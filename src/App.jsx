@@ -47,7 +47,7 @@ export default function App() {
 
   return (
     <IntlProvider locale={locale} messages={messages} defaultLocale="pt-BR">
-      <BrowserRouter basename="/anarbib">
+      <BrowserRouter basename="/AnarBib">
         <AuthProvider>
           <LibraryProvider>
             <ThemeGate>

@@ -10,7 +10,7 @@ export default defineConfig({
   // Ajuste "base" pour ton nom de repo GitHub Pages.
   // Ex: si le repo s'appelle "anarbib", le site sera à
   //     https://cclamazonia-cmd.github.io/anarbib/
-  base: '/anarbib/',
+  base: '/AnarBib/',
 
   resolve: {
     alias: {
