@@ -11,7 +11,7 @@
   -->
   <script>
     // Encode le path actuel dans un query param et redirige vers /
-    var pathSegmentsToKeep = 1; // 1 pour /anarbib/
+    var pathSegmentsToKeep = 0; // 0 pour domaine racine (app.anarbib.org)
     var l = window.location;
     l.replace(
       l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
