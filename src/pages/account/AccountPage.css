@@ -1,0 +1,115 @@
+/* ═══════════════════════════════════════════════════════════
+   AccountPage (conta) — fidèle à conta.html
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-conta-chips {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+  position: relative; z-index: 1;
+}
+
+/* Notices */
+.ab-conta-notice {
+  margin-top: 12px; padding: 12px 16px; border-radius: var(--brand-radius-sm);
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(200,150,0,.12); font-size: .9rem; color: var(--brand-text);
+  position: relative; z-index: 1;
+}
+.ab-conta-notice--danger { background: rgba(200,0,0,.2); border-color: rgba(255,255,255,.22); }
+.ab-conta-notice strong { display: block; margin-bottom: 4px; }
+
+/* Card */
+.ab-conta-card {
+  background-color: var(--brand-panel-bg);
+  background-image: var(--brand-panel-overlay-solid), var(--brand-panel-bg-image);
+  background-position: center; background-size: cover;
+  border: 1px solid var(--brand-panel-border);
+  border-radius: calc(var(--brand-radius) + 2px);
+  box-shadow: var(--brand-shadow); overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Tabs */
+.ab-conta-tabs {
+  display: flex; gap: 0; overflow-x: auto;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  background: rgba(12,12,12,.5);
+}
+.ab-conta-tab {
+  background: none; border: none; border-bottom: 3px solid transparent;
+  color: var(--brand-muted); padding: 14px 18px; font-size: .92rem;
+  font-weight: 700; cursor: pointer; white-space: nowrap;
+  display: flex; flex-direction: column; gap: 2px;
+  transition: color .18s, border-color .18s;
+}
+.ab-conta-tab:hover { color: var(--brand-text); }
+.ab-conta-tab.active { color: #fff; border-bottom-color: var(--brand-color-primary); }
+.ab-conta-tab__hint { font-size: .76rem; font-weight: 400; color: var(--brand-muted); }
+
+/* Panel */
+.ab-conta-panel { padding: 20px 24px; }
+@media (max-width: 640px) { .ab-conta-panel { padding: 14px; } }
+
+.ab-conta-section-title { margin: 0 0 8px; font-size: 1.1rem; font-weight: 700; font-family: var(--brand-font-body); }
+.ab-conta-subsection { margin: 18px 0 8px; font-size: 1rem; font-weight: 700; font-family: var(--brand-font-body); text-transform: none !important; }
+.ab-conta-hint { font-size: .88rem; color: var(--brand-muted); margin: 0 0 14px; }
+.ab-conta-empty { font-size: .9rem; color: var(--brand-muted); font-style: italic; }
+
+/* Form */
+.ab-conta-form { display: flex; flex-direction: column; gap: 12px; max-width: 640px; }
+.ab-conta-form label { display: flex; flex-direction: column; gap: 4px; font-size: .88rem; font-weight: 600; color: var(--brand-text); }
+.ab-conta-form input, .ab-conta-form select {
+  padding: 10px 12px; border: 1px solid var(--brand-panel-border); border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-strong); color: var(--brand-text); font-size: .92rem;
+}
+.ab-conta-form input:focus, .ab-conta-form select:focus { border-color: var(--brand-color-primary); outline: none; }
+.ab-conta-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ab-conta-grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.ab-conta-hr { border: none; border-top: 1px solid rgba(255,255,255,.10); margin: 14px 0; }
+.ab-conta-form h3 { margin: 0 0 8px; font-size: 1rem; }
+.ab-conta-form-actions { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+.ab-conta-msg { font-size: .88rem; font-weight: 600; color: var(--color-ok); }
+.ab-conta-msg--error { color: var(--color-bad); }
+
+/* Reserve form */
+.ab-conta-reserve-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.ab-conta-reserve-form .ab-input { max-width: 380px; }
+
+/* Items list */
+.ab-conta-items { display: flex; flex-direction: column; gap: 8px; }
+.ab-conta-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 14px; border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--brand-radius-sm); background: rgba(12,12,12,.35);
+  transition: border-color .18s;
+}
+.ab-conta-item:hover { border-color: rgba(179,32,37,.35); }
+.ab-conta-item--history { opacity: .7; }
+.ab-conta-item__main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ab-conta-item__title { font-size: .94rem; font-weight: 700; color: var(--brand-link); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ab-conta-item__title:hover { text-decoration: underline; }
+.ab-conta-item__meta { font-size: .82rem; color: var(--brand-muted); }
+
+/* Reservation card details */
+.ab-conta-item--reservation { flex-direction: column; gap: 8px; }
+.ab-conta-item__status {
+  font-size: .84rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 6px; display: inline-block; width: fit-content;
+  background: rgba(255,255,255,.06); color: var(--brand-text);
+}
+.ab-conta-item__status[data-stage="pronta_para_retirada"] { background: rgba(0,180,60,.18); color: #6fdb8f; }
+.ab-conta-item__status[data-stage="retirada_agendada"],
+.ab-conta-item__status[data-stage="re-retirada_agendada"] { background: rgba(200,150,0,.18); color: #e8c44a; }
+.ab-conta-item__status[data-stage="cancelada_leitor"],
+.ab-conta-item__status[data-stage="cancelada_biblioteca"],
+.ab-conta-item__status[data-stage="expirada"] { background: rgba(200,0,0,.15); color: #e88; }
+.ab-conta-item__detail { font-size: .82rem; color: var(--brand-muted); }
+.ab-conta-item__actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.ab-button--danger { background: rgba(180,20,20,.35) !important; border-color: rgba(200,40,40,.45) !important; }
+.ab-button--danger:hover { background: rgba(200,30,30,.5) !important; }
+
+@media (max-width: 640px) {
+  .ab-conta-tabs { flex-direction: column; }
+  .ab-conta-grid2 { grid-template-columns: 1fr; }
+  .ab-conta-reserve-form { flex-direction: column; }
+  .ab-conta-reserve-form .ab-input { max-width: none; width: 100%; }
+}

@@ -1,0 +1,109 @@
+/* ═══════════════════════════════════════════════════════════
+   AnarBib — theme-base.css
+   Variables de marque injectées dynamiquement par le ThemeLoader.
+   Ce fichier sert de socle : il donne des valeurs par défaut
+   raisonnables que le manifest JSON de chaque bibliothèque
+   viendra écraser au runtime.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Images de fond (page + panneaux) ─────────────────── */
+  --brand-bg-image: none;
+  --brand-bg-position: center center;
+  --brand-bg-size: cover;
+  --brand-bg-repeat: no-repeat;
+
+  --brand-panel-bg-image: var(--brand-bg-image);
+  --brand-panel-bg-position: center center;
+  --brand-panel-bg-size: cover;
+  --brand-panel-bg-repeat: no-repeat;
+
+  /* ── Overlays ─────────────────────────────────────────── */
+  --brand-bg-overlay: rgba(0, 0, 0, 0.78);
+  --brand-hero-overlay: linear-gradient(135deg, rgba(179, 32, 37, 0.34), rgba(8, 8, 8, 0.76));
+  --brand-panel-overlay-soft: linear-gradient(180deg, rgba(179, 32, 37, 0.12), rgba(255, 255, 255, 0.03));
+  --brand-panel-overlay-strong: linear-gradient(180deg, rgba(10, 10, 10, 0.50), rgba(10, 10, 10, 0.80));
+  --brand-panel-overlay-solid: linear-gradient(180deg, rgba(10, 10, 10, 0.60), rgba(10, 10, 10, 0.88));
+  --brand-sheet-head-overlay: linear-gradient(180deg, rgba(20, 20, 20, 0.82), rgba(12, 12, 12, 0.94));
+
+  /* ── Couleurs ─────────────────────────────────────────── */
+  --brand-color-primary: #b32025;
+  --brand-color-secondary: #101010;
+  --brand-color-accent: #f1ece3;
+
+  --brand-panel-bg: rgba(18, 18, 18, 0.82);
+  --brand-panel-bg-strong: rgba(10, 10, 10, 0.94);
+  --brand-panel-bg-soft: rgba(255, 255, 255, 0.03);
+  --brand-panel-border: rgba(255, 255, 255, 0.14);
+  --brand-panel-border-strong: rgba(255, 255, 255, 0.18);
+  --brand-text: #f5f2ea;
+  --brand-muted: #d4cec3;
+  --brand-link: #ffffff;
+  --brand-button-text: #f8f8f8;
+
+  /* ── Typographie ──────────────────────────────────────── */
+  /* Bitter : sérif contemporain, gras expressif, TOUTES les majuscules accentuées pt-BR */
+  /* Fira Sans : sans-sérif humaniste Mozilla, support latin-ext complet */
+  /* Fira Sans Condensed : variante condensée pour badges et accents */
+  --brand-font-heading: 'Bitter', 'Georgia', serif;
+  --brand-font-body: 'Fira Sans', 'Segoe UI', sans-serif;
+  --brand-font-accent: 'Fira Sans Condensed', 'Fira Sans', sans-serif;
+
+  /* ── Layout ───────────────────────────────────────────── */
+  --brand-radius: 20px;
+  --brand-radius-sm: 14px;
+  --brand-radius-pill: 999px;
+  --brand-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --brand-shadow-strong: 0 16px 38px rgba(0, 0, 0, 0.42);
+  --brand-hero-max-width: 1680px;
+  --brand-container-max-width: 1680px;
+
+  /* ── Sémantique ───────────────────────────────────────── */
+  --color-ok: #4ade80;
+  --color-warn: #fbbf24;
+  --color-bad: #fb7185;
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  color: var(--brand-text);
+  font-family: var(--brand-font-body);
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  background-color: #080808;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: var(--brand-bg-image);
+  background-size: var(--brand-bg-size);
+  background-repeat: var(--brand-bg-repeat);
+  background-position: var(--brand-bg-position);
+  background-attachment: fixed;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--brand-bg-overlay);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--brand-font-heading);
+}
+
+a { color: var(--brand-link); text-decoration-thickness: 1px; text-underline-offset: 0.12em; }
+button, input, select, textarea { font: inherit; }

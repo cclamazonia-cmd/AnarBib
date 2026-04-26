@@ -1,0 +1,39 @@
+/* ── Grille de catalogue (partagée) ─────────────────────── */
+
+.ab-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.ab-catalog-card {
+  transition: border-color 0.18s, transform 0.18s;
+  cursor: pointer;
+}
+
+.ab-catalog-card:hover {
+  border-color: rgba(225, 29, 47, 0.45);
+  transform: translateY(-2px);
+}
+
+.ab-catalog-card__title {
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.ab-catalog-card__author {
+  font-size: 0.9rem;
+  color: var(--brand-muted);
+  margin-bottom: 6px;
+}
+
+.ab-catalog-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--brand-muted);
+  margin-bottom: 8px;
+}

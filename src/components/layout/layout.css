@@ -1,0 +1,194 @@
+/* ── Page shell ──────────────────────────────────────────── */
+
+.ab-page-shell {
+  max-width: var(--brand-container-max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+@media (max-width: 640px) {
+  .ab-page-shell { padding: 14px; }
+}
+
+/* ── Topbar ──────────────────────────────────────────────── */
+
+.ab-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ab-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--brand-text);
+}
+
+.ab-topbar__logo {
+  height: 56px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+}
+
+.ab-topbar__library-logo {
+  height: 52px;
+  max-width: 140px;
+}
+
+.ab-topbar__name {
+  font-family: var(--brand-font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.ab-topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ab-topbar__nav a {
+  color: var(--brand-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: var(--brand-radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.ab-topbar__nav a:hover,
+.ab-topbar__nav a.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ab-topbar__logout {
+  background: none;
+  border: 1px solid var(--brand-panel-border);
+  color: var(--brand-muted);
+  padding: 6px 10px;
+  border-radius: var(--brand-radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ab-topbar__logout:hover { color: #fff; border-color: rgba(255, 255, 255, 0.22); }
+
+@media (max-width: 640px) {
+  .ab-topbar__logo { height: 44px; }
+  .ab-topbar__nav { gap: 6px; }
+}
+
+/* ── Hero — rouge profond AnarBib ────────────────────────── */
+
+.ab-hero {
+  max-width: var(--brand-hero-max-width);
+  margin-bottom: 20px;
+  padding: 24px 28px;
+  border: 1px solid rgba(140, 20, 28, 0.35);
+  border-radius: calc(var(--brand-radius) + 2px);
+  position: relative;
+  overflow: hidden;
+
+  /* Fond rouge profond, riche et texturé */
+  background:
+    linear-gradient(
+      145deg,
+      rgba(120, 10, 18, 0.97) 0%,
+      rgba(82, 6, 14, 0.98) 35%,
+      rgba(48, 4, 10, 0.99) 70%,
+      rgba(18, 2, 5, 1) 100%
+    );
+
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 80, 80, 0.08),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Texture grain subtile */
+.ab-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Reflet lumineux en haut à gauche */
+.ab-hero::after {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -20%;
+  width: 70%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(200, 40, 50, 0.12) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.ab-hero h1 {
+  margin: 0 0 6px;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  line-height: 1.1;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  /* Force la police body (Fira Sans) au lieu de la heading font du thème
+     qui est une police tout-en-majuscules sans accents corrects */
+  font-family: var(--brand-font-body) !important;
+  text-transform: none !important;
+  font-weight: 800;
+}
+
+.ab-hero p {
+  margin: 0;
+  color: rgba(255, 220, 215, 0.88);
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+  font-family: var(--brand-font-body) !important;
+  text-transform: none !important;
+}
+
+.ab-hero__content {
+  position: relative;
+  z-index: 1;
+}
+
+.ab-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+
+.ab-footer {
+  margin-top: 32px;
+  padding: 16px 0;
+  text-align: center;
+  color: var(--brand-muted);
+  font-size: 0.88rem;
+}

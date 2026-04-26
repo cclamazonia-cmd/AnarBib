@@ -1,0 +1,150 @@
+/* ═══════════════════════════════════════════════════════════
+   PanelPage (painel) — tableau de bord bibliothécaire
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-painel-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; position: relative; z-index: 1; }
+
+.ab-painel-card {
+  background-color: var(--brand-panel-bg);
+  background-image: var(--brand-panel-overlay-solid), var(--brand-panel-bg-image);
+  background-position: center; background-size: cover;
+  border: 1px solid var(--brand-panel-border);
+  border-radius: calc(var(--brand-radius) + 2px);
+  box-shadow: var(--brand-shadow); overflow: hidden; margin-bottom: 20px;
+}
+
+/* Tabs */
+.ab-painel-tabs {
+  display: flex; gap: 0; overflow-x: auto;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  background: rgba(12,12,12,.5);
+}
+.ab-painel-tab {
+  background: none; border: none; border-bottom: 3px solid transparent;
+  color: var(--brand-muted); padding: 14px 16px; font-size: .88rem;
+  font-weight: 700; cursor: pointer; white-space: nowrap;
+  display: flex; flex-direction: column; gap: 2px; transition: .18s;
+}
+.ab-painel-tab:hover { color: var(--brand-text); }
+.ab-painel-tab.active { color: #fff; border-bottom-color: var(--brand-color-primary); }
+.ab-painel-tab__hint { font-size: .74rem; font-weight: 400; color: var(--brand-muted); }
+
+.ab-painel-panel { padding: 20px 24px; }
+@media (max-width: 640px) { .ab-painel-panel { padding: 14px; } }
+
+.ab-painel-h2 { margin: 0 0 10px; font-size: 1.1rem; font-weight: 700; font-family: var(--brand-font-body); text-transform: none !important; }
+.ab-painel-h3 { margin: 16px 0 8px; font-size: 1rem; font-weight: 700; text-transform: none !important; }
+.ab-painel-hint { font-size: .86rem; color: var(--brand-muted); margin: 0 0 12px; }
+.ab-painel-msg { font-size: .88rem; font-weight: 600; color: var(--brand-text); margin-top: 8px; }
+.ab-painel-hr { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: 12px 0; }
+
+.ab-painel-input {
+  display: block; width: 100%; padding: 10px 12px; margin-top: 4px;
+  border: 1px solid var(--brand-panel-border); border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-strong); color: var(--brand-text); font-size: .9rem;
+}
+.ab-painel-input:focus { border-color: var(--brand-color-primary); outline: none; }
+
+/* Summary cards grid */
+.ab-painel-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.ab-painel-summary {
+  padding: 16px; border-radius: var(--brand-radius-sm);
+  border: 1px solid rgba(255,255,255,.08); background: rgba(12,12,12,.4);
+  text-align: center;
+}
+.ab-painel-summary--warn { border-color: rgba(200,150,0,.3); background: rgba(200,150,0,.08); }
+.ab-painel-summary--bad { border-color: rgba(200,40,40,.3); background: rgba(200,0,0,.1); }
+.ab-painel-summary--ok { border-color: rgba(0,180,60,.25); background: rgba(0,180,60,.08); }
+.ab-painel-summary__count { display: block; font-size: 2rem; font-weight: 900; color: var(--brand-text); }
+.ab-painel-summary__label { font-size: .82rem; color: var(--brand-muted); }
+
+/* Items list */
+.ab-painel-items { display: flex; flex-direction: column; gap: 6px; }
+.ab-painel-item { padding: 10px 12px; border: 1px solid rgba(255,255,255,.08); border-radius: var(--brand-radius-sm); background: rgba(12,12,12,.3); }
+.ab-painel-item--overdue { border-color: rgba(200,40,40,.35); }
+.ab-painel-item__title { font-weight: 700; font-size: .92rem; }
+.ab-painel-item__meta { font-size: .82rem; color: var(--brand-muted); display: block; margin-top: 2px; }
+
+/* Ações grid */
+.ab-painel-acoes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 800px) { .ab-painel-acoes-grid { grid-template-columns: 1fr; } }
+.ab-painel-acoes-card {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 16px; border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--brand-radius-sm); background: rgba(12,12,12,.3);
+}
+.ab-painel-acoes-card label { font-size: .86rem; font-weight: 600; display: flex; flex-direction: column; gap: 4px; }
+
+/* Reservas toolbar & workflow controls */
+.ab-painel-res-toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.ab-painel-res-workflow {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: end;
+  padding: 12px; margin-bottom: 14px;
+  border: 1px solid rgba(255,255,255,.06); border-radius: var(--brand-radius-sm);
+  background: rgba(20,20,20,.5);
+}
+.ab-painel-res-workflow .ab-painel-input { max-width: 240px; }
+.ab-painel-res-workflow select.ab-painel-input { max-width: 280px; }
+
+/* Table */
+.ab-painel-table-wrap { overflow-x: auto; }
+.ab-painel-table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+.ab-painel-table th { text-align: left; padding: 10px 8px; font-weight: 700; color: var(--brand-muted); border-bottom: 1px solid rgba(255,255,255,.12); white-space: nowrap; }
+.ab-painel-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,.05); }
+.ab-painel-table tr:hover { background: rgba(255,255,255,.03); }
+.ab-painel-table tr.selected { background: rgba(200,0,0,.08); }
+.ab-painel-table tr.overdue { background: rgba(200,30,30,.1); }
+.ab-painel-table a { color: var(--brand-link); text-decoration: none; }
+.ab-painel-table a:hover { text-decoration: underline; }
+.ab-painel-table input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--brand-color-primary); }
+
+/* Workflow stage badge */
+.ab-painel-stage {
+  font-size: .78rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+  background: rgba(255,255,255,.06); color: var(--brand-text); white-space: nowrap;
+}
+.ab-painel-stage[data-stage="solicitada"] { background: rgba(100,140,255,.15); color: #8ab4ff; }
+.ab-painel-stage[data-stage="em_preparacao"] { background: rgba(200,150,0,.15); color: #e8c44a; }
+.ab-painel-stage[data-stage="pronta_para_retirada"] { background: rgba(0,180,60,.18); color: #6fdb8f; }
+.ab-painel-stage[data-stage="retirada_agendada"],
+.ab-painel-stage[data-stage="re-retirada_agendada"] { background: rgba(200,100,0,.15); color: #f0a040; }
+.ab-painel-stage[data-stage="cancelada_leitor"],
+.ab-painel-stage[data-stage="cancelada_biblioteca"],
+.ab-painel-stage[data-stage="expirada"] { background: rgba(200,0,0,.15); color: #e88; }
+
+.ab-painel-loan-status { font-size: .78rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.ab-painel-loan-status--aberto { background: rgba(100,140,255,.15); color: #8ab4ff; }
+.ab-painel-loan-status--devolvido { background: rgba(0,180,60,.15); color: #6fdb8f; }
+
+/* Empréstimos agrupados */
+.ab-painel-lote { border: 1px solid rgba(255,255,255,.08); border-radius: var(--brand-radius-sm); margin-bottom: 10px; overflow: hidden; }
+.ab-painel-lote__head { padding: 12px 14px; background: rgba(12,12,12,.5); font-size: .88rem; }
+.ab-painel-lote__items { padding: 8px 14px; }
+.ab-painel-lote__item { font-size: .84rem; padding: 4px 0; color: var(--brand-muted); }
+.ab-painel-lote__item a { color: var(--brand-link); }
+
+/* Gerir leitor */
+.ab-painel-reader-search { display: flex; gap: 8px; align-items: end; margin-bottom: 12px; }
+.ab-painel-reader-search .ab-painel-input { max-width: 340px; }
+.ab-painel-reader-card {
+  padding: 16px; border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--brand-radius-sm); background: rgba(12,12,12,.4);
+}
+.ab-painel-reader-card h3 { margin: 0 0 8px; }
+.ab-painel-reader-card p { margin: 4px 0; font-size: .88rem; color: var(--brand-muted); }
+
+/* Task bucket */
+.ab-painel-task-bucket { margin-bottom: 16px; }
+.ab-painel-item__btn-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+.ab-painel-task-priority { font-size: .76rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; }
+.ab-painel-task-priority--alta { background: rgba(200,30,30,.2); color: #e88; }
+.ab-painel-task-priority--media { background: rgba(200,150,0,.15); color: #e8c44a; }
+
+/* Action cells in tables */
+.ab-painel-actions-cell { white-space: nowrap; display: flex; gap: 4px; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .ab-painel-tabs { flex-direction: column; }
+  .ab-painel-res-workflow { flex-direction: column; }
+  .ab-painel-res-workflow .ab-painel-input { max-width: none; }
+}

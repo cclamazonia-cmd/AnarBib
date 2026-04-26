@@ -1,0 +1,332 @@
+/* ═══════════════════════════════════════════════════════════
+   BookPage (livro) — faithful to original livro.html
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Top navigation ─────────────────────────────────────── */
+
+.ab-livro-topbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* ── Hero extensions ────────────────────────────────────── */
+
+.ab-livro-author {
+  margin-top: 10px;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.ab-livro-author-link {
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,.35);
+  transition: border-color .18s;
+}
+.ab-livro-author-link:hover {
+  border-color: rgba(255,255,255,.8);
+}
+
+.ab-livro-author-role {
+  font-weight: 400;
+  color: rgba(255,255,255,.6);
+  font-size: .92rem;
+}
+
+.ab-livro-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.ab-livro-holdings-hero {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.ab-livro-holding-line {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  gap: 8px;
+}
+
+.ab-livro-holding-lib {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── Detail card ────────────────────────────────────────── */
+
+.ab-livro-card {
+  background-color: var(--brand-panel-bg);
+  background-image: var(--brand-panel-overlay-solid), var(--brand-panel-bg-image);
+  background-position: center;
+  background-size: cover;
+  border: 1px solid var(--brand-panel-border);
+  border-radius: calc(var(--brand-radius) + 2px);
+  box-shadow: var(--brand-shadow);
+  backdrop-filter: blur(6px);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.ab-livro-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .ab-livro-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Cover ──────────────────────────────────────────────── */
+
+.ab-livro-cover img {
+  width: 100%;
+  border-radius: var(--brand-radius-sm);
+  box-shadow: var(--brand-shadow-strong);
+}
+
+.ab-livro-cover__placeholder {
+  width: 100%;
+  aspect-ratio: 2/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-panel-bg-strong);
+  border: 1px solid var(--brand-panel-border);
+  border-radius: var(--brand-radius-sm);
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--brand-color-primary);
+}
+
+/* ── Content ────────────────────────────────────────────── */
+
+.ab-livro-section-title {
+  margin: 0 0 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: var(--brand-font-body);
+}
+
+/* ── Meta pills ─────────────────────────────────────────── */
+
+.ab-livro-meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ab-livro-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--brand-radius-pill);
+  background-color: rgba(24, 24, 24, 0.80);
+  background-image: var(--brand-panel-overlay-solid), var(--brand-panel-bg-image);
+  background-position: center;
+  background-size: cover;
+  font-size: 0.88rem;
+  color: var(--brand-muted);
+}
+
+.ab-livro-pill__label {
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 400;
+}
+
+.ab-livro-pill__value {
+  color: var(--brand-text);
+  font-weight: 600;
+}
+
+/* ── HR / Description ───────────────────────────────────── */
+
+.ab-livro-hr {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.10);
+  margin: 14px 0;
+}
+
+.ab-livro-desc {
+  color: var(--brand-muted);
+  font-size: 0.93rem;
+  line-height: 1.55;
+  margin: 0 0 14px;
+}
+
+/* ── Status ─────────────────────────────────────────────── */
+
+.ab-livro-status-section {
+  margin: 14px 0;
+  padding: 10px 14px;
+  border-radius: var(--brand-radius-sm);
+  background: rgba(12, 12, 12, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Digital access ─────────────────────────────────────── */
+
+.ab-livro-digital {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+.ab-livro-digital-label {
+  font-size: 0.9rem;
+  color: var(--brand-muted);
+  font-weight: 600;
+}
+
+.ab-livro-digital-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--brand-radius-pill);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.ab-livro-digital-chip--yes {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--color-ok);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.ab-livro-digital-chip--no {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--brand-muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ── Actions ────────────────────────────────────────────── */
+
+.ab-livro-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.ab-livro-reserve-status {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--color-ok);
+  font-weight: 600;
+}
+
+.ab-livro-reserve-status--error {
+  color: var(--color-bad);
+}
+
+/* ── Detail header (standard/ISBD toggle) ───────────────── */
+
+.ab-livro-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+/* ── ISBD view ──────────────────────────────────────────── */
+
+.ab-livro-isbd {
+  margin-bottom: 14px;
+}
+
+.ab-livro-isbd-note {
+  font-size: 0.86rem;
+  color: var(--brand-muted);
+  margin: 0 0 12px;
+  font-style: italic;
+}
+
+.ab-livro-isbd-statement {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--brand-text);
+  margin: 0 0 16px;
+  padding: 14px;
+  background: rgba(12, 12, 12, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--brand-radius-sm);
+  font-family: var(--brand-font-body);
+}
+
+.ab-livro-isbd-zones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ab-livro-isbd-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--brand-color-primary);
+  background: rgba(12, 12, 12, 0.3);
+  border-radius: 0 var(--brand-radius-sm) var(--brand-radius-sm) 0;
+}
+
+.ab-livro-isbd-zone-label {
+  font-size: 0.78rem;
+  color: var(--brand-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ab-livro-isbd-zone-value {
+  font-size: 0.92rem;
+  color: var(--brand-text);
+  line-height: 1.45;
+}
+
+/* ── Status library label ───────────────────────────────── */
+
+.ab-livro-status-lib {
+  margin-left: 8px;
+  font-size: 0.86rem;
+  color: var(--brand-muted);
+  font-weight: 400;
+}
+
+/* ── Digital source attribution ─────────────────────────── */
+
+.ab-livro-digital-source {
+  font-size: 0.84rem;
+  color: var(--brand-muted);
+  margin: 6px 0 10px;
+}
+
+.ab-livro-digital-source a {
+  color: var(--brand-link);
+}
