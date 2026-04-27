@@ -303,9 +303,11 @@ export default function CatalogPage() {
   useEffect(() => {
     if (!libraryId || !isAuth) return;
     (async () => {
+      // FIX A.1 BUG #8: 'publicado' is rejected by CHECK constraint; valid value is 'published'.
+      // Was making the regimento link silently invisible to authenticated readers in the public catalog.
       const { data } = await supabase.from('library_regulation_documents')
         .select('storage_bucket, storage_path_public')
-        .eq('library_id', libraryId).eq('is_active', true).eq('publication_status', 'publicado')
+        .eq('library_id', libraryId).eq('is_active', true).eq('publication_status', 'published')
         .order('created_at', { ascending: false }).limit(1).maybeSingle();
       if (data?.storage_path_public) {
         setRegimentoUrl(`https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/${data.storage_bucket || 'library-regimentos-public'}/${data.storage_path_public}`);

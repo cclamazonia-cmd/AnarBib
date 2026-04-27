@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
@@ -9,8 +9,8 @@ import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 const SERVICE_MODES = [
-  { value: 'funcionamento_normal', label: t({id:'biblioteca.serviceMode.normal'}) },
-  { value: 'funcionamento_reduzido', label: t({id:'biblioteca.serviceMode.reduced'}) },
+  { value: 'funcionamento_normal', label: 'Funcionamento normal' },
+  { value: 'funcionamento_reduzido', label: 'Funcionamento reduzido' },
   { value: 'recesso', label: 'Em recesso' },
   { value: 'suspenso', label: 'Suspenso temporariamente' },
 ];
@@ -139,7 +139,7 @@ export default function BibliotecaPage() {
     try {
       const { error } = await supabase.from(table).update(data).eq(filterCol, libraryId);
       if (error) throw error;
-      setMsg({ text: t({id:'biblioteca.msg.saved'}), kind: 'ok' });
+      setMsg({ text: 'Dados salvos com sucesso.', kind: 'ok' });
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
     finally { setSaving(false); }
   }
@@ -150,7 +150,7 @@ export default function BibliotecaPage() {
       await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country }).eq('id', libraryId);
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
       if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message }).eq('library_id', libraryId);
-      setMsg({ text: t({id:'biblioteca.msg.saved'}), kind: 'ok' });
+      setMsg({ text: 'Dados salvos com sucesso.', kind: 'ok' });
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
     finally { setSaving(false); }
   }
@@ -172,13 +172,22 @@ export default function BibliotecaPage() {
   // ── Upload regimento ────────────────────────────────────
   async function uploadRegimento() {
     const file = regFileRef.current?.files?.[0];
-    if (!file) { setMsg({ text: t({id:'biblioteca.msg.selectPdf'}), kind: 'error' }); return; }
+    if (!file) { setMsg({ text: 'Selecione um arquivo PDF.', kind: 'error' }); return; }
     setSaving(true); setMsg({ text: t({id:'biblioteca.regulation.sending'}), kind: 'info' });
     try {
       const slug = lib?.slug || 'library';
       const path = `regimentos/${slug}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
       const { error: upErr } = await supabase.storage.from('library-regimentos-public').upload(path, file, { upsert: true });
       if (upErr) throw upErr;
+      // FIX A.1 BUG #6: deactivate any existing active regimento before
+      // inserting the new one. There's a unique constraint
+      // uq_library_regulation_documents_one_active_per_kind that allows only
+      // one active document per kind per library.
+      await supabase.from('library_regulation_documents')
+        .update({ is_active: false })
+        .eq('library_id', libraryId)
+        .eq('doc_kind', 'regimento')
+        .eq('is_active', true);
       // FIX BUG #3: 'publicado' is rejected by CHECK constraint; valid values are
       // 'draft_only', 'published', 'archived'. Was breaking the upload silently.
       const { error: insErr } = await supabase.from('library_regulation_documents').insert({
@@ -188,7 +197,7 @@ export default function BibliotecaPage() {
         created_by: user?.id,
       });
       if (insErr) throw insErr;
-      setMsg({ text: t({id:'biblioteca.msg.regimentUploaded'}), kind: 'ok' });
+      setMsg({ text: 'Regimento enviado e publicado.', kind: 'ok' });
       regFileRef.current.value = '';
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
@@ -201,15 +210,20 @@ export default function BibliotecaPage() {
     try {
       // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
       const tags = (newTask.tagsText || '').split(',').map(tag => tag.trim()).filter(Boolean);
-      const { error } = await supabase.from('painel_internal_tasks').insert({
+      // FIX A.1 BUG #7: tags column is NOT NULL with default '{}'. Sending null
+      // violates the constraint. Build payload conditionally so the DB applies
+      // its default when no tags are provided.
+      const insertPayload = {
         library_id: libraryId, title: newTask.title.trim(), description: newTask.description.trim() || null,
         priority: newTask.priority || 'normal', owner: newTask.owner.trim() || null,
-        due_date: newTask.dueDate || null, tags: tags.length > 0 ? tags : null,
+        due_date: newTask.dueDate || null,
         status: 'pendente', created_by: user?.id,
-      });
+      };
+      if (tags.length > 0) insertPayload.tags = tags;
+      const { error } = await supabase.from('painel_internal_tasks').insert(insertPayload);
       if (error) throw error;
       setNewTask({ title: '', description: '', priority: 'normal', owner: '', dueDate: '', tagsText: '' });
-      setMsg({ text: t({id:'biblioteca.msg.taskCreated'}), kind: 'ok' });
+      setMsg({ text: 'Tarefa criada.', kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
@@ -235,7 +249,7 @@ export default function BibliotecaPage() {
 
   async function saveIll() {
     if (!illForm.lender || !illForm.borrower) { setMsg({ text: t({id:'biblioteca.ill.selectBoth'}), kind: 'error' }); return; }
-    if (illForm.lender === illForm.borrower) { setMsg({ text: t({id:'biblioteca.msg.illSameLibrary'}), kind: 'error' }); return; }
+    if (illForm.lender === illForm.borrower) { setMsg({ text: 'As bibliotecas emprestadora e tomadora devem ser diferentes.', kind: 'error' }); return; }
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
       const { data: loan, error } = await supabase.from('interlibrary_loans_v2').insert({
@@ -299,7 +313,7 @@ export default function BibliotecaPage() {
 
   async function sendReport() {
     const email = commons?.contact_email;
-    if (!email) { setMsg({ text: t({id:'biblioteca.msg.noContactEmail'}), kind: 'error' }); return; }
+    if (!email) { setMsg({ text: 'Nenhum e-mail de contato configurado para esta biblioteca.', kind: 'error' }); return; }
     const text = generateReportText();
     // Use mailto as fallback — a proper email send would use notify-event
     const subject = encodeURIComponent(`Relatório — ${lib?.name || libraryName} — ${new Date().toLocaleDateString('pt-BR')}`);
@@ -410,7 +424,7 @@ export default function BibliotecaPage() {
             <div className="cat-book-grid">
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.serviceMode' })}</label><select value={serviceState.service_mode||''} onChange={e=>setSS('service_mode',e.target.value)} style={fs}>{SERVICE_MODES.map(m=><option key={m.value} value={m.value}>{m.label}</option>)}</select></div>
               <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_loans||false} onChange={e=>setSS('allows_new_loans',e.target.checked)} /> Aceita novos empréstimos</label></div>
-              <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_reservations||false} onChange={e=>setSS('allows_new_reservations',e.target.checked)} /> {t({id:'biblioteca.identity.allowsReservations'})}</label></div>
+              <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_reservations||false} onChange={e=>setSS('allows_new_reservations',e.target.checked)} /> Aceita novas reservas</label></div>
               <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.identity.publicMessage' })}</label><textarea value={serviceState.public_message||''} onChange={e=>setSS('public_message',e.target.value)} rows={2} style={{...fs,resize:'vertical'}} placeholder="Mensagem exibida publicamente…" /></div>
             </div>
           </div>}
