@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
 
 export default function CadastroPage() {
   const navigate = useNavigate();
+  const { formatMessage: t } = useIntl();
   const [view, setView] = useState('login');
   const [showPw, setShowPw] = useState(false);
   const [loginId, setLoginId] = useState('');
@@ -31,33 +33,33 @@ export default function CadastroPage() {
       let email = loginId.trim();
       if (!email.includes('@')) { try { const { data } = await supabase.rpc('resolve_login_email', { p_identifier: email }); const r = Array.isArray(data) ? data[0]?.email : data?.email; if (r) email = r; } catch {} }
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) { const r = (error.message || '').toLowerCase(); setLoginMsg({ text: r.includes('invalid login') || r.includes('invalid_credentials') ? 'E-mail ou senha incorretos.' : r.includes('not confirmed') ? 'E-mail ainda não confirmado.' : error.message, kind: 'error' }); return; }
+      if (error) { const r = (error.message || '').toLowerCase(); setLoginMsg({ text: r.includes('invalid login') || r.includes('invalid_credentials') ? t({id:'auth.wrongCredentials'}) : r.includes('not confirmed') ? t({id:'auth.notConfirmed'}) : error.message, kind: 'error' }); return; }
       navigate('/conta');
-    } catch { setLoginMsg({ text: 'Falha de rede.', kind: 'error' }); }
+    } catch { setLoginMsg({ text: t({id:'auth.networkError'}), kind: 'error' }); }
     finally { setLoginLoading(false); }
   }
 
   async function handleForgot(e) {
-    e.preventDefault(); if (!forgotEmail.trim()) { setForgotMsg({ text: 'Informe o e-mail.', kind: 'error' }); return; }
+    e.preventDefault(); if (!forgotEmail.trim()) { setForgotMsg({ text: t({id:'auth.forgotEmailRequired'}), kind: 'error' }); return; }
     setForgotLoading(true); setForgotMsg({ text: '', kind: '' });
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail.trim(), { redirectTo: `${window.location.origin}/cadastro` });
-      setForgotMsg(error ? { text: error.message, kind: 'error' } : { text: 'Link de redefinição enviado! Verifique seu e-mail (e Spam/Lixo eletrônico).', kind: 'ok' });
-    } catch { setForgotMsg({ text: 'Falha de rede.', kind: 'error' }); }
+      setForgotMsg(error ? { text: error.message, kind: 'error' } : { text: t({id:'auth.forgotSent'}), kind: 'ok' });
+    } catch { setForgotMsg({ text: t({id:'auth.networkError'}), kind: 'error' }); }
     finally { setForgotLoading(false); }
   }
 
   async function handleReset(e) {
     e.preventDefault();
-    if (newPw.length < 6) { setResetMsg({ text: 'A senha deve ter ao menos 6 caracteres.', kind: 'error' }); return; }
-    if (newPw !== newPw2) { setResetMsg({ text: 'As senhas não coincidem.', kind: 'error' }); return; }
+    if (newPw.length < 6) { setResetMsg({ text: t({id:'auth.resetMin6'}), kind: 'error' }); return; }
+    if (newPw !== newPw2) { setResetMsg({ text: t({id:'auth.resetMismatch'}), kind: 'error' }); return; }
     setResetLoading(true); setResetMsg({ text: '', kind: '' });
     try {
       const { error } = await supabase.auth.updateUser({ password: newPw });
-      if (error) { const r = (error.message || '').toLowerCase(); setResetMsg({ text: r.includes('same') || r.includes('different') ? 'Escolha uma senha diferente da anterior.' : r.includes('expired') ? 'Link expirado. Peça novo link em "Esqueci minha senha".' : error.message, kind: 'error' }); return; }
-      setResetMsg({ text: 'Senha redefinida com sucesso! Você já pode entrar.', kind: 'ok' });
+      if (error) { const r = (error.message || '').toLowerCase(); setResetMsg({ text: r.includes('same') || r.includes('different') ? t({id:'auth.resetSamePassword'}) : r.includes('expired') ? t({id:'auth.resetExpired'}) : error.message, kind: 'error' }); return; }
+      setResetMsg({ text: t({id:'auth.resetSuccess'}), kind: 'ok' });
       setTimeout(() => setView('login'), 2000);
-    } catch { setResetMsg({ text: 'Falha de rede.', kind: 'error' }); }
+    } catch { setResetMsg({ text: t({id:'auth.networkError'}), kind: 'error' }); }
     finally { setResetLoading(false); }
   }
 
@@ -68,37 +70,34 @@ export default function CadastroPage() {
   return (
     <PageShell><Topbar />
       <div style={{ maxWidth: 480, margin: '0 auto', padding: '24px 16px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>Cadastro</h1>
-        <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>Entrar · Esqueci minha senha · Redefinir senha</p>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'auth.cadastro.title'})}</h1>
+        <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>{t({id:'auth.cadastro.subtitle'})}</p>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-          <Button variant="secondary" onClick={() => navigate('/')}>Voltar ao catálogo</Button>
-          <Link to="/criar-conta" style={{ textDecoration: 'none' }}><Button variant="primary">Criar conta</Button></Link>
+          <Button variant="secondary" onClick={() => navigate('/')}>{t({id:'auth.backToCatalog'})}</Button>
+          <Link to="/criar-conta" style={{ textDecoration: 'none' }}><Button variant="primary">{t({id:'auth.createAccount'})}</Button></Link>
         </div>
 
         {view === 'login' && (<div>
           <form onSubmit={handleLogin}>
-            <div style={{ marginBottom: 12 }}><label style={ls}>ID público</label>
-              <input type="text" value={loginId} onChange={e => setLoginId(e.target.value)} placeholder="Seu ID público (ex.: leit.0042) ou e-mail" required style={fs} autoComplete="username" /></div>
-            <div style={{ marginBottom: 14 }}><label style={ls}>Senha</label>
+            <div style={{ marginBottom: 12 }}><label style={ls}>{t({id:'auth.publicId'})}</label>
+              <input type="text" value={loginId} onChange={e => setLoginId(e.target.value)} placeholder={t({id:'auth.publicIdPh'})} required style={fs} autoComplete="username" /></div>
+            <div style={{ marginBottom: 14 }}><label style={ls}>{t({id:'auth.password'})}</label>
               <input type={showPw ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required style={fs} autoComplete="current-password" /></div>
             <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
-              <Button variant="primary" type="submit" disabled={loginLoading}>{loginLoading ? 'Entrando…' : 'Entrar'}</Button>
-              <Button variant="secondary" onClick={() => setShowPw(!showPw)}>{showPw ? 'Esconder senha' : 'Mostrar senha'}</Button>
+              <Button variant="primary" type="submit" disabled={loginLoading}>{loginLoading ? t({id:'auth.loggingIn'}) : t({id:'auth.login'})}</Button>
+              <Button variant="secondary" onClick={() => setShowPw(!showPw)}>{showPw ? t({id:'auth.hidePassword'}) : t({id:'auth.showPassword'})}</Button>
             </div>
             {loginMsg.text && <div style={ms(loginMsg.kind)}>{loginMsg.text}</div>}
           </form>
 
-          {/* ── Esqueci minha senha ────────────────────── */}
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(180,83,9,.06)', border: '1px solid rgba(180,83,9,.18)', marginTop: 20 }}>
-            <strong style={{ fontSize: '.92rem' }}>Esqueceu a senha?</strong>
-            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>
-              Envie um link para redefinir sua senha. O link chegará no e-mail cadastrado. Verifique também a pasta Spam/Lixo eletrônico.
-            </div>
+            <strong style={{ fontSize: '.92rem' }}>{t({id:'auth.forgotTitle'})}</strong>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>{t({id:'auth.forgotHint'})}</div>
             <form onSubmit={handleForgot}>
-              <div style={{ marginBottom: 10 }}><label style={ls}>E-mail da conta</label>
+              <div style={{ marginBottom: 10 }}><label style={ls}>{t({id:'auth.forgotEmail'})}</label>
                 <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} required style={fs} autoComplete="email" /></div>
-              <Button variant="secondary" type="submit" disabled={forgotLoading}>{forgotLoading ? 'Enviando…' : 'Esqueci minha senha'}</Button>
+              <Button variant="secondary" type="submit" disabled={forgotLoading}>{forgotLoading ? t({id:'auth.forgotSending'}) : t({id:'auth.forgotButton'})}</Button>
               {forgotMsg.text && <div style={{ ...ms(forgotMsg.kind), marginTop: 10 }}>{forgotMsg.text}</div>}
             </form>
           </div>
@@ -106,17 +105,17 @@ export default function CadastroPage() {
 
         {view === 'recovery' && (<div>
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16 }}>
-            <strong>Redefinir senha</strong>
-            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>Escolha uma nova senha para sua conta.</div>
+            <strong>{t({id:'auth.resetTitle'})}</strong>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>{t({id:'auth.resetHint'})}</div>
           </div>
           <form onSubmit={handleReset}>
-            <div style={{ marginBottom: 12 }}><label style={ls}>Nova senha</label>
+            <div style={{ marginBottom: 12 }}><label style={ls}>{t({id:'auth.newPassword'})}</label>
               <input type={showPw ? 'text' : 'password'} value={newPw} onChange={e => setNewPw(e.target.value)} required style={fs} autoComplete="new-password" /></div>
-            <div style={{ marginBottom: 14 }}><label style={ls}>Confirmar nova senha</label>
+            <div style={{ marginBottom: 14 }}><label style={ls}>{t({id:'auth.confirmPassword'})}</label>
               <input type={showPw ? 'text' : 'password'} value={newPw2} onChange={e => setNewPw2(e.target.value)} required style={fs} autoComplete="new-password" /></div>
             <div style={{ display: 'flex', gap: 8 }}>
-              <Button variant="primary" type="submit" disabled={resetLoading}>{resetLoading ? 'Salvando…' : 'Salvar nova senha'}</Button>
-              <Button variant="secondary" onClick={() => setShowPw(!showPw)}>{showPw ? 'Esconder' : 'Mostrar senha'}</Button>
+              <Button variant="primary" type="submit" disabled={resetLoading}>{resetLoading ? t({id:'auth.resetSaving'}) : t({id:'auth.resetSave'})}</Button>
+              <Button variant="secondary" onClick={() => setShowPw(!showPw)}>{showPw ? t({id:'auth.hidePassword'}) : t({id:'auth.showPassword'})}</Button>
             </div>
             {resetMsg.text && <div style={{ ...ms(resetMsg.kind), marginTop: 14 }}>{resetMsg.text}</div>}
           </form>

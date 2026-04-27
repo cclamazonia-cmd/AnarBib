@@ -14,6 +14,7 @@ const PUBLIC_COLS = [
   'book_id','bib_ref','titulo','subtitulo','autor','author_display',
   'author_id','author_chips',
   'editora','ano','cdd','tipo_material','idioma',
+  'isbn','issn','assuntos','colecao','local_publicacao',
   'library_slug','library_name','biblioteca',
   'global_available_count','global_exemplares_total','available_count',
   'exemplares_total','loanable','bibliotecas_count',
@@ -24,6 +25,7 @@ const SESSION_COLS = [
   'book_id','bib_ref','titulo','subtitulo','autor','author_display',
   'author_id','author_chips',
   'editora','ano','cdd','tipo_material','idioma',
+  'isbn','issn','assuntos','colecao','local_publicacao',
   'library_slug','library_name','biblioteca',
   'global_available_count','global_exemplares_total',
   'exemplares_total','loanable','bibliotecas_count',
@@ -73,17 +75,14 @@ function getStatusInfo(book, isAuth, t) {
     if (c > 0) return { label: t({ id: 'catalog.avail.availableCount' }, { count: c }), cls: 'ok' };
     return { label: t({ id: 'catalog.avail.unavailNow' }), cls: 'bad' };
   }
-  if (h === 'indisponivel_no_momento') {
-    return { label: t({ id: 'catalog.avail.unavailNow' }), cls: 'bad' };
-  }
   return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
 }
 
-function buildServerFilters({ search, authorFilter, publisherFilter, yearFilter, libraryFilter, availabilityFilter, isAuth }) {
+function buildServerFilters({ search, authorFilter, publisherFilter, yearFilter, libraryFilter, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter }) {
   const f = {};
   if (search.trim()) {
     const p = `%${search.trim()}%`;
-    f['or'] = `(titulo.ilike.${p},autor.ilike.${p},editora.ilike.${p},bib_ref.ilike.${p},cdd.ilike.${p},assuntos.ilike.${p},subtitulo.ilike.${p})`;
+    f['or'] = `(titulo.ilike.${p},autor.ilike.${p},editora.ilike.${p},bib_ref.ilike.${p},cdd.ilike.${p},assuntos.ilike.${p},subtitulo.ilike.${p},isbn.ilike.${p})`;
   }
   if (authorFilter.trim()) f['autor'] = `ilike.%${authorFilter.trim()}%`;
   if (publisherFilter.trim()) f['editora'] = `ilike.%${publisherFilter.trim()}%`;
@@ -94,6 +93,14 @@ function buildServerFilters({ search, authorFilter, publisherFilter, yearFilter,
     else f['ano'] = `eq.${raw}`;
   }
   if (libraryFilter && libraryFilter !== '__all__') f['library_slug'] = `eq.${libraryFilter}`;
+  // Advanced filters
+  if (isbnFilter.trim()) f['isbn'] = `ilike.%${isbnFilter.trim().replace(/[-\s]/g, '')}%`;
+  if (languageFilter.trim()) f['idioma'] = `ilike.%${languageFilter.trim()}%`;
+  if (cddFilter.trim()) f['cdd'] = `ilike.${cddFilter.trim()}%`;
+  if (subjectsFilter.trim()) f['assuntos'] = `ilike.%${subjectsFilter.trim()}%`;
+  if (materialFilter && materialFilter !== '__all__') f['tipo_material'] = `eq.${materialFilter}`;
+  if (collectionFilter.trim()) f['colecao'] = `ilike.%${collectionFilter.trim()}%`;
+  if (placeFilter.trim()) f['local_publicacao'] = `ilike.%${placeFilter.trim()}%`;
 
   if (availabilityFilter && availabilityFilter !== '__all__' && isAuth) {
     switch (availabilityFilter) {
@@ -199,16 +206,30 @@ export default function CatalogPage() {
   const [sortValue, setSortValue] = useState(filterState.sortValue || '__relevance__');
   const [compact, setCompact] = useState(filterState.compact || false);
   const [filtersOpen, setFiltersOpen] = useState(true);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [isbnFilter, setIsbnFilter] = useState(filterState.isbnFilter || '');
+  const [languageFilter, setLanguageFilter] = useState(filterState.languageFilter || '');
+  const [cddFilter, setCddFilter] = useState(filterState.cddFilter || '');
+  const [subjectsFilter, setSubjectsFilter] = useState(filterState.subjectsFilter || '');
+  const [materialFilter, setMaterialFilter] = useState(filterState.materialFilter || '__all__');
+  const [collectionFilter, setCollectionFilter] = useState(filterState.collectionFilter || '');
+  const [placeFilter, setPlaceFilter] = useState(filterState.placeFilter || '');
 
   const dSearch = useDebounce(search);
   const dAuthor = useDebounce(authorFilter);
   const dPublisher = useDebounce(publisherFilter);
   const dYear = useDebounce(yearFilter);
+  const dIsbn = useDebounce(isbnFilter);
+  const dLanguage = useDebounce(languageFilter);
+  const dCdd = useDebounce(cddFilter);
+  const dSubjects = useDebounce(subjectsFilter);
+  const dCollection = useDebounce(collectionFilter);
+  const dPlace = useDebounce(placeFilter);
 
   // Sauvegarder les filtres dans sessionStorage à chaque modification
   useEffect(() => {
-    saveFilters({ search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact });
-  }, [search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact]);
+    saveFilters({ search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter });
+  }, [search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter]);
 
   const [libraryOptions, setLibraryOptions] = useState([{ value:'__all__', label: t({ id: 'catalog.avail.all' }) }]);
 
@@ -264,7 +285,7 @@ export default function CatalogPage() {
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     try {
-      const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth });
+      const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
       const { data, error } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
       if (error) throw error;
       const result = data || [];
@@ -274,7 +295,7 @@ export default function CatalogPage() {
       setHasMore(result.length === PAGE_SIZE);
     } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
     finally { setLoading(false); setLoadingMore(false); }
-  }, [viewName, selectCols, sortValue, dSearch, dAuthor, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth]);
+  }, [viewName, selectCols, sortValue, dSearch, dAuthor, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
 
@@ -318,7 +339,7 @@ export default function CatalogPage() {
   }, [isAuth]);
 
   // Stats
-  const hasActiveFilters = dSearch || dAuthor || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter !== '__all__';
+  const hasActiveFilters = dSearch || dAuthor || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter !== '__all__' || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
   const availabilityOptions = isAuth ? AVAILABILITY_OPTIONS_AUTH : AVAILABILITY_OPTIONS_ANON;
 
   function handleHeaderSort(col) {
@@ -332,6 +353,8 @@ export default function CatalogPage() {
   function clearFilters() {
     setSearch(''); setAuthorFilter(''); setPublisherFilter(''); setYearFilter('');
     setAvailabilityFilter('__all__'); setLibraryFilter('__all__'); setSortValue('__relevance__');
+    setIsbnFilter(''); setLanguageFilter(''); setCddFilter(''); setSubjectsFilter('');
+    setMaterialFilter('__all__'); setCollectionFilter(''); setPlaceFilter('');
   }
 
   function copySearchLink() {
@@ -428,6 +451,60 @@ export default function CatalogPage() {
           </div>
         </div>
 
+        {/* ── Advanced search toggle ──────────────────── */}
+        <button
+          className="ab-button ab-button--secondary"
+          style={{ margin: '8px 0 0', fontSize: '.78rem', padding: '4px 14px' }}
+          onClick={() => setAdvancedOpen(p => !p)}
+        >
+          {t({ id: 'catalog.advancedSearch.toggle' })} {advancedOpen ? '▲' : '▼'}
+        </button>
+
+        {/* ── Advanced search fields ─────────────────── */}
+        {advancedOpen && (
+          <div className="ab-filters-grid" style={{ marginTop: 8 }}>
+            <div className="ab-field">
+              <label className="ab-field__label">{t({ id: 'catalog.filters.isbn' })}</label>
+              <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.isbnPh' })}
+                value={isbnFilter} onChange={e => setIsbnFilter(e.target.value)} />
+            </div>
+            <div className="ab-field">
+              <label className="ab-field__label">{t({ id: 'catalog.filters.language' })}</label>
+              <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.languagePh' })}
+                value={languageFilter} onChange={e => setLanguageFilter(e.target.value)} />
+            </div>
+            <div className="ab-field">
+              <label className="ab-field__label">{t({ id: 'catalog.filters.cdd' })}</label>
+              <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.cddPh' })}
+                value={cddFilter} onChange={e => setCddFilter(e.target.value)} />
+            </div>
+            <div className="ab-field">
+              <label className="ab-field__label">{t({ id: 'catalog.filters.subjects' })}</label>
+              <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.subjectsPh' })}
+                value={subjectsFilter} onChange={e => setSubjectsFilter(e.target.value)} />
+            </div>
+            <div className="ab-field">
+              <label className="ab-field__label">{t({ id: 'catalog.filters.material' })}</label>
+              <select className="ab-select" value={materialFilter} onChange={e => setMaterialFilter(e.target.value)}>
+                <option value="__all__">{t({ id: 'catalog.filters.materialAll' })}</option>
+                {['livro','periodico','tract','cartaz','audio','audiovisual','recurso_digital','dossie','tese','artigo','relatorio','zine'].map(mt => (
+                  <option key={mt} value={mt}>{t({ id: `catalogacao.material.${mt}` })}</option>
+                ))}
+              </select>
+            </div>
+            <div className="ab-field">
+              <label className="ab-field__label">{t({ id: 'catalog.filters.collection' })}</label>
+              <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.collectionPh' })}
+                value={collectionFilter} onChange={e => setCollectionFilter(e.target.value)} />
+            </div>
+            <div className="ab-field">
+              <label className="ab-field__label">{t({ id: 'catalog.filters.place' })}</label>
+              <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.placePh' })}
+                value={placeFilter} onChange={e => setPlaceFilter(e.target.value)} />
+            </div>
+          </div>
+        )}
+
         {/* Chips + view controls */}
         <div className="ab-toolbar-meta">
           {hasActiveFilters && (
@@ -438,6 +515,13 @@ export default function CatalogPage() {
               {dYear && <span className="ab-filter-chip">{t({ id: 'catalog.chip.year' })}: <strong>{dYear}</strong> <button onClick={() => setYearFilter('')}>✕</button></span>}
               {availabilityFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.avail' })}: <strong>{availabilityOptions.find(o => o.value === availabilityFilter)?.label}</strong> <button onClick={() => setAvailabilityFilter('__all__')}>✕</button></span>}
               {libraryFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.library' })}: <strong>{libraryOptions.find(o => o.value === libraryFilter)?.label}</strong> <button onClick={() => setLibraryFilter('__all__')}>✕</button></span>}
+              {dIsbn && <span className="ab-filter-chip">{t({ id: 'catalog.chip.isbn' })}: <strong>{dIsbn}</strong> <button onClick={() => setIsbnFilter('')}>✕</button></span>}
+              {dLanguage && <span className="ab-filter-chip">{t({ id: 'catalog.chip.language' })}: <strong>{dLanguage}</strong> <button onClick={() => setLanguageFilter('')}>✕</button></span>}
+              {dCdd && <span className="ab-filter-chip">{t({ id: 'catalog.chip.cdd' })}: <strong>{dCdd}</strong> <button onClick={() => setCddFilter('')}>✕</button></span>}
+              {dSubjects && <span className="ab-filter-chip">{t({ id: 'catalog.chip.subjects' })}: <strong>{dSubjects}</strong> <button onClick={() => setSubjectsFilter('')}>✕</button></span>}
+              {materialFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.material' })}: <strong>{t({ id: `catalogacao.material.${materialFilter}` })}</strong> <button onClick={() => setMaterialFilter('__all__')}>✕</button></span>}
+              {dCollection && <span className="ab-filter-chip">{t({ id: 'catalog.chip.collection' })}: <strong>{dCollection}</strong> <button onClick={() => setCollectionFilter('')}>✕</button></span>}
+              {dPlace && <span className="ab-filter-chip">{t({ id: 'catalog.chip.place' })}: <strong>{dPlace}</strong> <button onClick={() => setPlaceFilter('')}>✕</button></span>}
             </div>
           )}
           <div className="ab-view-controls">

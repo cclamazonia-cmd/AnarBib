@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useIntl } from 'react-intl';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -7,14 +8,18 @@ import { Button } from '@/components/ui';
 const ANARBIB_LOGO = 'https://cclamazonia.noblogs.org/files/2026/03/AnarBib_logo.png';
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 const STATES_BR = ['','AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
-const GENDERS = [
-  { value: '', label: 'Não informar' }, { value: 'feminino', label: 'Feminino' },
-  { value: 'masculino', label: 'Masculino' }, { value: 'nao_binario', label: 'Não-binário' },
-  { value: 'outro', label: 'Outro' },
-];
+// GENDERS resolved via t() inside component
 
 export default function CriarContaPage() {
   const navigate = useNavigate();
+  const { formatMessage: t } = useIntl();
+  const GENDERS = [
+    { value: '', label: t({id:'auth.create.genderNone'}) },
+    { value: 'feminino', label: t({id:'auth.create.genderF'}) },
+    { value: 'masculino', label: t({id:'auth.create.genderM'}) },
+    { value: 'nao_binario', label: t({id:'auth.create.genderNB'}) },
+    { value: 'outro', label: t({id:'auth.create.genderOther'}) },
+  ];
   const [libraries, setLibraries] = useState([]);
   const [currentLib, setCurrentLib] = useState(null);
   const [form, setForm] = useState({
@@ -57,9 +62,9 @@ export default function CriarContaPage() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.first_name.trim() || !form.last_name.trim() || !form.email.trim() || !form.phone.trim()) { setMsg({ text: 'Preencha Nome, Sobrenome, E-mail e Telefone.', kind: 'error' }); return; }
-    if (!form.consent) { setMsg({ text: 'Marque a confirmação de uso do e-mail.', kind: 'error' }); return; }
-    if (currentLib?.has_regimento && !form.acceptRules) { setMsg({ text: 'Aceite o regimento da biblioteca.', kind: 'error' }); return; }
+    if (!form.first_name.trim() || !form.last_name.trim() || !form.email.trim() || !form.phone.trim()) { setMsg({ text: t({id:'auth.create.fillRequired'}), kind: 'error' }); return; }
+    if (!form.consent) { setMsg({ text: t({id:'auth.create.checkConsent'}), kind: 'error' }); return; }
+    if (currentLib?.has_regimento && !form.acceptRules) { setMsg({ text: t({id:'auth.create.acceptRulesRequired'}), kind: 'error' }); return; }
     setLoading(true); setMsg({ text: '', kind: '' }); setPublicId('');
     try {
       const noLib = !form.library_slug;
@@ -78,7 +83,7 @@ export default function CriarContaPage() {
         ? (noLib ? 'Cadastro concluído, mas houve um problema ao enviar o e-mail. Entre em contato com a coordenação do AnarBib.' : 'Cadastro concluído, mas houve um problema ao enviar o e-mail. Entre em contato com a biblioteca.')
         : (noLib ? 'Cadastro enviado! Verifique seu e-mail (e Spam) para receber senha provisória, ID público e orientações para solicitar entrada de nova biblioteca.' : 'Cadastro enviado! Verifique seu e-mail (e Spam) para receber senha provisória e ID público. Depois, altere sua senha na Conta.'),
         kind: data?.email_usuaria_enviado === false ? 'warn' : 'ok' });
-    } catch { setMsg({ text: 'Falha de rede. Tente novamente.', kind: 'error' }); }
+    } catch { setMsg({ text: t({id:'auth.networkError'}), kind: 'error' }); }
     finally { setLoading(false); }
   }
 
@@ -91,18 +96,18 @@ export default function CriarContaPage() {
   return (
     <PageShell><Topbar />
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '24px 16px' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>Criar conta</h1>
-        <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>Abertura de conta (leitor/a/e)</p>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'auth.create.title'})}</h1>
+        <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>{t({id:'auth.create.subtitle'})}</p>
 
         {/* Bibliothèque selector */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16 }}>
-          <label style={ls}>Selecionar biblioteca de referência {req}</label>
+          <label style={ls}>{t({id:'auth.create.selectLibrary'})} {req}</label>
           <select value={form.library_slug} onChange={e => handleLibChange(e.target.value)} style={fs}>
-            <option value="">Selecione...</option>
+            <option value="">{t({id:'auth.create.selectPh'})}</option>
             {libraries.map(l => <option key={l.slug} value={l.slug}>{l.name}</option>)}
-            <option value="">Inscrição sem biblioteca (para solicitar entrada de uma nova)</option>
+            <option value="">{t({id:'auth.create.noLibrary'})}</option>
           </select>
-          <div style={hs}>A biblioteca escolhida definirá a identidade visual do cadastro e o conteúdo do e-mail de boas-vindas.</div>
+          <div style={hs}>{t({id:'auth.create.libraryHint'})}</div>
         </div>
 
         {/* Logos */}
@@ -114,44 +119,44 @@ export default function CriarContaPage() {
 
         {/* Security notice */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(29,78,216,.08)', border: '1px solid rgba(29,78,216,.2)', marginBottom: 16, fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
-          <strong>Importante (segurança):</strong>
-          <p style={{ margin: '4px 0' }}>A senha que você receberá por e-mail é <strong>provisória</strong>. No primeiro acesso, <strong>altere sua senha na Conta</strong>.</p>
-          <p style={{ margin: '4px 0' }}>Seus acessos regulares serão feitos com seu <strong>ID público pessoal</strong>.</p>
+          <strong>{t({id:'auth.create.securityTitle'})}</strong>
+          <p style={{ margin: '4px 0' }}>{t({id:'auth.create.securityPw'})}</p>
+          <p style={{ margin: '4px 0' }}>{t({id:'auth.create.securityId'})}</p>
           <p style={{ margin: '4px 0' }}>Se perder o acesso, use em <Link to="/cadastro" style={{ textDecoration: 'underline' }}>Cadastro</Link> o botão <strong>"Esqueci minha senha"</strong>.</p>
           <p style={{ margin: '4px 0' }}>Se não encontrar o e-mail, verifique "Spam/Lixo eletrônico".</p>
         </div>
 
-        <p style={hs}>{req} Campo obrigatório. Campos de endereço são todos opcionais.</p>
+        <p style={hs}>{req}{t({id:'auth.create.required'})}</p>
 
         {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.85rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : msg.kind === 'warn' ? 'rgba(180,83,9,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : msg.kind === 'warn' ? '#fbbf24' : '#f87171', border: `1px solid ${msg.kind === 'ok' ? 'rgba(21,128,61,.25)' : msg.kind === 'warn' ? 'rgba(180,83,9,.25)' : 'rgba(220,38,38,.25)'}` }}>{msg.text}</div>}
 
         {publicId && <div style={{ padding: 16, borderRadius: 10, background: 'rgba(21,128,61,.12)', border: '1px solid rgba(21,128,61,.3)', marginBottom: 16, textAlign: 'center' }}>
-          <strong>Seu ID público</strong>
-          <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>Guarde este identificador. Nos próximos acessos, você entrará com ele e sua senha.</div>
+          <strong>{t({id:'auth.create.yourPublicId'})}</strong>
+          <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>{t({id:'auth.create.publicIdHint'})}</div>
           <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '.05em', color: '#4ade80' }}>{publicId}</div>
         </div>}
 
         <form onSubmit={handleSubmit}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-            <div><label style={ls}>Nome {req}</label><input type="text" value={form.first_name} onChange={e => set('first_name', e.target.value)} required style={fs} autoComplete="given-name" /></div>
-            <div><label style={ls}>Sobrenome {req}</label><input type="text" value={form.last_name} onChange={e => set('last_name', e.target.value)} required style={fs} autoComplete="family-name" /></div>
+            <div><label style={ls}>{t({id:'auth.create.firstName'})} {req}</label><input type="text" value={form.first_name} onChange={e => set('first_name', e.target.value)} required style={fs} autoComplete="given-name" /></div>
+            <div><label style={ls}>{t({id:'auth.create.lastName'})} {req}</label><input type="text" value={form.last_name} onChange={e => set('last_name', e.target.value)} required style={fs} autoComplete="family-name" /></div>
           </div>
-          <div style={{ marginBottom: 12 }}><label style={ls}>E-mail {req}</label><input type="email" value={form.email} onChange={e => set('email', e.target.value)} required style={fs} autoComplete="email" /></div>
-          <div style={{ marginBottom: 12 }}><label style={ls}>Telefone {req}</label><input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} placeholder="+55 (91) 1234-5678" required style={fs} autoComplete="tel" /></div>
-          <div style={{ marginBottom: 16 }}><label style={ls}>Gênero</label><select value={form.gender} onChange={e => set('gender', e.target.value)} style={fs}>{GENDERS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}</select><div style={hs}>Campo opcional.</div></div>
+          <div style={{ marginBottom: 12 }}><label style={ls}>{t({id:'auth.create.email'})} {req}</label><input type="email" value={form.email} onChange={e => set('email', e.target.value)} required style={fs} autoComplete="email" /></div>
+          <div style={{ marginBottom: 12 }}><label style={ls}>{t({id:'auth.create.phone'})} {req}</label><input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)} placeholder={t({id:'auth.create.phonePh'})} required style={fs} autoComplete="tel" /></div>
+          <div style={{ marginBottom: 16 }}><label style={ls}>{t({id:'auth.create.gender'})}</label><select value={form.gender} onChange={e => set('gender', e.target.value)} style={fs}>{GENDERS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}</select><div style={hs}>{t({id:'auth.create.genderOptional'})}</div></div>
 
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 10, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>Endereço</h2>
-          <div style={{ marginBottom: 12 }}><label style={ls}>Endereço 1</label><input type="text" value={form.addr1} onChange={e => set('addr1', e.target.value)} style={fs} autoComplete="address-line1" /></div>
-          <div style={{ marginBottom: 12 }}><label style={ls}>Complemento / referência</label><input type="text" value={form.addr2} onChange={e => set('addr2', e.target.value)} style={fs} /></div>
+          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 10, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'auth.create.addressTitle'})}</h2>
+          <div style={{ marginBottom: 12 }}><label style={ls}>{t({id:'auth.create.addr1'})}</label><input type="text" value={form.addr1} onChange={e => set('addr1', e.target.value)} style={fs} autoComplete="address-line1" /></div>
+          <div style={{ marginBottom: 12 }}><label style={ls}>{t({id:'auth.create.addr2'})}</label><input type="text" value={form.addr2} onChange={e => set('addr2', e.target.value)} style={fs} /></div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
-            <div><label style={ls}>Casa ou Ap. nº</label><input type="text" value={form.unit} onChange={e => set('unit', e.target.value)} style={fs} /></div>
-            <div><label style={ls}>CEP</label><input type="text" value={form.cep} onChange={e => set('cep', e.target.value)} inputMode="numeric" style={fs} autoComplete="postal-code" /></div>
-            <div><label style={ls}>Bairro</label><input type="text" value={form.bairro} onChange={e => set('bairro', e.target.value)} style={fs} /></div>
+            <div><label style={ls}>{t({id:'auth.create.unit'})}</label><input type="text" value={form.unit} onChange={e => set('unit', e.target.value)} style={fs} /></div>
+            <div><label style={ls}>{t({id:'auth.create.cep'})}</label><input type="text" value={form.cep} onChange={e => set('cep', e.target.value)} inputMode="numeric" style={fs} autoComplete="postal-code" /></div>
+            <div><label style={ls}>{t({id:'auth.create.bairro'})}</label><input type="text" value={form.bairro} onChange={e => set('bairro', e.target.value)} style={fs} /></div>
           </div>
-          <div style={{ marginBottom: 12 }}><label style={ls}>Cidade</label><input type="text" value={form.city} onChange={e => set('city', e.target.value)} style={fs} autoComplete="address-level2" /></div>
+          <div style={{ marginBottom: 12 }}><label style={ls}>{t({id:'auth.create.city'})}</label><input type="text" value={form.city} onChange={e => set('city', e.target.value)} style={fs} autoComplete="address-level2" /></div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-            <div><label style={ls}>Estado</label><select value={form.state} onChange={e => set('state', e.target.value)} style={fs}>{STATES_BR.map(s => <option key={s} value={s}>{s || 'Selecione...'}</option>)}</select></div>
-            <div><label style={ls}>País</label><input type="text" value={form.country} onChange={e => set('country', e.target.value)} style={fs} /></div>
+            <div><label style={ls}>{t({id:'auth.create.state'})}</label><select value={form.state} onChange={e => set('state', e.target.value)} style={fs}>{STATES_BR.map(s => <option key={s} value={s}>{s || t({id:'auth.create.statePh'})}</option>)}</select></div>
+            <div><label style={ls}>{t({id:'auth.create.country'})}</label><input type="text" value={form.country} onChange={e => set('country', e.target.value)} style={fs} /></div>
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,.1)', margin: '20px 0' }} />
@@ -159,19 +164,19 @@ export default function CriarContaPage() {
           {currentLib?.has_regimento && (
             <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 12, fontSize: '.85rem', cursor: 'pointer' }}>
               <input type="checkbox" checked={form.acceptRules} onChange={e => set('acceptRules', e.target.checked)} style={{ marginTop: 3 }} />
-              <span>Eu li e aceito o Regimento da Biblioteca (empréstimos, prazos, prorrogações e atrasos). {req}</span>
+              <span>{t({id:'auth.create.acceptRules'})} {req}</span>
             </label>
           )}
 
           <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 16, fontSize: '.85rem', cursor: 'pointer' }}>
             <input type="checkbox" checked={form.consent} onChange={e => set('consent', e.target.checked)} required style={{ marginTop: 3 }} />
-            <span>Eu aceito que meu e-mail seja usado para: {req} <strong>reservas</strong>, <strong>empréstimos</strong>, <strong>prorrogações</strong>, <strong>devoluções</strong> e <strong>avisos de atraso</strong>.</span>
+            <span>{t({id:'auth.create.consentEmail'})}</span>
           </label>
 
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <Button variant="primary" type="submit" disabled={loading}>{loading ? 'Enviando…' : 'Enviar cadastro'}</Button>
-            <Button variant="secondary" onClick={() => navigate(-1)}>Voltar</Button>
-            <Link to="/cadastro" style={{ textDecoration: 'none' }}><Button variant="secondary">Já tenho conta → Entrar</Button></Link>
+            <Button variant="primary" type="submit" disabled={loading}>{loading ? t({id:'auth.create.submitting'}) : t({id:'auth.create.submit'})}</Button>
+            <Button variant="secondary" onClick={() => navigate(-1)}>{t({id:'auth.create.back'})}</Button>
+            <Link to="/cadastro" style={{ textDecoration: 'none' }}><Button variant="secondary">{t({id:'auth.create.haveAccount'})}</Button></Link>
           </div>
         </form>
       </div>
