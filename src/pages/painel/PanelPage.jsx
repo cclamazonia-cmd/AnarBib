@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
@@ -538,12 +538,12 @@ export default function PanelPage() {
               <div className="ab-painel-acoes-card">
                 <h2 className="ab-painel-h2">{t({ id: 'panel.loan.return' })}</h2>
                 <label>{t({ id: 'panel.loan.returnFullLabel' })}
-                  <input type="text" value={returnId} onChange={e => setReturnId(e.target.value)} placeholder="Ex.: 154" className="ab-painel-input" />
+                  <input type="text" value={returnId} onChange={e => setReturnId(e.target.value)} placeholder={t({id:"panel.loan.returnTotalPh"})} className="ab-painel-input" />
                 </label>
                 <Button variant="secondary" onClick={registrarDevolucaoTotal}>{t({ id: 'panel.loan.returnFull' })}</Button>
                 <hr className="ab-painel-hr" />
                 <label>{t({ id: 'panel.loan.returnPartialLabel' })}
-                  <input type="text" value={returnSubIds} onChange={e => setReturnSubIds(e.target.value)} placeholder="Ex.: 154.1, 154.2" className="ab-painel-input" />
+                  <input type="text" value={returnSubIds} onChange={e => setReturnSubIds(e.target.value)} placeholder={t({id:"panel.loan.returnPartialPh"})} className="ab-painel-input" />
                 </label>
                 <Button variant="secondary" onClick={registrarDevolucaoParcial}>{t({ id: 'panel.loan.returnPartial' })}</Button>
                 {returnMsg && <p className="ab-painel-msg">{returnMsg}</p>}
@@ -560,7 +560,7 @@ export default function PanelPage() {
                 <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
               </div>
               <div className="ab-painel-res-workflow">
-                <input type="text" value={resNote} onChange={e => setResNote(e.target.value)} placeholder="Nota interna (opcional)" className="ab-painel-input" />
+                <input type="text" value={resNote} onChange={e => setResNote(e.target.value)} placeholder={t({id:"panel.loan.notePh"})} className="ab-painel-input" />
                 <input type="datetime-local" value={resSchedule} onChange={e => setResSchedule(e.target.value)} className="ab-painel-input" />
                 <select value={resStage} onChange={e => setResStage(e.target.value)} className="ab-painel-input">
                   <option value="">Selecione etapa…</option>
