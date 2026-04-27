@@ -195,7 +195,7 @@ export default function PanelPage() {
         p_user_id: borrower.id, p_holding_ids: holdingIds,
       });
       if (error) throw error;
-      setLoanMsg(`Saída registrada: ${refs.length} livro(s) para ${borrower.first_name || borrower.email}.`);
+      setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, reader: borrower.first_name || borrower.email }));
       // Le record_id retourné par la RPC est l'emprestimo_id — on ne l'a pas ici,
       // mais on peut utiliser un reload + notify asynchrone via les données rechargées
       // Pour l'instant on notifie avec un ID fictif que le backend résoudra
@@ -212,7 +212,7 @@ export default function PanelPage() {
     try {
       const { error } = await supabase.rpc('fn_v2_return_emprestimo_total', { p_emprestimo_id: id });
       if (error) throw error;
-      setReturnMsg(`Devolução total registrada para empréstimo #${id}.`);
+      setReturnMsg(t({ id: 'panel.loan.fullReturnDone' }, { id }));
       notifyEvent('emprestimo_v2_devolvido', id);
       setReturnId('');
       loadData();
@@ -231,7 +231,7 @@ export default function PanelPage() {
           p_emprestimo_id: empId, p_line_nos: [lineNo],
         });
       }
-      setReturnMsg(`Devolução parcial registrada: ${subIds.join(', ')}.`);
+      setReturnMsg(t({ id: 'panel.loan.partialReturnDone' }, { ids: subIds.join(', ') }));
       setReturnSubIds('');
       loadData();
     } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message:e.message})); }
@@ -525,10 +525,10 @@ export default function PanelPage() {
               <div className="ab-painel-acoes-card">
                 <h2 className="ab-painel-h2">{t({ id: 'panel.loan.register' })}</h2>
                 <p className="ab-painel-hint">{t({ id: 'panel.loan.refsHint' })}</p>
-                <label>ID público ou e-mail do(a/e) leitor(a/e)
+                <label>{t({ id: 'panel.loan.borrowerLabel' })}
                   <input type="text" value={borrowerLookup} onChange={e => setBorrowerLookup(e.target.value)} placeholder={t({ id: 'panel.loan.borrowerPlaceholder' })} className="ab-painel-input" />
                 </label>
-                <label>Referência(s) local(is)
+                <label>{t({ id: 'panel.loan.refsLabel' })}
                   <input type="text" value={loanRefs} onChange={e => setLoanRefs(e.target.value)} placeholder={t({ id: 'panel.loan.refsPlaceholder' })} className="ab-painel-input" />
                 </label>
                 <Button onClick={registrarSaida}>{t({ id: 'panel.loan.register' })}</Button>
@@ -536,12 +536,12 @@ export default function PanelPage() {
               </div>
               <div className="ab-painel-acoes-card">
                 <h2 className="ab-painel-h2">{t({ id: 'panel.loan.return' })}</h2>
-                <label>Devolução total (ID do empréstimo)
+                <label>{t({ id: 'panel.loan.returnFullLabel' })}
                   <input type="text" value={returnId} onChange={e => setReturnId(e.target.value)} placeholder="Ex.: 154" className="ab-painel-input" />
                 </label>
                 <Button variant="secondary" onClick={registrarDevolucaoTotal}>{t({ id: 'panel.loan.returnFull' })}</Button>
                 <hr className="ab-painel-hr" />
-                <label>Devolução parcial (IDs dos itens)
+                <label>{t({ id: 'panel.loan.returnPartialLabel' })}
                   <input type="text" value={returnSubIds} onChange={e => setReturnSubIds(e.target.value)} placeholder="Ex.: 154.1, 154.2" className="ab-painel-input" />
                 </label>
                 <Button variant="secondary" onClick={registrarDevolucaoParcial}>{t({ id: 'panel.loan.returnPartial' })}</Button>
