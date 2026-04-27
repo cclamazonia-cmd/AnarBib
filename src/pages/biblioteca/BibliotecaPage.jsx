@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+﻿import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
@@ -336,6 +336,23 @@ export default function BibliotecaPage() {
   }
 
   // ── UI constants ────────────────────────────────────────
+  async function saveRule() {
+    if (!editingRule) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase.from('library_circulation_policy_rules').update({
+        loan_days: editingRule.loan_days, renewal_days: editingRule.renewal_days,
+        renewal_max_count: editingRule.renewal_max_count, quantity_max: editingRule.quantity_max,
+        loan_allowed: editingRule.loan_allowed, renewable: editingRule.renewable,
+        public_note: editingRule.public_note,
+      }).eq('id', editingRule.id);
+      if (error) throw error;
+      setPolicyRules(prev => prev.map(r => r.id === editingRule.id ? editingRule : r));
+      setEditingRule(null);
+      setMsg({ text: t({id:'biblioteca.rules.saved'}), kind: 'ok' });
+    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
+    finally { setSaving(false); }
+  }
   const fs = { width:'100%', padding:'10px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', fontSize:'.9rem' };
   const ls = { display:'block', fontSize:'.85rem', fontWeight:600, marginBottom:3, color:'var(--brand-muted, #ccc)' };
   const bx = { padding:14, borderRadius:10, background:'rgba(255,255,255,.03)', border:'1px solid rgba(255,255,255,.08)', marginBottom:16 };
@@ -495,15 +512,37 @@ export default function BibliotecaPage() {
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.regulation.rules' })}</h4>
             {!policySet && <div style={{ fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.regulation.noRules' })}</div>}
             {policySet && <div style={{ marginBottom:10, fontSize:'.88rem' }}><strong>{policySet.label||'Regras'}</strong>{policySet.scope_note && ` — ${policySet.scope_note}`}</div>}
-            {policyRules.length>0 && <div style={lw}>{policyRules.map((r,i)=>(
-              <div key={r.id} style={{ padding:'8px 10px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)' }}>
-                <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.rule_label||`Regra #${r.id}`}</div>
-                <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                  {r.loan_allowed ? t({id:'biblioteca.regulation.loanAllowed'},{days:r.loan_days}) : t({id:'biblioteca.regulation.loanNotAllowed'})}
-                  {r.renewable&&` · Renovável (${r.renewal_days}d, ${r.renewal_max_count}x)`}
-                  {r.reservation_allowed&&' · Reserva'}{r.consultation_only&&' · Consulta'}
-                  {r.public_note&&` · ${r.public_note}`}
-                </div>
+{policyRules.length>0 && <div style={lw}>{policyRules.map((r,i)=>(
+              <div key={r.id} style={{ padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)' }}>
+                {editingRule?.id===r.id ? (
+                  <div className="cat-book-grid" style={{ gap:8 }}>
+                    <div className="cat-field" style={{ gridColumn:'span 3' }}><strong style={{ fontSize:'.9rem' }}>{r.rule_label||`Regra #${r.id}`}</strong></div>
+                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.loanDays'})}</label><input type="number" value={editingRule.loan_days||''} onChange={e=>setEditingRule(p=>({...p,loan_days:Number(e.target.value)||null}))} style={fs} /></div>
+                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.renewalDays'})}</label><input type="number" value={editingRule.renewal_days||''} onChange={e=>setEditingRule(p=>({...p,renewal_days:Number(e.target.value)||null}))} style={fs} /></div>
+                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.renewalMax'})}</label><input type="number" value={editingRule.renewal_max_count||''} onChange={e=>setEditingRule(p=>({...p,renewal_max_count:Number(e.target.value)||null}))} style={fs} /></div>
+                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.maxItems'})}</label><input type="number" value={editingRule.quantity_max||''} onChange={e=>setEditingRule(p=>({...p,quantity_max:Number(e.target.value)||null}))} style={fs} /></div>
+                    <div className="cat-field"><label style={{...ls,display:'flex',gap:6,alignItems:'center'}}><input type="checkbox" checked={editingRule.loan_allowed||false} onChange={e=>setEditingRule(p=>({...p,loan_allowed:e.target.checked}))} />{t({id:'biblioteca.rules.loanAllowed'})}</label></div>
+                    <div className="cat-field"><label style={{...ls,display:'flex',gap:6,alignItems:'center'}}><input type="checkbox" checked={editingRule.renewable||false} onChange={e=>setEditingRule(p=>({...p,renewable:e.target.checked}))} />{t({id:'biblioteca.rules.renewable'})}</label></div>
+                    <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({id:'biblioteca.rules.publicNote'})}</label><input type="text" value={editingRule.public_note||''} onChange={e=>setEditingRule(p=>({...p,public_note:e.target.value}))} style={fs} /></div>
+                    <div className="cat-field" style={{ gridColumn:'span 3', display:'flex', gap:8 }}>
+                      <button className="cat-btn primary" onClick={saveRule} disabled={saving} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.save'})}</button>
+                      <button className="cat-btn secondary" onClick={()=>setEditingRule(null)} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.cancel'})}</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 }}>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.rule_label||`Regra #${r.id}`}</div>
+                      <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                        {r.loan_allowed ? t({id:'biblioteca.regulation.loanAllowed'},{days:r.loan_days}) : t({id:'biblioteca.regulation.loanNotAllowed'})}
+                        {r.renewable&&` · Renovável (${r.renewal_days}d, ${r.renewal_max_count}x)`}
+                        {r.reservation_allowed&&' · Reserva'}{r.consultation_only&&' · Consulta'}
+                        {r.public_note&&` · ${r.public_note}`}
+                      </div>
+                    </div>
+                    <button className="cat-btn secondary" onClick={()=>setEditingRule({...r})} style={{ fontSize:'.78rem', padding:'4px 10px' }}>{t({id:'biblioteca.rules.edit'})}</button>
+                  </div>
+                )}
               </div>
             ))}</div>}
           </div>
