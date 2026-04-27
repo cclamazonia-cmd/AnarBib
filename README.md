@@ -134,6 +134,6 @@ Le hook `useTheme(slug)` dans `src/lib/theme.js` charge le manifest au runtime e
 
 ## Licence
 
-Ce projet est développé pour la communauté des bibliothèques libertaires.
+Ce projet est développé pour la communauté des bibliothèques libertaires mondiales (FICEDL, RebAL, etc.).
 
 
