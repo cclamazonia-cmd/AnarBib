@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>AnarBib</title>
+  <!--
+    GitHub Pages SPA fix.
+    GitHub Pages ne supporte pas le routing côté client (pushState).
+    Ce fichier 404.html redirige vers index.html en préservant le path.
+    Basé sur : https://github.com/rafgraph/spa-github-pages
+  -->
+  <script>
+    // Encode le path actuel dans un query param et redirige vers /
+    var pathSegmentsToKeep = 0; // 0 pour domaine racine (app.anarbib.org)
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+      l.hash
+    );
+  </script>
+</head>
+<body></body>
+</html>
