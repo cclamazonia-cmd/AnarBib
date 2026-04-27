@@ -195,7 +195,7 @@ export default function PanelPage() {
         p_user_id: borrower.id, p_holding_ids: holdingIds,
       });
       if (error) throw error;
-      setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, reader: borrower.first_name || borrower.email }));
+      setLoanMsg(`Saída registrada: ${refs.length} livro(s) para ${borrower.first_name || borrower.email}.`);
       // Le record_id retourné par la RPC est l'emprestimo_id — on ne l'a pas ici,
       // mais on peut utiliser un reload + notify asynchrone via les données rechargées
       // Pour l'instant on notifie avec un ID fictif que le backend résoudra
@@ -212,7 +212,7 @@ export default function PanelPage() {
     try {
       const { error } = await supabase.rpc('fn_v2_return_emprestimo_total', { p_emprestimo_id: id });
       if (error) throw error;
-      setReturnMsg(t({ id: 'panel.loan.fullReturnDone' }, { id }));
+      setReturnMsg(`Devolução total registrada para empréstimo #${id}.`);
       notifyEvent('emprestimo_v2_devolvido', id);
       setReturnId('');
       loadData();
@@ -231,7 +231,7 @@ export default function PanelPage() {
           p_emprestimo_id: empId, p_line_nos: [lineNo],
         });
       }
-      setReturnMsg(t({ id: 'panel.loan.partialReturnDone' }, { ids: subIds.join(', ') }));
+      setReturnMsg(`Devolução parcial registrada: ${subIds.join(', ')}.`);
       setReturnSubIds('');
       loadData();
     } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message:e.message})); }
@@ -363,14 +363,15 @@ export default function PanelPage() {
 
   // ── Render ───────────────────────────────────────────
 
+  // FIX BUG #1: Each tab now has a distinct hint key (was duplicating label).
   const TABS = [
     { key: 'trabalho-do-dia', label: t({ id: 'panel.tab.dailyWork' }), hint: t({ id: 'panel.tab.dailyWork.hint' }) },
-    { key: 'acoes', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions' }) },
-    { key: 'reservas', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations' }) },
-    { key: 'consultas-locais', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations' }) },
-    { key: 'emprestimos-livro', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans' }) },
-    { key: 'emprestimos-lote', label: t({ id: 'panel.loan.grouped' }), hint: t({ id: 'panel.loan.grouped' }) },
-    { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader' }) },
+    { key: 'acoes', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }) },
+    { key: 'reservas', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
+    { key: 'consultas-locais', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
+    { key: 'emprestimos-livro', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
+    { key: 'emprestimos-lote', label: t({ id: 'panel.loan.grouped' }), hint: t({ id: 'panel.tab.grouped.hint' }) },
+    { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
   ];
 
   const activeRes = reservations.filter(r => !['cancelada_leitor','cancelada_biblioteca','expirada','retirada_efetivada','liberada_para_circulacao'].includes(r.item_status));

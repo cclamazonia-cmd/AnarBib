@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
@@ -34,6 +34,15 @@ export default function BibliotecaPage() {
   const isCoord = role === 'coordenador' || role === 'administrador';
   const isLibrarian = role === 'librarian' || isCoord;
 
+  // FIX BUG #2: TASK_STATUS was referenced but never defined, causing ReferenceError
+  // when calling generateReportText(). Built here via useMemo to localize labels.
+  const TASK_STATUS = useMemo(() => ({
+    pendente: t({ id: 'task.status.pendente' }),
+    em_andamento: t({ id: 'task.status.em_andamento' }),
+    concluida: t({ id: 'task.status.concluida' }),
+    cancelada: t({ id: 'task.status.cancelada' }),
+  }), [t]);
+
   const ALL_TABS = [
     { id: 'identity', label: t({ id: 'biblioteca.tab.identity' }), coordOnly: true },
     { id: 'comms', label: t({ id: 'biblioteca.tab.comms' }), coordOnly: true },
@@ -45,7 +54,8 @@ export default function BibliotecaPage() {
     { id: 'reports', label: t({ id: 'biblioteca.tab.reports' }) },
     { id: 'tasks', label: t({ id: 'biblioteca.tab.tasks' }) },
   ];
-  const visibleTabs = ALL_TABS.filter(t => !t.coordOnly || isCoord);
+  // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
+  const visibleTabs = ALL_TABS.filter(tb => !tb.coordOnly || isCoord);
 
   const [tab, setTab] = useState(isCoord ? 'identity' : 'team');
   const [msg, setMsg] = useState({ text: '', kind: '' });
@@ -169,8 +179,10 @@ export default function BibliotecaPage() {
       const path = `regimentos/${slug}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
       const { error: upErr } = await supabase.storage.from('library-regimentos-public').upload(path, file, { upsert: true });
       if (upErr) throw upErr;
+      // FIX BUG #3: 'publicado' is rejected by CHECK constraint; valid values are
+      // 'draft_only', 'published', 'archived'. Was breaking the upload silently.
       const { error: insErr } = await supabase.from('library_regulation_documents').insert({
-        library_id: libraryId, doc_kind: 'regimento', publication_status: 'publicado',
+        library_id: libraryId, doc_kind: 'regimento', publication_status: 'published',
         is_active: true, storage_bucket: 'library-regimentos-public', storage_path_public: path,
         version_label: `Regimento ${new Date().toLocaleDateString('pt-BR')}`,
         created_by: user?.id,
@@ -187,7 +199,8 @@ export default function BibliotecaPage() {
   async function createTask() {
     if (!newTask.title.trim()) { setMsg({ text: t({ id: 'biblioteca.tasks.titleRequired' }), kind: 'error' }); return; }
     try {
-      const tags = (newTask.tagsText || '').split(',').map(t => t.trim()).filter(Boolean);
+      // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
+      const tags = (newTask.tagsText || '').split(',').map(tag => tag.trim()).filter(Boolean);
       const { error } = await supabase.from('painel_internal_tasks').insert({
         library_id: libraryId, title: newTask.title.trim(), description: newTask.description.trim() || null,
         priority: newTask.priority || 'normal', owner: newTask.owner.trim() || null,
@@ -278,7 +291,8 @@ export default function BibliotecaPage() {
         const p = m.profiles || {};
         return `  ${[p.first_name, p.last_name].filter(Boolean).join(' ') || p.email || '—'} — ${m.role === 'librarian' ? 'Bibliotecário(a)' : m.role === 'reader' ? 'Leitor(a)' : m.role}`;
       }), '',
-      'TAREFAS INTERNAS:', ...(tasks.length ? tasks.map(t => `  [${TASK_STATUS[t.status] || t.status}] ${t.title} (${TASK_PRIO[t.priority] || t.priority})${t.owner ? ` — ${t.owner}` : ''}`) : ['  Nenhuma tarefa registrada.']),
+      // FIX BUG #2 + #4: TASK_STATUS now defined; loop variable renamed to `tk`
+      'TAREFAS INTERNAS:', ...(tasks.length ? tasks.map(tk => `  [${TASK_STATUS[tk.status] || tk.status}] ${tk.title} (${TASK_PRIO[tk.priority] || tk.priority})${tk.owner ? ` — ${tk.owner}` : ''}`) : ['  Nenhuma tarefa registrada.']),
     ];
     return lines.join('\n');
   }
@@ -371,7 +385,8 @@ export default function BibliotecaPage() {
         {msg.text && <div style={{ padding:'10px 14px', borderRadius:8, fontSize:'.9rem', marginBottom:14, background:msg.kind==='ok'?'rgba(21,128,61,.12)':msg.kind==='info'?'rgba(29,78,216,.1)':'rgba(220,38,38,.12)', color:msg.kind==='ok'?'#4ade80':msg.kind==='info'?'#60a5fa':'#f87171' }}>{msg.text}</div>}
 
         <div className="cat-tabs" style={{ marginBottom:18 }}>
-          {visibleTabs.map(t => <button key={t.id} className={`cat-tab-btn${tab===t.id?' active':''}${t.separator?' tab-separator':''}`} onClick={()=>setTab(t.id)}>{t.label}</button>)}
+          {/* FIX BUG #4: rename loop variable to avoid shadowing `t` */}
+          {visibleTabs.map(tb => <button key={tb.id} className={`cat-tab-btn${tab===tb.id?' active':''}${tb.separator?' tab-separator':''}`} onClick={()=>setTab(tb.id)}>{tb.label}</button>)}
         </div>
 
         {/* ═══ 1. Identidade ═══════════════════════════ */}
@@ -665,31 +680,32 @@ export default function BibliotecaPage() {
             </div>
             <button className="cat-btn primary" onClick={createTask} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.tasks.create' })}</button>
           </div>
-          {tasks.length>0 && <div style={lw}>{tasks.map((t,i)=>(
-            <div key={t.id} style={{ ...lr(i), flexDirection:'column', alignItems:'stretch', gap:6 }}>
+          {/* FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage) */}
+          {tasks.length>0 && <div style={lw}>{tasks.map((tk,i)=>(
+            <div key={tk.id} style={{ ...lr(i), flexDirection:'column', alignItems:'stretch', gap:6 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{t.title||'(sem título)'}</div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{tk.title||'(sem título)'}</div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                    {t.owner||'—'}{t.due_date&&` · prazo: ${t.due_date}`}
-                    {t.tags?.length>0&&` · ${t.tags.join(', ')}`}
+                    {tk.owner||'—'}{tk.due_date&&` · prazo: ${tk.due_date}`}
+                    {tk.tags?.length>0&&` · ${tk.tags.join(', ')}`}
                   </div>
-                  {t.description && <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>{t.description}</div>}
+                  {tk.description && <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>{tk.description}</div>}
                 </div>
                 <div style={{ display:'flex', gap:4, flexShrink:0, alignItems:'center' }}>
-                  <span className={`cat-pill ${t.priority==='alta'?'danger':t.priority==='baixa'?'info':'warn'}`} style={{ fontSize:'.65rem' }}>{TASK_PRIO[t.priority]||t.priority}</span>
-                  <select value={t.status} onChange={e=>updateTaskStatus(t.id,e.target.value)} style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
+                  <span className={`cat-pill ${tk.priority==='alta'?'danger':tk.priority==='baixa'?'info':'warn'}`} style={{ fontSize:'.65rem' }}>{TASK_PRIO[tk.priority]||tk.priority}</span>
+                  <select value={tk.status} onChange={e=>updateTaskStatus(tk.id,e.target.value)} style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
                     <option value="pendente">{t({ id: 'task.status.pendente' })}</option><option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option><option value="concluida">{t({ id: 'task.status.concluida' })}</option><option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
                   </select>
-                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm('Descartar esta tarefa?'))return;await supabase.from('painel_internal_tasks').delete().eq('id',t.id);await loadAll();}}>{t({ id: 'common.discard' })}</button>
+                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm('Descartar esta tarefa?'))return;await supabase.from('painel_internal_tasks').delete().eq('id',tk.id);await loadAll();}}>{t({ id: 'common.discard' })}</button>
                 </div>
               </div>
               {/* Invite row */}
               <div style={{ display:'flex', gap:6, alignItems:'center' }}>
                 <input type="email" placeholder="E-mail do(a) camarada a convidar…" style={{...fs, flex:1, padding:'6px 10px', fontSize:'.82rem'}}
-                  onKeyDown={async e=>{if(e.key==='Enter'&&e.target.value.trim()){await inviteToTask(t.id,e.target.value);e.target.value='';}}} />
+                  onKeyDown={async e=>{if(e.key==='Enter'&&e.target.value.trim()){await inviteToTask(tk.id,e.target.value);e.target.value='';}}} />
                 <button className="cat-btn secondary" style={{ fontSize:'.78rem', padding:'4px 10px', flexShrink:0 }}
-                  onClick={async e=>{const inp=e.target.previousElementSibling;if(inp?.value?.trim()){await inviteToTask(t.id,inp.value);inp.value='';}}}>{t({ id: 'biblioteca.tasks.invite' })}</button>
+                  onClick={async e=>{const inp=e.target.previousElementSibling;if(inp?.value?.trim()){await inviteToTask(tk.id,inp.value);inp.value='';}}}>{t({ id: 'biblioteca.tasks.invite' })}</button>
               </div>
             </div>
           ))}</div>}
