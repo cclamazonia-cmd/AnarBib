@@ -69,6 +69,7 @@ export default function BibliotecaPage() {
   const [regDocs, setRegDocs] = useState([]);
   const [policySet, setPolicySet] = useState(null);
   const [policyRules, setPolicyRules] = useState([]);
+  const [editingRule, setEditingRule] = useState(null);
   const [docGov, setDocGov] = useState(null);
   const [partners, setPartners] = useState([]);
   const [members, setMembers] = useState([]);
