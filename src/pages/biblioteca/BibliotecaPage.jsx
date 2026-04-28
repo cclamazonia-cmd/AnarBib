@@ -75,7 +75,7 @@ export default function BibliotecaPage() {
   const [members, setMembers] = useState([]);
   const [illLoans, setIllLoans] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [stats, setStats] = useState({ books:0, authors:0, exemplars:0, readers:0, loansOpen:0 });
+  const [stats, setStats] = useState({ books:0, authors:0, exemplars:0, readers:0, loansOpen:0, loansOverdue:0, loansCreated7d:0, loansReturned7d:0, loansCreated30d:0, reservationsActive:0, reservations30d:0, consultationsActive:0, librariansActive:0, topBooks:[] });
   const [mailChannel, setMailChannel] = useState(null);
   const [notifPolicy, setNotifPolicy] = useState(null);
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'normal', owner: '' });
@@ -115,14 +115,23 @@ export default function BibliotecaPage() {
         const { data: rules } = await supabase.from('library_circulation_policy_rules').select('*').eq('policy_set_id', psR.data.id).order('priority');
         setPolicyRules(rules || []);
       }
-      const [bk, au, ex, rd, lo] = await Promise.all([
+      const [bk, au, circStats] = await Promise.all([
         supabase.from('books').select('id', { count: 'exact', head: true }),
         supabase.from('authors').select('id', { count: 'exact', head: true }),
-        supabase.from('exemplares').select('id', { count: 'exact', head: true }).eq('library_id', libraryId),
-        supabase.from('user_library_memberships').select('id', { count: 'exact', head: true }).eq('library_id', libraryId).eq('role', 'reader'),
-        supabase.from('emprestimos_v2_items').select('id', { count: 'exact', head: true }).eq('item_status', 'aberto'),
+        supabase.schema('api').from('library_circulation_stats').select('*').eq('library_id', libraryId).maybeSingle(),
       ]);
-      setStats({ books:bk.count||0, authors:au.count||0, exemplars:ex.count||0, readers:rd.count||0, loansOpen:lo.count||0 });
+      const cs = circStats.data || {};
+      setStats({
+        books: bk.count || 0, authors: au.count || 0,
+        exemplars: cs.exemplars_count || 0, readers: cs.readers_active || 0,
+        loansOpen: cs.loans_open || 0, loansOverdue: cs.loans_overdue || 0,
+        loansCreated7d: cs.loans_created_7d || 0, loansReturned7d: cs.loans_returned_7d || 0,
+        loansCreated30d: cs.loans_created_30d || 0,
+        reservationsActive: cs.reservations_active || 0, reservations30d: cs.reservations_30d || 0,
+        consultationsActive: cs.consultations_active || 0,
+        librariansActive: cs.librarians_active || 0,
+        topBooks: cs.top_books_90d || [],
+      });
     } catch (err) { console.warn('loadAll:', err); }
   }, [libraryId]);
 
@@ -697,8 +706,8 @@ export default function BibliotecaPage() {
           <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.reports.title' })}</h3>
           <div style={bx}>
             <div className="cat-book-grid">
-              {[{v:stats.books,l:t({id:'catalog.stats.documents'})},{v:stats.authors,l:t({id:'catalog.stats.authorities'})},{v:stats.exemplars,l:t({id:'catalog.stats.exemplars'})},{v:stats.readers,l:t({id:'catalog.stats.readers'})},{v:stats.loansOpen,l:t({id:'catalog.stats.loans'})},{v:members.filter(m=>m.role==='librarian').length,l:t({id:'catalog.stats.librarians'})}].map((s,i)=>(
-                <div key={i} style={{ padding:14, borderRadius:8, background:'rgba(0,0,0,.15)', textAlign:'center' }}>
+              {[{v:stats.books,l:t({id:'catalog.stats.documents'})},{v:stats.authors,l:t({id:'catalog.stats.authorities'})},{v:stats.exemplars,l:t({id:'catalog.stats.exemplars'})},{v:stats.readers,l:t({id:'biblioteca.stats.readersActive'})},{v:stats.loansOpen,l:t({id:'biblioteca.stats.loansOpen'})},{v:stats.loansOverdue,l:t({id:'biblioteca.stats.loansOverdue'}),warn:stats.loansOverdue>0},{v:stats.loansCreated7d,l:t({id:'biblioteca.stats.loansCreated7d'})},{v:stats.loansReturned7d,l:t({id:'biblioteca.stats.loansReturned7d'})},{v:stats.reservationsActive,l:t({id:'biblioteca.stats.reservationsActive'})},{v:stats.consultationsActive,l:t({id:'biblioteca.stats.consultationsActive'})},{v:stats.librariansActive,l:t({id:'biblioteca.stats.librariansActive'})}].map((s,i)=>(
+                <div key={i} style={{ padding:14, borderRadius:8, background:s.warn?'rgba(220,38,38,.15)':'rgba(0,0,0,.15)', textAlign:'center', border:s.warn?'1px solid rgba(220,38,38,.4)':'none' }}>
                   <div style={{ fontSize:'1.5rem', fontWeight:800 }}>{s.v}</div><div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{s.l}</div>
                 </div>
               ))}
