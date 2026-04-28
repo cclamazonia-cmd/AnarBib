@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { detectLocale } from '@/i18n';
+import { getCountryName } from '@/lib/countries';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './AuthorPage.css';
@@ -21,9 +22,14 @@ function yearsLabel(birth, death) {
   return `– ${d}`;
 }
 
-function buildHeroIntro(author, booksCount, t) {
+function buildHeroIntro(author, booksCount, t, locale) {
   const parts = [];
-  if (author.country) parts.push(t({ id: `country.${author.country}`, defaultMessage: author.country }));
+  // FIX B.1: use i18n-iso-countries helper instead of t({id: 'country.XXX'})
+  // — country.* keys were missing in all 6 locales, showing raw ISO code.
+  if (author.country) {
+    const countryName = getCountryName(author.country, locale);
+    if (countryName) parts.push(countryName);
+  }
   const years = yearsLabel(author.birth_year, author.death_year);
   if (years) parts.push(years);
   if (booksCount > 0) parts.push(t({ id: 'author.booksCount' }, { count: booksCount }));
@@ -33,7 +39,7 @@ function buildHeroIntro(author, booksCount, t) {
 export default function AuthorPage() {
   const { id } = useParams();
   const { user } = useAuth();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   const { librarySlug } = useLibrary();
   const navigate = useNavigate();
 
@@ -56,7 +62,10 @@ export default function AuthorPage() {
           // Attach translations as biography_i18n map
           if (transRes.data?.length) {
             authorData.biography_i18n = {};
-            transRes.data.forEach(t => { authorData.biography_i18n[t.lang] = t.biography; });
+            // FIX B.1 (bonus): rename loop variable `t` -> `tr` to avoid shadowing
+            // the outer formatMessage `t`. Was harmless here (used as object) but
+            // a latent trap for future edits.
+            transRes.data.forEach(tr => { authorData.biography_i18n[tr.lang] = tr.biography; });
           }
           setAuthor(authorData);
         }
@@ -100,7 +109,7 @@ export default function AuthorPage() {
     .map(v => String(v || '').trim())
     .find(v => v && v !== displayName) || '';
   const years = yearsLabel(author.birth_year, author.death_year);
-  const intro = buildHeroIntro(author, books.length, t);
+  const intro = buildHeroIntro(author, books.length, t, locale);
   const hasPhoto = !!author.photo_object_path;
   const sourceLabel = [author.source_kind, author.source_label].filter(Boolean).join(' · ');
 
@@ -120,7 +129,7 @@ export default function AuthorPage() {
       <Hero title={displayName} subtitle={intro}>
         <div className="ab-autor-chips">
           {years && <Pill>{t({ id: 'author.birthDeath' })}: {years}</Pill>}
-          {author.country && <Pill>{t({ id: 'author.country' })}: {t({ id: `country.${author.country}`, defaultMessage: author.country })}</Pill>}
+          {author.country && <Pill>{t({ id: 'author.country' })}: {getCountryName(author.country, locale) || author.country}</Pill>}
           {books.length > 0 && <Pill>{t({ id: 'author.booksCount' }, { count: books.length })}</Pill>}
           {author.viaf_id && (
             <Pill>

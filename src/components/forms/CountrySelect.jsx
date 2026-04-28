@@ -1,48 +1,25 @@
-// ═══════════════════════════════════════════════════════════
-// AnarBib — CountrySelect
-// ───────────────────────────────────────────────────────────
-// Sélecteur de pays hybride :
-//   1. Pays prioritaires en haut (cf. countryData.PRIORITY_COUNTRIES)
-//   2. Séparateur visuel
-//   3. Tous les autres pays par ordre alphabétique
+// =============================================================================
+// AnarBib -- CountrySelect
+// =============================================================================
+// Hybrid country selector:
+//   1. Priority countries on top (cf. countryData.PRIORITY_COUNTRIES)
+//   2. Visual separator
+//   3. All other countries in alphabetical order
 //
-// Les noms de pays sont localisés via i18n-iso-countries dans la
-// langue active de react-intl.
+// Country names are localized via i18n-iso-countries in the active locale.
+// Locale registration is handled by the central @/lib/countries helper.
 //
-// Valeur stockée : code ISO 3166-1 alpha-2 (ex: 'BR', 'FR', 'AR').
-// ═══════════════════════════════════════════════════════════
+// Stored value: ISO 3166-1 alpha-2 code (e.g. 'BR', 'FR', 'AR').
+// =============================================================================
 
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import countries from 'i18n-iso-countries';
 
-// Locales chargées au démarrage. Si une nouvelle langue est ajoutée
-// au projet, l'enregistrer ici.
-import enLocale from 'i18n-iso-countries/langs/en.json';
-import frLocale from 'i18n-iso-countries/langs/fr.json';
-import esLocale from 'i18n-iso-countries/langs/es.json';
-import ptLocale from 'i18n-iso-countries/langs/pt.json';
-import itLocale from 'i18n-iso-countries/langs/it.json';
-import deLocale from 'i18n-iso-countries/langs/de.json';
-
-countries.registerLocale(enLocale);
-countries.registerLocale(frLocale);
-countries.registerLocale(esLocale);
-countries.registerLocale(ptLocale);
-countries.registerLocale(itLocale);
-countries.registerLocale(deLocale);
+// Importing this helper auto-registers all 6 locales for i18n-iso-countries.
+// See src/lib/countries.js for details.
+import { getCountryNames } from '@/lib/countries';
 
 import { PRIORITY_COUNTRIES } from './countryData';
-
-/**
- * Map les locales react-intl vers les codes locales i18n-iso-countries.
- * pt-BR utilise les noms portugais (pt) car i18n-iso-countries ne distingue
- * pas pt-PT et pt-BR — les différences de noms de pays sont marginales.
- */
-function intlToIsoLocale(intlLocale) {
-  if (intlLocale.startsWith('pt')) return 'pt';
-  return intlLocale.split('-')[0];
-}
 
 export default function CountrySelect({
   value,
@@ -55,16 +32,15 @@ export default function CountrySelect({
   ariaLabel,
 }) {
   const { locale, formatMessage } = useIntl();
-  const isoLocale = intlToIsoLocale(locale);
 
   /**
-   * Construit la liste des options en deux groupes :
-   * prioritaires (dans l'ordre PRIORITY_COUNTRIES) puis tous les autres
-   * triés alphabétiquement dans la langue active.
+   * Builds the option list in two groups:
+   * priority (in PRIORITY_COUNTRIES order) then all others
+   * sorted alphabetically in the active language.
    */
   const { priorityOptions, otherOptions } = useMemo(() => {
-    const allCountries = countries.getNames(isoLocale, { select: 'official' });
-    // allCountries = { 'BR': 'Brasil', 'FR': 'França', ... }
+    const allCountries = getCountryNames(locale);
+    // allCountries = { 'BR': 'Brasil', 'FR': 'Franca', ... }
     const prioritySet = new Set(PRIORITY_COUNTRIES);
 
     const priority = PRIORITY_COUNTRIES
@@ -74,10 +50,10 @@ export default function CountrySelect({
     const others = Object.entries(allCountries)
       .filter(([code]) => !prioritySet.has(code))
       .map(([code, name]) => ({ code, name }))
-      .sort((a, b) => a.name.localeCompare(b.name, isoLocale));
+      .sort((a, b) => a.name.localeCompare(b.name, locale));
 
     return { priorityOptions: priority, otherOptions: others };
-  }, [isoLocale]);
+  }, [locale]);
 
   const placeholder = formatMessage({ id: 'address.country.placeholder' });
   const separatorLabel = formatMessage({ id: 'address.country.separator' });
@@ -95,7 +71,7 @@ export default function CountrySelect({
     >
       <option value="">{placeholder}</option>
 
-      {/* Pays prioritaires */}
+      {/* Priority countries */}
       <optgroup label={formatMessage({ id: 'address.country.priority' })}>
         {priorityOptions.map(({ code, name }) => (
           <option key={`p-${code}`} value={code}>
@@ -104,7 +80,7 @@ export default function CountrySelect({
         ))}
       </optgroup>
 
-      {/* Tous les autres pays */}
+      {/* All other countries */}
       <optgroup label={separatorLabel}>
         {otherOptions.map(({ code, name }) => (
           <option key={code} value={code}>
