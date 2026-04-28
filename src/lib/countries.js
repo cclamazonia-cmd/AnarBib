@@ -10,7 +10,12 @@
 //
 // Use cases:
 //   - <CountrySelect> (forms) : getCountryNames() returns the full map
-//   - AuthorPage / ReaderPage / etc. : getCountryName(code, locale) returns one
+//   - AuthorPage / ReaderPage / etc. : getCountryName(input, locale) returns one
+//
+// getCountryName accepts EITHER an ISO 3166-1 alpha-2 code (e.g. 'BR')
+// OR a textual name (e.g. 'Brasil', 'Brazil', 'Bresil'). This tolerance is
+// needed for legacy data where country names were stored as text instead
+// of ISO codes.
 // =============================================================================
 
 import countries from 'i18n-iso-countries';
@@ -30,6 +35,37 @@ countries.registerLocale(itLocale);
 countries.registerLocale(deLocale);
 
 /**
+ * Manual mapping for legacy textual values that i18n-iso-countries
+ * cannot recognize automatically (acronyms with dots, compound names,
+ * historical entities, etc.).
+ *
+ * Add new entries here as they are encountered in the database.
+ * Keys should match the EXACT textual value as stored in the DB.
+ */
+const LEGACY_NAME_MAP = {
+  // Brazilian Portuguese acronyms
+  'E.U.A.': 'US',
+  'EUA': 'US',
+  'EE.UU.': 'US',
+  'U.R.S.S.': 'RU',  // Soviet Union -> Russia (closest successor)
+  'URSS': 'RU',
+
+  // Compound entries (pick first listed country)
+  'Franca/Espanha': 'FR',
+  'Franca / Espanha': 'FR',
+  // The actual DB value uses the cedilla character; both forms below
+  // catch it whether the source code is read as UTF-8 or fallback.
+  // (See LEGACY_NAME_MAP_UNICODE below for the cedilla entries.)
+};
+
+// Same map but with proper Unicode characters (cedilla, accents).
+// JS engine reads this file as UTF-8 so these keys match DB values literally.
+const LEGACY_NAME_MAP_UNICODE = {
+  'França/Espanha': 'FR',
+  'França / Espanha': 'FR',
+};
+
+/**
  * Maps react-intl locales to i18n-iso-countries locale codes.
  * pt-BR uses Portuguese (pt) names, since i18n-iso-countries does not
  * distinguish pt-PT and pt-BR (country name differences are marginal).
@@ -44,23 +80,70 @@ export function intlToIsoLocale(intlLocale) {
 }
 
 /**
- * Returns the localized name of a country given its ISO 3166-1 alpha-2 code.
- * Falls back to the code itself if the country is not found.
+ * Resolves an input value to an ISO 3166-1 alpha-2 code, or null if unrecognizable.
+ * Accepts:
+ *   - an ISO code directly (e.g. 'BR', 'br', 'IT')
+ *   - a textual name in any of the 6 supported languages
+ *   - a known legacy text name (cf. LEGACY_NAME_MAP)
  *
- * @param {string} isoCode - ISO 3166-1 alpha-2 country code (e.g. 'BR', 'FR')
+ * @param {string} input - country code or name
+ * @returns {string|null} uppercase ISO code, or null if not resolvable
+ */
+function resolveToIsoCode(input) {
+  if (!input || typeof input !== 'string') return null;
+  const trimmed = input.trim();
+
+  // 1. Looks like an ISO code already (2 letters)
+  if (trimmed.length === 2 && /^[a-zA-Z]{2}$/.test(trimmed)) {
+    const upper = trimmed.toUpperCase();
+    // Validate: does i18n-iso-countries know this code?
+    if (countries.getName(upper, 'en')) return upper;
+    return null;
+  }
+
+  // 2. Manual legacy mapping (acronyms, compound names)
+  if (LEGACY_NAME_MAP[trimmed]) return LEGACY_NAME_MAP[trimmed];
+  if (LEGACY_NAME_MAP_UNICODE[trimmed]) return LEGACY_NAME_MAP_UNICODE[trimmed];
+
+  // 3. Try i18n-iso-countries reverse lookup in all 6 supported languages.
+  // We start with pt because the legacy database is in Brazilian Portuguese,
+  // then try the others in case of mixed data.
+  const tryLocales = ['pt', 'fr', 'en', 'es', 'it', 'de'];
+  for (const loc of tryLocales) {
+    const code = countries.getAlpha2Code(trimmed, loc);
+    if (code) return code;
+  }
+
+  return null;
+}
+
+/**
+ * Returns the localized name of a country given its ISO 3166-1 alpha-2 code
+ * OR a textual name (in any supported language).
+ *
+ * @param {string} input - ISO code (e.g. 'BR') or textual name (e.g. 'Brasil')
  * @param {string} intlLocale - react-intl locale (e.g. 'pt-BR', 'fr')
- * @returns {string|null} Localized country name, or the code if not found, or null if no isoCode
+ * @returns {string|null} Localized country name, or the input if not resolvable, or null if no input
  *
  * @example
- *   getCountryName('BR', 'fr')    // => 'Bresil'
- *   getCountryName('BR', 'pt-BR') // => 'Brasil'
- *   getCountryName('XX', 'en')    // => 'XX' (unknown code, returns code itself)
- *   getCountryName(null, 'fr')    // => null
+ *   getCountryName('BR', 'fr')           // => 'Bresil'
+ *   getCountryName('Brasil', 'fr')       // => 'Bresil' (legacy text input)
+ *   getCountryName('Italia', 'de')       // => 'Italien' (legacy text input)
+ *   getCountryName('E.U.A.', 'fr')       // => 'Etats-Unis' (legacy acronym)
+ *   getCountryName('XX', 'en')           // => 'XX' (unknown, returns input)
+ *   getCountryName(null, 'fr')           // => null
  */
-export function getCountryName(isoCode, intlLocale) {
-  if (!isoCode) return null;
+export function getCountryName(input, intlLocale) {
+  if (!input) return null;
   const isoLocale = intlToIsoLocale(intlLocale);
-  return countries.getName(isoCode, isoLocale, { select: 'official' }) || isoCode;
+
+  const code = resolveToIsoCode(input);
+  if (code) {
+    return countries.getName(code, isoLocale, { select: 'official' }) || input;
+  }
+
+  // Fallback: return input as-is if we can't resolve it
+  return input;
 }
 
 /**
