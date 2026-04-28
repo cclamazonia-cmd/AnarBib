@@ -48,7 +48,8 @@ export default function CriarContaPage() {
   useEffect(() => {
     (async () => {
       try {
-        const { data: libs } = await supabase.from('libraries').select('id, slug, name');
+        const { data: libs } = await supabase.from('v_libraries_for_signup').select('id, slug, name, short_name, city');
+
         if (!libs?.length) return;
         const { data: commons } = await supabase.from('library_commons').select('library_id, logo_url, logo_file_key');
         const { data: regs } = await supabase.from('library_regulation_documents').select('library_id').eq('is_active', true);
@@ -176,7 +177,13 @@ export default function CriarContaPage() {
           <label style={ls}>{t({id:'auth.create.selectLibrary'})} {req}</label>
           <select value={form.library_slug} onChange={e => handleLibChange(e.target.value)} style={fs}>
             <option value="">{t({id:'auth.create.selectPh'})}</option>
-            {libraries.map(l => <option key={l.slug} value={l.slug}>{l.name}</option>)}
+            {libraries.map(l => (
+              <option key={l.slug} value={l.slug}>
+                {l.short_name ? `${l.short_name} — ` : ''}
+                {l.name}
+                {l.city ? ` (${l.city})` : ''}
+              </option>
+            ))}
             <option value="">{t({id:'auth.create.noLibrary'})}</option>
           </select>
           <div style={hs}>{t({id:'auth.create.libraryHint'})}</div>
