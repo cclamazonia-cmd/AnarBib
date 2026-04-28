@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
 
@@ -18,9 +18,11 @@ function readFromSession() {
   try { const r = sessionStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : null; }
   catch { return null; }
 }
+
 function writeToSession(ctx) {
   try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(ctx)); } catch {}
 }
+
 function readFromUrl() {
   const url = new URL(window.location.href);
   const slug = url.searchParams.get('library') || url.searchParams.get('biblioteca');
@@ -37,6 +39,12 @@ export function LibraryProvider({ children }) {
   const [ctx, setCtx] = useState(() => readFromUrl() || readFromSession() || DEFAULT_CONTEXT);
   const [libraries, setLibraries] = useState([]);
 
+  // FIX B.3: depend on user?.id instead of user object reference.
+  // The user object reference changes on every AuthContext re-render
+  // (token refresh, session updates, etc.), causing this effect to
+  // re-fire and refetch user_library_memberships ~6 times per page load.
+  // Using user?.id ensures the effect only re-runs when the actual
+  // user identity changes.
   useEffect(() => {
     if (!user) {
       setLibraries([]);
@@ -55,6 +63,7 @@ export function LibraryProvider({ children }) {
         .eq('status', 'active');
 
       if (error || !data?.length) return;
+
       setLibraries(data);
 
       // Vérifier si l'URL force une bibliothèque
@@ -91,7 +100,7 @@ export function LibraryProvider({ children }) {
         writeToSession(next);
       }
     })();
-  }, [user]);
+  }, [user?.id]);
 
   const setLibrary = useCallback((slug) => {
     const membership = libraries.find(m => m.libraries?.slug === slug);
@@ -107,8 +116,17 @@ export function LibraryProvider({ children }) {
     writeToSession(next);
   }, [libraries]);
 
+  // FIX B.3: memoize the context value to avoid creating a new object
+  // reference on every render. Without this, all consumers of useLibrary()
+  // would re-render on every parent re-render, even if ctx/libraries
+  // haven't actually changed.
+  const contextValue = useMemo(
+    () => ({ ...ctx, setLibrary, libraries }),
+    [ctx, setLibrary, libraries]
+  );
+
   return (
-    <LibraryContext.Provider value={{ ...ctx, setLibrary, libraries }}>
+    <LibraryContext.Provider value={contextValue}>
       {children}
     </LibraryContext.Provider>
   );
