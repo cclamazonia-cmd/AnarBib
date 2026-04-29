@@ -257,7 +257,8 @@ export default function CatalogPage() {
     { value: 'consult', label: t({ id: 'catalog.avail.consultOnly' }) },
   ], [t]);
 
-  const viewName = isAuth ? 'catalog_books_public_session_v2' : 'catalog_books_public_v2';
+  // Phase B.5.6: vues matérialisées allégées api.catalog_list_*_v1
+  const viewName = isAuth ? 'catalog_list_session_v1' : 'catalog_list_anon_v1';
   const selectCols = isAuth ? SESSION_COLS : PUBLIC_COLS;
 
   // Resolve sort for PostgREST
