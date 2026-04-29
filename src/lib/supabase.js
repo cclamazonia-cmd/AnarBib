@@ -113,12 +113,74 @@ export async function apiQuery(viewName, options = {}) {
     if (!res.ok) {
       const text = await res.text();
       console.error(`apiQuery ${viewName} failed:`, res.status, text);
-      return { data: [], error: { status: res.status, message: text } };
+      return { data: [], error: { status: res.status, message: text }, totalCount: null };
     }
     const data = await res.json();
-    return { data: data || [], error: null };
+    // Phase B.7 : extraire totalCount du Content-Range si présent (header "0-99/240" ou "*/240")
+    let totalCount = null;
+    const contentRange = res.headers.get('Content-Range');
+    if (contentRange) {
+      const m = contentRange.match(/\/(\d+|\*)$/);
+      if (m && m[1] !== '*') totalCount = parseInt(m[1], 10);
+    }
+    return { data: data || [], error: null, totalCount };
   } catch (err) {
     console.error(`apiQuery ${viewName} network error:`, err);
-    return { data: [], error: err };
+    return { data: [], error: err, totalCount: null };
+  }
+}
+
+/**
+ * Appel RPC vers une fonction du schéma "api" via PostgREST.
+ *
+ * Reproduit l'approche d'apiQuery (REST direct, schéma 'api') mais en POST
+ * pour appeler une fonction stockée. Utilisé par le composant
+ * UnifiedSearchCombobox (Phase B.7.4).
+ *
+ * @param {string} functionName - Nom de la fonction RPC dans le schéma api
+ * @param {object} args - Arguments à passer à la fonction (clé = nom du paramètre)
+ * @returns {Promise<{ data: any, error: any }>}
+ *
+ * Exemple :
+ *   const { data, error } = await apiRpc('search_catalog_v1', { q: 'krop' });
+ */
+export async function apiRpc(functionName, args = {}) {
+  const url = `${SUPABASE_URL}/rest/v1/rpc/${functionName}`;
+
+  const headers = {
+    'apikey': SUPABASE_ANON_KEY,
+    'Accept-Profile': 'api',
+    'Content-Profile': 'api',
+    'Content-Type': 'application/json',
+  };
+
+  // Token auth si l'utilisateur est connecté (sinon clé anon)
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      headers['Authorization'] = `Bearer ${session.access_token}`;
+    } else {
+      headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`;
+    }
+  } catch {
+    headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`;
+  }
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(args),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error(`apiRpc ${functionName} failed:`, res.status, text);
+      return { data: null, error: { status: res.status, message: text } };
+    }
+    const data = await res.json();
+    return { data, error: null };
+  } catch (err) {
+    console.error(`apiRpc ${functionName} network error:`, err);
+    return { data: null, error: err };
   }
 }

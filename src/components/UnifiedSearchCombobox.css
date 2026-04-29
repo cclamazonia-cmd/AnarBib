@@ -1,0 +1,115 @@
+/* ─────────────────────────────────────────────────────────────────
+   UnifiedSearchCombobox — Phase B.7.4
+   Recherche unifiée à autocomplétion. Affiché au-dessus des
+   filtres avancés du catalogue.
+   ───────────────────────────────────────────────────────────────── */
+
+.ab-unified-search {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.ab-unified-search__inputwrap {
+  position: relative;
+}
+
+.ab-unified-search__input {
+  width: 100%;
+  /* Le reste de l'apparence vient de .ab-input (style global existant) */
+}
+
+.ab-unified-search__loading {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ab-color-muted, #888);
+  font-size: 1.2em;
+  pointer-events: none;
+  animation: ab-pulse 1s ease-in-out infinite;
+}
+
+@keyframes ab-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+.ab-unified-search__listbox {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  margin: 4px 0 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: var(--ab-color-bg, #fff);
+  border: 1px solid var(--ab-color-border, #ccc);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.ab-unified-search__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.55rem 0.8rem;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--ab-color-border-light, #f0f0f0);
+}
+
+.ab-unified-search__option:last-child {
+  border-bottom: none;
+}
+
+.ab-unified-search__option--active,
+.ab-unified-search__option:hover {
+  background: var(--ab-color-bg-active, #f3f3f3);
+}
+
+.ab-unified-search__kind {
+  font-size: 1.1em;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ab-unified-search__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.ab-unified-search__label {
+  font-weight: 500;
+  color: var(--ab-color-text, #1a1a1a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ab-unified-search__sublabel {
+  font-size: 0.85em;
+  color: var(--ab-color-muted, #666);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+/* Texte uniquement audible aux lecteurs d'écran */
+.ab-unified-search__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

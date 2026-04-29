@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, EmptyState, Spinner } from '@/components/ui';
+import UnifiedSearchCombobox from '@/components/UnifiedSearchCombobox';
 import './CatalogPage.css';
 
 const PAGE_SIZE = 100;
@@ -288,13 +289,16 @@ export default function CatalogPage() {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     try {
       const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
-      const { data, error } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
+      const { data, error, totalCount: serverTotal } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
       if (error) throw error;
       const result = data || [];
       if (append) setBooks(prev => [...prev, ...result]);
       else setBooks(result);
       setTotalFetched(offset + result.length);
       setHasMore(result.length === PAGE_SIZE);
+      // Phase B.7 : utiliser le totalCount du Content-Range plutôt qu'un appel séparé à books_count_v1
+      // (cohérent avec la grille, respecte automatiquement la visibility par matérialisée)
+      if (serverTotal != null) setTotalCount(serverTotal);
     } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
     finally { setLoading(false); setLoadingMore(false); }
   }, [viewName, selectCols, sortValue, dSearch, dAuthor, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
@@ -317,13 +321,9 @@ export default function CatalogPage() {
     })();
   }, [libraryId, isAuth]);
 
-  // Fetch total count (Phase B.4b: api.books_count_v1 au lieu de catalog_books_public_v2)
-  useEffect(() => {
-    (async () => {
-      const { data } = await apiQuery('books_count_v1', { select: 'id' });
-      if (data) setTotalCount(data.length);
-    })();
-  }, []);
+  // Phase B.7 : le total count est désormais récupéré directement via Content-Range
+  // dans fetchBooks (cohérent avec la grille, respecte la visibility automatiquement).
+  // L'ancien fetch via api.books_count_v1 est retiré (il fuyait le compte network aux anon).
 
   // Fetch real available count from the server (not limited to displayed books)
   const [serverAvailableCount, setServerAvailableCount] = useState(null);
@@ -408,6 +408,20 @@ export default function CatalogPage() {
       {isAuth && (
         <div className="ab-session-info">{t({ id: 'catalog.session.connected' })}</div>
       )}
+
+      {/* ══ RECHERCHE UNIFIÉE (Phase B.7) ════════════════════ */}
+      <section className="ab-unified-search-wrap">
+        <UnifiedSearchCombobox
+          onAuthorPick={(author) => {
+            // Filtre la grille par auteur (point 7 des décisions B.7) : on alimente
+            // simplement le champ authorFilter texte. Le système de filtres existant
+            // s'occupe du reste (debouncing, requête PostgREST, persistance localStorage).
+            setAuthorFilter(author.filterValue || author.label);
+            setSearch('');
+            setFiltersOpen(true);
+          }}
+        />
+      </section>
 
       {/* ══ FILTRES ═══════════════════════════════════════════ */}
       <section className="ab-toolbar">
