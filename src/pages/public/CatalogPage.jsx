@@ -331,7 +331,8 @@ export default function CatalogPage() {
     if (!isAuth) { setServerAvailableCount(null); return; }
     (async () => {
       // Count books where session says available in user's library
-      const { data } = await apiQuery('catalog_books_public_session_v2', {
+      // Phase B.6: api.catalog_list_session_v1 au lieu de catalog_books_public_session_v2
+      const { data } = await apiQuery('catalog_list_session_v1', {
         select: 'book_id',
         filters: {
           'session_status_hint': 'eq.no_acervo_da_sua_biblioteca',
