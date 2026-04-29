@@ -266,16 +266,17 @@ export default function CatalogPage() {
     return sortValue;
   }
 
-  // Bibliothèques
+  // Bibliothèques (Phase B.4a: api.libraries_public_v1 au lieu de catalog_books_public_v2)
   useEffect(() => {
     (async () => {
-      const { data } = await apiQuery('catalog_books_public_v2', { select:'library_slug,library_name' });
+      const { data } = await apiQuery('libraries_public_v1', {
+        select: 'slug,name',
+        order: 'name.asc',
+      });
       if (data?.length) {
-        const libs = new Map();
-        for (const r of data) if (r.library_slug && !libs.has(r.library_slug)) libs.set(r.library_slug, r.library_name || r.library_slug);
         setLibraryOptions([
-          { value:'__all__', label: t({ id: 'catalog.avail.all' }) },
-          ...[...libs.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([s,n])=>({ value:s, label:n })),
+          { value: '__all__', label: t({ id: 'catalog.avail.all' }) },
+          ...data.map(l => ({ value: l.slug, label: l.name || l.slug })),
         ]);
       }
     })();
@@ -315,10 +316,10 @@ export default function CatalogPage() {
     })();
   }, [libraryId, isAuth]);
 
-  // Fetch total count (anon, once)
+  // Fetch total count (Phase B.4b: api.books_count_v1 au lieu de catalog_books_public_v2)
   useEffect(() => {
     (async () => {
-      const { data } = await apiQuery('catalog_books_public_v2', { select:'book_id' });
+      const { data } = await apiQuery('books_count_v1', { select: 'id' });
       if (data) setTotalCount(data.length);
     })();
   }, []);
