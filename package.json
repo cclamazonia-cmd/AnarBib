@@ -8,7 +8,8 @@
   "build": "vite build",
   "preview": "vite preview",
   "deploy": "vite build && gh-pages -d dist",
-  "deploy:codeberg": "vite build && gh-pages -d dist -r https://codeberg.org/anarbib/anarbib.git -b pages"
+  "deploy:codeberg": "vite build && gh-pages -d dist -r https://codeberg.org/anarbib/anarbib.git -b pages --dotfiles"
+
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",
