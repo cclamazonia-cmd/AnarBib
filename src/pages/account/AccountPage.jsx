@@ -9,7 +9,7 @@ import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './AccountPage.css';
 
 export default function AccountPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { libraryName, librarySlug, libraryId } = useLibrary();
   const { formatMessage: t } = useIntl();
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function AccountPage() {
   // ── Chargement des données ───────────────────────────────
 
   const loadData = useCallback(async () => {
-    if (!user) return;
+    if (authLoading || !user) return;
     setLoading(true);
     try {
       const [profileRes, reservRes, consultRes, loansRes, histRes, svcRes] = await Promise.all([
@@ -64,18 +64,18 @@ export default function AccountPage() {
     } finally {
       setLoading(false);
     }
-  }, [user?.id]);
+  }, [user?.id, authLoading]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
   // ── Status do conta ───────────────────────────────────────
   useEffect(() => {
-    if (!user) return;
+    if (authLoading || !user) return;
     (async () => {
       const { data } = await supabase.rpc('fn_my_account_status');
       if (data) setAccountStatus(data);
     })();
-  }, [user?.id]);
+  }, [user?.id, authLoading]);
 
   // ── Regimento da biblioteca ───────────────────────────────
   useEffect(() => {
