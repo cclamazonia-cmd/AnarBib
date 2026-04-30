@@ -2,7 +2,7 @@
 
 **Système intégré de gestion de bibliothèques (SIGB) pour bibliothèques militantes anarchistes.**
 
-Frontend React + Vite déployé sur GitHub Pages, connecté à un backend Supabase.
+Frontend React + Vite déployé sur Codeberg, connecté à un backend Supabase.
 
 ## Démarrage rapide
 
