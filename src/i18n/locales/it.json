@@ -89,6 +89,7 @@
   "catalog.book.loanable": "Prestito",
   "catalog.book.consultOnly": "Solo consultazione",
   "catalog.book.readOnline": "Leggi online",
+  "catalog.loading.message": "Caricamento dei libri…",
   "book.title": "Scheda del documento",
   "book.author": "Autore/i",
   "book.publisher": "Editore",

@@ -89,6 +89,7 @@
   "catalog.book.loanable": "Préstamo",
   "catalog.book.consultOnly": "Solo consulta",
   "catalog.book.readOnline": "Leer en línea",
+  "catalog.loading.message": "Cargando los libros…",
   "book.title": "Ficha del documento",
   "book.author": "Autor/es",
   "book.publisher": "Editorial",

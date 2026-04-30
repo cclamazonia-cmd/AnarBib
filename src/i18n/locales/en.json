@@ -89,6 +89,7 @@
   "catalog.book.loanable": "Loanable",
   "catalog.book.consultOnly": "On-site only",
   "catalog.book.readOnline": "Read online",
+  "catalog.loading.message": "Loading books…",
   "book.title": "Book details",
   "book.author": "Author(s)",
   "book.publisher": "Publisher",

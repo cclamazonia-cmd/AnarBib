@@ -198,3 +198,83 @@
   margin-top: 16px;
   margin-bottom: 16px;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   AnarBib — Skeleton de chargement catalogue
+   Affiché pendant que les données arrivent (cold start Supabase).
+   À ajouter à la fin de src/pages/public/CatalogPage.css.
+   ───────────────────────────────────────────────────────────────── */
+
+.ab-catalog-loading {
+  padding: 1.5rem 0;
+}
+
+.ab-catalog-loading__message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+  color: var(--ab-color-muted, #888);
+  font-size: 0.95em;
+  font-style: italic;
+}
+
+.ab-catalog-loading__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ab-catalog-loading__row {
+  display: grid;
+  grid-template-columns: 80px 2fr 1.4fr 60px;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--ab-color-border-light, rgba(255,255,255,0.05));
+}
+
+.ab-catalog-loading__cell {
+  display: block;
+  height: 14px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.10) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 3px;
+  animation: ab-catalog-loading-pulse 1.6s ease-in-out infinite;
+}
+
+/* Variation par colonne pour évoquer la diversité des contenus */
+.ab-catalog-loading__cell--ref    { width: 70%; }
+.ab-catalog-loading__cell--title  { width: 95%; }
+.ab-catalog-loading__cell--author { width: 85%; }
+.ab-catalog-loading__cell--year   { width: 60%; }
+
+/* Échelonner les rangées pour que ça pulse en vague, pas tout en bloc */
+.ab-catalog-loading__row:nth-child(1)  .ab-catalog-loading__cell { animation-delay: 0.0s; }
+.ab-catalog-loading__row:nth-child(2)  .ab-catalog-loading__cell { animation-delay: 0.1s; }
+.ab-catalog-loading__row:nth-child(3)  .ab-catalog-loading__cell { animation-delay: 0.2s; }
+.ab-catalog-loading__row:nth-child(4)  .ab-catalog-loading__cell { animation-delay: 0.3s; }
+.ab-catalog-loading__row:nth-child(5)  .ab-catalog-loading__cell { animation-delay: 0.4s; }
+.ab-catalog-loading__row:nth-child(6)  .ab-catalog-loading__cell { animation-delay: 0.5s; }
+.ab-catalog-loading__row:nth-child(7)  .ab-catalog-loading__cell { animation-delay: 0.6s; }
+.ab-catalog-loading__row:nth-child(8)  .ab-catalog-loading__cell { animation-delay: 0.7s; }
+
+@keyframes ab-catalog-loading-pulse {
+  0%   { background-position: 200% 50%; opacity: 0.6; }
+  50%  { background-position: 0%   50%; opacity: 1.0; }
+  100% { background-position: -200% 50%; opacity: 0.6; }
+}
+
+/* Respect prefers-reduced-motion (accessibilité) */
+@media (prefers-reduced-motion: reduce) {
+  .ab-catalog-loading__cell {
+    animation: none;
+    opacity: 0.5;
+  }
+}

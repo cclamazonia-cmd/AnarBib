@@ -89,6 +89,7 @@
   "catalog.book.loanable": "Ausleihbar",
   "catalog.book.consultOnly": "Nur Präsenznutzung",
   "catalog.book.readOnline": "Online lesen",
+  "catalog.loading.message": "Bücher werden geladen…",
   "book.title": "Dokumentenblatt",
   "book.author": "Autor*in(nen)",
   "book.publisher": "Verlag",

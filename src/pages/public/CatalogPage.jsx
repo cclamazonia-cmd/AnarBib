@@ -555,7 +555,7 @@ export default function CatalogPage() {
       {/* ══ STATS PILLS ═══════════════════════════════════════ */}
       <div className="ab-stats">
         <Pill>Total: {totalCount ?? '…'}</Pill>
-        <Pill>{t({ id: 'catalog.stats.displayed' }, { count: books.length })}{hasMore ? ` / ${totalCount ?? '…'}` : totalCount ? ` / ${totalCount}` : ''}</Pill>
+        <Pill>{t({ id: 'catalog.stats.displayed' }, { count: loading && books.length === 0 ? '…' : books.length })}{loading && books.length === 0 ? ` / ${totalCount ?? '…'}` : hasMore ? ` / ${totalCount ?? '…'}` : totalCount ? ` / ${totalCount}` : ''}</Pill>
         <Pill variant={isAuth && serverAvailableCount > 0 ? 'ok' : 'default'}>
           {t({ id: 'catalog.stats.localAvailable' }, { count: isAuth ? (serverAvailableCount ?? '…') : '—' })}
         </Pill>
@@ -567,7 +567,22 @@ export default function CatalogPage() {
 
       {/* ══ TABLE ═════════════════════════════════════════════ */}
       {loading ? (
-        <div style={{ textAlign:'center', padding:40 }}><Spinner size={32} /></div>
+        <div className="ab-catalog-loading" role="status" aria-live="polite">
+          <div className="ab-catalog-loading__message">
+            <Spinner size={20} />
+            <span>{t({ id: 'catalog.loading.message' })}</span>
+          </div>
+          <div className="ab-catalog-loading__skeleton" aria-hidden="true">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="ab-catalog-loading__row">
+                <span className="ab-catalog-loading__cell ab-catalog-loading__cell--ref" />
+                <span className="ab-catalog-loading__cell ab-catalog-loading__cell--title" />
+                <span className="ab-catalog-loading__cell ab-catalog-loading__cell--author" />
+                <span className="ab-catalog-loading__cell ab-catalog-loading__cell--year" />
+              </div>
+            ))}
+          </div>
+        </div>
       ) : books.length === 0 ? (
         <EmptyState message={t({ id: 'catalog.results.empty' })} />
       ) : (
