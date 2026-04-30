@@ -64,7 +64,7 @@ export default function AccountPage() {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user?.id]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -75,7 +75,7 @@ export default function AccountPage() {
       const { data } = await supabase.rpc('fn_my_account_status');
       if (data) setAccountStatus(data);
     })();
-  }, [user, loading]); // reload when loans change
+  }, [user?.id]);
 
   // ── Regimento da biblioteca ───────────────────────────────
   useEffect(() => {
