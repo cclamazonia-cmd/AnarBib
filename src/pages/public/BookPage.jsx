@@ -31,7 +31,6 @@ function getStatusInfo(book, sessionCtx, isAuth, t) {
   if (h === 'no_acervo_da_sua_biblioteca') {
     const c = Number(sessionCtx.session_available_count) || 0;
     if (c > 0) return { label: t({ id: 'catalog.avail.availableCount' }, { count: c }), cls:'ok' };
-    // Unavailable but with expected return date
     if (sessionCtx.session_next_available_on) {
       return { label: t({ id: 'book.nextAvailable' }, { date: new Date(sessionCtx.session_next_available_on).toLocaleDateString() }), cls:'warn' };
     }
@@ -49,23 +48,17 @@ function getStatusInfo(book, sessionCtx, isAuth, t) {
 // ── Génération ISBD simplifiée ─────────────────────────────
 function buildIsbdStatement(b) {
   const parts = [];
-  // Zone 1 : Titre et mention de responsabilité
   let z1 = b.titulo || '';
   if (b.subtitulo) z1 += ` : ${b.subtitulo}`;
   if (b.autor || b.author_display) z1 += ` / ${b.author_display || b.autor}`;
   if (b.tradutor) z1 += ` ; trad. ${b.tradutor}`;
   if (b.organizador) z1 += ` ; org. ${b.organizador}`;
   if (z1) parts.push(z1);
-  // Zone 2 : Édition
   if (b.edicao) parts.push(b.edicao);
-  // Zone 4 : Publication
   const z4parts = [b.local_publicacao, b.editora, b.ano].filter(Boolean);
   if (z4parts.length) parts.push(z4parts.join(' : '));
-  // Zone 5 : Description physique
   if (b.paginas) parts.push(`${b.paginas} p.`);
-  // Zone 6 : Collection
   if (b.colecao) parts.push(`(${b.colecao})`);
-  // Zone 8 : ISBN/ISSN
   if (b.isbn) parts.push(`ISBN ${b.isbn}`);
   if (b.issn) parts.push(`ISSN ${b.issn}`);
   return parts.join('. — ');
@@ -73,7 +66,6 @@ function buildIsbdStatement(b) {
 
 function buildIsbdZones(b, t) {
   const zones = [];
-  // Zone 1
   let z1 = b.titulo || '';
   if (b.subtitulo) z1 += ` : ${b.subtitulo}`;
   let resp = b.author_display || b.autor || '';
@@ -110,6 +102,12 @@ export default function BookPage() {
   const [viewMode, setViewMode] = useState('standard'); // 'standard' | 'isbd'
 
   // ── Chargement ───────────────────────────────────────────
+  // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
+  // (objet user complet). À chaque retour d'onglet, le token Supabase est
+  // refresh, ce qui peut produire une nouvelle référence d'objet user et
+  // déclencher un re-fetch complet. On stabilise sur [id, user?.id] : la
+  // valeur primitive ne change que si l'utilisateur change réellement.
+  // Pattern identique au fix AccountPage du 30/04 (commit bfbaf74).
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -118,7 +116,6 @@ export default function BookPage() {
       setViewMode('standard');
       setReserveStatus('');
       try {
-        // Charger le livre
         let bookData = null;
         const { data } = await supabase.from('v_book_detail_public_v2').select('*').eq('book_id', id).limit(1).maybeSingle();
         if (data) bookData = data;
@@ -132,8 +129,10 @@ export default function BookPage() {
 
         const bookId = Number(bookData.book_id || bookData.id || 0);
 
-        // Charger les ressources numériques via RPC
         if (bookId > 0) {
+          // FIX 2026-05-01 (bonus) : variable locale au lieu de relire digitalAccess
+          // depuis la closure (qui est stale tant que React n'a pas re-render).
+          let publicAccessFound = false;
           try {
             const rpc = await supabase.rpc('get_book_primary_public_digital_asset_v2', { p_book_id: bookId });
             const row = Array.isArray(rpc.data) ? rpc.data?.[0] : rpc.data;
@@ -151,11 +150,11 @@ export default function BookPage() {
                 rights: row.rights_status,
                 label: row.label,
               });
+              publicAccessFound = true;
             }
           } catch {}
 
-          // Aussi vérifier les restricted pour utilisateurs connectés
-          if (user && !digitalAccess) {
+          if (user && !publicAccessFound) {
             try {
               const rpc2 = await supabase.rpc('fn_book_restricted_pdf_state_for_current_user', { p_bib_ref: bookData.bib_ref });
               const r2 = Array.isArray(rpc2.data) ? rpc2.data?.[0] : rpc2.data;
@@ -172,7 +171,6 @@ export default function BookPage() {
           }
         }
 
-        // Charger le contexte session
         if (user && bookId > 0) {
           try {
             const rpc = await supabase.rpc('fn_v2_book_session_context_for_current_user', {
@@ -185,7 +183,7 @@ export default function BookPage() {
       } catch (err) { console.error('Book fetch error:', err); }
       finally { setLoading(false); }
     })();
-  }, [id, user]);
+  }, [id, user?.id]);
 
   useEffect(() => {
     if (book?.titulo) document.title = `${book.titulo} — AnarBib`;
@@ -421,7 +419,6 @@ function MetaPill({ label, value, always = false }) {
 }
 
 function BookAuthorLinks({ book }) {
-  // Essayer authors_json d'abord (plus riche), puis author_chips
   let authors = book.authors_json || book.author_chips;
   if (typeof authors === 'string') {
     try { authors = JSON.parse(authors); } catch { authors = null; }
