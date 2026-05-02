@@ -20,6 +20,7 @@ export default function PanelPage() {
   const { formatMessage: t } = useIntl();
   const roleLoaded = role !== null && role !== undefined;
   const isLibrarian = role === 'librarian' || role === 'coordenador' || role === 'administrador';
+  const isCoordOrAdmin = role === 'coordenador' || role === 'administrador';
 
   // i18n-aware workflow labels
   const WORKFLOW_LABELS = useMemo(() => ({
@@ -77,6 +78,17 @@ export default function PanelPage() {
   const [readerProfile, setReaderProfile] = useState(null);
   const [readerMsg, setReaderMsg] = useState('');
   const [restrictReason, setRestrictReason] = useState('');
+
+  // Cotisation (coordenador/administrador uniquement)
+  const [membershipEnabled, setMembershipEnabled] = useState(false);
+  const [membershipRules, setMembershipRules] = useState([]);
+  const [membershipOverview, setMembershipOverview] = useState([]);
+  const [membershipFilter, setMembershipFilter] = useState('all'); // all, up_to_date, expired, never_paid
+  const [readerPayments, setReaderPayments] = useState([]);
+  const [paymentModal, setPaymentModal] = useState(null); // null ou { user_id, display_name, ... }
+  const [paymentDraft, setPaymentDraft] = useState(null);
+  const [paymentMsg, setPaymentMsg] = useState('');
+  const [paymentSaving, setPaymentSaving] = useState(false);
 
   // ── Load ──────────────────────────────────────────────
 
@@ -348,7 +360,128 @@ export default function PanelPage() {
       if (!p) { setReaderMsg(t({id:'panel.reader.notFound'})); setReaderProfile(null); return; }
       setReaderProfile(p);
       setReaderMsg('');
+      // Charger l'historique de cotisation pour ce lecteur
+      if (membershipEnabled && (isCoordOrAdmin)) {
+        const { data: payments } = await supabase.rpc('fn_list_membership_payments_for_user', { p_user_id: p.id });
+        setReaderPayments(payments || []);
+      } else {
+        setReaderPayments([]);
+      }
     } catch (e) { setReaderMsg(t({id:'common.errorPrefix'}, {message: e.message})); setReaderProfile(null); }
+  }
+
+  // ── Cotisation ───────────────────────────────────────
+
+  // Chargement de la config et des règles de cotisation
+  const loadMembershipConfig = useCallback(async () => {
+    if (!libraryId || !isCoordOrAdmin) return;
+    try {
+      const [{ data: libRow }, { data: rules }] = await Promise.all([
+        supabase.from('libraries').select('membership_enabled').eq('id', libraryId).single(),
+        supabase.from('library_membership_rules').select('*').eq('library_id', libraryId).eq('is_active', true).order('display_order'),
+      ]);
+      setMembershipEnabled(!!libRow?.membership_enabled);
+      setMembershipRules(rules || []);
+    } catch (e) { console.warn('loadMembershipConfig:', e); }
+  }, [libraryId, isCoordOrAdmin]);
+
+  // Chargement de l'aperçu global (tableau Contribuições)
+  const loadMembershipOverview = useCallback(async () => {
+    if (!libraryId || !isCoordOrAdmin) return;
+    try {
+      const { data, error } = await supabase
+        .from('v_membership_overview_panel')
+        .select('*')
+        .eq('library_id', libraryId)
+        .order('display_name', { ascending: true });
+      if (error) throw error;
+      setMembershipOverview(data || []);
+    } catch (e) { console.warn('loadMembershipOverview:', e); }
+  }, [libraryId, isCoordOrAdmin]);
+
+  useEffect(() => { loadMembershipConfig(); }, [loadMembershipConfig]);
+  useEffect(() => { if (tab === 'contribuicoes') loadMembershipOverview(); }, [tab, loadMembershipOverview]);
+
+  // Ouvrir le modal de paiement
+  function openPaymentModal(target) {
+    if (membershipRules.length === 0) {
+      setPaymentMsg(t({ id: 'membership.payment.noRulesAvailable' }));
+      return;
+    }
+    const firstRule = membershipRules[0];
+    setPaymentModal(target);
+    setPaymentDraft({
+      user_id: target.user_id,
+      rule_id: firstRule.id,
+      amount_paid: firstRule.amount_suggested ?? firstRule.amount_min ?? 0,
+      payment_method: 'cash',
+      paid_at: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
+      notes: '',
+    });
+    setPaymentMsg('');
+  }
+
+  function closePaymentModal() {
+    setPaymentModal(null);
+    setPaymentDraft(null);
+    setPaymentMsg('');
+  }
+
+  // Quand on change de règle, pré-remplir le montant
+  function onPaymentRuleChange(newRuleId) {
+    const rule = membershipRules.find(r => r.id === newRuleId);
+    setPaymentDraft(p => ({
+      ...p,
+      rule_id: newRuleId,
+      amount_paid: rule?.amount_suggested ?? rule?.amount_min ?? 0,
+    }));
+  }
+
+  async function submitPayment() {
+    if (!paymentDraft) return;
+    setPaymentSaving(true);
+    setPaymentMsg('');
+    try {
+      const { data, error } = await supabase.rpc('fn_record_membership_payment', {
+        p_user_id: paymentDraft.user_id,
+        p_rule_id: paymentDraft.rule_id,
+        p_amount_paid: Number(paymentDraft.amount_paid) || 0,
+        p_payment_method: paymentDraft.payment_method,
+        p_paid_at: new Date(paymentDraft.paid_at + 'T12:00:00Z').toISOString(),
+        p_notes: paymentDraft.notes?.trim() || null,
+      });
+      if (error) throw error;
+      const result = Array.isArray(data) ? data[0] : data;
+      setPaymentMsg(t({ id: 'membership.payment.recorded' }, { from: result.valid_from, until: result.valid_until || '∞' }));
+      // Refresh des données affichées
+      await loadMembershipOverview();
+      if (readerProfile && readerProfile.id === paymentDraft.user_id) {
+        const { data: payments } = await supabase.rpc('fn_list_membership_payments_for_user', { p_user_id: readerProfile.id });
+        setReaderPayments(payments || []);
+      }
+      // Fermer le modal après 1s pour que le user voie le message
+      setTimeout(() => closePaymentModal(), 1500);
+    } catch (e) {
+      setPaymentMsg(t({ id: 'common.errorPrefix' }, { message: e.message }));
+    } finally {
+      setPaymentSaving(false);
+    }
+  }
+
+  function fmtMembershipStatus(status, days) {
+    if (status === 'up_to_date') {
+      if (days != null && days <= 30) return { label: t({ id: 'membership.status.upToDate' }), variant: 'warn', detail: t({ id: 'membership.daysUntilExpiry.plural' }, { days }) };
+      return { label: t({ id: 'membership.status.upToDate' }), variant: 'ok', detail: null };
+    }
+    if (status === 'expired') return { label: t({ id: 'membership.status.expired' }), variant: 'danger', detail: null };
+    if (status === 'never_paid') return { label: t({ id: 'membership.status.neverPaid' }), variant: 'warn', detail: null };
+    if (status === 'lifetime') return { label: t({ id: 'membership.status.lifetime' }), variant: 'ok', detail: null };
+    return { label: t({ id: 'membership.status.notApplicable' }), variant: 'default', detail: null };
+  }
+
+  function getMembershipFilterCount(filter) {
+    if (filter === 'all') return membershipOverview.length;
+    return membershipOverview.filter(m => m.dues_status === filter).length;
   }
 
   // ── Toggle selection ─────────────────────────────────
@@ -372,6 +505,9 @@ export default function PanelPage() {
     { key: 'emprestimos-livro', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
     { key: 'emprestimos-lote', label: t({ id: 'panel.loan.grouped' }), hint: t({ id: 'panel.tab.grouped.hint' }) },
     { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
+    ...(isCoordOrAdmin && membershipEnabled ? [
+      { key: 'contribuicoes', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
+    ] : []),
   ];
 
   const activeRes = reservations.filter(r => !['cancelada_leitor','cancelada_biblioteca','expirada','retirada_efetivada','liberada_para_circulacao'].includes(r.item_status));
@@ -861,8 +997,227 @@ export default function PanelPage() {
                       </div>
                     )}
                   </div>
+
+                  {/* ── Histórico de contribuições (cotisation) ── */}
+                  {isCoordOrAdmin && membershipEnabled && (
+                    <div style={{ marginTop: 16, padding: 12, borderRadius: 8, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, gap: 8, flexWrap: 'wrap' }}>
+                        <h4 style={{ margin: 0, fontSize: '.95rem', fontWeight: 700 }}>{t({ id: 'membership.payment.historyTitle' })}</h4>
+                        <Button onClick={() => openPaymentModal({
+                          user_id: readerProfile.id,
+                          display_name: `${readerProfile.first_name || ''} ${readerProfile.last_name || ''}`.trim() || readerProfile.email,
+                        })}>
+                          + {t({ id: 'membership.action.recordPayment' })}
+                        </Button>
+                      </div>
+                      {readerPayments.length === 0 ? (
+                        <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)', padding: '8px 0' }}>
+                          {t({ id: 'membership.payment.noPayments' })}
+                        </div>
+                      ) : (
+                        <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,.06)' }}>
+                          {readerPayments.map((p, i) => (
+                            <div key={p.id} style={{ padding: '10px 12px', background: i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent', borderBottom: i < readerPayments.length - 1 ? '1px solid rgba(255,255,255,.04)' : 'none' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, flexWrap: 'wrap' }}>
+                                <div style={{ flex: 1, minWidth: 200 }}>
+                                  <div style={{ fontSize: '.9rem', fontWeight: 600 }}>
+                                    {p.amount_paid > 0
+                                      ? `${p.amount_paid} ${p.currency}`
+                                      : t({ id: `membership.method.${p.payment_method}` })}
+                                    <span style={{ fontWeight: 400, color: 'var(--brand-muted)', marginLeft: 8 }}>
+                                      · {t({ id: `membership.method.${p.payment_method}` })}
+                                    </span>
+                                  </div>
+                                  <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginTop: 2 }}>
+                                    {p.rule_name && <>{p.rule_name} · </>}
+                                    {t({ id: 'membership.payment.paidOn' }, { date: fmtD(p.paid_at) })}
+                                    {p.valid_until && <> · {t({ id: 'membership.validUntil' }, { date: p.valid_until })}</>}
+                                  </div>
+                                  {p.notes && (
+                                    <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginTop: 3, fontStyle: 'italic' }}>{p.notes}</div>
+                                  )}
+                                  {p.recorded_by_name && (
+                                    <div style={{ fontSize: '.74rem', color: 'var(--brand-muted)', marginTop: 2 }}>
+                                      {t({ id: 'membership.payment.recordedBy' }, { name: p.recorded_by_name })}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* ═══ Onglet Contribuições (admin coord) ═══════════════ */}
+          {tab === 'contribuicoes' && isCoordOrAdmin && (
+            <div>
+              <h2 className="ab-painel-h2">{t({ id: 'panel.memberships.title' })}</h2>
+              <p style={{ color: 'var(--brand-muted)', fontSize: '.88rem', marginBottom: 12 }}>
+                {t({ id: 'panel.memberships.hint' })}
+              </p>
+
+              {/* Filtres */}
+              <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+                {[
+                  { key: 'all', label: t({ id: 'panel.memberships.filter.all' }) },
+                  { key: 'up_to_date', label: t({ id: 'membership.status.upToDate' }) },
+                  { key: 'expired', label: t({ id: 'membership.status.expired' }) },
+                  { key: 'never_paid', label: t({ id: 'membership.status.neverPaid' }) },
+                ].map(f => (
+                  <button
+                    key={f.key}
+                    onClick={() => setMembershipFilter(f.key)}
+                    className={`ab-button ab-button--mini ${membershipFilter === f.key ? '' : 'ab-button--ghost'}`}
+                    style={{ fontSize: '.8rem' }}
+                  >
+                    {f.label} ({getMembershipFilterCount(f.key)})
+                  </button>
+                ))}
+              </div>
+
+              {/* Tableau */}
+              {membershipOverview.length === 0 ? (
+                <EmptyState message={t({ id: 'panel.memberships.empty' })} />
+              ) : (
+                <div style={{ borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,.08)' }}>
+                  {membershipOverview
+                    .filter(m => membershipFilter === 'all' || m.dues_status === membershipFilter)
+                    .map((m, i) => {
+                      const status = fmtMembershipStatus(m.dues_status, m.days_until_expiry);
+                      return (
+                        <div key={m.user_id} style={{ padding: '10px 12px', background: i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent', borderBottom: '1px solid rgba(255,255,255,.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                          <div style={{ flex: 1, minWidth: 220 }}>
+                            <div style={{ fontSize: '.9rem', fontWeight: 600 }}>
+                              {m.display_name}
+                              {m.public_id && <span style={{ fontWeight: 400, color: 'var(--brand-muted)', marginLeft: 6 }}>· {m.public_id}</span>}
+                              {m.is_restricted && <Pill variant="danger" style={{ marginLeft: 6, fontSize: '.65rem' }}>⛔</Pill>}
+                            </div>
+                            <div style={{ fontSize: '.8rem', color: 'var(--brand-muted)', marginTop: 2 }}>
+                              {m.email}
+                              {m.last_paid_at && <> · {t({ id: 'membership.payment.lastPaid' }, { date: fmtD(m.last_paid_at) })}</>}
+                              {m.last_amount_paid > 0 && <> · {m.last_amount_paid} {m.last_currency}</>}
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                            <Pill variant={status.variant}>{status.label}</Pill>
+                            {status.detail && <span style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>{status.detail}</span>}
+                            <Button onClick={() => openPaymentModal({ user_id: m.user_id, display_name: m.display_name })}>
+                              + {t({ id: 'membership.action.recordPayment' })}
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ═══ Modal d'enregistrement de paiement ═══════════════ */}
+          {paymentModal && paymentDraft && (
+            <div onClick={closePaymentModal} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+              <div onClick={e => e.stopPropagation()} style={{ background: 'var(--brand-bg, #1a1a1a)', borderRadius: 12, padding: 20, maxWidth: 500, width: '100%', border: '1px solid rgba(255,255,255,.1)', maxHeight: '90vh', overflow: 'auto' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>{t({ id: 'membership.payment.modalTitle' })}</h3>
+                  <button onClick={closePaymentModal} style={{ background: 'none', border: 'none', color: 'var(--brand-muted)', fontSize: '1.4rem', cursor: 'pointer', padding: 0, lineHeight: 1 }}>×</button>
+                </div>
+                <div style={{ fontSize: '.88rem', color: 'var(--brand-muted)', marginBottom: 12 }}>
+                  {t({ id: 'membership.payment.forReader' }, { name: paymentModal.display_name })}
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
+                    {t({ id: 'membership.payment.rule' })}
+                    <select
+                      value={paymentDraft.rule_id || ''}
+                      onChange={e => onPaymentRuleChange(e.target.value)}
+                      className="ab-painel-input"
+                      style={{ marginTop: 4 }}
+                    >
+                      {membershipRules.map(r => (
+                        <option key={r.id} value={r.id}>
+                          {r.name} — {r.amount_min > 0 ? `${r.amount_min} ${r.currency} min` : t({ id: 'membership.rule.freePrice' })}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
+                    {t({ id: 'membership.payment.amount' })}
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={paymentDraft.amount_paid}
+                      onChange={e => setPaymentDraft(p => ({ ...p, amount_paid: e.target.value }))}
+                      className="ab-painel-input"
+                      style={{ marginTop: 4 }}
+                    />
+                  </label>
+
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
+                    {t({ id: 'membership.payment.method' })}
+                    <select
+                      value={paymentDraft.payment_method}
+                      onChange={e => setPaymentDraft(p => ({ ...p, payment_method: e.target.value }))}
+                      className="ab-painel-input"
+                      style={{ marginTop: 4 }}
+                    >
+                      <option value="cash">{t({ id: 'membership.method.cash' })}</option>
+                      <option value="transfer">{t({ id: 'membership.method.transfer' })}</option>
+                      <option value="card">{t({ id: 'membership.method.card' })}</option>
+                      <option value="check">{t({ id: 'membership.method.check' })}</option>
+                      <option value="in_kind">{t({ id: 'membership.method.in_kind' })}</option>
+                      <option value="exemption">{t({ id: 'membership.method.exemption' })}</option>
+                      <option value="other">{t({ id: 'membership.method.other' })}</option>
+                    </select>
+                  </label>
+
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
+                    {t({ id: 'membership.payment.paidAt' })}
+                    <input
+                      type="date"
+                      value={paymentDraft.paid_at}
+                      onChange={e => setPaymentDraft(p => ({ ...p, paid_at: e.target.value }))}
+                      className="ab-painel-input"
+                      style={{ marginTop: 4 }}
+                    />
+                  </label>
+
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
+                    {t({ id: 'membership.payment.notes' })}
+                    <textarea
+                      rows={2}
+                      value={paymentDraft.notes || ''}
+                      onChange={e => setPaymentDraft(p => ({ ...p, notes: e.target.value }))}
+                      className="ab-painel-input"
+                      placeholder={t({ id: 'membership.payment.notesPlaceholder' })}
+                      style={{ marginTop: 4, fontFamily: 'inherit', resize: 'vertical' }}
+                    />
+                  </label>
+
+                  {paymentMsg && (
+                    <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.85rem', background: paymentMsg.startsWith('Erro') || paymentMsg.includes('error') ? 'rgba(220,38,38,.1)' : 'rgba(74,222,128,.1)', color: paymentMsg.startsWith('Erro') || paymentMsg.includes('error') ? '#f87171' : '#4ade80' }}>
+                      {paymentMsg}
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                    <Button onClick={submitPayment} disabled={paymentSaving}>
+                      {paymentSaving ? t({ id: 'common.saving' }) : t({ id: 'membership.payment.submit' })}
+                    </Button>
+                    <Button variant="secondary" onClick={closePaymentModal} disabled={paymentSaving}>
+                      {t({ id: 'common.cancel' })}
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
