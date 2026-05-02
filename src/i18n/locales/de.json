@@ -1585,5 +1585,11 @@
   "membership.payment.recordedBy": "Erfasst von {name}",
   "panel.memberships.noRulesWarning.title": "Keine aktive Beitragsregel",
   "panel.memberships.noRulesWarning.body": "Du hast das Beitragssystem aktiviert, aber es ist noch keine Regel erfasst. Erstelle mindestens eine, um Zahlungen erfassen zu können.",
-  "panel.memberships.noRulesWarning.link": "Zur Bibliotheksseite gehen →"
+  "panel.memberships.noRulesWarning.link": "Zur Bibliotheksseite gehen →",
+  "membership.account.hint": "Dein Beitragsstand bei {library}.",
+  "membership.account.lastPayment": "Letzte Zahlung",
+  "membership.account.applicableRules": "Anwendbare Regeln",
+  "membership.account.howToPay": "Um eine Zahlung zu erfassen, wende dich bei einem Besuch in der Bibliothek an eine*n Bibliothekar*in.",
+  "membership.account.openRegulation": "Ordnung öffnen",
+  "membership.account.fullHistory": "Vollständigen Verlauf anzeigen ({count} Zahlungen)"
 }

@@ -1580,5 +1580,11 @@
   "membership.payment.recordedBy": "Registrado por {name}",
   "panel.memberships.noRulesWarning.title": "Ninguna regla de cuota activa",
   "panel.memberships.noRulesWarning.body": "Activaste el sistema de cuotas, pero todavía no hay ninguna regla registrada. Creá al menos una para poder registrar pagos.",
-  "panel.memberships.noRulesWarning.link": "Ir a la página Biblioteca →"
+  "panel.memberships.noRulesWarning.link": "Ir a la página Biblioteca →",
+  "membership.account.hint": "Tu situación de cuota en {library}.",
+  "membership.account.lastPayment": "Último pago",
+  "membership.account.applicableRules": "Reglas aplicables",
+  "membership.account.howToPay": "Para registrar una cuota, hablá con une bibliotecarie durante una visita a la biblioteca.",
+  "membership.account.openRegulation": "Abrir reglamento",
+  "membership.account.fullHistory": "Ver historial completo ({count} pagos)"
 }

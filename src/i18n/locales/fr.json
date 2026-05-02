@@ -1567,5 +1567,11 @@
   "membership.payment.recordedBy": "Enregistré par {name}",
   "panel.memberships.noRulesWarning.title": "Aucune règle de cotisation active",
   "panel.memberships.noRulesWarning.body": "Vous avez activé le système de cotisations, mais aucune règle n'est enregistrée. Créez-en au moins une pour pouvoir enregistrer des paiements.",
-  "panel.memberships.noRulesWarning.link": "Aller à la page Bibliothèque →"
+  "panel.memberships.noRulesWarning.link": "Aller à la page Bibliothèque →",
+  "membership.account.hint": "Votre situation de cotisation à {library}.",
+  "membership.account.lastPayment": "Dernier paiement",
+  "membership.account.applicableRules": "Règles applicables",
+  "membership.account.howToPay": "Pour enregistrer une cotisation, adressez-vous à un·e bibliothécaire lors d'une visite à la bibliothèque.",
+  "membership.account.openRegulation": "Ouvrir le règlement",
+  "membership.account.fullHistory": "Voir l'historique complet ({count} paiements)"
 }

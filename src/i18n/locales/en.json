@@ -1586,5 +1586,11 @@
   "membership.payment.recordedBy": "Recorded by {name}",
   "panel.memberships.noRulesWarning.title": "No active dues rule",
   "panel.memberships.noRulesWarning.body": "You have enabled the dues system, but no rule is registered. Create at least one to be able to record payments.",
-  "panel.memberships.noRulesWarning.link": "Go to the Library page →"
+  "panel.memberships.noRulesWarning.link": "Go to the Library page →",
+  "membership.account.hint": "Your dues status at {library}.",
+  "membership.account.lastPayment": "Last payment",
+  "membership.account.applicableRules": "Applicable rules",
+  "membership.account.howToPay": "To record a payment, please see a librarian during a visit to the library.",
+  "membership.account.openRegulation": "Open regulation",
+  "membership.account.fullHistory": "See full history ({count} payments)"
 }

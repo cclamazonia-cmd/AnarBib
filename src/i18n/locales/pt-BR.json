@@ -1567,5 +1567,11 @@
   "membership.payment.recordedBy": "Registrado por {name}",
   "panel.memberships.noRulesWarning.title": "Nenhuma regra de contribuição ativa",
   "panel.memberships.noRulesWarning.body": "Você ativou o sistema de contribuições, mas ainda não há regra cadastrada. Crie ao menos uma para registrar pagamentos.",
-  "panel.memberships.noRulesWarning.link": "Ir para a página Biblioteca →"
+  "panel.memberships.noRulesWarning.link": "Ir para a página Biblioteca →",
+  "membership.account.hint": "Sua situação de contribuição em {library}.",
+  "membership.account.lastPayment": "Último pagamento",
+  "membership.account.applicableRules": "Regras aplicáveis",
+  "membership.account.howToPay": "Para registrar uma contribuição, fale com d(o/a/e) bibliotecári(o/a/e) durante uma visita à biblioteca.",
+  "membership.account.openRegulation": "Abrir regimento",
+  "membership.account.fullHistory": "Ver histórico completo ({count} pagamentos)"
 }

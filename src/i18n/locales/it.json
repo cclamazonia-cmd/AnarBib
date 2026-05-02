@@ -1585,5 +1585,11 @@
   "membership.payment.recordedBy": "Registrato da {name}",
   "panel.memberships.noRulesWarning.title": "Nessuna regola di quota attiva",
   "panel.memberships.noRulesWarning.body": "Hai attivato il sistema di quote, ma non c'è ancora nessuna regola registrata. Creane almeno una per poter registrare pagamenti.",
-  "panel.memberships.noRulesWarning.link": "Vai alla pagina Biblioteca →"
+  "panel.memberships.noRulesWarning.link": "Vai alla pagina Biblioteca →",
+  "membership.account.hint": "La tua situazione di quota presso {library}.",
+  "membership.account.lastPayment": "Ultimo pagamento",
+  "membership.account.applicableRules": "Regole applicabili",
+  "membership.account.howToPay": "Per registrare un pagamento, rivolgiti a un/a bibliotecario/a durante una visita in biblioteca.",
+  "membership.account.openRegulation": "Aprire il regolamento",
+  "membership.account.fullHistory": "Vedere lo storico completo ({count} pagamenti)"
 }
