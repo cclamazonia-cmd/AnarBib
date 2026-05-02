@@ -468,6 +468,44 @@ export default function BibliotecaPage() {
     } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
     finally { setSaving(false); }
   }
+
+  async function deleteMembershipRule(rule) {
+    // Confirm fort à 2 niveaux : avertissement + saisie du nom de la règle
+    if (!confirm(t({ id: 'membership.config.action.deleteConfirm' }, { name: rule.name }))) return;
+    const typed = prompt(t({ id: 'membership.config.action.deleteConfirmTyped' }, { name: rule.name }));
+    if (typed !== rule.name) {
+      if (typed !== null) setMsg({ text: t({ id: 'membership.config.action.deleteCancelled' }), kind: 'info' });
+      return;
+    }
+    setSaving(true);
+    try {
+      const { error } = await supabase.from('library_membership_rules').delete().eq('id', rule.id);
+      if (error) throw error;
+      setMembershipRules(prev => prev.filter(x => x.id !== rule.id));
+      setMsg({ text: t({ id: 'membership.config.msg.deleted' }), kind: 'ok' });
+    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
+    finally { setSaving(false); }
+  }
+
+  async function deleteCirculationRule(rule) {
+    // Confirm fort : avertissement explicite + saisie du label
+    const ruleLabel = rule.rule_label || `Regra #${rule.id}`;
+    if (!confirm(t({ id: 'biblioteca.rules.deleteWarning' }, { name: ruleLabel }))) return;
+    const typed = prompt(t({ id: 'biblioteca.rules.deleteConfirmTyped' }, { name: ruleLabel }));
+    if (typed !== ruleLabel) {
+      if (typed !== null) setMsg({ text: t({ id: 'membership.config.action.deleteCancelled' }), kind: 'info' });
+      return;
+    }
+    setSaving(true);
+    try {
+      const { error } = await supabase.from('library_circulation_policy_rules').delete().eq('id', rule.id);
+      if (error) throw error;
+      setPolicyRules(prev => prev.filter(x => x.id !== rule.id));
+      setEditingRule(null);
+      setMsg({ text: t({ id: 'biblioteca.rules.deleted' }), kind: 'ok' });
+    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
+    finally { setSaving(false); }
+  }
   const fs = { width:'100%', padding:'10px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', fontSize:'.9rem' };
   const ls = { display:'block', fontSize:'.85rem', fontWeight:600, marginBottom:3, color:'var(--brand-muted, #ccc)' };
   const bx = { padding:14, borderRadius:10, background:'rgba(255,255,255,.03)', border:'1px solid rgba(255,255,255,.08)', marginBottom:16 };
@@ -610,7 +648,7 @@ export default function BibliotecaPage() {
               <div key={doc.id} style={{ padding:'8px 10px', borderRadius:6, background:'rgba(0,0,0,.15)', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                 <div>
                   <div style={{ fontSize:'.9rem', fontWeight:600 }}>{doc.version_label||`Regimento #${doc.id}`}</div>
-                  <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{doc.doc_kind||'—'} · {doc.publication_status||'—'}{doc.is_active && <span className="cat-pill ok" style={{ marginLeft:6, fontSize:'.65rem' }}>Ativo</span>}</div>
+                  <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{doc.doc_kind||'—'} · {doc.publication_status||'—'}{doc.is_active && <> · <span className="cat-pill ok" style={{ fontSize:'.65rem' }}>{t({ id: 'common.active' })}</span></>}</div>
                 </div>
                 {doc.storage_path_public && <a href={`${PROJECT_URL}/storage/v1/object/public/${doc.storage_bucket||'library-regimentos-public'}/${doc.storage_path_public}`} target="_blank" rel="noopener" className="cat-btn secondary" style={{ fontSize:'.82rem', padding:'5px 12px' }}>{t({ id: 'biblioteca.regulation.openPdf' })}</a>}
               </div>
@@ -639,9 +677,20 @@ export default function BibliotecaPage() {
                     <div className="cat-field"><label style={{...ls,display:'flex',gap:6,alignItems:'center'}}><input type="checkbox" checked={editingRule.loan_allowed||false} onChange={e=>setEditingRule(p=>({...p,loan_allowed:e.target.checked}))} />{t({id:'biblioteca.rules.loanAllowed'})}</label></div>
                     <div className="cat-field"><label style={{...ls,display:'flex',gap:6,alignItems:'center'}}><input type="checkbox" checked={editingRule.renewable||false} onChange={e=>setEditingRule(p=>({...p,renewable:e.target.checked}))} />{t({id:'biblioteca.rules.renewable'})}</label></div>
                     <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({id:'biblioteca.rules.publicNote'})}</label><input type="text" value={editingRule.public_note||''} onChange={e=>setEditingRule(p=>({...p,public_note:e.target.value}))} style={fs} /></div>
-                    <div className="cat-field" style={{ gridColumn:'span 3', display:'flex', gap:8 }}>
-                      <button className="cat-btn primary" onClick={saveRule} disabled={saving} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.save'})}</button>
-                      <button className="cat-btn secondary" onClick={()=>setEditingRule(null)} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.cancel'})}</button>
+                    <div className="cat-field" style={{ gridColumn:'span 3', display:'flex', gap:8, justifyContent:'space-between', alignItems:'center' }}>
+                      <div style={{ display:'flex', gap:8 }}>
+                        <button className="cat-btn primary" onClick={saveRule} disabled={saving} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.save'})}</button>
+                        <button className="cat-btn secondary" onClick={()=>setEditingRule(null)} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.cancel'})}</button>
+                      </div>
+                      <button
+                        className="cat-btn ghost"
+                        onClick={()=>deleteCirculationRule(editingRule)}
+                        disabled={saving}
+                        style={{ fontSize:'.78rem', padding:'4px 10px', color:'#dc2626', borderColor:'rgba(220,38,38,.4)' }}
+                        title={t({id:'biblioteca.rules.deleteHint'})}
+                      >
+                        {t({id:'biblioteca.rules.delete'})}
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -649,10 +698,19 @@ export default function BibliotecaPage() {
                     <div style={{ flex:1 }}>
                       <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.rule_label||`Regra #${r.id}`}</div>
                       <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                        {r.loan_allowed ? t({id:'biblioteca.regulation.loanAllowed'},{days:r.loan_days}) : t({id:'biblioteca.regulation.loanNotAllowed'})}
-                        {r.renewable&&` · Renovável (${r.renewal_days}d, ${r.renewal_max_count}x)`}
-                        {r.reservation_allowed&&' · Reserva'}{r.consultation_only&&' · Consulta'}
-                        {r.public_note&&` · ${r.public_note}`}
+                        {r.loan_allowed
+                          ? (r.loan_days != null
+                              ? t({id:'biblioteca.regulation.loanAllowed'},{days:r.loan_days})
+                              : t({id:'biblioteca.regulation.loanAllowedNoDays'}))
+                          : t({id:'biblioteca.regulation.loanNotAllowed'})}
+                        {r.renewable && (
+                          (r.renewal_days != null && r.renewal_max_count != null)
+                            ? ` · ${t({id:'biblioteca.regulation.renewable'},{days:r.renewal_days,times:r.renewal_max_count})}`
+                            : ` · ${t({id:'biblioteca.regulation.renewableNoDetail'})}`
+                        )}
+                        {r.reservation_allowed && ` · ${t({id:'biblioteca.regulation.reservation'})}`}
+                        {r.consultation_only && ` · ${t({id:'biblioteca.regulation.consultation'})}`}
+                        {r.public_note && ` · ${r.public_note}`}
                       </div>
                     </div>
                     <button className="cat-btn secondary" onClick={()=>setEditingRule({...r})} style={{ fontSize:'.78rem', padding:'4px 10px' }}>{t({id:'biblioteca.rules.edit'})}</button>
@@ -862,6 +920,14 @@ export default function BibliotecaPage() {
                             style={{ fontSize:'.78rem', padding:'4px 10px', color: r.is_active ? '#f87171' : '#86efac' }}
                           >
                             {t({ id: r.is_active ? 'membership.config.action.deactivate' : 'membership.config.action.reactivate' })}
+                          </button>
+                          <button
+                            className="cat-btn ghost"
+                            onClick={() => deleteMembershipRule(r)}
+                            style={{ fontSize:'.78rem', padding:'4px 10px', color:'#dc2626', borderColor:'rgba(220,38,38,.4)' }}
+                            title={t({ id: 'membership.config.action.deleteHint' })}
+                          >
+                            {t({ id: 'membership.config.action.delete' })}
                           </button>
                         </div>
                       )}

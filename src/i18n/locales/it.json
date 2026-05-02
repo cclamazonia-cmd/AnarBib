@@ -1542,5 +1542,22 @@
   "membership.config.msg.reactivated": "Regola riattivata.",
   "membership.config.msg.enabledOn": "Sistema di quote attivato per questa biblioteca.",
   "membership.config.msg.enabledOff": "Sistema di quote disattivato.",
-  "membership.config.msg.minRequired": "L'importo minimo deve essere maggiore o uguale a zero."
+  "membership.config.msg.minRequired": "L'importo minimo deve essere maggiore o uguale a zero.",
+  "common.active": "Attivo",
+  "biblioteca.regulation.loanAllowedNoDays": "Prestito consentito",
+  "biblioteca.regulation.renewable": "Rinnovabile ({days}g, {times}×)",
+  "biblioteca.regulation.renewableNoDetail": "Rinnovabile",
+  "biblioteca.regulation.reservation": "Prenotazione",
+  "biblioteca.regulation.consultation": "Consultazione",
+  "membership.config.action.delete": "Eliminare",
+  "membership.config.action.deleteHint": "Sopprime definitivamente questa regola. I pagamenti antichi sono conservati ma perdono il riferimento alla regola.",
+  "membership.config.action.deleteConfirm": "Eliminare definitivamente la regola \"{name}\"?\n\nI pagamenti antichi rimarranno nello storico, ma senza riferimento alla regola.\n\nQuesta azione è irreversibile.",
+  "membership.config.action.deleteConfirmTyped": "Per confermare, digita il nome esatto della regola:\n\n{name}",
+  "membership.config.action.deleteCancelled": "Eliminazione annullata — il nome digitato non corrisponde.",
+  "membership.config.msg.deleted": "Regola eliminata.",
+  "biblioteca.rules.delete": "Eliminare",
+  "biblioteca.rules.deleteHint": "Sopprime definitivamente questa regola di circolazione. Attenzione: le regole \"Base legada\" fanno parte del sistema transitorio.",
+  "biblioteca.rules.deleteWarning": "⚠ Eliminare definitivamente \"{name}\"?\n\nLe regole \"Base legada\" sono il comportamento predefinito della biblioteca finché non vengono parametrate regole proprie. Eliminarle può lasciare la biblioteca senza regola di circolazione.\n\nQuesta azione è irreversibile.",
+  "biblioteca.rules.deleteConfirmTyped": "Per confermare, digita l'etichetta esatta della regola:\n\n{name}",
+  "biblioteca.rules.deleted": "Regola di circolazione eliminata."
 }

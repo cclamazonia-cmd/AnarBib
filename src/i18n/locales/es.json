@@ -1537,5 +1537,22 @@
   "membership.config.msg.reactivated": "Regla reactivada.",
   "membership.config.msg.enabledOn": "Sistema de cuota activado para esta biblioteca.",
   "membership.config.msg.enabledOff": "Sistema de cuota desactivado.",
-  "membership.config.msg.minRequired": "El monto mínimo debe ser mayor o igual a cero."
+  "membership.config.msg.minRequired": "El monto mínimo debe ser mayor o igual a cero.",
+  "common.active": "Activo",
+  "biblioteca.regulation.loanAllowedNoDays": "Préstamo permitido",
+  "biblioteca.regulation.renewable": "Renovable ({days}d, {times}×)",
+  "biblioteca.regulation.renewableNoDetail": "Renovable",
+  "biblioteca.regulation.reservation": "Reserva",
+  "biblioteca.regulation.consultation": "Consulta",
+  "membership.config.action.delete": "Eliminar",
+  "membership.config.action.deleteHint": "Suprime definitivamente esta regla. Los pagos antiguos se conservan pero pierden la referencia a la regla.",
+  "membership.config.action.deleteConfirm": "¿Eliminar definitivamente la regla \"{name}\"?\n\nLos pagos antiguos quedarán en el historial, pero sin referencia a la regla.\n\nEsta acción es irreversible.",
+  "membership.config.action.deleteConfirmTyped": "Para confirmar, escribí el nombre exacto de la regla:\n\n{name}",
+  "membership.config.action.deleteCancelled": "Eliminación cancelada — el nombre ingresado no coincide.",
+  "membership.config.msg.deleted": "Regla eliminada.",
+  "biblioteca.rules.delete": "Eliminar",
+  "biblioteca.rules.deleteHint": "Suprime definitivamente esta regla de circulación. Atención: las reglas \"Base legada\" forman parte del sistema transitorio.",
+  "biblioteca.rules.deleteWarning": "⚠ ¿Eliminar definitivamente \"{name}\"?\n\nLas reglas \"Base legada\" son el comportamiento por defecto de la biblioteca mientras no se parametrizan reglas propias. Eliminarlas puede dejar a la biblioteca sin regla de circulación.\n\nEsta acción es irreversible.",
+  "biblioteca.rules.deleteConfirmTyped": "Para confirmar, escribí la etiqueta exacta de la regla:\n\n{name}",
+  "biblioteca.rules.deleted": "Regla de circulación eliminada."
 }

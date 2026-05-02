@@ -1524,5 +1524,22 @@
   "membership.config.msg.reactivated": "Regra reativada.",
   "membership.config.msg.enabledOn": "Sistema de contribuição ativado para esta biblioteca.",
   "membership.config.msg.enabledOff": "Sistema de contribuição desativado.",
-  "membership.config.msg.minRequired": "Valor mínimo deve ser maior ou igual a zero."
+  "membership.config.msg.minRequired": "Valor mínimo deve ser maior ou igual a zero.",
+  "common.active": "Ativo",
+  "biblioteca.regulation.loanAllowedNoDays": "Empréstimo permitido",
+  "biblioteca.regulation.renewable": "Renovável ({days}d, {times}x)",
+  "biblioteca.regulation.renewableNoDetail": "Renovável",
+  "biblioteca.regulation.reservation": "Reserva",
+  "biblioteca.regulation.consultation": "Consulta",
+  "membership.config.action.delete": "Excluir",
+  "membership.config.action.deleteHint": "Suprime definitivamente esta regra. Os pagamentos antigos serão preservados, mas perderão a referência à regra.",
+  "membership.config.action.deleteConfirm": "Excluir definitivamente a regra \"{name}\"?\n\nOs pagamentos antigos ficarão preservados no histórico, mas sem referência à regra.\n\nEsta ação é irreversível.",
+  "membership.config.action.deleteConfirmTyped": "Para confirmar, digite o nome exato da regra:\n\n{name}",
+  "membership.config.action.deleteCancelled": "Exclusão cancelada — o nome digitado não corresponde.",
+  "membership.config.msg.deleted": "Regra excluída.",
+  "biblioteca.rules.delete": "Excluir",
+  "biblioteca.rules.deleteHint": "Suprime definitivamente esta regra de circulação. Atenção: as regras \"Base legada\" são parte do sistema transitório.",
+  "biblioteca.rules.deleteWarning": "⚠ Excluir definitivamente \"{name}\"?\n\nAs regras \"Base legada\" são o comportamento padrão da biblioteca enquanto não há regras próprias parametrizadas. Excluí-las pode deixar a biblioteca sem regra de circulação.\n\nEsta ação é irreversível.",
+  "biblioteca.rules.deleteConfirmTyped": "Para confirmar, digite o rótulo exato da regra:\n\n{name}",
+  "biblioteca.rules.deleted": "Regra de circulação excluída."
 }

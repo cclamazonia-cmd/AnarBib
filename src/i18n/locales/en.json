@@ -1543,5 +1543,22 @@
   "membership.config.msg.reactivated": "Rule reactivated.",
   "membership.config.msg.enabledOn": "Dues system enabled for this library.",
   "membership.config.msg.enabledOff": "Dues system disabled.",
-  "membership.config.msg.minRequired": "Minimum amount must be greater than or equal to zero."
+  "membership.config.msg.minRequired": "Minimum amount must be greater than or equal to zero.",
+  "common.active": "Active",
+  "biblioteca.regulation.loanAllowedNoDays": "Loan allowed",
+  "biblioteca.regulation.renewable": "Renewable ({days}d, {times}×)",
+  "biblioteca.regulation.renewableNoDetail": "Renewable",
+  "biblioteca.regulation.reservation": "Reservation",
+  "biblioteca.regulation.consultation": "On-site consultation",
+  "membership.config.action.delete": "Delete",
+  "membership.config.action.deleteHint": "Permanently removes this rule. Old payments are preserved but lose their link to the rule.",
+  "membership.config.action.deleteConfirm": "Permanently delete the rule \"{name}\"?\n\nOld payments will remain in history, but without reference to the rule.\n\nThis action cannot be undone.",
+  "membership.config.action.deleteConfirmTyped": "To confirm, type the exact name of the rule:\n\n{name}",
+  "membership.config.action.deleteCancelled": "Deletion cancelled — the typed name does not match.",
+  "membership.config.msg.deleted": "Rule deleted.",
+  "biblioteca.rules.delete": "Delete",
+  "biblioteca.rules.deleteHint": "Permanently removes this circulation rule. Warning: \"Base legada\" rules are part of the transitional system.",
+  "biblioteca.rules.deleteWarning": "⚠ Permanently delete \"{name}\"?\n\n\"Base legada\" rules are the library's default behaviour until custom rules are configured. Deleting them may leave the library without any circulation rule.\n\nThis action cannot be undone.",
+  "biblioteca.rules.deleteConfirmTyped": "To confirm, type the exact label of the rule:\n\n{name}",
+  "biblioteca.rules.deleted": "Circulation rule deleted."
 }

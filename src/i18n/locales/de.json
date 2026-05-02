@@ -1542,5 +1542,22 @@
   "membership.config.msg.reactivated": "Regel reaktiviert.",
   "membership.config.msg.enabledOn": "Beitragssystem für diese Bibliothek aktiviert.",
   "membership.config.msg.enabledOff": "Beitragssystem deaktiviert.",
-  "membership.config.msg.minRequired": "Der Mindestbetrag muss größer oder gleich Null sein."
+  "membership.config.msg.minRequired": "Der Mindestbetrag muss größer oder gleich Null sein.",
+  "common.active": "Aktiv",
+  "biblioteca.regulation.loanAllowedNoDays": "Ausleihe erlaubt",
+  "biblioteca.regulation.renewable": "Verlängerbar ({days}T, {times}×)",
+  "biblioteca.regulation.renewableNoDetail": "Verlängerbar",
+  "biblioteca.regulation.reservation": "Reservierung",
+  "biblioteca.regulation.consultation": "Vor-Ort-Einsicht",
+  "membership.config.action.delete": "Löschen",
+  "membership.config.action.deleteHint": "Entfernt diese Regel endgültig. Alte Zahlungen bleiben erhalten, verlieren aber ihre Verknüpfung zur Regel.",
+  "membership.config.action.deleteConfirm": "Die Regel „{name}\" endgültig löschen?\n\nAlte Zahlungen bleiben im Verlauf, aber ohne Bezug zur Regel.\n\nDiese Aktion ist nicht rückgängig zu machen.",
+  "membership.config.action.deleteConfirmTyped": "Zur Bestätigung gib den genauen Namen der Regel ein:\n\n{name}",
+  "membership.config.action.deleteCancelled": "Löschung abgebrochen — der eingegebene Name stimmt nicht überein.",
+  "membership.config.msg.deleted": "Regel gelöscht.",
+  "biblioteca.rules.delete": "Löschen",
+  "biblioteca.rules.deleteHint": "Entfernt diese Zirkulationsregel endgültig. Achtung: „Base legada\"-Regeln sind Teil des Übergangssystems.",
+  "biblioteca.rules.deleteWarning": "⚠ „{name}\" endgültig löschen?\n\n„Base legada\"-Regeln sind das Standardverhalten der Bibliothek, solange keine eigenen Regeln konfiguriert sind. Sie zu löschen kann die Bibliothek ohne Zirkulationsregel zurücklassen.\n\nDiese Aktion ist nicht rückgängig zu machen.",
+  "biblioteca.rules.deleteConfirmTyped": "Zur Bestätigung gib das genaue Etikett der Regel ein:\n\n{name}",
+  "biblioteca.rules.deleted": "Zirkulationsregel gelöscht."
 }
