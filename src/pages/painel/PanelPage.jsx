@@ -224,7 +224,7 @@ export default function PanelPage() {
     try {
       const { error } = await supabase.rpc('fn_v2_return_emprestimo_total', { p_emprestimo_id: id });
       if (error) throw error;
-      setReturnMsg(`Devolução total registrada para empréstimo #${id}.`);
+      setReturnMsg(t({id:'panel.return.totalRegistered'},{id}));
       notifyEvent('emprestimo_v2_devolvido', id);
       setReturnId('');
       loadData();
@@ -243,7 +243,7 @@ export default function PanelPage() {
           p_emprestimo_id: empId, p_line_nos: [lineNo],
         });
       }
-      setReturnMsg(`Devolução parcial registrada: ${subIds.join(', ')}.`);
+      setReturnMsg(t({id:'panel.return.partialRegistered'},{ids:subIds.join(', ')}));
       setReturnSubIds('');
       loadData();
     } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message:e.message})); }
@@ -715,7 +715,7 @@ export default function PanelPage() {
                   <thead>
                     <tr>
                       <th><input type="checkbox" checked={selectedRes.size === reservations.length && reservations.length > 0} onChange={toggleAllRes} /></th>
-                      <th>Sub-ID</th><th>Leitor(a/e)</th><th>{t({id:'panel.table.book'})}</th><th>Ref</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({id:'panel.table.pickup'})}</th><th>{t({id:'panel.table.validity'})}</th>
+                      <th>Sub-ID</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>Ref</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({id:'panel.table.pickup'})}</th><th>{t({id:'panel.table.validity'})}</th>
                     </tr>
                   </thead>
                   <tbody>

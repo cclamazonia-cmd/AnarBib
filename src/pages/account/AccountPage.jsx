@@ -231,13 +231,13 @@ export default function AccountPage() {
       if (!isConsultation) {
         const nonLoanable = rows.filter(r => r.matched && r.session_loanable === false);
         if (nonLoanable.length) {
-          setReserveMsg(`A(s) referência(s) ${nonLoanable.map(r => r.bib_ref || r.input_ref).join(', ')} é/são apenas para consulta no local. Use o botão "Pedir consulta no local".`);
+          setReserveMsg(t({id:'account.reserve.consultationOnlyHint'},{refs:nonLoanable.map(r => r.bib_ref || r.input_ref).join(', ')}));
           return;
         }
       } else {
         const loanableOnly = rows.filter(r => r.matched && r.session_loanable === true);
         if (loanableOnly.length) {
-          setReserveMsg(`A(s) referência(s) ${loanableOnly.map(r => r.bib_ref || r.input_ref).join(', ')} é/são emprestável/eis. Use o botão "Reservar empréstimo".`);
+          setReserveMsg(t({id:'account.reserve.loanableOnlyHint'},{refs:loanableOnly.map(r => r.bib_ref || r.input_ref).join(', ')}));
           return;
         }
       }
@@ -253,8 +253,8 @@ export default function AccountPage() {
       if (error) throw error;
 
       setReserveMsg(isConsultation
-        ? `Pedido de consulta local registrado com sucesso para ${refs.length} material(is).`
-        : `Reserva registrada com sucesso para ${refs.length} livro(s).`);
+        ? t({id:'account.reserve.consultationRegistered'},{count:refs.length})
+        : t({id:'account.reserve.loanRegistered'},{count:refs.length}));
       // Notification asynchrone — ne bloque pas l'UX
       if (!isConsultation) notifyEvent('reserva_v2_criada', 0, { user_id: user.id, holding_ids: holdingIds });
       setReserveRef('');
@@ -276,7 +276,7 @@ export default function AccountPage() {
       notifyEvent('reserva_cancelada_leitor', reservaId);
       loadData();
     } catch (err) {
-      alert(`Erro ao cancelar: ${err.message}`);
+      alert(t({id:'account.reserve.cancelError'},{message:err.message}));
     }
   }
 

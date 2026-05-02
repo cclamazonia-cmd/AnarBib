@@ -277,7 +277,7 @@ export default function BibliotecaPage() {
 
   async function saveIll() {
     if (!illForm.lender || !illForm.borrower) { setMsg({ text: t({id:'biblioteca.ill.selectBoth'}), kind: 'error' }); return; }
-    if (illForm.lender === illForm.borrower) { setMsg({ text: 'As bibliotecas emprestadora e tomadora devem ser diferentes.', kind: 'error' }); return; }
+    if (illForm.lender === illForm.borrower) { setMsg({ text: t({id:'biblioteca.ill.differentLibraries'}), kind: 'error' }); return; }
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
       const { data: loan, error } = await supabase.from('interlibrary_loans_v2').insert({
@@ -296,7 +296,7 @@ export default function BibliotecaPage() {
         }));
         await supabase.from('interlibrary_loan_items_v2').insert(rows);
       }
-      setMsg({ text: `Empréstimo interbibliotecas #${loan.id} criado com ${illItems.length} item(ns).`, kind: 'ok' });
+      setMsg({ text: t({id:'biblioteca.ill.created'},{id:loan.id,count:illItems.length}), kind: 'ok' });
       setIllForm({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'' });
       setIllItems([]); setIllDocSearch(''); setIllDocResults([]);
       await loadAll();
@@ -310,38 +310,49 @@ export default function BibliotecaPage() {
   }
 
   async function deleteIll(loanId) {
-    if (!confirm(`Descartar o empréstimo interbibliotecas #${loanId}? Esta ação é irreversível.`)) return;
+    if (!confirm(t({id:'biblioteca.ill.discardConfirm'},{id:loanId}))) return;
     try {
       await supabase.from('interlibrary_loan_items_v2').delete().eq('interlibrary_loan_id', loanId);
       await supabase.from('interlibrary_loans_v2').delete().eq('id', loanId);
-      setMsg({ text: `Empréstimo #${loanId} descartado.`, kind: 'ok' });
+      setMsg({ text: t({id:'biblioteca.ill.discarded'},{id:loanId}), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
 
   // ── Generate report text ────────────────────────────────
   function generateReportText() {
-    const now = new Date().toLocaleDateString('pt-BR');
+    const now = new Date().toLocaleDateString();
     const libName = lib?.name || libraryName;
     const lines = [
-      `RELATÓRIO — ${libName}`, `Data: ${now}`, '',
-      `Documentos no catálogo: ${stats.books}`, `Autoridades: ${stats.authors}`,
-      `Exemplares locais: ${stats.exemplars}`, `Leitores inscritos: ${stats.readers}`,
-      `Empréstimos em curso: ${stats.loansOpen}`,
-      `Bibliotecários: ${members.filter(m => m.role === 'librarian').length}`, '',
-      'EQUIPE:', ...members.map(m => {
+      t({id:'biblioteca.report.headerLine'},{lib:libName}),
+      t({id:'biblioteca.report.dateLine'},{date:now}),
+      '',
+      t({id:'biblioteca.report.docsInCatalog'},{count:stats.books}),
+      t({id:'biblioteca.report.authorities'},{count:stats.authors}),
+      t({id:'biblioteca.report.localExemplars'},{count:stats.exemplars}),
+      t({id:'biblioteca.report.registeredReaders'},{count:stats.readers}),
+      t({id:'biblioteca.report.openLoans'},{count:stats.loansOpen}),
+      t({id:'biblioteca.report.librarians'},{count:members.filter(m => m.role === 'librarian').length}),
+      '',
+      t({id:'biblioteca.report.team'}) + ':',
+      ...members.map(m => {
         const p = m.profiles || {};
-        return `  ${[p.first_name, p.last_name].filter(Boolean).join(' ') || p.email || '—'} — ${m.role === 'librarian' ? 'Bibliotecário(a)' : m.role === 'reader' ? 'Leitor(a)' : m.role}`;
-      }), '',
-      // FIX BUG #2 + #4: TASK_STATUS now defined; loop variable renamed to `tk`
-      'TAREFAS INTERNAS:', ...(tasks.length ? tasks.map(tk => `  [${TASK_STATUS[tk.status] || tk.status}] ${tk.title} (${TASK_PRIO[tk.priority] || tk.priority})${tk.owner ? ` — ${tk.owner}` : ''}`) : ['  Nenhuma tarefa registrada.']),
+        const personName = [p.first_name, p.last_name].filter(Boolean).join(' ') || p.email || '—';
+        const roleLabel = (m.role === 'librarian' || m.role === 'reader' || m.role === 'coordenador' || m.role === 'administrador')
+          ? t({id:`roles.${m.role}`})
+          : m.role;
+        return `  ${personName} — ${roleLabel}`;
+      }),
+      '',
+      t({id:'biblioteca.report.tasks'}) + ':',
+      ...(tasks.length ? tasks.map(tk => `  [${TASK_STATUS[tk.status] || tk.status}] ${tk.title} (${TASK_PRIO[tk.priority] || tk.priority})${tk.owner ? ` — ${tk.owner}` : ''}`) : ['  ' + t({id:'biblioteca.report.noTasksRegistered'})]),
     ];
     return lines.join('\n');
   }
 
   async function sendReport() {
     const email = commons?.contact_email;
-    if (!email) { setMsg({ text: 'Nenhum e-mail de contato configurado para esta biblioteca.', kind: 'error' }); return; }
+    if (!email) { setMsg({ text: t({id:'biblioteca.report.noEmail'}), kind: 'error' }); return; }
     const text = generateReportText();
     // Use mailto as fallback — a proper email send would use notify-event
     const subject = encodeURIComponent(`Relatório — ${lib?.name || libraryName} — ${new Date().toLocaleDateString('pt-BR')}`);
@@ -541,7 +552,7 @@ export default function BibliotecaPage() {
 
   if (!roleLoaded) return (
     <PageShell><Topbar />
-      <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>Carregando…</div>
+      <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>{t({id:'common.loading'})}</div>
     <Footer /></PageShell>
   );
 
@@ -606,9 +617,9 @@ export default function BibliotecaPage() {
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.identity.serviceState' })}</h4>
             <div className="cat-book-grid">
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.serviceMode' })}</label><select value={serviceState.service_mode||''} onChange={e=>setSS('service_mode',e.target.value)} style={fs}>{SERVICE_MODES.map(m=><option key={m.value} value={m.value}>{m.label}</option>)}</select></div>
-              <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_loans||false} onChange={e=>setSS('allows_new_loans',e.target.checked)} /> Aceita novos empréstimos</label></div>
-              <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_reservations||false} onChange={e=>setSS('allows_new_reservations',e.target.checked)} /> Aceita novas reservas</label></div>
-              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.identity.publicMessage' })}</label><textarea value={serviceState.public_message||''} onChange={e=>setSS('public_message',e.target.value)} rows={2} style={{...fs,resize:'vertical'}} placeholder="Mensagem exibida publicamente…" /></div>
+              <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_loans||false} onChange={e=>setSS('allows_new_loans',e.target.checked)} /> {t({id:'biblioteca.identity.allowsLoans'})}</label></div>
+              <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_reservations||false} onChange={e=>setSS('allows_new_reservations',e.target.checked)} /> {t({id:'biblioteca.identity.allowsReservations'})}</label></div>
+              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.identity.publicMessage' })}</label><textarea value={serviceState.public_message||''} onChange={e=>setSS('public_message',e.target.value)} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({id:'biblioteca.identity.publicMessagePlaceholder'})} /></div>
             </div>
           </div>}
           <button className="cat-btn primary" onClick={saveIdentity} disabled={saving}>{saving?t({id:'common.saving'}):t({id:'biblioteca.identity.save'})}</button>
@@ -991,32 +1002,32 @@ export default function BibliotecaPage() {
         {/* ═══ 6. Trocas interbibliotecas ══════════════ */}
         {tab==='exchanges' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.exchanges.title' })}</h3>
-          <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:14 }}>Propostas de troca definitiva de documentos entre bibliotecas da rede. Escolha documentos trocáveis, gere a proposta e acompanhe a resposta.</div>
+          <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:14 }}>{t({id:'biblioteca.exchanges.hint'})}</div>
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.exchanges.prepare' })}</h4>
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.partner' })}</label>
                 <select style={fs}><option value="">{t({ id: 'biblioteca.exchanges.selectPartner' })}</option>{allLibraries.filter(l=>l.id!==libraryId).map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}</select>
               </div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.localDoc' })}</label><input type="text" style={fs} placeholder="Buscar documento local para propor troca…" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.localDoc' })}</label><input type="text" style={fs} placeholder={t({id:'biblioteca.exchanges.localDocPlaceholder'})} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.wantedDoc' })}</label><input type="text" style={fs} placeholder="Buscar documento desejado…" /></div>
             </div>
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
               <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.exchanges.message' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder="A proposta fica registrada e pode abrir um e-mail pronto para envio ao contato responsável." /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.note' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder="Ex.: exemplares em bom estado, troca no próximo plantão…" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.note' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder={t({id:'biblioteca.exchanges.notePlaceholder'})} /></div>
             </div>
             <div style={{ display:'flex', gap:8 }}>
               <button className="cat-btn primary" style={{ fontSize:'.88rem' }} disabled>{t({ id: 'biblioteca.exchanges.register' })}</button>
               <button className="cat-btn secondary" style={{ fontSize:'.88rem' }} disabled>{t({ id: 'biblioteca.exchanges.openEmail' })}</button>
             </div>
-            <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:10, fontStyle:'italic' }}>As trocas interbibliotecas ainda estão em fase de implantação na rede. O formulário está pronto, mas o registro depende da criação da tabela de trocas no backend.</div>
+            <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:10, fontStyle:'italic' }}>{t({id:'biblioteca.exchanges.implementationPending'})}</div>
           </div>
         </div>)}
 
         {/* ═══ 7. Empréstimos interbibliotecas ═════════ */}
         {tab==='ill' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.ill.title' })}</h3>
-          <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:14 }}>Preparação e acompanhamento de empréstimos temporários entre bibliotecas, separados das trocas.</div>
+          <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:14 }}>{t({id:'biblioteca.ill.hint'})}</div>
 
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.ill.prepare' })}</h4>
@@ -1052,7 +1063,7 @@ export default function BibliotecaPage() {
                   <button className="cat-btn secondary" style={{ fontSize:'.78rem', padding:'3px 8px' }} onClick={e=>{e.stopPropagation();addIllItem(d);}}>{t({ id: 'common.add' })}</button>
                 </div>
               ))}</div>}
-              {illItems.length===0 && <div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>Nenhum exemplar incluído. Busque um documento acima e clique para adicionar.</div>}
+              {illItems.length===0 && <div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{t({id:'biblioteca.ill.emptyItems'})}</div>}
               {illItems.length>0 && <div style={lw}>{illItems.map((it,i)=>(
                 <div key={it.book_id} style={lr(i)}>
                   <div style={{ fontSize:'.88rem' }}><strong>{it.titulo}</strong> — {it.autor||'—'}</div>
@@ -1122,7 +1133,7 @@ export default function BibliotecaPage() {
             </div>
             <textarea value={generateReportText()} readOnly rows={12} style={{...fs, fontFamily:'monospace', fontSize:'.82rem', resize:'vertical', marginBottom:10}} />
             <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-              <button className="cat-btn primary" onClick={()=>{ navigator.clipboard?.writeText(generateReportText()); setMsg({text:'Relatório copiado para a área de transferência.',kind:'ok'}); }} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.copy' })}</button>
+              <button className="cat-btn primary" onClick={()=>{ navigator.clipboard?.writeText(generateReportText()); setMsg({text:t({id:'biblioteca.report.copiedToast'}),kind:'ok'}); }} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.copy' })}</button>
               <button className="cat-btn secondary" onClick={sendReport} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.sendEmail' })}</button>
               <span style={{ fontSize:'.82rem', color:'var(--brand-muted)', alignSelf:'center' }}>Destinatário: {commons?.contact_email || '(não configurado)'}</span>
             </div>
