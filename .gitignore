@@ -8,3 +8,11 @@ dist/
 *.bak
 *.bak/
 locales.bak/
+
+# Supabase CLI working directory
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+
+# CI Woodpecker (à reprendre dans la session CI/CD dédiée)
+.woodpecker.yml
