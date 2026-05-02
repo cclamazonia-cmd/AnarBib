@@ -1583,5 +1583,8 @@
   "membership.payment.noPayments": "No payment recorded.",
   "membership.payment.paidOn": "Paid on {date}",
   "membership.payment.lastPaid": "Last: {date}",
-  "membership.payment.recordedBy": "Recorded by {name}"
+  "membership.payment.recordedBy": "Recorded by {name}",
+  "panel.memberships.noRulesWarning.title": "No active dues rule",
+  "panel.memberships.noRulesWarning.body": "You have enabled the dues system, but no rule is registered. Create at least one to be able to record payments.",
+  "panel.memberships.noRulesWarning.link": "Go to the Library page →"
 }

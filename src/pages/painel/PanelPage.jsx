@@ -1006,7 +1006,7 @@ export default function PanelPage() {
                         <Button onClick={() => openPaymentModal({
                           user_id: readerProfile.id,
                           display_name: `${readerProfile.first_name || ''} ${readerProfile.last_name || ''}`.trim() || readerProfile.email,
-                        })}>
+                        })} disabled={membershipRules.length === 0} title={membershipRules.length === 0 ? t({ id: 'panel.memberships.noRulesWarning.title' }) : undefined}>
                           + {t({ id: 'membership.action.recordPayment' })}
                         </Button>
                       </div>
@@ -1062,6 +1062,21 @@ export default function PanelPage() {
                 {t({ id: 'panel.memberships.hint' })}
               </p>
 
+              {/* Bandeau d'avertissement si aucune règle active */}
+              {membershipRules.length === 0 && (
+                <div style={{ padding: '12px 14px', borderRadius: 8, marginBottom: 14, background: 'rgba(251,146,60,.1)', border: '1px solid rgba(251,146,60,.3)', color: '#fdba74' }}>
+                  <div style={{ fontWeight: 600, fontSize: '.9rem', marginBottom: 4 }}>
+                    ⚠ {t({ id: 'panel.memberships.noRulesWarning.title' })}
+                  </div>
+                  <div style={{ fontSize: '.85rem' }}>
+                    {t({ id: 'panel.memberships.noRulesWarning.body' })}{' '}
+                    <a href="/biblioteca" style={{ color: '#fdba74', textDecoration: 'underline', fontWeight: 600 }}>
+                      {t({ id: 'panel.memberships.noRulesWarning.link' })}
+                    </a>
+                  </div>
+                </div>
+              )}
+
               {/* Filtres */}
               <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
                 {[
@@ -1107,7 +1122,7 @@ export default function PanelPage() {
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                             <Pill variant={status.variant}>{status.label}</Pill>
                             {status.detail && <span style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>{status.detail}</span>}
-                            <Button onClick={() => openPaymentModal({ user_id: m.user_id, display_name: m.display_name })}>
+                            <Button onClick={() => openPaymentModal({ user_id: m.user_id, display_name: m.display_name })} disabled={membershipRules.length === 0}>
                               + {t({ id: 'membership.action.recordPayment' })}
                             </Button>
                           </div>

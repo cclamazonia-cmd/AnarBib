@@ -1577,5 +1577,8 @@
   "membership.payment.noPayments": "Ningún pago registrado.",
   "membership.payment.paidOn": "Pagado el {date}",
   "membership.payment.lastPaid": "Último: {date}",
-  "membership.payment.recordedBy": "Registrado por {name}"
+  "membership.payment.recordedBy": "Registrado por {name}",
+  "panel.memberships.noRulesWarning.title": "Ninguna regla de cuota activa",
+  "panel.memberships.noRulesWarning.body": "Activaste el sistema de cuotas, pero todavía no hay ninguna regla registrada. Creá al menos una para poder registrar pagos.",
+  "panel.memberships.noRulesWarning.link": "Ir a la página Biblioteca →"
 }

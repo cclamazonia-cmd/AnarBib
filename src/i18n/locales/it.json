@@ -1582,5 +1582,8 @@
   "membership.payment.noPayments": "Nessun pagamento registrato.",
   "membership.payment.paidOn": "Pagato il {date}",
   "membership.payment.lastPaid": "Ultimo: {date}",
-  "membership.payment.recordedBy": "Registrato da {name}"
+  "membership.payment.recordedBy": "Registrato da {name}",
+  "panel.memberships.noRulesWarning.title": "Nessuna regola di quota attiva",
+  "panel.memberships.noRulesWarning.body": "Hai attivato il sistema di quote, ma non c'è ancora nessuna regola registrata. Creane almeno una per poter registrare pagamenti.",
+  "panel.memberships.noRulesWarning.link": "Vai alla pagina Biblioteca →"
 }

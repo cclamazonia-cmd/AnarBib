@@ -1564,5 +1564,8 @@
   "membership.payment.noPayments": "Aucun paiement enregistré.",
   "membership.payment.paidOn": "Payé le {date}",
   "membership.payment.lastPaid": "Dernier : {date}",
-  "membership.payment.recordedBy": "Enregistré par {name}"
+  "membership.payment.recordedBy": "Enregistré par {name}",
+  "panel.memberships.noRulesWarning.title": "Aucune règle de cotisation active",
+  "panel.memberships.noRulesWarning.body": "Vous avez activé le système de cotisations, mais aucune règle n'est enregistrée. Créez-en au moins une pour pouvoir enregistrer des paiements.",
+  "panel.memberships.noRulesWarning.link": "Aller à la page Bibliothèque →"
 }

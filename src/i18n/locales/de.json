@@ -1582,5 +1582,8 @@
   "membership.payment.noPayments": "Keine Zahlung erfasst.",
   "membership.payment.paidOn": "Bezahlt am {date}",
   "membership.payment.lastPaid": "Letzte: {date}",
-  "membership.payment.recordedBy": "Erfasst von {name}"
+  "membership.payment.recordedBy": "Erfasst von {name}",
+  "panel.memberships.noRulesWarning.title": "Keine aktive Beitragsregel",
+  "panel.memberships.noRulesWarning.body": "Du hast das Beitragssystem aktiviert, aber es ist noch keine Regel erfasst. Erstelle mindestens eine, um Zahlungen erfassen zu können.",
+  "panel.memberships.noRulesWarning.link": "Zur Bibliotheksseite gehen →"
 }

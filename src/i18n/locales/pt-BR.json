@@ -1564,5 +1564,8 @@
   "membership.payment.noPayments": "Nenhum pagamento registrado.",
   "membership.payment.paidOn": "Pago em {date}",
   "membership.payment.lastPaid": "Último: {date}",
-  "membership.payment.recordedBy": "Registrado por {name}"
+  "membership.payment.recordedBy": "Registrado por {name}",
+  "panel.memberships.noRulesWarning.title": "Nenhuma regra de contribuição ativa",
+  "panel.memberships.noRulesWarning.body": "Você ativou o sistema de contribuições, mas ainda não há regra cadastrada. Crie ao menos uma para registrar pagamentos.",
+  "panel.memberships.noRulesWarning.link": "Ir para a página Biblioteca →"
 }
