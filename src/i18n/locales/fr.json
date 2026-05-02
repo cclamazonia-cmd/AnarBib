@@ -1573,5 +1573,13 @@
   "membership.account.applicableRules": "Règles applicables",
   "membership.account.howToPay": "Pour enregistrer une cotisation, adressez-vous à un·e bibliothécaire lors d'une visite à la bibliothèque.",
   "membership.account.openRegulation": "Ouvrir le règlement",
-  "membership.account.fullHistory": "Voir l'historique complet ({count} paiements)"
+  "membership.account.fullHistory": "Voir l'historique complet ({count} paiements)",
+  "biblioteca.regulation.docKind.regimento": "Règlement",
+  "biblioteca.regulation.pubStatus.published": "Publié",
+  "biblioteca.regulation.pubStatus.draft_only": "Brouillon",
+  "biblioteca.regulation.uploadNew": "Envoyer un nouveau règlement",
+  "panel.tasks.emptyHint": "Créez des tâches sur la page {libraryLink}, onglet « Tâches internes ».",
+  "panel.reservations.selectStage": "Sélectionner une étape…",
+  "panel.loan.status.open": "En cours",
+  "panel.loan.status.returned": "Retourné"
 }

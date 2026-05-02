@@ -535,9 +535,9 @@
   "biblioteca.regulation.title": "Regolamento e regole di circolazione",
   "biblioteca.regulation.docs": "Documenti di regolamento",
   "biblioteca.regulation.upload": "Enviar novo regimento",
-  "biblioteca.regulation.uploading": "Enviando…",
+  "biblioteca.regulation.uploading": "Invio in corso…",
   "biblioteca.regulation.uploaded": "Regolamento inviato e pubblicato.",
-  "biblioteca.regulation.choosePdf": "Escolher PDF",
+  "biblioteca.regulation.choosePdf": "Scegliere un PDF",
   "biblioteca.regulation.openPdf": "Apri PDF",
   "biblioteca.regulation.rules": "Regole di circolazione attive",
   "biblioteca.regulation.noRules": "Nessun set di regole attivo.",
@@ -1591,5 +1591,13 @@
   "membership.account.applicableRules": "Regole applicabili",
   "membership.account.howToPay": "Per registrare un pagamento, rivolgiti a un/a bibliotecario/a durante una visita in biblioteca.",
   "membership.account.openRegulation": "Aprire il regolamento",
-  "membership.account.fullHistory": "Vedere lo storico completo ({count} pagamenti)"
+  "membership.account.fullHistory": "Vedere lo storico completo ({count} pagamenti)",
+  "biblioteca.regulation.docKind.regimento": "Regolamento",
+  "biblioteca.regulation.pubStatus.published": "Pubblicato",
+  "biblioteca.regulation.pubStatus.draft_only": "Bozza",
+  "biblioteca.regulation.uploadNew": "Inviare un nuovo regolamento",
+  "panel.tasks.emptyHint": "Crea compiti nella pagina {libraryLink}, scheda «Compiti interni».",
+  "panel.reservations.selectStage": "Selezionare una fase…",
+  "panel.loan.status.open": "In corso",
+  "panel.loan.status.returned": "Restituito"
 }

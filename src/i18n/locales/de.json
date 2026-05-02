@@ -535,9 +535,9 @@
   "biblioteca.regulation.title": "Ordnung und Ausleihregeln",
   "biblioteca.regulation.docs": "Ordnungsdokumente",
   "biblioteca.regulation.upload": "Enviar novo regimento",
-  "biblioteca.regulation.uploading": "Enviando…",
+  "biblioteca.regulation.uploading": "Wird hochgeladen…",
   "biblioteca.regulation.uploaded": "Ordnung hochgeladen und veröffentlicht.",
-  "biblioteca.regulation.choosePdf": "Escolher PDF",
+  "biblioteca.regulation.choosePdf": "PDF auswählen",
   "biblioteca.regulation.openPdf": "PDF öffnen",
   "biblioteca.regulation.rules": "Aktive Ausleihregeln",
   "biblioteca.regulation.noRules": "Kein aktives Regelwerk.",
@@ -1591,5 +1591,13 @@
   "membership.account.applicableRules": "Anwendbare Regeln",
   "membership.account.howToPay": "Um eine Zahlung zu erfassen, wende dich bei einem Besuch in der Bibliothek an eine*n Bibliothekar*in.",
   "membership.account.openRegulation": "Ordnung öffnen",
-  "membership.account.fullHistory": "Vollständigen Verlauf anzeigen ({count} Zahlungen)"
+  "membership.account.fullHistory": "Vollständigen Verlauf anzeigen ({count} Zahlungen)",
+  "biblioteca.regulation.docKind.regimento": "Ordnung",
+  "biblioteca.regulation.pubStatus.published": "Veröffentlicht",
+  "biblioteca.regulation.pubStatus.draft_only": "Entwurf",
+  "biblioteca.regulation.uploadNew": "Neue Ordnung hochladen",
+  "panel.tasks.emptyHint": "Erstelle Aufgaben auf der Seite {libraryLink}, Reiter „Interne Aufgaben\".",
+  "panel.reservations.selectStage": "Schritt auswählen…",
+  "panel.loan.status.open": "Aktiv",
+  "panel.loan.status.returned": "Zurückgegeben"
 }

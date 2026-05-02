@@ -533,7 +533,7 @@
   "biblioteca.regulation.upload": "Enviar novo regimento",
   "biblioteca.regulation.uploading": "Enviando…",
   "biblioteca.regulation.uploaded": "Reglamento enviado y publicado.",
-  "biblioteca.regulation.choosePdf": "Escolher PDF",
+  "biblioteca.regulation.choosePdf": "Elegir un PDF",
   "biblioteca.regulation.openPdf": "Abrir PDF",
   "biblioteca.regulation.rules": "Reglas de circulación activas",
   "biblioteca.regulation.noRules": "Ningún conjunto de reglas activo.",
@@ -1586,5 +1586,13 @@
   "membership.account.applicableRules": "Reglas aplicables",
   "membership.account.howToPay": "Para registrar una cuota, hablá con une bibliotecarie durante una visita a la biblioteca.",
   "membership.account.openRegulation": "Abrir reglamento",
-  "membership.account.fullHistory": "Ver historial completo ({count} pagos)"
+  "membership.account.fullHistory": "Ver historial completo ({count} pagos)",
+  "biblioteca.regulation.docKind.regimento": "Reglamento",
+  "biblioteca.regulation.pubStatus.published": "Publicado",
+  "biblioteca.regulation.pubStatus.draft_only": "Borrador",
+  "biblioteca.regulation.uploadNew": "Enviar un nuevo reglamento",
+  "panel.tasks.emptyHint": "Creá tareas en la página {libraryLink}, pestaña «Tareas internas».",
+  "panel.reservations.selectStage": "Seleccionar etapa…",
+  "panel.loan.status.open": "En curso",
+  "panel.loan.status.returned": "Devuelto"
 }

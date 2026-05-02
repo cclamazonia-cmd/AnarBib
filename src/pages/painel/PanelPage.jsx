@@ -608,11 +608,16 @@ export default function PanelPage() {
               {/* ── Tarefas internas — sempre visível ──── */}
               <div style={{ marginTop: 20, padding: 16, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                  <h3 className="ab-painel-h3" style={{ margin: 0 }}>Tarefas internas da biblioteca ({internalTasks.length})</h3>
+                  <h3 className="ab-painel-h3" style={{ margin: 0 }}>{t({ id: 'panel.tasks.title' })} ({internalTasks.length})</h3>
                   <a href="/biblioteca" style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{t({ id: 'panel.tasks.manage' })}</a>
                 </div>
                 {internalTasks.length === 0 ? (
-                  <p style={{ fontSize: '.88rem', color: 'var(--brand-muted)', margin: 0 }}>{t({ id: 'panel.tasks.empty' })} Crie tarefas na página <a href="/biblioteca" style={{ color: 'var(--brand-text)' }}>{t({ id: 'nav.library' })}</a>, aba «Tarefas internas».</p>
+                  <p style={{ fontSize: '.88rem', color: 'var(--brand-muted)', margin: 0 }}>
+                    {t({ id: 'panel.tasks.empty' })}{' '}
+                    {t({ id: 'panel.tasks.emptyHint' }, {
+                      libraryLink: <a href="/biblioteca" style={{ color: 'var(--brand-text)' }}>{t({ id: 'nav.library' })}</a>,
+                    })}
+                  </p>
                 ) : (
                   <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, overflow: 'hidden' }}>
                     {internalTasks.map((tk, i) => {
@@ -691,15 +696,15 @@ export default function PanelPage() {
           {tab === 'reservas' && (
             <div>
               <div className="ab-painel-res-toolbar">
-                <Button onClick={confirmSelectedPickup}>Confirmar retirada ({selectedRes.size})</Button>
-                <Button variant="secondary" onClick={() => cancelSelectedRes()}>Cancelar ({selectedRes.size})</Button>
+                <Button onClick={confirmSelectedPickup}>{t({ id: 'panel.reservations.confirmPickup' }, { count: selectedRes.size })}</Button>
+                <Button variant="secondary" onClick={() => cancelSelectedRes()}>{t({ id: 'common.cancel' })} ({selectedRes.size})</Button>
                 <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
               </div>
               <div className="ab-painel-res-workflow">
                 <input type="text" value={resNote} onChange={e => setResNote(e.target.value)} placeholder={t({id:"panel.loan.notePh"})} className="ab-painel-input" />
                 <input type="datetime-local" value={resSchedule} onChange={e => setResSchedule(e.target.value)} className="ab-painel-input" />
                 <select value={resStage} onChange={e => setResStage(e.target.value)} className="ab-painel-input">
-                  <option value="">Selecione etapa…</option>
+                  <option value="">{t({ id: 'panel.reservations.selectStage' })}</option>
                   {RES_STAGES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
                 <Button variant="secondary" onClick={applyResWorkflow}>{t({ id: 'panel.reservations.applyStep' })}</Button>
@@ -792,7 +797,7 @@ export default function PanelPage() {
                         <td>{fmtD(l.emprestimo_created_at)}</td>
                         <td>{fmtD(l.due_at)}</td>
                         <td>{l.extended_until ? fmtD(l.extended_until) : '—'}</td>
-                        <td><span className={`ab-painel-loan-status ab-painel-loan-status--${l.item_status}`}>{l.item_status === 'aberto' ? 'Em curso' : 'Devolvido'}</span></td>
+                        <td><span className={`ab-painel-loan-status ab-painel-loan-status--${l.item_status}`}>{l.item_status === 'aberto' ? t({ id: 'panel.loan.status.open' }) : t({ id: 'panel.loan.status.returned' })}</span></td>
                         <td className="ab-painel-actions-cell">
                           {l.item_status === 'aberto' && (
                             <>

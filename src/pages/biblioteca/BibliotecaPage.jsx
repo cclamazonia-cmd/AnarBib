@@ -648,17 +648,24 @@ export default function BibliotecaPage() {
               <div key={doc.id} style={{ padding:'8px 10px', borderRadius:6, background:'rgba(0,0,0,.15)', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                 <div>
                   <div style={{ fontSize:'.9rem', fontWeight:600 }}>{doc.version_label||`Regimento #${doc.id}`}</div>
-                  <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{doc.doc_kind||'—'} · {doc.publication_status||'—'}{doc.is_active && <> · <span className="cat-pill ok" style={{ fontSize:'.65rem' }}>{t({ id: 'common.active' })}</span></>}</div>
+                  <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                    {doc.doc_kind ? t({ id: `biblioteca.regulation.docKind.${doc.doc_kind}`, defaultMessage: doc.doc_kind }) : '—'}
+                    {' · '}
+                    {doc.publication_status ? t({ id: `biblioteca.regulation.pubStatus.${doc.publication_status}`, defaultMessage: doc.publication_status }) : '—'}
+                    {doc.is_active && <> · <span className="cat-pill ok" style={{ fontSize:'.65rem' }}>{t({ id: 'common.active' })}</span></>}
+                  </div>
                 </div>
                 {doc.storage_path_public && <a href={`${PROJECT_URL}/storage/v1/object/public/${doc.storage_bucket||'library-regimentos-public'}/${doc.storage_path_public}`} target="_blank" rel="noopener" className="cat-btn secondary" style={{ fontSize:'.82rem', padding:'5px 12px' }}>{t({ id: 'biblioteca.regulation.openPdf' })}</a>}
               </div>
             ))}
             <div style={{ marginTop:12, display:'flex', gap:8, alignItems:'center', flexWrap:'wrap' }}>
               <label style={{ display:'inline-block', padding:'8px 16px', borderRadius:8, background:'var(--brand-panel-bg)', border:'1px solid rgba(255,255,255,.15)', cursor:'pointer', fontSize:'.88rem', fontWeight:600 }}>
-                Escolher PDF
+                {t({ id: 'biblioteca.regulation.choosePdf' })}
                 <input type="file" accept=".pdf,application/pdf" ref={regFileRef} style={{ display:'none' }} />
               </label>
-              <button className="cat-btn primary" onClick={uploadRegimento} disabled={saving} style={{ fontSize:'.88rem' }}>{saving?'Enviando…':'Enviar novo regimento'}</button>
+              <button className="cat-btn primary" onClick={uploadRegimento} disabled={saving} style={{ fontSize:'.88rem' }}>
+                {saving ? t({ id: 'biblioteca.regulation.uploading' }) : t({ id: 'biblioteca.regulation.uploadNew' })}
+              </button>
             </div>
           </div>
           <div style={bx}>

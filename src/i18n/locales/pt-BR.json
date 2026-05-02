@@ -1573,5 +1573,13 @@
   "membership.account.applicableRules": "Regras aplicáveis",
   "membership.account.howToPay": "Para registrar uma contribuição, fale com d(o/a/e) bibliotecári(o/a/e) durante uma visita à biblioteca.",
   "membership.account.openRegulation": "Abrir regimento",
-  "membership.account.fullHistory": "Ver histórico completo ({count} pagamentos)"
+  "membership.account.fullHistory": "Ver histórico completo ({count} pagamentos)",
+  "biblioteca.regulation.docKind.regimento": "Regimento",
+  "biblioteca.regulation.pubStatus.published": "Publicado",
+  "biblioteca.regulation.pubStatus.draft_only": "Rascunho",
+  "biblioteca.regulation.uploadNew": "Enviar novo regimento",
+  "panel.tasks.emptyHint": "Crie tarefas na página {libraryLink}, aba «Tarefas internas».",
+  "panel.reservations.selectStage": "Selecionar etapa…",
+  "panel.loan.status.open": "Em curso",
+  "panel.loan.status.returned": "Devolvido"
 }

@@ -1592,5 +1592,13 @@
   "membership.account.applicableRules": "Applicable rules",
   "membership.account.howToPay": "To record a payment, please see a librarian during a visit to the library.",
   "membership.account.openRegulation": "Open regulation",
-  "membership.account.fullHistory": "See full history ({count} payments)"
+  "membership.account.fullHistory": "See full history ({count} payments)",
+  "biblioteca.regulation.docKind.regimento": "Regulation",
+  "biblioteca.regulation.pubStatus.published": "Published",
+  "biblioteca.regulation.pubStatus.draft_only": "Draft",
+  "biblioteca.regulation.uploadNew": "Upload a new regulation",
+  "panel.tasks.emptyHint": "Create tasks on the {libraryLink} page, \"Internal tasks\" tab.",
+  "panel.reservations.selectStage": "Select stage…",
+  "panel.loan.status.open": "Open",
+  "panel.loan.status.returned": "Returned"
 }
