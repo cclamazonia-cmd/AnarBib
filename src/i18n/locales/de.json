@@ -1599,5 +1599,19 @@
   "panel.tasks.emptyHint": "Erstelle Aufgaben auf der Seite {libraryLink}, Reiter „Interne Aufgaben\".",
   "panel.reservations.selectStage": "Schritt auswählen…",
   "panel.loan.status.open": "Aktiv",
-  "panel.loan.status.returned": "Zurückgegeben"
+  "panel.loan.status.returned": "Zurückgegeben",
+  "circulation.systemSet.base_legada_circulacao_geral.label": "Übergangsweise Altbasis — allgemeiner Verkehr",
+  "circulation.systemSet.base_legada_circulacao_geral.scopeNote": "Wendet die aktuelle Basis 21/30/38 Tage + 1 Verlängerung von 7 Tagen an, solange die Bibliothek keine eigenen Regeln konfiguriert hat.",
+  "circulation.systemRule.base_legada_loan_1_item.label": "Altbasis — Ausleihe von 1 Medium",
+  "circulation.systemRule.base_legada_loan_1_item.publicNote": "Solange die Bibliothek keine eigene Regel definiert hat, gilt die Ausleihe von 1 Medium.",
+  "circulation.systemRule.base_legada_loan_2_3_items.label": "Altbasis — Ausleihe von 2 bis 3 Medien",
+  "circulation.systemRule.base_legada_loan_2_3_items.publicNote": "Übergangsfrist aus dem aktuellen System für eine Ausleihe von 2 bis 3 Medien.",
+  "circulation.systemRule.base_legada_loan_4plus_items.label": "Altbasis — Ausleihe von 4 oder mehr Medien",
+  "circulation.systemRule.base_legada_loan_4plus_items.publicNote": "Übergangsfrist aus dem aktuellen System für eine Ausleihe von 4 oder mehr Medien.",
+  "circulation.systemRule.base_legada_renewal_7_days.label": "Altbasis — 1 Verlängerung von 7 Tagen",
+  "circulation.systemRule.base_legada_renewal_7_days.publicNote": "Solange die Bibliothek keine eigene Regel definiert hat, gilt 1 Verlängerung von 7 Tagen.",
+  "circulation.systemRule.base_legada_reservations_allowed.label": "Altbasis — Reservierungen erlaubt",
+  "circulation.systemRule.base_legada_reservations_allowed.publicNote": "Solange die Bibliothek keine eigene Regel definiert hat, bleiben Reservierungen erlaubt.",
+  "circulation.systemRule.base_legada_consultation_allowed.label": "Altbasis — Vor-Ort-Einsicht erlaubt",
+  "circulation.systemRule.base_legada_consultation_allowed.publicNote": "Vor-Ort-Einsicht in der Übergangsbasis erlaubt, abhängig von den Öffnungszeiten der Bibliothek."
 }

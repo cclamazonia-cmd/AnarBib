@@ -1581,5 +1581,19 @@
   "panel.tasks.emptyHint": "Créez des tâches sur la page {libraryLink}, onglet « Tâches internes ».",
   "panel.reservations.selectStage": "Sélectionner une étape…",
   "panel.loan.status.open": "En cours",
-  "panel.loan.status.returned": "Retourné"
+  "panel.loan.status.returned": "Retourné",
+  "circulation.systemSet.base_legada_circulacao_geral.label": "Base transitoire héritée — circulation générale",
+  "circulation.systemSet.base_legada_circulacao_geral.scopeNote": "Applique la base actuelle 21/30/38 jours + 1 renouvellement de 7 jours tant que la bibliothèque n'a pas paramétré ses propres règles.",
+  "circulation.systemRule.base_legada_loan_1_item.label": "Base héritée — emprunt d'1 document",
+  "circulation.systemRule.base_legada_loan_1_item.publicNote": "Tant que la bibliothèque n'a pas défini sa propre règle, l'emprunt d'1 document s'applique.",
+  "circulation.systemRule.base_legada_loan_2_3_items.label": "Base héritée — emprunt de 2 à 3 documents",
+  "circulation.systemRule.base_legada_loan_2_3_items.publicNote": "Délai transitoire hérité du système actuel pour un emprunt de 2 à 3 documents.",
+  "circulation.systemRule.base_legada_loan_4plus_items.label": "Base héritée — emprunt de 4 documents ou plus",
+  "circulation.systemRule.base_legada_loan_4plus_items.publicNote": "Délai transitoire hérité du système actuel pour un emprunt de 4 documents ou plus.",
+  "circulation.systemRule.base_legada_renewal_7_days.label": "Base héritée — 1 renouvellement de 7 jours",
+  "circulation.systemRule.base_legada_renewal_7_days.publicNote": "Tant que la bibliothèque n'a pas défini sa propre règle, 1 renouvellement de 7 jours s'applique.",
+  "circulation.systemRule.base_legada_reservations_allowed.label": "Base héritée — réservations autorisées",
+  "circulation.systemRule.base_legada_reservations_allowed.publicNote": "Tant que la bibliothèque n'a pas défini sa propre règle, les réservations restent autorisées.",
+  "circulation.systemRule.base_legada_consultation_allowed.label": "Base héritée — consultation sur place autorisée",
+  "circulation.systemRule.base_legada_consultation_allowed.publicNote": "Consultation sur place autorisée dans la base transitoire, soumise aux horaires d'ouverture de la bibliothèque."
 }

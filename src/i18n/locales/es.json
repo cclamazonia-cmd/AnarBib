@@ -1594,5 +1594,19 @@
   "panel.tasks.emptyHint": "Creá tareas en la página {libraryLink}, pestaña «Tareas internas».",
   "panel.reservations.selectStage": "Seleccionar etapa…",
   "panel.loan.status.open": "En curso",
-  "panel.loan.status.returned": "Devuelto"
+  "panel.loan.status.returned": "Devuelto",
+  "circulation.systemSet.base_legada_circulacao_geral.label": "Base transitoria heredada — circulación general",
+  "circulation.systemSet.base_legada_circulacao_geral.scopeNote": "Aplica la base actual 21/30/38 días + 1 renovación de 7 días mientras la biblioteca no parametriza sus propias reglas.",
+  "circulation.systemRule.base_legada_loan_1_item.label": "Base heredada — préstamo de 1 documento",
+  "circulation.systemRule.base_legada_loan_1_item.publicNote": "Mientras la biblioteca no haya definido su propia regla, vale préstamo de 1 documento.",
+  "circulation.systemRule.base_legada_loan_2_3_items.label": "Base heredada — préstamo de 2 a 3 documentos",
+  "circulation.systemRule.base_legada_loan_2_3_items.publicNote": "Plazo transitorio heredado del sistema actual para préstamo de 2 a 3 documentos.",
+  "circulation.systemRule.base_legada_loan_4plus_items.label": "Base heredada — préstamo de 4 o más documentos",
+  "circulation.systemRule.base_legada_loan_4plus_items.publicNote": "Plazo transitorio heredado del sistema actual para préstamo de 4 o más documentos.",
+  "circulation.systemRule.base_legada_renewal_7_days.label": "Base heredada — 1 renovación de 7 días",
+  "circulation.systemRule.base_legada_renewal_7_days.publicNote": "Mientras la biblioteca no haya definido su propia regla, vale 1 renovación de 7 días.",
+  "circulation.systemRule.base_legada_reservations_allowed.label": "Base heredada — reservas permitidas",
+  "circulation.systemRule.base_legada_reservations_allowed.publicNote": "Mientras la biblioteca no haya definido su propia regla, la reserva sigue permitida.",
+  "circulation.systemRule.base_legada_consultation_allowed.label": "Base heredada — consulta in situ permitida",
+  "circulation.systemRule.base_legada_consultation_allowed.publicNote": "Consulta in situ permitida en la base transitoria, sujeta al funcionamiento y a los horarios de la biblioteca."
 }

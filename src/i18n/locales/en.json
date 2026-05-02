@@ -1600,5 +1600,19 @@
   "panel.tasks.emptyHint": "Create tasks on the {libraryLink} page, \"Internal tasks\" tab.",
   "panel.reservations.selectStage": "Select stage…",
   "panel.loan.status.open": "Open",
-  "panel.loan.status.returned": "Returned"
+  "panel.loan.status.returned": "Returned",
+  "circulation.systemSet.base_legada_circulacao_geral.label": "Transitional legacy base — general circulation",
+  "circulation.systemSet.base_legada_circulacao_geral.scopeNote": "Applies the current 21/30/38 days base + 1 renewal of 7 days while the library has not configured its own rules.",
+  "circulation.systemRule.base_legada_loan_1_item.label": "Legacy base — loan of 1 item",
+  "circulation.systemRule.base_legada_loan_1_item.publicNote": "While the library has not defined its own rule, loan of 1 item applies.",
+  "circulation.systemRule.base_legada_loan_2_3_items.label": "Legacy base — loan of 2 to 3 items",
+  "circulation.systemRule.base_legada_loan_2_3_items.publicNote": "Transitional period inherited from the current system for a loan of 2 to 3 items.",
+  "circulation.systemRule.base_legada_loan_4plus_items.label": "Legacy base — loan of 4 or more items",
+  "circulation.systemRule.base_legada_loan_4plus_items.publicNote": "Transitional period inherited from the current system for a loan of 4 or more items.",
+  "circulation.systemRule.base_legada_renewal_7_days.label": "Legacy base — 1 renewal of 7 days",
+  "circulation.systemRule.base_legada_renewal_7_days.publicNote": "While the library has not defined its own rule, 1 renewal of 7 days applies.",
+  "circulation.systemRule.base_legada_reservations_allowed.label": "Legacy base — reservations allowed",
+  "circulation.systemRule.base_legada_reservations_allowed.publicNote": "While the library has not defined its own rule, reservations remain allowed.",
+  "circulation.systemRule.base_legada_consultation_allowed.label": "Legacy base — on-site consultation allowed",
+  "circulation.systemRule.base_legada_consultation_allowed.publicNote": "On-site consultation allowed in the transitional base, subject to the library opening hours."
 }

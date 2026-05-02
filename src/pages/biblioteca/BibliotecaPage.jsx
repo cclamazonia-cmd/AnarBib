@@ -147,6 +147,19 @@ export default function BibliotecaPage() {
   function setC(k,v){ setCommons(p=>p?{...p,[k]:v}:p); }
   function setSS(k,v){ setServiceState(p=>p?{...p,[k]:v}:p); }
   function setMC(k,v){ setMailChannel(p=>p?{...p,[k]:v}:p); }
+
+  // Helper i18n : pour les seeds système (system_seed_key non-NULL), tente de
+  // traduire via i18n applicative ; sinon retombe sur le texte stocké en base.
+  // Usage : seedT(rule, 'rule_label', 'rule.label') → cherche
+  // `circulation.systemRule.{key}.label` ; si pas trouvée, retourne rule.rule_label.
+  function seedT(entity, fallbackField, i18nSubKey) {
+    if (entity?.system_seed_key) {
+      const fullKey = `circulation.${i18nSubKey.startsWith('set.') ? 'systemSet' : 'systemRule'}.${entity.system_seed_key}.${i18nSubKey.split('.').pop()}`;
+      const translated = t({ id: fullKey, defaultMessage: '__MISSING__' });
+      if (translated !== '__MISSING__') return translated;
+    }
+    return entity?.[fallbackField];
+  }
   function setNP(k,v){ setNotifPolicy(p=>p?{...p,[k]:v}:p); }
 
   async function saveTable(table, data, filterCol = 'library_id') {
@@ -671,7 +684,7 @@ export default function BibliotecaPage() {
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.regulation.rules' })}</h4>
             {!policySet && <div style={{ fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.regulation.noRules' })}</div>}
-            {policySet && <div style={{ marginBottom:10, fontSize:'.88rem' }}><strong>{policySet.label||'Regras'}</strong>{policySet.scope_note && ` — ${policySet.scope_note}`}</div>}
+            {policySet && <div style={{ marginBottom:10, fontSize:'.88rem' }}><strong>{seedT(policySet, 'label', 'set.label') || 'Regras'}</strong>{(seedT(policySet, 'scope_note', 'set.scopeNote') || policySet.scope_note) && ` — ${seedT(policySet, 'scope_note', 'set.scopeNote') || policySet.scope_note}`}</div>}
 {policyRules.length>0 && <div style={lw}>{policyRules.map((r,i)=>(
               <div key={r.id} style={{ padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)' }}>
                 {editingRule?.id===r.id ? (
@@ -703,7 +716,7 @@ export default function BibliotecaPage() {
                 ) : (
                   <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 }}>
                     <div style={{ flex:1 }}>
-                      <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.rule_label||`Regra #${r.id}`}</div>
+                      <div style={{ fontSize:'.9rem', fontWeight:600 }}>{seedT(r, 'rule_label', 'rule.label') || `Regra #${r.id}`}</div>
                       <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                         {r.loan_allowed
                           ? (r.loan_days != null
@@ -717,7 +730,7 @@ export default function BibliotecaPage() {
                         )}
                         {r.reservation_allowed && ` · ${t({id:'biblioteca.regulation.reservation'})}`}
                         {r.consultation_only && ` · ${t({id:'biblioteca.regulation.consultation'})}`}
-                        {r.public_note && ` · ${r.public_note}`}
+                        {(seedT(r, 'public_note', 'rule.publicNote') || r.public_note) && ` · ${seedT(r, 'public_note', 'rule.publicNote') || r.public_note}`}
                       </div>
                     </div>
                     <button className="cat-btn secondary" onClick={()=>setEditingRule({...r})} style={{ fontSize:'.78rem', padding:'4px 10px' }}>{t({id:'biblioteca.rules.edit'})}</button>

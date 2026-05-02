@@ -1581,5 +1581,19 @@
   "panel.tasks.emptyHint": "Crie tarefas na página {libraryLink}, aba «Tarefas internas».",
   "panel.reservations.selectStage": "Selecionar etapa…",
   "panel.loan.status.open": "Em curso",
-  "panel.loan.status.returned": "Devolvido"
+  "panel.loan.status.returned": "Devolvido",
+  "circulation.systemSet.base_legada_circulacao_geral.label": "Base transitória legada — circulação geral",
+  "circulation.systemSet.base_legada_circulacao_geral.scopeNote": "Aplica a base atual 21/30/38 dias + 1 prorrogação de 7 dias enquanto a biblioteca não parametriza regras próprias.",
+  "circulation.systemRule.base_legada_loan_1_item.label": "Base legada — empréstimo de 1 item",
+  "circulation.systemRule.base_legada_loan_1_item.publicNote": "Enquanto a biblioteca ainda não definiu sua própria regra, vale empréstimo de 1 item.",
+  "circulation.systemRule.base_legada_loan_2_3_items.label": "Base legada — empréstimo de 2 a 3 itens",
+  "circulation.systemRule.base_legada_loan_2_3_items.publicNote": "Prazo transitório herdado do sistema atual para empréstimo de 2 a 3 itens.",
+  "circulation.systemRule.base_legada_loan_4plus_items.label": "Base legada — empréstimo de 4 ou mais itens",
+  "circulation.systemRule.base_legada_loan_4plus_items.publicNote": "Prazo transitório herdado do sistema atual para empréstimo de 4 ou mais itens.",
+  "circulation.systemRule.base_legada_renewal_7_days.label": "Base legada — 1 prorrogação de 7 dias",
+  "circulation.systemRule.base_legada_renewal_7_days.publicNote": "Enquanto a biblioteca ainda não definiu sua própria regra, vale 1 prorrogação de 7 dias.",
+  "circulation.systemRule.base_legada_reservations_allowed.label": "Base legada — reservas permitidas",
+  "circulation.systemRule.base_legada_reservations_allowed.publicNote": "Enquanto a biblioteca ainda não definiu sua própria regra, a reserva continua permitida.",
+  "circulation.systemRule.base_legada_consultation_allowed.label": "Base legada — consulta local permitida",
+  "circulation.systemRule.base_legada_consultation_allowed.publicNote": "Consulta local permitida na base transitória, sujeita ao funcionamento e aos horários da biblioteca."
 }
