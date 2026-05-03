@@ -42,7 +42,11 @@ function applyColors(colors) {
   setCssVar('--brand-panel-border', colors.panelBorder);
   setCssVar('--brand-text', colors.text);
   setCssVar('--brand-muted', colors.muted);
-  setCssVar('--brand-link', colors.link);
+  // PATCH 02/05/2026 : --brand-link n'est plus injecté depuis le manifest.
+  // La couleur des liens (notamment titres et auteurs dans les tableaux) est
+  // désormais définie par theme-base.css à #ffffff (blanc cassé), pour
+  // garantir la lisibilité sur le dégradé rouge des briques.
+  // setCssVar('--brand-link', colors.link);
   setCssVar('--brand-bg-overlay', colors.bgOverlay);
   setCssVar('--brand-button-text', colors.buttonText);
 }
@@ -50,9 +54,12 @@ function applyColors(colors) {
 function applyBrandAssets(assets) {
   if (!assets) return;
   const bg = assets.backgroundPage || assets.background || assets.bgImage || '';
-  const panelBg = assets.backgroundPanel || assets.panelBackground || bg;
+  // PATCH 02/05/2026 : on n'utilise plus l'image de fond pour les briques.
+  // --brand-panel-bg-image conserve sa valeur par défaut de theme-base.css
+  // (un dégradé rouge AnarBib opaque). Le manifest peut toujours définir
+  // --brand-bg-image (image de fond globale de la page), mais les panels/cards
+  // utilisent un dégradé pour rester lisibles et identitaires.
   if (bg) setCssVar('--brand-bg-image', `url("${bg}")`);
-  if (panelBg) setCssVar('--brand-panel-bg-image', `url("${panelBg}")`);
   setCssVar('--brand-bg-position', assets.backgroundPosition || 'center center');
   setCssVar('--brand-bg-size', assets.backgroundSize || 'cover');
   setCssVar('--brand-bg-repeat', assets.backgroundRepeat || 'no-repeat');
