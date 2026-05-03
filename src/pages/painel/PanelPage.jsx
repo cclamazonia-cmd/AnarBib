@@ -587,7 +587,7 @@ export default function PanelPage() {
             <div>
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.dailyWork.hint' })}</h2>
               <div className="ab-painel-summary-grid">
-                <SummaryCard label="Hoje" count={hoje.length} variant="warn" />
+                <SummaryCard label={t({ id: 'panel.summary.today' })} count={hoje.length} variant="warn" />
                 <SummaryCard label={t({id:'panel.summary.attention'})} count={atencao.length} variant="bad" />
                 <SummaryCard label={t({ id: 'panel.summary.pendingReservations' })} count={activeRes.filter(r => r.workflow_stage_effective === 'solicitada').length} variant="warn" />
                 <SummaryCard label={t({ id: 'panel.summary.overdueLoans' })} count={overdueLoans.length} variant="bad" />

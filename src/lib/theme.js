@@ -87,9 +87,15 @@ async function applyManifest(manifest) {
   applyBrandAssets(manifest.assets);
   applyColors(manifest.colors);
   applyLayout(manifest.layout);
-  if (manifest.fonts?.heading) await installFont(manifest.fonts.heading, '--brand-font-heading');
+  // PATCH 02/05/2026 : on ne charge plus les polices heading/accent depuis le manifest.
+  // Le manifest BLMF chargeait "THE BOLD FONT - Free Version" (titre.ttf), une police
+  // display all-caps qui ne contient pas les minuscules accentuées (â, è, é...).
+  // Résultat : "TâCHES INTERNES DE LA BIBLIOTHèQUE" avec un mélange capitales/Times
+  // New Roman fallback sur les diacritiques. Bitter (la valeur par défaut de
+  // theme-base.css) supporte tous les diacritiques nécessaires.
+  // if (manifest.fonts?.heading) await installFont(manifest.fonts.heading, '--brand-font-heading');
   if (manifest.fonts?.body) await installFont(manifest.fonts.body, '--brand-font-body');
-  if (manifest.fonts?.accent) await installFont(manifest.fonts.accent, '--brand-font-accent');
+  // if (manifest.fonts?.accent) await installFont(manifest.fonts.accent, '--brand-font-accent');
 }
 
 async function fetchManifest(themeSlug) {
