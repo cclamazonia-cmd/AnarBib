@@ -109,44 +109,53 @@ a { color: var(--brand-link); text-decoration-thickness: 1px; text-underline-off
 button, input, select, textarea { font: inherit; }
 
 /* ═══════════════════════════════════════════════════════════
-   PATCH 02/05/2026 v3 — Briques avec dégradé rouge AnarBib opaque
+   PATCH 02/05/2026 v4 — Briques avec dégradé sombre teinté bordeaux
    
    Historique :
-   v1 : neutraliser les overlays a laissé l'image globale du body
-        apparaître par transparence — échoué.
-   v2 : force background-color opaque sur les classes utilisatrices —
-        échoué parce que theme.js injectait --brand-panel-bg-image
-        en inline style sur <html>, shuntant tout :root.
-   v3 : couplé à la modification de theme.js qui n'injecte plus
-        --brand-panel-bg-image, on peut maintenant override les
-        valeurs par défaut ici sans risque d'être shunté.
+   v1-v3 : remplacement de l'image de fond des briques par un
+           dégradé rouge AnarBib intense (#b32025 → #1a0407).
+   v4    : retour à un sombre teinté bordeaux très subtil pour :
+           - rendre la page lisible et reposante
+           - laisser le rouge AnarBib aux éléments signalétiques
+             (hero, hover, badges --bad / --warn / --ok, primary)
+           - rétablir la hiérarchie visuelle (un bloc "Attention"
+             rouge ressort sur fond sombre, pas sur fond rouge)
+   
+   Le hero (.ab-hero) garde son fond rouge profond codé en dur
+   dans layout.css — il n'utilise pas --brand-panel-bg-image.
    
    Pour annuler le patch : supprimer ce bloc + restaurer theme.js v0.
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* Dégradé rouge AnarBib opaque pour les briques.
-     Coloration : #b32025 (rouge AnarBib) en haut-gauche
-     vers #1a0407 (presque-noir teinté) en bas-droite. */
-  --brand-panel-bg-image: linear-gradient(135deg, #b32025 0%, #1a0407 100%);
+  /* Dégradé sombre teinté bordeaux pour les briques.
+     Coloration : #1a0a0c (noir bordeaux subtil) en haut-gauche
+     vers #0d0708 (presque-noir) en bas-droite. */
+  --brand-panel-bg-image: linear-gradient(135deg, #1a0a0c 0%, #0d0708 100%);
 
-  /* Overlays légèrement sombres pour adoucir le rouge en haut
-     des briques et améliorer la lisibilité du texte. Sans en
-     mettre trop, sinon le dégradé serait masqué. */
-  --brand-panel-overlay-soft: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.15));
-  --brand-panel-overlay-strong: linear-gradient(180deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.25));
-  --brand-panel-overlay-solid: linear-gradient(180deg, rgba(0, 0, 0, 0.10), rgba(0, 0, 0, 0.30));
-  --brand-sheet-head-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.50));
+  /* Overlays légers pour adoucir et préserver la lisibilité
+     du texte. Sur ce fond déjà sombre, ils restent très discrets. */
+  --brand-panel-overlay-soft: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.06));
+  --brand-panel-overlay-strong: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.12));
+  --brand-panel-overlay-solid: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.16));
+  --brand-sheet-head-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.36));
 }
 
 /* Force la couleur de fond opaque sous le dégradé. Empêche
    les transparences résiduelles de laisser passer l'image
    globale du body. Cible toutes les classes connues qui
-   utilisent le pattern "panel avec image". */
+   utilisent le pattern "panel avec image" dans le projet. */
 .ab-card,
 .ab-sheet,
+.ab-sheet__head,
+.ab-field,
 .ab-livro-card,
+.ab-livro-pill,
 .ab-autor-card,
-.ab-field {
-  background-color: #1a0407 !important;
+.ab-conta-card,
+.ab-painel-card,
+.ab-reader-sheet,
+.ab-recurso-card,
+.ab-recurso-viewer-shell {
+  background-color: #0d0708 !important;
 }
