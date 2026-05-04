@@ -20,6 +20,7 @@ const CatalogacaoPage = lazy(() => import('@/pages/catalogacao/CatalogacaoPage')
 const CriarContaPage = lazy(() => import('@/pages/public/CriarContaPage'));
 const CadastroPage = lazy(() => import('@/pages/public/CadastroPage'));
 const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibliotecaPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
 const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage'));
 const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
 const RedePage = lazy(() => import('@/pages/rede/RedePage'));
@@ -61,6 +62,7 @@ export default function App() {
                   <Route path="/entrar" element={<Navigate to="/cadastro" replace />} />
                   <Route path="/ler/:id" element={<ReaderPage />} />
                   <Route path="/ler-recurso" element={<ResourcePage />} />
+                  <Route path="/privacidade" element={<PrivacyPolicyPage />} />
 
                   {/* ── Pages authentifiées ──────────── */}
                   <Route path="/conta" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />

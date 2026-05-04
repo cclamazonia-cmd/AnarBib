@@ -129,7 +129,14 @@ export function Footer() {
   const { formatMessage: t } = useIntl();
   return (
     <footer className="ab-footer">
-      {t({ id: 'app.footer' })}
+      <span>{t({ id: 'app.footer' })}</span>
+      <span style={{ margin: '0 8px', opacity: 0.4 }}>·</span>
+      <Link
+        to="/privacidade"
+        style={{ color: 'inherit', textDecoration: 'none', opacity: 0.85 }}
+      >
+        {t({ id: 'nav.privacy' })}
+      </Link>
     </footer>
   );
 }
