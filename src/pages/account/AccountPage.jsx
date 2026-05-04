@@ -841,10 +841,10 @@ export default function AccountPage() {
                     }}>
                       <div className="ab-conta-item__main" style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{n.title}</span>
+                          <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{(n.category || '').startsWith('rgpd_retention_') && n.title ? t({ id: n.title, defaultMessage: n.title }) : n.title}</span>
                           {!n.is_read && <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', flexShrink: 0 }} />}
                         </div>
-                        {n.body && <span className="ab-conta-item__meta">{n.body}</span>}
+                        {n.body && <span className="ab-conta-item__meta">{(n.category || '').startsWith('rgpd_retention_') ? t({ id: n.body, defaultMessage: n.body }) : n.body}</span>}
                         <span className="ab-conta-item__meta" style={{ fontSize: '.78rem' }}>
                           {new Date(n.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
                           {n.category && <> · {n.category}</>}

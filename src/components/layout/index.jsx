@@ -179,7 +179,11 @@ export function Footer() {
   const { formatMessage: t } = useIntl();
   return (
     <footer className="ab-footer">
-      {t({ id: 'app.footer' })}
+      <span>{t({ id: 'app.footer' })}</span>
+      <span aria-hidden="true" style={{ margin: '0 8px', color: 'var(--brand-muted, #888)' }}>·</span>
+      <Link to="/privacidade" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 2 }}>
+        {t({ id: 'nav.privacy' })}
+      </Link>
     </footer>
   );
 }
