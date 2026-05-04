@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
+import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -47,6 +48,7 @@ export default function BibliotecaPage() {
     { id: 'identity', label: t({ id: 'biblioteca.tab.identity' }), coordOnly: true },
     { id: 'comms', label: t({ id: 'biblioteca.tab.comms' }), coordOnly: true },
     { id: 'regulation', label: t({ id: 'biblioteca.tab.regulation' }), coordOnly: true },
+    { id: 'privacy', label: t({ id: 'biblioteca.tab.privacy' }) },
     { id: 'documents', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
     { id: 'team', label: t({ id: 'biblioteca.tab.team' }) },
     { id: 'exchanges', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
@@ -984,6 +986,11 @@ export default function BibliotecaPage() {
             ))}</div>}
           </div>
         </div>)}
+
+        {/* ═══ 4b. Confidentialité — Phase 4a RGPD ═══════ */}
+        {tab==='privacy' && (
+          <RetentionPolicySection libraryId={libraryId} canEdit={isCoord} />
+        )}
 
         {/* ═══ 5. Equipe ═══════════════════════════════ */}
         {tab==='team' && (<div>

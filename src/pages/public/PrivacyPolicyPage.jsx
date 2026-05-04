@@ -159,6 +159,20 @@ export default function PrivacyPolicyPage() {
           <div style={noticeStyle}>{t({ id: 'privacy.s4.notice' })}</div>
         </section>
 
+        {/* ── Durée de conservation (Phase 4a RGPD) ──────────────────── */}
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>{t({ id: 'privacy.retention.title' })}</h2>
+          <p style={pStyle}>{t({ id: 'privacy.retention.body' })}</p>
+          <ul style={ulStyle}>
+            <li>{t({ id: 'privacy.retention.loans' })}</li>
+            <li>{t({ id: 'privacy.retention.reservations' })}</li>
+            <li>{t({ id: 'privacy.retention.consultations' })}</li>
+            <li>{t({ id: 'privacy.retention.notifications' })}</li>
+            <li>{t({ id: 'privacy.retention.profile' })}</li>
+          </ul>
+          <p style={pStyle}>{t({ id: 'privacy.retention.override' })}</p>
+        </section>
+
         <section style={sectionStyle}>
           <h2 style={h2Style}>{t({ id: 'privacy.s5.title' })}</h2>
           <p style={pStyle}>{t({ id: 'privacy.s5.body' })}</p>
