@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
+import DataExportButton from '@/components/account/DataExportButton';
 import './AccountPage.css';
 
 export default function AccountPage() {
@@ -313,7 +314,7 @@ export default function AccountPage() {
     created: profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : '—',
     reservas: reservations.length,
     consultas: consultations.length,
-    emprestimos: loans.length,
+    emprestimos: loans.filter(l => l.item_status === 'aberto').length,
   };
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
@@ -551,40 +552,61 @@ export default function AccountPage() {
                 );
               })()}
 
-              {/* ── Excluir conta ─────────────────────── */}
-              <div style={{ marginTop: 40, padding: 20, borderRadius: 10, background: 'rgba(220,38,38,.06)', border: '1px solid rgba(220,38,38,.2)' }}>
-                <h3 style={{ margin: '0 0 8px', fontSize: '1.05rem', color: '#f87171', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'account.deleteAccount.title' })}</h3>
-                <p style={{ fontSize: '.88rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 12px' }}>{t({ id: 'account.deleteAccount.warning' })}</p>
-                <div style={{ marginBottom: 10 }}>
-                  <label style={{ fontSize: '.85rem', fontWeight: 600, display: 'block', marginBottom: 4, color: 'var(--brand-muted)' }}>
-                    {t({ id: 'account.deleteAccount.confirmLabel' })}
-                  </label>
-                  <input type="text" value={deleteConfirm} onChange={e => setDeleteConfirm(e.target.value)}
-                    placeholder={t({ id: 'account.deleteAccount.confirmText' })} style={{ width: 200, padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(220,38,38,.3)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem' }} />
+              {/* ── Direitos RGPD/LGPD ─────────────────── */}
+              <div style={{ marginTop: 40, padding: 22, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
+                <h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', color: 'var(--brand-fg, #f4f4f4)', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
+                  {t({ id: 'account.rgpd.title' })}
+                </h3>
+                <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 18px' }}>
+                  {t({ id: 'account.rgpd.subtitle' })}
+                </p>
+
+                {/* Export des données */}
+                <div style={{ marginBottom: 20, paddingBottom: 18, borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+                  <h4 style={{ margin: '0 0 6px', fontSize: '.95rem', fontWeight: 700, color: 'var(--brand-fg, #f4f4f4)', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
+                    {t({ id: 'account.export.title' })}
+                  </h4>
+                  <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 10px' }}>
+                    {t({ id: 'account.export.description' })}
+                  </p>
+                  <DataExportButton />
                 </div>
-                <button
-                  disabled={deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' }) || deleting}
-                  onClick={async () => {
-                    if (deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' })) return;
-                    if (!confirm(t({ id: 'account.deleteAccount.confirmDialog' }))) return;
-                    setDeleting(true);
-                    try {
-                      const { data, error } = await supabase.rpc('fn_delete_my_account');
-                      if (error) throw error;
-                      if (data?.ok === false) { alert(data.error || t({ id: 'account.reserve.deleteError' })); setDeleting(false); return; }
-                      await supabase.auth.signOut();
-                      sessionStorage.removeItem('anarbib.libraryContext');
-                      navigate('/');
-                    } catch (err) { alert(t({id:'common.errorPrefix'},{message:err.message})); setDeleting(false); }
-                  }}
-                  style={{
-                    padding: '10px 20px', borderRadius: 8, fontSize: '.9rem', fontWeight: 700, cursor: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'pointer' : 'not-allowed',
-                    background: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'rgba(220,38,38,.8)' : 'rgba(220,38,38,.2)',
-                    color: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? '#fff' : 'rgba(255,255,255,.4)',
-                    border: '1px solid rgba(220,38,38,.4)', transition: 'all .15s',
-                  }}>
-                  {deleting ? t({ id: 'account.deleteAccount.deleting' }) : t({ id: 'account.deleteAccount.button' })}
-                </button>
+
+                {/* Suppression du compte */}
+                <div>
+                  <h4 style={{ margin: '0 0 6px', fontSize: '.95rem', fontWeight: 700, color: '#f87171', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'account.deleteAccount.title' })}</h4>
+                  <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 12px' }}>{t({ id: 'account.deleteAccount.warning' })}</p>
+                  <div style={{ marginBottom: 10 }}>
+                    <label style={{ fontSize: '.85rem', fontWeight: 600, display: 'block', marginBottom: 4, color: 'var(--brand-muted)' }}>
+                      {t({ id: 'account.deleteAccount.confirmLabel' })}
+                    </label>
+                    <input type="text" value={deleteConfirm} onChange={e => setDeleteConfirm(e.target.value)}
+                      placeholder={t({ id: 'account.deleteAccount.confirmText' })} style={{ width: 200, padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(220,38,38,.3)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem' }} />
+                  </div>
+                  <button
+                    disabled={deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' }) || deleting}
+                    onClick={async () => {
+                      if (deleteConfirm !== t({ id: 'account.deleteAccount.confirmText' })) return;
+                      if (!confirm(t({ id: 'account.deleteAccount.confirmDialog' }))) return;
+                      setDeleting(true);
+                      try {
+                        const { data, error } = await supabase.rpc('fn_delete_my_account');
+                        if (error) throw error;
+                        if (data?.ok === false) { alert(data.error || t({ id: 'account.reserve.deleteError' })); setDeleting(false); return; }
+                        await supabase.auth.signOut();
+                        sessionStorage.removeItem('anarbib.libraryContext');
+                        navigate('/');
+                      } catch (err) { alert(t({id:'common.errorPrefix'},{message:err.message})); setDeleting(false); }
+                    }}
+                    style={{
+                      padding: '10px 20px', borderRadius: 8, fontSize: '.9rem', fontWeight: 700, cursor: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'pointer' : 'not-allowed',
+                      background: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'rgba(220,38,38,.8)' : 'rgba(220,38,38,.2)',
+                      color: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? '#fff' : 'rgba(255,255,255,.4)',
+                      border: '1px solid rgba(220,38,38,.4)', transition: 'all .15s',
+                    }}>
+                    {deleting ? t({ id: 'account.deleteAccount.deleting' }) : t({ id: 'account.deleteAccount.button' })}
+                  </button>
+                </div>
               </div>
             </div>
           )}
