@@ -164,3 +164,55 @@ export function Spinner({ size = 24 }) {
     </svg>
   );
 }
+
+// ── Skeleton (placeholder animé pour zones de données en chargement) ──
+//
+// Affiche un bloc gris animé qui pulse doucement. Utilisé pour structurer
+// la page pendant que les données chargent, au lieu d'afficher un spinner
+// centré qui bloque tout le rendu.
+//
+// Variantes :
+// - <Skeleton />               : bloc rectangulaire 100% × 1.2em (texte standard)
+// - <Skeleton w="60%" />       : largeur custom (ex: pour titre court)
+// - <Skeleton h={48} />        : hauteur custom en px (ex: pour bouton/card)
+// - <Skeleton lines={3} />     : 3 lignes de texte avec espacement (ex: paragraphe)
+// - <Skeleton circle size={40} /> : cercle (ex: avatar)
+//
+export function Skeleton({
+  w = '100%',
+  h = '1.2em',
+  lines = 1,
+  circle = false,
+  size,
+  className = '',
+  style: styleOverride = {},
+}) {
+  const baseStyle = circle
+    ? { width: size, height: size, borderRadius: '50%' }
+    : { width: w, height: h };
+
+  if (lines > 1) {
+    return (
+      <div className={`ab-skeleton-stack ${className}`} style={styleOverride}>
+        {Array.from({ length: lines }).map((_, i) => (
+          <div
+            key={i}
+            className="ab-skeleton"
+            style={{
+              ...baseStyle,
+              // Dernière ligne plus courte pour réalisme
+              width: i === lines - 1 ? '70%' : '100%',
+            }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`ab-skeleton ${className}`}
+      style={{ ...baseStyle, ...styleOverride }}
+    />
+  );
+}

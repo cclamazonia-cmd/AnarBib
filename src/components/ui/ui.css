@@ -194,3 +194,45 @@
   color: var(--brand-muted);
   font-size: 0.95rem;
 }
+
+/* ── Skeleton (placeholder animé pour zones de données en chargement) ──
+   Bloc gris animé qui pulse doucement. Utilisé pour structurer la page
+   pendant que les données chargent, au lieu d'un spinner qui bloque tout.
+   Cohérent avec la palette sombre teintée bordeaux du PATCH v4. */
+
+.ab-skeleton {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.10) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: ab-skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.ab-skeleton-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ab-skeleton-stack .ab-skeleton {
+  height: 1em;
+}
+
+@keyframes ab-skeleton-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Réduit le mouvement si l'utilisateur·rice a configuré son OS pour ça
+   (préférence d'accessibilité). Le skeleton reste visible mais ne pulse plus. */
+@media (prefers-reduced-motion: reduce) {
+  .ab-skeleton {
+    animation: none;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}

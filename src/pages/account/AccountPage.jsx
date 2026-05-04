@@ -5,7 +5,7 @@ import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
-import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
+import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
 import DataExportButton from '@/components/account/DataExportButton';
 import './AccountPage.css';
 
@@ -302,8 +302,42 @@ export default function AccountPage() {
 
   // ── Rendu ────────────────────────────────────────────────
 
+  // PATCH 03/05/2026 : skeleton UI au lieu de Spinner centré.
+  // L'ancien comportement renvoyait juste <Spinner/> pendant loading,
+  // ce qui faisait que le hero (titre, sous-titre, structure) n'était
+  // pas affiché. Résultat : LCP médiocre, écran vide perçu.
+  // Maintenant on affiche le hero avec son titre/sous-titre traduits
+  // (ne dépendent pas des données), des skeletons à la place des pills,
+  // et une zone de chargement structurée pour le contenu de l'onglet.
   if (loading) {
-    return <PageShell><Topbar /><div style={{ textAlign: 'center', padding: 60 }}><Spinner size={32} /></div></PageShell>;
+    return (
+      <PageShell>
+        <Topbar />
+        <Hero title={t({ id: 'account.title' })} subtitle={t({ id: 'account.subtitle' })}>
+          <div className="ab-conta-chips">
+            <Skeleton w={180} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={120} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={140} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={160} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={150} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={150} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={130} h={28} style={{ borderRadius: 14 }} />
+          </div>
+        </Hero>
+        <div className="ab-conta-tabs" style={{ display: 'flex', gap: 12, padding: '16px 0', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Skeleton w={100} h={36} style={{ borderRadius: 8 }} />
+          <Skeleton w={130} h={36} style={{ borderRadius: 8 }} />
+          <Skeleton w={120} h={36} style={{ borderRadius: 8 }} />
+          <Skeleton w={110} h={36} style={{ borderRadius: 8 }} />
+          <Skeleton w={100} h={36} style={{ borderRadius: 8 }} />
+          <Skeleton w={140} h={36} style={{ borderRadius: 8 }} />
+        </div>
+        <div className="ab-conta-card" style={{ padding: 24 }}>
+          <Skeleton h={28} w="40%" style={{ marginBottom: 16 }} />
+          <Skeleton lines={4} />
+        </div>
+      </PageShell>
+    );
   }
 
   const addr = parseAddressText(profile?.address);

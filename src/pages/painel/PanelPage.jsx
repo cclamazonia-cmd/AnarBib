@@ -5,7 +5,7 @@ import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
-import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
+import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
 import './PanelPage.css';
 
 // ═══════════════════════════════════════════════════════════
@@ -517,7 +517,27 @@ export default function PanelPage() {
     return effectiveDue && new Date(effectiveDue) < new Date();
   });
 
-  if (!roleLoaded) return <PageShell><Topbar /><div style={{ textAlign: 'center', padding: 60 }}><Spinner size={32} /></div></PageShell>;
+  // PATCH 03/05/2026 : skeleton UI au lieu de Spinner.
+  // Pendant le chargement du rôle, on ne sait pas encore si on est librarian+
+  // ou simple reader (qui sera redirigé). On rend une structure neutre :
+  // Topbar + zone hero placeholder + zone contenu placeholder. Évite l'écran
+  // vide perçu pendant que la requête de rôle est en cours.
+  if (!roleLoaded) {
+    return (
+      <PageShell>
+        <Topbar />
+        <Hero title={t({ id: 'panel.title' })} subtitle={t({ id: 'panel.subtitle' })}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Skeleton w={140} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={120} h={28} style={{ borderRadius: 14 }} />
+          </div>
+        </Hero>
+        <div style={{ padding: 24 }}>
+          <Skeleton lines={3} />
+        </div>
+      </PageShell>
+    );
+  }
 
   if (!isLibrarian) return (
     <PageShell><Topbar />
@@ -529,7 +549,45 @@ export default function PanelPage() {
     </PageShell>
   );
 
-  if (loading) return <PageShell><Topbar /><div style={{ textAlign: 'center', padding: 60 }}><Spinner size={32} /></div></PageShell>;
+  // PATCH 03/05/2026 : skeleton UI au lieu de Spinner.
+  // À ce stade roleLoaded=true et isLibrarian=true, donc on peut afficher
+  // le hero complet avec son titre + nom de biblio. On affiche skeletons
+  // sur les pills compteurs (réservations actives, etc.) et sur la zone
+  // de contenu qui charge. Hero reste en rouge intense, pas affecté.
+  if (loading) {
+    return (
+      <PageShell>
+        <Topbar />
+        <Hero title={t({ id: 'panel.title' })} subtitle={libraryName || t({ id: 'panel.subtitle' })}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+            <Skeleton w={170} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={170} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={200} h={28} style={{ borderRadius: 14 }} />
+            <Skeleton w={110} h={28} style={{ borderRadius: 14 }} />
+          </div>
+        </Hero>
+        {/* Onglets en skeleton */}
+        <div style={{ display: 'flex', gap: 12, padding: '16px 0', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Skeleton w={120} h={42} style={{ borderRadius: 8 }} />
+          <Skeleton w={100} h={42} style={{ borderRadius: 8 }} />
+          <Skeleton w={130} h={42} style={{ borderRadius: 8 }} />
+          <Skeleton w={170} h={42} style={{ borderRadius: 8 }} />
+          <Skeleton w={110} h={42} style={{ borderRadius: 8 }} />
+          <Skeleton w={140} h={42} style={{ borderRadius: 8 }} />
+          <Skeleton w={150} h={42} style={{ borderRadius: 8 }} />
+        </div>
+        {/* Stats cards en skeleton (Synthèse opérationnelle) */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12, padding: '0 0 16px' }}>
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} style={{ padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,.08)', background: 'rgba(12,12,12,.4)', textAlign: 'center' }}>
+              <Skeleton w={40} h={32} style={{ margin: '0 auto 8px' }} />
+              <Skeleton w={100} h={14} style={{ margin: '0 auto' }} />
+            </div>
+          ))}
+        </div>
+      </PageShell>
+    );
+  }
 
   return (
     <PageShell>
@@ -587,7 +645,7 @@ export default function PanelPage() {
             <div>
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.dailyWork.hint' })}</h2>
               <div className="ab-painel-summary-grid">
-                <SummaryCard label={t({ id: 'panel.summary.today' })} count={hoje.length} variant="warn" />
+                <SummaryCard label="Hoje" count={hoje.length} variant="warn" />
                 <SummaryCard label={t({id:'panel.summary.attention'})} count={atencao.length} variant="bad" />
                 <SummaryCard label={t({ id: 'panel.summary.pendingReservations' })} count={activeRes.filter(r => r.workflow_stage_effective === 'solicitada').length} variant="warn" />
                 <SummaryCard label={t({ id: 'panel.summary.overdueLoans' })} count={overdueLoans.length} variant="bad" />
