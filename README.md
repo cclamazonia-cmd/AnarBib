@@ -249,4 +249,11 @@ Le script crée un snapshot de rollback dans `%TEMP%` avant toute modification.
 
 ## Licence
 
-Ce projet est développé pour la communauté des bibliothèques libertaires mondiales (FICEDL, RebAL, etc.).
+AnarBib est un logiciel libre développé pour la communauté des bibliothèques libertaires mondiales (FICEDL, RebAL, etc.).
+
+Le projet utilise une **double licence** :
+
+- **Code source** : [GNU Affero General Public License v3.0 (AGPL-3.0)](./LICENSE) — copyleft fort adapté au logiciel serveur. Toute personne déployant une version modifiée d'AnarBib (en SaaS ou autrement) est tenue de publier ses modifications sous la même licence.
+- **Documentation** (notamment `docs/legal/`) : [Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA-4.0)](./LICENSE-docs) — licence adaptée aux œuvres textuelles, avec la même logique copyleft. Voir [`docs/legal/README.md`](./docs/legal/README.md) pour le détail et les invitations à adapter / traduire.
+
+Les bibliothèques adhérentes sont explicitement encouragées à forker, adapter, traduire et republier le code et la documentation pour leur propre contexte, à condition de redistribuer leurs adaptations sous les mêmes licences.
