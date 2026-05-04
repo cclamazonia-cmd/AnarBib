@@ -63,6 +63,7 @@ export default function App() {
                   <Route path="/ler/:id" element={<ReaderPage />} />
                   <Route path="/ler-recurso" element={<ResourcePage />} />
                   <Route path="/privacidade" element={<PrivacyPolicyPage />} />
+                  <Route path="/privacidade/:slug" element={<PrivacyPolicyPage />} />
 
                   {/* ── Pages authentifiées ──────────── */}
                   <Route path="/conta" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />

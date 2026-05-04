@@ -1,6 +1,10 @@
 import { useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
+import { useLibrary } from '@/contexts/LibraryContext';
+import { supabase } from '@/lib/supabase';
+import LibraryPrivacySection from '@/components/privacy/LibraryPrivacySection';
 
 // ── Helpers de mise en forme ─────────────────────────────
 const sectionStyle = {
@@ -56,7 +60,44 @@ const updatedStyle = {
 
 // ── Page ─────────────────────────────────────────────────
 export default function PrivacyPolicyPage() {
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
+  const { slug: urlSlug } = useParams(); // /privacidade/:slug
+  const { libraries: userMemberships } = useLibrary();
+
+  // Si on est sur /privacidade/:slug, on fetch la library correspondante pour avoir son name complet
+  const [urlLibrary, setUrlLibrary] = useState(null);
+
+  useEffect(() => {
+    if (!urlSlug) {
+      setUrlLibrary(null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('libraries')
+        .select('id, slug, name, short_name')
+        .eq('slug', urlSlug)
+        .eq('is_active', true)
+        .maybeSingle();
+      if (!cancelled) {
+        // Si la biblio n'existe pas, on garde un objet minimal pour que le composant tente quand même
+        // de fetch le .md (il y aura un 404 silencieux, c'est OK)
+        setUrlLibrary(data || { slug: urlSlug, name: urlSlug, short_name: urlSlug });
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [urlSlug]);
+
+  // Résolution des biblios à afficher :
+  // - Si /privacidade/:slug → uniquement cette biblio (URL canonique pour partage public)
+  // - Sinon, si user connecté avec biblios actives → toutes ses biblios actives
+  // - Sinon → aucune biblio (politique commune AnarBib seule)
+  const librariesToShow = urlSlug
+    ? (urlLibrary ? [urlLibrary] : [])
+    : (userMemberships || [])
+        .map(m => m.libraries)
+        .filter(Boolean);
 
   return (
     <PageShell>
@@ -189,6 +230,19 @@ export default function PrivacyPolicyPage() {
           </p>
           <p style={pStyle}>{t({ id: 'privacy.s10.authority' })}</p>
         </section>
+
+        {/* ── Sections spécifiques par bibliothèque ─────────────────── */}
+        {/* Affichées si:                                                   */}
+        {/*   - URL canonique /privacidade/:slug   → cette biblio           */}
+        {/*   - User connecté avec biblios actives → ses biblios            */}
+        {/* Le composant gère lui-même le 404 silencieux si pas de .md.    */}
+        {librariesToShow.map(lib => (
+          <LibraryPrivacySection
+            key={lib.slug}
+            library={lib}
+            locale={locale}
+          />
+        ))}
 
         <p style={updatedStyle}>{t({ id: 'privacy.updated' })}</p>
       </div>

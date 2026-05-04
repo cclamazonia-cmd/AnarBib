@@ -1703,5 +1703,7 @@
   "privacy.s10.title": "How to contact us",
   "privacy.s10.body": "For any question about this policy or the processing of your data:",
   "privacy.s10.authority": "You can also contact the supervisory authority of your country (in France, CNIL — cnil.fr; in the UK, ICO — ico.org.uk; in Brazil, ANPD — gov.br/anpd; in Italy, Garante — garanteprivacy.it).",
-  "privacy.updated": "Last updated: May 4, 2026"
+  "privacy.updated": "Last updated: May 4, 2026",
+  "privacy.lib.title": "Specifics of {name}",
+  "privacy.lib.fallback": "This section has not yet been translated to your language. The text below is in Portuguese."
 }

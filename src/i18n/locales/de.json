@@ -1702,5 +1702,7 @@
   "privacy.s10.title": "Wie Sie uns kontaktieren",
   "privacy.s10.body": "Für jede Frage zu dieser Erklärung oder zur Verarbeitung Ihrer Daten:",
   "privacy.s10.authority": "Sie können auch die Aufsichtsbehörde Ihres Landes kontaktieren (in Deutschland, BfDI — bfdi.bund.de bzw. die Behörde Ihres Bundeslandes; in Österreich, DSB — dsb.gv.at; in der Schweiz, EDÖB — edoeb.admin.ch).",
-  "privacy.updated": "Letzte Aktualisierung: 4. Mai 2026"
+  "privacy.updated": "Letzte Aktualisierung: 4. Mai 2026",
+  "privacy.lib.title": "Besonderheiten von {name}",
+  "privacy.lib.fallback": "Dieser Abschnitt wurde noch nicht in Ihre Sprache übersetzt. Der folgende Text ist auf Portugiesisch."
 }

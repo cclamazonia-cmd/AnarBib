@@ -1697,5 +1697,7 @@
   "privacy.s10.title": "Cómo contactarnos",
   "privacy.s10.body": "Para cualquier pregunta sobre esta política o el tratamiento de sus datos:",
   "privacy.s10.authority": "Usted también puede contactar a la autoridad de control de su país (en Argentina, la AAIP — argentina.gob.ar/aaip; en España, la AEPD — aepd.es; en Brasil, la ANPD — gov.br/anpd).",
-  "privacy.updated": "Última actualización: 4 de mayo de 2026"
+  "privacy.updated": "Última actualización: 4 de mayo de 2026",
+  "privacy.lib.title": "Especificidades de {name}",
+  "privacy.lib.fallback": "Esta sección aún no está traducida a su idioma. El texto a continuación está en portugués."
 }

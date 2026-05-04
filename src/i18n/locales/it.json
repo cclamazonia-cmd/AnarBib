@@ -1702,5 +1702,7 @@
   "privacy.s10.title": "Come contattarci",
   "privacy.s10.body": "Per qualsiasi domanda relativa a questa politica o al trattamento dei suoi dati:",
   "privacy.s10.authority": "Può anche contattare l'autorità di controllo del suo paese (in Italia, il Garante — garanteprivacy.it; in Francia, la CNIL — cnil.fr; in Brasile, l'ANPD — gov.br/anpd).",
-  "privacy.updated": "Ultimo aggiornamento: 4 maggio 2026"
+  "privacy.updated": "Ultimo aggiornamento: 4 maggio 2026",
+  "privacy.lib.title": "Specificità di {name}",
+  "privacy.lib.fallback": "Questa sezione non è ancora stata tradotta nella sua lingua. Il testo sottostante è in portoghese."
 }
