@@ -1631,6 +1631,8 @@
   "privacy.s5.right.rectify": "Diritto di rettifica: correggere i dati errati",
   "privacy.s5.title": "I suoi diritti sui suoi dati",
   "privacy.s6.body": "Per funzionare tecnicamente, AnarBib utilizza tre fornitori di servizi (responsabili del trattamento ai sensi del GDPR):",
+  "privacy.s6.dpa": "Per le biblioteche che aderiscono alla rete AnarBib, un Accordo sul Trattamento dei Dati (DPA) descrive in dettaglio le responsabilità contrattuali tra ciascuna biblioteca aderente e AnarBib in conformità all'articolo 28 del GDPR e all'articolo 39 della LGPD.",
+  "privacy.s6.dpa.link": "Consultare il modello di DPA",
   "privacy.s6.noResale": "AnarBib non vende, non affitta, non condivide mai i suoi dati per scopi commerciali. Mai.",
   "privacy.s6.subprocessor.brevo": "Brevo SAS — invio delle email di notifica (promemoria di restituzione, conferme di prenotazione, ecc.). Server nell'Unione Europea. DPA integrato nelle condizioni generali di Brevo.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — hosting dell'interfaccia web (frontend). Server in Germania (UE). Associazione tedesca senza scopo di lucro.",

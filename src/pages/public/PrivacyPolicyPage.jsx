@@ -205,6 +205,18 @@ export default function PrivacyPolicyPage() {
           <p style={pStyle}>
             <strong>{t({ id: 'privacy.s6.noResale' })}</strong>
           </p>
+          <p style={pStyle}>
+            {t({ id: 'privacy.s6.dpa' })}{' '}
+            <a
+              href={`https://codeberg.org/anarbib/anarbib/src/branch/main/docs/legal/dpa-${locale}.md`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--brand-accent, #c44)' }}
+            >
+              {t({ id: 'privacy.s6.dpa.link' })}
+            </a>
+            .
+          </p>
         </section>
 
         <section style={sectionStyle}>

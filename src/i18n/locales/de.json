@@ -1631,6 +1631,8 @@
   "privacy.s5.right.rectify": "Recht auf Berichtigung: fehlerhafte Daten korrigieren",
   "privacy.s5.title": "Ihre Rechte an Ihren Daten",
   "privacy.s6.body": "Um technisch zu funktionieren, nutzt AnarBib drei Dienstleister (Auftragsverarbeiter im Sinne der DSGVO):",
+  "privacy.s6.dpa": "Für die Bibliotheken, die dem AnarBib-Netzwerk beitreten, beschreibt ein Auftragsverarbeitungsvertrag (DPA) die vertraglichen Verantwortlichkeiten zwischen jeder beitretenden Bibliothek und AnarBib in Übereinstimmung mit Artikel 28 der DSGVO und Artikel 39 der LGPD.",
+  "privacy.s6.dpa.link": "DPA-Vorlage einsehen",
   "privacy.s6.noResale": "AnarBib verkauft, vermietet oder teilt Ihre Daten niemals zu kommerziellen Zwecken. Niemals.",
   "privacy.s6.subprocessor.brevo": "Brevo SAS — Versand der Benachrichtigungs-E-Mails (Rückgabeerinnerungen, Reservierungsbestätigungen usw.). Server in der Europäischen Union. DPA in die AGB von Brevo integriert.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — Hosting der Web-Oberfläche (Frontend). Server in Deutschland (EU). Deutscher gemeinnütziger Verein.",
