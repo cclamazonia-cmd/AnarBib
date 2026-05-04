@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
@@ -72,7 +71,6 @@ export default function ImportacoesPage() {
       <div className="catalogacao-wrap" style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '60px 24px' }}>
         <h1>{t({ id: 'importacoes.title' })}</h1>
         <p style={{ color: 'var(--brand-muted)', marginTop: 12 }}>{t({ id: 'importacoes.restricted' })}</p>
-        <Link to="/painel" style={{ textDecoration: 'none' }}><button className="cat-btn primary" style={{ marginTop: 16 }}>{t({ id: 'common.back' })}</button></Link>
       </div>
     <Footer /></PageShell>
   );
@@ -323,9 +321,6 @@ export default function ImportacoesPage() {
             <p style={{ color: 'var(--brand-muted)', fontSize: '.9rem', margin: '4px 0 0' }}>
               Recepção artesanal, importação por URL, flux RSS/Atom e histórico de tratamentos.
             </p>
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <Link to="/catalogacao" style={{ textDecoration: 'none' }}><button className="cat-btn secondary" style={{ fontSize: '.85rem', padding: '7px 14px' }}>Voltar à catalogação</button></Link>
           </div>
         </div>
 

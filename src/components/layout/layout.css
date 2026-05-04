@@ -192,3 +192,17 @@
   color: var(--brand-muted);
   font-size: 0.88rem;
 }
+
+/* ── Séparateur visuel entre groupes de la topbar ─────────
+   Patch 04/05/2026 : structure la nav par groupe de rôle
+   (catalogue/conta | painel/catalogação | importações/biblioteca | rede).
+   Discret, ne crée pas d'effet de menu déroulant ou de bordure forte. */
+
+.ab-topbar__sep {
+  color: var(--brand-muted);
+  opacity: 0.35;
+  font-weight: 300;
+  user-select: none;
+  margin: 0 2px;
+  font-size: 0.95rem;
+}

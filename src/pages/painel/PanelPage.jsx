@@ -544,7 +544,6 @@ export default function PanelPage() {
       <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center', padding: '60px 24px' }}>
         <h1 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{t({ id: 'panel.title' })}</h1>
         <p style={{ color: 'var(--brand-muted)', marginTop: 12 }}>{t({ id: 'panel.restricted' })}</p>
-        <Link to="/conta" style={{ textDecoration: 'none' }}><button style={{ marginTop: 16, padding: '10px 20px', borderRadius: 8, fontSize: '.9rem', fontWeight: 600, background: 'var(--brand-color-primary, #7a0b14)', color: '#fff', border: 'none', cursor: 'pointer' }}>{t({ id: 'panel.myAccount' })}</button></Link>
       </div>
     </PageShell>
   );
@@ -592,28 +591,7 @@ export default function PanelPage() {
   return (
     <PageShell>
       <Topbar />
-      <Hero title={t({ id: 'panel.title' })} subtitle={libraryName || t({ id: 'panel.subtitle' })}
-        actions={
-          <>
-            <Link to="/catalogacao" style={{ textDecoration: 'none' }}>
-              <Button variant="primary">{t({ id: 'nav.catalogacao' })}</Button>
-            </Link>
-            {(role === 'coordenador' || role === 'administrador') && (
-              <Link to="/importacoes" style={{ textDecoration: 'none' }}>
-                <Button variant="secondary">{t({ id: 'nav.importacoes' })}</Button>
-              </Link>
-            )}
-            <Link to="/biblioteca" style={{ textDecoration: 'none' }}>
-              <Button variant="secondary">{t({ id: 'nav.library' })}</Button>
-            </Link>
-            {role === 'administrador' && (
-              <Link to="/rede" style={{ textDecoration: 'none' }}>
-                <Button variant="secondary">{t({ id: 'nav.network' })}</Button>
-              </Link>
-            )}
-          </>
-        }
-      >
+      <Hero title={t({ id: 'panel.title' })} subtitle={libraryName || t({ id: 'panel.subtitle' })}>
         <div className="ab-painel-chips">
           <Pill variant={activeRes.length > 0 ? 'warn' : 'default'}>{t({ id: 'panel.reservations.active' }, { count: activeRes.length })}</Pill>
           <Pill>{t({ id: 'panel.consultations.active' }, { count: consultations.filter(c => c.item_status === 'ativa').length })}</Pill>

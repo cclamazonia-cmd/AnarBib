@@ -4,6 +4,14 @@ import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { publicAssetUrl } from '@/lib/theme';
+import {
+  canSeeAccount,
+  canSeePainel,
+  canSeeCatalogacao,
+  canSeeImportacoes,
+  canSeeBiblioteca,
+  canSeeRede,
+} from '@/lib/roles';
 import { Button } from '@/components/ui';
 import { SUPPORTED_LOCALES, setLocale, detectLocale } from '@/i18n';
 import './layout.css';
@@ -33,7 +41,7 @@ export function PageShell({ children }) {
 export function Topbar() {
   const { formatMessage: t } = useIntl();
   const { user, signOut } = useAuth();
-  const { libraryName, librarySlug } = useLibrary();
+  const { libraryName, librarySlug, role } = useLibrary();
   const location = useLocation();
 
   const isActive = (path) => location.pathname.startsWith(path);
@@ -65,22 +73,64 @@ export function Topbar() {
       </Link>
 
       <div className="ab-topbar__nav">
+        {/* ── Groupe 1 : accessible à tout user ─────────────── */}
         <Link to="/" className={isActive('/catalogo') || location.pathname === '/' ? 'active' : ''}>
           {t({ id: 'nav.catalog' })}
         </Link>
 
-        {user ? (
+        {user && canSeeAccount(role) && (
+          <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
+            {t({ id: 'nav.account' })}
+          </Link>
+        )}
+
+        {/* ── Groupe 2 : ≥ librarian (Painel + Catalogação) ── */}
+        {canSeePainel(role) && (
           <>
-            <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
-              {t({ id: 'nav.account' })}
-            </Link>
+            <span className="ab-topbar__sep" aria-hidden="true">|</span>
             <Link to="/painel" className={isActive('/painel') ? 'active' : ''}>
               {t({ id: 'nav.panel' })}
             </Link>
-            <button className="ab-topbar__logout" onClick={signOut}>
-              {t({ id: 'nav.logout' })}
-            </button>
           </>
+        )}
+
+        {canSeeCatalogacao(role) && (
+          <Link to="/catalogacao" className={isActive('/catalogacao') ? 'active' : ''}>
+            {t({ id: 'nav.catalogacao' })}
+          </Link>
+        )}
+
+        {/* ── Groupe 3 : ≥ coordenador (Importações + Biblioteca) ── */}
+        {canSeeImportacoes(role) && (
+          <>
+            <span className="ab-topbar__sep" aria-hidden="true">|</span>
+            <Link to="/importacoes" className={isActive('/importacoes') ? 'active' : ''}>
+              {t({ id: 'nav.importacoes' })}
+            </Link>
+          </>
+        )}
+
+        {canSeeBiblioteca(role) && (
+          <Link to="/biblioteca" className={isActive('/biblioteca') ? 'active' : ''}>
+            {t({ id: 'nav.library' })}
+          </Link>
+        )}
+
+        {/* ── Groupe 4 : administrador AnarBib uniquement (Rede) ── */}
+        {canSeeRede(role) && (
+          <>
+            <span className="ab-topbar__sep" aria-hidden="true">|</span>
+            <Link to="/rede" className={isActive('/rede') ? 'active' : ''}>
+              {t({ id: 'nav.network' })}
+            </Link>
+          </>
+        )}
+
+        {/* ── Sortie / Inscription ─────────────────────────── */}
+        {user ? (
+          <button className="ab-topbar__logout" onClick={signOut}>
+            {t({ id: 'nav.logout' })}
+          </button>
         ) : (
           <>
             <Link to="/cadastro">
@@ -129,14 +179,7 @@ export function Footer() {
   const { formatMessage: t } = useIntl();
   return (
     <footer className="ab-footer">
-      <span>{t({ id: 'app.footer' })}</span>
-      <span style={{ margin: '0 8px', opacity: 0.4 }}>·</span>
-      <Link
-        to="/privacidade"
-        style={{ color: 'inherit', textDecoration: 'none', opacity: 0.85 }}
-      >
-        {t({ id: 'nav.privacy' })}
-      </Link>
+      {t({ id: 'app.footer' })}
     </footer>
   );
 }

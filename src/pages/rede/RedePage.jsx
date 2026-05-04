@@ -12,14 +12,6 @@ const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 // ROLE_LABELS built inside component with t()
 const SERVICE_LABELS = { funcionamento_normal:'Normal', funcionamento_reduzido:'Reduzido', recesso:'Em recesso', suspenso:'Suspenso' };
 
-const TABS = [
-  { id: 'overview', label: 'Resumo da rede' },
-  { id: 'requests', label: t({ id: 'rede.requests.label' }) },
-  { id: 'libraries', label: 'Bibliotecas' },
-  { id: 'members', label: 'Membros da rede' },
-  { id: 'admins', label: 'Administradores' },
-];
-
 export default function RedePage() {
   const { user } = useAuth();
   const { role } = useLibrary();
@@ -34,6 +26,13 @@ export default function RedePage() {
     reader: t({id:'roles.reader'}), librarian: t({id:'roles.librarian'}),
     coordenador: t({id:'roles.coordenador'}), administrador: t({id:'roles.administrador'}),
   }), [t]);
+  const TABS = useMemo(() => ([
+    { id: 'overview', label: 'Resumo da rede' },
+    { id: 'requests', label: t({ id: 'rede.requests.label' }) },
+    { id: 'libraries', label: 'Bibliotecas' },
+    { id: 'members', label: 'Membros da rede' },
+    { id: 'admins', label: 'Administradores' },
+  ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
   const isAdmin = role === 'administrador';
 
@@ -174,7 +173,6 @@ export default function RedePage() {
       <div className="catalogacao-wrap" style={{ maxWidth:800, margin:'0 auto', textAlign:'center', padding:'60px 24px' }}>
         <h1>{t({ id: 'rede.title' })}</h1>
         <p style={{ color:'var(--brand-muted)', marginTop:12 }}>{t({ id: 'rede.restricted' })}</p>
-        <Link to="/painel"><button className="cat-btn primary" style={{ marginTop:16 }}>{t({ id: 'common.back' })}</button></Link>
       </div>
     <Footer /></PageShell>
   );
@@ -202,9 +200,6 @@ export default function RedePage() {
             </p>
           </div>
           <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-            <Link to="/painel" style={{ textDecoration:'none' }}><button className="cat-btn secondary">{t({ id: 'nav.panel' })}</button></Link>
-            <Link to="/biblioteca" style={{ textDecoration:'none' }}><button className="cat-btn secondary">{t({ id: 'nav.library' })}</button></Link>
-            <Link to="/importacoes" style={{ textDecoration:'none' }}><button className="cat-btn secondary">{t({ id: 'nav.importacoes' })}</button></Link>
             <button className="cat-btn secondary" onClick={loadAll} disabled={loading}>{loading ? 'Atualizando…' : 'Atualizar dados'}</button>
           </div>
         </div>

@@ -545,7 +545,6 @@ export default function BibliotecaPage() {
         <h1>{t({ id: 'biblioteca.title' })}</h1>
         <p style={{ color:'var(--brand-muted)', marginTop:12 }}>{t({ id: 'biblioteca.noLibrary' })}</p>
         <div style={{ marginTop:20, display:'flex', gap:10, justifyContent:'center' }}>
-          <Link to="/painel"><button className="cat-btn primary">{t({ id: 'nav.panel' })}</button></Link>
           <Link to="/solicitar-biblioteca"><button className="cat-btn secondary">{t({ id: 'biblioteca.requestLibrary' })}</button></Link>
         </div>
       </div>
@@ -563,7 +562,6 @@ export default function BibliotecaPage() {
       <div className="catalogacao-wrap" style={{ maxWidth:800, margin:'0 auto', textAlign:'center', padding:'60px 24px' }}>
         <h1>{t({ id: 'biblioteca.title' })}</h1>
         <p style={{ color:'var(--brand-muted)', marginTop:12 }}>{t({ id: 'biblioteca.restricted' })}</p>
-        <Link to="/painel"><button className="cat-btn primary" style={{ marginTop:16 }}>{t({ id: 'common.back' })}</button></Link>
       </div>
     <Footer /></PageShell>
   );
@@ -578,11 +576,6 @@ export default function BibliotecaPage() {
             <div><h1 style={{ margin:0 }}>{t({ id: 'biblioteca.title' })}</h1><p style={{ color:'var(--brand-muted)', fontSize:'.9rem', margin:'2px 0 0' }}>{lib?.name||libraryName}
               <span className={`cat-pill ${role==='administrador'?'info':(role==='coordenador'||role==='librarian')?'ok':'warn'}`} style={{ marginLeft:8, fontSize:'.65rem' }}>{t({ id: 'roles.'+role, defaultMessage: role })}</span>
             </p></div>
-          </div>
-          <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-            <Link to="/painel" style={{ textDecoration:'none' }}><button className="cat-btn secondary">{t({ id: 'nav.panel' })}</button></Link>
-            <Link to="/catalogacao" style={{ textDecoration:'none' }}><button className="cat-btn secondary">{t({ id: 'nav.catalogacao' })}</button></Link>
-            <Link to="/importacoes" style={{ textDecoration:'none' }}><button className="cat-btn secondary">{t({ id: 'nav.importacoes' })}</button></Link>
           </div>
         </div>
 

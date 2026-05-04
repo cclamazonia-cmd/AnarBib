@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIntl } from 'react-intl';
 import { useLibrary } from '@/contexts/LibraryContext';
-import { SUPPORTED_LOCALES, setLocale, detectLocale } from '@/i18n';
+import { PageShell, Topbar, Footer } from '@/components/layout';
 import './CatalogacaoPage.css';
 import BookDraftForm from './BookDraftForm';
 import AuthorDraftForm from './AuthorDraftForm';
@@ -25,7 +24,6 @@ export default function CatalogacaoPage() {
   const { user } = useAuth();
   const { config } = useLibrary();
   const { formatMessage: t } = useIntl();
-  const navigate = useNavigate();
 
   const TABS = [
     { id: 'booksPanel',     label: t({ id: 'catalogacao.tab.documento' }) },
@@ -153,45 +151,25 @@ export default function CatalogacaoPage() {
     : t({ id: 'catalogacao.modeComplete' });
 
   return (
-    <div className="catalogacao-wrap">
+    <PageShell>
+      <Topbar />
+      <div className="catalogacao-wrap">
 
-      {/* ── Hero / topbar ────────────────────────────────── */}
-      <div className="cat-topbar">
-        <div className="cat-brand">
-          <div className="cat-hero-copy">
-            <h1>{t({ id: 'catalogacao.areaTitle' })}</h1>
-            <p>{t({ id: 'catalogacao.areaSubtitle' })}</p>
+        {/* ── Hero local de la page ────────────────────────── */}
+        <div className="cat-topbar">
+          <div className="cat-brand">
+            <div className="cat-hero-copy">
+              <h1>{t({ id: 'catalogacao.areaTitle' })}</h1>
+              <p>{t({ id: 'catalogacao.areaSubtitle' })}</p>
+            </div>
+            {config?.logoUrl && (
+              <img className="cat-logo" src={config.logoUrl} alt={config?.libraryName || 'AnarBib'} />
+            )}
           </div>
-          {config?.logoUrl && (
-            <img className="cat-logo" src={config.logoUrl} alt={config?.libraryName || 'AnarBib'} />
-          )}
         </div>
-        <div className="cat-hero-actions">
-          <a className="btn" href="#" onClick={(e) => { e.preventDefault(); navigate('/painel'); }}>
-            {t({ id: 'nav.panel' })}
-          </a>
-          <a className="btn" href="#" onClick={(e) => { e.preventDefault(); navigate('/importacoes'); }}>
-            {t({ id: 'nav.imports' })}
-          </a>
-          <a className="btn" href="#" onClick={(e) => { e.preventDefault(); navigate('/'); }}>
-            {t({ id: 'nav.catalog' })}
-          </a>
-          {/* Language selector */}
-          <select
-            value={detectLocale()}
-            onChange={e => setLocale(e.target.value)}
-            style={{ fontSize: '.78rem', padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#ccc', cursor: 'pointer' }}
-            aria-label={t({ id: 'language.selector' })}
-          >
-            {SUPPORTED_LOCALES.map(l => (
-              <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
-            ))}
-          </select>
-        </div>
-      </div>
 
-      {/* ── Toolbar: session + mode toggle ────────────────── */}
-      <div className="cat-toolbar">
+        {/* ── Toolbar: session + mode toggle ────────────────── */}
+        <div className="cat-toolbar">
         <div className="cat-toolbar-meta">
           <div className="cat-toolbar-status">
             <span className="cat-pill info">
@@ -317,7 +295,9 @@ export default function CatalogacaoPage() {
           <div className={`cat-panel${activeTab === 'catalogPanel' ? ' active' : ''}`}>
             <CatalogPanel />
           </div>
-    </div>
+      </div>
+      <Footer />
+    </PageShell>
   );
 }
 
