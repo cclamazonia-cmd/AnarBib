@@ -574,7 +574,7 @@ export default function BibliotecaPage() {
           <div style={{ display:'flex', gap:14, alignItems:'center' }}>
             {logoUrl && <img src={logoUrl} alt={libraryName} style={{ height:56, objectFit:'contain', filter:'drop-shadow(0 4px 12px rgba(0,0,0,.4))' }} />}
             <div><h1 style={{ margin:0 }}>{t({ id: 'biblioteca.title' })}</h1><p style={{ color:'var(--brand-muted)', fontSize:'.9rem', margin:'2px 0 0' }}>{lib?.name||libraryName}
-              <span className={`cat-pill ${isCoord?'ok':'info'}`} style={{ marginLeft:8, fontSize:'.65rem' }}>{t({ id: isCoord ? 'roles.coordenador' : 'roles.librarian' })}</span>
+              <span className={`cat-pill ${role==='administrador'?'info':(role==='coordenador'||role==='librarian')?'ok':'warn'}`} style={{ marginLeft:8, fontSize:'.65rem' }}>{t({ id: 'roles.'+role, defaultMessage: role })}</span>
             </p></div>
           </div>
           <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
@@ -993,7 +993,7 @@ export default function BibliotecaPage() {
             {members.map((m,i)=>{const p=m.profiles||{};return(
               <div key={m.user_id||i} style={lr(i)}>
                 <div><div style={{ fontSize:'.9rem', fontWeight:600 }}>{[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email||'(sem nome)'}</div><div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{p.email||'—'}</div></div>
-                <span className={`cat-pill ${m.role==='librarian'?'ok':m.role==='admin'?'info':'warn'}`} style={{ fontSize:'.7rem' }}>{t({id:'roles.'+m.role,defaultMessage:m.role})||'—'}</span>
+                <span className={`cat-pill ${m.role==='administrador'?'info':(m.role==='coordenador'||m.role==='librarian')?'ok':'warn'}`} style={{ fontSize:'.7rem' }}>{t({id:'roles.'+m.role,defaultMessage:m.role})||'—'}</span>
               </div>
             );})}
           </div>

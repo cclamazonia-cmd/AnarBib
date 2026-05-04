@@ -59,7 +59,7 @@ export default function ImportacoesPage() {
   }), [t]);
 
   const roleLoaded = role !== null && role !== undefined;
-  const isCoord = role === 'coordenador' || role === 'administrador';
+  const canImport = role === 'librarian' || role === 'coordenador' || role === 'administrador';
 
   if (!roleLoaded) return (
     <PageShell><Topbar />
@@ -67,7 +67,7 @@ export default function ImportacoesPage() {
     <Footer /></PageShell>
   );
 
-  if (!isCoord) return (
+  if (!canImport) return (
     <PageShell><Topbar />
       <div className="catalogacao-wrap" style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '60px 24px' }}>
         <h1>{t({ id: 'importacoes.title' })}</h1>
