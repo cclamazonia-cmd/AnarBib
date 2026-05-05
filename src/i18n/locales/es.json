@@ -1751,5 +1751,6 @@
   "task.status.cancelada": "Cancelada",
   "task.status.concluida": "Completada",
   "task.status.em_andamento": "En curso",
-  "task.status.pendente": "Pendiente"
+  "task.status.pendente": "Pendiente",
+  "auth.captchaRequired": "Esperá a que termine la verificación anti-bot antes de reintentar."
 }

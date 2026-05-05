@@ -1756,5 +1756,6 @@
   "task.status.cancelada": "Storniert",
   "task.status.concluida": "Abgeschlossen",
   "task.status.em_andamento": "In Bearbeitung",
-  "task.status.pendente": "Ausstehend"
+  "task.status.pendente": "Ausstehend",
+  "auth.captchaRequired": "Warte auf das Ende der Anti-Bot-Prüfung und versuche es erneut."
 }

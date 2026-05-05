@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button } from '@/components/ui';
+
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -21,6 +24,12 @@ export default function LoginPage() {
   const [newPw2, setNewPw2] = useState('');
   const [resetMsg, setResetMsg] = useState({ text: '', kind: '' });
   const [resetLoading, setResetLoading] = useState(false);
+  // ── Turnstile (anti-bot) ────────────────────────────────────
+  // Token retourné par le widget Cloudflare Turnstile, à passer à l'Edge
+  // Function login pour vérification serveur. Token usage unique : on reset
+  // le widget après chaque tentative échouée.
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileRef = useRef(null);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -29,6 +38,15 @@ export default function LoginPage() {
 
   async function handleLogin(e) {
     e.preventDefault();
+
+    // Vérification client : le token Turnstile doit être présent.
+    // Sécurité : la vraie vérification se fait côté Edge Function (le client
+    // peut être manipulé), c'est juste un garde-fou UX.
+    if (!turnstileToken) {
+      setLoginMsg({ text: t({ id: 'auth.captchaRequired' }), kind: 'error' });
+      return;
+    }
+
     setLoginLoading(true);
     setLoginMsg({ text: '', kind: '' });
     try {
@@ -40,21 +58,52 @@ export default function LoginPage() {
           if (r) email = r;
         } catch {}
       }
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        const r = (error.message || '').toLowerCase();
-        setLoginMsg({
-          text:
-            r.includes('invalid login') || r.includes('invalid_credentials')
-              ? t({ id: 'auth.wrongCredentials' })
-              : r.includes('not confirmed')
-              ? t({ id: 'auth.notConfirmed' })
-              : error.message,
-          kind: 'error',
-        });
+
+      // Appel à l'Edge Function login (vs signInWithPassword direct).
+      // L'Edge Function applique : vérif Turnstile + rate limit IP/email
+      // + signInWithPassword serveur, puis renvoie la session.
+      const { data, error: invokeError } = await supabase.functions.invoke('login', {
+        body: { email, password, turnstile_token: turnstileToken },
+      });
+
+      // Reset du widget Turnstile dans tous les cas (token usage unique)
+      turnstileRef.current?.reset();
+      setTurnstileToken('');
+
+      // Erreur réseau ou erreur côté Edge Function (status 4xx/5xx)
+      if (invokeError) {
+        // Tenter d'extraire un message structuré { error: "..." }
+        let msg = t({ id: 'auth.networkError' });
+        try {
+          const ctx = invokeError.context;
+          if (ctx) {
+            const body = await ctx.json?.();
+            if (body?.error) msg = body.error;
+          }
+        } catch {}
+        setLoginMsg({ text: msg, kind: 'error' });
         return;
       }
-      navigate('/conta');
+
+      // Erreur logique retournée explicitement par l'Edge Function
+      if (data?.error) {
+        setLoginMsg({ text: data.error, kind: 'error' });
+        return;
+      }
+
+      // Synchroniser la session côté supabase-js (stockage localStorage etc.)
+      if (data?.session) {
+        const { error: setErr } = await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        });
+        if (setErr) throw setErr;
+        navigate('/conta');
+        return;
+      }
+
+      // Cas inattendu : pas d'erreur ni de session
+      setLoginMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
     } catch {
       setLoginMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
     } finally {
@@ -184,6 +233,22 @@ export default function LoginPage() {
                   autoComplete="current-password"
                   required
                 />
+                {/* Widget Cloudflare Turnstile (anti-bot).
+                    Toujours visible, mode managed (Cloudflare décide quand
+                    interagir). Token usage unique : reset après chaque
+                    tentative échouée dans handleLogin. */}
+                {TURNSTILE_SITE_KEY && (
+                  <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0' }}>
+                    <Turnstile
+                      ref={turnstileRef}
+                      siteKey={TURNSTILE_SITE_KEY}
+                      onSuccess={(token) => setTurnstileToken(token)}
+                      onError={() => setTurnstileToken('')}
+                      onExpire={() => setTurnstileToken('')}
+                      options={{ theme: 'dark' }}
+                    />
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: 8 }}>
                   <Button variant="primary" type="submit" loading={loginLoading}>
                     {loginLoading ? t({ id: 'auth.loggingIn' }) : t({ id: 'auth.login' })}
