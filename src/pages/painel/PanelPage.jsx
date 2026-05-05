@@ -83,6 +83,18 @@ export default function PanelPage() {
   const [readerLookup, setReaderLookup] = useState('');
   const [readerProfile, setReaderProfile] = useState(null);
   const [readerMsg, setReaderMsg] = useState('');
+  // State local du formulaire d'édition d'adresse, séparé de readerProfile.address
+  // pour éviter la boucle parse→format→parse à chaque frappe (qui mangeait les
+  // espaces de fin via .trim() dans parseAddressText). Initialisé/réinitialisé
+  // depuis readerProfile.address quand celui-ci change (cf. useEffect ci-dessous).
+  const [editAddrState, setEditAddrState] = useState({
+    line1: '', line2: '', unit: '', postal_code: '',
+    district: '', city: '', state_region: '', country: ''
+  });
+  // Feedback du clic « Enregistrer le profil », affiché DANS le formulaire
+  // d'édition (à côté du bouton) et non plus dans la zone globale qui
+  // se trouve hors viewport quand le formulaire est déplié.
+  const [editProfileMsg, setEditProfileMsg] = useState('');
   const [restrictReason, setRestrictReason] = useState('');
 
   // Cotisation (coordenador/administrador uniquement)
@@ -95,6 +107,22 @@ export default function PanelPage() {
   const [paymentDraft, setPaymentDraft] = useState(null);
   const [paymentMsg, setPaymentMsg] = useState('');
   const [paymentSaving, setPaymentSaving] = useState(false);
+
+  // ── Synchronisation editAddrState ↔ readerProfile.address ──
+  // Quand on charge un·e nouveau·lle lecteur·rice, on (ré)initialise le state
+  // local d'édition d'adresse en parsant readerProfile.address. Et on remet
+  // à zéro le message de feedback local.
+  useEffect(() => {
+    if (readerProfile?.address !== undefined) {
+      setEditAddrState(parseAddressText(readerProfile.address));
+    } else {
+      setEditAddrState({
+        line1: '', line2: '', unit: '', postal_code: '',
+        district: '', city: '', state_region: '', country: ''
+      });
+    }
+    setEditProfileMsg('');
+  }, [readerProfile?.id]);
 
   // ── Load ──────────────────────────────────────────────
 
@@ -970,49 +998,49 @@ export default function PanelPage() {
                     </div>
 
                     {/* ── Address fields ── Uses shared CountrySelect/StateSelect components.
-                        Format de stockage : texte multi-ligne avec [XX] (cf. addressFormat.js).
-                        Le state local garde le texte ; on parse/format à chaque rendu/sauvegarde. */}
+                        State local (editAddrState) pour l'édition, sérialisation au format
+                        canonique multi-ligne avec [XX] uniquement au moment de la sauvegarde
+                        (cf. addressFormat.js). Évite la boucle parse→format→parse à chaque
+                        frappe qui causait des bugs de saisie (espaces mangés par .trim()). */}
                     <h4 style={{ margin: '12px 0 6px', fontSize: '.88rem', fontWeight: 600 }}>{t({id:'address.title'})}</h4>
                     {(() => {
-                      const addr = parseAddressText(readerProfile.address);
-                      const meta = getCountryMetadata(addr.country);
-                      const setAddrField = (field, val) => setReaderProfile(p => {
-                        const cur = parseAddressText(p.address);
-                        const updated = { ...cur, [field]: val };
+                      const meta = getCountryMetadata(editAddrState.country);
+                      const setAddrField = (field, val) => setEditAddrState(prev => {
+                        const updated = { ...prev, [field]: val };
                         // Reset state si le pays change (le code ISO 3166-2 deviendrait incohérent)
-                        if (field === 'country' && val !== cur.country) updated.state_region = '';
-                        return { ...p, address: formatAddressText(updated, locale) };
+                        if (field === 'country' && val !== prev.country) updated.state_region = '';
+                        return updated;
                       });
                       return (
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                           <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:'address.country'})}
                             <CountrySelect
-                              value={addr.country}
+                              value={editAddrState.country}
                               onChange={(v) => setAddrField('country', v)}
                             />
                           </label>
                           <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:'address.line1'})}
-                            <input type="text" className="ab-painel-input" value={addr.line1 || ''} onChange={e => setAddrField('line1', e.target.value)} placeholder={t({id:'address.line1.placeholder'})} />
+                            <input type="text" className="ab-painel-input" value={editAddrState.line1 || ''} onChange={e => setAddrField('line1', e.target.value)} placeholder={t({id:'address.line1.placeholder'})} />
                           </label>
                           <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:'address.line2'})}
-                            <input type="text" className="ab-painel-input" value={addr.line2 || ''} onChange={e => setAddrField('line2', e.target.value)} placeholder={t({id:'address.line2.placeholder'})} />
+                            <input type="text" className="ab-painel-input" value={editAddrState.line2 || ''} onChange={e => setAddrField('line2', e.target.value)} placeholder={t({id:'address.line2.placeholder'})} />
                           </label>
                           <label style={{ fontSize: '.82rem' }}>{t({id:'address.unit'})}
-                            <input type="text" className="ab-painel-input" value={addr.unit || ''} onChange={e => setAddrField('unit', e.target.value)} placeholder={t({id:'address.unit.placeholder'})} />
+                            <input type="text" className="ab-painel-input" value={editAddrState.unit || ''} onChange={e => setAddrField('unit', e.target.value)} placeholder={t({id:'address.unit.placeholder'})} />
                           </label>
                           <label style={{ fontSize: '.82rem' }}>{t({id:meta.postalCodeLabel})}
-                            <input type="text" className="ab-painel-input" value={addr.postal_code || ''} onChange={e => setAddrField('postal_code', e.target.value)} />
+                            <input type="text" className="ab-painel-input" value={editAddrState.postal_code || ''} onChange={e => setAddrField('postal_code', e.target.value)} />
                           </label>
                           <label style={{ fontSize: '.82rem' }}>{t({id:'address.district'})}
-                            <input type="text" className="ab-painel-input" value={addr.district || ''} onChange={e => setAddrField('district', e.target.value)} />
+                            <input type="text" className="ab-painel-input" value={editAddrState.district || ''} onChange={e => setAddrField('district', e.target.value)} />
                           </label>
                           <label style={{ fontSize: '.82rem' }}>{t({id:'address.city'})}
-                            <input type="text" className="ab-painel-input" value={addr.city || ''} onChange={e => setAddrField('city', e.target.value)} />
+                            <input type="text" className="ab-painel-input" value={editAddrState.city || ''} onChange={e => setAddrField('city', e.target.value)} />
                           </label>
                           <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:meta.stateLabel})}
                             <StateSelect
-                              countryCode={addr.country}
-                              value={addr.state_region || ''}
+                              countryCode={editAddrState.country}
+                              value={editAddrState.state_region || ''}
                               onChange={(v) => setAddrField('state_region', v)}
                             />
                           </label>
@@ -1020,23 +1048,33 @@ export default function PanelPage() {
                       );
                     })()}
 
-                    <Button style={{ marginTop: 8 }} onClick={async () => {
-                      try {
-                        // L'adresse est déjà au format texte multi-ligne dans readerProfile.address
-                        // (formatée par setAddrField à chaque modification). On l'envoie tel quel.
-                        const updateData = {
-                          first_name: readerProfile.first_name, last_name: readerProfile.last_name,
-                          phone: readerProfile.phone, gender: readerProfile.gender,
-                          email: readerProfile.email,
-                          address: typeof readerProfile.address === 'string'
-                            ? readerProfile.address
-                            : formatAddressText(readerProfile.address, locale),
-                        };
-                        const { error } = await supabase.from('profiles').update(updateData).eq('id', readerProfile.id);
-                        if (error) throw error;
-                        setReaderMsg(t({id:'panel.reader.profileSaved'}));
-                      } catch (err) { setReaderMsg(t({id:'common.errorPrefix'}, {message: err.message})); }
-                    }}>{t({id:'panel.reader.saveProfile'})}</Button>
+                    <div style={{ marginTop: 10, display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <Button onClick={async () => {
+                        setEditProfileMsg('');
+                        try {
+                          // Sérialisation de editAddrState en texte canonique au moment de la sauvegarde.
+                          const updateData = {
+                            first_name: readerProfile.first_name, last_name: readerProfile.last_name,
+                            phone: readerProfile.phone, gender: readerProfile.gender,
+                            email: readerProfile.email,
+                            address: formatAddressText(editAddrState, locale),
+                          };
+                          const { error } = await supabase.from('profiles').update(updateData).eq('id', readerProfile.id);
+                          if (error) throw error;
+                          // On synchronise readerProfile.address aussi pour que la zone d'affichage
+                          // au-dessus se mette à jour sans nécessiter un reload de la page.
+                          setReaderProfile(p => ({ ...p, address: formatAddressText(editAddrState, locale) }));
+                          setEditProfileMsg(t({id:'panel.reader.profileSaved'}));
+                        } catch (err) {
+                          setEditProfileMsg(t({id:'common.errorPrefix'}, {message: err.message}));
+                        }
+                      }}>{t({id:'panel.reader.saveProfile'})}</Button>
+                      {editProfileMsg && (
+                        <span style={{ fontSize: '.85rem', color: 'var(--brand-text)', fontWeight: 600 }}>
+                          {editProfileMsg}
+                        </span>
+                      )}
+                    </div>
                   </details>
 
                   {/* ── Restrict / Unrestrict ── */}
