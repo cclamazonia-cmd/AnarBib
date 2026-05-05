@@ -88,6 +88,8 @@
   "account.renew.renewed": "Ausleihe verlängert. Neues Rückgabedatum: {date}.",
   "account.reservations.active": "Aktive Vormerkungen",
   "account.reservations.empty": "Keine aktive Vormerkung.",
+  "account.regimento.button": "Bibliotheksordnung herunterladen",
+  "account.regimento.hint": "Regeln des Betriebs, der Zirkulation und Mitgliedschaft, gemeinsam beschlossen.",
   "account.reserve.alreadyLoaned": "Die Referenz {refs} ist bereits ausgeliehen. Versuche eine Reservierung.",
   "account.reserve.alreadyLoanedPlural": "Die Referenzen {refs} sind bereits ausgeliehen. Versuche eine Reservierung.",
   "account.reserve.alreadyReserved": "Dieses Dokument ist bereits auf Ihrem Konto vorgemerkt: {refs}.",

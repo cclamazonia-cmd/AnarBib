@@ -88,6 +88,8 @@
   "account.renew.renewed": "Prestito rinnovato. Nuova data di restituzione: {date}.",
   "account.reservations.active": "Prenotazioni attive",
   "account.reservations.empty": "Nessuna prenotazione attiva.",
+  "account.regimento.button": "Scarica il regolamento della biblioteca",
+  "account.regimento.hint": "Regole di funzionamento, circolazione e adesione definite collettivamente.",
   "account.reserve.alreadyLoaned": "Il riferimento {refs} è già in prestito. Prova una prenotazione.",
   "account.reserve.alreadyLoanedPlural": "I riferimenti {refs} sono già in prestito. Prova una prenotazione.",
   "account.reserve.alreadyReserved": "Questo documento è già prenotato: {refs}.",

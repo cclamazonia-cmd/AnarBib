@@ -88,6 +88,8 @@
   "account.renew.renewed": "Empréstimo renovado. Nova data de devolução: {date}.",
   "account.reservations.active": "Reservas ativas",
   "account.reservations.empty": "Nenhuma reserva ativa no momento.",
+  "account.regimento.button": "Baixar o regimento da biblioteca",
+  "account.regimento.hint": "Regras de funcionamento, circulação e adesão definidas coletivamente.",
   "account.reserve.alreadyLoaned": "A referência {refs} já está em empréstimo. Tente uma reserva.",
   "account.reserve.alreadyLoanedPlural": "As referências {refs} já estão em empréstimo. Tente uma reserva.",
   "account.reserve.alreadyReserved": "Este livro já está reservado na sua conta: {refs}.",

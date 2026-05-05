@@ -375,11 +375,6 @@ export default function AccountPage() {
           <Pill variant={chips.reservas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.reservations' }, { count: chips.reservas })}</Pill>
           <Pill variant={chips.consultas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.consultations' }, { count: chips.consultas })}</Pill>
           <Pill variant={chips.emprestimos > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.loans' }, { count: chips.emprestimos })}</Pill>
-          {regimentoUrl && (
-            <a href={regimentoUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-              <Pill variant="default">{t({ id: 'account.chips.regimento' })}</Pill>
-            </a>
-          )}
         </div>
 
         {/* ── Bandeau état du compte ────────────────── */}
@@ -432,6 +427,21 @@ export default function AccountPage() {
             </div>
           );
         })()}
+
+        {/* ── Bouton règlement de la bibliothèque ────── */}
+        {regimentoUrl && (
+          <div style={{ marginTop: 12, padding: '12px 16px', borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📄</span>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.4 }}>
+                {t({ id: 'account.regimento.hint' })}
+              </div>
+            </div>
+            <a href={regimentoUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+              <Button variant="secondary">{t({ id: 'account.regimento.button' })}</Button>
+            </a>
+          </div>
+        )}
       </Hero>
 
       {/* Tabs */}

@@ -88,6 +88,8 @@
   "account.renew.renewed": "Loan renewed. New due date: {date}.",
   "account.reservations.active": "Active reservations",
   "account.reservations.empty": "No active reservations.",
+  "account.regimento.button": "Download the library rules",
+  "account.regimento.hint": "Rules of operation, circulation and membership defined collectively.",
   "account.reserve.alreadyLoaned": "Reference {refs} is already on loan. Try a reservation.",
   "account.reserve.alreadyLoanedPlural": "References {refs} are already on loan. Try a reservation.",
   "account.reserve.alreadyReserved": "This document is already reserved on your account: {refs}.",
