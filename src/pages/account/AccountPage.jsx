@@ -8,6 +8,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
 import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
+import PhoneInput from '@/components/forms/PhoneInput';
 import { hasStatesList, getCountryMetadata, STATES_BY_COUNTRY } from '@/components/forms/countryData';
 import { resolveToIsoCode, getCountryNames } from '@/lib/countries';
 import DataExportButton from '@/components/account/DataExportButton';
@@ -496,7 +497,12 @@ export default function AccountPage() {
                   <label>{t({ id: 'account.profile.firstName' })} <input type="text" value={profile.first_name || ''} onChange={e => updateProfile('first_name', e.target.value)} required /></label>
                   <label>{t({ id: 'account.profile.lastName' })} <input type="text" value={profile.last_name || ''} onChange={e => updateProfile('last_name', e.target.value)} required /></label>
                 </div>
-                <label>{t({ id: 'account.profile.phone' })} <input type="tel" value={profile.phone || ''} onChange={e => updateProfile('phone', e.target.value)} placeholder="+55 (xx) xxxxx-xxxx" /></label>
+                <label>{t({ id: 'account.profile.phone' })}
+                  <PhoneInput
+                    value={profile.phone || ''}
+                    onChange={(v) => updateProfile('phone', v || '')}
+                  />
+                </label>
                 <label>{t({ id: 'account.profile.gender' })}
                   <select value={profile.gender || ''} onChange={e => updateProfile('gender', e.target.value)}>
                     <option value="">—</option>
