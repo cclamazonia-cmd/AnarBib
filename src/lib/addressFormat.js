@@ -77,8 +77,22 @@ export function parseAddressText(raw) {
     }
   }
 
-  // ─── Cas 3 : texte multi-ligne avec préfixes "Clé: Valeur" ─
-  const lines = String(raw).split('\n').map(l => l.trim()).filter(Boolean);
+  // ─── Cas 3 : texte mono-ligne avec séparateur " | " (legacy Edge Function register) ─
+  // L'Edge Function `register` (avant harmonisation) générait des adresses sur une
+  // seule ligne avec " | " comme séparateur, sous la forme :
+  //
+  //   Rua das Flores, 123 | Apto 5B | Unidade: 5B | CEP: ... | Cidade: ... | Estado: ... | País: ...
+  //
+  // Pour les lire avec le même parser que les formats multi-ligne, on remplace
+  // " | " par des sauts de ligne. Détection : la chaîne contient " | " et n'a
+  // pas de saut de ligne (sinon c'est un format hybride non géré).
+  let textForParsing = String(raw);
+  if (!textForParsing.includes('\n') && textForParsing.includes(' | ')) {
+    textForParsing = textForParsing.split(' | ').join('\n');
+  }
+
+  // ─── Cas 4 : texte multi-ligne avec préfixes "Clé: Valeur" ─
+  const lines = textForParsing.split('\n').map(l => l.trim()).filter(Boolean);
   const freeLines = [];
 
   // Helper : extrait "Valeur" et "ISO_CODE" depuis "São Paulo [SP]" ou "Brasil [BR]"
@@ -92,13 +106,13 @@ export function parseAddressText(raw) {
   let stateRaw = '';
 
   for (const line of lines) {
-    const m = line.match(/^(Logradouro|Complemento|Casa\/Apto|CEP|Code postal|CEP\/Code postal|Bairro|Quartier|Bairro\/Quartier|Cidade|Ville|Cidade\/Ville|Estado|Região|Estado\/Região|País)\s*:\s*(.+)$/i);
+    const m = line.match(/^(Logradouro|Complemento|Casa\/Apto|Unidade|CEP|Code postal|CEP\/Code postal|Bairro|Quartier|Bairro\/Quartier|Cidade|Ville|Cidade\/Ville|Estado|Região|Estado\/Região|País)\s*:\s*(.+)$/i);
     if (m) {
       const key = m[1].toLowerCase();
       const val = m[2].trim();
       if (key.includes('logradouro')) result.line1 = val;
       else if (key.includes('complemento')) result.line2 = val;
-      else if (key.includes('casa') || key.includes('apto')) result.unit = val;
+      else if (key.includes('casa') || key.includes('apto') || key.includes('unidade')) result.unit = val;
       else if (key.includes('cep') || key.includes('postal')) result.postal_code = val;
       else if (key.includes('bairro') || key.includes('quartier')) result.district = val;
       else if (key.includes('cidade') || key.includes('ville')) result.city = val;
