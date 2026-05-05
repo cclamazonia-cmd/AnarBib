@@ -45,6 +45,41 @@
 }
 .ab-painel-input:focus { border-color: var(--brand-color-primary); outline: none; }
 
+/* ── Édition profil lecteur·rice (CountrySelect/StateSelect/PhoneInput) ──
+   Les composants partagés (cf. @/components/forms) rendent des <select> et
+   <input> natifs sans className. Cette règle de descendance leur applique
+   le style sombre AnarBib pour cohérence visuelle avec .ab-painel-input. */
+.ab-painel-edit-profile select,
+.ab-painel-edit-profile input[type="text"],
+.ab-painel-edit-profile input[type="tel"],
+.ab-painel-edit-profile input[type="email"],
+.ab-painel-edit-profile .PhoneInput input,
+.ab-painel-edit-profile .PhoneInputCountrySelect {
+  display: block; width: 100%; padding: 10px 12px; margin-top: 4px;
+  border: 1px solid var(--brand-panel-border); border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-strong); color: var(--brand-text); font-size: .9rem;
+  box-sizing: border-box;
+}
+.ab-painel-edit-profile select:focus,
+.ab-painel-edit-profile input:focus,
+.ab-painel-edit-profile .PhoneInput input:focus { border-color: var(--brand-color-primary); outline: none; }
+
+/* PhoneInput : reset du wrapper par défaut de react-phone-number-input */
+.ab-painel-edit-profile .PhoneInput {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 4px;
+  padding: 0; border: none; background: none;
+}
+.ab-painel-edit-profile .PhoneInputCountry {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  border: 1px solid var(--brand-panel-border); border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-strong);
+}
+.ab-painel-edit-profile .PhoneInput input {
+  flex: 1; margin-top: 0;
+}
+
 /* Summary cards grid */
 .ab-painel-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .ab-painel-summary {

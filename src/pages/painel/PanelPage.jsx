@@ -940,7 +940,7 @@ export default function PanelPage() {
                   })()}
 
                   {/* ── Edit profile form ── */}
-                  <details style={{ marginTop: 12 }}>
+                  <details className="ab-painel-edit-profile" style={{ marginTop: 12 }}>
                     <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '.9rem' }}>{t({id:'panel.reader.editProfile'})}</summary>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
                       <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.firstName'})}
