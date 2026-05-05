@@ -133,6 +133,7 @@
   "account.status.attention": "Atenção",
   "account.status.incomplete": "Cadastro incompleto",
   "account.status.restricted": "Conta restrita",
+  "account.status.unknown": "Sessão não identificada",
   "account.subtitle": "Reservas, empréstimos, consultas, histórico e dados pessoais",
   "account.tab.history": "Histórico",
   "account.tab.history.hint": "Empréstimos e reservas anteriores",

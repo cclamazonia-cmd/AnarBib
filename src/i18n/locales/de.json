@@ -133,6 +133,7 @@
   "account.status.attention": "Achtung",
   "account.status.incomplete": "Registrierung unvollständig",
   "account.status.restricted": "Konto eingeschränkt",
+  "account.status.unknown": "Sitzung nicht identifiziert",
   "account.subtitle": "Vormerkungen, Ausleihen, Einsichtnahmen, Verlauf und persönliche Daten",
   "account.tab.history": "Verlauf",
   "account.tab.history.hint": "Frühere Ausleihen und Vormerkungen",

@@ -133,6 +133,7 @@
   "account.status.attention": "Attention",
   "account.status.incomplete": "Registration incomplete",
   "account.status.restricted": "Account restricted",
+  "account.status.unknown": "Session not identified",
   "account.subtitle": "Reservations, loans, consultations, history and personal data",
   "account.tab.history": "History",
   "account.tab.history.hint": "Past loans and reservations",
