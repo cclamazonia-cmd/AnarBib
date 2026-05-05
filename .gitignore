@@ -16,3 +16,9 @@ supabase/.env
 
 # CI Woodpecker (à reprendre dans la session CI/CD dédiée)
 .woodpecker.yml
+
+# Patches et scripts de migration ponctuels
+*.patch
+fix-*.py
+rename-*.py
+migrate-*.py
