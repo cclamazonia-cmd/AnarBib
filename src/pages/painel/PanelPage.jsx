@@ -6,6 +6,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
+import CountrySelect from '@/components/forms/CountrySelect';
+import StateSelect from '@/components/forms/StateSelect';
+import PhoneInput from '@/components/forms/PhoneInput';
+import { getCountryMetadata } from '@/components/forms/countryData';
+import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
+import { getCountryName } from '@/lib/countries';
 import './PanelPage.css';
 
 // ═══════════════════════════════════════════════════════════
@@ -17,7 +23,7 @@ function fmtD(d) { if (!d) return '—'; try { return new Date(d).toLocaleString
 export default function PanelPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role } = useLibrary();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   const roleLoaded = role !== null && role !== undefined;
   const isLibrarian = role === 'librarian' || role === 'coordenador' || role === 'administrador';
   const isCoordOrAdmin = role === 'coordenador' || role === 'administrador';
@@ -906,28 +912,30 @@ export default function PanelPage() {
                     </span>
                   </div>
 
-                  {/* Address display */}
+                  {/* Address display — uses parseAddressText to support all legacy formats */}
                   {readerProfile.address && (() => {
-                    let a = null;
-                    try { a = typeof readerProfile.address === 'object' ? readerProfile.address : JSON.parse(readerProfile.address); } catch { /* not JSON */ }
-                    if (a && typeof a === 'object' && (a.line1 || a.city)) {
+                    const a = parseAddressText(readerProfile.address);
+                    if (!a.line1 && !a.city && !a.country) {
+                      // Pas d'adresse exploitable : fallback texte brut
                       return (
-                        <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #aaa)', margin: '6px 0' }}>
-                          {a.line1 && <span>{t({id:'panel.reader.address'})}: {a.line1}</span>}
-                          {a.unit && <span> · {t({id:'panel.reader.unit'})}: {a.unit}</span>}
-                          {a.postal_code && <span> · {t({id:'panel.reader.postalCode'})}: {a.postal_code}</span>}
-                          {a.district && <span> · {t({id:'panel.reader.district'})}: {a.district}</span>}
-                          {a.city && <span> · {t({id:'panel.reader.city'})}: {a.city}</span>}
-                          {a.state_region && <span> · {t({id:'panel.reader.state'})}: {a.state_region}</span>}
-                          {a.country && <span> · {t({id:'panel.reader.country'})}: {a.country}</span>}
-                        </div>
+                        <p style={{ fontSize: '.82rem', color: 'var(--brand-muted, #aaa)', margin: '6px 0', whiteSpace: 'pre-line' }}>
+                          {String(readerProfile.address).replace(/\\n/g, '\n')}
+                        </p>
                       );
                     }
-                    // Fallback: plain text address
+                    // Affichage structuré : pays et état affichés dans la locale active
+                    const countryDisplay = a.country ? getCountryName(a.country, locale) : '';
                     return (
-                      <p style={{ fontSize: '.82rem', color: 'var(--brand-muted, #aaa)', margin: '6px 0', whiteSpace: 'pre-line' }}>
-                        {String(readerProfile.address).replace(/\\n/g, '\n')}
-                      </p>
+                      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #aaa)', margin: '6px 0' }}>
+                        {a.line1 && <span>{t({id:'address.line1'})}: {a.line1}</span>}
+                        {a.line2 && <span> · {t({id:'address.line2'})}: {a.line2}</span>}
+                        {a.unit && <span> · {t({id:'address.unit'})}: {a.unit}</span>}
+                        {a.postal_code && <span> · {t({id:'address.postalCode.generic'})}: {a.postal_code}</span>}
+                        {a.district && <span> · {t({id:'address.district'})}: {a.district}</span>}
+                        {a.city && <span> · {t({id:'address.city'})}: {a.city}</span>}
+                        {a.state_region && <span> · {t({id:'address.state.generic'})}: {a.state_region}</span>}
+                        {countryDisplay && <span> · {t({id:'address.country'})}: {countryDisplay}</span>}
+                      </div>
                     );
                   })()}
 
@@ -945,7 +953,10 @@ export default function PanelPage() {
                         <input type="email" className="ab-painel-input" value={readerProfile.email || ''} onChange={e => setReaderProfile(p => ({...p, email: e.target.value}))} />
                       </label>
                       <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.phone'})}
-                        <input type="tel" className="ab-painel-input" value={readerProfile.phone || ''} onChange={e => setReaderProfile(p => ({...p, phone: e.target.value}))} />
+                        <PhoneInput
+                          value={readerProfile.phone || ''}
+                          onChange={(v) => setReaderProfile(p => ({...p, phone: v || ''}))}
+                        />
                       </label>
                       <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.gender'})}
                         <select className="ab-painel-input" value={readerProfile.gender || ''} onChange={e => setReaderProfile(p => ({...p, gender: e.target.value}))}>
@@ -958,38 +969,52 @@ export default function PanelPage() {
                       </label>
                     </div>
 
-                    {/* ── Address fields ── */}
-                    <h4 style={{ margin: '12px 0 6px', fontSize: '.88rem', fontWeight: 600 }}>{t({id:'panel.reader.addressField'})}</h4>
+                    {/* ── Address fields ── Uses shared CountrySelect/StateSelect components.
+                        Format de stockage : texte multi-ligne avec [XX] (cf. addressFormat.js).
+                        Le state local garde le texte ; on parse/format à chaque rendu/sauvegarde. */}
+                    <h4 style={{ margin: '12px 0 6px', fontSize: '.88rem', fontWeight: 600 }}>{t({id:'address.title'})}</h4>
                     {(() => {
-                      let addr = {};
-                      try { addr = typeof readerProfile.address === 'object' && readerProfile.address ? readerProfile.address : JSON.parse(readerProfile.address || '{}'); } catch { addr = { line1: readerProfile.address || '' }; }
-                      const setAddr = (field, val) => setReaderProfile(p => {
-                        let cur = {};
-                        try { cur = typeof p.address === 'object' && p.address ? p.address : JSON.parse(p.address || '{}'); } catch { cur = { line1: p.address || '' }; }
-                        return {...p, address: JSON.stringify({...cur, [field]: val})};
+                      const addr = parseAddressText(readerProfile.address);
+                      const meta = getCountryMetadata(addr.country);
+                      const setAddrField = (field, val) => setReaderProfile(p => {
+                        const cur = parseAddressText(p.address);
+                        const updated = { ...cur, [field]: val };
+                        // Reset state si le pays change (le code ISO 3166-2 deviendrait incohérent)
+                        if (field === 'country' && val !== cur.country) updated.state_region = '';
+                        return { ...p, address: formatAddressText(updated, locale) };
                       });
                       return (
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                          <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:'panel.reader.addressLine1'})}
-                            <input type="text" className="ab-painel-input" value={addr.line1 || ''} onChange={e => setAddr('line1', e.target.value)} />
+                          <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:'address.country'})}
+                            <CountrySelect
+                              value={addr.country}
+                              onChange={(v) => setAddrField('country', v)}
+                            />
                           </label>
-                          <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.addressUnit'})}
-                            <input type="text" className="ab-painel-input" value={addr.unit || ''} onChange={e => setAddr('unit', e.target.value)} />
+                          <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:'address.line1'})}
+                            <input type="text" className="ab-painel-input" value={addr.line1 || ''} onChange={e => setAddrField('line1', e.target.value)} placeholder={t({id:'address.line1.placeholder'})} />
                           </label>
-                          <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.addressPostal'})}
-                            <input type="text" className="ab-painel-input" value={addr.postal_code || ''} onChange={e => setAddr('postal_code', e.target.value)} />
+                          <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:'address.line2'})}
+                            <input type="text" className="ab-painel-input" value={addr.line2 || ''} onChange={e => setAddrField('line2', e.target.value)} placeholder={t({id:'address.line2.placeholder'})} />
                           </label>
-                          <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.addressDistrict'})}
-                            <input type="text" className="ab-painel-input" value={addr.district || ''} onChange={e => setAddr('district', e.target.value)} />
+                          <label style={{ fontSize: '.82rem' }}>{t({id:'address.unit'})}
+                            <input type="text" className="ab-painel-input" value={addr.unit || ''} onChange={e => setAddrField('unit', e.target.value)} placeholder={t({id:'address.unit.placeholder'})} />
                           </label>
-                          <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.addressCity'})}
-                            <input type="text" className="ab-painel-input" value={addr.city || ''} onChange={e => setAddr('city', e.target.value)} />
+                          <label style={{ fontSize: '.82rem' }}>{t({id:meta.postalCodeLabel})}
+                            <input type="text" className="ab-painel-input" value={addr.postal_code || ''} onChange={e => setAddrField('postal_code', e.target.value)} />
                           </label>
-                          <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.addressState'})}
-                            <input type="text" className="ab-painel-input" value={addr.state_region || ''} onChange={e => setAddr('state_region', e.target.value)} />
+                          <label style={{ fontSize: '.82rem' }}>{t({id:'address.district'})}
+                            <input type="text" className="ab-painel-input" value={addr.district || ''} onChange={e => setAddrField('district', e.target.value)} />
                           </label>
-                          <label style={{ fontSize: '.82rem' }}>{t({id:'panel.reader.addressCountry'})}
-                            <input type="text" className="ab-painel-input" value={addr.country || ''} onChange={e => setAddr('country', e.target.value)} />
+                          <label style={{ fontSize: '.82rem' }}>{t({id:'address.city'})}
+                            <input type="text" className="ab-painel-input" value={addr.city || ''} onChange={e => setAddrField('city', e.target.value)} />
+                          </label>
+                          <label style={{ fontSize: '.82rem', gridColumn: 'span 2' }}>{t({id:meta.stateLabel})}
+                            <StateSelect
+                              countryCode={addr.country}
+                              value={addr.state_region || ''}
+                              onChange={(v) => setAddrField('state_region', v)}
+                            />
                           </label>
                         </div>
                       );
@@ -997,11 +1022,15 @@ export default function PanelPage() {
 
                     <Button style={{ marginTop: 8 }} onClick={async () => {
                       try {
+                        // L'adresse est déjà au format texte multi-ligne dans readerProfile.address
+                        // (formatée par setAddrField à chaque modification). On l'envoie tel quel.
                         const updateData = {
                           first_name: readerProfile.first_name, last_name: readerProfile.last_name,
                           phone: readerProfile.phone, gender: readerProfile.gender,
                           email: readerProfile.email,
-                          address: typeof readerProfile.address === 'string' ? readerProfile.address : JSON.stringify(readerProfile.address),
+                          address: typeof readerProfile.address === 'string'
+                            ? readerProfile.address
+                            : formatAddressText(readerProfile.address, locale),
                         };
                         const { error } = await supabase.from('profiles').update(updateData).eq('id', readerProfile.id);
                         if (error) throw error;

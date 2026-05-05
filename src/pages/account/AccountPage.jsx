@@ -9,8 +9,8 @@ import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
 import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput from '@/components/forms/PhoneInput';
-import { hasStatesList, getCountryMetadata, STATES_BY_COUNTRY } from '@/components/forms/countryData';
-import { resolveToIsoCode, getCountryNames } from '@/lib/countries';
+import { getCountryMetadata } from '@/components/forms/countryData';
+import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import DataExportButton from '@/components/account/DataExportButton';
 import './AccountPage.css';
 
@@ -120,47 +120,14 @@ export default function AccountPage() {
     setMsg('');
     try {
       const addr = typeof profile.address === 'object' ? (profile.address || {}) : parseAddressText(profile.address);
-
-      // Format texte multi-ligne avec codes ISO entre crochets pour pays et état.
-      // Compatible rétro avec l'ancien format (le parsing accepte les deux).
-      // Le nom du pays est stocké dans la locale active de l'utilisateur·rice.
-      const countryNames = addr.country ? getCountryNames(locale) : null;
-      const countryName = countryNames?.[addr.country] || addr.country || '';
-      const countryLine = addr.country
-        ? `País: ${countryName} [${addr.country}]`
-        : '';
-
-      // Pour l'état : si pays a une liste fermée, state_region est un code ISO 3166-2.
-      // Sinon, c'est du texte libre (pas de crochets).
-      let stateLine = '';
-      if (addr.state_region) {
-        if (addr.country && hasStatesList(addr.country)) {
-          const list = STATES_BY_COUNTRY[addr.country];
-          const found = list.find(s => s.code === addr.state_region);
-          const stateName = found?.name || addr.state_region;
-          stateLine = `Estado/Região: ${stateName} [${addr.state_region}]`;
-        } else {
-          stateLine = `Estado/Região: ${addr.state_region}`;
-        }
-      }
-
-      const addrParts = [
-        addr.line1 ? `Logradouro: ${addr.line1}` : '',
-        addr.line2 ? `Complemento: ${addr.line2}` : '',
-        addr.unit ? `Casa/Apto: ${addr.unit}` : '',
-        addr.postal_code ? `CEP/Code postal: ${addr.postal_code}` : '',
-        addr.district ? `Bairro/Quartier: ${addr.district}` : '',
-        addr.city ? `Cidade/Ville: ${addr.city}` : '',
-        stateLine,
-        countryLine,
-      ].filter(Boolean).join('\n');
+      const addrText = formatAddressText(addr, locale);
 
       const { error } = await supabase.from('profiles').update({
         first_name: profile.first_name,
         last_name: profile.last_name,
         phone: profile.phone,
         gender: profile.gender,
-        address: addrParts,
+        address: addrText,
       }).eq('id', user.id);
       if (error) throw error;
       setMsg(t({ id: 'account.reserve.dataSaved' }));
@@ -1050,118 +1017,6 @@ function ReservationCard({ r, onCancel, onPickupReply }) {
       </div>
     </div>
   );
-}
-
-/**
- * Parse une adresse stockée et la convertit en objet structuré.
- *
- * Format de stockage supporté (texte multi-ligne avec préfixes "Clé: Valeur") :
- *
- *   Logradouro: Rua das Flores, 123
- *   Complemento: Apto 5B
- *   Casa/Apto: 5B
- *   CEP/Code postal: 04567-890
- *   Bairro/Quartier: Vila Madalena
- *   Cidade/Ville: São Paulo
- *   Estado/Região: São Paulo [SP]      ← code ISO 3166-2 entre crochets (nouveau)
- *   País: Brasil [BR]                   ← code ISO 3166-1 alpha-2 (nouveau)
- *
- * Le format avec crochets [XX] est nouveau ; le format legacy sans crochets
- * reste supporté via résolution best-effort par nom (resolveToIsoCode et
- * recherche dans STATES_BY_COUNTRY).
- *
- * Renvoie un objet avec :
- *   - country : code ISO 3166-1 alpha-2 (ex: 'BR') ou '' si non résolu
- *   - state_region : code ISO 3166-2 (ex: 'SP') si pays a une liste fermée,
- *                    sinon nom libre, sinon ''
- *   - les autres champs en texte libre
- */
-function parseAddressText(raw) {
-  const result = { line1: '', line2: '', unit: '', postal_code: '', district: '', city: '', state_region: '', country: '' };
-  if (!raw) return result;
-
-  // Si c'est déjà un objet (ancien format JSON)
-  if (typeof raw === 'object') {
-    return {
-      line1: raw.line1 || '',
-      line2: raw.line2 || '',
-      unit: raw.unit || '',
-      postal_code: raw.cep || raw.postal_code || '',
-      district: raw.bairro || raw.district || '',
-      city: raw.city || raw.cidade || '',
-      state_region: raw.state || raw.state_region || raw.estado || '',
-      country: raw.country || raw.pais || '',
-    };
-  }
-
-  // Texte libre — parser les lignes "Clé: Valeur"
-  const text = String(raw);
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-  const freeLines = [];
-
-  // Helper : extrait "Valeur" et "ISO_CODE" depuis "São Paulo [SP]" ou "Brasil [BR]".
-  // Si pas de crochets, code est ''.
-  const extractIsoCode = (str) => {
-    const m = str.match(/^(.+?)\s*\[([A-Z0-9]{1,5})\]\s*$/);
-    if (m) return { value: m[1].trim(), code: m[2] };
-    return { value: str.trim(), code: '' };
-  };
-
-  let countryRaw = '';
-  let stateRaw = '';
-
-  for (const line of lines) {
-    const m = line.match(/^(Logradouro|Complemento|Casa\/Apto|CEP|Code postal|CEP\/Code postal|Bairro|Quartier|Bairro\/Quartier|Cidade|Ville|Cidade\/Ville|Estado|Região|Estado\/Região|País)\s*:\s*(.+)$/i);
-    if (m) {
-      const key = m[1].toLowerCase();
-      const val = m[2].trim();
-      if (key.includes('logradouro')) result.line1 = val;
-      else if (key.includes('complemento')) result.line2 = val;
-      else if (key.includes('casa') || key.includes('apto')) result.unit = val;
-      else if (key.includes('cep') || key.includes('postal')) result.postal_code = val;
-      else if (key.includes('bairro') || key.includes('quartier')) result.district = val;
-      else if (key.includes('cidade') || key.includes('ville')) result.city = val;
-      else if (key.includes('estado') || key.includes('região') || key.includes('region')) stateRaw = val;
-      else if (key.includes('país') || key.includes('pais')) countryRaw = val;
-    } else {
-      freeLines.push(line);
-    }
-  }
-
-  // Lignes libres → line1/line2 si pas déjà capturées par préfixes (compat. ancien format)
-  if (!result.line1 && freeLines.length >= 1) result.line1 = freeLines[0];
-  if (!result.line2 && freeLines.length >= 2) result.line2 = freeLines.slice(1).join(', ');
-
-  // Résolution du pays : code ISO entre crochets prioritaire, sinon résolution par nom
-  if (countryRaw) {
-    const { value, code } = extractIsoCode(countryRaw);
-    if (code) {
-      // Crochets présents : on stocke le code direct
-      result.country = code;
-    } else {
-      // Legacy : tente de résoudre le nom textuel en code ISO via i18n-iso-countries
-      result.country = resolveToIsoCode(value || countryRaw) || '';
-    }
-  }
-
-  // Résolution de l'état : code entre crochets prioritaire, sinon recherche par nom
-  if (stateRaw) {
-    const { value, code } = extractIsoCode(stateRaw);
-    if (code) {
-      // Crochets présents : on stocke le code direct (sera matché par StateSelect)
-      result.state_region = code;
-    } else if (result.country && hasStatesList(result.country)) {
-      // Legacy : tente de retrouver le code ISO 3166-2 par nom
-      const list = STATES_BY_COUNTRY[result.country];
-      const found = list.find(s => s.name.toLowerCase() === value.toLowerCase());
-      result.state_region = found ? found.code : value; // si non résolu, garde le nom comme texte libre
-    } else {
-      // Pays sans liste fermée : on garde le nom tel quel comme texte libre
-      result.state_region = value;
-    }
-  }
-
-  return result;
 }
 
 // ═══════════════════════════════════════════════════════════
