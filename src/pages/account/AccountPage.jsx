@@ -6,13 +6,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
+import CountrySelect from '@/components/forms/CountrySelect';
+import StateSelect from '@/components/forms/StateSelect';
+import { hasStatesList, getCountryMetadata, STATES_BY_COUNTRY } from '@/components/forms/countryData';
+import { resolveToIsoCode, getCountryNames } from '@/lib/countries';
 import DataExportButton from '@/components/account/DataExportButton';
 import './AccountPage.css';
 
 export default function AccountPage() {
   const { user, loading: authLoading } = useAuth();
   const { libraryName, librarySlug, libraryId } = useLibrary();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState('');
@@ -115,16 +119,39 @@ export default function AccountPage() {
     setMsg('');
     try {
       const addr = typeof profile.address === 'object' ? (profile.address || {}) : parseAddressText(profile.address);
-      // Formater l'adresse en texte lisible (compatible avec le stockage existant)
+
+      // Format texte multi-ligne avec codes ISO entre crochets pour pays et état.
+      // Compatible rétro avec l'ancien format (le parsing accepte les deux).
+      // Le nom du pays est stocké dans la locale active de l'utilisateur·rice.
+      const countryNames = addr.country ? getCountryNames(locale) : null;
+      const countryName = countryNames?.[addr.country] || addr.country || '';
+      const countryLine = addr.country
+        ? `País: ${countryName} [${addr.country}]`
+        : '';
+
+      // Pour l'état : si pays a une liste fermée, state_region est un code ISO 3166-2.
+      // Sinon, c'est du texte libre (pas de crochets).
+      let stateLine = '';
+      if (addr.state_region) {
+        if (addr.country && hasStatesList(addr.country)) {
+          const list = STATES_BY_COUNTRY[addr.country];
+          const found = list.find(s => s.code === addr.state_region);
+          const stateName = found?.name || addr.state_region;
+          stateLine = `Estado/Região: ${stateName} [${addr.state_region}]`;
+        } else {
+          stateLine = `Estado/Região: ${addr.state_region}`;
+        }
+      }
+
       const addrParts = [
-        addr.line1,
-        addr.line2,
+        addr.line1 ? `Logradouro: ${addr.line1}` : '',
+        addr.line2 ? `Complemento: ${addr.line2}` : '',
         addr.unit ? `Casa/Apto: ${addr.unit}` : '',
         addr.postal_code ? `CEP/Code postal: ${addr.postal_code}` : '',
         addr.district ? `Bairro/Quartier: ${addr.district}` : '',
         addr.city ? `Cidade/Ville: ${addr.city}` : '',
-        addr.state_region ? `Estado/Região: ${addr.state_region}` : '',
-        addr.country ? `País: ${addr.country}` : '',
+        stateLine,
+        countryLine,
       ].filter(Boolean).join('\n');
 
       const { error } = await supabase.from('profiles').update({
@@ -481,7 +508,7 @@ export default function AccountPage() {
                 </label>
 
                 <hr className="ab-conta-hr" />
-                <h3 style={{ fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'account.profile.address' })}</h3>
+                <h3 style={{ fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'address.title' })}</h3>
                 <AddressForm addr={addr} onChange={updateAddress} />
 
                 <div className="ab-conta-form-actions">
@@ -1019,6 +1046,30 @@ function ReservationCard({ r, onCancel, onPickupReply }) {
   );
 }
 
+/**
+ * Parse une adresse stockée et la convertit en objet structuré.
+ *
+ * Format de stockage supporté (texte multi-ligne avec préfixes "Clé: Valeur") :
+ *
+ *   Logradouro: Rua das Flores, 123
+ *   Complemento: Apto 5B
+ *   Casa/Apto: 5B
+ *   CEP/Code postal: 04567-890
+ *   Bairro/Quartier: Vila Madalena
+ *   Cidade/Ville: São Paulo
+ *   Estado/Região: São Paulo [SP]      ← code ISO 3166-2 entre crochets (nouveau)
+ *   País: Brasil [BR]                   ← code ISO 3166-1 alpha-2 (nouveau)
+ *
+ * Le format avec crochets [XX] est nouveau ; le format legacy sans crochets
+ * reste supporté via résolution best-effort par nom (resolveToIsoCode et
+ * recherche dans STATES_BY_COUNTRY).
+ *
+ * Renvoie un objet avec :
+ *   - country : code ISO 3166-1 alpha-2 (ex: 'BR') ou '' si non résolu
+ *   - state_region : code ISO 3166-2 (ex: 'SP') si pays a une liste fermée,
+ *                    sinon nom libre, sinon ''
+ *   - les autres champs en texte libre
+ */
 function parseAddressText(raw) {
   const result = { line1: '', line2: '', unit: '', postal_code: '', district: '', city: '', state_region: '', country: '' };
   if (!raw) return result;
@@ -1042,134 +1093,159 @@ function parseAddressText(raw) {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const freeLines = [];
 
+  // Helper : extrait "Valeur" et "ISO_CODE" depuis "São Paulo [SP]" ou "Brasil [BR]".
+  // Si pas de crochets, code est ''.
+  const extractIsoCode = (str) => {
+    const m = str.match(/^(.+?)\s*\[([A-Z0-9]{1,5})\]\s*$/);
+    if (m) return { value: m[1].trim(), code: m[2] };
+    return { value: str.trim(), code: '' };
+  };
+
+  let countryRaw = '';
+  let stateRaw = '';
+
   for (const line of lines) {
-    const m = line.match(/^(Casa\/Apto|CEP|Code postal|CEP\/Code postal|Bairro|Quartier|Bairro\/Quartier|Cidade|Ville|Cidade\/Ville|Estado|Região|Estado\/Região|País)\s*:\s*(.+)$/i);
+    const m = line.match(/^(Logradouro|Complemento|Casa\/Apto|CEP|Code postal|CEP\/Code postal|Bairro|Quartier|Bairro\/Quartier|Cidade|Ville|Cidade\/Ville|Estado|Região|Estado\/Região|País)\s*:\s*(.+)$/i);
     if (m) {
       const key = m[1].toLowerCase();
       const val = m[2].trim();
-      if (key.includes('casa') || key.includes('apto')) result.unit = val;
+      if (key.includes('logradouro')) result.line1 = val;
+      else if (key.includes('complemento')) result.line2 = val;
+      else if (key.includes('casa') || key.includes('apto')) result.unit = val;
       else if (key.includes('cep') || key.includes('postal')) result.postal_code = val;
       else if (key.includes('bairro') || key.includes('quartier')) result.district = val;
       else if (key.includes('cidade') || key.includes('ville')) result.city = val;
-      else if (key.includes('estado') || key.includes('região') || key.includes('region')) result.state_region = val;
-      else if (key.includes('país') || key.includes('pais')) result.country = val;
+      else if (key.includes('estado') || key.includes('região') || key.includes('region')) stateRaw = val;
+      else if (key.includes('país') || key.includes('pais')) countryRaw = val;
     } else {
       freeLines.push(line);
     }
   }
 
-  if (freeLines.length >= 1) result.line1 = freeLines[0];
-  if (freeLines.length >= 2) result.line2 = freeLines.slice(1).join(', ');
+  // Lignes libres → line1/line2 si pas déjà capturées par préfixes (compat. ancien format)
+  if (!result.line1 && freeLines.length >= 1) result.line1 = freeLines[0];
+  if (!result.line2 && freeLines.length >= 2) result.line2 = freeLines.slice(1).join(', ');
+
+  // Résolution du pays : code ISO entre crochets prioritaire, sinon résolution par nom
+  if (countryRaw) {
+    const { value, code } = extractIsoCode(countryRaw);
+    if (code) {
+      // Crochets présents : on stocke le code direct
+      result.country = code;
+    } else {
+      // Legacy : tente de résoudre le nom textuel en code ISO via i18n-iso-countries
+      result.country = resolveToIsoCode(value || countryRaw) || '';
+    }
+  }
+
+  // Résolution de l'état : code entre crochets prioritaire, sinon recherche par nom
+  if (stateRaw) {
+    const { value, code } = extractIsoCode(stateRaw);
+    if (code) {
+      // Crochets présents : on stocke le code direct (sera matché par StateSelect)
+      result.state_region = code;
+    } else if (result.country && hasStatesList(result.country)) {
+      // Legacy : tente de retrouver le code ISO 3166-2 par nom
+      const list = STATES_BY_COUNTRY[result.country];
+      const found = list.find(s => s.name.toLowerCase() === value.toLowerCase());
+      result.state_region = found ? found.code : value; // si non résolu, garde le nom comme texte libre
+    } else {
+      // Pays sans liste fermée : on garde le nom tel quel comme texte libre
+      result.state_region = value;
+    }
+  }
+
   return result;
 }
 
 // ═══════════════════════════════════════════════════════════
 // Formulaire d'adresse international
+// ───────────────────────────────────────────────────────────
+// Utilise les composants partagés CountrySelect / StateSelect
+// du dossier @/components/forms, qui gèrent :
+//   - liste complète des pays via i18n-iso-countries (localisée)
+//   - listes fermées d'états/provinces pour BR/FR/ES/IT/DE/AR/MX/CH
+//   - labels via getCountryMetadata (clés i18n par pays)
+//
+// Les valeurs internes sont des codes ISO :
+//   - addr.country : ISO 3166-1 alpha-2 (ex: 'BR', 'FR')
+//   - addr.state_region : ISO 3166-2 si pays a une liste fermée,
+//                         sinon texte libre
 // ═══════════════════════════════════════════════════════════
 
-const COUNTRY_CONFIGS = {
-  Brasil: {
-    postal: { label: 'CEP', placeholder: '00000-000' },
-    district: { label: 'Bairro', show: true },
-    region: { label: 'Estado', type: 'select', options: ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO'] },
-    unit: { label: 'Casa/Apto nº', placeholder: 'Ex.: Casa 2 / Ap. 301' },
-  },
-  França: {
-    postal: { label: 'Code postal', placeholder: '75001' },
-    district: { label: 'Quartier', show: false },
-    region: { label: 'Département / Région', type: 'text' },
-    unit: { label: 'Apt / Bât / Étage', placeholder: 'Ex.: Apt. 3, Bât. B' },
-  },
-  Itália: {
-    postal: { label: 'CAP', placeholder: '00100' },
-    district: { label: 'Quartiere', show: false },
-    region: { label: 'Provincia / Regione', type: 'text' },
-    unit: { label: 'Int. / Scala', placeholder: 'Ex.: Int. 5, Scala B' },
-  },
-  Espanha: {
-    postal: { label: 'Código postal', placeholder: '28001' },
-    district: { label: 'Barrio', show: false },
-    region: { label: 'Provincia / Comunidad', type: 'text' },
-    unit: { label: 'Piso / Puerta', placeholder: 'Ex.: 3º 2ª' },
-  },
-  Portugal: {
-    postal: { label: 'Código postal', placeholder: '1000-001' },
-    district: { label: 'Freguesia', show: true },
-    region: { label: 'Distrito', type: 'text' },
-    unit: { label: 'Andar / Fração', placeholder: 'Ex.: 2º Esq.' },
-  },
-  Argentina: {
-    postal: { label: 'Código postal', placeholder: 'C1000' },
-    district: { label: 'Barrio', show: true },
-    region: { label: 'Provincia', type: 'text' },
-    unit: { label: 'Piso / Depto', placeholder: 'Ex.: 5° B' },
-  },
-  __default: {
-    postal: { label: 'Código postal / Zip', placeholder: '' },
-    district: { label: 'Bairro / Distrito / District', show: false },
-    region: { label: 'Estado / Região / State', type: 'text' },
-    unit: { label: 'Apt / Unidade / Unit', placeholder: '' },
-  },
-};
-
-const COUNTRIES = [
-  'Argentina', 'Bolívia', 'Brasil', 'Chile', 'Colômbia', 'Equador', 'Espanha',
-  'Estados Unidos', 'França', 'Grécia', 'Itália', 'México', 'Paraguai', 'Peru',
-  'Portugal', 'Reino Unido', 'Uruguai', 'Venezuela',
-];
-
 function AddressForm({ addr, onChange }) {
+  const { formatMessage: t } = useIntl();
   const country = addr.country || '';
-  const cfg = COUNTRY_CONFIGS[country] || COUNTRY_CONFIGS.__default;
+  const meta = getCountryMetadata(country);
 
   return (
     <>
-      <label>País / Country
-        <select value={country} onChange={e => onChange('country', e.target.value)}>
-          <option value="">— Selecionar país —</option>
-          {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-          <option value="__outro">Outro / Other</option>
-        </select>
+      <label>{t({ id: 'address.country' })}
+        <CountrySelect
+          value={country}
+          onChange={(v) => {
+            // Reset de l'état si le pays change (sinon code ISO 3166-2 incohérent)
+            onChange('country', v);
+            if (v !== country) onChange('state_region', '');
+          }}
+        />
       </label>
-      {country === '__outro' && (
-        <label>Nome do país
-          <input type="text" value={addr.country_other || ''} onChange={e => onChange('country', e.target.value)} placeholder="Ex.: Alemanha, Turquia, Japão…" />
-        </label>
-      )}
 
-      <label>Endereço / Adresse / Address
-        <input type="text" value={addr.line1 || ''} onChange={e => onChange('line1', e.target.value)} placeholder="Rua, número / Rue, numéro / Street, number" />
+      <label>{t({ id: 'address.line1' })}
+        <input
+          type="text"
+          value={addr.line1 || ''}
+          onChange={e => onChange('line1', e.target.value)}
+          placeholder={t({ id: 'address.line1.placeholder' })}
+        />
       </label>
-      <label>Complemento / Complément / Line 2
-        <input type="text" value={addr.line2 || ''} onChange={e => onChange('line2', e.target.value)} placeholder="Edifício, bloco, referência…" />
+      <label>{t({ id: 'address.line2' })}
+        <input
+          type="text"
+          value={addr.line2 || ''}
+          onChange={e => onChange('line2', e.target.value)}
+          placeholder={t({ id: 'address.line2.placeholder' })}
+        />
       </label>
 
       <div className="ab-conta-grid3">
-        <label>{cfg.unit.label}
-          <input type="text" value={addr.unit || ''} onChange={e => onChange('unit', e.target.value)} placeholder={cfg.unit.placeholder} />
+        <label>{t({ id: 'address.unit' })}
+          <input
+            type="text"
+            value={addr.unit || ''}
+            onChange={e => onChange('unit', e.target.value)}
+            placeholder={t({ id: 'address.unit.placeholder' })}
+          />
         </label>
-        <label>{cfg.postal.label}
-          <input type="text" value={addr.postal_code || ''} onChange={e => onChange('postal_code', e.target.value)} placeholder={cfg.postal.placeholder} />
+        <label>{t({ id: meta.postalCodeLabel })}
+          <input
+            type="text"
+            value={addr.postal_code || ''}
+            onChange={e => onChange('postal_code', e.target.value)}
+          />
         </label>
-        {cfg.district.show !== false && (
-          <label>{cfg.district.label}
-            <input type="text" value={addr.district || ''} onChange={e => onChange('district', e.target.value)} />
-          </label>
-        )}
-        <label>Cidade / Ville / City
-          <input type="text" value={addr.city || ''} onChange={e => onChange('city', e.target.value)} />
+        <label>{t({ id: 'address.district' })}
+          <input
+            type="text"
+            value={addr.district || ''}
+            onChange={e => onChange('district', e.target.value)}
+          />
+        </label>
+        <label>{t({ id: 'address.city' })}
+          <input
+            type="text"
+            value={addr.city || ''}
+            onChange={e => onChange('city', e.target.value)}
+          />
         </label>
       </div>
 
-      <label>{cfg.region.label}
-        {cfg.region.type === 'select' ? (
-          <select value={addr.state_region || ''} onChange={e => onChange('state_region', e.target.value)}>
-            <option value="">—</option>
-            {cfg.region.options.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-        ) : (
-          <input type="text" value={addr.state_region || ''} onChange={e => onChange('state_region', e.target.value)} />
-        )}
+      <label>{t({ id: meta.stateLabel })}
+        <StateSelect
+          countryCode={country}
+          value={addr.state_region || ''}
+          onChange={(v) => onChange('state_region', v)}
+        />
       </label>
     </>
   );
