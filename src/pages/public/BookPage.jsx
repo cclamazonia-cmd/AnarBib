@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -185,9 +186,7 @@ export default function BookPage() {
     })();
   }, [id, user?.id]);
 
-  useEffect(() => {
-    if (book?.titulo) document.title = `${book.titulo} — AnarBib`;
-  }, [book]);
+  useDocumentTitle(book?.titulo);
 
   async function handleReserve() {
     if (!user || !sessionCtx?.session_holding_id) return;

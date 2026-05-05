@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -16,6 +17,7 @@ export default function RedePage() {
   const { user } = useAuth();
   const { role } = useLibrary();
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.network' }));
 
   const REQ_STATUS = useMemo(() => ({
     pendente: t({id:'request.status.pendente'}), em_analise: t({id:'request.status.em_analise'}),

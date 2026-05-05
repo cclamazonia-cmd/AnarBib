@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -31,6 +32,7 @@ export default function BibliotecaPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role } = useLibrary();
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.biblioteca' }));
   const roleLoaded = role !== null && role !== undefined;
   const isCoord = role === 'coordenador' || role === 'administrador';
   const isLibrarian = role === 'librarian' || isCoord;

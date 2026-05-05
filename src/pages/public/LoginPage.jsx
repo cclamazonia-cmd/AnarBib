@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -11,6 +12,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 export default function LoginPage() {
   const navigate = useNavigate();
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.login' }));
   const [view, setView] = useState('login');
   const [showPw, setShowPw] = useState(false);
   const [loginId, setLoginId] = useState('');

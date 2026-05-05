@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIntl } from 'react-intl';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -24,6 +25,7 @@ export default function CatalogacaoPage() {
   const { user } = useAuth();
   const { config } = useLibrary();
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.cataloging' }));
 
   const TABS = [
     { id: 'booksPanel',     label: t({ id: 'catalogacao.tab.documento' }) },

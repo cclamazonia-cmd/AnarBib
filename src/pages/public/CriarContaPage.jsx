@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -19,6 +20,7 @@ const DEFAULT_COUNTRY = 'BR';
 export default function CriarContaPage() {
   const navigate = useNavigate();
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.signup' }));
   const GENDERS = [
     { value: '',            label: t({id:'auth.create.genderNone'}) },
     { value: 'feminino',    label: t({id:'auth.create.genderF'}) },

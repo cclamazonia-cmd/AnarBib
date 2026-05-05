@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
 
@@ -22,6 +24,8 @@ const FIRST_MANAGER_OPTIONS = [
 export default function SolicitarBibliotecaPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.libraryRequest' }));
   const [form, setForm] = useState({
     libraryName: '', libraryShortName: '', city: '', state: '', country: 'Brasil',
     libraryEmail: '', libraryPhone: '', libraryAddress: '',

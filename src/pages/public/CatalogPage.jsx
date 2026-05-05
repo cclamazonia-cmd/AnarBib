@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -182,6 +183,7 @@ function saveFilters(filters) {
 
 export default function CatalogPage() {
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.catalog' }));
   const { user } = useAuth();
   const { libraryName, libraryId } = useLibrary();
   const navigate = useNavigate();

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -86,10 +87,11 @@ export default function AuthorPage() {
     })();
   }, [id]);
 
-  useEffect(() => {
-    if (author) document.title = `${author.preferred_name || author.sort_name || t({ id: 'author.title' })} — AnarBib`;
-    else document.title = 'AnarBib — ' + t({ id: 'author.title' });
-  }, [author]);
+  useDocumentTitle(
+    author
+      ? (author.preferred_name || author.sort_name || t({ id: 'author.title' }))
+      : t({ id: 'author.title' })
+  );
 
   if (loading) {
     return <PageShell><Topbar /><div style={{ textAlign: 'center', padding: 60 }}><Spinner size={32} /></div></PageShell>;

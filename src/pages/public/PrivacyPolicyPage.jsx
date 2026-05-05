@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -61,6 +62,7 @@ const updatedStyle = {
 // ── Page ─────────────────────────────────────────────────
 export default function PrivacyPolicyPage() {
   const { formatMessage: t, locale } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.privacy' }));
   const { slug: urlSlug } = useParams(); // /privacidade/:slug
   const { libraries: userMemberships } = useLibrary();
 

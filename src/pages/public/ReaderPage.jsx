@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -282,9 +283,7 @@ export default function ReaderPage() {
     }
   }
 
-  useEffect(() => {
-    document.title = bookTitle ? t({id:'reader.pageTitle'},{title:bookTitle}) : t({id:'reader.title'}) + ' — AnarBib';
-  }, [bookTitle]);
+  useDocumentTitle(bookTitle || t({ id: 'reader.title' }));
 
   const wm = user?.email ? `AnarBib · ${libraryName} · ${user.email}` : `AnarBib · ${libraryName}`;
 

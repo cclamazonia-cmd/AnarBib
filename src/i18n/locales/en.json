@@ -1758,5 +1758,16 @@
   "task.status.concluida": "Completed",
   "task.status.em_andamento": "In progress",
   "task.status.pendente": "Pending",
-  "auth.captchaRequired": "Wait for the anti-bot check to complete, then try again."
+  "auth.captchaRequired": "Wait for the anti-bot check to complete, then try again.",
+  "pageTitle.account": "My account",
+  "pageTitle.panel": "Dashboard",
+  "pageTitle.biblioteca": "Library",
+  "pageTitle.catalog": "Catalog",
+  "pageTitle.cataloging": "Cataloging",
+  "pageTitle.imports": "Imports",
+  "pageTitle.login": "Sign in",
+  "pageTitle.signup": "Sign up",
+  "pageTitle.network": "Network",
+  "pageTitle.privacy": "Privacy",
+  "pageTitle.libraryRequest": "Request a library"
 }

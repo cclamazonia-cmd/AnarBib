@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -76,10 +77,7 @@ export default function ResourcePage() {
 
   useEffect(() => { loadResource(); }, [assetId, user]);
 
-  useEffect(() => {
-    const label = payload?.asset?.label || 'Recurso digital';
-    document.title = `${label} — AnarBib`;
-  }, [payload]);
+  useDocumentTitle(payload?.asset?.label || 'Recurso digital');
 
   const asset = payload?.asset || {};
   const accessUrl = payload?.access_url || '';

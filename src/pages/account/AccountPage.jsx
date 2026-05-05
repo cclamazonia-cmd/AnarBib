@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -18,6 +19,7 @@ export default function AccountPage() {
   const { user, loading: authLoading } = useAuth();
   const { libraryName, librarySlug, libraryId } = useLibrary();
   const { formatMessage: t, locale } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.account' }));
   const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState('');

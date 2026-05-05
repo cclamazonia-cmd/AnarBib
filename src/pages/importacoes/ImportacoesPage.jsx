@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -43,6 +44,7 @@ export default function ImportacoesPage() {
   const { user } = useAuth();
   const { role } = useLibrary();
   const { formatMessage: t } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.imports' }));
 
   const FORMAT_LABELS = useMemo(() => ({
     csv: 'CSV', tsv: 'TSV', txt: 'Text', ris: 'RIS', bibtex: 'BibTeX', marc21: 'MARC21', marcxml: 'MARCXML',

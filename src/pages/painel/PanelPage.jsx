@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -24,6 +25,7 @@ export default function PanelPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role } = useLibrary();
   const { formatMessage: t, locale } = useIntl();
+  useDocumentTitle(t({ id: 'pageTitle.panel' }));
   const roleLoaded = role !== null && role !== undefined;
   const isLibrarian = role === 'librarian' || role === 'coordenador' || role === 'administrador';
   const isCoordOrAdmin = role === 'coordenador' || role === 'administrador';
