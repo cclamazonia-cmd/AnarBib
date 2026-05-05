@@ -52,10 +52,20 @@ export default function CriarContaPage() {
 
         if (!libs?.length) return;
         const { data: commons } = await supabase.from('library_commons').select('library_id, logo_url, logo_file_key');
-        const { data: regs } = await supabase.from('library_regulation_documents').select('library_id').eq('is_active', true);
-        const regSet = new Set((regs || []).map(r => r.library_id));
+        const { data: regs } = await supabase.from('library_regulation_documents')
+          .select('library_id, storage_bucket, storage_path_public')
+          .eq('is_active', true)
+          .eq('doc_kind', 'regimento');
+        const SUPABASE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
+        const regimentoMap = {};
+        (regs || []).forEach(r => {
+          if (r.storage_path_public) {
+            const bucket = r.storage_bucket || 'library-regimentos-public';
+            regimentoMap[r.library_id] = `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${r.storage_path_public}`;
+          }
+        });
         const commonsMap = {}; (commons || []).forEach(c => { commonsMap[c.library_id] = c; });
-        setLibraries(libs.map(l => ({ ...l, logo_url: commonsMap[l.id]?.logo_url || null, logo_file_key: commonsMap[l.id]?.logo_file_key || null, has_regimento: regSet.has(l.id) })));
+        setLibraries(libs.map(l => ({ ...l, logo_url: commonsMap[l.id]?.logo_url || null, logo_file_key: commonsMap[l.id]?.logo_file_key || null, has_regimento: !!regimentoMap[l.id], regimento_url: regimentoMap[l.id] || null })));
       } catch {}
     })();
   }, []);
@@ -126,6 +136,7 @@ export default function CriarContaPage() {
         country: form.country,           // code ISO ('BR', 'FR', 'AR'…)
         country_code: form.country,      // alias explicite pour la nouvelle API
         consent_email: true,
+        consent_email_at: new Date().toISOString(),
         accept_rules: currentLib?.has_regimento ? form.acceptRules : true,
         library_slug: noLib ? '' : form.library_slug,
         library_name: currentLib?.name || '',
@@ -316,12 +327,30 @@ export default function CriarContaPage() {
 
           <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,.1)', margin: '20px 0' }} />
 
+          {/* Note RGPD : information préalable au consentement (art. 13 RGPD) */}
+          <div style={{ padding: '10px 14px', borderRadius: 8, background: 'rgba(180,83,9,.06)', border: '1px solid rgba(180,83,9,.18)', fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', marginBottom: 14, lineHeight: 1.5 }}>
+            {t({id:'auth.create.privacyNotice'})}{' '}
+            <Link to="/privacidade" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-accent, #c44)' }}>
+              {t({id:'auth.create.privacyNoticeLink'})}
+            </Link>
+            .
+          </div>
+
           {/* Acceptation du règlement (uniquement si la bibliothèque en a un) */}
           {currentLib?.has_regimento && (
-            <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 12, fontSize: '.85rem', cursor: 'pointer' }}>
-              <input type="checkbox" checked={form.acceptRules} onChange={e => set('acceptRules', e.target.checked)} style={{ marginTop: 3 }} />
-              <span>{t({id:'auth.create.acceptRules'})} {req}</span>
-            </label>
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: '.85rem', cursor: 'pointer' }}>
+                <input type="checkbox" checked={form.acceptRules} onChange={e => set('acceptRules', e.target.checked)} style={{ marginTop: 3 }} />
+                <span>{t({id:'auth.create.acceptRules'})} {req}</span>
+              </label>
+              {currentLib?.regimento_url && (
+                <div style={{ marginTop: 4, marginLeft: 24, fontSize: '.78rem' }}>
+                  <a href={currentLib.regimento_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-accent, #c44)' }}>
+                    {t({id:'auth.create.acceptRulesLink'})}
+                  </a>
+                </div>
+              )}
+            </div>
           )}
 
           {/* Consentement email */}
