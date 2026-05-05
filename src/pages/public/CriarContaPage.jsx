@@ -108,19 +108,18 @@ export default function CriarContaPage() {
     setLoading(true); setMsg({ text: '', kind: '' }); setPublicId('');
     try {
       const noLib = !form.library_slug;
-      const addr2 = [
-        form.bairro.trim() && `${t({id:'auth.create.bairro'})}: ${form.bairro.trim()}`,
-        form.addr2.trim()  && `${t({id:'auth.create.addr2'})}: ${form.addr2.trim()}`,
-      ].filter(Boolean).join(' | ');
 
-      // Conversion du code d'état (ex: 'SP') vers son nom local (ex: 'São Paulo')
-      // si on a une liste fermée, sinon on envoie tel quel.
-      const stateValue = hasStatesList(form.country)
-        ? getStateName(form.country, form.state)
+      // L'Edge Function `register` (cf. supabase/functions/register/index.ts)
+      // attend les champs structurés séparément et reconstruit le format
+      // canonique multi-ligne avec [XX] pour stockage dans profiles.address.
+      // - state_code : code ISO 3166-2 si pays a une liste fermée (sinon vide)
+      // - state : nom local de l'état (résolu depuis state_code via getStateName)
+      // - country / country_code : code ISO 3166-1 alpha-2 ('BR', 'FR'…)
+      const stateCode = hasStatesList(form.country) ? form.state : '';
+      const stateValue = stateCode
+        ? getStateName(form.country, stateCode)
         : form.state.trim();
 
-      // Pour le pays, on envoie le nom traduit dans la langue active pour l'affichage
-      // mais on conserve aussi le code ISO côté Edge Function pour traitement.
       const { data, error } = await supabase.functions.invoke('register', { body: {
         email: form.email.trim(),
         first_name: form.first_name.trim(),
@@ -128,13 +127,15 @@ export default function CriarContaPage() {
         phone: form.phone.trim(), // au format E.164
         gender: form.gender,
         address_1: form.addr1.trim(),
-        address_2: addr2,
-        address_unit: form.unit.trim(),
-        cep: form.cep.trim(), // garde le nom 'cep' côté API par compat
+        address_2: form.addr2.trim(),       // Complément (sans préfixe)
+        address_unit: form.unit.trim(),     // Numéro / Casa-Apto
+        district: form.bairro.trim(),       // Bairro / Quartier
+        cep: form.cep.trim(),               // garde le nom 'cep' côté API par compat
         city: form.city.trim(),
-        state: stateValue,
-        country: form.country,           // code ISO ('BR', 'FR', 'AR'…)
-        country_code: form.country,      // alias explicite pour la nouvelle API
+        state: stateValue,                  // nom local de l'état (ou texte libre)
+        state_code: stateCode,              // code ISO 3166-2 (vide si pays sans liste fermée)
+        country: form.country,              // code ISO ('BR', 'FR', 'AR'…)
+        country_code: form.country,         // alias explicite pour la nouvelle API
         consent_email: true,
         consent_email_at: new Date().toISOString(),
         accept_rules: currentLib?.has_regimento ? form.acceptRules : true,
@@ -270,30 +271,30 @@ export default function CriarContaPage() {
           </div>
 
           {/* ─── Section Adresse ─── */}
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 10, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'auth.create.addressTitle'})}</h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 10, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'address.title'})}</h2>
 
           {/* Pays — placé EN PREMIER pour adapter dynamiquement les champs suivants */}
           <div style={{ marginBottom: 12 }}>
-            <label style={ls}>{t({id:'auth.create.country'})} {req}</label>
+            <label style={ls}>{t({id:'address.country'})} {req}</label>
             <CountrySelect value={form.country} onChange={handleCountryChange} required style={fs} />
           </div>
 
           {/* Adresse ligne 1 */}
           <div style={{ marginBottom: 12 }}>
-            <label style={ls}>{t({id:'auth.create.addr1'})}</label>
+            <label style={ls}>{t({id:'address.line1'})}</label>
             <input type="text" value={form.addr1} onChange={e => set('addr1', e.target.value)} style={fs} autoComplete="address-line1" />
           </div>
 
           {/* Adresse ligne 2 (complément) */}
           <div style={{ marginBottom: 12 }}>
-            <label style={ls}>{t({id:'auth.create.addr2'})}</label>
+            <label style={ls}>{t({id:'address.line2'})}</label>
             <input type="text" value={form.addr2} onChange={e => set('addr2', e.target.value)} style={fs} autoComplete="address-line2" />
           </div>
 
           {/* Numéro / Code postal / Quartier (le label "bairro/quartier" reste utile en BR/FR/ES) */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
             <div>
-              <label style={ls}>{t({id:'auth.create.unit'})}</label>
+              <label style={ls}>{t({id:'address.unit'})}</label>
               <input type="text" value={form.unit} onChange={e => set('unit', e.target.value)} style={fs} />
             </div>
             <div>
@@ -302,14 +303,14 @@ export default function CriarContaPage() {
               <input type="text" value={form.cep} onChange={e => set('cep', e.target.value)} inputMode="numeric" style={fs} autoComplete="postal-code" />
             </div>
             <div>
-              <label style={ls}>{t({id:'auth.create.bairro'})}</label>
+              <label style={ls}>{t({id:'address.district'})}</label>
               <input type="text" value={form.bairro} onChange={e => set('bairro', e.target.value)} style={fs} />
             </div>
           </div>
 
           {/* Ville */}
           <div style={{ marginBottom: 12 }}>
-            <label style={ls}>{t({id:'auth.create.city'})}</label>
+            <label style={ls}>{t({id:'address.city'})}</label>
             <input type="text" value={form.city} onChange={e => set('city', e.target.value)} style={fs} autoComplete="address-level2" />
           </div>
 

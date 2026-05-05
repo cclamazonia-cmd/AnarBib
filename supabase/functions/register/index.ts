@@ -338,10 +338,21 @@ serve(async (req)=>{
     const address1 = String(body?.address_1 || "").trim();
     const address2 = String(body?.address_2 || "").trim();
     const addressUnit = String(body?.address_unit || "").trim();
+    // district : "Bairro" en pt-BR, "Quartier" en français.
+    // Champ à part de address_2 (qui correspond au "Complemento" / 2e ligne).
+    const district = String(body?.district || "").trim();
     const cep = String(body?.cep || "").trim();
     const city = String(body?.city || "").trim();
     const state = String(body?.state || "").trim();
+    // state_code : code ISO 3166-2 (ex: 'SP', 'IDF') si pays a une liste fermée.
+    // Permet de stocker [XX] dans le format canonique pour réinitialisation
+    // exacte des dropdowns lors de l'édition ultérieure.
+    const stateCode = String(body?.state_code || "").trim().toUpperCase();
     const country = String(body?.country || "").trim();
+    // country_code : code ISO 3166-1 alpha-2 (ex: 'BR', 'FR') envoyé par le frontend
+    // pour préservation explicite. Si non fourni, on utilise `country` directement
+    // (peut être un code ISO 2 lettres ou un nom textuel selon legacy).
+    const countryCode = String(body?.country_code || "").trim().toUpperCase();
     const consentEmail = body?.consent_email === true;
     // Phase 6 RGPD : timestamp explicite du consentement (art. 7(1) RGPD).
     // On accepte une valeur fournie par le frontend (ISO string), sinon on
@@ -497,16 +508,28 @@ serve(async (req)=>{
         error: "PUBLIC_ID_NOT_READY"
       }, 500);
     }
+    // Format canonique d'adresse (cf. src/lib/addressFormat.js côté frontend) :
+    //   - Texte multi-ligne avec préfixes "Clé: Valeur"
+    //   - Codes ISO entre crochets [XX] pour pays et état (réinitialisation
+    //     exacte des dropdowns CountrySelect/StateSelect lors de l'édition)
+    //   - Compatible rétro avec parseAddressText pour les formats legacy
+    const stateLine = state
+      ? (stateCode ? `Estado/Região: ${state} [${stateCode}]` : `Estado/Região: ${state}`)
+      : "";
+    const countryLine = country
+      ? (countryCode ? `País: ${country} [${countryCode}]` : `País: ${country}`)
+      : "";
     const addressParts = [
-      address1,
-      address2,
-      addressUnit ? `Unidade: ${addressUnit}` : "",
-      cep ? `CEP: ${cep}` : "",
-      city ? `Cidade: ${city}` : "",
-      state ? `Estado: ${state}` : "",
-      country ? `País: ${country}` : ""
+      address1 ? `Logradouro: ${address1}` : "",
+      address2 ? `Complemento: ${address2}` : "",
+      addressUnit ? `Casa/Apto: ${addressUnit}` : "",
+      cep ? `CEP/Code postal: ${cep}` : "",
+      district ? `Bairro/Quartier: ${district}` : "",
+      city ? `Cidade/Ville: ${city}` : "",
+      stateLine,
+      countryLine,
     ].filter(Boolean);
-    const fullAddress = buildAddressLine(addressParts);
+    const fullAddress = addressParts.join("\n");
     const { data: profileUpdatedRow, error: profileUpdateError } = await admin.from("profiles").update({
       email,
       first_name: firstName,
