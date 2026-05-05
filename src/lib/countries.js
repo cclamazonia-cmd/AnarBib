@@ -89,7 +89,7 @@ export function intlToIsoLocale(intlLocale) {
  * @param {string} input - country code or name
  * @returns {string|null} uppercase ISO code, or null if not resolvable
  */
-function resolveToIsoCode(input) {
+export function resolveToIsoCode(input) {
   if (!input || typeof input !== 'string') return null;
   const trimmed = input.trim();
 
