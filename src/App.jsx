@@ -18,7 +18,7 @@ const AccountPage = lazy(() => import('@/pages/account/AccountPage'));
 const PanelPage = lazy(() => import('@/pages/painel/PanelPage'));
 const CatalogacaoPage = lazy(() => import('@/pages/catalogacao/CatalogacaoPage'));
 const CriarContaPage = lazy(() => import('@/pages/public/CriarContaPage'));
-const CadastroPage = lazy(() => import('@/pages/public/CadastroPage'));
+const LoginPage = lazy(() => import('@/pages/public/LoginPage'));
 const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibliotecaPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
 const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage'));
@@ -59,7 +59,7 @@ export default function App() {
                   <Route path="/catalogo" element={<CatalogPage />} />
                   <Route path="/livro/:id" element={<BookPage />} />
                   <Route path="/autor/:id" element={<AuthorPage />} />
-                  <Route path="/entrar" element={<Navigate to="/cadastro" replace />} />
+                  <Route path="/entrar" element={<Navigate to="/login" replace />} />
                   <Route path="/ler/:id" element={<ReaderPage />} />
                   <Route path="/ler-recurso" element={<ResourcePage />} />
                   <Route path="/privacidade" element={<PrivacyPolicyPage />} />
@@ -82,7 +82,12 @@ export default function App() {
 
                   {/* ── Inscription / Login / Solicitation ───── */}
                   <Route path="/criar-conta" element={<CriarContaPage />} />
-                  <Route path="/cadastro" element={<CadastroPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  {/* Legacy redirect — preserves recovery email links sent before the rename */}
+                  <Route
+                    path="/cadastro"
+                    element={<Navigate to={`/login${window.location.hash || ''}`} replace />}
+                  />
                   <Route path="/solicitar-biblioteca" element={<SolicitarBibliotecaPage />} />
 
                   {/* ── Importações ──────────────────────────── */}

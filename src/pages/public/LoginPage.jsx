@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
@@ -6,95 +6,291 @@ import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button } from '@/components/ui';
 
 export default function LoginPage() {
-  const { formatMessage: t } = useIntl();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const { formatMessage: t } = useIntl();
+  const [view, setView] = useState('login');
+  const [showPw, setShowPw] = useState(false);
+  const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loginMsg, setLoginMsg] = useState({ text: '', kind: '' });
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotMsg, setForgotMsg] = useState({ text: '', kind: '' });
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [newPw, setNewPw] = useState('');
+  const [newPw2, setNewPw2] = useState('');
+  const [resetMsg, setResetMsg] = useState({ text: '', kind: '' });
+  const [resetLoading, setResetLoading] = useState(false);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.includes('type=recovery') || hash.includes('access_token')) setView('recovery');
+  }, []);
 
   async function handleLogin(e) {
     e.preventDefault();
-    setError('');
-    setLoading(true);
-
+    setLoginLoading(true);
+    setLoginMsg({ text: '', kind: '' });
     try {
-      // Résoudre l'email si c'est un identifiant (public_id, etc.)
-      let loginEmail = email.trim();
-      if (!loginEmail.includes('@')) {
-        const { data, error: rpcError } = await supabase.rpc('resolve_login_email', {
-          p_identifier: loginEmail,
-        });
-        // rpc retourne un tableau de lignes { email, public_id, user_id }
-        const resolved = Array.isArray(data) ? data[0]?.email : data?.email;
-        if (resolved) {
-          loginEmail = resolved;
-        } else {
-          throw new Error('Identificador não encontrado. Use seu e-mail ou código de usuário.');
-        }
+      let email = loginId.trim();
+      if (!email.includes('@')) {
+        try {
+          const { data } = await supabase.rpc('resolve_login_email', { p_identifier: email });
+          const r = Array.isArray(data) ? data[0]?.email : data?.email;
+          if (r) email = r;
+        } catch {}
       }
-
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email: loginEmail,
-        password,
-      });
-
-      if (authError) throw authError;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        const r = (error.message || '').toLowerCase();
+        setLoginMsg({
+          text:
+            r.includes('invalid login') || r.includes('invalid_credentials')
+              ? t({ id: 'auth.wrongCredentials' })
+              : r.includes('not confirmed')
+              ? t({ id: 'auth.notConfirmed' })
+              : error.message,
+          kind: 'error',
+        });
+        return;
+      }
       navigate('/conta');
-    } catch (err) {
-      setError(err.message || 'Erro ao entrar.');
+    } catch {
+      setLoginMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
     } finally {
-      setLoading(false);
+      setLoginLoading(false);
     }
   }
+
+  async function handleForgot(e) {
+    e.preventDefault();
+    if (!forgotEmail.trim()) {
+      setForgotMsg({ text: t({ id: 'auth.forgotEmailRequired' }), kind: 'error' });
+      return;
+    }
+    setForgotLoading(true);
+    setForgotMsg({ text: '', kind: '' });
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail.trim(), {
+        redirectTo: `${window.location.origin}/login`,
+      });
+      setForgotMsg(
+        error
+          ? { text: error.message, kind: 'error' }
+          : { text: t({ id: 'auth.forgotSent' }), kind: 'ok' }
+      );
+    } catch {
+      setForgotMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
+    } finally {
+      setForgotLoading(false);
+    }
+  }
+
+  async function handleReset(e) {
+    e.preventDefault();
+    if (newPw.length < 6) {
+      setResetMsg({ text: t({ id: 'auth.resetMin6' }), kind: 'error' });
+      return;
+    }
+    if (newPw !== newPw2) {
+      setResetMsg({ text: t({ id: 'auth.resetMismatch' }), kind: 'error' });
+      return;
+    }
+    setResetLoading(true);
+    setResetMsg({ text: '', kind: '' });
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPw });
+      if (error) {
+        const r = (error.message || '').toLowerCase();
+        setResetMsg({
+          text:
+            r.includes('same') || r.includes('different')
+              ? t({ id: 'auth.resetSamePassword' })
+              : r.includes('expired')
+              ? t({ id: 'auth.resetExpired' })
+              : error.message,
+          kind: 'error',
+        });
+        return;
+      }
+      setResetMsg({ text: t({ id: 'auth.resetSuccess' }), kind: 'ok' });
+      setTimeout(() => setView('login'), 2000);
+    } catch {
+      setResetMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
+    } finally {
+      setResetLoading(false);
+    }
+  }
+
+  const ms = (k) => ({
+    padding: '10px 14px',
+    borderRadius: 8,
+    fontSize: '.85rem',
+    marginBottom: 14,
+    background: k === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)',
+    color: k === 'ok' ? '#4ade80' : '#f87171',
+    border: `1px solid ${k === 'ok' ? 'rgba(21,128,61,.25)' : 'rgba(220,38,38,.25)'}`,
+  });
 
   return (
     <PageShell>
       <Topbar />
-
-      <div style={{ maxWidth: 440, margin: '40px auto' }}>
+      <div style={{ maxWidth: 480, margin: '40px auto', padding: '0 16px' }}>
         <Card>
-          <h1 style={{ margin: '0 0 20px', fontSize: '1.3rem' }}>
+          <h1
+            style={{
+              fontSize: '1.5rem',
+              fontWeight: 800,
+              margin: '0 0 4px',
+              fontFamily: 'var(--brand-font-body)',
+              textTransform: 'none',
+            }}
+          >
             {t({ id: 'auth.login.title' })}
           </h1>
+          <p style={{ color: 'var(--brand-muted)', margin: '0 0 20px', fontSize: '.9rem' }}>
+            {t({ id: 'auth.login.subtitle' })}
+          </p>
 
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <Input
-              label={t({ id: 'auth.login.email' })}
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="username"
-              required
-            />
-            <Input
-              label={t({ id: 'auth.login.password' })}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
-
-            {error && (
-              <p style={{ color: 'var(--color-bad)', fontSize: '0.9rem', margin: 0 }}>
-                {error}
-              </p>
-            )}
-
-            <Button type="submit" loading={loading}>
-              {t({ id: 'auth.login.submit' })}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
+            <Button variant="secondary" onClick={() => navigate('/')}>
+              {t({ id: 'auth.backToCatalog' })}
             </Button>
-          </form>
-
-          <div style={{ marginTop: 16, fontSize: '0.9rem', color: 'var(--brand-muted)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <Link to="/criar-conta">{t({ id: 'nav.register' })}</Link>
-            <Link to="/cadastro">Esqueci minha senha</Link>
-            <Link to="/solicitar-biblioteca">Solicitar biblioteca</Link>
+            <Link to="/criar-conta" style={{ textDecoration: 'none' }}>
+              <Button variant="primary">{t({ id: 'auth.createAccount' })}</Button>
+            </Link>
           </div>
+
+          {view === 'login' && (
+            <div>
+              <form
+                onSubmit={handleLogin}
+                style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
+              >
+                <Input
+                  label={t({ id: 'auth.publicId' })}
+                  type="text"
+                  value={loginId}
+                  onChange={(e) => setLoginId(e.target.value)}
+                  placeholder={t({ id: 'auth.publicIdPh' })}
+                  autoComplete="username"
+                  required
+                />
+                <Input
+                  label={t({ id: 'auth.password' })}
+                  type={showPw ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Button variant="primary" type="submit" loading={loginLoading}>
+                    {loginLoading ? t({ id: 'auth.loggingIn' }) : t({ id: 'auth.login' })}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => setShowPw(!showPw)}
+                  >
+                    {showPw ? t({ id: 'auth.hidePassword' }) : t({ id: 'auth.showPassword' })}
+                  </Button>
+                </div>
+                {loginMsg.text && <div style={ms(loginMsg.kind)}>{loginMsg.text}</div>}
+              </form>
+
+              <div
+                style={{
+                  padding: 14,
+                  borderRadius: 10,
+                  background: 'rgba(180,83,9,.06)',
+                  border: '1px solid rgba(180,83,9,.18)',
+                  marginTop: 20,
+                }}
+              >
+                <strong style={{ fontSize: '.92rem' }}>{t({ id: 'auth.forgotTitle' })}</strong>
+                <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>
+                  {t({ id: 'auth.forgotHint' })}
+                </div>
+                <form
+                  onSubmit={handleForgot}
+                  style={{ display: 'flex', flexDirection: 'column', gap: 10 }}
+                >
+                  <Input
+                    label={t({ id: 'auth.forgotEmail' })}
+                    type="email"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    autoComplete="email"
+                    required
+                  />
+                  <div>
+                    <Button variant="secondary" type="submit" loading={forgotLoading}>
+                      {forgotLoading
+                        ? t({ id: 'auth.forgotSending' })
+                        : t({ id: 'auth.forgotButton' })}
+                    </Button>
+                  </div>
+                  {forgotMsg.text && <div style={ms(forgotMsg.kind)}>{forgotMsg.text}</div>}
+                </form>
+              </div>
+            </div>
+          )}
+
+          {view === 'recovery' && (
+            <div>
+              <div
+                style={{
+                  padding: 14,
+                  borderRadius: 10,
+                  background: 'rgba(255,255,255,.03)',
+                  border: '1px solid rgba(255,255,255,.08)',
+                  marginBottom: 16,
+                }}
+              >
+                <strong>{t({ id: 'auth.resetTitle' })}</strong>
+                <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>
+                  {t({ id: 'auth.resetHint' })}
+                </div>
+              </div>
+              <form
+                onSubmit={handleReset}
+                style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
+              >
+                <Input
+                  label={t({ id: 'auth.newPassword' })}
+                  type={showPw ? 'text' : 'password'}
+                  value={newPw}
+                  onChange={(e) => setNewPw(e.target.value)}
+                  autoComplete="new-password"
+                  required
+                />
+                <Input
+                  label={t({ id: 'auth.confirmPassword' })}
+                  type={showPw ? 'text' : 'password'}
+                  value={newPw2}
+                  onChange={(e) => setNewPw2(e.target.value)}
+                  autoComplete="new-password"
+                  required
+                />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Button variant="primary" type="submit" loading={resetLoading}>
+                    {resetLoading ? t({ id: 'auth.resetSaving' }) : t({ id: 'auth.resetSave' })}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => setShowPw(!showPw)}
+                  >
+                    {showPw ? t({ id: 'auth.hidePassword' }) : t({ id: 'auth.showPassword' })}
+                  </Button>
+                </div>
+                {resetMsg.text && <div style={ms(resetMsg.kind)}>{resetMsg.text}</div>}
+              </form>
+            </div>
+          )}
         </Card>
       </div>
-
       <Footer />
     </PageShell>
   );
