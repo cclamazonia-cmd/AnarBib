@@ -22,3 +22,7 @@ supabase/.env
 fix-*.py
 rename-*.py
 migrate-*.py
+# Variables d'environnement (clés API, secrets)
+.env
+.env.local
+.env.production

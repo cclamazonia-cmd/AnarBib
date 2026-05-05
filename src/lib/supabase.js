@@ -1,10 +1,24 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
-  || 'https://uflwmikiyjfnikiphtcp.supabase.co';
+// Configuration Supabase : les deux variables sont REQUISES au build.
+// Pas de fallback hardcodé : si une variable manque, c'est un bug de
+// configuration de l'environnement de build qui doit être détecté
+// explicitement plutôt que masqué par une valeur en dur.
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
-  || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmbHdtaWtpeWpmbmlraXBodGNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MzIyNDUsImV4cCI6MjA4OTQwODI0NX0.kCs7nPg08ofjb9CWwRH9xVN6BjanrAC5pj418line1o';
+if (!SUPABASE_URL) {
+  throw new Error(
+    'VITE_SUPABASE_URL est requis mais non défini. ' +
+    'Vérifie ton fichier .env (local) ou la configuration de build (prod).'
+  );
+}
+if (!SUPABASE_ANON_KEY) {
+  throw new Error(
+    'VITE_SUPABASE_ANON_KEY est requis mais non défini. ' +
+    'Vérifie ton fichier .env (local) ou la configuration de build (prod).'
+  );
+}
 
 export const PROJECT_REF = 'uflwmikiyjfnikiphtcp';
 
