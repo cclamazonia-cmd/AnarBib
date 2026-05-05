@@ -213,7 +213,7 @@ export default function CriarContaPage() {
           <p style={{ margin: '4px 0' }}>{t({id:'auth.create.securityPw'})}</p>
           <p style={{ margin: '4px 0' }}>{t({id:'auth.create.securityId'})}</p>
           <p style={{ margin: '4px 0' }}>{t({id:'auth.create.securityForgot'}, {
-            link: <Link to="/cadastro" style={{ textDecoration: 'underline' }}>{t({id:'auth.create.securityForgotLink'})}</Link>
+            link: <Link to="/login" style={{ textDecoration: 'underline' }}>{t({id:'auth.create.securityForgotLink'})}</Link>
           })}</p>
           <p style={{ margin: '4px 0' }}>{t({id:'auth.create.securitySpam'})}</p>
         </div>
@@ -363,7 +363,7 @@ export default function CriarContaPage() {
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             <Button variant="primary" type="submit" disabled={loading}>{loading ? t({id:'auth.create.submitting'}) : t({id:'auth.create.submit'})}</Button>
             <Button variant="secondary" onClick={() => navigate(-1)}>{t({id:'auth.create.back'})}</Button>
-            <Link to="/cadastro" style={{ textDecoration: 'none' }}>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
               <Button variant="secondary">{t({id:'auth.create.haveAccount'})}</Button>
             </Link>
           </div>
