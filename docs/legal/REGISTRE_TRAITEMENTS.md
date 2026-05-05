@@ -21,7 +21,7 @@ Ce registre documente les traitements de données personnelles effectués dans l
 Ce registre se compose de **deux couches** :
 
 1. **Le template générique** — applicable à toute bibliothèque utilisant AnarBib. Chaque bibliothèque adhérente doit le **personnaliser** en remplissant les sections marquées `[À COMPLÉTER]` et le maintenir à jour localement.
-2. **L'exemple rempli** (annexe A) — l'instance AnarBib opérée par Xavier, donnée à titre de référence concrète.
+2. **L'exemple rempli** (annexe A) — l'instance AnarBib opérée par Xavier VAN WELDEN, donnée à titre de référence concrète.
 
 **Pour les bibliothèques adhérentes** : copiez ce fichier dans votre propre dépôt, remplissez les `[À COMPLÉTER]`, supprimez l'annexe A si vous le souhaitez, et committez.
 
@@ -124,7 +124,7 @@ Toute lecteur·rice peut, à tout moment, exercer les droits suivants :
 | **Effacement (oubli)** | Art. 17 | Bouton « Supprimer mon compte » sur `/conta`, fonction `delete_user_account` (suppression cryptographique des données associées) |
 | **Portabilité** | Art. 20 | Bouton « Télécharger mes données » sur `/conta`, formats JSON et CSV au choix *(en cours d'implémentation — Phase 3 RGPD)* |
 | **Opposition** | Art. 21 | Sans objet pour les traitements basés sur l'exécution du contrat (2.1–2.4). Pour le traitement basé sur l'intérêt légitime (2.5), la lecteur·rice peut quitter le multi-membership à tout moment. |
-| **Limitation** | Art. 18 | Sur demande écrite à `[À COMPLÉTER : email contact]`, traitement gelé pendant l'instruction |
+| **Limitation** | Art. 18 | Sur demande écrite à `[contato@anarbib.org]`, traitement gelé pendant l'instruction |
 | **Réclamation** | Art. 77 | Auprès de l'autorité de contrôle nationale (voir section 7) |
 
 ---
@@ -235,7 +235,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 
 ---
 
-## Annexe A — Exemple rempli : instance opérée par Xavier
+## Annexe A — Exemple rempli : instance opérée par Xavier VAN WELDEN
 
 > Cette annexe sert de référence concrète pour les bibliothèques adhérentes. Elle documente la situation de l'instance « pilote » d'AnarBib.
 
@@ -250,7 +250,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 | DPO | Non désigné (non requis par l'art. 37 RGPD) |
 | Bibliothèques opérées | Bibliothèque pilote (CCLA-portée, BLMF) |
 | DPA Supabase | Signé le 4 mai 2026 (réf. TFXNN-HUMKJ-3WKP8-MZMYW) |
-| Date de mise en service | 2026 (bêta restreinte ; ouverture réseau prévue après le rassemblement de Bologne, septembre 2026) |
+| Date de mise en service | 2026 (bêta restreinte ; ouverture réseau prévue après le rassemblement FICEDL de Bologne, septembre 2026) |
 
 ---
 
