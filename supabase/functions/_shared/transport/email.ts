@@ -2,6 +2,7 @@ import { BREVO_KEY } from "../core/env.ts";
 import type { EmailDetails, EmailSendResult, EmailTarget, LibraryNotificationContext } from "../core/types.ts";
 import { resolveMailRouting, transportDisabledReason } from "../context/library-mail-routing.ts";
 import { renderEmail, footerPadrao } from "../mail/layout.ts";
+import { inlineLogosInHtml } from "../mail/inline-images.ts";
 import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 export async function sendBrevoEmail(opts: {toEmail:string;toName?:string;subject:string;html:string;text:string;context?:LibraryNotificationContext|null}) {
   const r=resolveMailRouting(opts.context); const rt=r.replyToEmail?{email:r.replyToEmail,...(r.replyToName?{name:r.replyToName}:{})}:undefined;
@@ -12,7 +13,15 @@ export function skippedEmailResult(label:string,reason:string,email?:string): Em
 export async function safeSendEmail(target:EmailTarget|null|undefined,subject:string,html:string,text:string,label="email",context?:LibraryNotificationContext|null): Promise<EmailSendResult> {
   const dr=transportDisabledReason(context); if (dr) return skippedEmailResult(label,dr);
   const em=target?.email?.trim()||""; if (!em||!isValidEmail(em)) return skippedEmailResult(label,em?"invalid_email":"empty_email",em||undefined);
-  try { const response=await sendBrevoEmail({toEmail:em,toName:target?.name?.trim(),subject,html,text,context}); console.log(`[${label}] sent to ${em}`); return {ok:true,label,email:em,response}; }
+  try {
+    // Inline les logos Supabase Storage en base64 pour éviter la réécriture
+    // d'URLs par Brevo qui casse les images dans les archives mail.
+    // Cf. docs/decisions/BUG_LOGOS_BREVO_TRACKER_2026-05-06.md
+    const inlinedHtml = await inlineLogosInHtml(html);
+    const response=await sendBrevoEmail({toEmail:em,toName:target?.name?.trim(),subject,html:inlinedHtml,text,context});
+    console.log(`[${label}] sent to ${em}`);
+    return {ok:true,label,email:em,response};
+  }
   catch (err) { console.error(`[${label}] failed for ${em}:`,err); return {ok:false,label,email:em,error:String((err as Error)?.message||err)}; }
 }
 export function userTargetFromProfile(p:Record<string,unknown>): EmailTarget|null { const e=String(p.email||"").trim(); if (!isValidEmail(e)) return null; return {email:e,name:firstNameOnly(p.first_name)||firstNameOnly(fullName(p))||undefined}; }
