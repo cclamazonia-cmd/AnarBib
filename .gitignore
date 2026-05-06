@@ -26,3 +26,9 @@ migrate-*.py
 .env
 .env.local
 .env.production
+
+# Sources de conversion fontaire (.ttf téléchargés depuis Google Fonts pour subsetting woff2)
+fonts-source/
+
+# Archives temporaires d'audit (zip envoyés à Claude pour lecture)
+notify-functions.zip
