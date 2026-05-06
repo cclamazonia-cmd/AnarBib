@@ -14,7 +14,7 @@
 
 Este documento registra as **decisões políticas de coordenação** tomadas pel(o/a/e)s coordenador(a/e)s da BLMF na operação dest(e/a) instância d(o/a/e) AnarBib. Distingue-se d(o/a/e) [registro de tratamentos](../legal/REGISTRE_TRAITEMENTS.md), que documenta o estado dos tratamentos num momento dado: aqui se consignam **as decisões e sua história**, com data, alcance e reversibilidade.
 
-Este documento serve também como **modelo reutilizável** para as outras bibliotecas da rede RebAL: cada biblioteca aderente pode adotar o mesmo formato para registrar suas próprias decisões de coordenação, conforme o princípio de soberania local.
+Este documento serve também como **modelo reutilizável** para as outras bibliotecas da rede AnarBib: cada biblioteca aderente pode adotar o mesmo formato para registrar suas próprias decisões de coordenação, conforme o princípio de soberania local.
 
 ---
 
@@ -102,6 +102,7 @@ Esta decisão política desbloqueia as etapas técnicas seguintes, a executar em
 |---|---|---|
 | 2026-05-05 | Xavier VAN WELDEN | Criação inicial do documento. Primeira decisão registrada: validação das durações de retenção RGPD/LGPD por padrão para a BLMF. |
 | 2026-05-06 | Xavier VAN WELDEN | Retificação das categorias retidas: a decisão inicial mencionava "empréstimos / reservas / cadastros inativos / logs", mas a leitura do código de `fn_get_retention_policy` e `fn_notify_users_before_purge` mostrou que a tabela `library_retention_policies` cobre na realidade **empréstimos / reservas / consultas locais / notificações**. As 4 categorias agora alinhadas com o esquema técnico real. Os parâmetros de cadastros inativos e logs técnicos são geridos por outros mecanismos sistêmicos d(o/a/e) AnarBib, não cobertos por esta decisão de coordenação local. Os valores numéricos validados originalmente foram mantidos para empréstimos (730d) e reservas (365d); foram adicionados consultas locais (365d) e notificações (90d), validados após análise política do propósito de cada categoria. |
+| 2026-05-06 | Xavier VAN WELDEN | Retificação terminológica: substituição de "rede RebAL" por "rede AnarBib" na introdução. RebAL designa um réseau italophone autônomo (Réseau de Bibliothèques Alternatives Libertaires), distinto da rede AnarBib. As bibliotecas aderentes a AnarBib formam a rede AnarBib, não a rede RebAL. Os eventuais rapports d'interopérabilité entre AnarBib e RebAL (por exemplo via OAI-PMH) são distintos da questão da adesão à rede. |
 
 ---
 
