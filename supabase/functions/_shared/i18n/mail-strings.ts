@@ -846,7 +846,247 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     en: "Urgent",
     it: "Urgente",
     de: "Dringend"
-  }
+  },
+
+  // ===== Team — Rôles dynamiques (team.role.*) ==============================
+  "team.role.librarian": {
+    "pt-BR": "bibliotecári(o/a/e)",
+    fr: "bibliothécaire",
+    es: "bibliotecarie",
+    en: "librarian",
+    it: "bibliotecario/a/e",
+    de: "Bibliothekar*in"
+  },
+  "team.role.coordenador": {
+    "pt-BR": "coordenador(o/a/e)",
+    fr: "coordinateur·rice",
+    es: "coordinadore",
+    en: "coordinator",
+    it: "coordinatore/trice/e",
+    de: "Koordinator*in"
+  },
+
+  // ===== Team — Admissions concertées (team.promoted_*) =====================
+  "team.promoted_to_librarian.sub": {
+    "pt-BR": "Você foi admitid(o/a/e) bibliotecári(o/a/e)",
+    fr: "Tu as été admis·e bibliothécaire",
+    es: "Fuiste admitide bibliotecarie",
+    en: "You have been admitted as a librarian",
+    it: "Sei stato/a/e ammesso/a/e come bibliotecario/a/e",
+    de: "Du wurdest als Bibliothekar*in aufgenommen"
+  },
+  "team.promoted_to_librarian.intro": {
+    "pt-BR": "Você acaba de ser admitid(o/a/e) bibliotecári(o/a/e) na {libraryName} de maneira concertada pela equipe de animação da biblioteca. Seja bem-vind(o/a/e)!",
+    fr: "Tu viens d'être admis·e bibliothécaire à la {libraryName} de manière concertée par l'équipe d'animation de la bibliothèque. Bienvenue !",
+    es: "Acabás de ser admitide bibliotecarie en le {libraryName} de manera concertada por le equipo de animación de la biblioteca. ¡Bienvenide!",
+    en: "You have just been admitted as a librarian at {libraryName} through a concerted decision by the library's animation team. Welcome!",
+    it: "Sei appena stato/a/e ammesso/a/e come bibliotecario/a/e a {libraryName} in modo concertato dall'equipe di animazione della biblioteca. Benvenuto/a/e!",
+    de: "Du bist soeben als Bibliothekar*in bei {libraryName} in Abstimmung mit dem Animationsteam der Bibliothek aufgenommen worden. Willkommen!"
+  },
+  "team.promoted_to_coordenador.sub": {
+    "pt-BR": "Você foi admitid(o/a/e) coordenador(o/a/e)",
+    fr: "Tu as été admis·e coordinateur·rice",
+    es: "Fuiste admitide coordinadore",
+    en: "You have been admitted as a coordinator",
+    it: "Sei stato/a/e ammesso/a/e come coordinatore/trice/e",
+    de: "Du wurdest als Koordinator*in aufgenommen"
+  },
+  "team.promoted_to_coordenador.intro": {
+    "pt-BR": "Você acaba de ser admitid(o/a/e) coordenador(o/a/e) na {libraryName} de maneira concertada. Você junta-se ao círculo de coordenação. Suas responsabilidades se ampliam: governança da equipe, validações sensíveis. O regimento interno está aqui: {regimentoUrl}",
+    fr: "Tu viens d'être admis·e coordinateur·rice à la {libraryName} de manière concertée. Tu rejoins le cercle de coordination. Tes responsabilités s'élargissent : gouvernance de l'équipe, validations sensibles. Le règlement intérieur est ici : {regimentoUrl}",
+    es: "Acabás de ser admitide coordinadore en le {libraryName} de manera concertada. Te sumás al círculo de coordinación. Tus responsabilidades se amplían: gobernanza de le equipo, validaciones sensibles. El reglamento interno está acá: {regimentoUrl}",
+    en: "You have just been admitted as a coordinator at {libraryName} through a concerted decision. You join the coordination circle. Your responsibilities expand: team governance, sensitive validations. The internal rules are here: {regimentoUrl}",
+    it: "Sei appena stato/a/e ammesso/a/e come coordinatore/trice/e a {libraryName} in modo concertato. Entri nel cerchio di coordinamento. Le tue responsabilità si ampliano: governance dell'equipe, validazioni sensibili. Il regolamento interno è qui: {regimentoUrl}",
+    de: "Du bist soeben als Koordinator*in bei {libraryName} in Abstimmung aufgenommen worden. Du trittst dem Koordinationskreis bei. Deine Verantwortungen erweitern sich: Governance des Teams, sensible Validierungen. Die interne Geschäftsordnung findest du hier: {regimentoUrl}"
+  },
+
+  // ===== Team — Retour volontaire à un autre rôle (team.self_demoted) =======
+  "team.self_demoted.sub": {
+    "pt-BR": "{actorName} retornou ao papel de {toRole}",
+    fr: "{actorName} est revenu·e au rôle de {toRole}",
+    es: "{actorName} volvió al rol de {toRole}",
+    en: "{actorName} has returned to the {toRole} role",
+    it: "{actorName} è tornato/a/e al ruolo di {toRole}",
+    de: "{actorName} ist zur Rolle {toRole} zurückgekehrt"
+  },
+  "team.self_demoted.intro": {
+    "pt-BR": "{actorName} retornou do papel de {fromRole} ao papel de {toRole} na {libraryName}. Esta decisão é voluntária e imediata.",
+    fr: "{actorName} est revenu·e du rôle de {fromRole} au rôle de {toRole} à la {libraryName}. Cette décision est volontaire et immédiate.",
+    es: "{actorName} volvió de le rol de {fromRole} al rol de {toRole} en le {libraryName}. Esta decisión es voluntaria e inmediata.",
+    en: "{actorName} has returned from the {fromRole} role to the {toRole} role at {libraryName}. This decision is voluntary and effective immediately.",
+    it: "{actorName} è tornato/a/e dal ruolo di {fromRole} al ruolo di {toRole} a {libraryName}. Questa decisione è volontaria e immediata.",
+    de: "{actorName} ist von der Rolle {fromRole} zur Rolle {toRole} bei {libraryName} zurückgekehrt. Diese Entscheidung ist freiwillig und sofort wirksam."
+  },
+
+  // ===== Team — Demande de retrait avec carence 7j (team.removal_*) =========
+  "team.removal_requested.sub": {
+    "pt-BR": "Pedido de retirada concernente a você",
+    fr: "Demande de retrait te concernant",
+    es: "Solicitud de retiro que te concierne",
+    en: "Removal request concerning you",
+    it: "Richiesta di rimozione che ti riguarda",
+    de: "Antrag auf Entzug, der dich betrifft"
+  },
+  "team.removal_requested.intro": {
+    "pt-BR": "Um pedido de retirada do papel de {role} concernente a você foi depositado na {libraryName}. Este pedido está submetido a um prazo de 7 dias durante o qual você pode trocar com outr(o/a/e)s coordenador(o/a/e)s para compreender ou contestar esta decisão. Sem anulação da parte del(e/a/e)s antes de {pendingUntilDate}, seu papel de {role} será retirado.",
+    fr: "Une demande de retrait du rôle de {role} te concernant a été déposée à la {libraryName}. Cette demande est soumise à un délai de 7 jours pendant lequel tu peux échanger avec les autres coordinateur·rices pour comprendre ou contester cette décision. Sans annulation de leur part avant le {pendingUntilDate}, ton rôle de {role} sera retiré.",
+    es: "Une solicitud de retiro de le rol de {role} que te concierne fue depositada en le {libraryName}. Esta solicitud está sometida a un plazo de 7 días durante el cual podés intercambiar con les otres coordinadores para comprender o contestar esta decisión. Sin anulación de su parte antes de le {pendingUntilDate}, tu rol de {role} será retirado.",
+    en: "A request to remove your {role} role at {libraryName} has been filed. This request is subject to a 7-day waiting period during which you may discuss with the other coordinators to understand or contest this decision. Without cancellation on their part before {pendingUntilDate}, your {role} role will be removed.",
+    it: "Una richiesta di rimozione dal ruolo di {role} che ti riguarda è stata depositata a {libraryName}. Questa richiesta è soggetta a un termine di 7 giorni durante il quale puoi confrontarti con le altre coordinatrici e gli altri coordinatori per comprendere o contestare questa decisione. Senza annullamento da parte loro entro il {pendingUntilDate}, il tuo ruolo di {role} sarà rimosso.",
+    de: "Ein Antrag auf Entzug der Rolle {role}, der dich betrifft, wurde bei {libraryName} eingereicht. Dieser Antrag unterliegt einer Frist von 7 Tagen, während der du dich mit den anderen Koordinator*innen austauschen kannst, um diese Entscheidung zu verstehen oder anzufechten. Ohne Annullierung ihrerseits vor dem {pendingUntilDate} wird deine Rolle als {role} entzogen."
+  },
+  "team.removal_cancelled.sub": {
+    "pt-BR": "O pedido de retirada concernente a você foi anulado",
+    fr: "La demande de retrait te concernant a été annulée",
+    es: "La solicitud de retiro que te concierne fue anulada",
+    en: "The removal request concerning you has been cancelled",
+    it: "La richiesta di rimozione che ti riguarda è stata annullata",
+    de: "Der Antrag auf Entzug, der dich betraf, wurde annulliert"
+  },
+  "team.removal_cancelled.intro": {
+    "pt-BR": "O pedido de retirada concernente a você na {libraryName} foi anulado por {cancellerName}. Você recupera todos os seus direitos de {role} imediatamente.",
+    fr: "La demande de retrait te concernant à la {libraryName} a été annulée par {cancellerName}. Tu retrouves tous tes droits de {role} immédiatement.",
+    es: "La solicitud de retiro que te concierne en le {libraryName} fue anulada por {cancellerName}. Recuperás todos tus derechos de {role} inmediatamente.",
+    en: "The removal request concerning you at {libraryName} has been cancelled by {cancellerName}. You immediately regain all your {role} rights.",
+    it: "La richiesta di rimozione che ti riguarda a {libraryName} è stata annullata da {cancellerName}. Recuperi immediatamente tutti i tuoi diritti di {role}.",
+    de: "Der Antrag auf Entzug, der dich bei {libraryName} betraf, wurde von {cancellerName} annulliert. Du erhältst sofort alle deine Rechte als {role} zurück."
+  },
+  "team.removal_completed.sub": {
+    "pt-BR": "Sua retirada do papel de {role} foi finalizada",
+    fr: "Ton retrait du rôle de {role} a été finalisé",
+    es: "Tu retiro de le rol de {role} fue finalizado",
+    en: "Your removal from the {role} role has been finalised",
+    it: "La tua rimozione dal ruolo di {role} è stata finalizzata",
+    de: "Dein Entzug der Rolle {role} wurde abgeschlossen"
+  },
+  "team.removal_completed.intro": {
+    "pt-BR": "O prazo de 7 dias decorreu sem anulação. Seu papel de {role} na {libraryName} foi retirado. Se você deseja compreender esta decisão ou discuti-la, entre em contato com (o/a/e)s coordenador(o/a/e)s.",
+    fr: "Le délai de 7 jours s'est écoulé sans annulation. Ton rôle de {role} à la {libraryName} a été retiré. Si tu souhaites comprendre cette décision ou en discuter, contacte les coordinateur·rices.",
+    es: "El plazo de 7 días transcurrió sin anulación. Tu rol de {role} en le {libraryName} fue retirado. Si querés comprender esta decisión o discutirla, contactá a les coordinadores.",
+    en: "The 7-day period has elapsed without cancellation. Your {role} role at {libraryName} has been removed. If you wish to understand this decision or discuss it, contact the coordinators.",
+    it: "Il termine di 7 giorni è trascorso senza annullamento. Il tuo ruolo di {role} a {libraryName} è stato rimosso. Se desideri comprendere questa decisione o discuterne, contatta le coordinatrici e i coordinatori.",
+    de: "Die Frist von 7 Tagen ist ohne Annullierung verstrichen. Deine Rolle als {role} bei {libraryName} wurde entzogen. Wenn du diese Entscheidung verstehen oder besprechen möchtest, wende dich an die Koordinator*innen."
+  },
+
+  // ===== Team — Suspension immédiate (team.suspended_*) =====================
+  "team.suspended.sub": {
+    "pt-BR": "Suspensão imediata dos seus direitos de {role}",
+    fr: "Suspension immédiate de tes droits de {role}",
+    es: "Suspensión inmediata de tus derechos de {role}",
+    en: "Immediate suspension of your {role} rights",
+    it: "Sospensione immediata dei tuoi diritti di {role}",
+    de: "Sofortige Aussetzung deiner {role}-Rechte"
+  },
+  "team.suspended.intro": {
+    "pt-BR": "Seus direitos de {role} na {libraryName} foram suspensos por medida cautelar. Motivo comunicado: {reason}. Para compreender ou contestar esta decisão, entre em contato com (o/a/e)s coordenador(o/a/e)s o mais rápido possível.",
+    fr: "Tes droits de {role} à la {libraryName} ont été suspendus par mesure conservatoire. Motif communiqué : {reason}. Pour comprendre ou contester cette décision, contacte les coordinateur·rices au plus vite.",
+    es: "Tus derechos de {role} en le {libraryName} fueron suspendidos por medida cautelar. Motivo comunicado: {reason}. Para comprender o contestar esta decisión, contactá a les coordinadores lo antes posible.",
+    en: "Your {role} rights at {libraryName} have been suspended as a precautionary measure. Communicated reason: {reason}. To understand or contest this decision, contact the coordinators as soon as possible.",
+    it: "I tuoi diritti di {role} a {libraryName} sono stati sospesi come misura cautelare. Motivo comunicato: {reason}. Per comprendere o contestare questa decisione, contatta le coordinatrici e i coordinatori il prima possibile.",
+    de: "Deine {role}-Rechte bei {libraryName} wurden als vorsorgliche Maßnahme ausgesetzt. Mitgeteilter Grund: {reason}. Um diese Entscheidung zu verstehen oder anzufechten, wende dich so schnell wie möglich an die Koordinator*innen."
+  },
+  "team.unsuspended.sub": {
+    "pt-BR": "Levantamento da sua suspensão",
+    fr: "Levée de ta suspension",
+    es: "Levantamiento de tu suspensión",
+    en: "Lifting of your suspension",
+    it: "Revoca della tua sospensione",
+    de: "Aufhebung deiner Aussetzung"
+  },
+  "team.unsuspended.intro": {
+    "pt-BR": "A suspensão dos seus direitos de {role} na {libraryName} foi levantada por {actorName}. Você recupera imediatamente seus acessos.",
+    fr: "La suspension de tes droits de {role} à la {libraryName} a été levée par {actorName}. Tu retrouves immédiatement tes accès.",
+    es: "La suspensión de tus derechos de {role} en le {libraryName} fue levantada por {actorName}. Recuperás inmediatamente tus accesos.",
+    en: "The suspension of your {role} rights at {libraryName} has been lifted by {actorName}. You immediately regain your access.",
+    it: "La sospensione dei tuoi diritti di {role} a {libraryName} è stata revocata da {actorName}. Recuperi immediatamente i tuoi accessi.",
+    de: "Die Aussetzung deiner {role}-Rechte bei {libraryName} wurde von {actorName} aufgehoben. Du erhältst sofort deinen Zugang zurück."
+  },
+
+  // ===== Team — Escalades aux administrateur·rices AnarBib (team.last_*) ====
+  "team.last_coordinator_left.sub": {
+    "pt-BR": "{libraryName} não tem mais coordenador(o/a/e)",
+    fr: "{libraryName} n'a plus de coordinateur·rice",
+    es: "{libraryName} ya no tiene coordinadore",
+    en: "{libraryName} no longer has a coordinator",
+    it: "{libraryName} non ha più coordinatori/trici/e",
+    de: "{libraryName} hat keine Koordinator*in mehr"
+  },
+  "team.last_coordinator_left.intro": {
+    "pt-BR": "A biblioteca {libraryName} encontra-se sem coordenador(o/a/e) ativ(o/a/e). {actorName} acaba de retornar a um papel não-coordenador, e ninguém mais ocupa o papel. A biblioteca permanece funcional tecnicamente (os bibliotecári(o/a/e)s podem continuar a operar) mas não tem mais instância de coordenação interna. Uma intervenção política da rede AnarBib é provavelmente necessária.",
+    fr: "La bibliothèque {libraryName} se retrouve sans coordinateur·rice actif·ve. {actorName} vient de revenir à un rôle non-coordinateur, et personne d'autre n'occupe le rôle. La bibliothèque reste fonctionnelle techniquement (les bibliothécaires peuvent toujours opérer) mais n'a plus d'instance de coordination interne. Une intervention politique du réseau AnarBib est probablement nécessaire.",
+    es: "La biblioteca {libraryName} se encuentra sin coordinadore active. {actorName} acaba de volver a un rol no-coordinadore, y nadie más ocupa el rol. La biblioteca permanece funcional técnicamente (les bibliotecaries pueden seguir operando) pero ya no tiene instancia de coordinación interna. Una intervención política de le red AnarBib es probablemente necesaria.",
+    en: "The {libraryName} library finds itself without an active coordinator. {actorName} has just returned to a non-coordinator role, and no one else holds the position. The library remains technically functional (librarians can still operate) but no longer has an internal coordination body. A political intervention from the AnarBib network is likely necessary.",
+    it: "La biblioteca {libraryName} si ritrova senza coordinatori/trici/e attivi/e. {actorName} è appena tornato/a/e a un ruolo non-coordinatore, e nessun'altra persona occupa il ruolo. La biblioteca rimane funzionale tecnicamente (le bibliotecarie e i bibliotecari possono continuare a operare) ma non ha più un'istanza di coordinamento interna. Un intervento politico della rete AnarBib è probabilmente necessario.",
+    de: "Die Bibliothek {libraryName} steht ohne aktive Koordinator*in da. {actorName} ist soeben zu einer Nicht-Koordinator*innen-Rolle zurückgekehrt, und niemand sonst nimmt die Rolle wahr. Die Bibliothek bleibt technisch funktionsfähig (die Bibliothekar*innen können weiter arbeiten), hat aber keine interne Koordinationsinstanz mehr. Eine politische Intervention des AnarBib-Netzwerks ist wahrscheinlich notwendig."
+  },
+  "team.last_coordinator_pending_removal.sub": {
+    "pt-BR": "{libraryName} corre risco de ficar sem coordenador(o/a/e)",
+    fr: "{libraryName} risque de se retrouver sans coordinateur·rice",
+    es: "{libraryName} corre el riesgo de quedarse sin coordinadore",
+    en: "{libraryName} risks finding itself without a coordinator",
+    it: "{libraryName} rischia di ritrovarsi senza coordinatori/trici/e",
+    de: "{libraryName} läuft Gefahr, ohne Koordinator*in dazustehen"
+  },
+  "team.last_coordinator_pending_removal.intro": {
+    "pt-BR": "A biblioteca {libraryName} não terá mais coordenador(o/a/e) ativ(o/a/e) a partir de {pendingUntilDate} se o pedido de retirada em curso não for anulado. {actorName} pediu a retirada d(o/a/e) últim(o/a/e) coordenador(o/a/e) ativ(o/a/e) da biblioteca. Você pode observar a situação, ou intervir politicamente se necessário.",
+    fr: "La bibliothèque {libraryName} aura plus de coordinateur·rice actif·ve à partir du {pendingUntilDate} si la demande de retrait en cours n'est pas annulée. {actorName} a demandé le retrait de la dernière coordinateur·rice actif·ve de la bibliothèque. Tu peux observer la situation, ou intervenir politiquement si nécessaire.",
+    es: "La biblioteca {libraryName} ya no tendrá coordinadore active a partir de le {pendingUntilDate} si la solicitud de retiro en curso no es anulada. {actorName} solicitó el retiro de le última coordinadore active de la biblioteca. Podés observar la situación, o intervenir políticamente si es necesario.",
+    en: "The {libraryName} library will have no active coordinator from {pendingUntilDate} onwards if the pending removal request is not cancelled. {actorName} requested the removal of the last active coordinator at the library. You may observe the situation, or intervene politically if necessary.",
+    it: "La biblioteca {libraryName} non avrà più coordinatori/trici/e attivi/e a partire dal {pendingUntilDate} se la richiesta di rimozione in corso non viene annullata. {actorName} ha richiesto la rimozione dell'ultim(o/a/e) coordinator(e/trice/e) attiv(o/a/e) della biblioteca. Puoi osservare la situazione, o intervenire politicamente se necessario.",
+    de: "Die Bibliothek {libraryName} wird ab dem {pendingUntilDate} keine aktive Koordinator*in mehr haben, falls der laufende Antrag auf Entzug nicht annulliert wird. {actorName} hat den Entzug der letzten aktiven Koordinator*in der Bibliothek beantragt. Du kannst die Situation beobachten oder politisch intervenieren, falls notwendig."
+  },
+
+  // ===== Team — Avertissements et passage en inactif (team.inactive_*) ======
+  // École 1 stricte : "inactif" qualifie "compte" / "statut" (concepts), donc
+  // accord grammatical standard, pas de marquage militant.
+  "team.inactive_warning_30d.sub": {
+    "pt-BR": "Sua conta vai passar a inativa em 30 dias",
+    fr: "Ton compte va passer en inactif dans 30 jours",
+    es: "Tu cuenta va a pasar a inactiva en 30 días",
+    en: "Your account will become inactive in 30 days",
+    it: "Il tuo account passerà a inattivo tra 30 giorni",
+    de: "Dein Konto wird in 30 Tagen inaktiv"
+  },
+  "team.inactive_warning_30d.intro": {
+    "pt-BR": "Você não se conectou em AnarBib há 8 meses. Sem conexão da sua parte nos próximos 30 dias, seu status de {role} na {libraryName} passará automaticamente a inativo. Para conservar seus acessos, conecte-se simplesmente a AnarBib antes de {deadlineDate}.",
+    fr: "Tu ne t'es pas connecté·e sur AnarBib depuis 8 mois. Sans connexion de ta part dans les 30 prochains jours, ton statut de {role} à la {libraryName} passera automatiquement en inactif. Pour conserver tes accès, connecte-toi simplement à AnarBib avant le {deadlineDate}.",
+    es: "No te conectaste a AnarBib desde hace 8 meses. Sin conexión de tu parte en los próximos 30 días, tu estatus de {role} en le {libraryName} pasará automáticamente a inactivo. Para conservar tus accesos, conectate simplemente a AnarBib antes de le {deadlineDate}.",
+    en: "You have not signed in to AnarBib for 8 months. Without a connection on your part within the next 30 days, your {role} status at {libraryName} will automatically become inactive. To keep your access, simply log in to AnarBib before {deadlineDate}.",
+    it: "Non ti sei connesso/a/e ad AnarBib da 8 mesi. Senza una connessione da parte tua nei prossimi 30 giorni, il tuo status di {role} a {libraryName} passerà automaticamente a inattivo. Per conservare i tuoi accessi, connettiti semplicemente ad AnarBib prima del {deadlineDate}.",
+    de: "Du hast dich seit 8 Monaten nicht mehr bei AnarBib angemeldet. Ohne Anmeldung deinerseits in den nächsten 30 Tagen wird dein Status als {role} bei {libraryName} automatisch auf inaktiv gesetzt. Um deinen Zugang zu behalten, melde dich einfach bei AnarBib vor dem {deadlineDate} an."
+  },
+  "team.inactive_warning_7d.sub": {
+    "pt-BR": "Último lembrete: sua conta passa a inativa em 7 dias",
+    fr: "Dernier rappel : ton compte passe en inactif dans 7 jours",
+    es: "Último recordatorio: tu cuenta pasa a inactiva en 7 días",
+    en: "Last reminder: your account becomes inactive in 7 days",
+    it: "Ultimo promemoria: il tuo account passa a inattivo tra 7 giorni",
+    de: "Letzte Erinnerung: Dein Konto wird in 7 Tagen inaktiv"
+  },
+  "team.inactive_warning_7d.intro": {
+    "pt-BR": "Sem conexão da sua parte nos próximos 7 dias, seu status de {role} na {libraryName} passará automaticamente a inativo em {deadlineDate}.",
+    fr: "Sans connexion de ta part dans les 7 prochains jours, ton statut de {role} à la {libraryName} passera automatiquement en inactif le {deadlineDate}.",
+    es: "Sin conexión de tu parte en los próximos 7 días, tu estatus de {role} en le {libraryName} pasará automáticamente a inactivo el {deadlineDate}.",
+    en: "Without a connection on your part within the next 7 days, your {role} status at {libraryName} will automatically become inactive on {deadlineDate}.",
+    it: "Senza una connessione da parte tua nei prossimi 7 giorni, il tuo status di {role} a {libraryName} passerà automaticamente a inattivo il {deadlineDate}.",
+    de: "Ohne Anmeldung deinerseits in den nächsten 7 Tagen wird dein Status als {role} bei {libraryName} am {deadlineDate} automatisch auf inaktiv gesetzt."
+  },
+  "team.inactive_completed.sub": {
+    "pt-BR": "Sua conta passou a inativa",
+    fr: "Ton compte est passé en inactif",
+    es: "Tu cuenta pasó a inactiva",
+    en: "Your account has become inactive",
+    it: "Il tuo account è passato a inattivo",
+    de: "Dein Konto ist inaktiv geworden"
+  },
+  "team.inactive_completed.intro": {
+    "pt-BR": "Após 9 meses sem conexão, seu status de {role} na {libraryName} passou a inativo. Seus acessos estão fechados. Se você desejar recuperá-los, entre em contato com (o/a/e)s coordenador(o/a/e)s da biblioteca para uma reativação.",
+    fr: "Après 9 mois sans connexion, ton statut de {role} à la {libraryName} est passé en inactif. Tes accès sont fermés. Si tu souhaites les retrouver, contacte les coordinateur·rices de la bibliothèque pour une réactivation.",
+    es: "Después de 9 meses sin conexión, tu estatus de {role} en le {libraryName} pasó a inactivo. Tus accesos están cerrados. Si querés recuperarlos, contactá a les coordinadores de la biblioteca para una reactivación.",
+    en: "After 9 months without a connection, your {role} status at {libraryName} has become inactive. Your access is closed. If you wish to regain it, contact the library coordinators for a reactivation.",
+    it: "Dopo 9 mesi senza connessione, il tuo status di {role} a {libraryName} è passato a inattivo. I tuoi accessi sono chiusi. Se desideri recuperarli, contatta le coordinatrici e i coordinatori della biblioteca per una riattivazione.",
+    de: "Nach 9 Monaten ohne Anmeldung ist dein Status als {role} bei {libraryName} auf inaktiv gesetzt worden. Dein Zugang ist geschlossen. Wenn du ihn zurückerhalten möchtest, wende dich an die Koordinator*innen der Bibliothek für eine Reaktivierung."
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";
