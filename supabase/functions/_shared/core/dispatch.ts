@@ -3,8 +3,12 @@ import { handleEmprestimoOld, handleReservaCriadaOld } from "../domain/legacy.ts
 import { handleEmprestimoDevolucaoEvent, handleEmprestimoV2, handleEmprestimoV2Reminder } from "../domain/emprestimos.ts";
 import { handleProfileNotice } from "../domain/profiles.ts";
 import { handleReservaCriadaV2, handleReservaPickupReplyEvent, handleReservaV2StatusChange, handleReservaV2WorkflowEvent } from "../domain/reservas.ts";
+import { handleTeamEvent } from "../domain/team.ts";
 
 export async function dispatchNotifyEvent(event: string, recordId: number, payload?: NotifyPayload | null): Promise<Record<string, unknown> | null> {
+  // Events team.* (gouvernance) — handler dédié, lit team_notification_outbox par recordId
+  if (event.startsWith("team.")) return await handleTeamEvent(recordId);
+
   if (event === "reserva_criada") return await handleReservaCriadaOld(recordId);
   if (event === "emprestimo_criado" || event === "emprestimo_prorrogado" || event === "emprestimo_devolvido" || event.startsWith("lembrete_devolucao_") || event.startsWith("aviso_atraso_")) return await handleEmprestimoOld(recordId, event);
   if (event === "reserva_v2_criada") return await handleReservaCriadaV2(recordId);
