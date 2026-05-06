@@ -1,7 +1,11 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 export const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 export const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-export const WEBHOOK_SECRET = (Deno.env.get("WEBHOOK_SECRET_NOTIFY_EVENT") || "").trim();
+// Note (audit P4 du 06/05/2026) : la const WEBHOOK_SECRET qui pointait vers
+// WEBHOOK_SECRET_NOTIFY_EVENT a été supprimée car (1) jamais importée ailleurs
+// dans notify-internal-task, (2) sémantiquement incorrecte (pointait vers le
+// secret de notify-event au lieu de celui d'internal-task). Le secret réel est
+// défini localement dans index.ts à partir de WEBHOOK_SECRET_NOTIFY_INTERNAL_TASK.
 export const BREVO_KEY = Deno.env.get("BREVO_API_KEY_NOTIFICATIONS");
 export const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || Deno.env.get("ANARBIB_SENDER_EMAIL") || Deno.env.get("NETWORK_SENDER_EMAIL") || Deno.env.get("BREVO_SENDER_MAIL") || "no-reply@example.org";
 export const SENDER_NAME = Deno.env.get("SENDER_NAME") || Deno.env.get("ANARBIB_SENDER_NAME") || Deno.env.get("NETWORK_SENDER_NAME") || Deno.env.get("BREVO_SENDER_NAME") || Deno.env.get("LIBRARY_SENDER_NAME") || "Biblioteca da rede AnarBib";
