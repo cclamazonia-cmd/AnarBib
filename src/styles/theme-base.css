@@ -44,10 +44,9 @@
   /* ── Typographie ──────────────────────────────────────── */
   /* Bitter : sérif contemporain, gras expressif, TOUTES les majuscules accentuées pt-BR */
   /* Fira Sans : sans-sérif humaniste Mozilla, support latin-ext complet */
-  /* Fira Sans Condensed : variante condensée pour badges et accents */
+  /* Polices auto-hébergées en woff2 subseté Latin Extended — cf. src/styles/fonts.css */
   --brand-font-heading: 'Bitter', 'Georgia', serif;
   --brand-font-body: 'Fira Sans', 'Segoe UI', sans-serif;
-  --brand-font-accent: 'Fira Sans Condensed', 'Fira Sans', sans-serif;
 
   /* ── Layout ───────────────────────────────────────────── */
   --brand-radius: 20px;

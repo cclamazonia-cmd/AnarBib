@@ -90,7 +90,7 @@
 .ab-painel-summary--warn { border-color: rgba(200,150,0,.3); background: rgba(200,150,0,.08); }
 .ab-painel-summary--bad { border-color: rgba(200,40,40,.3); background: rgba(200,0,0,.1); }
 .ab-painel-summary--ok { border-color: rgba(0,180,60,.25); background: rgba(0,180,60,.08); }
-.ab-painel-summary__count { display: block; font-size: 2rem; font-weight: 900; color: var(--brand-text); }
+.ab-painel-summary__count { display: block; font-size: 2rem; font-weight: 800; color: var(--brand-text); }
 .ab-painel-summary__label { font-size: .82rem; color: var(--brand-muted); }
 
 /* Items list */

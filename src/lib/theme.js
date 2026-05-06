@@ -93,8 +93,18 @@ async function applyManifest(manifest) {
   // Résultat : "TâCHES INTERNES DE LA BIBLIOTHèQUE" avec un mélange capitales/Times
   // New Roman fallback sur les diacritiques. Bitter (la valeur par défaut de
   // theme-base.css) supporte tous les diacritiques nécessaires.
+  //
+  // PATCH 06/05/2026 : on ne charge plus non plus la police body depuis le manifest.
+  // Le manifest default chargeait interface.ttf (~107 kB) depuis le bucket Supabase.
+  // Désormais, Bitter et Fira Sans sont auto-hébergées en woff2 subseté Latin Extended
+  // dans public/fonts/, déclarées dans src/styles/fonts.css avec font-display: swap.
+  // Cela élimine la dépendance au bucket Supabase pour les polices et économise
+  // ~204 kB par chargement (interface.ttf chargée 2x à cause des montages concurrents
+  // de useTheme). Si un jour on veut réactiver les polices custom par biblio, il
+  // suffira de décommenter ces 3 lignes — mais il faudra aussi vider/désactiver
+  // public/fonts/ pour éviter le double chargement.
   // if (manifest.fonts?.heading) await installFont(manifest.fonts.heading, '--brand-font-heading');
-  if (manifest.fonts?.body) await installFont(manifest.fonts.body, '--brand-font-body');
+  // if (manifest.fonts?.body) await installFont(manifest.fonts.body, '--brand-font-body');
   // if (manifest.fonts?.accent) await installFont(manifest.fonts.accent, '--brand-font-accent');
 }
 

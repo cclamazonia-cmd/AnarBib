@@ -1,0 +1,123 @@
+/*
+ * fonts.css — Polices auto-hébergées d(o/a/e) AnarBib
+ * --------------------------------------------------------------------------
+ * Migration du 06/05/2026 :
+ *   - Avant : Google Fonts via CDN (fonts.googleapis.com), ~1 MB initial
+ *   - Après : auto-hébergement local en woff2 subseté Latin Extended,
+ *             371 ko total pour 9 styles (-63% au total)
+ *
+ * Polices :
+ *   - Bitter      (Solmatas, SIL OFL) — titres, headings, accents éditoriaux
+ *                  https://github.com/solmatas/BitterPro
+ *   - Fira Sans   (Mozilla, SIL OFL)  — corps de texte, UI, formulaires
+ *                  https://github.com/mozilla/Fira
+ *
+ * Sous-ensemble Unicode appliqué :
+ *   Latin-1 + Latin Extended-A/B + Latin Extended Additional + ponctuation
+ *   typographique + symboles monétaires + flèches + esperanto
+ *   (couvre pt-BR, es, fr, it, de, en + esperanto + langues romanes mineures)
+ *
+ * Stratégie de chargement :
+ *   - font-display: swap → texte rendu immédiatement avec fallback,
+ *     remplacement progressif quand la fonte arrive (zéro FOIT)
+ *   - unicode-range défini par police pour optimiser le chargement
+ *   - 2 fichiers critiques en preload depuis index.html
+ *     (FiraSans-Regular + Bitter-Regular)
+ *
+ * Licence des polices : SIL Open Font License 1.1 — voir public/fonts/LICENSE
+ * --------------------------------------------------------------------------
+ */
+
+/* ─── Plage Unicode partagée ────────────────────────────────────────────────
+ * Identique à celle utilisée lors du subsetting via pyftsubset.
+ * Toute modification ici doit être répercutée lors d'un re-subset.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * BITTER — titres & headings
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Bitter-Regular.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+@font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/Bitter-SemiBold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+@font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Bitter-Bold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+@font-face {
+  font-family: 'Bitter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/Bitter-ExtraBold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * FIRA SANS — corps & UI
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/FiraSans-Regular.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/FiraSans-Italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/FiraSans-SemiBold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/FiraSans-Bold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/FiraSans-ExtraBold.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
+}
