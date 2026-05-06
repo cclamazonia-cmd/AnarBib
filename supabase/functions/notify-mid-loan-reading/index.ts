@@ -1,5 +1,22 @@
+// ============================================================================
+// notify-mid-loan-reading — Mensagem de meio de empréstimo + recomendações
+// ============================================================================
+// Audit du 06/05/2026 (P2-B) :
+//   - Lecture détaillée des 599 lignes : pas de duplication critique avec
+//     _shared/. La fonction utilise des cascades de variables d'environnement
+//     subtilement différentes (ex: senderNameFromContext fallback sur
+//     BREVO_SENDER_NAME que _shared/core/env.ts ne couvre pas) et un renderEmail
+//     spécifique avec section recommendations.
+//   - Mini-refactor minimal appliqué : supabaseAdmin partagé depuis _shared/
+//     pour économiser quelques lignes et harmoniser avec notify-event /
+//     notify-weekly-report. Le reste du code reste intentionnellement spécifique.
+//
+// Webhook secret : WEBHOOK_SECRET_NOTIFY_MID_LOAN
+// Brevo key      : BREVO_API_KEY_NOTIFICATIONS (fallback BREVO_API_KEY_NOTIFY_RESERVA)
+// ============================================================================
+
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { supabaseAdmin } from "../_shared/core/env.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-webhook-secret",
@@ -360,14 +377,8 @@ serve(async (req)=>{
     const dryRun = body?.dry_run === true;
     const limit = Math.min(Math.max(Number(body?.limit || 50), 1), 200);
     const libraryFilter = Array.from(new Set((body?.library_ids || []).map((value)=>normalizeText(value)).filter(Boolean)));
-    const supabaseUrl = mustEnv("SUPABASE_URL");
-    const serviceRoleKey = mustEnv("SUPABASE_SERVICE_ROLE_KEY");
     const brevoKey = normalizeText(Deno.env.get("BREVO_API_KEY_NOTIFICATIONS")) || normalizeText(Deno.env.get("BREVO_API_KEY_NOTIFY_RESERVA")) || mustEnv("BREVO_API_KEY_NOTIFY_RESERVA");
-    const sb = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        persistSession: false
-      }
-    });
+    const sb = supabaseAdmin;
     let loansQuery = sb.from("emprestimos_v2").select("id,user_id,library_id,due_at,created_at,status_global").eq("status_global", "aberto").gte("due_at", targetDate);
     if (libraryFilter.length) loansQuery = loansQuery.in("library_id", libraryFilter);
     const { data: loansData, error: loansError } = await loansQuery.limit(1000);
