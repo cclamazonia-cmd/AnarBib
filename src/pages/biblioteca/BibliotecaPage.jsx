@@ -12,15 +12,10 @@ import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
-const SERVICE_MODES = [
-  { value: 'funcionamento_normal', label: 'Funcionamento normal' },
-  { value: 'funcionamento_reduzido', label: 'Funcionamento reduzido' },
-  { value: 'recesso', label: 'Em recesso' },
-  { value: 'suspenso', label: 'Suspenso temporariamente' },
-];
+// SERVICE_MODES built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
+// TASK_PRIO   built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
 // ILL_STATUS built inside component with t()
 // TASK_STATUS built inside component with t()
-const TASK_PRIO = { alta:'Alta', normal:'Normal', baixa:'Baixa' };
 
 // NOTIFICATION_FLAGS keys — labels resolved via t() inside the component
 const NOTIFICATION_FLAG_KEYS = [
@@ -33,11 +28,26 @@ const NOTIFICATION_FLAG_KEYS = [
 export default function BibliotecaPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role } = useLibrary();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.biblioteca' }));
   const roleLoaded = role !== null && role !== undefined;
   const isCoord = role === 'coordenador' || role === 'administrador';
   const isLibrarian = role === 'librarian' || isCoord;
+
+  // SERVICE_MODES localized via t() — was hardcoded pt-BR before audit 07/05/2026.
+  const SERVICE_MODES = useMemo(() => ([
+    { value: 'funcionamento_normal',   label: t({ id: 'rede.serviceMode.funcionamento_normal' }) },
+    { value: 'funcionamento_reduzido', label: t({ id: 'rede.serviceMode.funcionamento_reduzido' }) },
+    { value: 'recesso',                label: t({ id: 'rede.serviceMode.recesso' }) },
+    { value: 'suspenso',               label: t({ id: 'rede.serviceMode.suspenso' }) },
+  ]), [t]);
+
+  // TASK_PRIO localized via t() — was hardcoded pt-BR before audit 07/05/2026.
+  const TASK_PRIO = useMemo(() => ({
+    alta:   t({ id: 'biblioteca.tasks.priority.alta' }),
+    normal: t({ id: 'biblioteca.tasks.priority.normal' }),
+    baixa:  t({ id: 'biblioteca.tasks.priority.baixa' }),
+  }), [t]);
 
   // FIX BUG #2: TASK_STATUS was referenced but never defined, causing ReferenceError
   // when calling generateReportText(). Built here via useMemo to localize labels.
@@ -229,11 +239,11 @@ export default function BibliotecaPage() {
       const { error: insErr } = await supabase.from('library_regulation_documents').insert({
         library_id: libraryId, doc_kind: 'regimento', publication_status: 'published',
         is_active: true, storage_bucket: 'library-regimentos-public', storage_path_public: path,
-        version_label: `Regimento ${new Date().toLocaleDateString('pt-BR')}`,
+        version_label: t({ id: 'biblioteca.regulation.versionPrefix' }, { date: new Date().toLocaleDateString(locale) }),
         created_by: user?.id,
       });
       if (insErr) throw insErr;
-      setMsg({ text: 'Regimento enviado e publicado.', kind: 'ok' });
+      setMsg({ text: t({ id: 'biblioteca.regulation.published' }), kind: 'ok' });
       regFileRef.current.value = '';
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
@@ -259,7 +269,7 @@ export default function BibliotecaPage() {
       const { error } = await supabase.from('painel_internal_tasks').insert(insertPayload);
       if (error) throw error;
       setNewTask({ title: '', description: '', priority: 'normal', owner: '', dueDate: '', tagsText: '' });
-      setMsg({ text: 'Tarefa criada.', kind: 'ok' });
+      setMsg({ text: t({ id: 'biblioteca.tasks.created' }), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
@@ -363,10 +373,10 @@ export default function BibliotecaPage() {
     if (!email) { setMsg({ text: t({id:'biblioteca.report.noEmail'}), kind: 'error' }); return; }
     const text = generateReportText();
     // Use mailto as fallback — a proper email send would use notify-event
-    const subject = encodeURIComponent(`Relatório — ${lib?.name || libraryName} — ${new Date().toLocaleDateString('pt-BR')}`);
+    const subject = encodeURIComponent(t({ id: 'biblioteca.report.emailSubject' }, { lib: lib?.name || libraryName, date: new Date().toLocaleDateString(locale) }));
     const body = encodeURIComponent(text);
     window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
-    setMsg({ text: `E-mail de relatório preparado para ${email}. Verifique seu cliente de e-mail.`, kind: 'ok' });
+    setMsg({ text: t({ id: 'biblioteca.report.prepared' }, { email }), kind: 'ok' });
   }
 
   // ── Task invite ─────────────────────────────────────────
@@ -377,7 +387,7 @@ export default function BibliotecaPage() {
         task_id: taskId, library_id: libraryId, invite_email: email.trim(),
         invite_status: 'pendente', created_by: user?.id,
       });
-      setMsg({ text: `Convite enviado para ${email.trim()}.`, kind: 'ok' });
+      setMsg({ text: t({ id: 'biblioteca.tasks.inviteSent' }, { email: email.trim() }), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
@@ -521,7 +531,7 @@ export default function BibliotecaPage() {
 
   async function deleteCirculationRule(rule) {
     // Confirm fort : avertissement explicite + saisie du label
-    const ruleLabel = rule.rule_label || `Regra #${rule.id}`;
+    const ruleLabel = rule.rule_label || t({ id: 'biblioteca.rules.ruleNumberFallback' }, { id: rule.id });
     if (!confirm(t({ id: 'biblioteca.rules.deleteWarning' }, { name: ruleLabel }))) return;
     const typed = prompt(t({ id: 'biblioteca.rules.deleteConfirmTyped' }, { name: ruleLabel }));
     if (typed !== ruleLabel) {
@@ -637,7 +647,7 @@ export default function BibliotecaPage() {
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.replyEmail' })}</label><input type="email" value={commons.reply_to_email||''} onChange={e=>setC('reply_to_email',e.target.value)} style={fs} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.sendMode' })}</label>
                 <select value={commons.email_delivery_mode||'normal'} onChange={e=>setC('email_delivery_mode',e.target.value)} style={fs}>
-                  <option value="normal">{t({ id: 'biblioteca.tasks.priority.normal' })}</option><option value="test_only">Somente teste</option><option value="disabled">Desativado</option>
+                  <option value="normal">{t({ id: 'biblioteca.comms.sendMode.normal' })}</option><option value="test_only">{t({ id: 'biblioteca.comms.sendMode.test_only' })}</option><option value="disabled">{t({ id: 'biblioteca.comms.sendMode.disabled' })}</option>
                 </select>
               </div>
             </div>
@@ -672,7 +682,7 @@ export default function BibliotecaPage() {
             {regDocs.map(doc => (
               <div key={doc.id} style={{ padding:'8px 10px', borderRadius:6, background:'rgba(0,0,0,.15)', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                 <div>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{doc.version_label||`Regimento #${doc.id}`}</div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{doc.version_label||t({ id: 'biblioteca.regulation.versionFallback' }, { id: doc.id })}</div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                     {doc.doc_kind ? t({ id: `biblioteca.regulation.docKind.${doc.doc_kind}`, defaultMessage: doc.doc_kind }) : '—'}
                     {' · '}
@@ -701,7 +711,7 @@ export default function BibliotecaPage() {
               <div key={r.id} style={{ padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)' }}>
                 {editingRule?.id===r.id ? (
                   <div className="cat-book-grid" style={{ gap:8 }}>
-                    <div className="cat-field" style={{ gridColumn:'span 3' }}><strong style={{ fontSize:'.9rem' }}>{r.rule_label||`Regra #${r.id}`}</strong></div>
+                    <div className="cat-field" style={{ gridColumn:'span 3' }}><strong style={{ fontSize:'.9rem' }}>{r.rule_label||t({ id: 'biblioteca.rules.ruleNumberFallback' }, { id: r.id })}</strong></div>
                     <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.loanDays'})}</label><input type="number" value={editingRule.loan_days||''} onChange={e=>setEditingRule(p=>({...p,loan_days:Number(e.target.value)||null}))} style={fs} /></div>
                     <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.renewalDays'})}</label><input type="number" value={editingRule.renewal_days||''} onChange={e=>setEditingRule(p=>({...p,renewal_days:Number(e.target.value)||null}))} style={fs} /></div>
                     <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.renewalMax'})}</label><input type="number" value={editingRule.renewal_max_count||''} onChange={e=>setEditingRule(p=>({...p,renewal_max_count:Number(e.target.value)||null}))} style={fs} /></div>
@@ -728,7 +738,7 @@ export default function BibliotecaPage() {
                 ) : (
                   <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 }}>
                     <div style={{ flex:1 }}>
-                      <div style={{ fontSize:'.9rem', fontWeight:600 }}>{seedT(r, 'rule_label', 'rule.label') || `Regra #${r.id}`}</div>
+                      <div style={{ fontSize:'.9rem', fontWeight:600 }}>{seedT(r, 'rule_label', 'rule.label') || t({ id: 'biblioteca.rules.ruleNumberFallback' }, { id: r.id })}</div>
                       <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                         {r.loan_allowed
                           ? (r.loan_days != null
@@ -922,7 +932,7 @@ export default function BibliotecaPage() {
                       <div style={{ flex:1 }}>
                         <div style={{ fontSize:'.9rem', fontWeight:600, display:'flex', alignItems:'center', gap:6 }}>
                           {r.name}
-                          {!r.is_active && <span className="cat-pill" style={{ fontSize:'.65rem', padding:'1px 6px', background:'rgba(255,255,255,.1)' }}>inactive</span>}
+                          {!r.is_active && <span className="cat-pill" style={{ fontSize:'.65rem', padding:'1px 6px', background:'rgba(255,255,255,.1)' }}>{t({ id: 'biblioteca.rules.inactive' })}</span>}
                           {r.is_required && r.is_active && <span className="cat-pill warn" style={{ fontSize:'.65rem', padding:'1px 6px' }}>{t({ id: 'membership.rule.required' })}</span>}
                         </div>
                         <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>
@@ -980,7 +990,7 @@ export default function BibliotecaPage() {
             {partners.length>0 && <div style={lw}>{partners.map((p,i)=>(
               <div key={p.id} style={lr(i)}>
                 <div><div style={{ fontSize:'.9rem', fontWeight:600 }}>{p.display_name||p.slug}</div><div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{p.software_family||'—'} · {p.country_code||'—'}</div></div>
-                <span className={`cat-pill ${p.is_active?'ok':'warn'}`} style={{ fontSize:'.7rem' }}>{p.is_active?'Ativa':'Inativa'}</span>
+                <span className={`cat-pill ${p.is_active?'ok':'warn'}`} style={{ fontSize:'.7rem' }}>{p.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span>
               </div>
             ))}</div>}
           </div>
@@ -1015,10 +1025,10 @@ export default function BibliotecaPage() {
                 <select style={fs}><option value="">{t({ id: 'biblioteca.exchanges.selectPartner' })}</option>{allLibraries.filter(l=>l.id!==libraryId).map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}</select>
               </div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.localDoc' })}</label><input type="text" style={fs} placeholder={t({id:'biblioteca.exchanges.localDocPlaceholder'})} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.wantedDoc' })}</label><input type="text" style={fs} placeholder="Buscar documento desejado…" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.wantedDoc' })}</label><input type="text" style={fs} placeholder={t({ id: 'biblioteca.ill.searchPlaceholder' })} /></div>
             </div>
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
-              <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.exchanges.message' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder="A proposta fica registrada e pode abrir um e-mail pronto para envio ao contato responsável." /></div>
+              <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.exchanges.message' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder={t({ id: 'biblioteca.ill.motifPlaceholder' })} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.note' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder={t({id:'biblioteca.exchanges.notePlaceholder'})} /></div>
             </div>
             <div style={{ display:'flex', gap:8 }}>
@@ -1059,7 +1069,7 @@ export default function BibliotecaPage() {
             <div style={{ ...bx, background:'rgba(0,0,0,.1)', marginBottom:12 }}>
               <h4 style={{ margin:'0 0 8px', fontSize:'.95rem' }}>{t({ id: 'biblioteca.ill.items' })}</h4>
               <div style={{ display:'flex', gap:8, marginBottom:8 }}>
-                <input type="text" value={illDocSearch} onChange={e=>setIllDocSearch(e.target.value)} onKeyDown={e=>e.key==='Enter'&&searchIllDocs()} placeholder="Buscar documento por título, autor ou ref…" style={{...fs,flex:1}} />
+                <input type="text" value={illDocSearch} onChange={e=>setIllDocSearch(e.target.value)} onKeyDown={e=>e.key==='Enter'&&searchIllDocs()} placeholder={t({ id: 'biblioteca.ill.fullSearchPlaceholder' })} style={{...fs,flex:1}} />
                 <button className="cat-btn secondary" onClick={searchIllDocs} style={{ fontSize:'.85rem', padding:'7px 14px', flexShrink:0 }}>{t({ id: 'common.search' })}</button>
               </div>
               {illDocResults.length>0 && <div style={{...lw,marginBottom:8,maxHeight:150,overflowY:'auto'}}>{illDocResults.map((d,i)=>(
@@ -1078,12 +1088,12 @@ export default function BibliotecaPage() {
             </div>
 
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contact' })}</label><input type="text" value={illForm.contactName} onChange={e=>setIllForm(p=>({...p,contactName:e.target.value}))} style={fs} placeholder="Nome da pessoa de referência" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contact' })}</label><input type="text" value={illForm.contactName} onChange={e=>setIllForm(p=>({...p,contactName:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.ill.contactNamePlaceholder' })} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contactEmail' })}</label><input type="email" value={illForm.contactEmail} onChange={e=>setIllForm(p=>({...p,contactEmail:e.target.value}))} style={fs} placeholder="contato@biblioteca.org" /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.meetingPoint' })}</label><input type="text" value={illForm.meetingPoint} onChange={e=>setIllForm(p=>({...p,meetingPoint:e.target.value}))} style={fs} placeholder="Retirada no plantão, envio postal…" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.meetingPoint' })}</label><input type="text" value={illForm.meetingPoint} onChange={e=>setIllForm(p=>({...p,meetingPoint:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.ill.pickupPlaceholder' })} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.startDate' })}</label><input type="date" value={illForm.startDate} onChange={e=>setIllForm(p=>({...p,startDate:e.target.value}))} style={fs} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.dueDate' })}</label><input type="date" value={illForm.dueDate} onChange={e=>setIllForm(p=>({...p,dueDate:e.target.value}))} style={fs} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.notes' })}</label><textarea value={illForm.logisticsNote} onChange={e=>setIllForm(p=>({...p,logisticsNote:e.target.value}))} rows={2} style={{...fs,resize:'vertical'}} placeholder="Embalagem, transporte, condições…" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.notes' })}</label><textarea value={illForm.logisticsNote} onChange={e=>setIllForm(p=>({...p,logisticsNote:e.target.value}))} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({ id: 'biblioteca.ill.packagingPlaceholder' })} /></div>
             </div>
             <div style={{ display:'flex', gap:8 }}>
               <button className="cat-btn primary" onClick={saveIll} disabled={saving} style={{ fontSize:'.9rem' }}>{saving?t({id:'common.saving'}):t({id:'biblioteca.ill.save'})}</button>
@@ -1100,10 +1110,10 @@ export default function BibliotecaPage() {
               const borrowerLib = allLibraries.find(l=>l.id===loan.borrower_library_id);
               return(<div key={loan.id} style={lr(i)}>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>#{loan.id} — {isLender?'Emprestadora':'Tomadora'}</div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>#{loan.id} — {isLender?t({ id: 'biblioteca.ill.lender' }):t({ id: 'biblioteca.ill.borrower' })}</div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                     {lenderLib?.short_name||'—'} → {borrowerLib?.short_name||'—'}
-                    {loan.start_date&&` · saída: ${loan.start_date}`}{loan.due_date&&` · retorno: ${loan.due_date}`}
+                    {loan.start_date&&` · ${t({ id: 'biblioteca.ill.startDateLabel' })}: ${loan.start_date}`}{loan.due_date&&` · ${t({ id: 'biblioteca.ill.dueDateLabel' })}: ${loan.due_date}`}
                     {loan.meeting_point&&` · ${loan.meeting_point}`}
                   </div>
                 </div>
@@ -1140,7 +1150,7 @@ export default function BibliotecaPage() {
             <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
               <button className="cat-btn primary" onClick={()=>{ navigator.clipboard?.writeText(generateReportText()); setMsg({text:t({id:'biblioteca.report.copiedToast'}),kind:'ok'}); }} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.copy' })}</button>
               <button className="cat-btn secondary" onClick={sendReport} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.sendEmail' })}</button>
-              <span style={{ fontSize:'.82rem', color:'var(--brand-muted)', alignSelf:'center' }}>Destinatário: {commons?.contact_email || '(não configurado)'}</span>
+              <span style={{ fontSize:'.82rem', color:'var(--brand-muted)', alignSelf:'center' }}>{t({ id: 'biblioteca.tasks.recipient' })} {commons?.contact_email || t({ id: 'common.notConfigured' })}</span>
             </div>
           </div>
         </div>)}
@@ -1151,12 +1161,12 @@ export default function BibliotecaPage() {
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.tasks.new' })}</h4>
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
-              <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.tasks.titleField' })}</label><input type="text" value={newTask.title} onChange={e=>setNewTask(p=>({...p,title:e.target.value}))} style={fs} placeholder="Ex.: Verificar exemplares do setor 2" /></div>
+              <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.tasks.titleField' })}</label><input type="text" value={newTask.title} onChange={e=>setNewTask(p=>({...p,title:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.titlePlaceholder' })} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.priority' })}</label><select value={newTask.priority} onChange={e=>setNewTask(p=>({...p,priority:e.target.value}))} style={fs}><option value="baixa">{t({ id: 'biblioteca.tasks.priority.low' })}</option><option value="normal">{t({ id: 'biblioteca.tasks.priority.normal' })}</option><option value="alta">{t({ id: 'biblioteca.tasks.priority.high' })}</option></select></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.owner' })}</label><input type="text" value={newTask.owner} onChange={e=>setNewTask(p=>({...p,owner:e.target.value}))} style={fs} placeholder="Nome" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.owner' })}</label><input type="text" value={newTask.owner} onChange={e=>setNewTask(p=>({...p,owner:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.ownerPlaceholder' })} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.dueDate' })}</label><input type="date" value={newTask.dueDate||''} onChange={e=>setNewTask(p=>({...p,dueDate:e.target.value}))} style={fs} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.tags' })}</label><input type="text" value={newTask.tagsText||''} onChange={e=>setNewTask(p=>({...p,tagsText:e.target.value}))} style={fs} placeholder="catalogação, urgente, setor 2" /></div>
-              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.tasks.description' })}</label><textarea value={newTask.description} onChange={e=>setNewTask(p=>({...p,description:e.target.value}))} rows={2} style={{...fs,resize:'vertical'}} placeholder="Detalhes da tarefa…" /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.tags' })}</label><input type="text" value={newTask.tagsText||''} onChange={e=>setNewTask(p=>({...p,tagsText:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.tagsPlaceholder' })} /></div>
+              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.tasks.description' })}</label><textarea value={newTask.description} onChange={e=>setNewTask(p=>({...p,description:e.target.value}))} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({ id: 'biblioteca.tasks.descPlaceholder' })} /></div>
             </div>
             <button className="cat-btn primary" onClick={createTask} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.tasks.create' })}</button>
           </div>
@@ -1165,9 +1175,9 @@ export default function BibliotecaPage() {
             <div key={tk.id} style={{ ...lr(i), flexDirection:'column', alignItems:'stretch', gap:6 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{tk.title||'(sem título)'}</div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{tk.title||t({ id: 'common.noTitle' })}</div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                    {tk.owner||'—'}{tk.due_date&&` · prazo: ${tk.due_date}`}
+                    {tk.owner||'—'}{tk.due_date&&` · ${t({ id: 'biblioteca.tasks.deadlineLabel' })}: ${tk.due_date}`}
                     {tk.tags?.length>0&&` · ${tk.tags.join(', ')}`}
                   </div>
                   {tk.description && <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>{tk.description}</div>}
@@ -1177,12 +1187,12 @@ export default function BibliotecaPage() {
                   <select value={tk.status} onChange={e=>updateTaskStatus(tk.id,e.target.value)} style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
                     <option value="pendente">{t({ id: 'task.status.pendente' })}</option><option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option><option value="concluida">{t({ id: 'task.status.concluida' })}</option><option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
                   </select>
-                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm('Descartar esta tarefa?'))return;await supabase.from('painel_internal_tasks').delete().eq('id',tk.id);await loadAll();}}>{t({ id: 'common.discard' })}</button>
+                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm(t({ id: 'biblioteca.tasks.discardConfirm' })))return;await supabase.from('painel_internal_tasks').delete().eq('id',tk.id);await loadAll();}}>{t({ id: 'common.discard' })}</button>
                 </div>
               </div>
               {/* Invite row */}
               <div style={{ display:'flex', gap:6, alignItems:'center' }}>
-                <input type="email" placeholder="E-mail do(a) camarada a convidar…" style={{...fs, flex:1, padding:'6px 10px', fontSize:'.82rem'}}
+                <input type="email" placeholder={t({ id: 'biblioteca.tasks.invitePlaceholder' })} style={{...fs, flex:1, padding:'6px 10px', fontSize:'.82rem'}}
                   onKeyDown={async e=>{if(e.key==='Enter'&&e.target.value.trim()){await inviteToTask(tk.id,e.target.value);e.target.value='';}}} />
                 <button className="cat-btn secondary" style={{ fontSize:'.78rem', padding:'4px 10px', flexShrink:0 }}
                   onClick={async e=>{const inp=e.target.previousElementSibling;if(inp?.value?.trim()){await inviteToTask(tk.id,inp.value);inp.value='';}}}>{t({ id: 'biblioteca.tasks.invite' })}</button>

@@ -14,13 +14,20 @@ import '../catalogacao/CatalogacaoPage.css';
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 // REQ_STATUS built inside component with t()
 // ROLE_LABELS built inside component with t()
-const SERVICE_LABELS = { funcionamento_normal:'Normal', funcionamento_reduzido:'Reduzido', recesso:'Em recesso', suspenso:'Suspenso' };
+// SERVICE_LABELS built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
 
 export default function RedePage() {
   const { user } = useAuth();
   const { role } = useLibrary();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.network' }));
+
+  const SERVICE_LABELS = useMemo(() => ({
+    funcionamento_normal:    t({ id: 'rede.serviceMode.funcionamento_normal' }),
+    funcionamento_reduzido:  t({ id: 'rede.serviceMode.funcionamento_reduzido' }),
+    recesso:                 t({ id: 'rede.serviceMode.recesso' }),
+    suspenso:                t({ id: 'rede.serviceMode.suspenso' }),
+  }), [t]);
 
   const REQ_STATUS = useMemo(() => ({
     pendente: t({id:'request.status.pendente'}), em_analise: t({id:'request.status.em_analise'}),
@@ -32,11 +39,11 @@ export default function RedePage() {
     coordenador: t({id:'roles.coordenador'}), administrador: t({id:'roles.administrador'}),
   }), [t]);
   const TABS = useMemo(() => ([
-    { id: 'overview', label: 'Resumo da rede' },
+    { id: 'overview', label: t({ id: 'rede.tab.overview' }) },
     { id: 'requests', label: t({ id: 'rede.requests.label' }) },
-    { id: 'libraries', label: 'Bibliotecas' },
-    { id: 'members', label: 'Membros da rede' },
-    { id: 'admins', label: 'Administradores' },
+    { id: 'libraries', label: t({ id: 'rede.tab.libraries' }) },
+    { id: 'members', label: t({ id: 'rede.tab.members' }) },
+    { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
   ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
   const isAdmin = role === 'administrador';
@@ -152,7 +159,7 @@ export default function RedePage() {
   }
 
   async function addAdmin() {
-    if (!newAdminEmail.trim()) { setMsg({ text: 'Informe o e-mail.', kind: 'error' }); return; }
+    if (!newAdminEmail.trim()) { setMsg({ text: t({ id: 'rede.admins.emailRequired' }), kind: 'error' }); return; }
     const member = allMembers.find(m => m.profiles?.email?.toLowerCase() === newAdminEmail.trim().toLowerCase());
     if (!member) { setMsg({ text: t({ id: 'rede.admins.userNotFound' }), kind: 'error' }); return; }
     await changeUserRole(member.user_id, member.library_id, 'administrador');
@@ -199,12 +206,12 @@ export default function RedePage() {
           <div>
             <h1 style={{ margin:0 }}>{t({ id: 'rede.title' })}</h1>
             <p style={{ color:'var(--brand-muted)', fontSize:'.9rem', margin:'2px 0 0' }}>
-              Coordenação da rede AnarBib
-              <span className="cat-pill danger" style={{ marginLeft:8, fontSize:'.65rem' }}>Administrador(a)</span>
+              {t({ id: 'rede.subtitle' })}
+              <span className="cat-pill danger" style={{ marginLeft:8, fontSize:'.65rem' }}>{t({ id: 'roles.administrador' })}</span>
             </p>
           </div>
           <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-            <button className="cat-btn secondary" onClick={loadAll} disabled={loading}>{loading ? 'Atualizando…' : 'Atualizar dados'}</button>
+            <button className="cat-btn secondary" onClick={loadAll} disabled={loading}>{loading ? t({ id: 'rede.refreshing' }) : t({ id: 'rede.refresh' })}</button>
           </div>
         </div>
 
@@ -238,25 +245,25 @@ export default function RedePage() {
                       <div style={{ fontSize:'1rem', fontWeight:700 }}>{lib.name}</div>
                       <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                         {lib.slug} · {lib.city||'—'}{lib.state&&`, ${lib.state}`}
-                        <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ marginLeft:6, fontSize:'.6rem' }}>{lib.is_active?'Ativa':'Inativa'}</span>
+                        <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ marginLeft:6, fontSize:'.6rem' }}>{lib.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span>
                       </div>
                     </div>
                   </div>
                   <div style={{ display:'flex', gap:6, marginBottom:8, flexWrap:'wrap' }}>
                     <span className={`cat-pill ${lib.service_mode==='funcionamento_normal'?'ok':'warn'}`} style={{ fontSize:'.68rem' }}>{SERVICE_LABELS[lib.service_mode]||lib.service_mode}</span>
-                    {lib.allows_new_loans && <span className="cat-pill ok" style={{ fontSize:'.68rem' }}>Empréstimos</span>}
-                    {lib.allows_new_reservations && <span className="cat-pill ok" style={{ fontSize:'.68rem' }}>Reservas</span>}
-                    {!lib.allows_new_loans && <span className="cat-pill danger" style={{ fontSize:'.68rem' }}>Sem empréstimos</span>}
+                    {lib.allows_new_loans && <span className="cat-pill ok" style={{ fontSize:'.68rem' }}>{t({ id: 'rede.allowsLoans' })}</span>}
+                    {lib.allows_new_reservations && <span className="cat-pill ok" style={{ fontSize:'.68rem' }}>{t({ id: 'rede.allowsReservations' })}</span>}
+                    {!lib.allows_new_loans && <span className="cat-pill danger" style={{ fontSize:'.68rem' }}>{t({ id: 'rede.noLoans' })}</span>}
                   </div>
                   <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:4, marginBottom:8 }}>
                     {statCell(lib.readers, t({id:'rede.stats.readers'}))}
-                    {statCell(lib.staff, 'Equipe')}
-                    {statCell(lib.exemplars, 'Exemplares')}
-                    {statCell(lib.loansOpen, 'Emp. abertos', lib.loansOpen > 0)}
+                    {statCell(lib.staff, t({id:'rede.stats.staff'}))}
+                    {statCell(lib.exemplars, t({id:'rede.stats.exemplars'}))}
+                    {statCell(lib.loansOpen, t({id:'rede.overview.loansOpenShort'}), lib.loansOpen > 0)}
                   </div>
                   <div style={{ fontSize:'.78rem', color:'var(--brand-muted)' }}>
                     {lib.contact_email && <span>✉ {lib.contact_email}</span>}
-                    {lib.created_at && <span style={{ marginLeft:8 }}>Desde {new Date(lib.created_at).toLocaleDateString('pt-BR')}</span>}
+                    {lib.created_at && <span style={{ marginLeft:8 }}>{t({ id: 'rede.since' }, { date: new Date(lib.created_at).toLocaleDateString(locale) })}</span>}
                   </div>
                 </div>
               );
@@ -267,9 +274,9 @@ export default function RedePage() {
         {/* ═══ 2. SOLICITAÇÕES ═════════════════════════ */}
         {tab==='requests' && (<div>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
-            <h3 style={{ margin:0 }}>Solicitações ({requests.length})</h3>
+            <h3 style={{ margin:0 }}>{t({ id: 'rede.requests.label' })} ({requests.length})</h3>
             <select value={reqFilter} onChange={e=>setReqFilter(e.target.value)} style={{...fs, width:'auto'}}>
-              <option value="">Todas</option>
+              <option value="">{t({ id: 'common.all' })}</option>
               {Object.entries(REQ_STATUS).map(([k,v])=><option key={k} value={k}>{v}</option>)}
             </select>
           </div>
@@ -280,8 +287,8 @@ export default function RedePage() {
               {filteredReqs.map((r,i) => (
                 <div key={r.id} style={{...lr(i), cursor:'pointer', background: selectedReq?.id===r.id?'rgba(29,78,216,.12)':lr(i).background}} onClick={()=>{setSelectedReq(r);setReviewNote(r.review_notes||'');}}>
                   <div style={{ flex:1 }}>
-                    <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.library_name || '(sem nome)'}</div>
-                    <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{r.city||'—'}{r.state_region&&`, ${r.state_region}`} · {new Date(r.created_at).toLocaleDateString('pt-BR')}</div>
+                    <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.library_name || t({ id: 'common.noName' })}</div>
+                    <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{r.city||'—'}{r.state_region&&`, ${r.state_region}`} · {new Date(r.created_at).toLocaleDateString(locale)}</div>
                   </div>
                   <span className={`cat-pill ${r.request_status==='aprovada'?'ok':r.request_status==='recusada'?'danger':r.request_status==='em_analise'?'info':'warn'}`} style={{ fontSize:'.7rem' }}>
                     {REQ_STATUS[r.request_status]||r.request_status}
@@ -290,23 +297,23 @@ export default function RedePage() {
               ))}
             </div>
             <div>
-              {!selectedReq && <div style={bx}><p style={{ fontSize:'.88rem', color:'var(--brand-muted)', margin:0 }}>Selecione uma solicitação para ver os detalhes e tomar uma decisão.</p></div>}
+              {!selectedReq && <div style={bx}><p style={{ fontSize:'.88rem', color:'var(--brand-muted)', margin:0 }}>{t({ id: 'rede.requests.selectPrompt' })}</p></div>}
               {selectedReq && (
                 <div style={bx}>
                   <h4 style={{ margin:'0 0 10px' }}>{selectedReq.library_name}</h4>
                   <div style={{ fontSize:'.85rem', lineHeight:1.7, marginBottom:12 }}>
-                    {[['Nome curto',selectedReq.library_short_name],['Cidade',`${selectedReq.city||'—'}${selectedReq.state_region?`, ${selectedReq.state_region}`:''}${selectedReq.country?` — ${selectedReq.country}`:''}`],
+                    {[[t({id:'rede.requests.shortName'}),selectedReq.library_short_name],[t({id:'rede.requests.city'}),`${selectedReq.city||'—'}${selectedReq.state_region?`, ${selectedReq.state_region}`:''}${selectedReq.country?` — ${selectedReq.country}`:''}`],
                       [t({id:'rede.requests.email'}),selectedReq.library_email],[t({id:'rede.requests.phone'}),selectedReq.library_phone],[t({id:'rede.requests.address'}),selectedReq.library_address],
-                      ['Contato',`${selectedReq.contact_name||'—'} (${selectedReq.contact_role||'—'}) · ${selectedReq.contact_email||'—'}`],
+                      [t({id:'rede.requests.contactLabel'}),`${selectedReq.contact_name||'—'} (${selectedReq.contact_role||'—'}) · ${selectedReq.contact_email||'—'}`],
                       [t({id:'rede.requests.stage'}),selectedReq.project_stage],[t({id:'rede.requests.firstManager'}),selectedReq.first_manager_intent],
                     ].map(([k,v])=> v && <div key={k}><strong>{k}:</strong> {v}</div>)}
-                    {selectedReq.summary && <div style={{ marginTop:6 }}><strong>Apresentação:</strong><br/>{selectedReq.summary}</div>}
-                    {selectedReq.needs && <div style={{ marginTop:6 }}><strong>Necessidades:</strong><br/>{selectedReq.needs}</div>}
-                    {selectedReq.collection_profile && <div style={{ marginTop:6 }}><strong>Perfil do acervo:</strong><br/>{selectedReq.collection_profile}</div>}
-                    {selectedReq.public_profile && <div style={{ marginTop:6 }}><strong>Perfil público:</strong><br/>{selectedReq.public_profile}</div>}
+                    {selectedReq.summary && <div style={{ marginTop:6 }}><strong>{t({id:'rede.requests.summary'})}:</strong><br/>{selectedReq.summary}</div>}
+                    {selectedReq.needs && <div style={{ marginTop:6 }}><strong>{t({id:'rede.requests.needs'})}:</strong><br/>{selectedReq.needs}</div>}
+                    {selectedReq.collection_profile && <div style={{ marginTop:6 }}><strong>{t({id:'rede.requests.collectionProfile'})}:</strong><br/>{selectedReq.collection_profile}</div>}
+                    {selectedReq.public_profile && <div style={{ marginTop:6 }}><strong>{t({id:'rede.requests.publicProfile'})}:</strong><br/>{selectedReq.public_profile}</div>}
                   </div>
-                  <label style={ls}>Nota de revisão</label>
-                  <textarea value={reviewNote} onChange={e=>setReviewNote(e.target.value)} rows={3} style={{...fs,resize:'vertical',marginBottom:10}} placeholder="Observações, pedido de complemento, motivo de recusa…" />
+                  <label style={ls}>{t({ id: 'rede.requests.reviewNote' })}</label>
+                  <textarea value={reviewNote} onChange={e=>setReviewNote(e.target.value)} rows={3} style={{...fs,resize:'vertical',marginBottom:10}} placeholder={t({ id: 'rede.requests.reviewPlaceholder' })} />
                   <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
                     <button className="cat-btn secondary" onClick={()=>updateRequestStatus(selectedReq.id,'em_analise')}>{t({ id: 'rede.requests.inReview' })}</button>
                     <button className="cat-btn primary" onClick={()=>updateRequestStatus(selectedReq.id,'aprovada')}>{t({ id: 'rede.requests.approve' })}</button>
@@ -320,15 +327,15 @@ export default function RedePage() {
 
         {/* ═══ 3. BIBLIOTECAS ═════════════════════════ */}
         {tab==='libraries' && (<div>
-          <h3 style={{ marginBottom:12 }}>Panorama das bibliotecas ({libCards.length})</h3>
+          <h3 style={{ marginBottom:12 }}>{t({ id: 'rede.libraries.panoramaTitle' }, { count: libCards.length })}</h3>
           <div style={lw}>
             <div style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'8px 12px', fontSize:'.75rem', fontWeight:700, color:'var(--brand-muted)', borderBottom:'1px solid rgba(255,255,255,.08)' }}>
-              <div>{t({ id: 'nav.library' })}</div><div style={{ textAlign:'center' }}>Serviço</div><div style={{ textAlign:'center' }}>Leitores</div><div style={{ textAlign:'center' }}>Equipe</div><div style={{ textAlign:'center' }}>Exemplares</div><div style={{ textAlign:'center' }}>Emp. abertos</div><div style={{ textAlign:'center' }}>Res. ativas</div><div style={{ textAlign:'center' }}>Ações</div>
+              <div>{t({ id: 'nav.library' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.th.service' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.readers' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.staff' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.exemplars' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOpenShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.reservationsActiveShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'common.actions' })}</div>
             </div>
             {libCards.map((lib,i) => (
               <div key={lib.id} style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
                 <div>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{lib.name} <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ fontSize:'.6rem' }}>{lib.is_active?'Ativa':'Inativa'}</span></div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{lib.name} <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ fontSize:'.6rem' }}>{lib.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span></div>
                   <div style={{ fontSize:'.78rem', color:'var(--brand-muted)' }}>{lib.slug} · {lib.city||'—'} · {lib.contact_email||'—'}</div>
                 </div>
                 <div style={{ textAlign:'center' }}><span className={`cat-pill ${lib.service_mode==='funcionamento_normal'?'ok':'warn'}`} style={{ fontSize:'.65rem' }}>{SERVICE_LABELS[lib.service_mode]||'—'}</span></div>
@@ -339,7 +346,7 @@ export default function RedePage() {
                 <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700, color: lib.resActive>0?'#60a5fa':'inherit' }}>{lib.resActive}</div>
                 <div style={{ textAlign:'center' }}>
                   <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', color: lib.is_active?'#f87171':'#4ade80' }} onClick={()=>toggleLibraryActive(lib.id, lib.is_active)}>
-                    {lib.is_active ? 'Desativar' : 'Reativar'}
+                    {lib.is_active ? t({ id: 'rede.deactivate' }) : t({ id: 'rede.reactivate' })}
                   </button>
                 </div>
               </div>
