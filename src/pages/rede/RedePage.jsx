@@ -8,6 +8,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import TeamPanel from '@/components/team/TeamPanel';
 import '@/components/team/TeamPanel.css';
+import AdminsPanel from '@/components/rede/AdminsPanel';
 import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -359,57 +360,17 @@ export default function RedePage() {
         )}
 
         {/* ═══ 5. ADMINISTRADORES ═════════════════════ */}
-        {tab==='admins' && (<div>
-          <h3 style={{ marginBottom:12 }}>Administradores da rede ({admins.length})</h3>
-          <div style={{
-            padding: '10px 14px',
-            borderRadius: 8,
-            fontSize: '.85rem',
-            marginBottom: 14,
-            background: 'rgba(29,78,216,.1)',
-            color: '#60a5fa',
-            border: '1px solid rgba(29,78,216,.3)',
-          }}>
-            ⓘ A gestão de papéis migrou para os RPCs <code>fn_team_*</code> (auditados, com mensagens militantes automáticas). Esta aba será refatorada na próxima fase. Por enquanto, alterações aqui <strong>não enviam</strong> as notificações automáticas aos membros concernidos.
-          </div>
-          <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:14 }}>
-            Os administradores têm acesso total ao painel de rede, à gestão dos membros e podem promover outros administradores. Este privilégio deve ser reservado a muito poucas pessoas de confiança da rede.
-          </div>
-
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>Promover um(a) camarada a administrador(a)</h4>
-            <div style={{ display:'flex', gap:8, marginBottom:8 }}>
-              <input type="email" value={newAdminEmail} onChange={e=>setNewAdminEmail(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addAdmin()} placeholder="E-mail do(a) camarada a promover…" style={{...fs, flex:1}} />
-              <button className="cat-btn primary" onClick={addAdmin} style={{ flexShrink:0 }}>{t({ id: 'rede.admins.promoteButton' })}</button>
-            </div>
-            <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>O usuário já deve ter uma conta ativa e um vínculo com uma biblioteca na rede.</div>
-          </div>
-
-          <div style={lw}>
-            {admins.length===0 && <div style={{ padding:16, fontSize:'.88rem', color:'var(--brand-muted)' }}>Nenhum administrador encontrado.</div>}
-            {admins.map((m,i) => {
-              const p = m.profiles || {};
-              const isSelf = m.user_id === user?.id;
-              return (
-                <div key={`${m.user_id}-${m.library_id}`} style={lr(i)}>
-                  <div style={{ flex:1 }}>
-                    <div style={{ fontSize:'.9rem', fontWeight:600 }}>
-                      {[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email||'(sem nome)'}
-                      {isSelf && <span style={{ fontSize:'.78rem', color:'var(--brand-muted)', marginLeft:8 }}>(você)</span>}
-                    </div>
-                    <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                      {p.email||'—'} · {m.libraries?.name||'—'}
-                      {m.created_at && ` · membro desde ${new Date(m.created_at).toLocaleDateString('pt-BR')}`}
-                    </div>
-                  </div>
-                  {!isSelf && (
-                    <button className="cat-btn ghost" style={{ fontSize:'.82rem', padding:'5px 12px', color:'#f87171' }} onClick={()=>removeAdmin(m.user_id,m.library_id)}>{t({ id: 'rede.admins.removeButton' })}</button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>)}
+        {/* ═══ 5. ADMINISTRADORES (Phase B2) ══════════════════ */}
+        {/* Phase B2 (07/05/2026) : refonte complète de l'onglet admins.
+            L'ancien code (addAdmin/removeAdmin via UPDATE direct) est
+            remplacé par <AdminsPanel /> qui utilise les RPCs fn_team_*
+            (promote_to_administrador, self_demote depuis admin avec
+            garde-fou last admin).
+            La fonction changeUserRole() reste dans ce fichier mais
+            n'est plus appelée nulle part — à supprimer en cleanup futur. */}
+        {tab === 'admins' && (
+          <AdminsPanel />
+        )}
 
       </div>
     <Footer /></PageShell>

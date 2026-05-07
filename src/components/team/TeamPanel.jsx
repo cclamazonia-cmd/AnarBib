@@ -9,38 +9,45 @@
 //       (librarian, coordenador, administrador) de la bibliothèque courante.
 //
 //   - <TeamPanel scope="network" />
-//       Onglet "Membres" de RedePage. Liste TOUS les memberships de toutes
+//       Onglet "Membros" de RedePage. Liste TOUS les memberships de toutes
 //       les bibliothèques du réseau, avec sélecteur de filtrage par bibli.
 //
-// Phase A (cette livraison) : lecture seule.
-//   - Affiche tous les memberships avec leur status (active, suspended,
-//     pending_removal, inactive, removed)
-//   - Badge coloré par status + tooltip explicatif
-//   - Compteurs par rôle / par status
-//   - Filtres : rôle, status, recherche texte
+// Phase A : lecture seule.
+// Phase B1 (cette version) : actions de gestion via les 5 RPCs fn_team_* :
+//   - promote_to_librarian, promote_to_coordenador
+//   - self_demote
+//   - suspend, unsuspend
 //
-// Phase B (à venir) : actions de gestion via RPCs fn_team_*.
-//   - Promote, demote, suspend, request_removal, cancel_removal, unsuspend
-//   - Modales avec champs raison i18n militante × 6 locales
-//   - Permissions calculées par scope + rôle utilisateur·ice
+// Phase B2 (à venir) : retraits avec carence (request_remove, cancel_remove)
+//                       + refonte onglet admins.
 //
-// Source : public.user_library_memberships + jointure profiles + libraries.
-// JAMAIS d'UPDATE direct sur user_library_memberships.role : la Phase B
-// utilisera exclusivement les RPCs fn_team_* du Lot 5.
+// L'observateur·rice voit un menu "Actions ▾" sur chaque ligne où une action
+// est possible. Le menu est calculé via availableTeamActions(ctx) selon les
+// règles row-level (jamais de double-modif d'admin, hiérarchie stricte, etc.)
+//
 // ============================================================================
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
-import { roleSortOrder, statusLabel, statusBadgeKind } from '@/lib/roles';
+import { useLibrary } from '@/contexts/LibraryContext';
+import {
+  roleSortOrder,
+  statusBadgeKind,
+  availableTeamActions,
+} from '@/lib/roles';
+import TeamActionsMenu from './TeamActionsMenu';
+import TeamActionModal from './TeamActionModal';
 
-// Rôles staff considérés (on exclut 'reader' par défaut — la gouvernance
-// d'équipe ne concerne que le staff).
-const STAFF_ROLES = ['librarian', 'coordenador', 'administrador'];
+// Note : la liste des rôles staff filtrés (librarian/coord/admin) est
+// désormais gérée côté DB par fn_team_list_memberships.
 
 export default function TeamPanel({ scope = 'library', libraryId = null }) {
   const { user } = useAuth();
+  // Le rôle de l'observateur·rice dans la lib courante (scope=library) ou
+  // son rôle global (scope=network — seul·e admin y accède de toute façon).
+  const { role: observerRole } = useLibrary();
   const { formatMessage: t } = useIntl();
 
   // ── État local ────────────────────────────────────────
@@ -54,36 +61,44 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
   const [searchText, setSearchText] = useState('');
   const [libraryFilter, setLibraryFilter] = useState(''); // network scope only
 
+  // Modale d'action : { membership, action } ou null
+  const [pendingAction, setPendingAction] = useState(null);
+  // Toast après mutation : { text, kind } ou null
+  const [toast, setToast] = useState(null);
+
   // ── Chargement ────────────────────────────────────────
+  // Phase B1 hotfix 07/05/2026 : on passe par la RPC fn_team_list_memberships
+  // (SECURITY DEFINER) au lieu d'un SELECT direct sur user_library_memberships.
+  //
+  // Pourquoi : la RLS sur public.profiles n'autorise pas un staff à voir les
+  // profils des autres bibliothèques (logique pour les readers, pas pour les
+  // admins AnarBib qui ont besoin de la vue cross-réseau). Plutôt que d'ouvrir
+  // une vanne RLS sur profiles (table sensible — adresse, téléphone, etc.),
+  // la RPC valide les droits du caller côté DB et retourne uniquement les
+  // champs UI utiles.
+  //
+  // La RPC retourne un tableau de jsonb au format identique à ce que
+  // produisait le SELECT avec join — pas d'autre changement nécessaire dans
+  // le composant.
   const loadMemberships = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      let query = supabase
-        .from('user_library_memberships')
-        .select(`
-          id, user_id, library_id, role, status, is_primary,
-          created_at, updated_at,
-          is_restricted, restricted_reason,
-          pending_removal_until, pending_removal_requested_by,
-          profiles:user_id(email, first_name, last_name),
-          libraries:library_id(id, name, short_name, slug)
-        `)
-        .in('role', STAFF_ROLES)
-        .order('created_at', { ascending: true });
-
-      if (scope === 'library') {
-        if (!libraryId) {
-          setMemberships([]);
-          return;
-        }
-        query = query.eq('library_id', libraryId);
+      // En scope=library sans libraryId, on n'appelle pas la RPC (elle
+      // exigerait un library_id non nul et lèverait une erreur).
+      if (scope === 'library' && !libraryId) {
+        setMemberships([]);
+        return;
       }
-      // scope === 'network' : pas de filtre, on récupère tout (les RLS
-      // filtreront automatiquement selon que l'utilisateur·ice est admin).
 
-      const { data, error: qErr } = await query;
+      const { data, error: qErr } = await supabase.rpc('fn_team_list_memberships', {
+        p_scope: scope,
+        p_library_id: scope === 'library' ? libraryId : null,
+      });
+
       if (qErr) throw qErr;
+      // La RPC retourne setof jsonb : data est déjà un tableau d'objets
+      // (chaque ligne est un jsonb avec la même forme qu'avant).
       setMemberships(data || []);
     } catch (err) {
       console.warn('TeamPanel loadMemberships:', err);
@@ -95,6 +110,13 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
 
   useEffect(() => { loadMemberships(); }, [loadMemberships]);
 
+  // Auto-dismiss du toast après 4s
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
   // ── Calculs dérivés ────────────────────────────────────
   // Compteurs par rôle et par status (sur le set non filtré, pour donner
   // une vue d'ensemble même quand un filtre masque des lignes).
@@ -103,8 +125,6 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
     const byStatus = { active: 0, suspended: 0, pending_removal: 0, inactive: 0, removed: 0 };
     for (const m of memberships) {
       if (byRole[m.role] !== undefined) byRole[m.role] += 1;
-      // Status calculé : pending_removal a priorité sur active si la date
-      // est dans le futur. C'est un "état dérivé" pour l'UI.
       const eff = effectiveStatus(m);
       if (byStatus[eff] !== undefined) byStatus[eff] += 1;
     }
@@ -144,16 +164,38 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
         return true;
       })
       .sort((a, b) => {
-        // Tri primaire : rôle décroissant (admin → coord → librarian)
         const ra = roleSortOrder(a.role);
         const rb = roleSortOrder(b.role);
         if (ra !== rb) return rb - ra;
-        // Tri secondaire : nom complet
         const na = fullName(a.profiles);
         const nb = fullName(b.profiles);
         return na.localeCompare(nb, 'pt-BR');
       });
   }, [memberships, roleFilter, statusFilter, libraryFilter, searchText]);
+
+  // ── Handlers d'action ─────────────────────────────────
+  const handleActionSelected = useCallback((membership, actionDescriptor) => {
+    setPendingAction({ membership, action: actionDescriptor });
+  }, []);
+
+  const handleActionSuccess = useCallback((result) => {
+    setToast({
+      text: t({ id: 'team.toast.success', defaultMessage: 'Ação realizada com sucesso.' }),
+      kind: 'ok',
+    });
+    // Refresh complet : option 1 validée par Xavier (simple, garanti cohérent)
+    loadMemberships();
+  }, [loadMemberships, t]);
+
+  const handleActionError = useCallback((result) => {
+    // L'erreur est déjà affichée dans la modale ; pas besoin de toast en plus.
+    // Mais on peut logger pour debug.
+    console.warn('TeamAction error:', result);
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setPendingAction(null);
+  }, []);
 
   // ── Rendu ─────────────────────────────────────────────
   if (error) {
@@ -166,6 +208,13 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
 
   return (
     <div className="ab-team-panel">
+      {/* ── Toast ───────────────────────────────────────── */}
+      {toast && (
+        <div className={`ab-team-toast ab-team-toast--${toast.kind}`}>
+          {toast.text}
+        </div>
+      )}
+
       {/* ── Compteurs par rôle ───────────────────────────── */}
       <div className="ab-team-counts">
         <CountCard label={t({ id: 'roles.librarian' })} count={counts.byRole.librarian} />
@@ -250,9 +299,26 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
               index={i}
               showLibrary={scope === 'network'}
               isCurrentUser={m.user_id === user?.id}
+              observerRole={observerRole}
+              observerUserId={user?.id}
+              scope={scope}
+              onActionSelected={handleActionSelected}
             />
           ))}
         </div>
+      )}
+
+      {/* ── Modale d'action ───────────────────────────── */}
+      {pendingAction && (
+        <TeamActionModal
+          isOpen={true}
+          onClose={handleModalClose}
+          onSuccess={handleActionSuccess}
+          onError={handleActionError}
+          action={pendingAction.action}
+          membership={pendingAction.membership}
+          currentUserId={user?.id}
+        />
       )}
     </div>
   );
@@ -283,7 +349,16 @@ function CountCard({ label, count, kind = 'default' }) {
   );
 }
 
-function TeamMembershipRow({ membership: m, index, showLibrary, isCurrentUser }) {
+function TeamMembershipRow({
+  membership: m,
+  index,
+  showLibrary,
+  isCurrentUser,
+  observerRole,
+  observerUserId,
+  scope,
+  onActionSelected,
+}) {
   const { formatMessage: t } = useIntl();
   const p = m.profiles || {};
   const eff = effectiveStatus(m);
@@ -292,13 +367,23 @@ function TeamMembershipRow({ membership: m, index, showLibrary, isCurrentUser })
     ? new Date(m.created_at).toLocaleDateString()
     : null;
 
-  // Calcul du nb de jours restants avant retrait (si pending_removal)
   const daysUntilRemoval = useMemo(() => {
     if (eff !== 'pending_removal' || !m.pending_removal_until) return null;
     const now = Date.now();
     const target = new Date(m.pending_removal_until).getTime();
     return Math.max(0, Math.ceil((target - now) / (1000 * 60 * 60 * 24)));
   }, [eff, m.pending_removal_until]);
+
+  // ── Calcul des actions disponibles pour cette ligne ──
+  const actions = useMemo(() => availableTeamActions({
+    observerRole,
+    observerUserId,
+    targetRole: m.role,
+    targetUserId: m.user_id,
+    targetStatus: eff,
+    targetHasPendingRemoval: eff === 'pending_removal',
+    scope,
+  }), [observerRole, observerUserId, m.role, m.user_id, eff, scope]);
 
   return (
     <div className="ab-team-row" data-status={eff} style={rowStyle(index)}>
@@ -346,6 +431,11 @@ function TeamMembershipRow({ membership: m, index, showLibrary, isCurrentUser })
         <span className={`cat-pill ${statusBadgeKind(eff)}`} style={{ fontSize: '.7rem' }}>
           {t({ id: 'team.status.' + eff, defaultMessage: eff })}
         </span>
+        {/* Menu d'actions (rendu uniquement si actions.length > 0) */}
+        <TeamActionsMenu
+          actions={actions}
+          onSelectAction={(a) => onActionSelected(m, a)}
+        />
       </div>
     </div>
   );
@@ -362,13 +452,6 @@ function fullName(profile) {
     .trim();
 }
 
-/**
- * Status dérivé pour l'affichage. Si pending_removal_until est dans le
- * futur ET que status='active', on affiche 'pending_removal' pour signaler
- * la carence. Si la date est passée, le cron fn_cron_team_pending_removal_complete
- * a probablement déjà fait son travail (ou va le faire dans l'heure) — on
- * affiche toujours le status réel de la base.
- */
 function effectiveStatus(m) {
   if (m.status === 'active' && m.pending_removal_until) {
     const target = new Date(m.pending_removal_until).getTime();

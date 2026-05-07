@@ -1,13 +1,46 @@
 /* ═══════════════════════════════════════════════════════════
    src/components/team/TeamPanel.css
-   Styles du composant central de gouvernance d'équipe.
-   À importer une fois dans BibliotecaPage.jsx ET RedePage.jsx.
+   Styles Phase A + extensions Phase B1 (modale, menu, toast).
    ═══════════════════════════════════════════════════════════ */
 
 .ab-team-panel {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  position: relative; /* pour le toast en absolute */
+}
+
+/* ── Toast ──────────────────────────────────────────── */
+
+.ab-team-toast {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1100;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: .9rem;
+  font-weight: 600;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .4);
+  max-width: 360px;
+  animation: abTeamToastSlide .25s ease-out;
+}
+
+.ab-team-toast--ok {
+  background: rgba(21, 128, 61, .9);
+  color: #fff;
+  border: 1px solid rgba(74, 222, 128, .4);
+}
+
+.ab-team-toast--error {
+  background: rgba(220, 38, 38, .9);
+  color: #fff;
+  border: 1px solid rgba(248, 113, 113, .4);
+}
+
+@keyframes abTeamToastSlide {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 /* ── Compteurs ──────────────────────────────────────── */
@@ -71,7 +104,6 @@
 /* ── Ligne de membership ────────────────────────────── */
 
 .ab-team-row {
-  /* style appliqué inline pour l'alternance via index — voir rowStyle() */
   transition: background .15s;
 }
 
@@ -145,6 +177,361 @@
   flex-shrink: 0;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   PHASE B1 — Menu d'actions par ligne
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-team-actions-menu {
+  position: relative;
+  margin-top: 4px;
+}
+
+.ab-team-actions-trigger {
+  padding: 4px 10px;
+  font-size: .78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  background: rgba(255, 255, 255, .05);
+  color: var(--brand-text);
+  cursor: pointer;
+  font-family: var(--brand-font-body);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background .15s, border-color .15s;
+}
+
+.ab-team-actions-trigger:hover:not(:disabled) {
+  background: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .25);
+}
+
+.ab-team-actions-trigger:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.ab-team-actions-trigger[aria-expanded="true"] {
+  background: rgba(255, 255, 255, .12);
+  border-color: rgba(255, 255, 255, .3);
+}
+
+.ab-team-actions-chevron {
+  font-size: .7rem;
+  line-height: 1;
+}
+
+.ab-team-actions-list {
+  /* Position calculée dynamiquement par le composant via createPortal +
+     getBoundingClientRect(). Les propriétés top/left/position sont définies
+     en inline style. On garde min-width ici en fallback. */
+  min-width: 200px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--brand-panel-bg, #1a0a0c);
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .5);
+  /* z-index élevé pour passer au-dessus de tout le contenu ordinaire mais
+     en dessous des modales/toasts (qui sont à 1000+). */
+  z-index: 900;
+  animation: abTeamMenuFade .12s ease-out;
+}
+
+@keyframes abTeamMenuFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ab-team-actions-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: .85rem;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--brand-text);
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: var(--brand-font-body);
+  transition: background .1s;
+}
+
+.ab-team-actions-item:hover {
+  background: rgba(255, 255, 255, .08);
+}
+
+.ab-team-actions-item--primary:hover {
+  background: rgba(74, 222, 128, .12);
+  color: #4ade80;
+}
+
+.ab-team-actions-item--warning:hover,
+.ab-team-actions-item--danger:hover {
+  background: rgba(251, 191, 36, .12);
+  color: #fbbf24;
+}
+
+.ab-team-actions-item--secondary:hover {
+  background: rgba(96, 165, 250, .12);
+  color: #60a5fa;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE B1 — Modale générique <Modal />
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, .65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: abModalOverlayFade .15s ease-out;
+}
+
+@keyframes abModalOverlayFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ab-modal {
+  background: linear-gradient(180deg, #1a0a0c 0%, #0d0708 100%);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  width: 100%;
+  animation: abModalSlide .2s ease-out;
+}
+
+.ab-modal--small  { max-width: 400px; }
+.ab-modal--medium { max-width: 560px; }
+.ab-modal--large  { max-width: 800px; }
+
+@keyframes abModalSlide {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ab-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.ab-modal__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-text);
+  font-family: var(--brand-font-heading);
+}
+
+.ab-modal__close {
+  border: none;
+  background: transparent;
+  color: var(--brand-muted);
+  cursor: pointer;
+  font-size: 1.6rem;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: color .12s, background .12s;
+}
+
+.ab-modal__close:hover {
+  color: var(--brand-text);
+  background: rgba(255, 255, 255, .06);
+}
+
+.ab-modal__body {
+  padding: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE B1 — TeamActionModal contenu spécifique
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-team-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ab-team-modal-target {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+
+.ab-team-modal-target__name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--brand-text);
+}
+
+.ab-team-modal-target__meta {
+  font-size: .82rem;
+  color: var(--brand-muted);
+  margin-top: 2px;
+}
+
+.ab-team-modal-description {
+  font-size: .92rem;
+  line-height: 1.5;
+  color: var(--brand-text);
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, .2);
+  border-left: 3px solid var(--brand-muted);
+}
+
+.ab-team-modal-description--positive {
+  border-left-color: #4ade80;
+  background: rgba(74, 222, 128, .06);
+}
+
+.ab-team-modal-description--warning {
+  border-left-color: #fbbf24;
+  background: rgba(251, 191, 36, .06);
+}
+
+.ab-team-modal-description--danger {
+  border-left-color: #f87171;
+  background: rgba(248, 113, 113, .06);
+}
+
+.ab-team-modal-warning {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(251, 191, 36, .1);
+  border: 1px solid rgba(251, 191, 36, .3);
+  color: #fbbf24;
+  font-size: .85rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.ab-team-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ab-team-modal-label {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--brand-text);
+}
+
+.ab-team-modal-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  background: rgba(0, 0, 0, .3);
+  color: var(--brand-text);
+  font-size: .9rem;
+  font-family: var(--brand-font-body);
+  resize: vertical;
+  min-height: 70px;
+}
+
+.ab-team-modal-textarea:focus {
+  outline: none;
+  border-color: var(--brand-color-primary);
+}
+
+.ab-team-modal-hint {
+  font-size: .78rem;
+  color: var(--brand-muted);
+  font-style: italic;
+}
+
+.ab-team-modal-error {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(220, 38, 38, .1);
+  border: 1px solid rgba(220, 38, 38, .3);
+  color: #f87171;
+  font-size: .85rem;
+}
+
+.ab-team-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, .06);
+}
+
+.cat-btn.warning {
+  background: linear-gradient(180deg, rgba(251, 191, 36, .25) 0%, rgba(217, 119, 6, .35) 100%);
+  border: 1px solid rgba(251, 191, 36, .4);
+  color: #fbbf24;
+}
+
+.cat-btn.warning:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(251, 191, 36, .35) 0%, rgba(217, 119, 6, .45) 100%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE B2 — Extensions modale (input texte + warning fort)
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-team-modal-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  background: rgba(0, 0, 0, .3);
+  color: var(--brand-text);
+  font-size: .9rem;
+  font-family: var(--brand-font-body);
+}
+
+.ab-team-modal-input:focus {
+  outline: none;
+  border-color: var(--brand-color-primary);
+}
+
+/* Warning renforcé pour le cas last admin : rouge + icône */
+.ab-team-modal-warning--strong {
+  background: rgba(220, 38, 38, .12);
+  border: 1px solid rgba(220, 38, 38, .4);
+  color: #f87171;
+  font-weight: 600;
+}
+
+/* optgroup dans select : meilleur rendu sur fond sombre */
+.ab-team-modal-input optgroup {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--brand-muted);
+}
+
+.ab-team-modal-input option {
+  background: var(--brand-panel-bg, #1a0a0c);
+  color: var(--brand-text);
+  font-weight: 400;
+  font-style: normal;
+}
+
 /* ── Mobile ─────────────────────────────────────────── */
 
 @media (max-width: 640px) {
@@ -164,5 +551,19 @@
   .ab-team-row__badges {
     flex-direction: row;
     align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .ab-team-actions-list {
+    /* En mobile on garde juste un minWidth plus petit. Le calcul de
+       position du portal s'occupe déjà du recadrage par rapport au
+       viewport. */
+    min-width: 180px;
+  }
+  .ab-team-toast {
+    top: auto;
+    bottom: 20px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
   }
 }

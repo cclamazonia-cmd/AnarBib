@@ -5,141 +5,60 @@
 // Helpers centralisés pour la hiérarchie des rôles AnarBib.
 //
 // Hiérarchie (du moins au plus de droits) :
-//   - reader        : lecteur·rice ordinaire (1 biblio, droits utilisateur de base)
-//   - librarian     : bibliothécaire (gère le quotidien d'une biblio)
-//   - coordenador   : coordinateur·rice (gère orga + paramètres d'une biblio)
-//   - administrador : admin AnarBib cross-biblio (Xavier pour l'instant)
+//   - reader        : lecteur·rice ordinaire
+//   - librarian     : bibliothécaire
+//   - coordenador   : coordinateur·rice (per-library)
+//   - administrador : admin AnarBib cross-biblio
 //
 // Convention : tous les helpers acceptent role=null/undefined sans crasher
 // (retournent false). Permet d'appeler en sécurité même si le contexte
 // n'a pas encore chargé le rôle.
-//
-// Source de vérité unique. Si on change la spec rôles, c'est ici qu'on agit
-// — toutes les pages utilisent ces helpers via import.
 // ============================================================================
 
 // ── Tests de rôle hiérarchiques (cumulatifs) ─────────────────
 
-/** Tout user authentifié avec un rôle reconnu. */
 export function isReader(role) {
   return role === 'reader' || isLibrarian(role);
 }
 
-/** ≥ bibliothécaire (librarian, coordenador ou administrador). */
 export function isLibrarian(role) {
   return role === 'librarian' || isCoord(role);
 }
 
-/** ≥ coordinateur·rice (coordenador ou administrador). */
 export function isCoord(role) {
   return role === 'coordenador' || isAdmin(role);
 }
 
-/** Admin AnarBib uniquement. */
 export function isAdmin(role) {
   return role === 'administrador';
 }
 
 // ── Permissions par page de navigation ───────────────────────
-//
-// Convention : `canSeeXxx(role)` = a-t-on le droit d'accéder à la page Xxx ?
-// Utilisé par la Topbar pour afficher conditionnellement les liens.
 
-/** Accès au catalogue : tout le monde, même anonyme. */
-export function canSeeCatalog(_role) {
-  return true;
-}
+export function canSeeCatalog(_role) { return true; }
+export function canSeeAccount(role) { return Boolean(role); }
+export function canSeePainel(role) { return isLibrarian(role); }
+export function canSeeCatalogacao(role) { return isLibrarian(role); }
+export function canSeeImportacoes(role) { return isCoord(role); }
+export function canSeeBiblioteca(role) { return isCoord(role); }
+export function canSeeRede(role) { return isAdmin(role); }
 
-/** Accès à /conta : tout user authentifié. */
-export function canSeeAccount(role) {
-  return Boolean(role); // role !== null/undefined = authentifié
-}
+// ── Permissions de gouvernance d'équipe ──────────────────────
 
-/** Accès à /painel : ≥ librarian. */
-export function canSeePainel(role) {
-  return isLibrarian(role);
-}
-
-/** Accès à /catalogacao : ≥ librarian. */
-export function canSeeCatalogacao(role) {
-  return isLibrarian(role);
-}
-
-/** Accès à /importacoes : ≥ coordenador. */
-export function canSeeImportacoes(role) {
-  return isCoord(role);
-}
-
-/** Accès à /biblioteca : ≥ coordenador. */
-export function canSeeBiblioteca(role) {
-  return isCoord(role);
-}
-
-/** Accès à /rede : administrador AnarBib uniquement. */
-export function canSeeRede(role) {
-  return isAdmin(role);
-}
-
-// ── Permissions de gouvernance d'équipe (Lot 5 / Phase B) ───
-//
-// Ces helpers seront utilisés par <TeamPanel /> en Phase B pour décider
-// d'afficher ou non les boutons d'action sur chaque ligne.
-//
-// IMPORTANT : ces helpers donnent la permission "scope-level" (ai-je le
-// droit de gérer DES équipes ?). La permission "row-level" (ai-je le
-// droit d'agir sur CETTE ligne précise ?) dépend en plus de :
-//   - role de la cible (un coord ne peut pas modifier un autre coord)
-//   - lien utilisateur·ice ↔ bibliothèque (un coord BLMF ne peut pas
-//     modifier l'équipe d'une autre bibli)
-//   - cas particuliers (self-demote toujours autorisé pour soi-même)
-//
-// La logique row-level vit dans <TeamPanel /> directement, en Phase B.
-
-/** Peut gérer l'équipe d'une bibliothèque (≥ coord). */
-export function canManageTeam(role) {
-  return isCoord(role);
-}
-
-/** Peut gérer les équipes du réseau (admin uniquement). */
-export function canManageNetworkTeam(role) {
-  return isAdmin(role);
-}
+export function canManageTeam(role) { return isCoord(role); }
+export function canManageNetworkTeam(role) { return isAdmin(role); }
 
 // ── Helpers d'affichage ──────────────────────────────────────
-//
-// Ces helpers ne déterminent pas des permissions mais aident l'UI à
-// rendre les rôles et statuts de façon cohérente partout.
 
-/**
- * Ordre de tri des rôles, du plus de droits au moins (utilisé pour
- * afficher les listes du staff "admin d'abord, librarian en dernier").
- * Les rôles inconnus tombent à 0.
- */
 export function roleSortOrder(role) {
   const order = { administrador: 4, coordenador: 3, librarian: 2, reader: 1 };
   return order[role] || 0;
 }
 
-/**
- * Renvoie le nom de la clé i18n pour le label d'un status de membership.
- * Convention : team.status.{status}
- *   - active         : actif·ve
- *   - suspended      : suspendu·e (is_restricted=true OU status='suspended')
- *   - pending_removal: en cours de retrait (carence 7j non écoulée)
- *   - inactive       : inactif·ve (260+ jours sans connexion)
- *   - removed        : retiré·e (carence écoulée, fn_cron a fait son travail)
- */
 export function statusLabel(status) {
   return `team.status.${status || 'active'}`;
 }
 
-/**
- * Renvoie le kind de pill (.cat-pill X) à utiliser pour un status donné.
- * Cohérent avec la convention visuelle existante :
- *   - ok      : vert (.cat-pill ok) — actif
- *   - warn    : jaune (.cat-pill warn) — suspendu, pending_removal, inactif
- *   - danger  : rouge (.cat-pill danger) — removed
- */
 export function statusBadgeKind(status) {
   switch (status) {
     case 'active': return 'ok';
@@ -149,4 +68,166 @@ export function statusBadgeKind(status) {
     case 'removed': return 'danger';
     default: return 'info';
   }
+}
+
+// ── Permissions row-level pour les actions de gouvernance ───
+//
+// Phase B1 : promote_to_librarian, promote_to_coordenador, self_demote,
+//            suspend, unsuspend
+// Phase B2 : ajout de
+//            - quit_admin_functions    (self uniquement, sur ligne admin)
+//            - request_remove          (sur staff non-admin actif)
+//            - cancel_remove           (sur staff non-admin pending_removal)
+//
+// Conventions :
+//   - Hors action 'quit_admin_functions', on ne touche PAS aux administradores
+//     via cette UI. La gestion des admins (promotion + retrait) se fait dans
+//     l'onglet admins refondu de RedePage avec un autre composant.
+//   - Self-demote : non-admin uniquement (un coord se rétrograde en librarian).
+//     Pour les admins, c'est 'quit_admin_functions' qui prend la suite (modale
+//     spécifique avec confirmation renforcée last admin).
+//   - Hiérarchie stricte : un coord ne peut pas modifier un autre coord.
+//   - Tout est validé côté DB par les RPCs SECURITY DEFINER.
+
+/**
+ * @param {object} ctx
+ * @param {string} ctx.observerRole       Rôle de l'utilisateur courant
+ * @param {string} ctx.observerUserId     ID de l'utilisateur courant
+ * @param {string} ctx.targetRole         Rôle de la cible
+ * @param {string} ctx.targetUserId       user_id de la cible
+ * @param {string} ctx.targetStatus       active | suspended | pending_removal | inactive | removed
+ * @param {boolean} ctx.targetHasPendingRemoval  true si pending_removal_until futur
+ * @param {string} ctx.scope              'library' | 'network'
+ *
+ * @returns {Array<{action, label, kind, requiresReason}>}
+ */
+export function availableTeamActions(ctx) {
+  const {
+    observerRole,
+    observerUserId,
+    targetRole,
+    targetUserId,
+    targetStatus,
+    targetHasPendingRemoval,
+    scope,
+  } = ctx || {};
+
+  const actions = [];
+  const isSelf = observerUserId && targetUserId && observerUserId === targetUserId;
+  const observerCanManage = isCoord(observerRole);
+
+  // Si pas de droit de gestion ET pas soi-même → pas d'actions
+  if (!observerCanManage && !isSelf) return actions;
+
+  // ─── Cas particulier : actions sur soi-même ───
+  if (isSelf) {
+    // Filtre par scope (dual-role admin/coord, fix 07/05/2026 matin)
+    // ----------------------------------------------------------------
+    // Avec le modèle dual-role validé politiquement :
+    //   - administrador AnarBib et coordenador d'une lib sont deux
+    //     délégations DISTINCTES, matérialisées par 2 memberships séparés.
+    //   - Chaque action doit s'afficher dans le bon contexte UI :
+    //       * quit_admin_functions  → /rede uniquement (scope='network')
+    //       * self_demote (coord→librarian) → /biblioteca (scope='library')
+    //
+    // Hors de ces contextes, on n'affiche rien sur la ligne soi-même
+    // (l'utilisateur·rice doit aller dans le bon onglet pour agir).
+
+    // Phase B2 : un admin peut quitter ses fonctions d'admin
+    // → uniquement dans le contexte réseau (RedePage onglet Admins)
+    if (
+      targetRole === 'administrador'
+      && targetStatus === 'active'
+      && scope === 'network'
+    ) {
+      actions.push({
+        action: 'quit_admin_functions',
+        label: 'team.action.quitAdmin',
+        kind: 'warning',
+        requiresReason: false,
+      });
+    }
+    // self-demote : un coord se rétrograde en librarian
+    // → uniquement dans le contexte de la lib (BibliotecaPage onglet équipe)
+    if (
+      targetRole === 'coordenador'
+      && targetStatus === 'active'
+      && scope === 'library'
+    ) {
+      actions.push({
+        action: 'self_demote',
+        label: 'team.action.selfDemote',
+        kind: 'secondary',
+        requiresReason: false,
+      });
+    }
+    // Pas de promote/suspend/unsuspend/remove sur soi-même
+    return actions;
+  }
+
+  // ─── Garde-fou admin : on ne touche pas aux admin via cette UI ───
+  // (la gestion des admins se fait dans l'onglet admins refondu)
+  if (targetRole === 'administrador') return actions;
+
+  // ─── À partir d'ici : observer ≠ target, target n'est pas admin ───
+
+  // Hiérarchie stricte : un coord ne peut agir que sur reader/librarian
+  const targetRank = roleSortOrder(targetRole);
+  const observerRank = roleSortOrder(observerRole);
+  if (targetRank >= observerRank) return actions;
+
+  // ─── Actions selon le status courant de la cible ───
+  if (targetStatus === 'active' && !targetHasPendingRemoval) {
+    // Promotion
+    if (targetRole === 'reader') {
+      actions.push({
+        action: 'promote_to_librarian',
+        label: 'team.action.promoteToLibrarian',
+        kind: 'primary',
+        requiresReason: false,
+      });
+    } else if (targetRole === 'librarian') {
+      actions.push({
+        action: 'promote_to_coordenador',
+        label: 'team.action.promoteToCoordenador',
+        kind: 'primary',
+        requiresReason: false,
+      });
+    }
+    // Suspension
+    if (targetRole === 'librarian' || targetRole === 'coordenador') {
+      actions.push({
+        action: 'suspend',
+        label: 'team.action.suspend',
+        kind: 'warning',
+        requiresReason: true,
+      });
+    }
+    // Phase B2 : demande de retrait avec carence 7j
+    if (targetRole === 'librarian' || targetRole === 'coordenador') {
+      actions.push({
+        action: 'request_remove',
+        label: 'team.action.requestRemove',
+        kind: 'danger',
+        requiresReason: true,
+      });
+    }
+  } else if (targetStatus === 'suspended') {
+    actions.push({
+      action: 'unsuspend',
+      label: 'team.action.unsuspend',
+      kind: 'primary',
+      requiresReason: false,
+    });
+  } else if (targetStatus === 'pending_removal' || targetHasPendingRemoval) {
+    // Phase B2 : annuler le retrait pendant la carence
+    actions.push({
+      action: 'cancel_remove',
+      label: 'team.action.cancelRemove',
+      kind: 'primary',
+      requiresReason: false,
+    });
+  }
+
+  return actions;
 }
