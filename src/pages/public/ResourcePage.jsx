@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
+import PdfViewer from '@/components/viewers/PdfViewer';
 import './ResourcePage.css';
 
 const SUPABASE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -154,7 +155,7 @@ export default function ResourcePage() {
                   <p>{t({ id: 'resource.viewer.emptyDetail' })}</p>
                 </div>
               ) : viewerKind === 'pdf' ? (
-                <iframe src={accessUrl} title="PDF" className="ab-recurso-iframe" />
+                <PdfViewer src={accessUrl} fileName={asset.label} />
               ) : viewerKind === 'audio' ? (
                 <audio controls preload="metadata" src={accessUrl} className="ab-recurso-audio" />
               ) : viewerKind === 'video' ? (
