@@ -1,0 +1,19 @@
+pdfjs-dist version: 5.7.284
+Installed: 2026-05-07T18:58:41Z
+Source: pdfjs-5.7.284-dist.zip
+Installer: scripts/install-pdfjs.sh
+
+Composants installés:
+  - build/pdf.mjs
+  - build/pdf.worker.mjs
+  - web/cmaps/         (polices CID)
+  - web/standard_fonts/ (polices PostScript de base)
+  - web/wasm/          (JBIG2, JPEG2000, QCMS)
+  - web/iccs/          (profils couleur ICC)
+
+Composants exclus volontairement:
+  - build/*.map (debug)
+  - build/pdf.sandbox.mjs (JS embarqué — désactivé)
+  - web/viewer.* (UI Mozilla — on a notre PdfViewer custom)
+  - web/locale/ (i18n Mozilla — on a la nôtre)
+  - web/images/ (UI Mozilla)
