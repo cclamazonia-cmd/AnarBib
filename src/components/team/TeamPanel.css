@@ -1,0 +1,168 @@
+/* ═══════════════════════════════════════════════════════════
+   src/components/team/TeamPanel.css
+   Styles du composant central de gouvernance d'équipe.
+   À importer une fois dans BibliotecaPage.jsx ET RedePage.jsx.
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-team-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Compteurs ──────────────────────────────────────── */
+
+.ab-team-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+/* ── Filtres ────────────────────────────────────────── */
+
+.ab-team-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--brand-radius-sm);
+  background: rgba(20, 20, 20, .5);
+  border: 1px solid rgba(255, 255, 255, .06);
+}
+
+.ab-team-search,
+.ab-team-select {
+  padding: 8px 12px;
+  border-radius: var(--brand-radius-sm);
+  border: 1px solid rgba(255, 255, 255, .12);
+  background: rgba(0, 0, 0, .3);
+  color: var(--brand-text);
+  font-size: .88rem;
+  font-family: var(--brand-font-body);
+}
+
+.ab-team-search {
+  flex: 1 1 240px;
+  min-width: 180px;
+}
+
+.ab-team-select {
+  flex: 0 0 auto;
+  min-width: 140px;
+}
+
+.ab-team-search:focus,
+.ab-team-select:focus {
+  border-color: var(--brand-color-primary);
+  outline: none;
+}
+
+/* ── Liste ──────────────────────────────────────────── */
+
+.ab-team-list {
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: var(--brand-radius-sm);
+  overflow: hidden;
+  background: rgba(12, 12, 12, .3);
+}
+
+/* ── Ligne de membership ────────────────────────────── */
+
+.ab-team-row {
+  /* style appliqué inline pour l'alternance via index — voir rowStyle() */
+  transition: background .15s;
+}
+
+.ab-team-row:hover {
+  background: rgba(255, 255, 255, .03) !important;
+}
+
+.ab-team-row[data-status="suspended"],
+.ab-team-row[data-status="pending_removal"] {
+  border-left: 3px solid var(--color-warn);
+}
+
+.ab-team-row[data-status="inactive"],
+.ab-team-row[data-status="removed"] {
+  opacity: .55;
+}
+
+.ab-team-row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ab-team-row__name {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--brand-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ab-team-self-tag {
+  font-size: .76rem;
+  font-weight: 400;
+  color: var(--brand-muted);
+  font-style: italic;
+}
+
+.ab-team-row__meta {
+  font-size: .82rem;
+  color: var(--brand-muted);
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+.ab-team-row__note {
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: .82rem;
+  line-height: 1.4;
+}
+
+.ab-team-row__note--warn {
+  background: rgba(251, 191, 36, .08);
+  border: 1px solid rgba(251, 191, 36, .25);
+  color: #fbbf24;
+}
+
+.ab-team-row__note--muted {
+  background: rgba(255, 255, 255, .03);
+  color: var(--brand-muted);
+  font-style: italic;
+}
+
+.ab-team-row__badges {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+/* ── Mobile ─────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .ab-team-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ab-team-search,
+  .ab-team-select {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  .ab-team-row {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+  .ab-team-row__badges {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -7,6 +7,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
+import TeamPanel from '@/components/team/TeamPanel';
+import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -76,6 +78,8 @@ export default function BibliotecaPage() {
   const [editingRule, setEditingRule] = useState(null);
   const [docGov, setDocGov] = useState(null);
   const [partners, setPartners] = useState([]);
+  // members reste chargé : utilisé par generateReportText() même si l'onglet team
+  // affiche désormais <TeamPanel /> qui charge ses propres données.
   const [members, setMembers] = useState([]);
   const [illLoans, setIllLoans] = useState([]);
   const [tasks, setTasks] = useState([]);
@@ -988,18 +992,17 @@ export default function BibliotecaPage() {
         )}
 
         {/* ═══ 5. Equipe ═══════════════════════════════ */}
-        {tab==='team' && (<div>
-          <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.team.title' })}</h3>
-          <div style={lw}>
-            {members.length===0 && <div style={{ padding:16, fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.team.noMembers' })}</div>}
-            {members.map((m,i)=>{const p=m.profiles||{};return(
-              <div key={m.user_id||i} style={lr(i)}>
-                <div><div style={{ fontSize:'.9rem', fontWeight:600 }}>{[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email||'(sem nome)'}</div><div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{p.email||'—'}</div></div>
-                <span className={`cat-pill ${m.role==='administrador'?'info':(m.role==='coordenador'||m.role==='librarian')?'ok':'warn'}`} style={{ fontSize:'.7rem' }}>{t({id:'roles.'+m.role,defaultMessage:m.role})||'—'}</span>
-              </div>
-            );})}
+        {/* Phase A 07/05/2026 : remplacement de la liste lecture seule par
+            <TeamPanel /> qui affiche aussi les status (suspended,
+            pending_removal, inactive) et préparera la Phase B (actions
+            via les RPCs fn_team_*). Le state `members` reste chargé dans
+            loadAll() car generateReportText() le consomme. */}
+        {tab==='team' && (
+          <div>
+            <h3 style={{ marginBottom: 12 }}>{t({ id: 'biblioteca.team.title' })}</h3>
+            <TeamPanel scope="library" libraryId={libraryId} />
           </div>
-        </div>)}
+        )}
 
         {/* ═══ 6. Trocas interbibliotecas ══════════════ */}
         {tab==='exchanges' && (<div>

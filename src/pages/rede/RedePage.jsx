@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
+import TeamPanel from '@/components/team/TeamPanel';
+import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -49,9 +51,10 @@ export default function RedePage() {
   const [reqFilter, setReqFilter] = useState('');
   const [selectedReq, setSelectedReq] = useState(null);
   const [reviewNote, setReviewNote] = useState('');
+  // allMembers reste chargé : utilisé par l'onglet "admins" (filtre des
+  // administradores, addAdmin, removeAdmin). L'onglet "members" affiche
+  // désormais <TeamPanel /> qui charge ses propres données.
   const [allMembers, setAllMembers] = useState([]);
-  const [memberFilter, setMemberFilter] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
   const [newAdminEmail, setNewAdminEmail] = useState('');
 
   // ── Load ────────────────────────────────────────────────
@@ -125,6 +128,11 @@ export default function RedePage() {
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
 
+  // ATTENTION : changeUserRole fait un UPDATE direct sur user_library_memberships.role
+  // ce qui court-circuite les RPCs fn_team_* du Lot 5 (pas d'audit, pas d'event
+  // outbox, pas de mail militant aux concerné·es). Conservée temporairement
+  // pour l'onglet "admins" qui n'a pas encore migré. À refondre en Phase B
+  // de gouvernance avec les RPCs propres.
   async function changeUserRole(userId, libraryId, newRole) {
     try {
       await supabase.from('user_library_memberships').update({ role: newRole }).eq('user_id', userId).eq('library_id', libraryId);
@@ -181,13 +189,6 @@ export default function RedePage() {
 
   const admins = allMembers.filter(m => m.role === 'administrador');
   const filteredReqs = reqFilter ? requests.filter(r => r.request_status === reqFilter) : requests;
-  const filteredMembers = allMembers.filter(m => {
-    if (roleFilter && m.role !== roleFilter) return false;
-    if (!memberFilter) return true;
-    const s = memberFilter.toLowerCase();
-    return (m.profiles?.email||'').toLowerCase().includes(s) || (m.profiles?.first_name||'').toLowerCase().includes(s) || (m.profiles?.last_name||'').toLowerCase().includes(s) || (m.libraries?.name||'').toLowerCase().includes(s);
-  });
-  const roleCounts = allMembers.reduce((a, m) => { a[m.role] = (a[m.role]||0) + 1; return a; }, {});
 
   return (
     <PageShell><Topbar />
@@ -346,53 +347,31 @@ export default function RedePage() {
         </div>)}
 
         {/* ═══ 4. MEMBROS DA REDE ═════════════════════ */}
-        {tab==='members' && (<div>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12, flexWrap:'wrap', gap:8 }}>
-            <h3 style={{ margin:0 }}>Membros da rede ({allMembers.length})</h3>
-            <div style={{ display:'flex', gap:8, alignItems:'center', flexWrap:'wrap' }}>
-              <input type="text" value={memberFilter} onChange={e=>setMemberFilter(e.target.value)} placeholder="Buscar nome, e-mail, biblioteca…" style={{...fs, width:240}} />
-              <select value={roleFilter} onChange={e=>setRoleFilter(e.target.value)} style={{...fs, width:'auto'}}>
-                <option value="">{t({id:'rede.members.allRoles'})}</option>
-                {Object.entries(ROLE_LABELS).map(([k,v])=><option key={k} value={k}>{v} ({roleCounts[k]||0})</option>)}
-              </select>
-            </div>
+        {/* Phase A 07/05/2026 : remplacement de la liste éditable (qui faisait
+            UPDATE direct sur user_library_memberships.role et court-circuitait
+            les RPCs gouvernance fn_team_*) par <TeamPanel /> en lecture seule.
+            Phase B recâblera les actions sur les RPCs propres. */}
+        {tab === 'members' && (
+          <div>
+            <h3 style={{ marginBottom: 12 }}>{t({ id: 'rede.tab.members' })}</h3>
+            <TeamPanel scope="network" />
           </div>
-
-          <div style={{ display:'flex', gap:10, marginBottom:12, flexWrap:'wrap' }}>
-            {Object.entries(ROLE_LABELS).map(([k,v]) => (
-              <div key={k} style={{ padding:'6px 14px', borderRadius:8, background:'rgba(0,0,0,.15)', textAlign:'center', cursor:'pointer', border: roleFilter===k?'1px solid rgba(255,255,255,.2)':'1px solid transparent' }} onClick={()=>setRoleFilter(roleFilter===k?'':k)}>
-                <div style={{ fontSize:'1.1rem', fontWeight:800 }}>{roleCounts[k]||0}</div>
-                <div style={{ fontSize:'.72rem', color:'var(--brand-muted)' }}>{v}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={lw}>
-            {filteredMembers.length===0 && <div style={{ padding:16, fontSize:'.88rem', color:'var(--brand-muted)' }}>Nenhum membro encontrado.</div>}
-            {filteredMembers.map((m,i) => {
-              const p = m.profiles || {};
-              return (
-                <div key={`${m.user_id}-${m.library_id}`} style={lr(i)}>
-                  <div style={{ flex:1 }}>
-                    <div style={{ fontSize:'.9rem', fontWeight:600 }}>{[p.first_name,p.last_name].filter(Boolean).join(' ')||p.email||'(sem nome)'}</div>
-                    <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                      {p.email||'—'} · {m.libraries?.name||'—'}
-                      {m.created_at && ` · desde ${new Date(m.created_at).toLocaleDateString('pt-BR')}`}
-                    </div>
-                  </div>
-                  <select value={m.role} onChange={e=>changeUserRole(m.user_id,m.library_id,e.target.value)}
-                    style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
-                    {Object.entries(ROLE_LABELS).map(([k,v])=><option key={k} value={k}>{v}</option>)}
-                  </select>
-                </div>
-              );
-            })}
-          </div>
-        </div>)}
+        )}
 
         {/* ═══ 5. ADMINISTRADORES ═════════════════════ */}
         {tab==='admins' && (<div>
           <h3 style={{ marginBottom:12 }}>Administradores da rede ({admins.length})</h3>
+          <div style={{
+            padding: '10px 14px',
+            borderRadius: 8,
+            fontSize: '.85rem',
+            marginBottom: 14,
+            background: 'rgba(29,78,216,.1)',
+            color: '#60a5fa',
+            border: '1px solid rgba(29,78,216,.3)',
+          }}>
+            ⓘ A gestão de papéis migrou para os RPCs <code>fn_team_*</code> (auditados, com mensagens militantes automáticas). Esta aba será refatorada na próxima fase. Por enquanto, alterações aqui <strong>não enviam</strong> as notificações automáticas aos membros concernidos.
+          </div>
           <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:14 }}>
             Os administradores têm acesso total ao painel de rede, à gestão dos membros e podem promover outros administradores. Este privilégio deve ser reservado a muito poucas pessoas de confiança da rede.
           </div>

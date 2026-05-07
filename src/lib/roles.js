@@ -79,3 +79,74 @@ export function canSeeBiblioteca(role) {
 export function canSeeRede(role) {
   return isAdmin(role);
 }
+
+// ── Permissions de gouvernance d'équipe (Lot 5 / Phase B) ───
+//
+// Ces helpers seront utilisés par <TeamPanel /> en Phase B pour décider
+// d'afficher ou non les boutons d'action sur chaque ligne.
+//
+// IMPORTANT : ces helpers donnent la permission "scope-level" (ai-je le
+// droit de gérer DES équipes ?). La permission "row-level" (ai-je le
+// droit d'agir sur CETTE ligne précise ?) dépend en plus de :
+//   - role de la cible (un coord ne peut pas modifier un autre coord)
+//   - lien utilisateur·ice ↔ bibliothèque (un coord BLMF ne peut pas
+//     modifier l'équipe d'une autre bibli)
+//   - cas particuliers (self-demote toujours autorisé pour soi-même)
+//
+// La logique row-level vit dans <TeamPanel /> directement, en Phase B.
+
+/** Peut gérer l'équipe d'une bibliothèque (≥ coord). */
+export function canManageTeam(role) {
+  return isCoord(role);
+}
+
+/** Peut gérer les équipes du réseau (admin uniquement). */
+export function canManageNetworkTeam(role) {
+  return isAdmin(role);
+}
+
+// ── Helpers d'affichage ──────────────────────────────────────
+//
+// Ces helpers ne déterminent pas des permissions mais aident l'UI à
+// rendre les rôles et statuts de façon cohérente partout.
+
+/**
+ * Ordre de tri des rôles, du plus de droits au moins (utilisé pour
+ * afficher les listes du staff "admin d'abord, librarian en dernier").
+ * Les rôles inconnus tombent à 0.
+ */
+export function roleSortOrder(role) {
+  const order = { administrador: 4, coordenador: 3, librarian: 2, reader: 1 };
+  return order[role] || 0;
+}
+
+/**
+ * Renvoie le nom de la clé i18n pour le label d'un status de membership.
+ * Convention : team.status.{status}
+ *   - active         : actif·ve
+ *   - suspended      : suspendu·e (is_restricted=true OU status='suspended')
+ *   - pending_removal: en cours de retrait (carence 7j non écoulée)
+ *   - inactive       : inactif·ve (260+ jours sans connexion)
+ *   - removed        : retiré·e (carence écoulée, fn_cron a fait son travail)
+ */
+export function statusLabel(status) {
+  return `team.status.${status || 'active'}`;
+}
+
+/**
+ * Renvoie le kind de pill (.cat-pill X) à utiliser pour un status donné.
+ * Cohérent avec la convention visuelle existante :
+ *   - ok      : vert (.cat-pill ok) — actif
+ *   - warn    : jaune (.cat-pill warn) — suspendu, pending_removal, inactif
+ *   - danger  : rouge (.cat-pill danger) — removed
+ */
+export function statusBadgeKind(status) {
+  switch (status) {
+    case 'active': return 'ok';
+    case 'suspended': return 'warn';
+    case 'pending_removal': return 'warn';
+    case 'inactive': return 'warn';
+    case 'removed': return 'danger';
+    default: return 'info';
+  }
+}
