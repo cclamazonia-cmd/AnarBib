@@ -6,10 +6,9 @@ import { resolve } from 'path';
 export default defineConfig({
   plugins: [react()],
 
-  // ── GitHub Pages ──────────────────────────────────────────
-  // Ajuste "base" pour ton nom de repo GitHub Pages.
-  // Ex: si le repo s'appelle "anarbib", le site sera à
-  //     https://cclamazonia-cmd.github.io/anarbib/
+  // ── GitHub Pages / Codeberg Pages ─────────────────────────
+  // Ajuste "base" pour ton nom de repo. Ex: si le repo s'appelle
+  // "anarbib", le site sera à https://cclamazonia-cmd.github.io/anarbib/
   base: '/',
 
   resolve: {
@@ -18,11 +17,45 @@ export default defineConfig({
     },
   },
 
+  // ── Vendor pdfjs : ne PAS pré-traiter ─────────────────────
+  // Les fichiers dans public/vendor/pdfjs/ sont déjà compilés
+  // (build/, web/cmaps/, web/standard_fonts/, web/wasm/, web/iccs/).
+  // Vite doit les servir tels quels en dev ET en prod, avec les bons
+  // MIME types (notamment application/wasm pour les .wasm).
+  //
+  // Sans ces options, Vite tente d'analyser pdf.mjs comme un module
+  // applicatif, ce qui peut casser le chargement du worker et des
+  // ressources WASM (jbig2.wasm, openjpeg.wasm, qcms_bg.wasm).
+  optimizeDeps: {
+    // Empêche Vite de pré-bundler ces imports — ils doivent rester
+    // chargés depuis /vendor/pdfjs/ à l'exécution
+    exclude: ['pdfjs-dist'],
+  },
+
+  // ── Serveur de dev ────────────────────────────────────────
+  server: {
+    fs: {
+      // Autorise la lecture des fichiers du dossier public/ (devrait
+      // être le cas par défaut, mais on l'explicite pour /vendor/)
+      strict: false,
+    },
+    // Headers MIME corrects pour les .wasm servis depuis /vendor/
+    // (Vite par défaut peut renvoyer application/octet-stream)
+    middlewareMode: false,
+    // En dev, on n'a pas de Cache-Control agressif sur /vendor/
+    // pour pouvoir tester un nouveau pdfjs sans purger le cache navigateur
+  },
+
+  // ── Assets statiques explicites ───────────────────────────
+  // Indique à Vite que les .wasm dans public/ sont à inclure
+  // dans le build de prod sans transformation
+  assetsInclude: ['**/*.wasm'],
+
   build: {
     outDir: 'dist',
     sourcemap: false,
 
-    // ── Code splitting des vendors ─────────────────────────
+    // ── Code splitting des vendors ──────────────────────────
     // Casse le bundle en chunks logiques pour :
     // 1. Téléchargement parallèle (HTTP/2 multiplexing)
     // 2. Cache long sur les vendors (qui changent rarement)
