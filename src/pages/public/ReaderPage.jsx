@@ -11,40 +11,69 @@ import './ReaderPage.css';
 
 const SUPABASE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 const PDFJS_BASE = import.meta.env.BASE_URL + 'vendor/pdfjs/build';
+const PDFJS_ASSETS_BASE = import.meta.env.BASE_URL + 'vendor/pdfjs/web/';
+const PDFJS_CMAPS_URL = PDFJS_ASSETS_BASE + 'cmaps/';
+const PDFJS_STANDARD_FONTS_URL = PDFJS_ASSETS_BASE + 'standard_fonts/';
+const PDFJS_WASM_URL = PDFJS_ASSETS_BASE + 'wasm/';
+const PDFJS_ICCS_URL = PDFJS_ASSETS_BASE + 'iccs/';
 
 // ═══════════════════════════════════════════════════════════
-// Protection anti-copie
+// Protection anti-copie SCOPÉE au viewer
 // ═══════════════════════════════════════════════════════════
+//
+// v2.1 : on attache au document (capture phase) et on filtre par
+// containment. Avantages :
+//  - marche même si viewerRef.current est encore null au moment où le
+//    useEffect s'exécute (le test se fait au moment de l'event, pas du mount)
+//  - capture phase : on intercepte avant que le canvas ait pu poser son
+//    propre handler bloquant
+//  - le filtre `viewerRef.current?.contains(e.target)` garantit que clic
+//    droit / drag / copy restent libres en dehors du viewer
+//
+// Limites connues : F12 et PrintScreen ne sont pas réellement bloquables
+// dans un navigateur ; ces interceptions sont du décourageant, pas du DRM.
 
-function useCopyProtection() {
+function useViewerCopyProtection(viewerRef) {
   useEffect(() => {
-    function block(e) { e.preventDefault(); e.stopPropagation(); return false; }
+    function inViewer(e) {
+      const node = viewerRef.current;
+      return Boolean(node && e.target && node.contains(e.target));
+    }
+    function block(e) {
+      if (!inViewer(e)) return;
+      e.preventDefault();
+      e.stopPropagation();
+    }
     function blockKeys(e) {
+      // Pour les raccourcis on ne teste pas le containment — ils s'appliquent
+      // dès que le focus est dans le document, donc on ne bloque que si le
+      // viewer est dans la page (peu importe l'élément actif).
+      if (!viewerRef.current) return;
       const k = (e.key || '').toLowerCase();
       if (
         (e.ctrlKey && !e.shiftKey && ['s','p','a','c','u'].includes(k)) ||
         (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k)) ||
         k === 'f12' || k === 'printscreen'
-      ) { e.preventDefault(); e.stopPropagation(); }
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }
+
     document.addEventListener('contextmenu', block, true);
-    window.addEventListener('contextmenu', block, true);
-    document.addEventListener('keydown', blockKeys, true);
     document.addEventListener('dragstart', block, true);
     document.addEventListener('copy', block, true);
     document.addEventListener('selectstart', block, true);
-    const prev = document.body.oncontextmenu;
-    document.body.oncontextmenu = () => false;
+    document.addEventListener('keydown', blockKeys, true);
+
     return () => {
       document.removeEventListener('contextmenu', block, true);
-      window.removeEventListener('contextmenu', block, true);
-      document.removeEventListener('keydown', blockKeys, true);
       document.removeEventListener('dragstart', block, true);
       document.removeEventListener('copy', block, true);
       document.removeEventListener('selectstart', block, true);
-      document.body.oncontextmenu = prev;
+      document.removeEventListener('keydown', blockKeys, true);
     };
-  }, []);
+  }, [viewerRef]);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -75,6 +104,11 @@ export default function ReaderPage() {
 
   const publicBucket = params.get('public_bucket');
   const publicPath = params.get('public_path');
+  // ── Stabilisation : on ne dépend que de l'identifiant utilisateur,
+  // pas de l'objet `user` entier (qui change de référence à chaque
+  // re-vérification de session Supabase au focus de l'onglet).
+  const userId = user?.id || null;
+  const userEmail = user?.email || '';
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -85,14 +119,17 @@ export default function ReaderPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [scale, setScale] = useState(1.2);
+  const [fitWidth, setFitWidth] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const viewerRef = useRef(null);    // conteneur viewer entier (scope anti-copie + fullscreen)
   const scrollRef = useRef(null);    // le conteneur scrollable
   const pagesRef = useRef(null);     // le div qui contient les page-wraps
   const renderedRef = useRef(new Set());
   const renderingRef = useRef(new Set());
   const observerRef = useRef(null);
 
-  useCopyProtection();
+  useViewerCopyProtection(viewerRef);
 
   // ── Chargement du PDF ────────────────────────────────────
 
@@ -144,9 +181,14 @@ export default function ReaderPage() {
 
         const doc = await pdfjsLib.getDocument({
           url: blobUrl,
+          cMapUrl: PDFJS_CMAPS_URL,
+          cMapPacked: true,
+          standardFontDataUrl: PDFJS_STANDARD_FONTS_URL,
+          wasmUrl: PDFJS_WASM_URL,
+          iccUrl: PDFJS_ICCS_URL,
+          useSystemFonts: false,
           disableAutoFetch: true,
           disableStream: true,
-          isEvalSupported: false,
         }).promise;
 
         if (cancelled) { URL.revokeObjectURL(blobUrl); return; }
@@ -161,13 +203,25 @@ export default function ReaderPage() {
       }
     })();
     return () => { cancelled = true; };
-  }, [id, publicBucket, publicPath, user]);
+    // userId au lieu de user : évite le rechargement du PDF au focus de l'onglet
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, publicBucket, publicPath, userId]);
+
+  // ── Calcul de l'échelle effective (fit-width vs zoom manuel) ─
+
+  const computeEffectiveScale = useCallback(async (page) => {
+    if (!fitWidth || !scrollRef.current) return scale;
+    const baseViewport = page.getViewport({ scale: 1 });
+    const padding = 32;
+    const availW = scrollRef.current.clientWidth - padding;
+    return availW / baseViewport.width;
+  }, [scale, fitWidth]);
 
   // ── Rendu d'une page sur canvas ──────────────────────────
 
   const renderPage = useCallback(async (pageNo) => {
     if (!pdfDoc || !pagesRef.current) return;
-    const key = `${pageNo}@${scale}`;
+    const key = `${pageNo}@${scale}@${fitWidth ? 'fw' : 'fz'}`;
     if (renderedRef.current.has(key) || renderingRef.current.has(key)) return;
 
     const wrap = pagesRef.current.querySelector(`[data-page="${pageNo}"]`);
@@ -176,7 +230,8 @@ export default function ReaderPage() {
     renderingRef.current.add(key);
     try {
       const page = await pdfDoc.getPage(pageNo);
-      const viewport = page.getViewport({ scale });
+      const effectiveScale = await computeEffectiveScale(page);
+      const viewport = page.getViewport({ scale: effectiveScale });
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d', { alpha: false });
@@ -193,7 +248,6 @@ export default function ReaderPage() {
       if (host) {
         host.style.minHeight = `${Math.ceil(viewport.height)}px`;
         host.style.width = `${Math.ceil(viewport.width)}px`;
-        host.style.maxWidth = '100%';
       }
 
       await page.render({ canvasContext: ctx, viewport }).promise;
@@ -207,7 +261,7 @@ export default function ReaderPage() {
     } finally {
       renderingRef.current.delete(key);
     }
-  }, [pdfDoc, scale]);
+  }, [pdfDoc, scale, fitWidth, computeEffectiveScale]);
 
   // ── IntersectionObserver pour le rendu au scroll ─────────
 
@@ -252,9 +306,9 @@ export default function ReaderPage() {
     for (let p = 1; p <= Math.min(3, totalPages); p++) renderPage(p);
 
     return () => observer.disconnect();
-  }, [pdfDoc, totalPages, scale, renderPage]);
+  }, [pdfDoc, totalPages, scale, fitWidth, renderPage]);
 
-  // ── Re-render au changement de zoom ──────────────────────
+  // ── Re-render au changement de zoom ou de fit-width ──────
 
   useEffect(() => {
     renderedRef.current = new Set();
@@ -269,7 +323,55 @@ export default function ReaderPage() {
       // Re-render les premières et la courante
       for (let p = Math.max(1, currentPage - 1); p <= Math.min(totalPages, currentPage + 1); p++) renderPage(p);
     }
-  }, [scale]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scale, fitWidth]);
+
+  // ── Re-render sur resize quand fit-width est actif ──────
+
+  useEffect(() => {
+    if (!fitWidth) return;
+    let timer = null;
+    const onResize = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        renderedRef.current = new Set();
+        renderingRef.current = new Set();
+        if (pdfDoc && pagesRef.current) {
+          const wraps = pagesRef.current.querySelectorAll('[data-page]');
+          wraps.forEach((w) => {
+            const host = w.querySelector('.ab-reader-page-host');
+            if (host) host.replaceChildren();
+          });
+          for (let p = Math.max(1, currentPage - 1); p <= Math.min(totalPages, currentPage + 1); p++) renderPage(p);
+        }
+      }, 200);
+    };
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (timer) clearTimeout(timer);
+    };
+  }, [fitWidth, pdfDoc, currentPage, totalPages, renderPage]);
+
+  // ── Plein écran ──────────────────────────────────────────
+
+  const toggleFullscreen = useCallback(() => {
+    const node = viewerRef.current;
+    if (!node) return;
+    if (!document.fullscreenElement) {
+      if (node.requestFullscreen) node.requestFullscreen();
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+    }
+  }, []);
+
+  useEffect(() => {
+    const onFsChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', onFsChange);
+    return () => document.removeEventListener('fullscreenchange', onFsChange);
+  }, []);
 
   // ── Navigation par boutons ───────────────────────────────
 
@@ -285,7 +387,7 @@ export default function ReaderPage() {
 
   useDocumentTitle(bookTitle || t({ id: 'reader.title' }));
 
-  const wm = user?.email ? `AnarBib · ${libraryName} · ${user.email}` : `AnarBib · ${libraryName}`;
+  const wm = userEmail ? `AnarBib · ${libraryName} · ${userEmail}` : `AnarBib · ${libraryName}`;
 
   // ── Rendu ────────────────────────────────────────────────
 
@@ -297,27 +399,27 @@ export default function ReaderPage() {
             <img src="https://cclamazonia.noblogs.org/files/2026/03/AnarBib_logo.png" alt="AnarBib" />
           </Link>
           <div className="ab-reader-nav__title">
-            <span className="ab-reader-nav__heading">Leitor PDF</span>
+            <span className="ab-reader-nav__heading">{t({id:'reader.brand'})}</span>
             {bookTitle && <span className="ab-reader-nav__book">{bookTitle}</span>}
           </div>
         </div>
         <div className="ab-reader-nav__actions">
-          <Link to="/" className="ab-button ab-button--secondary ab-button--mini">Catálogos</Link>
-          {id && <Link to={`/livro/${id}`} className="ab-button ab-button--secondary ab-button--mini">Voltar ao livro</Link>}
+          <Link to="/" className="ab-button ab-button--secondary ab-button--mini">{t({id:'reader.catalogs'})}</Link>
+          {id && <Link to={`/livro/${id}`} className="ab-button ab-button--secondary ab-button--mini">{t({id:'reader.backToBook'})}</Link>}
           {user
-            ? <Link to="/conta" className="ab-button ab-button--secondary ab-button--mini">Minha conta</Link>
-            : <Link to="/cadastro" className="ab-button ab-button--mini">Entrar</Link>}
+            ? <Link to="/conta" className="ab-button ab-button--secondary ab-button--mini">{t({id:'reader.myAccount'})}</Link>
+            : <Link to="/cadastro" className="ab-button ab-button--mini">{t({id:'reader.signIn'})}</Link>}
         </div>
       </nav>
 
       <div className="ab-reader-hero">
-        <h1>{bookTitle || 'Leitor PDF'}</h1>
+        <h1>{bookTitle || t({id:'reader.brand'})}</h1>
         {assetMeta && (
           <div className="ab-reader-meta">
             {assetMeta.source_name && (
-              <Pill>Fonte: {assetMeta.source_url
+              <Pill>{t({id:'reader.source'},{name: assetMeta.source_url
                 ? <a href={assetMeta.source_url} target="_blank" rel="noopener noreferrer">{assetMeta.source_name}</a>
-                : assetMeta.source_name}</Pill>
+                : assetMeta.source_name})}</Pill>
             )}
             {assetMeta.rights_status && <Pill>{assetMeta.rights_status}</Pill>}
           </div>
@@ -325,7 +427,7 @@ export default function ReaderPage() {
       </div>
 
       {loading ? (
-        <div className="ab-reader-loading"><Spinner size={36} /><p>Preparando a leitura…</p></div>
+        <div className="ab-reader-loading"><Spinner size={36} /><p>{t({id:'reader.loadingPrep'})}</p></div>
       ) : error ? (
         <div className="ab-reader-error">
           <EmptyState message={error}>
@@ -334,15 +436,19 @@ export default function ReaderPage() {
           </EmptyState>
         </div>
       ) : pdfDoc ? (
-        <div className="ab-reader-viewer">
+        <div
+          ref={viewerRef}
+          className={`ab-reader-viewer ${isFullscreen ? 'ab-reader-viewer--fullscreen' : ''}`}
+          tabIndex={0}
+        >
           {/* Toolbar */}
           <div className="ab-reader-toolbar">
             <div className="ab-reader-toolbar__group">
-              {id && <Link to={`/livro/${id}`} className="ab-button ab-button--secondary ab-button--mini">Voltar ao livro</Link>}
-              <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => window.location.reload()}>Recarregar</button>
+              {id && <Link to={`/livro/${id}`} className="ab-button ab-button--secondary ab-button--mini">{t({id:'reader.backToBook'})}</Link>}
+              <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => window.location.reload()}>{t({id:'reader.reload'})}</button>
             </div>
             <div className="ab-reader-toolbar__group">
-              <button className="ab-reader-tb-btn" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1}>← Página</button>
+              <button className="ab-reader-tb-btn" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1}>{t({id:'reader.prevPage'})}</button>
               <span className="ab-reader-tb-info">
                 <input type="number" className="ab-reader-page-input" min={1} max={totalPages} value={currentPage}
                   onChange={(e) => goToPage(parseInt(e.target.value) || 1)} />
@@ -351,9 +457,35 @@ export default function ReaderPage() {
               <button className="ab-reader-tb-btn" onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages}>{t({id:'reader.pageNav'})}</button>
             </div>
             <div className="ab-reader-toolbar__group">
-              <button className="ab-reader-tb-btn" onClick={() => setScale(s => Math.max(0.5, +(s - 0.15).toFixed(2)))}>− Zoom</button>
-              <button className="ab-reader-tb-btn" onClick={() => setScale(s => Math.min(3, +(s + 0.15).toFixed(2)))}>+ Zoom</button>
-              <span className="ab-reader-tb-info">{Math.round(scale * 100)}%</span>
+              <button
+                className="ab-reader-tb-btn"
+                onClick={() => { setFitWidth(false); setScale(s => Math.max(0.5, +(s - 0.15).toFixed(2))); }}
+                disabled={!fitWidth && scale <= 0.5}
+              >
+                {t({id:'reader.zoomOut'})}
+              </button>
+              <button
+                className="ab-reader-tb-btn"
+                onClick={() => { setFitWidth(false); setScale(s => Math.min(3, +(s + 0.15).toFixed(2))); }}
+                disabled={!fitWidth && scale >= 3}
+              >
+                {t({id:'reader.zoomIn'})}
+              </button>
+              <span className="ab-reader-tb-info">{fitWidth ? '↔' : `${Math.round(scale * 100)}%`}</span>
+              <button
+                className={`ab-reader-tb-btn ${fitWidth ? 'ab-reader-tb-btn--active' : ''}`}
+                onClick={() => setFitWidth(f => !f)}
+                title={t({id:'reader.fitWidth'})}
+              >
+                {t({id:'reader.fitWidth'})}
+              </button>
+              <button
+                className="ab-reader-tb-btn"
+                onClick={toggleFullscreen}
+                title={t({id: isFullscreen ? 'reader.fullscreenExit' : 'reader.fullscreen'})}
+              >
+                {isFullscreen ? '⤡' : '⤢'}
+              </button>
             </div>
           </div>
 
@@ -383,8 +515,7 @@ export default function ReaderPage() {
           </div>
 
           <p className="ab-reader-notice">
-            Este conteúdo é disponibilizado para leitura em linha pela rede AnarBib.
-            A reprodução não autorizada é proibida.
+            {t({id:'reader.notice'})}
           </p>
         </div>
       ) : null}
