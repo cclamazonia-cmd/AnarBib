@@ -1,0 +1,81 @@
+# =============================================================================
+# AnarBib — Configuration Supabase CLI
+# =============================================================================
+# Ce fichier est lu automatiquement par `supabase functions deploy` et impose
+# par fonction des paramètres qui ne doivent PAS revenir au défaut entre
+# déploiements (notamment verify_jwt).
+#
+# Référence : https://supabase.com/docs/guides/cli/config#functions.function_name.verify_jwt
+#
+# Convention :
+#   - verify_jwt = false         pour les fonctions appelées par des webhooks
+#                                internes (DB → Edge via x-webhook-secret) ou
+#                                des intégrations qui n'utilisent pas de JWT
+#                                Supabase Auth.
+#   - verify_jwt non déclaré      pour les fonctions appelées par le frontend
+#     (default = true)           authentifié (utilisent le JWT Supabase Auth).
+#
+# Inventaire au 2026-05-07 (cf. supabase functions list) :
+#
+#   verify_jwt: false  (13 fonctions, déclarées ci-dessous)
+#     - notify-event, notify-internal-task, notify-library-request,
+#       notify-weekly-report, notify-network-weekly-report,
+#       notify-mid-loan-reading, notify-document-permission-request,
+#       notify-interlibrary-loan  (8 mailers via webhook secret)
+#     - read-pdf, bn_isbn_lookup, process-partner-catalog-import,
+#       read-digital-asset, fetch-url-metadata  (5 utilitaires publics
+#       ou avec auth interne custom)
+#
+#   verify_jwt: true   (5 fonctions, AUCUNE déclaration nécessaire)
+#     - register (création de compte, JWT Supabase obligatoire)
+#     - probe-partner-catalog
+#     - catalog_metadata_lookup
+#     - mail-i18n-test
+#     - login (Edge wrapper d'auth)
+#
+# =============================================================================
+# Mailers (déclenchés par webhook secret depuis pg_net via fn_dispatch_*)
+# =============================================================================
+
+[functions.notify-event]
+verify_jwt = false
+
+[functions.notify-internal-task]
+verify_jwt = false
+
+[functions.notify-library-request]
+verify_jwt = false
+
+[functions.notify-weekly-report]
+verify_jwt = false
+
+[functions.notify-network-weekly-report]
+verify_jwt = false
+
+[functions.notify-mid-loan-reading]
+verify_jwt = false
+
+[functions.notify-document-permission-request]
+verify_jwt = false
+
+[functions.notify-interlibrary-loan]
+verify_jwt = false
+
+# =============================================================================
+# Utilitaires publics ou avec authentification custom
+# =============================================================================
+
+[functions.read-pdf]
+verify_jwt = false
+
+[functions.bn_isbn_lookup]
+verify_jwt = false
+
+[functions.process-partner-catalog-import]
+verify_jwt = false
+
+[functions.read-digital-asset]
+verify_jwt = false
+
+[functions.fetch-url-metadata]
+verify_jwt = false
