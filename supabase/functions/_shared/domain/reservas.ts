@@ -43,7 +43,7 @@ export async function handleReservaV2StatusChange(recordId:number,event:string) 
 }
 
 export async function handleReservaV2WorkflowEvent(recordId:number,event:string,payload?:NotifyPayload|null) {
-  const we=normalizeReservaWorkflowEvent(event)||event; if (we==="retirada_a_combinar") return {user_result:{ok:true,skipped:true,reason:"workflow_marker_only"},admin_result:{ok:true,skipped:true,reason:"workflow_marker_only"}};
+  const we=normalizeReservaWorkflowEvent(event)||event;
   const pln=normalizeLineNos(getPayloadValue(payload,"line_nos")); const pi=normalizeWorkflowItems(getPayloadValue(payload,"items"));
   const {reserva,profile,items:db}=await getReservaWorkflowBundle(recordId,pln.length?pln:undefined); const ctx=await resolveLibraryNotificationContext(String(reserva.library_id||"").trim()||null); const bt=subjectTag(ctx);
   const locale=String(profile?.preferred_language||"").trim()||null;
@@ -59,6 +59,8 @@ export async function handleReservaV2WorkflowEvent(recordId:number,event:string,
   else if (we==="pronta_para_retirada") { sub=`BLMF | ${tMail(locale,"wf.readyShort")}`; tit=tMail(locale,"wf.ready"); intro=`<p>${tMail(locale,"wf.ready")}.</p>${LIBRARIAN_PHONE?`<p>${label(locale,"contact")}: <b>${esc(LIBRARIAN_PHONE)}</b>.</p>`:""}`; }
   else if (we==="retirada_no_show") { sub=`BLMF | ${tMail(locale,"wf.noShow")}`; tit=tMail(locale,"wf.noShow"); intro=`<p>${tMail(locale,"wf.noShow")}.</p>${when?`<p>${label(locale,"pickup")}: <b>${esc(when)}</b>.</p>`:""}`; }
   else if (we==="liberada_para_circulacao") { sub=`BLMF | ${tMail(locale,"wf.closed")}`; tit=tMail(locale,"wf.closed"); intro=`<p>${tMail(locale,"wf.closed")}.</p>`; }
+  else if (we==="em_preparacao") { sub=`BLMF | ${tMail(locale,"wf.preparingShort")}`; tit=tMail(locale,"wf.preparing"); intro=`<p>${tMail(locale,"wf.preparing")}.</p>`; }
+  else if (we==="retirada_a_combinar") { sub=`BLMF | ${tMail(locale,"wf.toCoordinateShort")}`; tit=tMail(locale,"wf.toCoordinate"); intro=`<p>${tMail(locale,"wf.toCoordinate")}.</p>${when?`<p>${label(locale,"pickup")}: <b>${esc(when)}</b> (${label(locale,"deadline")||"butoir"})</p>`:""}<p>${tMail(locale,"wf.checkAccount")}</p>`; }
   const prs=String(items.find(i=>i.pickup_reply_status)?.pickup_reply_status||"").trim(); const prn=String(items.find(i=>i.pickup_reply_note)?.pickup_reply_note||"").trim(); const prl=pickupReplyLabel(prs);
   const det:EmailDetails=[...(tits?[{label:label(locale,"items"),value:tits}]:[]),...(sl?[{label:label(locale,"status"),value:sl}]:[]),...(when?[{label:label(locale,"pickup"),value:`${when} (local)`}]:[]),...(prl?[{label:label(locale,"reply"),value:prl}]:[]),...(prn?[{label:label(locale,"readerNote"),value:prn}]:[]),...(note?[{label:label(locale,"note"),value:note}]:[])]; 
   const {html,text}=renderEmail({preheader:tit,title:tit,greeting:greeting(locale,user?.name),introHtml:intro,details:det,footerHtml:footerPadrao(ctx),context:ctx}); sub=applyBrandingText(sub.replace(/BLMF/g,bt),ctx);

@@ -407,7 +407,39 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Prenotazione chiusa",
     de: "Vormerkung abgeschlossen"
   },
-  "wf.checkAccount": {
+  "wf.preparing": {
+    "pt-BR": "Sua reserva está em preparação",
+    fr: "Ta réservation est en préparation",
+    es: "Tu reserva está en preparación",
+    en: "Your reservation is being prepared",
+    it: "La tua prenotazione è in preparazione",
+    de: "Deine Vormerkung wird vorbereitet"
+  },
+  "wf.preparingShort": {
+    "pt-BR": "Em preparação",
+    fr: "En préparation",
+    es: "En preparación",
+    en: "Being prepared",
+    it: "In preparazione",
+    de: "In Vorbereitung"
+  },
+  "wf.toCoordinate": {
+    "pt-BR": "Retirada a combinar com a biblioteca",
+    fr: "Retrait à organiser avec la bibliothèque",
+    es: "Retiro a coordinar con la biblioteca",
+    en: "Pickup to be arranged with the library",
+    it: "Ritiro da concordare con la biblioteca",
+    de: "Abholung mit der Bibliothek abzustimmen"
+  },
+  "wf.toCoordinateShort": {
+    "pt-BR": "A combinar",
+    fr: "À convenir",
+    es: "A coordinar",
+    en: "To arrange",
+    it: "Da concordare",
+    de: "Abzustimmen"
+  },
+    "wf.checkAccount": {
     "pt-BR": "Confira sua conta para mais detalhes.",
     fr: "Consulte ton compte pour plus de détails.",
     es: "Consulte tu cuenta para más detalles.",

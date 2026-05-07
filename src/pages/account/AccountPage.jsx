@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
+import { supabase, apiQuery } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -253,8 +253,10 @@ export default function AccountPage() {
       setReserveMsg(isConsultation
         ? t({id:'account.reserve.consultationRegistered'},{count:refs.length})
         : t({id:'account.reserve.loanRegistered'},{count:refs.length}));
-      // Notification asynchrone — ne bloque pas l'UX
-      if (!isConsultation) notifyEvent('reserva_v2_criada', 0, { user_id: user.id, holding_ids: holdingIds });
+      // PATCH 07/05/2026 : suppression du notifyEvent manuel de création.
+      // Le trigger DB trg_notify_reserva_workflow_change émet automatiquement
+      // 'reserva_v2_criada' à l'INSERT du workflow_stage 'solicitada'
+      // (cf. phase 4 spec workflow réservation).
       setReserveRef('');
       loadData();
     } catch (err) {
@@ -263,37 +265,63 @@ export default function AccountPage() {
   }
 
   // ── Annulation ───────────────────────────────────────────
+  // PATCH 07/05/2026 : migration de fn_v2_cancel_reserva_linhas_as_leitor
+  // vers le wrapper api.cancel_my_reservation (phase 2 spec workflow réservation).
+  // Comportement : annulation tout-ou-rien sur toutes les lignes (cf. spec section 6).
+  // Le trigger DB trg_notify_reserva_workflow_change émet automatiquement l'event
+  // de notification — plus besoin du notifyEvent manuel (qui faisait double emploi).
 
-  async function cancelReservation(reservaId, lineNos) {
+  async function cancelReservation(reservaId) {
     try {
-      const { error } = await supabase.rpc('fn_v2_cancel_reserva_linhas_as_leitor', {
+      const { error } = await supabase.rpc('cancel_my_reservation', {
         p_reserva_id: reservaId,
-        p_line_nos: Array.isArray(lineNos) ? lineNos : [1],
-      });
+      }, { schema: 'api' });
       if (error) throw error;
-      notifyEvent('reserva_cancelada_leitor', reservaId);
       loadData();
     } catch (err) {
-      alert(t({id:'account.reserve.cancelError'},{message:err.message}));
+      // L'API peut renvoyer cancel_blocked_by_stage si une ligne est en stage avancé.
+      // Le hint Postgres explique ce qui bloque.
+      const msg = err.hint || err.message || String(err);
+      alert(t({id:'account.reserve.cancelError'},{message: msg}));
     }
   }
 
   // ── Réponse de retrait (pickup reply) ───────────────────
+  // PATCH 07/05/2026 : migration vers les wrappers api.confirm_pickup_slot
+  // et api.refuse_pickup_slot. Le refus exige désormais une raison ≥ 5 chars
+  // (validée côté DB par le wrapper). Prompt minimal pour l'instant — une vraie
+  // modale pourra venir avec le polish UI futur.
+  // Le notifyEvent manuel est supprimé : le trigger DB s'en charge.
 
   async function handlePickupReply(reservaId, lineNo, replyStatus, note) {
     try {
-      const { error } = await supabase.rpc('fn_v2_set_reserva_linhas_pickup_reply', {
-        p_reserva_id: reservaId,
-        p_line_nos: [lineNo],
-        p_reply_status: replyStatus,
-        p_note: note || null,
-      });
+      let error;
+      if (replyStatus === 'confirmado_leitor') {
+        ({ error } = await supabase.rpc('confirm_pickup_slot', {
+          p_reserva_id: reservaId,
+          p_line_no: lineNo,
+        }, { schema: 'api' }));
+      } else {
+        // recusado_leitor : raison obligatoire ≥ 5 chars
+        let reason = note;
+        if (!reason || reason.trim().length < 5) {
+          reason = window.prompt(t({id:'reservation.refusePickup.askReason'}) || 'Raison du refus (au moins 5 caractères) :');
+          if (!reason || reason.trim().length < 5) {
+            // Annulation par l'utilisateur ou raison trop courte
+            return;
+          }
+        }
+        ({ error } = await supabase.rpc('refuse_pickup_slot', {
+          p_reserva_id: reservaId,
+          p_line_no: lineNo,
+          p_reason: reason,
+        }, { schema: 'api' }));
+      }
       if (error) throw error;
-      const eventName = replyStatus === 'confirmado_leitor' ? 'retirada_confirmada_leitor' : 'retirada_recusada_leitor';
-      notifyEvent(eventName, reservaId, { line_nos: [lineNo] });
       loadData();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:err.message}));
+      const msg = err.hint || err.message || String(err);
+      alert(t({id:'common.errorPrefix'},{message: msg}));
     }
   }
 
@@ -1012,7 +1040,7 @@ function ReservationCard({ r, onCancel, onPickupReply }) {
         )}
         {canCancel && (
           <button className="ab-button ab-button--mini ab-button--danger"
-            onClick={() => onCancel(r.reserva_id, [r.line_no || 1])}>
+            onClick={() => onCancel(r.reserva_id)}>
             {t({ id: 'reservation.action.cancel' })}
           </button>
         )}

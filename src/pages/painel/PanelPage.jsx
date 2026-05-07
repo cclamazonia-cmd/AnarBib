@@ -34,10 +34,14 @@ export default function PanelPage() {
   const WORKFLOW_LABELS = useMemo(() => ({
     solicitada: t({ id: 'reservation.stage.solicitada' }), em_preparacao: t({ id: 'reservation.stage.em_preparacao' }),
     pronta_para_retirada: t({ id: 'reservation.stage.pronta_para_retirada' }),
-    retirada_a_combinar: t({ id: 'reservation.stage.pronta_para_retirada' }),
+    // PATCH 07/05/2026 : 3 bugs i18n pré-existants corrigés (clés mal pointées)
+    retirada_a_combinar: t({ id: 'reservation.stage.retirada_a_combinar' }),
     retirada_agendada: t({ id: 'reservation.stage.retirada_agendada' }),
-    're-retirada_agendada': t({ id: 'reservation.stage.retirada_agendada' }),
+    're-retirada_agendada': t({ id: 'reservation.stage.re_retirada_agendada' }),
     nao_retirada: t({ id: 'reservation.stage.nao_retirada' }),
+    // PATCH 07/05/2026 : retirada_no_show est le nom canonique (phase 1 spec).
+    // 'nao_retirada' reste comme alias historique pour les anciennes données.
+    retirada_no_show: t({ id: 'reservation.stage.nao_retirada' }),
     liberada_para_circulacao: t({ id: 'reservation.stage.liberada_para_circulacao' }),
     retirada_efetivada: t({ id: 'reservation.stage.retirada_efetivada' }),
     cancelada_leitor: t({ id: 'reservation.stage.cancelada_leitor' }),
@@ -52,15 +56,92 @@ export default function PanelPage() {
     cancelada_biblioteca: t({ id: 'reservation.stage.cancelada_biblioteca' }),
     expirada: t({ id: 'panel.workflow.expired' }),
   }), [t]);
+  // PATCH 07/05/2026 : renumérotation alignée sur spec section 4.
+  // Le grisage des transitions illégales est calculé en runtime via canTransition()
+  // ci-dessous (réplication JS de fn_check_workflow_transition).
   const RES_STAGES = useMemo(() => [
-    { value: 'em_preparacao', label: '1. ' + t({ id: 'reservation.stage.em_preparacao' }) },
-    { value: 'pronta_para_retirada', label: '2. ' + t({ id: 'reservation.stage.pronta_para_retirada' }) },
-    { value: 'retirada_a_combinar', label: '3. ' + t({ id: 'reservation.stage.pronta_para_retirada' }) },
-    { value: 'retirada_agendada', label: '4. ' + t({ id: 'reservation.stage.retirada_agendada' }) },
-    { value: 're-retirada_agendada', label: '4b. ' + t({ id: 'reservation.stage.retirada_agendada' }) },
-    { value: 'nao_retirada', label: '5. ' + t({ id: 'reservation.stage.nao_retirada' }) },
-    { value: 'liberada_para_circulacao', label: '6. ' + t({ id: 'reservation.stage.liberada_para_circulacao' }) },
+    { value: 'em_preparacao',        label: '1. '  + t({ id: 'reservation.stage.em_preparacao' }) },
+    { value: 'retirada_agendada',    label: '2a. ' + t({ id: 'reservation.stage.retirada_agendada' }) },
+    { value: 'retirada_a_combinar',  label: '2b. ' + t({ id: 'reservation.stage.retirada_a_combinar' }) },
+    { value: 're-retirada_agendada', label: '3. '  + t({ id: 'reservation.stage.re_retirada_agendada' }) },
+    { value: 'pronta_para_retirada', label: '4. '  + t({ id: 'reservation.stage.pronta_para_retirada' }) },
+    { value: 'retirada_no_show',     label: '5. '  + t({ id: 'reservation.stage.nao_retirada' }) },
+    // 'retirada_efetivada' (retrait effectif) : passe par le bouton dédié
+    //   "Confirmar retirada" → api.confirm_pickup_v1 (conversion atomique en emprunt)
+    // 'liberada_para_circulacao' : transition automatique du trigger DB après
+    //   no-show ou cancel biblio. Ne JAMAIS afficher comme action staff manuelle.
   ], [t]);
+  // PATCH 07/05/2026 : Réplication JS de fn_check_workflow_transition (DB)
+  // pour griser les options du menu RES_STAGES qui ne sont pas autorisées
+  // depuis le stage actuel d'une réservation, pour le rôle staff courant.
+  // Spec section 4 : matrice de transitions.
+  //
+  // ⚠️ Cette fonction DOIT rester synchrone avec la fonction DB
+  //   public.fn_check_workflow_transition. En cas de changement de matrice côté DB,
+  //   répliquer ici. Le helper DB reste la source de vérité (validé en runtime
+  //   par les wrappers api.*) ; le grisage UI est purement informatif.
+  const canTransition = useCallback((fromStage, toStage, actorRole) => {
+    // Normalisation alias historique
+    const f = fromStage === 'nao_retirada' ? 'retirada_no_show' : fromStage;
+    const tg = toStage === 'nao_retirada' ? 'retirada_no_show' : toStage;
+    if (!f || !tg || !actorRole) return false;
+
+    // États terminaux : aucune transition humaine sortante
+    const TERMINAL = new Set([
+      'retirada_efetivada', 'cancelada_leitor', 'cancelada_biblioteca',
+      'expirada', 'liberada_para_circulacao', 'retirada_no_show',
+    ]);
+    if (TERMINAL.has(f)) return false;
+
+    // Lecteur : annulation à tout moment avant retirada_efetivada
+    if (actorRole === 'lecteur') {
+      const ANNULABLE = new Set([
+        'solicitada', 'em_preparacao', 'retirada_agendada',
+        'retirada_a_combinar', 're-retirada_agendada', 'pronta_para_retirada',
+      ]);
+      return tg === 'cancelada_leitor' && ANNULABLE.has(f);
+    }
+
+    // Coordenador : annulation biblio à toute étape non-terminale
+    if (actorRole === 'coordenador' && tg === 'cancelada_biblioteca') {
+      const NON_TERMINAL = new Set([
+        'solicitada', 'em_preparacao', 'retirada_agendada',
+        'retirada_a_combinar', 're-retirada_agendada', 'pronta_para_retirada',
+      ]);
+      if (NON_TERMINAL.has(f)) return true;
+    }
+
+    // System (cron, trigger) : transitions automatiques
+    if (actorRole === 'system') {
+      if (tg === 'expirada' && f === 'solicitada') return true;
+      if (tg === 'retirada_no_show' && ['pronta_para_retirada', 'retirada_agendada', 're-retirada_agendada'].includes(f)) return true;
+      return false;
+    }
+
+    // Librarian/coordenador : transitions opérationnelles
+    if (actorRole !== 'librarian' && actorRole !== 'coordenador') return false;
+
+    const TRANSITIONS = {
+      solicitada:              ['em_preparacao', 'retirada_agendada', 'retirada_a_combinar'],
+      em_preparacao:           ['retirada_agendada', 'retirada_a_combinar'],
+      retirada_agendada:       ['re-retirada_agendada', 'pronta_para_retirada'],
+      retirada_a_combinar:     ['retirada_agendada', 're-retirada_agendada', 'pronta_para_retirada'],
+      're-retirada_agendada':  ['re-retirada_agendada', 'pronta_para_retirada'],
+      pronta_para_retirada:    ['retirada_efetivada', 'retirada_no_show'],
+    };
+    const allowed = TRANSITIONS[f] || [];
+    return allowed.includes(tg);
+  }, []);
+
+  // Mapping rôle frontend → actor_role attendu par la matrice DB
+  // Note : isCoordOrAdmin couvre 'coordenador' ET 'administrador' qui ont les
+  // mêmes capacités côté workflow réservation (cf. spec et helper DB).
+  const actorRole = useMemo(() => {
+    if (isCoordOrAdmin) return 'coordenador';
+    if (isLibrarian) return 'librarian';
+    return null;
+  }, [isCoordOrAdmin, isLibrarian]);
+
   const [tab, setTab] = useState('trabalho-do-dia');
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState([]);
@@ -152,71 +233,113 @@ export default function PanelPage() {
 
   // ── Reservation workflow ──────────────────────────────
 
+  // PATCH 07/05/2026 : migration de fn_v2_set_reserva_linhas_workflow vers les
+  // wrappers api.advance_reservation et api.mark_no_show (phase 2 spec).
+  // Le wrapper valide la matrice de transitions (saut illégal rejeté) et le rôle.
+  // La cible 'retirada_no_show' / 'nao_retirada' passe par le raccourci dédié.
+  // Le notifyEvent manuel est supprimé : le trigger DB s'en charge.
+
   async function applyResWorkflow() {
     if (!resStage) { setActionMsg(t({id:'panel.action.selectStep'})); return; }
     const items = [...selectedRes];
     if (!items.length) { setActionMsg(t({id:'panel.action.selectAtLeastOne'})); return; }
     setActionMsg(t({id:'panel.action.applying'}));
     try {
+      const isNoShow = (resStage === 'retirada_no_show' || resStage === 'nao_retirada');
       for (const key of items) {
         const [rid, lno] = key.split('-').map(Number);
-        await supabase.rpc('fn_v2_set_reserva_linhas_workflow', {
-          p_reserva_id: rid, p_line_nos: [lno], p_workflow_stage: resStage,
-          p_workflow_note: resNote || null,
-          p_pickup_scheduled_for: resSchedule || null,
-        });
+        let error;
+        if (isNoShow) {
+          ({ error } = await supabase.rpc('mark_no_show', {
+            p_reserva_id: rid, p_line_no: lno,
+          }, { schema: 'api' }));
+        } else {
+          // Construction des options jsonb pour advance_reservation
+          const opts = {};
+          if (resNote) opts.note = resNote;
+          if (resSchedule) opts.pickup_scheduled_for = resSchedule;
+          ({ error } = await supabase.rpc('advance_reservation', {
+            p_reserva_id: rid, p_line_no: lno,
+            p_target_stage: resStage,
+            p_options: opts,
+          }, { schema: 'api' }));
+        }
+        if (error) throw error;
       }
       setActionMsg(t({id:'panel.action.stepApplied'},{count:items.length}));
-      // Notifier chaque réservation affectée
-      for (const key of items) {
-        const [rid] = key.split('-').map(Number);
-        notifyEvent(resStage, rid, { line_nos: [Number(key.split('-')[1])] });
-      }
       setSelectedRes(new Set());
       loadData();
-    } catch (e) { setActionMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) {
+      // L'API peut renvoyer transition_not_allowed, pickup_scheduled_for_required,
+      // target_stage_has_dedicated_rpc, etc. Le hint Postgres explique.
+      const msg = e.hint || e.message || String(e);
+      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+    }
   }
 
   async function cancelSelectedRes() {
     const items = [...selectedRes];
     if (!items.length) { setActionMsg(t({id:'panel.action.selectAtLeastOne'})); return; }
+    // PATCH 07/05/2026 : migration vers api.cancel_reservation_as_library.
+    // - Réservé aux coordenadores (coordenador_required si librarian)
+    // - Raison obligatoire ≥ 5 chars si stage avancé (retirada_agendada,
+    //   re-retirada_agendada, retirada_a_combinar, pronta_para_retirada).
+    //   Le wrapper renvoie reason_required_min_5_chars sinon.
+    // Le trigger DB cascade ensuite vers liberada_para_circulacao avec
+    // final_reason='cancelled_by_library'.
     setActionMsg(t({id:'panel.action.cancelling'}));
     try {
       for (const key of items) {
         const [rid, lno] = key.split('-').map(Number);
-        await supabase.rpc('fn_v2_cancel_reserva_linhas_as_biblioteca', {
-          p_reserva_id: rid, p_line_nos: [lno], p_notes: resNote || null,
-        });
+        const { error } = await supabase.rpc('cancel_reservation_as_library', {
+          p_reserva_id: rid, p_line_no: lno,
+          p_reason: resNote || null,
+        }, { schema: 'api' });
+        if (error) throw error;
       }
       setActionMsg(t({id:'panel.action.reservationsCancelled'},{count:items.length}));
-      for (const key of items) {
-        const [rid] = key.split('-').map(Number);
-        notifyEvent('reserva_cancelada_biblioteca', rid);
-      }
       setSelectedRes(new Set());
       loadData();
-    } catch (e) { setActionMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) {
+      const msg = e.hint || e.message || String(e);
+      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+    }
   }
 
   async function confirmSelectedPickup() {
     const items = [...selectedRes];
     if (!items.length) { setActionMsg(t({id:'panel.action.selectAtLeastOne'})); return; }
+    // PATCH 07/05/2026 : migration vers api.confirm_pickup_v1 (phase 2 spec).
+    // Restriction stricte : workflow_stage doit être pronta_para_retirada
+    // (le wrapper rejette pickup_only_from_pronta_para_retirada sinon).
+    // Conversion atomique réserve → emprunt. Retourne le loan_id (bigint).
+    // Le notifyEvent manuel est supprimé : trigger DB s'en charge.
+    // PATCH v2 07/05/2026 : affichage des loan_ids retournés pour confirmation visuelle
+    // immédiate au staff (preuve technique synchrone que la conversion a réussi,
+    // indépendamment de la livraison du mail).
     setActionMsg(t({id:'panel.action.confirmingPickup'}));
     try {
+      const loanIds = [];
       for (const key of items) {
         const [rid, lno] = key.split('-').map(Number);
-        await supabase.rpc('fn_v2_convert_reserva_linhas_to_emprestimo', {
-          p_reserva_id: rid, p_line_nos: [lno],
-        });
+        const { data, error } = await supabase.rpc('confirm_pickup_v1', {
+          p_reserva_id: rid, p_line_no: lno,
+          p_loan_options: {},
+        }, { schema: 'api' });
+        if (error) throw error;
+        if (data) loanIds.push(data);
       }
-      setActionMsg(t({id:'panel.action.pickupConfirmed'},{count:items.length}));
-      for (const key of items) {
-        const [rid] = key.split('-').map(Number);
-        notifyEvent('reserva_convertida_em_emprestimo', rid);
-      }
+      setActionMsg(
+        loanIds.length
+          ? t({id:'panel.action.pickupConfirmedWithIds'}, { count: loanIds.length, loanIds: loanIds.join(', #') })
+          : t({id:'panel.action.pickupConfirmed'}, { count: items.length })
+      );
       setSelectedRes(new Set());
       loadData();
-    } catch (e) { setActionMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) {
+      const msg = e.hint || e.message || String(e);
+      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+    }
   }
 
   // ── Ações: saída e devolução ──────────────────────────
@@ -775,12 +898,54 @@ export default function PanelPage() {
               <div className="ab-painel-res-workflow">
                 <input type="text" value={resNote} onChange={e => setResNote(e.target.value)} placeholder={t({id:"panel.loan.notePh"})} className="ab-painel-input" />
                 <input type="datetime-local" value={resSchedule} onChange={e => setResSchedule(e.target.value)} className="ab-painel-input" />
+                {/* PATCH 07/05/2026 : grisage des transitions illégales depuis le(s) stage(s) sélectionné(s).
+                    - Calcul de l'intersection des transitions valides pour toutes les lignes sélectionnées
+                    - Si sélection vide : toutes options actives (mode exploratoire)
+                    - Si une option n'est valide pour aucune des lignes : disabled + title explicatif */}
                 <select value={resStage} onChange={e => setResStage(e.target.value)} className="ab-painel-input">
                   <option value="">{t({ id: 'panel.reservations.selectStage' })}</option>
-                  {RES_STAGES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  {(() => {
+                    const selectedStages = [...selectedRes]
+                      .map(key => {
+                        const [rid, lno] = key.split('-').map(Number);
+                        const row = reservations.find(r => r.reserva_id === rid && r.line_no === lno);
+                        return row?.workflow_stage_effective || row?.item_status || null;
+                      })
+                      .filter(Boolean);
+                    return RES_STAGES.map(s => {
+                      // Mode exploratoire : pas de sélection, tout est actif
+                      if (!selectedStages.length) {
+                        return <option key={s.value} value={s.value}>{s.label}</option>;
+                      }
+                      // Sinon, transition autorisée pour TOUTES les lignes sélectionnées (intersection)
+                      const allValid = selectedStages.every(from => canTransition(from, s.value, actorRole));
+                      const distinctStages = [...new Set(selectedStages)];
+                      const stageList = distinctStages
+                        .map(st => WORKFLOW_LABELS[st] || st)
+                        .join(', ');
+                      const reasonHint = allValid
+                        ? undefined
+                        : t({ id: 'panel.reservations.transitionBlocked' }, { stages: stageList });
+                      return (
+                        <option
+                          key={s.value}
+                          value={s.value}
+                          disabled={!allValid}
+                          title={reasonHint}
+                          style={!allValid ? { color: '#888' } : undefined}
+                        >
+                          {allValid ? s.label : `${s.label} ✗`}
+                        </option>
+                      );
+                    });
+                  })()}
                 </select>
                 <Button variant="secondary" onClick={applyResWorkflow}>{t({ id: 'panel.reservations.applyStep' })}</Button>
               </div>
+              {/* PATCH 07/05/2026 : aide UX pour clarifier les actions hors menu */}
+              <p className="ab-painel-help" style={{ fontSize: '0.85em', color: '#888', marginTop: '4px' }}>
+                {t({ id: 'panel.reservations.menuHelp' })}
+              </p>
               {actionMsg && <p className="ab-painel-msg">{actionMsg}</p>}
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
