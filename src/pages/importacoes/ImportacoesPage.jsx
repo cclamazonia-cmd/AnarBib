@@ -202,14 +202,14 @@ export default function ImportacoesPage() {
       setLastRunId(String(runId));
 
       // Dispatch parsing
-      setMsg({ text: `Tratamento #${runId} criado. Lançando análise…`, kind: 'info' });
+      setMsg({ text: t({ id: 'importacoes.runCreatedDispatching' }, { id: runId }), kind: 'info' });
       try {
         await supabase.schema('ingest').rpc('fn_dispatch_partner_catalog_import', { p_run_id: Number(runId), p_force_reparse: false });
       } catch {
         await supabase.rpc('fn_dispatch_partner_catalog_import', { p_run_id: Number(runId), p_force_reparse: false });
       }
 
-      setMsg({ text: `Tratamento #${runId} lançado com sucesso. Atualize o histórico para ver o resultado.`, kind: 'ok' });
+      setMsg({ text: t({ id: 'importacoes.runDispatched' }, { id: runId }), kind: 'ok' });
       await loadRuns();
     } catch (err) {
       setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' });
@@ -235,7 +235,7 @@ export default function ImportacoesPage() {
   // ── Bulk create drafts from run ─────────────────────────
   async function bulkCreateDrafts() {
     if (!selectedRun) return;
-    if (!confirm(`Gerar rascunhos a partir do tratamento #${selectedRun.id}?`)) return;
+    if (!confirm(t({ id: 'importacoes.bulkDraftsConfirm' }, { id: selectedRun.id }))) return;
     setMsg({ text: t({id:'importacoes.generatingDrafts'}), kind: 'info' });
     try {
       try {
@@ -264,7 +264,7 @@ export default function ImportacoesPage() {
         const { data } = await supabase.functions.invoke('catalog_metadata_lookup', { body: { isbn } });
         if (data?.candidates?.length) {
           setUrlResult({ type: 'isbn', isbn, candidates: data.candidates, url: urlInput });
-          setMsg({ text: `${data.candidates.length} resultado(s) encontrado(s) para ISBN ${isbn}.`, kind: 'ok' });
+          setMsg({ text: t({ id: 'importacoes.isbnResults' }, { count: data.candidates.length, isbn }), kind: 'ok' });
         } else {
           setMsg({ text: t({id:'importacoes.isbnNotFound'}), kind: 'info' });
         }
@@ -273,7 +273,7 @@ export default function ImportacoesPage() {
         const { data } = await supabase.functions.invoke('fetch-url-metadata', { body: { url: urlInput.trim(), mode: 'html' } });
         if (data?.ok) {
           setUrlResult({ type: 'html', metadata: data, url: urlInput });
-          setMsg({ text: data.title ? `Metadados extraídos: "${data.title}"` : 'URL acessada, mas poucos metadados encontrados.', kind: data.title ? 'ok' : 'info' });
+          setMsg({ text: data.title ? t({ id: 'importacoes.metadataExtracted' }, { title: data.title }) : t({ id: 'importacoes.urlAccessedFewMeta' }), kind: data.title ? 'ok' : 'info' });
         } else {
           setMsg({ text: data?.error || t({ id: 'importacoes.urlError' }), kind: 'error' });
         }
@@ -293,7 +293,7 @@ export default function ImportacoesPage() {
       });
       if (data?.ok && data?.items?.length) {
         setRssItems(data.items);
-        setMsg({ text: `${data.items.length} item(ns) encontrado(s) no flux "${data.feed_title || ''}".`, kind: 'ok' });
+        setMsg({ text: t({ id: 'importacoes.rss.itemsFromFeed' }, { count: data.items.length, feed: data.feed_title || '' }), kind: 'ok' });
       } else if (data?.ok && data?.mode === 'html') {
         setMsg({ text: t({ id: 'importacoes.notRss' }), kind: 'info' });
       } else {
@@ -321,7 +321,7 @@ export default function ImportacoesPage() {
           <div>
             <h1 style={{ margin: 0 }}>{t({ id: 'importacoes.title' })}</h1>
             <p style={{ color: 'var(--brand-muted)', fontSize: '.9rem', margin: '4px 0 0' }}>
-              Recepção artesanal, importação por URL, flux RSS/Atom e histórico de tratamentos.
+              {t({ id: 'importacoes.subtitle' })}
             </p>
           </div>
         </div>
@@ -348,58 +348,55 @@ export default function ImportacoesPage() {
         {tab === 'reception' && (
           <div>
             <div style={{ padding: 16, borderRadius: 10, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.15)', marginBottom: 16 }}>
-              <h3 style={{ margin: '0 0 6px', fontSize: '1.1rem' }}>Recepção artesanal de catálogos externos</h3>
-              <p style={{ fontSize: '.85rem', color: 'var(--brand-muted)', margin: 0 }}>
-                Formatos aceitos: <strong>CSV, TSV, RIS, BibTeX, MARC21, MARCXML, Excel, ODS, PDF, JSON, XML, ZIP</strong>.
-                O gesto é sequencial: receber o arquivo, identificar a biblioteca, escolher a fonte parceira e lançar o tratamento.
-              </p>
+              <h3 style={{ margin: '0 0 6px', fontSize: '1.1rem' }}>{t({ id: 'importacoes.reception.title' })}</h3>
+              <p style={{ fontSize: '.85rem', color: 'var(--brand-muted)', margin: 0 }} dangerouslySetInnerHTML={{ __html: t({ id: 'importacoes.reception.formats' }) }} />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
               {/* Left: file + identity */}
               <div>
                 <div style={{ marginBottom: 14 }}>
-                  <label style={ls}>Arquivo recebido</label>
+                  <label style={ls}>{t({ id: 'importacoes.reception.fileLabel' })}</label>
                   <label style={{ display: 'inline-block', padding: '8px 16px', borderRadius: 8, background: 'var(--brand-panel-bg)', border: '1px solid rgba(255,255,255,.15)', cursor: 'pointer', fontSize: '.85rem', fontWeight: 600 }}>
-                    Escolher arquivo
+                    {t({ id: 'importacoes.reception.chooseFile' })}
                     <input type="file" accept={`${ACCEPTED_EXTENSIONS},${ACCEPTED_MIME}`} onChange={handleFileChange} style={{ display: 'none' }} />
                   </label>
                   {file && (
                     <div style={{ marginTop: 8, fontSize: '.85rem', color: 'var(--brand-muted)' }}>
-                      <strong>{file.name}</strong> · {formatBytes(file.size)} · formato: <strong>{FORMAT_LABELS[detectFileKind(file.name)] || 'Desconhecido'}</strong>
+                      <strong>{file.name}</strong> · {formatBytes(file.size)} · {t({ id: 'importacoes.reception.formatPrefix' })}: <strong>{FORMAT_LABELS[detectFileKind(file.name)] || t({ id: 'importacoes.format.unknown' })}</strong>
                     </div>
                   )}
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
-                  <div><label style={ls}>Nome da biblioteca</label><input type="text" value={libName} onChange={e => setLibName(e.target.value)} placeholder="Biblioteca parceira" style={fs} /></div>
-                  <div><label style={ls}>Nome curto</label><input type="text" value={libShort} onChange={e => setLibShort(e.target.value)} placeholder="Sigla" style={fs} /></div>
-                  <div><label style={ls}>Identificador (slug)</label><input type="text" value={libSlug} onChange={e => setLibSlug(e.target.value)} placeholder="biblioteca-parceira" style={{ ...fs, fontFamily: 'monospace' }} /></div>
-                  <div><label style={ls}>Cidade / território</label><input type="text" value={libTerritory} onChange={e => setLibTerritory(e.target.value)} placeholder="Salvador, BA" style={fs} /></div>
+                  <div><label style={ls}>{t({ id: 'importacoes.reception.libNameLabel' })}</label><input type="text" value={libName} onChange={e => setLibName(e.target.value)} placeholder={t({ id: 'importacoes.reception.libNamePlaceholder' })} style={fs} /></div>
+                  <div><label style={ls}>{t({ id: 'importacoes.reception.libShortLabel' })}</label><input type="text" value={libShort} onChange={e => setLibShort(e.target.value)} placeholder={t({ id: 'importacoes.reception.libShortPlaceholder' })} style={fs} /></div>
+                  <div><label style={ls}>{t({ id: 'importacoes.reception.libSlugLabel' })}</label><input type="text" value={libSlug} onChange={e => setLibSlug(e.target.value)} placeholder={t({ id: 'importacoes.reception.libSlugPlaceholder' })} style={{ ...fs, fontFamily: 'monospace' }} /></div>
+                  <div><label style={ls}>{t({ id: 'importacoes.reception.libTerritoryLabel' })}</label><input type="text" value={libTerritory} onChange={e => setLibTerritory(e.target.value)} placeholder={t({ id: 'importacoes.reception.libTerritoryPlaceholder' })} style={fs} /></div>
                 </div>
 
                 <div style={{ marginBottom: 14 }}>
-                  <label style={ls}>Nota de recebimento</label>
-                  <input type="text" value={catalogNote} onChange={e => setCatalogNote(e.target.value)} placeholder="Catálogo artesanal enviado por e-mail…" style={fs} />
+                  <label style={ls}>{t({ id: 'importacoes.reception.noteLabel' })}</label>
+                  <input type="text" value={catalogNote} onChange={e => setCatalogNote(e.target.value)} placeholder={t({ id: 'importacoes.reception.notePlaceholder' })} style={fs} />
                 </div>
               </div>
 
               {/* Right: source + preview */}
               <div>
                 <div style={{ marginBottom: 14 }}>
-                  <label style={ls}>Fonte parceira</label>
+                  <label style={ls}>{t({ id: 'importacoes.file.source' })}</label>
                   <div style={{ display: 'flex', gap: 8 }}>
                     <select value={sourceId} onChange={e => setSourceId(e.target.value)} style={{ ...fs, flex: 1 }}>
-                      <option value="">Selecionar fonte parceira…</option>
-                      {sources.map(s => <option key={s.id} value={String(s.id)}>{s.partner_name || s.label || `Fonte #${s.id}`}</option>)}
+                      <option value="">{t({ id: 'importacoes.reception.selectSourcePlaceholder' })}</option>
+                      {sources.map(s => <option key={s.id} value={String(s.id)}>{s.partner_name || s.label || t({ id: 'importacoes.reception.sourceNumberFallback' }, { id: s.id })}</option>)}
                     </select>
-                    <button type="button" className="cat-btn secondary" style={{ fontSize: '.8rem', padding: '6px 12px', flexShrink: 0 }} onClick={loadSources}>Atualizar</button>
+                    <button type="button" className="cat-btn secondary" style={{ fontSize: '.8rem', padding: '6px 12px', flexShrink: 0 }} onClick={loadSources}>{t({ id: 'common.update' })}</button>
                   </div>
                 </div>
 
                 {filePreview && (
                   <div style={{ marginBottom: 14 }}>
-                    <label style={ls}>Prévia do arquivo</label>
+                    <label style={ls}>{t({ id: 'importacoes.reception.previewLabel' })}</label>
                     <pre style={{ ...fs, height: 160, overflow: 'auto', fontSize: '.78rem', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{filePreview}</pre>
                   </div>
                 )}
@@ -411,13 +408,13 @@ export default function ImportacoesPage() {
                   </button>
                   <button type="button" className="cat-btn ghost" style={{ fontSize: '.85rem', padding: '7px 14px' }}
                     onClick={() => { setFile(null); setFilePreview(''); setMsg({ text: '', kind: '' }); }}>
-                    Limpar recepção
+                    {t({ id: 'importacoes.reception.clear' })}
                   </button>
                 </div>
 
                 {lastRunId && (
                   <div style={{ marginTop: 10, fontSize: '.85rem', color: '#4ade80' }}>
-                    Último tratamento: <strong>#{lastRunId}</strong>. Veja o histórico para acompanhar.
+                    {t({ id: 'importacoes.lastRunNotice' }, { id: lastRunId })}
                   </div>
                 )}
               </div>
@@ -431,18 +428,18 @@ export default function ImportacoesPage() {
         {tab === 'url' && (
           <div>
             <div style={{ padding: 16, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16 }}>
-              <h3 style={{ margin: '0 0 6px', fontSize: '1.1rem' }}>Importar por URL</h3>
+              <h3 style={{ margin: '0 0 6px', fontSize: '1.1rem' }}>{t({ id: 'importacoes.tab.url' })}</h3>
               <p style={{ fontSize: '.85rem', color: 'var(--brand-muted)', margin: 0 }}>
-                Cole uma URL contendo um ISBN ou um link para um catálogo externo. O sistema extrairá os metadados disponíveis via as bibliotecas nacionais (BNE, BnF, DNB, ICCU) ou diretamente da página (título, autor, editora, ISBN, descrição).
+                {t({ id: 'importacoes.url.help' })}
               </p>
             </div>
 
             <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
               <input type="url" value={urlInput} onChange={e => setUrlInput(e.target.value)}
-                placeholder="https://... ou ISBN direto (978-85-7559-408-1)" style={{ ...fs, flex: 1 }} />
+                placeholder={t({ id: 'importacoes.url.placeholder' })} style={{ ...fs, flex: 1 }} />
               <button type="button" className="cat-btn primary" style={{ fontSize: '.9rem', padding: '9px 18px', flexShrink: 0 }}
                 onClick={handleUrlImport} disabled={urlLoading}>
-                {urlLoading ? 'Buscando…' : 'Buscar metadados'}
+                {urlLoading ? t({ id: 'common.searching' }) : t({ id: 'importacoes.url.fetchMetadata' })}
               </button>
             </div>
 
@@ -454,7 +451,7 @@ export default function ImportacoesPage() {
                     <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>
                       {[c.responsibility_statement || c.contributors?.[0]?.label, c.publisher, c.year].filter(Boolean).join(' · ')}
                       {c.isbn?.length > 0 && ` · ISBN: ${c.isbn[0]}`}
-                      {c.source && ` · fonte: ${c.source}`}
+                      {c.source && t({ id: 'importacoes.url.sourceFragment' }, { source: c.source })}
                     </div>
                   </div>
                 ))}
@@ -463,19 +460,19 @@ export default function ImportacoesPage() {
 
             {urlResult?.type === 'html' && urlResult.metadata && (
               <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
-                <h4 style={{ margin: '0 0 8px', fontSize: '1rem' }}>Metadados extraídos da página</h4>
+                <h4 style={{ margin: '0 0 8px', fontSize: '1rem' }}>{t({ id: 'importacoes.url.extractedTitle' })}</h4>
                 <div style={{ fontSize: '.88rem', lineHeight: 1.7 }}>
                   {urlResult.metadata.title && <div><strong>{t({id:'importacoes.url.resultTitle'})}:</strong> {urlResult.metadata.title}</div>}
-                  {urlResult.metadata.author && <div><strong>Autor:</strong> {urlResult.metadata.author}</div>}
-                  {urlResult.metadata.publisher && <div><strong>Editora / site:</strong> {urlResult.metadata.publisher}</div>}
-                  {urlResult.metadata.date && <div><strong>Data:</strong> {urlResult.metadata.date}</div>}
+                  {urlResult.metadata.author && <div><strong>{t({ id: 'importacoes.url.resultAuthor' })}:</strong> {urlResult.metadata.author}</div>}
+                  {urlResult.metadata.publisher && <div><strong>{t({ id: 'importacoes.url.resultPublisher' })}:</strong> {urlResult.metadata.publisher}</div>}
+                  {urlResult.metadata.date && <div><strong>{t({ id: 'importacoes.url.resultDate' })}:</strong> {urlResult.metadata.date}</div>}
                   {urlResult.metadata.isbn && <div><strong>ISBN:</strong> {urlResult.metadata.isbn}</div>}
-                  {urlResult.metadata.language && <div><strong>Idioma:</strong> {urlResult.metadata.language}</div>}
+                  {urlResult.metadata.language && <div><strong>{t({ id: 'importacoes.url.resultLanguage' })}:</strong> {urlResult.metadata.language}</div>}
                   {urlResult.metadata.description && <div><strong>{t({id:'importacoes.url.resultDescription'})}:</strong> {urlResult.metadata.description}</div>}
                   {urlResult.metadata.image && <div style={{ marginTop: 8 }}><img src={urlResult.metadata.image} alt="" style={{ maxHeight: 120, borderRadius: 6, border: '1px solid rgba(255,255,255,.1)' }} /></div>}
                 </div>
                 <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginTop: 8 }}>
-                  Fonte: {urlResult.url} · tipo: {urlResult.metadata.content_type || '—'}
+                  {t({ id: 'importacoes.url.sourceTypeFragment' }, { url: urlResult.url, type: urlResult.metadata.content_type || '—' })}
                 </div>
               </div>
             )}
@@ -488,18 +485,18 @@ export default function ImportacoesPage() {
         {tab === 'rss' && (
           <div>
             <div style={{ padding: 16, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16 }}>
-              <h3 style={{ margin: '0 0 6px', fontSize: '1.1rem' }}>Flux RSS / Atom</h3>
+              <h3 style={{ margin: '0 0 6px', fontSize: '1.1rem' }}>{t({ id: 'importacoes.tab.rss' })}</h3>
               <p style={{ fontSize: '.85rem', color: 'var(--brand-muted)', margin: 0 }}>
-                Cole a URL de um flux RSS ou Atom (blog, editora, revista, repositório). O sistema buscará os itens publicados e permitirá importar como rascunhos.
+                {t({ id: 'importacoes.rss.help' })}
               </p>
             </div>
 
             <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
               <input type="url" value={rssUrl} onChange={e => setRssUrl(e.target.value)}
-                placeholder="https://editora.example.com/feed.xml" style={{ ...fs, flex: 1 }} />
+                placeholder={t({ id: 'importacoes.rss.exampleUrl' })} style={{ ...fs, flex: 1 }} />
               <button type="button" className="cat-btn primary" style={{ fontSize: '.9rem', padding: '9px 18px', flexShrink: 0 }}
                 onClick={handleRssImport} disabled={rssLoading}>
-                {rssLoading ? 'Buscando…' : 'Buscar flux'}
+                {rssLoading ? t({ id: 'common.searching' }) : t({ id: 'importacoes.rss.fetch' })}
               </button>
             </div>
 
@@ -525,14 +522,14 @@ export default function ImportacoesPage() {
         {tab === 'history' && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-              <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Histórico de tratamentos</h3>
+              <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{t({ id: 'importacoes.tab.history' })}</h3>
               <button type="button" className="cat-btn secondary" style={{ fontSize: '.85rem', padding: '7px 14px' }}
-                onClick={loadRuns} disabled={runsLoading}>{runsLoading ? 'Atualizando…' : 'Atualizar'}</button>
+                onClick={loadRuns} disabled={runsLoading}>{runsLoading ? t({ id: 'rede.refreshing' }) : t({ id: 'common.update' })}</button>
             </div>
 
             {/* Run list */}
             <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 250, overflowY: 'auto', marginBottom: 16 }}>
-              {runs.length === 0 && !runsLoading && <div style={{ padding: 16, textAlign: 'center', fontSize: '.9rem', color: 'var(--brand-muted)' }}>Nenhum tratamento encontrado.</div>}
+              {runs.length === 0 && !runsLoading && <div style={{ padding: 16, textAlign: 'center', fontSize: '.9rem', color: 'var(--brand-muted)' }}>{t({ id: 'importacoes.history.empty' })}</div>}
               {runs.map((r, i) => (
                 <div key={r.id} onClick={() => loadRunDetail(r)} style={{
                   display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', cursor: 'pointer',
@@ -541,12 +538,12 @@ export default function ImportacoesPage() {
                 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: '.9rem', fontWeight: 600 }}>
-                      #{r.id} — {r.original_filename || '(sem arquivo)'}
+                      #{r.id} — {r.original_filename || t({ id: 'importacoes.noFile' })}
                     </div>
                     <div style={{ fontSize: '.8rem', color: 'var(--brand-muted)' }}>
-                      formato: {FORMAT_LABELS[r.detected_format] || r.detected_format || '—'}
-                      {r.imported_rows != null && ` · ${r.imported_rows} linhas`}
-                      {r.created_drafts != null && ` · ${r.created_drafts} rascunhos`}
+                      {t({ id: 'importacoes.reception.formatPrefix' })}: {FORMAT_LABELS[r.detected_format] || r.detected_format || '—'}
+                      {r.imported_rows != null && ` · ${t({ id: 'importacoes.rowsCount' }, { count: r.imported_rows })}`}
+                      {r.created_drafts != null && ` · ${t({ id: 'importacoes.draftsCount' }, { count: r.created_drafts })}`}
                       {r.parser_version && ` · parser: ${r.parser_version}`}
                     </div>
                   </div>
@@ -562,20 +559,20 @@ export default function ImportacoesPage() {
             {selectedRun && (
               <div style={{ padding: 16, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <h4 style={{ margin: 0, fontSize: '1rem' }}>Tratamento #{selectedRun.id} — {selectedRun.original_filename}</h4>
+                  <h4 style={{ margin: 0, fontSize: '1rem' }}>{t({ id: 'importacoes.history.runId' }, { id: selectedRun.id })} — {selectedRun.original_filename}</h4>
                   <div style={{ display: 'flex', gap: 8 }}>
                     <button type="button" className="cat-btn primary" style={{ fontSize: '.85rem', padding: '7px 14px' }}
                       onClick={bulkCreateDrafts} disabled={selectedRun.run_status === 'drafts_created'}>
-                      {selectedRun.run_status === 'drafts_created' ? 'Rascunhos já criados' : 'Gerar rascunhos'}
+                      {selectedRun.run_status === 'drafts_created' ? t({ id: 'importacoes.draftsAlreadyCreated' }) : t({ id: 'importacoes.generateDrafts' })}
                     </button>
                     <button type="button" className="cat-btn secondary" style={{ fontSize: '.85rem', padding: '7px 14px' }}
-                      onClick={() => loadRunDetail(selectedRun)}>Atualizar linhas</button>
+                      onClick={() => loadRunDetail(selectedRun)}>{t({ id: 'importacoes.refreshRows' })}</button>
                   </div>
                 </div>
 
                 {/* Staging rows */}
-                {runRowsLoading && <div style={{ fontSize: '.9rem', color: 'var(--brand-muted)', padding: 12 }}>Carregando linhas…</div>}
-                {!runRowsLoading && runRows.length === 0 && <div style={{ fontSize: '.9rem', color: 'var(--brand-muted)', padding: 12 }}>Nenhuma linha disponível para este tratamento.</div>}
+                {runRowsLoading && <div style={{ fontSize: '.9rem', color: 'var(--brand-muted)', padding: 12 }}>{t({ id: 'importacoes.loadingRows' })}</div>}
+                {!runRowsLoading && runRows.length === 0 && <div style={{ fontSize: '.9rem', color: 'var(--brand-muted)', padding: 12 }}>{t({ id: 'importacoes.noRowsAvailable' })}</div>}
                 {runRows.length > 0 && (
                   <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 350, overflowY: 'auto' }}>
                     {runRows.map((row, i) => (
