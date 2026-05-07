@@ -188,7 +188,10 @@ export default function PanelPage() {
   const [readerPayments, setReaderPayments] = useState([]);
   const [paymentModal, setPaymentModal] = useState(null); // null ou { user_id, display_name, ... }
   const [paymentDraft, setPaymentDraft] = useState(null);
+  // PATCH 07/05/2026 audit i18n : flag séparé pour la coloration erreur/succès
+  // (l'ancienne détection paymentMsg.startsWith('Erro') ne marchait qu'en pt-BR/fr)
   const [paymentMsg, setPaymentMsg] = useState('');
+  const [paymentMsgIsError, setPaymentMsgIsError] = useState(false);
   const [paymentSaving, setPaymentSaving] = useState(false);
 
   // ── Synchronisation editAddrState ↔ readerProfile.address ──
@@ -366,7 +369,8 @@ export default function PanelPage() {
         p_user_id: borrower.id, p_holding_ids: holdingIds,
       });
       if (error) throw error;
-      setLoanMsg(`Saída registrada: ${refs.length} livro(s) para ${borrower.first_name || borrower.email}.`);
+      // PATCH 07/05/2026 audit i18n : message hardcodé pt-BR remplacé par clé i18n
+      setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, name: borrower.first_name || borrower.email }));
       // Le record_id retourné par la RPC est l'emprestimo_id — on ne l'a pas ici,
       // mais on peut utiliser un reload + notify asynchrone via les données rechargées
       // Pour l'instant on notifie avec un ID fictif que le backend résoudra
@@ -415,7 +419,10 @@ export default function PanelPage() {
       const { error } = await supabase.rpc('fn_v2_extend_emprestimo_once', { p_emprestimo_id: empId });
       if (error) throw error;
       loadData();
-    } catch (e) { alert(`Erro ao prorrogar: ${e.message}`); }
+    } catch (e) {
+      // PATCH 07/05/2026 audit i18n : alert pt-BR remplacé par clé i18n
+      alert(t({ id: 'panel.loan.extendError' }, { message: e.message }));
+    }
   }
 
   async function returnLoanItem(empId, lineNos) {
@@ -565,6 +572,7 @@ export default function PanelPage() {
   function openPaymentModal(target) {
     if (membershipRules.length === 0) {
       setPaymentMsg(t({ id: 'membership.payment.noRulesAvailable' }));
+      setPaymentMsgIsError(true);
       return;
     }
     const firstRule = membershipRules[0];
@@ -578,12 +586,14 @@ export default function PanelPage() {
       notes: '',
     });
     setPaymentMsg('');
+    setPaymentMsgIsError(false);
   }
 
   function closePaymentModal() {
     setPaymentModal(null);
     setPaymentDraft(null);
     setPaymentMsg('');
+    setPaymentMsgIsError(false);
   }
 
   // Quand on change de règle, pré-remplir le montant
@@ -600,6 +610,7 @@ export default function PanelPage() {
     if (!paymentDraft) return;
     setPaymentSaving(true);
     setPaymentMsg('');
+    setPaymentMsgIsError(false);
     try {
       const { data, error } = await supabase.rpc('fn_record_membership_payment', {
         p_user_id: paymentDraft.user_id,
@@ -612,6 +623,7 @@ export default function PanelPage() {
       if (error) throw error;
       const result = Array.isArray(data) ? data[0] : data;
       setPaymentMsg(t({ id: 'membership.payment.recorded' }, { from: result.valid_from, until: result.valid_until || '∞' }));
+      setPaymentMsgIsError(false);
       // Refresh des données affichées
       await loadMembershipOverview();
       if (readerProfile && readerProfile.id === paymentDraft.user_id) {
@@ -622,6 +634,7 @@ export default function PanelPage() {
       setTimeout(() => closePaymentModal(), 1500);
     } catch (e) {
       setPaymentMsg(t({ id: 'common.errorPrefix' }, { message: e.message }));
+      setPaymentMsgIsError(true);
     } finally {
       setPaymentSaving(false);
     }
@@ -782,7 +795,7 @@ export default function PanelPage() {
             <div>
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.dailyWork.hint' })}</h2>
               <div className="ab-painel-summary-grid">
-                <SummaryCard label="Hoje" count={hoje.length} variant="warn" />
+                <SummaryCard label={t({id:'panel.summary.today'})} count={hoje.length} variant="warn" />
                 <SummaryCard label={t({id:'panel.summary.attention'})} count={atencao.length} variant="bad" />
                 <SummaryCard label={t({ id: 'panel.summary.pendingReservations' })} count={activeRes.filter(r => r.workflow_stage_effective === 'solicitada').length} variant="warn" />
                 <SummaryCard label={t({ id: 'panel.summary.overdueLoans' })} count={overdueLoans.length} variant="bad" />
@@ -952,7 +965,7 @@ export default function PanelPage() {
                   <thead>
                     <tr>
                       <th><input type="checkbox" checked={selectedRes.size === reservations.length && reservations.length > 0} onChange={toggleAllRes} /></th>
-                      <th>Sub-ID</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>Ref</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({id:'panel.table.pickup'})}</th><th>{t({id:'panel.table.validity'})}</th>
+                      <th>{t({id:'panel.table.subId'})}</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>{t({id:'panel.table.ref'})}</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({id:'panel.table.pickup'})}</th><th>{t({id:'panel.table.validity'})}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -984,7 +997,7 @@ export default function PanelPage() {
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.consultations' })}</h2>
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
-                  <thead><tr><th>Sub-ID</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>Ref</th><th>{t({id:'panel.table.step'})}</th><th>{t({ id: 'panel.loan.scheduling' })}</th><th>{t({id:'panel.table.actions'})}</th></tr></thead>
+                  <thead><tr><th>{t({id:'panel.table.subId'})}</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>{t({id:'panel.table.ref'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({ id: 'panel.loan.scheduling' })}</th><th>{t({id:'panel.table.actions'})}</th></tr></thead>
                   <tbody>
                     {consultations.map((c, i) => (
                       <tr key={i}>
@@ -1005,7 +1018,7 @@ export default function PanelPage() {
                             <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'consulta_realizada')}>{t({id:'panel.table.completed'})}</button>
                           )}
                           {!['consulta_realizada','cancelada_leitor','cancelada_biblioteca','expirada'].includes(c.workflow_stage_effective) && (
-                            <button className="ab-button ab-button--mini ab-button--danger" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'cancelada_biblioteca', 'Cancelada pelo painel.')}>{t({ id: 'common.cancel' })}</button>
+                            <button className="ab-button ab-button--mini ab-button--danger" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'cancelada_biblioteca', t({id:'panel.consultation.cancelledByPanel'}))}>{t({ id: 'common.cancel' })}</button>
                           )}
                         </td>
                       </tr>
@@ -1022,7 +1035,7 @@ export default function PanelPage() {
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.loans' })}</h2>
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
-                  <thead><tr><th>Sub-ID</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>Ref</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.exit'})}</th><th>{t({id:'panel.table.deadline'})}</th><th>{t({id:'panel.table.extended'})}</th><th>{t({id:'panel.table.status'})}</th><th>{t({id:'panel.table.actions'})}</th></tr></thead>
+                  <thead><tr><th>{t({id:'panel.table.subId'})}</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>{t({id:'panel.table.ref'})}</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.exit'})}</th><th>{t({id:'panel.table.deadline'})}</th><th>{t({id:'panel.table.extended'})}</th><th>{t({id:'panel.table.status'})}</th><th>{t({id:'panel.table.actions'})}</th></tr></thead>
                   <tbody>
                     {loans.map((l, i) => (
                       <tr key={i} className={l.item_status === 'aberto' && l.due_at && new Date(l.due_at) < new Date() ? 'overdue' : ''}>
@@ -1432,7 +1445,7 @@ export default function PanelPage() {
                     >
                       {membershipRules.map(r => (
                         <option key={r.id} value={r.id}>
-                          {r.name} — {r.amount_min > 0 ? `${r.amount_min} ${r.currency} min` : t({ id: 'membership.rule.freePrice' })}
+                          {r.name} — {r.amount_min > 0 ? t({id:'membership.rule.minAmount'}, {amount: r.amount_min, currency: r.currency}) : t({ id: 'membership.rule.freePrice' })}
                         </option>
                       ))}
                     </select>
@@ -1493,7 +1506,7 @@ export default function PanelPage() {
                   </label>
 
                   {paymentMsg && (
-                    <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.85rem', background: paymentMsg.startsWith('Erro') || paymentMsg.includes('error') ? 'rgba(220,38,38,.1)' : 'rgba(74,222,128,.1)', color: paymentMsg.startsWith('Erro') || paymentMsg.includes('error') ? '#f87171' : '#4ade80' }}>
+                    <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.85rem', background: paymentMsgIsError ? 'rgba(220,38,38,.1)' : 'rgba(74,222,128,.1)', color: paymentMsgIsError ? '#f87171' : '#4ade80' }}>
                       {paymentMsg}
                     </div>
                   )}

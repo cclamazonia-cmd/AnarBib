@@ -305,7 +305,9 @@ export default function AccountPage() {
         // recusado_leitor : raison obligatoire ≥ 5 chars
         let reason = note;
         if (!reason || reason.trim().length < 5) {
-          reason = window.prompt(t({id:'reservation.refusePickup.askReason'}) || 'Raison du refus (au moins 5 caractères) :');
+          // PATCH 07/05/2026 audit i18n : suppression du fallback français hardcodé.
+          // La clé reservation.refusePickup.askReason est désormais créée × 6 locales.
+          reason = window.prompt(t({id:'reservation.refusePickup.askReason'}));
           if (!reason || reason.trim().length < 5) {
             // Annulation par l'utilisateur ou raison trop courte
             return;
