@@ -77,7 +77,7 @@ export default function ResourcePage() {
 
   useEffect(() => { loadResource(); }, [assetId, user]);
 
-  useDocumentTitle(payload?.asset?.label || 'Recurso digital');
+  useDocumentTitle(payload?.asset?.label || t({ id: 'pageTitle.resource' }));
 
   const asset = payload?.asset || {};
   const accessUrl = payload?.access_url || '';
@@ -88,70 +88,70 @@ export default function ResourcePage() {
       <Topbar />
 
       {/* Hero */}
-      <Hero title="Ler recurso digital" subtitle="Abertura genérica de recurso digital do AnarBib para PDF, áudio, vídeo, imagem e links externos.">
+      <Hero title={t({ id: 'resource.heroTitle' })} subtitle={t({ id: 'resource.heroSubtitle' })}>
         <div className="ab-recurso-hero-actions">
-          <Link to="/" className="ab-button ab-button--secondary">Voltar ao catálogo</Link>
+          <Link to="/" className="ab-button ab-button--secondary">{t({ id: 'resource.backToCatalog' })}</Link>
           {user
-            ? <Link to="/conta" className="ab-button ab-button--secondary">Minha conta</Link>
-            : <Link to="/cadastro" className="ab-button ab-button--secondary">Entrar / minha conta</Link>}
+            ? <Link to="/conta" className="ab-button ab-button--secondary">{t({ id: 'nav.account' })}</Link>
+            : <Link to="/cadastro" className="ab-button ab-button--secondary">{t({ id: 'resource.signInOrAccount' })}</Link>}
           {accessUrl && !accessUrl.startsWith('blob:') && (
-            <a href={accessUrl} target="_blank" rel="noopener noreferrer" className="ab-button">Abrir recurso</a>
+            <a href={accessUrl} target="_blank" rel="noopener noreferrer" className="ab-button">{t({ id: 'resource.open' })}</a>
           )}
         </div>
       </Hero>
 
       {/* Toolbar pills */}
       <div className="ab-recurso-toolbar">
-        <Pill>{user?.email || 'Sem sessão'}</Pill>
+        <Pill>{user?.email || t({ id: 'resource.noSession' })}</Pill>
         <Pill variant={loading ? 'warn' : error ? 'bad' : 'ok'}>
           {loading ? t({id:'resource.checking'}) : error ? t({id:'resource.error'}) : t({id:'resource.authorized'})}
         </Pill>
-        {viewerKind && !loading && !error && <Pill>Leitor: {viewerKind}</Pill>}
-        <button className="ab-button ab-button--secondary ab-button--mini" onClick={loadResource}>Atualizar</button>
+        {viewerKind && !loading && !error && <Pill>{t({ id: 'resource.viewer' }, { kind: t({ id: `resource.viewerKind.${viewerKind}`, defaultMessage: viewerKind }) })}</Pill>}
+        <button className="ab-button ab-button--secondary ab-button--mini" onClick={loadResource}>{t({ id: 'common.update' })}</button>
         <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => {
           navigator.clipboard.writeText(window.location.href).catch(() => {});
-        }}>Copiar link</button>
+        }}>{t({ id: 'resource.copyLink' })}</button>
       </div>
 
       {/* Contenu */}
       {loading ? (
-        <div className="ab-recurso-loading"><Spinner size={32} /><p>Carregando metadados e acesso do recurso digital.</p></div>
+        <div className="ab-recurso-loading"><Spinner size={32} /><p>{t({ id: 'resource.loadingMessage' })}</p></div>
       ) : error ? (
         <div className="ab-recurso-error">
           <EmptyState message={error}>
-            {!user && <Link to="/cadastro"><Button>Entrar para acessar</Button></Link>}
-            <Button variant="secondary" onClick={loadResource}>Tentar de novo</Button>
+            {!user && <Link to="/cadastro"><Button>{t({ id: 'resource.signInToAccess' })}</Button></Link>}
+            <Button variant="secondary" onClick={loadResource}>{t({ id: 'common.retry' })}</Button>
           </EmptyState>
         </div>
       ) : (
         <div className="ab-recurso-grid">
           {/* Carte métadonnées */}
           <div className="ab-recurso-card">
-            <h2 className="ab-recurso-section-title">Leitura do recurso</h2>
+            <h2 className="ab-recurso-section-title">{t({ id: 'resource.readingTitle' })}</h2>
             <p className="ab-recurso-summary">
               {accessUrl ? t({id:'resource.loaded'}) : t({id:'resource.noUrl'})}
             </p>
             <div className="ab-recurso-meta-list">
-              <MetaItem label="Recurso em foco" value={fmt(asset.label)} />
-              <MetaItem label="Tipo / uso" value={`${fmt(asset.resource_type)} · ${fmt(asset.usage_type)}`} />
-              <MetaItem label="Acesso" value={fmt(asset.access_scope)} />
-              <MetaItem label="Fonte / atribuição" value={fmt(asset.attribution_text || asset.source_name)} />
-              <MetaItem label="Direitos / idioma" value={`${fmt(asset.rights_status)} · ${fmt(asset.language_code)}`} />
-              <MetaItem label="Identificadores técnicos" value={`asset_id: ${assetId || '—'} · mime: ${fmt(asset.mime_type)} · bucket: ${fmt(asset.storage_bucket)}`} />
+              <MetaItem label={t({ id: 'resource.meta.focus' })} value={fmt(asset.label)} />
+              <MetaItem label={t({ id: 'resource.meta.typeUse' })} value={`${fmt(asset.resource_type)} · ${fmt(asset.usage_type)}`} />
+              <MetaItem label={t({ id: 'resource.meta.access' })} value={fmt(asset.access_scope)} />
+              <MetaItem label={t({ id: 'resource.meta.sourceAttribution' })} value={fmt(asset.attribution_text || asset.source_name)} />
+              <MetaItem label={t({ id: 'resource.meta.rightsLanguage' })} value={`${fmt(asset.rights_status)} · ${fmt(asset.language_code)}`} />
+              <MetaItem label={t({ id: 'resource.meta.technicalIds' })} value={`asset_id: ${assetId || '—'} · mime: ${fmt(asset.mime_type)} · bucket: ${fmt(asset.storage_bucket)}`} />
             </div>
           </div>
 
           {/* Viewer */}
           <div className="ab-recurso-viewer-shell">
             <div className="ab-recurso-viewer-head">
-              <h2>{fmt(asset.label, 'Recurso digital')}</h2>
-              <p>Tipo {fmt(asset.resource_type)} · uso {fmt(asset.usage_type)} · acesso {fmt(asset.access_scope)}</p>
+              <h2>{fmt(asset.label, t({ id: 'pageTitle.resource' }))}</h2>
+              <p>{t({ id: 'resource.viewerTypeLine' }, { type: fmt(asset.resource_type), use: fmt(asset.usage_type), access: fmt(asset.access_scope) })}</p>
             </div>
             <div className="ab-recurso-viewer-body">
               {!accessUrl ? (
                 <div className="ab-recurso-viewer-empty">
-                  <strong>Sem conteúdo para mostrar</strong>
-                  <p>Este recurso não retornou URL de acesso.</p>
+                  <strong>{t({ id: 'resource.viewer.empty' })}</strong>
+                  <p>{t({ id: 'resource.viewer.emptyDetail' })}</p>
                 </div>
               ) : viewerKind === 'pdf' ? (
                 <iframe src={accessUrl} title="PDF" className="ab-recurso-iframe" />
@@ -160,18 +160,18 @@ export default function ResourcePage() {
               ) : viewerKind === 'video' ? (
                 <video controls preload="metadata" src={accessUrl} className="ab-recurso-video" />
               ) : viewerKind === 'image' ? (
-                <img src={accessUrl} alt="Imagem do recurso digital" className="ab-recurso-image" />
+                <img src={accessUrl} alt={t({ id: 'resource.viewer.imageAlt' })} className="ab-recurso-image" />
               ) : viewerKind === 'external_link' ? (
                 <div className="ab-recurso-viewer-notice">
-                  <strong>Link externo</strong>
-                  <p>Este recurso abre fora do AnarBib. Usa o botão <em>Abrir recurso</em> para continuar.</p>
-                  <a href={accessUrl} target="_blank" rel="noopener noreferrer" className="ab-button">Abrir recurso externo</a>
+                  <strong>{t({ id: 'resource.viewer.externalTitle' })}</strong>
+                  <p dangerouslySetInnerHTML={{ __html: t({ id: 'resource.viewer.externalNotice' }) }} />
+                  <a href={accessUrl} target="_blank" rel="noopener noreferrer" className="ab-button">{t({ id: 'resource.viewer.openExternal' })}</a>
                 </div>
               ) : (
                 <div className="ab-recurso-viewer-notice">
-                  <strong>Formato sem renderização local segura</strong>
-                  <p>O recurso está acessível, mas este formato abre melhor numa nova aba.</p>
-                  {accessUrl && <a href={accessUrl} target="_blank" rel="noopener noreferrer" className="ab-button ab-button--secondary">Abrir em nova aba</a>}
+                  <strong>{t({ id: 'resource.viewer.unsupportedTitle' })}</strong>
+                  <p>{t({ id: 'resource.viewer.unsupportedDetail' })}</p>
+                  {accessUrl && <a href={accessUrl} target="_blank" rel="noopener noreferrer" className="ab-button ab-button--secondary">{t({ id: 'resource.viewer.openNewTab' })}</a>}
                 </div>
               )}
             </div>
