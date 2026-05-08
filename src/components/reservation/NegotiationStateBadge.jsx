@@ -15,7 +15,7 @@ import { Pill } from '@/components/ui';
 //   - viewerRole     : 'staff' | 'reader'
 //
 // Sortie :
-//   - null si stage hors {retirada_agendada, re-retirada_agendada}
+//   - null si stage != retirada_a_combinar
 //     OU si proposedBy = NULL (la négociation est close, pas de badge utile)
 //   - <Pill> avec libellé et variant adaptés au rôle de qui regarde :
 //       * staff voit "Esperando leitor(a/e)" quand biblio a proposé
@@ -24,9 +24,14 @@ import { Pill } from '@/components/ui';
 //       * leitor voit "Esperando biblioteca" quand leitor a proposé
 //
 // Le compteur d'itérations s'affiche en suffixe "n/3" dès qu'il est > 0.
+//
+// PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
+// retirada_a_combinar = stage central de négociation active (forme verbale).
+// retirada_agendada = stage d'aboutissement, créneau verrouillé : plus de
+// négociation, donc plus de badge. re-retirada_agendada déprécié.
 // =============================================================================
 
-const NEGOTIATION_STAGES = ['retirada_agendada', 're-retirada_agendada'];
+const NEGOTIATION_STAGES = ['retirada_a_combinar'];
 const MAX_ITERATIONS = 3;
 
 export default function NegotiationStateBadge({ proposedBy, iterationCount = 0, stage, viewerRole = 'staff' }) {

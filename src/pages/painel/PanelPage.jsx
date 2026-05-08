@@ -62,11 +62,16 @@ export default function PanelPage() {
   // ci-dessous (réplication JS de fn_check_workflow_transition).
   const RES_STAGES = useMemo(() => [
     { value: 'em_preparacao',        label: '1. '  + t({ id: 'reservation.stage.em_preparacao' }) },
-    { value: 'retirada_a_combinar',  label: '2a. ' + t({ id: 'reservation.stage.retirada_a_combinar' }) },
-    { value: 'retirada_agendada',    label: '2b. ' + t({ id: 'reservation.stage.retirada_agendada' }) },
-    { value: 're-retirada_agendada', label: '3. '  + t({ id: 'reservation.stage.re_retirada_agendada' }) },
-    { value: 'pronta_para_retirada', label: '4. '  + t({ id: 'reservation.stage.pronta_para_retirada' }) },
-    { value: 'retirada_no_show',     label: '5. '  + t({ id: 'reservation.stage.nao_retirada' }) },
+    { value: 'retirada_a_combinar',  label: '2. '  + t({ id: 'reservation.stage.retirada_a_combinar' }) },
+    { value: 'pronta_para_retirada', label: '3. '  + t({ id: 'reservation.stage.pronta_para_retirada' }) },
+    { value: 'retirada_no_show',     label: '4. '  + t({ id: 'reservation.stage.nao_retirada' }) },
+    // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
+    // 'retirada_agendada' n'est plus une cible directe accessible depuis le menu :
+    //   c'est le stage d'aboutissement verrouillé, atteint uniquement par
+    //   confirmation mutuelle via les boutons "Confirmar e bloquear horário".
+    //   Le staff doit passer par 'retirada_a_combinar' qui ouvre la négociation.
+    // 're-retirada_agendada' est déprécié (matrice false partout, fossile pour
+    //   résas historiques).
     // 'retirada_efetivada' (retrait effectif) : passe par le bouton dédié
     //   "Confirmar retirada" → api.confirm_pickup_v1 (conversion atomique en emprunt)
     // 'liberada_para_circulacao' : transition automatique du trigger DB après
@@ -76,6 +81,13 @@ export default function PanelPage() {
   // pour griser les options du menu RES_STAGES qui ne sont pas autorisées
   // depuis le stage actuel d'une réservation, pour le rôle staff courant.
   // Spec section 4 : matrice de transitions.
+  //
+  // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
+  // - retirada_a_combinar = stage central de négociation (forme verbale).
+  // - retirada_agendada = stage d'aboutissement verrouillé, atteint UNIQUEMENT
+  //   via fn_confirm_pickup_slot_as_* (boutons inline). Aucun chemin direct
+  //   depuis solicitada/em_preparacao/retirada_a_combinar via advance_reservation.
+  // - re-retirada_agendada = déprécié, false partout (fossile historique).
   //
   // ⚠️ Cette fonction DOIT rester synchrone avec la fonction DB
   //   public.fn_check_workflow_transition. En cas de changement de matrice côté DB,
@@ -94,7 +106,10 @@ export default function PanelPage() {
     ]);
     if (TERMINAL.has(f)) return false;
 
-    // Lecteur : annulation à tout moment avant retirada_efetivada
+    // Lecteur : annulation à tout moment avant retirada_efetivada.
+    // re-retirada_agendada conservé dans l'ensemble pour compatibilité résas
+    // historiques (matrice DB v3 : annulable mais pas de transition sortante
+    // vers d'autres stages).
     if (actorRole === 'lecteur') {
       const ANNULABLE = new Set([
         'solicitada', 'em_preparacao', 'retirada_agendada',
@@ -112,7 +127,10 @@ export default function PanelPage() {
       if (NON_TERMINAL.has(f)) return true;
     }
 
-    // System (cron, trigger) : transitions automatiques
+    // System (cron, trigger) : transitions automatiques.
+    // PATCH paquet 5a : retirada_agendada retiré du périmètre no-show automatique
+    // (créneau verrouillé = pas de timeout négociation, géré séparément).
+    // re-retirada_agendada conservé pour compatibilité résas historiques.
     if (actorRole === 'system') {
       if (tg === 'expirada' && f === 'solicitada') return true;
       if (tg === 'retirada_no_show' && ['pronta_para_retirada', 'retirada_agendada', 're-retirada_agendada'].includes(f)) return true;
@@ -122,12 +140,15 @@ export default function PanelPage() {
     // Librarian/coordenador : transitions opérationnelles
     if (actorRole !== 'librarian' && actorRole !== 'coordenador') return false;
 
+    // Matrice v3 : retirada_agendada n'est plus une cible advance_reservation.
+    // Atteint uniquement via fn_confirm_pickup_slot_as_* depuis retirada_a_combinar.
+    // re-retirada_agendada : false partout (déprécié, plus aucune transition).
     const TRANSITIONS = {
-      solicitada:              ['em_preparacao', 'retirada_agendada', 'retirada_a_combinar'],
-      em_preparacao:           ['retirada_agendada', 'retirada_a_combinar'],
-      retirada_agendada:       ['re-retirada_agendada', 'pronta_para_retirada'],
-      retirada_a_combinar:     ['retirada_agendada', 're-retirada_agendada', 'pronta_para_retirada'],
-      're-retirada_agendada':  ['re-retirada_agendada', 'pronta_para_retirada'],
+      solicitada:              ['em_preparacao', 'retirada_a_combinar'],
+      em_preparacao:           ['retirada_a_combinar'],
+      retirada_a_combinar:     ['pronta_para_retirada'],
+      retirada_agendada:       ['pronta_para_retirada'],
+      're-retirada_agendada':  [],
       pronta_para_retirada:    ['retirada_efetivada', 'retirada_no_show'],
     };
     const allowed = TRANSITIONS[f] || [];
@@ -403,8 +424,10 @@ export default function PanelPage() {
 
   // Handler 3 : envoie la contre-proposition staff (depuis le form ouvert)
   // → api.fn_propose_pickup_slot_as_library (paquet 2)
-  // La RPC accepte aussi bien une première proposition (depuis solicitada)
-  // qu'une re-proposition (depuis retirada_agendada / re-retirada_agendada).
+  // PATCH 09/05/2026 paquet 5b : sémantique v3.
+  // La RPC accepte aussi bien une première proposition (depuis solicitada
+  // ou em_preparacao) qu'une re-proposition (depuis retirada_a_combinar avec
+  // pickup_proposed_by='leitor'). Cible toujours retirada_a_combinar.
   async function submitCounterProposal() {
     if (!negotiationForm) return;
     if (!negotiationForm.datetime) {
@@ -573,8 +596,12 @@ export default function PanelPage() {
       const stage = r.workflow_stage_effective || '';
       const pickupDay = r.pickup_scheduled_for ? new Date(r.pickup_scheduled_for).toISOString().slice(0, 10) : '';
 
+      // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
+      // retirada_agendada = créneau verrouillé : si pickupDay = aujourd'hui,
+      // c'est un retrait prévu aujourd'hui → tâche prioritaire bucket 'hoje'.
+      // re-retirada_agendada conservé en filet pour résas historiques fossiles.
       if (['retirada_agendada', 're-retirada_agendada'].includes(stage) && pickupDay === today) {
-        tasks.push({ priority: 'alta', bucket: 'hoje', kind: stage === 're-retirada_agendada' ? t({id:'panel.task.rescheduledToday'}) : t({id:'panel.task.scheduledToday'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: t({id:'panel.task.detail.pickup'}) + ': ' + fmtD(r.pickup_scheduled_for), actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'alta', bucket: 'hoje', kind: t({id:'panel.task.scheduledToday'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: t({id:'panel.task.detail.pickup'}) + ': ' + fmtD(r.pickup_scheduled_for), actionType: 'reserva', reserva_id: r.reserva_id });
       }
       if (stage === 'solicitada') {
         tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.newReservation'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${r.bib_ref} · ${t({id:'panel.task.detail.created'})}: ${fmtD(r.reserva_created_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
@@ -589,7 +616,10 @@ export default function PanelPage() {
       // déclenchée quand pickup_proposed_by = 'leitor' (= le lecteur a renvoyé
       // une contre-proposition que le staff doit traiter rapidement).
       // Priorité haute : la balle est dans le camp staff, action requise.
-      if (r.pickup_proposed_by === 'leitor' && ['retirada_agendada', 're-retirada_agendada'].includes(stage)) {
+      // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
+      // La négociation se déroule désormais dans retirada_a_combinar (forme
+      // verbale = action en cours), plus dans retirada_agendada/re-retirada_agendada.
+      if (r.pickup_proposed_by === 'leitor' && stage === 'retirada_a_combinar') {
         const iter = r.negotiation_iteration_count ?? 0;
         tasks.push({
           priority: 'alta',
@@ -1128,12 +1158,14 @@ export default function PanelPage() {
                       const isFormOpen = negotiationForm?.reservaId === r.reserva_id
                                       && negotiationForm?.lineNo === r.line_no;
                       // Détermine si les actions inline sont disponibles : seulement
-                      // quand le lecteur·rice a contre-proposé (= staff a la balle)
+                      // quand le lecteur·rice a contre-proposé (= staff a la balle).
+                      // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
+                      // La négociation se déroule désormais dans retirada_a_combinar.
                       const showStaffActions = r.pickup_proposed_by === 'leitor'
-                                            && ['retirada_agendada', 're-retirada_agendada'].includes(r.workflow_stage_effective);
+                                            && r.workflow_stage_effective === 'retirada_a_combinar';
                       // Indicateur "esperando resposta" quand notre biblio a déjà proposé
                       const isWaitingReader = r.pickup_proposed_by === 'biblio'
-                                           && ['retirada_agendada', 're-retirada_agendada'].includes(r.workflow_stage_effective);
+                                           && r.workflow_stage_effective === 'retirada_a_combinar';
                       return (
                         <Fragment key={i}>
                           <tr className={selectedRes.has(key) ? 'selected' : ''}>

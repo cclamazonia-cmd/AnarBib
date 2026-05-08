@@ -1027,19 +1027,30 @@ function fmtDate(d) {
 
 // ═══════════════════════════════════════════════════════════
 // ReservationCard — refondue paquet 4 (workflow réservation v2 négociation)
+// PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
 // ═══════════════════════════════════════════════════════════
 // Affiche une réservation avec actions contextuelles selon l'état de la
 // négociation symétrique (champs pickup_proposed_by, negotiation_iteration_count).
 //
+// Sémantique v3 :
+//   - retirada_a_combinar = stage de négociation active (forme verbale).
+//     C'est ici que se déroulent toutes les propositions/contre-propositions.
+//   - retirada_agendada = stage d'aboutissement, créneau verrouillé (forme
+//     aboutie). Atteint uniquement par confirmation mutuelle. Plus de boutons
+//     de négociation : juste un message "créneau confirmé, prêt à retirer
+//     bientôt", en attendant la transition vers pronta_para_retirada.
+//   - re-retirada_agendada = déprécié (matrice false partout, fossile pour
+//     résas historiques).
+//
 // 4 états distincts gérés :
 //
-//   1. Stage IN (retirada_agendada, re-retirada_agendada) ET pickup_proposed_by='biblio'
+//   1. Stage = retirada_a_combinar ET pickup_proposed_by='biblio'
 //      → la biblio a proposé un créneau, c'est au lecteur·rice de répondre
 //      → 3 boutons : "Aceitar este horário", "Propor outro horário", "Cancelar"
 //      → Le bouton "Propor outro horário" est masqué si compteur >= 3 OU si la
 //        biblio a désactivé reservation_allow_reader_counter_proposal.
 //
-//   2. Stage IN (retirada_agendada, re-retirada_agendada) ET pickup_proposed_by='leitor'
+//   2. Stage = retirada_a_combinar ET pickup_proposed_by='leitor'
 //      → le lecteur·rice a déjà contre-proposé, c'est à la biblio de répondre
 //      → 2 boutons : "Modificar minha proposta" et "Cancelar"
 //      → Compteur visible "iteração n/3" pour transparence.
@@ -1049,9 +1060,12 @@ function fmtDate(d) {
 //      → message d'aide + 1 seul bouton "Cancelar" (et "Aceitar este horário" reste,
 //        car le lecteur peut toujours accepter même au-delà de 3 itérations).
 //
-//   4. Autres stages (solicitada, em_preparacao, pronta_para_retirada, etc.) ou
-//      stage de retrait avec pickup_proposed_by=NULL (négociation close)
+//   4. Autres stages (solicitada, em_preparacao, retirada_agendada,
+//      pronta_para_retirada, etc.) ou stage retirada_a_combinar avec
+//      pickup_proposed_by=NULL (négociation close avant verrouillage)
 //      → affichage standard, 1 seul bouton "Cancelar" si stage non terminal.
+//      → retirada_agendada affiche un message "créneau verrouillé, livre
+//        bientôt prêt à retirer".
 //
 // La carte intègre un panneau accordion qui se déplie quand le lecteur·rice
 // clique sur "Propor outro horário". Le panneau contient un datetime-local
@@ -1092,8 +1106,14 @@ function ReservationCard({
   const iterCount = r.negotiation_iteration_count ?? 0;
   const MAX_ITER = 3;
 
-  // PATCH 08/05/2026 paquet 4 : détection des 4 états de négociation symétrique.
-  const inNegotiationStage = ['retirada_agendada', 're-retirada_agendada'].includes(stage);
+  // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
+  // La négociation se déroule dans retirada_a_combinar (forme verbale),
+  // plus dans retirada_agendada/re-retirada_agendada qui sont devenus
+  // respectivement le stage d'aboutissement verrouillé et un fossile déprécié.
+  const inNegotiationStage = stage === 'retirada_a_combinar';
+  // PATCH paquet 5b : retirada_agendada = créneau verrouillé, post-négociation.
+  // Pas de boutons négociation, juste un message d'orientation.
+  const isLockedSlot = stage === 'retirada_agendada';
   const bibliotaProposed = inNegotiationStage && proposedBy === 'biblio';
   const leitorAlreadyProposed = inNegotiationStage && proposedBy === 'leitor';
   const counterMaxReached = iterCount >= MAX_ITER;
@@ -1149,6 +1169,14 @@ function ReservationCard({
         {inNegotiationStage && leitorAlreadyProposed && (
           <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#fbbf24' }}>
             {t({ id: 'reservation.nextStep.leitorProposed' }, { count: iterCount, max: MAX_ITER })}
+          </span>
+        )}
+        {/* PATCH 09/05/2026 paquet 5b : sémantique v3.
+            retirada_agendada = créneau verrouillé après confirmation mutuelle,
+            avant transition vers pronta_para_retirada. Message vert positif. */}
+        {isLockedSlot && (
+          <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#4ade80' }}>
+            {t({ id: 'reservation.nextStep.retirada_agendada' })}
           </span>
         )}
         {stage === 'nao_retirada' && <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#f87171' }}>{t({ id: 'reservation.nextStep.nao_retirada' })}</span>}
