@@ -968,14 +968,14 @@ function fmtDate(d) {
 function ReservationCard({ r, onCancel, onPickupReply }) {
   const { formatMessage: t } = useIntl();
 
-  const WORKFLOW_LABELS = {
+const WORKFLOW_LABELS = {
     solicitada: t({ id: 'reservation.stage.solicitada' }),
     em_preparacao: t({ id: 'reservation.stage.em_preparacao' }),
     pronta_para_retirada: t({ id: 'reservation.stage.pronta_para_retirada' }),
-    retirada_a_combinar: t({ id: 'reservation.stage.pronta_para_retirada' }),
+    retirada_a_combinar: t({ id: 'reservation.stage.retirada_a_combinar' }),
     retirada_agendada: t({ id: 'reservation.stage.retirada_agendada' }),
-    're-retirada_agendada': t({ id: 'reservation.stage.retirada_agendada' }),
-    nao_retirada: t({ id: 'reservation.stage.solicitada' }),
+    're-retirada_agendada': t({ id: 'reservation.stage.re_retirada_agendada' }),
+    nao_retirada: t({ id: 'reservation.stage.nao_retirada' }),
     cancelada_leitor: t({ id: 'reservation.stage.cancelada_leitor' }),
     cancelada_biblioteca: t({ id: 'reservation.stage.cancelada_biblioteca' }),
     expirada: t({ id: 'reservation.stage.expirada' }),
