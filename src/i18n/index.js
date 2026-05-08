@@ -13,13 +13,18 @@ import de from './locales/de.json';
 
 export const DEFAULT_LOCALE = 'pt-BR';
 
+// Liste des locales supportées.
+// `shortCode` est utilisé dans le LocaleSwitcher (PT, FR, ES, EN, IT, DE).
+// `flag` reste à des fins illustratives ; le drapeau pt-BR combine 🇧🇷🇵🇹
+// pour refléter notre variante brésilienne et la solidarité avec la diaspora
+// militante au Portugal.
 export const SUPPORTED_LOCALES = [
-  { code: 'pt-BR', label: 'Português', flag: '🇧🇷🇵🇹' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'es', label: 'Castellano', flag: '🇪🇸' },
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'pt-BR', shortCode: 'PT', label: 'Português', flag: '🇧🇷🇵🇹' },
+  { code: 'fr',    shortCode: 'FR', label: 'Français',  flag: '🇫🇷' },
+  { code: 'es',    shortCode: 'ES', label: 'Castellano', flag: '🇪🇸' },
+  { code: 'en',    shortCode: 'EN', label: 'English',   flag: '🇬🇧' },
+  { code: 'it',    shortCode: 'IT', label: 'Italiano',  flag: '🇮🇹' },
+  { code: 'de',    shortCode: 'DE', label: 'Deutsch',   flag: '🇩🇪' },
 ];
 
 const MESSAGES = {
@@ -31,42 +36,136 @@ const MESSAGES = {
   'de': de,
 };
 
+const STORAGE_KEY = 'anarbib.locale';
+const SCROLL_RESTORE_KEY = 'anarbib.scrollRestore';
+
 export function getMessages(locale) {
   return MESSAGES[locale] || MESSAGES[DEFAULT_LOCALE];
 }
 
+export function isSupported(locale) {
+  return Boolean(locale && MESSAGES[locale]);
+}
+
 export function detectLocale() {
   // 1. URL param ?lang=xx
-  const url = new URL(window.location.href);
-  const param = url.searchParams.get('lang');
-  if (param && MESSAGES[param]) return param;
+  try {
+    const url = new URL(window.location.href);
+    const param = url.searchParams.get('lang');
+    if (isSupported(param)) return param;
+  } catch {
+    // ignore (SSR, etc.)
+  }
 
   // 2. localStorage
   try {
-    const stored = localStorage.getItem('anarbib.locale');
-    if (stored && MESSAGES[stored]) return stored;
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (isSupported(stored)) return stored;
   } catch {
-    // ignore
+    // ignore (privacy mode, etc.)
   }
 
   // 3. Navigateur (match partiel: pt → pt-BR, fr-FR → fr)
-  const navLangs = navigator.languages || [navigator.language];
-  for (const lang of navLangs) {
-    if (MESSAGES[lang]) return lang;
-    const short = lang.split('-')[0];
-    const match = Object.keys(MESSAGES).find(k => k.startsWith(short));
-    if (match) return match;
+  try {
+    const navLangs = navigator.languages || [navigator.language];
+    for (const lang of navLangs) {
+      if (isSupported(lang)) return lang;
+      const short = (lang || '').split('-')[0];
+      const match = Object.keys(MESSAGES).find(k => k.startsWith(short));
+      if (match) return match;
+    }
+  } catch {
+    // ignore
   }
 
   return DEFAULT_LOCALE;
 }
 
-export function setLocale(locale) {
+// ── Restauration de la position scroll au reload ───────────
+//
+// Quand on change de langue, on est obligés de reload la page (react-intl
+// ne sait pas changer de messages dynamiquement sans remount). Pour éviter
+// que l'utilisateur perde sa place dans la page, on sauvegarde scroll +
+// hash dans sessionStorage avant le reload, et on les restaure au mount.
+
+function saveScrollState() {
   try {
-    localStorage.setItem('anarbib.locale', locale);
+    const state = {
+      scrollY: window.scrollY,
+      scrollX: window.scrollX,
+      hash: window.location.hash,
+      pathname: window.location.pathname,
+      search: window.location.search,
+      timestamp: Date.now(),
+    };
+    sessionStorage.setItem(SCROLL_RESTORE_KEY, JSON.stringify(state));
   } catch {
     // ignore
   }
-  // Reload to apply the new locale throughout the app
+}
+
+export function consumeScrollRestore() {
+  try {
+    const raw = sessionStorage.getItem(SCROLL_RESTORE_KEY);
+    if (!raw) return null;
+    sessionStorage.removeItem(SCROLL_RESTORE_KEY);
+    const state = JSON.parse(raw);
+    // N'accepte que si récent (< 5 secondes) et même URL
+    if (Date.now() - state.timestamp > 5000) return null;
+    if (state.pathname !== window.location.pathname) return null;
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+// Appelé une seule fois au démarrage de l'app pour restaurer le scroll.
+export function applyScrollRestoreIfAny() {
+  const state = consumeScrollRestore();
+  if (!state) return;
+  // Différer pour laisser le rendu initial se faire
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.scrollTo(state.scrollX || 0, state.scrollY || 0);
+    });
+  });
+}
+
+// ── Setters ────────────────────────────────────────────────
+
+// Changement "soft" de locale : sauvegarde scroll + reload.
+export function setLocale(locale) {
+  if (!isSupported(locale)) return;
+  try {
+    localStorage.setItem(STORAGE_KEY, locale);
+  } catch {
+    // ignore
+  }
+  saveScrollState();
   window.location.reload();
+}
+
+// Synchronise la locale stockée localement avec celle du profil utilisateur.
+// Appelée au login depuis AuthContext. Si la locale stockée diffère de
+// celle du profil, on aligne sur le profil (autorité = base) puis on reload
+// avec restoration de scroll.
+//
+// Retourne true si un reload a été déclenché, false sinon.
+export function syncLocaleFromProfile(profileLanguage) {
+  if (!isSupported(profileLanguage)) return false;
+  let stored = null;
+  try {
+    stored = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    // ignore
+  }
+  if (stored === profileLanguage) return false;
+  try {
+    localStorage.setItem(STORAGE_KEY, profileLanguage);
+  } catch {
+    // ignore
+  }
+  saveScrollState();
+  window.location.reload();
+  return true;
 }

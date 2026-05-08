@@ -13,7 +13,7 @@ import {
   canSeeRede,
 } from '@/lib/roles';
 import { Button } from '@/components/ui';
-import { SUPPORTED_LOCALES, setLocale, detectLocale } from '@/i18n';
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import './layout.css';
 
 // ── Résolution du logo de la bibliothèque de session ───────
@@ -142,17 +142,8 @@ export function Topbar() {
           </>
         )}
 
-        {/* Language selector */}
-        <select
-          value={detectLocale()}
-          onChange={e => setLocale(e.target.value)}
-          style={{ fontSize: '.78rem', padding: '3px 6px', borderRadius: 6, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#ccc', cursor: 'pointer', marginLeft: 4 }}
-          aria-label={t({ id: 'language.selector' })}
-        >
-          {SUPPORTED_LOCALES.map(l => (
-            <option key={l.code} value={l.code}>{l.flag} {l.label}</option>
-          ))}
-        </select>
+        {/* Sélecteur de langue */}
+        <LocaleSwitcher variant="header" />
       </div>
     </nav>
   );
@@ -184,6 +175,8 @@ export function Footer() {
       <Link to="/privacidade" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: 2 }}>
         {t({ id: 'nav.privacy' })}
       </Link>
+      <span aria-hidden="true" style={{ margin: '0 8px', color: 'var(--brand-muted, #888)' }}>·</span>
+      <LocaleSwitcher variant="footer" />
     </footer>
   );
 }

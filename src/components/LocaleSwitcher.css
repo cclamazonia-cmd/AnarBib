@@ -1,0 +1,79 @@
+/* ═══════════════════════════════════════════════════════════
+   LocaleSwitcher — sélecteur de langue
+   Deux variantes : --header (compact) et --footer (plus visible)
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-locale-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Le label est visuellement caché mais accessible aux lecteurs d'écran.
+   On utilise la pattern "screen reader only" classique. */
+.ab-locale-switcher__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ab-locale-switcher__select {
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: border-color .15s, background-color .15s;
+}
+
+.ab-locale-switcher__select:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+.ab-locale-switcher__select:focus-visible {
+  outline: 2px solid var(--brand-accent, #b9001f);
+  outline-offset: 2px;
+}
+
+/* ── Variante header ──────────────────────────────────────── */
+
+.ab-locale-switcher--header .ab-locale-switcher__select {
+  font-size: .78rem;
+  padding: 3px 6px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  background: rgba(0, 0, 0, .3);
+  color: #ccc;
+  margin-left: 4px;
+}
+
+.ab-locale-switcher--header .ab-locale-switcher__select:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, .3);
+  background: rgba(0, 0, 0, .45);
+}
+
+/* ── Variante footer ──────────────────────────────────────── */
+
+.ab-locale-switcher--footer .ab-locale-switcher__select {
+  font-size: .85rem;
+  padding: 5px 10px;
+  border: 1px solid var(--brand-muted, #888);
+  background: transparent;
+  color: inherit;
+}
+
+.ab-locale-switcher--footer .ab-locale-switcher__select:hover:not(:disabled) {
+  border-color: var(--brand-accent, #b9001f);
+}
+
+/* Les <option> dans certains navigateurs (Firefox sur Linux notamment)
+   héritent du fond transparent et deviennent illisibles. On force un
+   fond opaque pour les options ouvertes. */
+.ab-locale-switcher__select option {
+  background: var(--brand-bg, #1a0a0c);
+  color: var(--brand-fg, #e8e2d6);
+}
