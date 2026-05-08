@@ -1913,6 +1913,8 @@
   "reservation.pickup.confirmed": "Sie haben diesen Termin bestätigt",
   "reservation.pickup.refused": "Sie haben eine Verhinderung gemeldet",
   "reservation.pickup.scheduled": "Abholung geplant: {date}",
+  "reservation.pickup.reply.confirmado_leitor": "Termin von der*dem Genoss*in bestätigt",
+  "reservation.pickup.reply.recusado_leitor": "Termin passt der*dem Genoss*in nicht",
   "reservation.refusePickup.askReason": "Grund für die Ablehnung (mindestens 5 Zeichen) :",
   "reservation.stage.cancelada_biblioteca": "Von der Bibliothek storniert",
   "reservation.stage.cancelada_leitor": "Vom Leser storniert",

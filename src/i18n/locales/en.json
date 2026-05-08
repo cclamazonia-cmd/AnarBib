@@ -1913,6 +1913,8 @@
   "reservation.pickup.confirmed": "You confirmed this time",
   "reservation.pickup.refused": "You reported you cannot make this time",
   "reservation.pickup.scheduled": "Pickup scheduled: {date}",
+  "reservation.pickup.reply.confirmado_leitor": "Time confirmed by the reader",
+  "reservation.pickup.reply.recusado_leitor": "Reader cannot make it at this time",
   "reservation.refusePickup.askReason": "Reason for refusal (at least 5 characters):",
   "reservation.stage.cancelada_biblioteca": "Cancelled by library",
   "reservation.stage.cancelada_leitor": "Cancelled by reader",

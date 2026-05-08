@@ -1913,6 +1913,8 @@
   "reservation.pickup.confirmed": "Vous avez confirmé cet horaire",
   "reservation.pickup.refused": "Vous avez signalé une indisponibilité",
   "reservation.pickup.scheduled": "Retrait prévu : {date}",
+  "reservation.pickup.reply.confirmado_leitor": "Horaire confirmé par la lectrice ou le lecteur",
+  "reservation.pickup.reply.recusado_leitor": "Cet horaire ne convient pas à la lectrice ou au lecteur",
   "reservation.refusePickup.askReason": "Raison du refus (au moins 5 caractères) :",
   "reservation.stage.cancelada_biblioteca": "Annulée par la bibliothèque",
   "reservation.stage.cancelada_leitor": "Annulée par le lecteur",

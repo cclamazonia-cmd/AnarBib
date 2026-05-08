@@ -953,7 +953,7 @@ export default function AccountPage() {
 // Carte réservation avec actions workflow
 // ═══════════════════════════════════════════════════════════
 
-// WORKFLOW_LABELS and PICKUP_REPLY_LABELS are now resolved via i18n inside ReservationCard
+// WORKFLOW_LABELS and PICKUP_REPLY_LABELS are now fully resolved via i18n keys (reservation.workflow.* and reservation.pickup.reply.*)
 
 function needsPickupReply(stage) {
   return ['retirada_agendada', 're-retirada_agendada'].includes(String(stage || ''));
@@ -1015,7 +1015,7 @@ function ReservationCard({ r, onCancel, onPickupReply }) {
         )}
         {pickupReply && (
           <span className="ab-conta-item__detail">
-            {PICKUP_REPLY_LABELS[pickupReply] || pickupReply}
+            {t({ id: `reservation.pickup.reply.${pickupReply}`, defaultMessage: pickupReply })}
           </span>
         )}
         {r.pickup_reply_note && (
