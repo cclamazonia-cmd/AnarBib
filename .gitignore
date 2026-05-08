@@ -29,3 +29,9 @@ fonts-source/
 
 # Archives temporaires d'audit (zip envoyés à Claude pour lecture)
 notify-functions.zip
+
+# Fichier test eslint
+eslint-first-run.txt
+
+# Logs ESLint temporaires
+eslint-first-run.txt

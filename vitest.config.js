@@ -11,5 +11,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/tests/setup.js'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/supabase/functions/**', // Edge Functions Supabase (Deno, pas Node)
+    ],
   },
 });
