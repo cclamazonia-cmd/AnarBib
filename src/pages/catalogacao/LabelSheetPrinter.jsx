@@ -130,7 +130,7 @@ export default function LabelSheetPrinter() {
 </style>
 </head><body>
 ${pages.join('\n')}
-<script>window.onload=()=>window.print();<\/script>
+<script>window.onload=()=>window.print();</${'script'}>
 </body></html>`;
 
     const w = window.open('', '_blank');

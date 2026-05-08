@@ -158,7 +158,7 @@ function exportPDF(books, t) {
 <h2>${books.length} ${t({id:'catalog.results.count'},{count:books.length})} — ${now}</h2>
 <table><thead><tr><th>${t({id:'catalog.table.ref'})}</th><th>${t({id:'catalog.table.author'})}</th><th>${t({id:'catalog.table.bookTitle'})}</th><th>${t({id:'catalog.table.year'})}</th><th>${t({id:'catalog.table.publisher'})}</th><th>${t({id:'catalog.table.libraries'})}</th></tr></thead><tbody>${rows}</tbody></table>
 <div class="footer">AnarBib — ${t({id:'app.subtitle'})} — ${now}</div>
-<script>window.onload=()=>window.print();<\/script>
+<script>window.onload=()=>window.print();</${'script'}>
 </body></html>`;
   const w = window.open('', '_blank');
   if (w) { w.document.write(html); w.document.close(); }

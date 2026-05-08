@@ -25,7 +25,7 @@ function yearsLabel(birth, death) {
 
 function buildHeroIntro(author, booksCount, t, locale) {
   const parts = [];
-  // FIX B.1: use i18n-iso-countries helper instead of t({id: 'country.XXX'})
+  // FIX B.1: use i18n-iso-countries helper instead of static i18n country keys
   // — country.* keys were missing in all 6 locales, showing raw ISO code.
   if (author.country) {
     const countryName = getCountryName(author.country, locale);
