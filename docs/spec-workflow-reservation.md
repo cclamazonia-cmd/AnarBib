@@ -5,7 +5,7 @@
 **Auteur·rices** : Xavier (spec et arbitrages) + Claude (rédaction, diagnostic)
 **Dépendances** : aucune (peut être implémenté indépendamment des specs validation physique et migration de compte)
 
----
+\---
 
 ## Sommaire
 
@@ -22,80 +22,82 @@
 11. [Checklist d'implémentation](#11-checklist-dimplémentation)
 12. [Tests d'acceptation](#12-tests-dacceptation)
 
----
+\---
 
-## 1. Contexte et objectif
+## 1\. Contexte et objectif
 
 ### Contexte
 
 Le système de réservation AnarBib repose sur trois tables principales :
-- `reservas_v2` : réservation parente (1 lecteur·rice + 1 biblio + n livres)
-- `reserva_linhas_v2` : lignes individuelles (1 livre = 1 ligne, parce qu'une réservation peut porter sur plusieurs livres)
-- `reserva_item_workflow_v2` : état courant du workflow par ligne
 
-Aujourd'hui, le système souffre d'un **workflow simplifié à l'extrême** : seuls 4 stages terminaux sont effectivement utilisés (`cancelada_leitor`, `cancelada_biblioteca`, `retirada_efetivada`, `liberada_para_circulacao`). Les stages intermédiaires (`solicitada`, `em_preparacao`, `retirada_agendada`, `pronta_para_retirada`) **ne sont jamais écrits en DB**, alors que toute l'infrastructure technique (triggers, fonction de dispatch HTTP vers notify-event, code Edge Function) est déjà en place.
+* `reservas\_v2` : réservation parente (1 lecteur·rice + 1 biblio + n livres)
+* `reserva\_linhas\_v2` : lignes individuelles (1 livre = 1 ligne, parce qu'une réservation peut porter sur plusieurs livres)
+* `reserva\_item\_workflow\_v2` : état courant du workflow par ligne
+
+Aujourd'hui, le système souffre d'un **workflow simplifié à l'extrême** : seuls 4 stages terminaux sont effectivement utilisés (`cancelada\_leitor`, `cancelada\_biblioteca`, `retirada\_efetivada`, `liberada\_para\_circulacao`). Les stages intermédiaires (`solicitada`, `em\_preparacao`, `retirada\_agendada`, `pronta\_para\_retirada`) **ne sont jamais écrits en DB**, alors que toute l'infrastructure technique (triggers, fonction de dispatch HTTP vers notify-event, code Edge Function) est déjà en place.
 
 ### Objectif
 
 Implémenter le workflow complet à 6 états + branches latérales, avec :
-- Transitions correctement écrites en DB
-- Mails contextuels par transition (ce que l'infra DB sait déjà faire)
-- UI staff dans `/painel` pour effectuer les transitions
-- UI lecteur dans `/conta` pour suivre l'état et confirmer/refuser les créneaux
-- Configuration par biblio (timeouts, mails individuellement désactivables)
-- Détection automatique des no-shows
-- Conversion atomique `retirada_efetivada` → emprunt actif
+
+* Transitions correctement écrites en DB
+* Mails contextuels par transition (ce que l'infra DB sait déjà faire)
+* UI staff dans `/painel` pour effectuer les transitions
+* UI lecteur dans `/conta` pour suivre l'état et confirmer/refuser les créneaux
+* Configuration par biblio (timeouts, mails individuellement désactivables)
+* Détection automatique des no-shows
+* Conversion atomique `retirada\_efetivada` → emprunt actif
 
 ### Principes directeurs
 
-> 1. **Souveraineté des biblios** sur leur configuration (timeouts, mails désactivables individuellement, modes de retrait).
-> 2. **Souveraineté du lecteur** sur sa propre réservation (peut toujours annuler avant retrait effectif).
-> 3. **Atomicité des opérations critiques** (conversion en emprunt = transaction unique).
-> 4. **Transparence** : timeline visuelle pour le lecteur, journal d'audit pour la biblio.
+> 1. \*\*Souveraineté des biblios\*\* sur leur configuration (timeouts, mails désactivables individuellement, modes de retrait).
+> 2. \*\*Souveraineté du lecteur\*\* sur sa propre réservation (peut toujours annuler avant retrait effectif).
+> 3. \*\*Atomicité des opérations critiques\*\* (conversion en emprunt = transaction unique).
+> 4. \*\*Transparence\*\* : timeline visuelle pour le lecteur, journal d'audit pour la biblio.
 
----
+\---
 
-## 2. Diagnostic préalable
+## 2\. Diagnostic préalable
 
 ### Découvertes de la session 04/05/2026
 
 1. **Triggers DB en place et fonctionnels** :
-   - `trg_notify_reserva_workflow` sur INSERT/UPDATE de `reserva_item_workflow_v2`
-   - Appelle `fn_dispatch_circulation_notify_event` qui fait un POST HTTP vers notify-event Edge Function
-   - Mapping correct des `workflow_stage` → events : `re-retirada_agendada`→`retirada_reagendada`, `nao_retirada`→`reserva_nao_retirada`, etc.
 
+   * `trg\_notify\_reserva\_workflow` sur INSERT/UPDATE de `reserva\_item\_workflow\_v2`
+   * Appelle `fn\_dispatch\_circulation\_notify\_event` qui fait un POST HTTP vers notify-event Edge Function
+   * Mapping correct des `workflow\_stage` → events : `re-retirada\_agendada`→`retirada\_reagendada`, `nao\_retirada`→`reserva\_nao\_retirada`, etc.
 2. **Edge Function notify-event en place** :
-   - `supabase/functions/_shared/core/dispatch.ts` : route correctement les events workflow
-   - `supabase/functions/_shared/domain/reservas.ts` : génère les mails par event
 
+   * `supabase/functions/\_shared/core/dispatch.ts` : route correctement les events workflow
+   * `supabase/functions/\_shared/domain/reservas.ts` : génère les mails par event
 3. **Cause racine** : le frontend (et les RPCs côté Supabase) **ne déclenchent jamais** les transitions intermédiaires. Probablement parce que :
-   - Pas d'UI staff pour passer une réservation de `solicitada` à `em_preparacao` ou `retirada_agendada`
-   - Pas de RPC dédiée à chaque transition (juste des UPDATE directs vers les états terminaux)
-   - Pas de cron pour `retirada_no_show`
 
-4. **Flag `reservation_workflow_enabled`** : présent dans `library_notification_policies` (true par défaut sur les 2 biblios actives). Lu côté Edge Function mais ne semble pas filtrer activement.
+   * Pas d'UI staff pour passer une réservation de `solicitada` à `em\_preparacao` ou `retirada\_agendada`
+   * Pas de RPC dédiée à chaque transition (juste des UPDATE directs vers les états terminaux)
+   * Pas de cron pour `retirada\_no\_show`
+4. **Flag `reservation\_workflow\_enabled`** : présent dans `library\_notification\_policies` (true par défaut sur les 2 biblios actives). Lu côté Edge Function mais ne semble pas filtrer activement.
 
 ### Inventaire actuel
 
 ```
-reserva_item_workflow_v2 — distribution actuelle :
-- cancelada_leitor : 5
-- retirada_efetivada : 3
-- cancelada_biblioteca : 1
-- liberada_para_circulacao : 1
+reserva\_item\_workflow\_v2 — distribution actuelle :
+- cancelada\_leitor : 5
+- retirada\_efetivada : 3
+- cancelada\_biblioteca : 1
+- liberada\_para\_circulacao : 1
 - TOUS les autres stages : 0
 
-Triggers actuels sur reservas_v2 :
-- trg_reservas_v2_touch_updated_at (juste utilitaire updated_at)
+Triggers actuels sur reservas\_v2 :
+- trg\_reservas\_v2\_touch\_updated\_at (juste utilitaire updated\_at)
 
-Triggers sur reserva_item_workflow_v2 :
-- trg_notify_reserva_workflow (BIEN PRÉSENT)
-- trg_reserva_item_workflow_v2_touch_updated_at
+Triggers sur reserva\_item\_workflow\_v2 :
+- trg\_notify\_reserva\_workflow (BIEN PRÉSENT)
+- trg\_reserva\_item\_workflow\_v2\_touch\_updated\_at
 ```
 
----
+\---
 
-## 3. Modèle conceptuel
+## 3\. Modèle conceptuel
 
 ### Cycle de vie d'une réservation
 
@@ -108,7 +110,7 @@ Triggers sur reserva_item_workflow_v2 :
                            │  staff prend en charge (optionnel)
                            ▼
                   ┌──────────────────┐
-                  │  em_preparacao   │  ← optionnel, sautable
+                  │  em\_preparacao   │  ← optionnel, sautable
                   │   (étape 2)      │
                   └────────┬─────────┘
                            │
@@ -116,21 +118,21 @@ Triggers sur reserva_item_workflow_v2 :
                            ├──────────────────┐
                            ▼                  ▼
               ┌──────────────────┐   ┌──────────────────┐
-              │ retirada_agendada│   │retirada_a_combinar│
+              │ retirada\_agendada│   │retirada\_a\_combinar│
               │   (étape 3a)     │   │   (étape 3b)      │
-              │ pickup_scheduled │   │ pickup_scheduled  │
+              │ pickup\_scheduled │   │ pickup\_scheduled  │
               │ obligatoire      │   │ flou (J+7 indic.) │
               └────┬─────────────┘   └────┬──────────────┘
                    │                      │
                    │  lecteur peut accepter│ ou refuser
-                   │  (pickup_reply_status)│
+                   │  (pickup\_reply\_status)│
                    │                      │
                    │  refus → biblio reagende
-                   │  (re-retirada_agendada)
+                   │  (re-retirada\_agendada)
                    │                      │
                    ▼                      ▼
                   ┌──────────────────────────┐
-                  │  pronta_para_retirada    │
+                  │  pronta\_para\_retirada    │
                   │   (étape 4)              │
                   │   livre physiquement     │
                   │   prêt à l'accueil       │
@@ -139,7 +141,7 @@ Triggers sur reserva_item_workflow_v2 :
                              │  lecteur vient
                              ▼
                   ┌──────────────────────────┐
-                  │   retirada_efetivada     │  ← ÉTAT FINAL
+                  │   retirada\_efetivada     │  ← ÉTAT FINAL
                   │   (étape 5)              │     conversion en
                   │                          │     empréstimo via
                   │                          │     RPC atomique
@@ -148,384 +150,388 @@ Triggers sur reserva_item_workflow_v2 :
 
 ### États d'échec / branches latérales
 
-À tout moment avant `retirada_efetivada` :
+À tout moment avant `retirada\_efetivada` :
 
-| État | Déclencheur | Source |
-|---|---|---|
-| `cancelada_leitor` | Lecteur·rice annule depuis `/conta` | Lecteur·rice |
-| `cancelada_biblioteca` | Biblio annule (raison obligatoire si stage ≥ retirada_agendada) | Coordenador |
-| `expirada` | `solicitada` dépasse `reservation_solicitada_timeout_days` | Job pg_cron |
-| `retirada_no_show` (= `nao_retirada`) | Lecteur·rice n'est pas venu·e après pickup_scheduled_for + `reservation_no_show_timeout_hours` | Job pg_cron OU staff manuellement |
-| `re-retirada_agendada` | Suite à refus lecteur (pickup_reply_status='recusado_leitor'), biblio repropose | Coordenador |
-| `liberada_para_circulacao` | Suite à no_show ou cancelada_biblioteca, livre repasse en circulation | Trigger automatique |
+|État|Déclencheur|Source|
+|-|-|-|
+|`cancelada\_leitor`|Lecteur·rice annule depuis `/conta`|Lecteur·rice|
+|`cancelada\_biblioteca`|Biblio annule (raison obligatoire si stage ≥ retirada\_agendada)|Coordenador|
+|`expirada`|`solicitada` dépasse `reservation\_solicitada\_timeout\_days`|Job pg\_cron|
+|`retirada\_no\_show` (= `nao\_retirada`)|Lecteur·rice n'est pas venu·e après pickup\_scheduled\_for + `reservation\_no\_show\_timeout\_hours`|Job pg\_cron OU staff manuellement|
+|`re-retirada\_agendada`|Suite à refus lecteur (pickup\_reply\_status='recusado\_leitor'), biblio repropose|Coordenador|
+|`liberada\_para\_circulacao`|Suite à no\_show ou cancelada\_biblioteca, livre repasse en circulation|Trigger automatique|
 
 ### Acteurs
 
-- **Lecteur·rice** : crée la réservation (`solicitada`), confirme/refuse les créneaux (`pickup_reply_status`), annule à tout moment avant `retirada_efetivada`.
-- **Librarian** (≥) : peut effectuer les transitions `solicitada` → `em_preparacao` → `retirada_agendada/a_combinar` → `pronta_para_retirada`. Peut marquer `retirada_efetivada` (avec création emprunt) et `retirada_no_show` (manuel).
-- **Coordenador** (≥) : tout ce qu'un librarian fait, plus `cancelada_biblioteca` (avec raison) à n'importe quelle étape.
-- **Job pg_cron** : déclenche `expirada` et `retirada_no_show` automatiquement.
+* **Lecteur·rice** : crée la réservation (`solicitada`), confirme/refuse les créneaux (`pickup\_reply\_status`), annule à tout moment avant `retirada\_efetivada`.
+* **Librarian** (≥) : peut effectuer les transitions `solicitada` → `em\_preparacao` → `retirada\_agendada/a\_combinar` → `pronta\_para\_retirada`. Peut marquer `retirada\_efetivada` (avec création emprunt) et `retirada\_no\_show` (manuel).
+* **Coordenador** (≥) : tout ce qu'un librarian fait, plus `cancelada\_biblioteca` (avec raison) à n'importe quelle étape.
+* **Job pg\_cron** : déclenche `expirada` et `retirada\_no\_show` automatiquement.
 
----
+\---
 
-## 4. États et transitions
+## 4\. États et transitions
 
-### États possibles (workflow_stage)
+### États possibles (workflow\_stage)
 
-| Stage | Description | Terminal ? | UI lecteur | UI staff |
-|---|---|---|---|---|
-| `solicitada` | Lecteur a créé la réservation | non | "Demande envoyée" | "À traiter" |
-| `em_preparacao` | Biblio prépare (sortie des étagères, vérification) | non | "En préparation" | "En cours" |
-| `retirada_agendada` | Créneau de retrait fixé (date précise) | non | "Retrait prévu le X" + boutons | "Retrait fixé" |
-| `retirada_a_combinar` | Retrait à voir au cas par cas (date butoir) | non | "Retrait à combiner avant le X" | "À combiner" |
-| `re-retirada_agendada` | Créneau reprogrammé | non | "Nouveau créneau le X" + boutons | "Reagendée" |
-| `pronta_para_retirada` | Livre prêt à l'accueil | non | "Prête, viens la chercher" | "Attente lecteur" |
-| `retirada_efetivada` | Lecteur·rice est venu·e | OUI | "Retrait effectué le X (devenu emprunt)" | "Effectuée" |
-| `cancelada_leitor` | Lecteur·rice a annulé | OUI | "Vous avez annulé" | "Annulée par lecteur" |
-| `cancelada_biblioteca` | Biblio a annulé | OUI | "Annulée par biblio : [raison]" | "Annulée par biblio" |
-| `expirada` | Timeout solicitada | OUI | "Expirée par non-prise en charge" | "Expirée" |
-| `retirada_no_show` (= `nao_retirada`) | Lecteur·rice non venu·e | OUI | "Non venu·e, livre libéré" | "No-show" |
-| `liberada_para_circulacao` | Livre remis en circulation (post-no_show ou cancel) | OUI | (n/a, déjà annulée) | "Livre libéré" |
+|Stage|Description|Terminal ?|UI lecteur|UI staff|
+|-|-|-|-|-|
+|`solicitada`|Lecteur a créé la réservation|non|"Demande envoyée"|"À traiter"|
+|`em\_preparacao`|Biblio prépare (sortie des étagères, vérification)|non|"En préparation"|"En cours"|
+|`retirada\_agendada`|Créneau de retrait fixé (date précise)|non|"Retrait prévu le X" + boutons|"Retrait fixé"|
+|`retirada\_a\_combinar`|Retrait à voir au cas par cas (date butoir)|non|"Retrait à combiner avant le X"|"À combiner"|
+|`re-retirada\_agendada`|Créneau reprogrammé|non|"Nouveau créneau le X" + boutons|"Reagendée"|
+|`pronta\_para\_retirada`|Livre prêt à l'accueil|non|"Prête, viens la chercher"|"Attente lecteur"|
+|`retirada\_efetivada`|Lecteur·rice est venu·e|OUI|"Retrait effectué le X (devenu emprunt)"|"Effectuée"|
+|`cancelada\_leitor`|Lecteur·rice a annulé|OUI|"Vous avez annulé"|"Annulée par lecteur"|
+|`cancelada\_biblioteca`|Biblio a annulé|OUI|"Annulée par biblio : \[raison]"|"Annulée par biblio"|
+|`expirada`|Timeout solicitada|OUI|"Expirée par non-prise en charge"|"Expirée"|
+|`retirada\_no\_show` (= `nao\_retirada`)|Lecteur·rice non venu·e|OUI|"Non venu·e, livre libéré"|"No-show"|
+|`liberada\_para\_circulacao`|Livre remis en circulation (post-no\_show ou cancel)|OUI|(n/a, déjà annulée)|"Livre libéré"|
 
 ### Matrice des transitions autorisées
 
 ```
 DEPUIS                         | TRANSITIONS AUTORISÉES                                     | QUI
 -------------------------------|-----------------------------------------------------------|---------
-solicitada                     | em_preparacao | retirada_agendada | retirada_a_combinar    | librarian
-                               | cancelada_leitor                                          | lecteur
-                               | cancelada_biblioteca                                      | coordenador
+solicitada                     | em\_preparacao | retirada\_agendada | retirada\_a\_combinar    | librarian
+                               | cancelada\_leitor                                          | lecteur
+                               | cancelada\_biblioteca                                      | coordenador
                                | expirada                                                  | cron
-em_preparacao                  | retirada_agendada | retirada_a_combinar                   | librarian
-                               | cancelada_leitor                                          | lecteur
-                               | cancelada_biblioteca                                      | coordenador
-retirada_agendada              | re-retirada_agendada | pronta_para_retirada               | librarian
-                               | cancelada_leitor                                          | lecteur
-                               | cancelada_biblioteca                                      | coordenador
-retirada_a_combinar            | retirada_agendada | re-retirada_agendada                  | librarian
-                               | pronta_para_retirada                                      | librarian
-                               | cancelada_leitor                                          | lecteur
-                               | cancelada_biblioteca                                      | coordenador
-re-retirada_agendada           | pronta_para_retirada | re-retirada_agendada               | librarian
-                               | cancelada_leitor                                          | lecteur
-                               | cancelada_biblioteca                                      | coordenador
-pronta_para_retirada           | retirada_efetivada (RPC atomique avec INSERT emprestimos) | librarian
-                               | retirada_no_show                                          | librarian | cron
-                               | cancelada_leitor                                          | lecteur
-                               | cancelada_biblioteca                                      | coordenador
-retirada_no_show               | liberada_para_circulacao (auto-déclenchée par trigger)    | trigger
+em\_preparacao                  | retirada\_agendada | retirada\_a\_combinar                   | librarian
+                               | cancelada\_leitor                                          | lecteur
+                               | cancelada\_biblioteca                                      | coordenador
+retirada\_agendada              | re-retirada\_agendada | pronta\_para\_retirada               | librarian
+                               | cancelada\_leitor                                          | lecteur
+                               | cancelada\_biblioteca                                      | coordenador
+retirada\_a\_combinar            | retirada\_agendada | re-retirada\_agendada                  | librarian
+                               | pronta\_para\_retirada                                      | librarian
+                               | cancelada\_leitor                                          | lecteur
+                               | cancelada\_biblioteca                                      | coordenador
+re-retirada\_agendada           | pronta\_para\_retirada | re-retirada\_agendada               | librarian
+                               | cancelada\_leitor                                          | lecteur
+                               | cancelada\_biblioteca                                      | coordenador
+pronta\_para\_retirada           | retirada\_efetivada (RPC atomique avec INSERT emprestimos) | librarian
+                               | retirada\_no\_show                                          | librarian | cron
+                               | cancelada\_leitor                                          | lecteur
+                               | cancelada\_biblioteca                                      | coordenador
+retirada\_no\_show               | liberada\_para\_circulacao (auto-déclenchée par trigger)    | trigger
                                | (état terminal après cette transition)                    |
-cancelada_*, expirada,         | (états terminaux, aucune transition possible)             |
-retirada_efetivada,            |                                                           |
-liberada_para_circulacao       |                                                           |
+cancelada\_\*, expirada,         | (états terminaux, aucune transition possible)             |
+retirada\_efetivada,            |                                                           |
+liberada\_para\_circulacao       |                                                           |
 ```
 
-### Cas particulier : `pickup_reply_status`
+### Cas particulier : `pickup\_reply\_status`
 
-Indépendant du `workflow_stage`. Quand le stage est `retirada_agendada` ou `re-retirada_agendada`, le lecteur peut répondre via la colonne `pickup_reply_status` :
-- `confirmado_leitor` : "OK, je peux à ce créneau"
-- `recusado_leitor` : "Non, je ne peux pas"
+Indépendant du `workflow\_stage`. Quand le stage est `retirada\_agendada` ou `re-retirada\_agendada`, le lecteur peut répondre via la colonne `pickup\_reply\_status` :
 
-Le trigger DB `trg_notify_reserva_workflow_change` détecte ce changement et envoie le mail correspondant à la biblio. Si refus, la biblio peut alors transitionner vers `re-retirada_agendada` avec un nouveau `pickup_scheduled_for`.
+* `confirmado\_leitor` : "OK, je peux à ce créneau"
+* `recusado\_leitor` : "Non, je ne peux pas"
 
----
+Le trigger DB `trg\_notify\_reserva\_workflow\_change` détecte ce changement et envoie le mail correspondant à la biblio. Si refus, la biblio peut alors transitionner vers `re-retirada\_agendada` avec un nouveau `pickup\_scheduled\_for`.
 
-## 5. Schéma DB
+\---
+
+## 5\. Schéma DB
 
 ### Tables existantes (rappel)
 
 ```sql
-public.reservas_v2 (
+public.reservas\_v2 (
   id bigserial PRIMARY KEY,
-  user_id uuid,
-  library_id uuid,
+  user\_id uuid,
+  library\_id uuid,
   notes text,
-  status_global text DEFAULT 'ativa', -- ativa | finalizada | cancelada
-  created_at, updated_at
+  status\_global text DEFAULT 'ativa', -- ativa | finalizada | cancelada
+  created\_at, updated\_at
 );
 
-public.reserva_linhas_v2 (
-  reserva_id bigint, line_no int,
+public.reserva\_linhas\_v2 (
+  reserva\_id bigint, line\_no int,
   -- ... (référence vers le livre, exemplaire, etc.)
 );
 
-public.reserva_item_workflow_v2 (
+public.reserva\_item\_workflow\_v2 (
   id bigserial PRIMARY KEY,
-  reserva_id bigint,
-  line_no int,
-  workflow_stage text,
-  workflow_note text,
-  pickup_scheduled_for timestamptz,
-  pickup_reply_status text, -- null | confirmado_leitor | recusado_leitor
-  pickup_reply_note text,
-  pickup_reply_at timestamptz,
-  updated_at, updated_by uuid,
-  UNIQUE (reserva_id, line_no)
+  reserva\_id bigint,
+  line\_no int,
+  workflow\_stage text,
+  workflow\_note text,
+  pickup\_scheduled\_for timestamptz,
+  pickup\_reply\_status text, -- null | confirmado\_leitor | recusado\_leitor
+  pickup\_reply\_note text,
+  pickup\_reply\_at timestamptz,
+  updated\_at, updated\_by uuid,
+  UNIQUE (reserva\_id, line\_no)
 );
 ```
 
 ### Modifications à apporter
 
-#### 1. Contraintes CHECK sur workflow_stage
+#### 1\. Contraintes CHECK sur workflow\_stage
 
 ```sql
-ALTER TABLE public.reserva_item_workflow_v2
-  ADD CONSTRAINT chk_workflow_stage CHECK (workflow_stage IN (
+ALTER TABLE public.reserva\_item\_workflow\_v2
+  ADD CONSTRAINT chk\_workflow\_stage CHECK (workflow\_stage IN (
     'solicitada',
-    'em_preparacao',
-    'retirada_agendada',
-    'retirada_a_combinar',
-    're-retirada_agendada',
-    'pronta_para_retirada',
-    'retirada_efetivada',
-    'retirada_no_show',
-    'nao_retirada',  -- alias historique de retirada_no_show, à conserver pour compat
-    'cancelada_leitor',
-    'cancelada_biblioteca',
+    'em\_preparacao',
+    'retirada\_agendada',
+    'retirada\_a\_combinar',
+    're-retirada\_agendada',
+    'pronta\_para\_retirada',
+    'retirada\_efetivada',
+    'retirada\_no\_show',
+    'nao\_retirada',  -- alias historique de retirada\_no\_show, à conserver pour compat
+    'cancelada\_leitor',
+    'cancelada\_biblioteca',
     'expirada',
-    'liberada_para_circulacao'
+    'liberada\_para\_circulacao'
   ));
 
-ALTER TABLE public.reserva_item_workflow_v2
-  ADD CONSTRAINT chk_pickup_scheduled_for_required CHECK (
-    workflow_stage NOT IN ('retirada_agendada', 're-retirada_agendada', 'retirada_a_combinar')
-    OR pickup_scheduled_for IS NOT NULL
+ALTER TABLE public.reserva\_item\_workflow\_v2
+  ADD CONSTRAINT chk\_pickup\_scheduled\_for\_required CHECK (
+    workflow\_stage NOT IN ('retirada\_agendada', 're-retirada\_agendada', 'retirada\_a\_combinar')
+    OR pickup\_scheduled\_for IS NOT NULL
   );
 ```
 
-#### 2. Nouveaux flags dans `library_notification_policies`
+#### 2\. Nouveaux flags dans `library\_notification\_policies`
 
 ```sql
-ALTER TABLE public.library_notification_policies
-  ADD COLUMN reservation_solicitada_timeout_days int NOT NULL DEFAULT 14,
-  ADD COLUMN reservation_no_show_timeout_hours int NOT NULL DEFAULT 24,
+ALTER TABLE public.library\_notification\_policies
+  ADD COLUMN reservation\_solicitada\_timeout\_days int NOT NULL DEFAULT 14,
+  ADD COLUMN reservation\_no\_show\_timeout\_hours int NOT NULL DEFAULT 24,
 
   -- Mails désactivables individuellement (default true = on envoie)
-  ADD COLUMN reservation_mail_solicitada_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_em_preparacao_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_retirada_agendada_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_retirada_a_combinar_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_pronta_para_retirada_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_retirada_reagendada_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_retirada_no_show_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_expirada_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_cancelada_leitor_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_cancelada_biblioteca_enabled boolean NOT NULL DEFAULT true,
-  ADD COLUMN reservation_mail_liberada_para_circulacao_enabled boolean NOT NULL DEFAULT false;
-  -- liberada_para_circulacao false par défaut = pas la peine de spammer le lecteur déjà annulé
+  ADD COLUMN reservation\_mail\_solicitada\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_em\_preparacao\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_retirada\_agendada\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_retirada\_a\_combinar\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_pronta\_para\_retirada\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_retirada\_reagendada\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_retirada\_no\_show\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_expirada\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_cancelada\_leitor\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_cancelada\_biblioteca\_enabled boolean NOT NULL DEFAULT true,
+  ADD COLUMN reservation\_mail\_liberada\_para\_circulacao\_enabled boolean NOT NULL DEFAULT false;
+  -- liberada\_para\_circulacao false par défaut = pas la peine de spammer le lecteur déjà annulé
   -- (option d'activation pour celles qui veulent dire "votre livre est dispo si vous voulez le re-réserver")
 
 -- Constraints raisonnables
-ALTER TABLE public.library_notification_policies
-  ADD CONSTRAINT chk_solicitada_timeout CHECK (reservation_solicitada_timeout_days BETWEEN 7 AND 60),
-  ADD CONSTRAINT chk_no_show_timeout CHECK (reservation_no_show_timeout_hours BETWEEN 12 AND 168);
+ALTER TABLE public.library\_notification\_policies
+  ADD CONSTRAINT chk\_solicitada\_timeout CHECK (reservation\_solicitada\_timeout\_days BETWEEN 7 AND 60),
+  ADD CONSTRAINT chk\_no\_show\_timeout CHECK (reservation\_no\_show\_timeout\_hours BETWEEN 12 AND 168);
 ```
 
-#### 3. Index pour les jobs cron
+#### 3\. Index pour les jobs cron
 
 ```sql
 -- Pour expiration rapide
-CREATE INDEX idx_riw_expiry_check ON public.reserva_item_workflow_v2 (workflow_stage, updated_at)
-  WHERE workflow_stage = 'solicitada';
+CREATE INDEX idx\_riw\_expiry\_check ON public.reserva\_item\_workflow\_v2 (workflow\_stage, updated\_at)
+  WHERE workflow\_stage = 'solicitada';
 
--- Pour no_show rapide
-CREATE INDEX idx_riw_no_show_check ON public.reserva_item_workflow_v2 (workflow_stage, pickup_scheduled_for)
-  WHERE workflow_stage IN ('pronta_para_retirada', 'retirada_agendada', 're-retirada_agendada');
+-- Pour no\_show rapide
+CREATE INDEX idx\_riw\_no\_show\_check ON public.reserva\_item\_workflow\_v2 (workflow\_stage, pickup\_scheduled\_for)
+  WHERE workflow\_stage IN ('pronta\_para\_retirada', 'retirada\_agendada', 're-retirada\_agendada');
 ```
 
-#### 4. Trigger pour `liberada_para_circulacao` automatique post-no_show
+#### 4\. Trigger pour `liberada\_para\_circulacao` automatique post-no\_show
 
 ```sql
-CREATE OR REPLACE FUNCTION public.trg_auto_liberate_after_no_show()
+CREATE OR REPLACE FUNCTION public.trg\_auto\_liberate\_after\_no\_show()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
 BEGIN
-  -- Si on passe en retirada_no_show ou cancelada_biblioteca,
-  -- on insert immédiatement un nouvel évènement liberada_para_circulacao
+  -- Si on passe en retirada\_no\_show ou cancelada\_biblioteca,
+  -- on insert immédiatement un nouvel évènement liberada\_para\_circulacao
   -- pour que le livre soit dispo en circulation à nouveau.
-  IF NEW.workflow_stage IN ('retirada_no_show', 'nao_retirada', 'cancelada_biblioteca') THEN
+  IF NEW.workflow\_stage IN ('retirada\_no\_show', 'nao\_retirada', 'cancelada\_biblioteca') THEN
     -- (logique applicative à définir : faut-il INSERT une nouvelle ligne, ou plutôt
-    --  émettre l'event sans changer le stage qui restait sur retirada_no_show ?)
+    --  émettre l'event sans changer le stage qui restait sur retirada\_no\_show ?)
     -- À discuter à l'implémentation : event d'info plutôt que mutation de stage.
-    PERFORM fn_dispatch_circulation_notify_event(
-      'liberada_para_circulacao',
-      NEW.reserva_id,
-      jsonb_build_object('line_nos', jsonb_build_array(NEW.line_no))
+    PERFORM fn\_dispatch\_circulation\_notify\_event(
+      'liberada\_para\_circulacao',
+      NEW.reserva\_id,
+      jsonb\_build\_object('line\_nos', jsonb\_build\_array(NEW.line\_no))
     );
   END IF;
   RETURN NEW;
 END;
 $$;
 
-CREATE TRIGGER trg_auto_liberate_after_no_show
-  AFTER UPDATE ON public.reserva_item_workflow_v2
+CREATE TRIGGER trg\_auto\_liberate\_after\_no\_show
+  AFTER UPDATE ON public.reserva\_item\_workflow\_v2
   FOR EACH ROW
-  WHEN (NEW.workflow_stage IS DISTINCT FROM OLD.workflow_stage)
-  EXECUTE FUNCTION trg_auto_liberate_after_no_show();
+  WHEN (NEW.workflow\_stage IS DISTINCT FROM OLD.workflow\_stage)
+  EXECUTE FUNCTION trg\_auto\_liberate\_after\_no\_show();
 ```
 
-**Note d'implémentation** : à raffiner. La sémantique exacte de `liberada_para_circulacao` doit être tranchée — est-ce un nouveau stage (qui remplace `retirada_no_show`), ou un event d'information sans mutation du stage ? Ma proposition : c'est un event d'information distinct du stage final `retirada_no_show`/`cancelada_biblioteca`. Le stage reste celui qui a déclenché la libération.
+**Note d'implémentation** : à raffiner. La sémantique exacte de `liberada\_para\_circulacao` doit être tranchée — est-ce un nouveau stage (qui remplace `retirada\_no\_show`), ou un event d'information sans mutation du stage ? Ma proposition : c'est un event d'information distinct du stage final `retirada\_no\_show`/`cancelada\_biblioteca`. Le stage reste celui qui a déclenché la libération.
 
----
+\---
 
-## 6. RPCs et triggers
+## 6\. RPCs et triggers
 
 ### RPCs frontend → DB
 
 Une RPC par transition métier, plutôt que des UPDATEs directs. Garantit :
-- Validation des transitions (refus si transition illégale)
-- Audit trail (updated_by)
-- Atomicité (transactions)
+
+* Validation des transitions (refus si transition illégale)
+* Audit trail (updated\_by)
+* Atomicité (transactions)
 
 ```sql
 -- Côté lecteur·rice
-api.create_reservation(book_id, library_id, notes) -> bigint
-  -- Crée reservas_v2 + reserva_linhas_v2 + reserva_item_workflow_v2 (workflow_stage='solicitada')
+api.create\_reservation(book\_id, library\_id, notes) -> bigint
+  -- Crée reservas\_v2 + reserva\_linhas\_v2 + reserva\_item\_workflow\_v2 (workflow\_stage='solicitada')
 
-api.cancel_my_reservation(reserva_id) -> void
+api.cancel\_my\_reservation(reserva\_id) -> void
   -- Vérifie que c'est bien la réservation du caller
-  -- Refuse si workflow_stage = 'retirada_efetivada' (déjà devenue emprunt)
-  -- UPDATE workflow_stage = 'cancelada_leitor'
+  -- Refuse si workflow\_stage = 'retirada\_efetivada' (déjà devenue emprunt)
+  -- UPDATE workflow\_stage = 'cancelada\_leitor'
 
-api.confirm_pickup_slot(reserva_id, line_no) -> void
+api.confirm\_pickup\_slot(reserva\_id, line\_no) -> void
   -- Vérifie ownership
-  -- Vérifie workflow_stage IN ('retirada_agendada', 're-retirada_agendada', 'retirada_a_combinar')
-  -- UPDATE pickup_reply_status = 'confirmado_leitor', pickup_reply_at = now()
+  -- Vérifie workflow\_stage IN ('retirada\_agendada', 're-retirada\_agendada', 'retirada\_a\_combinar')
+  -- UPDATE pickup\_reply\_status = 'confirmado\_leitor', pickup\_reply\_at = now()
 
-api.refuse_pickup_slot(reserva_id, line_no, reason text) -> void
-  -- UPDATE pickup_reply_status = 'recusado_leitor', pickup_reply_note = reason
+api.refuse\_pickup\_slot(reserva\_id, line\_no, reason text) -> void
+  -- UPDATE pickup\_reply\_status = 'recusado\_leitor', pickup\_reply\_note = reason
 
 -- Côté staff (≥ librarian)
-api.advance_reservation(reserva_id, line_no, target_stage text, options jsonb) -> void
+api.advance\_reservation(reserva\_id, line\_no, target\_stage text, options jsonb) -> void
   -- Vérifie role et que la transition est autorisée depuis stage actuel
-  -- UPDATE workflow_stage selon target_stage
-  -- Pour retirada_agendada/a_combinar/re-retirada_agendada : pickup_scheduled_for OBLIGATOIRE dans options
+  -- UPDATE workflow\_stage selon target\_stage
+  -- Pour retirada\_agendada/a\_combinar/re-retirada\_agendada : pickup\_scheduled\_for OBLIGATOIRE dans options
 
-api.confirm_pickup_v1(reserva_id, line_no, loan_options jsonb) -> bigint
-  -- Atomique : INSERT emprestimos_v2 + reserva_item_workflow_v2.workflow_stage = 'retirada_efetivada'
+api.confirm\_pickup\_v1(reserva\_id, line\_no, loan\_options jsonb) -> bigint
+  -- Atomique : INSERT emprestimos\_v2 + reserva\_item\_workflow\_v2.workflow\_stage = 'retirada\_efetivada'
   -- Retourne l'id du nouvel emprunt
 
-api.mark_no_show(reserva_id, line_no) -> void
+api.mark\_no\_show(reserva\_id, line\_no) -> void
   -- Manuel : staff constate que lecteur n'est pas venu
-  -- workflow_stage = 'retirada_no_show'
+  -- workflow\_stage = 'retirada\_no\_show'
 
 -- Côté coordenador
-api.cancel_reservation_as_library(reserva_id, line_no, reason text) -> void
+api.cancel\_reservation\_as\_library(reserva\_id, line\_no, reason text) -> void
   -- Vérifie role coordenador+
-  -- Si stage >= retirada_agendada, reason OBLIGATOIRE (CHECK)
-  -- workflow_stage = 'cancelada_biblioteca'
+  -- Si stage >= retirada\_agendada, reason OBLIGATOIRE (CHECK)
+  -- workflow\_stage = 'cancelada\_biblioteca'
 ```
 
-### Jobs pg_cron
+### Jobs pg\_cron
 
 ```sql
 -- Job 1 : expiration des solicitada
-CREATE OR REPLACE FUNCTION public.fn_expire_solicitada_reservations()
+CREATE OR REPLACE FUNCTION public.fn\_expire\_solicitada\_reservations()
 RETURNS int
 LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
 DECLARE
-  v_count int := 0;
+  v\_count int := 0;
 BEGIN
-  -- Pour chaque biblio, on récupère son timeout dans library_notification_policies
+  -- Pour chaque biblio, on récupère son timeout dans library\_notification\_policies
   WITH expired AS (
-    SELECT riw.reserva_id, riw.line_no
-    FROM public.reserva_item_workflow_v2 riw
-    JOIN public.reservas_v2 r ON r.id = riw.reserva_id
-    JOIN public.library_notification_policies lnp ON lnp.library_id = r.library_id
-    WHERE riw.workflow_stage = 'solicitada'
-      AND riw.updated_at < (now() - (lnp.reservation_solicitada_timeout_days || ' days')::interval)
+    SELECT riw.reserva\_id, riw.line\_no
+    FROM public.reserva\_item\_workflow\_v2 riw
+    JOIN public.reservas\_v2 r ON r.id = riw.reserva\_id
+    JOIN public.library\_notification\_policies lnp ON lnp.library\_id = r.library\_id
+    WHERE riw.workflow\_stage = 'solicitada'
+      AND riw.updated\_at < (now() - (lnp.reservation\_solicitada\_timeout\_days || ' days')::interval)
   )
-  UPDATE public.reserva_item_workflow_v2
-  SET workflow_stage = 'expirada', updated_at = now()
+  UPDATE public.reserva\_item\_workflow\_v2
+  SET workflow\_stage = 'expirada', updated\_at = now()
   FROM expired
-  WHERE reserva_item_workflow_v2.reserva_id = expired.reserva_id
-    AND reserva_item_workflow_v2.line_no = expired.line_no;
+  WHERE reserva\_item\_workflow\_v2.reserva\_id = expired.reserva\_id
+    AND reserva\_item\_workflow\_v2.line\_no = expired.line\_no;
   
-  GET DIAGNOSTICS v_count = ROW_COUNT;
-  RETURN v_count;
+  GET DIAGNOSTICS v\_count = ROW\_COUNT;
+  RETURN v\_count;
 END;
 $$;
 
 SELECT cron.schedule(
   'expire-solicitada-reservations',
-  '0 */6 * * *',  -- toutes les 6h
-  'SELECT fn_expire_solicitada_reservations()'
+  '0 \*/6 \* \* \*',  -- toutes les 6h
+  'SELECT fn\_expire\_solicitada\_reservations()'
 );
 
--- Job 2 : détection no_show
-CREATE OR REPLACE FUNCTION public.fn_detect_no_show_reservations()
+-- Job 2 : détection no\_show
+CREATE OR REPLACE FUNCTION public.fn\_detect\_no\_show\_reservations()
 RETURNS int
--- Similaire : sélectionne les reserva_item_workflow_v2 en pronta_para_retirada/retirada_agendada
--- dont pickup_scheduled_for + reservation_no_show_timeout_hours < now()
--- et passe en workflow_stage = 'retirada_no_show'.
+-- Similaire : sélectionne les reserva\_item\_workflow\_v2 en pronta\_para\_retirada/retirada\_agendada
+-- dont pickup\_scheduled\_for + reservation\_no\_show\_timeout\_hours < now()
+-- et passe en workflow\_stage = 'retirada\_no\_show'.
 $$;
 
 SELECT cron.schedule(
   'detect-no-show-reservations',
-  '0 * * * *',  -- toutes les heures
-  'SELECT fn_detect_no_show_reservations()'
+  '0 \* \* \* \*',  -- toutes les heures
+  'SELECT fn\_detect\_no\_show\_reservations()'
 );
 ```
 
 ### Trigger DB existant à conserver
 
-`trg_notify_reserva_workflow_change` reste tel quel : il détecte les changements de `workflow_stage` et de `pickup_reply_status`, et envoie l'event à notify-event Edge Function. Pas de modification.
+`trg\_notify\_reserva\_workflow\_change` reste tel quel : il détecte les changements de `workflow\_stage` et de `pickup\_reply\_status`, et envoie l'event à notify-event Edge Function. Pas de modification.
 
-**Petite amélioration possible** : faire que ce trigger consulte le flag `reservation_mail_*_enabled` correspondant avant d'appeler `fn_dispatch_circulation_notify_event`. Si flag = false, skip silencieusement. À implémenter dans la fonction trigger.
+**Petite amélioration possible** : faire que ce trigger consulte le flag `reservation\_mail\_\*\_enabled` correspondant avant d'appeler `fn\_dispatch\_circulation\_notify\_event`. Si flag = false, skip silencieusement. À implémenter dans la fonction trigger.
 
----
+\---
 
-## 7. Mails et notifications
+## 7\. Mails et notifications
 
 ### Mails par transition
 
-| Transition | Lecteur·rice reçoit | Biblio reçoit | Flag de désactivation |
-|---|---|---|---|
-| `solicitada` (création) | "Votre réservation est enregistrée" | "Nouvelle réservation à traiter" | `reservation_mail_solicitada_enabled` |
-| → `em_preparacao` | "Votre livre est en préparation" | (rien, c'est elle qui agit) | `reservation_mail_em_preparacao_enabled` |
-| → `retirada_agendada` | "Retrait prévu le X — confirmer/refuser" | (rien) | `reservation_mail_retirada_agendada_enabled` |
-| → `retirada_a_combinar` | "Retrait à combiner avant le X — contacter biblio" | (rien) | `reservation_mail_retirada_a_combinar_enabled` |
-| → `re-retirada_agendada` | "Nouveau créneau le X — confirmer/refuser" | (rien) | `reservation_mail_retirada_reagendada_enabled` |
-| `pickup_reply` confirmado | (rien) | "Lecteur·rice confirme" | (toujours actif, géré par trigger) |
-| `pickup_reply` recusado | (rien) | "Lecteur·rice refuse" | (toujours actif) |
-| → `pronta_para_retirada` | "Livre prêt, viens la chercher" | (rien) | `reservation_mail_pronta_para_retirada_enabled` |
-| → `retirada_efetivada` | "Retrait effectué, devenu emprunt jusqu'au X" | (rien, sauf `admin_copy_loans_enabled`) | (utilise les mails emprunt) |
-| → `retirada_no_show` (auto ou manuel) | "Vous n'êtes pas venu·e, réservation annulée, livre dispo" | "Lecteur·rice no-show" (event critique) | `reservation_mail_retirada_no_show_enabled` |
-| → `cancelada_leitor` | "Votre annulation est enregistrée" | (rien, sauf `admin_copy_reservations_enabled`) | `reservation_mail_cancelada_leitor_enabled` |
-| → `cancelada_biblioteca` | "Biblio a annulé : [raison]" | (rien) | `reservation_mail_cancelada_biblioteca_enabled` |
-| → `expirada` | "Votre réservation a expiré" | "Réservation expirée" (event critique) | `reservation_mail_expirada_enabled` |
-| → `liberada_para_circulacao` | (optionnel selon flag) | (rien) | `reservation_mail_liberada_para_circulacao_enabled` (default false) |
+|Transition|Lecteur·rice reçoit|Biblio reçoit|Flag de désactivation|
+|-|-|-|-|
+|`solicitada` (création)|"Votre réservation est enregistrée"|"Nouvelle réservation à traiter"|`reservation\_mail\_solicitada\_enabled`|
+|→ `em\_preparacao`|"Votre livre est en préparation"|(rien, c'est elle qui agit)|`reservation\_mail\_em\_preparacao\_enabled`|
+|→ `retirada\_agendada`|"Retrait prévu le X — confirmer/refuser"|(rien)|`reservation\_mail\_retirada\_agendada\_enabled`|
+|→ `retirada\_a\_combinar`|"Retrait à combiner avant le X — contacter biblio"|(rien)|`reservation\_mail\_retirada\_a\_combinar\_enabled`|
+|→ `re-retirada\_agendada`|"Nouveau créneau le X — confirmer/refuser"|(rien)|`reservation\_mail\_retirada\_reagendada\_enabled`|
+|`pickup\_reply` confirmado|(rien)|"Lecteur·rice confirme"|(toujours actif, géré par trigger)|
+|`pickup\_reply` recusado|(rien)|"Lecteur·rice refuse"|(toujours actif)|
+|→ `pronta\_para\_retirada`|"Livre prêt, viens la chercher"|(rien)|`reservation\_mail\_pronta\_para\_retirada\_enabled`|
+|→ `retirada\_efetivada`|"Retrait effectué, devenu emprunt jusqu'au X"|(rien, sauf `admin\_copy\_loans\_enabled`)|(utilise les mails emprunt)|
+|→ `retirada\_no\_show` (auto ou manuel)|"Vous n'êtes pas venu·e, réservation annulée, livre dispo"|"Lecteur·rice no-show" (event critique)|`reservation\_mail\_retirada\_no\_show\_enabled`|
+|→ `cancelada\_leitor`|"Votre annulation est enregistrée"|(rien, sauf `admin\_copy\_reservations\_enabled`)|`reservation\_mail\_cancelada\_leitor\_enabled`|
+|→ `cancelada\_biblioteca`|"Biblio a annulé : \[raison]"|(rien)|`reservation\_mail\_cancelada\_biblioteca\_enabled`|
+|→ `expirada`|"Votre réservation a expiré"|"Réservation expirée" (event critique)|`reservation\_mail\_expirada\_enabled`|
+|→ `liberada\_para\_circulacao`|(optionnel selon flag)|(rien)|`reservation\_mail\_liberada\_para\_circulacao\_enabled` (default false)|
 
 ### Copies admin biblio
 
-Conformément à `admin_copy_reservations_enabled` :
-- **Events critiques** (toujours copiés au coord biblio si flag = true) :
-  - `solicitada` (nouvelle commande à traiter)
-  - `expirada` (info comportement système)
-  - `retirada_no_show` (info comportement lecteur)
-  - `cancelada_leitor` après `pronta_para_retirada` uniquement (info comportement)
+Conformément à `admin\_copy\_reservations\_enabled` :
 
-- **Events non critiques** (jamais copiés au coord) :
-  - `em_preparacao`, `retirada_agendada`, `pronta_para_retirada`, `retirada_efetivada`, autres
-  - (raison : déjà déclenchés par la biblio elle-même)
+* **Events critiques** (toujours copiés au coord biblio si flag = true) :
+
+  * `solicitada` (nouvelle commande à traiter)
+  * `expirada` (info comportement système)
+  * `retirada\_no\_show` (info comportement lecteur)
+  * `cancelada\_leitor` après `pronta\_para\_retirada` uniquement (info comportement)
+* **Events non critiques** (jamais copiés au coord) :
+
+  * `em\_preparacao`, `retirada\_agendada`, `pronta\_para\_retirada`, `retirada\_efetivada`, autres
+  * (raison : déjà déclenchés par la biblio elle-même)
 
 ### Conventions militantes (rappel)
 
 Toutes les nouvelles clés i18n des mails de réservation doivent être **livrées en 6 locales d'un coup** (pt-BR, fr, es, en, it, de) selon les conventions existantes (cf. mémoire i18n).
 
-Estimation : ~20 nouvelles clés × 6 locales = ~120 traductions militantes (sujets + corps de mail).
+Estimation : \~20 nouvelles clés × 6 locales = \~120 traductions militantes (sujets + corps de mail).
 
----
+\---
 
-## 8. Interfaces utilisateur
+## 8\. Interfaces utilisateur
 
 ### 8.1 — Côté lecteur·rice (`/conta`)
 
-**Section "Mes réservations en cours"** : liste des réservations non-terminales (toutes sauf cancelada/expirada/retirada_efetivada).
+**Section "Mes réservations en cours"** : liste des réservations non-terminales (toutes sauf cancelada/expirada/retirada\_efetivada).
 
 Pour chaque réservation, affichage :
 
@@ -536,22 +542,23 @@ Pour chaque réservation, affichage :
 │   ✅ 1. Demande envoyée — 12/03/2026                    │
 │   ✅ 2. En préparation — 13/03/2026                     │
 │   ⏳ 3. Retrait prévu mardi 18/03 à 18h                 │
-│       [✅ Je confirme]  [❌ Je ne peux pas]             │
+│       \[✅ Je confirme]  \[❌ Je ne peux pas]             │
 │   ⬜ 4. Livre prêt à l'accueil                          │
 │   ⬜ 5. Retrait effectué                                │
 │                                                          │
-│  [ Annuler ma réservation ]                              │
+│  \[ Annuler ma réservation ]                              │
 │                                                          │
 └──────────────────────────────────────────────────────────┘
 ```
 
 Code couleur :
-- ✅ **Vert** : étape déjà passée (grisée, juste à titre informatif)
-- ⏳ **Animation** : étape courante
-- ⬜ **Gris pâle** : étape future
-- 🚫 **Rouge** : étape d'échec si applicable (annulation, expiration, no_show)
 
-Pour `retirada_a_combinar`, indiquer "À combiner avec biblio avant le X". Pour les `re-retirada_agendada`, marquer la première date barrée avec la nouvelle au-dessus.
+* ✅ **Vert** : étape déjà passée (grisée, juste à titre informatif)
+* ⏳ **Animation** : étape courante
+* ⬜ **Gris pâle** : étape future
+* 🚫 **Rouge** : étape d'échec si applicable (annulation, expiration, no\_show)
+
+Pour `retirada\_a\_combinar`, indiquer "À combiner avec biblio avant le X". Pour les `re-retirada\_agendada`, marquer la première date barrée avec la nouvelle au-dessus.
 
 **Section "Réservations terminées"** : collapsible, juste une liste compacte avec dernière date et état terminal.
 
@@ -563,33 +570,34 @@ Pour chaque ligne, un bouton qui ouvre une **modale de transition** :
 
 ```
 ┌─ Avancer la réservation #42 ─────────────────────────────┐
-│  État actuel : retirada_agendada                         │
+│  État actuel : retirada\_agendada                         │
 │                                                          │
 │  Transitions possibles :                                 │
-│   ⚪ ✅ retirada_agendada (état actuel)                   │ ← grisé
-│   ⚪ 📅 re-retirada_agendada (reprogrammer)               │
-│   ⚪ 📚 pronta_para_retirada (livre prêt)                 │
-│   ⚪ ❌ cancelada_biblioteca (annuler avec raison)        │
+│   ⚪ ✅ retirada\_agendada (état actuel)                   │ ← grisé
+│   ⚪ 📅 re-retirada\_agendada (reprogrammer)               │
+│   ⚪ 📚 pronta\_para\_retirada (livre prêt)                 │
+│   ⚪ ❌ cancelada\_biblioteca (annuler avec raison)        │
 │                                                          │
-│  [ Si retirada_agendada nouveau ou re- ] :               │
-│   Date de retrait : [date picker]                        │
-│   Note : [optional]                                      │
+│  \[ Si retirada\_agendada nouveau ou re- ] :               │
+│   Date de retrait : \[date picker]                        │
+│   Note : \[optional]                                      │
 │                                                          │
-│  [ Si cancelada_biblioteca ] :                           │
-│   Raison (obligatoire) : [textarea]                      │
+│  \[ Si cancelada\_biblioteca ] :                           │
+│   Raison (obligatoire) : \[textarea]                      │
 │                                                          │
-│  [ Annuler ] [ Confirmer ]                               │
+│  \[ Annuler ] \[ Confirmer ]                               │
 └──────────────────────────────────────────────────────────┘
 ```
 
 **Important** :
-- Les **étapes déjà passées** sont **affichées mais grisées** (visuellement présentes pour le contexte chronologique).
-- Les **étapes interdites depuis l'état courant** sont **non affichées**.
-- Les **étapes accessibles** sont **cliquables**.
 
-**Bouton spécial "Retrait effectué"** : visible uniquement si stage = `pronta_para_retirada`. Ouvre une modale "Création de l'emprunt" qui demande la date d'échéance (default = +X jours selon politique biblio) et confirme l'INSERT atomique via `api.confirm_pickup_v1`.
+* Les **étapes déjà passées** sont **affichées mais grisées** (visuellement présentes pour le contexte chronologique).
+* Les **étapes interdites depuis l'état courant** sont **non affichées**.
+* Les **étapes accessibles** sont **cliquables**.
 
-**Bouton "No-show manuel"** : visible si stage = `pronta_para_retirada` et `pickup_scheduled_for` < now(). Permet à la biblio de devancer le job cron.
+**Bouton spécial "Retrait effectué"** : visible uniquement si stage = `pronta\_para\_retirada`. Ouvre une modale "Création de l'emprunt" qui demande la date d'échéance (default = +X jours selon politique biblio) et confirme l'INSERT atomique via `api.confirm\_pickup\_v1`.
+
+**Bouton "No-show manuel"** : visible si stage = `pronta\_para\_retirada` et `pickup\_scheduled\_for` < now(). Permet à la biblio de devancer le job cron.
 
 ### 8.3 — Helpers UI à fournir
 
@@ -597,112 +605,112 @@ Composant React `<ReservationTimeline>` réutilisable :
 
 ```jsx
 <ReservationTimeline 
-  currentStage="retirada_agendada"
-  history={[
+  currentStage="retirada\_agendada"
+  history={\[
     { stage: 'solicitada', at: '2026-03-12' },
-    { stage: 'em_preparacao', at: '2026-03-13' },
+    { stage: 'em\_preparacao', at: '2026-03-13' },
   ]}
   pickupScheduledFor="2026-03-18T18:00"
-  onConfirm={() => /* api.confirm_pickup_slot */}
-  onRefuse={(reason) => /* api.refuse_pickup_slot */}
-  onCancel={() => /* api.cancel_my_reservation */}
+  onConfirm={() => /\* api.confirm\_pickup\_slot \*/}
+  onRefuse={(reason) => /\* api.refuse\_pickup\_slot \*/}
+  onCancel={() => /\* api.cancel\_my\_reservation \*/}
   mode="reader" // "reader" | "staff"
 />
 ```
 
 Mode `reader` : affiche les boutons côté lecteur·rice. Mode `staff` : affiche les boutons de transition pour ≥ librarian.
 
----
+\---
 
-## 9. Migration des données existantes
+## 9\. Migration des données existantes
 
 ### Inventaire (rappel diagnostic)
 
 ```
-3 retirada_efetivada
-5 cancelada_leitor
-1 liberada_para_circulacao
-1 cancelada_biblioteca
+3 retirada\_efetivada
+5 cancelada\_leitor
+1 liberada\_para\_circulacao
+1 cancelada\_biblioteca
 0 stages intermédiaires
 ```
 
 ### Stratégie : pas de migration nécessaire
 
-Tous les `workflow_stage` existants sont déjà des **stages terminaux** valides du nouveau workflow. Aucun n'est dans un état intermédiaire qui nécessiterait un "retournement" du flow. Donc :
+Tous les `workflow\_stage` existants sont déjà des **stages terminaux** valides du nouveau workflow. Aucun n'est dans un état intermédiaire qui nécessiterait un "retournement" du flow. Donc :
 
 1. Aucun UPDATE rétroactif nécessaire.
 2. Les nouvelles réservations utiliseront immédiatement les nouvelles transitions.
-3. Les RPCs front respectent les états existants (les `retirada_efetivada` ont déjà un emprunt associé, on ne les retouche pas).
+3. Les RPCs front respectent les états existants (les `retirada\_efetivada` ont déjà un emprunt associé, on ne les retouche pas).
 
 ### Vérification de cohérence à faire
 
 Une seule chose à vérifier au déploiement :
 
 ```sql
--- Les 3 retirada_efetivada ont-elles bien un emprunt correspondant en emprestimos_v2 ?
-SELECT riw.reserva_id, riw.line_no, riw.workflow_stage, e.id as loan_id
-FROM public.reserva_item_workflow_v2 riw
-LEFT JOIN public.emprestimo_itens_v2 e ON e.reserva_id = riw.reserva_id AND e.line_no = riw.line_no
-WHERE riw.workflow_stage = 'retirada_efetivada';
--- Si l'un n'a pas de loan_id, c'est une incohérence à investiguer (créer manuellement ou marquer en erreur).
+-- Les 3 retirada\_efetivada ont-elles bien un emprunt correspondant en emprestimos\_v2 ?
+SELECT riw.reserva\_id, riw.line\_no, riw.workflow\_stage, e.id as loan\_id
+FROM public.reserva\_item\_workflow\_v2 riw
+LEFT JOIN public.emprestimo\_itens\_v2 e ON e.reserva\_id = riw.reserva\_id AND e.line\_no = riw.line\_no
+WHERE riw.workflow\_stage = 'retirada\_efetivada';
+-- Si l'un n'a pas de loan\_id, c'est une incohérence à investiguer (créer manuellement ou marquer en erreur).
 ```
 
----
+\---
 
-## 10. Hors scope
+## 10\. Hors scope
 
-- **Système de file d'attente** : si plusieurs lecteur·rices réservent le même livre, un seul peut l'avoir. Une vraie file d'attente avec priorité serait utile, mais c'est une feature distincte. Pour l'instant : on accepte juste la première réservation et on refuse les suivantes côté API.
-- **Notifications push / SMS** : seulement mails pour cette spec. Push/SMS = autre chantier.
-- **Chat lecteur ↔ biblio** : on garde `workflow_note` pour mots libres unidirectionnels. Pour un vrai chat bilatéral, autre chantier.
-- **Rapports statistiques** : "combien de no_show par mois", "temps moyen entre solicitada et retirada_efetivada", etc. — utile mais pas pour Bologna.
+* **Système de file d'attente** : si plusieurs lecteur·rices réservent le même livre, un seul peut l'avoir. Une vraie file d'attente avec priorité serait utile, mais c'est une feature distincte. Pour l'instant : on accepte juste la première réservation et on refuse les suivantes côté API.
+* **Notifications push / SMS** : seulement mails pour cette spec. Push/SMS = autre chantier.
+* **Chat lecteur ↔ biblio** : on garde `workflow\_note` pour mots libres unidirectionnels. Pour un vrai chat bilatéral, autre chantier.
+* **Rapports statistiques** : "combien de no\_show par mois", "temps moyen entre solicitada et retirada\_efetivada", etc. — utile mais pas pour Bologna.
 
----
+\---
 
-## 11. Checklist d'implémentation
+## 11\. Checklist d'implémentation
 
 ### Phase 1 — Schéma DB (2-3h)
 
-- [ ] Migration SQL : CHECK constraints, nouveaux index, nouveaux flags dans `library_notification_policies`
-- [ ] Trigger `trg_auto_liberate_after_no_show` (ou pattern équivalent)
-- [ ] Vérification cohérence existant (`retirada_efetivada` ↔ emprestimos_v2)
+* \[ ] Migration SQL : CHECK constraints, nouveaux index, nouveaux flags dans `library\_notification\_policies`
+* \[ ] Trigger `trg\_auto\_liberate\_after\_no\_show` (ou pattern équivalent)
+* \[ ] Vérification cohérence existant (`retirada\_efetivada` ↔ emprestimos\_v2)
 
 ### Phase 2 — RPCs (4-6h)
 
-- [ ] `api.create_reservation()` 
-- [ ] `api.cancel_my_reservation()`
-- [ ] `api.confirm_pickup_slot()` / `api.refuse_pickup_slot()`
-- [ ] `api.advance_reservation()` (transition générique avec validation)
-- [ ] `api.confirm_pickup_v1()` (transaction atomique avec INSERT emprestimos_v2)
-- [ ] `api.mark_no_show()` (manuel staff)
-- [ ] `api.cancel_reservation_as_library()` (avec raison conditionnelle)
+* \[ ] `api.create\_reservation()`
+* \[ ] `api.cancel\_my\_reservation()`
+* \[ ] `api.confirm\_pickup\_slot()` / `api.refuse\_pickup\_slot()`
+* \[ ] `api.advance\_reservation()` (transition générique avec validation)
+* \[ ] `api.confirm\_pickup\_v1()` (transaction atomique avec INSERT emprestimos\_v2)
+* \[ ] `api.mark\_no\_show()` (manuel staff)
+* \[ ] `api.cancel\_reservation\_as\_library()` (avec raison conditionnelle)
 
-### Phase 3 — Jobs pg_cron (2h)
+### Phase 3 — Jobs pg\_cron (2h)
 
-- [ ] `fn_expire_solicitada_reservations()` + cron 6h
-- [ ] `fn_detect_no_show_reservations()` + cron 1h
-- [ ] Test manuel de chaque job
+* \[ ] `fn\_expire\_solicitada\_reservations()` + cron 6h
+* \[ ] `fn\_detect\_no\_show\_reservations()` + cron 1h
+* \[ ] Test manuel de chaque job
 
 ### Phase 4 — Mails i18n (4-6h)
 
-- [ ] ~20 nouvelles clés × 6 locales = ~120 traductions militantes
-- [ ] Mise à jour `mail-strings.ts`
-- [ ] Lecture des flags `reservation_mail_*_enabled` dans le trigger ou dispatch
-- [ ] Test Deno mail-strings.test.ts
+* \[ ] \~20 nouvelles clés × 6 locales = \~120 traductions militantes
+* \[ ] Mise à jour `mail-strings.ts`
+* \[ ] Lecture des flags `reservation\_mail\_\*\_enabled` dans le trigger ou dispatch
+* \[ ] Test Deno mail-strings.test.ts
 
 ### Phase 5 — Frontend lecteur (3-4h)
 
-- [ ] Composant `<ReservationTimeline>` (mode reader)
-- [ ] Section "Mes réservations" dans `/conta` avec timeline
-- [ ] Boutons confirmer/refuser/annuler
-- [ ] Tests de chaque branche
+* \[ ] Composant `<ReservationTimeline>` (mode reader)
+* \[ ] Section "Mes réservations" dans `/conta` avec timeline
+* \[ ] Boutons confirmer/refuser/annuler
+* \[ ] Tests de chaque branche
 
 ### Phase 6 — Frontend staff (4-6h)
 
-- [ ] Onglet "Réservations" dans `/painel`
-- [ ] Modale de transition avec validation des états autorisés
-- [ ] Bouton spécial "Retrait effectué" + modale création emprunt
-- [ ] Bouton "No-show manuel"
-- [ ] Composant `<ReservationTimeline>` mode staff
+* \[ ] Onglet "Réservations" dans `/painel`
+* \[ ] Modale de transition avec validation des états autorisés
+* \[ ] Bouton spécial "Retrait effectué" + modale création emprunt
+* \[ ] Bouton "No-show manuel"
+* \[ ] Composant `<ReservationTimeline>` mode staff
 
 ### Phase 7 — Tests d'acceptation
 
@@ -710,83 +718,84 @@ WHERE riw.workflow_stage = 'retirada_efetivada';
 
 **Estimation totale : 4-6 jours de travail effectif**, étalés sur 2-3 semaines.
 
----
+\---
 
-## 12. Tests d'acceptation
+## 12\. Tests d'acceptation
 
 ### Tests fonctionnels (T1-T8)
 
-- [ ] **T1** : Lecteur réserve livre → solicitada → biblio passe em_preparacao → retirada_agendada → lecteur confirme → pronta_para_retirada → biblio clique "Retrait effectué" → retirada_efetivada + emprunt créé. Tous les mails partent.
-- [ ] **T2** : Idem mais lecteur refuse le créneau → biblio repropose (re-retirada_agendada) → lecteur confirme.
-- [ ] **T3** : Lecteur annule sa réservation à différents stages, vérifie que c'est bien `cancelada_leitor`, refus si stage = `retirada_efetivada`.
-- [ ] **T4** : Biblio annule sans raison sur stage `solicitada` (OK), avec raison sur stage `retirada_agendada` (OK), sans raison sur stage `retirada_agendada` (REFUS).
-- [ ] **T5** : Réservation reste `solicitada` 14 jours sans action → cron passe en `expirada` + mail.
-- [ ] **T6** : Réservation est `pronta_para_retirada` avec pickup_scheduled_for = il y a 25h → cron passe en `retirada_no_show` + livre libéré.
-- [ ] **T7** : Biblio désactive `reservation_mail_em_preparacao_enabled` → transitions vers em_preparacao n'envoient plus de mail au lecteur, mais le stage est bien mis à jour.
-- [ ] **T8** : Multi-livres : lecteur réserve 3 livres dans une seule réservation → chacun a sa propre ligne workflow indépendante.
+* \[ ] **T1** : Lecteur réserve livre → solicitada → biblio passe em\_preparacao → retirada\_agendada → lecteur confirme → pronta\_para\_retirada → biblio clique "Retrait effectué" → retirada\_efetivada + emprunt créé. Tous les mails partent.
+* \[ ] **T2** : Idem mais lecteur refuse le créneau → biblio repropose (re-retirada\_agendada) → lecteur confirme.
+* \[ ] **T3** : Lecteur annule sa réservation à différents stages, vérifie que c'est bien `cancelada\_leitor`, refus si stage = `retirada\_efetivada`.
+* \[ ] **T4** : Biblio annule sans raison sur stage `solicitada` (OK), avec raison sur stage `retirada\_agendada` (OK), sans raison sur stage `retirada\_agendada` (REFUS).
+* \[ ] **T5** : Réservation reste `solicitada` 14 jours sans action → cron passe en `expirada` + mail.
+* \[ ] **T6** : Réservation est `pronta\_para\_retirada` avec pickup\_scheduled\_for = il y a 25h → cron passe en `retirada\_no\_show` + livre libéré.
+* \[ ] **T7** : Biblio désactive `reservation\_mail\_em\_preparacao\_enabled` → transitions vers em\_preparacao n'envoient plus de mail au lecteur, mais le stage est bien mis à jour.
+* \[ ] **T8** : Multi-livres : lecteur réserve 3 livres dans une seule réservation → chacun a sa propre ligne workflow indépendante.
 
 ### Tests de transition (T9-T15)
 
-- [ ] **T9** : Tentative de transition illégale (ex: `solicitada` → `pronta_para_retirada` direct) → RPC refuse.
-- [ ] **T10** : Tentative de transition avec mauvais rôle (reader → `em_preparacao`) → REFUS RLS.
-- [ ] **T11** : Création de `retirada_agendada` sans `pickup_scheduled_for` → CHECK constraint refuse.
-- [ ] **T12** : `retirada_efetivada` est appelé via `api.confirm_pickup_v1` avec un livre déjà emprunté ailleurs → la transaction rollback.
-- [ ] **T13** : Job cron expirada tourne en concurrence avec une action manuelle staff → atomic update, un seul gagne, pas de doublon mail.
-- [ ] **T14** : Tous les flags `reservation_mail_*_enabled` à false → aucun mail ne part mais les stages avancent.
-- [ ] **T15** : Transitions sur réservation d'une biblio dont `reservation_workflow_enabled = false` → comportement à définir (skip mails ? bloquer transitions ? juste skip mails est probablement le bon comportement).
+* \[ ] **T9** : Tentative de transition illégale (ex: `solicitada` → `pronta\_para\_retirada` direct) → RPC refuse.
+* \[ ] **T10** : Tentative de transition avec mauvais rôle (reader → `em\_preparacao`) → REFUS RLS.
+* \[ ] **T11** : Création de `retirada\_agendada` sans `pickup\_scheduled\_for` → CHECK constraint refuse.
+* \[ ] **T12** : `retirada\_efetivada` est appelé via `api.confirm\_pickup\_v1` avec un livre déjà emprunté ailleurs → la transaction rollback.
+* \[ ] **T13** : Job cron expirada tourne en concurrence avec une action manuelle staff → atomic update, un seul gagne, pas de doublon mail.
+* \[ ] **T14** : Tous les flags `reservation\_mail\_\*\_enabled` à false → aucun mail ne part mais les stages avancent.
+* \[ ] **T15** : Transitions sur réservation d'une biblio dont `reservation\_workflow\_enabled = false` → comportement à définir (skip mails ? bloquer transitions ? juste skip mails est probablement le bon comportement).
 
 ### Tests UI (U1-U6)
 
-- [ ] **U1** : Timeline lecteur : étapes passées grisées, étape courante animée, étapes futures en gris pâle.
-- [ ] **U2** : Timeline staff : modale ne propose pas les transitions illégales depuis l'état actuel.
-- [ ] **U3** : Bouton "Annuler ma réservation" disponible jusqu'à pronta_para_retirada inclus, désactivé sur retirada_efetivada.
-- [ ] **U4** : Bouton "Confirmer le créneau" / "Refuser le créneau" visible uniquement quand stage IN ('retirada_agendada', 're-retirada_agendada').
-- [ ] **U5** : Mode `retirada_a_combinar` affiche correctement la date butoir J+7 plutôt qu'un horaire précis.
-- [ ] **U6** : `pickup_reply_status` change → notification visible côté biblio en temps réel (refresh ou WebSocket).
+* \[ ] **U1** : Timeline lecteur : étapes passées grisées, étape courante animée, étapes futures en gris pâle.
+* \[ ] **U2** : Timeline staff : modale ne propose pas les transitions illégales depuis l'état actuel.
+* \[ ] **U3** : Bouton "Annuler ma réservation" disponible jusqu'à pronta\_para\_retirada inclus, désactivé sur retirada\_efetivada.
+* \[ ] **U4** : Bouton "Confirmer le créneau" / "Refuser le créneau" visible uniquement quand stage IN ('retirada\_agendada', 're-retirada\_agendada').
+* \[ ] **U5** : Mode `retirada\_a\_combinar` affiche correctement la date butoir J+7 plutôt qu'un horaire précis.
+* \[ ] **U6** : `pickup\_reply\_status` change → notification visible côté biblio en temps réel (refresh ou WebSocket).
 
 ### Tests audit (L1-L3)
 
-- [ ] **L1** : Toute transition est journalisée avec `updated_by` correct.
-- [ ] **L2** : `pickup_reply_at` correctement mis à jour quand le lecteur répond.
-- [ ] **L3** : Logs notify-event Edge Function montrent un POST par transition (ou 0 si flag désactivé).
+* \[ ] **L1** : Toute transition est journalisée avec `updated\_by` correct.
+* \[ ] **L2** : `pickup\_reply\_at` correctement mis à jour quand le lecteur répond.
+* \[ ] **L3** : Logs notify-event Edge Function montrent un POST par transition (ou 0 si flag désactivé).
 
----
+\---
 
 ## Annexes
 
 ### A — Glossaire
 
-- **Workflow stage** : état actuel d'une ligne de réservation, stocké dans `reserva_item_workflow_v2.workflow_stage`.
-- **Transition** : passage d'un workflow_stage à un autre, déclenché par lecteur, biblio, ou job automatique.
-- **Pickup reply** : réponse du lecteur à un créneau proposé (confirmation ou refus).
-- **No-show** : lecteur·rice n'est pas venu·e chercher le livre dans le délai imparti.
+* **Workflow stage** : état actuel d'une ligne de réservation, stocké dans `reserva\_item\_workflow\_v2.workflow\_stage`.
+* **Transition** : passage d'un workflow\_stage à un autre, déclenché par lecteur, biblio, ou job automatique.
+* **Pickup reply** : réponse du lecteur à un créneau proposé (confirmation ou refus).
+* **No-show** : lecteur·rice n'est pas venu·e chercher le livre dans le délai imparti.
 
 ### B — Récap des décisions
 
-| Question | Décision |
-|---|---|
-| Linéarité workflow | Hybride (em_preparacao optionnel, autres obligatoires) |
-| Mode retrait | Choix par réservation (agendada vs a_combinar) |
-| Détection no_show | Auto (pg_cron) + manuel (bouton staff) |
-| Refus créneau lecteur | Biblio reagende (4b) |
-| Annulation biblio | Différenciée selon état (raison obligatoire ≥ retirada_agendada) |
-| Annulation lecteur | À tout moment sauf retirada_efetivada |
-| Timeout solicitada | Configurable par biblio (default 14j) |
-| Timeout no_show | Configurable par biblio (default 24h) |
-| pickup_scheduled_for | Obligatoire pour stages retrait, nullable avant |
-| UI lecteur | Timeline visuelle complète |
-| Conversion → emprunt | Manuel + atomique (RPC unique) |
-| Migration données | Aucune (états existants déjà conformes) |
-| Mails désactivables | Individuellement par biblio (12 flags) |
-| Copie admin biblio | Events critiques uniquement |
+|Question|Décision|
+|-|-|
+|Linéarité workflow|Hybride (em\_preparacao optionnel, autres obligatoires)|
+|Mode retrait|Choix par réservation (agendada vs a\_combinar)|
+|Détection no\_show|Auto (pg\_cron) + manuel (bouton staff)|
+|Refus créneau lecteur|Biblio reagende (4b)|
+|Annulation biblio|Différenciée selon état (raison obligatoire ≥ retirada\_agendada)|
+|Annulation lecteur|À tout moment sauf retirada\_efetivada|
+|Timeout solicitada|Configurable par biblio (default 14j)|
+|Timeout no\_show|Configurable par biblio (default 24h)|
+|pickup\_scheduled\_for|Obligatoire pour stages retrait, nullable avant|
+|UI lecteur|Timeline visuelle complète|
+|Conversion → emprunt|Manuel + atomique (RPC unique)|
+|Migration données|Aucune (états existants déjà conformes)|
+|Mails désactivables|Individuellement par biblio (12 flags)|
+|Copie admin biblio|Events critiques uniquement|
 
 ### C — Décisions à prendre lors de l'implémentation
 
-- [ ] Sémantique exacte de `liberada_para_circulacao` : event d'info ou nouveau stage qui remplace ?
-- [ ] Pour multi-livres avec disponibilités différentes : peut-on avoir un line en `retirada_efetivada` et un autre en `em_preparacao` dans la même réservation parente ? (Probablement oui, à valider.)
-- [ ] WebSocket / realtime pour notifier la biblio des `pickup_reply_status` ? Ou juste refresh manuel ? (Probablement WebSocket pour Bologna.)
-- [ ] Comportement précis quand une biblio a `reservation_workflow_enabled = false` : skip mails ? Bloquer les transitions au-delà de `solicitada` ? Juste loguer un warning ? (À trancher en début d'implé.)
+* \[ ] Sémantique exacte de `liberada\_para\_circulacao` : event d'info ou nouveau stage qui remplace ?
+* \[ ] Pour multi-livres avec disponibilités différentes : peut-on avoir un line en `retirada\_efetivada` et un autre en `em\_preparacao` dans la même réservation parente ? (Probablement oui, à valider.)
+* \[ ] WebSocket / realtime pour notifier la biblio des `pickup\_reply\_status` ? Ou juste refresh manuel ? (Probablement WebSocket pour Bologna.)
+* \[ ] Comportement précis quand une biblio a `reservation\_workflow\_enabled = false` : skip mails ? Bloquer les transitions au-delà de `solicitada` ? Juste loguer un warning ? (À trancher en début d'implé.)
 
----
+\---
 
 **Spec close. Prochaine étape : implémentation — commencer par la phase 1 (schéma DB).**
+
