@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
+import NegotiationStateBadge from '@/components/reservation/NegotiationStateBadge';
 import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput from '@/components/forms/PhoneInput';
@@ -153,6 +154,14 @@ export default function PanelPage() {
   const [resNote, setResNote] = useState('');
   const [resSchedule, setResSchedule] = useState('');
   const [actionMsg, setActionMsg] = useState('');
+
+  // PATCH 08/05/2026 paquet 3B : state pour le formulaire accordion de
+  // contre-proposition staff. Un seul form ouvert à la fois (la ligne
+  // qui matche reservaId+lineNo). null = aucune ligne en mode édition.
+  // Champs datetime et note pré-remplis depuis le créneau actuel quand on
+  // ouvre le form, mais éditables librement par le staff.
+  const [negotiationForm, setNegotiationForm] = useState(null);
+  // Forme attendue : { reservaId, lineNo, datetime: 'YYYY-MM-DDTHH:MM', note: '' }
 
   // Ações
   const [borrowerLookup, setBorrowerLookup] = useState('');
@@ -345,6 +354,112 @@ export default function PanelPage() {
     }
   }
 
+  // ── Negociação simétrica de creneau (paquet 3B) ───────
+  // PATCH 08/05/2026 : 3 handlers pour la négociation symétrique côté staff.
+  // Tous routés via supabase.schema('api').rpc(...) — JAMAIS via la syntaxe
+  // foireuse rpc(name, params, { schema: 'api' }) qui appelle silencieusement
+  // public.* à la place.
+
+  // Handler 1 : staff confirme le créneau contre-proposé par le lecteur·rice
+  // → api.fn_confirm_pickup_slot_as_library (paquet 2 bis)
+  // Précondition côté DB : pickup_proposed_by = 'leitor'.
+  // Effet : transition vers pronta_para_retirada, pickup_proposed_by = NULL.
+  async function confirmReaderSlot(rid, lno) {
+    setActionMsg(t({id:'panel.action.confirmingReaderSlot'}));
+    try {
+      const { error } = await supabase.schema('api').rpc('fn_confirm_pickup_slot_as_library', {
+        p_reserva_id: rid,
+        p_line_no: lno,
+      });
+      if (error) throw error;
+      setActionMsg(t({id:'panel.action.readerSlotConfirmed'}));
+      // Si le form de contre-proposition était ouvert sur cette ligne, on le ferme
+      if (negotiationForm?.reservaId === rid && negotiationForm?.lineNo === lno) {
+        setNegotiationForm(null);
+      }
+      loadData();
+    } catch (e) {
+      const msg = e.hint || e.message || String(e);
+      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+    }
+  }
+
+  // Handler 2 : ouvre le form accordion de contre-proposition pour une ligne
+  // donnée. Pré-remplit avec le créneau actuel converti en format
+  // datetime-local (YYYY-MM-DDTHH:MM) et une note vide.
+  function openCounterProposalForm(rid, lno, currentSlot) {
+    let prefilled = '';
+    if (currentSlot) {
+      try {
+        const d = new Date(currentSlot);
+        // toLocaleString avec format ISO-like pour datetime-local input
+        // (datetime-local attend "YYYY-MM-DDTHH:MM" en heure locale)
+        const pad = (n) => String(n).padStart(2, '0');
+        prefilled = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      } catch { /* fallback string vide */ }
+    }
+    setNegotiationForm({ reservaId: rid, lineNo: lno, datetime: prefilled, note: '' });
+  }
+
+  // Handler 3 : envoie la contre-proposition staff (depuis le form ouvert)
+  // → api.fn_propose_pickup_slot_as_library (paquet 2)
+  // La RPC accepte aussi bien une première proposition (depuis solicitada)
+  // qu'une re-proposition (depuis retirada_agendada / re-retirada_agendada).
+  async function submitCounterProposal() {
+    if (!negotiationForm) return;
+    if (!negotiationForm.datetime) {
+      setActionMsg(t({id:'panel.action.counterProposalDatetimeRequired'}));
+      return;
+    }
+    setActionMsg(t({id:'panel.action.sendingCounterProposal'}));
+    try {
+      // datetime-local renvoie une string en heure LOCALE sans timezone.
+      // On la convertit en ISO via new Date(...) qui interprète en local.
+      const isoDatetime = new Date(negotiationForm.datetime).toISOString();
+      const { error } = await supabase.schema('api').rpc('fn_propose_pickup_slot_as_library', {
+        p_reserva_id: negotiationForm.reservaId,
+        p_line_no: negotiationForm.lineNo,
+        p_pickup_at: isoDatetime,
+        p_note: negotiationForm.note?.trim() || null,
+      });
+      if (error) throw error;
+      setActionMsg(t({id:'panel.action.counterProposalSent'}));
+      setNegotiationForm(null);
+      loadData();
+    } catch (e) {
+      const msg = e.hint || e.message || String(e);
+      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+    }
+  }
+
+  // Handler 4 : annulation par staff avec motif (réutilise le wrapper existant
+  // api.cancel_reservation_as_library, qui exige une raison ≥ 5 chars si stage
+  // avancé). Prompt minimal — UX modale future possible.
+  async function cancelWithReason(rid, lno) {
+    const reason = window.prompt(t({id:'panel.reservations.action.cancelReason.prompt'}));
+    if (!reason || reason.trim().length < 5) {
+      // Annulation par l'utilisateur ou raison trop courte (la DB rejetterait sinon)
+      return;
+    }
+    setActionMsg(t({id:'panel.action.cancelling'}));
+    try {
+      const { error } = await supabase.schema('api').rpc('cancel_reservation_as_library', {
+        p_reserva_id: rid,
+        p_line_no: lno,
+        p_reason: reason.trim(),
+      });
+      if (error) throw error;
+      setActionMsg(t({id:'panel.action.reservationsCancelled'},{count: 1}));
+      if (negotiationForm?.reservaId === rid && negotiationForm?.lineNo === lno) {
+        setNegotiationForm(null);
+      }
+      loadData();
+    } catch (e) {
+      const msg = e.hint || e.message || String(e);
+      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+    }
+  }
+
   // ── Ações: saída e devolução ──────────────────────────
 
   async function registrarSaida() {
@@ -469,6 +584,23 @@ export default function PanelPage() {
       }
       if (String(r.pickup_reply_status || '') === 'recusado_leitor') {
         tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.readerRefused'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: r.pickup_reply_note || t({id:'panel.task.detail.reschedule'}), actionType: 'reserva', reserva_id: r.reserva_id });
+      }
+      // PATCH 08/05/2026 paquet 3B : tâche prioritaire "Leitor(a/e) contra-propôs"
+      // déclenchée quand pickup_proposed_by = 'leitor' (= le lecteur a renvoyé
+      // une contre-proposition que le staff doit traiter rapidement).
+      // Priorité haute : la balle est dans le camp staff, action requise.
+      if (r.pickup_proposed_by === 'leitor' && ['retirada_agendada', 're-retirada_agendada'].includes(stage)) {
+        const iter = r.negotiation_iteration_count ?? 0;
+        tasks.push({
+          priority: 'alta',
+          bucket: 'atencao',
+          kind: t({id:'panel.task.readerCounterProposed'}),
+          label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`,
+          detail: t({id:'panel.task.detail.proposedSlot'}) + ': ' + fmtD(r.pickup_scheduled_for)
+                  + ' · ' + t({id:'panel.task.detail.iteration'}, { count: iter, max: 3 }),
+          actionType: 'reserva',
+          reserva_id: r.reserva_id,
+        });
       }
       if (stage === 'nao_retirada') {
         tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.notPickedUp'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: r.workflow_note || t({id:'panel.task.detail.check'}), actionType: 'reserva', reserva_id: r.reserva_id });
@@ -966,23 +1098,128 @@ export default function PanelPage() {
                     <tr>
                       <th><input type="checkbox" checked={selectedRes.size === reservations.length && reservations.length > 0} onChange={toggleAllRes} /></th>
                       <th>{t({id:'panel.table.subId'})}</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>{t({id:'panel.table.ref'})}</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({id:'panel.table.pickup'})}</th><th>{t({id:'panel.table.validity'})}</th>
+                      {/* PATCH 08/05/2026 paquet 3B : 2 nouvelles colonnes pour la négociation symétrique */}
+                      <th>{t({id:'panel.table.negotiation'})}</th>
+                      <th>{t({id:'panel.table.actions'})}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {reservations.map((r, i) => {
                       const key = `${r.reserva_id}-${r.line_no}`;
+                      // PATCH 08/05/2026 paquet 3B : ligne accordion ouverte si on
+                      // est en train de contre-proposer pour cette ligne précisément
+                      const isFormOpen = negotiationForm?.reservaId === r.reserva_id
+                                      && negotiationForm?.lineNo === r.line_no;
+                      // Détermine si les actions inline sont disponibles : seulement
+                      // quand le lecteur·rice a contre-proposé (= staff a la balle)
+                      const showStaffActions = r.pickup_proposed_by === 'leitor'
+                                            && ['retirada_agendada', 're-retirada_agendada'].includes(r.workflow_stage_effective);
+                      // Indicateur "esperando resposta" quand notre biblio a déjà proposé
+                      const isWaitingReader = r.pickup_proposed_by === 'biblio'
+                                           && ['retirada_agendada', 're-retirada_agendada'].includes(r.workflow_stage_effective);
                       return (
-                        <tr key={i} className={selectedRes.has(key) ? 'selected' : ''}>
-                          <td><input type="checkbox" checked={selectedRes.has(key)} onChange={() => toggleRes(key)} /></td>
-                          <td>{r.sub_id}</td>
-                          <td>{r.user_name || r.user_email || r.user_id?.slice(0,8)}</td>
-                          <td><Link to={`/livro/${r.book_id}`}>{r.titulo || '—'}</Link></td>
-                          <td>{r.bib_ref}</td>
-                          <td>{r.rotulo || '—'}</td>
-                          <td><span className="ab-painel-stage" data-stage={r.workflow_stage_effective}>{WORKFLOW_LABELS[r.workflow_stage_effective] || r.item_status || '—'}</span></td>
-                          <td>{fmtD(r.pickup_scheduled_for)}</td>
-                          <td>{fmtD(r.expires_at)}</td>
-                        </tr>
+                        <Fragment key={i}>
+                          <tr className={selectedRes.has(key) ? 'selected' : ''}>
+                            <td><input type="checkbox" checked={selectedRes.has(key)} onChange={() => toggleRes(key)} /></td>
+                            <td>{r.sub_id}</td>
+                            <td>{r.user_name || r.user_email || r.user_id?.slice(0,8)}</td>
+                            <td><Link to={`/livro/${r.book_id}`}>{r.titulo || '—'}</Link></td>
+                            <td>{r.bib_ref}</td>
+                            <td>{r.rotulo || '—'}</td>
+                            <td><span className="ab-painel-stage" data-stage={r.workflow_stage_effective}>{WORKFLOW_LABELS[r.workflow_stage_effective] || r.item_status || '—'}</span></td>
+                            <td>{fmtD(r.pickup_scheduled_for)}</td>
+                            <td>{fmtD(r.expires_at)}</td>
+                            {/* Colonne Negociação : badge d'état */}
+                            <td>
+                              <NegotiationStateBadge
+                                proposedBy={r.pickup_proposed_by}
+                                iterationCount={r.negotiation_iteration_count}
+                                stage={r.workflow_stage_effective}
+                                viewerRole="staff"
+                              />
+                            </td>
+                            {/* Colonne Ações : 3 boutons inline si lecteur·rice a contre-proposé,
+                                texte simple si on attend, rien sinon */}
+                            <td className="ab-painel-actions-cell">
+                              {showStaffActions && (
+                                <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+                                  <button
+                                    className="ab-button ab-button--mini"
+                                    onClick={() => confirmReaderSlot(r.reserva_id, r.line_no)}
+                                    title={t({id:'panel.reservations.action.confirmReaderSlot.tooltip'})}
+                                  >
+                                    {t({id:'panel.reservations.action.confirmReaderSlot'})}
+                                  </button>
+                                  <button
+                                    className="ab-button ab-button--secondary ab-button--mini"
+                                    onClick={() => isFormOpen
+                                      ? setNegotiationForm(null)
+                                      : openCounterProposalForm(r.reserva_id, r.line_no, r.pickup_scheduled_for)}
+                                    title={t({id:'panel.reservations.action.counterProposeSlot.tooltip'})}
+                                  >
+                                    {isFormOpen
+                                      ? t({id:'panel.reservations.counterProposeForm.cancelForm'})
+                                      : t({id:'panel.reservations.action.counterProposeSlot'})}
+                                  </button>
+                                  <button
+                                    className="ab-button ab-button--mini ab-button--danger"
+                                    onClick={() => cancelWithReason(r.reserva_id, r.line_no)}
+                                    title={t({id:'panel.reservations.action.cancelWithReason.tooltip'})}
+                                  >
+                                    {t({id:'panel.reservations.action.cancelWithReason'})}
+                                  </button>
+                                </div>
+                              )}
+                              {!showStaffActions && isWaitingReader && (
+                                <span style={{ fontSize:'.8rem', color:'var(--brand-muted)', fontStyle:'italic' }}>
+                                  {t({id:'panel.reservations.negotiation.waitingReaderInline'})}
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                          {/* PATCH 08/05/2026 paquet 3B : ligne accordion contenant le mini-form
+                              de contre-proposition. Utilise colSpan=11 pour couvrir toutes les
+                              colonnes (1 checkbox + 8 colonnes data + negotiation + actions). */}
+                          {isFormOpen && (
+                            <tr className="ab-painel-counter-form-row">
+                              <td colSpan={11} style={{ padding:'12px 16px', background:'rgba(251,191,36,.08)', borderTop:'2px solid rgba(251,191,36,.4)' }}>
+                                <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'flex-end' }}>
+                                  <div style={{ display:'flex', flexDirection:'column', gap:4, minWidth:200 }}>
+                                    <label style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                                      {t({id:'panel.reservations.counterProposeForm.datetime'})}
+                                    </label>
+                                    <input
+                                      type="datetime-local"
+                                      value={negotiationForm.datetime}
+                                      onChange={e => setNegotiationForm(prev => prev ? { ...prev, datetime: e.target.value } : prev)}
+                                      className="ab-painel-input"
+                                    />
+                                  </div>
+                                  <div style={{ display:'flex', flexDirection:'column', gap:4, flex:1, minWidth:240 }}>
+                                    <label style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                                      {t({id:'panel.reservations.counterProposeForm.note'})}
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={negotiationForm.note}
+                                      onChange={e => setNegotiationForm(prev => prev ? { ...prev, note: e.target.value } : prev)}
+                                      className="ab-painel-input"
+                                      placeholder={t({id:'panel.reservations.counterProposeForm.notePlaceholder'})}
+                                    />
+                                  </div>
+                                  <div style={{ display:'flex', gap:6 }}>
+                                    <Button onClick={submitCounterProposal}>
+                                      {t({id:'panel.reservations.counterProposeForm.submit'})}
+                                    </Button>
+                                    <Button variant="secondary" onClick={() => setNegotiationForm(null)}>
+                                      {t({id:'panel.reservations.counterProposeForm.cancelForm'})}
+                                    </Button>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
                       );
                     })}
                   </tbody>
