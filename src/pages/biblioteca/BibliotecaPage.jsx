@@ -207,8 +207,20 @@ export default function BibliotecaPage() {
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, email_delivery_mode:commons.email_delivery_mode }).eq('library_id', libraryId);
       if (mailChannel) await supabase.from('library_mail_channels').update({ admin_notification_email:mailChannel.admin_notification_email, weekly_report_email:mailChannel.weekly_report_email, severe_alert_email:mailChannel.severe_alert_email, delivery_mode:mailChannel.delivery_mode }).eq('library_id', libraryId);
       if (notifPolicy) {
+        // PATCH 08/05/2026 paquet 3A : sauvegarde aussi les 2 paramètres de
+        // négociation symétrique (toggle + timeout). Validation timeout côté
+        // frontend (la DB a aussi un CHECK 7..60 en défense en profondeur).
+        const timeoutDays = Number(notifPolicy.reservation_negotiation_timeout_days);
+        if (Number.isFinite(timeoutDays) && (timeoutDays < 7 || timeoutDays > 60)) {
+          throw new Error(t({ id: 'biblioteca.reservation.timeoutDays.outOfRange' }));
+        }
         const flags = {}; NOTIFICATION_FLAG_KEYS.forEach(k => { flags[k + '_enabled'] = notifPolicy[k + '_enabled'] || false; });
-        await supabase.from('library_notification_policies').update({ ...flags, updated_by: user?.id }).eq('library_id', libraryId);
+        await supabase.from('library_notification_policies').update({
+          ...flags,
+          reservation_allow_reader_counter_proposal: notifPolicy.reservation_allow_reader_counter_proposal ?? true,
+          reservation_negotiation_timeout_days: Number.isFinite(timeoutDays) ? timeoutDays : 21,
+          updated_by: user?.id
+        }).eq('library_id', libraryId);
       }
       setMsg({ text: t({ id: 'biblioteca.comms.savedOk' }), kind: 'ok' });
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
@@ -669,6 +681,52 @@ export default function BibliotecaPage() {
                   {t({ id: `notif.type.${k}`, defaultMessage: k.replace(/_/g, ' ') })}
                 </label>
               ))}
+            </div>
+          </div>}
+          {/* PATCH 08/05/2026 paquet 3A : politique de négociation symétrique
+              des créneaux de retrait. Toggle pour autoriser/refuser les
+              contre-propositions de leitor(o/a/e)s + champ timeout (7..60 j,
+              padrão 21 j). Sauvegardés via saveComms() vers library_notification_policies. */}
+          {notifPolicy && <div style={bx}>
+            <h4 style={{ margin:'0 0 6px' }}>{t({ id: 'biblioteca.reservation.title' })}</h4>
+            <p style={{ fontSize:'.85rem', color:'var(--brand-muted)', margin:'0 0 14px' }}>
+              {t({ id: 'biblioteca.reservation.subtitle' })}
+            </p>
+
+            <label style={{ display:'flex', gap:10, alignItems:'flex-start', cursor:'pointer', padding:'4px 0' }}>
+              <input
+                type="checkbox"
+                checked={notifPolicy.reservation_allow_reader_counter_proposal ?? true}
+                onChange={e => setNP('reservation_allow_reader_counter_proposal', e.target.checked)}
+                style={{ marginTop:3 }}
+              />
+              <span style={{ flex:1 }}>
+                <span style={{ fontSize:'.92rem', fontWeight:600 }}>
+                  {t({ id: 'biblioteca.reservation.allowCounterProposal' })}
+                </span>
+                <span style={{ display:'block', fontSize:'.82rem', color:'var(--brand-muted)', marginTop:3 }}>
+                  {t({ id: 'biblioteca.reservation.allowCounterProposal.hint' })}
+                </span>
+              </span>
+            </label>
+
+            <div className="cat-field" style={{ marginTop:14, maxWidth:280 }}>
+              <label style={ls}>{t({ id: 'biblioteca.reservation.timeoutDays' })}</label>
+              <input
+                type="number"
+                min={7}
+                max={60}
+                step={1}
+                value={notifPolicy.reservation_negotiation_timeout_days ?? 21}
+                onChange={e => {
+                  const n = parseInt(e.target.value, 10);
+                  setNP('reservation_negotiation_timeout_days', Number.isFinite(n) ? n : '');
+                }}
+                style={fs}
+              />
+              <span style={{ display:'block', fontSize:'.82rem', color:'var(--brand-muted)', marginTop:5 }}>
+                {t({ id: 'biblioteca.reservation.timeoutDays.hint' })}
+              </span>
             </div>
           </div>}
           <button className="cat-btn primary" onClick={saveComms} disabled={saving}>{saving?t({id:'common.saving'}):t({id:'biblioteca.comms.save'})}</button>
