@@ -61,8 +61,8 @@ export default function PanelPage() {
   // ci-dessous (réplication JS de fn_check_workflow_transition).
   const RES_STAGES = useMemo(() => [
     { value: 'em_preparacao',        label: '1. '  + t({ id: 'reservation.stage.em_preparacao' }) },
-    { value: 'retirada_agendada',    label: '2a. ' + t({ id: 'reservation.stage.retirada_agendada' }) },
-    { value: 'retirada_a_combinar',  label: '2b. ' + t({ id: 'reservation.stage.retirada_a_combinar' }) },
+    { value: 'retirada_a_combinar',  label: '2a. ' + t({ id: 'reservation.stage.retirada_a_combinar' }) },
+    { value: 'retirada_agendada',    label: '2b. ' + t({ id: 'reservation.stage.retirada_agendada' }) },
     { value: 're-retirada_agendada', label: '3. '  + t({ id: 'reservation.stage.re_retirada_agendada' }) },
     { value: 'pronta_para_retirada', label: '4. '  + t({ id: 'reservation.stage.pronta_para_retirada' }) },
     { value: 'retirada_no_show',     label: '5. '  + t({ id: 'reservation.stage.nao_retirada' }) },
