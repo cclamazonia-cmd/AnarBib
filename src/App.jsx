@@ -13,7 +13,6 @@ const CatalogPage = lazy(() => import('@/pages/public/CatalogPage'));
 const BookPage = lazy(() => import('@/pages/public/BookPage'));
 const AuthorPage = lazy(() => import('@/pages/public/AuthorPage'));
 const ReaderPage = lazy(() => import('@/pages/public/ReaderPage'));
-const ResourcePage = lazy(() => import('@/pages/public/ResourcePage'));
 const AccountPage = lazy(() => import('@/pages/account/AccountPage'));
 const PanelPage = lazy(() => import('@/pages/painel/PanelPage'));
 const CatalogacaoPage = lazy(() => import('@/pages/catalogacao/CatalogacaoPage'));
@@ -61,7 +60,7 @@ export default function App() {
                   <Route path="/autor/:id" element={<AuthorPage />} />
                   <Route path="/entrar" element={<Navigate to="/login" replace />} />
                   <Route path="/ler/:id" element={<ReaderPage />} />
-                  <Route path="/ler-recurso" element={<ResourcePage />} />
+                  <Route path="/ler-recurso" element={<ReaderPage />} />
                   <Route path="/privacidade" element={<PrivacyPolicyPage />} />
                   <Route path="/privacidade/:slug" element={<PrivacyPolicyPage />} />
 

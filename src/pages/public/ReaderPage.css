@@ -12,7 +12,7 @@
 .ab-reader-nav__title { display: flex; flex-direction: column; }
 .ab-reader-nav__heading { font-size: 1rem; font-weight: 800; color: var(--brand-text); }
 .ab-reader-nav__book { font-size: .85rem; color: var(--brand-muted); max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ab-reader-nav__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.ab-reader-nav__actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
 /* Hero compact */
 .ab-reader-hero {
@@ -42,6 +42,28 @@
   -webkit-user-drag: none;
 }
 
+/* Mode plein écran (introduit en v2.1) */
+.ab-reader-viewer--fullscreen {
+  background: #0a0506;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+.ab-reader-viewer--fullscreen .ab-reader-canvas-container {
+  flex: 1;
+  max-height: none;
+  min-height: 0;
+}
+.ab-reader-viewer--fullscreen .ab-reader-sheet {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+}
+
 /* Toolbar */
 .ab-reader-toolbar {
   display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
@@ -63,10 +85,17 @@
   border-radius: var(--brand-radius-sm);
   padding: 7px 10px; font-size: .85rem; font-weight: 700;
   cursor: pointer; box-shadow: var(--brand-shadow-strong);
-  transition: border-color .18s;
+  transition: border-color .18s, background-color .18s;
 }
 .ab-reader-tb-btn:hover:not(:disabled) { border-color: rgba(225,29,47,.65); color: #fff; }
 .ab-reader-tb-btn:disabled { opacity: .4; cursor: default; }
+
+/* État actif (ex: fit-width enclenché) introduit en v2.1 */
+.ab-reader-tb-btn--active {
+  border-color: rgba(225,29,47,.85);
+  background: rgba(120,10,18,.55);
+  color: #fff;
+}
 
 .ab-reader-tb-info {
   font-size: .88rem; color: var(--brand-muted); font-weight: 600;
@@ -197,4 +226,79 @@
 @media (max-width: 640px) {
   .ab-reader-canvas-container { max-height: none; }
   .ab-reader-toolbar__group { width: 100%; justify-content: center; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   v3 — Multi-format : conteneurs Audio/Video/Image et fallbacks
+   ═══════════════════════════════════════════════════════════ */
+
+/* Conteneur des viewers Audio/Video/Image dans la page de lecture.
+   Donne des marges cohérentes avec le reste de la page sans
+   contraindre la largeur (les viewers gèrent leur responsive). */
+.ab-reader-viewer-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 32px;
+}
+
+@media (max-width: 720px) {
+  .ab-reader-viewer-shell {
+    padding: 0 8px 16px;
+  }
+}
+
+/* ── External link / Generic fallback ──────────────────────── */
+
+.ab-reader-external {
+  max-width: 720px;
+  margin: 32px auto;
+  padding: 32px 24px;
+  background-color: var(--brand-panel-bg);
+  background-image: var(--brand-panel-overlay-solid), var(--brand-panel-bg-image);
+  background-position: center; background-size: cover;
+  border: 1px solid var(--brand-panel-border);
+  border-radius: calc(var(--brand-radius) + 2px);
+  box-shadow: var(--brand-shadow);
+  text-align: center;
+  color: var(--brand-text);
+}
+
+.ab-reader-external h2 {
+  margin: 0 0 12px;
+  font-family: var(--brand-font-body);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--brand-text);
+}
+
+.ab-reader-external p {
+  margin: 0 0 20px;
+  line-height: 1.6;
+  color: var(--brand-text);
+  opacity: 0.92;
+}
+
+.ab-reader-external .ab-button {
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.ab-reader-external__attribution {
+  margin-top: 24px !important;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--brand-muted);
+  opacity: 0.85;
+}
+
+@media (max-width: 600px) {
+  .ab-reader-external {
+    margin: 16px 8px;
+    padding: 24px 16px;
+  }
+  .ab-reader-external h2 {
+    font-size: 1.2rem;
+  }
 }
