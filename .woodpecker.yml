@@ -1,0 +1,110 @@
+# =============================================================================
+# Woodpecker CI — Repo `AnarBib/anarbib` (app SIGB React/Vite)
+# =============================================================================
+# Pipeline minimal (v1) :
+#   1. Install des dépendances
+#   2. Build Vite (avec injection des env vars VITE_*)
+#   3. Déploiement vers la branche `pages` du repo (Codeberg Pages)
+#   4. Miroir Codeberg → GitHub (cclamazonia-cmd/AnarBib)
+#
+# Lint et tests seront ajoutés dans une v2 quand les scripts npm correspondants
+# seront en place dans package.json.
+# =============================================================================
+
+when:
+  - event: [push, manual]
+    branch: main
+
+variables:
+  - &node_image "node:20-alpine"
+
+steps:
+  # ---------------------------------------------------------------------------
+  # 1. Installation des dépendances
+  # ---------------------------------------------------------------------------
+  install:
+    image: *node_image
+    commands:
+      - apk add --no-cache git
+      - npm ci --no-audit --no-fund
+      - echo "✓ Dépendances installées"
+
+  # ---------------------------------------------------------------------------
+  # 2. Build Vite
+  # ---------------------------------------------------------------------------
+  # Les env vars Vite (préfixées VITE_) sont publiques par nature : elles
+  # finissent dans le bundle JS distribué au navigateur. Aucun secret serveur.
+  # ---------------------------------------------------------------------------
+  build:
+    image: *node_image
+    environment:
+      VITE_SUPABASE_URL:
+        from_secret: vite_supabase_url
+      VITE_SUPABASE_ANON_KEY:
+        from_secret: vite_supabase_anon_key
+    commands:
+      - npm run build
+      - test -d dist || (echo "✗ Le dossier dist/ est introuvable" && exit 1)
+      - echo "✓ Build Vite terminé"
+    depends_on: [install]
+
+  # ---------------------------------------------------------------------------
+  # 3. Déploiement vers la branche `pages` du repo (Codeberg Pages)
+  # ---------------------------------------------------------------------------
+  # Crée un commit orphelin sur `pages` à chaque déploiement.
+  # Inclut .domains pour le domaine perso et 404.html pour le routing SPA.
+  # ---------------------------------------------------------------------------
+  deploy-pages:
+    image: alpine/git
+    environment:
+      CODEBERG_TOKEN:
+        from_secret: codeberg_token
+      CODEBERG_USER:
+        from_secret: codeberg_user
+      CUSTOM_DOMAIN:
+        from_secret: custom_domain
+    commands:
+      - cd dist
+      - echo "$${CUSTOM_DOMAIN}" > .domains
+      - cp index.html 404.html  # fallback SPA pour routes côté client
+      - git init -b pages
+      - git config user.email "ci@anarbib.codeberg.page"
+      - git config user.name "AnarBib CI"
+      - git add -A
+      - git commit -m "Deploy from main@$${CI_COMMIT_SHA:0:8}"
+      - git remote add origin "https://$${CODEBERG_USER}:$${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
+      - git push --force origin pages
+      - echo "✓ Déployé sur https://$${CUSTOM_DOMAIN}"
+    depends_on: [build]
+    when:
+      - event: push
+        branch: main
+
+  # ---------------------------------------------------------------------------
+  # 4. Miroir Codeberg → GitHub
+  # ---------------------------------------------------------------------------
+  # Pousse main vers cclamazonia-cmd/AnarBib pour redondance.
+  # ATTENTION : --force est destructif côté GitHub. C'est voulu (Codeberg
+  # est la source de vérité), mais ça veut dire que tout commit fait
+  # directement sur GitHub sera écrasé.
+  # ---------------------------------------------------------------------------
+  mirror-to-github:
+    image: alpine/git
+    environment:
+      GITHUB_TOKEN:
+        from_secret: github_token
+      GITHUB_USER:
+        from_secret: github_user
+      GITHUB_REPO:
+        from_secret: github_app_repo
+    commands:
+      - git config --global user.email "ci@anarbib.codeberg.page"
+      - git config --global user.name "AnarBib CI"
+      - git remote add github "https://$${GITHUB_USER}:$${GITHUB_TOKEN}@github.com/$${GITHUB_REPO}.git" || git remote set-url github "https://$${GITHUB_USER}:$${GITHUB_TOKEN}@github.com/$${GITHUB_REPO}.git"
+      - git push github main:main --force
+      - git push github --tags --force
+      - echo "✓ Miroir GitHub à jour"
+    depends_on: [build]
+    when:
+      - event: push
+        branch: main
