@@ -59,24 +59,6 @@ export default function ImportacoesPage() {
     failed: t({ id: 'importacoes.status.failed' }), cancelled: t({ id: 'importacoes.status.cancelled' }),
   }), [t]);
 
-  const roleLoaded = role !== null && role !== undefined;
-  const canImport = role === 'librarian' || role === 'coordenador' || role === 'administrador';
-
-  if (!roleLoaded) return (
-    <PageShell><Topbar />
-      <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>{t({ id: 'common.loading' })}</div>
-    <Footer /></PageShell>
-  );
-
-  if (!canImport) return (
-    <PageShell><Topbar />
-      <div className="catalogacao-wrap" style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '60px 24px' }}>
-        <h1>{t({ id: 'importacoes.title' })}</h1>
-        <p style={{ color: 'var(--brand-muted)', marginTop: 12 }}>{t({ id: 'importacoes.restricted' })}</p>
-      </div>
-    <Footer /></PageShell>
-  );
-
   // ── Tab state ───────────────────────────────────────────
   const [tab, setTab] = useState('reception'); // reception | history | url | rss
 
@@ -142,6 +124,25 @@ export default function ImportacoesPage() {
   }, []);
 
   useEffect(() => { loadRuns(); }, [loadRuns]);
+
+  // ── Role gating (must come AFTER all hooks to comply with Rules of Hooks) ──
+  const roleLoaded = role !== null && role !== undefined;
+  const canImport = role === 'librarian' || role === 'coordenador' || role === 'administrador';
+
+  if (!roleLoaded) return (
+    <PageShell><Topbar />
+      <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>{t({ id: 'common.loading' })}</div>
+    <Footer /></PageShell>
+  );
+
+  if (!canImport) return (
+    <PageShell><Topbar />
+      <div className="catalogacao-wrap" style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '60px 24px' }}>
+        <h1>{t({ id: 'importacoes.title' })}</h1>
+        <p style={{ color: 'var(--brand-muted)', marginTop: 12 }}>{t({ id: 'importacoes.restricted' })}</p>
+      </div>
+    <Footer /></PageShell>
+  );
 
   // ── File handling ───────────────────────────────────────
   function handleFileChange(e) {
@@ -257,7 +258,7 @@ export default function ImportacoesPage() {
     setUrlLoading(true); setUrlResult(null); setMsg({ text: t({id:'importacoes.consultingUrl'}), kind: 'info' });
     try {
       // Extract ISBN from URL if possible
-      const isbnMatch = urlInput.match(/isbn[=\/:]?\s*([0-9X-]{10,17})/i) || urlInput.match(/\b(97[89]\d{10})\b/) || urlInput.match(/\b(\d{9}[\dXx])\b/);
+      const isbnMatch = urlInput.match(/isbn[=/:]?\s*([0-9X-]{10,17})/i) || urlInput.match(/\b(97[89]\d{10})\b/) || urlInput.match(/\b(\d{9}[\dXx])\b/);
       const isbn = isbnMatch ? isbnMatch[1].replace(/[^0-9Xx]/g, '') : '';
 
       if (isbn) {
