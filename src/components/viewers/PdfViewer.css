@@ -344,7 +344,7 @@
     .ab-pdfviewer {
         display: none !important;
     }
-    /* On peut aller plus loin et masquer la page entière côté ResourcePage */
+    /* La page hôte (ReaderPage) ajoute aussi sa propre règle d'impression. */
     body::after {
         content: 'Impression désactivée pour cette ressource.';
         display: block;
