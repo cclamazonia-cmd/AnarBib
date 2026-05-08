@@ -605,6 +605,23 @@ export default function PanelPage() {
       if (stage === 'nao_retirada') {
         tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.notPickedUp'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: r.workflow_note || t({id:'panel.task.detail.check'}), actionType: 'reserva', reserva_id: r.reserva_id });
       }
+      // PATCH 09/05/2026 paquet 4 (approche A) : rendre visible le stage
+      // retirada_a_combinar dans Trabalho do dia. Sinon ces résas restent
+      // invisibles côté staff et le travail d'agendamento est oublié.
+      // Priorité moyenne : action attendue mais sans urgence comme un
+      // contra-proposta. Bucket atencao pour cohérence avec les autres
+      // « il y a quelque chose à faire ».
+      if (stage === 'retirada_a_combinar') {
+        tasks.push({
+          priority: 'media',
+          bucket: 'atencao',
+          kind: t({id:'panel.task.toScheduleWithReader'}),
+          label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`,
+          detail: r.workflow_note || t({id:'panel.task.detail.scheduleHint'}),
+          actionType: 'reserva',
+          reserva_id: r.reserva_id,
+        });
+      }
     });
 
     overdueLoans.forEach(l => {
