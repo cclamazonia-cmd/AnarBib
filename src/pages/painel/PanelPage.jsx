@@ -253,19 +253,19 @@ export default function PanelPage() {
         const [rid, lno] = key.split('-').map(Number);
         let error;
         if (isNoShow) {
-          ({ error } = await supabase.rpc('mark_no_show', {
+          ({ error } = await supabase.schema('api').rpc('mark_no_show', {
             p_reserva_id: rid, p_line_no: lno,
-          }, { schema: 'api' }));
+          }));
         } else {
           // Construction des options jsonb pour advance_reservation
           const opts = {};
           if (resNote) opts.note = resNote;
           if (resSchedule) opts.pickup_scheduled_for = resSchedule;
-          ({ error } = await supabase.rpc('advance_reservation', {
+          ({ error } = await supabase.schema('api').rpc('advance_reservation', {
             p_reserva_id: rid, p_line_no: lno,
             p_target_stage: resStage,
             p_options: opts,
-          }, { schema: 'api' }));
+          }));
         }
         if (error) throw error;
       }
@@ -294,10 +294,10 @@ export default function PanelPage() {
     try {
       for (const key of items) {
         const [rid, lno] = key.split('-').map(Number);
-        const { error } = await supabase.rpc('cancel_reservation_as_library', {
+        const { error } = await supabase.schema('api').rpc('cancel_reservation_as_library', {
           p_reserva_id: rid, p_line_no: lno,
           p_reason: resNote || null,
-        }, { schema: 'api' });
+        });
         if (error) throw error;
       }
       setActionMsg(t({id:'panel.action.reservationsCancelled'},{count:items.length}));
@@ -325,10 +325,10 @@ export default function PanelPage() {
       const loanIds = [];
       for (const key of items) {
         const [rid, lno] = key.split('-').map(Number);
-        const { data, error } = await supabase.rpc('confirm_pickup_v1', {
+        const { data, error } = await supabase.schema('api').rpc('confirm_pickup_v1', {
           p_reserva_id: rid, p_line_no: lno,
           p_loan_options: {},
-        }, { schema: 'api' });
+        });
         if (error) throw error;
         if (data) loanIds.push(data);
       }
