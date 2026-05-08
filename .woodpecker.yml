@@ -1,14 +1,16 @@
 # =============================================================================
 # Woodpecker CI — Repo `AnarBib/anarbib` (app SIGB React/Vite)
 # =============================================================================
-# Pipeline minimal (v1) :
+# Pipeline complet (v2) :
 #   1. Install des dépendances
-#   2. Build Vite (avec injection des env vars VITE_*)
-#   3. Déploiement vers la branche `pages` du repo (Codeberg Pages)
-#   4. Miroir Codeberg → GitHub (cclamazonia-cmd/AnarBib)
+#   2. Lint (ESLint) — BLOQUANT
+#   3. Tests (vitest)  — BLOQUANT
+#   4. Build Vite (avec injection des env vars VITE_*)
+#   5. Déploiement vers la branche `pages` du repo (Codeberg Pages)
+#   6. Miroir Codeberg → GitHub (cclamazonia-cmd/AnarBib)
 #
-# Lint et tests seront ajoutés dans une v2 quand les scripts npm correspondants
-# seront en place dans package.json.
+# Si lint OU test échoue, le déploiement n'est pas effectué.
+# Pour bypasser exceptionnellement la CI, mettre [CI SKIP] dans le commit.
 # =============================================================================
 
 when:
@@ -30,10 +32,38 @@ steps:
       - echo "✓ Dépendances installées"
 
   # ---------------------------------------------------------------------------
-  # 2. Build Vite
+  # 2. Lint (ESLint) — BLOQUANT
+  # ---------------------------------------------------------------------------
+  # Si ESLint trouve des erreurs (errors, pas warnings), le pipeline s'arrête
+  # ici et ni le build, ni le déploiement, ni le miroir GitHub ne sont effectués.
+  # ---------------------------------------------------------------------------
+  lint:
+    image: *node_image
+    commands:
+      - npm run lint
+      - echo "✓ ESLint passe sans erreur"
+    depends_on: [install]
+
+  # ---------------------------------------------------------------------------
+  # 3. Tests (vitest) — BLOQUANT
+  # ---------------------------------------------------------------------------
+  # 42 tests vérifient notamment la cohérence i18n (couverture des locales,
+  # charte d'écriture inclusive, termes proscrits comme camerata/i en italien).
+  # Si l'un d'eux échoue, le déploiement est bloqué.
+  # ---------------------------------------------------------------------------
+  test:
+    image: *node_image
+    commands:
+      - npm test
+      - echo "✓ Tous les tests vitest passent"
+    depends_on: [install]
+
+  # ---------------------------------------------------------------------------
+  # 4. Build Vite
   # ---------------------------------------------------------------------------
   # Les env vars Vite (préfixées VITE_) sont publiques par nature : elles
   # finissent dans le bundle JS distribué au navigateur. Aucun secret serveur.
+  # Ne s'exécute que si lint ET test sont passés.
   # ---------------------------------------------------------------------------
   build:
     image: *node_image
@@ -46,10 +76,10 @@ steps:
       - npm run build
       - test -d dist || (echo "✗ Le dossier dist/ est introuvable" && exit 1)
       - echo "✓ Build Vite terminé"
-    depends_on: [install]
+    depends_on: [lint, test]
 
   # ---------------------------------------------------------------------------
-  # 3. Déploiement vers la branche `pages` du repo (Codeberg Pages)
+  # 5. Déploiement vers la branche `pages` du repo (Codeberg Pages)
   # ---------------------------------------------------------------------------
   # Crée un commit orphelin sur `pages` à chaque déploiement.
   # Inclut .domains pour le domaine perso et 404.html pour le routing SPA.
@@ -81,7 +111,7 @@ steps:
         branch: main
 
   # ---------------------------------------------------------------------------
-  # 4. Miroir Codeberg → GitHub
+  # 6. Miroir Codeberg → GitHub
   # ---------------------------------------------------------------------------
   # Pousse main vers cclamazonia-cmd/AnarBib pour redondance.
   # ATTENTION : --force est destructif côté GitHub. C'est voulu (Codeberg
