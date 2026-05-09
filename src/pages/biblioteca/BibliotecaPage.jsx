@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
+import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
@@ -193,7 +194,10 @@ export default function BibliotecaPage() {
   async function saveIdentity() {
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
-      await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country }).eq('id', libraryId);
+      // PATCH 09/05/2026 paquet 6.3 : default_locale ajouté à l'update.
+      // C'est l'identité linguistique de la biblio, configurable depuis le
+      // sélecteur ajouté dans la grille identité (champ après country).
+      await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR' }).eq('id', libraryId);
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
       if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message }).eq('library_id', libraryId);
       setMsg({ text: 'Dados salvos com sucesso.', kind: 'ok' });
@@ -629,6 +633,15 @@ export default function BibliotecaPage() {
             <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.city' })}</label><input type="text" value={lib.city||''} onChange={e=>setL('city',e.target.value)} style={fs} /></div>
             <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.state' })}</label><input type="text" value={lib.state||''} onChange={e=>setL('state',e.target.value)} style={fs} /></div>
             <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.country' })}</label><input type="text" value={lib.country||''} onChange={e=>setL('country',e.target.value)} style={fs} /></div>
+            {/* PATCH 09/05/2026 paquet 6.3 : sélecteur de la langue d'identité.
+                La langue est un attribut d'identité (pas une préférence de
+                notification), positionnée juste après les coordonnées géographiques.
+                Pas de drapeaux ni de codes d'État dans l'affichage (cohérence
+                anarchiste, cf. décision politique session 2026-05-09). */}
+            <div className="cat-field">
+              <label style={ls}>{t({ id: 'biblioteca.identity.defaultLocale' })}</label>
+              <LocaleSelector value={lib.default_locale} onChange={loc=>setL('default_locale',loc)} style={fs} />
+            </div>
           </div>
           {commons && <div className="cat-book-grid" style={{ marginBottom:16 }}>
             <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.comms.displayName' })}</label><input type="text" value={commons.display_name||''} onChange={e=>setC('display_name',e.target.value)} style={fs} /></div>

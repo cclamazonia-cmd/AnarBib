@@ -448,6 +448,174 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     de: "Sieh in deinem Konto für weitere Details nach."
   },
 
+  // ===== Workflow v3 — lecteur (wf.reader.*) ================================
+  "wf.reader.libraryProposed": {
+    "pt-BR": "A biblioteca propõe um horário para você vir retirar seu livro. Você pode aceitar este horário, propor outro, ou cancelar a reserva pela sua conta.",
+    fr: "La biblio vous propose un créneau pour venir retirer votre livre. Vous pouvez accepter ce créneau, en proposer un autre, ou annuler votre réservation depuis votre compte.",
+    es: "La biblioteca le propone un horario para venir a retirar su libro. Puede aceptar este horario, proponer otro, o cancelar su reserva desde su cuenta.",
+    en: "The library is proposing a time slot for you to come pick up your book. You can accept this slot, propose another one, or cancel your reservation from your account.",
+    it: "La biblioteca vi propone un orario per venire a ritirare il vostro libro. Potete accettare questo orario, proporne un altro, o annullare la vostra prenotazione dal vostro account.",
+    de: "Die Bibliothek schlägt Ihnen einen Termin für die Abholung Ihres Buches vor. Sie können diesen Termin annehmen, einen anderen vorschlagen oder Ihre Reservierung über Ihr Konto stornieren."
+  },
+  "wf.reader.youCounterProposed": {
+    "pt-BR": "Sua contra-proposta foi enviada à biblioteca (tentativa {iter}/{max}). Você será avisado(a/e) assim que ela responder.",
+    fr: "Votre contre-proposition est bien transmise à la biblio (essai {iter}/{max}). Vous serez prévenu·e dès que celle-ci répond.",
+    es: "Su contrapropuesta fue enviada a la biblioteca (intento {iter}/{max}). Será avisade en cuanto le respondan.",
+    en: "Your counter-proposal has been sent to the library (attempt {iter}/{max}). You will be notified as soon as they reply.",
+    it: "La vostra controproposta è stata inviata alla biblioteca (tentativo {iter}/{max}). Sarete avvisatə non appena risponderanno.",
+    de: "Ihr Gegenvorschlag wurde an die Bibliothek gesendet (Versuch {iter}/{max}). Sie werden benachrichtigt, sobald geantwortet wird."
+  },
+  "wf.reader.slotLocked": {
+    "pt-BR": "O horário está confirmado e bloqueado. O livro estará em breve pronto para retirada — você receberá uma notificação assim que isso acontecer.",
+    fr: "Le créneau est confirmé et verrouillé. Le livre sera bientôt prêt à retirer — vous recevrez une notification dès que ce sera le cas.",
+    es: "El horario está confirmado y bloqueado. El libro estará pronto listo para retirar — recibirá una notificación apenas eso suceda.",
+    en: "The slot is confirmed and locked. The book will soon be ready for pickup — you will receive a notification as soon as that happens.",
+    it: "L'orario è confermato e bloccato. Il libro sarà presto pronto per il ritiro — riceverete una notifica appena ciò accada.",
+    de: "Der Termin ist bestätigt und festgelegt. Das Buch wird bald zur Abholung bereit sein — Sie erhalten eine Benachrichtigung, sobald dies der Fall ist."
+  },
+  "wf.reader.maxIterations": {
+    "pt-BR": "Várias trocas sem encontrar um horário que funcione para todo mundo. Para continuar, o melhor é entrar em contato diretamente com a biblioteca para conversar.",
+    fr: "Plusieurs allers-retours sans qu'on trouve un créneau qui convient à tout le monde. Pour continuer, le mieux est de contacter directement la biblio pour en discuter.",
+    es: "Varios intercambios sin encontrar un horario que convenga a todes. Para continuar, lo mejor es contactar directamente a la biblioteca para conversar.",
+    en: "Several exchanges without finding a time slot that works for everyone. To continue, the best is to contact the library directly to discuss.",
+    it: "Diversi scambi senza trovare un orario che vada bene a tuttə. Per continuare, la cosa migliore è contattare direttamente la biblioteca per parlarne.",
+    de: "Mehrere Versuche, ohne einen für alle passenden Termin zu finden. Um weiterzukommen, ist es am besten, sich direkt an die Bibliothek zu wenden, um darüber zu sprechen."
+  },
+  "wf.reader.negotiationTimeout": {
+    "pt-BR": "A negociação do seu horário ultrapassou o prazo sem acordo. A reserva foi liberada e o livro voltou à circulação. Você pode reservá-lo novamente quando quiser.",
+    fr: "La négociation pour votre créneau a dépassé le délai sans accord. La réservation a été libérée, le livre repart en circulation. Vous pouvez le réserver à nouveau quand vous voulez.",
+    es: "La negociación de su horario superó el plazo sin acuerdo. La reserva fue liberada, el libro vuelve a la circulación. Puede reservarlo nuevamente cuando quiera.",
+    en: "The negotiation for your slot has exceeded the deadline without agreement. The reservation has been released, the book returns to circulation. You can reserve it again whenever you want.",
+    it: "La negoziazione del vostro orario ha superato il termine senza accordo. La prenotazione è stata liberata, il libro torna in circolazione. Potete prenotarlo di nuovo quando volete.",
+    de: "Die Verhandlung über Ihren Termin hat die Frist ohne Einigung überschritten. Die Reservierung wurde freigegeben, das Buch geht zurück in den Umlauf. Sie können es jederzeit erneut reservieren."
+  },
+
+  // ===== Workflow v3 — biblio (wf.staff.*) ==================================
+  "wf.staff.negotiationOpened": {
+    "pt-BR": "A negociação de um horário de retirada foi aberta com o(a/e) leitor(a/e). O(a/e) leitor(a/e) foi avisado(a/e) por e-mail e pode aceitar, contra-propor ou cancelar pela própria conta.",
+    fr: "La négociation d'un créneau de retrait a été ouverte avec le·la lecteur·rice. Le·la lecteur·rice a été prévenu·e par mail et peut accepter, contre-proposer ou annuler depuis son compte.",
+    es: "Se abrió la negociación de un horario de retiro con le lectore. Le lectore fue avisade por correo y puede aceptar, contraproponer o cancelar desde su cuenta.",
+    en: "A negotiation has been opened with the reader for a pickup slot. The reader has been notified by email and can accept, counter-propose, or cancel from their account.",
+    it: "È stata aperta la negoziazione di un orario di ritiro con lə lettorə. Lə lettorə è statə avvisatə via email e può accettare, controproporre o annullare dal proprio account.",
+    de: "Eine Verhandlung über einen Abholtermin wurde mit der*dem Leser*in eröffnet. Die*Der Leser*in wurde per E-Mail benachrichtigt und kann annehmen, gegenvorschlagen oder über das eigene Konto stornieren."
+  },
+  "wf.staff.readerCounterProposed": {
+    "pt-BR": "O(a/e) leitor(a/e) contra-propôs outro horário para a retirada. <b>Resposta esperada</b> : abrir o painel para aceitar, contra-propor por sua vez, ou cancelar.",
+    fr: "Le·la lecteur·rice a contre-proposé un autre créneau pour le retrait. <b>Réponse attendue</b> : ouvrir le tableau de bord pour accepter, contre-proposer à votre tour, ou annuler.",
+    es: "Le lectore contrapropuso otro horario para el retiro. <b>Respuesta esperada</b> : abrir el panel para aceptar, contraproponer a su vez, o cancelar.",
+    en: "The reader has counter-proposed another slot for the pickup. <b>Response expected</b> : open the dashboard to accept, counter-propose in turn, or cancel.",
+    it: "Lə lettorə ha controproposto un altro orario per il ritiro. <b>Risposta attesa</b> : aprire il pannello per accettare, controproporre a vostra volta, o annullare.",
+    de: "Die*Der Leser*in hat einen anderen Termin für die Abholung vorgeschlagen. <b>Antwort erwartet</b> : Öffnen Sie das Dashboard, um anzunehmen, einen Gegenvorschlag zu machen oder zu stornieren."
+  },
+  "wf.staff.readerAccepted": {
+    "pt-BR": "O(a/e) leitor(a/e) aceitou o horário proposto. O horário está bloqueado — o livro pode ser preparado para a retirada.",
+    fr: "Le·la lecteur·rice a accepté le créneau proposé. Le créneau est verrouillé — le livre peut être préparé pour le retrait.",
+    es: "Le lectore aceptó el horario propuesto. El horario está bloqueado — el libro puede ser preparado para el retiro.",
+    en: "The reader has accepted the proposed slot. The slot is locked — the book can be prepared for pickup.",
+    it: "Lə lettorə ha accettato l'orario proposto. L'orario è bloccato — il libro può essere preparato per il ritiro.",
+    de: "Die*Der Leser*in hat den vorgeschlagenen Termin angenommen. Der Termin ist festgelegt — das Buch kann für die Abholung vorbereitet werden."
+  },
+  "wf.staff.staffConfirmed": {
+    "pt-BR": "Você confirmou o horário proposto pelo(a/e) leitor(a/e). O horário está bloqueado — o livro pode ser preparado para a retirada.",
+    fr: "Vous avez confirmé le créneau proposé par le·la lecteur·rice. Le créneau est verrouillé — le livre peut être préparé pour le retrait.",
+    es: "Usted confirmó el horario propuesto por le lectore. El horario está bloqueado — el libro puede ser preparado para el retiro.",
+    en: "You have confirmed the slot proposed by the reader. The slot is locked — the book can be prepared for pickup.",
+    it: "Avete confermato l'orario proposto da lə lettorə. L'orario è bloccato — il libro può essere preparato per il ritiro.",
+    de: "Sie haben den von der*dem Leser*in vorgeschlagenen Termin bestätigt. Der Termin ist festgelegt — das Buch kann für die Abholung vorbereitet werden."
+  },
+  "wf.staff.ready": {
+    "pt-BR": "Você sinalizou que o livro está pronto para a retirada. O(a/e) leitor(a/e) foi avisado(a/e).",
+    fr: "Vous avez signalé que le livre est prêt à être retiré. Le·la lecteur·rice a été prévenu·e.",
+    es: "Usted indicó que el libro está listo para ser retirado. Le lectore fue avisade.",
+    en: "You have signaled that the book is ready for pickup. The reader has been notified.",
+    it: "Avete segnalato che il libro è pronto per il ritiro. Lə lettorə è statə avvisatə.",
+    de: "Sie haben gemeldet, dass das Buch zur Abholung bereit ist. Die*Der Leser*in wurde benachrichtigt."
+  },
+  "wf.staff.noShow": {
+    "pt-BR": "O livro não foi retirado no horário previsto. A reserva foi marcada como não-retirada — o livro voltará em breve à circulação livre.",
+    fr: "Le livre n'a pas été retiré au créneau prévu. La réservation est marquée en non-retrait — le livre repassera bientôt en circulation libre.",
+    es: "El libro no fue retirado en el horario previsto. La reserva fue marcada como no-retiro — el libro volverá pronto a la circulación libre.",
+    en: "The book was not picked up at the scheduled time. The reservation is marked as no-show — the book will soon return to free circulation.",
+    it: "Il libro non è stato ritirato nell'orario previsto. La prenotazione è stata segnata come non-ritiro — il libro tornerà presto in circolazione libera.",
+    de: "Das Buch wurde zum vereinbarten Termin nicht abgeholt. Die Reservierung ist als Nicht-Abholung markiert — das Buch geht bald zurück in den freien Umlauf."
+  },
+  "wf.staff.closed": {
+    "pt-BR": "A reserva está encerrada, o livro voltou à circulação livre. Nenhuma ação adicional é esperada de sua parte.",
+    fr: "La réservation est close, le livre repasse en circulation libre. Aucune action supplémentaire n'est attendue de votre part.",
+    es: "La reserva está cerrada, el libro vuelve a la circulación libre. No se espera ninguna acción adicional de su parte.",
+    en: "The reservation is closed, the book returns to free circulation. No additional action is expected from you.",
+    it: "La prenotazione è chiusa, il libro torna in circolazione libera. Nessuna azione aggiuntiva è attesa da parte vostra.",
+    de: "Die Reservierung ist geschlossen, das Buch geht zurück in den freien Umlauf. Keine zusätzliche Aktion Ihrerseits ist erforderlich."
+  },
+  "wf.staff.maxIterations": {
+    "pt-BR": "Várias trocas sem acordo com o(a/e) leitor(a/e). O(a/e) leitor(a/e) foi convidado(a/e) a entrar em contato diretamente para encontrar uma solução.",
+    fr: "Plusieurs allers-retours sans accord avec le·la lecteur·rice. Le·la lecteur·rice a été invité·e à vous contacter directement pour trouver une solution.",
+    es: "Varios intercambios sin acuerdo con le lectore. Le lectore fue invitade a contactarle directamente para encontrar una solución.",
+    en: "Several exchanges without agreement with the reader. The reader has been invited to contact you directly to find a solution.",
+    it: "Diversi scambi senza accordo con lə lettorə. Lə lettorə è statə invitatə a contattarvi direttamente per trovare una soluzione.",
+    de: "Mehrere Versuche ohne Einigung mit der*dem Leser*in. Die*Der Leser*in wurde gebeten, sich direkt an Sie zu wenden, um eine Lösung zu finden."
+  },
+
+  // ===== Workflow v3 — cron timeout (wf.staff.negotiationTimedOut) ==========
+  "wf.staff.negotiationTimedOut": {
+    "pt-BR": "A negociação para a retirada expirou sem acordo ({days} dias sem resposta). A reserva foi liberada automaticamente e o livro voltou à circulação livre.",
+    fr: "La négociation pour le retrait a expiré sans accord ({days} jours sans réponse). La réservation a été libérée automatiquement, le livre repasse en circulation libre.",
+    es: "La negociación para el retiro expiró sin acuerdo ({days} días sin respuesta). La reserva fue liberada automáticamente, el libro vuelve a la circulación libre.",
+    en: "The negotiation for the pickup has expired without agreement ({days} days without reply). The reservation has been released automatically, the book returns to free circulation.",
+    it: "La negoziazione per il ritiro è scaduta senza accordo ({days} giorni senza risposta). La prenotazione è stata liberata automaticamente, il libro torna in circolazione libera.",
+    de: "Die Verhandlung über die Abholung ist ohne Einigung abgelaufen ({days} Tage ohne Antwort). Die Reservierung wurde automatisch freigegeben, das Buch geht zurück in den freien Umlauf."
+  },
+
+  // ===== Action/info boxes (wf.staff.*Box.*) ================================
+  // Encadrés visuels insérés dans le HTML du mail biblio :
+  //   - actionBox : encadré orange/rouge quand action attendue
+  //   - infoBox : encadré gris quand juste informatif
+  "wf.staff.actionBox.title": {
+    "pt-BR": "Ação esperada",
+    fr: "Action attendue",
+    es: "Acción esperada",
+    en: "Action expected",
+    it: "Azione attesa",
+    de: "Aktion erwartet"
+  },
+  "wf.staff.actionBox.openPanel": {
+    "pt-BR": "Abrir o painel",
+    fr: "Ouvrir le tableau de bord",
+    es: "Abrir el panel",
+    en: "Open the dashboard",
+    it: "Aprire il pannello",
+    de: "Dashboard öffnen"
+  },
+  "wf.staff.infoBox.title": {
+    "pt-BR": "Para sua informação",
+    fr: "Pour information",
+    es: "Para su información",
+    en: "For your information",
+    it: "Per vostra informazione",
+    de: "Zu Ihrer Information"
+  },
+
+  // ===== Subject prefixes (subj.*) ==========================================
+  // Préfixes textuels pour le sujet du mail biblio, permettant aux coordo
+  // de filtrer leur boîte (ex: dossier auto pour les actions requises).
+  "subj.staff.action": {
+    "pt-BR": "[Ação requerida]",
+    fr: "[Action requise]",
+    es: "[Acción requerida]",
+    en: "[Action required]",
+    it: "[Azione richiesta]",
+    de: "[Aktion erforderlich]"
+  },
+  "subj.staff.info": {
+    "pt-BR": "[Info]",
+    fr: "[Info]",
+    es: "[Info]",
+    en: "[Info]",
+    it: "[Info]",
+    de: "[Info]"
+  },
+
+
   // ===== Loan events (loan.*) ===============================================
   "loan.created.sub": {
     "pt-BR": "Empréstimo registrado",
