@@ -1,4 +1,4 @@
-import type { JsonObject } from "./webhook_types.ts";
+import type { JsonObject } from "./types.ts";
 const JSON_HEADERS = { "content-type": "application/json; charset=utf-8" };
 export function jsonResponse(status: number, body: unknown) {
   return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
