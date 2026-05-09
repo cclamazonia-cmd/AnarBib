@@ -19,6 +19,19 @@
 // ═══════════════════════════════════════════════════════════
 
 // ─────────────────────────────────────────────────────────────
+// Primitives JSON — types génériques pour payloads / réponses
+// ─────────────────────────────────────────────────────────────
+// JsonValue couvre tout ce qui est sérialisable JSON. JsonObject est un
+// objet JSON {clé: valeur}, JsonArray un tableau de JsonValue.
+// Utilisé par webhook.ts pour caster les retours des handlers Edge en
+// objets sérialisables avant jsonResponse(). Ajouté chore 2026-05-09
+// pour éliminer l'import orphelin "./webhook_types.ts" qui n'existait pas.
+
+export type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+export interface JsonObject { [key: string]: JsonValue; }
+export type JsonArray = JsonValue[];
+
+// ─────────────────────────────────────────────────────────────
 // Notification context — résolu depuis v_library_notification_context
 // ─────────────────────────────────────────────────────────────
 // Les valeurs nullable correspondent aux LEFT JOIN qui peuvent ne pas
