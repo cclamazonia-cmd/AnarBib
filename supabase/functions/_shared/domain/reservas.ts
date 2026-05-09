@@ -138,17 +138,47 @@ export async function handleReservaV2WorkflowEvent(recordId:number,event:string,
     readerKey='wf.preparing'; staffKey=null; staffMailEnabled=false;  // Q2 paquet 6 : pas de mail biblio pour em_preparacao
   }
 
+  // ─── PATCH paquet 6 fix-up bug #2 + #2bis (2026-05-09) ─────
+  // Bug #2 : <b>...</b> apparaissait brut dans le sujet (sujet = texte plat).
+  // Bug #2bis : {iter}/{max} non interpolés dans wf.reader.youCounterProposed.
+  //
+  // Solution : les 16 clés v3 (wf.reader.*, wf.staff.*) ont été dédoublées en
+  // .subject (texte plat, court) et .body (HTML autorisé, version développée).
+  // splitKey() retourne la paire à utiliser. Les clés v2 conservées
+  // (wf.ready, wf.noShow, wf.closed, wf.preparing, wf.toCoordinate,
+  // wf.pickupRescheduled) ne sont PAS dédoublées — elles servent comme
+  // fallback texte court et sont passées telles quelles.
+  // tParams porte {iter, max} pour interpolation dans youCounterProposed.
+  const V3_DOUBLED=new Set<string>([
+    'wf.reader.libraryProposed','wf.reader.libraryCounterProposed',
+    'wf.reader.youCounterProposed','wf.reader.slotLocked',
+    'wf.reader.maxIterations','wf.reader.negotiationTimeout',
+    'wf.staff.negotiationOpened','wf.staff.staffCounterProposed',
+    'wf.staff.readerCounterProposed','wf.staff.readerAccepted',
+    'wf.staff.staffConfirmed','wf.staff.ready','wf.staff.noShow',
+    'wf.staff.closed','wf.staff.maxIterations','wf.staff.negotiationTimedOut',
+  ]);
+  const splitKey=(k:string|null|undefined):{subjectKey:string;bodyKey:string}=>{
+    const base=k||'admin.resUpdate';
+    return V3_DOUBLED.has(base)
+      ? {subjectKey:`${base}.subject`,bodyKey:`${base}.body`}
+      : {subjectKey:base,bodyKey:base};
+  };
+  const tParams={iter:iterCount,max:3};
+
   // ─── Mail lecteur ────────────────────────────────────────
   // Construction du sujet et du contenu, dans la locale du lecteur.
   // wf.checkAccount ajouté pour les cas négociation et créneau prévu.
-  const readerTextKey=readerKey||'admin.resUpdate';
-  const readerTit=tMail(locale,readerTextKey);
+  const {subjectKey:readerSubKey,bodyKey:readerBodyKey}=splitKey(readerKey);
+  const readerSubject=tMail(locale,readerSubKey,tParams);
+  const readerBody=tMail(locale,readerBodyKey,tParams);
   const showCheckAccount=['wf.reader.libraryProposed','wf.reader.libraryCounterProposed','wf.reader.youCounterProposed','wf.reader.slotLocked'].includes(readerKey||'');
-  const userIntro=`<p>${tMail(locale,readerTextKey)}</p>${when?`<p>${label(locale,"pickup")}: <b>${esc(when)}</b></p>`:""}${showCheckAccount?`<p>${tMail(locale,"wf.checkAccount")}</p>`:""}`;
+  const userIntro=`<p>${readerBody}</p>${when?`<p>${label(locale,"pickup")}: <b>${esc(when)}</b></p>`:""}${showCheckAccount?`<p>${tMail(locale,"wf.checkAccount")}</p>`:""}`;
   const prs=String(items.find(i=>i.pickup_reply_status)?.pickup_reply_status||"").trim(); const prn=String(items.find(i=>i.pickup_reply_note)?.pickup_reply_note||"").trim(); const prl=pickupReplyLabel(prs);
   const det:EmailDetails=[...(tits?[{label:label(locale,"items"),value:tits}]:[]),...(sl?[{label:label(locale,"status"),value:sl}]:[]),...(when?[{label:label(locale,"pickup"),value:`${when} (local)`}]:[]),...(prl?[{label:label(locale,"reply"),value:prl}]:[]),...(prn?[{label:label(locale,"readerNote"),value:prn}]:[]),...(note?[{label:label(locale,"note"),value:note}]:[])];
-  const {html:userHtml,text:userText}=renderEmail({preheader:readerTit,title:readerTit,greeting:greeting(locale,user?.name),introHtml:userIntro,details:det,footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(locale,"subj.libreDiffusion")});
-  const userSub=applyBrandingText(`${readerTit} — ${bt}`,ctx);
+  // preheader & title = readerSubject (texte plat) — readerBody (HTML possible) reste dans introHtml.
+  const {html:userHtml,text:userText}=renderEmail({preheader:readerSubject,title:readerSubject,greeting:greeting(locale,user?.name),introHtml:userIntro,details:det,footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(locale,"subj.libreDiffusion")});
+  const userSub=applyBrandingText(`${readerSubject} — ${bt}`,ctx);
   const ur=reservationWorkflowEnabled(ctx)?await safeSendEmail(user,userSub,userHtml,userText,"user_mail",ctx):skippedEmailResult("user_mail","reservation_workflow_disabled");
 
   // ─── Mail biblio ─────────────────────────────────────────
@@ -162,14 +192,17 @@ export async function handleReservaV2WorkflowEvent(recordId:number,event:string,
   } else if (!reservationWorkflowEnabled(ctx)||!reservationAdminCopyEnabled(ctx)) {
     ar=skippedEmailResult("admin_copy",reservationWorkflowEnabled(ctx)?"reservation_admin_copy_disabled":"reservation_workflow_disabled");
   } else {
-    const staffTit=tMail(libLocale,staffKey);
-    const staffIntro=`<p>${tMail(libLocale,staffKey)}</p>${when?`<p>${label(libLocale,"pickup")}: <b>${esc(when)}</b></p>`:""}`;
+    const {subjectKey:staffSubKey,bodyKey:staffBodyKey}=splitKey(staffKey);
+    const staffSubject=tMail(libLocale,staffSubKey,tParams);
+    const staffBody=tMail(libLocale,staffBodyKey,tParams);
+    const staffIntro=`<p>${staffBody}</p>${when?`<p>${label(libLocale,"pickup")}: <b>${esc(when)}</b></p>`:""}`;
     const actionBox:ActionBox=staffNeedsAction?{kind:'action',title:tMail(libLocale,'wf.staff.actionBox.title'),ctaLabel:tMail(libLocale,'wf.staff.actionBox.openPanel'),ctaUrl:'https://app.anarbib.org/painel'}:{kind:'info',title:tMail(libLocale,'wf.staff.infoBox.title')};
     const subjPrefix=staffNeedsAction?tMail(libLocale,'subj.staff.action'):tMail(libLocale,'subj.staff.info');
     // Détails côté biblio : nom du lecteur en plus, dans la locale biblio
     const staffDet:EmailDetails=[{label:label(libLocale,"reader"),value:aun},...(tits?[{label:label(libLocale,"items"),value:tits}]:[]),...(sl?[{label:label(libLocale,"status"),value:sl}]:[]),...(when?[{label:label(libLocale,"pickup"),value:`${when} (local)`}]:[]),...(prl?[{label:label(libLocale,"reply"),value:prl}]:[]),...(prn?[{label:label(libLocale,"readerNote"),value:prn}]:[]),...(note?[{label:label(libLocale,"note"),value:note}]:[])];
-    const {html:staffHtml,text:staffText}=renderEmail({preheader:staffTit,title:staffTit,introHtml:staffIntro,details:staffDet,footerHtml:footerPadrao(ctx),context:ctx,actionBox,libreDiffusionLabel:tMail(libLocale,"subj.libreDiffusion")});
-    const staffSub=applyBrandingText(`${subjPrefix} ${staffTit} — ${aun} — ${bt}`,ctx);
+    // preheader & title = staffSubject (texte plat) — staffBody (HTML possible) reste dans introHtml.
+    const {html:staffHtml,text:staffText}=renderEmail({preheader:staffSubject,title:staffSubject,introHtml:staffIntro,details:staffDet,footerHtml:footerPadrao(ctx),context:ctx,actionBox,libreDiffusionLabel:tMail(libLocale,"subj.libreDiffusion")});
+    const staffSub=applyBrandingText(`${subjPrefix} ${staffSubject} — ${aun} — ${bt}`,ctx);
     ar=await safeSendEmail(adminTarget(ctx),staffSub,staffHtml,staffText,"admin_copy",ctx);
   }
   return {user_result:ur,admin_result:ar};
