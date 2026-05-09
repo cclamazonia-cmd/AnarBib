@@ -1204,9 +1204,20 @@ function ReservationCard({
           </span>
         )}
 
-        {r.workflow_note && (
-          <span className="ab-conta-item__detail">{r.workflow_note}</span>
-        )}
+        {/* PATCH 09/05/2026 paquet 5d : workflow_note MASQUÉE côté lecteur.
+            Cause : workflow_note contient des notes d'audit machine-parseables
+            (ex: "[autoconf-by-reader] 2026-05-08T23:47:33Z — créneau verrouillé
+            (retirada_agendada) après proposition biblio") rédigées en français
+            et destinées au staff/debug, pas au lecteur·rice.
+
+            Décision politique (option C ratifiée) : à terme, séparer le champ
+            actuel en `audit_note` (interne, jamais affiché lecteur) et
+            `reader_visible_note` (communication intentionnelle staff→lecteur).
+            Ce refactor sera traité dans un paquet dédié. En attendant on masque
+            purement et simplement workflow_note côté lecteur — c'est neutre :
+            quand le refactor sera fait, on remplacera ce bloc par un affichage
+            de `reader_visible_note`, sans perte de visibilité réelle pour le
+            lecteur·rice (rien d'intentionnellement adressé n'est masqué). */}
       </div>
 
       {/* Actions selon l'état de négociation */}
