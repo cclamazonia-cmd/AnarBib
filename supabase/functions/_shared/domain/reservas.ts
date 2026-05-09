@@ -21,10 +21,10 @@ export async function handleReservaCriadaV2(recordId:number) {
   const fmtD=(d:string)=>formatDateLocale(d,locale)||formatDateBR(d);
   const tits=joinTitles(items.map(i=>String(i.titulo||`[${String(i.bib_ref||"").trim()}]`))); const sids=joinTitles(items.map(i=>String(i.sub_id||"")),", "); const brfs=joinTitles(items.map(i=>String(i.bib_ref||"")),", "); const ca=String(reserva.created_at||"");
   const su=`${tMail(locale,"res.created.sub")} — ${bt}`;
-  const {html,text}=renderEmail({preheader:tMail(locale,"res.created.pre"),title:tMail(locale,"res.created.sub"),greeting:greeting(locale,user?.name),introHtml:`<p style="margin:0 0 10px;">${tMail(locale,"res.created.intro")}</p><p style="margin:0 0 10px;">${tMail(locale,"res.created.hint")}</p>${LIBRARIAN_PHONE?`<p style="margin:0;">${label(locale,"contact")}: <b>${esc(LIBRARIAN_PHONE)}</b>.</p>`:""}`  ,details:[...(tits?[{label:label(locale,"items"),value:tits}]:[]),...(brfs?[{label:label(locale,"refs"),value:brfs}]:[]),...(sids?[{label:label(locale,"ids"),value:sids}]:[]),...(ca?[{label:label(locale,"date"),value:fmtD(ca)}]:[])],footerHtml:footerPadrao(ctx),context:ctx});
+  const {html,text}=renderEmail({preheader:tMail(locale,"res.created.pre"),title:tMail(locale,"res.created.sub"),greeting:greeting(locale,user?.name),introHtml:`<p style="margin:0 0 10px;">${tMail(locale,"res.created.intro")}</p><p style="margin:0 0 10px;">${tMail(locale,"res.created.hint")}</p>${LIBRARIAN_PHONE?`<p style="margin:0;">${label(locale,"contact")}: <b>${esc(LIBRARIAN_PHONE)}</b>.</p>`:""}`  ,details:[...(tits?[{label:label(locale,"items"),value:tits}]:[]),...(brfs?[{label:label(locale,"refs"),value:brfs}]:[]),...(sids?[{label:label(locale,"ids"),value:sids}]:[]),...(ca?[{label:label(locale,"date"),value:fmtD(ca)}]:[])],footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(locale,"subj.libreDiffusion")});
   const ur=reservationCreatedEnabled(ctx)?await safeSendEmail(user,applyBrandingText(su,ctx),html,text,"user_mail",ctx):skippedEmailResult("user_mail","reservation_created_disabled");
   // Admin mail — locale biblio (ctx.default_locale, paquet 6)
-  const {html:ha,text:ta}=renderEmail({preheader:tMail(libLocale,"res.created.admin"),title:tMail(libLocale,"res.created.admin"),introHtml:applyBrandingText(`<p>${tMail(libLocale,"res.created.admin")}.</p>`,ctx),details:[{label:label(libLocale,"reader"),value:aun},...(tits?[{label:label(libLocale,"items"),value:tits}]:[]),...(brfs?[{label:label(libLocale,"refs"),value:brfs}]:[]),...(ca?[{label:label(libLocale,"date"),value:formatDateBR(ca)}]:[])],footerHtml:footerPadrao(ctx),context:ctx});
+  const {html:ha,text:ta}=renderEmail({preheader:tMail(libLocale,"res.created.admin"),title:tMail(libLocale,"res.created.admin"),introHtml:applyBrandingText(`<p>${tMail(libLocale,"res.created.admin")}.</p>`,ctx),details:[{label:label(libLocale,"reader"),value:aun},...(tits?[{label:label(libLocale,"items"),value:tits}]:[]),...(brfs?[{label:label(libLocale,"refs"),value:brfs}]:[]),...(ca?[{label:label(libLocale,"date"),value:formatDateBR(ca)}]:[])],footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(libLocale,"subj.libreDiffusion")});
   const ar=reservationCreatedEnabled(ctx)&&reservationAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),applyBrandingText(`${tMail(libLocale,"res.created.admin")} — ${aun} — ${bt}`,ctx),ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy",reservationCreatedEnabled(ctx)?"reservation_admin_copy_disabled":"reservation_created_disabled");
   return {user_result:ur,admin_result:ar};
 }
@@ -35,17 +35,22 @@ export async function handleReservaV2StatusChange(recordId:number,event:string) 
   // PATCH paquet 6 commit comportement : locale biblio + suppression hack BLMF
   const libLocale=String(ctx?.default_locale||"pt-BR").trim()||"pt-BR";
   const tits=joinTitles(items.map(i=>String(i.titulo||`[${String(i.bib_ref||"").trim()}]`))); const motivo=String(reserva.notes||"").trim();
-  let sub=`${tMail(locale,"admin.resUpdate")} — ${bt}`,tit=tMail(locale,"admin.resUpdate"),intro=`<p>${tMail(locale,"admin.resUpdate")}</p>`;
-  if (se==="reserva_v2_recusada") { sub=`${bt} | ${tMail(locale,"res.refused")}`; tit=tMail(locale,"res.refused"); intro=`<p>${tMail(locale,"res.refused")}.</p>${motivo?`<p>${label(locale,"reason")}: <b>${esc(motivo)}</b>.</p>`:""}`; }
-  else if (se==="reserva_cancelada_biblioteca") { sub=`${bt} | ${tMail(locale,"res.cancelStaff")}`; tit=tMail(locale,"res.cancelStaff"); intro=`<p>${tMail(locale,"res.cancelStaff")}.</p>${motivo?`<p>${label(locale,"reason")}: <b>${esc(motivo)}</b>.</p>`:""}`; }
-  else if (se==="reserva_cancelada_leitor") { sub=`${bt} | ${tMail(locale,"res.cancelReader")}`; tit=tMail(locale,"res.cancelReader"); intro=`<p>${tMail(locale,"res.cancelReader")}.</p>`; }
-  else if (se==="reserva_expirada") { sub=`${bt} | ${tMail(locale,"res.expired")}`; tit=tMail(locale,"res.expired"); intro=`<p>${tMail(locale,"res.expired")}.</p>`; }
-  else if (se==="reserva_convertida_em_emprestimo") { sub=`${bt} | ${tMail(locale,"res.converted")}`; tit=tMail(locale,"res.converted"); intro=`<p>${tMail(locale,"res.converted")}.</p>`; }
-  const det:EmailDetails=[...(tits?[{label:label(locale,"items"),value:tits}]:[])]; const {html,text}=renderEmail({preheader:tit,title:tit,greeting:greeting(locale,user?.name),introHtml:intro,details:det,footerHtml:footerPadrao(ctx),context:ctx}); sub=applyBrandingText(sub,ctx);
+  // PATCH fix-up : déterminer la clé i18n spécifique selon l'événement (utilisée
+  // par les 2 mails lecteur ET biblio, chacun dans sa locale).
+  let mailKey="admin.resUpdate";
+  if (se==="reserva_v2_recusada") mailKey="res.refused";
+  else if (se==="reserva_cancelada_biblioteca") mailKey="res.cancelStaff";
+  else if (se==="reserva_cancelada_leitor") mailKey="res.cancelReader";
+  else if (se==="reserva_expirada") mailKey="res.expired";
+  else if (se==="reserva_convertida_em_emprestimo") mailKey="res.converted";
+  let sub=`${bt} | ${tMail(locale,mailKey)}`,tit=tMail(locale,mailKey),intro=`<p>${tMail(locale,mailKey)}.</p>`;
+  if (motivo&&(se==="reserva_v2_recusada"||se==="reserva_cancelada_biblioteca")) intro+=`<p>${label(locale,"reason")}: <b>${esc(motivo)}</b>.</p>`;
+  const det:EmailDetails=[...(tits?[{label:label(locale,"items"),value:tits}]:[])]; const {html,text}=renderEmail({preheader:tit,title:tit,greeting:greeting(locale,user?.name),introHtml:intro,details:det,footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(locale,"subj.libreDiffusion")}); sub=applyBrandingText(sub,ctx);
   const ur=reservationStatusEnabled(ctx)?await safeSendEmail(user,sub,html,text,"user_mail",ctx):skippedEmailResult("user_mail","reservation_status_disabled");
-  // Admin — locale biblio (paquet 6)
-  const adminTit=tMail(libLocale,"admin.resUpdate");
-  const {html:ha,text:ta}=renderEmail({preheader:adminTit,title:adminTit,introHtml:`<p>${adminTit}</p>`,details:[{label:label(libLocale,"reader"),value:aun},...det],footerHtml:footerPadrao(ctx),context:ctx}); const ar=reservationStatusEnabled(ctx)&&reservationAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),applyBrandingText(`[${bt}] ${adminTit} — ${aun}`,ctx),ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy","reservation_admin_copy_disabled");
+  // Admin — locale biblio (paquet 6) avec titre/intro spécifiques à l'événement (paquet 6 fix-up)
+  const adminTit=tMail(libLocale,mailKey);
+  const adminIntro=`<p>${tMail(libLocale,mailKey)}.</p>`+(motivo&&(se==="reserva_v2_recusada"||se==="reserva_cancelada_biblioteca")?`<p>${label(libLocale,"reason")}: <b>${esc(motivo)}</b>.</p>`:"");
+  const {html:ha,text:ta}=renderEmail({preheader:adminTit,title:adminTit,introHtml:adminIntro,details:[{label:label(libLocale,"reader"),value:aun},{label:label(libLocale,"items"),value:tits||"—"}],footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(libLocale,"subj.libreDiffusion")}); const ar=reservationStatusEnabled(ctx)&&reservationAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),applyBrandingText(`[${bt}] ${adminTit} — ${aun}`,ctx),ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy","reservation_admin_copy_disabled");
   return {user_result:ur,admin_result:ar};
 }
 
@@ -142,7 +147,7 @@ export async function handleReservaV2WorkflowEvent(recordId:number,event:string,
   const userIntro=`<p>${tMail(locale,readerTextKey)}</p>${when?`<p>${label(locale,"pickup")}: <b>${esc(when)}</b></p>`:""}${showCheckAccount?`<p>${tMail(locale,"wf.checkAccount")}</p>`:""}`;
   const prs=String(items.find(i=>i.pickup_reply_status)?.pickup_reply_status||"").trim(); const prn=String(items.find(i=>i.pickup_reply_note)?.pickup_reply_note||"").trim(); const prl=pickupReplyLabel(prs);
   const det:EmailDetails=[...(tits?[{label:label(locale,"items"),value:tits}]:[]),...(sl?[{label:label(locale,"status"),value:sl}]:[]),...(when?[{label:label(locale,"pickup"),value:`${when} (local)`}]:[]),...(prl?[{label:label(locale,"reply"),value:prl}]:[]),...(prn?[{label:label(locale,"readerNote"),value:prn}]:[]),...(note?[{label:label(locale,"note"),value:note}]:[])];
-  const {html:userHtml,text:userText}=renderEmail({preheader:readerTit,title:readerTit,greeting:greeting(locale,user?.name),introHtml:userIntro,details:det,footerHtml:footerPadrao(ctx),context:ctx});
+  const {html:userHtml,text:userText}=renderEmail({preheader:readerTit,title:readerTit,greeting:greeting(locale,user?.name),introHtml:userIntro,details:det,footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(locale,"subj.libreDiffusion")});
   const userSub=applyBrandingText(`${readerTit} — ${bt}`,ctx);
   const ur=reservationWorkflowEnabled(ctx)?await safeSendEmail(user,userSub,userHtml,userText,"user_mail",ctx):skippedEmailResult("user_mail","reservation_workflow_disabled");
 
@@ -163,7 +168,7 @@ export async function handleReservaV2WorkflowEvent(recordId:number,event:string,
     const subjPrefix=staffNeedsAction?tMail(libLocale,'subj.staff.action'):tMail(libLocale,'subj.staff.info');
     // Détails côté biblio : nom du lecteur en plus, dans la locale biblio
     const staffDet:EmailDetails=[{label:label(libLocale,"reader"),value:aun},...(tits?[{label:label(libLocale,"items"),value:tits}]:[]),...(sl?[{label:label(libLocale,"status"),value:sl}]:[]),...(when?[{label:label(libLocale,"pickup"),value:`${when} (local)`}]:[]),...(prl?[{label:label(libLocale,"reply"),value:prl}]:[]),...(prn?[{label:label(libLocale,"readerNote"),value:prn}]:[]),...(note?[{label:label(libLocale,"note"),value:note}]:[])];
-    const {html:staffHtml,text:staffText}=renderEmail({preheader:staffTit,title:staffTit,introHtml:staffIntro,details:staffDet,footerHtml:footerPadrao(ctx),context:ctx,actionBox});
+    const {html:staffHtml,text:staffText}=renderEmail({preheader:staffTit,title:staffTit,introHtml:staffIntro,details:staffDet,footerHtml:footerPadrao(ctx),context:ctx,actionBox,libreDiffusionLabel:tMail(libLocale,"subj.libreDiffusion")});
     const staffSub=applyBrandingText(`${subjPrefix} ${staffTit} — ${aun} — ${bt}`,ctx);
     ar=await safeSendEmail(adminTarget(ctx),staffSub,staffHtml,staffText,"admin_copy",ctx);
   }
@@ -185,7 +190,7 @@ export async function handleReservaPickupReplyEvent(recordId:number,event:string
   let tit=tMail(libLocale,"pr.readerReply"),sub=`[${bt}] ${tMail(libLocale,"pr.readerReply")} — ${aun}`,intro=`<p>${tMail(libLocale,"pr.readerReply")}.</p>`;
   if (re==="retirada_confirmada_leitor") { tit=tMail(libLocale,"pr.confirmed"); sub=`[${bt}] ${tMail(libLocale,"pr.confirmed")} — ${aun}`; intro=`<p>${tMail(libLocale,"pr.confirmed")}.</p>`; }
   else if (re==="retirada_recusada_leitor") { tit=tMail(libLocale,"pr.declined"); sub=`[${bt}] ${tMail(libLocale,"pr.declined")} — ${aun}`; intro=`<p>${tMail(libLocale,"pr.declined")}.</p>`; }
-  const {html:ha,text:ta}=renderEmail({preheader:tit,title:tit,introHtml:intro,details:[{label:label(libLocale,"reader"),value:aun},...(tits?[{label:label(libLocale,"items"),value:tits}]:[]),...(when?[{label:label(libLocale,"pickup"),value:`${when} (local)`}]:[]),...(rl?[{label:label(libLocale,"reply"),value:rl}]:[]),...(rn?[{label:label(libLocale,"note"),value:rn}]:[])],footerHtml:footerPadrao(ctx),context:ctx}); sub=applyBrandingText(sub,ctx);
+  const {html:ha,text:ta}=renderEmail({preheader:tit,title:tit,introHtml:intro,details:[{label:label(libLocale,"reader"),value:aun},...(tits?[{label:label(libLocale,"items"),value:tits}]:[]),...(when?[{label:label(libLocale,"pickup"),value:`${when} (local)`}]:[]),...(rl?[{label:label(libLocale,"reply"),value:rl}]:[]),...(rn?[{label:label(libLocale,"note"),value:rn}]:[])],footerHtml:footerPadrao(ctx),context:ctx,libreDiffusionLabel:tMail(libLocale,"subj.libreDiffusion")}); sub=applyBrandingText(sub,ctx);
   const ar=reservationWorkflowEnabled(ctx)&&reservationAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),sub,ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy",reservationWorkflowEnabled(ctx)?"reservation_admin_copy_disabled":"reservation_workflow_disabled");
   return {user_result:{ok:true,skipped:true,reason:"admin_only"},admin_result:ar};
 }

@@ -639,6 +639,20 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "[Info]",
     de: "[Info]"
   },
+  // ===== Footer libre diffusion (paquet 6 commit fix-up) ====================
+  // Remplace l'ancien symbole © (idéologiquement incompatible avec un projet
+  // anarchiste). La chaîne s'affiche dans la dernière ligne de chaque mail :
+  //   "{subjectTag} — {libre diffusion} — {footerText}"
+  // Localisée dans la langue du destinataire (cohérence avec le reste du
+  // paquet 6 : chaque destinataire reçoit dans sa propre langue).
+  "subj.libreDiffusion": {
+    "pt-BR": "livre difusão",
+    fr: "libre diffusion",
+    es: "libre difusión",
+    en: "free distribution",
+    it: "libera diffusione",
+    de: "freie Verbreitung"
+  },
 
 
   // ===== Loan events (loan.*) ===============================================
