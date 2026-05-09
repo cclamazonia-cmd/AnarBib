@@ -21,6 +21,34 @@ import './PanelPage.css';
 function fmtD(d) { if (!d) return '—'; try { return new Date(d).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' }); } catch { return d; } }
 
 // ═══════════════════════════════════════════════════════════
+// UserDisplay — composant interne (paquet 5f)
+// ───────────────────────────────────────────────────────────
+// Affiche un·e lecteur·rice dans une cellule de tableau ou un item de
+// liste : nom complet sur la ligne principale, code public_id (ex:
+// U0000030) en sous-titre discret en dessous.
+//
+// Cascade de fallback pour la ligne principale :
+//   user_name → user_email → fragment d'UUID (8 premiers chars)
+//
+// Le sous-titre public_id n'est affiché que si :
+//   - user_public_id est dispo (sinon rien à montrer en sous-titre)
+//   - ET la ligne principale n'est PAS déjà l'UUID (sinon redondance)
+//
+// Cohérent avec le pattern existant emprestimo_itens_painel_ui qui
+// expose user_public_id depuis le paquet 5e.
+// ═══════════════════════════════════════════════════════════
+function UserDisplay({ name, email, publicId, userId, fallback = '—' }) {
+  const main = name || email || (userId ? userId.slice(0, 8) : fallback);
+  const showSub = publicId && (name || email);
+  return (
+    <div className="ab-painel-user-display">
+      <span>{main}</span>
+      {showSub && <span className="ab-painel-user-display__sub">{publicId}</span>}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
 
 export default function PanelPage() {
   const { user } = useAuth();
@@ -601,16 +629,16 @@ export default function PanelPage() {
       // c'est un retrait prévu aujourd'hui → tâche prioritaire bucket 'hoje'.
       // re-retirada_agendada conservé en filet pour résas historiques fossiles.
       if (['retirada_agendada', 're-retirada_agendada'].includes(stage) && pickupDay === today) {
-        tasks.push({ priority: 'alta', bucket: 'hoje', kind: t({id:'panel.task.scheduledToday'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: t({id:'panel.task.detail.pickup'}) + ': ' + fmtD(r.pickup_scheduled_for), actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'alta', bucket: 'hoje', kind: t({id:'panel.task.scheduledToday'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: t({id:'panel.task.detail.pickup'}) + ': ' + fmtD(r.pickup_scheduled_for), actionType: 'reserva', reserva_id: r.reserva_id });
       }
       if (stage === 'solicitada') {
-        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.newReservation'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${r.bib_ref} · ${t({id:'panel.task.detail.created'})}: ${fmtD(r.reserva_created_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.newReservation'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${r.bib_ref} · ${t({id:'panel.task.detail.created'})}: ${fmtD(r.reserva_created_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
       }
       if (stage === 'pronta_para_retirada') {
-        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.readyForPickup'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.validity'})}: ${fmtD(r.expires_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.readyForPickup'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.validity'})}: ${fmtD(r.expires_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
       }
       if (String(r.pickup_reply_status || '') === 'recusado_leitor') {
-        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.readerRefused'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: r.pickup_reply_note || t({id:'panel.task.detail.reschedule'}), actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.readerRefused'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: r.pickup_reply_note || t({id:'panel.task.detail.reschedule'}), actionType: 'reserva', reserva_id: r.reserva_id });
       }
       // PATCH 08/05/2026 paquet 3B : tâche prioritaire "Leitor(a/e) contra-propôs"
       // déclenchée quand pickup_proposed_by = 'leitor' (= le lecteur a renvoyé
@@ -625,7 +653,7 @@ export default function PanelPage() {
           priority: 'alta',
           bucket: 'atencao',
           kind: t({id:'panel.task.readerCounterProposed'}),
-          label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`,
+          label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`,
           detail: t({id:'panel.task.detail.proposedSlot'}) + ': ' + fmtD(r.pickup_scheduled_for)
                   + ' · ' + t({id:'panel.task.detail.iteration'}, { count: iter, max: 3 }),
           actionType: 'reserva',
@@ -633,7 +661,7 @@ export default function PanelPage() {
         });
       }
       if (stage === 'nao_retirada') {
-        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.notPickedUp'}), label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`, detail: r.workflow_note || t({id:'panel.task.detail.check'}), actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.notPickedUp'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: r.workflow_note || t({id:'panel.task.detail.check'}), actionType: 'reserva', reserva_id: r.reserva_id });
       }
       // PATCH 09/05/2026 paquet 4 (approche A) : rendre visible le stage
       // retirada_a_combinar dans Trabalho do dia. Sinon ces résas restent
@@ -646,7 +674,7 @@ export default function PanelPage() {
           priority: 'media',
           bucket: 'atencao',
           kind: t({id:'panel.task.toScheduleWithReader'}),
-          label: `${r.user_name || r.user_email || '?'} · ${r.titulo}`,
+          label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`,
           detail: r.workflow_note || t({id:'panel.task.detail.scheduleHint'}),
           actionType: 'reserva',
           reserva_id: r.reserva_id,
@@ -658,7 +686,7 @@ export default function PanelPage() {
       const effectiveDue = l.extended_until || l.due_at;
       const due = effectiveDue ? new Date(effectiveDue) : null;
       const diff = due ? Math.ceil((new Date() - due) / 86400000) : 0;
-      tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.overdueItem'}), label: `${l.user_name || l.user_email || '?'} · ${l.titulo}`, detail: t({id:'panel.task.detail.deadline'}) + ': ' + fmtD(effectiveDue) + ' · ' + t({id:'panel.task.detail.daysOverdue'},{days:diff}) + ' · ' + l.sub_id, actionType: 'emprestimo', emprestimo_id: l.emprestimo_id });
+      tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.overdueItem'}), label: `${l.user_name || l.user_email || l.user_public_id || '?'} · ${l.titulo}`, detail: t({id:'panel.task.detail.deadline'}) + ': ' + fmtD(effectiveDue) + ' · ' + t({id:'panel.task.detail.daysOverdue'},{days:diff}) + ' · ' + l.sub_id, actionType: 'emprestimo', emprestimo_id: l.emprestimo_id });
     });
 
     activeLoans.filter(l => {
@@ -666,11 +694,11 @@ export default function PanelPage() {
       return effectiveDue && new Date(effectiveDue).toISOString().slice(0, 10) === today;
     }).forEach(l => {
       const effectiveDue = l.extended_until || l.due_at;
-      tasks.push({ priority: 'media', bucket: 'hoje', kind: t({id:'panel.task.dueTodayItem'}), label: `${l.user_name || l.user_email || '?'} · ${l.titulo}`, detail: `${t({id:'panel.task.detail.deadline'})}: ${fmtD(effectiveDue)} · ${l.sub_id}`, actionType: 'emprestimo', emprestimo_id: l.emprestimo_id });
+      tasks.push({ priority: 'media', bucket: 'hoje', kind: t({id:'panel.task.dueTodayItem'}), label: `${l.user_name || l.user_email || l.user_public_id || '?'} · ${l.titulo}`, detail: `${t({id:'panel.task.detail.deadline'})}: ${fmtD(effectiveDue)} · ${l.sub_id}`, actionType: 'emprestimo', emprestimo_id: l.emprestimo_id });
     });
 
     consultations.filter(c => c.workflow_stage_effective === 'solicitada').forEach(c => {
-      tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.consultToProcess'}), label: `${c.user_name || c.user_email || '?'} · ${c.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${c.bib_ref}`, actionType: 'consulta', consulta_id: c.consulta_id });
+      tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.consultToProcess'}), label: `${c.user_name || c.user_email || c.user_public_id || '?'} · ${c.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${c.bib_ref}`, actionType: 'consulta', consulta_id: c.consulta_id });
     });
 
     // Internal tasks from biblioteca
@@ -1171,7 +1199,14 @@ export default function PanelPage() {
                           <tr className={selectedRes.has(key) ? 'selected' : ''}>
                             <td><input type="checkbox" checked={selectedRes.has(key)} onChange={() => toggleRes(key)} /></td>
                             <td>{r.sub_id}</td>
-                            <td>{r.user_name || r.user_email || r.user_id?.slice(0,8)}</td>
+                            <td>
+                              <UserDisplay
+                                name={r.user_name}
+                                email={r.user_email}
+                                publicId={r.user_public_id}
+                                userId={r.user_id}
+                              />
+                            </td>
                             <td><Link to={`/livro/${r.book_id}`}>{r.titulo || '—'}</Link></td>
                             <td>{r.bib_ref}</td>
                             <td>{r.rotulo || '—'}</td>
@@ -1288,7 +1323,14 @@ export default function PanelPage() {
                     {consultations.map((c, i) => (
                       <tr key={i}>
                         <td>{c.sub_id}</td>
-                        <td>{c.user_name || c.user_email || '—'}</td>
+                        <td>
+                          <UserDisplay
+                            name={c.user_name}
+                            email={c.user_email}
+                            publicId={c.user_public_id}
+                            userId={c.user_id}
+                          />
+                        </td>
                         <td><Link to={`/livro/${c.book_id}`}>{c.titulo || '—'}</Link></td>
                         <td>{c.bib_ref}</td>
                         <td><span className="ab-painel-stage" data-stage={c.workflow_stage_effective}>{CONSULT_WORKFLOW[c.workflow_stage_effective] || c.item_status || '—'}</span></td>
@@ -1326,7 +1368,14 @@ export default function PanelPage() {
                     {loans.map((l, i) => (
                       <tr key={i} className={l.item_status === 'aberto' && l.due_at && new Date(l.due_at) < new Date() ? 'overdue' : ''}>
                         <td>{l.sub_id}</td>
-                        <td>{l.user_name || l.user_email || '—'}</td>
+                        <td>
+                          <UserDisplay
+                            name={l.user_name}
+                            email={l.user_email}
+                            publicId={l.user_public_id}
+                            userId={l.user_id}
+                          />
+                        </td>
                         <td><Link to={`/livro/${l.book_id}`}>{l.titulo || '—'}</Link></td>
                         <td>{l.bib_ref}</td>
                         <td>{l.rotulo || '—'}</td>
@@ -1365,7 +1414,7 @@ export default function PanelPage() {
                 return Object.values(grouped).map((g, i) => (
                   <div key={i} className="ab-painel-lote">
                     <div className="ab-painel-lote__head">
-                      <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
+                      <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
                     </div>
                     <div className="ab-painel-lote__items">
                       {g.items.map((l, j) => (

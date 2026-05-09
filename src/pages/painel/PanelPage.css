@@ -183,3 +183,17 @@
   .ab-painel-res-workflow { flex-direction: column; }
   .ab-painel-res-workflow .ab-painel-input { max-width: none; }
 }
+
+/* ── User display avec sous-titre public_id (paquet 5f) ────
+   Affichage du lecteur·rice dans les cellules de tableau et
+   items de liste : nom complet sur la ligne principale, code
+   public_id (ex: U0000030) en sous-titre discret en dessous.
+   Permet aux bibliothécaires d'identifier sans ambiguïté quand
+   plusieurs lecteurs partagent le même nom, sans révéler l'email
+   dans l'affichage par défaut. */
+.ab-painel-user-display { display: flex; flex-direction: column; gap: 1px; }
+.ab-painel-user-display__sub {
+  font-size: .74rem; color: var(--brand-muted);
+  font-variant-numeric: tabular-nums; font-family: var(--brand-font-mono, monospace);
+  letter-spacing: .02em;
+}
