@@ -556,6 +556,31 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     de: "Mehrere Versuche ohne Einigung mit der*dem Leser*in. Die*Der Leser*in wurde gebeten, sich direkt an Sie zu wenden, um eine Lösung zu finden."
   },
 
+  // ===== Workflow v3 — re-proposition staff après contre-prop lecteur =======
+  // Couvre le cas spécifique où la coordo, après avoir reçu une contre-prop
+  // du lecteur (negotiation_iteration_count > 0, pickup_proposed_by='leitor'),
+  // décide de NE PAS accepter et de re-proposer un autre créneau. Décision
+  // technique paquet 6 commit comportement (option β) : on distingue cette
+  // re-proposition de la première ouverture de négo (wf.staff.negotiationOpened),
+  // pour que la coordo voie clairement dans son trace mail "j'ai re-proposé"
+  // vs "j'ai ouvert la négo".
+  "wf.reader.libraryCounterProposed": {
+    "pt-BR": "A biblioteca respondeu à sua contra-proposta com um novo horário. Você pode aceitar este horário, propor outro, ou cancelar a reserva pela sua conta.",
+    fr: "La biblio a répondu à votre contre-proposition avec un nouveau créneau. Vous pouvez accepter ce créneau, en proposer un autre, ou annuler votre réservation depuis votre compte.",
+    es: "La biblioteca respondió a su contrapropuesta con un nuevo horario. Puede aceptar este horario, proponer otro, o cancelar su reserva desde su cuenta.",
+    en: "The library has responded to your counter-proposal with a new time slot. You can accept this slot, propose another one, or cancel your reservation from your account.",
+    it: "La biblioteca ha risposto alla vostra controproposta con un nuovo orario. Potete accettare questo orario, proporne un altro, o annullare la vostra prenotazione dal vostro account.",
+    de: "Die Bibliothek hat auf Ihren Gegenvorschlag mit einem neuen Termin geantwortet. Sie können diesen Termin annehmen, einen anderen vorschlagen oder Ihre Reservierung über Ihr Konto stornieren."
+  },
+  "wf.staff.staffCounterProposed": {
+    "pt-BR": "Você enviou uma nova contra-proposta de horário ao(a/e) leitor(a/e) em resposta à proposta recebida. Aguarde a resposta.",
+    fr: "Vous avez envoyé une nouvelle contre-proposition de créneau au·à la lecteur·rice en réponse à sa proposition. En attente de sa réponse.",
+    es: "Usted envió una nueva contrapropuesta de horario a le lectore en respuesta a su propuesta. Esperando su respuesta.",
+    en: "You have sent a new counter-proposal to the reader in response to their proposal. Awaiting their reply.",
+    it: "Avete inviato una nuova controproposta di orario a lə lettorə in risposta alla sua proposta. In attesa della sua risposta.",
+    de: "Sie haben einen neuen Gegenvorschlag an die*den Leser*in als Antwort auf deren Vorschlag gesendet. Warten auf Antwort."
+  },
+
   // ===== Workflow v3 — cron timeout (wf.staff.negotiationTimedOut) ==========
   "wf.staff.negotiationTimedOut": {
     "pt-BR": "A negociação para a retirada expirou sem acordo ({days} dias sem resposta). A reserva foi liberada automaticamente e o livro voltou à circulação livre.",
