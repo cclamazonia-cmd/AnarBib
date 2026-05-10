@@ -1567,7 +1567,7 @@
   "panel.loan.loanId": "Prestito #{id}",
   "panel.loan.notePh": "Nota interna (opcional)",
   "panel.loan.noValidRefs": "Nessun riferimento valido nel fondo.",
-  "panel.loan.openLoans": "Prestiti aperti: {count} ({overdue, plural, =0 {0 in ritardo} one {# in ritardo} other {# in ritardo}})",
+  "panel.loan.openLoans": "Prestiti aperti: {count} ({items, plural, one {# elemento fuori} other {# elementi fuori}}, {overdue, plural, =0 {0 in ritardo} one {# in ritardo} other {# in ritardo}})",
   "panel.loan.readerNotFound": "Lettore/trice non trovato/a.",
   "panel.loan.refs": "Riferimenti locali degli esemplari",
   "panel.loan.refsHint": "Fino a 5 riferimenti locali alla volta.",

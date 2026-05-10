@@ -1043,6 +1043,8 @@ export default function PanelPage() {
     const effectiveDue = l.extended_until || l.due_at;
     return effectiveDue && new Date(effectiveDue) < new Date();
   });
+  // Paquet 19 v3 (11/05/2026) : distinction emprunts (groupes) vs items pour le hero
+  const activeLoanGroups = new Set(activeLoans.map(l => l.emprestimo_id)).size;
 
   // PATCH 03/05/2026 : skeleton UI au lieu de Spinner.
   // Pendant le chargement du rôle, on ne sait pas encore si on est librarian+
@@ -1122,7 +1124,7 @@ export default function PanelPage() {
         <div className="ab-painel-chips">
           <Pill variant={activeRes.length > 0 ? 'warn' : 'default'}>{t({ id: 'panel.reservations.active' }, { count: activeRes.length })}</Pill>
           <Pill>{t({ id: 'panel.consultations.active' }, { count: consultations.filter(c => c.item_status === 'ativa').length })}</Pill>
-          <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoans.length, overdue: overdueLoans.length })}</Pill>
+          <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoanGroups, items: activeLoans.length, overdue: overdueLoans.length })}</Pill>
           <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
         </div>
       </Hero>
@@ -1603,17 +1605,33 @@ export default function PanelPage() {
                   const canExtend = g.emprestimo_status === 'aberto'
                     && !g.extended_once
                     && !g.extended_until;
+                  // Paquet 19 v3 (11/05/2026) : bouton Restituer tout disponible si au
+                  // moins un item est encore ouvert dans l'emprunt
+                  const hasOpenItem = g.items.some(it => it.item_status === 'aberto');
                   return (
                   <div key={i} className="ab-painel-lote">
                     <div className="ab-painel-lote__head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
                       <div>
                         <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
                       </div>
-                      {canExtend && (
-                        <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(g.emprestimo_id)}>
-                          {t({id:'panel.table.extend'})}
-                        </button>
-                      )}
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        {hasOpenItem && (
+                          <button className="ab-button ab-button--mini" onClick={async () => {
+                            try {
+                              const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: g.emprestimo_id });
+                              if (error) throw error;
+                              loadData();
+                            } catch (e) { alert(t({id:'common.errorPrefix'},{message:e.message})); }
+                          }}>
+                            {t({id:'panel.loan.returnFull'})}
+                          </button>
+                        )}
+                        {canExtend && (
+                          <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(g.emprestimo_id)}>
+                            {t({id:'panel.table.extend'})}
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <div className="ab-painel-lote__items">
                       {g.items.map((l, j) => (

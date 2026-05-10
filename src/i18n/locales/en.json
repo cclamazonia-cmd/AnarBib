@@ -1567,7 +1567,7 @@
   "panel.loan.loanId": "Loan #{id}",
   "panel.loan.notePh": "Internal note (optional)",
   "panel.loan.noValidRefs": "No valid reference in the holdings.",
-  "panel.loan.openLoans": "Open loans: {count} ({overdue, plural, =0 {0 overdue} one {# overdue} other {# overdue}})",
+  "panel.loan.openLoans": "Open loans: {count} ({items, plural, one {# item out} other {# items out}}, {overdue, plural, =0 {0 overdue} one {# overdue} other {# overdue}})",
   "panel.loan.readerNotFound": "Reader not found.",
   "panel.loan.refs": "Local item references",
   "panel.loan.refsHint": "Up to 5 local references at a time.",
