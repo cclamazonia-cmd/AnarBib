@@ -1,7 +1,7 @@
 # =============================================================================
 # Woodpecker CI — Repo `AnarBib/anarbib` (app SIGB React/Vite)
 # =============================================================================
-# Pipeline complet (v3) :
+# Pipeline complet (v4) :
 #   1. Install des dépendances
 #   2. Lint (ESLint) — BLOQUANT
 #   3. Tests (vitest)  — BLOQUANT
@@ -9,6 +9,7 @@
 #   5. Déploiement vers la branche `pages` du repo (Codeberg Pages)
 #   6. Miroir Codeberg → GitHub (cclamazonia-cmd/AnarBib)
 #   7. Déploiement Edge Functions Supabase (paquet 13, 10/05/2026)
+#   8. Déploiement migrations SQL Supabase (paquet 14, 10/05/2026)
 #
 # Si lint OU test échoue, le déploiement n'est pas effectué.
 # Pour bypasser exceptionnellement la CI, mettre [CI SKIP] dans le commit.
@@ -188,6 +189,69 @@ steps:
           supabase functions deploy "$fn_name" --project-ref "$${SUPABASE_PROJECT_REF}"
         done
       - echo "✓ Toutes les Edge Functions déployées"
+    depends_on: [build]
+    when:
+      - event: push
+        branch: main
+
+  # ---------------------------------------------------------------------------
+  # 8. Déploiement des migrations SQL Supabase
+  # ---------------------------------------------------------------------------
+  # À chaque push sur main, applique les migrations SQL trouvées dans
+  # `supabase/migrations/` qui ne sont pas encore dans le tracker
+  # `supabase_migrations.schema_migrations` de la base prod.
+  #
+  # CONVENTION (paquet 14, 10/05/2026) :
+  # Toutes les nouvelles migrations sont placées dans `supabase/migrations/`
+  # avec le format `YYYYMMDDHHMMSS_nom.sql` (timestamp précis à la seconde).
+  # La CLI Supabase compare avec le tracker prod et applique uniquement
+  # les nouvelles. C'est idempotent : un push ne contenant pas de nouvelle
+  # migration ne fait rien.
+  #
+  # NOTE HISTORIQUE :
+  # Le dossier `db/migrations/` (à la racine du repo) contient l'historique
+  # des migrations antérieures au paquet 14 et est figé en lecture seule.
+  # Il y a un écart connu entre les fichiers locaux et le tracker prod
+  # (certaines migrations ont été appliquées via SQL Editor sans être
+  # commitées dans `db/migrations/`) qui ne peut être réconcilié rétroactivement.
+  # Cette dette est acceptée : à partir du paquet 14, toutes les nouvelles
+  # migrations passent par ce flow CI et sont donc 100% reproductibles.
+  #
+  # Pour bypasser exceptionnellement (cas rare : migration urgente) :
+  # appliquer manuellement via SQL Editor PUIS noter dans schema_migrations
+  # avec le bon `version` pour que le push CI suivant ne la rejoue pas.
+  # ---------------------------------------------------------------------------
+  deploy-migrations:
+    image: node:20-alpine
+    environment:
+      SUPABASE_ACCESS_TOKEN:
+        from_secret: supabase_access_token
+      SUPABASE_PROJECT_REF:
+        from_secret: supabase_project_ref
+      SUPABASE_DB_PASSWORD:
+        from_secret: supabase_db_password
+    commands:
+      # Installation de la CLI Supabase (binaire pré-compilé Linux x64)
+      - apk add --no-cache curl tar
+      - curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz
+      - tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
+      - chmod +x /usr/local/bin/supabase
+      - supabase --version
+      # Vérifie qu'il y a au moins un fichier dans supabase/migrations/
+      # avant d'appeler db push (la CLI plante si le dossier n'existe pas)
+      - |
+        if [ ! -d "supabase/migrations" ] || [ -z "$(ls -A supabase/migrations 2>/dev/null)" ]; then
+          echo "→ Aucune migration dans supabase/migrations/, rien à déployer"
+          exit 0
+        fi
+      # Lien du projet local au projet distant
+      - supabase link --project-ref "$${SUPABASE_PROJECT_REF}"
+      # Push des migrations non encore appliquées
+      # --include-all : inclut toutes les migrations, même celles antérieures
+      #                 à la dernière migration tracée (sécurité)
+      # SUPABASE_DB_PASSWORD est lu automatiquement par la CLI
+      - supabase db push --linked --include-all
+      - echo "✓ Migrations SQL synchronisées avec la prod"
     depends_on: [build]
     when:
       - event: push
