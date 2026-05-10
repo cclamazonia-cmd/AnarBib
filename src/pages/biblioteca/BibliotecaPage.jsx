@@ -9,6 +9,7 @@ import { PageShell, Topbar, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
+import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 
@@ -66,6 +67,7 @@ export default function BibliotecaPage() {
     { id: 'privacy', label: t({ id: 'biblioteca.tab.privacy' }) },
     { id: 'documents', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
     { id: 'team', label: t({ id: 'biblioteca.tab.team' }) },
+    { id: 'leitores', label: t({ id: 'biblioteca.tab.leitores' }) },
     { id: 'exchanges', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
     { id: 'ill', label: t({ id: 'biblioteca.tab.ill' }) },
     { id: 'reports', label: t({ id: 'biblioteca.tab.reports' }) },
@@ -1083,6 +1085,14 @@ export default function BibliotecaPage() {
             <h3 style={{ marginBottom: 12 }}>{t({ id: 'biblioteca.team.title' })}</h3>
             <TeamPanel scope="library" libraryId={libraryId} />
           </div>
+        )}
+
+        {/* ═══ 5bis. Leitoras·es ═══════════════════════ */}
+        {/* Phase B2bis 11/05/2026 : onglet distinct des lectrices et lecteurs
+            de la biblio, avec promotion → librarian via la RPC
+            fn_team_promote_to_librarian (déclenche l'event militant). */}
+        {tab==='leitores' && (
+          <LeitoresPanel libraryId={libraryId} />
         )}
 
         {/* ═══ 6. Trocas interbibliotecas ══════════════ */}

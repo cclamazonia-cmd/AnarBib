@@ -74,46 +74,78 @@ export default function RedePage() {
       const { data: commons } = await supabase.from('library_commons').select('library_id, display_name, contact_email, logo_file_key');
       const { data: svcStates } = await supabase.from('library_service_state').select('library_id, service_mode, allows_new_loans, allows_new_reservations, public_message');
 
-      // Per-library counts
+      // Per-library counts — bascule sur la vue canonique api.library_circulation_stats
+      // (même source que BibliotecaPage onglet Rapports). Garantit cohérence
+      // cross-pages et règle le bug du filtre status_global mal formé.
+      // 1 requête par biblio au lieu de 7.
       const enriched = await Promise.all((libs || []).map(async lib => {
         const commRow = (commons || []).find(c => c.library_id === lib.id);
         const svcRow = (svcStates || []).find(s => s.library_id === lib.id);
-        const [rdrs, staff, exs, loansOpen, loansTotal, resActive, resTotal] = await Promise.all([
-          supabase.from('user_library_memberships').select('id', { count:'exact', head:true }).eq('library_id', lib.id).eq('role', 'reader'),
-          supabase.from('user_library_memberships').select('id', { count:'exact', head:true }).eq('library_id', lib.id).in('role', ['librarian','coordenador','administrador']),
-          supabase.from('exemplares').select('id', { count:'exact', head:true }).eq('library_id', lib.id),
-          supabase.from('emprestimos_v2').select('id', { count:'exact', head:true }).eq('library_id', lib.id).or('status_global.is.null,status_global.neq.devolvido'),
-          supabase.from('emprestimos_v2').select('id', { count:'exact', head:true }).eq('library_id', lib.id),
-          supabase.from('reservas_v2').select('id', { count:'exact', head:true }).eq('library_id', lib.id).not('status_global', 'in', '(cancelada,concluida,expirada)'),
-          supabase.from('reservas_v2').select('id', { count:'exact', head:true }).eq('library_id', lib.id),
-        ]);
+        const { data: cs } = await supabase
+          .schema('api').from('library_circulation_stats')
+          .select('*').eq('library_id', lib.id).maybeSingle();
+        const s = cs || {};
         return {
           ...lib, ...commRow, ...svcRow,
-          readers: rdrs.count||0, staff: staff.count||0, exemplars: exs.count||0,
-          loansOpen: loansOpen.count||0, loansTotal: loansTotal.count||0,
-          resActive: resActive.count||0, resTotal: resTotal.count||0,
+          readers: s.readers_active || 0,
+          staff: s.librarians_active || 0,
+          exemplars: s.exemplars_count || 0,
+          loansOpen: s.loans_open || 0,
+          loansOverdue: s.loans_overdue || 0,
+          resActive: s.reservations_active || 0,
         };
       }));
       setLibCards(enriched);
 
       // 2. Global stats
+      // Personnes distinctes (user_id) : une même personne membre de N biblios
+      // ne compte qu'une fois ; on ne tient compte que des memberships status='active'.
+      // Une personne ayant plusieurs rôles compte dans la catégorie la plus haute :
+      // staff prime sur reader.
+      const { data: activeMembers } = await supabase
+        .from('user_library_memberships')
+        .select('user_id, role')
+        .eq('status', 'active');
+      const userTopRole = new Map();
+      const roleRank = { reader: 1, librarian: 2, coordenador: 3, administrador: 4 };
+      (activeMembers || []).forEach(m => {
+        const prev = userTopRole.get(m.user_id) || 0;
+        const cur = roleRank[m.role] || 0;
+        if (cur > prev) userTopRole.set(m.user_id, cur);
+      });
+      let distinctReaders = 0, distinctStaff = 0;
+      for (const rank of userTopRole.values()) {
+        if (rank === 1) distinctReaders += 1;
+        else if (rank >= 2) distinctStaff += 1;
+      }
       const totals = enriched.reduce((a, l) => ({
-        libraries: a.libraries + 1, readers: a.readers + l.readers, staff: a.staff + l.staff,
-        exemplars: a.exemplars + l.exemplars, loansOpen: a.loansOpen + l.loansOpen, resActive: a.resActive + l.resActive,
-      }), { libraries:0, readers:0, staff:0, exemplars:0, loansOpen:0, resActive:0 });
+        libraries: a.libraries + 1,
+        exemplars: a.exemplars + l.exemplars,
+        loansOpen: a.loansOpen + l.loansOpen,
+        loansOverdue: a.loansOverdue + (l.loansOverdue || 0),
+        resActive: a.resActive + l.resActive,
+      }), { libraries:0, exemplars:0, loansOpen:0, loansOverdue:0, resActive:0 });
       const [bk, au] = await Promise.all([
         supabase.from('books').select('id', { count:'exact', head:true }),
         supabase.from('authors').select('id', { count:'exact', head:true }),
       ]);
-      setGlobalStats({ ...totals, books: bk.count||0, authors: au.count||0 });
+      setGlobalStats({
+        ...totals,
+        readers: distinctReaders,
+        staff: distinctStaff,
+        books: bk.count||0,
+        authors: au.count||0,
+      });
 
       // 3. Requests
       const { data: reqData } = await supabase.from('library_requests').select('*').order('created_at', { ascending: false });
       setRequests(reqData || []);
 
-      // 4. All members
+      // 4. All members (filtré sur status='active' — exclut pending_removal,
+      // removed, inactive, suspended introduits par la spec gouvernance)
       const { data: memData } = await supabase.from('user_library_memberships')
         .select('user_id, role, status, library_id, is_primary, created_at, libraries(name, slug), profiles:user_id(email, first_name, last_name)')
+        .eq('status', 'active')
         .order('role');
       setAllMembers(memData || []);
 
@@ -329,11 +361,11 @@ export default function RedePage() {
         {tab==='libraries' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'rede.libraries.panoramaTitle' }, { count: libCards.length })}</h3>
           <div style={lw}>
-            <div style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'8px 12px', fontSize:'.75rem', fontWeight:700, color:'var(--brand-muted)', borderBottom:'1px solid rgba(255,255,255,.08)' }}>
-              <div>{t({ id: 'nav.library' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.th.service' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.readers' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.staff' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.exemplars' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOpenShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.reservationsActiveShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'common.actions' })}</div>
+            <div style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'8px 12px', fontSize:'.75rem', fontWeight:700, color:'var(--brand-muted)', borderBottom:'1px solid rgba(255,255,255,.08)' }}>
+              <div>{t({ id: 'nav.library' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.th.service' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.readers' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.staff' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.exemplars' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOpenShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOverdueShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.reservationsActiveShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'common.actions' })}</div>
             </div>
             {libCards.map((lib,i) => (
-              <div key={lib.id} style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
+              <div key={lib.id} style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
                 <div>
                   <div style={{ fontSize:'.9rem', fontWeight:600 }}>{lib.name} <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ fontSize:'.6rem' }}>{lib.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span></div>
                   <div style={{ fontSize:'.78rem', color:'var(--brand-muted)' }}>{lib.slug} · {lib.city||'—'} · {lib.contact_email||'—'}</div>
@@ -343,6 +375,7 @@ export default function RedePage() {
                 <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700 }}>{lib.staff}</div>
                 <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700 }}>{lib.exemplars}</div>
                 <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700, color: lib.loansOpen>0?'#fbbf24':'inherit' }}>{lib.loansOpen}</div>
+                <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700, color: lib.loansOverdue>0?'#f87171':'inherit' }}>{lib.loansOverdue||0}</div>
                 <div style={{ textAlign:'center', fontSize:'.9rem', fontWeight:700, color: lib.resActive>0?'#60a5fa':'inherit' }}>{lib.resActive}</div>
                 <div style={{ textAlign:'center' }}>
                   <button className="cat-btn ghost" style={{ fontSize:'.75rem', padding:'3px 8px', color: lib.is_active?'#f87171':'#4ade80' }} onClick={()=>toggleLibraryActive(lib.id, lib.is_active)}>
