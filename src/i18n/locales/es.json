@@ -2167,5 +2167,9 @@
   "account.history.reservations.title": "Reservas",
   "panel.loan.status.aberto": "En curso",
   "panel.loan.status.parcialmente_devolvido": "Devolución parcial",
-  "panel.loan.status.encerrado": "Concluido"
+  "panel.loan.status.encerrado": "Concluido",
+  "panel.loan.preview.confirm": "Vista previa: {count, plural, one {# documento} other {# documentos}} para {name}, devolución prevista el {dueDate} (regla: {rule}). Haz clic en Confirmar para validar.",
+  "panel.loan.preview.notAllowed": "Esta operación no está permitida por la regla actual: {rule}.",
+  "panel.loan.confirmRegister": "Confirmar préstamo",
+  "panel.loan.cancelPreview": "Cancelar"
 }

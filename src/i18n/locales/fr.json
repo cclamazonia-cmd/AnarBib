@@ -2167,5 +2167,9 @@
   "account.history.reservations.title": "Réservations",
   "panel.loan.status.aberto": "En cours",
   "panel.loan.status.parcialmente_devolvido": "Retour partiel",
-  "panel.loan.status.encerrado": "Clôturé"
+  "panel.loan.status.encerrado": "Clôturé",
+  "panel.loan.preview.confirm": "Aperçu : {count, plural, one {# document} other {# documents}} pour {name}, retour prévu le {dueDate} (règle : {rule}). Clique sur Confirmer pour valider.",
+  "panel.loan.preview.notAllowed": "Cette opération n'est pas autorisée par la règle actuelle : {rule}.",
+  "panel.loan.confirmRegister": "Confirmer l'emprunt",
+  "panel.loan.cancelPreview": "Annuler"
 }
