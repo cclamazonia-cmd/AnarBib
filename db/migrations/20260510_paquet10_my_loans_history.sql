@@ -55,7 +55,7 @@ SELECT
   e.id AS id,                          -- alias compat pattern reservations
   e.user_id,
   e.library_id,
-  l.slug AS library_slug,
+  l.library_slug AS library_slug,
   l.display_name AS library_name,
   e.library_id = m.default_library_id AS is_default_library,
   e.status_global,
