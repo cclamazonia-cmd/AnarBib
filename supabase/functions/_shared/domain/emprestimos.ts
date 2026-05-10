@@ -35,8 +35,8 @@ export async function handleEmprestimoV2(recordId:number,event:string) {
   else if (event==="emprestimo_v2_devolvido") { ai=`<p>${tMail(null,"admin.returnDone")}</p>`; as2=`[BLMF] ${tMail(null,"loan.returned.sub")} — ${aun}`; }
   else if (event==="emprestimo_v2_parcialmente_devolvido") { ai=`<p>${tMail(null,"admin.partialReturnDone")}</p>`; as2=`[BLMF] ${tMail(null,"loan.partialReturn.sub")} — ${aun}`; }
   else if (event==="emprestimo_v2_devolvido_apos_parcial") { ai=`<p>${tMail(null,"admin.fullyReturnedAfterPartialDone")}</p>`; as2=`[BLMF] ${tMail(null,"loan.fullyReturnedAfterPartial.sub")} — ${aun}`; }
-  const adminDet:EmailDetails=[{label:label(null,"reader"),value:aun},...det.map(d=>({label:tMail(null,`l.${Object.entries({"items":"items","registration":"registration","dueDate":"dueDate","newDueDate":"newDueDate","renewal":"renewal","return":"return"}).find(([_,v])=>label(locale,v)===d.label)?.[0]||""}`)||d.label,value:d.value}))];
-  const {html:ha,text:ta}=renderEmail({preheader:tit,title:tit,introHtml:ai,details:[{label:label(null,"reader"),value:aun},...det],footerHtml:footerPadrao(ctx),context:ctx}); as2=applyBrandingText(as2.replace(/BLMF/g,bt),ctx);
+  const adminDet:EmailDetails=[{label:label(null,"reader"),value:aun},...det.map(d=>({label:tMail(null,`l.${Object.entries({"items":"items","itemsReturned":"itemsReturned","itemsRemaining":"itemsRemaining","registration":"registration","dueDate":"dueDate","newDueDate":"newDueDate","renewal":"renewal","return":"return"}).find(([_,v])=>label(locale,v)===d.label)?.[0]||""}`)||d.label,value:d.value}))];
+  const {html:ha,text:ta}=renderEmail({preheader:tit,title:tit,introHtml:ai,details:adminDet,footerHtml:footerPadrao(ctx),context:ctx}); as2=applyBrandingText(as2.replace(/BLMF/g,bt),ctx);
   const ar=loanLifecycleEnabled(ctx)&&loanAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),as2,ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy",loanLifecycleEnabled(ctx)?"loan_admin_copy_disabled":"loan_lifecycle_disabled");
   return {user_result:ur,admin_result:ar};
 }
