@@ -576,7 +576,7 @@ export default function PanelPage() {
 
       // Get loan projection (paquet 16)
       const bookIds = (resolveRes.data || []).filter(r => r.matched && Number(r.book_id) > 0).map(r => Number(r.book_id));
-      const projectionRes = await supabase.rpc('get_batch_loan_projection', {
+      const projectionRes = await supabase.schema('api').rpc('get_batch_loan_projection', {
         p_library_id: libraryId,
         p_user_id: borrower.id,
         p_book_ids: bookIds,
