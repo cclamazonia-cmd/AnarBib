@@ -2167,9 +2167,5 @@
   "account.history.reservations.title": "Reservations",
   "panel.loan.status.aberto": "Open",
   "panel.loan.status.parcialmente_devolvido": "Partial return",
-  "panel.loan.status.encerrado": "Completed",
-  "panel.loan.preview.confirm": "Preview: {count, plural, one {# document} other {# documents}} for {name}, due back on {dueDate} (rule: {rule}). Click Confirm to validate.",
-  "panel.loan.preview.notAllowed": "This operation is not allowed by the current rule: {rule}.",
-  "panel.loan.confirmRegister": "Confirm loan",
-  "panel.loan.cancelPreview": "Cancel"
+  "panel.loan.status.encerrado": "Completed"
 }

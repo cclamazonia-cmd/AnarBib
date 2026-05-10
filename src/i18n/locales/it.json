@@ -2167,9 +2167,5 @@
   "account.history.reservations.title": "Prenotazioni",
   "panel.loan.status.aberto": "In corso",
   "panel.loan.status.parcialmente_devolvido": "Restituzione parziale",
-  "panel.loan.status.encerrado": "Concluso",
-  "panel.loan.preview.confirm": "Anteprima: {count, plural, one {# documento} other {# documenti}} per {name}, restituzione prevista il {dueDate} (regola: {rule}). Clicca su Conferma per validare.",
-  "panel.loan.preview.notAllowed": "Questa operazione non è consentita dalla regola attuale: {rule}.",
-  "panel.loan.confirmRegister": "Conferma prestito",
-  "panel.loan.cancelPreview": "Annulla"
+  "panel.loan.status.encerrado": "Concluso"
 }

@@ -2167,9 +2167,5 @@
   "account.history.reservations.title": "Vormerkungen",
   "panel.loan.status.aberto": "Laufend",
   "panel.loan.status.parcialmente_devolvido": "Teilrückgabe",
-  "panel.loan.status.encerrado": "Abgeschlossen",
-  "panel.loan.preview.confirm": "Vorschau: {count, plural, one {# Dokument} other {# Dokumente}} für {name}, Rückgabe vorgesehen am {dueDate} (Regel: {rule}). Klicke auf Bestätigen zum Validieren.",
-  "panel.loan.preview.notAllowed": "Dieser Vorgang ist nach der aktuellen Regel nicht zulässig: {rule}.",
-  "panel.loan.confirmRegister": "Ausleihe bestätigen",
-  "panel.loan.cancelPreview": "Abbrechen"
+  "panel.loan.status.encerrado": "Abgeschlossen"
 }
