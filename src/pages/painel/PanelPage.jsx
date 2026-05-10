@@ -907,6 +907,10 @@ export default function PanelPage() {
   // 'cancelada_biblioteca', 'expirada', 'liberada_para_circulacao'.
   const activeRes = reservations.filter(r => r.item_status === 'ativa');
   const activeLoans = loans.filter(l => l.item_status === 'aberto');
+  // Paquet "audit phase 5" (10/05/2026) : compter aussi les EMPRUNTS distincts
+  // (et plus seulement les items) pour le hero. Un emprunt 3-items dont 1 est
+  // rendu = 1 emprunt + 2 items dehors.
+  const activeLoanGroups = new Set(activeLoans.map(l => l.emprestimo_id)).size;
   const overdueLoans = activeLoans.filter(l => {
     const effectiveDue = l.extended_until || l.due_at;
     return effectiveDue && new Date(effectiveDue) < new Date();
@@ -990,7 +994,7 @@ export default function PanelPage() {
         <div className="ab-painel-chips">
           <Pill variant={activeRes.length > 0 ? 'warn' : 'default'}>{t({ id: 'panel.reservations.active' }, { count: activeRes.length })}</Pill>
           <Pill>{t({ id: 'panel.consultations.active' }, { count: consultations.filter(c => c.item_status === 'ativa').length })}</Pill>
-          <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoans.length, overdue: overdueLoans.length })}</Pill>
+          <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoanGroups, items: activeLoans.length, overdue: overdueLoans.length })}</Pill>
           <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
         </div>
       </Hero>
@@ -1456,7 +1460,7 @@ export default function PanelPage() {
                 return Object.values(grouped).map((g, i) => (
                   <div key={i} className="ab-painel-lote">
                     <div className="ab-painel-lote__head">
-                      <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
+                      <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {t({id:`panel.loan.status.${g.emprestimo_status}`, defaultMessage: g.emprestimo_status})}
                     </div>
                     <div className="ab-painel-lote__items">
                       {g.items.map((l, j) => (

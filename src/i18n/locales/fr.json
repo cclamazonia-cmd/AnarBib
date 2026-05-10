@@ -1567,7 +1567,7 @@
   "panel.loan.loanId": "Emprunt #{id}",
   "panel.loan.notePh": "Note interne (facultatif)",
   "panel.loan.noValidRefs": "Aucune référence valide dans le fonds.",
-  "panel.loan.openLoans": "Emprunts ouverts : {count} ({overdue} en retard)",
+  "panel.loan.openLoans": "Emprunts ouverts : {count} ({items, plural, one {# item dehors} other {# items dehors}}, {overdue, plural, =0 {0 en retard} one {# en retard} other {# en retard}})",
   "panel.loan.readerNotFound": "Lecteur·rice non trouvé·e.",
   "panel.loan.refs": "Références locales des exemplaires",
   "panel.loan.refsHint": "5 références locales maximum à la fois.",
@@ -2164,5 +2164,8 @@
   "account.history.loans.itemsCount": "{count} document(s)",
   "account.history.loans.renewalsUsed": "{count} renouvellement(s)",
   "account.history.loans.completed": "Clôturé",
-  "account.history.reservations.title": "Réservations"
+  "account.history.reservations.title": "Réservations",
+  "panel.loan.status.aberto": "En cours",
+  "panel.loan.status.parcialmente_devolvido": "Retour partiel",
+  "panel.loan.status.encerrado": "Clôturé"
 }
