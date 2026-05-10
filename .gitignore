@@ -35,3 +35,6 @@ eslint-first-run.txt
 
 # Logs ESLint temporaires
 eslint-first-run.txt
+
+# Backups générés par les scripts PowerShell de patching
+*.bak-*
