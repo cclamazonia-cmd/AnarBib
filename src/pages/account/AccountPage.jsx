@@ -32,12 +32,14 @@ export default function AccountPage() {
   const [profile, setProfile] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
+  const [renewStatus, setRenewStatus] = useState({});
   const [loans, setLoans] = useState([]);
   const [history, setHistory] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
+  const [msgIsError, setMsgIsError] = useState(false);
   const [reserveRef, setReserveRef] = useState('');
   const [reserveMsg, setReserveMsg] = useState('');
   const [serviceState, setServiceState] = useState(null);
@@ -52,11 +54,12 @@ export default function AccountPage() {
     if (authLoading || !user) return;
     setLoading(true);
     try {
-      const [profileRes, reservRes, consultRes, loansRes, histRes, svcRes] = await Promise.all([
+      const [profileRes, reservRes, consultRes, loansRes, renewStatusRes, histRes, svcRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         apiQuery('my_reservations_active_v2'),
         apiQuery('my_consultas_active_v2'),
         apiQuery('emprestimo_itens_ui'),
+        apiQuery('my_loans_renewal_status_v1'),
         apiQuery('my_reservations_history_v2'),
         supabase.from('library_service_state').select('*'),
       ]);
@@ -64,6 +67,9 @@ export default function AccountPage() {
       setReservations(reservRes.data || []);
       setConsultations(consultRes.data || []);
       setLoans(loansRes.data || []);
+      setRenewStatus(Object.fromEntries(
+        (renewStatusRes.data || []).map(r => [r.emprestimo_id, r])
+      ));
       setHistory(histRes.data || []);
       // Service state for the user's library
       if (svcRes.data?.length) setServiceState(svcRes.data[0]);
@@ -121,6 +127,7 @@ export default function AccountPage() {
     e.preventDefault();
     setSaving(true);
     setMsg('');
+    setMsgIsError(false);
     try {
       const addr = typeof profile.address === 'object' ? (profile.address || {}) : parseAddressText(profile.address);
       const addrText = formatAddressText(addr, locale);
@@ -134,8 +141,10 @@ export default function AccountPage() {
       }).eq('id', user.id);
       if (error) throw error;
       setMsg(t({ id: 'account.reserve.dataSaved' }));
+      setMsgIsError(false);
     } catch (err) {
       setMsg(t({id:'common.errorPrefix'},{message:err.message}));
+      setMsgIsError(true);
     } finally {
       setSaving(false);
     }
@@ -571,7 +580,7 @@ export default function AccountPage() {
 
                 <div className="ab-conta-form-actions">
                   <Button type="submit" loading={saving}>{t({ id: 'common.save' })}</Button>
-                  {msg && <span className={`ab-conta-msg ${msg.startsWith('Erro') ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
+                  {msg && <span className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
                 </div>
               </form>
 
@@ -807,12 +816,18 @@ export default function AccountPage() {
               ) : (
                 <div className="ab-conta-items">
                   {loans.filter(l => l.item_status === 'aberto').map((l, i) => {
-                    const due = l.due_at ? new Date(l.due_at + 'T00:00:00') : null;
+                    // Paquet 7 fix (10/05/2026) : utiliser extended_until si présent,
+                    // sinon due_at. Sinon la date affichée ne reflète pas le renouvellement.
+                    const effectiveDue = l.extended_until || l.due_at;
+                    const due = effectiveDue ? new Date(effectiveDue + 'T00:00:00') : null;
                     const today = new Date(); today.setHours(0,0,0,0);
                     const daysLeft = due ? Math.ceil((due - today) / 86400000) : null;
                     const isOverdue = daysLeft !== null && daysLeft < 0;
                     const isSoon = daysLeft !== null && daysLeft >= 0 && daysLeft <= 3;
-                    const wasExtended = !!l.extended_until;
+                    // Paquet 7 (10/05/2026) : compteur explicite + pré-évaluation
+                    const renewalsUsed = l.renewals_used || 0;
+                    const wasExtended = renewalsUsed > 0;
+                    const renewInfo = renewStatus[l.emprestimo_id] || null;
                     return (
                       <div key={i} className={`ab-conta-item ${isOverdue ? 'ab-conta-item--overdue' : ''}`}
                         style={{ borderLeft: `3px solid ${isOverdue ? '#ef4444' : isSoon ? '#f59e0b' : 'rgba(255,255,255,.08)'}` }}>
@@ -825,25 +840,51 @@ export default function AccountPage() {
                             {due && <> · {t({id:'account.loans.deadline'})}: <strong style={{ color: isOverdue ? '#ef4444' : isSoon ? '#f59e0b' : 'inherit' }}>{due.toLocaleDateString()}</strong></>}
                             {daysLeft !== null && (
                               isOverdue
-                                ? <> · <strong style={{ color: '#ef4444' }}>{Math.abs(daysLeft)} dia(s) de atraso</strong></>
-                                : <> · {daysLeft} dia(s) restante(s)</>
+                                ? <> · <strong style={{ color: '#ef4444' }}>{t({ id: 'account.loans.daysOverdue' }, { days: Math.abs(daysLeft) })}</strong></>
+                                : <> · {t({ id: 'account.loans.daysLeft' }, { days: daysLeft })}</>
                             )}
                           </span>
                           {wasExtended && <span className="ab-conta-item__meta" style={{ color: '#60a5fa' }}>{t({ id: 'account.loans.renewedUntil' }, { date: new Date(l.extended_until + 'T00:00:00').toLocaleDateString() })}</span>}
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
-                          {!wasExtended && !isOverdue && (
-                            <Button variant="mini" onClick={async () => {
-                              const { data, error } = await supabase.rpc('fn_renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
-                              if (error) { alert(t({id:'common.errorPrefix'}, {message: error.message})); return; }
-                              if (data?.ok === false) {
-                                alert(t({ id: `account.renew.${data.reason}` }));
-                                return;
-                              }
-                              alert(t({ id: 'account.renew.renewed' }, { date: new Date(data.new_due_date).toLocaleDateString() }));
-                              loadData();
-                            }}>{t({ id: 'account.loans.renew' })}</Button>
-                          )}
+                          {(() => {
+                            // Paquet 7 : pré-désactivation + tooltip
+                            // renewInfo vient de api.my_loans_renewal_status_v1 et porte
+                            // can_renew (bool) + blocking_reason (text|null).
+                            // Fallback ancien comportement si la vue n'a pas répondu.
+                            const canRenew = renewInfo
+                              ? renewInfo.can_renew
+                              : (!wasExtended && !isOverdue);
+                            const blockingReason = renewInfo ? renewInfo.blocking_reason : null;
+                            const tooltipMsg = blockingReason
+                              ? t(
+                                  { id: 'account.renew.tooltipBlocked' },
+                                  { reason: t({ id: `account.renew.${blockingReason}` }) }
+                                )
+                              : null;
+                            // On n'affiche le bouton que si pas déjà étiqueté "renouvelé" ou "en retard"
+                            // (les deux étiquettes spécialisées plus bas couvrent ces cas).
+                            if (wasExtended || isOverdue) return null;
+                            return (
+                              <Button
+                                variant="mini"
+                                disabled={!canRenew}
+                                title={tooltipMsg || undefined}
+                                onClick={async () => {
+                                  const { data, error } = await supabase.rpc('fn_renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
+                                  if (error) { alert(t({id:'common.errorPrefix'}, {message: error.message})); return; }
+                                  if (data?.ok === false) {
+                                    alert(t({ id: `account.renew.${data.reason}` }));
+                                    return;
+                                  }
+                                  alert(t({ id: 'account.renew.renewed' }, { date: new Date(data.new_due_date).toLocaleDateString() }));
+                                  loadData();
+                                }}
+                              >
+                                {t({ id: 'account.loans.renew' })}
+                              </Button>
+                            );
+                          })()}
                           {wasExtended && <span style={{ fontSize: '.72rem', color: '#60a5fa', fontWeight: 600 }}>{t({ id: 'account.loans.renewed' })}</span>}
                           {isOverdue && <span style={{ fontSize: '.72rem', color: '#ef4444', fontWeight: 600 }}>{t({ id: 'account.loans.overdue' })}</span>}
                         </div>

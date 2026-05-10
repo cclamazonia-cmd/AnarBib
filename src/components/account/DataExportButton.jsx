@@ -59,7 +59,7 @@ function flattenLoansForCsv(loans) {
         library_id: loan.library_id,
         loan_status: loan.status_global,
         loan_due_at: loan.due_at,
-        loan_extended_once: loan.extended_once,
+        loan_renewals_used: loan.renewals_used,
         loan_created_at: loan.created_at,
         loan_notes: loan.notes,
       });
@@ -70,7 +70,7 @@ function flattenLoansForCsv(loans) {
           library_id: loan.library_id,
           loan_status: loan.status_global,
           loan_due_at: loan.due_at,
-          loan_extended_once: loan.extended_once,
+          loan_renewals_used: loan.renewals_used,
           loan_created_at: loan.created_at,
           loan_notes: loan.notes,
           item_line_no: item.line_no,

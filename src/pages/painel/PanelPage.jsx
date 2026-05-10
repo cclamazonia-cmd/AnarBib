@@ -582,8 +582,13 @@ export default function PanelPage() {
 
   async function extendLoan(empId) {
     try {
-      const { error } = await supabase.rpc('fn_v2_extend_emprestimo_once', { p_emprestimo_id: empId });
+      // Paquet 7 (10/05/2026) : retour jsonb harmonisé avec fn_renew_my_loan
+      const { data, error } = await supabase.rpc('fn_v2_extend_emprestimo_once', { p_emprestimo_id: empId });
       if (error) throw error;
+      if (data?.ok === false) {
+        alert(t({ id: `account.renew.${data.reason}` }));
+        return;
+      }
       loadData();
     } catch (e) {
       // PATCH 07/05/2026 audit i18n : alert pt-BR remplacé par clé i18n
@@ -1387,7 +1392,7 @@ export default function PanelPage() {
                           {l.item_status === 'aberto' && (
                             <>
                               <button className="ab-button ab-button--mini" onClick={() => returnLoanItem(l.emprestimo_id, [l.line_no])}>{t({ id: 'panel.loan.return.btn' })}</button>
-                              {!l.extended_once && !l.extended_until && (
+                              {!(l.renewals_used > 0) && !l.extended_until && (
                                 <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(l.emprestimo_id)}>{t({id:'panel.table.extend'})}</button>
                               )}
                             </>
