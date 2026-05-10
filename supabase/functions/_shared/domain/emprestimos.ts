@@ -37,16 +37,17 @@ export async function handleEmprestimoV2(recordId:number,event:string) {
   sub=applyBrandingText(sub.replace(/BLMF/g,bt),ctx);
   const ur=loanLifecycleEnabled(ctx)?await safeSendEmail(user,sub,html,text,"user_mail",ctx):skippedEmailResult("user_mail","loan_lifecycle_disabled");
   // Admin mail — always PT-BR (locale=null)
-  let ai=`<p>${tMail(null,"admin.loanUpdate")}</p>`,as2=`[BLMF] ${tit} — ${aun}`;
-  if (event==="emprestimo_v2_criado") { ai=`<p>${tMail(null,"admin.newLoan")}</p>`; as2=`[BLMF] ${tMail(null,"loan.created.sub")} — ${aun}`; }
-  else if (event==="emprestimo_v2_prorrogado") { ai=`<p>${tMail(null,"admin.renewalDone")}</p>`; as2=`[BLMF] ${tMail(null,"loan.renewed.sub")} — ${aun}`; }
-  else if (event==="emprestimo_v2_devolvido") { ai=`<p>${tMail(null,"admin.returnDone")}</p>`; as2=`[BLMF] ${tMail(null,"loan.returned.sub")} — ${aun}`; }
-  else if (event==="emprestimo_v2_parcialmente_devolvido") { ai=`<p>${tMail(null,"admin.partialReturnDone")}</p>`; as2=`[BLMF] ${tMail(null,"loan.partialReturn.sub")} — ${aun}`; }
-  else if (event==="emprestimo_v2_devolvido_apos_parcial") { ai=`<p>${tMail(null,"admin.fullyReturnedAfterPartialDone")}</p>`; as2=`[BLMF] ${tMail(null,"loan.fullyReturnedAfterPartial.sub")} — ${aun}`; }
+  // Paquet 17 (10/05/2026, fin de session) : titre admin force pt-BR (avant : utilisait tit qui etait en langue lecteur)
+  let ai=`<p>${tMail(null,"admin.loanUpdate")}</p>`,as2=`[BLMF] ${tit} — ${aun}`,titAdmin=tit;
+  if (event==="emprestimo_v2_criado") { ai=`<p>${tMail(null,"admin.newLoan")}</p>`; titAdmin=tMail(null,"loan.created.sub"); as2=`[BLMF] ${titAdmin} — ${aun}`; }
+  else if (event==="emprestimo_v2_prorrogado") { ai=`<p>${tMail(null,"admin.renewalDone")}</p>`; titAdmin=tMail(null,"loan.renewed.sub"); as2=`[BLMF] ${titAdmin} — ${aun}`; }
+  else if (event==="emprestimo_v2_devolvido") { ai=`<p>${tMail(null,"admin.returnDone")}</p>`; titAdmin=tMail(null,"loan.returned.sub"); as2=`[BLMF] ${titAdmin} — ${aun}`; }
+  else if (event==="emprestimo_v2_parcialmente_devolvido") { ai=`<p>${tMail(null,"admin.partialReturnDone")}</p>`; titAdmin=tMail(null,"loan.partialReturn.sub"); as2=`[BLMF] ${titAdmin} — ${aun}`; }
+  else if (event==="emprestimo_v2_devolvido_apos_parcial") { ai=`<p>${tMail(null,"admin.fullyReturnedAfterPartialDone")}</p>`; titAdmin=tMail(null,"loan.fullyReturnedAfterPartial.sub"); as2=`[BLMF] ${titAdmin} — ${aun}`; }
   // Paquet 17 (10/05/2026) : adminDet construit depuis detKeys (cles stables)
   // au lieu d'un mapping inverse fragile sur les labels traduits.
   const adminDet:EmailDetails=[{label:label(null,"reader"),value:aun},...detKeys.map(k=>({label:label(null,k.key),value:k.value}))];
-  const {html:ha,text:ta}=renderEmail({preheader:tit,title:tit,introHtml:ai,details:adminDet,footerHtml:footerPadrao(ctx),context:ctx}); as2=applyBrandingText(as2.replace(/BLMF/g,bt),ctx);
+  const {html:ha,text:ta}=renderEmail({preheader:titAdmin,title:titAdmin,introHtml:ai,details:adminDet,footerHtml:footerPadrao(ctx),context:ctx}); as2=applyBrandingText(as2.replace(/BLMF/g,bt),ctx);
   const ar=loanLifecycleEnabled(ctx)&&loanAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),as2,ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy",loanLifecycleEnabled(ctx)?"loan_admin_copy_disabled":"loan_lifecycle_disabled");
   return {user_result:ur,admin_result:ar};
 }
@@ -68,9 +69,14 @@ export async function handleEmprestimoDevolucaoEvent(recordId:number,event:strin
   const {html,text}=renderEmail({preheader:tit,title:tit,greeting:greeting(locale,user.name),introHtml:intro,details:det,footerHtml:footerPadrao(ctx),context:ctx});
   sub=applyBrandingText(sub,ctx);
   const ur=loanLifecycleEnabled(ctx)?await safeSendEmail(user,sub,html,text,"user_mail",ctx):skippedEmailResult("user_mail","loan_lifecycle_disabled");
+  // Paquet 17 (10/05/2026, fin de session) : titre admin force pt-BR
+  let titAdmin2=tit;
+  if (event==="emprestimo_devolucao_agendada") titAdmin2=tMail(null,"loan.returnScheduled");
+  else if (event==="emprestimo_devolucao_cancelada") titAdmin2=tMail(null,"loan.returnCancelled");
+  else if (event==="emprestimo_devolucao_nao_realizada") titAdmin2=tMail(null,"loan.returnMissed");
   const adminDet2:EmailDetails=[{label:label(null,"reader"),value:aun},...detKeys2.map(k=>({label:label(null,k.key),value:k.value}))];
-  const {html:ha,text:ta}=renderEmail({preheader:tit,title:tit,introHtml:`<p>${tMail(null,"admin.returnUpdate")}</p>`,details:adminDet2,footerHtml:footerPadrao(ctx),context:ctx});
-  const ar=loanLifecycleEnabled(ctx)&&loanAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),`[${bt}] ${tit} — ${aun}`,ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy","loan_admin_copy_disabled");
+  const {html:ha,text:ta}=renderEmail({preheader:titAdmin2,title:titAdmin2,introHtml:`<p>${tMail(null,"admin.returnUpdate")}</p>`,details:adminDet2,footerHtml:footerPadrao(ctx),context:ctx});
+  const ar=loanLifecycleEnabled(ctx)&&loanAdminCopyEnabled(ctx)?await safeSendEmail(adminTarget(ctx),`[${bt}] ${titAdmin2} — ${aun}`,ha,ta,"admin_copy",ctx):skippedEmailResult("admin_copy","loan_admin_copy_disabled");
   return {user_result:ur,admin_result:ar};
 }
 
