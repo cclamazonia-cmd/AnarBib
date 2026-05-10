@@ -35,6 +35,7 @@ export default function AccountPage() {
   const [renewStatus, setRenewStatus] = useState({});
   const [loans, setLoans] = useState([]);
   const [history, setHistory] = useState([]);
+  const [loanHistory, setLoanHistory] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -54,13 +55,14 @@ export default function AccountPage() {
     if (authLoading || !user) return;
     setLoading(true);
     try {
-      const [profileRes, reservRes, consultRes, loansRes, renewStatusRes, histRes, svcRes] = await Promise.all([
+      const [profileRes, reservRes, consultRes, loansRes, renewStatusRes, histRes, loanHistRes, svcRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         apiQuery('my_reservations_active_v2'),
         apiQuery('my_consultas_active_v2'),
         apiQuery('emprestimo_itens_ui'),
         apiQuery('my_loans_renewal_status_v1'),
         apiQuery('my_reservations_history_v2'),
+        apiQuery('my_loans_history_v1'),
         supabase.from('library_service_state').select('*'),
       ]);
       setProfile(profileRes.data);
@@ -71,6 +73,7 @@ export default function AccountPage() {
         (renewStatusRes.data || []).map(r => [r.emprestimo_id, r])
       ));
       setHistory(histRes.data || []);
+      setLoanHistory(loanHistRes.data || []);
       // Service state for the user's library
       if (svcRes.data?.length) setServiceState(svcRes.data[0]);
       // Notifications and wishlist
@@ -930,9 +933,48 @@ export default function AccountPage() {
             <div>
               <h2 className="ab-conta-section-title">{t({ id: 'account.history.title' })}</h2>
               <p className="ab-conta-hint">{t({ id: 'account.history.hint' })}</p>
-              {history.length === 0 ? (
-                <p className="ab-conta-empty">{t({ id: 'account.history.empty' })}</p>
-              ) : (
+
+              {/* Paquet 10 (10/05/2026) : section historique des emprunts */}
+              <div style={{ marginTop: 16 }}>
+                <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.history.loans.title' })}</h3>
+                {loanHistory.length === 0 ? (
+                  <p className="ab-conta-empty">{t({ id: 'account.history.loans.empty' })}</p>
+                ) : (
+                  <div className="ab-conta-items">
+                    {loanHistory.map((lh, i) => (
+                      <div key={`loan-${lh.emprestimo_id}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10 }}>
+                        <div className="ab-conta-item__main" style={{ flex: 1 }}>
+                          {lh.book_id ? (
+                            <Link to={`/livro/${lh.book_id}`} className="ab-conta-item__title">{lh.titulos || '—'}</Link>
+                          ) : (
+                            <span className="ab-conta-item__title">{lh.titulos || '—'}</span>
+                          )}
+                          {lh.autores && <span className="ab-conta-item__meta">{lh.autores}</span>}
+                          <span className="ab-conta-item__meta">
+                            {lh.items_count > 1 && <>{t({ id: 'account.history.loans.itemsCount' }, { count: lh.items_count })} · </>}
+                            ref: {lh.bib_refs || '—'} · {lh.library_name || '—'}
+                            {lh.emprestimo_created_at && <> · {t({id:'account.loans.checkout'})}: {new Date(lh.emprestimo_created_at).toLocaleDateString()}</>}
+                            {lh.returned_at && <> · {t({id:'account.loans.returnedOn'})}: {new Date(lh.returned_at).toLocaleDateString()}</>}
+                            {lh.renewals_used > 0 && <> · {t({ id: 'account.history.loans.renewalsUsed' }, { count: lh.renewals_used })}</>}
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
+                          <span style={{ fontSize: '.72rem', padding: '2px 8px', borderRadius: 4, fontWeight: 600, background: 'rgba(74,222,128,.12)', color: '#4ade80' }}>
+                            {t({ id: 'account.history.loans.completed' })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Section historique des reservations (preexistante) */}
+              <div style={{ marginTop: 24 }}>
+                <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.history.reservations.title' })}</h3>
+                {history.length === 0 ? (
+                  <p className="ab-conta-empty">{t({ id: 'account.history.empty' })}</p>
+                ) : (
                 <div className="ab-conta-items">
                   {history.map((h, i) => {
                     const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -968,7 +1010,8 @@ export default function AccountPage() {
                     );
                   })}
                 </div>
-              )}
+                )}
+              </div>
             </div>
           )}
 

@@ -197,6 +197,7 @@ export default function PanelPage() {
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
   const [loans, setLoans] = useState([]);
+  const [staffRenewStatus, setStaffRenewStatus] = useState({});
   const [internalTasks, setInternalTasks] = useState([]);
   const [selectedRes, setSelectedRes] = useState(new Set());
   const [resStage, setResStage] = useState('');
@@ -273,14 +274,19 @@ export default function PanelPage() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [resR, conR, loanR] = await Promise.all([
+      const [resR, conR, loanR, staffRenewR] = await Promise.all([
         apiQuery('reserva_itens_followup_ui'),
         apiQuery('consulta_itens_followup_ui'),
         apiQuery('emprestimo_itens_painel_ui'),
+        apiQuery('staff_loans_renewal_status_v1'),
       ]);
       setReservations(resR.data || []);
       setConsultations(conR.data || []);
       setLoans(loanR.data || []);
+      // Paquet 11 (10/05/2026) : pré-évaluation Prorrogar côté biblio
+      setStaffRenewStatus(Object.fromEntries(
+        (staffRenewR.data || []).map(r => [r.emprestimo_id, r])
+      ));
       // Load internal tasks
       if (libraryId) {
         const { data: tasksData } = await supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).in('status', ['pendente', 'em_andamento']).order('priority').order('due_date').limit(50);
@@ -1397,9 +1403,35 @@ export default function PanelPage() {
                           {l.item_status === 'aberto' && (
                             <>
                               <button className="ab-button ab-button--mini" onClick={() => returnLoanItem(l.emprestimo_id, [l.line_no])}>{t({ id: 'panel.loan.return.btn' })}</button>
-                              {!l.extended_once && !l.extended_until && (
-                                <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(l.emprestimo_id)}>{t({id:'panel.table.extend'})}</button>
-                              )}
+                              {(() => {
+                                // Paquet 11 (10/05/2026) : pré-désactivation Prorrogar avec tooltip raisonné
+                                // (calque sur le bouton Renovar côté lecteur, paquet 7).
+                                // staffRenewInfo vient de api.staff_loans_renewal_status_v1.
+                                // Inclut aussi le fix paquet 7 : !(renewals_used > 0) au lieu de !extended_once.
+                                const staffRenewInfo = staffRenewStatus[l.emprestimo_id] || null;
+                                const wasExtended = (l.renewals_used || 0) > 0 || !!l.extended_until;
+                                if (wasExtended) return null;
+                                const canRenew = staffRenewInfo
+                                  ? staffRenewInfo.can_renew
+                                  : true; // fallback : on laisse le bouton actif si la vue n'a pas répondu
+                                const blockingReason = staffRenewInfo ? staffRenewInfo.blocking_reason : null;
+                                const tooltipMsg = blockingReason
+                                  ? t(
+                                      { id: 'account.renew.tooltipBlocked' },
+                                      { reason: t({ id: `account.renew.${blockingReason}` }) }
+                                    )
+                                  : null;
+                                return (
+                                  <button
+                                    className="ab-button ab-button--secondary ab-button--mini"
+                                    disabled={!canRenew}
+                                    title={tooltipMsg || undefined}
+                                    onClick={() => extendLoan(l.emprestimo_id)}
+                                  >
+                                    {t({id:'panel.table.extend'})}
+                                  </button>
+                                );
+                              })()}
                             </>
                           )}
                         </td>
