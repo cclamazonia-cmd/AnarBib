@@ -1567,7 +1567,7 @@
   "panel.loan.loanId": "Ausleihe #{id}",
   "panel.loan.notePh": "Nota interna (opcional)",
   "panel.loan.noValidRefs": "Keine gültige Referenz im Bestand.",
-  "panel.loan.openLoans": "Offene Ausleihen: {count} ({items, plural, one {# Exemplar draußen} other {# Exemplare draußen}}, {overdue, plural, =0 {0 überfällig} one {# überfällig} other {# überfällig}})",
+  "panel.loan.openLoans": "Offene Ausleihen: {count} ({overdue, plural, =0 {0 überfällig} one {# überfällig} other {# überfällig}})",
   "panel.loan.readerNotFound": "Leser*in nicht gefunden.",
   "panel.loan.refs": "Lokale Exemplar-Referenzen",
   "panel.loan.refsHint": "Bis zu 5 lokale Referenzen gleichzeitig.",

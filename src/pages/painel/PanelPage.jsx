@@ -1597,10 +1597,23 @@ export default function PanelPage() {
                   if (!grouped[l.emprestimo_id]) grouped[l.emprestimo_id] = { ...l, items: [] };
                   grouped[l.emprestimo_id].items.push(l);
                 });
-                return Object.values(grouped).map((g, i) => (
+                return Object.values(grouped).map((g, i) => {
+                  // Paquet 19 v2 (11/05/2026) : bouton Prorrogar disponible si emprunt ouvert
+                  // et non deja prolonge. Meme logique que le tableau Empruntes standard.
+                  const canExtend = g.emprestimo_status === 'aberto'
+                    && !g.extended_once
+                    && !g.extended_until;
+                  return (
                   <div key={i} className="ab-painel-lote">
-                    <div className="ab-painel-lote__head">
-                      <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
+                    <div className="ab-painel-lote__head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                      <div>
+                        <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
+                      </div>
+                      {canExtend && (
+                        <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(g.emprestimo_id)}>
+                          {t({id:'panel.table.extend'})}
+                        </button>
+                      )}
                     </div>
                     <div className="ab-painel-lote__items">
                       {g.items.map((l, j) => (
@@ -1610,7 +1623,8 @@ export default function PanelPage() {
                       ))}
                     </div>
                   </div>
-                ));
+                  );
+                });
               })()}
             </div>
           )}
