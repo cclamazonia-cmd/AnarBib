@@ -2156,5 +2156,7 @@
     "video.subtitles":  "Untertitel: {label}",
     "video.subtitlesOff":  "aus",
     "video.unmute":  "Stummschaltung aufheben",
-    "video.volume":  "Lautstärke"
+    "video.volume":  "Lautstärke",
+    "account.loans.partialReturn":  "Teilrückgabe",
+    "account.loans.partialReturnHint":  "Ausleihe mit laufender Teilrückgabe"
 }

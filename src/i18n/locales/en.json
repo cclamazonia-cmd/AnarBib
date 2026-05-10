@@ -2156,5 +2156,7 @@
     "video.subtitles":  "Subtitles: {label}",
     "video.subtitlesOff":  "off",
     "video.unmute":  "Unmute",
-    "video.volume":  "Volume"
+    "video.volume":  "Volume",
+    "account.loans.partialReturn":  "Partial return",
+    "account.loans.partialReturnHint":  "Loan with a partial return in progress"
 }

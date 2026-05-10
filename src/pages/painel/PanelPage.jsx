@@ -537,10 +537,9 @@ export default function PanelPage() {
       if (error) throw error;
       // PATCH 07/05/2026 audit i18n : message hardcodé pt-BR remplacé par clé i18n
       setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, name: borrower.first_name || borrower.email }));
-      // Le record_id retourné par la RPC est l'emprestimo_id — on ne l'a pas ici,
-      // mais on peut utiliser un reload + notify asynchrone via les données rechargées
-      // Pour l'instant on notifie avec un ID fictif que le backend résoudra
-      notifyEvent('emprestimo_v2_criado', 0, { user_id: borrower.id, holding_ids: holdingIds });
+      // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
+      // trg_notify_emprestimo_criado (header AFTER INSERT) s'en charge.
+      // Cohérent avec le cleanup déjà appliqué L301 et L377.
       setBorrowerLookup(''); setLoanRefs('');
       loadData();
     } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message:e.message})); }
@@ -554,7 +553,9 @@ export default function PanelPage() {
       const { error } = await supabase.rpc('fn_v2_return_emprestimo_total', { p_emprestimo_id: id });
       if (error) throw error;
       setReturnMsg(t({id:'panel.return.totalRegistered'},{id}));
-      notifyEvent('emprestimo_v2_devolvido', id);
+      // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
+      // (via fn_v2_refresh_emprestimo_status_global) dispatch déjà l'event
+      // approprié selon la transition (devolvido OU devolvido_apos_parcial).
       setReturnId('');
       loadData();
     } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message:e.message})); }
@@ -582,13 +583,8 @@ export default function PanelPage() {
 
   async function extendLoan(empId) {
     try {
-      // Paquet 7 (10/05/2026) : retour jsonb harmonisé avec fn_renew_my_loan
-      const { data, error } = await supabase.rpc('fn_v2_extend_emprestimo_once', { p_emprestimo_id: empId });
+      const { error } = await supabase.rpc('fn_v2_extend_emprestimo_once', { p_emprestimo_id: empId });
       if (error) throw error;
-      if (data?.ok === false) {
-        alert(t({ id: `account.renew.${data.reason}` }));
-        return;
-      }
       loadData();
     } catch (e) {
       // PATCH 07/05/2026 audit i18n : alert pt-BR remplacé par clé i18n
@@ -894,7 +890,16 @@ export default function PanelPage() {
     ] : []),
   ];
 
-  const activeRes = reservations.filter(r => !['cancelada_leitor','cancelada_biblioteca','expirada','retirada_efetivada','liberada_para_circulacao'].includes(r.item_status));
+  // Paquet 9 (10/05/2026) : fix bug compteur "Réservations actives" du hero.
+  // L'ancienne denylist excluait cancelada_leitor/cancelada_biblioteca/expirada/
+  // retirada_efetivada/liberada_para_circulacao mais oubliait
+  // 'convertida_em_emprestimo' (ajouté au CHECK quand le flow réservation→emprunt
+  // a été câblé). Résultat : les résas converties en emprunts comptaient comme
+  // actives. On bascule sur une allowlist pour être robuste aux ajouts futurs.
+  // Valeurs possibles selon le CHECK constraint sur reserva_linhas_v2 :
+  // 'ativa' (seule active), 'convertida_em_emprestimo', 'cancelada_leitor',
+  // 'cancelada_biblioteca', 'expirada', 'liberada_para_circulacao'.
+  const activeRes = reservations.filter(r => r.item_status === 'ativa');
   const activeLoans = loans.filter(l => l.item_status === 'aberto');
   const overdueLoans = activeLoans.filter(l => {
     const effectiveDue = l.extended_until || l.due_at;
@@ -1392,7 +1397,7 @@ export default function PanelPage() {
                           {l.item_status === 'aberto' && (
                             <>
                               <button className="ab-button ab-button--mini" onClick={() => returnLoanItem(l.emprestimo_id, [l.line_no])}>{t({ id: 'panel.loan.return.btn' })}</button>
-                              {!(l.renewals_used > 0) && !l.extended_until && (
+                              {!l.extended_once && !l.extended_until && (
                                 <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(l.emprestimo_id)}>{t({id:'panel.table.extend'})}</button>
                               )}
                             </>

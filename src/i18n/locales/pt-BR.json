@@ -2156,5 +2156,7 @@
     "video.subtitles":  "Legendas : {label}",
     "video.subtitlesOff":  "desativadas",
     "video.unmute":  "Ativar som",
-    "video.volume":  "Volume"
+    "video.volume":  "Volume",
+    "account.loans.partialReturn":  "Devolução parcial",
+    "account.loans.partialReturnHint":  "Empréstimo com devolução parcial em curso"
 }

@@ -83,6 +83,22 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Documenti",
     de: "Dokumente"
   },
+  "l.itemsReturned": {
+    "pt-BR": "Documentos devolvidos",
+    fr: "Documents rendus",
+    es: "Documentos devueltos",
+    en: "Documents returned",
+    it: "Documenti restituiti",
+    de: "Zurückgegebene Dokumente"
+  },
+  "l.itemsRemaining": {
+    "pt-BR": "Documentos ainda em mãos",
+    fr: "Documents encore à rendre",
+    es: "Documentos todavía pendientes",
+    en: "Documents still to return",
+    it: "Documenti ancora da restituire",
+    de: "Noch zurückzugebende Dokumente"
+  },
   "l.ref": {
     "pt-BR": "Referência",
     fr: "Référence",
@@ -888,6 +904,62 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Restituzione non effettuata",
     de: "Rückgabe nicht erfolgt"
   },
+  "loan.partialReturn.sub": {
+    "pt-BR": "Devolução parcial registrada",
+    fr: "Retour partiel enregistré",
+    es: "Devolución parcial registrada",
+    en: "Partial return recorded",
+    it: "Restituzione parziale registrata",
+    de: "Teilrückgabe registriert"
+  },
+  "loan.partialReturn.intro": {
+    "pt-BR": "Registramos a devolução parcial do seu empréstimo. Obrigad(o/a/e) por trazer alguns documentos!",
+    fr: "Nous avons enregistré le retour partiel de ton emprunt. Merci d'avoir rapporté une partie des documents !",
+    es: "Registramos la devolución parcial de tu préstamo. ¡Gracias por traer une parte de los documentos!",
+    en: "We've recorded the partial return of your loan. Thank you for bringing back some of the documents!",
+    it: "Abbiamo registrato la restituzione parziale del tuo prestito. Grazie per aver riportato alcuni documenti!",
+    de: "Wir haben die Teilrückgabe deiner Ausleihe registriert. Danke, dass du einige Dokumente zurückgebracht hast!"
+  },
+  "loan.partialReturn.dueReminder": {
+    "pt-BR": "Lembrete: a data de devolução dos documentos restantes é {date}.",
+    fr: "Rappel : la date de retour des documents restants est le {date}.",
+    es: "Recordatorio: la fecha de devolución de los documentos restantes es el {date}.",
+    en: "Reminder: the due date for the remaining documents is {date}.",
+    it: "Promemoria: la data di restituzione dei documenti rimanenti è il {date}.",
+    de: "Erinnerung: das Rückgabedatum für die verbleibenden Dokumente ist der {date}."
+  },
+  "loan.partialReturn.outro": {
+    "pt-BR": "Não esqueça de passar pela biblioteca para devolver os documentos restantes.",
+    fr: "N'oublie pas de passer à la bibliothèque pour rendre les documents restants.",
+    es: "No olvides pasar por la biblioteca para devolver los documentos restantes.",
+    en: "Don't forget to drop by the library to return the remaining documents.",
+    it: "Non dimenticare di passare in biblioteca per restituire i documenti rimanenti.",
+    de: "Vergiss nicht, in der Bibliothek vorbeizuschauen, um die verbleibenden Dokumente zurückzugeben."
+  },
+  "loan.fullyReturnedAfterPartial.sub": {
+    "pt-BR": "Empréstimo concluído",
+    fr: "Emprunt clôturé",
+    es: "Préstamo concluido",
+    en: "Loan completed",
+    it: "Prestito concluso",
+    de: "Ausleihe abgeschlossen"
+  },
+  "loan.fullyReturnedAfterPartial.intro": {
+    "pt-BR": "Você devolveu o último documento do seu empréstimo. Tudo voltou! Obrigad(o/a/e) por cuidar bem dos livros da biblioteca.",
+    fr: "Tu viens de rendre le dernier document de ton emprunt. Tout est revenu ! Merci d'avoir pris soin des documents de la bibliothèque.",
+    es: "Devolviste el último documento de tu préstamo. ¡Todo volvió! Gracias por cuidar de los documentos de la biblioteca.",
+    en: "You've returned the last document of your loan. Everything is back! Thank you for taking good care of the library's documents.",
+    it: "Hai restituito l'ultimo documento del tuo prestito. È tutto rientrato! Grazie per esserti preso/a/* cura dei documenti della biblioteca.",
+    de: "Du hast das letzte Dokument deiner Ausleihe zurückgebracht. Alles ist wieder da! Danke, dass du gut auf die Dokumente der Bibliothek aufgepasst hast."
+  },
+  "loan.fullyReturnedAfterPartial.browse": {
+    "pt-BR": "Continue navegando no acervo para suas próximas leituras.",
+    fr: "Continue à explorer le fonds pour tes prochaines lectures.",
+    es: "Sigue navegando el acervo para tus próximas lecturas.",
+    en: "Keep browsing the collection for your next reads.",
+    it: "Continua a esplorare il fondo per le tue prossime letture.",
+    de: "Stöbere weiter im Bestand für deine nächste Lektüre."
+  },
 
   // ===== Reminders (rem.*) ==================================================
   "rem.title": {
@@ -1105,6 +1177,22 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     en: "Return recorded",
     it: "Restituzione registrata",
     de: "Rückgabe registriert"
+  },
+  "admin.partialReturnDone": {
+    "pt-BR": "Devolução parcial registrada",
+    fr: "Retour partiel enregistré",
+    es: "Devolución parcial registrada",
+    en: "Partial return recorded",
+    it: "Restituzione parziale registrata",
+    de: "Teilrückgabe registriert"
+  },
+  "admin.fullyReturnedAfterPartialDone": {
+    "pt-BR": "Empréstimo concluído (após devolução parcial)",
+    fr: "Emprunt clôturé (après retour partiel)",
+    es: "Préstamo concluido (tras devolución parcial)",
+    en: "Loan completed (after partial return)",
+    it: "Prestito concluso (dopo restituzione parziale)",
+    de: "Ausleihe abgeschlossen (nach Teilrückgabe)"
   },
   "admin.returnUpdate": {
     "pt-BR": "Atualização sobre devolução",

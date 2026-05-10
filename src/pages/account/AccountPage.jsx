@@ -828,6 +828,12 @@ export default function AccountPage() {
                     const renewalsUsed = l.renewals_used || 0;
                     const wasExtended = renewalsUsed > 0;
                     const renewInfo = renewStatus[l.emprestimo_id] || null;
+                    // Paquet 8 (10/05/2026) : détection retour partiel calculée côté frontend
+                    // à partir du tableau loans complet (groupBy emprestimo_id).
+                    const sameLoanItems = loans.filter(x => x.emprestimo_id === l.emprestimo_id);
+                    const hasReturned = sameLoanItems.some(x => x.item_status === 'devolvido');
+                    const hasOpen = sameLoanItems.some(x => x.item_status === 'aberto');
+                    const isPartialReturn = hasReturned && hasOpen;
                     return (
                       <div key={i} className={`ab-conta-item ${isOverdue ? 'ab-conta-item--overdue' : ''}`}
                         style={{ borderLeft: `3px solid ${isOverdue ? '#ef4444' : isSoon ? '#f59e0b' : 'rgba(255,255,255,.08)'}` }}>
@@ -845,6 +851,7 @@ export default function AccountPage() {
                             )}
                           </span>
                           {wasExtended && <span className="ab-conta-item__meta" style={{ color: '#60a5fa' }}>{t({ id: 'account.loans.renewedUntil' }, { date: new Date(l.extended_until + 'T00:00:00').toLocaleDateString() })}</span>}
+                          {isPartialReturn && <span className="ab-conta-item__meta" style={{ color: '#f59e0b' }}>{t({ id: 'account.loans.partialReturnHint' })}</span>}
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
                           {(() => {
@@ -887,6 +894,7 @@ export default function AccountPage() {
                           })()}
                           {wasExtended && <span style={{ fontSize: '.72rem', color: '#60a5fa', fontWeight: 600 }}>{t({ id: 'account.loans.renewed' })}</span>}
                           {isOverdue && <span style={{ fontSize: '.72rem', color: '#ef4444', fontWeight: 600 }}>{t({ id: 'account.loans.overdue' })}</span>}
+                          {isPartialReturn && <span style={{ fontSize: '.72rem', color: '#f59e0b', fontWeight: 600 }}>{t({ id: 'account.loans.partialReturn' })}</span>}
                         </div>
                       </div>
                     );

@@ -2156,5 +2156,7 @@
     "video.subtitles":  "Sottotitoli: {label}",
     "video.subtitlesOff":  "disattivati",
     "video.unmute":  "Riattiva audio",
-    "video.volume":  "Volume"
+    "video.volume":  "Volume",
+    "account.loans.partialReturn":  "Restituzione parziale",
+    "account.loans.partialReturnHint":  "Prestito con restituzione parziale in corso"
 }
