@@ -49,6 +49,73 @@ function UserDisplay({ name, email, publicId, userId, fallback = '—' }) {
 }
 
 // ═══════════════════════════════════════════════════════════
+// useSort — hook pour tri ascendant/descendant sur un tableau (paquet 18)
+// ───────────────────────────────────────────────────────────
+// Usage :
+//   const { sortedItems, sortKey, sortDir, toggleSort } = useSort(items);
+//   <SortHeader sortKey="due_at" current={sortKey} dir={sortDir} onClick={toggleSort}>Échéance</SortHeader>
+//   ... sortedItems.map(...)
+//
+// toggleSort(key) : null → asc → desc → null (cycle 3 etats).
+// Si null, l'ordre original est preserve.
+// ═══════════════════════════════════════════════════════════
+function useSort(items) {
+  const [sortKey, setSortKey] = useState(null);
+  const [sortDir, setSortDir] = useState(null);
+
+  const toggleSort = (key) => {
+    if (sortKey !== key) { setSortKey(key); setSortDir('asc'); return; }
+    if (sortDir === 'asc') { setSortDir('desc'); return; }
+    if (sortDir === 'desc') { setSortKey(null); setSortDir(null); return; }
+  };
+
+  const sortedItems = useMemo(() => {
+    if (!sortKey || !sortDir) return items;
+    const arr = [...items];
+    arr.sort((a, b) => {
+      const va = a?.[sortKey], vb = b?.[sortKey];
+      // null/undefined toujours en bas
+      if (va == null && vb == null) return 0;
+      if (va == null) return 1;
+      if (vb == null) return -1;
+      // dates ISO (heuristique : string commencant par YYYY-)
+      const isaDate = typeof va === 'string' && /^\d{4}-\d{2}-\d{2}/.test(va);
+      const isbDate = typeof vb === 'string' && /^\d{4}-\d{2}-\d{2}/.test(vb);
+      if (isaDate && isbDate) {
+        const cmp = new Date(va).getTime() - new Date(vb).getTime();
+        return sortDir === 'asc' ? cmp : -cmp;
+      }
+      // nombres (y compris strings purement numeriques)
+      const na = Number(va), nb = Number(vb);
+      if (!Number.isNaN(na) && !Number.isNaN(nb) && typeof va !== 'object' && typeof vb !== 'object') {
+        const cmp = na - nb;
+        if (cmp !== 0) return sortDir === 'asc' ? cmp : -cmp;
+      }
+      // fallback : comparaison string
+      const sa = String(va), sb = String(vb);
+      const cmp = sa.localeCompare(sb, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+    return arr;
+  }, [items, sortKey, sortDir]);
+
+  return { sortedItems, sortKey, sortDir, toggleSort };
+}
+
+// ═══════════════════════════════════════════════════════════
+// SortHeader — composant <th> cliquable avec fleche (paquet 18)
+// ═══════════════════════════════════════════════════════════
+function SortHeader({ sortKey, current, dir, onClick, children }) {
+  const isActive = current === sortKey;
+  const arrow = isActive ? (dir === 'asc' ? ' ↑' : ' ↓') : '';
+  return (
+    <th onClick={() => onClick(sortKey)} style={{ cursor: 'pointer', userSelect: 'none' }} title="Cliquer pour trier">
+      {children}{arrow}
+    </th>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
 
 export default function PanelPage() {
   const { user } = useAuth();
@@ -197,7 +264,10 @@ export default function PanelPage() {
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
   const [loans, setLoans] = useState([]);
-  const [staffRenewStatus, setStaffRenewStatus] = useState({});
+  // Paquet 18 (10/05/2026) : tri par colonnes pour les 3 tableaux principaux
+  const sortRes = useSort(reservations);
+  const sortCon = useSort(consultations);
+  const sortLoans = useSort(loans);
   const [internalTasks, setInternalTasks] = useState([]);
   const [selectedRes, setSelectedRes] = useState(new Set());
   const [resStage, setResStage] = useState('');
@@ -216,10 +286,6 @@ export default function PanelPage() {
   // Ações
   const [borrowerLookup, setBorrowerLookup] = useState('');
   const [loanRefs, setLoanRefs] = useState('');
-  // Paquet 16 (10/05/2026) : preview echeance avant confirmation
-  const [loanPreview, setLoanPreview] = useState(null);
-  // Paquet 16 v2 : flag pour bloquer le double-clic pendant le traitement async
-  const [loanBusy, setLoanBusy] = useState(false);
   const [loanMsg, setLoanMsg] = useState('');
   const [returnId, setReturnId] = useState('');
   const [returnSubIds, setReturnSubIds] = useState('');
@@ -278,19 +344,14 @@ export default function PanelPage() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [resR, conR, loanR, staffRenewR] = await Promise.all([
+      const [resR, conR, loanR] = await Promise.all([
         apiQuery('reserva_itens_followup_ui'),
         apiQuery('consulta_itens_followup_ui'),
         apiQuery('emprestimo_itens_painel_ui'),
-        apiQuery('staff_loans_renewal_status_v1'),
       ]);
       setReservations(resR.data || []);
       setConsultations(conR.data || []);
       setLoans(loanR.data || []);
-      // Paquet 11 (10/05/2026) : pré-évaluation Prorrogar côté biblio
-      setStaffRenewStatus(Object.fromEntries(
-        (staffRenewR.data || []).map(r => [r.emprestimo_id, r])
-      ));
       // Load internal tasks
       if (libraryId) {
         const { data: tasksData } = await supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).in('status', ['pendente', 'em_andamento']).order('priority').order('due_date').limit(50);
@@ -524,42 +585,8 @@ export default function PanelPage() {
   // ── Ações: saída e devolução ──────────────────────────
 
   async function registrarSaida() {
-    // Paquet 16 (10/05/2026) : 2 phases
-    //   Phase 1 : pas de loanPreview → resoudre borrower + holdings + projection → stocker preview
-    //   Phase 2 : loanPreview existe → utiliser ses valeurs pour creer l'emprunt
-    //
-    // Paquet 16 v2 (10/05/2026 fin de session) : guard loanBusy pour bloquer
-    // les double-clics qui sautaient en phase 2 avant que la preview soit affichee.
-    if (loanBusy) return;
     const refs = loanRefs.split(/[,;\s]+/).map(r => r.trim()).filter(Boolean);
     if (!borrowerLookup.trim() || !refs.length) { setLoanMsg(t({ id: 'panel.loan.errorMissing' })); return; }
-
-    // ════════════════════════════════════════════════════
-    // PHASE 2 : confirmation - on a deja une preview valide
-    // ════════════════════════════════════════════════════
-    if (loanPreview && loanPreview.refsKey === refs.join('|') && loanPreview.borrowerKey === borrowerLookup.trim()) {
-      setLoanBusy(true);
-      setLoanMsg(t({id:'panel.loan.registering'}));
-      try {
-        const { error } = await supabase.rpc('fn_v2_create_emprestimo_by_holdings', {
-          p_user_id: loanPreview.borrowerId, p_holding_ids: loanPreview.holdingIds,
-        });
-        if (error) throw error;
-        setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, name: loanPreview.borrowerName }));
-        // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
-        // trg_notify_emprestimo_criado (header AFTER INSERT) s'en charge.
-        setBorrowerLookup(''); setLoanRefs('');
-        setLoanPreview(null);
-        loadData();
-      } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message:e.message})); }
-      finally { setLoanBusy(false); }
-      return;
-    }
-
-    // ════════════════════════════════════════════════════
-    // PHASE 1 : preview - resoudre borrower + holdings + projection
-    // ════════════════════════════════════════════════════
-    setLoanBusy(true);
     setLoanMsg(t({id:'panel.loan.resolving'}));
     try {
       // Resolve borrower
@@ -574,49 +601,19 @@ export default function PanelPage() {
       const holdingIds = (resolveRes.data || []).filter(r => r.matched && Number(r.session_holding_id) > 0).map(r => Number(r.session_holding_id));
       if (!holdingIds.length) { setLoanMsg(t({ id: 'panel.loan.noValidRefs' })); return; }
 
-      // Get loan projection (paquet 16)
-      const bookIds = (resolveRes.data || []).filter(r => r.matched && Number(r.book_id) > 0).map(r => Number(r.book_id));
-      const projectionRes = await supabase.schema('api').rpc('get_batch_loan_projection', {
-        p_library_id: libraryId,
-        p_user_id: borrower.id,
-        p_book_ids: bookIds,
-        p_holding_ids: holdingIds,
-        p_quantity: holdingIds.length,
-        p_as_of_date: new Date().toISOString().slice(0, 10),
+      setLoanMsg(t({id:'panel.loan.registering'}));
+      const { error } = await supabase.rpc('fn_v2_create_emprestimo_by_holdings', {
+        p_user_id: borrower.id, p_holding_ids: holdingIds,
       });
-      if (projectionRes.error) throw projectionRes.error;
-      const proj = Array.isArray(projectionRes.data) ? projectionRes.data[0] : projectionRes.data;
-
-      // Stocker la preview
-      setLoanPreview({
-        borrowerId: borrower.id,
-        borrowerName: borrower.first_name || borrower.email,
-        borrowerKey: borrowerLookup.trim(),
-        holdingIds,
-        refsKey: refs.join('|'),
-        dueDate: proj?.due_date,
-        ruleLabel: proj?.rule_label,
-        loanAllowed: proj?.loan_allowed !== false,
-      });
-
-      if (proj?.loan_allowed === false) {
-        setLoanMsg(t({id:'panel.loan.preview.notAllowed'}, { rule: proj.rule_label || '' }));
-      } else {
-        setLoanMsg(t({id:'panel.loan.preview.confirm'}, {
-          name: borrower.first_name || borrower.email,
-          count: holdingIds.length,
-          dueDate: fmtD(proj?.due_date) || '—',
-          rule: proj?.rule_label || '—',
-        }));
-      }
+      if (error) throw error;
+      // PATCH 07/05/2026 audit i18n : message hardcodé pt-BR remplacé par clé i18n
+      setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, name: borrower.first_name || borrower.email }));
+      // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
+      // trg_notify_emprestimo_criado (header AFTER INSERT) s'en charge.
+      // Cohérent avec le cleanup déjà appliqué L301 et L377.
+      setBorrowerLookup(''); setLoanRefs('');
+      loadData();
     } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message:e.message})); }
-    finally { setLoanBusy(false); }
-  }
-
-  // Paquet 16 : annuler la preview pour reprendre la saisie
-  function cancelLoanPreview() {
-    setLoanPreview(null);
-    setLoanMsg('');
   }
 
   async function registrarDevolucaoTotal() {
@@ -975,10 +972,6 @@ export default function PanelPage() {
   // 'cancelada_biblioteca', 'expirada', 'liberada_para_circulacao'.
   const activeRes = reservations.filter(r => r.item_status === 'ativa');
   const activeLoans = loans.filter(l => l.item_status === 'aberto');
-  // Paquet "audit phase 5" (10/05/2026) : compter aussi les EMPRUNTS distincts
-  // (et plus seulement les items) pour le hero. Un emprunt 3-items dont 1 est
-  // rendu = 1 emprunt + 2 items dehors.
-  const activeLoanGroups = new Set(activeLoans.map(l => l.emprestimo_id)).size;
   const overdueLoans = activeLoans.filter(l => {
     const effectiveDue = l.extended_until || l.due_at;
     return effectiveDue && new Date(effectiveDue) < new Date();
@@ -1062,7 +1055,7 @@ export default function PanelPage() {
         <div className="ab-painel-chips">
           <Pill variant={activeRes.length > 0 ? 'warn' : 'default'}>{t({ id: 'panel.reservations.active' }, { count: activeRes.length })}</Pill>
           <Pill>{t({ id: 'panel.consultations.active' }, { count: consultations.filter(c => c.item_status === 'ativa').length })}</Pill>
-          <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoanGroups, items: activeLoans.length, overdue: overdueLoans.length })}</Pill>
+          <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoans.length, overdue: overdueLoans.length })}</Pill>
           <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
         </div>
       </Hero>
@@ -1171,25 +1164,12 @@ export default function PanelPage() {
                 <h2 className="ab-painel-h2">{t({ id: 'panel.loan.register' })}</h2>
                 <p className="ab-painel-hint">{t({ id: 'panel.loan.refsHint' })}</p>
                 <label>{t({ id: 'panel.loan.borrowerLabel' })}
-                  <input type="text" value={borrowerLookup} onChange={e => { setBorrowerLookup(e.target.value); if (loanPreview) setLoanPreview(null); }} placeholder={t({ id: 'panel.loan.borrowerPlaceholder' })} className="ab-painel-input" />
+                  <input type="text" value={borrowerLookup} onChange={e => setBorrowerLookup(e.target.value)} placeholder={t({ id: 'panel.loan.borrowerPlaceholder' })} className="ab-painel-input" />
                 </label>
                 <label>{t({ id: 'panel.loan.refsLabel' })}
-                  <input type="text" value={loanRefs} onChange={e => { setLoanRefs(e.target.value); if (loanPreview) setLoanPreview(null); }} placeholder={t({ id: 'panel.loan.refsPlaceholder' })} className="ab-painel-input" />
+                  <input type="text" value={loanRefs} onChange={e => setLoanRefs(e.target.value)} placeholder={t({ id: 'panel.loan.refsPlaceholder' })} className="ab-painel-input" />
                 </label>
-                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                  <Button onClick={registrarSaida} disabled={loanBusy || (loanPreview && loanPreview.loanAllowed === false)}>
-                    {loanBusy
-                      ? '…'
-                      : loanPreview
-                        ? t({ id: 'panel.loan.confirmRegister' })
-                        : t({ id: 'panel.loan.register' })}
-                  </Button>
-                  {loanPreview && !loanBusy && (
-                    <Button variant="secondary" onClick={cancelLoanPreview}>
-                      {t({ id: 'panel.loan.cancelPreview' })}
-                    </Button>
-                  )}
-                </div>
+                <Button onClick={registrarSaida}>{t({ id: 'panel.loan.register' })}</Button>
                 {loanMsg && <p className="ab-painel-msg">{loanMsg}</p>}
               </div>
               <div className="ab-painel-acoes-card">
@@ -1273,14 +1253,20 @@ export default function PanelPage() {
                   <thead>
                     <tr>
                       <th><input type="checkbox" checked={selectedRes.size === reservations.length && reservations.length > 0} onChange={toggleAllRes} /></th>
-                      <th>{t({id:'panel.table.subId'})}</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>{t({id:'panel.table.ref'})}</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({id:'panel.table.pickup'})}</th><th>{t({id:'panel.table.validity'})}</th>
-                      {/* PATCH 08/05/2026 paquet 3B : 2 nouvelles colonnes pour la négociation symétrique */}
-                      <th>{t({id:'panel.table.negotiation'})}</th>
+                      <SortHeader sortKey="sub_id" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.subId'})}</SortHeader>
+                      <SortHeader sortKey="user_name" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.reader'})}</SortHeader>
+                      <SortHeader sortKey="titulo" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.book'})}</SortHeader>
+                      <SortHeader sortKey="bib_ref" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.ref'})}</SortHeader>
+                      <SortHeader sortKey="rotulo" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.label'})}</SortHeader>
+                      <SortHeader sortKey="workflow_stage_effective" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.step'})}</SortHeader>
+                      <SortHeader sortKey="pickup_scheduled_for" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.pickup'})}</SortHeader>
+                      <SortHeader sortKey="expires_at" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.validity'})}</SortHeader>
+                      <SortHeader sortKey="pickup_proposed_by" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.negotiation'})}</SortHeader>
                       <th>{t({id:'panel.table.actions'})}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {reservations.map((r, i) => {
+                    {sortRes.sortedItems.map((r, i) => {
                       const key = `${r.reserva_id}-${r.line_no}`;
                       // PATCH 08/05/2026 paquet 3B : ligne accordion ouverte si on
                       // est en train de contre-proposer pour cette ligne précisément
@@ -1419,9 +1405,17 @@ export default function PanelPage() {
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.consultations' })}</h2>
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
-                  <thead><tr><th>{t({id:'panel.table.subId'})}</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>{t({id:'panel.table.ref'})}</th><th>{t({id:'panel.table.step'})}</th><th>{t({ id: 'panel.loan.scheduling' })}</th><th>{t({id:'panel.table.actions'})}</th></tr></thead>
+                  <thead><tr>
+                    <SortHeader sortKey="sub_id" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.subId'})}</SortHeader>
+                    <SortHeader sortKey="user_name" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.reader'})}</SortHeader>
+                    <SortHeader sortKey="titulo" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.book'})}</SortHeader>
+                    <SortHeader sortKey="bib_ref" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.ref'})}</SortHeader>
+                    <SortHeader sortKey="workflow_stage_effective" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.step'})}</SortHeader>
+                    <SortHeader sortKey="consultation_scheduled_for" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({ id: 'panel.loan.scheduling' })}</SortHeader>
+                    <th>{t({id:'panel.table.actions'})}</th>
+                  </tr></thead>
                   <tbody>
-                    {consultations.map((c, i) => (
+                    {sortCon.sortedItems.map((c, i) => (
                       <tr key={i}>
                         <td>{c.sub_id}</td>
                         <td>
@@ -1464,9 +1458,20 @@ export default function PanelPage() {
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.loans' })}</h2>
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
-                  <thead><tr><th>{t({id:'panel.table.subId'})}</th><th>{t({id:'panel.table.reader'})}</th><th>{t({id:'panel.table.book'})}</th><th>{t({id:'panel.table.ref'})}</th><th>{t({id:'panel.table.label'})}</th><th>{t({id:'panel.table.exit'})}</th><th>{t({id:'panel.table.deadline'})}</th><th>{t({id:'panel.table.extended'})}</th><th>{t({id:'panel.table.status'})}</th><th>{t({id:'panel.table.actions'})}</th></tr></thead>
+                  <thead><tr>
+                    <SortHeader sortKey="sub_id" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.subId'})}</SortHeader>
+                    <SortHeader sortKey="user_name" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.reader'})}</SortHeader>
+                    <SortHeader sortKey="titulo" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.book'})}</SortHeader>
+                    <SortHeader sortKey="bib_ref" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.ref'})}</SortHeader>
+                    <SortHeader sortKey="rotulo" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.label'})}</SortHeader>
+                    <SortHeader sortKey="emprestimo_created_at" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.exit'})}</SortHeader>
+                    <SortHeader sortKey="due_at" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.deadline'})}</SortHeader>
+                    <SortHeader sortKey="extended_until" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.extended'})}</SortHeader>
+                    <SortHeader sortKey="item_status" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.status'})}</SortHeader>
+                    <th>{t({id:'panel.table.actions'})}</th>
+                  </tr></thead>
                   <tbody>
-                    {loans.map((l, i) => (
+                    {sortLoans.sortedItems.map((l, i) => (
                       <tr key={i} className={l.item_status === 'aberto' && l.due_at && new Date(l.due_at) < new Date() ? 'overdue' : ''}>
                         <td>{l.sub_id}</td>
                         <td>
@@ -1488,35 +1493,9 @@ export default function PanelPage() {
                           {l.item_status === 'aberto' && (
                             <>
                               <button className="ab-button ab-button--mini" onClick={() => returnLoanItem(l.emprestimo_id, [l.line_no])}>{t({ id: 'panel.loan.return.btn' })}</button>
-                              {(() => {
-                                // Paquet 11 (10/05/2026) : pré-désactivation Prorrogar avec tooltip raisonné
-                                // (calque sur le bouton Renovar côté lecteur, paquet 7).
-                                // staffRenewInfo vient de api.staff_loans_renewal_status_v1.
-                                // Inclut aussi le fix paquet 7 : !(renewals_used > 0) au lieu de !extended_once.
-                                const staffRenewInfo = staffRenewStatus[l.emprestimo_id] || null;
-                                const wasExtended = (l.renewals_used || 0) > 0 || !!l.extended_until;
-                                if (wasExtended) return null;
-                                const canRenew = staffRenewInfo
-                                  ? staffRenewInfo.can_renew
-                                  : true; // fallback : on laisse le bouton actif si la vue n'a pas répondu
-                                const blockingReason = staffRenewInfo ? staffRenewInfo.blocking_reason : null;
-                                const tooltipMsg = blockingReason
-                                  ? t(
-                                      { id: 'account.renew.tooltipBlocked' },
-                                      { reason: t({ id: `account.renew.${blockingReason}` }) }
-                                    )
-                                  : null;
-                                return (
-                                  <button
-                                    className="ab-button ab-button--secondary ab-button--mini"
-                                    disabled={!canRenew}
-                                    title={tooltipMsg || undefined}
-                                    onClick={() => extendLoan(l.emprestimo_id)}
-                                  >
-                                    {t({id:'panel.table.extend'})}
-                                  </button>
-                                );
-                              })()}
+                              {!l.extended_once && !l.extended_until && (
+                                <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(l.emprestimo_id)}>{t({id:'panel.table.extend'})}</button>
+                              )}
                             </>
                           )}
                         </td>
@@ -1541,7 +1520,7 @@ export default function PanelPage() {
                 return Object.values(grouped).map((g, i) => (
                   <div key={i} className="ab-painel-lote">
                     <div className="ab-painel-lote__head">
-                      <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {t({id:`panel.loan.status.${g.emprestimo_status}`, defaultMessage: g.emprestimo_status})}
+                      <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
                     </div>
                     <div className="ab-painel-lote__items">
                       {g.items.map((l, j) => (
