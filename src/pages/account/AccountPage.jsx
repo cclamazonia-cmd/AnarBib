@@ -881,7 +881,8 @@ export default function AccountPage() {
                                 disabled={!canRenew}
                                 title={tooltipMsg || undefined}
                                 onClick={async () => {
-                                  const { data, error } = await supabase.rpc('fn_renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
+                                  // Paquet 19 (10/05/2026) : utiliser le wrapper api.* au lieu de la fn DEFINER
+                                  const { data, error } = await supabase.schema('api').rpc('renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
                                   if (error) { alert(t({id:'common.errorPrefix'}, {message: error.message})); return; }
                                   if (data?.ok === false) {
                                     alert(t({ id: `account.renew.${data.reason}` }));

@@ -286,6 +286,9 @@ export default function PanelPage() {
   // Ações
   const [borrowerLookup, setBorrowerLookup] = useState('');
   const [loanRefs, setLoanRefs] = useState('');
+  // Paquet 16 v2 (10/05/2026) : preview echeance + guard double-clic
+  const [loanPreview, setLoanPreview] = useState(null);
+  const [loanBusy, setLoanBusy] = useState(false);
   const [loanMsg, setLoanMsg] = useState('');
   const [returnId, setReturnId] = useState('');
   const [returnSubIds, setReturnSubIds] = useState('');
@@ -585,8 +588,38 @@ export default function PanelPage() {
   // ── Ações: saída e devolução ──────────────────────────
 
   async function registrarSaida() {
+    // Paquet 16 v2 (10/05/2026) : 2 phases (preview puis confirmation) + guard double-clic
+    // Paquet 19 (10/05/2026) : utilise api.create_loan_at_counter au lieu de fn_v2_create_emprestimo_by_holdings
+    if (loanBusy) return;
     const refs = loanRefs.split(/[,;\s]+/).map(r => r.trim()).filter(Boolean);
     if (!borrowerLookup.trim() || !refs.length) { setLoanMsg(t({ id: 'panel.loan.errorMissing' })); return; }
+
+    // ════════════════════════════════════════════════════
+    // PHASE 2 : confirmation - on a deja une preview valide
+    // ════════════════════════════════════════════════════
+    if (loanPreview && loanPreview.refsKey === refs.join('|') && loanPreview.borrowerKey === borrowerLookup.trim()) {
+      setLoanBusy(true);
+      setLoanMsg(t({id:'panel.loan.registering'}));
+      try {
+        const { error } = await supabase.schema('api').rpc('create_loan_at_counter', {
+          p_user_id: loanPreview.borrowerId, p_holding_ids: loanPreview.holdingIds,
+        });
+        if (error) throw error;
+        setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, name: loanPreview.borrowerName }));
+        // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
+        // trg_notify_emprestimo_criado (header AFTER INSERT) s'en charge.
+        setBorrowerLookup(''); setLoanRefs('');
+        setLoanPreview(null);
+        loadData();
+      } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+      finally { setLoanBusy(false); }
+      return;
+    }
+
+    // ════════════════════════════════════════════════════
+    // PHASE 1 : preview - resoudre borrower + holdings + projection
+    // ════════════════════════════════════════════════════
+    setLoanBusy(true);
     setLoanMsg(t({id:'panel.loan.resolving'}));
     try {
       // Resolve borrower
@@ -601,19 +634,49 @@ export default function PanelPage() {
       const holdingIds = (resolveRes.data || []).filter(r => r.matched && Number(r.session_holding_id) > 0).map(r => Number(r.session_holding_id));
       if (!holdingIds.length) { setLoanMsg(t({ id: 'panel.loan.noValidRefs' })); return; }
 
-      setLoanMsg(t({id:'panel.loan.registering'}));
-      const { error } = await supabase.rpc('fn_v2_create_emprestimo_by_holdings', {
-        p_user_id: borrower.id, p_holding_ids: holdingIds,
+      // Get loan projection (paquet 16)
+      const bookIds = (resolveRes.data || []).filter(r => r.matched && Number(r.book_id) > 0).map(r => Number(r.book_id));
+      const projectionRes = await supabase.schema('api').rpc('get_batch_loan_projection', {
+        p_library_id: libraryId,
+        p_user_id: borrower.id,
+        p_book_ids: bookIds,
+        p_holding_ids: holdingIds,
+        p_quantity: holdingIds.length,
+        p_as_of_date: new Date().toISOString().slice(0, 10),
       });
-      if (error) throw error;
-      // PATCH 07/05/2026 audit i18n : message hardcodé pt-BR remplacé par clé i18n
-      setLoanMsg(t({ id: 'panel.loan.exitRegistered' }, { count: refs.length, name: borrower.first_name || borrower.email }));
-      // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
-      // trg_notify_emprestimo_criado (header AFTER INSERT) s'en charge.
-      // Cohérent avec le cleanup déjà appliqué L301 et L377.
-      setBorrowerLookup(''); setLoanRefs('');
-      loadData();
+      if (projectionRes.error) throw projectionRes.error;
+      const proj = Array.isArray(projectionRes.data) ? projectionRes.data[0] : projectionRes.data;
+
+      // Stocker la preview
+      setLoanPreview({
+        borrowerId: borrower.id,
+        borrowerName: borrower.first_name || borrower.email,
+        borrowerKey: borrowerLookup.trim(),
+        holdingIds,
+        refsKey: refs.join('|'),
+        dueDate: proj?.due_date,
+        ruleLabel: proj?.rule_label,
+        loanAllowed: proj?.loan_allowed !== false,
+      });
+
+      if (proj?.loan_allowed === false) {
+        setLoanMsg(t({id:'panel.loan.preview.notAllowed'}, { rule: proj.rule_label || '' }));
+      } else {
+        setLoanMsg(t({id:'panel.loan.preview.confirm'}, {
+          name: borrower.first_name || borrower.email,
+          count: holdingIds.length,
+          dueDate: fmtD(proj?.due_date) || '—',
+          rule: proj?.rule_label || '—',
+        }));
+      }
     } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+    finally { setLoanBusy(false); }
+  }
+
+  // Paquet 16 v2 : annuler la preview pour reprendre la saisie
+  function cancelLoanPreview() {
+    setLoanPreview(null);
+    setLoanMsg('');
   }
 
   async function registrarDevolucaoTotal() {
@@ -621,7 +684,8 @@ export default function PanelPage() {
     if (!id) { setReturnMsg(t({id:'panel.loan.enterLoanId'})); return; }
     setReturnMsg(t({id:'panel.loan.returning'}));
     try {
-      const { error } = await supabase.rpc('fn_v2_return_emprestimo_total', { p_emprestimo_id: id });
+      // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
+      const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: id });
       if (error) throw error;
       setReturnMsg(t({id:'panel.return.totalRegistered'},{id}));
       // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
@@ -640,7 +704,8 @@ export default function PanelPage() {
       for (const subId of subIds) {
         const [empId, lineNo] = subId.split('.').map(Number);
         if (!empId || !lineNo) continue;
-        await supabase.rpc('fn_v2_return_emprestimo_itens', {
+        // Paquet 19 : utiliser le wrapper api.* (et fix : fn_v2_return_emprestimo_itens n'existe pas, c'etait fn_v2_return_emprestimo_linhas)
+        await supabase.schema('api').rpc('return_loan_partial', {
           p_emprestimo_id: empId, p_line_nos: [lineNo],
         });
       }
@@ -654,7 +719,8 @@ export default function PanelPage() {
 
   async function extendLoan(empId) {
     try {
-      const { error } = await supabase.rpc('fn_v2_extend_emprestimo_once', { p_emprestimo_id: empId });
+      // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
+      const { error } = await supabase.schema('api').rpc('extend_loan_as_library', { p_emprestimo_id: empId });
       if (error) throw error;
       loadData();
     } catch (e) {
@@ -665,7 +731,8 @@ export default function PanelPage() {
 
   async function returnLoanItem(empId, lineNos) {
     try {
-      const { error } = await supabase.rpc('fn_v2_return_emprestimo_linhas', {
+      // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
+      const { error } = await supabase.schema('api').rpc('return_loan_partial', {
         p_emprestimo_id: empId, p_line_nos: lineNos,
       });
       if (error) throw error;
@@ -1164,12 +1231,25 @@ export default function PanelPage() {
                 <h2 className="ab-painel-h2">{t({ id: 'panel.loan.register' })}</h2>
                 <p className="ab-painel-hint">{t({ id: 'panel.loan.refsHint' })}</p>
                 <label>{t({ id: 'panel.loan.borrowerLabel' })}
-                  <input type="text" value={borrowerLookup} onChange={e => setBorrowerLookup(e.target.value)} placeholder={t({ id: 'panel.loan.borrowerPlaceholder' })} className="ab-painel-input" />
+                  <input type="text" value={borrowerLookup} onChange={e => { setBorrowerLookup(e.target.value); if (loanPreview) setLoanPreview(null); }} placeholder={t({ id: 'panel.loan.borrowerPlaceholder' })} className="ab-painel-input" />
                 </label>
                 <label>{t({ id: 'panel.loan.refsLabel' })}
-                  <input type="text" value={loanRefs} onChange={e => setLoanRefs(e.target.value)} placeholder={t({ id: 'panel.loan.refsPlaceholder' })} className="ab-painel-input" />
+                  <input type="text" value={loanRefs} onChange={e => { setLoanRefs(e.target.value); if (loanPreview) setLoanPreview(null); }} placeholder={t({ id: 'panel.loan.refsPlaceholder' })} className="ab-painel-input" />
                 </label>
-                <Button onClick={registrarSaida}>{t({ id: 'panel.loan.register' })}</Button>
+                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                  <Button onClick={registrarSaida} disabled={loanBusy || (loanPreview && loanPreview.loanAllowed === false)}>
+                    {loanBusy
+                      ? '…'
+                      : loanPreview
+                        ? t({ id: 'panel.loan.confirmRegister' })
+                        : t({ id: 'panel.loan.register' })}
+                  </Button>
+                  {loanPreview && !loanBusy && (
+                    <Button variant="secondary" onClick={cancelLoanPreview}>
+                      {t({ id: 'panel.loan.cancelPreview' })}
+                    </Button>
+                  )}
+                </div>
                 {loanMsg && <p className="ab-painel-msg">{loanMsg}</p>}
               </div>
               <div className="ab-painel-acoes-card">
