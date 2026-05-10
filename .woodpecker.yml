@@ -1,13 +1,14 @@
 # =============================================================================
 # Woodpecker CI — Repo `AnarBib/anarbib` (app SIGB React/Vite)
 # =============================================================================
-# Pipeline complet (v2) :
+# Pipeline complet (v3) :
 #   1. Install des dépendances
 #   2. Lint (ESLint) — BLOQUANT
 #   3. Tests (vitest)  — BLOQUANT
 #   4. Build Vite (avec injection des env vars VITE_*)
 #   5. Déploiement vers la branche `pages` du repo (Codeberg Pages)
 #   6. Miroir Codeberg → GitHub (cclamazonia-cmd/AnarBib)
+#   7. Déploiement Edge Functions Supabase (paquet 13, 10/05/2026)
 #
 # Si lint OU test échoue, le déploiement n'est pas effectué.
 # Pour bypasser exceptionnellement la CI, mettre [CI SKIP] dans le commit.
@@ -136,6 +137,57 @@ steps:
       - git push github main:main --force
       - git push github --tags --force
       - echo "✓ Miroir GitHub à jour"
+    depends_on: [build]
+    when:
+      - event: push
+        branch: main
+
+  # ---------------------------------------------------------------------------
+  # 7. Déploiement des Edge Functions Supabase
+  # ---------------------------------------------------------------------------
+  # À chaque push sur main, redéploie TOUTES les Edge Functions trouvées
+  # dans supabase/functions/. Ferme la dette technique du paquet 6 où
+  # un test runtime contre du v2 stale a fait croire à un bug paquet 6
+  # alors que le code v3 était déjà commité mais pas déployé.
+  #
+  # La config verify_jwt par fonction est gérée dans supabase/config.toml.
+  # La CLI Supabase la lit et applique le bon flag par fonction.
+  #
+  # Note historique : le MCP deploy_edge_function plante sur les fonctions
+  # bundlées > limite API (ex. notify-event ~150KB). La CLI n'a pas cette
+  # limite. C'est pourquoi on utilise la CLI ici, pas le MCP.
+  # ---------------------------------------------------------------------------
+  deploy-edge-functions:
+    image: node:20-alpine
+    environment:
+      SUPABASE_ACCESS_TOKEN:
+        from_secret: supabase_access_token
+      SUPABASE_PROJECT_REF:
+        from_secret: supabase_project_ref
+    commands:
+      # Installation de la CLI Supabase (binaire pré-compilé Linux x64)
+      - apk add --no-cache curl tar
+      - curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz
+      - tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
+      - chmod +x /usr/local/bin/supabase
+      - supabase --version
+      # Lien du projet local au projet distant
+      - supabase link --project-ref "$${SUPABASE_PROJECT_REF}"
+      # Déploiement de toutes les fonctions trouvées dans supabase/functions/
+      # (chaque sous-dossier = une fonction). Le _shared/ est exclu car ce
+      # n'est pas une fonction mais un module partagé.
+      - |
+        set -e
+        for fn_dir in supabase/functions/*/; do
+          fn_name=$(basename "$fn_dir")
+          if [ "$fn_name" = "_shared" ]; then
+            echo "→ Skip $fn_name (module partagé)"
+            continue
+          fi
+          echo "→ Déploiement $fn_name"
+          supabase functions deploy "$fn_name" --project-ref "$${SUPABASE_PROJECT_REF}"
+        done
+      - echo "✓ Toutes les Edge Functions déployées"
     depends_on: [build]
     when:
       - event: push
