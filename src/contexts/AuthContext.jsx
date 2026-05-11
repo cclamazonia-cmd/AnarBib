@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { syncLocaleFromProfile } from '@/i18n';
+import { clearStaffSession } from '@/lib/staffStorage';
 
 const AuthContext = createContext({
   session: null,
@@ -99,6 +100,7 @@ export function AuthProvider({ children }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    clearStaffSession();
     setSession(null);
     syncedForUserRef.current = null;
   };

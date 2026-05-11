@@ -23,11 +23,12 @@
 //
 // ============================================================================
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useIdleTimer } from '@/hooks/useIdleTimer';
+import { isStaffSession, markStaffSession, migrateTokensToSessionStorage } from '@/lib/staffStorage';
 import IdleWarningModal from '@/components/IdleWarningModal';
 
 const IDLE_MINUTES = 60;
@@ -44,6 +45,23 @@ export default function IdleTimerGuard({ children }) {
   const isStaff =
     !!user &&
     (role === 'librarian' || role === 'coordenador' || role === 'administrador');
+
+  // ── Migration tokens vers sessionStorage pour les sessions staff ────
+  // Au premier render qui detecte un staff connecte ET pas encore migre,
+  // on copie les tokens supabase de localStorage vers sessionStorage et
+  // on force un reload pour que le client Supabase reparte avec le bon
+  // storage (volet B du paquet 23).
+  //
+  // Apres le reload, isStaffSession() est true → anarbibStorage utilise
+  // sessionStorage → quand le navigateur ferme completement, sessionStorage
+  // est efface par le navigateur → la session est perdue (effet voulu).
+  useEffect(() => {
+    if (!isStaff) return;
+    if (isStaffSession()) return; // deja migre, rien a faire
+    migrateTokensToSessionStorage();
+    markStaffSession();
+    window.location.reload();
+  }, [isStaff]);
 
   const handleTimeout = useCallback(async () => {
     try {

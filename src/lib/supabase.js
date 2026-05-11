@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { anarbibStorage } from './staffStorage';
 
 // Configuration Supabase : les deux variables sont REQUISES au build.
 // Pas de fallback hardcodé : si une variable manque, c'est un bug de
@@ -28,6 +29,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
+    storage: anarbibStorage,
   },
 });
 
