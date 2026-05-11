@@ -6,6 +6,7 @@ import { LibraryProvider, useLibrary } from '@/contexts/LibraryContext';
 import { useTheme } from '@/lib/theme';
 import { detectLocale, getMessages } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
+import IdleTimerGuard from '@/components/IdleTimerGuard';
 import { Spinner } from '@/components/ui';
 
 // ── Lazy-loaded pages ──────────────────────────────────────
@@ -50,6 +51,7 @@ export default function App() {
       <BrowserRouter basename="/">
         <AuthProvider>
           <LibraryProvider>
+            <IdleTimerGuard>
             <ThemeGate>
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
@@ -111,6 +113,7 @@ export default function App() {
                 </Routes>
               </Suspense>
             </ThemeGate>
+            </IdleTimerGuard>
           </LibraryProvider>
         </AuthProvider>
       </BrowserRouter>

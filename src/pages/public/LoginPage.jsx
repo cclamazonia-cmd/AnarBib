@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { Turnstile } from '@marsidev/react-turnstile';
@@ -11,6 +11,8 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const reason = searchParams.get('reason');
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.login' }));
   const [view, setView] = useState('login');
@@ -187,6 +189,22 @@ export default function LoginPage() {
     <PageShell>
       <Topbar />
       <div style={{ maxWidth: 480, margin: '40px auto', padding: '0 16px' }}>
+        {reason === 'idle' && (
+          <div
+            role="alert"
+            style={{
+              marginBottom: 16,
+              padding: '12px 16px',
+              borderRadius: 8,
+              background: 'rgba(185, 0, 31, 0.08)',
+              border: '1px solid rgba(185, 0, 31, 0.3)',
+              color: 'var(--brand-fg, #e8e2d6)',
+              fontSize: '.9rem',
+            }}
+          >
+            {t({ id: 'login.reason.idle' })}
+          </div>
+        )}
         <Card>
           <h1
             style={{
