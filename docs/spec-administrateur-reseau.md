@@ -1,13 +1,14 @@
 # Spec : Séparation administrateur réseau / staff local
 
-**Version** : 0.2
-**Date** : 11/05/2026 (révision complète)
+**Version** : 0.3
+**Date** : 11/05/2026 (consignation des décisions)
 **Auteur·rice** : Xavier (lead dev) + Claude (assistant·e)
-**Statut** : brouillon, en attente de validation politique
+**Statut** : doctrine complète, prête pour rédaction paquet B
 
 **Historique de version** :
 - v0.1 (11/05/2026, première rédaction, 846 lignes) : pose la séparation conceptuelle, l'architecture cible, la séquence de 6 paquets (A à F).
-- v0.2 (11/05/2026, refonte complète) : intègre les décisions politiques du 11/05 matin (sémantique « page = périmètre » des compteurs, nouvelle vue `api.network_overview`, prise en compte du membership coordenador BLMF de Xavier inscrit le 11/05/2026), met à jour les décisions ouvertes Q1-Q6 (certaines tranchées), ouvre la question de l'accélération du retrait de `'administrador'`.
+- v0.2 (11/05/2026, refonte complète) : sémantique « page = périmètre » des compteurs, nouvelle vue `api.network_overview`, prise en compte du membership coordenador BLMF de Xavier inscrit le 11/05/2026, MAJ des décisions ouvertes, ouverture des questions Q7-Q8.
+- v0.3 (11/05/2026, consignation des décisions) : toutes les questions Q2-Q8 tranchées. Doctrine politique complète. Ajout des spécifications techniques détaillées (`disclose_identity`, rationale obligatoire pour opposed, rappels J+14/J+25, carence 7j retrait collectif, table `cross_library_actions_log` avec criticité, digest hebdomadaire + notifications immédiates). Séquence v0.1 conservatrice confirmée (pas de grand bond).
 
 ---
 
@@ -40,21 +41,26 @@ Cette règle se justifie politiquement : chaque périmètre a sa propre identit�
 ## Table des matières
 
 1. Objectifs et non-objectifs
-2. Sémantique des compteurs *(nouveau §, central dans la v0.2)*
+2. Sémantique des compteurs *(section centrale v0.2, conservée v0.3)*
 3. Architecture cible
-   - 3.1 La table `network_administrators`
+   - 3.1 La table `network_administrators` *(MAJ v0.3 : champ `pending_collective_removal_until`)*
    - 3.2 Table d'audit
-   - 3.3 Tables de propositions et votes
+   - 3.3 Tables de propositions et votes *(MAJ v0.3 : champ `disclose_identity`)*
    - 3.4 Nouveaux helpers SQL
    - 3.5 Modifications de `user_library_memberships`
 4. Logique de cooptation à l'unanimité
+   - 4.2 RPC implémentées par le paquet A
+   - 4.2.1 Évolutions de `fn_network_admin_vote_cooptation` au paquet D *(v0.3)*
+   - 4.2.2 Workflow complet de retrait collectif au paquet D *(v0.3)*
+   - 4.2.3 Système de rappels automatiques *(v0.3)*
 5. Mapping des modifications nécessaires
 6. Plan d'implémentation par paquets
+   - 6.3.1 Spécification de `network_admin_cross_library_actions_log` *(v0.3)*
 7. Implications UI détaillées
 8. Risques et contre-mesures
-9. Cas particulier : situation de Xavier au 11/05/2026 *(MAJ v0.2)*
+9. Cas particulier : situation de Xavier au 11/05/2026
 10. Calendrier prévisionnel
-11. Décisions ouvertes *(MAJ v0.2)*
+11. Décisions tranchées *(MAJ v0.3 : toutes Q1-Q8 résolues)*
 12. Annexes
 
 ---
@@ -79,7 +85,7 @@ Cette règle se justifie politiquement : chaque périmètre a sa propre identit�
 
 ---
 
-## 2. Sémantique des compteurs *(nouveau §, central dans la v0.2)*
+## 2. Sémantique des compteurs *(section centrale, conservée v0.3)*
 
 C'est la section qui distingue le plus la v0.2 de la v0.1. Elle pose la grammaire de tous les compteurs militants de l'application, pour qu'on ne se reperde plus dans des calculs croisés ambigus.
 
@@ -194,6 +200,7 @@ CREATE TABLE public.network_administrators (
     removal_reason text,
     removed_at timestamptz,
     last_seen_at timestamptz,
+    pending_collective_removal_until timestamptz,  -- v0.3 : carence 7j retrait collectif (Q5)
     notes text,
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now()
@@ -263,9 +270,16 @@ CREATE TABLE public.network_administrator_cooptation_votes (
     vote text NOT NULL CHECK (vote IN ('favorable', 'opposed', 'abstain')),
     voted_at timestamptz NOT NULL DEFAULT now(),
     rationale text,
+    disclose_identity boolean NOT NULL DEFAULT true,  -- v0.3 : choix de divulgation (Q4)
     PRIMARY KEY (proposal_id, voter_user_id)
 );
 ```
+
+**Note v0.3** :
+- `disclose_identity` détermine si le nom du votant est révélé à la personne proposée et au proposeur en cas de rejet de la proposition (vote `opposed` avec véto)
+- Default `true` : transparence par défaut, cohérent avec la culture militante d'assomption des positions ; chaque votant peut explicitement passer à `false` s'il préfère rester dans le collectif
+- La rationale reste affichée même quand `disclose_identity=false` (mais anonymisée : « un·e opposant·e a soulevé : ... »)
+- Pour les votes `favorable` et `abstain`, `disclose_identity` n'a pas d'effet en pratique (pas de mail détaillant les votes individuels en cas de succès ou d'abstention)
 
 ### 3.4 Nouveaux helpers SQL
 
@@ -354,12 +368,58 @@ Inchangée par rapport à la v0.1, intégralement implémentée dans le paquet A
 
 ### 4.2 RPC implémentées par le paquet A
 
-| RPC | Rôle | Statut |
+| RPC | Rôle | Statut au 11/05/2026 |
 |---|---|---|
 | `fn_network_admin_propose_cooptation(p_user_id, p_motivation)` | Proposer une nouvelle personne | Opérationnel |
-| `fn_network_admin_vote_cooptation(p_proposal_id, p_vote, p_rationale)` | Voter | Opérationnel |
+| `fn_network_admin_vote_cooptation(p_proposal_id, p_vote, p_rationale)` | Voter | Opérationnel mais à enrichir au paquet D (cf. §4.2.1) |
 | `fn_network_admin_self_remove(p_reason)` | Auto-retrait | Opérationnel |
-| `fn_network_admin_request_removal(p_target_user_id, p_reason)` | Demander retrait d'un autre | **Stub** : marque pending_removal, workflow complet de vote miroir à implémenter au paquet D |
+| `fn_network_admin_request_removal(p_target_user_id, p_reason)` | Demander retrait d'un autre | **Stub** : marque pending_removal, workflow complet de vote miroir à implémenter au paquet D (cf. §4.2.2) |
+
+### 4.2.1 Évolutions de `fn_network_admin_vote_cooptation` au paquet D *(v0.3, Q4)*
+
+Le paquet D enrichit cette RPC pour intégrer les décisions Q4 :
+
+```sql
+CREATE OR REPLACE FUNCTION public.fn_network_admin_vote_cooptation(
+    p_proposal_id uuid,
+    p_vote text,
+    p_rationale text DEFAULT NULL,
+    p_disclose_identity boolean DEFAULT true  -- nouveau v0.3 (Q4)
+)
+RETURNS void
+-- ... gardes-fous existants ...
+-- NOUVEAU garde : rationale obligatoire pour 'opposed'
+IF p_vote = 'opposed' AND (p_rationale IS NULL OR length(trim(p_rationale)) < 20) THEN
+    RAISE EXCEPTION 'rationale_required_for_opposed: voting opposed requires a written rationale of at least 20 characters'
+        USING ERRCODE = '22023';
+END IF;
+-- ... reste de la logique inchangée, plus stockage de disclose_identity ...
+```
+
+Cohérent avec la spec gouvernance des rôles (5/05) qui imposait déjà des rationales d'au moins 20 caractères pour les exclusions de membres staff.
+
+### 4.2.2 Workflow complet de retrait collectif au paquet D *(v0.3, Q5)*
+
+Au paquet D, `fn_network_admin_request_removal` cesse d'être un stub et devient un workflow miroir de la cooptation :
+
+1. Un admin actif propose le retrait d'un autre admin (motivation obligatoire >=20 chars)
+2. Une proposition est créée dans une nouvelle table `network_administrator_removal_proposals` (à concevoir au paquet D)
+3. Les autres admins actifs votent (`favorable`, `opposed`, `abstain`)
+4. Un vote `opposed` → rejet immédiat
+5. Unanimité `favorable` → admin retiré passe en `pending_removal` avec `pending_collective_removal_until = now() + interval '7 days'`
+6. Cron daily : tous les admins en `pending_removal` dont la date d'effectivité est dépassée → `status='removed'`, `removed_at=now()`
+7. Pendant les 7 jours de carence, l'admin retiré conserve ses droits opérationnels mais reçoit un mail clair sur sa sortie programmée. Il peut éventuellement engager une dernière discussion. Il ne peut pas annuler le retrait unilatéralement (seul le collectif peut décider, à nouveau à l'unanimité).
+
+### 4.2.3 Système de rappels automatiques *(v0.3, Q3)*
+
+Au paquet D, on ajoute un mécanisme de rappels automatiques pour les propositions de cooptation en cours :
+
+- Cron daily qui interroge `network_administrator_cooptation_proposals` en `status='open'`
+- À `J+14 jours` (14 jours après `proposed_at`) : envoi d'un mail à tous les admins actifs n'ayant pas encore voté
+- À `J+25 jours` (5 jours avant expiration) : second mail plus pressant (« cette proposition expire dans 5 jours, prenez position »)
+- À `J+30 jours` : passage automatique en `status='expired'` (déjà géré par le mécanisme actuel)
+
+Pour les propositions de retrait collectif, mêmes échéances J+14 et J+25 par symétrie.
 
 ### 4.3 Cas particulier : premier administrateur
 
@@ -524,9 +584,60 @@ Contenu livré :
 - **C.2** — `library_service_state` (3 policies), `libraries` (1 policy). Politiques structurelles.
 - **C.3** — `library_retention_policies` (2 policies), `library_membership_rules` (1 policy), `membership_payments` (2 policies). Politiques d'engagement.
 - **C.4** — `storage.objects` (3 policies). Uploads privacy.
-- **C.5** — `user_library_memberships` (2 policies). Le plus délicat, à garder pour la fin.
+- **C.5** — `user_library_memberships` (2 policies). Le plus délicat, à garder pour la fin. Inclut aussi la **création de la table `network_admin_cross_library_actions_log`** *(v0.3, Q2+Q6)* avec son mécanisme de notification (cf. §6.3.1).
 
 À chaque sous-paquet, validation manuelle avec scénario test concret en tant qu'admin réseau **et** en tant que staff local.
+
+#### 6.3.1 Spécification de `network_admin_cross_library_actions_log` *(v0.3, Q2+Q6)*
+
+Table d'audit dédiée aux actions transverses des admins réseau, créée au paquet C.5.
+
+```sql
+CREATE TABLE public.network_admin_cross_library_actions_log (
+    id bigserial PRIMARY KEY,
+    actor_user_id uuid NOT NULL REFERENCES auth.users(id),
+    library_id uuid NOT NULL REFERENCES public.libraries(id),
+    action_type text NOT NULL,
+    is_critical boolean NOT NULL DEFAULT false,
+    target_entity_type text,
+    target_entity_id uuid,
+    payload jsonb NOT NULL DEFAULT '{}'::jsonb,
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+
+COMMENT ON TABLE public.network_admin_cross_library_actions_log IS 
+'Journal des actions effectuées par un administrateur réseau sur une bibliothèque dont il n''est pas staff local. Garantit la transparence politique des interventions transverses. INSERT only, immuable.';
+
+CREATE INDEX network_admin_cross_lib_log_library_idx 
+    ON public.network_admin_cross_library_actions_log(library_id, created_at DESC);
+
+CREATE INDEX network_admin_cross_lib_log_critical_idx 
+    ON public.network_admin_cross_library_actions_log(is_critical, library_id, created_at DESC)
+    WHERE is_critical = true;
+```
+
+**Liste limitative des actions critiques** *(v0.3, Q6)* — déclenchent un mail immédiat au staff local de la biblio concernée :
+- Modification de `libraries` (slug, name, identité)
+- Modification de `library_membership_rules`
+- Modification de `library_retention_policies`
+- Modification de `library_service_state`
+- Appel à `fn_team_suspend_member`
+- Appel à `fn_team_request_remove_member`
+- Appel à `fn_team_promote_to_*`
+- Modification de `library_circulation_policies`
+
+**Actions routinières** — digest hebdomadaire seulement :
+- Consultations de données (SELECT)
+- Création/modification d'emprunts, réservations, consultations sur place, retours
+- Génération de rapports
+- Toute autre action non listée comme critique
+
+**Mécanisme de notification** :
+- Triggers ou helpers de logging dans chaque RPC concernée : INSERT dans la table + check si l'actor est admin réseau **sans** membership staff local sur cette biblio
+- Si action critique → INSERT dans outbox d'event `network.cross_library_critical_action` → traité immédiatement par notify-event → mail aux coordenadores actifs de la biblio
+- Cron hebdomadaire dimanche minuit : pour chaque biblio, agrège toutes les actions transverses de la semaine et envoie un digest aux coordenadores actifs
+
+**Cas particulier de Xavier** : Xavier est admin réseau ET coord BLMF. Une action de Xavier sur BLMF n'est **pas** une action transverse (il est staff local, son intervention est légitimement locale). Une action de Xavier sur BTL **est** une action transverse (il n'est pas staff local BTL). Le helper `user_is_staff_on_library(p_user_id, p_library_id)` (à créer au paquet C.5 si pas déjà fait, sinon réutiliser) permet de trancher.
 
 ### 6.4 Paquet D — Refactorisation RPC + workflow retrait complet
 
@@ -687,7 +798,7 @@ Tonalité militante stricte (École 1) avec point médian inclusif pour fr, trip
 
 **Scénario** : un administrateur réseau utilise son droit d'intervention opérationnelle pour modifier des données d'une biblio sans concertation avec son staff local.
 
-**Contre-mesure** : **traçabilité maximale**. Toutes les actions des administrateurs réseau sur des biblios où ils ne sont pas staff local seront auditées dans une table `network_admin_cross_library_actions` (à spécifier dans le paquet C.5). Le staff local de la biblio est notifié par mail. Le mécanisme protège politiquement sans empêcher techniquement.
+**Contre-mesure** *(v0.3, Q2+Q6 tranchées)* : **traçabilité maximale assurée par la table `network_admin_cross_library_actions_log`** créée au paquet C.5 (cf. §6.3.1). Toutes les actions des administrateurs réseau sur des biblios où ils ne sont pas staff local sont auditées dans cette table. Les actions critiques (modifications de règlement, suspensions, promotions, etc.) déclenchent un mail immédiat au staff local ; les actions routinières remontent dans un digest hebdomadaire. Le mécanisme protège politiquement sans empêcher techniquement.
 
 ### 8.6 (Nouveau v0.2) Risque : incohérence de compteurs pendant la coexistence
 
@@ -740,50 +851,35 @@ L'ancien `administrador` BLMF disparaît à terme. La question du moment exact d
 
 ---
 
-## 11. Décisions ouvertes
+## 11. Décisions tranchées *(MAJ v0.3 : toutes les questions Q1-Q8 résolues)*
 
-Mises à jour v0.2 : certaines questions de la v0.1 sont **tranchées** par les décisions de ce matin, d'autres sont conservées, deux nouvelles sont introduites.
+Cette section consigne les décisions politiques prises au cours des sessions des 11/05/2026 matin (Q1, v0.2) et 11/05/2026 après-midi (Q2-Q8, v0.3).
 
-**Q1 (tranchée le 11/05)** : ~~Les administrateurs réseau peuvent-ils être membres staff de plusieurs biblios à la fois ?~~ **Réponse : oui, c'est légitime politiquement. La sémantique « page = périmètre » garantit qu'aucun compteur ne le pénalise.**
+**Q1 (tranchée v0.2)** : ~~Les administrateurs réseau peuvent-ils être membres staff de plusieurs biblios à la fois ?~~ → **Oui, c'est légitime politiquement. La sémantique « page = périmètre » garantit qu'aucun compteur ne le pénalise.**
 
-**Q2** — Doit-on créer une table `network_admin_cross_library_actions_log` au paquet C.5 ou est-ce trop intrusif ? *Reste ouvert.*
+**Q2 (tranchée v0.3)** : ~~Doit-on créer une table `network_admin_cross_library_actions_log` au paquet C.5 ?~~ → **Oui, table créée au paquet C.5 (cf. §6.3.1). Traçabilité politique maximale des actions transverses.**
 
-**Q3** — Quel délai d'expiration pour les propositions de cooptation : 30 jours ou 14 jours ? *Posé à 30 jours par défaut dans le paquet A, reste discutable.*
+**Q3 (tranchée v0.3)** : ~~Quel délai d'expiration pour les propositions de cooptation ?~~ → **30 jours avec rappels automatiques à J+14 et J+25** (cf. §4.2.3). Compromis qui respecte la temporalité associative tout en évitant l'oubli collectif.
 
-**Q4** — Le mail au proposé en cas de rejet de cooptation : on transmet la rationale des opposants ou on garde l'opposition anonyme ? *Reste ouvert.*
+**Q4 (tranchée v0.3)** : ~~Anonymat ou transparence des opposants en cas de rejet ?~~ → **Choix de chaque opposant (champ `disclose_identity`) + rationale obligatoire pour les votes `opposed`** (cf. §3.3, §4.2.1). Chaque votant assume ou non publiquement son veto, mais doit toujours argumenter par écrit.
 
-**Q5** — La carence avant retrait définitif d'un administrateur retiré collectivement : immédiate, 7 jours, 30 jours ? *Posée à 30 jours pour le self-removal du dernier admin. À harmoniser pour le retrait collectif au paquet D.*
+**Q5 (tranchée v0.3)** : ~~Carence avant retrait définitif (retrait collectif) ?~~ → **7 jours de carence** (`pending_collective_removal_until`, cf. §3.1 et §4.2.2). Compromis respectueux de la décision collective et de la dignité du retrait. L'auto-retrait reste immédiat sauf cas du dernier admin (30 jours).
 
-**Q6** — On notifie le staff local d'une biblio quand un admin réseau y fait une action ? Mail immédiat ou digest hebdomadaire ? *Reste ouvert, dépendant de Q2.*
+**Q6 (tranchée v0.3)** : ~~Notifications du staff local sur actions transverses ?~~ → **Digest hebdomadaire par défaut + mail immédiat pour actions critiques** (cf. §6.3.1). La liste des actions critiques est limitative et politiquement justifiée (modifications de règlement, suspensions, promotions).
 
-**Q7 (NOUVEAU v0.2)** — Doit-on supprimer la ligne `user_library_memberships` `administrador` BLMF de Xavier dès le paquet B (puisqu'il a son `coordenador` BLMF politiquement inscrit + va recevoir son admin réseau dans `network_administrators`) ? Ou attendre le paquet F ?
+**Q7 (tranchée v0.3)** : ~~Retrait précoce de la ligne `administrador` BLMF de Xavier dès le paquet B ?~~ → **Non, attendre le paquet F (séquence v0.1 conservatrice).** Le double filet de sécurité de la coexistence longue est préféré à la propreté immédiate. La ligne `administrador` reste en place jusqu'à validation de toutes les RLS basculées.
 
-**Arguments pour la suppression précoce (paquet B)** :
-- Cohérence sémantique immédiate : pas de double engagement local
-- La sémantique v0.2 « page = périmètre » devient pleinement opérationnelle
-- Réduit la confusion pendant la coexistence
-- Simplifie le paquet F (qui devient quasi vide pour Xavier)
+**Q8 (tranchée v0.3)** : ~~Fusion paquets B+C+F en un seul « grand bond » ?~~ → **Non, séquence v0.1 conservatrice maintenue.** Cohérent avec Q7. La progression par checkpoints intermédiaires (sous-paquets C.1 à C.5, paquet D, paquet E) est privilégiée pour pouvoir valider chaque étape et minimiser le risque d'erreur cumulée.
 
-**Arguments pour attendre (paquet F)** :
-- Préserve le mécanisme de double-filet de sécurité décrit en 8.1
-- Permet de tester progressivement les RLS basculées sans risque de perte d'accès
-- Respect du principe de coexistence longue (paranoïaque vs ambitieux)
+### 11.1 Décisions résiduelles ouvertes
 
-*Préférence personnelle (Claude) : suppression précoce paquet B, dans la même transaction que l'INSERT fondateur. L'argument du double-filet n'est pas pertinent ici car Xavier sera dans `network_administrators` au même moment.*
+Aucune décision politique majeure n'est ouverte. La spec est complète sur ce plan.
 
-**Q8 (NOUVEAU v0.2)** — Compte tenu qu'il n'y a qu'une seule ligne `administrador` à migrer (Xavier), pourrait-on fusionner les paquets B + C + une partie de F en un seul paquet « grand bond » ?
+Quelques **détails d'implémentation** restent à finaliser au moment de l'écriture de chaque paquet, sans incidence sur la doctrine :
 
-**Arguments pour** :
-- Réduction drastique du temps de coexistence (1-2 semaines au lieu de 4-8)
-- Moins de surface d'incohérence
-- Économies de sessions de travail
-
-**Arguments contre** :
-- Paquet plus volumineux = plus de risque d'erreur d'un coup
-- Moins de checkpoints intermédiaires de validation
-- Pas de tests progressifs des RLS basculées
-
-*À débattre au moment d'attaquer le paquet B, en cerveau frais.*
+- **Q9 (mineure)** : faut-il un champ `restrictive` à la spec gouvernance pour les actions transverses ? → trancher au paquet C.5 selon la complexité réelle
+- **Q10 (mineure)** : faut-il une notification au staff local lors de l'**ajout** d'un nouvel admin réseau, pour qu'ils sachent qui peut intervenir sur leur biblio ? → trancher au paquet E (UI)
+- **Q11 (technique)** : système de rappels automatiques (Q3) — implémentation via `pg_cron`, file outbox, ou Edge Function planifiée ? → trancher au paquet D selon l'infrastructure existante
 
 ---
 
@@ -839,6 +935,39 @@ Voir les bilans de session du 11/05/2026 :
 - §4 Logique de cooptation
 - §5.1 Mapping fonctions
 - §5.4 RLS
+
+### 12.5 Changelog v0.2 → v0.3
+
+**Décisions tranchées dans cette version** : Q2, Q3, Q4, Q5, Q6, Q7, Q8. Toutes les questions politiques majeures sont désormais résolues.
+
+**Sections ajoutées** :
+- §4.2.1 Évolutions de `fn_network_admin_vote_cooptation` au paquet D (intégration Q4)
+- §4.2.2 Workflow complet de retrait collectif au paquet D (intégration Q5)
+- §4.2.3 Système de rappels automatiques (intégration Q3)
+- §6.3.1 Spécification de `network_admin_cross_library_actions_log` (intégration Q2 + Q6)
+- §11.1 Décisions résiduelles ouvertes (Q9-Q11 mineures)
+- §12.5 Ce changelog
+
+**Sections mises à jour** :
+- §3.1 (ajout colonne `pending_collective_removal_until` à `network_administrators`, Q5)
+- §3.3 (ajout colonne `disclose_identity` à `network_administrator_cooptation_votes`, Q4)
+- §4.2 (tableau RPC marqué « à enrichir au paquet D » pour `vote_cooptation` et `request_removal`)
+- §6.3 (paquet C.5 enrichi avec création de `cross_library_actions_log`)
+- §8.5 (contre-mesure abus admin réseau pointe vers §6.3.1 désormais spécifié)
+- §11 (refonte totale : toutes les questions tranchées, plus de section « ouvertes »)
+
+**Sections inchangées (par rapport à v0.2)** :
+- §1 Objectifs
+- §2 Sémantique des compteurs (la grande nouveauté v0.2 reste centrale en v0.3)
+- §3.2 (audit), §3.4 (helpers), §3.5 (CHECK)
+- §5 Mapping (sauf cohérence implicite avec C.5 enrichi)
+- §6.1 (paquet A déjà livré), §6.2 (paquet B), §6.4-§6.7
+- §7 UI (les évolutions de l'UI seront détaillées lors du paquet E)
+- §8.1-§8.4, §8.6 (risques inchangés)
+- §9 Cas Xavier (Q7 confirme attente paquet F)
+- §10 Calendrier (séquence v0.1 conservatrice confirmée par Q8)
+
+**Bilan v0.3** : la spec est désormais une **doctrine politique complète et techniquement spécifiée**. Tous les paquets suivants (B, C, D, E, F) peuvent être écrits sans nouvelle décision politique nécessaire. Les Q9-Q11 résiduelles sont des détails d'implémentation à trancher dans le contexte de chaque paquet.
 
 ---
 
