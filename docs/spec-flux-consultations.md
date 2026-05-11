@@ -1,9 +1,10 @@
 # Spec — Flux des consultations sur place
 
-> **Statut** : rédaction du 11/05/2026 — base pour implémentation phasée
+> **Statut** : v2 du 11/05/2026 (Phase 0 d'audit close, écarts intégrés) — base pour implémentation phasée
 > **Périmètre** : consultations sur place (`consultas_locais_v2` + `consulta_linhas_v2` + `consulta_item_workflow_v2`). Hors périmètre : prêt inter-bibliothèques, emprunts à domicile.
 > **Spec sœur** : spec-flux-emprunts.md (chaîne parallèle pour les emprunts).
 > **Spec amont** : spec-workflow-reservation.md (modèle de négociation de créneau dont s'inspire la phase d'agendamento de consultation).
+> **Changelog v1 → v2** : audit Phase 0 ajouté §2.4-§2.8 (aucun trigger, aucune clé mail, aucun handler, UI staff partielle avec bug latent L1520, UI lecteur incomplète, invariant emprunt-vs-consulta non garanti). Phase 1 et Phase 5 ajustées en conséquence.
 
 ---
 
@@ -90,41 +91,70 @@ L'objectif n'est pas de réécrire le backend — les 8 fonctions DEFINER existe
 
 ### 2.4 Triggers de notification
 
-À auditer en Phase 0 (voir §2.7). Probablement un `trg_notify_consulta_lifecycle` similaire à celui des emprunts/réservations, mais à confirmer car aucune mention n'apparaît dans les sessions précédentes.
+**Audit Phase 0 (11/05/2026)** : **aucun trigger** sur les 3 tables consultations. La requête `SELECT tgname FROM pg_trigger WHERE tgrelid::regclass::text LIKE '%consulta%'` retourne 0 ligne. Aucune notification mail n'est émise automatiquement pour les consultations.
+
+Conséquence : Phase 3 doit créer ces triggers **de zéro** (cf. §7).
 
 ### 2.5 Toggles de notification (`library_notification_policies`)
 
-À auditer. Si rien n'existe encore, il faudra ajouter :
+**Audit Phase 0 (11/05/2026)** : seul `local_consultation_enabled` (boolean, default true) existe — c'est un toggle "feature on/off" (autoriser la consultation sur place dans cette biblio), **pas** un toggle de notification.
+
+À ajouter en Phase 3 :
 - `consulta_lifecycle_enabled` — création, agendamento, réalisation, annulation
 - `consulta_reminders_enabled` — rappels J-1 / jour J du créneau
 - `admin_copy_consultas_enabled` — copie carbone aux bibliothécaires
 
+Le toggle `local_consultation_enabled` existant reste indépendant et est lu en amont par le frontend pour afficher (ou non) le bouton "Demander une consultation".
+
 ### 2.6 Surfaces UI existantes
 
-**Côté lecteur (`AccountPage.jsx`)** : onglet `Consultations sur place actives` — affiche les demandes via `api.my_consultas_active_v2`. Création depuis le formulaire commun "Réserver un emprunt OU demander une consultation sur place" (appelle directement `fn_v2_create_consulta_local_by_holdings`). Annulation par le bouton dédié (appelle directement `fn_v2_cancel_consulta_linhas_as_leitor`).
+**Audit Phase 0 (11/05/2026)** :
 
-**Côté bibliothécaire (`PanelPage.jsx`)** : onglet consultations (à confirmer en Phase 0). Probablement structure parallèle à celle des réservations : liste avec actions (avancer, programmer créneau, annuler).
+**Côté lecteur (`AccountPage.jsx`)** :
+- Création : OK via le formulaire mutualisé réservation/consultation (`isConsultation ? 'fn_v2_create_consulta_local_by_holdings' : 'fn_v2_create_reserva_by_holdings'`, L258)
+- Affichage des consultations actives via `api.my_consultas_active_v2` : ✓ existant
+- **Annulation par le lecteur : NON implémentée** (pas d'appel `fn_v2_cancel_consulta_linhas_as_leitor`)
+- **Réponse à un créneau proposé : NON implémentée** (pas d'appel `fn_v2_set_consulta_linhas_schedule_reply`)
+- **Fermeture (dismiss) d'une annulation biblio : NON implémentée** (pas d'appel `fn_v2_dismiss_consulta_cancelled_as_leitor`)
 
-### 2.7 Audit à conduire en Phase 0
+**Côté bibliothécaire (`PanelPage.jsx`)** : 24 occurrences `consulta`, largement branché :
+- Onglet `consultas-locais` (L1485)
+- Affichage via `consulta_itens_followup_ui` (L352)
+- Tri par colonne (paquet 18 appliqué, L1496)
+- Hero avec compteurs : "Consultations actives" + "Consultations en attente" (L1126, L1159)
+- Helper `setConsultaWorkflow(consultaId, lineNo, stage, note)` qui appelle `fn_v2_set_consulta_linhas_workflow` (L745-754)
+- 4 boutons d'action :
+  - **Préparer** (`em_preparacao`) — L1517
+  - **Agender** (`consulta_agendada`) — L1520
+  - **Marquer réalisé** (`consulta_realizada`) — L1523
+  - **Annuler côté biblio** (`cancelada_biblioteca`) — L1526
+- Tâche dans le panel quotidien (`buildDailyTasks`) si stage `solicitada` (L839-840)
 
-Avant de toucher au code, vérifier :
+**Bug latent détecté L1520** : le bouton "Agender" appelle `setConsultaWorkflow(consultaId, lineNo, 'consulta_agendada')` **sans passer de date** (`p_consultation_scheduled_for`). La fn DEFINER `fn_v2_set_consulta_linhas_workflow` raise alors `Informe a data e hora da consulta agendada`. Ce bug est probablement passé inaperçu car peu de consultations existent en base (1 seule, `encerrada`). À fixer dans Phase 5.
 
-1. **Triggers de notification** : `SELECT tgname FROM pg_trigger WHERE tgrelid IN ('consultas_locais_v2'::regclass, 'consulta_linhas_v2'::regclass);` — existent-ils ? Quels événements émettent-ils ?
-2. **Toggles** : `SELECT column_name FROM information_schema.columns WHERE table_name = 'library_notification_policies' AND column_name LIKE '%consulta%';` — déjà en place ?
-3. **Mails consultation** : grep `mail-strings.ts` pour les clés `consulta.*` — existent-elles ?
-4. **PanelPage consultations** : grep `PanelPage.jsx` pour `consulta` — quels appels sont déjà branchés ?
-5. **Cohérence vues lecteur** : `SELECT * FROM api.my_consultas_active_v2 LIMIT 5;` — quelles colonnes sont exposées ? Y a-t-il `pickup_proposed_by` ou un équivalent pour la négociation ?
-6. **RPC d'analyse** : `api.search_catalog_v1` retourne-t-il `loanable` ET un flag `consultable_only` pour orienter le frontend ?
+### 2.7 Audit Phase 0 — terminé
 
-### 2.8 Constats critiques à priori
+Audit conduit le 11/05/2026. Résultats récapitulés dans §2.4-§2.6 et §2.8. La conclusion principale : la couche backend de notifications consultations est entièrement à créer ; côté frontend, l'UI staff est partiellement en place (avec un bug latent) et l'UI lecteur a 3 fonctionnalités manquantes.
 
-1. **Pas de wrappers `api.*` pour les consultations.** Le frontend appelle directement les fonctions DEFINER `public.fn_v2_*`. Conséquence : pas de centralisation des contrôles d'accès, le mot "lecteur·rice" est codé partout dans les fns DEFINER avec leurs propres règles (au lieu d'utiliser `fn_resolve_caller_role_for_library`). Risque : un bug analogue à celui découvert au paquet 20 v2 (rôle `'leitor'` retourné comme `NULL`) pourrait masquer des règles de validation.
+### 2.8 Constats critiques consolidés (Phase 0)
 
-2. **`fn_v2_set_consulta_linhas_workflow` ne lit pas la matrice de transitions.** La fonction valide uniquement le stage cible (`v_stage IN (...)`) sans vérifier que la transition est légitime depuis le stage actuel. Conséquence : un coordenador peut techniquement passer de `cancelada_biblioteca` à `consulta_realizada` directement, ce qui est inconsistant. À durcir.
+1. **Aucun trigger de notification** sur les 3 tables consultations. Phase 3 = création complète.
 
-3. **Aucun helper d'action ou de transition formalisé.** Contrairement aux emprunts (`fn_check_loan_action`) et aux réservations (`fn_check_workflow_transition`), les consultations n'ont pas de helper centralisé. À créer.
+2. **Aucune clé i18n mail `consulta.*`** dans `mail-strings.ts` (1639 lignes auditées, 0 occurrence). Phase 3 = ~60 clés × 6 locales = 360 traductions.
 
-4. **Pas de tests d'acceptation.** Aucun bloc DO $$ dans `tests/sql/` ne couvre les consultations. À ajouter (objectif ~50 tests).
+3. **Aucun handler `consultations.ts`** dans `notify-event/handlers/`. Phase 3 = création complète sur le modèle de `internal-task.ts` (pattern : `fetchConsulta` + `fetchConsultaProfile`, `renderEmail(layout)`, `safeSendEmail`).
+
+4. **Pas de wrappers `api.*` pour les consultations.** Le frontend appelle directement les fonctions DEFINER. Phase 2 = créer 5 wrappers SECURITY INVOKER.
+
+5. **`fn_v2_set_consulta_linhas_workflow` ne lit pas de matrice de transitions formalisée.** La fonction valide uniquement le stage cible. Phase 1 = créer `fn_check_consulta_transition` + l'utiliser dans le wrapper `api.advance_consulta`.
+
+6. **Invariant emprunt-vs-consulta NON garanti côté backend.** L'audit de `fn_v2_create_emprestimo_by_holdings` (Phase 0) montre que la fonction vérifie les réservations actives sur un holding mais **pas** les consultations actives. Conséquence : on peut techniquement créer un emprunt sur un holding qui est en `consulta_linhas_v2.item_status = 'ativa'`. À patcher en Phase 1.
+
+7. **Bug latent UI staff (PanelPage L1520)** : le bouton "Agender" appelle `setConsultaWorkflow` sans date. À fixer en Phase 5 en intégrant un formulaire de proposition de créneau (date+heure+timezone+fenêtre optionnelle).
+
+8. **UI lecteur incomplète** : annulation, réponse créneau, dismiss non implémentées dans `AccountPage.jsx`. À ajouter en Phase 4.
+
+9. **Aucun test SQL d'acceptation** pour les consultations. Phases 1 et 2 doivent en livrer ~45.
 
 ---
 
@@ -699,13 +729,15 @@ Estimation totale : ~5 jours de travail.
 
 **Livrable** : section §2.4 et §2.7 mises à jour avec les vraies données. Pas de code, juste un audit pour cadrer la suite.
 
-### Phase 1 — Helpers + matrice de transitions (1 demi-journée)
+### Phase 1 — Helpers + matrice de transitions + invariant emprunt/consulta (1 journée)
 
 1. Migration `YYYYMMDDHHMMSS_consulta_helpers.sql` :
    - `fn_check_consulta_transition(from, to, role)` — matrice §5.2
    - `fn_get_consulta_context(consulta_id)` — lookup
 
-2. Tests SQL d'acceptation pour les helpers (~15 tests dans `tests/sql/paquetXX_consulta_helpers_tests.sql`)
+2. **Migration `YYYYMMDDHHMMSS_invariant_emprestimo_vs_consulta.sql` (Phase 0 ajout)** : patch de `fn_v2_create_emprestimo_by_holdings` pour vérifier l'absence de `consulta_linhas_v2.item_status = 'ativa'` sur le holding cible (analogue à la vérification réservations actives déjà présente). Inversement, étendre `fn_v2_create_consulta_local_by_holdings` pour vérifier l'absence d'emprunt actif ET de réservation active sur le holding.
+
+3. Tests SQL d'acceptation pour les helpers + invariant (~20 tests dans `tests/sql/paquetXX_consulta_helpers_tests.sql`).
 
 ### Phase 2 — Wrappers `api.*` (1 journée)
 
@@ -733,12 +765,25 @@ Estimation totale : ~5 jours de travail.
 3. AccountPage — bloc "Annulée par biblio" avec bouton Fermer → `api.dismiss_consulta_cancelled`
 4. AccountPage — clés i18n `account.consulta.*` (~25 clés × 6 locales)
 
-### Phase 5 — Frontend bibliothécaire (1 journée)
+### Phase 5 — Frontend bibliothécaire (1 demi-journée — UI déjà en place)
 
-1. PanelPage — onglet "Consultations" (création ou refonte selon Phase 0)
-2. PanelPage — actions sur chaque ligne via `api.advance_consulta`
-3. PanelPage — clés i18n `panel.consulta.*` (~15 clés × 6 locales)
-4. PanelPage — bloc création de consultation par staff pour un lecteur (analogue à création d'emprunt)
+L'audit Phase 0 a montré que l'onglet `consultas-locais` de `PanelPage.jsx` est déjà largement branché (24 occurrences, 4 boutons d'action). Le travail consiste à enrichir l'existant plutôt qu'à le créer.
+
+1. **Fix bug latent L1520** : le bouton "Agender" appelle `setConsultaWorkflow(consultaId, lineNo, 'consulta_agendada')` sans date. Remplacer par un formulaire modal qui collecte : date, heure début, heure fin optionnelle, timezone par défaut (celle de la biblio), note workflow. Appel `api.advance_consulta` avec `target_stage='consulta_agendada'` + params créneau.
+
+2. Migration des 4 appels `setConsultaWorkflow` existants vers `api.advance_consulta` :
+   - Préparer → `api.advance_consulta(target='em_preparacao')`
+   - Agender → `api.advance_consulta(target='consulta_agendada', consultation_*)` (cf. point 1)
+   - Marquer réalisé → `api.advance_consulta(target='consulta_realizada')`
+   - Annuler côté biblio → `api.advance_consulta(target='cancelada_biblioteca', workflow_note=obligatoire)`
+
+3. Nouveau bouton **Marquer no-show** (`nao_compareceu`) — manquant dans l'UI actuelle, à ajouter à côté de "Marquer réalisé" (visible uniquement si stage = `consulta_agendada`).
+
+4. Affichage de la réponse du lecteur sur le créneau proposé (colonne ou pastille selon `schedule_reply_status` : `confirmado_leitor` / `recusado_leitor` / NULL).
+
+5. Création de consultation par staff pour un lecteur (analogue à la création d'emprunt depuis l'onglet "Ações"). Appelle `api.create_consulta_local` avec `p_user_id` choisi.
+
+6. Clés i18n `panel.consulta.*` (~15 clés × 6 locales).
 
 ### Phase 6 — Tests runtime (1 demi-journée)
 
