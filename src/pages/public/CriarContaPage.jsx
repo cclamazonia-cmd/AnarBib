@@ -73,7 +73,10 @@ export default function CriarContaPage() {
   }, []);
 
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); }
-  function handleLibChange(slug) { set('library_slug', slug); set('acceptRules', false); setCurrentLib(libraries.find(l => l.slug === slug) || null); }
+  function handleLibChange(slug) {
+    if (slug === '__solicitar__') { navigate('/solicitar-biblioteca'); return; }
+    set('library_slug', slug); set('acceptRules', false); setCurrentLib(libraries.find(l => l.slug === slug) || null);
+  }
   function libLogo(lib) {
     if (!lib?.slug) return null;
     if (lib.logo_url?.startsWith('http')) return lib.logo_url;
@@ -198,7 +201,7 @@ export default function CriarContaPage() {
                 {l.city ? ` (${l.city})` : ''}
               </option>
             ))}
-            <option value="">{t({id:'auth.create.noLibrary'})}</option>
+            <option value="__solicitar__">{t({id:'auth.create.noLibrary'})}</option>
           </select>
           <div style={hs}>{t({id:'auth.create.libraryHint'})}</div>
         </div>
