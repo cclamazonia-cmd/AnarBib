@@ -12,10 +12,10 @@ Pose la couche notifications consultations de zéro, sur le pattern v3 réservat
 
 | L | Contenu | Effort | Risque |
 |---|---|---|---|
-| L1 | Migration toggles (8 colonnes `library_notification_policies`) | ~120 lignes SQL | Faible |
-| L2 | Migration triggers (2 trigger functions + 2 triggers + smoke tests) | ~280 lignes SQL | Moyen (correctness sémantique) |
-| L3 | i18n mails (~55 clés × 6 locales, préfixe `con.*`) | +320 lignes TS | Faible (linéaire mais volumineux) |
-| L4 | Handlers + bundles + policies + events normalizers | ~400 lignes TS | Élevé (decode payload, format mail, i18n binding) |
+| L1 | Migration toggles (8 colonnes `library_notification_policies`) | ~120 lignes SQL | Faible | ✅ pushé 13/05 (commit 9749549) |
+| L2 | Migration triggers (2 trigger functions + 2 triggers + smoke tests) | ~290 lignes SQL | Moyen (correctness sémantique) | 🟡 rédigé, en attente push |
+| L3 | i18n mails (~55 clés × 6 locales, préfixe `con.*`) | +320 lignes TS | Faible (linéaire mais volumineux) | ⏳ |
+| L4 | Handlers + bundles + policies + events normalizers | ~400 lignes TS | Élevé (decode payload, format mail, i18n binding) | ⏳ |
 
 ---
 
@@ -39,6 +39,11 @@ Pose la couche notifications consultations de zéro, sur le pattern v3 réservat
 | 14 | Timezone créneau : lue dans `library_service_state.consultation_timezone`, fallback `DEFAULT_NOTIFICATION_TIMEZONE`. Helper `formatDateTimeInZone` du `shared/format.ts` | Phase 2 (paquet 25) + `shared/format.ts` |
 | 15 | Discriminant `cancelled_by ∈ {leitor, biblioteca}` passé en payload via le trigger lifecycle, lu par le handler pour routing destinataire + clé i18n | spec §7.2 |
 | 16 | Locale biblio : `ctx.default_locale` (fallback `pt-BR`) — calque patch paquet 6 inline dans `reservas.ts` | code réel reservas.ts ligne 18-21 |
+| 17 | **L2 — Payload riche** : `line_nos` toujours + `cancelled_by` sur cancelada + `consultation_starts_at/ends_at` sur agendada + `schedule_reply_status` sur resposta_creneau. Économise relectures DB côté handler. | sondage L2 |
+| 18 | **L2 — Pas de cron expiration** : la transition `→expirada` est `system`, traitement renvoyé au **paquet 27 (crons consultations)**. Le trigger lifecycle réagira automatiquement quand le cron viendra UPDATE `item_status='expirada'`. | sondage L2 |
+| 19 | **L2 — Helper canonique réutilisé** : les 2 trigger fns appellent `public.fn_dispatch_circulation_notify_event(event, record_id, payload)` (helper existant 1235 octets, partagé par reserva et emprestimo). Aucun `pg_net.http_post` inline. | introspection 4 |
+| 20 | **L2 — Pattern double garde** : (1) `local_consultation_enabled` master switch en premier, (2) `consulta_mail_*_enabled` granulaire en second via `EXECUTE format(%I)`. Fail-open par défaut sur flag NULL. | calque bloc 1 trg reserva |
+| 21 | **L2 — Cohabitation triggers sans doublon** : transitions disjointes par construction. Lifecycle traite item_status DISTINCT FROM (criada/realizada/cancelada/expirada). Workflow traite workflow_stage `→consulta_agendada` ET schedule_reply_status DISTINCT FROM. Pas d'event émis 2× sur la même transaction. | matrice §5.2 + analyse |
 
 ---
 
