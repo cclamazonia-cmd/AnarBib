@@ -71,7 +71,7 @@ export function LocaleSwitcher({ variant = 'header' }) {
       >
         {SUPPORTED_LOCALES.map(l => (
           <option key={l.code} value={l.code}>
-            {l.shortCode} • {l.label} {l.flag}
+            {l.label}
           </option>
         ))}
       </select>

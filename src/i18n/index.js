@@ -14,17 +14,19 @@ import de from './locales/de.json';
 export const DEFAULT_LOCALE = 'pt-BR';
 
 // Liste des locales supportées.
-// `shortCode` est utilisé dans le LocaleSwitcher (PT, FR, ES, EN, IT, DE).
-// `flag` reste à des fins illustratives ; le drapeau pt-BR combine 🇧🇷🇵🇹
-// pour refléter notre variante brésilienne et la solidarité avec la diaspora
-// militante au Portugal.
+// Décision politique acta-anarchiste (paquet 21, 2026-05-11) :
+// - Pas de drapeaux d'États (un drapeau, même combiné, reste un drapeau d'État)
+// - Pas de codes d'État (« PT », « FR », « ES », « GB », « IT », « DE »)
+// - Chaque langue s'affiche dans son propre nom, dans sa propre langue
+// Le code BCP 47 (`code`) reste inchangé : c'est l'identifiant technique
+// stocké en DB (profile.preferred_language, library.default_locale).
 export const SUPPORTED_LOCALES = [
-  { code: 'pt-BR', shortCode: 'PT', label: 'Português', flag: '🇧🇷🇵🇹' },
-  { code: 'fr',    shortCode: 'FR', label: 'Français',  flag: '🇫🇷' },
-  { code: 'es',    shortCode: 'ES', label: 'Castellano', flag: '🇪🇸' },
-  { code: 'en',    shortCode: 'EN', label: 'English',   flag: '🇬🇧' },
-  { code: 'it',    shortCode: 'IT', label: 'Italiano',  flag: '🇮🇹' },
-  { code: 'de',    shortCode: 'DE', label: 'Deutsch',   flag: '🇩🇪' },
+  { code: 'pt-BR', label: 'Português' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Castellano' },
+  { code: 'en', label: 'English' },
+  { code: 'it', label: 'Italiano' },
+  { code: 'de', label: 'Deutsch' },
 ];
 
 const MESSAGES = {
