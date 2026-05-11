@@ -168,7 +168,7 @@ steps:
     commands:
       # Installation de la CLI Supabase (binaire pré-compilé Linux x64)
       - apk add --no-cache curl tar
-      - curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz
+      - curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/download/v2.98.1/supabase_linux_amd64.tar.gz
       - tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
       - chmod +x /usr/local/bin/supabase
       - supabase --version
@@ -233,7 +233,7 @@ steps:
     commands:
       # Installation de la CLI Supabase (binaire pré-compilé Linux x64)
       - apk add --no-cache curl tar
-      - curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz
+      - curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/download/v2.98.1/supabase_linux_amd64.tar.gz
       - tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
       - chmod +x /usr/local/bin/supabase
       - supabase --version
