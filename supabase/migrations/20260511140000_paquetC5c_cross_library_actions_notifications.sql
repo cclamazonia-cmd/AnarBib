@@ -191,10 +191,13 @@ BEGIN
         command := 'SELECT public.fn_cron_notify_cross_library_digest();'
     );
     
-    -- Désactiver le job immédiatement (Edge Function pas encore créée)
-    UPDATE cron.job
-    SET active = false
-    WHERE jobid = v_job_id;
+    -- Désactiver le job immédiatement (Edge Function pas encore créée).
+    -- On utilise cron.alter_job() plutôt qu'UPDATE direct sur cron.job
+    -- parce que la table cron.job nécessite des privilèges qui ne sont pas
+    -- accordés au rôle exécutant la migration (postgres CI), alors que
+    -- cron.alter_job est conçue pour fonctionner avec les permissions du
+    -- propriétaire du job.
+    PERFORM cron.alter_job(job_id := v_job_id, active := false);
     
     RAISE NOTICE 'cron_job_ok: job anarbib-notify-cross-library-digest-weekly créé (id=%) et désactivé. À activer après déploiement de l''Edge Function notify-cross-library-digest et création du secret WEBHOOK_SECRET_NOTIFY_CROSS_LIBRARY_DIGEST dans le vault.', v_job_id;
 END;
