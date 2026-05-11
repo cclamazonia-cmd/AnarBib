@@ -12,6 +12,13 @@ import './CatalogPage.css';
 
 const PAGE_SIZE = 100;
 
+// URLs des manuels (stockes sur Supabase Storage, bucket library-ui-assets).
+// Le manuel lecteur est un PDF multilingue unique (8 langues en interne).
+// Le manuel complet sera bascule en i18n quand les versions traduites
+// seront pretes.
+const MANUAL_READER_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual%20Leitor-a-e.pdf';
+const MANUAL_COMPLETE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual_do_AnarBib.pdf';
+
 const PUBLIC_COLS = [
   'book_id','bib_ref','titulo','subtitulo','autor','author_display',
   'author_id','author_chips',
@@ -185,7 +192,8 @@ export default function CatalogPage() {
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.catalog' }));
   const { user } = useAuth();
-  const { libraryName, libraryId } = useLibrary();
+  const { libraryName, libraryId, role: libraryRole } = useLibrary();
+  const isStaff = libraryRole === 'librarian' || libraryRole === 'coordenador' || libraryRole === 'administrador';
   const navigate = useNavigate();
   const isAuth = !!user;
   const tableRef = useRef(null);
@@ -395,15 +403,18 @@ export default function CatalogPage() {
           <Button onClick={() => exportPDF(books, t)}>{t({ id: 'catalog.export.pdf' })}</Button>
           <Button variant="secondary" onClick={() => exportCSV(books)}>{t({ id: 'catalog.export.csv' })}</Button>
           <span className="ab-hero-sep" aria-hidden="true" />
-          {user
-            ? <Button variant="secondary" onClick={() => navigate('/conta')}>{t({ id: 'nav.account' })}</Button>
-            : <Button variant="secondary" onClick={() => navigate('/cadastro')}>{t({ id: 'nav.login' })}</Button>
-          }
+          {!user && (
+            <Button variant="secondary" onClick={() => navigate('/cadastro')}>{t({ id: 'nav.login' })}</Button>
+          )}
           {regimentoUrl && (
             <a className="ab-button ab-button--secondary" href={regimentoUrl} target="_blank" rel="noopener noreferrer">{t({ id: 'catalog.regimento' })}</a>
           )}
           <span className="ab-hero-sep" aria-hidden="true" />
-          <a className="ab-button ab-button--secondary" href="https://cclamazonia-cmd.github.io/anarbib-staging/Manual_do_AnarBib.pdf" target="_blank" rel="noopener noreferrer">{t({ id: 'nav.manual' })} AnarBib</a>
+          {isStaff ? (
+            <a className="ab-button ab-button--secondary" href={MANUAL_COMPLETE_URL} target="_blank" rel="noopener noreferrer">{t({ id: 'nav.manual.complete' })}</a>
+          ) : (
+            <a className="ab-button ab-button--secondary" href={MANUAL_READER_URL} target="_blank" rel="noopener noreferrer">{t({ id: 'nav.manual.reader' })}</a>
+          )}
         </>}
       />
 
