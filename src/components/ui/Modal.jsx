@@ -24,6 +24,7 @@
 // ============================================================================
 
 import { useEffect, useRef } from 'react';
+import './Modal.css';
 
 export default function Modal({
   isOpen,

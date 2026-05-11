@@ -30,7 +30,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { useIdleTimer } from '@/hooks/useIdleTimer';
 import IdleWarningModal from '@/components/IdleWarningModal';
 
-const IDLE_MINUTES = 2;
+const IDLE_MINUTES = 60;
 const WARNING_SECONDS = 60;
 
 export default function IdleTimerGuard({ children }) {
@@ -40,6 +40,7 @@ export default function IdleTimerGuard({ children }) {
 
   // Le idle timer ne s'active QUE pour les utilisateur·rices staff connecté·es.
   // Anonymes et lecteurs : aucune protection idle (leur usage ne le justifie pas).
+  console.log('[IdleTimerGuard] render: user=', user?.id || 'anon', 'role=', role);
   const isStaff =
     !!user &&
     (role === 'librarian' || role === 'coordenador' || role === 'administrador');

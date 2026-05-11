@@ -1,0 +1,100 @@
+/* ============================================================================
+   src/components/ui/Modal.css
+   ============================================================================
+
+   Styles pour le composant <Modal /> generique (src/components/ui/Modal.jsx).
+
+   Auparavant : ces classes etaient definies dans TeamPanel.css, ce qui faisait
+   que la modal ne s'affichait correctement QUE sur les pages Team. Sur les
+   autres pages (catalogue, panel, etc.), la modal n'avait pas de positionnement
+   fixed et apparaissait en bas du DOM (bug du Paquet 23a).
+
+   Paquet 23a (2026-05-11) — extraction du CSS modal pour autonomie du
+   composant. Le composant Modal n'a plus de dependance sur TeamPanel.css.
+
+   ============================================================================ */
+
+.ab-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, .65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: abModalOverlayFade .15s ease-out;
+}
+
+@keyframes abModalOverlayFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ab-modal {
+  background: linear-gradient(180deg, #1a0a0c 0%, #0d0708 100%);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  width: 100%;
+  animation: abModalSlide .2s ease-out;
+}
+
+.ab-modal--small  { max-width: 400px; }
+.ab-modal--medium { max-width: 560px; }
+.ab-modal--large  { max-width: 800px; }
+
+@keyframes abModalSlide {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ab-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.ab-modal__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: var(--brand-font-body, inherit);
+  color: var(--brand-fg, #e8e2d6);
+}
+
+.ab-modal__close {
+  background: none;
+  border: none;
+  color: var(--brand-muted, #999);
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  border-radius: 6px;
+  transition: background-color .15s, color .15s;
+}
+
+.ab-modal__close:hover {
+  background: rgba(255, 255, 255, .06);
+  color: var(--brand-fg, #e8e2d6);
+}
+
+.ab-modal__body {
+  padding: 20px;
+  color: var(--brand-fg, #e8e2d6);
+}
+
+.ab-modal__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}

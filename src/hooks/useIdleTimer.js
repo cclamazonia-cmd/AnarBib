@@ -8,24 +8,20 @@
 // Paquet 23a (2026-05-11) — backlog item #76 « Delogging automatique a la
 // fermeture du navigateur » (volet A uniquement : idle timeout).
 //
+// PATCH v2 (2026-05-11) : fix bug de cascade. La v1 avait des callbacks dans
+// les dependances du useEffect, ce qui faisait que chaque changement de state
+// (notamment showWarning passant a true) rejouait le useEffect, qui appelait
+// startIdleTimer qui faisait setShowWarning(false) → la modal se fermait
+// immediatement. Resolution : tout passer par des refs, useEffect avec
+// uniquement [enabled] en dependance.
+//
 // Doctrine :
 //   - Cible postes partages en bibliotheque militante (catalogage commun)
 //   - Active uniquement pour le staff (librarian/coordenador/administrador)
 //   - Apres `idleMinutes` minutes sans activite (mousedown, keydown, scroll),
 //     declenche un modal d'avertissement de `warningSeconds` secondes
 //   - Si l'utilisateur clique « Rester connecte·e » → timer reset
-//   - Si l'utilisateur ne reagit pas → onTimeout() declenche (typiquement
-//     signOut + redirect)
-//   - Throttle des events d'activite a 1s pour ne pas saturer
-//
-// Usage :
-//   const { showWarning, secondsRemaining, stayLoggedIn, forceLogout } =
-//     useIdleTimer({
-//       enabled: isStaff,
-//       idleMinutes: 60,
-//       warningSeconds: 60,
-//       onTimeout: () => signOut().then(() => navigate('/login?reason=idle')),
-//     });
+//   - Si l'utilisateur ne reagit pas → onTimeout() declenche
 //
 // ============================================================================
 
@@ -43,19 +39,29 @@ export function useIdleTimer({
   const [showWarning, setShowWarning] = useState(false);
   const [secondsRemaining, setSecondsRemaining] = useState(warningSeconds);
 
-  // Refs : pour pouvoir reset les timers depuis n'importe quel callback
-  // sans creer de closures stale
+  // ── Refs pour tout (config + timers + state miroir) ──────
+  // L'idee : tout passer par des refs pour que le useEffect principal
+  // n'ait QUE [enabled] comme dependance, et ne se rejoue donc pas a
+  // chaque changement de state interne.
   const idleTimerRef = useRef(null);
   const warningTimerRef = useRef(null);
   const countdownIntervalRef = useRef(null);
   const lastActivityRef = useRef(Date.now());
   const onTimeoutRef = useRef(onTimeout);
+  const showWarningRef = useRef(false);
+  const idleMinutesRef = useRef(idleMinutes);
+  const warningSecondsRef = useRef(warningSeconds);
 
-  // Garde onTimeout a jour dans le ref pour eviter les re-renders
-  // qui re-creeraient tout l'effet a chaque render
-  useEffect(() => {
-    onTimeoutRef.current = onTimeout;
-  }, [onTimeout]);
+  // Sync refs avec les props (sans rejouer le useEffect principal)
+  useEffect(() => { onTimeoutRef.current = onTimeout; }, [onTimeout]);
+  useEffect(() => { idleMinutesRef.current = idleMinutes; }, [idleMinutes]);
+  useEffect(() => { warningSecondsRef.current = warningSeconds; }, [warningSeconds]);
+
+  // Setter wrapped qui maintient showWarningRef en sync
+  const setShowWarningSafe = useCallback((value) => {
+    showWarningRef.current = value;
+    setShowWarning(value);
+  }, []);
 
   // ── Nettoyage de tous les timers ──────────────────────────
   const clearAllTimers = useCallback(() => {
@@ -76,15 +82,17 @@ export function useIdleTimer({
   // ── Demarrage du timer principal (avant warning) ──────────
   const startIdleTimer = useCallback(() => {
     clearAllTimers();
-    setShowWarning(false);
+    setShowWarningSafe(false);
 
-    const idleMs = (idleMinutes * 60 - warningSeconds) * 1000;
+    const idleMinutesNow = idleMinutesRef.current;
+    const warningSecondsNow = warningSecondsRef.current;
+    const idleMs = (idleMinutesNow * 60 - warningSecondsNow) * 1000;
 
     idleTimerRef.current = setTimeout(() => {
       // Phase 1 → phase 2 : on affiche le warning et on demarre
       // le compte a rebours visible
-      setShowWarning(true);
-      setSecondsRemaining(warningSeconds);
+      setShowWarningSafe(true);
+      setSecondsRemaining(warningSecondsNow);
 
       // Decompte visible chaque seconde
       countdownIntervalRef.current = setInterval(() => {
@@ -94,30 +102,25 @@ export function useIdleTimer({
       // Timer final : signOut effectif a la fin
       warningTimerRef.current = setTimeout(() => {
         clearAllTimers();
-        setShowWarning(false);
+        setShowWarningSafe(false);
         if (onTimeoutRef.current) {
           onTimeoutRef.current();
         }
-      }, warningSeconds * 1000);
+      }, warningSecondsNow * 1000);
     }, idleMs);
-  }, [idleMinutes, warningSeconds, clearAllTimers]);
+  }, [clearAllTimers, setShowWarningSafe]);
 
   // ── Activite detectee : reset du timer ────────────────────
   const handleActivity = useCallback(() => {
     const now = Date.now();
-    // Throttle : on ne reset pas plus d'une fois par seconde
     if (now - lastActivityRef.current < ACTIVITY_THROTTLE_MS) return;
     lastActivityRef.current = now;
 
-    // Si on est en phase warning, l'activite NE reset PAS — l'utilisateur
-    // doit cliquer explicitement sur « Rester connecte·e ». C'est important
-    // pour eviter qu'un mouvement involontaire (clic sur fermeture d'onglet
-    // qui passe par l'overlay, par exemple) reset le timer alors que la
-    // personne est partie.
-    if (showWarning) return;
+    // Lit l'etat via le ref (pas via le closure) pour avoir la valeur courante
+    if (showWarningRef.current) return;
 
     startIdleTimer();
-  }, [showWarning, startIdleTimer]);
+  }, [startIdleTimer]);
 
   // ── Bouton « Rester connecte·e » ──────────────────────────
   const stayLoggedIn = useCallback(() => {
@@ -128,19 +131,23 @@ export function useIdleTimer({
   // ── Bouton « Se deconnecter maintenant » ──────────────────
   const forceLogout = useCallback(() => {
     clearAllTimers();
-    setShowWarning(false);
+    setShowWarningSafe(false);
     if (onTimeoutRef.current) {
       onTimeoutRef.current();
     }
-  }, [clearAllTimers]);
+  }, [clearAllTimers, setShowWarningSafe]);
 
   // ── Mise en place / nettoyage des listeners + timer ───────
+  // CRUCIAL : seul `enabled` est en dependance. NE PAS rajouter handleActivity,
+  // startIdleTimer ou clearAllTimers ici — ils sont stables via leurs refs.
+  // C'est la cle du fix v2 : ne pas rejouer le useEffect a chaque render.
   useEffect(() => {
     if (!enabled) {
       clearAllTimers();
-      setShowWarning(false);
+      setShowWarningSafe(false);
       return;
     }
+
 
     // Demarrer le timer
     startIdleTimer();
@@ -156,7 +163,8 @@ export function useIdleTimer({
         window.removeEventListener(event, handleActivity);
       });
     };
-  }, [enabled, handleActivity, startIdleTimer, clearAllTimers]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled]);
 
   return {
     showWarning,
