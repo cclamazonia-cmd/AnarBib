@@ -9,78 +9,24 @@
   min-height: 100vh;
 }
 
-/* ── Hero / topbar ───────────────────────────────────────── */
-
-.cat-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.cat-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.cat-hero-copy { display: flex; flex-direction: column; gap: 0; min-width: 0; flex: 1 1 420px; }
-.cat-hero-copy h1 {
-  margin: 0; font-size: 1.5rem; line-height: 1.2; font-weight: 800;
-  font-family: var(--brand-font-body) !important;
-  text-transform: none !important;
-}
-.cat-hero-copy p {
-  margin: 4px 0 0; font-size: 0.85rem; color: var(--brand-muted, #d1d1d1);
-  font-family: var(--brand-font-body) !important;
-  text-transform: none !important;
-}
-
-/* Force body font on all headings to avoid uppercase-only theme fonts */
-.catalogacao-wrap h1,
-.catalogacao-wrap h2,
-.catalogacao-wrap h3,
-.catalogacao-wrap h4 {
-  font-family: var(--brand-font-body) !important;
-  text-transform: none !important;
-}
+/* NB. Le hero (titre, sous-titre, dégradé rouge AnarBib) est désormais géré
+   par le composant partagé <Hero> (cf. src/components/layout + layout.css).
+   Les anciennes classes .cat-topbar, .cat-brand, .cat-hero-copy ont été
+   supprimées. La classe .cat-logo est conservée pour compatibilité éventuelle
+   (rendu d'un logo dans le hero via style inline). */
 
 .cat-logo {
   height: 64px; width: auto; max-width: 170px; object-fit: contain; display: block; flex-shrink: 0;
   filter: drop-shadow(0 8px 18px rgba(0,0,0,.35));
 }
 
-.cat-hero-actions {
-  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-}
-.cat-hero-actions .btn {
-  padding: 8px 16px; border-radius: 8px; font-size: .82rem; font-weight: 600;
-  text-decoration: none; transition: background .15s;
-  background: var(--brand-panel-bg, rgba(30,30,30,.8));
-  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.1));
-  color: var(--brand-text, #f4f4f4);
-}
-.cat-hero-actions .btn:hover { background: rgba(255,255,255,.08); }
-.cat-hero-actions-separator {
-  width: 1px; height: 24px; background: var(--brand-panel-border, rgba(255,255,255,.1));
-}
-
-/* ── Toolbar (session + mode) ────────────────────────────── */
+/* ── Toolbar (mode toggle uniquement) ────────────────────── */
 
 .cat-toolbar {
   display: flex; flex-direction: column; gap: 12px;
   padding: 14px 0; border-bottom: 1px solid var(--brand-panel-border, rgba(255,255,255,.1));
   margin-bottom: 14px;
 }
-
-.cat-toolbar-meta {
-  display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
-}
-
-.cat-toolbar-status { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.cat-toolbar-main { display: flex; gap: 8px; align-items: center; }
 
 .cat-mode-switch {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
@@ -231,7 +177,6 @@
 
 @media (max-width: 720px) {
   .catalogacao-wrap { --wrap-pad: 12px; }
-  .cat-topbar { flex-direction: column; align-items: flex-start; }
   .cat-statusbar { flex-direction: column; gap: 10px; }
   .cat-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
   .cat-tab-btn { flex-shrink: 0; }

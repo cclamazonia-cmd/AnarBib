@@ -4,7 +4,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIntl } from 'react-intl';
 import { useLibrary } from '@/contexts/LibraryContext';
-import { PageShell, Topbar, Footer } from '@/components/layout';
+import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import './CatalogacaoPage.css';
 import BookDraftForm from './BookDraftForm';
 import AuthorDraftForm from './AuthorDraftForm';
@@ -155,38 +155,32 @@ export default function CatalogacaoPage() {
   return (
     <PageShell>
       <Topbar />
+
+      <Hero title={t({ id: 'catalogacao.areaTitle' })} subtitle={t({ id: 'catalogacao.areaSubtitle' })}>
+        <div className="ab-hero__content" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginTop: 12 }}>
+          <span className="cat-pill info">{user?.email || ''}</span>
+          <span className="cat-pill ok">{t({ id: 'catalogacao.librarianAccess' })}</span>
+          {config?.logoUrl && (
+            <img
+              className="cat-logo"
+              src={config.logoUrl}
+              alt={config?.libraryName || 'AnarBib'}
+              style={{ height: 48, marginLeft: 'auto' }}
+            />
+          )}
+        </div>
+        <div className="ab-hero__actions">
+          <button className="cat-btn secondary" onClick={refreshAll} disabled={loading}>
+            {loading ? t({ id: 'common.loading' }) : t({ id: 'common.update' })}
+          </button>
+        </div>
+      </Hero>
+
       <div className="catalogacao-wrap">
 
-        {/* ── Hero local de la page ────────────────────────── */}
-        <div className="cat-topbar">
-          <div className="cat-brand">
-            <div className="cat-hero-copy">
-              <h1>{t({ id: 'catalogacao.areaTitle' })}</h1>
-              <p>{t({ id: 'catalogacao.areaSubtitle' })}</p>
-            </div>
-            {config?.logoUrl && (
-              <img className="cat-logo" src={config.logoUrl} alt={config?.libraryName || 'AnarBib'} />
-            )}
-          </div>
-        </div>
-
-        {/* ── Toolbar: session + mode toggle ────────────────── */}
+        {/* ── Toolbar: mode toggle ──────────────────────────── */}
         <div className="cat-toolbar">
-        <div className="cat-toolbar-meta">
-          <div className="cat-toolbar-status">
-            <span className="cat-pill info">
-              {user?.email || ''}
-            </span>
-            <span className="cat-pill ok">{t({ id: 'catalogacao.librarianAccess' })}</span>
-          </div>
-          <div className="cat-toolbar-main">
-            <button className="cat-btn secondary" onClick={refreshAll} disabled={loading}>
-              {loading ? t({id:'common.loading'}) : t({id:'common.update'})}
-            </button>
-          </div>
-        </div>
-
-        <div className="cat-mode-switch">
+          <div className="cat-mode-switch">
           <span className="cat-mode-switch-label">{t({ id: 'catalogacao.modeLabel' })}</span>
           <div className="cat-mode-switch-buttons">
             <button

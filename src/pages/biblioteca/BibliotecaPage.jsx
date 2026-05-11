@@ -5,7 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
-import { PageShell, Topbar, Footer } from '@/components/layout';
+import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
@@ -575,10 +575,9 @@ export default function BibliotecaPage() {
 
   if (!libraryId) return (
     <PageShell><Topbar />
-      <div className="catalogacao-wrap" style={{ maxWidth:800, margin:'0 auto', textAlign:'center', padding:'60px 24px' }}>
-        <h1>{t({ id: 'biblioteca.title' })}</h1>
-        <p style={{ color:'var(--brand-muted)', marginTop:12 }}>{t({ id: 'biblioteca.noLibrary' })}</p>
-        <div style={{ marginTop:20, display:'flex', gap:10, justifyContent:'center' }}>
+      <Hero title={t({ id: 'biblioteca.title' })} subtitle={t({ id: 'biblioteca.noLibrary' })} />
+      <div className="catalogacao-wrap" style={{ maxWidth:800, margin:'0 auto', textAlign:'center', padding:'40px 24px' }}>
+        <div style={{ display:'flex', gap:10, justifyContent:'center' }}>
           <Link to="/solicitar-biblioteca"><button className="cat-btn secondary">{t({ id: 'biblioteca.requestLibrary' })}</button></Link>
         </div>
       </div>
@@ -593,25 +592,29 @@ export default function BibliotecaPage() {
 
   if (!isLibrarian) return (
     <PageShell><Topbar />
-      <div className="catalogacao-wrap" style={{ maxWidth:800, margin:'0 auto', textAlign:'center', padding:'60px 24px' }}>
-        <h1>{t({ id: 'biblioteca.title' })}</h1>
-        <p style={{ color:'var(--brand-muted)', marginTop:12 }}>{t({ id: 'biblioteca.restricted' })}</p>
-      </div>
+      <Hero title={t({ id: 'biblioteca.title' })} subtitle={t({ id: 'biblioteca.restricted' })} />
     <Footer /></PageShell>
   );
 
   return (
     <PageShell><Topbar />
-      <div className="catalogacao-wrap" style={{ maxWidth:1100, margin:'0 auto' }}>
 
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16, flexWrap:'wrap', gap:12 }}>
-          <div style={{ display:'flex', gap:14, alignItems:'center' }}>
-            {logoUrl && <img src={logoUrl} alt={libraryName} style={{ height:56, objectFit:'contain', filter:'drop-shadow(0 4px 12px rgba(0,0,0,.4))' }} />}
-            <div><h1 style={{ margin:0 }}>{t({ id: 'biblioteca.title' })}</h1><p style={{ color:'var(--brand-muted)', fontSize:'.9rem', margin:'2px 0 0' }}>{lib?.name||libraryName}
-              <span className={`cat-pill ${role==='administrador'?'info':(role==='coordenador'||role==='librarian')?'ok':'warn'}`} style={{ marginLeft:8, fontSize:'.65rem' }}>{t({ id: 'roles.'+role, defaultMessage: role })}</span>
-            </p></div>
-          </div>
+      <Hero title={t({ id: 'biblioteca.title' })} subtitle={lib?.name || libraryName}>
+        <div className="ab-hero__content" style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+          {logoUrl && (
+            <img
+              src={logoUrl}
+              alt={libraryName}
+              style={{ height: 56, objectFit: 'contain', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,.4))' }}
+            />
+          )}
+          <span className={`cat-pill ${role==='administrador'?'info':(role==='coordenador'||role==='librarian')?'ok':'warn'}`}>
+            {t({ id: 'roles.'+role, defaultMessage: role })}
+          </span>
         </div>
+      </Hero>
+
+      <div className="catalogacao-wrap" style={{ maxWidth:1100, margin:'0 auto' }}>
 
         <div className="cat-statusbar" style={{ marginBottom:16 }}>
           {[[t({id:'catalog.stats.documents'}),stats.books],[t({id:'catalog.stats.authorities'}),stats.authors],[t({id:'catalog.stats.exemplars'}),stats.exemplars],[t({id:'catalog.stats.readers'}),stats.readers],[t({id:'catalog.stats.loans'}),stats.loansOpen]].map(([l,v])=>

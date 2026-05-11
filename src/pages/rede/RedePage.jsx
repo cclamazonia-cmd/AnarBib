@@ -5,7 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
-import { PageShell, Topbar, Footer } from '@/components/layout';
+import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import TeamPanel from '@/components/team/TeamPanel';
 import '@/components/team/TeamPanel.css';
 import AdminsPanel from '@/components/rede/AdminsPanel';
@@ -220,10 +220,7 @@ export default function RedePage() {
   if (!roleLoaded) return <PageShell><Topbar /><div style={{ textAlign:'center', padding:60, color:'var(--brand-muted)' }}>{t({id:'common.loading'})}</div><Footer /></PageShell>;
   if (!isAdmin) return (
     <PageShell><Topbar />
-      <div className="catalogacao-wrap" style={{ maxWidth:800, margin:'0 auto', textAlign:'center', padding:'60px 24px' }}>
-        <h1>{t({ id: 'rede.title' })}</h1>
-        <p style={{ color:'var(--brand-muted)', marginTop:12 }}>{t({ id: 'rede.restricted' })}</p>
-      </div>
+      <Hero title={t({ id: 'rede.title' })} subtitle={t({ id: 'rede.restricted' })} />
     <Footer /></PageShell>
   );
 
@@ -232,20 +229,19 @@ export default function RedePage() {
 
   return (
     <PageShell><Topbar />
-      <div className="catalogacao-wrap" style={{ maxWidth:1200, margin:'0 auto' }}>
 
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16, flexWrap:'wrap', gap:12 }}>
-          <div>
-            <h1 style={{ margin:0 }}>{t({ id: 'rede.title' })}</h1>
-            <p style={{ color:'var(--brand-muted)', fontSize:'.9rem', margin:'2px 0 0' }}>
-              {t({ id: 'rede.subtitle' })}
-              <span className="cat-pill danger" style={{ marginLeft:8, fontSize:'.65rem' }}>{t({ id: 'roles.administrador' })}</span>
-            </p>
-          </div>
-          <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-            <button className="cat-btn secondary" onClick={loadAll} disabled={loading}>{loading ? t({ id: 'rede.refreshing' }) : t({ id: 'rede.refresh' })}</button>
-          </div>
+      <Hero title={t({ id: 'rede.title' })} subtitle={t({ id: 'rede.subtitle' })}>
+        <div className="ab-hero__content" style={{ marginTop: 8 }}>
+          <span className="cat-pill danger">{t({ id: 'roles.administrador' })}</span>
         </div>
+        <div className="ab-hero__actions">
+          <button className="cat-btn secondary" onClick={loadAll} disabled={loading}>
+            {loading ? t({ id: 'rede.refreshing' }) : t({ id: 'rede.refresh' })}
+          </button>
+        </div>
+      </Hero>
+
+      <div className="catalogacao-wrap" style={{ maxWidth:1200, margin:'0 auto' }}>
 
         {msg.text && <div style={{ padding:'10px 14px', borderRadius:8, fontSize:'.9rem', marginBottom:14, background:msg.kind==='ok'?'rgba(21,128,61,.12)':'rgba(220,38,38,.12)', color:msg.kind==='ok'?'#4ade80':'#f87171' }}>{msg.text}</div>}
 

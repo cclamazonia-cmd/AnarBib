@@ -4,7 +4,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
-import { PageShell, Topbar, Footer } from '@/components/layout';
+import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import '../catalogacao/CatalogacaoPage.css';
 
 const BUCKET = 'catalogos_parceiros_raw';
@@ -137,10 +137,7 @@ export default function ImportacoesPage() {
 
   if (!canImport) return (
     <PageShell><Topbar />
-      <div className="catalogacao-wrap" style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '60px 24px' }}>
-        <h1>{t({ id: 'importacoes.title' })}</h1>
-        <p style={{ color: 'var(--brand-muted)', marginTop: 12 }}>{t({ id: 'importacoes.restricted' })}</p>
-      </div>
+      <Hero title={t({ id: 'importacoes.title' })} subtitle={t({ id: 'importacoes.restricted' })} />
     <Footer /></PageShell>
   );
 
@@ -317,15 +314,10 @@ export default function ImportacoesPage() {
 
   return (
     <PageShell><Topbar />
+
+      <Hero title={t({ id: 'importacoes.title' })} subtitle={t({ id: 'importacoes.subtitle' })} />
+
       <div className="catalogacao-wrap" style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
-          <div>
-            <h1 style={{ margin: 0 }}>{t({ id: 'importacoes.title' })}</h1>
-            <p style={{ color: 'var(--brand-muted)', fontSize: '.9rem', margin: '4px 0 0' }}>
-              {t({ id: 'importacoes.subtitle' })}
-            </p>
-          </div>
-        </div>
 
         {/* ── Messages ───────────────────────────────── */}
         {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : msg.kind === 'info' ? 'rgba(29,78,216,.1)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : msg.kind === 'info' ? '#60a5fa' : '#f87171' }}>{msg.text}</div>}
