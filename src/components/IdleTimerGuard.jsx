@@ -30,7 +30,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { useIdleTimer } from '@/hooks/useIdleTimer';
 import IdleWarningModal from '@/components/IdleWarningModal';
 
-const IDLE_MINUTES = 60;
+const IDLE_MINUTES = 2;
 const WARNING_SECONDS = 60;
 
 export default function IdleTimerGuard({ children }) {
