@@ -136,7 +136,8 @@ DECLARE
     v_count integer;
     v_new_id uuid;
 BEGIN
-    SELECT count(*), max(id) INTO v_count, v_new_id
+    -- Compte
+    SELECT count(*) INTO v_count
     FROM public.user_library_memberships
     WHERE user_id = 'd6710372-e5e5-4608-800b-99a26817c677'
       AND library_id = '1234825f-a0f9-4fbd-a875-6551c30ea4ca'
@@ -145,8 +146,18 @@ BEGIN
       AND created_at >= (now() - interval '1 minute');
     
     IF v_count <> 1 THEN
-        RAISE EXCEPTION 'insert_validation_failed: % coordenador BLMF actif(s) attendus (attendu : 1)', v_count;
+        RAISE EXCEPTION 'insert_validation_failed: % coordenador BLMF actif(s) (attendu : 1)', v_count;
     END IF;
+    
+    -- Récup de l'id (séparée, via ORDER BY au lieu de max() qui n'existe pas pour uuid)
+    SELECT id INTO v_new_id
+    FROM public.user_library_memberships
+    WHERE user_id = 'd6710372-e5e5-4608-800b-99a26817c677'
+      AND library_id = '1234825f-a0f9-4fbd-a875-6551c30ea4ca'
+      AND role = 'coordenador'
+      AND status = 'active'
+    ORDER BY created_at DESC
+    LIMIT 1;
     
     RAISE NOTICE 'insert_ok: nouveau coordenador BLMF créé (id=%)', v_new_id;
 END;
