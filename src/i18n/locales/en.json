@@ -2286,5 +2286,6 @@
   "solicitar.claim.valid.title": "Active invitation: continue your request",
   "solicitar.claim.valid.body": "You reached this page through the link sent to {email}. Your institutional request can now be filled in and submitted to the AnarBib network coordination.",
   "solicitar.claim.invalid.title": "Expired or invalid link",
-  "solicitar.claim.invalid.body": "The link you followed is no longer valid (already used, expired, or unknown). If you already coordinate a registered library, you can still submit the request below. Otherwise, contact the network coordination."
+  "solicitar.claim.invalid.body": "The link you followed is no longer valid (already used, expired, or unknown). If you already coordinate a registered library, you can still submit the request below. Otherwise, contact the network coordination.",
+  "solicitar.field.contactEmail.lockedHint": "This e-mail is the same as your AnarBib account (certified by your initial registration). It cannot be changed here."
 }

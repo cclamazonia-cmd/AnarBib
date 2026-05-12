@@ -77,12 +77,32 @@ export default function SolicitarBibliotecaPage() {
   const [submitted, setSubmitted] = useState(false);
   const [summaryData, setSummaryData] = useState(null);
 
-  // Pre-fill contact email from logged user
+  // Pre-fill contact email + name from logged user (paquet 25.9).
+  // - email depuis user.email (toujours present si connecte)
+  // - name depuis profile.first_name + profile.last_name si profile charge
+  // useEffect dependant de user ET profile : se redeclenche quand profile arrive
+  // (AuthContext le charge en setTimeout 0, donc avec un petit delai).
   useEffect(() => {
-    if (user?.email && !form.contactEmail) {
-      setForm(prev => ({ ...prev, contactEmail: user.email }));
-    }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!user) return;
+    setForm(prev => {
+      const next = { ...prev };
+      // Email : si vide ou egal a une ancienne valeur, mettre user.email
+      if (user.email && !prev.contactEmail) {
+        next.contactEmail = user.email;
+      }
+      // Nom : composer first_name + last_name depuis profile si dispo
+      if (profile && !prev.contactName) {
+        const fullName = [profile.first_name, profile.last_name]
+          .filter(s => s && String(s).trim().length > 0)
+          .join(' ')
+          .trim();
+        if (fullName) {
+          next.contactName = fullName;
+        }
+      }
+      return next;
+    });
+  }, [user, profile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Paquet 25.8 — Validation du claim token au mount.
   // Si l'URL contient ?claim=<token>, on appelle fn_get_library_request_claim_context
@@ -369,7 +389,28 @@ export default function SolicitarBibliotecaPage() {
               <div><label style={ls}>{t({ id: 'solicitar.field.contactRole' })}</label><input type="text" value={form.contactRole} onChange={e => set('contactRole', e.target.value)} style={fs} /></div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
-              <div><label style={ls}>{t({ id: 'solicitar.field.contactEmail' })} {req}</label><input type="email" value={form.contactEmail} onChange={e => set('contactEmail', e.target.value)} required style={fs} /></div>
+              <div>
+                <label style={ls}>{t({ id: 'solicitar.field.contactEmail' })} {req}</label>
+                {/* Paquet 25.9 : en mode claim valide, le contactEmail est verrouille
+                    sur l'email du compte (= email_snapshot du claim). Cela garantit
+                    que le mail de la demande = mail du coordinateur certifie par le
+                    flow d'inscription. */}
+                <input
+                  type="email"
+                  value={form.contactEmail}
+                  onChange={e => set('contactEmail', e.target.value)}
+                  required
+                  readOnly={claimContext === 'valid'}
+                  style={{
+                    ...fs,
+                    ...(claimContext === 'valid' ? { opacity: 0.7, cursor: 'not-allowed', background: 'rgba(0,0,0,.45)' } : {}),
+                  }}
+                  title={claimContext === 'valid' ? t({ id: 'solicitar.field.contactEmail.lockedHint' }) : undefined}
+                />
+                {claimContext === 'valid' && (
+                  <div style={hs}>{t({ id: 'solicitar.field.contactEmail.lockedHint' })}</div>
+                )}
+              </div>
               <div><label style={ls}>{t({ id: 'solicitar.field.contactPhone' })}</label><input type="text" value={form.contactPhone} onChange={e => set('contactPhone', e.target.value)} style={fs} /></div>
             </div>
             <div style={{ marginBottom: 16 }}>

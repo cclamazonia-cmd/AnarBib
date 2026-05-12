@@ -2286,5 +2286,6 @@
   "solicitar.claim.valid.title": "Aktive Einladung: Antrag fortsetzen",
   "solicitar.claim.valid.body": "Du bist über den an {email} gesendeten Link hier gelandet. Dein institutioneller Antrag kann nun ausgefüllt und an die Koordination des AnarBib-Netzwerks gesendet werden.",
   "solicitar.claim.invalid.title": "Abgelaufener oder ungültiger Link",
-  "solicitar.claim.invalid.body": "Der Link, dem du gefolgt bist, ist nicht mehr gültig (bereits verwendet, abgelaufen oder unbekannt). Wenn du bereits eine registrierte Bibliothek koordinierst, kannst du den Antrag unten trotzdem einreichen. Andernfalls wende dich an die Koordination des Netzwerks."
+  "solicitar.claim.invalid.body": "Der Link, dem du gefolgt bist, ist nicht mehr gültig (bereits verwendet, abgelaufen oder unbekannt). Wenn du bereits eine registrierte Bibliothek koordinierst, kannst du den Antrag unten trotzdem einreichen. Andernfalls wende dich an die Koordination des Netzwerks.",
+  "solicitar.field.contactEmail.lockedHint": "Diese E-Mail entspricht der deines AnarBib-Kontos (durch die ursprüngliche Anmeldung zertifiziert). Sie kann hier nicht geändert werden."
 }

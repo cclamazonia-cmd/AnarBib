@@ -2286,5 +2286,6 @@
   "solicitar.claim.valid.title": "Invitación activa: continuar la solicitud",
   "solicitar.claim.valid.body": "Llegaste aquí a través del enlace enviado a {email}. Tu solicitud institucional puede ahora ser completada y enviada a la coordinación de la red AnarBib.",
   "solicitar.claim.invalid.title": "Enlace expirado o inválido",
-  "solicitar.claim.invalid.body": "El enlace que seguiste ya no es válido (ya utilizado, expirado o desconocido). Si coordinás una biblioteca ya registrada, podés enviar igualmente la solicitud abajo. De lo contrario, contactá a la coordinación de la red."
+  "solicitar.claim.invalid.body": "El enlace que seguiste ya no es válido (ya utilizado, expirado o desconocido). Si coordinás una biblioteca ya registrada, podés enviar igualmente la solicitud abajo. De lo contrario, contactá a la coordinación de la red.",
+  "solicitar.field.contactEmail.lockedHint": "Este correo es el mismo que el de tu cuenta AnarBib (certificado por la inscripción inicial). No puede ser modificado aquí."
 }
