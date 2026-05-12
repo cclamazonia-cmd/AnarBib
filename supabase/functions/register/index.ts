@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { tMail } from "../_shared/i18n/mail-strings.ts";
+import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -18,7 +19,13 @@ const DEFAULT_ANARBIB_ADMIN_EMAIL = DEFAULT_ANARBIB_SENDER_EMAIL;
 const DEFAULT_LIBRARY_REQUEST_URL = "https://app.anarbib.org/solicitar-biblioteca";
 const LIBRARY_REQUEST_CLAIM_TTL_DAYS = 14;
 const MAIL_BRAND = {
-  anarbibLogoUrl: "https://raw.githubusercontent.com/cclamazonia-cmd/anarbib-conta-staging/main/assets/img/libraries/anarbib/logo-anarbib.png",
+  // Paquet 25.10 — URL logo migree du vestige GitHub Pages vers Supabase Storage.
+  // L'URL Supabase est detectee par inlineLogosInHtml() qui telecharge le logo
+  // et l'inline en data URI base64 dans le HTML, contournant ainsi la reecriture
+  // d'URLs par Brevo (qui passait par sendibt3.com avec TTL court).
+  // Avantage : logo garanti present dans les archives mail meme si Brevo ou
+  // Supabase deplacent leurs CDNs ; et plus de dependance au repo GitHub vestige.
+  anarbibLogoUrl: "https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/themes/default/logo-anarbib.png",
   colors: {
     bg: "#060606",
     hero: "#111111",
@@ -289,6 +296,20 @@ async function sendBrevoEmail({ apiKey, logLabel, payload }) {
       status: null,
       responseText: "MISSING_BREVO_API_KEY"
     };
+  }
+  // Paquet 25.10 — Inline les logos Supabase Storage en data URI base64
+  // AVANT envoi a Brevo. Cela empeche Brevo de reecrire les <img src="..."> en
+  // URLs trackees via son CDN (sendibt3.com) dont la duree de vie est courte,
+  // ce qui faisait disparaitre les logos des archives mail.
+  // inlineLogosInHtml() est defensif : si une URL ne peut pas etre telechargee,
+  // elle reste en URL distante (mail expedie quand meme). Cache memoire interne
+  // pour eviter les telechargements repetes.
+  if (payload?.htmlContent && typeof payload.htmlContent === "string") {
+    try {
+      payload.htmlContent = await inlineLogosInHtml(payload.htmlContent);
+    } catch (e) {
+      console.warn(`register: ${logLabel} inlineLogosInHtml failed (mail sent anyway):`, e);
+    }
   }
   console.log(`register: ${logLabel} request`, {
     to: payload?.to,

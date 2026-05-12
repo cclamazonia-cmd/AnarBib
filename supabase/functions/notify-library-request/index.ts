@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustEnv("SUPABASE_SERVICE_ROLE_KEY");
 const BREVO_KEY = mustEnv("BREVO_API_KEY_NOTIFICATIONS");
@@ -224,6 +225,19 @@ function renderEmail(opts) {
   };
 }
 async function sendBrevoEmail(target, subject, html, text) {
+  // Paquet 25.10 — Inline les logos Supabase Storage en data URI base64
+  // AVANT envoi a Brevo (cf. _shared/mail/inline-images.ts). Empeche Brevo
+  // de reecrire les <img src="..."> via son CDN tracker dont la duree de vie
+  // est courte. Comportement defensif : en cas d'echec, on envoie quand
+  // meme le mail avec les URLs originales.
+  let htmlInlined = html;
+  if (html && typeof html === "string") {
+    try {
+      htmlInlined = await inlineLogosInHtml(html);
+    } catch (e) {
+      console.warn(`notify-library-request: inlineLogosInHtml failed (mail sent anyway):`, e);
+    }
+  }
   const payload = {
     sender: {
       name: BRAND_NAME,
@@ -238,7 +252,7 @@ async function sendBrevoEmail(target, subject, html, text) {
       }
     ],
     subject,
-    htmlContent: html,
+    htmlContent: htmlInlined,
     textContent: text
   };
   if (isValidEmail(ADMIN_EMAIL)) {
