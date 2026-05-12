@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
+import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -663,6 +664,12 @@ export default function BibliotecaPage() {
               <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.identity.publicMessage' })}</label><textarea value={serviceState.public_message||''} onChange={e=>setSS('public_message',e.target.value)} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({id:'biblioteca.identity.publicMessagePlaceholder'})} /></div>
             </div>
           </div>}
+          <LibraryVisualAssetsSection
+            libraryId={libraryId}
+            librarySlug={lib.slug}
+            libraryName={lib.short_name || lib.name}
+            canEdit={isCoord}
+          />
           <button className="cat-btn primary" onClick={saveIdentity} disabled={saving}>{saving?t({id:'common.saving'}):t({id:'biblioteca.identity.save'})}</button>
         </div>)}
 
