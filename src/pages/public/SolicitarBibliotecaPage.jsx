@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,9 +13,27 @@ import { Button } from '@/components/ui';
 
 export default function SolicitarBibliotecaPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, profile } = useAuth();
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.libraryRequest' }));
+
+  // Paquet 25.8 — Claim token depuis l'URL (?claim=<token>).
+  // Quand un usager s'est inscrit "sem biblioteca" via /criar-conta, le mail
+  // de bienvenue contient un CTA vers /solicitar-biblioteca?claim=<token>.
+  // Le token est valide 14 jours et lié à son compte (email_snapshot).
+  // À la soumission du formulaire on appellera fn_submit_library_request_via_claim
+  // qui consommera atomiquement le claim et créera la library_request.
+  const claimToken = searchParams.get('claim') || '';
+
+  // claimContext stocke le résultat de fn_get_library_request_claim_context :
+  //  - null     : pas encore vérifié (init) ou pas de claim dans l'URL
+  //  - 'valid'  : le claim existe, n'est pas expiré, n'est pas consommé
+  //  - 'invalid': le claim est inconnu, expiré, ou déjà consommé
+  // Quand claimContext === 'valid', on garde aussi claimEmailSnapshot pour
+  // afficher à l'usager à quel mail le claim était attaché.
+  const [claimContext, setClaimContext] = useState(claimToken ? 'checking' : null);
+  const [claimEmailSnapshot, setClaimEmailSnapshot] = useState('');
 
   // Garde paquet 25.5 : si l'usager est connecté avec un mot de passe provisoire
   // (must_change_password = true OU password_changed_at = null), il doit
@@ -66,6 +84,42 @@ export default function SolicitarBibliotecaPage() {
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Paquet 25.8 — Validation du claim token au mount.
+  // Si l'URL contient ?claim=<token>, on appelle fn_get_library_request_claim_context
+  // pour vérifier qu'il est valide (existe, non expiré, non consommé). La RPC
+  // retourne 0 ligne si le claim est invalide → on bascule en mode 'invalid'.
+  // Si valide, on garde l'email_snapshot pour afficher à l'usager à quel
+  // compte le claim était attaché.
+  useEffect(() => {
+    if (!claimToken) return; // pas de claim dans l'URL, rien à faire
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.rpc('fn_get_library_request_claim_context', {
+          p_claim_token: claimToken,
+        });
+        if (cancelled) return;
+        if (error) {
+          // Erreur côté API (problème réseau, RPC manquante…) : on considère
+          // le claim comme invalide plutôt que de bloquer l'usager indéfiniment.
+          setClaimContext('invalid');
+          return;
+        }
+        // RPC retourne TABLE → data est un array (souvent 1 ligne ou 0)
+        const row = Array.isArray(data) ? data[0] : data;
+        if (row && row.is_valid === true) {
+          setClaimContext('valid');
+          setClaimEmailSnapshot(row.email_snapshot || '');
+        } else {
+          setClaimContext('invalid');
+        }
+      } catch {
+        if (!cancelled) setClaimContext('invalid');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [claimToken]);
+
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); }
 
   async function handleSubmit(e) {
@@ -102,33 +156,73 @@ export default function SolicitarBibliotecaPage() {
     setLoading(true); setMsg({ text: '', kind: '' });
 
     try {
-      const payload = {
-        submitted_by_user_id: user.id,
-        submitted_by_email_snapshot: user.email || form.contactEmail,
-        request_status: 'pendente',
-        library_name: form.libraryName.trim(),
-        library_short_name: form.libraryShortName.trim() || null,
-        city: form.city.trim(),
-        state_region: form.state.trim() || null,
-        country: form.country.trim(),
-        library_email: form.libraryEmail.trim(),
-        library_phone: form.libraryPhone.trim() || null,
-        library_address: form.libraryAddress.trim() || null,
-        project_stage: form.projectStage,
-        contact_name: form.contactName.trim(),
-        contact_email: form.contactEmail.trim(),
-        contact_phone: form.contactPhone.trim() || null,
-        contact_role: form.contactRole.trim() || null,
-        first_manager_intent: form.firstManager,
-        summary: form.summary.trim(),
-        public_profile: form.publicProfile.trim() || null,
-        collection_profile: form.collectionProfile.trim() || null,
-        needs: form.needs.trim() || null,
-        confirm_real: true,
-        confirm_contact: true,
-      };
+      let data;
+      let error;
 
-      const { data, error } = await supabase.from('library_requests').insert(payload).select().single();
+      // Paquet 25.8 — Branche claim vs branche classique.
+      // Si l'usager arrive depuis un mail "inscription sans biblio" et que
+      // son claim est valide, on appelle la RPC dédiée qui crée la
+      // library_request ET consomme le claim atomiquement (transaction DB).
+      // Sinon (usager d'une biblio existante qui veut demander une nouvelle
+      // biblio, ou claim invalide/absent), on garde l'INSERT direct historique.
+      if (claimContext === 'valid' && claimToken) {
+        const rpcRes = await supabase.rpc('fn_submit_library_request_via_claim', {
+          p_claim_token: claimToken,
+          p_library_name: form.libraryName.trim(),
+          p_library_short_name: form.libraryShortName.trim() || null,
+          p_city: form.city.trim(),
+          p_state_region: form.state.trim() || null,
+          p_country: form.country.trim() || 'Brasil',
+          p_library_email: form.libraryEmail.trim(),
+          p_library_phone: form.libraryPhone.trim() || null,
+          p_library_address: form.libraryAddress.trim() || null,
+          p_project_stage: form.projectStage,
+          p_contact_name: form.contactName.trim(),
+          p_contact_email: form.contactEmail.trim(),
+          p_contact_phone: form.contactPhone.trim() || null,
+          p_contact_role: form.contactRole.trim() || null,
+          p_first_manager_intent: form.firstManager,
+          p_summary: form.summary.trim(),
+          p_public_profile: form.publicProfile.trim() || null,
+          p_collection_profile: form.collectionProfile.trim() || null,
+          p_needs: form.needs.trim() || null,
+          p_confirm_real: true,
+          p_confirm_contact: true,
+        });
+        // RPC retourne library_requests (le record cree) sous data
+        data = rpcRes.data;
+        error = rpcRes.error;
+      } else {
+        const payload = {
+          submitted_by_user_id: user.id,
+          submitted_by_email_snapshot: user.email || form.contactEmail,
+          request_status: 'pendente',
+          library_name: form.libraryName.trim(),
+          library_short_name: form.libraryShortName.trim() || null,
+          city: form.city.trim(),
+          state_region: form.state.trim() || null,
+          country: form.country.trim(),
+          library_email: form.libraryEmail.trim(),
+          library_phone: form.libraryPhone.trim() || null,
+          library_address: form.libraryAddress.trim() || null,
+          project_stage: form.projectStage,
+          contact_name: form.contactName.trim(),
+          contact_email: form.contactEmail.trim(),
+          contact_phone: form.contactPhone.trim() || null,
+          contact_role: form.contactRole.trim() || null,
+          first_manager_intent: form.firstManager,
+          summary: form.summary.trim(),
+          public_profile: form.publicProfile.trim() || null,
+          collection_profile: form.collectionProfile.trim() || null,
+          needs: form.needs.trim() || null,
+          confirm_real: true,
+          confirm_contact: true,
+        };
+        const ins = await supabase.from('library_requests').insert(payload).select().single();
+        data = ins.data;
+        error = ins.error;
+      }
+
       if (error) throw error;
 
       // Try to send notification
@@ -163,6 +257,33 @@ export default function SolicitarBibliotecaPage() {
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(29,78,216,.08)', border: '1px solid rgba(29,78,216,.2)', marginBottom: 16, fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
           <strong>{t({ id: 'solicitar.howItWorks.label' })}</strong> {t({ id: 'solicitar.howItWorks.body' })}
         </div>
+
+        {/* Paquet 25.8 — Bandeau "claim valide" : l'usager arrive depuis un
+            mail d'inscription sans biblio, son claim token est validé. */}
+        {claimContext === 'valid' && (
+          <div style={{ padding: 14, borderRadius: 10, background: 'rgba(21,128,61,.08)', border: '1px solid rgba(21,128,61,.25)', marginBottom: 16 }}>
+            <strong style={{ fontSize: '.92rem', display: 'block', marginBottom: 6, color: '#4ade80' }}>
+              {t({ id: 'solicitar.claim.valid.title' })}
+            </strong>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+              {t({ id: 'solicitar.claim.valid.body' }, { email: claimEmailSnapshot })}
+            </div>
+          </div>
+        )}
+
+        {/* Paquet 25.8 — Bandeau "claim invalide" : token expiré, déjà
+            consommé, ou inconnu. On informe sans bloquer : l'usager
+            connecté peut quand même soumettre (mode classique). */}
+        {claimContext === 'invalid' && (
+          <div style={{ padding: 14, borderRadius: 10, background: 'rgba(185,0,31,.10)', border: '1px solid rgba(185,0,31,.30)', marginBottom: 16 }}>
+            <strong style={{ fontSize: '.92rem', display: 'block', marginBottom: 6, color: '#f87171' }}>
+              {t({ id: 'solicitar.claim.invalid.title' })}
+            </strong>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+              {t({ id: 'solicitar.claim.invalid.body' })}
+            </div>
+          </div>
+        )}
 
         {/* Before sending — paquet 24b : "Cadastro" → "Login" */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16, fontSize: '.82rem', color: 'var(--brand-muted, #ccc)' }}>

@@ -2282,5 +2282,9 @@
   "solicitar.gate.passwordRequired.cta": "Mein Passwort jetzt festlegen",
   "solicitar.gate.passwordRequired.error": "Du musst zuerst dein persönliches Passwort festlegen, bevor du eine Bibliotheksanfrage einreichst.",
   "auth.create.noLibInfo.title": "Anmeldung ohne angehängte Bibliothek",
-  "auth.create.noLibInfo.body": "Du meldest dich an, ohne dein Konto mit einer bereits registrierten Bibliothek zu verknüpfen. Nach Erstellung deines Kontos erhältst du eine E-Mail mit einem Link, um den institutionellen Antrag deiner Bibliothek an die Koordination des AnarBib-Netzwerks zu übermitteln."
+  "auth.create.noLibInfo.body": "Du meldest dich an, ohne dein Konto mit einer bereits registrierten Bibliothek zu verknüpfen. Nach Erstellung deines Kontos erhältst du eine E-Mail mit einem Link, um den institutionellen Antrag deiner Bibliothek an die Koordination des AnarBib-Netzwerks zu übermitteln.",
+  "solicitar.claim.valid.title": "Aktive Einladung: Antrag fortsetzen",
+  "solicitar.claim.valid.body": "Du bist über den an {email} gesendeten Link hier gelandet. Dein institutioneller Antrag kann nun ausgefüllt und an die Koordination des AnarBib-Netzwerks gesendet werden.",
+  "solicitar.claim.invalid.title": "Abgelaufener oder ungültiger Link",
+  "solicitar.claim.invalid.body": "Der Link, dem du gefolgt bist, ist nicht mehr gültig (bereits verwendet, abgelaufen oder unbekannt). Wenn du bereits eine registrierte Bibliothek koordinierst, kannst du den Antrag unten trotzdem einreichen. Andernfalls wende dich an die Koordination des Netzwerks."
 }

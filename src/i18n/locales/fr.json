@@ -2282,5 +2282,9 @@
   "solicitar.gate.passwordRequired.cta": "Définir mon mot de passe maintenant",
   "solicitar.gate.passwordRequired.error": "Tu dois d'abord définir ton mot de passe personnel avant d'envoyer une demande de bibliothèque.",
   "auth.create.noLibInfo.title": "Inscription sans bibliothèque rattachée",
-  "auth.create.noLibInfo.body": "Tu t'inscris sans rattacher ton compte à une bibliothèque déjà enregistrée. Après création de ton compte, tu recevras un e-mail contenant un lien pour soumettre la demande institutionnelle de ta bibliothèque à la coordination du réseau AnarBib."
+  "auth.create.noLibInfo.body": "Tu t'inscris sans rattacher ton compte à une bibliothèque déjà enregistrée. Après création de ton compte, tu recevras un e-mail contenant un lien pour soumettre la demande institutionnelle de ta bibliothèque à la coordination du réseau AnarBib.",
+  "solicitar.claim.valid.title": "Invitation active : poursuivre la demande",
+  "solicitar.claim.valid.body": "Tu es arrivé·e ici depuis le lien envoyé à {email}. Ta demande institutionnelle peut maintenant être remplie et envoyée à la coordination du réseau AnarBib.",
+  "solicitar.claim.invalid.title": "Lien expiré ou invalide",
+  "solicitar.claim.invalid.body": "Le lien que tu as suivi n'est plus valide (déjà utilisé, expiré ou inconnu). Si tu coordonnes déjà une bibliothèque enregistrée, tu peux quand même envoyer la demande ci-dessous. Sinon, contacte la coordination du réseau."
 }
