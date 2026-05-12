@@ -2287,5 +2287,9 @@
   "solicitar.claim.valid.body": "Sei arrivato/a qui tramite il link inviato a {email}. La tua richiesta istituzionale può ora essere compilata e inviata al coordinamento della rete AnarBib.",
   "solicitar.claim.invalid.title": "Link scaduto o non valido",
   "solicitar.claim.invalid.body": "Il link che hai seguito non è più valido (già usato, scaduto o sconosciuto). Se coordini già una biblioteca registrata, puoi comunque inviare la richiesta qui sotto. Altrimenti, contatta il coordinamento della rete.",
-  "solicitar.field.contactEmail.lockedHint": "Questa e-mail è la stessa del tuo account AnarBib (certificata dall'iscrizione iniziale). Non può essere modificata qui."
+  "solicitar.field.contactEmail.lockedHint": "Questa e-mail è la stessa del tuo account AnarBib (certificata dall'iscrizione iniziale). Non può essere modificata qui.",
+  "solicitar.connectGate.title": "Accedi al tuo account per continuare",
+  "solicitar.connectGate.body": "L'invito ricevuto via e-mail è attivo per {email}. Per inviare la richiesta istituzionale, è necessario prima accedere. Usa la password provvisoria ricevuta nella tua casella di posta — potrai reimpostarla in seguito.",
+  "solicitar.connectGate.cta": "Accedere e continuare",
+  "solicitar.connectGate.thisAccount": "il tuo account AnarBib"
 }

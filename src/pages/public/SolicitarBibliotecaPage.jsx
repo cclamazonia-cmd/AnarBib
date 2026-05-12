@@ -342,8 +342,11 @@ export default function SolicitarBibliotecaPage() {
         {/* Before sending — paquet 24b : "Cadastro" → "Login"
             Paquet 25.11 : le lien preserve le claim courant via ?next=.
             Paquet 25.11bis : masque quand mustChangePassword est actif, car
-            la garde rouge en dessous fait deja la consigne avec un bouton. */}
-        {!mustChangePassword && (
+            la garde rouge en dessous fait deja la consigne avec un bouton.
+            Paquet 25.11quater : masque AUSSI quand on va afficher la grande
+            bannière d'action "Conecte-se" plus bas (cas !user && claim valide)
+            pour ne pas faire doublon. */}
+        {!mustChangePassword && !(!user && claimContext === 'valid') && (
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16, fontSize: '.82rem', color: 'var(--brand-muted, #ccc)' }}>
             <strong>{t({ id: 'solicitar.beforeSending.label' })}</strong>{' '}
             {t({ id: 'solicitar.beforeSending.body' }, {
@@ -352,7 +355,50 @@ export default function SolicitarBibliotecaPage() {
           </div>
         )}
 
-        {!user && (
+        {/* Paquet 25.11quater — Bandeau proeminent "Conecte-se à sua conta"
+            quand l'usager arrive avec un claim valide mais n'est pas connecte.
+            C'est le cas le plus frequent : usager qui clique le CTA du mail,
+            tombe ici via /login?next=... mais sa session n'est pas encore
+            etablie (premier acces, autre navigateur, etc.). On lui propose un
+            gros bouton "Entrar e continuar" plutot que de noyer la consigne
+            dans un texte muted.
+            Cas alternatif : !user && pas de claim → on rend le petit bandeau
+            rouge legacy "notLoggedIn.notice" (texte avec liens login + criar
+            conta), parce que c'est un cas plus rare et plus ambigu. */}
+        {!user && claimContext === 'valid' && (
+          <div style={{
+            padding: '20px 22px',
+            borderRadius: 12,
+            background: 'rgba(185, 0, 31, 0.14)',
+            border: '1px solid rgba(185, 0, 31, 0.40)',
+            marginBottom: 18,
+          }}>
+            <h2 style={{
+              fontSize: '1.05rem', fontWeight: 800, marginBottom: 8,
+              color: '#fca5a5',
+              fontFamily: 'var(--brand-font-body)', textTransform: 'none',
+            }}>
+              {t({ id: 'solicitar.connectGate.title', defaultMessage: 'Conecte-se à sua conta para continuar' })}
+            </h2>
+            <p style={{
+              fontSize: '.92rem', color: 'var(--brand-muted, #d4d4d4)',
+              marginBottom: 14, lineHeight: 1.55,
+            }}>
+              {t({ id: 'solicitar.connectGate.body' }, {
+                email: claimEmailSnapshot || t({ id: 'solicitar.connectGate.thisAccount', defaultMessage: 'sua conta AnarBib' }),
+              })}
+            </p>
+            <Button variant="primary" onClick={() => navigate(loginHref)}>
+              {t({ id: 'solicitar.connectGate.cta', defaultMessage: 'Entrar e continuar' })}
+            </Button>
+          </div>
+        )}
+
+        {/* Cas alternatif : !user mais sans claim (ou claim invalide).
+            On garde l'ancien bandeau rouge discret avec ses deux liens
+            (entrar + criar conta) — pas de gros bouton car le scenario est
+            ambigu et le contact prealable d'un compte n'est pas garanti. */}
+        {!user && claimContext !== 'valid' && (
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(220,38,38,.1)', border: '1px solid rgba(220,38,38,.2)', marginBottom: 16, fontSize: '.85rem', color: '#f87171' }}>
             {t({ id: 'solicitar.notLoggedIn.notice' }, {
               loginLink:   chunks => <Link to={loginHref}     style={{ textDecoration: 'underline' }}>{chunks}</Link>,
