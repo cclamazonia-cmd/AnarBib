@@ -2268,5 +2268,13 @@
   "video.subtitles": "Sottotitoli: {label}",
   "video.subtitlesOff": "disattivati",
   "video.unmute": "Riattiva audio",
-  "video.volume": "Volume"
+  "video.volume": "Volume",
+  "auth.forceChange.pageTitle": "Imposta la tua nuova password",
+  "auth.forceChange.pageSubtitle": "Prima di accedere al tuo account, scegli una password personale che sostituirà quella provvisoria.",
+  "auth.forceChange.title": "Password provvisoria rilevata",
+  "auth.forceChange.body": "È il tuo primo accesso con la password provvisoria ricevuta via e-mail. Per la tua sicurezza, imposta ora una password personale. Non potrai accedere al tuo account senza questo passaggio.",
+  "auth.forceChange.save": "Imposta la mia password",
+  "auth.forceChange.saving": "Salvataggio…",
+  "auth.forceChange.success": "Password aggiornata. Reindirizzamento in corso…",
+  "auth.forceChange.warningProfile": "Password aggiornata, ma si è verificato un problema tecnico. Puoi accedere al tuo account adesso; se questa schermata riapparirà al prossimo accesso, contatta il coordinamento."
 }

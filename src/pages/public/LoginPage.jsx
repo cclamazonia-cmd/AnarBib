@@ -28,6 +28,11 @@ export default function LoginPage() {
   const [newPw2, setNewPw2] = useState('');
   const [resetMsg, setResetMsg] = useState({ text: '', kind: '' });
   const [resetLoading, setResetLoading] = useState(false);
+  // États dédiés au flow "force-change" (premier login avec mdp provisoire).
+  // On réutilise newPw / newPw2 / showPw qui sont génériques, mais on isole
+  // le message et le loading pour ne pas interférer avec le flow recovery.
+  const [forceChangeMsg, setForceChangeMsg] = useState({ text: '', kind: '' });
+  const [forceChangeLoading, setForceChangeLoading] = useState(false);
   // ── Turnstile (anti-bot) ────────────────────────────────────
   // Token retourné par le widget Cloudflare Turnstile, à passer à l'Edge
   // Function login pour vérification serveur. Token usage unique : on reset
@@ -102,6 +107,35 @@ export default function LoginPage() {
           refresh_token: data.session.refresh_token,
         });
         if (setErr) throw setErr;
+
+        // ── Check must_change_password ────────────────────────────────
+        // Avant de rediriger vers /conta, on lit must_change_password
+        // depuis profiles. Si true, on bascule en mode "force-change"
+        // (paquet 25.3) au lieu de laisser l'usager naviguer librement
+        // avec un mot de passe provisoire.
+        // On ne dépend PAS de AuthContext.profile qui est chargé en
+        // setTimeout 0 et probablement pas encore prêt à ce stade.
+        try {
+          const userId = data.session.user?.id;
+          if (userId) {
+            const { data: prof } = await supabase
+              .from('profiles')
+              .select('must_change_password')
+              .eq('id', userId)
+              .maybeSingle();
+            if (prof?.must_change_password === true) {
+              // Bascule sans navigation : l'usager reste sur /login mais
+              // la vue change. Le formulaire d'accueil pour le nouveau mdp
+              // s'affiche. À la soumission réussie → navigate('/conta').
+              setView('force-change');
+              return;
+            }
+          }
+        } catch {
+          // En cas d'échec de la lecture du profil, on ne bloque pas le
+          // login. L'usager arrive sur /conta et pourra changer son mdp
+          // manuellement plus tard (parcours dégradé acceptable).
+        }
         navigate('/conta');
         return;
       }
@@ -175,6 +209,83 @@ export default function LoginPage() {
     }
   }
 
+  // ── handleForceChange ──────────────────────────────────────────────────
+  // Premier login avec mot de passe provisoire (must_change_password = true).
+  // L'usager est obligé de définir un nouveau mdp avant d'accéder à l'app.
+  //
+  // Différences avec handleReset (mode recovery) :
+  // 1. Après updateUser, on UPDATE profiles SET must_change_password = false,
+  //    password_changed_at = now() pour lever la garde.
+  // 2. En cas de succès, on navigate('/conta') directement au lieu de
+  //    revenir à la vue login (l'usager est déjà connecté).
+  //
+  // RLS profiles_update_own (id = auth.uid()) permet cet UPDATE depuis le
+  // frontend. Cf. discussion paquet 25.3 : option A choisie.
+  async function handleForceChange(e) {
+    e.preventDefault();
+    if (newPw.length < 6) {
+      setForceChangeMsg({ text: t({ id: 'auth.resetMin6' }), kind: 'error' });
+      return;
+    }
+    if (newPw !== newPw2) {
+      setForceChangeMsg({ text: t({ id: 'auth.resetMismatch' }), kind: 'error' });
+      return;
+    }
+    setForceChangeLoading(true);
+    setForceChangeMsg({ text: '', kind: '' });
+    try {
+      // 1) Update du mdp côté auth.users via Supabase Auth
+      const { error: authError } = await supabase.auth.updateUser({ password: newPw });
+      if (authError) {
+        const r = (authError.message || '').toLowerCase();
+        setForceChangeMsg({
+          text:
+            r.includes('same') || r.includes('different')
+              ? t({ id: 'auth.resetSamePassword' })
+              : authError.message,
+          kind: 'error',
+        });
+        return;
+      }
+
+      // 2) Clear must_change_password + set password_changed_at sur profiles
+      // RLS profiles_update_own autorise cet update (id = auth.uid())
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData?.session?.user?.id;
+      if (userId) {
+        const { error: profError } = await supabase
+          .from('profiles')
+          .update({
+            must_change_password: false,
+            password_changed_at: new Date().toISOString(),
+          })
+          .eq('id', userId);
+        if (profError) {
+          // Le mdp est bien changé côté auth, mais la garde reste active.
+          // Au prochain login, l'usager re-tombera sur ce formulaire.
+          // On informe sans bloquer : l'usager est dans un état dégradé
+          // mais récupérable.
+          console.warn('[force-change] profiles update failed:', profError);
+          setForceChangeMsg({
+            text: t({ id: 'auth.forceChange.warningProfile' }),
+            kind: 'error',
+          });
+          // On laisse l'usager passer quand même : son mdp est valide.
+          setTimeout(() => navigate('/conta'), 2000);
+          return;
+        }
+      }
+
+      // 3) Tout OK : navigate vers /conta
+      setForceChangeMsg({ text: t({ id: 'auth.forceChange.success' }), kind: 'ok' });
+      setTimeout(() => navigate('/conta'), 1200);
+    } catch {
+      setForceChangeMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
+    } finally {
+      setForceChangeLoading(false);
+    }
+  }
+
   const ms = (k) => ({
     padding: '10px 14px',
     borderRadius: 8,
@@ -215,20 +326,26 @@ export default function LoginPage() {
               textTransform: 'none',
             }}
           >
-            {t({ id: 'auth.login.title' })}
+            {view === 'force-change'
+              ? t({ id: 'auth.forceChange.pageTitle' })
+              : t({ id: 'auth.login.title' })}
           </h1>
           <p style={{ color: 'var(--brand-muted)', margin: '0 0 20px', fontSize: '.9rem' }}>
-            {t({ id: 'auth.login.subtitle' })}
+            {view === 'force-change'
+              ? t({ id: 'auth.forceChange.pageSubtitle' })
+              : t({ id: 'auth.login.subtitle' })}
           </p>
 
-          <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-            <Button variant="secondary" onClick={() => navigate('/')}>
-              {t({ id: 'auth.backToCatalog' })}
-            </Button>
-            <Link to="/criar-conta" style={{ textDecoration: 'none' }}>
-              <Button variant="primary">{t({ id: 'auth.createAccount' })}</Button>
-            </Link>
-          </div>
+          {view !== 'force-change' && (
+            <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
+              <Button variant="secondary" onClick={() => navigate('/')}>
+                {t({ id: 'auth.backToCatalog' })}
+              </Button>
+              <Link to="/criar-conta" style={{ textDecoration: 'none' }}>
+                <Button variant="primary">{t({ id: 'auth.createAccount' })}</Button>
+              </Link>
+            </div>
+          )}
 
           {view === 'login' && (
             <div>
@@ -371,6 +488,61 @@ export default function LoginPage() {
                   </Button>
                 </div>
                 {resetMsg.text && <div style={ms(resetMsg.kind)}>{resetMsg.text}</div>}
+              </form>
+            </div>
+          )}
+
+          {view === 'force-change' && (
+            <div>
+              <div
+                style={{
+                  padding: 14,
+                  borderRadius: 10,
+                  background: 'rgba(185, 0, 31, 0.08)',
+                  border: '1px solid rgba(185, 0, 31, 0.3)',
+                  marginBottom: 16,
+                }}
+              >
+                <strong>{t({ id: 'auth.forceChange.title' })}</strong>
+                <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>
+                  {t({ id: 'auth.forceChange.body' })}
+                </div>
+              </div>
+              <form
+                onSubmit={handleForceChange}
+                style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
+              >
+                <Input
+                  label={t({ id: 'auth.newPassword' })}
+                  type={showPw ? 'text' : 'password'}
+                  value={newPw}
+                  onChange={(e) => setNewPw(e.target.value)}
+                  autoComplete="new-password"
+                  required
+                />
+                <Input
+                  label={t({ id: 'auth.confirmPassword' })}
+                  type={showPw ? 'text' : 'password'}
+                  value={newPw2}
+                  onChange={(e) => setNewPw2(e.target.value)}
+                  autoComplete="new-password"
+                  required
+                />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Button variant="primary" type="submit" loading={forceChangeLoading}>
+                    {forceChangeLoading
+                      ? t({ id: 'auth.forceChange.saving' })
+                      : t({ id: 'auth.forceChange.save' })}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => setShowPw(!showPw)}
+                  >
+                    {showPw ? t({ id: 'auth.hidePassword' }) : t({ id: 'auth.showPassword' })}
+                  </Button>
+                </div>
+                {forceChangeMsg.text && <div style={ms(forceChangeMsg.kind)}>{forceChangeMsg.text}</div>}
               </form>
             </div>
           )}

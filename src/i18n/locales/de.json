@@ -2268,5 +2268,13 @@
   "video.subtitles": "Untertitel: {label}",
   "video.subtitlesOff": "aus",
   "video.unmute": "Stummschaltung aufheben",
-  "video.volume": "Lautstärke"
+  "video.volume": "Lautstärke",
+  "auth.forceChange.pageTitle": "Lege dein neues Passwort fest",
+  "auth.forceChange.pageSubtitle": "Bevor du auf dein Konto zugreifst, wähle ein persönliches Passwort, das das vorläufige ersetzt.",
+  "auth.forceChange.title": "Vorläufiges Passwort erkannt",
+  "auth.forceChange.body": "Dies ist deine erste Anmeldung mit dem per E-Mail erhaltenen vorläufigen Passwort. Lege jetzt zur Sicherheit ein persönliches Passwort fest. Ohne diesen Schritt kannst du nicht auf dein Konto zugreifen.",
+  "auth.forceChange.save": "Mein Passwort festlegen",
+  "auth.forceChange.saving": "Wird gespeichert…",
+  "auth.forceChange.success": "Passwort aktualisiert. Weiterleitung läuft…",
+  "auth.forceChange.warningProfile": "Passwort aktualisiert, aber es ist ein technisches Problem aufgetreten. Du kannst jetzt auf dein Konto zugreifen; falls dieser Bildschirm bei der nächsten Anmeldung erneut erscheint, wende dich an die Koordination."
 }

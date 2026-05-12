@@ -2268,5 +2268,13 @@
   "video.subtitles": "Subtitles: {label}",
   "video.subtitlesOff": "off",
   "video.unmute": "Unmute",
-  "video.volume": "Volume"
+  "video.volume": "Volume",
+  "auth.forceChange.pageTitle": "Set your new password",
+  "auth.forceChange.pageSubtitle": "Before accessing your account, choose a personal password that will replace the temporary one.",
+  "auth.forceChange.title": "Temporary password detected",
+  "auth.forceChange.body": "This is your first login with the temporary password received by email. For your security, set a personal password now. You won't be able to access your account without this step.",
+  "auth.forceChange.save": "Set my password",
+  "auth.forceChange.saving": "Saving…",
+  "auth.forceChange.success": "Password updated. Redirecting…",
+  "auth.forceChange.warningProfile": "Password updated, but a technical issue occurred. You can access your account now; if this screen appears again at your next login, contact the coordination."
 }

@@ -2268,5 +2268,13 @@
   "video.subtitles": "Sous-titres : {label}",
   "video.subtitlesOff": "désactivés",
   "video.unmute": "Réactiver le son",
-  "video.volume": "Volume"
+  "video.volume": "Volume",
+  "auth.forceChange.pageTitle": "Définis ton nouveau mot de passe",
+  "auth.forceChange.pageSubtitle": "Avant d'accéder à ton compte, choisis un mot de passe personnel qui remplacera le mot de passe provisoire.",
+  "auth.forceChange.title": "Mot de passe provisoire détecté",
+  "auth.forceChange.body": "C'est ta première connexion avec le mot de passe provisoire reçu par e-mail. Pour ta sécurité, définis dès maintenant un mot de passe personnel. Tu ne pourras pas accéder à ton compte sans cette étape.",
+  "auth.forceChange.save": "Définir mon mot de passe",
+  "auth.forceChange.saving": "Enregistrement…",
+  "auth.forceChange.success": "Mot de passe enregistré. Redirection en cours…",
+  "auth.forceChange.warningProfile": "Mot de passe enregistré, mais un problème technique est survenu. Tu peux accéder à ton compte maintenant ; si cet écran revient à la prochaine connexion, contacte la coordination."
 }

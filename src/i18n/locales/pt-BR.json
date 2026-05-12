@@ -2268,5 +2268,13 @@
   "video.subtitles": "Legendas : {label}",
   "video.subtitlesOff": "desativadas",
   "video.unmute": "Ativar som",
-  "video.volume": "Volume"
+  "video.volume": "Volume",
+  "auth.forceChange.pageTitle": "Defina sua nova senha",
+  "auth.forceChange.pageSubtitle": "Antes de acessar a sua conta, escolha uma senha pessoal para substituir a senha provisória.",
+  "auth.forceChange.title": "Senha provisória detectada",
+  "auth.forceChange.body": "Esta é a sua primeira conexão com a senha provisória recebida por e-mail. Para sua segurança, defina agora uma senha pessoal. Você não poderá acessar a sua conta sem essa etapa.",
+  "auth.forceChange.save": "Definir minha senha",
+  "auth.forceChange.saving": "Salvando…",
+  "auth.forceChange.success": "Senha atualizada. Redirecionando…",
+  "auth.forceChange.warningProfile": "Senha atualizada, mas houve um problema técnico. Você pode acessar a sua conta agora; em caso de retorno desta tela na próxima conexão, contate a coordenação."
 }

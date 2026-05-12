@@ -2268,5 +2268,13 @@
   "video.subtitles": "Subtítulos: {label}",
   "video.subtitlesOff": "desactivados",
   "video.unmute": "Activar sonido",
-  "video.volume": "Volumen"
+  "video.volume": "Volumen",
+  "auth.forceChange.pageTitle": "Definí tu nueva contraseña",
+  "auth.forceChange.pageSubtitle": "Antes de acceder a tu cuenta, elegí una contraseña personal que reemplazará la contraseña provisional.",
+  "auth.forceChange.title": "Contraseña provisional detectada",
+  "auth.forceChange.body": "Es tu primera conexión con la contraseña provisional recibida por correo. Por tu seguridad, definí ahora una contraseña personal. No podrás acceder a tu cuenta sin este paso.",
+  "auth.forceChange.save": "Definir mi contraseña",
+  "auth.forceChange.saving": "Guardando…",
+  "auth.forceChange.success": "Contraseña actualizada. Redirigiendo…",
+  "auth.forceChange.warningProfile": "Contraseña actualizada, pero hubo un problema técnico. Podés acceder a tu cuenta ahora; si esta pantalla vuelve en la próxima conexión, contactá a la coordinación."
 }
