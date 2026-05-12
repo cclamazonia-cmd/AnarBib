@@ -1,14 +1,10 @@
 -- ============================================================================
 -- Paquet 24c-ter : fix ambiguite colonnes dans fn_ensure_library_theme
 --
--- Bug : la RPC retournait erreur 42702 'column reference library_slug is
--- ambiguous'. Cause : les colonnes du RETURNS TABLE portaient les memes
--- noms que les colonnes de public.library_themes, donc dans le RETURN
--- QUERY final PostgreSQL ne savait pas resoudre la reference.
---
--- Fix : prefixer les colonnes de retour en out_*. C'est la convention
--- defensive pour les fonctions PL/pgSQL qui retournent des lignes de leurs
--- propres tables.
+-- Bug : 'column reference library_slug is ambiguous' (42702).
+-- Cause : colonnes RETURNS TABLE portaient les memes noms que les colonnes
+-- de public.library_themes.
+-- Fix : prefixer les colonnes de retour en out_*.
 -- ============================================================================
 
 CREATE OR REPLACE FUNCTION public.fn_ensure_library_theme(p_library_id uuid)
@@ -22,7 +18,7 @@ RETURNS TABLE (
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public, pg_temp
-AS \$
+AS $func$
 DECLARE
   v_slug text;
   v_name text;
@@ -68,7 +64,7 @@ BEGIN
     FROM public.library_themes lt
     WHERE lt.library_slug = v_slug;
 END;
-\$;
+$func$;
 
 GRANT EXECUTE ON FUNCTION public.fn_ensure_library_theme(uuid)
   TO authenticated;
