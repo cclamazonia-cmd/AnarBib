@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { tMail } from "../_shared/i18n/mail-strings.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -178,46 +179,49 @@ function buildMailShell({ pretitle, title, subtitle, logoTable, contentHtml }) {
     </div>
   `;
 }
-function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, libraryRequestUrl }) {
+function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, libraryRequestUrl, locale = "pt-BR" }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
     libraryName,
     includeLibraryLogo: !isWithoutLibrary
   });
-  const contextParagraph = isWithoutLibrary ? buildParagraph(`Sua conta inicial no <b>AnarBib</b> foi criada com sucesso. A próxima etapa é enviar a solicitação institucional da sua biblioteca para análise da coordenação da rede.`) : buildParagraph(`Seu cadastro de leitor/a/e na <b>${escapeHtml(libraryName)}</b> foi criado com sucesso.`);
+  // Section "context" : message d'intro adapté au cas (avec ou sans biblio)
+  const contextParagraph = isWithoutLibrary
+    ? buildParagraph(tMail(locale, "welcome.context.initial"))
+    : buildParagraph(tMail(locale, "welcome.context.standard", { libraryName: escapeHtml(libraryName) }));
   const contentHtml = `
-    ${buildParagraph(`Olá, <b>${escapeHtml(firstName)}</b>.`)}
+    ${buildParagraph(tMail(locale, "welcome.greeting", { firstName: escapeHtml(firstName) }))}
     ${contextParagraph}
     ${buildInfoCard({
-    label: "Seu ID público",
-    value: publicId,
-    tone: "red"
-  })}
+      label: tMail(locale, "welcome.publicIdLabel"),
+      value: publicId,
+      tone: "red"
+    })}
     ${buildInfoCard({
-    label: "Senha provisória",
-    value: tempPassword,
-    tone: "dark"
-  })}
-    ${buildParagraph(`Nos próximos acessos ao AnarBib, entre com seu <b>ID público</b> e sua senha.`)}
-    ${buildParagraph(`<b>Importante:</b> a senha enviada aqui é provisória. Depois do primeiro acesso, altere-a na página <b>Conta</b>.`)}
-    ${buildParagraph(`Se você perder o acesso, use o botão <b>“Esqueci minha senha”</b> na página de cadastro.`)}
-    ${isWithoutLibrary && libraryRequestUrl ? buildParagraph(`Use o botão abaixo para iniciar a solicitação institucional da sua biblioteca. Este link já está ligado à sua conta inicial, não precisa entrar manualmente de novo para começar.`) : ""}
+      label: tMail(locale, "welcome.tempPasswordLabel"),
+      value: tempPassword,
+      tone: "dark"
+    })}
+    ${buildParagraph(tMail(locale, "welcome.nextAccess"))}
+    ${buildParagraph(tMail(locale, "welcome.important"))}
+    ${buildParagraph(tMail(locale, "welcome.forgotHint"))}
+    ${isWithoutLibrary && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.intro")) : ""}
     ${isWithoutLibrary && libraryRequestUrl ? buildActionButton({
-    href: libraryRequestUrl,
-    label: "Iniciar solicitação da biblioteca"
-  }) : ""}
-    ${isWithoutLibrary && libraryRequestUrl ? buildParagraph(`Se o link expirar, entre em contato com a coordenação do AnarBib para receber um novo acesso.`) : ""}
-    ${!isWithoutLibrary && postalAddress ? buildParagraph(`<b>Endereço da biblioteca:</b> ${escapeHtml(postalAddress)}`) : ""}
-    ${!isWithoutLibrary && contactEmail ? buildParagraph(`<b>Contato da biblioteca:</b> ${escapeHtml(contactEmail)}`) : ""}
+      href: libraryRequestUrl,
+      label: tMail(locale, "welcome.libraryRequest.cta")
+    }) : ""}
+    ${isWithoutLibrary && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.fallback")) : ""}
+    ${!isWithoutLibrary && postalAddress ? buildParagraph(`<b>${tMail(locale, "welcome.libraryAddressLabel")}</b> ${escapeHtml(postalAddress)}`) : ""}
+    ${!isWithoutLibrary && contactEmail ? buildParagraph(`<b>${tMail(locale, "welcome.libraryContactLabel")}</b> ${escapeHtml(contactEmail)}`) : ""}
     <div style="margin-top:18px; padding:14px 16px; border-radius:14px; border:1px solid ${MAIL_BRAND.colors.borderLight}; background:${MAIL_BRAND.colors.surfaceAlt}; color:${MAIL_BRAND.colors.mutedOnLight}; font-size:13px; line-height:1.6;">
-      Mensagem automática do cadastro AnarBib. As respostas a este e-mail serão encaminhadas para a gestão do projeto.
+      ${tMail(locale, "welcome.autoMessage")}
     </div>
   `;
   return buildMailShell({
-    pretitle: isWithoutLibrary ? "Cadastro inicial criado" : "Cadastro criado",
-    title: `Bem-vindo/a/e à ${libraryName}`,
-    subtitle: isWithoutLibrary ? "Seu acesso inicial ao AnarBib já está pronto." : "Seu acesso inicial ao AnarBib já está pronto.",
+    pretitle: isWithoutLibrary ? tMail(locale, "welcome.pretitle.initial") : tMail(locale, "welcome.pretitle"),
+    title: tMail(locale, "welcome.title", { libraryName }),
+    subtitle: tMail(locale, "welcome.subtitle"),
     logoTable,
     contentHtml
   });
@@ -385,6 +389,12 @@ serve(async (req)=>{
     const requestedLibraryEmailDeliveryMode = String(body?.library_email_delivery_mode || "normal").trim();
     const requestedLibraryIsTestMode = body?.library_is_test_mode === true;
     const preferredLoginIdentifier = String(body?.preferred_login_identifier || "public_id").trim();
+    // Locale du destinataire pour le mail de bienvenue.
+    // Le frontend (CriarContaPage) passe `locale: detectLocale()` dans le body.
+    // Validation : doit être l'une des 6 locales supportées, sinon fallback pt-BR.
+    const SUPPORTED_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de"];
+    const requestedLocale = String(body?.locale || "").trim();
+    const userLocale = SUPPORTED_LOCALES.includes(requestedLocale) ? requestedLocale : "pt-BR";
     if (!email || !firstName || !lastName || !phone) {
       return json({
         error: "MISSING_REQUIRED_FIELDS"
@@ -539,6 +549,7 @@ serve(async (req)=>{
       address: fullAddress || null,
       consent_email: true,
       consent_email_at: consentEmailAt,
+      must_change_password: true,
     }).eq("id", userId).select("id, email, public_id").maybeSingle();
     if (profileUpdateError || !profileUpdatedRow?.id || !profileUpdatedRow?.email) {
       console.error("register: profile update failed", {
@@ -634,7 +645,8 @@ serve(async (req)=>{
       anarbibLogoUrl,
       libraryLogoUrl,
       isWithoutLibrary: signupWithoutLibrary,
-      libraryRequestUrl: libraryRequestClaimUrl
+      libraryRequestUrl: libraryRequestClaimUrl,
+      locale: userLocale
     });
     const libraryMailHtml = buildInternalMail({
       title: signupWithoutLibrary ? `Cadastro inicial sem biblioteca — ${displayName}` : `Novo cadastro — ${displayName}`,
@@ -686,7 +698,9 @@ serve(async (req)=>{
           email: replyToEmail,
           name: senderDisplayName
         },
-        subject: signupWithoutLibrary ? `Cadastro inicial criado — ${displayName}` : `Cadastro criado — ${displayName}`,
+        subject: signupWithoutLibrary
+          ? tMail(userLocale, "welcome.subject.initial", { displayName })
+          : tMail(userLocale, "welcome.subject", { displayName }),
         htmlContent: userMailHtml
       }
     });

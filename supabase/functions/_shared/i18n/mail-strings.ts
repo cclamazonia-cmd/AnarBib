@@ -1542,6 +1542,173 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Dopo 9 mesi senza connessione, il tuo status di {role} a {libraryName} è passato a inattivo. I tuoi accessi sono chiusi. Se desideri recuperarli, contatta le coordinatrici e i coordinatori della biblioteca per una riattivazione.",
     de: "Nach 9 Monaten ohne Anmeldung ist dein Status als {role} bei {libraryName} auf inaktiv gesetzt worden. Dein Zugang ist geschlossen. Wenn du ihn zurückerhalten möchtest, wende dich an die Koordinator*innen der Bibliothek für eine Reaktivierung."
   },
+
+  // ===== Welcome — mail de bienvenue post-inscription (welcome.*) ============
+  // Section utilisée par register/index.ts > buildUserMail()
+  // Cas standard : inscription rattachée à une biblio existante
+  // Cas "initial" : inscription orpheline (signup_without_library=true)
+  //   → contient le CTA vers /solicitar-biblioteca avec claim token (TTL 14j)
+  "welcome.subject": {
+    "pt-BR": "Cadastro criado — {displayName}",
+    fr: "Inscription créée — {displayName}",
+    es: "Inscripción creada — {displayName}",
+    en: "Registration created — {displayName}",
+    it: "Iscrizione creata — {displayName}",
+    de: "Anmeldung erstellt — {displayName}"
+  },
+  "welcome.subject.initial": {
+    "pt-BR": "Cadastro inicial criado — {displayName}",
+    fr: "Inscription initiale créée — {displayName}",
+    es: "Inscripción inicial creada — {displayName}",
+    en: "Initial registration created — {displayName}",
+    it: "Iscrizione iniziale creata — {displayName}",
+    de: "Anmeldung initialisiert — {displayName}"
+  },
+  "welcome.pretitle": {
+    "pt-BR": "Cadastro criado",
+    fr: "Inscription créée",
+    es: "Inscripción creada",
+    en: "Registration created",
+    it: "Iscrizione creata",
+    de: "Anmeldung erstellt"
+  },
+  "welcome.pretitle.initial": {
+    "pt-BR": "Cadastro inicial criado",
+    fr: "Inscription initiale créée",
+    es: "Inscripción inicial creada",
+    en: "Initial registration created",
+    it: "Iscrizione iniziale creata",
+    de: "Anmeldung initialisiert"
+  },
+  "welcome.title": {
+    "pt-BR": "Bem-vindo/a/e à {libraryName}",
+    fr: "Bienvenue à la {libraryName}",
+    es: "Bienvenide a le {libraryName}",
+    en: "Welcome to {libraryName}",
+    it: "Benvenutə alla {libraryName}",
+    de: "Willkommen bei {libraryName}"
+  },
+  "welcome.subtitle": {
+    "pt-BR": "Seu acesso inicial ao AnarBib já está pronto.",
+    fr: "Ton accès initial à AnarBib est prêt.",
+    es: "Tu acceso inicial a AnarBib ya está listo.",
+    en: "Your initial access to AnarBib is ready.",
+    it: "Il tuo accesso iniziale ad AnarBib è pronto.",
+    de: "Dein erster Zugang zu AnarBib ist bereit."
+  },
+  "welcome.greeting": {
+    "pt-BR": "Olá, <b>{firstName}</b>.",
+    fr: "Bonjour, <b>{firstName}</b>.",
+    es: "Hola, <b>{firstName}</b>.",
+    en: "Hello, <b>{firstName}</b>.",
+    it: "Ciao, <b>{firstName}</b>.",
+    de: "Hallo, <b>{firstName}</b>."
+  },
+  "welcome.context.standard": {
+    "pt-BR": "Seu cadastro de leitor/a/e na <b>{libraryName}</b> foi criado com sucesso.",
+    fr: "Ton inscription en tant que lecteur·rice à la <b>{libraryName}</b> a été créée avec succès.",
+    es: "Tu inscripción como lector(a/e) en le <b>{libraryName}</b> fue creada con éxito.",
+    en: "Your reader registration at <b>{libraryName}</b> has been created successfully.",
+    it: "La tua iscrizione come lettore/lettrice presso <b>{libraryName}</b> è stata creata con successo.",
+    de: "Deine Leser*innen-Anmeldung bei <b>{libraryName}</b> wurde erfolgreich erstellt."
+  },
+  "welcome.context.initial": {
+    "pt-BR": "Sua conta inicial no <b>AnarBib</b> foi criada com sucesso. A próxima etapa é enviar a solicitação institucional da sua biblioteca para análise da coordenação da rede.",
+    fr: "Ton compte initial sur <b>AnarBib</b> a été créé avec succès. La prochaine étape est d'envoyer la demande institutionnelle de ta bibliothèque pour analyse de la coordination du réseau.",
+    es: "Tu cuenta inicial en <b>AnarBib</b> fue creada con éxito. El próximo paso es enviar la solicitud institucional de tu biblioteca para análisis de la coordinación de la red.",
+    en: "Your initial account on <b>AnarBib</b> has been created successfully. The next step is to submit the institutional request for your library to the network coordination for review.",
+    it: "Il tuo account iniziale su <b>AnarBib</b> è stato creato con successo. Il prossimo passo è inviare la richiesta istituzionale della tua biblioteca per l'analisi del coordinamento della rete.",
+    de: "Dein erstes Konto auf <b>AnarBib</b> wurde erfolgreich erstellt. Der nächste Schritt ist, den institutionellen Antrag deiner Bibliothek zur Prüfung durch die Netzwerkkoordination einzureichen."
+  },
+  "welcome.publicIdLabel": {
+    "pt-BR": "Seu ID público",
+    fr: "Ton identifiant public",
+    es: "Tu identificador público",
+    en: "Your public ID",
+    it: "Il tuo ID pubblico",
+    de: "Deine öffentliche Kennung"
+  },
+  "welcome.tempPasswordLabel": {
+    "pt-BR": "Senha provisória",
+    fr: "Mot de passe provisoire",
+    es: "Contraseña provisional",
+    en: "Temporary password",
+    it: "Password provvisoria",
+    de: "Vorläufiges Passwort"
+  },
+  "welcome.nextAccess": {
+    "pt-BR": "Nos próximos acessos ao AnarBib, entre com seu <b>ID público</b> e sua senha.",
+    fr: "Pour tes prochains accès à AnarBib, connecte-toi avec ton <b>identifiant public</b> et ton mot de passe.",
+    es: "En tus próximos accesos a AnarBib, ingresá con tu <b>identificador público</b> y tu contraseña.",
+    en: "For your next visits to AnarBib, log in with your <b>public ID</b> and your password.",
+    it: "Per i tuoi prossimi accessi ad AnarBib, accedi con il tuo <b>ID pubblico</b> e la tua password.",
+    de: "Bei deinen nächsten Anmeldungen bei AnarBib verwende deine <b>öffentliche Kennung</b> und dein Passwort."
+  },
+  "welcome.important": {
+    "pt-BR": "<b>Importante:</b> a senha enviada aqui é provisória. Depois do primeiro acesso, altere-a na página <b>Conta</b>.",
+    fr: "<b>Important :</b> le mot de passe envoyé ici est provisoire. Dès ton premier accès, tu seras invité·e à le changer.",
+    es: "<b>Importante:</b> la contraseña enviada aquí es provisional. En tu primer acceso, se te invitará a cambiarla.",
+    en: "<b>Important:</b> the password sent here is temporary. On your first login, you will be prompted to change it.",
+    it: "<b>Importante:</b> la password inviata qui è provvisoria. Al primo accesso, ti verrà chiesto di cambiarla.",
+    de: "<b>Wichtig:</b> Das hier gesendete Passwort ist vorläufig. Bei deiner ersten Anmeldung wirst du aufgefordert, es zu ändern."
+  },
+  "welcome.forgotHint": {
+    "pt-BR": "Se você perder o acesso, use o botão <b>“Esqueci minha senha”</b> na página de login.",
+    fr: "Si tu perds l'accès, utilise le bouton <b>« Mot de passe oublié »</b> sur la page de connexion.",
+    es: "Si perdés el acceso, usá el botón <b>«Olvidé mi contraseña»</b> en la página de inicio de sesión.",
+    en: "If you lose access, use the <b>“Forgot my password”</b> button on the login page.",
+    it: "Se perdi l'accesso, usa il pulsante <b>«Ho dimenticato la password»</b> nella pagina di accesso.",
+    de: "Wenn du den Zugang verlierst, verwende die Schaltfläche <b>„Passwort vergessen“</b> auf der Anmeldeseite."
+  },
+  "welcome.libraryRequest.intro": {
+    "pt-BR": "Use o botão abaixo para iniciar a solicitação institucional da sua biblioteca. Este link já está ligado à sua conta inicial, não precisa entrar manualmente de novo para começar.",
+    fr: "Utilise le bouton ci-dessous pour initier la demande institutionnelle de ta bibliothèque. Ce lien est déjà lié à ton compte initial, tu n'as pas besoin de te reconnecter manuellement pour commencer.",
+    es: "Usá el botón de abajo para iniciar la solicitud institucional de tu biblioteca. Este enlace ya está vinculado a tu cuenta inicial, no necesitás iniciar sesión manualmente otra vez para comenzar.",
+    en: "Use the button below to start the institutional request for your library. This link is already tied to your initial account — no need to log in manually again to begin.",
+    it: "Usa il pulsante qui sotto per avviare la richiesta istituzionale della tua biblioteca. Questo link è già collegato al tuo account iniziale, non hai bisogno di accedere manualmente di nuovo per iniziare.",
+    de: "Verwende die Schaltfläche unten, um den institutionellen Antrag deiner Bibliothek zu starten. Dieser Link ist bereits mit deinem ersten Konto verknüpft — du musst dich nicht erneut manuell anmelden, um zu beginnen."
+  },
+  "welcome.libraryRequest.cta": {
+    "pt-BR": "Iniciar solicitação da biblioteca",
+    fr: "Démarrer la demande de bibliothèque",
+    es: "Iniciar solicitud de la biblioteca",
+    en: "Start the library request",
+    it: "Avviare la richiesta della biblioteca",
+    de: "Antrag der Bibliothek starten"
+  },
+  "welcome.libraryRequest.fallback": {
+    "pt-BR": "Se o link expirar, entre em contato com a coordenação do AnarBib para receber um novo acesso.",
+    fr: "Si le lien expire, contacte la coordination d'AnarBib pour recevoir un nouvel accès.",
+    es: "Si el enlace expira, contactá a la coordinación de AnarBib para recibir un nuevo acceso.",
+    en: "If the link expires, contact the AnarBib coordination to receive a new access.",
+    it: "Se il link scade, contatta il coordinamento di AnarBib per ricevere un nuovo accesso.",
+    de: "Wenn der Link abläuft, wende dich an die AnarBib-Koordination, um einen neuen Zugang zu erhalten."
+  },
+  "welcome.libraryAddressLabel": {
+    "pt-BR": "Endereço da biblioteca:",
+    fr: "Adresse de la bibliothèque :",
+    es: "Dirección de la biblioteca:",
+    en: "Library address:",
+    it: "Indirizzo della biblioteca:",
+    de: "Adresse der Bibliothek:"
+  },
+  "welcome.libraryContactLabel": {
+    "pt-BR": "Contato da biblioteca:",
+    fr: "Contact de la bibliothèque :",
+    es: "Contacto de la biblioteca:",
+    en: "Library contact:",
+    it: "Contatto della biblioteca:",
+    de: "Kontakt der Bibliothek:"
+  },
+  "welcome.autoMessage": {
+    "pt-BR": "Mensagem automática do cadastro AnarBib. As respostas a este e-mail serão encaminhadas para a gestão do projeto.",
+    fr: "Message automatique de l'inscription AnarBib. Les réponses à cet e-mail sont transmises à la gestion du projet.",
+    es: "Mensaje automático del registro AnarBib. Las respuestas a este correo serán reenviadas a la gestión del proyecto.",
+    en: "Automatic message from the AnarBib registration. Replies to this email are forwarded to the project management.",
+    it: "Messaggio automatico dell'iscrizione AnarBib. Le risposte a questa e-mail vengono inoltrate alla gestione del progetto.",
+    de: "Automatische Nachricht der AnarBib-Anmeldung. Antworten auf diese E-Mail werden an die Projektleitung weitergeleitet."
+  },
+
 };
 
 const D: SupportedMailLocale = "pt-BR";
