@@ -2280,5 +2280,7 @@
   "solicitar.gate.passwordRequired.title": "Lege dein Passwort fest, bevor du fortfährst",
   "solicitar.gate.passwordRequired.body": "Dein Konto wurde mit einem vorläufigen Passwort erstellt. Zu deiner Sicherheit und damit deine Bibliotheksanfrage volle Gültigkeit hat, schließe die Aktivierung deines Kontos ab, indem du ein persönliches Passwort festlegst.",
   "solicitar.gate.passwordRequired.cta": "Mein Passwort jetzt festlegen",
-  "solicitar.gate.passwordRequired.error": "Du musst zuerst dein persönliches Passwort festlegen, bevor du eine Bibliotheksanfrage einreichst."
+  "solicitar.gate.passwordRequired.error": "Du musst zuerst dein persönliches Passwort festlegen, bevor du eine Bibliotheksanfrage einreichst.",
+  "auth.create.noLibInfo.title": "Anmeldung ohne angehängte Bibliothek",
+  "auth.create.noLibInfo.body": "Du meldest dich an, ohne dein Konto mit einer bereits registrierten Bibliothek zu verknüpfen. Nach Erstellung deines Kontos erhältst du eine E-Mail mit einem Link, um den institutionellen Antrag deiner Bibliothek an die Koordination des AnarBib-Netzwerks zu übermitteln."
 }

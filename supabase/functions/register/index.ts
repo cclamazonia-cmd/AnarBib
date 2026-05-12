@@ -9,7 +9,13 @@ const corsHeaders = {
 const DEFAULT_ANARBIB_SENDER_EMAIL = "anarbib@anarbib.org";
 const DEFAULT_ANARBIB_REPLY_TO_EMAIL = DEFAULT_ANARBIB_SENDER_EMAIL;
 const DEFAULT_ANARBIB_ADMIN_EMAIL = DEFAULT_ANARBIB_SENDER_EMAIL;
-const DEFAULT_LIBRARY_REQUEST_URL = "https://cclamazonia-cmd.github.io/anarbib-conta-staging/solicitar-biblioteca.html";
+// Paquet 25.7 — URL par defaut vers la page de demande de bibliotheque.
+// Pointe vers le frontend AnarBib actuel (app.anarbib.org).
+// Auparavant pointait vers cclamazonia-cmd.github.io qui est un vestige
+// GitHub Pages obsolete (paquet L.4 du chantier linter). L'env var
+// ANARBIB_LIBRARY_REQUEST_URL reste exposee pour permettre une URL
+// differente en staging futur.
+const DEFAULT_LIBRARY_REQUEST_URL = "https://app.anarbib.org/solicitar-biblioteca";
 const LIBRARY_REQUEST_CLAIM_TTL_DAYS = 14;
 const MAIL_BRAND = {
   anarbibLogoUrl: "https://raw.githubusercontent.com/cclamazonia-cmd/anarbib-conta-staging/main/assets/img/libraries/anarbib/logo-anarbib.png",

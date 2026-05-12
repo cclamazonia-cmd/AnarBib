@@ -2280,5 +2280,7 @@
   "solicitar.gate.passwordRequired.title": "Définis ton mot de passe avant de continuer",
   "solicitar.gate.passwordRequired.body": "Ton compte a été créé avec un mot de passe provisoire. Pour ta sécurité et pour que ta demande de bibliothèque ait pleine valeur, finalise l'activation de ton compte en définissant un mot de passe personnel.",
   "solicitar.gate.passwordRequired.cta": "Définir mon mot de passe maintenant",
-  "solicitar.gate.passwordRequired.error": "Tu dois d'abord définir ton mot de passe personnel avant d'envoyer une demande de bibliothèque."
+  "solicitar.gate.passwordRequired.error": "Tu dois d'abord définir ton mot de passe personnel avant d'envoyer une demande de bibliothèque.",
+  "auth.create.noLibInfo.title": "Inscription sans bibliothèque rattachée",
+  "auth.create.noLibInfo.body": "Tu t'inscris sans rattacher ton compte à une bibliothèque déjà enregistrée. Après création de ton compte, tu recevras un e-mail contenant un lien pour soumettre la demande institutionnelle de ta bibliothèque à la coordination du réseau AnarBib."
 }

@@ -2280,5 +2280,7 @@
   "solicitar.gate.passwordRequired.title": "Definí tu contraseña antes de continuar",
   "solicitar.gate.passwordRequired.body": "Tu cuenta fue creada con una contraseña provisional. Por tu seguridad y para que tu solicitud de biblioteca tenga pleno valor, finalizá la activación de tu cuenta definiendo una contraseña personal.",
   "solicitar.gate.passwordRequired.cta": "Definir mi contraseña ahora",
-  "solicitar.gate.passwordRequired.error": "Primero debés definir tu contraseña personal antes de enviar una solicitud de biblioteca."
+  "solicitar.gate.passwordRequired.error": "Primero debés definir tu contraseña personal antes de enviar una solicitud de biblioteca.",
+  "auth.create.noLibInfo.title": "Inscripción sin biblioteca vinculada",
+  "auth.create.noLibInfo.body": "Te estás inscribiendo sin vincular tu cuenta a una biblioteca ya registrada. Después de crear tu cuenta, recibirás un correo con un enlace para enviar la solicitud institucional de tu biblioteca a la coordinación de la red AnarBib."
 }

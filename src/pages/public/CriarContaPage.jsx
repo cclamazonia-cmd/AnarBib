@@ -75,7 +75,20 @@ export default function CriarContaPage() {
 
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); }
   function handleLibChange(slug) {
-    if (slug === '__solicitar__') { navigate('/solicitar-biblioteca'); return; }
+    // Paquet 25.7bis : avant, choisir "sans bibliothèque" (__solicitar__)
+    // redirigeait immédiatement vers /solicitar-biblioteca, empêchant ainsi
+    // l'usager de compléter son inscription. Désormais on memorise le choix
+    // dans library_slug = '__solicitar__' (valeur sentinelle visible dans
+    // le select) et le formulaire continue normalement. À la soumission,
+    // signup_without_library est calculé via noLib = (slug === '__solicitar__').
+    // register/index.ts genere un claim token et envoie un mail avec le CTA
+    // /solicitar-biblioteca?claim=<token>.
+    if (slug === '__solicitar__') {
+      set('library_slug', '__solicitar__');
+      set('acceptRules', true); // pas de regimento bibliotheque a accepter
+      setCurrentLib(null);
+      return;
+    }
     set('library_slug', slug); set('acceptRules', false); setCurrentLib(libraries.find(l => l.slug === slug) || null);
   }
   function libLogo(lib) {
@@ -113,7 +126,11 @@ export default function CriarContaPage() {
 
     setLoading(true); setMsg({ text: '', kind: '' }); setPublicId('');
     try {
-      const noLib = !form.library_slug;
+      // noLib = true si l'usager a explicitement choisi "sans bibliothèque"
+      // (library_slug = '__solicitar__'). Si library_slug est vide ('') il
+      // n'a juste rien sélectionné — ne devrait pas arriver car le select
+      // est required, mais on traite le cas par sécurité.
+      const noLib = !form.library_slug || form.library_slug === '__solicitar__';
 
       // L'Edge Function `register` (cf. supabase/functions/register/index.ts)
       // attend les champs structurés séparément et reconstruit le format
@@ -211,6 +228,18 @@ export default function CriarContaPage() {
           </select>
           <div style={hs}>{t({id:'auth.create.libraryHint'})}</div>
         </div>
+
+        {/* Encadré informatif "sans biblio" (paquet 25.7bis option B) */}
+        {form.library_slug === '__solicitar__' && (
+          <div style={{ padding: 14, borderRadius: 10, background: 'rgba(180,83,9,.08)', border: '1px solid rgba(180,83,9,.25)', marginBottom: 16 }}>
+            <strong style={{ fontSize: '.92rem', display: 'block', marginBottom: 6 }}>
+              {t({id:'auth.create.noLibInfo.title'})}
+            </strong>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+              {t({id:'auth.create.noLibInfo.body'})}
+            </div>
+          </div>
+        )}
 
         {/* Logos */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '16px 0', padding: 16 }}>

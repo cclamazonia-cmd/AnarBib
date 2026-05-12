@@ -2280,5 +2280,7 @@
   "solicitar.gate.passwordRequired.title": "Set your password before continuing",
   "solicitar.gate.passwordRequired.body": "Your account was created with a temporary password. For your security and so that your library request carries full weight, complete your account activation by setting a personal password.",
   "solicitar.gate.passwordRequired.cta": "Set my password now",
-  "solicitar.gate.passwordRequired.error": "You must first set your personal password before submitting a library request."
+  "solicitar.gate.passwordRequired.error": "You must first set your personal password before submitting a library request.",
+  "auth.create.noLibInfo.title": "Registration without an attached library",
+  "auth.create.noLibInfo.body": "You are registering without attaching your account to an existing library. After your account is created, you will receive an email with a link to submit the institutional request for your library to the AnarBib network coordination."
 }
