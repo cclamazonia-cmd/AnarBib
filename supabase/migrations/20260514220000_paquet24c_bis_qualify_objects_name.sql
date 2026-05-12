@@ -1,5 +1,17 @@
 -- ============================================================================
 -- Paquet 24c-bis : qualifier objects.name dans les 3 RLS storage
+--
+-- Bug : 'new row violates row-level security policy' lors d'un upload dans
+-- library-ui-assets/themes/{slug}/. Cause : name non qualifie dans la
+-- sous-requete FROM libraries l etait resolu en libraries.name au lieu de
+-- storage.objects.name.
+--
+-- Fix : qualifier en (storage.foldername(objects.name))[N], comme le fait
+-- deja la policy 'Coordenadors can upload privacy sections'.
+--
+-- Note : pas de COMMENT ON POLICY car les objets de storage.objects
+-- appartiennent a supabase_storage_admin, pas a postgres. Le commentaire
+-- de tracabilite reste ici en tete du fichier de migration.
 -- ============================================================================
 
 DROP POLICY IF EXISTS "Coordenadors can upload library ui assets" ON storage.objects;
@@ -47,6 +59,3 @@ CREATE POLICY "Coordenadors can delete library ui assets"
         AND user_can_engage_library(l.id)
     )
   );
-
-COMMENT ON POLICY "Coordenadors can upload library ui assets" ON storage.objects IS
-  'Paquet 24c-bis : objects.name qualifie pour eviter resolution sur libraries.name (bug 12/05/2026).';
