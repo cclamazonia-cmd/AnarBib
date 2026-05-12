@@ -22,7 +22,10 @@ function getSafeNextUrl(searchParams) {
   if (raw.length < 2) return '/conta';
   if (raw[0] !== '/') return '/conta';
   if (raw[1] === '/' || raw[1] === '\\') return '/conta';
-  // Pas de saut de ligne, pas de caracteres de controle
+  // Pas de saut de ligne, pas de caracteres de controle (volontaire :
+  // c'est le but de cette fonction - rejeter les URLs avec injection
+  // de caracteres de controle).
+  // eslint-disable-next-line no-control-regex
   if (/[\x00-\x1f\x7f]/.test(raw)) return '/conta';
   return raw;
 }
@@ -109,8 +112,7 @@ export default function LoginPage() {
     } else {
       navigate(nextUrl);
     }
-     
-  }, [authLoading, user, profile, view]);
+  }, [authLoading, user, profile, view, navigate, nextUrl]);
 
   async function handleLogin(e) {
     e.preventDefault();
