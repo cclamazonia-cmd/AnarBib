@@ -42,9 +42,13 @@ export function AuthProvider({ children }) {
 
   // ── Chargement du profil ────────────────────────────────────────────────
   //
-  // Architecture (option β) : après getSession() réussi, on fetch le profil
-  // en cascade. Les composants qui dépendent de `profile` doivent gérer le
-  // cas profile === null pendant la latence (~100-200ms après le login).
+  // Architecture (option β) : le profil est chargé en arrière-plan APRÈS
+  // que la session est posée. On utilise setTimeout(..., 0) côté appelant
+  // (cf. useEffect plus bas) pour éviter le deadlock supabase-js connu sur
+  // les appels API dans onAuthStateChange.
+  //
+  // Les composants qui dépendent de `profile` doivent gérer le cas
+  // profile === null pendant la latence (~100-200ms après login).
   //
   // Logique de la synchro langue intégrée : si preferred_language en base
   // diffère de localStorage, syncLocaleFromProfile() déclenche un soft reload
@@ -54,9 +58,8 @@ export function AuthProvider({ children }) {
   // Cas non couverts (volontairement) :
   //  - Utilisateur anonyme : pas de profile à lire
   //  - TOKEN_REFRESHED / USER_UPDATED : ignorés pour éviter cascade de
-  //    re-render (cf. commentaire dans onAuthStateChange). Pour rafraîchir
-  //    le profile suite à une modification utilisateur, appeler
-  //    refreshProfile() depuis le composant qui a fait l'update.
+  //    re-render. Pour rafraîchir le profile suite à une modification
+  //    utilisateur, appeler refreshProfile() depuis le composant.
 
   const loadProfile = useCallback(async (userId, { syncLocale = true } = {}) => {
     if (!userId) {
@@ -102,36 +105,47 @@ export function AuthProvider({ children }) {
   }, [session, loadProfile]);
 
   useEffect(() => {
-    // Récupérer la session existante au boot
-    supabase.auth.getSession().then(async ({ data: { session: s } }) => {
+    // Récupérer la session existante au boot.
+    // setLoading(false) est fait dès qu'on a la session (pas en attente du
+    // profil) pour ne pas bloquer le rendu de l'UI. Le profil est chargé en
+    // tâche de fond ; les composants qui en dépendent doivent gérer
+    // profile === null pendant la latence (~100-200ms).
+    supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
-      // Chargement du profil en cascade (option β).
-      // setLoading(false) seulement APRÈS, pour que les composants qui se
-      // basent sur loading=false aient également le profil disponible.
-      if (s?.user?.id) {
-        await loadProfile(s.user.id);
-      }
       setLoading(false);
+      if (s?.user?.id) {
+        // Différé via setTimeout pour ne pas bloquer le rendu initial.
+        setTimeout(() => { loadProfile(s.user.id); }, 0);
+      }
     });
 
     // Écouter les changements d'auth.
-    // Important : on ignore TOKEN_REFRESHED et USER_UPDATED qui se déclenchent
-    // notamment au retour d'onglet, et qui provoquaient des re-render en cascade
-    // suivis de re-fetch en boucle des vues my_*_v2 (saturant le pool Postgres
-    // au point de provoquer des timeouts 500 sous concurrence).
-    // Le token reste maintenu à jour automatiquement par supabase.auth.getSession()
-    // qui est appelé à chaque requête dans apiQuery/apiRpc.
+    //
+    // IMPORTANT — Bug supabase-js connu :
+    // https://supabase.com/docs/guides/troubleshooting/why-is-my-supabase-api-call-not-returning-PGzXw0
+    // Tout appel API Supabase dans onAuthStateChange provoque un deadlock
+    // (le prochain appel Supabase n'importe où dans l'app hang à jamais).
+    // Workaround officiel : différer les appels via setTimeout(..., 0) pour
+    // sortir du contexte du callback avant de toucher au client Supabase.
+    //
+    // On ignore aussi TOKEN_REFRESHED et USER_UPDATED qui se déclenchent
+    // notamment au retour d'onglet, et qui provoquaient des re-render en
+    // cascade suivis de re-fetch en boucle des vues my_*_v2 (saturant le
+    // pool Postgres au point de provoquer des timeouts 500 sous concurrence).
+    // Le token reste maintenu à jour automatiquement par
+    // supabase.auth.getSession() qui est appelé à chaque requête dans
+    // apiQuery/apiRpc.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, s) => {
+      (event, s) => {
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }
         setSession(s);
         if (s?.user?.id) {
-          // Charger le profil pour ce nouvel utilisateur (typiquement SIGNED_IN)
-          await loadProfile(s.user.id);
+          // setTimeout 0 obligatoire — sinon deadlock supabase-js (cf. ci-dessus)
+          setTimeout(() => { loadProfile(s.user.id); }, 0);
         } else {
-          // Au SIGNED_OUT ou tout événement sans user : clear le profil
+          // SIGNED_OUT ou tout événement sans user : clear le profil
           setProfile(null);
         }
         // Au signOut, reset la garde locale pour permettre une re-synchro à la
