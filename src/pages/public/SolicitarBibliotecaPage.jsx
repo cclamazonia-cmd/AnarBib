@@ -13,9 +13,24 @@ import { Button } from '@/components/ui';
 
 export default function SolicitarBibliotecaPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.libraryRequest' }));
+
+  // Garde paquet 25.5 : si l'usager est connecté avec un mot de passe provisoire
+  // (must_change_password = true OU password_changed_at = null), il doit
+  // d'abord finir l'activation de son compte (force-change sur /login) avant
+  // de pouvoir soumettre une demande de bibliothèque.
+  //
+  // Note : profile est chargé en arrière-plan par AuthContext (option β), donc
+  // il peut être null pendant ~100-200ms après le login. On affiche dans ce cas
+  // un état neutre (pas de garde affichée tant que profile n'est pas chargé),
+  // au pire l'usager soumet et le backend rejettera (mais en pratique le profile
+  // est presque toujours là quand l'usager arrive sur cette page).
+  const mustChangePassword =
+    user &&
+    profile &&
+    (profile.must_change_password === true || profile.password_changed_at == null);
 
   // Listes déroulantes localisées via t() — étaient hardcodées pt-BR avant paquet 24a.
   const PROJECT_STAGES = useMemo(() => ([
@@ -75,6 +90,13 @@ export default function SolicitarBibliotecaPage() {
     }
     if (!user) {
       setMsg({ text: t({ id: 'solicitar.error.notLoggedIn' }), kind: 'error' }); return;
+    }
+    // Garde paquet 25.5 défensive : refuser la soumission si l'usager n'a pas
+    // encore finalisé son activation de compte (changement du mot de passe
+    // provisoire). En pratique le rendu bloque déjà l'accès au formulaire,
+    // mais cette garde est une ceinture additionnelle en cas de bypass.
+    if (mustChangePassword) {
+      setMsg({ text: t({ id: 'solicitar.gate.passwordRequired.error' }), kind: 'error' }); return;
     }
 
     setLoading(true); setMsg({ text: '', kind: '' });
@@ -159,6 +181,23 @@ export default function SolicitarBibliotecaPage() {
           </div>
         )}
 
+        {/* Paquet 25.5 — Garde must_change_password : l'usager est connecté
+            mais doit encore changer son mot de passe provisoire. On lui
+            propose un retour vers /login qui basculera en view force-change. */}
+        {mustChangePassword && (
+          <div style={{ padding: 16, borderRadius: 10, background: 'rgba(185, 0, 31, 0.12)', border: '1px solid rgba(185, 0, 31, 0.35)', marginBottom: 16 }}>
+            <h2 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: 8, color: '#f87171', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
+              {t({ id: 'solicitar.gate.passwordRequired.title' })}
+            </h2>
+            <p style={{ fontSize: '.88rem', color: 'var(--brand-muted, #ccc)', marginBottom: 12, lineHeight: 1.6 }}>
+              {t({ id: 'solicitar.gate.passwordRequired.body' })}
+            </p>
+            <Button variant="primary" onClick={() => navigate('/login')}>
+              {t({ id: 'solicitar.gate.passwordRequired.cta' })}
+            </Button>
+          </div>
+        )}
+
         {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.85rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171', border: `1px solid ${msg.kind === 'ok' ? 'rgba(21,128,61,.25)' : 'rgba(220,38,38,.25)'}` }}>{msg.text}</div>}
 
         {/* Summary after submission */}
@@ -176,8 +215,8 @@ export default function SolicitarBibliotecaPage() {
           </div>
         )}
 
-        {/* Form */}
-        {!submitted && (
+        {/* Form — caché si mustChangePassword (paquet 25.5) */}
+        {!submitted && !mustChangePassword && (
           <form onSubmit={handleSubmit}>
             <p style={hs}>{req} {t({ id: 'solicitar.requiredFieldHint' })}</p>
 

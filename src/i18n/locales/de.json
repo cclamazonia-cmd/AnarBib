@@ -2276,5 +2276,9 @@
   "auth.forceChange.save": "Mein Passwort festlegen",
   "auth.forceChange.saving": "Wird gespeichert…",
   "auth.forceChange.success": "Passwort aktualisiert. Weiterleitung läuft…",
-  "auth.forceChange.warningProfile": "Passwort aktualisiert, aber es ist ein technisches Problem aufgetreten. Du kannst jetzt auf dein Konto zugreifen; falls dieser Bildschirm bei der nächsten Anmeldung erneut erscheint, wende dich an die Koordination."
+  "auth.forceChange.warningProfile": "Passwort aktualisiert, aber es ist ein technisches Problem aufgetreten. Du kannst jetzt auf dein Konto zugreifen; falls dieser Bildschirm bei der nächsten Anmeldung erneut erscheint, wende dich an die Koordination.",
+  "solicitar.gate.passwordRequired.title": "Lege dein Passwort fest, bevor du fortfährst",
+  "solicitar.gate.passwordRequired.body": "Dein Konto wurde mit einem vorläufigen Passwort erstellt. Zu deiner Sicherheit und damit deine Bibliotheksanfrage volle Gültigkeit hat, schließe die Aktivierung deines Kontos ab, indem du ein persönliches Passwort festlegst.",
+  "solicitar.gate.passwordRequired.cta": "Mein Passwort jetzt festlegen",
+  "solicitar.gate.passwordRequired.error": "Du musst zuerst dein persönliches Passwort festlegen, bevor du eine Bibliotheksanfrage einreichst."
 }

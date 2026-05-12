@@ -2276,5 +2276,9 @@
   "auth.forceChange.save": "Imposta la mia password",
   "auth.forceChange.saving": "Salvataggio…",
   "auth.forceChange.success": "Password aggiornata. Reindirizzamento in corso…",
-  "auth.forceChange.warningProfile": "Password aggiornata, ma si è verificato un problema tecnico. Puoi accedere al tuo account adesso; se questa schermata riapparirà al prossimo accesso, contatta il coordinamento."
+  "auth.forceChange.warningProfile": "Password aggiornata, ma si è verificato un problema tecnico. Puoi accedere al tuo account adesso; se questa schermata riapparirà al prossimo accesso, contatta il coordinamento.",
+  "solicitar.gate.passwordRequired.title": "Imposta la tua password prima di continuare",
+  "solicitar.gate.passwordRequired.body": "Il tuo account è stato creato con una password provvisoria. Per la tua sicurezza e affinché la tua richiesta di biblioteca abbia pieno valore, completa l'attivazione del tuo account impostando una password personale.",
+  "solicitar.gate.passwordRequired.cta": "Imposta la mia password adesso",
+  "solicitar.gate.passwordRequired.error": "Devi prima impostare la tua password personale prima di inviare una richiesta di biblioteca."
 }

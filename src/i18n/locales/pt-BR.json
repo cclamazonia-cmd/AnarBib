@@ -2276,5 +2276,9 @@
   "auth.forceChange.save": "Definir minha senha",
   "auth.forceChange.saving": "Salvando…",
   "auth.forceChange.success": "Senha atualizada. Redirecionando…",
-  "auth.forceChange.warningProfile": "Senha atualizada, mas houve um problema técnico. Você pode acessar a sua conta agora; em caso de retorno desta tela na próxima conexão, contate a coordenação."
+  "auth.forceChange.warningProfile": "Senha atualizada, mas houve um problema técnico. Você pode acessar a sua conta agora; em caso de retorno desta tela na próxima conexão, contate a coordenação.",
+  "solicitar.gate.passwordRequired.title": "Defina sua senha antes de continuar",
+  "solicitar.gate.passwordRequired.body": "Sua conta foi criada com uma senha provisória. Para sua segurança e para que sua demanda de biblioteca tenha pleno valor, finalize a ativação da sua conta definindo uma senha pessoal.",
+  "solicitar.gate.passwordRequired.cta": "Definir minha senha agora",
+  "solicitar.gate.passwordRequired.error": "Você deve primeiro definir sua senha pessoal antes de enviar uma solicitação de biblioteca."
 }

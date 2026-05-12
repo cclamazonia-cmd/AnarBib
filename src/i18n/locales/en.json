@@ -2276,5 +2276,9 @@
   "auth.forceChange.save": "Set my password",
   "auth.forceChange.saving": "Saving…",
   "auth.forceChange.success": "Password updated. Redirecting…",
-  "auth.forceChange.warningProfile": "Password updated, but a technical issue occurred. You can access your account now; if this screen appears again at your next login, contact the coordination."
+  "auth.forceChange.warningProfile": "Password updated, but a technical issue occurred. You can access your account now; if this screen appears again at your next login, contact the coordination.",
+  "solicitar.gate.passwordRequired.title": "Set your password before continuing",
+  "solicitar.gate.passwordRequired.body": "Your account was created with a temporary password. For your security and so that your library request carries full weight, complete your account activation by setting a personal password.",
+  "solicitar.gate.passwordRequired.cta": "Set my password now",
+  "solicitar.gate.passwordRequired.error": "You must first set your personal password before submitting a library request."
 }

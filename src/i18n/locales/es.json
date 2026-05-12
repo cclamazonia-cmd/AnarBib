@@ -2276,5 +2276,9 @@
   "auth.forceChange.save": "Definir mi contraseña",
   "auth.forceChange.saving": "Guardando…",
   "auth.forceChange.success": "Contraseña actualizada. Redirigiendo…",
-  "auth.forceChange.warningProfile": "Contraseña actualizada, pero hubo un problema técnico. Podés acceder a tu cuenta ahora; si esta pantalla vuelve en la próxima conexión, contactá a la coordinación."
+  "auth.forceChange.warningProfile": "Contraseña actualizada, pero hubo un problema técnico. Podés acceder a tu cuenta ahora; si esta pantalla vuelve en la próxima conexión, contactá a la coordinación.",
+  "solicitar.gate.passwordRequired.title": "Definí tu contraseña antes de continuar",
+  "solicitar.gate.passwordRequired.body": "Tu cuenta fue creada con una contraseña provisional. Por tu seguridad y para que tu solicitud de biblioteca tenga pleno valor, finalizá la activación de tu cuenta definiendo una contraseña personal.",
+  "solicitar.gate.passwordRequired.cta": "Definir mi contraseña ahora",
+  "solicitar.gate.passwordRequired.error": "Primero debés definir tu contraseña personal antes de enviar una solicitud de biblioteca."
 }
