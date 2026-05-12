@@ -14,7 +14,7 @@ import { Button } from '@/components/ui';
 export default function SolicitarBibliotecaPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, profile } = useAuth();
+  const { user, profile, refreshProfile } = useAuth();
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.libraryRequest' }));
 
@@ -34,6 +34,20 @@ export default function SolicitarBibliotecaPage() {
   // afficher à l'usager à quel mail le claim était attaché.
   const [claimContext, setClaimContext] = useState(claimToken ? 'checking' : null);
   const [claimEmailSnapshot, setClaimEmailSnapshot] = useState('');
+
+  // Paquet 25.11 — Construire l'URL "Se connecter" en preservant le claim
+  // (et le path complet) via ?next=, pour que l'usager qui clique "Se connecter"
+  // depuis le bandeau "tu dois te connecter" revienne ici APRES login +
+  // force-change, et non pas sur /conta. Empeche l'utilisateur de perdre le fil
+  // du parcours signup-sans-biblio.
+  // - Sans claim : on pointe vers /login?next=/solicitar-biblioteca
+  // - Avec claim : on pointe vers /login?next=/solicitar-biblioteca?claim=<token>
+  const loginHref = (() => {
+    const pathWithClaim = claimToken
+      ? `/solicitar-biblioteca?claim=${encodeURIComponent(claimToken)}`
+      : `/solicitar-biblioteca`;
+    return `/login?next=${encodeURIComponent(pathWithClaim)}`;
+  })();
 
   // Garde paquet 25.5 : si l'usager est connecté avec un mot de passe provisoire
   // (must_change_password = true OU password_changed_at = null), il doit
@@ -103,6 +117,26 @@ export default function SolicitarBibliotecaPage() {
       return next;
     });
   }, [user, profile]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Paquet 25.11bis — Force le rechargement du profile au mount de la page.
+  // CONTEXTE DU BUG : apres le force-change de mot de passe sur /login, l'usager
+  // est redirige ici via ?next=. Le DB est a jour (must_change_password=false)
+  // mais le state React de AuthContext n'est pas rafraichi automatiquement
+  // (USER_UPDATED est ignore par AuthContext pour eviter les cascades, cf.
+  // commit 25.2). Resultat : `profile.must_change_password` reste a true en
+  // memoire pendant quelques secondes, et la garde rouge "Defina sua senha"
+  // s'affiche a tort. Le bandeau disparait au prochain focus (visibilitychange
+  // redeclenche le profile load via onAuthStateChange).
+  // FIX : on appelle refreshProfile() au mount pour forcer la donnee fraiche
+  // immediatement, evitant le flash de garde rouge.
+  useEffect(() => {
+    if (typeof refreshProfile === 'function') {
+      refreshProfile().catch(err => {
+        console.warn('[SolicitarBiblioteca] refreshProfile au mount a echoue:', err);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // mount uniquement
 
   // Paquet 25.8 — Validation du claim token au mount.
   // Si l'URL contient ?claim=<token>, on appelle fn_get_library_request_claim_context
@@ -305,18 +339,23 @@ export default function SolicitarBibliotecaPage() {
           </div>
         )}
 
-        {/* Before sending — paquet 24b : "Cadastro" → "Login" */}
-        <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16, fontSize: '.82rem', color: 'var(--brand-muted, #ccc)' }}>
-          <strong>{t({ id: 'solicitar.beforeSending.label' })}</strong>{' '}
-          {t({ id: 'solicitar.beforeSending.body' }, {
-            loginLink: chunks => <Link to="/login" style={{ textDecoration: 'underline' }}>{chunks}</Link>,
-          })}
-        </div>
+        {/* Before sending — paquet 24b : "Cadastro" → "Login"
+            Paquet 25.11 : le lien preserve le claim courant via ?next=.
+            Paquet 25.11bis : masque quand mustChangePassword est actif, car
+            la garde rouge en dessous fait deja la consigne avec un bouton. */}
+        {!mustChangePassword && (
+          <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16, fontSize: '.82rem', color: 'var(--brand-muted, #ccc)' }}>
+            <strong>{t({ id: 'solicitar.beforeSending.label' })}</strong>{' '}
+            {t({ id: 'solicitar.beforeSending.body' }, {
+              loginLink: chunks => <Link to={loginHref} style={{ textDecoration: 'underline' }}>{chunks}</Link>,
+            })}
+          </div>
+        )}
 
         {!user && (
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(220,38,38,.1)', border: '1px solid rgba(220,38,38,.2)', marginBottom: 16, fontSize: '.85rem', color: '#f87171' }}>
             {t({ id: 'solicitar.notLoggedIn.notice' }, {
-              loginLink:   chunks => <Link to="/login"        style={{ textDecoration: 'underline' }}>{chunks}</Link>,
+              loginLink:   chunks => <Link to={loginHref}     style={{ textDecoration: 'underline' }}>{chunks}</Link>,
               createLink:  chunks => <Link to="/criar-conta"  style={{ textDecoration: 'underline' }}>{chunks}</Link>,
             })}
           </div>
@@ -324,7 +363,10 @@ export default function SolicitarBibliotecaPage() {
 
         {/* Paquet 25.5 — Garde must_change_password : l'usager est connecté
             mais doit encore changer son mot de passe provisoire. On lui
-            propose un retour vers /login qui basculera en view force-change. */}
+            propose un retour vers /login qui basculera en view force-change.
+            Paquet 25.11 — Le bouton utilise loginHref pour preserver le claim
+            via ?next=, sinon apres le force-change l'usager est redirige sur
+            /conta et perd le fil du parcours signup-sans-biblio. */}
         {mustChangePassword && (
           <div style={{ padding: 16, borderRadius: 10, background: 'rgba(185, 0, 31, 0.12)', border: '1px solid rgba(185, 0, 31, 0.35)', marginBottom: 16 }}>
             <h2 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: 8, color: '#f87171', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
@@ -333,7 +375,7 @@ export default function SolicitarBibliotecaPage() {
             <p style={{ fontSize: '.88rem', color: 'var(--brand-muted, #ccc)', marginBottom: 12, lineHeight: 1.6 }}>
               {t({ id: 'solicitar.gate.passwordRequired.body' })}
             </p>
-            <Button variant="primary" onClick={() => navigate('/login')}>
+            <Button variant="primary" onClick={() => navigate(loginHref)}>
               {t({ id: 'solicitar.gate.passwordRequired.cta' })}
             </Button>
           </div>
