@@ -4,15 +4,51 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button } from '@/components/ui';
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
+// Paquet 25.6 — destination apres login / force-change.
+// Lit ?next=<url> depuis la query string et n'accepte QUE des URLs internes
+// (commence par '/' mais pas par '//' qui serait un protocol-relative).
+// Empeche les open redirects vers des sites externes. Si next est absent
+// ou invalide, fallback sur /conta (comportement par defaut).
+function getSafeNextUrl(searchParams) {
+  const raw = searchParams.get('next');
+  if (!raw) return '/conta';
+  // Tests stricts : doit commencer par '/' simple, pas '//' ni '/\'
+  if (raw.length < 2) return '/conta';
+  if (raw[0] !== '/') return '/conta';
+  if (raw[1] === '/' || raw[1] === '\\') return '/conta';
+  // Pas de saut de ligne, pas de caracteres de controle
+  if (/[\x00-\x1f\x7f]/.test(raw)) return '/conta';
+  return raw;
+}
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const reason = searchParams.get('reason');
+  // Destination apres login reussi (paquet 25.6).
+  // Capturee une seule fois au mount du composant. Si l'usager change d'URL
+  // pendant le flow login (peu probable), on garde la destination initiale.
+  const nextUrl = getSafeNextUrl(searchParams);
+  // Profile + session via AuthContext (paquet 25.6 fix deadlock + zombie session).
+  // Au lieu de fetcher profiles depuis handleLogin (double requete qui creait
+  // un deadlock supabase-js sporadique), on attend que AuthContext charge tout
+  // via son setTimeout 0, puis on decide de la redirection dans un useEffect
+  // en reaction a (user, profile).
+  //
+  // Avantage supplementaire : si l'usager arrive sur /login deja connecte
+  // (session zombie en localStorage, refresh accidentel, etc.), le useEffect
+  // detectera la session et redirigera immediatement sans qu'il ait besoin de
+  // re-saisir ses credentials.
+  const { user, profile, loading: authLoading } = useAuth();
+  // (pendingLoginRedirect retire au v4 : la decision est prise directement
+  // par le useEffect qui reagit a (user, profile, authLoading), pas besoin
+  // d'un flag intermediaire.)
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.login' }));
   const [view, setView] = useState('login');
@@ -45,6 +81,37 @@ export default function LoginPage() {
     if (hash.includes('type=recovery') || hash.includes('access_token')) setView('recovery');
   }, []);
 
+  // Bascule auto vers la destination (paquet 25.6).
+  //
+  // Se declenche dans deux cas :
+  // 1) Login frais : handleLogin a appele setSession, AuthContext a charge
+  //    user + profile via setTimeout 0, ce useEffect detecte et redirige.
+  // 2) Session zombie : l'usager arrive sur /login alors qu'il a deja une
+  //    session valide en localStorage (refresh accidentel, retour navigation
+  //    par exemple). Pas la peine de lui demander de se reconnecter.
+  //
+  // Conditions :
+  //  - authLoading === false : AuthContext a fini d'initialiser
+  //  - user truthy : session active
+  //  - profile chargé : on peut decider entre force-change et navigate
+  //  - view === 'login' : on ne casse pas un flow recovery ou force-change
+  //    en cours (par exemple si l'usager change son mdp sur recovery,
+  //    il faut le laisser finir, pas le rediriger en cours de route)
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) return;
+    if (!profile) return;
+    if (view !== 'login') return;
+    // Decision :
+    if (profile.must_change_password === true) {
+      setView('force-change');
+      setLoginLoading(false);
+    } else {
+      navigate(nextUrl);
+    }
+     
+  }, [authLoading, user, profile, view]);
+
   async function handleLogin(e) {
     e.preventDefault();
 
@@ -55,6 +122,12 @@ export default function LoginPage() {
       setLoginMsg({ text: t({ id: 'auth.captchaRequired' }), kind: 'error' });
       return;
     }
+
+    // Flag local : si setSession a reussi, on NE clear PAS loginLoading dans
+    // le finally (le bouton reste en spinner jusqu'a ce que le useEffect prenne
+    // la decision de bascule, garantissant que l'usager ne re-clique pas
+    // pendant la latence d'AuthContext.loadProfile ~100-200ms).
+    let sessionWasSet = false;
 
     setLoginLoading(true);
     setLoginMsg({ text: '', kind: '' });
@@ -107,36 +180,15 @@ export default function LoginPage() {
           refresh_token: data.session.refresh_token,
         });
         if (setErr) throw setErr;
+        sessionWasSet = true;
 
-        // ── Check must_change_password ────────────────────────────────
-        // Avant de rediriger vers /conta, on lit must_change_password
-        // depuis profiles. Si true, on bascule en mode "force-change"
-        // (paquet 25.3) au lieu de laisser l'usager naviguer librement
-        // avec un mot de passe provisoire.
-        // On ne dépend PAS de AuthContext.profile qui est chargé en
-        // setTimeout 0 et probablement pas encore prêt à ce stade.
-        try {
-          const userId = data.session.user?.id;
-          if (userId) {
-            const { data: prof } = await supabase
-              .from('profiles')
-              .select('must_change_password')
-              .eq('id', userId)
-              .maybeSingle();
-            if (prof?.must_change_password === true) {
-              // Bascule sans navigation : l'usager reste sur /login mais
-              // la vue change. Le formulaire d'accueil pour le nouveau mdp
-              // s'affiche. À la soumission réussie → navigate('/conta').
-              setView('force-change');
-              return;
-            }
-          }
-        } catch {
-          // En cas d'échec de la lecture du profil, on ne bloque pas le
-          // login. L'usager arrive sur /conta et pourra changer son mdp
-          // manuellement plus tard (parcours dégradé acceptable).
-        }
-        navigate('/conta');
+        // Paquet 25.6 v4 : on NE FAIT RIEN d'autre ici.
+        // AuthContext va detecter SIGNED_IN, charger user + profile en
+        // setTimeout 0, et le useEffect en haut du composant fera la
+        // bascule (force-change ou navigate(nextUrl)) automatiquement.
+        // Le bouton Entrar reste en loading car on n'a pas clear loginLoading :
+        // c'est le useEffect qui clear quand il decide (ou bien le finally
+        // dans le cas d'erreur).
         return;
       }
 
@@ -145,7 +197,13 @@ export default function LoginPage() {
     } catch {
       setLoginMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
     } finally {
-      setLoginLoading(false);
+      // Si setSession a reussi, on laisse loginLoading a true : le bouton
+      // Entrar reste en spinner jusqu'a ce que le useEffect prenne la
+      // decision (force-change ou navigate). Sinon (erreur ou cas inattendu)
+      // on libere immediatement.
+      if (!sessionWasSet) {
+        setLoginLoading(false);
+      }
     }
   }
 
@@ -271,14 +329,15 @@ export default function LoginPage() {
             kind: 'error',
           });
           // On laisse l'usager passer quand même : son mdp est valide.
-          setTimeout(() => navigate('/conta'), 2000);
+          setTimeout(() => navigate(nextUrl), 2000);
           return;
         }
       }
 
-      // 3) Tout OK : navigate vers /conta
+      // 3) Tout OK : navigate vers la destination (paquet 25.6).
+      // nextUrl = ?next=<url> dans la query si specifie, sinon /conta par defaut.
       setForceChangeMsg({ text: t({ id: 'auth.forceChange.success' }), kind: 'ok' });
-      setTimeout(() => navigate('/conta'), 1200);
+      setTimeout(() => navigate(nextUrl), 1200);
     } catch {
       setForceChangeMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
     } finally {
