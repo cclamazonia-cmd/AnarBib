@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { syncLocaleFromProfile } from '@/i18n';
 import { clearStaffSession } from '@/lib/staffStorage';
@@ -6,68 +6,112 @@ import { clearStaffSession } from '@/lib/staffStorage';
 const AuthContext = createContext({
   session: null,
   user: null,
+  profile: null,
   loading: true,
   signOut: async () => {},
+  refreshProfile: async () => {},
 });
+
+// Colonnes lues depuis public.profiles au login.
+// Ajouter ici toute colonne nécessaire à un composant qui utilise useAuth().profile.
+// Note politique : on lit le minimum nécessaire, pas l'intégralité du profil
+// (l'adresse postale et le téléphone restent récupérés à la demande par les
+// pages qui en ont besoin, pour ne pas les exposer globalement dans le contexte).
+const PROFILE_COLUMNS = [
+  'id',
+  'public_id',
+  'email',
+  'first_name',
+  'last_name',
+  'preferred_language',
+  'must_change_password',
+  'password_changed_at',
+  'is_restricted',
+  'is_librarian',
+].join(', ');
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Anti-rebond : on ne synchronise la locale qu'une fois par user_id et par
-  // chargement d'app. Sans ça, certains re-render de session (rare mais
-  // possible sous charge) pourraient déclencher un reload en boucle.
+  // Anti-rebond locale : on ne synchronise la locale qu'une fois par user_id
+  // et par chargement d'app. Sans ça, certains re-render de session pourraient
+  // déclencher un reload en boucle.
   const syncedForUserRef = useRef(null);
 
-  // ── Synchronisation de la langue depuis profile.preferred_language ──
+  // ── Chargement du profil ────────────────────────────────────────────────
   //
-  // Idée : la base est la source de vérité pour les utilisateurs connectés.
-  // Au moment où la session se résout, on lit la langue stockée en base et,
-  // si elle diffère du localStorage, on aligne (soft reload via i18n).
+  // Architecture (option β) : après getSession() réussi, on fetch le profil
+  // en cascade. Les composants qui dépendent de `profile` doivent gérer le
+  // cas profile === null pendant la latence (~100-200ms après le login).
   //
-  // Cas couverts :
-  //  - Connexion depuis un nouveau navigateur (localStorage vide ou pt-BR
-  //    par défaut alors que l'utilisateur a choisi 'fr' la dernière fois)
-  //  - Connexion d'un compte différent partageant le même navigateur
+  // Logique de la synchro langue intégrée : si preferred_language en base
+  // diffère de localStorage, syncLocaleFromProfile() déclenche un soft reload
+  // (avec restoration de scroll). Anti-rebond via syncedForUserRef pour ne
+  // synchroniser qu'une fois par user_id et par chargement d'app.
   //
   // Cas non couverts (volontairement) :
-  //  - Utilisateur anonyme : pas de profile à lire, donc on garde le
-  //    localStorage / Accept-Language sans rien toucher
-  //  - TOKEN_REFRESHED : ignoré comme dans la version d'origine, donc pas
-  //    de risque de reload en cascade
+  //  - Utilisateur anonyme : pas de profile à lire
+  //  - TOKEN_REFRESHED / USER_UPDATED : ignorés pour éviter cascade de
+  //    re-render (cf. commentaire dans onAuthStateChange). Pour rafraîchir
+  //    le profile suite à une modification utilisateur, appeler
+  //    refreshProfile() depuis le composant qui a fait l'update.
 
-  async function trySyncLocaleFromProfile(userId) {
-    if (!userId) return;
-    if (syncedForUserRef.current === userId) return; // déjà fait pour cet user
-    syncedForUserRef.current = userId;
+  const loadProfile = useCallback(async (userId, { syncLocale = true } = {}) => {
+    if (!userId) {
+      setProfile(null);
+      return null;
+    }
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('preferred_language')
+        .select(PROFILE_COLUMNS)
         .eq('id', userId)
         .maybeSingle();
       if (error) {
-        console.warn('[AuthContext] Failed to read preferred_language:', error);
-        return;
+        console.warn('[AuthContext] Failed to load profile:', error);
+        return null;
       }
-      if (data?.preferred_language) {
-        // Si la langue diffère de localStorage, syncLocaleFromProfile
-        // déclenche un soft reload (avec restoration de scroll). Sinon,
-        // c'est un no-op.
-        syncLocaleFromProfile(data.preferred_language);
+      if (data) {
+        setProfile(data);
+        // Synchro langue conditionnelle. On ne la déclenche qu'au premier
+        // chargement par user_id, pas sur les refreshProfile() ultérieurs
+        // (qui n'ont pas vocation à provoquer un reload de page).
+        if (syncLocale && data.preferred_language && syncedForUserRef.current !== userId) {
+          syncedForUserRef.current = userId;
+          syncLocaleFromProfile(data.preferred_language);
+        }
+        return data;
       }
+      return null;
     } catch (err) {
-      console.warn('[AuthContext] Locale sync failed:', err);
+      console.warn('[AuthContext] loadProfile failed:', err);
+      return null;
     }
-  }
+  }, []);
+
+  // Exposée aux composants pour forcer un refresh du profil après une
+  // modification (par exemple après UPDATE profiles SET preferred_language).
+  // Ne déclenche pas la synchro langue (le composant qui modifie est
+  // responsable de l'effet visuel s'il en veut un).
+  const refreshProfile = useCallback(async () => {
+    const userId = session?.user?.id;
+    if (!userId) return null;
+    return loadProfile(userId, { syncLocale: false });
+  }, [session, loadProfile]);
 
   useEffect(() => {
-    // Récupérer la session existante
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
+    // Récupérer la session existante au boot
+    supabase.auth.getSession().then(async ({ data: { session: s } }) => {
       setSession(s);
+      // Chargement du profil en cascade (option β).
+      // setLoading(false) seulement APRÈS, pour que les composants qui se
+      // basent sur loading=false aient également le profil disponible.
+      if (s?.user?.id) {
+        await loadProfile(s.user.id);
+      }
       setLoading(false);
-      // Synchro langue si on est connecté au boot
-      if (s?.user?.id) trySyncLocaleFromProfile(s.user.id);
     });
 
     // Écouter les changements d'auth.
@@ -78,16 +122,19 @@ export function AuthProvider({ children }) {
     // Le token reste maintenu à jour automatiquement par supabase.auth.getSession()
     // qui est appelé à chaque requête dans apiQuery/apiRpc.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, s) => {
+      async (event, s) => {
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }
         setSession(s);
-        // Synchro langue après un SIGNED_IN (ou tout événement non ignoré
-        // avec un user). syncedForUserRef protège contre les déclenchements
-        // multiples pour le même user.
-        if (s?.user?.id) trySyncLocaleFromProfile(s.user.id);
-        // Au signOut, reset la garde pour permettre une re-synchro à la
+        if (s?.user?.id) {
+          // Charger le profil pour ce nouvel utilisateur (typiquement SIGNED_IN)
+          await loadProfile(s.user.id);
+        } else {
+          // Au SIGNED_OUT ou tout événement sans user : clear le profil
+          setProfile(null);
+        }
+        // Au signOut, reset la garde locale pour permettre une re-synchro à la
         // prochaine connexion (potentiellement avec un autre user)
         if (event === 'SIGNED_OUT') {
           syncedForUserRef.current = null;
@@ -96,12 +143,13 @@ export function AuthProvider({ children }) {
     );
     return () => subscription.unsubscribe();
      
-  }, []);
+  }, [loadProfile]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
     clearStaffSession();
     setSession(null);
+    setProfile(null);
     syncedForUserRef.current = null;
   };
 
@@ -110,8 +158,10 @@ export function AuthProvider({ children }) {
       value={{
         session,
         user: session?.user ?? null,
+        profile,
         loading,
         signOut,
+        refreshProfile,
       }}
     >
       {children}
