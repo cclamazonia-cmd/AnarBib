@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { detectLocale } from '@/i18n';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
 import CountrySelect from '@/components/forms/CountrySelect';
@@ -149,6 +150,11 @@ export default function CriarContaPage() {
         signup_without_library: noLib,
         anarbib_logo_url: ANARBIB_LOGO,
         preferred_login_identifier: 'public_id',
+        // Locale du navigateur (paquet 25.4) : permet au mail de bienvenue d'arriver
+        // dans la langue actuellement affichée à l'usager. Backend register/index.ts
+        // valide la valeur contre la liste des 6 locales supportées et fait fallback
+        // sur pt-BR si la valeur n'est pas reconnue.
+        locale: detectLocale(),
       }});
       if (error) {
         const m = data?.error || error.message || t({id:'auth.networkError'});
