@@ -49,6 +49,16 @@ export default function AccountPage() {
   const [membershipPayments, setMembershipPayments] = useState([]); // historique propre paiements
   const [membershipRules, setMembershipRules] = useState([]); // règles actives (juste pour info)
 
+  // Lot 26.1a — Changement de mot de passe a la demande de l'usager.
+  // States dedies pour ne pas mixer avec le formulaire profil (saving/msg).
+  // Indépendant du flow recovery dans LoginPage. Utilise la session active
+  // comme preuve d'identite (Supabase Auth standard).
+  const [pwdNew, setPwdNew] = useState('');
+  const [pwdConfirm, setPwdConfirm] = useState('');
+  const [pwdSaving, setPwdSaving] = useState(false);
+  const [pwdMsg, setPwdMsg] = useState('');
+  const [pwdMsgIsError, setPwdMsgIsError] = useState(false);
+
   // ── Chargement des données ───────────────────────────────
 
   const loadData = useCallback(async () => {
@@ -150,6 +160,47 @@ export default function AccountPage() {
       setMsgIsError(true);
     } finally {
       setSaving(false);
+    }
+  }
+
+  // Lot 26.1a — Changement de mot de passe a la demande de l'usager.
+  // Indépendant du flow recovery (LoginPage). Utilise supabase.auth.updateUser
+  // qui s'appuie sur la session active. Pas besoin de saisir le mot de passe
+  // courant : Supabase considere la session authentifiee comme preuve.
+  // Validation cote frontend : >= 8 caracteres et confirmation == nouveau.
+  async function handleChangePassword(e) {
+    e.preventDefault();
+    setPwdMsg('');
+    setPwdMsgIsError(false);
+    if (!pwdNew || pwdNew.length < 8) {
+      setPwdMsg(t({ id: 'account.changePassword.error.tooShort', defaultMessage: 'A nova senha deve ter pelo menos 8 caracteres.' }));
+      setPwdMsgIsError(true);
+      return;
+    }
+    if (pwdNew !== pwdConfirm) {
+      setPwdMsg(t({ id: 'account.changePassword.error.mismatch', defaultMessage: 'A confirmação não corresponde à nova senha.' }));
+      setPwdMsgIsError(true);
+      return;
+    }
+    setPwdSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: pwdNew });
+      if (error) throw error;
+      // Aussi mettre a jour password_changed_at et must_change_password dans
+      // profiles pour la coherence avec le flow recovery dans LoginPage.
+      await supabase.from('profiles').update({
+        password_changed_at: new Date().toISOString(),
+        must_change_password: false,
+      }).eq('id', user.id);
+      setPwdMsg(t({ id: 'account.changePassword.success', defaultMessage: 'Senha atualizada com sucesso.' }));
+      setPwdMsgIsError(false);
+      setPwdNew('');
+      setPwdConfirm('');
+    } catch (err) {
+      setPwdMsg(t({ id: 'common.errorPrefix' }, { message: err.message }));
+      setPwdMsgIsError(true);
+    } finally {
+      setPwdSaving(false);
     }
   }
 
@@ -478,6 +529,11 @@ export default function AccountPage() {
           const borderColor = s === 'active' ? 'rgba(21,128,61,.2)' : s === 'restricted' ? 'rgba(220,38,38,.2)' : s === 'attention' ? 'rgba(251,191,36,.2)' : 'rgba(29,78,216,.15)';
           const textColor = s === 'active' ? '#4ade80' : s === 'restricted' ? '#f87171' : s === 'attention' ? '#fbbf24' : '#60a5fa';
           const icon = s === 'active' ? '✓' : s === 'restricted' ? '⛔' : s === 'attention' ? '⚠' : 'ℹ';
+          // Lot 26.1b — Si le bandeau est "incomplete" et que l'usager n'a
+          // pas de bibliotheque rattachee (cas typique du parcours
+          // signup-sans-biblio interrompu), on ajoute un CTA jaune cliquable
+          // vers /solicitar-biblioteca pour qu'il finalise sa demande.
+          const incompleteDueToNoLib = s === 'incomplete' && !libraryId;
           return (
             <div style={{ marginTop: 10, padding: '10px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12, background: bgColor, border: `1px solid ${borderColor}` }}>
               <span style={{ fontSize: '1.3rem' }}>{icon}</span>
@@ -495,6 +551,26 @@ export default function AccountPage() {
                     {accountStatus.alerts.filter(a => a.level === 'info').map(a =>
                       a.message_key ? t({ id: a.message_key }, { count: a.count, days: a.days }) : a.message
                     ).join(' · ')}
+                  </div>
+                )}
+                {incompleteDueToNoLib && (
+                  <div style={{ marginTop: 8 }}>
+                    <Link
+                      to="/solicitar-biblioteca"
+                      style={{
+                        display: 'inline-block',
+                        padding: '6px 12px',
+                        borderRadius: 6,
+                        background: 'rgba(251,191,36,.15)',
+                        border: '1px solid rgba(251,191,36,.4)',
+                        color: '#fbbf24',
+                        fontSize: '.85rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                      }}
+                    >
+                      → {t({ id: 'account.alert.incomplete.cta', defaultMessage: 'Solicitar inscrição da biblioteca' })}
+                    </Link>
                   </div>
                 )}
               </div>
@@ -586,6 +662,52 @@ export default function AccountPage() {
                   {msg && <span className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
                 </div>
               </form>
+
+              {/* ── Lot 26.1a — Changement de mot de passe ────────── */}
+              <div style={{ marginTop: 32, padding: 20, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
+                <h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
+                  {t({ id: 'account.changePassword.title', defaultMessage: 'Mudar minha senha' })}
+                </h3>
+                <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)', marginBottom: 14 }}>
+                  {t({ id: 'account.changePassword.hint', defaultMessage: 'Defina uma nova senha de pelo menos 8 caracteres. A confirmação é obrigatória.' })}
+                </div>
+                <form onSubmit={handleChangePassword} className="ab-conta-form">
+                  <div className="ab-conta-grid2">
+                    <label>
+                      {t({ id: 'account.changePassword.newPassword', defaultMessage: 'Nova senha' })}
+                      <input
+                        type="password"
+                        value={pwdNew}
+                        onChange={e => setPwdNew(e.target.value)}
+                        autoComplete="new-password"
+                        minLength={8}
+                        required
+                      />
+                    </label>
+                    <label>
+                      {t({ id: 'account.changePassword.confirmPassword', defaultMessage: 'Confirmar nova senha' })}
+                      <input
+                        type="password"
+                        value={pwdConfirm}
+                        onChange={e => setPwdConfirm(e.target.value)}
+                        autoComplete="new-password"
+                        minLength={8}
+                        required
+                      />
+                    </label>
+                  </div>
+                  <div className="ab-conta-form-actions">
+                    <Button type="submit" loading={pwdSaving}>
+                      {t({ id: 'account.changePassword.submit', defaultMessage: 'Atualizar senha' })}
+                    </Button>
+                    {pwdMsg && (
+                      <span className={`ab-conta-msg ${pwdMsgIsError ? 'ab-conta-msg--error' : ''}`}>
+                        {pwdMsg}
+                      </span>
+                    )}
+                  </div>
+                </form>
+              </div>
 
               {/* ── Cotisation associative ─────────────── */}
               {(membership || membershipRules.length > 0) && (() => {
