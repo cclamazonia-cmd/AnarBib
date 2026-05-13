@@ -1580,7 +1580,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Iscrizione iniziale creata",
     de: "Anmeldung initialisiert"
   },
-  "welcome.title": {
+  "welcome.title.initial": {
+    "pt-BR": "Bem-vindo/a/e à rede AnarBib",
+    fr: "Bienvenue dans le réseau AnarBib",
+    es: "Bienvenide a la red AnarBib",
+    en: "Welcome to the AnarBib network",
+    it: "Benvenutə nella rete AnarBib",
+    de: "Willkommen im AnarBib-Netzwerk"
+  },
+   "welcome.title": {
     "pt-BR": "Bem-vindo/a/e à {libraryName}",
     fr: "Bienvenue à la {libraryName}",
     es: "Bienvenide a le {libraryName}",

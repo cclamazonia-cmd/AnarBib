@@ -233,7 +233,14 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
   `;
   return buildMailShell({
     pretitle: isWithoutLibrary ? tMail(locale, "welcome.pretitle.initial") : tMail(locale, "welcome.pretitle"),
-    title: tMail(locale, "welcome.title", { libraryName }),
+    // Paquet 25.11 — Pour le cas signup_without_library, on utilise un titre
+    // SANS placeholder libraryName : "Bienvenue dans le réseau AnarBib" plutot
+    // que "Bienvenue à la AnarBib" qui est grammaticalement faux dans plusieurs
+    // langues (preposition+article fusionnes attendus avec un nom feminin
+    // de bibliotheque, pas avec "AnarBib").
+    title: isWithoutLibrary
+      ? tMail(locale, "welcome.title.initial")
+      : tMail(locale, "welcome.title", { libraryName }),
     subtitle: tMail(locale, "welcome.subtitle"),
     logoTable,
     contentHtml
@@ -632,7 +639,38 @@ serve(async (req)=>{
           error: "CLAIM_CREATE_FAILED"
         }, 500);
       }
-      libraryRequestClaimUrl = `${LIBRARY_REQUEST_URL}?claim=${encodeURIComponent(libraryRequestClaimToken)}`;
+      // Paquet 25.11 — URL du CTA reconstruite pour passer par /login d'abord.
+      // L'usager doit de toute facon se connecter (must_change_password=true).
+      // En passant par /login?next=<finalUrl> on garantit que :
+      //  1. Apres login + force-change, il atterrit sur la page finale
+      //  2. Le claim token est preserve dans l'URL finale (apres redirect)
+      //  3. Pas besoin d'un parcours separe "page de redirection intermediaire"
+      // Le `?next=` est lu par LoginPage (cf. commit 25.6) et utilise comme
+      // destination apres login standard ET apres force-change.
+      const finalUrl = `${LIBRARY_REQUEST_URL}?claim=${encodeURIComponent(libraryRequestClaimToken)}`;
+      // Extraire le chemin + query depuis l'URL absolue de LIBRARY_REQUEST_URL
+      // pour ne PAS construire un next=https://... (qui serait rejete par
+      // getSafeNextUrl cote frontend pour des raisons de securite open redirect).
+      // On extrait juste la partie path+query.
+      let nextPathAndQuery;
+      try {
+        const u = new URL(finalUrl);
+        nextPathAndQuery = u.pathname + u.search; // ex: "/solicitar-biblioteca?claim=xxx"
+      } catch {
+        // Fallback defensif : si LIBRARY_REQUEST_URL n'est pas une URL absolue
+        // valide, on utilise telle quelle (cas tres improbable).
+        nextPathAndQuery = "/solicitar-biblioteca";
+      }
+      // Construire l'URL de login avec ?next= encode.
+      // Le LIBRARY_REQUEST_URL est cense pointer vers app.anarbib.org/solicitar-biblioteca
+      // donc l'origine du login = meme origine.
+      let loginOrigin;
+      try {
+        loginOrigin = new URL(LIBRARY_REQUEST_URL).origin; // "https://app.anarbib.org"
+      } catch {
+        loginOrigin = "https://app.anarbib.org";
+      }
+      libraryRequestClaimUrl = `${loginOrigin}/login?next=${encodeURIComponent(nextPathAndQuery)}`;
     }
     const displayName = firstNonEmptyString(libraryMeta?.display_name, libraryRow?.name, requestedLibraryName, signupWithoutLibrary ? "AnarBib" : effectiveLibrarySlug);
     const contactEmail = normalizeEmail(libraryMeta?.contact_email);
