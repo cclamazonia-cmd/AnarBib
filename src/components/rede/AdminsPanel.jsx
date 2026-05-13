@@ -25,6 +25,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import NetworkAdminBadge from './NetworkAdminBadge';
 import ProposeCooptationModal from './ProposeCooptationModal';
 import VoteCooptationModal from './VoteCooptationModal';
+import ProposeCollectiveRemovalModal from './ProposeCollectiveRemovalModal';
+import VoteCollectiveRemovalModal from './VoteCollectiveRemovalModal';
+import CancelCollectiveRemovalModal from './CancelCollectiveRemovalModal';
 
 export default function AdminsPanel() {
   const { user } = useAuth();
@@ -32,19 +35,23 @@ export default function AdminsPanel() {
 
   const [admins, setAdmins] = useState([]);
   const [proposals, setProposals] = useState([]);
+  const [removalProposals, setRemovalProposals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const [proposeOpen, setProposeOpen] = useState(false);
-  const [voteProposal, setVoteProposal] = useState(null); // proposal active pour vote, ou null
+  const [voteProposal, setVoteProposal] = useState(null);
+  const [removeTarget, setRemoveTarget] = useState(null);          // admin a retirer
+  const [voteRemovalProposal, setVoteRemovalProposal] = useState(null);
+  const [cancelRemovalProposal, setCancelRemovalProposal] = useState(null);
   const [toast, setToast] = useState(null);
 
-  // ── Chargement combiné : admins + propositions en cours ──
+  // ── Chargement combine : admins + propositions cooptation + propositions retrait ──
   const loadAll = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const [adminsResult, proposalsResult] = await Promise.all([
+      const [adminsResult, proposalsResult, removalProposalsResult] = await Promise.all([
         supabase
           .schema('api')
           .from('network_administrators_public_v1')
@@ -55,13 +62,20 @@ export default function AdminsPanel() {
           .from('cooptation_proposals_current_v1')
           .select('*')
           .order('proposed_at', { ascending: false }),
+        supabase
+          .schema('api')
+          .from('collective_removal_proposals_current_v1')
+          .select('*')
+          .order('proposed_at', { ascending: false }),
       ]);
 
       if (adminsResult.error) throw adminsResult.error;
       if (proposalsResult.error) throw proposalsResult.error;
+      if (removalProposalsResult.error) throw removalProposalsResult.error;
 
       setAdmins(adminsResult.data || []);
       setProposals(proposalsResult.data || []);
+      setRemovalProposals(removalProposalsResult.data || []);
     } catch (err) {
       console.warn('AdminsPanel loadAll:', err);
       setError(err.message || String(err));
@@ -92,6 +106,24 @@ export default function AdminsPanel() {
     loadAll();
   }, [loadAll, t]);
 
+  const handleProposeRemovalSuccess = useCallback(() => {
+    setToast({ text: t({ id: 'rede.collectiveRemoval.toast.proposed' }), kind: 'ok' });
+    setRemoveTarget(null);
+    loadAll();
+  }, [loadAll, t]);
+
+  const handleVoteRemovalSuccess = useCallback(() => {
+    setToast({ text: t({ id: 'rede.collectiveRemoval.toast.voted' }), kind: 'ok' });
+    setVoteRemovalProposal(null);
+    loadAll();
+  }, [loadAll, t]);
+
+  const handleCancelRemovalSuccess = useCallback(() => {
+    setToast({ text: t({ id: 'rede.collectiveRemoval.toast.cancelled' }), kind: 'ok' });
+    setCancelRemovalProposal(null);
+    loadAll();
+  }, [loadAll, t]);
+
   // ── Rendu ───────────────────────────────────────────
   if (error) {
     return (
@@ -114,7 +146,7 @@ export default function AdminsPanel() {
       {/* ── Intro admins actifs ── */}
       <div style={{ marginBottom: 14 }}>
         <h3 style={{ margin: '0 0 4px' }}>
-          {t({ id: 'rede.admins.title' }, { count: admins.length })}
+          {t({ id: 'rede.admins.title' })} ({admins.length})
         </h3>
         <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
           {t({ id: 'rede.admins.subtitle' })}
@@ -154,6 +186,7 @@ export default function AdminsPanel() {
               index={i}
               isCurrentUser={a.user_id === user?.id}
               locale={locale}
+              onProposeRemovalClick={() => setRemoveTarget(a)}
             />
           ))}
         </div>
@@ -193,6 +226,41 @@ export default function AdminsPanel() {
         )}
       </div>
 
+      {/* ── Section "Propostas de retirada coletiva em curso" ── */}
+      <div style={{ marginTop: 32 }}>
+        <h3 style={{ margin: '0 0 8px' }}>
+          {t({ id: 'rede.collectiveRemoval.tab' })} ({removalProposals.length})
+        </h3>
+
+        {!loading && removalProposals.length === 0 && (
+          <div
+            style={{
+              padding: 16,
+              fontSize: '.88rem',
+              color: 'var(--brand-muted)',
+              fontStyle: 'italic',
+            }}
+          >
+            {t({ id: 'rede.collectiveRemoval.empty' })}
+          </div>
+        )}
+
+        {!loading && removalProposals.length > 0 && (
+          <div className="ab-team-list">
+            {removalProposals.map((p, i) => (
+              <RemovalProposalRow
+                key={p.proposal_id}
+                proposal={p}
+                index={i}
+                locale={locale}
+                onVoteClick={() => setVoteRemovalProposal(p)}
+                onCancelClick={() => setCancelRemovalProposal(p)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* ── Modals ── */}
       <ProposeCooptationModal
         isOpen={proposeOpen}
@@ -206,6 +274,27 @@ export default function AdminsPanel() {
         onClose={() => setVoteProposal(null)}
         onSuccess={handleVoteSuccess}
       />
+
+      <ProposeCollectiveRemovalModal
+        isOpen={removeTarget !== null}
+        target={removeTarget}
+        onClose={() => setRemoveTarget(null)}
+        onSuccess={handleProposeRemovalSuccess}
+      />
+
+      <VoteCollectiveRemovalModal
+        isOpen={voteRemovalProposal !== null}
+        proposal={voteRemovalProposal}
+        onClose={() => setVoteRemovalProposal(null)}
+        onSuccess={handleVoteRemovalSuccess}
+      />
+
+      <CancelCollectiveRemovalModal
+        isOpen={cancelRemovalProposal !== null}
+        proposal={cancelRemovalProposal}
+        onClose={() => setCancelRemovalProposal(null)}
+        onSuccess={handleCancelRemovalSuccess}
+      />
     </div>
   );
 }
@@ -215,7 +304,7 @@ export default function AdminsPanel() {
 // (inchange depuis E.4.a)
 // ────────────────────────────────────────────────────────────
 
-function AdminRow({ admin: a, index, isCurrentUser, locale }) {
+function AdminRow({ admin: a, index, isCurrentUser, locale, onProposeRemovalClick }) {
   const { formatMessage: t } = useIntl();
 
   const name = [a.first_name, a.last_name].filter(Boolean).join(' ')
@@ -264,8 +353,25 @@ function AdminRow({ admin: a, index, isCurrentUser, locale }) {
           )}
         </div>
       </div>
-      <div className="ab-team-row__badges">
+      <div className="ab-team-row__badges" style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
         <NetworkAdminBadge />
+        {!isCurrentUser && onProposeRemovalClick && (
+          <button
+            type="button"
+            className="cat-btn"
+            onClick={onProposeRemovalClick}
+            style={{
+              fontSize: '.72rem',
+              padding: '4px 8px',
+              background: 'rgba(248,113,113,.1)',
+              borderColor: 'rgba(248,113,113,.3)',
+              color: '#fca5a5',
+            }}
+            title={t({ id: 'rede.collectiveRemoval.propose.cta' })}
+          >
+            {t({ id: 'rede.collectiveRemoval.propose.cta' })}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -389,6 +495,152 @@ function ProposalRow({ proposal: p, index, locale, onVoteClick }) {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────
+// RemovalProposalRow E.4.c : ligne proposition de retrait en cours
+// Affiche identite cible + proposeur + motivation + comptes votes +
+// boutons "Votar" et "Anular proposta" selon les flags caller.
+// ────────────────────────────────────────────────────────────
+
+function RemovalProposalRow({ proposal: p, index, locale, onVoteClick, onCancelClick }) {
+  const { formatMessage: t } = useIntl();
+
+  const targetName = [p.proposed_first_name, p.proposed_last_name].filter(Boolean).join(' ')
+    || p.proposed_email
+    || t({ id: 'team.unnamedMember' });
+
+  const proposerName = [p.proposer_first_name, p.proposer_last_name].filter(Boolean).join(' ')
+    || p.proposer_email
+    || t({ id: 'team.unnamedMember' });
+
+  const expiresDate = p.expires_at
+    ? new Date(p.expires_at).toLocaleDateString(locale)
+    : null;
+
+  const carenceDate = p.pending_removal_until
+    ? new Date(p.pending_removal_until).toLocaleDateString(locale)
+    : null;
+
+  // Statut visible : 'open' ou 'unanimous' (carence)
+  const isUnanimous = p.status === 'unanimous';
+
+  // Vote possible si :
+  //   - status='open' (vote actif)
+  //   - caller n'est pas le target
+  // Note : durant carence (status='unanimous'), pas de vote possible (deja unanime)
+  const canVote = !p.caller_is_target && p.status === 'open';
+
+  // Annulation possible : n'importe quel admin reseau (presomption v0.3,
+  // RPC retournera erreur si ce n'est pas le cas)
+  const canCancel = true;
+
+  return (
+    <div
+      className="ab-team-row"
+      style={{
+        padding: '12px 14px',
+        background: index % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent',
+        borderBottom: '1px solid rgba(255,255,255,.04)',
+        borderLeft: isUnanimous ? '3px solid #fbbf24' : '3px solid #f87171',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 8,
+      }}
+    >
+      {/* En-tete : identite + statut */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+        <div>
+          <div className="ab-team-row__name" style={{ fontWeight: 600 }}>
+            {targetName}
+            {p.caller_is_target && (
+              <span className="ab-team-self-tag">
+                ({t({ id: 'team.selfTag' })})
+              </span>
+            )}
+          </div>
+          <div className="ab-team-row__meta" style={{ fontSize: '.82rem' }}>
+            {t({ id: 'rede.cooptation.proposal.proposedBy' }, { name: proposerName })}
+            {!isUnanimous && expiresDate && (
+              <span>{' · '}{t({ id: 'rede.cooptation.proposal.expiresAt' }, { date: expiresDate })}</span>
+            )}
+            {isUnanimous && carenceDate && (
+              <span>{' · '}{t({ id: 'rede.collectiveRemoval.proposal.carenceUntil' }, { date: carenceDate })}</span>
+            )}
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+          <span
+            className={isUnanimous ? 'cat-pill warn' : 'cat-pill info'}
+            style={{ fontSize: '.7rem' }}
+          >
+            {isUnanimous
+              ? t({ id: 'rede.collectiveRemoval.proposal.status.unanimous' })
+              : t({ id: 'rede.collectiveRemoval.proposal.status.open' })}
+          </span>
+        </div>
+      </div>
+
+      {/* Comptes de votes */}
+      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>
+        <span style={{ fontWeight: 600, color: 'var(--brand-fg, inherit)' }}>
+          {t(
+            { id: 'rede.cooptation.proposal.votesProgress' },
+            { count: p.favor_count, total: p.required_votes }
+          )}
+        </span>
+        {p.against_count > 0 && (
+          <span style={{ marginLeft: 8, color: '#22c55e' }}>
+            · {p.against_count} {t({ id: 'rede.collectiveRemoval.vote.against' }).toLowerCase()}
+          </span>
+        )}
+      </div>
+
+      {/* Motivation (preview limitee) */}
+      {p.motivation && (
+        <div
+          style={{
+            fontSize: '.85rem',
+            fontStyle: 'italic',
+            padding: '6px 10px',
+            background: 'rgba(0,0,0,.15)',
+            borderRadius: 4,
+            borderLeft: '3px solid rgba(255,255,255,.15)',
+          }}
+        >
+          {p.motivation.length > 200
+            ? p.motivation.slice(0, 200) + '…'
+            : p.motivation}
+        </div>
+      )}
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+        {canCancel && onCancelClick && (
+          <button
+            type="button"
+            className="cat-btn"
+            onClick={onCancelClick}
+            style={{ fontSize: '.82rem' }}
+          >
+            {t({ id: 'rede.collectiveRemoval.cancel.cta' })}
+          </button>
+        )}
+        {canVote && onVoteClick && (
+          <button
+            type="button"
+            className="cat-btn"
+            onClick={onVoteClick}
+            style={{ fontSize: '.82rem' }}
+          >
+            {p.caller_has_voted
+              ? t({ id: 'rede.collectiveRemoval.vote.modal.title' }) + ' …'
+              : t({ id: 'rede.cooptation.vote.submit' })}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
