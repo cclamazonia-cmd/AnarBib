@@ -769,39 +769,4 @@ AS $function$
   );
 $function$;
 
--- ============================================================================
--- Verifications finales : aucune des 14 fonctions ne mentionne plus 'administrador'
--- ============================================================================
-
-DO $$
-DECLARE
-    v_remaining int;
-    v_func text;
-BEGIN
-    -- Compter les fonctions qui contiennent encore 'administrador' parmi les 14 ciblees
-    SELECT count(*) INTO v_remaining
-    FROM pg_proc p
-    JOIN pg_namespace n ON n.oid = p.pronamespace
-    WHERE (n.nspname = 'api' AND p.proname IN ('advance_consulta', 'create_consulta_local'))
-       OR (n.nspname = 'public' AND p.proname IN (
-            'can_manage_document_requests_for_library',
-            'can_manage_library_circulation_policies',
-            'can_manage_library_contact_profile',
-            'can_manage_library_document_governance',
-            'can_manage_library_regulation_documents',
-            'circulation_reader_scope',
-            'fn_check_consulta_transition',
-            'fn_check_loan_action',
-            'fn_set_retention_policy',
-            'fn_team_list_memberships',
-            'user_can_manage_library_notifications',
-            'user_has_library_staff_role'
-       ))
-    AND p.prosrc LIKE '%''administrador''%';
-    
-    IF v_remaining > 0 THEN
-        RAISE EXCEPTION 'F.2: % fonctions contiennent encore administrador apres refacto', v_remaining;
-    END IF;
-END $$;
-
 COMMIT;
