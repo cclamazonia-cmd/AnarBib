@@ -38,3 +38,6 @@ eslint-first-run.txt
 
 # Backups générés par les scripts PowerShell de patching
 *.bak-*
+
+# Sauvegardes locales temporaires des sessions de patch (nettoyage 13/05)
+*.bak.*
