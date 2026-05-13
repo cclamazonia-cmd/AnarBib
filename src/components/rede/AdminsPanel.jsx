@@ -1,58 +1,58 @@
 // ============================================================================
-// src/components/rede/AdminsPanel.jsx
+// src/components/rede/AdminsPanel.jsx — Refonte E.4.a v0.3
 // ============================================================================
 //
-// Composant qui remplace l'ancien onglet "admins" de RedePage.
-// Affiche la liste des administradores actifs du réseau et permet :
+// Onglet "Administradores" de RedePage. v0.3 : la source de donnees est
+// la table dediee network_administrators (transversale, sans library_id,
+// sans role). On consomme via la vue api.network_administrators_public_v1
+// qui expose les colonnes minimales pour l'affichage public.
 //
-//   - À tout admin actif : promouvoir un staff existant en administrador
-//     (via fn_team_promote_to_administrador, ancré sur une lib choisie).
-//   - À tout admin actif : quitter ses fonctions d'admin (via le menu
-//     Actions ▾ sur sa propre ligne — réutilise <TeamActionsMenu /> +
-//     <TeamActionModal />). Si dernier admin, exige saisie de la phrase.
+// E.4.a (ce paquet) : adapter la source de donnees + retirer le code
+// obsolete (PromoteAdminModal, fn_team_promote_to_administrador deprecie
+// en D.8). Le bouton "Propor cooptacao" est un placeholder qui sera cable
+// en E.4.b avec un vrai modal de proposition (RPC fn_network_admin_propose_
+// cooptation, D.5).
 //
-// PAS DE suspend/remove sur les autres admins — décision politique B2 :
-// la suspension/retrait d'un admin par un autre est un acte politique
-// extrêmement rare qui mérite une décision collective hors-app
-// (assemblée, vote du réseau). Sera traité en B3 si le besoin émerge.
+// E.4.b/c (a venir) : ajout des modals cooptation/retrait collectif, du
+// menu d'actions par admin (self-quit / propose-removal), et de la section
+// "Propostas em curso".
+//
+// Doctrine v0.3 :
+//   - admin reseau = statut transversal (pas de library_id, pas de role)
+//   - pas de promotion/retrait unilateral : tout passe par cooptation par
+//     unanimite (D.5) ou retrait collectif par unanimite + carence 7j (D.6)
+//   - le badge <NetworkAdminBadge /> identifie visuellement le statut
 //
 // ============================================================================
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
-import { availableTeamActions } from '@/lib/roles';
-import TeamActionsMenu from '@/components/team/TeamActionsMenu';
-import TeamActionModal from '@/components/team/TeamActionModal';
-import PromoteAdminModal from './PromoteAdminModal';
+import NetworkAdminBadge from './NetworkAdminBadge';
 
 export default function AdminsPanel() {
   const { user } = useAuth();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
 
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [pendingAction, setPendingAction] = useState(null);
-  const [promoteOpen, setPromoteOpen] = useState(false);
-  const [toast, setToast] = useState(null);
 
-  // ── Chargement via la RPC fn_team_list_memberships ──
-  // (réutilise l'existant : la RPC retourne tous les staff du réseau pour
-  // un admin, on filtre côté client sur role = administrador active)
+  // ── Chargement via la vue api.network_administrators_public_v1 ──
+  // Cette vue expose user_id, public_id, first_name, last_name, email,
+  // coopted_at, last_seen_at. RLS filtre : visible aux authentifies.
   const loadAdmins = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const { data, error: qErr } = await supabase.rpc('fn_team_list_memberships', {
-        p_scope: 'network',
-        p_library_id: null,
-      });
+      const { data, error: qErr } = await supabase
+        .schema('api')
+        .from('network_administrators_public_v1')
+        .select('user_id, public_id, first_name, last_name, email, coopted_at, last_seen_at')
+        .order('coopted_at', { ascending: true });
       if (qErr) throw qErr;
-      const adminMemberships = (data || [])
-        .filter(m => m.role === 'administrador' && m.status === 'active');
-      setAdmins(adminMemberships);
+      setAdmins(data || []);
     } catch (err) {
       console.warn('AdminsPanel loadAdmins:', err);
       setError(err.message || String(err));
@@ -63,33 +63,13 @@ export default function AdminsPanel() {
 
   useEffect(() => { loadAdmins(); }, [loadAdmins]);
 
-  // Auto-dismiss toast après 4s
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 4000);
-    return () => clearTimeout(timer);
-  }, [toast]);
-
-  // ── Handlers ────────────────────────────────────────
-  const handleActionSelected = useCallback((membership, actionDescriptor) => {
-    setPendingAction({ membership, action: actionDescriptor });
+  // ── Placeholder bouton "Propor cooptacao" ──
+  // E.4.b cablera ce handler sur un modal <ProposeCooptationModal /> qui
+  // appellera la RPC fn_network_admin_propose_cooptation (D.5).
+  const handleProposeCooptationClick = useCallback(() => {
+    // eslint-disable-next-line no-alert
+    alert('Funcionalidade em desenvolvimento. Disponivel no proximo paquet E.4.b.');
   }, []);
-
-  const handleActionSuccess = useCallback((result) => {
-    setToast({
-      text: result.warning === 'last_administrador_left'
-        ? t({ id: 'team.toast.lastAdminLeft' })
-        : t({ id: 'team.toast.success' }),
-      kind: 'ok',
-    });
-    loadAdmins();
-  }, [loadAdmins, t]);
-
-  const handlePromoteSuccess = useCallback(() => {
-    setToast({ text: t({ id: 'team.toast.adminPromoted' }), kind: 'ok' });
-    loadAdmins();
-    setPromoteOpen(false);
-  }, [loadAdmins, t]);
 
   // ── Rendu ───────────────────────────────────────────
   if (error) {
@@ -102,31 +82,25 @@ export default function AdminsPanel() {
 
   return (
     <div className="ab-admins-panel">
-      {/* ── Toast ── */}
-      {toast && (
-        <div className={`ab-team-toast ab-team-toast--${toast.kind}`}>
-          {toast.text}
-        </div>
-      )}
 
       {/* ── Intro ── */}
       <div style={{ marginBottom: 14 }}>
         <h3 style={{ margin: '0 0 4px' }}>
-          {t({ id: 'rede.admins.title' }, { count: admins.length })}
+          {t({ id: 'rede.admins.title' })} ({admins.length})
         </h3>
         <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
           {t({ id: 'rede.admins.subtitle' })}
         </div>
       </div>
 
-      {/* ── Action : promouvoir ── */}
+      {/* ── Action : proposer cooptacao (placeholder E.4.a) ── */}
       <div style={{ marginBottom: 16 }}>
         <button
           type="button"
           className="cat-btn primary"
-          onClick={() => setPromoteOpen(true)}
+          onClick={handleProposeCooptationClick}
         >
-          {t({ id: 'rede.admins.promoteCta' })}
+          {t({ id: 'rede.cooptation.propose.cta' })}
         </button>
       </div>
 
@@ -145,73 +119,46 @@ export default function AdminsPanel() {
 
       {!loading && admins.length > 0 && (
         <div className="ab-team-list">
-          {admins.map((m, i) => (
+          {admins.map((a, i) => (
             <AdminRow
-              key={m.id}
-              membership={m}
+              key={a.user_id}
+              admin={a}
               index={i}
-              isCurrentUser={m.user_id === user?.id}
-              currentUserId={user?.id}
-              onActionSelected={handleActionSelected}
+              isCurrentUser={a.user_id === user?.id}
+              locale={locale}
             />
           ))}
         </div>
-      )}
-
-      {/* ── Modale d'action (quitter ses fonctions admin) ── */}
-      {pendingAction && (
-        <TeamActionModal
-          isOpen={true}
-          onClose={() => setPendingAction(null)}
-          onSuccess={handleActionSuccess}
-          onError={(r) => console.warn('AdminsPanel action error:', r)}
-          action={pendingAction.action}
-          membership={pendingAction.membership}
-          currentUserId={user?.id}
-        />
-      )}
-
-      {/* ── Modale de promotion ── */}
-      {promoteOpen && (
-        <PromoteAdminModal
-          isOpen={true}
-          onClose={() => setPromoteOpen(false)}
-          onSuccess={handlePromoteSuccess}
-        />
       )}
     </div>
   );
 }
 
 // ────────────────────────────────────────────────────────────
-// AdminRow : ligne d'admin avec menu Actions (uniquement sur soi-même)
+// AdminRow E.4.a : ligne simplifiee (badge + identite + date)
+// Le menu d'actions (self-quit, propose-removal) sera ajoute en E.4.b/c
+// avec les modals correspondants (cooptation, retrait collectif).
 // ────────────────────────────────────────────────────────────
 
-function AdminRow({ membership: m, index, isCurrentUser, currentUserId, onActionSelected }) {
+function AdminRow({ admin: a, index, isCurrentUser, locale }) {
   const { formatMessage: t } = useIntl();
-  const p = m.profiles || {};
-  const name = [p.first_name, p.last_name].filter(Boolean).join(' ')
-    || p.email
+
+  const name = [a.first_name, a.last_name].filter(Boolean).join(' ')
+    || a.email
     || t({ id: 'team.unnamedMember' });
-  const memberSince = m.created_at
-    ? new Date(m.created_at).toLocaleDateString()
+
+  const cooptedDate = a.coopted_at
+    ? new Date(a.coopted_at).toLocaleDateString(locale)
     : null;
 
-  // Calcul des actions disponibles (uniquement sur soi-même : quit_admin_functions)
-  const actions = useMemo(() => availableTeamActions({
-    observerRole: 'administrador',
-    observerUserId: currentUserId,
-    targetRole: m.role,
-    targetUserId: m.user_id,
-    targetStatus: m.status,
-    targetHasPendingRemoval: false,
-    scope: 'network',
-  }), [currentUserId, m.role, m.user_id, m.status]);
+  const lastSeenDate = a.last_seen_at
+    ? new Date(a.last_seen_at).toLocaleDateString(locale)
+    : null;
 
   return (
     <div
       className="ab-team-row"
-      data-status={m.status}
+      data-admin-reseau="true"
       style={{
         padding: '12px 14px',
         background: index % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent',
@@ -232,26 +179,18 @@ function AdminRow({ membership: m, index, isCurrentUser, currentUserId, onAction
           )}
         </div>
         <div className="ab-team-row__meta">
-          {p.email && <span>{p.email}</span>}
-          {m.libraries && (
-            <span>{' · '}{m.libraries.short_name || m.libraries.name}</span>
+          {a.email && <span>{a.email}</span>}
+          {a.public_id && <span>{' · '}{a.public_id}</span>}
+          {cooptedDate && (
+            <span>{' · '}{t({ id: 'team.memberSince' }, { date: cooptedDate })}</span>
           )}
-          {memberSince && (
-            <span>{' · '}{t({ id: 'team.memberSince' }, { date: memberSince })}</span>
+          {lastSeenDate && (
+            <span>{' · '}{`vu ${lastSeenDate}`}</span>
           )}
         </div>
       </div>
       <div className="ab-team-row__badges">
-        <span className="cat-pill info" style={{ fontSize: '.7rem' }}>
-          {t({ id: 'roles.administrador' })}
-        </span>
-        <span className="cat-pill ok" style={{ fontSize: '.7rem' }}>
-          {t({ id: 'team.status.active' })}
-        </span>
-        <TeamActionsMenu
-          actions={actions}
-          onSelectAction={(a) => onActionSelected(m, a)}
-        />
+        <NetworkAdminBadge />
       </div>
     </div>
   );

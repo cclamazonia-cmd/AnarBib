@@ -18,7 +18,12 @@ const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 
 export default function RedePage() {
   const { user } = useAuth();
-  const { role } = useLibrary();
+  // E.4.a : isNetworkAdmin vient de LibraryContext enrichi en E.3.
+  // role local reste utilise pour les composants enfants si besoin, mais
+  // la garde isAdmin de RedePage repose desormais sur isNetworkAdmin
+  // (doctrine v0.3 : Rede est le perimetre des admins reseau, pas des
+  // admins locaux).
+  const { role, isNetworkAdmin } = useLibrary();
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.network' }));
 
@@ -46,7 +51,11 @@ export default function RedePage() {
     { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
   ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
-  const isAdmin = role === 'administrador';
+  // E.4.a : garde stricte v0.3. Seuls les admins reseau actifs accedent
+  // a RedePage. Les admins locaux (role='administrador' dans ulm) qui ne
+  // seraient pas admins reseau sont exclus — leur rang reste actif (en
+  // attente du paquet F qui supprime le role 'administrador' local).
+  const isAdmin = isNetworkAdmin;
 
   const [tab, setTab] = useState('overview');
   const [msg, setMsg] = useState({ text: '', kind: '' });
@@ -59,11 +68,11 @@ export default function RedePage() {
   const [reqFilter, setReqFilter] = useState('');
   const [selectedReq, setSelectedReq] = useState(null);
   const [reviewNote, setReviewNote] = useState('');
-  // allMembers reste chargé : utilisé par l'onglet "admins" (filtre des
-  // administradores, addAdmin, removeAdmin). L'onglet "members" affiche
-  // désormais <TeamPanel /> qui charge ses propres données.
-  const [allMembers, setAllMembers] = useState([]);
-  const [newAdminEmail, setNewAdminEmail] = useState('');
+  // E.4.a : allMembers, newAdminEmail et l'agregation distincte staff/reader
+  // au niveau reseau ont ete supprimes. AdminsPanel charge maintenant ses
+  // propres donnees via api.network_administrators_public_v1. Les stats
+  // staff/reader globales viennent toujours de l'agregation via
+  // user_library_memberships (preserve dans loadAll).
 
   // ── Load ────────────────────────────────────────────────
   const loadAll = useCallback(async () => {
@@ -141,13 +150,10 @@ export default function RedePage() {
       const { data: reqData } = await supabase.from('library_requests').select('*').order('created_at', { ascending: false });
       setRequests(reqData || []);
 
-      // 4. All members (filtré sur status='active' — exclut pending_removal,
-      // removed, inactive, suspended introduits par la spec gouvernance)
-      const { data: memData } = await supabase.from('user_library_memberships')
-        .select('user_id, role, status, library_id, is_primary, created_at, libraries(name, slug), profiles:user_id(email, first_name, last_name)')
-        .eq('status', 'active')
-        .order('role');
-      setAllMembers(memData || []);
+      // E.4.a : suppression du SELECT memData / setAllMembers. AdminsPanel
+      // (onglet "admins") consomme maintenant directement
+      // api.network_administrators_public_v1, donc le chargement reseau-wide
+      // des memberships n'est plus necessaire ici.
 
     } catch (err) { console.warn('RedePage loadAll:', err); }
     finally { setLoading(false); }
@@ -168,18 +174,17 @@ export default function RedePage() {
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
 
-  // ATTENTION : changeUserRole fait un UPDATE direct sur user_library_memberships.role
-  // ce qui court-circuite les RPCs fn_team_* du Lot 5 (pas d'audit, pas d'event
-  // outbox, pas de mail militant aux concerné·es). Conservée temporairement
-  // pour l'onglet "admins" qui n'a pas encore migré. À refondre en Phase B
-  // de gouvernance avec les RPCs propres.
-  async function changeUserRole(userId, libraryId, newRole) {
-    try {
-      await supabase.from('user_library_memberships').update({ role: newRole }).eq('user_id', userId).eq('library_id', libraryId);
-      setMsg({ text: t({id:'common.dataSaved'}), kind: 'ok' });
-      await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
-  }
+  // E.4.a : suppression de changeUserRole / addAdmin / removeAdmin.
+  // Ces fonctions faisaient des UPDATE directs sur user_library_memberships.role
+  // pour gerer l'ancien onglet "admins" (workflow ante-v0.3). Elles sont
+  // supprimees car :
+  //   1. Le role 'administrador' local est deprecie (D.8)
+  //   2. L'onglet "admins" est maintenant gere par <AdminsPanel /> qui
+  //      consomme la table network_administrators v0.3
+  //   3. La cooptation/retrait se fait via RPCs fn_network_admin_*
+  //      (D.5 / D.6), pas par UPDATE direct
+  // toggleLibraryActive reste : c'est une action distincte (activation
+  // d'une biblio, pas de role utilisateur).
 
   async function toggleLibraryActive(libId, currentState) {
     if (!confirm(currentState ? t({ id: 'rede.deactivateConfirm' }) : t({ id: 'rede.reactivateConfirm' }))) return;
@@ -188,19 +193,6 @@ export default function RedePage() {
       setMsg({ text: currentState ? t({id:'biblioteca.deactivated'}) : t({id:'biblioteca.reactivated'}), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
-  }
-
-  async function addAdmin() {
-    if (!newAdminEmail.trim()) { setMsg({ text: t({ id: 'rede.admins.emailRequired' }), kind: 'error' }); return; }
-    const member = allMembers.find(m => m.profiles?.email?.toLowerCase() === newAdminEmail.trim().toLowerCase());
-    if (!member) { setMsg({ text: t({ id: 'rede.admins.userNotFound' }), kind: 'error' }); return; }
-    await changeUserRole(member.user_id, member.library_id, 'administrador');
-    setNewAdminEmail('');
-  }
-
-  async function removeAdmin(userId, libraryId) {
-    if (!confirm(t({ id: 'rede.admins.removeConfirm' }))) return;
-    await changeUserRole(userId, libraryId, 'coordenador');
   }
 
   // ── Styles ──────────────────────────────────────────────
@@ -224,7 +216,6 @@ export default function RedePage() {
     <Footer /></PageShell>
   );
 
-  const admins = allMembers.filter(m => m.role === 'administrador');
   const filteredReqs = reqFilter ? requests.filter(r => r.request_status === reqFilter) : requests;
 
   return (
@@ -395,15 +386,10 @@ export default function RedePage() {
           </div>
         )}
 
-        {/* ═══ 5. ADMINISTRADORES ═════════════════════ */}
-        {/* ═══ 5. ADMINISTRADORES (Phase B2) ══════════════════ */}
-        {/* Phase B2 (07/05/2026) : refonte complète de l'onglet admins.
-            L'ancien code (addAdmin/removeAdmin via UPDATE direct) est
-            remplacé par <AdminsPanel /> qui utilise les RPCs fn_team_*
-            (promote_to_administrador, self_demote depuis admin avec
-            garde-fou last admin).
-            La fonction changeUserRole() reste dans ce fichier mais
-            n'est plus appelée nulle part — à supprimer en cleanup futur. */}
+        {/* ═══ 5. ADMINISTRADORES (v0.3) ══════════════════════ */}
+        {/* E.4.a (13/05/2026) : nettoyage Phase B2. AdminsPanel consomme
+            maintenant la source v0.3 (api.network_administrators_public_v1).
+            Cooptation et retrait collectif suivent en E.4.b/c. */}
         {tab === 'admins' && (
           <AdminsPanel />
         )}
