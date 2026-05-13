@@ -4,18 +4,33 @@
 //
 // Helpers centralisés pour la hiérarchie des rôles AnarBib.
 //
-// Hiérarchie (du moins au plus de droits) :
+// Hiérarchie locale (du moins au plus de droits) :
 //   - reader        : lecteur·rice ordinaire
 //   - librarian     : bibliothécaire
-//   - coordenador   : coordinateur·rice (per-library)
-//   - administrador : admin AnarBib cross-biblio
+//   - coordenador   : coordinateur·rice (per-library) — sommet de la hiérarchie
+//                     locale depuis F.1 (suppression du role 'administrador').
+//
+// L'admin réseau (cross-biblio) est désormais un concept séparé, transverse,
+// stocké dans la table network_administrators et exposé par LibraryContext
+// via le flag booléen isNetworkAdmin. Les helpers de permission liés au
+// réseau prennent ce flag en argument, pas le rôle local.
 //
 // Convention : tous les helpers acceptent role=null/undefined sans crasher
 // (retournent false). Permet d'appeler en sécurité même si le contexte
 // n'a pas encore chargé le rôle.
+//
+// F.4 v0.3 (13/05/2026) : finalisation chantier admin réseau v0.3.
+//   - Suppression isAdmin(role) (le role local 'administrador' n'existe
+//     plus depuis F.1, schéma + fonctions DB nettoyées en F.2.bis et F.3).
+//   - Suppression canManageNetworkTeam(role) (mort code post-F.1).
+//   - canSeeRede prend désormais isNetworkAdmin (booléen) au lieu de role.
+//   - isCoord simplifié (plus de cascade vers isAdmin).
+//   - roleSortOrder : retrait de 'administrador' (orphelin).
+//   - availableTeamActions : retrait du bloc 'quit_admin_functions' (mort
+//     code post-F.3) + retrait du garde-fou targetRole='administrador'.
 // ============================================================================
 
-// ── Tests de rôle hiérarchiques (cumulatifs) ─────────────────
+// ── Tests de rôle hiérarchiques (cumulatifs) ─────────────────────
 
 export function isReader(role) {
   return role === 'reader' || isLibrarian(role);
@@ -26,14 +41,10 @@ export function isLibrarian(role) {
 }
 
 export function isCoord(role) {
-  return role === 'coordenador' || isAdmin(role);
+  return role === 'coordenador';
 }
 
-export function isAdmin(role) {
-  return role === 'administrador';
-}
-
-// ── Permissions par page de navigation ───────────────────────
+// ── Permissions par page de navigation ──────────────────────────
 
 export function canSeeCatalog(_role) { return true; }
 export function canSeeAccount(role) { return Boolean(role); }
@@ -41,17 +52,20 @@ export function canSeePainel(role) { return isLibrarian(role); }
 export function canSeeCatalogacao(role) { return isLibrarian(role); }
 export function canSeeImportacoes(role) { return isCoord(role); }
 export function canSeeBiblioteca(role) { return isCoord(role); }
-export function canSeeRede(role) { return isAdmin(role); }
 
-// ── Permissions de gouvernance d'équipe ──────────────────────
+// canSeeRede : prend isNetworkAdmin (booléen depuis LibraryContext),
+// PAS le role local. Doctrine v0.3 : la page Rede est le périmètre des
+// admins réseau, pas des admins locaux (qui n'existent plus).
+export function canSeeRede(isNetworkAdmin) { return Boolean(isNetworkAdmin); }
+
+// ── Permissions de gouvernance d'équipe ─────────────────────────
 
 export function canManageTeam(role) { return isCoord(role); }
-export function canManageNetworkTeam(role) { return isAdmin(role); }
 
-// ── Helpers d'affichage ──────────────────────────────────────
+// ── Helpers d'affichage ─────────────────────────────────────────
 
 export function roleSortOrder(role) {
-  const order = { administrador: 4, coordenador: 3, librarian: 2, reader: 1 };
+  const order = { coordenador: 3, librarian: 2, reader: 1 };
   return order[role] || 0;
 }
 
@@ -75,17 +89,17 @@ export function statusBadgeKind(status) {
 // Phase B1 : promote_to_librarian, promote_to_coordenador, self_demote,
 //            suspend, unsuspend
 // Phase B2 : ajout de
-//            - quit_admin_functions    (self uniquement, sur ligne admin)
-//            - request_remove          (sur staff non-admin actif)
-//            - cancel_remove           (sur staff non-admin pending_removal)
+//            - request_remove          (sur staff actif)
+//            - cancel_remove           (sur staff pending_removal)
+//
+// F.4 v0.3 : suppression de l'action 'quit_admin_functions' (le role
+// local 'administrador' n'existe plus depuis F.1). L'auto-retrait d'un
+// admin réseau passe désormais par fn_network_admin_self_remove (RPC
+// dédiée appelée depuis AdminsPanel).
 //
 // Conventions :
-//   - Hors action 'quit_admin_functions', on ne touche PAS aux administradores
-//     via cette UI. La gestion des admins (promotion + retrait) se fait dans
-//     l'onglet admins refondu de RedePage avec un autre composant.
-//   - Self-demote : non-admin uniquement (un coord se rétrograde en librarian).
-//     Pour les admins, c'est 'quit_admin_functions' qui prend la suite (modale
-//     spécifique avec confirmation renforcée last admin).
+//   - Self-demote : un coord se rétrograde en librarian (dans le contexte
+//     library uniquement).
 //   - Hiérarchie stricte : un coord ne peut pas modifier un autre coord.
 //   - Tout est validé côté DB par les RPCs SECURITY DEFINER.
 
@@ -121,32 +135,6 @@ export function availableTeamActions(ctx) {
 
   // ─── Cas particulier : actions sur soi-même ───
   if (isSelf) {
-    // Filtre par scope (dual-role admin/coord, fix 07/05/2026 matin)
-    // ----------------------------------------------------------------
-    // Avec le modèle dual-role validé politiquement :
-    //   - administrador AnarBib et coordenador d'une lib sont deux
-    //     délégations DISTINCTES, matérialisées par 2 memberships séparés.
-    //   - Chaque action doit s'afficher dans le bon contexte UI :
-    //       * quit_admin_functions  → /rede uniquement (scope='network')
-    //       * self_demote (coord→librarian) → /biblioteca (scope='library')
-    //
-    // Hors de ces contextes, on n'affiche rien sur la ligne soi-même
-    // (l'utilisateur·rice doit aller dans le bon onglet pour agir).
-
-    // Phase B2 : un admin peut quitter ses fonctions d'admin
-    // → uniquement dans le contexte réseau (RedePage onglet Admins)
-    if (
-      targetRole === 'administrador'
-      && targetStatus === 'active'
-      && scope === 'network'
-    ) {
-      actions.push({
-        action: 'quit_admin_functions',
-        label: 'team.action.quitAdmin',
-        kind: 'warning',
-        requiresReason: false,
-      });
-    }
     // self-demote : un coord se rétrograde en librarian
     // → uniquement dans le contexte de la lib (BibliotecaPage onglet équipe)
     if (
@@ -165,11 +153,7 @@ export function availableTeamActions(ctx) {
     return actions;
   }
 
-  // ─── Garde-fou admin : on ne touche pas aux admin via cette UI ───
-  // (la gestion des admins se fait dans l'onglet admins refondu)
-  if (targetRole === 'administrador') return actions;
-
-  // ─── À partir d'ici : observer ≠ target, target n'est pas admin ───
+  // ─── À partir d'ici : observer ≠ target ───
 
   // Hiérarchie stricte : un coord ne peut agir que sur reader/librarian
   const targetRank = roleSortOrder(targetRole);

@@ -41,7 +41,7 @@ export function PageShell({ children }) {
 export function Topbar() {
   const { formatMessage: t } = useIntl();
   const { user, signOut } = useAuth();
-  const { libraryName, librarySlug, role } = useLibrary();
+  const { libraryName, librarySlug, role, isNetworkAdmin } = useLibrary();
   const location = useLocation();
 
   const isActive = (path) => location.pathname.startsWith(path);
@@ -117,7 +117,7 @@ export function Topbar() {
         )}
 
         {/* ── Groupe 4 : administrador AnarBib uniquement (Rede) ── */}
-        {canSeeRede(role) && (
+        {canSeeRede(isNetworkAdmin) && (
           <>
             <span className="ab-topbar__sep" aria-hidden="true">|</span>
             <Link to="/rede" className={isActive('/rede') ? 'active' : ''}>
