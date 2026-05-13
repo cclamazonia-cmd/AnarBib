@@ -14,10 +14,18 @@
 //   - suspendMember, unsuspendMember
 //
 // Phase B2 (cette version) :
-//   - quitAdminFunctions  : self-demote depuis admin avec garde-fou last admin
-//   - promoteToAdministrador : promotion d'un staff existant en admin
 //   - requestRemoveMember : retrait avec carence 7j (raison obligatoire)
 //   - cancelRemoveMember  : annule le retrait pendant la carence
+//
+// F.3 v0.3 (13/05/2026) : suppression des wrappers obsoletes lies au role
+// local 'administrador' supprime en F.1 :
+//   - LAST_ADMIN_CONFIRM_PHRASE export (plus utilise)
+//   - quitAdminFunctions wrapper (la branche A de fn_team_self_demote a
+//     ete supprimee en F.3 backend)
+//   - promoteToAdministrador wrapper (RPC depreciee en D.8)
+//
+// L'auto-retrait d'un admin reseau passe desormais par les RPC
+// fn_network_admin_* (cf. AdminsPanel et modals collectiveRemoval).
 //
 // Convention : chaque mutation retourne { success: bool, error?: string,
 // data?: any }. Le caller décide quoi faire (toast, refresh, fermer modale).
@@ -25,8 +33,6 @@
 
 import { useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-
-export const LAST_ADMIN_CONFIRM_PHRASE = 'JE FERME LA GOUVERNANCE ANARBIB';
 
 export function useTeamMutations() {
   const [loading, setLoading] = useState(false);
@@ -37,23 +43,13 @@ export function useTeamMutations() {
     try {
       const { data, error } = await supabase.rpc(rpcName, params);
       if (error) {
-        // Détecter spécifiquement le code last_admin_lockdown
-        const msg = error.message || '';
-        if (msg.includes('last_admin_lockdown')) {
-          return {
-            success: false,
-            error: 'last_admin_lockdown',
-            message: msg,
-          };
-        }
         return {
           success: false,
           error: error.code || 'rpc_error',
-          message: msg || 'Erreur RPC inconnue',
+          message: error.message || 'Erreur RPC inconnue',
         };
       }
       // Format Lot 5 : { ok: true, ... } ou { success: true, ... }
-      // (les RPCs anciennes utilisent 'ok', les nouvelles 'success')
       if (data && typeof data === 'object') {
         if ('ok' in data) {
           return { success: data.ok, ...data };
@@ -74,7 +70,7 @@ export function useTeamMutations() {
     }
   }, []);
 
-  // ─── Phase B1 : promotions ────────────────────────────
+  // ─── Phase B1 : promotions ─────────────────────────────────────────────
   const promoteToLibrarian = useCallback(
     (userId, libraryId) => callRpc('fn_team_promote_to_librarian', {
       p_user_id: userId,
@@ -91,7 +87,7 @@ export function useTeamMutations() {
     [callRpc]
   );
 
-  // ─── Phase B1 : self-demote (non-admin) ───────────────
+  // ─── Phase B1 : self-demote ─────────────────────────────────────────────
   const selfDemote = useCallback(
     (libraryId, targetRole = 'librarian') => callRpc('fn_team_self_demote', {
       p_library_id: libraryId,
@@ -100,7 +96,7 @@ export function useTeamMutations() {
     [callRpc]
   );
 
-  // ─── Phase B1 : suspension ────────────────────────────
+  // ─── Phase B1 : suspension ─────────────────────────────────────────────
   const suspendMember = useCallback(
     (userId, libraryId, role, reason) => callRpc('fn_team_suspend_member', {
       p_user_id: userId,
@@ -120,31 +116,7 @@ export function useTeamMutations() {
     [callRpc]
   );
 
-  // ─── Phase B2 : quitter ses fonctions d'admin ─────────
-  // Wrapper qui appelle fn_team_self_demote avec le 3ème paramètre.
-  // Si le caller n'est pas le dernier admin, confirmPhrase peut être null.
-  // Si le caller est le dernier admin, confirmPhrase doit valoir
-  // LAST_ADMIN_CONFIRM_PHRASE exactement (sinon la DB renvoie last_admin_lockdown).
-  const quitAdminFunctions = useCallback(
-    (libraryId, confirmPhrase = null, targetRole = 'librarian') =>
-      callRpc('fn_team_self_demote', {
-        p_library_id: libraryId,
-        p_target_role: targetRole,
-        p_confirm_close_governance: confirmPhrase,
-      }),
-    [callRpc]
-  );
-
-  // ─── Phase B2 : promotion administrador ───────────────
-  const promoteToAdministrador = useCallback(
-    (userId, libraryId) => callRpc('fn_team_promote_to_administrador', {
-      p_user_id: userId,
-      p_library_id: libraryId,
-    }),
-    [callRpc]
-  );
-
-  // ─── Phase B2 : retraits avec carence 7j ──────────────
+  // ─── Phase B2 : retraits avec carence 7j ─────────────────────────────
   const requestRemoveMember = useCallback(
     (userId, libraryId, role, reason) => callRpc('fn_team_request_remove_member', {
       p_user_id: userId,
@@ -173,8 +145,6 @@ export function useTeamMutations() {
     suspendMember,
     unsuspendMember,
     // Phase B2
-    quitAdminFunctions,
-    promoteToAdministrador,
     requestRemoveMember,
     cancelRemoveMember,
   };

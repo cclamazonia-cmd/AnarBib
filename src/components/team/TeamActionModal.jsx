@@ -8,15 +8,13 @@
 //
 // Phase B1 actions : promote_to_librarian, promote_to_coordenador,
 //                    self_demote, suspend, unsuspend
-// Phase B2 actions : quit_admin_functions, request_remove, cancel_remove
-//                    (la promotion administrador a sa propre modale dédiée
-//                     dans AdminsPanel)
+// Phase B2 actions : request_remove, cancel_remove
 //
-// Cas particulier "quit_admin_functions" :
-//   - Le composant interroge la DB pour savoir si l'utilisateur·rice est le
-//     DERNIER admin actif du réseau.
-//   - Si oui, exige la saisie exacte de 'JE FERME LA GOUVERNANCE ANARBIB'.
-//   - Sinon, demande une confirmation simple renforcée.
+// F.3 v0.3 (13/05/2026) : suppression de l'action 'quit_admin_functions'
+// (devenue obsolete : le role local 'administrador' a ete supprime en F.1,
+// l'auto-retrait d'un admin reseau passe par fn_network_admin_self_remove).
+// Suppression aussi de la detection last admin via la phrase rituelle
+// 'JE FERME LA GOUVERNANCE ANARBIB'.
 //
 // Props :
 //   - isOpen        : bool
@@ -31,9 +29,8 @@
 
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import { supabase } from '@/lib/supabase';
 import Modal from '@/components/ui/Modal';
-import { useTeamMutations, LAST_ADMIN_CONFIRM_PHRASE } from '@/lib/teamMutations';
+import { useTeamMutations } from '@/lib/teamMutations';
 
 export default function TeamActionModal({
   isOpen,
@@ -47,60 +44,15 @@ export default function TeamActionModal({
   const { formatMessage: t } = useIntl();
   const mutations = useTeamMutations();
   const [reason, setReason] = useState('');
-  const [confirmPhrase, setConfirmPhrase] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const [isLastAdmin, setIsLastAdmin] = useState(null); // null = en cours, true/false
-  const [adminCheckLoading, setAdminCheckLoading] = useState(false);
 
   // Reset interne à chaque ouverture
   useEffect(() => {
     if (isOpen) {
       setReason('');
-      setConfirmPhrase('');
       setErrorMsg('');
-      setIsLastAdmin(null);
     }
   }, [isOpen]);
-
-  // ── Si action = quit_admin_functions, détecter le cas last admin ──
-  useEffect(() => {
-    if (!isOpen || action?.action !== 'quit_admin_functions') return;
-
-    let cancelled = false;
-    setAdminCheckLoading(true);
-
-    (async () => {
-      try {
-        const { data, error } = await supabase
-          .from('user_library_memberships')
-          .select('user_id', { count: 'exact', head: false })
-          .eq('role', 'administrador')
-          .eq('status', 'active');
-
-        if (cancelled) return;
-
-        if (error) {
-          // En cas d'erreur, on suppose conservativement qu'on est last admin
-          // (fallback safe : demande la confirmation renforcée)
-          setIsLastAdmin(true);
-        } else {
-          // Compter les admins distincts autres que soi-même
-          const distinctOthers = new Set(
-            (data || [])
-              .map(r => r.user_id)
-              .filter(uid => uid !== currentUserId)
-          );
-          setIsLastAdmin(distinctOthers.size === 0);
-        }
-      } catch (_) {
-        if (!cancelled) setIsLastAdmin(true);
-      } finally {
-        if (!cancelled) setAdminCheckLoading(false);
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [isOpen, action, currentUserId]);
 
   if (!isOpen || !action || !membership) return null;
 
@@ -111,17 +63,11 @@ export default function TeamActionModal({
   const libraryName = membership.libraries?.short_name || membership.libraries?.name || '';
 
   // ── Configuration locale par type d'action ──────────
-  const config = buildConfig(action.action, t, isLastAdmin);
+  const config = buildConfig(action.action, t);
 
   // ── Validations locales ─────────────────────────────
-  const phraseValid = action.action !== 'quit_admin_functions'
-    || !isLastAdmin
-    || confirmPhrase === LAST_ADMIN_CONFIRM_PHRASE;
-
   const canSubmit = !mutations.loading
-    && !adminCheckLoading
-    && (!action.requiresReason || reason.trim().length > 0)
-    && phraseValid;
+    && (!action.requiresReason || reason.trim().length > 0);
 
   // ── Submit ──────────────────────────────────────────
   const handleConfirm = async () => {
@@ -129,11 +75,6 @@ export default function TeamActionModal({
 
     if (action.requiresReason && !reason.trim()) {
       setErrorMsg(t({ id: 'team.modal.reason.required' }));
-      return;
-    }
-
-    if (action.action === 'quit_admin_functions' && isLastAdmin && !phraseValid) {
-      setErrorMsg(t({ id: 'team.modal.quitAdmin.invalidPhrase' }));
       return;
     }
 
@@ -147,14 +88,6 @@ export default function TeamActionModal({
         break;
       case 'self_demote':
         result = await mutations.selfDemote(membership.library_id, 'librarian');
-        break;
-      case 'quit_admin_functions':
-        // Si last admin, on passe la phrase ; sinon null (la DB n'en aura pas besoin)
-        result = await mutations.quitAdminFunctions(
-          membership.library_id,
-          isLastAdmin ? confirmPhrase : null,
-          'librarian'
-        );
         break;
       case 'suspend':
         result = await mutations.suspendMember(
@@ -210,53 +143,15 @@ export default function TeamActionModal({
           )}
         </div>
 
-        {/* ── Loading admin check ── */}
-        {action.action === 'quit_admin_functions' && adminCheckLoading && (
-          <div className="ab-team-modal-description">
-            {t({ id: 'common.loading' })}
-          </div>
-        )}
-
         {/* ── Description ── */}
-        {!adminCheckLoading && (
-          <div className={`ab-team-modal-description ab-team-modal-description--${config.kind}`}>
-            {config.description}
-          </div>
-        )}
+        <div className={`ab-team-modal-description ab-team-modal-description--${config.kind}`}>
+          {config.description}
+        </div>
 
         {/* ── Avertissement self-demote ── */}
         {action.action === 'self_demote' && (
           <div className="ab-team-modal-warning">
             {t({ id: 'team.modal.warningSelfDemote' })}
-          </div>
-        )}
-
-        {/* ── Avertissement renforcé last admin ── */}
-        {action.action === 'quit_admin_functions' && isLastAdmin === true && (
-          <div className="ab-team-modal-warning ab-team-modal-warning--strong">
-            {t({ id: 'team.modal.quitAdmin.lastAdminWarning' })}
-          </div>
-        )}
-
-        {/* ── Saisie phrase (last admin uniquement) ── */}
-        {action.action === 'quit_admin_functions' && isLastAdmin === true && (
-          <div className="ab-team-modal-field">
-            <label htmlFor="ab-team-modal-confirm" className="ab-team-modal-label">
-              {t({ id: 'team.modal.quitAdmin.confirmLabel' }, { phrase: LAST_ADMIN_CONFIRM_PHRASE })}
-            </label>
-            <input
-              id="ab-team-modal-confirm"
-              type="text"
-              className="ab-team-modal-input"
-              value={confirmPhrase}
-              onChange={(e) => setConfirmPhrase(e.target.value)}
-              placeholder={LAST_ADMIN_CONFIRM_PHRASE}
-              autoComplete="off"
-              autoFocus
-            />
-            <div className="ab-team-modal-hint">
-              {t({ id: 'team.modal.quitAdmin.hint' })}
-            </div>
           </div>
         )}
 
@@ -285,7 +180,7 @@ export default function TeamActionModal({
                 : 'team.modal.reason.placeholder' })}
               rows={3}
               maxLength={500}
-              autoFocus={action.action !== 'quit_admin_functions'}
+              autoFocus
             />
             <div className="ab-team-modal-hint">
               {t({ id: 'team.modal.reason.hint' })}
@@ -328,9 +223,10 @@ export default function TeamActionModal({
 
 // ────────────────────────────────────────────────────────────
 // Configuration par type d'action
+// (F.3 : retrait du cas 'quit_admin_functions')
 // ────────────────────────────────────────────────────────────
 
-function buildConfig(actionType, t, isLastAdmin) {
+function buildConfig(actionType, t) {
   switch (actionType) {
     case 'promote_to_librarian':
       return {
@@ -355,16 +251,6 @@ function buildConfig(actionType, t, isLastAdmin) {
         confirmLabel: t({ id: 'team.modal.confirm.selfDemote' }),
         kind: 'warning',
         buttonKind: 'secondary',
-      };
-    case 'quit_admin_functions':
-      return {
-        title: t({ id: 'team.modal.title.quitAdmin' }),
-        description: isLastAdmin === true
-          ? t({ id: 'team.modal.description.quitAdminLast' })
-          : t({ id: 'team.modal.description.quitAdmin' }),
-        confirmLabel: t({ id: 'team.modal.confirm.quitAdmin' }),
-        kind: isLastAdmin === true ? 'danger' : 'warning',
-        buttonKind: isLastAdmin === true ? 'warning' : 'secondary',
       };
     case 'suspend':
       return {
