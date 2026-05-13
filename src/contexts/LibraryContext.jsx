@@ -12,7 +12,29 @@ const DEFAULT_CONTEXT = {
   role: null,
 };
 
-const LibraryContext = createContext({ ...DEFAULT_CONTEXT, setLibrary: () => {}, libraries: [] });
+// Hierarchie effective des roles AnarBib v0.3.
+// Ordre croissant : plus le rang est eleve, plus le role est "haut".
+// network_admin domine tous les roles locaux car il est transversal.
+// administrador reste dans la hierarchie tant qu'il n'est pas supprime
+// (deprecie en D.8, suppression prevue au paquet F).
+const ROLE_RANK = {
+  reader: 1,
+  librarian: 2,
+  coordenador: 3,
+  administrador: 4,
+  network_admin: 5,
+};
+
+const STAFF_ROLES = new Set(['librarian', 'coordenador', 'administrador', 'network_admin']);
+
+const LibraryContext = createContext({
+  ...DEFAULT_CONTEXT,
+  setLibrary: () => {},
+  libraries: [],
+  isNetworkAdmin: false,
+  effectiveRole: null,
+  hasStaffAccess: false,
+});
 
 function readFromSession() {
   try { const r = sessionStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : null; }
@@ -34,21 +56,30 @@ function readFromUrl() {
   };
 }
 
+// Calcule le role effectif (max entre role local et statut admin reseau).
+// Renvoie 'network_admin' si admin reseau actif, sinon le role local.
+// null si ni l'un ni l'autre (utilisateur non staff).
+function computeEffectiveRole(localRole, isNetworkAdmin) {
+  if (isNetworkAdmin) return 'network_admin';
+  return localRole || null;
+}
+
+// Determine si l'utilisateur a un acces staff (visible TeamPanel, BibliotecaPage admin, etc.)
+function computeHasStaffAccess(effectiveRole) {
+  return STAFF_ROLES.has(effectiveRole);
+}
+
 export function LibraryProvider({ children }) {
   const { user } = useAuth();
   const [ctx, setCtx] = useState(() => readFromUrl() || readFromSession() || DEFAULT_CONTEXT);
   const [libraries, setLibraries] = useState([]);
+  const [isNetworkAdmin, setIsNetworkAdmin] = useState(false);
 
-  // FIX B.3: depend on user?.id instead of user object reference.
-  // The user object reference changes on every AuthContext re-render
-  // (token refresh, session updates, etc.), causing this effect to
-  // re-fire and refetch user_library_memberships ~6 times per page load.
-  // Using user?.id ensures the effect only re-runs when the actual
-  // user identity changes.
+  // FIX B.3 (conserve E.3) : depend on user?.id instead of user object reference.
   useEffect(() => {
     if (!user) {
       setLibraries([]);
-      // Reset au contexte par défaut quand déconnecté
+      setIsNetworkAdmin(false);
       const def = readFromUrl() || DEFAULT_CONTEXT;
       setCtx(def);
       writeToSession(def);
@@ -56,17 +87,48 @@ export function LibraryProvider({ children }) {
     }
 
     (async () => {
-      const { data, error } = await supabase
-        .from('user_library_memberships')
-        .select('library_id, role, is_primary, libraries(id, slug, name, short_name)')
-        .eq('user_id', user.id)
-        .eq('status', 'active');
+      // E.3 : 2 SELECT en parallele (Promise.all)
+      //   1. memberships locaux (table user_library_memberships)
+      //   2. statut admin reseau (table network_administrators)
+      const [membershipsResult, networkAdminResult] = await Promise.all([
+        supabase
+          .from('user_library_memberships')
+          .select('library_id, role, is_primary, libraries(id, slug, name, short_name)')
+          .eq('user_id', user.id)
+          .eq('status', 'active'),
+        supabase
+          .from('network_administrators')
+          .select('user_id')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .maybeSingle(),
+      ]);
 
-      if (error || !data?.length) return;
+      // Resultat admin reseau (independant des memberships)
+      // maybeSingle retourne data=null si pas de ligne, pas une erreur.
+      if (networkAdminResult.error) {
+        // Cas d'erreur reseau ou RLS : on log et on assume non-admin
+        // (defensif : eviter de laisser un admin par defaut a tort)
+        console.warn('LibraryContext networkAdmin check:', networkAdminResult.error);
+        setIsNetworkAdmin(false);
+      } else {
+        setIsNetworkAdmin(!!networkAdminResult.data);
+      }
+
+      // Resultat memberships (logique existante preservee)
+      const { data, error } = membershipsResult;
+      if (error || !data?.length) {
+        // L'utilisateur peut etre admin reseau sans membership local :
+        // dans ce cas on ne modifie pas le contexte lib (reste DEFAULT_CONTEXT
+        // ou whatever a ete charge precedemment) mais isNetworkAdmin
+        // sera bien a true s'il l'est.
+        setLibraries([]);
+        return;
+      }
 
       setLibraries(data);
 
-      // Vérifier si l'URL force une bibliothèque
+      // Verifier si l'URL force une bibliotheque
       const urlCtx = readFromUrl();
       if (urlCtx && urlCtx.librarySlug !== 'default') {
         const match = data.find(m => m.libraries?.slug === urlCtx.librarySlug);
@@ -85,7 +147,7 @@ export function LibraryProvider({ children }) {
         }
       }
 
-      // Sinon prendre la bibliothèque primary de l'utilisateur
+      // Sinon prendre la bibliotheque primary de l'utilisateur
       const primary = data.find(m => m.is_primary) || data[0];
       if (primary?.libraries) {
         const lib = primary.libraries;
@@ -116,13 +178,27 @@ export function LibraryProvider({ children }) {
     writeToSession(next);
   }, [libraries]);
 
-  // FIX B.3: memoize the context value to avoid creating a new object
-  // reference on every render. Without this, all consumers of useLibrary()
-  // would re-render on every parent re-render, even if ctx/libraries
-  // haven't actually changed.
+  // E.3 : derives memoises a partir de role + isNetworkAdmin
+  const effectiveRole = useMemo(
+    () => computeEffectiveRole(ctx.role, isNetworkAdmin),
+    [ctx.role, isNetworkAdmin]
+  );
+  const hasStaffAccess = useMemo(
+    () => computeHasStaffAccess(effectiveRole),
+    [effectiveRole]
+  );
+
+  // FIX B.3 (conserve E.3) : memoize the context value
   const contextValue = useMemo(
-    () => ({ ...ctx, setLibrary, libraries }),
-    [ctx, setLibrary, libraries]
+    () => ({
+      ...ctx,
+      setLibrary,
+      libraries,
+      isNetworkAdmin,
+      effectiveRole,
+      hasStaffAccess,
+    }),
+    [ctx, setLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess]
   );
 
   return (
@@ -135,3 +211,6 @@ export function LibraryProvider({ children }) {
 export function useLibrary() {
   return useContext(LibraryContext);
 }
+
+// E.3 : exports pour usage externe (tests, gardes hors hook, etc.)
+export { ROLE_RANK, STAFF_ROLES };
