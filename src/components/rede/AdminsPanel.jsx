@@ -114,7 +114,7 @@ export default function AdminsPanel() {
       {/* ── Intro admins actifs ── */}
       <div style={{ marginBottom: 14 }}>
         <h3 style={{ margin: '0 0 4px' }}>
-          {t({ id: 'rede.admins.title' })} ({admins.length})
+          {t({ id: 'rede.admins.title' }, { count: admins.length })}
         </h3>
         <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
           {t({ id: 'rede.admins.subtitle' })}
