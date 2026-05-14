@@ -778,7 +778,7 @@ export default function PanelPage() {
     const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
     const dd = String(tomorrow.getDate()).padStart(2, '0');
     setScheduleTarget(consulta);
-    setScheduleForm({ date: `${yyyy}-${mm}-${dd}`, startsAt: '14:00', endsAt: '', note: '' });
+    setScheduleForm({ date: `${yyyy}-${mm}-${dd}`, startsAt: '14:00', endsAt: '15:00', note: '' });
     setScheduleError('');
   }
 
@@ -792,7 +792,7 @@ export default function PanelPage() {
     if (!scheduleTarget) return;
     const { date, startsAt, endsAt, note } = scheduleForm;
     setScheduleError('');
-    if (!date || !startsAt) {
+    if (!date || !startsAt || !endsAt) {
       setScheduleError(t({ id: 'panel.consultation.schedule.errorRequired' }));
       return;
     }

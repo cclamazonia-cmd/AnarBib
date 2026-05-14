@@ -1680,7 +1680,7 @@
   "panel.consultation.schedule.book": "Documento",
   "panel.consultation.schedule.dateLabel": "Data",
   "panel.consultation.schedule.startsAtLabel": "Ora di inizio",
-  "panel.consultation.schedule.endsAtLabel": "Ora di fine (facoltativa)",
+  "panel.consultation.schedule.endsAtLabel": "Ora di fine",
   "panel.consultation.schedule.noteLabel": "Messaggio per chi legge (facoltativo)",
   "panel.consultation.schedule.notePlaceholder": "Es.: ci troviamo al banco accoglienza. Chiedi di Marie.",
   "panel.consultation.schedule.noteHint": "Questo messaggio sarà incluso nell’e-mail inviata.",

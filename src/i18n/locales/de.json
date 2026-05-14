@@ -1680,7 +1680,7 @@
   "panel.consultation.schedule.book": "Dokument",
   "panel.consultation.schedule.dateLabel": "Datum",
   "panel.consultation.schedule.startsAtLabel": "Startzeit",
-  "panel.consultation.schedule.endsAtLabel": "Endzeit (optional)",
+  "panel.consultation.schedule.endsAtLabel": "Endzeit",
   "panel.consultation.schedule.noteLabel": "Nachricht für die lesende Person (optional)",
   "panel.consultation.schedule.notePlaceholder": "Z.B.: wir treffen uns am Empfang. Frag nach Marie.",
   "panel.consultation.schedule.noteHint": "Diese Nachricht wird in der E-Mail an die lesende Person enthalten sein.",

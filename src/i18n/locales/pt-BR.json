@@ -1680,7 +1680,7 @@
   "panel.consultation.schedule.book": "Documento",
   "panel.consultation.schedule.dateLabel": "Data",
   "panel.consultation.schedule.startsAtLabel": "Hora de início",
-  "panel.consultation.schedule.endsAtLabel": "Hora de término (opcional)",
+  "panel.consultation.schedule.endsAtLabel": "Hora de término",
   "panel.consultation.schedule.noteLabel": "Mensagem para o leitor (opcional)",
   "panel.consultation.schedule.notePlaceholder": "Ex.: nos encontramos no balcão da entrada. Pergunte por Maria.",
   "panel.consultation.schedule.noteHint": "Esta mensagem será incluída no e-mail enviado ao leitor.",

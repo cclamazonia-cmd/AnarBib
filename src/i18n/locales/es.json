@@ -1680,7 +1680,7 @@
   "panel.consultation.schedule.book": "Documento",
   "panel.consultation.schedule.dateLabel": "Fecha",
   "panel.consultation.schedule.startsAtLabel": "Hora de inicio",
-  "panel.consultation.schedule.endsAtLabel": "Hora de fin (opcional)",
+  "panel.consultation.schedule.endsAtLabel": "Hora de fin",
   "panel.consultation.schedule.noteLabel": "Mensaje para la persona lectora (opcional)",
   "panel.consultation.schedule.notePlaceholder": "Ej.: nos encontramos en la recepción. Pregunta por María.",
   "panel.consultation.schedule.noteHint": "Este mensaje se incluirá en el correo enviado a la persona lectora.",

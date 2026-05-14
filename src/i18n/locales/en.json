@@ -1680,7 +1680,7 @@
   "panel.consultation.schedule.book": "Document",
   "panel.consultation.schedule.dateLabel": "Date",
   "panel.consultation.schedule.startsAtLabel": "Start time",
-  "panel.consultation.schedule.endsAtLabel": "End time (optional)",
+  "panel.consultation.schedule.endsAtLabel": "End time",
   "panel.consultation.schedule.noteLabel": "Message for the reader (optional)",
   "panel.consultation.schedule.notePlaceholder": "E.g.: meet me at the front desk. Ask for Marie.",
   "panel.consultation.schedule.noteHint": "This message will be included in the email sent to the reader.",
