@@ -32,6 +32,7 @@ export default function AccountPage() {
   const [profile, setProfile] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
+  const [consultationsHistory, setConsultationsHistory] = useState([]);
   const [renewStatus, setRenewStatus] = useState({});
   const [loans, setLoans] = useState([]);
   const [history, setHistory] = useState([]);
@@ -65,10 +66,11 @@ export default function AccountPage() {
     if (authLoading || !user) return;
     setLoading(true);
     try {
-      const [profileRes, reservRes, consultRes, loansRes, renewStatusRes, histRes, loanHistRes, svcRes] = await Promise.all([
+      const [profileRes, reservRes, consultRes, consultHistRes, loansRes, renewStatusRes, histRes, loanHistRes, svcRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         apiQuery('my_reservations_active_v2'),
         apiQuery('my_consultas_active_v2'),
+        apiQuery('my_consultas_history_v2'),
         apiQuery('emprestimo_itens_ui'),
         apiQuery('my_loans_renewal_status_v1'),
         apiQuery('my_reservations_history_v2'),
@@ -78,6 +80,7 @@ export default function AccountPage() {
       setProfile(profileRes.data);
       setReservations(reservRes.data || []);
       setConsultations(consultRes.data || []);
+      setConsultationsHistory(consultHistRes.data || []);
       setLoans(loansRes.data || []);
       setRenewStatus(Object.fromEntries(
         (renewStatusRes.data || []).map(r => [r.emprestimo_id, r])
@@ -483,6 +486,24 @@ export default function AccountPage() {
     );
   }
 
+  const handleDismissConsultaCancelled = async (c) => {
+    if (!c?.consulta_id) return;
+    try {
+      const { error } = await supabase.rpc('dismiss_consulta_cancelled', {
+        p_consulta_id: c.consulta_id,
+        p_line_nos: [c.line_no || 1],
+        p_note: null
+      });
+      if (error) {
+        console.error('dismiss_consulta_cancelled error:', error);
+        return;
+      }
+      await loadData();
+    } catch (err) {
+      console.error('dismiss_consulta_cancelled exception:', err);
+    }
+  };
+
   const addr = parseAddressText(profile?.address);
   const chips = {
     user: profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || user.email : '—',
@@ -490,7 +511,7 @@ export default function AccountPage() {
     publicId: profile?.public_id || '—',
     created: profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : '—',
     reservas: reservations.length,
-    consultas: consultations.length,
+    consultas: consultations.filter(c => c.status === 'ativa').length,
     emprestimos: loans.filter(l => l.item_status === 'aberto').length,
   };
 
@@ -914,12 +935,12 @@ export default function AccountPage() {
               )}
 
               <h3 className="ab-conta-subsection">{t({ id: 'account.consultations.active' })}</h3>
-              {consultations.length === 0 ? (
+              {consultations.filter(c => c.status === 'ativa').length === 0 ? (
                 <p className="ab-conta-empty">{t({ id: 'account.consultations.empty' })}</p>
               ) : (
                 <div className="ab-conta-items">
-                  {consultations.map((c, i) => (
-                    <div key={i} className="ab-conta-item">
+                  {consultations.filter(c => c.status === 'ativa').map((c, i) => (
+                    <div key={`act-${i}`} className="ab-conta-item">
                       <div className="ab-conta-item__main">
                         <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
                         <span className="ab-conta-item__meta">ref: {c.bib_ref || '—'} · {c.workflow_stage || c.status || '—'}</span>
@@ -927,6 +948,33 @@ export default function AccountPage() {
                     </div>
                   ))}
                 </div>
+              )}
+
+              {consultations.filter(c => c.status === 'cancelada_biblioteca').length > 0 && (
+                <>
+                  <h3 className="ab-conta-subsection" style={{ marginTop: 24 }}>
+                    {t({ id: 'account.consultations.cancelledByLibrary' })}
+                  </h3>
+                  <p className="ab-conta-hint">{t({ id: 'account.consultations.cancelledByLibraryHint' })}</p>
+                  <div className="ab-conta-items">
+                    {consultations.filter(c => c.status === 'cancelada_biblioteca').map((c, i) => (
+                      <div key={`cnx-${i}`} className="ab-conta-item" style={{ borderLeft: '3px solid #f59e0b' }}>
+                        <div className="ab-conta-item__main">
+                          <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
+                          <span className="ab-conta-item__meta">
+                            ref: {c.bib_ref || '—'}
+                            {c.cancelled_at && <> · {new Date(c.cancelled_at).toLocaleDateString()}</>}
+                          </span>
+                        </div>
+                        <div className="ab-conta-item__actions">
+                          <Button variant="secondary" onClick={() => handleDismissConsultaCancelled(c)}>
+                            {t({ id: 'account.consultations.dismissButton' })}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           )}
@@ -1085,13 +1133,55 @@ export default function AccountPage() {
                           <span style={{ fontSize: '.72rem', padding: '2px 8px', borderRadius: 4, fontWeight: 600, background: 'rgba(74,222,128,.12)', color: '#4ade80' }}>
                             {t({ id: 'account.history.loans.completed' })}
                           </span>
+                          <button type="button" style={{ fontSize: '.7rem', color: 'var(--brand-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                            onClick={() => { setLoanHistory(prev => prev.filter((_, idx) => idx !== i)); }}
+                          >{t({ id: 'account.history.hide' })}</button>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
-
+              {/* Paquet 26 L4 (14/05/2026) : section historique des consultas */}
+              <div style={{ marginTop: 24 }}>
+                <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.history.consultations.title' })}</h3>
+                {consultationsHistory.length === 0 ? (
+                  <p className="ab-conta-empty">{t({ id: 'account.history.consultations.empty' })}</p>
+                ) : (
+                  <div className="ab-conta-items">
+                    {consultationsHistory.map((c, i) => {
+                      const stageKey = c.workflow_stage || c.status || '';
+                      const stageLabel = stageKey ? t({ id: `consultation.stage.${stageKey.replace('-','_')}`, defaultMessage: stageKey }) : '—';
+                      const isFinal = ['consultada','cancelada_leitor','cancelada_biblioteca','expirada'].includes(stageKey);
+                      return (
+                        <div key={`ch-${i}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10 }}>
+                          <div className="ab-conta-item__main" style={{ flex: 1 }}>
+                            <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
+                            <span className="ab-conta-item__meta">{c.autor || '—'}{c.editora && ` · ${c.editora}`}{c.ano && ` (${c.ano})`}</span>
+                            <span className="ab-conta-item__meta">
+                              ref: {c.bib_ref || '—'} · {c.library_name || '—'}
+                              {c.requested_at && <> · {t({id:'account.history.consultations.requestedOn'})}: {new Date(c.requested_at).toLocaleDateString()}</>}
+                              {c.consulted_at && <> · {t({id:'account.history.consultations.consultedOn'})}: {new Date(c.consulted_at).toLocaleDateString()}</>}
+                              {c.cancelled_at && <> · {t({id:'account.history.cancelledOn'})}: {new Date(c.cancelled_at).toLocaleDateString()}</>}
+                            </span>
+                          </div>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
+                            <span style={{ fontSize: '.72rem', padding: '2px 8px', borderRadius: 4, fontWeight: 600,
+                              background: isFinal ? 'rgba(255,255,255,.05)' : 'rgba(251,191,36,.12)',
+                              color: isFinal ? 'var(--brand-muted)' : '#fbbf24' }}>
+                              {stageLabel}
+                            </span>
+                            <button type="button" style={{ fontSize: '.7rem', color: 'var(--brand-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                              onClick={() => { setConsultationsHistory(prev => prev.filter((_, idx) => idx !== i)); }}
+                            >{t({ id: 'account.history.hide' })}</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              
               {/* Section historique des reservations (preexistante) */}
               <div style={{ marginTop: 24 }}>
                 <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.history.reservations.title' })}</h3>
