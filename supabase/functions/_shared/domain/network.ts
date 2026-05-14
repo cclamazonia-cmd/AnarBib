@@ -752,6 +752,7 @@ async function handleCollectiveRemovalProposed(payload, ctx, bt) {
     loadProfile(proposedBy)
   ]);
   const targetName = displayName(target) || "?";
+  const proposedName = targetName;
   const proposerName = displayName(proposer) || "?";
 
   // Tous admins actifs sauf proposeur ET target
@@ -776,9 +777,9 @@ async function handleCollectiveRemovalProposed(payload, ctx, bt) {
 
     const subKey = "network.collective_removal_proposed.sub";
     const introKey = "network.collective_removal_proposed.intro";
-    const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-    const tit = tMail(locale, subKey, { targetName });
-    const introHtml = `<p>${tMail(locale, introKey, { targetName, proposerName })}</p>`;
+    const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+    const tit = tMail(locale, subKey, { proposedName });
+    const introHtml = `<p>${tMail(locale, introKey, { proposedName, proposerName })}</p>`;
 
     const details = [
       { label: tMail(locale, "network.collective_removal_proposed.motivation_label"), value: motivationPreview || "—" }
@@ -844,6 +845,7 @@ async function handleCollectiveRemovalVoteCast(payload, ctx, bt) {
     discloseIdentity && voterUserId ? loadProfile(voterUserId) : Promise.resolve(null)
   ]);
   const targetName = displayName(target) || "?";
+  const proposedName = targetName;
   const proposerName = displayName(proposer) || "?";
   const voterName = discloseIdentity && voter ? displayName(voter) : null;
 
@@ -886,9 +888,9 @@ async function handleCollectiveRemovalVoteCast(payload, ctx, bt) {
 
     const subKey = "network.collective_removal_vote_cast.sub";
     const introKey = "network.collective_removal_vote_cast.intro";
-    const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-    const tit = tMail(locale, subKey, { targetName });
-    const introHtml = `<p>${tMail(locale, introKey, { targetName, proposerName })}</p>`;
+    const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+    const tit = tMail(locale, subKey, { proposedName });
+    const introHtml = `<p>${tMail(locale, introKey, { proposedName, proposerName })}</p>`;
 
     // Vote label : "favor"/"against" pour collective removal (différent de cooptation)
     // On utilise les clés network.vote.favorable/opposed comme proxies
@@ -940,6 +942,7 @@ async function handleCollectiveRemovalUnanimous(payload, ctx, bt) {
     loadProfile(proposedBy)
   ]);
   const targetName = displayName(target) || "?";
+  const proposedName = targetName;
   const proposerName = displayName(proposer) || "?";
 
   // Note : à ce stade, le target est encore dans network_administrators avec
@@ -963,8 +966,8 @@ async function handleCollectiveRemovalUnanimous(payload, ctx, bt) {
       const locale = target.preferred_language || null;
       const subKey = "network.collective_removal_unanimous.sub";
       const introKey = "network.collective_removal_unanimous.target_intro";
-      const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-      const tit = tMail(locale, subKey, { targetName });
+      const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+      const tit = tMail(locale, subKey, { proposedName });
       const introHtml = `<p>${tMail(locale, introKey, { targetName, proposerName })}</p>`;
 
       const details = [];
@@ -1004,9 +1007,9 @@ async function handleCollectiveRemovalUnanimous(payload, ctx, bt) {
 
     const subKey = "network.collective_removal_unanimous.sub";
     const introKey = "network.collective_removal_unanimous.intro";
-    const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-    const tit = tMail(locale, subKey, { targetName });
-    const introHtml = `<p>${tMail(locale, introKey, { targetName, proposerName })}</p>`;
+    const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+    const tit = tMail(locale, subKey, { proposedName });
+    const introHtml = `<p>${tMail(locale, introKey, { proposedName, proposerName })}</p>`;
 
     const details = [];
     if (pendingRemovalUntil) {
@@ -1072,6 +1075,7 @@ async function handleCollectiveRemovalCancelled(payload, ctx, bt) {
     loadProfile(cancelledBy)
   ]);
   const targetName = displayName(target) || "?";
+  const proposedName = targetName;
   const proposerName = displayName(proposer) || "?";
   const cancellerName = displayName(canceller) || "?";
 
@@ -1096,8 +1100,8 @@ async function handleCollectiveRemovalCancelled(payload, ctx, bt) {
       const locale = target.preferred_language || null;
       const subKey = "network.collective_removal_cancelled.sub";
       const introKey = "network.collective_removal_cancelled.target_intro";
-      const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-      const tit = tMail(locale, subKey, { targetName });
+      const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+      const tit = tMail(locale, subKey, { proposedName });
       const introHtml = `<p>${tMail(locale, introKey, { targetName })}</p>`;
 
       const details = [];
@@ -1142,9 +1146,9 @@ async function handleCollectiveRemovalCancelled(payload, ctx, bt) {
 
     const subKey = "network.collective_removal_cancelled.sub";
     const introKey = "network.collective_removal_cancelled.intro";
-    const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-    const tit = tMail(locale, subKey, { targetName });
-    const introHtml = `<p>${tMail(locale, introKey, { targetName, cancellerName })}</p>`;
+    const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+    const tit = tMail(locale, subKey, { proposedName });
+    const introHtml = `<p>${tMail(locale, introKey, { proposedName, cancellerName })}</p>`;
 
     const details = [];
     if (cancellationReason) {
@@ -1196,6 +1200,7 @@ async function handleCollectiveRemovalExecuted(payload, ctx, bt) {
     loadProfile(proposedBy)
   ]);
   const targetName = displayName(target) || "?";
+  const proposedName = targetName;
   const proposerName = displayName(proposer) || "?";
 
   // Note : à ce stade, target.status='removed' donc loadActiveNetworkAdmins() ne
@@ -1218,8 +1223,8 @@ async function handleCollectiveRemovalExecuted(payload, ctx, bt) {
       const locale = target.preferred_language || null;
       const subKey = "network.collective_removal_executed.sub";
       const introKey = "network.collective_removal_executed.target_intro";
-      const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-      const tit = tMail(locale, subKey, { targetName });
+      const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+      const tit = tMail(locale, subKey, { proposedName });
       const introHtml = `<p>${tMail(locale, introKey, { targetName })}</p>`;
 
       const details = [{ label: label(locale, "executed_at") || "Date", value: formatDateLocale(executedAt, locale) }];
@@ -1253,9 +1258,9 @@ async function handleCollectiveRemovalExecuted(payload, ctx, bt) {
 
     const subKey = "network.collective_removal_executed.sub";
     const introKey = "network.collective_removal_executed.intro";
-    const sub = `${tMail(locale, subKey, { targetName })} — ${bt}`;
-    const tit = tMail(locale, subKey, { targetName });
-    const introHtml = `<p>${tMail(locale, introKey, { targetName, proposerName })}</p>`;
+    const sub = `${tMail(locale, subKey, { proposedName })} — ${bt}`;
+    const tit = tMail(locale, subKey, { proposedName });
+    const introHtml = `<p>${tMail(locale, introKey, { proposedName, proposerName })}</p>`;
 
     const details = [
       { label: label(locale, "executed_at") || "Date", value: formatDateLocale(executedAt, locale) },
