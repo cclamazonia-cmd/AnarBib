@@ -14,6 +14,7 @@ import PhoneInput from '@/components/forms/PhoneInput';
 import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { getCountryName } from '@/lib/countries';
+import Modal from '@/components/ui/Modal';
 import './PanelPage.css';
 
 // ═══════════════════════════════════════════════════════════
@@ -274,6 +275,11 @@ export default function PanelPage() {
   const [resNote, setResNote] = useState('');
   const [resSchedule, setResSchedule] = useState('');
   const [actionMsg, setActionMsg] = useState('');
+  // Paquet 27.A.4 (5.B) : modal Agender consulta avec date+heure+note.
+  const [scheduleTarget, setScheduleTarget] = useState(null);
+  const [scheduleForm, setScheduleForm] = useState({ date: '', startsAt: '', endsAt: '', note: '' });
+  const [scheduling, setScheduling] = useState(false);
+  const [scheduleError, setScheduleError] = useState('');
 
   // PATCH 08/05/2026 paquet 3B : state pour le formulaire accordion de
   // contre-proposition staff. Un seul form ouvert à la fois (la ligne
@@ -761,6 +767,63 @@ export default function PanelPage() {
       if (error) throw error;
       loadData();
     } catch (e) { alert(t({id:'common.errorPrefix'},{message:e.message})); }
+  }
+
+  // Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta agendada.
+  function openScheduleModal(consulta) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const yyyy = tomorrow.getFullYear();
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const dd = String(tomorrow.getDate()).padStart(2, '0');
+    setScheduleTarget(consulta);
+    setScheduleForm({ date: `${yyyy}-${mm}-${dd}`, startsAt: '14:00', endsAt: '', note: '' });
+    setScheduleError('');
+  }
+
+  function closeScheduleModal() {
+    if (scheduling) return;
+    setScheduleTarget(null);
+    setScheduleError('');
+  }
+
+  async function handleScheduleSubmit() {
+    if (!scheduleTarget) return;
+    const { date, startsAt, endsAt, note } = scheduleForm;
+    setScheduleError('');
+    if (!date || !startsAt) {
+      setScheduleError(t({ id: 'panel.consultation.schedule.errorRequired' }));
+      return;
+    }
+    const todayStr = new Date().toISOString().slice(0, 10);
+    if (date < todayStr) {
+      setScheduleError(t({ id: 'panel.consultation.schedule.errorPastDate' }));
+      return;
+    }
+    if (endsAt && endsAt <= startsAt) {
+      setScheduleError(t({ id: 'panel.consultation.schedule.errorEndBeforeStart' }));
+      return;
+    }
+    if (note && note.length > 300) {
+      setScheduleError(t({ id: 'panel.consultation.schedule.errorNoteTooLong' }));
+      return;
+    }
+    const startsIso = new Date(`${date}T${startsAt}:00`).toISOString();
+    const endsIso = endsAt ? new Date(`${date}T${endsAt}:00`).toISOString() : null;
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || null;
+    setScheduling(true);
+    try {
+      await setConsultaWorkflow(
+        scheduleTarget.consulta_id,
+        scheduleTarget.line_no,
+        'consulta_agendada',
+        note || null,
+        { startsAt: startsIso, endsAt: endsIso, timezone: tz }
+      );
+      setScheduleTarget(null);
+    } finally {
+      setScheduling(false);
+    }
   }
 
   // ── Task builder for trabalho do dia ──────────────────
@@ -1527,7 +1590,7 @@ export default function PanelPage() {
                             <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'em_preparacao')}>{t({id:'panel.table.prepare'})}</button>
                           )}
                           {c.workflow_stage_effective === 'em_preparacao' && (
-                            <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'consulta_agendada')}>{t({ id: 'panel.loan.schedule' })}</button>
+                            <button className="ab-button ab-button--mini" onClick={() => openScheduleModal(c)}>{t({ id: 'panel.loan.schedule' })}</button>
                           )}
                           {c.workflow_stage_effective === 'consulta_agendada' && (
                             <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'consulta_realizada')}>{t({id:'panel.table.completed'})}</button>
@@ -2090,6 +2153,72 @@ export default function PanelPage() {
         </div>
       </div>
       <Footer />
+          {/* Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta */}
+      <Modal
+        isOpen={!!scheduleTarget}
+        onClose={closeScheduleModal}
+        title={t({ id: 'panel.consultation.schedule.title' })}
+        size="medium"
+      >
+        <div className="ab-modal__body">
+          {scheduleTarget && (
+            <>
+              <p style={{ marginBottom: 8 }}>
+                <strong>{t({ id: 'panel.consultation.schedule.subtitle' })} :</strong>{' '}
+                {scheduleTarget.user_name || scheduleTarget.user_email || scheduleTarget.user_public_id || '?'}
+              </p>
+              <p style={{ marginBottom: 16, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
+                {t({ id: 'panel.consultation.schedule.book' })} : {scheduleTarget.titulo || scheduleTarget.bib_ref || '?'}
+              </p>
+            </>
+          )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
+                {t({ id: 'panel.consultation.schedule.dateLabel' })}
+              </span>
+              <input type="date" value={scheduleForm.date} onChange={(e) => setScheduleForm(f => ({ ...f, date: e.target.value }))} className="ab-input" disabled={scheduling} />
+            </label>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
+                  {t({ id: 'panel.consultation.schedule.startsAtLabel' })}
+                </span>
+                <input type="time" value={scheduleForm.startsAt} onChange={(e) => setScheduleForm(f => ({ ...f, startsAt: e.target.value }))} className="ab-input" disabled={scheduling} />
+              </label>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
+                  {t({ id: 'panel.consultation.schedule.endsAtLabel' })}
+                </span>
+                <input type="time" value={scheduleForm.endsAt} onChange={(e) => setScheduleForm(f => ({ ...f, endsAt: e.target.value }))} className="ab-input" disabled={scheduling} />
+              </label>
+            </div>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
+                {t({ id: 'panel.consultation.schedule.noteLabel' })}
+              </span>
+              <textarea value={scheduleForm.note} onChange={(e) => setScheduleForm(f => ({ ...f, note: e.target.value }))} placeholder={t({ id: 'panel.consultation.schedule.notePlaceholder' })} className="ab-input" rows={3} maxLength={300} disabled={scheduling} />
+              <span style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>
+                {t({ id: 'panel.consultation.schedule.noteHint' })} ({scheduleForm.note.length}/300)
+              </span>
+            </label>
+            <p style={{ fontSize: '.75rem', color: 'var(--brand-muted)', marginTop: 4 }}>
+              {t({ id: 'panel.consultation.schedule.timezoneHint' }, { tz: Intl.DateTimeFormat().resolvedOptions().timeZone })}
+            </p>
+            {scheduleError && (
+              <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', margin: 0 }}>{scheduleError}</p>
+            )}
+          </div>
+        </div>
+        <div className="ab-modal__actions">
+          <Button variant="secondary" onClick={closeScheduleModal} disabled={scheduling}>
+            {t({ id: 'panel.consultation.schedule.cancelButton' })}
+          </Button>
+          <Button onClick={handleScheduleSubmit} disabled={scheduling}>
+            {scheduling ? t({ id: 'panel.consultation.schedule.submitting' }) : t({ id: 'panel.consultation.schedule.submitButton' })}
+          </Button>
+        </div>
+      </Modal>
     </PageShell>
   );
 }
