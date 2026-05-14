@@ -742,12 +742,22 @@ export default function PanelPage() {
 
   // ── Consultation workflow ─────────────────────────────
 
-  async function setConsultaWorkflow(consultaId, lineNo, stage, note) {
+  // Paquet 27.A.3 (5.A) : migration vers wrapper api.advance_consulta (SECURITY INVOKER).
+  // scheduleParams optionnel : { startsAt, endsAt, timezone } pour stage 'consulta_agendada'.
+  async function setConsultaWorkflow(consultaId, lineNo, stage, note, scheduleParams) {
     try {
-      const { error } = await supabase.rpc('fn_v2_set_consulta_linhas_workflow', {
-        p_consulta_id: consultaId, p_line_nos: [lineNo],
-        p_workflow_stage: stage, p_workflow_note: note || null,
-      });
+      const params = {
+        p_consulta_id: consultaId,
+        p_line_nos: [lineNo],
+        p_target_stage: stage,
+        p_workflow_note: note || null,
+      };
+      if (scheduleParams) {
+        params.p_consultation_starts_at = scheduleParams.startsAt || null;
+        params.p_consultation_ends_at = scheduleParams.endsAt || null;
+        params.p_consultation_timezone = scheduleParams.timezone || null;
+      }
+      const { error } = await supabase.schema('api').rpc('advance_consulta', params);
       if (error) throw error;
       loadData();
     } catch (e) { alert(t({id:'common.errorPrefix'},{message:e.message})); }
