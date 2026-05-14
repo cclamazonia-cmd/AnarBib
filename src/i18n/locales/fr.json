@@ -1696,6 +1696,8 @@
   "panel.consultation.replyStatus.refused": "Refusé",
   "panel.consultation.replyStatus.pending": "En attente de réponse",
   "panel.consultation.action.markNoShow": "Marquer non-présence",
+  "panel.consultation.action.proposeAnother": "Proposer un autre créneau",
+  "panel.consultation.refuseReason": "Motif du refus :",
   "panel.consultation.noShowConfirm": "Confirmer que la personne lectrice n’est pas venue ?",
   "panel.consultation.openSchedule": "Proposer un créneau",
   "panel.consultation.noShowReason": "Non-présence au créneau proposé.",

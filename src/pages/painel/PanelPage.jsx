@@ -14,6 +14,7 @@ import PhoneInput from '@/components/forms/PhoneInput';
 import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { getCountryName } from '@/lib/countries';
+import { formatSchedule } from '@/lib/scheduleFormat';
 import Modal from '@/components/ui/Modal';
 import './PanelPage.css';
 
@@ -1584,7 +1585,35 @@ export default function PanelPage() {
                         <td><Link to={`/livro/${c.book_id}`}>{c.titulo || '—'}</Link></td>
                         <td>{c.bib_ref}</td>
                         <td><span className="ab-painel-stage" data-stage={c.workflow_stage_effective}>{CONSULT_WORKFLOW[c.workflow_stage_effective] || c.item_status || '—'}</span></td>
-                        <td>{fmtD(c.consultation_scheduled_for)}</td>
+                        <td>
+                          {c.consultation_starts_at ? (
+                            <>
+                              <div>{formatSchedule(c)}</div>
+                              {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'confirmado_leitor' && (
+                                <span style={{ color: '#15803d', fontSize: '.85rem', fontWeight: 600 }}>
+                                  ✓ {t({ id: 'panel.consultation.replyStatus.confirmed' })}
+                                </span>
+                              )}
+                              {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'recusado_leitor' && (
+                                <div>
+                                  <span style={{ color: '#c2410c', fontSize: '.85rem', fontWeight: 600 }}>
+                                    ✗ {t({ id: 'panel.consultation.replyStatus.refused' })}
+                                  </span>
+                                  {c.schedule_reply_note && (
+                                    <div style={{ fontSize: '.75rem', fontStyle: 'italic', color: 'var(--brand-muted)', marginTop: 2 }}>
+                                      {t({ id: 'panel.consultation.refuseReason' })} {c.schedule_reply_note}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              {c.workflow_stage_effective === 'consulta_agendada' && !c.schedule_reply_status && (
+                                <span style={{ color: 'var(--brand-muted)', fontSize: '.85rem' }}>
+                                  ⏳ {t({ id: 'panel.consultation.replyStatus.pending' })}
+                                </span>
+                              )}
+                            </>
+                          ) : fmtD(c.consultation_scheduled_for)}
+                        </td>
                         <td className="ab-painel-actions-cell">
                           {c.workflow_stage_effective === 'solicitada' && (
                             <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'em_preparacao')}>{t({id:'panel.table.prepare'})}</button>
@@ -1592,7 +1621,17 @@ export default function PanelPage() {
                           {c.workflow_stage_effective === 'em_preparacao' && (
                             <button className="ab-button ab-button--mini" onClick={() => openScheduleModal(c)}>{t({ id: 'panel.loan.schedule' })}</button>
                           )}
-                          {c.workflow_stage_effective === 'consulta_agendada' && (
+                          {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'recusado_leitor' && (
+                            <button className="ab-button ab-button--mini" onClick={() => openScheduleModal(c)}>{t({ id: 'panel.consultation.action.proposeAnother' })}</button>
+                          )}
+                          {c.workflow_stage_effective === 'consulta_agendada' && c.consultation_starts_at && new Date(c.consultation_starts_at) < new Date() && c.schedule_reply_status !== 'recusado_leitor' && (
+                            <button className="ab-button ab-button--mini ab-button--danger" onClick={() => {
+                              if (window.confirm(t({ id: 'panel.consultation.noShowConfirm' }))) {
+                                setConsultaWorkflow(c.consulta_id, c.line_no, 'nao_compareceu', t({ id: 'panel.consultation.noShowReason' }));
+                              }
+                            }}>{t({ id: 'panel.consultation.action.markNoShow' })}</button>
+                          )}
+                          {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status !== 'recusado_leitor' && (
                             <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'consulta_realizada')}>{t({id:'panel.table.completed'})}</button>
                           )}
                           {!['consulta_realizada','cancelada_leitor','cancelada_biblioteca','expirada'].includes(c.workflow_stage_effective) && (

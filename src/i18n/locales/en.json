@@ -1696,6 +1696,8 @@
   "panel.consultation.replyStatus.refused": "Declined",
   "panel.consultation.replyStatus.pending": "Awaiting reply",
   "panel.consultation.action.markNoShow": "Mark no-show",
+  "panel.consultation.action.proposeAnother": "Propose another slot",
+  "panel.consultation.refuseReason": "Reason for declining:",
   "panel.consultation.noShowConfirm": "Confirm that the reader did not show up?",
   "panel.consultation.openSchedule": "Propose a time slot",
   "panel.consultation.noShowReason": "No-show at proposed time.",

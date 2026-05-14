@@ -1696,6 +1696,8 @@
   "panel.consultation.replyStatus.refused": "Abgelehnt",
   "panel.consultation.replyStatus.pending": "Wartet auf Antwort",
   "panel.consultation.action.markNoShow": "Nichterscheinen markieren",
+  "panel.consultation.action.proposeAnother": "Anderen Termin vorschlagen",
+  "panel.consultation.refuseReason": "Grund der Ablehnung:",
   "panel.consultation.noShowConfirm": "Bestätigen, dass die lesende Person nicht erschienen ist?",
   "panel.consultation.openSchedule": "Termin vorschlagen",
   "panel.consultation.noShowReason": "Nicht zum vorgeschlagenen Termin erschienen.",

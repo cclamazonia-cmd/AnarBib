@@ -13,6 +13,7 @@ import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput from '@/components/forms/PhoneInput';
 import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
+import { formatSchedule } from '@/lib/scheduleFormat';
 import DataExportButton from '@/components/account/DataExportButton';
 import Modal from '@/components/ui/Modal';
 import './AccountPage.css';
@@ -616,25 +617,7 @@ export default function AccountPage() {
     }
   };
 
-  // Paquet 27.A.5 (4.3 helper) : formater un creneau pour affichage.
-  const formatSchedule = (c) => {
-    if (!c) return '';
-    const starts = c.consultation_starts_at;
-    const ends = c.consultation_ends_at;
-    if (!starts) return '';
-    try {
-      const startDate = new Date(starts);
-      const dateStr = startDate.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-      const startTime = startDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-      if (ends) {
-        const endTime = new Date(ends).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-        return `${dateStr}  ${startTime}${endTime}`;
-      }
-      return `${dateStr}  ${startTime}`;
-    } catch {
-      return starts;
-    }
-  };
+
 
   const addr = parseAddressText(profile?.address);
   const chips = {

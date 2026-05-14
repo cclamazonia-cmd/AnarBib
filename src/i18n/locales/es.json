@@ -1696,6 +1696,8 @@
   "panel.consultation.replyStatus.refused": "Rechazado",
   "panel.consultation.replyStatus.pending": "Esperando respuesta",
   "panel.consultation.action.markNoShow": "Marcar no asistencia",
+  "panel.consultation.action.proposeAnother": "Proponer otro horario",
+  "panel.consultation.refuseReason": "Motivo del rechazo:",
   "panel.consultation.noShowConfirm": "¿Confirmar que la persona lectora no se presentó?",
   "panel.consultation.openSchedule": "Proponer un horario",
   "panel.consultation.noShowReason": "No asistió al horario propuesto.",

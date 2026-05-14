@@ -1696,6 +1696,8 @@
   "panel.consultation.replyStatus.refused": "Rifiutato",
   "panel.consultation.replyStatus.pending": "In attesa di risposta",
   "panel.consultation.action.markNoShow": "Segnare mancata presenza",
+  "panel.consultation.action.proposeAnother": "Proporre un altro orario",
+  "panel.consultation.refuseReason": "Motivo del rifiuto:",
   "panel.consultation.noShowConfirm": "Confermare che la persona non si è presentata?",
   "panel.consultation.openSchedule": "Proporre un orario",
   "panel.consultation.noShowReason": "Mancata presenza all’orario proposto.",
