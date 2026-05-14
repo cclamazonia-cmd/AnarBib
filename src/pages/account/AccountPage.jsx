@@ -309,12 +309,22 @@ export default function AccountPage() {
 
       // 8. Créer la réservation ou consultation
       setReserveMsg(isConsultation ? t({ id: 'account.reserve.creatingConsult' }) : t({ id: 'account.reserve.creatingLoan' }));
-      const rpcName = isConsultation ? 'fn_v2_create_consulta_local_by_holdings' : 'fn_v2_create_reserva_by_holdings';
-      const { error } = await supabase.rpc(rpcName, {
-        p_user_id: user.id,
-        p_holding_ids: holdingIds,
-        p_notes: isConsultation ? t({ id: 'account.reserve.noteConsult' }) : t({ id: 'account.reserve.noteLoan' }),
-      });
+      // Paquet 27.A.1 (14/05/2026) : migration consulta vers wrapper api.* SECURITY INVOKER.
+      // Le call reservation reste sur l'ancienne fn DEFINER (autre chantier).
+      let error;
+      if (isConsultation) {
+        ({ error } = await supabase.schema('api').rpc('create_consulta_local', {
+          p_user_id: user.id,
+          p_holding_ids: holdingIds,
+          p_notes: t({ id: 'account.reserve.noteConsult' }),
+        }));
+      } else {
+        ({ error } = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
+          p_user_id: user.id,
+          p_holding_ids: holdingIds,
+          p_notes: t({ id: 'account.reserve.noteLoan' }),
+        }));
+      }
       if (error) throw error;
 
       setReserveMsg(isConsultation
