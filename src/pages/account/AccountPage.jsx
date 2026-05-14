@@ -48,6 +48,11 @@ export default function AccountPage() {
   // Paquet 27.A.2 : modal annulation consulta
   const [cancelTarget, setCancelTarget] = useState(null);
   const [cancelling, setCancelling] = useState(false);
+  // Paquet 27.A.5 (4.3) : reply au creneau propose par la biblio.
+  const [refuseTarget, setRefuseTarget] = useState(null);
+  const [refuseNote, setRefuseNote] = useState('');
+  const [refuseError, setRefuseError] = useState('');
+  const [replying, setReplying] = useState(false);
   const [serviceState, setServiceState] = useState(null);
   // Cotisation
   const [membership, setMembership] = useState(null); // ligne v_active_memberships
@@ -542,6 +547,95 @@ export default function AccountPage() {
     }
   };
 
+  // Paquet 27.A.5 (4.3) : confirmation directe du creneau propose.
+  const handleConfirmSchedule = async (c) => {
+    if (!c?.consulta_id || replying) return;
+    setReplying(true);
+    try {
+      const { error } = await supabase.schema('api').rpc('reply_consulta_schedule', {
+        p_consulta_id: c.consulta_id,
+        p_line_nos: [c.line_no || 1],
+        p_reply: 'confirmado_leitor',
+        p_note: null,
+      });
+      if (error) {
+        console.error('reply_consulta_schedule (confirm) error:', error);
+        alert(t({ id: 'common.errorPrefix' }, { message: error.message }));
+        return;
+      }
+      await loadData();
+    } catch (err) {
+      console.error('reply_consulta_schedule (confirm) exception:', err);
+      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+    } finally {
+      setReplying(false);
+    }
+  };
+
+  // Paquet 27.A.5 (4.3) : ouvrir le modal de refus (note obligatoire).
+  const openRefuseModal = (c) => {
+    setRefuseTarget(c);
+    setRefuseNote('');
+    setRefuseError('');
+  };
+
+  const closeRefuseModal = () => {
+    if (replying) return;
+    setRefuseTarget(null);
+    setRefuseNote('');
+    setRefuseError('');
+  };
+
+  const handleRefuseSchedule = async () => {
+    if (!refuseTarget?.consulta_id || replying) return;
+    setRefuseError('');
+    if (!refuseNote || refuseNote.trim().length < 1) {
+      setRefuseError(t({ id: 'account.consultations.refuseModal.errorNoteRequired' }));
+      return;
+    }
+    setReplying(true);
+    try {
+      const { error } = await supabase.schema('api').rpc('reply_consulta_schedule', {
+        p_consulta_id: refuseTarget.consulta_id,
+        p_line_nos: [refuseTarget.line_no || 1],
+        p_reply: 'recusado_leitor',
+        p_note: refuseNote.trim(),
+      });
+      if (error) {
+        console.error('reply_consulta_schedule (refuse) error:', error);
+        alert(t({ id: 'common.errorPrefix' }, { message: error.message }));
+        return;
+      }
+      setRefuseTarget(null);
+      await loadData();
+    } catch (err) {
+      console.error('reply_consulta_schedule (refuse) exception:', err);
+      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+    } finally {
+      setReplying(false);
+    }
+  };
+
+  // Paquet 27.A.5 (4.3 helper) : formater un creneau pour affichage.
+  const formatSchedule = (c) => {
+    if (!c) return '';
+    const starts = c.consultation_starts_at;
+    const ends = c.consultation_ends_at;
+    if (!starts) return '';
+    try {
+      const startDate = new Date(starts);
+      const dateStr = startDate.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const startTime = startDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+      if (ends) {
+        const endTime = new Date(ends).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        return `${dateStr}  ${startTime}${endTime}`;
+      }
+      return `${dateStr}  ${startTime}`;
+    } catch {
+      return starts;
+    }
+  };
+
   const addr = parseAddressText(profile?.address);
   const chips = {
     user: profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || user.email : '—',
@@ -972,6 +1066,42 @@ export default function AccountPage() {
                 </div>
               )}
 
+              {/* Paquet 27.A.5 (4.3) : creneau propose par la biblio, en attente de reponse */}
+              {consultations.filter(c => c.workflow_stage_effective === 'consulta_agendada' && !c.schedule_reply_status).length > 0 && (
+                <>
+                  <h3 className="ab-conta-subsection" style={{ marginTop: 0 }}>
+                    {t({ id: 'account.consultations.scheduleProposed.title' })}
+                  </h3>
+                  <p className="ab-conta-hint">{t({ id: 'account.consultations.scheduleProposed.hint' })}</p>
+                  <div className="ab-conta-items">
+                    {consultations.filter(c => c.workflow_stage_effective === 'consulta_agendada' && !c.schedule_reply_status).map((c, i) => (
+                      <div key={`prop-${i}`} className="ab-conta-item" style={{ borderLeft: '3px solid #2563eb' }}>
+                        <div className="ab-conta-item__main">
+                          <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || ''}</Link>
+                          <span className="ab-conta-item__meta">ref: {c.bib_ref || ''}</span>
+                          <p style={{ margin: '8px 0 0', fontWeight: 600 }}>
+                            {t({ id: 'account.consultations.scheduleProposed.dateLabel' })} : {formatSchedule(c)}
+                          </p>
+                          {c.workflow_note && (
+                            <p style={{ margin: '4px 0 0', fontStyle: 'italic', color: 'var(--brand-muted)' }}>
+                              {t({ id: 'account.consultations.scheduleProposed.noteLabel' })} : {c.workflow_note}
+                            </p>
+                          )}
+                        </div>
+                        <div className="ab-conta-item__actions" style={{ display: 'flex', gap: 8 }}>
+                          <Button onClick={() => handleConfirmSchedule(c)} disabled={replying}>
+                            {t({ id: 'account.consultations.scheduleProposed.confirmButton' })}
+                          </Button>
+                          <Button variant="secondary" onClick={() => openRefuseModal(c)} disabled={replying}>
+                            {t({ id: 'account.consultations.scheduleProposed.refuseButton' })}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
               <h3 className="ab-conta-subsection">{t({ id: 'account.consultations.active' })}</h3>
               {consultations.filter(c => c.status === 'ativa').length === 0 ? (
                 <p className="ab-conta-empty">{t({ id: 'account.consultations.empty' })}</p>
@@ -982,6 +1112,11 @@ export default function AccountPage() {
                       <div className="ab-conta-item__main">
                         <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
                         <span className="ab-conta-item__meta">ref: {c.bib_ref || '—'} · {c.workflow_stage || c.status || '—'}</span>
+                        {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'confirmado_leitor' && (
+                          <p style={{ margin: '4px 0 0', color: '#15803d', fontWeight: 600 }}>
+                            ✓ {t({ id: 'account.consultations.scheduleConfirmed.badge' }, { date: formatSchedule(c) })}
+                          </p>
+                        )}
                       </div>
                       <div className="ab-conta-item__actions">
                         <Button variant="secondary" onClick={() => setCancelTarget(c)}>
@@ -1377,6 +1512,52 @@ export default function AccountPage() {
           </Button>
           <Button onClick={handleCancelConsulta} disabled={cancelling}>
             {cancelling ? t({ id: 'common.loading' }) : t({ id: 'account.consultations.cancelButton' })}
+          </Button>
+        </div>
+      </Modal>
+          {/* Paquet 27.A.5 (4.3) : modal de refus du creneau (note obligatoire) */}
+      <Modal
+        isOpen={!!refuseTarget}
+        onClose={closeRefuseModal}
+        title={t({ id: 'account.consultations.refuseModal.title' })}
+        size="small"
+      >
+        <div className="ab-modal__body">
+          {refuseTarget && (
+            <p style={{ marginBottom: 12, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
+              {refuseTarget.titulo || refuseTarget.bib_ref}
+            </p>
+          )}
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <span style={{ fontSize: '.85rem' }}>
+              {t({ id: 'account.consultations.refuseModal.noteLabel' })}
+            </span>
+            <textarea
+              value={refuseNote}
+              onChange={(e) => setRefuseNote(e.target.value)}
+              placeholder={t({ id: 'account.consultations.refuseModal.notePlaceholder' })}
+              className="ab-input"
+              rows={3}
+              maxLength={300}
+              disabled={replying}
+              autoFocus
+            />
+            <span style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>
+              ({refuseNote.length}/300)
+            </span>
+          </label>
+          {refuseError && (
+            <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', marginTop: 8 }}>
+              {refuseError}
+            </p>
+          )}
+        </div>
+        <div className="ab-modal__actions">
+          <Button variant="secondary" onClick={closeRefuseModal} disabled={replying}>
+            {t({ id: 'common.cancel' })}
+          </Button>
+          <Button onClick={handleRefuseSchedule} disabled={replying}>
+            {replying ? t({ id: 'common.loading' }) : t({ id: 'account.consultations.scheduleProposed.refuseButton' })}
           </Button>
         </div>
       </Modal>
