@@ -14,6 +14,7 @@ import PhoneInput from '@/components/forms/PhoneInput';
 import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import DataExportButton from '@/components/account/DataExportButton';
+import Modal from '@/components/ui/Modal';
 import './AccountPage.css';
 
 export default function AccountPage() {
@@ -44,6 +45,9 @@ export default function AccountPage() {
   const [msgIsError, setMsgIsError] = useState(false);
   const [reserveRef, setReserveRef] = useState('');
   const [reserveMsg, setReserveMsg] = useState('');
+  // Paquet 27.A.2 : modal annulation consulta
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [cancelling, setCancelling] = useState(false);
   const [serviceState, setServiceState] = useState(null);
   // Cotisation
   const [membership, setMembership] = useState(null); // ligne v_active_memberships
@@ -514,6 +518,30 @@ export default function AccountPage() {
     }
   };
 
+  // Paquet 27.A.2 : annulation d'une consulta active par le lecteur.
+  const handleCancelConsulta = async () => {
+    if (!cancelTarget?.consulta_id) return;
+    setCancelling(true);
+    try {
+      const { error } = await supabase.schema('api').rpc('cancel_consulta_as_reader', {
+        p_consulta_id: cancelTarget.consulta_id,
+        p_line_nos: [cancelTarget.line_no || 1],
+      });
+      if (error) {
+        console.error('cancel_consulta_as_reader error:', error);
+        alert(t({ id: 'common.errorPrefix' }, { message: error.message }));
+        return;
+      }
+      setCancelTarget(null);
+      await loadData();
+    } catch (err) {
+      console.error('cancel_consulta_as_reader exception:', err);
+      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+    } finally {
+      setCancelling(false);
+    }
+  };
+
   const addr = parseAddressText(profile?.address);
   const chips = {
     user: profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || user.email : '—',
@@ -955,6 +983,11 @@ export default function AccountPage() {
                         <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
                         <span className="ab-conta-item__meta">ref: {c.bib_ref || '—'} · {c.workflow_stage || c.status || '—'}</span>
                       </div>
+                      <div className="ab-conta-item__actions">
+                        <Button variant="secondary" onClick={() => setCancelTarget(c)}>
+                          {t({ id: 'account.consultations.cancelButton' })}
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1324,6 +1357,29 @@ export default function AccountPage() {
       </div>
 
       <Footer />
+          <Modal
+        isOpen={!!cancelTarget}
+        onClose={() => !cancelling && setCancelTarget(null)}
+        title={t({ id: 'account.consultations.cancelConfirmTitle' })}
+        size="small"
+      >
+        <div className="ab-modal__body">
+          <p>{t({ id: 'account.consultations.cancelConfirm' })}</p>
+          {cancelTarget && (cancelTarget.titulo || cancelTarget.bib_ref) && (
+            <p style={{ marginTop: 12, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
+              {cancelTarget.titulo || cancelTarget.bib_ref}
+            </p>
+          )}
+        </div>
+        <div className="ab-modal__actions">
+          <Button variant="secondary" onClick={() => setCancelTarget(null)} disabled={cancelling}>
+            {t({ id: 'common.cancel' })}
+          </Button>
+          <Button onClick={handleCancelConsulta} disabled={cancelling}>
+            {cancelling ? t({ id: 'common.loading' }) : t({ id: 'account.consultations.cancelButton' })}
+          </Button>
+        </div>
+      </Modal>
     </PageShell>
   );
 }
