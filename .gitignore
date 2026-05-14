@@ -19,15 +19,15 @@ supabase/.env
 fix-*.py
 rename-*.py
 migrate-*.py
-# Variables d'environnement (clés API, secrets)
+# Variables d'environnement (clÃ©s API, secrets)
 .env
 .env.local
 .env.production
 
-# Sources de conversion fontaire (.ttf téléchargés depuis Google Fonts pour subsetting woff2)
+# Sources de conversion fontaire (.ttf tÃ©lÃ©chargÃ©s depuis Google Fonts pour subsetting woff2)
 fonts-source/
 
-# Archives temporaires d'audit (zip envoyés à Claude pour lecture)
+# Archives temporaires d'audit (zip envoyÃ©s Ã  Claude pour lecture)
 notify-functions.zip
 
 # Fichier test eslint
@@ -41,3 +41,5 @@ eslint-first-run.txt
 
 # Sauvegardes locales temporaires des sessions de patch (nettoyage 13/05)
 *.bak.*
+# Fichiers brises temporaires (refactor en cours, debug)
+*.broken*
