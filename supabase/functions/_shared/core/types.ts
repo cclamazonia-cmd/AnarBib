@@ -1,46 +1,46 @@
-// ═══════════════════════════════════════════════════════════
-// types.ts — Types partagés des Edge Functions Supabase AnarBib
-// ═══════════════════════════════════════════════════════════
-// Ce fichier consolide les définitions de types utilisées par toutes les
-// Edge Functions du projet (notify-event et autres). Il était implicitement
-// référencé par 14 fichiers via `import type { ... } from "../core/types.ts"`
-// mais n'existait pas dans le repo — Deno faisait du type-stripping en runtime
-// et les types n'étaient jamais validés. Ce fichier répare cette dette
+﻿// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// types.ts â€” Types partagÃ©s des Edge Functions Supabase AnarBib
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// Ce fichier consolide les dÃ©finitions de types utilisÃ©es par toutes les
+// Edge Functions du projet (notify-event et autres). Il Ã©tait implicitement
+// rÃ©fÃ©rencÃ© par 14 fichiers via `import type { ... } from "../core/types.ts"`
+// mais n'existait pas dans le repo â€” Deno faisait du type-stripping en runtime
+// et les types n'Ã©taient jamais validÃ©s. Ce fichier rÃ©pare cette dette
 // technique latente.
 //
 // Convention : un seul export par interface/type, pas de namespace, pas de
 // classes. Tout est `export interface` ou `export type`. Les structures sont
-// reverse-engineerées depuis l'usage observé dans le codebase au moment de
-// la création du fichier (2026-05-09).
+// reverse-engineerÃ©es depuis l'usage observÃ© dans le codebase au moment de
+// la crÃ©ation du fichier (2026-05-09).
 //
-// Si vous ajoutez un nouveau type partagé entre plusieurs Edge Functions,
-// c'est ici qu'il vit. Si un type n'est utilisé que dans une seule Edge
-// Function, gardez-le local au fichier où il est utilisé (don't pollute).
-// ═══════════════════════════════════════════════════════════
+// Si vous ajoutez un nouveau type partagÃ© entre plusieurs Edge Functions,
+// c'est ici qu'il vit. Si un type n'est utilisÃ© que dans une seule Edge
+// Function, gardez-le local au fichier oÃ¹ il est utilisÃ© (don't pollute).
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-// ─────────────────────────────────────────────────────────────
-// Primitives JSON — types génériques pour payloads / réponses
-// ─────────────────────────────────────────────────────────────
-// JsonValue couvre tout ce qui est sérialisable JSON. JsonObject est un
-// objet JSON {clé: valeur}, JsonArray un tableau de JsonValue.
-// Utilisé par webhook.ts pour caster les retours des handlers Edge en
-// objets sérialisables avant jsonResponse(). Ajouté chore 2026-05-09
-// pour éliminer un import orphelin pointant vers un fichier qui n'existait pas.
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Primitives JSON â€” types gÃ©nÃ©riques pour payloads / rÃ©ponses
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// JsonValue couvre tout ce qui est sÃ©rialisable JSON. JsonObject est un
+// objet JSON {clÃ©: valeur}, JsonArray un tableau de JsonValue.
+// UtilisÃ© par webhook.ts pour caster les retours des handlers Edge en
+// objets sÃ©rialisables avant jsonResponse(). AjoutÃ© chore 2026-05-09
+// pour Ã©liminer un import orphelin pointant vers un fichier qui n'existait pas.
 
 export type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
 export interface JsonObject { [key: string]: JsonValue; }
 export type JsonArray = JsonValue[];
 
-// ─────────────────────────────────────────────────────────────
-// Notification context — résolu depuis v_library_notification_context
-// ─────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Notification context â€” rÃ©solu depuis v_library_notification_context
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Les valeurs nullable correspondent aux LEFT JOIN qui peuvent ne pas
 // remonter de ligne (library sans profile, sans channel, etc.).
-// Utilisé par : library-mail-routing, library-notification-context,
+// UtilisÃ© par : library-mail-routing, library-notification-context,
 // policies, branding, layout, transport/email, et tous les domain/*.
 
 export interface LibraryNotificationContext {
-  // Identité de la biblio
+  // IdentitÃ© de la biblio
   library_id: string | null;
   slug: string | null;
   library_name: string;
@@ -63,6 +63,13 @@ export interface LibraryNotificationContext {
   reservation_status_enabled: boolean;
   reservation_workflow_enabled: boolean;
   local_consultation_enabled: boolean;
+  consulta_mail_criada_enabled: boolean;
+  consulta_mail_agendada_enabled: boolean;
+  consulta_mail_resposta_creneau_enabled: boolean;
+  consulta_mail_realizada_enabled: boolean;
+  consulta_mail_cancelada_enabled: boolean;
+  consulta_mail_expirada_enabled: boolean;
+  admin_copy_consultas_enabled: boolean;
   loan_lifecycle_enabled: boolean;
   loan_reminders_enabled: boolean;
   loan_overdue_enabled: boolean;
@@ -84,19 +91,19 @@ export interface LibraryNotificationContext {
   last_tested_at: string | null;
   channel_active: boolean;
 
-  // Identité linguistique de la biblio (paquet 6.1, ajouté 2026-05-09)
+  // IdentitÃ© linguistique de la biblio (paquet 6.1, ajoutÃ© 2026-05-09)
   // BCP 47 short code : 'pt-BR' | 'fr' | 'es' | 'en' | 'it' | 'de' au paquet 6.
-  // Validation côté UI uniquement, pas de CHECK constraint en DB pour
+  // Validation cÃ´tÃ© UI uniquement, pas de CHECK constraint en DB pour
   // permettre l'ajout futur de nouvelles locales (eu, ca, oc, etc.).
   default_locale: string;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Mail routing résolu — produit par resolveMailRouting()
-// ─────────────────────────────────────────────────────────────
-// Représente l'état final de routage d'un mail après application de toutes
-// les politiques (sender effectif, replyTo, logos, footer, désactivation).
-// Utilisé par : library-mail-routing.
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Mail routing rÃ©solu â€” produit par resolveMailRouting()
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ReprÃ©sente l'Ã©tat final de routage d'un mail aprÃ¨s application de toutes
+// les politiques (sender effectif, replyTo, logos, footer, dÃ©sactivation).
+// UtilisÃ© par : library-mail-routing.
 
 export interface ResolvedMailRouting {
   brandName: string;
@@ -116,9 +123,9 @@ export interface ResolvedMailRouting {
   channelActive: boolean;
 }
 
-// ─────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Mail primitives
-// ─────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Types pour la couche transport/rendu mail (Brevo, layout, etc.).
 
 export interface EmailTarget {
@@ -126,14 +133,14 @@ export interface EmailTarget {
   name?: string;
 }
 
-// Tableau de paires label/valeur affichées dans la table de détails
+// Tableau de paires label/valeur affichÃ©es dans la table de dÃ©tails
 // du mail (cf. renderEmail dans layout.ts).
 export type EmailDetails = Array<{ label: string; value: string }>;
 
-// Résultat normalisé d'une tentative d'envoi de mail. ok=false avec
-// skipped=true signifie qu'on a délibérément choisi de ne pas envoyer
-// (canal désactivé, email invalide, etc.) — différent d'une vraie erreur
-// avec ok=false et error renseigné.
+// RÃ©sultat normalisÃ© d'une tentative d'envoi de mail. ok=false avec
+// skipped=true signifie qu'on a dÃ©libÃ©rÃ©ment choisi de ne pas envoyer
+// (canal dÃ©sactivÃ©, email invalide, etc.) â€” diffÃ©rent d'une vraie erreur
+// avec ok=false et error renseignÃ©.
 export interface EmailSendResult {
   ok: boolean;
   label?: string;
@@ -144,16 +151,16 @@ export interface EmailSendResult {
   error?: string;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Webhook payload — entrée des Edge Functions notify-*
-// ─────────────────────────────────────────────────────────────
-// Payload reçu en POST par notify-event/index.ts depuis les triggers DB
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Webhook payload â€” entrÃ©e des Edge Functions notify-*
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Payload reÃ§u en POST par notify-event/index.ts depuis les triggers DB
 // ou des appels manuels. Les champs principaux sont event + record_id ;
-// les autres dépendent de l'événement (line_nos pour résas, items pour
+// les autres dÃ©pendent de l'Ã©vÃ©nement (line_nos pour rÃ©sas, items pour
 // workflow, user_email/user_name pour overrides, etc.).
 //
 // Utilise une signature index pour rester souple : les helpers
-// getPayloadValue, normalizeLineNos, etc. gèrent le typage runtime.
+// getPayloadValue, normalizeLineNos, etc. gÃ¨rent le typage runtime.
 
 export interface NotifyPayload {
   event?: string;
@@ -169,12 +176,12 @@ export interface NotifyPayload {
   [key: string]: unknown;
 }
 
-// ─────────────────────────────────────────────────────────────
-// Workflow item — payload structuré pour les events workflow réservation
-// ─────────────────────────────────────────────────────────────
-// Item de réservation enrichi des données workflow (stage, créneau, note).
-// Utilisé soit côté payload entrant (override depuis trigger DB) soit côté
-// data récupéré via getReservaWorkflowBundle.
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Workflow item â€” payload structurÃ© pour les events workflow rÃ©servation
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Item de rÃ©servation enrichi des donnÃ©es workflow (stage, crÃ©neau, note).
+// UtilisÃ© soit cÃ´tÃ© payload entrant (override depuis trigger DB) soit cÃ´tÃ©
+// data rÃ©cupÃ©rÃ© via getReservaWorkflowBundle.
 
 export interface ReservaWorkflowItem {
   line_no?: number;
