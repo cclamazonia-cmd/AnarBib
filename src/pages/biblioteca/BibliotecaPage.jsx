@@ -1232,6 +1232,25 @@ export default function BibliotecaPage() {
             </div>
           </div>
 
+          {stats.topBooks && stats.topBooks.length > 0 && (
+            <div style={bx}>
+              <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.reports.topBooks90d' })}</h4>
+              <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:10 }}>
+                {t({ id: 'biblioteca.reports.topBooks90dHint' })}
+              </div>
+              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                {stats.topBooks.map((b, i) => (
+                  <div key={i} style={{ display:'flex', justifyContent:'space-between', gap:12, padding:'8px 12px', borderRadius:6, background:'rgba(0,0,0,.12)' }}>
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontSize:'.92rem', fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{b.titulo || t({ id: 'common.untitled' })}</div>
+                      <div style={{ fontSize:'.78rem', color:'var(--brand-muted)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{b.autor || t({ id: 'common.unknownAuthor' })}</div>
+                    </div>
+                    <div style={{ fontSize:'.92rem', fontWeight:700, alignSelf:'center', whiteSpace:'nowrap' }}>{t({ id: 'biblioteca.reports.topBooks.loanCount' }, { count: b.cnt })}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.reports.generate' })}</h4>
             <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:10 }}>
