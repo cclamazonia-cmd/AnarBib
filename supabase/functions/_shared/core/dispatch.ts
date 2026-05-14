@@ -4,9 +4,12 @@ import { handleProfileNotice } from "../domain/profiles.ts";
 import { handleReservaCriadaV2, handleReservaPickupReplyEvent, handleReservaV2StatusChange, handleReservaV2WorkflowEvent } from "../domain/reservas.ts";
 import { handleConsultaCriadaV2, handleConsultaV2LifecycleEvent, handleConsultaV2WorkflowEvent } from "../domain/consultas.ts";
 import { handleTeamEvent } from "../domain/team.ts";
+import { handleNetworkEvent } from "../domain/network.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
-  // Events team.* (gouvernance) - handler dedie, lit team_notification_outbox par recordId
+  // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
+  // Events network.* (gouvernance reseau transverse) - handler dedie, meme outbox que team.*
+  if (event.startsWith("network.")) return await handleNetworkEvent(recordId);
   if (event === "reserva_criada") return await handleReservaCriadaOld(recordId);
   if (event === "emprestimo_criado" || event === "emprestimo_prorrogado" || event === "emprestimo_devolvido" || event.startsWith("lembrete_devolucao_") || event.startsWith("aviso_atraso_")) return await handleEmprestimoOld(recordId, event);
   if (event === "reserva_v2_criada") return await handleReservaCriadaV2(recordId);

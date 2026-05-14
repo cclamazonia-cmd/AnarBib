@@ -1825,28 +1825,28 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // payload.voter_user_id peut être NULL si disclose_identity=false côté DB :
   // dans ce cas, l'Edge Function substituera {voterName} par une chaîne neutre.
   "network.collective_removal_vote_cast.sub": {
-    "pt-BR": "Voto registrado sobre a retirada coletiva : {proposedName}",
-    fr: "Vote enregistré sur le retrait collectif de {proposedName}",
-    es: "Voto registrado sobre el retiro colectivo de {proposedName}",
-    en: "Vote recorded on the collective removal of {proposedName}",
-    it: "Voto registrato sul ritiro collettivo di {proposedName}",
-    de: "Stimme zum kollektiven Rückzug von {proposedName} registriert"
+    "pt-BR": "Voto registrado : retirada coletiva de {proposedName}",
+    fr: "Vote enregistré · retrait collectif de {proposedName}",
+    es: "Voto registrado · retiro colectivo de {proposedName}",
+    en: "Vote registered · collective removal of {proposedName}",
+    it: "Voto registrato · ritiro collettivo di {proposedName}",
+    de: "Stimme registriert · kollektiver Rückzug von {proposedName}"
   },
   "network.collective_removal_vote_cast.intro": {
-    "pt-BR": "Un(a/e) administrador(a/e) registrou seu voto sobre a proposta de retirada coletiva d(o/a/e) {proposedName}. O processo continua aberto até que tod(o/a/e)s tenham se pronunciado.",
-    fr: "Un·e administrateur·rice a enregistré son vote sur la proposition de retrait collectif de {proposedName}. Le processus reste ouvert tant que toutes les voix ne se sont pas exprimées.",
-    es: "Une administrade ha registrado su voto sobre la propuesta de retiro colectivo de {proposedName}. El proceso sigue abierto hasta que todes se hayan pronunciado.",
-    en: "A network administrator has recorded their vote on the collective removal proposal for {proposedName}. The process remains open until all voices have been heard.",
-    it: "Un(o/a/e) amministratore/trice/e ha registrato il proprio voto sulla proposta di ritiro collettivo di {proposedName}. Il processo resta aperto fino a quando tutt(i/e/u) si saranno pronunciat(i/e/u).",
-    de: "Ein*e Netzwerk-Administrator*in hat seine·ihre Stimme zum Vorschlag des kollektiven Rückzugs von {proposedName} abgegeben. Der Prozess bleibt offen, bis alle Stimmen abgegeben wurden."
+    "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de retirada coletiva d(o/a/e) administrador(a/e) {proposedName}, aberta por {proposerName}. Acessai a app para ver o estado atual da deliberação e votar.",
+    fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de retrait collectif de l'administrateur·rice {proposedName}, ouverte par {proposerName}. Accédez à l'app pour voir l'état actuel de la délibération et voter.",
+    es: "Une administrade de red acaba de votar sobre la propuesta de retiro colectivo de le administrade {proposedName}, abierta por {proposerName}. Accedé a la app para ver el estado actual de la deliberación y votar.",
+    en: "A network administrator has just cast a vote on the collective removal proposal of administrator {proposedName}, opened by {proposerName}. Open the app to see the current state of the deliberation and vote.",
+    it: "Un compagno/a/e amministratore/trice/e di rete ha appena votato sulla proposta di ritiro collettivo dell'amministratore/trice/e {proposedName}, aperta da {proposerName}. Accedi all'app per vedere lo stato attuale della deliberazione e votare.",
+    de: "Ein*e Netzwerk-Administrator*in hat soeben über den Vorschlag eines kollektiven Rückzugs von Administrator*in {proposedName} abgestimmt, eröffnet von {proposerName}. Öffnen Sie die App, um den aktuellen Stand der Beratung zu sehen und abzustimmen."
   },
   "network.collective_removal_vote_cast.rationale_label": {
-    "pt-BR": "Justificativa (obrigatória se voto contrário) :",
-    fr: "Justification (obligatoire si vote contre) :",
-    es: "Justificación (obligatoria si voto en contra) :",
-    en: "Rationale (mandatory if voting against):",
-    it: "Motivazione (obbligatoria in caso di voto contrario) :",
-    de: "Begründung (verpflichtend bei Gegenstimme):"
+    "pt-BR": "Motivo do voto contrário :",
+    fr: "Motif du vote défavorable :",
+    es: "Motivo del voto contrario :",
+    en: "Reason for opposing vote:",
+    it: "Motivo del voto contrario :",
+    de: "Begründung der Ablehnung:"
   },
 
   // ===== network.collective_removal_unanimous ===============================
@@ -1879,12 +1879,12 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     de: "Diese Nachricht informiert Sie darüber, dass die Einstimmigkeit der anderen aktiven Netzwerk-Administrator*innen über Ihren kollektiven Rückzug erreicht wurde. Eine 7-tägige Karenzfrist gilt vor der Vollziehung. Ihr Wort bleibt frei während dieses Zeitraums."
   },
   "network.collective_removal_unanimous.carence_label": {
-    "pt-BR": "Efetivação prevista para {pendingDeadline}.",
-    fr: "Exécution prévue pour le {pendingDeadline}.",
-    es: "Ejecución prevista para el {pendingDeadline}.",
-    en: "Execution scheduled for {pendingDeadline}.",
-    it: "Esecuzione prevista per il {pendingDeadline}.",
-    de: "Vollziehung vorgesehen für {pendingDeadline}."
+    "pt-BR": "Período de carência : a execução efetiva ocorrerá em {executionDate}.",
+    fr: "Période de carence : l'exécution effective interviendra le {executionDate}.",
+    es: "Período de carencia : la ejecución efectiva ocurrirá el {executionDate}.",
+    en: "Grace period: effective execution will occur on {executionDate}.",
+    it: "Periodo di carenza : l'esecuzione effettiva avverrà il {executionDate}.",
+    de: "Karenzzeit: die tatsächliche Ausführung erfolgt am {executionDate}."
   },
 
   // ===== network.collective_removal_cancelled ===============================
@@ -1912,12 +1912,12 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // L'Edge Function adaptera selon destinataire (target vs autres) via
   // variante .target_intro.
   "network.collective_removal_executed.sub": {
-    "pt-BR": "Retirada coletiva efetivada : {proposedName}",
-    fr: "Retrait collectif effectif · {proposedName}",
-    es: "Retiro colectivo efectivo · {proposedName}",
-    en: "Collective removal effective · {proposedName}",
-    it: "Ritiro collettivo effettivo · {proposedName}",
-    de: "Kollektiver Rückzug wirksam · {proposedName}"
+    "pt-BR": "Retirada coletiva executada : {proposedName}",
+    fr: "Retrait collectif exécuté · {proposedName}",
+    es: "Retiro colectivo ejecutado · {proposedName}",
+    en: "Collective removal executed · {proposedName}",
+    it: "Ritiro collettivo eseguito · {proposedName}",
+    de: "Kollektiver Rückzug vollzogen · {proposedName}"
   },
   "network.collective_removal_executed.intro": {
     "pt-BR": "Após o término da carência de 7 dias, a retirada coletiva d(o/a/e) {proposedName} foi efetivada. Esta pessoa não tem mais o papel d(o/a/e) administrador(a/e) de rede. A decisão é registrada no histórico militante d(o/a/e) AnarBib.",
@@ -1961,28 +1961,28 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // Le target n'est PAS notifie a cette etape : sa cooptation se discute
   // entre les admins existants avant qu'il en soit informe.
   "network.cooptation_proposed.sub": {
-    "pt-BR": "Proposta de cooptacao : {proposedName}",
+    "pt-BR": "Proposta de cooptação : {proposedName}",
     fr: "Proposition de cooptation : {proposedName}",
-    es: "Propuesta de cooptacion : {proposedName}",
+    es: "Propuesta de cooptación : {proposedName}",
     en: "Cooptation proposal: {proposedName}",
     it: "Proposta di cooptazione : {proposedName}",
     de: "Kooptationsvorschlag: {proposedName}"
   },
   "network.cooptation_proposed.intro": {
-    "pt-BR": "{proposerName} propos cooptar {proposedName} como administrador(a/e) de rede. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s e necessaria para concluir o processo. Vosso voto e esperado.",
-    fr: "{proposerName} propose de coopter {proposedName} comme administrateur·rice du reseau. L'unanimite des administrateur·rices actif·ves est necessaire pour conclure le processus. Votre vote est attendu.",
+    "pt-BR": "{proposerName} propôs cooptar {proposedName} como administrador(a/e) de rede. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s é necessária para concluir o processo. Vosso voto é esperado.",
+    fr: "{proposerName} propose de coopter {proposedName} comme administrateur·rice du réseau. L'unanimité des administrateur·rices actif·ves est nécessaire pour conclure le processus. Votre vote est attendu.",
     es: "{proposerName} propone cooptar a {proposedName} como administrade de red. La unanimidad de les administradores activos es necesaria para cerrar el proceso. Vuestro voto es esperado.",
     en: "{proposerName} proposes to coopt {proposedName} as a network administrator. Unanimity among active network administrators is required to complete the process. Your vote is expected.",
-    it: "{proposerName} propone di cooptare {proposedName} come amministratore/trice/e di rete. L'unanimita dei compagni/e amministratori/e attivi/e e necessaria per concludere il processo. Il vostro voto e atteso.",
-    de: "{proposerName} schlagt vor, {proposedName} als Netzwerk-Administrator*in zu kooptieren. Die Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich, um den Prozess abzuschliessen. Ihre Stimme wird erwartet."
+    it: "{proposerName} propone di cooptare {proposedName} come amministratore/trice/e di rete. L'unanimità dei compagni/e amministratori/e attivi/e è necessaria per concludere il processo. Il vostro voto è atteso.",
+    de: "{proposerName} schlägt vor, {proposedName} als Netzwerk-Administrator*in zu kooptieren. Die Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich, um den Prozess abzuschließen. Ihre Stimme wird erwartet."
   },
   "network.cooptation_proposed.cta": {
     "pt-BR": "Acessar a proposta e votar",
-    fr: "Acceder a la proposition et voter",
+    fr: "Accéder à la proposition et voter",
     es: "Acceder a la propuesta y votar",
     en: "Open the proposal and vote",
     it: "Accedere alla proposta e votare",
-    de: "Vorschlag offnen und abstimmen"
+    de: "Vorschlag öffnen und abstimmen"
   },
   "network.cooptation_proposed.motivation_label": {
     "pt-BR": "Motivacao invocada :",
@@ -1998,28 +1998,28 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // intermediaire (Q1 transparence). payload.voter_user_id peut etre NULL
   // si disclose_identity=false : cote EF, substitution par chaine neutre.
   "network.cooptation_voted.sub": {
-    "pt-BR": "Voto registrado sobre a cooptacao de {proposedName}",
-    fr: "Vote enregistre sur la cooptation de {proposedName}",
-    es: "Voto registrado sobre la cooptacion de {proposedName}",
-    en: "Vote recorded on the cooptation of {proposedName}",
-    it: "Voto registrato sulla cooptazione di {proposedName}",
-    de: "Stimme zur Kooptation von {proposedName} registriert"
+    "pt-BR": "Voto registrado : cooptação de {proposedName}",
+    fr: "Vote enregistré · cooptation de {proposedName}",
+    es: "Voto registrado · cooptación de {proposedName}",
+    en: "Vote registered · cooptation of {proposedName}",
+    it: "Voto registrato · cooptazione di {proposedName}",
+    de: "Stimme registriert · Kooptation von {proposedName}"
   },
   "network.cooptation_voted.intro": {
-    "pt-BR": "Un(a/e) administrador(a/e) registrou seu voto sobre a proposta de cooptacao de {proposedName}. O processo continua aberto ate que tod(o/a/e)s tenham se pronunciado, ou ate que um voto contrario encerre o processo.",
-    fr: "Un·e administrateur·rice a enregistre son vote sur la proposition de cooptation de {proposedName}. Le processus reste ouvert tant que toutes les voix ne se sont pas exprimees, ou jusqu'a ce qu'un vote contre ne le cloture.",
-    es: "Une administrade ha registrado su voto sobre la propuesta de cooptacion de {proposedName}. El proceso sigue abierto hasta que todes se hayan pronunciado, o hasta que un voto en contra lo cierre.",
-    en: "A network administrator has recorded their vote on the cooptation proposal for {proposedName}. The process remains open until all voices have been heard, or until an opposing vote closes it.",
-    it: "Un(o/a/e) amministratore/trice/e ha registrato il proprio voto sulla proposta di cooptazione di {proposedName}. Il processo resta aperto fino a quando tutt(i/e/u) si saranno pronunciat(i/e/u), o fino a quando un voto contrario non lo chiudera.",
-    de: "Ein*e Netzwerk-Administrator*in hat seine·ihre Stimme zum Kooptationsvorschlag fur {proposedName} abgegeben. Der Prozess bleibt offen, bis alle Stimmen abgegeben wurden, oder bis eine Gegenstimme ihn beendet."
+    "pt-BR": "Um(a/e) administrador(a/e) de rede acaba de votar sobre a proposta de cooptação de {proposedName}, aberta por {proposerName}. Acessai a app para ver o estado atual da deliberação e votar se ainda não o fizeste.",
+    fr: "Un·e administrateur·rice du réseau vient de voter sur la proposition de cooptation de {proposedName}, ouverte par {proposerName}. Accédez à l'app pour voir l'état actuel de la délibération et voter si ce n'est pas déjà fait.",
+    es: "Une administrade de red acaba de votar sobre la propuesta de cooptación de {proposedName}, abierta por {proposerName}. Accedé a la app para ver el estado actual de la deliberación y votar si aún no lo hiciste.",
+    en: "A network administrator has just cast a vote on the cooptation proposal of {proposedName}, opened by {proposerName}. Open the app to see the current state of the deliberation and vote if you haven't already.",
+    it: "Un compagno/a/e amministratore/trice/e di rete ha appena votato sulla proposta di cooptazione di {proposedName}, aperta da {proposerName}. Accedi all'app per vedere lo stato attuale della deliberazione e votare se non l'hai ancora fatto.",
+    de: "Ein*e Netzwerk-Administrator*in hat soeben über den Kooptationsvorschlag von {proposedName} abgestimmt, eröffnet von {proposerName}. Öffnen Sie die App, um den aktuellen Stand der Beratung zu sehen und abzustimmen, falls noch nicht geschehen."
   },
   "network.cooptation_voted.rationale_label": {
-    "pt-BR": "Justificativa (obrigatoria se voto contrario) :",
-    fr: "Justification (obligatoire si vote contre) :",
-    es: "Justificacion (obligatoria si voto en contra) :",
-    en: "Rationale (mandatory if voting against):",
-    it: "Motivazione (obbligatoria in caso di voto contrario) :",
-    de: "Begrundung (verpflichtend bei Gegenstimme):"
+    "pt-BR": "Motivo do voto contrário :",
+    fr: "Motif du vote défavorable :",
+    es: "Motivo del voto contrario :",
+    en: "Reason for opposing vote:",
+    it: "Motivo del voto contrario :",
+    de: "Begründung der Ablehnung:"
   },
 
   // ===== network.cooptation_rejected ========================================
@@ -2027,64 +2027,64 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // Q3 : target + proposeur + autres admins.
   // Variante target_intro pour le target ("votre cooptation a ete refusee").
   "network.cooptation_rejected.sub": {
-    "pt-BR": "Cooptacao recusada : {proposedName}",
-    fr: "Cooptation refusee : {proposedName}",
-    es: "Cooptacion rechazada : {proposedName}",
-    en: "Cooptation rejected: {proposedName}",
-    it: "Cooptazione rifiutata : {proposedName}",
-    de: "Kooptation abgelehnt: {proposedName}"
+    "pt-BR": "Cooptação rejeitada : {proposedName}",
+    fr: "Cooptation rejetée · {proposedName}",
+    es: "Cooptación rechazada · {proposedName}",
+    en: "Cooptation rejected · {proposedName}",
+    it: "Cooptazione respinta · {proposedName}",
+    de: "Kooptation abgelehnt · {proposedName}"
   },
   "network.cooptation_rejected.intro": {
-    "pt-BR": "A proposta de cooptacao de {proposedName} foi recusada apos um voto contrario. A doutrina de unanimidade torna esta decisao imediata. Esta informacao e registrada no historico militante d(o/a/e) AnarBib.",
-    fr: "La proposition de cooptation de {proposedName} a ete refusee suite a un vote contre. La doctrine d'unanimite rend cette decision immediate. Cette information est consignee dans l'historique militant d'AnarBib.",
-    es: "La propuesta de cooptacion de {proposedName} fue rechazada tras un voto en contra. La doctrina de unanimidad hace que esta decision sea inmediata. Esta informacion queda registrada en el historial militante de AnarBib.",
-    en: "The cooptation proposal for {proposedName} has been rejected following an opposing vote. The unanimity doctrine makes this decision immediate. This information is recorded in the militant history of AnarBib.",
-    it: "La proposta di cooptazione di {proposedName} e stata rifiutata in seguito a un voto contrario. La dottrina dell'unanimita rende questa decisione immediata. Questa informazione e registrata nella storia militante di AnarBib.",
-    de: "Der Kooptationsvorschlag fur {proposedName} wurde nach einer Gegenstimme abgelehnt. Die Einstimmigkeitsdoktrin macht diese Entscheidung sofortig. Diese Information wird in der militanten Geschichte von AnarBib festgehalten."
+    "pt-BR": "A proposta de cooptação de {proposedName}, aberta por {proposerName}, foi rejeitada por pelo menos um voto contrário. A unanimidade requerida não foi alcançada e o processo é encerrado.",
+    fr: "La proposition de cooptation de {proposedName}, ouverte par {proposerName}, a été rejetée par au moins un vote défavorable. L'unanimité requise n'est pas atteinte et le processus est clos.",
+    es: "La propuesta de cooptación de {proposedName}, abierta por {proposerName}, fue rechazada por al menos un voto contrario. La unanimidad requerida no se alcanzó y el proceso se cierra.",
+    en: "The cooptation proposal of {proposedName}, opened by {proposerName}, has been rejected by at least one opposing vote. The required unanimity was not reached and the process is closed.",
+    it: "La proposta di cooptazione di {proposedName}, aperta da {proposerName}, è stata respinta per almeno un voto contrario. L'unanimità richiesta non è stata raggiunta e il processo si chiude.",
+    de: "Der Kooptationsvorschlag von {proposedName}, eröffnet von {proposerName}, wurde durch mindestens eine Gegenstimme abgelehnt. Die erforderliche Einstimmigkeit wurde nicht erreicht und der Prozess wird geschlossen."
   },
   "network.cooptation_rejected.target_intro": {
-    "pt-BR": "A proposta de cooptacao que vos dizia respeito foi recusada apos um voto contrario. Em AnarBib, a unanimidade d(o/a/e)s administrador(a/e)s e necessaria para uma cooptacao : um unico voto contra encerra o processo. Esta decisao nao impede de futuras propostas se a posicao coletiva evoluir.",
-    fr: "La proposition de cooptation qui vous concernait a ete refusee suite a un vote contre. Dans AnarBib, l'unanimite des administrateur·rices est requise pour une cooptation : un seul vote contre cloture le processus. Cette decision n'empeche pas de futures propositions si la position collective evolue.",
-    es: "La propuesta de cooptacion que le concernia fue rechazada tras un voto en contra. En AnarBib, la unanimidad de les administradores es necesaria para una cooptacion : un solo voto en contra cierra el proceso. Esta decision no impide propuestas futuras si la posicion colectiva evoluciona.",
-    en: "The cooptation proposal concerning you has been rejected following an opposing vote. In AnarBib, unanimity among administrators is required for a cooptation: a single opposing vote closes the process. This decision does not preclude future proposals if the collective position evolves.",
-    it: "La proposta di cooptazione che vi riguardava e stata rifiutata in seguito a un voto contrario. In AnarBib, l'unanimita dei compagni/e amministratori/e e necessaria per una cooptazione : un solo voto contrario chiude il processo. Questa decisione non impedisce proposte future se la posizione collettiva evolve.",
-    de: "Der Kooptationsvorschlag, der Sie betraf, wurde nach einer Gegenstimme abgelehnt. In AnarBib ist Einstimmigkeit der Administrator*innen fur eine Kooptation erforderlich: eine einzige Gegenstimme beendet den Prozess. Diese Entscheidung schliesst zukunftige Vorschlage nicht aus, falls sich die kollektive Position weiterentwickelt."
+    "pt-BR": "Olá {targetName}. Uma proposta de cooptação para integrar-te como administrador(a/e) de rede AnarBib foi aberta e discutida pel(o/a/e)s administrador(a/e)s ativ(o/a/e)s. Esta proposta não foi acolhida à unanimidade : recebeu pelo menos um voto contrário e o processo é encerrado. Esta decisão é coletiva e política, não pessoal.",
+    fr: "Bonjour {targetName}. Une proposition de cooptation pour t'intégrer comme administrateur·rice du réseau AnarBib a été ouverte et discutée par les administrateur·rices actif·ves. Cette proposition n'a pas recueilli l'unanimité : elle a reçu au moins un vote défavorable et le processus est clos. Cette décision est collective et politique, non personnelle.",
+    es: "Hola {targetName}. Una propuesta de cooptación para integrarte como administrade de red AnarBib fue abierta y discutida por les administradores activos. Esta propuesta no obtuvo unanimidad : recibió al menos un voto contrario y el proceso se cierra. Esta decisión es colectiva y política, no personal.",
+    en: "Hello {targetName}. A cooptation proposal to integrate you as a network administrator of AnarBib was opened and discussed by the active administrators. This proposal did not reach unanimity: it received at least one opposing vote and the process is closed. This decision is collective and political, not personal.",
+    it: "Ciao {targetName}. Una proposta di cooptazione per integrarti come amministratore/trice/e di rete AnarBib è stata aperta e discussa dai compagni/e amministratori/e attivi/e. Questa proposta non ha raggiunto l'unanimità : ha ricevuto almeno un voto contrario e il processo si chiude. Questa decisione è collettiva e politica, non personale.",
+    de: "Hallo {targetName}. Ein Kooptationsvorschlag, um Sie als Netzwerk-Administrator*in von AnarBib zu integrieren, wurde eröffnet und von den aktiven Administrator*innen besprochen. Dieser Vorschlag erreichte keine Einstimmigkeit: er erhielt mindestens eine Gegenstimme und der Prozess wird geschlossen. Diese Entscheidung ist kollektiv und politisch, nicht persönlich."
   },
 
   // ===== network.cooptation_completed =======================================
   // Unanimite atteinte. Q4 : target + proposeur + autres admins.
   // Variante target_intro : ton particulier "bienvenue dans la coordination".
   "network.cooptation_completed.sub": {
-    "pt-BR": "Cooptacao confirmada por unanimidade : {proposedName}",
-    fr: "Cooptation confirmee a l'unanimite : {proposedName}",
-    es: "Cooptacion confirmada por unanimidad : {proposedName}",
-    en: "Cooptation confirmed by unanimity: {proposedName}",
-    it: "Cooptazione confermata all'unanimita : {proposedName}",
-    de: "Kooptation einstimmig bestatigt: {proposedName}"
+    "pt-BR": "Cooptação concluída à unanimidade : {proposedName}",
+    fr: "Cooptation conclue à l'unanimité · {proposedName}",
+    es: "Cooptación concluida por unanimidad · {proposedName}",
+    en: "Cooptation completed unanimously · {proposedName}",
+    it: "Cooptazione conclusa all'unanimità · {proposedName}",
+    de: "Kooptation einstimmig abgeschlossen · {proposedName}"
   },
   "network.cooptation_completed.intro": {
-    "pt-BR": "A unanimidade d(o/a/e)s administrador(a/e)s foi alcancada sobre a cooptacao de {proposedName}. Esta pessoa entra a partir de agora na coordenacao da rede AnarBib. A decisao e registrada no historico militante.",
-    fr: "L'unanimite des administrateur·rices a ete atteinte sur la cooptation de {proposedName}. Cette personne rejoint la coordination du reseau AnarBib des maintenant. La decision est consignee dans l'historique militant.",
-    es: "Se alcanzo la unanimidad de les administradores sobre la cooptacion de {proposedName}. Esta persona se integra a la coordinacion de la red AnarBib desde ahora. La decision queda registrada en el historial militante.",
-    en: "Unanimity among administrators has been reached on the cooptation of {proposedName}. This person joins the AnarBib network coordination from now on. The decision is recorded in the militant history.",
-    it: "L'unanimita dei compagni/e amministratori/e e stata raggiunta sulla cooptazione di {proposedName}. Questa persona entra a far parte della coordinazione della rete AnarBib da ora. La decisione e registrata nella storia militante.",
-    de: "Einstimmigkeit der Administrator*innen wurde fur die Kooptation von {proposedName} erreicht. Diese Person tritt ab sofort der Koordination des AnarBib-Netzwerks bei. Die Entscheidung wird in der militanten Geschichte festgehalten."
+    "pt-BR": "A proposta de cooptação de {proposedName}, aberta por {proposerName}, foi concluída à unanimidade. {proposedName} torna-se administrador(a/e) de rede ativ(o/a/e) da AnarBib.",
+    fr: "La proposition de cooptation de {proposedName}, ouverte par {proposerName}, a été conclue à l'unanimité. {proposedName} devient administrateur·rice du réseau AnarBib actif·ve.",
+    es: "La propuesta de cooptación de {proposedName}, abierta por {proposerName}, fue concluida por unanimidad. {proposedName} se vuelve administrade de red activa de AnarBib.",
+    en: "The cooptation proposal of {proposedName}, opened by {proposerName}, has been concluded unanimously. {proposedName} becomes an active network administrator of AnarBib.",
+    it: "La proposta di cooptazione di {proposedName}, aperta da {proposerName}, è stata conclusa all'unanimità. {proposedName} diventa compagno/a/e amministratore/trice/e di rete attiv(o/a/e) di AnarBib.",
+    de: "Der Kooptationsvorschlag von {proposedName}, eröffnet von {proposerName}, wurde einstimmig abgeschlossen. {proposedName} wird aktive*r Netzwerk-Administrator*in von AnarBib."
   },
   "network.cooptation_completed.target_intro": {
-    "pt-BR": "Bem-vind(o/a/e) a coordenacao da rede AnarBib. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s foi alcancada sobre vossa cooptacao, e a partir de agora vos sois administrador(a/e) ativ(o/a/e) da rede. Esta responsabilidade vos da acesso a propostas de cooptacao, votos de retirada coletiva, e governanca transversal d(o/a/e) AnarBib.",
-    fr: "Bienvenue dans la coordination du reseau AnarBib. L'unanimite des administrateur·rices actif·ves a ete atteinte sur votre cooptation, et vous etes desormais administrateur·rice actif·ve du reseau. Cette responsabilite vous donne acces aux propositions de cooptation, aux votes de retrait collectif et a la gouvernance transversale d'AnarBib.",
-    es: "Bienvenide a la coordinacion de la red AnarBib. Se alcanzo la unanimidad de les administradores activos sobre vuestra cooptacion, y desde ahora vos sois administrade activo de la red. Esta responsabilidad le da acceso a propuestas de cooptacion, votos de retiro colectivo y gobernanza transversal de AnarBib.",
-    en: "Welcome to the AnarBib network coordination. Unanimity among active administrators has been reached on your cooptation, and you are now an active network administrator. This responsibility gives you access to cooptation proposals, collective removal votes, and the transversal governance of AnarBib.",
-    it: "Benvenut(o/a/e) nella coordinazione della rete AnarBib. L'unanimita dei compagni/e amministratori/e attivi/e e stata raggiunta sulla vostra cooptazione, e da ora siete amministratore/trice/e attivo/a/e della rete. Questa responsabilita vi da accesso alle proposte di cooptazione, ai voti di ritiro collettivo e alla governance trasversale di AnarBib.",
-    de: "Willkommen in der Koordination des AnarBib-Netzwerks. Die Einstimmigkeit der aktiven Administrator*innen wurde fur Ihre Kooptation erreicht, und Sie sind nun aktive*r Netzwerk-Administrator*in. Diese Verantwortung gibt Ihnen Zugang zu Kooptationsvorschlagen, kollektiven Ruckzugsabstimmungen und der ubergreifenden Governance von AnarBib."
+    "pt-BR": "Olá {targetName}. A proposta de cooptação para integrar-te como administrador(a/e) de rede AnarBib foi concluída à unanimidade. Sejas bem-vind(o/a/e) na equipa de administração de rede.",
+    fr: "Bonjour {targetName}. La proposition de cooptation pour t'intégrer comme administrateur·rice du réseau AnarBib a été conclue à l'unanimité. Bienvenue dans l'équipe d'administration du réseau.",
+    es: "Hola {targetName}. La propuesta de cooptación para integrarte como administrade de red AnarBib fue concluida por unanimidad. ¡Bienvenide al equipo de administración de red!",
+    en: "Hello {targetName}. The cooptation proposal to integrate you as a network administrator of AnarBib has been concluded unanimously. Welcome to the network administration team.",
+    it: "Ciao {targetName}. La proposta di cooptazione per integrarti come amministratore/trice/e di rete AnarBib è stata conclusa all'unanimità. Benvenuto/a/e nel team di amministrazione di rete.",
+    de: "Hallo {targetName}. Der Kooptationsvorschlag, um Sie als Netzwerk-Administrator*in von AnarBib zu integrieren, wurde einstimmig abgeschlossen. Willkommen im Netzwerk-Administrationsteam."
   },
   "network.cooptation_completed.cta": {
-    "pt-BR": "Acessar o painel de rede",
-    fr: "Acceder au tableau de bord du reseau",
-    es: "Acceder al panel de red",
-    en: "Open the network dashboard",
-    it: "Accedere al pannello di rete",
-    de: "Netzwerk-Dashboard offnen"
+    "pt-BR": "Acessar o painel de administração de rede",
+    fr: "Accéder au panneau d'administration du réseau",
+    es: "Acceder al panel de administración de red",
+    en: "Open the network administration panel",
+    it: "Accedere al pannello di amministrazione di rete",
+    de: "Netzwerk-Administrationspanel öffnen"
   },
   // ===== Consulta locale lifecycle (con.*) =================================
   "con.created.sub": {
@@ -2224,7 +2224,64 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     en: "Open the panel",
     it: "Apri il pannello",
     de: "Panel öffnen"
-  }
+  },
+  // Section #114.A : labels et valeurs de vote pour la cooptation reseau
+  "l.vote": {
+    "pt-BR": "Voto",
+    fr: "Vote",
+    es: "Voto",
+    en: "Vote",
+    it: "Voto",
+    de: "Stimme"
+  },
+  "l.voter": {
+    "pt-BR": "Voto emitido por",
+    fr: "Vote émis par",
+    es: "Voto emitido por",
+    en: "Vote cast by",
+    it: "Voto espresso da",
+    de: "Stimme abgegeben von"
+  },
+  "l.proposer": {
+    "pt-BR": "Proposta por",
+    fr: "Proposée par",
+    es: "Propuesta por",
+    en: "Proposed by",
+    it: "Proposta da",
+    de: "Vorgeschlagen von"
+  },
+  "network.cooptation_voted.cta": {
+    "pt-BR": "Acessar a proposta e votar",
+    fr: "Accéder à la proposition et voter",
+    es: "Acceder a la propuesta y votar",
+    en: "Open the proposal and vote",
+    it: "Accedere alla proposta e votare",
+    de: "Vorschlag öffnen und abstimmen"
+  },
+  "network.vote.favorable": {
+    "pt-BR": "favorável",
+    fr: "favorable",
+    es: "favorable",
+    en: "in favour",
+    it: "favorevole",
+    de: "dafür"
+  },
+  "network.vote.opposed": {
+    "pt-BR": "contrário",
+    fr: "défavorable",
+    es: "contrario",
+    en: "against",
+    it: "contrario",
+    de: "dagegen"
+  },
+  "network.vote.abstain": {
+    "pt-BR": "abstenção",
+    fr: "abstention",
+    es: "abstención",
+    en: "abstention",
+    it: "astensione",
+    de: "Enthaltung"
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";
