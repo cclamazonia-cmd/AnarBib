@@ -1750,14 +1750,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // Rappel J+14 ou J+25 envoyé aux admins n'ayant pas voté.
   // Edge Function : choisira le bon variant via payload.reminder_kind ('j14'|'j25')
   // et préfixera le sujet par "[J+14]" ou "[J+25]" si pertinent.
-     "network.cooptation_reminder.proposer_intro": {
+  "network.cooptation_reminder.proposer_intro": {
     "pt-BR": "Olá, {proposerName}. Sua proposta de cooptação de {targetName} ainda não recebeu votos suficientes. A proposta expira em {expiresAt}. Você pode acompanhar o andamento na sua área de administração.",
     fr: "Bonjour {proposerName}. Ta proposition de cooptation de {targetName} n'a pas encore recueilli assez de votes. La proposition expire le {expiresAt}. Tu peux suivre son avancement dans ton espace d'administration.",
     es: "Hola, {proposerName}. Tu propuesta de cooptación de {targetName} todavía no ha recibido suficientes votos. La propuesta expira el {expiresAt}. Podés seguir su avance en tu área de administración.",
     en: "Hello {proposerName}. Your cooptation proposal for {targetName} hasn't gathered enough votes yet. The proposal expires on {expiresAt}. You can follow its progress in your admin area.",
     it: "Ciao {proposerName}. La tua proposta di cooptazione di {targetName} non ha ancora raccolto abbastanza voti. La proposta scade il {expiresAt}. Puoi seguirne l'avanzamento nella tua area di amministrazione.",
     de: "Hallo {proposerName}. Dein Kooptationsvorschlag für {targetName} hat noch nicht genug Stimmen gesammelt. Der Vorschlag läuft am {expiresAt} ab. Du kannst den Verlauf in deinem Administrationsbereich verfolgen."
-  },  "network.cooptation_reminder.sub": {
+  },
+  "network.cooptation_reminder.sub": {
     "pt-BR": "Lembrete : votação pendente sobre a cooptação de {proposedName}",
     fr: "Rappel · vote en attente sur la cooptation de {proposedName}",
     es: "Recordatorio · votación pendiente sobre la cooptación de {proposedName}",
@@ -1897,14 +1898,15 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // ===== network.collective_removal_cancelled ===============================
   // Envoyé aux autres admins (et au target si la proposition était unanimous).
   // Purement informatif.
-     "network.collective_removal_cancelled.reason_label": {
+  "network.collective_removal_cancelled.reason_label": {
     "pt-BR": "Motivo da anulação :",
     fr: "Motif d'annulation :",
     es: "Motivo de la anulación :",
     en: "Cancellation reason:",
     it: "Motivo dell'annullamento :",
     de: "Annullierungsgrund:"
-  },  "network.collective_removal_cancelled.sub": {
+  },
+  "network.collective_removal_cancelled.sub": {
     "pt-BR": "Retirada coletiva cancelada : {proposedName}",
     fr: "Retrait collectif annulé · {proposedName}",
     es: "Retiro colectivo cancelado · {proposedName}",
