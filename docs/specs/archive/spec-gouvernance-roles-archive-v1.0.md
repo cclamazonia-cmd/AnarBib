@@ -1,13 +1,9 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.1 — 2026-05-15 (refonte cohérence post-implémentation admin réseau)
-**Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
+**Version** : 1.0 — 2026-05-05
+**Statut** : Spec validée politiquement, en attente d'implémentation
 **Contexte** : Roadmap Bologna sept 2026
-**Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
-
-**Historique** :
-- v1.0 (2026-05-05) : première rédaction. Modèle 4 rôles (`reader`, `librarian`, `coordenador`, `administrador`), 9 transitions T1-T9, audit log, notifications, cron pending_removal et inactivity cleanup. Implémentation en lots 1-7.
-- **v1.1 (2026-05-15)** : refonte cohérence après la livraison complète du chantier admin réseau (paquets A-F + #114, 11-14/05/2026). Le rôle `administrador` **local** a été supprimé du schéma `user_library_memberships.role` (CHECK constraint rétréci au paquet F), remplacé par la table `network_administrators` (cf. spec admin réseau v0.3.1). Cette spec gouvernance perd donc tout ce qui concernait l'administrador local. Ajout du périmètre d'activation : cette spec décrit le mode `governance_mode = 'full_governance'` de la spec profils v0.3 ; les profils plus simples (`informal`, `staff_roles`) en activent des sous-ensembles. Implémentation reflétée dans §14.
+**Auteur·ices** : Xavier (cadrage politique) + assistant IA (rédaction)
 
 ---
 
@@ -25,7 +21,7 @@
 10. [Modèle de données](#10-modèle-de-données)
 11. [API : RPC SECURITY DEFINER](#11-api--rpc-security-definer)
 12. [Cron jobs](#12-cron-jobs)
-13. [Rôle administrador AnarBib → renvoi spec dédiée](#13-rôle-administrador-anarbib--renvoi-spec-dédiée)
+13. [Rôle administrador AnarBib](#13-rôle-administrador-anarbib)
 14. [Plan d'implémentation](#14-plan-dimplémentation)
 15. [Cas d'usage de référence](#15-cas-dusage-de-référence)
 
@@ -54,22 +50,9 @@ Les rôles dans AnarBib **ne sont pas des grades**. Ce sont des **fonctions** qu
 - Notifications, audit log, interface
 
 **Hors périmètre** (specs séparées) :
-- **Administration du réseau AnarBib** (cooptation, retrait collectif, droits transverses) : couvert par `spec-administrateur-reseau.md v0.3.1` (chantier clos 14/05/2026)
 - Validation physique d'un compte lecteur·rice (cf. `spec-validation-physique.md` à rédiger)
 - Migration de compte entre biblios (cf. `spec-migration-compte.md` cadrée le 03/05/2026)
 - Workflow d'invitation initiale d'un·e librarian (à cadrer dans une spec dédiée)
-
-### 1.4. *(Nouveau v1.1)* Périmètre d'activation : mode `full_governance` des profils d'adoption
-
-Cette spec décrit le **mode `governance_mode = 'full_governance'`** défini par la spec profils d'adoption v0.3 (cf. `spec-profils-bibliotheque.md`). Le `governance_mode` est l'un des 4 axes orthogonaux de configuration d'une biblio :
-
-- `governance_mode = 'informal'` : pas de rôles staff distincts. Tout le monde est `reader`. La biblio fonctionne par confiance directe, sans workflow de cooptation. Cette spec **ne s'applique pas**.
-- `governance_mode = 'staff_roles'` : rôles `librarian` + `coordenador` actifs, mais pas de cycle de carence/suspension/audit log. Cooptation simplifiée. Cette spec s'applique en mode **dégradé** (T1, T2, T4 actifs ; T5, T6, T7 désactivés).
-- **`governance_mode = 'full_governance'`** : doctrine intégrale de cette spec. Tous les rôles, toutes les transitions, audit log complet, notifications systématiques, crons actifs.
-
-**Conséquence opérationnelle** : les RPC de cette spec vérifient en début d'exécution le `governance_mode` de la biblio cible et rejettent les transitions non autorisées dans le mode courant. La doctrine politique reste identique ; seul l'activation des mécanismes varie.
-
-**Implémentation** : à prévoir au paquet F de la spec profils (livraison du `governance_mode` opérationnel). Tant que la spec profils n'est pas livrée, toutes les biblios fonctionnent implicitement en mode `full_governance` (équivalent à v1.0).
 
 ---
 
@@ -103,8 +86,6 @@ Tout changement de rôle déclenche un **email à la personne concernée et à t
 
 Les changements de rôle dans la biblio A n'affectent **rien** dans la biblio B, même pour la même personne. Chaque biblio est souveraine sur ses délégations internes.
 
-**Articulation v1.1 avec admin réseau** : les administrateurs du réseau AnarBib (cf. spec admin réseau v0.3.1) ont un droit politique transverse d'**intervention opérationnelle** sur n'importe quelle biblio (via les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library`). Cette intervention transverse est **tracée** dans `network_admin_cross_library_actions_log` (paquet C.5), avec notification au staff local pour les actions critiques. La souveraineté locale reste donc politiquement intacte : l'admin réseau ne remplace pas la coordination locale, il intervient si elle est défaillante ou empêchée.
-
 ### P8 — Le SIGB ne modélise pas l'AG
 
 Le SIGB exécute les décisions, il ne les prend pas. La spec ne contient aucun mécanisme de vote, quorum, etc. Ces choses se passent en collectif, hors logiciel.
@@ -113,14 +94,11 @@ Le SIGB exécute les décisions, il ne les prend pas. La spec ne contient aucun 
 
 ## 3. Modèle des rôles
 
-AnarBib utilise un modèle à **3 rôles locaux** (réduit de 4 à 3 au paquet F admin réseau, 13/05/2026). Ces rôles existent en base via le CHECK constraint sur `user_library_memberships.role` :
+AnarBib utilise un modèle à **4 rôles** (cadré le 03/05/2026, mémoire #25). Ces rôles existent en base via le CHECK constraint sur `user_library_memberships.role` :
 
 ```sql
--- Depuis le paquet F (13/05/2026) :
-CHECK (role = ANY (ARRAY['reader', 'librarian', 'coordenador']))
+CHECK (role = ANY (ARRAY['reader', 'librarian', 'coordenador', 'administrador']))
 ```
-
-**Évolution v1.0 → v1.1** : le rôle `administrador` qui figurait dans cette liste en v1.0 a été **retiré** du CHECK constraint au paquet F. Il était politiquement ambigu (cf. préambule politique spec admin réseau) : techniquement rattaché à une `library_id`, mais sémantiquement transverse. Sa fonction est désormais portée par la table `network_administrators` (cf. spec admin réseau v0.3.1 §3.1).
 
 ### 3.1. `reader`
 
@@ -138,7 +116,7 @@ CHECK (role = ANY (ARRAY['reader', 'librarian', 'coordenador']))
 
 **Définition** : staff opérationnel de la biblio. Gère le quotidien (emprunts, réservations, validation des inscriptions).
 
-**Permissions techniques actuelles** (via le helper `user_can_act_as_staff_on_library` — wrapper depuis le paquet C admin réseau, cf. annexe B) :
+**Permissions techniques actuelles** (helpers `user_has_library_staff_role`) :
 - Tout ce qu'a un reader
 - Gérer les emprunts, réservations, retours
 - Valider les inscriptions (selon le mode `validation_mode` de la biblio)
@@ -154,7 +132,7 @@ CHECK (role = ANY (ARRAY['reader', 'librarian', 'coordenador']))
 
 **Définition** : staff de coordination. Délégation administrative donnée par le collectif.
 
-**Permissions actuelles** (via le helper `user_can_engage_library` — wrapper depuis le paquet C admin réseau, cf. annexe B) :
+**Permissions actuelles** (helpers `user_can_manage_library`) :
 - Tout ce qu'a un librarian
 - Modifier l'identité publique de la biblio (`library_commons` : nom, logo, contact mail, etc.)
 - Modifier la configuration de la biblio (politiques d'emprunt, règlement, etc.)
@@ -168,31 +146,29 @@ CHECK (role = ANY (ARRAY['reader', 'librarian', 'coordenador']))
 - **Annuler la demande d'exclusion** d'un autre coordenador (avant les 7j)
 - **Suspendre** immédiatement un·e librarian (mesure conservatoire)
 
-### 3.4. *(Refonte v1.1)* Rôle d'administration du réseau → spec dédiée
+### 3.4. `administrador`
 
-**Le rôle `administrador` local a été supprimé au paquet F admin réseau (13/05/2026)** : il n'existe plus dans `user_library_memberships.role`. Sa fonction politique (autorité transverse sur le réseau AnarBib) est désormais portée par la table dédiée `network_administrators`.
+**Définition** : rôle exceptionnel cross-biblios, spécifique à AnarBib (pas à une biblio donnée).
 
-**Pour l'autorité transverse, voir** : `spec-administrateur-reseau.md v0.3.1`. Cette spec gouvernance se limite désormais strictement aux rôles **locaux** d'une biblio.
+**Permissions** :
+- Tout ce qu'a un coordenador, dans **toutes les biblios**
+- Activation de nouvelles biblios (workflow `fn_activate_approved_library_request`)
+- Intervention en cas de blocage (cf. §6 cas-limites)
+- Gestion technique de la plateforme (modèle de données, RLS, etc.)
 
-**Articulation avec cette spec** :
-- Un·e administrateur·rice réseau actif·ve passe le helper `fn_caller_is_network_admin()` → considéré comme **staff** sur toute biblio via les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library` (paquet C admin réseau)
-- Ses actions transverses sont tracées dans `network_admin_cross_library_actions_log` (paquet C.5 admin réseau) avec notification au staff local pour les actions critiques (modifications de règlement, suspensions, etc.)
-- `fn_resolve_caller_role_for_library` retourne `'network_admin'` comme rôle virtuel pour ces personnes
-- Le `LibraryContext` du frontend expose `isNetworkAdmin`, `effectiveRole`, `hasStaffAccess` (paquet E.3 admin réseau)
-
-**Conséquence pour le tableau des transitions §5** : « administrador » disparaît de la colonne « Qui peut le faire » de toutes les transitions T1-T9. La capacité d'intervention reste portée par les administrateurs du réseau, via les helpers d'autorisation centralisés.
+**Cette spec** ne couvre **pas** la gestion du rôle administrador (cf. §13 pour les contours et la note de spec future).
 
 ---
 
 ## 4. Modèle des status
 
-Le CHECK constraint actuel sur `user_library_memberships.status` (élargi par le paquet 23 du 11/05/2026 pour cohérence avec `network_administrators`) :
+Le CHECK constraint actuel sur `user_library_memberships.status` autorise :
 
 ```sql
-CHECK (status = ANY (ARRAY['active', 'inactive', 'pending', 'pending_removal', 'suspended', 'removed']))
+CHECK (status = ANY (ARRAY['active', 'inactive', 'pending', 'suspended']))
 ```
 
-**Note v1.1** : la valeur `'removed'` ajoutée par le paquet 23 pour aligner sur `network_administrators` n'est pas utilisée par les RPC de cette spec (qui s'arrêtent à `'inactive'`). Elle est réservée à des usages futurs (purge RGPD, par exemple).
+Cette spec **ajoute un 5ème status** : `'pending_removal'`.
 
 ### 4.1. `active`
 
@@ -212,7 +188,7 @@ CHECK (status = ANY (ARRAY['active', 'inactive', 'pending', 'pending_removal', '
 
 **Effet** : aucun accès aux fonctions du rôle. La personne reste affichée dans l'équipe avec un badge « suspendue ».
 
-### 4.4. `pending_removal`
+### 4.4. `pending_removal` (NOUVEAU)
 
 **Période de carence de 7 jours** avant exclusion effective.
 
@@ -272,27 +248,23 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 ## 5. Transitions et autorisations
 
-### 5.1. Tableau récapitulatif *(v1.1 : « administrador » retiré, « network_admin » mentionné)*
+### 5.1. Tableau récapitulatif
 
 | # | Transition | Qui peut le faire | Mécanisme |
 |---|---|---|---|
-| T1 | `reader` → `librarian` | Coordenador local **OU** admin réseau actif | Cooptation (P2) |
-| T2 | `librarian` → `coordenador` | Coordenador local **OU** admin réseau actif | Cooptation (P2) |
-| T3 | `coordenador` → `librarian` | Soi-même + autres coordenadores locaux | Auto-rétro ou retrait collégial |
+| T1 | `reader` → `librarian` | Coordenador+ | Cooptation (P2) |
+| T2 | `librarian` → `coordenador` | Coordenador+ | Cooptation (P2) |
+| T3 | `coordenador` → `librarian` | Soi-même + autres coordenadores | Auto-rétro ou retrait collégial |
 | T4 | `librarian` → `reader` (volontaire) | Soi-même | Auto-rétro (P3) |
-| T5 | `librarian` → `reader` (par le collectif) | Coordenador local **OU** admin réseau (avec carence 7j) | `pending_removal` |
-| T6 | Suspension immédiate (urgence) | Coordenador local **OU** admin réseau | Passage à `suspended` |
-| T7 | Levée de suspension | Coordenador local **OU** admin réseau | Retour `suspended` → `active` |
-| T8 | Annulation d'une demande de retrait | Coordenador local **OU** admin réseau | Retour `pending_removal` → `active` |
+| T5 | `librarian` → `reader` (par le collectif) | Coordenador (avec carence 7j) | `pending_removal` |
+| T6 | Suspension immédiate (urgence) | Coordenador | Passage à `suspended` |
+| T7 | Levée de suspension | Coordenador | Retour `suspended` → `active` |
+| T8 | Annulation d'une demande de retrait | Coordenador | Retour `pending_removal` → `active` |
 | T9 | Sortie automatique (compte abandonné) | Cron | Passage à `inactive` après 9 mois sans login + mails J-30 et J-7 |
-
-**Note v1.1** : « admin réseau actif » signifie une personne dont `fn_caller_is_network_admin()` retourne TRUE. L'autorité transverse passe par les helpers centralisés (`user_can_act_as_staff_on_library`, `user_can_engage_library`), pas par une mention explicite dans les RPC. Les actions transverses sont tracées (cf. P7 v1.1).
-
-**Note v1.1 — Transition T10 supprimée** : la transition `coordenador → administrador` qui figurait conceptuellement dans la v1.0 (sans être numérotée) est désormais explicitement hors périmètre. La cooptation au réseau d'administrateurs passe par `fn_network_admin_propose_cooptation` + vote à l'unanimité (cf. spec admin réseau v0.3.1 §4). Ce n'est pas une transition de rôle local, c'est une inscription **politique distincte** dans le périmètre réseau.
 
 ### 5.2. Détail de T1 — `reader` → `librarian` (cooptation)
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve, **avec autorisation `user_can_engage_library` sur la biblio cible**.
+**Qui** : un·e coordenador·a OU un·e administrador·a, **membre actif·ve** de la biblio cible.
 
 **Précondition** :
 - La personne cible existe en tant qu'utilisateur·rice AnarBib (a un compte)
@@ -305,13 +277,11 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - Mail à la personne concernée + à tous les coordenadores actifs de la biblio
 - Audit log
 
-**Note v1.1 (cross-library)** : si l'acteur·rice est admin réseau **sans** membership staff local sur la biblio cible, l'action est tracée dans `network_admin_cross_library_actions_log` (cf. spec admin réseau v0.3.1 §6.3.1 — action critique : promotion staff). Mail immédiat au staff local de la biblio.
-
 **RPC** : `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid)`
 
 ### 5.3. Détail de T2 — `librarian` → `coordenador` (cooptation)
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve, avec autorisation `user_can_engage_library` sur la biblio cible.
+**Qui** : un·e coordenador·a OU un·e administrador·a, **membre actif·ve** de la biblio cible.
 
 **Précondition** :
 - La personne cible a une membership `librarian` `active` dans cette biblio
@@ -322,7 +292,6 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - OU mise à jour de la ligne existante si on suit un modèle « unique role per user_id+library_id » (à arbitrer en implémentation)
 - Mail à la personne + à tous les coordenadores
 - Audit log
-- Si admin réseau cross-library : log dans `network_admin_cross_library_actions_log` + mail immédiat staff local
 
 **RPC** : `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid)`
 
@@ -332,7 +301,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 **Qui** :
 - **Soi-même** : sans validation tierce (P3)
-- **Autres coordenadores locaux** : la rétrogradation par un·e autre coordenador·a est traitée comme une demande de retrait avec carence (7j), via `fn_team_request_remove_member` ciblant la membership `coordenador`. Le statut passe à `pending_removal`. Cf. T5.
+- **Autres coordenadores** : la rétrogradation par un·e autre coordenador·a est traitée comme une demande de retrait avec carence (7j), via `fn_team_request_remove_member` ciblant la membership `coordenador`. Le statut passe à `pending_removal`. Cf. T5.
 
 **RPC pour auto-rétro** : `fn_team_self_demote(p_library_id uuid, p_target_role text DEFAULT 'librarian')`
 
@@ -342,8 +311,6 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - Sinon, une nouvelle membership `librarian` est créée
 - Mail à toute la coordination + à la personne (confirmation)
 - Audit log
-
-**Note v1.1** : la branche « last admin lockdown » qui figurait dans la v1.0 de `fn_team_self_demote` (refus si dernier·e coordenador·a actif·ve) a été **supprimée au paquet F.3 admin réseau** (13/05/2026). La sortie est désormais inconditionnellement autorisée, avec escalade aux admins réseau si elle laisse la biblio sans coordination (cf. §6.1). Cohérent avec P1 (rotation des fonctions) et la souveraineté politique du collectif local.
 
 ### 5.5. Détail de T4 — `librarian` → `reader` (auto-rétro)
 
@@ -359,7 +326,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 ### 5.6. Détail de T5 — `librarian` → `reader` (par le collectif, avec carence)
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve.
+**Qui** : un·e coordenador·a OU un·e administrador·a.
 
 **Précondition** :
 - La personne cible a une membership `librarian` `active` dans cette biblio
@@ -371,7 +338,6 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - Champ `pending_removal_requested_by` rempli avec `auth.uid()`
 - Mail à la personne concernée + à tous les coordenadores actifs
 - Audit log
-- Si admin réseau cross-library : log dans `network_admin_cross_library_actions_log` + mail immédiat staff local
 
 **Effet à J+7** (cron, cf. §12) :
 - Si toujours `pending_removal` : passage à `inactive`
@@ -382,7 +348,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 ### 5.7. Détail de T6 — Suspension immédiate (urgence)
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve.
+**Qui** : un·e coordenador·a OU un·e administrador·a.
 
 **Cas d'usage** :
 - Harcèlement signalé urgent
@@ -394,7 +360,6 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - Aucun accès jusqu'à levée
 - Mail à la personne + à toute la coordination
 - Audit log
-- Si admin réseau cross-library : log + mail immédiat staff local (action critique selon spec admin réseau §6.3.1)
 
 **Durée** : indéfinie. La suspension n'est **pas** un délai de carence avant exclusion ; c'est une mesure conservatoire qui peut durer le temps nécessaire à la délibération collective.
 
@@ -404,7 +369,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 ### 5.8. Détail de T7 — Levée de suspension
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve (pas obligatoirement celui·celle qui a suspendu).
+**Qui** : un·e coordenador·a OU un·e administrador·a (n'importe lequel·le, pas obligatoirement celui·celle qui a suspendu).
 
 **Effet** :
 - Retour à `active`
@@ -415,7 +380,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 ### 5.9. Détail de T8 — Annulation d'une demande de retrait
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve (mécanisme de contrôle collégial).
+**Qui** : un·e coordenador·a OU un·e administrador·a (n'importe lequel·le ; mécanisme de contrôle collégial).
 
 **Effet** :
 - La membership en `pending_removal` repasse à `active`
@@ -438,7 +403,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 3. **J-9 mois** : passage à `inactive` automatique. Mail final à la personne + à toute la coordination.
 
 **Important** :
-- Cette sortie automatique s'applique aussi aux `coordenador`. Si c'est le·la dernier·e coordenador·a, le cron escalade aux administrateurs **réseau** avant exécution (cf. §6.1).
+- Cette sortie automatique s'applique aussi aux `coordenador`. Si c'est le·la dernier·e coordenador·a, le cron escalade à un·e administrador AnarBib avant exécution (cf. §6.1).
 - Une simple **connexion** suffit à réinitialiser le compteur (le cron lit `last_sign_in_at`).
 
 **Cron** : `cron_team_inactive_cleanup` (cf. §12.2).
@@ -452,44 +417,41 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 **Scénario** : la personne déclenche `fn_team_self_demote` ou tente une action qui ferait passer la biblio à 0 coordenador·a actif·ve.
 
-**Comportement** *(actualisé v1.1)* :
+**Comportement** :
 
 1. **Avertissement** : la RPC vérifie qu'on est dans ce cas et **autorise** l'opération mais retourne un avertissement structuré (`{warning: 'last_coordinator_leaving'}`).
 2. **Sortie effective** : la biblio se retrouve avec 0 coordenador·a. Les librarians peuvent continuer à fonctionner sur leurs prérogatives (gestion emprunts, validation inscriptions, etc.) mais aucune modification de l'identité publique ou de la configuration n'est possible.
-3. **Escalade automatique** : un mail est envoyé aux **administrateurs du réseau AnarBib** (table `network_administrators` `status='active'`), indiquant que la biblio X est en mode « sans coord ». Iels peuvent intervenir pour aider le collectif à désigner un·e nouveau·elle coordenador·a (via leur droit transverse de promotion `fn_team_promote_to_coordenador`), ou aider à fermer proprement la biblio.
+3. **Escalade automatique** : un mail est envoyé aux administradores AnarBib, indiquant que la biblio X est en mode « sans coord ». Iels peuvent intervenir pour aider le collectif à désigner un·e nouveau·elle coordenador·a, ou aider à fermer proprement la biblio.
 
-**Note politique** : ce comportement respecte la souveraineté du collectif (le SIGB ne bloque pas la décision) tout en évitant le chaos silencieux (escalade explicite). Notez que la branche « last admin lockdown » qui bloquait techniquement la sortie en v1.0 a été supprimée au paquet F.3 (13/05/2026).
+**Note politique** : ce comportement respecte la souveraineté du collectif (le SIGB ne bloque pas la décision) tout en évitant le chaos silencieux (escalade explicite).
 
 ### 6.2. Auto-promotion impossible
 
 Personne ne peut se promouvoir lui-même à un rôle supérieur. Toutes les RPC de promotion vérifient `p_user_id != auth.uid()`.
 
-### 6.3. *(Supprimée v1.1)* Coordenador→administrador interdite via UI
+### 6.3. Coordenador→administrador interdite via UI
 
-Cette section devient sans objet : le rôle `administrador` local n'existe plus dans `user_library_memberships.role`. La cooptation au réseau d'administrateurs est un mécanisme **politique distinct** (cf. spec admin réseau v0.3.1 §4), pas une transition de rôle local.
+**Principe** : l'accès au rôle `administrador` ne peut **jamais** être obtenu via les RPCs de cette spec. Aucune RPC `fn_team_promote_to_administrador` n'est exposée.
 
-La RPC `fn_team_promote_to_administrador` qui existait en v1.0 a été **dépréciée** au paquet D.8 admin réseau (13/05/2026) puis **supprimée** au paquet F. Toute tentative d'appel retourne une erreur de fonction inexistante.
+L'attribution du rôle `administrador` se fait **hors UI**, par modification SQL directe (par un·e administrador existant·e), selon les règles définies dans le §13.
 
 ### 6.4. Biblio sans aucun staff (cas pathologique)
 
 **Scénario** : tous les staff actifs (librarians + coordenadores) deviennent `inactive` simultanément.
 
-**Comportement** *(actualisé v1.1)* :
+**Comportement** :
 - La biblio reste « active » techniquement (sa visibility, ses livres, sont accessibles selon RLS)
-- Mais aucune action de gestion locale ne peut plus être faite par le staff local
-- Mail urgent aux administrateurs du réseau AnarBib
-- Les administrateurs réseau peuvent intervenir directement via leur droit transverse pour : (a) créer une membership `coordenador` via `fn_team_promote_to_coordenador` après validation politique du collectif local, ou (b) accompagner la fermeture de la biblio (procédure hors-spec)
-
-**Différence avec v1.0** : la v1.0 mentionnait « modification SQL directe » par un admin AnarBib. Depuis le paquet D admin réseau, cette action passe par la RPC normale, simplement appelée par un·e admin réseau (autorisée par les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library`). Plus de bypass SQL, tracé dans `network_admin_cross_library_actions_log`.
+- Mais aucune action de gestion ne peut plus être faite via l'UI
+- Mail urgent aux administradores AnarBib
+- Procédure manuelle de redémarrage à définir hors-spec (probablement : créer une nouvelle membership `coordenador` via SQL direct, après validation du collectif)
 
 ### 6.5. Multi-membership de la même personne
 
 **Cas accepté** : une personne peut avoir plusieurs lignes `user_library_memberships` dans la même biblio (ex : `reader` + `librarian`), grâce à la contrainte UNIQUE `(user_id, library_id, role)`.
 
-**Règle d'affichage** *(actualisée v1.1)* :
-- Dans l'UI onglet `team`, la personne est affichée **une seule fois**, avec son rôle local de plus haut niveau actif (ordre : `coordenador` > `librarian` > `reader`)
-- Si la personne est aussi admin réseau, un `<NetworkAdminBadge>` supplémentaire s'affiche à côté du badge local (cf. spec admin réseau v0.3.1 §7.2), sans ligne supplémentaire
-- L'audit log affiche les changements ligne par ligne (chaque membership a son histoire)
+**Règle d'affichage** :
+- Dans l'UI onglet `team`, la personne est affichée **une seule fois**, avec son rôle de plus haut niveau actif (ordre : `administrador` > `coordenador` > `librarian` > `reader`).
+- L'audit log affiche les changements ligne par ligne (chaque membership a son histoire).
 
 **Règle de RPC** : les RPCs `fn_team_*` opèrent sur une membership précise, identifiée par `(user_id, library_id, role)`. Pas d'ambiguïté.
 
@@ -509,15 +471,9 @@ La RPC `fn_team_promote_to_administrador` qui existait en v1.0 a été **dépré
 
 **Comportement** : retour idempotent (succès silencieux). La RPC vérifie l'état avant action ; si la personne est déjà `librarian` actif, la RPC `fn_team_promote_to_librarian` ne fait rien et retourne `{ok: true, no_change: true}`.
 
-### 6.9. *(Refonte v1.1)* Tentative d'agir sur un·e administrateur·rice réseau via les RPC `fn_team_*`
+### 6.9. Tentative de rétrograder un·e administrador
 
-**Comportement** : les RPC `fn_team_request_remove_member`, `fn_team_self_demote`, `fn_team_suspend_member` ont été **modifiées au paquet C admin réseau (11/05/2026)** pour refuser toute action sur des admins réseau. Si la cible (`p_user_id`) est dans `network_administrators` avec `status='active'`, la RPC retourne une erreur explicite : « cette personne est administrateur·rice du réseau ; le retrait passe par les RPC dédiées (cf. spec admin réseau v0.3.1) ».
-
-Le retrait d'un·e admin réseau passe par :
-- **Auto-retrait** : `fn_network_admin_self_remove` (cf. spec admin réseau §4.4)
-- **Retrait collectif** : `fn_network_admin_propose_collective_removal` + vote à l'unanimité (cf. spec admin réseau §4.2.2)
-
-Cette séparation reflète la séparation politique : le staff local d'une biblio n'a pas pouvoir politique sur l'inscription réseau d'une personne, même si elle agit sur leur biblio.
+**Comportement** : refusée systématiquement. Le rôle `administrador` ne peut être modifié que par les administradores eux·elles-mêmes, via mécanismes hors-spec (cf. §13).
 
 ### 6.10. Impact sur les emprunts en cours d'un·e librarian destitué·e
 
@@ -528,16 +484,6 @@ Cette séparation reflète la séparation politique : le staff local d'une bibli
 - L'historique des actions du librarian dans le système est conservé (audit logs des emprunts, etc.)
 - La personne peut redevenir membre plus tard (nouvelle ligne de membership) sans que ses anciens emprunts soient affectés
 
-### 6.11. *(Nouveau v1.1)* Articulation avec le `governance_mode` de la spec profils
-
-Les RPC de cette spec vérifient en début d'exécution le `governance_mode` de la biblio cible (champ ajouté par le paquet A spec profils, à venir) :
-
-- `governance_mode = 'informal'` : toutes les RPC `fn_team_*` retournent une erreur explicite : « cette biblio fonctionne en mode informel, il n'y a pas de rôles staff distincts à gérer ». L'UI n'expose simplement pas l'onglet Équipe.
-- `governance_mode = 'staff_roles'` : RPC `fn_team_promote_to_librarian`, `fn_team_self_demote` actives. RPC `fn_team_request_remove_member`, `fn_team_suspend_member`, `fn_team_cancel_remove_member`, `fn_team_unsuspend_member` retournent une erreur : « les mécanismes de carence/suspension ne sont pas activés dans ce mode ; passez en `full_governance` ou agissez hors logiciel ».
-- `governance_mode = 'full_governance'` : doctrine intégrale, toutes les RPC actives.
-
-**Implémentation** : à prévoir au paquet F de la spec profils. En attendant, toutes les biblios fonctionnent implicitement en `full_governance`.
-
 ---
 
 ## 7. Audit log
@@ -546,9 +492,9 @@ Les RPC de cette spec vérifient en début d'exécution le `governance_mode` de 
 
 Tous les changements de rôle et de status sont **journalisés** dans une table dédiée. La consultation est :
 
-- **Public au staff actif de la biblio** : tout `librarian`, `coordenador` actif·ve dans la biblio peut lire l'audit log de cette biblio. **Les administrateurs réseau** y ont aussi accès au titre de leur droit transverse (via le helper `user_can_act_as_staff_on_library`).
+- **Public au staff actif de la biblio** : tout `librarian`, `coordenador`, `administrador` actif·ve dans la biblio peut lire l'audit log de cette biblio.
 - **Privé au reader** : un·e reader ne voit pas l'audit log de l'équipe (ce n'est pas une donnée publique du catalogue).
-- **Privé inter-biblios** : les staff d'une biblio A ne voient pas l'audit de la biblio B (sauf admin réseau via droit transverse).
+- **Privé inter-biblios** : les staff d'une biblio A ne voient pas l'audit de la biblio B.
 
 ### 7.2. Contenu d'une entrée
 
@@ -561,11 +507,11 @@ Chaque action génère **une entrée** dans `library_membership_audit` :
 | `target_user_id` | uuid FK | personne dont la membership a changé |
 | `actor_user_id` | uuid FK | personne qui a effectué l'action (NULL si cron) |
 | `action` | text | code de l'action (cf. §7.3) |
-| `role` | text | rôle concerné (`reader`, `librarian`, `coordenador`) — `'administrador'` retiré v1.1 |
+| `role` | text | rôle concerné (`reader`, `librarian`, `coordenador`) |
 | `status_before` | text | status avant (peut être NULL pour création) |
 | `status_after` | text | status après |
 | `reason` | text | justification (peut être NULL ; obligatoire pour suspend, optionnelle ailleurs) |
-| `metadata` | jsonb | données contextuelles (ex : pending_removal_until, cross_library_action flag, etc.) |
+| `metadata` | jsonb | données contextuelles (ex : pending_removal_until, etc.) |
 | `created_at` | timestamptz | horodatage de l'action |
 
 ### 7.3. Codes d'action
@@ -584,12 +530,6 @@ Chaque action génère **une entrée** dans `library_membership_audit` :
 | `inactive_warning_7d` | T9 (mail J-7) | cron `cron_team_inactive_cleanup` |
 | `inactive_auto` | T9 (sortie auto J-9 mois) | cron `cron_team_inactive_cleanup` |
 
-**Note v1.1** : les actions transverses d'un·e admin réseau (par exemple `fn_team_suspend_member` appelé par un admin réseau sans staff local sur la biblio) génèrent **2 entrées** d'audit complémentaires :
-- Une entrée dans `library_membership_audit` (cette table) avec `metadata.cross_library = true` et `metadata.actor_role = 'network_admin'`
-- Une entrée dans `network_admin_cross_library_actions_log` (table d'audit réseau, paquet C.5 admin réseau)
-
-La duplication intentionnelle garantit la visibilité côté staff local **et** côté audit réseau, sans dépendre d'une jointure complexe.
-
 ### 7.4. Écriture
 
 L'écriture est faite **directement par les RPCs SECURITY DEFINER** (pas via trigger). Cela permet de capturer le contexte applicatif (`actor_user_id`, `reason`) qui ne serait pas accessible dans un trigger.
@@ -597,19 +537,17 @@ L'écriture est faite **directement par les RPCs SECURITY DEFINER** (pas via tri
 ### 7.5. RLS de la table audit
 
 ```sql
--- Lecture : staff actif de la biblio uniquement (inclut admin réseau via le helper)
+-- Lecture : staff actif de la biblio uniquement
 CREATE POLICY library_membership_audit_staff_read
 ON public.library_membership_audit
 FOR SELECT
 TO authenticated
 USING (
-  public.user_can_act_as_staff_on_library(library_id)  -- v1.1 : helper centralisé
+  public.user_has_library_staff_role(auth.uid(), library_id)
 );
 
 -- Écriture : aucune policy. Seules les RPCs SECURITY DEFINER y accèdent.
 ```
-
-**Note v1.1** : le helper `user_has_library_staff_role` qui figurait en v1.0 a été **refactoré au paquet C admin réseau** comme wrapper de `user_can_act_as_staff_on_library`. La RLS continue de fonctionner, et inclut désormais les admins réseau (cohérent avec la transparence collective).
 
 ### 7.6. Rétention
 
@@ -627,11 +565,11 @@ Cas de suppression : si une biblio ferme (cf. workflow de fermeture, hors spec),
 **Tout changement de rôle déclenche un email** :
 - À la **personne concernée** (toujours)
 - À **tous les coordenadores actifs** de la biblio (toujours)
-- Aux **administrateurs du réseau AnarBib** dans certains cas critiques (compte abandonné détecté sur le·la dernier·e coord, biblio sans staff, actions cross-library critiques, etc.)
+- Aux **administradores AnarBib** dans certains cas critiques (compte abandonné détecté sur le·la dernier·e coord, biblio sans staff, etc.)
 
 ### 8.2. Pattern d'event types
 
-Les events suivent le préfixe `team.*` (cohérent avec `loan.*`, `res.*`, `wf.*` existants).
+Les nouveaux events suivent le préfixe `team.*` (cohérent avec `loan.*`, `res.*`, `wf.*` existants).
 
 | Event type | Déclenché par | Destinataires |
 |---|---|---|
@@ -646,13 +584,11 @@ Les events suivent le préfixe `team.*` (cohérent avec `loan.*`, `res.*`, `wf.*
 | `team.inactive_warning_30d` | T9 (J-30) | personne uniquement |
 | `team.inactive_warning_7d` | T9 (J-7) | personne uniquement |
 | `team.inactive_auto` | T9 (J-9 mois) | personne + coordenadores |
-| `team.last_coordinator_leaving` | §6.1 | administrateurs du réseau uniquement |
-
-**Note v1.1** : pour les events liés à une action transverse (admin réseau sur biblio dont il n'est pas staff local), le mail au staff local mentionne explicitement « action réalisée par un·e administrateur·rice du réseau AnarBib » (clé i18n dédiée). Cohérent avec la transparence du droit transverse.
+| `team.last_coordinator_leaving` | §6.1 | administradores AnarBib uniquement |
 
 ### 8.3. Clés i18n nécessaires
 
-Les chaînes i18n pour les mails sont dans `supabase/functions/_shared/i18n/mail-strings.ts` × 6 locales (pt-BR, fr, es, en, it, de) selon les conventions militantes établies.
+Les chaînes i18n pour les mails seront ajoutées dans `supabase/functions/_shared/i18n/mail-strings.ts` × 6 locales (pt-BR, fr, es, en, it, de) selon les conventions militantes déjà établies (cf. mémoire interne).
 
 **Liste minimale** (le détail des chaînes sera précisé à l'implémentation) :
 
@@ -664,7 +600,7 @@ team.promoted_to_coordenador.intro
 ...
 ```
 
-Soit environ **40-60 clés × 6 locales = 240 à 360 chaînes**.
+Soit environ **40-60 nouvelles clés × 6 locales = 240 à 360 chaînes**. À traiter via un script Python idempotent (pattern `add-pageTitle-keys.py` du 05/05).
 
 ### 8.4. Gabarit type
 
@@ -681,13 +617,13 @@ Pour chaque event, le mail contient :
 ### 8.5. Intégration dans `notify-event`
 
 Le pattern actuel de `notify-event` est :
-1. Trigger DB ou RPC INSERT dans `team_notification_outbox`
-2. Edge Function `notify-event` lit l'outbox et dispatche via les handlers
+1. Trigger DB envoie un payload via webhook
+2. Edge Function reçoit, dispatche via `dispatchNotifyEvent(event, recordId, payload)`
 3. Mail envoyé avec les chaînes i18n correspondantes
 
 **Pour cette spec** :
-- Les RPCs `fn_team_*` insèrent dans l'outbox via `fn_team_notify_event` (helper symétrique à `fn_network_notify_event`, cf. paquet D.6bis admin réseau)
-- Pattern doctrinal : **un INSERT par event**, fan-out réalisé par l'Edge Function en lisant le payload JSONB
+- Les RPCs `fn_team_*` envoient explicitement les events (pas via triggers DB), pour avoir un contexte applicatif riche (qui a déclenché, raison, etc.).
+- Implémentation : appel direct depuis la RPC à `pg_net.http_post()` vers `notify-event`, OU passage par une table de queue (`notification_outbox`) avec un cron léger qui déclenche `notify-event`. À arbitrer en implémentation selon ce qui existe déjà.
 
 ---
 
@@ -703,7 +639,7 @@ L'onglet `team` existe déjà et affiche actuellement la liste des membres en le
 
 L'onglet `team` est visible :
 - En **lecture seule** pour les `librarian` actifs (peuvent voir l'équipe, l'audit log, mais pas agir)
-- En **mode action** pour les `coordenador` actifs **OU** les administrateurs réseau actifs (peuvent promouvoir, retirer, suspendre, etc.)
+- En **mode action** pour les `coordenador` et `administrador` actifs (peuvent promouvoir, retirer, suspendre, etc.)
 
 ### 9.3. Structure proposée
 
@@ -717,7 +653,7 @@ L'onglet `team` est visible :
 │  │  Emma G.          librarian       [Promouvoir] [Retirer] │   │
 │  │  emma@blmf.org                                       │   │
 │  │                                                       │   │
-│  │  Voltairine d.C. coordenador  [Admin réseau]   [Rétrograder] │
+│  │  Voltairine d.C. coordenador     [Rétrograder]       │   │
 │  │  voltairine@blmf.org                                 │   │
 │  │                                                       │   │
 │  │  ...                                                  │   │
@@ -739,9 +675,7 @@ L'onglet `team` est visible :
 └─────────────────────────────────────────────────────────────┘
 ```
 
-**Note v1.1** : le badge `[Admin réseau]` ajouté à côté du badge local (cf. exemple Voltairine ci-dessus) reflète la séparation politique. Implémenté via `<NetworkAdminBadge>` (paquet E.3 admin réseau).
-
-### 9.4. Comportements UI précis *(refonte v1.1)*
+### 9.4. Comportements UI précis
 
 **Pour un·e librarian actif·ve** (lecture seule) :
 - Voit la liste des membres avec leurs rôles
@@ -755,10 +689,9 @@ L'onglet `team` est visible :
 - Bouton « Inviter quelqu'un dans l'équipe » (workflow d'invitation cf. spec future)
 - Action « Je passe la main » sur sa propre ligne (auto-rétro)
 
-**Pour un·e administrateur·rice réseau actif·ve** (v1.1) :
-- Tout ce que voit un·e coordenador·a, **sur n'importe quelle biblio du réseau**
-- Visibilité : badge `[Admin réseau]` affiché à côté du badge local sur sa propre ligne (s'il/elle a aussi un membership local)
-- Pas d'action spéciale supplémentaire dans l'UI de cet onglet (les actions réseau sont dans `/rede` onglet Administradores, cf. spec admin réseau v0.3.1 §7.5)
+**Pour un·e administrador·a** :
+- Tout ce que voit un·e coordenador·a
+- Plus quelques actions spéciales accessibles uniquement aux admins (intervention en cas de blocage)
 
 ### 9.5. Modales de confirmation
 
@@ -770,8 +703,6 @@ Toute action **non triviale** ouvre une modale de confirmation :
 - **Lever suspension / Annuler exclusion** : modales simples « Êtes-vous sûr·e ? ».
 - **Auto-rétrogradation** : modale **obligatoire** avec mention claire des conséquences (« Vous perdrez les permissions de coordenador·a immédiatement. Cette action est réversible uniquement par un·e autre coordenador·a »).
 
-**Note v1.1** : la phrase rituelle « last admin lockdown » qui figurait dans la modale d'auto-rétrogradation en v1.0 a été **supprimée au paquet F.3** en même temps que la branche de blocage dans la RPC. Le coordenador·a sortant·e n'a plus à valider de mention spéciale ; l'escalade admin réseau est silencieuse côté UI (mail aux admins réseau).
-
 ### 9.6. États visuels
 
 Les badges de statut affichés sur chaque ligne :
@@ -780,39 +711,32 @@ Les badges de statut affichés sur chaque ligne :
 |---|---|---|
 | `active` | rôle (ex « librarian ») | vert / neutre |
 | `suspended` | « suspendu·e » | orange |
-| `pending_removal` | « préavis jusqu'au <date> » | rouge |
+| `pending_removal` | « préavis jusqu'au <date>` | rouge |
 | `inactive` | (n'apparaît pas dans la liste par défaut) | n/a |
-
-Badge complémentaire :
-
-| Condition | Badge UI |
-|---|---|
-| `isNetworkAdmin = true` (v1.1) | « Admin réseau » à côté du badge local |
 
 ### 9.7. Internationalisation
 
-Toutes les chaînes UI utilisent le pattern i18n existant (`useIntl`, `t({id: 'biblioteca.team.*'})`). Les clés nécessaires (~40 clés × 6 locales = 240 chaînes), à livrer en un seul lot via un script Python idempotent.
+Toutes les chaînes UI utilisent le pattern i18n existant (`useIntl`, `t({id: 'biblioteca.team.*'})`). Les nouvelles clés à créer (estimation : ~40 clés × 6 locales = 240 chaînes), à livrer en un seul lot via un script Python idempotent.
 
 
 ---
 
 ## 10. Modèle de données
 
-### 10.1. Modifications de la table existante *(actualisé v1.1)*
+### 10.1. Modifications de la table existante
 
-**Table `user_library_memberships`** : modifications appliquées en plusieurs paquets entre le 5/05/2026 et le 13/05/2026.
+**Table `user_library_memberships`** : la structure actuelle est largement compatible. Modifications minimales :
 
 ```sql
--- 1. Élargissement du CHECK constraint sur status (paquet 23 du 11/05/2026)
+-- 1. Élargir le CHECK constraint pour ajouter 'pending_removal'
 ALTER TABLE public.user_library_memberships
   DROP CONSTRAINT user_library_memberships_status_check;
 
 ALTER TABLE public.user_library_memberships
   ADD CONSTRAINT user_library_memberships_status_check
-  CHECK (status IN ('active', 'inactive', 'pending', 'pending_removal', 'suspended', 'removed'));
-  -- 'removed' ajouté pour cohérence avec network_administrators
+  CHECK (status IN ('active', 'inactive', 'pending', 'pending_removal', 'suspended'));
 
--- 2. Ajout des colonnes pour le délai de carence (paquet 1 spec gouvernance)
+-- 2. Ajouter les colonnes pour le délai de carence
 ALTER TABLE public.user_library_memberships
   ADD COLUMN IF NOT EXISTS pending_removal_until timestamptz,
   ADD COLUMN IF NOT EXISTS pending_removal_requested_by uuid REFERENCES public.profiles(id);
@@ -826,15 +750,6 @@ COMMENT ON COLUMN public.user_library_memberships.pending_removal_requested_by I
 CREATE INDEX IF NOT EXISTS idx_ulm_pending_removal_until
   ON public.user_library_memberships (pending_removal_until)
   WHERE status = 'pending_removal';
-
--- 4. Rétrécissement du CHECK constraint sur role (paquet F admin réseau du 13/05/2026)
-ALTER TABLE public.user_library_memberships
-  DROP CONSTRAINT user_library_memberships_role_check;
-
-ALTER TABLE public.user_library_memberships
-  ADD CONSTRAINT user_library_memberships_role_check 
-  CHECK (role IN ('reader', 'librarian', 'coordenador'));
-  -- 'administrador' retiré : remplacé par la table network_administrators
 ```
 
 ### 10.2. Nouvelle table `library_membership_audit`
@@ -858,7 +773,7 @@ CREATE TABLE public.library_membership_audit (
                     'inactive_warning_7d',
                     'inactive_auto'
                   )),
-  role            text NOT NULL CHECK (role IN ('reader', 'librarian', 'coordenador')),  -- v1.1 : 'administrador' retiré
+  role            text NOT NULL CHECK (role IN ('reader', 'librarian', 'coordenador', 'administrador')),
   status_before   text,
   status_after    text NOT NULL,
   reason          text,
@@ -874,13 +789,13 @@ CREATE INDEX idx_lma_target_user
 
 ALTER TABLE public.library_membership_audit ENABLE ROW LEVEL SECURITY;
 
--- Lecture : staff actif de la biblio (inclut admin réseau via le helper centralisé)
+-- Lecture : staff actif de la biblio
 CREATE POLICY library_membership_audit_staff_read
 ON public.library_membership_audit
 FOR SELECT
 TO authenticated
 USING (
-  public.user_can_act_as_staff_on_library(library_id)  -- v1.1 : helper centralisé
+  public.user_has_library_staff_role(auth.uid(), library_id)
 );
 
 -- Pas de policy d'écriture : seules les RPC SECURITY DEFINER y accèdent
@@ -903,30 +818,25 @@ Toutes les RPCs respectent les règles suivantes :
 - Préfixe : `fn_team_*`
 - `LANGUAGE plpgsql SECURITY DEFINER`
 - `SET search_path = public, pg_temp`
-- Vérifications d'autorisation explicites en début de fonction (pattern `IF NOT user_can_engage_library(...) THEN RAISE EXCEPTION 'unauthorized' END IF` — v1.1 : helper centralisé)
+- Vérifications d'autorisation explicites en début de fonction (pattern `IF NOT user_can_manage_library(...) THEN RAISE EXCEPTION 'unauthorized' END IF`)
 - Retournent `jsonb` structuré : `{ok: true|false, action: '...', warnings: [], errors: []}`
 - Écrivent dans `library_membership_audit` à chaque action réussie
-- Émettent un event `team.*` via `fn_team_notify_event` (helper INSERT outbox) à chaque action réussie
-- **(v1.1)** Si l'acteur·rice est admin réseau cross-library : `PERFORM fn_log_cross_library_action` après audit local et avant notification mail (cf. spec admin réseau v0.3.1 §6.3.1, NOOP automatique si non-transverse)
+- Émettent un event `team.*` via `notify-event` à chaque action réussie
 - `GRANT EXECUTE` accordé à `authenticated` uniquement (pas à `anon`)
 
-### 11.2. Liste des RPCs *(actualisée v1.1)*
+### 11.2. Liste des RPCs
 
-| RPC | Signature | Autorisation requise | Statut |
-|---|---|---|---|
-| `fn_team_promote_to_librarian` | `(p_user_id uuid, p_library_id uuid)` | `user_can_engage_library` | ✅ Existante |
-| `fn_team_promote_to_coordenador` | `(p_user_id uuid, p_library_id uuid)` | `user_can_engage_library` | ✅ Existante |
-| ~~`fn_team_promote_to_administrador`~~ | ~~obsolète~~ | — | ❌ **Supprimée au paquet F (13/05/2026)** |
-| `fn_team_self_demote` | `(p_library_id uuid, p_target_role text)` | staff actif (auto) | ✅ Existante, branche « last admin lockdown » supprimée au paquet F.3 |
-| `fn_team_request_remove_member` | `(p_user_id uuid, p_library_id uuid, p_role text, p_reason text)` | `user_can_engage_library` + refus si cible admin réseau | ✅ Existante, refacto C |
-| `fn_team_cancel_remove_member` | `(p_user_id uuid, p_library_id uuid, p_role text)` | `user_can_engage_library` | ✅ Existante |
-| `fn_team_suspend_member` | `(p_user_id uuid, p_library_id uuid, p_role text, p_reason text)` | `user_can_engage_library` + refus si cible admin réseau | ✅ Existante, refacto F.3 |
-| `fn_team_unsuspend_member` | `(p_user_id uuid, p_library_id uuid, p_role text)` | `user_can_engage_library` | ✅ Existante |
-| `fn_team_list_memberships` | `(p_scope text, p_library_id uuid)` | varie selon scope | ✅ Refactorée au paquet D.8 sur `fn_caller_is_network_admin` |
+| RPC | Signature | Rôle requis (auth.uid()) |
+|---|---|---|
+| `fn_team_promote_to_librarian` | `(p_user_id uuid, p_library_id uuid)` | coordenador+ |
+| `fn_team_promote_to_coordenador` | `(p_user_id uuid, p_library_id uuid)` | coordenador+ |
+| `fn_team_self_demote` | `(p_library_id uuid, p_target_role text)` | staff actif (auto) |
+| `fn_team_request_remove_member` | `(p_user_id uuid, p_library_id uuid, p_role text, p_reason text)` | coordenador+ |
+| `fn_team_cancel_remove_member` | `(p_user_id uuid, p_library_id uuid, p_role text)` | coordenador+ |
+| `fn_team_suspend_member` | `(p_user_id uuid, p_library_id uuid, p_role text, p_reason text)` | coordenador+ |
+| `fn_team_unsuspend_member` | `(p_user_id uuid, p_library_id uuid, p_role text)` | coordenador+ |
 
-**Note v1.1** : `fn_caller_is_administrador` qui figurait en v1.0 comme helper a été **dépréciée au paquet D.8** puis **supprimée au paquet F** (cohérent avec la suppression du rôle `administrador` local). Tous les appelants ont été refactorés sur `fn_caller_is_network_admin` (cf. spec admin réseau v0.3.1).
-
-### 11.3. Pattern type d'une RPC (exemple : promote_to_librarian) *(actualisé v1.1)*
+### 11.3. Pattern type d'une RPC (exemple : promote_to_librarian)
 
 ```sql
 CREATE OR REPLACE FUNCTION public.fn_team_promote_to_librarian(
@@ -947,9 +857,9 @@ BEGIN
     RAISE EXCEPTION 'unauthorized: not authenticated';
   END IF;
 
-  -- 2. Vérifier que l'acteur·rice peut engager la biblio (coord local OU admin réseau)
-  IF NOT public.user_can_engage_library(p_library_id) THEN  -- v1.1 : helper centralisé
-    RAISE EXCEPTION 'unauthorized: only coordenador local or network admin can promote';
+  -- 2. Vérifier que l'acteur·rice est coordenador+ de la biblio cible
+  IF NOT public.user_can_manage_library(p_library_id) THEN
+    RAISE EXCEPTION 'unauthorized: only coordenador+ can promote';
   END IF;
 
   -- 3. Vérifier que l'acteur·rice ne se promeut pas lui·elle-même
@@ -983,26 +893,14 @@ BEGIN
     SET status = 'active',
         updated_at = now();
 
-  -- 7. Audit log local
+  -- 7. Audit log
   INSERT INTO public.library_membership_audit
     (library_id, target_user_id, actor_user_id, action, role, status_before, status_after)
   VALUES
     (p_library_id, p_user_id, v_actor_id, 'promoted_to_librarian', 'librarian',
      COALESCE(v_existing.status, NULL), 'active');
 
-  -- 8. v1.1 : log cross-library si admin réseau sans staff local sur cette biblio
-  PERFORM public.fn_log_cross_library_action(
-    p_actor_user_id := v_actor_id,
-    p_library_id := p_library_id,
-    p_action_type := 'team_promote_to_librarian',
-    p_is_critical := true,  -- promotion staff = critique
-    p_target_entity_type := 'user_library_membership',
-    p_target_entity_id := p_user_id,
-    p_payload := jsonb_build_object('promoted_role', 'librarian')
-  );
-  -- NOOP automatique si v_actor_id est staff local de p_library_id
-
-  -- 9. Notification mail
+  -- 8. Notification mail
   PERFORM public.fn_team_notify_event('team.promoted_to_librarian',
     jsonb_build_object(
       'library_id', p_library_id,
@@ -1016,22 +914,25 @@ $$;
 
 GRANT EXECUTE ON FUNCTION public.fn_team_promote_to_librarian(uuid, uuid) TO authenticated;
 COMMENT ON FUNCTION public.fn_team_promote_to_librarian(uuid, uuid) IS
-  'Promeut un user au rôle librarian dans une biblio. Cooptation par coordenador local ou admin réseau. Cf. spec-gouvernance-roles.md v1.1 §5.2.';
+  'Promeut un user au rôle librarian dans une biblio. Cooptation par coordenador+. Cf. spec-gouvernance-roles.md §5.2.';
 ```
 
 Les autres RPCs suivent le même pattern, avec leurs vérifications spécifiques.
 
 ### 11.4. Helper d'envoi des notifications
 
-Fonction helper `fn_team_notify_event(p_event text, p_payload jsonb)` :
-- Pattern unifié depuis le paquet D.6bis admin réseau : **un INSERT par event** dans `team_notification_outbox`, fan-out par l'Edge Function `notify-event` en lisant le payload JSONB
-- Symétrie totale avec `fn_network_notify_event` (events `network.*`)
+Une fonction helper `fn_team_notify_event(p_event text, p_payload jsonb)` est créée pour centraliser l'envoi des events team vers `notify-event`. Elle peut, selon l'arbitrage d'implémentation :
+
+- **Option A** : faire un `pg_net.http_post()` direct vers l'Edge Function `notify-event` avec le payload
+- **Option B** : INSERT dans une table `notification_outbox` puis cron léger qui dispatche
+
+L'option B est plus robuste (résilience aux pannes momentanées) et recommandée si l'infrastructure existe.
 
 ---
 
 ## 12. Cron jobs
 
-Les crons sont implémentés via `pg_cron`.
+Les crons sont implémentés via `pg_cron` (déjà en place pour le rafraîchissement du catalogue, cf. mémoire #5).
 
 ### 12.1. `cron_team_pending_removal_complete`
 
@@ -1092,7 +993,7 @@ SELECT cron.schedule(
 **Action** :
 1. Pour chaque membership `active` d'un user dont `last_sign_in_at` est à exactement J-9mois - 30 jours : envoyer `team.inactive_warning_30d` à la personne, audit log.
 2. Idem pour J-9mois - 7 jours : `team.inactive_warning_7d`.
-3. Pour chaque membership `active` dont `last_sign_in_at` est à >= J-9mois : passage à `inactive`, mail + audit log + escalade admins réseau si c'est le·la dernier·e coord (cf. §6.1).
+3. Pour chaque membership `active` dont `last_sign_in_at` est à >= J-9mois : passage à `inactive`, mail + audit log + escalade administrador AnarBib si c'est le·la dernier·e coord (cf. §6.1).
 
 **Garde-fou** : si `last_sign_in_at` est NULL (compte jamais utilisé), le critère ne s'applique pas (sinon, on virerait des comptes tout neufs en attente de validation). À adapter selon l'audit du champ.
 
@@ -1106,91 +1007,119 @@ Les crons sont déclarés dans `pg_cron` et leurs exécutions tracées dans `cro
 
 ---
 
-## 13. Rôle administrador AnarBib → renvoi spec dédiée
+## 13. Rôle administrador AnarBib
 
-*(Section refondue intégralement v1.1)*
+### 13.1. Cadre actuel (transitoire)
 
-L'administration du réseau AnarBib (cooptation à l'unanimité, retrait collectif à l'unanimité, auto-retrait unilatéral, audit cross-library, etc.) est traitée par **`spec-administrateur-reseau.md v0.3.1`**, chantier entièrement livré en production entre le 11/05/2026 et le 14/05/2026 (paquets A-F + #114 mails militants).
+Au 05/05/2026, **un·e seul·e administrador** existe : Xavier (auteur·ice de cette spec). Cette spec **ne touche pas** à ce rôle, qui reste géré hors-UI par modification SQL directe.
 
-**Cette spec gouvernance ne s'occupe plus du tout du rôle d'administration du réseau** : elle se limite strictement aux rôles **locaux** d'une biblio (`reader`, `librarian`, `coordenador`). L'articulation entre les deux niveaux passe par les helpers centralisés `user_can_act_as_staff_on_library`, `user_can_engage_library`, et `fn_caller_is_network_admin` (cf. annexe B).
+### 13.2. Cadre cible (à formaliser dans une spec ultérieure)
 
-**Note historique** : la v1.0 de cette spec contenait une section §13 dédiée à un rôle `administrador` local hypothétique, avec une transition `coordenador → administrador` envisagée. Ces éléments sont devenus sans objet le 13/05/2026 quand le paquet F a supprimé le rôle `administrador` du CHECK constraint de `user_library_memberships.role`. Toute autorité transverse passe désormais par la table `network_administrators` et son workflow politique de cooptation unanime.
+La gouvernance du rôle `administrador` AnarBib est elle-même un sujet politique. Cadrage validé le 05/05/2026 :
+
+- **Cercle restreint** : 1, 3 ou 5 administradores maximum
+- **Nombre impair** : pour permettre les départages en cas de décision difficile
+- **Nomination** : cooptation entre administradores existant·es, selon des règles internes à formaliser
+- **Hors UI** : aucune RPC `fn_team_promote_to_administrador` n'est jamais exposée
+- **Modalités de décision** : à définir (consensus, majorité simple, etc.)
+
+### 13.3. Disposition transitoire (cadre minimal)
+
+Tant que le rôle `administrador` est tenu par une seule personne (situation au 05/05/2026), la **désignation d'un·e successeur·e** se fait **en accord avec les coordenadores des biblios actives** d'AnarBib. Ce mécanisme transitoire :
+
+- préserve la souveraineté des biblios fédérées (elles sont consultées, leur avis compte)
+- évite la rupture de service (un·e successeur·e est toujours désigné·e à l'avance)
+- génère une **vie organique** au sein de la communauté AnarBib qui pourra inspirer la spec future
+- reste **hors-UI** : la passation se fait par accord politique puis modification SQL directe par l'administrador sortant·e
+
+Cette disposition transitoire reste valide jusqu'à la rédaction et l'adoption d'une spec dédiée `spec-administrador-anarbib.md`.
+
+### 13.4. Note de spec future
+
+Une spec dédiée `spec-administrador-anarbib.md` devra :
+
+- Définir le mode de désignation des administradores (qui propose, qui valide, comment)
+- Définir les règles de fonctionnement collégial (quorum, scrutin, etc.)
+- Définir les modalités de retrait d'un·e administrador (volontaire ou collégial)
+- Définir les rapports avec le réseau RebAL et les biblios fédérées
+
+Cette spec future devra être **rédigée collectivement** (pas seul·e), idéalement dans le cadre d'une rencontre du réseau (Bologna sept 2026 par exemple).
 
 ---
 
-## 14. Plan d'implémentation *(actualisé v1.1 — état des lots)*
+## 14. Plan d'implémentation
 
-### 14.1. Découpage en lots et statut
+### 14.1. Découpage en lots
 
-L'implémentation s'est faite en lots progressifs. Au 15/05/2026, voici l'état :
+L'implémentation peut se faire en lots indépendants, déployables progressivement.
 
-#### Lot 1 — Infrastructure DB ✅ **Partiellement livré**
+#### Lot 1 — Infrastructure DB (estimation : 1/2 journée)
 
-- ✅ Migration : élargissement du CHECK constraint sur `status` (paquet 23 du 11/05/2026, élargi à `removed` pour cohérence admin réseau)
-- ✅ Migration : rétrécissement du CHECK constraint sur `role` (paquet F admin réseau du 13/05/2026)
-- ⏸️ Migration : ajout des colonnes `pending_removal_until`, `pending_removal_requested_by` — **à faire**
-- ⏸️ Migration : création de `library_membership_audit` — **à faire**
-- ⏸️ Migration : création de l'index `idx_ulm_pending_removal_until` — **à faire**
+- Migration : élargissement du CHECK constraint sur `status`
+- Migration : ajout des colonnes `pending_removal_until`, `pending_removal_requested_by`
+- Migration : création de `library_membership_audit`
+- Migration : création de l'index `idx_ulm_pending_removal_until`
+- Test : insertion + sélection d'une ligne d'audit, vérif RLS
 
-#### Lot 2 — RPCs cooptation (T1, T2) ✅ **Largement livré**
+#### Lot 2 — RPCs cooptation (T1, T2) (estimation : 1 journée)
 
-- ✅ `fn_team_promote_to_librarian` : existante, refactorée au paquet C admin réseau sur `user_can_engage_library`
-- ✅ `fn_team_promote_to_coordenador` : existante, refactorée au paquet C admin réseau
-- ⏸️ Helper `fn_team_notify_event` : pattern doctrinal D.6bis admin réseau adopté côté réseau, à appliquer côté team (refacto mineur, INSERT outbox)
-- ⏸️ Tests d'acceptation : à compléter
+- `fn_team_promote_to_librarian`
+- `fn_team_promote_to_coordenador`
+- Helper `fn_team_notify_event`
+- Tests : promotion réussie, idempotence, refus si non coord, refus auto-promo
 
-#### Lot 3 — RPCs retraits (T3-T8) ✅ **Partiellement livré, branche last admin lockdown supprimée**
+#### Lot 3 — RPCs retraits (T3-T8) (estimation : 1 journée)
 
-- ✅ `fn_team_self_demote` : existante, branche A « last admin lockdown » + phrase rituelle supprimée au paquet F.3 admin réseau
-- ✅ `fn_team_request_remove_member` : existante, refactorée au paquet C + refus si cible admin réseau (paquet F.3)
-- ⏸️ `fn_team_cancel_remove_member` : à vérifier / à implémenter si absente
-- ✅ `fn_team_suspend_member` : existante, refactorée au paquet F.3
-- ⏸️ `fn_team_unsuspend_member` : à vérifier / à implémenter si absente
+- `fn_team_self_demote`
+- `fn_team_request_remove_member`
+- `fn_team_cancel_remove_member`
+- `fn_team_suspend_member`
+- `fn_team_unsuspend_member`
+- Tests : carence 7j, annulation, suspension/levée, refus tentatives interdites
 
-#### Lot 4 — Crons ⏸️ **À implémenter**
+#### Lot 4 — Crons (estimation : 1/2 journée)
 
-- ⏸️ `cron_team_pending_removal_complete` (hourly) : pas encore créé
-- ⏸️ `cron_team_inactive_cleanup` (daily) : pas encore créé
+- `cron_team_pending_removal_complete` (hourly)
+- `cron_team_inactive_cleanup` (daily)
+- Tests : forcer un cas avec `pending_removal_until` dans le passé, vérifier le passage à inactive
 
-#### Lot 5 — Notifications mail ⏸️ **À implémenter**
+#### Lot 5 — Notifications mail (estimation : 1 journée)
 
-- ⏸️ Clés i18n `team.*` × 6 locales (~240-360 chaînes) — déjà partiellement en place pour les events admin réseau, à élargir aux events team
-- ⏸️ Handler `notify-event/handlers/team.ts` : à créer (ou étendre le handler `internal-task` existant)
-- ⏸️ Tests d'envoi
+- Nouvelles clés i18n × 6 locales (~240-360 chaînes) via script Python idempotent
+- Adaptation de `notify-event` pour gérer les events `team.*`
+- Tests : envoi de chaque type d'event, réception correcte par les destinataires
 
-#### Lot 6 — UI : enrichissement onglet `team` ⏸️ **À implémenter**
+#### Lot 6 — UI : enrichissement onglet `team` (estimation : 1-2 journées)
 
-- ⏸️ Nouvelles clés i18n UI × 6 locales (~240 chaînes)
-- ⏸️ Composants : boutons d'action, modales de confirmation
-- ⏸️ Sections : « Suspensions et préavis en cours », « Historique de l'équipe »
-- ⏸️ Intégration de `<NetworkAdminBadge>` (composant existant, paquet E.3 admin réseau) sur les lignes des admins réseau
-- ⏸️ Tests : parcours complet pour coordenador, parcours lecture seule pour librarian
+- Nouvelles clés i18n UI × 6 locales (~240 chaînes)
+- Composants : boutons d'action, modales de confirmation
+- Sections : « Suspensions et préavis en cours », « Historique de l'équipe »
+- Tests : parcours complet pour coordenador, parcours lecture seule pour librarian
 
-#### Lot 7 — Workflow d'invitation ⏸️ **À cadrer**
+#### Lot 7 — Workflow d'invitation (estimation : à cadrer)
 
-Cf. spec future `spec-invitation-equipe.md` (renommée potentiellement `spec-onboarding-biblioteca.md` v1.1).
+Cf. spec future `spec-invitation-equipe.md`. Concerne le cas où on veut ajouter à l'équipe une personne qui n'a pas encore de compte AnarBib (mail d'invitation, lien de signup pré-affilié, etc.).
 
-### 14.2. Articulation avec la spec profils d'adoption v0.3
+### 14.2. Ordre de déploiement recommandé
 
-Le déploiement complet de cette spec gouvernance dépend du **paquet F de la spec profils** qui activera le `governance_mode` par biblio. Tant que ce paquet n'est pas livré, toutes les biblios fonctionnent implicitement en mode `full_governance`.
-
-**Séquence recommandée** :
-1. Spec profils paquets A-E (champs DB + RLS + UI choix profil)
-2. Cette spec gouvernance Lots 1-6 (mécanismes complets en `full_governance`)
-3. Spec profils paquet F (activation conditionnelle des mécanismes selon `governance_mode`)
+1. Lot 1 (DB) en premier, déployable seul (ne change rien fonctionnellement)
+2. Lots 2 et 3 (RPCs) ensemble, mais testables sans UI via curl/SQL
+3. Lot 5 (notifications) avant Lot 6 (UI), pour que les actions UI envoient déjà des mails dès le premier déploiement
+4. Lot 6 (UI) en dernier
+5. Lot 4 (crons) à activer une fois Lot 6 testé en prod, pour ne pas avoir de carences automatiques sans UI pour annuler
 
 ### 14.3. Points d'attention transverses
 
 - **i18n** : respect des conventions militantes (cf. mémoire). Toutes les locales en une fois, jamais de fallback temporaire.
 - **Tests** : prévoir des tests d'intégration sur scénarios complets (cf. §15 cas d'usage).
-- **Migrations** : versionnées avec date dans `supabase/migrations/YYYYMMDDHHMMSS_*.sql`, idempotentes (DROP IF EXISTS / CREATE OR REPLACE), commitées sur le repo. Pipeline Woodpecker auto-applique.
-- **Rollback** : chaque migration doit avoir un script de rollback testé.
+- **Migrations** : versionnées avec date dans `db/migrations/YYYY_MM_DD_*.sql`, idempotentes (DROP IF EXISTS / CREATE OR REPLACE), commitées sur le repo.
+- **Rollback** : chaque migration doit avoir un script de rollback testé (DROP des nouvelles colonnes/contraintes).
 
 ---
 
 ## 15. Cas d'usage de référence
 
-### 15.1. Voltairine cooptée librarian
+### 15.1. Voltairine coopté·e librarian
 
 > Emma est coordenador·a de la BLMF. Elle veut accueillir Voltairine dans l'équipe (Voltairine est déjà reader inscrite à la BLMF).
 >
@@ -1207,7 +1136,7 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 >
 > 1. Lucy va dans `/biblioteca`, onglet `team`
 > 2. Sur sa propre ligne (statut coordenador), elle clique « Je passe la main » → « Repasser librarian »
-> 3. Modale de confirmation simple, Lucy confirme
+> 3. Modale de confirmation, Lucy confirme
 > 4. Sa membership coordenador passe à `inactive`, sa membership `librarian` (qui existait peut-être déjà ; sinon créée) reste/devient active
 > 5. Toute la coordination reçoit un mail : « Lucy a passé la main, n'est plus coordenador·a »
 > 6. Lucy reçoit un mail de confirmation
@@ -1240,19 +1169,18 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 > 7. Audit log : `suspended` avec raison
 > 8. **Plus tard**, après vérification (mot de passe changé, pas de dégât) : un·e coord clique « Lever la suspension », membership repasse à `active`
 
-### 15.5. L'ultime coord part *(actualisé v1.1)*
+### 15.5. L'ultime coord part
 
 > La BLMF n'a plus qu'un seul coord, Errico. Il doit partir (déménagement, plus de temps).
 >
 > 1. Errico va dans `/biblioteca`, onglet `team`, clique « Je passe la main »
-> 2. Modale de confirmation simple (sans phrase rituelle « last admin lockdown » qui figurait en v1.0, supprimée au paquet F.3) : « Vous perdrez les permissions de coordenador·a immédiatement. »
-> 3. Errico confirme. Sa membership coordenador passe à `inactive` sans blocage technique.
-> 4. Le SIGB détecte que la BLMF n'a plus de coordenador·a actif·ve → mail aux **administrateurs réseau actifs** (table `network_administrators` `status='active'`)
-> 5. La BLMF continue à fonctionner en mode dégradé (les librarians peuvent gérer les emprunts, etc., mais pas la config)
-> 6. Hors-logiciel, l'équipe d'admin réseau prend contact avec le collectif BLMF pour aider à désigner un·e nouveau·elle coord
-> 7. Quand le collectif a décidé, un·e admin réseau exécute la promotion via la RPC normale `fn_team_promote_to_coordenador` (autorisée par le droit transverse). L'action est tracée dans `network_admin_cross_library_actions_log` (action critique : promotion staff) + mail immédiat aux librarians de BLMF.
-
-**Différence avec v1.0** : en v1.0, le scénario mentionnait une « modification SQL directe » par Xavier (admin AnarBib). Depuis le paquet F admin réseau, l'admin réseau passe par la RPC normale, avec autorisation transparente et trace automatique. Plus de bypass SQL, plus de phrase rituelle bloquante.
+> 2. Modale spéciale : « **ATTENTION** : tu es l'unique coordenador·a actif·ve. La biblio se retrouvera sans coordination. Les administradores AnarBib seront notifié·es. Continuer ? »
+> 3. Errico confirme
+> 4. Sa membership coordenador passe à `inactive`
+> 5. Mail à tous les administradores AnarBib : « La BLMF n'a plus de coordenador·a. Voici les librarians actifs : … »
+> 6. La BLMF continue à fonctionner en mode dégradé (les librarians peuvent gérer les emprunts, etc., mais pas la config)
+> 7. Hors-logiciel, Xavier (admin AnarBib) prend contact avec le collectif BLMF pour aider à désigner un·e nouveau·elle coord
+> 8. Quand le collectif a décidé, Xavier exécute la promotion via SQL direct OU via la même UI (s'il a accès en tant qu'admin)
 
 ---
 
@@ -1263,117 +1191,40 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 - **Multi-membership** : possibilité d'avoir plusieurs lignes de membership pour une même personne dans une même biblio
 - **Carence** : délai entre une décision et son effet (ici 7 jours pour les exclusions)
 - **RebAL** : Réseau de Bibliothèques Alternatives Libertaires
-- **(v1.1) Administrateur·rice réseau** : personne inscrite dans `network_administrators` avec `status='active'`. Autorité politique transverse, cooptée à l'unanimité (cf. spec admin réseau v0.3.1).
-- **(v1.1) Action cross-library** : action d'un·e admin réseau sur une biblio dont il/elle n'est pas staff local. Tracée dans `network_admin_cross_library_actions_log`.
 
-## Annexe B : Glossaire des fonctions techniques *(actualisé v1.1)*
+## Annexe B : Glossaire des fonctions techniques
 
-**Helpers centralisés (paquet C admin réseau, 11/05/2026)** :
+- `user_has_library_staff_role(user_id, library_id)` : helper retournant true si l'utilisateur·rice a un rôle librarian, coordenador ou administrador actif dans la biblio. Existe depuis le 04/05/2026.
+- `user_can_manage_library(library_id)` : helper retournant true si auth.uid() a un rôle coordenador ou administrador actif dans la biblio. Existe depuis le 04/05/2026.
+- `fn_library_visible_to_caller(library_id)` : helper de visibilité (public/network/private). Existe depuis le 02/05/2026.
 
-- **`user_can_act_as_staff_on_library(p_library_id uuid) RETURNS boolean`** : TRUE si l'appelant·e peut agir comme membre du staff sur la biblio donnée. Inclut le staff local actif (`librarian` + `coordenador`) **ET** les administrateurs réseau actifs. Pilier de la catégorie A des RLS (15 policies au total).
+## Annexe C : Références aux specs cousines
 
-- **`user_can_engage_library(p_library_id uuid) RETURNS boolean`** : TRUE si l'appelant·e peut engager politiquement la biblio (modifications structurelles, règlement, politique de circulation). Inclut `coordenador` local actif **ET** administrateurs réseau actifs. Pilier de la catégorie B des RLS (4 policies).
-
-- **`fn_caller_is_network_admin() RETURNS boolean`** : TRUE si l'appelant·e est dans `network_administrators` avec `status='active'`. Pilier de la catégorie C des RLS (1 policy).
-
-**Helpers historiques (v1.0) refactorés comme wrappers** :
-
-- `user_has_library_staff_role(user_id, library_id)` : wrapper de `user_can_act_as_staff_on_library` depuis le paquet C admin réseau (11/05/2026)
-- `user_can_manage_library(library_id)` : wrapper de `user_can_engage_library` depuis le paquet C admin réseau (11/05/2026)
-- `fn_library_visible_to_caller(library_id)` : helper de visibilité (public/network/private). Existe depuis le 02/05/2026, intact.
-
-**Helpers supprimés au paquet F (13/05/2026)** :
-
-- ~~`fn_caller_is_administrador()`~~ : remplacée par `fn_caller_is_network_admin()`
-- ~~`fn_team_promote_to_administrador(uuid, uuid)`~~ : remplacée par `fn_network_admin_propose_cooptation` (workflow politique distinct, cf. spec admin réseau)
-
-## Annexe C : Références aux specs cousines *(actualisé v1.1)*
-
-- **`spec-administrateur-reseau.md v0.3.1`** (chantier clos 14/05/2026, 1037 lignes) : administration du réseau AnarBib (cooptation unanime, retrait collectif, audit cross-library, mails militants). **Spec sœur indispensable**.
-- **`spec-flux-consultations.md v2.1`** (chantier clos 14/05/2026, 1083 lignes) : workflow de consultations sur place. Utilise les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library` pour les autorisations staff.
-- **`spec-profils-bibliotheque.md v0.3`** (13/05/2026, 934 lignes) : doctrine des 4 axes orthogonaux de profils d'adoption (`catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`). Cette spec gouvernance décrit le mode `governance_mode = 'full_governance'`.
 - `spec-validation-physique.md` (à rédiger) : validation physique des comptes lecteur·rices
 - `spec-migration-compte.md` (940 lignes, cadrée le 03/05/2026) : migration d'un compte d'une biblio à une autre
-- `spec-onboarding-biblioteca.md v1.1` (refonte en cours) : workflow d'invitation pour les personnes sans compte AnarBib
+- `spec-invitation-equipe.md` (à rédiger) : workflow d'invitation par email pour les personnes sans compte AnarBib
 
-## Annexe D : Décisions politiques cadrées *(actualisé v1.1)*
+## Annexe D : Décisions politiques cadrées
 
-Cette spec consigne les décisions prises lors d'une session de cadrage avec Xavier le 05/05/2026, complétées par les refontes post-implémentation :
+Cette spec consigne les décisions prises lors d'une session de cadrage avec Xavier le 05/05/2026 :
 
-| Q | Décision v1.0 | Statut v1.1 |
-|---|---|---|
-| Q1 (vision politique) | Délégation avec rotation des fonctions | ✅ Conservée |
-| Q2 (reader→librarian) | Coordenador+ uniquement (cooptation) | ✅ Conservée (« + » désigne admin réseau via helpers) |
-| Q3 (librarian→coordenador) | Coordenador+ uniquement (cooptation) | ✅ Conservée |
-| Q4 (rétrograder coord) | Soi-même + autres coordenadores | ✅ Conservée |
-| Q5 (librarian→reader) | Soi-même + coordenadores | ✅ Conservée |
-| Q6 (modèle exclusion) | 3 états avec délai de carence 7j | ✅ Conservée |
-| Q7 (compte abandonné) | Sortie auto à 9 mois + mails J-30 et J-7 | ✅ Conservée |
-| Q8 (audit log visibilité) | Public au staff | ✅ Conservée, étendue aux admins réseau via helper |
-| Q9 (notifications) | Personne concernée + toute la coordination | ✅ Conservée, mention « action transverse » si applicable |
-| Q10 (UI) | Onglet « Equipe » dans /biblioteca | ✅ Conservée, ajout `<NetworkAdminBadge>` |
-| Q11 (dernier coord part) | Avertir + autoriser + escalader administrador | ✅ **Branche bloquante supprimée au paquet F.3.** Escalade vers admins réseau. |
-| Q12 (multi-membership) | Strictement local (biblio par biblio) | ✅ Conservée |
-| Q13 (coord→admin) | Non, écrit comme principe | ✅ **Renforcée v1.1** : transition impossible, l'administration réseau est un mécanisme politique distinct (cooptation unanime, cf. spec admin réseau v0.3.1) |
-| Q14 (succession admin) | Cercle 1/3/5 (impair), modalités à formaliser ailleurs | ✅ **Résolue v1.1** : workflow complet livré dans la spec admin réseau v0.3.1 (cooptation à l'unanimité, retrait collectif à l'unanimité, auto-retrait unilatéral, quorum minimum ≥ 3 admins) |
-
-## Annexe E : *(Nouveau v1.1)* Changelog v1.0 → v1.1
-
-**Objet de la version** : refonte cohérence après la livraison complète du chantier admin réseau (paquets A-F + #114, 11-14/05/2026). Le rôle `administrador` **local** a été supprimé du schéma, remplacé par la table `network_administrators` portée par une spec dédiée. Cette spec gouvernance est désormais strictement limitée aux rôles **locaux** d'une biblio. Ajout du périmètre d'activation : cette spec décrit le mode `governance_mode = 'full_governance'` de la spec profils v0.3.
-
-**Sections ajoutées** :
-- §1.4 Périmètre d'activation (mode `full_governance` de la spec profils)
-- §6.11 Articulation avec le `governance_mode` de la spec profils
-- Annexe E (ce changelog)
-
-**Sections refondues intégralement** :
-- §3.4 : « administrador » local → renvoi vers spec admin réseau v0.3.1
-- §6.3 : Coordenador→administrador devient sans objet
-- §6.9 : Tentative d'action sur admin réseau via `fn_team_*` (refus systématique, refacto paquet C/F)
-- §13 : intégralement remplacée par un renvoi vers la spec admin réseau v0.3.1
-
-**Sections mises à jour** :
-- Préambule + en-tête : version 1.1, statut « partiellement implémenté »
-- §1.3 Périmètre : ajout du non-périmètre « administration du réseau » (renvoi spec admin réseau)
-- §3 (chapeau) : passage de 4 à 3 rôles locaux, mention du paquet F
-- §3.2, §3.3 : références aux helpers centralisés `user_can_act_as_staff_on_library`, `user_can_engage_library`
-- §4 (chapeau) : CHECK constraint actualisé avec `'removed'` (paquet 23)
-- §5.1 tableau T1-T9 : « administrador » retiré, mention « OU admin réseau » sur les transitions T1, T2, T5-T8 ; mention explicite de la suppression de la transition T10 (`coordenador → administrador`)
-- §5.2, §5.3, §5.6, §5.7, §5.8, §5.9 : « OU admin réseau » + mention action cross-library tracée
-- §5.4 : branche « last admin lockdown » supprimée au paquet F.3
-- §5.10 : escalade vers admins réseau (au lieu d'administradores locaux)
-- §6.1 : escalade vers admins réseau, plus de blocage technique
-- §6.4 : « modification SQL directe » remplacée par RPC normale appelée par admin réseau
-- §6.5 : ajout du `<NetworkAdminBadge>` sur les lignes admin réseau
-- §7 : helper RLS centralisé, mention de la double trace audit (local + réseau) pour les actions cross-library
-- §8.2 : event `team.last_coordinator_leaving` → destinataires = admins réseau (au lieu d'administradores)
-- §9.2, §9.4 : visibilité onglet team étendue aux admins réseau
-- §9.3 : exemple UI avec `[Admin réseau]` badge
-- §9.5 : phrase rituelle modale auto-rétro supprimée
-- §10.1, §10.2 : CHECK constraints actualisés (status élargi à `removed`, role rétréci à 3 valeurs)
-- §11.1 : pattern enrichi avec `fn_log_cross_library_action`
-- §11.2 : liste des RPC actualisée avec statut d'implémentation et notes sur les RPC supprimées
-- §11.3 : exemple pattern type avec `user_can_engage_library` et `fn_log_cross_library_action`
-- §14 : tous les lots marqués avec leur statut réel d'implémentation
-- §15.5 : scénario « ultime coord part » actualisé sans phrase rituelle ni bypass SQL
-- Annexe B : helpers centralisés explicités, helpers historiques marqués comme wrappers, helpers supprimés listés
-- Annexe C : références aux specs sœurs livrées (admin réseau v0.3.1, consultas v2.1, profils v0.3)
-- Annexe D : Q11 marquée « branche bloquante supprimée », Q13 renforcée, Q14 résolue par spec admin réseau
-
-**Sections inchangées (par rapport à v1.0)** :
-- §2 Principes fondateurs (sauf P7 enrichi de l'articulation transverse)
-- §3.1 reader (rôle inchangé)
-- §4.1-4.6 status (sauf §4 chapeau)
-- §6.2, §6.6, §6.7, §6.8, §6.10 cas-limites locaux
-- §7 audit log (sauf §7.5 helper RLS)
-- §8.1, §8.3, §8.4 notifications
-- §9.1, §9.6, §9.7 UI
-- §11.4 helper de notifications
-- §12 cron jobs (descriptif technique)
-- §15.1, §15.2, §15.3, §15.4 cas d'usage
-
-**Bilan v1.1** : la spec est désormais **alignée sur l'état du système en production au 14/05/2026**, intégralement compatible avec la spec admin réseau v0.3.1, et préparée pour l'activation conditionnelle par `governance_mode` de la spec profils v0.3. Les lots d'implémentation restants (1 partiellement, 4, 5, 6, 7) restent à livrer dans un chantier dédié, qui pourra démarrer après la livraison du paquet A de la spec profils.
+| Q | Décision |
+|---|---|
+| Q1 (vision politique) | Délégation avec rotation des fonctions (rôles = fonctions temporairement déléguées) |
+| Q2 (reader→librarian) | Coordenador+ uniquement (cooptation) |
+| Q3 (librarian→coordenador) | Coordenador+ uniquement (cooptation) |
+| Q4 (rétrograder coord) | Soi-même + autres coordenadores |
+| Q5 (librarian→reader) | Soi-même + coordenadores |
+| Q6 (modèle exclusion) | 3 états avec délai de carence 7j |
+| Q7 (compte abandonné) | Sortie auto à 9 mois + mails J-30 et J-7 |
+| Q8 (audit log visibilité) | Public au staff |
+| Q9 (notifications) | Personne concernée + toute la coordination |
+| Q10 (UI) | Onglet « Equipe » dans /biblioteca |
+| Q11 (dernier coord part) | Avertir + autoriser + escalader administrador |
+| Q12 (multi-membership) | Strictement local (biblio par biblio) |
+| Q13 (coord→admin) | Non, écrit comme principe |
+| Q14 (succession admin) | Cercle 1/3/5 (impair), modalités à formaliser ailleurs |
 
 ---
 
-*Spec rédigée le 05/05/2026 (v1.0), refondue le 15/05/2026 (v1.1) pour intégrer la séparation admin réseau et l'articulation avec les profils d'adoption.*
+*Fin du document.*
