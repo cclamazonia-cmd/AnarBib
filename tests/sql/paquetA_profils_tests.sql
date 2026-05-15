@@ -1,13 +1,11 @@
 -- ============================================================
--- Tests d'acceptation paquet A profils d'adoption
+-- Tests d'acceptation paquet A profils d'adoption — v2
 -- Spec : docs/specs/spec-profils-bibliotheque.md v0.3 §9.1
 -- Date : 2026-05-15
 -- ============================================================
--- A executer dans Supabase SQL Editor APRES application de la migration
--- 20260515170000_paquet_A_profils_infrastructure.sql via Woodpecker.
---
--- Tous les tests sont encapsules dans une transaction unique avec ROLLBACK
--- a la fin : aucune donnee n'est modifiee, c'est purement defensif.
+-- v2 (15/05/2026 apres-midi) : fix du test 5 qui polluait l'etat
+-- lu par les tests 11 et 12. Maintenant chaque test qui modifie
+-- l'etat le restaure immediatement dans le meme DO-block.
 -- ============================================================
 
 BEGIN;
@@ -105,7 +103,7 @@ BEGIN
 END $$;
 
 -- ============================================================
--- TEST 5 — Combinaisons valides acceptees
+-- TEST 5 — Combinaisons valides acceptees (avec restauration immediate)
 -- ============================================================
 DO $$
 DECLARE
@@ -119,8 +117,14 @@ BEGIN
         network_mode = 'isolated'
     WHERE id = v_blmf_id;
   
-  RAISE NOTICE 'TEST 5 OK : bascule vers profil B (local_only + isolated + full_sigb + full_governance) acceptee';
-  -- ROLLBACK final restaurera l'etat
+  -- v2 : RESTAURATION IMMEDIATE dans le meme DO-block pour ne pas polluer
+  -- les tests suivants qui lisent l'etat de BLMF
+  UPDATE public.libraries 
+    SET catalog_mode = 'network_published',
+        network_mode = 'federated'
+    WHERE id = v_blmf_id;
+  
+  RAISE NOTICE 'TEST 5 OK : bascule vers profil B acceptee, BLMF restaure immediatement';
 END $$;
 
 -- ============================================================
@@ -167,7 +171,7 @@ BEGIN
 END $$;
 
 -- ============================================================
--- TEST 8 — INSERT autorise dans library_profile_history (depuis postgres, audit immutable)
+-- TEST 8 — INSERT autorise dans library_profile_history
 -- ============================================================
 DO $$
 DECLARE
@@ -196,7 +200,6 @@ DECLARE
   v_error_caught boolean := false;
   v_lph_id uuid;
 BEGIN
-  -- Recuperer l'id du row insere au test 8
   SELECT id INTO v_lph_id FROM public.library_profile_history WHERE motivation = 'test 8 - sera rollback';
   
   BEGIN
@@ -208,7 +211,6 @@ BEGIN
     WHEN insufficient_privilege THEN
       v_error_caught := true;
     WHEN OTHERS THEN
-      -- Le trigger raise avec ERRCODE 42501 = insufficient_privilege
       v_error_caught := true;
   END;
   
@@ -244,6 +246,7 @@ END $$;
 
 -- ============================================================
 -- TEST 11 — Helpers lecteurs retournent les bonnes valeurs
+-- (apres restauration du test 5, BLMF est de nouveau en profil D)
 -- ============================================================
 DO $$
 DECLARE
@@ -332,7 +335,7 @@ BEGIN
       AND column_name IN ('requested_catalog_mode', 'requested_circulation_mode',
                           'requested_network_mode', 'requested_governance_mode',
                           'profile_template_chosen')
-      AND is_nullable = 'YES';  -- pas de CHECK ici, validation a l'acceptation
+      AND is_nullable = 'YES';
   
   IF v_count <> 5 THEN
     RAISE EXCEPTION 'TEST 14 FAILED : attendu 5 colonnes profil sur library_requests, trouve %', v_count;
@@ -366,8 +369,8 @@ END $$;
 
 -- ============================================================
 -- ROLLBACK final : aucun changement persiste
+-- (la transaction echoue grace au RAISE pour forcer le rollback explicite)
 -- ============================================================
 ROLLBACK;
 
--- Si tu vois ce message, c'est que tous les tests sont passes
 SELECT '===== Paquet A : 15/15 tests passent =====' AS result;
