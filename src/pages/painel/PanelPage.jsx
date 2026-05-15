@@ -788,6 +788,61 @@ export default function PanelPage() {
     setScheduleError('');
   }
 
+  // ═══════════════════════════════════════════════════════════
+  // B6 (15/05/2026) : modal d'annulation biblio avec note obligatoire
+  // Fix spec consultas v2.1 §6.2 / §8.1
+  // ═══════════════════════════════════════════════════════════
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [cancelForm, setCancelForm] = useState({ note: '' });
+  const [cancelError, setCancelError] = useState('');
+  const [cancelling, setCancelling] = useState(false);
+
+  function openCancelModal(consulta) {
+    setCancelTarget(consulta);
+    setCancelForm({ note: '' });
+    setCancelError('');
+  }
+
+  function closeCancelModal() {
+    if (cancelling) return;
+    setCancelTarget(null);
+    setCancelError('');
+  }
+
+  async function handleCancelSubmit() {
+    if (!cancelTarget) return;
+    const note = cancelForm.note.trim();
+    setCancelError('');
+    if (note.length < 5) {
+      setCancelError(t({ id: 'panel.consultation.cancel.errorNoteTooShort' }));
+      return;
+    }
+    if (note.length > 300) {
+      setCancelError(t({ id: 'panel.consultation.cancel.errorNoteTooLong' }));
+      return;
+    }
+    setCancelling(true);
+    try {
+      await setConsultaWorkflow(
+        cancelTarget.consulta_id,
+        cancelTarget.line_no,
+        'cancelada_biblioteca',
+        note
+      );
+      setCancelTarget(null);
+      setCancelForm({ note: '' });
+    } catch (err) {
+      const msg = err?.message || '';
+      if (msg.includes('cancel_note_required')) {
+        setCancelError(t({ id: 'panel.consultation.cancel.errorBackend' }));
+      } else {
+        setCancelError(msg || t({ id: 'panel.consultation.cancel.errorGeneric' }));
+      }
+    } finally {
+      setCancelling(false);
+    }
+  }
+
   async function handleScheduleSubmit() {
     if (!scheduleTarget) return;
     const { date, startsAt, endsAt, note } = scheduleForm;
@@ -1635,7 +1690,7 @@ export default function PanelPage() {
                             <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'consulta_realizada')}>{t({id:'panel.table.completed'})}</button>
                           )}
                           {!['consulta_realizada','cancelada_leitor','cancelada_biblioteca','expirada'].includes(c.workflow_stage_effective) && (
-                            <button className="ab-button ab-button--mini ab-button--danger" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'cancelada_biblioteca', t({id:'panel.consultation.cancelledByPanel'}))}>{t({ id: 'common.cancel' })}</button>
+                            <button className="ab-button ab-button--mini ab-button--danger" onClick={() => openCancelModal(c)}>{t({ id: 'common.cancel' })}</button>
                           )}
                         </td>
                       </tr>
@@ -2255,6 +2310,61 @@ export default function PanelPage() {
           </Button>
           <Button onClick={handleScheduleSubmit} disabled={scheduling}>
             {scheduling ? t({ id: 'panel.consultation.schedule.submitting' }) : t({ id: 'panel.consultation.schedule.submitButton' })}
+          </Button>
+        </div>
+      </Modal>
+
+      {/* B6 (15/05/2026) : modal d'annulation biblio avec note obligatoire */}
+      <Modal
+        isOpen={!!cancelTarget}
+        onClose={closeCancelModal}
+        title={t({ id: 'panel.consultation.cancel.title' })}
+        size="medium"
+      >
+        <div className="ab-modal__body">
+          {cancelTarget && (
+            <>
+              <p style={{ marginBottom: 8 }}>
+                <strong>{t({ id: 'panel.consultation.cancel.subtitle' })} :</strong>{' '}
+                {cancelTarget.user_name || cancelTarget.user_email || cancelTarget.user_public_id || '?'}
+              </p>
+              <p style={{ marginBottom: 16, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
+                {t({ id: 'panel.consultation.cancel.book' })} : {cancelTarget.titulo || cancelTarget.bib_ref || '?'}
+              </p>
+            </>
+          )}
+          <p style={{ marginBottom: 12, fontSize: '.9rem' }}>
+            {t({ id: 'panel.consultation.cancel.description' })}
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
+                {t({ id: 'panel.consultation.cancel.noteLabel' })}
+              </span>
+              <textarea
+                value={cancelForm.note}
+                onChange={(e) => setCancelForm({ note: e.target.value })}
+                placeholder={t({ id: 'panel.consultation.cancel.notePlaceholder' })}
+                className="ab-input"
+                rows={4}
+                maxLength={300}
+                disabled={cancelling}
+              />
+              <span style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>
+                {t({ id: 'panel.consultation.cancel.noteHint' })} ({cancelForm.note.length}/300, min 5)
+              </span>
+            </label>
+            {cancelError && (
+              <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', margin: 0 }}>{cancelError}</p>
+            )}
+          </div>
+        </div>
+        <div className="ab-modal__actions">
+          <Button variant="secondary" onClick={closeCancelModal} disabled={cancelling}>
+            {t({ id: 'panel.consultation.cancel.backButton' })}
+          </Button>
+          <Button onClick={handleCancelSubmit} disabled={cancelling || cancelForm.note.trim().length < 5}>
+            {cancelling ? t({ id: 'panel.consultation.cancel.submitting' }) : t({ id: 'panel.consultation.cancel.confirmButton' })}
           </Button>
         </div>
       </Modal>
