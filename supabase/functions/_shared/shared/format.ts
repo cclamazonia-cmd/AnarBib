@@ -32,7 +32,12 @@ export function formatDateTimeInZone(d, tz = DEFAULT_NOTIFICATION_TIMEZONE) {
       hour12: false
     }).formatToParts(v);
     const g = (t)=>p.find((x)=>x.type === t)?.value || "";
-    return `${g("day")}/${g("month")}/${g("year")} às ${g("hour")}:${g("minute")}`;
+    // B1 fix (15/05/2026) : retrait du séparateur narratif "às" qui cassait
+    // le split(" ") dans buildSlotVars de _shared/domain/consultas.ts.
+    // La fonction retourne désormais "DD/MM/YYYY HH:MM" (un seul espace).
+    // Le séparateur narratif ("às" en pt-BR, "à" en fr, "at" en en, etc.)
+    // reste dans les templates i18n par locale (cohérent doctrine i18n).
+    return `${g("day")}/${g("month")}/${g("year")} ${g("hour")}:${g("minute")}`;
   } catch  {
     return String(d);
   }
