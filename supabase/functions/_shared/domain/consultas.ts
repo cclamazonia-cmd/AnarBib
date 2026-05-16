@@ -559,7 +559,7 @@ export async function handleConsultaV2WorkflowEvent(
 
     const { html, text } = renderEmail({
       preheader: interpolated,
-      title: tMail(locale, readerKey).split(":")[0] || tMail(locale, readerKey),
+      title: interpolated.split(":")[0] || interpolated,
       greeting: greeting(locale, user?.name),
       introHtml: `<p style="margin:0 0 10px;">${interpolated}</p>`,
       actionBox,
