@@ -152,7 +152,9 @@ export function normalizeConsultaLifecycleEvent(e: string): string {
 
 const CON_WE_MAP: Record<string, string> = {
   consulta_v2_agendada: "consulta_agendada",
-  consulta_v2_resposta_creneau: "resposta_creneau"
+  consulta_v2_resposta_creneau: "resposta_creneau",
+  consulta_v2_em_preparacao: "em_preparacao",
+  consulta_v2_nao_compareceu: "nao_compareceu"
 };
 
 export function normalizeConsultaWorkflowEvent(e: string): string {
