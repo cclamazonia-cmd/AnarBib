@@ -357,7 +357,8 @@ export async function handleConsultaV2LifecycleEvent(
       actionBox,
       details: [
         ...(tits ? [{ label: label(locale, "items"), value: tits }] : []),
-        ...(brfs ? [{ label: label(locale, "refs"), value: brfs }] : [])
+        ...(brfs ? [{ label: label(locale, "refs"), value: brfs }] : []),
+        ...noteDetailReader
       ],
       footerHtml: footerPadrao(ctx),
       context: ctx,
@@ -381,7 +382,8 @@ export async function handleConsultaV2LifecycleEvent(
       details: [
         { label: label(libLocale, "reader"), value: aun },
         ...(tits ? [{ label: label(libLocale, "items"), value: tits }] : []),
-        ...(brfs ? [{ label: label(libLocale, "refs"), value: brfs }] : [])
+        ...(brfs ? [{ label: label(libLocale, "refs"), value: brfs }] : []),
+        ...noteDetailStaff
       ],
       footerHtml: footerPadrao(ctx),
       context: ctx,
@@ -527,6 +529,11 @@ export async function handleConsultaV2WorkflowEvent(
   const whenStart = startsAt ? formatDateTimeInZone(startsAt, tz) : "";
   const whenEnd = endsAt ? (formatDateTimeInZone(endsAt, tz).split(" ")[1] || "") : "";
   const when = whenStart && whenEnd ? `${whenStart} - ${whenEnd}` : whenStart;
+  // Paquet 141.2.C : ligne 'Observacao' a injecter dans details (lecteur ET staff)
+  // si workflowNote presente. Resout B3 generalise (motif refus, motif annulation,
+  // note staff lors de proposition, etc.) cote workflow event.
+  const noteDetailReaderWf = workflowNote ? [{ label: label(locale, "note") || "Note", value: workflowNote }] : [];
+  const noteDetailStaffWf = workflowNote ? [{ label: label(libLocale, "note") || "Note", value: workflowNote }] : [];
 
   // ---- Mail lecteur ----
   let ur;
@@ -552,7 +559,8 @@ export async function handleConsultaV2WorkflowEvent(
       details: [
         ...(tits ? [{ label: label(locale, "items"), value: tits }] : []),
         ...(brfs ? [{ label: label(locale, "refs"), value: brfs }] : []),
-        ...(when ? [{ label: label(locale, "date"), value: when }] : [])
+        ...(when ? [{ label: label(locale, "date"), value: when }] : []),
+        ...noteDetailReaderWf
       ],
       footerHtml: footerPadrao(ctx),
       context: ctx,
@@ -587,7 +595,8 @@ export async function handleConsultaV2WorkflowEvent(
         { label: label(libLocale, "reader"), value: aun },
         ...(tits ? [{ label: label(libLocale, "items"), value: tits }] : []),
         ...(brfs ? [{ label: label(libLocale, "refs"), value: brfs }] : []),
-        ...(when ? [{ label: label(libLocale, "date"), value: when }] : [])
+        ...(when ? [{ label: label(libLocale, "date"), value: when }] : []),
+        ...noteDetailStaffWf
       ],
       footerHtml: footerPadrao(ctx),
       context: ctx,

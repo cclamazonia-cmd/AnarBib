@@ -2233,6 +2233,36 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Lettor* ha rifiutato l'orario proposto",
     de: "Leser*in hat den vorgeschlagenen Termin abgelehnt"
   },
+  // ===== Paquet 141.2 (16/05/2026) =====
+  // Templates pour 2 nouveaux events workflow consultas :
+  //   - em_preparacao (B2) : transition solicitada -> em_preparacao
+  //   - nao_compareceu (B5) : transition vers nao_compareceu
+  // Doctrine : la note workflow_note (si presente) est injectee comme
+  // ligne supplementaire dans 'details' du renderEmail, pas dans le template.
+  "cwf.reader.em_preparacao": {
+    "pt-BR": "Sua solicitação de consulta local está em preparação. A biblioteca vai propor um horário em breve.",
+    fr: "Ta demande de consultation est en préparation. La bibliothèque te proposera un horaire bientôt.",
+    es: "Tu solicitud de consulta local está en preparación. La biblioteca propondrá un horario pronto.",
+    en: "Your local consultation request is being prepared. The library will propose a time slot soon.",
+    it: "La tua richiesta di consultazione locale è in preparazione. La biblioteca proporrà un orario a breve.",
+    de: "Deine Anfrage zur lokalen Einsichtnahme wird vorbereitet. Die Bibliothek wird bald einen Termin vorschlagen."
+  },
+  "cwf.reader.nao_compareceu": {
+    "pt-BR": "Você foi marcado(a/e) como ausente na consulta local agendada para {date}, das {time_start} às {time_end}. A biblioteca tinha se preparado para te receber. Caso queira marcar um novo horário, entre em contato com a biblioteca.",
+    fr: "Tu as été marqué·e comme absent·e à la consultation prévue le {date}, de {time_start} à {time_end}. La bibliothèque s'était préparée à t'accueillir. Si tu souhaites fixer un nouvel horaire, contacte la bibliothèque.",
+    es: "Has sido marcado(a/e) como ausente en la consulta local programada para {date}, de {time_start} a {time_end}. La biblioteca se había preparado para recibirte. Si quieres fijar un nuevo horario, contactá a la biblioteca.",
+    en: "You have been marked as absent for the local consultation scheduled on {date}, from {time_start} to {time_end}. The library had prepared to welcome you. If you wish to schedule a new time, please contact the library.",
+    it: "Sei stato/a/* segnalato/a/* come assente alla consultazione locale prevista per il {date}, dalle {time_start} alle {time_end}. La biblioteca si era preparata ad accoglierti. Se desideri fissare un nuovo orario, contatta la biblioteca.",
+    de: "Du wurdest als abwesend bei der lokalen Einsichtnahme am {date} von {time_start} bis {time_end} markiert. Die Bibliothek hatte sich darauf vorbereitet, dich zu empfangen. Wenn du einen neuen Termin vereinbaren möchtest, kontaktiere die Bibliothek."
+  },
+  "cwf.staff.nao_compareceu": {
+    "pt-BR": "Não comparecimento registrado",
+    fr: "Non-présentation enregistrée",
+    es: "No comparecencia registrada",
+    en: "No-show recorded",
+    it: "Mancata presentazione registrata",
+    de: "Nichterscheinen erfasst"
+  },
   "cwf.actionBox.replySlot": {
     "pt-BR": "Responder à proposta",
     fr: "Répondre à la proposition",
