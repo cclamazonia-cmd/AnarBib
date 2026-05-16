@@ -48,6 +48,8 @@ import {
   consultaRealizadaEnabled,
   consultaCanceladaEnabled,
   consultaExpiradaEnabled,
+  consultaEmPreparacaoEnabled,
+  consultaNaoCompareceuEnabled,
   consultaAdminCopyEnabled,
   localConsultationEnabled
 } from "../context/policies.ts";
@@ -126,20 +128,23 @@ function buildSlotVars(
   startsAt: string,
   endsAt: string,
   tz: string,
-  locale: string | null
+  locale: string | null,
+  workflowNote?: string | null
 ): Record<string, string> {
-  if (!startsAt) return { date: "", time_start: "", time_end: "", tz };
+  const note = String(workflowNote || "").trim();
+  if (!startsAt) return { date: "", time_start: "", time_end: "", tz, workflow_note: note };
   const startStr = formatDateTimeInZone(startsAt, tz);
   const endStr = endsAt ? formatDateTimeInZone(endsAt, tz) : "";
-  // formatDateTimeInZone renvoie typiquement "DD/MM/YYYY HH:MM" - extraire
-  // les parties date/heure pour une interpolation propre.
+  // formatDateTimeInZone renvoie "DD/MM/YYYY HH:MM" depuis paquet 141.3.
+  // Extraire les parties date/heure pour une interpolation propre.
   const [startDate, startTime] = startStr.split(" ");
   const endTime = endStr ? endStr.split(" ")[1] || "" : "";
   return {
     date: formatDateLocale(startsAt, locale) || startDate || "",
     time_start: startTime || "",
     time_end: endTime || "",
-    tz: tz || ""
+    tz: tz || "",
+    workflow_note: note
   };
 }
 
@@ -243,6 +248,11 @@ export async function handleConsultaV2LifecycleEvent(
 ) {
   const we = normalizeConsultaLifecycleEvent(event) || event;
   const cancelledBy = consultaCancelledByFromPayload(payload);
+  // Paquet 141.2 (B3 generalise + complement B6) : extraction workflow_note
+  // depuis le payload (la note d'annulation par la biblio doit etre affichee
+  // au lecteur, le motif d'annulation par le lecteur doit etre affiche a la
+  // biblio, etc.).
+  const workflowNote = String(getPayloadValue(payload, "workflow_note") || "").trim();
 
   const { consulta, profile, items } = await getConsultaV2Bundle(recordId);
   const ctx = await resolveLibraryNotificationContext(
@@ -315,6 +325,12 @@ export async function handleConsultaV2LifecycleEvent(
 
   const tits = joinTitles(items.map((i) => String(i.titulo || `[${String(i.bib_ref || "").trim()}]`)));
   const brfs = joinTitles(items.map((i) => String(i.bib_ref || "")), ", ");
+  // Paquet 141.2 (B3 generalise + complement B6) : ligne 'Note' a injecter
+  // dans les 2 mails (lecteur et staff) si workflowNote presente.
+  // Utilise label cle 'note' (sera ajoutee a mail-strings.ts en paquet 141.2.C
+  // si pas encore presente). En attendant : fallback texte 'Note'.
+  const noteDetailReader = workflowNote ? [{ label: label(locale, "note") || "Note", value: workflowNote }] : [];
+  const noteDetailStaff = workflowNote ? [{ label: label(libLocale, "note") || "Note", value: workflowNote }] : [];
 
   // ---- Mail lecteur ----
   let ur;
@@ -422,8 +438,12 @@ export async function handleConsultaV2WorkflowEvent(
   const endsAtPayload = String(getPayloadValue(payload, "consultation_ends_at") || "").trim();
   const startsAt = startsAtPayload || items.find((i) => i.consultation_starts_at)?.consultation_starts_at || "";
   const endsAt = endsAtPayload || items.find((i) => i.consultation_ends_at)?.consultation_ends_at || "";
-  const slotVars = buildSlotVars(startsAt, endsAt, tz, locale);
-  const slotVarsLib = buildSlotVars(startsAt, endsAt, tz, libLocale);
+  // Paquet 141.2 : extraction workflow_note (note staff lors de proposition,
+  // note lecteur lors de refus, note staff lors de no-show, etc.).
+  // Propagee via slotVars pour interpolation {workflow_note} dans templates i18n.
+  const workflowNote = String(getPayloadValue(payload, "workflow_note") || items.find((i) => i.workflow_note)?.workflow_note || "").trim();
+  const slotVars = buildSlotVars(startsAt, endsAt, tz, locale, workflowNote);
+  const slotVarsLib = buildSlotVars(startsAt, endsAt, tz, libLocale, workflowNote);
 
   // Schedule reply status pour resposta_creneau
   const replyStatus = consultaScheduleReplyFromPayload(payload)
@@ -439,7 +459,15 @@ export async function handleConsultaV2WorkflowEvent(
   let staffActionUrl: string | null = null;
   let granularFlag: boolean | null = null;
 
-  if (we === "consulta_agendada") {
+  if (we === "em_preparacao") {
+    // Paquet 141 B2 : transition solicitada -> em_preparacao.
+    // Mail lecteur uniquement (action courante de la biblio, pas de portee
+    // collective). Pas de CTA : info pure, le lecteur attend la suite.
+    readerKey = "cwf.reader.em_preparacao";
+    staffKey = null;
+    staffMailEnabled = false;  // pas de mail coordination (cf. doctrine R5)
+    granularFlag = consultaEmPreparacaoEnabled(ctx);
+  } else if (we === "consulta_agendada") {
     // Detection re-proposition : un workflow_stage qui etait deja 'consulta_agendada'
     // avant. Comme on n'a pas l'OLD dans le payload, on infere depuis schedule_reply_at
     // (si NULL = premiere proposition, sinon re-proposition).
@@ -448,6 +476,17 @@ export async function handleConsultaV2WorkflowEvent(
     staffKey = isReschedule ? "cwf.staff.rescheduled" : "cwf.staff.scheduled";
     readerActionUrl = READER_PAGE;  // CTA "Repondre a la proposition"
     granularFlag = consultaAgendadaEnabled(ctx);
+  } else if (we === "nao_compareceu") {
+    // Paquet 141 B5 : transition vers nao_compareceu.
+    // Doctrine : mail no-show = rappel d'engagement reciproque, pas punition.
+    // Mail lecteur (B5) + mail coordination (R8 tracabilite coordination :
+    // tous les bibliothecaires + coordenadores doivent etre informes de
+    // l'absence, pas seulement la personne qui a clique).
+    readerKey = "cwf.reader.nao_compareceu";
+    staffKey = "cwf.staff.nao_compareceu";
+    staffMailEnabled = true;  // mail collectif a admin_notification_email
+    // Pas de staffActionUrl : info pure pour la coordination, action terminee.
+    granularFlag = consultaNaoCompareceuEnabled(ctx);
   } else if (we === "resposta_creneau") {
     // Le lecteur a repondu -> notif staff uniquement (le lecteur sait)
     readerKey = null;
@@ -482,7 +521,12 @@ export async function handleConsultaV2WorkflowEvent(
 
   const tits = joinTitles(items.map((i) => String(i.titulo || `[linha ${i.line_no || "?"}]`)));
   const brfs = joinTitles(items.map((i) => String(i.bib_ref || "")), ", ");
-  const when = startsAt ? formatDateTimeInZone(startsAt, tz) : "";
+  // Paquet 141.2 : enrichir 'when' avec heure de fin si dispo (avant 141.2,
+  // seule l'heure de debut etait affichee dans mail biblio). On affiche
+  // "DD/MM/YYYY HH:MM - HH:MM" si endsAt present, sinon "DD/MM/YYYY HH:MM".
+  const whenStart = startsAt ? formatDateTimeInZone(startsAt, tz) : "";
+  const whenEnd = endsAt ? (formatDateTimeInZone(endsAt, tz).split(" ")[1] || "") : "";
+  const when = whenStart && whenEnd ? `${whenStart} - ${whenEnd}` : whenStart;
 
   // ---- Mail lecteur ----
   let ur;
