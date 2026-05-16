@@ -441,11 +441,18 @@ export async function handleConsultaV2WorkflowEvent(
   const startsAt = startsAtPayload || items.find((i) => i.consultation_starts_at)?.consultation_starts_at || "";
   const endsAt = endsAtPayload || items.find((i) => i.consultation_ends_at)?.consultation_ends_at || "";
   // Paquet 141.2 : extraction workflow_note (note staff lors de proposition,
-  // note lecteur lors de refus, note staff lors de no-show, etc.).
-  // Propagee via slotVars pour interpolation {workflow_note} dans templates i18n.
+  // note staff lors de no-show, etc.).
   const workflowNote = String(getPayloadValue(payload, "workflow_note") || items.find((i) => i.workflow_note)?.workflow_note || "").trim();
-  const slotVars = buildSlotVars(startsAt, endsAt, tz, locale, workflowNote);
-  const slotVarsLib = buildSlotVars(startsAt, endsAt, tz, libLocale, workflowNote);
+  // Paquet 141.2.F (16/05/2026) : Fix B3 - le motif du refus par le
+  // lecteur est dans schedule_reply_note (colonne dediee dans
+  // consulta_item_workflow_v2), pas dans workflow_note. Le trigger
+  // workflow le propage depuis paquet 141.2.E.
+  // effectiveNote = schedule_reply_note prioritaire sur workflow_note
+  // (retro-compatible : si reply_note absent, on retombe sur workflow_note).
+  const scheduleReplyNote = String(getPayloadValue(payload, "schedule_reply_note") || items.find((i) => i.schedule_reply_note)?.schedule_reply_note || "").trim();
+  const effectiveNote = scheduleReplyNote || workflowNote;
+  const slotVars = buildSlotVars(startsAt, endsAt, tz, locale, effectiveNote);
+  const slotVarsLib = buildSlotVars(startsAt, endsAt, tz, libLocale, effectiveNote);
 
   // Schedule reply status pour resposta_creneau
   const replyStatus = consultaScheduleReplyFromPayload(payload)
@@ -530,10 +537,10 @@ export async function handleConsultaV2WorkflowEvent(
   const whenEnd = endsAt ? (formatDateTimeInZone(endsAt, tz).split(" ")[1] || "") : "";
   const when = whenStart && whenEnd ? `${whenStart} - ${whenEnd}` : whenStart;
   // Paquet 141.2.C : ligne 'Observacao' a injecter dans details (lecteur ET staff)
-  // si workflowNote presente. Resout B3 generalise (motif refus, motif annulation,
-  // note staff lors de proposition, etc.) cote workflow event.
-  const noteDetailReaderWf = workflowNote ? [{ label: label(locale, "note") || "Note", value: workflowNote }] : [];
-  const noteDetailStaffWf = workflowNote ? [{ label: label(libLocale, "note") || "Note", value: workflowNote }] : [];
+  // si effectiveNote presente. Resout B3 (motif refus lecteur via schedule_reply_note)
+  // et autres cas (motif annulation, note staff lors de proposition) cote workflow event.
+  const noteDetailReaderWf = effectiveNote ? [{ label: label(locale, "note") || "Note", value: effectiveNote }] : [];
+  const noteDetailStaffWf = effectiveNote ? [{ label: label(libLocale, "note") || "Note", value: effectiveNote }] : [];
 
   // ---- Mail lecteur ----
   let ur;
