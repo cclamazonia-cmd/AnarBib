@@ -71,7 +71,7 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // ===== Consultas locais - paquet 26 =====================================
   if (event === "consulta_v2_criada") return await handleConsultaCriadaV2(recordId);
   if (["consulta_v2_realizada","consulta_v2_cancelada","consulta_v2_expirada"].includes(event)) return await handleConsultaV2LifecycleEvent(recordId, event, payload);
-  if (["consulta_v2_agendada","consulta_v2_resposta_creneau"].includes(event)) return await handleConsultaV2WorkflowEvent(recordId, event, payload);
+  if (["consulta_v2_em_preparacao","consulta_v2_agendada","consulta_v2_nao_compareceu","consulta_v2_resposta_creneau"].includes(event)) return await handleConsultaV2WorkflowEvent(recordId, event, payload);
   if (event === "profile_notice") return await handleProfileNotice(recordId);
   return null;
 }

@@ -65,3 +65,9 @@ export function consultaExpiradaEnabled(ctx?: LibraryNotificationContext|null) {
 export function consultaAdminCopyEnabled(ctx?: LibraryNotificationContext|null) {
   return asBool(ctx?.admin_copy_consultas_enabled, true);
 }
+export function consultaEmPreparacaoEnabled(ctx?: LibraryNotificationContext|null) {
+  return asBool(ctx?.consulta_mail_em_preparacao_enabled, true);
+}
+export function consultaNaoCompareceuEnabled(ctx?: LibraryNotificationContext|null) {
+  return asBool(ctx?.consulta_mail_nao_compareceu_enabled, true);
+}

@@ -69,6 +69,8 @@ export interface LibraryNotificationContext {
   consulta_mail_realizada_enabled: boolean;
   consulta_mail_cancelada_enabled: boolean;
   consulta_mail_expirada_enabled: boolean;
+  consulta_mail_em_preparacao_enabled: boolean;
+  consulta_mail_nao_compareceu_enabled: boolean;
   admin_copy_consultas_enabled: boolean;
   loan_lifecycle_enabled: boolean;
   loan_reminders_enabled: boolean;
