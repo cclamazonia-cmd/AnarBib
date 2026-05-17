@@ -198,37 +198,3 @@
   font-variant-numeric: tabular-nums; font-family: var(--brand-font-mono, monospace);
   letter-spacing: .02em;
 }
-
-/* ═══════════════════════════════════════════════════════════
-   Onglet Historique (#143.2 - 17/05/2026)
-   Pills cochables multi-selection pour filtrer par type
-   ═══════════════════════════════════════════════════════════ */
-
-.ab-painel-history-filters {
-  display: flex; flex-wrap: wrap; gap: 8px;
-  margin: 12px 0 18px;
-}
-.ab-painel-history-pill {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.12);
-  color: var(--brand-muted);
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: .86rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .18s;
-  white-space: nowrap;
-}
-.ab-painel-history-pill:hover {
-  color: var(--brand-text);
-  border-color: rgba(255,255,255,.24);
-}
-.ab-painel-history-pill.active {
-  background: rgba(200,0,0,.15);
-  border-color: var(--brand-color-primary);
-  color: #fff;
-}
-.ab-painel-history-list {
-  min-height: 200px;
-}
