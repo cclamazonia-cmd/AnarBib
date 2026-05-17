@@ -118,15 +118,27 @@ Plans à dérouler en prod pour identifier bugs Br* et De* (cf. cadre QA consult
 
 **Estimation :** 1h
 
-### #145 — **Mojibakes résiduels AccountPage.jsx** (NOUVEAU score 4) 🟡
+### #145 — **Mojibakes résiduels AccountPage.jsx** — **Clos session 17/05 par non-existence** ✅
 
-**Estimation :** 15 min
+**Diagnostic :** ce qui était perçu comme mojibake (`â€"`, `Â·`) dans le fichier était en réalité un **artefact d'affichage PowerShell** sur Windows FR. La console PowerShell utilise CP1252 par défaut et affiche mal les caractères UTF-8 multi-bytes, alors que le fichier sous-jacent est UTF-8 valide.
 
-**Description :** Lignes 1124-1126 contiennent `â€"` et `Â·` au lieu de `—` et `·`. Cosmétique mais visible en prod.
+**Vérification :**
+```powershell
+$content = [System.IO.File]::ReadAllText($path, [System.Text.UTF8Encoding]::new($false))
+# Em dash mojibake : 0
+# Em dash reel '—' : 48
+# Middot reel '·' : 44
+```
 
-### #146 — **Désactiver GitHub Pages** (NOUVEAU score 5) 🟡
+**Doctrine UTF-8 PowerShell complétée :**
+- Connu : `Get-Content -Raw` + `WriteAllText` peut **corrompre** un fichier UTF-8 (CP1252 lecture → double-encodage écriture)
+- Nouveau : `Get-Content` peut **afficher** un fichier UTF-8 correct comme s'il était corrompu, sans qu'il le soit. Toujours vérifier avec `[System.IO.File]::ReadAllText(..., UTF8Encoding)` avant d'agir.
+
+### #146 — **Désactiver GitHub Pages** (NOUVEAU score 3) 🟡 — **Reporté**
 
 **Estimation :** 5 min
+
+**Décision session 17/05 :** maintenir tel quel pour l'instant. GitHub Pages reste un miroir de secours en plus du déploiement principal Codeberg Pages (cf. livre-blanc-v0.1 §3.2 et BILAN_05_au_07_MAI). À reconsidérer si confusion en pratique avec les contributeur·rice·s.
 
 **Description :** Le déploiement principal est Codeberg Pages via Woodpecker. GitHub Pages est inutile et peut créer de la confusion. Désactiver dans les settings du miroir GitHub.
 
@@ -160,7 +172,9 @@ Doctrines à inscrire dans les specs concernées :
 
 3. **R8 traçabilité coordination généralisée** (post #142) : toute action initiée par le staff biblio sur un item lecteur génère un mail à `library_commons.coordination_email` en plus du mail au lecteur. Couvre cancelada_biblioteca, nao_compareceu, et probablement extensions/renouvellements/retours. À inscrire dans spec consultas v2.2 ET spec admin réseau v0.3.2 (#140).
 
-4. **Leçon UTF-8 PowerShell** : sur Windows FR, `Get-Content -Raw` lit en CP1252 et corrompt les fichiers UTF-8 avec caractères Unicode (═, accents). Réécriture ensuite = double-encodage. Méthode sûre : `[System.IO.File]::ReadAllText($path, [System.Text.UTF8Encoding]::new($false))` ou scripts Node `.cjs` qui utilisent fs UTF-8 par défaut.
+4. **Leçon UTF-8 PowerShell (étendue 17/05 fin de session)** : sur Windows FR PowerShell, 2 pièges symétriques :
+   - **Écriture** : `Get-Content -Raw` lit en CP1252 et corrompt les fichiers UTF-8 avec caractères Unicode (═, accents). Réécriture ensuite = double-encodage, fichier devient mojibake intégral. Méthode sûre : `[System.IO.File]::ReadAllText($path, [System.Text.UTF8Encoding]::new($false))` ou scripts Node `.cjs` qui utilisent fs UTF-8 par défaut.
+   - **Lecture/affichage** : `Get-Content` peut **afficher** des mojibakes (`â€"`, `Â·`) à la console alors que le fichier est en réalité UTF-8 valide. Toujours vérifier avec ReadAllText UTF-8 explicite **avant** de croire à un bug (incident #145 du 17/05 : faux positif).
 
 5. **Doctrine création objets backend sécurisés** (rappel, déjà internalisé mais à enforcer) : `security_invoker=on` pour vues, `REVOKE ALL FROM PUBLIC` + `GRANT SELECT TO authenticated` explicite, DO-block de vérification en fin de migration. Le pre-commit hook `.githooks/pre-commit` enforce automatiquement.
 
@@ -170,14 +184,15 @@ Doctrines à inscrire dans les specs concernées :
 
 | Métrique | v14 (15/05 soir) | v15 (17/05 soir) | Delta |
 |---|---|---|---|
-| Items ouverts | 15 | **15** | 0 (4 clos, 5 nouveaux) |
-| Items clos cumulés | 23 | **27** | +4 (#141, #132, #142, #143) |
-| Score total ouverts | ~210 | ~190 | -20 (gros chantiers clos, petits nouveaux) |
+| Items ouverts | 15 | **14** | -1 (5 clos, 4 nouveaux) |
+| Items clos cumulés | 23 | **28** | +5 (#141, #132, #142, #143, #145) |
+| Score total ouverts | ~210 | ~186 | -24 (gros chantiers clos, petits nouveaux) |
 | Bugs critiques (score ≥ 17) | 2 | **0** | -2 (#131 absorbé dans #141 clos, #132 clos) |
 | Chantier majeur en cours | #141 | **(aucun)** | — |
 | Prochain gros chantier | #141 ou #98-B | **#98-B profils d'adoption** | — |
 | **Onglet Historique en prod** | non | ✅ | nouveau |
 | **Doctrine R8 généralisée** | non | ✅ | nouveau |
+| **Doctrine UTF-8 PowerShell complète** | partielle (écriture) | ✅ (écriture + lecture) | étendue |
 
 ---
 
