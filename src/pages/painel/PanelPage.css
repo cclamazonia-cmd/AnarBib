@@ -232,3 +232,169 @@
 .ab-painel-history-list {
   min-height: 200px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Onglet Historique - Sections collapsibles + tableaux hybrides
+   (#143.3.c - 17/05/2026)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Section <details> collapsible par type */
+.ab-painel-history-section {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--brand-radius-sm);
+  margin-bottom: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,.02);
+}
+.ab-painel-history-section[open] {
+  background: rgba(255,255,255,.04);
+}
+.ab-painel-history-section__summary {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: .92rem;
+  font-weight: 700;
+  list-style: none;
+  user-select: none;
+  transition: .15s;
+}
+.ab-painel-history-section__summary:hover {
+  background: rgba(255,255,255,.04);
+}
+.ab-painel-history-section__summary::-webkit-details-marker {
+  display: none;
+}
+.ab-painel-history-section__summary::before {
+  content: '▶';
+  font-size: .7rem;
+  color: var(--brand-muted);
+  transition: transform .15s;
+}
+.ab-painel-history-section[open] > .ab-painel-history-section__summary::before {
+  transform: rotate(90deg);
+}
+.ab-painel-history-section__title { flex: 1; }
+.ab-painel-history-section__count {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--brand-muted);
+  background: rgba(255,255,255,.06);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+.ab-painel-history-section__body {
+  padding: 12px 16px 16px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+
+/* Tableau historique (reutilise styles de .ab-painel-table) */
+.ab-painel-history-table {
+  width: 100%; border-collapse: collapse; font-size: .86rem;
+}
+.ab-painel-history-table th {
+  text-align: left; padding: 10px 8px; font-weight: 700;
+  color: var(--brand-muted);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  white-space: nowrap;
+}
+.ab-painel-history-table td {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  vertical-align: top;
+}
+.ab-painel-history-table tr:hover { background: rgba(255,255,255,.03); }
+.ab-painel-history-table .truncate {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Cellule motif (peut etre long, autoriser wrap) */
+.ab-painel-history-table .cell-motif {
+  font-size: .82rem;
+  color: var(--brand-muted);
+  max-width: 320px;
+}
+
+/* Bouton load more */
+.ab-painel-history-loadmore {
+  margin: 14px 0 6px;
+  text-align: center;
+}
+.ab-painel-history-loadmore button {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--brand-text);
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: .86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .18s;
+}
+.ab-painel-history-loadmore button:hover {
+  background: rgba(255,255,255,.08);
+}
+.ab-painel-history-loadmore button:disabled {
+  opacity: .5; cursor: not-allowed;
+}
+
+/* Type pill (uni/groupe) */
+.ab-painel-history-typepill {
+  display: inline-block;
+  font-size: .76rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(100,140,255,.15);
+  color: #8ab4ff;
+}
+.ab-painel-history-typepill[data-type="groupe"] {
+  background: rgba(200,150,0,.15);
+  color: #e8c44a;
+}
+
+/* ─── Mobile : tableau -> cards ────────────────────────────── */
+@media (max-width: 768px) {
+  .ab-painel-history-table,
+  .ab-painel-history-table thead,
+  .ab-painel-history-table tbody,
+  .ab-painel-history-table tr,
+  .ab-painel-history-table th,
+  .ab-painel-history-table td {
+    display: block;
+  }
+  .ab-painel-history-table thead {
+    display: none;  /* labels via ::before sur td */
+  }
+  .ab-painel-history-table tr {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--brand-radius-sm);
+    margin-bottom: 12px;
+    padding: 10px 12px;
+  }
+  .ab-painel-history-table tr:hover { background: rgba(255,255,255,.05); }
+  .ab-painel-history-table td {
+    border: none;
+    padding: 4px 0;
+    position: relative;
+    padding-left: 40%;
+    min-height: 24px;
+  }
+  .ab-painel-history-table td::before {
+    content: attr(data-label) ':';
+    position: absolute;
+    left: 0;
+    width: 35%;
+    font-weight: 700;
+    color: var(--brand-muted);
+    font-size: .78rem;
+  }
+  .ab-painel-history-table .truncate {
+    max-width: none;
+    white-space: normal;
+  }
+}

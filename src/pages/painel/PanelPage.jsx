@@ -303,6 +303,64 @@ export default function PanelPage() {
       return next;
     });
   };
+
+  // Donnees historiques (chargees a la demande, paginees par 50)
+  const [historyData, setHistoryData] = useState({ reservas: [], consultas: [], emprestimos: [] });
+  const [historyOffsets, setHistoryOffsets] = useState({ reservas: 0, consultas: 0, emprestimos: 0 });
+  const [historyHasMore, setHistoryHasMore] = useState({ reservas: true, consultas: true, emprestimos: true });
+  const [historyLoading, setHistoryLoading] = useState({ reservas: false, consultas: false, emprestimos: false });
+
+  const HISTORY_PAGE_SIZE = 50;
+  const HISTORY_VIEW_NAMES = {
+    reservas: 'painel_reservations_history_v1',
+    consultas: 'painel_consultas_history_v1',
+    emprestimos: 'painel_loans_history_v1'
+  };
+
+  const loadHistorySection = useCallback(async (type, append = false) => {
+    if (historyLoading[type]) return;
+    setHistoryLoading(prev => ({ ...prev, [type]: true }));
+    
+    const offset = append ? historyOffsets[type] : 0;
+    const viewName = HISTORY_VIEW_NAMES[type];
+    
+    try {
+      const { data, error } = await supabase
+        .schema('api').from(viewName)
+        .select('*')
+        .range(offset, offset + HISTORY_PAGE_SIZE - 1);
+      
+      if (error) {
+        console.error(`load ${type} history error:`, error);
+        setHistoryLoading(prev => ({ ...prev, [type]: false }));
+        return;
+      }
+      
+      const items = data || [];
+      const hasMore = items.length === HISTORY_PAGE_SIZE;
+      
+      setHistoryData(prev => ({
+        ...prev,
+        [type]: append ? [...prev[type], ...items] : items
+      }));
+      setHistoryOffsets(prev => ({ ...prev, [type]: offset + items.length }));
+      setHistoryHasMore(prev => ({ ...prev, [type]: hasMore }));
+    } catch (err) {
+      console.error(`load ${type} history exception:`, err);
+    } finally {
+      setHistoryLoading(prev => ({ ...prev, [type]: false }));
+    }
+  }, [historyLoading, historyOffsets]);
+
+  // Auto-load des sections cochees a l'ouverture de l'onglet
+  useEffect(() => {
+    if (tab !== 'historico' || !historyTypes) return;
+    for (const type of ['reservas', 'consultas', 'emprestimos']) {
+      if (historyTypes.has(type) && historyData[type].length === 0 && historyHasMore[type] && !historyLoading[type]) {
+        loadHistorySection(type, false);
+      }
+    }
+  }, [tab, historyTypes, historyData, historyHasMore, historyLoading, loadHistorySection]);
   // === Fin onglet Historique ==================================
   const [resStage, setResStage] = useState('');
   const [resNote, setResNote] = useState('');
@@ -2115,13 +2173,220 @@ export default function PanelPage() {
                 ))}
               </div>
 
-              <div className="ab-painel-history-list">
-                {(historyTypes || new Set()).size === 0 ? (
-                  <p className="ab-painel-hint">{t({ id: 'panel.history.noFilter' })}</p>
-                ) : (
-                  <p className="ab-painel-hint">{t({ id: 'panel.history.empty' })}</p>
-                )}
-              </div>
+              {(historyTypes || new Set()).size === 0 ? (
+                <p className="ab-painel-hint">{t({ id: 'panel.history.noFilter' })}</p>
+              ) : (
+                <div className="ab-painel-history-list">
+
+                  {/* Section Reservations */}
+                  {(historyTypes || new Set()).has('reservas') && (
+                    <details className="ab-painel-history-section">
+                      <summary className="ab-painel-history-section__summary">
+                        <span className="ab-painel-history-section__title">{t({ id: 'panel.history.section.reservations' })}</span>
+                        <span className="ab-painel-history-section__count">
+                          {t({ id: 'panel.history.itemsCount' }, { count: historyData.reservas.length })}
+                        </span>
+                      </summary>
+                      <div className="ab-painel-history-section__body">
+                        {historyLoading.reservas && historyData.reservas.length === 0 ? (
+                          <p className="ab-painel-hint">{t({ id: 'common.loading' })}</p>
+                        ) : historyData.reservas.length === 0 ? (
+                          <p className="ab-painel-hint">{t({ id: 'panel.history.section.empty' })}</p>
+                        ) : (
+                          <>
+                            <div className="ab-painel-table-wrap">
+                              <table className="ab-painel-history-table">
+                                <thead>
+                                  <tr>
+                                    <th>{t({ id: 'panel.history.col.title' })}</th>
+                                    <th>{t({ id: 'panel.history.col.status' })}</th>
+                                    <th>{t({ id: 'panel.history.col.reader' })}</th>
+                                    <th>{t({ id: 'panel.history.col.requested' })}</th>
+                                    <th>{t({ id: 'panel.history.col.closed' })}</th>
+                                    <th>{t({ id: 'panel.history.col.motif' })}</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {historyData.reservas.map((r, i) => (
+                                    <tr key={`hr-${r.reserva_item_id || r.reserva_id + '-' + r.line_no || i}`}>
+                                      <td data-label={t({ id: 'panel.history.col.title' })}>
+                                        <div className="truncate">{r.titulo || r.bib_ref || '—'}</div>
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.status' })}>
+                                        {t({ id: `reservation.stage.${r.item_status}`, defaultMessage: r.item_status })}
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.reader' })}>
+                                        {r.user_name || r.user_email || r.user_public_id || '—'}
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.requested' })}>
+                                        {r.requested_at ? new Date(r.requested_at).toLocaleDateString() : '—'}
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.closed' })}>
+                                        {r.closed_at ? new Date(r.closed_at).toLocaleDateString() : '—'}
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.motif' })} className="cell-motif">
+                                        {r.workflow_note || '—'}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            {historyHasMore.reservas && (
+                              <div className="ab-painel-history-loadmore">
+                                <button type="button"
+                                  onClick={() => loadHistorySection('reservas', true)}
+                                  disabled={historyLoading.reservas}>
+                                  {historyLoading.reservas ? '...' : t({ id: 'panel.history.loadMore' })}
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </details>
+                  )}
+
+                  {/* Section Consultas */}
+                  {(historyTypes || new Set()).has('consultas') && (
+                    <details className="ab-painel-history-section">
+                      <summary className="ab-painel-history-section__summary">
+                        <span className="ab-painel-history-section__title">{t({ id: 'panel.history.section.consultas' })}</span>
+                        <span className="ab-painel-history-section__count">
+                          {t({ id: 'panel.history.itemsCount' }, { count: historyData.consultas.length })}
+                        </span>
+                      </summary>
+                      <div className="ab-painel-history-section__body">
+                        {historyLoading.consultas && historyData.consultas.length === 0 ? (
+                          <p className="ab-painel-hint">{t({ id: 'common.loading' })}</p>
+                        ) : historyData.consultas.length === 0 ? (
+                          <p className="ab-painel-hint">{t({ id: 'panel.history.section.empty' })}</p>
+                        ) : (
+                          <>
+                            <div className="ab-painel-table-wrap">
+                              <table className="ab-painel-history-table">
+                                <thead>
+                                  <tr>
+                                    <th>{t({ id: 'panel.history.col.title' })}</th>
+                                    <th>{t({ id: 'panel.history.col.status' })}</th>
+                                    <th>{t({ id: 'panel.history.col.reader' })}</th>
+                                    <th>{t({ id: 'panel.history.col.scheduled' })}</th>
+                                    <th>{t({ id: 'panel.history.col.closed' })}</th>
+                                    <th>{t({ id: 'panel.history.col.motif' })}</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {historyData.consultas.map((c, i) => {
+                                    const motif = c.schedule_reply_note || c.workflow_note;
+                                    return (
+                                      <tr key={`hc-${c.consulta_item_id || c.consulta_id + '-' + c.line_no || i}`}>
+                                        <td data-label={t({ id: 'panel.history.col.title' })}>
+                                          <div className="truncate">{c.titulo || c.bib_ref || '—'}</div>
+                                        </td>
+                                        <td data-label={t({ id: 'panel.history.col.status' })}>
+                                          {t({ id: `consultation.stage.${c.item_status}`, defaultMessage: c.item_status })}
+                                        </td>
+                                        <td data-label={t({ id: 'panel.history.col.reader' })}>
+                                          {c.user_name || c.user_email || c.user_public_id || '—'}
+                                        </td>
+                                        <td data-label={t({ id: 'panel.history.col.scheduled' })}>
+                                          {c.scheduled_for ? new Date(c.scheduled_for).toLocaleDateString() : '—'}
+                                        </td>
+                                        <td data-label={t({ id: 'panel.history.col.closed' })}>
+                                          {c.closed_at ? new Date(c.closed_at).toLocaleDateString() : '—'}
+                                        </td>
+                                        <td data-label={t({ id: 'panel.history.col.motif' })} className="cell-motif">
+                                          {motif || '—'}
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </div>
+                            {historyHasMore.consultas && (
+                              <div className="ab-painel-history-loadmore">
+                                <button type="button"
+                                  onClick={() => loadHistorySection('consultas', true)}
+                                  disabled={historyLoading.consultas}>
+                                  {historyLoading.consultas ? '...' : t({ id: 'panel.history.loadMore' })}
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </details>
+                  )}
+
+                  {/* Section Emprestimos */}
+                  {(historyTypes || new Set()).has('emprestimos') && (
+                    <details className="ab-painel-history-section">
+                      <summary className="ab-painel-history-section__summary">
+                        <span className="ab-painel-history-section__title">{t({ id: 'panel.history.section.emprestimos' })}</span>
+                        <span className="ab-painel-history-section__count">
+                          {t({ id: 'panel.history.itemsCount' }, { count: historyData.emprestimos.length })}
+                        </span>
+                      </summary>
+                      <div className="ab-painel-history-section__body">
+                        {historyLoading.emprestimos && historyData.emprestimos.length === 0 ? (
+                          <p className="ab-painel-hint">{t({ id: 'common.loading' })}</p>
+                        ) : historyData.emprestimos.length === 0 ? (
+                          <p className="ab-painel-hint">{t({ id: 'panel.history.section.empty' })}</p>
+                        ) : (
+                          <>
+                            <div className="ab-painel-table-wrap">
+                              <table className="ab-painel-history-table">
+                                <thead>
+                                  <tr>
+                                    <th>{t({ id: 'panel.history.col.items' })}</th>
+                                    <th>{t({ id: 'panel.history.col.type' })}</th>
+                                    <th>{t({ id: 'panel.history.col.reader' })}</th>
+                                    <th>{t({ id: 'panel.history.col.returned' })}</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {historyData.emprestimos.map((e, i) => (
+                                    <tr key={`he-${e.emprestimo_id || i}`}>
+                                      <td data-label={t({ id: 'panel.history.col.items' })}>
+                                        <div className="truncate" title={e.titulos || ''}>
+                                          {e.titulos || e.bib_refs || '—'}
+                                        </div>
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.type' })}>
+                                        <span className="ab-painel-history-typepill" data-type={e.loan_type}>
+                                          {t({ id: `panel.history.type.${e.loan_type}`, defaultMessage: e.loan_type })}
+                                          {e.items_count > 1 && ` (${e.items_count})`}
+                                        </span>
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.reader' })}>
+                                        {e.user_name || e.user_email || e.user_public_id || '—'}
+                                      </td>
+                                      <td data-label={t({ id: 'panel.history.col.returned' })}>
+                                        {e.returned_at ? new Date(e.returned_at).toLocaleDateString() : '—'}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            {historyHasMore.emprestimos && (
+                              <div className="ab-painel-history-loadmore">
+                                <button type="button"
+                                  onClick={() => loadHistorySection('emprestimos', true)}
+                                  disabled={historyLoading.emprestimos}>
+                                  {historyLoading.emprestimos ? '...' : t({ id: 'panel.history.loadMore' })}
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </details>
+                  )}
+
+                </div>
+              )}
             </div>
           )}
 
