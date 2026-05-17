@@ -272,6 +272,38 @@ export default function PanelPage() {
   const sortLoans = useSort(loans);
   const [internalTasks, setInternalTasks] = useState([]);
   const [selectedRes, setSelectedRes] = useState(new Set());
+
+  // === Onglet Historique (#143.2) =============================
+  // Pills cochables multi-selection pour filtrer par type d'item.
+  // Initialise au type le plus utilise (dynamique selon les comptes).
+  const [historyTypes, setHistoryTypes] = useState(null);
+
+  const dominantHistoryType = useMemo(() => {
+    const counts = {
+      reservas: (reservations || []).filter(r => ['cancelada_leitor','cancelada_biblioteca','convertida_em_emprestimo','expirada','liberada_para_circulacao'].includes(r.item_status)).length,
+      consultas: (consultations || []).filter(c => ['cancelada_biblioteca','cancelada_leitor','consultada','expirada'].includes(c.item_status)).length,
+      emprestimos: (loans || []).filter(l => l.status_global === 'encerrado').length,
+    };
+    if (counts.consultas >= counts.reservas && counts.consultas >= counts.emprestimos) return 'consultas';
+    if (counts.reservas >= counts.emprestimos) return 'reservas';
+    return 'emprestimos';
+  }, [reservations, consultations, loans]);
+
+  React.useEffect(() => {
+    if (historyTypes === null && dominantHistoryType) {
+      setHistoryTypes(new Set([dominantHistoryType]));
+    }
+  }, [dominantHistoryType, historyTypes]);
+
+  const toggleHistoryType = (type) => {
+    setHistoryTypes(prev => {
+      const next = new Set(prev || []);
+      if (next.has(type)) next.delete(type);
+      else next.add(type);
+      return next;
+    });
+  };
+  // === Fin onglet Historique ==================================
   const [resStage, setResStage] = useState('');
   const [resNote, setResNote] = useState('');
   const [resSchedule, setResSchedule] = useState('');
@@ -1152,6 +1184,7 @@ export default function PanelPage() {
     { key: 'emprestimos-livro', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
     { key: 'emprestimos-lote', label: t({ id: 'panel.loan.grouped' }), hint: t({ id: 'panel.tab.grouped.hint' }) },
     { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
+    { key: 'historico', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
     ...(isCoordOrAdmin && membershipEnabled ? [
       { key: 'contribuicoes', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
@@ -2063,6 +2096,35 @@ export default function PanelPage() {
           )}
 
           {/* ═══ Onglet Contribuições (admin coord) ═══════════════ */}
+          {tab === 'historico' && (
+            <div>
+              <h2 className="ab-painel-h2">{t({ id: 'panel.history.title' })}</h2>
+              <p className="ab-painel-hint">{t({ id: 'panel.history.subtitle' })}</p>
+
+              <div className="ab-painel-history-filters">
+                {['reservas', 'consultas', 'emprestimos'].map(type => (
+                  <button
+                    key={type}
+                    type="button"
+                    className={`ab-painel-history-pill ${(historyTypes || new Set()).has(type) ? 'active' : ''}`}
+                    onClick={() => toggleHistoryType(type)}
+                    aria-pressed={(historyTypes || new Set()).has(type)}
+                  >
+                    {t({ id: `panel.history.filter.${type}` })}
+                  </button>
+                ))}
+              </div>
+
+              <div className="ab-painel-history-list">
+                {(historyTypes || new Set()).size === 0 ? (
+                  <p className="ab-painel-hint">{t({ id: 'panel.history.noFilter' })}</p>
+                ) : (
+                  <p className="ab-painel-hint">{t({ id: 'panel.history.empty' })}</p>
+                )}
+              </div>
+            </div>
+          )}
+
           {tab === 'contribuicoes' && isCoordOrAdmin && (
             <div>
               <h2 className="ab-painel-h2">{t({ id: 'panel.memberships.title' })}</h2>
