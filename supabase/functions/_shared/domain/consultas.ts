@@ -293,10 +293,13 @@ export async function handleConsultaV2LifecycleEvent(
       readerMailEnabled = false;
       staffKey = "con.cancelReader";
     } else if (cancelledBy === "biblioteca") {
-      // La biblio a annule -> mail au lecteur uniquement
+      // La biblio a annule -> mail au lecteur + mail coordination (R8)
+      // L'operateur qui clique "annuler" n'est pas forcement le coordenador
+      // qui doit etre au courant. Motif d'annulation obligatoire (>= 5 chars)
+      // garanti par api.advance_consulta, propage via workflow_note et
+      // affiche dans details du mail staff via noteDetailStaff.
       readerKey = "con.cancelStaff";
-      staffKey = null;
-      staffMailEnabled = false;
+      staffKey = "con.cancelStaff";
     } else {
       // Discriminant absent du payload (cas degrade) -> mail aux deux cotes
       // par securite, avec la cle generique "reservation annulee".
