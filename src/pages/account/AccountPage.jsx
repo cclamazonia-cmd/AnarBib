@@ -509,7 +509,7 @@ export default function AccountPage() {
   const handleDismissConsultaCancelled = async (c) => {
     if (!c?.consulta_id) return;
     try {
-      const { error } = await supabase.rpc('dismiss_consulta_cancelled', {
+      const { error } = await supabase.schema('api').rpc('dismiss_consulta_cancelled', {
         p_consulta_id: c.consulta_id,
         p_line_nos: [c.line_no || 1],
         p_note: null
