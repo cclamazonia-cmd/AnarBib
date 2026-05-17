@@ -199,6 +199,20 @@ export default function CatalogPage() {
   const tableRef = useRef(null);
   const [regimentoUrl, setRegimentoUrl] = useState(null);
 
+  // ── Réservation rapide depuis le catalogue (Paquet 27 quickReserve) ──
+  // serviceState : connaître si la biblio est `pausada` / `somente_consulta`
+  //   → on cache le bouton dans ces cas.
+  // isRestricted : profil suspendu (sanction militante) → on cache aussi.
+  // reserveState : statut par livre, clef = book_id (ou bib_ref en fallback).
+  //   Valeurs : 'idle' | 'reserving' | 'done' | 'error:<message>'
+  // reservedBibRefs : set des bib_ref déjà réservés avec succès dans la
+  //   session courante du catalogue, pour ne pas montrer un bouton "actif"
+  //   sur une ligne déjà traitée (UX : évite le double clic surpris).
+  const [serviceState, setServiceState] = useState(null);
+  const [isRestricted, setIsRestricted] = useState(false);
+  const [reserveState, setReserveState] = useState({});
+  const [reservedBibRefs, setReservedBibRefs] = useState(new Set());
+
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -331,6 +345,96 @@ export default function CatalogPage() {
     })();
   }, [libraryId, isAuth]);
 
+  // ── Garde-fous pour la réservation rapide ──────────────────
+  // Charge 2 contextes globaux stables : mode service de la biblio et statut
+  // restreint du profil. Suffisant pour décider si le bouton apparaît.
+  // Les doublons (réservation/emprunt actif sur même livre) sont laissés au
+  // backend : trop coûteux à charger ici, et le RPC les rejette proprement.
+  useEffect(() => {
+    if (!isAuth || !libraryId) return;
+    (async () => {
+      // service_state actif de la bibliothèque (mode normal / pausada / somente_consulta)
+      const svcRes = await supabase.from('v_library_service_state_current')
+        .select('service_mode, allows_new_reservations')
+        .eq('library_id', libraryId).maybeSingle();
+      if (svcRes.data) setServiceState(svcRes.data);
+
+      // profil : flag is_restricted seul (pas besoin du reste pour ce chantier)
+      const profRes = await supabase.from('profiles')
+        .select('is_restricted').eq('id', user.id).maybeSingle();
+      if (profRes.data) setIsRestricted(!!profRes.data.is_restricted);
+    })();
+  }, [isAuth, libraryId, user?.id]);
+
+  // ── Action de réservation rapide ───────────────────────────
+  // Appelée par le bouton "Reservar" en bout de ligne. Pour 1 seul livre :
+  //   1. fn_v2_resolve_catalog_refs_for_current_user → résout bib_ref vers
+  //      holding_id de la session du lecteur (sa bibliothèque).
+  //   2. fn_v2_create_reserva_by_holdings → crée la réservation. Le trigger
+  //      DB trg_notify_reserva_workflow_change émet automatiquement
+  //      'reserva_v2_criada' (cf. spec workflow réservation phase 4).
+  // Pas de notifyEvent manuel à faire ici.
+  const handleQuickReserve = useCallback(async (book) => {
+    const key = String(book.book_id || book.bib_ref || '');
+    const ref = String(book.bib_ref || '').trim();
+    if (!ref) return;
+
+    // Cache local : déjà réservé dans cette session ?
+    if (reservedBibRefs.has(ref.toLowerCase())) return;
+
+    setReserveState(s => ({ ...s, [key]: 'reserving' }));
+
+    try {
+      // 1. Résolution bib_ref → holding_id (côté session du lecteur)
+      const resolveRes = await supabase.rpc('fn_v2_resolve_catalog_refs_for_current_user', { p_refs: [ref] });
+      if (resolveRes.error) throw resolveRes.error;
+
+      const rows = Array.isArray(resolveRes.data) ? resolveRes.data : [];
+      const row = rows[0];
+      if (!row || !row.matched || !(Number(row.session_holding_id) > 0)) {
+        // Cas "trouvé mais non disponible dans MA biblio" : message du backend si présent.
+        throw new Error(row?.message || t({ id: 'catalog.quickReserve.notInMyLibrary' }));
+      }
+
+      // 2. Refus si l'exemplaire est consultation-only (ne devrait pas arriver
+      //    car le bouton n'apparaît que sur status 'ok', mais on garde la
+      //    ceinture-bretelles : un livre peut bouger entre l'affichage et le clic).
+      if (row.session_loanable === false) {
+        throw new Error(t({ id: 'catalog.quickReserve.consultationOnly' }));
+      }
+
+      // 3. Création de la réservation
+      const createRes = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
+        p_user_id: user.id,
+        p_holding_ids: [Number(row.session_holding_id)],
+        p_notes: t({ id: 'catalog.quickReserve.note' }),
+      });
+      if (createRes.error) throw createRes.error;
+
+      // Succès : on marque le livre comme réservé pour éviter le double clic
+      setReserveState(s => ({ ...s, [key]: 'done' }));
+      setReservedBibRefs(prev => {
+        const next = new Set(prev);
+        next.add(ref.toLowerCase());
+        return next;
+      });
+    } catch (err) {
+      setReserveState(s => ({ ...s, [key]: `error:${err.message || 'erro'}` }));
+    }
+  }, [user?.id, t, reservedBibRefs]);
+
+  // Calcul dérivé : le bouton de réservation rapide est-il globalement actif ?
+  // Cache pour le rendu de chaque ligne (évalué une fois par render).
+  const quickReserveAvailable = useMemo(() => {
+    if (!isAuth) return false;
+    if (isRestricted) return false;
+    const svcMode = serviceState?.service_mode || 'funcionamento_normal';
+    const allowsRes = serviceState?.allows_new_reservations !== false;
+    if (!allowsRes) return false;
+    if (svcMode === 'pausada' || svcMode === 'somente_consulta') return false;
+    return true;
+  }, [isAuth, isRestricted, serviceState]);
+
   // Phase B.7 : le total count est désormais récupéré directement via Content-Range
   // dans fetchBooks (cohérent avec la grille, respecte la visibility automatiquement).
   // L'ancien fetch via api.books_count_v1 est retiré (il fuyait le compte network aux anon).
@@ -406,9 +510,6 @@ export default function CatalogPage() {
           {!user && (
             <Button variant="secondary" onClick={() => navigate('/cadastro')}>{t({ id: 'nav.login' })}</Button>
           )}
-          {regimentoUrl && (
-            <a className="ab-button ab-button--secondary" href={regimentoUrl} target="_blank" rel="noopener noreferrer">{t({ id: 'catalog.regimento' })}</a>
-          )}
           <span className="ab-hero-sep" aria-hidden="true" />
           {isStaff ? (
             <a className="ab-button ab-button--secondary" href={MANUAL_COMPLETE_URL} target="_blank" rel="noopener noreferrer">{t({ id: 'nav.manual.complete' })}</a>
@@ -417,6 +518,23 @@ export default function CatalogPage() {
           )}
         </>}
       />
+
+      {/* ── Bandeau règlement de la bibliothèque ──────────────
+          Identique au bandeau de la page conta (AccountPage) :
+          icône PDF + hint i18n + bouton vers le PDF public.
+          Affiché uniquement aux connectés (cohérent avec le chargement
+          conditionnel de regimentoUrl plus haut). */}
+      {regimentoUrl && (
+        <div className="ab-regimento-banner">
+          <span className="ab-regimento-banner__icon" aria-hidden="true">📄</span>
+          <div className="ab-regimento-banner__text">
+            {t({ id: 'account.regimento.hint' })}
+          </div>
+          <a href={regimentoUrl} target="_blank" rel="noopener noreferrer" className="ab-regimento-banner__cta">
+            <Button variant="secondary">{t({ id: 'account.regimento.button' })}</Button>
+          </a>
+        </div>
+      )}
 
       {isAuth && (
         <div className="ab-session-info">{t({ id: 'catalog.session.connected' })}</div>
@@ -621,6 +739,9 @@ export default function CatalogPage() {
                   <th onClick={() => handleHeaderSort('editora')}>{t({ id: 'catalog.table.publisher' })}{si('editora')}</th>
                   <th>{t({ id: 'catalog.table.libraries' })}</th>
                   <th>{t({ id: 'catalog.table.availability' })}</th>
+                  {isAuth && (
+                    <th className="ab-table__actions-col">{t({ id: 'catalog.table.actions' })}</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -644,6 +765,64 @@ export default function CatalogPage() {
                       <td>{book.editora || '—'}</td>
                       <td>{libs || '—'}</td>
                       <td><span className={`ab-status-dot ab-status-dot--${status.cls}`}>{status.label}</span></td>
+                      {isAuth && (
+                        <td className="ab-table__actions-cell">
+                          {(() => {
+                            // Bouton visible uniquement si :
+                            //  - garde-fous globaux OK (service mode, non restreint)
+                            //  - statut du livre = 'ok' (= disponible dans MA biblio, count > 0)
+                            //  - livre prêtable (sinon c'est consultation, autre flux)
+                            if (!quickReserveAvailable) return null;
+                            if (status.cls !== 'ok') return null;
+                            if (book.session_loanable === false) return null;
+
+                            const key = String(book.book_id || book.bib_ref || '');
+                            const refLow = String(book.bib_ref || '').trim().toLowerCase();
+                            const localDone = reservedBibRefs.has(refLow);
+                            const st = reserveState[key] || (localDone ? 'done' : 'idle');
+
+                            if (st === 'done') {
+                              return (
+                                <span className="ab-quick-reserve ab-quick-reserve--done" title={t({ id: 'catalog.quickReserve.doneHint' })}>
+                                  ✓ {t({ id: 'catalog.quickReserve.done' })}
+                                </span>
+                              );
+                            }
+                            if (st === 'reserving') {
+                              return (
+                                <button className="ab-quick-reserve ab-quick-reserve--loading" disabled>
+                                  <Spinner size="sm" /> {t({ id: 'catalog.quickReserve.loading' })}
+                                </button>
+                              );
+                            }
+                            if (typeof st === 'string' && st.startsWith('error:')) {
+                              const msg = st.slice(6);
+                              return (
+                                <div className="ab-quick-reserve-error">
+                                  <span className="ab-quick-reserve-error__msg" title={msg}>{msg}</span>
+                                  <button
+                                    type="button"
+                                    className="ab-quick-reserve ab-quick-reserve--retry"
+                                    onClick={() => handleQuickReserve(book)}
+                                  >
+                                    {t({ id: 'catalog.quickReserve.retry' })}
+                                  </button>
+                                </div>
+                              );
+                            }
+                            return (
+                              <button
+                                type="button"
+                                className="ab-quick-reserve"
+                                onClick={() => handleQuickReserve(book)}
+                                title={t({ id: 'catalog.quickReserve.hint' })}
+                              >
+                                {t({ id: 'catalog.quickReserve.label' })}
+                              </button>
+                            );
+                          })()}
+                        </td>
+                      )}
                     </tr>
                   );
                 })}

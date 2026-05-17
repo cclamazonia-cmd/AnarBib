@@ -815,7 +815,6 @@
   "catalog.hero.subtitle": "AnarBib — Libertarian & anarchist catalog(s) network",
   "catalog.hero.title": "Libertarian Catalog(s) — AnarBib",
   "catalog.loading.message": "Loading books…",
-  "catalog.regimento": "Rules",
   "catalog.results.count": "{count, plural, =0 {No results} one {# result} other {# results}}",
   "catalog.results.empty": "No results found for this search.",
   "catalog.results.loadMore": "Load more",
@@ -2450,5 +2449,15 @@
   "video.subtitles": "Subtitles: {label}",
   "video.subtitlesOff": "off",
   "video.unmute": "Unmute",
-  "video.volume": "Volume"
+  "video.volume": "Volume",
+  "catalog.table.actions": "Actions",
+  "catalog.quickReserve.label": "Reserve",
+  "catalog.quickReserve.hint": "Reserve this book in your library with one click",
+  "catalog.quickReserve.loading": "Reserving…",
+  "catalog.quickReserve.done": "Reserved",
+  "catalog.quickReserve.doneHint": "You reserved this book. See My account › Reservations.",
+  "catalog.quickReserve.retry": "Retry",
+  "catalog.quickReserve.notInMyLibrary": "This book is not available in your library.",
+  "catalog.quickReserve.consultationOnly": "This copy is on-site consultation only.",
+  "catalog.quickReserve.note": "Reservation created from the catalog."
 }

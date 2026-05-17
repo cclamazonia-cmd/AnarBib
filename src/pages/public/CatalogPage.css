@@ -278,3 +278,151 @@
     opacity: 0.5;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Bandeau règlement de la bibliothèque
+   Repris du pattern AccountPage (page conta) pour cohérence visuelle :
+   icône PDF + hint en texte secondaire + bouton vers le PDF public.
+   Placé juste après le Hero, avant ab-session-info.
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-regimento-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  border-radius: var(--brand-radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ab-regimento-banner__icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ab-regimento-banner__text {
+  flex: 1;
+  min-width: 200px;
+  font-size: 0.82rem;
+  color: var(--brand-muted, #ccc);
+  line-height: 1.4;
+}
+
+.ab-regimento-banner__cta {
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Bouton de réservation rapide (colonne Ações)
+   Visible uniquement aux connectés, uniquement sur les livres
+   au statut "disponible dans ma biblio" (status.cls === 'ok').
+   3 états visuels : idle (rouge militant), loading (spinner),
+   done (vert sobre), error (message + bouton retry).
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-table__actions-col {
+  width: 110px;
+  text-align: center;
+}
+
+.ab-table__actions-cell {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ab-quick-reserve {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--brand-radius-sm);
+  border: 1px solid rgba(225, 29, 47, 0.45);
+  background: rgba(179, 32, 37, 0.18);
+  color: var(--brand-text);
+  font-family: var(--brand-font-body);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, transform .15s;
+  white-space: nowrap;
+}
+
+.ab-quick-reserve:hover:not(:disabled) {
+  background: rgba(225, 29, 47, 0.32);
+  border-color: rgba(225, 29, 47, 0.75);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.ab-quick-reserve:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.ab-quick-reserve:focus-visible {
+  outline: 2px solid var(--brand-color-primary, #e11d2f);
+  outline-offset: 2px;
+}
+
+.ab-quick-reserve--loading {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--brand-muted);
+  cursor: wait;
+}
+
+.ab-quick-reserve--done {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: var(--brand-radius-sm);
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.28);
+  color: var(--color-ok, #4ade80);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: default;
+}
+
+.ab-quick-reserve--retry {
+  font-size: 0.78rem;
+  padding: 4px 9px;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+}
+
+.ab-quick-reserve-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ab-quick-reserve-error__msg {
+  font-size: 0.74rem;
+  color: var(--color-bad, #f87171);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 1.2;
+}
+
+/* Sur écran étroit : compacter le bouton */
+@media (max-width: 640px) {
+  .ab-table__actions-col {
+    width: 80px;
+  }
+  .ab-quick-reserve {
+    padding: 5px 8px;
+    font-size: 0.78rem;
+  }
+}

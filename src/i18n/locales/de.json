@@ -815,7 +815,6 @@
   "catalog.hero.subtitle": "AnarBib — Libertäre(r) & anarchistische(r) Katalog(e) im Netzwerk",
   "catalog.hero.title": "Libertäre(r) Katalog(e) — AnarBib",
   "catalog.loading.message": "Bücher werden geladen…",
-  "catalog.regimento": "Ordnung",
   "catalog.results.count": "{count, plural, =0 {Keine Ergebnisse} one {# Ergebnis} other {# Ergebnisse}}",
   "catalog.results.empty": "Keine Treffer für diese Suche.",
   "catalog.results.loadMore": "Mehr laden",
@@ -2450,5 +2449,15 @@
   "video.subtitles": "Untertitel: {label}",
   "video.subtitlesOff": "aus",
   "video.unmute": "Stummschaltung aufheben",
-  "video.volume": "Lautstärke"
+  "video.volume": "Lautstärke",
+  "catalog.table.actions": "Aktionen",
+  "catalog.quickReserve.label": "Reservieren",
+  "catalog.quickReserve.hint": "Dieses Buch mit einem Klick in deiner Bibliothek reservieren",
+  "catalog.quickReserve.loading": "Wird reserviert…",
+  "catalog.quickReserve.done": "Reserviert",
+  "catalog.quickReserve.doneHint": "Du hast dieses Buch reserviert. Siehe Mein Konto › Reservierungen.",
+  "catalog.quickReserve.retry": "Erneut versuchen",
+  "catalog.quickReserve.notInMyLibrary": "Dieses Buch ist in deiner Bibliothek nicht verfügbar.",
+  "catalog.quickReserve.consultationOnly": "Dieses Exemplar ist nur zur Einsicht vor Ort.",
+  "catalog.quickReserve.note": "Reservierung aus dem Katalog erstellt."
 }
