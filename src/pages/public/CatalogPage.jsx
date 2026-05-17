@@ -351,20 +351,22 @@ export default function CatalogPage() {
   // Les doublons (réservation/emprunt actif sur même livre) sont laissés au
   // backend : trop coûteux à charger ici, et le RPC les rejette proprement.
   useEffect(() => {
-    if (!isAuth || !libraryId) return;
+    if (!isAuth) return;
     (async () => {
-      // service_state actif de la bibliothèque (mode normal / pausada / somente_consulta)
-      const svcRes = await supabase.from('v_library_service_state_current')
-        .select('service_mode, allows_new_reservations')
-        .eq('library_id', libraryId).maybeSingle();
+      // Mode service de la biblio de l'utilisateur connecte.
+      // La vue api.my_library_context filtre deja par auth.uid()
+      // via my_session_context : pas besoin de library_id ici.
+      // Coherent avec la doctrine 'page = scope, no cross-calculation'.
+      const svcRes = await supabase.schema('api').from('my_library_context')
+        .select('service_mode, allows_new_reservations').maybeSingle();
       if (svcRes.data) setServiceState(svcRes.data);
 
-      // profil : flag is_restricted seul (pas besoin du reste pour ce chantier)
+      // profil : flag is_restricted seul (pas besoin du reste ici)
       const profRes = await supabase.from('profiles')
         .select('is_restricted').eq('id', user.id).maybeSingle();
       if (profRes.data) setIsRestricted(!!profRes.data.is_restricted);
     })();
-  }, [isAuth, libraryId, user?.id]);
+  }, [isAuth, user?.id]);
 
   // ── Action de réservation rapide ───────────────────────────
   // Appelée par le bouton "Reservar" en bout de ligne. Pour 1 seul livre :
