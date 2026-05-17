@@ -43,3 +43,7 @@ eslint-first-run.txt
 *.bak.*
 # Fichiers brises temporaires (refactor en cours, debug)
 *.broken*
+
+# Scripts one-shot Claude (creation de migrations, ne pas commit)
+create-*.cjs
+fix-*.cjs
