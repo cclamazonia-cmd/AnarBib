@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -198,7 +199,7 @@ export default function BookPage() {
       });
       if (error) throw error;
       setReserveStatus(t({ id: 'book.reserve.success' }));
-    } catch (err) { setReserveError(true); setReserveStatus(t({ id: 'common.errorPrefix' }, { message: err.message })); }
+    } catch (err) { setReserveError(true); setReserveStatus(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) })); }
   }
 
   function buildLerUrl() {

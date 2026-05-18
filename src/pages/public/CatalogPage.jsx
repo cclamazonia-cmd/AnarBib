@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -421,7 +422,7 @@ export default function CatalogPage() {
         return next;
       });
     } catch (err) {
-      setReserveState(s => ({ ...s, [key]: `error:${err.message || 'erro'}` }));
+      setReserveState(s => ({ ...s, [key]: `error:${localizeError(err, t) || 'erro'}` }));
     }
   }, [user?.id, t, reservedBibRefs]);
 
