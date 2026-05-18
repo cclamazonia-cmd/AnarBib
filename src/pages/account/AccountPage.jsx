@@ -14,6 +14,7 @@ import PhoneInput from '@/components/forms/PhoneInput';
 import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { formatSchedule } from '@/lib/scheduleFormat';
+import { localizeError } from '@/lib/localizeError';
 import DataExportButton from '@/components/account/DataExportButton';
 import Modal from '@/components/ui/Modal';
 import './AccountPage.css';
@@ -347,7 +348,7 @@ export default function AccountPage() {
       setReserveRef('');
       loadData();
     } catch (err) {
-      setReserveMsg(t({id:'common.errorPrefix'},{message:err.message}));
+      setReserveMsg(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
     }
   }
 
@@ -1214,7 +1215,7 @@ export default function AccountPage() {
                                 onClick={async () => {
                                   // Paquet 19 (10/05/2026) : utiliser le wrapper api.* au lieu de la fn DEFINER
                                   const { data, error } = await supabase.schema('api').rpc('renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
-                                  if (error) { alert(t({id:'common.errorPrefix'}, {message: error.message})); return; }
+                                  if (error) { alert(t({id:'common.errorPrefix'}, {message: localizeError(error, t)})); return; }
                                   if (data?.ok === false) {
                                     alert(t({ id: `account.renew.${data.reason}` }));
                                     return;
