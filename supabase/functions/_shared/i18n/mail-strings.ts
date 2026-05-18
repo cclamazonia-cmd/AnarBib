@@ -2336,6 +2336,457 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "astensione",
     de: "Enthaltung"
   },
+  // ===== B.5 — library_profile : sujets ====================================
+  "library_profile.proposed.sub": {
+    "pt-BR": "{libraryName}: nova proposta de transição em {axisLoc}",
+    fr: "{libraryName}: nova proposta de transição em {axisLoc}",
+    es: "{libraryName}: nova proposta de transição em {axisLoc}",
+    en: "{libraryName}: nova proposta de transição em {axisLoc}",
+    it: "{libraryName}: nova proposta de transição em {axisLoc}",
+    de: "{libraryName}: nova proposta de transição em {axisLoc}"
+  },
+  "library_profile.voted.sub": {
+    "pt-BR": "{libraryName}: novo voto sobre {axisLoc}",
+    fr: "{libraryName}: novo voto sobre {axisLoc}",
+    es: "{libraryName}: novo voto sobre {axisLoc}",
+    en: "{libraryName}: novo voto sobre {axisLoc}",
+    it: "{libraryName}: novo voto sobre {axisLoc}",
+    de: "{libraryName}: novo voto sobre {axisLoc}"
+  },
+  "library_profile.accepted.sub": {
+    "pt-BR": "{libraryName}: transição em {axisLoc} aprovada coletivamente",
+    fr: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
+    es: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
+    en: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
+    it: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
+    de: "{libraryName}: transição em {axisLoc} aprovada coletivamente"
+  },
+  "library_profile.rejected.sub": {
+    "pt-BR": "{libraryName}: proposta em {axisLoc} não passou",
+    fr: "{libraryName}: proposta em {axisLoc} não passou",
+    es: "{libraryName}: proposta em {axisLoc} não passou",
+    en: "{libraryName}: proposta em {axisLoc} não passou",
+    it: "{libraryName}: proposta em {axisLoc} não passou",
+    de: "{libraryName}: proposta em {axisLoc} não passou"
+  },
+  "library_profile.cancelled.sub": {
+    "pt-BR": "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
+    fr: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
+    es: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
+    en: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
+    it: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
+    de: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente"
+  },
+  "library_profile.executed.sub": {
+    "pt-BR": "{libraryName}: transição em {axisLoc} agora em vigor",
+    fr: "{libraryName}: transição em {axisLoc} agora em vigor",
+    es: "{libraryName}: transição em {axisLoc} agora em vigor",
+    en: "{libraryName}: transição em {axisLoc} agora em vigor",
+    it: "{libraryName}: transição em {axisLoc} agora em vigor",
+    de: "{libraryName}: transição em {axisLoc} agora em vigor"
+  },
+
+  // ===== B.5 — library_profile : intros ====================================
+  "library_profile.proposed.intro": {
+    "pt-BR": "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
+    fr: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
+    es: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
+    en: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
+    it: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
+    de: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar."
+  },
+  "library_profile.voted.intro": {
+    "pt-BR": "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
+    fr: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
+    es: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
+    en: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
+    it: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
+    de: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>)."
+  },
+  "library_profile.accepted.intro": {
+    "pt-BR": "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
+    fr: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
+    es: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
+    en: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
+    it: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
+    de: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar."
+  },
+  "library_profile.rejected.intro": {
+    "pt-BR": "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
+    fr: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
+    es: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
+    en: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
+    it: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
+    de: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor."
+  },
+  "library_profile.cancelled.intro": {
+    "pt-BR": "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
+    fr: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
+    es: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
+    en: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
+    it: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
+    de: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor."
+  },
+  "library_profile.executed.intro": {
+    "pt-BR": "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
+    fr: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
+    es: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
+    en: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
+    it: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
+    de: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente."
+  },
+
+  // ===== B.5 — library_profile : CTA et infos ==============================
+  "library_profile.proposed.cta": {
+    "pt-BR": "Deliberar e votar",
+    fr: "Deliberar e votar",
+    es: "Deliberar e votar",
+    en: "Deliberar e votar",
+    it: "Deliberar e votar",
+    de: "Deliberar e votar"
+  },
+  "library_profile.voted.cta": {
+    "pt-BR": "Ver a proposta",
+    fr: "Ver a proposta",
+    es: "Ver a proposta",
+    en: "Ver a proposta",
+    it: "Ver a proposta",
+    de: "Ver a proposta"
+  },
+  "library_profile.accepted.cta": {
+    "pt-BR": "Ver os detalhes",
+    fr: "Ver os detalhes",
+    es: "Ver os detalhes",
+    en: "Ver os detalhes",
+    it: "Ver os detalhes",
+    de: "Ver os detalhes"
+  },
+  "library_profile.accepted.gracePeriodInfo": {
+    "pt-BR": "Período de carência em curso",
+    fr: "Período de carência em curso",
+    es: "Período de carência em curso",
+    en: "Período de carência em curso",
+    it: "Período de carência em curso",
+    de: "Período de carência em curso"
+  },
+  "library_profile.executed.cta": {
+    "pt-BR": "Ver o perfil da biblioteca",
+    fr: "Ver o perfil da biblioteca",
+    es: "Ver o perfil da biblioteca",
+    en: "Ver o perfil da biblioteca",
+    it: "Ver o perfil da biblioteca",
+    de: "Ver o perfil da biblioteca"
+  },
+  "library_profile.executed.info": {
+    "pt-BR": "Transição aplicada",
+    fr: "Transição aplicada",
+    es: "Transição aplicada",
+    en: "Transição aplicada",
+    it: "Transição aplicada",
+    de: "Transição aplicada"
+  },
+
+  // ===== B.5 — Labels d'axe ================================================
+  "lp.axis.catalog_mode": {
+    "pt-BR": "modo de catalogação",
+    fr: "modo de catalogação",
+    es: "modo de catalogação",
+    en: "modo de catalogação",
+    it: "modo de catalogação",
+    de: "modo de catalogação"
+  },
+  "lp.axis.circulation_mode": {
+    "pt-BR": "modo de circulação",
+    fr: "modo de circulação",
+    es: "modo de circulação",
+    en: "modo de circulação",
+    it: "modo de circulação",
+    de: "modo de circulação"
+  },
+  "lp.axis.network_mode": {
+    "pt-BR": "vínculo à federação",
+    fr: "vínculo à federação",
+    es: "vínculo à federação",
+    en: "vínculo à federação",
+    it: "vínculo à federação",
+    de: "vínculo à federação"
+  },
+  "lp.axis.governance_mode": {
+    "pt-BR": "modo de governança",
+    fr: "modo de governança",
+    es: "modo de governança",
+    en: "modo de governança",
+    it: "modo de governança",
+    de: "modo de governança"
+  },
+
+  // ===== B.5 — Labels de valeur d'axe ======================================
+  "lp.value.catalog_mode.local_only": {
+    "pt-BR": "catálogo apenas local",
+    fr: "catálogo apenas local",
+    es: "catálogo apenas local",
+    en: "catálogo apenas local",
+    it: "catálogo apenas local",
+    de: "catálogo apenas local"
+  },
+  "lp.value.catalog_mode.network_published": {
+    "pt-BR": "catálogo publicado na federação",
+    fr: "catálogo publicado na federação",
+    es: "catálogo publicado na federação",
+    en: "catálogo publicado na federação",
+    it: "catálogo publicado na federação",
+    de: "catálogo publicado na federação"
+  },
+  "lp.value.circulation_mode.off": {
+    "pt-BR": "sem circulação",
+    fr: "sem circulação",
+    es: "sem circulação",
+    en: "sem circulação",
+    it: "sem circulação",
+    de: "sem circulação"
+  },
+  "lp.value.circulation_mode.informal": {
+    "pt-BR": "circulação informal",
+    fr: "circulação informal",
+    es: "circulação informal",
+    en: "circulação informal",
+    it: "circulação informal",
+    de: "circulação informal"
+  },
+  "lp.value.circulation_mode.full_sigb": {
+    "pt-BR": "SIGB completo (empréstimos, reservas, consultas)",
+    fr: "SIGB completo (empréstimos, reservas, consultas)",
+    es: "SIGB completo (empréstimos, reservas, consultas)",
+    en: "SIGB completo (empréstimos, reservas, consultas)",
+    it: "SIGB completo (empréstimos, reservas, consultas)",
+    de: "SIGB completo (empréstimos, reservas, consultas)"
+  },
+  "lp.value.network_mode.isolated": {
+    "pt-BR": "isolada da federação",
+    fr: "isolada da federação",
+    es: "isolada da federação",
+    en: "isolada da federação",
+    it: "isolada da federação",
+    de: "isolada da federação"
+  },
+  "lp.value.network_mode.observer": {
+    "pt-BR": "observadora da federação",
+    fr: "observadora da federação",
+    es: "observadora da federação",
+    en: "observadora da federação",
+    it: "observadora da federação",
+    de: "observadora da federação"
+  },
+  "lp.value.network_mode.federated": {
+    "pt-BR": "federada (participação plena)",
+    fr: "federada (participação plena)",
+    es: "federada (participação plena)",
+    en: "federada (participação plena)",
+    it: "federada (participação plena)",
+    de: "federada (participação plena)"
+  },
+  "lp.value.governance_mode.informal": {
+    "pt-BR": "governança informal (sem papéis declarados)",
+    fr: "governança informal (sem papéis declarados)",
+    es: "governança informal (sem papéis declarados)",
+    en: "governança informal (sem papéis declarados)",
+    it: "governança informal (sem papéis declarados)",
+    de: "governança informal (sem papéis declarados)"
+  },
+  "lp.value.governance_mode.staff_roles": {
+    "pt-BR": "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
+    fr: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
+    es: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
+    en: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
+    it: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
+    de: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))"
+  },
+  "lp.value.governance_mode.full_governance": {
+    "pt-BR": "governança plena (com todas as rotinas coletivas)",
+    fr: "governança plena (com todas as rotinas coletivas)",
+    es: "governança plena (com todas as rotinas coletivas)",
+    en: "governança plena (com todas as rotinas coletivas)",
+    it: "governança plena (com todas as rotinas coletivas)",
+    de: "governança plena (com todas as rotinas coletivas)"
+  },
+
+  // ===== B.5 — Labels de type de transition ================================
+  "lp.transition.direct": {
+    "pt-BR": "transição direta (sem deliberação)",
+    fr: "transição direta (sem deliberação)",
+    es: "transição direta (sem deliberação)",
+    en: "transição direta (sem deliberação)",
+    it: "transição direta (sem deliberação)",
+    de: "transição direta (sem deliberação)"
+  },
+  "lp.transition.majority": {
+    "pt-BR": "maioria simples",
+    fr: "maioria simples",
+    es: "maioria simples",
+    en: "maioria simples",
+    it: "maioria simples",
+    de: "maioria simples"
+  },
+  "lp.transition.unanimous": {
+    "pt-BR": "unanimidade",
+    fr: "unanimidade",
+    es: "unanimidade",
+    en: "unanimidade",
+    it: "unanimidade",
+    de: "unanimidade"
+  },
+  "lp.transition.unanimous_extended": {
+    "pt-BR": "unanimidade alargada (com período de carência reforçado)",
+    fr: "unanimidade alargada (com período de carência reforçado)",
+    es: "unanimidade alargada (com período de carência reforçado)",
+    en: "unanimidade alargada (com período de carência reforçado)",
+    it: "unanimidade alargada (com período de carência reforçado)",
+    de: "unanimidade alargada (com período de carência reforçado)"
+  },
+  "lp.transition.unknown": {
+    "pt-BR": "tipo de transição desconhecido",
+    fr: "tipo de transição desconhecido",
+    es: "tipo de transição desconhecido",
+    en: "tipo de transição desconhecido",
+    it: "tipo de transição desconhecido",
+    de: "tipo de transição desconhecido"
+  },
+
+  // ===== B.5 — Labels de vote ==============================================
+  "lp.vote.favor": {
+    "pt-BR": "a favor",
+    fr: "a favor",
+    es: "a favor",
+    en: "a favor",
+    it: "a favor",
+    de: "a favor"
+  },
+  "lp.vote.against": {
+    "pt-BR": "contra",
+    fr: "contra",
+    es: "contra",
+    en: "contra",
+    it: "contra",
+    de: "contra"
+  },
+  "lp.vote.abstain": {
+    "pt-BR": "abstenção",
+    fr: "abstenção",
+    es: "abstenção",
+    en: "abstenção",
+    it: "abstenção",
+    de: "abstenção"
+  },
+
+  // ===== B.5 — Labels de statut acceptation =================================
+  "lp.status.accepted_unanimous": {
+    "pt-BR": "por unanimidade",
+    fr: "por unanimidade",
+    es: "por unanimidade",
+    en: "por unanimidade",
+    it: "por unanimidade",
+    de: "por unanimidade"
+  },
+  "lp.status.accepted_majority": {
+    "pt-BR": "por maioria",
+    fr: "por maioria",
+    es: "por maioria",
+    en: "por maioria",
+    it: "por maioria",
+    de: "por maioria"
+  },
+
+  // ===== B.5 — Labels de raison de rejet ===================================
+  "lp.rejected.reason.rejected": {
+    "pt-BR": "voto coletivo desfavorável",
+    fr: "voto coletivo desfavorável",
+    es: "voto coletivo desfavorável",
+    en: "voto coletivo desfavorável",
+    it: "voto coletivo desfavorável",
+    de: "voto coletivo desfavorável"
+  },
+  "lp.rejected.reason.expired": {
+    "pt-BR": "prazo de deliberação atingido sem decisão",
+    fr: "prazo de deliberação atingido sem decisão",
+    es: "prazo de deliberação atingido sem decisão",
+    en: "prazo de deliberação atingido sem decisão",
+    it: "prazo de deliberação atingido sem decisão",
+    de: "prazo de deliberação atingido sem decisão"
+  },
+
+  // ===== B.5 — Labels génériques (via label()) =============================
+  "l.lp.transitionType": {
+    "pt-BR": "Tipo de transição",
+    fr: "Tipo de transição",
+    es: "Tipo de transição",
+    en: "Tipo de transição",
+    it: "Tipo de transição",
+    de: "Tipo de transição"
+  },
+  "l.lp.motivation": {
+    "pt-BR": "Motivação",
+    fr: "Motivação",
+    es: "Motivação",
+    en: "Motivação",
+    it: "Motivação",
+    de: "Motivação"
+  },
+  "l.lp.proposer": {
+    "pt-BR": "Proponente",
+    fr: "Proponente",
+    es: "Proponente",
+    en: "Proponente",
+    it: "Proponente",
+    de: "Proponente"
+  },
+  "l.lp.voteCount": {
+    "pt-BR": "Votos",
+    fr: "Votos",
+    es: "Votos",
+    en: "Votos",
+    it: "Votos",
+    de: "Votos"
+  },
+  "l.lp.rationaleAgainst": {
+    "pt-BR": "Justificação do voto contra",
+    fr: "Justificação do voto contra",
+    es: "Justificação do voto contra",
+    en: "Justificação do voto contra",
+    it: "Justificação do voto contra",
+    de: "Justificação do voto contra"
+  },
+  "l.lp.gracePeriodUntil": {
+    "pt-BR": "Carência até",
+    fr: "Carência até",
+    es: "Carência até",
+    en: "Carência até",
+    it: "Carência até",
+    de: "Carência até"
+  },
+  "l.lp.reason": {
+    "pt-BR": "Razão",
+    fr: "Razão",
+    es: "Razão",
+    en: "Razão",
+    it: "Razão",
+    de: "Razão"
+  },
+  "l.lp.cancelledMotivation": {
+    "pt-BR": "Motivo do retiro",
+    fr: "Motivo do retiro",
+    es: "Motivo do retiro",
+    en: "Motivo do retiro",
+    it: "Motivo do retiro",
+    de: "Motivo do retiro"
+  },
+  "l.lp.executedAt": {
+    "pt-BR": "Aplicada em",
+    fr: "Aplicada em",
+    es: "Aplicada em",
+    en: "Aplicada em",
+    it: "Aplicada em",
+    de: "Aplicada em"
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";
@@ -2431,3 +2882,4 @@ export function _isComplete(key: string): boolean {
   }
   return true;
 }
+

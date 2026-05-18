@@ -51,6 +51,7 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
+import { handleLibraryProfileEvent } from "./library_profile.ts";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
@@ -196,6 +197,8 @@ export async function handleNetworkEvent(recordId) {
       result = await handleCollectiveRemovalCancelled(payload, ctx, bt);
     } else if (event === "network.collective_removal_executed") {
       result = await handleCollectiveRemovalExecuted(payload, ctx, bt);
+    } else if (event.startsWith("network.library_profile.")) {
+      return await handleLibraryProfileEvent(row.id);
     } else {
       console.warn(`[network] unknown event: ${event}`);
       await markOutboxSent(row.id);

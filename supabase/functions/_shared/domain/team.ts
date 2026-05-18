@@ -26,6 +26,7 @@ import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
 import { esc, formatDateBR, fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
+import { handleLibraryProfileEvent } from "./library_profile.ts";
 // ─── Helpers ──────────────────────────────────────────────────────────────
 async function markOutboxSent(outboxId) {
   await supabaseAdmin.from("team_notification_outbox").update({
@@ -124,6 +125,8 @@ export async function handleTeamEvent(recordId) {
       result = await handleInactiveWarning(event, payload, library, targetUserId, ctx, bt);
     } else if (event === "team.inactive_completed") {
       result = await handleInactiveCompleted(payload, library, targetUserId, ctx, bt);
+    } else if (event.startsWith("team.library_profile.")) {
+      return await handleLibraryProfileEvent(row.id);
     } else {
       console.warn(`[team] unknown event: ${event}`);
       await markOutboxSent(row.id);
