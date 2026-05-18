@@ -2339,453 +2339,453 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // ===== B.5 — library_profile : sujets ====================================
   "library_profile.proposed.sub": {
     "pt-BR": "{libraryName}: nova proposta de transição em {axisLoc}",
-    fr: "{libraryName}: nova proposta de transição em {axisLoc}",
-    es: "{libraryName}: nova proposta de transição em {axisLoc}",
-    en: "{libraryName}: nova proposta de transição em {axisLoc}",
-    it: "{libraryName}: nova proposta de transição em {axisLoc}",
-    de: "{libraryName}: nova proposta de transição em {axisLoc}"
+    fr: "{libraryName} : nouvelle proposition de transition — {axisLoc}",
+    es: "{libraryName}: nueva propuesta de transición — {axisLoc}",
+    en: "{libraryName}: new transition proposal — {axisLoc}",
+    it: "{libraryName}: nuova proposta di transizione — {axisLoc}",
+    de: "{libraryName}: neuer Übergangsvorschlag — {axisLoc}"
   },
   "library_profile.voted.sub": {
     "pt-BR": "{libraryName}: novo voto sobre {axisLoc}",
-    fr: "{libraryName}: novo voto sobre {axisLoc}",
-    es: "{libraryName}: novo voto sobre {axisLoc}",
-    en: "{libraryName}: novo voto sobre {axisLoc}",
-    it: "{libraryName}: novo voto sobre {axisLoc}",
-    de: "{libraryName}: novo voto sobre {axisLoc}"
+    fr: "{libraryName} : nouveau vote sur {axisLoc}",
+    es: "{libraryName}: nuevo voto sobre {axisLoc}",
+    en: "{libraryName}: new vote on {axisLoc}",
+    it: "{libraryName}: nuovo voto su {axisLoc}",
+    de: "{libraryName}: neue Stimme zu {axisLoc}"
   },
   "library_profile.accepted.sub": {
     "pt-BR": "{libraryName}: transição em {axisLoc} aprovada coletivamente",
-    fr: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
-    es: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
-    en: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
-    it: "{libraryName}: transição em {axisLoc} aprovada coletivamente",
-    de: "{libraryName}: transição em {axisLoc} aprovada coletivamente"
+    fr: "{libraryName} : transition sur {axisLoc} acceptée collectivement",
+    es: "{libraryName}: transición sobre {axisLoc} aceptada colectivamente",
+    en: "{libraryName}: transition on {axisLoc} accepted collectively",
+    it: "{libraryName}: transizione su {axisLoc} accettata collettivamente",
+    de: "{libraryName}: Übergang zu {axisLoc} kollektiv angenommen"
   },
   "library_profile.rejected.sub": {
     "pt-BR": "{libraryName}: proposta em {axisLoc} não passou",
-    fr: "{libraryName}: proposta em {axisLoc} não passou",
-    es: "{libraryName}: proposta em {axisLoc} não passou",
-    en: "{libraryName}: proposta em {axisLoc} não passou",
-    it: "{libraryName}: proposta em {axisLoc} não passou",
-    de: "{libraryName}: proposta em {axisLoc} não passou"
+    fr: "{libraryName} : proposition sur {axisLoc} non retenue",
+    es: "{libraryName}: propuesta sobre {axisLoc} no aceptada",
+    en: "{libraryName}: proposal on {axisLoc} did not pass",
+    it: "{libraryName}: proposta su {axisLoc} non accettata",
+    de: "{libraryName}: Vorschlag zu {axisLoc} nicht angenommen"
   },
   "library_profile.cancelled.sub": {
     "pt-BR": "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
-    fr: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
-    es: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
-    en: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
-    it: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente",
-    de: "{libraryName}: proposta em {axisLoc} retirada pel(o/a/e) proponente"
+    fr: "{libraryName} : proposition sur {axisLoc} retirée par le·la proposant·e",
+    es: "{libraryName}: propuesta sobre {axisLoc} retirada por le proponente",
+    en: "{libraryName}: proposal on {axisLoc} withdrawn by the proposer",
+    it: "{libraryName}: proposta su {axisLoc} ritirata dal/dalla proponente",
+    de: "{libraryName}: Vorschlag zu {axisLoc} von der*dem Vorschlagenden zurückgezogen"
   },
   "library_profile.executed.sub": {
     "pt-BR": "{libraryName}: transição em {axisLoc} agora em vigor",
-    fr: "{libraryName}: transição em {axisLoc} agora em vigor",
-    es: "{libraryName}: transição em {axisLoc} agora em vigor",
-    en: "{libraryName}: transição em {axisLoc} agora em vigor",
-    it: "{libraryName}: transição em {axisLoc} agora em vigor",
-    de: "{libraryName}: transição em {axisLoc} agora em vigor"
+    fr: "{libraryName} : transition sur {axisLoc} désormais en vigueur",
+    es: "{libraryName}: transición sobre {axisLoc} ahora en vigor",
+    en: "{libraryName}: transition on {axisLoc} now in effect",
+    it: "{libraryName}: transizione su {axisLoc} ora in vigore",
+    de: "{libraryName}: Übergang zu {axisLoc} jetzt in Kraft"
   },
 
   // ===== B.5 — library_profile : intros ====================================
   "library_profile.proposed.intro": {
-    "pt-BR": "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
-    fr: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
-    es: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
-    en: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
-    it: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
-    de: "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu modo de <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar."
+    "pt-BR": "<b>{proposerName}</b> abriu uma proposta para que <b>{libraryName}</b> mude seu <b>{axisLoc}</b>, passando de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A equipe é convidada a deliberar e votar.",
+    fr: "<b>{proposerName}</b> a ouvert une proposition pour que <b>{libraryName}</b> change son <b>{axisLoc}</b>, passant de <i>{oldValueLoc}</i> à <b>{newValueLoc}</b>. L'équipe est invitée à délibérer et à voter.",
+    es: "<b>{proposerName}</b> abrió una propuesta para que <b>{libraryName}</b> cambie su <b>{axisLoc}</b>, pasando de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>. Le invitamos al equipo a deliberar y votar.",
+    en: "<b>{proposerName}</b> opened a proposal for <b>{libraryName}</b> to change its <b>{axisLoc}</b>, moving from <i>{oldValueLoc}</i> to <b>{newValueLoc}</b>. The team is invited to deliberate and vote.",
+    it: "<b>{proposerName}</b> ha aperto una proposta affinché <b>{libraryName}</b> cambi il suo <b>{axisLoc}</b>, passando da <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>. L'equipe è invitata a deliberare e votare.",
+    de: "<b>{proposerName}</b> hat einen Vorschlag eröffnet, damit <b>{libraryName}</b> seinen <b>{axisLoc}</b> ändert, von <i>{oldValueLoc}</i> zu <b>{newValueLoc}</b>. Das Team ist eingeladen, zu beraten und abzustimmen."
   },
   "library_profile.voted.intro": {
     "pt-BR": "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
-    fr: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
-    es: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
-    en: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
-    it: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>).",
-    de: "<b>{voterName}</b> votou <b>{voteLoc}</b> sobre a proposta de mudança em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>)."
+    fr: "<b>{voterName}</b> a voté <b>{voteLoc}</b> sur la proposition de transition de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> vers <b>{newValueLoc}</b>).",
+    es: "<b>{voterName}</b> votó <b>{voteLoc}</b> sobre la propuesta de transición de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>).",
+    en: "<b>{voterName}</b> voted <b>{voteLoc}</b> on the transition proposal for <b>{axisLoc}</b> at <b>{libraryName}</b> (from <i>{oldValueLoc}</i> to <b>{newValueLoc}</b>).",
+    it: "<b>{voterName}</b> ha votato <b>{voteLoc}</b> sulla proposta di transizione di <b>{axisLoc}</b> a <b>{libraryName}</b> (da <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>).",
+    de: "<b>{voterName}</b> hat <b>{voteLoc}</b> zum Übergangsvorschlag für <b>{axisLoc}</b> bei <b>{libraryName}</b> gestimmt (von <i>{oldValueLoc}</i> zu <b>{newValueLoc}</b>)."
   },
   "library_profile.accepted.intro": {
     "pt-BR": "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
-    fr: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
-    es: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
-    en: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
-    it: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar.",
-    de: "A coletividade da <b>{libraryName}</b> aprovou (<i>{acceptedLoc}</i>) a transição em <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>. A decisão entrará em vigor após o período de carência, durante o qual a comunidade pode ainda se manifestar."
+    fr: "La collectivité de <b>{libraryName}</b> a accepté (<i>{acceptedLoc}</i>) la transition de <b>{axisLoc}</b> : de <i>{oldValueLoc}</i> à <b>{newValueLoc}</b>. La décision entrera en vigueur après le délai de réflexion, pendant lequel la communauté peut encore se manifester.",
+    es: "La colectividad de <b>{libraryName}</b> aceptó (<i>{acceptedLoc}</i>) la transición de <b>{axisLoc}</b>: de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>. La decisión entrará en vigor después del plazo de reflexión, durante el cual la comunidad aún puede manifestarse.",
+    en: "The collective of <b>{libraryName}</b> accepted (<i>{acceptedLoc}</i>) the transition of <b>{axisLoc}</b>: from <i>{oldValueLoc}</i> to <b>{newValueLoc}</b>. The decision will take effect after the reflection period, during which the community may still raise objections.",
+    it: "La collettività di <b>{libraryName}</b> ha accettato (<i>{acceptedLoc}</i>) la transizione di <b>{axisLoc}</b>: da <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>. La decisione entrerà in vigore dopo il periodo di riflessione, durante il quale la comunità può ancora manifestarsi.",
+    de: "Das Kollektiv von <b>{libraryName}</b> hat den Übergang von <b>{axisLoc}</b> angenommen (<i>{acceptedLoc}</i>): von <i>{oldValueLoc}</i> zu <b>{newValueLoc}</b>. Die Entscheidung tritt nach der Reflexionsfrist in Kraft, während der die Gemeinschaft sich noch äußern kann."
   },
   "library_profile.rejected.intro": {
     "pt-BR": "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
-    fr: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
-    es: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
-    en: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
-    it: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor.",
-    de: "A proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (de <i>{oldValueLoc}</i> para <b>{newValueLoc}</b>) não passou: <i>{reasonLoc}</i>. O modo atual permanece em vigor."
+    fr: "La proposition de transition de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> vers <b>{newValueLoc}</b>) n'a pas abouti : <i>{reasonLoc}</i>. Le fonctionnement actuel reste en vigueur.",
+    es: "La propuesta de transición de <b>{axisLoc}</b> de <b>{libraryName}</b> (de <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>) no fue aceptada: <i>{reasonLoc}</i>. El funcionamiento actual se mantiene en vigor.",
+    en: "The transition proposal for <b>{axisLoc}</b> at <b>{libraryName}</b> (from <i>{oldValueLoc}</i> to <b>{newValueLoc}</b>) did not pass: <i>{reasonLoc}</i>. The current setup remains in effect.",
+    it: "La proposta di transizione di <b>{axisLoc}</b> a <b>{libraryName}</b> (da <i>{oldValueLoc}</i> a <b>{newValueLoc}</b>) non è passata: <i>{reasonLoc}</i>. Il funzionamento attuale rimane in vigore.",
+    de: "Der Übergangsvorschlag für <b>{axisLoc}</b> bei <b>{libraryName}</b> (von <i>{oldValueLoc}</i> zu <b>{newValueLoc}</b>) wurde nicht angenommen: <i>{reasonLoc}</i>. Die aktuelle Funktionsweise bleibt in Kraft."
   },
   "library_profile.cancelled.intro": {
     "pt-BR": "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
-    fr: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
-    es: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
-    en: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
-    it: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor.",
-    de: "<b>{proposerName}</b> retirou sua própria proposta de transição em <b>{axisLoc}</b> da <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> para <i>{newValueLoc}</i>). O modo atual permanece em vigor."
+    fr: "<b>{proposerName}</b> a retiré sa propre proposition de transition de <b>{axisLoc}</b> de <b>{libraryName}</b> (qui était : de <i>{oldValueLoc}</i> vers <i>{newValueLoc}</i>). Le fonctionnement actuel reste en vigueur.",
+    es: "<b>{proposerName}</b> retiró su propia propuesta de transición de <b>{axisLoc}</b> de <b>{libraryName}</b> (que era: de <i>{oldValueLoc}</i> a <i>{newValueLoc}</i>). El funcionamiento actual se mantiene en vigor.",
+    en: "<b>{proposerName}</b> withdrew their own transition proposal for <b>{axisLoc}</b> at <b>{libraryName}</b> (which was: from <i>{oldValueLoc}</i> to <i>{newValueLoc}</i>). The current setup remains in effect.",
+    it: "<b>{proposerName}</b> ha ritirato la propria proposta di transizione di <b>{axisLoc}</b> a <b>{libraryName}</b> (che era: da <i>{oldValueLoc}</i> a <i>{newValueLoc}</i>). Il funzionamento attuale rimane in vigore.",
+    de: "<b>{proposerName}</b> hat den eigenen Übergangsvorschlag für <b>{axisLoc}</b> bei <b>{libraryName}</b> zurückgezogen (er war: von <i>{oldValueLoc}</i> zu <i>{newValueLoc}</i>). Die aktuelle Funktionsweise bleibt in Kraft."
   },
   "library_profile.executed.intro": {
-    "pt-BR": "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
-    fr: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
-    es: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
-    en: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
-    it: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
-    de: "A <b>{libraryName}</b> acaba de basculhar seu modo de <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente."
+    "pt-BR": "A <b>{libraryName}</b> acaba de basculhar seu <b>{axisLoc}</b>: a partir de agora, ela funciona em <b>{newValueLoc}</b> (anteriormente: <i>{oldValueLoc}</i>). Esta transição foi decidida coletivamente.",
+    fr: "<b>{libraryName}</b> adopte un nouveau <b>{axisLoc}</b> : à partir de maintenant, <i>{oldValueLoc}</i> devient <b>{newValueLoc}</b>. Cette transition a été décidée collectivement.",
+    es: "<b>{libraryName}</b> adopta un nuevo <b>{axisLoc}</b>: a partir de ahora, <i>{oldValueLoc}</i> deviene <b>{newValueLoc}</b>. Esta transición fue decidida colectivamente.",
+    en: "<b>{libraryName}</b> adopts a new <b>{axisLoc}</b>: from now on, <i>{oldValueLoc}</i> becomes <b>{newValueLoc}</b>. This transition was decided collectively.",
+    it: "<b>{libraryName}</b> adotta un nuovo <b>{axisLoc}</b>: da ora in poi, <i>{oldValueLoc}</i> diventa <b>{newValueLoc}</b>. Questa transizione è stata decisa collettivamente.",
+    de: "<b>{libraryName}</b> nimmt einen neuen <b>{axisLoc}</b> an: ab jetzt wird <i>{oldValueLoc}</i> zu <b>{newValueLoc}</b>. Diese Transition wurde kollektiv beschlossen."
   },
 
   // ===== B.5 — library_profile : CTA et infos ==============================
   "library_profile.proposed.cta": {
     "pt-BR": "Deliberar e votar",
-    fr: "Deliberar e votar",
-    es: "Deliberar e votar",
-    en: "Deliberar e votar",
-    it: "Deliberar e votar",
-    de: "Deliberar e votar"
+    fr: "Délibérer et voter",
+    es: "Deliberar y votar",
+    en: "Deliberate and vote",
+    it: "Deliberare e votare",
+    de: "Beraten und abstimmen"
   },
   "library_profile.voted.cta": {
     "pt-BR": "Ver a proposta",
-    fr: "Ver a proposta",
-    es: "Ver a proposta",
-    en: "Ver a proposta",
-    it: "Ver a proposta",
-    de: "Ver a proposta"
+    fr: "Voir la proposition",
+    es: "Ver la propuesta",
+    en: "View the proposal",
+    it: "Vedere la proposta",
+    de: "Vorschlag ansehen"
   },
   "library_profile.accepted.cta": {
     "pt-BR": "Ver os detalhes",
-    fr: "Ver os detalhes",
-    es: "Ver os detalhes",
-    en: "Ver os detalhes",
-    it: "Ver os detalhes",
-    de: "Ver os detalhes"
+    fr: "Voir les détails",
+    es: "Ver los detalles",
+    en: "View the details",
+    it: "Vedere i dettagli",
+    de: "Details ansehen"
   },
   "library_profile.accepted.gracePeriodInfo": {
     "pt-BR": "Período de carência em curso",
-    fr: "Período de carência em curso",
-    es: "Período de carência em curso",
-    en: "Período de carência em curso",
-    it: "Período de carência em curso",
-    de: "Período de carência em curso"
+    fr: "Délai de réflexion en cours",
+    es: "Plazo de reflexión en curso",
+    en: "Reflection period in progress",
+    it: "Periodo di riflessione in corso",
+    de: "Reflexionsfrist läuft"
   },
   "library_profile.executed.cta": {
     "pt-BR": "Ver o perfil da biblioteca",
-    fr: "Ver o perfil da biblioteca",
-    es: "Ver o perfil da biblioteca",
-    en: "Ver o perfil da biblioteca",
-    it: "Ver o perfil da biblioteca",
-    de: "Ver o perfil da biblioteca"
+    fr: "Voir le profil de la bibliothèque",
+    es: "Ver el perfil de la biblioteca",
+    en: "View the library profile",
+    it: "Vedere il profilo della biblioteca",
+    de: "Bibliotheksprofil ansehen"
   },
   "library_profile.executed.info": {
     "pt-BR": "Transição aplicada",
-    fr: "Transição aplicada",
-    es: "Transição aplicada",
-    en: "Transição aplicada",
-    it: "Transição aplicada",
-    de: "Transição aplicada"
+    fr: "Transition appliquée",
+    es: "Transición aplicada",
+    en: "Transition applied",
+    it: "Transizione applicata",
+    de: "Übergang angewendet"
   },
 
   // ===== B.5 — Labels d'axe ================================================
   "lp.axis.catalog_mode": {
     "pt-BR": "modo de catalogação",
-    fr: "modo de catalogação",
-    es: "modo de catalogação",
-    en: "modo de catalogação",
-    it: "modo de catalogação",
-    de: "modo de catalogação"
+    fr: "mode de catalogage",
+    es: "modo de catalogación",
+    en: "cataloguing mode",
+    it: "modo di catalogazione",
+    de: "Katalogmodus"
   },
   "lp.axis.circulation_mode": {
     "pt-BR": "modo de circulação",
-    fr: "modo de circulação",
-    es: "modo de circulação",
-    en: "modo de circulação",
-    it: "modo de circulação",
-    de: "modo de circulação"
+    fr: "mode de circulation",
+    es: "modo de circulación",
+    en: "circulation mode",
+    it: "modo di circolazione",
+    de: "Zirkulationsmodus"
   },
   "lp.axis.network_mode": {
     "pt-BR": "vínculo à federação",
-    fr: "vínculo à federação",
-    es: "vínculo à federação",
-    en: "vínculo à federação",
-    it: "vínculo à federação",
-    de: "vínculo à federação"
+    fr: "lien à la fédération",
+    es: "vínculo con la federación",
+    en: "link to the federation",
+    it: "legame con la federazione",
+    de: "Verbindung zur Föderation"
   },
   "lp.axis.governance_mode": {
     "pt-BR": "modo de governança",
-    fr: "modo de governança",
-    es: "modo de governança",
-    en: "modo de governança",
-    it: "modo de governança",
-    de: "modo de governança"
+    fr: "mode de gouvernance",
+    es: "modo de gobernanza",
+    en: "governance mode",
+    it: "modo di governance",
+    de: "Governance-Modus"
   },
 
   // ===== B.5 — Labels de valeur d'axe ======================================
   "lp.value.catalog_mode.local_only": {
     "pt-BR": "catálogo apenas local",
-    fr: "catálogo apenas local",
-    es: "catálogo apenas local",
-    en: "catálogo apenas local",
-    it: "catálogo apenas local",
-    de: "catálogo apenas local"
+    fr: "catalogue local uniquement",
+    es: "catálogo solo local",
+    en: "local catalogue only",
+    it: "catalogo solo locale",
+    de: "nur lokaler Katalog"
   },
   "lp.value.catalog_mode.network_published": {
     "pt-BR": "catálogo publicado na federação",
-    fr: "catálogo publicado na federação",
-    es: "catálogo publicado na federação",
-    en: "catálogo publicado na federação",
-    it: "catálogo publicado na federação",
-    de: "catálogo publicado na federação"
+    fr: "catalogue publié dans la fédération",
+    es: "catálogo publicado en la federación",
+    en: "catalogue published in the federation",
+    it: "catalogo pubblicato nella federazione",
+    de: "in der Föderation veröffentlichter Katalog"
   },
   "lp.value.circulation_mode.off": {
     "pt-BR": "sem circulação",
-    fr: "sem circulação",
-    es: "sem circulação",
-    en: "sem circulação",
-    it: "sem circulação",
-    de: "sem circulação"
+    fr: "sans circulation",
+    es: "sin circulación",
+    en: "no circulation",
+    it: "senza circolazione",
+    de: "keine Zirkulation"
   },
   "lp.value.circulation_mode.informal": {
     "pt-BR": "circulação informal",
-    fr: "circulação informal",
-    es: "circulação informal",
-    en: "circulação informal",
-    it: "circulação informal",
-    de: "circulação informal"
+    fr: "circulation informelle",
+    es: "circulación informal",
+    en: "informal circulation",
+    it: "circolazione informale",
+    de: "informelle Zirkulation"
   },
   "lp.value.circulation_mode.full_sigb": {
     "pt-BR": "SIGB completo (empréstimos, reservas, consultas)",
-    fr: "SIGB completo (empréstimos, reservas, consultas)",
-    es: "SIGB completo (empréstimos, reservas, consultas)",
-    en: "SIGB completo (empréstimos, reservas, consultas)",
-    it: "SIGB completo (empréstimos, reservas, consultas)",
-    de: "SIGB completo (empréstimos, reservas, consultas)"
+    fr: "SIGB complet (emprunts, réservations, consultations)",
+    es: "SIGB completo (préstamos, reservas, consultas)",
+    en: "full ILS (loans, reservations, consultations)",
+    it: "SIGB completo (prestiti, prenotazioni, consultazioni)",
+    de: "vollständiges ILS (Ausleihen, Reservierungen, Konsultationen)"
   },
   "lp.value.network_mode.isolated": {
     "pt-BR": "isolada da federação",
-    fr: "isolada da federação",
-    es: "isolada da federação",
-    en: "isolada da federação",
-    it: "isolada da federação",
-    de: "isolada da federação"
+    fr: "isolée de la fédération",
+    es: "aislada de la federación",
+    en: "isolated from the federation",
+    it: "isolata dalla federazione",
+    de: "von der Föderation isoliert"
   },
   "lp.value.network_mode.observer": {
     "pt-BR": "observadora da federação",
-    fr: "observadora da federação",
-    es: "observadora da federação",
-    en: "observadora da federação",
-    it: "observadora da federação",
-    de: "observadora da federação"
+    fr: "observatrice de la fédération",
+    es: "observadora de la federación",
+    en: "observer of the federation",
+    it: "osservatrice della federazione",
+    de: "Beobachterin der Föderation"
   },
   "lp.value.network_mode.federated": {
     "pt-BR": "federada (participação plena)",
-    fr: "federada (participação plena)",
-    es: "federada (participação plena)",
-    en: "federada (participação plena)",
-    it: "federada (participação plena)",
-    de: "federada (participação plena)"
+    fr: "fédérée (participation pleine)",
+    es: "federada (participación plena)",
+    en: "federated (full participation)",
+    it: "federata (partecipazione piena)",
+    de: "föderiert (volle Teilnahme)"
   },
   "lp.value.governance_mode.informal": {
     "pt-BR": "governança informal (sem papéis declarados)",
-    fr: "governança informal (sem papéis declarados)",
-    es: "governança informal (sem papéis declarados)",
-    en: "governança informal (sem papéis declarados)",
-    it: "governança informal (sem papéis declarados)",
-    de: "governança informal (sem papéis declarados)"
+    fr: "gouvernance informelle (sans rôles déclarés)",
+    es: "gobernanza informal (sin roles declarados)",
+    en: "informal governance (no declared roles)",
+    it: "governance informale (senza ruoli dichiarati)",
+    de: "informelle Governance (ohne erklärte Rollen)"
   },
   "lp.value.governance_mode.staff_roles": {
     "pt-BR": "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
-    fr: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
-    es: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
-    en: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
-    it: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))",
-    de: "papéis declarados (bibliotecári(o/a/e) e coordenador(o/a/e))"
+    fr: "rôles déclarés (bibliothécaires et coordinateur·rice·s)",
+    es: "roles declarados (bibliotecaries y coordinadores)",
+    en: "declared roles (librarians and coordinators)",
+    it: "ruoli dichiarati (bibliotecari/e/o e coordinatori/e/o)",
+    de: "erklärte Rollen (Bibliothekar*innen und Koordinator*innen)"
   },
   "lp.value.governance_mode.full_governance": {
     "pt-BR": "governança plena (com todas as rotinas coletivas)",
-    fr: "governança plena (com todas as rotinas coletivas)",
-    es: "governança plena (com todas as rotinas coletivas)",
-    en: "governança plena (com todas as rotinas coletivas)",
-    it: "governança plena (com todas as rotinas coletivas)",
-    de: "governança plena (com todas as rotinas coletivas)"
+    fr: "gouvernance pleine (avec toutes les routines collectives)",
+    es: "gobernanza plena (con todas las rutinas colectivas)",
+    en: "full governance (with all collective routines)",
+    it: "governance piena (con tutte le routine collettive)",
+    de: "volle Governance (mit allen kollektiven Routinen)"
   },
 
   // ===== B.5 — Labels de type de transition ================================
   "lp.transition.direct": {
     "pt-BR": "transição direta (sem deliberação)",
-    fr: "transição direta (sem deliberação)",
-    es: "transição direta (sem deliberação)",
-    en: "transição direta (sem deliberação)",
-    it: "transição direta (sem deliberação)",
-    de: "transição direta (sem deliberação)"
+    fr: "transition directe (sans délibération)",
+    es: "transición directa (sin deliberación)",
+    en: "direct transition (no deliberation)",
+    it: "transizione diretta (senza deliberazione)",
+    de: "direkter Übergang (ohne Beratung)"
   },
   "lp.transition.majority": {
     "pt-BR": "maioria simples",
-    fr: "maioria simples",
-    es: "maioria simples",
-    en: "maioria simples",
-    it: "maioria simples",
-    de: "maioria simples"
+    fr: "majorité simple",
+    es: "mayoría simple",
+    en: "simple majority",
+    it: "maggioranza semplice",
+    de: "einfache Mehrheit"
   },
   "lp.transition.unanimous": {
     "pt-BR": "unanimidade",
-    fr: "unanimidade",
-    es: "unanimidade",
-    en: "unanimidade",
-    it: "unanimidade",
-    de: "unanimidade"
+    fr: "unanimité",
+    es: "unanimidad",
+    en: "unanimity",
+    it: "unanimità",
+    de: "Einstimmigkeit"
   },
   "lp.transition.unanimous_extended": {
     "pt-BR": "unanimidade alargada (com período de carência reforçado)",
-    fr: "unanimidade alargada (com período de carência reforçado)",
-    es: "unanimidade alargada (com período de carência reforçado)",
-    en: "unanimidade alargada (com período de carência reforçado)",
-    it: "unanimidade alargada (com período de carência reforçado)",
-    de: "unanimidade alargada (com período de carência reforçado)"
+    fr: "unanimité élargie (avec délai de réflexion renforcé)",
+    es: "unanimidad ampliada (con plazo de reflexión reforzado)",
+    en: "extended unanimity (with reinforced reflection period)",
+    it: "unanimità allargata (con periodo di riflessione rafforzato)",
+    de: "erweiterte Einstimmigkeit (mit verstärkter Reflexionsfrist)"
   },
   "lp.transition.unknown": {
     "pt-BR": "tipo de transição desconhecido",
-    fr: "tipo de transição desconhecido",
-    es: "tipo de transição desconhecido",
-    en: "tipo de transição desconhecido",
-    it: "tipo de transição desconhecido",
-    de: "tipo de transição desconhecido"
+    fr: "type de transition inconnu",
+    es: "tipo de transición desconocido",
+    en: "unknown transition type",
+    it: "tipo di transizione sconosciuto",
+    de: "unbekannter Übergangstyp"
   },
 
   // ===== B.5 — Labels de vote ==============================================
   "lp.vote.favor": {
     "pt-BR": "a favor",
-    fr: "a favor",
+    fr: "pour",
     es: "a favor",
-    en: "a favor",
-    it: "a favor",
-    de: "a favor"
+    en: "in favor",
+    it: "a favore",
+    de: "dafür"
   },
   "lp.vote.against": {
     "pt-BR": "contra",
-    fr: "contra",
-    es: "contra",
-    en: "contra",
-    it: "contra",
-    de: "contra"
+    fr: "contre",
+    es: "en contra",
+    en: "against",
+    it: "contro",
+    de: "dagegen"
   },
   "lp.vote.abstain": {
     "pt-BR": "abstenção",
-    fr: "abstenção",
-    es: "abstenção",
-    en: "abstenção",
-    it: "abstenção",
-    de: "abstenção"
+    fr: "abstention",
+    es: "abstención",
+    en: "abstention",
+    it: "astensione",
+    de: "Enthaltung"
   },
 
   // ===== B.5 — Labels de statut acceptation =================================
   "lp.status.accepted_unanimous": {
     "pt-BR": "por unanimidade",
-    fr: "por unanimidade",
-    es: "por unanimidade",
-    en: "por unanimidade",
-    it: "por unanimidade",
-    de: "por unanimidade"
+    fr: "à l'unanimité",
+    es: "por unanimidad",
+    en: "unanimously",
+    it: "all'unanimità",
+    de: "einstimmig"
   },
   "lp.status.accepted_majority": {
     "pt-BR": "por maioria",
-    fr: "por maioria",
-    es: "por maioria",
-    en: "por maioria",
-    it: "por maioria",
-    de: "por maioria"
+    fr: "à la majorité",
+    es: "por mayoría",
+    en: "by majority",
+    it: "a maggioranza",
+    de: "mehrheitlich"
   },
 
   // ===== B.5 — Labels de raison de rejet ===================================
   "lp.rejected.reason.rejected": {
     "pt-BR": "voto coletivo desfavorável",
-    fr: "voto coletivo desfavorável",
-    es: "voto coletivo desfavorável",
-    en: "voto coletivo desfavorável",
-    it: "voto coletivo desfavorável",
-    de: "voto coletivo desfavorável"
+    fr: "vote collectif défavorable",
+    es: "voto colectivo desfavorable",
+    en: "unfavorable collective vote",
+    it: "voto collettivo sfavorevole",
+    de: "ungünstige kollektive Abstimmung"
   },
   "lp.rejected.reason.expired": {
     "pt-BR": "prazo de deliberação atingido sem decisão",
-    fr: "prazo de deliberação atingido sem decisão",
-    es: "prazo de deliberação atingido sem decisão",
-    en: "prazo de deliberação atingido sem decisão",
-    it: "prazo de deliberação atingido sem decisão",
-    de: "prazo de deliberação atingido sem decisão"
+    fr: "délai de délibération atteint sans décision",
+    es: "plazo de deliberación alcanzado sin decisión",
+    en: "deliberation deadline reached without decision",
+    it: "termine di deliberazione raggiunto senza decisione",
+    de: "Beratungsfrist ohne Entscheidung abgelaufen"
   },
 
   // ===== B.5 — Labels génériques (via label()) =============================
   "l.lp.transitionType": {
     "pt-BR": "Tipo de transição",
-    fr: "Tipo de transição",
-    es: "Tipo de transição",
-    en: "Tipo de transição",
-    it: "Tipo de transição",
-    de: "Tipo de transição"
+    fr: "Type de transition",
+    es: "Tipo de transición",
+    en: "Transition type",
+    it: "Tipo di transizione",
+    de: "Übergangstyp"
   },
   "l.lp.motivation": {
     "pt-BR": "Motivação",
-    fr: "Motivação",
-    es: "Motivação",
-    en: "Motivação",
-    it: "Motivação",
-    de: "Motivação"
+    fr: "Motivation",
+    es: "Motivación",
+    en: "Motivation",
+    it: "Motivazione",
+    de: "Begründung"
   },
   "l.lp.proposer": {
     "pt-BR": "Proponente",
-    fr: "Proponente",
+    fr: "Proposant·e",
     es: "Proponente",
-    en: "Proponente",
+    en: "Proposer",
     it: "Proponente",
-    de: "Proponente"
+    de: "Vorschlagende*r"
   },
   "l.lp.voteCount": {
     "pt-BR": "Votos",
-    fr: "Votos",
+    fr: "Voix",
     es: "Votos",
-    en: "Votos",
-    it: "Votos",
-    de: "Votos"
+    en: "Votes",
+    it: "Voti",
+    de: "Stimmen"
   },
   "l.lp.rationaleAgainst": {
     "pt-BR": "Justificação do voto contra",
-    fr: "Justificação do voto contra",
-    es: "Justificação do voto contra",
-    en: "Justificação do voto contra",
-    it: "Justificação do voto contra",
-    de: "Justificação do voto contra"
+    fr: "Justification du vote contre",
+    es: "Justificación del voto en contra",
+    en: "Rationale for vote against",
+    it: "Giustificazione del voto contrario",
+    de: "Begründung der Gegenstimme"
   },
   "l.lp.gracePeriodUntil": {
     "pt-BR": "Carência até",
-    fr: "Carência até",
-    es: "Carência até",
-    en: "Carência até",
-    it: "Carência até",
-    de: "Carência até"
+    fr: "Délai de réflexion jusqu'au",
+    es: "Plazo de reflexión hasta",
+    en: "Reflection period until",
+    it: "Periodo di riflessione fino al",
+    de: "Reflexionsfrist bis"
   },
   "l.lp.reason": {
     "pt-BR": "Razão",
-    fr: "Razão",
-    es: "Razão",
-    en: "Razão",
-    it: "Razão",
-    de: "Razão"
+    fr: "Raison",
+    es: "Razón",
+    en: "Reason",
+    it: "Ragione",
+    de: "Grund"
   },
   "l.lp.cancelledMotivation": {
     "pt-BR": "Motivo do retiro",
-    fr: "Motivo do retiro",
-    es: "Motivo do retiro",
-    en: "Motivo do retiro",
-    it: "Motivo do retiro",
-    de: "Motivo do retiro"
+    fr: "Motif du retrait",
+    es: "Motivo del retiro",
+    en: "Reason for withdrawal",
+    it: "Motivo del ritiro",
+    de: "Grund des Rückzugs"
   },
   "l.lp.executedAt": {
     "pt-BR": "Aplicada em",
-    fr: "Aplicada em",
-    es: "Aplicada em",
-    en: "Aplicada em",
-    it: "Aplicada em",
-    de: "Aplicada em"
+    fr: "Appliquée le",
+    es: "Aplicada el",
+    en: "Applied on",
+    it: "Applicata il",
+    de: "Angewendet am"
   },
 };
 
