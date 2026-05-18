@@ -113,6 +113,24 @@ async function loadActiveNetworkAdmins() {
   return profiles;
 }
 
+async function loadActiveReaders(libraryId) {
+  if (!libraryId) return [];
+  const { data: memberships, error: e1 } = await supabaseAdmin
+    .from("user_library_memberships")
+    .select("user_id")
+    .eq("library_id", libraryId)
+    .eq("role", "reader")
+    .eq("status", "active");
+  if (e1 || !memberships || memberships.length === 0) return [];
+  const userIds = Array.from(new Set(memberships.map((m) => m.user_id)));
+  const { data: profiles, error: e2 } = await supabaseAdmin
+    .from("profiles")
+    .select("id,email,first_name,last_name,preferred_language")
+    .in("id", userIds);
+  if (e2 || !profiles) return [];
+  return profiles;
+}
+
 function mergeProfilesDedup(a, b) {
   const seen = new Set();
   const result = [];
@@ -705,5 +723,69 @@ async function handleExecuted(payload, library, ctx, bt) {
     results.push({ user_id: r.id, email: r.email, ...res });
   }
 
-  return { recipients_count: recipients.length, results };
+  // ===== B.7 : notification lecteur·rice·s si axis=circulation_mode =====
+  // Doctrine : pas de déduplication avec staff/admin. Un user admin réseau + reader
+  // reçoit 2 mails (rôles distincts, infos distinctes).
+  let readerResults = [];
+  if (axis === "circulation_mode") {
+    const readers = await loadActiveReaders(libraryId);
+    if (readers.length > 0) {
+      const impactKeyMap = {
+        "full_sigb": "library_profile.reader_executed.impact.full_sigb",
+        "informal":  "library_profile.reader_executed.impact.informal",
+        "off":       "library_profile.reader_executed.impact.off"
+      };
+      const impactKey = impactKeyMap[newValue] || null;
+
+      for (const r of readers) {
+        const locale = r.preferred_language || null;
+        const userTarget = userTargetFromProfile(r);
+        if (!userTarget) {
+          readerResults.push({ user_id: r.id, skipped: true, reason: "invalid_email" });
+          continue;
+        }
+
+        const axisLoc = axisLabel(locale, axis);
+        const oldValueLoc = axisValueLabel(locale, axis, oldValue);
+        const newValueLoc = axisValueLabel(locale, axis, newValue);
+
+        const sub = `${tMail(locale, "library_profile.reader_executed.sub", { libraryName, axisLoc })} — ${bt}`;
+        const tit = tMail(locale, "library_profile.reader_executed.sub", { libraryName, axisLoc });
+        const introHtml = `<p>${tMail(locale, "library_profile.reader_executed.intro", {
+          libraryName,
+          axisLoc,
+          oldValueLoc,
+          newValueLoc
+        })}</p>`;
+        const impactHtml = impactKey
+          ? `<p>${tMail(locale, impactKey, { libraryName })}</p>`
+          : "";
+
+        const { html, text } = renderEmail({
+          preheader: tit,
+          title: tit,
+          greeting: greeting(locale, r.first_name || undefined),
+          introHtml: introHtml + impactHtml,
+          details: [],
+          actionBox: {
+            kind: "info",
+            title: tMail(locale, "library_profile.executed.info"),
+            ctaUrl: pageUrl,
+            ctaLabel: tMail(locale, "library_profile.reader_executed.cta")
+          },
+          footerHtml: footerPadrao(ctx),
+          context: ctx
+        });
+
+        const res = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "library_profile_reader_executed", ctx);
+        readerResults.push({ user_id: r.id, email: r.email, ...res });
+      }
+    }
+  }
+
+  return {
+    recipients_count: recipients.length + readerResults.length,
+    results,
+    reader_results: readerResults
+  };
 }

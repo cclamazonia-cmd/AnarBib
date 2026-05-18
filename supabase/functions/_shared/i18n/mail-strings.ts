@@ -2486,6 +2486,56 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     de: "Übergang angewendet"
   },
 
+  // ===== B.7 — library_profile reader_executed (mail lecteur·rice·s sur circulation_mode) =====
+  "library_profile.reader_executed.sub": {
+    "pt-BR": "{libraryName}: mudança no {axisLoc}",
+    fr: "{libraryName} : changement de {axisLoc}",
+    es: "{libraryName}: cambio en {axisLoc}",
+    en: "{libraryName}: change in {axisLoc}",
+    it: "{libraryName}: cambiamento di {axisLoc}",
+    de: "{libraryName}: Änderung des {axisLoc}"
+  },
+  "library_profile.reader_executed.intro": {
+    "pt-BR": "A coletividade de <b>{libraryName}</b> decidiu mudar seu <b>{axisLoc}</b>: a partir de agora, <i>{oldValueLoc}</i> torna-se <b>{newValueLoc}</b>.",
+    fr: "La collectivité de <b>{libraryName}</b> a décidé de changer son <b>{axisLoc}</b> : à partir de maintenant, <i>{oldValueLoc}</i> devient <b>{newValueLoc}</b>.",
+    es: "La colectividad de <b>{libraryName}</b> decidió cambiar su <b>{axisLoc}</b>: a partir de ahora, <i>{oldValueLoc}</i> deviene <b>{newValueLoc}</b>.",
+    en: "The collective of <b>{libraryName}</b> has decided to change its <b>{axisLoc}</b>: from now on, <i>{oldValueLoc}</i> becomes <b>{newValueLoc}</b>.",
+    it: "La collettività di <b>{libraryName}</b> ha deciso di cambiare il suo <b>{axisLoc}</b>: da ora in poi, <i>{oldValueLoc}</i> diventa <b>{newValueLoc}</b>.",
+    de: "Das Kollektiv von <b>{libraryName}</b> hat beschlossen, seinen <b>{axisLoc}</b> zu ändern: ab jetzt wird <i>{oldValueLoc}</i> zu <b>{newValueLoc}</b>."
+  },
+  "library_profile.reader_executed.impact.full_sigb": {
+    "pt-BR": "Para você como leitor·a·e: a partir de agora, você pode pegar emprestados livros, fazer reservas e consultar documentos no local através da interface AnarBib de <b>{libraryName}</b>.",
+    fr: "Pour toi en tant que lecteur·rice : à partir de maintenant, tu peux emprunter des livres, faire des réservations et consulter des documents sur place via l'interface AnarBib de <b>{libraryName}</b>.",
+    es: "Para vos como lector·a·e: a partir de ahora, podés tomar prestados libros, hacer reservas y consultar documentos en el lugar a través de la interfaz AnarBib de <b>{libraryName}</b>.",
+    en: "For you as a reader: from now on, you can borrow books, make reservations and consult documents on site through the AnarBib interface of <b>{libraryName}</b>.",
+    it: "Per te come lettore/trice/x: da ora in poi, puoi prendere in prestito libri, fare prenotazioni e consultare documenti sul posto attraverso l'interfaccia AnarBib di <b>{libraryName}</b>.",
+    de: "Für dich als Leser*in: ab jetzt kannst du Bücher ausleihen, Reservierungen vornehmen und Dokumente vor Ort über die AnarBib-Oberfläche von <b>{libraryName}</b> einsehen."
+  },
+  "library_profile.reader_executed.impact.informal": {
+    "pt-BR": "Para você como leitor·a·e: a partir de agora, a circulação acontece de maneira informal, fora da interface AnarBib. Entre em contato diretamente com <b>{libraryName}</b> para pegar emprestado ou consultar.",
+    fr: "Pour toi en tant que lecteur·rice : à partir de maintenant, la circulation se fait de manière informelle, hors interface AnarBib. Contacte directement <b>{libraryName}</b> pour emprunter ou consulter.",
+    es: "Para vos como lector·a·e: a partir de ahora, la circulación se hace de manera informal, fuera de la interfaz AnarBib. Contactá directamente a <b>{libraryName}</b> para tomar prestado o consultar.",
+    en: "For you as a reader: from now on, circulation happens informally, outside the AnarBib interface. Contact <b>{libraryName}</b> directly to borrow or consult.",
+    it: "Per te come lettore/trice/x: da ora in poi, la circolazione avviene in modo informale, fuori dall'interfaccia AnarBib. Contatta direttamente <b>{libraryName}</b> per prendere in prestito o consultare.",
+    de: "Für dich als Leser*in: ab jetzt erfolgt die Zirkulation informell, außerhalb der AnarBib-Oberfläche. Wende dich direkt an <b>{libraryName}</b>, um etwas auszuleihen oder einzusehen."
+  },
+  "library_profile.reader_executed.impact.off": {
+    "pt-BR": "Para você como leitor·a·e: a partir de agora, <b>{libraryName}</b> não oferece mais serviço de empréstimo nem de consulta para leitor·a·e·s via AnarBib. Você ainda pode entrar em contato com a biblioteca para conversar sobre o acervo.",
+    fr: "Pour toi en tant que lecteur·rice : à partir de maintenant, <b>{libraryName}</b> ne propose plus de service de prêt ni de consultation aux lecteur·rice·s via AnarBib. Tu peux toujours contacter la bibliothèque pour échanger sur le fonds.",
+    es: "Para vos como lector·a·e: a partir de ahora, <b>{libraryName}</b> ya no ofrece servicio de préstamo ni de consulta para lector·a·e·s vía AnarBib. Aún podés contactar la biblioteca para conversar sobre el acervo.",
+    en: "For you as a reader: from now on, <b>{libraryName}</b> no longer offers borrowing or consultation services for readers via AnarBib. You can still contact the library to discuss the collection.",
+    it: "Per te come lettore/trice/x: da ora in poi, <b>{libraryName}</b> non offre più servizi di prestito o consultazione per lettori/trici/x via AnarBib. Puoi ancora contattare la biblioteca per parlare della collezione.",
+    de: "Für dich als Leser*in: ab jetzt bietet <b>{libraryName}</b> keine Ausleih- oder Einsichtsdienste mehr für Leser*innen über AnarBib an. Du kannst die Bibliothek weiterhin kontaktieren, um über den Bestand zu sprechen."
+  },
+  "library_profile.reader_executed.cta": {
+    "pt-BR": "Ver a biblioteca",
+    fr: "Voir la bibliothèque",
+    es: "Ver la biblioteca",
+    en: "View the library",
+    it: "Vedere la biblioteca",
+    de: "Bibliothek ansehen"
+  },
+
   // ===== B.5 — Labels d'axe ================================================
   "lp.axis.catalog_mode": {
     "pt-BR": "modo de catalogação",
