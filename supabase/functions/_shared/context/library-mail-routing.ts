@@ -1,5 +1,6 @@
-import { ADMIN_EMAIL, ADMIN_NAME, FOOTER_TEXT, LOGO_URL, SENDER_EMAIL, SENDER_NAME, supabaseAdmin } from "../core/env.ts";
+import { ADMIN_EMAIL, ADMIN_NAME, LOGO_URL, SENDER_EMAIL, SENDER_NAME, supabaseAdmin } from "../core/env.ts";
 import { replaceBrandTokens, resolvedBrandName, resolvedSubjectTag } from "../shared/branding.ts";
+import { tMail } from "../i18n/mail-strings.ts";
 const BUCKET = "library-ui-assets";
 function isHttp(v) {
   try {
@@ -43,13 +44,19 @@ export function brandName(ctx) {
 export function applyBrandingText(text, ctx) {
   return replaceBrandTokens(text, ctx);
 }
-export function resolveMailRouting(ctx) {
+export function resolveMailRouting(ctx, locale = null) {
   const sn = String(ctx?.sender_display_name || (ctx?.use_library_name_as_sender !== false ? ctx?.library_short_name || ctx?.library_name || "" : "") || SENDER_NAME).trim() || SENDER_NAME;
   const rte = String(ctx?.delivery_mode === "platform_shared_local_reply" || ctx?.delivery_mode === "library_own_transport" ? ctx?.reply_to_email || ctx?.admin_notification_email || "" : "").trim() || null;
   const fp = [];
-  if (ctx?.signature_short) fp.push(String(ctx.signature_short).trim());
+  // Signature : préférer signature_short_i18n[locale] si défini, sinon fallback signature_short text.
+  // Doctrine chantier i18n layout (Q-L1 σ2 additive, 18/05/2026).
+  const sigI18n = (ctx?.signature_short_i18n && typeof ctx.signature_short_i18n === "object") ? ctx.signature_short_i18n : null;
+  const sigForLocale = locale && sigI18n ? String(sigI18n[locale] || "").trim() : "";
+  const sigFallback = String(ctx?.signature_short || "").trim();
+  const sig = sigForLocale || sigFallback;
+  if (sig) fp.push(sig);
   if (ctx?.footer_local) fp.push(String(ctx.footer_local).trim());
-  if (!fp.length) fp.push(FOOTER_TEXT);
+  if (!fp.length) fp.push(tMail(locale, "layout.footerText"));
   const nlu = String(LOGO_URL || "").trim();
   const llu = libLogo(ctx);
   return {

@@ -294,6 +294,7 @@ async function handleProposed(payload, library, ctx, bt) {
     }
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -305,7 +306,7 @@ async function handleProposed(payload, library, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "library_profile.proposed.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -390,6 +391,7 @@ async function handleVoted(payload, library, ctx, bt) {
     }
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -401,7 +403,7 @@ async function handleVoted(payload, library, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "library_profile.voted.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -478,6 +480,7 @@ async function handleAccepted(payload, library, ctx, bt) {
     }
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -489,7 +492,7 @@ async function handleAccepted(payload, library, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "library_profile.accepted.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -555,12 +558,13 @@ async function handleRejected(payload, library, ctx, bt) {
     ];
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
       introHtml,
       details,
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -627,12 +631,13 @@ async function handleCancelled(payload, library, ctx, bt) {
     details.push({ label: label(locale, "lp.proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
       introHtml,
       details,
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -704,6 +709,7 @@ async function handleExecuted(payload, library, ctx, bt) {
     }
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -715,7 +721,7 @@ async function handleExecuted(payload, library, ctx, bt) {
         ctaUrl: pageUrl,
         ctaLabel: tMail(locale, "library_profile.executed.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -762,6 +768,7 @@ async function handleExecuted(payload, library, ctx, bt) {
           : "";
 
         const { html, text } = renderEmail({
+          locale,
           preheader: tit,
           title: tit,
           greeting: greeting(locale, r.first_name || undefined),
@@ -773,7 +780,7 @@ async function handleExecuted(payload, library, ctx, bt) {
             ctaUrl: pageUrl,
             ctaLabel: tMail(locale, "library_profile.reader_executed.cta")
           },
-          footerHtml: footerPadrao(ctx),
+          footerHtml: footerPadrao(ctx, locale),
           context: ctx
         });
 

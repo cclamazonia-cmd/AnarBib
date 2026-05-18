@@ -27,6 +27,7 @@ export async function handleReservaCriadaV2(recordId) {
   const ca = String(reserva.created_at || "");
   const su = `${tMail(locale, "res.created.sub")} — ${bt}`;
   const { html, text } = renderEmail({
+    locale: locale,
     preheader: tMail(locale, "res.created.pre"),
     title: tMail(locale, "res.created.sub"),
     greeting: greeting(locale, user?.name),
@@ -57,13 +58,14 @@ export async function handleReservaCriadaV2(recordId) {
         }
       ] : []
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx,
     libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
   });
   const ur = reservationCreatedEnabled(ctx) ? await safeSendEmail(user, applyBrandingText(su, ctx), html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "reservation_created_disabled");
   // Admin mail — locale biblio (ctx.default_locale, paquet 6)
   const { html: ha, text: ta } = renderEmail({
+    locale: libLocale,
     preheader: tMail(libLocale, "res.created.admin"),
     title: tMail(libLocale, "res.created.admin"),
     introHtml: applyBrandingText(`<p>${tMail(libLocale, "res.created.admin")}.</p>`, ctx),
@@ -91,7 +93,7 @@ export async function handleReservaCriadaV2(recordId) {
         }
       ] : []
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, libLocale),
     context: ctx,
     libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
   });
@@ -132,12 +134,13 @@ export async function handleReservaV2StatusChange(recordId, event) {
     ] : []
   ];
   const { html, text } = renderEmail({
+    locale: locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, user?.name),
     introHtml: intro,
     details: det,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx,
     libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
   });
@@ -147,6 +150,7 @@ export async function handleReservaV2StatusChange(recordId, event) {
   const adminTit = tMail(libLocale, mailKey);
   const adminIntro = `<p>${tMail(libLocale, mailKey)}.</p>` + (motivo && (se === "reserva_v2_recusada" || se === "reserva_cancelada_biblioteca") ? `<p>${label(libLocale, "reason")}: <b>${esc(motivo)}</b>.</p>` : "");
   const { html: ha, text: ta } = renderEmail({
+    locale: libLocale,
     preheader: adminTit,
     title: adminTit,
     introHtml: adminIntro,
@@ -160,7 +164,7 @@ export async function handleReservaV2StatusChange(recordId, event) {
         value: tits || "—"
       }
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, libLocale),
     context: ctx,
     libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
   });
@@ -377,12 +381,13 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   ];
   // preheader & title = readerSubject (texte plat) — readerBody (HTML possible) reste dans introHtml.
   const { html: userHtml, text: userText } = renderEmail({
+    locale: locale,
     preheader: readerSubject,
     title: readerSubject,
     greeting: greeting(locale, user?.name),
     introHtml: userIntro,
     details: det,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx,
     libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
   });
@@ -459,11 +464,12 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
     ];
     // preheader & title = staffSubject (texte plat) — staffBody (HTML possible) reste dans introHtml.
     const { html: staffHtml, text: staffText } = renderEmail({
+      locale: libLocale,
       preheader: staffSubject,
       title: staffSubject,
       introHtml: staffIntro,
       details: staffDet,
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, libLocale),
       context: ctx,
       actionBox,
       libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
@@ -507,6 +513,7 @@ export async function handleReservaPickupReplyEvent(recordId, event, payload) {
     intro = `<p>${tMail(libLocale, "pr.declined")}.</p>`;
   }
   const { html: ha, text: ta } = renderEmail({
+    locale: libLocale,
     preheader: tit,
     title: tit,
     introHtml: intro,
@@ -540,7 +547,7 @@ export async function handleReservaPickupReplyEvent(recordId, event, payload) {
         }
       ] : []
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, libLocale),
     context: ctx,
     libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
   });

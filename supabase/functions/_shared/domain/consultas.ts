@@ -183,6 +183,7 @@ export async function handleConsultaCriadaV2(recordId: number) {
 
   // ---- Mail lecteur ----
   const { html, text } = renderEmail({
+    locale: locale,
     preheader: tMail(locale, "con.created.pre"),
     title: tMail(locale, "con.created.sub"),
     greeting: greeting(locale, user?.name),
@@ -198,7 +199,7 @@ export async function handleConsultaCriadaV2(recordId: number) {
       ...(sids ? [{ label: label(locale, "ids"), value: sids }] : []),
       ...(ca ? [{ label: label(locale, "date"), value: fmtD(ca) }] : [])
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx,
     libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
   });
@@ -209,6 +210,7 @@ export async function handleConsultaCriadaV2(recordId: number) {
 
   // ---- Mail copie admin biblio (locale biblio paquet 6) ----
   const { html: ha, text: ta } = renderEmail({
+    locale: libLocale,
     preheader: tMail(libLocale, "con.created.admin"),
     title: tMail(libLocale, "con.created.admin"),
     introHtml: applyBrandingText(`<p>${tMail(libLocale, "con.created.admin")}.</p>`, ctx),
@@ -218,7 +220,7 @@ export async function handleConsultaCriadaV2(recordId: number) {
       ...(brfs ? [{ label: label(libLocale, "refs"), value: brfs }] : []),
       ...(ca ? [{ label: label(libLocale, "date"), value: formatDateBR(ca) }] : [])
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, libLocale),
     context: ctx,
     libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
   });
@@ -353,6 +355,7 @@ export async function handleConsultaV2LifecycleEvent(
       : undefined;
 
     const { html, text } = renderEmail({
+      locale: locale,
       preheader: tMail(locale, readerKey),
       title: tMail(locale, readerKey),
       greeting: greeting(locale, user?.name),
@@ -363,7 +366,7 @@ export async function handleConsultaV2LifecycleEvent(
         ...(brfs ? [{ label: label(locale, "refs"), value: brfs }] : []),
         ...noteDetailReader
       ],
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx,
       libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
     });
@@ -379,6 +382,7 @@ export async function handleConsultaV2LifecycleEvent(
     const staffIntro = `<p>${tMail(libLocale, staffKey)}.</p>`;
 
     const { html: ha, text: ta } = renderEmail({
+      locale: libLocale,
       preheader: tMail(libLocale, staffKey),
       title: tMail(libLocale, staffKey),
       introHtml: applyBrandingText(staffIntro, ctx),
@@ -388,7 +392,7 @@ export async function handleConsultaV2LifecycleEvent(
         ...(brfs ? [{ label: label(libLocale, "refs"), value: brfs }] : []),
         ...noteDetailStaff
       ],
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, libLocale),
       context: ctx,
       libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
     });
@@ -561,6 +565,7 @@ export async function handleConsultaV2WorkflowEvent(
       : undefined;
 
     const { html, text } = renderEmail({
+      locale: locale,
       preheader: interpolated,
       title: interpolated.split(":")[0] || interpolated,
       greeting: greeting(locale, user?.name),
@@ -572,7 +577,7 @@ export async function handleConsultaV2WorkflowEvent(
         ...(when ? [{ label: label(locale, "date"), value: when }] : []),
         ...noteDetailReaderWf
       ],
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx,
       libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
     });
@@ -597,6 +602,7 @@ export async function handleConsultaV2WorkflowEvent(
       : undefined;
 
     const { html: ha, text: ta } = renderEmail({
+      locale: libLocale,
       preheader: staffIntroBase,
       title: staffIntroBase,
       introHtml: applyBrandingText(`<p>${staffIntroBase}.</p>`, ctx),
@@ -608,7 +614,7 @@ export async function handleConsultaV2WorkflowEvent(
         ...(when ? [{ label: label(libLocale, "date"), value: when }] : []),
         ...noteDetailStaffWf
       ],
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, libLocale),
       context: ctx,
       libreDiffusionLabel: tMail(libLocale, "subj.libreDiffusion")
     });

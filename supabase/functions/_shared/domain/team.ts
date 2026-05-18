@@ -73,14 +73,18 @@ function displayName(p) {
   return fn || String(p.email || "").trim() || "";
 }
 // Envoie une copie admin biblio.
-// Le mail admin est en pt-BR (admin biblio = équipe local), avec sujet préfixé "[BLMF]".
+// Le mail admin est dans la locale par défaut de la biblio (doctrine 2C, 18/05/2026 :
+// "le mail admin reflète l'identité linguistique de la biblio, pas la préférence
+// personnelle du destinataire"). Avec sujet préfixé "[BLMF]".
 async function sendAdminCopy(ctx, bt, subjectAdmin, titleAdmin, introHtmlAdmin, details) {
+  const locale = ctx?.default_locale || null;
   const { html, text } = renderEmail({
+    locale,
     preheader: titleAdmin,
     title: titleAdmin,
     introHtml: introHtmlAdmin,
     details,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const adminSubject = applyBrandingText(`[${bt}] ${subjectAdmin}`, ctx);
@@ -169,6 +173,7 @@ async function handlePromotion(event, library, targetUserId, actor, ctx, bt) {
     regimentoUrl
   })}</p>`;
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
@@ -179,7 +184,7 @@ async function handlePromotion(event, library, targetUserId, actor, ctx, bt) {
         value: displayName(actor)
       }
     ] : [],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -242,12 +247,13 @@ async function handleSelfDemoted(payload, library, actor, ctx, bt) {
         libraryName
       })}</p>`;
       const { html, text } = renderEmail({
+        locale,
         preheader: tit,
         title: tit,
         greeting: greeting(locale, recipient.first_name || undefined),
         introHtml,
         details: [],
-        footerHtml: footerPadrao(ctx),
+        footerHtml: footerPadrao(ctx, locale),
         context: ctx
       });
       const r = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -313,12 +319,13 @@ async function handleRemovalRequested(payload, library, targetUserId, actor, ctx
     value: displayName(actor)
   });
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
     introHtml,
     details: detailsUser,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -378,12 +385,13 @@ async function handleRemovalCancelled(payload, library, targetUserId, actor, ctx
     role: roleLoc
   })}</p>`;
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
     introHtml,
     details: [],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -436,12 +444,13 @@ async function handleRemovalCompleted(payload, library, targetUserId, ctx, bt) {
     libraryName
   })}</p>`;
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
     introHtml,
     details: [],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -497,12 +506,13 @@ async function handleSuspended(payload, library, targetUserId, actor, ctx, bt) {
     value: displayName(actor)
   });
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
     introHtml,
     details: detailsUser,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -558,12 +568,13 @@ async function handleUnsuspended(payload, library, targetUserId, actor, ctx, bt)
     actorName
   })}</p>`;
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
     introHtml,
     details: [],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -623,12 +634,13 @@ async function handleLastCoordinatorLeft(library, actor, ctx, bt) {
       actorName
     })}</p>`;
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, admin.first_name || undefined),
       introHtml,
       details: [],
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
     const r = await safeSendEmail(adminUserTarget, applyBrandingText(sub, ctx), html, text, "anarbib_escalation", ctx);
@@ -669,12 +681,13 @@ async function handleLastCoordinatorPendingRemoval(payload, library, actor, ctx,
       pendingUntilDate
     })}</p>`;
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, admin.first_name || undefined),
       introHtml,
       details: [],
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
     const r = await safeSendEmail(adminUserTarget, applyBrandingText(sub, ctx), html, text, "anarbib_escalation", ctx);
@@ -708,12 +721,13 @@ async function handleInactiveWarning(event, payload, library, targetUserId, ctx,
     deadlineDate
   })}</p>`;
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
     introHtml,
     details: [],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
@@ -765,12 +779,13 @@ async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) 
     libraryName
   })}</p>`;
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, target.first_name || undefined),
     introHtml,
     details: [],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);

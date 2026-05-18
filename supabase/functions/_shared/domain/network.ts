@@ -278,6 +278,7 @@ async function handleCooptationProposed(payload, ctx, bt) {
     }
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -289,7 +290,7 @@ async function handleCooptationProposed(payload, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "network.cooptation_proposed.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -379,6 +380,7 @@ async function handleCooptationVoted(payload, ctx, bt) {
     details.push({ label: label(locale, "proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -390,7 +392,7 @@ async function handleCooptationVoted(payload, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "network.cooptation_voted.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -451,12 +453,13 @@ async function handleCooptationRejected(payload, ctx, bt) {
       const introHtml = `<p>${tMail(locale, introKey, { targetName: proposedName })}</p>`;
 
       const { html, text } = renderEmail({
+        locale,
         preheader: tit,
         title: tit,
         greeting: greeting(locale, target.first_name || undefined),
         introHtml,
         details: [],
-        footerHtml: footerPadrao(ctx),
+        footerHtml: footerPadrao(ctx, locale),
         context: ctx
       });
 
@@ -493,12 +496,13 @@ async function handleCooptationRejected(payload, ctx, bt) {
     details.push({ label: label(locale, "proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
       introHtml,
       details,
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -552,6 +556,7 @@ async function handleCooptationCompleted(payload, ctx, bt) {
       const introHtml = `<p>${tMail(locale, introKey, { targetName: proposedName, proposerName })}</p>`;
 
       const { html, text } = renderEmail({
+        locale,
         preheader: tit,
         title: tit,
         greeting: greeting(locale, target.first_name || undefined),
@@ -563,7 +568,7 @@ async function handleCooptationCompleted(payload, ctx, bt) {
           ctaUrl: proposalUrl,
           ctaLabel: tMail(locale, "network.cooptation_completed.cta")
         },
-        footerHtml: footerPadrao(ctx),
+        footerHtml: footerPadrao(ctx, locale),
         context: ctx
       });
 
@@ -593,6 +598,7 @@ async function handleCooptationCompleted(payload, ctx, bt) {
     const details = [{ label: label(locale, "proposer"), value: proposerName }];
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -604,7 +610,7 @@ async function handleCooptationCompleted(payload, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "network.cooptation_completed.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -670,6 +676,7 @@ async function handleCooptationReminder(payload, ctx, bt) {
     details.push({ label: label(locale, "proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -681,7 +688,7 @@ async function handleCooptationReminder(payload, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "network.cooptation_reminder.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -706,6 +713,7 @@ async function handleCooptationReminder(payload, ctx, bt) {
       }
 
       const { html, text } = renderEmail({
+        locale,
         preheader: tit,
         title: tit,
         greeting: greeting(locale, proposer.first_name || undefined),
@@ -717,7 +725,7 @@ async function handleCooptationReminder(payload, ctx, bt) {
           ctaUrl: proposalUrl,
           ctaLabel: tMail(locale, "network.cooptation_reminder.cta")
         },
-        footerHtml: footerPadrao(ctx),
+        footerHtml: footerPadrao(ctx, locale),
         context: ctx
       });
 
@@ -793,6 +801,7 @@ async function handleCollectiveRemovalProposed(payload, ctx, bt) {
     details.push({ label: label(locale, "proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -804,7 +813,7 @@ async function handleCollectiveRemovalProposed(payload, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "network.collective_removal_proposed.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -910,12 +919,13 @@ async function handleCollectiveRemovalVoteCast(payload, ctx, bt) {
     details.push({ label: label(locale, "proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
       introHtml,
       details,
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -982,12 +992,13 @@ async function handleCollectiveRemovalUnanimous(payload, ctx, bt) {
       }
 
       const { html, text } = renderEmail({
+        locale,
         preheader: tit,
         title: tit,
         greeting: greeting(locale, target.first_name || undefined),
         introHtml,
         details,
-        footerHtml: footerPadrao(ctx),
+        footerHtml: footerPadrao(ctx, locale),
         context: ctx
       });
 
@@ -1024,6 +1035,7 @@ async function handleCollectiveRemovalUnanimous(payload, ctx, bt) {
     details.push({ label: label(locale, "proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
@@ -1035,7 +1047,7 @@ async function handleCollectiveRemovalUnanimous(payload, ctx, bt) {
         ctaUrl: proposalUrl,
         ctaLabel: tMail(locale, "network.collective_removal_proposed.cta")
       },
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -1116,12 +1128,13 @@ async function handleCollectiveRemovalCancelled(payload, ctx, bt) {
       }
 
       const { html, text } = renderEmail({
+        locale,
         preheader: tit,
         title: tit,
         greeting: greeting(locale, target.first_name || undefined),
         introHtml,
         details,
-        footerHtml: footerPadrao(ctx),
+        footerHtml: footerPadrao(ctx, locale),
         context: ctx
       });
 
@@ -1163,12 +1176,13 @@ async function handleCollectiveRemovalCancelled(payload, ctx, bt) {
     details.push({ label: label(locale, "proposer"), value: proposerName });
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
       introHtml,
       details,
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 
@@ -1233,12 +1247,13 @@ async function handleCollectiveRemovalExecuted(payload, ctx, bt) {
       const details = [{ label: label(locale, "executed_at") || "Date", value: formatDateLocale(executedAt, locale) }];
 
       const { html, text } = renderEmail({
+        locale,
         preheader: tit,
         title: tit,
         greeting: greeting(locale, target.first_name || undefined),
         introHtml,
         details,
-        footerHtml: footerPadrao(ctx),
+        footerHtml: footerPadrao(ctx, locale),
         context: ctx
       });
 
@@ -1271,12 +1286,13 @@ async function handleCollectiveRemovalExecuted(payload, ctx, bt) {
     ];
 
     const { html, text } = renderEmail({
+      locale,
       preheader: tit,
       title: tit,
       greeting: greeting(locale, r.first_name || undefined),
       introHtml,
       details,
-      footerHtml: footerPadrao(ctx),
+      footerHtml: footerPadrao(ctx, locale),
       context: ctx
     });
 

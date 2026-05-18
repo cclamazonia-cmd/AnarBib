@@ -66,6 +66,32 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     de: "Bewahre diese Nachricht auf."
   },
 
+  // ===== Chantier i18n layout 2B (18/05/2026) — labels footer générique =====
+  "layout.phoneLabel": {
+    "pt-BR": "Telefone",
+    fr: "Téléphone",
+    es: "Teléfono",
+    en: "Phone",
+    it: "Telefono",
+    de: "Telefon"
+  },
+  "layout.regimentoLabel": {
+    "pt-BR": "Regimento",
+    fr: "Règlement",
+    es: "Reglamento",
+    en: "Regulations",
+    it: "Regolamento",
+    de: "Reglement"
+  },
+  "layout.footerText": {
+    "pt-BR": "Mensagem automática da biblioteca. Responda apenas se o campo de resposta indicar um contato local.",
+    fr: "Message automatique de la bibliothèque. Réponds uniquement si le champ de réponse indique un contact local.",
+    es: "Mensaje automático de la biblioteca. Respondé únicamente si el campo de respuesta indica un contacto local.",
+    en: "Automatic message from the library. Reply only if the reply-to field indicates a local contact.",
+    it: "Messaggio automatico della biblioteca. Rispondi solo se il campo di risposta indica un contatto locale.",
+    de: "Automatische Nachricht der Bibliothek. Antworte nur, wenn das Antwortfeld einen lokalen Kontakt anzeigt."
+  },
+
   // ===== Labels (l.*) =======================================================
   "l.book": {
     "pt-BR": "Livro",

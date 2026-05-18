@@ -22,6 +22,7 @@ export async function handleProfileNotice(recordId) {
   const user = userTargetFromProfile(profile);
   const aun = adminDisplayName(fullName(profile), user?.email);
   const locale = String(profile?.preferred_language || "").trim() || null;
+  const libLocale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const fmtD = (d)=>formatDateLocale(d, locale) || formatDateBR(d);
   const kind = String(notice.kind || "");
   const reason = String(notice.reason || profile.restricted_reason || "").trim();
@@ -65,29 +66,31 @@ export async function handleProfileNotice(recordId) {
     ] : []
   ];
   const { html, text } = renderEmail({
+    locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, user?.name),
     introHtml: intro,
     details: det,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   sub = applyBrandingText(sub.replace(/BLMF/g, bt), ctx);
   const ur = profileRestrictionEnabled(ctx) ? await safeSendEmail(user, sub, html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "profile_notice_disabled");
-  // Admin — PT-BR
+  // Admin — locale biblio (doctrine 2C, 18/05/2026)
   const { html: ha, text: ta } = renderEmail({
+    locale: libLocale,
     preheader: tit,
     title: tit,
-    introHtml: `<p>${tMail(null, "admin.profileNotice")}: <b>${esc(kind)}</b>.</p>`,
+    introHtml: `<p>${tMail(libLocale, "admin.profileNotice")}: <b>${esc(kind)}</b>.</p>`,
     details: [
       {
-        label: label(null, "reader"),
+        label: label(libLocale, "reader"),
         value: aun
       },
       ...det
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, libLocale),
     context: ctx
   });
   const ar = profileRestrictionEnabled(ctx) ? await safeSendEmail(adminTarget(ctx), applyBrandingText(`[BLMF] ${tit} — ${aun}`, ctx), ha, ta, "admin_copy", ctx) : skippedEmailResult("admin_copy", "profile_notice_disabled");

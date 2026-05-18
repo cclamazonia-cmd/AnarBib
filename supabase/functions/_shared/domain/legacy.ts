@@ -10,6 +10,7 @@ import { LIBRARIAN_PHONE } from "../core/env.ts";
 export async function handleReservaCriadaOld(recordId) {
   const r = await getReservaDetalhes(recordId);
   const ctx = await resolveLibraryNotificationContext(String(r.library_id || r.default_library_id || "").trim() || null);
+  const locale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const brandTag = subjectTag(ctx);
   const userFullName = fullNameFromParts(r.first_name, r.last_name);
   const user = {
@@ -22,6 +23,7 @@ export async function handleReservaCriadaOld(recordId) {
   const reservaEm = String(r.reserva_em || "");
   const subjectUser = bibRef ? `Reserva recebida — ${bibRef} — ${brandTag}` : `Reserva recebida — ${brandTag}`;
   const { html, text } = renderEmail({
+    locale,
     preheader: "Sua reserva foi registrada.",
     title: "Reserva recebida",
     greeting: user.name ? `Olá, ${user.name}!` : "Olá!",
@@ -44,11 +46,12 @@ export async function handleReservaCriadaOld(recordId) {
         }
       ] : []
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const userResult = reservationCreatedEnabled(ctx) ? await safeSendEmail(user, applyBrandingText(subjectUser, ctx), html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "reservation_created_disabled");
   const { html: ha, text: ta } = renderEmail({
+    locale,
     preheader: "Nova reserva registrada.",
     title: "Nova reserva registrada",
     introHtml: `<p style="margin:0;">Uma nova reserva foi registrada (sistema antigo).</p>`,
@@ -68,7 +71,7 @@ export async function handleReservaCriadaOld(recordId) {
         }
       ] : []
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   const adminResult = reservationCreatedEnabled(ctx) && reservationAdminCopyEnabled(ctx) ? await safeSendEmail(adminTarget(ctx), applyBrandingText(`Nova reserva — ${adminUserName} — ${brandTag}`, ctx), ha, ta, "admin_copy", ctx) : skippedEmailResult("admin_copy", "reservation_admin_copy_disabled");
@@ -80,6 +83,7 @@ export async function handleReservaCriadaOld(recordId) {
 export async function handleEmprestimoOld(recordId, event) {
   const e = await getEmprestimoDetalhes(recordId);
   const ctx = await resolveLibraryNotificationContext(String(e.library_id || e.default_library_id || "").trim() || null);
+  const locale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const brandTag = subjectTag(ctx);
   const userFullName = String(e.user_nome || e.nome || "").trim();
   const user = {
@@ -108,6 +112,7 @@ export async function handleEmprestimoOld(recordId, event) {
     introHtml = `<p>Atualização sobre seu empréstimo.</p>`;
   }
   const { html, text } = renderEmail({
+    locale,
     preheader: title,
     title,
     greeting: user.name ? `Olá, ${user.name}!` : "Olá!",
@@ -130,7 +135,7 @@ export async function handleEmprestimoOld(recordId, event) {
         }
       ] : []
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   subject = applyBrandingText(subject, ctx);

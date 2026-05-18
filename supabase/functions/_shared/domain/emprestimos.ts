@@ -14,6 +14,7 @@ export async function handleEmprestimoV2(recordId, event) {
   const user = userTargetFromProfile(profile);
   const aun = adminDisplayName(fullName(profile), user?.email);
   const locale = String(profile?.preferred_language || "").trim() || null;
+  const libLocale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const fmtD = (d)=>formatDateLocale(d, locale) || formatDateBR(d);
   const oi = items.filter((i)=>String(i.item_status || "") === "aberto");
   const ri = items.filter((i)=>String(i.item_status || "") === "devolvido");
@@ -160,12 +161,13 @@ export async function handleEmprestimoV2(recordId, event) {
       value: k.value
     }));
   const { html, text } = renderEmail({
+    locale: locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, user?.name),
     introHtml: intro,
     details: det,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   sub = applyBrandingText(sub.replace(/BLMF/g, bt), ctx);
@@ -207,11 +209,12 @@ export async function handleEmprestimoV2(recordId, event) {
       }))
   ];
   const { html: ha, text: ta } = renderEmail({
+    locale: libLocale,
     preheader: titAdmin,
     title: titAdmin,
     introHtml: ai,
     details: adminDet,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, libLocale),
     context: ctx
   });
   as2 = applyBrandingText(as2.replace(/BLMF/g, bt), ctx);
@@ -233,6 +236,7 @@ export async function handleEmprestimoDevolucaoEvent(recordId, event, payload) {
   };
   const aun = adminDisplayName(fullNameFromParts(f.first_name, f.last_name), user.email);
   const locale = String(f.preferred_language || "").trim() || null;
+  const libLocale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const fmtD = (d)=>formatDateLocale(d, locale) || formatDateBR(d);
   const tits = joinTitles(rows.map((r)=>String(r.titulo || `[${String(r.bib_ref || "").trim()}]`)));
   const when = formatDateTimeInZone(String(f.return_scheduled_for || "").trim() || null, DEFAULT_NOTIFICATION_TIMEZONE);
@@ -277,12 +281,13 @@ export async function handleEmprestimoDevolucaoEvent(recordId, event, payload) {
       value: k.value
     }));
   const { html, text } = renderEmail({
+    locale: locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, user.name),
     introHtml: intro,
     details: det,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   sub = applyBrandingText(sub, ctx);
@@ -303,11 +308,12 @@ export async function handleEmprestimoDevolucaoEvent(recordId, event, payload) {
       }))
   ];
   const { html: ha, text: ta } = renderEmail({
+    locale: libLocale,
     preheader: titAdmin2,
     title: titAdmin2,
     introHtml: `<p>${tMail(null, "admin.returnUpdate")}</p>`,
     details: adminDet2,
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, libLocale),
     context: ctx
   });
   const ar = loanLifecycleEnabled(ctx) && loanAdminCopyEnabled(ctx) ? await safeSendEmail(adminTarget(ctx), `[${bt}] ${titAdmin2} — ${aun}`, ha, ta, "admin_copy", ctx) : skippedEmailResult("admin_copy", "loan_admin_copy_disabled");
@@ -366,6 +372,7 @@ export async function handleEmprestimoV2Reminder(recordId, event) {
     })}</p>`;
   }
   const { html, text } = renderEmail({
+    locale: locale,
     preheader: tit,
     title: tit,
     greeting: greeting(locale, user.name),
@@ -384,7 +391,7 @@ export async function handleEmprestimoV2Reminder(recordId, event) {
         }
       ] : []
     ],
-    footerHtml: footerPadrao(ctx),
+    footerHtml: footerPadrao(ctx, locale),
     context: ctx
   });
   sub = applyBrandingText(sub.replace(/BLMF/g, bt), ctx);
