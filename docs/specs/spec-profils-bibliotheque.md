@@ -4,10 +4,10 @@
 
 | Champ | Valeur |
 |---|---|
-| Version | v0.3 |
-| Date | 13 mai 2026 |
-| Statut | Spec opérationnelle, prête à committer. Inclut les clarifications sur l'archivage et la gouvernance des transitions. |
-| Historique | v0.1 (13 mai, doctrine + cartographie) → v0.2 (13 mai, plan de paquets, arbitrages Q1-Q3) → v0.3 (13 mai, raffinements archivage paquet D + doctrine transitions par vote §4.5) |
+| Version | v0.4 |
+| Date | 18 mai 2026 |
+| Statut | Spec opérationnelle, à jour de l'implémentation du paquet B (sous-paquets B.1 à B.7 bouclés). Intègre les décisions doctrinales prises pendant l'implémentation : doctrine de quorum staff, doctrine ACL #19, pipeline notifications team/network, doctrines i18n par locale, Option B (intro nue), Option E3 (sans article devant {libraryName}), notification lecteur·rice·s sur transitions circulation_mode. |
+| Historique | v0.1 (13 mai, doctrine + cartographie) → v0.2 (13 mai, plan de paquets, arbitrages Q1-Q3) → v0.3 (13 mai, raffinements archivage paquet D + doctrine transitions par vote §4.5) → v0.4 (18 mai, write-up post-implémentation paquet B : actualisation §9.2, nouvelles §9.2bis et §9.2ter, doctrine quorum staff §4.5.5, §14 backlog post-paquet B) |
 | Auteur·rice | Xavier + Claude |
 | Spec parente | aucune |
 | Specs en interaction forte | `spec-administrateur-reseau.md` v0.3, `spec-gouvernance-roles.md`, `spec-onboarding-biblioteca.md` |
@@ -437,6 +437,29 @@ Cette transition de type 4 supprime la distinction qui sert à sa propre validat
 
 Si des `library_profile_proposals` (ou des propositions de cooptation D.6 ouvertes au niveau biblio, le cas échéant) sont en cours, la transition est **refusée** tant que ces propositions ne sont pas closes (acceptées, rejetées ou expirées). Justification : archiver un vote politique en cours est plus discutable qu'archiver un prêt.
 
+### 4.5.5 Doctrine de quorum minimum staff (ajoutée v0.4)
+
+L'implémentation du paquet B a fait apparaître un cas-limite que la doctrine v0.3 n'avait pas explicité : **que se passe-t-il quand une biblio a moins de staff actif que requis par le mécanisme de vote de la transition demandée ?**
+
+Exemple : biblio en `governance_mode = full_governance` avec un seul·e librarian·e actif·ve qui propose une transition de type 2 nécessitant un vote à la majorité. À combien de voix faut-il atteindre la majorité quand on est seul·e dans le collectif ? La réponse anarchiste n'est pas « la majorité d'1 = 1 vote » (ce qui revient à une transition directe déguisée), mais **« on ne peut pas faire vote à la majorité sans collectif »**.
+
+D'où la doctrine de quorum minimum implémentée dans `fn_propose_library_profile_change` :
+
+| Type | Quorum minimum staff actif | Logique |
+|---|---|---|
+| 1 (direct) | 1 staff | Un·e librarian·e suffit pour acter une transition élargissante |
+| 2 (majority) | 2 staff | Un vote majoritaire requiert au moins 2 voix significatives |
+| 3 (unanimous) | 2 staff | Unanimité d'1 = transition directe, donc rejetée |
+| 4 (unanimous_extended) | 3 staff | Transitions critiques d'archivage : collectif sérieux requis |
+
+Quand le quorum n'est pas atteint, la RPC retourne `PROPOSE_QUORUM_NOT_MET` avec le HINT i18n `error.profile_change.quorum_not_met`. Le frontend doit alors présenter à la·au proposant·e :
+
+1. Un message explicatif (« cette transition nécessite N staff actifs, votre collectif en compte K ») ;
+2. Une invitation à coopter des compañeres en `librarian` ou `coordenador` avant de proposer ;
+3. Pour les biblios en `informal`, l'option de basculer d'abord en `staff_roles` (transition type 1 direct).
+
+**Conséquence opérationnelle :** une biblio collective d'1 personne reste pleinement légitime, mais ne peut pas se rétracter vers un mode plus restreint par procédure de vote — il faut soit grossir l'équipe, soit revenir en mode `informal` où les transitions type 1/2/3 deviennent directes.
+
 ### 4.6 Gel des jobs pendant la carence
 
 **Doctrine "gel complet"** : pendant une fenêtre de carence d'une transition de type 3 ou 4, tous les jobs pg_cron qui auraient pu modifier l'état des transactions concernées **skip cette bibliothèque**.
@@ -561,47 +584,123 @@ Le chantier "Profils d'adoption" est découpé en sept paquets de A à G, conçu
 
 **Coût estimé :** 1 jour.
 
-### 9.2 Paquet B — Fonctions de transition
+### 9.2 Paquet B — Fonctions de transition + notifications (BOUCLÉ 18/05/2026)
 
-**Périmètre :** RPC de transition + tables symétriques D.6 pour les propositions/votes en `full_governance` + jobs pg_cron de carence et de gel.
+**Périmètre :** RPC de transition + tables symétriques D.6 pour les propositions/votes + pipeline de notifications complet (triggers SQL → outbox → EF → mail). Découpé en 7 sous-paquets B.1 à B.7 livrés entre le 17/05 et le 18/05.
 
-**Livrables :**
-- tables `library_profile_proposals` et `library_profile_votes` (symétriques à celles de cooptation D.6, scope = `library_id` plutôt que réseau) ;
-  - `library_profile_proposals` : id, library_id, axis, old_value, new_value, motivation, proposed_by, proposed_at, status (`open`, `accepted_unanimous`, `rejected`, `expired`, `cancelled`), unanimous_at, expires_at (proposed_at + 30j), grace_period_until, completed_at ;
-  - `library_profile_votes` : id, proposal_id, voter_id, vote (`for`, `against`), voted_at, rationale_against text NULLABLE ;
-  - RLS readonly + INSERT via SECURITY DEFINER uniquement ; immutables (anti-UPDATE et anti-DELETE) ;
-- RPC `fn_propose_library_profile_change(p_library_id, p_axis, p_new_value, p_motivation)` :
-  - en `governance_mode = informal` ou `staff_roles` pour types 1/2/3 ou type 4 informal : initie directement la transition ;
-  - en `governance_mode = staff_roles` pour type 4 : crée un proposal_id et notifie les admins/coords pour vote à la majorité ;
-  - en `governance_mode = full_governance` pour type 4 : crée un proposal_id et notifie les autres admins pour vote à l'unanimité ;
-- RPC `fn_vote_library_profile_change(p_proposal_id, p_vote, p_rationale_against)` ;
-- RPC `fn_revoke_library_profile_transition(p_proposal_id, p_motivation)` (révocation pendant la carence) ;
-- helper `fn_classify_transition(p_axis, p_old, p_new)` retournant le type 1/2/3/4 ;
-- helper `fn_required_governance_for_transition(p_library_id, p_axis, p_new_value)` retournant le mode de gouvernance applicable (direct / majorité / unanimité / unanimité_élargie pour staff_roles→informal) ;
-- exécuteur interne `fn_execute_library_profile_change(p_proposal_id)` appelé soit directement (transitions sans vote), soit à l'atteinte de l'unanimité, soit à l'expiration de la carence ;
-- job pg_cron horaire `process_profile_transition_grace` : pour chaque proposal en carence dont `grace_period_until < now()`, appeler l'exécuteur ;
-- job pg_cron quotidien `expire_profile_proposals` : pour chaque proposal `open` dont `expires_at < now()`, basculer en `expired` ;
-- table `library_profile_grace_locks` : pour matérialiser le gel pendant carence (cf. §4.6) ;
-  - `library_id`, `grace_until timestamptz`, `affected_axis text`, `affected_jobs text[]` ;
-  - lue par les jobs pg_cron de circulation/gouvernance/réseau pour décider s'ils skip une biblio ;
-- handler `team.profile_change_*` dans `notify-event` (6 events) :
-  - `proposed`, `voted_for`, `voted_against`, `accepted_unanimous`, `cancelled_by_admin`, `completed_after_grace` ;
-- libellés i18n des 6 events × 6 locales.
+**Sous-paquets et livrables effectifs :**
 
-**Critères d'acceptation :**
-- une transition de type 1 sur une biblio en `informal` est effective immédiatement ;
-- une transition de type 3 sur `network_mode` insère un lock dans `library_profile_grace_locks`, qui est consulté par le job de refresh de `mv_books_catalog_list_network_v1` ;
-- une transition de type 4 `circulation_mode: full_sigb → off` sur biblio en `full_governance` à 3 admins exige 3 votes "for" pour atteindre l'unanimité ;
-- pendant la carence, les jobs de rappel mail skip la biblio (testable via une biblio fictive et un prêt avec échéance dans 2 jours) ;
-- une révocation pendant la carence restaure l'état antérieur et lève le lock ;
-- une proposition expirée à 30j passe en `expired` sans effet ;
-- les 6 locales sont complètes pour les 6 events.
+#### B.1 — Tables d'audit (livré 17/05)
 
-**Risques :** moyen-élevé. La logique d'unanimité, de carence et de gel est nouvelle et touche à plusieurs jobs pg_cron existants. Test simulé indispensable.
+- Table `library_profile_proposals` : id, library_id, axis, old_value, new_value, transition_type, governance_required, motivation, proposed_by, proposed_at, status (`open`, `accepted_unanimous`, `accepted_majority`, `rejected`, `expired`, `cancelled`, `completed`), accepted_at, grace_period_until, completed_at, expires_at (proposed_at + 30j) ;
+- Table `library_profile_votes` : id, proposal_id, voter_id, vote (`for`, `against`, `abstain`), voted_at, rationale_against text NULLABLE ;
+- Table `library_profile_history` : audit narratif des transitions exécutées (immuable, source de vérité historique) ;
+- RLS readonly + INSERT via SECURITY DEFINER uniquement ; immutables (anti-UPDATE et anti-DELETE).
 
-**Coût estimé :** 3 jours (vs 2 en v0.2, parce que les tables proposals/votes alourdissent le paquet).
+**Différence avec v0.3 :** ajout du status `accepted_majority` distinct de `accepted_unanimous` (clarification doctrinale : la voie d'acceptation est tracée). Ajout du vote `abstain` (les abstentions comptent au quorum mais pas dans la décision, doctrine v0.4).
 
-**Dépendances :** paquet A.
+#### B.2 — Helpers de classification (livré 17/05)
+
+- `fn_classify_transition(p_axis, p_old, p_new)` retourne JSONB `{transition_type: 1|2|3|4, governance_required: 'direct'|'majority'|'unanimous'|'unanimous_extended'}` ;
+- `fn_required_governance_for_transition(p_library_id, p_axis, p_new_value)` : applique la matrice §4.2 contextualisée au `governance_mode` actuel de la biblio ;
+- `fn_library_active_staff_count(p_library_id)` : retourne le nombre de staff actifs (`role IN ('librarian','coordenador')` + `status='active'`) ; utilisé pour le quorum §4.5.5 et pour le calcul des votes requis.
+
+#### B.3 — RPC de transition (livré 17/05)
+
+- `fn_propose_library_profile_change(p_library_id, p_axis, p_new_value, p_motivation)` :
+  - applique la matrice §4.2 pour déterminer le mode de gouvernance ;
+  - applique la doctrine de quorum §4.5.5 (refuse précocement si staff insuffisant) ;
+  - refuse précocement les transitions type 4 (paquet D non livré) avec HINT `error.profile_change.archiving_not_available` ;
+  - pour type 1 : exécute immédiatement dans la transaction (INSERT history puis UPDATE libraries, doctrine #141.2.E ordre narrative→état) ;
+  - pour type 2/3 : crée le proposal en status `open`, expire_at = now() + 30j ;
+- `fn_vote_library_profile_change(p_proposal_id, p_vote, p_rationale_against)` :
+  - vérifie le caller est staff actif de la biblio cible ;
+  - calcule l'acceptation : majority dès atteinte de `staff_count/2 + 1` voix `for`, unanimous dès atteinte de `staff_count` voix `for` ;
+  - propose passe en `accepted_majority` ou `accepted_unanimous`, grace_period_until = now() + 14j (réflexion réversible) ;
+- `fn_cancel_library_profile_change(p_proposal_id, p_motivation)` : la·le proposant·e original·e peut retirer sa propre proposition tant qu'elle est `open` ; propose passe en `cancelled` ;
+- `fn_execute_library_profile_change(p_proposal_id)` : exécuteur idempotent appelé à la fin de la carence par le cron `fn_execute_due_profile_proposals` (B.4).
+
+**Note :** la RPC `fn_revoke_library_profile_transition` (révocation pendant carence) prévue en v0.3 **n'a pas été livrée en B**. Reportée au backlog post-paquet B (cf. §14). De même, les `library_profile_grace_locks` (gel des jobs pendant carence §4.6) ne sont pas livrés en B.
+
+#### B.4 — Crons (livré 17/05)
+
+- `fn_expire_overdue_profile_proposals` cron quotidien : pour chaque proposal `open` dont `expires_at < now()`, bascule en `expired` ;
+- `fn_execute_due_profile_proposals` cron horaire : pour chaque proposal `accepted_*` dont `grace_period_until < now()`, appelle `fn_execute_library_profile_change`.
+
+#### B.5 — Notifications team/network (livré 18/05 matin)
+
+**Triggers SQL** (migration `20260518110000_paquet_B5_triggers_notification.sql`) :
+
+- `fn_notify_lpp_lifecycle` AFTER INSERT/UPDATE sur `library_profile_proposals` : publie dans `team_notification_outbox` les events `team.library_profile.proposed`, `team.library_profile.rejected`, `team.library_profile.cancelled` ; et `network.library_profile.accepted` (statuts accepted_unanimous/accepted_majority) ;
+- `fn_notify_lpv_cast` AFTER INSERT sur `library_profile_votes` : publie `team.library_profile.voted` avec flag `is_first_vote` ;
+- `fn_notify_lph_executed` AFTER INSERT sur `library_profile_history` : publie `network.library_profile.executed`.
+
+**Doctrine de routage des événements :**
+- Préfixe `team.*` : événements de processus interne (délibération, vote, refus, retrait). Destinataires = staff actif de la biblio (`role IN ('librarian','coordenador')` + `status='active'`), proposant·e exclus·e des notifications de son propre vote (doctrine v0.3 §4.5 raffinement).
+- Préfixe `network.*` : événements à portée fédérale (décision acquise ou appliquée). Destinataires = staff actif **et** admins réseau actifs, dédupliqués (`mergeProfilesDedup`).
+
+**Handler EF** (`_shared/domain/library_profile.ts`, 791 lignes après B.7) :
+- Sous-handlers : `handleProposed`, `handleVoted`, `handleAccepted`, `handleRejected`, `handleCancelled`, `handleExecuted` ;
+- Helpers : `loadActiveStaff(libraryId)`, `loadActiveNetworkAdmins()`, `loadActiveReaders(libraryId)` (ajouté en B.7), `mergeProfilesDedup(a, b)` ;
+- `team.ts` et `network.ts` dans `_shared/domain/` délèguent les events matchant `*.library_profile.*` à `handleLibraryProfileEvent`.
+
+**i18n pt-BR** (54 clés library_profile.* + lp.* + l.lp.*) livrées dans `mail-strings.ts`.
+
+**Hotfix ACL doctrine #19** (matin du 18/05, avant B.5) : 7 fonctions B.2/B.3 corrigées (`REVOKE EXECUTE ... FROM PUBLIC, anon, authenticated, service_role` puis `GRANT EXECUTE TO authenticated`). Audit `has_function_privilege('anon', ...)` confirme 0 fonction exposée à anon parmi les 12 fonctions B. Cf. doctrine création objets backend v2 (`docs/decisions/CHANTIER_doctrine_creation_objets_securises_2026-05-18_v2.md`).
+
+#### B.6 — Traductions multilingues (livré 18/05 après-midi)
+
+54 clés × 5 nouvelles locales (fr, es, en, it, de) = **270 strings militantes**, conventions par locale :
+
+| Locale | Doctrine appliquée |
+|---|---|
+| **fr** | Point médian quand masc/fém diffèrent (coordinateur·rice·s, proposant·e, voteur·euse). Mots déjà épicènes laissés tels quels (bibliothécaire, responsable). |
+| **es** | Neutre argentin `-e` pour les personnes (bibliotecaries, coordinadores, proponente). Féminin grammatical conservé pour la biblio (observadora). |
+| **en** | Épicène standard (librarians, coordinators, proposer, voter). « ILS » pour SIGB, « extended unanimity », « reflection period ». |
+| **it** | Forme triple militante (bibliotecari/e/o, coordinatori/e/o). JAMAIS `camerata`. |
+| **de** | Genderstern (Bibliothekar*innen, Koordinator*innen, Vorschlagende*r). JAMAIS `Compas`. Mots composés (Reflexionsfrist, Übergangstyp). |
+
+**Décisions doctrinales structurelles prises en B.6 :**
+
+- **Option B** : les intros ne contiennent pas l'expression « modo de » / « mode de » devant `{axisLoc}`, chaque label d'axe porte son wording propre (« modo de governança », « mode de gouvernance », « lien à la fédération », « link to the federation », « legame con la federazione », « Verbindung zur Föderation »). Évite les doublons type *« mude seu modo de modo de governança »* repérés au test fumée pt-BR.
+- **Option E3** sur `library_profile.executed.intro` : pas d'article défini devant `{libraryName}` (ex. « La {libraryName} » exclu). Formulation universelle robuste à tout nom de biblio : *« {libraryName} adopte un nouveau {axisLoc} : à partir de maintenant, {oldValueLoc} devient {newValueLoc}. Cette transition a été décidée collectivement. »*
+
+#### B.7 — Mail lecteur·rice·s (livré 18/05 fin d'après-midi)
+
+Doctrine : seules les transitions sur `circulation_mode` affectent l'expérience pratique des lecteur·rice·s. Les autres axes restent silencieux côté lecteur·rice·s.
+
+**Extension du handler `handleExecuted`** : après notification staff + admins (B.5), si `axis === "circulation_mode"`, charge les readers actifs (`loadActiveReaders`) et envoie un mail distinct avec template orienté impact pratique. Pas de déduplication staff/admin vs reader (un user admin réseau qui est aussi reader d'une biblio reçoit 2 mails : un avec template politique, un avec template d'impact).
+
+**6 nouvelles clés × 6 locales = 36 strings :**
+
+- `library_profile.reader_executed.sub` : sujet du mail lecteur·rice ;
+- `library_profile.reader_executed.intro` : rappel doctrinal (la collectivité a décidé) sans détails de gouvernance ;
+- `library_profile.reader_executed.impact.full_sigb` : ouverture maximale, l'usager peut emprunter/réserver/consulter ;
+- `library_profile.reader_executed.impact.informal` : circulation hors interface, contacter la biblio directement ;
+- `library_profile.reader_executed.impact.off` : fermeture du service de prêt et consultation via AnarBib ;
+- `library_profile.reader_executed.cta` : « Voir la bibliothèque ».
+
+**Critères d'acceptation paquet B (revus v0.4) :**
+
+- ✅ une transition de type 1 sur `governance_mode` est effective immédiatement (paquet B.3 + B.5 trigger lifecycle `network.library_profile.executed`) ;
+- ✅ une transition de type 2 sur biblio avec 1 staff seul est refusée avec HINT `quorum_not_met` (doctrine §4.5.5) ;
+- ✅ une transition de type 4 sur `circulation_mode` est refusée avec HINT `archiving_not_available` tant que le paquet D n'est pas livré ;
+- ✅ les notifications team.* sont reçues par le staff actif, les notifications network.* par staff + admins réseau dédupliqués ;
+- ✅ test fumée bout-en-bout sur pipeline pt-BR : 3.4 secondes du trigger SQL au mail Brevo reçu (18/05 10:39) ;
+- ✅ test fumée fr : mail entièrement en français, sans résidu pt-BR sur les 54+6 clés ;
+- ⏳ test fumée sur axe `circulation_mode` (B.7) **reporté** : aucun reader actif sur BLMF/BTL au moment de la livraison ;
+- ⏳ tests fumée es/en/it/de **reportés** : aucun destinataire dans ces locales au moment de la livraison.
+
+**Reste à faire (post-paquet B, cf. §14) :**
+- révocation pendant carence (`fn_revoke_library_profile_transition` v0.3) ;
+- gel des jobs pendant carence (`library_profile_grace_locks` §4.6) ;
+- chantier i18n layout mail générique (résidus pt-BR repérés au test fumée fr : `Notificação automática`, `Telefone:`, `Equipe da BLMF`) ;
+- test fumée B.7 sur compte reader réel ;
+- tests fumée es/en/it/de.
+
+**Coût effectif :** ~6h de travail dev sur 17/05 (B.1-B.4) + ~8h sur 18/05 (hotfix ACL + B.5 + B.6 + B.7) = **~14h** (proche de l'estimation v0.3 de 3 jours élargie à la doctrine i18n complète, plus dense que prévu).
+
+**Dépendances :** paquet A *non livré formellement* (les tables `library_profile_*` ont été ajoutées par les migrations B.1, hors du périmètre A). **Le paquet A reste à clore proprement** : ajout des 4 colonnes `catalog_mode`/`circulation_mode`/`network_mode`/`governance_mode` dans `libraries` (qui existent déjà depuis le 13/05 selon mémoire), helpers de lecture `fn_library_*_mode`, vues de cohérence (cf. §9.1). En pratique, le paquet B s'est appuyé sur le paquet A pré-existant *de facto*.
 
 ### 9.3 Paquet C — Conditionnement des RLS et RPC métier
 
@@ -908,27 +1007,75 @@ Pour valider que la spec est correctement implémentée, les tests suivants doiv
 - vérifier que les 6 locales sont strictement uniformes en nombre de clés après paquet F ;
 - vérifier que les contraintes CHECK croisées (publication ⇒ network observable, full_sigb ⇒ rôles différenciés) refusent les UPDATE qui les violeraient.
 
-## 13. Récapitulatif chiffré
+## 13. Récapitulatif chiffré (mis à jour v0.4)
 
-| Métrique | Valeur estimée |
-|---|---|
-| Paquets | 7 (A à G) |
-| Coût total estimé | ≈ 16 jours développeur (révisé v0.3 : +2j paquets B et D affinés) |
-| Coût étalé calendaire | ≈ 3-4 semaines |
-| Tables modifiées | 2 (`libraries`, `library_signup_requests`) + ~5 tables transactionnelles avec ajout `archived_at` + `archive_reason` |
-| Tables créées | 5 (`library_profile_history`, `library_profile_proposals`, `library_profile_votes`, `library_profile_grace_locks`, `library_unarchive_log`) |
-| Colonnes ajoutées | ~16 |
-| Helpers DB créés | 11 (`fn_library_*_mode` ×4, prédicats ×5, `fn_classify_transition`, `fn_required_governance_for_transition`) |
-| Fonctions RPC créées/modifiées | ~9 (propose + vote + revoke + execute + unarchive + archive_circulation + archive_cotisations + signup + create_from_request) |
-| RLS impactées | 15-25 (sur 108) |
-| Vues impactées | ~10-15 (libraries_public_v1, network_overview, mv_network, library_circulation_stats, ~6 vues conta active, ~6 vues conta history, vues painel) |
-| Edge Functions handlers impactés | 4 familles existantes (emprestimo, reserva, consulta) + 1 famille nouvelle (team.profile_change_* avec 6 events) |
-| Jobs pg_cron modifiés | 5+ (consultation de `library_profile_grace_locks` par les jobs de circulation, gouvernance, refresh mv_network) |
-| Jobs pg_cron créés | 2 (`process_profile_transition_grace` horaire, `expire_profile_proposals` quotidien) |
-| Chaînes i18n ajoutées | ~60 × 6 locales = ~360 (révisé v0.3 : +60 pour events de proposition/vote/exécution) |
-| Composants frontend nouveaux | 3 (LibraryProfileBadge, LibraryProfileEditPage, écrans onboarding) + composants de vote/proposition pour transitions type 4 |
-| Composants frontend modifiés | 5+ (PainelPage, BookDetailPage, AccountPage, LibraryRequestForm, SignupChooseLibraryPage) |
+**État au 18 mai 2026 :**
 
----
+- **Paquet B livré** : 7 sous-paquets (B.1 à B.7), ~14h de dev cumulées sur 17-18/05 ;
+- **Migrations DB** : 4 migrations (B.1 tables, B.2/B.3 fonctions, B.4 crons, hotfix ACL) + 1 migration triggers notification (B.5) ;
+- **Fonctions PL/pgSQL livrées** : 12 (4 RPC + 3 helpers + 2 cron + 3 trigger functions) ;
+- **Tables créées** : 3 (`library_profile_proposals`, `library_profile_votes`, `library_profile_history`) ;
+- **Edge Function** : `notify-event` v317, +1 handler (`library_profile.ts`, 791 lignes), patches `team.ts` et `network.ts` ;
+- **i18n** : 54+6 clés × 6 locales = **360 strings militantes** (54 communes proposed/voted/accepted/rejected/cancelled/executed + 6 reader_executed) ;
+- **Tests fumée pipeline complet** : 2 (pt-BR le 18/05 10:39, fr le 18/05 11:26), tous deux réussis end-to-end en 3-4s.
 
-*Fin v0.3 — spec opérationnelle, prête à être commitée et à devenir un chantier après clôture du paquet F admin réseau.*
+**Reste à livrer pour clore la spec profils :**
+
+- Paquet A (`libraries` colonnes + helpers de lecture + vues) — *de facto pré-existant, à formaliser et écrire la migration manquante si applicable* ;
+- Paquet C (conditionnement RLS et RPC métier sur `circulation_mode`/`network_mode`) ;
+- Paquet D (mécanique d'archivage et de masquage pour type 4) — **bloquant pour rétractations critiques** ;
+- Paquet E (frontend painel adaptatif au profil) ;
+- Paquet F (onboarding refondu §5) ;
+- Paquet G (déploiement et migration des biblios existantes).
+
+**Backlog interne paquet B post-livraison (cf. §14) :**
+
+- Révocation pendant carence (RPC `fn_revoke_library_profile_transition`) ;
+- Gel des jobs pendant carence (`library_profile_grace_locks` + intégration dans crons existants) ;
+- Tests fumée es/en/it/de quand destinataires non-pt-BR/fr existeront ;
+- Test fumée B.7 (axe circulation_mode) quand reader actif existera.
+
+## 14. Backlog post-paquet B (nouveau v0.4)
+
+Cette section documente les éléments **prévus dans la spec v0.3** ou **identifiés à l'usage** pendant l'implémentation du paquet B, qui n'ont pas été livrés et nécessitent un traitement ultérieur. Ils ne bloquent pas la mise en production du paquet B tel qu'il est, mais constituent une dette doctrinale ou technique à apurer.
+
+### 14.1 Révocation pendant carence (issu de v0.3)
+
+**Spec v0.3 prévue :** `fn_revoke_library_profile_transition(p_proposal_id, p_motivation)` permettait à la collectivité d'annuler une décision prise pendant la fenêtre de carence (14 jours entre `accepted_*` et `executed`). Non livré en B.
+
+**Décision v0.4 :** reporté à un chantier dédié post-paquet B (« B.8 ? ») dont la doctrine reste à préciser :
+- Qui peut révoquer ? (la·le proposant·e original·e ? n'importe quel·le staff ? un quorum ?)
+- Sur quels critères ? (motivation libre ? raison codée ?)
+- Quelle notification ? (un event `network.library_profile.revoked_during_grace` à créer)
+
+### 14.2 Gel des jobs pendant carence (issu de v0.3 §4.6)
+
+**Spec v0.3 prévue :** table `library_profile_grace_locks` matérialisant le gel des jobs de circulation/gouvernance/réseau pendant la carence (§4.6). Les crons existants devaient lire cette table avant d'opérer sur une biblio. Non livré en B.
+
+**Décision v0.4 :** reporté. À refaire en cohérence avec le paquet D (archivage type 4) qui partagera probablement la même mécanique de gel.
+
+### 14.3 Chantier i18n layout mail générique (issu de tests fumée B.5/B.6)
+
+**Constat aux tests fumée des 18/05 :** trois chaînes apparaissent toujours en pt-BR dans les mails reçus par un destinataire de locale `fr`, alors même que les 54+6 clés library_profile sont entièrement traduites :
+
+- `Notificação automática` (en tête du mail, sous le branding biblio) ;
+- `Telefone:` (footer contact) ;
+- `Equipe da BLMF` (signature de fin) ;
+
+Diagnostic préliminaire : ce sont des éléments du **layout mail générique** (`_shared/mail/layout.ts` ou `_shared/shared/branding.ts`), pas du payload library_profile. La clé `layout.autoNotice` existe pourtant déjà avec ses 6 traductions, donc le bug est probablement un défaut de routage de locale dans le moteur de rendu mail, pas un manque de traduction.
+
+**Décision v0.4 :** chantier dédié hors périmètre paquet profils. Audit complet de `_shared/mail/layout.ts` et `_shared/shared/branding.ts` pour identifier toutes les chaînes hardcodées ou mal routées, puis refonte du passage de locale. Impactera **tous les mails de l'app** (consultas, emprunts, weekly reports, signup…) donc doit être traité dans une session dédiée à froid.
+
+### 14.4 Tests fumée locales restantes
+
+- B.7 axe `circulation_mode` : nécessite au moins un reader actif (`role='reader'` + `status='active'`) sur une biblio. Aucun au 18/05. Test possible via INSERT outbox direct comme pour B.5 partie 2.
+- es / en / it / de : nécessite des destinataires avec `preferred_language` dans ces locales. À tester quand des compañeres non-pt-BR/fr rejoindront BLMF ou une autre biblio.
+
+### 14.5 Spec v0.5 envisageable
+
+Quand les chantiers ci-dessus seront livrés et que les paquets A, C, D, E, F, G du plan original auront avancé, une **spec v0.5** pourra :
+
+- intégrer les livrables effectifs de A à G ;
+- consolider les doctrines de gouvernance autour du paquet D archivage ;
+- documenter les patterns de transitions inverses (réouverture après archivage, ré-fédération après isolement) qui n'ont pas été pensés en v0.3.
+
