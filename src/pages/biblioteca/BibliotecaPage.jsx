@@ -5,6 +5,8 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import LibraryProfileBanner from '@/components/LibraryProfileBanner';
+import TransitionsPanel from '@/components/TransitionsPanel';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
@@ -30,7 +32,7 @@ const NOTIFICATION_FLAG_KEYS = [
 
 export default function BibliotecaPage() {
   const { user } = useAuth();
-  const { libraryId, libraryName, role } = useLibrary();
+  const { libraryId, libraryName, role, governance_mode } = useLibrary();
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.biblioteca' }));
   const roleLoaded = role !== null && role !== undefined;
@@ -67,6 +69,8 @@ export default function BibliotecaPage() {
     { id: 'regulation', label: t({ id: 'biblioteca.tab.regulation' }), coordOnly: true },
     { id: 'privacy', label: t({ id: 'biblioteca.tab.privacy' }) },
     { id: 'documents', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
+    // Paquet E.5 refactor (20/05/2026) : transitions de profil (gouvernance politique)
+    { id: 'transicoes', label: t({ id: 'biblioteca.tab.transitions' }), coordOnly: true, governance_only: true },
     { id: 'team', label: t({ id: 'biblioteca.tab.team' }) },
     { id: 'leitores', label: t({ id: 'biblioteca.tab.leitores' }) },
     { id: 'exchanges', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
@@ -75,7 +79,14 @@ export default function BibliotecaPage() {
     { id: 'tasks', label: t({ id: 'biblioteca.tab.tasks' }) },
   ];
   // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
-  const visibleTabs = ALL_TABS.filter(tb => !tb.coordOnly || isCoord);
+  // Paquet E.5 refactor (20/05/2026) : filtrer aussi par governance_mode
+  // pour l'onglet transicoes (visible si staff_roles ou full_governance).
+  const hasStructuredGovernance = governance_mode === 'staff_roles' || governance_mode === 'full_governance';
+  const visibleTabs = ALL_TABS.filter(tb => {
+    if (tb.coordOnly && !isCoord) return false;
+    if (tb.governance_only && !hasStructuredGovernance) return false;
+    return true;
+  });
 
   const [tab, setTab] = useState(isCoord ? 'identity' : 'team');
   const [msg, setMsg] = useState({ text: '', kind: '' });
@@ -84,6 +95,26 @@ export default function BibliotecaPage() {
 
   // ── Dados ───────────────────────────────────────────────
   const [lib, setLib] = useState(null);
+  // Paquet G refactor (20/05/2026) : profile_template_chosen pour decider de
+  // l'affichage du LibraryProfileBanner. Charge en parallele des autres datas.
+  const [profileTemplateChosen, setProfileTemplateChosen] = useState(undefined);
+  useEffect(() => {
+    if (!libraryId) { setProfileTemplateChosen(undefined); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from('libraries')
+          .select('profile_template_chosen')
+          .eq('id', libraryId)
+          .maybeSingle();
+        if (!cancelled) setProfileTemplateChosen(data?.profile_template_chosen ?? null);
+      } catch (e) {
+        if (!cancelled) setProfileTemplateChosen(null);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [libraryId]);
   const [commons, setCommons] = useState(null);
   const [serviceState, setServiceState] = useState(null);
   const [regDocs, setRegDocs] = useState([]);
@@ -623,12 +654,27 @@ export default function BibliotecaPage() {
           )}
         </div>
 
+        {/* Paquet G refactor (20/05/2026) : bandeau informatif pour biblios sans
+            profile_template_chosen choisi consciemment. Place sur Biblioteca
+            (lieu de la deliberation politique) plutot que Painel (operationnel). */}
+        {profileTemplateChosen !== undefined && (
+          <LibraryProfileBanner
+            profileTemplateChosen={profileTemplateChosen}
+            role={role}
+          />
+        )}
+
         {msg.text && <div style={{ padding:'10px 14px', borderRadius:8, fontSize:'.9rem', marginBottom:14, background:msg.kind==='ok'?'rgba(21,128,61,.12)':msg.kind==='info'?'rgba(29,78,216,.1)':'rgba(220,38,38,.12)', color:msg.kind==='ok'?'#4ade80':msg.kind==='info'?'#60a5fa':'#f87171' }}>{msg.text}</div>}
 
         <div className="cat-tabs" style={{ marginBottom:18 }}>
           {/* FIX BUG #4: rename loop variable to avoid shadowing `t` */}
           {visibleTabs.map(tb => <button key={tb.id} className={`cat-tab-btn${tab===tb.id?' active':''}${tb.separator?' tab-separator':''}`} onClick={()=>setTab(tb.id)}>{tb.label}</button>)}
         </div>
+
+        {/* Paquet E.5 refactor (20/05/2026) : onglet transitions de profil */}
+        {tab==='transicoes' && (
+          <TransitionsPanel libraryId={libraryId} role={role} />
+        )}
 
         {/* ═══ 1. Identidade ═══════════════════════════ */}
         {tab==='identity' && lib && (<div>

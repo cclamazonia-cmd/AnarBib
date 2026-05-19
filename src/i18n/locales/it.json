@@ -2596,6 +2596,8 @@
     "transitions.history.empty":  "Nessuna transizione passata per ora.",
     "transitions.status.completed":  "Applicata",
     "transitions.status.cancelled":  "Annullata",
-    "transitions.status.expired":  "Scaduta"
+    "transitions.status.expired":  "Scaduta",
+
+    "biblioteca.tab.transitions":  "Transizioni"
 
 }

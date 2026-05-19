@@ -2596,6 +2596,8 @@
     "transitions.history.empty":  "Noch keine vergangenen Ubergange.",
     "transitions.status.completed":  "Angewendet",
     "transitions.status.cancelled":  "Storniert",
-    "transitions.status.expired":  "Abgelaufen"
+    "transitions.status.expired":  "Abgelaufen",
+
+    "biblioteca.tab.transitions":  "Ubergange"
 
 }
