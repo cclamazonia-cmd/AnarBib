@@ -124,7 +124,9 @@ function buildServerFilters({ search, authorFilter, publisherFilter, yearFilter,
       case 'check': f['session_status_hint'] = 'eq.sem_biblioteca_de_sessao'; break;
     }
   }
-  if (availabilityFilter === 'consult' && !isAuth) f['loanable'] = 'is.false';
+  // Doctrine A1/A2/A3 : aucun filtre availabilityFilter ne s'applique pour l'anon
+  // (branche consult && !isAuth retiree car AVAILABILITY_OPTIONS_ANON ne contient
+  // plus que '__all__').
   return f;
 }
 
@@ -280,9 +282,11 @@ export default function CatalogPage() {
     { value: 'unavailable_now', label: t({ id: 'catalog.avail.unavailNow' }) },
     { value: 'check', label: t({ id: 'catalog.avail.check' }) },
   ], [t]);
+  // Doctrine A1/A2/A3 : pour l'anon, aucun critere de disponibilite n'a de sens
+  // (pas de contexte biblio). Seul __all__ subsiste ; le dropdown est conserve
+  // pour homogeneite UI mais ne propose qu'une option.
   const AVAILABILITY_OPTIONS_ANON = useMemo(() => [
     { value: '__all__', label: t({ id: 'catalog.avail.all' }) },
-    { value: 'consult', label: t({ id: 'catalog.avail.consultOnly' }) },
   ], [t]);
 
   // Phase B.5.6: vues matérialisées allégées api.catalog_list_*_v1
