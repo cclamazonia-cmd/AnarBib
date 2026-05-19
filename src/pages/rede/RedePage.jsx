@@ -9,6 +9,8 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import TeamPanel from '@/components/team/TeamPanel';
 import '@/components/team/TeamPanel.css';
 import AdminsPanel from '@/components/rede/AdminsPanel';
+import UserHeroBadge from '@/components/UserHeroBadge';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -222,14 +224,14 @@ export default function RedePage() {
     <PageShell><Topbar />
 
       <Hero title={t({ id: 'rede.title' })} subtitle={t({ id: 'rede.subtitle' })}>
-        <div className="ab-hero__content" style={{ marginTop: 8 }}>
-          <span className="cat-pill danger">{t({ id: 'roles.administrador' })}</span>
-        </div>
-        <div className="ab-hero__actions">
-          <button className="cat-btn secondary" onClick={loadAll} disabled={loading}>
-            {loading ? t({ id: 'rede.refreshing' }) : t({ id: 'rede.refresh' })}
-          </button>
-        </div>
+        <UserHeroBadge />
+        <HeroDocumentationActions
+          extraActions={
+            <button className="cat-btn secondary" onClick={loadAll} disabled={loading}>
+              {loading ? t({ id: 'rede.refreshing' }) : t({ id: 'rede.refresh' })}
+            </button>
+          }
+        />
       </Hero>
 
       <div className="catalogacao-wrap" style={{ maxWidth:1200, margin:'0 auto' }}>

@@ -3,7 +3,7 @@
  * Styles ISOLES pour le bloc identite des heros (doctrine option 3).
  * Aucune dependance ni interaction avec .ab-pill ou .cat-pill existantes.
  *
- * Codes couleur conformes au CHANTIER §2.2 :
+ * Codes couleur conformes au CHANTIER section 2.2 :
  *   - leitor      -> ramp c-amber  (#FAEEDA / #BA7517 / #633806)
  *   - staff       -> ramp c-blue   (#E6F1FB / #185FA5 / #0C447C)
  *   - admin       -> ramp c-green  (#EAF3DE / #3B6D11 / #27500A)
@@ -11,6 +11,9 @@
  *   - status-ok   -> vert (compte actif)
  *   - status-warn -> ambre (attention)
  *   - status-bad  -> rouge (bloque)
+ *
+ * NOTE : specificite renforcee via .ab-hero pour overrider le theme.js
+ * qui applique des --brand-* en inline style sur le hero.
  */
 
 .ab-hero-badge-row {
@@ -18,7 +21,7 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  margin: 0 0 14px 0;
+  margin: 16px 0 14px 0; /* espace au-dessus pour aerer avec le subtitle */
 }
 
 /* --- Pill de base --- */
@@ -42,58 +45,68 @@
   justify-content: center;
 }
 
-/* --- Variantes de role (doctrine couleurs) --- */
+/* --- Variantes de role (doctrine couleurs) ---
+ * Selecteurs renforces .ab-hero .ab-hero-badge--* pour overrider theme.js
+ * qui applique --brand-* sur les enfants du .ab-hero.
+ */
 
+.ab-hero .ab-hero-badge--leitor,
 .ab-hero-badge--leitor {
-  background: #FAEEDA;
-  color: #633806;
-  border-color: #BA7517;
+  background-color: #FAEEDA !important;
+  color: #633806 !important;
+  border-color: #BA7517 !important;
 }
 
+.ab-hero .ab-hero-badge--staff,
 .ab-hero-badge--staff {
-  background: #E6F1FB;
-  color: #0C447C;
-  border-color: #185FA5;
+  background-color: #E6F1FB !important;
+  color: #0C447C !important;
+  border-color: #185FA5 !important;
 }
 
+.ab-hero .ab-hero-badge--admin,
 .ab-hero-badge--admin {
-  background: #EAF3DE;
-  color: #27500A;
-  border-color: #3B6D11;
+  background-color: #EAF3DE !important;
+  color: #27500A !important;
+  border-color: #3B6D11 !important;
 }
 
 /* --- Variante neutre (ID public, sigle biblio) --- */
 
+.ab-hero .ab-hero-badge--neutral,
 .ab-hero-badge--neutral {
-  background: rgba(245, 233, 216, 0.08);
-  color: #d9c9b0;
-  border-color: rgba(245, 233, 216, 0.2);
+  background-color: rgba(245, 233, 216, 0.08) !important;
+  color: #d9c9b0 !important;
+  border-color: rgba(245, 233, 216, 0.2) !important;
 }
 
 .ab-hero-badge__id {
   font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
-  font-size: 0.85em;
+  font-size: 1em;
   letter-spacing: 0.04em;
 }
 
 /* --- Variantes de statut compte (uniquement /conta) --- */
 
+.ab-hero .ab-hero-badge--status-ok,
 .ab-hero-badge--status-ok {
-  background: rgba(99, 153, 34, 0.18);
-  color: #C0DD97;
-  border-color: rgba(99, 153, 34, 0.5);
+  background-color: rgba(99, 153, 34, 0.18) !important;
+  color: #C0DD97 !important;
+  border-color: rgba(99, 153, 34, 0.5) !important;
 }
 
+.ab-hero .ab-hero-badge--status-warn,
 .ab-hero-badge--status-warn {
-  background: rgba(186, 117, 23, 0.18);
-  color: #FAC775;
-  border-color: rgba(186, 117, 23, 0.5);
+  background-color: rgba(186, 117, 23, 0.18) !important;
+  color: #FAC775 !important;
+  border-color: rgba(186, 117, 23, 0.5) !important;
 }
 
+.ab-hero .ab-hero-badge--status-danger,
 .ab-hero-badge--status-danger {
-  background: rgba(226, 75, 74, 0.18);
-  color: #F09595;
-  border-color: rgba(226, 75, 74, 0.5);
+  background-color: rgba(226, 75, 74, 0.18) !important;
+  color: #F09595 !important;
+  border-color: rgba(226, 75, 74, 0.5) !important;
 }
 
 /* --- Rangee de boutons documentation du hero --- */
@@ -102,7 +115,7 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 6px;
+  margin-top: 14px; /* espace au-dessus pour aerer avec le bloc badges */
 }
 
 .ab-hero-doc-btn {
@@ -151,10 +164,14 @@
 @media (max-width: 640px) {
   .ab-hero-badge-row {
     gap: 6px;
+    margin: 12px 0 10px 0;
   }
   .ab-hero-badge {
     font-size: 11px;
     padding: 4px 9px;
+  }
+  .ab-hero-doc-actions {
+    margin-top: 10px;
   }
   .ab-hero-doc-btn {
     font-size: 12px;
