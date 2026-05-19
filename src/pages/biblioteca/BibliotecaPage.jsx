@@ -15,6 +15,8 @@ import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
+import UserHeroBadge from '@/components/UserHeroBadge';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 // SERVICE_MODES built inside component with t() — was hardcoded pt-BR (audit 07/05/2026)
@@ -632,18 +634,8 @@ export default function BibliotecaPage() {
     <PageShell><Topbar />
 
       <Hero title={t({ id: 'biblioteca.title' })} subtitle={lib?.name || libraryName}>
-        <div className="ab-hero__content" style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
-          {logoUrl && (
-            <img
-              src={logoUrl}
-              alt={libraryName}
-              style={{ height: 56, objectFit: 'contain', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,.4))' }}
-            />
-          )}
-          <span className={`cat-pill ${role==='administrador'?'info':(role==='coordenador'||role==='librarian')?'ok':'warn'}`}>
-            {t({ id: 'roles.'+role, defaultMessage: role })}
-          </span>
-        </div>
+        <UserHeroBadge />
+        <HeroDocumentationActions />
       </Hero>
 
       <div className="catalogacao-wrap" style={{ maxWidth:1100, margin:'0 auto' }}>
