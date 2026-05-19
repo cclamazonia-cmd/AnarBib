@@ -1,0 +1,163 @@
+/* src/components/UserHeroBadge.css
+ *
+ * Styles ISOLES pour le bloc identite des heros (doctrine option 3).
+ * Aucune dependance ni interaction avec .ab-pill ou .cat-pill existantes.
+ *
+ * Codes couleur conformes au CHANTIER §2.2 :
+ *   - leitor      -> ramp c-amber  (#FAEEDA / #BA7517 / #633806)
+ *   - staff       -> ramp c-blue   (#E6F1FB / #185FA5 / #0C447C)
+ *   - admin       -> ramp c-green  (#EAF3DE / #3B6D11 / #27500A)
+ *   - neutral     -> beige translucide pour ID public + sigle biblio
+ *   - status-ok   -> vert (compte actif)
+ *   - status-warn -> ambre (attention)
+ *   - status-bad  -> rouge (bloque)
+ */
+
+.ab-hero-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 14px 0;
+}
+
+/* --- Pill de base --- */
+
+.ab-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ab-hero-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Variantes de role (doctrine couleurs) --- */
+
+.ab-hero-badge--leitor {
+  background: #FAEEDA;
+  color: #633806;
+  border-color: #BA7517;
+}
+
+.ab-hero-badge--staff {
+  background: #E6F1FB;
+  color: #0C447C;
+  border-color: #185FA5;
+}
+
+.ab-hero-badge--admin {
+  background: #EAF3DE;
+  color: #27500A;
+  border-color: #3B6D11;
+}
+
+/* --- Variante neutre (ID public, sigle biblio) --- */
+
+.ab-hero-badge--neutral {
+  background: rgba(245, 233, 216, 0.08);
+  color: #d9c9b0;
+  border-color: rgba(245, 233, 216, 0.2);
+}
+
+.ab-hero-badge__id {
+  font-family: var(--font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+  font-size: 0.85em;
+  letter-spacing: 0.04em;
+}
+
+/* --- Variantes de statut compte (uniquement /conta) --- */
+
+.ab-hero-badge--status-ok {
+  background: rgba(99, 153, 34, 0.18);
+  color: #C0DD97;
+  border-color: rgba(99, 153, 34, 0.5);
+}
+
+.ab-hero-badge--status-warn {
+  background: rgba(186, 117, 23, 0.18);
+  color: #FAC775;
+  border-color: rgba(186, 117, 23, 0.5);
+}
+
+.ab-hero-badge--status-danger {
+  background: rgba(226, 75, 74, 0.18);
+  color: #F09595;
+  border-color: rgba(226, 75, 74, 0.5);
+}
+
+/* --- Rangee de boutons documentation du hero --- */
+
+.ab-hero-doc-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.ab-hero-doc-btn {
+  padding: 7px 14px;
+  border-radius: var(--brand-radius-md, 8px);
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(245, 233, 216, 0.35);
+  background: rgba(245, 233, 216, 0.06);
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.ab-hero-doc-btn:hover {
+  background: rgba(245, 233, 216, 0.12);
+  border-color: rgba(245, 233, 216, 0.5);
+}
+
+.ab-hero-doc-btn--primary {
+  background: rgba(245, 233, 216, 0.14);
+  border-color: rgba(245, 233, 216, 0.6);
+}
+
+.ab-hero-doc-btn--gov {
+  background: rgba(192, 221, 151, 0.14);
+  border-color: rgba(192, 221, 151, 0.6);
+  color: #C0DD97;
+}
+
+.ab-hero-doc-btn--gov:hover {
+  background: rgba(192, 221, 151, 0.22);
+}
+
+.ab-hero-doc-btn__icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* --- Responsive mobile --- */
+
+@media (max-width: 640px) {
+  .ab-hero-badge-row {
+    gap: 6px;
+  }
+  .ab-hero-badge {
+    font-size: 11px;
+    padding: 4px 9px;
+  }
+  .ab-hero-doc-btn {
+    font-size: 12px;
+    padding: 6px 11px;
+  }
+}
