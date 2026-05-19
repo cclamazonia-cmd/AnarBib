@@ -6,6 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import '../catalogacao/CatalogacaoPage.css';
+import UserHeroBadge from '@/components/UserHeroBadge';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 
 const BUCKET = 'catalogos_parceiros_raw';
 const ACCEPTED_EXTENSIONS = '.csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.xlsx,.xls,.ods,.pdf,.json,.xml,.zip,.marc,.marcxml';
@@ -315,7 +317,10 @@ export default function ImportacoesPage() {
   return (
     <PageShell><Topbar />
 
-      <Hero title={t({ id: 'importacoes.title' })} subtitle={t({ id: 'importacoes.subtitle' })} />
+      <Hero title={t({ id: 'importacoes.title' })} subtitle={t({ id: 'importacoes.subtitle' })}>
+        <UserHeroBadge />
+        <HeroDocumentationActions />
+      </Hero>
 
       <div className="catalogacao-wrap" style={{ maxWidth: 1200, margin: '0 auto' }}>
 
