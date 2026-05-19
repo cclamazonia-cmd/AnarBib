@@ -69,8 +69,10 @@ function parseLibraryNames(book) {
 }
 
 function getStatusInfo(book, isAuth, t) {
+  // Doctrine A1/A2/A3 (tableau BLMF) : pour un anon, l'affichage reste public et
+  // non personnalise. Ne PAS exposer la distinction pret/consultation (loanable)
+  // a un visiteur non connecte.
   if (!isAuth) {
-    if (book.loanable === false) return { label: t({ id: 'catalog.avail.consult' }), cls: 'warn' };
     return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
   }
   const h = (book.session_status_hint || '').toLowerCase();
