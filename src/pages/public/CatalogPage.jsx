@@ -9,17 +9,14 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, EmptyState, Spinner } from '@/components/ui';
 import UnifiedSearchCombobox from '@/components/UnifiedSearchCombobox';
+import UserHeroBadge from '@/components/UserHeroBadge';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './CatalogPage.css';
 
 const PAGE_SIZE = 100;
 
 // URLs des manuels (stockes sur Supabase Storage, bucket library-ui-assets).
 // Le manuel lecteur est un PDF multilingue unique (8 langues en interne).
-// Le manuel complet sera bascule en i18n quand les versions traduites
-// seront pretes.
-const MANUAL_READER_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual%20Leitor-a-e.pdf';
-const MANUAL_COMPLETE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual_do_AnarBib.pdf';
-
 const PUBLIC_COLS = [
   'book_id','bib_ref','titulo','subtitulo','autor','author_display',
   'author_id','author_chips',
@@ -568,22 +565,20 @@ export default function CatalogPage() {
       {/* ══ HERO ══════════════════════════════════════════════ */}
       <Hero
         title={t({ id: 'catalog.hero.title' })}
-        subtitle={t({ id: 'catalog.hero.subtitle' })}
-        actions={<>
-          <Button onClick={() => exportPDF(books, t)}>{t({ id: 'catalog.export.pdf' })}</Button>
-          <Button variant="secondary" onClick={() => exportCSV(books)}>{t({ id: 'catalog.export.csv' })}</Button>
-          <span className="ab-hero-sep" aria-hidden="true" />
-          {!user && (
-            <Button variant="secondary" onClick={() => navigate('/cadastro')}>{t({ id: 'nav.login' })}</Button>
-          )}
-          <span className="ab-hero-sep" aria-hidden="true" />
-          {isStaff ? (
-            <a className="ab-button ab-button--secondary" href={MANUAL_COMPLETE_URL} target="_blank" rel="noopener noreferrer">{t({ id: 'nav.manual.complete' })}</a>
-          ) : (
-            <a className="ab-button ab-button--secondary" href={MANUAL_READER_URL} target="_blank" rel="noopener noreferrer">{t({ id: 'nav.manual.reader' })}</a>
-          )}
-        </>}
-      />
+        subtitle={t({ id: 'catalog.hero.subtitle' })}>
+        <UserHeroBadge />
+        <HeroDocumentationActions
+          extraActions={
+            <>
+              <Button onClick={() => exportPDF(books, t)}>{t({ id: 'catalog.export.pdf' })}</Button>
+              <Button variant="secondary" onClick={() => exportCSV(books)}>{t({ id: 'catalog.export.csv' })}</Button>
+              {!user && (
+                <Button variant="secondary" onClick={() => navigate('/cadastro')}>{t({ id: 'nav.login' })}</Button>
+              )}
+            </>
+          }
+        />
+      </Hero>
 
       {/* ── Bandeau règlement de la bibliothèque ──────────────
           Identique au bandeau de la page conta (AccountPage) :
