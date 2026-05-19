@@ -4,12 +4,23 @@ import { useAuth } from './AuthContext';
 
 const STORAGE_KEY = 'anarbib.libraryContext';
 
+// Paquet E.0 (19/05/2026) : enrichissement du contexte avec les 5 axes profil
+// (4 axes orthogonaux du chantier profils d'adoption + membership_enabled).
+// Defaut safe = full_sigb sur les 4 axes pour preserver le comportement
+// actuel pendant le chargement (BLMF et BTL sont toutes deux en full_sigb).
+// Voir spec-profils-bibliotheque-v0.6.md section 9.7 pour la doctrine.
 const DEFAULT_CONTEXT = {
   librarySlug: 'default',
   libraryId: null,
   themeSlug: 'default',
   libraryName: 'AnarBib',
   role: null,
+  // 4 axes profil + membership_enabled (paquet E.0)
+  catalog_mode: 'network_published',
+  circulation_mode: 'full_sigb',
+  network_mode: 'federated',
+  governance_mode: 'full_governance',
+  membership_enabled: false,
 };
 
 // Hierarchie effective des roles AnarBib v0.3.
@@ -90,10 +101,13 @@ export function LibraryProvider({ children }) {
       // E.3 : 2 SELECT en parallele (Promise.all)
       //   1. memberships locaux (table user_library_memberships)
       //   2. statut admin reseau (table network_administrators)
+      // E.0 (paquet profils) : SELECT enrichi sur libraries pour exposer
+      // les 4 axes profil + membership_enabled, evitant un SELECT redondant
+      // dans PanelPage et autres pages qui consomment ces champs.
       const [membershipsResult, networkAdminResult] = await Promise.all([
         supabase
           .from('user_library_memberships')
-          .select('library_id, role, is_primary, libraries(id, slug, name, short_name)')
+          .select('library_id, role, is_primary, libraries(id, slug, name, short_name, catalog_mode, circulation_mode, network_mode, governance_mode, membership_enabled)')
           .eq('user_id', user.id)
           .eq('status', 'active'),
         supabase
@@ -140,6 +154,12 @@ export function LibraryProvider({ children }) {
             themeSlug: lib.slug,
             libraryName: lib.short_name || lib.name,
             role: match.role,
+            // E.0 : 4 axes profil + membership_enabled (fallback defaults safe)
+            catalog_mode: lib.catalog_mode || DEFAULT_CONTEXT.catalog_mode,
+            circulation_mode: lib.circulation_mode || DEFAULT_CONTEXT.circulation_mode,
+            network_mode: lib.network_mode || DEFAULT_CONTEXT.network_mode,
+            governance_mode: lib.governance_mode || DEFAULT_CONTEXT.governance_mode,
+            membership_enabled: lib.membership_enabled === true,
           };
           setCtx(next);
           writeToSession(next);
@@ -157,6 +177,12 @@ export function LibraryProvider({ children }) {
           themeSlug: lib.slug,
           libraryName: lib.short_name || lib.name,
           role: primary.role,
+          // E.0 : 4 axes profil + membership_enabled
+          catalog_mode: lib.catalog_mode || DEFAULT_CONTEXT.catalog_mode,
+          circulation_mode: lib.circulation_mode || DEFAULT_CONTEXT.circulation_mode,
+          network_mode: lib.network_mode || DEFAULT_CONTEXT.network_mode,
+          governance_mode: lib.governance_mode || DEFAULT_CONTEXT.governance_mode,
+          membership_enabled: lib.membership_enabled === true,
         };
         setCtx(next);
         writeToSession(next);
@@ -173,6 +199,12 @@ export function LibraryProvider({ children }) {
       themeSlug: slug,
       libraryName: lib?.short_name || lib?.name || slug,
       role: membership?.role || null,
+      // E.0 : 4 axes profil + membership_enabled
+      catalog_mode: lib?.catalog_mode || DEFAULT_CONTEXT.catalog_mode,
+      circulation_mode: lib?.circulation_mode || DEFAULT_CONTEXT.circulation_mode,
+      network_mode: lib?.network_mode || DEFAULT_CONTEXT.network_mode,
+      governance_mode: lib?.governance_mode || DEFAULT_CONTEXT.governance_mode,
+      membership_enabled: lib?.membership_enabled === true,
     };
     setCtx(next);
     writeToSession(next);

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
+import { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -17,6 +17,7 @@ import { getCountryName } from '@/lib/countries';
 import { formatSchedule } from '@/lib/scheduleFormat';
 import Modal from '@/components/ui/Modal';
 import './PanelPage.css';
+import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -121,7 +122,8 @@ function SortHeader({ sortKey, current, dir, onClick, children }) {
 
 export default function PanelPage() {
   const { user } = useAuth();
-  const { libraryId, libraryName, role } = useLibrary();
+  const { libraryId, libraryName, role, circulation_mode, membership_enabled } = useLibrary();
+  const availability = usePanelAvailability();
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.panel' }));
   const roleLoaded = role !== null && role !== undefined;
@@ -410,7 +412,10 @@ export default function PanelPage() {
   const [restrictReason, setRestrictReason] = useState('');
 
   // Cotisation (coordenador/administrador uniquement)
-  const [membershipEnabled, setMembershipEnabled] = useState(false);
+  // E.0 (paquet profils 19/05) : membership_enabled vient du LibraryContext.
+  // Alias local conserve pour minimiser les modifications dans le reste du fichier.
+  const membershipEnabled = membership_enabled;
+  const setMembershipEnabled = () => {}; // no-op (source de verite = contexte)
   const [membershipRules, setMembershipRules] = useState([]);
   const [membershipOverview, setMembershipOverview] = useState([]);
   const [membershipFilter, setMembershipFilter] = useState('all'); // all, up_to_date, expired, never_paid
@@ -1107,11 +1112,14 @@ export default function PanelPage() {
   const loadMembershipConfig = useCallback(async () => {
     if (!libraryId || !isCoordOrAdmin) return;
     try {
-      const [{ data: libRow }, { data: rules }] = await Promise.all([
-        supabase.from('libraries').select('membership_enabled').eq('id', libraryId).single(),
-        supabase.from('library_membership_rules').select('*').eq('library_id', libraryId).eq('is_active', true).order('display_order'),
-      ]);
-      setMembershipEnabled(!!libRow?.membership_enabled);
+      // E.0 (paquet profils 19/05) : membership_enabled est deja expose par le
+      // LibraryContext. Plus de SELECT redondant ici. On charge uniquement les regles.
+      const { data: rules } = await supabase
+        .from('library_membership_rules')
+        .select('*')
+        .eq('library_id', libraryId)
+        .eq('is_active', true)
+        .order('display_order');
       setMembershipRules(rules || []);
     } catch (e) { console.warn('loadMembershipConfig:', e); }
   }, [libraryId, isCoordOrAdmin]);
@@ -1234,7 +1242,12 @@ export default function PanelPage() {
   // ── Render ───────────────────────────────────────────
 
   // FIX BUG #1: Each tab now has a distinct hint key (was duplicating label).
-  const TABS = [
+  // Paquet E.2 (19/05/2026) : filtrage des onglets par availability selon profil de biblio.
+  // ALL_TABS est l'array complet ; TABS est filtre via le hook usePanelAvailability
+  // qui consomme circulation_mode et membership_enabled du LibraryContext.
+  // Le check role (isCoordOrAdmin) sur 'contribuicoes' reste explicit : c'est un
+  // check de role utilisateur orthogonal au profil de la biblio.
+  const ALL_TABS = [
     { key: 'trabalho-do-dia', label: t({ id: 'panel.tab.dailyWork' }), hint: t({ id: 'panel.tab.dailyWork.hint' }) },
     { key: 'acoes', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }) },
     { key: 'reservas', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
@@ -1243,10 +1256,11 @@ export default function PanelPage() {
     { key: 'emprestimos-lote', label: t({ id: 'panel.loan.grouped' }), hint: t({ id: 'panel.tab.grouped.hint' }) },
     { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
     { key: 'historico', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
-    ...(isCoordOrAdmin && membershipEnabled ? [
+    ...(isCoordOrAdmin ? [
       { key: 'contribuicoes', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
   ];
+  const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
   // Paquet 9 (10/05/2026) : fix bug compteur "Réservations actives" du hero.
   // L'ancienne denylist excluait cancelada_leitor/cancelada_biblioteca/expirada/
