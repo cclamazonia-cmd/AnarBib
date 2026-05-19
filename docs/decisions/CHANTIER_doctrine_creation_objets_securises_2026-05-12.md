@@ -1,9 +1,10 @@
 # Doctrine de création d'objets PostgreSQL sécurisés
 
-**Date** : 2026-05-12
+**Date initiale** : 2026-05-12
+**Dernière mise à jour** : 2026-05-19 (intégration leçons L.12 / L.12bis / L.12ter)
 **Statut** : Actif, à appliquer à toute nouvelle migration AnarBib
 **Auteur** : Xavier, coordenador AnarBib
-**Référence** : Issu du chantier linter L.* (sessions des 11-12 mai 2026)
+**Référence** : Issu du chantier linter L.* (sessions des 11-12 mai 2026) + audit post-doctrine du 19/05/2026
 
 ---
 
@@ -15,6 +16,7 @@ Le chantier linter L.* des 11-12 mai 2026 a éradiqué ~90 alertes de sécurité
 - Toute fonction sans `search_path` explicite est vulnérable aux attaques par injection de schéma
 - Toute table créée dans `public` sera, à partir du 30 octobre 2026, inaccessible via la Data API sans `GRANT` explicite
 - Toute vue créée sans `security_invoker` exécute son SQL avec les droits du créateur (postgres), bypass des RLS
+- Toute table dans `public.*` avec RLS désactivée est signalée **ERROR** par le linter Supabase (`rls_disabled_in_public`)
 
 Pour éviter de regénérer cette dette technique à chaque nouveau paquet, cette note fournit les **templates obligatoires** à appliquer pour toute création d'objet PostgreSQL dans AnarBib.
 
@@ -72,6 +74,8 @@ GRANT EXECUTE ON FUNCTION public.fn_nom_de_fonction(type1, type2) TO authenticat
    - les opérations d'écriture cross-RLS (cf. les RPC de gouvernance réseau)
    - les helpers RLS qui doivent voir l'ensemble du contexte utilisateur·rice
 
+6. **Cas particulier : fonctions SECURITY INVOKER aussi concernées** (leçon L.12, 19/05/2026). Le linter `function_search_path_mutable` signale toute fonction (DEFINER ou INVOKER) sans `search_path` fixé. Même pour les triggers SECURITY INVOKER, c'est une bonne pratique de toujours fixer `search_path = public, pg_catalog`.
+
 ---
 
 ## Template 2 — Création de table avec RLS et grants futur-proof
@@ -105,6 +109,8 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON public.ma_nouvelle_table TO authenticate
 
 -- Scénario C : Table hors Data API (manipulée uniquement par RPC SECURITY DEFINER)
 REVOKE ALL ON public.ma_nouvelle_table FROM anon, authenticated;
+-- ET garder ENABLE RLS + policy lock-down explicite pour satisfaire le linter :
+-- (voir Scénario C détaillé plus bas dans la section ENABLE RLS)
 
 -- service_role conserve TOUJOURS l'accès complet (Edge Functions)
 GRANT ALL ON public.ma_nouvelle_table TO service_role;
@@ -112,7 +118,7 @@ GRANT ALL ON public.ma_nouvelle_table TO service_role;
 -- RLS obligatoire
 ALTER TABLE public.ma_nouvelle_table ENABLE ROW LEVEL SECURITY;
 
--- Policies (au moins une, sinon RLS bloque tout)
+-- Policies (au moins une, sinon RLS bloque tout côté API)
 CREATE POLICY "ma_nouvelle_table_select_owner"
   ON public.ma_nouvelle_table
   FOR SELECT
@@ -131,7 +137,12 @@ CREATE POLICY "ma_nouvelle_table_insert_owner"
   TO authenticated
   WITH CHECK (user_id = auth.uid());
 
--- etc. selon les besoins métier
+-- Si Scénario C (table fermée, lock-down explicite) :
+-- CREATE POLICY "ma_nouvelle_table_lockdown"
+--   ON public.ma_nouvelle_table
+--   FOR ALL
+--   TO anon, authenticated
+--   USING (false) WITH CHECK (false);
 
 -- Trigger d'audit updated_at (si applicable)
 CREATE TRIGGER ma_nouvelle_table_set_updated_at
@@ -143,7 +154,7 @@ CREATE TRIGGER ma_nouvelle_table_set_updated_at
 
 1. **GRANT explicites OBLIGATOIRES** depuis le 30 octobre 2026 (pour les projets existants comme AnarBib). Sans GRANT, la table sera inaccessible via supabase-js avec une erreur 42501.
 
-2. **ALWAYS ENABLE ROW LEVEL SECURITY**. Une table sans RLS qui a des GRANT pour authenticated devient un trou de sécurité béant : n'importe qui·te connecté·e peut lire toutes les lignes via PostgREST.
+2. **ALWAYS ENABLE ROW LEVEL SECURITY**. Une table sans RLS qui a des GRANT pour authenticated devient un trou de sécurité béant : n'importe qui·te connecté·e peut lire toutes les lignes via PostgREST. **Et le linter Supabase signale `rls_disabled_in_public` comme ERROR critique** (cf. leçon L.12 du 19/05/2026).
 
 3. **Au moins une policy par opération autorisée**. Si tu accordes INSERT mais pas de policy INSERT, l'opération sera bloquée par RLS. Audit possible :
    ```sql
@@ -245,6 +256,26 @@ COMMIT;
 
 4. **Tester les parcours critiques en contexte simulé**, pas juste les permissions au niveau métadata. Exemple : confirmer que le catalogue anon retourne au moins 1 livre, pas juste que la fonction a SELECT.
 
+5. **DO-block tolérant pour tables fermées (leçon L.12bis du 19/05/2026)**. Quand le test vérifie qu'une table n'est PAS lisible par anon/authenticated, il doit accepter DEUX mécanismes de blocage légitimes :
+   - **GRANT bloque** → exception `SQLSTATE 42501` (`insufficient_privilege`)
+   - **RLS bloque** → SELECT retourne 0 ligne
+
+   Pattern obligatoire :
+
+   ```sql
+   BEGIN
+     EXECUTE format('SELECT count(*) FROM public.%I', v_table) INTO v_count;
+     IF v_count = 0 THEN
+       v_blocked := true;  -- RLS bloque
+     END IF;
+   EXCEPTION
+     WHEN insufficient_privilege THEN
+       v_blocked := true;  -- GRANT bloque (42501)
+   END;
+   ```
+
+   Sans le bloc EXCEPTION, le DO-block plante sur les tables sans GRANT (cas L.12bis du 19/05/2026, où le test a planté avant même d'évaluer la RLS sur 3 tables archivées sans GRANT anon/authenticated).
+
 ---
 
 ## Checklist pratique à coller en tête de chaque migration
@@ -263,10 +294,13 @@ COMMIT;
 --       [ ] REVOKE EXECUTE ... FROM PUBLIC
 --       [ ] GRANT EXECUTE ... TO <rôle ciblé>
 --       [ ] Exception helpers RLS anon-lisibles : GRANT TO anon conservé
+--   [ ] Si création de fonction SECURITY INVOKER (trigger, fonction métier) :
+--       [ ] SET search_path = public, pg_catalog (hygiène linter)
 --   [ ] Si création de table dans public :
 --       [ ] GRANT SELECT/INSERT/UPDATE/DELETE explicites
---       [ ] ALTER TABLE ... ENABLE ROW LEVEL SECURITY
+--       [ ] ALTER TABLE ... ENABLE ROW LEVEL SECURITY (TOUJOURS, même fermées)
 --       [ ] Au moins une CREATE POLICY par opération autorisée
+--       [ ] Si table fermée : policy lock-down USING (false) WITH CHECK (false)
 --       [ ] GRANT ALL TO service_role
 --   [ ] Si création de vue :
 --       [ ] WITH (security_invoker = true)
@@ -274,6 +308,7 @@ COMMIT;
 --   [ ] Si touche permissions/policies/search_path/extensions :
 --       [ ] DO block de vérification automatique en fin de transaction
 --       [ ] Tests parcours critiques en contexte anon ET authenticated simulés
+--       [ ] Pour tables fermées : EXCEPTION WHEN insufficient_privilege
 -- =========================================================================
 ```
 
@@ -326,11 +361,47 @@ Les fonctions métier qui utilisent ces extensions doivent inclure `extensions` 
 ALTER FUNCTION my.func(...) SET search_path = public, extensions, pg_temp;
 ```
 
+### Tables archivées ou inertes dans `public.*` (leçon L.12 / L.12bis / L.12ter, 19/05/2026)
+
+Pour une table conservée dans `public.*` mais qui n'est **plus accédée via PostgREST** (snapshot historique, archive gelée, table de migration ponctuelle), **ne JAMAIS désactiver la RLS** via `ALTER TABLE ... DISABLE ROW LEVEL SECURITY`. Le linter Supabase signale toute table publique sans RLS comme **ERROR** `rls_disabled_in_public`, considérant qu'elle pourrait être lue si un GRANT était accordé un jour par mégarde.
+
+Le bon pattern est :
+
+```sql
+-- 1. Conserver la RLS activée
+ALTER TABLE public._archived_ma_table ENABLE ROW LEVEL SECURITY;
+
+-- 2. Ajouter une policy lock-down qui bloque tout
+CREATE POLICY "ma_table_lockdown"
+  ON public._archived_ma_table
+  FOR ALL
+  TO anon, authenticated
+  USING (false)
+  WITH CHECK (false);
+
+-- 3. Documenter
+COMMENT ON TABLE public._archived_ma_table IS
+  'Archive gelée du JJ/MM/AAAA — table inerte. '
+  'RLS activée + policy lock-down. Accessible uniquement via service_role.';
+```
+
+**Pourquoi pas simplement `DISABLE RLS` ?** Parce que Supabase classe `rls_disabled_in_public` comme ERROR (criticité supérieure à `rls_enabled_no_policy` qui n'est qu'INFO). Pour une table publique-mais-inerte, la RLS activée + policy `USING (false)` est strictement équivalente sécurité-wise mais sans alerte critique au linter.
+
+**`service_role` reste autorisé** parce qu'il a `BYPASSRLS` au niveau Postgres, indépendamment des policies. Donc une Edge Function ou un accès SQL Editor avec service_role peut toujours lire l'archive pour audit ponctuel.
+
+**Alternatives à considérer avant d'arriver à ce pattern** :
+
+1. **Déplacer la table hors de `public`** vers un schéma `archive` non exposé à l'API REST. Mieux mais demande un refactor et de retirer le schéma de `db_extra_search_path` Supabase.
+2. **DROP TABLE** si l'archive n'a vraiment plus aucune valeur historique. À privilégier quand le coût de conservation excède la valeur des données.
+3. **`REVOKE ALL` sur la table** sans policy : marche techniquement mais le linter Supabase ne le voit pas et continuera à signaler `rls_enabled_no_policy`.
+
+Le pattern `ENABLE RLS + USING (false)` est le compromis pragmatique entre exigence du linter, simplicité d'écriture et zéro risque d'accès accidentel.
+
 ---
 
 ## Évolution de cette doctrine
 
-Cette doctrine est issue du chantier linter L.* des 11-12 mai 2026. Elle a vocation à évoluer :
+Cette doctrine est issue du chantier linter L.* des 11-12 mai 2026, complétée le 19/05/2026 après les leçons L.12 / L.12bis / L.12ter. Elle a vocation à évoluer :
 
 - Si Supabase modifie ses defaults, ajuster les templates en conséquence
 - Si la doctrine politique d'AnarBib évolue, ajuster les exceptions documentées
@@ -340,11 +411,25 @@ Pour proposer une évolution : créer une note `CHANTIER_doctrine_evolution_AAAA
 
 ---
 
+## Historique des leçons intégrées
+
+| Date | Leçon | Référence |
+|---|---|---|
+| 2026-05-12 | Doctrine initiale issue du chantier linter L.1 à L.11 | Paquets L.1-L.11 |
+| 2026-05-19 | Tables archivées : `ENABLE RLS + policy USING (false)`, jamais `DISABLE RLS` | Paquet L.12 (régression) → L.12ter (correction) |
+| 2026-05-19 | DO-block tolérant : `EXCEPTION WHEN insufficient_privilege` quand on teste l'inaccessibilité | Hotfix L.12bis (échec Woodpecker) → L.12ter |
+| 2026-05-19 | Fonctions SECURITY INVOKER aussi concernées par `function_search_path_mutable` | Paquet L.12 sur `fn_block_lph_modification` |
+
+---
+
 ## Références
 
 - Chantier linter L.* (sessions 11-12 mai 2026) : 9 paquets, ~270 → ~184 alertes
 - Document de synthèse du chantier : `AnarBib_Recap_Chantier_Linter_2026-05-12.docx`
 - Note de décision SECURITY DEFINER assumé : `CHANTIER_linter_security_definer_assume_2026-05-12.md`
+- Paquet L.12 (cleanup zero risk) : `supabase/migrations/20260519300000_paquetL12_cleanup_zero_risk.sql`
+- Paquet L.12ter (hotfix RLS archives) : `supabase/migrations/20260519320000_paquetL12ter_hotfix_rls_archives_tolerant.sql`
 - Documentation Supabase Data API defaults 30/10/2026 : mail du 12/05/2026
 - Documentation Supabase database linter : <https://supabase.com/docs/guides/database/database-linter>
+- Documentation Supabase rls_disabled_in_public : <https://supabase.com/docs/guides/database/database-linter?lint=0006_rls_disabled_in_public>
 - Documentation PostgreSQL SECURITY DEFINER : <https://www.postgresql.org/docs/current/sql-createfunction.html#SQL-CREATEFUNCTION-SECURITY>
