@@ -109,6 +109,12 @@ export default function BookPage() {
   const [reserveStatus, setReserveStatus] = useState('');
   const [reserveError, setReserveError] = useState(false);
   const [viewMode, setViewMode] = useState('standard'); // 'standard' | 'isbd'
+  // Paquet B.0 (chantier consulta button) : fetch du mode de service pour
+  // conditionner les boutons d'action (Reservar pret, Agendar consulta).
+  // Respecte la doctrine §8 synthese technique consultation/holdings :
+  // pausada -> aucun bouton ; somente_consulta -> seul Agendar consulta ;
+  // funcionamento_normal -> les deux selon loanable.
+  const [serviceState, setServiceState] = useState(null);
 
   // ── Chargement ───────────────────────────────────────────
   // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
@@ -193,6 +199,18 @@ export default function BookPage() {
       finally { setLoading(false); }
     })();
   }, [id, user?.id]);
+
+  // Paquet B.0 : fetch du serviceState (mode de fonctionnement de la biblio).
+  // Modele : CatalogPage.jsx ligne 355. La vue api.my_library_context filtre
+  // deja par auth.uid() via my_session_context : pas besoin de library_id.
+  useEffect(() => {
+    if (!isAuth) { setServiceState(null); return; }
+    (async () => {
+      const svcRes = await supabase.schema('api').from('my_library_context')
+        .select('service_mode, allows_new_reservations').maybeSingle();
+      if (svcRes.data) setServiceState(svcRes.data);
+    })();
+  }, [isAuth, user?.id]);
 
   useDocumentTitle(book?.titulo);
 
@@ -382,7 +400,10 @@ export default function BookPage() {
 
             {/* Actions */}
             <div className="ab-livro-actions">
-              {user && sessionCtx?.session_holding_id && status.cls === 'ok' && (
+              {user && sessionCtx?.session_holding_id && status.cls === 'ok'
+                && serviceState?.service_mode !== 'pausada'
+                && serviceState?.service_mode !== 'somente_consulta'
+                && serviceState?.allows_new_reservations !== false && (
                 <Button onClick={handleReserve}>{t({ id: 'book.reserve' })}</Button>
               )}
               {user && (
