@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
+import LibraryProfileWizard from '@/components/LibraryProfileWizard';
 
 // PATCH 12/05/2026 paquet 24a — i18n complète de la page.
 // PATCH 12/05/2026 paquet 24b — remplacement sémantique de "Cadastro" par "Login"
@@ -85,6 +86,10 @@ export default function SolicitarBibliotecaPage() {
     projectStage: '', contactName: '', contactRole: '', contactEmail: '', contactPhone: '',
     firstManager: 'sim', summary: '', publicProfile: '', collectionProfile: '', needs: '',
     confirmReal: false, confirmContact: false,
+    // Paquet F.3 (20/05/2026) : 4 axes profil + template choisi (wizard)
+    requestedCatalogMode: null, requestedCirculationMode: null,
+    requestedNetworkMode: null, requestedGovernanceMode: null,
+    profileTemplateChosen: null,
   });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [loading, setLoading] = useState(false);
@@ -193,6 +198,16 @@ export default function SolicitarBibliotecaPage() {
     if (!form.summary.trim()) {
       setMsg({ text: t({ id: 'solicitar.error.requiredSummary' }), kind: 'error' }); return;
     }
+    // Paquet F.3 : validation des 4 axes profil (obligatoires)
+    if (!form.requestedCatalogMode || !form.requestedCirculationMode
+        || !form.requestedNetworkMode || !form.requestedGovernanceMode) {
+      setMsg({ text: t({ id: 'solicitar.error.requiredProfileAxes' }), kind: 'error' }); return;
+    }
+    // Coherence catalog_published <-> network observer/federated
+    if (form.requestedCatalogMode === 'network_published'
+        && !['observer', 'federated'].includes(form.requestedNetworkMode)) {
+      setMsg({ text: t({ id: 'solicitar.error.incoherentCatalogNetwork' }), kind: 'error' }); return;
+    }
     if (!form.confirmReal || !form.confirmContact) {
       setMsg({ text: t({ id: 'solicitar.error.requiredConfirms' }), kind: 'error' }); return;
     }
@@ -242,39 +257,50 @@ export default function SolicitarBibliotecaPage() {
           p_needs: form.needs.trim() || null,
           p_confirm_real: true,
           p_confirm_contact: true,
+          // Paquet F.3 : 4 axes profil + template
+          p_requested_catalog_mode: form.requestedCatalogMode,
+          p_requested_circulation_mode: form.requestedCirculationMode,
+          p_requested_network_mode: form.requestedNetworkMode,
+          p_requested_governance_mode: form.requestedGovernanceMode,
+          p_profile_template_chosen: form.profileTemplateChosen,
         });
         // RPC retourne library_requests (le record cree) sous data
         data = rpcRes.data;
         error = rpcRes.error;
       } else {
-        const payload = {
-          submitted_by_user_id: user.id,
-          submitted_by_email_snapshot: user.email || form.contactEmail,
-          request_status: 'pendente',
-          library_name: form.libraryName.trim(),
-          library_short_name: form.libraryShortName.trim() || null,
-          city: form.city.trim(),
-          state_region: form.state.trim() || null,
-          country: form.country.trim(),
-          library_email: form.libraryEmail.trim(),
-          library_phone: form.libraryPhone.trim() || null,
-          library_address: form.libraryAddress.trim() || null,
-          project_stage: form.projectStage,
-          contact_name: form.contactName.trim(),
-          contact_email: form.contactEmail.trim(),
-          contact_phone: form.contactPhone.trim() || null,
-          contact_role: form.contactRole.trim() || null,
-          first_manager_intent: form.firstManager,
-          summary: form.summary.trim(),
-          public_profile: form.publicProfile.trim() || null,
-          collection_profile: form.collectionProfile.trim() || null,
-          needs: form.needs.trim() || null,
-          confirm_real: true,
-          confirm_contact: true,
-        };
-        const ins = await supabase.from('library_requests').insert(payload).select().single();
-        data = ins.data;
-        error = ins.error;
+        // Paquet F.3 : on passe maintenant par fn_submit_library_request (RPC)
+        // au lieu d'un INSERT direct, pour beneficier de la validation cote
+        // serveur des 4 axes profil obligatoires (CHECK constraints en BDD).
+        const rpcRes = await supabase.rpc('fn_submit_library_request', {
+          p_library_name: form.libraryName.trim(),
+          p_library_short_name: form.libraryShortName.trim() || null,
+          p_city: form.city.trim(),
+          p_state_region: form.state.trim() || null,
+          p_country: form.country.trim() || 'Brasil',
+          p_library_email: form.libraryEmail.trim(),
+          p_library_phone: form.libraryPhone.trim() || null,
+          p_library_address: form.libraryAddress.trim() || null,
+          p_project_stage: form.projectStage,
+          p_contact_name: form.contactName.trim(),
+          p_contact_email: form.contactEmail.trim(),
+          p_contact_phone: form.contactPhone.trim() || null,
+          p_contact_role: form.contactRole.trim() || null,
+          p_first_manager_intent: form.firstManager,
+          p_summary: form.summary.trim(),
+          p_public_profile: form.publicProfile.trim() || null,
+          p_collection_profile: form.collectionProfile.trim() || null,
+          p_needs: form.needs.trim() || null,
+          p_confirm_real: true,
+          p_confirm_contact: true,
+          // Paquet F.3 : 4 axes profil + template
+          p_requested_catalog_mode: form.requestedCatalogMode,
+          p_requested_circulation_mode: form.requestedCirculationMode,
+          p_requested_network_mode: form.requestedNetworkMode,
+          p_requested_governance_mode: form.requestedGovernanceMode,
+          p_profile_template_chosen: form.profileTemplateChosen,
+        });
+        data = rpcRes.data;
+        error = rpcRes.error;
       }
 
       if (error) throw error;
@@ -515,6 +541,28 @@ export default function SolicitarBibliotecaPage() {
               <div><label style={ls}>{t({ id: 'solicitar.field.collectionProfile' })}</label><input type="text" value={form.collectionProfile} onChange={e => set('collectionProfile', e.target.value)} style={fs} /></div>
             </div>
             <div style={{ marginBottom: 16 }}><label style={ls}>{t({ id: 'solicitar.field.needs' })}</label><textarea value={form.needs} onChange={e => set('needs', e.target.value)} style={{ ...fs, resize: 'vertical', minHeight: 60 }} /></div>
+
+            <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,.1)', margin: '20px 0' }} />
+
+            {/* Paquet F.3 (20/05/2026) : Wizard de profil de biblioteca (4 axes obligatoires) */}
+            <LibraryProfileWizard
+              value={{
+                catalog_mode: form.requestedCatalogMode,
+                circulation_mode: form.requestedCirculationMode,
+                network_mode: form.requestedNetworkMode,
+                governance_mode: form.requestedGovernanceMode,
+                profile_template_chosen: form.profileTemplateChosen,
+              }}
+              onChange={(next) => setForm(prev => ({
+                ...prev,
+                requestedCatalogMode: next.catalog_mode,
+                requestedCirculationMode: next.circulation_mode,
+                requestedNetworkMode: next.network_mode,
+                requestedGovernanceMode: next.governance_mode,
+                profileTemplateChosen: next.profile_template_chosen,
+              }))}
+              disabled={loading}
+            />
 
             <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,.1)', margin: '20px 0' }} />
 
