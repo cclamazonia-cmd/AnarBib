@@ -19,6 +19,7 @@ import Modal from '@/components/ui/Modal';
 import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import LibraryProfileBanner from '@/components/LibraryProfileBanner';
+import TransitionsPanel from '@/components/TransitionsPanel';
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -1280,6 +1281,7 @@ export default function PanelPage() {
     { key: 'emprestimos-lote', label: t({ id: 'panel.loan.grouped' }), hint: t({ id: 'panel.tab.grouped.hint' }) },
     { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
     { key: 'historico', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
+    { key: 'transicoes', label: t({ id: 'panel.tab.transitions' }), hint: t({ id: 'panel.tab.transitions.hint' }) },
     ...(isCoordOrAdmin ? [
       { key: 'contribuicoes', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
@@ -2447,6 +2449,11 @@ export default function PanelPage() {
                 </div>
               )}
             </div>
+          )}
+
+          {/* TRANSITIONS DE PROFIL (paquet E.5, 20/05/2026) */}
+          {tab === 'transicoes' && (
+            <TransitionsPanel libraryId={libraryId} role={role} />
           )}
 
           {tab === 'contribuicoes' && isCoordOrAdmin && (

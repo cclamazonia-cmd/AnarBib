@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useLibrary } from '@/contexts/LibraryContext';
 
 /**
- * Hook usePanelAvailability (paquet E.1, 19/05/2026)
+ * Hook usePanelAvailability (paquet E.1, mis a jour paquet E.5.1, 20/05/2026)
  *
  * Retourne la matrice de disponibilite des onglets du painel staff selon le
  * profil de la biblio courante (4 axes orthogonaux + membership_enabled).
@@ -23,25 +23,22 @@ import { useLibrary } from '@/contexts/LibraryContext';
  * | emprestimos-lt | circulation_mode = 'full_sigb' (lotes = mecanique SIGB) |
  * | leitor         | toujours (recherche lecteur)                            |
  * | historico      | toujours (couche D.4 masque deja si circulation = off)  |
+ * | transicoes     | governance_mode IN ('staff_roles', 'full_governance')   |
  * | contribuicoes  | membership_enabled ET circulation_mode != 'off'         |
  *
- * Note paquet E (et non E.2 ou ulterieur) :
- *   - Onglets sensibles a governance_mode (vote transitions, etc.) pas
- *     encore presents dans PanelPage ; rajouter quand le frontend voting
- *     sera livre (cf backlog spec v0.6 section 11.5)
- *   - Onglets sensibles a network_mode (PEB interlibrary loan visible si
- *     federated) deja masques par le filtre archived_at au backend ;
- *     cote frontend, l'onglet PEB n'a pas encore d'entree dans TABS
- *     (livraison ulterieure cf backlog)
+ * Paquet E.5.1 (20/05/2026) : ajout de 'transicoes' (vote sur transitions de
+ * profil). Masque pour governance_mode='informal' qui n'a pas de gouvernance
+ * formelle structuree.
  */
 export function usePanelAvailability() {
   const library = useLibrary();
   return useMemo(() => {
-    // library est toujours defini (DEFAULT_CONTEXT en fallback), mais defensif :
     const cm = library?.circulation_mode || 'full_sigb';
+    const gm = library?.governance_mode || 'full_governance';
     const me = library?.membership_enabled === true;
     const allowsLoanFlow = cm === 'informal' || cm === 'full_sigb';
     const isFullSigb = cm === 'full_sigb';
+    const hasStructuredGovernance = gm === 'staff_roles' || gm === 'full_governance';
     return {
       'trabalho-do-dia': true,
       'acoes': true,
@@ -51,7 +48,8 @@ export function usePanelAvailability() {
       'emprestimos-lote': isFullSigb,
       'leitor': true,
       'historico': true,
+      'transicoes': hasStructuredGovernance,
       'contribuicoes': me && cm !== 'off',
     };
-  }, [library?.circulation_mode, library?.membership_enabled]);
+  }, [library?.circulation_mode, library?.governance_mode, library?.membership_enabled]);
 }
