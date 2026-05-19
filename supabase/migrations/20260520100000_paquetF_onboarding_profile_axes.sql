@@ -79,6 +79,11 @@ ALTER TABLE public.library_requests
 -- ============================================================================
 -- F.1a : Extension fn_submit_library_request
 -- ============================================================================
+-- DROP necessaire car la signature change (20 -> 25 parametres).
+-- PostgreSQL n'autorise pas CREATE OR REPLACE FUNCTION quand la liste de
+-- parametres change : sans DROP, ca cree une 2e fonction overloaded au lieu
+-- de remplacer l'existante. Aucune dependance verifiee (pg_depend vide).
+DROP FUNCTION IF EXISTS public.fn_submit_library_request(text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, boolean, boolean);
 
 CREATE OR REPLACE FUNCTION public.fn_submit_library_request(
   p_library_name text,
@@ -280,7 +285,8 @@ $function$;
 -- F.1b : Extension fn_submit_library_request_via_claim
 -- ============================================================================
 -- Meme logique que F.1a, mais avec p_claim_token en premier parametre.
--- On reproduit la meme structure pour symetrie doctrinale.
+-- DROP necessaire pour les memes raisons (21 -> 26 parametres).
+DROP FUNCTION IF EXISTS public.fn_submit_library_request_via_claim(text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, text, boolean, boolean);
 
 CREATE OR REPLACE FUNCTION public.fn_submit_library_request_via_claim(
   p_claim_token text,
