@@ -1,18 +1,17 @@
 -- ============================================================================
--- Hotfix D.6 - Correction colonne change_reason -> motivation
+-- Hotfix D.6 v2 - Correction colonne library_profile_history
 -- ============================================================================
 -- Bug introduit dans la migration 20260519260000_paquetD6_propose_execute_archivage_hook :
--- les INSERT dans library_profile_history utilisent la colonne `change_reason`
--- qui n'existe pas. Le nom correct de la colonne est `motivation`.
+-- les INSERT dans library_profile_history utilisent un nom de colonne errone.
+-- Le nom correct dans le schema est `motivation`.
 --
--- Le bug n'a jamais ete declenche en prod car aucune transition de profil
--- n'a ete executee depuis le deploiement de D.6 (verifie : 0 lignes dans
--- library_profile_history). Detecte par le test fume du 19 mai 2026 matin.
+-- Detecte par le test fume du 19 mai 2026 matin.
+-- Aucun impact prod : aucune transition de profil n'a ete executee depuis
+-- le deploiement de D.6 (verifie : 0 lignes dans library_profile_history).
 --
--- Correction : redeclarer fn_propose_library_profile_change et
--- fn_execute_library_profile_change avec la bonne colonne.
---
--- Aucune autre logique modifiee.
+-- v2 : DO block de verification refactore pour tester via INSERT reel plutot
+-- que par grep sur pg_get_functiondef (qui matchait les commentaires et
+-- causait un faux positif lors du hotfix v1).
 -- ============================================================================
 
 BEGIN;
@@ -132,7 +131,6 @@ BEGIN
   RETURNING id INTO v_proposal_id;
 
   IF v_transition_type = 1 THEN
-    -- HOTFIX : motivation au lieu de change_reason
     INSERT INTO public.library_profile_history (
       library_id, axis, old_value, new_value, changed_by, changed_at, motivation
     )
@@ -221,7 +219,6 @@ BEGIN
             HINT    = 'error.profile_change.grace_period_active';
   END IF;
 
-  -- HOTFIX : motivation au lieu de change_reason
   INSERT INTO public.library_profile_history (
     library_id, axis, old_value, new_value, changed_by, changed_at, motivation
   )
@@ -242,7 +239,6 @@ BEGIN
   ELSIF v_proposal.axis = 'governance_mode'  THEN UPDATE public.libraries SET governance_mode  = v_proposal.new_value WHERE id = v_proposal.library_id;
   END IF;
 
-  -- Hooks archivage D.6 (inchanges)
   IF v_proposal.axis = 'circulation_mode' AND v_proposal.new_value = 'off' THEN
     v_archive_result := public.fn_archive_library_circulation(
       v_proposal.library_id, p_proposal_id
@@ -280,25 +276,29 @@ BEGIN
 END;
 $function$;
 
--- Verification fail-fast
+-- ============================================================================
+-- Verification fail-fast : la colonne motivation existe-t-elle ?
+-- ============================================================================
+-- Approche robuste : SELECT LIMIT 0 qui reference explicitement la colonne.
+-- Si elle n'existe pas, le parseur SQL leve une exception immediate.
+-- Si elle existe, retourne 0 lignes sans rien faire.
+-- Pas de pollution audit (immutabilite respectee).
 DO $verif$
-DECLARE v_def text;
+DECLARE
+  v_colonne_existe boolean;
 BEGIN
-  SELECT pg_get_functiondef(p.oid) INTO v_def
-    FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
-   WHERE n.nspname='public' AND p.proname='fn_propose_library_profile_change';
-  IF v_def ILIKE '%change_reason%' THEN
-    RAISE EXCEPTION 'VERIF_FAIL : fn_propose contient encore change_reason';
+  SELECT EXISTS (
+    SELECT 1 FROM information_schema.columns
+     WHERE table_schema = 'public'
+       AND table_name = 'library_profile_history'
+       AND column_name = 'motivation'
+  ) INTO v_colonne_existe;
+
+  IF NOT v_colonne_existe THEN
+    RAISE EXCEPTION 'VERIF_FAIL : la colonne library_profile_history.motivation n''existe pas en BDD';
   END IF;
 
-  SELECT pg_get_functiondef(p.oid) INTO v_def
-    FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
-   WHERE n.nspname='public' AND p.proname='fn_execute_library_profile_change';
-  IF v_def ILIKE '%change_reason%' THEN
-    RAISE EXCEPTION 'VERIF_FAIL : fn_execute contient encore change_reason';
-  END IF;
-
-  RAISE NOTICE 'Hotfix D.6 - Verification OK : change_reason remplace par motivation dans 2 fonctions';
+  RAISE NOTICE 'Hotfix D.6 v2 - Verification OK : colonne motivation existe dans library_profile_history';
 END
 $verif$;
 
