@@ -1262,6 +1262,17 @@ export default function PanelPage() {
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
+  // Paquet E.3 (19/05/2026) : garde-fou bascule auto si onglet actif devient indisponible.
+  // Cas couverts :
+  //   - changement de biblio en cours de session (?library= dans URL)
+  //   - vote de transition profil execute pendant qu'un staff a le panel ouvert
+  // Le re-direct se fait vers 'trabalho-do-dia' qui est toujours disponible.
+  useEffect(() => {
+    if (availability[tab] === false) {
+      setTab('trabalho-do-dia');
+    }
+  }, [tab, availability]);
+
   // Paquet 9 (10/05/2026) : fix bug compteur "Réservations actives" du hero.
   // L'ancienne denylist excluait cancelada_leitor/cancelada_biblioteca/expirada/
   // retirada_efetivada/liberada_para_circulacao mais oubliait
