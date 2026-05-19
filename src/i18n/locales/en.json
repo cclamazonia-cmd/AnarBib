@@ -2527,6 +2527,15 @@
     "wizard.profile.recap.modify":  "modify",
     "wizard.profile.recap.incoherenceCatalogNetwork":  "Warning: to publish the catalog on the network, the network mode must be \"observer\" or \"federated\".",
     "wizard.profile.recap.confirmed":  "Profile complete. You can proceed to the final confirmations.",
-    "wizard.profile.statusHint.incomplete":  "Complete the 4 axes to continue."
+    "wizard.profile.statusHint.incomplete":  "Complete the 4 axes to continue.",
+
+    "banner.profile.title":  "Your library is running in {template}",
+    "banner.profile.body":  "This profile was set automatically when your library was created. To confirm it or redefine it collectively, discuss in assembly and use the collective voting mechanism.",
+    "banner.profile.dismiss":  "Hide for this session",
+    "banner.profile.template.A.name":  "profile A — simple showcase",
+    "banner.profile.template.B.name":  "profile B — coherent informal",
+    "banner.profile.template.C.name":  "profile C — federated observer",
+    "banner.profile.template.D.name":  "profile D — fully engaged",
+    "banner.profile.template.custom.name":  "custom configuration"
 
 }

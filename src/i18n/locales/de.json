@@ -2527,6 +2527,15 @@
     "wizard.profile.recap.modify":  "andern",
     "wizard.profile.recap.incoherenceCatalogNetwork":  "Achtung: Um den Katalog im Netzwerk zu veroffentlichen, muss der Netzwerkmodus \"beobachtend\" oder \"foderiert\" sein.",
     "wizard.profile.recap.confirmed":  "Profil komplett. Du kannst zu den finalen Bestatigungen ubergehen.",
-    "wizard.profile.statusHint.incomplete":  "Vervollstandige die 4 Achsen, um fortzufahren."
+    "wizard.profile.statusHint.incomplete":  "Vervollstandige die 4 Achsen, um fortzufahren.",
+
+    "banner.profile.title":  "Deine Bibliothek lauft in {template}",
+    "banner.profile.body":  "Dieses Profil wurde bei der Erstellung deiner Bibliothek automatisch festgelegt. Um es kollektiv zu bestatigen oder neu zu definieren, besprecht es in der Versammlung und nutzt den kollektiven Abstimmungsmechanismus.",
+    "banner.profile.dismiss":  "Fur diese Sitzung ausblenden",
+    "banner.profile.template.A.name":  "Profil A — Einfaches Schaufenster",
+    "banner.profile.template.B.name":  "Profil B — Koharent informell",
+    "banner.profile.template.C.name":  "Profil C — Foderiert beobachtend",
+    "banner.profile.template.D.name":  "Profil D — Voll engagiert",
+    "banner.profile.template.custom.name":  "Benutzerdefinierte Konfiguration"
 
 }

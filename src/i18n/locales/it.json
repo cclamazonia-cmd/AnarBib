@@ -2527,6 +2527,15 @@
     "wizard.profile.recap.modify":  "modifica",
     "wizard.profile.recap.incoherenceCatalogNetwork":  "Attenzione: per pubblicare il catalogo in rete, la modalita di rete deve essere \"osservatrice\" o \"federata\".",
     "wizard.profile.recap.confirmed":  "Profilo completo. Puoi procedere alle conferme finali.",
-    "wizard.profile.statusHint.incomplete":  "Completa i 4 assi per continuare."
+    "wizard.profile.statusHint.incomplete":  "Completa i 4 assi per continuare.",
+
+    "banner.profile.title":  "La tua biblioteca funziona in {template}",
+    "banner.profile.body":  "Questo profilo è stato definito automaticamente alla creazione della tua biblioteca. Per confermarlo o ridefinirlo collettivamente, discutetene in assemblea e usate il meccanismo di votazione collettiva.",
+    "banner.profile.dismiss":  "Nascondere per questa sessione",
+    "banner.profile.template.A.name":  "profilo A — vetrina semplice",
+    "banner.profile.template.B.name":  "profilo B — informale coerente",
+    "banner.profile.template.C.name":  "profilo C — federata osservatrice",
+    "banner.profile.template.D.name":  "profilo D — completa impegnata",
+    "banner.profile.template.custom.name":  "configurazione personalizzata"
 
 }

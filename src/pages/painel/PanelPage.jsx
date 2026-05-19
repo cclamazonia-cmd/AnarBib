@@ -18,6 +18,7 @@ import { formatSchedule } from '@/lib/scheduleFormat';
 import Modal from '@/components/ui/Modal';
 import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
+import LibraryProfileBanner from '@/components/LibraryProfileBanner';
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -124,6 +125,29 @@ export default function PanelPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role, circulation_mode, membership_enabled } = useLibrary();
   const availability = usePanelAvailability();
+
+  // Paquet G (20/05/2026) : profile_template_chosen pour decider de l'affichage
+  // du LibraryProfileBanner. Charge via un useEffect leger.
+  const [profileTemplateChosen, setProfileTemplateChosen] = useState(undefined); // undefined = pas encore charge
+  useEffect(() => {
+    if (!libraryId) { setProfileTemplateChosen(undefined); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from('libraries')
+          .select('profile_template_chosen')
+          .eq('id', libraryId)
+          .maybeSingle();
+        if (!cancelled) {
+          setProfileTemplateChosen(data?.profile_template_chosen ?? null);
+        }
+      } catch (e) {
+        if (!cancelled) setProfileTemplateChosen(null);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [libraryId]);
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.panel' }));
   const roleLoaded = role !== null && role !== undefined;
@@ -1373,6 +1397,16 @@ export default function PanelPage() {
           <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
         </div>
       </Hero>
+
+      {/* Paquet G (20/05/2026) : bandeau informatif pour les biblios qui n'ont
+          jamais consciemment choisi leur profil (profile_template_chosen=null).
+          Conditions internes : role coord/admin + pas dismissed en session. */}
+      {profileTemplateChosen !== undefined && (
+        <LibraryProfileBanner
+          profileTemplateChosen={profileTemplateChosen}
+          role={role}
+        />
+      )}
 
       <div className="ab-painel-card">
         <nav className="ab-painel-tabs" role="tablist">

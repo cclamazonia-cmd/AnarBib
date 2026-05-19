@@ -2527,6 +2527,15 @@
     "wizard.profile.recap.modify":  "modificar",
     "wizard.profile.recap.incoherenceCatalogNetwork":  "Atenção: para publicar o catálogo na rede, o modo de rede deve ser \"observadora\" ou \"federada\".",
     "wizard.profile.recap.confirmed":  "Perfil completo. Você pode prosseguir para as confirmações finais.",
-    "wizard.profile.statusHint.incomplete":  "Termine os 4 eixos para continuar."
+    "wizard.profile.statusHint.incomplete":  "Termine os 4 eixos para continuar.",
+
+    "banner.profile.title":  "Sua biblioteca funciona em {template}",
+    "banner.profile.body":  "Este perfil foi definido automaticamente na criação da sua biblioteca. Para confirmá-lo ou redefini-lo coletivamente, discutam em assembleia e utilizem o mecanismo de votação coletiva.",
+    "banner.profile.dismiss":  "Esconder para esta sessão",
+    "banner.profile.template.A.name":  "perfil A — vitrine simples",
+    "banner.profile.template.B.name":  "perfil B — informal coerente",
+    "banner.profile.template.C.name":  "perfil C — federada observadora",
+    "banner.profile.template.D.name":  "perfil D — completa engajada",
+    "banner.profile.template.custom.name":  "configuração personalizada"
 
 }

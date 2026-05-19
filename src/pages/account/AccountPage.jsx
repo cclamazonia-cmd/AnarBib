@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { useAccountAvailability } from '@/hooks/useAccountAvailability';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
 import NegotiationStateBadge from '@/components/reservation/NegotiationStateBadge';
@@ -22,6 +23,7 @@ import './AccountPage.css';
 export default function AccountPage() {
   const { user, loading: authLoading } = useAuth();
   const { libraryName, librarySlug, libraryId } = useLibrary();
+  const availability = useAccountAvailability();
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.account' }));
   const navigate = useNavigate();
@@ -31,6 +33,15 @@ export default function AccountPage() {
   const [accountStatus, setAccountStatus] = useState(null);
 
   const [activeTab, setActiveTab] = useState('perfil');
+  // Paquet E.4.6 (20/05/2026) : garde-fou bascule auto si onglet actif devient
+  // indisponible (changement de biblio ou transition profil pendant session).
+  // Re-direct vers 'perfil' qui est toujours disponible. Place ICI pour que
+  // les hooks soient toujours appeles dans le meme ordre.
+  useEffect(() => {
+    if (availability[activeTab] === false) {
+      setActiveTab('perfil');
+    }
+  }, [activeTab, availability]);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [reservations, setReservations] = useState([]);
@@ -633,7 +644,9 @@ export default function AccountPage() {
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
-  const TABS = [
+  // Paquet E.4.2 (20/05/2026) : filtrage des onglets AccountPage par availability
+  // selon profil de biblio (1 lecteur·rice = 1 biblio, cf. doctrine ancrage).
+  const ALL_TABS = [
     { key: 'perfil', label: t({ id: 'account.tab.profile' }), hint: t({ id: 'account.tab.profile.hint' }) },
     { key: 'reservar', label: t({ id: 'account.tab.reservations' }), hint: t({ id: 'account.tab.reservations.hint' }) },
     { key: 'curso', label: t({ id: 'account.tab.loans' }), hint: t({ id: 'account.tab.loans.hint' }) },
@@ -641,6 +654,7 @@ export default function AccountPage() {
     { key: 'avisos', label: `${t({ id: 'account.tab.notifications' })}${unreadCount > 0 ? ` (${unreadCount})` : ''}`, hint: t({ id: 'account.tab.notifications.hint' }) },
     { key: 'desejos', label: `${t({ id: 'account.tab.wishlist' })} (${wishlist.length})`, hint: t({ id: 'account.tab.wishlist.hint' }) },
   ];
+  const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
   return (
     <PageShell>
@@ -652,9 +666,9 @@ export default function AccountPage() {
           <Pill>{t({ id: 'account.chips.library' }, { name: chips.library })}</Pill>
           {profile?.public_id && <Pill>{t({ id: 'account.chips.publicId' }, { id: chips.publicId })}</Pill>}
           <Pill>{t({ id: 'account.chips.since' }, { date: chips.created })}</Pill>
-          <Pill variant={chips.reservas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.reservations' }, { count: chips.reservas })}</Pill>
-          <Pill variant={chips.consultas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.consultations' }, { count: chips.consultas })}</Pill>
-          <Pill variant={chips.emprestimos > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.loans' }, { count: chips.emprestimos })}</Pill>
+          {availability.chip_reservas && (<Pill variant={chips.reservas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.reservations' }, { count: chips.reservas })}</Pill>)}
+          {availability.chip_consultas && (<Pill variant={chips.consultas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.consultations' }, { count: chips.consultas })}</Pill>)}
+          {availability.chip_emprestimos && (<Pill variant={chips.emprestimos > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.loans' }, { count: chips.emprestimos })}</Pill>)}
         </div>
 
         {/* ── Bandeau état du compte ────────────────── */}
@@ -847,7 +861,9 @@ export default function AccountPage() {
               </div>
 
               {/* ── Cotisation associative ─────────────── */}
-              {(membership || membershipRules.length > 0) && (() => {
+              {/* Paquet E.4.5 : ajoute le check availability.cotisacoes (depend de
+                  circulation_mode et membership_enabled de la biblio) */}
+              {availability.cotisacoes && (membership || membershipRules.length > 0) && (() => {
                 const status = membership?.dues_status || 'not_applicable';
                 const statusVariant = status === 'up_to_date' ? 'ok' : status === 'expired' ? 'danger' : status === 'never_paid' ? 'warn' : status === 'lifetime' ? 'ok' : 'default';
                 const statusColor = statusVariant === 'ok' ? '#4ade80' : statusVariant === 'danger' ? '#f87171' : statusVariant === 'warn' ? '#fbbf24' : 'var(--brand-muted)';

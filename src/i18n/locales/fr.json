@@ -2527,6 +2527,15 @@
     "wizard.profile.recap.modify":  "modifier",
     "wizard.profile.recap.incoherenceCatalogNetwork":  "Attention : pour publier le catalogue sur le réseau, le mode de réseau doit être « observatrice » ou « fédérée ».",
     "wizard.profile.recap.confirmed":  "Profil complet. Vous pouvez passer aux confirmations finales.",
-    "wizard.profile.statusHint.incomplete":  "Terminez les 4 axes pour continuer."
+    "wizard.profile.statusHint.incomplete":  "Terminez les 4 axes pour continuer.",
+
+    "banner.profile.title":  "Votre bibliothèque fonctionne en {template}",
+    "banner.profile.body":  "Ce profil a été défini automatiquement à la création de votre bibliothèque. Pour le confirmer ou le redéfinir collectivement, discutez-en en assemblée et utilisez le mécanisme de vote collectif.",
+    "banner.profile.dismiss":  "Masquer pour cette session",
+    "banner.profile.template.A.name":  "profil A — vitrine simple",
+    "banner.profile.template.B.name":  "profil B — informel cohérent",
+    "banner.profile.template.C.name":  "profil C — fédérée observatrice",
+    "banner.profile.template.D.name":  "profil D — complète engagée",
+    "banner.profile.template.custom.name":  "configuration personnalisée"
 
 }
