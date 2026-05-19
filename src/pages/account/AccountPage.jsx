@@ -18,6 +18,8 @@ import { formatSchedule } from '@/lib/scheduleFormat';
 import { localizeError } from '@/lib/localizeError';
 import DataExportButton from '@/components/account/DataExportButton';
 import Modal from '@/components/ui/Modal';
+import UserHeroBadge from '@/components/UserHeroBadge';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './AccountPage.css';
 
 export default function AccountPage() {
@@ -661,15 +663,16 @@ export default function AccountPage() {
       <Topbar />
 
       <Hero title={t({ id: 'account.title' })} subtitle={t({ id: 'account.subtitle' })}>
-        <div className="ab-conta-chips">
-          <Pill>{t({ id: 'account.chips.reader' }, { name: chips.user })}</Pill>
-          <Pill>{t({ id: 'account.chips.library' }, { name: chips.library })}</Pill>
-          {profile?.public_id && <Pill>{t({ id: 'account.chips.publicId' }, { id: chips.publicId })}</Pill>}
-          <Pill>{t({ id: 'account.chips.since' }, { date: chips.created })}</Pill>
-          {availability.chip_reservas && (<Pill variant={chips.reservas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.reservations' }, { count: chips.reservas })}</Pill>)}
-          {availability.chip_consultas && (<Pill variant={chips.consultas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.consultations' }, { count: chips.consultas })}</Pill>)}
-          {availability.chip_emprestimos && (<Pill variant={chips.emprestimos > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.loans' }, { count: chips.emprestimos })}</Pill>)}
-        </div>
+        <UserHeroBadge accountStatus={accountStatus?.status} />
+        <HeroDocumentationActions
+          extraActions={
+            <>
+              {availability.chip_reservas && (<Pill variant={chips.reservas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.reservations' }, { count: chips.reservas })}</Pill>)}
+              {availability.chip_consultas && (<Pill variant={chips.consultas > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.consultations' }, { count: chips.consultas })}</Pill>)}
+              {availability.chip_emprestimos && (<Pill variant={chips.emprestimos > 0 ? 'warn' : 'default'}>{t({ id: 'account.chips.loans' }, { count: chips.emprestimos })}</Pill>)}
+            </>
+          }
+        />
 
         {/* ── Bandeau état du compte ────────────────── */}
         {accountStatus && (() => {
