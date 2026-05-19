@@ -217,6 +217,10 @@ export default function CatalogPage() {
   const [isRestricted, setIsRestricted] = useState(false);
   const [reserveState, setReserveState] = useState({});
   const [reservedBibRefs, setReservedBibRefs] = useState(new Set());
+  // Paquet B.2 (chantier consulta button) : miroir de reservedBibRefs / reserveState
+  // pour la chaine consultation. Doctrine §8 : la consulta a son propre cycle.
+  const [consultedBibRefs, setConsultedBibRefs] = useState(new Set());
+  const [consultaState, setConsultaState] = useState({});
 
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -432,6 +436,48 @@ export default function CatalogPage() {
     }
   }, [user?.id, t, reservedBibRefs]);
 
+  // Paquet B.2 (chantier consulta button) : miroir de handleQuickReserve pour la
+  // chaine consultation sur place. Appelle api.create_consulta_local (wrapper
+  // SECURITY INVOKER, paquet 27.A.1) au lieu de fn_v2_create_reserva_by_holdings.
+  const handleQuickConsulta = useCallback(async (book) => {
+    const key = String(book.book_id || book.bib_ref || '');
+    const ref = String(book.bib_ref || '').trim();
+    if (!ref) return;
+    if (consultedBibRefs.has(ref.toLowerCase())) return;
+
+    setConsultaState(s => ({ ...s, [key]: 'reserving' }));
+
+    try {
+      // 1. Resolution bib_ref -> holding_id (cote session du lecteur)
+      const resolveRes = await supabase.rpc('fn_v2_resolve_catalog_refs_for_current_user', { p_refs: [ref] });
+      if (resolveRes.error) throw resolveRes.error;
+
+      const rows = Array.isArray(resolveRes.data) ? resolveRes.data : [];
+      const row = rows[0];
+      if (!row || !row.matched || !(Number(row.session_holding_id) > 0)) {
+        throw new Error(row?.message || t({ id: 'catalog.quickReserve.notInMyLibrary' }));
+      }
+
+      // 2. Creation de la demande de consultation
+      const createRes = await supabase.schema('api').rpc('create_consulta_local', {
+        p_user_id: user.id,
+        p_holding_ids: [Number(row.session_holding_id)],
+        p_notes: t({ id: 'catalog.quickConsulta.note' }),
+      });
+      if (createRes.error) throw createRes.error;
+
+      // Succes
+      setConsultaState(s => ({ ...s, [key]: 'done' }));
+      setConsultedBibRefs(prev => {
+        const next = new Set(prev);
+        next.add(ref.toLowerCase());
+        return next;
+      });
+    } catch (err) {
+      setConsultaState(s => ({ ...s, [key]: 'error:' + (localizeError(err, t) || 'erro') }));
+    }
+  }, [user?.id, t, consultedBibRefs]);
+
   // Calcul dérivé : le bouton de réservation rapide est-il globalement actif ?
   // Cache pour le rendu de chaque ligne (évalué une fois par render).
   const quickReserveAvailable = useMemo(() => {
@@ -441,6 +487,17 @@ export default function CatalogPage() {
     const allowsRes = serviceState?.allows_new_reservations !== false;
     if (!allowsRes) return false;
     if (svcMode === 'pausada' || svcMode === 'somente_consulta') return false;
+    return true;
+  }, [isAuth, isRestricted, serviceState]);
+
+  // Paquet B.2 : disponibilite du bouton "Agendar consulta". Doctrine §8 :
+  // pausada -> non ; somente_consulta -> oui ; funcionamento_normal -> oui.
+  // Donc plus permissif que quickReserveAvailable.
+  const quickConsultaAvailable = useMemo(() => {
+    if (!isAuth) return false;
+    if (isRestricted) return false;
+    const svcMode = serviceState?.service_mode || 'funcionamento_normal';
+    if (svcMode === 'pausada') return false;
     return true;
   }, [isAuth, isRestricted, serviceState]);
 
@@ -827,6 +884,65 @@ export default function CatalogPage() {
                                 title={t({ id: 'catalog.quickReserve.hint' })}
                               >
                                 {t({ id: 'catalog.quickReserve.label' })}
+                              </button>
+                            );
+                          })()}
+                          {/* Paquet B.2 : bouton "Agendar consulta", miroir du Reservar.
+                              Doctrine §8 : pausada -> aucun ; somente_consulta -> seul ce bouton ;
+                              funcionamento_normal -> ce bouton sur non-loanable OU livre dispo. */}
+                          {(() => {
+                            if (!quickConsultaAvailable) return null;
+                            const mode = serviceState?.service_mode || 'funcionamento_normal';
+                            const showConsulta =
+                              mode === 'somente_consulta' ||
+                              (mode === 'funcionamento_normal' && (
+                                book.session_loanable === false ||
+                                (status.cls === 'ok' && book.session_loanable !== false)
+                              ));
+                            if (!showConsulta) return null;
+
+                            const key = String(book.book_id || book.bib_ref || '');
+                            const refLow = String(book.bib_ref || '').trim().toLowerCase();
+                            const localDone = consultedBibRefs.has(refLow);
+                            const st = consultaState[key] || (localDone ? 'done' : 'idle');
+
+                            if (st === 'done') {
+                              return (
+                                <span className="ab-quick-reserve ab-quick-reserve--done" title={t({ id: 'catalog.quickConsulta.doneHint' })}>
+                                  ✓ {t({ id: 'catalog.quickConsulta.done' })}
+                                </span>
+                              );
+                            }
+                            if (st === 'reserving') {
+                              return (
+                                <button className="ab-quick-reserve ab-quick-reserve--loading" disabled>
+                                  <Spinner size="sm" /> {t({ id: 'catalog.quickConsulta.loading' })}
+                                </button>
+                              );
+                            }
+                            if (typeof st === 'string' && st.startsWith('error:')) {
+                              const msg = st.slice(6);
+                              return (
+                                <div className="ab-quick-reserve-error">
+                                  <span className="ab-quick-reserve-error__msg" title={msg}>{msg}</span>
+                                  <button
+                                    type="button"
+                                    className="ab-quick-reserve ab-quick-reserve--retry"
+                                    onClick={() => handleQuickConsulta(book)}
+                                  >
+                                    {t({ id: 'catalog.quickReserve.retry' })}
+                                  </button>
+                                </div>
+                              );
+                            }
+                            return (
+                              <button
+                                type="button"
+                                className="ab-quick-reserve"
+                                onClick={() => handleQuickConsulta(book)}
+                                title={t({ id: 'catalog.quickConsulta.hint' })}
+                              >
+                                {t({ id: 'catalog.quickConsulta.label' })}
                               </button>
                             );
                           })()}
