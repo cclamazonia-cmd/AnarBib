@@ -1,13 +1,14 @@
-# Backlog rapide : chantiers H + I (issus reunion BTL/SP 18 mai 2026)
+# Backlog rapide : chantiers H + I + J (issus reunion BTL/SP 18 mai 2026)
 
 **Date** : 18 mai 2026
 **Contexte** : reunion de demonstration AnarBib avec les compas de Sao Paulo
-(BTL principalement). Deux demandes spontanees emergees pendant les questions :
+(BTL principalement). Trois demandes spontanees emergees pendant les questions :
 
 1. **Chantier H -- Scanner ISBN mobile** (catalogage par code-barres)
 2. **Chantier I -- Integration archive.org** (recuperation de docs web archives)
+3. **Chantier J -- Granularite loanable par exemplaire** (4 exemplaires d'un livre : 2 consultables + 2 empruntables)
 
-Ces deux chantiers sont **independants des paquets E/F/G** de la spec profils
+Ces trois chantiers sont **independants des paquets E/F/G** de la spec profils
 d'adoption et peuvent etre attaques en parallele.
 
 ## Chantier H -- Scanner ISBN mobile pour catalogage rapide
@@ -146,19 +147,135 @@ archive.org a une **API publique** :
 
 ---
 
+## Chantier J -- Granularite loanable par exemplaire
+
+### Demande utilisateur·rice
+
+Cas concret evoque par les compas : un livre present en **4 exemplaires** dans
+une biblio, dont **2 destines a l'emprunt** et **2 destines a la consultation
+sur place uniquement** (ex : reserve, exemplaire rare, ouvrage de reference).
+
+Question : "AnarBib sait-il gerer ca ?"
+
+### Etat actuel (mai 2026)
+
+**Reponse honnete : NON, pas encore.**
+
+Le modele actuel a :
+- 1 ligne `books` par titre/auteur abstrait
+- 1 ligne `book_holdings` par couple (book, library) avec un booleen `loanable`
+  partage par TOUS les exemplaires du livre dans cette biblio
+- N lignes `exemplares` (un par tombo physique) sous le meme holding, sans
+  champ `loanable` individuel
+
+**Consequence** : impossible de distinguer "exemplaire 0042 empruntable" de
+"exemplaire 0043 consultation-only" si les deux pointent vers le meme livre
+dans la meme biblio.
+
+**Verification prod (BLMF, 18/05/2026)** : 7 cas de `exemplares_total = 2`
+deja en base (Emma Goldman, A Historia da Luta pela Terra, Autogestao Hoje,
+Fragmentos de Antropologia anarquista, etc.), tous avec `loanable = true`
+uniformement. Aucun cas mixte encore tente -- limite non-bloquante a court
+terme mais identifiable.
+
+### Faisabilite technique
+
+3 options ont ete examinees :
+
+**Option A -- `exemplares.loanable boolean DEFAULT true` (recommandee)** :
+- Granularite au niveau de l'exemplaire physique
+- Modelise fidelement la realite : un exemplaire est un objet distinct du
+  livre abstrait
+- Permet d'autres nuances utiles : exemplaire temporairement abime
+  non-empruntable, exemplaire dedicace, etc.
+
+**Option B -- `exemplares.usage_mode enum`** :
+- Enum `('loan_and_consultation', 'consultation_only', 'loan_only', 'reference')`
+- Plus expressif que le booleen mais sur-engineering pour la demande actuelle
+- Reserve a une evolution future si necessaire
+
+**Option C -- dedoubler les `book_holdings`** :
+- Workaround sans changement de schema : 2 holdings pour la meme paire
+  (book, library), un avec `loanable=true`, l'autre `loanable=false`
+- **REJETE** : viole la regle "1 livre x 1 biblio = 1 holding" qui est
+  implicite dans pas mal de logiques metier et de vues SQL
+
+**Choix recommande : Option A**.
+
+### Composants a livrer
+
+| Composant | Description |
+|---|---|
+| Migration `exemplares` | Ajout colonne `loanable boolean NOT NULL DEFAULT true` |
+| Doctrine de propagation | Au moment de la migration, propager `book_holdings.loanable` a tous les exemplaires existants (la plupart `true`, sera surchargeable par exemplaire ensuite) |
+| Patch RPC `fn_v2_create_emprestimo_by_holdings` | Verifier que l'exemplaire choisi est `loanable=true` -- sinon RAISE EXCEPTION + i18n |
+| Patch RPC `fn_v2_create_consulta_local_by_holdings` | Aucune contrainte ajoutee (consulta valable sur tous exemplaires existants) |
+| Vue `api.book_holdings_summary` (nouvelle) | Pour chaque holding, compter `loanable_count` et `consultation_only_count` parmi exemplaires actifs |
+| UI catalogage exemplaire | Toggle "Empruntable" / "Consultation uniquement" sur chaque exemplaire dans le formulaire de catalogage |
+| UI catalogue (page livre) | Affichage type "4 exemplaires : 2 empruntables, 2 en consultation" |
+| i18n × 6 locales | ~8 cles UI |
+
+### Decisions doctrinales a trancher
+
+1. **Que devient `book_holdings.loanable` apres la migration ?**
+   - Le garder comme "valeur par defaut pour les nouveaux exemplaires" ?
+   - Le retirer apres propagation ?
+   - **Proposition** : le garder comme defaut + compatibilite ascendante,
+     en le marquant deprecated dans la doc
+
+2. **Une reservation peut-elle viser un exemplaire `loanable=false` ?**
+   - Probable NON (cf. fn_v2_create_reserva_by_holdings doit verifier)
+   - A acter dans la doctrine
+
+3. **PEB sur un exemplaire `loanable=false` ?**
+   - NON par definition (consultation_only ne quitte pas la biblio)
+   - fn_v2_create_emprestimo_interbibliotecas doit verifier
+
+4. **Affichage catalogue public** : faut-il afficher la repartition
+   empruntable/consultation a un·e lecteur·rice anonyme, ou seulement
+   "disponibilite" globale ? Probable affichage detaille pour la
+   transparence militante.
+
+5. **Doctrine cohherence avec network_mode** : un exemplaire
+   `loanable=false` est-il quand meme expose au reseau federe ? OUI
+   (le livre existe, juste pas empruntable hors biblio).
+
+### Effort estime
+
+**2 sessions de travail** :
+- Session 1 (backend) : migration + propagation + patches RPC + vue summary
+- Session 2 (frontend) : UI catalogage + affichage catalogue + i18n + tests
+
+### Sequencage proposé
+
+1. Audit complet des RPC et vues qui consomment `book_holdings.loanable`
+2. Migration colonne `exemplares.loanable` + propagation initiale
+3. Patch RPC `fn_v2_create_emprestimo_by_holdings` avec check
+4. Vue `api.book_holdings_summary` (nouvelle granularite)
+5. UI catalogage : ajout toggle par exemplaire
+6. UI catalogue public : affichage repartition
+7. Tests fumee : creer 2 exemplaires loanable + 2 consultation_only, tester emprunt+consulta+reservation+PEB
+
+---
+
 ## Priorisation suggeree
 
-Les compas ont demande spontanement ces 2 fonctionnalites pendant la demo.
-C'est un signal **fort** que ce sont des features qui parlent immediatement
+Les compas ont demande spontanement ces 3 fonctionnalites pendant la demo.
+Trois signaux forts que ce sont des features qui parlent immediatement
 au public cible (biblios militantes).
 
-**Ma suggestion** :
-- **Chantier H (ISBN scanner)** en HAUTE priorite : impact UX massif au
-  quotidien pour le catalogage. Effort modere (2-3 sessions).
-- **Chantier I (archive.org)** en MOYENNE-HAUTE priorite : moins frequent
-  d'usage mais politiquement fort. Effort plus court (1-2 sessions).
+| Chantier | Priorite | Effort | Type d'apport |
+|---|---|---|---|
+| H -- ISBN scanner | **TRES HAUTE** | 2-3 sessions | UX massive au quotidien |
+| J -- granularite exemplaire | **HAUTE** | 2 sessions | Couvre un cas reel des biblios |
+| I -- archive.org | MOYENNE-HAUTE | 1-2 sessions | Politiquement fort, moins frequent |
 
-**Ordre propose** : H d'abord (gain rapide visible), puis I.
+**Ordre propose** :
+1. **H** d'abord (gain rapide visible, democratise le catalogage)
+2. **J** ensuite (necessaire pour les biblios qui ont deja des reserves
+   ou exemplaires speciaux)
+3. **I** en troisieme (gros impact politique mais moins de cas d'usage
+   quotidien)
 
 **Insertion dans le planning** :
 - Apres bouclage paquet E (frontend painel adaptatif) ou en parallele
@@ -175,7 +292,11 @@ au public cible (biblios militantes).
 
 ## Note finale
 
-Ce backlog a ete redige a la volee a 23h45 apres la reunion BTL pour ne pas
-perdre les demandes des compas. A retravailler en specs proprement dites
+Ce backlog a ete redige a la volee a 23h45-23h55 apres la reunion BTL pour ne
+pas perdre les demandes des compas. A retravailler en specs proprement dites
 quand le moment sera venu de demarrer ces chantiers (probablement post-paquet E
 ou en parallele).
+
+Les trois chantiers H/I/J sont **independants entre eux** et **independants
+de la spec profils d'adoption**, ce qui permet de les attaquer dans n'importe
+quel ordre selon l'energie et les disponibilites des compas.
