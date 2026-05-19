@@ -227,6 +227,26 @@ export default function BookPage() {
     } catch (err) { setReserveError(true); setReserveStatus(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) })); }
   }
 
+  // Paquet B.1 (chantier consulta button) : action soeur de handleReserve pour
+  // demander une consultation sur place. Appelle api.create_consulta_local
+  // (wrapper SECURITY INVOKER, paquet 27.A.1) avec les memes parametres que
+  // dans AccountPage. Le workflow se poursuit cote painel (proposition de
+  // creneau par le staff) et cote conta (reponse du lecteur).
+  async function handleReserveConsulta() {
+    if (!user || !sessionCtx?.session_holding_id) return;
+    setReserveStatus(t({ id: 'book.reserve.consult.sending' }));
+    setReserveError(false);
+    try {
+      const { error } = await supabase.schema('api').rpc('create_consulta_local', {
+        p_user_id: user.id,
+        p_holding_ids: [sessionCtx.session_holding_id],
+        p_notes: t({ id: 'book.reserve.consult.note' }),
+      });
+      if (error) throw error;
+      setReserveStatus(t({ id: 'book.reserve.consult.success' }));
+    } catch (err) { setReserveError(true); setReserveStatus(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) })); }
+  }
+
   function buildLerUrl() {
     const base = `/ler/${book.book_id || book.id}`;
     if (digitalAccess?.assetId) return `${base}?asset_id=${digitalAccess.assetId}`;
@@ -406,6 +426,36 @@ export default function BookPage() {
                 && serviceState?.allows_new_reservations !== false && (
                 <Button onClick={handleReserve}>{t({ id: 'book.reserve' })}</Button>
               )}
+              {/* Paquet B.1 : bouton "Agendar consulta". Affichage selon doctrine §8 :
+                  - pausada -> aucun bouton (regle commune)
+                  - somente_consulta -> seul bouton consulta (toujours, peu importe loanable)
+                  - funcionamento_normal + non-loanable -> bouton consulta (seul affichage possible)
+                  - funcionamento_normal + loanable + status=ok -> bouton consulta en plus de Reservar
+                  - lecteur sans biblio de rattachement -> bouton grise tooltip
+              */}
+              {user && serviceState?.service_mode !== 'pausada' && (() => {
+                if (!sessionCtx?.session_holding_id) {
+                  return (
+                    <Button variant="secondary" disabled
+                      title={t({ id: 'book.attachLibraryHint' })}>
+                      {t({ id: 'book.reserve.consult' })}
+                    </Button>
+                  );
+                }
+                const mode = serviceState?.service_mode || 'funcionamento_normal';
+                const showConsulta =
+                  mode === 'somente_consulta' ||
+                  (mode === 'funcionamento_normal' && (
+                    book.loanable === false ||
+                    (status.cls === 'ok' && book.loanable !== false)
+                  ));
+                if (!showConsulta) return null;
+                return (
+                  <Button variant="secondary" onClick={handleReserveConsulta}>
+                    {t({ id: 'book.reserve.consult' })}
+                  </Button>
+                );
+              })()}
               {user && (
                 <Button variant="secondary" onClick={async () => {
                   try {
