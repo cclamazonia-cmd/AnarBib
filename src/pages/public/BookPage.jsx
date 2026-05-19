@@ -18,7 +18,14 @@ const STORAGE_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object
 function parseJson(v) { if (!v) return null; if (typeof v === 'object') return v; try { return JSON.parse(v); } catch { return null; } }
 
 function getStatusInfo(book, sessionCtx, isAuth, t) {
-  if (!isAuth || !sessionCtx) {
+  // Doctrine A1/A2/A3 (tableau BLMF) : anon = affichage public non personnalise.
+  // Ne JAMAIS exposer loanable a un visiteur non connecte.
+  if (!isAuth) {
+    return { label: t({ id: 'catalog.avail.check' }), cls:'muted' };
+  }
+  // Connecte mais sans contexte de session (lecteur sans biblio de rattachement) :
+  // on reste sur la branche neutre ; loanable peut etre lu car l'utilisateur est dans le systeme.
+  if (!sessionCtx) {
     if (book.loanable === false) return { label: t({ id: 'catalog.avail.consult' }), cls:'warn' };
     return { label: t({ id: 'catalog.avail.check' }), cls:'muted' };
   }
