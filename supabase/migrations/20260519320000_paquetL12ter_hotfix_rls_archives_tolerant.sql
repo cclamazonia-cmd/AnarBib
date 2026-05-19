@@ -1,27 +1,33 @@
 -- =========================================================================
--- Paquet L.12bis (hotfix) — Ré-activation RLS sur tables archivées
+-- Paquet L.12ter (hotfix du hotfix) — RLS archives, DO-block tolérant
 -- =========================================================================
 -- Date     : 2026-05-19
--- Chantier : hotfix régression L.12
+-- Chantier : hotfix du hotfix L.12bis
 -- Auteur   : Xavier
 --
 -- CONTEXTE :
---   Le paquet L.12 (20260519300000) a désactivé la RLS sur 3 tables
---   _archived_*_20260408 pour éliminer 3 alertes INFO rls_enabled_no_policy.
---   Effet de bord constaté : Supabase a remplacé ces 3 INFO par 3 ERRORS
---   rls_disabled_in_public, ce qui est plus critique.
+--   Le hotfix L.12bis a planté à l'application (Woodpecker, 19/05/2026)
+--   avec ERROR: permission denied for table (SQLSTATE 42501).
 --
---   Le bon pattern pour une table archivée dans public.* est :
---     ENABLE RLS + policy explicite "USING (false)" qui bloque toute lecture.
+--   Diagnostic : les 3 tables _archived_*_20260408 n'ont AUCUN GRANT SELECT
+--   accordé à anon ni authenticated au niveau table-level. Donc la
+--   tentative de SELECT dans le DO-block plante AVANT même que la policy
+--   RLS soit évaluée.
+--
+--   La conclusion sécurité reste la même : anon et authenticated ne peuvent
+--   rien lire. Mais le mécanisme de blocage est ici au niveau GRANT, pas RLS.
 --
 -- OBJECTIF :
---   Restaurer la RLS sur les 3 tables et ajouter une policy lock-down
---   qui bloque explicitement toute lecture/écriture anon et authenticated.
---   service_role conserve l'accès (BYPASSRLS) pour audit ponctuel.
+--   Appliquer le même fix que L.12bis (ENABLE RLS + policy lock-down)
+--   MAIS avec un DO-block qui accepte permission denied (42501) comme
+--   succès, puisque c'est l'objectif visé.
 --
--- BÉNÉFICE LINTER :
---   -3 ERRORS rls_disabled_in_public + 0 alerte rls_enabled_no_policy
---   (la policy lock-down satisfait le linter).
+-- LEÇON DOCTRINALE (à ajouter à la doctrine) :
+--   Pour tester l'inaccessibilité d'une table en anon/authenticated dans
+--   un DO-block, TOUJOURS encadrer le SELECT par un BEGIN/EXCEPTION qui
+--   attrape SQLSTATE '42501' (permission denied) ET traite cela comme
+--   un succès, parce que le blocage peut venir de GRANT ou de RLS, et
+--   les deux sont des défenses légitimes.
 -- =========================================================================
 
 BEGIN;
@@ -40,12 +46,9 @@ ALTER TABLE public._archived_library_requests_20260408
   ENABLE ROW LEVEL SECURITY;
 
 -- -------------------------------------------------------------------------
--- 2. Policy lock-down explicite sur chaque table
+-- 2. Policy lock-down explicite sur chaque table (ceinture en plus des
+-- bretelles GRANT)
 -- -------------------------------------------------------------------------
--- Pattern : FOR ALL (SELECT + INSERT + UPDATE + DELETE), USING (false) +
--- WITH CHECK (false) = aucune ligne visible, aucune écriture acceptée.
--- service_role bypass automatiquement la RLS (BYPASSRLS), donc reste
--- capable de lire pour audit ponctuel via Edge Function ou SQL Editor.
 
 CREATE POLICY "archived_2026_04_08_lockdown"
   ON public._archived_library_request_claims_20260408
@@ -74,22 +77,27 @@ CREATE POLICY "archived_2026_04_08_lockdown"
 
 COMMENT ON TABLE public._archived_library_request_claims_20260408 IS
   'Archive gelée du 08/04/2026 — table inerte, 1 ligne historique. '
-  'RLS activée + policy lock-down (USING false) par paquet L.12bis (19/05/2026). '
-  'Accessible uniquement via service_role pour audit ponctuel.';
+  'RLS activée + policy lock-down (USING false) par paquet L.12ter (19/05/2026). '
+  'Pas de GRANT anon/authenticated (double verrou). Accessible uniquement via service_role.';
 
 COMMENT ON TABLE public._archived_library_request_notification_events_20260408 IS
   'Archive gelée du 08/04/2026 — table inerte, 1 ligne historique. '
-  'RLS activée + policy lock-down (USING false) par paquet L.12bis (19/05/2026). '
-  'Accessible uniquement via service_role pour audit ponctuel.';
+  'RLS activée + policy lock-down (USING false) par paquet L.12ter (19/05/2026). '
+  'Pas de GRANT anon/authenticated (double verrou). Accessible uniquement via service_role.';
 
 COMMENT ON TABLE public._archived_library_requests_20260408 IS
   'Archive gelée du 08/04/2026 — table inerte, 1 ligne historique. '
-  'RLS activée + policy lock-down (USING false) par paquet L.12bis (19/05/2026). '
-  'Accessible uniquement via service_role pour audit ponctuel.';
+  'RLS activée + policy lock-down (USING false) par paquet L.12ter (19/05/2026). '
+  'Pas de GRANT anon/authenticated (double verrou). Accessible uniquement via service_role.';
 
 -- -------------------------------------------------------------------------
--- 4. DO-block de vérification : confirmer que anon et authenticated ne
--- peuvent rien lire dans ces tables
+-- 4. DO-block de vérification TOLÉRANT aux deux mécanismes de blocage
+--
+-- Le SELECT en contexte anon/authenticated doit échouer pour une des deux
+-- raisons légitimes :
+--   (a) SQLSTATE 42501 : permission denied (pas de GRANT) → succès
+--   (b) SELECT retourne 0 ligne (RLS bloque) → succès
+-- Toute autre situation est une régression.
 -- -------------------------------------------------------------------------
 
 DO $$
@@ -101,34 +109,56 @@ DECLARE
     '_archived_library_request_notification_events_20260408',
     '_archived_library_requests_20260408'
   ];
+  v_anon_blocked boolean;
+  v_auth_blocked boolean;
 BEGIN
-  -- Test contexte anon
+  -- ==== Test contexte anon ====
   SET LOCAL ROLE anon;
   SET LOCAL "request.jwt.claims" = '{}';
 
   FOREACH v_table IN ARRAY v_tables LOOP
-    EXECUTE format('SELECT count(*) FROM public.%I', v_table) INTO v_count;
-    IF v_count > 0 THEN
-      RAISE EXCEPTION 'Vérification échouée : anon voit % lignes dans %, attendu 0', v_count, v_table;
+    v_anon_blocked := false;
+    BEGIN
+      EXECUTE format('SELECT count(*) FROM public.%I', v_table) INTO v_count;
+      IF v_count = 0 THEN
+        v_anon_blocked := true;  -- RLS bloque
+      END IF;
+    EXCEPTION
+      WHEN insufficient_privilege THEN
+        v_anon_blocked := true;  -- GRANT bloque (42501)
+    END;
+
+    IF NOT v_anon_blocked THEN
+      RAISE EXCEPTION 'Vérification échouée : anon peut lire des lignes dans %', v_table;
     END IF;
   END LOOP;
 
   RESET ROLE;
 
-  -- Test contexte authenticated
+  -- ==== Test contexte authenticated ====
   SET LOCAL ROLE authenticated;
   SET LOCAL "request.jwt.claims" = '{"sub":"00000000-0000-0000-0000-000000000000","role":"authenticated"}';
 
   FOREACH v_table IN ARRAY v_tables LOOP
-    EXECUTE format('SELECT count(*) FROM public.%I', v_table) INTO v_count;
-    IF v_count > 0 THEN
-      RAISE EXCEPTION 'Vérification échouée : authenticated voit % lignes dans %, attendu 0', v_count, v_table;
+    v_auth_blocked := false;
+    BEGIN
+      EXECUTE format('SELECT count(*) FROM public.%I', v_table) INTO v_count;
+      IF v_count = 0 THEN
+        v_auth_blocked := true;
+      END IF;
+    EXCEPTION
+      WHEN insufficient_privilege THEN
+        v_auth_blocked := true;
+    END;
+
+    IF NOT v_auth_blocked THEN
+      RAISE EXCEPTION 'Vérification échouée : authenticated peut lire des lignes dans %', v_table;
     END IF;
   END LOOP;
 
   RESET ROLE;
 
-  RAISE NOTICE 'Paquet L.12bis vérifications OK : 0 ligne visible anon/authenticated sur les 3 archives';
+  RAISE NOTICE 'Paquet L.12ter vérifications OK : anon et authenticated bloqués sur les 3 archives (par GRANT ou RLS)';
 END $$;
 
 COMMIT;
