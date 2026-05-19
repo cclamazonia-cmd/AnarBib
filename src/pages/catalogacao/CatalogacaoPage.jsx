@@ -12,6 +12,8 @@ import ExemplarDraftForm from './ExemplarDraftForm';
 import LabelSheetPrinter from './LabelSheetPrinter';
 import QueuePanel from './QueuePanel';
 import CatalogPanel from './CatalogPanel';
+import UserHeroBadge from '@/components/UserHeroBadge';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 
 // ── Storage keys ────────────────────────────────────────────
 const MODE_KEY = 'catalogacaoMode';
@@ -157,23 +159,14 @@ export default function CatalogacaoPage() {
       <Topbar />
 
       <Hero title={t({ id: 'catalogacao.areaTitle' })} subtitle={t({ id: 'catalogacao.areaSubtitle' })}>
-        <div className="ab-hero__content" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginTop: 12 }}>
-          <span className="cat-pill info">{user?.email || ''}</span>
-          <span className="cat-pill ok">{t({ id: 'catalogacao.librarianAccess' })}</span>
-          {config?.logoUrl && (
-            <img
-              className="cat-logo"
-              src={config.logoUrl}
-              alt={config?.libraryName || 'AnarBib'}
-              style={{ height: 48, marginLeft: 'auto' }}
-            />
-          )}
-        </div>
-        <div className="ab-hero__actions">
-          <button className="cat-btn secondary" onClick={refreshAll} disabled={loading}>
-            {loading ? t({ id: 'common.loading' }) : t({ id: 'common.update' })}
-          </button>
-        </div>
+        <UserHeroBadge />
+        <HeroDocumentationActions
+          extraActions={
+            <button className="cat-btn secondary" onClick={refreshAll} disabled={loading}>
+              {loading ? t({ id: 'common.loading' }) : t({ id: 'common.update' })}
+            </button>
+          }
+        />
       </Hero>
 
       <div className="catalogacao-wrap">
