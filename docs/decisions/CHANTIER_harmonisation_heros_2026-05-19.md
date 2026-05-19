@@ -1,9 +1,10 @@
 # CHANTIER — Harmonisation des héros des pages d'AnarBib
 
-**Date :** 19 mai 2026
+**Date d'ouverture :** 19 mai 2026
+**Date de clôture :** 20 mai 2026 (session unique)
 **Auteur·rice :** Xavier (coord BLMF, admin réseau)
-**Statut :** doctrine actée, prêt à exécution
-**Périmètre :** frontend SPA, 7 pages, 1 composant nouveau, 1 hook nouveau, 3 clés i18n × 6 locales
+**Statut :** **BOUCLÉ** — 7/7 pages en prod
+**Périmètre exécuté :** 1 hook, 2 composants, 1 CSS, 7 pages frontend, 42 clés i18n × 6 locales
 
 ---
 
@@ -37,15 +38,28 @@ Présent sur les 7 pages où l'usager·e connecté·e peut se trouver, dans cet 
 
 Sur `/catálogo` quand l'usager·e n'est pas connecté·e, le bloc identité est masqué (la page reste accessible aux anonymes).
 
-### 2.2 Code couleur des rôles — invariant
+### 2.2 Code couleur des rôles — palette inversée DÉFINITIVE
 
-| Rôle effectif sur la page | Ramp | Hex (light mode) | Sémantique |
+**Décision actée le 20/05/2026 après test visuel sur prod** : palette inversée (fond foncé + texte clair) pour lisibilité optimale sur le fond rouge profond AnarBib du hero (`linear-gradient(145deg, rgba(120,10,18,.97), rgba(18,2,5,1))`, cf. `layout.css`).
+
+| Rôle effectif sur la page | Ramp | Fond (hex) | Texte (hex) | Bordure (hex) |
+|---|---|---|---|---|
+| `leitor` | `c-amber` (inversé) | `#412402` | `#FAC775` | `#BA7517` |
+| `librarian` ou `coordenador` | `c-blue` (inversé) | `#042C53` | `#85B7EB` | `#185FA5` |
+| `administrador` de rede | `c-green` (inversé) | `#173404` | `#C0DD97` | `#3B6D11` |
+
+**Justification du choix inversé** : la palette initiale (fond clair stop 100 + texte foncé stop 800) testée sur prod le 19/05 a révélé un contraste insuffisant sur le fond rouge AnarBib (la pill `#EAF3DE` avec texte `#27500A` se distinguait à peine du fond rouge). La doctrine reste fidèle aux **mêmes ramps** (c-amber, c-blue, c-green) — seuls les stops choisis dans chaque ramp ont changé (900/200 au lieu de 100/800). Ce pattern « stops foncés en fond + clairs en texte » est cohérent avec les boutons "Atualizar dados" et "Guia de governança" qui sont déjà parfaitement lisibles sur le hero.
+
+**Couleurs des badges contextuels (neutre + statuts compte)** :
+
+| Variante | Fond | Texte | Bordure |
 |---|---|---|---|
-| `leitor` | `c-amber` | fond `#FAEEDA`, bordure `#BA7517`, texte `#633806` | usager·e de base |
-| `librarian` ou `coordenador` | `c-blue` | fond `#E6F1FB`, bordure `#185FA5`, texte `#0C447C` | staff local engagé·e |
-| `administrador` de rede | `c-green` | fond `#EAF3DE`, bordure `#3B6D11`, texte `#27500A` | autorité transverse |
+| Neutre (ID public, sigle biblio) | `rgba(245,233,216,.08)` | `#d9c9b0` | `rgba(245,233,216,.2)` |
+| Statut compte `active` | `rgba(99,153,34,.18)` | `#C0DD97` | `rgba(99,153,34,.5)` |
+| Statut compte `attention` | `rgba(186,117,23,.18)` | `#FAC775` | `rgba(186,117,23,.5)` |
+| Statut compte `blocked` | `rgba(226,75,74,.18)` | `#F09595` | `rgba(226,75,74,.5)` |
 
-Ces classes existent déjà dans `theme-base.css` sous les noms `cat-pill-amber`, `cat-pill-info`, `cat-pill-ok` à vérifier en début de chantier (cf. §5.1). Si elles n'existent pas, on les crée.
+**Implémentation : styles inline JSX obligatoires** (cf. §7bis L.2) — pas en CSS externe, parce que `theme.js` injecte des variables `--brand-*` en setProperty inline qui surchargent toute règle CSS externe, même avec `!important`. Seul un autre inline style peut les battre.
 
 ### 2.3 Rôle effectif — règle « page = scope »
 
@@ -92,42 +106,37 @@ Charte langage inclusif AnarBib (Paquet 21, mai 2026) : forme triple en pt-BR.
 
 ### 2.6 URLs des documents
 
-À stocker dans des constantes `MANUAL_URLS` en haut du composant `<HeroDocumentationActions>` :
+Bucket Supabase `library-ui-assets/manuals/network/published/` :
+- `Manual%20Leitor-a-e.pdf` (multilingue intégré)
+- `Manual_do_AnarBib.pdf` (manuel complet, future bascule i18n)
+- `Guia_de_governanca_AnarBib.pdf` (v1.0 du 11/05/2026, uploadé le 19/05/2026 par Xavier)
 
-```js
-const MANUAL_URLS = {
-  reader: 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual%20Leitor-a-e.pdf',
-  complete: 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Manual_do_AnarBib.pdf',
-  governance: 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/library-ui-assets/manuals/network/published/Guia_de_governanca_AnarBib.pdf',
-};
-```
-
-Le PDF de gouvernance fourni le 19/05/2026 (v1.0, 11 mai 2026) sera uploadé dans le bucket Supabase `library-ui-assets/manuals/network/published/Guia_de_governanca_AnarBib.pdf` avant le déploiement.
-
-À terme (chantier ultérieur), ces URLs basculeront en i18n quand les versions traduites du manuel complet seront disponibles. Le manuel lecteur reste monolithique multilingue, donc une seule URL.
+Constantes définies dans `HeroDocumentationActions.jsx`.
 
 ---
 
-## 3. Architecture technique
+## 3. Architecture technique mise en œuvre
 
 ### 3.1 Composant `<UserHeroBadge />`
 
 **Emplacement :** `src/components/UserHeroBadge.jsx` + `src/components/UserHeroBadge.css`
 
-**Props :** aucune. Le composant lit son contexte via `useEffectiveScope()`.
+**Props :**
+- `accountStatus?: 'active' | 'attention' | 'blocked' | null` — seulement utilisé sur `/conta`
 
 **Responsabilité :** rendre le bloc identité (nom, rôle, ID public, sigle biblio, statut compte) conformément à la doctrine §2.1.
 
-**Cas limites :**
-- Si non connecté·e : ne rend rien (`return null`).
-- Si profil pas encore chargé : ne rend rien (évite le flash sans nom).
-- Sur `/conta`, accepte une prop optionnelle `accountStatus={'active'|'attention'|'blocked'}` pour la pill statut.
+**Implémentation technique notable :**
+- Couleurs en **inline style** sur chaque `<span>` (pas en CSS) — voir §2.2
+- `color: 'inherit'` explicite sur les `<span>` enfants — voir §7bis L.3
+- `return null` si non authentifié·e ou profil pas encore chargé (UX flash-free)
 
 ### 3.2 Composant `<HeroDocumentationActions />`
 
 **Emplacement :** `src/components/HeroDocumentationActions.jsx`
 
-**Props :** aucune. Lit `useEffectiveScope()` pour déterminer quels boutons afficher.
+**Props :**
+- `extraActions?: React.ReactNode` — boutons additionnels spécifiques à la page (Atualizar, Exportar PDF/CSV, compteurs métier, etc.), rendus AVANT les boutons documentation
 
 **Responsabilité :** rendre la rangée de boutons documentation conformément à la table §2.5.
 
@@ -142,7 +151,8 @@ Le PDF de gouvernance fourni le 19/05/2026 (v1.0, 11 mai 2026) sera uploadé dan
   fullName: string | null,
   publicId: string | null,
   effectiveRole: 'leitor' | 'librarian' | 'coordenador' | 'network_admin' | null,
-  roleColorClass: 'cat-pill-amber' | 'cat-pill-info' | 'cat-pill-ok' | null,
+  roleVariant: 'leitor' | 'staff' | 'admin' | null,
+  roleLabelKey: string | null,
   libraryAcronym: string | null,
   showLibraryAcronym: boolean,
   documents: {
@@ -154,151 +164,190 @@ Le PDF de gouvernance fourni le 19/05/2026 (v1.0, 11 mai 2026) sera uploadé dan
 ```
 
 **Logique interne :**
-1. Lit `useAuth()` pour `user` et `profile` (full_name, public_id).
-2. Lit `useLibrary()` pour `role`, `isNetworkAdmin`, `libraryName` (sigle), `libraryId`.
+1. Lit `useAuth()` pour `user` et `profile` (first_name, last_name, public_id).
+2. Lit `useLibrary()` pour `role`, `isNetworkAdmin`, `libraryName` (sigle).
 3. Lit `useLocation()` (de react-router-dom) pour connaître la page courante.
 4. Calcule `effectiveRole` selon §2.3.
 5. Calcule `documents` selon §2.5.
 6. Calcule `showLibraryAcronym` : `false` si pathname commence par `/rede`, `true` sinon.
 
-### 3.4 Avantage architectural
-
-Le hook centralise toute la logique de doctrine. Si demain on décide qu'une admin réseau visitant `/painel` doit voir un badge spécial « administradora de rede consultando como coordenadora local », on modifie une seule fonction. Les 7 pages ne savent rien de la doctrine, elles importent juste les deux composants.
+**Avantage architectural** : le hook centralise toute la logique de doctrine. Modifier un comportement = une seule fonction à toucher, pas 7 pages.
 
 ---
 
-## 4. Plan de mise en œuvre
+## 4. Plan de mise en œuvre — EXÉCUTÉ
 
-### Phase A — Composants partagés (autonome, sans toucher aux pages)
+### Phase A — Composants partagés ✅ (19/05/2026, commit `02b788b`)
 
-- A.1 : créer `src/hooks/useEffectiveScope.js`
-- A.2 : créer `src/components/UserHeroBadge.jsx` + `.css`
-- A.3 : créer `src/components/HeroDocumentationActions.jsx`
-- A.4 : ajouter les 3 nouvelles clés i18n × 6 locales (12 entrées par locale soit 18 entrées au total cf. §5)
-- A.5 : ajouter les libellés des rôles i18n × 6 locales s'ils n'existent pas déjà
-- A.6 : uploader le PDF guide-gouvernance dans le bucket Supabase
+- ✅ A.1 : `src/hooks/useEffectiveScope.js`
+- ✅ A.2 : `src/components/UserHeroBadge.jsx` + `.css`
+- ✅ A.3 : `src/components/HeroDocumentationActions.jsx`
+- ✅ A.4 : 7 nouvelles clés i18n × 6 locales (42 entrées via script Node.js `phaseA_patch_i18n.cjs`)
+- ✅ A.5 : libellés des rôles i18n × 6 locales
+- ✅ A.6 : PDF `Guia_de_governanca_AnarBib.pdf` uploadé dans le bucket Supabase
 
-**Critère de succès A :** `npm run build` passe, aucune page ne change visuellement (les composants existent mais ne sont importés nulle part).
+### Phase B — Intégration page par page ✅
 
-### Phase B — Intégration page par page
+Ordre exécuté (option 1 cycle court : du plus particulier au plus simple, puis croissant en taille) :
 
-À traiter dans cet ordre, une page par session de patch, avec test de non-régression entre chaque :
+| # | Page | Lignes | Particularités | Statut |
+|---|---|---|---|---|
+| B.1 | RedePage | 368 | Cas le plus particulier (vert admin, pas de sigle biblio, palette inversée découverte ici) | ✅ |
+| B.2 | CatalogacaoPage | 426 | Logo + email + cat-pill ok supprimés | ✅ |
+| B.3 | ImportacoesPage | 545 | Hero principal vide, Hero restricted préservé | ✅ |
+| B.4 | BibliotecaPage | 1290 | Logo retiré, doctrine couleurs corrigée (bleu et non plus vert), 5 stats préservés | ✅ |
+| B.5 | PanelPage | 2643 | 3 Hero distincts (loading initial / loading données / ready), 3 pills compteurs préservées | ✅ |
+| B.6 | CatalogPage | 921 | Page publique (anonymes), prop `actions={}` transformée en children, 2 constantes URLs supprimées | ✅ |
+| B.7 | AccountPage | 1858 | Prop `accountStatus` propagée, 2 Hero, bandeaux RGPD/serviceState préservés intacts | ✅ |
 
-- B.1 : `/catálogo` (CatalogPage.jsx) — la plus complexe car aussi accessible aux anonymes
-- B.2 : `/conta` (AccountPage.jsx) — déjà a un bloc identité riche, à remplacer
-- B.3 : `/painel` (PanelPage.jsx) — vide actuellement, premier ajout
-- B.4 : `/biblioteca` (BibliotecaPage.jsx) — a juste le rôle, à enrichir
-- B.5 : `/catalogação` (CatalogacaoPage.jsx) — vide
-- B.6 : `/importações` (ImportacoesPage.jsx) — vide
-- B.7 : `/rede` (RedePage.jsx) — a juste le rôle, à enrichir + nouveau bouton guide
+### Phase C — Fermeture ✅ (20/05/2026)
 
-**Critère de succès B :** à chaque B.n, build OK, test visuel manuel OK, commit + push.
-
-### Phase C — Fermeture
-
-- C.1 : audit visuel comparatif des 7 pages
-- C.2 : retrait des éventuels morceaux de code dupliqué/obsolète identifiés pendant le chantier
-- C.3 : note de session `SESSION_harmonisation_heros_2026-05-XX.docx` dans `docs/decisions/`
+- ✅ C.1 : audit visuel des 7 pages
+- ✅ C.2 : nettoyage scripts/backups
+- ✅ C.3 : ce document de doctrine mis à jour avec décisions finales
+- ⏳ C.4 : note de session pour le Grand Livre Blanc (à faire dans la foulée)
 
 ---
 
-## 5. Clés i18n à ajouter
+## 5. Clés i18n ajoutées
 
-### 5.1 Documentation (3 clés × 6 locales = 18 entrées)
+42 entrées au total (7 clés × 6 locales). Toutes via script Node.js `phaseA_patch_i18n.cjs` (lecture/écriture UTF-8 native, parsing JSON sécurisé, backup automatique).
 
-```json
-// pt-BR
-"nav.manual.reader": "Manual do(a/e) leitor(a/e)",
-"nav.manual.complete": "Manual completo",
-"nav.governance.guide": "Guia de governança",
+Clés ajoutées : `nav.governance.guide`, `role.leitor`, `role.librarian`, `role.coordenador`, `role.network_admin`, `account.status.blocked`, `hero.identity.aria`.
 
-// fr
-"nav.manual.reader": "Manuel lecteur·rice",
-"nav.manual.complete": "Manuel complet",
-"nav.governance.guide": "Guide de gouvernance",
+Clés préservées (déjà en prod) : `nav.manual.reader`, `nav.manual.complete`, `account.status.active`, `account.status.attention`, `roles.*` (anciennes, encore référencées en marge sur quelques pages).
 
-// es
-"nav.manual.reader": "Manual lectora·or",
-"nav.manual.complete": "Manual completo",
-"nav.governance.guide": "Guía de gobernanza",
+---
 
-// en
-"nav.manual.reader": "Reader manual",
-"nav.manual.complete": "Full manual",
-"nav.governance.guide": "Governance guide",
+## 6. Risques anticipés — bilan
 
-// it
-"nav.manual.reader": "Manuale lettor*rice",
-"nav.manual.complete": "Manuale completo",
-"nav.governance.guide": "Guida di governance",
+### 6.1 Risque CSS — RÉSOLU
 
-// de
-"nav.manual.reader": "Leser*innen-Handbuch",
-"nav.manual.complete": "Vollständiges Handbuch",
-"nav.governance.guide": "Governance-Leitfaden"
+Le risque que les classes `cat-pill-amber/info/ok` n'existent pas s'est confirmé. Approche d'isolation totale (option 3) avec CSS dédié `ab-hero-badge-*` adoptée. Mais découverte en cours de chantier : **theme.js surcharge même ces classes en cascade**, d'où la migration vers styles inline JSX (§2.2).
+
+### 6.2 Risque ID public — NON CONFIRMÉ
+
+`profile.public_id` était bien disponible dans `AuthContext` (audit Phase A confirmé). Aucune adaptation nécessaire.
+
+### 6.3 Risque doctrine multi-membership — NON DÉCLENCHÉ
+
+Le hook s'aligne sur `useLibrary().role` qui retourne déjà le rôle de plus haut niveau actif. Aucun cas-limite rencontré pendant le chantier (mais Xavier est seul·e usager·e de prod actuellement).
+
+### 6.4 Risque pages mobile — NON TESTÉ
+
+À tester en post-chantier. Le CSS prévoit déjà des breakpoints `@media (max-width: 640px)` pour réduire les pills.
+
+### 6.5 Risque ordre i18n — RÉSOLU
+
+Audit Phase A a confirmé que `nav.manual.reader/complete` et `account.status.active/attention` existaient déjà. Le script Node a sauté ces clés sans les écraser (0 conflits).
+
+---
+
+## 7. Définition de fin de chantier — ATTEINTE
+
+1. ✅ Les 7 pages affichent un hero conforme à §2.1
+2. ✅ Le code couleur §2.2 (palette inversée) est respecté visuellement sur les 7 pages
+3. ✅ Le composant `<UserHeroBadge>` est utilisé partout, aucune logique d'affichage du badge dupliquée
+4. ✅ Le PDF guide-gouvernance est dans le bucket et accessible via les boutons
+5. ✅ Les 6 locales sont à parité sur les nouvelles clés
+6. ✅ `npm run build` passe sans warning nouveau (warning AccountPage > 500 KB préexistant, item de backlog distinct)
+7. ✅ La session est tracée dans ce document
+
+---
+
+## 7bis. Bilan de fermeture — Leçons techniques transférables
+
+### L.1 — DevTools FIRST quand un patch CSS semble sans effet
+
+Quand après un patch CSS le rendu ne change pas, **ouvrir les DevTools du navigateur avant** de relancer un autre patch en aveugle. La capture de la cascade CSS lors du chantier B.1 a permis d'identifier que les inline styles JSX étaient *bien appliqués* (computed color = `rgb(39, 80, 10)`, vert foncé doctrine) — et donc que le problème était un manque de contraste sur le fond rouge, pas un override CSS. Sans DevTools j'aurais probablement enchaîné des patches de spécificité inutiles.
+
+**Coût d'opportunité perdu sans DevTools** : ≈ 3 patches en aveugle (B.1.css, B.1.inline-styles, B.1.text-color) qui auraient été évitables. Doctrine actée : **DevTools avant 2e patch**.
+
+### L.2 — Styles inline JSX pour battre `theme.js`
+
+Le fichier `theme.js` (`src/lib/theme.js`) injecte des variables CSS `--brand-*` via `document.documentElement.style.setProperty()`. Ces injections créent des **inline styles sur l'élément racine** qui ont une spécificité égale aux inline styles JSX, mais qui sont **prioritaires sur toute règle CSS externe**, même avec `!important`.
+
+**Conséquence** : pour battre cette cascade sur le hero AnarBib (fond rouge profond), le seul moyen est d'utiliser `style={{...}}` directement dans le JSX. Notre `UserHeroBadge.jsx` applique donc les 3 couleurs (bg/fg/border) en inline, et le `UserHeroBadge.css` gère uniquement la mise en page (gap, padding, margin, border-radius).
+
+**À retenir pour les futurs composants** : tout ce qui s'affiche dans le `.ab-hero` doit gérer ses couleurs en inline si la palette dévie de `--brand-*`.
+
+### L.3 — `color: 'inherit'` explicite sur les enfants
+
+Même avec un inline style `style={{ color: '#XXXXXX' }}` sur un `<span>` parent, les `<span>` enfants **ne héritent pas automatiquement** de la couleur — parce que `theme.js` injecte une cascade `--brand-text` qui réassigne `color` sur tous les éléments du hero via une règle CSS plus spécifique.
+
+**Solution** : `<span style={{ color: 'inherit' }}>...</span>` sur chaque enfant qui doit prendre la couleur du parent. C'est l'inverse de ce qu'on attendrait de CSS classique, mais nécessaire dans ce contexte. Pattern appliqué systématiquement dans `UserHeroBadge.jsx`.
+
+### L.4 — Patches JSX par bornes d'indices (`IndexOf` + `Substring`)
+
+Les longues heredocs PowerShell (`@"..."@`) contenant des caractères ambigus pour PS — backticks `` ` `` (template literals JavaScript, hex `60`), `$` (variables PS), accolades `${...}` (interpolation) — sont **systématiquement risquées** : PS interprète des séquences que JSX traite littéralement, et les patches échouent silencieusement ou produisent des chaînes corrompues.
+
+**Solution adoptée à partir de B.4** : **bornes d'indices** plutôt que matching de contenu :
+```powershell
+$openIdx = $content.IndexOf("<MarqueurDebut>")
+$closeIdx = $content.IndexOf("</MarqueurFin>", $openIdx)
+$before = $content.Substring(0, $openIdx)
+$after = $content.Substring($closeIdx + "</MarqueurFin>".Length)
+$content = $before + $nouveauContenu + $after
 ```
 
-### 5.2 Rôles dans le hero (4 clés × 6 locales = 24 entrées)
+Plus robuste, indépendant du contenu interne, lisible. Pattern appliqué dans B.4, B.5, B.6, B.7.
 
-À vérifier d'abord si elles existent déjà (probablement oui partiellement). Clés cibles :
+### L.5 — ASCII strict pur dans tous les scripts PowerShell
 
-```json
-"role.leitor": "Leitor(a/e)" // etc.
-"role.librarian": "Bibliotecário(a/e)" // etc.
-"role.coordenador": "Coordenador(a/e)" // etc.
-"role.network_admin": "Administrador(a/e) da rede AnarBib" // etc.
+Pas seulement accents et emojis. **Aussi** les caractères typographiques apparemment innocents :
+- `§` (section sign, U+00A7)
+- `—` (em dash, U+2014)
+- `«»` (guillemets français, U+00AB / U+00BB)
+- `…` (ellipsis, U+2026)
+- `·` (point médian, U+00B7)
+- `→` (right arrow, U+2192)
+
+Tous cassent le parsing PowerShell sous Windows FR, **même quand ils sont uniquement dans des commentaires** `#`. Doctrine actée : **ASCII strict pur pour tous les `.ps1`**.
+
+**Exception nécessaire** : quand la heredoc PS contient du code JSX avec accents légitimes (commentaires `// héros`, libellés FR, etc.), ajouter un **BOM UTF-8** au début du fichier `.ps1` (3 octets `EF BB BF`) pour que PS le lise en UTF-8 et non en CP1252. Ou bascule sur **script Node.js `.cjs`** (Node lit UTF-8 nativement, le piège disparaît).
+
+### L.6 — `$LASTEXITCODE` + `Tee-Object` peu fiable
+
+Capture du code de sortie de `npm run build` via `Tee-Object` produit des faux négatifs (le pic-vert Phase A a été initialement annoncé en rouge alors que le build avait réussi). À utiliser sans pipeline intermédiaire :
+
+```powershell
+& npm run build
+$code = $LASTEXITCODE  # capture immediate, fiable
 ```
 
-Voir §2.4 pour les valeurs dans chaque locale.
+Pas de `2>&1`, pas de `Tee-Object`, pas de `Out-Host` entre les deux instructions. Pattern appliqué dans tous les scripts B.
 
-### 5.3 Statut du compte (3 clés × 6 locales = 18 entrées)
+### L.7 — Composer en cycle court plutôt qu'en cycle long
 
-Probablement déjà existantes (`account.status.active`, etc.). À vérifier.
+Le chantier a été exécuté en option 1 (cycle court : 7 pages en une seule session). Bilan : **gagnant**. Chaque patch B.n bénéficiait des leçons des patches précédents (L.2/L.3/L.4 actées au fur et à mesure), et les composants partagés étaient déjà validés en prod dès B.1. Si on avait fait B.1 puis attendu plusieurs jours, on aurait perdu le bénéfice du momentum et des leçons fraîches.
 
----
-
-## 6. Risques et points d'attention
-
-### 6.1 Risque CSS
-
-Les classes `cat-pill-amber`, `cat-pill-info`, `cat-pill-ok` doivent exister. Si elles n'existent pas (seule `cat-pill ok/info/warn` à classes composites existe selon nos sessions passées), prévoir un mini-patch CSS dédié dans `UserHeroBadge.css` avec sélecteurs locaux.
-
-### 6.2 Risque ID public
-
-Vérifier que `profile.public_id` est bien disponible dans `AuthContext`. Sinon, ajouter une requête depuis le hook ou enrichir `AuthContext` (chantier annexe à scinder).
-
-### 6.3 Risque doctrine multi-membership
-
-Le guide de gouvernance §5.6 (p.20) acte qu'une personne peut avoir plusieurs lignes de membership avec des rôles différents dans la même biblio. Notre doctrine actuelle affiche le rôle « de plus haut niveau actif » via `useLibrary().role`. Le hook `useEffectiveScope` ne fait pas autre chose : il s'aligne sur cette doctrine déjà actée. Pas de risque nouveau.
-
-### 6.4 Risque pages mobile
-
-Les héros sont déjà responsive sur les autres pages. Le composant `<UserHeroBadge>` utilise `flex-wrap`, donc les pills s'enroulent automatiquement sur mobile. À vérifier visuellement quand même en phase B.
-
-### 6.5 Risque ordre i18n
-
-Les clés `nav.manual.reader` existaient déjà avant ce chantier (cf. session du 12/05/2026, paquet réglement). Vérifier que la valeur actuelle correspond à la doctrine §5.1 avant de patcher (ne pas écraser une traduction déjà militante par une traduction générée).
-
----
-
-## 7. Définition de fin de chantier
-
-Le chantier est clos lorsque :
-
-1. Les 7 pages affichent un hero conforme à §2.1 (bloc identité complet + boutons doc selon §2.5).
-2. Le code couleur §2.2 est respecté visuellement sur les 7 pages.
-3. Le composant `<UserHeroBadge>` est utilisé partout, aucune logique d'affichage du badge dupliquée dans les pages.
-4. Le PDF guide-gouvernance est dans le bucket et accessible via les boutons.
-5. Les 6 locales sont à parité sur les nouvelles clés.
-6. `npm run build` passe sans warning nouveau.
-7. La session est tracée dans `docs/decisions/`.
+**Doctrine actée pour les futurs chantiers d'harmonisation UI** : si les composants partagés sont autonomes (Phase A close), enchaîner les pages en cycle court tant que possible. Une page = 30-60 min en moyenne avec les patterns L.4 + L.6.
 
 ---
 
 ## 8. Prérequis bloquants
 
-Aucun. Toutes les dépendances backend (table `network_administrators`, vue `api.network_administrators_public_v1`, `LibraryContext.isNetworkAdmin`) sont déjà en prod (cf. paquet F admin réseau bouclé le 13/05/2026).
+Aucun. Toutes les dépendances backend (table `network_administrators`, vue `api.network_administrators_public_v1`, `LibraryContext.isNetworkAdmin`) étaient déjà en prod (cf. paquet F admin réseau bouclé le 13/05/2026).
 
 ---
 
-*Fin du document de chantier.*
+## 9. État du backlog post-chantier
+
+**Items résolus implicitement** par ce chantier :
+- Affichage incohérent du rôle entre les 7 pages → résolu (composant partagé)
+- Bouton "Manual completo" présent uniquement sur `/catálogo` → résolu (mapping par page)
+- Doctrine couleurs `c-amber/c-blue/c-green` non respectée sur `/biblioteca` et `/rede` → résolu (palette inversée appliquée partout)
+
+**Items créés par ce chantier** :
+- (aucun bug, aucune régression visuelle observée)
+
+**Items pré-existants confirmés non affectés** :
+- Code-splitting `AccountPage.jsx` (warning Vite > 500 KB) → toujours ouvert, item de backlog distinct
+- `(nulld, nullx)` display bug → non touché
+- Top books 90-day block → non touché
+
+---
+
+*Document de chantier final. Version 1.1 du 20 mai 2026.*
+
+*Ce guide est lui-même amendable. Toute correction ou ajout est bienvenu·e via les canaux habituels.*
