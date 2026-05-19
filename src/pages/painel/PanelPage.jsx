@@ -18,6 +18,8 @@ import { formatSchedule } from '@/lib/scheduleFormat';
 import Modal from '@/components/ui/Modal';
 import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
+import UserHeroBadge from '@/components/UserHeroBadge';
+import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -1366,12 +1368,17 @@ export default function PanelPage() {
     <PageShell>
       <Topbar />
       <Hero title={t({ id: 'panel.title' })} subtitle={libraryName || t({ id: 'panel.subtitle' })}>
-        <div className="ab-painel-chips">
-          <Pill variant={activeRes.length > 0 ? 'warn' : 'default'}>{t({ id: 'panel.reservations.active' }, { count: activeRes.length })}</Pill>
-          <Pill>{t({ id: 'panel.consultations.active' }, { count: consultations.filter(c => c.item_status === 'ativa').length })}</Pill>
-          <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoanGroups, items: activeLoans.length, overdue: overdueLoans.length })}</Pill>
-          <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
-        </div>
+        <UserHeroBadge />
+        <HeroDocumentationActions
+          extraActions={
+            <>
+              <Pill variant={activeRes.length > 0 ? 'warn' : 'default'}>{t({ id: 'panel.reservations.active' }, { count: activeRes.length })}</Pill>
+              <Pill>{t({ id: 'panel.consultations.active' }, { count: consultations.filter(c => c.item_status === 'ativa').length })}</Pill>
+              <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoanGroups, items: activeLoans.length, overdue: overdueLoans.length })}</Pill>
+              <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
+            </>
+          }
+        />
       </Hero>
 
       <div className="ab-painel-card">
