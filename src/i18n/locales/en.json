@@ -2463,5 +2463,16 @@
     "error.library.peb_not_authorized":  "At least one of the libraries involved is not in a position to participate in an interlibrary loan. Circulation must be active and network mode must be set to federated on both libraries.",
     "error.library.circulation_disabled":  "Circulation is disabled for this library. Loans, holds, and on-site consultation requests cannot be created. Reach out to the coordination team for more information.",
     "common.error.unknown":  "Unknown error.",
-    "account.renew.circulation_disabled":  "Circulation has been disabled for this library. Loans cannot be renewed."
+    "account.renew.circulation_disabled":  "Circulation has been disabled for this library. Loans cannot be renewed.",
+    "book.attachLibraryHint":  "Attach to a library to request a consultation",
+    "book.reserve.consult":  "Request consultation",
+    "book.reserve.consult.note":  "Requested from the document page",
+    "book.reserve.consult.sending":  "Sending request…",
+    "book.reserve.consult.success":  "Consultation requested",
+    "catalog.quickConsulta.done":  "Requested",
+    "catalog.quickConsulta.doneHint":  "Consultation already requested. See in My account > Consultations.",
+    "catalog.quickConsulta.hint":  "Request an on-site consultation",
+    "catalog.quickConsulta.label":  "Request consultation",
+    "catalog.quickConsulta.loading":  "Sending…",
+    "catalog.quickConsulta.note":  "Requested from search"
 }

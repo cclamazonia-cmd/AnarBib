@@ -2463,5 +2463,16 @@
     "error.library.peb_not_authorized":  "Almeno una delle biblioteche coinvolte non è nelle condizioni di partecipare a prestiti interbibliotecari. La circolazione deve essere attiva e il modo di rete deve essere federato in entrambe le biblioteche.",
     "error.library.circulation_disabled":  "La circolazione è disattivata per questa biblioteca. Non è possibile creare prestiti, prenotazioni o richieste di consultazione. Contatta la coordinazione per maggiori informazioni.",
     "common.error.unknown":  "Errore sconosciuto.",
-    "account.renew.circulation_disabled":  "La circolazione è stata disattivata per questa biblioteca. Non è possibile rinnovare i prestiti."
+    "account.renew.circulation_disabled":  "La circolazione è stata disattivata per questa biblioteca. Non è possibile rinnovare i prestiti.",
+    "book.attachLibraryHint":  "Collegati a una biblioteca per richiedere una consultazione",
+    "book.reserve.consult":  "Richiedere una consultazione",
+    "book.reserve.consult.note":  "Richiesto dalla pagina del documento",
+    "book.reserve.consult.sending":  "Invio in corso…",
+    "book.reserve.consult.success":  "Consultazione richiesta",
+    "catalog.quickConsulta.done":  "Richiesta",
+    "catalog.quickConsulta.doneHint":  "Consultazione già richiesta. Vedi in Il mio account > Consultazioni.",
+    "catalog.quickConsulta.hint":  "Richiedere una consultazione in sede",
+    "catalog.quickConsulta.label":  "Richiedere consultazione",
+    "catalog.quickConsulta.loading":  "Invio…",
+    "catalog.quickConsulta.note":  "Richiesto dalla ricerca"
 }

@@ -2463,5 +2463,16 @@
     "error.library.peb_not_authorized":  "Mindestens eine der beteiligten Bibliotheken ist nicht in der Lage, an einer Fernleihe teilzunehmen. Die Ausleihe muss aktiv sein und der Netzwerkmodus muss in beiden Bibliotheken auf föderiert eingestellt sein.",
     "error.library.circulation_disabled":  "Die Ausleihe ist für diese Bibliothek deaktiviert. Es können keine Ausleihen, Reservierungen oder Konsultationsanfragen erstellt werden. Wende dich an die Koordination für weitere Informationen.",
     "common.error.unknown":  "Unbekannter Fehler.",
-    "account.renew.circulation_disabled":  "Die Ausleihe wurde für diese Bibliothek deaktiviert. Ausleihen können nicht verlängert werden."
+    "account.renew.circulation_disabled":  "Die Ausleihe wurde für diese Bibliothek deaktiviert. Ausleihen können nicht verlängert werden.",
+    "book.attachLibraryHint":  "Mit einer Bibliothek verbinden, um eine Einsichtnahme anzufragen",
+    "book.reserve.consult":  "Einsichtnahme anfragen",
+    "book.reserve.consult.note":  "Über die Dokumentseite angefragt",
+    "book.reserve.consult.sending":  "Wird gesendet…",
+    "book.reserve.consult.success":  "Einsichtnahme angefragt",
+    "catalog.quickConsulta.done":  "Angefragt",
+    "catalog.quickConsulta.doneHint":  "Einsichtnahme bereits angefragt. Siehe Mein Konto > Einsichtnahmen.",
+    "catalog.quickConsulta.hint":  "Einsichtnahme vor Ort anfragen",
+    "catalog.quickConsulta.label":  "Einsichtnahme anfragen",
+    "catalog.quickConsulta.loading":  "Wird gesendet…",
+    "catalog.quickConsulta.note":  "Aus der Suche angefragt"
 }

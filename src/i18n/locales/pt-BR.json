@@ -2463,5 +2463,16 @@
     "error.library.peb_not_authorized":  "Pelo menos uma das bibliotecas envolvidas não está em condição de participar de empréstimos interbibliotecas. A circulação precisa estar ativa e o modo de rede precisa ser federado nas duas bibliotecas.",
     "error.library.circulation_disabled":  "A circulação está desativada para esta biblioteca. Não é possível criar empréstimos, reservas ou pedidos de consulta. Entre em contato com a coordenação para mais informações.",
     "common.error.unknown":  "Erro desconhecido.",
-    "account.renew.circulation_disabled":  "A circulação foi desativada para esta biblioteca. Não é possível renovar empréstimos."
+    "account.renew.circulation_disabled":  "A circulação foi desativada para esta biblioteca. Não é possível renovar empréstimos.",
+    "book.attachLibraryHint":  "Vincule-se a uma biblioteca para agendar uma consulta",
+    "book.reserve.consult":  "Agendar consulta",
+    "book.reserve.consult.note":  "Pedido feito desde a página do documento",
+    "book.reserve.consult.sending":  "Enviando pedido…",
+    "book.reserve.consult.success":  "Consulta agendada",
+    "catalog.quickConsulta.done":  "Agendada",
+    "catalog.quickConsulta.doneHint":  "Consulta já agendada. Veja em Minha conta > Consultas.",
+    "catalog.quickConsulta.hint":  "Agendar uma consulta no local",
+    "catalog.quickConsulta.label":  "Agendar consulta",
+    "catalog.quickConsulta.loading":  "Agendando…",
+    "catalog.quickConsulta.note":  "Pedido feito desde a busca"
 }
