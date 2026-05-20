@@ -14,6 +14,17 @@ import { hasStatesList, getCountryMetadata, getStateName } from '@/components/fo
 const ANARBIB_LOGO = 'https://cclamazonia.noblogs.org/files/2026/03/AnarBib_logo.png';
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 
+// Galerie publique des bibliothèques, hébergée sur le site de présentation
+// anarbib.org (et non dans l'app). Le site a un dossier par langue ; on
+// mappe la locale de l'app (pt-BR, fr, es, it, en, de) vers ce dossier.
+// pt-BR -> /pt/ : le site utilise le code court. Fallback /pt/ si inconnu.
+function galleryUrl(locale) {
+  const map = { 'pt-BR': 'pt', pt: 'pt', fr: 'fr', es: 'es',
+                it: 'it', en: 'en', de: 'de' };
+  const lang = map[locale] || 'pt';
+  return `https://anarbib.org/${lang}/explorar/`;
+}
+
 // Pays par défaut au chargement initial. La détection plus fine
 // (via locale ou IP géolocalisée) pourra être ajoutée ultérieurement.
 const DEFAULT_COUNTRY = 'BR';
@@ -211,6 +222,29 @@ export default function CriarContaPage() {
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '24px 16px' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'auth.create.title'})}</h1>
         <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>{t({id:'auth.create.subtitle'})}</p>
+
+        {/* Bandeau vitrine — doctrine onboarding v0.2 : un compte sert à
+            AGIR ; la consultation libre des catalogues publics n'en
+            demande pas. On offre la sortie « explorer sans compte »
+            AVANT le formulaire. Lien externe vers la galerie du site
+            de présentation (anarbib.org), nouvel onglet pour ne pas
+            faire perdre la saisie en cours. */}
+        <div style={{ padding: '16px 18px', borderRadius: 10, background: 'rgba(21,128,61,.10)', border: '1px solid rgba(21,128,61,.30)', marginBottom: 20 }}>
+          <strong style={{ fontSize: '1.05rem', display: 'block', marginBottom: 6 }}>
+            {t({id:'auth.create.showcase.title'})}
+          </strong>
+          <div style={{ fontSize: '.95rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+            {t({id:'auth.create.showcase.body'})}
+          </div>
+          <a
+            href={galleryUrl(detectLocale())}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'inline-block', marginTop: 10, fontSize: '1rem', fontWeight: 700, color: '#4ade80', textDecoration: 'underline' }}
+          >
+            {t({id:'auth.create.showcase.link'})}
+          </a>
+        </div>
 
         {/* Sélection de bibliothèque */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16 }}>
