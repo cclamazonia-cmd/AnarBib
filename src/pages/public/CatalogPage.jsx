@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
@@ -197,6 +197,9 @@ export default function CatalogPage() {
   const { libraryName, libraryId, role: libraryRole } = useLibrary();
   const isStaff = libraryRole === 'librarian' || libraryRole === 'coordenador' || libraryRole === 'administrador';
   const navigate = useNavigate();
+  // Alias profond /catalogo/:slug + query params (galerie anarbib.org, copySearchLink).
+  const { slug: routeLibrarySlug } = useParams();
+  const [urlSearchParams] = useSearchParams();
   const isAuth = !!user;
   const tableRef = useRef(null);
   const [regimentoUrl, setRegimentoUrl] = useState(null);
@@ -261,6 +264,43 @@ export default function CatalogPage() {
   useEffect(() => {
     saveFilters({ search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter });
   }, [search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter]);
+
+  // ── Initialisation depuis l'URL (montage uniquement) ───────
+  // Doctrine validée : l'URL est la source de vérité. Un lien profond
+  // (galerie anarbib.org → /catalogo/:slug, ou « Copiar busca em link »)
+  // doit produire un résultat déterministe, indépendant des filtres
+  // sauvegardés dans localStorage.
+  //   - filtre bibliothèque : :slug (route) prioritaire, sinon ?biblioteca=
+  //   - autres filtres : appliqués SI l'URL les porte explicitement,
+  //     sinon REMIS À ZÉRO (on ne garde rien de localStorage).
+  // Le slug n'est pas validé côté client : un slug inexistant renvoie
+  // simplement zéro résultat (buildServerFilters → library_slug=eq.<slug>),
+  // et la vue serveur ne contient que des biblios légitimes.
+  // [] en deps : exécution unique, volontaire (montage seulement).
+  useEffect(() => {
+    const qpLibrary = urlSearchParams.get('biblioteca');
+    const libFromUrl = routeLibrarySlug || qpLibrary;
+    // Si l'URL ne porte aucune intention (ni slug ni query param),
+    // on ne touche à rien : comportement historique préservé.
+    const hasUrlIntent = libFromUrl
+      || urlSearchParams.has('q') || urlSearchParams.has('autor')
+      || urlSearchParams.has('editora') || urlSearchParams.has('ano');
+    if (!hasUrlIntent) return;
+
+    // Filtre bibliothèque : URL prioritaire, sinon __all__.
+    setLibraryFilter(libFromUrl || '__all__');
+    // Autres filtres : valeur de l'URL si présente, sinon remise à zéro.
+    setSearch(urlSearchParams.get('q') || '');
+    setAuthorFilter(urlSearchParams.get('autor') || '');
+    setPublisherFilter(urlSearchParams.get('editora') || '');
+    setYearFilter(urlSearchParams.get('ano') || '');
+    // Filtres sans représentation URL : remis à zéro pour un écran propre.
+    setAvailabilityFilter('__all__');
+    setIsbnFilter(''); setLanguageFilter(''); setCddFilter('');
+    setSubjectsFilter(''); setMaterialFilter('__all__');
+    setCollectionFilter(''); setPlaceFilter('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [libraryOptions, setLibraryOptions] = useState([{ value:'__all__', label: t({ id: 'catalog.avail.all' }) }]);
 
@@ -540,12 +580,15 @@ export default function CatalogPage() {
   }
 
   function copySearchLink() {
-    const url = new URL(window.location.href);
+    // Forme propre alignée sur la route alias /catalogo/:slug.
+    // La bibliothèque va dans le chemin ; les autres filtres en query params.
+    const base = window.location.origin
+      + (libraryFilter !== '__all__' ? `/catalogo/${libraryFilter}` : '/catalogo');
+    const url = new URL(base);
     if (dSearch) url.searchParams.set('q', dSearch);
     if (dAuthor) url.searchParams.set('autor', dAuthor);
     if (dPublisher) url.searchParams.set('editora', dPublisher);
     if (dYear) url.searchParams.set('ano', dYear);
-    if (libraryFilter !== '__all__') url.searchParams.set('biblioteca', libraryFilter);
     navigator.clipboard.writeText(url.toString()).catch(() => {});
   }
 

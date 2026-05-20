@@ -58,6 +58,8 @@ export default function App() {
                   {/* ── Pages publiques ──────────────── */}
                   <Route path="/" element={<CatalogPage />} />
                   <Route path="/catalogo" element={<CatalogPage />} />
+                  {/* Alias profond : catalogue scopé sur une bibliothèque (galerie anarbib.org). */}
+                  <Route path="/catalogo/:slug" element={<CatalogPage />} />
                   <Route path="/livro/:id" element={<BookPage />} />
                   <Route path="/autor/:id" element={<AuthorPage />} />
                   <Route path="/entrar" element={<Navigate to="/login" replace />} />
