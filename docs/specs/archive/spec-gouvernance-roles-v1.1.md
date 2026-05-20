@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.2 — 2026-05-20 (doctrine « rôle exclusif » actée)
+**Version** : 1.1 — 2026-05-15 (refonte cohérence post-implémentation admin réseau)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -8,7 +8,6 @@
 **Historique** :
 - v1.0 (2026-05-05) : première rédaction. Modèle 4 rôles (`reader`, `librarian`, `coordenador`, `administrador`), 9 transitions T1-T9, audit log, notifications, cron pending_removal et inactivity cleanup. Implémentation en lots 1-7.
 - **v1.1 (2026-05-15)** : refonte cohérence après la livraison complète du chantier admin réseau (paquets A-F + #114, 11-14/05/2026). Le rôle `administrador` **local** a été supprimé du schéma `user_library_memberships.role` (CHECK constraint rétréci au paquet F), remplacé par la table `network_administrators` (cf. spec admin réseau v0.3.1). Cette spec gouvernance perd donc tout ce qui concernait l'administrador local. Ajout du périmètre d'activation : cette spec décrit le mode `governance_mode = 'full_governance'` de la spec profils v0.3 ; les profils plus simples (`informal`, `staff_roles`) en activent des sous-ensembles. Implémentation reflétée dans §14.
-- **v1.2 (2026-05-20)** : doctrine « **rôle exclusif** » actée et implémentée en production. Une personne ne peut avoir qu'**un seul rôle actif** par bibliothèque ; une promotion ferme le membership de rang inférieur (`status='removed'`), une rétrogradation réactive celui du cran en dessous. La v1.1 recommandait le multi-membership (cumul de lignes actives) « pour préserver l'historique » : cet argument ne tient pas — l'historique est intégralement porté par l'audit log et par les lignes `removed`, sans cumul de lignes `active`. Le multi-membership n'apportait que de l'ambiguïté (toute requête `WHERE role=...` devait se demander laquelle fait foi). Sections amendées : §5.3, §6.5, §10.3 ; précisions §5.6 et §12.1. Voir Annexe E (changelog) et Annexe D (décision cadrée). Implémentation : hotfix promotion librarian (20/05) + migration doctrine rôle exclusif promote_coordenador/cron (20/05).
 
 ---
 
@@ -298,13 +297,13 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 **Précondition** :
 - La personne cible existe en tant qu'utilisateur·rice AnarBib (a un compte)
 - La personne cible n'a pas déjà une membership `active` ou `pending_removal` ou `suspended` dans cette biblio avec un rôle staff (`librarian`/`coordenador`)
-- La personne cible a typiquement une membership `reader` `active` dans cette biblio (cas nominal : on promeut un·e lecteur·rice). Cette ligne `reader` sera fermée par la promotion (cf. Effet).
+- Une membership `reader` existante peut coexister avec le nouveau rôle (multi-membership autorisé par la contrainte UNIQUE `(user_id, library_id, role)`)
 
-**Effet** *(actualisé v1.2 — doctrine rôle exclusif)* :
-- Création d'une nouvelle ligne `user_library_memberships` avec `role='librarian'`, `status='active'` (ou réactivation si une ligne `librarian` existait en `removed`/`inactive`)
-- **Fermeture du membership `reader`** de la même biblio : la ligne `reader` passe à `status='removed'`. Les rôles sont exclusifs au sein d'une biblio — le rôle `librarian` englobe les capacités du `reader` (cf. §3.2). Une entrée d'audit `removal_completed` sur le rôle `reader` trace la fermeture.
+**Effet** :
+- Création d'une nouvelle ligne `user_library_memberships` avec `role='librarian'`, `status='active'`
+- L'ancienne membership `reader` reste active (la personne reste reader ET devient librarian)
 - Mail à la personne concernée + à tous les coordenadores actifs de la biblio
-- Audit log (entrée `promoted_to_librarian`)
+- Audit log
 
 **Note v1.1 (cross-library)** : si l'acteur·rice est admin réseau **sans** membership staff local sur la biblio cible, l'action est tracée dans `network_admin_cross_library_actions_log` (cf. spec admin réseau v0.3.1 §6.3.1 — action critique : promotion staff). Mail immédiat au staff local de la biblio.
 
@@ -318,16 +317,16 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - La personne cible a une membership `librarian` `active` dans cette biblio
 - La personne cible n'a pas déjà une membership `coordenador` `active` dans cette biblio
 
-**Effet** *(actualisé v1.2 — doctrine rôle exclusif)* :
-- Création d'une ligne `coordenador` `active` (ou réactivation si une ligne `coordenador` existait en `removed`/`inactive`)
-- **Fermeture du membership `librarian`** de la même biblio : la ligne `librarian` passe à `status='removed'`. Les rôles sont exclusifs au sein d'une biblio — devenir `coordenador` clôt le rôle `librarian`, dont les capacités sont de toute façon englobées par `coordenador` (cf. §3.3). Une entrée d'audit `removal_completed` sur le rôle `librarian` trace la fermeture.
+**Effet** :
+- Création d'une ligne `coordenador` `active` (la membership `librarian` reste, multi-membership)
+- OU mise à jour de la ligne existante si on suit un modèle « unique role per user_id+library_id » (à arbitrer en implémentation)
 - Mail à la personne + à tous les coordenadores
-- Audit log (entrée `promoted_to_coordenador`)
+- Audit log
 - Si admin réseau cross-library : log dans `network_admin_cross_library_actions_log` + mail immédiat staff local
 
 **RPC** : `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid)`
 
-**Note d'implémentation** *(actualisée v1.2)* : la contrainte UNIQUE `(user_id, library_id, role)` est conservée — elle reste utile pour porter l'historique (une même personne peut avoir une ligne `librarian` en `removed` *et* une ligne `coordenador` en `active`, ce qui retrace son parcours). Mais la **doctrine « rôle exclusif »** impose qu'au plus **une seule ligne soit en `status='active'`** par couple `(user_id, library_id)`. Une promotion ferme systématiquement le rôle de rang inférieur ; une rétrogradation (T3, T5, cron) réactive le rôle du cran en dessous. L'historique est ainsi intégralement préservé par les lignes non-actives (`removed`, `inactive`) et par l'audit log, sans jamais cumuler deux lignes `active`. La v1.1 recommandait le multi-membership actif (« filtrer à l'affichage le rôle de plus haut niveau ») : cette recommandation est **abandonnée** — masquer en permanence une complexité à l'affichage est le signe que cette complexité ne devait pas exister.
+**Note d'implémentation** : la contrainte UNIQUE actuelle est sur `(user_id, library_id, role)`, ce qui autorise le multi-membership avec rôles différents. Cette spec recommande de **garder** ce comportement (multi-membership) pour préserver l'historique et la flexibilité, mais de **filtrer à l'affichage** dans l'UI pour ne montrer que le rôle de plus haut niveau.
 
 ### 5.4. Détail de T3 — `coordenador` → `librarian`
 
@@ -374,11 +373,10 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 - Audit log
 - Si admin réseau cross-library : log dans `network_admin_cross_library_actions_log` + mail immédiat staff local
 
-**Effet à J+7** (cron, cf. §12) *(actualisé v1.2)* :
-- Si toujours `pending_removal` : la membership passe à `status='removed'`
-- **Rétrogradation d'un cran** : la personne n'est pas exclue de la biblio, elle redescend au rôle inférieur. Pour un retrait `librarian`, le membership `reader` est réactivé (ou créé s'il n'existe pas) en `active`. Pour un retrait `coordenador` (même mécanisme via T3 collectif), c'est le membership `librarian` qui est réactivé. Ceci respecte la doctrine rôle exclusif : à tout instant, une seule ligne `active` par `(user_id, library_id)`.
+**Effet à J+7** (cron, cf. §12) :
+- Si toujours `pending_removal` : passage à `inactive`
 - Mail confirmation à la personne + à toute la coordination
-- Audit log : entrée `removal_completed` sur le rôle retiré + entrée traçant la réactivation du rôle inférieur
+- Audit log « pending_removal_completed »
 
 **RPC** : `fn_team_request_remove_member(p_user_id uuid, p_library_id uuid, p_role text, p_reason text DEFAULT NULL)`
 
@@ -484,22 +482,16 @@ La RPC `fn_team_promote_to_administrador` qui existait en v1.0 a été **dépré
 
 **Différence avec v1.0** : la v1.0 mentionnait « modification SQL directe » par un admin AnarBib. Depuis le paquet D admin réseau, cette action passe par la RPC normale, simplement appelée par un·e admin réseau (autorisée par les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library`). Plus de bypass SQL, tracé dans `network_admin_cross_library_actions_log`.
 
-### 6.5. Plusieurs lignes de membership pour la même personne *(refonte v1.2)*
+### 6.5. Multi-membership de la même personne
 
-**Principe — doctrine « rôle exclusif »** : au sein d'une même biblio, une personne n'a **qu'un seul rôle actif** à la fois. Il ne peut jamais y avoir deux lignes `user_library_memberships` en `status='active'` pour un même couple `(user_id, library_id)`.
+**Cas accepté** : une personne peut avoir plusieurs lignes `user_library_memberships` dans la même biblio (ex : `reader` + `librarian`), grâce à la contrainte UNIQUE `(user_id, library_id, role)`.
 
-**Ce que la contrainte UNIQUE autorise** : la contrainte `(user_id, library_id, role)` permet techniquement plusieurs *lignes* pour une même personne dans une même biblio — mais c'est pour porter l'**historique**, pas pour cumuler des rôles actifs. Exemple typique d'une personne promue deux fois : une ligne `reader` en `status='removed'`, une ligne `librarian` en `status='removed'`, une ligne `coordenador` en `status='active'`. Trois lignes, une seule active : son parcours est lisible, son rôle courant est sans ambiguïté.
-
-**Transitions** : une promotion ferme le rôle inférieur (`removed`) ; une rétrogradation ou un retrait par le collectif réactive le rôle du cran en dessous. Cf. §5.3, §5.6, §12.1.
-
-**Règle d'affichage** :
-- Dans l'UI onglet `team`, la personne apparaît une seule fois, avec son unique rôle actif (plus besoin de « filtrer le plus haut niveau » : il n'y en a qu'un)
+**Règle d'affichage** *(actualisée v1.1)* :
+- Dans l'UI onglet `team`, la personne est affichée **une seule fois**, avec son rôle local de plus haut niveau actif (ordre : `coordenador` > `librarian` > `reader`)
 - Si la personne est aussi admin réseau, un `<NetworkAdminBadge>` supplémentaire s'affiche à côté du badge local (cf. spec admin réseau v0.3.1 §7.2), sans ligne supplémentaire
 - L'audit log affiche les changements ligne par ligne (chaque membership a son histoire)
 
 **Règle de RPC** : les RPCs `fn_team_*` opèrent sur une membership précise, identifiée par `(user_id, library_id, role)`. Pas d'ambiguïté.
-
-**Note v1.2** : la v1.1 décrivait ici le multi-membership actif (`reader` + `librarian` simultanément `active`) comme un « cas accepté ». Ce n'est plus le cas — voir Annexe D pour la décision et son argumentaire.
 
 ### 6.6. Interactions entre suspension et pending_removal
 
@@ -896,13 +888,9 @@ COMMENT ON TABLE public.library_membership_audit IS
   'Journal des changements de rôle/status dans les équipes de biblio. Lecture pour le staff actif (transparence P5). Écriture uniquement via RPC SECURITY DEFINER.';
 ```
 
-### 10.3. Pas de modification de la contrainte UNIQUE *(actualisé v1.2)*
+### 10.3. Pas de modification de la contrainte UNIQUE
 
-La contrainte `(user_id, library_id, role)` est conservée telle quelle. Elle permet de garder, pour une même personne dans une biblio, plusieurs lignes de rôles différents — ce qui sert à **porter l'historique** : les rôles passés restent en base avec `status='removed'` (ou `inactive`), tandis qu'un seul rôle est `active`.
-
-**La contrainte n'autorise pas le multi-membership *actif*.** L'unicité de la ligne `active` n'est pas garantie par une contrainte SQL mais par la **doctrine « rôle exclusif »** (v1.2), appliquée par les RPC : toute promotion ferme le rôle inférieur, toute rétrogradation réactive le cran en dessous. L'invariant « au plus une ligne `active` par `(user_id, library_id)` » est donc maintenu *par la logique applicative*, pas par le schéma.
-
-*(Note : une contrainte d'exclusion partielle de type `EXCLUDE … WHERE (status = 'active')` pourrait à terme matérialiser cet invariant au niveau SQL. Non retenu en v1.2 — la doctrine est jeune, mieux vaut laisser les RPC la porter et observer ; à reconsidérer si un bug de double-membership actif réapparaissait malgré les RPC. Noté comme piste, pas comme dette.)*
+La contrainte actuelle `(user_id, library_id, role)` est conservée telle quelle. Elle permet le multi-membership d'une même personne dans une biblio (par exemple `reader` + `librarian` simultanés), ce qui est utile pour préserver l'historique lors des promotions/rétrogradations.
 
 ---
 
@@ -1045,19 +1033,57 @@ Fonction helper `fn_team_notify_event(p_event text, p_payload jsonb)` :
 
 Les crons sont implémentés via `pg_cron`.
 
-### 12.1. `fn_cron_team_pending_removal_complete`
+### 12.1. `cron_team_pending_removal_complete`
 
 **Fréquence** : toutes les heures.
 
-**Action** *(actualisée v1.2)* : finalise les retraits dont la carence de 7 jours a expiré, en appliquant la doctrine de **rétrogradation d'un cran**.
+**Action** : passe les memberships `pending_removal` dont `pending_removal_until <= now()` à `inactive`.
 
-Pour chaque membership en `status='pending_removal'` dont `pending_removal_until <= now()` :
-1. Le membership est clos : `status='removed'`, champs `pending_removal_*` vidés.
-2. La personne **redescend d'un cran**, elle n'est pas exclue : le rôle immédiatement inférieur est réactivé (ou créé) en `status='active'` — `coordenador` retiré → `librarian` réactivé ; `librarian` retiré → `reader` réactivé. Ceci maintient l'invariant « une seule ligne `active` par `(user_id, library_id)` » (doctrine rôle exclusif, §5.3 / §10.3).
-3. Deux entrées d'audit : `removal_completed` sur le rôle retiré (`status_before='pending_removal'`), et une entrée traçant la réactivation du rôle inférieur.
-4. Event `team.removal_completed` déposé dans `team_notification_outbox` (payload enrichi du champ `demoted_to`).
+```sql
+CREATE OR REPLACE FUNCTION public.cron_team_pending_removal_complete()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+  v_membership record;
+BEGIN
+  FOR v_membership IN
+    SELECT *
+    FROM public.user_library_memberships
+    WHERE status = 'pending_removal'
+      AND pending_removal_until <= now()
+  LOOP
+    UPDATE public.user_library_memberships
+    SET status = 'inactive',
+        pending_removal_until = NULL,
+        pending_removal_requested_by = NULL,
+        updated_at = now()
+    WHERE id = v_membership.id;
 
-**Note d'implémentation v1.2** : le code de référence est la fonction `fn_cron_team_pending_removal_complete` telle qu'établie par la migration `20260520230000_doctrine_role_exclusif_coordenador_cron.sql`. Cette migration a aussi corrigé un **bug pré-existant** : la version antérieure filtrait `status='active'` dans sa boucle, alors que `fn_team_request_remove_member` pose `status='pending_removal'` — le cron ne ramassait donc jamais aucun membership à finaliser (bug dormant, le flux de retrait avec carence n'ayant jamais été exercé en conditions réelles avant le 20/05). La spec ne reproduit pas le corps SQL complet de la fonction : le code en base fait foi.
+    INSERT INTO public.library_membership_audit
+      (library_id, target_user_id, actor_user_id, action, role, status_before, status_after, metadata)
+    VALUES
+      (v_membership.library_id, v_membership.user_id, NULL,
+       'removal_completed', v_membership.role, 'pending_removal', 'inactive',
+       jsonb_build_object('originally_requested_by', v_membership.pending_removal_requested_by));
+
+    PERFORM public.fn_team_notify_event('team.removal_completed',
+      jsonb_build_object('library_id', v_membership.library_id,
+                         'target_user_id', v_membership.user_id,
+                         'role', v_membership.role));
+  END LOOP;
+END;
+$$;
+
+-- Programmation hourly
+SELECT cron.schedule(
+  'cron_team_pending_removal_complete_hourly',
+  '0 * * * *',
+  'SELECT public.cron_team_pending_removal_complete();'
+);
+```
 
 ### 12.2. `cron_team_inactive_cleanup`
 
@@ -1234,7 +1260,7 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 
 - **AG** : Assemblée Générale (réunion collective de prise de décision)
 - **Cooptation** : nomination par les membres existants
-- **Multi-membership** : présence de plusieurs lignes `user_library_memberships` pour une même personne dans une même biblio. Depuis la doctrine « rôle exclusif » (v1.2), au plus **une** de ces lignes est en `status='active'` ; les autres (`removed`, `inactive`) portent l'historique des rôles passés.
+- **Multi-membership** : possibilité d'avoir plusieurs lignes de membership pour une même personne dans une même biblio
 - **Carence** : délai entre une décision et son effet (ici 7 jours pour les exclusions)
 - **RebAL** : Réseau de Bibliothèques Alternatives Libertaires
 - **(v1.1) Administrateur·rice réseau** : personne inscrite dans `network_administrators` avec `status='active'`. Autorité politique transverse, cooptée à l'unanimité (cf. spec admin réseau v0.3.1).
@@ -1290,7 +1316,6 @@ Cette spec consigne les décisions prises lors d'une session de cadrage avec Xav
 | Q12 (multi-membership) | Strictement local (biblio par biblio) | ✅ Conservée |
 | Q13 (coord→admin) | Non, écrit comme principe | ✅ **Renforcée v1.1** : transition impossible, l'administration réseau est un mécanisme politique distinct (cooptation unanime, cf. spec admin réseau v0.3.1) |
 | Q14 (succession admin) | Cercle 1/3/5 (impair), modalités à formaliser ailleurs | ✅ **Résolue v1.1** : workflow complet livré dans la spec admin réseau v0.3.1 (cooptation à l'unanimité, retrait collectif à l'unanimité, auto-retrait unilatéral, quorum minimum ≥ 3 admins) |
-| Q15 (rôle exclusif) | *(non posée en v1.0 — la v1.1 recommandait le multi-membership actif)* | 🆕 **Actée v1.2 (20/05/2026)** : une personne n'a qu'**un seul rôle actif** par biblio. Une promotion ferme le rôle inférieur (`status='removed'`) ; une rétrogradation réactive le cran en dessous. Argumentaire : la v1.1 justifiait le multi-membership actif par « préserver l'historique et la flexibilité » — l'historique est en réalité intégralement porté par l'audit log et les lignes `removed`, sans cumul de lignes `active` ; et la « flexibilité » du cumul n'était qu'une ambiguïté (toute requête `WHERE role=…` devait arbitrer laquelle fait foi, toute vue devait penser à `DISTINCT`). Décision révélée par deux bugs jumeaux en production : `fn_team_promote_to_librarian` et `fn_team_promote_to_coordenador` créaient des doubles memberships actifs. Doctrine cohérente avec P1 (délégation, pas hiérarchie) : retirer un rôle ne bannit pas la personne, elle redescend d'un cran. |
 
 ## Annexe E : *(Nouveau v1.1)* Changelog v1.0 → v1.1
 
@@ -1351,25 +1376,4 @@ Cette spec consigne les décisions prises lors d'une session de cadrage avec Xav
 
 ---
 
-## Annexe F : *(Nouveau v1.2)* Changelog v1.1 → v1.2
-
-**Objet** : acter la doctrine « **rôle exclusif** » — une personne n'a qu'un seul rôle actif par bibliothèque.
-
-**Origine** : deux bugs jumeaux découverts en production le 20/05/2026, en testant pour la première fois en conditions réelles les flux de promotion. `fn_team_promote_to_librarian` puis `fn_team_promote_to_coordenador` faisaient un `INSERT ... ON CONFLICT` sur la clé `(user_id, library_id, role)` ; le rôle cible différant du rôle existant, aucun conflit n'était détecté, d'où un `INSERT` pur créant un **second membership actif** au lieu d'une transition. Une personne promue se retrouvait `reader`+`librarian` ou `librarian`+`coordenador` simultanément actifs.
-
-**Sections amendées** :
-- En-tête : version 1.2, entrée d'historique.
-- §5.3 (T2 `librarian`→`coordenador`) : l'« Effet » et la « Note d'implémentation » décrivent désormais la fermeture du rôle inférieur ; la recommandation v1.1 de multi-membership actif est explicitement abandonnée.
-- §5.6 (T5, effet à J+7) : la finalisation du cron est une **rétrogradation d'un cran** (réactivation du rôle inférieur), pas une exclusion sèche.
-- §6.5 : refondue — « rôle exclusif », l'invariant « une seule ligne `active` par `(user_id, library_id)` » remplace le multi-membership.
-- §10.3 : la contrainte UNIQUE est conservée pour l'historique, mais ne garantit pas l'unicité du rôle actif — celle-ci est portée par les RPC ; piste d'une contrainte `EXCLUDE` partielle évoquée, non retenue en v1.2.
-- §12.1 : le pseudo-code SQL obsolète est remplacé par une description du comportement réel + renvoi à la migration ; mention du bug pré-existant du `WHERE status='active'` corrigé.
-- Annexe D : ajout de la décision Q15 avec son argumentaire.
-
-**Implémentation** : livrée en production le 20/05/2026 — hotfix `fn_team_promote_to_librarian` (ferme le `reader`), puis migration `20260520230000_doctrine_role_exclusif_coordenador_cron.sql` (`fn_team_promote_to_coordenador` ferme le `librarian` ; `fn_cron_team_pending_removal_complete` corrigé sur deux points : le `WHERE` ramasse enfin les `pending_removal`, et la finalisation rétrograde d'un cran). `fn_team_self_demote` et `fn_team_request_remove_member` étaient déjà cohérentes, non modifiées.
-
-**Reste à faire** : pas de chantier ouvert par cette doctrine — elle est entièrement appliquée. Point de vigilance pour un futur audit : vérifier qu'aucune vue ou requête frontend ne suppose encore le multi-membership actif (le compteur `librarians_active` de `library_circulation_stats` utilise `count(DISTINCT user_id)`, donc déjà robuste).
-
----
-
-*Spec rédigée le 05/05/2026 (v1.0), refondue le 15/05/2026 (v1.1) pour intégrer la séparation admin réseau et l'articulation avec les profils d'adoption, amendée le 20/05/2026 (v1.2) pour acter la doctrine « rôle exclusif ».*
+*Spec rédigée le 05/05/2026 (v1.0), refondue le 15/05/2026 (v1.1) pour intégrer la séparation admin réseau et l'articulation avec les profils d'adoption.*
