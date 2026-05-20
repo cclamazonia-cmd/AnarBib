@@ -175,14 +175,15 @@ export default function BibliotecaPage() {
         const { data: rules } = await supabase.from('library_circulation_policy_rules').select('*').eq('policy_set_id', psR.data.id).order('priority');
         setPolicyRules(rules || []);
       }
-      const [bk, au, circStats] = await Promise.all([
-        supabase.from('books').select('id', { count: 'exact', head: true }),
+      const [au, circStats] = await Promise.all([
         supabase.from('authors').select('id', { count: 'exact', head: true }),
         supabase.schema('api').from('library_circulation_stats').select('*').eq('library_id', libraryId).maybeSingle(),
       ]);
       const cs = circStats.data || {};
       setStats({
-        books: bk.count || 0, authors: au.count || 0,
+        // DOCUMENTOS = holdings de cette biblio (scope par library_id via la vue).
+        // Anciennement count(*) sur books sans filtre -> comptait tout le reseau (bug).
+        books: cs.holdings_count || 0, authors: au.count || 0,
         exemplars: cs.exemplars_count || 0, readers: cs.readers_active || 0,
         loansOpen: cs.loans_open || 0, loansOverdue: cs.loans_overdue || 0,
         loansCreated7d: cs.loans_created_7d || 0, loansReturned7d: cs.loans_returned_7d || 0,
