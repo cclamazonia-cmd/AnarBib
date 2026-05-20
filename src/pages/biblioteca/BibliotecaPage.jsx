@@ -350,23 +350,40 @@ export default function BibliotecaPage() {
     if (illForm.lender === illForm.borrower) { setMsg({ text: t({id:'biblioteca.ill.differentLibraries'}), kind: 'error' }); return; }
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
-      const { data: loan, error } = await supabase.from('interlibrary_loans_v2').insert({
-        lender_library_id: illForm.lender, borrower_library_id: illForm.borrower, initiated_by_library_id: libraryId,
-        status_global: illForm.status || 'preparacao', coordination_contact_name: illForm.contactName || null,
-        coordination_contact_email: illForm.contactEmail || null, start_date: illForm.startDate || null,
-        due_date: illForm.dueDate || null, notes: illForm.logisticsNote || null, meeting_point: illForm.meetingPoint || null,
-        logistics_mode: 'a_combinar', created_by: user?.id,
-      }).select().single();
+      // EA-12 phase 1 (21/05/2026) : bascule sur fn_peb_create_loan_with_items
+      // pour atomicite loan+items et securite RLS heritee. La RPC valide
+      // automatiquement user_can_manage_library + fn_peb_authorized.
+      const payload_loan = {
+        lender_library_id: illForm.lender,
+        borrower_library_id: illForm.borrower,
+        initiated_by_library_id: libraryId,
+        status_global: illForm.status || 'preparacao',
+        coordination_contact_name: illForm.contactName || null,
+        coordination_contact_email: illForm.contactEmail || null,
+        start_date: illForm.startDate || null,
+        due_date: illForm.dueDate || null,
+        notes: illForm.logisticsNote || null,
+        meeting_point: illForm.meetingPoint || null,
+        logistics_mode: 'a_combinar',
+      };
+      const payload_items = illItems.map((it, i) => ({
+        line_no: i + 1,
+        holding_id: it.holding_id,
+        item_id: it.item_id,
+        book_id: it.book_id || null,
+        bib_ref: it.bib_ref,
+        titulo_cache: it.titulo,
+        autor_cache: it.autor,
+        item_status: 'reservado_para_saida',
+      }));
+      const { data, error } = await supabase.rpc('fn_peb_create_loan_with_items', {
+        p_loan: payload_loan,
+        p_items: payload_items,
+      });
       if (error) throw error;
-      // Insert items
-      if (illItems.length > 0 && loan) {
-        const rows = illItems.map((it, i) => ({
-          interlibrary_loan_id: loan.id, book_id: it.book_id, line_no: i + 1,
-          titulo_cache: it.titulo, autor_cache: it.autor, bib_ref: it.bib_ref, item_status: 'reservado',
-        }));
-        await supabase.from('interlibrary_loan_items_v2').insert(rows);
-      }
-      setMsg({ text: t({id:'biblioteca.ill.created'},{id:loan.id,count:illItems.length}), kind: 'ok' });
+      const newLoan = data?.loan;
+      const newItems = data?.items || [];
+      setMsg({ text: t({id:'biblioteca.ill.created'},{id:newLoan?.id,count:newItems.length}), kind: 'ok' });
       setIllForm({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'' });
       setIllItems([]); setIllDocSearch(''); setIllDocResults([]);
       await loadAll();
@@ -375,15 +392,27 @@ export default function BibliotecaPage() {
   }
 
   async function updateIllStatus(loanId, newStatus) {
-    await supabase.from('interlibrary_loans_v2').update({ status_global: newStatus, updated_by: user?.id }).eq('id', loanId);
-    await loadAll();
+    // EA-12 phase 1 (21/05/2026) : bascule sur fn_peb_update_status (RPC).
+    try {
+      const { error } = await supabase.rpc('fn_peb_update_status', {
+        p_loan_id: loanId,
+        p_new_status: newStatus,
+      });
+      if (error) throw error;
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' });
+    }
   }
 
   async function deleteIll(loanId) {
     if (!confirm(t({id:'biblioteca.ill.discardConfirm'},{id:loanId}))) return;
     try {
-      await supabase.from('interlibrary_loan_items_v2').delete().eq('interlibrary_loan_id', loanId);
-      await supabase.from('interlibrary_loans_v2').delete().eq('id', loanId);
+      // EA-12 phase 1 (21/05/2026) : bascule sur fn_peb_delete_loan (atomique).
+      const { error } = await supabase.rpc('fn_peb_delete_loan', {
+        p_loan_id: loanId,
+      });
+      if (error) throw error;
       setMsg({ text: t({id:'biblioteca.ill.discarded'},{id:loanId}), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
