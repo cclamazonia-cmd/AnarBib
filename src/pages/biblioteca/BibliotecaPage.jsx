@@ -306,29 +306,38 @@ export default function BibliotecaPage() {
   async function createTask() {
     if (!newTask.title.trim()) { setMsg({ text: t({ id: 'biblioteca.tasks.titleRequired' }), kind: 'error' }); return; }
     try {
-      // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
+      // EA-15 (21/05/2026) : bascule sur fn_task_create (RPC).
+      // Les defaults backend ('pendente' pour status, '{}' pour tags) sont
+      // appliques cote RPC si les params sont absents ou vides.
       const tags = (newTask.tagsText || '').split(',').map(tag => tag.trim()).filter(Boolean);
-      // FIX A.1 BUG #7: tags column is NOT NULL with default '{}'. Sending null
-      // violates the constraint. Build payload conditionally so the DB applies
-      // its default when no tags are provided.
-      const insertPayload = {
-        library_id: libraryId, title: newTask.title.trim(), description: newTask.description.trim() || null,
-        priority: newTask.priority || 'normal', owner: newTask.owner.trim() || null,
-        due_date: newTask.dueDate || null,
-        status: 'pendente', created_by: user?.id,
-      };
-      if (tags.length > 0) insertPayload.tags = tags;
-      const { error } = await supabase.from('painel_internal_tasks').insert(insertPayload);
+      const { error } = await supabase.rpc('fn_task_create', {
+        p_library_id: libraryId,
+        p_title: newTask.title.trim(),
+        p_description: newTask.description.trim() || null,
+        p_priority: newTask.priority || 'media',
+        p_owner: newTask.owner.trim() || null,
+        p_due_date: newTask.dueDate || null,
+        p_tags: tags,
+      });
       if (error) throw error;
-      setNewTask({ title: '', description: '', priority: 'normal', owner: '', dueDate: '', tagsText: '' });
+      setNewTask({ title: '', description: '', priority: 'media', owner: '', dueDate: '', tagsText: '' });
       setMsg({ text: t({ id: 'biblioteca.tasks.created' }), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
 
   async function updateTaskStatus(taskId, status) {
-    await supabase.from('painel_internal_tasks').update({ status, updated_by: user?.id }).eq('id', taskId);
-    await loadAll();
+    // EA-15 (21/05/2026) : bascule sur fn_task_update_status (RPC).
+    try {
+      const { error } = await supabase.rpc('fn_task_update_status', {
+        p_task_id: taskId,
+        p_new_status: status,
+      });
+      if (error) throw error;
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' });
+    }
   }
 
   // ── ILL: search documents for item adding ───────────────
@@ -464,10 +473,15 @@ export default function BibliotecaPage() {
   async function inviteToTask(taskId, email) {
     if (!email?.trim()) return;
     try {
-      await supabase.from('painel_internal_task_invites').insert({
-        task_id: taskId, library_id: libraryId, invite_email: email.trim(),
-        invite_status: 'pendente', created_by: user?.id,
+      // EA-15 (21/05/2026) : bascule sur fn_task_invite (RPC intelligente).
+      // La RPC ajoute l'email aux tags de la task, et le trigger
+      // tg_sync_task_invites_from_task cree l'invite proprement.
+      // Idempotente (si email deja dans tags, ne fait rien).
+      const { error } = await supabase.rpc('fn_task_invite', {
+        p_task_id: taskId,
+        p_invite_email: email.trim(),
       });
+      if (error) throw error;
       setMsg({ text: t({ id: 'biblioteca.tasks.inviteSent' }, { email: email.trim() }), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
@@ -1364,7 +1378,7 @@ export default function BibliotecaPage() {
                   <select value={tk.status} onChange={e=>updateTaskStatus(tk.id,e.target.value)} style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
                     <option value="pendente">{t({ id: 'task.status.pendente' })}</option><option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option><option value="concluida">{t({ id: 'task.status.concluida' })}</option><option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
                   </select>
-                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm(t({ id: 'biblioteca.tasks.discardConfirm' })))return;await supabase.from('painel_internal_tasks').delete().eq('id',tk.id);await loadAll();}}>{t({ id: 'common.discard' })}</button>
+                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm(t({ id: 'biblioteca.tasks.discardConfirm' })))return;try{const{error}=await supabase.rpc('fn_task_delete',{p_task_id:tk.id});if(error)throw error;await loadAll();}catch(err){setMsg({text:t({id:'common.errorPrefix'},{message:err.message}),kind:'error'});}}}>{t({ id: 'common.discard' })}</button>
                 </div>
               </div>
               {/* Invite row */}
