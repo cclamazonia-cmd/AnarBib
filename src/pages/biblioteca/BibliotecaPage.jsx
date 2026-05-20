@@ -1292,7 +1292,7 @@ export default function BibliotecaPage() {
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.reports.generate' })}</h4>
             <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:10 }}>
-              Gera um resumo com indicadores, equipe e tarefas internas da biblioteca. O relatório pode ser copiado, salvo como texto ou enviado por e-mail.
+              {t({ id: 'biblioteca.reports.generateHint' })}
             </div>
             <textarea value={generateReportText()} readOnly rows={12} style={{...fs, fontFamily:'monospace', fontSize:'.82rem', resize:'vertical', marginBottom:10}} />
             <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>

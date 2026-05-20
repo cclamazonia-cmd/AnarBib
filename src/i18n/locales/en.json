@@ -2602,5 +2602,6 @@
     "role.coordenador": "Coordinator",
     "role.leitor": "Reader",
     "role.librarian": "Librarian",
-    "role.network_admin": "AnarBib network administrator"
+    "role.network_admin": "AnarBib network administrator",
+    "biblioteca.reports.generateHint": "Generates a summary with indicators, team and internal tasks of the library. The report can be copied, saved as text or sent by email."
 }

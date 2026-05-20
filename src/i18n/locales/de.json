@@ -2602,5 +2602,6 @@
     "role.coordenador": "Koordinator*in",
     "role.leitor": "Leser*in",
     "role.librarian": "Bibliothekar*in",
-    "role.network_admin": "Netzwerkadministrator*in von AnarBib"
+    "role.network_admin": "Netzwerkadministrator*in von AnarBib",
+    "biblioteca.reports.generateHint": "Erstellt eine Zusammenfassung mit Indikatoren, Team und internen Aufgaben der Bibliothek. Der Bericht kann kopiert, als Text gespeichert oder per E-Mail gesendet werden."
 }

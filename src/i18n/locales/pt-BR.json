@@ -2602,5 +2602,6 @@
     "role.coordenador": "Coordenador(a/e)",
     "role.leitor": "Leitor(a/e)",
     "role.librarian": "Bibliotecário(a/e)",
-    "role.network_admin": "Administrador(a/e) da rede AnarBib"
+    "role.network_admin": "Administrador(a/e) da rede AnarBib",
+    "biblioteca.reports.generateHint": "Gera um resumo com indicadores, equipe e tarefas internas da biblioteca. O relatório pode ser copiado, salvo como texto ou enviado por e-mail."
 }
