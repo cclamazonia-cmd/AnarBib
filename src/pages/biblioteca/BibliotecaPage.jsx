@@ -363,14 +363,18 @@ export default function BibliotecaPage() {
   // ── ILL: search documents for item adding ───────────────
   async function searchIllDocs() {
     if (!illDocSearch.trim()) return;
-    // EA-12 phase 2 (dette 4) : on cherche des EXEMPLAIRES, pas des titres.
-    // La RPC fn_peb_create_loan_with_items exige holding_id + item_id ;
-    // v_exemplar_labels porte exemplar_id (=item_id), holding_id, book_id.
-    const q = illDocSearch.trim();
-    const { data } = await supabase.from('v_exemplar_labels')
-      .select('exemplar_id, holding_id, book_id, titulo_etiqueta, autor_etiqueta, tombo, resolved_bib_ref')
-      .or(`titulo_etiqueta.ilike.%${q}%,autor_etiqueta.ilike.%${q}%,tombo.ilike.%${q}%,resolved_bib_ref.ilike.%${q}%`)
-      .limit(15);
+    // EA-12 phase 2 (dette 4) - correctif : la recherche passe par la RPC
+    // fn_peb_search_exemplares (exemplares -> book_holdings -> books). La
+    // vue v_exemplar_labels appelait une fonction bridge non accessible a
+    // authenticated (42501). On gere desormais explicitement l'erreur.
+    const { data, error } = await supabase.rpc('fn_peb_search_exemplares', {
+      p_query: illDocSearch.trim(),
+    });
+    if (error) {
+      setIllDocResults([]);
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: error.message }), kind: 'error' });
+      return;
+    }
     setIllDocResults(data || []);
   }
 
@@ -384,9 +388,9 @@ export default function BibliotecaPage() {
       item_id: ex.exemplar_id,
       holding_id: ex.holding_id,
       book_id: ex.book_id,
-      bib_ref: ex.resolved_bib_ref,
-      titulo: ex.titulo_etiqueta,
-      autor: ex.autor_etiqueta,
+      bib_ref: ex.bib_ref,
+      titulo: ex.titulo,
+      autor: ex.autor,
       tombo: ex.tombo,
     }]);
   }
@@ -1229,7 +1233,7 @@ export default function BibliotecaPage() {
               </div>
               {illDocResults.length>0 && <div style={{...lw,marginBottom:8,maxHeight:150,overflowY:'auto'}}>{illDocResults.map((d,i)=>(
                 <div key={d.exemplar_id} style={{...lr(i),cursor:'pointer'}} onClick={()=>addIllItem(d)}>
-                  <div style={{ fontSize:'.88rem' }}><strong>{d.titulo_etiqueta}</strong> — {d.autor_etiqueta||'—'} · {t({ id: 'biblioteca.ill.tombo' })}: {d.tombo||'—'}</div>
+                  <div style={{ fontSize:'.88rem' }}><strong>{d.titulo}</strong> — {d.autor||'—'} · {t({ id: 'biblioteca.ill.tombo' })}: {d.tombo||'—'}</div>
                   <button className="cat-btn secondary" style={{ fontSize:'.78rem', padding:'3px 8px' }} onClick={e=>{e.stopPropagation();addIllItem(d);}}>{t({ id: 'common.add' })}</button>
                 </div>
               ))}</div>}
