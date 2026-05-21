@@ -224,20 +224,42 @@ function renderEmail(opts) {
     text
   };
 }
-async function sendBrevoEmail(target, subject, html, text) {
-  // Paquet 25.10 — Inline les logos Supabase Storage en data URI base64
-  // AVANT envoi a Brevo (cf. _shared/mail/inline-images.ts). Empeche Brevo
-  // de reecrire les <img src="..."> via son CDN tracker dont la duree de vie
-  // est courte. Comportement defensif : en cas d'echec, on envoie quand
-  // meme le mail avec les URLs originales.
-  let htmlInlined = html;
-  if (html && typeof html === "string") {
-    try {
-      htmlInlined = await inlineLogosInHtml(html);
-    } catch (e) {
-      console.warn(`notify-library-request: inlineLogosInHtml failed (mail sent anyway):`, e);
-    }
+// ============================================================================
+// Transport mail — wrapper neutre + dispatch par provider
+// ----------------------------------------------------------------------------
+// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #5).
+// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3 et §4.5.
+//
+// Decision §4.3 : EXTRACTION PROPRE. sendBrevoEmail etait deja une fonction
+// isolee ; on la dedouble en sendViaBrevo / sendViaResend, exposees derriere
+// un wrapper neutre sendEmail() qui dispatche selon MAIL_PROVIDER.
+//
+// §4.5 : l'inlining des logos (inlineLogosInHtml) est INCONDITIONNEL et commun
+// aux deux providers. On le factorise dans sendEmail(), AVANT le dispatch :
+// les deux implementations recoivent donc du HTML deja inline. Pas de
+// duplication du bloc try/catch.
+//
+// Signature positionnelle (target, subject, html, text) conservee : c'est le
+// contrat que consomme safeSendEmail. Contrat de retour : string + throw.
+//
+// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// ============================================================================
+const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
+function resolveMailProvider() {
+  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
+  if (!VALID_MAIL_PROVIDERS.has(raw)) {
+    console.warn(`[library-request] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
+    return "brevo";
   }
+  return raw;
+}
+function formatMailAddress(email, name) {
+  const n = String(name || "").trim();
+  return n ? `${n} <${email}>` : email;
+}
+// --- Implementation Brevo --------------------------------------------------
+// htmlInlined : HTML deja passe par inlineLogosInHtml (factorise dans sendEmail).
+async function sendViaBrevo(target, subject, htmlInlined, text) {
   const payload = {
     sender: {
       name: BRAND_NAME,
@@ -276,6 +298,55 @@ async function sendBrevoEmail(target, subject, html, text) {
   if (!res.ok) throw new Error(`Brevo error HTTP ${res.status}: ${body}`);
   return body;
 }
+// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// htmlInlined : meme HTML deja inline que pour Brevo (§4.5).
+async function sendViaResend(target, subject, htmlInlined, text) {
+  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
+  if (!resendKey) {
+    throw new Error("RESEND_API_KEY absente des secrets Edge Function");
+  }
+  const payload: Record<string, unknown> = {
+    from: formatMailAddress(SENDER_EMAIL, BRAND_NAME),
+    to: [target.email],
+    subject,
+    html: htmlInlined,
+    text
+  };
+  if (isValidEmail(ADMIN_EMAIL)) {
+    payload.reply_to = formatMailAddress(ADMIN_EMAIL.trim().toLowerCase(), ADMIN_NAME);
+  }
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${resendKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+  const body = await res.text();
+  if (!res.ok) throw new Error(`Resend error HTTP ${res.status}: ${body}`);
+  return body;
+}
+// --- Wrapper neutre --------------------------------------------------------
+// Inline les logos une fois (spec §4.5), puis dispatche selon MAIL_PROVIDER.
+async function sendEmail(target, subject, html, text) {
+  // Inlining des logos Supabase Storage en data URI base64 — inconditionnel,
+  // commun aux deux providers. Defensif : en cas d'echec, HTML d'origine.
+  let htmlInlined = html;
+  if (html && typeof html === "string") {
+    try {
+      htmlInlined = await inlineLogosInHtml(html);
+    } catch (e) {
+      console.warn(`notify-library-request: inlineLogosInHtml failed (mail sent anyway):`, e);
+    }
+  }
+  const provider = resolveMailProvider();
+  console.log(`[library-request] envoi via ${provider}`);
+  if (provider === "resend") {
+    return await sendViaResend(target, subject, htmlInlined, text);
+  }
+  return await sendViaBrevo(target, subject, htmlInlined, text);
+}
 async function safeSendEmail(label, target, subject, html, text) {
   if (!target || !isValidEmail(target.email)) {
     return {
@@ -287,7 +358,7 @@ async function safeSendEmail(label, target, subject, html, text) {
     };
   }
   try {
-    const response = await sendBrevoEmail(target, subject, html, text);
+    const response = await sendEmail(target, subject, html, text);
     return {
       ok: true,
       label,
