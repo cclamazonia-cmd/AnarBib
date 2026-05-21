@@ -12,6 +12,7 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
 import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
 import PolicySetManager from '@/components/library/PolicySetManager';
+import RegimeStateBox from '@/components/library/RegimeStateBox';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -799,6 +800,9 @@ export default function BibliotecaPage() {
         {/* ═══ 3. Regimento e circulação ════════════════ */}
         {tab==='regulation' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.regulation.title' })}</h3>
+          {/* EA-06 (21/05/2026) : encart de lecture du regime.
+              Diagnostic synthetique du croisement jeu actif x texte actif. */}
+          <RegimeStateBox libraryId={libraryId} regulationDocs={regDocs} />
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.regulation.docs' })}</h4>
             {regDocs.map(doc => (
