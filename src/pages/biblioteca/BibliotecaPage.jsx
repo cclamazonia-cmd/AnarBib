@@ -10,6 +10,7 @@ import TransitionsPanel from '@/components/TransitionsPanel';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
+import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -1149,7 +1150,11 @@ export default function BibliotecaPage() {
         {/* ═══ 4. Documentos e relações externas ═══════ */}
         {tab==='documents' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.documents.title' })}</h3>
-          <div style={bx}>
+          {/* EA-08 (21/05/2026) : editeur de gouvernance documentale.
+              Restaure la fonctionnalite du HTML d'origine. Doctrine :
+              gouvernance documentale = attribut local par biblioteca. */}
+          <DocumentGovernanceSection libraryId={libraryId} canEdit={isCoord} />
+          <div style={{ ...bx, marginTop:16 }}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.documents.partners' })}</h4>
             {partners.length===0 && <div style={{ fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.documents.noPartners' })}</div>}
             {partners.length>0 && <div style={lw}>{partners.map((p,i)=>(
