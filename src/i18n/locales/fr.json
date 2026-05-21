@@ -2691,5 +2691,15 @@
   "biblioteca.regime.state5.step1": "Enregistre d'abord le texte principal de la bibliothèque.",
   "biblioteca.regime.state5.step2": "Crée un jeu de règles pour le prêt, la réservation et la consultation.",
   "biblioteca.regime.state5.step3": "Ajoute au moins une règle.",
-  "biblioteca.regime.state5.step4": "Mets le jeu en usage."
+  "biblioteca.regime.state5.step4": "Mets le jeu en usage.",
+  "biblioteca.workspaceInspector.openButton": "Voir la configuration brute",
+  "biblioteca.workspaceInspector.title": "Configuration institutionnelle (brute)",
+  "biblioteca.workspaceInspector.copy": "Copier le JSON",
+  "biblioteca.workspaceInspector.copied": "Copié",
+  "biblioteca.workspaceInspector.copyFailed": "Impossible de copier.",
+  "biblioteca.workspaceInspector.reload": "Recharger",
+  "biblioteca.workspaceInspector.meta": "{count} blocs · lecture seule",
+  "biblioteca.workspaceInspector.empty": "Aucune configuration trouvée.",
+  "biblioteca.refresh.label": "Actualiser",
+  "biblioteca.refresh.hint": "Recharge les données de la page."
 }

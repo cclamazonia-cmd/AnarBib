@@ -2691,5 +2691,15 @@
   "biblioteca.regime.state5.step1": "Registra primero el texto principal de la biblioteca.",
   "biblioteca.regime.state5.step2": "Crea un conjunto de reglas para préstamo, reserva y consulta.",
   "biblioteca.regime.state5.step3": "Añade al menos una regla.",
-  "biblioteca.regime.state5.step4": "Pon el conjunto en uso."
+  "biblioteca.regime.state5.step4": "Pon el conjunto en uso.",
+  "biblioteca.workspaceInspector.openButton": "Ver configuración en bruto",
+  "biblioteca.workspaceInspector.title": "Configuración institucional (en bruto)",
+  "biblioteca.workspaceInspector.copy": "Copiar JSON",
+  "biblioteca.workspaceInspector.copied": "Copiado",
+  "biblioteca.workspaceInspector.copyFailed": "No se pudo copiar.",
+  "biblioteca.workspaceInspector.reload": "Recargar",
+  "biblioteca.workspaceInspector.meta": "{count} bloques · solo lectura",
+  "biblioteca.workspaceInspector.empty": "No se encontró ninguna configuración.",
+  "biblioteca.refresh.label": "Actualizar",
+  "biblioteca.refresh.hint": "Recarga los datos de la página."
 }

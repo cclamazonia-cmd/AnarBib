@@ -13,6 +13,7 @@ import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssets
 import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
 import PolicySetManager from '@/components/library/PolicySetManager';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
+import WorkspaceInspectorModal from '@/components/library/WorkspaceInspectorModal';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -94,6 +95,7 @@ export default function BibliotecaPage() {
   });
 
   const [tab, setTab] = useState(isCoord ? 'identity' : 'team');
+  const [wsInspectorOpen, setWsInspectorOpen] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [saving, setSaving] = useState(false);
   const regFileRef = useRef(null);
@@ -663,6 +665,8 @@ export default function BibliotecaPage() {
         <div className="cat-tabs" style={{ marginBottom:18 }}>
           {/* FIX BUG #4: rename loop variable to avoid shadowing `t` */}
           {visibleTabs.map(tb => <button key={tb.id} className={`cat-tab-btn${tab===tb.id?' active':''}${tb.separator?' tab-separator':''}`} onClick={()=>setTab(tb.id)}>{tb.label}</button>)}
+          {/* EA-02 (21/05/2026) : bouton Atualizar global. Recharge loadAll(). */}
+          <button className="cat-btn secondary" onClick={loadAll} title={t({ id: 'biblioteca.refresh.hint' })} style={{ marginLeft:'auto', fontSize:'.8rem', padding:'4px 10px' }}>{t({ id: 'biblioteca.refresh.label' })}</button>
         </div>
 
         {/* Paquet E.5 refactor (20/05/2026) : onglet transitions de profil */}
@@ -672,7 +676,12 @@ export default function BibliotecaPage() {
 
         {/* ═══ 1. Identidade ═══════════════════════════ */}
         {tab==='identity' && lib && (<div>
-          <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.identity.title' })}</h3>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+            <h3 style={{ margin:0 }}>{t({ id: 'biblioteca.identity.title' })}</h3>
+            {/* EA-01 (21/05/2026) : ouvre la modale d'inspection de la config brute. */}
+            <button className="cat-btn secondary" onClick={()=>setWsInspectorOpen(true)} style={{ fontSize:'.8rem', padding:'4px 10px' }}>{t({ id: 'biblioteca.workspaceInspector.openButton' })}</button>
+          </div>
+          <WorkspaceInspectorModal libraryId={libraryId} open={wsInspectorOpen} onClose={()=>setWsInspectorOpen(false)} />
           <div className="cat-book-grid" style={{ marginBottom:16 }}>
             <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.identity.name' })}</label><input type="text" value={lib.name||''} onChange={e=>setL('name',e.target.value)} style={fs} /></div>
             <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.shortName' })}</label><input type="text" value={lib.short_name||''} onChange={e=>setL('short_name',e.target.value)} style={fs} /></div>

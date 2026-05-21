@@ -2691,5 +2691,15 @@
   "biblioteca.regime.state5.step1": "First register the library's main text.",
   "biblioteca.regime.state5.step2": "Create a rule set for loans, reservations and consultation.",
   "biblioteca.regime.state5.step3": "Add at least one rule.",
-  "biblioteca.regime.state5.step4": "Put the set in use."
+  "biblioteca.regime.state5.step4": "Put the set in use.",
+  "biblioteca.workspaceInspector.openButton": "View raw configuration",
+  "biblioteca.workspaceInspector.title": "Institutional configuration (raw)",
+  "biblioteca.workspaceInspector.copy": "Copy JSON",
+  "biblioteca.workspaceInspector.copied": "Copied",
+  "biblioteca.workspaceInspector.copyFailed": "Could not copy.",
+  "biblioteca.workspaceInspector.reload": "Reload",
+  "biblioteca.workspaceInspector.meta": "{count} blocks · read only",
+  "biblioteca.workspaceInspector.empty": "No configuration found.",
+  "biblioteca.refresh.label": "Refresh",
+  "biblioteca.refresh.hint": "Reloads the page data."
 }

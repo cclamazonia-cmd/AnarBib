@@ -2691,5 +2691,15 @@
   "biblioteca.regime.state5.step1": "Registriere zuerst den Haupttext der Bibliothek.",
   "biblioteca.regime.state5.step2": "Erstelle einen Regelsatz für Ausleihe, Reservierung und Einsichtnahme.",
   "biblioteca.regime.state5.step3": "Füge mindestens eine Regel hinzu.",
-  "biblioteca.regime.state5.step4": "Nimm den Satz in Gebrauch."
+  "biblioteca.regime.state5.step4": "Nimm den Satz in Gebrauch.",
+  "biblioteca.workspaceInspector.openButton": "Rohkonfiguration ansehen",
+  "biblioteca.workspaceInspector.title": "Institutionelle Konfiguration (roh)",
+  "biblioteca.workspaceInspector.copy": "JSON kopieren",
+  "biblioteca.workspaceInspector.copied": "Kopiert",
+  "biblioteca.workspaceInspector.copyFailed": "Kopieren nicht möglich.",
+  "biblioteca.workspaceInspector.reload": "Neu laden",
+  "biblioteca.workspaceInspector.meta": "{count} Blöcke · nur lesen",
+  "biblioteca.workspaceInspector.empty": "Keine Konfiguration gefunden.",
+  "biblioteca.refresh.label": "Aktualisieren",
+  "biblioteca.refresh.hint": "Lädt die Seitendaten neu."
 }

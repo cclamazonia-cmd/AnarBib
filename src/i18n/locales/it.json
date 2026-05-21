@@ -2691,5 +2691,15 @@
   "biblioteca.regime.state5.step1": "Registra prima il testo principale della biblioteca.",
   "biblioteca.regime.state5.step2": "Crea un insieme di regole per prestito, prenotazione e consultazione.",
   "biblioteca.regime.state5.step3": "Aggiungi almeno una regola.",
-  "biblioteca.regime.state5.step4": "Metti l'insieme in uso."
+  "biblioteca.regime.state5.step4": "Metti l'insieme in uso.",
+  "biblioteca.workspaceInspector.openButton": "Vedi la configurazione grezza",
+  "biblioteca.workspaceInspector.title": "Configurazione istituzionale (grezza)",
+  "biblioteca.workspaceInspector.copy": "Copia JSON",
+  "biblioteca.workspaceInspector.copied": "Copiato",
+  "biblioteca.workspaceInspector.copyFailed": "Impossibile copiare.",
+  "biblioteca.workspaceInspector.reload": "Ricaricare",
+  "biblioteca.workspaceInspector.meta": "{count} blocchi · sola lettura",
+  "biblioteca.workspaceInspector.empty": "Nessuna configurazione trovata.",
+  "biblioteca.refresh.label": "Aggiornare",
+  "biblioteca.refresh.hint": "Ricarica i dati della pagina."
 }
