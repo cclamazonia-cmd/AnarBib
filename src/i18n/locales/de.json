@@ -466,7 +466,7 @@
   "biblioteca.ill.packagingPlaceholder": "Verpackung, Transport, Bedingungen…",
   "biblioteca.ill.pickupPlaceholder": "Abholung am Tresen, Postversand…",
   "biblioteca.ill.prepare": "Temporäre Ausleihe vorbereiten",
-  "biblioteca.ill.save": "Ausleihe speichern",
+  "biblioteca.ill.save": "Leihanfrage erstellen",
   "biblioteca.ill.searchDoc": "Dokument nach Titel, Autor oder Ref. suchen…",
   "biblioteca.ill.searchPh": "Buscar documento por título, autor ou ref…",
   "biblioteca.ill.searchPlaceholder": "Gewünschtes Dokument suchen…",
@@ -2703,5 +2703,7 @@
   "biblioteca.refresh.label": "Aktualisieren",
   "biblioteca.refresh.hint": "Lädt die Seitendaten neu.",
   "biblioteca.refresh.busy": "Wird aktualisiert…",
-  "biblioteca.refresh.done": "Aktualisiert"
+  "biblioteca.refresh.done": "Aktualisiert",
+  "biblioteca.ill.notAuthorized": "Fernleihe ist nur zwischen föderierten Bibliotheken mit aktiver Ausleihe möglich. Prüfe, ob die beiden ausgewählten Bibliotheken diese Bedingung erfüllen.",
+  "biblioteca.ill.tombo": "Inventarnummer"
 }

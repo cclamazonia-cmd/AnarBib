@@ -466,7 +466,7 @@
   "biblioteca.ill.packagingPlaceholder": "Packaging, transport, conditions…",
   "biblioteca.ill.pickupPlaceholder": "Pickup at the desk, postal mail…",
   "biblioteca.ill.prepare": "Prepare a temporary loan",
-  "biblioteca.ill.save": "Save loan",
+  "biblioteca.ill.save": "Create loan request",
   "biblioteca.ill.searchDoc": "Search document by title, author or ref…",
   "biblioteca.ill.searchPh": "Search document by title, author or ref…",
   "biblioteca.ill.searchPlaceholder": "Search for the requested document…",
@@ -2703,5 +2703,7 @@
   "biblioteca.refresh.label": "Refresh",
   "biblioteca.refresh.hint": "Reloads the page data.",
   "biblioteca.refresh.busy": "Refreshing…",
-  "biblioteca.refresh.done": "Refreshed"
+  "biblioteca.refresh.done": "Refreshed",
+  "biblioteca.ill.notAuthorized": "Interlibrary loan is only possible between federated libraries with active circulation. Check that both selected libraries meet this condition.",
+  "biblioteca.ill.tombo": "item number"
 }

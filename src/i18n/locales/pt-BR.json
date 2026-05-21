@@ -466,7 +466,7 @@
   "biblioteca.ill.packagingPlaceholder": "Embalagem, transporte, condições…",
   "biblioteca.ill.pickupPlaceholder": "Retirada no plantão, envio postal…",
   "biblioteca.ill.prepare": "Preparar um empréstimo temporário",
-  "biblioteca.ill.save": "Salvar empréstimo",
+  "biblioteca.ill.save": "Criar pedido de empréstimo",
   "biblioteca.ill.searchDoc": "Buscar documento por título, autor ou ref…",
   "biblioteca.ill.searchPh": "Buscar documento por título, autor ou ref…",
   "biblioteca.ill.searchPlaceholder": "Buscar documento desejado…",
@@ -2703,5 +2703,7 @@
   "biblioteca.refresh.label": "Atualizar",
   "biblioteca.refresh.hint": "Recarrega os dados da página.",
   "biblioteca.refresh.busy": "Atualizando…",
-  "biblioteca.refresh.done": "Atualizado"
+  "biblioteca.refresh.done": "Atualizado",
+  "biblioteca.ill.notAuthorized": "O empréstimo interbibliotecas só é possível entre bibliotecas federadas com circulação ativa. Verifique que as duas bibliotecas selecionadas atendem a essa condição.",
+  "biblioteca.ill.tombo": "tombo"
 }

@@ -466,7 +466,7 @@
   "biblioteca.ill.packagingPlaceholder": "Emballage, transport, conditions…",
   "biblioteca.ill.pickupPlaceholder": "Retrait à la permanence, envoi postal…",
   "biblioteca.ill.prepare": "Préparer un prêt temporaire",
-  "biblioteca.ill.save": "Enregistrer le prêt",
+  "biblioteca.ill.save": "Créer une demande de prêt",
   "biblioteca.ill.searchDoc": "Rechercher un document par titre, auteur ou réf…",
   "biblioteca.ill.searchPh": "Rechercher un document par titre, auteur ou réf…",
   "biblioteca.ill.searchPlaceholder": "Chercher le document souhaité…",
@@ -2703,5 +2703,7 @@
   "biblioteca.refresh.label": "Actualiser",
   "biblioteca.refresh.hint": "Recharge les données de la page.",
   "biblioteca.refresh.busy": "Actualisation…",
-  "biblioteca.refresh.done": "Actualisé"
+  "biblioteca.refresh.done": "Actualisé",
+  "biblioteca.ill.notAuthorized": "Le prêt entre bibliothèques n'est possible qu'entre bibliothèques fédérées ayant une circulation active. Vérifie que les deux bibliothèques sélectionnées remplissent cette condition.",
+  "biblioteca.ill.tombo": "numéro d'inventaire"
 }

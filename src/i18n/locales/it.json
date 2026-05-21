@@ -466,7 +466,7 @@
   "biblioteca.ill.packagingPlaceholder": "Imballaggio, trasporto, condizioni…",
   "biblioteca.ill.pickupPlaceholder": "Ritiro al banco, spedizione postale…",
   "biblioteca.ill.prepare": "Preparare un prestito temporaneo",
-  "biblioteca.ill.save": "Salva prestito",
+  "biblioteca.ill.save": "Creare una richiesta di prestito",
   "biblioteca.ill.searchDoc": "Cerca documento per titolo, autore o rif…",
   "biblioteca.ill.searchPh": "Buscar documento por título, autor ou ref…",
   "biblioteca.ill.searchPlaceholder": "Cerca il documento desiderato…",
@@ -2703,5 +2703,7 @@
   "biblioteca.refresh.label": "Aggiornare",
   "biblioteca.refresh.hint": "Ricarica i dati della pagina.",
   "biblioteca.refresh.busy": "Aggiornamento…",
-  "biblioteca.refresh.done": "Aggiornato"
+  "biblioteca.refresh.done": "Aggiornato",
+  "biblioteca.ill.notAuthorized": "Il prestito interbibliotecario è possibile solo tra biblioteche federate con circolazione attiva. Verifica che le due biblioteche selezionate soddisfino questa condizione.",
+  "biblioteca.ill.tombo": "numero d'inventario"
 }

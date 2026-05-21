@@ -145,6 +145,13 @@ export default function BibliotecaPage() {
   const [illItems, setIllItems] = useState([]);
   const [illDocSearch, setIllDocSearch] = useState('');
   const [illDocResults, setIllDocResults] = useState([]);
+  // EA-12 phase 2 (dette 2) : bibliotheques eligibles au PEB.
+  // Regle alignee sur fn_peb_authorized : federee + circulation active + active.
+  const pebEligibleLibraries = allLibraries.filter(l =>
+    l.network_mode === 'federated'
+    && l.circulation_mode && l.circulation_mode !== 'off'
+    && l.is_active !== false
+  );
 
   // ── Carregamento ────────────────────────────────────────
   const loadAll = useCallback(async () => {
@@ -172,7 +179,7 @@ export default function BibliotecaPage() {
       setMailChannel(mcR.data); setNotifPolicy(npR.data);
       setMembershipRules(mrR.data || []);
       // Load all libraries for ILL selects
-      const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name').order('name');
+      const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name, network_mode, circulation_mode, is_active').order('name');
       setAllLibraries(allLibs || []);
       const [au, circStats] = await Promise.all([
         supabase.from('authors').select('id', { count: 'exact', head: true }),
@@ -356,16 +363,35 @@ export default function BibliotecaPage() {
   // ── ILL: search documents for item adding ───────────────
   async function searchIllDocs() {
     if (!illDocSearch.trim()) return;
-    const { data } = await supabase.from('books').select('id, titulo, autor, bib_ref').or(`titulo.ilike.%${illDocSearch.trim()}%,autor.ilike.%${illDocSearch.trim()}%,bib_ref.ilike.%${illDocSearch.trim()}%`).limit(10);
+    // EA-12 phase 2 (dette 4) : on cherche des EXEMPLAIRES, pas des titres.
+    // La RPC fn_peb_create_loan_with_items exige holding_id + item_id ;
+    // v_exemplar_labels porte exemplar_id (=item_id), holding_id, book_id.
+    const q = illDocSearch.trim();
+    const { data } = await supabase.from('v_exemplar_labels')
+      .select('exemplar_id, holding_id, book_id, titulo_etiqueta, autor_etiqueta, tombo, resolved_bib_ref')
+      .or(`titulo_etiqueta.ilike.%${q}%,autor_etiqueta.ilike.%${q}%,tombo.ilike.%${q}%,resolved_bib_ref.ilike.%${q}%`)
+      .limit(15);
     setIllDocResults(data || []);
   }
 
-  function addIllItem(book) {
-    if (illItems.find(it => it.book_id === book.id)) return;
-    setIllItems(prev => [...prev, { book_id: book.id, titulo: book.titulo, autor: book.autor, bib_ref: book.bib_ref }]);
+  // EA-12 phase 2 (dette 4) : un item PEB est un EXEMPLAIRE physique precis.
+  // On stocke item_id (= exemplar_id), holding_id et book_id, tous exiges
+  // ou utilises par fn_peb_create_loan_with_items. La cle d'unicite est
+  // l'exemplaire (item_id) : deux exemplaires d'un meme titre sont distincts.
+  function addIllItem(ex) {
+    if (illItems.find(it => it.item_id === ex.exemplar_id)) return;
+    setIllItems(prev => [...prev, {
+      item_id: ex.exemplar_id,
+      holding_id: ex.holding_id,
+      book_id: ex.book_id,
+      bib_ref: ex.resolved_bib_ref,
+      titulo: ex.titulo_etiqueta,
+      autor: ex.autor_etiqueta,
+      tombo: ex.tombo,
+    }]);
   }
 
-  function removeIllItem(bookId) { setIllItems(prev => prev.filter(it => it.book_id !== bookId)); }
+  function removeIllItem(itemId) { setIllItems(prev => prev.filter(it => it.item_id !== itemId)); }
 
   async function saveIll() {
     if (!illForm.lender || !illForm.borrower) { setMsg({ text: t({id:'biblioteca.ill.selectBoth'}), kind: 'error' }); return; }
@@ -388,6 +414,8 @@ export default function BibliotecaPage() {
         meeting_point: illForm.meetingPoint || null,
         logistics_mode: 'a_combinar',
       };
+      // EA-12 phase 2 (dette 4) : holding_id et item_id viennent desormais
+      // reellement de l'exemplaire choisi (etaient undefined avant le patch).
       const payload_items = illItems.map((it, i) => ({
         line_no: i + 1,
         holding_id: it.holding_id,
@@ -409,7 +437,19 @@ export default function BibliotecaPage() {
       setIllForm({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'' });
       setIllItems([]); setIllDocSearch(''); setIllDocResults([]);
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) {
+      // EA-12 phase 2 (dette 3) : un rejet RLS / fn_peb_authorized renvoie
+      // un message Postgres technique. On le traduit en message clair :
+      // le PEB exige que les deux bibliotheques soient federees.
+      const raw = String(err?.message || '');
+      const isAuthz = /row-level security|fn_peb_authorized|violates row-level|permission denied/i.test(raw);
+      setMsg({
+        text: isAuthz
+          ? t({ id: 'biblioteca.ill.notAuthorized' })
+          : t({ id: 'common.errorPrefix' }, { message: raw }),
+        kind: 'error',
+      });
+    }
     finally { setSaving(false); }
   }
 
@@ -1159,14 +1199,17 @@ export default function BibliotecaPage() {
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.ill.prepare' })}</h4>
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
+              {/* EA-12 phase 2 (dette 2) : seules les bibliotheques eligibles
+                  au PEB sont proposees - federees, circulation active, actives.
+                  C'est la regle de fn_peb_authorized, appliquee des le dropdown. */}
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.lender' })}</label>
                 <select value={illForm.lender} onChange={e=>setIllForm(p=>({...p,lender:e.target.value}))} style={fs}>
-                  <option value="">{t({ id: 'biblioteca.ill.select' })}</option>{allLibraries.map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}
+                  <option value="">{t({ id: 'biblioteca.ill.select' })}</option>{pebEligibleLibraries.map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}
                 </select>
               </div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.borrower' })}</label>
                 <select value={illForm.borrower} onChange={e=>setIllForm(p=>({...p,borrower:e.target.value}))} style={fs}>
-                  <option value="">{t({ id: 'biblioteca.ill.select' })}</option>{allLibraries.map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}
+                  <option value="">{t({ id: 'biblioteca.ill.select' })}</option>{pebEligibleLibraries.map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}
                 </select>
               </div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.status' })}</label>
@@ -1185,16 +1228,16 @@ export default function BibliotecaPage() {
                 <button className="cat-btn secondary" onClick={searchIllDocs} style={{ fontSize:'.85rem', padding:'7px 14px', flexShrink:0 }}>{t({ id: 'common.search' })}</button>
               </div>
               {illDocResults.length>0 && <div style={{...lw,marginBottom:8,maxHeight:150,overflowY:'auto'}}>{illDocResults.map((d,i)=>(
-                <div key={d.id} style={{...lr(i),cursor:'pointer'}} onClick={()=>addIllItem(d)}>
-                  <div style={{ fontSize:'.88rem' }}><strong>{d.titulo}</strong> — {d.autor||'—'} · ref: {d.bib_ref||'—'}</div>
+                <div key={d.exemplar_id} style={{...lr(i),cursor:'pointer'}} onClick={()=>addIllItem(d)}>
+                  <div style={{ fontSize:'.88rem' }}><strong>{d.titulo_etiqueta}</strong> — {d.autor_etiqueta||'—'} · {t({ id: 'biblioteca.ill.tombo' })}: {d.tombo||'—'}</div>
                   <button className="cat-btn secondary" style={{ fontSize:'.78rem', padding:'3px 8px' }} onClick={e=>{e.stopPropagation();addIllItem(d);}}>{t({ id: 'common.add' })}</button>
                 </div>
               ))}</div>}
               {illItems.length===0 && <div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{t({id:'biblioteca.ill.emptyItems'})}</div>}
               {illItems.length>0 && <div style={lw}>{illItems.map((it,i)=>(
-                <div key={it.book_id} style={lr(i)}>
-                  <div style={{ fontSize:'.88rem' }}><strong>{it.titulo}</strong> — {it.autor||'—'}</div>
-                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'3px 8px', color:'#f87171' }} onClick={()=>removeIllItem(it.book_id)}>{t({ id: 'common.remove' })}</button>
+                <div key={it.item_id} style={lr(i)}>
+                  <div style={{ fontSize:'.88rem' }}><strong>{it.titulo}</strong> — {it.autor||'—'} · {t({ id: 'biblioteca.ill.tombo' })}: {it.tombo||'—'}</div>
+                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'3px 8px', color:'#f87171' }} onClick={()=>removeIllItem(it.item_id)}>{t({ id: 'common.remove' })}</button>
                 </div>
               ))}</div>}
             </div>
