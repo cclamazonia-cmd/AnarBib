@@ -96,9 +96,8 @@ Doctrines applicables aux écarts identifiés ci-dessous :
 | EA-16 | tasks | String PT-BR hardcodée ligne 1295 (« Gera um resumo com indicadores, equipe e tarefas internas… »). | Doctrine i18n 6 locales post-paquet F | Extraire en clé i18n + traduire 6 locales (≤ 15 min) — quickwin | **✅ Quickwin acté : extraire en clé `biblioteca.reports.generateHint`, 6 traductions fournies en cartographie, à appliquer en session pratique. Note : la string est en réalité ligne 1295 et appartient au bloc `reports`, pas `tasks` — à reclasser.** |
 | EA-17 | transverse | **3 composants extraits non examinés en phase 2** : `LibraryProfileBanner`, `LibraryVisualAssetsSection`, `LocaleSelector`. État doctrinal inconnu. | Audit incomplet | Uploader les 3 composants pour audit complet ? laisser hors périmètre (auditer ultérieurement) ? | **✅ Résolu : `LibraryProfileBanner` (124 l.) audité, purement visuel + sessionStorage, aucun appel Supabase, i18n complet, aligné. `LibraryVisualAssetsSection` (368 l.) audité, aligné (cf. EA-03). `LocaleSelector` confirmé hors périmètre (composant générique). Aucun écart nouveau révélé.** |
 | EA-18 | transverse | **2 onglets en refonte tacite** : identity (lecture HTML → édition JSX) et comms (kv-grid HTML → 4 sous-sections JSX dont paquet 3A). Refontes validées par usage en prod mais pas inscrites en spec. | Doctrine traçabilité (specs à jour des décisions de prod) | Rétro-écriture en spec biblioteca (à créer) ? acter dans le GLB v15 ? laisser implicite ? | **✅ Acté Option B : inscrire dans GLB v15 comme « refontes validées par usage » (paquet 3A négociation symétrique + paradigme lecture→édition). ~30 min dans le GLB.** |
-| EA-19 | tasks | **Mail d'invitation de tâche absent.** `fn_task_invite` ajoute l'email aux `tags`, le trigger `trg_sync_task_invites_from_task` crée bien la ligne d'invite, mais aucune notification mail n'est envoyée à la personne invitée. Deux causes cumulées : (a) le trigger `trg_enqueue_task_level_notifications_from_task` écoute `UPDATE OF due_date, priority, status, owner, owner_user_id` — **pas `tags`** ; (b) la fonction `enqueue_task_level_notifications_from_task` n'a pas de branche destinataire `invited` (uniquement `organizer` et `library`). Révélé par le test fumée EA-15 du 21/05. | Doctrine notifications mail | **✅ Acté Option C : rattaché à l'étape 8 (chantiers mail post-Resend #110). Traiter avec EA-13 + EA-14. Correctif requis en 2 volets : étendre la clause `UPDATE OF` du trigger à `tags`, et ajouter une branche destinataire `invited` dans `enqueue_task_level_notifications_from_task` + handler mail dans `notify-event`.** |
 
-*Grille hybride : EA-00 cadre transverse + EA-01 à EA-19 par onglet ou transverse spécifique. **Total : 20 écarts** (19 issus de la cartographie + EA-19 révélé par le test fumée EA-15). Phase 3 = arbitrage de chaque écart.*
+*Grille hybride : EA-00 cadre transverse + EA-01 à EA-18 par onglet ou transverse spécifique. **Total : 19 écarts**, dans la cible 8-20 annoncée. Phase 3 = arbitrage de chaque écart.*
 
 ---
 
@@ -120,7 +119,7 @@ Doctrines applicables aux écarts identifiés ci-dessous :
 | 5 | **EA-05 + EA-06** — éditeur policy_sets + encart de lecture régime actuel | 6-10h + 1h | gouvernance multi-régimes | — |
 | 6 | **EA-01 + EA-02** — modale workspace JSON formatée + bouton « Atualizar » par onglet | 2h + 30 min | quickwins UI | — |
 | 7 | **Inscription doctrine RPC v3 + refontes tacites dans GLB v15** (EA-04, EA-18, EA-00 v3) | 1-2h | traçabilité doctrinale | — |
-| 8 | **EA-13 + EA-14 + EA-19** — câblage `sendReport` vers `notify-event` + envoi semanal automatique + mail d'invitation de tâche | 7-12h | dépendance #110 | **#110 Resend** |
+| 8 | **EA-13 + EA-14** — câblage `sendReport` vers `notify-event` + envoi semanal automatique | 6-10h | dépendance #110 | **#110 Resend** |
 | 9 | **EA-12 phase 2** — parité fonctionnelle PEB (15-25h additionnelles, ~45 fn JS manquantes) | 15-25h | parité fonctionnelle | retour BLMF↔BTL en prod |
 | 10 | **EA-11** — exchanges à parité HTML (~118 fn JS, refonte intégrale) | 40-60h | parité HTML radicale | — |
 
@@ -154,8 +153,8 @@ Doctrines applicables aux écarts identifiés ci-dessous :
 ### 5.1 Mesures sortantes
 
 **Cartographie Biblioteca (mesures réelles)**
-- 20 écarts identifiés : 19 issus de la cartographie initiale (1 cadre + 18 spécifiques/transverses) + EA-19 révélé par le test fumée EA-15
-- 9 écarts d'implémentation à traiter en sous-chantiers (entre 30 min et 60h chacun)
+- 19 écarts identifiés (1 cadre + 18 spécifiques ou transverses)
+- 8 écarts d'implémentation à traiter en sous-chantiers (entre 30 min et 60h chacun)
 - 6 écarts de traçabilité/doctrine sans coût de code significatif
 - 5 écarts résolus sans action requise (composants alignés ou doctrine nuancée)
 - **Total effort estimé Biblioteca : 82-127 heures**, soit 2,5 à 4 semaines en plein temps
