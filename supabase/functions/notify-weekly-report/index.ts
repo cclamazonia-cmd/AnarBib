@@ -282,6 +282,115 @@ async function tryUpdateRunStatus(sb, runId, patch) {
 
 // ─── Handler principal ─────────────────────────────────────────────────────
 
+// ============================================================================
+// Transport mail — wrapper neutre + dispatch par provider
+// ----------------------------------------------------------------------------
+// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #4).
+// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3.
+//
+// Decision §4.3 : EXTRACTION PROPRE. Le fetch Brevo etait inline dans le serve,
+// entrelace avec tryUpdateRunStatus (suivi du run). On extrait UNIQUEMENT le
+// coeur transport (brevoBody + fetch + lecture + throw HTTP) ; les appels
+// tryUpdateRunStatus restent dans le serve car ils relevent de la logique de
+// l'EF, pas du transport. Aucune dette R.7.
+//
+// CONTRAT : string en succes, throw sur erreur HTTP — identique au bloc inline.
+// Le serve garde sa gestion du run : tryUpdateRunStatus(failed) avant re-throw,
+// tryUpdateRunStatus(sent) apres succes. Comportement strictement preserve,
+// y compris la double ecriture 'failed' (serve local + catch global) qui
+// preexiste a ce patch et n'est pas modifiee ici.
+//
+// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// ============================================================================
+const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
+function resolveMailProvider() {
+  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
+  if (!VALID_MAIL_PROVIDERS.has(raw)) {
+    console.warn(`[weekly-report] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
+    return "brevo";
+  }
+  return raw;
+}
+function formatMailAddress(email, name) {
+  const n = String(name || "").trim();
+  return n ? `${n} <${email}>` : email;
+}
+// --- Implementation Brevo (corps inchange : ancien bloc inline du serve) ----
+// opts : { routing, subject, htmlContent, textContent, brevoKey }
+async function sendViaBrevo(opts) {
+  const { routing, subject, htmlContent, textContent, brevoKey } = opts;
+  const brevoBody = {
+    sender: { email: routing.senderEmail, name: routing.senderName },
+    to: [{
+      email: routing.recipientEmail,
+      ...(routing.recipientName ? { name: routing.recipientName } : {})
+    }],
+    subject,
+    textContent,
+    htmlContent
+  };
+  if (routing.replyToEmail) {
+    brevoBody.replyTo = {
+      email: routing.replyToEmail,
+      ...(routing.replyToName ? { name: routing.replyToName } : {})
+    };
+  }
+  const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      "api-key": brevoKey
+    },
+    body: JSON.stringify(brevoBody)
+  });
+  const brevoText = await brevoRes.text();
+  if (!brevoRes.ok) {
+    throw new Error(`Brevo error HTTP ${brevoRes.status}: ${brevoText}`);
+  }
+  return brevoText;
+}
+// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+async function sendViaResend(opts) {
+  const { routing, subject, htmlContent, textContent } = opts;
+  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
+  if (!resendKey) {
+    throw new Error("RESEND_API_KEY absente des secrets Edge Function");
+  }
+  const payload: Record<string, unknown> = {
+    from: formatMailAddress(routing.senderEmail, routing.senderName),
+    to: [routing.recipientEmail],
+    subject,
+    html: htmlContent,
+    text: textContent
+  };
+  if (routing.replyToEmail) {
+    payload.reply_to = formatMailAddress(routing.replyToEmail, routing.replyToName);
+  }
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${resendKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+  const resText = await res.text();
+  if (!res.ok) {
+    throw new Error(`Resend error HTTP ${res.status}: ${resText}`);
+  }
+  return resText;
+}
+// --- Wrapper neutre --------------------------------------------------------
+async function sendEmail(opts) {
+  const provider = resolveMailProvider();
+  console.log(`[weekly-report] envoi via ${provider}`);
+  if (provider === "resend") {
+    return await sendViaResend(opts);
+  }
+  return await sendViaBrevo(opts);
+}
+
 serve(async (req) => {
   const body = await req.json().catch(() => null);
   const runId = body?.run_id ?? null;
@@ -495,36 +604,17 @@ serve(async (req) => {
       routing
     });
 
-    // ─── Envoi Brevo ───────────────────────────────────────────────────────
-    const brevoBody = {
-      sender: { email: routing.senderEmail, name: routing.senderName },
-      to: [{
-        email: routing.recipientEmail,
-        ...(routing.recipientName ? { name: routing.recipientName } : {})
-      }],
-      subject,
-      textContent,
-      htmlContent
-    };
-    if (routing.replyToEmail) {
-      brevoBody.replyTo = {
-        email: routing.replyToEmail,
-        ...(routing.replyToName ? { name: routing.replyToName } : {})
-      };
-    }
-    const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        "api-key": brevoKey
-      },
-      body: JSON.stringify(brevoBody)
-    });
-    const brevoText = await brevoRes.text();
-    if (!brevoRes.ok) {
-      await tryUpdateRunStatus(sb, runId, { status: "failed", error: `Brevo error HTTP ${brevoRes.status}: ${brevoText}` });
-      throw new Error(`Brevo error HTTP ${brevoRes.status}: ${brevoText}`);
+    // ─── Envoi mail ─────────────────────────────────────────────────────────
+    // Transport extrait (chantier #110 R.3.2) : wrapper neutre sendEmail(),
+    // dispatch Brevo/Resend selon MAIL_PROVIDER. Le suivi du run
+    // (tryUpdateRunStatus) reste ici car il releve de la logique de l'EF.
+    // En cas d'echec, on ecrit le statut "failed" avant de re-propager
+    // l'exception — comportement identique au bloc inline d'avant R.3.2.
+    try {
+      await sendEmail({ routing, subject, htmlContent, textContent, brevoKey });
+    } catch (sendError) {
+      await tryUpdateRunStatus(sb, runId, { status: "failed", error: String(sendError?.message ?? sendError) });
+      throw sendError;
     }
     await tryUpdateRunStatus(sb, runId, { status: "sent", sent_at: new Date().toISOString(), error: null });
     return json(200, {
