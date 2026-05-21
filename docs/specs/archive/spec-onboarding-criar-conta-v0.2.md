@@ -1,15 +1,14 @@
 # Spec — Onboarding `/criar-conta`
 
-**Version :** 0.3
-**Date :** 2026-05-21
+**Version :** 0.2
+**Date :** 2026-05-20
 **Auteur·rice :** Xavier (AnarBib)
-**Statut :** Brouillon de cadrage actualisé après clôture du chantier #K2. Cœur (paquets 1, 2, 4, 6, 7, 8) prêt à exécuter.
+**Statut :** Brouillon de cadrage, à relire à froid puis à valider avant exécution
 **Périmètre :** Restructuration de la page `/criar-conta` pour clarifier les usages possibles d'un compte AnarBib et lever l'ambiguïté actuelle entre exploration libre et action sur un catalogue.
 
 **Historique :**
 - v0.1 (2026-05-20) — première rédaction, 9 décisions cadrées dont 6 validées d'emblée et 3 en suspens (D7 cible du lien explorer, D8 stockage cas orpheline et migration CHECK, D9 ordre des paquets).
 - v0.2 (2026-05-20) — D7 résolu (option 2 : route provisoire + galerie type RebAL en chantier dédié phase 2) ; D8 résolu (piste A : pas de claim en v0.1, rattachement automatique reporté en phase 2) ; ajout §4.6 privacy notice ; D9 validé.
-- v0.3 (2026-05-21) — actualisation après livraison du chantier #K2 (galerie des bibliothèques sur `anarbib.org`, 8 langues). **Paquet 3 (route provisoire `/explorar`) supprimé** : la galerie #K2 a livré directement la cible définitive, le provisoire n'a plus lieu d'être (D7 absorbé). Le §3.3 est requalifié. Le bandeau vitrine (Bloc A) a été livré par #K2 dans sa forme minimale ; §3.1, §4.4 et §4.5 alignés sur le réel (clé i18n `showcase.link`, lien sortant vers la galerie). Le cœur du chantier (paquets 1, 2, 4, 6, 7, 8) est inchangé et reste à exécuter.
 
 ---
 
@@ -69,9 +68,9 @@ Ces deux cas ont des flux radicalement différents (dossier candidat vs simple c
 
 **Consultation des catalogues publics** : libre. Les bibliothèques qui ont choisi de rendre leur catalogue public sont consultables comme une vitrine de magasin. Cette information doit apparaître **avant** toute proposition de création de compte, sur la page `/criar-conta` elle-même, sous forme d'un bandeau explicite avec lien sortant.
 
-La cible de ce lien sortant est la **galerie multi-bibliothèques** hébergée sur le site de présentation `anarbib.org` (page `/<lang>/explorar/`), livrée par le chantier #K2 le 21/05/2026. Elle est inspirée du site RebAL (cf. §3.3 et §7.4).
+La cible définitive de ce lien sortant est une **page galerie multi-bibliothèques inspirée du site RebAL** (cf. §3.3), hébergée sur le site de présentation `anarbib.org`. Cette page constitue un chantier dédié de phase 2 (cf. §7.4).
 
-Le lien sortant pointe donc directement vers cette galerie. La route provisoire `/explorar` dans l'app, envisagée en v0.1/v0.2 le temps que la galerie soit construite, n'a pas lieu d'être : la galerie a été livrée avant l'exécution de cette spec.
+En v0.1, le lien pointe vers une **route minimale provisoire** dans l'app AnarBib (cf. §3.3).
 
 ### 2.3 Trois cas de figure dans le sélecteur
 
@@ -111,9 +110,7 @@ Contenu (pt-BR canonique) :
 >
 > [→ Explorar os catálogos públicos]
 
-Le lien sortant pointe vers la galerie `anarbib.org/<lang>/explorar/` (galerie #K2, cf. §3.3).
-
-> **État au 21/05/2026 (v0.3).** Un bandeau vitrine a déjà été posé sur `/criar-conta` lors du chantier #K2 (étape 5), dans une **forme minimale** : trois clés i18n `auth.create.showcase.title` / `.body` / `.link`. Le texte ci-dessus (Bloc A) est la forme cible, plus complète. À l'exécution du paquet 4, vérifier si le bandeau en place doit être enrichi pour correspondre à ce texte, ou s'il convient en l'état. Décision à prendre à ce moment-là, pas un blocage.
+Le lien sortant pointe vers la route provisoire `/explorar` (cf. §3.3).
 
 #### Bloc B — Sélecteur de bibliothèque (restructuré)
 
@@ -150,15 +147,22 @@ Inchangé : nom, prénom, email, téléphone, gender, adresse, RGPD, consentemen
 |---|---|---|---|
 | Bibliothèque active choisie | `'reader_pending'` | Bienvenue + en attente de validation | Lien vers `/conta` |
 | Abrir nova biblioteca | `'collective_candidate'` | Bienvenue + dossier candidat | Lien `/solicitar-biblioteca?claim=<token>` |
-| Lectrice orpheline | `'reader_orphan'` | Bienvenue + explication + invitation à parler à sa biblio | Liens vers la galerie `anarbib.org/<lang>/explorar/` + `/sobre-anarbib` |
+| Lectrice orpheline | `'reader_orphan'` | Bienvenue + explication + invitation à parler à sa biblio | Liens vers `/explorar` + `/sobre-anarbib` |
 
-### 3.3 Lien vitrine vers la galerie des bibliothèques
+### 3.3 Route provisoire `/explorar` (v0.1)
 
-> **Note v0.3.** Les versions v0.1 et v0.2 de cette spec prévoyaient ici une route provisoire `/explorar` minimale (liste en prose) dans l'app, le temps que la galerie définitive soit construite sur `anarbib.org`. Cette route provisoire **n'a jamais été créée et ne le sera pas** : le chantier #K2 (21/05/2026) a livré directement la galerie définitive. Le provisoire est devenu sans objet.
+La route `/explorar` est une **route transitoire** dans l'app `app.anarbib.org`. Elle existe pendant la période séparant la livraison de cette spec et la livraison de la galerie multi-bibliothèques sur `anarbib.org` (chantier dédié, cf. §7.4).
 
-Le lien vitrine du Bloc A pointe vers la **galerie des bibliothèques du réseau**, hébergée sur le site de présentation : `anarbib.org/<lang>/explorar/`. Cette galerie, livrée par le chantier #K2, présente une carte par bibliothèque ayant rendu son catalogue public (nom, ville, affiliation, volumétrie, badge, boutons « voir le catalogue » et « site web »), en 8 langues. Sa source de données est la vue `api.public_libraries`. Pour le détail de la galerie, voir le chantier #K2 et, le cas échéant, la spec dédiée `spec-galerie-bibliotheques-anarbib-org.md` si elle est rédigée a posteriori.
+**Contenu minimal de la route :**
 
-Côté `/criar-conta`, il n'y a donc qu'un **lien sortant** vers cette galerie — pas de route à créer dans l'app. Le mapping locale app (`pt-BR`, `fr`, `es`, `it`, `en`, `de`) vers le dossier de langue du site est géré par le helper `galleryUrl()` déjà en place (livré avec le bandeau au chantier #K2).
+- Bandeau d'introduction : « Catálogos públicos das bibliotecas no AnarBib »
+- Liste simple en prose des bibliothèques dont le catalogue est public, avec pour chacune : nom, ville, lien direct vers son catalogue dans l'app (route `/catalogo/{slug}` ou équivalent à confirmer)
+- Pas de carte, pas de chiffres, pas de badge — du texte propre suffit
+- Lien en bas de page : « Quer saber mais sobre o projeto AnarBib ? [anarbib.org] »
+
+**Source de données :** vue déjà existante `api.libraries_public_v1` (filtrée par la doctrine `fn_library_visible_to_caller`), ou nouvelle vue dédiée si besoin de filtrer plus finement (bibliothèques qui ont *explicitement* rendu leur catalogue public, pas juste leur fiche). À cadrer en paquet 3.
+
+**Migration vers la cible définitive :** quand la galerie sur `anarbib.org` sera livrée, le lien du bandeau de `/criar-conta` sera mis à jour pour pointer dessus, et la route `/explorar` côté app sera soit supprimée, soit conservée comme miroir technique simplifié. À trancher dans le chantier dédié.
 
 ---
 
@@ -243,7 +247,7 @@ switch (signup_intent) {
     // 1. Créer auth.users + profiles
     // 2. PAS de membership, PAS de claim
     // 3. Stocker signup_intent + metadata { library_name_mentioned? }
-    // 4. Envoyer mail "bienvenue + explication orpheline" avec liens galerie anarbib.org + /sobre-anarbib
+    // 4. Envoyer mail "bienvenue + explication orpheline" avec liens /explorar + /sobre-anarbib
     break;
 }
 ```
@@ -283,14 +287,12 @@ Le `<select>` est restructuré (cf. §3.1 bloc B). Le handler `handleLibChange` 
 
 ### 4.4 Internationalisation (clés i18n × 6 locales)
 
-Nouvelles clés à créer dans `pt-BR`, `fr`, `es`, `en`, `it`, `de` (les 3 clés `showcase.*` ci-dessous sont **déjà en prod**, livrées par #K2 — à ne pas recréer ; les clés `intent.*` et suivantes restent à créer) :
+Nouvelles clés à créer dans `pt-BR`, `fr`, `es`, `en`, `it`, `de` :
 
 ```
 auth.create.showcase.title              # "Você não precisa de uma conta para explorar."
 auth.create.showcase.body               # paragraphe du bandeau vitrine
-auth.create.showcase.link               # "Explorar os catálogos públicos" — clé livrée par #K2,
-                                         #   déjà en prod dans les 6 locales. (La v0.2 la nommait
-                                         #   showcase.exploreCta ; nom réel retenu : showcase.link.)
+auth.create.showcase.exploreCta         # "Explorar os catálogos públicos"
 
 auth.create.intent.groupActiveLibraries # "─── Bibliotecas no AnarBib ───"
 auth.create.intent.groupOtherCases      # "─── Outros casos ───"
@@ -343,12 +345,10 @@ Pour `welcome-reader-orphan.ts`, contenu pt-BR :
 {
   kind: 'action',
   title: t('mail.orphan.exploreTitle'),
-  ctaUrl: `https://anarbib.org/${localeToSiteLang(locale)}/explorar/`,
+  ctaUrl: `${APP_URL}/explorar`,
   ctaLabel: t('mail.orphan.exploreCta')
 }
 ```
-
-> **Note v0.3.** Le `ctaUrl` pointe vers la galerie sur le site de présentation (`anarbib.org`), et non vers une route de l'app. La conversion locale app → dossier de langue du site (`pt-BR` → `pt`, etc.) suit la même logique que le helper `galleryUrl()` du frontend ; l'Edge Function devra disposer d'un équivalent (mapping trivial, 6 entrées).
 
 ### 4.6 Privacy notice — incidence du champ `library_name_mentioned`
 
@@ -405,16 +405,20 @@ Cette donnée a la même durée de vie que le compte. Suppression du compte → 
 5. Routage mail selon le cas
 6. Tests d'intégration sur les 3 cas
 
-### Paquet 3 — ~~Route provisoire `/explorar`~~ → ABSORBÉ par le chantier #K2
+### Paquet 3 — Route provisoire `/explorar`
 
-**Ce paquet est sans objet (v0.3).** Il prévoyait une route provisoire `/explorar` minimale dans l'app, le temps que la galerie soit construite. Le chantier #K2 a livré directement la galerie définitive sur `anarbib.org` (21/05/2026). Il n'y a donc rien à exécuter ici : le lien vitrine de `/criar-conta` pointe vers la galerie #K2 (cf. §3.3). Le numéro « Paquet 3 » est conservé pour ne pas renuméroter les autres paquets et leurs références.
+1. Créer la route dans le frontend
+2. Source de données : `api.libraries_public_v1` ou nouvelle vue filtrée selon doctrine (biblios à catalogue *explicitement* public)
+3. UI minimale : liste prose, pas de cartes
+4. Lien sortant vers `anarbib.org`
+5. i18n × 6 locales (clés `explore.*`)
 
 ### Paquet 4 — Frontend `CriarContaPage.jsx`
 
 1. Refactor du `<select>` (3 groupes : placeholder + biblios actives + cas particuliers)
 2. State `signup_intent` + `orphan_library_name`
 3. Encadrés contextuels conditionnels (3 cas)
-4. Bandeau vitrine : **déjà livré par #K2** (forme minimale, 3 clés `showcase.*`, lien vers la galerie `anarbib.org/<lang>/explorar/`). À l'exécution : vérifier si le bandeau en place doit être enrichi pour correspondre au texte cible du Bloc A (§3.1), ou s'il convient en l'état.
+4. Bandeau vitrine en haut de page + lien sortant vers `/explorar`
 5. Suppression des références à `__solicitar__` dans tout le repo
 6. Build + test prod en navigation privée
 
@@ -483,11 +487,14 @@ Avec 2 nouvelles entrées sous la liste des biblios, le select peut sembler char
 - **Chantier Resend (#110)** : les nouveaux mails de cette spec doivent être créés directement en stack Resend (pas via Brevo), pour ne pas créer de dette à migrer.
 - **Phases 3-6 consultas (#91-#94)** : indépendant.
 - **LanguagePicker refactor** : indépendant.
-- **Galerie multi-biblios sur `anarbib.org`** (§7.4) : **livrée** (chantier #K2, 21/05/2026). N'est plus un chantier en cours ni un point de couplage : le lien vitrine de `/criar-conta` pointe directement dessus.
+- **Galerie multi-biblios sur `anarbib.org`** (§7.4) : *bloque la migration définitive* du lien sortant `/criar-conta` → galerie, mais ne bloque pas la livraison v0.1 (route provisoire `/explorar`).
 
-### 6.5 Transition `/explorar` → galerie `anarbib.org` — FAITE
+### 6.5 Transition `/explorar` → galerie `anarbib.org`
 
-> **Note v0.3.** Cette section décrivait une transition future. Elle est désormais **sans objet** : la galerie a été livrée avant l'exécution de cette spec, il n'y a jamais eu de route provisoire à migrer. Le lien vitrine de `/criar-conta` (bandeau livré par #K2) et le futur lien du mail `welcome-reader-orphan` (paquet 6) pointent d'emblée vers `anarbib.org/<lang>/explorar/`. Aucune migration de lien à prévoir.
+Quand la galerie sera livrée :
+- Mise à jour du lien dans le bandeau vitrine de `/criar-conta` (1 string i18n × 6 locales : la `ctaUrl` ; le label reste identique)
+- Mise à jour du lien dans le mail `welcome-reader-orphan` (idem)
+- Décision sur le sort de la route `/explorar` : suppression, ou conservation comme miroir technique simple. À trancher dans la spec dédiée galerie.
 
 ---
 
@@ -522,9 +529,7 @@ Cette spec entraînera :
 
 À traiter dans `spec-rattachement-lectrice-orpheline.md`.
 
-### 7.4 Galerie multi-bibliothèques sur `anarbib.org` — LIVRÉE (#K2)
-
-> **Note v0.3.** Cette section était un cadrage prospectif. La galerie a été **livrée le 21/05/2026** par le chantier #K2 : page `anarbib.org/<lang>/explorar/` en 8 langues, cartes par bibliothèque (nom, ville, affiliation, volumétrie, badge, boutons « voir le catalogue » + « site web »), source `api.public_libraries`. Le texte ci-dessous est conservé comme trace du cadrage initial ; pour l'état réel, se référer au chantier #K2. Les « décisions à trancher » listées plus bas ont été tranchées pendant #K2.
+### 7.4 Galerie multi-bibliothèques sur `anarbib.org`
 
 Inspirée du site RebAL ([rebal.info/vufind/](https://rebal.info/vufind/)). Page hébergée sur le **site de présentation** `anarbib.org` (et pas dans l'app `app.anarbib.org`).
 
@@ -569,10 +574,10 @@ Si un jour on en a besoin (analytics, contact des lectrices orphelines quand leu
 | D4 | 3 cas dans le select : biblio active / nova biblio / orfã | Oui | ✓ |
 | D5 | Stockage via `profiles.signup_intent` + `signup_intent_metadata` | Oui | ✓ |
 | D6 | Bandeau vitrine + lien sortant en tête de page | Oui | ✓ |
-| D7 | Lien sortant du bandeau vitrine | Pointe vers la galerie `anarbib.org/<lang>/explorar/` (livrée par #K2). La route provisoire `/explorar` initialement prévue est abandonnée — galerie livrée avant exécution (v0.3). | ✓ |
+| D7 | Lien sortant pointe vers route provisoire `/explorar` puis vers galerie anarbib.org (phase 2) | Oui | ✓ |
 | D8 | Champ optionnel « nom de la biblio » pour orpheline + privacy notice ; pas de claim `reader_attachment` en v0.1 (reporté phase 2) | Oui | ✓ |
-| D9 | Ordre des paquets : DB → EF → ~~/explorar~~ (absorbé #K2) → frontend → i18n → mail → privacy + /conta → tests E2E → Karina | Oui (paquet 3 sans objet en v0.3) | ✓ |
+| D9 | Ordre des paquets : DB → EF → /explorar → frontend → i18n → mail → privacy + /conta → tests E2E → Karina | Oui | ✓ |
 
 ---
 
-*Fin de la spec v0.3 — relue à froid après #K2, paquet 3 absorbé, bandeau aligné sur le livré. Cœur (paquets 1, 2, 4, 6, 7, 8) prêt à exécuter dans l'ordre de D9.*
+*Fin de la spec v0.2 — à relire à froid, à amender si besoin, puis à exécuter par paquets.*
