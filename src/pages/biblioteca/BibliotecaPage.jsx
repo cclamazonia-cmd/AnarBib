@@ -11,6 +11,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
 import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
+import PolicySetManager from '@/components/library/PolicySetManager';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -869,64 +870,15 @@ export default function BibliotecaPage() {
               </button>
             </div>
           </div>
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.regulation.rules' })}</h4>
-            {!policySet && <div style={{ fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.regulation.noRules' })}</div>}
-            {policySet && <div style={{ marginBottom:10, fontSize:'.88rem' }}><strong>{seedT(policySet, 'label', 'set.label') || 'Regras'}</strong>{(seedT(policySet, 'scope_note', 'set.scopeNote') || policySet.scope_note) && ` — ${seedT(policySet, 'scope_note', 'set.scopeNote') || policySet.scope_note}`}</div>}
-{policyRules.length>0 && <div style={lw}>{policyRules.map((r,i)=>(
-              <div key={r.id} style={{ padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)' }}>
-                {editingRule?.id===r.id ? (
-                  <div className="cat-book-grid" style={{ gap:8 }}>
-                    <div className="cat-field" style={{ gridColumn:'span 3' }}><strong style={{ fontSize:'.9rem' }}>{r.rule_label||t({ id: 'biblioteca.rules.ruleNumberFallback' }, { id: r.id })}</strong></div>
-                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.loanDays'})}</label><input type="number" value={editingRule.loan_days||''} onChange={e=>setEditingRule(p=>({...p,loan_days:Number(e.target.value)||null}))} style={fs} /></div>
-                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.renewalDays'})}</label><input type="number" value={editingRule.renewal_days||''} onChange={e=>setEditingRule(p=>({...p,renewal_days:Number(e.target.value)||null}))} style={fs} /></div>
-                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.renewalMax'})}</label><input type="number" value={editingRule.renewal_max_count||''} onChange={e=>setEditingRule(p=>({...p,renewal_max_count:Number(e.target.value)||null}))} style={fs} /></div>
-                    <div className="cat-field"><label style={ls}>{t({id:'biblioteca.rules.maxItems'})}</label><input type="number" value={editingRule.quantity_max||''} onChange={e=>setEditingRule(p=>({...p,quantity_max:Number(e.target.value)||null}))} style={fs} /></div>
-                    <div className="cat-field"><label style={{...ls,display:'flex',gap:6,alignItems:'center'}}><input type="checkbox" checked={editingRule.loan_allowed||false} onChange={e=>setEditingRule(p=>({...p,loan_allowed:e.target.checked}))} />{t({id:'biblioteca.rules.loanAllowed'})}</label></div>
-                    <div className="cat-field"><label style={{...ls,display:'flex',gap:6,alignItems:'center'}}><input type="checkbox" checked={editingRule.renewable||false} onChange={e=>setEditingRule(p=>({...p,renewable:e.target.checked}))} />{t({id:'biblioteca.rules.renewable'})}</label></div>
-                    <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({id:'biblioteca.rules.publicNote'})}</label><input type="text" value={editingRule.public_note||''} onChange={e=>setEditingRule(p=>({...p,public_note:e.target.value}))} style={fs} /></div>
-                    <div className="cat-field" style={{ gridColumn:'span 3', display:'flex', gap:8, justifyContent:'space-between', alignItems:'center' }}>
-                      <div style={{ display:'flex', gap:8 }}>
-                        <button className="cat-btn primary" onClick={saveRule} disabled={saving} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.save'})}</button>
-                        <button className="cat-btn secondary" onClick={()=>setEditingRule(null)} style={{ fontSize:'.85rem' }}>{t({id:'biblioteca.rules.cancel'})}</button>
-                      </div>
-                      <button
-                        className="cat-btn ghost"
-                        onClick={()=>deleteCirculationRule(editingRule)}
-                        disabled={saving}
-                        style={{ fontSize:'.78rem', padding:'4px 10px', color:'#dc2626', borderColor:'rgba(220,38,38,.4)' }}
-                        title={t({id:'biblioteca.rules.deleteHint'})}
-                      >
-                        {t({id:'biblioteca.rules.delete'})}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 }}>
-                    <div style={{ flex:1 }}>
-                      <div style={{ fontSize:'.9rem', fontWeight:600 }}>{seedT(r, 'rule_label', 'rule.label') || t({ id: 'biblioteca.rules.ruleNumberFallback' }, { id: r.id })}</div>
-                      <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
-                        {r.loan_allowed
-                          ? (r.loan_days != null
-                              ? t({id:'biblioteca.regulation.loanAllowed'},{days:r.loan_days})
-                              : t({id:'biblioteca.regulation.loanAllowedNoDays'}))
-                          : t({id:'biblioteca.regulation.loanNotAllowed'})}
-                        {r.renewable && (
-                          (r.renewal_days != null && r.renewal_max_count != null)
-                            ? ` · ${t({id:'biblioteca.regulation.renewable'},{days:r.renewal_days,times:r.renewal_max_count})}`
-                            : ` · ${t({id:'biblioteca.regulation.renewableNoDetail'})}`
-                        )}
-                        {r.reservation_allowed && ` · ${t({id:'biblioteca.regulation.reservation'})}`}
-                        {r.consultation_only && ` · ${t({id:'biblioteca.regulation.consultation'})}`}
-                        {(seedT(r, 'public_note', 'rule.publicNote') || r.public_note) && ` · ${seedT(r, 'public_note', 'rule.publicNote') || r.public_note}`}
-                      </div>
-                    </div>
-                    <button className="cat-btn secondary" onClick={()=>setEditingRule({...r})} style={{ fontSize:'.78rem', padding:'4px 10px' }}>{t({id:'biblioteca.rules.edit'})}</button>
-                  </div>
-                )}
-              </div>
-            ))}</div>}
-          </div>
+          {/* EA-05 (21/05/2026) : gestionnaire de jeux de regles de circulation.
+              Remplace l'editeur inline mono-jeu par PolicySetManager, qui
+              gere tous les jeux (draft/active/archived) + leurs regles via RPC. */}
+          <PolicySetManager
+            libraryId={libraryId}
+            canEdit={isCoord}
+            regulationDocs={regDocs}
+            seedT={seedT}
+          />
 
           {/* ─── Cotisation associative ────────────────── */}
           <div style={bx}>
