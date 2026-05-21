@@ -270,7 +270,38 @@ function footerHtml() {
   parts.push(esc(FOOTER_TEXT));
   return parts.join("<br>");
 }
-async function sendBrevoEmail(opts) {
+// ============================================================================
+// Transport mail — wrapper neutre + dispatch par provider
+// ----------------------------------------------------------------------------
+// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #2).
+// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3.
+//
+// Decision §4.3 : EXTRACTION PROPRE. sendBrevoEmail etait deja une fonction
+// isolee ; on la dedouble en sendViaBrevo / sendViaResend, exposees derriere
+// un wrapper neutre sendEmail() qui dispatche selon MAIL_PROVIDER. safeSendEmail
+// appelle desormais sendEmail() ; sa signature et son contrat sont inchanges.
+//
+// CONTRAT DE RETOUR LOCAL : string brute en succes, throw sur erreur HTTP.
+// sendViaBrevo et sendViaResend respectent ce contrat a l'identique, donc
+// safeSendEmail (try/catch) n'a rien a adapter.
+//
+// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// ============================================================================
+const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
+function resolveMailProvider() {
+  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
+  if (!VALID_MAIL_PROVIDERS.has(raw)) {
+    console.warn(`[document-permission-request] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
+    return "brevo";
+  }
+  return raw;
+}
+function formatMailAddress(email, name) {
+  const n = String(name || "").trim();
+  return n ? `${n} <${email}>` : email;
+}
+// --- Implementation Brevo (corps inchange : ancien sendBrevoEmail) ----------
+async function sendViaBrevo(opts) {
   const replyTo = isValidEmail(REPLY_TO_EMAIL) ? {
     email: REPLY_TO_EMAIL,
     ...REPLY_TO_NAME ? {
@@ -311,6 +342,47 @@ async function sendBrevoEmail(opts) {
   if (!res.ok) throw new Error(`Brevo error HTTP ${res.status}: ${body}`);
   return body;
 }
+// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
+// reply_to "Nom <email>", corps html/text. Contrat identique a sendViaBrevo :
+// renvoie la string brute, throw sur erreur HTTP.
+async function sendViaResend(opts) {
+  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
+  if (!resendKey) {
+    throw new Error("RESEND_API_KEY absente des secrets Edge Function");
+  }
+  const payload: Record<string, unknown> = {
+    from: formatMailAddress(SENDER_EMAIL, SENDER_NAME),
+    to: [opts.toEmail],
+    subject: opts.subject,
+    html: opts.html,
+    text: opts.text
+  };
+  if (isValidEmail(REPLY_TO_EMAIL)) {
+    payload.reply_to = formatMailAddress(REPLY_TO_EMAIL, REPLY_TO_NAME);
+  }
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${resendKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+  const body = await res.text();
+  if (!res.ok) throw new Error(`Resend error HTTP ${res.status}: ${body}`);
+  return body;
+}
+// --- Wrapper neutre --------------------------------------------------------
+// sendEmail() ne mentionne aucun provider, le dispatch est interne.
+async function sendEmail(opts) {
+  const provider = resolveMailProvider();
+  console.log(`[document-permission-request] envoi via ${provider}`);
+  if (provider === "resend") {
+    return await sendViaResend(opts);
+  }
+  return await sendViaBrevo(opts);
+}
 async function safeSendEmail(target, subject, html, text, label) {
   const email = String(target?.email || "").trim().toLowerCase();
   if (!isValidEmail(email)) {
@@ -323,7 +395,7 @@ async function safeSendEmail(target, subject, html, text, label) {
     };
   }
   try {
-    const response = await sendBrevoEmail({
+    const response = await sendEmail({
       toEmail: email,
       toName: target?.name,
       subject,
