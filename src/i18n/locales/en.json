@@ -2705,5 +2705,7 @@
   "biblioteca.refresh.busy": "Refreshing…",
   "biblioteca.refresh.done": "Refreshed",
   "biblioteca.ill.notAuthorized": "Interlibrary loan is only possible between federated libraries with active circulation. Check that both selected libraries meet this condition.",
-  "biblioteca.ill.tombo": "item number"
+  "biblioteca.ill.tombo": "item number",
+  "biblioteca.ill.coordinationHelp": "Enter the contact at your library that the other party can reach to arrange this loan.",
+  "biblioteca.ill.clickToAdd": "Click to add this copy"
 }

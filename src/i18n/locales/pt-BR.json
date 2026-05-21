@@ -2705,5 +2705,7 @@
   "biblioteca.refresh.busy": "Atualizando…",
   "biblioteca.refresh.done": "Atualizado",
   "biblioteca.ill.notAuthorized": "O empréstimo interbibliotecas só é possível entre bibliotecas federadas com circulação ativa. Verifique que as duas bibliotecas selecionadas atendem a essa condição.",
-  "biblioteca.ill.tombo": "tombo"
+  "biblioteca.ill.tombo": "tombo",
+  "biblioteca.ill.coordinationHelp": "Informe o contato da sua biblioteca que a outra parte poderá procurar para combinar este empréstimo.",
+  "biblioteca.ill.clickToAdd": "Clique para adicionar este exemplar"
 }

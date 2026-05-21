@@ -1231,10 +1231,18 @@ export default function BibliotecaPage() {
                 <input type="text" value={illDocSearch} onChange={e=>setIllDocSearch(e.target.value)} onKeyDown={e=>e.key==='Enter'&&searchIllDocs()} placeholder={t({ id: 'biblioteca.ill.fullSearchPlaceholder' })} style={{...fs,flex:1}} />
                 <button className="cat-btn secondary" onClick={searchIllDocs} style={{ fontSize:'.85rem', padding:'7px 14px', flexShrink:0 }}>{t({ id: 'common.search' })}</button>
               </div>
+              {/* Finition UX PEB : la ligne entiere ajoute l'exemplaire au clic
+                  (le bouton « Adicionar » faisait doublon, retire). Le survol
+                  signale que la ligne est cliquable. */}
               {illDocResults.length>0 && <div style={{...lw,marginBottom:8,maxHeight:150,overflowY:'auto'}}>{illDocResults.map((d,i)=>(
-                <div key={d.exemplar_id} style={{...lr(i),cursor:'pointer'}} onClick={()=>addIllItem(d)}>
+                <div key={d.exemplar_id}
+                  style={{...lr(i),cursor:'pointer'}}
+                  title={t({ id: 'biblioteca.ill.clickToAdd' })}
+                  onClick={()=>addIllItem(d)}
+                  onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,.06)';}}
+                  onMouseLeave={e=>{e.currentTarget.style.background='';}}>
                   <div style={{ fontSize:'.88rem' }}><strong>{d.titulo}</strong> — {d.autor||'—'} · {t({ id: 'biblioteca.ill.tombo' })}: {d.tombo||'—'}</div>
-                  <button className="cat-btn secondary" style={{ fontSize:'.78rem', padding:'3px 8px' }} onClick={e=>{e.stopPropagation();addIllItem(d);}}>{t({ id: 'common.add' })}</button>
+                  <span aria-hidden="true" style={{ fontSize:'.78rem', color:'var(--brand-muted)' }}>+</span>
                 </div>
               ))}</div>}
               {illItems.length===0 && <div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{t({id:'biblioteca.ill.emptyItems'})}</div>}
@@ -1246,6 +1254,12 @@ export default function BibliotecaPage() {
               ))}</div>}
             </div>
 
+            {/* Finition UX PEB : le PEB est bidirectionnel, le libelle des
+                champs de contact ne peut pas dire « preteuse » ou « emprunteuse ».
+                Cette phrase leve l'ambiguite : c'est le contact de SA biblio. */}
+            <div style={{ fontSize:'.8rem', color:'var(--brand-muted)', marginBottom:8 }}>
+              {t({ id: 'biblioteca.ill.coordinationHelp' })}
+            </div>
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contact' })}</label><input type="text" value={illForm.contactName} onChange={e=>setIllForm(p=>({...p,contactName:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.ill.contactNamePlaceholder' })} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contactEmail' })}</label><input type="email" value={illForm.contactEmail} onChange={e=>setIllForm(p=>({...p,contactEmail:e.target.value}))} style={fs} placeholder="contato@biblioteca.org" /></div>

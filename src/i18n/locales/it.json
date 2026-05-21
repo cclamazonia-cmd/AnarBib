@@ -2705,5 +2705,7 @@
   "biblioteca.refresh.busy": "Aggiornamento…",
   "biblioteca.refresh.done": "Aggiornato",
   "biblioteca.ill.notAuthorized": "Il prestito interbibliotecario è possibile solo tra biblioteche federate con circolazione attiva. Verifica che le due biblioteche selezionate soddisfino questa condizione.",
-  "biblioteca.ill.tombo": "numero d'inventario"
+  "biblioteca.ill.tombo": "numero d'inventario",
+  "biblioteca.ill.coordinationHelp": "Indica il contatto della tua biblioteca che l'altra parte potra raggiungere per organizzare questo prestito.",
+  "biblioteca.ill.clickToAdd": "Clicca per aggiungere questa copia"
 }

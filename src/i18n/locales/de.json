@@ -2705,5 +2705,7 @@
   "biblioteca.refresh.busy": "Wird aktualisiert…",
   "biblioteca.refresh.done": "Aktualisiert",
   "biblioteca.ill.notAuthorized": "Fernleihe ist nur zwischen föderierten Bibliotheken mit aktiver Ausleihe möglich. Prüfe, ob die beiden ausgewählten Bibliotheken diese Bedingung erfüllen.",
-  "biblioteca.ill.tombo": "Inventarnummer"
+  "biblioteca.ill.tombo": "Inventarnummer",
+  "biblioteca.ill.coordinationHelp": "Gib die Kontaktperson deiner Bibliothek an, die die andere Seite fuer die Abstimmung dieser Leihe erreichen kann.",
+  "biblioteca.ill.clickToAdd": "Klicke, um dieses Exemplar hinzuzufuegen"
 }
