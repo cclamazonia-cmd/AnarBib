@@ -96,6 +96,7 @@ export default function BibliotecaPage() {
 
   const [tab, setTab] = useState(isCoord ? 'identity' : 'team');
   const [wsInspectorOpen, setWsInspectorOpen] = useState(false);
+  const [refreshState, setRefreshState] = useState('idle');
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [saving, setSaving] = useState(false);
   const regFileRef = useRef(null);
@@ -195,6 +196,19 @@ export default function BibliotecaPage() {
   }, [libraryId]);
 
   useEffect(() => { loadAll(); }, [loadAll]);
+
+  // Correctif EA-02 : recharge avec feedback visuel (busy -> done -> idle).
+  const handleRefresh = useCallback(async () => {
+    if (refreshState === 'busy') return;
+    setRefreshState('busy');
+    try {
+      await loadAll();
+      setRefreshState('done');
+      setTimeout(() => setRefreshState('idle'), 2000);
+    } catch {
+      setRefreshState('idle');
+    }
+  }, [loadAll, refreshState]);
 
   // ── Save helpers ────────────────────────────────────────
   function setL(k,v){ setLib(p=>p?{...p,[k]:v}:p); }
@@ -666,7 +680,7 @@ export default function BibliotecaPage() {
           {/* FIX BUG #4: rename loop variable to avoid shadowing `t` */}
           {visibleTabs.map(tb => <button key={tb.id} className={`cat-tab-btn${tab===tb.id?' active':''}${tb.separator?' tab-separator':''}`} onClick={()=>setTab(tb.id)}>{tb.label}</button>)}
           {/* EA-02 (21/05/2026) : bouton Atualizar global. Recharge loadAll(). */}
-          <button className="cat-btn secondary" onClick={loadAll} title={t({ id: 'biblioteca.refresh.hint' })} style={{ marginLeft:'auto', fontSize:'.8rem', padding:'4px 10px' }}>{t({ id: 'biblioteca.refresh.label' })}</button>
+          <button className="cat-btn secondary" onClick={handleRefresh} disabled={refreshState==='busy'} title={t({ id: 'biblioteca.refresh.hint' })} style={{ marginLeft:'auto', fontSize:'.8rem', padding:'4px 10px' }}>{t({ id: refreshState==='busy' ? 'biblioteca.refresh.busy' : refreshState==='done' ? 'biblioteca.refresh.done' : 'biblioteca.refresh.label' })}</button>
         </div>
 
         {/* Paquet E.5 refactor (20/05/2026) : onglet transitions de profil */}

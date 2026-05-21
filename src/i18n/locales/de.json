@@ -2701,5 +2701,7 @@
   "biblioteca.workspaceInspector.meta": "{count} Blöcke · nur lesen",
   "biblioteca.workspaceInspector.empty": "Keine Konfiguration gefunden.",
   "biblioteca.refresh.label": "Aktualisieren",
-  "biblioteca.refresh.hint": "Lädt die Seitendaten neu."
+  "biblioteca.refresh.hint": "Lädt die Seitendaten neu.",
+  "biblioteca.refresh.busy": "Wird aktualisiert…",
+  "biblioteca.refresh.done": "Aktualisiert"
 }

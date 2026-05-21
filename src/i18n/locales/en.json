@@ -2701,5 +2701,7 @@
   "biblioteca.workspaceInspector.meta": "{count} blocks · read only",
   "biblioteca.workspaceInspector.empty": "No configuration found.",
   "biblioteca.refresh.label": "Refresh",
-  "biblioteca.refresh.hint": "Reloads the page data."
+  "biblioteca.refresh.hint": "Reloads the page data.",
+  "biblioteca.refresh.busy": "Refreshing…",
+  "biblioteca.refresh.done": "Refreshed"
 }

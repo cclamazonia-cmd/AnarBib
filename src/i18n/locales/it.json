@@ -2701,5 +2701,7 @@
   "biblioteca.workspaceInspector.meta": "{count} blocchi · sola lettura",
   "biblioteca.workspaceInspector.empty": "Nessuna configurazione trovata.",
   "biblioteca.refresh.label": "Aggiornare",
-  "biblioteca.refresh.hint": "Ricarica i dati della pagina."
+  "biblioteca.refresh.hint": "Ricarica i dati della pagina.",
+  "biblioteca.refresh.busy": "Aggiornamento…",
+  "biblioteca.refresh.done": "Aggiornato"
 }
