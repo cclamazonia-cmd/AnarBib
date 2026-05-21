@@ -122,9 +122,6 @@ export default function BibliotecaPage() {
   const [commons, setCommons] = useState(null);
   const [serviceState, setServiceState] = useState(null);
   const [regDocs, setRegDocs] = useState([]);
-  const [policySet, setPolicySet] = useState(null);
-  const [policyRules, setPolicyRules] = useState([]);
-  const [editingRule, setEditingRule] = useState(null);
   const [docGov, setDocGov] = useState(null);
   const [partners, setPartners] = useState([]);
   // members reste chargé : utilisé par generateReportText() même si l'onglet team
@@ -165,7 +162,7 @@ export default function BibliotecaPage() {
         supabase.from('library_membership_rules').select('*').eq('library_id', libraryId).order('display_order', { ascending: true }).order('created_at', { ascending: true }),
       ]);
       setLib(libR.data); setCommons(commR.data); setServiceState(ssR.data);
-      setRegDocs(regR.data || []); setPolicySet(psR.data); setDocGov(dgR.data);
+      setRegDocs(regR.data || []); setDocGov(dgR.data);
       setPartners(partR.data || []); setMembers(memR.data || []);
       setIllLoans(illR.data || []); setTasks(taskR.data || []);
       setMailChannel(mcR.data); setNotifPolicy(npR.data);
@@ -173,10 +170,6 @@ export default function BibliotecaPage() {
       // Load all libraries for ILL selects
       const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name').order('name');
       setAllLibraries(allLibs || []);
-      if (psR.data?.id) {
-        const { data: rules } = await supabase.from('library_circulation_policy_rules').select('*').eq('policy_set_id', psR.data.id).order('priority');
-        setPolicyRules(rules || []);
-      }
       const [au, circStats] = await Promise.all([
         supabase.from('authors').select('id', { count: 'exact', head: true }),
         supabase.schema('api').from('library_circulation_stats').select('*').eq('library_id', libraryId).maybeSingle(),
@@ -490,25 +483,6 @@ export default function BibliotecaPage() {
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
 
-  // ── UI constants ────────────────────────────────────────
-  async function saveRule() {
-    if (!editingRule) return;
-    setSaving(true);
-    try {
-      const { error } = await supabase.from('library_circulation_policy_rules').update({
-        loan_days: editingRule.loan_days, renewal_days: editingRule.renewal_days,
-        renewal_max_count: editingRule.renewal_max_count, quantity_max: editingRule.quantity_max,
-        loan_allowed: editingRule.loan_allowed, renewable: editingRule.renewable,
-        public_note: editingRule.public_note,
-      }).eq('id', editingRule.id);
-      if (error) throw error;
-      setPolicyRules(prev => prev.map(r => r.id === editingRule.id ? editingRule : r));
-      setEditingRule(null);
-      setMsg({ text: t({id:'biblioteca.rules.saved'}), kind: 'ok' });
-    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
-    finally { setSaving(false); }
-  }
-
   // ── Cotisation (membership) ──────────────────────────
   async function toggleMembershipEnabled(next) {
     setSaving(true);
@@ -627,25 +601,6 @@ export default function BibliotecaPage() {
     finally { setSaving(false); }
   }
 
-  async function deleteCirculationRule(rule) {
-    // Confirm fort : avertissement explicite + saisie du label
-    const ruleLabel = rule.rule_label || t({ id: 'biblioteca.rules.ruleNumberFallback' }, { id: rule.id });
-    if (!confirm(t({ id: 'biblioteca.rules.deleteWarning' }, { name: ruleLabel }))) return;
-    const typed = prompt(t({ id: 'biblioteca.rules.deleteConfirmTyped' }, { name: ruleLabel }));
-    if (typed !== ruleLabel) {
-      if (typed !== null) setMsg({ text: t({ id: 'membership.config.action.deleteCancelled' }), kind: 'info' });
-      return;
-    }
-    setSaving(true);
-    try {
-      const { error } = await supabase.from('library_circulation_policy_rules').delete().eq('id', rule.id);
-      if (error) throw error;
-      setPolicyRules(prev => prev.filter(x => x.id !== rule.id));
-      setEditingRule(null);
-      setMsg({ text: t({ id: 'biblioteca.rules.deleted' }), kind: 'ok' });
-    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
-    finally { setSaving(false); }
-  }
   const fs = { width:'100%', padding:'10px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', fontSize:'.9rem' };
   const ls = { display:'block', fontSize:'.85rem', fontWeight:600, marginBottom:3, color:'var(--brand-muted, #ccc)' };
   const bx = { padding:14, borderRadius:10, background:'rgba(255,255,255,.03)', border:'1px solid rgba(255,255,255,.08)', marginBottom:16 };
