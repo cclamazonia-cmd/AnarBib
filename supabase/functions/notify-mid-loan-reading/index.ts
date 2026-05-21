@@ -135,7 +135,39 @@ function canSendForContext(ctx) {
   if (deliveryMode === "disabled") return false;
   return true;
 }
-async function sendBrevoEmail(opts) {
+// ============================================================================
+// Transport mail — wrapper neutre + dispatch par provider
+// ----------------------------------------------------------------------------
+// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #1).
+// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3.
+//
+// Decision §4.3 : EXTRACTION PROPRE. sendBrevoEmail etait deja une fonction
+// isolee ; on la dedouble en sendViaBrevo / sendViaResend, exposees derriere
+// un wrapper neutre sendEmail() qui dispatche selon MAIL_PROVIDER. Le site
+// d'appel (le serve) appelle desormais sendEmail().
+//
+// CONTRAT DE RETOUR LOCAL PRESERVE : cette EF attend { ok, status, body } et
+// ne throw jamais sur erreur HTTP (le serve lit sendResult.ok / .status /
+// .body). On NE reprend donc PAS le contrat string/throw du transport
+// partage R.2 : sendViaResend renvoie le meme objet { ok, status, body }.
+//
+// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// ============================================================================
+const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
+function resolveMailProvider() {
+  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
+  if (!VALID_MAIL_PROVIDERS.has(raw)) {
+    console.warn(`[mid-loan-reading] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
+    return "brevo";
+  }
+  return raw;
+}
+function formatMailAddress(email, name) {
+  const n = (name || "").trim();
+  return n ? `${n} <${email}>` : email;
+}
+// --- Implementation Brevo (corps inchange : ancien sendBrevoEmail) ----------
+async function sendViaBrevo(opts) {
   const senderEmail = senderEmailFromContext(opts.context);
   const senderName = senderNameFromContext(opts.context);
   const replyTo = replyToFromContext(opts.context);
@@ -173,6 +205,58 @@ async function sendBrevoEmail(opts) {
     status: response.status,
     body
   };
+}
+// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
+// reply_to "Nom <email>", corps html/text. Retour aligne sur le contrat
+// local { ok, status, body } : pas de throw sur erreur HTTP.
+async function sendViaResend(opts) {
+  const senderEmail = senderEmailFromContext(opts.context);
+  const senderName = senderNameFromContext(opts.context);
+  const replyTo = replyToFromContext(opts.context);
+  const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
+  if (!resendKey) {
+    return {
+      ok: false,
+      status: 0,
+      body: "RESEND_API_KEY absente des secrets Edge Function"
+    };
+  }
+  const payload: Record<string, unknown> = {
+    from: formatMailAddress(senderEmail, senderName),
+    to: [opts.toEmail],
+    subject: opts.subject,
+    html: opts.html,
+    text: opts.text
+  };
+  if (replyTo && replyTo.email) {
+    payload.reply_to = formatMailAddress(replyTo.email, replyTo.name);
+  }
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${resendKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+  const body = await response.text();
+  return {
+    ok: response.ok,
+    status: response.status,
+    body
+  };
+}
+// --- Wrapper neutre --------------------------------------------------------
+// Wrapper neutre : sendEmail() ne mentionne aucun provider, le dispatch est
+// interne. C'est la seule fonction d'envoi connue du reste de l'EF.
+async function sendEmail(opts) {
+  const provider = resolveMailProvider();
+  console.log(`[mid-loan-reading] envoi via ${provider}`);
+  if (provider === "resend") {
+    return await sendViaResend(opts);
+  }
+  return await sendViaBrevo(opts);
 }
 function renderEmail(opts) {
   const brandName = brandNameFromContext(opts.context);
@@ -535,7 +619,7 @@ serve(async (req)=>{
           });
           continue;
         }
-        sendResult = await sendBrevoEmail({
+        sendResult = await sendEmail({
           brevoKey,
           toEmail: normalizeText(profile.email),
           toName: fullName(profile) || undefined,
