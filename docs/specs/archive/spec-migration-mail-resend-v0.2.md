@@ -1,22 +1,10 @@
 # spec-migration-mail-resend.md — Migration du provider mail Brevo → Resend
 
-**Version** : v0.3
-**Date** : 21/05/2026 (révision de la v0.2 du 21/05/2026, archivée sous `docs/specs/archive/spec-migration-mail-resend-v0.2.md` ; la v0.1 du 13/05/2026 est archivée sous `docs/specs/archive/spec-migration-mail-resend-v0.1.md`)
-**Statut** : en cours d'exécution — sous-paquets R.1, R.2 et R.3 clos le 21/05 ; R.4 (bascule de `MAIL_PROVIDER`) à venir
+**Version** : v0.2
+**Date** : 21/05/2026 (révision de la v0.1 du 13/05/2026, archivée sous `docs/specs/archive/spec-migration-mail-resend-v0.1.md`)
+**Statut** : projet, à valider avant ouverture de chantier
 **Périmètre** : 8 Edge Functions Supabase porteuses d'envoi mail + transport mail partagé
 **Auteur·rices** : Xavier (rédaction politique), Claude (rédaction technique)
-
----
-
-## Changelog v0.2 → v0.3
-
-La v0.3 révise la v0.2 à la lumière de l'exécution des sous-paquets R.1, R.2 et R.3, conduite et close le 21/05/2026. Trois points.
-
-1. **Correction de la couture R.1 ↔ R.3 (§5.2).** La v0.2, en R.1.3, affirmait que `no-reply@notifications.anarbib.org` était « compatible avec Brevo (variante du domaine `anarbib.org` déjà vérifié) » et pouvait donc être posé dès R.1 sans précaution. C'est faux : un **sous-domaine** n'hérite pas de la vérification d'expéditeur du domaine parent — chez Brevo comme chez tout fournisseur, un sous-domaine d'envoi doit être authentifié séparément. Pendant R.3, le provider actif est encore Brevo ; or `SENDER_EMAIL` avait basculé en R.1 vers un sous-domaine non authentifié côté Brevo, et Brevo rejetait l'expéditeur (« sender not valid »). Incident constaté au premier test runtime de R.3 le 21/05, résolu en authentifiant le sous-domaine côté Brevo. La v0.3 corrige R.1.3 et ajoute une étape R.1.6 dédiée. Doctrine introduite : pendant toute la période de coexistence des deux providers, le sous-domaine d'envoi doit être authentifié chez **les deux**, pas seulement chez le provider cible.
-
-2. **Bilan d'exécution de R.3 (§5.4).** R.3 est clos. Un bloc de bilan est ajouté en fin de §5.4 : les sept transports autonomes (la v0.2 en comptait « six » plus `register` traité à part — soit sept au total) ont adopté le wrapper `sendEmail` ; les sept extractions ont été propres au sens de §4.3, donc aucune dette n'est reportée au chantier d'hygiène R.7 ; six EF ont été testées en runtime, la septième (`notify-document-permission-request`) ayant son test reporté à R.4 pour une raison documentée.
-
-3. **Annexe A2.** Une note est ajoutée à l'état des secrets : la bascule de `SENDER_EMAIL` en R.1 a une dépendance DNS (authentification du sous-domaine) qui n'était pas explicitée ; et le secret `WEBHOOK_SECRET_NOTIFY_INTERNAL_TASK` a été rotaté le 21/05 pendant R.3.
 
 ---
 
@@ -486,12 +474,11 @@ La migration #110 se déroule en sept sous-paquets nommés R.1 à R.7. La logiqu
 |---|---|
 | R.1.1 | Audit du dashboard Brevo : inventaire des webhooks sortants définis (cf. Q3) ; débrancher tout webhook pointant vers une URL obsolète ; relevé de l'état du link tracking pour traçabilité. Compte rendu en annexe A2. |
 | R.1.2 | Création du secret `RESEND_API_KEY` dans les Edge Function Secrets Supabase. Clé générée dans le compte Resend du CCLA, scope limité au domaine `notifications.anarbib.org`. Vérifier que la clé ne donne accès à aucun autre domaine. |
-| R.1.3 | Mise à jour de `SENDER_EMAIL` à `no-reply@notifications.anarbib.org`. **Attention — corrigé en v0.3 :** `notifications.anarbib.org` est un **sous-domaine**, et un sous-domaine n'hérite **pas** de la vérification d'expéditeur du domaine parent `anarbib.org`. Il doit être authentifié séparément chez chaque provider. Cette valeur peut être posée dès R.1, mais elle n'est effectivement utilisable que sur un provider où le sous-domaine est authentifié. Comme R.2 et R.3 s'exécutent avec Brevo encore actif, l'authentification du sous-domaine **côté Brevo** est un préalable — voir R.1.6. Le sous-domaine doit rester authentifié des deux côtés pendant toute la coexistence des providers. |
+| R.1.3 | Mise à jour de `SENDER_EMAIL` à `no-reply@notifications.anarbib.org`. Cette valeur est compatible avec Brevo (variante du domaine `anarbib.org` déjà vérifié) comme avec Resend : elle peut donc être posée dès maintenant sans attendre la bascule. |
 | R.1.4 | Vérification du réglage TLS dans le dashboard Resend. Le dashboard expose un mode « Opportunistic TLS » par défaut ; vérifier s'il existe un mode strict (TLS obligatoire) et, le cas échéant, le préférer — un projet libertaire a intérêt à la connexion chiffrée garantie plutôt qu'opportuniste. Si seul le mode opportuniste est disponible, le consigner sans en faire un bloquant. |
 | R.1.5 | Vérification du garde-fou tracking : capture de la page `/domains/<id>/tracking` du dashboard Resend pour l'annexe A6. Confirmer qu'aucun tracking subdomain n'est créé. Ne pas valider cette page (cf. §6.4). |
-| R.1.6 | **Authentification du sous-domaine `notifications.anarbib.org` côté Brevo** (ajouté en v0.3). Tant que Brevo est le provider actif (toute la durée de R.2, R.3 et jusqu'à la bascule R.4), le sous-domaine d'envoi doit y être authentifié, faute de quoi Brevo rejette l'expéditeur (« sender not valid »). Authentification par pose de quatre enregistrements DNS dans la zone OVH de `anarbib.org` : un enregistrement TXT de code de vérification Brevo sur `notifications`, deux CNAME DKIM (`brevo1._domainkey.notifications`, `brevo2._domainkey.notifications`), un TXT DMARC sur `_dmarc.notifications`. Option « Authenticate yourself » retenue, sans donner d'accès délégué à OVH (cohérence politique). Vérifier le passage au vert côté Brevo. Le sous-domaine étant par ailleurs configuré côté Resend (fait le 07/05, cf. R.1 préalables), il est dès lors authentifié chez les deux providers — état requis pour la coexistence. |
 
-**Critère de succès.** `RESEND_API_KEY` présent et testable par un `curl` direct vers `api.resend.com/emails` (envoi d'un mail de test vers une adresse du CCLA, réception confirmée) ; compte rendu d'audit Brevo rédigé ; réglage TLS consigné ; capture tracking archivée ; sous-domaine `notifications.anarbib.org` authentifié et au vert côté Brevo comme côté Resend.
+**Critère de succès.** `RESEND_API_KEY` présent et testable par un `curl` direct vers `api.resend.com/emails` (envoi d'un mail de test vers une adresse du CCLA, réception confirmée) ; compte rendu d'audit Brevo rédigé ; réglage TLS consigné ; capture tracking archivée.
 
 ### 5.3 R.2 — Adoption du wrapper dans le transport partagé `notify-event`
 
@@ -531,14 +518,6 @@ Les six transports concernés : la copie privée de `notify-internal-task`, et l
 **Risque.** Moyen — c'est l'étape qui touche le plus de fichiers. Mitigation : un commit et un test runtime par EF, dans l'ordre du moins critique au plus critique (suggestion : `notify-mid-loan-reading`, `notify-document-permission-request`, `notify-network-weekly-report`, `notify-weekly-report`, `notify-library-request`, `notify-internal-task`, `register` en dernier car porteuse du `verify_jwt`).
 
 **Critère de succès.** Les six transports ont adopté le wrapper ; en production `MAIL_PROVIDER` est toujours `brevo` et tous les mails partent encore de Brevo, comportement inchangé ; chaque EF a été testée individuellement.
-
-**Bilan d'exécution — R.3 clos le 21/05/2026 (ajouté en v0.3).** Les sept transports autonomes ont adopté le wrapper neutre `sendEmail` dispatchant par `MAIL_PROVIDER` : `notify-mid-loan-reading`, `notify-document-permission-request`, `notify-network-weekly-report`, `notify-weekly-report`, `notify-library-request`, `notify-internal-task` (copie privée du transport, cas R.3.1), `register` (cas R.3.3). La v0.2 comptait « six transports » plus `register` traité à part ; le total réel de transports autonomes traités est donc de sept.
-
-Décision §4.3 pour chacun : **extraction propre** dans les sept cas — la fonction de transport a été isolée puis dédoublée en `sendViaBrevo` / `sendViaResend`, sans jamais recourir au bloc conditionnel sur place. **Aucune dette n'est donc reportée au chantier d'hygiène R.7.** Deux cas ont demandé une attention particulière, traités sans déroger à l'extraction propre : `notify-library-request` et `register` inlinent les logos — l'appel à `inlineLogosInHtml` a été factorisé une seule fois dans le wrapper, en amont du dispatch, commun aux deux providers (conforme à §4.5) ; `register` construit ses payloads au format Brevo natif sur trois sites d'appel — conformément à §4.6 (seul le transport bascule), les trois sites n'ont pas été réécrits, le payload Brevo sert de format d'entrée pivot et `sendViaResend` le traduit vers le format Resend par une fonction pure isolée.
-
-Six des sept EF ont été testées en runtime avec `MAIL_PROVIDER` non défini (donc Brevo) : mail reçu, comportement et rendu inchangés. La septième, `notify-document-permission-request`, a son test runtime **reporté à R.4** : la table `library_contact_profiles` est vide pour les bibliothèques concernées, tous les envois retomberaient en `skipped` sans atteindre le transport. La non-régression est établie par preuve de lecture (le transport y était déjà isolé avant R.3, l'extraction n'a donc rien réécrit de risqué) ; le test deviendra exerçable en R.4. Pour `register`, la vérification que `verify_jwt` reste activé après déploiement (exigée par R.3.3) a été faite et confirmée : appel sans JWT rejeté en 401.
-
-Couture découverte en cours d'exécution : voir le changelog v0.2 → v0.3, point 1, et la correction de R.1.3 / l'ajout de R.1.6.
 
 ### 5.5 R.4 — Bascule de `MAIL_PROVIDER`
 
@@ -1111,10 +1090,6 @@ Tableau de conversion des champs de l'API Brevo vers ceux de l'API Resend, pour 
 | `BREVO_API_KEY_NOTIFICATIONS` | inchangé | Actif (encore utilisé) |
 | `BREVO_API_KEY` | inchangé | Actif (encore utilisé par `register`) |
 | Autres variables | inchangées | — |
-
-> **Note v0.3 — dépendance DNS de `SENDER_EMAIL`.** La bascule de `SENDER_EMAIL` vers `no-reply@notifications.anarbib.org` n'est pas qu'un changement de variable : `notifications.anarbib.org` est un sous-domaine, qui doit être authentifié séparément chez chaque provider (la vérification du domaine parent `anarbib.org` ne descend pas aux sous-domaines). Tant que Brevo reste actif (R.2, R.3, jusqu'à R.4), le sous-domaine doit être authentifié côté Brevo — voir l'étape R.1.6. Authentification posée le 21/05 (4 enregistrements DNS dans la zone OVH : TXT de code Brevo, 2 CNAME DKIM, TXT DMARC). Côté Resend, le sous-domaine est configuré depuis le 07/05.
-
-> **Note v0.3 — rotation de `WEBHOOK_SECRET_NOTIFY_INTERNAL_TASK`.** Pendant l'exécution de R.3 le 21/05, ce secret a été rotaté : l'ancienne valeur était introuvable (écart constaté par comparaison de digest SHA-256 lors du test runtime de `notify-internal-task`), une nouvelle valeur de 32 octets en base64 a été générée et posée via `supabase secrets set`. Conséquence à traiter hors de ce chantier : le webhook Postgres qui déclenche `notify-internal-task` envoie encore l'ancienne valeur ; il devra être mis en cohérence avec la nouvelle avant toute mise en service réelle des notifications de tâches internes. Suivi au backlog, item #119 (audit des secrets).
 
 **État après R.2 et R.3 (wrapper adopté dans tous les transports) :**
 
