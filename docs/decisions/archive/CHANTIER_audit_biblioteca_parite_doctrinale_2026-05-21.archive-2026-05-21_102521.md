@@ -221,10 +221,3 @@ Si l'une de ces conditions ne tient plus, la séquence est à réviser. Cet audi
 - `anarbib-app/src/components/RetentionPolicySection.jsx` (à confirmer)
 - HTML legacy de référence : `biblioteca.html` (6227 l., dont 5317 l. de JS embarqué, 267 fonctions JS)
 
-### 6.3 Écarts pré-identifiés hors périmètre Biblioteca
-
-Écarts repérés au cours de l'audit Biblioteca mais qui n'appartiennent pas à la page Biblioteca. Inscrits ici pour mémoire, à verser au chantier d'audit du module concerné lorsqu'il s'ouvrira.
-
-**ER-01 — Absence d'éditeur applicatif pour `catalog_partners` (page réseau).**
-La table `catalog_partners` (partenaires de catalogage du réseau : CIRA Lausanne, Centro Pinelli Milan) n'a aucune politique RLS INSERT/UPDATE/DELETE — elle est en lecture seule pour tous les rôles, y compris l'administration réseau. Ses 2 lignes ont été créées par insertion manuelle directe le 31/03/2026 (même timestamp, jamais modifiées depuis), sans migration de seed traçable ni mécanisme applicatif d'alimentation. Le bloc « Bibliotecas parceiras » de l'onglet `documents` de Biblioteca n'est qu'un affichage en lecture seule de cette table — fidèle au HTML d'origine, donc pas un écart de Biblioteca. Mais l'absence de tout moyen d'éditer `catalog_partners` depuis l'application *est* un écart réel : il relève de la **page réseau** (administration réseau), pas de la page Biblioteca locale. À traiter dans le futur chantier d'audit de la page réseau. Cohérent avec la doctrine de périmètre admin réseau (« page = périmètre, pas de cross-calculation ») : la liste des partenaires du réseau est une donnée transverse, son éditeur a sa place côté réseau. Repéré le 21/05/2026 lors du test fumée d'EA-08.
-
