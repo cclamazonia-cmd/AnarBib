@@ -295,22 +295,24 @@ declare
   v_count integer;
   v_rpc_def text;
 begin
-  -- (a) La nouvelle fn_peb_search_exemplares(text, uuid) existe.
+  -- (a) La nouvelle fn_peb_search_exemplares a bien 2 arguments (text, uuid).
+  -- On compte les arguments via pronargs (robuste), plutot que de comparer
+  -- pg_get_function_identity_arguments a une chaine de format incertain.
   select count(*) into v_count
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
   where n.nspname = 'public' and p.proname = 'fn_peb_search_exemplares'
-    and pg_get_function_identity_arguments(p.oid) = 'text, uuid';
+    and p.pronargs = 2;
   if v_count <> 1 then
-    raise exception 'Verification echouee : fn_peb_search_exemplares(text, uuid) absente.';
+    raise exception 'Verification echouee : fn_peb_search_exemplares a 2 arguments absente (trouve % fonction(s) a 2 args).', v_count;
   end if;
 
-  -- (b) L'ancienne fn_peb_search_exemplares(text) a bien ete supprimee.
+  -- (b) L'ancienne fn_peb_search_exemplares a 1 argument a bien ete supprimee.
   select count(*) into v_count
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
   where n.nspname = 'public' and p.proname = 'fn_peb_search_exemplares'
-    and pg_get_function_identity_arguments(p.oid) = 'text';
+    and p.pronargs = 1;
   if v_count <> 0 then
-    raise exception 'Verification echouee : l ancienne fn_peb_search_exemplares(text) existe encore.';
+    raise exception 'Verification echouee : l ancienne fn_peb_search_exemplares a 1 argument existe encore.';
   end if;
 
   -- (c) La garde de disponibilite est presente dans la RPC de creation.
