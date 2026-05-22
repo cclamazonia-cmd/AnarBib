@@ -1,118 +1,380 @@
 // ============================================================================
-// notify-interlibrary-loan — STUB (NON OPERATIONNEL)
+// notify-interlibrary-loan — Notifications des prêts interbibliothèques (PEB)
 // ============================================================================
-// État : MODULE EN CHANTIER, NE PAS UTILISER EN PRODUCTION
+// Remplace le stub non opérationnel (501) par l'implémentation réelle.
 //
-// Cette Edge Function est appelée par le trigger DB
-// `trg_interlibrary_loan_enqueue_notifications` sur `interlibrary_loans_v2`,
-// via `fn_notify_emprestimo_interbibliotecas_webhook`.
+// Chaîne amont (inchangée) :
+//   interlibrary_loans_v2 (INSERT/UPDATE status_global)
+//     -> trg_interlibrary_loan_enqueue_notifications
+//     -> fn_enqueue_emprestimo_interbibliotecas_notification (file d'attente)
+//     -> fn_notify_emprestimo_interbibliotecas_webhook (POST vers cette EF)
 //
-// Elle est intentionnellement non implémentée pour le moment :
-//   - Le module "Prêts interbibliothèques" est en cours de redéfinition.
-//   - L'envoi effectif des mails (Brevo) reste à brancher.
-//   - Les politiques d'accès, de consentement, et le format des messages
-//     doivent être validés politiquement avant toute mise en service réelle.
+// Événements gérés (8) :
+//   created · prepared · dispatched · return_started · returned
+//   · cancelled · overdue · partially_returned
 //
-// Comportement actuel :
-//   - Authentifie le webhook (secret).
-//   - Logue la payload reçue avec un avertissement explicite (console.warn).
-//   - Renvoie HTTP 501 Not Implemented pour signaler clairement le statut.
+//   Deux de ces événements sont DORMANTS — leur branche est prête mais le
+//   trigger SQL ne les émet pas encore :
+//     - overdue : aucun statut 'atrasado' n'est posé aujourd'hui (cron à venir).
+//     - partially_returned : le trigger n'a pas de branche pour le statut
+//       'parcialmente_devolvido'. Voir chantier #ILL-partial.
+//   Les gérer ici dès maintenant évite de rouvrir l'EF plus tard.
 //
-// Pour reprise du chantier :
-//   - Voir docs/decisions/MODULE_INTERBIBLIOTECAS_STATUT_2026-05-06.md
-//   - Le code de formatage (subjectMap, textBody) ci-dessous est conservé
-//     comme point de départ pour l'implémentation finale.
+// Modèle de notification :
+//   - created : 4 contenus selon la matrice {prêteuse|emprunteuse} ×
+//     {initiatrice|partenaire}. L'initiatrice reçoit une confirmation ;
+//     la partenaire reçoit une sollicitation avec actionBox portant le
+//     contact de coordination.
+//   - changements de statut : symétrique — les deux bibliothèques reçoivent
+//     le même mail, adapté à leur locale et à leur logo.
 //
+// Table de détails (documents) :
+//   - affichée pour tous les événements SAUF 'cancelled' (un prêt annulé
+//     n'a plus de détail d'exemplaires à montrer) ;
+//   - particulièrement utile sur 'partially_returned', où elle indique
+//     document par document ce qui est rentré et ce qui est encore dehors.
+//
+// Dépendances partagées (lues et vérifiées) :
+//   - _shared/transport/email.ts   : safeSendEmail (Resend hérité du wrapper)
+//   - _shared/mail/layout.ts       : renderEmail, footerPadrao
+//   - _shared/context/library-notification-context.ts : resolveLibraryNotificationContext
+//   - _shared/i18n/mail-strings.ts : tMail (8 locales)
+//   - _shared/core/webhook.ts      : authorizeWebhook, jsonResponse, parseJsonPayload
+//   Secret webhook : variable d'env DÉDIÉE NOTIFY_INTERLIBRARY_LOAN_WEBHOOK_SECRET
+//   (PAS le WEBHOOK_SECRET de env.ts, qui est celui de notify-event).
+//
+// Auth : on exige le secret webhook (auth.webhookOk), pas le simple Bearer —
+// ce webhook est strictement machine-à-machine. Choix durci validé.
+//
+// Voir docs/decisions/MODULE_INTERBIBLIOTECAS_STATUT_2026-05-06.md (à réviser).
 // ============================================================================
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { authorizeWebhook, jsonResponse, parseJsonPayload } from "../_shared/core/webhook.ts";
+import { renderEmail, footerPadrao } from "../_shared/mail/layout.ts";
+import { safeSendEmail } from "../_shared/transport/email.ts";
+import { resolveLibraryNotificationContext } from "../_shared/context/library-notification-context.ts";
+import { tMail } from "../_shared/i18n/mail-strings.ts";
 
-serve(async (req) => {
-  try {
-    if (req.method !== "POST") {
-      return new Response("Method not allowed", { status: 405 });
+// ─── Secret webhook DÉDIÉ au module PEB ─────────────────────────────────────
+// IMPORTANT : on NE réutilise PAS le WEBHOOK_SECRET de _shared/core/env.ts —
+// celui-ci lit WEBHOOK_SECRET_NOTIFY_EVENT, le secret de l'EF notify-event.
+// La chaîne PEB a son propre secret : la fonction SQL
+// fn_notify_emprestimo_interbibliotecas_webhook lit dans le vault
+// NOTIFY_INTERLIBRARY_LOAN_WEBHOOK_SECRET et l'envoie dans x-webhook-secret.
+// L'EF doit donc comparer au MÊME secret, lu depuis sa variable d'env dédiée.
+// (Le secret est present cote Edge Functions — verifie via `supabase secrets list`.)
+const WEBHOOK_SECRET = (Deno.env.get("NOTIFY_INTERLIBRARY_LOAN_WEBHOOK_SECRET") || "").trim();
+
+// ─── Types de payload (forme produite par fn_notify_..._webhook) ────────────
+interface IllLoan {
+  id: number | null;
+  request_id: string | null;
+  status_global: string | null;
+  start_date: string | null;
+  due_date: string | null;
+  dispatched_at: string | null;
+  return_started_at: string | null;
+  returned_at: string | null;
+  lender_library_id: string | null;
+  lender_library_name: string | null;
+  lender_library_short_name: string | null;
+  borrower_library_id: string | null;
+  borrower_library_name: string | null;
+  borrower_library_short_name: string | null;
+  coordination_contact_name: string | null;
+  coordination_contact_email: string | null;
+  coordination_contact_phone: string | null;
+  logistics_mode: string | null;
+  meeting_point: string | null;
+  notes: string | null;
+}
+interface IllItem {
+  line_no: number | null;
+  titulo: string | null;
+  autor: string | null;
+  tombo: string | null;
+  bib_ref: string | null;
+  item_status: string | null;
+}
+interface IllPayload {
+  source?: string;
+  kind?: string;
+  event_id?: number;
+  event_type?: string;
+  event_key?: string;
+  created_at?: string;
+  loan?: IllLoan;
+  items?: IllItem[];
+  // initiated_by_library_id : présent côté table interlibrary_loans_v2 mais
+  // PAS encore dans la payload du webhook. Migration requise pour la matrice
+  // de 'created'. Tant qu'il est absent : repli symétrique (voir plus bas).
+  initiated_by_library_id?: string | null;
+}
+
+// ─── Les huit événements connus ─────────────────────────────────────────────
+const KNOWN_EVENTS = new Set([
+  "interlibrary_loan_created",
+  "interlibrary_loan_prepared",
+  "interlibrary_loan_dispatched",
+  "interlibrary_loan_return_started",
+  "interlibrary_loan_returned",
+  "interlibrary_loan_cancelled",
+  "interlibrary_loan_overdue",
+  "interlibrary_loan_partially_returned",
+]);
+
+// Événements pour lesquels la table de détails (documents) n'est PAS affichée.
+const EVENTS_WITHOUT_DETAILS = new Set(["cancelled"]);
+
+// event_type complet -> clé courte i18n (ill.subject.<court>, etc.)
+function shortKey(eventType: string): string {
+  return eventType.replace(/^interlibrary_loan_/, "");
+}
+
+// ─── Rendu d'une valeur logistics_mode ──────────────────────────────────────
+// logistics_mode est un champ texte libre (aucun CHECK en base). On traduit
+// les valeurs connues via une clé i18n ; toute valeur inconnue est affichée
+// brute (cas d'un futur texte libre). Voir chantier #ILL-logistics.
+function renderLogistics(mode: string | null, locale: string): string | null {
+  if (!mode) return null;
+  const KNOWN = new Set(["a_combinar"]);
+  if (KNOWN.has(mode)) return tMail(locale, `ill.logistics.${mode}`);
+  return mode; // valeur libre non répertoriée : affichage brut
+}
+
+// ─── Détails de la table mail (libellés via tMail, valeurs depuis loan) ─────
+function buildDetails(loan: IllLoan, items: IllItem[], locale: string) {
+  const d: { label: string; value: string }[] = [];
+  d.push({ label: tMail(locale, "ill.detail.loanRef"),
+           value: loan.request_id || `#${loan.id ?? "—"}` });
+  d.push({ label: tMail(locale, "ill.detail.lender"),
+           value: loan.lender_library_name || "—" });
+  d.push({ label: tMail(locale, "ill.detail.borrower"),
+           value: loan.borrower_library_name || "—" });
+  if (loan.start_date) {
+    d.push({ label: tMail(locale, "ill.detail.startDate"), value: loan.start_date });
+  }
+  if (loan.due_date) {
+    d.push({ label: tMail(locale, "ill.detail.dueDate"), value: loan.due_date });
+  }
+  const logistics = renderLogistics(loan.logistics_mode, locale);
+  if (logistics) {
+    d.push({ label: tMail(locale, "ill.detail.logistics"), value: logistics });
+  }
+  if (loan.meeting_point) {
+    d.push({ label: tMail(locale, "ill.detail.meetingPoint"), value: loan.meeting_point });
+  }
+  // Items : une ligne récapitulative (compte) + détail titre par titre.
+  d.push({ label: tMail(locale, "ill.detail.itemCount"),
+           value: String(items.length) });
+  for (const it of items) {
+    const ref = [it.titulo, it.autor].filter(Boolean).join(" — ") || it.bib_ref || "—";
+    const tombo = it.tombo ? ` (${it.tombo})` : "";
+    d.push({ label: `· ${tMail(locale, "ill.detail.itemLine")} ${it.line_no ?? ""}`.trim(),
+             value: `${ref}${tombo}` });
+  }
+  return d;
+}
+
+// ─── Construit et envoie UN mail vers UNE bibliothèque ──────────────────────
+// roleInLoan : 'lender' | 'borrower'  (rôle de la biblio destinataire)
+// roleInFlow : 'initiator' | 'partner' | 'symmetric'
+async function sendToLibrary(opts: {
+  libraryId: string;
+  roleInLoan: "lender" | "borrower";
+  roleInFlow: "initiator" | "partner" | "symmetric";
+  eventType: string;
+  loan: IllLoan;
+  items: IllItem[];
+}) {
+  const { libraryId, roleInLoan, roleInFlow, eventType, loan, items } = opts;
+  const short = shortKey(eventType);
+
+  // Context de la bibliothèque destinataire : logo, locale, admin email.
+  const ctx = await resolveLibraryNotificationContext(libraryId);
+  const locale = ctx.default_locale || "pt-BR";
+
+  // Destinataire : l'email d'administration de la bibliothèque elle-même.
+  const toEmail = ctx.admin_notification_email;
+  if (!toEmail) {
+    return { ok: false, libraryId, roleInLoan, roleInFlow,
+             skipped: true, reason: "no_admin_notification_email" };
+  }
+
+  // Sujet : une clé par événement, neutre, identique pour les 2 destinataires.
+  const subject = tMail(locale, `ill.subject.${short}`, {
+    lender: loan.lender_library_short_name || loan.lender_library_name || "",
+    borrower: loan.borrower_library_short_name || loan.borrower_library_name || "",
+  });
+
+  // Intro : pour 'created', clé à 2 axes (rôle dans le prêt + rôle dans le
+  // flux). Pour les changements de statut, clé symétrique unique.
+  let introKey: string;
+  if (short === "created" && roleInFlow !== "symmetric") {
+    // ill.intro.created.lender_initiator | borrower_partner |
+    //                   borrower_initiator | lender_partner
+    introKey = `ill.intro.created.${roleInLoan}_${roleInFlow}`;
+  } else {
+    // ill.intro.prepared | dispatched | return_started | returned |
+    //          cancelled | overdue | partially_returned   (symétrique)
+    introKey = `ill.intro.${short}`;
+  }
+  const introHtml = tMail(locale, introKey, {
+    lender: loan.lender_library_name || "—",
+    borrower: loan.borrower_library_name || "—",
+    loanRef: loan.request_id || `#${loan.id ?? "—"}`,
+  });
+
+  // actionBox : uniquement pour la partenaire d'un 'created'. Elle porte le
+  // contact de coordination saisi par la biblio initiatrice.
+  let actionBox: { kind: string; title: string } | undefined;
+  if (short === "created" && roleInFlow === "partner") {
+    const contactName = loan.coordination_contact_name || "";
+    const contactEmail = loan.coordination_contact_email || "";
+    if (contactName || contactEmail) {
+      const who = [contactName, contactEmail].filter(Boolean).join(" — ");
+      actionBox = {
+        kind: "action",
+        title: tMail(locale, "ill.actionBox.contactPartner", { contact: who }),
+      };
     }
+  }
 
-    const expectedSecret = Deno.env.get("NOTIFY_INTERLIBRARY_LOAN_WEBHOOK_SECRET") || "";
-    const receivedSecret = req.headers.get("x-webhook-secret") || "";
-    if (!expectedSecret || receivedSecret !== expectedSecret) {
-      return new Response("Unauthorized", { status: 401 });
-    }
+  const title = tMail(locale, `ill.title.${short}`);
 
-    const body = await req.json();
-    const eventType = body?.event_type || "";
-    const loan = body?.loan || {};
-    const items = Array.isArray(body?.items) ? body.items : [];
+  // Table de détails : affichée partout SAUF sur 'cancelled'.
+  const details = EVENTS_WITHOUT_DETAILS.has(short)
+    ? undefined
+    : buildDetails(loan, items, locale);
 
-    // ─── Pré-formatage conservé pour reprise ulterieure ─────────────────────
-    const lenderName = loan?.lender_library_short_name || loan?.lender_library_name || "Biblioteca emprestadora";
-    const borrowerName = loan?.borrower_library_short_name || loan?.borrower_library_name || "Biblioteca tomadora";
+  const { html, text } = renderEmail({
+    preheader: subject,
+    title,
+    introHtml,
+    actionBox,
+    details,
+    footerHtml: footerPadrao(ctx, locale),
+    context: ctx,
+    locale,
+  });
 
-    const subjectMap = {
-      interlibrary_loan_created: `Novo empréstimo interbibliotecas — ${lenderName} ↔ ${borrowerName}`,
-      interlibrary_loan_prepared: `Empréstimo interbibliotecas preparado — ${lenderName} ↔ ${borrowerName}`,
-      interlibrary_loan_dispatched: `Empréstimo interbibliotecas despachado — ${lenderName} ↔ ${borrowerName}`,
-      interlibrary_loan_return_started: `Devolução iniciada — ${lenderName} ↔ ${borrowerName}`,
-      interlibrary_loan_returned: `Empréstimo interbibliotecas devolvido — ${lenderName} ↔ ${borrowerName}`,
-      interlibrary_loan_cancelled: `Empréstimo interbibliotecas cancelado — ${lenderName} ↔ ${borrowerName}`,
-      interlibrary_loan_overdue: `Empréstimo interbibliotecas em atraso — ${lenderName} ↔ ${borrowerName}`
-    };
-    const subject = subjectMap[eventType] || `Atualização de empréstimo interbibliotecas — ${lenderName} ↔ ${borrowerName}`;
+  const label = `ill_${short}_${roleInFlow}`;
+  const result = await safeSendEmail(
+    { email: toEmail, name: ctx.library_short_name || undefined },
+    subject, html, text, label, ctx,
+  );
+  return { ...result, libraryId, roleInLoan, roleInFlow };
+}
 
-    const lines = items.map((it) => `- ${it?.titulo || it?.bib_ref || "Documento"} · ${it?.tombo || "sem tombo"} · status ${it?.item_status || "—"}`).join("\n");
-
-    const textBody = [
-      `Evento: ${eventType}`,
-      ``,
-      `Empréstimo #${loan?.id || "—"}`,
-      `Biblioteca emprestadora: ${loan?.lender_library_name || "—"}`,
-      `Biblioteca tomadora: ${loan?.borrower_library_name || "—"}`,
-      `Status global: ${loan?.status_global || "—"}`,
-      `Saída: ${loan?.start_date || "—"}`,
-      `Retorno previsto: ${loan?.due_date || "—"}`,
-      `Contato: ${loan?.coordination_contact_name || "—"} / ${loan?.coordination_contact_email || "—"}`,
-      `Logística: ${loan?.logistics_mode || "—"}`,
-      `Ponto de encontro: ${loan?.meeting_point || "—"}`,
-      ``,
-      `Itens:`,
-      lines || "- nenhum item",
-      ``,
-      `Observações: ${loan?.notes || "—"}`
-    ].join("\n");
-
-    // ─── Log d'avertissement explicite ──────────────────────────────────────
-    console.warn(
-      "⚠️  [STUB] notify-interlibrary-loan called — module not yet operational. " +
-      "Mail NOT sent. See docs/decisions/MODULE_INTERBIBLIOTECAS_STATUT_2026-05-06.md"
-    );
-    console.warn(JSON.stringify({
-      stub: true,
-      eventType,
-      loanId: loan?.id || null,
-      subject,
-      textBody
-    }, null, 2));
-
-    // ─── Retourne 501 Not Implemented ───────────────────────────────────────
-    return new Response(JSON.stringify({
-      ok: false,
-      stub: true,
-      not_implemented: true,
-      eventType,
-      loanId: loan?.id || null,
-      message: "Module Prêts interbibliothèques non opérationnel — mail non envoyé. Voir docs/decisions/MODULE_INTERBIBLIOTECAS_STATUT_2026-05-06.md"
-    }), {
-      status: 501,
-      headers: { "content-type": "application/json" }
-    });
-  } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({
-      ok: false,
-      error: String(err?.message || err)
-    }), {
-      status: 500,
-      headers: { "content-type": "application/json" }
+// ─── Handler principal ──────────────────────────────────────────────────────
+async function handleNotifyIll(req: Request): Promise<Response> {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", {
+      status: 200,
+      headers: {
+        "access-control-allow-origin": "*",
+        "access-control-allow-methods": "POST, OPTIONS",
+        "access-control-allow-headers":
+          "authorization, x-client-info, apikey, content-type, x-webhook-secret",
+      },
     });
   }
-});
+  if (req.method !== "POST") {
+    return jsonResponse(405, { ok: false, error: "Method not allowed" });
+  }
+
+  const { payload, manualTest } = await parseJsonPayload(req);
+  const auth = authorizeWebhook(req, manualTest, {
+    secretEnv: WEBHOOK_SECRET,
+    allowDashboardBearerForManualTest: true,
+  });
+  // Auth durcie : on exige le secret webhook. Le simple Bearer ne suffit pas
+  // pour ce flux machine-à-machine (sauf test manuel depuis le dashboard).
+  if (!auth.webhookOk && !auth.dashboardTestOk) {
+    return jsonResponse(401, { ok: false, error: "Unauthorized" });
+  }
+
+  try {
+    const p = (payload || {}) as IllPayload;
+    const eventType = String(p.event_type || "").trim();
+    const loan = p.loan || ({} as IllLoan);
+    const items = Array.isArray(p.items) ? p.items : [];
+
+    if (!eventType || !KNOWN_EVENTS.has(eventType)) {
+      return jsonResponse(400, { ok: false, error: "Unknown event_type", eventType });
+    }
+    if (!loan.lender_library_id || !loan.borrower_library_id) {
+      return jsonResponse(400, { ok: false, error: "Missing library ids on loan" });
+    }
+
+    const short = shortKey(eventType);
+    const results: unknown[] = [];
+
+    if (short === "created") {
+      // Matrice à 2 axes. L'initiatrice est lue dans la payload.
+      // IMPORTANT : initiated_by_library_id n'est PAS encore dans la payload
+      // du webhook (migration requise). Tant qu'il est absent, on retombe
+      // sur un envoi symétrique afin de ne JAMAIS perdre une notification.
+      const initiatorId = p.initiated_by_library_id || null;
+
+      if (initiatorId === loan.lender_library_id) {
+        // Cas A — initiatrice = prêteuse
+        results.push(await sendToLibrary({
+          libraryId: loan.lender_library_id, roleInLoan: "lender",
+          roleInFlow: "initiator", eventType, loan, items }));
+        results.push(await sendToLibrary({
+          libraryId: loan.borrower_library_id, roleInLoan: "borrower",
+          roleInFlow: "partner", eventType, loan, items }));
+      } else if (initiatorId === loan.borrower_library_id) {
+        // Cas B — initiatrice = emprunteuse
+        results.push(await sendToLibrary({
+          libraryId: loan.borrower_library_id, roleInLoan: "borrower",
+          roleInFlow: "initiator", eventType, loan, items }));
+        results.push(await sendToLibrary({
+          libraryId: loan.lender_library_id, roleInLoan: "lender",
+          roleInFlow: "partner", eventType, loan, items }));
+      } else {
+        // initiator inconnu (payload sans initiated_by_library_id) :
+        // repli symétrique. À supprimer une fois la migration faite.
+        console.warn(
+          "[notify-ill] initiated_by_library_id absent de la payload — " +
+          "repli sur envoi symétrique pour 'created'. " +
+          "Migration requise : ajouter initiated_by_library_id à " +
+          "fn_notify_emprestimo_interbibliotecas_webhook.");
+        results.push(await sendToLibrary({
+          libraryId: loan.lender_library_id, roleInLoan: "lender",
+          roleInFlow: "symmetric", eventType, loan, items }));
+        results.push(await sendToLibrary({
+          libraryId: loan.borrower_library_id, roleInLoan: "borrower",
+          roleInFlow: "symmetric", eventType, loan, items }));
+      }
+    } else {
+      // Changements de statut (prepared, dispatched, return_started,
+      // returned, cancelled, overdue, partially_returned) : symétrique.
+      results.push(await sendToLibrary({
+        libraryId: loan.lender_library_id, roleInLoan: "lender",
+        roleInFlow: "symmetric", eventType, loan, items }));
+      results.push(await sendToLibrary({
+        libraryId: loan.borrower_library_id, roleInLoan: "borrower",
+        roleInFlow: "symmetric", eventType, loan, items }));
+    }
+
+    const allOk = results.every((r) => (r as { ok?: boolean }).ok);
+    return jsonResponse(allOk ? 200 : 207, {
+      ok: allOk,
+      event_type: eventType,
+      loan_id: loan.id ?? null,
+      manual_test: manualTest,
+      results,
+    });
+  } catch (error) {
+    console.error("[notify-ill] error:", error);
+    return jsonResponse(500, {
+      ok: false,
+      error: String((error as { message?: string })?.message || error),
+    });
+  }
+}
+
+serve(handleNotifyIll);
