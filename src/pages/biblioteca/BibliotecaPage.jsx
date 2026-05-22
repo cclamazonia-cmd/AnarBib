@@ -145,6 +145,14 @@ export default function BibliotecaPage() {
   const [illItems, setIllItems] = useState([]);
   const [illDocSearch, setIllDocSearch] = useState('');
   const [illDocResults, setIllDocResults] = useState([]);
+  // #ILL-partial — exemplaires des prêts DÉJÀ enregistrés (distinct de illItems,
+  // qui est le panier du formulaire de création). Dictionnaire { loanId: [items] }.
+  const [illItemsByLoan, setIllItemsByLoan] = useState({});
+  // Prêts dont le bloc d'exemplaires est déplié (Set d'ids).
+  const [illExpanded, setIllExpanded] = useState(() => new Set());
+  // Pointages de retour en cours de saisie, par prêt :
+  // { [loanId]: { [itemRowId]: { checked: bool, status: 'devolvido'|... } } }
+  const [illReturnDraft, setIllReturnDraft] = useState({});
   // EA-12 phase 2 (dette 2) : bibliotheques eligibles au PEB.
   // Regle alignee sur fn_peb_authorized : federee + circulation active + active.
   const pebEligibleLibraries = allLibraries.filter(l =>
@@ -176,6 +184,25 @@ export default function BibliotecaPage() {
       setRegDocs(regR.data || []); setDocGov(dgR.data);
       setPartners(partR.data || []); setMembers(memR.data || []);
       setIllLoans(illR.data || []); setTasks(taskR.data || []);
+      // #ILL-partial — charge les exemplaires de tous les prêts affichés,
+      // regroupés par prêt. Lecture simple protégée par la RLS
+      // interlibrary_loan_items_v2_select (doctrine RPC v3 : from() autorisé
+      // pour les lectures protégées par RLS).
+      const loanIds = (illR.data || []).map(l => l.id);
+      if (loanIds.length > 0) {
+        const { data: itemsData } = await supabase
+          .from('interlibrary_loan_items_v2')
+          .select('*')
+          .in('interlibrary_loan_id', loanIds)
+          .order('line_no', { ascending: true });
+        const byLoan = {};
+        for (const it of (itemsData || [])) {
+          (byLoan[it.interlibrary_loan_id] ||= []).push(it);
+        }
+        setIllItemsByLoan(byLoan);
+      } else {
+        setIllItemsByLoan({});
+      }
       setMailChannel(mcR.data); setNotifPolicy(npR.data);
       setMembershipRules(mrR.data || []);
       // Load all libraries for ILL selects
@@ -468,6 +495,57 @@ export default function BibliotecaPage() {
       await loadAll();
     } catch (err) {
       setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' });
+    }
+  }
+
+  // ── #ILL-partial : pointage du retour des exemplaires ─────
+  // Statuts de prêt où le pointage d'un retour a un sens (aligné sur le
+  // garde-fou de phase du trigger trg_peb_consolidate_loan_status).
+  const ILL_RETURN_PHASES = ['emprestado', 'em_devolucao', 'atrasado', 'parcialmente_devolvido'];
+  // Un exemplaire est « réglé » s'il a atteint une issue de retour.
+  const ILL_ITEM_SETTLED = ['devolvido', 'perdido', 'danificado', 'cancelado'];
+
+  function toggleIllExpanded(loanId) {
+    setIllExpanded(prev => {
+      const next = new Set(prev);
+      next.has(loanId) ? next.delete(loanId) : next.add(loanId);
+      return next;
+    });
+  }
+
+  // Met à jour le brouillon de pointage d'un exemplaire (case cochée / statut).
+  function setIllReturnField(loanId, itemRowId, field, value) {
+    setIllReturnDraft(prev => {
+      const loanDraft = { ...(prev[loanId] || {}) };
+      const itemDraft = { ...(loanDraft[itemRowId] || { checked: false, status: 'devolvido' }) };
+      itemDraft[field] = value;
+      loanDraft[itemRowId] = itemDraft;
+      return { ...prev, [loanId]: loanDraft };
+    });
+  }
+
+  // Envoie le lot d'exemplaires cochés à la RPC fn_peb_update_item_status.
+  async function submitIllItemReturn(loanId) {
+    const loanDraft = illReturnDraft[loanId] || {};
+    const p_items = Object.entries(loanDraft)
+      .filter(([, d]) => d.checked)
+      .map(([itemRowId, d]) => ({ id: Number(itemRowId), new_status: d.status }));
+    if (p_items.length === 0) {
+      setMsg({ text: t({ id: 'biblioteca.ill.return.nothingSelected' }), kind: 'error' });
+      return;
+    }
+    try {
+      const { error } = await supabase.rpc('fn_peb_update_item_status', {
+        p_loan_id: loanId,
+        p_items,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'biblioteca.ill.return.done' }, { count: p_items.length }), kind: 'ok' });
+      // Réinitialise le brouillon de ce prêt et recharge.
+      setIllReturnDraft(prev => { const n = { ...prev }; delete n[loanId]; return n; });
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
     }
   }
 
@@ -1281,21 +1359,84 @@ export default function BibliotecaPage() {
               const isLender = loan.lender_library_id===libraryId;
               const lenderLib = allLibraries.find(l=>l.id===loan.lender_library_id);
               const borrowerLib = allLibraries.find(l=>l.id===loan.borrower_library_id);
-              return(<div key={loan.id} style={lr(i)}>
+              // #ILL-partial — exemplaires de ce prêt, état déplié, phase de retour.
+              const items = illItemsByLoan[loan.id] || [];
+              const expanded = illExpanded.has(loan.id);
+              const inReturnPhase = ILL_RETURN_PHASES.includes(loan.status_global);
+              // status_global déduit (parcialmente_devolvido, devolvido) : le
+              // <select> l'affiche mais ne permet pas de le choisir à la main.
+              const statusIsDerived = loan.status_global==='parcialmente_devolvido' || loan.status_global==='devolvido';
+              const loanDraft = illReturnDraft[loan.id] || {};
+              return(<div key={loan.id} style={{ borderBottom:'1px solid rgba(255,255,255,.04)' }}>
+                <div style={{ ...lr(i), borderBottom:'none' }}>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>#{loan.id} — {isLender?t({ id: 'biblioteca.ill.lender' }):t({ id: 'biblioteca.ill.borrower' })}</div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>
+                    {items.length>0 && (
+                      <button onClick={()=>toggleIllExpanded(loan.id)} className="cat-btn ghost"
+                        style={{ fontSize:'.78rem', padding:'0 6px', marginRight:6 }}>
+                        {expanded?'▾':'▸'} {t({ id:'biblioteca.ill.itemsCount' },{count:items.length})}
+                      </button>
+                    )}
+                    #{loan.id} — {isLender?t({ id: 'biblioteca.ill.lender' }):t({ id: 'biblioteca.ill.borrower' })}
+                  </div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                     {lenderLib?.short_name||'—'} → {borrowerLib?.short_name||'—'}
                     {loan.start_date&&` · ${t({ id: 'biblioteca.ill.startDateLabel' })}: ${loan.start_date}`}{loan.due_date&&` · ${t({ id: 'biblioteca.ill.dueDateLabel' })}: ${loan.due_date}`}
                     {loan.meeting_point&&` · ${loan.meeting_point}`}
                   </div>
                 </div>
-                <select value={loan.status_global||''} onChange={e=>updateIllStatus(loan.id,e.target.value)} style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
+                <select value={loan.status_global||''} disabled={statusIsDerived}
+                  onChange={e=>updateIllStatus(loan.id,e.target.value)}
+                  style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', opacity:statusIsDerived?0.6:1 }}>
                   <option value="preparacao">{t({ id: 'ill.status.preparacao' })}</option><option value="aguardando_saida">{t({ id: 'ill.status.aguardando_saida' })}</option>
                   <option value="emprestado">{t({ id: 'ill.status.emprestado' })}</option><option value="em_devolucao">{t({ id: 'ill.status.em_devolucao' })}</option>
+                  {/* #ILL-partial — affiché pour ne pas casser le select quand le
+                      statut est déduit ; non sélectionnable (select disabled). */}
+                  <option value="parcialmente_devolvido">{t({ id: 'ill.status.parcialmente_devolvido' })}</option>
                   <option value="devolvido">{t({ id: 'ill.status.devolvido' })}</option><option value="cancelado">{t({ id: 'ill.status.cancelado' })}</option>
                 </select>
                 <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={()=>deleteIll(loan.id)}>{t({ id: 'common.discard' })}</button>
+                </div>
+                {/* #ILL-partial — bloc dépliable : exemplaires + pointage du retour */}
+                {expanded && items.length>0 && (
+                  <div style={{ padding:'4px 12px 12px 28px', background:'rgba(0,0,0,.12)' }}>
+                    {items.map(it=>{
+                      const settled = ILL_ITEM_SETTLED.includes(it.item_status);
+                      const draft = loanDraft[it.id] || { checked:false, status: settled?it.item_status:'devolvido' };
+                      const ref = [it.titulo_cache, it.autor_cache].filter(Boolean).join(' — ') || it.bib_ref || '—';
+                      return(<div key={it.id} style={{ display:'flex', alignItems:'center', gap:8, padding:'5px 0', fontSize:'.82rem', borderBottom:'1px solid rgba(255,255,255,.03)' }}>
+                        <input type="checkbox" checked={!!draft.checked} disabled={!inReturnPhase}
+                          onChange={e=>setIllReturnField(loan.id, it.id, 'checked', e.target.checked)} />
+                        <span style={{ flex:1 }}>
+                          {ref}{it.rotulo_cache?` (${it.rotulo_cache})`:''}
+                          <span style={{ color:'var(--brand-muted)', marginLeft:6 }}>
+                            · {t({ id:`ill.itemStatus.${it.item_status}` })}
+                          </span>
+                        </span>
+                        {/* corrigeables : un select de statut de retour pour chaque
+                            exemplaire (réglé ou non — la RPC autorise la correction) */}
+                        <select value={draft.status} disabled={!inReturnPhase}
+                          onChange={e=>setIllReturnField(loan.id, it.id, 'status', e.target.value)}
+                          style={{ fontSize:'.78rem', padding:'2px 6px', borderRadius:5, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
+                          <option value="devolvido">{t({ id:'ill.itemStatus.devolvido' })}</option>
+                          <option value="perdido">{t({ id:'ill.itemStatus.perdido' })}</option>
+                          <option value="danificado">{t({ id:'ill.itemStatus.danificado' })}</option>
+                          <option value="cancelado">{t({ id:'ill.itemStatus.cancelado' })}</option>
+                        </select>
+                      </div>);
+                    })}
+                    {inReturnPhase ? (
+                      <button className="cat-btn" style={{ fontSize:'.8rem', padding:'5px 12px', marginTop:8 }}
+                        onClick={()=>submitIllItemReturn(loan.id)}>
+                        {t({ id:'biblioteca.ill.return.submit' })}
+                      </button>
+                    ) : (
+                      <div style={{ fontSize:'.78rem', color:'var(--brand-muted)', marginTop:8, fontStyle:'italic' }}>
+                        {t({ id:'biblioteca.ill.return.notInPhase' })}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>);
             })}</div>
           </div>)}
