@@ -556,6 +556,85 @@ serve(async (req) => {
       ];
     });
 
+    // ─── Activité PEB (prêt interbibliothèques) — chantier #ILL-reports ─────
+    // Une bibliothèque est tantôt prêteuse, tantôt emprunteuse : son activité
+    // PEB se lit donc des deux côtés. Trois compteurs :
+    //   - PEB consentis  : prêts où elle est prêteuse, créés dans la semaine
+    //   - PEB sollicités : prêts où elle est emprunteuse, créés dans la semaine
+    //   - PEB en circulation : prêts (tout rôle) encore dehors à la clôture
+    // NB : le compteur « en circulation » s'appuie sur status_global, dont la
+    // fiabilité reste imparfaite tant que #ILL-lifecycle n'est pas traité.
+    // Le bloc PEB est toujours rendu, même sans activité (compteurs à 0).
+    const pebInCirculationStatuses = ["emprestado", "parcialmente_devolvido", "atrasado"];
+
+    const { count: pebLentCount, error: pebLentCountErr } = await sb.from("interlibrary_loans_v2")
+      .select("id", { count: "exact", head: true })
+      .eq("lender_library_id", libraryId)
+      .gte("created_at", startISO).lt("created_at", endExclusiveISO);
+    if (pebLentCountErr) throw pebLentCountErr;
+
+    const { count: pebBorrowedCount, error: pebBorrowedCountErr } = await sb.from("interlibrary_loans_v2")
+      .select("id", { count: "exact", head: true })
+      .eq("borrower_library_id", libraryId)
+      .gte("created_at", startISO).lt("created_at", endExclusiveISO);
+    if (pebBorrowedCountErr) throw pebBorrowedCountErr;
+
+    const { count: pebInCirculationCount, error: pebInCirculationCountErr } = await sb.from("interlibrary_loans_v2")
+      .select("id", { count: "exact", head: true })
+      .or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`)
+      .in("status_global", pebInCirculationStatuses);
+    if (pebInCirculationCountErr) throw pebInCirculationCountErr;
+
+    // Détail : les PEB créés dans la semaine, les deux rôles confondus.
+    const { data: pebRowsRaw, error: pebRowsErr } = await sb.from("interlibrary_loans_v2")
+      .select("id,request_id,lender_library_id,borrower_library_id,status_global,created_at")
+      .or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`)
+      .gte("created_at", startISO).lt("created_at", endExclusiveISO)
+      .order("created_at", { ascending: false }).limit(50);
+    if (pebRowsErr) throw pebRowsErr;
+    const pebRowsList = Array.isArray(pebRowsRaw) ? pebRowsRaw : [];
+
+    // Nombre de documents par PEB (un seul appel groupé, puis comptage en JS).
+    const pebLoanIds = pebRowsList.map((p) => p.id).filter(Boolean);
+    const { data: pebItemsRaw, error: pebItemsErr } = pebLoanIds.length
+      ? await sb.from("interlibrary_loan_items_v2")
+          .select("interlibrary_loan_id").in("interlibrary_loan_id", pebLoanIds)
+      : { data: [], error: null };
+    if (pebItemsErr) throw pebItemsErr;
+    const pebItemCountByLoan = new Map();
+    for (const it of (pebItemsRaw || [])) {
+      const k = String(it.interlibrary_loan_id);
+      pebItemCountByLoan.set(k, (pebItemCountByLoan.get(k) || 0) + 1);
+    }
+
+    // Noms des bibliothèques partenaires (corrélation rôle/partenaire en JS,
+    // comme fetchProfiles pour les profils — pas de jointure PostgREST).
+    const pebPartnerIds = Array.from(new Set(
+      pebRowsList.map((p) => String(p.lender_library_id) === libraryId
+        ? p.borrower_library_id : p.lender_library_id).filter(Boolean)
+    ));
+    const pebLibNames = new Map();
+    if (pebPartnerIds.length) {
+      const { data: libsRaw, error: libsErr } = await sb.from("libraries")
+        .select("id,name,short_name").in("id", pebPartnerIds);
+      if (libsErr) throw libsErr;
+      for (const l of (libsRaw || [])) {
+        pebLibNames.set(String(l.id), String(l.name || l.short_name || l.id));
+      }
+    }
+
+    const pebRows = pebRowsList.map((p) => {
+      const isLender = String(p.lender_library_id) === libraryId;
+      const partnerId = isLender ? p.borrower_library_id : p.lender_library_id;
+      return [
+        String(p.request_id || p.id || "—"),
+        isLender ? "Emprestadora" : "Tomadora",
+        pebLibNames.get(String(partnerId)) || "—",
+        String(p.status_global || "—"),
+        String(pebItemCountByLoan.get(String(p.id)) || 0)
+      ];
+    });
+
     // ─── Composition du mail ───────────────────────────────────────────────
     const subject = `${routing.subjectTag} · Relatório semanal (${formatBR(weekStart)} → ${formatBR(weekEnd)})`;
     const title = `Relatório semanal — ${routing.brandName}`;
@@ -582,8 +661,20 @@ serve(async (req) => {
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(returnsCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;"><b>Atrasos ativos (à clôture da semana)</b></td>
-            <td style="padding:10px;text-align:right;"><b>${countOr0(overdueActiveCount)}</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Atrasos ativos (à clôture da semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(overdueActiveCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB consentidos (como emprestadora)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebLentCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB solicitados (como tomadora)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebBorrowedCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;"><b>PEB em circulação (à clôture da semana)</b></td>
+            <td style="padding:10px;text-align:right;"><b>${countOr0(pebInCirculationCount)}</b></td>
           </tr>
         </table>
       </div>
@@ -598,7 +689,8 @@ serve(async (req) => {
         renderTable("Empréstimos criados (últimos 50)", ["ID", "Criado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], loansCreatedRows),
         renderTable("Renovações (últimas 50)", ["ID", "Renovado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], renewalsRows),
         renderTable("Devoluções (últimas 50 linhas agrupadas por empréstimo)", ["Empréstimo", "Devolvido em", "Livro(s)", "Leitor(a/e)"], returnsRows),
-        renderTable("Atrasos ativos (top 50)", ["Empréstimo", "Vencimento", "Livro(s)", "Leitor(a/e)"], overdueRows)
+        renderTable("Atrasos ativos (top 50)", ["Empréstimo", "Vencimento", "Livro(s)", "Leitor(a/e)"], overdueRows),
+        renderTable("Intercâmbios interbibliotecas (PEB criados na semana, últimos 50)", ["Referência", "Papel", "Biblioteca parceira", "Estado", "Documentos"], pebRows)
       ],
       context: ctx,
       routing
@@ -630,7 +722,10 @@ serve(async (req) => {
         emprestimos_criados: loansCreatedCount ?? 0,
         renovacoes: renewalsCount ?? 0,
         devolucoes: returnsCount ?? 0,
-        atrasos_ativos: overdueActiveCount ?? 0
+        atrasos_ativos: overdueActiveCount ?? 0,
+        peb_consentidos: pebLentCount ?? 0,
+        peb_solicitados: pebBorrowedCount ?? 0,
+        peb_em_circulacao: pebInCirculationCount ?? 0
       }
     });
   } catch (e) {
