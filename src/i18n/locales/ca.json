@@ -499,6 +499,7 @@
   "biblioteca.ill.notAuthorized": "El préstec interbibliotecari només és possible entre biblioteques federades amb una circulació activa. Comprova que les dues biblioteques seleccionades compleixen aquesta condició.",
   "biblioteca.ill.notes": "Notes logístiques",
   "biblioteca.ill.packagingPlaceholder": "Embalatge, transport, condicions…",
+  "biblioteca.ill.pickLenderFirst": "Tria primer la biblioteca prestadora per cercar documents.",
   "biblioteca.ill.pickupPlaceholder": "Recollida a la permanència, enviament postal…",
   "biblioteca.ill.prepare": "Preparar un préstec temporal",
   "biblioteca.ill.return.done": "{count} exemplar(s) actualitzat(s) — préstec: {status}",

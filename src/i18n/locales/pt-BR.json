@@ -499,6 +499,7 @@
   "biblioteca.ill.notAuthorized": "O empréstimo interbibliotecas só é possível entre bibliotecas federadas com circulação ativa. Verifique que as duas bibliotecas selecionadas atendem a essa condição.",
   "biblioteca.ill.notes": "Notas logísticas",
   "biblioteca.ill.packagingPlaceholder": "Embalagem, transporte, condições…",
+  "biblioteca.ill.pickLenderFirst": "Escolha primeiro a biblioteca emprestadora para buscar documentos.",
   "biblioteca.ill.pickupPlaceholder": "Retirada no plantão, envio postal…",
   "biblioteca.ill.prepare": "Preparar um empréstimo temporário",
   "biblioteca.ill.return.done": "{count} exemplar(es) atualizado(s) — empréstimo: {status}",

@@ -499,6 +499,7 @@
   "biblioteca.ill.notAuthorized": "La interbiblioteka prunto eblas nur inter federitaj bibliotekoj kun aktiva cirkulado. Kontrolu ke la du elektitaj bibliotekoj plenumas ĉi tiun kondiĉon.",
   "biblioteca.ill.notes": "Logistikaj notoj",
   "biblioteca.ill.packagingPlaceholder": "Pakado, transporto, kondiĉoj…",
+  "biblioteca.ill.pickLenderFirst": "Elektu unue la pruntedonantan bibliotekon por serĉi dokumentojn.",
   "biblioteca.ill.pickupPlaceholder": "Elpreno ĉe la deĵoro, poŝta sendo…",
   "biblioteca.ill.prepare": "Prepari provizoran prunton",
   "biblioteca.ill.return.done": "{count} ekzemplero(j) ĝisdatigita(j) — prunto: {status}",

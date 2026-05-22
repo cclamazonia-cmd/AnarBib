@@ -499,6 +499,7 @@
   "biblioteca.ill.notAuthorized": "Il prestito interbibliotecario è possibile solo tra biblioteche federate con circolazione attiva. Verifica che le due biblioteche selezionate soddisfino questa condizione.",
   "biblioteca.ill.notes": "Note logistiche",
   "biblioteca.ill.packagingPlaceholder": "Imballaggio, trasporto, condizioni…",
+  "biblioteca.ill.pickLenderFirst": "Scegli prima la biblioteca prestatrice per cercare documenti.",
   "biblioteca.ill.pickupPlaceholder": "Ritiro al banco, spedizione postale…",
   "biblioteca.ill.prepare": "Preparare un prestito temporaneo",
   "biblioteca.ill.return.done": "{count} esemplare(i) aggiornato(i) — prestito: {status}",

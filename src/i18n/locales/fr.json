@@ -499,6 +499,7 @@
   "biblioteca.ill.notAuthorized": "Le prêt entre bibliothèques n'est possible qu'entre bibliothèques fédérées ayant une circulation active. Vérifie que les deux bibliothèques sélectionnées remplissent cette condition.",
   "biblioteca.ill.notes": "Notes logistiques",
   "biblioteca.ill.packagingPlaceholder": "Emballage, transport, conditions…",
+  "biblioteca.ill.pickLenderFirst": "Choisissez d'abord la bibliothèque prêteuse pour rechercher des documents.",
   "biblioteca.ill.pickupPlaceholder": "Retrait à la permanence, envoi postal…",
   "biblioteca.ill.prepare": "Préparer un prêt temporaire",
   "biblioteca.ill.return.done": "{count} exemplaire(s) mis à jour — prêt : {status}",

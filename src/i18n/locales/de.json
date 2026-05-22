@@ -499,6 +499,7 @@
   "biblioteca.ill.notAuthorized": "Fernleihe ist nur zwischen föderierten Bibliotheken mit aktiver Ausleihe möglich. Prüfe, ob die beiden ausgewählten Bibliotheken diese Bedingung erfüllen.",
   "biblioteca.ill.notes": "Logistikhinweise",
   "biblioteca.ill.packagingPlaceholder": "Verpackung, Transport, Bedingungen…",
+  "biblioteca.ill.pickLenderFirst": "Wähle zuerst die verleihende Bibliothek, um Dokumente zu suchen.",
   "biblioteca.ill.pickupPlaceholder": "Abholung am Tresen, Postversand…",
   "biblioteca.ill.prepare": "Temporäre Ausleihe vorbereiten",
   "biblioteca.ill.return.done": "{count} Exemplar(e) aktualisiert — Leihe: {status}",

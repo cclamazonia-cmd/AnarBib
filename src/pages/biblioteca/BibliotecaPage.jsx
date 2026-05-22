@@ -393,12 +393,18 @@ export default function BibliotecaPage() {
   // ── ILL: search documents for item adding ───────────────
   async function searchIllDocs() {
     if (!illDocSearch.trim()) return;
+    // #ILL-search-scope + #ILL-availability : la recherche exige la
+    // bibliotheque prêteuse (fn_peb_search_exemplares filtre sur elle et
+    // sur la disponibilite). Sans prêteuse choisie, on ne cherche pas.
+    if (!illForm.lender) {
+      setMsg({ text: t({ id: 'biblioteca.ill.pickLenderFirst' }), kind: 'error' });
+      return;
+    }
     // EA-12 phase 2 (dette 4) - correctif : la recherche passe par la RPC
-    // fn_peb_search_exemplares (exemplares -> book_holdings -> books). La
-    // vue v_exemplar_labels appelait une fonction bridge non accessible a
-    // authenticated (42501). On gere desormais explicitement l'erreur.
+    // fn_peb_search_exemplares (exemplares -> book_holdings -> books).
     const { data, error } = await supabase.rpc('fn_peb_search_exemplares', {
       p_query: illDocSearch.trim(),
+      p_lender_library_id: illForm.lender,
     });
     if (error) {
       setIllDocResults([]);
@@ -1307,7 +1313,16 @@ export default function BibliotecaPage() {
                   au PEB sont proposees - federees, circulation active, actives.
                   C'est la regle de fn_peb_authorized, appliquee des le dropdown. */}
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.lender' })}</label>
-                <select value={illForm.lender} onChange={e=>setIllForm(p=>({...p,lender:e.target.value}))} style={fs}>
+                <select value={illForm.lender} onChange={e=>{
+                  const v = e.target.value;
+                  setIllForm(p=>({...p,lender:v}));
+                  // #ILL-search-scope : changer de prêteuse invalide le panier
+                  // (les exemplaires appartenaient a l'ancienne prêteuse) et
+                  // les resultats de recherche. On purge les deux.
+                  setIllItems([]);
+                  setIllDocResults([]);
+                  setIllDocSearch('');
+                }} style={fs}>
                   <option value="">{t({ id: 'biblioteca.ill.select' })}</option>{pebEligibleLibraries.map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}
                 </select>
               </div>
@@ -1327,9 +1342,26 @@ export default function BibliotecaPage() {
 
             <div style={{ ...bx, background:'rgba(0,0,0,.1)', marginBottom:12 }}>
               <h4 style={{ margin:'0 0 8px', fontSize:'.95rem' }}>{t({ id: 'biblioteca.ill.items' })}</h4>
+              {/* #ILL-search-scope : la recherche d'exemplaires exige qu'une
+                  bibliotheque prêteuse soit choisie (la recherche est filtree
+                  sur ses fonds disponibles). Tant qu'aucune n'est selectionnee,
+                  champ et bouton desactives, avec une invite. */}
+              {!illForm.lender && (
+                <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', fontStyle:'italic', marginBottom:8 }}>
+                  {t({ id: 'biblioteca.ill.pickLenderFirst' })}
+                </div>
+              )}
               <div style={{ display:'flex', gap:8, marginBottom:8 }}>
-                <input type="text" value={illDocSearch} onChange={e=>setIllDocSearch(e.target.value)} onKeyDown={e=>e.key==='Enter'&&searchIllDocs()} placeholder={t({ id: 'biblioteca.ill.fullSearchPlaceholder' })} style={{...fs,flex:1}} />
-                <button className="cat-btn secondary" onClick={searchIllDocs} style={{ fontSize:'.85rem', padding:'7px 14px', flexShrink:0 }}>{t({ id: 'common.search' })}</button>
+                <input type="text" value={illDocSearch} disabled={!illForm.lender}
+                  onChange={e=>setIllDocSearch(e.target.value)}
+                  onKeyDown={e=>e.key==='Enter'&&searchIllDocs()}
+                  placeholder={t({ id: 'biblioteca.ill.fullSearchPlaceholder' })}
+                  style={{...fs,flex:1,opacity:illForm.lender?1:0.5}} />
+                <button className="cat-btn secondary" onClick={searchIllDocs}
+                  disabled={!illForm.lender}
+                  style={{ fontSize:'.85rem', padding:'7px 14px', flexShrink:0, opacity:illForm.lender?1:0.5 }}>
+                  {t({ id: 'common.search' })}
+                </button>
               </div>
               {/* Finition UX PEB : la ligne entiere ajoute l'exemplaire au clic
                   (le bouton « Adicionar » faisait doublon, retire). Le survol

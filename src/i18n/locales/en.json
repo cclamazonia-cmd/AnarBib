@@ -499,6 +499,7 @@
   "biblioteca.ill.notAuthorized": "Interlibrary loan is only possible between federated libraries with active circulation. Check that both selected libraries meet this condition.",
   "biblioteca.ill.notes": "Logistics notes",
   "biblioteca.ill.packagingPlaceholder": "Packaging, transport, conditions…",
+  "biblioteca.ill.pickLenderFirst": "Select the lending library first to search for documents.",
   "biblioteca.ill.pickupPlaceholder": "Pickup at the desk, postal mail…",
   "biblioteca.ill.prepare": "Prepare a temporary loan",
   "biblioteca.ill.return.done": "{count} item(s) updated — loan: {status}",
