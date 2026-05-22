@@ -3882,6 +3882,93 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Da concordare", de: "Noch festzulegen",
     ca: "A convenir", eo: "Interkonsentota"
   },
+  // ===== PEB — statut d'exemplaire & synthèse retour partiel ===============
+  // #ILL-partial. Utilisées par buildDetails() de notify-interlibrary-loan,
+  // sur les événements partially_returned (statut + synthèse) et returned
+  // (statut). Vocabulaire « tourné destinataire » : emprestado se dit
+  // « encore en circulation » (ce qui n'est pas revenu), cancelado « retiré
+  // du prêt ». Divergence assumée avec le dictionnaire applicatif, qui parle
+  // au gestionnaire (« En prêt », « Annulé »).
+  "ill.itemStatus.reservado_para_saida": {
+    "pt-BR": "Reservado para saída",
+    fr: "Réservé au départ",
+    es: "Reservado para la salida",
+    en: "Reserved for dispatch",
+    it: "Riservato per la partenza",
+    de: "Für den Versand reserviert",
+    ca: "Reservat per a la sortida",
+    eo: "Rezervita por la foriro"
+  },
+  "ill.itemStatus.emprestado": {
+    "pt-BR": "Ainda em circulação",
+    fr: "Encore en circulation",
+    es: "Aún en circulación",
+    en: "Still in circulation",
+    it: "Ancora in circolazione",
+    de: "Noch unterwegs",
+    ca: "Encara en circulació",
+    eo: "Ankoraŭ en cirkulado"
+  },
+  "ill.itemStatus.devolvido": {
+    "pt-BR": "Devolvido",
+    fr: "Rendu",
+    es: "Devuelto",
+    en: "Returned",
+    it: "Restituito",
+    de: "Zurückgegeben",
+    ca: "Retornat",
+    eo: "Redonita"
+  },
+  "ill.itemStatus.perdido": {
+    "pt-BR": "Perdido",
+    fr: "Perdu",
+    es: "Perdido",
+    en: "Lost",
+    it: "Perduto",
+    de: "Verloren",
+    ca: "Perdut",
+    eo: "Perdita"
+  },
+  "ill.itemStatus.danificado": {
+    "pt-BR": "Danificado",
+    fr: "Endommagé",
+    es: "Dañado",
+    en: "Damaged",
+    it: "Danneggiato",
+    de: "Beschädigt",
+    ca: "Malmès",
+    eo: "Difektita"
+  },
+  "ill.itemStatus.cancelado": {
+    "pt-BR": "Retirado do empréstimo",
+    fr: "Retiré du prêt",
+    es: "Retirado del préstamo",
+    en: "Removed from the loan",
+    it: "Rimosso dal prestito",
+    de: "Aus der Leihe entfernt",
+    ca: "Retirat del préstec",
+    eo: "Forigita el la prunto"
+  },
+  "ill.detail.returnSummary": {
+    "pt-BR": "Balanço da devolução",
+    fr: "Bilan du retour",
+    es: "Balance de la devolución",
+    en: "Return summary",
+    it: "Bilancio della restituzione",
+    de: "Rückgabe-Übersicht",
+    ca: "Balanç de la devolució",
+    eo: "Bilanco de la redono"
+  },
+  "ill.detail.returnSummaryValue": {
+    "pt-BR": "{settled} resolvido(s), {outstanding} ainda em circulação",
+    fr: "{settled} réglé(s), {outstanding} encore en circulation",
+    es: "{settled} resuelto(s), {outstanding} aún en circulación",
+    en: "{settled} settled, {outstanding} still in circulation",
+    it: "{settled} risolto(i), {outstanding} ancora in circolazione",
+    de: "{settled} erledigt, {outstanding} noch unterwegs",
+    ca: "{settled} resolt(s), {outstanding} encara en circulació",
+    eo: "{settled} solvita(j), {outstanding} ankoraŭ en cirkulado"
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";

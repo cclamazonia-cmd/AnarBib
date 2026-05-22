@@ -143,7 +143,11 @@ function renderLogistics(mode: string | null, locale: string): string | null {
 }
 
 // ─── Détails de la table mail (libellés via tMail, valeurs depuis loan) ─────
-function buildDetails(loan: IllLoan, items: IllItem[], locale: string) {
+// short : événement courant ('partially_returned', 'returned', etc.). Sur
+// 'partially_returned' et 'returned', chaque exemplaire affiche son statut
+// individuel, et une ligne de synthèse chiffrée précède le détail — c'est
+// l'information centrale de ces deux événements.
+function buildDetails(loan: IllLoan, items: IllItem[], locale: string, short: string) {
   const d: { label: string; value: string }[] = [];
   d.push({ label: tMail(locale, "ill.detail.loanRef"),
            value: loan.request_id || `#${loan.id ?? "—"}` });
@@ -164,14 +168,38 @@ function buildDetails(loan: IllLoan, items: IllItem[], locale: string) {
   if (loan.meeting_point) {
     d.push({ label: tMail(locale, "ill.detail.meetingPoint"), value: loan.meeting_point });
   }
-  // Items : une ligne récapitulative (compte) + détail titre par titre.
+
+  // Faut-il afficher le statut de chaque exemplaire ? Oui sur les deux
+  // événements où les exemplaires peuvent être dans des états différents.
+  const withItemStatus = short === "partially_returned" || short === "returned";
+
   d.push({ label: tMail(locale, "ill.detail.itemCount"),
            value: String(items.length) });
+
+  // Ligne de synthèse chiffrée — uniquement sur 'partially_returned', où
+  // savoir « combien rendus / combien encore dehors » d'un coup d'œil est
+  // l'information clé.
+  if (short === "partially_returned") {
+    const settled = items.filter((it) =>
+      ["devolvido", "perdido", "danificado", "cancelado"].includes(it.item_status || "")).length;
+    const outstanding = items.length - settled;
+    d.push({
+      label: tMail(locale, "ill.detail.returnSummary"),
+      value: tMail(locale, "ill.detail.returnSummaryValue",
+                   { settled: settled, outstanding: outstanding }),
+    });
+  }
+
   for (const it of items) {
     const ref = [it.titulo, it.autor].filter(Boolean).join(" — ") || it.bib_ref || "—";
     const tombo = it.tombo ? ` (${it.tombo})` : "";
+    // Sur partially_returned / returned : le statut de l'exemplaire est
+    // préfixé en évidence devant le titre.
+    const statusPrefix = withItemStatus && it.item_status
+      ? `${tMail(locale, `ill.itemStatus.${it.item_status}`)} — `
+      : "";
     d.push({ label: `· ${tMail(locale, "ill.detail.itemLine")} ${it.line_no ?? ""}`.trim(),
-             value: `${ref}${tombo}` });
+             value: `${statusPrefix}${ref}${tombo}` });
   }
   return d;
 }
@@ -245,7 +273,7 @@ async function sendToLibrary(opts: {
   // Table de détails : affichée partout SAUF sur 'cancelled'.
   const details = EVENTS_WITHOUT_DETAILS.has(short)
     ? undefined
-    : buildDetails(loan, items, locale);
+    : buildDetails(loan, items, locale, short);
 
   const { html, text } = renderEmail({
     preheader: subject,
