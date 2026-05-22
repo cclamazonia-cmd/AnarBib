@@ -521,7 +521,7 @@ export default function AuthorDraftForm({ mode, batches }) {
                   {t({id:'catalogacao.bio.translations'})} {bioTranslations.length > 0 && `(${bioTranslations.map(bt => bt.lang).join(', ')})`}
                 </summary>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
-                  {['pt-BR','fr','es','en','it','de'].map(lang => {
+                  {['pt-BR','fr','es','en','it','de','ca','eo'].map(lang => {
                     const existing = bioTranslations.find(bt => bt.lang === lang);
                     return (
                       <div key={lang} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>

@@ -10,6 +10,8 @@ import es from './locales/es.json';
 import en from './locales/en.json';
 import it from './locales/it.json';
 import de from './locales/de.json';
+import ca from './locales/ca.json';
+import eo from './locales/eo.json';
 
 export const DEFAULT_LOCALE = 'pt-BR';
 
@@ -27,6 +29,8 @@ export const SUPPORTED_LOCALES = [
   { code: 'en', label: 'English' },
   { code: 'it', label: 'Italiano' },
   { code: 'de', label: 'Deutsch' },
+  { code: 'ca', label: 'Català' },
+  { code: 'eo', label: 'Esperanto' },
 ];
 
 const MESSAGES = {
@@ -36,6 +40,8 @@ const MESSAGES = {
   'en': en,
   'it': it,
   'de': de,
+  'ca': ca,
+  'eo': eo,
 };
 
 const STORAGE_KEY = 'anarbib.locale';

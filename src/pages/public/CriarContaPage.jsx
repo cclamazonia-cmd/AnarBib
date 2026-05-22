@@ -16,11 +16,11 @@ const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 
 // Galerie publique des bibliothèques, hébergée sur le site de présentation
 // anarbib.org (et non dans l'app). Le site a un dossier par langue ; on
-// mappe la locale de l'app (pt-BR, fr, es, it, en, de) vers ce dossier.
+// mappe la locale de l'app (pt-BR, fr, es, it, en, de, ca, eo) vers ce dossier.
 // pt-BR -> /pt/ : le site utilise le code court. Fallback /pt/ si inconnu.
 function galleryUrl(locale) {
   const map = { 'pt-BR': 'pt', pt: 'pt', fr: 'fr', es: 'es',
-                it: 'it', en: 'en', de: 'de' };
+                it: 'it', en: 'en', de: 'de', ca: 'ca', eo: 'eo' };
   const lang = map[locale] || 'pt';
   return `https://anarbib.org/${lang}/explorar/`;
 }

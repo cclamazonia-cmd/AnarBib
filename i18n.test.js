@@ -18,12 +18,14 @@ import en from '@/i18n/locales/en.json';
 import de from '@/i18n/locales/de.json';
 import it_ from '@/i18n/locales/it.json';
 import es from '@/i18n/locales/es.json';
+import ca from '@/i18n/locales/ca.json';
+import eo from '@/i18n/locales/eo.json';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const SRC_DIR = join(__dirname, 'src');
 
-const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es };
+const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es, ca, eo };
 const PT_KEYS = Object.keys(ptBR);
 
 // ─────────────────────────────────────────────────────────────

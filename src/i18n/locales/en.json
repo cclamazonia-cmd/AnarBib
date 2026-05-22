@@ -1471,6 +1471,8 @@
   "language.es": "Castellano",
   "language.fr": "Français",
   "language.it": "Italiano",
+  "language.ca": "Català",
+  "language.eo": "Esperanto",
   "language.pt-BR": "Português",
   "language.selector": "Language",
   "login.reason.idle": "You were signed out after 60 minutes of inactivity. Please sign in again to continue.",

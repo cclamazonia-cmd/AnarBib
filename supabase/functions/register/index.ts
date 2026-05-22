@@ -548,7 +548,7 @@ serve(async (req)=>{
     // Locale du destinataire pour le mail de bienvenue.
     // Le frontend (CriarContaPage) passe `locale: detectLocale()` dans le body.
     // Validation : doit être l'une des 6 locales supportées, sinon fallback pt-BR.
-    const SUPPORTED_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de"];
+    const SUPPORTED_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo"];
     const requestedLocale = String(body?.locale || "").trim();
     const userLocale = SUPPORTED_LOCALES.includes(requestedLocale) ? requestedLocale : "pt-BR";
     if (!email || !firstName || !lastName || !phone) {

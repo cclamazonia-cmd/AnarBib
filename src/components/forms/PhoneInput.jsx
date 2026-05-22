@@ -32,6 +32,10 @@ function defaultCountryFromLocale(locale) {
     'en': 'US',
     'it': 'IT',
     'de': 'DE',
+    'ca': 'ES',
+    // 'eo' (espéranto) : langue sans État, volontairement non mappée.
+    // defaultCountryFromLocale retourne undefined → le composant affiche
+    // le sélecteur pays sans pré-sélection, à l'utilisateur·rice de choisir.
   };
   return map[locale] || map[locale.split('-')[0]] || undefined;
 }
