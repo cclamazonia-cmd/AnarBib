@@ -132,14 +132,20 @@ function shortKey(eventType: string): string {
 }
 
 // ─── Rendu d'une valeur logistics_mode ──────────────────────────────────────
-// logistics_mode est un champ texte libre (aucun CHECK en base). On traduit
-// les valeurs connues via une clé i18n ; toute valeur inconnue est affichée
-// brute (cas d'un futur texte libre). Voir chantier #ILL-logistics.
+// logistics_mode est désormais une énumération (CHECK en base, #ILL-logistics) :
+// envio_postal, entrega_em_maos, transporte_militante, a_combinar. On traduit
+// les valeurs connues via une clé i18n ; toute valeur inconnue (donnée
+// ancienne) est affichée brute.
 function renderLogistics(mode: string | null, locale: string): string | null {
   if (!mode) return null;
-  const KNOWN = new Set(["a_combinar"]);
+  const KNOWN = new Set([
+    "envio_postal",
+    "entrega_em_maos",
+    "transporte_militante",
+    "a_combinar",
+  ]);
   if (KNOWN.has(mode)) return tMail(locale, `ill.logistics.${mode}`);
-  return mode; // valeur libre non répertoriée : affichage brut
+  return mode; // valeur non répertoriée : affichage brut
 }
 
 // ─── Détails de la table mail (libellés via tMail, valeurs depuis loan) ─────

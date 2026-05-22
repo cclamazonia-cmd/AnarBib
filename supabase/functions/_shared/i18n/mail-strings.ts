@@ -3969,6 +3969,40 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{settled} resolt(s), {outstanding} encara en circulació",
     eo: "{settled} solvita(j), {outstanding} ankoraŭ en cirkulado"
   },
+  // ===== PEB — modes logistiques (#ILL-logistics) ==========================
+  // Utilisés par renderLogistics() de notify-interlibrary-loan. 'a_combinar'
+  // existe déjà dans ce dictionnaire ; on ajoute les 3 modes introduits par
+  // l'énumération logistics_mode.
+  "ill.logistics.envio_postal": {
+    "pt-BR": "Envio postal",
+    fr: "Envoi postal",
+    es: "Envío postal",
+    en: "Postal delivery",
+    it: "Invio postale",
+    de: "Postversand",
+    ca: "Enviament postal",
+    eo: "Poŝta sendo"
+  },
+  "ill.logistics.entrega_em_maos": {
+    "pt-BR": "Entrega em mãos",
+    fr: "Remise en main propre",
+    es: "Entrega en mano",
+    en: "Hand delivery",
+    it: "Consegna a mano",
+    de: "Persönliche Übergabe",
+    ca: "Lliurament en mà",
+    eo: "Enmana transdono"
+  },
+  "ill.logistics.transporte_militante": {
+    "pt-BR": "Transporte militante",
+    fr: "Portage militant",
+    es: "Transporte militante",
+    en: "Militant carriage",
+    it: "Trasporto militante",
+    de: "Militante Beförderung",
+    ca: "Transport militant",
+    eo: "Aktivisma transporto"
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";
