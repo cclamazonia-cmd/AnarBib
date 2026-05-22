@@ -82,6 +82,9 @@ interface IllLoan {
   borrower_library_id: string | null;
   borrower_library_name: string | null;
   borrower_library_short_name: string | null;
+  // Bibliothèque à l'origine du flux PEB — transmise par fn_notify_..._webhook
+  // DANS l'objet 'loan' (cf. migration 20260522020000). Sert à la matrice 'created'.
+  initiated_by_library_id: string | null;
   coordination_contact_name: string | null;
   coordination_contact_email: string | null;
   coordination_contact_phone: string | null;
@@ -106,10 +109,6 @@ interface IllPayload {
   created_at?: string;
   loan?: IllLoan;
   items?: IllItem[];
-  // initiated_by_library_id : présent côté table interlibrary_loans_v2 mais
-  // PAS encore dans la payload du webhook. Migration requise pour la matrice
-  // de 'created'. Tant qu'il est absent : repli symétrique (voir plus bas).
-  initiated_by_library_id?: string | null;
 }
 
 // ─── Les huit événements connus ─────────────────────────────────────────────
@@ -312,11 +311,10 @@ async function handleNotifyIll(req: Request): Promise<Response> {
     const results: unknown[] = [];
 
     if (short === "created") {
-      // Matrice à 2 axes. L'initiatrice est lue dans la payload.
-      // IMPORTANT : initiated_by_library_id n'est PAS encore dans la payload
-      // du webhook (migration requise). Tant qu'il est absent, on retombe
-      // sur un envoi symétrique afin de ne JAMAIS perdre une notification.
-      const initiatorId = p.initiated_by_library_id || null;
+      // Matrice à 2 axes : {prêteuse|emprunteuse} × {initiatrice|partenaire}.
+      // L'initiatrice est lue dans loan.initiated_by_library_id — la migration
+      // 20260522020000 place ce champ DANS l'objet 'loan' de la payload.
+      const initiatorId = loan.initiated_by_library_id || null;
 
       if (initiatorId === loan.lender_library_id) {
         // Cas A — initiatrice = prêteuse
@@ -335,13 +333,15 @@ async function handleNotifyIll(req: Request): Promise<Response> {
           libraryId: loan.lender_library_id, roleInLoan: "lender",
           roleInFlow: "partner", eventType, loan, items }));
       } else {
-        // initiator inconnu (payload sans initiated_by_library_id) :
-        // repli symétrique. À supprimer une fois la migration faite.
+        // initiated_by_library_id ne correspond ni à la prêteuse ni à
+        // l'emprunteuse — cas anormal (champ absent, ou valeur incohérente
+        // pointant une bibliothèque tierce). Repli symétrique pour ne JAMAIS
+        // perdre la notification, avec un warn pour investigation.
         console.warn(
-          "[notify-ill] initiated_by_library_id absent de la payload — " +
-          "repli sur envoi symétrique pour 'created'. " +
-          "Migration requise : ajouter initiated_by_library_id à " +
-          "fn_notify_emprestimo_interbibliotecas_webhook.");
+          "[notify-ill] initiated_by_library_id (" +
+          String(loan.initiated_by_library_id) +
+          ") ne correspond ni au lender ni au borrower — repli symétrique. " +
+          "Vérifier la coherence de la donnée sur interlibrary_loans_v2.");
         results.push(await sendToLibrary({
           libraryId: loan.lender_library_id, roleInLoan: "lender",
           roleInFlow: "symmetric", eventType, loan, items }));
