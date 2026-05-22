@@ -141,7 +141,7 @@ export default function BibliotecaPage() {
   const [editingMembershipRule, setEditingMembershipRule] = useState(null); // null = aucun, 'new' = nouveau, ou {id,...} pour édition
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'normal', owner: '' });
   const [allLibraries, setAllLibraries] = useState([]);
-  const [illForm, setIllForm] = useState({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'' });
+  const [illForm, setIllForm] = useState({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'', logisticsMode:'' });
   const [illItems, setIllItems] = useState([]);
   const [illDocSearch, setIllDocSearch] = useState('');
   const [illDocResults, setIllDocResults] = useState([]);
@@ -436,6 +436,12 @@ export default function BibliotecaPage() {
   async function saveIll() {
     if (!illForm.lender || !illForm.borrower) { setMsg({ text: t({id:'biblioteca.ill.selectBoth'}), kind: 'error' }); return; }
     if (illForm.lender === illForm.borrower) { setMsg({ text: t({id:'biblioteca.ill.differentLibraries'}), kind: 'error' }); return; }
+    // #ILL-front — champs obligatoires : contact de coordination, e-mail
+    // valide, au moins un exemplaire, mode logistique choisi.
+    if (!illForm.contactName.trim()) { setMsg({ text: t({id:'biblioteca.ill.contactRequired'}), kind: 'error' }); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(illForm.contactEmail.trim())) { setMsg({ text: t({id:'biblioteca.ill.contactEmailInvalid'}), kind: 'error' }); return; }
+    if (illItems.length === 0) { setMsg({ text: t({id:'biblioteca.ill.itemsRequired'}), kind: 'error' }); return; }
+    if (!illForm.logisticsMode) { setMsg({ text: t({id:'biblioteca.ill.logisticsModeRequired'}), kind: 'error' }); return; }
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
       // EA-12 phase 1 (21/05/2026) : bascule sur fn_peb_create_loan_with_items
@@ -451,8 +457,12 @@ export default function BibliotecaPage() {
         start_date: illForm.startDate || null,
         due_date: illForm.dueDate || null,
         notes: illForm.logisticsNote || null,
-        meeting_point: illForm.meetingPoint || null,
-        logistics_mode: 'a_combinar',
+        // meeting_point n'a de sens que pour les modes de remise physique.
+        meeting_point: (illForm.logisticsMode === 'entrega_em_maos'
+                        || illForm.logisticsMode === 'transporte_militante')
+                       ? (illForm.meetingPoint || null) : null,
+        // #ILL-logistics : mode choisi par l'utilisateur·rice.
+        logistics_mode: illForm.logisticsMode,
       };
       // EA-12 phase 2 (dette 4) : holding_id et item_id viennent desormais
       // reellement de l'exemplaire choisi (etaient undefined avant le patch).
@@ -474,7 +484,7 @@ export default function BibliotecaPage() {
       const newLoan = data?.loan;
       const newItems = data?.items || [];
       setMsg({ text: t({id:'biblioteca.ill.created'},{id:newLoan?.id,count:newItems.length}), kind: 'ok' });
-      setIllForm({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'' });
+      setIllForm({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'', logisticsMode:'' });
       setIllItems([]); setIllDocSearch(''); setIllDocResults([]);
       await loadAll();
     } catch (err) {
@@ -1341,7 +1351,7 @@ export default function BibliotecaPage() {
             </div>
 
             <div style={{ ...bx, background:'rgba(0,0,0,.1)', marginBottom:12 }}>
-              <h4 style={{ margin:'0 0 8px', fontSize:'.95rem' }}>{t({ id: 'biblioteca.ill.items' })}</h4>
+              <h4 style={{ margin:'0 0 8px', fontSize:'.95rem' }}>{t({ id: 'biblioteca.ill.items' })} *</h4>
               {/* #ILL-search-scope : la recherche d'exemplaires exige qu'une
                   bibliotheque prêteuse soit choisie (la recherche est filtree
                   sur ses fonds disponibles). Tant qu'aucune n'est selectionnee,
@@ -1393,16 +1403,30 @@ export default function BibliotecaPage() {
               {t({ id: 'biblioteca.ill.coordinationHelp' })}
             </div>
             <div className="cat-book-grid" style={{ marginBottom:10 }}>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contact' })}</label><input type="text" value={illForm.contactName} onChange={e=>setIllForm(p=>({...p,contactName:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.ill.contactNamePlaceholder' })} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contactEmail' })}</label><input type="email" value={illForm.contactEmail} onChange={e=>setIllForm(p=>({...p,contactEmail:e.target.value}))} style={fs} placeholder="contato@biblioteca.org" /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.meetingPoint' })}</label><input type="text" value={illForm.meetingPoint} onChange={e=>setIllForm(p=>({...p,meetingPoint:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.ill.pickupPlaceholder' })} /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contact' })} *</label><input type="text" value={illForm.contactName} onChange={e=>setIllForm(p=>({...p,contactName:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.ill.contactNamePlaceholder' })} /></div>
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.contactEmail' })} *</label><input type="email" value={illForm.contactEmail} onChange={e=>setIllForm(p=>({...p,contactEmail:e.target.value}))} style={fs} placeholder="contato@biblioteca.org" /></div>
+              {/* #ILL-logistics : mode de transmission des documents. */}
+              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.logisticsMode' })} *</label>
+                <select value={illForm.logisticsMode} onChange={e=>setIllForm(p=>({...p,logisticsMode:e.target.value}))} style={fs}>
+                  <option value="">{t({ id: 'biblioteca.ill.select' })}</option>
+                  <option value="envio_postal">{t({ id: 'ill.logistics.envio_postal' })}</option>
+                  <option value="entrega_em_maos">{t({ id: 'ill.logistics.entrega_em_maos' })}</option>
+                  <option value="transporte_militante">{t({ id: 'ill.logistics.transporte_militante' })}</option>
+                  <option value="a_combinar">{t({ id: 'ill.logistics.a_combinar' })}</option>
+                </select>
+              </div>
+              {/* meeting_point : seulement pour les modes de remise physique
+                  (remise en main propre, portage militant). */}
+              {(illForm.logisticsMode === 'entrega_em_maos' || illForm.logisticsMode === 'transporte_militante') && (
+                <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.meetingPoint' })}</label><input type="text" value={illForm.meetingPoint} onChange={e=>setIllForm(p=>({...p,meetingPoint:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.ill.pickupPlaceholder' })} /></div>
+              )}
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.startDate' })}</label><input type="date" value={illForm.startDate} onChange={e=>setIllForm(p=>({...p,startDate:e.target.value}))} style={fs} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.dueDate' })}</label><input type="date" value={illForm.dueDate} onChange={e=>setIllForm(p=>({...p,dueDate:e.target.value}))} style={fs} /></div>
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.ill.notes' })}</label><textarea value={illForm.logisticsNote} onChange={e=>setIllForm(p=>({...p,logisticsNote:e.target.value}))} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({ id: 'biblioteca.ill.packagingPlaceholder' })} /></div>
             </div>
             <div style={{ display:'flex', gap:8 }}>
               <button className="cat-btn primary" onClick={saveIll} disabled={saving} style={{ fontSize:'.9rem' }}>{saving?t({id:'common.saving'}):t({id:'biblioteca.ill.save'})}</button>
-              <button className="cat-btn ghost" onClick={()=>{setIllForm({lender:'',borrower:'',status:'preparacao',contactName:'',contactEmail:'',startDate:'',dueDate:'',logisticsNote:'',meetingPoint:''});setIllItems([]);}} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.ill.clear' })}</button>
+              <button className="cat-btn ghost" onClick={()=>{setIllForm({lender:'',borrower:'',status:'preparacao',contactName:'',contactEmail:'',startDate:'',dueDate:'',logisticsNote:'',meetingPoint:'',logisticsMode:''});setIllItems([]);}} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.ill.clear' })}</button>
             </div>
           </div>
 
