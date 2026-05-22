@@ -58,11 +58,11 @@ AS $function$
 declare
   v_event_id bigint;
 begin
-  -- NOTE 20260522050000 (#ILL-partial) : la branche tg_op = 'INSERT' a ete
-  -- retiree. L'evenement 'created' est desormais emis explicitement par
-  -- fn_peb_create_loan_with_items, APRES insertion des exemplaires, pour
-  -- que la payload compte correctement les documents. Ce trigger ne gere
-  -- plus que les changements de status_global (UPDATE).
+  -- NOTE 20260522050000 (#ILL-partial) : la gestion de l'evenement de
+  -- creation a ete retiree de ce trigger. L'evenement est desormais emis
+  -- explicitement par fn_peb_create_loan_with_items, APRES insertion des
+  -- exemplaires, pour que la payload compte correctement les documents.
+  -- Ce trigger ne gere plus que les changements de status_global (UPDATE).
 
   if tg_op = 'UPDATE' then
     if old.status_global is distinct from new.status_global then
@@ -302,6 +302,9 @@ declare
   v_rpc_def text;
 begin
   -- (a) Le trigger ne contient plus la branche INSERT.
+  -- On cherche la structure de controle complete 'if tg_op = ''INSERT'' then'
+  -- (avec if et then) : ce motif n'apparait que dans du code executable,
+  -- jamais dans une phrase de commentaire — evite le faux positif.
   select pg_get_functiondef(p.oid) into v_trg_def
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
   where n.nspname = 'public' and p.proname = 'trg_interlibrary_loan_enqueue_notifications';
@@ -309,7 +312,7 @@ begin
   if v_trg_def is null then
     raise exception 'Verification echouee : trigger de notification absent.';
   end if;
-  if position('tg_op = ''INSERT''' in v_trg_def) > 0 then
+  if position('if tg_op = ''INSERT'' then' in lower(v_trg_def)) > 0 then
     raise exception 'Verification echouee : la branche INSERT est toujours dans le trigger.';
   end if;
 
