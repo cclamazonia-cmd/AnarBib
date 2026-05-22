@@ -3521,6 +3521,367 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Aplicada el",
     eo: "Aplikita la"
   },
+
+  // ===== Prêts interbibliothèques (PEB / ILL) ==============================
+  // Module notify-interlibrary-loan. 38 clés × 8 locales.
+  // Flèche univoque {lender} → {borrower} : la prêteuse vers l'emprunteuse.
+  // Convention inclusive : ca = triplet "lector-a-e" ; eo = "legant-in-o".
+  // Le contenu est surtout institutionnel (bibliothèques, documents) ;
+  // peu de formes genrées de personnes.
+
+  // --- Sujets (8) ----------------------------------------------------------
+  "ill.subject.created": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — novo pedido",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — nouvelle demande",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — nueva solicitud",
+    en: "Interlibrary loan {lender} → {borrower} — new request",
+    it: "Prestito interbibliotecario {lender} → {borrower} — nuova richiesta",
+    de: "Fernleihe {lender} → {borrower} — neue Anfrage",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — nova sol·licitud",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — nova peto"
+  },
+  "ill.subject.prepared": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — preparado",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — préparé",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — preparado",
+    en: "Interlibrary loan {lender} → {borrower} — prepared",
+    it: "Prestito interbibliotecario {lender} → {borrower} — preparato",
+    de: "Fernleihe {lender} → {borrower} — vorbereitet",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — preparat",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — preparita"
+  },
+  "ill.subject.dispatched": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — em circulação",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — en circulation",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — en circulación",
+    en: "Interlibrary loan {lender} → {borrower} — in transit",
+    it: "Prestito interbibliotecario {lender} → {borrower} — in circolazione",
+    de: "Fernleihe {lender} → {borrower} — unterwegs",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — en circulació",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — en cirkulado"
+  },
+  "ill.subject.return_started": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — devolução iniciada",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — retour amorcé",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — devolución iniciada",
+    en: "Interlibrary loan {lender} → {borrower} — return started",
+    it: "Prestito interbibliotecario {lender} → {borrower} — restituzione avviata",
+    de: "Fernleihe {lender} → {borrower} — Rückgabe begonnen",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — devolució iniciada",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — redono komencita"
+  },
+  "ill.subject.returned": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — encerrado",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — clôturé",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — cerrado",
+    en: "Interlibrary loan {lender} → {borrower} — closed",
+    it: "Prestito interbibliotecario {lender} → {borrower} — concluso",
+    de: "Fernleihe {lender} → {borrower} — abgeschlossen",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — tancat",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — fermita"
+  },
+  "ill.subject.cancelled": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — cancelado",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — annulé",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — cancelado",
+    en: "Interlibrary loan {lender} → {borrower} — cancelled",
+    it: "Prestito interbibliotecario {lender} → {borrower} — annullato",
+    de: "Fernleihe {lender} → {borrower} — storniert",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — anul·lat",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — nuligita"
+  },
+  "ill.subject.overdue": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — em atraso",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — en retard",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — atrasado",
+    en: "Interlibrary loan {lender} → {borrower} — overdue",
+    it: "Prestito interbibliotecario {lender} → {borrower} — in ritardo",
+    de: "Fernleihe {lender} → {borrower} — überfällig",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — endarrerit",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — malfruita"
+  },
+  "ill.subject.partially_returned": {
+    "pt-BR": "Empréstimo interbibliotecas {lender} → {borrower} — devolução parcial",
+    fr: "Prêt interbibliothèques {lender} → {borrower} — retour partiel",
+    es: "Préstamo interbibliotecario {lender} → {borrower} — devolución parcial",
+    en: "Interlibrary loan {lender} → {borrower} — partial return",
+    it: "Prestito interbibliotecario {lender} → {borrower} — restituzione parziale",
+    de: "Fernleihe {lender} → {borrower} — Teilrückgabe",
+    ca: "Préstec interbibliotecari {lender} → {borrower} — devolució parcial",
+    eo: "Interbiblioteka prunto {lender} → {borrower} — parta redono"
+  },
+
+  // --- Titres (8) ----------------------------------------------------------
+  "ill.title.created": {
+    "pt-BR": "Novo pedido de empréstimo interbibliotecas",
+    fr: "Nouvelle demande de prêt interbibliothèques",
+    es: "Nueva solicitud de préstamo interbibliotecario",
+    en: "New interlibrary loan request",
+    it: "Nuova richiesta di prestito interbibliotecario",
+    de: "Neue Fernleihe-Anfrage",
+    ca: "Nova sol·licitud de préstec interbibliotecari",
+    eo: "Nova peto de interbiblioteka prunto"
+  },
+  "ill.title.prepared": {
+    "pt-BR": "Empréstimo preparado",
+    fr: "Prêt préparé",
+    es: "Préstamo preparado",
+    en: "Loan prepared",
+    it: "Prestito preparato",
+    de: "Leihe vorbereitet",
+    ca: "Préstec preparat",
+    eo: "Prunto preparita"
+  },
+  "ill.title.dispatched": {
+    "pt-BR": "Empréstimo em circulação",
+    fr: "Prêt en circulation",
+    es: "Préstamo en circulación",
+    en: "Loan in transit",
+    it: "Prestito in circolazione",
+    de: "Leihe unterwegs",
+    ca: "Préstec en circulació",
+    eo: "Prunto en cirkulado"
+  },
+  "ill.title.return_started": {
+    "pt-BR": "Devolução iniciada",
+    fr: "Retour amorcé",
+    es: "Devolución iniciada",
+    en: "Return started",
+    it: "Restituzione avviata",
+    de: "Rückgabe begonnen",
+    ca: "Devolució iniciada",
+    eo: "Redono komencita"
+  },
+  "ill.title.returned": {
+    "pt-BR": "Empréstimo encerrado",
+    fr: "Prêt clôturé",
+    es: "Préstamo cerrado",
+    en: "Loan closed",
+    it: "Prestito concluso",
+    de: "Leihe abgeschlossen",
+    ca: "Préstec tancat",
+    eo: "Prunto fermita"
+  },
+  "ill.title.cancelled": {
+    "pt-BR": "Empréstimo cancelado",
+    fr: "Prêt annulé",
+    es: "Préstamo cancelado",
+    en: "Loan cancelled",
+    it: "Prestito annullato",
+    de: "Leihe storniert",
+    ca: "Préstec anul·lat",
+    eo: "Prunto nuligita"
+  },
+  "ill.title.overdue": {
+    "pt-BR": "Empréstimo em atraso",
+    fr: "Prêt en retard",
+    es: "Préstamo atrasado",
+    en: "Loan overdue",
+    it: "Prestito in ritardo",
+    de: "Leihe überfällig",
+    ca: "Préstec endarrerit",
+    eo: "Prunto malfruita"
+  },
+  "ill.title.partially_returned": {
+    "pt-BR": "Devolução parcial",
+    fr: "Retour partiel",
+    es: "Devolución parcial",
+    en: "Partial return",
+    it: "Restituzione parziale",
+    de: "Teilrückgabe",
+    ca: "Devolució parcial",
+    eo: "Parta redono"
+  },
+
+  // --- Intros de 'created' — matrice à 2 axes (4) --------------------------
+  "ill.intro.created.lender_initiator": {
+    "pt-BR": "Sua biblioteca acaba de propor um empréstimo de documentos a {borrower}. O pedido {loanRef} está registrado. {borrower} foi informada e responderá para dar seguimento a esta proposta. O detalhe dos documentos envolvidos está abaixo.",
+    fr: "Votre bibliothèque vient de proposer un prêt de documents à {borrower}. La demande {loanRef} est enregistrée. {borrower} en est informée et vous répondra pour donner suite à cette proposition. Le détail des documents concernés figure ci-dessous.",
+    es: "Tu biblioteca acaba de proponer un préstamo de documentos a {borrower}. La solicitud {loanRef} está registrada. {borrower} ha sido informada y os responderá para dar curso a esta propuesta. El detalle de los documentos implicados está abajo.",
+    en: "Your library has just offered a loan of documents to {borrower}. Request {loanRef} is registered. {borrower} has been notified and will reply to take this offer forward. The list of documents concerned is below.",
+    it: "La vostra biblioteca ha appena proposto un prestito di documenti a {borrower}. La richiesta {loanRef} è registrata. {borrower} è stata informata e vi risponderà per dare seguito a questa proposta. Il dettaglio dei documenti interessati è qui sotto.",
+    de: "Eure Bibliothek hat {borrower} soeben eine Ausleihe von Dokumenten angeboten. Die Anfrage {loanRef} ist registriert. {borrower} wurde benachrichtigt und wird antworten, um dieses Angebot weiterzuverfolgen. Die Liste der betreffenden Dokumente steht unten.",
+    ca: "La vostra biblioteca acaba de proposar un préstec de documents a {borrower}. La sol·licitud {loanRef} està registrada. {borrower} ha estat informada i us respondrà per donar curs a aquesta proposta. El detall dels documents implicats és a sota.",
+    eo: "Via biblioteko ĵus proponis prunton de dokumentoj al {borrower}. La peto {loanRef} estas registrita. {borrower} estis informita kaj respondos por daŭrigi ĉi tiun proponon. La detalo de la koncernaj dokumentoj estas sube."
+  },
+  "ill.intro.created.borrower_partner": {
+    "pt-BR": "{lender} propõe à sua biblioteca um empréstimo de documentos. O pedido {loanRef} acaba de ser aberto. Para aceitar, conversar ou organizar a retirada, entre em contato com a pessoa indicada abaixo. O detalhe dos documentos propostos está mais abaixo.",
+    fr: "{lender} propose à votre bibliothèque un prêt de documents. La demande {loanRef} vient d'être ouverte. Pour accepter, en discuter ou organiser le retrait, contactez la personne indiquée ci-dessous. Le détail des documents proposés figure plus bas.",
+    es: "{lender} propone a tu biblioteca un préstamo de documentos. La solicitud {loanRef} acaba de abrirse. Para aceptar, conversar u organizar el retiro, contacta a la persona indicada abajo. El detalle de los documentos propuestos está más abajo.",
+    en: "{lender} is offering your library a loan of documents. Request {loanRef} has just been opened. To accept, discuss it or arrange pickup, contact the person indicated below. The list of documents offered is further down.",
+    it: "{lender} propone alla vostra biblioteca un prestito di documenti. La richiesta {loanRef} è appena stata aperta. Per accettare, discuterne o organizzare il ritiro, contattate la persona indicata qui sotto. Il dettaglio dei documenti proposti è più in basso.",
+    de: "{lender} bietet eurer Bibliothek eine Ausleihe von Dokumenten an. Die Anfrage {loanRef} wurde soeben eröffnet. Um anzunehmen, zu besprechen oder die Abholung zu organisieren, wendet euch an die unten genannte Person. Die Liste der angebotenen Dokumente steht weiter unten.",
+    ca: "{lender} proposa a la vostra biblioteca un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per acceptar, parlar-ne o organitzar la recollida, contacteu la persona indicada a sota. El detall dels documents proposats és més avall.",
+    eo: "{lender} proponas al via biblioteko prunton de dokumentoj. La peto {loanRef} ĵus malfermiĝis. Por akcepti, priparoli aŭ organizi la prenon, kontaktu la personon indikitan sube. La detalo de la proponitaj dokumentoj estas pli sube."
+  },
+  "ill.intro.created.borrower_initiator": {
+    "pt-BR": "Sua biblioteca acaba de solicitar um empréstimo de documentos a {lender}. O pedido {loanRef} está registrado. {lender} foi informada e responderá para dar seguimento a este pedido. O detalhe dos documentos solicitados está abaixo.",
+    fr: "Votre bibliothèque vient de solliciter un emprunt de documents auprès de {lender}. La demande {loanRef} est enregistrée. {lender} en est informée et vous répondra pour donner suite à cette demande. Le détail des documents demandés figure ci-dessous.",
+    es: "Tu biblioteca acaba de solicitar un préstamo de documentos a {lender}. La solicitud {loanRef} está registrada. {lender} ha sido informada y os responderá para dar curso a esta solicitud. El detalle de los documentos solicitados está abajo.",
+    en: "Your library has just requested a loan of documents from {lender}. Request {loanRef} is registered. {lender} has been notified and will reply to take this request forward. The list of documents requested is below.",
+    it: "La vostra biblioteca ha appena richiesto un prestito di documenti a {lender}. La richiesta {loanRef} è registrata. {lender} è stata informata e vi risponderà per dare seguito a questa richiesta. Il dettaglio dei documenti richiesti è qui sotto.",
+    de: "Eure Bibliothek hat soeben eine Ausleihe von Dokumenten bei {lender} angefragt. Die Anfrage {loanRef} ist registriert. {lender} wurde benachrichtigt und wird antworten, um diese Anfrage weiterzuverfolgen. Die Liste der angefragten Dokumente steht unten.",
+    ca: "La vostra biblioteca acaba de sol·licitar un préstec de documents a {lender}. La sol·licitud {loanRef} està registrada. {lender} ha estat informada i us respondrà per donar curs a aquesta sol·licitud. El detall dels documents sol·licitats és a sota.",
+    eo: "Via biblioteko ĵus petis prunton de dokumentoj de {lender}. La peto {loanRef} estas registrita. {lender} estis informita kaj respondos por daŭrigi ĉi tiun peton. La detalo de la petitaj dokumentoj estas sube."
+  },
+  "ill.intro.created.lender_partner": {
+    "pt-BR": "{borrower} solicita à sua biblioteca um empréstimo de documentos. O pedido {loanRef} acaba de ser aberto. Para responder, conversar ou organizar o envio, entre em contato com a pessoa indicada abaixo. O detalhe dos documentos solicitados está mais abaixo.",
+    fr: "{borrower} sollicite auprès de votre bibliothèque un emprunt de documents. La demande {loanRef} vient d'être ouverte. Pour répondre, en discuter ou organiser l'envoi, contactez la personne indiquée ci-dessous. Le détail des documents demandés figure plus bas.",
+    es: "{borrower} solicita a tu biblioteca un préstamo de documentos. La solicitud {loanRef} acaba de abrirse. Para responder, conversar u organizar el envío, contacta a la persona indicada abajo. El detalle de los documentos solicitados está más abajo.",
+    en: "{borrower} is requesting a loan of documents from your library. Request {loanRef} has just been opened. To reply, discuss it or arrange dispatch, contact the person indicated below. The list of documents requested is further down.",
+    it: "{borrower} richiede alla vostra biblioteca un prestito di documenti. La richiesta {loanRef} è appena stata aperta. Per rispondere, discuterne o organizzare l'invio, contattate la persona indicata qui sotto. Il dettaglio dei documenti richiesti è più in basso.",
+    de: "{borrower} fragt bei eurer Bibliothek eine Ausleihe von Dokumenten an. Die Anfrage {loanRef} wurde soeben eröffnet. Um zu antworten, zu besprechen oder den Versand zu organisieren, wendet euch an die unten genannte Person. Die Liste der angefragten Dokumente steht weiter unten.",
+    ca: "{borrower} sol·licita a la vostra biblioteca un préstec de documents. La sol·licitud {loanRef} acaba d'obrir-se. Per respondre, parlar-ne o organitzar l'enviament, contacteu la persona indicada a sota. El detall dels documents sol·licitats és més avall.",
+    eo: "{borrower} petas de via biblioteko prunton de dokumentoj. La peto {loanRef} ĵus malfermiĝis. Por respondi, priparoli aŭ organizi la sendon, kontaktu la personon indikitan sube. La detalo de la petitaj dokumentoj estas pli sube."
+  },
+
+  // --- Intros de statut — symétriques (7) ----------------------------------
+  "ill.intro.prepared": {
+    "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} está agora preparado. Os documentos foram reunidos e estão prontos para partir. O detalhe está abaixo.",
+    fr: "Le prêt interbibliothèques {loanRef} entre {lender} et {borrower} est maintenant préparé. Les documents sont rassemblés et prêts à partir. Le détail figure ci-dessous.",
+    es: "El préstamo interbibliotecario {loanRef} entre {lender} y {borrower} ya está preparado. Los documentos están reunidos y listos para partir. El detalle está abajo.",
+    en: "Interlibrary loan {loanRef} between {lender} and {borrower} is now prepared. The documents are gathered and ready to leave. The details are below.",
+    it: "Il prestito interbibliotecario {loanRef} tra {lender} e {borrower} è ora preparato. I documenti sono stati riuniti e pronti a partire. Il dettaglio è qui sotto.",
+    de: "Die Fernleihe {loanRef} zwischen {lender} und {borrower} ist nun vorbereitet. Die Dokumente sind zusammengestellt und versandbereit. Die Einzelheiten stehen unten.",
+    ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ja està preparat. Els documents estan reunits i a punt per sortir. El detall és a sota.",
+    eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} nun estas preparita. La dokumentoj estas kunigitaj kaj pretaj por foriri. La detalo estas sube."
+  },
+  "ill.intro.dispatched": {
+    "pt-BR": "Os documentos do empréstimo interbibliotecas {loanRef} estão em circulação entre {lender} e {borrower}. Conforme o modo combinado, viajam pelo correio ou em mãos. O detalhe está abaixo.",
+    fr: "Les documents du prêt interbibliothèques {loanRef} sont en circulation entre {lender} et {borrower}. Selon le mode convenu, ils voyagent par voie postale ou de la main à la main. Le détail figure ci-dessous.",
+    es: "Los documentos del préstamo interbibliotecario {loanRef} están en circulación entre {lender} y {borrower}. Según el modo acordado, viajan por correo o en mano. El detalle está abajo.",
+    en: "The documents of interlibrary loan {loanRef} are in transit between {lender} and {borrower}. Depending on the agreed method, they travel by post or hand to hand. The details are below.",
+    it: "I documenti del prestito interbibliotecario {loanRef} sono in circolazione tra {lender} e {borrower}. Secondo il modo concordato, viaggiano per posta o a mano. Il dettaglio è qui sotto.",
+    de: "Die Dokumente der Fernleihe {loanRef} sind zwischen {lender} und {borrower} unterwegs. Je nach vereinbarter Art reisen sie per Post oder von Hand zu Hand. Die Einzelheiten stehen unten.",
+    ca: "Els documents del préstec interbibliotecari {loanRef} estan en circulació entre {lender} i {borrower}. Segons el mode acordat, viatgen per correu o en mà. El detall és a sota.",
+    eo: "La dokumentoj de la interbiblioteka prunto {loanRef} estas en cirkulado inter {lender} kaj {borrower}. Laŭ la interkonsentita maniero, ili vojaĝas poŝte aŭ man-al-mane. La detalo estas sube."
+  },
+  "ill.intro.return_started": {
+    "pt-BR": "A devolução do empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} acaba de ser iniciada. Os documentos fazem o caminho de volta. O detalhe está abaixo.",
+    fr: "Le retour du prêt interbibliothèques {loanRef} entre {lender} et {borrower} vient d'être amorcé. Les documents font le chemin inverse. Le détail figure ci-dessous.",
+    es: "La devolución del préstamo interbibliotecario {loanRef} entre {lender} y {borrower} acaba de iniciarse. Los documentos hacen el camino de vuelta. El detalle está abajo.",
+    en: "The return of interlibrary loan {loanRef} between {lender} and {borrower} has just started. The documents are making the journey back. The details are below.",
+    it: "La restituzione del prestito interbibliotecario {loanRef} tra {lender} e {borrower} è appena stata avviata. I documenti fanno il percorso inverso. Il dettaglio è qui sotto.",
+    de: "Die Rückgabe der Fernleihe {loanRef} zwischen {lender} und {borrower} hat soeben begonnen. Die Dokumente treten den Rückweg an. Die Einzelheiten stehen unten.",
+    ca: "La devolució del préstec interbibliotecari {loanRef} entre {lender} i {borrower} acaba d'iniciar-se. Els documents fan el camí de tornada. El detall és a sota.",
+    eo: "La redono de la interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} ĵus komenciĝis. La dokumentoj faras la revojon. La detalo estas sube."
+  },
+  "ill.intro.returned": {
+    "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} está encerrado. Os documentos voltaram à sua biblioteca. Um acervo circulou de um coletivo a outro: é assim que vivem nossas bibliotecas.",
+    fr: "Le prêt interbibliothèques {loanRef} entre {lender} et {borrower} est clôturé. Les documents ont regagné leur bibliothèque. Un fonds a circulé d'un collectif vers un autre : c'est ainsi que vivent nos bibliothèques.",
+    es: "El préstamo interbibliotecario {loanRef} entre {lender} y {borrower} está cerrado. Los documentos han vuelto a su biblioteca. Un fondo ha circulado de un colectivo a otro: así es como viven nuestras bibliotecas.",
+    en: "Interlibrary loan {loanRef} between {lender} and {borrower} is closed. The documents have returned to their library. A collection has travelled from one collective to another: this is how our libraries live.",
+    it: "Il prestito interbibliotecario {loanRef} tra {lender} e {borrower} è concluso. I documenti sono tornati alla loro biblioteca. Un fondo è circolato da un collettivo all'altro: è così che vivono le nostre biblioteche.",
+    de: "Die Fernleihe {loanRef} zwischen {lender} und {borrower} ist abgeschlossen. Die Dokumente sind in ihre Bibliothek zurückgekehrt. Ein Bestand ist von einem Kollektiv zum anderen gewandert: so leben unsere Bibliotheken.",
+    ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} està tancat. Els documents han tornat a la seva biblioteca. Un fons ha circulat d'un col·lectiu a un altre: així és com viuen les nostres biblioteques.",
+    eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} estas fermita. La dokumentoj revenis al sia biblioteko. Kolekto cirkulis de unu kolektivo al alia: tiel vivas niaj bibliotekoj."
+  },
+  "ill.intro.cancelled": {
+    "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} foi cancelado. Nenhuma troca ocorrerá no âmbito deste pedido. Para qualquer dúvida, as duas bibliotecas podem se contatar diretamente.",
+    fr: "Le prêt interbibliothèques {loanRef} entre {lender} et {borrower} a été annulé. Aucun échange n'aura lieu dans le cadre de cette demande. Pour toute question, les deux bibliothèques peuvent se rapprocher directement.",
+    es: "El préstamo interbibliotecario {loanRef} entre {lender} y {borrower} ha sido cancelado. No habrá ningún intercambio en el marco de esta solicitud. Para cualquier duda, las dos bibliotecas pueden contactarse directamente.",
+    en: "Interlibrary loan {loanRef} between {lender} and {borrower} has been cancelled. No exchange will take place under this request. For any question, the two libraries can get in touch directly.",
+    it: "Il prestito interbibliotecario {loanRef} tra {lender} e {borrower} è stato annullato. Nessuno scambio avrà luogo nell'ambito di questa richiesta. Per qualsiasi domanda, le due biblioteche possono contattarsi direttamente.",
+    de: "Die Fernleihe {loanRef} zwischen {lender} und {borrower} wurde storniert. Im Rahmen dieser Anfrage findet kein Austausch statt. Bei Fragen können sich die beiden Bibliotheken direkt miteinander in Verbindung setzen.",
+    ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ha estat anul·lat. No hi haurà cap intercanvi en el marc d'aquesta sol·licitud. Per a qualsevol dubte, les dues biblioteques poden contactar-se directament.",
+    eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} estis nuligita. Neniu interŝanĝo okazos en la kadro de ĉi tiu peto. Por iu ajn demando, la du bibliotekoj povas rekte interkontaktiĝi."
+  },
+  "ill.intro.overdue": {
+    "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} ultrapassou a data de devolução prevista. As duas bibliotecas são convidadas a se aproximar para fazer o ponto sobre a situação dos documentos. O detalhe está abaixo.",
+    fr: "Le prêt interbibliothèques {loanRef} entre {lender} et {borrower} a dépassé sa date de retour prévue. Les deux bibliothèques sont invitées à se rapprocher pour faire le point sur la situation des documents. Le détail figure ci-dessous.",
+    es: "El préstamo interbibliotecario {loanRef} entre {lender} y {borrower} ha superado su fecha de devolución prevista. Se invita a las dos bibliotecas a ponerse en contacto para hacer el punto sobre la situación de los documentos. El detalle está abajo.",
+    en: "Interlibrary loan {loanRef} between {lender} and {borrower} has passed its expected return date. Both libraries are invited to get in touch to take stock of where the documents stand. The details are below.",
+    it: "Il prestito interbibliotecario {loanRef} tra {lender} e {borrower} ha superato la data di restituzione prevista. Le due biblioteche sono invitate a mettersi in contatto per fare il punto sulla situazione dei documenti. Il dettaglio è qui sotto.",
+    de: "Die Fernleihe {loanRef} zwischen {lender} und {borrower} hat ihr vorgesehenes Rückgabedatum überschritten. Beide Bibliotheken sind eingeladen, sich abzustimmen, um den Stand der Dokumente zu klären. Die Einzelheiten stehen unten.",
+    ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ha superat la data de devolució prevista. Es convida les dues biblioteques a posar-se en contacte per fer el punt sobre la situació dels documents. El detall és a sota.",
+    eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} preterpasis sian antaŭviditan redatan daton. La du bibliotekoj estas invitataj interkontaktiĝi por pripensi la situacion de la dokumentoj. La detalo estas sube."
+  },
+  "ill.intro.partially_returned": {
+    "pt-BR": "O empréstimo interbibliotecas {loanRef} entre {lender} e {borrower} foi parcialmente devolvido. Uma parte dos documentos voltou à sua biblioteca; o restante ainda está em circulação. O detalhe está abaixo, documento por documento.",
+    fr: "Le prêt interbibliothèques {loanRef} entre {lender} et {borrower} est partiellement rendu. Une partie des documents a regagné sa bibliothèque ; le reste est encore en circulation. Le détail figure ci-dessous, document par document.",
+    es: "El préstamo interbibliotecario {loanRef} entre {lender} y {borrower} ha sido devuelto parcialmente. Una parte de los documentos ha vuelto a su biblioteca; el resto sigue en circulación. El detalle está abajo, documento por documento.",
+    en: "Interlibrary loan {loanRef} between {lender} and {borrower} has been partially returned. Some of the documents have returned to their library; the rest are still in transit. The details are below, document by document.",
+    it: "Il prestito interbibliotecario {loanRef} tra {lender} e {borrower} è stato restituito parzialmente. Una parte dei documenti è tornata alla propria biblioteca; il resto è ancora in circolazione. Il dettaglio è qui sotto, documento per documento.",
+    de: "Die Fernleihe {loanRef} zwischen {lender} und {borrower} wurde teilweise zurückgegeben. Ein Teil der Dokumente ist in seine Bibliothek zurückgekehrt; der Rest ist noch unterwegs. Die Einzelheiten stehen unten, Dokument für Dokument.",
+    ca: "El préstec interbibliotecari {loanRef} entre {lender} i {borrower} ha estat retornat parcialment. Una part dels documents ha tornat a la seva biblioteca; la resta encara està en circulació. El detall és a sota, document per document.",
+    eo: "La interbiblioteka prunto {loanRef} inter {lender} kaj {borrower} estis parte redonita. Parto de la dokumentoj revenis al sia biblioteko; la cetero ankoraŭ estas en cirkulado. La detalo estas sube, dokumento post dokumento."
+  },
+
+  // --- ActionBox (1) -------------------------------------------------------
+  "ill.actionBox.contactPartner": {
+    "pt-BR": "Para dar seguimento, entre em contato com: {contact}",
+    fr: "Pour donner suite, contactez : {contact}",
+    es: "Para dar curso, contacta con: {contact}",
+    en: "To take this forward, contact: {contact}",
+    it: "Per dare seguito, contattate: {contact}",
+    de: "Um fortzufahren, wendet euch an: {contact}",
+    ca: "Per donar curs, contacteu amb: {contact}",
+    eo: "Por daŭrigi, kontaktu: {contact}"
+  },
+
+  // --- Libellés de détails (9) ---------------------------------------------
+  "ill.detail.loanRef": {
+    "pt-BR": "Referência do empréstimo", fr: "Référence du prêt",
+    es: "Referencia del préstamo", en: "Loan reference",
+    it: "Riferimento del prestito", de: "Leih-Referenz",
+    ca: "Referència del préstec", eo: "Referenco de la prunto"
+  },
+  "ill.detail.lender": {
+    "pt-BR": "Biblioteca emprestadora", fr: "Bibliothèque prêteuse",
+    es: "Biblioteca prestadora", en: "Lending library",
+    it: "Biblioteca prestatrice", de: "Verleihende Bibliothek",
+    ca: "Biblioteca prestadora", eo: "Pruntedonanta biblioteko"
+  },
+  "ill.detail.borrower": {
+    "pt-BR": "Biblioteca tomadora", fr: "Bibliothèque emprunteuse",
+    es: "Biblioteca prestataria", en: "Borrowing library",
+    it: "Biblioteca richiedente", de: "Entleihende Bibliothek",
+    ca: "Biblioteca prestatària", eo: "Prunteprenanta biblioteko"
+  },
+  "ill.detail.startDate": {
+    "pt-BR": "Data de partida", fr: "Date de départ",
+    es: "Fecha de salida", en: "Start date",
+    it: "Data di partenza", de: "Startdatum",
+    ca: "Data de sortida", eo: "Ekdato"
+  },
+  "ill.detail.dueDate": {
+    "pt-BR": "Devolução prevista", fr: "Retour prévu",
+    es: "Devolución prevista", en: "Expected return",
+    it: "Restituzione prevista", de: "Erwartete Rückgabe",
+    ca: "Devolució prevista", eo: "Antaŭvidita redono"
+  },
+  "ill.detail.logistics": {
+    "pt-BR": "Logística", fr: "Logistique",
+    es: "Logística", en: "Logistics",
+    it: "Logistica", de: "Logistik",
+    ca: "Logística", eo: "Loĝistiko"
+  },
+  "ill.detail.meetingPoint": {
+    "pt-BR": "Ponto de encontro", fr: "Point de rencontre",
+    es: "Punto de encuentro", en: "Meeting point",
+    it: "Punto d'incontro", de: "Treffpunkt",
+    ca: "Punt de trobada", eo: "Renkontiĝejo"
+  },
+  "ill.detail.itemCount": {
+    "pt-BR": "Número de documentos", fr: "Nombre de documents",
+    es: "Número de documentos", en: "Number of documents",
+    it: "Numero di documenti", de: "Anzahl der Dokumente",
+    ca: "Nombre de documents", eo: "Nombro de dokumentoj"
+  },
+  "ill.detail.itemLine": {
+    "pt-BR": "Documento", fr: "Document",
+    es: "Documento", en: "Document",
+    it: "Documento", de: "Dokument",
+    ca: "Document", eo: "Dokumento"
+  },
+
+  // --- Logistique (1) ------------------------------------------------------
+  "ill.logistics.a_combinar": {
+    "pt-BR": "A combinar", fr: "À convenir",
+    es: "A convenir", en: "To be arranged",
+    it: "Da concordare", de: "Noch festzulegen",
+    ca: "A convenir", eo: "Interkonsentota"
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";
