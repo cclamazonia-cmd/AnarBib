@@ -153,6 +153,9 @@ export default function BibliotecaPage() {
   // Pointages de retour en cours de saisie, par prêt :
   // { [loanId]: { [itemRowId]: { checked: bool, status: 'devolvido'|... } } }
   const [illReturnDraft, setIllReturnDraft] = useState({});
+  // Feedback LOCAL au bloc de pointage, par prêt (option B) :
+  // { [loanId]: { busy: bool, msg: string|null, kind: 'ok'|'error'|null } }
+  const [illReturnFeedback, setIllReturnFeedback] = useState({});
   // EA-12 phase 2 (dette 2) : bibliotheques eligibles au PEB.
   // Regle alignee sur fn_peb_authorized : federee + circulation active + active.
   const pebEligibleLibraries = allLibraries.filter(l =>
@@ -525,27 +528,46 @@ export default function BibliotecaPage() {
   }
 
   // Envoie le lot d'exemplaires cochés à la RPC fn_peb_update_item_status.
+  // Feedback LOCAL au bloc (option B) : message + état occupé propres au prêt.
   async function submitIllItemReturn(loanId) {
     const loanDraft = illReturnDraft[loanId] || {};
     const p_items = Object.entries(loanDraft)
       .filter(([, d]) => d.checked)
       .map(([itemRowId, d]) => ({ id: Number(itemRowId), new_status: d.status }));
     if (p_items.length === 0) {
-      setMsg({ text: t({ id: 'biblioteca.ill.return.nothingSelected' }), kind: 'error' });
+      setIllReturnFeedback(prev => ({ ...prev, [loanId]: {
+        busy: false, kind: 'error',
+        msg: t({ id: 'biblioteca.ill.return.nothingSelected' }),
+      }}));
       return;
     }
+    // État occupé : le bouton se désactive et affiche « Validation… ».
+    setIllReturnFeedback(prev => ({ ...prev, [loanId]: { busy: true, msg: null, kind: null }}));
     try {
-      const { error } = await supabase.rpc('fn_peb_update_item_status', {
+      const { data, error } = await supabase.rpc('fn_peb_update_item_status', {
         p_loan_id: loanId,
         p_items,
       });
       if (error) throw error;
-      setMsg({ text: t({ id: 'biblioteca.ill.return.done' }, { count: p_items.length }), kind: 'ok' });
-      // Réinitialise le brouillon de ce prêt et recharge.
+      // La RPC renvoie { loan, items } : on lit le nouveau statut du prêt
+      // pour le nommer dans le message de confirmation.
+      const newStatus = data?.loan?.status_global || '';
+      const statusLabel = newStatus
+        ? t({ id: `ill.status.${newStatus}` })
+        : '';
       setIllReturnDraft(prev => { const n = { ...prev }; delete n[loanId]; return n; });
       await loadAll();
+      // Message de résultat : nombre traité + nouveau statut du prêt.
+      setIllReturnFeedback(prev => ({ ...prev, [loanId]: {
+        busy: false, kind: 'ok',
+        msg: t({ id: 'biblioteca.ill.return.done' },
+                { count: p_items.length, status: statusLabel }),
+      }}));
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setIllReturnFeedback(prev => ({ ...prev, [loanId]: {
+        busy: false, kind: 'error',
+        msg: t({ id: 'common.errorPrefix' }, { message: err.message }),
+      }}));
     }
   }
 
@@ -1426,10 +1448,28 @@ export default function BibliotecaPage() {
                       </div>);
                     })}
                     {inReturnPhase ? (
-                      <button className="cat-btn" style={{ fontSize:'.8rem', padding:'5px 12px', marginTop:8 }}
-                        onClick={()=>submitIllItemReturn(loan.id)}>
-                        {t({ id:'biblioteca.ill.return.submit' })}
-                      </button>
+                      <>
+                        <button className="cat-btn"
+                          disabled={illReturnFeedback[loan.id]?.busy}
+                          style={{ fontSize:'.8rem', padding:'5px 12px', marginTop:8,
+                                   opacity: illReturnFeedback[loan.id]?.busy ? 0.6 : 1 }}
+                          onClick={()=>submitIllItemReturn(loan.id)}>
+                          {illReturnFeedback[loan.id]?.busy
+                            ? t({ id:'biblioteca.ill.return.submitting' })
+                            : t({ id:'biblioteca.ill.return.submit' })}
+                        </button>
+                        {/* Message de résultat LOCAL, juste sous le bouton (option B). */}
+                        {illReturnFeedback[loan.id]?.msg && (
+                          <div style={{ fontSize:'.8rem', marginTop:6, padding:'5px 9px',
+                                        borderRadius:6,
+                                        background: illReturnFeedback[loan.id].kind==='ok'
+                                          ? 'rgba(74,222,128,.12)' : 'rgba(248,113,113,.12)',
+                                        color: illReturnFeedback[loan.id].kind==='ok'
+                                          ? '#4ade80' : '#f87171' }}>
+                            {illReturnFeedback[loan.id].msg}
+                          </div>
+                        )}
+                      </>
                     ) : (
                       <div style={{ fontSize:'.78rem', color:'var(--brand-muted)', marginTop:8, fontStyle:'italic' }}>
                         {t({ id:'biblioteca.ill.return.notInPhase' })}
