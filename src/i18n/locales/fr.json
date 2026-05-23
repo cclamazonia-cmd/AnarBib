@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Catalogue partagé avec le réseau AnarBib, circulation informelle, gouvernance avec rôles définis (bibliothécaires, coordination). Ne participe pas au prêt entre bibliothèques.",
   "wizard.profile.template.C.title": "Profil C — Fédérée observatrice",
   "wizard.profile.template.D.desc": "Bibliothèque mûre : SIGB complet (emprunts, réservations, cotisations), participation pleine au réseau et au prêt entre bibliothèques, gouvernance formelle avec transitions par vote.",
-  "wizard.profile.template.D.title": "Profil D — Complète engagée"
+  "wizard.profile.template.D.title": "Profil D — Complète engagée",
+  "biblioteca.exchanges.selectPartnerFirst": "Choisis d’abord la bibliothèque partenaire",
+  "biblioteca.exchanges.selectDoc": "Sélectionne un document",
+  "biblioteca.exchanges.noSurplus": "Aucun document local en surplus",
+  "biblioteca.exchanges.partnerNoSurplus": "La partenaire ne montre aucun document en surplus",
+  "biblioteca.exchanges.loading": "Chargement…",
+  "biblioteca.exchanges.messagePlaceholder": "Écris ou génère le message de la proposition d’échange.",
+  "biblioteca.exchanges.generateMessage": "Générer un message suggéré",
+  "biblioteca.exchanges.registering": "Enregistrement…",
+  "biblioteca.exchanges.created": "Proposition d’échange enregistrée.",
+  "biblioteca.exchanges.needPartner": "Choisis une bibliothèque partenaire.",
+  "biblioteca.exchanges.partnerSameAsLocal": "La bibliothèque partenaire doit être différente de la tienne.",
+  "biblioteca.exchanges.needBothDocs": "Choisis un document local et un document de la partenaire.",
+  "biblioteca.exchanges.needMessage": "Écris ou génère le message de la proposition.",
+  "biblioteca.exchanges.suggestedMessage": "Bonjour, les compagnon·nes de {partner}. Nous écrivons pour ouvrir une consultation d’échange interbibliothèques dans le cadre du réseau AnarBib. La proposition est exploratoire : elle sert à vérifier l’intérêt mutuel avant tout engagement. Document que nous pouvons mettre à disposition : {localDoc}. Document que nous aimerions recevoir : {partnerDoc}. Si la proposition semble pertinente, nous pourrons convenir de la vérification des exemplaires et de la logistique entre les bibliothèques. Salutations fraternelles."
 }

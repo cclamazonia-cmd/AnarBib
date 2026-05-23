@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Catálogo compartilhado com a rede AnarBib, circulação informal, governança com papéis definidos (bibliotecári-as-es, coordenação). Não participa do empréstimo entre bibliotecas.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB completo (empréstimos, reservas, cotizações), participação plena na rede e no empréstimo entre bibliotecas, governança formal com transições por votação.",
-  "wizard.profile.template.D.title": "Perfil D — Completa engajada"
+  "wizard.profile.template.D.title": "Perfil D — Completa engajada",
+  "biblioteca.exchanges.selectPartnerFirst": "Escolha primeiro a biblioteca parceira",
+  "biblioteca.exchanges.selectDoc": "Selecione um documento",
+  "biblioteca.exchanges.noSurplus": "Nenhum documento local com excedente",
+  "biblioteca.exchanges.partnerNoSurplus": "A parceira não mostra documentos com excedente",
+  "biblioteca.exchanges.loading": "Carregando…",
+  "biblioteca.exchanges.messagePlaceholder": "Escreva ou gere a mensagem da proposta de troca.",
+  "biblioteca.exchanges.generateMessage": "Gerar mensagem sugerida",
+  "biblioteca.exchanges.registering": "Registrando…",
+  "biblioteca.exchanges.created": "Proposta de troca registrada.",
+  "biblioteca.exchanges.needPartner": "Escolha uma biblioteca parceira.",
+  "biblioteca.exchanges.partnerSameAsLocal": "A biblioteca parceira precisa ser diferente da sua.",
+  "biblioteca.exchanges.needBothDocs": "Escolha um documento local e um documento da parceira.",
+  "biblioteca.exchanges.needMessage": "Escreva ou gere a mensagem da proposta.",
+  "biblioteca.exchanges.suggestedMessage": "Olá, compas da {partner}. Escrevemos para abrir uma consulta de troca interbibliotecas no âmbito da rede AnarBib. A proposta é exploratória: serve para verificar interesse mútuo antes de qualquer compromisso. Material que podemos disponibilizar: {localDoc}. Material que gostaríamos de receber: {partnerDoc}. Se a proposta parecer pertinente, podemos combinar a conferência dos exemplares e a logística entre as bibliotecas. Abraços fraternos."
 }

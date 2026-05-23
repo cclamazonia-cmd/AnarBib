@@ -14,6 +14,7 @@ import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSe
 import PolicySetManager from '@/components/library/PolicySetManager';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
 import WorkspaceInspectorModal from '@/components/library/WorkspaceInspectorModal';
+import ExchangeProposalForm from '@/components/library/ExchangeProposalForm';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -1290,25 +1291,10 @@ export default function BibliotecaPage() {
         {tab==='exchanges' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.exchanges.title' })}</h3>
           <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:14 }}>{t({id:'biblioteca.exchanges.hint'})}</div>
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.exchanges.prepare' })}</h4>
-            <div className="cat-book-grid" style={{ marginBottom:10 }}>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.partner' })}</label>
-                <select style={fs}><option value="">{t({ id: 'biblioteca.exchanges.selectPartner' })}</option>{allLibraries.filter(l=>l.id!==libraryId).map(l=><option key={l.id} value={l.id}>{l.name} ({l.short_name})</option>)}</select>
-              </div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.localDoc' })}</label><input type="text" style={fs} placeholder={t({id:'biblioteca.exchanges.localDocPlaceholder'})} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.wantedDoc' })}</label><input type="text" style={fs} placeholder={t({ id: 'biblioteca.ill.searchPlaceholder' })} /></div>
-            </div>
-            <div className="cat-book-grid" style={{ marginBottom:10 }}>
-              <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.exchanges.message' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder={t({ id: 'biblioteca.ill.motifPlaceholder' })} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.exchanges.note' })}</label><textarea style={{...fs,resize:'vertical'}} rows={3} placeholder={t({id:'biblioteca.exchanges.notePlaceholder'})} /></div>
-            </div>
-            <div style={{ display:'flex', gap:8 }}>
-              <button className="cat-btn primary" style={{ fontSize:'.88rem' }} disabled>{t({ id: 'biblioteca.exchanges.register' })}</button>
-              <button className="cat-btn secondary" style={{ fontSize:'.88rem' }} disabled>{t({ id: 'biblioteca.exchanges.openEmail' })}</button>
-            </div>
-            <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:10, fontStyle:'italic' }}>{t({id:'biblioteca.exchanges.implementationPending'})}</div>
-          </div>
+          {/* EA-11 paquet 1 : formulaire de proposition de troca, dans le
+              composant separe ExchangeProposalForm. Le bloc maquette inerte
+              (boutons disabled, implementationPending) a ete remplace. */}
+          <ExchangeProposalForm libraryId={libraryId} allLibraries={allLibraries} t={t} />
         </div>)}
 
         {/* ═══ 7. Empréstimos interbibliotecas ═════════ */}

@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Catalogo condiviso con la rete AnarBib, circolazione informale, governance con ruoli definiti (bibliotecari*, coordinazione). Non partecipa al prestito interbibliotecario.",
   "wizard.profile.template.C.title": "Profilo C — Federata osservatrice",
   "wizard.profile.template.D.desc": "Biblioteca matura: ILS completo (prestiti, prenotazioni, quote), piena partecipazione alla rete e al prestito interbibliotecario, governance formale con transizioni per votazione.",
-  "wizard.profile.template.D.title": "Profilo D — Completa impegnata"
+  "wizard.profile.template.D.title": "Profilo D — Completa impegnata",
+  "biblioteca.exchanges.selectPartnerFirst": "Scegli prima la biblioteca partner",
+  "biblioteca.exchanges.selectDoc": "Seleziona un documento",
+  "biblioteca.exchanges.noSurplus": "Nessun documento locale in eccedenza",
+  "biblioteca.exchanges.partnerNoSurplus": "La partner non mostra documenti in eccedenza",
+  "biblioteca.exchanges.loading": "Caricamento…",
+  "biblioteca.exchanges.messagePlaceholder": "Scrivi o genera il messaggio della proposta di scambio.",
+  "biblioteca.exchanges.generateMessage": "Genera messaggio suggerito",
+  "biblioteca.exchanges.registering": "Registrazione…",
+  "biblioteca.exchanges.created": "Proposta di scambio registrata.",
+  "biblioteca.exchanges.needPartner": "Scegli una biblioteca partner.",
+  "biblioteca.exchanges.partnerSameAsLocal": "La biblioteca partner deve essere diversa dalla tua.",
+  "biblioteca.exchanges.needBothDocs": "Scegli un documento locale e un documento della partner.",
+  "biblioteca.exchanges.needMessage": "Scrivi o genera il messaggio della proposta.",
+  "biblioteca.exchanges.suggestedMessage": "Ciao, compagne e compagni di {partner}. Scriviamo per aprire una consultazione di scambio interbibliotecario nell’ambito della rete AnarBib. La proposta è esplorativa: serve a verificare l’interesse reciproco prima di qualsiasi impegno. Materiale che possiamo offrire: {localDoc}. Materiale che vorremmo ricevere: {partnerDoc}. Se la proposta sembra pertinente, potremo concordare la verifica delle copie e la logistica tra le biblioteche. Abbracci fraterni."
 }

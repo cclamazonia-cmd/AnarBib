@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Katalog mit dem AnarBib-Netzwerk geteilt, informelle Zirkulation, Selbstverwaltung mit definierten Rollen (Bibliothekar*innen, Koordination). Nimmt nicht an der Fernleihe teil.",
   "wizard.profile.template.C.title": "Profil C — Foderiert beobachtend",
   "wizard.profile.template.D.desc": "Etablierte Bibliothek: komplettes ILS (Ausleihen, Reservierungen, Beitrage), volle Netzwerk- und Fernleihe-Teilnahme, formale Selbstverwaltung mit Abstimmungs-Transitionen.",
-  "wizard.profile.template.D.title": "Profil D — Voll engagiert"
+  "wizard.profile.template.D.title": "Profil D — Voll engagiert",
+  "biblioteca.exchanges.selectPartnerFirst": "Waehle zuerst die Partnerbibliothek",
+  "biblioteca.exchanges.selectDoc": "Waehle ein Dokument",
+  "biblioteca.exchanges.noSurplus": "Kein lokales Dokument mit Ueberschuss",
+  "biblioteca.exchanges.partnerNoSurplus": "Die Partnerin zeigt kein Dokument mit Ueberschuss",
+  "biblioteca.exchanges.loading": "Laedt…",
+  "biblioteca.exchanges.messagePlaceholder": "Schreibe oder generiere die Nachricht des Tauschvorschlags.",
+  "biblioteca.exchanges.generateMessage": "Vorgeschlagene Nachricht generieren",
+  "biblioteca.exchanges.registering": "Registrierung…",
+  "biblioteca.exchanges.created": "Tauschvorschlag registriert.",
+  "biblioteca.exchanges.needPartner": "Waehle eine Partnerbibliothek.",
+  "biblioteca.exchanges.partnerSameAsLocal": "Die Partnerbibliothek muss sich von deiner unterscheiden.",
+  "biblioteca.exchanges.needBothDocs": "Waehle ein lokales Dokument und ein Dokument der Partnerin.",
+  "biblioteca.exchanges.needMessage": "Schreibe oder generiere die Nachricht des Vorschlags.",
+  "biblioteca.exchanges.suggestedMessage": "Hallo, Genossinnen und Genossen von {partner}. Wir schreiben, um eine Anfrage zum bibliotheksuebergreifenden Tausch im Rahmen des AnarBib-Netzwerks zu eroeffnen. Der Vorschlag ist erkundend: er dient dazu, das gegenseitige Interesse vor jeder Verpflichtung zu pruefen. Material, das wir anbieten koennen: {localDoc}. Material, das wir erhalten moechten: {partnerDoc}. Wenn der Vorschlag passend erscheint, koennen wir die Pruefung der Exemplare und die Logistik zwischen den Bibliotheken vereinbaren. Bruederliche Gruesse."
 }

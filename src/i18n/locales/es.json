@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Catálogo compartido con la red AnarBib, circulación informal, gobernanza con roles definidos (bibliotecaries, coordinación). No participa del préstamo interbibliotecario.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB completo (préstamos, reservas, cotizaciones), participación plena en la red y en el préstamo interbibliotecario, gobernanza formal con transiciones por votación.",
-  "wizard.profile.template.D.title": "Perfil D — Completa comprometida"
+  "wizard.profile.template.D.title": "Perfil D — Completa comprometida",
+  "biblioteca.exchanges.selectPartnerFirst": "Elige primero la biblioteca asociada",
+  "biblioteca.exchanges.selectDoc": "Selecciona un documento",
+  "biblioteca.exchanges.noSurplus": "Ningún documento local con excedente",
+  "biblioteca.exchanges.partnerNoSurplus": "La asociada no muestra documentos con excedente",
+  "biblioteca.exchanges.loading": "Cargando…",
+  "biblioteca.exchanges.messagePlaceholder": "Escribe o genera el mensaje de la propuesta de intercambio.",
+  "biblioteca.exchanges.generateMessage": "Generar mensaje sugerido",
+  "biblioteca.exchanges.registering": "Registrando…",
+  "biblioteca.exchanges.created": "Propuesta de intercambio registrada.",
+  "biblioteca.exchanges.needPartner": "Elige una biblioteca asociada.",
+  "biblioteca.exchanges.partnerSameAsLocal": "La biblioteca asociada debe ser distinta de la tuya.",
+  "biblioteca.exchanges.needBothDocs": "Elige un documento local y un documento de la asociada.",
+  "biblioteca.exchanges.needMessage": "Escribe o genera el mensaje de la propuesta.",
+  "biblioteca.exchanges.suggestedMessage": "Hola, compañeras y compañeros de {partner}. Escribimos para abrir una consulta de intercambio interbibliotecario en el marco de la red AnarBib. La propuesta es exploratoria: sirve para verificar el interés mutuo antes de cualquier compromiso. Material que podemos ofrecer: {localDoc}. Material que nos gustaría recibir: {partnerDoc}. Si la propuesta parece pertinente, podremos acordar la verificación de los ejemplares y la logística entre las bibliotecas. Abrazos fraternos."
 }

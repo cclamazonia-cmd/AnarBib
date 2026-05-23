@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Catalog shared with the AnarBib network, informal circulation, governance with defined roles (librarians, coordination). Does not participate in interlibrary loans.",
   "wizard.profile.template.C.title": "Profile C — Federated observer",
   "wizard.profile.template.D.desc": "Mature library: full ILS (loans, reservations, dues), full participation in the network and interlibrary loans, formal governance with voting transitions.",
-  "wizard.profile.template.D.title": "Profile D — Fully engaged"
+  "wizard.profile.template.D.title": "Profile D — Fully engaged",
+  "biblioteca.exchanges.selectPartnerFirst": "Choose the partner library first",
+  "biblioteca.exchanges.selectDoc": "Select a document",
+  "biblioteca.exchanges.noSurplus": "No local document with surplus",
+  "biblioteca.exchanges.partnerNoSurplus": "The partner shows no document with surplus",
+  "biblioteca.exchanges.loading": "Loading…",
+  "biblioteca.exchanges.messagePlaceholder": "Write or generate the exchange proposal message.",
+  "biblioteca.exchanges.generateMessage": "Generate suggested message",
+  "biblioteca.exchanges.registering": "Registering…",
+  "biblioteca.exchanges.created": "Exchange proposal registered.",
+  "biblioteca.exchanges.needPartner": "Choose a partner library.",
+  "biblioteca.exchanges.partnerSameAsLocal": "The partner library must be different from yours.",
+  "biblioteca.exchanges.needBothDocs": "Choose a local document and a partner document.",
+  "biblioteca.exchanges.needMessage": "Write or generate the proposal message.",
+  "biblioteca.exchanges.suggestedMessage": "Hello, comrades of {partner}. We are writing to open an interlibrary exchange inquiry within the AnarBib network. The proposal is exploratory: it serves to check mutual interest before any commitment. Material we can offer: {localDoc}. Material we would like to receive: {partnerDoc}. If the proposal seems relevant, we can arrange the checking of copies and the logistics between the libraries. Fraternal regards."
 }
