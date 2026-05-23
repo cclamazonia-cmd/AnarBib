@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Catàleg compartit amb la xarxa AnarBib, circulació informal, governança amb rols definits (bibliotecaris-àries-es, coordinació). No participa en el préstec interbibliotecari.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB complet (préstecs, reserves, quotes), participació plena a la xarxa i al préstec interbibliotecari, governança formal amb transicions per vot.",
-  "wizard.profile.template.D.title": "Perfil D — Completa compromesa"
+  "wizard.profile.template.D.title": "Perfil D — Completa compromesa",
+  "biblioteca.exchanges.selectPartnerFirst": "Tria primer la biblioteca associada",
+  "biblioteca.exchanges.selectDoc": "Selecciona un document",
+  "biblioteca.exchanges.noSurplus": "Cap document local amb excedent",
+  "biblioteca.exchanges.partnerNoSurplus": "L’associada no mostra documents amb excedent",
+  "biblioteca.exchanges.loading": "Carregant…",
+  "biblioteca.exchanges.messagePlaceholder": "Escriu o genera el missatge de la proposta d’intercanvi.",
+  "biblioteca.exchanges.generateMessage": "Genera un missatge suggerit",
+  "biblioteca.exchanges.registering": "Registrant…",
+  "biblioteca.exchanges.created": "Proposta d’intercanvi registrada.",
+  "biblioteca.exchanges.needPartner": "Tria una biblioteca associada.",
+  "biblioteca.exchanges.partnerSameAsLocal": "La biblioteca associada ha de ser diferent de la teva.",
+  "biblioteca.exchanges.needBothDocs": "Tria un document local i un document de l’associada.",
+  "biblioteca.exchanges.needMessage": "Escriu o genera el missatge de la proposta.",
+  "biblioteca.exchanges.suggestedMessage": "Hola, companyes i companys de {partner}. Us escrivim per obrir una consulta d’intercanvi interbibliotecari en el marc de la xarxa AnarBib. La proposta és exploratòria: serveix per verificar l’interès mutu abans de qualsevol compromís. Material que podem oferir: {localDoc}. Material que ens agradaria rebre: {partnerDoc}. Si la proposta sembla pertinent, podrem acordar la verificació dels exemplars i la logística entre les biblioteques. Abraçades fraternes."
 }

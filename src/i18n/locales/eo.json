@@ -2745,5 +2745,19 @@
   "wizard.profile.template.C.desc": "Katalogo kunhavigita kun la reto AnarBib, neformala cirkulado, memmastrumado kun difinitaj roloj (bibliotekist-in-oj, kunordigo). Ne partoprenas en la interbiblioteka prunto.",
   "wizard.profile.template.C.title": "Profilo C — Federita observanta",
   "wizard.profile.template.D.desc": "Matura biblioteko: kompleta SIGB (pruntoj, rezervoj, kotizoj), plena partopreno en la reto kaj en la interbiblioteka prunto, formala memmastrumado kun transiroj per voĉdono.",
-  "wizard.profile.template.D.title": "Profilo D — Kompleta engaĝita"
+  "wizard.profile.template.D.title": "Profilo D — Kompleta engaĝita",
+  "biblioteca.exchanges.selectPartnerFirst": "Unue elektu la partneran bibliotekon",
+  "biblioteca.exchanges.selectDoc": "Elektu dokumenton",
+  "biblioteca.exchanges.noSurplus": "Neniu loka dokumento kun pluso",
+  "biblioteca.exchanges.partnerNoSurplus": "La partnero montras neniun dokumenton kun pluso",
+  "biblioteca.exchanges.loading": "Ŝargante…",
+  "biblioteca.exchanges.messagePlaceholder": "Skribu aŭ generu la mesaĝon de la propono de interŝanĝo.",
+  "biblioteca.exchanges.generateMessage": "Generi sugestitan mesaĝon",
+  "biblioteca.exchanges.registering": "Registrante…",
+  "biblioteca.exchanges.created": "Propono de interŝanĝo registrita.",
+  "biblioteca.exchanges.needPartner": "Elektu partneran bibliotekon.",
+  "biblioteca.exchanges.partnerSameAsLocal": "La partnera biblioteko devas esti malsama ol la via.",
+  "biblioteca.exchanges.needBothDocs": "Elektu lokan dokumenton kaj dokumenton de la partnero.",
+  "biblioteca.exchanges.needMessage": "Skribu aŭ generu la mesaĝon de la propono.",
+  "biblioteca.exchanges.suggestedMessage": "Saluton, kamaradoj de {partner}. Ni skribas por malfermi konsulton pri interbiblioteka interŝanĝo en la kadro de la reto AnarBib. La propono estas esplora: ĝi servas por kontroli reciprokan intereson antaŭ ajna devontigo. Materialo kiun ni povas proponi: {localDoc}. Materialo kiun ni ŝatus ricevi: {partnerDoc}. Se la propono ŝajnas trafa, ni povos interkonsenti pri la kontrolo de la ekzempleroj kaj la loĝistiko inter la bibliotekoj. Fratecaj salutoj."
 }
