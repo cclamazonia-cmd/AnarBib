@@ -192,17 +192,43 @@ function buildMailShell({ pretitle, title, subtitle, logoTable, contentHtml }) {
     </div>
   `;
 }
-function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, libraryRequestUrl, locale = "pt-BR" }) {
+// Paquet 6 criar-conta — conversion locale technique (pt-BR, fr, ...) vers le
+// dossier de langue du site de présentation anarbib.org. Équivalent EF du
+// helper galleryUrl() du frontend (src/pages/public/CriarContaPage.jsx) —
+// mapping calqué à l'identique. Seul pt-BR diffère (-> pt). Fallback 'pt'.
+const SITE_LANG_BY_LOCALE = {
+  "pt-BR": "pt", pt: "pt", fr: "fr", es: "es",
+  it: "it", en: "en", de: "de", ca: "ca", eo: "eo",
+};
+function localeToSiteLang(locale) {
+  return SITE_LANG_BY_LOCALE[String(locale || "").trim()] || "pt";
+}
+// Paquet 6 criar-conta — page "projet" du site anarbib.org : le dossier de
+// langue ET le mot lui-même sont traduits (fr/projet, pt/projeto, ...).
+const SITE_PROJECT_SLUG_BY_LOCALE = {
+  "pt-BR": "projeto", pt: "projeto", fr: "projet", es: "proyecto",
+  it: "progetto", en: "project", de: "projekt", ca: "projecte", eo: "projekto",
+};
+function projectUrl(locale) {
+  const lang = localeToSiteLang(locale);
+  const slug = SITE_PROJECT_SLUG_BY_LOCALE[String(locale || "").trim()] || "projeto";
+  return `https://anarbib.org/${lang}/${slug}/`;
+}
+function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR" }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
     libraryName,
     includeLibraryLogo: !isWithoutLibrary
   });
-  // Section "context" : message d'intro adapté au cas (avec ou sans biblio)
-  const contextParagraph = isWithoutLibrary
-    ? buildParagraph(tMail(locale, "welcome.context.initial"))
-    : buildParagraph(tMail(locale, "welcome.context.standard", { libraryName: escapeHtml(libraryName) }));
+  // Section "context" : message d'intro adapté au cas.
+  // isOrphan implique isWithoutLibrary (cf. site d'appel). Si un 4e cas
+  // d'inscription apparaît, refondre ces booléens en énum mailKind.
+  const contextParagraph = isOrphan
+    ? buildParagraph(tMail(locale, "welcome.context.orphan"))
+    : isWithoutLibrary
+      ? buildParagraph(tMail(locale, "welcome.context.initial"))
+      : buildParagraph(tMail(locale, "welcome.context.standard", { libraryName: escapeHtml(libraryName) }));
   const contentHtml = `
     ${buildParagraph(tMail(locale, "welcome.greeting", { firstName: escapeHtml(firstName) }))}
     ${contextParagraph}
@@ -219,12 +245,18 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
     ${buildParagraph(tMail(locale, "welcome.nextAccess"))}
     ${buildParagraph(tMail(locale, "welcome.important"))}
     ${buildParagraph(tMail(locale, "welcome.forgotHint"))}
-    ${isWithoutLibrary && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.intro")) : ""}
-    ${isWithoutLibrary && libraryRequestUrl ? buildActionButton({
+    ${isWithoutLibrary && !isOrphan && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.intro")) : ""}
+    ${isWithoutLibrary && !isOrphan && libraryRequestUrl ? buildActionButton({
       href: libraryRequestUrl,
       label: tMail(locale, "welcome.libraryRequest.cta")
     }) : ""}
-    ${isWithoutLibrary && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.fallback")) : ""}
+    ${isWithoutLibrary && !isOrphan && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.fallback")) : ""}
+    ${isOrphan && galleryUrl ? buildActionButton({
+      href: galleryUrl,
+      label: tMail(locale, "welcome.orphan.exploreCta")
+    }) : ""}
+    ${isOrphan && galleryUrl ? buildParagraph(`${tMail(locale, "welcome.orphan.fallback")}<br>${escapeHtml(galleryUrl)}`) : ""}
+    ${isOrphan && aboutUrl ? buildParagraph(`${tMail(locale, "welcome.orphan.aboutIntro")}<br><a href="${escapeHtml(aboutUrl)}">${escapeHtml(aboutUrl)}</a>`) : ""}
     ${!isWithoutLibrary && postalAddress ? buildParagraph(`<b>${tMail(locale, "welcome.libraryAddressLabel")}</b> ${escapeHtml(postalAddress)}`) : ""}
     ${!isWithoutLibrary && contactEmail ? buildParagraph(`<b>${tMail(locale, "welcome.libraryContactLabel")}</b> ${escapeHtml(contactEmail)}`) : ""}
     <div style="margin-top:18px; padding:14px 16px; border-radius:14px; border:1px solid ${MAIL_BRAND.colors.borderLight}; background:${MAIL_BRAND.colors.surfaceAlt}; color:${MAIL_BRAND.colors.mutedOnLight}; font-size:13px; line-height:1.6;">
@@ -232,15 +264,20 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
     </div>
   `;
   return buildMailShell({
-    pretitle: isWithoutLibrary ? tMail(locale, "welcome.pretitle.initial") : tMail(locale, "welcome.pretitle"),
+    pretitle: isOrphan
+      ? tMail(locale, "welcome.pretitle.orphan")
+      : isWithoutLibrary ? tMail(locale, "welcome.pretitle.initial") : tMail(locale, "welcome.pretitle"),
     // Paquet 25.11 — Pour le cas signup_without_library, on utilise un titre
     // SANS placeholder libraryName : "Bienvenue dans le réseau AnarBib" plutot
     // que "Bienvenue à la AnarBib" qui est grammaticalement faux dans plusieurs
     // langues (preposition+article fusionnes attendus avec un nom feminin
     // de bibliotheque, pas avec "AnarBib").
-    title: isWithoutLibrary
-      ? tMail(locale, "welcome.title.initial")
-      : tMail(locale, "welcome.title", { libraryName }),
+    // Paquet 6 — reader_orphan a son propre titre welcome.title.orphan.
+    title: isOrphan
+      ? tMail(locale, "welcome.title.orphan")
+      : isWithoutLibrary
+        ? tMail(locale, "welcome.title.initial")
+        : tMail(locale, "welcome.title", { libraryName }),
     subtitle: tMail(locale, "welcome.subtitle"),
     logoTable,
     contentHtml
@@ -905,6 +942,10 @@ serve(async (req)=>{
     // existant : zéro nouvelle clé i18n, zéro jetable. Un mail
     // welcome-reader-orphan dédié est prévu au Paquet 6.
     const mailIsWithoutLibrary = signupIntent !== "reader_pending";
+    // Paquet 6 criar-conta — reader_orphan a désormais son registre i18n
+    // dédié (welcome.*.orphan) et son bloc CTA galerie. mailIsOrphan
+    // implique toujours mailIsWithoutLibrary (cf. les 3 cas ci-dessus).
+    const mailIsOrphan = signupIntent === "reader_orphan";
     const displayName = firstNonEmptyString(libraryMeta?.display_name, libraryRow?.name, requestedLibraryName, mailIsWithoutLibrary ? "AnarBib" : effectiveLibrarySlug);
     const contactEmail = normalizeEmail(libraryMeta?.contact_email);
     const postalAddress = String(libraryMeta?.postal_address || "").trim();
@@ -943,7 +984,10 @@ serve(async (req)=>{
       anarbibLogoUrl,
       libraryLogoUrl,
       isWithoutLibrary: mailIsWithoutLibrary,
+      isOrphan: mailIsOrphan,
       libraryRequestUrl: libraryRequestClaimUrl,
+      galleryUrl: mailIsOrphan ? `https://anarbib.org/${localeToSiteLang(userLocale)}/explorar/` : "",
+      aboutUrl: mailIsOrphan ? projectUrl(userLocale) : "",
       locale: userLocale
     });
     // ── Paquet 2 — libellés internes selon le cas ──────────────────────────
@@ -1015,9 +1059,11 @@ serve(async (req)=>{
           email: replyToEmail,
           name: senderDisplayName
         },
-        subject: mailIsWithoutLibrary
-          ? tMail(userLocale, "welcome.subject.initial", { displayName })
-          : tMail(userLocale, "welcome.subject", { displayName }),
+        subject: mailIsOrphan
+          ? tMail(userLocale, "welcome.subject.orphan")
+          : mailIsWithoutLibrary
+            ? tMail(userLocale, "welcome.subject.initial", { displayName })
+            : tMail(userLocale, "welcome.subject", { displayName }),
         htmlContent: userMailHtml
       }
     });

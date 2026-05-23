@@ -2152,6 +2152,77 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Missatge automàtic de la inscripció AnarBib. Les respostes a aquest correu es transmeten a la gestió del projecte.",
     eo: "Aŭtomata mesaĝo de la registriĝo AnarBib. La respondoj al ĉi tiu retpoŝto estas plusenditaj al la projektmastrumado."
   },
+  // ===== Paquet 6 criar-conta — mail welcome-reader-orphan (welcome.*.orphan) =
+  "welcome.pretitle.orphan": {
+    "pt-BR": "Conta criada",
+    fr: "Compte créé",
+    es: "Cuenta creada",
+    en: "Account created",
+    it: "Account creato",
+    de: "Konto erstellt",
+    ca: "Compte creat",
+    eo: "Konto kreita"
+  },
+  "welcome.title.orphan": {
+    "pt-BR": "Bem-vind-a-e ao AnarBib",
+    fr: "Bienvenue dans le réseau AnarBib",
+    es: "Bienvenide a la red AnarBib",
+    en: "Welcome to the AnarBib network",
+    it: "Benvenut* nella rete AnarBib",
+    de: "Willkommen im AnarBib-Netzwerk",
+    ca: "Benvingut-da-e a la xarxa AnarBib",
+    eo: "Bonvenon en la reton AnarBib"
+  },
+  "welcome.subject.orphan": {
+    "pt-BR": "Sua conta no AnarBib foi criada",
+    fr: "Ton compte AnarBib a été créé",
+    es: "Tu cuenta de AnarBib fue creada",
+    en: "Your AnarBib account has been created",
+    it: "Il tuo account AnarBib è stato creato",
+    de: "Dein AnarBib-Konto wurde erstellt",
+    ca: "El teu compte d'AnarBib s'ha creat",
+    eo: "Via konto ĉe AnarBib estis kreita"
+  },
+  "welcome.context.orphan": {
+    "pt-BR": "Sua conta foi criada. Como você nos indicou, sua biblioteca ainda não está na rede AnarBib. Fale do AnarBib com a equipe da sua biblioteca: se essa decidir aderir, você poderá ser integrad-a-e como leitor-a-e com a mesma conta que acaba de criar. Enquanto isso, você pode explorar livremente os catálogos das bibliotecas que escolheram torná-los públicos.",
+    fr: "Ton compte a été créé. Comme tu nous l'as indiqué, ta bibliothèque n'est pas encore dans le réseau AnarBib. Parle d'AnarBib à l'équipe de ta bibliothèque : si elle décide d'adhérer, tu pourras y être intégré·e comme lecteur·rice avec le compte que tu viens de créer. En attendant, tu peux explorer librement les catalogues des bibliothèques qui ont choisi de les rendre publics.",
+    es: "Tu cuenta fue creada. Como nos indicaste, tu biblioteca todavía no está en la red AnarBib. Hablá de AnarBib con el equipo de tu biblioteca: si este decide sumarse, vas a poder ser integrade como lectore con la misma cuenta que acabás de crear. Mientras tanto, podés explorar libremente los catálogos de las bibliotecas que eligieron hacerlos públicos.",
+    en: "Your account has been created. As you told us, your library is not yet part of the AnarBib network. Talk about AnarBib with your library's team: if it decides to join, you'll be able to be added as a reader with the same account you've just created. In the meantime, you can freely explore the catalogues of the libraries that have chosen to make them public.",
+    it: "Il tuo account è stato creato. Come ci hai indicato, la tua biblioteca non fa ancora parte della rete AnarBib. Parla di AnarBib con l'équipe della tua biblioteca: se questa decide di aderire, potrai essere integrat* come lettore* con lo stesso account che hai appena creato. Nel frattempo, puoi esplorare liberamente i cataloghi delle biblioteche che hanno scelto di renderli pubblici.",
+    de: "Dein Konto wurde erstellt. Wie du uns mitgeteilt hast, gehört deine Bibliothek noch nicht zum AnarBib-Netzwerk. Sprich mit dem Team deiner Bibliothek über AnarBib: wenn es sich entscheidet beizutreten, kannst du als Leser*in mit demselben Konto, das du gerade erstellt hast, aufgenommen werden. In der Zwischenzeit kannst du die Kataloge der Bibliotheken, die sie öffentlich gemacht haben, frei durchstöbern.",
+    ca: "El teu compte s'ha creat. Tal com ens vas indicar, la teva biblioteca encara no forma part de la xarxa AnarBib. Parla d'AnarBib amb l'equip de la teva biblioteca: si aquest decideix adherir-s'hi, podràs ser integrat-da-e com a lector-a-e amb el mateix compte que acabes de crear. Mentrestant, pots explorar lliurement els catàlegs de les biblioteques que han decidit fer-los públics.",
+    eo: "Via konto estis kreita. Kiel vi indikis al ni, via biblioteko ankoraŭ ne apartenas al la reto AnarBib. Parolu pri AnarBib kun la teamo de via biblioteko: se ĝi decidas aliĝi, vi povos esti integrit-in-e kiel legant-in-e per la sama konto kiun vi ĵus kreis. Dume, vi povas libere esplori la katalogojn de la bibliotekoj kiuj elektis publikigi ilin."
+  },
+  "welcome.orphan.exploreCta": {
+    "pt-BR": "→ Explorar os catálogos",
+    fr: "→ Explorer les catalogues",
+    es: "→ Explorar los catálogos",
+    en: "→ Explore the catalogues",
+    it: "→ Esplora i cataloghi",
+    de: "→ Kataloge durchstöbern",
+    ca: "→ Explorar els catàlegs",
+    eo: "→ Esplori la katalogojn"
+  },
+  "welcome.orphan.aboutIntro": {
+    "pt-BR": "Para saber mais sobre o projeto AnarBib e como sua biblioteca pode aderir, acesse:",
+    fr: "Pour en savoir plus sur le projet AnarBib et comment ta bibliothèque peut adhérer, rends-toi sur :",
+    es: "Para saber más sobre el proyecto AnarBib y cómo tu biblioteca puede sumarse, entrá en:",
+    en: "To learn more about the AnarBib project and how your library can join, go to:",
+    it: "Per saperne di più sul progetto AnarBib e su come la tua biblioteca può aderire, vai su:",
+    de: "Um mehr über das AnarBib-Projekt zu erfahren und wie deine Bibliothek beitreten kann, geh auf:",
+    ca: "Per saber-ne més sobre el projecte AnarBib i com pot adherir-s'hi la teva biblioteca, vés a:",
+    eo: "Por scii pli pri la projekto AnarBib kaj kiel via biblioteko povas aliĝi, iru al:"
+  },
+  "welcome.orphan.fallback": {
+    "pt-BR": "Se o botão não funcionar, copie este endereço no seu navegador:",
+    fr: "Si le bouton ne fonctionne pas, copie cette adresse dans ton navigateur :",
+    es: "Si el botón no funciona, copiá esta dirección en tu navegador:",
+    en: "If the button doesn't work, copy this address into your browser:",
+    it: "Se il pulsante non funziona, copia questo indirizzo nel tuo browser:",
+    de: "Wenn der Button nicht funktioniert, kopiere diese Adresse in deinen Browser:",
+    ca: "Si el botó no funciona, copia aquesta adreça al teu navegador:",
+    eo: "Se la butono ne funkcias, kopiu ĉi tiun adreson en vian retumilon:"
+  },
 
 // ============================================================================
 // Paquet E.1 — Bloc i18n à insérer dans mail-strings.ts
