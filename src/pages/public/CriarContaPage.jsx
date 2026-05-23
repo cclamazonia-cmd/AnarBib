@@ -44,6 +44,9 @@ export default function CriarContaPage() {
   const [currentLib, setCurrentLib] = useState(null);
   const [form, setForm] = useState({
     library_slug: '', first_name: '', last_name: '', email: '',
+    // Nom de bibliothèque mentionné par une lectrice orpheline (cas
+    // __orphan__). Optionnel, plafonné à 200 car. Vide pour les autres cas.
+    orphan_library_name: '',
     // phone est désormais au format E.164 ('+5511999999999')
     phone: '',
     gender: '', addr1: '', addr2: '', unit: '', cep: '', bairro: '',
@@ -86,21 +89,28 @@ export default function CriarContaPage() {
 
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); }
   function handleLibChange(slug) {
-    // Paquet 25.7bis : avant, choisir "sans bibliothèque" (__solicitar__)
-    // redirigeait immédiatement vers /solicitar-biblioteca, empêchant ainsi
-    // l'usager de compléter son inscription. Désormais on memorise le choix
-    // dans library_slug = '__solicitar__' (valeur sentinelle visible dans
-    // le select) et le formulaire continue normalement. À la soumission,
-    // signup_without_library est calculé via noLib = (slug === '__solicitar__').
-    // register/index.ts genere un claim token et envoie un mail avec le CTA
-    // /solicitar-biblioteca?claim=<token>.
-    if (slug === '__solicitar__') {
-      set('library_slug', '__solicitar__');
-      set('acceptRules', true); // pas de regimento bibliotheque a accepter
+    // Paquet 4 — 3 cas explicites (spec criar-conta v0.3 §3.1) :
+    //  - un vrai slug      → reader_pending (lectrice d'une biblio du réseau)
+    //  - '__orphan__'      → reader_orphan (biblio pas encore sur AnarBib)
+    //  - '__new_library__' → collective_candidate (ouvrir une nouvelle biblio)
+    // La sentinelle est mémorisée dans library_slug et le formulaire continue
+    // normalement ; le signup_intent est dérivé à la soumission.
+    if (slug === '__orphan__' || slug === '__new_library__') {
+      set('library_slug', slug);
+      set('acceptRules', true); // pas de regimento de biblio à accepter
       setCurrentLib(null);
       return;
     }
-    set('library_slug', slug); set('acceptRules', false); setCurrentLib(libraries.find(l => l.slug === slug) || null);
+    set('library_slug', slug);
+    set('acceptRules', false);
+    setCurrentLib(libraries.find(l => l.slug === slug) || null);
+  }
+  // Paquet 4 — dérive le signup_intent envoyé à l'EF register depuis la
+  // valeur du select. Trois cas, miroir de handleLibChange.
+  function deriveSignupIntent(slug) {
+    if (slug === '__orphan__') return 'reader_orphan';
+    if (slug === '__new_library__') return 'collective_candidate';
+    return 'reader_pending';
   }
   function libLogo(lib) {
     if (!lib?.slug) return null;
@@ -127,6 +137,12 @@ export default function CriarContaPage() {
       setMsg({ text: t({id:'auth.create.fillRequired'}), kind: 'error' });
       return;
     }
+    // Paquet 4 — le select de bibliothèque est obligatoire : l'usager·ère
+    // doit choisir un des 3 cas (biblio du réseau, orpheline, ou nouvelle).
+    if (!form.library_slug) {
+      setMsg({ text: t({id:'auth.create.selectLibraryRequired'}), kind: 'error' });
+      return;
+    }
     // Validation E.164 du numéro de téléphone
     if (!isValidPhoneNumber(form.phone)) {
       setMsg({ text: t({id:'address.phone.invalid'}), kind: 'error' });
@@ -137,11 +153,10 @@ export default function CriarContaPage() {
 
     setLoading(true); setMsg({ text: '', kind: '' }); setPublicId('');
     try {
-      // noLib = true si l'usager a explicitement choisi "sans bibliothèque"
-      // (library_slug = '__solicitar__'). Si library_slug est vide ('') il
-      // n'a juste rien sélectionné — ne devrait pas arriver car le select
-      // est required, mais on traite le cas par sécurité.
-      const noLib = !form.library_slug || form.library_slug === '__solicitar__';
+      // Paquet 4 — signup_intent dérivé du select (3 cas), remplace
+      // l'ancien booléen signup_without_library.
+      const signupIntent = deriveSignupIntent(form.library_slug);
+      const isReaderPending = signupIntent === 'reader_pending';
 
       // L'Edge Function `register` (cf. supabase/functions/register/index.ts)
       // attend les champs structurés séparément et reconstruit le format
@@ -173,9 +188,14 @@ export default function CriarContaPage() {
         consent_email: true,
         consent_email_at: new Date().toISOString(),
         accept_rules: currentLib?.has_regimento ? form.acceptRules : true,
-        library_slug: noLib ? '' : form.library_slug,
+        library_slug: isReaderPending ? form.library_slug : '',
         library_name: currentLib?.name || '',
-        signup_without_library: noLib,
+        signup_intent: signupIntent,
+        // Paquet 4 — nom de biblio mentionné par une lectrice orpheline
+        // (optionnel). Trim ; l'EF re-tronque à 200. Vide pour les autres cas.
+        orphan_library_name_mentioned: signupIntent === 'reader_orphan'
+          ? form.orphan_library_name.trim()
+          : '',
         anarbib_logo_url: ANARBIB_LOGO,
         preferred_login_identifier: 'public_id',
         // Locale du navigateur (paquet 25.4) : permet au mail de bienvenue d'arriver
@@ -196,14 +216,21 @@ export default function CriarContaPage() {
       }
       if (data?.public_id) setPublicId(data.public_id);
 
-      // Messages de succès
-      const okMsgKey = data?.email_usuaria_enviado === false
-        ? (noLib ? 'auth.create.successNoLibEmailFailed' : 'auth.create.successEmailFailed')
-        : (noLib ? 'auth.create.successNoLib'           : 'auth.create.success');
-      setMsg({
-        text: t({id: okMsgKey}),
-        kind: data?.email_usuaria_enviado === false ? 'warn' : 'ok'
-      });
+      // Paquet 4 — message de succès selon le cas (3 variantes). En cas
+      // d'échec d'envoi du mail : un seul message commun (le souci technique
+      // est le même quel que soit le cas).
+      const emailFailed = data?.email_usuaria_enviado === false;
+      let okMsgKey;
+      if (emailFailed) {
+        okMsgKey = 'auth.create.successEmailFailed';
+      } else if (signupIntent === 'reader_orphan') {
+        okMsgKey = 'auth.create.successOrphan';
+      } else if (signupIntent === 'collective_candidate') {
+        okMsgKey = 'auth.create.successNewLibrary';
+      } else {
+        okMsgKey = 'auth.create.success';
+      }
+      setMsg({ text: t({id: okMsgKey}), kind: emailFailed ? 'warn' : 'ok' });
     } catch {
       setMsg({ text: t({id:'auth.networkError'}), kind: 'error' });
     } finally {
@@ -249,28 +276,56 @@ export default function CriarContaPage() {
         {/* Sélection de bibliothèque */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 16 }}>
           <label style={ls}>{t({id:'auth.create.selectLibrary'})} {req}</label>
-          <select value={form.library_slug} onChange={e => handleLibChange(e.target.value)} style={fs}>
+          <select value={form.library_slug} onChange={e => handleLibChange(e.target.value)} required style={fs}>
             <option value="">{t({id:'auth.create.selectPh'})}</option>
-            {libraries.map(l => (
-              <option key={l.slug} value={l.slug}>
-                {l.short_name ? `${l.short_name} — ` : ''}
-                {l.name}
-                {l.city ? ` (${l.city})` : ''}
-              </option>
-            ))}
-            <option value="__solicitar__">{t({id:'auth.create.noLibrary'})}</option>
+            <optgroup label={t({id:'auth.create.intent.groupLibraries'})}>
+              {libraries.map(l => (
+                <option key={l.slug} value={l.slug}>
+                  {l.short_name ? `${l.short_name} — ` : ''}
+                  {l.name}
+                  {l.city ? ` (${l.city})` : ''}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label={t({id:'auth.create.intent.groupOtherCases'})}>
+              <option value="__orphan__">{t({id:'auth.create.intent.optionOrphan'})}</option>
+              <option value="__new_library__">{t({id:'auth.create.intent.optionNewLibrary'})}</option>
+            </optgroup>
           </select>
           <div style={hs}>{t({id:'auth.create.libraryHint'})}</div>
         </div>
 
-        {/* Encadré informatif "sans biblio" (paquet 25.7bis option B) */}
-        {form.library_slug === '__solicitar__' && (
+        {/* Paquet 4 — Cas « lectrice orpheline » : biblio pas encore sur AnarBib.
+            Encadré informatif + champ optionnel pour mentionner le nom de la
+            bibliothèque (signal d'essaimage pour la coordination). */}
+        {form.library_slug === '__orphan__' && (
+          <div style={{ padding: 14, borderRadius: 10, background: 'rgba(29,78,216,.08)', border: '1px solid rgba(29,78,216,.25)', marginBottom: 16 }}>
+            <strong style={{ fontSize: '.92rem', display: 'block', marginBottom: 6 }}>
+              {t({id:'auth.create.intent.orphan.title'})}
+            </strong>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6, marginBottom: 10 }}>
+              {t({id:'auth.create.intent.orphan.body'})}
+            </div>
+            <label style={ls}>{t({id:'auth.create.intent.orphan.libNameLabel'})}</label>
+            <input
+              type="text"
+              value={form.orphan_library_name}
+              onChange={e => set('orphan_library_name', e.target.value)}
+              maxLength={200}
+              style={fs}
+            />
+            <div style={hs}>{t({id:'auth.create.intent.orphan.libNameHint'})}</div>
+          </div>
+        )}
+
+        {/* Paquet 4 — Cas « candidate à l'ouverture d'une nouvelle biblio ». */}
+        {form.library_slug === '__new_library__' && (
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(180,83,9,.08)', border: '1px solid rgba(180,83,9,.25)', marginBottom: 16 }}>
             <strong style={{ fontSize: '.92rem', display: 'block', marginBottom: 6 }}>
-              {t({id:'auth.create.noLibInfo.title'})}
+              {t({id:'auth.create.intent.newLibrary.title'})}
             </strong>
             <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
-              {t({id:'auth.create.noLibInfo.body'})}
+              {t({id:'auth.create.intent.newLibrary.body'})}
             </div>
           </div>
         )}
