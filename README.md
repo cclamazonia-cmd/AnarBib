@@ -20,7 +20,7 @@ The application is **in production** and used by the Biblioteca Libertária Maxw
 
 ## Sommaire / Table of contents
 
-* [État au 17 mai 2026 / State as of 17 May 2026](#état-au-17-mai-2026--state-as-of-17-may-2026)
+* [État au 23 mai 2026 / State as of 23 May 2026](#état-au-23-mai-2026--state-as-of-23-may-2026)
 * [Démarrage rapide / Quick start](#démarrage-rapide--quick-start)
 * [Architecture](#architecture)
 * [Configuration](#configuration)
@@ -38,9 +38,9 @@ The application is **in production** and used by the Biblioteca Libertária Maxw
 
 ---
 
-## État au 17 mai 2026 / State as of 17 May 2026
+## État au 23 mai 2026 / State as of 23 May 2026
 
-### État au 17 mai 2026 *(FR)*
+### État au 23 mai 2026 *(FR)*
 
 **Chantiers structurants livrés (mai 2026)** :
 
@@ -50,13 +50,16 @@ The application is **in production** and used by the Biblioteca Libertária Maxw
 * **Hardening notifications consultations (#141)** — 7 bugs résolus en prod : mojibake, ordre des UPDATE narrative-avant-état, distinction `workflow_note` / `schedule_reply_note`, motifs propagés, interpolation des titres.
 * **Linter Supabase** — 270 alertes → 184, 18 ERRORs → 0 (1 maintenue volontairement et documentée). 11 paquets de migration L.1 à L.11.
 
-**Chantier en cours** : **Profils d'adoption (#98)** — 7 paquets A à G permettant à chaque bibliothèque de se positionner sur 4 axes politiques orthogonaux (`catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`). Spec : `docs/specs/spec-profils-bibliotheque.md` v0.3 (934 lignes).
+**Chantier livré** : **Profils d'adoption (#98)** — 7 paquets A à G permettant à chaque bibliothèque de se positionner sur 4 axes politiques orthogonaux (`catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`). Spec : `docs/specs/spec-profils-bibliotheque.md` v0.3 (934 lignes). Workflow complet en production : infrastructure DB, transitions de profils avec propositions collectives, vote, exécution, annulation et expiration automatique (jobs pg_cron).
 
-* Paquet A (infrastructure DB dormante) : ✅ livré
-* Paquet B (transitions de profils — 6 sous-paquets) : **4/6 livrés** (B.1 tables d'audit, B.2 helpers de classification, B.3 RPC métier, B.4 jobs pg_cron). Reste B.5 (handler EF) et B.6 (i18n).
-* Paquets C à G : à venir
+**Chantier en cours** : **Onboarding criar-conta (#K1)** — refonte du parcours d'inscription pour distinguer trois cas à l'inscription (lectrice d'une bibliothèque du réseau, lectrice d'une bibliothèque pas encore sur AnarBib, candidate à l'ouverture d'une nouvelle bibliothèque). Spec : `docs/specs/spec-onboarding-criar-conta.md` v0.3.
 
-### State as of 17 May 2026 *(EN)*
+* Paquet 1 (migration DB `profiles.signup_intent`) : ✅ livré
+* Paquet 2 (refonte de l'Edge Function `register`, énum `signup_intent` à 3 cas) : ✅ livré et testé en production
+* Paquets 4 et 5 (refonte du `<select>` à 3 cas dans `CriarContaPage.jsx` + i18n des 8 locales) : ✅ livrés
+* Paquets 6 à 8 (mail dédié `welcome-reader-orphan`, exposition `/conta`, tests E2E) : à venir
+
+### State as of 23 May 2026 *(EN)*
 
 **Structural work delivered (May 2026)**:
 
@@ -66,11 +69,14 @@ The application is **in production** and used by the Biblioteca Libertária Maxw
 * **Consultation notifications hardening (#141)** — 7 bugs resolved in production: mojibake, narrative-before-state UPDATE order, `workflow_note` / `schedule_reply_note` distinction, motive propagation, title interpolation.
 * **Supabase linter** — 270 alerts → 184, 18 ERRORs → 0 (1 kept deliberately and documented). 11 migration packages L.1 to L.11.
 
-**Work in progress**: **Adoption profiles (#98)** — 7 packages A to G allowing each library to position itself on 4 orthogonal political axes (`catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`). Spec: `docs/specs/spec-profils-bibliotheque.md` v0.3 (934 lines).
+**Delivered work**: **Adoption profiles (#98)** — 7 packages A to G allowing each library to position itself on 4 orthogonal political axes (`catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`). Spec: `docs/specs/spec-profils-bibliotheque.md` v0.3 (934 lines). Full workflow in production: DB infrastructure, profile transitions with collective proposals, voting, execution, cancellation and automatic expiry (pg_cron jobs).
 
-* Package A (dormant DB infrastructure): ✅ delivered
-* Package B (profile transitions — 6 sub-packages): **4/6 delivered** (B.1 audit tables, B.2 classification helpers, B.3 business RPCs, B.4 pg_cron jobs). Remaining: B.5 (EF handler) and B.6 (i18n).
-* Packages C to G: upcoming
+**Work in progress**: **criar-conta onboarding (#K1)** — rework of the sign-up flow to distinguish three cases at registration (reader of a network library, reader of a library not yet on AnarBib, candidate to open a new library). Spec: `docs/specs/spec-onboarding-criar-conta.md` v0.3.
+
+* Package 1 (DB migration `profiles.signup_intent`): ✅ delivered
+* Package 2 (rework of the `register` Edge Function, 3-case `signup_intent` enum): ✅ delivered and tested in production
+* Packages 4 and 5 (3-case `<select>` rework in `CriarContaPage.jsx` + i18n across the 8 locales): ✅ delivered
+* Packages 6 to 8 (dedicated `welcome-reader-orphan` mail, `/conta` exposure, E2E tests): upcoming
 
 ---
 
