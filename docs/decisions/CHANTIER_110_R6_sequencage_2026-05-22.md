@@ -3,7 +3,7 @@
 **Document de décision**
 **Date de rédaction** : 22/05/2026
 **Auteur·rices** : Xavier (décision), Claude (rédaction technique)
-**Statut** : plan préparatoire — exécution planifiée au **05/06/2026**, non exécuté à ce jour
+**Statut** : plan préparatoire — exécution planifiée au **05/06/2026**, non exécuté à ce jour. Mis à jour le 23/05/2026 : intégration du résultat de la vérification de couture sender (cf. §R.6.3).
 **Référence** : `docs/specs/spec-migration-mail-resend.md` v0.3, §5.7 (R.6) et §8.3 (critères de clôture)
 
 ---
@@ -87,11 +87,18 @@ Soit huit transports. À confirmer le jour J par un `grep -rn "sendViaBrevo" sup
 
 ### R.6.3 — Nettoyage des variantes historiques de sender
 
-**Périmètre.** Les variables d'environnement de sender conservées en fallback, devenues inutiles une fois Brevo retiré. Candidates : `ANARBIB_SENDER_EMAIL`, `NETWORK_SENDER_EMAIL`, `BREVO_SENDER_MAIL` (ou graphies voisines), et toute variante repérée lors de la vérification de couture sender (cf. tâche du 23/05, à rapprocher de #119).
+**Périmètre.** Les variables d'environnement de sender conservées en fallback, devenues inutiles une fois Brevo retiré.
 
-**Préalable.** Cette étape dépend de la vérification de couture sender prévue le 23/05 : c'est elle qui établira la **liste exhaustive** des variantes existantes et de celles que le code lit encore. R.6.3 ne peut être finalisée qu'avec cette liste en main. Tant qu'une variante est lue par un transport comme fallback, ne pas la supprimer sans avoir vérifié que `SENDER_EMAIL` (la variable canonique, alignée) couvre le cas.
+**Résultat de la vérification de couture sender (23/05/2026).** Cette vérification, prévue par la première rédaction de ce document, a été menée le 23/05. Elle a croisé les variables de sender lues par le code (`grep` sur `supabase/functions/`) avec leur valeur réelle côté Supabase (digest SHA-256). Conclusions :
 
-**Prudence.** `ANARBIB_SENDER_EMAIL` et `NETWORK_SENDER_EMAIL` ont été *alignées* (et non supprimées) en R.4 — elles pointent désormais sur `no-reply@notifications.anarbib.org`. Les supprimer est de l'hygiène, pas une urgence ; le faire seulement si la vérification du 23/05 confirme qu'aucune EF n'en dépend de façon non couverte par `SENDER_EMAIL`.
+- Cinq variables d'adresse de sender sont lues par le code : `SENDER_EMAIL`, `ANARBIB_SENDER_EMAIL`, `NETWORK_SENDER_EMAIL`, `BREVO_SENDER_EMAIL`, `BREVO_SENDER_MAIL`.
+- **`SENDER_EMAIL`, `ANARBIB_SENDER_EMAIL`, `NETWORK_SENDER_EMAIL` sont toutes alignées** sur `no-reply@notifications.anarbib.org` (digest `ff24e18a…`). `SENDER_EMAIL` est en tête de toutes les chaînes de fallback : la couture est donc **fonctionnellement saine**, aucun correctif `secrets set` n'est requis.
+- **`BREVO_SENDER_EMAIL`** porte encore une ancienne valeur (digest `da61d930…`, non aligné). Elle n'est lue qu'en **3ᵉ position** de la chaîne de `notify-document-permission-request` (`SENDER_EMAIL || ANARBIB_SENDER_EMAIL || BREVO_SENDER_EMAIL`) : `SENDER_EMAIL` étant bon, ce fallback n'est jamais atteint. Cette mauvaise valeur est donc **inerte** — pas de bug actif. `BREVO_SENDER_EMAIL` est un secret Brevo : sa suppression est **déjà prévue en R.6.2** (il figure dans la liste des 7 secrets Brevo). Rien à ajouter.
+- **`BREVO_SENDER_MAIL`** (graphie `_MAIL`, pas `_EMAIL`) : ce secret **n'existe pas** côté Supabase. Le code qui le lit (`notify-internal-task/_shared/core/env.ts`, `notify-mid-loan-reading/index.ts`, `_shared/core/env.ts`) reçoit donc `undefined` et passe au fallback suivant — sans danger. C'est vraisemblablement une **coquille** dans le code (`_MAIL` pour `_EMAIL`). Aucune action dédiée nécessaire : ces lignes de fallback Brevo seront **retirées par R.6.1**. Point de vigilance pour R.6.1 : en retirant le code Brevo de ces fichiers, on rencontrera `BREVO_SENDER_MAIL` — c'est cette coquille connue, elle part avec le reste.
+
+**Conclusion pour R.6.3.** La vérification ne révèle **aucune variante active mal alignée** et **aucune surprise**. R.6.3 se réduit donc à : confirmer que `BREVO_SENDER_EMAIL` a bien été supprimée en R.6.2 (c'est le cas si R.6.2 a suivi sa liste), et constater que `BREVO_SENDER_MAIL` a disparu du code via R.6.1. Aucune suppression de secret supplémentaire au titre de R.6.3.
+
+**Prudence — variantes alignées conservées.** `ANARBIB_SENDER_EMAIL` et `NETWORK_SENDER_EMAIL` ont été *alignées* (et non supprimées) en R.4 ; elles pointent sur `no-reply@notifications.anarbib.org` et restent lues par plusieurs EF comme fallback de `SENDER_EMAIL`. **Ne pas les supprimer** : elles ne sont pas des variables Brevo, elles servent encore de filet de fallback derrière `SENDER_EMAIL`, et leur valeur est correcte. Leur éventuelle rationalisation (réduire le nombre de variantes de sender) relève de l'hygiène R.7, pas de R.6.
 
 ### R.6.4 — Décision sur le compte Brevo
 
@@ -115,7 +122,7 @@ Note : 8.3.3 et 8.3.6 sont des critères **documentaires** — ils peuvent deman
 2. **R.6.1** — retirer `sendViaBrevo` des 8 transports, un par un ; build + déploiement ; re-test runtime. *(réversible)*
 3. Vérifier la stabilité 24-48 h si possible, ou au minimum re-tester chaque famille.
 4. **R.6.2** — supprimer les secrets Brevo, après `grep` confirmant l'absence de lecture. *(point de non-retour)*
-5. **R.6.3** — nettoyer les variantes de sender, selon la liste établie le 23/05.
+5. **R.6.3** — vérifier que `BREVO_SENDER_EMAIL` a été supprimée en R.6.2 et que `BREVO_SENDER_MAIL` a disparu du code via R.6.1 ; aucune suppression de secret supplémentaire (cf. vérification du 23/05).
 6. **R.6.4** — acter le standby du compte Brevo, noter l'échéance de fermeture.
 7. Mettre à jour les documents : registre RGPD, manuel admin réseau, fiche #110 du backlog (clôture de #110), spec v0.3 (bilan R.6).
 
