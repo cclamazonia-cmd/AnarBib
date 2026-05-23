@@ -538,6 +538,39 @@ serve(async (req)=>{
     const acceptRules = body?.accept_rules === true;
     const librarySlug = normalizeSlug(body?.library_slug);
     const signupWithoutLibrary = body?.signup_without_library === true;
+    // ── Paquet 2 — signup_intent (spec criar-conta v0.3 §4.2) ──────────────
+    // Le frontend (Paquet 4) enverra signup_intent explicitement. Tant que
+    // le Paquet 4 n'est pas livré, le frontend envoie encore l'ancien booléen
+    // signup_without_library : on dérive alors signup_intent depuis lui.
+    // FALLBACK À RETIRER après livraison du Paquet 4.
+    const VALID_SIGNUP_INTENTS = new Set([
+      "reader_pending",
+      "reader_orphan",
+      "collective_candidate"
+    ]);
+    const rawSignupIntent = String(body?.signup_intent || "").trim();
+    let signupIntent: string;
+    if (rawSignupIntent) {
+      if (!VALID_SIGNUP_INTENTS.has(rawSignupIntent)) {
+        return json({
+          error: "INVALID_SIGNUP_INTENT"
+        }, 400);
+      }
+      signupIntent = rawSignupIntent;
+    } else {
+      // Fallback rétrocompat : ancien frontend, dérivation depuis le booléen.
+      // signup_without_library=true  → collective_candidate (crée un claim)
+      // signup_without_library=false → reader_pending       (crée un membership)
+      // reader_orphan n'est PAS atteignable par ce chemin : il requiert le
+      // nouveau select à 3 cas du Paquet 4.
+      signupIntent = signupWithoutLibrary ? "collective_candidate" : "reader_pending";
+    }
+    // Nom de bibliothèque mentionné par une lectrice orpheline (optionnel).
+    // Spec §4.2.3 : longueur max 200. Échappement XSS reporté au point d'usage
+    // (construction HTML du mail interne — escapeHtml).
+    const orphanLibraryNameMentioned = String(body?.orphan_library_name_mentioned || "")
+      .trim()
+      .slice(0, 200);
     const requestedLibraryName = String(body?.library_name || "").trim();
     const requestedLibraryContactEmail = normalizeEmail(body?.library_contact_email);
     const requestedLibraryReplyToEmail = normalizeEmail(body?.library_reply_to_email);
@@ -556,16 +589,31 @@ serve(async (req)=>{
         error: "MISSING_REQUIRED_FIELDS"
       }, 400);
     }
-    if (!consentEmail || !signupWithoutLibrary && !acceptRules) {
+    // CONSENT : acceptation des règles requise sauf pour les cas sans biblio
+    // à rejoindre (collective_candidate et reader_orphan ne rejoignent pas
+    // une biblio existante). Pendant exact de l'ancien !signupWithoutLibrary.
+    if (!consentEmail || (signupIntent === "reader_pending" && !acceptRules)) {
       return json({
         error: "CONSENT_REQUIRED"
       }, 400);
     }
-    if (!signupWithoutLibrary && !librarySlug) {
-      return json({
-        error: "LIBRARY_REQUIRED"
-      }, 400);
+    // ── Paquet 2 — garde-fous par cas (spec criar-conta v0.3 §4.2.3) ───────
+    if (signupIntent === "reader_pending") {
+      // Lectrice d'une biblio déjà sur AnarBib : library_slug obligatoire.
+      if (!librarySlug) {
+        return json({
+          error: "LIBRARY_REQUIRED"
+        }, 400);
+      }
+    } else if (signupIntent === "collective_candidate") {
+      // Candidature à l'ouverture d'une biblio : library_slug interdit.
+      if (librarySlug) {
+        return json({
+          error: "LIBRARY_SLUG_NOT_ALLOWED"
+        }, 400);
+      }
     }
+    // reader_orphan : aucun garde-fou de slug.
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const BREVO_API_KEY = readEnvString("BREVO_API_KEY", readEnvString("BREVO_API_KEY_STAGING"));
@@ -586,8 +634,8 @@ serve(async (req)=>{
     });
     let libraryMeta = null;
     let libraryRow = null;
-    const effectiveLibrarySlug = signupWithoutLibrary ? "" : librarySlug;
-    if (signupWithoutLibrary) {
+    const effectiveLibrarySlug = signupIntent === "reader_pending" ? librarySlug : "";
+    if (signupIntent !== "reader_pending") {
       libraryMeta = {
         library_slug: null,
         display_name: requestedLibraryName || "AnarBib",
@@ -718,7 +766,27 @@ serve(async (req)=>{
         error: "PROFILE_UPDATE_FAILED"
       }, 500);
     }
-    if (!signupWithoutLibrary && libraryRow?.id) {
+    // ── Paquet 2 — aiguillage des 3 cas (spec criar-conta v0.3 §4.2.2) ─────
+    // Le profil est déjà créé/rempli en amont. signup_intent + metadata
+    // sont écrits juste après cette section, une fois claim_id connu.
+    let libraryRequestClaimUrl = "";
+    let signupIntentMetadata: Record<string, unknown> = {};
+    if (signupIntent === "reader_pending") {
+      // ── Cas 1 : lectrice d'une biblio déjà sur AnarBib ──────────────────
+      // libraryRow a normalement été validé en amont (lookup libraries +
+      // return LIBRARY_NOT_FOUND si absent). Re-garde explicite : un
+      // reader_pending DOIT avoir un membership, jamais de lecteur orphelin
+      // silencieux.
+      if (!libraryRow?.id) {
+        console.error("register: reader_pending sans libraryRow", {
+          userId,
+          effectiveLibrarySlug
+        });
+        await cleanupAuthUser(admin, userId, "READER_PENDING_NO_LIBRARY_ROW");
+        return json({
+          error: "READER_PENDING_NO_LIBRARY_ROW"
+        }, 500);
+      }
       const { error: membershipError } = await admin.from("user_library_memberships").upsert({
         user_id: userId,
         library_id: libraryRow.id,
@@ -735,14 +803,17 @@ serve(async (req)=>{
           error: "MEMBERSHIP_UPSERT_FAILED"
         }, 500);
       }
-    }
-    let libraryRequestClaimToken = "";
-    let libraryRequestClaimUrl = "";
-    if (signupWithoutLibrary) {
-      libraryRequestClaimToken = generateOpaqueToken();
+      signupIntentMetadata = {
+        library_id: libraryRow.id,
+        library_slug: effectiveLibrarySlug
+      };
+    } else if (signupIntent === "collective_candidate") {
+      // ── Cas 2 : candidature à l'ouverture d'une biblio ──────────────────
+      // Crée le claim library_request, puis calcule l'URL du CTA candidat.
+      const libraryRequestClaimToken = generateOpaqueToken();
       const claimTokenHash = await sha256Hex(libraryRequestClaimToken);
       const claimExpiresAt = new Date(Date.now() + LIBRARY_REQUEST_CLAIM_TTL_DAYS * 24 * 60 * 60 * 1000).toISOString();
-      const { error: claimInsertError } = await admin.from("library_request_claims").insert({
+      const { data: claimRow, error: claimInsertError } = await admin.from("library_request_claims").insert({
         user_id: userId,
         email_snapshot: email,
         claim_token_hash: claimTokenHash,
@@ -753,7 +824,7 @@ serve(async (req)=>{
           preferred_login_identifier: preferredLoginIdentifier
         },
         created_by_user_id: userId
-      });
+      }).select("id").maybeSingle();
       if (claimInsertError) {
         console.error("register: claim insert failed", claimInsertError);
         await cleanupAuthUser(admin, userId, "CLAIM_CREATE_FAILED");
@@ -761,6 +832,9 @@ serve(async (req)=>{
           error: "CLAIM_CREATE_FAILED"
         }, 500);
       }
+      signupIntentMetadata = {
+        claim_id: claimRow?.id ?? null
+      };
       // Paquet 25.11 — URL du CTA reconstruite pour passer par /login d'abord.
       // L'usager doit de toute facon se connecter (must_change_password=true).
       // En passant par /login?next=<finalUrl> on garantit que :
@@ -793,20 +867,57 @@ serve(async (req)=>{
         loginOrigin = "https://app.anarbib.org";
       }
       libraryRequestClaimUrl = `${loginOrigin}/login?next=${encodeURIComponent(nextPathAndQuery)}`;
+    } else {
+      // ── Cas 3 : lectrice orpheline (biblio pas encore sur AnarBib) ──────
+      // NI membership, NI claim. Juste le profil (déjà créé) + le tag.
+      signupIntentMetadata = orphanLibraryNameMentioned
+        ? { library_name_mentioned: orphanLibraryNameMentioned }
+        : {};
     }
-    const displayName = firstNonEmptyString(libraryMeta?.display_name, libraryRow?.name, requestedLibraryName, signupWithoutLibrary ? "AnarBib" : effectiveLibrarySlug);
+    // ── Paquet 2 — écriture des colonnes signup_intent (Paquet 1 DB) ───────
+    // Second UPDATE dédié : signupIntentMetadata n'est complet qu'ici (le
+    // claim_id n'existe qu'après l'insert du claim). Colonnes créées par la
+    // migration 20260521120000_profiles_signup_intent.sql.
+    const { error: signupIntentUpdateError } = await admin.from("profiles").update({
+      signup_intent: signupIntent,
+      signup_intent_metadata: signupIntentMetadata,
+      signup_intent_set_at: new Date().toISOString()
+    }).eq("id", userId);
+    if (signupIntentUpdateError) {
+      // Non bloquant : compte, membership/claim et profil sont déjà créés et
+      // cohérents. signup_intent est un marqueur ; son échec d'écriture ne
+      // justifie pas de détruire le compte. On loggue et on poursuit.
+      console.error("register: signup_intent update failed (non bloquant)", {
+        userId,
+        signupIntent,
+        signupIntentUpdateError
+      });
+    }
+    // ── Paquet 2 — le mail de bienvenue selon le cas ───────────────────────
+    // mailIsWithoutLibrary pilote le registre i18n du mail (titre, intro, logo)
+    // et la logique de routage interne :
+    //   reader_pending       → false : mail "standard" + nom/logo biblio
+    //   collective_candidate → true  : mail "initial" + bloc CTA candidat
+    //                                  (libraryRequestClaimUrl non vide)
+    //   reader_orphan        → true  : mail "initial" SANS bloc CTA
+    //                                  (libraryRequestClaimUrl vide → bloc omis)
+    // PAQUET 2 PROVISOIRE — reader_orphan réutilise le registre "initial"
+    // existant : zéro nouvelle clé i18n, zéro jetable. Un mail
+    // welcome-reader-orphan dédié est prévu au Paquet 6.
+    const mailIsWithoutLibrary = signupIntent !== "reader_pending";
+    const displayName = firstNonEmptyString(libraryMeta?.display_name, libraryRow?.name, requestedLibraryName, mailIsWithoutLibrary ? "AnarBib" : effectiveLibrarySlug);
     const contactEmail = normalizeEmail(libraryMeta?.contact_email);
     const postalAddress = String(libraryMeta?.postal_address || "").trim();
     const emailDeliveryMode = String(libraryMeta?.email_delivery_mode || "normal").trim();
     const isTestMode = libraryMeta?.is_test_mode === true;
-    const libraryMailAsset = signupWithoutLibrary ? null : resolveLibraryMailAsset(effectiveLibrarySlug);
+    const libraryMailAsset = mailIsWithoutLibrary ? null : resolveLibraryMailAsset(effectiveLibrarySlug);
     const anarbibLogoUrl = MAIL_BRAND.anarbibLogoUrl;
     const libraryLogoUrl = firstNonEmptyString(libraryMailAsset?.logoUrl);
     const replyToEmail = ANARBIB_REPLY_TO_EMAIL;
     const senderEmail = ANARBIB_SENDER_EMAIL;
-    const senderDisplayName = signupWithoutLibrary ? "AnarBib" : `AnarBib · ${displayName}`;
-    const libraryInternalRedirectEmail = signupWithoutLibrary ? "" : resolveLibraryInternalRedirectEmail(effectiveLibrarySlug);
-    const effectiveLibraryInternalRecipients = signupWithoutLibrary ? [] : uniqueEmails([
+    const senderDisplayName = mailIsWithoutLibrary ? "AnarBib" : `AnarBib · ${displayName}`;
+    const libraryInternalRedirectEmail = mailIsWithoutLibrary ? "" : resolveLibraryInternalRedirectEmail(effectiveLibrarySlug);
+    const effectiveLibraryInternalRecipients = mailIsWithoutLibrary ? [] : uniqueEmails([
       libraryInternalRedirectEmail || contactEmail
     ]);
     const adminRecipients = uniqueEmails([
@@ -814,7 +925,7 @@ serve(async (req)=>{
     ]);
     console.log("register: routing", {
       library_slug: effectiveLibrarySlug,
-      signup_without_library: signupWithoutLibrary,
+      signup_intent: signupIntent,
       display_name: displayName,
       configured_contact_email: contactEmail,
       effective_library_internal_recipients: effectiveLibraryInternalRecipients,
@@ -831,14 +942,33 @@ serve(async (req)=>{
       contactEmail,
       anarbibLogoUrl,
       libraryLogoUrl,
-      isWithoutLibrary: signupWithoutLibrary,
+      isWithoutLibrary: mailIsWithoutLibrary,
       libraryRequestUrl: libraryRequestClaimUrl,
       locale: userLocale
     });
+    // ── Paquet 2 — libellés internes selon le cas ──────────────────────────
+    // reader_orphan : signale explicitement le cas à la coordination AnarBib
+    // et fait remonter le nom de biblio mentionné par la personne (signal
+    // d'essaimage : une biblio que le réseau ne connaît pas encore).
+    const orphanLibLine = orphanLibraryNameMentioned
+      ? ` Biblioteca mencionada: "${escapeHtml(orphanLibraryNameMentioned)}".`
+      : " Nenhuma biblioteca mencionada.";
+    let internalTitle: string;
+    let internalSubtitle: string;
+    if (signupIntent === "reader_orphan") {
+      internalTitle = `Cadastro de leitor·a órfã·o — ${displayName}`;
+      internalSubtitle = `Nova leitora órfã (biblioteca ainda não no AnarBib), ID ${publicId}.${orphanLibLine}`;
+    } else if (signupIntent === "collective_candidate") {
+      internalTitle = `Cadastro inicial sem biblioteca — ${displayName}`;
+      internalSubtitle = `Novo cadastro inicial sem biblioteca vinculada, com ID ${publicId}.`;
+    } else {
+      internalTitle = `Novo cadastro — ${displayName}`;
+      internalSubtitle = `Novo cadastro de leitor/a/e com ID ${publicId}.`;
+    }
     const libraryMailHtml = buildInternalMail({
-      title: signupWithoutLibrary ? `Cadastro inicial sem biblioteca — ${displayName}` : `Novo cadastro — ${displayName}`,
-      pretitle: signupWithoutLibrary ? "Notificação da coordenação AnarBib" : "Notificação da biblioteca",
-      subtitle: signupWithoutLibrary ? `Novo cadastro inicial sem biblioteca vinculada, com ID ${publicId}.` : `Novo cadastro de leitor/a/e com ID ${publicId}.`,
+      title: internalTitle,
+      pretitle: mailIsWithoutLibrary ? "Notificação da coordenação AnarBib" : "Notificação da biblioteca",
+      subtitle: internalSubtitle,
       firstName,
       lastName,
       publicId,
@@ -849,12 +979,12 @@ serve(async (req)=>{
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,
-      isWithoutLibrary: signupWithoutLibrary
+      isWithoutLibrary: mailIsWithoutLibrary
     });
     const adminMailHtml = buildInternalMail({
-      title: signupWithoutLibrary ? `Cadastro inicial sem biblioteca — ${displayName}` : `Novo cadastro — ${displayName}`,
+      title: internalTitle,
       pretitle: "Notificação da gestão AnarBib",
-      subtitle: signupWithoutLibrary ? `Novo cadastro inicial sem biblioteca vinculada, com ID ${publicId}.` : `Novo cadastro de leitor/a/e com ID ${publicId}.`,
+      subtitle: internalSubtitle,
       firstName,
       lastName,
       publicId,
@@ -865,7 +995,7 @@ serve(async (req)=>{
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,
-      isWithoutLibrary: signupWithoutLibrary
+      isWithoutLibrary: mailIsWithoutLibrary
     });
     const userSendResult = await sendEmail({
       apiKey: BREVO_API_KEY || "",
@@ -885,7 +1015,7 @@ serve(async (req)=>{
           email: replyToEmail,
           name: senderDisplayName
         },
-        subject: signupWithoutLibrary
+        subject: mailIsWithoutLibrary
           ? tMail(userLocale, "welcome.subject.initial", { displayName })
           : tMail(userLocale, "welcome.subject", { displayName }),
         htmlContent: userMailHtml
@@ -965,9 +1095,15 @@ serve(async (req)=>{
       library_email_api_accepted: librarySendResult.apiAccepted,
       admin_email_requested: adminSendResult.requested,
       admin_email_api_accepted: adminSendResult.apiAccepted,
-      library_slug: signupWithoutLibrary ? null : effectiveLibrarySlug,
-      signup_without_library: signupWithoutLibrary,
-      library_request_claim_created: signupWithoutLibrary ? Boolean(libraryRequestClaimUrl) : false
+      library_slug: signupIntent === "reader_pending" ? effectiveLibrarySlug : null,
+      // ── Paquet 2 — réponse alignée sur signup_intent (spec §4.2) ─────────
+      signup_intent: signupIntent,
+      // signup_without_library conservé pour rétrocompat tant que le Paquet 4
+      // (frontend) n'est pas livré. À RETIRER avec le fallback d'entrée.
+      signup_without_library: signupIntent !== "reader_pending",
+      library_request_claim_created: signupIntent === "collective_candidate"
+        ? Boolean(libraryRequestClaimUrl)
+        : false
     });
   } catch (error) {
     console.error("register function crash", error);
