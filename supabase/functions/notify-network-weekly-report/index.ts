@@ -381,6 +381,44 @@ serve(async (req)=>{
     const renewals = await fetchAllRows((from, to)=>sb.from("emprestimos_v2").select("library_id,extended_at").not("extended_at", "is", null).gte("extended_at", startISO).lt("extended_at", endExclusiveISO).range(from, to));
     const returns = await fetchAllRows((from, to)=>sb.from("emprestimo_itens_v2").select("returned_at,emprestimos_v2!inner(library_id)").not("returned_at", "is", null).gte("returned_at", startISO).lt("returned_at", endExclusiveISO).range(from, to));
     const overdue = await fetchAllRows((from, to)=>sb.from("emprestimo_itens_v2").select("item_status,due_at,emprestimos_v2!inner(library_id)").eq("item_status", "aberto").lt("due_at", weekEndPlusOneDate).range(from, to));
+
+    // ─── Activité PEB de niveau réseau — chantier #ILL-reports (étape 2) ────
+    // Un PEB relie DEUX bibliothèques : ce n'est pas une donnée d'un collectif
+    // mais une relation entre collectifs. Au niveau réseau on le présente donc
+    // comme une section distincte (pas une colonne de la synthèse par
+    // bibliothèque), ce qui évite tout double comptage. Deux compteurs
+    // globaux et un tableau listant les échanges de la semaine.
+    // NB : « PEB en circulation » s'appuie sur status_global, dont la
+    // fiabilité reste imparfaite tant que #ILL-lifecycle n'est pas traité.
+    const pebInCirculationStatuses = ["emprestado", "parcialmente_devolvido", "atrasado"];
+
+    // Échanges créés dans la semaine (la maille réseau : un échange = une ligne).
+    const pebCreated = await fetchAllRows((from, to)=>sb.from("interlibrary_loans_v2")
+      .select("id,request_id,lender_library_id,borrower_library_id,status_global,created_at")
+      .gte("created_at", startISO).lt("created_at", endExclusiveISO)
+      .order("created_at", { ascending: false }).range(from, to));
+
+    // Échanges encore en circulation à la clôture (tout le réseau).
+    const pebInCirculation = await fetchAllRows((from, to)=>sb.from("interlibrary_loans_v2")
+      .select("id").in("status_global", pebInCirculationStatuses).range(from, to));
+
+    // Nombre de documents par PEB créé cette semaine (un appel groupé).
+    const pebCreatedIds = pebCreated.map((p)=>p.id).filter(Boolean);
+    const pebItems = pebCreatedIds.length
+      ? await fetchAllRows((from, to)=>sb.from("interlibrary_loan_items_v2")
+          .select("interlibrary_loan_id").in("interlibrary_loan_id", pebCreatedIds).range(from, to))
+      : [];
+    const pebItemCountByLoan = new Map();
+    for (const it of pebItems){
+      const k = String(it.interlibrary_loan_id);
+      pebItemCountByLoan.set(k, (pebItemCountByLoan.get(k) || 0) + 1);
+    }
+
+    const pebTotals = {
+      criados: pebCreated.length,
+      em_circulacao: pebInCirculation.length
+    };
+
     const summaryByLibrary = new Map();
     for (const library of libraries){
       const libraryId = String(library.id);
@@ -490,8 +528,16 @@ serve(async (req)=>{
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.devolucoes)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;"><b>Atrasos ativos (fim da semana)</b></td>
-            <td style="padding:10px;text-align:right;"><b>${countOr0(totals.atrasos_ativos)}</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Atrasos ativos (fim da semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.atrasos_ativos)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB criados na semana (intercâmbios)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebTotals.criados)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;"><b>PEB em circulação na rede (fim da semana)</b></td>
+            <td style="padding:10px;text-align:right;"><b>${countOr0(pebTotals.em_circulacao)}</b></td>
           </tr>
         </table>
       </div>
@@ -512,6 +558,23 @@ serve(async (req)=>{
         row.admin_notification_email || "sem admin_notification_email",
         row.channel_active ? row.delivery_mode : "canal desativado"
       ]);
+
+    // ─── Lignes du tableau des échanges PEB (#ILL-reports étape 2) ──────────
+    // Résolution des noms via summaryByLibrary, déjà rempli pour toutes les
+    // bibliothèques actives — pas de requête supplémentaire. Une bibliothèque
+    // inactive ou inconnue (cas limite) retombe sur son identifiant.
+    const pebLibLabel = (id)=>{
+      const entry = summaryByLibrary.get(String(id || ""));
+      return entry ? (entry.library_short_name || entry.library_name) : String(id || "—");
+    };
+    const pebExchangeRows = pebCreated.map((p)=>[
+        pebLibLabel(p.lender_library_id),
+        pebLibLabel(p.borrower_library_id),
+        String(p.status_global || "—"),
+        String(pebItemCountByLoan.get(String(p.id)) || 0),
+        String(p.created_at || "").slice(0, 10) || "—"
+      ]);
+
     const subject = `${routing.brandName} · Relatório semanal da rede (${formatBR(weekStart)} → ${formatBR(weekEnd)})`;
     const title = `Relatório semanal da rede — ${routing.brandName}`;
     const { html, text } = renderEmail({
@@ -535,7 +598,14 @@ serve(async (req)=>{
           "weekly_report_email",
           "admin_notification_email",
           "Estado"
-        ], attentionRows)
+        ], attentionRows),
+        renderTable("Intercâmbios interbibliotecas da rede (PEB criados na semana)", [
+          "Biblioteca emprestadora",
+          "Biblioteca tomadora",
+          "Estado",
+          "Documentos",
+          "Criado em"
+        ], pebExchangeRows)
       ],
       routing
     });
@@ -556,6 +626,7 @@ serve(async (req)=>{
       recipient_email: routing.recipientEmail,
       subject,
       totals,
+      peb_totals: pebTotals,
       libraries: librarySummaries
     });
   } catch (error) {
