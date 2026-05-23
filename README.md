@@ -3,9 +3,9 @@
 **Système intégré de gestion de bibliothèques (SIGB) pour bibliothèques anarchistes.**
 **Integrated library management system (ILMS) for anarchist libraries.**
 
-Frontend React + Vite hébergé sur Codeberg, déployé sur Codeberg Pages via Woodpecker CI, backend Supabase (Postgres + Edge Functions Deno) en zone `sa-east-1`. Application multilingue (6 locales) en production.
+Frontend React + Vite hébergé sur Codeberg, déployé sur Codeberg Pages via Woodpecker CI, backend Supabase (Postgres + Edge Functions Deno) en zone `sa-east-1`. Application multilingue (8 locales) en production.
 
-React + Vite frontend hosted on Codeberg, deployed to Codeberg Pages via Woodpecker CI, Supabase backend (Postgres + Deno Edge Functions) in `sa-east-1` region. Multilingual application (6 locales) in production.
+React + Vite frontend hosted on Codeberg, deployed to Codeberg Pages via Woodpecker CI, Supabase backend (Postgres + Deno Edge Functions) in `sa-east-1` region. Multilingual application (8 locales) in production.
 
 * Repo principal / Main repository : [https://codeberg.org/anarbib/anarbib](https://codeberg.org/anarbib/anarbib)
 * Miroir GitHub / GitHub mirror : [https://github.com/cclamazonia-cmd/AnarBib](https://github.com/cclamazonia-cmd/AnarBib)
@@ -149,12 +149,14 @@ anarbib-app/
 │   ├── i18n/
 │   │   ├── index.js              # Configuration react-intl + détection navigateur
 │   │   └── locales/
-│   │       ├── pt-BR.json        # Locale de référence (~1700 clés)
+│   │       ├── pt-BR.json        # Locale de référence (~2747 clés)
 │   │       ├── fr.json
 │   │       ├── es.json
 │   │       ├── en.json
 │   │       ├── it.json
-│   │       └── de.json
+│   │       ├── de.json
+│   │       ├── ca.json
+│   │       └── eo.json
 │   ├── lib/
 │   │   ├── supabase.js           # Client Supabase
 │   │   ├── theme.js              # Chargement dynamique de thème
@@ -212,7 +214,7 @@ anarbib-app/
 
 The codebase mirrors the structure above. Key directories:
 
-* `src/` — React + Vite frontend with React Context for auth and library state, react-intl for i18n across 6 locales, themed UI components
+* `src/` — React + Vite frontend with React Context for auth and library state, react-intl for i18n across 8 locales, themed UI components
 * `supabase/migrations/` — Versioned SQL migrations applied automatically by Woodpecker CI on push to `main`
 * `supabase/functions/` — Deno Edge Functions for transactional emails (`notify-event` is the main router), new library signups (`register`), and i18n testing (`mail-i18n-test`)
 * `docs/` — Specifications (in French), decision logs, versioned backlogs, legal documents
@@ -497,7 +499,7 @@ supabase.auth.onAuthStateChange((event, session) => {
 
 ### Internationalisation *(FR)*
 
-L'application est entièrement multilingue (pt-BR référence + fr, es, en, it, de). Les Edge Functions de notification mail utilisent le même système de clés via `_shared/i18n/mail-strings.ts`.
+L'application est entièrement multilingue (pt-BR référence + fr, es, en, it, de, ca, eo). Les Edge Functions de notification mail utilisent le même système de clés via `_shared/i18n/mail-strings.ts`.
 
 #### Charte de langage inclusif
 
@@ -510,12 +512,14 @@ Voir **obligatoirement** avant tout travail i18n :
 
 | Locale | Cohérence | Convention principale |
 |--------|-----------|----------------------|
-| `pt-BR` | Référence | Suffixe `@` pluriel (`compañer@s`) + articles `xs`/`x` (`xs leitorxs`) |
+| `pt-BR` | Référence | Triple terminaison (`leitor-a-e` au singulier, `bibliotecári-as-es` au pluriel) ; le suffixe `@` est abandonné. Pour les phrases à accords multiples, reformuler via un mot épicène (`pessoas`) plutôt qu'empiler les marques |
 | `fr` | Cohérente | Point médian (`lecteur·rice`, `compas`) |
-| `es` | Cohérente | `e` neutre argentin (`compañere`) + articles neutres (`le`, `les`, `une`) |
+| `es` | Cohérente | `e` neutre argentin (`compañere`) — jamais `-x` ni `@` ; articles neutres (`le`, `les`, `une`) |
 | `en` | Cohérente | Termes épicènes par défaut, singular `they` |
-| `it` | Cohérente | Slash (`compagno/a`) — convention provisoire |
-| `de` | Cohérente | Genderstern (`Genoss*in`) |
+| `it` | Cohérente | Astérisque final (`attiv*`, `lettore*`) ; jamais `camerata`/`camerati` |
+| `de` | Cohérente | Genderstern (`Genoss*in`, `Mitarbeiter*innen`) — astérisque ASCII pour le marqueur inclusif ; umlauts conservés |
+| `ca` | Cohérente | Triple terminaison (`lector-a-e`), même logique que le `um-a-e` du pt-BR |
+| `eo` | Cohérente | Suffixe (`legant-in-e`, `aŭtor-in-o`, `uzant-in-e`) ; forme verbale `konektita-a-e` |
 
 #### Workflow d'ajout de clé
 
@@ -549,7 +553,7 @@ Texte à traduire : [...]
 
 ### Internationalization *(EN)*
 
-The application is fully multilingual (pt-BR reference + fr, es, en, it, de). Mail notification Edge Functions use the same key system via `_shared/i18n/mail-strings.ts`.
+The application is fully multilingual (pt-BR reference + fr, es, en, it, de, ca, eo). Mail notification Edge Functions use the same key system via `_shared/i18n/mail-strings.ts`.
 
 #### Inclusive language charter
 
@@ -562,12 +566,14 @@ State per locale:
 
 | Locale | Consistency | Main convention |
 |--------|-------------|----------------|
-| `pt-BR` | Reference | Plural `@` suffix (`compañer@s`) + neutral articles `xs`/`x` (`xs leitorxs`) |
+| `pt-BR` | Reference | Triple ending (`leitor-a-e` singular, `bibliotecári-as-es` plural); the `@` suffix is abandoned. For sentences with multiple agreements, rephrase using an epicene word (`pessoas`) rather than stacking markers |
 | `fr` | Consistent | Middle dot (`lecteur·rice`, `compas`) |
-| `es` | Consistent | Argentinian neutral `e` (`compañere`) + neutral articles (`le`, `les`, `une`) |
+| `es` | Consistent | Argentinian neutral `e` (`compañere`) — never `-x` or `@`; neutral articles (`le`, `les`, `une`) |
 | `en` | Consistent | Default epicene terms, singular `they` |
-| `it` | Consistent | Slash (`compagno/a`) — provisional convention |
-| `de` | Consistent | Genderstern (`Genoss*in`) |
+| `it` | Consistent | Trailing asterisk (`attiv*`, `lettore*`); never `camerata`/`camerati` |
+| `de` | Consistent | Genderstern (`Genoss*in`, `Mitarbeiter*innen`) — ASCII asterisk for the inclusive marker; umlauts kept |
+| `ca` | Consistent | Triple ending (`lector-a-e`), same logic as pt-BR's `um-a-e` |
+| `eo` | Consistent | Suffix (`legant-in-e`, `aŭtor-in-o`, `uzant-in-e`); verbal form `konektita-a-e` |
 
 #### Key addition workflow
 
@@ -734,7 +740,7 @@ The `useTheme(slug)` hook in `src/lib/theme.js` loads the manifest at runtime an
 
 ### Noms de pays *(FR)*
 
-Les noms de pays sont localisés dynamiquement via `i18n-iso-countries` plutôt que d'être stockés dans les fichiers locale (qui auraient nécessité ~1500 entrées). Le helper `src/lib/countries.js` centralise l'enregistrement des 6 locales :
+Les noms de pays sont localisés dynamiquement via `i18n-iso-countries` plutôt que d'être stockés dans les fichiers locale (qui auraient nécessité ~1500 entrées). Le helper `src/lib/countries.js` centralise l'enregistrement des 8 locales :
 
 * `getCountryName(input, locale)` — accepte un code ISO 3166-1 (`'BR'`) ou un nom textuel (`'Brasil'`, `'France'`, `'E.U.A.'`)
 * `getCountryNames(locale)` — retourne le map complet
@@ -744,7 +750,7 @@ Tout composant qui affiche un nom de pays doit utiliser ces helpers.
 
 ### Country names *(EN)*
 
-Country names are dynamically localized via `i18n-iso-countries` rather than being stored in locale files (which would have required ~1500 entries). The `src/lib/countries.js` helper centralizes registration of the 6 locales:
+Country names are dynamically localized via `i18n-iso-countries` rather than being stored in locale files (which would have required ~1500 entries). The `src/lib/countries.js` helper centralizes registration of the 8 locales:
 
 * `getCountryName(input, locale)` — accepts an ISO 3166-1 code (`'BR'`) or a textual name (`'Brasil'`, `'France'`, `'E.U.A.'`)
 * `getCountryNames(locale)` — returns the complete map
@@ -972,4 +978,4 @@ To discuss significant work before coding, open an issue on Codeberg or contact 
 
 ---
 
-*Dernière mise à jour / Last updated: 17 mai 2026 / 17 May 2026 — fin de session B.4 paquet profils d'adoption / end of B.4 session in adoption profiles work.*
+*Dernière mise à jour / Last updated: 23 mai 2026 / 23 May 2026 — ajout des chartes inclusives `ca` et `eo`, passage à 8 locales / addition of `ca` and `eo` inclusive charters, move to 8 locales.*
