@@ -2759,5 +2759,16 @@
   "biblioteca.exchanges.partnerSameAsLocal": "La partnera biblioteko devas esti malsama ol la via.",
   "biblioteca.exchanges.needBothDocs": "Elektu lokan dokumenton kaj dokumenton de la partnero.",
   "biblioteca.exchanges.needMessage": "Skribu aŭ generu la mesaĝon de la propono.",
-  "biblioteca.exchanges.suggestedMessage": "Saluton, kamaradoj de {partner}. Ni skribas por malfermi konsulton pri interbiblioteka interŝanĝo en la kadro de la reto AnarBib. La propono estas esplora: ĝi servas por kontroli reciprokan intereson antaŭ ajna devontigo. Materialo kiun ni povas proponi: {localDoc}. Materialo kiun ni ŝatus ricevi: {partnerDoc}. Se la propono ŝajnas trafa, ni povos interkonsenti pri la kontrolo de la ekzempleroj kaj la loĝistiko inter la bibliotekoj. Fratecaj salutoj."
+  "biblioteca.exchanges.suggestedMessage": "Saluton, kamaradoj de {partner}. Ni skribas por malfermi konsulton pri interbiblioteka interŝanĝo en la kadro de la reto AnarBib. La propono estas esplora: ĝi servas por kontroli reciprokan intereson antaŭ ajna devontigo. Materialo kiun ni povas proponi: {localDoc}. Materialo kiun ni ŝatus ricevi: {partnerDoc}. Se la propono ŝajnas trafa, ni povos interkonsenti pri la kontrolo de la ekzempleroj kaj la loĝistiko inter la bibliotekoj. Fratecaj salutoj.",
+  "biblioteca.exchanges.disabledByPolicy": "La loka politiko indikas ke interŝanĝoj ankoraŭ ne estas ebligitaj por ĉi tiu biblioteko.",
+  "biblioteca.exchanges.docNotEligible": "La elektitaj dokumentoj devas plenumi la kriteriojn de interŝanĝo.",
+  "biblioteca.exchanges.elig.reasonTotal": "malpli ol {min} ekzempleroj entute",
+  "biblioteca.exchanges.elig.reasonAvailable": "malpli ol {min} ekzemplero(j) disponebla(j) nun",
+  "biblioteca.exchanges.elig.ready": "Povas eniri proponon ({total} entute / {available} disponebla(j)).",
+  "biblioteca.exchanges.elig.blocked": "Ne povas eniri proponon nun: {reasons}.",
+  "biblioteca.exchanges.elig.caution": "disponebleco kalkulita per simpla nombrado de ekzempleroj; kontrolu la tenaĵojn se necese",
+  "biblioteca.exchanges.elig.criteria": "Nuna kriterio de interŝanĝo: {total} ekzempleroj entute, {available}.",
+  "biblioteca.exchanges.elig.criteriaAvailable": "{min} disponebla(j) nun",
+  "biblioteca.exchanges.elig.criteriaNoAvailable": "sen filtrilo de tuja disponebleco",
+  "biblioteca.exchanges.elig.blockedCount": "{count} loka(j) dokumento(j) ne plenumas la nunajn kriteriojn."
 }

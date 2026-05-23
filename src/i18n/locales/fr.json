@@ -2759,5 +2759,16 @@
   "biblioteca.exchanges.partnerSameAsLocal": "La bibliothèque partenaire doit être différente de la tienne.",
   "biblioteca.exchanges.needBothDocs": "Choisis un document local et un document de la partenaire.",
   "biblioteca.exchanges.needMessage": "Écris ou génère le message de la proposition.",
-  "biblioteca.exchanges.suggestedMessage": "Bonjour, les compagnon·nes de {partner}. Nous écrivons pour ouvrir une consultation d’échange interbibliothèques dans le cadre du réseau AnarBib. La proposition est exploratoire : elle sert à vérifier l’intérêt mutuel avant tout engagement. Document que nous pouvons mettre à disposition : {localDoc}. Document que nous aimerions recevoir : {partnerDoc}. Si la proposition semble pertinente, nous pourrons convenir de la vérification des exemplaires et de la logistique entre les bibliothèques. Salutations fraternelles."
+  "biblioteca.exchanges.suggestedMessage": "Bonjour, les compagnon·nes de {partner}. Nous écrivons pour ouvrir une consultation d’échange interbibliothèques dans le cadre du réseau AnarBib. La proposition est exploratoire : elle sert à vérifier l’intérêt mutuel avant tout engagement. Document que nous pouvons mettre à disposition : {localDoc}. Document que nous aimerions recevoir : {partnerDoc}. Si la proposition semble pertinente, nous pourrons convenir de la vérification des exemplaires et de la logistique entre les bibliothèques. Salutations fraternelles.",
+  "biblioteca.exchanges.disabledByPolicy": "La politique locale indique que les échanges ne sont pas encore activés pour cette bibliothèque.",
+  "biblioteca.exchanges.docNotEligible": "Les documents choisis doivent remplir les critères d’échange.",
+  "biblioteca.exchanges.elig.reasonTotal": "moins de {min} exemplaires au total",
+  "biblioteca.exchanges.elig.reasonAvailable": "moins de {min} exemplaire(s) disponible(s) maintenant",
+  "biblioteca.exchanges.elig.ready": "Peut entrer dans une proposition ({total} au total / {available} disponible(s)).",
+  "biblioteca.exchanges.elig.blocked": "N’entre pas dans une proposition pour le moment : {reasons}.",
+  "biblioteca.exchanges.elig.caution": "disponibilité calculée par simple comptage d’exemplaires ; vérifier les holdings si besoin",
+  "biblioteca.exchanges.elig.criteria": "Critère d’échange en vigueur : {total} exemplaires au total, {available}.",
+  "biblioteca.exchanges.elig.criteriaAvailable": "{min} disponible(s) maintenant",
+  "biblioteca.exchanges.elig.criteriaNoAvailable": "sans filtre de disponibilité immédiate",
+  "biblioteca.exchanges.elig.blockedCount": "{count} document(s) local(aux) ne remplissent pas les critères actuels."
 }

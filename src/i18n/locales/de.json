@@ -2759,5 +2759,16 @@
   "biblioteca.exchanges.partnerSameAsLocal": "Die Partnerbibliothek muss sich von deiner unterscheiden.",
   "biblioteca.exchanges.needBothDocs": "Waehle ein lokales Dokument und ein Dokument der Partnerin.",
   "biblioteca.exchanges.needMessage": "Schreibe oder generiere die Nachricht des Vorschlags.",
-  "biblioteca.exchanges.suggestedMessage": "Hallo, Genossinnen und Genossen von {partner}. Wir schreiben, um eine Anfrage zum bibliotheksuebergreifenden Tausch im Rahmen des AnarBib-Netzwerks zu eroeffnen. Der Vorschlag ist erkundend: er dient dazu, das gegenseitige Interesse vor jeder Verpflichtung zu pruefen. Material, das wir anbieten koennen: {localDoc}. Material, das wir erhalten moechten: {partnerDoc}. Wenn der Vorschlag passend erscheint, koennen wir die Pruefung der Exemplare und die Logistik zwischen den Bibliotheken vereinbaren. Bruederliche Gruesse."
+  "biblioteca.exchanges.suggestedMessage": "Hallo, Genossinnen und Genossen von {partner}. Wir schreiben, um eine Anfrage zum bibliotheksuebergreifenden Tausch im Rahmen des AnarBib-Netzwerks zu eroeffnen. Der Vorschlag ist erkundend: er dient dazu, das gegenseitige Interesse vor jeder Verpflichtung zu pruefen. Material, das wir anbieten koennen: {localDoc}. Material, das wir erhalten moechten: {partnerDoc}. Wenn der Vorschlag passend erscheint, koennen wir die Pruefung der Exemplare und die Logistik zwischen den Bibliotheken vereinbaren. Bruederliche Gruesse.",
+  "biblioteca.exchanges.disabledByPolicy": "Die lokale Richtlinie gibt an, dass Tausche fuer diese Bibliothek noch nicht aktiviert sind.",
+  "biblioteca.exchanges.docNotEligible": "Die gewaehlten Dokumente muessen die Tauschkriterien erfuellen.",
+  "biblioteca.exchanges.elig.reasonTotal": "weniger als {min} Exemplare insgesamt",
+  "biblioteca.exchanges.elig.reasonAvailable": "weniger als {min} Exemplar(e) jetzt verfuegbar",
+  "biblioteca.exchanges.elig.ready": "Kann in einen Vorschlag aufgenommen werden ({total} insgesamt / {available} verfuegbar).",
+  "biblioteca.exchanges.elig.blocked": "Kann derzeit nicht in einen Vorschlag aufgenommen werden: {reasons}.",
+  "biblioteca.exchanges.elig.caution": "Verfuegbarkeit durch einfache Exemplarzaehlung berechnet; bei Bedarf die Holdings pruefen",
+  "biblioteca.exchanges.elig.criteria": "Aktuelles Tauschkriterium: {total} Exemplare insgesamt, {available}.",
+  "biblioteca.exchanges.elig.criteriaAvailable": "{min} jetzt verfuegbar",
+  "biblioteca.exchanges.elig.criteriaNoAvailable": "ohne Filter fuer sofortige Verfuegbarkeit",
+  "biblioteca.exchanges.elig.blockedCount": "{count} lokale(s) Dokument(e) erfuellen die aktuellen Kriterien nicht."
 }

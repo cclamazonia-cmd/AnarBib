@@ -2759,5 +2759,16 @@
   "biblioteca.exchanges.partnerSameAsLocal": "La biblioteca associada ha de ser diferent de la teva.",
   "biblioteca.exchanges.needBothDocs": "Tria un document local i un document de l’associada.",
   "biblioteca.exchanges.needMessage": "Escriu o genera el missatge de la proposta.",
-  "biblioteca.exchanges.suggestedMessage": "Hola, companyes i companys de {partner}. Us escrivim per obrir una consulta d’intercanvi interbibliotecari en el marc de la xarxa AnarBib. La proposta és exploratòria: serveix per verificar l’interès mutu abans de qualsevol compromís. Material que podem oferir: {localDoc}. Material que ens agradaria rebre: {partnerDoc}. Si la proposta sembla pertinent, podrem acordar la verificació dels exemplars i la logística entre les biblioteques. Abraçades fraternes."
+  "biblioteca.exchanges.suggestedMessage": "Hola, companyes i companys de {partner}. Us escrivim per obrir una consulta d’intercanvi interbibliotecari en el marc de la xarxa AnarBib. La proposta és exploratòria: serveix per verificar l’interès mutu abans de qualsevol compromís. Material que podem oferir: {localDoc}. Material que ens agradaria rebre: {partnerDoc}. Si la proposta sembla pertinent, podrem acordar la verificació dels exemplars i la logística entre les biblioteques. Abraçades fraternes.",
+  "biblioteca.exchanges.disabledByPolicy": "La política local indica que els intercanvis encara no estan habilitats en aquesta biblioteca.",
+  "biblioteca.exchanges.docNotEligible": "Els documents triats han de complir els criteris d’intercanvi.",
+  "biblioteca.exchanges.elig.reasonTotal": "menys de {min} exemplars en total",
+  "biblioteca.exchanges.elig.reasonAvailable": "menys de {min} exemplar(s) disponible(s) ara",
+  "biblioteca.exchanges.elig.ready": "Pot entrar en una proposta ({total} en total / {available} disponible(s)).",
+  "biblioteca.exchanges.elig.blocked": "No entra en una proposta de moment: {reasons}.",
+  "biblioteca.exchanges.elig.caution": "disponibilitat calculada per recompte simple d’exemplars; verifica els holdings si cal",
+  "biblioteca.exchanges.elig.criteria": "Criteri d’intercanvi vigent: {total} exemplars en total, {available}.",
+  "biblioteca.exchanges.elig.criteriaAvailable": "{min} disponible(s) ara",
+  "biblioteca.exchanges.elig.criteriaNoAvailable": "sense filtre de disponibilitat immediata",
+  "biblioteca.exchanges.elig.blockedCount": "{count} document(s) local(s) no compleixen els criteris actuals."
 }

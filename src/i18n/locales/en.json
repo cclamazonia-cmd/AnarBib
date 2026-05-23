@@ -2759,5 +2759,16 @@
   "biblioteca.exchanges.partnerSameAsLocal": "The partner library must be different from yours.",
   "biblioteca.exchanges.needBothDocs": "Choose a local document and a partner document.",
   "biblioteca.exchanges.needMessage": "Write or generate the proposal message.",
-  "biblioteca.exchanges.suggestedMessage": "Hello, comrades of {partner}. We are writing to open an interlibrary exchange inquiry within the AnarBib network. The proposal is exploratory: it serves to check mutual interest before any commitment. Material we can offer: {localDoc}. Material we would like to receive: {partnerDoc}. If the proposal seems relevant, we can arrange the checking of copies and the logistics between the libraries. Fraternal regards."
+  "biblioteca.exchanges.suggestedMessage": "Hello, comrades of {partner}. We are writing to open an interlibrary exchange inquiry within the AnarBib network. The proposal is exploratory: it serves to check mutual interest before any commitment. Material we can offer: {localDoc}. Material we would like to receive: {partnerDoc}. If the proposal seems relevant, we can arrange the checking of copies and the logistics between the libraries. Fraternal regards.",
+  "biblioteca.exchanges.disabledByPolicy": "The local policy indicates that exchanges are not yet enabled for this library.",
+  "biblioteca.exchanges.docNotEligible": "The chosen documents must meet the exchange criteria.",
+  "biblioteca.exchanges.elig.reasonTotal": "fewer than {min} copies in total",
+  "biblioteca.exchanges.elig.reasonAvailable": "fewer than {min} copy(ies) available now",
+  "biblioteca.exchanges.elig.ready": "Can enter a proposal ({total} in total / {available} available).",
+  "biblioteca.exchanges.elig.blocked": "Cannot enter a proposal for now: {reasons}.",
+  "biblioteca.exchanges.elig.caution": "availability computed by simple copy count; check holdings if needed",
+  "biblioteca.exchanges.elig.criteria": "Current exchange criterion: {total} copies in total, {available}.",
+  "biblioteca.exchanges.elig.criteriaAvailable": "{min} available now",
+  "biblioteca.exchanges.elig.criteriaNoAvailable": "no immediate availability filter",
+  "biblioteca.exchanges.elig.blockedCount": "{count} local document(s) do not meet the current criteria."
 }

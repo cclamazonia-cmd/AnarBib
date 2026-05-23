@@ -2759,5 +2759,16 @@
   "biblioteca.exchanges.partnerSameAsLocal": "A biblioteca parceira precisa ser diferente da sua.",
   "biblioteca.exchanges.needBothDocs": "Escolha um documento local e um documento da parceira.",
   "biblioteca.exchanges.needMessage": "Escreva ou gere a mensagem da proposta.",
-  "biblioteca.exchanges.suggestedMessage": "Olá, compas da {partner}. Escrevemos para abrir uma consulta de troca interbibliotecas no âmbito da rede AnarBib. A proposta é exploratória: serve para verificar interesse mútuo antes de qualquer compromisso. Material que podemos disponibilizar: {localDoc}. Material que gostaríamos de receber: {partnerDoc}. Se a proposta parecer pertinente, podemos combinar a conferência dos exemplares e a logística entre as bibliotecas. Abraços fraternos."
+  "biblioteca.exchanges.suggestedMessage": "Olá, compas da {partner}. Escrevemos para abrir uma consulta de troca interbibliotecas no âmbito da rede AnarBib. A proposta é exploratória: serve para verificar interesse mútuo antes de qualquer compromisso. Material que podemos disponibilizar: {localDoc}. Material que gostaríamos de receber: {partnerDoc}. Se a proposta parecer pertinente, podemos combinar a conferência dos exemplares e a logística entre as bibliotecas. Abraços fraternos.",
+  "biblioteca.exchanges.disabledByPolicy": "A política local marca que as trocas ainda não estão habilitadas nesta biblioteca.",
+  "biblioteca.exchanges.docNotEligible": "Os documentos escolhidos precisam passar pelos critérios de troca.",
+  "biblioteca.exchanges.elig.reasonTotal": "menos de {min} exemplares no total",
+  "biblioteca.exchanges.elig.reasonAvailable": "menos de {min} exemplar(es) disponível(is) agora",
+  "biblioteca.exchanges.elig.ready": "Pode entrar em proposta agora ({total} no total / {available} disponível(is)).",
+  "biblioteca.exchanges.elig.blocked": "Não entra na proposta agora: {reasons}.",
+  "biblioteca.exchanges.elig.caution": "disponibilidade calculada por contagem simples de exemplares; conferir holdings se necessário",
+  "biblioteca.exchanges.elig.criteria": "Critério atual de troca: {total} exemplares no total, {available}.",
+  "biblioteca.exchanges.elig.criteriaAvailable": "{min} disponível(is) agora",
+  "biblioteca.exchanges.elig.criteriaNoAvailable": "sem filtro de disponibilidade imediata",
+  "biblioteca.exchanges.elig.blockedCount": "{count} documento(s) local(is) não passam pelos critérios atuais."
 }

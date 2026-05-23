@@ -2759,5 +2759,16 @@
   "biblioteca.exchanges.partnerSameAsLocal": "La biblioteca partner deve essere diversa dalla tua.",
   "biblioteca.exchanges.needBothDocs": "Scegli un documento locale e un documento della partner.",
   "biblioteca.exchanges.needMessage": "Scrivi o genera il messaggio della proposta.",
-  "biblioteca.exchanges.suggestedMessage": "Ciao, compagne e compagni di {partner}. Scriviamo per aprire una consultazione di scambio interbibliotecario nell’ambito della rete AnarBib. La proposta è esplorativa: serve a verificare l’interesse reciproco prima di qualsiasi impegno. Materiale che possiamo offrire: {localDoc}. Materiale che vorremmo ricevere: {partnerDoc}. Se la proposta sembra pertinente, potremo concordare la verifica delle copie e la logistica tra le biblioteche. Abbracci fraterni."
+  "biblioteca.exchanges.suggestedMessage": "Ciao, compagne e compagni di {partner}. Scriviamo per aprire una consultazione di scambio interbibliotecario nell’ambito della rete AnarBib. La proposta è esplorativa: serve a verificare l’interesse reciproco prima di qualsiasi impegno. Materiale che possiamo offrire: {localDoc}. Materiale che vorremmo ricevere: {partnerDoc}. Se la proposta sembra pertinente, potremo concordare la verifica delle copie e la logistica tra le biblioteche. Abbracci fraterni.",
+  "biblioteca.exchanges.disabledByPolicy": "La politica locale indica che gli scambi non sono ancora abilitati per questa biblioteca.",
+  "biblioteca.exchanges.docNotEligible": "I documenti scelti devono soddisfare i criteri di scambio.",
+  "biblioteca.exchanges.elig.reasonTotal": "meno di {min} copie in totale",
+  "biblioteca.exchanges.elig.reasonAvailable": "meno di {min} copia(e) disponibile(i) ora",
+  "biblioteca.exchanges.elig.ready": "Puo entrare in una proposta ({total} in totale / {available} disponibile(i)).",
+  "biblioteca.exchanges.elig.blocked": "Non entra in una proposta per ora: {reasons}.",
+  "biblioteca.exchanges.elig.caution": "disponibilita calcolata con conteggio semplice delle copie; verificare gli holding se necessario",
+  "biblioteca.exchanges.elig.criteria": "Criterio di scambio in vigore: {total} copie in totale, {available}.",
+  "biblioteca.exchanges.elig.criteriaAvailable": "{min} disponibile(i) ora",
+  "biblioteca.exchanges.elig.criteriaNoAvailable": "senza filtro di disponibilita immediata",
+  "biblioteca.exchanges.elig.blockedCount": "{count} documento(i) locale(i) non soddisfano i criteri attuali."
 }
