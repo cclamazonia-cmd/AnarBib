@@ -15,6 +15,9 @@ import PolicySetManager from '@/components/library/PolicySetManager';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
 import WorkspaceInspectorModal from '@/components/library/WorkspaceInspectorModal';
 import ExchangeProposalForm from '@/components/library/ExchangeProposalForm';
+import ExchangeRequestsList from '@/components/library/ExchangeRequestsList';
+import ExchangeFollowupPanel from '@/components/library/ExchangeFollowupPanel';
+import LibraryContactProfileSection from '@/components/library/LibraryContactProfileSection';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -921,6 +924,13 @@ export default function BibliotecaPage() {
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.comms.alertEmail' })}</label><input type="email" value={mailChannel.severe_alert_email||''} onChange={e=>setMC('severe_alert_email',e.target.value)} style={fs} placeholder="urgente@biblioteca.org" /></div>
             </div>
           </div>}
+          {/* EA-20 : editeur du profil de contact de la biblioteca
+              (library_contact_profiles), dans le composant separe
+              LibraryContactProfileSection. */}
+          <div style={bx}>
+            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.contactProfile.title' })}</h4>
+            <LibraryContactProfileSection libraryId={libraryId} canEdit={isCoord} />
+          </div>
           {notifPolicy && <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.comms.notifTypes' })}</h4>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:6 }}>
@@ -1295,6 +1305,12 @@ export default function BibliotecaPage() {
               composant separe ExchangeProposalForm. Le bloc maquette inerte
               (boutons disabled, implementationPending) a ete remplace. */}
           <ExchangeProposalForm libraryId={libraryId} allLibraries={allLibraries} t={t} />
+          {/* EA-11 paquet 3 : liste, filtres et decision des propositions
+              de troca, dans le composant separe ExchangeRequestsList. */}
+          <ExchangeRequestsList libraryId={libraryId} allLibraries={allLibraries} t={t} />
+          {/* EA-11 paquet 4 : suivi des trocas acceptees, dans le
+              composant separe ExchangeFollowupPanel. */}
+          <ExchangeFollowupPanel libraryId={libraryId} allLibraries={allLibraries} t={t} />
         </div>)}
 
         {/* ═══ 7. Empréstimos interbibliotecas ═════════ */}
