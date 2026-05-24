@@ -118,12 +118,66 @@ identifie une **sous-tâche du chantier A** — enrichir la clé `res.converted`
 la date d'échéance (le contexte de notification la connaît). Une conversion
 *est* un emprunt qui démarre ; le mail qui l'annonce doit en donner l'échéance.
 
-**Dette ouverte D-1.a.** La correction suppose que le trigger
-`trg_notify_emprestimo_criado` puisse *savoir* que l'emprunt courant naît d'une
-conversion. Si `emprestimos_v2` ne porte pas de colonne ou de flag exploitable
-(p. ex. `origem = 'conversao_reserva'` ou un lien vers la réservation source),
-il faut l'ajouter. C'est une vraie sous-tâche de schéma, pas un détail
-d'implémentation — inscrite comme telle dans la fiche du chantier A.
+**Dette D-1.a — instruite et close le 24/05/2026.** La question était : le
+trigger `trg_notify_emprestimo_criado` peut-il *savoir* qu'un emprunt naît d'une
+conversion, ou faut-il ajouter une colonne à `emprestimos_v2` ? L'instruction sur
+dump SQL frais (`dump_D1a_2026-05-24.sql`) et lecture du handler EF réel
+(`emprestimos.ts`) conclut : **aucune migration de schéma n'est nécessaire.** Le
+détail de l'instruction est consigné en §2.1bis ci-dessous ; il reclasse la
+correction TR-2 et précise la cible exacte de D-1.
+
+### 2.1bis — Instruction de D-1.a (24/05/2026) et conséquences pour le chantier A
+
+L'instruction a porté sur quatre objets : la table `emprestimos_v2`, le trigger
+`trg_notify_emprestimo_criado` et sa fonction, la fonction de dispatch
+`fn_dispatch_circulation_notify_event`, et le handler EF `handleEmprestimoV2`
+(`emprestimos.ts`). Constats :
+
+1. **`emprestimos_v2` (l'en-tête) ne porte aucune information de provenance** —
+   ni `reserva_id`, ni `origem`, ni équivalent. Un emprunt de conversion et un
+   emprunt direct y sont indiscernables.
+2. **Mais `emprestimo_itens_v2` (les items) porte la liaison.** Le chemin de
+   conversion (`fn_v2_convert_reserva_linhas_to_emprestimo`) renseigne
+   `reserva_id` et `reserva_line_no` sur chaque item ; le chemin de création
+   directe (`fn_v2_create_emprestimo_by_holdings`) les laisse `NULL`. La
+   provenance est donc **déjà tracée en base** — pas de colonne à créer.
+3. **Le trigger ne peut pas lire cette provenance.** `trg_notify_emprestimo_criado`
+   est `AFTER INSERT` sur `emprestimos_v2` ; dans la RPC de conversion, l'INSERT
+   de l'en-tête précède la boucle d'insertion des items. Quand le trigger tire,
+   `emprestimo_itens_v2` est encore vide pour cet emprunt. Le trigger ne voit que
+   `NEW` (l'en-tête, sans provenance) et passe `'{}'::jsonb` comme `p_extra` —
+   aucune provenance ne transite vers le handler.
+4. **Le handler `handleEmprestimoV2` ne connaît pas non plus la provenance.** Il
+   lit `getEmprestimoV2Bundle`, dont le `SELECT` sur `emprestimos_v2` ne ramène
+   aucune colonne d'origine ; aucune branche du handler ne distingue conversion
+   et création directe.
+5. **Le handler envoie *deux* mails pour `emprestimo_v2_criado`** — un mail
+   lecteur·rice (gardé par `loanLifecycleEnabled`) et un mail admin/staff (gardé
+   par `loanLifecycleEnabled && loanAdminCopyEnabled`). **Raffinement de D-1 :**
+   la décision ne vise que le doublon *côté lecteur·rice*. Le mail admin « nouvel
+   emprunt créé » reste légitime pour une conversion (côté gestion, un emprunt
+   est bien créé) et **ne doit pas être supprimé**. La cible de D-1 est le seul
+   envoi `safeSendEmail(user, …)`, pas le bloc admin.
+
+**Conséquences pour la correction TR-2 (mises à jour de la décision D-1) :**
+
+- D-1 ne demande **pas** de migration de schéma. La formulation initiale
+  (« conditionner le trigger ») est remplacée : le trigger ne *peut pas* être
+  conditionné utilement, faute de voir la provenance au bon moment.
+- La voie retenue est de **faire piloter la notification par la RPC**, qui, elle,
+  sait dans quel cas elle est — cohérent avec la doctrine #141.2.E (ne pas lutter
+  contre l'ordre des triggers, reprendre la main dans la fonction qui orchestre)
+  et avec la doctrine RPC v3 (l'action DB signifiante pilote sa notification).
+- Le mécanisme recommandé est le **flag `p_extra`** : `fn_dispatch_circulation_notify_event`
+  fond déjà son paramètre `p_extra jsonb` dans le `body` du webhook envoyé à
+  `notify-event`. La conversion peut donc émettre le dispatch avec
+  `p_extra = '{"suppress_user_mail": true}'` (ou clé équivalente) ; le handler
+  `handleEmprestimoV2` lit ce flag et conditionne le seul envoi lecteur·rice, en
+  laissant partir le mail admin. Variante possible (event distinct
+  `emprestimo_v2_criado_por_conversao`) : plus explicite dans les logs, mais plus
+  lourde — arbitrage laissé à la session du chantier A.
+- Reste vrai et inchangé : `res.converted` doit être enrichi de la date
+  d'échéance (autre moitié de D-1), côté handler de réservation.
 
 ### 2.2 — Décision D-2 : TR-8 (cascade d'annulation biblio)
 
@@ -201,15 +255,23 @@ multilingue v2, jamais le mail legacy non internationalisé.
 
 **Sous-tâches.**
 
-1. **TR-2 — appliquer D-1.** Conditionner `trg_notify_emprestimo_criado` pour
-   qu'il n'émette pas la notification lecteur·rice quand l'emprunt naît d'une
-   conversion de réservation. Préalable : statuer sur la dette D-1.a (le trigger
-   dispose-t-il du moyen de savoir qu'il s'agit d'une conversion ? sinon, ajouter
-   colonne/flag sur `emprestimos_v2` via migration).
+1. **TR-2 — supprimer le doublon côté lecteur·rice.** Instruction D-1.a close
+   (cf. §2.1bis) : pas de migration de schéma. Faire que la RPC
+   `fn_v2_convert_reserva_linhas_to_emprestimo` émette le dispatch de
+   `emprestimo_v2_criado` avec un flag de suppression du mail lecteur·rice
+   (mécanisme recommandé : `p_extra = '{"suppress_user_mail": true}'`, fondu dans
+   le `body` du webhook par `fn_dispatch_circulation_notify_event`). Côté EF,
+   `handleEmprestimoV2` lit ce flag et conditionne le seul envoi
+   `safeSendEmail(user, …)`. **Le mail admin n'est pas touché** : il reste
+   légitime pour une conversion. Décider en session : déplacer aussi le dispatch
+   du chemin de création directe (`fn_v2_create_emprestimo_by_holdings`) pour la
+   symétrie, ou conserver le trigger pour ce seul chemin — voir §2.1bis pour le
+   compromis robustesse / exhaustivité automatique.
 2. **TR-2 — enrichir `res.converted`.** Ajouter la date d'échéance au mail
    `res.converted` côté lecteur·rice, de sorte que le mail conservé porte
-   l'information que portait `loan.created`. Vérifier la disponibilité de la
-   date dans le contexte de notification ; sinon, l'y acheminer.
+   l'information que portait `loan.created`. Côté handler de réservation (hors
+   `emprestimos.ts`). Vérifier la disponibilité de la date dans le contexte de
+   notification ; sinon, l'y acheminer.
 3. **TR-8 — appliquer D-2.** Neutraliser la notification lecteur·rice du stage
    `liberada_para_circulacao`. Trancher en session la portée exacte (dette
    D-2.a : inconditionnel vs conditionné à une annulation antérieure).
@@ -229,24 +291,29 @@ sécurisés v2, 18/05). Aucune action de durcissement sans dump SQL courant (GLB
 v13). Un changement à la fois pour les hotfix (leçon 11-12/05).
 
 **Pré-requis.** Dump SQL à jour des schémas concernés
-(`supabase db dump -f schema.sql --linked -s public,api`). Lecture du code SQL
-réellement déployé des triggers cités (`pg_get_triggerdef`,
-`pg_get_functiondef`) — déjà partiellement obtenu par l'audit en passes B.1/B.2.
+(`supabase db dump -f schema.sql --linked -s public,api`). L'instruction de
+D-1.a (24/05) a déjà été conduite sur le dump `dump_D1a_2026-05-24.sql` et la
+lecture du handler `emprestimos.ts` ; un dump rafraîchi reste néanmoins requis
+au moment de l'exécution, conformément à la doctrine « aucune action de
+durcissement sans dump SQL courant ».
 
 **Critères de clôture.**
 - Une conversion réservation → emprunt produit exactement **un** mail
-  lecteur·rice, portant la date d'échéance.
+  lecteur·rice (le mail `res.converted`, portant la date d'échéance), et le mail
+  admin de création d'emprunt continue de partir.
 - Une annulation biblio produit exactement **un** mail lecteur·rice (le mail
   d'annulation), sans mail « libérée pour circulation ».
 - Un événement `emprestimo_prorrogado` produit le mail v2 multilingue (ou
   l'événement est confirmé mort et la branche legacy supprimée).
-- Tests fonctionnels BLMF passés en navigation privée (fixtures Xavier/Lívia).
+- Tests fonctionnels BLMF passés en navigation privée (fixtures Xavier/Lívia) —
+  en particulier : effectuer une conversion et vérifier qu'un seul mail
+  lecteur·rice arrive, et qu'un mail admin arrive bien.
 - Migrations passées par le pipeline Woodpecker (jamais de SQL en SQL Editor
   avant push).
 
-**Dettes ouvertes par ce chantier.** D-1.a (flag de conversion sur
-`emprestimos_v2`), D-2.a (portée de la neutralisation de
-`liberada_para_circulacao`).
+**Dettes ouvertes par ce chantier.** D-1.a est **close** (instruite le 24/05,
+cf. §2.1bis — pas de migration de schéma). Reste D-2.a (portée de la
+neutralisation de `liberada_para_circulacao`), à trancher en session.
 
 ---
 
@@ -602,7 +669,7 @@ intégralement, par le chantier qui le rencontre en premier. Le détail :
 
 | Étape | Chantier | Pré-requis bloquant | Livrable |
 |---|---|---|---|
-| 1 | A | Dump SQL à jour ; instruction D-1.a (flag de conversion) | Migrations + patch `dispatch.ts` |
+| 1 | A | Dump SQL rafraîchi (D-1.a déjà instruite, cf. §2.1bis) | Patch RPC conversion + `handleEmprestimoV2` + `dispatch.ts` |
 | 2 | B | Inventaire des 54 + chaînes `register` croisé `mail-strings.ts` | `team.ts` et `register` entièrement i18n |
 | 3 | C | Confirmer la colonne `logo_url` au schéma | Résolution logo par contexte |
 | 4 | D | — (`res.converted` déjà traité en A) | Mails de statut de réservation informatifs |
@@ -701,7 +768,8 @@ rappelés ici pour qu'aucune session future ne les rouvre par erreur :
 - Les décisions D-0, D-1 et D-2 (§2) sont, elles, **actées** : D-0 fixe la règle
   de traitement unique des objets partagés entre chantiers ; D-1 et D-2
   tranchent ce que l'audit laissait « à qualifier » et conditionnent le chantier
-  A. Les dettes qu'elles ouvrent (D-1.a, D-2.a) restent à instruire en session.
+  A. La dette D-1.a a été instruite et close le 24/05 (cf. §2.1bis) ; la dette
+  D-2.a reste à instruire en session du chantier A.
 - TM-A est **acté** : il sera traité par amendement de `spec-gouvernance-roles.md`
   en version v1.3 (le réseau entérine la notification de la coordination au seuil
   J-7, avec escalade aux administrateur·rices du réseau si la personne inactive
