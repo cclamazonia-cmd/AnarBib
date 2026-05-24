@@ -195,6 +195,13 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
 
+        {/* ── Paquet 7 criar-conta — Informations déclaratives optionnelles ── */}
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>{t({ id: 'privacy.declared.title' })}</h2>
+          <p style={pStyle}>{t({ id: 'privacy.declared.body1' })}</p>
+          <p style={pStyle}>{t({ id: 'privacy.declared.body2' })}</p>
+        </section>
+
         <section style={sectionStyle}>
           <h2 style={h2Style}>{t({ id: 'privacy.s6.title' })}</h2>
           <p style={pStyle}>{t({ id: 'privacy.s6.body' })}</p>

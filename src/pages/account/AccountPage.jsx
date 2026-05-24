@@ -46,6 +46,10 @@ export default function AccountPage() {
   }, [activeTab, availability]);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
+  // Paquet 7 criar-conta — état de l'encadré privacy (suppression du champ déclaratif)
+  const [clearingDeclared, setClearingDeclared] = useState(false);
+  const [declaredMsg, setDeclaredMsg] = useState('');
+  const [declaredMsgIsError, setDeclaredMsgIsError] = useState(false);
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
   const [consultationsHistory, setConsultationsHistory] = useState([]);
@@ -188,6 +192,29 @@ export default function AccountPage() {
     } finally {
       setSaving(false);
     }
+  }
+
+  // Paquet 7 criar-conta — suppression du champ déclaratif library_name_mentioned.
+  // Appelle la RPC api.fn_clear_my_signup_metadata_field (sans argument,
+  // SECURITY DEFINER, scopée à auth.uid()). En cas de succès, retire la clé
+  // du state local profile pour que l'encadré disparaisse immédiatement.
+  async function handleClearDeclaredField() {
+    setClearingDeclared(true);
+    setDeclaredMsg('');
+    const { error } = await supabase.schema('api').rpc('fn_clear_my_signup_metadata_field');
+    setClearingDeclared(false);
+    if (error) {
+      setDeclaredMsgIsError(true);
+      setDeclaredMsg(t({ id: 'account.declared.deleteError' }));
+      return;
+    }
+    setProfile(p => {
+      const meta = { ...(p.signup_intent_metadata || {}) };
+      delete meta.library_name_mentioned;
+      return { ...p, signup_intent_metadata: meta };
+    });
+    setDeclaredMsgIsError(false);
+    setDeclaredMsg(t({ id: 'account.declared.deleted' }));
   }
 
   // Lot 26.1a — Changement de mot de passe a la demande de l'usager.
@@ -816,6 +843,33 @@ export default function AccountPage() {
                   {msg && <span className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
                 </div>
               </form>
+
+              {/* ── Paquet 7 criar-conta — Encadré privacy : biblio mentionnée ──── */}
+              {profile.signup_intent_metadata?.library_name_mentioned && (
+                <div className="ab-conta-notice" style={{ marginTop: 24 }}>
+                  <strong>{t({ id: 'account.declared.title' })}</strong>
+                  <p style={{ margin: '0 0 8px' }}>
+                    {t({ id: 'account.declared.libLabel' })}{' '}
+                    <em>{profile.signup_intent_metadata.library_name_mentioned}</em>
+                  </p>
+                  <p className="ab-conta-hint" style={{ margin: '0 0 10px' }}>
+                    {t({ id: 'account.declared.hint' })}
+                  </p>
+                  <Button
+                    type="button"
+                    variant="danger"
+                    loading={clearingDeclared}
+                    onClick={handleClearDeclaredField}
+                  >
+                    {t({ id: 'account.declared.deleteBtn' })}
+                  </Button>
+                  {declaredMsg && (
+                    <span className={`ab-conta-msg ${declaredMsgIsError ? 'ab-conta-msg--error' : ''}`} style={{ marginLeft: 12 }}>
+                      {declaredMsg}
+                    </span>
+                  )}
+                </div>
+              )}
 
               {/* ── Lot 26.1a — Changement de mot de passe ────────── */}
               <div style={{ marginTop: 32, padding: 20, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>

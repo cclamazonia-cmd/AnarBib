@@ -2841,5 +2841,14 @@
   "biblioteca.exchanges.followup.outcomeNote": "Rezulta noto",
   "biblioteca.exchanges.followup.outcomeNotePlaceholder": "Kiel finiĝis la interŝanĝo, post kompletigo.",
   "biblioteca.exchanges.followup.save": "Konservi la sekvadon",
-  "biblioteca.exchanges.followup.saved": "Sekvado konservita."
+  "biblioteca.exchanges.followup.saved": "Sekvado konservita.",
+  "account.declared.title": "Deklara informo",
+  "account.declared.libLabel": "Biblioteko menciita ĉe la registriĝo:",
+  "account.declared.hint": "Vi menciis ĉi tiun bibliotekon kiam vi kreis vian konton. Se ĝi iam aliĝos al AnarBib, ni povos proponi al vi ligon kiel legant-in-e. Ĉi tiu informo estas legebla nur de la teamo kiu administras la reton.",
+  "account.declared.deleteBtn": "→ Forigi ĉi tiun informon",
+  "account.declared.deleted": "Informo forigita.",
+  "account.declared.deleteError": "Ne eblis forigi. Bonvolu reprovi.",
+  "privacy.declared.title": "Nedevigaj deklaraj informoj",
+  "privacy.declared.body1": "Se, kreante vian konton, vi indikis al ni la nomon de biblioteko kiu ankoraŭ ne estas en AnarBib, ĉi tiu informo estas konservata por ke, se tiu biblioteko iam aliĝos al nia reto, ni povu proponi al vi ligon kiel legant-in-e.",
+  "privacy.declared.body2": "Ĉi tiu informo ne estas dividata kun triaj partioj. Ĝi estas legebla nur de la teamo kiu administras la reton AnarBib. Vi povas konsulti, modifi aŭ forigi ĉi tiun informon iam ajn el via konto (sekcio Miaj datumoj)."
 }

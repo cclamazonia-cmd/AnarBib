@@ -2841,5 +2841,14 @@
   "biblioteca.exchanges.followup.outcomeNote": "Ergebnisnotiz",
   "biblioteca.exchanges.followup.outcomeNotePlaceholder": "Wie der Tausch endete, nach Abschluss.",
   "biblioteca.exchanges.followup.save": "Nachverfolgung speichern",
-  "biblioteca.exchanges.followup.saved": "Nachverfolgung gespeichert."
+  "biblioteca.exchanges.followup.saved": "Nachverfolgung gespeichert.",
+  "account.declared.title": "Deklarative Angabe",
+  "account.declared.libLabel": "Bei der Anmeldung genannte Bibliothek:",
+  "account.declared.hint": "Du hast diese Bibliothek bei der Erstellung deines Kontos genannt. Wenn sie eines Tages AnarBib beitritt, können wir dir eine Anbindung als Leser*in anbieten. Diese Angabe ist nur für das Team lesbar, das das Netzwerk verwaltet.",
+  "account.declared.deleteBtn": "→ Diese Angabe löschen",
+  "account.declared.deleted": "Angabe gelöscht.",
+  "account.declared.deleteError": "Löschen nicht möglich. Bitte versuche es erneut.",
+  "privacy.declared.title": "Optionale deklarative Angaben",
+  "privacy.declared.body1": "Wenn du uns bei der Erstellung deines Kontos den Namen einer Bibliothek genannt hast, die noch nicht bei AnarBib ist, wird diese Angabe aufbewahrt, damit wir dir, falls diese Bibliothek eines Tages unserem Netzwerk beitritt, eine Anbindung als Leser*in anbieten können.",
+  "privacy.declared.body2": "Diese Angabe wird an keine Dritten weitergegeben. Sie ist nur für das Team lesbar, das das AnarBib-Netzwerk verwaltet. Du kannst diese Angabe jederzeit in deinem Konto einsehen, ändern oder löschen (Bereich Meine Daten)."
 }

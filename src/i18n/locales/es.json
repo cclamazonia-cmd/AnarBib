@@ -2841,5 +2841,14 @@
   "biblioteca.exchanges.followup.outcomeNote": "Nota de resultado",
   "biblioteca.exchanges.followup.outcomeNotePlaceholder": "Cómo terminó el intercambio, una vez concluido.",
   "biblioteca.exchanges.followup.save": "Guardar el seguimiento",
-  "biblioteca.exchanges.followup.saved": "Seguimiento guardado."
+  "biblioteca.exchanges.followup.saved": "Seguimiento guardado.",
+  "account.declared.title": "Información declarativa",
+  "account.declared.libLabel": "Biblioteca mencionada en el registro:",
+  "account.declared.hint": "Indicaste esta biblioteca al crear tu cuenta. Si algún día se suma al AnarBib, vamos a poder proponerte un vínculo como lectore. Esta información solo es legible por el equipo que administra la red.",
+  "account.declared.deleteBtn": "→ Borrar esta información",
+  "account.declared.deleted": "Información borrada.",
+  "account.declared.deleteError": "No se pudo borrar. Probá de nuevo.",
+  "privacy.declared.title": "Informaciones declarativas opcionales",
+  "privacy.declared.body1": "Si al crear tu cuenta nos indicaste el nombre de una biblioteca que todavía no está en el AnarBib, esta información se conserva para que, si esa biblioteca se suma algún día a nuestra red, podamos proponerte un vínculo como lectore.",
+  "privacy.declared.body2": "Esta información no se comparte con terceros. Solo es legible por el equipo que administra la red AnarBib. Podés consultar, modificar o borrar esta información en cualquier momento desde tu cuenta (sección Mis datos)."
 }

@@ -2841,5 +2841,14 @@
   "biblioteca.exchanges.followup.outcomeNote": "Nota de resultat",
   "biblioteca.exchanges.followup.outcomeNotePlaceholder": "Com va acabar l’intercanvi, un cop conclòs.",
   "biblioteca.exchanges.followup.save": "Desar el seguiment",
-  "biblioteca.exchanges.followup.saved": "Seguiment desat."
+  "biblioteca.exchanges.followup.saved": "Seguiment desat.",
+  "account.declared.title": "Informació declarativa",
+  "account.declared.libLabel": "Biblioteca esmentada en el registre:",
+  "account.declared.hint": "Vas indicar aquesta biblioteca en crear el teu compte. Si algun dia s'adhereix a AnarBib, et podrem proposar un vincle com a lector-a-e. Aquesta informació només és llegible per l'equip que administra la xarxa.",
+  "account.declared.deleteBtn": "→ Esborrar aquesta informació",
+  "account.declared.deleted": "Informació esborrada.",
+  "account.declared.deleteError": "No s'ha pogut esborrar. Torna-ho a provar.",
+  "privacy.declared.title": "Informacions declaratives opcionals",
+  "privacy.declared.body1": "Si, en crear el teu compte, ens vas indicar el nom d'una biblioteca que encara no és a AnarBib, aquesta informació es conserva perquè, si aquesta biblioteca s'adhereix algun dia a la nostra xarxa, et puguem proposar un vincle com a lector-a-e.",
+  "privacy.declared.body2": "Aquesta informació no es comparteix amb tercers. Només és llegible per l'equip que administra la xarxa AnarBib. Pots consultar, modificar o esborrar aquesta informació en qualsevol moment des del teu compte (secció Les meves dades)."
 }

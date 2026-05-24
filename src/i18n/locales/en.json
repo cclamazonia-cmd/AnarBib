@@ -2841,5 +2841,14 @@
   "biblioteca.exchanges.followup.outcomeNote": "Outcome note",
   "biblioteca.exchanges.followup.outcomeNotePlaceholder": "How the exchange ended, once completed.",
   "biblioteca.exchanges.followup.save": "Save follow-up",
-  "biblioteca.exchanges.followup.saved": "Follow-up saved."
+  "biblioteca.exchanges.followup.saved": "Follow-up saved.",
+  "account.declared.title": "Declared information",
+  "account.declared.libLabel": "Library mentioned at sign-up:",
+  "account.declared.hint": "You mentioned this library when you created your account. If it joins AnarBib one day, we'll be able to offer you an attachment as a reader. This information is readable only by the team that administers the network.",
+  "account.declared.deleteBtn": "→ Delete this information",
+  "account.declared.deleted": "Information deleted.",
+  "account.declared.deleteError": "Could not delete. Please try again.",
+  "privacy.declared.title": "Optional declared information",
+  "privacy.declared.body1": "If, when creating your account, you gave us the name of a library that is not yet on AnarBib, this information is kept so that, if that library joins our network one day, we can offer you an attachment as a reader.",
+  "privacy.declared.body2": "This information is not shared with any third party. It is readable only by the team that administers the AnarBib network. You can view, modify or delete this information at any time from your account (My data section)."
 }
