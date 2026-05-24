@@ -158,6 +158,11 @@ export default function BibliotecaPage() {
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [instantiateFor, setInstantiateFor] = useState(null);
   const [instantiateDate, setInstantiateDate] = useState('');
+  // Chantier #TASKS etape 6 paquet 3 (24/05/2026) : catalogue de suggestions.
+  // suggestions = painel_task_suggestion_catalog (global, lecture seule).
+  // Le texte des suggestions vit dans la donnee (title_i18n/description_i18n
+  // jsonb 8 langues) ; seule l'ossature du sous-onglet a des cles i18n.
+  const [suggestions, setSuggestions] = useState([]);
   const [allLibraries, setAllLibraries] = useState([]);
   const [illForm, setIllForm] = useState({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'', logisticsMode:'' });
   const [illItems, setIllItems] = useState([]);
@@ -186,7 +191,7 @@ export default function BibliotecaPage() {
   const loadAll = useCallback(async () => {
     if (!libraryId) return;
     try {
-      const [libR, commR, ssR, regR, psR, dgR, partR, memR, illR, taskR, mcR, npR, mrR, tplR] = await Promise.all([
+      const [libR, commR, ssR, regR, psR, dgR, partR, memR, illR, taskR, mcR, npR, mrR, tplR, sugR] = await Promise.all([
         supabase.from('libraries').select('*').eq('id', libraryId).single(),
         supabase.from('library_commons').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('*').eq('library_id', libraryId).maybeSingle(),
@@ -204,12 +209,17 @@ export default function BibliotecaPage() {
         // protegee par la RLS painel_recurring_task_rules_select (doctrine
         // RPC v3 : from() autorise pour les lectures protegees par RLS).
         supabase.from('painel_recurring_task_rules').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }),
+        // Chantier #TASKS etape 6 paquet 3 : catalogue de suggestions. Table
+        // globale (sans library_id), lecture seule reservee au staff par la
+        // RLS painel_task_suggestion_catalog_select_staff.
+        supabase.from('painel_task_suggestion_catalog').select('*').eq('is_active', true).order('display_order', { ascending: true }),
       ]);
       setLib(libR.data); setCommons(commR.data); setServiceState(ssR.data);
       setRegDocs(regR.data || []); setDocGov(dgR.data);
       setPartners(partR.data || []); setMembers(memR.data || []);
       setIllLoans(illR.data || []); setTasks(taskR.data || []);
       setTemplates(tplR.data || []);
+      setSuggestions(sugR.data || []);
       // #ILL-partial — charge les exemplaires de tous les prêts affichés,
       // regroupés par prêt. Lecture simple protégée par la RLS
       // interlibrary_loan_items_v2_select (doctrine RPC v3 : from() autorisé
@@ -528,6 +538,25 @@ export default function BibliotecaPage() {
       setInstantiateFor(null);
       setInstantiateDate('');
       setMsg({ text: t({ id: 'biblioteca.templates.instantiated' }), kind: 'ok' });
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    }
+  }
+
+  // Adopte une suggestion du catalogue : la RPC fn_task_adopt_suggestion copie
+  // la suggestion en tache-type locale (painel_recurring_task_rules). On passe
+  // la locale courante pour que le titre/description copies soient dans la
+  // langue de l'interface ; le backend retombe sur pt-BR si la cle manque.
+  async function adoptSuggestion(code) {
+    try {
+      const { error } = await supabase.rpc('fn_task_adopt_suggestion', {
+        p_suggestion_code: code,
+        p_library_id: libraryId,
+        p_locale: locale || 'pt-BR',
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'biblioteca.catalog.adopted' }), kind: 'ok' });
       await loadAll();
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
@@ -2082,12 +2111,72 @@ export default function BibliotecaPage() {
               )}
             </div>)}
 
-            {/* ── Sous-onglet CATALOGO (placeholder, paquet 3) ── */}
-            {tasksSubtab==='catalogo' && (
-              <div style={{ ...bx, fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic' }}>
-                {t({ id: 'biblioteca.tasks.subtab.catalog.placeholder' })}
+            {/* ── Sous-onglet CATALOGO (chantier #TASKS p3) ── */}
+            {tasksSubtab==='catalogo' && (() => {
+              // Le texte des suggestions vient de la donnee (jsonb 8 langues).
+              // Helper de lecture localisee avec repli sur pt-BR puis 1re cle.
+              const i18nField = (obj) => {
+                if (!obj) return '';
+                return obj[locale] || obj['pt-BR'] || Object.values(obj)[0] || '';
+              };
+              // Regroupement par categorie, ordre = display_order (deja trie
+              // au chargement). On conserve l'ordre d'apparition des categories.
+              const byCategory = [];
+              const seen = new Map();
+              for (const s of suggestions) {
+                if (!seen.has(s.category)) {
+                  const grp = { category: s.category, items: [] };
+                  seen.set(s.category, grp);
+                  byCategory.push(grp);
+                }
+                seen.get(s.category).items.push(s);
+              }
+              return (
+              <div>
+                <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:12 }}>
+                  {t({ id: 'biblioteca.catalog.hint' })}
+                </div>
+                {suggestions.length===0 && (
+                  <div style={{ fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic', padding:'8px 2px' }}>
+                    {t({ id: 'biblioteca.catalog.empty' })}
+                  </div>
+                )}
+                {byCategory.map(grp => (
+                  <div key={grp.category} style={{ marginBottom:16 }}>
+                    <h4 style={{ margin:'0 0 8px', fontSize:'.92rem' }}>
+                      {t({ id: `biblioteca.catalog.category.${grp.category}`, defaultMessage: grp.category })}
+                    </h4>
+                    <div style={lw}>
+                      {grp.items.map((s,i)=>{
+                        const isRecurrent = s.suggested_interval_count!=null && s.suggested_interval_unit!=null;
+                        return (
+                        <div key={s.id} style={{ ...lr(i), alignItems:'flex-start', gap:10 }}>
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <div style={{ fontSize:'.9rem', fontWeight:600, display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
+                              {i18nField(s.title_i18n)}
+                              <span className={`cat-pill ${isRecurrent?'info':''}`} style={{ fontSize:'.62rem', padding:'1px 6px' }}>
+                                {isRecurrent
+                                  ? t({ id: 'biblioteca.templates.cadenceBadge' }, { count: s.suggested_interval_count, unit: t({ id: `biblioteca.templates.unit.${s.suggested_interval_unit}` }) })
+                                  : t({ id: 'biblioteca.templates.punctualBadge' })}
+                              </span>
+                            </div>
+                            <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>
+                              {i18nField(s.description_i18n)}
+                            </div>
+                          </div>
+                          <button className="cat-btn secondary" onClick={()=>adoptSuggestion(s.code)}
+                            style={{ fontSize:'.78rem', padding:'4px 10px', flexShrink:0 }}>
+                            {t({ id: 'biblioteca.catalog.adopt' })}
+                          </button>
+                        </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
+              );
+            })()}
           </div>
           );
         })()}
