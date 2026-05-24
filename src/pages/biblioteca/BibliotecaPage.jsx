@@ -144,6 +144,11 @@ export default function BibliotecaPage() {
   const [membershipRules, setMembershipRules] = useState([]);
   const [editingMembershipRule, setEditingMembershipRule] = useState(null); // null = aucun, 'new' = nouveau, ou {id,...} pour édition
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'normal', owner: '' });
+  // Chantier #TASKS etape 6 (24/05/2026) : sous-onglets de l'onglet « Tarefas
+  // internas ». Paquet 1 ne remplit que 'lista' (vue par echeance + drapeau
+  // stale) ; 'modelos' et 'catalogo' sont des placeholders, remplis aux
+  // paquets 2 et 3.
+  const [tasksSubtab, setTasksSubtab] = useState('lista');
   const [allLibraries, setAllLibraries] = useState([]);
   const [illForm, setIllForm] = useState({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'', logisticsMode:'' });
   const [illItems, setIllItems] = useState([]);
@@ -781,6 +786,38 @@ export default function BibliotecaPage() {
     } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
     finally { setSaving(false); }
   }
+
+  // Chantier #TASKS etape 6 paquet 1 (24/05/2026) : regroupement des taches
+  // par echeance pour la vue « Lista ». Quatre seaux : en retard, aujourd'hui,
+  // a venir, sans echeance. Les taches terminees (concluida) ou annulees
+  // (cancelada) sont ecartees de la vue par echeance — elles n'appellent plus
+  // d'action. due_date est de type date (pas timestamp) : comparaison de
+  // chaines YYYY-MM-DD suffit et evite tout decalage de fuseau.
+  const tasksByBucket = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    const buckets = { atrasada: [], hoje: [], futura: [], sem_prazo: [] };
+    for (const tk of tasks) {
+      if (tk.status === 'concluida' || tk.status === 'cancelada') continue;
+      if (!tk.due_date) { buckets.sem_prazo.push(tk); continue; }
+      if (tk.due_date < today) buckets.atrasada.push(tk);
+      else if (tk.due_date === today) buckets.hoje.push(tk);
+      else buckets.futura.push(tk);
+    }
+    // Tri intra-seau par due_date croissante (les sans-echeance gardent
+    // l'ordre de chargement, created_at desc).
+    const byDue = (a, b) => (a.due_date || '').localeCompare(b.due_date || '');
+    buckets.atrasada.sort(byDue);
+    buckets.hoje.sort(byDue);
+    buckets.futura.sort(byDue);
+    return buckets;
+  }, [tasks]);
+
+  // Taches deja closes (concluida/cancelada), affichees a part en bas de la
+  // vue Lista pour ne pas encombrer les seaux d'echeance.
+  const closedTasks = useMemo(
+    () => tasks.filter(tk => tk.status === 'concluida' || tk.status === 'cancelada'),
+    [tasks],
+  );
 
   const fs = { width:'100%', padding:'10px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', fontSize:'.9rem' };
   const ls = { display:'block', fontSize:'.85rem', fontWeight:600, marginBottom:3, color:'var(--brand-muted, #ccc)' };
@@ -1587,26 +1624,39 @@ export default function BibliotecaPage() {
         </div>)}
 
         {/* ═══ 9. Tarefas internas ════════════════════ */}
-        {tab==='tasks' && (<div>
-          <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.tasks.title' })}</h3>
-          <div style={bx}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.tasks.new' })}</h4>
-            <div className="cat-book-grid" style={{ marginBottom:10 }}>
-              <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.tasks.titleField' })}</label><input type="text" value={newTask.title} onChange={e=>setNewTask(p=>({...p,title:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.titlePlaceholder' })} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.priority' })}</label><select value={newTask.priority} onChange={e=>setNewTask(p=>({...p,priority:e.target.value}))} style={fs}><option value="baixa">{t({ id: 'biblioteca.tasks.priority.low' })}</option><option value="normal">{t({ id: 'biblioteca.tasks.priority.normal' })}</option><option value="alta">{t({ id: 'biblioteca.tasks.priority.high' })}</option></select></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.owner' })}</label><input type="text" value={newTask.owner} onChange={e=>setNewTask(p=>({...p,owner:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.ownerPlaceholder' })} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.dueDate' })}</label><input type="date" value={newTask.dueDate||''} onChange={e=>setNewTask(p=>({...p,dueDate:e.target.value}))} style={fs} /></div>
-              <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.tags' })}</label><input type="text" value={newTask.tagsText||''} onChange={e=>setNewTask(p=>({...p,tagsText:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.tagsPlaceholder' })} /></div>
-              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.tasks.description' })}</label><textarea value={newTask.description} onChange={e=>setNewTask(p=>({...p,description:e.target.value}))} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({ id: 'biblioteca.tasks.descPlaceholder' })} /></div>
-            </div>
-            <button className="cat-btn primary" onClick={createTask} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.tasks.create' })}</button>
-          </div>
-          {/* FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage) */}
-          {tasks.length>0 && <div style={lw}>{tasks.map((tk,i)=>(
+        {/* Chantier #TASKS etape 6 (24/05/2026) : onglet refondu en trois
+            sous-onglets. Paquet 1 livre « Lista » (vue par echeance + drapeau
+            de recurrence en retard). « Modelos » et « Catalogo » sont des
+            placeholders, remplis aux paquets 2 et 3. */}
+        {tab==='tasks' && (() => {
+          // Rendu d'une ligne de tache. Closure pour reutilisation dans chaque
+          // seau d'echeance et dans la liste des taches closes. Le markup et
+          // le comportement (select de statut, suppression, invitation) sont
+          // identiques a l'ancienne liste plate ; on ajoute seulement deux
+          // marqueurs : drapeau « recurrence en retard » (recurrence_stale_
+          // flagged_at) et badge « serie » (recurrence_rule_id non nul).
+          const renderTaskRow = (tk, i) => {
+            const isStale = !!tk.recurrence_stale_flagged_at;
+            const isRecurring = !!tk.recurrence_rule_id;
+            return (
             <div key={tk.id} style={{ ...lr(i), flexDirection:'column', alignItems:'stretch', gap:6 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:'.9rem', fontWeight:600 }}>{tk.title||t({ id: 'common.noTitle' })}</div>
+                  <div style={{ fontSize:'.9rem', fontWeight:600, display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
+                    {tk.title||t({ id: 'common.noTitle' })}
+                    {isRecurring && (
+                      <span className="cat-pill info" style={{ fontSize:'.62rem', padding:'1px 6px' }}
+                        title={t({ id: 'biblioteca.tasks.recurring.hint' })}>
+                        {t({ id: 'biblioteca.tasks.recurring.badge' })}
+                      </span>
+                    )}
+                    {isStale && (
+                      <span className="cat-pill danger" style={{ fontSize:'.62rem', padding:'1px 6px' }}
+                        title={t({ id: 'biblioteca.tasks.staleRecurrence.hint' })}>
+                        {t({ id: 'biblioteca.tasks.staleRecurrence.badge' })}
+                      </span>
+                    )}
+                  </div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                     {tk.owner||'—'}{tk.due_date&&` · ${t({ id: 'biblioteca.tasks.deadlineLabel' })}: ${tk.due_date}`}
                     {tk.tags?.length>0&&` · ${tk.tags.join(', ')}`}
@@ -1629,8 +1679,100 @@ export default function BibliotecaPage() {
                   onClick={async e=>{const inp=e.target.previousElementSibling;if(inp?.value?.trim()){await inviteToTask(tk.id,inp.value);inp.value='';}}}>{t({ id: 'biblioteca.tasks.invite' })}</button>
               </div>
             </div>
-          ))}</div>}
-        </div>)}
+            );
+          };
+
+          // Rendu d'un seau d'echeance : titre + compteur + lignes. Masque si
+          // vide (sauf le bloc « sans echeance » qui reste utile a montrer).
+          const renderBucket = (key, labelId, accent) => {
+            const list = tasksByBucket[key];
+            if (!list.length) return null;
+            return (
+              <div style={{ marginBottom:14 }}>
+                <h4 style={{ margin:'0 0 8px', fontSize:'.92rem', color:accent }}>
+                  {t({ id: labelId })} ({list.length})
+                </h4>
+                <div style={lw}>{list.map((tk,i)=>renderTaskRow(tk,i))}</div>
+              </div>
+            );
+          };
+
+          const hasActiveTasks = (
+            tasksByBucket.atrasada.length
+            + tasksByBucket.hoje.length
+            + tasksByBucket.futura.length
+            + tasksByBucket.sem_prazo.length
+          ) > 0;
+
+          return (
+          <div>
+            <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.tasks.title' })}</h3>
+
+            {/* Sous-onglets internes : Lista / Modelos / Catalogo. Reutilise
+                la classe cat-tab-btn pour rester coherent avec la page. */}
+            <div className="cat-tabs" style={{ marginBottom:16 }}>
+              <button className={`cat-tab-btn${tasksSubtab==='lista'?' active':''}`} onClick={()=>setTasksSubtab('lista')}>{t({ id: 'biblioteca.tasks.subtab.list' })}</button>
+              <button className={`cat-tab-btn${tasksSubtab==='modelos'?' active':''}`} onClick={()=>setTasksSubtab('modelos')}>{t({ id: 'biblioteca.tasks.subtab.templates' })}</button>
+              <button className={`cat-tab-btn${tasksSubtab==='catalogo'?' active':''}`} onClick={()=>setTasksSubtab('catalogo')}>{t({ id: 'biblioteca.tasks.subtab.catalog' })}</button>
+            </div>
+
+            {/* ── Sous-onglet LISTA ── */}
+            {tasksSubtab==='lista' && (<div>
+              <div style={bx}>
+                <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.tasks.new' })}</h4>
+                <div className="cat-book-grid" style={{ marginBottom:10 }}>
+                  <div className="cat-field" style={{ gridColumn:'span 2' }}><label style={ls}>{t({ id: 'biblioteca.tasks.titleField' })}</label><input type="text" value={newTask.title} onChange={e=>setNewTask(p=>({...p,title:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.titlePlaceholder' })} /></div>
+                  <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.priority' })}</label><select value={newTask.priority} onChange={e=>setNewTask(p=>({...p,priority:e.target.value}))} style={fs}><option value="baixa">{t({ id: 'biblioteca.tasks.priority.low' })}</option><option value="normal">{t({ id: 'biblioteca.tasks.priority.normal' })}</option><option value="alta">{t({ id: 'biblioteca.tasks.priority.high' })}</option></select></div>
+                  <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.owner' })}</label><input type="text" value={newTask.owner} onChange={e=>setNewTask(p=>({...p,owner:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.ownerPlaceholder' })} /></div>
+                  <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.dueDate' })}</label><input type="date" value={newTask.dueDate||''} onChange={e=>setNewTask(p=>({...p,dueDate:e.target.value}))} style={fs} /></div>
+                  <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.tasks.tags' })}</label><input type="text" value={newTask.tagsText||''} onChange={e=>setNewTask(p=>({...p,tagsText:e.target.value}))} style={fs} placeholder={t({ id: 'biblioteca.tasks.tagsPlaceholder' })} /></div>
+                  <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.tasks.description' })}</label><textarea value={newTask.description} onChange={e=>setNewTask(p=>({...p,description:e.target.value}))} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({ id: 'biblioteca.tasks.descPlaceholder' })} /></div>
+                </div>
+                <button className="cat-btn primary" onClick={createTask} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.tasks.create' })}</button>
+              </div>
+
+              {/* Vue par echeance. Quatre seaux ordonnes du plus urgent au
+                  moins urgent. Le bloc « sans echeance » ferme la marche. */}
+              {!hasActiveTasks && (
+                <div style={{ fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic', padding:'8px 2px' }}>
+                  {t({ id: 'biblioteca.tasks.empty' })}
+                </div>
+              )}
+              {renderBucket('atrasada', 'biblioteca.tasks.bucket.overdue', '#f87171')}
+              {renderBucket('hoje', 'biblioteca.tasks.bucket.today', '#fbbf24')}
+              {renderBucket('futura', 'biblioteca.tasks.bucket.upcoming', 'var(--brand-text)')}
+              {renderBucket('sem_prazo', 'biblioteca.tasks.bucket.undated', 'var(--brand-muted)')}
+
+              {/* Taches closes (concluida / cancelada), repliees sous un
+                  separateur discret pour ne pas encombrer les seaux actifs. */}
+              {closedTasks.length>0 && (
+                <details style={{ marginTop:10 }}>
+                  <summary style={{ cursor:'pointer', fontSize:'.85rem', color:'var(--brand-muted)' }}>
+                    {t({ id: 'biblioteca.tasks.closed.toggle' }, { count: closedTasks.length })}
+                  </summary>
+                  <div style={{ ...lw, marginTop:8, opacity:.7 }}>
+                    {closedTasks.map((tk,i)=>renderTaskRow(tk,i))}
+                  </div>
+                </details>
+              )}
+            </div>)}
+
+            {/* ── Sous-onglet MODELOS (placeholder, paquet 2) ── */}
+            {tasksSubtab==='modelos' && (
+              <div style={{ ...bx, fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic' }}>
+                {t({ id: 'biblioteca.tasks.subtab.templates.placeholder' })}
+              </div>
+            )}
+
+            {/* ── Sous-onglet CATALOGO (placeholder, paquet 3) ── */}
+            {tasksSubtab==='catalogo' && (
+              <div style={{ ...bx, fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic' }}>
+                {t({ id: 'biblioteca.tasks.subtab.catalog.placeholder' })}
+              </div>
+            )}
+          </div>
+          );
+        })()}
 
       </div>
     <Footer /></PageShell>
