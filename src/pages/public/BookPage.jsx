@@ -426,11 +426,17 @@ export default function BookPage() {
                 && serviceState?.allows_new_reservations !== false && (
                 <Button onClick={handleReserve}>{t({ id: 'book.reserve' })}</Button>
               )}
-              {/* Paquet B.1 : bouton "Agendar consulta". Affichage selon doctrine §8 :
-                  - pausada -> aucun bouton (regle commune)
-                  - somente_consulta -> seul bouton consulta (toujours, peu importe loanable)
-                  - funcionamento_normal + non-loanable -> bouton consulta (seul affichage possible)
-                  - funcionamento_normal + loanable + status=ok -> bouton consulta en plus de Reservar
+              {/* Bouton "Agendar consulta" (#consulta-loanable, 24/05/2026).
+                  Tout ouvrage en circulation est consultable sur place, qu'il
+                  soit empruntable ou non, et que ses exemplaires soient ou non
+                  disponibles a l'emprunt : la consultation est une file
+                  independante. Le bouton s'affiche donc des que le service
+                  n'est pas 'pausada'. La disponibilite reelle d'un exemplaire
+                  est tranchee cote base (fn_v2_resolve_consulta_exemplar,
+                  #MODEL-item-grain) : une demande sans exemplaire libre est
+                  refusee proprement par la RPC.
+                  - pausada -> aucun bouton (regle commune, garde exterieure)
+                  - somente_consulta / funcionamento_normal -> bouton affiche
                   - lecteur sans biblio de rattachement -> bouton grise tooltip
               */}
               {user && serviceState?.service_mode !== 'pausada' && (() => {
@@ -442,14 +448,6 @@ export default function BookPage() {
                     </Button>
                   );
                 }
-                const mode = serviceState?.service_mode || 'funcionamento_normal';
-                const showConsulta =
-                  mode === 'somente_consulta' ||
-                  (mode === 'funcionamento_normal' && (
-                    book.loanable === false ||
-                    (status.cls === 'ok' && book.loanable !== false)
-                  ));
-                if (!showConsulta) return null;
                 return (
                   <Button variant="secondary" onClick={handleReserveConsulta}>
                     {t({ id: 'book.reserve.consult' })}

@@ -925,19 +925,17 @@ export default function CatalogPage() {
                               </button>
                             );
                           })()}
-                          {/* Paquet B.2 : bouton "Agendar consulta", miroir du Reservar.
-                              Doctrine §8 : pausada -> aucun ; somente_consulta -> seul ce bouton ;
-                              funcionamento_normal -> ce bouton sur non-loanable OU livre dispo. */}
+                          {/* Bouton "Agendar consulta" (#consulta-loanable,
+                              24/05/2026). Tout ouvrage en circulation est
+                              consultable, qu'il soit empruntable ou non, et
+                              que ses exemplaires soient ou non disponibles a
+                              l'emprunt. quickConsultaAvailable porte deja la
+                              garde de service (pausada -> non). La
+                              disponibilite reelle d'un exemplaire est tranchee
+                              cote base (fn_v2_resolve_consulta_exemplar,
+                              #MODEL-item-grain). */}
                           {(() => {
                             if (!quickConsultaAvailable) return null;
-                            const mode = serviceState?.service_mode || 'funcionamento_normal';
-                            const showConsulta =
-                              mode === 'somente_consulta' ||
-                              (mode === 'funcionamento_normal' && (
-                                book.session_loanable === false ||
-                                (status.cls === 'ok' && book.session_loanable !== false)
-                              ));
-                            if (!showConsulta) return null;
 
                             const key = String(book.book_id || book.bib_ref || '');
                             const refLow = String(book.bib_ref || '').trim().toLowerCase();
