@@ -1459,8 +1459,18 @@ export default function PanelPage() {
                             </span>
                             <select value={tk.status} style={{ fontSize: '.82rem', padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4' }}
                               onChange={async e => {
-                                await supabase.from('painel_internal_tasks').update({ status: e.target.value }).eq('id', tk.id);
-                                loadData();
+                                // Chantier #TASKS : router par fn_task_update_status (RPC)
+                                // au lieu d'un update() direct. Le update() court-circuitait
+                                // la regeneration des taches recurrentes a l'achevement.
+                                try {
+                                  const { error } = await supabase.rpc('fn_task_update_status', {
+                                    p_task_id: tk.id, p_new_status: e.target.value,
+                                  });
+                                  if (error) throw error;
+                                  loadData();
+                                } catch (err) {
+                                  alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+                                }
                               }}>
                               <option value="pendente">{t({ id: 'task.status.pendente' })}</option>
                               <option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option>
@@ -2770,9 +2780,20 @@ function TaskBucket({ title, tasks, setTab, onTaskAction }) {
                 <select style={{ fontSize:'.78rem', padding:'3px 6px', borderRadius:6, border:'1px solid rgba(255,255,255,.15)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}
                   defaultValue="" onChange={async e => {
                     if (!e.target.value) return;
-                    await supabase.from('painel_internal_tasks').update({ status: e.target.value }).eq('id', tk.task_id);
-                    if (onTaskAction) onTaskAction();
+                    // Chantier #TASKS : router par fn_task_update_status (RPC)
+                    // au lieu d'un update() direct, sinon la regeneration des
+                    // taches recurrentes ne se declenche jamais a l'achevement.
+                    const newStatus = e.target.value;
                     e.target.value = '';
+                    try {
+                      const { error } = await supabase.rpc('fn_task_update_status', {
+                        p_task_id: tk.task_id, p_new_status: newStatus,
+                      });
+                      if (error) throw error;
+                      if (onTaskAction) onTaskAction();
+                    } catch (err) {
+                      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+                    }
                   }}>
                   <option value="">{t({ id: 'panel.tasks.advance' })}</option>
                   <option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option>
