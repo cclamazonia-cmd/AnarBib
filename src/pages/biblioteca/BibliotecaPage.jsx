@@ -21,6 +21,7 @@ import LibraryContactProfileSection from '@/components/library/LibraryContactPro
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
+import LibraryPartnershipsSection from '@/components/library/LibraryPartnershipsSection';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -131,7 +132,6 @@ export default function BibliotecaPage() {
   const [serviceState, setServiceState] = useState(null);
   const [regDocs, setRegDocs] = useState([]);
   const [docGov, setDocGov] = useState(null);
-  const [partners, setPartners] = useState([]);
   // members reste chargé : utilisé par generateReportText() même si l'onglet team
   // affiche désormais <TeamPanel /> qui charge ses propres données.
   const [members, setMembers] = useState([]);
@@ -191,14 +191,17 @@ export default function BibliotecaPage() {
   const loadAll = useCallback(async () => {
     if (!libraryId) return;
     try {
-      const [libR, commR, ssR, regR, psR, dgR, partR, memR, illR, taskR, mcR, npR, mrR, tplR, sugR] = await Promise.all([
+      const [libR, commR, ssR, regR, psR, dgR, memR, illR, taskR, mcR, npR, mrR, tplR, sugR] = await Promise.all([
         supabase.from('libraries').select('*').eq('id', libraryId).single(),
         supabase.from('library_commons').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_regulation_documents').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }),
         supabase.from('library_circulation_policy_sets').select('*').eq('library_id', libraryId).eq('is_active', true).maybeSingle(),
         supabase.from('library_document_governance').select('*').eq('library_id', libraryId).maybeSingle(),
-        supabase.from('catalog_partners').select('*').order('display_name'),
+        // Chantier « Partenaires de correspondance » 24/05/2026 : le fetch
+        // catalog_partners a ete retire d'ici. L'editeur LibraryPartnershipsSection
+        // (onglet documents) charge desormais lui-meme catalog_partners et la vue
+        // api.library_partnerships_ui. Le state `partners` de la page est supprime.
         supabase.from('user_library_memberships').select('*, profiles:user_id(email, first_name, last_name)').eq('library_id', libraryId).order('created_at'),
         supabase.from('interlibrary_loans_v2').select('*').or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`).order('created_at', { ascending: false }).limit(50),
         supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }).limit(50),
@@ -216,7 +219,7 @@ export default function BibliotecaPage() {
       ]);
       setLib(libR.data); setCommons(commR.data); setServiceState(ssR.data);
       setRegDocs(regR.data || []); setDocGov(dgR.data);
-      setPartners(partR.data || []); setMembers(memR.data || []);
+      setMembers(memR.data || []);
       setIllLoans(illR.data || []); setTasks(taskR.data || []);
       setTemplates(tplR.data || []);
       setSuggestions(sugR.data || []);
@@ -1460,16 +1463,18 @@ export default function BibliotecaPage() {
               Restaure la fonctionnalite du HTML d'origine. Doctrine :
               gouvernance documentale = attribut local par biblioteca. */}
           <DocumentGovernanceSection libraryId={libraryId} canEdit={isCoord} />
-          <div style={{ ...bx, marginTop:16 }}>
-            <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.documents.partners' })}</h4>
-            {partners.length===0 && <div style={{ fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.documents.noPartners' })}</div>}
-            {partners.length>0 && <div style={lw}>{partners.map((p,i)=>(
-              <div key={p.id} style={lr(i)}>
-                <div><div style={{ fontSize:'.9rem', fontWeight:600 }}>{p.display_name||p.slug}</div><div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{p.software_family||'—'} · {p.country_code||'—'}</div></div>
-                <span className={`cat-pill ${p.is_active?'ok':'warn'}`} style={{ fontSize:'.7rem' }}>{p.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span>
-              </div>
-            ))}</div>}
-          </div>
+          {/* Chantier « Partenaires de correspondance » etape 3 (24/05/2026) :
+              remplace l'ancienne liste globale en lecture seule de
+              catalog_partners par l'editeur LibraryPartnershipsSection.
+              Chaque biblioteca choisit desormais ses propres partenaires
+              (bibliotheques federees ou collectifs catalogue). Reserve au
+              staff de coordination (canEdit=isCoord, l'onglet est coordOnly).
+              Spec : docs/decisions/CHANTIER_partenaires_correspondance_2026-05-24. */}
+          <LibraryPartnershipsSection
+            libraryId={libraryId}
+            canEdit={isCoord}
+            allLibraries={allLibraries}
+          />
         </div>)}
 
         {/* ═══ 4b. Confidentialité — Phase 4a RGPD ═══════ */}
