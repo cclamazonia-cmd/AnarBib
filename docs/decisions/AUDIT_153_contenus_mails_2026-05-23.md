@@ -8,10 +8,9 @@
 **Méthode :** audit en 4 passes — A (inventaire), B (destinataires & doublons),
 C (wording & cohérence), D (présentation & délivrabilité).
 
-**État au 24/05/2026 :** passe A réalisée. **Passe B complète** — sous-passes
-B.1 (TR-1, TR-2 ; voir §5), B.2 (`team.ts`, `library_profile.ts`, TR-8 ; voir §6)
-et B.3 (`network.ts` ; voir §7) réalisées. Passes C (wording & cohérence) et D
-(présentation & délivrabilité) à venir.
+**État au 24/05/2026 :** passes A, B (complète) et **C (complète)** réalisées.
+Sous-passes B.1 (§5), B.2 (§6), B.3 (§7) ; passe C — wording & cohérence (§8).
+Reste la passe D (présentation & délivrabilité).
 
 ---
 
@@ -260,24 +259,26 @@ constats **TM-*** sont propres au handler `team.ts`, les **LP-*** au handler
 |---|---|---|---|
 | TR-1 | Coexistence des handlers `legacy.ts` et v2. **Instruit en B.1 :** double envoi via dispatch impossible (`if/return`). Mais anomalie de routage révélée — `emprestimo_prorrogado` capté par la branche legacy, la branche v2 (lignes 58/62 de `dispatch.ts`) est morte. Mail legacy non i18n au lieu du mail v2 multilingue. | À qualifier | B.1 — instruit, voir §5 |
 | TR-2 | Conversion réservation → emprunt : **doublon confirmé en B.1.** Le passage du stage à `retirada_efetivada` émet `reserva_convertida_em_emprestimo` (mail `res.converted`), et l'INSERT de l'emprunt dans `emprestimos_v2` émet `emprestimo_v2_criado` (mail `loan.created`). Le lecteur·rice reçoit deux mails. Redondance de notification (mails distincts), non duplication stricte. Sous-constat n°2. | À qualifier | B.1 — instruit, voir §5 |
-| TR-3 | Annulation de réservation : clé i18n unique partagée entre mail reader et mail staff (`res.cancelStaff`). Le mail reader est rédigé côté staff. Sous-constat n°1. | À qualifier | C |
-| TR-4 | Rendus internes de `register` non harmonisés sur le style du mail lecteur·rice. Sous-constat n°3. | À qualifier | C |
+| TR-3 | Changement de statut de réservation. **Instruit en passe C (voir §8.1) :** dans `handleReservaV2StatusChange`, chaque événement est rendu par une clé `res.*` unique servant à la fois de sujet, titre et intro, identique pour le mail lecteur·rice et le mail staff. TR-3.1 — les clés `res.*` sont des étiquettes courtes sans version « message » : l'intro recopie le titre, le mail n'explique rien au lecteur·rice. TR-3.2 — aucune différenciation de propos lecteur·rice / staff. Note : `res.cancelStaff` n'est pas un texte « réservé au staff » — `Staff` y désigne l'auteur de l'annulation. Les 5 clés `res.*` sont complètes sur les 8 locales. | **Moyenne** | C — instruit, voir §8.1 |
+| TR-4 | Rendus internes de `register` hors i18n. **Instruit en passe C (voir §8.2) :** les deux mails internes (`libraryMailHtml` → biblio, `adminMailHtml` → gestion AnarBib) ont titres, sous-titres, pré-titres et sujets codés en dur en pt-BR ; le mail lecteur·rice du même fichier est entièrement i18n. Une biblio non lusophone reçoit ses notifications internes en portugais — en tension avec la promesse fédérative 8 langues. Même famille que TM-B / TM-C. Sous-constat n°3. | **Moyenne** | C — instruit, voir §8.2 |
 | TR-5 | Incohérence des préfixes de sujet : `[AnarBib]` en dur dans `notify-library-request`, `subjectTag` contextuel ailleurs, `[<BRAND>]` dans `notify-document-permission-request`. | À qualifier | D |
 | TR-6 | Logo `logo_url` null : l'affichage du logo dépend de la source que chaque EF interroge. Sous-constat n°4. | À qualifier | D |
 | TR-7 | Délivrabilité : le sous-domaine `notifications.anarbib.org` a une réputation jeune ; risque de classement en spam (Gmail observé). Sous-constat n°5. | À qualifier | D |
 | TR-8 | Cascade d'annulation. **Tranché en B.2 :** une annulation biblio (item → `cancelada_biblioteca`) déclenche le trigger `trg_auto_liberate_after_no_show_change`, qui fait un second `UPDATE` (stage → `liberada_para_circulacao`). Les deux changements de stage émettent chacun un événement : `reserva_cancelada_biblioteca` puis `liberada_para_circulacao`. Or le handler de `liberada_para_circulacao` (`reservas.ts` l.277-279) définit `readerKey='wf.closed'` → **mail lecteur·rice**. Résultat : deux mails au lecteur·rice pour une seule annulation, le second redondant et porteur de jargon interne (« libérée pour circulation »). | À qualifier | B.2 — tranché, voir §6.3 |
+| TR-9 | **Relevé puis infirmé en passe C.** Constat initialement formulé : « la couche i18n des mails (`mail-strings.ts`) serait restée à 6 langues alors que le réseau en cible 8 ». Vérification faite : `mail-strings.ts` **est bien en 8 langues** (385 clés × 8 locales, complètes — voir §8.4). Le constat était fondé sur une version périmée du fichier, présente dans le premier export `functions.zip` ; un export à jour l'a corrigé. **TR-9 est retiré.** Trace conservée par honnêteté d'audit ; voir la note de méthode en §8.5. | — (retiré) | C — infirmé |
 
-> Les sévérités sont laissées **à qualifier** : l'audit inventorie et instruit,
-> il ne hiérarchise pas. La qualification se fera lorsque l'ensemble des constats
-> sera instruit (fin de passe B, puis C et D).
+> Les sévérités non encore fixées sont laissées **à qualifier** : l'audit
+> inventorie et instruit, il ne hiérarchise pas. La qualification se fait au fil
+> de l'instruction de chaque constat ; les constats restants relèvent de la
+> passe D.
 
 ### 3.2 — Constats sur `team.ts` (TM-*)
 
 | ID | Constat | Sévérité estimée | Passe |
 |---|---|---|---|
 | TM-A | Écart code / spec sur la notification d'inactivité. La spec gouvernance (§9, lignes 654-656) prévoit que `inactive_warning_30d` **et** `inactive_warning_7d` notifient **la personne uniquement** ; seul `inactive_auto` (J-9 mois) ajoute la coordination. Le code de `team.ts` est conforme pour le 30j mais **non conforme pour le 7j** : `handleInactiveWarning` envoie une copie staff (`if (isShort)`, l.735) non prévue par la spec. Correction par défaut : aligner le code sur la spec (retrait de la copie staff au 7j). Une révision de spec resterait possible par le circuit d'amendement, si le réseau juge au contraire que la coordination doit être prévenue dès le 7j. | À qualifier | B.2 |
-| TM-B | Mails de copie staff (`admin_copy`) entièrement **hors du système i18n** : titres et intros codés en dur en **pt-BR** (`"Admissão concertada"`, `"Pedido de retirada"`, etc.), libellés de détails codés en dur en **français** (`"Cible"`, `"Acteur·rice"`, `"Bibliothèque"`, `"Motif"`). Le mail lecteur·rice, lui, passe par `tMail(locale, …)`. Pour une biblio dont la `default_locale` n'est ni pt-BR ni fr, le mail de copie part dans la mauvaise langue. Même famille que TR-4 (sous-constat n°3). | À qualifier | B.2 / C |
-| TM-C | Mot-valise FR/PT dans un libellé en dur : `team.ts` l.738, `"Aviso de inatividade — 7 dias antes do passage em inativo"` — « passage » est français au milieu d'un texte portugais. Coquille. | Faible | B.2 / C |
+| TM-B | Mails de copie staff (`admin_copy`) entièrement **hors du système i18n**. **Instruit en passe C (voir §8.3) :** 9 sous-handlers, **54 chaînes en dur** — 9 titres + 9 intros en pt-BR (`"Admissão concertada"`, `"Pedido de retirada"`…), 36 libellés de détails en français (`"Cible"`, `"Acteur·rice"`, `"Motif"`…). Aggravant : les clés i18n équivalentes (`l.reader`, `l.reason`, `l.contact`…) **existent déjà** dans `mail-strings.ts`, complètes sur les 8 locales, et sont inutilisées ; `team.ts` appelle pourtant `label()` 4 fois dans ses mails lecteur·rice, et `library_profile.ts` fait tout en i18n. Incohérence interne, non dette de traduction. Même famille que TR-4. | **Moyenne-haute** | C — instruit, voir §8.3 |
+| TM-C | Mot-valise FR/PT dans un libellé en dur : `team.ts` l.738, `"Aviso de inatividade — 7 dias antes do passage em inativo"` — « passage » est français au milieu d'un texte portugais. Coquille ; sous-cas de TM-B. | Faible | C — instruit, voir §8.3 |
 | TM-D | Divergence de nommage spec / code : la spec gouvernance nomme l'événement de sortie automatique `inactive_auto` (§9 l.656, §12) ; le code de `team.ts` traite `team.inactive_completed` (TM-13). Même rôle fonctionnel, nom différent. À confirmer : simple décalage de nommage sans incidence, ou risque qu'un événement émis sous un nom ne soit pas capté. | Faible — à confirmer | B.2 |
 
 ### 3.3 — Constats sur `library_profile.ts` (LP-*)
@@ -292,8 +293,8 @@ constats **TM-*** sont propres au handler `team.ts`, les **LP-*** au handler
 
 | ID | Constat | Sévérité estimée | Passe |
 |---|---|---|---|
-| NW-A | Dette i18n mineure. Le handler `collective_removal_vote_cast` (vote `favor`/`against`) ne dispose pas de clés i18n propres : il réutilise `network.vote.favorable` / `network.vote.opposed` (clés de la cooptation) comme proxies, le code l'assume en commentaire (l.908-910). Fonctionnel, mais si le wording du retrait collectif devait un jour diverger de celui de la cooptation, ces clés partagées feraient obstacle. | Faible | B.3 / C |
-| NW-B | Fallback en dur dans un libellé : `network.ts` l.1247 et 1284, `label(locale, "executed_at") || "Date"`. Si la clé `executed_at` est absente des `labels` d'une locale, le mail affiche le mot français « Date ». À vérifier contre les 6 locales en passe C : soit la clé existe partout (fallback inoffensif), soit certaines locales affichent « Date » en dur. | Faible | B.3 / C |
+| NW-A | Dette i18n mineure. Le handler `collective_removal_vote_cast` (vote `favor`/`against`) ne dispose pas de clés i18n propres : il réutilise `network.vote.favorable` / `network.vote.opposed` (clés de la cooptation) comme proxies, le code l'assume en commentaire (l.908-910). **Confirmé en passe C.** Fonctionnel, mais si le wording du retrait collectif devait un jour diverger de celui de la cooptation, ces clés partagées feraient obstacle. | Faible | C — confirmé, voir §8.4 |
+| NW-B | Libellé i18n cassé. **Instruit et requalifié en passe C (voir §8.4) :** `network.ts` l.1247 et 1284 appellent `label(locale, "executed_at")`, mais la clé `l.executed_at` est **absente** de `mail-strings.ts`. `tMail` renvoie alors la clé brute `"l.executed_at"` ; étant une chaîne non vide, elle court-circuite le fallback `|| "Date"`, qui ne s'exécute jamais. Conséquence : dans les mails `network.collective_removal_executed`, le détail « date d'exécution » affiche le texte technique `l.executed_at` au lieu d'un mot lisible, dans les 8 langues. Correction : ajouter la clé `l.executed_at` (8 traductions). Requalifié de « faible » (fallback supposé inoffensif) à **moyenne** (libellé visiblement cassé, mais circonscrit à un détail d'un seul type de mail). | **Moyenne** | C — instruit, voir §8.4 |
 | NW-C | Hypothèse de timing non documentée. `cooptation_voted` et `collective_removal_vote_cast` déterminent « 1er vote ? » par un `SELECT count(*)` sur la table des votes (`isFirstVote = voteCount === 1`), ce qui suppose que le vote courant est déjà inscrit en base au moment où l'EF lit le compte. Probablement vrai (l'événement est émis après l'INSERT du vote), mais dépendance implicite à l'ordre des opérations — non commentée dans le code. À confirmer. | Faible — à confirmer | B.3 |
 
 ---
@@ -319,9 +320,10 @@ relevés en cours d'inventaire : TR-1 (coexistence legacy/v2) et TR-5
 **Suite.** État des passes :
 - **Passe B — destinataires & doublons** : **complète.** Sous-passes B.1 (§5),
   B.2 (§6) et B.3 (§7) réalisées. Bilan détaillé en §7.4.
-- **Passe C — wording & cohérence** : à mener. Instruire TR-3, TR-4 ; traiter la
-  famille de constats i18n (TM-B, TM-C, NW-A, NW-B) ; revue des clés sur les
-  6 locales ; cohérence de registre d'un mail à l'autre.
+- **Passe C — wording & cohérence** : **complète.** Voir §8. TR-3, TR-4 instruits
+  (moyenne) ; famille i18n des mails internes TM-B (moyenne-haute) / TM-C (faible)
+  instruite ; NW-A confirmé, NW-B requalifié (moyenne) ; revue des 8 locales
+  conforme ; constat TR-9 relevé puis infirmé (§8.5).
 - **Passe D — présentation & délivrabilité** : à mener. Instruire TR-5, TR-6,
   TR-7 ; layout, logos, sujets, réputation du sous-domaine. LP-B sert de
   référence d'usage correct d'`actionBox`.
@@ -643,5 +645,157 @@ et assumé (LP-A, doctrine B.7). Aucun autre.
 
 ---
 
-*Audit #153 — passes A et B (complète). Document de travail interne, à compléter
-par les passes C et D. Distribué sous licence CC-BY-SA-4.0.*
+## 8. Passe C — wording & cohérence
+
+**Date :** 24 mai 2026.
+**Méthode :** lecture du code des handlers concernés et du fichier i18n
+`mail-strings.ts` ; vérification mécanique de la complétude des locales par
+script. Voir la note de méthode §8.5 sur la source du code.
+
+### 8.1 — TR-3 : pauvreté du contenu des mails de changement de statut de réservation
+
+`handleReservaV2StatusChange` (`reservas.ts`) rend chaque événement de statut
+(`reserva_v2_recusada`, `reserva_cancelada_biblioteca`, `reserva_cancelada_leitor`,
+`reserva_expirada`, `reserva_convertida_em_emprestimo`) par une clé `res.*`
+unique.
+
+**TR-3.1** — la clé `res.*` sert à la fois de sujet, de titre **et** d'intro :
+l'intro est `<p>${tMail(locale, mailKey)}.</p>`, soit le titre recopié suivi
+d'un point. Les clés `res.*` sont des étiquettes courtes, sans version
+« message » : le mail ne dit au lecteur·rice rien de plus que son propre titre
+(pas de conséquence, pas de marche à suivre).
+
+**TR-3.2** — le mail lecteur·rice et le mail staff partent du même `mailKey` :
+même phrase, deux locales. Seuls les détails diffèrent (le mail staff ajoute
+`reader` + `items`), pas le propos.
+
+Précision : contrairement à ce que son nom suggère, `res.cancelStaff` n'est pas
+un texte « réservé au staff ». `Staff` y désigne l'auteur de l'annulation (la
+bibliothèque), par opposition à `res.cancelReader`. Le contenu de la clé est
+neutre et lisible par un lecteur·rice.
+
+Couverture i18n : les 5 clés `res.*` sont complètes sur les 8 locales.
+Coquille relevée — `res.converted`, valeur `es` : « Reserva convertide en
+préstamo » (forme inclusive `-e` sur un participe passé, inhabituelle même en
+inclusif ; à confirmer par un·e hispanophone).
+
+**Sévérité : moyenne.** Un mail qui ne fait que répéter son titre au
+lecteur·rice est un défaut d'expérience, pas un simple confort rédactionnel.
+
+**Piste de correction** (hors périmètre) : doter les clés `res.*` d'une variante
+`.intro` portant un vrai message distinct du titre, et différencier le propos
+lecteur·rice / staff.
+
+### 8.2 — TR-4 : rendus internes de `register` hors i18n
+
+`register/index.ts` envoie trois mails à l'inscription. Le mail lecteur·rice
+(`welcome`) est entièrement i18n (`tMail(userLocale, "welcome.*")`, sujet
+compris). Les deux rendus internes — `libraryMailHtml` (→ biblio) et
+`adminMailHtml` (→ gestion AnarBib), construits par `buildInternalMail` — ont
+titres, sous-titres, pré-titres et sujets **codés en dur en pt-BR** (`"Novo
+cadastro — …"`, `"Notificação da biblioteca"`, `"Novo cadastro de leitor/a/e
+com ID …"`, etc.).
+
+Le réseau ciblant 8 langues, une bibliothèque non lusophone reçoit ses
+notifications internes en portugais — en tension avec la promesse fédérative du
+projet. Même défaut structurel que TM-B.
+
+**Sévérité : moyenne.**
+
+### 8.3 — Famille i18n des mails internes : TM-B, TM-C
+
+TR-4, TM-B et TM-C relèvent d'**un même défaut structurel** : dans `register`
+et `team.ts`, les mails vers le public sont internationalisés, les mails vers le
+staff sont codés en dur.
+
+**TM-B** — `team.ts`, 9 sous-handlers envoyant une copie staff : **54 chaînes en
+dur** — 9 titres + 9 intros en pt-BR, 36 libellés de détails en français. Le
+constat est aggravé par trois faits établis en passe C :
+- les clés i18n équivalentes (`l.reader`, `l.items`, `l.reason`, `l.contact`,
+  `l.proposer`…) **existent déjà** dans `mail-strings.ts`, complètes sur les
+  8 locales, et ne sont pas utilisées ;
+- `team.ts` appelle pourtant `label(locale, …)` à 4 reprises — dans ses mails
+  *lecteur·rice* ;
+- `library_profile.ts` (handler voisin, audité en B.2) fait l'intégralité de ses
+  mails staff en i18n.
+Le défaut n'est donc pas une dette de traduction (les traductions existent) mais
+une **incohérence interne** : le pattern correct est employé dans le même
+fichier et dans le fichier voisin. Correction peu coûteuse : brancher `label()`
+et `tMail()`, créer les quelques clés de titres/intros manquantes.
+
+**Sévérité TM-B : moyenne-haute** — par l'ampleur (54 chaînes) et le caractère
+d'incohérence interne, un cran au-dessus de TR-4.
+
+**TM-C** — sous-cas de TM-B : `team.ts` l.738, le libellé en dur « 7 dias antes
+do passage em inativo » mélange portugais et français (« passage »). Coquille,
+sévérité faible.
+
+### 8.4 — `network.ts` (NW-A, NW-B) et revue de complétude des 8 locales
+
+**Revue de complétude.** Vérification mécanique de `mail-strings.ts` par script :
+**385 clés, 8 locales (pt-BR, fr, es, en, it, de, ca, eo), zéro trou** — chaque
+clé a une traduction non vide dans les 8 langues. La couche i18n des mails est
+intégralement couverte. Constat positif. `_supportedLocales()` et le type
+`SupportedMailLocale` sont cohérents (8 langues).
+
+**NW-A** — confirmé. `collective_removal_vote_cast` réutilise
+`network.vote.favorable/opposed` comme proxies pour les votes `favor`/`against`.
+Fonctionnel, assumé en commentaire ; dette mineure (bloquerait une future
+divergence de wording). Sévérité faible.
+
+**NW-B — requalifié.** En B.3, noté « fallback en dur, à confirmer ». La
+vérification tranche : la clé `l.executed_at` est **absente** de
+`mail-strings.ts`. `network.ts` l.1247/1284 appelle `label(locale,
+"executed_at")` ; `tMail`, sur clé absente, renvoie la clé brute
+`"l.executed_at"` — chaîne non vide, donc *truthy*, donc le fallback `|| "Date"`
+**n'est jamais atteint**. Les mails `collective_removal_executed` affichent donc
+le libellé technique `l.executed_at` au lieu d'un mot lisible, dans les
+8 langues. Ce n'est pas un fallback inoffensif mais un **libellé cassé en
+production**. Correction : ajouter la clé `l.executed_at` (8 traductions) ; les
+clés `l.*` voisines existent et sont complètes. **Sévérité : moyenne**
+(visiblement cassé, mais circonscrit à un détail du seul événement
+`collective_removal_executed`, rare).
+
+### 8.5 — Note de méthode : constat TR-9 relevé puis infirmé
+
+En cours de passe C, un constat **TR-9** a été formulé : la couche i18n des
+mails serait restée à 6 langues alors que le réseau en cible 8. Ce constat
+s'appuyait sur le fichier `mail-strings.ts` présent dans le premier export
+`functions.zip` fourni en début de #153 — fichier qui comptait 2961 lignes et
+6 locales, `_supportedLocales()` figé à 6.
+
+Cet export s'est avéré **périmé** : il datait d'avant le passage du réseau à
+8 langues. Un export `functions.zip` à jour a montré un `mail-strings.ts` de
+4172 lignes, **8 locales complètes**. **TR-9 est donc infirmé et retiré.**
+
+Conséquence de méthode : tous les constats des passes B et C amont ayant été
+instruits sur le premier export, une **vérification ciblée** a été menée sur
+l'export à jour, sur les six points névralgiques (TR-1, TR-3, TR-4, TR-8, la
+famille TM-*, NW-A/NW-B). Résultat : `team.ts` et `network.ts` strictement
+inchangés ; `reservas.ts` inchangé sur les zones auditées ; `register/index.ts`
+refactorisé (+300 lignes, ajout d'un cas « orphan ») **sans modification du fond
+de TR-4**. Tous les constats antérieurs sont **confirmés sur la version à jour**.
+La trace de TR-9 est conservée ici par honnêteté d'audit : un constat relevé
+puis infirmé fait partie du travail d'instruction.
+
+### 8.6 — Bilan de la passe C
+
+| Constat | État | Sévérité |
+|---|---|---|
+| TR-3 | Instruit — clés `res.*` plates, `mailKey` unique | Moyenne |
+| TR-4 | Instruit — rendus internes `register` en pt-BR dur | Moyenne |
+| TR-9 | Relevé puis **infirmé** (zip périmé) — retiré | — |
+| TM-B | Instruit — 54 chaînes en dur, clés i18n existantes ignorées | Moyenne-haute |
+| TM-C | Instruit — coquille « do passage » | Faible |
+| NW-A | Confirmé — clés de vote proxies | Faible |
+| NW-B | Instruit & **requalifié** — libellé `l.executed_at` cassé | Moyenne |
+| Revue 8 locales | **Conforme** — 385 clés × 8 langues, complètes | — |
+
+**Reste la passe D — présentation & délivrabilité** : instruire TR-5 (préfixes
+de sujet incohérents), TR-6 (logo `logo_url` null), TR-7 (réputation du
+sous-domaine, spam). LP-B sert de référence d'usage correct d'`actionBox`.
+
+---
+
+*Audit #153 — passes A, B (complète) et C (complète). Document de travail
+interne, à compléter par la passe D. Distribué sous licence CC-BY-SA-4.0.*
