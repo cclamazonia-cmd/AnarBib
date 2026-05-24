@@ -285,6 +285,39 @@ $$ LANGUAGE sql STABLE SECURITY DEFINER;
 
 Pas de changement structurel — juste que `fn_current_user_is_in_network()` retourne maintenant `false` pour les users non-validés, ce qui les exclut des biblios `network`. Symétrie maintenue.
 
+### Évolution de `fn_my_account_status()` — statut `pending`
+
+> **Point ajouté le 24/05/2026** suite à l'audit de l'existant pour la clôture du sous-item #CL.3 (bandeau état du compte). À traiter dans la même migration que le reste de la section 3.
+
+La fonction `public.fn_my_account_status()` existe déjà et alimente le bandeau d'état du compte de `AccountPage.jsx` (sous-item #CL.3, considéré clos). C'est **l'objet-résumé unique côté backend** de l'état d'un compte. La validation physique introduit un cinquième état de compte — « en attente de validation » — qui doit y être intégré : la spec ne crée **pas** de fonction parallèle, elle fait évoluer `fn_my_account_status()`.
+
+Trois interventions, toutes dans cette même fonction :
+
+1. **Cascade de statut.** La fonction calcule `v_status` via une cascade `IF/ELSIF` à priorité explicite : actuellement `incomplete > restricted > overdue > dues_expired > dues_never_paid > must_change_password > active`. Le statut `pending` s'insère **en deuxième position, juste après `restricted`** : un compte non validé n'a pas accès à la navigation lecteur·rice, donc `pending` prime sur les alertes de circulation (`overdue`, cotisation), mais reste subordonné à `restricted` (un compte suspendu le reste, qu'il soit validé ou non). La branche `incomplete` (compte sans `user_library_memberships` primaire actif) demeure en tête : on s'inscrit *à* une biblio, puis on attend sa validation — un compte `pending` a donc nécessairement un membership.
+
+   Branche à insérer :
+
+   ```sql
+   ELSIF v_profile.physically_validated_at IS NULL THEN
+     v_status := 'pending';
+     v_alerts := v_alerts || jsonb_build_object(
+       'level','warn',
+       'message_key','account.alert.pendingValidation'
+     );
+   ```
+
+2. **Lecture de la colonne.** Le `SELECT * INTO v_profile FROM profiles` ramène déjà `physically_validated_at` une fois la colonne ajoutée par la section 3 — aucune modification de la requête nécessaire.
+
+3. **Exposition dans le retour.** Ajouter `physically_validated_at` au `jsonb_build_object` final, pour que le frontend (écran d'attente, bandeau) puisse y accéder sans requête supplémentaire :
+
+   ```sql
+   'physically_validated_at', v_profile.physically_validated_at,
+   ```
+
+**Note de sécurité** : `fn_my_account_status()` est en `SECURITY INVOKER` (pas DEFINER), `search_path` figé à `public`, sans paramètre, filtrée sur `auth.uid()`, et exposée à `authenticated` mais **pas** à `anon`. La doctrine REVOKE v2 (réservée aux `SECURITY DEFINER`) ne s'y applique pas. Aucun durcissement requis lors de cette évolution.
+
+**Côté frontend** : le bandeau d'état de `AccountPage.jsx` câble aujourd'hui `active / restricted / attention / incomplete`. Une branche couleur/icône pour `pending` est à ajouter (cf. section 7 et la checklist). Pour autant, l'UX du compte non validé repose principalement sur le `<PendingAccountScreen>` bloquant — le bandeau n'est ici qu'un complément secondaire.
+
 ### Nouveau check : `fn_current_user_is_member_of()` requiert validation ?
 
 Question subtile : un user en attente, membre d'une biblio `private`, voit-il les contenus de SA biblio `private` ?
@@ -643,6 +676,7 @@ Pas de blocage. Le librarian peut valider un user en attente même si ce user ne
   - [ ] Trigger BEFORE INSERT auto-validation
   - [ ] Trigger AFTER INSERT log auto-validation
   - [ ] Contrainte chk_validation_consistency
+  - [ ] Évolution `fn_my_account_status()` : branche `pending` dans la cascade (après `restricted`) + exposition `physically_validated_at` dans le retour (cf. section 4)
 - [ ] Migration de l'existant (cf. section 8)
 - [ ] Tests SQL : insertions de test pour valider les triggers
 
@@ -657,6 +691,7 @@ Pas de blocage. Le librarian peut valider un user en attente même si ce user ne
 
 - [ ] Composant `<PendingAccountScreen>` à afficher quand `fn_current_user_is_pending()`
 - [ ] Bannière jaune sur `/conta` si en attente
+- [ ] Branche `pending` (couleur/icône) dans le bandeau état du compte de `AccountPage.jsx` (le bandeau câble déjà `active/restricted/attention/incomplete` — cf. section 4)
 - [ ] Page `/biblioteca` onglet "Paramètres généraux" : toggle mode d'accueil
 - [ ] Page `/biblioteca` onglet "Règlement et circulation" : champ override
 - [ ] Page `/biblioteca/blmf` (publique) : section politique d'accès
@@ -762,6 +797,7 @@ Pas de blocage. Le librarian peut valider un user en attente même si ce user ne
 - Une seule colonne `physically_validated_at` (pas deux flags séparés)
 - Compte en attente = écran d'attente, pas blocage du login
 - Révocation autorisée à `librarian` (avec journal d'audit)
+- État `pending` intégré à `fn_my_account_status()` existante (pas de fonction parallèle), inséré après `restricted` dans la cascade de priorité — décision du 24/05/2026, audit #CL.3
 
 ### C — Decisions à prendre lors de l'implémentation
 
