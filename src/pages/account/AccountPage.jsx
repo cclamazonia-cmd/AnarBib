@@ -343,17 +343,18 @@ export default function AccountPage() {
       const holdingIds = rows.filter(r => r.matched === true && Number(r.session_holding_id) > 0).map(r => Number(r.session_holding_id));
       if (!holdingIds.length) { setReserveMsg(rows[0]?.message || t({ id: 'account.reserve.refNotFound' })); return; }
 
-      // 7. Contrôle loanable vs consultation-only
+      // 7. Contrôle loanable vs consultation-only.
+      //    Relation asymétrique (#consulta-loanable, 24/05/2026) :
+      //    - un ouvrage en consultation seule (loanable=false) ne peut PAS
+      //      être emprunté -> la branche emprunt refuse ces références ;
+      //    - un ouvrage empruntable PEUT être consulté sur place -> la
+      //      branche consultation n'applique AUCUN filtre loanable.
+      //    Tout ouvrage en circulation est consultable, qu'il soit
+      //    empruntable ou non.
       if (!isConsultation) {
         const nonLoanable = rows.filter(r => r.matched && r.session_loanable === false);
         if (nonLoanable.length) {
           setReserveMsg(t({id:'account.reserve.consultationOnlyHint'},{refs:nonLoanable.map(r => r.bib_ref || r.input_ref).join(', ')}));
-          return;
-        }
-      } else {
-        const loanableOnly = rows.filter(r => r.matched && r.session_loanable === true);
-        if (loanableOnly.length) {
-          setReserveMsg(t({id:'account.reserve.loanableOnlyHint'},{refs:loanableOnly.map(r => r.bib_ref || r.input_ref).join(', ')}));
           return;
         }
       }
