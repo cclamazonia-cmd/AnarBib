@@ -8,9 +8,9 @@
 **Méthode :** audit en 4 passes — A (inventaire), B (destinataires & doublons),
 C (wording & cohérence), D (présentation & délivrabilité).
 
-**État au 23/05/2026 :** passe A réalisée. Passe B amorcée — sous-passe B.1
-réalisée (instruction des constats TR-1 et TR-2 ; voir §5). Passes B.2, B.3, C
-et D à venir en sessions dédiées.
+**État au 24/05/2026 :** passe A réalisée. Passe B en cours — sous-passes B.1
+(TR-1, TR-2 ; voir §5) et B.2 (`team.ts`, `library_profile.ts`, TR-8 ; voir §6)
+réalisées. Reste B.3 (`network.ts`). Passes C et D à venir.
 
 ---
 
@@ -246,9 +246,14 @@ Demande de troche documentaire inter-bibliothèques. Trois sujets identifiés.
 
 ---
 
-## 3. Constats transverses relevés dès la passe A
+## 3. Registre des constats
 
-Ces constats ne sont pas rattachés à une seule EF — ils traversent le périmètre.
+Ce registre rassemble tous les constats de l'audit. Les constats **TR-***
+traversent le périmètre (relevés en passe A ou en cours d'instruction). Les
+constats **TM-*** sont propres au handler `team.ts`, les **LP-*** au handler
+`library_profile.ts` (tous deux instruits en passe B.2, voir §6).
+
+### 3.1 — Constats transverses (TR-*)
 
 | ID | Constat | Sévérité estimée | Passe de traitement |
 |---|---|---|---|
@@ -259,11 +264,28 @@ Ces constats ne sont pas rattachés à une seule EF — ils traversent le périm
 | TR-5 | Incohérence des préfixes de sujet : `[AnarBib]` en dur dans `notify-library-request`, `subjectTag` contextuel ailleurs, `[<BRAND>]` dans `notify-document-permission-request`. | À qualifier | D |
 | TR-6 | Logo `logo_url` null : l'affichage du logo dépend de la source que chaque EF interroge. Sous-constat n°4. | À qualifier | D |
 | TR-7 | Délivrabilité : le sous-domaine `notifications.anarbib.org` a une réputation jeune ; risque de classement en spam (Gmail observé). Sous-constat n°5. | À qualifier | D |
-| TR-8 | **Relevé en B.1.** Cascade d'annulation : `trg_auto_liberate_after_no_show_change` exécute un `UPDATE` qui repasse le stage à `liberada_para_circulacao` juste après `cancelada_biblioteca` / `no_show`. Le trigger de notification réagissant aux changements de stage, une annulation par la biblio pourrait générer deux notifications successives (`reserva_cancelada_biblioteca` puis `liberada_para_circulacao`). À instruire : le mail `liberada_para_circulacao` part-il au lecteur·rice, et est-ce souhaitable après une annulation ? | À qualifier | B (à instruire) |
+| TR-8 | Cascade d'annulation. **Tranché en B.2 :** une annulation biblio (item → `cancelada_biblioteca`) déclenche le trigger `trg_auto_liberate_after_no_show_change`, qui fait un second `UPDATE` (stage → `liberada_para_circulacao`). Les deux changements de stage émettent chacun un événement : `reserva_cancelada_biblioteca` puis `liberada_para_circulacao`. Or le handler de `liberada_para_circulacao` (`reservas.ts` l.277-279) définit `readerKey='wf.closed'` → **mail lecteur·rice**. Résultat : deux mails au lecteur·rice pour une seule annulation, le second redondant et porteur de jargon interne (« libérée pour circulation »). | À qualifier | B.2 — tranché, voir §6.3 |
 
-> Les sévérités sont laissées **à qualifier** : la passe A inventorie, elle ne
-> hiérarchise pas. La qualification se fera passe par passe, une fois chaque
-> constat instruit.
+> Les sévérités sont laissées **à qualifier** : l'audit inventorie et instruit,
+> il ne hiérarchise pas. La qualification se fera lorsque l'ensemble des constats
+> sera instruit (fin de passe B, puis C et D).
+
+### 3.2 — Constats sur `team.ts` (TM-*)
+
+| ID | Constat | Sévérité estimée | Passe |
+|---|---|---|---|
+| TM-A | Écart code / spec sur la notification d'inactivité. La spec gouvernance (§9, lignes 654-656) prévoit que `inactive_warning_30d` **et** `inactive_warning_7d` notifient **la personne uniquement** ; seul `inactive_auto` (J-9 mois) ajoute la coordination. Le code de `team.ts` est conforme pour le 30j mais **non conforme pour le 7j** : `handleInactiveWarning` envoie une copie staff (`if (isShort)`, l.735) non prévue par la spec. Correction par défaut : aligner le code sur la spec (retrait de la copie staff au 7j). Une révision de spec resterait possible par le circuit d'amendement, si le réseau juge au contraire que la coordination doit être prévenue dès le 7j. | À qualifier | B.2 |
+| TM-B | Mails de copie staff (`admin_copy`) entièrement **hors du système i18n** : titres et intros codés en dur en **pt-BR** (`"Admissão concertada"`, `"Pedido de retirada"`, etc.), libellés de détails codés en dur en **français** (`"Cible"`, `"Acteur·rice"`, `"Bibliothèque"`, `"Motif"`). Le mail lecteur·rice, lui, passe par `tMail(locale, …)`. Pour une biblio dont la `default_locale` n'est ni pt-BR ni fr, le mail de copie part dans la mauvaise langue. Même famille que TR-4 (sous-constat n°3). | À qualifier | B.2 / C |
+| TM-C | Mot-valise FR/PT dans un libellé en dur : `team.ts` l.738, `"Aviso de inatividade — 7 dias antes do passage em inativo"` — « passage » est français au milieu d'un texte portugais. Coquille. | Faible | B.2 / C |
+| TM-D | Divergence de nommage spec / code : la spec gouvernance nomme l'événement de sortie automatique `inactive_auto` (§9 l.656, §12) ; le code de `team.ts` traite `team.inactive_completed` (TM-13). Même rôle fonctionnel, nom différent. À confirmer : simple décalage de nommage sans incidence, ou risque qu'un événement émis sous un nom ne soit pas capté. | Faible — à confirmer | B.2 |
+
+### 3.3 — Constats sur `library_profile.ts` (LP-*)
+
+| ID | Constat | Sévérité estimée | Passe |
+|---|---|---|---|
+| LP-A | Doublon **volontaire et assumé** (doctrine B.7). Sur `executed` avec `axis = circulation_mode`, le handler envoie un mail aux lecteur·rices **en plus** du mail staff/admin, sans déduplication : une personne à la fois lectrice et staff reçoit deux mails (contenus distincts — l'un côté gestion, l'autre côté usage). Doctrine confirmée justifiée par l'auteur du projet le 24/05/2026. Signalé pour mémoire, **non considéré comme défaut**. | Néant (doctrine assumée) | B.2 |
+| LP-B | Non-constat positif. Les six appels à `actionBox` de `library_profile.ts` respectent le contrat strict de `layout.ts` (`{kind, title, ctaUrl, ctaLabel}`). Le fichier est une **référence correcte** d'usage d'`actionBox` — utile pour la passe D. | Néant | D (référence) |
+| LP-C | Lorsqu'un fan-out est vide (ex. : proposition dans une biblio à staff unique → seul destinataire exclu car proposeur), le handler journalise un `console.warn` « no recipients » et marque néanmoins l'outbox `status='sent'`. Comportement fonctionnellement correct (rien à envoyer), mais l'état `sent` sans envoi réel peut tromper une lecture ultérieure de la table outbox. | Faible | B.2 |
 
 ---
 
@@ -286,9 +308,9 @@ relevés en cours d'inventaire : TR-1 (coexistence legacy/v2) et TR-5
 (incohérence des préfixes de sujet).
 
 **Suite.** Trois passes restent à mener, en sessions dédiées :
-- **Passe B — destinataires & doublons** : sous-passe B.1 réalisée (TR-1, TR-2
-  instruits ; TR-8 relevé — voir §5). Reste B.2 (`team.ts`, `library_profile.ts`,
-  instruction de TR-8) et B.3 (`network.ts`).
+- **Passe B — destinataires & doublons** : sous-passes B.1 (TR-1, TR-2 instruits ;
+  TR-8 relevé — voir §5) et B.2 (`team.ts`, `library_profile.ts`, TR-8 tranché —
+  voir §6) réalisées. Reste B.3 (`network.ts`).
 - **Passe C — wording & cohérence** : instruire TR-3, TR-4 ; revue des clés i18n
   sur les 6 locales ; cohérence de registre d'un mail à l'autre.
 - **Passe D — présentation & délivrabilité** : instruire TR-5, TR-6, TR-7 ;
@@ -384,7 +406,7 @@ et une seconde notification après une annulation est-elle souhaitable ?
 |---|---|
 | TR-1 | Tranché. Double envoi impossible. Reclassé « anomalie de routage » (`emprestimo_prorrogado` → legacy au lieu de v2). |
 | TR-2 | Tranché. Doublon confirmé : `reserva_convertida_em_emprestimo` + `emprestimo_v2_criado`. Redondance de notification. |
-| TR-8 | Nouveau. Cascade d'annulation re-déclenchant le trigger de notification. Non tranché, à instruire. |
+| TR-8 | Nouveau. Cascade d'annulation re-déclenchant le trigger de notification. Non tranché en B.1 — instruit et tranché ensuite en B.2 (voir §6.3). |
 
 **Reste de la passe B :**
 - **B.2** — décomposition fine des handlers à fan-out `team.ts` et
@@ -394,5 +416,130 @@ et une seconde notification après une annulation est-elle souhaitable ?
 
 ---
 
-*Audit #153 — passes A et B.1. Document de travail interne, à compléter par les
-sous-passes B.2, B.3 et les passes C et D. Distribué sous licence CC-BY-SA-4.0.*
+## 6. Passe B.2 — décomposition des handlers à fan-out `team.ts` et `library_profile.ts`, instruction de TR-8
+
+**Date :** 24 mai 2026.
+**Méthode :** lecture intégrale des deux handlers de domaine ; confrontation à la
+spec gouvernance (`spec-gouvernance-roles.md`) ; pour TR-8, lecture du code SQL
+des triggers (déjà obtenu en B.1) et du handler de workflow de `reservas.ts`.
+
+### 6.1 — `team.ts` : 13 événements de gouvernance d'équipe
+
+Le handler lit `team_notification_outbox` par `recordId` et route sur le champ
+`event`. Décomposition fine :
+
+| # | Événement | Destinataire du mail | Copie staff | Transition |
+|---|---|---|---|---|
+| TM-1 | `team.promoted_to_librarian` | la personne promue | Oui | T1 |
+| TM-2 | `team.promoted_to_coordenador` | la personne promue | Oui | T2 |
+| TM-3 | `team.self_demoted` | autres coordenadores actifs (fan-out, acteur·rice exclu·e) | Oui | T3/T4 |
+| TM-4 | `team.removal_requested` | la cible | Oui | T5 |
+| TM-5 | `team.removal_cancelled` | la cible | Oui | T8 |
+| TM-6 | `team.removal_completed` | la cible | Oui | fin T5 (J+7) |
+| TM-7 | `team.suspended` | la cible | Oui | T6 |
+| TM-8 | `team.unsuspended` | la cible | Oui | T7 |
+| TM-9 | `team.last_coordinator_left` | tous les `administrador` (fan-out) | Non | escalade |
+| TM-10 | `team.last_coordinator_pending_removal` | tous les `administrador` (fan-out) | Non | escalade |
+| TM-11 | `team.inactive_warning_30d` | la cible | Non | T9 (J-30) |
+| TM-12 | `team.inactive_warning_7d` | la cible | **Oui** (non conforme spec — TM-A) | T9 (J-7) |
+| TM-13 | `team.inactive_completed` | la cible | Oui | T9 |
+
+Un 14ᵉ cas de routage : `event.startsWith("team.library_profile.")` délègue à
+`handleLibraryProfileEvent` (voir §6.2).
+
+**Fan-out vérifié sain :** TM-3 (vers les coordenadores) exclut bien l'acteur·rice
+de la liste ; TM-9 et TM-10 (vers les administradores) sont des escalades sans
+copie biblio, ce qui est cohérent. Aucun oubli ni doublon de destinataire.
+
+**Constats :** TM-A (écart code/spec sur la copie staff au 7j), TM-B (mails
+`admin_copy` hors i18n, pt-BR et fr en dur), TM-C (mot-valise « do passage »),
+TM-D (nommage `inactive_auto` spec vs `inactive_completed` code). Détail au
+registre §3.2.
+
+### 6.2 — `library_profile.ts` : 6 sous-événements de profil de bibliothèque
+
+Module appelé par `team.ts` (`team.library_profile.*`) et `network.ts`
+(`network.library_profile.*`). Décape le préfixe, route sur 6 sous-événements.
+
+| # | Sous-événement | Destinataires (fan-out) | Exclusion |
+|---|---|---|---|
+| LP-1 | `proposed` | staff actif | proposeur exclu |
+| LP-2 | `voted` | staff actif | voteur exclu ; proposeur exclu sauf 1er vote (doctrine #21) |
+| LP-3 | `accepted` | staff actif + admins réseau (dédoublonnés) | — |
+| LP-4 | `rejected` | staff actif | aucune (transparence interne) |
+| LP-5 | `cancelled` | staff actif | proposeur exclu |
+| LP-6 | `executed` | staff actif + admins réseau (dédoublonnés) | — |
+| LP-6bis | `executed` + `axis = circulation_mode` | **+ lecteur·rices actif·ves** de la biblio | — |
+
+**Fichier sain.** Contrairement à `team.ts` : tout passe par i18n (sujets,
+intros, libellés, axes, valeurs) — aucun texte en dur ; le fan-out est propre
+avec des exclusions pertinentes ; la déduplication staff/admin réseau est
+explicite (`mergeProfilesDedup`). Le constat TM-B (texte en dur) ne s'étend
+**pas** à ce fichier.
+
+**Constats :** LP-A (doublon B.7 lecteur·rice + staff — assumé, doctrine
+confirmée justifiée le 24/05), LP-B (non-constat — usage correct d'`actionBox`),
+LP-C (outbox marquée `sent` quand le fan-out est vide). Détail au registre §3.3.
+
+### 6.3 — TR-8 : instruction de la cascade d'annulation
+
+**Question instruite :** une annulation de réservation par la bibliothèque
+génère-t-elle deux mails au lecteur·rice ?
+
+**Verdict : doublon confirmé.** Séquence établie par lecture du code SQL et des
+handlers EF :
+
+1. L'`UPDATE` initial passe le stage de l'item à `cancelada_biblioteca`. Deux
+   triggers `AFTER UPDATE` réagissent sur `reserva_item_workflow_v2` :
+   - `trg_auto_liberate_after_no_show_change` calcule `v_reason =
+     'cancelled_by_library'` et lance un **second `UPDATE`** (stage →
+     `liberada_para_circulacao`).
+   - `trg_notify_reserva_workflow_change` émet `reserva_cancelada_biblioteca`
+     pour l'`UPDATE` initial.
+2. Le second `UPDATE` (stage → `liberada_para_circulacao`) déclenche à nouveau
+   les triggers : `auto_liberate` ne fait rien (`v_reason` NULL, garde correcte
+   contre la récursion) ; `trg_notify` émet `liberada_para_circulacao`.
+3. Côté EF : `reserva_cancelada_biblioteca` → `handleReservaV2StatusChange`
+   (mail `res.cancelStaff`, lecteur·rice + staff). `liberada_para_circulacao` →
+   `handleReservaV2WorkflowEvent` ; le bloc l.277-279 de `reservas.ts` définit
+   `readerKey = 'wf.closed'` et laisse `staffMailEnabled = true` → **mail
+   lecteur·rice + mail staff**.
+
+**Le lecteur·rice reçoit donc deux mails** pour une seule annulation. Plus
+problématique que TR-2 : le second mail (`wf.closed`, « réservation libérée pour
+circulation ») arrive juste après un mail d'annulation, il est redondant pour la
+personne et porte un vocabulaire de gestion interne (le document redevient
+empruntable) sans intérêt pour elle.
+
+Le mécanisme `auto_liberate` lui-même est de la **logique métier légitime**
+(libérer l'exemplaire). Le défaut est que la cascade re-déclenche une
+notification *lecteur·rice* sur un changement de stage purement technique.
+
+**Piste de correction** (hors périmètre de l'audit, pour mémoire) : côté EF, le
+handler de `liberada_para_circulacao` pourrait poser `readerKey = null` quand le
+`final_reason` vaut `cancelled_by_library` ou `no_show` (information disponible,
+posée par `auto_liberate`). Cela couperait le mail lecteur·rice redondant tout en
+conservant le mail staff `wf.staff.closed`, qui lui reste pertinent. Décision de
+chantier de correction.
+
+**Limite assumée :** l'ordre d'exécution des deux triggers (alphabétique :
+`auto_liberate` avant `notify`) n'a pas pu être confirmé par le SQL — leur
+`CREATE TRIGGER` n'est pas dans le lot de migrations consulté. Cela n'affecte pas
+le verdict : les deux événements sont émis et les deux ont un `readerKey` non
+nul ; l'ordre ne change que la séquence d'arrivée des mails, pas leur nombre.
+
+### 6.4 — Bilan de la passe B.2
+
+| Objet | Verdict B.2 |
+|---|---|
+| `team.ts` | 13 événements inventoriés, fan-out sain. Constats TM-A à TM-D (voir §3.2). |
+| `library_profile.ts` | 6 sous-événements inventoriés, fichier sain. Constats LP-A à LP-C (voir §3.3). |
+| TR-8 | Tranché. Doublon confirmé : annulation biblio → deux mails lecteur·rice (`res.cancelStaff` + `wf.closed`). |
+
+**Reste de la passe B :** B.3 — décomposition fine de `network.ts` (1305 lignes,
+le plus gros handler du périmètre).
+
+---
+
+*Audit #153 — passes A, B.1 et B.2. Document de travail interne, à compléter par
+la sous-passe B.3 et les passes C et D. Distribué sous licence CC-BY-SA-4.0.*
