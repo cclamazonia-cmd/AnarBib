@@ -8,9 +8,9 @@
 **Méthode :** audit en 4 passes — A (inventaire), B (destinataires & doublons),
 C (wording & cohérence), D (présentation & délivrabilité).
 
-**État au 24/05/2026 :** passes A, B (complète) et **C (complète)** réalisées.
-Sous-passes B.1 (§5), B.2 (§6), B.3 (§7) ; passe C — wording & cohérence (§8).
-Reste la passe D (présentation & délivrabilité).
+**État au 24/05/2026 : audit complet.** Les quatre passes sont réalisées —
+A (inventaire), B (destinataires & doublons, §5-7), C (wording & cohérence, §8),
+D (présentation & délivrabilité, §9). Synthèse de clôture en §10.
 
 ---
 
@@ -261,9 +261,9 @@ constats **TM-*** sont propres au handler `team.ts`, les **LP-*** au handler
 | TR-2 | Conversion réservation → emprunt : **doublon confirmé en B.1.** Le passage du stage à `retirada_efetivada` émet `reserva_convertida_em_emprestimo` (mail `res.converted`), et l'INSERT de l'emprunt dans `emprestimos_v2` émet `emprestimo_v2_criado` (mail `loan.created`). Le lecteur·rice reçoit deux mails. Redondance de notification (mails distincts), non duplication stricte. Sous-constat n°2. | À qualifier | B.1 — instruit, voir §5 |
 | TR-3 | Changement de statut de réservation. **Instruit en passe C (voir §8.1) :** dans `handleReservaV2StatusChange`, chaque événement est rendu par une clé `res.*` unique servant à la fois de sujet, titre et intro, identique pour le mail lecteur·rice et le mail staff. TR-3.1 — les clés `res.*` sont des étiquettes courtes sans version « message » : l'intro recopie le titre, le mail n'explique rien au lecteur·rice. TR-3.2 — aucune différenciation de propos lecteur·rice / staff. Note : `res.cancelStaff` n'est pas un texte « réservé au staff » — `Staff` y désigne l'auteur de l'annulation. Les 5 clés `res.*` sont complètes sur les 8 locales. | **Moyenne** | C — instruit, voir §8.1 |
 | TR-4 | Rendus internes de `register` hors i18n. **Instruit en passe C (voir §8.2) :** les deux mails internes (`libraryMailHtml` → biblio, `adminMailHtml` → gestion AnarBib) ont titres, sous-titres, pré-titres et sujets codés en dur en pt-BR ; le mail lecteur·rice du même fichier est entièrement i18n. Une biblio non lusophone reçoit ses notifications internes en portugais — en tension avec la promesse fédérative 8 langues. Même famille que TM-B / TM-C. Sous-constat n°3. | **Moyenne** | C — instruit, voir §8.2 |
-| TR-5 | Incohérence des préfixes de sujet : `[AnarBib]` en dur dans `notify-library-request`, `subjectTag` contextuel ailleurs, `[<BRAND>]` dans `notify-document-permission-request`. | À qualifier | D |
-| TR-6 | Logo `logo_url` null : l'affichage du logo dépend de la source que chaque EF interroge. Sous-constat n°4. | À qualifier | D |
-| TR-7 | Délivrabilité : le sous-domaine `notifications.anarbib.org` a une réputation jeune ; risque de classement en spam (Gmail observé). Sous-constat n°5. | À qualifier | D |
+| TR-5 | Préfixes de sujet incohérents. **Instruit en passe D (voir §9.1) :** trois conventions — `subjectTag(ctx)` (contextuel par biblio, majorité des EF), `[${BRAND_NAME}]` (global par variable d'env, `notify-document-permission-request`), `[AnarBib]` (littéral en dur, ignore `BRAND_NAME`, `notify-library-request`, 7 sujets). Les EF non rattachées à une biblio unique peuvent légitimement utiliser un préfixe global, mais rien ne justifie qu'elles divergent entre elles. Correction : aligner `notify-library-request` sur `[${BRAND_NAME}]`. | **Faible** | D — instruit, voir §9.1 |
+| TR-6 | Résolution du logo : cinq stratégies divergentes. **Instruit en passe D (voir §9.2).** TR-6.1 — comportement « logo absent » incohérent (6 EF affichent du vide, seule `notify-network-weekly-report` dégrade vers un repli texte, qui est le bon comportement). TR-6.2a — logo réseau AnarBib en dur : **non-constat, solution validée** (objet unique et invariant, hard-coding robuste — doctrine 24/05). TR-6.2b — logos de bibliothèques en dur (`LIBRARY_MAIL_ASSETS` : `blmf`, `btl`) : **défaut**, une nouvelle biblio n'aurait pas son logo sans édition de code ; doit être résolu depuis `ctx.logo_url`. Doctrine 24/05 : ni anecdotique ni négociable. TR-6.3 — trois variables d'env (`LOGO_URL`, `ANARBIB_LOGO_URL`, `NETWORK_LOGO_URL`) lues en ordre variable. | **Moyenne** | D — instruit, voir §9.2 |
+| TR-7 | Délivrabilité / spam Gmail. **Instruit en passe D — requalifié en non-constat (voir §9.3).** Le constat reposait sur un mail isolé classé en spam, non récurrent, consécutif au lancement du sous-domaine d'envoi Resend. Instruction (précisions auteur, 24/05) : comportement normal de **warm-up** d'un domaine d'envoi neuf ; un classement spam isolé en phase initiale n'est pas un défaut de configuration. Caractère isolé cohérent avec un warm-up sain. **Pas un défaut, pas de correction.** Check-list d'hygiène de délivrabilité (DNS : SPF/DKIM/DMARC, alignement `From:`) fournie en §9.3. | — (non-constat) | D — requalifié |
 | TR-8 | Cascade d'annulation. **Tranché en B.2 :** une annulation biblio (item → `cancelada_biblioteca`) déclenche le trigger `trg_auto_liberate_after_no_show_change`, qui fait un second `UPDATE` (stage → `liberada_para_circulacao`). Les deux changements de stage émettent chacun un événement : `reserva_cancelada_biblioteca` puis `liberada_para_circulacao`. Or le handler de `liberada_para_circulacao` (`reservas.ts` l.277-279) définit `readerKey='wf.closed'` → **mail lecteur·rice**. Résultat : deux mails au lecteur·rice pour une seule annulation, le second redondant et porteur de jargon interne (« libérée pour circulation »). | À qualifier | B.2 — tranché, voir §6.3 |
 | TR-9 | **Relevé puis infirmé en passe C.** Constat initialement formulé : « la couche i18n des mails (`mail-strings.ts`) serait restée à 6 langues alors que le réseau en cible 8 ». Vérification faite : `mail-strings.ts` **est bien en 8 langues** (385 clés × 8 locales, complètes — voir §8.4). Le constat était fondé sur une version périmée du fichier, présente dans le premier export `functions.zip` ; un export à jour l'a corrigé. **TR-9 est retiré.** Trace conservée par honnêteté d'audit ; voir la note de méthode en §8.5. | — (retiré) | C — infirmé |
 
@@ -324,9 +324,10 @@ relevés en cours d'inventaire : TR-1 (coexistence legacy/v2) et TR-5
   (moyenne) ; famille i18n des mails internes TM-B (moyenne-haute) / TM-C (faible)
   instruite ; NW-A confirmé, NW-B requalifié (moyenne) ; revue des 8 locales
   conforme ; constat TR-9 relevé puis infirmé (§8.5).
-- **Passe D — présentation & délivrabilité** : à mener. Instruire TR-5, TR-6,
-  TR-7 ; layout, logos, sujets, réputation du sous-domaine. LP-B sert de
-  référence d'usage correct d'`actionBox`.
+- **Passe D — présentation & délivrabilité** : **complète.** Voir §9. TR-5
+  instruit (faible) ; TR-6 instruit (moyenne ; logo réseau validé, logos de
+  biblios = défaut) ; TR-7 requalifié en non-constat (warm-up normal). Synthèse
+  de clôture de l'audit en §10.
 
 ---
 
@@ -797,5 +798,223 @@ sous-domaine, spam). LP-B sert de référence d'usage correct d'`actionBox`.
 
 ---
 
-*Audit #153 — passes A, B (complète) et C (complète). Document de travail
-interne, à compléter par la passe D. Distribué sous licence CC-BY-SA-4.0.*
+## 9. Passe D — présentation & délivrabilité
+
+**Date :** 24 mai 2026.
+**Méthode :** lecture du code des EF pour TR-5 et TR-6 ; pour TR-7, cadrage à
+partir des précisions de l'auteur (le constat relève de la configuration DNS et
+de la réputation d'expéditeur, hors du périmètre du code).
+
+### 9.1 — TR-5 : préfixes de sujet incohérents
+
+Trois conventions de préfixe de sujet coexistent :
+
+- **`subjectTag(ctx)`** — préfixe contextuel, résolu par bibliothèque. Employé
+  par `notify-event` (tous ses handlers) et les EF rattachées à une biblio.
+- **`[${BRAND_NAME}]`** — préfixe global, variable d'environnement.
+  `notify-document-permission-request` (3 sujets).
+- **`[AnarBib]`** — littéral en dur, ignore même la variable `BRAND_NAME`.
+  `notify-library-request` (7 sujets, l.451-613).
+
+Les trois ne sont pas équivalentes : `subjectTag` indique *quelle biblio* est
+concernée, les deux autres donnent un préfixe global. `notify-library-request`
+et `notify-document-permission-request` traitent des objets non rattachés à une
+biblio unique (adhésion réseau, échange inter-biblios) — un préfixe global y est
+donc légitime. Le défaut n'est pas l'usage d'un préfixe global, mais que ces
+deux EF **divergent entre elles** : l'une lit `BRAND_NAME`, l'autre code la
+marque en dur.
+
+**Correction** (hors périmètre) : aligner `notify-library-request` sur
+`[${BRAND_NAME}]`.
+
+**Sévérité : faible.** Incohérence réelle, mais sans impact fonctionnel tant que
+le déploiement s'appelle « AnarBib ».
+
+### 9.2 — TR-6 : résolution du logo, cinq stratégies
+
+L'URL du logo est résolue différemment selon l'EF : contexte biblio
+(`ctx.logo_url`), variable(s) d'environnement, ou valeur en dur. Trois constats
+distincts.
+
+**TR-6.1 — Comportement « logo absent » incohérent.** Quand l'URL du logo
+manque, 6 EF affichent du vide (`logoHtml = ""`) ; seule
+`notify-network-weekly-report` dégrade proprement vers un repli texte (le nom de
+marque). Le repli texte est le **bon** comportement ; les 6 autres EF en sont
+dépourvues et laissent un en-tête amputé.
+
+**TR-6.2a — Logo réseau AnarBib en dur : non-constat, solution validée.**
+`register` utilise une URL stable / un inline pour le logo réseau. Pour un objet
+**unique et invariant**, ce choix garantit l'affichage (y compris en archive
+mail) sans dépendance à un CDN tiers ni à une réécriture d'URL par le
+transporteur. **Doctrine validée par l'auteur du projet le 24/05/2026** : le
+hard-coding du logo *réseau* est une solution robuste, pas une dette.
+
+**TR-6.2b — Logos de bibliothèques en dur : défaut à corriger.** `register`
+contient une table `LIBRARY_MAIL_ASSETS` mappant en dur les logos `blmf` et
+`btl`. Une nouvelle bibliothèque adhérente n'aurait pas son logo dans les mails
+sans édition du code et redéploiement. Le logo d'une bibliothèque doit être
+résolu depuis **sa** donnée (`ctx.logo_url`, colonne en base — mécanisme déjà
+employé par `notify-event`). **Doctrine posée par l'auteur le 24/05/2026 : ce
+point n'est ni anecdotique ni négociable** — chaque bibliothèque doit voir son
+propre logo, exigence du caractère fédératif du réseau.
+
+> **Note pour le chantier de correction.** La correction de TR-6 doit être
+> **asymétrique** : ne pas « déhardcoder » en bloc. Le logo réseau (TR-6.2a) est
+> à conserver tel quel ; seule la résolution des logos de bibliothèques
+> (TR-6.2b) est à reprendre, en la branchant sur `ctx.logo_url`. Le repli
+> « logo absent » (TR-6.1) gagnerait un comportement texte, distinct selon qu'il
+> s'agit du logo réseau (nom de marque) ou d'un logo de biblio (nom de la
+> biblio).
+
+**TR-6.3 — Multiplicité des variables d'environnement.** `LOGO_URL`,
+`ANARBIB_LOGO_URL`, `NETWORK_LOGO_URL` — trois variables, lues en
+ordre/sous-ensemble variable selon l'EF. Cohérence de configuration mal
+garantie (un déploiement renseignant l'une mais pas l'autre verrait le logo
+dans certaines EF seulement).
+
+**Sévérité TR-6 : moyenne.** TR-6.1 et TR-6.3 seraient faibles ; TR-6.2b tire le
+constat vers le haut — le hard-coding des logos de biblios est un frein réel à
+l'extensibilité du réseau.
+
+**Limite d'instruction :** TR-6 est instruit par lecture de code — il établit
+que les stratégies de résolution divergent. Il n'établit pas si, en production
+à un instant donné, tel logo s'affiche ou non (cela dépend de l'état réel des
+variables d'env et de la colonne `logo_url`). Le constat « les stratégies
+divergent » est solide ; un constat « tel mail n'a pas de logo aujourd'hui »
+relèverait d'un envoi test.
+
+### 9.3 — TR-7 : délivrabilité / spam Gmail — requalifié en non-constat
+
+Le constat d'origine : « sous-domaine d'envoi à réputation jeune, risque de
+classement en spam (Gmail observé) ».
+
+Instruction (précisions de l'auteur, 24/05) : l'épisode observé est **un seul
+mail**, non récurrent, classé en spam par Gmail, **consécutif au lancement du
+sous-domaine d'envoi Resend**.
+
+Analyse : il s'agit du comportement normal de **warm-up** d'un domaine d'envoi
+neuf. Un domaine sans historique n'a aucune réputation auprès de Gmail ; les
+filtres jaugent un expéditeur inconnu, et un classement spam isolé en phase
+initiale n'est pas un défaut de configuration. Le caractère **isolé et non
+récurrent** de l'épisode est au contraire cohérent avec un warm-up qui se
+déroule normalement : un défaut d'authentification (SPF/DKIM/DMARC) produirait
+un classement spam *systématique*, pas ponctuel.
+
+**TR-7 n'est pas un défaut.** Requalifié en non-constat. Aucune correction.
+
+**Recommandation d'hygiène de délivrabilité** (check-list, hors périmètre du
+code — relève de la configuration DNS et de la console Resend) :
+
+1. Vérifier que les trois enregistrements DNS d'authentification du sous-domaine
+   sont publiés et « verified » côté Resend : **SPF** (TXT autorisant Resend),
+   **DKIM** (clé de signature fournie par Resend), **DMARC** (enregistrement
+   `_dmarc` ; une politique souple `p=none` suffit en phase de warm-up).
+2. Vérifier l'**alignement** : l'adresse du `From:` utilise bien le sous-domaine
+   signé par DKIM (cohérence `From:` / domaine DKIM / `Return-Path`). Un
+   désalignement est la première cause de spam *persistant*.
+3. Maintenir une **régularité d'envoi** sans pic brutal pendant la phase de
+   warm-up. Volume transactionnel d'un réseau de bibliothèques : a priori faible
+   et régulier, peu de risque.
+
+Si les points 1 et 2 sont au vert, le warm-up suit son cours normalement et
+l'épisode isolé ne se reproduira pas une fois la réputation établie.
+
+### 9.4 — Bilan de la passe D
+
+| Constat | État | Sévérité |
+|---|---|---|
+| TR-5 | Instruit — trois conventions de préfixe de sujet | Faible |
+| TR-6 | Instruit — cinq stratégies de logo ; TR-6.2a validé, TR-6.2b défaut | Moyenne |
+| TR-7 | Instruit — **requalifié en non-constat** (warm-up normal) | — |
+
+---
+
+## 10. Synthèse de clôture de l'audit #153
+
+L'audit est **complet**. Les quatre passes ont couvert les 8 Edge Functions du
+périmètre (10 handlers de domaine pour `notify-event`), soit plus de
+30 déclencheurs de courriels.
+
+### 10.1 — Constats retenus, par sévérité
+
+**Doublons confirmés (à corriger) :**
+
+| ID | Objet | Sévérité |
+|---|---|---|
+| TR-2 | Conversion réservation → emprunt : 2 mails au lecteur·rice (`res.converted` + `loan.created`) | À qualifier |
+| TR-8 | Annulation biblio : 2 mails au lecteur·rice (cascade `auto_liberate` → `wf.closed`) | À qualifier |
+
+**Constats de sévérité moyenne-haute :**
+
+| ID | Objet |
+|---|---|
+| TM-B | `team.ts` — 54 chaînes en dur dans les mails staff, clés i18n existantes inutilisées |
+
+**Constats de sévérité moyenne :**
+
+| ID | Objet |
+|---|---|
+| TR-3 | Mails de statut de réservation : contenu plat (intro = titre), pas de différenciation lecteur·rice / staff |
+| TR-4 | `register` — rendus internes hors i18n (pt-BR en dur) |
+| TR-6 | Résolution du logo : 5 stratégies ; logos de bibliothèques en dur (TR-6.2b) |
+| NW-B | `network.ts` — libellé `l.executed_at` cassé (clé absente de `mail-strings.ts`) |
+| TM-A | `team.ts` — écart code/spec : copie staff au 7j d'inactivité non prévue par la spec |
+
+**Constats de sévérité faible :**
+
+| ID | Objet |
+|---|---|
+| TR-1 | `dispatch.ts` — `emprestimo_prorrogado` routé en legacy au lieu de v2 (branche v2 morte) |
+| TR-5 | Préfixes de sujet : `notify-library-request` code `[AnarBib]` en dur |
+| TM-C | `team.ts` — coquille FR/PT « do passage » |
+| TM-D | Divergence de nommage spec (`inactive_auto`) / code (`inactive_completed`) |
+| NW-A | `network.ts` — clés de vote du retrait collectif empruntées à la cooptation |
+| NW-C | `network.ts` — hypothèse de timing non documentée sur la lecture de `voteCount` |
+| LP-C | `library_profile.ts` — outbox marquée `sent` quand le fan-out est vide |
+
+**Non-constats / points positifs :**
+
+| ID | Objet |
+|---|---|
+| LP-A | `library_profile.ts` — doublon B.7 lecteur·rice + staff : volontaire, doctrine assumée |
+| LP-B | `library_profile.ts` — usage correct d'`actionBox` (référence) |
+| TR-6.2a | Logo réseau AnarBib en dur : solution robuste validée |
+| TR-7 | Spam Gmail : warm-up normal d'un domaine neuf, pas un défaut |
+| TR-9 | Couche i18n « restée à 6 langues » : infirmé — `mail-strings.ts` est en 8 langues |
+| Revue i18n | 385 clés × 8 locales dans `mail-strings.ts` : couverture complète |
+
+### 10.2 — Familles de constats
+
+Plusieurs constats relèvent d'un même défaut de fond et gagneraient à être
+corrigés ensemble :
+
+- **Famille « i18n des mails internes »** : TR-4, TM-B, TM-C. Les mails vers le
+  staff ne sont pas internationalisés alors que les mails vers le public le
+  sont. Correction commune : router les rendus internes par la locale de la
+  biblio, brancher `tMail`/`label` (clés en grande partie déjà existantes).
+- **Famille « doublon par cascade »** : TR-2, TR-8. Tous deux naissent d'un
+  `UPDATE`/INSERT qui re-déclenche un trigger de notification. Correction de même
+  nature : neutraliser le mail lecteur·rice du second événement.
+
+### 10.3 — Limites de l'audit
+
+- L'audit constate et instruit ; il **ne corrige rien**. Les pistes de
+  correction mentionnées sont indicatives, pour les futurs chantiers.
+- Les sévérités des deux doublons (TR-2, TR-8) restent **à qualifier** par
+  l'auteur du projet.
+- TR-6 est instruit par lecture de code (les stratégies divergent, c'est
+  établi) ; l'état d'affichage réel d'un logo en production relèverait d'un
+  envoi test.
+- TR-2 et TR-8 ont été instruits côté SQL sur la base de production (requêtes
+  `pg_trigger` / `pg_get_functiondef`) ; les constats de code l'ont été sur
+  l'export `functions.zip` à jour, après l'épisode TR-9 (voir §8.5).
+
+### 10.4 — Suite
+
+L'audit étant clos, la suite relève de **chantiers de correction distincts**, à
+ouvrir et prioriser séparément. Aucun n'est engagé par le présent document.
+
+---
+
+*Audit #153 — complet (passes A, B, C, D). Document de travail interne.
+Distribué sous licence CC-BY-SA-4.0.*
