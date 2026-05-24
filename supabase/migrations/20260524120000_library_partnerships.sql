@@ -311,8 +311,11 @@ SELECT
     END                                              AS partner_kind,
     lp.partner_library_id,
     lp.partner_catalog_id,
-    -- nom d'affichage resolu selon le type
-    COALESCE(pl.display_name, cp.display_name)        AS partner_display_name,
+    -- nom d'affichage resolu selon le type :
+    --   biblioteca  -> libraries n'a pas de display_name ; on prend short_name,
+    --                  a defaut name (meme logique que libLabel cote frontend) ;
+    --   collectif   -> catalog_partners.display_name.
+    COALESCE(pl.short_name, pl.name, cp.display_name) AS partner_display_name,
     -- metadonnees specifiques biblio
     pl.slug                                          AS partner_library_slug,
     pl.network_mode                                  AS partner_library_network_mode,
