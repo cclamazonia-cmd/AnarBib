@@ -8,9 +8,10 @@
 **Méthode :** audit en 4 passes — A (inventaire), B (destinataires & doublons),
 C (wording & cohérence), D (présentation & délivrabilité).
 
-**État au 24/05/2026 :** passe A réalisée. Passe B en cours — sous-passes B.1
-(TR-1, TR-2 ; voir §5) et B.2 (`team.ts`, `library_profile.ts`, TR-8 ; voir §6)
-réalisées. Reste B.3 (`network.ts`). Passes C et D à venir.
+**État au 24/05/2026 :** passe A réalisée. **Passe B complète** — sous-passes
+B.1 (TR-1, TR-2 ; voir §5), B.2 (`team.ts`, `library_profile.ts`, TR-8 ; voir §6)
+et B.3 (`network.ts` ; voir §7) réalisées. Passes C (wording & cohérence) et D
+(présentation & délivrabilité) à venir.
 
 ---
 
@@ -287,6 +288,14 @@ constats **TM-*** sont propres au handler `team.ts`, les **LP-*** au handler
 | LP-B | Non-constat positif. Les six appels à `actionBox` de `library_profile.ts` respectent le contrat strict de `layout.ts` (`{kind, title, ctaUrl, ctaLabel}`). Le fichier est une **référence correcte** d'usage d'`actionBox` — utile pour la passe D. | Néant | D (référence) |
 | LP-C | Lorsqu'un fan-out est vide (ex. : proposition dans une biblio à staff unique → seul destinataire exclu car proposeur), le handler journalise un `console.warn` « no recipients » et marque néanmoins l'outbox `status='sent'`. Comportement fonctionnellement correct (rien à envoyer), mais l'état `sent` sans envoi réel peut tromper une lecture ultérieure de la table outbox. | Faible | B.2 |
 
+### 3.4 — Constats sur `network.ts` (NW-*)
+
+| ID | Constat | Sévérité estimée | Passe |
+|---|---|---|---|
+| NW-A | Dette i18n mineure. Le handler `collective_removal_vote_cast` (vote `favor`/`against`) ne dispose pas de clés i18n propres : il réutilise `network.vote.favorable` / `network.vote.opposed` (clés de la cooptation) comme proxies, le code l'assume en commentaire (l.908-910). Fonctionnel, mais si le wording du retrait collectif devait un jour diverger de celui de la cooptation, ces clés partagées feraient obstacle. | Faible | B.3 / C |
+| NW-B | Fallback en dur dans un libellé : `network.ts` l.1247 et 1284, `label(locale, "executed_at") || "Date"`. Si la clé `executed_at` est absente des `labels` d'une locale, le mail affiche le mot français « Date ». À vérifier contre les 6 locales en passe C : soit la clé existe partout (fallback inoffensif), soit certaines locales affichent « Date » en dur. | Faible | B.3 / C |
+| NW-C | Hypothèse de timing non documentée. `cooptation_voted` et `collective_removal_vote_cast` déterminent « 1er vote ? » par un `SELECT count(*)` sur la table des votes (`isFirstVote = voteCount === 1`), ce qui suppose que le vote courant est déjà inscrit en base au moment où l'EF lit le compte. Probablement vrai (l'événement est émis après l'INSERT du vote), mais dépendance implicite à l'ordre des opérations — non commentée dans le code. À confirmer. | Faible — à confirmer | B.3 |
+
 ---
 
 ## 4. Bilan de la passe A
@@ -307,14 +316,15 @@ n°2 → TR-2 ; n°3 → TR-4 ; n°4 → TR-6 ; n°5 → TR-7. Deux constats sup
 relevés en cours d'inventaire : TR-1 (coexistence legacy/v2) et TR-5
 (incohérence des préfixes de sujet).
 
-**Suite.** Trois passes restent à mener, en sessions dédiées :
-- **Passe B — destinataires & doublons** : sous-passes B.1 (TR-1, TR-2 instruits ;
-  TR-8 relevé — voir §5) et B.2 (`team.ts`, `library_profile.ts`, TR-8 tranché —
-  voir §6) réalisées. Reste B.3 (`network.ts`).
-- **Passe C — wording & cohérence** : instruire TR-3, TR-4 ; revue des clés i18n
-  sur les 6 locales ; cohérence de registre d'un mail à l'autre.
-- **Passe D — présentation & délivrabilité** : instruire TR-5, TR-6, TR-7 ;
-  layout, logos, sujets, réputation du sous-domaine.
+**Suite.** État des passes :
+- **Passe B — destinataires & doublons** : **complète.** Sous-passes B.1 (§5),
+  B.2 (§6) et B.3 (§7) réalisées. Bilan détaillé en §7.4.
+- **Passe C — wording & cohérence** : à mener. Instruire TR-3, TR-4 ; traiter la
+  famille de constats i18n (TM-B, TM-C, NW-A, NW-B) ; revue des clés sur les
+  6 locales ; cohérence de registre d'un mail à l'autre.
+- **Passe D — présentation & délivrabilité** : à mener. Instruire TR-5, TR-6,
+  TR-7 ; layout, logos, sujets, réputation du sous-domaine. LP-B sert de
+  référence d'usage correct d'`actionBox`.
 
 ---
 
@@ -541,5 +551,97 @@ le plus gros handler du périmètre).
 
 ---
 
-*Audit #153 — passes A, B.1 et B.2. Document de travail interne, à compléter par
-la sous-passe B.3 et les passes C et D. Distribué sous licence CC-BY-SA-4.0.*
+## 7. Passe B.3 — décomposition du handler à fan-out `network.ts`
+
+**Date :** 24 mai 2026.
+**Méthode :** lecture intégrale du handler de domaine `network.ts` (1305 lignes,
+le plus volumineux du périmètre) ; confrontation à l'en-tête auto-documenté du
+fichier et aux doctrines qu'il cite (spec administrateur réseau v0.3,
+specs d'implémentation #114.A et #114.B).
+
+### 7.1 — `network.ts` : 10 événements de gouvernance réseau
+
+Le handler lit `team_notification_outbox` par `recordId` et route sur le champ
+`event`. Dix événements, en deux blocs.
+
+**Bloc cooptation (5)**
+
+| # | Événement | Destinataires | Doctrine |
+|---|---|---|---|
+| NW-1 | `cooptation_proposed` | tous admins actifs | proposeur exclu ; target jamais notifié (spec v0.3 Q1) |
+| NW-2 | `cooptation_voted` | tous admins actifs | voteur + target exclus ; proposeur exclu sauf 1er vote |
+| NW-3 | `cooptation_rejected` | target + proposeur + autres admins | voteur opposé exclu ; 2 mails distincts (`target_intro` / `intro`) |
+| NW-4 | `cooptation_completed` | target + proposeur + autres admins | 2 mails distincts (bienvenue / annonce) |
+| NW-5 | `cooptation_reminder` | retardataires (`pending_voters`) + proposeur | target jamais notifié ; 2 mails distincts ; cron J+14 / J+25 |
+
+**Bloc retrait collectif (5)**
+
+| # | Événement | Destinataires | Doctrine |
+|---|---|---|---|
+| NW-6 | `collective_removal_proposed` | autres admins actifs | proposeur + target exclus ; target jamais notifié à l'ouverture (spec §4.5) |
+| NW-7 | `collective_removal_vote_cast` | autres admins actifs | voteur + target exclus ; proposeur exclu sauf 1er vote |
+| NW-8 | `collective_removal_unanimous` | target + proposeur + autres admins | 2 mails distincts (`target_intro` avec carence 7j / `intro`) |
+| NW-9 | `collective_removal_cancelled` | target si `was_unanimous` + admins | annulateur exclu ; proposeur exclu s'il est l'annulateur ; 2 mails distincts |
+| NW-10 | `collective_removal_executed` | target + proposeur + autres admins | 2 mails distincts ; cron post-carence |
+
+Un 11ᵉ cas de routage : `event.startsWith("network.library_profile.")` délègue à
+`handleLibraryProfileEvent` (inventorié en B.2, §6.2).
+
+### 7.2 — Qualité du handler
+
+`network.ts` est le **handler le mieux écrit du périmètre #153**. Points forts
+établis par la lecture :
+
+- **Tout passe par i18n** — sujets, intros, libellés, labels de vote, de
+  rationale, de carence. Aucun texte en dur, sur 1305 lignes. Contraste net avec
+  `team.ts` (constat TM-B).
+- **Fan-out conditionnels fins et tracés.** Chaque exclusion est justifiée par
+  un commentaire renvoyant à la doctrine : proposeur notifié au seul 1er vote
+  (`voteCount === 1`), target jamais notifié avant unanimité, target notifié à
+  l'annulation seulement si `was_unanimous`.
+- **Gestion correcte des états transitoires de la cible.** Selon l'événement, le
+  target est `pending_removal`, `removed` ou restauré `active` ; le code sait
+  dans quel cas `loadActiveNetworkAdmins()` le retourne ou non, et le traite
+  explicitement en conséquence.
+- **`actionBox` conforme** au contrat strict de `layout.ts`.
+
+**Aucun doublon de destinataire** n'a été trouvé : chaque fan-out est soit
+`loadActiveNetworkAdmins()` filtré, soit une liste explicite où le proposeur est
+retiré des admins avant d'être rajouté en tête. Sur le critère central de la
+passe B (destinataires & doublons), `network.ts` est sain.
+
+### 7.3 — Constats
+
+Trois constats, tous de sévérité faible : NW-A (clés de vote empruntées à la
+cooptation pour le retrait collectif), NW-B (fallback en dur `|| "Date"` sur le
+libellé `executed_at`), NW-C (hypothèse de timing non documentée sur la lecture
+de `voteCount`). Détail au registre §3.4.
+
+**Limite assumée :** la lecture porte sur le handler `network.ts` (réception des
+événements). Elle ne vérifie pas que les helpers SQL émetteurs
+(`fn_network_admin_vote_*`) émettent bien un seul événement par action. Un
+double envoi par sur-émission côté SQL serait un bug de l'émetteur, hors du
+périmètre de B.3 ; à instruire séparément si un doute survenait.
+
+### 7.4 — Bilan de la passe B
+
+La passe B (destinataires & doublons) est **complète**.
+
+| Sous-passe | Objet | Résultat |
+|---|---|---|
+| B.1 | TR-1, TR-2 | TR-1 : pas de doublon, anomalie de routage `emprestimo_prorrogado`. TR-2 : doublon confirmé (conversion réservation → emprunt). |
+| B.2 | `team.ts`, `library_profile.ts`, TR-8 | 13 + 6 événements inventoriés. TR-8 : doublon confirmé (annulation biblio). Constats TM-A→D, LP-A→C. |
+| B.3 | `network.ts` | 10 événements inventoriés, handler sain, aucun doublon. Constats NW-A→C. |
+
+**Doublons :** deux confirmés (TR-2, TR-8), tous deux par cascade d'un `UPDATE`
+ou d'un INSERT re-déclenchant un trigger de notification. Un doublon volontaire
+et assumé (LP-A, doctrine B.7). Aucun autre.
+
+**Constats hérités pour les passes suivantes :**
+- Vers la passe **C** (wording) : TR-3, TR-4, TM-B, TM-C, NW-A, NW-B.
+- Vers la passe **D** (présentation & délivrabilité) : TR-5, TR-6, TR-7, LP-B.
+
+---
+
+*Audit #153 — passes A et B (complète). Document de travail interne, à compléter
+par les passes C et D. Distribué sous licence CC-BY-SA-4.0.*
