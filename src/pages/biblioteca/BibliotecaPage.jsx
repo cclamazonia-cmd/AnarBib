@@ -149,6 +149,15 @@ export default function BibliotecaPage() {
   // stale) ; 'modelos' et 'catalogo' sont des placeholders, remplis aux
   // paquets 2 et 3.
   const [tasksSubtab, setTasksSubtab] = useState('lista');
+  // Chantier #TASKS etape 6 paquet 2 (24/05/2026) : tâches-types locales.
+  // templates = liste chargee depuis painel_recurring_task_rules.
+  // editingTemplate = null (aucun) | 'new' (creation) | {id,...} (edition).
+  // instantiateFor = id du modele dont le mini-formulaire d'echeance est
+  // ouvert (un seul a la fois), null sinon. instantiateDate = sa date.
+  const [templates, setTemplates] = useState([]);
+  const [editingTemplate, setEditingTemplate] = useState(null);
+  const [instantiateFor, setInstantiateFor] = useState(null);
+  const [instantiateDate, setInstantiateDate] = useState('');
   const [allLibraries, setAllLibraries] = useState([]);
   const [illForm, setIllForm] = useState({ lender:'', borrower:'', status:'preparacao', contactName:'', contactEmail:'', startDate:'', dueDate:'', logisticsNote:'', meetingPoint:'', logisticsMode:'' });
   const [illItems, setIllItems] = useState([]);
@@ -177,7 +186,7 @@ export default function BibliotecaPage() {
   const loadAll = useCallback(async () => {
     if (!libraryId) return;
     try {
-      const [libR, commR, ssR, regR, psR, dgR, partR, memR, illR, taskR, mcR, npR, mrR] = await Promise.all([
+      const [libR, commR, ssR, regR, psR, dgR, partR, memR, illR, taskR, mcR, npR, mrR, tplR] = await Promise.all([
         supabase.from('libraries').select('*').eq('id', libraryId).single(),
         supabase.from('library_commons').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('*').eq('library_id', libraryId).maybeSingle(),
@@ -191,11 +200,16 @@ export default function BibliotecaPage() {
         supabase.from('library_mail_channels').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_notification_policies').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_membership_rules').select('*').eq('library_id', libraryId).order('display_order', { ascending: true }).order('created_at', { ascending: true }),
+        // Chantier #TASKS etape 6 paquet 2 : tâches-types. Lecture simple
+        // protegee par la RLS painel_recurring_task_rules_select (doctrine
+        // RPC v3 : from() autorise pour les lectures protegees par RLS).
+        supabase.from('painel_recurring_task_rules').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }),
       ]);
       setLib(libR.data); setCommons(commR.data); setServiceState(ssR.data);
       setRegDocs(regR.data || []); setDocGov(dgR.data);
       setPartners(partR.data || []); setMembers(memR.data || []);
       setIllLoans(illR.data || []); setTasks(taskR.data || []);
+      setTemplates(tplR.data || []);
       // #ILL-partial — charge les exemplaires de tous les prêts affichés,
       // regroupés par prêt. Lecture simple protégée par la RLS
       // interlibrary_loan_items_v2_select (doctrine RPC v3 : from() autorisé
@@ -396,6 +410,127 @@ export default function BibliotecaPage() {
       await loadAll();
     } catch (err) {
       setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' });
+    }
+  }
+
+  // ── Tâches-types : CRUD + instanciation (chantier #TASKS p2) ─────────
+  // Toutes les ecritures passent par les RPC fn_recurring_task_rule_*
+  // (doctrine RPC v3 : RPC obligatoire pour les ecritures avec validation
+  // metier). La distinction recurrent / ponctuel est portee par un champ
+  // `recurrent` (bool) dans le formulaire ; cote RPC, un modele recurrent
+  // exige interval_count + interval_unit, un ponctuel les laisse NULL.
+
+  // Ouvre le formulaire en mode creation, avec des valeurs par defaut.
+  function startNewTemplate() {
+    setEditingTemplate({
+      id: 'new', template_title: '', template_description: '',
+      template_priority: 'media', tagsText: '', label: '',
+      recurrent: false, interval_count: 1, interval_unit: 'semana',
+      is_active: true,
+    });
+    setMsg({ text: '', kind: '' });
+  }
+
+  // Ouvre le formulaire en mode edition pour un modele existant.
+  function startEditTemplate(tpl) {
+    setEditingTemplate({
+      id: tpl.id,
+      template_title: tpl.template_title || '',
+      template_description: tpl.template_description || '',
+      template_priority: tpl.template_priority || 'media',
+      tagsText: (tpl.template_tags || []).join(', '),
+      label: tpl.label || '',
+      recurrent: tpl.interval_count != null && tpl.interval_unit != null,
+      interval_count: tpl.interval_count || 1,
+      interval_unit: tpl.interval_unit || 'semana',
+      is_active: tpl.is_active !== false,
+    });
+    setMsg({ text: '', kind: '' });
+  }
+
+  function cancelEditTemplate() { setEditingTemplate(null); }
+
+  async function saveTemplate() {
+    if (!editingTemplate) return;
+    const e = editingTemplate;
+    if (!e.template_title.trim()) {
+      setMsg({ text: t({ id: 'biblioteca.templates.titleRequired' }), kind: 'error' });
+      return;
+    }
+    const tags = (e.tagsText || '').split(',').map(s => s.trim()).filter(Boolean);
+    // Modele ponctuel => cadence NULL ; recurrent => les deux champs.
+    const intervalCount = e.recurrent ? Number(e.interval_count) || null : null;
+    const intervalUnit  = e.recurrent ? e.interval_unit : null;
+    setSaving(true);
+    try {
+      if (e.id === 'new') {
+        const { error } = await supabase.rpc('fn_recurring_task_rule_create', {
+          p_library_id: libraryId,
+          p_template_title: e.template_title.trim(),
+          p_template_description: e.template_description.trim() || null,
+          p_template_priority: e.template_priority || 'media',
+          p_template_tags: tags,
+          p_label: e.label.trim() || null,
+          p_interval_count: intervalCount,
+          p_interval_unit: intervalUnit,
+        });
+        if (error) throw error;
+        setMsg({ text: t({ id: 'biblioteca.templates.created' }), kind: 'ok' });
+      } else {
+        const { error } = await supabase.rpc('fn_recurring_task_rule_update', {
+          p_template_id: e.id,
+          p_template_title: e.template_title.trim(),
+          p_template_description: e.template_description.trim() || null,
+          p_template_priority: e.template_priority || 'media',
+          p_template_tags: tags,
+          p_label: e.label.trim() || null,
+          p_interval_count: intervalCount,
+          p_interval_unit: intervalUnit,
+          p_is_active: e.is_active,
+        });
+        if (error) throw error;
+        setMsg({ text: t({ id: 'biblioteca.templates.saved' }), kind: 'ok' });
+      }
+      setEditingTemplate(null);
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function deleteTemplate(tpl) {
+    if (!confirm(t({ id: 'biblioteca.templates.deleteConfirm' }, { title: tpl.template_title || '—' }))) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase.rpc('fn_recurring_task_rule_delete', { p_template_id: tpl.id });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'biblioteca.templates.deleted' }), kind: 'ok' });
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // Instancie une tache depuis un modele. p_due_date optionnel : si vide,
+  // la tache nait sans echeance (seau « Sem prazo »). Pour un modele
+  // recurrent, fournir une date donne le point de depart de la serie.
+  async function instantiateTemplate(templateId, dueDate) {
+    try {
+      const { error } = await supabase.rpc('fn_task_instantiate_template', {
+        p_template_id: templateId,
+        p_due_date: dueDate || null,
+      });
+      if (error) throw error;
+      setInstantiateFor(null);
+      setInstantiateDate('');
+      setMsg({ text: t({ id: 'biblioteca.templates.instantiated' }), kind: 'ok' });
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
     }
   }
 
@@ -1757,12 +1892,195 @@ export default function BibliotecaPage() {
               )}
             </div>)}
 
-            {/* ── Sous-onglet MODELOS (placeholder, paquet 2) ── */}
-            {tasksSubtab==='modelos' && (
-              <div style={{ ...bx, fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic' }}>
-                {t({ id: 'biblioteca.tasks.subtab.templates.placeholder' })}
+            {/* ── Sous-onglet MODELOS (chantier #TASKS p2) ── */}
+            {tasksSubtab==='modelos' && (<div>
+              <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:12 }}>
+                {t({ id: 'biblioteca.templates.hint' })}
               </div>
-            )}
+
+              {/* Bouton « Nouveau modèle » — masque tant qu'un formulaire est ouvert */}
+              {!editingTemplate && (
+                <button className="cat-btn primary" onClick={startNewTemplate} style={{ fontSize:'.88rem', marginBottom:12 }}>
+                  {t({ id: 'biblioteca.templates.new' })}
+                </button>
+              )}
+
+              {/* Formulaire créer / éditer */}
+              {editingTemplate && (
+                <div style={bx}>
+                  <h4 style={{ margin:'0 0 10px' }}>
+                    {editingTemplate.id==='new'
+                      ? t({ id: 'biblioteca.templates.new' })
+                      : t({ id: 'biblioteca.templates.edit' })}
+                  </h4>
+                  <div className="cat-book-grid" style={{ marginBottom:10 }}>
+                    <div className="cat-field" style={{ gridColumn:'span 2' }}>
+                      <label style={ls}>{t({ id: 'biblioteca.templates.titleField' })}</label>
+                      <input type="text" value={editingTemplate.template_title}
+                        onChange={e=>setEditingTemplate(p=>({...p,template_title:e.target.value}))}
+                        style={fs} placeholder={t({ id: 'biblioteca.templates.titlePlaceholder' })} />
+                    </div>
+                    <div className="cat-field">
+                      <label style={ls}>{t({ id: 'biblioteca.tasks.priority' })}</label>
+                      <select value={editingTemplate.template_priority}
+                        onChange={e=>setEditingTemplate(p=>({...p,template_priority:e.target.value}))} style={fs}>
+                        <option value="baixa">{t({ id: 'biblioteca.tasks.priority.low' })}</option>
+                        <option value="media">{t({ id: 'biblioteca.tasks.priority.normal' })}</option>
+                        <option value="alta">{t({ id: 'biblioteca.tasks.priority.high' })}</option>
+                      </select>
+                    </div>
+                    <div className="cat-field">
+                      <label style={ls}>{t({ id: 'biblioteca.templates.label' })}</label>
+                      <input type="text" value={editingTemplate.label}
+                        onChange={e=>setEditingTemplate(p=>({...p,label:e.target.value}))}
+                        style={fs} placeholder={t({ id: 'biblioteca.templates.labelPlaceholder' })} />
+                    </div>
+                    <div className="cat-field">
+                      <label style={ls}>{t({ id: 'biblioteca.tasks.tags' })}</label>
+                      <input type="text" value={editingTemplate.tagsText}
+                        onChange={e=>setEditingTemplate(p=>({...p,tagsText:e.target.value}))}
+                        style={fs} placeholder={t({ id: 'biblioteca.tasks.tagsPlaceholder' })} />
+                    </div>
+                    <div className="cat-field" style={{ gridColumn:'span 3' }}>
+                      <label style={ls}>{t({ id: 'biblioteca.tasks.description' })}</label>
+                      <textarea value={editingTemplate.template_description}
+                        onChange={e=>setEditingTemplate(p=>({...p,template_description:e.target.value}))}
+                        rows={2} style={{...fs,resize:'vertical'}}
+                        placeholder={t({ id: 'biblioteca.tasks.descPlaceholder' })} />
+                    </div>
+                  </div>
+
+                  {/* Bascule récurrent / ponctuel + cadence */}
+                  <div style={{ padding:10, borderRadius:8, background:'rgba(0,0,0,.12)', marginBottom:10 }}>
+                    <label style={{ display:'flex', gap:8, alignItems:'center', fontSize:'.88rem', cursor:'pointer' }}>
+                      <input type="checkbox" checked={editingTemplate.recurrent}
+                        onChange={e=>setEditingTemplate(p=>({...p,recurrent:e.target.checked}))} />
+                      {t({ id: 'biblioteca.templates.recurrentToggle' })}
+                    </label>
+                    {editingTemplate.recurrent ? (
+                      <div style={{ display:'flex', gap:8, alignItems:'center', marginTop:8, flexWrap:'wrap' }}>
+                        <span style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>
+                          {t({ id: 'biblioteca.templates.cadencePrefix' })}
+                        </span>
+                        <input type="number" min={1} value={editingTemplate.interval_count}
+                          onChange={e=>setEditingTemplate(p=>({...p,interval_count:e.target.value}))}
+                          style={{...fs, width:80}} />
+                        <select value={editingTemplate.interval_unit}
+                          onChange={e=>setEditingTemplate(p=>({...p,interval_unit:e.target.value}))}
+                          style={{...fs, width:'auto'}}>
+                          <option value="dia">{t({ id: 'biblioteca.templates.unit.dia' })}</option>
+                          <option value="semana">{t({ id: 'biblioteca.templates.unit.semana' })}</option>
+                          <option value="mes">{t({ id: 'biblioteca.templates.unit.mes' })}</option>
+                        </select>
+                      </div>
+                    ) : (
+                      <div style={{ fontSize:'.8rem', color:'var(--brand-muted)', fontStyle:'italic', marginTop:6 }}>
+                        {t({ id: 'biblioteca.templates.punctualHint' })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Actif / inactif — seulement en édition */}
+                  {editingTemplate.id!=='new' && (
+                    <label style={{ display:'flex', gap:8, alignItems:'center', fontSize:'.88rem', cursor:'pointer', marginBottom:10 }}>
+                      <input type="checkbox" checked={editingTemplate.is_active}
+                        onChange={e=>setEditingTemplate(p=>({...p,is_active:e.target.checked}))} />
+                      {t({ id: 'biblioteca.templates.activeToggle' })}
+                    </label>
+                  )}
+
+                  <div style={{ display:'flex', gap:8 }}>
+                    <button className="cat-btn primary" onClick={saveTemplate} disabled={saving} style={{ fontSize:'.88rem' }}>
+                      {saving ? t({ id: 'common.saving' }) : t({ id: 'common.save' })}
+                    </button>
+                    <button className="cat-btn secondary" onClick={cancelEditTemplate} disabled={saving} style={{ fontSize:'.88rem' }}>
+                      {t({ id: 'common.cancel' })}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Liste des modèles */}
+              {templates.length===0 && !editingTemplate && (
+                <div style={{ fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic', padding:'8px 2px' }}>
+                  {t({ id: 'biblioteca.templates.empty' })}
+                </div>
+              )}
+              {templates.length>0 && (
+                <div style={lw}>
+                  {templates.map((tpl,i)=>{
+                    const isRecurrent = tpl.interval_count!=null && tpl.interval_unit!=null;
+                    return (
+                    <div key={tpl.id} style={{ ...lr(i), flexDirection:'column', alignItems:'stretch', gap:6 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
+                        <div style={{ flex:1 }}>
+                          <div style={{ fontSize:'.9rem', fontWeight:600, display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
+                            {tpl.template_title || t({ id: 'common.noTitle' })}
+                            {!tpl.is_active && (
+                              <span className="cat-pill" style={{ fontSize:'.62rem', padding:'1px 6px', background:'rgba(255,255,255,.1)' }}>
+                                {t({ id: 'biblioteca.rules.inactive' })}
+                              </span>
+                            )}
+                            <span className={`cat-pill ${isRecurrent?'info':''}`} style={{ fontSize:'.62rem', padding:'1px 6px' }}>
+                              {isRecurrent
+                                ? t({ id: 'biblioteca.templates.cadenceBadge' }, { count: tpl.interval_count, unit: t({ id: `biblioteca.templates.unit.${tpl.interval_unit}` }) })
+                                : t({ id: 'biblioteca.templates.punctualBadge' })}
+                            </span>
+                          </div>
+                          <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                            {tpl.label || '—'}
+                            {tpl.template_tags?.length>0 && ` · ${tpl.template_tags.join(', ')}`}
+                          </div>
+                          {tpl.template_description && (
+                            <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>
+                              {tpl.template_description}
+                            </div>
+                          )}
+                        </div>
+                        <div style={{ display:'flex', gap:4, flexShrink:0, alignItems:'center' }}>
+                          <span className={`cat-pill ${tpl.template_priority==='alta'?'danger':tpl.template_priority==='baixa'?'info':'warn'}`} style={{ fontSize:'.65rem' }}>
+                            {TASK_PRIO[tpl.template_priority]||tpl.template_priority}
+                          </span>
+                          <button className="cat-btn secondary" onClick={()=>{ setInstantiateFor(instantiateFor===tpl.id?null:tpl.id); setInstantiateDate(''); }}
+                            disabled={!!editingTemplate} style={{ fontSize:'.78rem', padding:'4px 10px' }}>
+                            {t({ id: 'biblioteca.templates.instantiate' })}
+                          </button>
+                          <button className="cat-btn secondary" onClick={()=>startEditTemplate(tpl)}
+                            disabled={!!editingTemplate} style={{ fontSize:'.78rem', padding:'4px 10px' }}>
+                            {t({ id: 'membership.config.action.edit' })}
+                          </button>
+                          <button className="cat-btn ghost" onClick={()=>deleteTemplate(tpl)}
+                            disabled={!!editingTemplate} style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }}>
+                            {t({ id: 'common.discard' })}
+                          </button>
+                        </div>
+                      </div>
+                      {/* Mini-formulaire d'instanciation : champ date optionnel */}
+                      {instantiateFor===tpl.id && (
+                        <div style={{ display:'flex', gap:8, alignItems:'center', flexWrap:'wrap', padding:'8px 10px', borderRadius:8, background:'rgba(251,191,36,.08)' }}>
+                          <span style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                            {t({ id: 'biblioteca.templates.instantiateDateLabel' })}
+                          </span>
+                          <input type="date" value={instantiateDate}
+                            onChange={e=>setInstantiateDate(e.target.value)}
+                            style={{...fs, width:'auto'}} />
+                          <button className="cat-btn primary" onClick={()=>instantiateTemplate(tpl.id, instantiateDate)}
+                            style={{ fontSize:'.8rem', padding:'4px 10px' }}>
+                            {t({ id: 'biblioteca.templates.instantiateConfirm' })}
+                          </button>
+                          <span style={{ fontSize:'.75rem', color:'var(--brand-muted)', fontStyle:'italic' }}>
+                            {isRecurrent
+                              ? t({ id: 'biblioteca.templates.instantiateRecurrentHint' })
+                              : t({ id: 'biblioteca.templates.instantiateDateHint' })}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>)}
 
             {/* ── Sous-onglet CATALOGO (placeholder, paquet 3) ── */}
             {tasksSubtab==='catalogo' && (
