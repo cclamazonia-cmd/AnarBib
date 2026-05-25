@@ -1,4 +1,12 @@
 {
+  "biblioteca.report.illSection": "Interbibliotekaj pruntoj (PEB)",
+  "biblioteca.report.illOngoing": "Daŭrantaj interbibliotekaj pruntoj: {count}",
+  "biblioteca.report.illOverdue": "el kiuj malfruaj: {count}",
+  "biblioteca.report.illTerminalPending": "Finitaj interbibliotekaj pruntoj atendantaj arkivigon: {count}",
+  "biblioteca.report.illOngoingList": "Detalo de la daŭrantaj interbibliotekaj pruntoj",
+  "biblioteca.report.illLendTo": "prunto al {partner}",
+  "biblioteca.report.illBorrowFrom": "prunto ĉe {partner}",
+
   "biblioteca.ill.archive": "Arkivi",
   "biblioteca.ill.archived": "Interbiblioteka prunto #{id} arkivita.",
   "biblioteca.ill.archiveConfirm": "Ĉu arkivi la interbibliotekan prunton #{id}? Ĝi forlasas la aktivan liston kaj restas konsultebla en la langeto Raportoj.",

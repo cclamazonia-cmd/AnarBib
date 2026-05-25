@@ -1,4 +1,12 @@
 {
+  "biblioteca.report.illSection": "Empréstimos entre bibliotecas (PEB)",
+  "biblioteca.report.illOngoing": "PEB em curso: {count}",
+  "biblioteca.report.illOverdue": "dos quais em atraso: {count}",
+  "biblioteca.report.illTerminalPending": "PEB encerrados aguardando arquivamento: {count}",
+  "biblioteca.report.illOngoingList": "Detalhe dos PEB em curso",
+  "biblioteca.report.illLendTo": "empréstimo a {partner}",
+  "biblioteca.report.illBorrowFrom": "empréstimo junto a {partner}",
+
   "biblioteca.ill.archive": "Arquivar",
   "biblioteca.ill.archived": "PEB #{id} arquivado.",
   "biblioteca.ill.archiveConfirm": "Arquivar o PEB #{id}? Ele sai da lista ativa e fica consultável na aba Relatórios.",
@@ -740,7 +748,7 @@
   "biblioteca.report.team": "EQUIPE",
   "biblioteca.reports.copied": "Relatório copiado para a área de transferência.",
   "biblioteca.reports.copy": "Copiar relatório",
-  "biblioteca.reports.generate": "Gerar conta-rendida",
+  "biblioteca.reports.generate": "Gerar relatório",
   "biblioteca.reports.generateHint": "Gera um resumo com indicadores, equipe e tarefas internas da biblioteca. O relatório pode ser copiado, salvo como texto ou enviado por e-mail.",
   "biblioteca.reports.hint": "Gera um resumo com indicadores, equipe e tarefas internas.",
   "biblioteca.reports.noEmail": "(não configurado)",

@@ -23,8 +23,11 @@ import { supabase } from '@/lib/supabase';
  * Props :
  *   libraryId    uuid de la bibliothèque courante
  *   allLibraries liste déjà chargée par BibliotecaPage (pour les noms)
+ *   onChange     callback optionnel appelé après un désarchivage réussi —
+ *                BibliotecaPage y branche loadAll() pour que la file active
+ *                de l'onglet PEB se rafraîchisse sans refresh manuel.
  */
-export default function PebHistorySection({ libraryId, allLibraries = [] }) {
+export default function PebHistorySection({ libraryId, allLibraries = [], onChange }) {
   const intl = useIntl();
   const t = (d, v) => intl.formatMessage(d, v);
 
@@ -85,6 +88,10 @@ export default function PebHistorySection({ libraryId, allLibraries = [] }) {
       });
       if (err) throw err;
       await load();
+      // #ILL-reports volet B : prévenir le parent (BibliotecaPage) pour qu'il
+      // rafraîchisse la file active de l'onglet PEB — le PEB désarchivé doit y
+      // réapparaître sans refresh manuel de la page.
+      if (typeof onChange === 'function') onChange();
     } catch (err) {
       console.warn('PebHistorySection.handleUnarchive:', err);
       setError(t({ id: 'biblioteca.pebHistory.unarchiveError' }));

@@ -1,4 +1,12 @@
 {
+  "biblioteca.report.illSection": "Prêts entre bibliothèques (PEB)",
+  "biblioteca.report.illOngoing": "PEB en cours : {count}",
+  "biblioteca.report.illOverdue": "dont en retard : {count}",
+  "biblioteca.report.illTerminalPending": "PEB terminés en attente d'archivage : {count}",
+  "biblioteca.report.illOngoingList": "Détail des PEB en cours",
+  "biblioteca.report.illLendTo": "prêt à {partner}",
+  "biblioteca.report.illBorrowFrom": "emprunt auprès de {partner}",
+
   "biblioteca.ill.archive": "Archiver",
   "biblioteca.ill.archived": "PEB #{id} archivé.",
   "biblioteca.ill.archiveConfirm": "Archiver le PEB #{id} ? Il quitte la liste active et reste consultable dans l'onglet Rapports.",

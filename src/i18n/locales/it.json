@@ -1,4 +1,12 @@
 {
+  "biblioteca.report.illSection": "Prestiti interbibliotecari (PEB)",
+  "biblioteca.report.illOngoing": "PEB in corso: {count}",
+  "biblioteca.report.illOverdue": "di cui in ritardo: {count}",
+  "biblioteca.report.illTerminalPending": "PEB conclusi in attesa di archiviazione: {count}",
+  "biblioteca.report.illOngoingList": "Dettaglio dei PEB in corso",
+  "biblioteca.report.illLendTo": "prestito a {partner}",
+  "biblioteca.report.illBorrowFrom": "prestito presso {partner}",
+
   "biblioteca.ill.archive": "Archiviare",
   "biblioteca.ill.archived": "PEB #{id} archiviato.",
   "biblioteca.ill.archiveConfirm": "Archiviare il PEB #{id}? Esce dall'elenco attivo e resta consultabile nella scheda Rapporti.",

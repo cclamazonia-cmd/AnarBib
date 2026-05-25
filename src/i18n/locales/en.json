@@ -1,4 +1,12 @@
 {
+  "biblioteca.report.illSection": "Interlibrary loans (ILL)",
+  "biblioteca.report.illOngoing": "ILLs in progress: {count}",
+  "biblioteca.report.illOverdue": "of which overdue: {count}",
+  "biblioteca.report.illTerminalPending": "Finished ILLs awaiting archiving: {count}",
+  "biblioteca.report.illOngoingList": "ILLs in progress — detail",
+  "biblioteca.report.illLendTo": "lent to {partner}",
+  "biblioteca.report.illBorrowFrom": "borrowed from {partner}",
+
   "biblioteca.ill.archive": "Archive",
   "biblioteca.ill.archived": "ILL #{id} archived.",
   "biblioteca.ill.archiveConfirm": "Archive ILL #{id}? It leaves the active list and stays consultable in the Reports tab.",

@@ -822,6 +822,47 @@ export default function BibliotecaPage() {
       '',
       t({id:'biblioteca.report.tasks'}) + ':',
       ...(tasks.length ? tasks.map(tk => `  [${TASK_STATUS[tk.status] || tk.status}] ${tk.title} (${TASK_PRIO[tk.priority] || tk.priority})${tk.owner ? ` — ${tk.owner}` : ''}`) : ['  ' + t({id:'biblioteca.report.noTasksRegistered'})]),
+      // #ILL-reports volet A : section PEB du compte-rendu. Chiffres dérivés
+      // de illLoans (la file active exclut déjà les PEB archivés), puis liste
+      // des PEB EN COURS uniquement (ni devolvido ni cancelado), avec le sens
+      // du prêt, le partenaire et les titres des exemplaires.
+      ...(() => {
+        const ILL_TERMINAL = ['devolvido', 'cancelado'];
+        const ongoing = illLoans.filter(l => !ILL_TERMINAL.includes(l.status_global));
+        const overdue = illLoans.filter(l => l.status_global === 'atrasado');
+        const terminalPending = illLoans.filter(l => ILL_TERMINAL.includes(l.status_global));
+        const out = [
+          '',
+          t({id:'biblioteca.report.illSection'}) + ':',
+          '  ' + t({id:'biblioteca.report.illOngoing'}, {count: ongoing.length}),
+          '  ' + t({id:'biblioteca.report.illOverdue'}, {count: overdue.length}),
+          '  ' + t({id:'biblioteca.report.illTerminalPending'}, {count: terminalPending.length}),
+        ];
+        if (ongoing.length) {
+          out.push('  ' + t({id:'biblioteca.report.illOngoingList'}) + ':');
+          for (const loan of ongoing) {
+            const isLender = loan.lender_library_id === libraryId;
+            const partnerId = isLender ? loan.borrower_library_id : loan.lender_library_id;
+            const partnerLib = allLibraries.find(l => l.id === partnerId);
+            const partnerName = partnerLib?.short_name || partnerLib?.name || '—';
+            const sens = isLender
+              ? t({id:'biblioteca.report.illLendTo'}, {partner: partnerName})
+              : t({id:'biblioteca.report.illBorrowFrom'}, {partner: partnerName});
+            const statusLabel = t({id:`ill.status.${loan.status_global}`});
+            out.push(`    #${loan.id} — ${sens} — ${statusLabel}`);
+            // titres des exemplaires : illItemsByLoan est chargé dans le meme
+            // loadAll() que illLoans, donc toujours synchrone ici.
+            const items = illItemsByLoan[loan.id] || [];
+            if (items.length) {
+              const titles = items
+                .map(it => it.titulo_cache || it.bib_ref || '—')
+                .join(' ; ');
+              out.push(`      ${titles}`);
+            }
+          }
+        }
+        return out;
+      })(),
     ];
     return lines.join('\n');
   }
@@ -1827,8 +1868,10 @@ export default function BibliotecaPage() {
           )}
           {/* #ILL-archive (25/05/2026) : consultation des PEB archivés.
               Composant dédié, lit la vue api.peb_history_v1, permet de
-              désarchiver. Réservé au staff (l'onglet Rapports l'est déjà). */}
-          <PebHistorySection libraryId={libraryId} allLibraries={allLibraries} />
+              désarchiver. Réservé au staff (l'onglet Rapports l'est déjà).
+              #ILL-reports volet B : onChange=loadAll pour que la file active
+              se rafraîchisse quand un PEB est désarchivé. */}
+          <PebHistorySection libraryId={libraryId} allLibraries={allLibraries} onChange={loadAll} />
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.reports.generate' })}</h4>
             <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:10 }}>

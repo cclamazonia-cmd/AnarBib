@@ -1,4 +1,12 @@
 {
+  "biblioteca.report.illSection": "Fernleihen (PEB)",
+  "biblioteca.report.illOngoing": "Laufende Fernleihen: {count}",
+  "biblioteca.report.illOverdue": "davon überfällig: {count}",
+  "biblioteca.report.illTerminalPending": "Abgeschlossene Fernleihen, die auf Archivierung warten: {count}",
+  "biblioteca.report.illOngoingList": "Laufende Fernleihen — Detail",
+  "biblioteca.report.illLendTo": "Verleih an {partner}",
+  "biblioteca.report.illBorrowFrom": "Entleih von {partner}",
+
   "biblioteca.ill.archive": "Archivieren",
   "biblioteca.ill.archived": "Fernleihe #{id} archiviert.",
   "biblioteca.ill.archiveConfirm": "Fernleihe #{id} archivieren? Sie verlässt die aktive Liste und bleibt im Tab Berichte einsehbar.",

@@ -1,4 +1,12 @@
 {
+  "biblioteca.report.illSection": "Préstecs interbibliotecaris (PIB)",
+  "biblioteca.report.illOngoing": "PIB en curs: {count}",
+  "biblioteca.report.illOverdue": "dels quals endarrerits: {count}",
+  "biblioteca.report.illTerminalPending": "PIB acabats en espera d'arxivament: {count}",
+  "biblioteca.report.illOngoingList": "Detall dels PIB en curs",
+  "biblioteca.report.illLendTo": "préstec a {partner}",
+  "biblioteca.report.illBorrowFrom": "préstec a càrrec de {partner}",
+
   "biblioteca.ill.archive": "Arxivar",
   "biblioteca.ill.archived": "PIB #{id} arxivat.",
   "biblioteca.ill.archiveConfirm": "Arxivar el PIB #{id}? Surt de la llista activa i queda consultable a la pestanya Informes.",
