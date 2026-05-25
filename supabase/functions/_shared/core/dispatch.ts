@@ -11,7 +11,14 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events network.* (gouvernance reseau transverse) - handler dedie, meme outbox que team.*
   if (event.startsWith("network.")) return await handleNetworkEvent(recordId);
   if (event === "reserva_criada") return await handleReservaCriadaOld(recordId);
-  if (event === "emprestimo_criado" || event === "emprestimo_prorrogado" || event === "emprestimo_devolvido" || event.startsWith("lembrete_devolucao_") || event.startsWith("aviso_atraso_")) return await handleEmprestimoOld(recordId, event);
+  // TR-1 (#153.A) : 'emprestimo_prorrogado' retire de la branche legacy.
+  // L'evenement n'est plus emis par la base : le seul emetteur de prorogation,
+  // le trigger trg_notify_emprestimo_prorrogacao, emet 'emprestimo_v2_prorrogado'.
+  // 'emprestimo_prorrogado' etait donc du code mort ici (et dans la branche v2).
+  // Note : la branche legacy handleEmprestimoOld route encore emprestimo_criado,
+  // emprestimo_devolvido, lembrete_devolucao_*, aviso_atraso_* — leur emission
+  // n'a pas ete instruite ; voir la dette notee au dossier-cadre #153.
+  if (event === "emprestimo_criado" || event === "emprestimo_devolvido" || event.startsWith("lembrete_devolucao_") || event.startsWith("aviso_atraso_")) return await handleEmprestimoOld(recordId, event);
   if (event === "reserva_v2_criada") return await handleReservaCriadaV2(recordId);
   if ([
     "reserva_v2_recusada",
@@ -55,14 +62,15 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // TR-2 (#153.A) : payload transmis a handleEmprestimoV2 — la RPC de conversion
   // y place suppress_user_mail pour que le handler saute le mail lecteur·rice
   // (le mail admin, lui, reste emis). Auparavant payload n'etait pas transmis.
+  // TR-1 (#153.A) : 'emprestimo_prorrogado' retire du tableau et la
+  // normalisation ternaire associee supprimee — evenement plus jamais emis.
   if ([
     "emprestimo_v2_criado",
     "emprestimo_v2_prorrogado",
-    "emprestimo_prorrogado",
     "emprestimo_v2_devolvido",
     "emprestimo_v2_parcialmente_devolvido",
     "emprestimo_v2_devolvido_apos_parcial"
-  ].includes(event)) return await handleEmprestimoV2(recordId, event === "emprestimo_prorrogado" ? "emprestimo_v2_prorrogado" : event, payload);
+  ].includes(event)) return await handleEmprestimoV2(recordId, event, payload);
   if ([
     "lembrete_v2_devolucao_5d",
     "lembrete_v2_devolucao_3d",

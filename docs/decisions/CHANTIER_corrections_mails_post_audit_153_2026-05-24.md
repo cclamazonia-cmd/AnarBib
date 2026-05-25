@@ -355,8 +355,12 @@ durcissement sans dump SQL courant ».
   chantier D — voir §2.1ter.)
 - Une annulation biblio produit exactement **un** mail lecteur·rice (le mail
   d'annulation), sans mail « libérée pour circulation ».
-- Un événement `emprestimo_prorrogado` produit le mail v2 multilingue (ou
-  l'événement est confirmé mort et la branche legacy supprimée).
+- TR-1 instruit le 25/05 : l'événement `emprestimo_prorrogado` n'est plus émis
+  par la base (le seul émetteur de prorogation, le trigger
+  `trg_notify_emprestimo_prorrogacao`, émet `emprestimo_v2_prorrogado`). Le
+  « mauvais routage » de l'audit était théorique. Correction livrée : nettoyage
+  du code mort `emprestimo_prorrogado` dans `dispatch.ts` (branche legacy et
+  branche v2).
 - Tests fonctionnels BLMF passés en navigation privée (fixtures Xavier/Lívia) —
   en particulier : effectuer une conversion et vérifier qu'un seul mail
   lecteur·rice arrive, et qu'un mail admin arrive bien.
@@ -364,8 +368,24 @@ durcissement sans dump SQL courant ».
   avant push).
 
 **Dettes ouvertes par ce chantier.** D-1.a est **close** (instruite le 24/05,
-cf. §2.1bis — pas de migration de schéma). Reste D-2.a (portée de la
-neutralisation de `liberada_para_circulacao`), à trancher en session.
+cf. §2.1bis — pas de migration de schéma). D-2.a est **close** (instruite le
+25/05, cf. §2.2 — neutralisation conditionnée à `final_reason` non nul, couvrant
+`cancelled_by_library` et `no_show`). Deux observations sont portées en dette,
+hors périmètre de ce chantier :
+- **Branche legacy `handleEmprestimoOld` (constat 25/05, instruction de TR-1).**
+  TR-1 a confirmé que l'événement `emprestimo_prorrogado` est mort. La branche
+  legacy `handleEmprestimoOld` route encore quatre autres familles d'événements
+  — `emprestimo_criado`, `emprestimo_devolvido`, `lembrete_devolucao_*`,
+  `aviso_atraso_*` — plus `reserva_criada` (`handleReservaCriadaOld`). Leur
+  émission n'a pas été instruite : si elles sont toutes mortes elles aussi, la
+  branche legacy et les handlers `handleEmprestimoOld` / `handleReservaCriadaOld`
+  seraient du code mort à retirer. À instruire à froid — chantier #153.E
+  (cohérence transverse) ou note de backlog dédiée. Ne pas supprimer un handler
+  legacy sans avoir confirmé l'absence d'émission de chacun de ses événements.
+- **Flag `reservation_mail_liberada_para_circulacao_enabled` (constat TR-8).**
+  Voir la migration TR-8 : ce flag (`DEFAULT false`) pourrait n'activer plus
+  aucun mail une fois TR-8 posé, toute bascule vers `liberada_para_circulacao`
+  portant un `final_reason`. À instruire séparément.
 
 ---
 
@@ -572,7 +592,7 @@ les biblios dont la colonne serait vide.
 
 ### Chantier D — Wording des mails de statut de réservation
 
-**Constats couverts :** TR-3 (sous-constats TR-3.1 et TR-3.2).
+**Constats couverts :** TR-3 (sous-constats TR-3.1, TR-3.2 et TR-3.3).
 **Sévérité :** moyenne.
 **Nature :** EF (`reservas.ts`, handler `handleReservaV2StatusChange`) + écriture
 i18n nouvelle.
@@ -583,7 +603,7 @@ réellement informatif, et différencier le propos selon le destinataire
 
 **Constat de fond.** Dans `handleReservaV2StatusChange`, chaque événement est
 rendu par une clé `res.*` unique qui sert **à la fois** de sujet, de titre et
-d'intro — et **la même clé** pour le mail lecteur·rice et le mail staff. Deux
+d'intro — et **la même clé** pour le mail lecteur·rice et le mail staff. Trois
 défauts en découlent :
 
 - **TR-3.1 — contenu plat.** Les clés `res.*` sont des étiquettes courtes, sans
@@ -594,6 +614,26 @@ défauts en découlent :
   staff, alors que les deux n'ont pas besoin de la même information. (Précision
   de l'audit : `res.cancelStaff` n'est *pas* une clé « réservée au staff » —
   `Staff` y désigne l'auteur de l'annulation, pas le destinataire.)
+- **TR-3.3 — mauvais champ de motif (constaté le 25/05, test de TR-8).** Le mail
+  d'annulation biblio (`reserva_cancelada_biblioteca`) affiche son motif depuis
+  `reserva.notes` (ligne `const motivo = String(reserva.notes || "").trim();`).
+  Or `reservas_v2.notes` contient la note de *création* de la réservation, pas
+  le motif d'*annulation*. Résultat constaté : un mail d'annulation affichant
+  « Motif : Réservation créée depuis le compte lecteur·rice » au lieu du motif
+  réellement saisi par le staff. Le défaut touche **les deux mails** — celui du
+  lecteur·rice et celui de la bibliothèque : la variable `motivo` est lue une
+  seule fois en tête de `handleReservaV2StatusChange` et alimente à la fois
+  l'intro lecteur·rice et l'intro staff. C'est donc une seule cause, une seule
+  ligne à corriger, pour les deux mails. Le motif d'annulation est correctement
+  enregistré — vérifié sur la base le 25/05 — mais dans
+  `reserva_item_workflow_v2.workflow_note`, sur la ligne dont le `workflow_stage`
+  est `cancelada_biblioteca`. C'est un bug de lecture, sans perte de donnée : le
+  handler lit la mauvaise colonne. Correction : faire lire le motif depuis
+  `workflow_note` de la ligne de workflow d'annulation, et non depuis
+  `reserva.notes`. À traiter dans la même passe que la refonte du wording de
+  `res.cancelStaff` (sous-tâche 1), puisque c'est le même mail. Concerne aussi,
+  potentiellement, `res.refused` (`reserva_v2_recusada`), qui lit `motivo` par le
+  même mécanisme — à vérifier lors du chantier.
 
 **Sous-tâches.**
 
@@ -615,6 +655,15 @@ défauts en découlent :
    `getReservaV2Bundle` (couche `data/reservas.ts`) ou ajouter une lecture dédiée
    dans le handler. À faire dans la même passe que la refonte de la clé
    `res.converted` (sous-tâche 1), pour ne traiter cet objet qu'une seule fois.
+5. **Corriger le champ de motif des mails d'annulation (TR-3.3).** Faire lire le
+   motif depuis `reserva_item_workflow_v2.workflow_note` de la ligne dont le
+   `workflow_stage` est `cancelada_biblioteca`, et non depuis `reserva.notes`
+   (qui contient la note de création). Concerne `res.cancelStaff`
+   (`reserva_cancelada_biblioteca`) ; vérifier si `res.refused`
+   (`reserva_v2_recusada`) est affecté par le même mécanisme. Comme pour la
+   sous-tâche 4, la donnée n'est pas forcément dans le bundle actuel — vérifier
+   ce que ramène `getReservaWorkflowBundle` / `getReservaV2Bundle` et, au besoin,
+   l'enrichir.
 
 **Périmètre des événements concernés.** `reserva_v2_recusada`,
 `reserva_cancelada_biblioteca`, `reserva_cancelada_leitor`, `reserva_expirada`,
