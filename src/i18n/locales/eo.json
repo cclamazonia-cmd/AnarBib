@@ -2947,5 +2947,12 @@
   "account.declared.deleteError": "Ne eblis forigi. Bonvolu reprovi.",
   "privacy.declared.title": "Nedevigaj deklaraj informoj",
   "privacy.declared.body1": "Se, kreante vian konton, vi indikis al ni la nomon de biblioteko kiu ankoraŭ ne estas en AnarBib, ĉi tiu informo estas konservata por ke, se tiu biblioteko iam aliĝos al nia reto, ni povu proponi al vi ligon kiel legant-in-e.",
-  "privacy.declared.body2": "Ĉi tiu informo ne estas dividata kun triaj partioj. Ĝi estas legebla nur de la teamo kiu administras la reton AnarBib. Vi povas konsulti, modifi aŭ forigi ĉi tiun informon iam ajn el via konto (sekcio Miaj datumoj)."
+  "privacy.declared.body2": "Ĉi tiu informo ne estas dividata kun triaj partioj. Ĝi estas legebla nur de la teamo kiu administras la reton AnarBib. Vi povas konsulti, modifi aŭ forigi ĉi tiun informon iam ajn el via konto (sekcio Miaj datumoj).",
+  "panel.stageFilter.all": "Ĉiuj",
+  "panel.reservations.empty": "Neniu rezervo nuntempe en kurso.",
+  "panel.reservations.emptyStage": "Neniu rezervo en ĉi tiu etapo.",
+  "panel.consultations.empty": "Neniu konsulto nuntempe en kurso.",
+  "panel.consultations.emptyStage": "Neniu konsulto en ĉi tiu etapo.",
+  "panel.loans.empty": "Neniu prunto nuntempe en kurso.",
+  "panel.loanGrouped.empty": "Neniu grupigita prunto en kurso."
 }

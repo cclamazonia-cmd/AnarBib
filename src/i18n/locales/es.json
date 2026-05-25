@@ -2947,5 +2947,12 @@
   "account.declared.deleteError": "No se pudo borrar. Probá de nuevo.",
   "privacy.declared.title": "Informaciones declarativas opcionales",
   "privacy.declared.body1": "Si al crear tu cuenta nos indicaste el nombre de una biblioteca que todavía no está en el AnarBib, esta información se conserva para que, si esa biblioteca se suma algún día a nuestra red, podamos proponerte un vínculo como lectore.",
-  "privacy.declared.body2": "Esta información no se comparte con terceros. Solo es legible por el equipo que administra la red AnarBib. Podés consultar, modificar o borrar esta información en cualquier momento desde tu cuenta (sección Mis datos)."
+  "privacy.declared.body2": "Esta información no se comparte con terceros. Solo es legible por el equipo que administra la red AnarBib. Podés consultar, modificar o borrar esta información en cualquier momento desde tu cuenta (sección Mis datos).",
+  "panel.stageFilter.all": "Todas",
+  "panel.reservations.empty": "Ninguna reserva en curso por el momento.",
+  "panel.reservations.emptyStage": "Ninguna reserva en esta etapa.",
+  "panel.consultations.empty": "Ninguna consulta en curso por el momento.",
+  "panel.consultations.emptyStage": "Ninguna consulta en esta etapa.",
+  "panel.loans.empty": "Ningún préstamo en curso por el momento.",
+  "panel.loanGrouped.empty": "Ningún préstamo agrupado en curso."
 }

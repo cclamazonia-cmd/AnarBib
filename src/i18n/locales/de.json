@@ -2947,5 +2947,12 @@
   "account.declared.deleteError": "Löschen nicht möglich. Bitte versuche es erneut.",
   "privacy.declared.title": "Optionale deklarative Angaben",
   "privacy.declared.body1": "Wenn du uns bei der Erstellung deines Kontos den Namen einer Bibliothek genannt hast, die noch nicht bei AnarBib ist, wird diese Angabe aufbewahrt, damit wir dir, falls diese Bibliothek eines Tages unserem Netzwerk beitritt, eine Anbindung als Leser*in anbieten können.",
-  "privacy.declared.body2": "Diese Angabe wird an keine Dritten weitergegeben. Sie ist nur für das Team lesbar, das das AnarBib-Netzwerk verwaltet. Du kannst diese Angabe jederzeit in deinem Konto einsehen, ändern oder löschen (Bereich Meine Daten)."
+  "privacy.declared.body2": "Diese Angabe wird an keine Dritten weitergegeben. Sie ist nur für das Team lesbar, das das AnarBib-Netzwerk verwaltet. Du kannst diese Angabe jederzeit in deinem Konto einsehen, ändern oder löschen (Bereich Meine Daten).",
+  "panel.stageFilter.all": "Alle",
+  "panel.reservations.empty": "Derzeit keine laufenden Reservierungen.",
+  "panel.reservations.emptyStage": "Keine Reservierungen in dieser Phase.",
+  "panel.consultations.empty": "Derzeit keine laufenden Einsichtnahmen.",
+  "panel.consultations.emptyStage": "Keine Einsichtnahmen in dieser Phase.",
+  "panel.loans.empty": "Derzeit keine laufenden Ausleihen.",
+  "panel.loanGrouped.empty": "Keine gruppierten Ausleihen in Bearbeitung."
 }

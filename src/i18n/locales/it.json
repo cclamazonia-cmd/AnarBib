@@ -2947,5 +2947,12 @@
   "account.declared.deleteError": "Impossibile cancellare. Riprova.",
   "privacy.declared.title": "Informazioni dichiarative facoltative",
   "privacy.declared.body1": "Se, al momento di creare il tuo account, ci hai indicato il nome di una biblioteca che non fa ancora parte di AnarBib, questa informazione viene conservata affinché, se quella biblioteca aderisce un giorno alla nostra rete, possiamo proporti un collegamento come lettore*.",
-  "privacy.declared.body2": "Questa informazione non è condivisa con terzi. È leggibile solo dall'équipe che amministra la rete AnarBib. Puoi consultare, modificare o cancellare questa informazione in qualsiasi momento dal tuo account (sezione I miei dati)."
+  "privacy.declared.body2": "Questa informazione non è condivisa con terzi. È leggibile solo dall'équipe che amministra la rete AnarBib. Puoi consultare, modificare o cancellare questa informazione in qualsiasi momento dal tuo account (sezione I miei dati).",
+  "panel.stageFilter.all": "Tutte",
+  "panel.reservations.empty": "Nessuna prenotazione in corso al momento.",
+  "panel.reservations.emptyStage": "Nessuna prenotazione in questa fase.",
+  "panel.consultations.empty": "Nessuna consultazione in corso al momento.",
+  "panel.consultations.emptyStage": "Nessuna consultazione in questa fase.",
+  "panel.loans.empty": "Nessun prestito in corso al momento.",
+  "panel.loanGrouped.empty": "Nessun prestito raggruppato in corso."
 }

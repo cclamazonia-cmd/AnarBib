@@ -2947,5 +2947,12 @@
   "account.declared.deleteError": "Could not delete. Please try again.",
   "privacy.declared.title": "Optional declared information",
   "privacy.declared.body1": "If, when creating your account, you gave us the name of a library that is not yet on AnarBib, this information is kept so that, if that library joins our network one day, we can offer you an attachment as a reader.",
-  "privacy.declared.body2": "This information is not shared with any third party. It is readable only by the team that administers the AnarBib network. You can view, modify or delete this information at any time from your account (My data section)."
+  "privacy.declared.body2": "This information is not shared with any third party. It is readable only by the team that administers the AnarBib network. You can view, modify or delete this information at any time from your account (My data section).",
+  "panel.stageFilter.all": "All",
+  "panel.reservations.empty": "No reservations in progress at the moment.",
+  "panel.reservations.emptyStage": "No reservations at this stage.",
+  "panel.consultations.empty": "No consultations in progress at the moment.",
+  "panel.consultations.emptyStage": "No consultations at this stage.",
+  "panel.loans.empty": "No loans in progress at the moment.",
+  "panel.loanGrouped.empty": "No grouped loans in progress."
 }

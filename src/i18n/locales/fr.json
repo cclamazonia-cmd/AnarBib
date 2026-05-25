@@ -2947,5 +2947,12 @@
   "account.declared.deleteError": "Impossible d'effacer. Réessaie.",
   "privacy.declared.title": "Informations déclaratives optionnelles",
   "privacy.declared.body1": "Si, en créant ton compte, tu nous as indiqué le nom d'une bibliothèque qui n'est pas encore sur AnarBib, cette information est conservée afin que, si cette bibliothèque rejoint un jour notre réseau, nous puissions te proposer un rattachement comme lecteur·rice.",
-  "privacy.declared.body2": "Cette information n'est partagée avec aucun tiers. Elle n'est lisible que par l'équipe qui administre le réseau AnarBib. Tu peux consulter, modifier ou effacer cette information à tout moment depuis ton compte (section Mes données)."
+  "privacy.declared.body2": "Cette information n'est partagée avec aucun tiers. Elle n'est lisible que par l'équipe qui administre le réseau AnarBib. Tu peux consulter, modifier ou effacer cette information à tout moment depuis ton compte (section Mes données).",
+  "panel.stageFilter.all": "Toutes",
+  "panel.reservations.empty": "Aucune réservation en cours pour le moment.",
+  "panel.reservations.emptyStage": "Aucune réservation à cette étape.",
+  "panel.consultations.empty": "Aucune consultation en cours pour le moment.",
+  "panel.consultations.emptyStage": "Aucune consultation à cette étape.",
+  "panel.loans.empty": "Aucun emprunt en cours pour le moment.",
+  "panel.loanGrouped.empty": "Aucun emprunt groupé en cours."
 }

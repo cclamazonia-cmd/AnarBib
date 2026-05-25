@@ -2947,5 +2947,12 @@
   "account.declared.deleteError": "No s'ha pogut esborrar. Torna-ho a provar.",
   "privacy.declared.title": "Informacions declaratives opcionals",
   "privacy.declared.body1": "Si, en crear el teu compte, ens vas indicar el nom d'una biblioteca que encara no és a AnarBib, aquesta informació es conserva perquè, si aquesta biblioteca s'adhereix algun dia a la nostra xarxa, et puguem proposar un vincle com a lector-a-e.",
-  "privacy.declared.body2": "Aquesta informació no es comparteix amb tercers. Només és llegible per l'equip que administra la xarxa AnarBib. Pots consultar, modificar o esborrar aquesta informació en qualsevol moment des del teu compte (secció Les meves dades)."
+  "privacy.declared.body2": "Aquesta informació no es comparteix amb tercers. Només és llegible per l'equip que administra la xarxa AnarBib. Pots consultar, modificar o esborrar aquesta informació en qualsevol moment des del teu compte (secció Les meves dades).",
+  "panel.stageFilter.all": "Totes",
+  "panel.reservations.empty": "Cap reserva en curs de moment.",
+  "panel.reservations.emptyStage": "Cap reserva en aquesta etapa.",
+  "panel.consultations.empty": "Cap consulta en curs de moment.",
+  "panel.consultations.emptyStage": "Cap consulta en aquesta etapa.",
+  "panel.loans.empty": "Cap préstec en curs de moment.",
+  "panel.loanGrouped.empty": "Cap préstec agrupat en curs."
 }
