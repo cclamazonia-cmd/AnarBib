@@ -270,10 +270,9 @@ export default function PanelPage() {
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
   const [loans, setLoans] = useState([]);
-  // Paquet 18 (10/05/2026) : tri par colonnes pour les 3 tableaux principaux
-  const sortRes = useSort(reservations);
-  const sortCon = useSort(consultations);
-  const sortLoans = useSort(loans);
+  // Paquet 18 (10/05/2026) : tri par colonnes pour les 3 tableaux principaux.
+  // Audit UX 25/05/2026 (P1) : les appels useSort sont deplaces plus bas,
+  // apres la definition des listes ACTIVES, pour porter sur celles-ci.
   const [internalTasks, setInternalTasks] = useState([]);
   const [selectedRes, setSelectedRes] = useState(new Set());
 
@@ -366,6 +365,11 @@ export default function PanelPage() {
     }
   }, [tab, historyTypes, historyData, historyHasMore, historyLoading, loadHistorySection]);
   // === Fin onglet Historique ==================================
+  // Audit UX 25/05/2026 (P3) : filtre par etape de workflow pour les onglets
+  // Reservations et Consultations. 'all' = toutes les etapes. Modele :
+  // membershipFilter de l'onglet Contribuicoes.
+  const [resStageFilter, setResStageFilter] = useState('all');
+  const [conStageFilter, setConStageFilter] = useState('all');
   const [resStage, setResStage] = useState('');
   const [resNote, setResNote] = useState('');
   const [resSchedule, setResSchedule] = useState('');
@@ -1237,8 +1241,10 @@ export default function PanelPage() {
     setSelectedRes(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; });
   }
   function toggleAllRes() {
-    if (selectedRes.size === reservations.length) setSelectedRes(new Set());
-    else setSelectedRes(new Set(reservations.map(r => `${r.reserva_id}-${r.line_no}`)));
+    // Audit UX 25/05/2026 (P1) : la selection « tout » porte sur les
+    // reservations ACTIVES affichees, pas sur le tableau brut.
+    if (selectedRes.size === activeRes.length) setSelectedRes(new Set());
+    else setSelectedRes(new Set(activeRes.map(r => `${r.reserva_id}-${r.line_no}`)));
   }
 
   // ── Render ───────────────────────────────────────────
@@ -1286,6 +1292,48 @@ export default function PanelPage() {
   // 'cancelada_biblioteca', 'expirada', 'liberada_para_circulacao'.
   const activeRes = reservations.filter(r => r.item_status === 'ativa');
   const activeLoans = loans.filter(l => l.item_status === 'aberto');
+  // Audit UX 25/05/2026 (P1) : les vues *_followup_ui renvoient l'actif ET
+  // le cloture. Les onglets operationnels ne doivent montrer que l'actionnable ;
+  // l'historique vit dans l'onglet dedie (vues painel_*_history_v1). Statuts
+  // terminaux repris de dominantHistoryType (l. 287-289).
+  const CONSULT_TERMINAL = ['consulta_realizada', 'cancelada_leitor', 'cancelada_biblioteca', 'expirada'];
+  const activeConsultations = consultations.filter(
+    c => !CONSULT_TERMINAL.includes(c.item_status)
+  );
+  // Audit UX 25/05/2026 (P3) : filtre par etape applique AVANT le tri.
+  // 'all' = pas de filtre. Tri par colonnes via SortHeader (ex-paquet 18).
+  const stageFilteredRes = useMemo(
+    () => resStageFilter === 'all'
+      ? activeRes
+      : activeRes.filter(r => (r.workflow_stage_effective || r.item_status) === resStageFilter),
+    [activeRes, resStageFilter]
+  );
+  const stageFilteredCon = useMemo(
+    () => conStageFilter === 'all'
+      ? activeConsultations
+      : activeConsultations.filter(c => (c.workflow_stage_effective || c.item_status) === conStageFilter),
+    [activeConsultations, conStageFilter]
+  );
+  const sortRes = useSort(stageFilteredRes);
+  const sortCon = useSort(stageFilteredCon);
+  const sortLoans = useSort(activeLoans);
+  // P3 : comptage des items actifs par etape, pour les pills de filtre.
+  const resStageCounts = useMemo(() => {
+    const m = new Map();
+    activeRes.forEach(r => {
+      const s = r.workflow_stage_effective || r.item_status || '—';
+      m.set(s, (m.get(s) || 0) + 1);
+    });
+    return m;
+  }, [activeRes]);
+  const conStageCounts = useMemo(() => {
+    const m = new Map();
+    activeConsultations.forEach(c => {
+      const s = c.workflow_stage_effective || c.item_status || '—';
+      m.set(s, (m.get(s) || 0) + 1);
+    });
+    return m;
+  }, [activeConsultations]);
   const overdueLoans = activeLoans.filter(l => {
     const effectiveDue = l.extended_until || l.due_at;
     return effectiveDue && new Date(effectiveDue) < new Date();
@@ -1591,12 +1639,26 @@ export default function PanelPage() {
               <p className="ab-painel-help" style={{ fontSize: '0.85em', color: '#888', marginTop: '4px' }}>
                 {t({ id: 'panel.reservations.menuHelp' })}
               </p>
+              <StageFilterBar
+                counts={resStageCounts}
+                current={resStageFilter}
+                onSelect={setResStageFilter}
+                labels={WORKFLOW_LABELS}
+                allLabel={t({ id: 'panel.stageFilter.all' })}
+              />
               {actionMsg && <p className="ab-painel-msg">{actionMsg}</p>}
+              {sortRes.sortedItems.length === 0 ? (
+                <EmptyState message={t({
+                  id: resStageFilter === 'all'
+                    ? 'panel.reservations.empty'
+                    : 'panel.reservations.emptyStage'
+                })} />
+              ) : (
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
                   <thead>
                     <tr>
-                      <th><input type="checkbox" checked={selectedRes.size === reservations.length && reservations.length > 0} onChange={toggleAllRes} /></th>
+                      <th><input type="checkbox" checked={selectedRes.size === activeRes.length && activeRes.length > 0} onChange={toggleAllRes} /></th>
                       <SortHeader sortKey="sub_id" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.subId'})}</SortHeader>
                       <SortHeader sortKey="user_name" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.reader'})}</SortHeader>
                       <SortHeader sortKey="titulo" current={sortRes.sortKey} dir={sortRes.sortDir} onClick={sortRes.toggleSort}>{t({id:'panel.table.book'})}</SortHeader>
@@ -1740,6 +1802,7 @@ export default function PanelPage() {
                   </tbody>
                 </table>
               </div>
+              )}
             </div>
           )}
 
@@ -1747,6 +1810,20 @@ export default function PanelPage() {
           {tab === 'consultas-locais' && (
             <div>
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.consultations' })}</h2>
+              <StageFilterBar
+                counts={conStageCounts}
+                current={conStageFilter}
+                onSelect={setConStageFilter}
+                labels={CONSULT_WORKFLOW}
+                allLabel={t({ id: 'panel.stageFilter.all' })}
+              />
+              {sortCon.sortedItems.length === 0 ? (
+                <EmptyState message={t({
+                  id: conStageFilter === 'all'
+                    ? 'panel.consultations.empty'
+                    : 'panel.consultations.emptyStage'
+                })} />
+              ) : (
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
                   <thead><tr>
@@ -1831,6 +1908,7 @@ export default function PanelPage() {
                   </tbody>
                 </table>
               </div>
+              )}
             </div>
           )}
 
@@ -1838,6 +1916,9 @@ export default function PanelPage() {
           {tab === 'emprestimos-livro' && (
             <div>
               <h2 className="ab-painel-h2">{t({ id: 'panel.tab.loans' })}</h2>
+              {sortLoans.sortedItems.length === 0 ? (
+                <EmptyState message={t({ id: 'panel.loans.empty' })} />
+              ) : (
               <div className="ab-painel-table-wrap">
                 <table className="ab-painel-table">
                   <thead><tr>
@@ -1886,6 +1967,7 @@ export default function PanelPage() {
                   </tbody>
                 </table>
               </div>
+              )}
             </div>
           )}
 
@@ -1895,11 +1977,18 @@ export default function PanelPage() {
               <h2 className="ab-painel-h2">{t({ id: 'panel.loan.grouped' })}</h2>
               {(() => {
                 const grouped = {};
-                loans.forEach(l => {
+                // Audit UX 25/05/2026 (P1) : ne grouper que les emprunts ayant
+                // au moins un item ouvert. Les emprunts entierement clotures
+                // vont dans l'onglet Historique.
+                activeLoans.forEach(l => {
                   if (!grouped[l.emprestimo_id]) grouped[l.emprestimo_id] = { ...l, items: [] };
                   grouped[l.emprestimo_id].items.push(l);
                 });
-                return Object.values(grouped).map((g, i) => {
+                const groups = Object.values(grouped);
+                if (groups.length === 0) {
+                  return <EmptyState message={t({ id: 'panel.loanGrouped.empty' })} />;
+                }
+                return groups.map((g, i) => {
                   // Paquet 19 v2 (11/05/2026) : bouton Prorrogar disponible si emprunt ouvert
                   // et non deja prolonge. Meme logique que le tableau Empruntes standard.
                   const canExtend = g.emprestimo_status === 'aberto'
@@ -2738,6 +2827,36 @@ export default function PanelPage() {
         </div>
       </Modal>
     </PageShell>
+  );
+}
+
+// Audit UX 25/05/2026 (P3) : rangee de pills de filtre par etape de workflow.
+// Modele visuel : .ab-painel-history-pill (onglet Historique). Logique
+// compteur : membershipFilter (onglet Contribuicoes).
+function StageFilterBar({ counts, current, onSelect, labels, allLabel }) {
+  const total = [...counts.values()].reduce((a, b) => a + b, 0);
+  return (
+    <div className="ab-painel-stage-filter">
+      <button
+        type="button"
+        className={`ab-painel-stage-pill ${current === 'all' ? 'active' : ''}`}
+        onClick={() => onSelect('all')}
+        aria-pressed={current === 'all'}
+      >
+        {allLabel} ({total})
+      </button>
+      {[...counts.entries()].map(([stage, n]) => (
+        <button
+          key={stage}
+          type="button"
+          className={`ab-painel-stage-pill ${current === stage ? 'active' : ''}`}
+          onClick={() => onSelect(stage)}
+          aria-pressed={current === stage}
+        >
+          {(labels && labels[stage]) || stage} ({n})
+        </button>
+      ))}
+    </div>
   );
 }
 
