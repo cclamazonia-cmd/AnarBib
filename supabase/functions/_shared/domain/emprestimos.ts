@@ -7,12 +7,17 @@ import { adminTarget, safeSendEmail, sendAdminNotification, skippedEmailResult, 
 import { DEFAULT_NOTIFICATION_TIMEZONE, adminDisplayName, esc, firstNameOnly, formatDateBR, formatDateTimeInZone, fullName, fullNameFromParts, joinTitles } from "../shared/format.ts";
 import { getPayloadValue, normalizeLineNos } from "../shared/payload.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
-export async function handleEmprestimoV2(recordId, event) {
+export async function handleEmprestimoV2(recordId, event, payload) {
   const { emprestimo, profile, items } = await getEmprestimoV2Bundle(recordId);
   const ctx = await resolveLibraryNotificationContext(String(emprestimo.library_id || "").trim() || null);
   const bt = subjectTag(ctx);
   const user = userTargetFromProfile(profile);
   const aun = adminDisplayName(fullName(profile), user?.email);
+  // TR-2 (#153.A) : sur une conversion reserva->emprestimo, la RPC
+  // fn_v2_convert_reserva_linhas_to_emprestimo passe suppress_user_mail dans le
+  // payload. Le mail lecteur·rice est alors porte par 'res.converted' (workflow
+  // de reservation) ; on saute l'envoi lecteur·rice ici. Le mail admin reste emis.
+  const suppressUserMail = getPayloadValue(payload, "suppress_user_mail") === true;
   const locale = String(profile?.preferred_language || "").trim() || null;
   const libLocale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const fmtD = (d)=>formatDateLocale(d, locale) || formatDateBR(d);
@@ -171,7 +176,9 @@ export async function handleEmprestimoV2(recordId, event) {
     context: ctx
   });
   sub = applyBrandingText(sub.replace(/BLMF/g, bt), ctx);
-  const ur = loanLifecycleEnabled(ctx) ? await safeSendEmail(user, sub, html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "loan_lifecycle_disabled");
+  // TR-2 (#153.A) : si suppress_user_mail (conversion), on saute l'envoi
+  // lecteur·rice avec un motif explicite. Sinon, comportement inchange.
+  const ur = suppressUserMail ? skippedEmailResult("user_mail", "suppressed_conversion") : loanLifecycleEnabled(ctx) ? await safeSendEmail(user, sub, html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "loan_lifecycle_disabled");
   // Admin mail — always PT-BR (locale=null)
   // Paquet 17 (10/05/2026, fin de session) : titre admin force pt-BR (avant : utilisait tit qui etait en langue lecteur)
   let ai = `<p>${tMail(null, "admin.loanUpdate")}</p>`, as2 = `[BLMF] ${tit} — ${aun}`, titAdmin = tit;

@@ -76,9 +76,11 @@ premier dans la séquence.** Le ou les chantiers suivants ne font que constater
 la conformité, sans retoucher l'objet.
 
 Concrètement :
-- `res.converted` est traité **intégralement dans le chantier A** (date
-  d'échéance D-1 *et* version « message » TR-3 réunies en une seule passe). Le
-  chantier D ne réécrit pas cette clé : il vérifie qu'elle est déjà conforme.
+- `res.converted` est traité **intégralement dans le chantier D** : ce chantier
+  refond la clé (version « message », TR-3) *et* y ajoute la date d'échéance.
+  Note : une formulation antérieure rattachait ce traitement au chantier A ;
+  l'instruction du 25/05 l'a corrigée (voir §2.1ter). Le chantier A ne touche pas
+  cette clé — son volet TR-2 se limite à la résorption du doublon.
 - Le repli « logo absent » est **défini dans le chantier C** (règle : repli
   texte) et **propagé tel quel dans le chantier E** sur les 8 EF, sans
   redéfinition.
@@ -114,9 +116,11 @@ doctrine RPC v3 (focus sur l'opération signifiante, pas sur la mécanique).
 **Réserve instruite.** L'objection légitime en faveur de `loan.created` est
 qu'il porte la **date de retour**, que `res.converted` ne porte pas
 nécessairement. Cette objection ne justifie pas de garder `loan.created` : elle
-identifie une **sous-tâche du chantier A** — enrichir la clé `res.converted` de
-la date d'échéance (le contexte de notification la connaît). Une conversion
-*est* un emprunt qui démarre ; le mail qui l'annonce doit en donner l'échéance.
+identifie un besoin d'enrichir la clé `res.converted` de la date d'échéance.
+Cet enrichissement, initialement rattaché au chantier A, a été transféré au
+chantier D par la révision du 25/05 (voir §2.1ter) : il se fera avec la refonte
+TR-3 de la clé. Une conversion *est* un emprunt qui démarre ; le mail qui
+l'annonce doit en donner l'échéance — ce sera l'objet du chantier D.
 
 **Dette D-1.a — instruite et close le 24/05/2026.** La question était : le
 trigger `trg_notify_emprestimo_criado` peut-il *savoir* qu'un emprunt naît d'une
@@ -176,8 +180,50 @@ L'instruction a porté sur quatre objets : la table `emprestimos_v2`, le trigger
   laissant partir le mail admin. Variante possible (event distinct
   `emprestimo_v2_criado_por_conversao`) : plus explicite dans les logs, mais plus
   lourde — arbitrage laissé à la session du chantier A.
-- Reste vrai et inchangé : `res.converted` doit être enrichi de la date
-  d'échéance (autre moitié de D-1), côté handler de réservation.
+- L'enrichissement de `res.converted` avec la date d'échéance — initialement
+  prévu comme seconde moitié de D-1 — fait l'objet d'une révision actée le
+  25/05 ; voir §2.1ter.
+
+### 2.1ter — Révision de D-1 (25/05/2026) : l'enrichissement de `res.converted` est transféré au chantier D
+
+La décision D-1 prévoyait deux volets : (1) supprimer le doublon de mail
+lecteur·rice lors d'une conversion — volet *résorption du doublon* ; (2) enrichir
+le mail `res.converted` conservé avec la date d'échéance — volet *enrichissement
+de contenu*. L'instruction du volet 2 sur le code réel (`reservas.ts`,
+`handleReservaV2StatusChange`, et le dump SQL) a révélé ce qui suit :
+
+- L'événement `reserva_convertida_em_emprestimo` n'est **pas** émis par la RPC
+  de conversion mais par un **trigger** sur `reserva_item_workflow_v2` (transition
+  de `workflow_stage` vers `retirada_efetivada`). Le trigger ne connaît que
+  `reserva_id` et `line_no` ; il ne dispose pas de la date d'échéance de
+  l'emprunt. Faire porter la date par le `p_extra` de ce dispatch (option dite
+  « A ») est donc impossible : la RPC ne contrôle pas ce dispatch.
+- La seule voie pour enrichir `res.converted` de la date serait que le handler
+  EF `handleReservaV2StatusChange` aille lui-même chercher la `due_at` de
+  l'emprunt issu de la réservation, via `emprestimo_itens_v2.reserva_id` — ce qui
+  suppose de modifier la **couche data** (`getReservaV2Bundle`) pour une seule
+  clé parmi cinq (option dite « B »).
+- Or `handleReservaV2StatusChange` sera **rouvert intégralement par le chantier
+  D** : le constat TR-3 porte précisément sur la refonte des cinq clés `res.*`
+  plates de ce handler, dont `res.converted`. Réaliser l'option B au titre du
+  chantier A ferait une greffe data ciblée sur un fichier que le chantier D
+  réorganisera ensuite — soit deux passes sur le même objet.
+
+**Décision (actée le 25/05/2026).** L'enrichissement de `res.converted` avec la
+date d'échéance est **retiré du chantier A et transféré au chantier D**, où il
+sera réalisé en une seule passe avec la refonte TR-3 de la clé. Cette révision
+est conforme à l'esprit de la règle D-0 — un objet partagé est traité **une
+seule fois** : `res.converted` sera donc traité une seule fois, par le chantier
+D. La formulation antérieure de D-0 (« `res.converted` traité intégralement dans
+le chantier A ») est corrigée en ce sens (voir §2.0 et §5).
+
+**Conséquence : le volet TR-2 du chantier A se limite à la résorption du
+doublon**, livrée par trois fichiers (migration SQL retirant le trigger et
+faisant émettre les deux RPC ; `dispatch.ts` transmettant le `payload` ;
+`handleEmprestimoV2` lisant `suppress_user_mail`). Le mail `res.converted`
+restera, jusqu'au chantier D, sans date d'échéance — ce qui n'est pas une
+régression : il ne l'a jamais portée. TR-2 est **clos** au sein du chantier A
+avec ces trois fichiers.
 
 ### 2.2 — Décision D-2 : TR-8 (cascade d'annulation biblio)
 
@@ -255,23 +301,26 @@ multilingue v2, jamais le mail legacy non internationalisé.
 
 **Sous-tâches.**
 
-1. **TR-2 — supprimer le doublon côté lecteur·rice.** Instruction D-1.a close
-   (cf. §2.1bis) : pas de migration de schéma. Faire que la RPC
-   `fn_v2_convert_reserva_linhas_to_emprestimo` émette le dispatch de
-   `emprestimo_v2_criado` avec un flag de suppression du mail lecteur·rice
-   (mécanisme recommandé : `p_extra = '{"suppress_user_mail": true}'`, fondu dans
-   le `body` du webhook par `fn_dispatch_circulation_notify_event`). Côté EF,
-   `handleEmprestimoV2` lit ce flag et conditionne le seul envoi
-   `safeSendEmail(user, …)`. **Le mail admin n'est pas touché** : il reste
-   légitime pour une conversion. Décider en session : déplacer aussi le dispatch
-   du chemin de création directe (`fn_v2_create_emprestimo_by_holdings`) pour la
-   symétrie, ou conserver le trigger pour ce seul chemin — voir §2.1bis pour le
-   compromis robustesse / exhaustivité automatique.
-2. **TR-2 — enrichir `res.converted`.** Ajouter la date d'échéance au mail
-   `res.converted` côté lecteur·rice, de sorte que le mail conservé porte
-   l'information que portait `loan.created`. Côté handler de réservation (hors
-   `emprestimos.ts`). Vérifier la disponibilité de la date dans le contexte de
-   notification ; sinon, l'y acheminer.
+1. **TR-2 — résorber le doublon côté lecteur·rice — RÉALISÉ (25/05/2026).**
+   Instruction D-1.a close (cf. §2.1bis), option β retenue. Trois fichiers
+   produits et prêts à déployer : (a) migration
+   `20260525110000_tr2_emprestimo_criado_dispatch_rpc.sql` — retire le trigger
+   `trg_notify_emprestimo_criado` et fait émettre `fn_dispatch_circulation_notify_event`
+   par les deux RPC de création (`fn_v2_create_emprestimo_by_holdings` avec
+   `p_extra` vide ; `fn_v2_convert_reserva_linhas_to_emprestimo` avec
+   `'{"suppress_user_mail": true}'`) ; (b) `dispatch.ts` — transmet le `payload`
+   à `handleEmprestimoV2` ; (c) `emprestimos.ts` — `handleEmprestimoV2` lit
+   `suppress_user_mail` et saute le seul envoi lecteur·rice, le mail admin
+   restant émis. Reste à faire : déploiement coordonné (EF d'abord, migration
+   ensuite) et test BLMF en navigation privée.
+2. **TR-2 — enrichir `res.converted` — TRANSFÉRÉ AU CHANTIER D (révision D-1,
+   25/05/2026).** L'instruction sur le code réel a montré que l'événement
+   `reserva_convertida_em_emprestimo` est émis par un trigger qui ne dispose pas
+   de la date d'échéance, et que `handleReservaV2StatusChange` sera de toute
+   façon rouvert intégralement par le chantier D (TR-3). L'enrichissement de
+   `res.converted` avec la date d'échéance se fera donc dans le chantier D, en
+   une seule passe avec la refonte de la clé — voir §2.1ter. Cette sous-tâche ne
+   relève plus du chantier A.
 3. **TR-8 — appliquer D-2.** Neutraliser la notification lecteur·rice du stage
    `liberada_para_circulacao`. Trancher en session la portée exacte (dette
    D-2.a : inconditionnel vs conditionné à une annulation antérieure).
@@ -281,7 +330,9 @@ multilingue v2, jamais le mail legacy non internationalisé.
    lignes 58/62) et non par la branche legacy qui vient en premier et fait
    `return`. Préalable d'instruction : vérifier que le SIGB émet *encore*
    l'événement `emprestimo_prorrogado` — s'il est lui-même mort, la correction
-   se réduit à supprimer la branche legacy morte.
+   se réduit à supprimer la branche legacy morte. Note : le patch `dispatch.ts`
+   de TR-2 a délibérément laissé ce double routage intact (un changement à la
+   fois) ; TR-1 le traitera.
 
 **Doctrine applicable.** Ce chantier touche des triggers en cascade : la
 doctrine #141.2.E (ordre des `UPDATE` quand des triggers `AFTER UPDATE` sont en
@@ -299,8 +350,9 @@ durcissement sans dump SQL courant ».
 
 **Critères de clôture.**
 - Une conversion réservation → emprunt produit exactement **un** mail
-  lecteur·rice (le mail `res.converted`, portant la date d'échéance), et le mail
-  admin de création d'emprunt continue de partir.
+  lecteur·rice (le mail `res.converted`), et le mail admin de création d'emprunt
+  continue de partir. (L'ajout de la date d'échéance à `res.converted` relève du
+  chantier D — voir §2.1ter.)
 - Une annulation biblio produit exactement **un** mail lecteur·rice (le mail
   d'annulation), sans mail « libérée pour circulation ».
 - Un événement `emprestimo_prorrogado` produit le mail v2 multilingue (ou
@@ -553,12 +605,23 @@ défauts en découlent :
    deux approches est la plus économe (les 5 clés `res.*` concernées sont déjà
    complètes sur les 8 locales — voir §8.1 de l'audit).
 3. Écrire les chaînes nouvelles sur les **8 locales**, en langage inclusif.
+4. **Enrichir `res.converted` de la date d'échéance** (transféré du chantier A
+   par la révision D-1 du 25/05, §2.1ter). Le mail de conversion réservation →
+   emprunt doit indiquer la date de retour. La donnée n'est pas dans le bundle
+   de `handleReservaV2StatusChange` (`getReservaV2Bundle` ne ramène qu'un bundle
+   de réservation) : il faut l'acheminer. Voie identifiée — le handler s'exécute
+   après le COMMIT, l'emprunt et ses items existent ; la `due_at` se récupère
+   via `emprestimo_itens_v2.reserva_id` qui lie réservation et emprunt. Modifier
+   `getReservaV2Bundle` (couche `data/reservas.ts`) ou ajouter une lecture dédiée
+   dans le handler. À faire dans la même passe que la refonte de la clé
+   `res.converted` (sous-tâche 1), pour ne traiter cet objet qu'une seule fois.
 
 **Périmètre des événements concernés.** `reserva_v2_recusada`,
 `reserva_cancelada_biblioteca`, `reserva_cancelada_leitor`, `reserva_expirada`,
-`reserva_convertida_em_emprestimo` (5 clés `res.*`). Note de coordination :
-`res.converted` est aussi touché par le chantier A (D-1, enrichissement avec la
-date d'échéance) — voir §5.
+`reserva_convertida_em_emprestimo` (5 clés `res.*`). `res.converted` est traité
+**intégralement par ce chantier** : refonte de la clé (sous-tâches 1-3) *et*
+ajout de la date d'échéance (sous-tâche 4). Le chantier A ne touche pas cette
+clé — voir §2.1ter et §5.
 
 **Doctrine applicable.** Langage inclusif sur les 6+ locales (exigence cœur du
 projet). Toute clé créée complète sur les 8 locales. Lecture intégrale du fichier
@@ -569,6 +632,7 @@ avant modification.
   son titre.
 - Le contenu reçu par le lecteur·rice est rédigé de son point de vue ; le
   contenu staff du sien.
+- Le mail `res.converted` porte la date d'échéance de l'emprunt.
 - Toutes les chaînes nouvelles sont complètes sur les 8 locales, en langage
   inclusif.
 
@@ -648,11 +712,16 @@ Trois recoupements existent entre chantiers. La **décision D-0 (§2.0)** les
 règle par une règle ferme : chaque objet partagé est traité une seule fois,
 intégralement, par le chantier qui le rencontre en premier. Le détail :
 
-- **`res.converted` — chantiers A et D.** Le chantier A enrichit cette clé de la
-  date d'échéance (D-1) ; le chantier D la dote d'une version « message »
-  informative (TR-3). **Règle D-0 :** `res.converted` est traité **une seule
-  fois, dans le chantier A**, en intégrant d'emblée les deux besoins (date
-  d'échéance + version message). Le chantier D se borne à vérifier la conformité.
+- **`res.converted` — chantier D (révisé le 25/05).** Cette clé est touchée à la
+  fois par le besoin d'enrichissement (date d'échéance, initialement volet de
+  D-1, chantier A) et par la refonte de wording (version « message », TR-3,
+  chantier D). La révision D-1 du 25/05 (§2.1ter) a tranché : l'instruction sur
+  le code réel a montré que l'enrichissement ne peut pas se faire proprement
+  depuis le chantier A (l'événement est émis par un trigger sans accès à la
+  date). **Règle D-0 appliquée :** `res.converted` est traité **une seule fois,
+  intégralement, dans le chantier D** — refonte de la clé *et* ajout de la date
+  d'échéance dans la même passe. Le chantier A ne touche pas cette clé ; son
+  volet TR-2 se limite à la résorption du doublon de mail.
 - **Repli « logo absent » — chantiers C et E.** Le chantier C définit le
   comportement de repli pour les logos de biblios (TR-6.2b → `ctx.logo_url`) ; le
   chantier E uniformise ce repli sur les 8 EF (TR-6.1). **Règle D-0 :** le
@@ -672,7 +741,7 @@ intégralement, par le chantier qui le rencontre en premier. Le détail :
 | 1 | A | Dump SQL rafraîchi (D-1.a déjà instruite, cf. §2.1bis) | Patch RPC conversion + `handleEmprestimoV2` + `dispatch.ts` |
 | 2 | B | Inventaire des 54 + chaînes `register` croisé `mail-strings.ts` | `team.ts` et `register` entièrement i18n |
 | 3 | C | Confirmer la colonne `logo_url` au schéma | Résolution logo par contexte |
-| 4 | D | — (`res.converted` déjà traité en A) | Mails de statut de réservation informatifs |
+| 4 | D | `reservas.ts` + couche `data/reservas.ts` | Mails de statut de réservation informatifs ; `res.converted` refondu et daté |
 | 5 | E | TM-A / TM-D tranchés en B ; règle de repli logo fixée en C | Lot de cohérence soldé |
 
 Chaque étape se clôt selon ses critères de clôture propres, avec commit et push

@@ -52,6 +52,9 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
     "emprestimo_devolucao_cancelada",
     "emprestimo_devolucao_nao_realizada"
   ].includes(event)) return await handleEmprestimoDevolucaoEvent(recordId, event, payload);
+  // TR-2 (#153.A) : payload transmis a handleEmprestimoV2 — la RPC de conversion
+  // y place suppress_user_mail pour que le handler saute le mail lecteur·rice
+  // (le mail admin, lui, reste emis). Auparavant payload n'etait pas transmis.
   if ([
     "emprestimo_v2_criado",
     "emprestimo_v2_prorrogado",
@@ -59,7 +62,7 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
     "emprestimo_v2_devolvido",
     "emprestimo_v2_parcialmente_devolvido",
     "emprestimo_v2_devolvido_apos_parcial"
-  ].includes(event)) return await handleEmprestimoV2(recordId, event === "emprestimo_prorrogado" ? "emprestimo_v2_prorrogado" : event);
+  ].includes(event)) return await handleEmprestimoV2(recordId, event === "emprestimo_prorrogado" ? "emprestimo_v2_prorrogado" : event, payload);
   if ([
     "lembrete_v2_devolucao_5d",
     "lembrete_v2_devolucao_3d",
