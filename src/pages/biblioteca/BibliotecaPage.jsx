@@ -22,6 +22,7 @@ import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
 import LibraryPartnershipsSection from '@/components/library/LibraryPartnershipsSection';
+import PebHistorySection from '@/components/library/PebHistorySection';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -203,7 +204,10 @@ export default function BibliotecaPage() {
         // (onglet documents) charge desormais lui-meme catalog_partners et la vue
         // api.library_partnerships_ui. Le state `partners` de la page est supprime.
         supabase.from('user_library_memberships').select('*, profiles:user_id(email, first_name, last_name)').eq('library_id', libraryId).order('created_at'),
-        supabase.from('interlibrary_loans_v2').select('*').or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`).order('created_at', { ascending: false }).limit(50),
+        // #ILL-archive (25/05/2026) : la file active exclut les PEB archivés.
+        // Les PEB archivés sont consultables dans l'onglet Rapports via le
+        // composant PebHistorySection (vue api.peb_history_v1).
+        supabase.from('interlibrary_loans_v2').select('*').or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`).is('archived_at', null).order('created_at', { ascending: false }).limit(50),
         supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }).limit(50),
         supabase.from('library_mail_channels').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_notification_policies').select('*').eq('library_id', libraryId).maybeSingle(),
@@ -772,6 +776,21 @@ export default function BibliotecaPage() {
       });
       if (error) throw error;
       setMsg({ text: t({id:'biblioteca.ill.discarded'},{id:loanId}), kind: 'ok' });
+      await loadAll();
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+  }
+
+  // #ILL-archive (25/05/2026) : archivage manuel d'un PEB terminé. Le PEB
+  // sort de la file active et devient consultable dans l'onglet Rapports.
+  // RPC fn_peb_archive_loan — réservée au staff, vérifie le statut terminal.
+  async function archiveIllLoan(loanId) {
+    if (!confirm(t({id:'biblioteca.ill.archiveConfirm'},{id:loanId}))) return;
+    try {
+      const { error } = await supabase.rpc('fn_peb_archive_loan', {
+        p_loan_id: loanId,
+      });
+      if (error) throw error;
+      setMsg({ text: t({id:'biblioteca.ill.archived'},{id:loanId}), kind: 'ok' });
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
   }
@@ -1653,6 +1672,13 @@ export default function BibliotecaPage() {
               // <select> l'affiche mais ne permet pas de le choisir à la main.
               const statusIsDerived = loan.status_global==='parcialmente_devolvido' || loan.status_global==='devolvido';
               const loanDraft = illReturnDraft[loan.id] || {};
+              // #ILL-archive — un PEB terminé (devolvido/cancelado) est archivable.
+              // Garde-fou visuel : s'il est terminé depuis plus de 30 jours, on
+              // le signale (closed_at approché par returned_at, sinon updated_at).
+              const isTerminal = loan.status_global==='devolvido' || loan.status_global==='cancelado';
+              const closedAt = loan.returned_at || loan.updated_at;
+              const staleForArchive = isTerminal && closedAt &&
+                (Date.now() - new Date(closedAt).getTime()) > 30*24*60*60*1000;
               return(<div key={loan.id} style={{ borderBottom:'1px solid rgba(255,255,255,.04)' }}>
                 <div style={{ ...lr(i), borderBottom:'none' }}>
                 <div style={{ flex:1 }}>
@@ -1664,6 +1690,13 @@ export default function BibliotecaPage() {
                       </button>
                     )}
                     #{loan.id} — {isLender?t({ id: 'biblioteca.ill.lender' }):t({ id: 'biblioteca.ill.borrower' })}
+                    {/* #ILL-archive — garde-fou visuel : PEB terminé depuis longtemps */}
+                    {staleForArchive && (
+                      <span style={{ marginLeft:8, fontSize:'.7rem', fontWeight:600, padding:'2px 7px',
+                        borderRadius:10, background:'rgba(251,191,36,.16)', color:'#fbbf24' }}>
+                        {t({ id: 'biblioteca.ill.staleForArchive' })}
+                      </span>
+                    )}
                   </div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
                     {lenderLib?.short_name||'—'} → {borrowerLib?.short_name||'—'}
@@ -1681,7 +1714,21 @@ export default function BibliotecaPage() {
                   <option value="parcialmente_devolvido">{t({ id: 'ill.status.parcialmente_devolvido' })}</option>
                   <option value="devolvido">{t({ id: 'ill.status.devolvido' })}</option><option value="cancelado">{t({ id: 'ill.status.cancelado' })}</option>
                 </select>
-                <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={()=>deleteIll(loan.id)}>{t({ id: 'common.discard' })}</button>
+                {/* #ILL-archive — bouton d'archivage, seulement sur un PEB terminé */}
+                {isTerminal && (
+                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px' }}
+                    onClick={()=>archiveIllLoan(loan.id)}>
+                    {t({ id: 'biblioteca.ill.archive' })}
+                  </button>
+                )}
+                {/* #ILL-archive — descartar (suppression définitive) n'a de
+                    sens que sur un PEB non terminal (créé par erreur, jamais
+                    sorti). Sur un PEB terminé, le bon geste est arquivar :
+                    on masque descartar pour éviter la suppression accidentelle
+                    d'un prêt qui a réellement eu lieu. */}
+                {!isTerminal && (
+                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={()=>deleteIll(loan.id)}>{t({ id: 'common.discard' })}</button>
+                )}
                 </div>
                 {/* #ILL-partial — bloc dépliable : exemplaires + pointage du retour */}
                 {expanded && items.length>0 && (
@@ -1778,6 +1825,10 @@ export default function BibliotecaPage() {
               </div>
             </div>
           )}
+          {/* #ILL-archive (25/05/2026) : consultation des PEB archivés.
+              Composant dédié, lit la vue api.peb_history_v1, permet de
+              désarchiver. Réservé au staff (l'onglet Rapports l'est déjà). */}
+          <PebHistorySection libraryId={libraryId} allLibraries={allLibraries} />
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.reports.generate' })}</h4>
             <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:10 }}>
