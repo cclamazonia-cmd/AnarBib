@@ -47,3 +47,8 @@ eslint-first-run.txt
 # Scripts one-shot Claude (creation de migrations, ne pas commit)
 create-*.cjs
 fix-*.cjs
+
+# Dumps Supabase archives en local (recuperation si une migration echoue).
+# Le dossier docs/db/ n est pas versionne, sauf son README explicatif.
+docs/db/*
+!docs/db/README.md
