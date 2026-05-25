@@ -235,6 +235,14 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   // staffMailEnabled : false si on ne veut pas envoyer de mail biblio
   // (cas em_preparacao Q2 paquet 6).
   let readerKey = null, staffKey = null, staffMailEnabled = true, staffNeedsAction = false;
+  // TR-8 (#153.A) : readerMailEnabled, symetrique de staffMailEnabled, permet de
+  // couper le mail lecteur·rice sans dependre de readerKey (splitKey(null)
+  // retomberait sur 'admin.resUpdate' et le mail partirait quand meme).
+  let readerMailEnabled = true;
+  // TR-8 (#153.A) : final_reason est joint au payload par le trigger
+  // trg_notify_reserva_workflow_change pour les bascules causales vers
+  // 'liberada_para_circulacao' ('cancelled_by_library' ou 'no_show').
+  const finalReason = String(getPayloadValue(payload, "final_reason") || "").trim();
   if (we === "retirada_a_combinar") {
     if (proposedBy === 'biblio') {
       if (iterCount === 0) {
@@ -277,6 +285,13 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
   } else if (we === "liberada_para_circulacao") {
     readerKey = 'wf.closed';
     staffKey = 'wf.staff.closed';
+    // TR-8 (#153.A) : si la libération est causale (final_reason non vide :
+    // 'cancelled_by_library' ou 'no_show'), le lecteur·rice a déjà reçu le mail
+    // d'annulation ou de non-retrait. Le mail « libérée pour circulation » est
+    // alors un doublon de jargon interne — on coupe le mail lecteur·rice. Le
+    // mail staff (wf.staff.closed) reste émis : la biblio veut savoir que
+    // l'exemplaire est revenu en circulation.
+    if (finalReason) readerMailEnabled = false;
   } else if (we === "em_preparacao") {
     readerKey = 'wf.preparing';
     staffKey = null;
@@ -392,7 +407,9 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
     libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
   });
   const userSub = applyBrandingText(`${readerSubject} — ${bt}`, ctx);
-  const ur = reservationWorkflowEnabled(ctx) ? await safeSendEmail(user, userSub, userHtml, userText, "user_mail", ctx) : skippedEmailResult("user_mail", "reservation_workflow_disabled");
+  // TR-8 (#153.A) : readerMailEnabled coupe le mail lecteur·rice pour les
+  // bascules causales vers 'liberada_para_circulacao' (doublon évité).
+  const ur = !readerMailEnabled ? skippedEmailResult("user_mail", "liberada_causale_no_reader_mail") : reservationWorkflowEnabled(ctx) ? await safeSendEmail(user, userSub, userHtml, userText, "user_mail", ctx) : skippedEmailResult("user_mail", "reservation_workflow_disabled");
   // ─── Mail biblio ─────────────────────────────────────────
   // Si staffKey est null (em_preparacao, retirada_reagendada déprécié,
   // ou pickup_proposed_by absent) : skip le mail biblio.
