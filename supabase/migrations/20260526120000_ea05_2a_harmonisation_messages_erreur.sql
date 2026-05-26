@@ -384,8 +384,8 @@ ALTER FUNCTION "api"."schedule_loan_return"("p_emprestimo_id" bigint, "p_line_no
 -- ----------------------------------------------------------------------------
 -- Verification statique en fin de transaction (rollback automatique si echec)
 -- ----------------------------------------------------------------------------
--- Interroge pg_get_functiondef() — le code source des fonctions tel
--- qu'enregistre apres le CREATE OR REPLACE ci-dessus — et confirme, pour
+-- Interroge pg_proc / pg_get_functiondef() — le code source des fonctions
+-- tel qu'enregistre apres le CREATE OR REPLACE ci-dessus — et confirme, pour
 -- chacune des 8 fonctions :
 --   (a) le code attendu est present dans la definition ;
 --   (b) aucune phrase portugaise ne subsiste en position de message de RAISE
@@ -421,7 +421,20 @@ DECLARE
 BEGIN
   FOR i IN 1 .. array_length(v_checks, 1) LOOP
     v_fn := v_checks[i][1];
-    v_def := pg_get_functiondef(('api.' || v_fn)::regprocedure);
+
+    -- Concatener la definition de TOUTES les fonctions api portant ce nom
+    -- (recherche par nom dans pg_proc : insensible a la signature, donc pas
+    --  de piege regprocedure/parentheses ; agregation au cas ou surcharge).
+    SELECT string_agg(pg_get_functiondef(p.oid), E'\n')
+      INTO v_def
+      FROM pg_proc p
+      JOIN pg_namespace n ON n.oid = p.pronamespace
+     WHERE n.nspname = 'api'
+       AND p.proname = v_fn;
+
+    IF v_def IS NULL THEN
+      RAISE EXCEPTION 'Verification echouee : fonction api.% introuvable', v_fn;
+    END IF;
 
     -- (a) le code attendu doit etre present
     IF position(v_checks[i][2] IN v_def) = 0 THEN
