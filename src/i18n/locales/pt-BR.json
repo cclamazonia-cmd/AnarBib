@@ -2993,5 +2993,7 @@
   "panel.apiError.generic": "Não foi possível concluir esta ação. Tente novamente.",
   "panel.sort.tooltip": "Clique para ordenar",
   "catalog.table.jumpTop": "Ir para o topo",
-  "catalog.table.jumpBottom": "Ir para o fim"
+  "catalog.table.jumpBottom": "Ir para o fim",
+  "scroll.toTop": "Ir para o topo da página",
+  "scroll.toBottom": "Ir para o fim da página"
 }

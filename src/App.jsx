@@ -8,6 +8,7 @@ import { useTheme } from '@/lib/theme';
 import { detectLocale, getMessages } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
+import ScrollButtons from '@/components/ScrollButtons';
 import { Spinner } from '@/components/ui';
 
 // ── Lazy-loaded pages ────────────────────────────────────────────────
@@ -116,6 +117,7 @@ export default function App() {
                   } />
                 </Routes>
               </Suspense>
+              <ScrollButtons />
             </ThemeGate>
             </ToastProvider>
             </IdleTimerGuard>

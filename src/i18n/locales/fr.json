@@ -2993,5 +2993,7 @@
   "panel.apiError.generic": "Cette action n'a pas pu aboutir. Réessayez.",
   "panel.sort.tooltip": "Cliquer pour trier",
   "catalog.table.jumpTop": "Aller en haut",
-  "catalog.table.jumpBottom": "Aller en bas"
+  "catalog.table.jumpBottom": "Aller en bas",
+  "scroll.toTop": "Aller en haut de la page",
+  "scroll.toBottom": "Aller en bas de la page"
 }

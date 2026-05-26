@@ -2993,5 +2993,7 @@
   "panel.apiError.generic": "No s'ha pogut completar aquesta acció. Torna-ho a provar.",
   "panel.sort.tooltip": "Clica per ordenar",
   "catalog.table.jumpTop": "Vés a dalt",
-  "catalog.table.jumpBottom": "Vés a baix"
+  "catalog.table.jumpBottom": "Vés a baix",
+  "scroll.toTop": "Vés a dalt de la pàgina",
+  "scroll.toBottom": "Vés a baix de la pàgina"
 }

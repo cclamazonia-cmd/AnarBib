@@ -2993,5 +2993,7 @@
   "panel.apiError.generic": "Diese Aktion konnte nicht abgeschlossen werden. Bitte erneut versuchen.",
   "panel.sort.tooltip": "Zum Sortieren klicken",
   "catalog.table.jumpTop": "Nach oben springen",
-  "catalog.table.jumpBottom": "Nach unten springen"
+  "catalog.table.jumpBottom": "Nach unten springen",
+  "scroll.toTop": "Zum Seitenanfang",
+  "scroll.toBottom": "Zum Seitenende"
 }
