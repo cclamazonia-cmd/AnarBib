@@ -6,11 +6,16 @@
 //
 //   - <TeamPanel scope="library" libraryId={...} />
 //       Onglet "Equipe" de BibliotecaPage. Liste les memberships staff
-//       (librarian, coordenador, administrador) de la bibliothèque courante.
+//       (librarian, coordenador) de la bibliothèque courante. Le rôle
+//       administrador n'est PAS un rôle d'adhésion locale : l'administration
+//       réseau vit dans network_staff / network_administrators (tables
+//       transverses) et se compte sur la page Réseau, jamais ici. Doctrine
+//       Admin réseau (13/05) : page = périmètre, pas de calcul transverse.
 //
 //   - <TeamPanel scope="network" />
 //       Onglet "Membros" de RedePage. Liste TOUS les memberships de toutes
 //       les bibliothèques du réseau, avec sélecteur de filtrage par bibli.
+//       C'est la seule portée où le rôle administrador a un sens.
 //
 // Phase A : lecture seule.
 // Phase B1 (cette version) : actions de gestion via les 5 RPCs fn_team_* :
@@ -219,7 +224,11 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
       <div className="ab-team-counts">
         <CountCard label={t({ id: 'roles.librarian' })} count={counts.byRole.librarian} />
         <CountCard label={t({ id: 'roles.coordenador' })} count={counts.byRole.coordenador} />
-        <CountCard label={t({ id: 'roles.administrador' })} count={counts.byRole.administrador} />
+        {/* administrador n'est pas un rôle d'adhésion locale : compteur réservé
+            à la portée réseau (doctrine Admin réseau, page = périmètre). */}
+        {scope === 'network' && (
+          <CountCard label={t({ id: 'roles.administrador' })} count={counts.byRole.administrador} />
+        )}
         {counts.byStatus.suspended > 0 && (
           <CountCard
             label={t({ id: 'team.status.suspended' })}
@@ -256,7 +265,10 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
           <option value="">{t({ id: 'team.filter.allRoles' })}</option>
           <option value="librarian">{t({ id: 'roles.librarian' })}</option>
           <option value="coordenador">{t({ id: 'roles.coordenador' })}</option>
-          <option value="administrador">{t({ id: 'roles.administrador' })}</option>
+          {/* administrador : option de filtre réservée à la portée réseau. */}
+          {scope === 'network' && (
+            <option value="administrador">{t({ id: 'roles.administrador' })}</option>
+          )}
         </select>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="ab-team-select">
           <option value="">{t({ id: 'team.filter.allStatuses' })}</option>
