@@ -1294,12 +1294,15 @@ export default function PanelPage() {
   const activeLoans = loans.filter(l => l.item_status === 'aberto');
   // Audit UX 25/05/2026 (P1) : les vues *_followup_ui renvoient l'actif ET
   // le cloture. Les onglets operationnels ne doivent montrer que l'actionnable ;
-  // l'historique vit dans l'onglet dedie (vues painel_*_history_v1). Statuts
-  // terminaux repris de dominantHistoryType (l. 287-289).
-  const CONSULT_TERMINAL = ['consulta_realizada', 'cancelada_leitor', 'cancelada_biblioteca', 'expirada'];
-  const activeConsultations = consultations.filter(
-    c => !CONSULT_TERMINAL.includes(c.item_status)
-  );
+  // l'historique vit dans l'onglet dedie (vues painel_*_history_v1).
+  // Correctif 26/05/2026 : filtrer sur la SEULE valeur active de item_status,
+  // symetrique de activeRes / activeLoans. La version initiale testait item_status
+  // contre une liste de workflow_stage ('consulta_realizada'...) — or item_status
+  // d'une consulta ne vaut que 'ativa' | 'consultada' | 'cancelada_leitor' |
+  // 'cancelada_biblioteca' | 'expirada' (CHECK consulta_linhas_v2_item_status_chk).
+  // 'consulta_realizada' est un stage, pas un statut : les consultas faites
+  // (item_status='consultada') passaient donc a tort dans la file active.
+  const activeConsultations = consultations.filter(c => c.item_status === 'ativa');
   // Audit UX 25/05/2026 (P3) : filtre par etape applique AVANT le tri.
   // 'all' = pas de filtre. Tri par colonnes via SortHeader (ex-paquet 18).
   const stageFilteredRes = useMemo(
