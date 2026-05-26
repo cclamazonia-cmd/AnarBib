@@ -2124,6 +2124,137 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   // Cas standard : inscription rattachée à une biblio existante
   // Cas "initial" : inscription orpheline (signup_without_library=true)
   //   ââ€ ’ contient le CTA vers /solicitar-biblioteca avec claim token (TTL 14j)
+  // ===== TR-4 (#153.B) — titres/sous-titres/sujets des mails internes register =====
+  "register.internal.pretitle.coordination": {
+    "pt-BR": "Notificação da coordenação AnarBib",
+    fr: "Notification de la coordination AnarBib",
+    es: "Notificación de la coordinación AnarBib",
+    en: "AnarBib coordination notice",
+    it: "Notifica del coordinamento AnarBib",
+    de: "Mitteilung der AnarBib-Koordination",
+    ca: "Notificació de la coordinació AnarBib",
+    eo: "Sciigo de la AnarBib-kunordigo"
+  },
+  "register.internal.pretitle.library": {
+    "pt-BR": "Notificação da biblioteca",
+    fr: "Notification de la bibliothèque",
+    es: "Notificación de la biblioteca",
+    en: "Library notice",
+    it: "Notifica della biblioteca",
+    de: "Mitteilung der Bibliothek",
+    ca: "Notificació de la biblioteca",
+    eo: "Sciigo de la biblioteko"
+  },
+  "register.internal.pretitle.management": {
+    "pt-BR": "Notificação da gestão AnarBib",
+    fr: "Notification de la gestion AnarBib",
+    es: "Notificación de la gestión AnarBib",
+    en: "AnarBib management notice",
+    it: "Notifica della gestione AnarBib",
+    de: "Mitteilung der AnarBib-Verwaltung",
+    ca: "Notificació de la gestió AnarBib",
+    eo: "Sciigo de la AnarBib-administrado"
+  },
+  "register.internal.title.orphan": {
+    "pt-BR": "Cadastro de leitor-a-e órfã-o-e — {displayName}",
+    fr: "Inscription de lecteur·rice orphelin·e — {displayName}",
+    es: "Registro de lector(a/e) huérfan(a/e) — {displayName}",
+    en: "Registration of an unaffiliated reader — {displayName}",
+    it: "Registrazione di lettore/lettrice orfano/a — {displayName}",
+    de: "Anmeldung einer noch nicht zugeordneten lesenden Person — {displayName}",
+    ca: "Registre de lector(a/e) orfe(na/e) — {displayName}",
+    eo: "Registriĝo de senbiblioteka leganto — {displayName}"
+  },
+  "register.internal.title.initial": {
+    "pt-BR": "Cadastro inicial sem biblioteca — {displayName}",
+    fr: "Inscription initiale sans bibliothèque — {displayName}",
+    es: "Registro inicial sin biblioteca — {displayName}",
+    en: "Initial registration without a library — {displayName}",
+    it: "Registrazione iniziale senza biblioteca — {displayName}",
+    de: "Erstanmeldung ohne Bibliothek — {displayName}",
+    ca: "Registre inicial sense biblioteca — {displayName}",
+    eo: "Komenca registriĝo sen biblioteko — {displayName}"
+  },
+  "register.internal.title.standard": {
+    "pt-BR": "Novo cadastro — {displayName}",
+    fr: "Nouvelle inscription — {displayName}",
+    es: "Nuevo registro — {displayName}",
+    en: "New registration — {displayName}",
+    it: "Nuova registrazione — {displayName}",
+    de: "Neue Anmeldung — {displayName}",
+    ca: "Nou registre — {displayName}",
+    eo: "Nova registriĝo — {displayName}"
+  },
+  "register.internal.subtitle.orphan": {
+    "pt-BR": "Nov-o-a-e leitor-a-e órfã-o-e (biblioteca ainda não no AnarBib), ID {publicId}.",
+    fr: "Nouvelle lecteur·rice orphelin·e (bibliothèque pas encore sur AnarBib), ID {publicId}.",
+    es: "Nueva lectora huérfana (biblioteca aún no en AnarBib), ID {publicId}.",
+    en: "New unaffiliated reader (library not yet on AnarBib), ID {publicId}.",
+    it: "Nuovo/a lettore/lettrice orfano/a (biblioteca non ancora su AnarBib), ID {publicId}.",
+    de: "Neue noch nicht zugeordnete lesende Person (Bibliothek noch nicht bei AnarBib), ID {publicId}.",
+    ca: "Nova lectora òrfena (biblioteca encara no a AnarBib), ID {publicId}.",
+    eo: "Nova senbiblioteka leganto (biblioteko ankoraŭ ne en AnarBib), ID {publicId}."
+  },
+  "register.internal.subtitle.initial": {
+    "pt-BR": "Novo cadastro inicial sem biblioteca vinculada, com ID {publicId}.",
+    fr: "Nouvelle inscription initiale sans bibliothèque rattachée, ID {publicId}.",
+    es: "Nuevo registro inicial sin biblioteca vinculada, con ID {publicId}.",
+    en: "New initial registration with no library attached, ID {publicId}.",
+    it: "Nuova registrazione iniziale senza biblioteca collegata, ID {publicId}.",
+    de: "Neue Erstanmeldung ohne zugeordnete Bibliothek, ID {publicId}.",
+    ca: "Nou registre inicial sense biblioteca vinculada, amb ID {publicId}.",
+    eo: "Nova komenca registriĝo sen ligita biblioteko, ID {publicId}."
+  },
+  "register.internal.subtitle.standard": {
+    "pt-BR": "Novo cadastro de leitor-a-e com ID {publicId}.",
+    fr: "Nouvelle inscription de lecteur·rice, ID {publicId}.",
+    es: "Nuevo registro de lector(a/e) con ID {publicId}.",
+    en: "New reader registration, ID {publicId}.",
+    it: "Nuova registrazione di lettore/lettrice, ID {publicId}.",
+    de: "Neue Anmeldung einer lesenden Person, ID {publicId}.",
+    ca: "Nou registre de lector(a/e), amb ID {publicId}.",
+    eo: "Nova registriĝo de leganto, ID {publicId}."
+  },
+  "register.internal.orphanLib.mentioned": {
+    "pt-BR": " Biblioteca mencionada: \"{libraryName}\".",
+    fr: " Bibliothèque mentionnée : « {libraryName} ».",
+    es: " Biblioteca mencionada: «{libraryName}».",
+    en: " Library mentioned: \"{libraryName}\".",
+    it: " Biblioteca menzionata: «{libraryName}».",
+    de: " Genannte Bibliothek: „{libraryName}\".",
+    ca: " Biblioteca esmentada: «{libraryName}».",
+    eo: " Menciita biblioteko: \"{libraryName}\"."
+  },
+  "register.internal.orphanLib.none": {
+    "pt-BR": " Nenhuma biblioteca mencionada.",
+    fr: " Aucune bibliothèque mentionnée.",
+    es: " Ninguna biblioteca mencionada.",
+    en: " No library mentioned.",
+    it: " Nessuna biblioteca menzionata.",
+    de: " Keine Bibliothek genannt.",
+    ca: " Cap biblioteca esmentada.",
+    eo: " Neniu biblioteko menciita."
+  },
+  "register.internal.testContextNote": {
+    "pt-BR": "Este cadastro passou por uma rota com redirecionamento ou marcação de teste ativa.",
+    fr: "Cette inscription est passée par une route avec redirection ou marquage de test actif.",
+    es: "Este registro pasó por una ruta con redirección o marcado de prueba activo.",
+    en: "This registration went through a route with an active redirect or test flag.",
+    it: "Questa registrazione è passata per una rotta con reindirizzamento o marcatura di test attiva.",
+    de: "Diese Anmeldung lief über eine Route mit aktiver Weiterleitung oder Testmarkierung.",
+    ca: "Aquest registre ha passat per una ruta amb redirecció o marcatge de prova actiu.",
+    eo: "Ĉi tiu registriĝo pasis tra vojo kun aktiva alidirektado aŭ testmarko."
+  },
+  "register.internal.subject": {
+    "pt-BR": "Novo cadastro — {displayName} — {publicId}",
+    fr: "Nouvelle inscription — {displayName} — {publicId}",
+    es: "Nuevo registro — {displayName} — {publicId}",
+    en: "New registration — {displayName} — {publicId}",
+    it: "Nuova registrazione — {displayName} — {publicId}",
+    de: "Neue Anmeldung — {displayName} — {publicId}",
+    ca: "Nou registre — {displayName} — {publicId}",
+    eo: "Nova registriĝo — {displayName} — {publicId}"
+  },
   "welcome.subject": {
     "pt-BR": "Cadastro criado — {displayName}",
     fr: "Inscription créée — {displayName}",
@@ -3213,6 +3344,77 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     de: "Ende der Kulanzfrist",
     ca: "Fi del termini de gràcia",
     eo: "Fino de la prokrastperiodo"
+  },
+  // ===== TR-4 (#153.B) — libelles des mails internes register =====
+  "l.publicId": {
+    "pt-BR": "ID público",
+    fr: "ID public",
+    es: "ID público",
+    en: "Public ID",
+    it: "ID pubblico",
+    de: "Öffentliche ID",
+    ca: "ID públic",
+    eo: "Publika ID"
+  },
+  "l.name": {
+    "pt-BR": "Nome",
+    fr: "Nom",
+    es: "Nombre",
+    en: "Name",
+    it: "Nome",
+    de: "Name",
+    ca: "Nom",
+    eo: "Nomo"
+  },
+  "l.email": {
+    "pt-BR": "E-mail",
+    fr: "E-mail",
+    es: "Correo electrónico",
+    en: "Email",
+    it: "E-mail",
+    de: "E-Mail",
+    ca: "Correu electrònic",
+    eo: "Retpoŝto"
+  },
+  "l.phone": {
+    "pt-BR": "Telefone",
+    fr: "Téléphone",
+    es: "Teléfono",
+    en: "Phone",
+    it: "Telefono",
+    de: "Telefon",
+    ca: "Telèfon",
+    eo: "Telefono"
+  },
+  "l.address": {
+    "pt-BR": "Endereço informado",
+    fr: "Adresse renseignée",
+    es: "Dirección indicada",
+    en: "Address provided",
+    it: "Indirizzo fornito",
+    de: "Angegebene Adresse",
+    ca: "Adreça indicada",
+    eo: "Indikita adreso"
+  },
+  "l.registrationDate": {
+    "pt-BR": "Data do cadastro",
+    fr: "Date d'inscription",
+    es: "Fecha de registro",
+    en: "Registration date",
+    it: "Data di registrazione",
+    de: "Anmeldedatum",
+    ca: "Data de registre",
+    eo: "Dato de registriĝo"
+  },
+  "l.testContext": {
+    "pt-BR": "Contexto de teste",
+    fr: "Contexte de test",
+    es: "Contexto de prueba",
+    en: "Test context",
+    it: "Contesto di test",
+    de: "Testkontext",
+    ca: "Context de prova",
+    eo: "Testa kunteksto"
   },
   "network.cooptation_voted.cta": {
     "pt-BR": "Acessar a proposta e votar",

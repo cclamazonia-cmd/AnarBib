@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { tMail } from "../_shared/i18n/mail-strings.ts";
+import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -283,22 +283,25 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
     contentHtml
   });
 }
-function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, publicId, userEmail, phone, libraryName, fullAddress, isTestContext, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false }) {
+function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, publicId, userEmail, phone, libraryName, fullAddress, isTestContext, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, locale = "pt-BR" }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
     libraryName,
     includeLibraryLogo: !isWithoutLibrary
   });
+  // TR-4 (#153.B) : libelles du corps internationalises. La locale est celle du
+  // destinataire institutionnel — locale biblio pour le mail biblio, pt-BR pour
+  // le mail gestion AnarBib (doctrine 2C, transmise par l'appelant).
   const contentHtml = `
-    ${buildParagraph(`<b>Biblioteca:</b> ${escapeHtml(libraryName)}`)}
-    ${buildParagraph(`<b>ID público:</b> ${escapeHtml(publicId)}`)}
-    ${buildParagraph(`<b>Nome:</b> ${escapeHtml(`${firstName} ${lastName}`.trim())}`)}
-    ${buildParagraph(`<b>E-mail:</b> ${escapeHtml(userEmail)}`)}
-    ${buildParagraph(`<b>Telefone:</b> ${escapeHtml(phone)}`)}
-    ${fullAddress ? buildParagraph(`<b>Endereço informado:</b> ${escapeHtml(fullAddress)}`) : ""}
-    ${buildParagraph(`<b>Data do cadastro:</b> ${escapeHtml(new Date().toISOString())}`)}
-    ${isTestContext ? `<div style="margin-top:18px; padding:14px 16px; border-radius:14px; border:1px solid ${MAIL_BRAND.colors.borderLight}; background:${MAIL_BRAND.colors.surfaceAlt}; color:${MAIL_BRAND.colors.redDeep}; font-size:13px; line-height:1.6;"><b>Contexto de teste:</b> este cadastro passou por uma rota com redirecionamento ou marcação de teste ativa.</div>` : ""}
+    ${buildParagraph(`<b>${label(locale, "library")}:</b> ${escapeHtml(libraryName)}`)}
+    ${buildParagraph(`<b>${label(locale, "publicId")}:</b> ${escapeHtml(publicId)}`)}
+    ${buildParagraph(`<b>${label(locale, "name")}:</b> ${escapeHtml(`${firstName} ${lastName}`.trim())}`)}
+    ${buildParagraph(`<b>${label(locale, "email")}:</b> ${escapeHtml(userEmail)}`)}
+    ${buildParagraph(`<b>${label(locale, "phone")}:</b> ${escapeHtml(phone)}`)}
+    ${fullAddress ? buildParagraph(`<b>${label(locale, "address")}:</b> ${escapeHtml(fullAddress)}`) : ""}
+    ${buildParagraph(`<b>${label(locale, "registrationDate")}:</b> ${escapeHtml(new Date().toISOString())}`)}
+    ${isTestContext ? `<div style="margin-top:18px; padding:14px 16px; border-radius:14px; border:1px solid ${MAIL_BRAND.colors.borderLight}; background:${MAIL_BRAND.colors.surfaceAlt}; color:${MAIL_BRAND.colors.redDeep}; font-size:13px; line-height:1.6;"><b>${label(locale, "testContext")}:</b> ${tMail(locale, "register.internal.testContextNote")}</div>` : ""}
   `;
   return buildMailShell({
     pretitle,
@@ -696,7 +699,7 @@ serve(async (req)=>{
           library_slug: effectiveLibrarySlug
         }, 400);
       }
-      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name").eq("slug", effectiveLibrarySlug).maybeSingle();
+      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale").eq("slug", effectiveLibrarySlug).maybeSingle();
       if (libraryRowError || !foundLibraryRow?.id) {
         console.error("register: library not found in libraries", {
           librarySlug: effectiveLibrarySlug,
@@ -990,29 +993,39 @@ serve(async (req)=>{
       aboutUrl: mailIsOrphan ? projectUrl(userLocale) : "",
       locale: userLocale
     });
-    // ── Paquet 2 — libellés internes selon le cas ──────────────────────────
-    // reader_orphan : signale explicitement le cas à la coordination AnarBib
-    // et fait remonter le nom de biblio mentionné par la personne (signal
-    // d'essaimage : une biblio que le réseau ne connaît pas encore).
-    const orphanLibLine = orphanLibraryNameMentioned
-      ? ` Biblioteca mencionada: "${escapeHtml(orphanLibraryNameMentioned)}".`
-      : " Nenhuma biblioteca mencionada.";
-    let internalTitle: string;
-    let internalSubtitle: string;
-    if (signupIntent === "reader_orphan") {
-      internalTitle = `Cadastro de leitor·a órfã·o — ${displayName}`;
-      internalSubtitle = `Nova leitora órfã (biblioteca ainda não no AnarBib), ID ${publicId}.${orphanLibLine}`;
-    } else if (signupIntent === "collective_candidate") {
-      internalTitle = `Cadastro inicial sem biblioteca — ${displayName}`;
-      internalSubtitle = `Novo cadastro inicial sem biblioteca vinculada, com ID ${publicId}.`;
-    } else {
-      internalTitle = `Novo cadastro — ${displayName}`;
-      internalSubtitle = `Novo cadastro de leitor/a/e com ID ${publicId}.`;
-    }
+    // ── TR-4 (#153.B) — libellés internes internationalisés ───────────────
+    // Doctrine 2C : le mail biblio est rendu dans la locale de la biblio
+    // (libraryRow.default_locale) ; le mail gestion AnarBib en pt-BR, locale
+    // de référence du réseau. Cas reader_orphan / collective_candidate : pas
+    // de biblio rattachée -> libraryRow null -> repli pt-BR.
+    const internalLibLocale = libraryRow?.default_locale || "pt-BR";
+    const internalAdminLocale = "pt-BR";
+    // Construit les chaines internes pour une locale donnee (biblio ou admin).
+    const buildInternalStrings = (loc)=>{
+      const orphanLibLine = orphanLibraryNameMentioned
+        ? tMail(loc, "register.internal.orphanLib.mentioned", { libraryName: orphanLibraryNameMentioned })
+        : tMail(loc, "register.internal.orphanLib.none");
+      let title, subtitle;
+      if (signupIntent === "reader_orphan") {
+        title = tMail(loc, "register.internal.title.orphan", { displayName });
+        subtitle = tMail(loc, "register.internal.subtitle.orphan", { publicId }) + orphanLibLine;
+      } else if (signupIntent === "collective_candidate") {
+        title = tMail(loc, "register.internal.title.initial", { displayName });
+        subtitle = tMail(loc, "register.internal.subtitle.initial", { publicId });
+      } else {
+        title = tMail(loc, "register.internal.title.standard", { displayName });
+        subtitle = tMail(loc, "register.internal.subtitle.standard", { publicId });
+      }
+      return { title, subtitle };
+    };
+    const libraryStrings = buildInternalStrings(internalLibLocale);
+    const adminStrings = buildInternalStrings(internalAdminLocale);
     const libraryMailHtml = buildInternalMail({
-      title: internalTitle,
-      pretitle: mailIsWithoutLibrary ? "Notificação da coordenação AnarBib" : "Notificação da biblioteca",
-      subtitle: internalSubtitle,
+      title: libraryStrings.title,
+      pretitle: mailIsWithoutLibrary
+        ? tMail(internalLibLocale, "register.internal.pretitle.coordination")
+        : tMail(internalLibLocale, "register.internal.pretitle.library"),
+      subtitle: libraryStrings.subtitle,
       firstName,
       lastName,
       publicId,
@@ -1023,12 +1036,13 @@ serve(async (req)=>{
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,
-      isWithoutLibrary: mailIsWithoutLibrary
+      isWithoutLibrary: mailIsWithoutLibrary,
+      locale: internalLibLocale
     });
     const adminMailHtml = buildInternalMail({
-      title: internalTitle,
-      pretitle: "Notificação da gestão AnarBib",
-      subtitle: internalSubtitle,
+      title: adminStrings.title,
+      pretitle: tMail(internalAdminLocale, "register.internal.pretitle.management"),
+      subtitle: adminStrings.subtitle,
       firstName,
       lastName,
       publicId,
@@ -1039,7 +1053,8 @@ serve(async (req)=>{
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,
-      isWithoutLibrary: mailIsWithoutLibrary
+      isWithoutLibrary: mailIsWithoutLibrary,
+      locale: internalAdminLocale
     });
     const userSendResult = await sendEmail({
       apiKey: BREVO_API_KEY || "",
@@ -1096,7 +1111,7 @@ serve(async (req)=>{
             email: replyToEmail,
             name: senderDisplayName
           },
-          subject: `Novo cadastro — ${displayName} — ${publicId}`,
+          subject: tMail(internalLibLocale, "register.internal.subject", { displayName, publicId }),
           htmlContent: libraryMailHtml
         }
       });
@@ -1123,7 +1138,7 @@ serve(async (req)=>{
             email: replyToEmail,
             name: senderDisplayName
           },
-          subject: `Novo cadastro — ${displayName} — ${publicId}`,
+          subject: tMail(internalAdminLocale, "register.internal.subject", { displayName, publicId }),
           htmlContent: adminMailHtml
         }
       });
