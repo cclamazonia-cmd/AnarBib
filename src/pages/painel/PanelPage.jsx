@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
+import { resolveErrorKey } from '@/lib/apiErrors';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -834,7 +835,7 @@ export default function PanelPage() {
       if (error) throw error;
       loadData();
     } catch (e) {
-      notifyError(t({ id: 'panel.loan.extendError' }), e);
+      notifyError(t({ id: resolveErrorKey(e, 'panel.loan.extendError') }), e);
     }
   }
 
@@ -846,7 +847,7 @@ export default function PanelPage() {
       });
       if (error) throw error;
       loadData();
-    } catch (e) { notifyError(t({ id: 'panel.error.loanReturn' }), e); }
+    } catch (e) { notifyError(t({ id: resolveErrorKey(e, 'panel.error.loanReturn') }), e); }
   }
 
   // ── Consultation workflow ─────────────────────────────
@@ -869,7 +870,7 @@ export default function PanelPage() {
       const { error } = await supabase.schema('api').rpc('advance_consulta', params);
       if (error) throw error;
       loadData();
-    } catch (e) { notifyError(t({ id: 'panel.error.consultaWorkflow' }), e); }
+    } catch (e) { notifyError(t({ id: resolveErrorKey(e, 'panel.error.consultaWorkflow') }), e); }
   }
 
   // Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta agendada.
@@ -1521,7 +1522,7 @@ export default function PanelPage() {
                                   if (error) throw error;
                                   loadData();
                                 } catch (err) {
-                                  notifyError(t({ id: 'panel.error.taskStatus' }), err);
+                                  notifyError(t({ id: resolveErrorKey(err, 'panel.error.taskStatus') }), err);
                                 }
                               }}>
                               <option value="pendente">{t({ id: 'task.status.pendente' })}</option>
@@ -2014,7 +2015,7 @@ export default function PanelPage() {
                               const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: g.emprestimo_id });
                               if (error) throw error;
                               loadData();
-                            } catch (e) { notifyError(t({ id: 'panel.error.loanReturn' }), e); }
+                            } catch (e) { notifyError(t({ id: resolveErrorKey(e, 'panel.error.loanReturn') }), e); }
                           }}>
                             {t({id:'panel.loan.returnFull'})}
                           </button>
@@ -2916,7 +2917,7 @@ function TaskBucket({ title, tasks, setTab, onTaskAction }) {
                       if (error) throw error;
                       if (onTaskAction) onTaskAction();
                     } catch (err) {
-                      notifyError(t({ id: 'panel.error.taskStatus' }), err);
+                      notifyError(t({ id: resolveErrorKey(err, 'panel.error.taskStatus') }), err);
                     }
                   }}>
                   <option value="">{t({ id: 'panel.tasks.advance' })}</option>
