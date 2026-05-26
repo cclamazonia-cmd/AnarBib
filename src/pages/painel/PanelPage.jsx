@@ -517,9 +517,8 @@ export default function PanelPage() {
       loadData();
     } catch (e) {
       // L'API peut renvoyer transition_not_allowed, pickup_scheduled_for_required,
-      // target_stage_has_dedicated_rpc, etc. Le hint Postgres explique.
-      const msg = e.hint || e.message || String(e);
-      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+      // target_stage_has_dedicated_rpc, etc. resolveErrorKey traduit le code.
+      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.error.consultaWorkflow')})}));
     }
   }
 
@@ -547,8 +546,7 @@ export default function PanelPage() {
       setSelectedRes(new Set());
       loadData();
     } catch (e) {
-      const msg = e.hint || e.message || String(e);
-      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
     }
   }
 
@@ -583,8 +581,7 @@ export default function PanelPage() {
       setSelectedRes(new Set());
       loadData();
     } catch (e) {
-      const msg = e.hint || e.message || String(e);
-      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
     }
   }
 
@@ -613,8 +610,7 @@ export default function PanelPage() {
       }
       loadData();
     } catch (e) {
-      const msg = e.hint || e.message || String(e);
-      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
     }
   }
 
@@ -663,8 +659,7 @@ export default function PanelPage() {
       setNegotiationForm(null);
       loadData();
     } catch (e) {
-      const msg = e.hint || e.message || String(e);
-      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
     }
   }
 
@@ -691,8 +686,7 @@ export default function PanelPage() {
       }
       loadData();
     } catch (e) {
-      const msg = e.hint || e.message || String(e);
-      setActionMsg(t({id:'common.errorPrefix'},{message: msg}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
     }
   }
 
@@ -722,7 +716,7 @@ export default function PanelPage() {
         setBorrowerLookup(''); setLoanRefs('');
         setLoanPreview(null);
         loadData();
-      } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+      } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.loan.errorMissing')})})); }
       finally { setLoanBusy(false); }
       return;
     }
@@ -780,7 +774,7 @@ export default function PanelPage() {
           rule: proj?.rule_label || '—',
         }));
       }
-    } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.loan.errorMissing')})})); }
     finally { setLoanBusy(false); }
   }
 
@@ -804,7 +798,7 @@ export default function PanelPage() {
       // approprié selon la transition (devolvido OU devolvido_apos_parcial).
       setReturnId('');
       loadData();
-    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.error.loanReturn')})})); }
   }
 
   async function registrarDevolucaoParcial() {
@@ -823,7 +817,7 @@ export default function PanelPage() {
       setReturnMsg(t({id:'panel.return.partialRegistered'},{ids:subIds.join(', ')}));
       setReturnSubIds('');
       loadData();
-    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.error.loanReturn')})})); }
   }
 
   // ── Empréstimo actions ─────────────────────────────────
