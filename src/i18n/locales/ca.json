@@ -2954,5 +2954,8 @@
   "panel.consultations.empty": "Cap consulta en curs de moment.",
   "panel.consultations.emptyStage": "Cap consulta en aquesta etapa.",
   "panel.loans.empty": "Cap préstec en curs de moment.",
-  "panel.loanGrouped.empty": "Cap préstec agrupat en curs."
+  "panel.loanGrouped.empty": "Cap préstec agrupat en curs.",
+  "panel.error.loanReturn": "No s'ha pogut registrar la devolució.",
+  "panel.error.consultaWorkflow": "No s'ha pogut actualitzar l'etapa de la consulta.",
+  "panel.error.taskStatus": "No s'ha pogut canviar l'estat de la tasca."
 }

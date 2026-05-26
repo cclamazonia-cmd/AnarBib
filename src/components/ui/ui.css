@@ -1,9 +1,9 @@
-/* ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════
    AnarBib — UI components CSS
    Utilise les variables de theme-base.css
-   ═══════════════════════════════════════════════════════════ */
+   ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Button ─────────────────────────────────────────────── */
+/* ── Button ─────────────────────────────────────────────────────────── */
 
 .ab-button {
   display: inline-flex;
@@ -53,7 +53,7 @@
 @keyframes ab-spin { to { transform: rotate(360deg); } }
 .ab-spinner { animation: ab-spin 1s linear infinite; }
 
-/* ── Field ──────────────────────────────────────────────── */
+/* ── Field ──────────────────────────────────────────────────────────── */
 
 .ab-field {
   display: flex;
@@ -73,7 +73,7 @@
   color: var(--color-bad);
 }
 
-/* ── Input / Select / Textarea ──────────────────────────── */
+/* ── Input / Select / Textarea ─────────────────────────────────────── */
 
 .ab-input,
 .ab-select,
@@ -104,7 +104,7 @@
 .ab-textarea { min-height: 96px; resize: vertical; }
 .ab-select { font-weight: 600; }
 
-/* ── Card ───────────────────────────────────────────────── */
+/* ── Card ───────────────────────────────────────────────────────────── */
 
 .ab-card {
   background-color: var(--brand-panel-bg);
@@ -118,7 +118,7 @@
   padding: 16px;
 }
 
-/* ── Sheet ──────────────────────────────────────────────── */
+/* ── Sheet ──────────────────────────────────────────────────────────── */
 
 .ab-sheet {
   background-color: var(--brand-panel-bg);
@@ -149,7 +149,7 @@
 .ab-sheet__actions { display: flex; gap: 8px; align-items: center; }
 .ab-sheet__body { padding: 16px 18px; }
 
-/* ── Pill ───────────────────────────────────────────────── */
+/* ── Pill ───────────────────────────────────────────────────────────── */
 
 .ab-pill {
   display: inline-flex;
@@ -167,7 +167,7 @@
 .ab-pill--warn { color: var(--color-warn); border-color: rgba(251, 191, 36, 0.25); }
 .ab-pill--bad { color: var(--color-bad); border-color: rgba(251, 113, 133, 0.25); }
 
-/* ── Status Badge ───────────────────────────────────────── */
+/* ── Status Badge ──────────────────────────────────────────────────── */
 
 .ab-status-badge {
   display: inline-flex;
@@ -186,7 +186,7 @@
 .ab-status-badge--bad { color: var(--color-bad); border-color: rgba(251, 113, 133, 0.3); }
 .ab-status-badge--muted { color: var(--brand-muted); }
 
-/* ── Empty state ────────────────────────────────────────── */
+/* ── Empty state ───────────────────────────────────────────────────── */
 
 .ab-empty {
   padding: 32px 16px;
@@ -235,4 +235,65 @@
     animation: none;
     background: rgba(255, 255, 255, 0.08);
   }
+}
+
+/* ── Toast (notifications non-bloquantes — EA-09, 26/05/2026) ──────────
+   Remplace les alert() bruts du navigateur. Pile en bas à droite,
+   au-dessus de tout. Piloté par ToastContext / ToastViewport.
+   Cohérent palette sombre bordeaux : variables --brand-* / --color-*. */
+
+.ab-toast-viewport {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: min(380px, calc(100vw - 40px));
+  pointer-events: none;
+}
+
+.ab-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-strong);
+  border: 1px solid var(--brand-panel-border-strong);
+  box-shadow: var(--brand-shadow-strong);
+  color: var(--brand-text);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  animation: ab-toast-in 0.22s ease-out;
+}
+
+.ab-toast__msg { flex: 1; min-width: 0; }
+
+.ab-toast__close {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--brand-muted);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}
+.ab-toast__close:hover { color: var(--brand-text); }
+
+/* Liseré gauche coloré selon le type. */
+.ab-toast--success { border-left: 4px solid var(--color-ok); }
+.ab-toast--error   { border-left: 4px solid var(--color-bad); }
+.ab-toast--info    { border-left: 4px solid var(--brand-color-primary); }
+
+@keyframes ab-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-toast { animation: none; }
 }

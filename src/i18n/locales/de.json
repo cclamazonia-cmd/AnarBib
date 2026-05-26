@@ -2954,5 +2954,8 @@
   "panel.consultations.empty": "Derzeit keine laufenden Einsichtnahmen.",
   "panel.consultations.emptyStage": "Keine Einsichtnahmen in dieser Phase.",
   "panel.loans.empty": "Derzeit keine laufenden Ausleihen.",
-  "panel.loanGrouped.empty": "Keine gruppierten Ausleihen in Bearbeitung."
+  "panel.loanGrouped.empty": "Keine gruppierten Ausleihen in Bearbeitung.",
+  "panel.error.loanReturn": "Die Rückgabe konnte nicht erfasst werden.",
+  "panel.error.consultaWorkflow": "Die Phase der Einsichtnahme konnte nicht aktualisiert werden.",
+  "panel.error.taskStatus": "Der Status der Aufgabe konnte nicht geändert werden."
 }

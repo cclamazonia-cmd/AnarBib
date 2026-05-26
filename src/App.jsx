@@ -3,13 +3,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LibraryProvider, useLibrary } from '@/contexts/LibraryContext';
+import { ToastProvider } from '@/contexts/ToastContext';
 import { useTheme } from '@/lib/theme';
 import { detectLocale, getMessages } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
 import { Spinner } from '@/components/ui';
 
-// ── Lazy-loaded pages ──────────────────────────────────────
+// ── Lazy-loaded pages ────────────────────────────────────────────────
 const CatalogPage = lazy(() => import('@/pages/public/CatalogPage'));
 const BookPage = lazy(() => import('@/pages/public/BookPage'));
 const AuthorPage = lazy(() => import('@/pages/public/AuthorPage'));
@@ -25,7 +26,7 @@ const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage')
 const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
 const RedePage = lazy(() => import('@/pages/rede/RedePage'));
 
-// ── Fallback de chargement ─────────────────────────────────
+// ── Fallback de chargement ───────────────────────────────────────────
 function LoadingFallback() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -34,14 +35,14 @@ function LoadingFallback() {
   );
 }
 
-// ── Chargement du thème ────────────────────────────────────
+// ── Chargement du thème ──────────────────────────────────────────────
 function ThemeGate({ children }) {
   const { themeSlug } = useLibrary();
   useTheme(themeSlug);
   return children;
 }
 
-// ── App ────────────────────────────────────────────────────
+// ── App ──────────────────────────────────────────────────────────────
 export default function App() {
   const locale = detectLocale();
   const messages = getMessages(locale);
@@ -52,10 +53,11 @@ export default function App() {
         <AuthProvider>
           <LibraryProvider>
             <IdleTimerGuard>
+            <ToastProvider>
             <ThemeGate>
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
-                  {/* ── Pages publiques ──────────────── */}
+                  {/* ── Pages publiques ───────────── */}
                   <Route path="/" element={<CatalogPage />} />
                   <Route path="/catalogo" element={<CatalogPage />} />
                   {/* Alias profond : catalogue scopé sur une bibliothèque (galerie anarbib.org). */}
@@ -68,17 +70,17 @@ export default function App() {
                   <Route path="/privacidade" element={<PrivacyPolicyPage />} />
                   <Route path="/privacidade/:slug" element={<PrivacyPolicyPage />} />
 
-                  {/* ── Pages authentifiées ──────────── */}
+                  {/* ── Pages authentifiées ────────── */}
                   <Route path="/conta" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
                   <Route path="/painel" element={<ProtectedRoute><PanelPage /></ProtectedRoute>} />
                   <Route path="/painel/:tab" element={<ProtectedRoute><PanelPage /></ProtectedRoute>} />
 
-                  {/* ── Biblioteca ──────────────────────────── */}
+                  {/* ── Biblioteca ───────────────────────── */}
                   <Route path="/biblioteca" element={
                     <ProtectedRoute><BibliotecaPage /></ProtectedRoute>
                   } />
 
-                  {/* ── Rede (administrador only) ────────── */}
+                  {/* ── Rede (administrador only) ──────────── */}
                   <Route path="/rede" element={
                     <ProtectedRoute><RedePage /></ProtectedRoute>
                   } />
@@ -93,19 +95,19 @@ export default function App() {
                   />
                   <Route path="/solicitar-biblioteca" element={<SolicitarBibliotecaPage />} />
 
-                  {/* ── Importações ──────────────────────────── */}
+                  {/* ── Importações ──────────────────────── */}
                   <Route path="/importacoes" element={
                     <ProtectedRoute><ImportacoesPage /></ProtectedRoute>
                   } />
 
-                  {/* ── Catalogação ────────────────────────── */}
+                  {/* ── Catalogação ─────────────────────── */}
                   <Route path="/catalogacao" element={
                     <ProtectedRoute>
                       <CatalogacaoPage />
                     </ProtectedRoute>
                   } />
 
-                  {/* ── 404 ─────────────────────────── */}
+                  {/* ── 404 ────────────────────── */}
                   <Route path="*" element={
                     <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>
                       <h1>404</h1>
@@ -115,6 +117,7 @@ export default function App() {
                 </Routes>
               </Suspense>
             </ThemeGate>
+            </ToastProvider>
             </IdleTimerGuard>
           </LibraryProvider>
         </AuthProvider>

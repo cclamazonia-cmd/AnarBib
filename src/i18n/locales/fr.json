@@ -2954,5 +2954,8 @@
   "panel.consultations.empty": "Aucune consultation en cours pour le moment.",
   "panel.consultations.emptyStage": "Aucune consultation à cette étape.",
   "panel.loans.empty": "Aucun emprunt en cours pour le moment.",
-  "panel.loanGrouped.empty": "Aucun emprunt groupé en cours."
+  "panel.loanGrouped.empty": "Aucun emprunt groupé en cours.",
+  "panel.error.loanReturn": "Le retour n'a pas pu être enregistré.",
+  "panel.error.consultaWorkflow": "L'étape de la consultation n'a pas pu être mise à jour.",
+  "panel.error.taskStatus": "Le statut de la tâche n'a pas pu être modifié."
 }

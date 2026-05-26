@@ -2954,5 +2954,8 @@
   "panel.consultations.empty": "No consultations in progress at the moment.",
   "panel.consultations.emptyStage": "No consultations at this stage.",
   "panel.loans.empty": "No loans in progress at the moment.",
-  "panel.loanGrouped.empty": "No grouped loans in progress."
+  "panel.loanGrouped.empty": "No grouped loans in progress.",
+  "panel.error.loanReturn": "The return could not be recorded.",
+  "panel.error.consultaWorkflow": "The consultation stage could not be updated.",
+  "panel.error.taskStatus": "The task status could not be changed."
 }

@@ -2954,5 +2954,8 @@
   "panel.consultations.empty": "Nenhuma consulta em curso no momento.",
   "panel.consultations.emptyStage": "Nenhuma consulta nesta etapa.",
   "panel.loans.empty": "Nenhum empréstimo em curso no momento.",
-  "panel.loanGrouped.empty": "Nenhum empréstimo agrupado em curso."
+  "panel.loanGrouped.empty": "Nenhum empréstimo agrupado em curso.",
+  "panel.error.loanReturn": "Não foi possível registrar a devolução.",
+  "panel.error.consultaWorkflow": "Não foi possível atualizar a etapa da consulta.",
+  "panel.error.taskStatus": "Não foi possível alterar o estado da tarefa."
 }

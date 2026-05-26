@@ -2954,5 +2954,8 @@
   "panel.consultations.empty": "Neniu konsulto nuntempe en kurso.",
   "panel.consultations.emptyStage": "Neniu konsulto en ĉi tiu etapo.",
   "panel.loans.empty": "Neniu prunto nuntempe en kurso.",
-  "panel.loanGrouped.empty": "Neniu grupigita prunto en kurso."
+  "panel.loanGrouped.empty": "Neniu grupigita prunto en kurso.",
+  "panel.error.loanReturn": "Ne eblis registri la redonon.",
+  "panel.error.consultaWorkflow": "Ne eblis ĝisdatigi la etapon de la konsulto.",
+  "panel.error.taskStatus": "Ne eblis ŝanĝi la staton de la tasko."
 }

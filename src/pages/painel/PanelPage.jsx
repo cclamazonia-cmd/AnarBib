@@ -16,6 +16,7 @@ import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { getCountryName } from '@/lib/countries';
 import { formatSchedule } from '@/lib/scheduleFormat';
 import Modal from '@/components/ui/Modal';
+import { useToast } from '@/contexts/ToastContext';
 import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -127,6 +128,7 @@ export default function PanelPage() {
   const { libraryId, libraryName, role, circulation_mode, membership_enabled } = useLibrary();
   const availability = usePanelAvailability();
   const { formatMessage: t, locale } = useIntl();
+  const { notifyError } = useToast();
   useDocumentTitle(t({ id: 'pageTitle.panel' }));
   const roleLoaded = role !== null && role !== undefined;
   const isLibrarian = role === 'librarian' || role === 'coordenador' || role === 'administrador';
@@ -832,8 +834,7 @@ export default function PanelPage() {
       if (error) throw error;
       loadData();
     } catch (e) {
-      // PATCH 07/05/2026 audit i18n : alert pt-BR remplacé par clé i18n
-      alert(t({ id: 'panel.loan.extendError' }, { message: e.message }));
+      notifyError(t({ id: 'panel.loan.extendError' }), e);
     }
   }
 
@@ -845,7 +846,7 @@ export default function PanelPage() {
       });
       if (error) throw error;
       loadData();
-    } catch (e) { alert(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) { notifyError(t({ id: 'panel.error.loanReturn' }), e); }
   }
 
   // ── Consultation workflow ─────────────────────────────
@@ -868,7 +869,7 @@ export default function PanelPage() {
       const { error } = await supabase.schema('api').rpc('advance_consulta', params);
       if (error) throw error;
       loadData();
-    } catch (e) { alert(t({id:'common.errorPrefix'},{message:e.message})); }
+    } catch (e) { notifyError(t({ id: 'panel.error.consultaWorkflow' }), e); }
   }
 
   // Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta agendada.
@@ -1520,7 +1521,7 @@ export default function PanelPage() {
                                   if (error) throw error;
                                   loadData();
                                 } catch (err) {
-                                  alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+                                  notifyError(t({ id: 'panel.error.taskStatus' }), err);
                                 }
                               }}>
                               <option value="pendente">{t({ id: 'task.status.pendente' })}</option>
@@ -2013,7 +2014,7 @@ export default function PanelPage() {
                               const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: g.emprestimo_id });
                               if (error) throw error;
                               loadData();
-                            } catch (e) { alert(t({id:'common.errorPrefix'},{message:e.message})); }
+                            } catch (e) { notifyError(t({ id: 'panel.error.loanReturn' }), e); }
                           }}>
                             {t({id:'panel.loan.returnFull'})}
                           </button>
@@ -2874,6 +2875,7 @@ function SummaryCard({ label, count, variant = 'default' }) {
 
 function TaskBucket({ title, tasks, setTab, onTaskAction }) {
   const { formatMessage: t } = useIntl();
+  const { notifyError } = useToast();
   return (
     <div className="ab-painel-task-bucket">
       <h3 className="ab-painel-h3">{title} ({tasks.length})</h3>
@@ -2914,7 +2916,7 @@ function TaskBucket({ title, tasks, setTab, onTaskAction }) {
                       if (error) throw error;
                       if (onTaskAction) onTaskAction();
                     } catch (err) {
-                      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+                      notifyError(t({ id: 'panel.error.taskStatus' }), err);
                     }
                   }}>
                   <option value="">{t({ id: 'panel.tasks.advance' })}</option>
