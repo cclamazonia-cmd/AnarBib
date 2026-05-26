@@ -2098,6 +2098,27 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{targetName} està a punt de passar a inactiu (rol de {role}) a la {libraryName} el {deadlineDate} si no es connecta.",
     eo: "{targetName} baldaŭ fariĝos neaktiva (rolo {role}) ĉe {libraryName} je {deadlineDate}, se ri ne ensalutos."
   },
+  // ===== TM-A (#153.B) — escalade réseau au seuil J-7 (dernier·e coord) =====
+  "team.inactive_warning_7d.escalation.sub": {
+    "pt-BR": "Escalada de rede — última coordenação inativa: {libraryName}",
+    fr: "Escalade réseau — dernière coordination inactive : {libraryName}",
+    es: "Escalada de red — última coordinación inactiva: {libraryName}",
+    en: "Network escalation — last coordination inactive: {libraryName}",
+    it: "Escalation di rete — ultimo coordinamento inattivo: {libraryName}",
+    de: "Netzwerk-Eskalation — letzte Koordination inaktiv: {libraryName}",
+    ca: "Escalada de xarxa — última coordinació inactiva: {libraryName}",
+    eo: "Reta plialtigo — lasta kunordigo neaktiva: {libraryName}"
+  },
+  "team.inactive_warning_7d.escalation.intro": {
+    "pt-BR": "{targetName}, únic-o-a-e coordenador-a-e de {libraryName}, está inativ-o-a-e e passará automaticamente para inativo em {deadlineDate} (em 7 dias). Como não há outra coordenação local para ser avisada, esta notificação é escalada à administração da rede. Sem reação, a biblioteca ficará sem coordenação ativa.",
+    fr: "{targetName}, unique coordinateur·rice de {libraryName}, est inactif·ve et passera automatiquement en inactif le {deadlineDate} (dans 7 jours). Comme il n'y a pas d'autre coordination locale à prévenir, cette notification est escaladée à l'administration du réseau. Sans réaction, la bibliothèque se retrouvera sans coordination active.",
+    es: "{targetName}, únic(a/e) coordinador(a/e) de {libraryName}, está inactiv(a/e) y pasará automáticamente a inactivo el {deadlineDate} (en 7 días). Como no hay otra coordinación local a la que avisar, esta notificación se escala a la administración de la red. Sin reacción, la biblioteca quedará sin coordinación activa.",
+    en: "{targetName}, the only coordinator of {libraryName}, is inactive and will automatically become inactive on {deadlineDate} (in 7 days). As there is no other local coordination to notify, this notice is escalated to the network administration. Without action, the library will be left with no active coordination.",
+    it: "{targetName}, unica coordinazione di {libraryName}, è inattiva e passerà automaticamente a inattivo il {deadlineDate} (tra 7 giorni). Poiché non c'è altro coordinamento locale da avvisare, questa notifica è inoltrata all'amministrazione della rete. Senza reazione, la biblioteca resterà senza coordinamento attivo.",
+    de: "{targetName}, einzige Koordination von {libraryName}, ist inaktiv und wird am {deadlineDate} (in 7 Tagen) automatisch auf inaktiv gesetzt. Da es keine andere lokale Koordination zu benachrichtigen gibt, wird diese Mitteilung an die Netzwerk-Verwaltung eskaliert. Ohne Reaktion bleibt die Bibliothek ohne aktive Koordination.",
+    ca: "{targetName}, únic(a/e) coordinador(a/e) de {libraryName}, està inactiv(a/e) i passarà automàticament a inactiu el {deadlineDate} (d'aquí a 7 dies). Com que no hi ha cap altra coordinació local a qui avisar, aquesta notificació s'escala a l'administració de la xarxa. Sense reacció, la biblioteca quedarà sense coordinació activa.",
+    eo: "{targetName}, sola kunordiganto de {libraryName}, estas neaktiva kaj aŭtomate fariĝos neaktiva je {deadlineDate} (post 7 tagoj). Ĉar ne ekzistas alia loka kunordigo por averti, ĉi tiu sciigo estas plialtigita al la reta administrado. Sen reago, la biblioteko restos sen aktiva kunordigo."
+  },
   "team.inactive_auto.admin.sub": {
     "pt-BR": "Passagem para inativo confirmada — {role}",
     fr: "Passage en inactif confirmé — {role}",

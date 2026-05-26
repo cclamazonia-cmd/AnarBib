@@ -17,7 +17,7 @@
 //   - team.removal_requested / team.removal_cancelled / team.removal_completed
 //   - team.suspended / team.unsuspended
 //   - team.last_coordinator_left / team.last_coordinator_pending_removal (escalades AnarBib)
-//   - team.inactive_warning_30d / team.inactive_warning_7d / team.inactive_auto
+//   - team.inactive_warning_30d / team.inactive_warning_7d / team.inactive_completed
 // ============================================================================
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
@@ -53,7 +53,15 @@ async function loadLibrary(libraryId) {
   return data;
 }
 async function loadAdministradores() {
-  const { data: memberships, error: e1 } = await supabaseAdmin.from("user_library_memberships").select("user_id").eq("role", "administrador").eq("status", "active");
+  // TM-A (#153.B) : la source était user_library_memberships role='administrador'.
+  // Ce rôle a été supprimé du CHECK constraint de user_library_memberships au
+  // paquet F admin réseau (13/05/2026) — la requête retournait donc toujours [].
+  // Les administrateur·rices du réseau vivent désormais dans la table dédiée
+  // network_administrators (autorité transverse, aucune library_id). On lit donc
+  // network_administrators status='active'. Cette correction rétablit du même
+  // coup les escalades de handleLastCoordinatorLeft (§6.1) et
+  // handleLastCoordinatorPendingRemoval (§6.4), cassées par la même cause.
+  const { data: memberships, error: e1 } = await supabaseAdmin.from("network_administrators").select("user_id").eq("status", "active");
   if (e1 || !memberships || memberships.length === 0) return [];
   const userIds = Array.from(new Set(memberships.map((m)=>m.user_id)));
   const { data: profiles, error: e2 } = await supabaseAdmin.from("profiles").select("id,email,first_name,last_name,preferred_language").in("id", userIds);
@@ -127,8 +135,8 @@ export async function handleTeamEvent(recordId) {
       result = await handleLastCoordinatorPendingRemoval(payload, library, actor, ctx, bt);
     } else if (event === "team.inactive_warning_30d" || event === "team.inactive_warning_7d") {
       result = await handleInactiveWarning(event, payload, library, targetUserId, ctx, bt);
-    } else if (event === "team.inactive_auto") {
-      result = await handleInactiveAuto(payload, library, targetUserId, ctx, bt);
+    } else if (event === "team.inactive_completed") {
+      result = await handleInactiveCompleted(payload, library, targetUserId, ctx, bt);
     } else if (event.startsWith("team.library_profile.")) {
       return await handleLibraryProfileEvent(row.id);
     } else {
@@ -762,8 +770,63 @@ async function handleLastCoordinatorPendingRemoval(payload, library, actor, ctx,
     recipients_count: admins.length
   };
 }
+// team.inactive_warning_7d — escalade réseau (TM-A #153.B)
+// Cas « dernier·e coordenador·a » : la personne inactive au seuil J-7 est
+// l'unique coordenador·a actif·ve de la biblio. Il n'y a pas de coordination
+// locale à mettre en copie -> on escalade aux administrateur·rices du réseau
+// (network_administrators status='active', via loadAdministradores). Même
+// logique que l'escalade §6.1. Le mail est dans la langue de chaque admin
+// réseau (preferred_language). Remplace la copie admin biblio (qui tomberait
+// dans une boîte non consultée, la seule coordination étant inactive).
+async function sendInactiveWarningEscalation(target, library, role, deadlineDate, ctx, bt) {
+  const admins = await loadAdministradores();
+  if (admins.length === 0) {
+    return {
+      escalation_results: [],
+      reason: "no_network_admins_found"
+    };
+  }
+  const libraryName = library?.name || library?.short_name || "";
+  const targetName = displayName(target);
+  const results = [];
+  for (const admin of admins){
+    const locale = admin.preferred_language || null;
+    const adminUserTarget = userTargetFromProfile(admin);
+    const roleLoc = localizedRole(role, locale);
+    const sub = `${tMail(locale, "team.inactive_warning_7d.escalation.sub", {
+      libraryName
+    })} — ${bt}`;
+    const tit = tMail(locale, "team.inactive_warning_7d.escalation.sub", {
+      libraryName
+    });
+    const introHtml = `<p>${tMail(locale, "team.inactive_warning_7d.escalation.intro", {
+      targetName,
+      libraryName,
+      role: roleLoc,
+      deadlineDate
+    })}</p>`;
+    const { html, text } = renderEmail({
+      locale,
+      preheader: tit,
+      title: tit,
+      greeting: greeting(locale, admin.first_name || undefined),
+      introHtml,
+      details: [],
+      footerHtml: footerPadrao(ctx, locale),
+      context: ctx
+    });
+    const r = await safeSendEmail(adminUserTarget, applyBrandingText(sub, ctx), html, text, "anarbib_escalation", ctx);
+    results.push(r);
+  }
+  return {
+    escalation_results: results,
+    recipients_count: admins.length
+  };
+}
 // team.inactive_warning_30d, team.inactive_warning_7d (déclenchés par cron Lot 4)
 // Destinataire : la cible + copie admin biblio (uniquement pour le 7d)
+// TM-A (#153.B) : au seuil 7d, si la cible est l'unique coordenador·a actif·ve
+// de la biblio, la copie admin biblio est remplacée par une escalade réseau.
 async function handleInactiveWarning(event, payload, library, targetUserId, ctx, bt) {
   const target = await loadProfile(targetUserId);
   if (!target) throw new Error(`profile ${targetUserId} not found`);
@@ -796,48 +859,73 @@ async function handleInactiveWarning(event, payload, library, targetUserId, ctx,
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   let adminResult;
+  let escalationResult;
   if (isShort) {
-    const targetName = displayName(target);
-    // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
-    // TM-C (#153.B) : la coquille FR/PT « do passage » disparait avec le passage
-    // en i18n du titre.
-    const libLocale = ctx?.default_locale || "pt-BR";
-    const roleLocAdmin = localizedRole(role, libLocale);
-    const adminTit = tMail(libLocale, "team.inactive_warning_7d.admin.sub");
-    const adminIntro = `<p>${tMail(libLocale, "team.inactive_warning_7d.admin.intro", {
-      targetName,
-      role: roleLocAdmin,
-      libraryName,
-      deadlineDate
-    })}</p>`;
-    const adminDetails = [
-      {
-        label: label(libLocale, "target"),
-        value: targetName
-      },
-      {
-        label: label(libLocale, "roleConcerned"),
-        value: roleLocAdmin
-      },
-      {
-        label: label(libLocale, "library"),
-        value: libraryName
-      },
-      {
-        label: label(libLocale, "deadline"),
-        value: deadlineDate
-      }
-    ];
-    adminResult = await sendAdminCopy(ctx, bt, adminTit, adminTit, adminIntro, adminDetails);
+    // TM-A (#153.B) : détecter le cas « dernier·e coordenador·a ». L'escalade
+    // n'a de sens que si la cible est elle-même coordenador·a (la sortie d'un·e
+    // librarian ne laisse pas la biblio sans coordination). Au seuil J-7 la
+    // cible est encore coordenador·a active (elle ne bascule inactive qu'au
+    // J-9 mois) : elle est donc « dernière » si le compte des coordenadores
+    // actifs de la biblio vaut exactement 1.
+    let isLastCoordinator = false;
+    if (role === "coordenador" && library?.id) {
+      const { data: activeCoords } = await supabaseAdmin
+        .from("user_library_memberships")
+        .select("user_id")
+        .eq("library_id", library.id)
+        .eq("role", "coordenador")
+        .eq("status", "active");
+      const coordCount = Array.isArray(activeCoords) ? activeCoords.length : 0;
+      isLastCoordinator = coordCount === 1;
+    }
+    if (isLastCoordinator) {
+      // Pas de coordination locale à prévenir -> escalade réseau, au lieu de
+      // la copie admin biblio (qui tomberait dans une boîte non consultée).
+      escalationResult = await sendInactiveWarningEscalation(target, library, role, deadlineDate, ctx, bt);
+    } else {
+      const targetName = displayName(target);
+      // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+      // TM-C (#153.B) : la coquille FR/PT « do passage » disparait avec le passage
+      // en i18n du titre.
+      const libLocale = ctx?.default_locale || "pt-BR";
+      const roleLocAdmin = localizedRole(role, libLocale);
+      const adminTit = tMail(libLocale, "team.inactive_warning_7d.admin.sub");
+      const adminIntro = `<p>${tMail(libLocale, "team.inactive_warning_7d.admin.intro", {
+        targetName,
+        role: roleLocAdmin,
+        libraryName,
+        deadlineDate
+      })}</p>`;
+      const adminDetails = [
+        {
+          label: label(libLocale, "target"),
+          value: targetName
+        },
+        {
+          label: label(libLocale, "roleConcerned"),
+          value: roleLocAdmin
+        },
+        {
+          label: label(libLocale, "library"),
+          value: libraryName
+        },
+        {
+          label: label(libLocale, "deadline"),
+          value: deadlineDate
+        }
+      ];
+      adminResult = await sendAdminCopy(ctx, bt, adminTit, adminTit, adminIntro, adminDetails);
+    }
   }
   return {
     user_result: userResult,
-    admin_result: adminResult
+    admin_result: adminResult,
+    escalation_result: escalationResult
   };
 }
-// team.inactive_auto (déclenché par cron Lot 4)
+// team.inactive_completed (déclenché par cron Lot 4)
 // Destinataire : la cible + copie admin biblio
-async function handleInactiveAuto(payload, library, targetUserId, ctx, bt) {
+async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) {
   const target = await loadProfile(targetUserId);
   if (!target) throw new Error(`profile ${targetUserId} not found`);
   const locale = target.preferred_language || null;
@@ -845,9 +933,9 @@ async function handleInactiveAuto(payload, library, targetUserId, ctx, bt) {
   const libraryName = library?.name || library?.short_name || "";
   const role = String(payload.role || "").trim();
   const roleLoc = localizedRole(role, locale);
-  const sub = `${tMail(locale, "team.inactive_auto.sub")} — ${bt}`;
-  const tit = tMail(locale, "team.inactive_auto.sub");
-  const introHtml = `<p>${tMail(locale, "team.inactive_auto.intro", {
+  const sub = `${tMail(locale, "team.inactive_completed.sub")} — ${bt}`;
+  const tit = tMail(locale, "team.inactive_completed.sub");
+  const introHtml = `<p>${tMail(locale, "team.inactive_completed.intro", {
     role: roleLoc,
     libraryName
   })}</p>`;
@@ -866,10 +954,10 @@ async function handleInactiveAuto(payload, library, targetUserId, ctx, bt) {
   // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
   const libLocale = ctx?.default_locale || "pt-BR";
   const roleLocAdmin = localizedRole(role, libLocale);
-  const adminTit = tMail(libLocale, "team.inactive_auto.admin.sub", {
+  const adminTit = tMail(libLocale, "team.inactive_completed.admin.sub", {
     role: roleLocAdmin
   });
-  const adminIntro = `<p>${tMail(libLocale, "team.inactive_auto.admin.intro", {
+  const adminIntro = `<p>${tMail(libLocale, "team.inactive_completed.admin.intro", {
     targetName,
     role: roleLocAdmin,
     libraryName

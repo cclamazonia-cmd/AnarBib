@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.2 — 2026-05-20 (doctrine « rôle exclusif » actée)
+**Version** : 1.3 — 2026-05-24 (notification coordination au seuil J-7)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -9,6 +9,7 @@
 - v1.0 (2026-05-05) : première rédaction. Modèle 4 rôles (`reader`, `librarian`, `coordenador`, `administrador`), 9 transitions T1-T9, audit log, notifications, cron pending_removal et inactivity cleanup. Implémentation en lots 1-7.
 - **v1.1 (2026-05-15)** : refonte cohérence après la livraison complète du chantier admin réseau (paquets A-F + #114, 11-14/05/2026). Le rôle `administrador` **local** a été supprimé du schéma `user_library_memberships.role` (CHECK constraint rétréci au paquet F), remplacé par la table `network_administrators` (cf. spec admin réseau v0.3.1). Cette spec gouvernance perd donc tout ce qui concernait l'administrador local. Ajout du périmètre d'activation : cette spec décrit le mode `governance_mode = 'full_governance'` de la spec profils v0.3 ; les profils plus simples (`informal`, `staff_roles`) en activent des sous-ensembles. Implémentation reflétée dans §14.
 - **v1.2 (2026-05-20)** : doctrine « **rôle exclusif** » actée et implémentée en production. Une personne ne peut avoir qu'**un seul rôle actif** par bibliothèque ; une promotion ferme le membership de rang inférieur (`status='removed'`), une rétrogradation réactive celui du cran en dessous. La v1.1 recommandait le multi-membership (cumul de lignes actives) « pour préserver l'historique » : cet argument ne tient pas — l'historique est intégralement porté par l'audit log et par les lignes `removed`, sans cumul de lignes `active`. Le multi-membership n'apportait que de l'ambiguïté (toute requête `WHERE role=...` devait se demander laquelle fait foi). Sections amendées : §5.3, §6.5, §10.3 ; précisions §5.6 et §12.1. Voir Annexe E (changelog) et Annexe D (décision cadrée). Implémentation : hotfix promotion librarian (20/05) + migration doctrine rôle exclusif promote_coordenador/cron (20/05).
+- **v1.3 (2026-05-24)** : amendement TM-A (issu de l'audit #153 des contenus de mails). Le seuil d'inactivité J-7 (`team.inactive_warning_7d`) notifie désormais la coordination en copie, et non plus la seule personne concernée ; si la personne inactive est le·la dernier·e coordenador·a, la copie est escaladée aux administrateur·rices du réseau (même mécanisme que §6.1). Cet amendement entérine le comportement déjà en production dans `team.ts` plutôt que de l'aligner sur l'ancienne règle. Sections amendées : §5.10, §8.2 ; traçage Annexe Q7. Le seuil J-30 reste inchangé (personne uniquement).
 
 ---
 
@@ -436,7 +437,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 **Workflow** :
 
 1. **J-9 mois - 30 jours** : mail d'avertissement à la personne (« votre membership va être désactivée dans 30 jours sans connexion »).
-2. **J-9 mois - 7 jours** : mail de rappel.
+2. **J-9 mois - 7 jours** : mail de rappel à la personne **et copie à la coordination** (tous les `coordenador` actifs de la biblio). *(amendé v1.3)* Si la personne inactive est elle-même le·la **dernier·e coordenador·a** de la biblio — donc s'il n'existe aucun·e autre coordenador·a à mettre en copie —, la copie est **escaladée aux administrateur·rices du réseau** (table `network_administrators` `status='active'`), selon le même mécanisme que l'escalade « dernier·e coordenador·a » de §6.1.
 3. **J-9 mois** : passage à `inactive` automatique. Mail final à la personne + à toute la coordination.
 
 **Important** :
@@ -652,11 +653,13 @@ Les events suivent le préfixe `team.*` (cohérent avec `loan.*`, `res.*`, `wf.*
 | `team.suspended` | T6 | personne + coordenadores |
 | `team.unsuspended` | T7 | personne + coordenadores |
 | `team.inactive_warning_30d` | T9 (J-30) | personne uniquement |
-| `team.inactive_warning_7d` | T9 (J-7) | personne uniquement |
+| `team.inactive_warning_7d` | T9 (J-7) | personne + coordenadores *(amendé v1.3)* |
 | `team.inactive_auto` | T9 (J-9 mois) | personne + coordenadores |
 | `team.last_coordinator_leaving` | §6.1 | administrateurs du réseau uniquement |
 
 **Note v1.1** : pour les events liés à une action transverse (admin réseau sur biblio dont il n'est pas staff local), le mail au staff local mentionne explicitement « action réalisée par un·e administrateur·rice du réseau AnarBib » (clé i18n dédiée). Cohérent avec la transparence du droit transverse.
+
+**Note v1.3** : le seuil J-7 (`inactive_warning_7d`) notifie désormais la coordination en copie, et non plus la seule personne concernée — afin que la coordination soit alertée d'une inactivité critique avant la sortie automatique. Si la personne inactive est le·la dernier·e coordenador·a, la copie est escaladée aux administrateur·rices du réseau (cf. §5.10 et §6.1). Le seuil J-30 (`inactive_warning_30d`) reste, lui, adressé à la personne uniquement : un mois avant l'échéance, l'information est encore strictement individuelle.
 
 ### 8.3. Clés i18n nécessaires
 
@@ -1282,7 +1285,7 @@ Cette spec consigne les décisions prises lors d'une session de cadrage avec Xav
 | Q4 (rétrograder coord) | Soi-même + autres coordenadores | ✅ Conservée |
 | Q5 (librarian→reader) | Soi-même + coordenadores | ✅ Conservée |
 | Q6 (modèle exclusion) | 3 états avec délai de carence 7j | ✅ Conservée |
-| Q7 (compte abandonné) | Sortie auto à 9 mois + mails J-30 et J-7 | ✅ Conservée |
+| Q7 (compte abandonné) | Sortie auto à 9 mois + mails J-30 et J-7 | ✏️ Amendée v1.3 — le mail J-7 notifie aussi la coordination (escalade réseau si dernier·e coord) ; le J-30 reste individuel |
 | Q8 (audit log visibilité) | Public au staff | ✅ Conservée, étendue aux admins réseau via helper |
 | Q9 (notifications) | Personne concernée + toute la coordination | ✅ Conservée, mention « action transverse » si applicable |
 | Q10 (UI) | Onglet « Equipe » dans /biblioteca | ✅ Conservée, ajout `<NetworkAdminBadge>` |
