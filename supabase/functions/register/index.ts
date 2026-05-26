@@ -47,14 +47,6 @@ const MAIL_BRAND = {
     mono: "'Courier New', Courier, monospace"
   }
 };
-const LIBRARY_MAIL_ASSETS = {
-  blmf: {
-    logoUrl: "https://cclamazonia.noblogs.org/files/2026/03/logo_detoure_BLMF.png"
-  },
-  btl: {
-    logoUrl: "https://cclamazonia.noblogs.org/files/2026/03/logo-btl.png"
-  }
-};
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
@@ -102,9 +94,6 @@ function uniqueEmails(values) {
 }
 function buildAddressLine(parts) {
   return parts.map((part)=>part.trim()).filter(Boolean).join(" | ");
-}
-function resolveLibraryMailAsset(librarySlug) {
-  return LIBRARY_MAIL_ASSETS[normalizeSlug(librarySlug)] || null;
 }
 function readEnvEmail(name, fallback = "") {
   return normalizeEmail(Deno.env.get(name) || fallback);
@@ -699,7 +688,7 @@ serve(async (req)=>{
           library_slug: effectiveLibrarySlug
         }, 400);
       }
-      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale").eq("slug", effectiveLibrarySlug).maybeSingle();
+      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, logo_url").eq("slug", effectiveLibrarySlug).maybeSingle();
       if (libraryRowError || !foundLibraryRow?.id) {
         console.error("register: library not found in libraries", {
           librarySlug: effectiveLibrarySlug,
@@ -954,9 +943,15 @@ serve(async (req)=>{
     const postalAddress = String(libraryMeta?.postal_address || "").trim();
     const emailDeliveryMode = String(libraryMeta?.email_delivery_mode || "normal").trim();
     const isTestMode = libraryMeta?.is_test_mode === true;
-    const libraryMailAsset = mailIsWithoutLibrary ? null : resolveLibraryMailAsset(effectiveLibrarySlug);
+    // #153.C : le logo de la biblio est résolu depuis son contexte (la base)
+    // — colonne libraries.logo_url, lue dans le select de libraryRow — et non
+    // plus depuis un objet codé en dur dans ce fichier. Une biblio nouvellement
+    // ajoutée au réseau affiche ainsi son logo dans ses mails sans aucune
+    // édition de code. Cas mailIsWithoutLibrary : pas de biblio rattachée donc
+    // pas de logo ; cas logo_url NULL/vide : firstNonEmptyString normalise en
+    // chaîne vide et buildLogoTable omet la cellule (repli « pas de logo »).
     const anarbibLogoUrl = MAIL_BRAND.anarbibLogoUrl;
-    const libraryLogoUrl = firstNonEmptyString(libraryMailAsset?.logoUrl);
+    const libraryLogoUrl = mailIsWithoutLibrary ? "" : firstNonEmptyString(libraryRow?.logo_url);
     const replyToEmail = ANARBIB_REPLY_TO_EMAIL;
     const senderEmail = ANARBIB_SENDER_EMAIL;
     const senderDisplayName = mailIsWithoutLibrary ? "AnarBib" : `AnarBib · ${displayName}`;
