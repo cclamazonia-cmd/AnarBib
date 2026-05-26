@@ -17,7 +17,7 @@
 //   - team.removal_requested / team.removal_cancelled / team.removal_completed
 //   - team.suspended / team.unsuspended
 //   - team.last_coordinator_left / team.last_coordinator_pending_removal (escalades AnarBib)
-//   - team.inactive_warning_30d / team.inactive_warning_7d / team.inactive_completed
+//   - team.inactive_warning_30d / team.inactive_warning_7d / team.inactive_auto
 // ============================================================================
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
@@ -127,8 +127,8 @@ export async function handleTeamEvent(recordId) {
       result = await handleLastCoordinatorPendingRemoval(payload, library, actor, ctx, bt);
     } else if (event === "team.inactive_warning_30d" || event === "team.inactive_warning_7d") {
       result = await handleInactiveWarning(event, payload, library, targetUserId, ctx, bt);
-    } else if (event === "team.inactive_completed") {
-      result = await handleInactiveCompleted(payload, library, targetUserId, ctx, bt);
+    } else if (event === "team.inactive_auto") {
+      result = await handleInactiveAuto(payload, library, targetUserId, ctx, bt);
     } else if (event.startsWith("team.library_profile.")) {
       return await handleLibraryProfileEvent(row.id);
     } else {
@@ -835,9 +835,9 @@ async function handleInactiveWarning(event, payload, library, targetUserId, ctx,
     admin_result: adminResult
   };
 }
-// team.inactive_completed (déclenché par cron Lot 4)
+// team.inactive_auto (déclenché par cron Lot 4)
 // Destinataire : la cible + copie admin biblio
-async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) {
+async function handleInactiveAuto(payload, library, targetUserId, ctx, bt) {
   const target = await loadProfile(targetUserId);
   if (!target) throw new Error(`profile ${targetUserId} not found`);
   const locale = target.preferred_language || null;
@@ -845,9 +845,9 @@ async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) 
   const libraryName = library?.name || library?.short_name || "";
   const role = String(payload.role || "").trim();
   const roleLoc = localizedRole(role, locale);
-  const sub = `${tMail(locale, "team.inactive_completed.sub")} — ${bt}`;
-  const tit = tMail(locale, "team.inactive_completed.sub");
-  const introHtml = `<p>${tMail(locale, "team.inactive_completed.intro", {
+  const sub = `${tMail(locale, "team.inactive_auto.sub")} — ${bt}`;
+  const tit = tMail(locale, "team.inactive_auto.sub");
+  const introHtml = `<p>${tMail(locale, "team.inactive_auto.intro", {
     role: roleLoc,
     libraryName
   })}</p>`;
@@ -866,10 +866,10 @@ async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) 
   // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
   const libLocale = ctx?.default_locale || "pt-BR";
   const roleLocAdmin = localizedRole(role, libLocale);
-  const adminTit = tMail(libLocale, "team.inactive_completed.admin.sub", {
+  const adminTit = tMail(libLocale, "team.inactive_auto.admin.sub", {
     role: roleLocAdmin
   });
-  const adminIntro = `<p>${tMail(libLocale, "team.inactive_completed.admin.intro", {
+  const adminIntro = `<p>${tMail(libLocale, "team.inactive_auto.admin.intro", {
     targetName,
     role: roleLocAdmin,
     libraryName

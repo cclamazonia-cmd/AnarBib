@@ -1916,7 +1916,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Sense connexió per part teva en els pròxims 7 dies, el teu estat de {role} a le {libraryName} passarà automàticament a inactiu el {deadlineDate}.",
     eo: "Sen konekto flanke de vi en la venontaj 7 tagoj, via stato de {role} ĉe {libraryName} aŭtomate iĝos neaktiva la {deadlineDate}."
   },
-  "team.inactive_completed.sub": {
+  "team.inactive_auto.sub": {
     "pt-BR": "Sua conta passou a inativa",
     fr: "Ton compte est passé en inactif",
     es: "Tu cuenta pasó a inactiva",
@@ -1926,7 +1926,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "El teu compte ha passat a inactiu",
     eo: "Via konto iĝis neaktiva"
   },
-  "team.inactive_completed.intro": {
+  "team.inactive_auto.intro": {
     "pt-BR": "Após 9 meses sem conexão, seu status de {role} na {libraryName} passou a inativo. Seus acessos estão fechados. Se você desejar recuperá-los, entre em contato com (o/a/e)s coordenador(o/a/e)s da biblioteca para uma reativação.",
     fr: "Après 9 mois sans connexion, ton statut de {role} à la {libraryName} est passé en inactif. Tes accès sont fermés. Si tu souhaites les retrouver, contacte les coordinateur·rices de la bibliothèque pour une réactivation.",
     es: "Después de 9 meses sin conexión, tu estatus de {role} en le {libraryName} pasó a inactivo. Tus accesos están cerrados. Si querés recuperarlos, contactá a les coordinadores de la biblioteca para una reactivación.",
@@ -2098,7 +2098,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "{targetName} està a punt de passar a inactiu (rol de {role}) a la {libraryName} el {deadlineDate} si no es connecta.",
     eo: "{targetName} baldaŭ fariĝos neaktiva (rolo {role}) ĉe {libraryName} je {deadlineDate}, se ri ne ensalutos."
   },
-  "team.inactive_completed.admin.sub": {
+  "team.inactive_auto.admin.sub": {
     "pt-BR": "Passagem para inativo confirmada — {role}",
     fr: "Passage en inactif confirmé — {role}",
     es: "Paso a inactivo confirmado — {role}",
@@ -2108,7 +2108,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Pas a inactiu confirmat — {role}",
     eo: "Ŝanĝo al neaktiva konfirmita — {role}"
   },
-  "team.inactive_completed.admin.intro": {
+  "team.inactive_auto.admin.intro": {
     "pt-BR": "{targetName} passou para inativo após 9 meses sem conexão (papel de {role}) na {libraryName}. Acessos fechados.",
     fr: "{targetName} est passé·e en inactif après 9 mois sans connexion (rôle de {role}) à la {libraryName}. Accès fermés.",
     es: "{targetName} pasó a inactivo tras 9 meses sin conexión (rol de {role}) en la {libraryName}. Accesos cerrados.",
