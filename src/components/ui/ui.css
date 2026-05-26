@@ -297,3 +297,58 @@
 @media (prefers-reduced-motion: reduce) {
   .ab-toast { animation: none; }
 }
+
+/* ── Scroll buttons (boutons flottants monter/descendre — 26/05/2026) ──────
+   Composant ScrollButtons, monté une fois dans App.jsx. Contextuels :
+   n'apparaissent que s'il reste du contenu dans le sens concerné.
+   Même registre que le toast : position fixe, palette --brand-*. */
+
+.ab-scroll-buttons {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9990; /* sous le toast (9999), au-dessus du contenu */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ab-scroll-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--brand-panel-border-strong);
+  border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-strong);
+  color: var(--brand-text);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--brand-shadow-strong);
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  animation: ab-scroll-button-in 0.2s ease-out;
+}
+
+.ab-scroll-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(225, 29, 47, 0.65);
+}
+
+@keyframes ab-scroll-button-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Sur les écrans étroits, on resserre un peu pour ne pas gêner le pouce. */
+@media (max-width: 540px) {
+  .ab-scroll-buttons { right: 12px; bottom: 12px; }
+  .ab-scroll-button { width: 38px; height: 38px; }
+}
+
+/* Respecte la préférence système de mouvement réduit. */
+@media (prefers-reduced-motion: reduce) {
+  .ab-scroll-button { animation: none; transition: none; }
+  .ab-scroll-button:hover { transform: none; }
+}
