@@ -2990,5 +2990,8 @@
   "panel.apiError.line_required": "Indiquez au moins une ligne pour continuer.",
   "panel.apiError.not_your_loan": "Cet emprunt appartient à une autre personne.",
   "panel.apiError.library_not_identified": "Aucune bibliothèque active n'a été identifiée.",
-  "panel.apiError.generic": "Cette action n'a pas pu aboutir. Réessayez."
+  "panel.apiError.generic": "Cette action n'a pas pu aboutir. Réessayez.",
+  "panel.sort.tooltip": "Cliquer pour trier",
+  "catalog.table.jumpTop": "Aller en haut",
+  "catalog.table.jumpBottom": "Aller en bas"
 }

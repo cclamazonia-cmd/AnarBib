@@ -2990,5 +2990,8 @@
   "panel.apiError.line_required": "Indica almenys una línia per continuar.",
   "panel.apiError.not_your_loan": "Aquest préstec pertany a una altra persona.",
   "panel.apiError.library_not_identified": "No s'ha identificat cap biblioteca activa.",
-  "panel.apiError.generic": "No s'ha pogut completar aquesta acció. Torna-ho a provar."
+  "panel.apiError.generic": "No s'ha pogut completar aquesta acció. Torna-ho a provar.",
+  "panel.sort.tooltip": "Clica per ordenar",
+  "catalog.table.jumpTop": "Vés a dalt",
+  "catalog.table.jumpBottom": "Vés a baix"
 }

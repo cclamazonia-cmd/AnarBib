@@ -2990,5 +2990,8 @@
   "panel.apiError.line_required": "Bonvolu indiki almenaŭ unu linion por daŭrigi.",
   "panel.apiError.not_your_loan": "Tiu ĉi prunto apartenas al alia persono.",
   "panel.apiError.library_not_identified": "Neniu aktiva biblioteko estis identigita.",
-  "panel.apiError.generic": "Ne eblis plenumi tiun ĉi agon. Bonvolu reprovi."
+  "panel.apiError.generic": "Ne eblis plenumi tiun ĉi agon. Bonvolu reprovi.",
+  "panel.sort.tooltip": "Klaku por ordigi",
+  "catalog.table.jumpTop": "Iri al la supro",
+  "catalog.table.jumpBottom": "Iri al la fino"
 }

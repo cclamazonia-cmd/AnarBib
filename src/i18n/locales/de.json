@@ -2990,5 +2990,8 @@
   "panel.apiError.line_required": "Bitte mindestens eine Zeile auswählen, um fortzufahren.",
   "panel.apiError.not_your_loan": "Diese Ausleihe gehört einer anderen Person.",
   "panel.apiError.library_not_identified": "Es konnte keine aktive Bibliothek ermittelt werden.",
-  "panel.apiError.generic": "Diese Aktion konnte nicht abgeschlossen werden. Bitte erneut versuchen."
+  "panel.apiError.generic": "Diese Aktion konnte nicht abgeschlossen werden. Bitte erneut versuchen.",
+  "panel.sort.tooltip": "Zum Sortieren klicken",
+  "catalog.table.jumpTop": "Nach oben springen",
+  "catalog.table.jumpBottom": "Nach unten springen"
 }

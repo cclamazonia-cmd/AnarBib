@@ -2990,5 +2990,8 @@
   "panel.apiError.line_required": "Please select at least one line to continue.",
   "panel.apiError.not_your_loan": "This loan belongs to someone else.",
   "panel.apiError.library_not_identified": "No active library could be identified.",
-  "panel.apiError.generic": "This action could not be completed. Please try again."
+  "panel.apiError.generic": "This action could not be completed. Please try again.",
+  "panel.sort.tooltip": "Click to sort",
+  "catalog.table.jumpTop": "Go to top",
+  "catalog.table.jumpBottom": "Go to bottom"
 }

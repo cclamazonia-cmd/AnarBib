@@ -113,10 +113,11 @@ function useSort(items) {
 // SortHeader — composant <th> cliquable avec fleche (paquet 18)
 // ═══════════════════════════════════════════════════════════
 function SortHeader({ sortKey, current, dir, onClick, children }) {
+  const { formatMessage: t } = useIntl();
   const isActive = current === sortKey;
   const arrow = isActive ? (dir === 'asc' ? ' ↑' : ' ↓') : '';
   return (
-    <th onClick={() => onClick(sortKey)} style={{ cursor: 'pointer', userSelect: 'none' }} title="Cliquer pour trier">
+    <th onClick={() => onClick(sortKey)} style={{ cursor: 'pointer', userSelect: 'none' }} title={t({ id: 'panel.sort.tooltip' })}>
       {children}{arrow}
     </th>
   );

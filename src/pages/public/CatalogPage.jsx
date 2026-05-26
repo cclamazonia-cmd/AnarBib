@@ -828,8 +828,8 @@ export default function CatalogPage() {
               <span className="ab-sheet__hint">{t({ id: 'catalog.table.sortHint' })}</span>
             </div>
             <div className="ab-table-jump">
-              <button onClick={() => scrollTable('top')} title="Ir para o topo">↑</button>
-              <button onClick={() => scrollTable('bottom')} title="Ir para o fim">↓</button>
+              <button onClick={() => scrollTable('top')} title={t({ id: 'catalog.table.jumpTop' })}>↑</button>
+              <button onClick={() => scrollTable('bottom')} title={t({ id: 'catalog.table.jumpBottom' })}>↓</button>
             </div>
           </div>
           <div className="ab-table-wrap" ref={tableRef}>
