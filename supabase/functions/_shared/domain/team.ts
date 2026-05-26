@@ -24,7 +24,7 @@ import { applyBrandingText, subjectTag } from "../context/library-mail-routing.t
 import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, userTargetFromProfile } from "../transport/email.ts";
-import { esc, formatDateBR, fullName } from "../shared/format.ts";
+import { formatDateBR, fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 import { handleLibraryProfileEvent } from "./library_profile.ts";
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -190,20 +190,31 @@ async function handlePromotion(event, library, targetUserId, actor, ctx, bt) {
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   const targetName = displayName(target);
   const actorName = displayName(actor);
-  const roleLabelPt = isCoord ? "coordenador(o/a/e)" : "bibliotecári(o/a/e)";
-  const adminTit = `Admissão concertada — ${roleLabelPt}`;
-  const adminIntro = `<p>${esc(actorName)} admitiu <b>${esc(targetName)}</b> como ${roleLabelPt} na <b>${esc(libraryName)}</b>.</p>`;
+  // TM-B (#153.B) : mail admin internationalise. Locale = celle de la biblio
+  // (libLocale), doctrine 2C : le mail admin reflete l'identite linguistique
+  // de la biblio. Le role est localise dans cette meme locale.
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const roleLabelLoc = localizedRole(isCoord ? "coordenador" : "librarian", libLocale);
+  const adminTit = tMail(libLocale, "team.promoted.admin.sub", {
+    role: roleLabelLoc
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.promoted.admin.intro", {
+    actorName,
+    targetName,
+    role: roleLabelLoc,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Cible",
+      label: label(libLocale, "target"),
       value: targetName
     },
     {
-      label: "Acteur·rice",
+      label: label(libLocale, "actor"),
       value: actorName
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     }
   ];
@@ -260,25 +271,34 @@ async function handleSelfDemoted(payload, library, actor, ctx, bt) {
       results.push(r);
     }
   }
-  const fromRolePt = localizedRole(fromRole, "pt-BR");
-  const toRolePt = localizedRole(toRole, "pt-BR");
-  const adminTit = `Retorno voluntário ao papel de ${toRolePt}`;
-  const adminIntro = `<p><b>${esc(actorName)}</b> retornou do papel de ${fromRolePt} ao papel de ${toRolePt} na <b>${esc(libraryName)}</b>.</p>`;
+  // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const fromRoleLoc = localizedRole(fromRole, libLocale);
+  const toRoleLoc = localizedRole(toRole, libLocale);
+  const adminTit = tMail(libLocale, "team.self_demoted.admin.sub", {
+    toRole: toRoleLoc
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.self_demoted.admin.intro", {
+    actorName,
+    fromRole: fromRoleLoc,
+    toRole: toRoleLoc,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Acteur·rice",
+      label: label(libLocale, "actor"),
       value: actorName
     },
     {
-      label: "Ancien rôle",
-      value: fromRolePt
+      label: label(libLocale, "roleFrom"),
+      value: fromRoleLoc
     },
     {
-      label: "Nouveau rôle",
-      value: toRolePt
+      label: label(libLocale, "roleTo"),
+      value: toRoleLoc
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     }
   ];
@@ -331,33 +351,42 @@ async function handleRemovalRequested(payload, library, targetUserId, actor, ctx
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   const targetName = displayName(target);
   const actorName = displayName(actor);
-  const rolePt = localizedRole(role, "pt-BR");
-  const adminTit = `Pedido de retirada — ${rolePt}`;
-  const adminIntro = `<p>${esc(actorName)} solicitou a retirada de <b>${esc(targetName)}</b> do papel de ${rolePt} na <b>${esc(libraryName)}</b>. Prazo de carência : 7 dias.</p>`;
+  // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const roleLocAdmin = localizedRole(role, libLocale);
+  const adminTit = tMail(libLocale, "team.removal_requested.admin.sub", {
+    role: roleLocAdmin
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.removal_requested.admin.intro", {
+    actorName,
+    targetName,
+    role: roleLocAdmin,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Cible",
+      label: label(libLocale, "target"),
       value: targetName
     },
     {
-      label: "Acteur·rice",
+      label: label(libLocale, "actor"),
       value: actorName
     },
     {
-      label: "Rôle",
-      value: rolePt
+      label: label(libLocale, "role"),
+      value: roleLocAdmin
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     },
     {
-      label: "Fin carence",
+      label: label(libLocale, "gracePeriodEnd"),
       value: pendingUntilDate
     }
   ];
   if (reason) adminDetails.push({
-    label: "Motif",
+    label: label(libLocale, "reason"),
     value: reason
   });
   const adminResult = await sendAdminCopy(ctx, bt, adminTit, adminTit, adminIntro, adminDetails);
@@ -396,24 +425,33 @@ async function handleRemovalCancelled(payload, library, targetUserId, actor, ctx
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   const targetName = displayName(target);
-  const rolePt = localizedRole(role, "pt-BR");
-  const adminTit = `Pedido de retirada anulado — ${rolePt}`;
-  const adminIntro = `<p><b>${esc(cancellerName)}</b> anulou o pedido de retirada de <b>${esc(targetName)}</b> do papel de ${rolePt} na <b>${esc(libraryName)}</b>. ${esc(targetName)} recupera todos os direitos imediatamente.</p>`;
+  // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const roleLocAdmin = localizedRole(role, libLocale);
+  const adminTit = tMail(libLocale, "team.removal_cancelled.admin.sub", {
+    role: roleLocAdmin
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.removal_cancelled.admin.intro", {
+    cancellerName,
+    targetName,
+    role: roleLocAdmin,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Cible",
+      label: label(libLocale, "target"),
       value: targetName
     },
     {
-      label: "Annulé par",
+      label: label(libLocale, "cancelledBy"),
       value: cancellerName
     },
     {
-      label: "Rôle",
-      value: rolePt
+      label: label(libLocale, "role"),
+      value: roleLocAdmin
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     }
   ];
@@ -455,20 +493,28 @@ async function handleRemovalCompleted(payload, library, targetUserId, ctx, bt) {
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   const targetName = displayName(target);
-  const rolePt = localizedRole(role, "pt-BR");
-  const adminTit = `Retirada finalizada — ${rolePt}`;
-  const adminIntro = `<p>O prazo de 7 dias decorreu sem anulação. <b>${esc(targetName)}</b> foi retirad(o/a/e) do papel de ${rolePt} na <b>${esc(libraryName)}</b>.</p>`;
+  // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const roleLocAdmin = localizedRole(role, libLocale);
+  const adminTit = tMail(libLocale, "team.removal_completed.admin.sub", {
+    role: roleLocAdmin
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.removal_completed.admin.intro", {
+    targetName,
+    role: roleLocAdmin,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Cible",
+      label: label(libLocale, "target"),
       value: targetName
     },
     {
-      label: "Rôle retiré",
-      value: rolePt
+      label: label(libLocale, "roleRemoved"),
+      value: roleLocAdmin
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     }
   ];
@@ -518,28 +564,37 @@ async function handleSuspended(payload, library, targetUserId, actor, ctx, bt) {
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   const targetName = displayName(target);
   const actorName = displayName(actor);
-  const rolePt = localizedRole(role, "pt-BR");
-  const adminTit = `Suspensão imediata — ${rolePt}`;
-  const adminIntro = `<p><b>${esc(actorName)}</b> suspendeu os direitos de ${rolePt} de <b>${esc(targetName)}</b> na <b>${esc(libraryName)}</b> por medida cautelar.</p>`;
+  // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const roleLocAdmin = localizedRole(role, libLocale);
+  const adminTit = tMail(libLocale, "team.suspended.admin.sub", {
+    role: roleLocAdmin
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.suspended.admin.intro", {
+    actorName,
+    targetName,
+    role: roleLocAdmin,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Cible",
+      label: label(libLocale, "target"),
       value: targetName
     },
     {
-      label: "Acteur·rice",
+      label: label(libLocale, "actor"),
       value: actorName
     },
     {
-      label: "Rôle",
-      value: rolePt
+      label: label(libLocale, "role"),
+      value: roleLocAdmin
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     },
     {
-      label: "Motif",
+      label: label(libLocale, "reason"),
       value: reason
     }
   ];
@@ -579,24 +634,33 @@ async function handleUnsuspended(payload, library, targetUserId, actor, ctx, bt)
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   const targetName = displayName(target);
-  const rolePt = localizedRole(role, "pt-BR");
-  const adminTit = `Levantamento de suspensão — ${rolePt}`;
-  const adminIntro = `<p><b>${esc(actorName)}</b> levantou a suspensão dos direitos de ${rolePt} de <b>${esc(targetName)}</b> na <b>${esc(libraryName)}</b>. Acessos restaurados.</p>`;
+  // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const roleLocAdmin = localizedRole(role, libLocale);
+  const adminTit = tMail(libLocale, "team.unsuspended.admin.sub", {
+    role: roleLocAdmin
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.unsuspended.admin.intro", {
+    actorName,
+    targetName,
+    role: roleLocAdmin,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Cible",
+      label: label(libLocale, "target"),
       value: targetName
     },
     {
-      label: "Acteur·rice",
+      label: label(libLocale, "actor"),
       value: actorName
     },
     {
-      label: "Rôle",
-      value: rolePt
+      label: label(libLocale, "role"),
+      value: roleLocAdmin
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     }
   ];
@@ -734,24 +798,33 @@ async function handleInactiveWarning(event, payload, library, targetUserId, ctx,
   let adminResult;
   if (isShort) {
     const targetName = displayName(target);
-    const rolePt = localizedRole(role, "pt-BR");
-    const adminTit = `Aviso de inatividade — 7 dias antes do passage em inativo`;
-    const adminIntro = `<p><b>${esc(targetName)}</b> está prestes a passar em inativo (papel de ${rolePt}) na <b>${esc(libraryName)}</b> em ${esc(deadlineDate)} se não se conectar.</p>`;
+    // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+    // TM-C (#153.B) : la coquille FR/PT « do passage » disparait avec le passage
+    // en i18n du titre.
+    const libLocale = ctx?.default_locale || "pt-BR";
+    const roleLocAdmin = localizedRole(role, libLocale);
+    const adminTit = tMail(libLocale, "team.inactive_warning_7d.admin.sub");
+    const adminIntro = `<p>${tMail(libLocale, "team.inactive_warning_7d.admin.intro", {
+      targetName,
+      role: roleLocAdmin,
+      libraryName,
+      deadlineDate
+    })}</p>`;
     const adminDetails = [
       {
-        label: "Cible",
+        label: label(libLocale, "target"),
         value: targetName
       },
       {
-        label: "Rôle concerné",
-        value: rolePt
+        label: label(libLocale, "roleConcerned"),
+        value: roleLocAdmin
       },
       {
-        label: "Bibliothèque",
+        label: label(libLocale, "library"),
         value: libraryName
       },
       {
-        label: "Échéance",
+        label: label(libLocale, "deadline"),
         value: deadlineDate
       }
     ];
@@ -790,20 +863,28 @@ async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) 
   });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   const targetName = displayName(target);
-  const rolePt = localizedRole(role, "pt-BR");
-  const adminTit = `Passagem em inativo confirmada — ${rolePt}`;
-  const adminIntro = `<p><b>${esc(targetName)}</b> passou em inativo após 9 meses sem conexão (papel de ${rolePt}) na <b>${esc(libraryName)}</b>. Acessos fechados.</p>`;
+  // TM-B (#153.B) : mail admin internationalise (locale biblio, doctrine 2C).
+  const libLocale = ctx?.default_locale || "pt-BR";
+  const roleLocAdmin = localizedRole(role, libLocale);
+  const adminTit = tMail(libLocale, "team.inactive_completed.admin.sub", {
+    role: roleLocAdmin
+  });
+  const adminIntro = `<p>${tMail(libLocale, "team.inactive_completed.admin.intro", {
+    targetName,
+    role: roleLocAdmin,
+    libraryName
+  })}</p>`;
   const adminDetails = [
     {
-      label: "Cible",
+      label: label(libLocale, "target"),
       value: targetName
     },
     {
-      label: "Rôle concerné",
-      value: rolePt
+      label: label(libLocale, "roleConcerned"),
+      value: roleLocAdmin
     },
     {
-      label: "Bibliothèque",
+      label: label(libLocale, "library"),
       value: libraryName
     }
   ];

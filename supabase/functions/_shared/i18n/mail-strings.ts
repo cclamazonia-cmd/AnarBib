@@ -1937,6 +1937,188 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Post 9 monatoj sen konekto, via stato de {role} ĉe {libraryName} iĝis neaktiva. Viaj aliroj estas fermitaj. Se vi deziras reakiri ilin, kontaktu la kunordigant-in-ojn de la biblioteko por reaktivigo."
   },
 
+  // ===== TM-B (#153.B) — titres et intros des mails admin team.* =====
+  "team.promoted.admin.sub": {
+    "pt-BR": "Admissão concertada — {role}",
+    fr: "Admission concertée — {role}",
+    es: "Admisión concertada — {role}",
+    en: "Agreed admission — {role}",
+    it: "Ammissione concertata — {role}",
+    de: "Einvernehmliche Aufnahme — {role}",
+    ca: "Admissió concertada — {role}",
+    eo: "Interkonsentita akcepto — {role}"
+  },
+  "team.promoted.admin.intro": {
+    "pt-BR": "{actorName} admitiu {targetName} como {role} na {libraryName}.",
+    fr: "{actorName} a admis {targetName} comme {role} à la {libraryName}.",
+    es: "{actorName} admitió a {targetName} como {role} en la {libraryName}.",
+    en: "{actorName} admitted {targetName} as {role} at {libraryName}.",
+    it: "{actorName} ha ammesso {targetName} come {role} presso {libraryName}.",
+    de: "{actorName} hat {targetName} als {role} bei {libraryName} aufgenommen.",
+    ca: "{actorName} ha admès {targetName} com a {role} a la {libraryName}.",
+    eo: "{actorName} akceptis {targetName} kiel {role} ĉe {libraryName}."
+  },
+  "team.self_demoted.admin.sub": {
+    "pt-BR": "Retorno voluntário ao papel de {toRole}",
+    fr: "Retour volontaire au rôle de {toRole}",
+    es: "Retorno voluntario al rol de {toRole}",
+    en: "Voluntary return to the {toRole} role",
+    it: "Ritorno volontario al ruolo di {toRole}",
+    de: "Freiwillige Rückkehr zur Rolle {toRole}",
+    ca: "Retorn voluntari al rol de {toRole}",
+    eo: "Memvola reveno al la rolo {toRole}"
+  },
+  "team.self_demoted.admin.intro": {
+    "pt-BR": "{actorName} retornou do papel de {fromRole} ao papel de {toRole} na {libraryName}.",
+    fr: "{actorName} est revenu·e du rôle de {fromRole} au rôle de {toRole} à la {libraryName}.",
+    es: "{actorName} volvió del rol de {fromRole} al rol de {toRole} en la {libraryName}.",
+    en: "{actorName} stepped back from the {fromRole} role to the {toRole} role at {libraryName}.",
+    it: "{actorName} è tornato/a dal ruolo di {fromRole} al ruolo di {toRole} presso {libraryName}.",
+    de: "{actorName} ist von der Rolle {fromRole} zur Rolle {toRole} bei {libraryName} zurückgekehrt.",
+    ca: "{actorName} ha tornat del rol de {fromRole} al rol de {toRole} a la {libraryName}.",
+    eo: "{actorName} revenis de la rolo {fromRole} al la rolo {toRole} ĉe {libraryName}."
+  },
+  "team.removal_requested.admin.sub": {
+    "pt-BR": "Pedido de retirada — {role}",
+    fr: "Demande de retrait — {role}",
+    es: "Solicitud de retiro — {role}",
+    en: "Removal request — {role}",
+    it: "Richiesta di rimozione — {role}",
+    de: "Antrag auf Entzug — {role}",
+    ca: "Sol·licitud de retirada — {role}",
+    eo: "Forigpeto — {role}"
+  },
+  "team.removal_requested.admin.intro": {
+    "pt-BR": "{actorName} solicitou a retirada de {targetName} do papel de {role} na {libraryName}. Prazo de carência: 7 dias.",
+    fr: "{actorName} a demandé le retrait de {targetName} du rôle de {role} à la {libraryName}. Délai de carence : 7 jours.",
+    es: "{actorName} solicitó el retiro de {targetName} del rol de {role} en la {libraryName}. Plazo de gracia: 7 días.",
+    en: "{actorName} requested the removal of {targetName} from the {role} role at {libraryName}. Grace period: 7 days.",
+    it: "{actorName} ha richiesto la rimozione di {targetName} dal ruolo di {role} presso {libraryName}. Periodo di tolleranza: 7 giorni.",
+    de: "{actorName} hat den Entzug der Rolle {role} von {targetName} bei {libraryName} beantragt. Kulanzfrist: 7 Tage.",
+    ca: "{actorName} ha sol·licitat la retirada de {targetName} del rol de {role} a la {libraryName}. Termini de gràcia: 7 dies.",
+    eo: "{actorName} petis la forigon de {targetName} el la rolo {role} ĉe {libraryName}. Prokrastperiodo: 7 tagoj."
+  },
+  "team.removal_cancelled.admin.sub": {
+    "pt-BR": "Pedido de retirada anulado — {role}",
+    fr: "Demande de retrait annulée — {role}",
+    es: "Solicitud de retiro anulada — {role}",
+    en: "Removal request cancelled — {role}",
+    it: "Richiesta di rimozione annullata — {role}",
+    de: "Antrag auf Entzug aufgehoben — {role}",
+    ca: "Sol·licitud de retirada anul·lada — {role}",
+    eo: "Forigpeto nuligita — {role}"
+  },
+  "team.removal_cancelled.admin.intro": {
+    "pt-BR": "{cancellerName} anulou o pedido de retirada de {targetName} do papel de {role} na {libraryName}. {targetName} recupera todos os direitos imediatamente.",
+    fr: "{cancellerName} a annulé la demande de retrait de {targetName} du rôle de {role} à la {libraryName}. {targetName} recouvre tous ses droits immédiatement.",
+    es: "{cancellerName} anuló la solicitud de retiro de {targetName} del rol de {role} en la {libraryName}. {targetName} recupera todos sus derechos de inmediato.",
+    en: "{cancellerName} cancelled the removal request for {targetName} from the {role} role at {libraryName}. {targetName} regains all rights immediately.",
+    it: "{cancellerName} ha annullato la richiesta di rimozione di {targetName} dal ruolo di {role} presso {libraryName}. {targetName} riacquista tutti i diritti immediatamente.",
+    de: "{cancellerName} hat den Antrag auf Entzug der Rolle {role} von {targetName} bei {libraryName} aufgehoben. {targetName} erhält alle Rechte sofort zurück.",
+    ca: "{cancellerName} ha anul·lat la sol·licitud de retirada de {targetName} del rol de {role} a la {libraryName}. {targetName} recupera tots els drets immediatament.",
+    eo: "{cancellerName} nuligis la forigpeton de {targetName} el la rolo {role} ĉe {libraryName}. {targetName} tuj reakiras ĉiujn rajtojn."
+  },
+  "team.removal_completed.admin.sub": {
+    "pt-BR": "Retirada finalizada — {role}",
+    fr: "Retrait finalisé — {role}",
+    es: "Retiro finalizado — {role}",
+    en: "Removal completed — {role}",
+    it: "Rimozione completata — {role}",
+    de: "Entzug abgeschlossen — {role}",
+    ca: "Retirada finalitzada — {role}",
+    eo: "Forigo finita — {role}"
+  },
+  "team.removal_completed.admin.intro": {
+    "pt-BR": "O prazo de 7 dias decorreu sem anulação. {targetName} foi retirad-o-a-e do papel de {role} na {libraryName}.",
+    fr: "Le délai de 7 jours s’est écoulé sans annulation. {targetName} a été retiré·e du rôle de {role} à la {libraryName}.",
+    es: "El plazo de 7 días transcurrió sin anulación. {targetName} fue retirad(o/a/e) del rol de {role} en la {libraryName}.",
+    en: "The 7-day period elapsed without cancellation. {targetName} has been removed from the {role} role at {libraryName}.",
+    it: "Il termine di 7 giorni è trascorso senza annullamento. {targetName} è stato/a rimosso/a dal ruolo di {role} presso {libraryName}.",
+    de: "Die 7-Tage-Frist ist ohne Aufhebung verstrichen. {targetName} wurde von der Rolle {role} bei {libraryName} entbunden.",
+    ca: "El termini de 7 dies ha transcorregut sense anul·lació. {targetName} ha estat retirat(a/e) del rol de {role} a la {libraryName}.",
+    eo: "La 7-taga periodo pasis sen nuligo. {targetName} estis forigita el la rolo {role} ĉe {libraryName}."
+  },
+  "team.suspended.admin.sub": {
+    "pt-BR": "Suspensão imediata — {role}",
+    fr: "Suspension immédiate — {role}",
+    es: "Suspensión inmediata — {role}",
+    en: "Immediate suspension — {role}",
+    it: "Sospensione immediata — {role}",
+    de: "Sofortige Aussetzung — {role}",
+    ca: "Suspensió immediata — {role}",
+    eo: "Tuja suspendo — {role}"
+  },
+  "team.suspended.admin.intro": {
+    "pt-BR": "{actorName} suspendeu os direitos de {role} de {targetName} na {libraryName} por medida cautelar.",
+    fr: "{actorName} a suspendu les droits de {role} de {targetName} à la {libraryName} par mesure conservatoire.",
+    es: "{actorName} suspendió los derechos de {role} de {targetName} en la {libraryName} como medida cautelar.",
+    en: "{actorName} suspended {targetName}'s {role} rights at {libraryName} as a precautionary measure.",
+    it: "{actorName} ha sospeso i diritti di {role} di {targetName} presso {libraryName} a titolo cautelare.",
+    de: "{actorName} hat die {role}-Rechte von {targetName} bei {libraryName} vorsorglich ausgesetzt.",
+    ca: "{actorName} ha suspès els drets de {role} de {targetName} a la {libraryName} com a mesura cautelar.",
+    eo: "{actorName} suspendis la {role}-rajtojn de {targetName} ĉe {libraryName} kiel antaŭzorgan rimedon."
+  },
+  "team.unsuspended.admin.sub": {
+    "pt-BR": "Levantamento de suspensão — {role}",
+    fr: "Levée de suspension — {role}",
+    es: "Levantamiento de suspensión — {role}",
+    en: "Suspension lifted — {role}",
+    it: "Revoca della sospensione — {role}",
+    de: "Aufhebung der Aussetzung — {role}",
+    ca: "Aixecament de la suspensió — {role}",
+    eo: "Nuligo de suspendo — {role}"
+  },
+  "team.unsuspended.admin.intro": {
+    "pt-BR": "{actorName} levantou a suspensão dos direitos de {role} de {targetName} na {libraryName}. Acessos restaurados.",
+    fr: "{actorName} a levé la suspension des droits de {role} de {targetName} à la {libraryName}. Accès restaurés.",
+    es: "{actorName} levantó la suspensión de los derechos de {role} de {targetName} en la {libraryName}. Accesos restaurados.",
+    en: "{actorName} lifted the suspension of {targetName}'s {role} rights at {libraryName}. Access restored.",
+    it: "{actorName} ha revocato la sospensione dei diritti di {role} di {targetName} presso {libraryName}. Accessi ripristinati.",
+    de: "{actorName} hat die Aussetzung der {role}-Rechte von {targetName} bei {libraryName} aufgehoben. Zugänge wiederhergestellt.",
+    ca: "{actorName} ha aixecat la suspensió dels drets de {role} de {targetName} a la {libraryName}. Accessos restaurats.",
+    eo: "{actorName} nuligis la suspendon de la {role}-rajtoj de {targetName} ĉe {libraryName}. Aliroj restarigitaj."
+  },
+  "team.inactive_warning_7d.admin.sub": {
+    "pt-BR": "Aviso de inatividade — 7 dias antes da passagem para inativo",
+    fr: "Avertissement d'inactivité — 7 jours avant le passage en inactif",
+    es: "Aviso de inactividad — 7 días antes del paso a inactivo",
+    en: "Inactivity warning — 7 days before becoming inactive",
+    it: "Avviso di inattività — 7 giorni prima del passaggio a inattivo",
+    de: "Inaktivitätswarnung — 7 Tage vor dem Wechsel zu inaktiv",
+    ca: "Avís d'inactivitat — 7 dies abans del pas a inactiu",
+    eo: "Averto pri neaktiveco — 7 tagoj antaŭ la ŝanĝo al neaktiva"
+  },
+  "team.inactive_warning_7d.admin.intro": {
+    "pt-BR": "{targetName} está prestes a passar para inativo (papel de {role}) na {libraryName} em {deadlineDate} se não se conectar.",
+    fr: "{targetName} est sur le point de passer en inactif (rôle de {role}) à la {libraryName} le {deadlineDate} en l'absence de connexion.",
+    es: "{targetName} está a punto de pasar a inactivo (rol de {role}) en la {libraryName} el {deadlineDate} si no se conecta.",
+    en: "{targetName} is about to become inactive ({role} role) at {libraryName} on {deadlineDate} unless they log in.",
+    it: "{targetName} sta per passare a inattivo (ruolo di {role}) presso {libraryName} il {deadlineDate} se non si connette.",
+    de: "{targetName} wird bei {libraryName} am {deadlineDate} auf inaktiv gesetzt ({role}-Rolle), falls keine Anmeldung erfolgt.",
+    ca: "{targetName} està a punt de passar a inactiu (rol de {role}) a la {libraryName} el {deadlineDate} si no es connecta.",
+    eo: "{targetName} baldaŭ fariĝos neaktiva (rolo {role}) ĉe {libraryName} je {deadlineDate}, se ri ne ensalutos."
+  },
+  "team.inactive_completed.admin.sub": {
+    "pt-BR": "Passagem para inativo confirmada — {role}",
+    fr: "Passage en inactif confirmé — {role}",
+    es: "Paso a inactivo confirmado — {role}",
+    en: "Transition to inactive confirmed — {role}",
+    it: "Passaggio a inattivo confermato — {role}",
+    de: "Wechsel zu inaktiv bestätigt — {role}",
+    ca: "Pas a inactiu confirmat — {role}",
+    eo: "Ŝanĝo al neaktiva konfirmita — {role}"
+  },
+  "team.inactive_completed.admin.intro": {
+    "pt-BR": "{targetName} passou para inativo após 9 meses sem conexão (papel de {role}) na {libraryName}. Acessos fechados.",
+    fr: "{targetName} est passé·e en inactif après 9 mois sans connexion (rôle de {role}) à la {libraryName}. Accès fermés.",
+    es: "{targetName} pasó a inactivo tras 9 meses sin conexión (rol de {role}) en la {libraryName}. Accesos cerrados.",
+    en: "{targetName} became inactive after 9 months without logging in ({role} role) at {libraryName}. Access closed.",
+    it: "{targetName} è passato/a a inattivo dopo 9 mesi senza connessione (ruolo di {role}) presso {libraryName}. Accessi chiusi.",
+    de: "{targetName} wurde nach 9 Monaten ohne Anmeldung auf inaktiv gesetzt ({role}-Rolle) bei {libraryName}. Zugänge geschlossen.",
+    ca: "{targetName} ha passat a inactiu després de 9 mesos sense connexió (rol de {role}) a la {libraryName}. Accessos tancats.",
+    eo: "{targetName} fariĝis neaktiva post 9 monatoj sen ensaluto (rolo {role}) ĉe {libraryName}. Aliroj fermitaj."
+  },
+
   // ===== Welcome — mail de bienvenue post-inscription (welcome.*) ============
   // Section utilisée par register/index.ts > buildUserMail()
   // Cas standard : inscription rattachée à une biblio existante
@@ -2930,6 +3112,107 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     de: "Vorgeschlagen von",
     ca: "Proposada per",
     eo: "Proponita de"
+  },
+  // ===== TM-B (#153.B) — libelles de details mails admin team.* =====
+  "l.target": {
+    "pt-BR": "Pessoa concernida",
+    fr: "Personne concernée",
+    es: "Persona concernida",
+    en: "Person concerned",
+    it: "Persona interessata",
+    de: "Betroffene Person",
+    ca: "Persona concernida",
+    eo: "Koncernata persono"
+  },
+  "l.actor": {
+    "pt-BR": "Autor-a-e da ação",
+    fr: "Auteur·rice de l'action",
+    es: "Autor(a/e) de la acción",
+    en: "Action taken by",
+    it: "Autore/a dell'azione",
+    de: "Ausführende Person",
+    ca: "Autor(a/e) de l'acció",
+    eo: "Aŭtoro de la ago"
+  },
+  "l.cancelledBy": {
+    "pt-BR": "Anulado por",
+    fr: "Annulé par",
+    es: "Anulado por",
+    en: "Cancelled by",
+    it: "Annullato da",
+    de: "Aufgehoben von",
+    ca: "Anul·lat per",
+    eo: "Nuligita de"
+  },
+  "l.library": {
+    "pt-BR": "Biblioteca",
+    fr: "Bibliothèque",
+    es: "Biblioteca",
+    en: "Library",
+    it: "Biblioteca",
+    de: "Bibliothek",
+    ca: "Biblioteca",
+    eo: "Biblioteko"
+  },
+  "l.role": {
+    "pt-BR": "Papel",
+    fr: "Rôle",
+    es: "Rol",
+    en: "Role",
+    it: "Ruolo",
+    de: "Rolle",
+    ca: "Rol",
+    eo: "Rolo"
+  },
+  "l.roleConcerned": {
+    "pt-BR": "Papel concernido",
+    fr: "Rôle concerné",
+    es: "Rol concernido",
+    en: "Role concerned",
+    it: "Ruolo interessato",
+    de: "Betroffene Rolle",
+    ca: "Rol concernit",
+    eo: "Koncernata rolo"
+  },
+  "l.roleRemoved": {
+    "pt-BR": "Papel retirado",
+    fr: "Rôle retiré",
+    es: "Rol retirado",
+    en: "Role removed",
+    it: "Ruolo rimosso",
+    de: "Entzogene Rolle",
+    ca: "Rol retirat",
+    eo: "Forigita rolo"
+  },
+  "l.roleFrom": {
+    "pt-BR": "Papel anterior",
+    fr: "Ancien rôle",
+    es: "Rol anterior",
+    en: "Previous role",
+    it: "Ruolo precedente",
+    de: "Bisherige Rolle",
+    ca: "Rol anterior",
+    eo: "Antaŭa rolo"
+  },
+  "l.roleTo": {
+    "pt-BR": "Novo papel",
+    fr: "Nouveau rôle",
+    es: "Nuevo rol",
+    en: "New role",
+    it: "Nuovo ruolo",
+    de: "Neue Rolle",
+    ca: "Nou rol",
+    eo: "Nova rolo"
+  },
+  "l.gracePeriodEnd": {
+    "pt-BR": "Fim do prazo de carência",
+    fr: "Fin du délai de carence",
+    es: "Fin del plazo de gracia",
+    en: "End of grace period",
+    it: "Fine del periodo di tolleranza",
+    de: "Ende der Kulanzfrist",
+    ca: "Fi del termini de gràcia",
+    eo: "Fino de la prokrastperiodo"
   },
   "network.cooptation_voted.cta": {
     "pt-BR": "Acessar a proposta e votar",
