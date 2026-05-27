@@ -2995,5 +2995,10 @@
   "catalog.table.jumpTop": "Iri al la supro",
   "catalog.table.jumpBottom": "Iri al la fino",
   "scroll.toTop": "Iri al la supro de la paĝo",
-  "scroll.toBottom": "Iri al la fino de la paĝo"
+  "scroll.toBottom": "Iri al la fino de la paĝo",
+  "panel.stage.unknown": "Nekonata etapo",
+  "panel.loan.status.devolvido": "Redonita",
+  "reservation.stage.ativa": "Aktiva",
+  "reservation.stage.retirada_no_show": "Ne retirita",
+  "consultation.stage.ativa": "Aktiva"
 }

@@ -2995,5 +2995,10 @@
   "catalog.table.jumpTop": "Ir arriba",
   "catalog.table.jumpBottom": "Ir abajo",
   "scroll.toTop": "Ir al inicio de la página",
-  "scroll.toBottom": "Ir al final de la página"
+  "scroll.toBottom": "Ir al final de la página",
+  "panel.stage.unknown": "Etapa desconocida",
+  "panel.loan.status.devolvido": "Devuelto",
+  "reservation.stage.ativa": "En curso",
+  "reservation.stage.retirada_no_show": "No retirada",
+  "consultation.stage.ativa": "En curso"
 }

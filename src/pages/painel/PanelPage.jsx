@@ -137,6 +137,16 @@ export default function PanelPage() {
   const isCoordOrAdmin = role === 'coordenador' || role === 'administrador';
 
   // i18n-aware workflow labels
+  // PATCH EA-13 (27/05/2026) : exhaustivité garantie sur reservas.
+  // Valeurs couvertes (CHECK reserva_linhas_v2_item_status_chk + workflow_stage) :
+  //   item_status : ativa | convertida_em_emprestimo | cancelada_leitor |
+  //                 cancelada_biblioteca | expirada | liberada_para_circulacao
+  //   workflow_stage : solicitada | em_preparacao | retirada_a_combinar |
+  //                 retirada_agendada | re-retirada_agendada (fossile) |
+  //                 pronta_para_retirada | retirada_efetivada |
+  //                 retirada_no_show | nao_retirada (alias) |
+  //                 liberada_para_circulacao | cancelada_* | expirada
+  // Toute affleurance non couverte tombe sur panel.stage.unknown (fallback i18n).
   const WORKFLOW_LABELS = useMemo(() => ({
     solicitada: t({ id: 'reservation.stage.solicitada' }), em_preparacao: t({ id: 'reservation.stage.em_preparacao' }),
     pronta_para_retirada: t({ id: 'reservation.stage.pronta_para_retirada' }),
@@ -147,13 +157,23 @@ export default function PanelPage() {
     nao_retirada: t({ id: 'reservation.stage.nao_retirada' }),
     // PATCH 07/05/2026 : retirada_no_show est le nom canonique (phase 1 spec).
     // 'nao_retirada' reste comme alias historique pour les anciennes données.
-    retirada_no_show: t({ id: 'reservation.stage.nao_retirada' }),
+    retirada_no_show: t({ id: 'reservation.stage.retirada_no_show' }),
     liberada_para_circulacao: t({ id: 'reservation.stage.liberada_para_circulacao' }),
     retirada_efetivada: t({ id: 'reservation.stage.retirada_efetivada' }),
     cancelada_leitor: t({ id: 'reservation.stage.cancelada_leitor' }),
     cancelada_biblioteca: t({ id: 'reservation.stage.cancelada_biblioteca' }),
     expirada: t({ id: 'reservation.stage.expirada' }),
+    // PATCH EA-13 (27/05/2026) : couverture des valeurs item_status susceptibles
+    // d'affleurer via le fallback historique (cf. lignes 1706, 1852, 2856).
+    ativa: t({ id: 'reservation.stage.ativa' }),
+    convertida_em_emprestimo: t({ id: 'reservation.stage.convertida_em_emprestimo' }),
   }), [t]);
+  // PATCH EA-13 (27/05/2026) : exhaustivité garantie sur consultas.
+  // Valeurs couvertes (CHECK consulta_linhas_v2_item_status_chk + workflow_stage) :
+  //   item_status : ativa | consultada | cancelada_leitor |
+  //                 cancelada_biblioteca | expirada
+  //   workflow_stage : solicitada | em_preparacao | consulta_agendada |
+  //                 consulta_realizada | nao_compareceu | cancelada_* | expirada
   const CONSULT_WORKFLOW = useMemo(() => ({
     solicitada: t({ id: 'reservation.stage.solicitada' }), em_preparacao: t({ id: 'reservation.stage.em_preparacao' }),
     consulta_agendada: t({ id: 'panel.workflow.scheduled' }), consulta_realizada: t({ id: 'panel.workflow.done' }),
@@ -161,6 +181,21 @@ export default function PanelPage() {
     cancelada_leitor: t({ id: 'reservation.stage.cancelada_leitor' }),
     cancelada_biblioteca: t({ id: 'reservation.stage.cancelada_biblioteca' }),
     expirada: t({ id: 'panel.workflow.expired' }),
+    // PATCH EA-13 (27/05/2026) : couverture des valeurs item_status susceptibles
+    // d'affleurer via le fallback historique (cf. lignes 1852, 2856).
+    ativa: t({ id: 'consultation.stage.ativa' }),
+    consultada: t({ id: 'consultation.stage.consultada' }),
+  }), [t]);
+  // PATCH EA-13 (27/05/2026) : dico pour emprestimos.status_global (alias
+  // emprestimo_status dans les vues api.emprestimo_itens_*_ui).
+  // Valeurs observées en base : aberto, devolvido, encerrado.
+  // parcialmente_devolvido ajouté par sécurité (clé i18n présente sur 8 langues).
+  // Tout autre valeur tombera sur panel.stage.unknown via le fallback du JSX.
+  const EMPRESTIMO_STATUS_LABELS = useMemo(() => ({
+    aberto: t({ id: 'panel.loan.status.aberto' }),
+    devolvido: t({ id: 'panel.loan.status.devolvido' }),
+    encerrado: t({ id: 'panel.loan.status.encerrado' }),
+    parcialmente_devolvido: t({ id: 'panel.loan.status.parcialmente_devolvido' }),
   }), [t]);
   // PATCH 07/05/2026 : renumérotation alignée sur spec section 4.
   // Le grisage des transitions illégales est calculé en runtime via canTransition()
@@ -1614,7 +1649,7 @@ export default function PanelPage() {
                       const allValid = selectedStages.every(from => canTransition(from, s.value, actorRole));
                       const distinctStages = [...new Set(selectedStages)];
                       const stageList = distinctStages
-                        .map(st => WORKFLOW_LABELS[st] || st)
+                        .map(st => WORKFLOW_LABELS[st] || t({ id: 'panel.stage.unknown' }))
                         .join(', ');
                       const reasonHint = allValid
                         ? undefined
@@ -1645,6 +1680,7 @@ export default function PanelPage() {
                 onSelect={setResStageFilter}
                 labels={WORKFLOW_LABELS}
                 allLabel={t({ id: 'panel.stageFilter.all' })}
+                unknownLabel={t({ id: 'panel.stage.unknown' })}
               />
               {actionMsg && <p className="ab-painel-msg">{actionMsg}</p>}
               {sortRes.sortedItems.length === 0 ? (
@@ -1703,7 +1739,7 @@ export default function PanelPage() {
                             <td><Link to={`/livro/${r.book_id}`}>{r.titulo || '—'}</Link></td>
                             <td>{r.bib_ref}</td>
                             <td>{r.rotulo || '—'}</td>
-                            <td><span className="ab-painel-stage" data-stage={r.workflow_stage_effective}>{WORKFLOW_LABELS[r.workflow_stage_effective] || r.item_status || '—'}</span></td>
+                            <td><span className="ab-painel-stage" data-stage={r.workflow_stage_effective}>{WORKFLOW_LABELS[r.workflow_stage_effective] || WORKFLOW_LABELS[r.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
                             <td>{fmtD(r.pickup_scheduled_for)}</td>
                             <td>{fmtD(r.expires_at)}</td>
                             {/* Colonne Negociação : badge d'état */}
@@ -1816,6 +1852,7 @@ export default function PanelPage() {
                 onSelect={setConStageFilter}
                 labels={CONSULT_WORKFLOW}
                 allLabel={t({ id: 'panel.stageFilter.all' })}
+                unknownLabel={t({ id: 'panel.stage.unknown' })}
               />
               {sortCon.sortedItems.length === 0 ? (
                 <EmptyState message={t({
@@ -1849,7 +1886,7 @@ export default function PanelPage() {
                         </td>
                         <td><Link to={`/livro/${c.book_id}`}>{c.titulo || '—'}</Link></td>
                         <td>{c.bib_ref}</td>
-                        <td><span className="ab-painel-stage" data-stage={c.workflow_stage_effective}>{CONSULT_WORKFLOW[c.workflow_stage_effective] || c.item_status || '—'}</span></td>
+                        <td><span className="ab-painel-stage" data-stage={c.workflow_stage_effective}>{CONSULT_WORKFLOW[c.workflow_stage_effective] || CONSULT_WORKFLOW[c.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
                         <td>
                           {c.consultation_starts_at ? (
                             <>
@@ -2001,7 +2038,7 @@ export default function PanelPage() {
                   <div key={i} className="ab-painel-lote">
                     <div className="ab-painel-lote__head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
                       <div>
-                        <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {g.emprestimo_status}
+                        <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {EMPRESTIMO_STATUS_LABELS[g.emprestimo_status] || t({ id: 'panel.stage.unknown' })}
                       </div>
                       <div style={{ display: 'flex', gap: 6 }}>
                         {hasOpenItem && (
@@ -2050,7 +2087,7 @@ export default function PanelPage() {
               {readerProfile && (
                 <div className="ab-painel-reader-card">
                   <h3>{readerProfile.first_name} {readerProfile.last_name}</h3>
-                  <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: readerProfile.gender}) : '—'}</p>
+                  <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'}</p>
                   <p>{t({id:'panel.reader.registered'})}: {fmtD(readerProfile.created_at)} · {t({id:'panel.reader.restricted'})}: {readerProfile.is_restricted ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})} · {t({id:'panel.reader.passwordPending'})}: {readerProfile.must_change_password ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})}</p>
 
                   {/* Restriction status */}
@@ -2344,7 +2381,7 @@ export default function PanelPage() {
                                         <div className="truncate">{r.titulo || r.bib_ref || '—'}</div>
                                       </td>
                                       <td data-label={t({ id: 'panel.history.col.status' })}>
-                                        {t({ id: `reservation.stage.${r.item_status}`, defaultMessage: r.item_status })}
+                                        {t({ id: `reservation.stage.${r.item_status}`, defaultMessage: t({ id: 'panel.stage.unknown' }) })}
                                       </td>
                                       <td data-label={t({ id: 'panel.history.col.reader' })}>
                                         {r.user_name || r.user_email || r.user_public_id || '—'}
@@ -2415,7 +2452,7 @@ export default function PanelPage() {
                                           <div className="truncate">{c.titulo || c.bib_ref || '—'}</div>
                                         </td>
                                         <td data-label={t({ id: 'panel.history.col.status' })}>
-                                          {t({ id: `consultation.stage.${c.item_status}`, defaultMessage: c.item_status })}
+                                          {t({ id: `consultation.stage.${c.item_status}`, defaultMessage: t({ id: 'panel.stage.unknown' }) })}
                                         </td>
                                         <td data-label={t({ id: 'panel.history.col.reader' })}>
                                           {c.user_name || c.user_email || c.user_public_id || '—'}
@@ -2486,7 +2523,9 @@ export default function PanelPage() {
                                       </td>
                                       <td data-label={t({ id: 'panel.history.col.type' })}>
                                         <span className="ab-painel-history-typepill" data-type={e.loan_type}>
-                                          {t({ id: `panel.history.type.${e.loan_type}`, defaultMessage: e.loan_type })}
+                                          {/* PATCH EA-13 (27/05/2026) : defaultMessage en i18n
+                                              au lieu de e.loan_type brut. Valeurs connues : groupe, uni. */}
+                                          {t({ id: `panel.history.type.${e.loan_type}`, defaultMessage: t({ id: 'panel.stage.unknown' }) })}
                                           {e.items_count > 1 && ` (${e.items_count})`}
                                         </span>
                                       </td>
@@ -2833,7 +2872,7 @@ export default function PanelPage() {
 // Audit UX 25/05/2026 (P3) : rangee de pills de filtre par etape de workflow.
 // Modele visuel : .ab-painel-history-pill (onglet Historique). Logique
 // compteur : membershipFilter (onglet Contribuicoes).
-function StageFilterBar({ counts, current, onSelect, labels, allLabel }) {
+function StageFilterBar({ counts, current, onSelect, labels, allLabel, unknownLabel }) {
   const total = [...counts.values()].reduce((a, b) => a + b, 0);
   return (
     <div className="ab-painel-stage-filter">
@@ -2853,7 +2892,7 @@ function StageFilterBar({ counts, current, onSelect, labels, allLabel }) {
           onClick={() => onSelect(stage)}
           aria-pressed={current === stage}
         >
-          {(labels && labels[stage]) || stage} ({n})
+          {(labels && labels[stage]) || unknownLabel || stage} ({n})
         </button>
       ))}
     </div>
