@@ -7,6 +7,7 @@
 > session dédiée.
 
 **Date d'ouverture :** 24 mai 2026
+**Dernière mise à jour :** 27 mai 2026 (bilan de clôture en §11)
 **Document source :** `AUDIT_153_contenus_mails_2026-05-23.md` (passes A, B, C, D — complet)
 **Périmètre :** les 8 Edge Functions qui envoient effectivement des courriels.
 **Emplacement cible :** `docs/decisions/`
@@ -260,13 +261,13 @@ attendre légitimement ce mail.
 
 ## 3. Les 5 chantiers — vue d'ensemble
 
-| Chantier | Intitulé | Constats couverts | Sévérité | Ordre |
-|---|---|---|---|---|
-| **A** | Doublons et mauvais routage de notification lecteur·rice | TR-1, TR-2, TR-8 | Haute (impact lecteur·rice direct) | 1 |
-| **B** | Internationalisation des mails internes | TR-4, TM-B, TM-C | Moyenne-haute | 2 |
-| **C** | Logos de bibliothèques résolus depuis le contexte | TR-6.2b | Moyenne (doctrinale) | 3 |
-| **D** | Wording des mails de statut de réservation | TR-3 | Moyenne | 4 |
-| **E** | Lot de cohérence transverse | TR-5, TR-6.1, TR-6.3, NW-A, NW-B, NW-C, LP-C | Faible à moyenne | 5 |
+| Chantier | Intitulé | Constats couverts | Sévérité | Ordre | État (27/05/2026) |
+|---|---|---|---|---|---|
+| **A** | Doublons et mauvais routage de notification lecteur·rice | TR-1, TR-2, TR-8 | Haute (impact lecteur·rice direct) | 1 | ✅ bouclé (25/05) |
+| **B** | Internationalisation des mails internes | TR-4, TM-B, TM-C | Moyenne-haute | 2 | 🟠 ouvert |
+| **C** | Logos de bibliothèques résolus depuis le contexte | TR-6.2b | Moyenne (doctrinale) | 3 | ✅ bouclé (27/05) |
+| **D** | Wording des mails de statut de réservation | TR-3 | Moyenne | 4 | ✅ bouclé (27/05, D-1 et D-2) |
+| **E** | Lot de cohérence transverse | TR-5, TR-6.1, TR-6.3, NW-A, NW-B, NW-C, LP-C | Faible à moyenne | 5 | ✅ clos sur le code (27/05) ; 2 détails de finition tracés en §11 |
 
 **Couverture.** Les 15 constats de l'audit sont tous affectés. Les 6
 non-constats (LP-A, LP-B, TR-6.2a, TR-7, TR-9, revue i18n) ne donnent lieu à
@@ -834,25 +835,25 @@ Rappel des règles du projet qui s'appliquent à l'ensemble du programme :
 
 État de prise en charge des 15 constats de l'audit #153 :
 
-| Constat | Sévérité (audit) | Chantier | Décision liée |
-|---|---|---|---|
-| TR-1 | Faible | A | — |
-| TR-2 | À qualifier | A | D-1 |
-| TR-3 | Moyenne | D | — |
-| TR-4 | Moyenne | B | — |
-| TR-5 | Faible | E | — |
-| TR-6.1 | Moyenne (composante) | E | — |
-| TR-6.2b | Moyenne, doctrinale | C | — |
-| TR-6.3 | Moyenne (composante) | E | — |
-| TR-8 | À qualifier | A | D-2 |
-| TM-A | Moyenne | B | D-0 ; amendement spec (acté) |
-| TM-B | Moyenne-haute | B | — |
-| TM-C | Faible | B | — |
-| TM-D | Faible | B | D-0 ; code à aligner sur la spec |
-| NW-A | Faible | E | — |
-| NW-B | Moyenne | E | — |
-| NW-C | Faible — à confirmer | E | — |
-| LP-C | Faible | E | — |
+| Constat | Sévérité (audit) | Chantier | Décision liée | État (27/05/2026) |
+|---|---|---|---|---|
+| TR-1 | Faible | A | — | ✅ traité (25/05) |
+| TR-2 | À qualifier | A | D-1 | ✅ traité (25/05) |
+| TR-3 | Moyenne | D | — | ✅ traité (27/05, D-1 et D-2) |
+| TR-4 | Moyenne | B | — | 🟠 ouvert |
+| TR-5 | Faible | E | — | ✅ traité (26/05) |
+| TR-6.1 | Moyenne (composante) | E | — | ✅ traité (27/05) |
+| TR-6.2b | Moyenne, doctrinale | C | — | ✅ traité (27/05) |
+| TR-6.3 | Moyenne (composante) | E | — | ✅ traité (27/05) |
+| TR-8 | À qualifier | A | D-2 | ✅ traité (25/05) |
+| TM-A | Moyenne | B | D-0 ; amendement spec (acté) | 🟠 ouvert |
+| TM-B | Moyenne-haute | B | — | 🟠 ouvert |
+| TM-C | Faible | B | — | 🟠 ouvert |
+| TM-D | Faible | B | D-0 ; code à aligner sur la spec | 🟠 ouvert |
+| NW-A | Faible | E | — | ✅ traité (27/05) |
+| NW-B | Moyenne | E | — | ✅ traité (26/05) |
+| NW-C | Faible — à confirmer | E | — | ✅ traité (27/05, invariant confirmé) |
+| LP-C | Faible | E | — | ✅ traité (27/05, requalifié et corrigé) |
 
 ---
 
@@ -899,6 +900,130 @@ rappelés ici pour qu'aucune session future ne les rouvre par erreur :
 - TM-D est **clarifié** : la spec nomme déjà correctement `team.inactive_auto` ;
   c'est le code qui diverge. L'alignement se fait dans le sens code → spec, dans
   le chantier B.
+
+---
+
+## 11. Bilan de clôture (27 mai 2026)
+
+**État global.** Quatre des cinq chantiers du méga-item #153 sont bouclés : A
+(25/05), C, D et E (27/05). Treize des quinze constats de l'audit sont traités.
+Le chantier B (i18n des mails internes — TR-4, TM-A, TM-B, TM-C, TM-D) reste
+ouvert dans son intégralité. Deux détails de finition, identifiés en cours de
+chantier, sont à traiter hors du périmètre strict de B.
+
+### 11.1 — Séquence d'exécution réelle
+
+L'ordre théorique 1→5 du §6 n'a pas été suivi à la lettre. Les sessions ont
+exécuté A, puis E partiellement (constats NW-B et TR-5 traités en première
+passe pour limiter la visibilité du défaut), puis C et D en parallèle, et enfin
+le reste de E (TR-6.1, TR-6.3, NW-A, NW-C, LP-C) en clôture. L'ordre d'exécution
+réel a été : A → NW-B → TR-5 → C → D-1 → D-2 → TR-6.x sur les EF concernées →
+NW-A → NW-C → LP-C. La règle de repli logo fixée par C a bien précédé son
+application par E (TR-6.1), comme prévu §6. Aucune dépendance bloquante n'a
+été contredite par cet ordre.
+
+### 11.2 — Détails de chantier C
+
+Bouclé le 27/05 en deux gestes. Côté base, une migration ajoute la colonne
+`libraries.logo_url` ; elle est alimentée par bibliothèque depuis son contexte.
+Côté Edge Function, `register` lit désormais ce `logo_url` depuis la base au
+lieu de la table en dur, et le restitue dans le rendu des mails. Le logo réseau
+AnarBib reste légitimement codé en dur (URL Supabase Storage du paquet 25.10).
+Test en production confirmé sur BLMF : le mail affiche le logo résolu depuis la
+base. La dette ouverte du §4.C (« renseigner `logo_url` pour toute biblio
+créée par la suite ») est désormais matérialisée par la colonne et reste
+ouverte comme procédure d'onboarding.
+
+### 11.3 — Détails de chantier D
+
+Bouclé le 27/05 en deux volets séquencés. D-1 : corrections de données.
+Le motif d'annulation est porté par `final_reason = 'cancelled_by_library'`
+sur `reserva_item_workflow_v2`, pas par le stage transitoire ; la fonction
+helper a été corrigée en conséquence. La date d'échéance de l'emprunt est
+ajoutée au mail `res.converted` (lecteur·rice comme staff). D-2 : refonte
+du wording. Les quatre clés plates `res.cancelStaff` / `cancelReader` /
+`expired` / `converted` deviennent des familles structurées `.sub` / `.intro` /
+`.adminIntro` — douze clés neuves au total, écrites sur les huit locales en
+registre chaleureux et inclusif, lecteur·rice et staff différenciés.
+Test en production confirmé. **Détail à traiter** : la clé `res.refused` et
+la branche `reserva_v2_recusada` du dispatcher sont du code mort (l'UI n'émet
+plus que `reserva_cancelada_biblioteca`). Voir §11.5.
+
+### 11.4 — Détails de chantier E
+
+Clos sur le volet code le 27/05. Les sept constats ont été traités dans l'ordre
+suivant :
+
+- **NW-B.** Clé i18n `l.executed_at` ajoutée sur les huit locales ; les mails
+  de retrait collectif exécuté n'affichent plus de texte technique.
+- **TR-5.** Sujets en dur `[AnarBib]` remplacés par `[${BRAND_NAME}]` dans
+  `notify-library-request`.
+- **TR-6.1 et TR-6.3.** Examen de toutes les Edge Functions du périmètre logo.
+  Corrections appliquées sur `notify-network-weekly-report` (cascade
+  complétée), `notify-document-permission-request` (cascade + repli texte),
+  `notify-mid-loan-reading` (cascade ; repli déjà correct par construction),
+  `notify-weekly-report` (import mort `LOGO_URL` retiré). `register` et
+  `notify-internal-task` examinées et jugées conformes ; `notify-event` hors
+  périmètre logo direct.
+- **NW-A.** Commentaire correctif dans `network.ts` : les clés
+  `network.vote.favorable` / `opposed` sont des libellés génériques de vote
+  du réseau, volontairement partagés entre cooptation et retrait collectif —
+  pas un emprunt de fortune. Pas de duplication 8 langues, mutualisation
+  assumée et désormais documentée.
+- **NW-C.** Invariant de timing du `SELECT count(*)` documenté en commentaire :
+  l'INSERT du vote précède l'émission de l'événement dans la même transaction
+  de la RPC `fn_*_collective_removal_vote`, la PK (proposal_id, voter_user_id)
+  garantit l'unicité. `isFirstVote = voteCount === 1` est donc fiable par
+  construction.
+- **LP-C.** Le constat tel que formulé par l'audit (« le fan-out vide marque
+  `sent` ») s'est révélé inexact à la lecture du code : `team_notification_outbox`
+  est bien marquée à l'issue du traitement par `handleTeamEvent` /
+  `handleNetworkEvent` — mais le marquage `sent` était appliqué *aussi* aux
+  cas où aucun mail ne part (fan-out vide, event non reconnu). Le constat a été
+  **requalifié** sur le code réel, puis corrigé. Migration ajoutant le statut
+  `'skipped'` au CHECK de `team_notification_outbox`, alignée sur la convention
+  déjà en place pour les outbox de tâches. Helper `markOutboxSkipped` ajouté
+  dans `team.ts` et `network.ts`, choix `sent` / `skipped` selon
+  `recipients_count` et selon la branche événement reconnu / non reconnu.
+  Bilan : la table d'audit cesse de prétendre qu'un mail est parti là où
+  aucun ne l'est. Cas méthodologique notable : sans lecture directe du code
+  réel, la correction aurait été fausse.
+
+### 11.5 — Deux détails à régler hors périmètre B
+
+Deux constats identifiés en cours de chantier et hors périmètre de B restent
+à traiter pour clore intégralement le programme #153 :
+
+1. **Code mort `reserva_v2_recusada` / `res.refused`.** Identifié en #153.D.
+   L'événement `reserva_v2_recusada` n'est plus émis par la base (l'UI
+   n'expose plus que `reserva_cancelada_biblioteca` via la RPC). La branche
+   correspondante dans `dispatch.ts` (`handleReservaV2StatusChange`) et la clé
+   `res.refused` dans `mail-strings.ts` (sur les huit locales) sont du code
+   mort à retirer. Action courte : `dispatch.ts` (retrait du nom dans le
+   tableau `[...].includes(event)`), `reservas.ts` (retrait de la branche),
+   `mail-strings.ts` (suppression de la clé sur les huit locales). À vérifier
+   après par recherche d'occurrences résiduelles.
+
+2. **Dé-duplication de `_shared/` dans `notify-internal-task`.** Identifié en
+   #153.E. L'EF embarque une copie autonome du répertoire `_shared/`,
+   aujourd'hui alignée sur la version centrale, mais la divergence future est
+   garantie sans surveillance. La résorption au profit du module partagé peut
+   être rattachée à #154 (robustesse de la même EF) ou traitée en session
+   propre. Travail non trivial : il faut vérifier que la copie n'embarque
+   aucun fragment légitimement spécifique avant de la supprimer.
+
+Ces deux détails seront traités à part. Tant qu'ils ne sont pas réglés,
+#153.E reste « clos sur le code » sans être *intégralement* clos.
+
+### 11.6 — Acquis méthodologique
+
+L'épisode LP-C — fiche d'audit décrivant un comportement erroné, requalification
+sur lecture du code réel, correction juste — confirme une discipline déjà à
+l'œuvre dans le projet : **on ne corrige pas sur la foi d'une fiche, on lit le
+code que la fiche décrit, et on requalifie si nécessaire**. Cette discipline a
+également joué sur D-1 (le motif d'annulation porté par `final_reason`, pas par
+le stage transitoire). Elle reste à observer pour le chantier B et pour les deux
+détails de §11.5.
 
 ---
 
