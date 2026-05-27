@@ -46,7 +46,11 @@ function resolveEnvBrandName() {
   return (Deno.env.get("NETWORK_BRAND_NAME") || Deno.env.get("BRAND_NAME") || "AnarBib").trim();
 }
 function resolveEnvLogoUrl() {
-  return (Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("LOGO_URL") || "").trim();
+  // #153.E TR-6.3 : cascade alignée sur le jeu de variables du _shared/core/env.ts
+  // central (LOGO_URL, LIBRARY_LOGO_URL, ANARBIB_LOGO_URL, NETWORK_LOGO_URL,
+  // BLMF_LOGO_URL). Divergence d'ordre ASSUMÉE et documentée : cette EF émet le
+  // rapport hebdomadaire du réseau, NETWORK_LOGO_URL est donc lu en priorité.
+  return (Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("LOGO_URL") || Deno.env.get("LIBRARY_LOGO_URL") || Deno.env.get("ANARBIB_LOGO_URL") || Deno.env.get("BLMF_LOGO_URL") || "").trim();
 }
 function resolveEnvFooterText() {
   return (Deno.env.get("NETWORK_FOOTER_TEXT") || Deno.env.get("FOOTER_TEXT") || "Mensagem automática de coordenação do AnarBib.").trim();
