@@ -38,9 +38,15 @@ const BRAND_NAME = firstEnv([
   "BRAND_NAME",
   "ANARBIB_BRAND_NAME"
 ], "AnarBib");
+// #153.E TR-6.3 : cascade alignée sur le jeu de 5 variables du _shared/core/env.ts
+// central. Ordre standard (cette EF n'est pas une EF réseau, pas de priorité
+// particulière à NETWORK_LOGO_URL).
 const LOGO_URL = firstEnv([
   "LOGO_URL",
-  "ANARBIB_LOGO_URL"
+  "LIBRARY_LOGO_URL",
+  "ANARBIB_LOGO_URL",
+  "NETWORK_LOGO_URL",
+  "BLMF_LOGO_URL"
 ], "");
 const FOOTER_TEXT = firstEnv([
   "FOOTER_TEXT",
@@ -225,7 +231,11 @@ function renderEmail(opts) {
         <td style="padding:8px 0;vertical-align:top;color:#f3f4f6;">${esc(item.value)}</td>
       </tr>
     `).join("");
-  const logoHtml = LOGO_URL ? `<div style="margin-bottom:18px;"><img src="${esc(LOGO_URL)}" alt="${esc(BRAND_NAME)}" style="max-width:140px;height:auto;"></div>` : "";
+  // #153.E TR-6.1 : repli logo uniformisé — logo absent => nom de marque en
+  // texte (patron notify-network-weekly-report), et non un bloc vide.
+  const logoHtml = LOGO_URL
+    ? `<div style="margin-bottom:18px;"><img src="${esc(LOGO_URL)}" alt="${esc(BRAND_NAME)}" style="max-width:140px;height:auto;"></div>`
+    : `<div style="margin-bottom:18px;font-size:20px;font-weight:700;color:#ffffff;">${esc(BRAND_NAME)}</div>`;
   const footerHtml = opts.footerHtml ? `<div style="margin-top:22px;color:#d1d5db;font-size:12px;line-height:1.55;">${opts.footerHtml}</div>` : "";
   const html = `<!doctype html>
 <html lang="pt-BR">
