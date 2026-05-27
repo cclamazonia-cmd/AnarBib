@@ -120,7 +120,10 @@ function replyToFromContext(ctx) {
 function logoUrlFromContext(ctx) {
   const explicit = normalizeText(ctx?.logo_url || "");
   if (/^https?:\/\//i.test(explicit)) return explicit;
-  return normalizeText(Deno.env.get("LOGO_URL") || Deno.env.get("ANARBIB_LOGO_URL") || Deno.env.get("NETWORK_LOGO_URL") || "");
+  // #153.E TR-6.3 : cascade alignée sur le jeu de 5 variables du
+  // _shared/core/env.ts central. Ordre standard (EF non réseau). La résolution
+  // depuis ctx.logo_url ci-dessus (logo de la bibliothèque) reste inchangée.
+  return normalizeText(Deno.env.get("LOGO_URL") || Deno.env.get("LIBRARY_LOGO_URL") || Deno.env.get("ANARBIB_LOGO_URL") || Deno.env.get("NETWORK_LOGO_URL") || Deno.env.get("BLMF_LOGO_URL") || "");
 }
 function brandNameFromContext(ctx) {
   return normalizeText(ctx?.library_short_name || ctx?.library_name || Deno.env.get("ANARBIB_BRAND_NAME") || Deno.env.get("NETWORK_BRAND_NAME") || Deno.env.get("BRAND_NAME") || "AnarBib") || "AnarBib";
