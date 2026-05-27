@@ -18,7 +18,6 @@ import {
   ADMIN_EMAIL,
   ADMIN_NAME,
   FOOTER_TEXT,
-  LOGO_URL,
   SENDER_EMAIL,
   SENDER_NAME,
   supabaseAdmin
