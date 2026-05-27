@@ -63,14 +63,22 @@ export async function getReservaWorkflowBundle(id, lineNos) {
 // Le handler handleReservaV2StatusChange lisait le motif depuis reservas_v2.notes
 // — colonne qui contient la note de *création* de la réservation, pas le motif
 // d'annulation. Le motif réel est écrit par la RPC fn_v2_cancel_reserva_linhas_
-// as_biblioteca dans reserva_item_workflow_v2.workflow_note, sur les lignes dont
-// le workflow_stage est 'cancelada_biblioteca' (la RPC y met une valeur par
-// défaut 'Cancelamento efetuado pela biblioteca.' si le motif saisi est vide —
+// as_biblioteca dans reserva_item_workflow_v2.workflow_note (valeur par défaut
+// 'Cancelamento efetuado pela biblioteca.' si le motif saisi est vide —
 // workflow_note n'est donc jamais NULL pour une annulation biblio).
-// Une réservation a plusieurs lignes ; l'annulation biblio les passe toutes au
-// même stage avec le même motif. On retourne le premier workflow_note non vide.
+//
+// IMPORTANT : on ne peut PAS cibler la ligne par workflow_stage =
+// 'cancelada_biblioteca'. La RPC écrit bien ce stage, mais le trigger
+// trg_auto_liberate_after_no_show le bascule aussitôt en
+// 'liberada_para_circulacao' (remise du livre en circulation). À l'état
+// observable en base, plus aucune ligne n'est au stage 'cancelada_biblioteca'.
+// La colonne stable qui identifie une annulation biblio est final_reason :
+// 'cancelled_by_library' pour une annulation, 'no_show' pour un défaut de
+// retrait (à exclure — son workflow_note n'est pas un motif d'annulation).
+// Une réservation a plusieurs lignes ; on retourne le premier workflow_note
+// non vide parmi les lignes final_reason = 'cancelled_by_library'.
 export async function getReservaCancelamentoBibliotecaMotivo(id) {
-  const { data, error } = await supabaseAdmin.from("reserva_item_workflow_v2").select("workflow_note").eq("reserva_id", id).eq("workflow_stage", "cancelada_biblioteca").order("line_no", {
+  const { data, error } = await supabaseAdmin.from("reserva_item_workflow_v2").select("workflow_note").eq("reserva_id", id).eq("final_reason", "cancelled_by_library").order("line_no", {
     ascending: true
   });
   if (error) throw error;
