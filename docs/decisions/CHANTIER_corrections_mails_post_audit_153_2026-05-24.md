@@ -264,7 +264,7 @@ attendre légitimement ce mail.
 | Chantier | Intitulé | Constats couverts | Sévérité | Ordre | État (27/05/2026) |
 |---|---|---|---|---|---|
 | **A** | Doublons et mauvais routage de notification lecteur·rice | TR-1, TR-2, TR-8 | Haute (impact lecteur·rice direct) | 1 | ✅ bouclé (25/05) |
-| **B** | Internationalisation des mails internes | TR-4, TM-B, TM-C | Moyenne-haute | 2 | 🟠 ouvert |
+| **B** | Internationalisation des mails internes | TR-4, TM-B, TM-C | Moyenne-haute | 2 | ✅ bouclé (18/05, hors séquence d'origine — voir §11.7) |
 | **C** | Logos de bibliothèques résolus depuis le contexte | TR-6.2b | Moyenne (doctrinale) | 3 | ✅ bouclé (27/05) |
 | **D** | Wording des mails de statut de réservation | TR-3 | Moyenne | 4 | ✅ bouclé (27/05, D-1 et D-2) |
 | **E** | Lot de cohérence transverse | TR-5, TR-6.1, TR-6.3, NW-A, NW-B, NW-C, LP-C | Faible à moyenne | 5 | ✅ clos sur le code (27/05) ; 2 détails de finition tracés en §11 |
@@ -840,16 +840,16 @@ Rappel des règles du projet qui s'appliquent à l'ensemble du programme :
 | TR-1 | Faible | A | — | ✅ traité (25/05) |
 | TR-2 | À qualifier | A | D-1 | ✅ traité (25/05) |
 | TR-3 | Moyenne | D | — | ✅ traité (27/05, D-1 et D-2) |
-| TR-4 | Moyenne | B | — | 🟠 ouvert |
+| TR-4 | Moyenne | B | — | ✅ traité (18/05) |
 | TR-5 | Faible | E | — | ✅ traité (26/05) |
 | TR-6.1 | Moyenne (composante) | E | — | ✅ traité (27/05) |
 | TR-6.2b | Moyenne, doctrinale | C | — | ✅ traité (27/05) |
 | TR-6.3 | Moyenne (composante) | E | — | ✅ traité (27/05) |
 | TR-8 | À qualifier | A | D-2 | ✅ traité (25/05) |
-| TM-A | Moyenne | B | D-0 ; amendement spec (acté) | 🟠 ouvert |
-| TM-B | Moyenne-haute | B | — | 🟠 ouvert |
-| TM-C | Faible | B | — | 🟠 ouvert |
-| TM-D | Faible | B | D-0 ; code à aligner sur la spec | 🟠 ouvert |
+| TM-A | Moyenne | B | D-0 ; amendement spec (acté) | ✅ traité (18/05) |
+| TM-B | Moyenne-haute | B | — | ✅ traité (18/05) |
+| TM-C | Faible | B | — | ✅ traité (18/05) |
+| TM-D | Faible | B | D-0 ; code à aligner sur la spec | ✅ traité (18/05) |
 | NW-A | Faible | E | — | ✅ traité (27/05) |
 | NW-B | Moyenne | E | — | ✅ traité (26/05) |
 | NW-C | Faible — à confirmer | E | — | ✅ traité (27/05, invariant confirmé) |
@@ -905,22 +905,26 @@ rappelés ici pour qu'aucune session future ne les rouvre par erreur :
 
 ## 11. Bilan de clôture (27 mai 2026)
 
-**État global.** Quatre des cinq chantiers du méga-item #153 sont bouclés : A
-(25/05), C, D et E (27/05). Treize des quinze constats de l'audit sont traités.
-Le chantier B (i18n des mails internes — TR-4, TM-A, TM-B, TM-C, TM-D) reste
-ouvert dans son intégralité. Deux détails de finition, identifiés en cours de
-chantier, sont à traiter hors du périmètre strict de B.
+**État global.** Les cinq chantiers du méga-item #153 sont bouclés : B (18/05,
+en avance sur la séquence d'origine — voir §11.7), A (25/05), C, D et E
+(27/05). Les quinze constats de l'audit sont tous traités. Deux détails de
+finition, identifiés en cours de chantier, restent à traiter hors du périmètre
+strict des cinq chantiers initiaux (voir §11.5). Hors ces deux détails,
+#153 est intégralement clos sur son volet code.
 
 ### 11.1 — Séquence d'exécution réelle
 
-L'ordre théorique 1→5 du §6 n'a pas été suivi à la lettre. Les sessions ont
-exécuté A, puis E partiellement (constats NW-B et TR-5 traités en première
-passe pour limiter la visibilité du défaut), puis C et D en parallèle, et enfin
-le reste de E (TR-6.1, TR-6.3, NW-A, NW-C, LP-C) en clôture. L'ordre d'exécution
-réel a été : A → NW-B → TR-5 → C → D-1 → D-2 → TR-6.x sur les EF concernées →
-NW-A → NW-C → LP-C. La règle de repli logo fixée par C a bien précédé son
-application par E (TR-6.1), comme prévu §6. Aucune dépendance bloquante n'a
-été contredite par cet ordre.
+L'ordre théorique 1→5 du §6 n'a pas été suivi à la lettre. Le chantier B a été
+exécuté en avance, dans une session du 18/05 antérieure à l'ouverture formelle
+du dossier-cadre #153 (24/05) — voir §11.7 pour le rattrapage de traçabilité.
+Les sessions à partir du 25/05 ont ensuite déroulé A, puis E partiellement
+(constats NW-B et TR-5 traités en première passe pour limiter la visibilité du
+défaut), puis C et D en parallèle, et enfin le reste de E (TR-6.1, TR-6.3,
+NW-A, NW-C, LP-C) en clôture. L'ordre d'exécution réel a donc été : B →
+A → NW-B → TR-5 → C → D-1 → D-2 → TR-6.x sur les EF concernées → NW-A → NW-C
+→ LP-C. La règle de repli logo fixée par C a bien précédé son application par
+E (TR-6.1), comme prévu §6. Aucune dépendance bloquante n'a été contredite par
+cet ordre.
 
 ### 11.2 — Détails de chantier C
 
@@ -989,10 +993,10 @@ suivant :
   aucun ne l'est. Cas méthodologique notable : sans lecture directe du code
   réel, la correction aurait été fausse.
 
-### 11.5 — Deux détails à régler hors périmètre B
+### 11.5 — Deux détails de finition à régler
 
-Deux constats identifiés en cours de chantier et hors périmètre de B restent
-à traiter pour clore intégralement le programme #153 :
+Deux constats identifiés en cours de chantier et hors du périmètre des cinq
+chantiers initiaux restent à traiter pour clore intégralement le programme #153 :
 
 1. **Code mort `reserva_v2_recusada` / `res.refused`.** Identifié en #153.D.
    L'événement `reserva_v2_recusada` n'est plus émis par la base (l'UI
@@ -1022,8 +1026,41 @@ sur lecture du code réel, correction juste — confirme une discipline déjà �
 l'œuvre dans le projet : **on ne corrige pas sur la foi d'une fiche, on lit le
 code que la fiche décrit, et on requalifie si nécessaire**. Cette discipline a
 également joué sur D-1 (le motif d'annulation porté par `final_reason`, pas par
-le stage transitoire). Elle reste à observer pour le chantier B et pour les deux
+le stage transitoire) et sur le rattrapage de traçabilité du chantier B (voir
+§11.7 : on n'inscrit pas un chantier comme « ouvert » sur la foi d'un backlog,
+on lit le code pour vérifier l'état réel). Elle reste à observer pour les deux
 détails de §11.5.
+
+### 11.7 — Chantier B et rattrapage de traçabilité
+
+Le chantier B (i18n des mails internes — TR-4, TM-A, TM-B, TM-C, TM-D) a été
+exécuté **en avance sur la séquence théorique du §6**, dans une session du
+18/05/2026 antérieure de six jours à l'ouverture formelle de ce dossier-cadre
+(24/05). Le travail s'est inscrit alors dans un chantier i18n du layout mail
+plus large, qui n'avait pas été relié explicitement au programme de correction
+#153. Son contenu correspond néanmoins exactement au périmètre annoncé pour B
+(54 chaînes en dur dans `team.ts` + register, 5 constats à traiter) — augmenté
+de quelques ajustements (signature_short_i18n jsonb additive avec fallback texte,
+adaptation de `layout.ts` et `library-mail-routing.ts` pour accepter une locale,
+58 patches au total sur 8 handlers).
+
+Cette antériorité n'avait pas été remontée dans le backlog v17 (25/05) ni dans
+le présent dossier-cadre (24/05), tous deux marquant encore B comme « non
+commencé » au moment de leur rédaction. Le constat a été soulevé dans la session
+du 27/05, en fin de clôture documentaire, et vérifié sur pièce :
+`Select-String` sur `team.ts` et sur `register/index.ts` ne renvoie plus aucune
+chaîne utilisateur en dur, seulement des occurrences techniques (noms de polices
+CSS, étiquettes de logs, commentaires). Le constat de clôture est donc fiable.
+
+L'erreur n'est pas dans le travail mais dans sa traçabilité. C'est cette session
+de clôture qui la rattrape — backlog v18 corrigé, dossier-cadre §11 enrichi,
+mémoire de session amendée. Le mécanisme défectueux n'est pas le code mais le
+**reporting** : un chantier conduit en avance ou hors de la séquence prévue ne
+remonte pas automatiquement dans les fiches qui l'attendaient. La leçon est
+opérationnelle : à chaque ouverture de chantier ou de session de cadrage, **on
+vérifie au code ce qui est déjà fait, on ne se contente pas du backlog comme
+source de vérité**. C'est la même discipline qu'au §11.6, appliquée non plus à
+une fiche d'audit mais à une fiche de planning.
 
 ---
 
