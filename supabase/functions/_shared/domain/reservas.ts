@@ -2,7 +2,7 @@ import { LIBRARIAN_PHONE } from "../core/env.ts";
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
 import { reservationAdminCopyEnabled, reservationCreatedEnabled, reservationStatusEnabled, reservationWorkflowEnabled } from "../context/policies.ts";
-import { getReservaV2Bundle, getReservaWorkflowBundle } from "../data/reservas.ts";
+import { getReservaV2Bundle, getReservaWorkflowBundle, getReservaCancelamentoBibliotecaMotivo, getEmprestimoDueDateFromReserva } from "../data/reservas.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, skippedEmailResult, userTargetFromProfile } from "../transport/email.ts";
 import { adminDisplayName, esc, firstNameOnly, formatDateBR, formatDateTimeInZone, fullName, isValidEmail, joinTitles, DEFAULT_NOTIFICATION_TIMEZONE } from "../shared/format.ts";
@@ -114,7 +114,26 @@ export async function handleReservaV2StatusChange(recordId, event) {
   // PATCH paquet 6 commit comportement : locale biblio + suppression hack BLMF
   const libLocale = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const tits = joinTitles(items.map((i)=>String(i.titulo || `[${String(i.bib_ref || "").trim()}]`)));
-  const motivo = String(reserva.notes || "").trim();
+  // #153.D-1 (TR-3.3) : le motif d'annulation biblio doit être lu depuis
+  // reserva_item_workflow_v2.workflow_note (où la RPC d'annulation l'écrit
+  // proprement), et NON depuis reserva.notes qui contient la note de création
+  // de la réservation. Sans cette correction, le mail d'annulation affichait
+  // « Motif : Réservation créée depuis le compte lecteur·rice » au lieu du
+  // motif réel. Concerne reserva_cancelada_biblioteca uniquement — l'événement
+  // reserva_v2_recusada (clé res.refused) n'a aucun émetteur (code mort).
+  let motivo = "";
+  if (se === "reserva_cancelada_biblioteca") {
+    motivo = await getReservaCancelamentoBibliotecaMotivo(recordId);
+  }
+  // #153.D-1 (sous-tâche 4) : pour une conversion réservation -> emprunt, on
+  // récupère la date d'échéance de l'emprunt issu de la réservation. La donnée
+  // n'est dans aucun bundle (getReservaV2Bundle ne ramène que la réservation) ;
+  // lecture dédiée sur emprestimo_itens_v2 via reserva_id. Affichée en ligne de
+  // détail (la refonte rédactionnelle de l'intro res.converted relève de D-2).
+  let dueDate = "";
+  if (se === "reserva_convertida_em_emprestimo") {
+    dueDate = await getEmprestimoDueDateFromReserva(recordId);
+  }
   // PATCH fix-up : déterminer la clé i18n spécifique selon l'événement (utilisée
   // par les 2 mails lecteur ET biblio, chacun dans sa locale).
   let mailKey = "admin.resUpdate";
@@ -124,12 +143,20 @@ export async function handleReservaV2StatusChange(recordId, event) {
   else if (se === "reserva_expirada") mailKey = "res.expired";
   else if (se === "reserva_convertida_em_emprestimo") mailKey = "res.converted";
   let sub = `${bt} | ${tMail(locale, mailKey)}`, tit = tMail(locale, mailKey), intro = `<p>${tMail(locale, mailKey)}.</p>`;
-  if (motivo && (se === "reserva_v2_recusada" || se === "reserva_cancelada_biblioteca")) intro += `<p>${label(locale, "reason")}: <b>${esc(motivo)}</b>.</p>`;
+  // #153.D-1 : motivo n'est rempli que pour reserva_cancelada_biblioteca ;
+  // le test sur l'événement est donc désormais porté par motivo lui-même.
+  if (motivo) intro += `<p>${label(locale, "reason")}: <b>${esc(motivo)}</b>.</p>`;
   const det = [
     ...tits ? [
       {
         label: label(locale, "items"),
         value: tits
+      }
+    ] : [],
+    ...dueDate ? [
+      {
+        label: label(locale, "dueDate"),
+        value: formatDateLocale(dueDate, locale) || formatDateBR(dueDate)
       }
     ] : []
   ];
@@ -148,7 +175,7 @@ export async function handleReservaV2StatusChange(recordId, event) {
   const ur = reservationStatusEnabled(ctx) ? await safeSendEmail(user, sub, html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "reservation_status_disabled");
   // Admin — locale biblio (paquet 6) avec titre/intro spécifiques à l'événement (paquet 6 fix-up)
   const adminTit = tMail(libLocale, mailKey);
-  const adminIntro = `<p>${tMail(libLocale, mailKey)}.</p>` + (motivo && (se === "reserva_v2_recusada" || se === "reserva_cancelada_biblioteca") ? `<p>${label(libLocale, "reason")}: <b>${esc(motivo)}</b>.</p>` : "");
+  const adminIntro = `<p>${tMail(libLocale, mailKey)}.</p>` + (motivo ? `<p>${label(libLocale, "reason")}: <b>${esc(motivo)}</b>.</p>` : "");
   const { html: ha, text: ta } = renderEmail({
     locale: libLocale,
     preheader: adminTit,
@@ -162,7 +189,13 @@ export async function handleReservaV2StatusChange(recordId, event) {
       {
         label: label(libLocale, "items"),
         value: tits || "—"
-      }
+      },
+      ...dueDate ? [
+        {
+          label: label(libLocale, "dueDate"),
+          value: formatDateLocale(dueDate, libLocale) || formatDateBR(dueDate)
+        }
+      ] : []
     ],
     footerHtml: footerPadrao(ctx, libLocale),
     context: ctx,

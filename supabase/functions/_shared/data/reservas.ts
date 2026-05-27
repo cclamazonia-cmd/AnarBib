@@ -57,3 +57,46 @@ export async function getReservaWorkflowBundle(id, lineNos) {
       }))
   };
 }
+// ---------------------------------------------------------------------------
+// #153.D-1 (TR-3.3) — lecture du motif d'annulation biblio
+// ---------------------------------------------------------------------------
+// Le handler handleReservaV2StatusChange lisait le motif depuis reservas_v2.notes
+// — colonne qui contient la note de *création* de la réservation, pas le motif
+// d'annulation. Le motif réel est écrit par la RPC fn_v2_cancel_reserva_linhas_
+// as_biblioteca dans reserva_item_workflow_v2.workflow_note, sur les lignes dont
+// le workflow_stage est 'cancelada_biblioteca' (la RPC y met une valeur par
+// défaut 'Cancelamento efetuado pela biblioteca.' si le motif saisi est vide —
+// workflow_note n'est donc jamais NULL pour une annulation biblio).
+// Une réservation a plusieurs lignes ; l'annulation biblio les passe toutes au
+// même stage avec le même motif. On retourne le premier workflow_note non vide.
+export async function getReservaCancelamentoBibliotecaMotivo(id) {
+  const { data, error } = await supabaseAdmin.from("reserva_item_workflow_v2").select("workflow_note").eq("reserva_id", id).eq("workflow_stage", "cancelada_biblioteca").order("line_no", {
+    ascending: true
+  });
+  if (error) throw error;
+  for (const row of data || []){
+    const note = String(row?.workflow_note || "").trim();
+    if (note) return note;
+  }
+  return "";
+}
+// ---------------------------------------------------------------------------
+// #153.D-1 (sous-tâche 4) — date d'échéance de l'emprunt issu d'une conversion
+// ---------------------------------------------------------------------------
+// L'événement reserva_convertida_em_emprestimo est émis au passage en
+// 'retirada_efetivada' : l'emprunt et ses items emprestimo_itens_v2 existent
+// alors déjà, avec reserva_id renseigné (lien réservation -> emprunt) et due_at.
+// La date d'échéance effective est extended_until si une prorogation a eu lieu,
+// sinon due_at (à la conversion extended_until est NULL, mais on applique la
+// règle correcte par robustesse). On retourne la première ligne par line_no.
+export async function getEmprestimoDueDateFromReserva(id) {
+  const { data, error } = await supabaseAdmin.from("emprestimo_itens_v2").select("due_at,extended_until,line_no").eq("reserva_id", id).order("line_no", {
+    ascending: true
+  });
+  if (error) throw error;
+  for (const row of data || []){
+    const due = String(row?.extended_until || row?.due_at || "").trim();
+    if (due) return due;
+  }
+  return "";
+}
