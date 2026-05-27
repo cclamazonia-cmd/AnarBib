@@ -3000,5 +3000,15 @@
   "panel.loan.status.devolvido": "Zurückgegeben",
   "reservation.stage.ativa": "Laufend",
   "reservation.stage.retirada_no_show": "Nicht abgeholt",
-  "consultation.stage.ativa": "Laufend"
+  "consultation.stage.ativa": "Laufend",
+  "panel.loanGrouped.filter": "Ausleihstatus",
+  "panel.loanGrouped.filter.all": "Alle",
+  "panel.loanGrouped.filter.aberto": "Offen",
+  "panel.loanGrouped.filter.partial": "Teilweise zurückgegeben",
+  "panel.loanGrouped.sort": "Sortieren nach",
+  "panel.loanGrouped.sort.dueAsc": "Frist nah",
+  "panel.loanGrouped.sort.dueDesc": "Frist fern",
+  "panel.loanGrouped.sort.recent": "Neueste",
+  "panel.loanGrouped.sort.oldest": "Älteste",
+  "panel.loanGrouped.sort.reader": "Leser*in"
 }

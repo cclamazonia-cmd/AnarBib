@@ -3000,5 +3000,15 @@
   "panel.loan.status.devolvido": "Tornat",
   "reservation.stage.ativa": "En curs",
   "reservation.stage.retirada_no_show": "No recollida",
-  "consultation.stage.ativa": "En curs"
+  "consultation.stage.ativa": "En curs",
+  "panel.loanGrouped.filter": "Estat del préstec",
+  "panel.loanGrouped.filter.all": "Tots",
+  "panel.loanGrouped.filter.aberto": "Obert",
+  "panel.loanGrouped.filter.partial": "Retornat parcialment",
+  "panel.loanGrouped.sort": "Ordenar per",
+  "panel.loanGrouped.sort.dueAsc": "Venciment proper",
+  "panel.loanGrouped.sort.dueDesc": "Venciment llunyà",
+  "panel.loanGrouped.sort.recent": "Més recent",
+  "panel.loanGrouped.sort.oldest": "Més antic",
+  "panel.loanGrouped.sort.reader": "Lector·a"
 }

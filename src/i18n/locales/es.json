@@ -3000,5 +3000,15 @@
   "panel.loan.status.devolvido": "Devuelto",
   "reservation.stage.ativa": "En curso",
   "reservation.stage.retirada_no_show": "No retirada",
-  "consultation.stage.ativa": "En curso"
+  "consultation.stage.ativa": "En curso",
+  "panel.loanGrouped.filter": "Estado del préstamo",
+  "panel.loanGrouped.filter.all": "Todes",
+  "panel.loanGrouped.filter.aberto": "Abierto",
+  "panel.loanGrouped.filter.partial": "Devuelto parcialmente",
+  "panel.loanGrouped.sort": "Ordenar por",
+  "panel.loanGrouped.sort.dueAsc": "Vencimiento próximo",
+  "panel.loanGrouped.sort.dueDesc": "Vencimiento lejano",
+  "panel.loanGrouped.sort.recent": "Más reciente",
+  "panel.loanGrouped.sort.oldest": "Más antiguo",
+  "panel.loanGrouped.sort.reader": "Lectore"
 }

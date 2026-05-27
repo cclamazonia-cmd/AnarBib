@@ -3000,5 +3000,15 @@
   "panel.loan.status.devolvido": "Restituito",
   "reservation.stage.ativa": "In corso",
   "reservation.stage.retirada_no_show": "Non ritirata",
-  "consultation.stage.ativa": "In corso"
+  "consultation.stage.ativa": "In corso",
+  "panel.loanGrouped.filter": "Stato del prestito",
+  "panel.loanGrouped.filter.all": "Tuttə",
+  "panel.loanGrouped.filter.aberto": "Aperto",
+  "panel.loanGrouped.filter.partial": "Restituito parzialmente",
+  "panel.loanGrouped.sort": "Ordina per",
+  "panel.loanGrouped.sort.dueAsc": "Scadenza vicina",
+  "panel.loanGrouped.sort.dueDesc": "Scadenza lontana",
+  "panel.loanGrouped.sort.recent": "Più recente",
+  "panel.loanGrouped.sort.oldest": "Più vecchio",
+  "panel.loanGrouped.sort.reader": "Lettorə"
 }

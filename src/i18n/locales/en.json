@@ -3000,5 +3000,15 @@
   "panel.loan.status.devolvido": "Returned",
   "reservation.stage.ativa": "Active",
   "reservation.stage.retirada_no_show": "Not picked up",
-  "consultation.stage.ativa": "Active"
+  "consultation.stage.ativa": "Active",
+  "panel.loanGrouped.filter": "Loan status",
+  "panel.loanGrouped.filter.all": "All",
+  "panel.loanGrouped.filter.aberto": "Open",
+  "panel.loanGrouped.filter.partial": "Partially returned",
+  "panel.loanGrouped.sort": "Sort by",
+  "panel.loanGrouped.sort.dueAsc": "Due soon",
+  "panel.loanGrouped.sort.dueDesc": "Due later",
+  "panel.loanGrouped.sort.recent": "Most recent",
+  "panel.loanGrouped.sort.oldest": "Oldest",
+  "panel.loanGrouped.sort.reader": "Reader"
 }

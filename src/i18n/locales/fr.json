@@ -3000,5 +3000,15 @@
   "panel.loan.status.devolvido": "Retourné",
   "reservation.stage.ativa": "En cours",
   "reservation.stage.retirada_no_show": "Non retirée",
-  "consultation.stage.ativa": "En cours"
+  "consultation.stage.ativa": "En cours",
+  "panel.loanGrouped.filter": "État du prêt",
+  "panel.loanGrouped.filter.all": "Tous",
+  "panel.loanGrouped.filter.aberto": "Ouvert",
+  "panel.loanGrouped.filter.partial": "Partiellement rendu",
+  "panel.loanGrouped.sort": "Trier par",
+  "panel.loanGrouped.sort.dueAsc": "Échéance proche",
+  "panel.loanGrouped.sort.dueDesc": "Échéance lointaine",
+  "panel.loanGrouped.sort.recent": "Plus récent",
+  "panel.loanGrouped.sort.oldest": "Plus ancien",
+  "panel.loanGrouped.sort.reader": "Lecteur·rice"
 }

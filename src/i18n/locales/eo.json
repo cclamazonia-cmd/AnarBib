@@ -3000,5 +3000,15 @@
   "panel.loan.status.devolvido": "Redonita",
   "reservation.stage.ativa": "Aktiva",
   "reservation.stage.retirada_no_show": "Ne retirita",
-  "consultation.stage.ativa": "Aktiva"
+  "consultation.stage.ativa": "Aktiva",
+  "panel.loanGrouped.filter": "Stato de la pruntedono",
+  "panel.loanGrouped.filter.all": "Ĉiuj",
+  "panel.loanGrouped.filter.aberto": "Malfermita",
+  "panel.loanGrouped.filter.partial": "Parte redonita",
+  "panel.loanGrouped.sort": "Ordigi laŭ",
+  "panel.loanGrouped.sort.dueAsc": "Limdato proksima",
+  "panel.loanGrouped.sort.dueDesc": "Limdato fora",
+  "panel.loanGrouped.sort.recent": "Plej lastatempa",
+  "panel.loanGrouped.sort.oldest": "Plej malnova",
+  "panel.loanGrouped.sort.reader": "Leganto"
 }

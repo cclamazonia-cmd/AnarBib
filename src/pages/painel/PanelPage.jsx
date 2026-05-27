@@ -409,6 +409,13 @@ export default function PanelPage() {
   // membershipFilter de l'onglet Contribuicoes.
   const [resStageFilter, setResStageFilter] = useState('all');
   const [conStageFilter, setConStageFilter] = useState('all');
+  // EA-08 (chantier B, 27/05/2026) : tri et filtre sur l'onglet emprestimos-lote.
+  // Aligne l'experience avec les trois autres onglets-objet. Valeurs canoniques
+  // de emprestimo_status derivees de fn_v2_refresh_emprestimo_status_global
+  // (dump du 27/05) : aberto, parcialmente_devolvido, encerrado. L'onglet
+  // n'affichant que les actifs, 'encerrado' n'apparait jamais.
+  const [loteStatusFilter, setLoteStatusFilter] = useState('all');
+  const [loteSortKey, setLoteSortKey] = useState('due_at_asc');
   const [resStage, setResStage] = useState('');
   const [resNote, setResNote] = useState('');
   const [resSchedule, setResSchedule] = useState('');
@@ -1322,7 +1329,19 @@ export default function PanelPage() {
   // Valeurs possibles selon le CHECK constraint sur reserva_linhas_v2 :
   // 'ativa' (seule active), 'convertida_em_emprestimo', 'cancelada_leitor',
   // 'cancelada_biblioteca', 'expirada', 'liberada_para_circulacao'.
-  const activeRes = reservations.filter(r => r.item_status === 'ativa');
+  // EA-04 (chantier B, 27/05/2026) : defense en profondeur du filtre actif.
+  // Exclut les lignes dont workflow_stage est terminal mais dont item_status
+  // n'a pas (encore) ete propage par un trigger. Liste fermee, derivee de la
+  // doctrine item_status / workflow_stage du Grand Livre Blanc v16 chapitre 0
+  // et des matrices fn_check_workflow_transition (reservations) /
+  // fn_check_consulta_transition (consultations). Les emprunts n'ont pas de
+  // workflow_stage distinct, EA-04 ne s'applique pas a eux.
+  const TERMINAL_RES_STAGES = ['retirada_no_show', 'emprestimo_emitido'];
+  const TERMINAL_CON_STAGES = ['consulta_no_show', 'consulta_realizada'];
+  const activeRes = reservations.filter(r =>
+    r.item_status === 'ativa'
+    && !TERMINAL_RES_STAGES.includes(r.workflow_stage_effective)
+  );
   const activeLoans = loans.filter(l => l.item_status === 'aberto');
   // Audit UX 25/05/2026 (P1) : les vues *_followup_ui renvoient l'actif ET
   // le cloture. Les onglets operationnels ne doivent montrer que l'actionnable ;
@@ -1334,7 +1353,10 @@ export default function PanelPage() {
   // 'cancelada_biblioteca' | 'expirada' (CHECK consulta_linhas_v2_item_status_chk).
   // 'consulta_realizada' est un stage, pas un statut : les consultas faites
   // (item_status='consultada') passaient donc a tort dans la file active.
-  const activeConsultations = consultations.filter(c => c.item_status === 'ativa');
+  const activeConsultations = consultations.filter(c =>
+    c.item_status === 'ativa'
+    && !TERMINAL_CON_STAGES.includes(c.workflow_stage_effective)
+  );
   // Audit UX 25/05/2026 (P3) : filtre par etape applique AVANT le tri.
   // 'all' = pas de filtre. Tri par colonnes via SortHeader (ex-paquet 18).
   const stageFilteredRes = useMemo(
@@ -1456,7 +1478,7 @@ export default function PanelPage() {
           extraActions={
             <>
               <Pill variant={activeRes.length > 0 ? 'warn' : 'default'}>{t({ id: 'panel.reservations.active' }, { count: activeRes.length })}</Pill>
-              <Pill>{t({ id: 'panel.consultations.active' }, { count: consultations.filter(c => c.item_status === 'ativa').length })}</Pill>
+              <Pill>{t({ id: 'panel.consultations.active' }, { count: activeConsultations.length })}</Pill>
               <Pill variant={overdueLoans.length > 0 ? 'bad' : 'default'}>{t({ id: 'panel.loan.openLoans' }, { count: activeLoanGroups, items: activeLoans.length, overdue: overdueLoans.length })}</Pill>
               <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
             </>
@@ -2012,6 +2034,37 @@ export default function PanelPage() {
           {tab === 'emprestimos-lote' && (
             <div>
               <h2 className="ab-painel-h2">{t({ id: 'panel.loan.grouped' })}</h2>
+
+              {/* EA-08 (chantier B, 27/05/2026) : controles filtre + tri. */}
+              <div className="ab-painel-lote-controls" style={{ display: 'flex', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
+                <div>
+                  <label style={{ marginRight: 8 }}>{t({ id: 'panel.loanGrouped.filter' })}</label>
+                  <select
+                    value={loteStatusFilter}
+                    onChange={e => setLoteStatusFilter(e.target.value)}
+                    className="ab-painel-input"
+                  >
+                    <option value="all">{t({ id: 'panel.loanGrouped.filter.all' })}</option>
+                    <option value="aberto">{t({ id: 'panel.loanGrouped.filter.aberto' })}</option>
+                    <option value="parcialmente_devolvido">{t({ id: 'panel.loanGrouped.filter.partial' })}</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ marginRight: 8 }}>{t({ id: 'panel.loanGrouped.sort' })}</label>
+                  <select
+                    value={loteSortKey}
+                    onChange={e => setLoteSortKey(e.target.value)}
+                    className="ab-painel-input"
+                  >
+                    <option value="due_at_asc">{t({ id: 'panel.loanGrouped.sort.dueAsc' })}</option>
+                    <option value="due_at_desc">{t({ id: 'panel.loanGrouped.sort.dueDesc' })}</option>
+                    <option value="emprestimo_id_desc">{t({ id: 'panel.loanGrouped.sort.recent' })}</option>
+                    <option value="emprestimo_id_asc">{t({ id: 'panel.loanGrouped.sort.oldest' })}</option>
+                    <option value="user_name">{t({ id: 'panel.loanGrouped.sort.reader' })}</option>
+                  </select>
+                </div>
+              </div>
+
               {(() => {
                 const grouped = {};
                 // Audit UX 25/05/2026 (P1) : ne grouper que les emprunts ayant
@@ -2021,7 +2074,21 @@ export default function PanelPage() {
                   if (!grouped[l.emprestimo_id]) grouped[l.emprestimo_id] = { ...l, items: [] };
                   grouped[l.emprestimo_id].items.push(l);
                 });
-                const groups = Object.values(grouped);
+                // EA-08 (chantier B, 27/05/2026) : filtre par emprestimo_status
+                // puis tri selon la cle choisie. Tri par defaut : echeances les
+                // plus proches en premier (sens metier au comptoir).
+                const groups = Object.values(grouped)
+                  .filter(g => loteStatusFilter === 'all' || g.emprestimo_status === loteStatusFilter)
+                  .sort((a, b) => {
+                    switch (loteSortKey) {
+                      case 'due_at_asc':   return (a.due_at || '\uffff') < (b.due_at || '\uffff') ? -1 : 1;
+                      case 'due_at_desc':  return (a.due_at || '') > (b.due_at || '') ? -1 : 1;
+                      case 'emprestimo_id_desc': return (b.emprestimo_id || 0) - (a.emprestimo_id || 0);
+                      case 'emprestimo_id_asc':  return (a.emprestimo_id || 0) - (b.emprestimo_id || 0);
+                      case 'user_name':    return (a.user_name || '').localeCompare(b.user_name || '');
+                      default: return 0;
+                    }
+                  });
                 if (groups.length === 0) {
                   return <EmptyState message={t({ id: 'panel.loanGrouped.empty' })} />;
                 }
