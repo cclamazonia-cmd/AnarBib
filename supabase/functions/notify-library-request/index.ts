@@ -448,7 +448,7 @@ function buildApplicantEmail(eventType, row, reviewerName) {
   const greeting = firstNameOnly(row.contact_name) ? `Olá, ${firstNameOnly(row.contact_name)}!` : "Olá!";
   if (eventType === "library_request_created") {
     return {
-      subject: `[AnarBib] Solicitação recebida`,
+      subject: `[${BRAND_NAME}] Solicitação recebida`,
       title: "Solicitação institucional recebida",
       greeting,
       introHtml: `
@@ -466,7 +466,7 @@ function buildApplicantEmail(eventType, row, reviewerName) {
   }
   if (eventType === "library_request_in_analysis") {
     return {
-      subject: `[AnarBib] Solicitação em análise`,
+      subject: `[${BRAND_NAME}] Solicitação em análise`,
       title: "Solicitação em análise",
       greeting,
       introHtml: `
@@ -492,7 +492,7 @@ function buildApplicantEmail(eventType, row, reviewerName) {
   }
   if (eventType === "library_request_more_info") {
     return {
-      subject: `[AnarBib] Precisamos de informações complementares`,
+      subject: `[${BRAND_NAME}] Precisamos de informações complementares`,
       title: "Pedido de complemento",
       greeting,
       introHtml: `
@@ -518,7 +518,7 @@ function buildApplicantEmail(eventType, row, reviewerName) {
   }
   if (eventType === "library_request_approved") {
     return {
-      subject: `[AnarBib] Solicitação aprovada`,
+      subject: `[${BRAND_NAME}] Solicitação aprovada`,
       title: "Solicitação aprovada",
       greeting,
       introHtml: `
@@ -543,7 +543,7 @@ function buildApplicantEmail(eventType, row, reviewerName) {
     };
   }
   return {
-    subject: `[AnarBib] Solicitação recusada`,
+    subject: `[${BRAND_NAME}] Solicitação recusada`,
     title: "Solicitação recusada",
     greeting,
     introHtml: `
@@ -593,7 +593,7 @@ function buildAdminEmail(eventType, row, reviewerName) {
   ];
   if (eventType === "library_request_created") {
     return {
-      subject: `[AnarBib] Nova solicitação institucional`,
+      subject: `[${BRAND_NAME}] Nova solicitação institucional`,
       title: "Nova solicitação institucional",
       introHtml: `
         <p style="margin:0 0 10px;">Uma nova solicitação institucional de entrada na rede foi registrada.</p>
@@ -610,7 +610,7 @@ function buildAdminEmail(eventType, row, reviewerName) {
   }
   const statusText = eventType === "library_request_approved" ? "aprovada" : eventType === "library_request_refused" ? "recusada" : eventType === "library_request_more_info" ? "pedido de complemento enviado" : "em análise";
   return {
-    subject: `[AnarBib] Atualização de solicitação institucional`,
+    subject: `[${BRAND_NAME}] Atualização de solicitação institucional`,
     title: `Solicitação ${statusText}`,
     introHtml: `
       <p style="margin:0 0 10px;">Uma solicitação institucional foi atualizada no painel de rede.</p>
