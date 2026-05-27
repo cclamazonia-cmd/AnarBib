@@ -69,6 +69,16 @@ async function markOutboxFailed(outboxId, errorMsg) {
   }).eq("id", outboxId);
 }
 
+// #153.E LP-C : fan-out vide (handler réussi mais aucun destinataire). Statut
+// distinct de 'sent' pour que la table d'audit ne prétende pas qu'un mail est
+// parti. 'skipped' autorisé par la migration 20260527180000_outbox_status_skipped.
+async function markOutboxSkipped(outboxId) {
+  await supabaseAdmin.from("team_notification_outbox").update({
+    status: "skipped",
+    sent_at: new Date().toISOString()
+  }).eq("id", outboxId);
+}
+
 async function loadProfile(userId) {
   if (!userId) return null;
   const { data, error } = await supabaseAdmin
@@ -201,7 +211,8 @@ export async function handleNetworkEvent(recordId) {
       return await handleLibraryProfileEvent(row.id);
     } else {
       console.warn(`[network] unknown event: ${event}`);
-      await markOutboxSent(row.id);
+      // #153.E LP-C : event non reconnu = aucun mail émis → skipped, pas sent.
+      await markOutboxSkipped(row.id);
       return {
         ok: true,
         ignored: true,
@@ -209,7 +220,13 @@ export async function handleNetworkEvent(recordId) {
         event
       };
     }
-    await markOutboxSent(row.id);
+    // #153.E LP-C : fan-out vide (handler réussi, recipients_count === 0) →
+    // 'skipped' et non 'sent', pour ne pas faire croire qu'un mail est parti.
+    if (result?.recipients_count === 0) {
+      await markOutboxSkipped(row.id);
+    } else {
+      await markOutboxSent(row.id);
+    }
     return {
       ok: true,
       event,
@@ -867,7 +884,14 @@ async function handleCollectiveRemovalVoteCast(payload, ctx, bt) {
     rationale = await loadCollectiveRemovalVoteRationale(proposalId, voterUserId);
   }
 
-  // Compter les votes existants pour détecter le 1er vote
+  // Compter les votes existants pour détecter le 1er vote.
+  // #153.E NW-C : ce count suppose que le vote courant est DÉJÀ inscrit en base
+  // au moment où ce handler s'exécute (isFirstVote = voteCount === 1, pas 0).
+  // Invariant GARANTI par la RPC de vote (fn_*_collective_removal_vote) : dans
+  // la même transaction, l'INSERT du vote dans network_admin_collective_removal_
+  // votes précède l'émission de l'événement via fn_network_notify_event. La PK
+  // (proposal_id, voter_user_id) + la garde « pas déjà voté » garantissent en
+  // outre l'unicité, donc un count monotone et fiable.
   const { count: voteCount } = await supabaseAdmin
     .from("network_admin_collective_removal_votes")
     .select("*", { count: "exact", head: true })
@@ -904,9 +928,12 @@ async function handleCollectiveRemovalVoteCast(payload, ctx, bt) {
     const tit = tMail(locale, subKey, { proposedName });
     const introHtml = `<p>${tMail(locale, introKey, { proposedName, proposerName })}</p>`;
 
-    // Vote label : "favor"/"against" pour collective removal (différent de cooptation)
-    // On utilise les clés network.vote.favorable/opposed comme proxies
-    // car le sens est équivalent (favor=favorable au retrait, against=opposé)
+    // #153.E NW-A : libellés de vote affichés. network.vote.favorable/opposed
+    // sont des libellés GÉNÉRIQUES de position de vote du réseau (« favorable » /
+    // « défavorable »), volontairement PARTAGÉS entre les handlers de vote
+    // (cooptation, retrait collectif). Ce n'est pas un emprunt de fortune : le
+    // vocabulaire est neutre et correct pour tout vote favor/against. Mutualisation
+    // assumée — pas de clés dédiées pour éviter une duplication 8 langues.
     const voteLabelKey = vote === "favor" ? "network.vote.favorable" : "network.vote.opposed";
     const voteLabel = tMail(locale, voteLabelKey);
     const details = [{ label: label(locale, "vote"), value: voteLabel }];

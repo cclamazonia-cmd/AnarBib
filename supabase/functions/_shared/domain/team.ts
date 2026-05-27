@@ -40,6 +40,15 @@ async function markOutboxFailed(outboxId, errorMsg) {
     last_error: errorMsg
   }).eq("id", outboxId);
 }
+// #153.E LP-C : fan-out vide (handler réussi mais aucun destinataire). Statut
+// distinct de 'sent' pour que la table d'audit ne prétende pas qu'un mail est
+// parti. 'skipped' autorisé par la migration 20260527180000_outbox_status_skipped.
+async function markOutboxSkipped(outboxId) {
+  await supabaseAdmin.from("team_notification_outbox").update({
+    status: "skipped",
+    sent_at: new Date().toISOString()
+  }).eq("id", outboxId);
+}
 async function loadProfile(userId) {
   if (!userId) return null;
   const { data, error } = await supabaseAdmin.from("profiles").select("id,email,first_name,last_name,preferred_language").eq("id", userId).maybeSingle();
@@ -141,7 +150,8 @@ export async function handleTeamEvent(recordId) {
       return await handleLibraryProfileEvent(row.id);
     } else {
       console.warn(`[team] unknown event: ${event}`);
-      await markOutboxSent(row.id);
+      // #153.E LP-C : event non reconnu = aucun mail émis → skipped, pas sent.
+      await markOutboxSkipped(row.id);
       return {
         ok: true,
         ignored: true,
@@ -149,7 +159,13 @@ export async function handleTeamEvent(recordId) {
         event
       };
     }
-    await markOutboxSent(row.id);
+    // #153.E LP-C : fan-out vide (handler réussi, recipients_count === 0) →
+    // 'skipped' et non 'sent', pour ne pas faire croire qu'un mail est parti.
+    if (result?.recipients_count === 0) {
+      await markOutboxSkipped(row.id);
+    } else {
+      await markOutboxSent(row.id);
+    }
     return {
       ok: true,
       event,
