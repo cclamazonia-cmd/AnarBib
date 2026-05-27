@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
-import { resolveErrorKey } from '@/lib/apiErrors';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -560,8 +560,8 @@ export default function PanelPage() {
       loadData();
     } catch (e) {
       // L'API peut renvoyer transition_not_allowed, pickup_scheduled_for_required,
-      // target_stage_has_dedicated_rpc, etc. resolveErrorKey traduit le code.
-      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.error.consultaWorkflow')})}));
+      // target_stage_has_dedicated_rpc, etc. localizeError traduit le code.
+      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.consultaWorkflow')}));
     }
   }
 
@@ -589,7 +589,7 @@ export default function PanelPage() {
       setSelectedRes(new Set());
       loadData();
     } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
   }
 
@@ -624,7 +624,7 @@ export default function PanelPage() {
       setSelectedRes(new Set());
       loadData();
     } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
   }
 
@@ -653,7 +653,7 @@ export default function PanelPage() {
       }
       loadData();
     } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
   }
 
@@ -702,7 +702,7 @@ export default function PanelPage() {
       setNegotiationForm(null);
       loadData();
     } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
   }
 
@@ -729,7 +729,7 @@ export default function PanelPage() {
       }
       loadData();
     } catch (e) {
-      setActionMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.apiError.generic')})}));
+      setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
   }
 
@@ -759,7 +759,7 @@ export default function PanelPage() {
         setBorrowerLookup(''); setLoanRefs('');
         setLoanPreview(null);
         loadData();
-      } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.loan.errorMissing')})})); }
+      } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.loan.errorMissing')})); }
       finally { setLoanBusy(false); }
       return;
     }
@@ -817,7 +817,7 @@ export default function PanelPage() {
           rule: proj?.rule_label || '—',
         }));
       }
-    } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.loan.errorMissing')})})); }
+    } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.loan.errorMissing')})); }
     finally { setLoanBusy(false); }
   }
 
@@ -841,7 +841,7 @@ export default function PanelPage() {
       // approprié selon la transition (devolvido OU devolvido_apos_parcial).
       setReturnId('');
       loadData();
-    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.error.loanReturn')})})); }
+    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.loanReturn')})); }
   }
 
   async function registrarDevolucaoParcial() {
@@ -860,7 +860,7 @@ export default function PanelPage() {
       setReturnMsg(t({id:'panel.return.partialRegistered'},{ids:subIds.join(', ')}));
       setReturnSubIds('');
       loadData();
-    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: t({id: resolveErrorKey(e, 'panel.error.loanReturn')})})); }
+    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.loanReturn')})); }
   }
 
   // ── Empréstimo actions ─────────────────────────────────
@@ -872,7 +872,7 @@ export default function PanelPage() {
       if (error) throw error;
       loadData();
     } catch (e) {
-      notifyError(t({ id: resolveErrorKey(e, 'panel.loan.extendError') }), e);
+      notifyError(localizeError(e, t, 'panel.loan.extendError'), e);
     }
   }
 
@@ -884,7 +884,7 @@ export default function PanelPage() {
       });
       if (error) throw error;
       loadData();
-    } catch (e) { notifyError(t({ id: resolveErrorKey(e, 'panel.error.loanReturn') }), e); }
+    } catch (e) { notifyError(localizeError(e, t, 'panel.error.loanReturn'), e); }
   }
 
   // ── Consultation workflow ─────────────────────────────
@@ -907,7 +907,7 @@ export default function PanelPage() {
       const { error } = await supabase.schema('api').rpc('advance_consulta', params);
       if (error) throw error;
       loadData();
-    } catch (e) { notifyError(t({ id: resolveErrorKey(e, 'panel.error.consultaWorkflow') }), e); }
+    } catch (e) { notifyError(localizeError(e, t, 'panel.error.consultaWorkflow'), e); }
   }
 
   // Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta agendada.
@@ -1574,7 +1574,7 @@ export default function PanelPage() {
                                   if (error) throw error;
                                   loadData();
                                 } catch (err) {
-                                  notifyError(t({ id: resolveErrorKey(err, 'panel.error.taskStatus') }), err);
+                                  notifyError(localizeError(err, t, 'panel.error.taskStatus'), err);
                                 }
                               }}>
                               <option value="pendente">{t({ id: 'task.status.pendente' })}</option>
@@ -2114,7 +2114,7 @@ export default function PanelPage() {
                               const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: g.emprestimo_id });
                               if (error) throw error;
                               loadData();
-                            } catch (e) { notifyError(t({ id: resolveErrorKey(e, 'panel.error.loanReturn') }), e); }
+                            } catch (e) { notifyError(localizeError(e, t, 'panel.error.loanReturn'), e); }
                           }}>
                             {t({id:'panel.loan.returnFull'})}
                           </button>
@@ -3018,7 +3018,7 @@ function TaskBucket({ title, tasks, setTab, onTaskAction }) {
                       if (error) throw error;
                       if (onTaskAction) onTaskAction();
                     } catch (err) {
-                      notifyError(t({ id: resolveErrorKey(err, 'panel.error.taskStatus') }), err);
+                      notifyError(localizeError(err, t, 'panel.error.taskStatus'), err);
                     }
                   }}>
                   <option value="">{t({ id: 'panel.tasks.advance' })}</option>
