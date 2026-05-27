@@ -189,6 +189,16 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Data",
     eo: "Dato"
   },
+  "l.executed_at": {
+    "pt-BR": "Data de execução",
+    fr: "Date d'exécution",
+    es: "Fecha de ejecución",
+    en: "Execution date",
+    it: "Data di esecuzione",
+    de: "Ausführungsdatum",
+    ca: "Data d'execució",
+    eo: "Plenuma dato"
+  },
   "l.dueDate": {
     "pt-BR": "Devolução prevista",
     fr: "Retour prévu",
