@@ -142,7 +142,21 @@ export async function handleReservaV2StatusChange(recordId, event) {
   else if (se === "reserva_cancelada_leitor") mailKey = "res.cancelReader";
   else if (se === "reserva_expirada") mailKey = "res.expired";
   else if (se === "reserva_convertida_em_emprestimo") mailKey = "res.converted";
-  let sub = `${bt} | ${tMail(locale, mailKey)}`, tit = tMail(locale, mailKey), intro = `<p>${tMail(locale, mailKey)}.</p>`;
+  // #153.D-2 (TR-3.1 / TR-3.2) : les 4 événements de statut de réservation
+  // ouvrent des familles de clés structurées res.X.sub / .intro / .adminIntro
+  // (titre court, intro lecteur·rice, intro staff — différenciées). Les autres
+  // valeurs de mailKey restent des clés plates : admin.resUpdate (fallback
+  // événement non reconnu) et res.refused (clé conservée, événement sans
+  // émetteur — code mort). resKey() renvoie la clé i18n à utiliser : suffixée
+  // pour une famille res.*, telle quelle sinon.
+  const isResFamily = mailKey === "res.cancelStaff" || mailKey === "res.cancelReader" || mailKey === "res.expired" || mailKey === "res.converted";
+  const resKey = (suffix)=>isResFamily ? `${mailKey}.${suffix}` : mailKey;
+  const titleKey = resKey("sub");
+  // Les intros des familles res.* sont des phrases completes deja ponctuees ;
+  // les cles plates (admin.resUpdate, res.refused) sont des etiquettes courtes
+  // auxquelles on conserve le point final ajoute par l'ancien rendu.
+  const introDot = isResFamily ? "" : ".";
+  let sub = `${bt} | ${tMail(locale, titleKey)}`, tit = tMail(locale, titleKey), intro = `<p>${tMail(locale, resKey("intro"))}${introDot}</p>`;
   // #153.D-1 : motivo n'est rempli que pour reserva_cancelada_biblioteca ;
   // le test sur l'événement est donc désormais porté par motivo lui-même.
   if (motivo) intro += `<p>${label(locale, "reason")}: <b>${esc(motivo)}</b>.</p>`;
@@ -173,9 +187,11 @@ export async function handleReservaV2StatusChange(recordId, event) {
   });
   sub = applyBrandingText(sub, ctx);
   const ur = reservationStatusEnabled(ctx) ? await safeSendEmail(user, sub, html, text, "user_mail", ctx) : skippedEmailResult("user_mail", "reservation_status_disabled");
-  // Admin — locale biblio (paquet 6) avec titre/intro spécifiques à l'événement (paquet 6 fix-up)
-  const adminTit = tMail(libLocale, mailKey);
-  const adminIntro = `<p>${tMail(libLocale, mailKey)}.</p>` + (motivo ? `<p>${label(libLocale, "reason")}: <b>${esc(motivo)}</b>.</p>` : "");
+  // Admin — locale biblio (paquet 6). #153.D-2 : titre = .sub, intro = .adminIntro
+  // (intro staff differenciee de l'intro lecteur·rice). Meme regle de point
+  // final conditionnel que pour le mail lecteur·rice.
+  const adminTit = tMail(libLocale, titleKey);
+  const adminIntro = `<p>${tMail(libLocale, resKey("adminIntro"))}${introDot}</p>` + (motivo ? `<p>${label(libLocale, "reason")}: <b>${esc(motivo)}</b>.</p>` : "");
   const { html: ha, text: ta } = renderEmail({
     locale: libLocale,
     preheader: adminTit,

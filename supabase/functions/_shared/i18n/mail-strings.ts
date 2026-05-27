@@ -451,7 +451,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva rebutjada per la biblioteca",
     eo: "Rezervo rifuzita de la biblioteko"
   },
-  "res.cancelStaff": {
+  "res.cancelStaff.sub": {
     "pt-BR": "Reserva cancelada pela biblioteca",
     fr: "Réservation annulée par la bibliothèque",
     es: "Reserva cancelada por la biblioteca",
@@ -461,7 +461,27 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva cancel·lada per la biblioteca",
     eo: "Rezervo nuligita de la biblioteko"
   },
-  "res.cancelReader": {
+  "res.cancelStaff.intro": {
+    "pt-BR": "Informamos que a biblioteca precisou cancelar a sua reserva. Isso não é uma recusa do seu pedido: o exemplar pode estar indisponível, danificado ou já de volta à circulação. Você pode reservá-lo novamente mais tarde, ou passar na biblioteca para encontrarmos uma solução junt-o-a-e.",
+    fr: "Nous t'informons que la bibliothèque a dû annuler ta réservation. Ce n'est pas un refus de ta démarche : l'exemplaire peut être indisponible, abîmé, ou déjà reparti en circulation. Tu peux le réserver à nouveau plus tard, ou passer à la bibliothèque pour qu'on trouve une solution ensemble.",
+    es: "Te informamos de que la biblioteca tuvo que cancelar tu reserva. No es un rechazo de tu solicitud: el ejemplar puede estar no disponible, dañado o ya de vuelta en circulación. Puedes reservarlo de nuevo más adelante, o pasar por la biblioteca para encontrar una solución entre todes.",
+    en: "We're letting you know that the library had to cancel your reservation. This isn't a rejection of your request: the copy may be unavailable, damaged, or already back in circulation. You can reserve it again later, or drop by the library so we can find a solution together.",
+    it: "Ti informiamo che la biblioteca ha dovuto annullare la tua prenotazione. Non è un rifiuto della tua richiesta: la copia può essere non disponibile, danneggiata o già tornata in circolazione. Puoi prenotarla di nuovo più avanti, oppure passare in biblioteca per trovare insieme una soluzione.",
+    de: "Wir teilen dir mit, dass die Bibliothek deine Vormerkung stornieren musste. Das ist keine Ablehnung deines Anliegens: Das Exemplar kann nicht verfügbar, beschädigt oder bereits wieder im Umlauf sein. Du kannst es später erneut vormerken oder in der Bibliothek vorbeikommen, damit wir gemeinsam eine Lösung finden.",
+    ca: "T'informem que la biblioteca ha hagut d'anul·lar la teva reserva. No és un rebuig de la teva sol·licitud: l'exemplar pot estar no disponible, malmès o ja de tornada en circulació. El pots reservar de nou més endavant, o passar per la biblioteca per trobar una solució plegades.",
+    eo: "Ni informas vin, ke la biblioteko devis nuligi vian rezervon. Tio ne estas rifuzo de via peto: la ekzemplero povas esti nedisponebla, difektita aŭ jam reen en cirkulado. Vi povas rezervi ĝin denove poste, aŭ viziti la bibliotekon por ke ni trovu solvon kune."
+  },
+  "res.cancelStaff.adminIntro": {
+    "pt-BR": "Uma reserva foi cancelada pela biblioteca. Os exemplares correspondentes foram automaticamente recolocados em circulação. O motivo registrado no momento do cancelamento está indicado abaixo.",
+    fr: "Une réservation a été annulée par la bibliothèque. Les exemplaires concernés ont été automatiquement remis en circulation. Le motif saisi au moment de l'annulation est indiqué ci-dessous.",
+    es: "Una reserva fue cancelada por la biblioteca. Los ejemplares correspondientes se han vuelto a poner en circulación automáticamente. El motivo registrado en el momento de la cancelación se indica a continuación.",
+    en: "A reservation was cancelled by the library. The corresponding copies have been automatically returned to circulation. The reason entered at the time of cancellation is shown below.",
+    it: "Una prenotazione è stata annullata dalla biblioteca. Le copie corrispondenti sono state automaticamente rimesse in circolazione. Il motivo registrato al momento dell'annullamento è indicato qui sotto.",
+    de: "Eine Vormerkung wurde von der Bibliothek storniert. Die betreffenden Exemplare wurden automatisch wieder in den Umlauf gegeben. Der bei der Stornierung angegebene Grund ist unten aufgeführt.",
+    ca: "Una reserva ha estat anul·lada per la biblioteca. Els exemplars corresponents s'han tornat a posar en circulació automàticament. El motiu registrat en el moment de l'anul·lació s'indica a continuació.",
+    eo: "Rezervo estis nuligita de la biblioteko. La koncernaj ekzempleroj estis aŭtomate remetitaj en cirkuladon. La kialo registrita dum la nuligo estas montrita sube."
+  },
+  "res.cancelReader.sub": {
     "pt-BR": "Reserva cancelada por você",
     fr: "Réservation annulée par toi",
     es: "Reserva cancelada por ti",
@@ -471,7 +491,27 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva cancel·lada per tu",
     eo: "Rezervo nuligita de vi"
   },
-  "res.expired": {
+  "res.cancelReader.intro": {
+    "pt-BR": "Confirmamos que a sua reserva foi cancelada a seu pedido. O exemplar volta a ficar disponível para outras pessoas. Você pode fazer uma nova reserva quando quiser.",
+    fr: "Nous confirmons que ta réservation a bien été annulée à ta demande. L'exemplaire redevient disponible pour d'autres personnes. Tu peux faire une nouvelle réservation quand tu le souhaites.",
+    es: "Confirmamos que tu reserva se ha cancelado a petición tuya. El ejemplar vuelve a estar disponible para otras personas. Puedes hacer una nueva reserva cuando quieras.",
+    en: "We confirm that your reservation has been cancelled at your request. The copy is available again for other people. You can make a new reservation whenever you like.",
+    it: "Confermiamo che la tua prenotazione è stata annullata su tua richiesta. La copia torna disponibile per altre persone. Puoi fare una nuova prenotazione quando vuoi.",
+    de: "Wir bestätigen, dass deine Vormerkung auf deinen Wunsch hin storniert wurde. Das Exemplar ist wieder für andere Personen verfügbar. Du kannst jederzeit eine neue Vormerkung vornehmen.",
+    ca: "Confirmem que la teva reserva s'ha anul·lat a petició teva. L'exemplar torna a estar disponible per a altres persones. Pots fer una nova reserva quan vulguis.",
+    eo: "Ni konfirmas, ke via rezervo estis nuligita laŭ via peto. La ekzemplero denove disponeblas por aliaj personoj. Vi povas fari novan rezervon kiam ajn vi volas."
+  },
+  "res.cancelReader.adminIntro": {
+    "pt-BR": "Um-a-e leitor-a-e cancelou a própria reserva. Os exemplares correspondentes foram automaticamente recolocados em circulação. Nenhuma ação da equipe é necessária.",
+    fr: "Un·e lecteur·rice a annulé sa propre réservation. Les exemplaires concernés ont été automatiquement remis en circulation. Aucune action de l'équipe n'est nécessaire.",
+    es: "Une lectore ha cancelado su propia reserva. Los ejemplares correspondientes se han vuelto a poner en circulación automáticamente. No se requiere ninguna acción del equipo.",
+    en: "A reader has cancelled their own reservation. The corresponding copies have been automatically returned to circulation. No action from the team is needed.",
+    it: "Un* lettore* ha annullato la propria prenotazione. Le copie corrispondenti sono state automaticamente rimesse in circolazione. Non è necessaria alcuna azione da parte dell'équipe.",
+    de: "Eine lesende Person hat ihre eigene Vormerkung storniert. Die betreffenden Exemplare wurden automatisch wieder in den Umlauf gegeben. Es ist keine Aktion des Teams erforderlich.",
+    ca: "Un·a lector·a ha anul·lat la seva pròpia reserva. Els exemplars corresponents s'han tornat a posar en circulació automàticament. No cal cap acció de l'equip.",
+    eo: "Leganto nuligis sian propran rezervon. La koncernaj ekzempleroj estis aŭtomate remetitaj en cirkuladon. Neniu ago de la teamo necesas."
+  },
+  "res.expired.sub": {
     "pt-BR": "Reserva expirada",
     fr: "Réservation expirée",
     es: "Reserva expirada",
@@ -481,15 +521,55 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     ca: "Reserva expirada",
     eo: "Rezervo eksvalidiĝinta"
   },
-  "res.converted": {
+  "res.expired.intro": {
+    "pt-BR": "Informamos que a sua reserva expirou: o prazo para retirar o exemplar foi ultrapassado. O exemplar volta à circulação para outras pessoas. Se ainda tiver interesse, você pode fazer uma nova reserva quando quiser.",
+    fr: "Nous t'informons que ta réservation a expiré : le délai pour retirer l'exemplaire a été dépassé. L'exemplaire repart en circulation pour d'autres personnes. Si tu es toujours intéressé·e, tu peux faire une nouvelle réservation quand tu le souhaites.",
+    es: "Te informamos de que tu reserva ha expirado: se ha superado el plazo para retirar el ejemplar. El ejemplar vuelve a la circulación para otras personas. Si todavía te interesa, puedes hacer una nueva reserva cuando quieras.",
+    en: "We're letting you know that your reservation has expired: the deadline to pick up the copy has passed. The copy returns to circulation for other people. If you're still interested, you can make a new reservation whenever you like.",
+    it: "Ti informiamo che la tua prenotazione è scaduta: il termine per ritirare la copia è stato superato. La copia torna in circolazione per altre persone. Se sei ancora interessat*, puoi fare una nuova prenotazione quando vuoi.",
+    de: "Wir teilen dir mit, dass deine Vormerkung abgelaufen ist: Die Frist zur Abholung des Exemplars ist verstrichen. Das Exemplar geht wieder in den Umlauf für andere Personen. Wenn du weiterhin Interesse hast, kannst du jederzeit eine neue Vormerkung vornehmen.",
+    ca: "T'informem que la teva reserva ha expirat: s'ha superat el termini per recollir l'exemplar. L'exemplar torna a la circulació per a altres persones. Si encara t'interessa, pots fer una nova reserva quan vulguis.",
+    eo: "Ni informas vin, ke via rezervo eksvalidiĝis: la limdato por preni la ekzempleron pasis. La ekzemplero revenas en cirkuladon por aliaj personoj. Se vi ankoraŭ interesiĝas, vi povas fari novan rezervon kiam ajn vi volas."
+  },
+  "res.expired.adminIntro": {
+    "pt-BR": "Uma reserva expirou automaticamente: o prazo de retirada foi ultrapassado sem que o exemplar fosse retirado. Os exemplares correspondentes voltaram à circulação. Nenhuma ação da equipe é necessária.",
+    fr: "Une réservation a expiré automatiquement : le délai de retrait a été dépassé sans que l'exemplaire soit retiré. Les exemplaires concernés sont repartis en circulation. Aucune action de l'équipe n'est nécessaire.",
+    es: "Una reserva ha expirado automáticamente: se superó el plazo de retirada sin que se recogiera el ejemplar. Los ejemplares correspondientes han vuelto a la circulación. No se requiere ninguna acción del equipo.",
+    en: "A reservation has expired automatically: the pickup deadline passed without the copy being collected. The corresponding copies have returned to circulation. No action from the team is needed.",
+    it: "Una prenotazione è scaduta automaticamente: il termine di ritiro è stato superato senza che la copia venisse ritirata. Le copie corrispondenti sono tornate in circolazione. Non è necessaria alcuna azione da parte dell'équipe.",
+    de: "Eine Vormerkung ist automatisch abgelaufen: Die Abholfrist ist verstrichen, ohne dass das Exemplar abgeholt wurde. Die betreffenden Exemplare sind wieder in den Umlauf gegangen. Es ist keine Aktion des Teams erforderlich.",
+    ca: "Una reserva ha expirat automàticament: s'ha superat el termini de recollida sense que es recollís l'exemplar. Els exemplars corresponents han tornat a la circulació. No cal cap acció de l'equip.",
+    eo: "Rezervo aŭtomate eksvalidiĝis: la limdato de preno pasis sen ke la ekzemplero estu prenita. La koncernaj ekzempleroj revenis en cirkuladon. Neniu ago de la teamo necesas."
+  },
+  "res.converted.sub": {
     "pt-BR": "Reserva convertida em empréstimo",
     fr: "Réservation convertie en emprunt",
-    es: "Reserva convertide en préstamo",
+    es: "Reserva convertida en préstamo",
     en: "Reservation converted into a loan",
     it: "Prenotazione convertita in prestito",
     de: "Vormerkung in Ausleihe umgewandelt",
     ca: "Reserva convertida en préstec",
     eo: "Rezervo konvertita en prunton"
+  },
+  "res.converted.intro": {
+    "pt-BR": "Boa notícia: a sua reserva foi convertida em empréstimo. O exemplar agora está com você. A data de devolução prevista está indicada abaixo — você receberá um lembrete quando ela se aproximar.",
+    fr: "Bonne nouvelle : ta réservation a été convertie en emprunt. L'exemplaire est désormais entre tes mains. La date de retour prévue est indiquée ci-dessous — tu recevras un rappel à l'approche de l'échéance.",
+    es: "Buena noticia: tu reserva se ha convertido en préstamo. El ejemplar ya está contigo. La fecha de devolución prevista se indica a continuación — recibirás un recordatorio cuando se acerque.",
+    en: "Good news: your reservation has been converted into a loan. The copy is now in your hands. The expected return date is shown below — you'll get a reminder as it approaches.",
+    it: "Buona notizia: la tua prenotazione è stata convertita in prestito. La copia è ora nelle tue mani. La data di restituzione prevista è indicata qui sotto — riceverai un promemoria all'avvicinarsi della scadenza.",
+    de: "Gute Nachricht: Deine Vormerkung wurde in eine Ausleihe umgewandelt. Das Exemplar ist nun in deinen Händen. Das voraussichtliche Rückgabedatum ist unten angegeben — du erhältst eine Erinnerung, wenn es näher rückt.",
+    ca: "Bona notícia: la teva reserva s'ha convertit en préstec. L'exemplar ja és a les teves mans. La data de retorn prevista s'indica a continuació — rebràs un recordatori quan s'acosti.",
+    eo: "Bona novaĵo: via rezervo estis konvertita en prunton. La ekzemplero nun estas en viaj manoj. La planita redona dato estas montrita sube — vi ricevos memorigon kiam ĝi proksimiĝos."
+  },
+  "res.converted.adminIntro": {
+    "pt-BR": "Uma reserva foi convertida em empréstimo após a retirada presencial do exemplar. O empréstimo está agora ativo. A data de devolução prevista está indicada abaixo.",
+    fr: "Une réservation a été convertie en emprunt après le retrait sur place de l'exemplaire. L'emprunt est désormais actif. La date de retour prévue est indiquée ci-dessous.",
+    es: "Una reserva se ha convertido en préstamo tras la retirada presencial del ejemplar. El préstamo está ahora activo. La fecha de devolución prevista se indica a continuación.",
+    en: "A reservation has been converted into a loan after the copy was picked up in person. The loan is now active. The expected return date is shown below.",
+    it: "Una prenotazione è stata convertita in prestito dopo il ritiro in sede della copia. Il prestito è ora attivo. La data di restituzione prevista è indicata qui sotto.",
+    de: "Eine Vormerkung wurde nach der persönlichen Abholung des Exemplars in eine Ausleihe umgewandelt. Die Ausleihe ist nun aktiv. Das voraussichtliche Rückgabedatum ist unten angegeben.",
+    ca: "Una reserva s'ha convertit en préstec després de la recollida presencial de l'exemplar. El préstec ara està actiu. La data de retorn prevista s'indica a continuació.",
+    eo: "Rezervo estis konvertita en prunton post la surloka preno de la ekzemplero. La prunto nun estas aktiva. La planita redona dato estas montrita sube."
   },
 
   // ===== Workflow events (wf.*) =============================================
