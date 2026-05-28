@@ -2190,7 +2190,7 @@
   "panel.tasks.advance": "Avancer…",
   "panel.tasks.createAt": "Créez des tâches dans la page Bibliothèque, onglet «Tâches internes».",
   "panel.tasks.empty": "Aucune tâche interne en attente ou en cours.",
-  "panel.tasks.emptyHint": "Créez des tâches sur la page {libraryLink}, onglet « Tâches internes ».",
+  "panel.tasks.emptyHint": "Créez des tâches sur la page <link>Bibliothèque</link>, onglet « Tâches internes ».",
   "panel.tasks.manage": "Gérer sur la page Bibliothèque →",
   "panel.tasks.title": "Tâches internes de la bibliothèque",
   "panel.title": "Tableau de bord",

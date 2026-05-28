@@ -2190,7 +2190,7 @@
   "panel.tasks.advance": "Antaŭenigi…",
   "panel.tasks.createAt": "Kreu taskojn en la paĝo Biblioteko, langeto «Internaj taskoj».",
   "panel.tasks.empty": "Neniu interna tasko atendanta aŭ en kurso.",
-  "panel.tasks.emptyHint": "Kreu taskojn en la paĝo {libraryLink}, langeto «Internaj taskoj».",
+  "panel.tasks.emptyHint": "Kreu taskojn en la paĝo <link>Biblioteko</link>, langeto «Internaj taskoj».",
   "panel.tasks.manage": "Administri en la paĝo Biblioteko →",
   "panel.tasks.title": "Internaj taskoj de la biblioteko",
   "panel.title": "Panelo",

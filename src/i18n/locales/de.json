@@ -2190,7 +2190,7 @@
   "panel.tasks.advance": "Weiter…",
   "panel.tasks.createAt": "Erstellen Sie Aufgaben auf der Seite Bibliothek, Reiter «Interne Aufgaben».",
   "panel.tasks.empty": "Keine offenen oder laufenden internen Aufgaben.",
-  "panel.tasks.emptyHint": "Erstelle Aufgaben auf der Seite {libraryLink}, Reiter „Interne Aufgaben\".",
+  "panel.tasks.emptyHint": "Erstelle Aufgaben auf der Seite <link>Bibliothek</link>, Reiter „Interne Aufgaben\".",
   "panel.tasks.manage": "Auf der Seite Bibliothek verwalten →",
   "panel.tasks.title": "Interne Aufgaben der Bibliothek",
   "panel.title": "Bibliotheksübersicht",

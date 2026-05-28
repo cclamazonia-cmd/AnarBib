@@ -2190,7 +2190,7 @@
   "panel.tasks.advance": "Avanza…",
   "panel.tasks.createAt": "Crea attività nella pagina Biblioteca, scheda «Attività interne».",
   "panel.tasks.empty": "Nessuna attività interna in sospeso o in corso.",
-  "panel.tasks.emptyHint": "Crea compiti nella pagina {libraryLink}, scheda «Compiti interni».",
+  "panel.tasks.emptyHint": "Crea compiti nella pagina <link>Biblioteca</link>, scheda «Compiti interni».",
   "panel.tasks.manage": "Gestire nella pagina Biblioteca →",
   "panel.tasks.title": "Attività interne della biblioteca",
   "panel.title": "Pannello della biblioteca",

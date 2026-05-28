@@ -2190,7 +2190,7 @@
   "panel.tasks.advance": "Avanzar…",
   "panel.tasks.createAt": "Cree tareas en la página Biblioteca, pestaña «Tareas internas».",
   "panel.tasks.empty": "Ninguna tarea interna pendiente o en curso.",
-  "panel.tasks.emptyHint": "Creá tareas en la página {libraryLink}, pestaña «Tareas internas».",
+  "panel.tasks.emptyHint": "Creá tareas en la página <link>Biblioteca</link>, pestaña «Tareas internas».",
   "panel.tasks.manage": "Gestionar en la página Biblioteca →",
   "panel.tasks.title": "Tareas internas de la biblioteca",
   "panel.title": "Panel de la biblioteca",

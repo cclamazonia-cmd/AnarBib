@@ -2190,7 +2190,7 @@
   "panel.tasks.advance": "Advance…",
   "panel.tasks.createAt": "Create tasks on the Library page, Internal tasks tab.",
   "panel.tasks.empty": "No pending or in-progress internal tasks.",
-  "panel.tasks.emptyHint": "Create tasks on the {libraryLink} page, \"Internal tasks\" tab.",
+  "panel.tasks.emptyHint": "Create tasks on the <link>Library</link> page, \"Internal tasks\" tab.",
   "panel.tasks.manage": "Manage on Library page →",
   "panel.tasks.title": "Library internal tasks",
   "panel.title": "Library dashboard",

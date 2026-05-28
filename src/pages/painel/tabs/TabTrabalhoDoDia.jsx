@@ -60,7 +60,7 @@ export default function TabTrabalhoDoDia({
           <p style={{ fontSize: '.88rem', color: 'var(--brand-muted)', margin: 0 }}>
             {t({ id: 'panel.tasks.empty' })}{' '}
             {t({ id: 'panel.tasks.emptyHint' }, {
-              libraryLink: <a href="/biblioteca" style={{ color: 'var(--brand-text)' }}>{t({ id: 'nav.library' })}</a>,
+              link: chunks => <a href="/biblioteca" style={{ color: 'var(--brand-text)' }}>{chunks}</a>,
             })}
           </p>
         ) : (

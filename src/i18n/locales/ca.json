@@ -2190,7 +2190,7 @@
   "panel.tasks.advance": "Avançar…",
   "panel.tasks.createAt": "Creeu tasques a la pàgina Biblioteca, pestanya «Tasques internes».",
   "panel.tasks.empty": "Cap tasca interna pendent o en curs.",
-  "panel.tasks.emptyHint": "Creeu tasques a la pàgina {libraryLink}, pestanya «Tasques internes».",
+  "panel.tasks.emptyHint": "Creeu tasques a la pàgina <link>Biblioteca</link>, pestanya «Tasques internes».",
   "panel.tasks.manage": "Gestionar a la pàgina Biblioteca →",
   "panel.tasks.title": "Tasques internes de la biblioteca",
   "panel.title": "Tauler",
