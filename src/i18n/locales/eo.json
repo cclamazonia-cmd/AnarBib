@@ -6,7 +6,6 @@
   "biblioteca.report.illOngoingList": "Detalo de la daŭrantaj interbibliotekaj pruntoj",
   "biblioteca.report.illLendTo": "prunto al {partner}",
   "biblioteca.report.illBorrowFrom": "prunto ĉe {partner}",
-
   "biblioteca.ill.archive": "Arkivi",
   "biblioteca.ill.archived": "Interbiblioteka prunto #{id} arkivita.",
   "biblioteca.ill.archiveConfirm": "Ĉu arkivi la interbibliotekan prunton #{id}? Ĝi forlasas la aktivan liston kaj restas konsultebla en la langeto Raportoj.",
@@ -22,7 +21,6 @@
   "biblioteca.pebHistory.unarchiveConfirm": "Ĉu malarkivi la interbibliotekan prunton #{id}? Ĝi revenas al la aktiva listo.",
   "biblioteca.pebHistory.loadError": "Ne eblis ŝargi la arkivitajn interbibliotekajn pruntojn.",
   "biblioteca.pebHistory.unarchiveError": "Ne eblis malarkivi la interbibliotekan prunton.",
-
   "biblioteca.partnerships.title": "Korespondaj partnerecoj",
   "biblioteca.partnerships.hint": "Bibliotekoj kaj kolektivoj kun kiuj ĉi tiu biblioteko havas firman kaj regulan rilaton.",
   "biblioteca.partnerships.loading": "Ŝargado de partnerecoj…",
@@ -41,7 +39,6 @@
   "biblioteca.partnerships.addError": "Ne eblis aldoni la partnerecon.",
   "biblioteca.partnerships.removeError": "Ne eblis forigi la partnerecon.",
   "biblioteca.partnerships.duplicateError": "Tiu partnereco jam estas deklarita.",
-
   "account.address.countryOther.placeholder": "Ekz.: Germanio, Turkio, Japanio…",
   "account.address.line1.placeholder": "Strato, numero",
   "account.address.postal.placeholder": "Ekz.: 59000",
@@ -3010,5 +3007,17 @@
   "panel.loanGrouped.sort.dueDesc": "Limdato fora",
   "panel.loanGrouped.sort.recent": "Plej lastatempa",
   "panel.loanGrouped.sort.oldest": "Plej malnova",
-  "panel.loanGrouped.sort.reader": "Leganto"
+  "panel.loanGrouped.sort.reader": "Leganto",
+  "biblioteca.identity.readerCards": "Aktivigi la legantajn kartojn",
+  "biblioteca.identity.readerCards.hint": "Ebligas al legantaj membroj generi deŝireblan karton (QR + nomo de la biblioteko). Legado per skanado venos kun la poŝtelefona modulo. Politika elekto: biblioteko povas tute bone funkcii sen ĝi.",
+  "account.readerCard.title": "Mia leganta karto",
+  "account.readerCard.subtitle": "Generu deŝireblan karton por {library}.",
+  "account.readerCard.securityNote": "La karto estas dosiero kiun vi kunportas (galerio aŭ presaĵo). Ĝi ne donas aliron al via konto: se oni trovas ĝin, ĝi nur malkaŝas vian aparteno al {library}. Vi povas regeneri ĝin iam ajn, kio malvalidigas la antaŭan. Tre elmontrita leganto povas elekti generi neniun.",
+  "account.readerCard.generate": "Generi mian karton (PNG + PDF)",
+  "account.readerCard.generated": "Karto generita. La PNG kaj la PDF estis elŝutitaj.",
+  "account.readerCard.cardFooter": "AnarBib leganta karto",
+  "account.readerCard.error.unknown": "La karto ne povis esti generita.",
+  "account.readerCard.error.not_a_member": "Vi ne estas aktiva membro de ĉi tiu biblioteko.",
+  "account.readerCard.error.cards_disabled": "Ĉi tiu biblioteko ne aktivigis la legantajn kartojn.",
+  "panel.loan.readerCardActive": "La legantaj kartoj estas aktivigitaj por ĉi tiu biblioteko. Legado per skanado venos kun la poŝtelefona modulo."
 }

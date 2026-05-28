@@ -6,7 +6,6 @@
   "biblioteca.report.illOngoingList": "Dettaglio dei PEB in corso",
   "biblioteca.report.illLendTo": "prestito a {partner}",
   "biblioteca.report.illBorrowFrom": "prestito presso {partner}",
-
   "biblioteca.ill.archive": "Archiviare",
   "biblioteca.ill.archived": "PEB #{id} archiviato.",
   "biblioteca.ill.archiveConfirm": "Archiviare il PEB #{id}? Esce dall'elenco attivo e resta consultabile nella scheda Rapporti.",
@@ -22,7 +21,6 @@
   "biblioteca.pebHistory.unarchiveConfirm": "Ripristinare il PEB #{id}? Torna nell'elenco attivo.",
   "biblioteca.pebHistory.loadError": "Impossibile caricare i PEB archiviati.",
   "biblioteca.pebHistory.unarchiveError": "Impossibile ripristinare il PEB.",
-
   "biblioteca.partnerships.title": "Partenariati di corrispondenza",
   "biblioteca.partnerships.hint": "Biblioteche e collettivi con cui questa biblioteca mantiene una relazione affermata e regolare.",
   "biblioteca.partnerships.loading": "Caricamento dei partenariati…",
@@ -41,7 +39,6 @@
   "biblioteca.partnerships.addError": "Impossibile aggiungere il partenariato.",
   "biblioteca.partnerships.removeError": "Impossibile rimuovere il partenariato.",
   "biblioteca.partnerships.duplicateError": "Questo partenariato è già stato dichiarato.",
-
   "account.address.countryOther.placeholder": "Es.: Germania, Turchia, Giappone…",
   "account.address.line1.placeholder": "Via, numero",
   "account.address.postal.placeholder": "Es.: 59000",
@@ -3010,5 +3007,17 @@
   "panel.loanGrouped.sort.dueDesc": "Scadenza lontana",
   "panel.loanGrouped.sort.recent": "Più recente",
   "panel.loanGrouped.sort.oldest": "Più vecchio",
-  "panel.loanGrouped.sort.reader": "Lettorə"
+  "panel.loanGrouped.sort.reader": "Lettorə",
+  "biblioteca.identity.readerCards": "Attivare le tessere di lettorə",
+  "biblioteca.identity.readerCards.hint": "Permette allə lettorə membrə di generare una tessera staccabile (QR + nome della biblioteca). La lettura tramite scansione arriverà col modulo mobile. Scelta politica: una biblioteca può benissimo funzionare senza.",
+  "account.readerCard.title": "La mia tessera di lettorə",
+  "account.readerCard.subtitle": "Genera una tessera staccabile per {library}.",
+  "account.readerCard.securityNote": "La tessera è un file che porti con te (galleria o stampa). Non dà accesso al tuo account: se viene trovata, rivela solo la tua appartenenza a {library}. Puoi rigenerarla in qualsiasi momento, il che invalida la precedente. Unə lettorə molto espostə può scegliere di non generarne nessuna.",
+  "account.readerCard.generate": "Genera la mia tessera (PNG + PDF)",
+  "account.readerCard.generated": "Tessera generata. Il PNG e il PDF sono stati scaricati.",
+  "account.readerCard.cardFooter": "Tessera di lettorə AnarBib",
+  "account.readerCard.error.unknown": "Non è stato possibile generare la tessera.",
+  "account.readerCard.error.not_a_member": "Non sei membrə attivə di questa biblioteca.",
+  "account.readerCard.error.cards_disabled": "Questa biblioteca non ha attivato le tessere di lettorə.",
+  "panel.loan.readerCardActive": "Le tessere di lettorə sono attivate per questa biblioteca. La lettura tramite scansione arriverà col modulo mobile."
 }

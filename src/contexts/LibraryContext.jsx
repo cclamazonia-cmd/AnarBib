@@ -21,6 +21,8 @@ const DEFAULT_CONTEXT = {
   network_mode: 'federated',
   governance_mode: 'full_governance',
   membership_enabled: false,
+  // Carte-lecteur (chantier mobile, 28/05/2026) : capacite activable par biblio.
+  reader_cards_enabled: false,
 };
 
 // Hierarchie effective des roles AnarBib v0.3.
@@ -107,7 +109,7 @@ export function LibraryProvider({ children }) {
       const [membershipsResult, networkAdminResult] = await Promise.all([
         supabase
           .from('user_library_memberships')
-          .select('library_id, role, is_primary, libraries(id, slug, name, short_name, catalog_mode, circulation_mode, network_mode, governance_mode, membership_enabled)')
+          .select('library_id, role, is_primary, libraries(id, slug, name, short_name, catalog_mode, circulation_mode, network_mode, governance_mode, membership_enabled, reader_cards_enabled)')
           .eq('user_id', user.id)
           .eq('status', 'active'),
         supabase
@@ -160,6 +162,7 @@ export function LibraryProvider({ children }) {
             network_mode: lib.network_mode || DEFAULT_CONTEXT.network_mode,
             governance_mode: lib.governance_mode || DEFAULT_CONTEXT.governance_mode,
             membership_enabled: lib.membership_enabled === true,
+            reader_cards_enabled: lib.reader_cards_enabled === true,
           };
           setCtx(next);
           writeToSession(next);
@@ -183,6 +186,7 @@ export function LibraryProvider({ children }) {
           network_mode: lib.network_mode || DEFAULT_CONTEXT.network_mode,
           governance_mode: lib.governance_mode || DEFAULT_CONTEXT.governance_mode,
           membership_enabled: lib.membership_enabled === true,
+          reader_cards_enabled: lib.reader_cards_enabled === true,
         };
         setCtx(next);
         writeToSession(next);
@@ -205,6 +209,7 @@ export function LibraryProvider({ children }) {
       network_mode: lib?.network_mode || DEFAULT_CONTEXT.network_mode,
       governance_mode: lib?.governance_mode || DEFAULT_CONTEXT.governance_mode,
       membership_enabled: lib?.membership_enabled === true,
+      reader_cards_enabled: lib?.reader_cards_enabled === true,
     };
     setCtx(next);
     writeToSession(next);

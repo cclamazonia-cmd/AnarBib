@@ -6,7 +6,6 @@
   "biblioteca.report.illOngoingList": "ILLs in progress — detail",
   "biblioteca.report.illLendTo": "lent to {partner}",
   "biblioteca.report.illBorrowFrom": "borrowed from {partner}",
-
   "biblioteca.ill.archive": "Archive",
   "biblioteca.ill.archived": "ILL #{id} archived.",
   "biblioteca.ill.archiveConfirm": "Archive ILL #{id}? It leaves the active list and stays consultable in the Reports tab.",
@@ -22,7 +21,6 @@
   "biblioteca.pebHistory.unarchiveConfirm": "Unarchive ILL #{id}? It returns to the active list.",
   "biblioteca.pebHistory.loadError": "Could not load archived ILLs.",
   "biblioteca.pebHistory.unarchiveError": "Could not unarchive the ILL.",
-
   "biblioteca.partnerships.title": "Correspondence partners",
   "biblioteca.partnerships.hint": "Libraries and collectives this library maintains an affirmed and regular relationship with.",
   "biblioteca.partnerships.loading": "Loading partners…",
@@ -41,7 +39,6 @@
   "biblioteca.partnerships.addError": "Could not add the partner.",
   "biblioteca.partnerships.removeError": "Could not remove the partner.",
   "biblioteca.partnerships.duplicateError": "This partner is already declared.",
-
   "account.address.countryOther.placeholder": "E.g.: Germany, Turkey, Japan…",
   "account.address.line1.placeholder": "Street, number",
   "account.address.postal.placeholder": "E.g.: 59000",
@@ -3010,5 +3007,17 @@
   "panel.loanGrouped.sort.dueDesc": "Due later",
   "panel.loanGrouped.sort.recent": "Most recent",
   "panel.loanGrouped.sort.oldest": "Oldest",
-  "panel.loanGrouped.sort.reader": "Reader"
+  "panel.loanGrouped.sort.reader": "Reader",
+  "biblioteca.identity.readerCards": "Enable reader cards",
+  "biblioteca.identity.readerCards.hint": "Lets reader members generate a detachable card (QR + library name). Scan reading will arrive with the mobile module. A political choice: a library can work perfectly well without it.",
+  "account.readerCard.title": "My reader card",
+  "account.readerCard.subtitle": "Generate a detachable card for {library}.",
+  "account.readerCard.securityNote": "The card is a file you carry with you (gallery or print). It gives no access to your account: if found, it only reveals your membership in {library}. You can regenerate it at any time, which invalidates the old one. A highly exposed reader may choose not to generate one at all.",
+  "account.readerCard.generate": "Generate my card (PNG + PDF)",
+  "account.readerCard.generated": "Card generated. The PNG and PDF have been downloaded.",
+  "account.readerCard.cardFooter": "AnarBib reader card",
+  "account.readerCard.error.unknown": "The card could not be generated.",
+  "account.readerCard.error.not_a_member": "You are not an active member of this library.",
+  "account.readerCard.error.cards_disabled": "This library has not enabled reader cards.",
+  "panel.loan.readerCardActive": "Reader cards are enabled for this library. Scan reading will arrive with the mobile module."
 }

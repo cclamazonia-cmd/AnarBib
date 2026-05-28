@@ -35,6 +35,7 @@ export function useAccountAvailability() {
   return useMemo(() => {
     const cm = library?.circulation_mode || 'full_sigb';
     const me = library?.membership_enabled === true;
+    const rc = library?.reader_cards_enabled === true;
     const allowsLoanFlow = cm === 'informal' || cm === 'full_sigb';
     const isFullSigb = cm === 'full_sigb';
     return {
@@ -51,6 +52,9 @@ export function useAccountAvailability() {
       'chip_emprestimos': allowsLoanFlow,
       // Sections internes
       'cotisacoes': me && cm !== 'off',
+      // Carte-lecteur (chantier mobile, 28/05/2026) : visible si la biblio
+      // d'attache a active la capacite. Independant de circulation_mode.
+      'reader_card': rc,
     };
-  }, [library?.circulation_mode, library?.membership_enabled]);
+  }, [library?.circulation_mode, library?.membership_enabled, library?.reader_cards_enabled]);
 }

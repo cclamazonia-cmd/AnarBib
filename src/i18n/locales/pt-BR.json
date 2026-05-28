@@ -6,7 +6,6 @@
   "biblioteca.report.illOngoingList": "Detalhe dos PEB em curso",
   "biblioteca.report.illLendTo": "empréstimo a {partner}",
   "biblioteca.report.illBorrowFrom": "empréstimo junto a {partner}",
-
   "biblioteca.ill.archive": "Arquivar",
   "biblioteca.ill.archived": "PEB #{id} arquivado.",
   "biblioteca.ill.archiveConfirm": "Arquivar o PEB #{id}? Ele sai da lista ativa e fica consultável na aba Relatórios.",
@@ -22,7 +21,6 @@
   "biblioteca.pebHistory.unarchiveConfirm": "Desarquivar o PEB #{id}? Ele volta à lista ativa.",
   "biblioteca.pebHistory.loadError": "Não foi possível carregar os PEB arquivados.",
   "biblioteca.pebHistory.unarchiveError": "Não foi possível desarquivar o PEB.",
-
   "biblioteca.partnerships.title": "Parcerias de correspondência",
   "biblioteca.partnerships.hint": "Bibliotecas e coletivos com quem esta biblioteca mantém uma relação afirmada e regular.",
   "biblioteca.partnerships.loading": "Carregando parcerias…",
@@ -41,7 +39,6 @@
   "biblioteca.partnerships.addError": "Não foi possível adicionar a parceria.",
   "biblioteca.partnerships.removeError": "Não foi possível retirar a parceria.",
   "biblioteca.partnerships.duplicateError": "Essa parceria já foi declarada.",
-
   "account.address.countryOther.placeholder": "Ex.: Alemanha, Turquia, Japão…",
   "account.address.line1.placeholder": "Rua, número",
   "account.address.postal.placeholder": "Ex.: 59000",
@@ -3010,5 +3007,17 @@
   "panel.loanGrouped.sort.dueDesc": "Prazo distante",
   "panel.loanGrouped.sort.recent": "Mais recente",
   "panel.loanGrouped.sort.oldest": "Mais antigo",
-  "panel.loanGrouped.sort.reader": "Leitor·a·e"
+  "panel.loanGrouped.sort.reader": "Leitor·a·e",
+  "biblioteca.identity.readerCards": "Ativar as carteiras de leitor/a/e",
+  "biblioteca.identity.readerCards.hint": "Permite aos/às/es leitores/as/es membros gerar uma carteira destacável (QR + nome da biblioteca). A leitura por scan virá com o módulo móvel. Escolha política: uma biblioteca pode funcionar perfeitamente sem.",
+  "account.readerCard.title": "Minha carteira de leitor/a/e",
+  "account.readerCard.subtitle": "Gere uma carteira destacável para {library}.",
+  "account.readerCard.securityNote": "A carteira é um arquivo que você leva consigo (galeria ou impressão). Ela não dá acesso à sua conta: se for encontrada, revela apenas seu vínculo com {library}. Você pode regerá-la a qualquer momento, o que invalida a anterior. Um/a/e leitor/a/e muito exposto/a/e pode escolher não gerar nenhuma.",
+  "account.readerCard.generate": "Gerar minha carteira (PNG + PDF)",
+  "account.readerCard.generated": "Carteira gerada. O PNG e o PDF foram baixados.",
+  "account.readerCard.cardFooter": "Carteira de leitor/a/e AnarBib",
+  "account.readerCard.error.unknown": "Não foi possível gerar a carteira.",
+  "account.readerCard.error.not_a_member": "Você não é membro ativo/a/e desta biblioteca.",
+  "account.readerCard.error.cards_disabled": "Esta biblioteca não ativou as carteiras de leitor/a/e.",
+  "panel.loan.readerCardActive": "As carteiras de leitor/a/e estão ativadas para esta biblioteca. A leitura por scan virá com o módulo móvel."
 }

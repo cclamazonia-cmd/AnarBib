@@ -127,7 +127,7 @@ function SortHeader({ sortKey, current, dir, onClick, children }) {
 
 export default function PanelPage() {
   const { user } = useAuth();
-  const { libraryId, libraryName, role, circulation_mode, membership_enabled } = useLibrary();
+  const { libraryId, libraryName, role, circulation_mode, membership_enabled, reader_cards_enabled } = useLibrary();
   const availability = usePanelAvailability();
   const { formatMessage: t, locale } = useIntl();
   const { notifyError } = useToast();
@@ -1620,6 +1620,11 @@ export default function PanelPage() {
                   )}
                 </div>
                 {loanMsg && <p className="ab-painel-msg">{loanMsg}</p>}
+                {reader_cards_enabled && (
+                  <p className="ab-painel-hint" style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+                    {t({ id: 'panel.loan.readerCardActive' })}
+                  </p>
+                )}
               </div>
               <div className="ab-painel-acoes-card">
                 <h2 className="ab-painel-h2">{t({ id: 'panel.loan.return' })}</h2>

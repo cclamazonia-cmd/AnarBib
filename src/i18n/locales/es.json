@@ -6,7 +6,6 @@
   "biblioteca.report.illOngoingList": "Detalle de los PEB en curso",
   "biblioteca.report.illLendTo": "préstamo a {partner}",
   "biblioteca.report.illBorrowFrom": "préstamo de {partner}",
-
   "biblioteca.ill.archive": "Archivar",
   "biblioteca.ill.archived": "PEB #{id} archivado.",
   "biblioteca.ill.archiveConfirm": "¿Archivar el PEB #{id}? Sale de la lista activa y queda consultable en la pestaña Informes.",
@@ -22,7 +21,6 @@
   "biblioteca.pebHistory.unarchiveConfirm": "¿Desarchivar el PEB #{id}? Vuelve a la lista activa.",
   "biblioteca.pebHistory.loadError": "No se pudieron cargar los PEB archivados.",
   "biblioteca.pebHistory.unarchiveError": "No se pudo desarchivar el PEB.",
-
   "biblioteca.partnerships.title": "Alianzas de correspondencia",
   "biblioteca.partnerships.hint": "Bibliotecas y colectivos con quienes esta biblioteca mantiene una relación afirmada y regular.",
   "biblioteca.partnerships.loading": "Cargando alianzas…",
@@ -41,7 +39,6 @@
   "biblioteca.partnerships.addError": "No se pudo añadir la alianza.",
   "biblioteca.partnerships.removeError": "No se pudo quitar la alianza.",
   "biblioteca.partnerships.duplicateError": "Esa alianza ya fue declarada.",
-
   "account.address.countryOther.placeholder": "Ej.: Alemania, Turquía, Japón…",
   "account.address.line1.placeholder": "Calle, número",
   "account.address.postal.placeholder": "Ej.: 59000",
@@ -3010,5 +3007,17 @@
   "panel.loanGrouped.sort.dueDesc": "Vencimiento lejano",
   "panel.loanGrouped.sort.recent": "Más reciente",
   "panel.loanGrouped.sort.oldest": "Más antiguo",
-  "panel.loanGrouped.sort.reader": "Lectore"
+  "panel.loanGrouped.sort.reader": "Lectore",
+  "biblioteca.identity.readerCards": "Activar les carnets de lectore",
+  "biblioteca.identity.readerCards.hint": "Permite a les lectores miembros generar un carnet desprendible (QR + nombre de la biblioteca). La lectura por escaneo llegará con el módulo móvil. Decisión política: una biblioteca puede funcionar perfectamente sin él.",
+  "account.readerCard.title": "Mi carnet de lectore",
+  "account.readerCard.subtitle": "Generá un carnet desprendible para {library}.",
+  "account.readerCard.securityNote": "El carnet es un archivo que llevás con vos (galería o impresión). No da acceso a tu cuenta: si lo encuentran, solo revela tu pertenencia a {library}. Podés regenerarlo cuando quieras, lo que invalida el anterior. Une lectore muy expueste puede elegir no generar ninguno.",
+  "account.readerCard.generate": "Generar mi carnet (PNG + PDF)",
+  "account.readerCard.generated": "Carnet generado. El PNG y el PDF se descargaron.",
+  "account.readerCard.cardFooter": "Carnet de lectore AnarBib",
+  "account.readerCard.error.unknown": "No se pudo generar el carnet.",
+  "account.readerCard.error.not_a_member": "No sos miembre active de esta biblioteca.",
+  "account.readerCard.error.cards_disabled": "Esta biblioteca no activó los carnets de lectore.",
+  "panel.loan.readerCardActive": "Los carnets de lectore están activados para esta biblioteca. La lectura por escaneo llegará con el módulo móvil."
 }
