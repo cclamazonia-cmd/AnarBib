@@ -25,6 +25,8 @@ import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { fmtD, UserDisplay, useSort, SortHeader, StageFilterBar } from './_shared';
 import TabEmprestimosLivro from './tabs/TabEmprestimosLivro';
 import TabConsultasLocais from './tabs/TabConsultasLocais';
+import TabEmprestimosLote from './tabs/TabEmprestimosLote';
+import TabAcoes from './tabs/TabAcoes';
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -1509,46 +1511,26 @@ export default function PanelPage() {
 
           {/* ═══ AÇÕES ═══ */}
           {tab === 'acoes' && (
-            <div className="ab-painel-acoes-grid">
-              <div className="ab-painel-acoes-card">
-                <h2 className="ab-painel-h2">{t({ id: 'panel.loan.register' })}</h2>
-                <p className="ab-painel-hint">{t({ id: 'panel.loan.refsHint' })}</p>
-                <label>{t({ id: 'panel.loan.borrowerLabel' })}
-                  <input type="text" value={borrowerLookup} onChange={e => { setBorrowerLookup(e.target.value); if (loanPreview) setLoanPreview(null); }} placeholder={t({ id: 'panel.loan.borrowerPlaceholder' })} className="ab-painel-input" />
-                </label>
-                <label>{t({ id: 'panel.loan.refsLabel' })}
-                  <input type="text" value={loanRefs} onChange={e => { setLoanRefs(e.target.value); if (loanPreview) setLoanPreview(null); }} placeholder={t({ id: 'panel.loan.refsPlaceholder' })} className="ab-painel-input" />
-                </label>
-                <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                  <Button onClick={registrarSaida} disabled={loanBusy || (loanPreview && loanPreview.loanAllowed === false)}>
-                    {loanBusy
-                      ? '…'
-                      : loanPreview
-                        ? t({ id: 'panel.loan.confirmRegister' })
-                        : t({ id: 'panel.loan.register' })}
-                  </Button>
-                  {loanPreview && !loanBusy && (
-                    <Button variant="secondary" onClick={cancelLoanPreview}>
-                      {t({ id: 'panel.loan.cancelPreview' })}
-                    </Button>
-                  )}
-                </div>
-                {loanMsg && <p className="ab-painel-msg">{loanMsg}</p>}
-              </div>
-              <div className="ab-painel-acoes-card">
-                <h2 className="ab-painel-h2">{t({ id: 'panel.loan.return' })}</h2>
-                <label>{t({ id: 'panel.loan.returnFullLabel' })}
-                  <input type="text" value={returnId} onChange={e => setReturnId(e.target.value)} placeholder={t({id:"panel.loan.returnTotalPh"})} className="ab-painel-input" />
-                </label>
-                <Button variant="secondary" onClick={registrarDevolucaoTotal}>{t({ id: 'panel.loan.returnFull' })}</Button>
-                <hr className="ab-painel-hr" />
-                <label>{t({ id: 'panel.loan.returnPartialLabel' })}
-                  <input type="text" value={returnSubIds} onChange={e => setReturnSubIds(e.target.value)} placeholder={t({id:"panel.loan.returnPartialPh"})} className="ab-painel-input" />
-                </label>
-                <Button variant="secondary" onClick={registrarDevolucaoParcial}>{t({ id: 'panel.loan.returnPartial' })}</Button>
-                {returnMsg && <p className="ab-painel-msg">{returnMsg}</p>}
-              </div>
-            </div>
+            <TabAcoes
+              t={t}
+              borrowerLookup={borrowerLookup}
+              setBorrowerLookup={setBorrowerLookup}
+              loanRefs={loanRefs}
+              setLoanRefs={setLoanRefs}
+              loanPreview={loanPreview}
+              setLoanPreview={setLoanPreview}
+              loanBusy={loanBusy}
+              loanMsg={loanMsg}
+              returnId={returnId}
+              setReturnId={setReturnId}
+              returnSubIds={returnSubIds}
+              setReturnSubIds={setReturnSubIds}
+              returnMsg={returnMsg}
+              registrarSaida={registrarSaida}
+              cancelLoanPreview={cancelLoanPreview}
+              registrarDevolucaoTotal={registrarDevolucaoTotal}
+              registrarDevolucaoParcial={registrarDevolucaoParcial}
+            />
           )}
 
           {/* ═══ RESERVAS ATIVAS ═══ */}
@@ -1805,112 +1787,17 @@ export default function PanelPage() {
 
           {/* ═══ EMPRÉSTIMOS AGRUPADOS ═══ */}
           {tab === 'emprestimos-lote' && (
-            <div>
-              <h2 className="ab-painel-h2">{t({ id: 'panel.loan.grouped' })}</h2>
-
-              {/* EA-08 (chantier B, 27/05/2026) : controles filtre + tri. */}
-              <div className="ab-painel-lote-controls" style={{ display: 'flex', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
-                <div>
-                  <label style={{ marginRight: 8 }}>{t({ id: 'panel.loanGrouped.filter' })}</label>
-                  <select
-                    value={loteStatusFilter}
-                    onChange={e => setLoteStatusFilter(e.target.value)}
-                    className="ab-painel-input"
-                  >
-                    <option value="all">{t({ id: 'panel.loanGrouped.filter.all' })}</option>
-                    <option value="aberto">{t({ id: 'panel.loanGrouped.filter.aberto' })}</option>
-                    <option value="parcialmente_devolvido">{t({ id: 'panel.loanGrouped.filter.partial' })}</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ marginRight: 8 }}>{t({ id: 'panel.loanGrouped.sort' })}</label>
-                  <select
-                    value={loteSortKey}
-                    onChange={e => setLoteSortKey(e.target.value)}
-                    className="ab-painel-input"
-                  >
-                    <option value="due_at_asc">{t({ id: 'panel.loanGrouped.sort.dueAsc' })}</option>
-                    <option value="due_at_desc">{t({ id: 'panel.loanGrouped.sort.dueDesc' })}</option>
-                    <option value="emprestimo_id_desc">{t({ id: 'panel.loanGrouped.sort.recent' })}</option>
-                    <option value="emprestimo_id_asc">{t({ id: 'panel.loanGrouped.sort.oldest' })}</option>
-                    <option value="user_name">{t({ id: 'panel.loanGrouped.sort.reader' })}</option>
-                  </select>
-                </div>
-              </div>
-
-              {(() => {
-                const grouped = {};
-                // Audit UX 25/05/2026 (P1) : ne grouper que les emprunts ayant
-                // au moins un item ouvert. Les emprunts entierement clotures
-                // vont dans l'onglet Historique.
-                activeLoans.forEach(l => {
-                  if (!grouped[l.emprestimo_id]) grouped[l.emprestimo_id] = { ...l, items: [] };
-                  grouped[l.emprestimo_id].items.push(l);
-                });
-                // EA-08 (chantier B, 27/05/2026) : filtre par emprestimo_status
-                // puis tri selon la cle choisie. Tri par defaut : echeances les
-                // plus proches en premier (sens metier au comptoir).
-                const groups = Object.values(grouped)
-                  .filter(g => loteStatusFilter === 'all' || g.emprestimo_status === loteStatusFilter)
-                  .sort((a, b) => {
-                    switch (loteSortKey) {
-                      case 'due_at_asc':   return (a.due_at || '\uffff') < (b.due_at || '\uffff') ? -1 : 1;
-                      case 'due_at_desc':  return (a.due_at || '') > (b.due_at || '') ? -1 : 1;
-                      case 'emprestimo_id_desc': return (b.emprestimo_id || 0) - (a.emprestimo_id || 0);
-                      case 'emprestimo_id_asc':  return (a.emprestimo_id || 0) - (b.emprestimo_id || 0);
-                      case 'user_name':    return (a.user_name || '').localeCompare(b.user_name || '');
-                      default: return 0;
-                    }
-                  });
-                if (groups.length === 0) {
-                  return <EmptyState message={t({ id: 'panel.loanGrouped.empty' })} />;
-                }
-                return groups.map((g, i) => {
-                  // Paquet 19 v2 (11/05/2026) : bouton Prorrogar disponible si emprunt ouvert
-                  // et non deja prolonge. Meme logique que le tableau Empruntes standard.
-                  const canExtend = g.emprestimo_status === 'aberto'
-                    && !g.extended_once
-                    && !g.extended_until;
-                  // Paquet 19 v3 (11/05/2026) : bouton Restituer tout disponible si au
-                  // moins un item est encore ouvert dans l'emprunt
-                  const hasOpenItem = g.items.some(it => it.item_status === 'aberto');
-                  return (
-                  <div key={i} className="ab-painel-lote">
-                    <div className="ab-painel-lote__head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-                      <div>
-                        <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'} · {g.items.length} {t({id:'panel.loan.items'},{count:g.items.length})} · {t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)} · {EMPRESTIMO_STATUS_LABELS[g.emprestimo_status] || t({ id: 'panel.stage.unknown' })}
-                      </div>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        {hasOpenItem && (
-                          <button className="ab-button ab-button--mini" onClick={async () => {
-                            try {
-                              const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: g.emprestimo_id });
-                              if (error) throw error;
-                              loadData();
-                            } catch (e) { notifyError(localizeError(e, t, 'panel.error.loanReturn'), e); }
-                          }}>
-                            {t({id:'panel.loan.returnFull'})}
-                          </button>
-                        )}
-                        {canExtend && (
-                          <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(g.emprestimo_id)}>
-                            {t({id:'panel.table.extend'})}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                    <div className="ab-painel-lote__items">
-                      {g.items.map((l, j) => (
-                        <div key={j} className="ab-painel-lote__item">
-                          {l.sub_id} · <Link to={`/livro/${l.book_id}`}>{l.titulo || l.bib_ref}</Link> · {l.item_status === 'aberto' ? t({id:'panel.loan.inProgress'}) : t({id:'panel.loan.returned'})}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  );
-                });
-              })()}
-            </div>
+            <TabEmprestimosLote
+              t={t}
+              activeLoans={activeLoans}
+              loteStatusFilter={loteStatusFilter}
+              setLoteStatusFilter={setLoteStatusFilter}
+              loteSortKey={loteSortKey}
+              setLoteSortKey={setLoteSortKey}
+              EMPRESTIMO_STATUS_LABELS={EMPRESTIMO_STATUS_LABELS}
+              extendLoan={extendLoan}
+              loadData={loadData}
+            />
           )}
 
           {/* ═══ GERIR LEITOR ═══ */}
