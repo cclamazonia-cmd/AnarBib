@@ -312,7 +312,7 @@ export default function BibliotecaPage() {
     try {
       const { error } = await supabase.from(table).update(data).eq(filterCol, libraryId);
       if (error) throw error;
-      setMsg({ text: 'Dados salvos com sucesso.', kind: 'ok' });
+      setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
     finally { setSaving(false); }
   }
@@ -326,7 +326,7 @@ export default function BibliotecaPage() {
       await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true }).eq('id', libraryId);
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
       if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message }).eq('library_id', libraryId);
-      setMsg({ text: 'Dados salvos com sucesso.', kind: 'ok' });
+      setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
     finally { setSaving(false); }
   }
