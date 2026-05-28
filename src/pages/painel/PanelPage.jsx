@@ -127,7 +127,7 @@ function SortHeader({ sortKey, current, dir, onClick, children }) {
 
 export default function PanelPage() {
   const { user } = useAuth();
-  const { libraryId, libraryName, role, circulation_mode, membership_enabled, reader_cards_enabled } = useLibrary();
+  const { libraryId, libraryName, role, circulation_mode, membership_enabled, isNetworkAdmin } = useLibrary();
   const availability = usePanelAvailability();
   const { formatMessage: t, locale } = useIntl();
   const { notifyError } = useToast();
@@ -462,6 +462,10 @@ export default function PanelPage() {
   // se trouve hors viewport quand le formulaire est déplié.
   const [editProfileMsg, setEditProfileMsg] = useState('');
   const [restrictReason, setRestrictReason] = useState('');
+  // EA-10 (chantier D) : etat de restriction (local membership + global profile)
+  const [restrictionState, setRestrictionState] = useState(null);
+  const [restrictBusy, setRestrictBusy] = useState(false);
+  const [freezeReason, setFreezeReason] = useState('');
 
   // Cotisation (coordenador/administrador uniquement)
   // E.0 (paquet profils 19/05) : membership_enabled vient du LibraryContext.
@@ -1141,6 +1145,11 @@ export default function PanelPage() {
       if (!p) { setReaderMsg(t({id:'panel.reader.notFound'})); setReaderProfile(null); return; }
       setReaderProfile(p);
       setReaderMsg('');
+      // EA-10 : charger l'etat de restriction (local + global)
+      try {
+        const { data: rs } = await supabase.schema('api').rpc('get_member_restriction', { p_user_id: p.id, p_library_id: libraryId });
+        setRestrictionState(rs?.ok ? rs : null);
+      } catch { setRestrictionState(null); }
       // Charger l'historique de cotisation pour ce lecteur
       if (membershipEnabled && (isCoordOrAdmin)) {
         const { data: payments } = await supabase.rpc('fn_list_membership_payments_for_user', { p_user_id: p.id });
@@ -1620,11 +1629,6 @@ export default function PanelPage() {
                   )}
                 </div>
                 {loanMsg && <p className="ab-painel-msg">{loanMsg}</p>}
-                {reader_cards_enabled && (
-                  <p className="ab-painel-hint" style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,.08)' }}>
-                    {t({ id: 'panel.loan.readerCardActive' })}
-                  </p>
-                )}
               </div>
               <div className="ab-painel-acoes-card">
                 <h2 className="ab-painel-h2">{t({ id: 'panel.loan.return' })}</h2>
@@ -2162,14 +2166,14 @@ export default function PanelPage() {
                   <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'}</p>
                   <p>{t({id:'panel.reader.registered'})}: {fmtD(readerProfile.created_at)} · {t({id:'panel.reader.restricted'})}: {readerProfile.is_restricted ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})} · {t({id:'panel.reader.passwordPending'})}: {readerProfile.must_change_password ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})}</p>
 
-                  {/* Restriction status */}
-                  <div style={{ margin: '10px 0', padding: '8px 12px', borderRadius: 8, background: readerProfile.is_restricted ? 'rgba(220,38,38,.15)' : 'rgba(74,222,128,.1)', border: readerProfile.is_restricted ? '1px solid rgba(220,38,38,.3)' : '1px solid rgba(74,222,128,.2)' }}>
-                    <span style={{ fontWeight: 600, fontSize: '.85rem' }}>
-                      {readerProfile.is_restricted
-                        ? t({id:'panel.reader.restricted.yes'}, { reason: readerProfile.restricted_reason || '—' })
-                        : t({id:'panel.reader.restricted.no'})}
-                    </span>
-                  </div>
+                  {/* EA-10 : indicateur visuel du gel GLOBAL (detail dans le bloc dedie plus bas) */}
+                  {readerProfile.is_restricted && (
+                    <div style={{ margin: '10px 0', padding: '8px 12px', borderRadius: 8, background: 'rgba(220,38,38,.15)', border: '1px solid rgba(220,38,38,.3)' }}>
+                      <span style={{ fontWeight: 600, fontSize: '.85rem' }}>
+                        {t({id:'panel.reader.globalFrozenBadge'}, { reason: readerProfile.restricted_reason || '—' })}
+                      </span>
+                    </div>
+                  )}
 
                   {/* Address display — uses parseAddressText to support all legacy formats */}
                   {readerProfile.address && (() => {
@@ -2308,34 +2312,117 @@ export default function PanelPage() {
                     </div>
                   </details>
 
-                  {/* ── Restrict / Unrestrict ── */}
-                  <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 8, background: 'rgba(0,0,0,.15)' }}>
-                    {readerProfile.is_restricted ? (
-                      <Button variant="secondary" onClick={async () => {
-                        if (!confirm(t({id:'panel.reader.unrestrictConfirm'}))) return;
-                        try {
-                          await supabase.from('profiles').update({ is_restricted: false, restricted_reason: null }).eq('id', readerProfile.id);
-                          setReaderProfile(p => ({...p, is_restricted: false, restricted_reason: null}));
-                          setReaderMsg(t({id:'common.dataSaved'}));
-                        } catch (err) { setReaderMsg(t({id:'common.errorPrefix'}, {message: err.message})); }
-                      }}>{t({id:'panel.reader.unrestrictAction'})}</Button>
-                    ) : (
-                      <div>
-                        <input type="text" className="ab-painel-input" placeholder={t({id:'panel.reader.restrictReasonPlaceholder'})}
-                          value={restrictReason || ''} onChange={e => setRestrictReason(e.target.value)} style={{ marginBottom: 6, width: '100%' }} />
-                        <Button variant="secondary" onClick={async () => {
-                          if (!restrictReason?.trim()) return;
-                          if (!confirm(t({id:'panel.reader.restrictConfirm'}))) return;
-                          try {
-                            await supabase.from('profiles').update({ is_restricted: true, restricted_reason: restrictReason.trim() }).eq('id', readerProfile.id);
-                            setReaderProfile(p => ({...p, is_restricted: true, restricted_reason: restrictReason.trim()}));
-                            setRestrictReason('');
-                            setReaderMsg(t({id:'common.dataSaved'}));
-                          } catch (err) { setReaderMsg(t({id:'common.errorPrefix'}, {message: err.message})); }
-                        }}>{t({id:'panel.reader.restrictAction'})}</Button>
+                  {/* ── EA-10 (chantier D) : Restriction LOCALE (membership) ── */}
+                  {(() => {
+                    const loc = restrictionState?.local;
+                    const glob = restrictionState?.global;
+                    const fmtDate = d => d ? new Date(d).toLocaleDateString() : '—';
+                    const reloadRestriction = async () => {
+                      try {
+                        const { data: rs } = await supabase.schema('api').rpc('get_member_restriction', { p_user_id: readerProfile.id, p_library_id: libraryId });
+                        setRestrictionState(rs?.ok ? rs : null);
+                      } catch { /* garder l'etat */ }
+                    };
+                    const handleErr = (data, err) => {
+                      const reason = err ? 'unknown' : (data?.reason || 'unknown');
+                      setReaderMsg(t({ id: `panel.reader.restrict.error.${reason}`, defaultMessage: t({id:'panel.reader.restrict.error.unknown'}) }));
+                    };
+                    return (
+                      <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 8, background: 'rgba(0,0,0,.15)' }}>
+                        <div style={{ fontSize: '.8rem', color: 'var(--brand-muted)', textTransform: 'uppercase', letterSpacing: '.04em', marginBottom: 8 }}>
+                          {t({ id: 'panel.reader.restrict.localTitle' }, { library: libraryName })}
+                        </div>
+                        {loc?.is_restricted ? (
+                          <div>
+                            <p style={{ margin: '0 0 8px', fontSize: '.85rem' }}>
+                              {t({ id: 'panel.reader.restrict.localActive' }, { who: loc.by_name || '—', when: fmtDate(loc.at) })}
+                              {loc.reason && <><br/><span style={{ color: 'var(--brand-muted)' }}>{t({ id: 'panel.reader.restrict.reasonLabel' }, { reason: loc.reason })}</span></>}
+                            </p>
+                            <Button variant="secondary" disabled={restrictBusy} onClick={async () => {
+                              if (!confirm(t({id:'panel.reader.unrestrictConfirm'}))) return;
+                              setRestrictBusy(true);
+                              try {
+                                const { data, error } = await supabase.schema('api').rpc('unrestrict_member', { p_user_id: readerProfile.id, p_library_id: libraryId });
+                                if (error || !data?.ok) { handleErr(data, error); return; }
+                                await reloadRestriction(); setReaderMsg(t({id:'common.dataSaved'}));
+                              } finally { setRestrictBusy(false); }
+                            }}>{t({id:'panel.reader.unrestrictAction'})}</Button>
+                          </div>
+                        ) : (
+                          <div>
+                            <input type="text" className="ab-painel-input" placeholder={t({id:'panel.reader.restrictReasonPlaceholder'})}
+                              value={restrictReason || ''} onChange={e => setRestrictReason(e.target.value)} style={{ marginBottom: 6, width: '100%' }} />
+                            <Button variant="secondary" disabled={restrictBusy} onClick={async () => {
+                              if (!restrictReason?.trim()) return;
+                              if (!confirm(t({id:'panel.reader.restrictConfirm'}))) return;
+                              setRestrictBusy(true);
+                              try {
+                                const { data, error } = await supabase.schema('api').rpc('restrict_member', { p_user_id: readerProfile.id, p_library_id: libraryId, p_reason: restrictReason.trim() });
+                                if (error || !data?.ok) { handleErr(data, error); return; }
+                                setRestrictReason(''); await reloadRestriction(); setReaderMsg(t({id:'common.dataSaved'}));
+                              } finally { setRestrictBusy(false); }
+                            }}>{t({id:'panel.reader.restrictAction'})}</Button>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    );
+                  })()}
+
+                  {/* ── EA-10 : Gel GLOBAL (profile) ─ admin reseau seulement, bloc distinct ── */}
+                  {isNetworkAdmin && (() => {
+                    const glob = restrictionState?.global;
+                    const fmtDate = d => d ? new Date(d).toLocaleDateString() : '—';
+                    const reloadRestriction = async () => {
+                      try {
+                        const { data: rs } = await supabase.schema('api').rpc('get_member_restriction', { p_user_id: readerProfile.id, p_library_id: libraryId });
+                        setRestrictionState(rs?.ok ? rs : null);
+                      } catch { /* garder */ }
+                    };
+                    const handleErr = (data, err) => {
+                      const reason = err ? 'unknown' : (data?.reason || 'unknown');
+                      setReaderMsg(t({ id: `panel.reader.freeze.error.${reason}`, defaultMessage: t({id:'panel.reader.restrict.error.unknown'}) }));
+                    };
+                    return (
+                      <div style={{ marginTop: 12, padding: '10px 12px', borderRadius: 8, background: 'rgba(220,38,38,.10)', border: '1px solid rgba(220,38,38,.35)' }}>
+                        <div style={{ fontSize: '.8rem', color: '#f87171', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.04em', marginBottom: 4 }}>
+                          {t({ id: 'panel.reader.freeze.title' })}
+                        </div>
+                        <p style={{ margin: '0 0 8px', fontSize: '.8rem', color: 'var(--brand-muted)' }}>{t({ id: 'panel.reader.freeze.scopeWarning' })}</p>
+                        {glob?.is_restricted ? (
+                          <div>
+                            <p style={{ margin: '0 0 8px', fontSize: '.85rem' }}>
+                              {t({ id: 'panel.reader.freeze.active' }, { who: glob.by_name || '—', when: fmtDate(glob.since) })}
+                              {glob.reason && <><br/><span style={{ color: 'var(--brand-muted)' }}>{t({ id: 'panel.reader.restrict.reasonLabel' }, { reason: glob.reason })}</span></>}
+                            </p>
+                            <Button variant="secondary" disabled={restrictBusy} onClick={async () => {
+                              if (!confirm(t({id:'panel.reader.unfreezeConfirm'}))) return;
+                              setRestrictBusy(true);
+                              try {
+                                const { data, error } = await supabase.schema('api').rpc('unfreeze_account', { p_user_id: readerProfile.id });
+                                if (error || !data?.ok) { handleErr(data, error); return; }
+                                await reloadRestriction(); setReaderMsg(t({id:'common.dataSaved'}));
+                              } finally { setRestrictBusy(false); }
+                            }}>{t({id:'panel.reader.unfreezeAction'})}</Button>
+                          </div>
+                        ) : (
+                          <div>
+                            <input type="text" className="ab-painel-input" placeholder={t({id:'panel.reader.freezeReasonPlaceholder'})}
+                              value={freezeReason || ''} onChange={e => setFreezeReason(e.target.value)} style={{ marginBottom: 6, width: '100%' }} />
+                            <Button variant="secondary" disabled={restrictBusy} onClick={async () => {
+                              if (!freezeReason?.trim()) return;
+                              if (!confirm(t({id:'panel.reader.freezeConfirm'}))) return;
+                              setRestrictBusy(true);
+                              try {
+                                const { data, error } = await supabase.schema('api').rpc('freeze_account', { p_user_id: readerProfile.id, p_reason: freezeReason.trim() });
+                                if (error || !data?.ok) { handleErr(data, error); return; }
+                                setFreezeReason(''); await reloadRestriction(); setReaderMsg(t({id:'common.dataSaved'}));
+                              } finally { setRestrictBusy(false); }
+                            }}>{t({id:'panel.reader.freezeAction'})}</Button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {/* ── Histórico de contribuições (cotisation) ── */}
                   {isCoordOrAdmin && membershipEnabled && (
