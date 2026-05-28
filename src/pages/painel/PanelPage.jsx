@@ -22,107 +22,11 @@ import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
+import { fmtD, UserDisplay, useSort, SortHeader } from './_shared';
+import TabEmprestimosLivro from './tabs/TabEmprestimosLivro';
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
-function fmtD(d) { if (!d) return '—'; try { return new Date(d).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' }); } catch { return d; } }
-
-// ═══════════════════════════════════════════════════════════
-// UserDisplay — composant interne (paquet 5f)
-// ───────────────────────────────────────────────────────────
-// Affiche un·e lecteur·rice dans une cellule de tableau ou un item de
-// liste : nom complet sur la ligne principale, code public_id (ex:
-// U0000030) en sous-titre discret en dessous.
-//
-// Cascade de fallback pour la ligne principale :
-//   user_name → user_email → fragment d'UUID (8 premiers chars)
-//
-// Le sous-titre public_id n'est affiché que si :
-//   - user_public_id est dispo (sinon rien à montrer en sous-titre)
-//   - ET la ligne principale n'est PAS déjà l'UUID (sinon redondance)
-//
-// Cohérent avec le pattern existant emprestimo_itens_painel_ui qui
-// expose user_public_id depuis le paquet 5e.
-// ═══════════════════════════════════════════════════════════
-function UserDisplay({ name, email, publicId, userId, fallback = '—' }) {
-  const main = name || email || (userId ? userId.slice(0, 8) : fallback);
-  const showSub = publicId && (name || email);
-  return (
-    <div className="ab-painel-user-display">
-      <span>{main}</span>
-      {showSub && <span className="ab-painel-user-display__sub">{publicId}</span>}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════
-// useSort — hook pour tri ascendant/descendant sur un tableau (paquet 18)
-// ───────────────────────────────────────────────────────────
-// Usage :
-//   const { sortedItems, sortKey, sortDir, toggleSort } = useSort(items);
-//   <SortHeader sortKey="due_at" current={sortKey} dir={sortDir} onClick={toggleSort}>Échéance</SortHeader>
-//   ... sortedItems.map(...)
-//
-// toggleSort(key) : null → asc → desc → null (cycle 3 etats).
-// Si null, l'ordre original est preserve.
-// ═══════════════════════════════════════════════════════════
-function useSort(items) {
-  const [sortKey, setSortKey] = useState(null);
-  const [sortDir, setSortDir] = useState(null);
-
-  const toggleSort = (key) => {
-    if (sortKey !== key) { setSortKey(key); setSortDir('asc'); return; }
-    if (sortDir === 'asc') { setSortDir('desc'); return; }
-    if (sortDir === 'desc') { setSortKey(null); setSortDir(null); return; }
-  };
-
-  const sortedItems = useMemo(() => {
-    if (!sortKey || !sortDir) return items;
-    const arr = [...items];
-    arr.sort((a, b) => {
-      const va = a?.[sortKey], vb = b?.[sortKey];
-      // null/undefined toujours en bas
-      if (va == null && vb == null) return 0;
-      if (va == null) return 1;
-      if (vb == null) return -1;
-      // dates ISO (heuristique : string commencant par YYYY-)
-      const isaDate = typeof va === 'string' && /^\d{4}-\d{2}-\d{2}/.test(va);
-      const isbDate = typeof vb === 'string' && /^\d{4}-\d{2}-\d{2}/.test(vb);
-      if (isaDate && isbDate) {
-        const cmp = new Date(va).getTime() - new Date(vb).getTime();
-        return sortDir === 'asc' ? cmp : -cmp;
-      }
-      // nombres (y compris strings purement numeriques)
-      const na = Number(va), nb = Number(vb);
-      if (!Number.isNaN(na) && !Number.isNaN(nb) && typeof va !== 'object' && typeof vb !== 'object') {
-        const cmp = na - nb;
-        if (cmp !== 0) return sortDir === 'asc' ? cmp : -cmp;
-      }
-      // fallback : comparaison string
-      const sa = String(va), sb = String(vb);
-      const cmp = sa.localeCompare(sb, undefined, { numeric: true, sensitivity: 'base' });
-      return sortDir === 'asc' ? cmp : -cmp;
-    });
-    return arr;
-  }, [items, sortKey, sortDir]);
-
-  return { sortedItems, sortKey, sortDir, toggleSort };
-}
-
-// ═══════════════════════════════════════════════════════════
-// SortHeader — composant <th> cliquable avec fleche (paquet 18)
-// ═══════════════════════════════════════════════════════════
-function SortHeader({ sortKey, current, dir, onClick, children }) {
-  const { formatMessage: t } = useIntl();
-  const isActive = current === sortKey;
-  const arrow = isActive ? (dir === 'asc' ? ' ↑' : ' ↓') : '';
-  return (
-    <th onClick={() => onClick(sortKey)} style={{ cursor: 'pointer', userSelect: 'none' }} title={t({ id: 'panel.sort.tooltip' })}>
-      {children}{arrow}
-    </th>
-  );
-}
-
 // ═══════════════════════════════════════════════════════════
 
 export default function PanelPage() {
@@ -1982,61 +1886,12 @@ export default function PanelPage() {
 
           {/* ═══ EMPRÉSTIMOS POR LIVRO ═══ */}
           {tab === 'emprestimos-livro' && (
-            <div>
-              <h2 className="ab-painel-h2">{t({ id: 'panel.tab.loans' })}</h2>
-              {sortLoans.sortedItems.length === 0 ? (
-                <EmptyState message={t({ id: 'panel.loans.empty' })} />
-              ) : (
-              <div className="ab-painel-table-wrap">
-                <table className="ab-painel-table">
-                  <thead><tr>
-                    <SortHeader sortKey="sub_id" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.subId'})}</SortHeader>
-                    <SortHeader sortKey="user_name" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.reader'})}</SortHeader>
-                    <SortHeader sortKey="titulo" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.book'})}</SortHeader>
-                    <SortHeader sortKey="bib_ref" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.ref'})}</SortHeader>
-                    <SortHeader sortKey="rotulo" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.label'})}</SortHeader>
-                    <SortHeader sortKey="emprestimo_created_at" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.exit'})}</SortHeader>
-                    <SortHeader sortKey="due_at" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.deadline'})}</SortHeader>
-                    <SortHeader sortKey="extended_until" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.extended'})}</SortHeader>
-                    <SortHeader sortKey="item_status" current={sortLoans.sortKey} dir={sortLoans.sortDir} onClick={sortLoans.toggleSort}>{t({id:'panel.table.status'})}</SortHeader>
-                    <th>{t({id:'panel.table.actions'})}</th>
-                  </tr></thead>
-                  <tbody>
-                    {sortLoans.sortedItems.map((l, i) => (
-                      <tr key={i} className={l.item_status === 'aberto' && l.due_at && new Date(l.due_at) < new Date() ? 'overdue' : ''}>
-                        <td>{l.sub_id}</td>
-                        <td>
-                          <UserDisplay
-                            name={l.user_name}
-                            email={l.user_email}
-                            publicId={l.user_public_id}
-                            userId={l.user_id}
-                          />
-                        </td>
-                        <td><Link to={`/livro/${l.book_id}`}>{l.titulo || '—'}</Link></td>
-                        <td>{l.bib_ref}</td>
-                        <td>{l.rotulo || '—'}</td>
-                        <td>{fmtD(l.emprestimo_created_at)}</td>
-                        <td>{fmtD(l.due_at)}</td>
-                        <td>{l.extended_until ? fmtD(l.extended_until) : '—'}</td>
-                        <td><span className={`ab-painel-loan-status ab-painel-loan-status--${l.item_status}`}>{l.item_status === 'aberto' ? t({ id: 'panel.loan.status.open' }) : t({ id: 'panel.loan.status.returned' })}</span></td>
-                        <td className="ab-painel-actions-cell">
-                          {l.item_status === 'aberto' && (
-                            <>
-                              <button className="ab-button ab-button--mini" onClick={() => returnLoanItem(l.emprestimo_id, [l.line_no])}>{t({ id: 'panel.loan.return.btn' })}</button>
-                              {!l.extended_once && !l.extended_until && (
-                                <button className="ab-button ab-button--secondary ab-button--mini" onClick={() => extendLoan(l.emprestimo_id)}>{t({id:'panel.table.extend'})}</button>
-                              )}
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              )}
-            </div>
+            <TabEmprestimosLivro
+              t={t}
+              sortLoans={sortLoans}
+              returnLoanItem={returnLoanItem}
+              extendLoan={extendLoan}
+            />
           )}
 
           {/* ═══ EMPRÉSTIMOS AGRUPADOS ═══ */}
