@@ -1,5 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
+import { useToast } from '@/contexts/ToastContext';
 
 // ═══════════════════════════════════════════════════════════
 // Helpers et composants partagés du Painel (chantier E.1 / OT-4)
@@ -135,6 +138,86 @@ export function StageFilterBar({ counts, current, onSelect, labels, allLabel, un
           {(labels && labels[stage]) || unknownLabel || stage} ({n})
         </button>
       ))}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// SummaryCard — carte de compteur (résumé) (chantier E.1 / OT-4)
+// ───────────────────────────────────────────────────────────
+// Partagée entre le Hero/résumé et l'onglet trabalho-do-dia.
+// ═══════════════════════════════════════════════════════════
+export function SummaryCard({ label, count, variant = 'default' }) {
+  return (
+    <div className={`ab-painel-summary ab-painel-summary--${variant}`}>
+      <span className="ab-painel-summary__count">{count}</span>
+      <span className="ab-painel-summary__label">{label}</span>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// TaskBucket — panier de tâches du jour (chantier E.1 / OT-4)
+// ───────────────────────────────────────────────────────────
+// Utilisé par l'onglet trabalho-do-dia. Autonome : récupère t et
+// notifyError via hooks ; setTab et onTaskAction passés en props.
+// ═══════════════════════════════════════════════════════════
+export function TaskBucket({ title, tasks, setTab, onTaskAction }) {
+  const { formatMessage: t } = useIntl();
+  const { notifyError } = useToast();
+  return (
+    <div className="ab-painel-task-bucket">
+      <h3 className="ab-painel-h3">{title} ({tasks.length})</h3>
+      <div className="ab-painel-items">
+        {tasks.map((tk, i) => (
+          <div key={i} className={`ab-painel-item ${tk.priority === 'alta' ? 'ab-painel-item--overdue' : ''}`}>
+            <div>
+              <span className="ab-painel-item__title">{tk.kind}</span>
+              <span className="ab-painel-item__meta">{tk.label}</span>
+              <span className="ab-painel-item__meta">{tk.detail}</span>
+            </div>
+            <div className="ab-painel-item__btn-row">
+              <span className={`ab-painel-task-priority ab-painel-task-priority--${tk.priority}`}>
+                {tk.priority === 'alta' ? t({id:'panel.task.priority.high'}) : t({id:'panel.task.priority.normal'})}
+              </span>
+              {tk.actionType === 'reserva' && (
+                <button className="ab-button ab-button--mini" onClick={() => setTab('reservas')}>{t({ id: 'panel.openReservations' })}</button>
+              )}
+              {tk.actionType === 'emprestimo' && (
+                <button className="ab-button ab-button--mini" onClick={() => setTab('emprestimos-livro')}>{t({ id: 'panel.openLoans' })}</button>
+              )}
+              {tk.actionType === 'consulta' && (
+                <button className="ab-button ab-button--mini" onClick={() => setTab('consultas-locais')}>{t({ id: 'panel.openConsultations' })}</button>
+              )}
+              {tk.actionType === 'tarefa' && (
+                <select style={{ fontSize:'.78rem', padding:'3px 6px', borderRadius:6, border:'1px solid rgba(255,255,255,.15)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}
+                  defaultValue="" onChange={async e => {
+                    if (!e.target.value) return;
+                    // Chantier #TASKS : router par fn_task_update_status (RPC)
+                    // au lieu d'un update() direct, sinon la regeneration des
+                    // taches recurrentes ne se declenche jamais a l'achevement.
+                    const newStatus = e.target.value;
+                    e.target.value = '';
+                    try {
+                      const { error } = await supabase.rpc('fn_task_update_status', {
+                        p_task_id: tk.task_id, p_new_status: newStatus,
+                      });
+                      if (error) throw error;
+                      if (onTaskAction) onTaskAction();
+                    } catch (err) {
+                      notifyError(localizeError(err, t, 'panel.error.taskStatus'), err);
+                    }
+                  }}>
+                  <option value="">{t({ id: 'panel.tasks.advance' })}</option>
+                  <option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option>
+                  <option value="concluida">{t({ id: 'task.status.concluida' })}</option>
+                  <option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
+                </select>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
