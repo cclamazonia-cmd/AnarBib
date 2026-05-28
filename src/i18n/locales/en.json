@@ -53,7 +53,7 @@
   "account.alert.openLoans": "{count, plural, one {You have # loan in progress} other {You have # loans in progress}}",
   "account.alert.overdue": "{count, plural, one {# overdue loan} other {# overdue loans}}",
   "account.alert.restricted": "Restricted account: {reason}",
-  "account.alert.restricted.local": "Account restricted locally by your library. Reason: {reason}. Please contact the library team to resolve this.",
+  "account.alert.restricted.local": "Account locally restricted by your library: {reason}",
   "account.changePassword.confirmPassword": "Confirm new password",
   "account.changePassword.error.mismatch": "The confirmation does not match the new password.",
   "account.changePassword.error.tooShort": "The new password must be at least 8 characters long.",

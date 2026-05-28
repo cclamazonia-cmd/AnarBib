@@ -53,7 +53,7 @@
   "account.alert.openLoans": "{count, plural, one {Teniu # préstec en curs} other {Teniu # préstecs en curs}}",
   "account.alert.overdue": "{count, plural, one {# préstec endarrerit} other {# préstecs endarrerits}}",
   "account.alert.restricted": "Compte amb restricció: {reason}",
-  "account.alert.restricted.local": "Compte restringit localment per la teva biblioteca. Motiu: {reason}. Adreça’t a l’equip de la biblioteca per regularitzar.",
+  "account.alert.restricted.local": "Compte amb restricció local per la teva biblioteca: {reason}",
   "account.changePassword.confirmPassword": "Confirmar la nova contrasenya",
   "account.changePassword.error.mismatch": "La confirmació no coincideix amb la nova contrasenya.",
   "account.changePassword.error.tooShort": "La nova contrasenya ha de tenir almenys 8 caràcters.",

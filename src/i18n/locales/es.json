@@ -53,7 +53,7 @@
   "account.alert.openLoans": "{count, plural, one {Tenés # préstamo en curso} other {Tenés # préstamos en curso}}",
   "account.alert.overdue": "{count, plural, one {# préstamo vencido} other {# préstamos vencidos}}",
   "account.alert.restricted": "Cuenta con restricción: {reason}",
-  "account.alert.restricted.local": "Cuenta restringida localmente por su biblioteca. Motivo: {reason}. Acérquese al equipo de la biblioteca para regularizar.",
+  "account.alert.restricted.local": "Cuenta con restricción local por su biblioteca: {reason}",
   "account.changePassword.confirmPassword": "Confirmar nueva contraseña",
   "account.changePassword.error.mismatch": "La confirmación no coincide con la nueva contraseña.",
   "account.changePassword.error.tooShort": "La nueva contraseña debe tener al menos 8 caracteres.",
