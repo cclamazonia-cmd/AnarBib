@@ -2115,6 +2115,8 @@
   "panel.reservations.transitionBlocked": "Transizione non consentita da {stages}.",
   "panel.restricted": "Accesso riservato a bibliotecari e coordinatori.",
   "panel.return.partialRegistered": "Restituzione parziale registrata: {ids}.",
+  "panel.return.malformedSubIds": "Identificatori mal formati (ignorati): {ids}",
+  "panel.return.rejectedSubIds": "Identificatori non applicabili (riga inesistente o già restituita): {ids}",
   "panel.return.totalRegistered": "Restituzione totale registrata per il prestito n°{id}.",
   "panel.subtitle": "Gestione operativa",
   "panel.summary.attention": "Attenzione",

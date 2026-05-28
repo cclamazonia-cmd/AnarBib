@@ -2115,6 +2115,8 @@
   "panel.reservations.transitionBlocked": "Transición no permitida desde {stages}.",
   "panel.restricted": "Acceso restringido a bibliotecarios y coordinadores.",
   "panel.return.partialRegistered": "Devolución parcial registrada: {ids}.",
+  "panel.return.malformedSubIds": "Identificadores mal formados (ignorados): {ids}",
+  "panel.return.rejectedSubIds": "Identificadores no aplicables (línea inexistente o ya devuelta): {ids}",
   "panel.return.totalRegistered": "Devolución total registrada para el préstamo n°{id}.",
   "panel.subtitle": "Gestión operacional",
   "panel.summary.attention": "Atención",

@@ -2115,6 +2115,8 @@
   "panel.reservations.transitionBlocked": "Übergang nicht erlaubt von {stages}.",
   "panel.restricted": "Zugang nur für Bibliothekar*innen und Koordination.",
   "panel.return.partialRegistered": "Teilweise Rückgabe erfasst: {ids}.",
+  "panel.return.malformedSubIds": "Ungültig formatierte IDs (ignoriert): {ids}",
+  "panel.return.rejectedSubIds": "Nicht anwendbare IDs (Zeile fehlt oder bereits zurückgegeben): {ids}",
   "panel.return.totalRegistered": "Vollständige Rückgabe für Ausleihe Nr. {id} erfasst.",
   "panel.subtitle": "Operative Verwaltung",
   "panel.summary.attention": "Achtung",

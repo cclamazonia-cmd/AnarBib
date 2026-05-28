@@ -2115,6 +2115,8 @@
   "panel.reservations.transitionBlocked": "Transition non autorisée depuis {stages}.",
   "panel.restricted": "Accès réservé aux bibliothécaires et coordinateur·rices.",
   "panel.return.partialRegistered": "Retour partiel enregistré : {ids}.",
+  "panel.return.malformedSubIds": "Identifiants mal formés (ignorés) : {ids}",
+  "panel.return.rejectedSubIds": "Identifiants inapplicables (ligne inexistante ou déjà rendue) : {ids}",
   "panel.return.totalRegistered": "Retour complet enregistré pour le prêt n°{id}.",
   "panel.subtitle": "Gestion opérationnelle",
   "panel.summary.attention": "Attention",

@@ -766,19 +766,56 @@ export default function PanelPage() {
     const subIds = returnSubIds.split(/[,;\s]+/).map(s => s.trim()).filter(Boolean);
     if (!subIds.length) { setReturnMsg(t({id:'panel.loan.enterSubIds'})); return; }
     setReturnMsg(t({id:'panel.loan.returning'}));
-    try {
-      for (const subId of subIds) {
-        const [empId, lineNo] = subId.split('.').map(Number);
-        if (!empId || !lineNo) continue;
-        // Paquet 19 : utiliser le wrapper api.* (et fix : fn_v2_return_emprestimo_itens n'existe pas, c'etait fn_v2_return_emprestimo_linhas)
-        await supabase.schema('api').rpc('return_loan_partial', {
+    // BUG-retour-partiel-faux-succès (28/05/2026) : auparavant, le succès
+    // s'affichait inconditionnellement à la fin de la boucle, même si tous
+    // les sub_ids étaient mal formés (saisie de book_id 0000185 sans point,
+    // au lieu de sub_id 47.2 par exemple). On distingue maintenant 3 cas :
+    //   - malformed: sub_ids non parsables (pas de point ou parties non
+    //     numériques) → skippés au parsing
+    //   - rejected: sub_ids valides en apparence mais que le RPC rejette
+    //     (emprestimo inconnu, line_no inexistant, item déjà rendu) →
+    //     le RPC lève maintenant une exception no_lines_returned
+    //   - ok: lignes effectivement rendues
+    const malformed = [];
+    const rejected = [];
+    const ok = [];
+    for (const subId of subIds) {
+      const [empId, lineNo] = subId.split('.').map(Number);
+      if (!empId || !lineNo) { malformed.push(subId); continue; }
+      try {
+        const { data, error } = await supabase.schema('api').rpc('return_loan_partial', {
           p_emprestimo_id: empId, p_line_nos: [lineNo],
         });
+        if (error) throw error;
+        // Defense en profondeur cote front : le RPC retourne le nombre de
+        // lignes effectivement rendues. Si 0, c'est un faux succes (line_no
+        // inexistant pour cet emprestimo, ou item deja rendu). La migration
+        // backend leve normalement no_lines_returned, mais on protege aussi
+        // ici au cas ou la migration ne serait pas (encore) appliquee.
+        if (data === 0 || data === null) {
+          rejected.push(subId);
+        } else {
+          ok.push(subId);
+        }
+      } catch (e) {
+        rejected.push(subId);
+        // On continue les autres sub_ids ; l'erreur sera consolidée plus bas.
       }
-      setReturnMsg(t({id:'panel.return.partialRegistered'},{ids:subIds.join(', ')}));
-      setReturnSubIds('');
-      loadData();
-    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.loanReturn')})); }
+    }
+    // Message consolidé : on n'affiche succès QUE si au moins une ligne
+    // a réellement été rendue, et on signale les erreurs/anomalies.
+    const parts = [];
+    if (ok.length) {
+      parts.push(t({id:'panel.return.partialRegistered'},{ids: ok.join(', ')}));
+    }
+    if (malformed.length) {
+      parts.push(t({id:'panel.return.malformedSubIds'},{ids: malformed.join(', ')}));
+    }
+    if (rejected.length) {
+      parts.push(t({id:'panel.return.rejectedSubIds'},{ids: rejected.join(', ')}));
+    }
+    setReturnMsg(parts.join(' · '));
+    if (ok.length) { setReturnSubIds(''); loadData(); }
   }
 
   // ── Empréstimo actions ─────────────────────────────────

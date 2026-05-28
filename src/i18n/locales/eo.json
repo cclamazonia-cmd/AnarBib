@@ -2115,6 +2115,8 @@
   "panel.reservations.transitionBlocked": "Transiro ne autorizita de {stages}.",
   "panel.restricted": "Aliro rezervita al la bibliotekist-in-oj kaj kunordigant-in-oj.",
   "panel.return.partialRegistered": "Parta redono registrita: {ids}.",
+  "panel.return.malformedSubIds": "Misformaj identigiloj (preteratentitaj): {ids}",
+  "panel.return.rejectedSubIds": "Neaplikeblaj identigiloj (linio mankas aŭ jam redonita): {ids}",
   "panel.return.totalRegistered": "Plena redono registrita por la prunto n-ro {id}.",
   "panel.subtitle": "Operacia administrado",
   "panel.summary.attention": "Atento",

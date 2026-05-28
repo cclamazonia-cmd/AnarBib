@@ -2115,6 +2115,8 @@
   "panel.reservations.transitionBlocked": "Transition not allowed from {stages}.",
   "panel.restricted": "Access restricted to librarians and coordinators.",
   "panel.return.partialRegistered": "Partial return registered: {ids}.",
+  "panel.return.malformedSubIds": "Malformed IDs (ignored): {ids}",
+  "panel.return.rejectedSubIds": "Non-applicable IDs (missing line or already returned): {ids}",
   "panel.return.totalRegistered": "Total return registered for loan #{id}.",
   "panel.subtitle": "Operational management",
   "panel.summary.attention": "Attention",
