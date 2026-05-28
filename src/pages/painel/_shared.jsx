@@ -105,3 +105,36 @@ export function SortHeader({ sortKey, current, dir, onClick, children }) {
     </th>
   );
 }
+
+// ═══════════════════════════════════════════════════════════
+// StageFilterBar — barre de filtres par étape (pills + compteurs)
+// ───────────────────────────────────────────────────────────
+// Partagée entre les onglets consultas-locais et reservas.
+// Extraite de PanelPage.jsx (chantier E.1 / OT-4), iso-comportement.
+// ═══════════════════════════════════════════════════════════
+export function StageFilterBar({ counts, current, onSelect, labels, allLabel, unknownLabel }) {
+  const total = [...counts.values()].reduce((a, b) => a + b, 0);
+  return (
+    <div className="ab-painel-stage-filter">
+      <button
+        type="button"
+        className={`ab-painel-stage-pill ${current === 'all' ? 'active' : ''}`}
+        onClick={() => onSelect('all')}
+        aria-pressed={current === 'all'}
+      >
+        {allLabel} ({total})
+      </button>
+      {[...counts.entries()].map(([stage, n]) => (
+        <button
+          key={stage}
+          type="button"
+          className={`ab-painel-stage-pill ${current === stage ? 'active' : ''}`}
+          onClick={() => onSelect(stage)}
+          aria-pressed={current === stage}
+        >
+          {(labels && labels[stage]) || unknownLabel || stage} ({n})
+        </button>
+      ))}
+    </div>
+  );
+}

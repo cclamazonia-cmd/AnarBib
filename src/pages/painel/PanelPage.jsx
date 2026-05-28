@@ -22,8 +22,9 @@ import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
-import { fmtD, UserDisplay, useSort, SortHeader } from './_shared';
+import { fmtD, UserDisplay, useSort, SortHeader, StageFilterBar } from './_shared';
 import TabEmprestimosLivro from './tabs/TabEmprestimosLivro';
+import TabConsultasLocais from './tabs/TabConsultasLocais';
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -1779,109 +1780,17 @@ export default function PanelPage() {
 
           {/* ═══ CONSULTAS LOCAIS ═══ */}
           {tab === 'consultas-locais' && (
-            <div>
-              <h2 className="ab-painel-h2">{t({ id: 'panel.tab.consultations' })}</h2>
-              <StageFilterBar
-                counts={conStageCounts}
-                current={conStageFilter}
-                onSelect={setConStageFilter}
-                labels={CONSULT_WORKFLOW}
-                allLabel={t({ id: 'panel.stageFilter.all' })}
-                unknownLabel={t({ id: 'panel.stage.unknown' })}
-              />
-              {sortCon.sortedItems.length === 0 ? (
-                <EmptyState message={t({
-                  id: conStageFilter === 'all'
-                    ? 'panel.consultations.empty'
-                    : 'panel.consultations.emptyStage'
-                })} />
-              ) : (
-              <div className="ab-painel-table-wrap">
-                <table className="ab-painel-table">
-                  <thead><tr>
-                    <SortHeader sortKey="sub_id" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.subId'})}</SortHeader>
-                    <SortHeader sortKey="user_name" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.reader'})}</SortHeader>
-                    <SortHeader sortKey="titulo" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.book'})}</SortHeader>
-                    <SortHeader sortKey="bib_ref" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.ref'})}</SortHeader>
-                    <SortHeader sortKey="workflow_stage_effective" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.step'})}</SortHeader>
-                    <SortHeader sortKey="consultation_scheduled_for" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({ id: 'panel.loan.scheduling' })}</SortHeader>
-                    <th>{t({id:'panel.table.actions'})}</th>
-                  </tr></thead>
-                  <tbody>
-                    {sortCon.sortedItems.map((c, i) => (
-                      <tr key={i}>
-                        <td>{c.sub_id}</td>
-                        <td>
-                          <UserDisplay
-                            name={c.user_name}
-                            email={c.user_email}
-                            publicId={c.user_public_id}
-                            userId={c.user_id}
-                          />
-                        </td>
-                        <td><Link to={`/livro/${c.book_id}`}>{c.titulo || '—'}</Link></td>
-                        <td>{c.bib_ref}</td>
-                        <td><span className="ab-painel-stage" data-stage={c.workflow_stage_effective}>{CONSULT_WORKFLOW[c.workflow_stage_effective] || CONSULT_WORKFLOW[c.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
-                        <td>
-                          {c.consultation_starts_at ? (
-                            <>
-                              <div>{formatSchedule(c)}</div>
-                              {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'confirmado_leitor' && (
-                                <span style={{ color: '#15803d', fontSize: '.85rem', fontWeight: 600 }}>
-                                  ✓ {t({ id: 'panel.consultation.replyStatus.confirmed' })}
-                                </span>
-                              )}
-                              {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'recusado_leitor' && (
-                                <div>
-                                  <span style={{ color: '#c2410c', fontSize: '.85rem', fontWeight: 600 }}>
-                                    ✗ {t({ id: 'panel.consultation.replyStatus.refused' })}
-                                  </span>
-                                  {c.schedule_reply_note && (
-                                    <div style={{ fontSize: '.75rem', fontStyle: 'italic', color: 'var(--brand-muted)', marginTop: 2 }}>
-                                      {t({ id: 'panel.consultation.refuseReason' })} {c.schedule_reply_note}
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                              {c.workflow_stage_effective === 'consulta_agendada' && !c.schedule_reply_status && (
-                                <span style={{ color: 'var(--brand-muted)', fontSize: '.85rem' }}>
-                                  ⏳ {t({ id: 'panel.consultation.replyStatus.pending' })}
-                                </span>
-                              )}
-                            </>
-                          ) : fmtD(c.consultation_scheduled_for)}
-                        </td>
-                        <td className="ab-painel-actions-cell">
-                          {c.workflow_stage_effective === 'solicitada' && (
-                            <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'em_preparacao')}>{t({id:'panel.table.prepare'})}</button>
-                          )}
-                          {c.workflow_stage_effective === 'em_preparacao' && (
-                            <button className="ab-button ab-button--mini" onClick={() => openScheduleModal(c)}>{t({ id: 'panel.loan.schedule' })}</button>
-                          )}
-                          {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'recusado_leitor' && (
-                            <button className="ab-button ab-button--mini" onClick={() => openScheduleModal(c)}>{t({ id: 'panel.consultation.action.proposeAnother' })}</button>
-                          )}
-                          {c.workflow_stage_effective === 'consulta_agendada' && c.consultation_starts_at && new Date(c.consultation_starts_at) < new Date() && c.schedule_reply_status !== 'recusado_leitor' && (
-                            <button className="ab-button ab-button--mini ab-button--danger" onClick={() => {
-                              if (window.confirm(t({ id: 'panel.consultation.noShowConfirm' }))) {
-                                setConsultaWorkflow(c.consulta_id, c.line_no, 'nao_compareceu', t({ id: 'panel.consultation.noShowReason' }));
-                              }
-                            }}>{t({ id: 'panel.consultation.action.markNoShow' })}</button>
-                          )}
-                          {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status !== 'recusado_leitor' && (
-                            <button className="ab-button ab-button--mini" onClick={() => setConsultaWorkflow(c.consulta_id, c.line_no, 'consulta_realizada')}>{t({id:'panel.table.completed'})}</button>
-                          )}
-                          {!['consulta_realizada','cancelada_leitor','cancelada_biblioteca','expirada'].includes(c.workflow_stage_effective) && (
-                            <button className="ab-button ab-button--mini ab-button--danger" onClick={() => openCancelModal(c)}>{t({ id: 'common.cancel' })}</button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              )}
-            </div>
+            <TabConsultasLocais
+              t={t}
+              sortCon={sortCon}
+              conStageCounts={conStageCounts}
+              conStageFilter={conStageFilter}
+              setConStageFilter={setConStageFilter}
+              CONSULT_WORKFLOW={CONSULT_WORKFLOW}
+              setConsultaWorkflow={setConsultaWorkflow}
+              openScheduleModal={openScheduleModal}
+              openCancelModal={openCancelModal}
+            />
           )}
 
           {/* ═══ EMPRÉSTIMOS POR LIVRO ═══ */}
@@ -2886,32 +2795,6 @@ export default function PanelPage() {
 // Audit UX 25/05/2026 (P3) : rangee de pills de filtre par etape de workflow.
 // Modele visuel : .ab-painel-history-pill (onglet Historique). Logique
 // compteur : membershipFilter (onglet Contribuicoes).
-function StageFilterBar({ counts, current, onSelect, labels, allLabel, unknownLabel }) {
-  const total = [...counts.values()].reduce((a, b) => a + b, 0);
-  return (
-    <div className="ab-painel-stage-filter">
-      <button
-        type="button"
-        className={`ab-painel-stage-pill ${current === 'all' ? 'active' : ''}`}
-        onClick={() => onSelect('all')}
-        aria-pressed={current === 'all'}
-      >
-        {allLabel} ({total})
-      </button>
-      {[...counts.entries()].map(([stage, n]) => (
-        <button
-          key={stage}
-          type="button"
-          className={`ab-painel-stage-pill ${current === stage ? 'active' : ''}`}
-          onClick={() => onSelect(stage)}
-          aria-pressed={current === stage}
-        >
-          {(labels && labels[stage]) || unknownLabel || stage} ({n})
-        </button>
-      ))}
-    </div>
-  );
-}
 
 function SummaryCard({ label, count, variant = 'default' }) {
   return (
