@@ -71,8 +71,17 @@ export default function TabEmprestimosLote({
         // EA-08 (chantier B, 27/05/2026) : filtre par emprestimo_status
         // puis tri selon la cle choisie. Tri par defaut : echeances les
         // plus proches en premier (sens metier au comptoir).
+        // BUG fix (28/05/2026) : 'aberto' filtrait trop strict — un emprunt
+        // dont un seul item est rendu passe en parcialmente_devolvido cote DB.
+        // La semantique "Aberto" cote UX inclut tout ce qui n'est pas clos,
+        // en coherence avec le backend (fn_check_loan_action v_active_status).
         const groups = Object.values(grouped)
-          .filter(g => loteStatusFilter === 'all' || g.emprestimo_status === loteStatusFilter)
+          .filter(g => {
+            if (loteStatusFilter === 'all') return true;
+            if (loteStatusFilter === 'aberto')
+              return ['aberto', 'parcialmente_devolvido'].includes(g.emprestimo_status);
+            return g.emprestimo_status === loteStatusFilter;
+          })
           .sort((a, b) => {
             switch (loteSortKey) {
               case 'due_at_asc':   return (a.due_at || '\uffff') < (b.due_at || '\uffff') ? -1 : 1;
@@ -87,9 +96,13 @@ export default function TabEmprestimosLote({
           return <EmptyState message={t({ id: 'panel.loanGrouped.empty' })} />;
         }
         return groups.map((g, i) => {
-          // Paquet 19 v2 (11/05/2026) : bouton Prorrogar disponible si emprunt ouvert
-          // et non deja prolonge. Meme logique que le tableau Empruntes standard.
-          const canExtend = g.emprestimo_status === 'aberto'
+          // Paquet 19 v2 (11/05/2026) : bouton Prorrogar disponible si emprunt actif
+          // (aberto OU parcialmente_devolvido) et non deja prolonge. Meme logique
+          // que le RPC api.extend_loan_as_library qui accepte les deux statuts via
+          // fn_check_loan_action (v_active_status = aberto OU parcialmente_devolvido).
+          // BUG-lote-extend (28/05/2026) : ajout 'parcialmente_devolvido', le statut
+          // strict 'aberto' empechait l'extension d'un emprunt aux items mixtes.
+          const canExtend = ['aberto', 'parcialmente_devolvido'].includes(g.emprestimo_status)
             && !g.extended_once
             && !g.extended_until;
           // Paquet 19 v3 (11/05/2026) : bouton Restituer tout disponible si au
