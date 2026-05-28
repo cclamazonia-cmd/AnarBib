@@ -53,6 +53,7 @@
   "account.alert.openLoans": "{count, plural, one {Vous avez # emprunt en cours} other {Vous avez # emprunts en cours}}",
   "account.alert.overdue": "{count, plural, one {# emprunt en retard} other {# emprunts en retard}}",
   "account.alert.restricted": "Compte avec restriction : {reason}",
+  "account.alert.restricted.local": "Compte restreint localement par votre bibliothèque. Motif : {reason}. Rapprochez-vous de l’équipe de la bibliothèque pour régulariser.",
   "account.changePassword.confirmPassword": "Confirmer le nouveau mot de passe",
   "account.changePassword.error.mismatch": "La confirmation ne correspond pas au nouveau mot de passe.",
   "account.changePassword.error.tooShort": "Le nouveau mot de passe doit faire au moins 8 caractères.",

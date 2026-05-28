@@ -53,6 +53,7 @@
   "account.alert.openLoans": "{count, plural, one {Vi havas # kurantan prunton} other {Vi havas # kurantajn pruntojn}}",
   "account.alert.overdue": "{count, plural, one {# malfruita prunto} other {# malfruitaj pruntoj}}",
   "account.alert.restricted": "Konto kun restrikto: {reason}",
+  "account.alert.restricted.local": "Konto loke limigita de via biblioteko. Kialo: {reason}. Kontaktu la bibliotekan teamon por solvi tion.",
   "account.changePassword.confirmPassword": "Konfirmi la novan pasvorton",
   "account.changePassword.error.mismatch": "La konfirmo ne kongruas kun la nova pasvorto.",
   "account.changePassword.error.tooShort": "La nova pasvorto devas havi almenaŭ 8 signojn.",
