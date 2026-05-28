@@ -1,3 +1,4 @@
+import { TabHeader } from '../_shared';
 // ═══════════════════════════════════════════════════════════
 // TabHistorico — onglet « Historique » (chantier E.1 / OT-4)
 // ───────────────────────────────────────────────────────────
@@ -14,10 +15,11 @@ export default function TabHistorico({
   historyLoading,
   toggleHistoryType,
   loadHistorySection,
+  refreshHistorico,
 }) {
   return (
     <div>
-      <h2 className="ab-painel-h2">{t({ id: 'panel.history.title' })}</h2>
+      <TabHeader title={t({ id: 'panel.history.title' })} onRefresh={refreshHistorico} />
       <p className="ab-painel-hint">{t({ id: 'panel.history.subtitle' })}</p>
 
       <div className="ab-painel-history-filters">

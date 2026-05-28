@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
-import { SummaryCard, TaskBucket } from '../_shared';
+import { SummaryCard, TaskBucket, TabHeader } from '../_shared';
 
 // ═══════════════════════════════════════════════════════════
 // TabTrabalhoDoDia — onglet « Travail du jour » (chantier E.1 / OT-4)
@@ -30,7 +30,7 @@ export default function TabTrabalhoDoDia({
   const acomp = tasks.filter(t => t.bucket === 'acompanhamento');
   return (
     <div>
-      <h2 className="ab-painel-h2">{t({ id: 'panel.tab.dailyWork.hint' })}</h2>
+      <TabHeader title={t({ id: 'panel.tab.dailyWork.hint' })} onRefresh={loadData} />
       <div className="ab-painel-summary-grid">
         <SummaryCard label={t({id:'panel.summary.today'})} count={hoje.length} variant="warn" />
         <SummaryCard label={t({id:'panel.summary.attention'})} count={atencao.length} variant="bad" />

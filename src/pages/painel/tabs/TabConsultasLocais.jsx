@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { EmptyState } from '@/components/ui';
 import { formatSchedule } from '@/lib/scheduleFormat';
-import { fmtD, UserDisplay, SortHeader, StageFilterBar } from '../_shared';
+import { fmtD, UserDisplay, SortHeader, StageFilterBar, TabHeader } from '../_shared';
 
 // ═══════════════════════════════════════════════════════════
 // TabConsultasLocais — onglet « Consultations » (chantier E.1 / OT-4)
@@ -20,10 +20,11 @@ export default function TabConsultasLocais({
   setConsultaWorkflow,
   openScheduleModal,
   openCancelModal,
+  loadData,
 }) {
   return (
     <div>
-      <h2 className="ab-painel-h2">{t({ id: 'panel.tab.consultations' })}</h2>
+      <TabHeader title={t({ id: 'panel.tab.consultations' })} onRefresh={loadData} />
       <StageFilterBar
         counts={conStageCounts}
         current={conStageFilter}

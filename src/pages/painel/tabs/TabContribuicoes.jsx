@@ -1,5 +1,5 @@
 import { Button, Pill, EmptyState } from '@/components/ui';
-import { fmtD } from '../_shared';
+import { fmtD, TabHeader } from '../_shared';
 
 // ═══════════════════════════════════════════════════════════
 // TabContribuicoes — onglet « Contribuições / Cotisations » (E.1 / OT-4)
@@ -18,10 +18,11 @@ export default function TabContribuicoes({
   getMembershipFilterCount,
   fmtMembershipStatus,
   openPaymentModal,
+  loadMembershipOverview,
 }) {
   return (
     <div>
-      <h2 className="ab-painel-h2">{t({ id: 'panel.memberships.title' })}</h2>
+      <TabHeader title={t({ id: 'panel.memberships.title' })} onRefresh={loadMembershipOverview} />
       <p style={{ color: 'var(--brand-muted)', fontSize: '.88rem', marginBottom: 12 }}>
         {t({ id: 'panel.memberships.hint' })}
       </p>

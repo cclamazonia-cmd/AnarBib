@@ -3,7 +3,7 @@ import { EmptyState } from '@/components/ui';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
-import { fmtD } from '../_shared';
+import { fmtD, TabHeader } from '../_shared';
 
 // ═══════════════════════════════════════════════════════════
 // TabEmprestimosLote — onglet « Emprunts groupés » (chantier E.1 / OT-4)
@@ -27,7 +27,7 @@ export default function TabEmprestimosLote({
   const { notifyError } = useToast();
   return (
     <div>
-      <h2 className="ab-painel-h2">{t({ id: 'panel.loan.grouped' })}</h2>
+      <TabHeader title={t({ id: 'panel.loan.grouped' })} onRefresh={loadData} />
 
       {/* EA-08 (chantier B, 27/05/2026) : controles filtre + tri. */}
       <div className="ab-painel-lote-controls" style={{ display: 'flex', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>

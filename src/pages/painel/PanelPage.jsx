@@ -313,6 +313,14 @@ export default function PanelPage() {
   // Audit UX 25/05/2026 (P3) : filtre par etape de workflow pour les onglets
   // Reservations et Consultations. 'all' = toutes les etapes. Modele :
   // membershipFilter de l'onglet Contribuicoes.
+  // E.2 (OT-1, 28/05/2026) : refresh par onglet — Histórico ne dépend pas de
+  // loadData global, il a sa propre logique loadHistorySection par type.
+  // On rappelle loadHistorySection(type, false) pour chaque type actif.
+  const refreshHistorico = useCallback(() => {
+    const types = historyTypes || new Set();
+    types.forEach(type => loadHistorySection(type, false));
+  }, [historyTypes, loadHistorySection]);
+
   const [resStageFilter, setResStageFilter] = useState('all');
   const [conStageFilter, setConStageFilter] = useState('all');
   // EA-08 (chantier B, 27/05/2026) : tri et filtre sur l'onglet emprestimos-lote.
@@ -1501,6 +1509,7 @@ export default function PanelPage() {
               setConsultaWorkflow={setConsultaWorkflow}
               openScheduleModal={openScheduleModal}
               openCancelModal={openCancelModal}
+              loadData={loadData}
             />
           )}
 
@@ -1511,6 +1520,7 @@ export default function PanelPage() {
               sortLoans={sortLoans}
               returnLoanItem={returnLoanItem}
               extendLoan={extendLoan}
+              loadData={loadData}
             />
           )}
 
@@ -1574,6 +1584,7 @@ export default function PanelPage() {
               historyLoading={historyLoading}
               toggleHistoryType={toggleHistoryType}
               loadHistorySection={loadHistorySection}
+              refreshHistorico={refreshHistorico}
             />
           )}
 
@@ -1587,6 +1598,7 @@ export default function PanelPage() {
               getMembershipFilterCount={getMembershipFilterCount}
               fmtMembershipStatus={fmtMembershipStatus}
               openPaymentModal={openPaymentModal}
+              loadMembershipOverview={loadMembershipOverview}
             />
           )}
 

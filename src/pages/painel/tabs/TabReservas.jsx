@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, EmptyState } from '@/components/ui';
 import NegotiationStateBadge from '@/components/reservation/NegotiationStateBadge';
-import { fmtD, UserDisplay, SortHeader, StageFilterBar } from '../_shared';
+import { fmtD, UserDisplay, SortHeader, StageFilterBar, TabHeader } from '../_shared';
 
 // ═══════════════════════════════════════════════════════════
 // TabReservas — onglet « Réservations » (chantier E.1 / OT-4)
@@ -45,10 +45,10 @@ export default function TabReservas({
 }) {
   return (
     <div>
+      <TabHeader title={t({ id: 'panel.tab.reservations' })} onRefresh={loadData} />
       <div className="ab-painel-res-toolbar">
         <Button onClick={confirmSelectedPickup}>{t({ id: 'panel.reservations.confirmPickup' }, { count: selectedRes.size })}</Button>
         <Button variant="secondary" onClick={() => cancelSelectedRes()}>{t({ id: 'common.cancel' })} ({selectedRes.size})</Button>
-        <Button variant="secondary" onClick={loadData}>{t({ id: 'common.refresh' })}</Button>
       </div>
       <div className="ab-painel-res-workflow">
         <input type="text" value={resNote} onChange={e => setResNote(e.target.value)} placeholder={t({id:"panel.loan.notePh"})} className="ab-painel-input" />

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { EmptyState } from '@/components/ui';
-import { fmtD, UserDisplay, SortHeader } from '../_shared';
+import { fmtD, UserDisplay, SortHeader, TabHeader } from '../_shared';
 
 // ═══════════════════════════════════════════════════════════
 // TabEmprestimosLivro — onglet « Emprunts » (chantier E.1 / OT-4)
@@ -9,10 +9,10 @@ import { fmtD, UserDisplay, SortHeader } from '../_shared';
 // Composant de présentation : tout l'état et les handlers restent
 // dans PanelPage, passés ici en props. Iso-comportement strict.
 // ═══════════════════════════════════════════════════════════
-export default function TabEmprestimosLivro({ t, sortLoans, returnLoanItem, extendLoan }) {
+export default function TabEmprestimosLivro({ t, sortLoans, returnLoanItem, extendLoan, loadData }) {
   return (
     <div>
-      <h2 className="ab-painel-h2">{t({ id: 'panel.tab.loans' })}</h2>
+      <TabHeader title={t({ id: 'panel.tab.loans' })} onRefresh={loadData} />
       {sortLoans.sortedItems.length === 0 ? (
         <EmptyState message={t({ id: 'panel.loans.empty' })} />
       ) : (

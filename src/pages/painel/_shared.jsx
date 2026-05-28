@@ -221,3 +221,51 @@ export function TaskBucket({ title, tasks, setTab, onTaskAction }) {
     </div>
   );
 }
+
+// ═══════════════════════════════════════════════════════════
+// TabHeader — en-tête uniforme avec titre + bouton refresh
+// (chantier E.2 / OT-1, 28/05/2026)
+// ───────────────────────────────────────────────────────────
+// Pattern « ↻ Actualiser » à côté du titre d'onglet, demandé par
+// l'audit Painel OT-1. Mutualisé pour garantir l'homogénéité
+// visuelle entre tous les onglets concernés.
+//
+// Le bouton n'est rendu que si onRefresh est fourni — permet aux
+// onglets qui n'ont pas de refresh (Ações, Gerir leitor·e) de
+// réutiliser TabHeader pour le seul titre, si voulu un jour.
+// ═══════════════════════════════════════════════════════════
+export function TabHeader({ title, onRefresh, refreshLabel }) {
+  const { formatMessage: t } = useIntl();
+  // E.2 (28/05/2026) : feedback visuel pendant le rechargement. Sans ça,
+  // si la base n'a pas changé, l'utilisateur a l'impression que rien ne
+  // s'est passé. Désactive le bouton + spinner pendant l'appel.
+  const [busy, setBusy] = useState(false);
+  const handleClick = async () => {
+    if (busy) return;
+    setBusy(true);
+    try { await onRefresh(); }
+    finally {
+      // Délai mini pour que le feedback soit perceptible même sur appel
+      // ultra-rapide (cache, RPC < 100ms). 400ms est un bon compromis.
+      setTimeout(() => setBusy(false), 400);
+    }
+  };
+  const label = refreshLabel || t({ id: 'common.refresh' });
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
+      <h2 className="ab-painel-h2" style={{ margin: 0 }}>{title}</h2>
+      {onRefresh && (
+        <button
+          type="button"
+          className="ab-button ab-button--secondary ab-button--mini"
+          onClick={handleClick}
+          disabled={busy}
+          title={label}
+          style={busy ? { opacity: 0.5, cursor: 'wait' } : undefined}
+        >
+          ↻ {busy ? `${label}…` : label}
+        </button>
+      )}
+    </div>
+  );
+}
