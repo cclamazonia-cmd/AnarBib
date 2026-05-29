@@ -16,6 +16,8 @@ export default function TabHistorico({
   toggleHistoryType,
   loadHistorySection,
   refreshHistorico,
+  historyPageSize,
+  changeHistoryPageSize,
 }) {
   return (
     <div>
@@ -34,6 +36,43 @@ export default function TabHistorico({
             {t({ id: `panel.history.filter.${type}` })}
           </button>
         ))}
+      </div>
+
+      {/* EA-11 (29/05/2026) : selecteur de taille de page 25/50/100.
+          Toujours visible (meme si aucun type filtre coche), parce que c'est
+          une preference de l'utilisateur·rice qui doit persister.
+          NOTE: styles inline en attendant E.4 / OT-2 (chartage centralise). */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        marginTop: 12,
+        marginBottom: 12,
+        fontSize: '.88rem',
+        color: 'var(--brand-muted)',
+      }}>
+        <label htmlFor="history-page-size">
+          {t({ id: 'panel.history.pageSize' })} :
+        </label>
+        <select
+          id="history-page-size"
+          value={historyPageSize}
+          onChange={e => changeHistoryPageSize(parseInt(e.target.value, 10))}
+          style={{
+            padding: '4px 8px',
+            borderRadius: 6,
+            background: 'rgba(0,0,0,.3)',
+            color: 'inherit',
+            border: '1px solid rgba(255,255,255,.15)',
+            fontSize: '.88rem',
+            fontFamily: 'inherit',
+            cursor: 'pointer',
+          }}
+        >
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
       </div>
 
       {(historyTypes || new Set()).size === 0 ? (

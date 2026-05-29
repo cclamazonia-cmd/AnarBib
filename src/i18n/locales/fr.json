@@ -2197,6 +2197,7 @@
   "panel.tasks.title": "Tâches internes de la bibliothèque",
   "panel.title": "Tableau de bord",
   "panel.hero.allClear": "Tout est à jour. → Voir la synthèse",
+  "panel.history.pageSize": "Par page",
   "panel.hero.dailyWorkLink": "{count, plural, one {# item demande une action aujourd'hui} other {# items demandent une action aujourd'hui}} → Voir la synthèse",
   "panel.workflow.done": "Effectué",
   "panel.workflow.expired": "Expiré",

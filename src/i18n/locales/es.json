@@ -2197,6 +2197,7 @@
   "panel.tasks.title": "Tareas internas de la biblioteca",
   "panel.title": "Panel de la biblioteca",
   "panel.hero.allClear": "Todo al día. → Ver la síntesis",
+  "panel.history.pageSize": "Por página",
   "panel.hero.dailyWorkLink": "{count, plural, one {# elemento requiere acción hoy} other {# elementos requieren acción hoy}} → Ver la síntesis",
   "panel.workflow.done": "Realizado",
   "panel.workflow.expired": "Expirado",

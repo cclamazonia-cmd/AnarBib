@@ -258,12 +258,26 @@ export default function PanelPage() {
   const [historyHasMore, setHistoryHasMore] = useState({ reservas: true, consultas: true, emprestimos: true });
   const [historyLoading, setHistoryLoading] = useState({ reservas: false, consultas: false, emprestimos: false });
 
-  const HISTORY_PAGE_SIZE = 50;
+  // EA-11 (29/05/2026) : taille de page configurable par l'utilisateur·rice
+  // (selecteur 25/50/100 cote TabHistorico). State au niveau PanelPage parce
+  // que loadHistorySection en a besoin et que le handler de changement doit
+  // pouvoir reset historyData/Offsets/HasMore pour relancer le chargement.
+  const [historyPageSize, setHistoryPageSize] = useState(50);
   const HISTORY_VIEW_NAMES = {
     reservas: 'painel_reservations_history_v1',
     consultas: 'painel_consultas_history_v1',
     emprestimos: 'painel_loans_history_v1'
   };
+
+  const changeHistoryPageSize = useCallback((newSize) => {
+    setHistoryPageSize(newSize);
+    // Reset complet : on relance le chargement de la 1ere page a la nouvelle
+    // taille. Le useEffect d'auto-load detecte historyData[type].length === 0
+    // et appelle loadHistorySection si type est dans historyTypes.
+    setHistoryData({ reservas: [], consultas: [], emprestimos: [] });
+    setHistoryOffsets({ reservas: 0, consultas: 0, emprestimos: 0 });
+    setHistoryHasMore({ reservas: true, consultas: true, emprestimos: true });
+  }, []);
 
   const loadHistorySection = useCallback(async (type, append = false) => {
     if (historyLoading[type]) return;
@@ -276,7 +290,7 @@ export default function PanelPage() {
       const { data, error } = await supabase
         .schema('api').from(viewName)
         .select('*')
-        .range(offset, offset + HISTORY_PAGE_SIZE - 1);
+        .range(offset, offset + historyPageSize - 1);
       
       if (error) {
         console.error(`load ${type} history error:`, error);
@@ -285,7 +299,7 @@ export default function PanelPage() {
       }
       
       const items = data || [];
-      const hasMore = items.length === HISTORY_PAGE_SIZE;
+      const hasMore = items.length === historyPageSize;
       
       setHistoryData(prev => ({
         ...prev,
@@ -298,7 +312,7 @@ export default function PanelPage() {
     } finally {
       setHistoryLoading(prev => ({ ...prev, [type]: false }));
     }
-  }, [historyLoading, historyOffsets]);
+  }, [historyLoading, historyOffsets, historyPageSize]);
 
   // Auto-load des sections cochees a l'ouverture de l'onglet
   useEffect(() => {
@@ -1695,6 +1709,8 @@ export default function PanelPage() {
               toggleHistoryType={toggleHistoryType}
               loadHistorySection={loadHistorySection}
               refreshHistorico={refreshHistorico}
+              historyPageSize={historyPageSize}
+              changeHistoryPageSize={changeHistoryPageSize}
             />
           )}
 

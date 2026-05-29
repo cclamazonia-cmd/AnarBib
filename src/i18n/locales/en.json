@@ -2197,6 +2197,7 @@
   "panel.tasks.title": "Library internal tasks",
   "panel.title": "Library dashboard",
   "panel.hero.allClear": "All clear today. → See synthesis",
+  "panel.history.pageSize": "Per page",
   "panel.hero.dailyWorkLink": "{count, plural, one {# item requires action today} other {# items require action today}} → See synthesis",
   "panel.workflow.done": "Realizada",
   "panel.workflow.expired": "Expirada",
