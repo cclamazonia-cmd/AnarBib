@@ -134,6 +134,7 @@
   "account.loans.partialReturnHint": "Préstec amb devolució parcial en curs",
   "account.loans.recentlyReturned": "Tornats recentment",
   "account.loans.renew": "Renovar",
+  "account.loans.renewAll": "Renovar-ho tot",
   "account.loans.renewed": "Ja renovat",
   "account.loans.renewed.msg": "Renovat!",
   "account.loans.renewedUntil": "Renovat fins al {date}",

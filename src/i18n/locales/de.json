@@ -134,6 +134,7 @@
   "account.loans.partialReturnHint": "Ausleihe mit laufender Teilrückgabe",
   "account.loans.recentlyReturned": "Kürzlich zurückgegeben",
   "account.loans.renew": "Verlängern",
+  "account.loans.renewAll": "Alles verlängern",
   "account.loans.renewed": "Bereits verlängert",
   "account.loans.renewed.msg": "Verlängert!",
   "account.loans.renewedUntil": "Verlängert bis {date}",

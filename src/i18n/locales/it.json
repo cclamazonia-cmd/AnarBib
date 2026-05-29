@@ -134,6 +134,7 @@
   "account.loans.partialReturnHint": "Prestito con restituzione parziale in corso",
   "account.loans.recentlyReturned": "Restituiti di recente",
   "account.loans.renew": "Rinnova",
+  "account.loans.renewAll": "Rinnova tutto",
   "account.loans.renewed": "Già rinnovato",
   "account.loans.renewed.msg": "Rinnovato!",
   "account.loans.renewedUntil": "Rinnovato fino al {date}",

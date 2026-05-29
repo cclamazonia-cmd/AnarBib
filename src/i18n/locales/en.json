@@ -134,6 +134,7 @@
   "account.loans.partialReturnHint": "Loan with a partial return in progress",
   "account.loans.recentlyReturned": "Recently returned",
   "account.loans.renew": "Renew",
+  "account.loans.renewAll": "Renew all",
   "account.loans.renewed": "Already renewed",
   "account.loans.renewed.msg": "Renewed!",
   "account.loans.renewedUntil": "Renewed until {date}",

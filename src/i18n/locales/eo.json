@@ -134,6 +134,7 @@
   "account.loans.partialReturnHint": "Prunto kun kuranta parta redono",
   "account.loans.recentlyReturned": "Lastatempe redonitaj",
   "account.loans.renew": "Renovigi",
+  "account.loans.renewAll": "Renovigi ĉion",
   "account.loans.renewed": "Jam renovigita",
   "account.loans.renewed.msg": "Renovigita!",
   "account.loans.renewedUntil": "Renovigita ĝis {date}",

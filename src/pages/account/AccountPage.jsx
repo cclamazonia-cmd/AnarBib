@@ -107,7 +107,7 @@ export default function AccountPage() {
         apiQuery('my_consultas_active_v2'),
         apiQuery('my_consultas_history_v2'),
         apiQuery('emprestimo_itens_ui'),
-        apiQuery('my_loans_renewal_status_v1'),
+        apiQuery('my_loans_renewal_status_by_item_v1'),
         apiQuery('my_reservations_history_v2'),
         apiQuery('my_loans_history_v1'),
         supabase.from('library_service_state').select('*'),
@@ -118,7 +118,7 @@ export default function AccountPage() {
       setConsultationsHistory(consultHistRes.data || []);
       setLoans(loansRes.data || []);
       setRenewStatus(Object.fromEntries(
-        (renewStatusRes.data || []).map(r => [r.emprestimo_id, r])
+        (renewStatusRes.data || []).map(r => [r.sub_id, r])
       ));
       setHistory(histRes.data || []);
       setLoanHistory(loanHistRes.data || []);
@@ -1322,7 +1322,15 @@ export default function AccountPage() {
                 <p className="ab-conta-empty">{t({ id: 'account.loans.empty' })}</p>
               ) : (
                 <div className="ab-conta-items">
-                  {loans.filter(l => l.item_status === 'aberto').map((l, i) => {
+                  {(() => {
+                    const openLoans = loans.filter(l => l.item_status === 'aberto');
+                    // Granularité 3b : structures par emprunt pour « tout renouveler ».
+                    const openByLoan = {};
+                    openLoans.forEach(x => { openByLoan[x.emprestimo_id] = (openByLoan[x.emprestimo_id] || 0) + 1; });
+                    const canRenewAnyByLoan = {};
+                    Object.values(renewStatus).forEach(r => { if (r && r.can_renew) canRenewAnyByLoan[r.emprestimo_id] = true; });
+                    const firstRowSeen = new Set();
+                    return openLoans.map((l, i) => {
                     // Paquet 7 fix (10/05/2026) : utiliser extended_until si présent,
                     // sinon due_at. Sinon la date affichée ne reflète pas le renouvellement.
                     const effectiveDue = l.extended_until || l.due_at;
@@ -1332,9 +1340,16 @@ export default function AccountPage() {
                     const isOverdue = daysLeft !== null && daysLeft < 0;
                     const isSoon = daysLeft !== null && daysLeft >= 0 && daysLeft <= 3;
                     // Paquet 7 (10/05/2026) : compteur explicite + pré-évaluation
-                    const renewalsUsed = l.renewals_used || 0;
+                    // Granularité 3b (29/05/2026) : statut PAR ITEM (clé sub_id).
+                    const renewInfo = renewStatus[l.sub_id] || null;
+                    const renewalsUsed = renewInfo ? (renewInfo.renewals_used || 0) : (l.renewals_used || 0);
                     const wasExtended = renewalsUsed > 0;
-                    const renewInfo = renewStatus[l.emprestimo_id] || null;
+                    // « Tout renouveler » : sur la 1re ligne ouverte d'un emprunt à >=2 items.
+                    const openCount = openByLoan[l.emprestimo_id] || 1;
+                    const isFirstOfLoan = !firstRowSeen.has(l.emprestimo_id);
+                    if (isFirstOfLoan) firstRowSeen.add(l.emprestimo_id);
+                    const showRenewAll = isFirstOfLoan && openCount >= 2;
+                    const loanCanRenewAny = !!canRenewAnyByLoan[l.emprestimo_id];
                     // Paquet 8 (10/05/2026) : détection retour partiel calculée côté frontend
                     // à partir du tableau loans complet (groupBy emprestimo_id).
                     const sameLoanItems = loans.filter(x => x.emprestimo_id === l.emprestimo_id);
@@ -1361,9 +1376,25 @@ export default function AccountPage() {
                           {isPartialReturn && <span className="ab-conta-item__meta" style={{ color: '#f59e0b' }}>{t({ id: 'account.loans.partialReturnHint' })}</span>}
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
+                          {showRenewAll && (
+                            <Button
+                              variant="mini"
+                              disabled={!loanCanRenewAny}
+                              title={!loanCanRenewAny ? t({ id: 'account.renew.tooltipBlocked' }, { reason: t({ id: 'account.renew.not_renewable' }) }) : undefined}
+                              onClick={async () => {
+                                const { data, error } = await supabase.schema('api').rpc('renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
+                                if (error) { alert(t({id:'common.errorPrefix'}, {message: localizeError(error, t)})); return; }
+                                if (data?.ok === false) { alert(t({ id: `account.renew.${data.reason}` })); return; }
+                                alert(t({ id: 'account.renew.renewed' }, { date: new Date(data.new_due_date).toLocaleDateString() }));
+                                loadData();
+                              }}
+                            >
+                              {t({ id: 'account.loans.renewAll' })}
+                            </Button>
+                          )}
                           {(() => {
                             // Paquet 7 : pré-désactivation + tooltip
-                            // renewInfo vient de api.my_loans_renewal_status_v1 et porte
+                            // renewInfo vient de api.my_loans_renewal_status_by_item_v1 et porte
                             // can_renew (bool) + blocking_reason (text|null).
                             // Fallback ancien comportement si la vue n'a pas répondu.
                             const canRenew = renewInfo
@@ -1378,15 +1409,15 @@ export default function AccountPage() {
                               : null;
                             // On n'affiche le bouton que si pas déjà étiqueté "renouvelé" ou "en retard"
                             // (les deux étiquettes spécialisées plus bas couvrent ces cas).
-                            if (wasExtended || isOverdue) return null;
+                            if (isOverdue || (wasExtended && !canRenew)) return null;
                             return (
                               <Button
                                 variant="mini"
                                 disabled={!canRenew}
                                 title={tooltipMsg || undefined}
                                 onClick={async () => {
-                                  // Paquet 19 (10/05/2026) : utiliser le wrapper api.* au lieu de la fn DEFINER
-                                  const { data, error } = await supabase.schema('api').rpc('renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
+                                  // Granularité 3b (29/05/2026) : renouvellement PAR ITEM via wrapper api.*
+                                  const { data, error } = await supabase.schema('api').rpc('renew_my_loan_item', { p_emprestimo_id: l.emprestimo_id, p_line_no: l.line_no });
                                   if (error) { alert(t({id:'common.errorPrefix'}, {message: localizeError(error, t)})); return; }
                                   if (data?.ok === false) {
                                     alert(t({ id: `account.renew.${data.reason}` }));
@@ -1406,7 +1437,8 @@ export default function AccountPage() {
                         </div>
                       </div>
                     );
-                  })}
+                    });
+                  })()}
                 </div>
               )}
 
