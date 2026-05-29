@@ -372,6 +372,13 @@ export default function PanelPage() {
   const [returnId, setReturnId] = useState('');
   const [returnSubIds, setReturnSubIds] = useState('');
   const [returnMsg, setReturnMsg] = useState('');
+  // EA-03 (29/05/2026) : prévisualisation symétrique de la sortie d'emprunt
+  // pour les retours total et partiel. 2 phases (preview puis confirmation)
+  // avec clé de cohérence : la preview est invalidée dès que l'input change.
+  // Calcul de preview entièrement côté front à partir de `loans` (déjà chargé) :
+  // pas de RPC supplémentaire.
+  const [returnTotalPreview, setReturnTotalPreview] = useState(null);
+  const [returnPartialPreview, setReturnPartialPreview] = useState(null);
 
   // Gerir leitor
   const [readerLookup, setReaderLookup] = useState('');
@@ -762,74 +769,194 @@ export default function PanelPage() {
   async function registrarDevolucaoTotal() {
     const id = parseInt(returnId);
     if (!id) { setReturnMsg(t({id:'panel.loan.enterLoanId'})); return; }
-    setReturnMsg(t({id:'panel.loan.returning'}));
-    try {
-      // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
-      const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: id });
-      if (error) throw error;
-      setReturnMsg(t({id:'panel.return.totalRegistered'},{id}));
-      // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
-      // (via fn_v2_refresh_emprestimo_status_global) dispatch déjà l'event
-      // approprié selon la transition (devolvido OU devolvido_apos_parcial).
-      setReturnId('');
-      loadData();
-    } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.loanReturn')})); }
+
+    // ════════════════════════════════════════════════════
+    // PHASE 2 : confirmation - preview valide et cohérente
+    // ════════════════════════════════════════════════════
+    if (returnTotalPreview && returnTotalPreview.id === id) {
+      setReturnMsg(t({id:'panel.loan.returning'}));
+      try {
+        // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
+        const { error } = await supabase.schema('api').rpc('return_loan_total', { p_emprestimo_id: id });
+        if (error) throw error;
+        setReturnMsg(t({id:'panel.return.totalRegistered'},{id}));
+        // Paquet 9 (10/05/2026) : notifyEvent manuel supprimé. Le trigger DB
+        // (via fn_v2_refresh_emprestimo_status_global) dispatch déjà l'event
+        // approprié selon la transition (devolvido OU devolvido_apos_parcial).
+        setReturnId('');
+        setReturnTotalPreview(null);
+        loadData();
+      } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.loanReturn')})); }
+      return;
+    }
+
+    // ════════════════════════════════════════════════════
+    // PHASE 1 : preview - vérifier emprunt + lister items à clore
+    // ════════════════════════════════════════════════════
+    // EA-03 (29/05/2026) : on cherche l'emprunt dans `loans` (et non
+    // `activeLoans`) pour pouvoir distinguer "inconnu" (jamais existé / archivé)
+    // de "déjà totalement clôturé" (tous items à 'devolvido' mais encore dans
+    // le scope chargé). Si aucun item ouvert à clore, on rejette.
+    const matchingItems = loans.filter(l => l.emprestimo_id === id);
+    if (!matchingItems.length) {
+      setReturnMsg(t({id:'panel.return.total.notFound'},{id}));
+      return;
+    }
+    const openItems = matchingItems.filter(l => l.item_status === 'aberto');
+    if (!openItems.length) {
+      setReturnMsg(t({id:'panel.return.total.alreadyClosed'},{id}));
+      return;
+    }
+    const borrowerName = matchingItems[0].user_name
+      || matchingItems[0].user_email
+      || matchingItems[0].user_public_id
+      || '?';
+    setReturnTotalPreview({
+      id,
+      borrowerName,
+      itemCount: openItems.length,
+    });
+    setReturnMsg(t({id:'panel.return.total.preview.confirm'}, {
+      id,
+      borrower: borrowerName,
+      count: openItems.length,
+    }));
   }
 
   async function registrarDevolucaoParcial() {
     const subIds = returnSubIds.split(/[,;\s]+/).map(s => s.trim()).filter(Boolean);
     if (!subIds.length) { setReturnMsg(t({id:'panel.loan.enterSubIds'})); return; }
-    setReturnMsg(t({id:'panel.loan.returning'}));
-    // BUG-retour-partiel-faux-succès (28/05/2026) : auparavant, le succès
-    // s'affichait inconditionnellement à la fin de la boucle, même si tous
-    // les sub_ids étaient mal formés (saisie de book_id 0000185 sans point,
-    // au lieu de sub_id 47.2 par exemple). On distingue maintenant 3 cas :
-    //   - malformed: sub_ids non parsables (pas de point ou parties non
-    //     numériques) → skippés au parsing
-    //   - rejected: sub_ids valides en apparence mais que le RPC rejette
-    //     (emprestimo inconnu, line_no inexistant, item déjà rendu) →
-    //     le RPC lève maintenant une exception no_lines_returned
-    //   - ok: lignes effectivement rendues
+
+    // Clé de cohérence : chaîne canonique des sub_ids (triée pour être
+    // insensible à l'ordre de saisie).
+    const subIdsKey = subIds.slice().sort().join('|');
+
+    // ════════════════════════════════════════════════════
+    // PHASE 2 : confirmation - preview valide et cohérente
+    // ════════════════════════════════════════════════════
+    if (returnPartialPreview && returnPartialPreview.subIdsKey === subIdsKey) {
+      setReturnMsg(t({id:'panel.loan.returning'}));
+      // BUG-retour-partiel-faux-succès (28/05/2026) : on conserve la
+      // défense en profondeur (filets backend + check data === 0) même
+      // si la preview a déjà filtré les cas mal formés / inapplicables.
+      // Cas couvert : un item passe en 'devolvido' entre la preview et
+      // la confirmation (course condition rare mais possible).
+      const rejected = [];
+      const ok = [];
+      for (const item of returnPartialPreview.okCandidates) {
+        try {
+          const { data, error } = await supabase.schema('api').rpc('return_loan_partial', {
+            p_emprestimo_id: item.empId, p_line_nos: [item.lineNo],
+          });
+          if (error) throw error;
+          if (data === 0 || data === null) {
+            rejected.push(item.sub_id);
+          } else {
+            ok.push(item.sub_id);
+          }
+        } catch (e) {
+          rejected.push(item.sub_id);
+        }
+      }
+      // Message consolidé reprenant les 3 catégories (pre-preview + post-RPC).
+      const parts = [];
+      if (ok.length) {
+        parts.push(t({id:'panel.return.partialRegistered'},{ids: ok.join(', ')}));
+      }
+      if (returnPartialPreview.malformed.length) {
+        parts.push(t({id:'panel.return.malformedSubIds'},{ids: returnPartialPreview.malformed.join(', ')}));
+      }
+      const allRejected = [
+        ...returnPartialPreview.preRejected.map(r => r.sub_id),
+        ...rejected,
+      ];
+      if (allRejected.length) {
+        parts.push(t({id:'panel.return.rejectedSubIds'},{ids: allRejected.join(', ')}));
+      }
+      setReturnMsg(parts.join(' · '));
+      if (ok.length) {
+        setReturnSubIds('');
+        setReturnPartialPreview(null);
+        loadData();
+      }
+      return;
+    }
+
+    // ════════════════════════════════════════════════════
+    // PHASE 1 : preview - catégoriser les sub_ids
+    // ════════════════════════════════════════════════════
+    // EA-03 (29/05/2026) : tri front en 3 catégories AVANT exécution :
+    //   - malformed : parsing échoué (book_id au lieu de sub_id, etc.)
+    //   - preRejected : sub_id valide mais item inconnu ou déjà rendu
+    //   - okCandidates : sub_id valide ET item ouvert → à rendre
+    // Le même tri était fait après-coup côté front depuis le fix d'hier
+    // soir ; maintenant on l'expose en preview pour que l'utilisateur·rice
+    // puisse vérifier avant de confirmer.
     const malformed = [];
-    const rejected = [];
-    const ok = [];
+    const preRejected = [];
+    const okCandidates = [];
     for (const subId of subIds) {
       const [empId, lineNo] = subId.split('.').map(Number);
       if (!empId || !lineNo) { malformed.push(subId); continue; }
-      try {
-        const { data, error } = await supabase.schema('api').rpc('return_loan_partial', {
-          p_emprestimo_id: empId, p_line_nos: [lineNo],
+      const item = loans.find(l => l.emprestimo_id === empId && l.line_no === lineNo);
+      if (!item) {
+        preRejected.push({ sub_id: subId, reason: 'unknown' });
+      } else if (item.item_status !== 'aberto') {
+        preRejected.push({ sub_id: subId, reason: 'alreadyReturned' });
+      } else {
+        okCandidates.push({
+          sub_id: subId,
+          empId,
+          lineNo,
+          titulo: item.titulo || item.bib_ref || '—',
         });
-        if (error) throw error;
-        // Defense en profondeur cote front : le RPC retourne le nombre de
-        // lignes effectivement rendues. Si 0, c'est un faux succes (line_no
-        // inexistant pour cet emprestimo, ou item deja rendu). La migration
-        // backend leve normalement no_lines_returned, mais on protege aussi
-        // ici au cas ou la migration ne serait pas (encore) appliquee.
-        if (data === 0 || data === null) {
-          rejected.push(subId);
-        } else {
-          ok.push(subId);
-        }
-      } catch (e) {
-        rejected.push(subId);
-        // On continue les autres sub_ids ; l'erreur sera consolidée plus bas.
       }
     }
-    // Message consolidé : on n'affiche succès QUE si au moins une ligne
-    // a réellement été rendue, et on signale les erreurs/anomalies.
-    const parts = [];
-    if (ok.length) {
-      parts.push(t({id:'panel.return.partialRegistered'},{ids: ok.join(', ')}));
+
+    // Si rien à rendre : message d'erreur immédiat sans pré-loader de preview.
+    if (!okCandidates.length) {
+      const parts = [];
+      if (malformed.length) {
+        parts.push(t({id:'panel.return.malformedSubIds'},{ids: malformed.join(', ')}));
+      }
+      if (preRejected.length) {
+        parts.push(t({id:'panel.return.rejectedSubIds'},{ids: preRejected.map(r => r.sub_id).join(', ')}));
+      }
+      setReturnMsg(parts.join(' · '));
+      return;
     }
+
+    // Au moins un ok candidate : on stocke la preview et on demande confirmation.
+    setReturnPartialPreview({
+      subIdsKey,
+      okCandidates,
+      malformed,
+      preRejected,
+    });
+    const parts = [
+      t({id:'panel.return.partial.preview.confirm'}, {
+        count: okCandidates.length,
+        ids: okCandidates.map(c => c.sub_id).join(', '),
+      }),
+    ];
     if (malformed.length) {
-      parts.push(t({id:'panel.return.malformedSubIds'},{ids: malformed.join(', ')}));
+      parts.push(t({id:'panel.return.partial.preview.malformed'}, { count: malformed.length }));
     }
-    if (rejected.length) {
-      parts.push(t({id:'panel.return.rejectedSubIds'},{ids: rejected.join(', ')}));
+    if (preRejected.length) {
+      parts.push(t({id:'panel.return.partial.preview.rejected'}, { count: preRejected.length }));
     }
     setReturnMsg(parts.join(' · '));
-    if (ok.length) { setReturnSubIds(''); loadData(); }
+  }
+
+  // EA-03 (29/05/2026) : annulation symétrique de cancelLoanPreview, pour
+  // les deux flux de retour. Reset le state preview + efface le message.
+  function cancelReturnTotalPreview() {
+    setReturnTotalPreview(null);
+    setReturnMsg('');
+  }
+  function cancelReturnPartialPreview() {
+    setReturnPartialPreview(null);
+    setReturnMsg('');
   }
 
   // ── Empréstimo actions ─────────────────────────────────
@@ -1581,6 +1708,12 @@ export default function PanelPage() {
               cancelLoanPreview={cancelLoanPreview}
               registrarDevolucaoTotal={registrarDevolucaoTotal}
               registrarDevolucaoParcial={registrarDevolucaoParcial}
+              returnTotalPreview={returnTotalPreview}
+              setReturnTotalPreview={setReturnTotalPreview}
+              returnPartialPreview={returnPartialPreview}
+              setReturnPartialPreview={setReturnPartialPreview}
+              cancelReturnTotalPreview={cancelReturnTotalPreview}
+              cancelReturnPartialPreview={cancelReturnPartialPreview}
             />
           )}
 

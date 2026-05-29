@@ -25,6 +25,12 @@ export default function TabAcoes({
   cancelLoanPreview,
   registrarDevolucaoTotal,
   registrarDevolucaoParcial,
+  returnTotalPreview,
+  setReturnTotalPreview,
+  returnPartialPreview,
+  setReturnPartialPreview,
+  cancelReturnTotalPreview,
+  cancelReturnPartialPreview,
 }) {
   return (
     <div className="ab-painel-acoes-grid">
@@ -56,14 +62,37 @@ export default function TabAcoes({
       <div className="ab-painel-acoes-card">
         <h2 className="ab-painel-h2">{t({ id: 'panel.loan.return' })}</h2>
         <label>{t({ id: 'panel.loan.returnFullLabel' })}
-          <input type="text" value={returnId} onChange={e => setReturnId(e.target.value)} placeholder={t({id:"panel.loan.returnTotalPh"})} className="ab-painel-input" />
+          <input type="text" value={returnId} onChange={e => { setReturnId(e.target.value); if (returnTotalPreview) setReturnTotalPreview(null); }} placeholder={t({id:"panel.loan.returnTotalPh"})} className="ab-painel-input" />
         </label>
-        <Button variant="secondary" onClick={registrarDevolucaoTotal}>{t({ id: 'panel.loan.returnFull' })}</Button>
+        {/* EA-03 (29/05/2026) : bouton avec libellé selon état preview, + bouton "Annuler" quand preview active */}
+        <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+          <Button variant="secondary" onClick={registrarDevolucaoTotal}>
+            {returnTotalPreview
+              ? t({ id: 'panel.return.confirmReturn' })
+              : t({ id: 'panel.loan.returnFull' })}
+          </Button>
+          {returnTotalPreview && (
+            <Button variant="secondary" onClick={cancelReturnTotalPreview}>
+              {t({ id: 'panel.return.cancelPreview' })}
+            </Button>
+          )}
+        </div>
         <hr className="ab-painel-hr" />
         <label>{t({ id: 'panel.loan.returnPartialLabel' })}
-          <input type="text" value={returnSubIds} onChange={e => setReturnSubIds(e.target.value)} placeholder={t({id:"panel.loan.returnPartialPh"})} className="ab-painel-input" />
+          <input type="text" value={returnSubIds} onChange={e => { setReturnSubIds(e.target.value); if (returnPartialPreview) setReturnPartialPreview(null); }} placeholder={t({id:"panel.loan.returnPartialPh"})} className="ab-painel-input" />
         </label>
-        <Button variant="secondary" onClick={registrarDevolucaoParcial}>{t({ id: 'panel.loan.returnPartial' })}</Button>
+        <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+          <Button variant="secondary" onClick={registrarDevolucaoParcial}>
+            {returnPartialPreview
+              ? t({ id: 'panel.return.confirmReturn' })
+              : t({ id: 'panel.loan.returnPartial' })}
+          </Button>
+          {returnPartialPreview && (
+            <Button variant="secondary" onClick={cancelReturnPartialPreview}>
+              {t({ id: 'panel.return.cancelPreview' })}
+            </Button>
+          )}
+        </div>
         {returnMsg && <p className="ab-painel-msg">{returnMsg}</p>}
       </div>
     </div>
