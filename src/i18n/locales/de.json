@@ -2196,6 +2196,8 @@
   "panel.tasks.manage": "Auf der Seite Bibliothek verwalten →",
   "panel.tasks.title": "Interne Aufgaben der Bibliothek",
   "panel.title": "Bibliotheksübersicht",
+  "panel.hero.allClear": "Alles erledigt. → Übersicht ansehen",
+  "panel.hero.dailyWorkLink": "{count, plural, one {# Eintrag erfordert heute eine Aktion} other {# Einträge erfordern heute eine Aktion}} → Übersicht ansehen",
   "panel.workflow.done": "Erledigt",
   "panel.workflow.expired": "Abgelaufen",
   "panel.workflow.noShow": "Nicht erschienen",

@@ -2196,6 +2196,8 @@
   "panel.tasks.manage": "Gestire nella pagina Biblioteca →",
   "panel.tasks.title": "Attività interne della biblioteca",
   "panel.title": "Pannello della biblioteca",
+  "panel.hero.allClear": "Tutto in ordine. → Vedi la sintesi",
+  "panel.hero.dailyWorkLink": "{count, plural, one {# elemento richiede un'azione oggi} other {# elementi richiedono un'azione oggi}} → Vedi la sintesi",
   "panel.workflow.done": "Effettuato",
   "panel.workflow.expired": "Scaduto",
   "panel.workflow.noShow": "Non presentato/a",

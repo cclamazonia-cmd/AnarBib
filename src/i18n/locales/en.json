@@ -2196,6 +2196,8 @@
   "panel.tasks.manage": "Manage on Library page →",
   "panel.tasks.title": "Library internal tasks",
   "panel.title": "Library dashboard",
+  "panel.hero.allClear": "All clear today. → See synthesis",
+  "panel.hero.dailyWorkLink": "{count, plural, one {# item requires action today} other {# items require action today}} → See synthesis",
   "panel.workflow.done": "Realizada",
   "panel.workflow.expired": "Expirada",
   "panel.workflow.noShow": "No show",

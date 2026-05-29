@@ -2196,6 +2196,8 @@
   "panel.tasks.manage": "Administri en la paĝo Biblioteko →",
   "panel.tasks.title": "Internaj taskoj de la biblioteko",
   "panel.title": "Panelo",
+  "panel.hero.allClear": "Ĉio en ordo. → Vidi la superrigardon",
+  "panel.hero.dailyWorkLink": "{count, plural, one {# ero postulas agon hodiaŭ} other {# eroj postulas agon hodiaŭ}} → Vidi la superrigardon",
   "panel.workflow.done": "Plenumita",
   "panel.workflow.expired": "Eksvalidiĝinta",
   "panel.workflow.noShow": "Ne aperinta",

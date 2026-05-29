@@ -2196,6 +2196,8 @@
   "panel.tasks.manage": "Gerenciar na página Biblioteca →",
   "panel.tasks.title": "Tarefas internas da biblioteca",
   "panel.title": "Painel da biblioteca",
+  "panel.hero.allClear": "Tudo em dia. → Ver a síntese",
+  "panel.hero.dailyWorkLink": "{count, plural, one {# item demanda ação hoje} other {# itens demandam ação hoje}} → Ver a síntese",
   "panel.workflow.done": "Realizada",
   "panel.workflow.expired": "Expirada",
   "panel.workflow.noShow": "Não compareceu",

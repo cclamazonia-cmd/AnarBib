@@ -2196,6 +2196,8 @@
   "panel.tasks.manage": "Gestionar a la pàgina Biblioteca →",
   "panel.tasks.title": "Tasques internes de la biblioteca",
   "panel.title": "Tauler",
+  "panel.hero.allClear": "Tot al dia. → Veure la síntesi",
+  "panel.hero.dailyWorkLink": "{count, plural, one {# element demana acció avui} other {# elements demanen acció avui}} → Veure la síntesi",
   "panel.workflow.done": "Efectuat",
   "panel.workflow.expired": "Expirat",
   "panel.workflow.noShow": "No presentat-da-e",

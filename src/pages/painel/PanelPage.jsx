@@ -1358,6 +1358,27 @@ export default function PanelPage() {
   // Paquet 19 v3 (11/05/2026) : distinction emprunts (groupes) vs items pour le hero
   const activeLoanGroups = new Set(activeLoans.map(l => l.emprestimo_id)).size;
 
+  // EA-01 niveau 2 (refonte Hero B.3, 29/05/2026) :
+  // Compteur saillant dans le Hero pointant vers Trabalho do dia. Compte
+  // uniquement les items des buckets hoje + atencao (actions à faire),
+  // pas acompanhamento (suivi sans urgence immédiate). Réutilise la même
+  // source de vérité que TabTrabalhoDoDia (buildDailyTasks) pour garantir
+  // la cohérence des chiffres entre Hero et onglet.
+  // NOTE: placé ICI (après les déclarations activeRes/activeLoans/overdueLoans)
+  // et non juste après buildDailyTasks() : le hoisting d'une function
+  // declaration permettrait l'appel, mais les const dans le tableau de deps
+  // sont soumises à la Temporal Dead Zone et lèvent ReferenceError si
+  // référencées avant leur initialisation.
+  const dailyActionCount = useMemo(() => {
+    try {
+      const tasks = buildDailyTasks();
+      return tasks.filter(tk => tk.bucket === 'hoje' || tk.bucket === 'atencao').length;
+    } catch {
+      return 0;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeRes, consultations, overdueLoans, activeLoans, internalTasks]);
+
   // PATCH 03/05/2026 : skeleton UI au lieu de Spinner.
   // Pendant le chargement du rôle, on ne sait pas encore si on est librarian+
   // ou simple reader (qui sera redirigé). On rend une structure neutre :
@@ -1433,6 +1454,58 @@ export default function PanelPage() {
     <PageShell>
       <Topbar />
       <Hero title={t({ id: 'panel.title' })} subtitle={libraryName || t({ id: 'panel.subtitle' })}>
+        {/* EA-01 niveau 2 (refonte Hero B.3, 29/05/2026) :
+            ligne saillante "N items demandent action → Voir la synthèse",
+            masquée quand on est déjà sur l'onglet Trabalho do dia.
+            NOTE: styles inline en attendant E.4 / OT-2 (chartage centralisé). */}
+        {tab !== 'trabalho-do-dia' && (
+          <div style={{
+            marginTop: 12,
+            marginBottom: 4,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            flexWrap: 'wrap',
+          }}>
+            {dailyActionCount > 0 ? (
+              <button
+                type="button"
+                onClick={() => setTab('trabalho-do-dia')}
+                style={{
+                  background: 'rgba(251, 191, 36, 0.15)',
+                  border: '1px solid rgba(251, 191, 36, 0.4)',
+                  borderRadius: 8,
+                  padding: '6px 14px',
+                  color: '#fbbf24',
+                  cursor: 'pointer',
+                  fontSize: '.95rem',
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                }}
+              >
+                {t({ id: 'panel.hero.dailyWorkLink' }, { count: dailyActionCount })}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setTab('trabalho-do-dia')}
+                style={{
+                  background: 'rgba(74, 222, 128, 0.12)',
+                  border: '1px solid rgba(74, 222, 128, 0.35)',
+                  borderRadius: 8,
+                  padding: '6px 14px',
+                  color: 'rgba(74, 222, 128, 0.95)',
+                  cursor: 'pointer',
+                  fontSize: '.92rem',
+                  fontWeight: 500,
+                  fontFamily: 'inherit',
+                }}
+              >
+                ✓ {t({ id: 'panel.hero.allClear' })}
+              </button>
+            )}
+          </div>
+        )}
         <UserHeroBadge />
         <HeroDocumentationActions
           extraActions={
