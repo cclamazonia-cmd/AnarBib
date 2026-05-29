@@ -1318,150 +1318,120 @@ export default function AccountPage() {
             <div>
               <h2 className="ab-conta-section-title">{t({ id: 'account.loans.title' })}</h2>
               <p className="ab-conta-hint">{t({ id: 'account.loans.hint' })}</p>
-              {loans.filter(l => l.item_status === 'aberto').length === 0 ? (
-                <p className="ab-conta-empty">{t({ id: 'account.loans.empty' })}</p>
-              ) : (
-                <div className="ab-conta-items">
-                  {(() => {
-                    const openLoans = loans.filter(l => l.item_status === 'aberto');
-                    // Granularité 3b : structures par emprunt pour « tout renouveler ».
-                    const openByLoan = {};
-                    openLoans.forEach(x => { openByLoan[x.emprestimo_id] = (openByLoan[x.emprestimo_id] || 0) + 1; });
-                    const canRenewAnyByLoan = {};
-                    Object.values(renewStatus).forEach(r => { if (r && r.can_renew) canRenewAnyByLoan[r.emprestimo_id] = true; });
-                    const firstRowSeen = new Set();
-                    return openLoans.map((l, i) => {
-                    // Paquet 7 fix (10/05/2026) : utiliser extended_until si présent,
-                    // sinon due_at. Sinon la date affichée ne reflète pas le renouvellement.
-                    const effectiveDue = l.extended_until || l.due_at;
-                    const due = effectiveDue ? new Date(effectiveDue + 'T00:00:00') : null;
-                    const today = new Date(); today.setHours(0,0,0,0);
-                    const daysLeft = due ? Math.ceil((due - today) / 86400000) : null;
-                    const isOverdue = daysLeft !== null && daysLeft < 0;
-                    const isSoon = daysLeft !== null && daysLeft >= 0 && daysLeft <= 3;
-                    // Paquet 7 (10/05/2026) : compteur explicite + pré-évaluation
-                    // Granularité 3b (29/05/2026) : statut PAR ITEM (clé sub_id).
-                    const renewInfo = renewStatus[l.sub_id] || null;
-                    const renewalsUsed = renewInfo ? (renewInfo.renewals_used || 0) : (l.renewals_used || 0);
-                    const wasExtended = renewalsUsed > 0;
-                    // « Tout renouveler » : sur la 1re ligne ouverte d'un emprunt à >=2 items.
-                    const openCount = openByLoan[l.emprestimo_id] || 1;
-                    const isFirstOfLoan = !firstRowSeen.has(l.emprestimo_id);
-                    if (isFirstOfLoan) firstRowSeen.add(l.emprestimo_id);
-                    const showRenewAll = isFirstOfLoan && openCount >= 2;
-                    const loanCanRenewAny = !!canRenewAnyByLoan[l.emprestimo_id];
-                    // Paquet 8 (10/05/2026) : détection retour partiel calculée côté frontend
-                    // à partir du tableau loans complet (groupBy emprestimo_id).
-                    const sameLoanItems = loans.filter(x => x.emprestimo_id === l.emprestimo_id);
-                    const hasReturned = sameLoanItems.some(x => x.item_status === 'devolvido');
-                    const hasOpen = sameLoanItems.some(x => x.item_status === 'aberto');
-                    const isPartialReturn = hasReturned && hasOpen;
-                    return (
-                      <div key={i} className={`ab-conta-item ${isOverdue ? 'ab-conta-item--overdue' : ''}`}
-                        style={{ borderLeft: `3px solid ${isOverdue ? '#ef4444' : isSoon ? '#f59e0b' : 'rgba(255,255,255,.08)'}` }}>
-                        <div className="ab-conta-item__main" style={{ flex: 1 }}>
-                          <Link to={`/livro/${l.book_id}`} className="ab-conta-item__title">{l.titulo || l.bib_ref || '—'}</Link>
-                          <span className="ab-conta-item__meta">{l.autor || '—'}</span>
-                          <span className="ab-conta-item__meta">
-                            ref: {l.bib_ref || '—'}
-                            {l.emprestimo_created_at && <> · {t({id:'account.loans.checkout'})}: {new Date(l.emprestimo_created_at).toLocaleDateString()}</>}
-                            {due && <> · {t({id:'account.loans.deadline'})}: <strong style={{ color: isOverdue ? '#ef4444' : isSoon ? '#f59e0b' : 'inherit' }}>{due.toLocaleDateString()}</strong></>}
-                            {daysLeft !== null && (
-                              isOverdue
-                                ? <> · <strong style={{ color: '#ef4444' }}>{t({ id: 'account.loans.daysOverdue' }, { days: Math.abs(daysLeft) })}</strong></>
-                                : <> · {t({ id: 'account.loans.daysLeft' }, { days: daysLeft })}</>
-                            )}
-                          </span>
-                          {wasExtended && <span className="ab-conta-item__meta" style={{ color: '#60a5fa' }}>{t({ id: 'account.loans.renewedUntil' }, { date: new Date(l.extended_until + 'T00:00:00').toLocaleDateString() })}</span>}
-                          {isPartialReturn && <span className="ab-conta-item__meta" style={{ color: '#f59e0b' }}>{t({ id: 'account.loans.partialReturnHint' })}</span>}
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
-                          {showRenewAll && (
-                            <Button
-                              variant="mini"
-                              disabled={!loanCanRenewAny}
-                              title={!loanCanRenewAny ? t({ id: 'account.renew.tooltipBlocked' }, { reason: t({ id: 'account.renew.not_renewable' }) }) : undefined}
-                              onClick={async () => {
-                                const { data, error } = await supabase.schema('api').rpc('renew_my_loan', { p_emprestimo_id: l.emprestimo_id });
-                                if (error) { alert(t({id:'common.errorPrefix'}, {message: localizeError(error, t)})); return; }
-                                if (data?.ok === false) { alert(t({ id: `account.renew.${data.reason}` })); return; }
-                                alert(t({ id: 'account.renew.renewed' }, { date: new Date(data.new_due_date).toLocaleDateString() }));
-                                loadData();
-                              }}
-                            >
-                              {t({ id: 'account.loans.renewAll' })}
-                            </Button>
-                          )}
-                          {(() => {
-                            // Paquet 7 : pré-désactivation + tooltip
-                            // renewInfo vient de api.my_loans_renewal_status_by_item_v1 et porte
-                            // can_renew (bool) + blocking_reason (text|null).
-                            // Fallback ancien comportement si la vue n'a pas répondu.
-                            const canRenew = renewInfo
-                              ? renewInfo.can_renew
-                              : (!wasExtended && !isOverdue);
-                            const blockingReason = renewInfo ? renewInfo.blocking_reason : null;
-                            const tooltipMsg = blockingReason
-                              ? t(
-                                  { id: 'account.renew.tooltipBlocked' },
-                                  { reason: t({ id: `account.renew.${blockingReason}` }) }
-                                )
-                              : null;
-                            // On n'affiche le bouton que si pas déjà étiqueté "renouvelé" ou "en retard"
-                            // (les deux étiquettes spécialisées plus bas couvrent ces cas).
-                            if (isOverdue || (wasExtended && !canRenew)) return null;
-                            return (
+              {(() => {
+                // Refonte conta curso (29/05/2026, parité painel) : items ouverts
+                // GROUPÉS par emprunt — en-tête humain (date · n livres · échéance la
+                // plus proche) + « Renovar tudo », puis lignes par item avec « Renovar ».
+                // Les emprunts clôturés vivent dans l'onglet Histórico (groupés via
+                // my_loans_history_v1) ; on ne duplique plus « Devolvidos recentemente ».
+                const openItems = loans.filter(l => l.item_status === 'aberto');
+                if (openItems.length === 0) {
+                  return <p className="ab-conta-empty">{t({ id: 'account.loans.empty' })}</p>;
+                }
+                const order = [];
+                const groups = {};
+                openItems.forEach(l => {
+                  if (!groups[l.emprestimo_id]) { groups[l.emprestimo_id] = []; order.push(l.emprestimo_id); }
+                  groups[l.emprestimo_id].push(l);
+                });
+                const today = new Date(); today.setHours(0, 0, 0, 0);
+                return (
+                  <div className="ab-conta-loan-groups" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                    {order.map(empId => {
+                      const items = groups[empId];
+                      const checkout = items[0].emprestimo_created_at;
+                      // Échéance la plus proche parmi les items ouverts (peut diverger
+                      // après renouvellement par item).
+                      const dueDates = items.map(it => it.extended_until || it.due_at).filter(Boolean).sort();
+                      const soonest = dueDates[0] ? new Date(dueDates[0] + 'T00:00:00') : null;
+                      const soonestOverdue = soonest && soonest < today;
+                      const groupCanRenewAny = items.some(it => renewStatus[it.sub_id]?.can_renew);
+                      const showRenewAll = items.length >= 2;
+                      return (
+                        <div key={empId} className="ab-conta-loan-group" style={{ border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, overflow: 'hidden' }}>
+                          <div className="ab-conta-loan-group__head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: '10px 14px', background: 'rgba(255,255,255,.03)' }}>
+                            <div style={{ fontWeight: 600, fontSize: '.92rem' }}>
+                              {checkout && <>{t({ id: 'account.loans.group.checkedOutOn' }, { date: new Date(checkout).toLocaleDateString() })}</>}
+                              {' · '}{t({ id: 'account.loans.group.bookCount' }, { count: items.length })}
+                              {soonest && <>{' · '}<span style={{ color: soonestOverdue ? '#ef4444' : 'inherit' }}>{t({ id: 'account.loans.group.dueBy' }, { date: soonest.toLocaleDateString() })}</span></>}
+                            </div>
+                            {showRenewAll && (
                               <Button
                                 variant="mini"
-                                disabled={!canRenew}
-                                title={tooltipMsg || undefined}
+                                disabled={!groupCanRenewAny}
+                                title={!groupCanRenewAny ? t({ id: 'account.renew.tooltipBlocked' }, { reason: t({ id: 'account.renew.not_renewable' }) }) : undefined}
                                 onClick={async () => {
-                                  // Granularité 3b (29/05/2026) : renouvellement PAR ITEM via wrapper api.*
-                                  const { data, error } = await supabase.schema('api').rpc('renew_my_loan_item', { p_emprestimo_id: l.emprestimo_id, p_line_no: l.line_no });
-                                  if (error) { alert(t({id:'common.errorPrefix'}, {message: localizeError(error, t)})); return; }
-                                  if (data?.ok === false) {
-                                    alert(t({ id: `account.renew.${data.reason}` }));
-                                    return;
-                                  }
+                                  const { data, error } = await supabase.schema('api').rpc('renew_my_loan', { p_emprestimo_id: empId });
+                                  if (error) { alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) })); return; }
+                                  if (data?.ok === false) { alert(t({ id: `account.renew.${data.reason}` })); return; }
                                   alert(t({ id: 'account.renew.renewed' }, { date: new Date(data.new_due_date).toLocaleDateString() }));
                                   loadData();
                                 }}
                               >
-                                {t({ id: 'account.loans.renew' })}
+                                {t({ id: 'account.loans.renewAll' })}
                               </Button>
-                            );
-                          })()}
-                          {wasExtended && <span style={{ fontSize: '.72rem', color: '#60a5fa', fontWeight: 600 }}>{t({ id: 'account.loans.renewed' })}</span>}
-                          {isOverdue && <span style={{ fontSize: '.72rem', color: '#ef4444', fontWeight: 600 }}>{t({ id: 'account.loans.overdue' })}</span>}
-                          {isPartialReturn && <span style={{ fontSize: '.72rem', color: '#f59e0b', fontWeight: 600 }}>{t({ id: 'account.loans.partialReturn' })}</span>}
+                            )}
+                          </div>
+                          <div className="ab-conta-loan-group__items">
+                            {items.map((l, i) => {
+                              const effectiveDue = l.extended_until || l.due_at;
+                              const due = effectiveDue ? new Date(effectiveDue + 'T00:00:00') : null;
+                              const daysLeft = due ? Math.ceil((due - today) / 86400000) : null;
+                              const isOverdue = daysLeft !== null && daysLeft < 0;
+                              const isSoon = daysLeft !== null && daysLeft >= 0 && daysLeft <= 3;
+                              const renewInfo = renewStatus[l.sub_id] || null;
+                              const renewalsUsed = renewInfo ? (renewInfo.renewals_used || 0) : 0;
+                              const wasExtended = renewalsUsed > 0;
+                              const canRenew = renewInfo ? renewInfo.can_renew : (!wasExtended && !isOverdue);
+                              const blockingReason = renewInfo ? renewInfo.blocking_reason : null;
+                              const tooltipMsg = blockingReason
+                                ? t({ id: 'account.renew.tooltipBlocked' }, { reason: t({ id: `account.renew.${blockingReason}` }) })
+                                : null;
+                              return (
+                                <div key={i} className={`ab-conta-item ${isOverdue ? 'ab-conta-item--overdue' : ''}`}
+                                  style={{ borderLeft: `3px solid ${isOverdue ? '#ef4444' : isSoon ? '#f59e0b' : 'transparent'}` }}>
+                                  <div className="ab-conta-item__main" style={{ flex: 1 }}>
+                                    <Link to={`/livro/${l.book_id}`} className="ab-conta-item__title">{l.titulo || l.bib_ref || '—'}</Link>
+                                    <span className="ab-conta-item__meta">{l.autor || '—'}</span>
+                                    <span className="ab-conta-item__meta">
+                                      ref: {l.bib_ref || '—'}
+                                      {due && <> · {t({ id: 'account.loans.deadline' })}: <strong style={{ color: isOverdue ? '#ef4444' : isSoon ? '#f59e0b' : 'inherit' }}>{due.toLocaleDateString()}</strong></>}
+                                      {daysLeft !== null && (isOverdue
+                                        ? <> · <strong style={{ color: '#ef4444' }}>{t({ id: 'account.loans.daysOverdue' }, { days: Math.abs(daysLeft) })}</strong></>
+                                        : <> · {t({ id: 'account.loans.daysLeft' }, { days: daysLeft })}</>)}
+                                    </span>
+                                    {wasExtended && <span className="ab-conta-item__meta" style={{ color: '#60a5fa' }}>{t({ id: 'account.loans.renewedUntil' }, { date: new Date(l.extended_until + 'T00:00:00').toLocaleDateString() })}</span>}
+                                  </div>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
+                                    {!(isOverdue || (wasExtended && !canRenew)) && (
+                                      <Button
+                                        variant="mini"
+                                        disabled={!canRenew}
+                                        title={tooltipMsg || undefined}
+                                        onClick={async () => {
+                                          const { data, error } = await supabase.schema('api').rpc('renew_my_loan_item', { p_emprestimo_id: l.emprestimo_id, p_line_no: l.line_no });
+                                          if (error) { alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) })); return; }
+                                          if (data?.ok === false) { alert(t({ id: `account.renew.${data.reason}` })); return; }
+                                          alert(t({ id: 'account.renew.renewed' }, { date: new Date(data.new_due_date).toLocaleDateString() }));
+                                          loadData();
+                                        }}
+                                      >
+                                        {t({ id: 'account.loans.renew' })}
+                                      </Button>
+                                    )}
+                                    {wasExtended && <span style={{ fontSize: '.72rem', color: '#60a5fa', fontWeight: 600 }}>{t({ id: 'account.loans.renewed' })}</span>}
+                                    {isOverdue && <span style={{ fontSize: '.72rem', color: '#ef4444', fontWeight: 600 }}>{t({ id: 'account.loans.overdue' })}</span>}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
-                    );
-                    });
-                  })()}
-                </div>
-              )}
-
-              {/* Empréstimos devolvidos recentemente */}
-              {loans.filter(l => l.item_status === 'devolvido').length > 0 && (
-                <div style={{ marginTop: 20 }}>
-                  <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.loans.recentlyReturned' })}</h3>
-                  <div className="ab-conta-items">
-                    {loans.filter(l => l.item_status === 'devolvido').slice(0, 10).map((l, i) => (
-                      <div key={i} className="ab-conta-item ab-conta-item--history" style={{ opacity: .7 }}>
-                        <div className="ab-conta-item__main">
-                          <Link to={`/livro/${l.book_id}`} className="ab-conta-item__title">{l.titulo || l.bib_ref || '—'}</Link>
-                          <span className="ab-conta-item__meta">
-                            ref: {l.bib_ref || '—'}
-                            {l.emprestimo_created_at && <> · {t({id:'account.loans.checkout'})}: {new Date(l.emprestimo_created_at).toLocaleDateString()}</>}
-                            {l.returned_at && <> · {t({id:'account.loans.returnedOn'})}: {new Date(l.returned_at).toLocaleDateString()}</>}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
           )}
 
