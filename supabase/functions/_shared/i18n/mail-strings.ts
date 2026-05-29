@@ -1167,14 +1167,14 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     eo: "Nova redato: {date}."
   },
   "loan.renewed.once": {
-    "pt-BR": "Lembre-se: cada empréstimo pode ser prorrogado apenas uma vez.",
-    fr: "Pour rappel : chaque emprunt ne peut être prolongé qu'une seule fois.",
-    es: "Recuerda: cada préstamo puede renovarse solo una vez.",
-    en: "Reminder: each loan can be renewed only once.",
-    it: "Ricorda: ogni prestito può essere rinnovato solo una volta.",
-    de: "Zur Erinnerung: jede Ausleihe kann nur einmal verlängert werden.",
-    ca: "Recorda: cada préstec només es pot renovar una vegada.",
-    eo: "Memoru: ĉiu prunto povas esti renovigita nur unufoje."
+    "pt-BR": "Lembre-se: cada exemplar pode ser prorrogado apenas uma vez.",
+    fr: "Pour rappel : chaque exemplaire ne peut être prolongé qu'une seule fois.",
+    es: "Recuerda: cada ejemplar puede renovarse solo una vez.",
+    en: "Reminder: each item can be renewed only once.",
+    it: "Ricorda: ogni copia può essere rinnovata solo una volta.",
+    de: "Zur Erinnerung: jedes Exemplar kann nur einmal verlängert werden.",
+    ca: "Recorda: cada exemplar només es pot renovar una vegada.",
+    eo: "Memoru: ĉiu ekzemplero povas esti renovigita nur unufoje."
   },
   "loan.returned.sub": {
     "pt-BR": "Devolução registrada",

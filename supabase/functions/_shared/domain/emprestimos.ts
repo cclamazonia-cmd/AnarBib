@@ -61,32 +61,18 @@ export async function handleEmprestimoV2(recordId, event, payload) {
       ] : []
     ];
   } else if (event === "emprestimo_v2_prorrogado") {
-    const t = joinTitles((oi.length ? oi : items).map((i)=>String(i.titulo || `[${String(i.bib_ref || "").trim()}]`)));
+    // #NOTIFY-prorrogacao (B, 29/05/2026) : notification PAR ITEM.
+    // Cibler les items renouvelés via payload.line_nos ; échéance = extended_until
+    // (source de vérité), jamais due_at header. Liste « titre — date » par item (D6).
+    const pln = normalizeLineNos(getPayloadValue(payload, "line_nos"));
+    const ti = pln.length ? items.filter((i)=>pln.includes(i.line_no)) : oi;
     sub = `${tMail(locale, "loan.renewed.sub")} — BLMF`;
     tit = tMail(locale, "loan.renewed.sub");
-    intro = `<p style="margin:0 0 10px;">${tMail(locale, "loan.renewed.intro")}</p>${da ? `<p style="margin:0 0 10px;">${tMail(locale, "loan.newDue", {
-      date: esc(fmtD(da))
-    })}</p>` : ""}<p style="margin:0;">${tMail(locale, "loan.renewed.once")}</p>`;
-    detKeys = [
-      ...t ? [
-        {
-          key: "items",
-          value: t
-        }
-      ] : [],
-      ...da ? [
-        {
-          key: "newDueDate",
-          value: fmtD(da)
-        }
-      ] : [],
-      ...ea ? [
-        {
-          key: "renewal",
-          value: fmtD(ea)
-        }
-      ] : []
-    ];
+    intro = `<p style="margin:0 0 10px;">${tMail(locale, "loan.renewed.intro")}</p><p style="margin:0;">${tMail(locale, "loan.renewed.once")}</p>`;
+    detKeys = ti.map((i)=>({
+      label: String(i.titulo || `[${String(i.bib_ref || "").trim()}]`),
+      value: fmtD(String(i.extended_until || i.due_at || "").trim())
+    }));
   } else if (event === "emprestimo_v2_devolvido") {
     const t = joinTitles((ri.length ? ri : items).map((i)=>String(i.titulo || `[${String(i.bib_ref || "").trim()}]`)));
     const ra = ri.find((i)=>i.returned_at)?.returned_at;
@@ -162,7 +148,7 @@ export async function handleEmprestimoV2(recordId, event, payload) {
   } else throw new Error(`Evento não suportado: ${event}`);
   // Derive det (locale du lecteur) et adminDet (force pt-BR) depuis detKeys
   const det = detKeys.map((k)=>({
-      label: label(locale, k.key),
+      label: k.label ?? label(locale, k.key),
       value: k.value
     }));
   const { html, text } = renderEmail({
@@ -211,7 +197,7 @@ export async function handleEmprestimoV2(recordId, event, payload) {
       value: aun
     },
     ...detKeys.map((k)=>({
-        label: label(null, k.key),
+        label: k.label ?? label(null, k.key),
         value: k.value
       }))
   ];
