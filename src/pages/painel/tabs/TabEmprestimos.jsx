@@ -39,6 +39,8 @@ export default function TabEmprestimos({
   toggleExpandedLoan,
   extendLoan,
   returnLoanItem,
+  extendLoanItem,
+  renewStatusByItem = {},
   loadData,
 }) {
   const { notifyError } = useToast();
@@ -197,6 +199,17 @@ export default function TabEmprestimos({
                             onClick={() => returnLoanItem(l.emprestimo_id, [l.line_no])}
                           >
                             {t({id:'panel.loan.return.btn'})}
+                          </button>
+                        )}
+                        {/* Granularité Phase 4 (29/05/2026) : prolongation PAR ITEM,
+                            affichée si l'item est éligible (api.staff_loans_renewal_status_by_item_v1).
+                            Résout BUG-lote-extend (Prolonger absent sur emprunts partiellement rendus). */}
+                        {l.item_status === 'aberto' && renewStatusByItem[l.sub_id]?.can_renew && (
+                          <button
+                            className="ab-button ab-button--secondary ab-button--mini"
+                            onClick={() => extendLoanItem(l.emprestimo_id, l.line_no)}
+                          >
+                            {t({id:'panel.table.extend'})}
                           </button>
                         )}
                       </span>

@@ -214,6 +214,9 @@ export default function PanelPage() {
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
   const [loans, setLoans] = useState([]);
+  // Granularité Phase 4 (29/05/2026) : statut de renouvellement PAR ITEM (staff),
+  // indexé par sub_id. Voir api.staff_loans_renewal_status_by_item_v1.
+  const [renewStatusByItem, setRenewStatusByItem] = useState({});
   // Paquet 18 (10/05/2026) : tri par colonnes pour les 3 tableaux principaux.
   // Audit UX 25/05/2026 (P1) : les appels useSort sont deplaces plus bas,
   // apres la definition des listes ACTIVES, pour porter sur celles-ci.
@@ -451,14 +454,19 @@ export default function PanelPage() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [resR, conR, loanR] = await Promise.all([
+      const [resR, conR, loanR, renewItemR] = await Promise.all([
         apiQuery('reserva_itens_followup_ui'),
         apiQuery('consulta_itens_followup_ui'),
         apiQuery('emprestimo_itens_painel_ui'),
+        apiQuery('staff_loans_renewal_status_by_item_v1'),
       ]);
       setReservations(resR.data || []);
       setConsultations(conR.data || []);
       setLoans(loanR.data || []);
+      // Granularité Phase 4 : indexer le statut de renouvellement par sub_id.
+      setRenewStatusByItem(Object.fromEntries(
+        (renewItemR.data || []).map(r => [r.sub_id, r])
+      ));
       // Load internal tasks
       if (libraryId) {
         const { data: tasksData } = await supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).in('status', ['pendente', 'em_andamento']).order('priority').order('due_date').limit(50);
@@ -992,6 +1000,19 @@ export default function PanelPage() {
       if (error) throw error;
       loadData();
     } catch (e) { notifyError(localizeError(e, t, 'panel.error.loanReturn'), e); }
+  }
+
+  async function extendLoanItem(empId, lineNo) {
+    try {
+      // Granularité Phase 4 : extension PAR ITEM via wrapper api.* (non-DEFINER).
+      const { error } = await supabase.schema('api').rpc('extend_loan_item_as_library', {
+        p_emprestimo_id: empId, p_line_no: lineNo,
+      });
+      if (error) throw error;
+      loadData();
+    } catch (e) {
+      notifyError(localizeError(e, t, 'panel.loan.extendError'), e);
+    }
   }
 
   // ── Consultation workflow ─────────────────────────────
@@ -1795,6 +1816,8 @@ export default function PanelPage() {
               toggleExpandedLoan={toggleExpandedLoan}
               extendLoan={extendLoan}
               returnLoanItem={returnLoanItem}
+              extendLoanItem={extendLoanItem}
+              renewStatusByItem={renewStatusByItem}
               loadData={loadData}
             />
           )}
