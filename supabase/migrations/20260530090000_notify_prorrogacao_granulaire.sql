@@ -189,8 +189,7 @@ BEGIN
     'skipped', v_skipped
   );
 END;
-$function$
-
+$function$;
 
 -- Retrait du trigger header devenu redondant (l'émission a lieu dans le cœur RPC).
 DROP TRIGGER IF EXISTS trg_notify_emprestimo_prorrogacao ON public.emprestimos_v2;
