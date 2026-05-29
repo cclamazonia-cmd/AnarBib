@@ -1169,7 +1169,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   "loan.renewed.once": {
     "pt-BR": "Lembre-se: cada empréstimo pode ser prorrogado apenas uma vez.",
     fr: "Pour rappel : chaque emprunt ne peut être prolongé qu'une seule fois.",
-    es: "Recuerda: cada préstamo puede renovarse solo une vez.",
+    es: "Recuerda: cada préstamo puede renovarse solo una vez.",
     en: "Reminder: each loan can be renewed only once.",
     it: "Ricorda: ogni prestito può essere rinnovato solo una volta.",
     de: "Zur Erinnerung: jede Ausleihe kann nur einmal verlängert werden.",
