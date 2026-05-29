@@ -131,6 +131,13 @@ export default function TabEmprestimos({
             && !g.extended_until;
           const hasOpenItem = g.items.length > 0;
           const counts = itemCounts[g.emprestimo_id] || { open: g.items.length, total: g.items.length };
+          // Granularité (29/05/2026) : échéance effective du lot = la plus proche
+          // des items ouverts (extended_until || due_at), pour refléter les
+          // renouvellements par item dans l'en-tête maître.
+          const groupDue = (g.items || [])
+            .map(it => it.extended_until || it.due_at)
+            .filter(Boolean)
+            .sort()[0] || g.due_at;
 
           return (
             <div key={g.emprestimo_id} className="ab-painel-lote">
@@ -149,7 +156,7 @@ export default function TabEmprestimos({
                   </span>
                   <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'}
                   {' · '}{t({id:'panel.loan.itemsReturned'}, { returned: counts.total - counts.open, total: counts.total })}
-                  {' · '}{t({id:'panel.task.detail.deadline'})}: {fmtD(g.due_at)}
+                  {' · '}{t({id:'panel.task.detail.deadline'})}: {fmtD(groupDue)}
                   {' · '}{EMPRESTIMO_STATUS_LABELS[g.emprestimo_status] || t({ id: 'panel.stage.unknown' })}
                 </div>
                 {/* Actions : on stoppe la propagation du clic pour éviter
@@ -189,6 +196,11 @@ export default function TabEmprestimos({
                     >
                       <span style={{ fontFamily: 'monospace', fontSize: '.88rem', opacity: .85 }}>{l.sub_id}</span>
                       <Link to={`/livro/${l.book_id}`}>{l.titulo || l.bib_ref}</Link>
+                      {(l.extended_until || l.due_at) && (
+                        <span style={{ fontSize: '.82rem', opacity: .8, color: l.extended_until ? '#60a5fa' : 'inherit' }}>
+                          {fmtD(l.extended_until || l.due_at)}
+                        </span>
+                      )}
                       <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span className={`ab-painel-loan-status ab-painel-loan-status--${l.item_status}`}>
                           {l.item_status === 'aberto' ? t({id:'panel.loan.status.open'}) : t({id:'panel.loan.status.returned'})}
