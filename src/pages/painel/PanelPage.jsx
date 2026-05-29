@@ -17,9 +17,8 @@ import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { fmtD, UserDisplay, useSort, SortHeader, StageFilterBar } from './_shared';
-import TabEmprestimosLivro from './tabs/TabEmprestimosLivro';
+import TabEmprestimos from './tabs/TabEmprestimos';
 import TabConsultasLocais from './tabs/TabConsultasLocais';
-import TabEmprestimosLote from './tabs/TabEmprestimosLote';
 import TabAcoes from './tabs/TabAcoes';
 import TabHistorico from './tabs/TabHistorico';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
@@ -337,13 +336,25 @@ export default function PanelPage() {
 
   const [resStageFilter, setResStageFilter] = useState('all');
   const [conStageFilter, setConStageFilter] = useState('all');
-  // EA-08 (chantier B, 27/05/2026) : tri et filtre sur l'onglet emprestimos-lote.
+  // EA-08 (chantier B, 27/05/2026) : tri et filtre sur l'onglet Empréstimos
+  // (initialement emprestimos-lote, désormais fusionné en emprestimos via E.3/EA-07).
   // Aligne l'experience avec les trois autres onglets-objet. Valeurs canoniques
   // de emprestimo_status derivees de fn_v2_refresh_emprestimo_status_global
   // (dump du 27/05) : aberto, parcialmente_devolvido, encerrado. L'onglet
   // n'affichant que les actifs, 'encerrado' n'apparait jamais.
   const [loteStatusFilter, setLoteStatusFilter] = useState('all');
   const [loteSortKey, setLoteSortKey] = useState('due_at_asc');
+  // E.3 / EA-07 (29/05/2026) : onglet Empréstimos fusionné. Les lignes
+  // d'emprunt sont dépliables, le set contient les emprestimo_id ouverts.
+  const [expandedLoans, setExpandedLoans] = useState(() => new Set());
+  const toggleExpandedLoan = useCallback((empId) => {
+    setExpandedLoans(prev => {
+      const next = new Set(prev);
+      if (next.has(empId)) next.delete(empId);
+      else next.add(empId);
+      return next;
+    });
+  }, []);
   const [resStage, setResStage] = useState('');
   const [resNote, setResNote] = useState('');
   const [resSchedule, setResSchedule] = useState('');
@@ -1400,8 +1411,7 @@ export default function PanelPage() {
     { key: 'acoes', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }) },
     { key: 'reservas', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
     { key: 'consultas-locais', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
-    { key: 'emprestimos-livro', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
-    { key: 'emprestimos-lote', label: t({ id: 'panel.loan.grouped' }), hint: t({ id: 'panel.tab.grouped.hint' }) },
+    { key: 'emprestimos', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
     { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
     { key: 'historico', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
     ...(isCoordOrAdmin ? [
@@ -1770,28 +1780,21 @@ export default function PanelPage() {
             />
           )}
 
-          {/* ═══ EMPRÉSTIMOS POR LIVRO ═══ */}
-          {tab === 'emprestimos-livro' && (
-            <TabEmprestimosLivro
-              t={t}
-              sortLoans={sortLoans}
-              returnLoanItem={returnLoanItem}
-              extendLoan={extendLoan}
-              loadData={loadData}
-            />
-          )}
-
-          {/* ═══ EMPRÉSTIMOS AGRUPADOS ═══ */}
-          {tab === 'emprestimos-lote' && (
-            <TabEmprestimosLote
+          {/* ═══ EMPRÉSTIMOS (fusionnés — E.3/EA-07, 29/05/2026) ═══ */}
+          {tab === 'emprestimos' && (
+            <TabEmprestimos
               t={t}
               activeLoans={activeLoans}
+              loans={loans}
               loteStatusFilter={loteStatusFilter}
               setLoteStatusFilter={setLoteStatusFilter}
               loteSortKey={loteSortKey}
               setLoteSortKey={setLoteSortKey}
               EMPRESTIMO_STATUS_LABELS={EMPRESTIMO_STATUS_LABELS}
+              expandedLoans={expandedLoans}
+              toggleExpandedLoan={toggleExpandedLoan}
               extendLoan={extendLoan}
+              returnLoanItem={returnLoanItem}
               loadData={loadData}
             />
           )}
