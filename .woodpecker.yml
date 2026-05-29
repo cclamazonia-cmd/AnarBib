@@ -209,13 +209,13 @@ steps:
   # migration ne fait rien.
   #
   # NOTE HISTORIQUE :
-  # Le dossier `db/migrations/` (à la racine du repo) contient l'historique
-  # des migrations antérieures au paquet 14 et est figé en lecture seule.
-  # Il y a un écart connu entre les fichiers locaux et le tracker prod
-  # (certaines migrations ont été appliquées via SQL Editor sans être
-  # commitées dans `db/migrations/`) qui ne peut être réconcilié rétroactivement.
-  # Cette dette est acceptée : à partir du paquet 14, toutes les nouvelles
-  # migrations passent par ce flow CI et sont donc 100% reproductibles.
+  # Les migrations antérieures au paquet 14 (01/05 → 10/05/2026, format
+  # hétérogène) sont archivées dans `docs/archive/db-migrations-legacy-pre-woodpecker/`.
+  # L'audit du 29/05/2026 (cf. `docs/decisions/CLEANUP_db_migrations_2026-05-29.md`)
+  # a vérifié que 100 % des objets créés par ces migrations sont soit en prod,
+  # soit volontairement retirés par un chantier ultérieur tracé. Aucune dette
+  # résiduelle. Depuis le paquet 14, toutes les nouvelles migrations passent
+  # par le flow CI ci-dessous et sont 100 % reproductibles.
   #
   # Pour bypasser exceptionnellement (cas rare : migration urgente) :
   # appliquer manuellement via SQL Editor PUIS noter dans schema_migrations
