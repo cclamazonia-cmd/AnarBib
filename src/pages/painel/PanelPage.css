@@ -492,3 +492,41 @@
 .ab-painel-itask-prio--baixa { background: rgba(29,78,216,.18); color: #60a5fa; }
 .ab-painel-itask-prio--normal { background: rgba(180,83,9,.18); color: #fbbf24; }
 .ab-painel-itask-select { font-size: .82rem; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.3); color: #f4f4f4; }
+
+/* TabLeitor — gestion lecteur·rice (E.4/OT-2) */
+.ab-painel-reader-card > .ab-painel-edit-profile { margin-top: 12px; }
+.ab-painel-edit-profile label { font-size: .82rem; }
+.ab-painel-field--span2 { grid-column: span 2; }
+.ab-painel-edit-summary { cursor: pointer; font-weight: 600; font-size: .9rem; }
+.ab-painel-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ab-painel-field-grid--mt { margin-top: 8px; }
+.ab-painel-addr-title { margin: 12px 0 6px; font-size: .88rem; font-weight: 600; }
+.ab-painel-addr-raw { font-size: .82rem; color: var(--brand-muted, #aaa); margin: 6px 0; white-space: pre-line; }
+.ab-painel-addr-display { font-size: .82rem; color: var(--brand-muted, #aaa); margin: 6px 0; }
+.ab-painel-frozen-badge { margin: 10px 0; padding: 8px 12px; border-radius: 8px; background: rgba(220,38,38,.15); border: 1px solid rgba(220,38,38,.3); }
+.ab-painel-frozen-badge__text { font-weight: 600; font-size: .85rem; }
+.ab-painel-edit-actions { margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.ab-painel-edit-msg { font-size: .85rem; color: var(--brand-text); font-weight: 600; }
+.ab-painel-restrict-box { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: rgba(0,0,0,.15); }
+.ab-painel-restrict-title { font-size: .8rem; color: var(--brand-muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
+.ab-painel-restrict-active { margin: 0 0 8px; font-size: .85rem; }
+.ab-painel-restrict-reason { color: var(--brand-muted); }
+.ab-painel-restrict-input { margin-bottom: 6px; width: 100%; }
+.ab-painel-freeze-box { margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: rgba(220,38,38,.10); border: 1px solid rgba(220,38,38,.35); }
+.ab-painel-freeze-title { font-size: .8rem; color: #f87171; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+.ab-painel-freeze-warn { margin: 0 0 8px; font-size: .8rem; color: var(--brand-muted); }
+.ab-painel-pay-box { margin-top: 16px; padding: 12px; border-radius: 8px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+.ab-painel-pay-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; flex-wrap: wrap; }
+.ab-painel-pay-title { margin: 0; font-size: .95rem; font-weight: 700; }
+.ab-painel-pay-empty { font-size: .85rem; color: var(--brand-muted); padding: 8px 0; }
+.ab-painel-pay-list { border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,.06); }
+.ab-painel-pay-row { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); }
+.ab-painel-pay-list > .ab-painel-pay-row:nth-child(odd) { background: rgba(0,0,0,.08); }
+.ab-painel-pay-list > .ab-painel-pay-row:last-child { border-bottom: none; }
+.ab-painel-pay-row__inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+.ab-painel-pay-row__main { flex: 1; min-width: 200px; }
+.ab-painel-pay-amount { font-size: .9rem; font-weight: 600; }
+.ab-painel-pay-method { font-weight: 400; color: var(--brand-muted); margin-left: 8px; }
+.ab-painel-pay-meta { font-size: .82rem; color: var(--brand-muted); margin-top: 2px; }
+.ab-painel-pay-notes { font-size: .78rem; color: var(--brand-muted); margin-top: 3px; font-style: italic; }
+.ab-painel-pay-recorder { font-size: .74rem; color: var(--brand-muted); margin-top: 2px; }
