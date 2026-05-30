@@ -3062,5 +3062,6 @@
   "panel.reader.freezeReasonPlaceholder": "Kialo de la tutreta ŝlosado (deviga)",
   "panel.reader.globalFrozenBadge": "Konto ŝlosita je reta nivelo · {reason}",
   "error.borrower.frozen": "Konto frostigita de la reto. Pruntado kaj rezervado blokitaj.",
-  "error.borrower.restricted_local": "Konto limigita en ĉi tiu biblioteko. Pruntado kaj rezervado blokitaj."
+  "error.borrower.restricted_local": "Konto limigita en ĉi tiu biblioteko. Pruntado kaj rezervado blokitaj.",
+  "account.alert.decidedBy": "Laŭ decido de {name}."
 }

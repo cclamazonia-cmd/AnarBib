@@ -3062,5 +3062,6 @@
   "panel.reader.freezeReasonPlaceholder": "Motif du gel global (obligatoire)",
   "panel.reader.globalFrozenBadge": "Compte gelé au niveau réseau · {reason}",
   "error.borrower.frozen": "Compte gelé par le réseau. Emprunt et réservation bloqués.",
-  "error.borrower.restricted_local": "Compte restreint dans cette bibliothèque. Emprunt et réservation bloqués."
+  "error.borrower.restricted_local": "Compte restreint dans cette bibliothèque. Emprunt et réservation bloqués.",
+  "account.alert.decidedBy": "Sur décision de {name}."
 }

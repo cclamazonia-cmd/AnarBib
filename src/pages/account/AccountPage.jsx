@@ -803,6 +803,11 @@ export default function AccountPage() {
                 {accountStatus.alerts?.filter(a => a.level !== 'info').map((a, i) => (
                   <div key={i} style={{ fontSize: '.85rem', color: a.level === 'danger' ? '#f87171' : '#fbbf24', marginTop: 2 }}>
                     {a.message_key ? t({ id: a.message_key }, { count: a.count, reason: a.reason, days: a.days }) : a.message}
+                    {a.decided_by && (
+                      <span style={{ display: 'block', fontWeight: 400, opacity: .85, marginTop: 1 }}>
+                        {t({ id: 'account.alert.decidedBy' }, { name: a.decided_by })}
+                      </span>
+                    )}
                   </div>
                 ))}
                 {accountStatus.alerts?.filter(a => a.level === 'info').length > 0 && (

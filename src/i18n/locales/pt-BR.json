@@ -3062,5 +3062,6 @@
   "panel.reader.freezeReasonPlaceholder": "Motivo do congelamento global (obrigatório)",
   "panel.reader.globalFrozenBadge": "Conta congelada no nível da rede · {reason}",
   "error.borrower.frozen": "Conta congelada pela rede. Empréstimo e reserva bloqueados.",
-  "error.borrower.restricted_local": "Conta com restrição nesta biblioteca. Empréstimo e reserva bloqueados."
+  "error.borrower.restricted_local": "Conta com restrição nesta biblioteca. Empréstimo e reserva bloqueados.",
+  "account.alert.decidedBy": "Por decisão de {name}."
 }
