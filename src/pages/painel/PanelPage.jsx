@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
+import { useState, useEffect, useCallback, useMemo, Fragment, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -17,14 +17,15 @@ import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { fmtD, UserDisplay, useSort, SortHeader, StageFilterBar } from './_shared';
-import TabEmprestimos from './tabs/TabEmprestimos';
-import TabConsultasLocais from './tabs/TabConsultasLocais';
-import TabAcoes from './tabs/TabAcoes';
-import TabHistorico from './tabs/TabHistorico';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
-import TabReservas from './tabs/TabReservas';
-import TabLeitor from './tabs/TabLeitor';
-import TabContribuicoes from './tabs/TabContribuicoes';
+// #115 : code-split - les onglets de detail sont charges a la demande (lazy).
+const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
+const TabConsultasLocais = lazy(() => import('./tabs/TabConsultasLocais'));
+const TabAcoes           = lazy(() => import('./tabs/TabAcoes'));
+const TabReservas        = lazy(() => import('./tabs/TabReservas'));
+const TabLeitor          = lazy(() => import('./tabs/TabLeitor'));
+const TabHistorico       = lazy(() => import('./tabs/TabHistorico'));
+const TabContribuicoes   = lazy(() => import('./tabs/TabContribuicoes'));
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -1729,6 +1730,8 @@ export default function PanelPage() {
 
         <div className="ab-painel-panel">
 
+          <Suspense fallback={<div className="ab-painel-tab-loading"><Spinner /></div>}>
+
           {/* ═══ TRABALHO DO DIA ═══ */}
           {tab === 'trabalho-do-dia' && (
             <TabTrabalhoDoDia
@@ -1911,6 +1914,8 @@ export default function PanelPage() {
               loadMembershipOverview={loadMembershipOverview}
             />
           )}
+
+          </Suspense>
 
           {/* ═══ Modal d'enregistrement de paiement ═══════════════ */}
           {paymentModal && paymentDraft && (

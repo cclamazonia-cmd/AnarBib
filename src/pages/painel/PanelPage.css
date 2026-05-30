@@ -613,3 +613,14 @@
     margin: 4px 14px;
   }
 }
+
+/* ── #115 : fallback de chargement des onglets lazy (code-split) ──────
+   Affichee brievement pendant le chargement a la demande d'un onglet
+   de detail (React.lazy + Suspense). Trabalho do dia reste eager. */
+.ab-painel-tab-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 40px;
+}
