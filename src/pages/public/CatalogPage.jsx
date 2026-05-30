@@ -936,6 +936,13 @@ export default function CatalogPage() {
                               #MODEL-item-grain). */}
                           {(() => {
                             if (!quickConsultaAvailable) return null;
+                            // Bug fix 30/05/2026 — garde par livre manquante.
+                            // Sans ce check, le bouton apparaissait sur les
+                            // livres hors périmètre lecteur (typique BTL vu
+                            // depuis compte BLMF, hint=indisponivel_para_voce,
+                            // status.cls='bad'). Le backend bloque déjà côté
+                            // RPC mais montrer le bouton est trompeur.
+                            if (status.cls === 'bad') return null;
 
                             const key = String(book.book_id || book.bib_ref || '');
                             const refLow = String(book.bib_ref || '').trim().toLowerCase();
