@@ -51,41 +51,41 @@ export default function TabTrabalhoDoDia({
       )}
 
       {/* ── Tarefas internas — sempre visível ──── */}
-      <div style={{ marginTop: 20, padding: 16, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-          <h3 className="ab-painel-h3" style={{ margin: 0 }}>{t({ id: 'panel.tasks.title' })} ({internalTasks.length})</h3>
-          <a href="/biblioteca" style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{t({ id: 'panel.tasks.manage' })}</a>
+      <div className="ab-painel-itask-box">
+        <div className="ab-painel-itask-head">
+          <h3 className="ab-painel-h3">{t({ id: 'panel.tasks.title' })} ({internalTasks.length})</h3>
+          <a href="/biblioteca" className="ab-painel-itask-manage">{t({ id: 'panel.tasks.manage' })}</a>
         </div>
         {internalTasks.length === 0 ? (
-          <p style={{ fontSize: '.88rem', color: 'var(--brand-muted)', margin: 0 }}>
+          <p className="ab-painel-itask-empty">
             {t({ id: 'panel.tasks.empty' })}{' '}
             {t({ id: 'panel.tasks.emptyHint' }, {
-              link: chunks => <a href="/biblioteca" style={{ color: 'var(--brand-text)' }}>{chunks}</a>,
+              link: chunks => <a href="/biblioteca">{chunks}</a>,
             })}
           </p>
         ) : (
-          <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, overflow: 'hidden' }}>
+          <div className="ab-painel-itask-list">
             {internalTasks.map((tk, i) => {
               const isOverdue = tk.due_date && tk.due_date < new Date().toISOString().slice(0, 10);
               return (
-                <div key={tk.id} style={{ padding: '10px 12px', background: i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent', borderBottom: '1px solid rgba(255,255,255,.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '.9rem', fontWeight: 600 }}>
+                <div key={tk.id} className="ab-painel-itask-row">
+                  <div className="ab-painel-itask-cell">
+                    <div className="ab-painel-itask-title">
                       {tk.title || '—'}
-                      {isOverdue && <span style={{ color: '#f87171', fontWeight: 700, marginLeft: 8, fontSize: '.78rem' }}>{t({ id: 'panel.overdue' })}</span>}
+                      {isOverdue && <span className="ab-painel-itask-overdue">{t({ id: 'panel.overdue' })}</span>}
                     </div>
-                    <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>
+                    <div className="ab-painel-itask-meta">
                       {tk.status === 'em_andamento' ? t({id:'task.status.em_andamento'}) : t({id:'task.status.pendente'})}
                       {tk.owner && ` · ${tk.owner}`}
                       {tk.due_date && ` · ${t({id:'panel.task.detail.prazo'})}: ${tk.due_date}`}
                       {tk.tags?.length > 0 && ` · ${tk.tags.join(', ')}`}
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: 4, flexShrink: 0, alignItems: 'center' }}>
-                    <span style={{ fontSize: '.7rem', padding: '2px 8px', borderRadius: 4, fontWeight: 700, background: tk.priority === 'alta' ? 'rgba(220,38,38,.18)' : tk.priority === 'baixa' ? 'rgba(29,78,216,.18)' : 'rgba(180,83,9,.18)', color: tk.priority === 'alta' ? '#f87171' : tk.priority === 'baixa' ? '#60a5fa' : '#fbbf24' }}>
+                  <div className="ab-painel-itask-actions">
+                    <span className={`ab-painel-itask-prio ab-painel-itask-prio--${tk.priority === 'alta' ? 'alta' : tk.priority === 'baixa' ? 'baixa' : 'normal'}`}>
                       {tk.priority === 'alta' ? t({id:'panel.task.priority.high'}) : tk.priority === 'baixa' ? t({id:'panel.task.priority.low'}) : t({id:'panel.task.priority.normal'})}
                     </span>
-                    <select value={tk.status} style={{ fontSize: '.82rem', padding: '4px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4' }}
+                    <select value={tk.status} className="ab-painel-itask-select"
                       onChange={async e => {
                         // Chantier #TASKS : router par fn_task_update_status (RPC)
                         // au lieu d'un update() direct. Le update() court-circuitait

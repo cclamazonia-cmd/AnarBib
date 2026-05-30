@@ -471,3 +471,24 @@
 .ab-painel-counter-field { display: flex; flex-direction: column; gap: 4px; min-width: 200px; }
 .ab-painel-counter-field--wide { flex: 1; min-width: 240px; }
 .ab-painel-counter-actions { display: flex; gap: 6px; }
+
+/* TabTrabalhoDoDia — tâches internes (E.4/OT-2) */
+.ab-painel-itask-box { margin-top: 20px; padding: 16px; border-radius: 10px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+.ab-painel-itask-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.ab-painel-itask-head .ab-painel-h3 { margin: 0; }
+.ab-painel-itask-manage { font-size: .85rem; color: var(--brand-muted); }
+.ab-painel-itask-empty { font-size: .88rem; color: var(--brand-muted); margin: 0; }
+.ab-painel-itask-empty a { color: var(--brand-text); }
+.ab-painel-itask-list { border: 1px solid rgba(255,255,255,.06); border-radius: 8px; overflow: hidden; }
+.ab-painel-itask-row { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ab-painel-itask-list > .ab-painel-itask-row:nth-child(odd) { background: rgba(0,0,0,.08); }
+.ab-painel-itask-cell { flex: 1; }
+.ab-painel-itask-title { font-size: .9rem; font-weight: 600; }
+.ab-painel-itask-overdue { color: #f87171; font-weight: 700; margin-left: 8px; font-size: .78rem; }
+.ab-painel-itask-meta { font-size: .82rem; color: var(--brand-muted); }
+.ab-painel-itask-actions { display: flex; gap: 4px; flex-shrink: 0; align-items: center; }
+.ab-painel-itask-prio { font-size: .7rem; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+.ab-painel-itask-prio--alta { background: rgba(220,38,38,.18); color: #f87171; }
+.ab-painel-itask-prio--baixa { background: rgba(29,78,216,.18); color: #60a5fa; }
+.ab-painel-itask-prio--normal { background: rgba(180,83,9,.18); color: #fbbf24; }
+.ab-painel-itask-select { font-size: .82rem; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.3); color: #f4f4f4; }
