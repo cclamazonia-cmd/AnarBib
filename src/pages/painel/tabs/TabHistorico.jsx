@@ -40,17 +40,8 @@ export default function TabHistorico({
 
       {/* EA-11 (29/05/2026) : selecteur de taille de page 25/50/100.
           Toujours visible (meme si aucun type filtre coche), parce que c'est
-          une preference de l'utilisateur·rice qui doit persister.
-          NOTE: styles inline en attendant E.4 / OT-2 (chartage centralise). */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        marginTop: 12,
-        marginBottom: 12,
-        fontSize: '.88rem',
-        color: 'var(--brand-muted)',
-      }}>
+          une preference de l'utilisateur·rice qui doit persister. */}
+      <div className="ab-painel-page-size">
         <label htmlFor="history-page-size">
           {t({ id: 'panel.history.pageSize' })} :
         </label>
@@ -58,16 +49,7 @@ export default function TabHistorico({
           id="history-page-size"
           value={historyPageSize}
           onChange={e => changeHistoryPageSize(parseInt(e.target.value, 10))}
-          style={{
-            padding: '4px 8px',
-            borderRadius: 6,
-            background: 'rgba(0,0,0,.3)',
-            color: 'inherit',
-            border: '1px solid rgba(255,255,255,.15)',
-            fontSize: '.88rem',
-            fontFamily: 'inherit',
-            cursor: 'pointer',
-          }}
+          className="ab-painel-page-size__select"
         >
           <option value="25">25</option>
           <option value="50">50</option>
