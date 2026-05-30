@@ -132,6 +132,15 @@ export default function LibraryVisualAssetsSection({ libraryId, librarySlug, lib
           contentType: file.type || undefined,
         });
       if (error) throw error;
+      // #PN-2 : un manifeste vient d'etre depose -> marquer la biblio comme thematisee
+      // (LibraryContext resoudra alors themeSlug = slug, et non 'default'). Non bloquant.
+      if (slotKey === 'manifest.json' && libraryId) {
+        try {
+          await supabase.schema('api').rpc('fn_set_library_theme_active', { p_library_id: libraryId, p_active: true });
+        } catch (e) {
+          console.warn('[AnarBib] fn_set_library_theme_active(true) failed:', e);
+        }
+      }
       setMsg({ text: t({ id: 'biblioteca.visualAssets.success.uploaded' }, { name: slotKey }), kind: 'ok' });
       await reload();
     } catch (err) {
@@ -151,6 +160,14 @@ export default function LibraryVisualAssetsSection({ libraryId, librarySlug, lib
       const path = `themes/${librarySlug}/${slotKey}`;
       const { error } = await supabase.storage.from(BUCKET).remove([path]);
       if (error) throw error;
+      // #PN-2 : manifeste supprime -> la biblio repasse au theme par defaut. Non bloquant.
+      if (slotKey === 'manifest.json' && libraryId) {
+        try {
+          await supabase.schema('api').rpc('fn_set_library_theme_active', { p_library_id: libraryId, p_active: false });
+        } catch (e) {
+          console.warn('[AnarBib] fn_set_library_theme_active(false) failed:', e);
+        }
+      }
       setMsg({ text: t({ id: 'biblioteca.visualAssets.success.removed' }, { name: slotKey }), kind: 'ok' });
       await reload();
     } catch (err) {

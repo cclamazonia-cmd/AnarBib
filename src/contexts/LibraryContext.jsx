@@ -109,7 +109,7 @@ export function LibraryProvider({ children }) {
       const [membershipsResult, networkAdminResult] = await Promise.all([
         supabase
           .from('user_library_memberships')
-          .select('library_id, role, is_primary, libraries(id, slug, name, short_name, catalog_mode, circulation_mode, network_mode, governance_mode, membership_enabled, reader_cards_enabled)')
+          .select('library_id, role, is_primary, libraries(id, slug, name, short_name, catalog_mode, circulation_mode, network_mode, governance_mode, membership_enabled, reader_cards_enabled, theme_slug)')
           .eq('user_id', user.id)
           .eq('status', 'active'),
         supabase
@@ -153,7 +153,7 @@ export function LibraryProvider({ children }) {
           const next = {
             librarySlug: lib.slug,
             libraryId: lib.id,
-            themeSlug: lib.slug,
+            themeSlug: lib.theme_slug || 'default',
             libraryName: lib.short_name || lib.name,
             role: match.role,
             // E.0 : 4 axes profil + membership_enabled (fallback defaults safe)
@@ -177,7 +177,7 @@ export function LibraryProvider({ children }) {
         const next = {
           librarySlug: lib.slug,
           libraryId: lib.id,
-          themeSlug: lib.slug,
+          themeSlug: lib.theme_slug || 'default',
           libraryName: lib.short_name || lib.name,
           role: primary.role,
           // E.0 : 4 axes profil + membership_enabled
@@ -200,7 +200,7 @@ export function LibraryProvider({ children }) {
     const next = {
       librarySlug: slug,
       libraryId: lib?.id || null,
-      themeSlug: slug,
+      themeSlug: lib?.theme_slug || 'default',
       libraryName: lib?.short_name || lib?.name || slug,
       role: membership?.role || null,
       // E.0 : 4 axes profil + membership_enabled
