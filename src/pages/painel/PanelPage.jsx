@@ -451,30 +451,50 @@ export default function PanelPage() {
 
   // ── Load ──────────────────────────────────────────────
 
-  const loadData = useCallback(async () => {
-    setLoading(true);
+  const loadReservas = useCallback(async () => {
     try {
-      const [resR, conR, loanR, renewItemR] = await Promise.all([
-        apiQuery('reserva_itens_followup_ui'),
-        apiQuery('consulta_itens_followup_ui'),
+      const r = await apiQuery('reserva_itens_followup_ui');
+      setReservations(r.data || []);
+    } catch (e) { console.error('Painel reservas reload error:', e); }
+  }, []);
+
+  const loadConsultas = useCallback(async () => {
+    try {
+      const r = await apiQuery('consulta_itens_followup_ui');
+      setConsultations(r.data || []);
+    } catch (e) { console.error('Painel consultas reload error:', e); }
+  }, []);
+
+  const loadLoans = useCallback(async () => {
+    try {
+      const [loanR, renewItemR] = await Promise.all([
         apiQuery('emprestimo_itens_painel_ui'),
         apiQuery('staff_loans_renewal_status_by_item_v1'),
       ]);
-      setReservations(resR.data || []);
-      setConsultations(conR.data || []);
       setLoans(loanR.data || []);
-      // Granularité Phase 4 : indexer le statut de renouvellement par sub_id.
+      // Granularite Phase 4 : indexer le statut de renouvellement par sub_id.
       setRenewStatusByItem(Object.fromEntries(
         (renewItemR.data || []).map(r => [r.sub_id, r])
       ));
-      // Load internal tasks
-      if (libraryId) {
-        const { data: tasksData } = await supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).in('status', ['pendente', 'em_andamento']).order('priority').order('due_date').limit(50);
-        setInternalTasks(tasksData || []);
-      }
-    } catch (e) { console.error('Painel load error:', e); }
-    finally { setLoading(false); }
+    } catch (e) { console.error('Painel loans reload error:', e); }
   }, []);
+
+  const loadTasks = useCallback(async () => {
+    if (!libraryId) return;
+    try {
+      const { data: tasksData } = await supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).in('status', ['pendente', 'em_andamento']).order('priority').order('due_date').limit(50);
+      setInternalTasks(tasksData || []);
+    } catch (e) { console.error('Painel tasks reload error:', e); }
+  }, [libraryId]);
+
+  // E.5 - orchestrateur de recharge complete : montage initial + bouton Recarregar global.
+  // Les actions ciblees appellent directement loadReservas / loadConsultas / loadLoans.
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Promise.all([loadReservas(), loadConsultas(), loadLoans(), loadTasks()]);
+    } finally { setLoading(false); }
+  }, [loadReservas, loadConsultas, loadLoans, loadTasks]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -515,7 +535,7 @@ export default function PanelPage() {
       }
       setActionMsg(t({id:'panel.action.stepApplied'},{count:items.length}));
       setSelectedRes(new Set());
-      loadData();
+      loadReservas();
     } catch (e) {
       // L'API peut renvoyer transition_not_allowed, pickup_scheduled_for_required,
       // target_stage_has_dedicated_rpc, etc. localizeError traduit le code.
@@ -545,7 +565,7 @@ export default function PanelPage() {
       }
       setActionMsg(t({id:'panel.action.reservationsCancelled'},{count:items.length}));
       setSelectedRes(new Set());
-      loadData();
+      loadReservas();
     } catch (e) {
       setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
@@ -580,7 +600,8 @@ export default function PanelPage() {
           : t({id:'panel.action.pickupConfirmed'}, { count: items.length })
       );
       setSelectedRes(new Set());
-      loadData();
+      loadReservas();
+      loadLoans();
     } catch (e) {
       setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
@@ -609,7 +630,7 @@ export default function PanelPage() {
       if (negotiationForm?.reservaId === rid && negotiationForm?.lineNo === lno) {
         setNegotiationForm(null);
       }
-      loadData();
+      loadReservas();
     } catch (e) {
       setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
@@ -658,7 +679,7 @@ export default function PanelPage() {
       if (error) throw error;
       setActionMsg(t({id:'panel.action.counterProposalSent'}));
       setNegotiationForm(null);
-      loadData();
+      loadReservas();
     } catch (e) {
       setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
@@ -685,7 +706,7 @@ export default function PanelPage() {
       if (negotiationForm?.reservaId === rid && negotiationForm?.lineNo === lno) {
         setNegotiationForm(null);
       }
-      loadData();
+      loadReservas();
     } catch (e) {
       setActionMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.apiError.generic')}));
     }
@@ -716,7 +737,7 @@ export default function PanelPage() {
         // trg_notify_emprestimo_criado (header AFTER INSERT) s'en charge.
         setBorrowerLookup(''); setLoanRefs('');
         setLoanPreview(null);
-        loadData();
+        loadLoans();
       } catch (e) { setLoanMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.loan.errorMissing')})); }
       finally { setLoanBusy(false); }
       return;
@@ -804,7 +825,7 @@ export default function PanelPage() {
         // approprié selon la transition (devolvido OU devolvido_apos_parcial).
         setReturnId('');
         setReturnTotalPreview(null);
-        loadData();
+        loadLoans();
       } catch (e) { setReturnMsg(t({id:'common.errorPrefix'},{message: localizeError(e, t, 'panel.error.loanReturn')})); }
       return;
     }
@@ -896,7 +917,7 @@ export default function PanelPage() {
       if (ok.length) {
         setReturnSubIds('');
         setReturnPartialPreview(null);
-        loadData();
+        loadLoans();
       }
       return;
     }
@@ -985,7 +1006,7 @@ export default function PanelPage() {
       // Paquet 19 : utiliser le wrapper api.* au lieu de la fn DEFINER
       const { error } = await supabase.schema('api').rpc('extend_loan_as_library', { p_emprestimo_id: empId });
       if (error) throw error;
-      loadData();
+      loadLoans();
     } catch (e) {
       notifyError(localizeError(e, t, 'panel.loan.extendError'), e);
     }
@@ -998,7 +1019,7 @@ export default function PanelPage() {
         p_emprestimo_id: empId, p_line_nos: lineNos,
       });
       if (error) throw error;
-      loadData();
+      loadLoans();
     } catch (e) { notifyError(localizeError(e, t, 'panel.error.loanReturn'), e); }
   }
 
@@ -1009,7 +1030,7 @@ export default function PanelPage() {
         p_emprestimo_id: empId, p_line_no: lineNo,
       });
       if (error) throw error;
-      loadData();
+      loadLoans();
     } catch (e) {
       notifyError(localizeError(e, t, 'panel.loan.extendError'), e);
     }
@@ -1034,7 +1055,7 @@ export default function PanelPage() {
       }
       const { error } = await supabase.schema('api').rpc('advance_consulta', params);
       if (error) throw error;
-      loadData();
+      loadConsultas();
     } catch (e) { notifyError(localizeError(e, t, 'panel.error.consultaWorkflow'), e); }
   }
 
@@ -1561,12 +1582,12 @@ export default function PanelPage() {
       <PageShell>
         <Topbar />
         <Hero title={t({ id: 'panel.title' })} subtitle={t({ id: 'panel.subtitle' })}>
-          <div className="ab-painel-skel-chips">
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <Skeleton w={140} h={28} style={{ borderRadius: 14 }} />
             <Skeleton w={120} h={28} style={{ borderRadius: 14 }} />
           </div>
         </Hero>
-        <div className="ab-painel-skel-panel">
+        <div style={{ padding: 24 }}>
           <Skeleton lines={3} />
         </div>
       </PageShell>
@@ -1575,9 +1596,9 @@ export default function PanelPage() {
 
   if (!isLibrarian) return (
     <PageShell><Topbar />
-      <div className="ab-painel-restricted">
-        <h1>{t({ id: 'panel.title' })}</h1>
-        <p>{t({ id: 'panel.restricted' })}</p>
+      <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center', padding: '60px 24px' }}>
+        <h1 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{t({ id: 'panel.title' })}</h1>
+        <p style={{ color: 'var(--brand-muted)', marginTop: 12 }}>{t({ id: 'panel.restricted' })}</p>
       </div>
     </PageShell>
   );
@@ -1592,7 +1613,7 @@ export default function PanelPage() {
       <PageShell>
         <Topbar />
         <Hero title={t({ id: 'panel.title' })} subtitle={libraryName || t({ id: 'panel.subtitle' })}>
-          <div className="ab-painel-skel-chips ab-painel-skel-chips--mt">
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
             <Skeleton w={170} h={28} style={{ borderRadius: 14 }} />
             <Skeleton w={170} h={28} style={{ borderRadius: 14 }} />
             <Skeleton w={200} h={28} style={{ borderRadius: 14 }} />
@@ -1600,7 +1621,7 @@ export default function PanelPage() {
           </div>
         </Hero>
         {/* Onglets en skeleton */}
-        <div className="ab-painel-skel-tabs">
+        <div style={{ display: 'flex', gap: 12, padding: '16px 0', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Skeleton w={120} h={42} style={{ borderRadius: 8 }} />
           <Skeleton w={100} h={42} style={{ borderRadius: 8 }} />
           <Skeleton w={130} h={42} style={{ borderRadius: 8 }} />
@@ -1610,9 +1631,9 @@ export default function PanelPage() {
           <Skeleton w={150} h={42} style={{ borderRadius: 8 }} />
         </div>
         {/* Stats cards en skeleton (Synthèse opérationnelle) */}
-        <div className="ab-painel-skel-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12, padding: '0 0 16px' }}>
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="ab-painel-skel-card">
+            <div key={i} style={{ padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,.08)', background: 'rgba(12,12,12,.4)', textAlign: 'center' }}>
               <Skeleton w={40} h={32} style={{ margin: '0 auto 8px' }} />
               <Skeleton w={100} h={14} style={{ margin: '0 auto' }} />
             </div>
@@ -1631,12 +1652,29 @@ export default function PanelPage() {
             masquée quand on est déjà sur l'onglet Trabalho do dia.
             NOTE: styles inline en attendant E.4 / OT-2 (chartage centralisé). */}
         {tab !== 'trabalho-do-dia' && (
-          <div className="ab-painel-hero-action-row">
+          <div style={{
+            marginTop: 12,
+            marginBottom: 4,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            flexWrap: 'wrap',
+          }}>
             {dailyActionCount > 0 ? (
               <button
                 type="button"
                 onClick={() => setTab('trabalho-do-dia')}
-                className="ab-painel-hero-action-btn ab-painel-hero-action-btn--warn"
+                style={{
+                  background: 'rgba(251, 191, 36, 0.15)',
+                  border: '1px solid rgba(251, 191, 36, 0.4)',
+                  borderRadius: 8,
+                  padding: '6px 14px',
+                  color: '#fbbf24',
+                  cursor: 'pointer',
+                  fontSize: '.95rem',
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                }}
               >
                 {t({ id: 'panel.hero.dailyWorkLink' }, { count: dailyActionCount })}
               </button>
@@ -1644,7 +1682,17 @@ export default function PanelPage() {
               <button
                 type="button"
                 onClick={() => setTab('trabalho-do-dia')}
-                className="ab-painel-hero-action-btn ab-painel-hero-action-btn--ok"
+                style={{
+                  background: 'rgba(74, 222, 128, 0.12)',
+                  border: '1px solid rgba(74, 222, 128, 0.35)',
+                  borderRadius: 8,
+                  padding: '6px 14px',
+                  color: 'rgba(74, 222, 128, 0.95)',
+                  cursor: 'pointer',
+                  fontSize: '.92rem',
+                  fontWeight: 500,
+                  fontFamily: 'inherit',
+                }}
               >
                 ✓ {t({ id: 'panel.hero.allClear' })}
               </button>
@@ -1747,7 +1795,7 @@ export default function PanelPage() {
               canTransition={canTransition}
               confirmSelectedPickup={confirmSelectedPickup}
               cancelSelectedRes={cancelSelectedRes}
-              loadData={loadData}
+              loadData={loadReservas}
               applyResWorkflow={applyResWorkflow}
               toggleAllRes={toggleAllRes}
               toggleRes={toggleRes}
@@ -1770,7 +1818,7 @@ export default function PanelPage() {
               setConsultaWorkflow={setConsultaWorkflow}
               openScheduleModal={openScheduleModal}
               openCancelModal={openCancelModal}
-              loadData={loadData}
+              loadData={loadConsultas}
             />
           )}
 
@@ -1791,7 +1839,7 @@ export default function PanelPage() {
               returnLoanItem={returnLoanItem}
               extendLoanItem={extendLoanItem}
               renewStatusByItem={renewStatusByItem}
-              loadData={loadData}
+              loadData={loadLoans}
             />
           )}
 
@@ -1862,24 +1910,24 @@ export default function PanelPage() {
 
           {/* ═══ Modal d'enregistrement de paiement ═══════════════ */}
           {paymentModal && paymentDraft && (
-            <div onClick={closePaymentModal} className="ab-painel-modal-overlay">
-              <div onClick={e => e.stopPropagation()} className="ab-painel-modal">
-                <div className="ab-painel-modal-head">
-                  <h3 className="ab-painel-modal-title">{t({ id: 'membership.payment.modalTitle' })}</h3>
-                  <button onClick={closePaymentModal} className="ab-painel-modal-close">×</button>
+            <div onClick={closePaymentModal} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+              <div onClick={e => e.stopPropagation()} style={{ background: 'var(--brand-bg, #1a1a1a)', borderRadius: 12, padding: 20, maxWidth: 500, width: '100%', border: '1px solid rgba(255,255,255,.1)', maxHeight: '90vh', overflow: 'auto' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>{t({ id: 'membership.payment.modalTitle' })}</h3>
+                  <button onClick={closePaymentModal} style={{ background: 'none', border: 'none', color: 'var(--brand-muted)', fontSize: '1.4rem', cursor: 'pointer', padding: 0, lineHeight: 1 }}>×</button>
                 </div>
-                <div className="ab-painel-modal-sub">
+                <div style={{ fontSize: '.88rem', color: 'var(--brand-muted)', marginBottom: 12 }}>
                   {t({ id: 'membership.payment.forReader' }, { name: paymentModal.display_name })}
                 </div>
 
-                <div className="ab-painel-modal-form">
-                  <label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
                     {t({ id: 'membership.payment.rule' })}
                     <select
                       value={paymentDraft.rule_id || ''}
                       onChange={e => onPaymentRuleChange(e.target.value)}
                       className="ab-painel-input"
-                     
+                      style={{ marginTop: 4 }}
                     >
                       {membershipRules.map(r => (
                         <option key={r.id} value={r.id}>
@@ -1889,7 +1937,7 @@ export default function PanelPage() {
                     </select>
                   </label>
 
-                  <label>
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
                     {t({ id: 'membership.payment.amount' })}
                     <input
                       type="number"
@@ -1898,17 +1946,17 @@ export default function PanelPage() {
                       value={paymentDraft.amount_paid}
                       onChange={e => setPaymentDraft(p => ({ ...p, amount_paid: e.target.value }))}
                       className="ab-painel-input"
-                     
+                      style={{ marginTop: 4 }}
                     />
                   </label>
 
-                  <label>
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
                     {t({ id: 'membership.payment.method' })}
                     <select
                       value={paymentDraft.payment_method}
                       onChange={e => setPaymentDraft(p => ({ ...p, payment_method: e.target.value }))}
                       className="ab-painel-input"
-                     
+                      style={{ marginTop: 4 }}
                     >
                       <option value="cash">{t({ id: 'membership.method.cash' })}</option>
                       <option value="transfer">{t({ id: 'membership.method.transfer' })}</option>
@@ -1920,18 +1968,18 @@ export default function PanelPage() {
                     </select>
                   </label>
 
-                  <label>
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
                     {t({ id: 'membership.payment.paidAt' })}
                     <input
                       type="date"
                       value={paymentDraft.paid_at}
                       onChange={e => setPaymentDraft(p => ({ ...p, paid_at: e.target.value }))}
                       className="ab-painel-input"
-                     
+                      style={{ marginTop: 4 }}
                     />
                   </label>
 
-                  <label>
+                  <label style={{ fontSize: '.85rem', fontWeight: 600 }}>
                     {t({ id: 'membership.payment.notes' })}
                     <textarea
                       rows={2}
@@ -1939,17 +1987,17 @@ export default function PanelPage() {
                       onChange={e => setPaymentDraft(p => ({ ...p, notes: e.target.value }))}
                       className="ab-painel-input"
                       placeholder={t({ id: 'membership.payment.notesPlaceholder' })}
-                     
+                      style={{ marginTop: 4, fontFamily: 'inherit', resize: 'vertical' }}
                     />
                   </label>
 
                   {paymentMsg && (
-                    <div className={`ab-painel-modal-msg ${paymentMsgIsError ? 'ab-painel-modal-msg--error' : 'ab-painel-modal-msg--ok'}`}>
+                    <div style={{ padding: '8px 12px', borderRadius: 6, fontSize: '.85rem', background: paymentMsgIsError ? 'rgba(220,38,38,.1)' : 'rgba(74,222,128,.1)', color: paymentMsgIsError ? '#f87171' : '#4ade80' }}>
                       {paymentMsg}
                     </div>
                   )}
 
-                  <div className="ab-painel-btn-row">
+                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                     <Button onClick={submitPayment} disabled={paymentSaving}>
                       {paymentSaving ? t({ id: 'common.saving' }) : t({ id: 'membership.payment.submit' })}
                     </Button>
@@ -1975,50 +2023,50 @@ export default function PanelPage() {
         <div className="ab-modal__body">
           {scheduleTarget && (
             <>
-              <p className="ab-painel-dialog-p">
+              <p style={{ marginBottom: 8 }}>
                 <strong>{t({ id: 'panel.consultation.schedule.subtitle' })} :</strong>{' '}
                 {scheduleTarget.user_name || scheduleTarget.user_email || scheduleTarget.user_public_id || '?'}
               </p>
-              <p className="ab-painel-dialog-note">
+              <p style={{ marginBottom: 16, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
                 {t({ id: 'panel.consultation.schedule.book' })} : {scheduleTarget.titulo || scheduleTarget.bib_ref || '?'}
               </p>
             </>
           )}
-          <div className="ab-painel-dialog-form">
-            <label className="ab-painel-field-col">
-              <span className="ab-painel-field-label">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
                 {t({ id: 'panel.consultation.schedule.dateLabel' })}
               </span>
               <input type="date" value={scheduleForm.date} onChange={(e) => setScheduleForm(f => ({ ...f, date: e.target.value }))} className="ab-input" disabled={scheduling} />
             </label>
-            <div className="ab-painel-field-row">
-              <label className="ab-painel-field-col ab-painel-field-col--flex1">
-                <span className="ab-painel-field-label">
+            <div style={{ display: 'flex', gap: 12 }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
                   {t({ id: 'panel.consultation.schedule.startsAtLabel' })}
                 </span>
                 <input type="time" value={scheduleForm.startsAt} onChange={(e) => setScheduleForm(f => ({ ...f, startsAt: e.target.value }))} className="ab-input" disabled={scheduling} />
               </label>
-              <label className="ab-painel-field-col ab-painel-field-col--flex1">
-                <span className="ab-painel-field-label">
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
                   {t({ id: 'panel.consultation.schedule.endsAtLabel' })}
                 </span>
                 <input type="time" value={scheduleForm.endsAt} onChange={(e) => setScheduleForm(f => ({ ...f, endsAt: e.target.value }))} className="ab-input" disabled={scheduling} />
               </label>
             </div>
-            <label className="ab-painel-field-col">
-              <span className="ab-painel-field-label">
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
                 {t({ id: 'panel.consultation.schedule.noteLabel' })}
               </span>
               <textarea value={scheduleForm.note} onChange={(e) => setScheduleForm(f => ({ ...f, note: e.target.value }))} placeholder={t({ id: 'panel.consultation.schedule.notePlaceholder' })} className="ab-input" rows={3} maxLength={300} disabled={scheduling} />
-              <span className="ab-painel-field-hint">
+              <span style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>
                 {t({ id: 'panel.consultation.schedule.noteHint' })} ({scheduleForm.note.length}/300)
               </span>
             </label>
-            <p className="ab-painel-dialog-tzhint">
+            <p style={{ fontSize: '.75rem', color: 'var(--brand-muted)', marginTop: 4 }}>
               {t({ id: 'panel.consultation.schedule.timezoneHint' }, { tz: Intl.DateTimeFormat().resolvedOptions().timeZone })}
             </p>
             {scheduleError && (
-              <p className="ab-painel-dialog-error">{scheduleError}</p>
+              <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', margin: 0 }}>{scheduleError}</p>
             )}
           </div>
         </div>
@@ -2042,21 +2090,21 @@ export default function PanelPage() {
         <div className="ab-modal__body">
           {cancelTarget && (
             <>
-              <p className="ab-painel-dialog-p">
+              <p style={{ marginBottom: 8 }}>
                 <strong>{t({ id: 'panel.consultation.cancel.subtitle' })} :</strong>{' '}
                 {cancelTarget.user_name || cancelTarget.user_email || cancelTarget.user_public_id || '?'}
               </p>
-              <p className="ab-painel-dialog-note">
+              <p style={{ marginBottom: 16, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
                 {t({ id: 'panel.consultation.cancel.book' })} : {cancelTarget.titulo || cancelTarget.bib_ref || '?'}
               </p>
             </>
           )}
-          <p className="ab-painel-dialog-lead">
+          <p style={{ marginBottom: 12, fontSize: '.9rem' }}>
             {t({ id: 'panel.consultation.cancel.description' })}
           </p>
-          <div className="ab-painel-dialog-form">
-            <label className="ab-painel-field-col">
-              <span className="ab-painel-field-label">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>
                 {t({ id: 'panel.consultation.cancel.noteLabel' })}
               </span>
               <textarea
@@ -2068,12 +2116,12 @@ export default function PanelPage() {
                 maxLength={300}
                 disabled={cancelling}
               />
-              <span className="ab-painel-field-hint">
+              <span style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>
                 {t({ id: 'panel.consultation.cancel.noteHint' })} ({cancelForm.note.length}/300, min 5)
               </span>
             </label>
             {cancelError && (
-              <p className="ab-painel-dialog-error">{cancelError}</p>
+              <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', margin: 0 }}>{cancelError}</p>
             )}
           </div>
         </div>
