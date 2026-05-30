@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -1715,11 +1715,15 @@ export default function PanelPage() {
       <div className="ab-painel-card">
         <nav className="ab-painel-tabs" role="tablist">
           {TABS.map(t => (
-            <button key={t.key} className={`ab-painel-tab ${tab === t.key ? 'active' : ''}`}
-              onClick={() => setTab(t.key)} role="tab">
-              {t.label}
-              <span className="ab-painel-tab__hint">{t.hint}</span>
-            </button>
+            <Fragment key={t.key}>
+              <button className={`ab-painel-tab ${tab === t.key ? 'active' : ''}`}
+                onClick={() => setTab(t.key)} role="tab">
+                {t.label}
+                <span className="ab-painel-tab__hint">{t.hint}</span>
+              </button>
+              {/* EA-01 : Trabalho do dia = vue d'ensemble ; le reste = vues de detail */}
+              {t.key === 'trabalho-do-dia' && <span className="ab-painel-tab-divider" aria-hidden="true" />}
+            </Fragment>
           ))}
         </nav>
 

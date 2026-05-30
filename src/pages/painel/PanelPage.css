@@ -593,3 +593,23 @@
 .ab-painel-field-row { display: flex; gap: 12px; }
 .ab-painel-field-label { font-size: .85rem; color: var(--brand-muted); }
 .ab-painel-field-hint { font-size: .75rem; color: var(--brand-muted); }
+
+/* ── EA-01 : separation vue d'ensemble / vues de detail ──────────────
+   Trabalho do dia est la porte d'entree (vue d'ensemble) du Painel ;
+   les onglets-objet (Reservas, Consultas, Emprestimos, Leitor...) sont
+   des vues de detail consultees au besoin. Le separateur marque ce statut.
+   Fonctionne en barre horizontale ET en colonne (<=640px). */
+.ab-painel-tab-divider {
+  align-self: stretch;
+  flex: 0 0 auto;
+  width: 1px;
+  background: rgba(255, 255, 255, .14);
+  margin: 8px 4px;
+}
+@media (max-width: 640px) {
+  .ab-painel-tab-divider {
+    width: auto;
+    height: 1px;
+    margin: 4px 14px;
+  }
+}
