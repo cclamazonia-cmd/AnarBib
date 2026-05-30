@@ -98,7 +98,7 @@ export default function TabReservas({
         <Button variant="secondary" onClick={applyResWorkflow}>{t({ id: 'panel.reservations.applyStep' })}</Button>
       </div>
       {/* PATCH 07/05/2026 : aide UX pour clarifier les actions hors menu */}
-      <p className="ab-painel-help" style={{ fontSize: '0.85em', color: '#888', marginTop: '4px' }}>
+      <p className="ab-painel-help">
         {t({ id: 'panel.reservations.menuHelp' })}
       </p>
       <StageFilterBar
@@ -182,7 +182,7 @@ export default function TabReservas({
                         texte simple si on attend, rien sinon */}
                     <td className="ab-painel-actions-cell">
                       {showStaffActions && (
-                        <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+                        <div className="ab-painel-res-actions">
                           <button
                             className="ab-button ab-button--mini"
                             onClick={() => confirmReaderSlot(r.reserva_id, r.line_no)}
@@ -211,7 +211,7 @@ export default function TabReservas({
                         </div>
                       )}
                       {!showStaffActions && isWaitingReader && (
-                        <span style={{ fontSize:'.8rem', color:'var(--brand-muted)', fontStyle:'italic' }}>
+                        <span className="ab-painel-res-waiting">
                           {t({id:'panel.reservations.negotiation.waitingReaderInline'})}
                         </span>
                       )}
@@ -222,10 +222,10 @@ export default function TabReservas({
                       colonnes (1 checkbox + 8 colonnes data + negotiation + actions). */}
                   {isFormOpen && (
                     <tr className="ab-painel-counter-form-row">
-                      <td colSpan={11} style={{ padding:'12px 16px', background:'rgba(251,191,36,.08)', borderTop:'2px solid rgba(251,191,36,.4)' }}>
-                        <div style={{ display:'flex', gap:12, flexWrap:'wrap', alignItems:'flex-end' }}>
-                          <div style={{ display:'flex', flexDirection:'column', gap:4, minWidth:200 }}>
-                            <label style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                      <td colSpan={11}>
+                        <div className="ab-painel-counter-form">
+                          <div className="ab-painel-counter-field">
+                            <label>
                               {t({id:'panel.reservations.counterProposeForm.datetime'})}
                             </label>
                             <input
@@ -235,8 +235,8 @@ export default function TabReservas({
                               className="ab-painel-input"
                             />
                           </div>
-                          <div style={{ display:'flex', flexDirection:'column', gap:4, flex:1, minWidth:240 }}>
-                            <label style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                          <div className="ab-painel-counter-field ab-painel-counter-field--wide">
+                            <label>
                               {t({id:'panel.reservations.counterProposeForm.note'})}
                             </label>
                             <input
@@ -247,7 +247,7 @@ export default function TabReservas({
                               placeholder={t({id:'panel.reservations.counterProposeForm.notePlaceholder'})}
                             />
                           </div>
-                          <div style={{ display:'flex', gap:6 }}>
+                          <div className="ab-painel-counter-actions">
                             <Button onClick={submitCounterProposal}>
                               {t({id:'panel.reservations.counterProposeForm.submit'})}
                             </Button>

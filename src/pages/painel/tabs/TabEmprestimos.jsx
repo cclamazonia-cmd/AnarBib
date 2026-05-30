@@ -90,9 +90,9 @@ export default function TabEmprestimos({
       <TabHeader title={t({ id: 'panel.tab.loans' })} onRefresh={loadData} />
 
       {/* Toolbar : filtre statut + tri. Repris iso de TabEmprestimosLote. */}
-      <div className="ab-painel-lote-controls" style={{ display: 'flex', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
+      <div className="ab-painel-lote-controls">
         <div>
-          <label style={{ marginRight: 8 }}>{t({ id: 'panel.loanGrouped.filter' })}</label>
+          <label>{t({ id: 'panel.loanGrouped.filter' })}</label>
           <select
             value={loteStatusFilter}
             onChange={e => setLoteStatusFilter(e.target.value)}
@@ -104,7 +104,7 @@ export default function TabEmprestimos({
           </select>
         </div>
         <div>
-          <label style={{ marginRight: 8 }}>{t({ id: 'panel.loanGrouped.sort' })}</label>
+          <label>{t({ id: 'panel.loanGrouped.sort' })}</label>
           <select
             value={loteSortKey}
             onChange={e => setLoteSortKey(e.target.value)}
@@ -143,7 +143,7 @@ export default function TabEmprestimos({
             <div key={g.emprestimo_id} className="ab-painel-lote">
               <div
                 className="ab-painel-lote__head"
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, cursor: 'pointer' }}
+               
                 onClick={() => toggleExpandedLoan(g.emprestimo_id)}
                 role="button"
                 tabIndex={0}
@@ -151,7 +151,7 @@ export default function TabEmprestimos({
                 aria-expanded={isExpanded}
               >
                 <div>
-                  <span style={{ display: 'inline-block', width: 16, fontSize: '.85rem', opacity: .7 }}>
+                  <span className="ab-painel-lote__caret">
                     {isExpanded ? '▾' : '▸'}
                   </span>
                   <strong>#{g.emprestimo_id}</strong> · {g.user_name || g.user_email || g.user_public_id || '—'}
@@ -161,7 +161,7 @@ export default function TabEmprestimos({
                 </div>
                 {/* Actions : on stoppe la propagation du clic pour éviter
                     qu'un clic sur "Prolonger" ne déplie/replie la ligne. */}
-                <div style={{ display: 'flex', gap: 6 }} onClick={e => e.stopPropagation()}>
+                <div className="ab-painel-lote__actions" onClick={e => e.stopPropagation()}>
                   {hasOpenItem && (
                     <button className="ab-button ab-button--mini" onClick={async () => {
                       // EA-07 (29/05/2026) : confirmation modale en remplacement
@@ -192,16 +192,15 @@ export default function TabEmprestimos({
                     <div
                       key={l.line_no}
                       className="ab-painel-lote__item"
-                      style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}
                     >
-                      <span style={{ fontFamily: 'monospace', fontSize: '.88rem', opacity: .85 }}>{l.sub_id}</span>
+                      <span className="ab-painel-lote__subid">{l.sub_id}</span>
                       <Link to={`/livro/${l.book_id}`}>{l.titulo || l.bib_ref}</Link>
                       {(l.extended_until || l.due_at) && (
-                        <span style={{ fontSize: '.82rem', opacity: .8, color: l.extended_until ? '#60a5fa' : 'inherit' }}>
+                        <span className={`ab-painel-lote__due ${l.extended_until ? 'ab-painel-lote__due--extended' : ''}`}>
                           {fmtD(l.extended_until || l.due_at)}
                         </span>
                       )}
-                      <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span className="ab-painel-lote__item-actions">
                         <span className={`ab-painel-loan-status ab-painel-loan-status--${l.item_status}`}>
                           {l.item_status === 'aberto' ? t({id:'panel.loan.status.open'}) : t({id:'panel.loan.status.returned'})}
                         </span>
