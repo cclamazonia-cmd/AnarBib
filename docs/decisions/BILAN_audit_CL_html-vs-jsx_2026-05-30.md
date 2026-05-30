@@ -22,6 +22,7 @@
 - [#CL.9 — Liste d'envies / guardar para depois](#cl9)
 - [#CL.10 — Infos pratiques de retrait intégrées au parcours](#cl10)
 - [Tableau récapitulatif](#tableau-récapitulatif)
+- [Recommandations transverses](#recommandations-transverses)
 - [Recommandation d'occupation jusqu'au 06/06](#recommandation-doccupation-jusquau-0606)
 - [Conséquences pour le backlog v22 et le GLB v17](#conséquences-pour-le-backlog-v22-et-le-glb-v17)
 
@@ -69,9 +70,17 @@ Le sous-item ne peut pas être déclaré clos sur la seule présence d'un onglet
 
 À ce stade, sur la seule base des grep, le statut probable est **partiel** : la structure est là, le chargement est là, mais la dimension « pont vers le catalogue vivant » (le cœur politique du sous-item selon le cahier) n'est pas confirmée par un Link visible dans les résultats de recherche pour cet onglet.
 
-### Verdict — #CL.1 : 🟡 PARTIEL (à confirmer par lecture détaillée du rendu)
+### Verdict — #CL.1 : 🟡 PARTIEL — manque la prochaine disponibilité, doctrine d'affichage à arbitrer
 
-Action recommandée : ouvrir `AccountPage.jsx` autour de la ligne 1440, vérifier (a) que chaque ligne d'historique a un Link cliquable vers la fiche livre, (b) que la disponibilité actuelle locale est affichée pour chaque titre, (c) que le champ `is_reservable` ou équivalent est exploité pour proposer la réservation. Si oui, sous-item clos. Si manque (a), (b) ou (c), travail de complément à chiffrer (probablement 1 session).
+L'audit visuel des captures du 30/05 (côté `conta` et côté `painel`) confirme que l'historique côté lecteur·rice est **riche en données contextuelles de l'emprunt passé** : titre complet, auteurs, références multiples, biblio, dates de retrait et de dévolution, nombre de renouvellements, bouton « Ocultar histórico » par ligne. C'est bien au-delà du minimum.
+
+Mais le **cœur politique du sous-item selon le cahier Dunkerque** — la « prochaine disponibilité » du livre (date de retour prévue la plus proche si tout est sorti, ou statut courant : disponible / tout sorti / consultation seule / indisponible) — **n'est exposé sur aucune des deux vues**. C'est ce qui devait transformer l'historique en pont vers le catalogue vivant. Cette dimension reste à implémenter.
+
+**Convergence avec #CL.9** : le besoin d'une surface de disponibilité locale réutilisable apparaît à deux endroits (historique et liste d'envies). Voir la recommandation transverse en fin de bilan.
+
+**Question doctrinale d'affichage** : la vue painel (table dense, onglets pliables Reservas / Consultas / Empréstimos, motifs explicites) est jugée plus pratique à consulter. La vue conta (listing en prose) reste plus narrative mais moins scannable. Décision à prendre — c'est un choix d'UX politique : la conta est-elle un *récit lisible* ou une *surface dense* ? Aligner conta sur painel rendrait l'historique plus consultable mais perdrait l'épaisseur narrative.
+
+Action recommandée : (1) implémenter la surface de disponibilité courante (composant transverse, voir recommandation), (2) arbitrer doctrine d'affichage (table dense parité painel ou listing narratif), (3) intégrer un bouton refresh sur l'onglet (cf. recommandation transverse refresh).
 
 ---
 
@@ -221,9 +230,18 @@ L'HTML d'origine n'a pas de Link React — les liens étaient gérés en JS dyna
 
 Le sous-item #CL.5 est largement **partiellement vérifiable** par cet audit. La partie « depuis `conta` vers `livro` » est livrée (le Link existe). La partie « depuis `livro` vers `autor` puis retour » demande un audit séparé de `BookPage.jsx` et `AuthorPage.jsx`.
 
-### Verdict — #CL.5 : 🟡 PARTIEL (à confirmer par audit transverse)
+### Verdict — #CL.5 : ✅ LIVRÉ
 
-Action recommandée : audit ciblé de `BookPage.jsx` et `AuthorPage.jsx` (probablement 30 minutes chacun) pour vérifier la continuité de navigation. Le cœur du sous-item — sortir de la page compte vers le catalogue — est en place côté `AccountPage`.
+**Audit transverse complété le 30/05** sur `BookPage.jsx` (525 lignes) et `AuthorPage.jsx` (253 lignes). Les trois ponts de navigation sont câblés :
+
+- **conta → livro** : `<Link to={\`/livro/${l.book_id}\`}>` ligne 1395 de `AccountPage.jsx` (déjà constaté en première passe).
+- **livro → autor** : `<Link to={\`/autor/${a.author_id}\`}>` lignes 507 et 519 de `BookPage.jsx`. Doublement présent — probablement un cas pour l'auteur principal et un cas pour les co-auteurs.
+- **autor → livro** : `<Link to={\`/livro/${book.book_id}\`}>` ligne 220 de `AuthorPage.jsx`, dans la liste des œuvres de l'auteur.
+- **retour vers index** : bouton `backToCatalog` dans le topbar (`AuthorPage.jsx` ligne 116), pattern probablement répété sur `BookPage.jsx`.
+
+`AuthorPage.jsx` est par ailleurs une page particulièrement soignée : hero contextualisé, biographie i18n avec fallback en cascade (locale → langue de base → pt-BR → original), photo, identifiants externes (VIAF, ISNI, Wikidata) en chips cliquables. C'est au-dessus du minimum cahier.
+
+Sous-item à marquer résolu dans le backlog v22.
 
 ---
 
@@ -266,9 +284,23 @@ Deux points méritent une vérification de second niveau, parce que le grep ne l
 
 **Second point — la granularité de la lecture**. L'action « Marquer tout comme lu » est livrée. Le cahier n'exige pas explicitement un marquage individuel par notification, mais c'est une attente courante. À vérifier si chaque notification a son propre bouton « marquer comme lu », ou si seul le marquage global existe.
 
-### Verdict — #CL.6 : ✅ LIVRÉ (sous réserve de deux vérifications mineures)
+### Verdict — #CL.6 : 🟡 PARTIEL — archivage par ligne et vue archives à ajouter
 
-L'ossature complète est en place. La structure de données, le compteur de non-lus, le marquage global, le rendu, l'i18n pour les notifications RGPD : tout y est. Les deux points (Link contextuel, marquage individuel) sont des raffinements à arbitrer, pas des manques structurels. À déclarer clos avec mention « raffinements optionnels en attente d'arbitrage ».
+L'ossature complète est en place. La structure de données, le compteur de non-lus, le marquage global, le rendu, l'i18n pour les notifications RGPD : tout y est.
+
+**Manques explicitement identifiés (audit du 30/05)** :
+
+1. **Archivage par ligne**. Différent du « marquer comme lu » global qui existe : archiver, c'est sortir l'avis de la vue active sans le supprimer. Implique l'ajout d'une colonne `archived_at` sur `user_notifications`, une RPC `fn_archive_notification(p_notification_id)`, et un bouton par ligne dans le rendu.
+
+2. **Toggle « montrer les archives »** au niveau de l'onglet. Bascule la vue de « avis actifs » (par défaut, `archived_at IS NULL`) vers « avis archivés ». Implique un état React `viewMode = 'active' | 'archived'` qui modifie le filtre de la requête de chargement. Depuis la vue archives, une action symétrique « désarchiver » est probablement utile (RPC `fn_unarchive_notification`).
+
+3. **Action contextuelle de saut**. Si chaque notification a un `target_id` (vers réservation ou prêt), le pont vers le contexte devient possible. À vérifier dans le schéma `user_notifications`.
+
+4. **Marquage individuel comme lu**. Optionnel, mais classique. Une RPC `fn_mark_one_notification_read(p_notification_id)` complète le marquage global.
+
+Le pattern global est celui d'une inbox (Gmail/etc.) : actifs / archives / éventuellement corbeille. Mécaniquement standard, mais demande backend + frontend coordonnés. Estimation : 1-2 sessions.
+
+À inscrire au backlog comme **🟡 PARTIEL avec raffinements identifiés**.
 
 ---
 
@@ -388,9 +420,19 @@ Tout est en place, jusqu'à l'i18n du titre et du hint de l'onglet.
 
 Aucun écart. Sous-item livré. Le seul point à confirmer par lecture détaillée du rendu : le bouton « retirer de la liste » et le Link vers la fiche livre. Mais la structure de données est en place, et il serait surprenant que le rendu ne les expose pas.
 
-### Verdict — #CL.9 : ✅ LIVRÉ
+### Verdict — #CL.9 : 🟡 PARTIEL — sous-exploité, trois manques précis
 
-À régulariser dans le backlog : marquer le sous-item résolu.
+L'ossature est livrée — onglet, table dédiée, JOIN sur livres, compteur, rendu de base. Mais l'audit visuel du 30/05 révèle que la liste d'envies est **sous-exploitée** par rapport à ce que demande le cahier Dunkerque. Trois manques précis :
+
+1. **Pas d'indicateur de disponibilité en temps réel.** Le cahier le demande explicitement : *« statut de disponibilité du titre »*. C'est même le cœur politique du sous-item — savoir si on peut enfin réserver un titre qu'on avait mis de côté. Sans cet indicateur, la liste d'envies reste une fonction de marque-page passif, pas un outil actif de circulation.
+
+2. **Pas de date d'ajout visible.** La donnée existe (`user_wishlist.created_at` est ramenée par la requête ligne 135), c'est uniquement un manque d'affichage côté rendu. Trivial à corriger.
+
+3. **Pas d'action « réserver depuis la liste d'envies »** (pont vers le catalogue vivant). Le bouton ou Link permettant de basculer un item de la wishlist vers une réservation directe — quand il est disponible — manque. C'est ce qui ferait de la wishlist un outil actif.
+
+**Convergence avec #CL.1** : le besoin d'une surface de disponibilité locale réutilisable apparaît à deux endroits du compte lecteur·rice (historique et liste d'envies). Voir la recommandation transverse en fin de bilan.
+
+À inscrire au backlog comme **🟡 PARTIEL avec trois manques identifiés**. Estimation : 1 session si la surface de disponibilité est mutualisée avec #CL.1 ; 1,5 session sinon.
 
 ---
 
@@ -440,46 +482,116 @@ Non livré, sous-item véritablement ouvert. À inscrire au backlog comme **vrai
 
 | Sous-item | Titre | Statut backlog v22 | **Statut réel (audit 30/05)** | Action |
 |-----------|-------|--------------------|-------------------------------|--------|
-| #CL.1 | Historique cliquable → fiche livre → dispo locale | 🟡 CADRÉ | 🟡 PARTIEL (à confirmer par lecture rendu) | Lecture détaillée AccountPage:1440+, ~30 min |
+| #CL.1 | Historique cliquable → fiche livre → dispo locale | 🟡 CADRÉ | 🟡 PARTIEL — manque dispo courante, doctrine d'affichage à arbitrer | Composant dispo transverse + arbitrage table dense vs listing |
 | #CL.2 | Réservations lecteur bout-à-bout | 🟡 CADRÉ | ✅ LIVRÉ (au-dessus du minimum) | Marquer résolu, absorbe #157 |
-| #CL.3 | Bandeau état du compte | ✅ Clos 24/05 | ✅ LIVRÉ + correction bug record IS NOT NULL (25-26/05) | Ajouter mention correction en section E |
+| #CL.3 | Bandeau état du compte | ✅ Clos 24/05 | ✅ LIVRÉ + correction bug `record IS NOT NULL` (25-26/05) | Ajouter mention correction en section E |
 | #CL.4 | Prêts en cours avec renouvellement clair | 🟡 CADRÉ | ✅ LIVRÉ (refonte 29/05, parité painel) | Marquer résolu |
-| #CL.5 | Navigation continue conta → livro → autor → index | 🟡 CADRÉ | 🟡 PARTIEL côté AccountPage, audit transverse requis | Audit BookPage + AuthorPage, ~1h |
-| #CL.6 | Centre d'avis / notifications | 🟡 CADRÉ | ✅ LIVRÉ (sous réserve 2 raffinements) | Marquer résolu, raffinements optionnels |
+| #CL.5 | Navigation continue conta → livro → autor → index | 🟡 CADRÉ | ✅ LIVRÉ (audit transverse 30/05 — 3 ponts câblés) | Marquer résolu |
+| #CL.6 | Centre d'avis / notifications | 🟡 CADRÉ | 🟡 PARTIEL — archivage par ligne + vue archives à ajouter | Mini-évolution backend + frontend, 1-2 sessions |
 | #CL.7 | Mes données / sécurité / rattachement | 🟡 CADRÉ | 🟡 PARTIEL — préférences notif manquantes | Décision politique requise sur préf notif |
-| #CL.8 | Maîtrise de l'historique | 🟡 CADRÉ | 🔴 OUVERT | Mini-spec à rédiger avant implémentation |
-| #CL.9 | Liste d'envies | 🟡 CADRÉ | ✅ LIVRÉ | Marquer résolu |
+| #CL.8 | Maîtrise de l'historique | 🟡 CADRÉ | 🔴 OUVERT (mais amorce via « Ocultar histórico » par ligne) | Mini-spec à rédiger ; capitaliser sur l'amorce existante |
+| #CL.9 | Liste d'envies | 🟡 CADRÉ | 🟡 PARTIEL — dispo, date d'ajout, action réserver manquantes | Avec mutualisation #CL.1 : 1 session |
 | #CL.10 | Infos pratiques de retrait | 🟡 CADRÉ | 🔴 OUVERT (dépend données biblio) | Conditionner à #PARTNERS / multi-appartenance |
 
 **Synthèse chiffrée** :
-- **5 sous-items livrés** non reconnus comme tels par le backlog v22 (#CL.2, #CL.3, #CL.4, #CL.6, #CL.9) — soit la moitié.
-- **2 sous-items partiels** demandant un complément de lecture ou audit transverse (#CL.1, #CL.5).
-- **1 sous-item partiel** demandant un arbitrage politique (#CL.7 — préférences notif).
-- **2 sous-items véritablement ouverts** non implémentés ni en HTML, ni en JSX (#CL.8, #CL.10).
+- **4 sous-items livrés** non reconnus comme tels par le backlog v22 (#CL.2, #CL.3, #CL.4, #CL.5).
+- **4 sous-items partiels** demandant un complément ciblé (#CL.1, #CL.6, #CL.7, #CL.9). Pour #CL.1 et #CL.9, mutualisation possible.
+- **2 sous-items véritablement ouverts** non implémentés (#CL.8 avec amorce, #CL.10 sans).
+
+**Lecture de méthode** : la révision du verdict initial (5 livrés → 4 livrés ; 1 livré sous réserve → 4 partiels ; etc.) après retour des captures et audit transverse confirme la pertinence de l'audit à deux passes — la première par grep, la seconde sur retours utilisateur·rice et lecture détaillée. C'est exactement la méthode parité+audit appliquée à l'audit lui-même.
 
 ---
+
+<a id="recommandations-transverses"></a>
+## Recommandations transverses
+
+Trois recommandations qui dépassent un sous-item unique sont apparues au cours de l'audit. Elles méritent d'être traitées comme des objets de travail à part entière.
+
+### Recommandation A — Composant `<BookAvailability>` réutilisable
+
+**Constat** : #CL.1 et #CL.9 partagent le même manque structurel — l'affichage du statut courant de disponibilité d'un livre à partir d'une ligne (d'historique ou de wishlist). Le cahier Dunkerque le demande explicitement pour les deux sous-items.
+
+**Recommandation** : créer un composant `<BookAvailability bookId={...} libraryId={...} variant="inline|compact|full" />` qui consomme une RPC backend `fn_book_availability_local(p_book_id, p_library_id)` retournant un objet stable :
+
+```json
+{
+  "available_count": 2,
+  "on_loan_count": 1,
+  "earliest_due_back": "2026-06-15",
+  "is_reservable": true,
+  "is_consultation_only": false,
+  "status_label": "disponible" | "tout sorti" | "consultation seule" | "indisponible"
+}
+```
+
+**Avantages** :
+- Backend partagé entre #CL.1 et #CL.9 — la moitié du travail est mutualisée.
+- Variant d'affichage configurable — `inline` pour une ligne d'historique, `compact` pour une carte wishlist, `full` pour usage futur sur livro.html.
+- Surface stable réutilisable plus tard (peut-être sur l'index, dans le résultat de recherche, ou en preview de catalogue).
+
+**Estimation** : 1-2 sessions pour le composant + la RPC. Après ça, l'intégration sur #CL.1 et #CL.9 prend une session combinée.
+
+### Recommandation B — Bouton refresh sur les onglets utiles de `conta`
+
+**Constat** : le painel a un pattern de refresh par onglet (« ⟳ Recarregar », visible sur la capture #CL.1 image 2). Ce pattern manque côté `conta` alors que la lectrice peut avoir besoin de rafraîchir un onglet sans recharger toute la page (par exemple, pour vérifier si une réservation est passée en « pronta para retirada »).
+
+**Recommandation** : généraliser le bouton refresh sur les onglets utiles de `AccountPage.jsx`, sur le modèle exact du painel. Onglets concernés :
+
+- `histórico` (#CL.1) — au cas où une dévolution récente
+- `reservar` ou `reservas` (#CL.2) — pour suivre l'évolution d'une réservation
+- `curso` (#CL.4) — pour vérifier un renouvellement effectué côté staff
+- `avisos` (#CL.6) — pour voir les notifications fraîches sans recharger
+
+Onglets où c'est probablement inutile : `perfil` (pas de données qui changent côté serveur), `desejos` (changement uniquement à l'initiative de la lectrice).
+
+**Estimation** : 1 session compacte une fois le pattern posé. Probablement un hook réutilisable `useTabRefresh(tabKey, loaderFn)` à factoriser.
+
+**Doctrine** : la parité fonctionnelle painel ↔ conta est cohérente avec la doctrine « page = périmètre » du GLB v17. Si le staff peut rafraîchir, la lectrice doit pouvoir aussi — c'est le même droit, sur les mêmes données, vu depuis le compte.
+
+### Recommandation C — Inversion de l'invariant backlog
+
+**Constat** : sur dix sous-items #CL audités, le backlog v22 sous-estimait quatre livraisons et surestimait l'avancement de trois autres. La cadence de production excède la cadence d'inscription documentaire.
+
+**Recommandation** : passer d'un backlog « rien ne sort tant qu'on n'a pas explicitement marqué résolu » à un backlog « tout doit être audité avant de démarrer ». Décision doctrinale à formaliser dans un `docs/decisions/`.
+
+C'est ce que cet audit pratique de fait. Le rendre explicite protège contre le risque qu'on a pointé en ouverture de session : se lancer sur un chantier déclaré ouvert qui est en réalité livré.
+
+---
+
+
 
 <a id="recommandation-doccupation-jusquau-0606"></a>
 ## Recommandation d'occupation jusqu'au 06/06
 
-Vu l'état réel, la semaine d'occupation jusqu'au 06/06 (où #BIBLIO étape 8 sera débloqué par #110 R.6) peut être structurée ainsi, par ordre de priorité décroissante :
+Vu l'état réel après seconde passe, la semaine d'occupation jusqu'au 06/06 (où #BIBLIO étape 8 sera débloqué par #110 R.6) peut être structurée ainsi, par ordre de priorité décroissante :
 
-**1. Confirmation des partiels — 1 demi-journée maximum.**
-Lecture détaillée du rendu de #CL.1 (`AccountPage.jsx` autour de la ligne 1440) pour confirmer cliquabilité et exposition de la dispo locale, puis audit transverse rapide de `BookPage.jsx` et `AuthorPage.jsx` pour #CL.5. À l'issue, ces deux partiels passeront soit en LIVRÉ (probable, vu la dynamique de livraison récente), soit en travail de complément clairement chiffré.
+**1. Régularisation du backlog v22 — courte session.**
+Mise à jour du tableau des sous-items #CL avec les statuts révélés par l'audit (4 livrés, 4 partiels avec manques précis, 2 ouverts). Ajout en section E des trois livraisons non tracées : refonte #CL.4 du 29/05, correction du bug `record IS NOT NULL` du 25-26/05, mécanique pickup bidirectionnelle #CL.2, navigation autor/livro complète #CL.5. Note d'écart sur le GLB v17 à consigner pour intégration au v18 fin juillet.
 
-**2. Régularisation du backlog v22 et du GLB v17 — 1 session.**
-Mise à jour du tableau des sous-items #CL avec les statuts révélés par l'audit, ajout en section E (Acquis) des trois livraisons non tracées : refonte #CL.4 du 29/05, correction du bug `record IS NOT NULL` du 25-26/05, mécanique pickup bidirectionnelle #CL.2. Note d'écart sur le GLB v17 (séquence 3 « jonction frontend profils d'adoption » obsolète + #CL.4 livré non reconnu). Ne pas refondre le GLB lui-même (la cadence Livre blanc est volontairement interrompue jusqu'à fin juillet), mais consigner les écarts dans une note de session.
+**2. Composant `<BookAvailability>` + RPC associée — 1-2 sessions.**
+C'est la **recommandation transverse A**. Elle débloque mécaniquement la finition de #CL.1 (manque la prochaine dispo) et #CL.9 (manque l'indicateur de dispo). Travail d'investissement à fort levier — un objet créé une fois, réutilisé sur deux sous-items + surfaces futures.
 
-**3. Décision sur les préférences de notification (#CL.7) — courte session.**
-Arbitrage politique : préférences configurables (chantier de complément) ou politique mail minimale non configurable (décision doctrinale, peut-être en lien avec « refus de la traçabilité marchande ») ? Si la seconde, c'est une note en `docs/decisions/` et #CL.7 passe en LIVRÉ.
+**3. Finition #CL.1 + #CL.9 + arbitrage doctrine d'affichage #CL.1 — 1 session combinée.**
+Une fois `<BookAvailability>` en place, l'intégration côté historique et wishlist est rapide. Ajouter au passage la date d'ajout #CL.9 (trivial) et l'action « réserver depuis wishlist ». Trancher en parallèle la doctrine d'affichage de #CL.1 (table dense parité painel ou listing narratif).
 
-**4. Cadrage de `spec-multi-appartenance-lecteur` — chantier principal de la semaine.**
-C'est le vrai sujet structurant ouvert ce matin. Sa rédaction est largement compatible avec la fenêtre 30/05 → 06/06, et préparera l'attaque de la migration SQL validation physique qui suivra. Cette spec a vocation à intégrer également des arbitrages utiles pour #CL.10 (exposition publique des données biblio).
+**4. Refresh par onglet sur `conta` — 1 session.**
+Recommandation transverse B. Pattern à factoriser depuis painel, hook `useTabRefresh` réutilisable.
 
-**5. Si temps disponible — démarrage de la mini-spec #CL.8.**
-Décision politique sur la rétention d'historique, schéma de configuration, esquisse d'UI. Pas urgent, mais à entamer maintenant qu'il est explicitement identifié comme vraiment ouvert.
+**5. Décision sur les préférences de notification (#CL.7) — courte session.**
+Arbitrage politique : préférences configurables (chantier de complément) ou politique mail minimale non configurable (décision doctrinale en lien possible avec « refus de la traçabilité marchande ») ? Si la seconde, c'est une note en `docs/decisions/` et #CL.7 passe en LIVRÉ.
 
-Ce que la semaine **ne doit pas contenir** : redéveloppement de fonctions déjà livrées. Le risque, sans cet audit, aurait été de coder un renouvellement de prêts en pensant que #CL.4 attendait du travail, alors qu'il était fait depuis le 29/05. C'est précisément ce que la doctrine « refus de la fausse fermeture » du GLB v17 doit empêcher — et la valeur de cet audit est d'avoir mesuré l'écart avant qu'il coûte plusieurs jours de travail inutile.
+**6. Chantier #CL.6 — archivage par ligne + vue archives — 1-2 sessions.**
+Mini-évolution backend (colonne `archived_at` + 2 RPC) + frontend (état `viewMode`, bouton par ligne, toggle vue). Pattern inbox standard. Pas urgent par rapport au reste mais cohérent à enchaîner sur la même semaine.
+
+**7. Cadrage de `spec-multi-appartenance-lecteur` — chantier principal de fond.**
+Sa rédaction est compatible avec ce qui précède en alternance (sessions de cadrage vs sessions de code), et préparera l'attaque de la migration SQL validation physique. Peut intégrer aussi les arbitrages utiles pour #CL.10.
+
+**8. Si temps disponible — démarrage mini-spec #CL.8.**
+Capitaliser sur l'amorce existante (« Ocultar histórico » par ligne, visible sur la capture du 30/05). Décision politique sur la rétention, schéma de configuration, esquisse d'UI.
+
+**Volumétrie estimée** : 6-9 sessions sur 6 jours calendaires (30/05 → 05/06), donc tenable, voire confortable si certaines sessions se cumulent. Et bonne couverture : on sort de la semaine avec backlog à jour, deux composants transverses propres, quatre sous-items #CL en plus en livré ou clos, et une spec multi-appartenance avancée.
+
+Ce que la semaine **ne doit pas contenir** : redéveloppement de fonctions déjà livrées. C'est précisément ce que la doctrine « refus de la fausse fermeture » du GLB v17 doit empêcher — et la valeur de cet audit est d'avoir mesuré l'écart avant qu'il coûte plusieurs jours de travail inutile.
 
 ---
 
@@ -488,36 +600,36 @@ Ce que la semaine **ne doit pas contenir** : redéveloppement de fonctions déj�
 
 ### Pour le backlog v22 (à régulariser au prochain passage de version, v23)
 
-- **Section C.3 (fiche #CL)** : mettre à jour la liste des sous-items résolus. Au minimum #CL.2, #CL.4, #CL.6, #CL.9 passent dans les acquis. #CL.3 sort de sa réserve cotisation. #CL.1 et #CL.5 restent en cadré le temps de la confirmation. #CL.7 dépend d'un arbitrage. #CL.8 et #CL.10 passent explicitement en « ouvert avec spec à rédiger / dépendance externe ».
+- **Section C.3 (fiche #CL)** : mettre à jour la liste des sous-items avec les statuts révisés. **#CL.2, #CL.4, #CL.5** passent dans les acquis. **#CL.3** sort de sa réserve cotisation. **#CL.1, #CL.6, #CL.9** restent en partiel avec manques précis à inscrire. **#CL.7** dépend d'un arbitrage. **#CL.8** et **#CL.10** passent explicitement en « ouvert ».
 - **Section E (Acquis)** : ajouter quatre lignes
   - *Correction `fn_my_account_status` (bug `record IS NOT NULL`) — 25-26/05, migration `20260525200000`, sécurise la branche cotisation du bandeau #CL.3 pour tou·tes les lecteur·rices.*
   - *Refonte conta curso parité painel — 29/05, livre #CL.4 (prêts groupés, renouvellement par item ou par groupe, codes couleur, motifs de blocage typés).*
   - *Mécanique pickup bidirectionnelle (`fn_propose_pickup_slot_as_reader`, `fn_confirm_pickup_slot_as_reader`) — paquets 2 et 2 bis, livre #CL.2 (réservation bout-à-bout).*
-  - *Centre d'avis #CL.6 — onglet `avisos`, table `user_notifications`, RPC `fn_mark_notifications_read`, intégration RGPD.*
-- **Section D (sous-tickets)** : déplacer ou marquer résolus les lignes correspondantes.
-- **Section F (Arbitrages à rendre)** : ajouter l'arbitrage préférences de notification (#CL.7).
+  - *Navigation continue conta → livro → autor → index — #CL.5 livré, ponts câblés sur les trois pages, `AuthorPage` enrichie (biographie i18n avec fallback, identifiants externes VIAF/ISNI/Wikidata).*
+- **Section D (sous-tickets)** : déplacer les lignes correspondantes. Ajouter trois sous-tickets nouveaux issus des recommandations transverses : **(a) Composant `<BookAvailability>` + RPC `fn_book_availability_local`**, **(b) Pattern refresh par onglet sur `conta` (parité painel)**, **(c) #CL.6 — archivage par ligne + vue archives (colonne `archived_at`, RPC + UI)**.
+- **Section F (Arbitrages à rendre)** : ajouter deux arbitrages
+  - **Préférences de notification #CL.7** : configurables ou minimum non configurable ?
+  - **Doctrine d'affichage de l'historique #CL.1** : table dense parité painel ou listing narratif ?
 
 ### Pour le GLB v17 (à régulariser à v18 fin juillet)
 
 Le GLB v17 est explicitement gelé jusqu'à fin juillet ; aucune édition à apporter avant. Mais consigner dans une note de session du 30/05 :
 
 - La séquence 3 du tableau IV (« jonction frontend profils d'adoption ») est obsolète depuis le marathon 19-20 mai. État réel : livré, frontend painel + biblioteca + conta adaptatifs.
-- Le présent audit révèle cinq sous-items #CL livrés silencieusement, dont deux dans la dynamique du marathon Painel 28-30 mai (refonte conta curso 29/05, mécanique pickup paquets 2/2 bis).
-- L'arbitrage 1 du GLB v17 (« continuer Painel ou basculer sur profils d'adoption ? ») est en partie caduc : les profils d'adoption sont livrés.
+- Le présent audit révèle quatre sous-items #CL livrés silencieusement, dont trois dans la dynamique du marathon Painel 28-30 mai (refonte conta curso 29/05, mécanique pickup paquets 2/2 bis, navigation autor transverse).
+- L'arbitrage 1 du GLB v17 (« continuer Painel ou basculer sur profils d'adoption ? ») est caduc : les profils d'adoption sont livrés.
 - L'arbitrage 2 (« CIRA Marseille avant ou après séquence 3 ? ») devient praticable, la séquence 3 étant en fait close.
 
 Ces points devront alimenter la rédaction du v18 fin juillet pour que la formule de clôture (« la prochaine étape est un chantier tenu — la jonction frontend des profils d'adoption ») ne soit pas reportée par inertie sur un travail déjà fait.
 
 ### Leçon de méthode
 
-Cet audit montre que **la cadence de livraison du projet excède désormais la cadence d'inscription dans les documents stratégiques**. C'est un effet de la méthode parité+audit elle-même : un marathon comme celui de Painel 26-30 mai déplace plusieurs périmètres à la fois (Painel + parité conta + corrections collatérales), et les sous-items concernés ne sont pas systématiquement répercutés. Trois pistes pour y répondre, à arbitrer plus tard :
+Cet audit montre que **la cadence de livraison du projet excède désormais la cadence d'inscription dans les documents stratégiques**. Effet collatéral de la méthode parité+audit elle-même : un marathon comme celui de Painel 26-30 mai déplace plusieurs périmètres à la fois (Painel + parité conta + corrections collatérales), et les sous-items concernés ne sont pas systématiquement répercutés.
 
-1. **Audit éclair à la fin de chaque marathon** : 30 minutes en fin de session pour grep les sous-items concernés et basculer leur statut.
-2. **Document de bilan de marathon** : un fichier court par marathon (genre `BILAN_painel_28-30mai.md`) qui liste les livraisons collatérales, à committer dans `docs/decisions/`.
-3. **Inversion de l'invariant backlog** : passer d'un backlog « rien ne sort tant qu'on n'a pas explicitement marqué résolu » à un backlog « tout doit être audité avant de démarrer ». C'est la posture pratiquée par ce bilan, et qui pourrait devenir doctrine.
+La **recommandation transverse C** (inversion de l'invariant backlog : « tout doit être audité avant de démarrer ») répond directement à ce constat. C'est ce que cet audit pratique de fait. Le formaliser en doctrine protégerait du risque pointé en ouverture de session — se lancer sur un chantier déclaré ouvert qui est en réalité livré.
 
-La troisième piste est probablement la plus saine — elle inscrit comme règle ce que le projet pratique déjà *de facto*, et elle protège du risque que tu pointais en début de session : se lancer sur un chantier déclaré ouvert qui est en réalité livré.
+Mention additionnelle : **la méthode parité+audit gagne en finesse à mesure qu'elle s'étend**. Première application sur #BIBLIO en mai (parité fonctionnelle), seconde sur #PAINEL (parité fonctionnelle + qualitative + doctrinale), troisième sur #CL via le présent audit (parité fonctionnelle + qualitative + revue comparative ancêtre HTML). À chaque itération, la grille de lecture s'affine. C'est un acquis méthodologique en soi.
 
 ---
 
-*Bilan rédigé le 30/05/2026 par Claude, dans la session avec Xavier qui s'est ouverte au sortir de la session marathon Painel.*
+*Bilan rédigé le 30/05/2026 par Claude, dans la session avec Xavier qui s'est ouverte au sortir de la session marathon Painel. Révision intégrée le 30/05 après retours utilisateur·rice sur #CL.1 (captures), #CL.5 (audit transverse `BookPage.jsx` + `AuthorPage.jsx`), #CL.6 (archivage par ligne + vue archives), #CL.9 (manques précis).*
