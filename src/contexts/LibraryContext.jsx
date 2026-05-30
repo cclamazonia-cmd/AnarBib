@@ -64,7 +64,7 @@ function readFromUrl() {
   if (!slug) return null;
   return {
     librarySlug: slug.trim().toLowerCase(),
-    themeSlug: (url.searchParams.get('theme') || slug).trim().toLowerCase(),
+    themeSlug: 'default', // #PN-2 : jamais deduit du slug d'URL (resolu en base) -> zero 404 manifeste
     libraryName: url.searchParams.get('library_name') || 'AnarBib',
   };
 }
@@ -93,9 +93,36 @@ export function LibraryProvider({ children }) {
     if (!user) {
       setLibraries([]);
       setIsNetworkAdmin(false);
-      const def = readFromUrl() || DEFAULT_CONTEXT;
-      setCtx(def);
-      writeToSession(def);
+      const urlCtx = readFromUrl();
+      // #PN-2 : visiteur anonyme -> on demarre TOUJOURS sur le theme par defaut
+      // (jamais de sonde themes/<slug>/manifest.json depuis l'URL), puis on resout
+      // theme_slug en base. Biblio sans manifeste ou non visible par anon (ex.
+      // nouvelle biblio non publiee) -> reste en 'default'. Zero 404 quelles que
+      // soient les inscriptions de biblios.
+      const base = urlCtx
+        ? { ...DEFAULT_CONTEXT, librarySlug: urlCtx.librarySlug, libraryName: urlCtx.libraryName }
+        : DEFAULT_CONTEXT;
+      setCtx(base);
+      writeToSession(base);
+      if (urlCtx && urlCtx.librarySlug !== 'default') {
+        (async () => {
+          try {
+            const { data } = await supabase
+              .from('libraries')
+              .select('slug, name, short_name, theme_slug')
+              .eq('slug', urlCtx.librarySlug)
+              .maybeSingle();
+            if (!data) return; // non visible par anon ou inexistante -> reste en default
+            const next = {
+              ...base,
+              libraryName: data.short_name || data.name || base.libraryName,
+              themeSlug: data.theme_slug || 'default',
+            };
+            setCtx(next);
+            writeToSession(next);
+          } catch { /* reste en default */ }
+        })();
+      }
       return;
     }
 
