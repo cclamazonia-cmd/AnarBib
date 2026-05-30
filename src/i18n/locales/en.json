@@ -3060,5 +3060,7 @@
   "panel.reader.freezeConfirm": "Confirm the GLOBAL freeze of this account across the whole network?",
   "panel.reader.unfreezeConfirm": "Lift the global freeze on this account?",
   "panel.reader.freezeReasonPlaceholder": "Reason for the global freeze (required)",
-  "panel.reader.globalFrozenBadge": "Account frozen at network level · {reason}"
+  "panel.reader.globalFrozenBadge": "Account frozen at network level · {reason}",
+  "error.borrower.frozen": "Account frozen by the network. Loans and reservations are blocked.",
+  "error.borrower.restricted_local": "Account restricted at this library. Loans and reservations are blocked."
 }

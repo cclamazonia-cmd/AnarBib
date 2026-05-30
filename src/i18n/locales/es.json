@@ -3060,5 +3060,7 @@
   "panel.reader.freezeConfirm": "¿Confirmar el congelamiento GLOBAL de esta cuenta en toda la red?",
   "panel.reader.unfreezeConfirm": "¿Descongelar esta cuenta globalmente?",
   "panel.reader.freezeReasonPlaceholder": "Motivo del congelamiento global (obligatorio)",
-  "panel.reader.globalFrozenBadge": "Cuenta congelada a nivel de red · {reason}"
+  "panel.reader.globalFrozenBadge": "Cuenta congelada a nivel de red · {reason}",
+  "error.borrower.frozen": "Cuenta congelada por la red. Préstamo y reserva bloqueados.",
+  "error.borrower.restricted_local": "Cuenta con restricción en esta biblioteca. Préstamo y reserva bloqueados."
 }

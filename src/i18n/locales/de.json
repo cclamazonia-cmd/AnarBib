@@ -3060,5 +3060,7 @@
   "panel.reader.freezeConfirm": "Globale Sperre dieses Kontos im gesamten Netzwerk bestätigen?",
   "panel.reader.unfreezeConfirm": "Globale Sperre dieses Kontos aufheben?",
   "panel.reader.freezeReasonPlaceholder": "Grund der globalen Sperre (erforderlich)",
-  "panel.reader.globalFrozenBadge": "Konto auf Netzwerkebene gesperrt · {reason}"
+  "panel.reader.globalFrozenBadge": "Konto auf Netzwerkebene gesperrt · {reason}",
+  "error.borrower.frozen": "Konto netzwerkweit gesperrt. Ausleihe und Reservierung blockiert.",
+  "error.borrower.restricted_local": "Konto in dieser Bibliothek eingeschränkt. Ausleihe und Reservierung blockiert."
 }

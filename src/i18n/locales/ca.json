@@ -3060,5 +3060,7 @@
   "panel.reader.freezeConfirm": "Confirmar la congelació GLOBAL d'aquest compte a tota la xarxa?",
   "panel.reader.unfreezeConfirm": "Aixecar la congelació global d'aquest compte?",
   "panel.reader.freezeReasonPlaceholder": "Motiu de la congelació global (obligatori)",
-  "panel.reader.globalFrozenBadge": "Compte congelat a nivell de xarxa · {reason}"
+  "panel.reader.globalFrozenBadge": "Compte congelat a nivell de xarxa · {reason}",
+  "error.borrower.frozen": "Compte congelat per la xarxa. Préstec i reserva bloquejats.",
+  "error.borrower.restricted_local": "Compte restringit en aquesta biblioteca. Préstec i reserva bloquejats."
 }
