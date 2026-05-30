@@ -530,3 +530,21 @@
 .ab-painel-pay-meta { font-size: .82rem; color: var(--brand-muted); margin-top: 2px; }
 .ab-painel-pay-notes { font-size: .78rem; color: var(--brand-muted); margin-top: 3px; font-style: italic; }
 .ab-painel-pay-recorder { font-size: .74rem; color: var(--brand-muted); margin-top: 2px; }
+
+/* TabContribuicoes — cotisations (E.4/OT-2) */
+.ab-painel-memb-hint { color: var(--brand-muted); font-size: .88rem; margin-bottom: 12px; }
+.ab-painel-memb-warn { padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; background: rgba(251,146,60,.1); border: 1px solid rgba(251,146,60,.3); color: #fdba74; }
+.ab-painel-memb-warn__title { font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+.ab-painel-memb-warn__body { font-size: .85rem; }
+.ab-painel-memb-warn a { color: #fdba74; text-decoration: underline; font-weight: 600; }
+.ab-painel-memb-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.ab-painel-memb-filters button { font-size: .8rem; }
+.ab-painel-memb-list { border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); }
+.ab-painel-memb-row { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ab-painel-memb-list > .ab-painel-memb-row:nth-child(odd) { background: rgba(0,0,0,.08); }
+.ab-painel-memb-row__main { flex: 1; min-width: 220px; }
+.ab-painel-memb-name { font-size: .9rem; font-weight: 600; }
+.ab-painel-memb-pubid { font-weight: 400; color: var(--brand-muted); margin-left: 6px; }
+.ab-painel-memb-meta { font-size: .8rem; color: var(--brand-muted); margin-top: 2px; }
+.ab-painel-memb-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ab-painel-memb-detail { font-size: .78rem; color: var(--brand-muted); }
