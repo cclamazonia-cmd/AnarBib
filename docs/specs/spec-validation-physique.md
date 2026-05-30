@@ -1,6 +1,34 @@
 # Spec — Validation physique des comptes lecteur·rice
 
-**Statut** : Cadrée le 03/05/2026, en attente d'implémentation
+> ## ⚠️ Amendement structurant — 30/05/2026
+>
+> **La validation physique est désormais portée par l'appartenance (`user_library_memberships`), pas par le compte (`profiles`).** Décision actée dans `docs/decisions/DECISION_validation_par_appartenance_2026-05-30.md`.
+>
+> Cet amendement précède l'implémentation de la spec. Il ne réécrit pas la spec mais désigne les sections à ajuster lors de la rédaction de la migration SQL. La section 3 reste valable dans sa structure ; ce sont les **emplacements** (table cible, FK) qui changent.
+>
+> ### Ce qui change concrètement
+>
+> **Section 3 — Schéma DB.** Les trois colonnes (`physically_validated_at`, `physically_validated_by_user_id`, `physical_validation_note`) sont à créer sur **`user_library_memberships`**, pas sur `profiles`. La table de journalisation, nommée `profile_validation_log` dans la rédaction initiale, devient **`membership_validation_log`** avec une FK vers `user_library_memberships(id)`. Les deux triggers d'auto-validation s'attachent à `user_library_memberships`, pas à `profiles`. La contrainte d'intégrité `chk_validation_consistency` se vérifie au niveau du membership.
+>
+> **Section 4 — Helpers RLS.** Les fonctions `fn_current_user_is_pending()` et `fn_current_user_is_member_of(library_id)` s'évaluent désormais par-appartenance. `fn_current_user_is_pending()` doit clarifier sa sémantique : « pending sur sa biblio primaire » (cohérent avec ce que lit `fn_my_account_status`) ou « pending sur au moins une appartenance ». À trancher à la rédaction — recommandation : sur la primaire, pour rester aligné avec le bandeau de `/conta`. L'évolution de `fn_my_account_status` décrite dans cette section reste valide telle quelle : la fonction lit déjà l'appartenance primaire, la branche `pending` s'ajoute sans modification de mécanisme.
+>
+> **Section 5 — Workflows.** L'écran d'attente `<PendingAccountScreen>` reste pertinent dans son principe, mais sa condition de déclenchement devient « appartenance primaire non validée », et non « compte non validé ». Une lectrice validée à BLMF mais récemment inscrite à Lyon **n'est pas bloquée** par cet écran tant que sa primaire est BLMF — c'est conforme à la décision γ.1 (chaque biblio est souveraine de son acte).
+>
+> **Section 8 — Migration de l'existant (grandfathering).** Le bloc de migration doit reposer sur `user_library_memberships`. Les comptes des biblios existantes ont une appartenance primaire ; c'est sur cette appartenance que `physically_validated_at` sera positionnée (par exemple `now()` pour les memberships antérieurs au déploiement, avec un `physical_validation_note = 'grandfathering 2026-XX'`). La logique de mode `open` vs `manual_validation` sur `libraries` reste inchangée — c'est une politique de biblio, par nature locale.
+>
+> ### Ce qui ne change pas
+>
+> - La logique fonctionnelle de la spec (modes `open` / `manual_validation`, écran d'attente, journal d'audit, révocation par bibliothécaire) reste intacte.
+> - Les deux colonnes sur `libraries` (`network_access_mode`, `access_rule_text_override`) restent sur `libraries` : ce sont des politiques de biblio, pas des états d'appartenance.
+> - La sous-section de la section 4 sur l'évolution de `fn_my_account_status` (statut `pending`, cascade après `restricted`) reste valide telle qu'elle est écrite — la fonction lit l'appartenance primaire, donc la branche `pending` y fonctionne par construction.
+>
+> ### Règles d'enchaînement multi-biblios
+>
+> Cette spec **ne traite pas** des règles d'enchaînement (qui peut ajouter une seconde appartenance, et quand). Ces règles sont actées dans la décision (β.1 : au moins une appartenance validée requise pour en ajouter d'autres ; γ.1 : pas de cascade automatique sur révocation), et seront implémentées par la future `spec-multi-appartenance-lecteur` — pas par celle-ci. La présente spec se concentre sur **l'acte de validation d'une appartenance**, indépendamment des règles inter-appartenances.
+
+---
+
+**Statut** : Cadrée le 03/05/2026, amendée le 30/05/2026 (validation par-appartenance), en attente d'implémentation
 **Cible** : Bologna FICEDL, septembre 2026
 **Auteur·rices** : Xavier (spec et arbitrages) + Claude (rédaction)
 
