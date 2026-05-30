@@ -1,6 +1,23 @@
 # Spec — Migration de compte lecteur·rice entre bibliothèques
 
-**Statut** : Cadrée le 03/05/2026, en attente d'implémentation
+> ## ⚠️ Note d'archivage — 30/05/2026
+>
+> **Cette spec est archivée.** Elle a été cadrée le 03/05/2026 sous l'hypothèse fondatrice *« AnarBib applique un principe un user = une biblio verrouillé en DB »* (§1 Contexte). Toute sa mécanique en découle : workflow à deux étages, `pending_source_approval`, approbation formelle de la biblio source avant départ, transfert exclusif d'historique d'une biblio vers une autre.
+>
+> Cette hypothèse n'est plus la vérité du modèle. Le projet a basculé sur **multi-appartenance lecteur·rice**, comme en témoignent :
+> - le champ `is_primary` de `user_library_memberships`, déjà lu par `fn_my_account_status()` ;
+> - la doctrine périmètre du Grand Livre blanc v17 (II), qui inscrit explicitement qu'*« un·e lecteur·rice membre de trois bibliothèques apparaît trois fois (une par appartenance) dans les comptages locaux »* ;
+> - les exemples du backlog v22 (note sur `fn_get_my_active_membership`).
+>
+> La cause politique de ce basculement est cohérente avec la doctrine fédérative anarchiste : un·e lecteur·rice peut appartenir à plusieurs collectifs simultanément, sans avoir à demander à l'un la permission de rejoindre l'autre. La migration v1 reproduisait involontairement une logique d'autorisation administrative que le projet refuse.
+>
+> Le cas multi-biblios est rare en pratique — peut-être huit ou neuf villes au monde comptent plus d'une biblio anarchiste — mais AnarBib doit savoir l'accueillir proprement : Lyon, São Paulo, Madrid et quelques autres. C'est le sujet d'une nouvelle spec, **`spec-multi-appartenance-lecteur`** (à écrire), qui devra trancher notamment : historique par biblio ou global, cotisation par biblio (probablement oui), validation physique par-appartenance ou par-compte (point structurant qui conditionne la migration SQL de la spec validation physique), rôle exact de `is_primary`, et conditions de retrait d'une appartenance.
+>
+> La présente spec est conservée pour mémoire et pour les éléments qu'elle a explorés — cycle de vie d'une demande, journalisation des décisions, principes de souveraineté — qui pourront alimenter la nouvelle si pertinents.
+
+---
+
+**Statut** : 🗄️ Archivée le 30/05/2026 (était : cadrée le 03/05/2026, en attente d'implémentation)
 **Cible** : Bologna FICEDL, septembre 2026
 **Auteur·rices** : Xavier (spec et arbitrages) + Claude (rédaction)
 **Dépendances** : `docs/spec-validation-physique.md` (à implémenter au préalable)
