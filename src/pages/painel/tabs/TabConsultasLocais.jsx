@@ -71,24 +71,24 @@ export default function TabConsultasLocais({
                     <>
                       <div>{formatSchedule(c)}</div>
                       {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'confirmado_leitor' && (
-                        <span style={{ color: '#15803d', fontSize: '.85rem', fontWeight: 600 }}>
+                        <span className="ab-painel-reply ab-painel-reply--confirmed">
                           ✓ {t({ id: 'panel.consultation.replyStatus.confirmed' })}
                         </span>
                       )}
                       {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'recusado_leitor' && (
                         <div>
-                          <span style={{ color: '#c2410c', fontSize: '.85rem', fontWeight: 600 }}>
+                          <span className="ab-painel-reply ab-painel-reply--refused">
                             ✗ {t({ id: 'panel.consultation.replyStatus.refused' })}
                           </span>
                           {c.schedule_reply_note && (
-                            <div style={{ fontSize: '.75rem', fontStyle: 'italic', color: 'var(--brand-muted)', marginTop: 2 }}>
+                            <div className="ab-painel-reply-note">
                               {t({ id: 'panel.consultation.refuseReason' })} {c.schedule_reply_note}
                             </div>
                           )}
                         </div>
                       )}
                       {c.workflow_stage_effective === 'consulta_agendada' && !c.schedule_reply_status && (
-                        <span style={{ color: 'var(--brand-muted)', fontSize: '.85rem' }}>
+                        <span className="ab-painel-reply ab-painel-reply--pending">
                           ⏳ {t({ id: 'panel.consultation.replyStatus.pending' })}
                         </span>
                       )}

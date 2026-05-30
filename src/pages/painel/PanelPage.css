@@ -433,3 +433,20 @@
 /* EA-11 — sélecteur de taille de page (historique) — migré inline→charte (E.4/OT-2) */
 .ab-painel-page-size { display: flex; align-items: center; gap: 8px; margin: 12px 0; font-size: .88rem; color: var(--brand-muted); }
 .ab-painel-page-size__select { padding: 4px 8px; border-radius: 6px; background: rgba(0,0,0,.3); color: inherit; border: 1px solid rgba(255,255,255,.15); font-size: .88rem; font-family: inherit; cursor: pointer; }
+
+/* TabAcoes — rangées de boutons (migré inline→charte E.4/OT-2) */
+.ab-painel-btn-row { display: flex; gap: 8px; margin-top: 8px; }
+.ab-painel-btn-row--tight { margin-top: 4px; }
+
+/* TabConsultasLocais — statut de réponse lecteur·rice (E.4/OT-2) */
+.ab-painel-reply { font-size: .85rem; }
+.ab-painel-reply--confirmed { color: #15803d; font-weight: 600; }
+.ab-painel-reply--refused { color: #c2410c; font-weight: 600; }
+.ab-painel-reply--pending { color: var(--brand-muted); }
+.ab-painel-reply-note { font-size: .75rem; font-style: italic; color: var(--brand-muted); margin-top: 2px; }
+
+/* _shared — SortHeader / TaskBucket / TabHeader (E.4/OT-2) */
+.ab-painel-sort-th { cursor: pointer; user-select: none; }
+.ab-painel-task-select { font-size: .78rem; padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(255,255,255,.15); background: rgba(0,0,0,.3); color: #f4f4f4; }
+.ab-painel-tab-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.ab-painel-tab-header .ab-painel-h2 { margin: 0; }

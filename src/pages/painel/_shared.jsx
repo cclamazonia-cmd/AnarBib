@@ -103,7 +103,7 @@ export function SortHeader({ sortKey, current, dir, onClick, children }) {
   const isActive = current === sortKey;
   const arrow = isActive ? (dir === 'asc' ? ' ↑' : ' ↓') : '';
   return (
-    <th onClick={() => onClick(sortKey)} style={{ cursor: 'pointer', userSelect: 'none' }} title={t({ id: 'panel.sort.tooltip' })}>
+    <th onClick={() => onClick(sortKey)} className="ab-painel-sort-th" title={t({ id: 'panel.sort.tooltip' })}>
       {children}{arrow}
     </th>
   );
@@ -190,7 +190,7 @@ export function TaskBucket({ title, tasks, setTab, onTaskAction }) {
                 <button className="ab-button ab-button--mini" onClick={() => setTab('consultas-locais')}>{t({ id: 'panel.openConsultations' })}</button>
               )}
               {tk.actionType === 'tarefa' && (
-                <select style={{ fontSize:'.78rem', padding:'3px 6px', borderRadius:6, border:'1px solid rgba(255,255,255,.15)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}
+                <select className="ab-painel-task-select"
                   defaultValue="" onChange={async e => {
                     if (!e.target.value) return;
                     // Chantier #TASKS : router par fn_task_update_status (RPC)
@@ -252,8 +252,8 @@ export function TabHeader({ title, onRefresh, refreshLabel }) {
   };
   const label = refreshLabel || t({ id: 'common.refresh' });
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
-      <h2 className="ab-painel-h2" style={{ margin: 0 }}>{title}</h2>
+    <div className="ab-painel-tab-header">
+      <h2 className="ab-painel-h2">{title}</h2>
       {onRefresh && (
         <button
           type="button"

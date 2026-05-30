@@ -43,7 +43,7 @@ export default function TabAcoes({
         <label>{t({ id: 'panel.loan.refsLabel' })}
           <input type="text" value={loanRefs} onChange={e => { setLoanRefs(e.target.value); if (loanPreview) setLoanPreview(null); }} placeholder={t({ id: 'panel.loan.refsPlaceholder' })} className="ab-painel-input" />
         </label>
-        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+        <div className="ab-painel-btn-row">
           <Button onClick={registrarSaida} disabled={loanBusy || (loanPreview && loanPreview.loanAllowed === false)}>
             {loanBusy
               ? '…'
@@ -65,7 +65,7 @@ export default function TabAcoes({
           <input type="text" value={returnId} onChange={e => { setReturnId(e.target.value); if (returnTotalPreview) setReturnTotalPreview(null); }} placeholder={t({id:"panel.loan.returnTotalPh"})} className="ab-painel-input" />
         </label>
         {/* EA-03 (29/05/2026) : bouton avec libellé selon état preview, + bouton "Annuler" quand preview active */}
-        <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+        <div className="ab-painel-btn-row ab-painel-btn-row--tight">
           <Button variant="secondary" onClick={registrarDevolucaoTotal}>
             {returnTotalPreview
               ? t({ id: 'panel.return.confirmReturn' })
@@ -81,7 +81,7 @@ export default function TabAcoes({
         <label>{t({ id: 'panel.loan.returnPartialLabel' })}
           <input type="text" value={returnSubIds} onChange={e => { setReturnSubIds(e.target.value); if (returnPartialPreview) setReturnPartialPreview(null); }} placeholder={t({id:"panel.loan.returnPartialPh"})} className="ab-painel-input" />
         </label>
-        <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+        <div className="ab-painel-btn-row ab-painel-btn-row--tight">
           <Button variant="secondary" onClick={registrarDevolucaoParcial}>
             {returnPartialPreview
               ? t({ id: 'panel.return.confirmReturn' })
