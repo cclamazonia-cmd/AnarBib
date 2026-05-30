@@ -135,7 +135,7 @@
   "account.loans.recentlyReturned": "Restituiti di recente",
   "account.loans.renew": "Rinnova",
   "account.loans.renewAll": "Rinnova tutto",
-  "account.loans.group.checkedOutOn": "Prestito del {date}",
+  "account.loans.group.checkedOutOn": "Ritiro del {date}",
   "account.loans.group.bookCount": "{count, plural, one {# libro} other {# libri}}",
   "account.loans.group.dueBy": "da restituire entro il {date}",
   "account.loans.renewed": "Già rinnovato",

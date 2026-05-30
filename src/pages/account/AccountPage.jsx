@@ -101,7 +101,7 @@ export default function AccountPage() {
     if (authLoading || !user) return;
     setLoading(true);
     try {
-      const [profileRes, reservRes, consultRes, consultHistRes, loansRes, renewStatusRes, histRes, loanHistRes, svcRes] = await Promise.all([
+      const [profileRes, reservRes, consultRes, consultHistRes, loansRes, renewStatusRes, histRes, loanHistRes, svcRes, statusRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         apiQuery('my_reservations_active_v2'),
         apiQuery('my_consultas_active_v2'),
@@ -111,6 +111,7 @@ export default function AccountPage() {
         apiQuery('my_reservations_history_v2'),
         apiQuery('my_loans_history_v1'),
         supabase.from('library_service_state').select('*'),
+        supabase.rpc('fn_my_account_status'),
       ]);
       setProfile(profileRes.data);
       setReservations(reservRes.data || []);
@@ -124,6 +125,10 @@ export default function AccountPage() {
       setLoanHistory(loanHistRes.data || []);
       // Service state for the user's library
       if (svcRes.data?.length) setServiceState(svcRes.data[0]);
+      // Account status (déplacé du useEffect indépendant 29/05/2026 — bug fix
+      // désynchronisation du cache : le useEffect ne se redéclenchait qu'au
+      // changement de user?.id, le banner restait figé après ajout d'emprunts)
+      if (statusRes?.data) setAccountStatus(statusRes.data);
       // Notifications and wishlist
       const { data: notifData } = await supabase.from('user_notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50);
       setNotifications(notifData || []);
@@ -148,15 +153,6 @@ export default function AccountPage() {
   }, [user?.id, authLoading, libraryId]);
 
   useEffect(() => { loadData(); }, [loadData]);
-
-  // ── Status do conta ───────────────────────────────────────
-  useEffect(() => {
-    if (authLoading || !user) return;
-    (async () => {
-      const { data } = await supabase.rpc('fn_my_account_status');
-      if (data) setAccountStatus(data);
-    })();
-  }, [user?.id, authLoading]);
 
   // ── Regimento da biblioteca ───────────────────────────────
   useEffect(() => {

@@ -135,7 +135,7 @@
   "account.loans.recentlyReturned": "Tornats recentment",
   "account.loans.renew": "Renovar",
   "account.loans.renewAll": "Renovar-ho tot",
-  "account.loans.group.checkedOutOn": "Préstec del {date}",
+  "account.loans.group.checkedOutOn": "Recollida del {date}",
   "account.loans.group.bookCount": "{count, plural, one {# llibre} other {# llibres}}",
   "account.loans.group.dueBy": "per retornar abans del {date}",
   "account.loans.renewed": "Ja renovat",
