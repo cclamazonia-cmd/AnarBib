@@ -3070,5 +3070,10 @@
   "account.availability.indisponivel_para_voce": "No disponible per a tu",
   "account.availability.sem_biblioteca_de_sessao": "Sense biblioteca de referència",
   "account.availability.nextOn": "Propera disponibilitat prevista: {date}",
-  "account.wishlist.reserveNow": "Reservar ara"
+  "account.wishlist.reserveNow": "Reservar ara",
+  "account.notifications.archive": "Arxivar",
+  "account.notifications.unarchive": "Restaurar",
+  "account.notifications.showArchives": "Veure arxius",
+  "account.notifications.backToActive": "Tornar als actius",
+  "account.notifications.archivesEmpty": "Cap avís arxivat."
 }

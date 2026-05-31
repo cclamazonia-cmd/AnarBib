@@ -118,6 +118,10 @@ export default function AccountPage() {
   const [history, setHistory] = useState([]);
   const [loanHistory, setLoanHistory] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  // #CL.6 (31/05/2026) — Vue active / archives. Filtre frontend sur la même
+  // source 'notifications' (single requête, jusqu'à 100 notifs). Le compteur
+  // unreadCount est toujours calculé sur les actives, indépendamment du mode.
+  const [notifViewMode, setNotifViewMode] = useState('active');
   const [wishlist, setWishlist] = useState([]);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
@@ -230,7 +234,7 @@ export default function AccountPage() {
       // changement de user?.id, le banner restait figé après ajout d'emprunts)
       if (statusRes?.data) setAccountStatus(statusRes.data);
       // Notifications and wishlist
-      const { data: notifData } = await supabase.from('user_notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(50);
+      const { data: notifData } = await supabase.from('user_notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100);
       setNotifications(notifData || []);
       const { data: wishData } = await supabase.from('user_wishlist').select('*, books:book_id(id, titulo, autor, bib_ref, editora, ano)').eq('user_id', user.id).order('created_at', { ascending: false });
       setWishlist(wishData || []);
@@ -775,7 +779,15 @@ export default function AccountPage() {
     emprestimos: loans.filter(l => l.item_status === 'aberto').length,
   };
 
-  const unreadCount = notifications.filter(n => !n.is_read).length;
+  // #CL.6 — Compteur des non-lus calculé UNIQUEMENT sur les notifications
+  // actives (non archivées). Le label de l'onglet et le bouton "Marquer tout
+  // comme lu" reflètent toujours l'état de la pile active, indépendamment
+  // du mode courant (active / archived).
+  const unreadCount = notifications.filter(n => !n.is_read && !n.archived_at).length;
+  // Notifications visibles selon le mode courant.
+  const visibleNotifications = notifications.filter(n =>
+    notifViewMode === 'active' ? !n.archived_at : !!n.archived_at
+  );
 
   // Paquet E.4.2 (20/05/2026) : filtrage des onglets AccountPage par availability
   // selon profil de biblio (1 lecteur·rice = 1 biblio, cf. doctrine ancrage).
@@ -1677,19 +1689,35 @@ export default function AccountPage() {
               <ContaTabHeader
                 title={t({ id: 'account.notifications.title' })}
                 onRefresh={() => loadData({ silent: true })}
-                actions={unreadCount > 0 && (
-                  <Button variant="mini" onClick={async () => {
-                    await supabase.rpc('fn_mark_notifications_read');
-                    loadData();
-                  }}>{t({ id: 'account.notifications.markAllRead' })}</Button>
+                actions={(
+                  <>
+                    {/* #CL.6 — toggle vue active / archives */}
+                    <Button variant="mini" onClick={() => setNotifViewMode(m => m === 'active' ? 'archived' : 'active')}>
+                      {notifViewMode === 'active'
+                        ? t({ id: 'account.notifications.showArchives' })
+                        : t({ id: 'account.notifications.backToActive' })}
+                    </Button>
+                    {/* "Marquer tout comme lu" : actifs uniquement, et seulement
+                        s'il y a effectivement des non-lus à marquer */}
+                    {notifViewMode === 'active' && unreadCount > 0 && (
+                      <Button variant="mini" onClick={async () => {
+                        await supabase.rpc('fn_mark_notifications_read');
+                        loadData({ silent: true });
+                      }}>{t({ id: 'account.notifications.markAllRead' })}</Button>
+                    )}
+                  </>
                 )}
               />
               <p className="ab-conta-hint">{t({ id: 'account.tab.notifications.hint' })}</p>
-              {notifications.length === 0 ? (
-                <p className="ab-conta-empty">{t({ id: 'account.notifications.empty' })}</p>
+              {visibleNotifications.length === 0 ? (
+                <p className="ab-conta-empty">{
+                  notifViewMode === 'active'
+                    ? t({ id: 'account.notifications.empty' })
+                    : t({ id: 'account.notifications.archivesEmpty' })
+                }</p>
               ) : (
                 <div className="ab-conta-items">
-                  {notifications.map((n) => (
+                  {visibleNotifications.map((n) => (
                     <div key={n.id} className="ab-conta-item" style={{
                       borderLeft: `3px solid ${n.is_read ? 'rgba(255,255,255,.06)' : n.category === 'alerta' ? '#f87171' : n.category === 'reserva' ? '#60a5fa' : n.category === 'emprestimo' ? '#fbbf24' : '#4ade80'}`,
                       opacity: n.is_read ? 0.6 : 1,
@@ -1710,8 +1738,20 @@ export default function AccountPage() {
                         {!n.is_read && (
                           <Button variant="mini" onClick={async () => {
                             await supabase.rpc('fn_mark_notifications_read', { p_ids: [n.id] });
-                            loadData();
+                            loadData({ silent: true });
                           }}>✓</Button>
+                        )}
+                        {/* #CL.6 — archiver (vue active) ou restaurer (vue archives) */}
+                        {notifViewMode === 'active' ? (
+                          <Button variant="mini" onClick={async () => {
+                            const { error } = await supabase.rpc('fn_archive_notification', { p_notification_id: n.id });
+                            if (!error) loadData({ silent: true });
+                          }} title={t({ id: 'account.notifications.archive' })}>📥</Button>
+                        ) : (
+                          <Button variant="mini" onClick={async () => {
+                            const { error } = await supabase.rpc('fn_unarchive_notification', { p_notification_id: n.id });
+                            if (!error) loadData({ silent: true });
+                          }} title={t({ id: 'account.notifications.unarchive' })}>↩</Button>
                         )}
                       </div>
                     </div>

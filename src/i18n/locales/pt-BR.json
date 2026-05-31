@@ -3070,5 +3070,10 @@
   "account.availability.indisponivel_para_voce": "Indisponível para você",
   "account.availability.sem_biblioteca_de_sessao": "Sem biblioteca de referência",
   "account.availability.nextOn": "Próxima disponibilidade prevista: {date}",
-  "account.wishlist.reserveNow": "Reservar agora"
+  "account.wishlist.reserveNow": "Reservar agora",
+  "account.notifications.archive": "Arquivar",
+  "account.notifications.unarchive": "Restaurar",
+  "account.notifications.showArchives": "Mostrar arquivos",
+  "account.notifications.backToActive": "Voltar aos ativos",
+  "account.notifications.archivesEmpty": "Nenhum aviso arquivado."
 }

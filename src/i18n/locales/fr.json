@@ -3070,5 +3070,10 @@
   "account.availability.indisponivel_para_voce": "Indisponible pour vous",
   "account.availability.sem_biblioteca_de_sessao": "Sans bibliothèque de référence",
   "account.availability.nextOn": "Prochaine disponibilité prévue : {date}",
-  "account.wishlist.reserveNow": "Réserver maintenant"
+  "account.wishlist.reserveNow": "Réserver maintenant",
+  "account.notifications.archive": "Archiver",
+  "account.notifications.unarchive": "Restaurer",
+  "account.notifications.showArchives": "Voir les archives",
+  "account.notifications.backToActive": "Retour aux actifs",
+  "account.notifications.archivesEmpty": "Aucun avis archivé."
 }

@@ -3070,5 +3070,10 @@
   "account.availability.indisponivel_para_voce": "Nedisponebla por vi",
   "account.availability.sem_biblioteca_de_sessao": "Sen referenca biblioteko",
   "account.availability.nextOn": "Sekva atendata disponebleco: {date}",
-  "account.wishlist.reserveNow": "Rezervi nun"
+  "account.wishlist.reserveNow": "Rezervi nun",
+  "account.notifications.archive": "Arkivi",
+  "account.notifications.unarchive": "Restaŭri",
+  "account.notifications.showArchives": "Montri arkivojn",
+  "account.notifications.backToActive": "Reen al aktivaj",
+  "account.notifications.archivesEmpty": "Neniu arkivita avizo."
 }
