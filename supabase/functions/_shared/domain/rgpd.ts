@@ -63,14 +63,16 @@ export async function handleRgpdPurgeWarning(recordId: number, event: string) {
   // 2. Récupération du profil (email + locale)
   const { data: profile, error: e2 } = await supabaseAdmin
     .from("profiles")
-    .select("id, email, first_name, last_name, preferred_language, default_library_id")
+    .select("id, email, first_name, last_name, preferred_language")
     .eq("id", notif.user_id)
     .maybeSingle();
   if (e2) throw e2;
   if (!profile) throw new Error(`RGPD: profil ${notif.user_id} non trouvé`);
 
-  // 3. Contexte mail biblio (utilise library_id de la notif ou fallback profil)
-  const libraryId = String(notif.library_id || profile.default_library_id || "").trim() || null;
+  // 3. Contexte mail biblio. notif.library_id est toujours présent par
+  // construction (cf. fn_notify_users_before_purge phase 1 qui l'insère),
+  // mais on garde un null-coalesce de défense.
+  const libraryId = String(notif.library_id || "").trim() || null;
   const ctx = await resolveLibraryNotificationContext(libraryId);
 
   // 4. Locale lectrice (priorité), fallback locale biblio, fallback pt-BR
