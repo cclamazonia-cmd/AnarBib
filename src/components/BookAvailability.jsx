@@ -47,17 +47,24 @@ export default function BookAvailability({ availability, variant = 'inline' }) {
   } = availability;
 
   // Sélection du variant Pill selon le statut.
+  // Variants CSS effectivement disponibles dans le projet (src/components/ui/ui.css) :
+  //   'ok'      → vert
+  //   'warn'    → orange
+  //   'bad'     → rouge
+  //   'default' → neutre (pas de classe modificatrice)
+  // Autres valeurs sont silencieusement traitées comme 'default'.
   const pillVariant = (() => {
     switch (session_status_hint) {
       case 'no_acervo_da_sua_biblioteca':
-        return session_available_count > 0 ? 'success' : 'warn';
+        return session_available_count > 0 ? 'ok' : 'warn';
       case 'indisponivel_no_momento':
         return 'warn';
       case 'consultavel_no_local':
-        return 'default';
+        return 'default';   // modalité, pas état problématique
       case 'indisponivel_para_voce':
+        return 'bad';       // livre inaccessible à la lectrice : signal fort
       case 'sem_biblioteca_de_sessao':
-        return 'muted';
+        return 'default';   // état d'attente/configuration, pas négatif
       default:
         return 'default';
     }
