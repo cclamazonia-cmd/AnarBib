@@ -190,9 +190,16 @@ export default function AccountPage() {
 
   // ── Chargement des données ───────────────────────────────
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (opts = {}) => {
     if (authLoading || !user) return;
-    setLoading(true);
+    // Mode 'silent' (chantier #CL — recommandation B, 31/05/2026) : appelé
+    // depuis le bouton refresh des onglets via ContaTabHeader. On ne met PAS
+    // setLoading(true), pour ne pas faire disparaître l'affichage actuel
+    // (skeletons full-page). Le feedback visuel du clic est porté par l'état
+    // 'busy' interne au ContaTabHeader (bouton grisé pendant l'appel).
+    // Mode normal (chargement initial via useEffect ci-dessous) : skeletons
+    // affichés pendant la résolution des chargements en parallèle.
+    if (!opts.silent) setLoading(true);
     try {
       const [profileRes, reservRes, consultRes, consultHistRes, loansRes, renewStatusRes, histRes, loanHistRes, svcRes, statusRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
@@ -241,7 +248,7 @@ export default function AccountPage() {
     } catch (err) {
       console.error('Account load error:', err);
     } finally {
-      setLoading(false);
+      if (!opts.silent) setLoading(false);
     }
   }, [user?.id, authLoading, libraryId]);
 
@@ -1280,7 +1287,7 @@ export default function AccountPage() {
           {/* ═══ RESERVAS E CONSULTAS ═══ */}
           {activeTab === 'reservar' && (
             <div>
-              <ContaTabHeader title={t({ id: 'account.reserve.title' })} onRefresh={loadData} />
+              <ContaTabHeader title={t({ id: 'account.reserve.title' })} onRefresh={() => loadData({ silent: true })} />
               <p className="ab-conta-hint">
                 No catálogo, copie a referência e cole aqui. Use <strong>{t({ id: 'account.reserve.loan' })}</strong> para materiais emprestáveis
                 ou <strong>{t({ id: 'account.reserve.consult' })}</strong> para periódicos e materiais consultáveis.
@@ -1410,7 +1417,7 @@ export default function AccountPage() {
           {/* ═══ EMPRÉSTIMOS EM CURSO ═══ */}
           {activeTab === 'curso' && (
             <div>
-              <ContaTabHeader title={t({ id: 'account.loans.title' })} onRefresh={loadData} />
+              <ContaTabHeader title={t({ id: 'account.loans.title' })} onRefresh={() => loadData({ silent: true })} />
               <p className="ab-conta-hint">{t({ id: 'account.loans.hint' })}</p>
               {(() => {
                 // Refonte conta curso (29/05/2026, parité painel) : items ouverts
@@ -1532,7 +1539,7 @@ export default function AccountPage() {
           {/* ═══ HISTÓRICO ═══ */}
           {activeTab === 'historico' && (
             <div>
-              <ContaTabHeader title={t({ id: 'account.history.title' })} onRefresh={loadData} />
+              <ContaTabHeader title={t({ id: 'account.history.title' })} onRefresh={() => loadData({ silent: true })} />
               <p className="ab-conta-hint">{t({ id: 'account.history.hint' })}</p>
 
               {/* Paquet 10 (10/05/2026) : section historique des emprunts */}
@@ -1669,7 +1676,7 @@ export default function AccountPage() {
             <div>
               <ContaTabHeader
                 title={t({ id: 'account.notifications.title' })}
-                onRefresh={loadData}
+                onRefresh={() => loadData({ silent: true })}
                 actions={unreadCount > 0 && (
                   <Button variant="mini" onClick={async () => {
                     await supabase.rpc('fn_mark_notifications_read');
