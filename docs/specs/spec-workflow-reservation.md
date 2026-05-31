@@ -1,5 +1,15 @@
 # Spec — Workflow de réservation
 
+> ## ⚠️ Note de clôture — 31/05/2026
+>
+> **Statut actuel** : référence — la spec est **en production** depuis le paquet 5b du 09/05/2026. Le contenu de la spec reste valide comme description du modèle ; le statut « cadrée, en attente d'implémentation » du bloc ci-dessous correspond à l'état au moment de la rédaction (04/05/2026).
+>
+> La doctrine sémantique du refactor v3 (cf. `spec-refactor-v3-semantique.md`) a été appliquée à cette spec lors du paquet 5b.
+>
+> Source : résumé `docs/decisions/AnarBib_decisions_synthese_2026-05-29.docx`, section « Acquis », entrée Paquet 5b.
+>
+> Le bloc de métadonnées ci-dessous est celui de la rédaction d'origine, conservé pour traçabilité.
+
 **Statut** : Cadrée le 04/05/2026, en attente d'implémentation
 **Cible** : Bologna FICEDL, septembre 2026
 **Auteur·rices** : Xavier (spec et arbitrages) + Claude (rédaction, diagnostic)

@@ -1,5 +1,14 @@
 # Spec d'implémentation — #114.A : notify-event routing `network.cooptation_*`
 
+> ## ⚠️ Note de clôture — 31/05/2026
+>
+> **Statut actuel** : référence historique — chantier #114.A clos le 14/05/2026.
+> Toutes les phases décrites au § 8 « Estimation totale révisée » (i18n l.deadline, network.ts, dispatch.ts, check + deploy, test) ont été exécutées dans la session du 14/05. La RPC `notify-event` route désormais correctement `network.cooptation_proposed` et `network.cooptation_voted`.
+>
+> Source : résumé `docs/decisions/AnarBib_decisions_synthese_2026-05-29.docx`, section « Acquis » ; backlog v23 section E.
+>
+> Le bloc de métadonnées ci-dessous est celui de la rédaction d'origine, conservé pour traçabilité.
+
 **Version :** 0.1 — 2026-05-14
 **Périmètre :** sous-paquet #114.A (cooptation_proposed + cooptation_voted)
 **Statut :** Inconnues à trancher avant implémentation
