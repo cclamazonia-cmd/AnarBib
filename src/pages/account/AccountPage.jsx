@@ -26,6 +26,61 @@ import QRCode from 'qrcode';
 import { jsPDF } from 'jspdf';
 import './AccountPage.css';
 
+// ── ContaTabHeader (chantier #CL — recommandation B, refresh par onglet, 31/05/2026) ───
+// Header standard pour les onglets de la page Conta qui méritent un bouton refresh.
+// Pattern inspiré de TabHeader dans src/pages/painel/_shared.jsx (paquet E.2 du 28/05),
+// mais avec les classes CSS de Conta (ab-conta-section-title) plutôt que celles de
+// Painel (ab-painel-h2). Composant local — pas de promotion en src/components/ui/
+// pour l'instant, à arbitrer dans une future session de rangement si le pattern
+// se généralise.
+//
+// Props :
+//   - title       (string)   : libellé de l'onglet
+//   - onRefresh   (function) : callback de rechargement (typiquement loadData)
+//   - actions     (node)     : slot optionnel pour boutons supplémentaires à droite
+//                              (ex. "Marquer tout comme lu" sur l'onglet avisos)
+function ContaTabHeader({ title, onRefresh, actions }) {
+  const { formatMessage: t } = useIntl();
+  const [busy, setBusy] = useState(false);
+  const handleClick = async () => {
+    if (busy) return;
+    setBusy(true);
+    try { await onRefresh(); }
+    finally {
+      // Délai mini 400ms pour que le feedback visuel soit perceptible
+      // même quand l'appel est ultra-rapide (cf. TabHeader Painel).
+      setTimeout(() => setBusy(false), 400);
+    }
+  };
+  const label = t({ id: 'common.refresh' });
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 10,
+      gap: 8,
+    }}>
+      <h2 className="ab-conta-section-title" style={{ margin: 0 }}>{title}</h2>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
+        {actions}
+        {onRefresh && (
+          <button
+            type="button"
+            className="ab-button ab-button--secondary ab-button--mini"
+            onClick={handleClick}
+            disabled={busy}
+            title={label}
+            style={busy ? { opacity: 0.5, cursor: 'wait' } : undefined}
+          >
+            ↻ {busy ? `${label}…` : label}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function AccountPage() {
   const { user, loading: authLoading } = useAuth();
   const { libraryName, librarySlug, libraryId } = useLibrary();
@@ -1225,7 +1280,7 @@ export default function AccountPage() {
           {/* ═══ RESERVAS E CONSULTAS ═══ */}
           {activeTab === 'reservar' && (
             <div>
-              <h2 className="ab-conta-section-title">{t({ id: 'account.reserve.title' })}</h2>
+              <ContaTabHeader title={t({ id: 'account.reserve.title' })} onRefresh={loadData} />
               <p className="ab-conta-hint">
                 No catálogo, copie a referência e cole aqui. Use <strong>{t({ id: 'account.reserve.loan' })}</strong> para materiais emprestáveis
                 ou <strong>{t({ id: 'account.reserve.consult' })}</strong> para periódicos e materiais consultáveis.
@@ -1355,7 +1410,7 @@ export default function AccountPage() {
           {/* ═══ EMPRÉSTIMOS EM CURSO ═══ */}
           {activeTab === 'curso' && (
             <div>
-              <h2 className="ab-conta-section-title">{t({ id: 'account.loans.title' })}</h2>
+              <ContaTabHeader title={t({ id: 'account.loans.title' })} onRefresh={loadData} />
               <p className="ab-conta-hint">{t({ id: 'account.loans.hint' })}</p>
               {(() => {
                 // Refonte conta curso (29/05/2026, parité painel) : items ouverts
@@ -1477,7 +1532,7 @@ export default function AccountPage() {
           {/* ═══ HISTÓRICO ═══ */}
           {activeTab === 'historico' && (
             <div>
-              <h2 className="ab-conta-section-title">{t({ id: 'account.history.title' })}</h2>
+              <ContaTabHeader title={t({ id: 'account.history.title' })} onRefresh={loadData} />
               <p className="ab-conta-hint">{t({ id: 'account.history.hint' })}</p>
 
               {/* Paquet 10 (10/05/2026) : section historique des emprunts */}
@@ -1612,15 +1667,16 @@ export default function AccountPage() {
           {/* ═══ AVISOS ═══ */}
           {activeTab === 'avisos' && (
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                <h2 className="ab-conta-section-title" style={{ margin: 0 }}>{t({ id: 'account.notifications.title' })}</h2>
-                {unreadCount > 0 && (
+              <ContaTabHeader
+                title={t({ id: 'account.notifications.title' })}
+                onRefresh={loadData}
+                actions={unreadCount > 0 && (
                   <Button variant="mini" onClick={async () => {
                     await supabase.rpc('fn_mark_notifications_read');
                     loadData();
                   }}>{t({ id: 'account.notifications.markAllRead' })}</Button>
                 )}
-              </div>
+              />
               <p className="ab-conta-hint">{t({ id: 'account.tab.notifications.hint' })}</p>
               {notifications.length === 0 ? (
                 <p className="ab-conta-empty">{t({ id: 'account.notifications.empty' })}</p>
