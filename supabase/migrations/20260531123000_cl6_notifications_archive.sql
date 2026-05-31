@@ -65,8 +65,9 @@ BEGIN
 
   GET DIAGNOSTICS v_rows = ROW_COUNT;
   IF v_rows = 0 THEN
-    RAISE EXCEPTION 'notification not found, not owned, or already archived'
-      USING HINT = 'fn_archive_notification: id=% user=%', p_notification_id, v_user_id;
+    RAISE EXCEPTION 'notification % not found, not owned, or already archived for user %',
+      p_notification_id, v_user_id
+      USING HINT = 'fn_archive_notification: vérifier que la notification appartient à auth.uid() et n''est pas déjà archivée';
   END IF;
 END;
 $function$;
@@ -105,8 +106,9 @@ BEGIN
 
   GET DIAGNOSTICS v_rows = ROW_COUNT;
   IF v_rows = 0 THEN
-    RAISE EXCEPTION 'notification not found, not owned, or not archived'
-      USING HINT = 'fn_unarchive_notification: id=% user=%', p_notification_id, v_user_id;
+    RAISE EXCEPTION 'notification % not found, not owned, or not archived for user %',
+      p_notification_id, v_user_id
+      USING HINT = 'fn_unarchive_notification: vérifier que la notification appartient à auth.uid() et est bien archivée';
   END IF;
 END;
 $function$;
