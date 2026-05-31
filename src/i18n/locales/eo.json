@@ -3075,5 +3075,15 @@
   "account.notifications.unarchive": "Restaŭri",
   "account.notifications.showArchives": "Montri arkivojn",
   "account.notifications.backToActive": "Reen al aktivaj",
-  "account.notifications.archivesEmpty": "Neniu arkivita avizo."
+  "account.notifications.archivesEmpty": "Neniu arkivita avizo.",
+  "account.notifPrefs.title": "Viaj sciigoj",
+  "account.notifPrefs.intro": "Vi povas alĝustigi la sciigojn kiujn vi ricevas en ĉi tiu aplikaĵo, ene de tio kion via biblioteko transdonas.",
+  "account.notifPrefs.disableReservaPronta": "Ne sciigi min kiam unu el miaj rezervoj estas preta por elpreno",
+  "account.notifPrefs.disableConsultaPronta": "Ne sciigi min kiam unu el miaj konsultoj estas planita",
+  "account.notifPrefs.alwaysActive": "Ĉiam aktivaj: kolektivaj decidoj koncernantaj vin, GDPR-avertoj, limigoj kaj ekskludoj. Tiuj sciigoj ne estas malŝalteblaj ĉar ili tuŝas viajn rajtojn.",
+  "account.notifPrefs.saved": "Preferoj konservitaj.",
+  "notif.reserva.prontaParaRetirada.title": "Rezervo preta por elpreno",
+  "notif.reserva.prontaParaRetirada.body": "Unu el viaj rezervoj estas preta. Vi povas veni preni ĝin en la biblioteko.",
+  "notif.consulta.agendada.title": "Konsulto planita",
+  "notif.consulta.agendada.body": "Unu el viaj surlokaj konsultoj estis planita. Kontrolu la horon en la langeto Rezervoj kaj konsultoj."
 }

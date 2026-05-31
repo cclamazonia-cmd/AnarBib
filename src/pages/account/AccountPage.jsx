@@ -122,6 +122,12 @@ export default function AccountPage() {
   // source 'notifications' (single requête, jusqu'à 100 notifs). Le compteur
   // unreadCount est toujours calculé sur les actives, indépendamment du mode.
   const [notifViewMode, setNotifViewMode] = useState('active');
+  // #CL.7 (31/05/2026) — Préférences de notification lectrice.
+  // Position 1 (souveraineté biblio + réduction lectrice) ; cf. spec-notifications-lecteur.md.
+  // Chargées via fn_get_my_notification_preferences au montage, sauvées via fn_set_my_notification_preferences.
+  const [notifPrefs, setNotifPrefs] = useState({ disable_reserva_pronta: false, disable_consulta_pronta: false });
+  const [notifPrefsSaving, setNotifPrefsSaving] = useState(false);
+  const [notifPrefsMsg, setNotifPrefsMsg] = useState('');
   const [wishlist, setWishlist] = useState([]);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
@@ -238,6 +244,14 @@ export default function AccountPage() {
       setNotifications(notifData || []);
       const { data: wishData } = await supabase.from('user_wishlist').select('*, books:book_id(id, titulo, autor, bib_ref, editora, ano)').eq('user_id', user.id).order('created_at', { ascending: false });
       setWishlist(wishData || []);
+      // #CL.7 — préférences de notification (vide = défauts respectés)
+      const { data: prefsData } = await supabase.rpc('fn_get_my_notification_preferences');
+      if (Array.isArray(prefsData) && prefsData.length > 0) {
+        setNotifPrefs({
+          disable_reserva_pronta: !!prefsData[0].disable_reserva_pronta,
+          disable_consulta_pronta: !!prefsData[0].disable_consulta_pronta,
+        });
+      }
       // Cotisation : statut et historique pour la biblio active
       if (libraryId) {
         const [{ data: memData }, { data: rulesData }, { data: payData }] = await Promise.all([
@@ -1292,6 +1306,69 @@ export default function AccountPage() {
                     {deleting ? t({ id: 'account.deleteAccount.deleting' }) : t({ id: 'account.deleteAccount.button' })}
                   </button>
                 </div>
+              </div>
+
+              {/* #CL.7 — Préférences de notification (31/05/2026) */}
+              {/* Cf. docs/specs/spec-notifications-lecteur.md §5. Position 1 :    */}
+              {/* la lectrice peut réduire ce que la biblio envoie, pas l'inverse.*/}
+              <div style={{ marginTop: 24, padding: 16, background: 'rgba(96,165,250,.05)', borderRadius: 8, border: '1px solid rgba(96,165,250,.15)' }}>
+                <h3 className="ab-conta-section-title" style={{ fontSize: '1rem', marginTop: 0, marginBottom: 8 }}>
+                  {t({ id: 'account.notifPrefs.title' })}
+                </h3>
+                <p className="ab-conta-hint" style={{ marginTop: 0, marginBottom: 12 }}>
+                  {t({ id: 'account.notifPrefs.intro' })}
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 12 }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={notifPrefs.disable_reserva_pronta}
+                      onChange={(e) => setNotifPrefs(p => ({ ...p, disable_reserva_pronta: e.target.checked }))}
+                    />
+                    <span>{t({ id: 'account.notifPrefs.disableReservaPronta' })}</span>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={notifPrefs.disable_consulta_pronta}
+                      onChange={(e) => setNotifPrefs(p => ({ ...p, disable_consulta_pronta: e.target.checked }))}
+                    />
+                    <span>{t({ id: 'account.notifPrefs.disableConsultaPronta' })}</span>
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Button
+                    variant="secondary"
+                    onClick={async () => {
+                      setNotifPrefsSaving(true);
+                      setNotifPrefsMsg('');
+                      try {
+                        const { error } = await supabase.rpc('fn_set_my_notification_preferences', {
+                          p_disable_reserva_pronta: notifPrefs.disable_reserva_pronta,
+                          p_disable_consulta_pronta: notifPrefs.disable_consulta_pronta,
+                        });
+                        if (error) throw error;
+                        setNotifPrefsMsg(t({ id: 'account.notifPrefs.saved' }));
+                      } catch (err) {
+                        setNotifPrefsMsg(t({ id: 'common.errorPrefix' }, { message: err?.message || 'error' }));
+                      } finally {
+                        setNotifPrefsSaving(false);
+                      }
+                    }}
+                    disabled={notifPrefsSaving}
+                  >
+                    {notifPrefsSaving ? t({ id: 'common.saving' }) : t({ id: 'common.save' })}
+                  </Button>
+                  {notifPrefsMsg && (
+                    <span className="ab-conta-msg" style={{ fontSize: '.85rem' }}>{notifPrefsMsg}</span>
+                  )}
+                </div>
+
+                <p className="ab-conta-hint" style={{ marginTop: 12, marginBottom: 0, fontSize: '.78rem', fontStyle: 'italic' }}>
+                  {t({ id: 'account.notifPrefs.alwaysActive' })}
+                </p>
               </div>
             </div>
           )}

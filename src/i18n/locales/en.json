@@ -3075,5 +3075,15 @@
   "account.notifications.unarchive": "Restore",
   "account.notifications.showArchives": "Show archives",
   "account.notifications.backToActive": "Back to active",
-  "account.notifications.archivesEmpty": "No archived notifications."
+  "account.notifications.archivesEmpty": "No archived notifications.",
+  "account.notifPrefs.title": "Your notifications",
+  "account.notifPrefs.intro": "You can adjust the notifications you receive in this app, within what your library transmits.",
+  "account.notifPrefs.disableReservaPronta": "Don't notify me when one of my reservations is ready for pickup",
+  "account.notifPrefs.disableConsultaPronta": "Don't notify me when one of my consultations is scheduled",
+  "account.notifPrefs.alwaysActive": "Always active: collective decisions that concern you, GDPR alerts, restrictions and exclusions. These notifications cannot be disabled because they touch on your rights.",
+  "account.notifPrefs.saved": "Preferences saved.",
+  "notif.reserva.prontaParaRetirada.title": "Reservation ready for pickup",
+  "notif.reserva.prontaParaRetirada.body": "One of your reservations is ready. You can come and pick it up at the library.",
+  "notif.consulta.agendada.title": "Consultation scheduled",
+  "notif.consulta.agendada.body": "One of your on-site consultations has been scheduled. Check the time in the Reservations and consultations tab."
 }

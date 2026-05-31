@@ -3075,5 +3075,15 @@
   "account.notifications.unarchive": "Wiederherstellen",
   "account.notifications.showArchives": "Archiv anzeigen",
   "account.notifications.backToActive": "Zurück zu aktiven",
-  "account.notifications.archivesEmpty": "Keine archivierten Mitteilungen."
+  "account.notifications.archivesEmpty": "Keine archivierten Mitteilungen.",
+  "account.notifPrefs.title": "Deine Benachrichtigungen",
+  "account.notifPrefs.intro": "Du kannst die Benachrichtigungen, die du in dieser App erhältst, innerhalb dessen anpassen, was deine Bibliothek versendet.",
+  "account.notifPrefs.disableReservaPronta": "Keine Benachrichtigung erhalten, wenn eine meiner Vormerkungen abholbereit ist",
+  "account.notifPrefs.disableConsultaPronta": "Keine Benachrichtigung erhalten, wenn ein Lesetermin von mir geplant ist",
+  "account.notifPrefs.alwaysActive": "Immer aktiv: kollektive Entscheidungen, die dich betreffen, DSGVO-Warnungen, Einschränkungen und Ausschlüsse. Diese Benachrichtigungen sind nicht deaktivierbar, weil sie deine Rechte berühren.",
+  "account.notifPrefs.saved": "Einstellungen gespeichert.",
+  "notif.reserva.prontaParaRetirada.title": "Vormerkung abholbereit",
+  "notif.reserva.prontaParaRetirada.body": "Eine deiner Vormerkungen ist bereit. Du kannst sie in der Bibliothek abholen.",
+  "notif.consulta.agendada.title": "Lesetermin geplant",
+  "notif.consulta.agendada.body": "Einer deiner Lesetermine vor Ort wurde geplant. Prüfe die Uhrzeit im Reiter Vormerkungen und Lesetermine."
 }

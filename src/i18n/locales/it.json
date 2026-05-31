@@ -3075,5 +3075,15 @@
   "account.notifications.unarchive": "Ripristina",
   "account.notifications.showArchives": "Vedi archivio",
   "account.notifications.backToActive": "Torna agli attivi",
-  "account.notifications.archivesEmpty": "Nessun avviso archiviato."
+  "account.notifications.archivesEmpty": "Nessun avviso archiviato.",
+  "account.notifPrefs.title": "Le tue notifiche",
+  "account.notifPrefs.intro": "Puoi adeguare le notifiche che ricevi in questa app, nei limiti di quanto la tua biblioteca trasmette.",
+  "account.notifPrefs.disableReservaPronta": "Non ricevere avviso quando una mia prenotazione è pronta per il ritiro",
+  "account.notifPrefs.disableConsultaPronta": "Non ricevere avviso quando una mia consultazione è programmata",
+  "account.notifPrefs.alwaysActive": "Sempre attive: decisioni collettive che ti riguardano, avvisi RGPD, restrizioni ed esclusioni. Queste notifiche non sono disattivabili perché toccano i tuoi diritti.",
+  "account.notifPrefs.saved": "Preferenze salvate.",
+  "notif.reserva.prontaParaRetirada.title": "Prenotazione pronta per il ritiro",
+  "notif.reserva.prontaParaRetirada.body": "Una delle tue prenotazioni è pronta. Puoi passare a ritirarla in biblioteca.",
+  "notif.consulta.agendada.title": "Consultazione programmata",
+  "notif.consulta.agendada.body": "Una delle tue consultazioni in sede è stata programmata. Verifica l'orario nella scheda Prenotazioni e consultazioni."
 }

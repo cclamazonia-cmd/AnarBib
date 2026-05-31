@@ -3075,5 +3075,15 @@
   "account.notifications.unarchive": "Restaurer",
   "account.notifications.showArchives": "Voir les archives",
   "account.notifications.backToActive": "Retour aux actifs",
-  "account.notifications.archivesEmpty": "Aucun avis archivé."
+  "account.notifications.archivesEmpty": "Aucun avis archivé.",
+  "account.notifPrefs.title": "Tes notifications",
+  "account.notifPrefs.intro": "Tu peux ajuster les notifications que tu reçois dans cette app, dans la limite de ce que ta bibliothèque transmet.",
+  "account.notifPrefs.disableReservaPronta": "Ne pas recevoir d'avis quand une de mes réservations est prête à retirer",
+  "account.notifPrefs.disableConsultaPronta": "Ne pas recevoir d'avis quand une de mes consultations est programmée",
+  "account.notifPrefs.alwaysActive": "Toujours actives : décisions collectives qui te concernent, alertes RGPD, restrictions et exclusions. Ces notifications ne sont pas désactivables car elles touchent à tes droits.",
+  "account.notifPrefs.saved": "Préférences enregistrées.",
+  "notif.reserva.prontaParaRetirada.title": "Réservation prête à retirer",
+  "notif.reserva.prontaParaRetirada.body": "Une de tes réservations est prête. Tu peux venir la chercher à la bibliothèque.",
+  "notif.consulta.agendada.title": "Consultation programmée",
+  "notif.consulta.agendada.body": "Une de tes consultations sur place a été programmée. Vérifie l'horaire dans l'onglet Réservations et consultations."
 }

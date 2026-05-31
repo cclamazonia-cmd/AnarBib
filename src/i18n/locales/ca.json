@@ -3075,5 +3075,15 @@
   "account.notifications.unarchive": "Restaurar",
   "account.notifications.showArchives": "Veure arxius",
   "account.notifications.backToActive": "Tornar als actius",
-  "account.notifications.archivesEmpty": "Cap avís arxivat."
+  "account.notifications.archivesEmpty": "Cap avís arxivat.",
+  "account.notifPrefs.title": "Les teves notificacions",
+  "account.notifPrefs.intro": "Pots ajustar les notificacions que reps en aquesta app, dins del que la teva biblioteca transmet.",
+  "account.notifPrefs.disableReservaPronta": "No rebre avís quan una reserva meva estigui llesta per recollir",
+  "account.notifPrefs.disableConsultaPronta": "No rebre avís quan una consulta meva estigui programada",
+  "account.notifPrefs.alwaysActive": "Sempre actives: decisions col·lectives que et concerneixen, alertes RGPD, restriccions i exclusions. Aquestes notificacions no es poden desactivar perquè afecten els teus drets.",
+  "account.notifPrefs.saved": "Preferències desades.",
+  "notif.reserva.prontaParaRetirada.title": "Reserva llesta per recollir",
+  "notif.reserva.prontaParaRetirada.body": "Una de les teves reserves està llesta. Pots passar a recollir-la a la biblioteca.",
+  "notif.consulta.agendada.title": "Consulta programada",
+  "notif.consulta.agendada.body": "Una de les teves consultes locals ha estat programada. Verifica l'horari a la pestanya Reserves i consultes."
 }
