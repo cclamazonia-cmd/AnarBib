@@ -5,6 +5,7 @@ import { handleReservaCriadaV2, handleReservaPickupReplyEvent, handleReservaV2St
 import { handleConsultaCriadaV2, handleConsultaV2LifecycleEvent, handleConsultaV2WorkflowEvent } from "../domain/consultas.ts";
 import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
+import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
@@ -84,5 +85,8 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   if (["consulta_v2_realizada","consulta_v2_cancelada","consulta_v2_expirada"].includes(event)) return await handleConsultaV2LifecycleEvent(recordId, event, payload);
   if (["consulta_v2_em_preparacao","consulta_v2_agendada","consulta_v2_nao_compareceu","consulta_v2_resposta_creneau"].includes(event)) return await handleConsultaV2WorkflowEvent(recordId, event, payload);
   if (event === "profile_notice") return await handleProfileNotice(recordId);
+  // ===== Préavis RGPD purge (Spec §7.1, 31/05/2026) ======================
+  // Couvre rgpd_purge_warning_loans / _reservations / _consultations
+  if (event.startsWith("rgpd_purge_warning_")) return await handleRgpdPurgeWarning(recordId, event);
   return null;
 }
