@@ -1,5 +1,11 @@
 # Spec — Flux des emprunts
 
+> ## ⚠️ Amendement v1.1 — 31/05/2026
+>
+> **Propagation des doctrines R7-R11** depuis spec-flux-consultations-v2.2 §11.3, comme TODO inscrit au §12 cohérence inter-specs depuis le 20/05. Ces doctrines techniques ont émergé pendant le chantier hardening #141 (16/05/2026) et le chantier #142 (17/05/2026) sur la chaîne consultas, mais elles s'appliquent au domaine emprunts par symétrie d'architecture.
+>
+> Le bloc de métadonnées ci-dessous est celui de la rédaction d'origine, conservé pour traçabilité. La nouvelle section **§11.3** ajoute les doctrines R7-R11 adaptées au vocabulaire et aux RPC du domaine emprunts. La section **§12 cohérence inter-specs** est complétée pour acter la propagation.
+
 > **Statut** : rédaction du 10/05/2026 — base pour implémentation phasée
 > **Périmètre** : circulation locale (emprestimos_v2 + emprestimo_itens_v2). Hors périmètre : prêt inter-bibliothèques (interlibrary_loans_v2), couvert par sa propre chaîne.
 > **Spec sœur** : spec-flux-consultation-locale.md (chaîne parallèle pour les consultations sur place).
@@ -640,6 +646,56 @@ Aucun chemin actuel : si un bibliothécaire crée un emprunt par erreur, il doit
 - **Risque #2** : changement du CHECK sur `status_global` peut faire échouer des UPDATE en cours si une transaction longue est ouverte. Mitigation : exécuter la migration en heure creuse, vérifier `pg_stat_activity` au préalable.
 - **Risque #3** : les `loan_id` retournés par `api.confirm_pickup_v1` pourraient être affichés différemment selon `status_global` initial. À tester en Phase 6 cas 1.
 
+### 11.3 *(Nouveau v1.1, 31/05/2026)* Doctrines techniques R7-R11 propagées depuis consultas
+
+Les doctrines techniques internalisées au chantier hardening #141 (16/05/2026) et au chantier #142 (17/05/2026), formalisées normativement dans `spec-flux-consultations-v2.2.md §11.3`, sont ici **propagées au domaine emprunts** par symétrie d'architecture. Le TODO inscrit au §12 cohérence inter-specs depuis le 20/05 est levé.
+
+**R7 — Ordre UPDATE narrative-avant-état (doctrine #141.2.E)**
+
+Dans toute RPC d'emprunt modifiant **plusieurs tables liées par triggers AFTER UPDATE**, UPDATE la source de vérité narrative (note dans `emprestimos_v2.notes` ou colonne équivalente côté item) **AVANT** la source d'état (`emprestimo_itens_v2.item_status` qui fire les notifications via `trg_notify_emprestimo_lifecycle`). Sinon le trigger lifecycle voit l'ancienne note et le mail propage un contenu incohérent.
+
+**Pattern à appliquer côté emprunts** :
+- Pour les RPC de **retour partiel** (`fn_v2_return_emprestimo_linhas`, `fn_v2_return_emprestimo_total`) : si une note de retour est consignée (ex: motif d'un retour anticipé staff), UPDATE la note AVANT le passage `item_status: aberto → devolvido` qui fire l'event `emprestimo_v2_devolvido`.
+- Pour les RPC d'**extension** (`fn_v2_extend_core` portant `payload line_nos`, `fn_v2_extend_emprestimo_once`, `fn_renew_my_loan`) : si une justification narrative est jointe à la prolongation, UPDATE celle-ci AVANT `extended_once: false → true` qui fire `trg_notify_emprestimo_prorrogacao`.
+- Pour les RPC sans note narrative (cas majoritaire actuel) : ordre libre, mais conserver le pattern pour cohérence d'audit en cas d'enrichissement futur.
+
+**Audit recommandé** : passer en revue les RPC `fn_v2_*` qui modifient `emprestimos_v2` ET `emprestimo_itens_v2` dans la même transaction. Aucun bug R7 observé en production sur les emprunts au 31/05/2026, mais le pattern est à respecter pour préserver l'invariance avec consultas.
+
+**R8 — Distinction des notes par acteur (doctrine #141.2.C)**
+
+Sur le domaine consultas, R8 distingue deux colonnes : `workflow_note` (staff) et `schedule_reply_note` (lecteur). Sur le domaine emprunts au 31/05/2026, la table `emprestimos_v2` ne porte qu'un seul champ `notes` (saisi côté staff au moment du prêt comptoir) et `emprestimo_itens_v2.notes` (idem côté item, niveau ligne). Aucune colonne n'expose une note initiée par le lecteur.
+
+**Conséquence** : R8 ne s'applique pas littéralement aujourd'hui, mais sa logique doit être respectée si une fonctionnalité future ajoute une note d'origine lecteur (ex: motif d'une demande de renouvellement, message au moment d'un retour). Dans ce cas, **ne jamais agglomérer les deux origines** dans la même colonne. Pattern à anticiper côté handler `handlers/emprestimos.ts` : prévoir l'exposition de deux champs i18n distincts `{staffNote}` et `{readerNote}` plutôt que d'un seul `{note}` ambigu.
+
+**R9 — Traçabilité coordination généralisée (doctrine #142, 17/05/2026)**
+
+Toute action initiée par le **staff biblio** sur un emprunt génère un mail à `library_commons.coordination_email` **en plus** du mail au lecteur. C'est le principe transverse posé par `spec-administrateur-reseau.md v0.4` (Préambule politique) : transparence interne staff sans dépendance à un journal séparé.
+
+**Couverture actuelle côté emprunts** *(à vérifier au moment de l'application R9)* :
+- Création comptoir (`fn_v2_create_emprestimo_by_holdings`) : à auditer — le prêt staff devrait notifier la coordination.
+- Extension staff (`fn_v2_extend_emprestimo_once`) : à auditer.
+- Retour staff total (`fn_v2_return_emprestimo_total`) : à auditer.
+- Retour staff partiel (`fn_v2_return_emprestimo_linhas`) : à auditer.
+- Conversion réservation → emprunt (`fn_v2_convert_reserva_linhas_to_emprestimo`, via `api.confirm_pickup_v1`) : à auditer.
+
+**Action requise** : audit ciblé des cinq RPC ci-dessus pour vérifier que le mail de coordination est bien envoyé quand `actor_kind = 'staff'`. Toggle à respecter : `library_notification_policies` du toggle `coordination_email_enabled`.
+
+Les RPC initiées par le lecteur (`fn_renew_my_loan`) ne déclenchent pas R9 (action lecteur, pas staff).
+
+**R10 — Cohérence handler vs trigger : signature payload stable**
+
+Le handler `handlers/emprestimos.ts` (mentionné dans la mémoire projet, depuis la refonte du chantier #NOTIFY-prorrogacao du 30/05) doit lire le payload exactement dans la forme produite par les triggers `trg_notify_emprestimo_lifecycle` et `trg_notify_emprestimo_prorrogacao`. Toute évolution de payload doit être faite **simultanément** trigger + handler, dans la même migration / le même PR.
+
+**Point d'attention spécifique aux emprunts** : la refonte du chantier #NOTIFY-prorrogacao (30/05/2026) a introduit l'émission par item depuis `fn_v2_extend_core` avec un `payload.line_nos` qui remplace l'ancien trigger header `trg_notify_emprestimo_prorrogacao` (retiré). Le handler `emprestimos.ts` lit désormais `extended_until` par item et produit une liste « titre — date » dans le mail. Cette refonte est un exemple d'application correcte de R10 : trigger et handler ont évolué en cohérence dans une seule session.
+
+**Audit recommandé** : tableau de correspondance entre `_shared/i18n/mail-strings.ts` (clés ICU `loan.*`), `handlers/emprestimos.ts` (clés TS), triggers SQL (clés payload). À tenir à jour symétriquement de celui des consultas.
+
+**R11 — Doctrine UTF-8 PowerShell sur scripts d'i18n**
+
+Doctrine transverse, identique pour tous les domaines. Tous les scripts d'édition de `mail-strings.ts` (clés `loan.*` incluses) doivent passer par Node `.cjs` ou par la méthode UTF-8 explicite PowerShell `[System.IO.File]::ReadAllText($path, [System.Text.UTF8Encoding]::new($false))`. Toute mojibake détectée à la console **doit être vérifiée** avant intervention pour éviter les faux positifs (incident #145 du 17/05 = mojibake apparent à l'affichage, fichier UTF-8 valide en réalité).
+
+Cette doctrine n'est pas spécifique aux emprunts mais elle est rappelée ici pour cohérence : aucune particularité à inscrire pour le domaine.
+
 ---
 
 ## 12. Cohérence avec les autres specs
@@ -647,7 +703,7 @@ Aucun chemin actuel : si un bibliothécaire crée un emprunt par erreur, il doit
 | Spec | Lien |
 |---|---|
 | spec-workflow-reservation.md | Définit le chemin de création d'emprunt depuis une réservation (`api.confirm_pickup_v1`). Cette spec récupère le résultat sans le redéfinir. |
-| spec-flux-consultation-locale.md | Chaîne sœur indépendante. Aucune interaction sauf via la règle de circulation : un même holding ne peut pas avoir simultanément un emprunt actif ET une consulta active (vérifié par les deux fonctions de création). |
+| spec-flux-consultations-v2.2.md | Chaîne sœur indépendante. Aucune interaction sauf via la règle de circulation : un même holding ne peut pas avoir simultanément un emprunt actif ET une consulta active (vérifié par les deux fonctions de création). **Source normative des doctrines R7-R11** propagées en §11.3 de la présente spec (v1.1, 31/05/2026). |
 | spec-gouvernance-roles.md | `can_access_painel`, `librarian`/`coordenador` mobilisés dans les vérifications de rôle. Pas d'évolution. |
 | spec-validation-physique.md | Indépendante. Le `user_id` utilisé doit être validé physiquement, mais la spec emprunts ne re-vérifie pas (déléguée). |
 
