@@ -3063,5 +3063,12 @@
   "panel.reader.globalFrozenBadge": "Konto auf Netzwerkebene gesperrt · {reason}",
   "error.borrower.frozen": "Konto netzwerkweit gesperrt. Ausleihe und Reservierung blockiert.",
   "error.borrower.restricted_local": "Konto in dieser Bibliothek eingeschränkt. Ausleihe und Reservierung blockiert.",
-  "account.alert.decidedBy": "Entscheidung von {name}."
+  "account.alert.decidedBy": "Entscheidung von {name}.",
+  "account.availability.no_acervo_da_sua_biblioteca": "Im Bestand deiner Bibliothek",
+  "account.availability.indisponivel_no_momento": "Derzeit nicht verfügbar",
+  "account.availability.consultavel_no_local": "Vor Ort einsehbar",
+  "account.availability.indisponivel_para_voce": "Für dich nicht verfügbar",
+  "account.availability.sem_biblioteca_de_sessao": "Keine Referenzbibliothek",
+  "account.availability.nextOn": "Nächste voraussichtliche Verfügbarkeit: {date}",
+  "account.wishlist.reserveNow": "Jetzt vormerken"
 }

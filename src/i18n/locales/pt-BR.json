@@ -3063,5 +3063,12 @@
   "panel.reader.globalFrozenBadge": "Conta congelada no nível da rede · {reason}",
   "error.borrower.frozen": "Conta congelada pela rede. Empréstimo e reserva bloqueados.",
   "error.borrower.restricted_local": "Conta com restrição nesta biblioteca. Empréstimo e reserva bloqueados.",
-  "account.alert.decidedBy": "Por decisão de {name}."
+  "account.alert.decidedBy": "Por decisão de {name}.",
+  "account.availability.no_acervo_da_sua_biblioteca": "No acervo da sua biblioteca",
+  "account.availability.indisponivel_no_momento": "Indisponível no momento",
+  "account.availability.consultavel_no_local": "Consultável no local",
+  "account.availability.indisponivel_para_voce": "Indisponível para você",
+  "account.availability.sem_biblioteca_de_sessao": "Sem biblioteca de referência",
+  "account.availability.nextOn": "Próxima disponibilidade prevista: {date}",
+  "account.wishlist.reserveNow": "Reservar agora"
 }

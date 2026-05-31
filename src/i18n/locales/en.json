@@ -3063,5 +3063,12 @@
   "panel.reader.globalFrozenBadge": "Account frozen at network level · {reason}",
   "error.borrower.frozen": "Account frozen by the network. Loans and reservations are blocked.",
   "error.borrower.restricted_local": "Account restricted at this library. Loans and reservations are blocked.",
-  "account.alert.decidedBy": "Decided by {name}."
+  "account.alert.decidedBy": "Decided by {name}.",
+  "account.availability.no_acervo_da_sua_biblioteca": "In your library's collection",
+  "account.availability.indisponivel_no_momento": "Currently unavailable",
+  "account.availability.consultavel_no_local": "Reference only (on-site)",
+  "account.availability.indisponivel_para_voce": "Unavailable to you",
+  "account.availability.sem_biblioteca_de_sessao": "No reference library",
+  "account.availability.nextOn": "Next expected availability: {date}",
+  "account.wishlist.reserveNow": "Reserve now"
 }

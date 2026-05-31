@@ -3063,5 +3063,12 @@
   "panel.reader.globalFrozenBadge": "Compte gelé au niveau réseau · {reason}",
   "error.borrower.frozen": "Compte gelé par le réseau. Emprunt et réservation bloqués.",
   "error.borrower.restricted_local": "Compte restreint dans cette bibliothèque. Emprunt et réservation bloqués.",
-  "account.alert.decidedBy": "Sur décision de {name}."
+  "account.alert.decidedBy": "Sur décision de {name}.",
+  "account.availability.no_acervo_da_sua_biblioteca": "Dans le fonds de votre bibliothèque",
+  "account.availability.indisponivel_no_momento": "Indisponible pour le moment",
+  "account.availability.consultavel_no_local": "Consultable sur place",
+  "account.availability.indisponivel_para_voce": "Indisponible pour vous",
+  "account.availability.sem_biblioteca_de_sessao": "Sans bibliothèque de référence",
+  "account.availability.nextOn": "Prochaine disponibilité prévue : {date}",
+  "account.wishlist.reserveNow": "Réserver maintenant"
 }

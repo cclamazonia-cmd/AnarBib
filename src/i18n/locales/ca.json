@@ -3063,5 +3063,12 @@
   "panel.reader.globalFrozenBadge": "Compte congelat a nivell de xarxa · {reason}",
   "error.borrower.frozen": "Compte congelat per la xarxa. Préstec i reserva bloquejats.",
   "error.borrower.restricted_local": "Compte restringit en aquesta biblioteca. Préstec i reserva bloquejats.",
-  "account.alert.decidedBy": "Per decisió de {name}."
+  "account.alert.decidedBy": "Per decisió de {name}.",
+  "account.availability.no_acervo_da_sua_biblioteca": "Al fons de la teva biblioteca",
+  "account.availability.indisponivel_no_momento": "No disponible ara mateix",
+  "account.availability.consultavel_no_local": "Consultable in situ",
+  "account.availability.indisponivel_para_voce": "No disponible per a tu",
+  "account.availability.sem_biblioteca_de_sessao": "Sense biblioteca de referència",
+  "account.availability.nextOn": "Propera disponibilitat prevista: {date}",
+  "account.wishlist.reserveNow": "Reservar ara"
 }
