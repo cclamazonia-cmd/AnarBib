@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -6,8 +6,10 @@ import { supabase, apiQuery } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useAccountAvailability } from '@/hooks/useAccountAvailability';
+import { useBookAvailability } from '@/hooks/useBookAvailability';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
+import BookAvailability from '@/components/BookAvailability';
 import NegotiationStateBadge from '@/components/reservation/NegotiationStateBadge';
 import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
@@ -94,6 +96,42 @@ export default function AccountPage() {
   const [pwdSaving, setPwdSaving] = useState(false);
   const [pwdMsg, setPwdMsg] = useState('');
   const [pwdMsgIsError, setPwdMsgIsError] = useState(false);
+
+  // ── Disponibilité des livres (chantier #CL.1 + #CL.9, 31/05/2026) ───
+  // Collecte de tous les book_id distincts présents dans les sources de
+  // données chargées par loadData, pour interroger la dispo en un seul
+  // appel groupé via le hook useBookAvailability.
+  //
+  // Sources couvertes :
+  //  - loanHistory : emprunts passés (historique #CL.1)
+  //  - history     : réservations passées (historique #CL.1, deuxième volet)
+  //  - wishlist    : liste d'envies (#CL.9)
+  //  - loans       : emprunts en cours (utile pour signaler si un livre
+  //                  est de nouveau dispo malgré qu'on l'ait encore)
+  //
+  // Doctrine α (décision validation par-appartenance du 30/05/2026) : la
+  // dispo retournée est celle de la biblio courante de la lectrice, pas
+  // celle de la biblio d'origine de l'emprunt/réservation historique. Pour
+  // les comptes multi-biblios c'est intentionnel.
+  const bookIdsForAvailability = useMemo(() => {
+    const ids = new Set();
+    for (const item of loanHistory) {
+      if (item?.book_id != null) ids.add(Number(item.book_id));
+    }
+    for (const item of history) {
+      if (item?.book_id != null) ids.add(Number(item.book_id));
+    }
+    for (const item of wishlist) {
+      if (item?.book_id != null) ids.add(Number(item.book_id));
+    }
+    for (const item of loans) {
+      if (item?.book_id != null) ids.add(Number(item.book_id));
+    }
+    return Array.from(ids);
+  }, [loanHistory, history, wishlist, loans]);
+
+  const { availabilityMap } = useBookAvailability(bookIdsForAvailability);
+
 
   // ── Chargement des données ───────────────────────────────
 
@@ -1465,6 +1503,12 @@ export default function AccountPage() {
                             {lh.returned_at && <> · {t({id:'account.loans.returnedOn'})}: {new Date(lh.returned_at).toLocaleDateString()}</>}
                             {lh.renewals_used > 0 && <> · {t({ id: 'account.history.loans.renewalsUsed' }, { count: lh.renewals_used })}</>}
                           </span>
+                          {/* #CL.1 — dispo courante du livre dans la biblio par défaut (31/05/2026) */}
+                          {lh.book_id && availabilityMap.get(Number(lh.book_id)) && (
+                            <span className="ab-conta-item__meta" style={{ marginTop: 4 }}>
+                              <BookAvailability availability={availabilityMap.get(Number(lh.book_id))} variant="inline" />
+                            </span>
+                          )}
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
                           <span style={{ fontSize: '.72rem', padding: '2px 8px', borderRadius: 4, fontWeight: 600, background: 'rgba(74,222,128,.12)', color: '#4ade80' }}>
@@ -1625,6 +1669,11 @@ export default function AccountPage() {
                 <div className="ab-conta-items">
                   {wishlist.map((w) => {
                     const b = w.books || {};
+                    const wAvail = w.book_id ? availabilityMap.get(Number(w.book_id)) : null;
+                    const canReserveFromWishlist =
+                      wAvail?.session_holding_id &&
+                      wAvail?.session_loanable &&
+                      (wAvail?.session_available_count || 0) > 0;
                     return (
                       <div key={w.id} className="ab-conta-item" style={{ display: 'flex', gap: 10 }}>
                         <div className="ab-conta-item__main" style={{ flex: 1 }}>
@@ -1632,9 +1681,25 @@ export default function AccountPage() {
                           <span className="ab-conta-item__meta">{b.autor || '—'}{b.editora && ` · ${b.editora}`}{b.ano && ` (${b.ano})`}</span>
                           <span className="ab-conta-item__meta">ref: {b.bib_ref || '—'}{w.note && ` · ${w.note}`}</span>
                           <span className="ab-conta-item__meta" style={{ fontSize: '.78rem' }}>{t({id:'account.wishlist.addedOn2'},{date: new Date(w.created_at).toLocaleDateString()})}</span>
+                          {/* #CL.9 — dispo courante du livre dans la biblio par défaut (31/05/2026) */}
+                          {wAvail && (
+                            <span className="ab-conta-item__meta" style={{ marginTop: 4 }}>
+                              <BookAvailability availability={wAvail} variant="compact" />
+                            </span>
+                          )}
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
                           <Link to={`/livro/${w.book_id}`}><Button variant="mini">{t({ id: 'account.wishlist.seeRecord' })}</Button></Link>
+                          {/* #CL.9 — réserver depuis la wishlist quand le livre est dispo et prêtable (31/05/2026) */}
+                          {canReserveFromWishlist && (
+                            <Button variant="mini" onClick={async () => {
+                              const { error } = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
+                                p_user_id: user.id,
+                                p_holding_ids: [wAvail.session_holding_id],
+                              });
+                              if (!error) loadData();
+                            }}>{t({ id: 'account.wishlist.reserveNow' })}</Button>
+                          )}
                           <Button variant="mini" onClick={async () => {
                             await supabase.from('user_wishlist').delete().eq('id', w.id);
                             loadData();
