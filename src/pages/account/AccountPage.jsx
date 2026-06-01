@@ -120,6 +120,10 @@ export default function AccountPage() {
   // #CL.8 — rétention historique lectrice (masquage persistant + suppression)
   const [showHiddenHistory, setShowHiddenHistory] = useState(false);
   const [deleteHistoryTarget, setDeleteHistoryTarget] = useState(null);
+  // #CL.8 C.5 — suppression de masse par domaine (mot de confirmation)
+  const [deleteAllTarget, setDeleteAllTarget] = useState(null);
+  const [deleteAllConfirmText, setDeleteAllConfirmText] = useState('');
+  const [deleteAllBusy, setDeleteAllBusy] = useState(false);
   const [notifications, setNotifications] = useState([]);
   // #CL.6 (31/05/2026) — Vue active / archives. Filtre frontend sur la même
   // source 'notifications' (single requête, jusqu'à 100 notifs). Le compteur
@@ -360,6 +364,32 @@ export default function AccountPage() {
       setRetentionMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setRetentionSaving(false);
+    }
+  };
+
+  // #CL.8 C.5 — nombre de lignes terminales par domaine pour la biblio active
+  const countFor = (domain) => {
+    const list = domain === 'loans' ? loanHistory : domain === 'reservations' ? history : consultationsHistory;
+    return list.filter(it => it.library_id === libraryId).length;
+  };
+  // #CL.8 C.5 — purge rétroactive de tout l'historique d'un domaine pour la biblio active
+  const handleDeleteAllHistory = async () => {
+    if (!deleteAllTarget || !libraryId) return;
+    const { domain } = deleteAllTarget;
+    setDeleteAllBusy(true);
+    try {
+      const { error } = await supabase.rpc('fn_delete_all_my_history', { p_library_id: libraryId, p_domain: domain });
+      if (error) throw error;
+      histSetter(domain)(prev => prev.filter(it => it.library_id !== libraryId));
+      setDeleteAllTarget(null);
+      setDeleteAllConfirmText('');
+      setMsg(t({ id: 'account.history.deleteAll.done' }));
+      setMsgIsError(false);
+    } catch (err) {
+      setMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
+      setMsgIsError(true);
+    } finally {
+      setDeleteAllBusy(false);
     }
   };
 
@@ -1922,6 +1952,28 @@ export default function AccountPage() {
                 </p>
               </div>
               )}
+              {/* #CL.8 C.5 — suppression de masse rétroactive par domaine (D.7) */}
+              {libraryId && ['loans','reservations','consultations'].some(d => countFor(d) > 0) && (
+              <div style={{ marginTop: 16, padding: 16, background: 'rgba(248,113,113,.05)', borderRadius: 8, border: '1px solid rgba(248,113,113,.2)' }}>
+                <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem', marginTop: 0, marginBottom: 8, color: '#f87171' }}>
+                  {t({ id: 'account.history.deleteAll.sectionTitle' })}
+                </h3>
+                <p className="ab-conta-hint" style={{ marginTop: 0, marginBottom: 12 }}>
+                  {t({ id: 'account.history.deleteAll.sectionHint' })}
+                </p>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {['loans','reservations','consultations'].map(domain => {
+                    const cnt = countFor(domain);
+                    if (cnt === 0) return null;
+                    return (
+                      <Button key={domain} variant="danger" onClick={() => { setDeleteAllConfirmText(''); setDeleteAllTarget({ domain }); }}>
+                        {t({ id: 'account.history.deleteAll.button' }, { domain: t({ id: `account.history.deleteAll.domain.${domain}` }), count: cnt })}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+              )}
             </div>
             );
           })()}
@@ -2062,6 +2114,46 @@ export default function AccountPage() {
       </div>
 
       <Footer />
+          <Modal
+        isOpen={!!deleteAllTarget}
+        onClose={() => { if (!deleteAllBusy) { setDeleteAllTarget(null); setDeleteAllConfirmText(''); } }}
+        title={t({ id: 'account.history.deleteAll.title' })}
+        size="small"
+      >
+        <div className="ab-modal__body">
+          {deleteAllTarget && (
+            <p>{t({ id: 'account.history.deleteAll.body' }, { domain: t({ id: `account.history.deleteAll.domain.${deleteAllTarget.domain}` }), library: libraryName })}</p>
+          )}
+          <p style={{ marginTop: 8, color: '#f87171', fontSize: '.85rem' }}>
+            {t({ id: 'account.history.deleteAll.irreversible' })}
+          </p>
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 12 }}>
+            <span style={{ fontSize: '.85rem' }}>
+              {t({ id: 'account.history.deleteAll.typeToConfirm' }, { word: t({ id: 'account.history.deleteAll.confirmWord' }) })}
+            </span>
+            <input
+              type="text"
+              className="ab-input"
+              value={deleteAllConfirmText}
+              onChange={(e) => setDeleteAllConfirmText(e.target.value)}
+              disabled={deleteAllBusy}
+              autoFocus
+            />
+          </label>
+        </div>
+        <div className="ab-modal__actions">
+          <Button variant="secondary" onClick={() => { setDeleteAllTarget(null); setDeleteAllConfirmText(''); }} disabled={deleteAllBusy}>
+            {t({ id: 'common.cancel' })}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDeleteAllHistory}
+            disabled={deleteAllBusy || deleteAllConfirmText.trim().toUpperCase() !== t({ id: 'account.history.deleteAll.confirmWord' }).toUpperCase()}
+          >
+            {deleteAllBusy ? t({ id: 'common.loading' }) : t({ id: 'account.history.deleteAll.confirmButton' })}
+          </Button>
+        </div>
+      </Modal>
           <Modal
         isOpen={!!deleteHistoryTarget}
         onClose={() => setDeleteHistoryTarget(null)}
