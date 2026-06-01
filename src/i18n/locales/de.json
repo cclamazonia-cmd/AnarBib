@@ -1,4 +1,6 @@
 {
+  "panel.history.hiddenByReader": "von der Leserin ausgeblendet",
+  "panel.history.hiddenByReader.tooltip": "Dieser Eintrag wurde von der Leserin in ihrem persönlichen Bereich ausgeblendet. Er bleibt hier sichtbar (kollektives Gedächtnis der Bibliothek).",
   "account.history.deleteAll.sectionTitle": "Massenlöschung",
   "account.history.deleteAll.sectionHint": "Löschen Sie auf einmal Ihren gesamten bisherigen Verlauf einer Kategorie in dieser Bibliothek. Unumkehrbare Aktion.",
   "account.history.deleteAll.button": "{domain} löschen ({count})",

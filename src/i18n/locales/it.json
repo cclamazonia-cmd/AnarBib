@@ -1,4 +1,6 @@
 {
+  "panel.history.hiddenByReader": "nascosto dalla lettrice",
+  "panel.history.hiddenByReader.tooltip": "Questa voce è stata nascosta dalla lettrice nel suo spazio personale. Resta visibile qui (memoria collettiva della biblioteca).",
   "account.history.deleteAll.sectionTitle": "Eliminazione di massa",
   "account.history.deleteAll.sectionHint": "Elimina in una volta tutta la tua cronologia passata di una categoria in questa biblioteca. Azione irreversibile.",
   "account.history.deleteAll.button": "Elimina {domain} ({count})",

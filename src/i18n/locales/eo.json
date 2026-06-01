@@ -1,4 +1,6 @@
 {
+  "panel.history.hiddenByReader": "kaŝita de la leganto",
+  "panel.history.hiddenByReader.tooltip": "Ĉi tiu enigo estis kaŝita de la leganto en ŝia persona spaco. Ĝi restas videbla ĉi tie (kolektiva memoro de la biblioteko).",
   "account.history.deleteAll.sectionTitle": "Amasa forigo",
   "account.history.deleteAll.sectionHint": "Forigu samtempe vian tutan pasintan historion de kategorio ĉe ĉi tiu biblioteko. Neinversigebla ago.",
   "account.history.deleteAll.button": "Forigi {domain} ({count})",

@@ -1,4 +1,6 @@
 {
+  "panel.history.hiddenByReader": "masqué par la lectrice",
+  "panel.history.hiddenByReader.tooltip": "Cette entrée a été masquée par la lectrice dans son espace personnel. Elle reste visible ici (mémoire collective de la bibliothèque).",
   "account.history.deleteAll.sectionTitle": "Suppression de masse",
   "account.history.deleteAll.sectionHint": "Supprimez d'un coup tout votre historique passé d'une catégorie dans cette bibliothèque. Action irréversible.",
   "account.history.deleteAll.button": "Supprimer {domain} ({count})",

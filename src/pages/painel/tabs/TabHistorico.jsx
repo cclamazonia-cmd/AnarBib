@@ -95,6 +95,11 @@ export default function TabHistorico({
                             <tr key={`hr-${r.reserva_item_id || r.reserva_id + '-' + r.line_no || i}`}>
                               <td data-label={t({ id: 'panel.history.col.title' })}>
                                 <div className="truncate">{r.titulo || r.bib_ref || '—'}</div>
+                                {r.is_hidden_by_user && (
+                                  <span style={{ display: 'inline-block', marginTop: 2, fontSize: '.68rem', padding: '1px 6px', borderRadius: 4, background: 'rgba(148,163,184,.15)', color: 'var(--brand-muted, #94a3b8)' }} title={t({ id: 'panel.history.hiddenByReader.tooltip' })}>
+                                    {t({ id: 'panel.history.hiddenByReader' })}
+                                  </span>
+                                )}
                               </td>
                               <td data-label={t({ id: 'panel.history.col.status' })}>
                                 {t({ id: `reservation.stage.${r.item_status}`, defaultMessage: t({ id: 'panel.stage.unknown' }) })}
@@ -166,6 +171,11 @@ export default function TabHistorico({
                               <tr key={`hc-${c.consulta_item_id || c.consulta_id + '-' + c.line_no || i}`}>
                                 <td data-label={t({ id: 'panel.history.col.title' })}>
                                   <div className="truncate">{c.titulo || c.bib_ref || '—'}</div>
+                                {c.is_hidden_by_user && (
+                                  <span style={{ display: 'inline-block', marginTop: 2, fontSize: '.68rem', padding: '1px 6px', borderRadius: 4, background: 'rgba(148,163,184,.15)', color: 'var(--brand-muted, #94a3b8)' }} title={t({ id: 'panel.history.hiddenByReader.tooltip' })}>
+                                    {t({ id: 'panel.history.hiddenByReader' })}
+                                  </span>
+                                )}
                                 </td>
                                 <td data-label={t({ id: 'panel.history.col.status' })}>
                                   {t({ id: `consultation.stage.${c.item_status}`, defaultMessage: t({ id: 'panel.stage.unknown' }) })}
@@ -236,6 +246,11 @@ export default function TabHistorico({
                                 <div className="truncate" title={e.titulos || ''}>
                                   {e.titulos || e.bib_refs || '—'}
                                 </div>
+                                {e.is_hidden_by_user && (
+                                  <span style={{ display: 'inline-block', marginTop: 2, fontSize: '.68rem', padding: '1px 6px', borderRadius: 4, background: 'rgba(148,163,184,.15)', color: 'var(--brand-muted, #94a3b8)' }} title={t({ id: 'panel.history.hiddenByReader.tooltip' })}>
+                                    {t({ id: 'panel.history.hiddenByReader' })}
+                                  </span>
+                                )}
                               </td>
                               <td data-label={t({ id: 'panel.history.col.type' })}>
                                 <span className="ab-painel-history-typepill" data-type={e.loan_type}>

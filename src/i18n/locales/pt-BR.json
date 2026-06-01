@@ -1,4 +1,6 @@
 {
+  "panel.history.hiddenByReader": "oculto pela leitora",
+  "panel.history.hiddenByReader.tooltip": "Esta entrada foi ocultada pela leitora em seu espaço pessoal. Permanece visível aqui (memória coletiva da biblioteca).",
   "account.history.deleteAll.sectionTitle": "Apagar histórico em massa",
   "account.history.deleteAll.sectionHint": "Apague de uma vez todo o seu histórico passado de uma categoria nesta biblioteca. Ação irreversível.",
   "account.history.deleteAll.button": "Apagar {domain} ({count})",

@@ -1,4 +1,6 @@
 {
+  "panel.history.hiddenByReader": "hidden by reader",
+  "panel.history.hiddenByReader.tooltip": "This entry was hidden by the reader in their personal space. It remains visible here (the library's collective memory).",
   "account.history.deleteAll.sectionTitle": "Bulk deletion",
   "account.history.deleteAll.sectionHint": "Delete all your past history of a category at this library at once. Irreversible action.",
   "account.history.deleteAll.button": "Delete {domain} ({count})",
