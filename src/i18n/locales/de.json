@@ -1,4 +1,13 @@
 {
+  "account.history.unhide": "Wiederherstellen",
+  "account.history.delete": "Löschen",
+  "account.history.delete.confirmTitle": "Endgültig löschen?",
+  "account.history.delete.confirmBody": "Dieser Eintrag aus Ihrem Verlauf wird endgültig gelöscht.",
+  "account.history.delete.irreversible": "Diese Aktion kann nicht rückgängig gemacht werden.",
+  "account.history.delete.confirm": "Endgültig löschen",
+  "account.history.hiddenBadge": "Ausgeblendet",
+  "account.history.showHiddenToggle": "Ausgeblendete Einträge anzeigen ({count})",
+  "account.history.hideHiddenToggle": "Wieder ausblenden",
   "biblioteca.report.illSection": "Fernleihen (PEB)",
   "biblioteca.report.illOngoing": "Laufende Fernleihen: {count}",
   "biblioteca.report.illOverdue": "davon überfällig: {count}",

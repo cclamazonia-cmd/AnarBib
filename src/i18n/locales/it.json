@@ -1,4 +1,13 @@
 {
+  "account.history.unhide": "Ripristina",
+  "account.history.delete": "Elimina",
+  "account.history.delete.confirmTitle": "Eliminare definitivamente?",
+  "account.history.delete.confirmBody": "Questa voce della tua cronologia sarà eliminata definitivamente.",
+  "account.history.delete.irreversible": "Questa azione non può essere annullata.",
+  "account.history.delete.confirm": "Elimina definitivamente",
+  "account.history.hiddenBadge": "Nascosto",
+  "account.history.showHiddenToggle": "Mostra elementi nascosti ({count})",
+  "account.history.hideHiddenToggle": "Nascondi di nuovo",
   "biblioteca.report.illSection": "Prestiti interbibliotecari (PEB)",
   "biblioteca.report.illOngoing": "PEB in corso: {count}",
   "biblioteca.report.illOverdue": "di cui in ritardo: {count}",

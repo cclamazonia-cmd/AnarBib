@@ -1,4 +1,13 @@
 {
+  "account.history.unhide": "Restaurer",
+  "account.history.delete": "Supprimer",
+  "account.history.delete.confirmTitle": "Supprimer définitivement ?",
+  "account.history.delete.confirmBody": "Cette entrée de votre historique sera définitivement supprimée.",
+  "account.history.delete.irreversible": "Cette action est irréversible.",
+  "account.history.delete.confirm": "Supprimer définitivement",
+  "account.history.hiddenBadge": "Masqué",
+  "account.history.showHiddenToggle": "Afficher les éléments masqués ({count})",
+  "account.history.hideHiddenToggle": "Masquer à nouveau",
   "biblioteca.report.illSection": "Prêts entre bibliothèques (PEB)",
   "biblioteca.report.illOngoing": "PEB en cours : {count}",
   "biblioteca.report.illOverdue": "dont en retard : {count}",

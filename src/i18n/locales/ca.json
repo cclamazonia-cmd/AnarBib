@@ -1,4 +1,13 @@
 {
+  "account.history.unhide": "Restaura",
+  "account.history.delete": "Elimina",
+  "account.history.delete.confirmTitle": "Voleu eliminar definitivament?",
+  "account.history.delete.confirmBody": "Aquesta entrada del vostre historial s'eliminarà definitivament.",
+  "account.history.delete.irreversible": "Aquesta acció no es pot desfer.",
+  "account.history.delete.confirm": "Elimina definitivament",
+  "account.history.hiddenBadge": "Ocult",
+  "account.history.showHiddenToggle": "Mostra els elements ocults ({count})",
+  "account.history.hideHiddenToggle": "Amaga de nou",
   "biblioteca.report.illSection": "Préstecs interbibliotecaris (PIB)",
   "biblioteca.report.illOngoing": "PIB en curs: {count}",
   "biblioteca.report.illOverdue": "dels quals endarrerits: {count}",

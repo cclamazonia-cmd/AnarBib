@@ -1,4 +1,13 @@
 {
+  "account.history.unhide": "Restarigi",
+  "account.history.delete": "Forigi",
+  "account.history.delete.confirmTitle": "Ĉu forigi por ĉiam?",
+  "account.history.delete.confirmBody": "Ĉi tiu enigo de via historio estos forigita por ĉiam.",
+  "account.history.delete.irreversible": "Ĉi tiu ago ne povas esti malfarita.",
+  "account.history.delete.confirm": "Forigi por ĉiam",
+  "account.history.hiddenBadge": "Kaŝita",
+  "account.history.showHiddenToggle": "Montri kaŝitajn erojn ({count})",
+  "account.history.hideHiddenToggle": "Rekaŝi",
   "biblioteca.report.illSection": "Interbibliotekaj pruntoj (PEB)",
   "biblioteca.report.illOngoing": "Daŭrantaj interbibliotekaj pruntoj: {count}",
   "biblioteca.report.illOverdue": "el kiuj malfruaj: {count}",

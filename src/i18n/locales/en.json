@@ -1,4 +1,13 @@
 {
+  "account.history.unhide": "Restore",
+  "account.history.delete": "Delete",
+  "account.history.delete.confirmTitle": "Delete permanently?",
+  "account.history.delete.confirmBody": "This entry from your history will be permanently deleted.",
+  "account.history.delete.irreversible": "This action cannot be undone.",
+  "account.history.delete.confirm": "Delete permanently",
+  "account.history.hiddenBadge": "Hidden",
+  "account.history.showHiddenToggle": "Show hidden items ({count})",
+  "account.history.hideHiddenToggle": "Hide again",
   "biblioteca.report.illSection": "Interlibrary loans (ILL)",
   "biblioteca.report.illOngoing": "ILLs in progress: {count}",
   "biblioteca.report.illOverdue": "of which overdue: {count}",

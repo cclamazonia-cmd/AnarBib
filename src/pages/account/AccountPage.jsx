@@ -117,6 +117,9 @@ export default function AccountPage() {
   const [loans, setLoans] = useState([]);
   const [history, setHistory] = useState([]);
   const [loanHistory, setLoanHistory] = useState([]);
+  // #CL.8 — rétention historique lectrice (masquage persistant + suppression)
+  const [showHiddenHistory, setShowHiddenHistory] = useState(false);
+  const [deleteHistoryTarget, setDeleteHistoryTarget] = useState(null);
   const [notifications, setNotifications] = useState([]);
   // #CL.6 (31/05/2026) — Vue active / archives. Filtre frontend sur la même
   // source 'notifications' (single requête, jusqu'à 100 notifs). Le compteur
@@ -271,6 +274,81 @@ export default function AccountPage() {
   }, [user?.id, authLoading, libraryId]);
 
   useEffect(() => { loadData(); }, [loadData]);
+
+  // ── #CL.8 — masquage / restauration / suppression de l'historique ───────────
+  // Le masquage est persistant (fn_hide_history_item), réversible (fn_unhide),
+  // distinct de la suppression physique irréversible (fn_delete_history_item).
+  // Granularité option A : loans = racine (emprestimo_id), réservations/consultas
+  // = ligne (reserva_item_id / consulta_item_id).
+  const histSetter = (domain) =>
+    domain === 'loans' ? setLoanHistory
+    : domain === 'reservations' ? setHistory
+    : setConsultationsHistory;
+  const histIdField = (domain) =>
+    domain === 'loans' ? 'emprestimo_id'
+    : domain === 'reservations' ? 'reserva_item_id'
+    : 'consulta_item_id';
+
+  const handleHideHistoryItem = async (domain, recordId) => {
+    try {
+      const { error } = await supabase.rpc('fn_hide_history_item', { p_domain: domain, p_record_id: recordId });
+      if (error) throw error;
+      const f = histIdField(domain);
+      histSetter(domain)(prev => prev.map(it => it[f] === recordId ? { ...it, is_hidden_by_user: true } : it));
+    } catch (err) {
+      setMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
+      setMsgIsError(true);
+    }
+  };
+
+  const handleUnhideHistoryItem = async (domain, recordId) => {
+    try {
+      const { error } = await supabase.rpc('fn_unhide_history_item', { p_domain: domain, p_record_id: recordId });
+      if (error) throw error;
+      const f = histIdField(domain);
+      histSetter(domain)(prev => prev.map(it => it[f] === recordId ? { ...it, is_hidden_by_user: false } : it));
+    } catch (err) {
+      setMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
+      setMsgIsError(true);
+    }
+  };
+
+  const handleDeleteHistoryItem = async () => {
+    if (!deleteHistoryTarget) return;
+    const { domain, recordId } = deleteHistoryTarget;
+    try {
+      const { error } = await supabase.rpc('fn_delete_history_item', { p_domain: domain, p_record_id: recordId });
+      if (error) throw error;
+      const f = histIdField(domain);
+      histSetter(domain)(prev => prev.filter(it => it[f] !== recordId));
+      setDeleteHistoryTarget(null);
+    } catch (err) {
+      setMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
+      setMsgIsError(true);
+      setDeleteHistoryTarget(null);
+    }
+  };
+
+  // Style commun des boutons-liens d'action sur une ligne d'historique
+  const histLinkBtn = { fontSize: '.7rem', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline', color: 'var(--brand-muted)' };
+  // Bloc d'actions réutilisable (masquer/restaurer + supprimer + badge masqué)
+  const renderHistActions = (domain, recordId, label, isHidden) => (
+    <>
+      {isHidden && (
+        <span style={{ fontSize: '.68rem', padding: '1px 6px', borderRadius: 4, background: 'rgba(255,255,255,.06)', color: 'var(--brand-muted)' }}>
+          {t({ id: 'account.history.hiddenBadge' })}
+        </span>
+      )}
+      <button type="button" style={histLinkBtn}
+        onClick={() => isHidden ? handleUnhideHistoryItem(domain, recordId) : handleHideHistoryItem(domain, recordId)}>
+        {t({ id: isHidden ? 'account.history.unhide' : 'account.history.hide' })}
+      </button>
+      <button type="button" style={{ ...histLinkBtn, color: '#f87171' }}
+        onClick={() => setDeleteHistoryTarget({ domain, recordId, label })}>
+        {t({ id: 'account.history.delete' })}
+      </button>
+    </>
+  );
 
   // ── Regimento da biblioteca ───────────────────────────────
   useEffect(() => {
@@ -1626,35 +1704,51 @@ export default function AccountPage() {
           )}
 
           {/* ═══ HISTÓRICO ═══ */}
-          {activeTab === 'historico' && (
+          {activeTab === 'historico' && (() => {
+            const hiddenCount =
+              loanHistory.filter(x => x.is_hidden_by_user).length +
+              consultationsHistory.filter(x => x.is_hidden_by_user).length +
+              history.filter(x => x.is_hidden_by_user).length;
+            const visLoans = loanHistory.filter(x => showHiddenHistory || !x.is_hidden_by_user);
+            const visConsult = consultationsHistory.filter(x => showHiddenHistory || !x.is_hidden_by_user);
+            const visResas = history.filter(x => showHiddenHistory || !x.is_hidden_by_user);
+            return (
             <div>
               <ContaTabHeader title={t({ id: 'account.history.title' })} onRefresh={() => loadData({ silent: true })} />
               <p className="ab-conta-hint">{t({ id: 'account.history.hint' })}</p>
 
+              {hiddenCount > 0 && (
+                <button type="button" style={{ ...histLinkBtn, marginBottom: 8 }}
+                  onClick={() => setShowHiddenHistory(v => !v)}>
+                  {showHiddenHistory
+                    ? t({ id: 'account.history.hideHiddenToggle' })
+                    : t({ id: 'account.history.showHiddenToggle' }, { count: hiddenCount })}
+                </button>
+              )}
+
               {/* Paquet 10 (10/05/2026) : section historique des emprunts */}
               <div style={{ marginTop: 16 }}>
                 <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.history.loans.title' })}</h3>
-                {loanHistory.length === 0 ? (
+                {visLoans.length === 0 ? (
                   <p className="ab-conta-empty">{t({ id: 'account.history.loans.empty' })}</p>
                 ) : (
                   <div className="ab-conta-items">
-                    {loanHistory.map((lh, i) => (
-                      <div key={`loan-${lh.emprestimo_id}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10 }}>
+                    {visLoans.map((lh) => (
+                      <div key={`loan-${lh.emprestimo_id}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10, opacity: lh.is_hidden_by_user ? 0.55 : 1 }}>
                         <div className="ab-conta-item__main" style={{ flex: 1 }}>
                           {lh.book_id ? (
-                            <Link to={`/livro/${lh.book_id}`} className="ab-conta-item__title">{lh.titulos || '—'}</Link>
+                            <Link to={`/livro/${lh.book_id}`} className="ab-conta-item__title">{lh.titulos || '\u2014'}</Link>
                           ) : (
-                            <span className="ab-conta-item__title">{lh.titulos || '—'}</span>
+                            <span className="ab-conta-item__title">{lh.titulos || '\u2014'}</span>
                           )}
                           {lh.autores && <span className="ab-conta-item__meta">{lh.autores}</span>}
                           <span className="ab-conta-item__meta">
-                            {lh.items_count > 1 && <>{t({ id: 'account.history.loans.itemsCount' }, { count: lh.items_count })} · </>}
-                            ref: {lh.bib_refs || '—'} · {lh.library_name || '—'}
-                            {lh.emprestimo_created_at && <> · {t({id:'account.loans.checkout'})}: {new Date(lh.emprestimo_created_at).toLocaleDateString()}</>}
-                            {lh.returned_at && <> · {t({id:'account.loans.returnedOn'})}: {new Date(lh.returned_at).toLocaleDateString()}</>}
-                            {lh.renewals_used > 0 && <> · {t({ id: 'account.history.loans.renewalsUsed' }, { count: lh.renewals_used })}</>}
+                            {lh.items_count > 1 && <>{t({ id: 'account.history.loans.itemsCount' }, { count: lh.items_count })} \u00b7 </>}
+                            ref: {lh.bib_refs || '\u2014'} \u00b7 {lh.library_name || '\u2014'}
+                            {lh.emprestimo_created_at && <> \u00b7 {t({id:'account.loans.checkout'})}: {new Date(lh.emprestimo_created_at).toLocaleDateString()}</>}
+                            {lh.returned_at && <> \u00b7 {t({id:'account.loans.returnedOn'})}: {new Date(lh.returned_at).toLocaleDateString()}</>}
+                            {lh.renewals_used > 0 && <> \u00b7 {t({ id: 'account.history.loans.renewalsUsed' }, { count: lh.renewals_used })}</>}
                           </span>
-                          {/* #CL.1 — dispo courante du livre dans la biblio par défaut (31/05/2026) */}
                           {lh.book_id && availabilityMap.get(Number(lh.book_id)) && (
                             <span className="ab-conta-item__meta" style={{ marginTop: 4 }}>
                               <BookAvailability availability={availabilityMap.get(Number(lh.book_id))} variant="inline" />
@@ -1665,9 +1759,7 @@ export default function AccountPage() {
                           <span style={{ fontSize: '.72rem', padding: '2px 8px', borderRadius: 4, fontWeight: 600, background: 'rgba(74,222,128,.12)', color: '#4ade80' }}>
                             {t({ id: 'account.history.loans.completed' })}
                           </span>
-                          <button type="button" style={{ fontSize: '.7rem', color: 'var(--brand-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
-                            onClick={() => { setLoanHistory(prev => prev.filter((_, idx) => idx !== i)); }}
-                          >{t({ id: 'account.history.hide' })}</button>
+                          {renderHistActions('loans', lh.emprestimo_id, lh.titulos || '\u2014', lh.is_hidden_by_user)}
                         </div>
                       </div>
                     ))}
@@ -1677,24 +1769,24 @@ export default function AccountPage() {
               {/* Paquet 26 L4 (14/05/2026) : section historique des consultas */}
               <div style={{ marginTop: 24 }}>
                 <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.history.consultations.title' })}</h3>
-                {consultationsHistory.length === 0 ? (
+                {visConsult.length === 0 ? (
                   <p className="ab-conta-empty">{t({ id: 'account.history.consultations.empty' })}</p>
                 ) : (
                   <div className="ab-conta-items">
-                    {consultationsHistory.map((c, i) => {
+                    {visConsult.map((c, i) => {
                       const stageKey = c.workflow_stage || c.status || '';
-                      const stageLabel = stageKey ? t({ id: `consultation.stage.${stageKey.replace('-','_')}`, defaultMessage: stageKey }) : '—';
+                      const stageLabel = stageKey ? t({ id: `consultation.stage.${stageKey.replace('-','_')}`, defaultMessage: stageKey }) : '\u2014';
                       const isFinal = ['consultada','cancelada_leitor','cancelada_biblioteca','expirada'].includes(stageKey);
                       return (
-                        <div key={`ch-${i}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10 }}>
+                        <div key={`ch-${c.consulta_item_id ?? i}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10, opacity: c.is_hidden_by_user ? 0.55 : 1 }}>
                           <div className="ab-conta-item__main" style={{ flex: 1 }}>
-                            <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '—'}</Link>
-                            <span className="ab-conta-item__meta">{c.autor || '—'}{c.editora && ` · ${c.editora}`}{c.ano && ` (${c.ano})`}</span>
+                            <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || '\u2014'}</Link>
+                            <span className="ab-conta-item__meta">{c.autor || '\u2014'}{c.editora && ` \u00b7 ${c.editora}`}{c.ano && ` (${c.ano})`}</span>
                             <span className="ab-conta-item__meta">
-                              ref: {c.bib_ref || '—'} · {c.library_name || '—'}
-                              {c.requested_at && <> · {t({id:'account.history.consultations.requestedOn'})}: {new Date(c.requested_at).toLocaleDateString()}</>}
-                              {c.consulted_at && <> · {t({id:'account.history.consultations.consultedOn'})}: {new Date(c.consulted_at).toLocaleDateString()}</>}
-                              {c.cancelled_at && <> · {t({id:'account.history.cancelledOn'})}: {new Date(c.cancelled_at).toLocaleDateString()}</>}
+                              ref: {c.bib_ref || '\u2014'} \u00b7 {c.library_name || '\u2014'}
+                              {c.requested_at && <> \u00b7 {t({id:'account.history.consultations.requestedOn'})}: {new Date(c.requested_at).toLocaleDateString()}</>}
+                              {c.consulted_at && <> \u00b7 {t({id:'account.history.consultations.consultedOn'})}: {new Date(c.consulted_at).toLocaleDateString()}</>}
+                              {c.cancelled_at && <> \u00b7 {t({id:'account.history.cancelledOn'})}: {new Date(c.cancelled_at).toLocaleDateString()}</>}
                             </span>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
@@ -1703,9 +1795,7 @@ export default function AccountPage() {
                               color: isFinal ? 'var(--brand-muted)' : '#fbbf24' }}>
                               {stageLabel}
                             </span>
-                            <button type="button" style={{ fontSize: '.7rem', color: 'var(--brand-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
-                              onClick={() => { setConsultationsHistory(prev => prev.filter((_, idx) => idx !== i)); }}
-                            >{t({ id: 'account.history.hide' })}</button>
+                            {renderHistActions('consultations', c.consulta_item_id, c.titulo || c.bib_ref || '\u2014', c.is_hidden_by_user)}
                           </div>
                         </div>
                       );
@@ -1713,31 +1803,31 @@ export default function AccountPage() {
                   </div>
                 )}
               </div>
-              
+
               {/* Section historique des reservations (preexistante) */}
               <div style={{ marginTop: 24 }}>
                 <h3 className="ab-conta-section-title" style={{ fontSize: '.95rem' }}>{t({ id: 'account.history.reservations.title' })}</h3>
-                {history.length === 0 ? (
+                {visResas.length === 0 ? (
                   <p className="ab-conta-empty">{t({ id: 'account.history.empty' })}</p>
                 ) : (
                 <div className="ab-conta-items">
-                  {history.map((h, i) => {
+                  {visResas.map((h, i) => {
                     const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
                     const coverUrl = h.cover_object_path ? `${PROJECT_URL}/storage/v1/object/public/covers/${h.cover_object_path}` : null;
                     const stageKey = h.workflow_stage_effective || h.status || '';
-                    const stageLabel = stageKey ? t({ id: `reservation.stage.${stageKey.replace('-','_')}`, defaultMessage: stageKey }) : '—';
+                    const stageLabel = stageKey ? t({ id: `reservation.stage.${stageKey.replace('-','_')}`, defaultMessage: stageKey }) : '\u2014';
                     const isFinal = ['cancelada_leitor','cancelada_biblioteca','expirada','retirada_efetivada','liberada_para_circulacao','convertida_em_emprestimo'].includes(h.workflow_stage_effective || h.status);
                     return (
-                      <div key={i} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10 }}>
+                      <div key={`res-${h.reserva_item_id ?? i}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10, opacity: h.is_hidden_by_user ? 0.55 : 1 }}>
                         {coverUrl && <img src={coverUrl} alt="" style={{ width: 40, height: 56, objectFit: 'cover', borderRadius: 4, flexShrink: 0, background: 'rgba(0,0,0,.2)' }} onError={e => { e.target.style.display = 'none'; }} />}
                         <div className="ab-conta-item__main" style={{ flex: 1 }}>
-                          <Link to={`/livro/${h.book_id}`} className="ab-conta-item__title">{h.titulo || h.bib_ref || '—'}</Link>
-                          <span className="ab-conta-item__meta">{h.autor || '—'}{h.editora && ` · ${h.editora}`}{h.ano && ` (${h.ano})`}</span>
+                          <Link to={`/livro/${h.book_id}`} className="ab-conta-item__title">{h.titulo || h.bib_ref || '\u2014'}</Link>
+                          <span className="ab-conta-item__meta">{h.autor || '\u2014'}{h.editora && ` \u00b7 ${h.editora}`}{h.ano && ` (${h.ano})`}</span>
                           <span className="ab-conta-item__meta">
-                            ref: {h.bib_ref || '—'} · {h.library_name || '—'}
-                            {h.reserved_at && <> · {t({id:'account.history.reservedOn'})}: {new Date(h.reserved_at).toLocaleDateString()}</>}
-                            {h.fulfilled_at && <> · {t({id:'account.history.fulfilledOn'})}: {new Date(h.fulfilled_at).toLocaleDateString()}</>}
-                            {h.cancelled_at && <> · {t({id:'account.history.cancelledOn'})}: {new Date(h.cancelled_at).toLocaleDateString()}</>}
+                            ref: {h.bib_ref || '\u2014'} \u00b7 {h.library_name || '\u2014'}
+                            {h.reserved_at && <> \u00b7 {t({id:'account.history.reservedOn'})}: {new Date(h.reserved_at).toLocaleDateString()}</>}
+                            {h.fulfilled_at && <> \u00b7 {t({id:'account.history.fulfilledOn'})}: {new Date(h.fulfilled_at).toLocaleDateString()}</>}
+                            {h.cancelled_at && <> \u00b7 {t({id:'account.history.cancelledOn'})}: {new Date(h.cancelled_at).toLocaleDateString()}</>}
                           </span>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
@@ -1747,9 +1837,7 @@ export default function AccountPage() {
                             {stageLabel}
                           </span>
                           <Link to={`/livro/${h.book_id}`} style={{ fontSize: '.75rem', color: 'var(--brand-muted)' }}>{t({ id: 'account.history.seeAvailability' })}</Link>
-                          <button type="button" style={{ fontSize: '.7rem', color: 'var(--brand-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
-                            onClick={() => { setHistory(prev => prev.filter((_, idx) => idx !== i)); }}
-                          >{t({ id: 'account.history.hide' })}</button>
+                          {renderHistActions('reservations', h.reserva_item_id, h.titulo || h.bib_ref || '\u2014', h.is_hidden_by_user)}
                         </div>
                       </div>
                     );
@@ -1758,7 +1846,8 @@ export default function AccountPage() {
                 )}
               </div>
             </div>
-          )}
+            );
+          })()}
 
           {/* ═══ AVISOS ═══ */}
           {activeTab === 'avisos' && (
@@ -1896,6 +1985,32 @@ export default function AccountPage() {
       </div>
 
       <Footer />
+          <Modal
+        isOpen={!!deleteHistoryTarget}
+        onClose={() => setDeleteHistoryTarget(null)}
+        title={t({ id: 'account.history.delete.confirmTitle' })}
+        size="small"
+      >
+        <div className="ab-modal__body">
+          <p>{t({ id: 'account.history.delete.confirmBody' })}</p>
+          {deleteHistoryTarget?.label && (
+            <p style={{ marginTop: 12, fontStyle: 'italic', color: 'var(--brand-muted)' }}>
+              {deleteHistoryTarget.label}
+            </p>
+          )}
+          <p style={{ marginTop: 12, color: '#f87171', fontSize: '.85rem' }}>
+            {t({ id: 'account.history.delete.irreversible' })}
+          </p>
+        </div>
+        <div className="ab-modal__actions">
+          <Button variant="secondary" onClick={() => setDeleteHistoryTarget(null)}>
+            {t({ id: 'common.cancel' })}
+          </Button>
+          <Button variant="danger" onClick={handleDeleteHistoryItem}>
+            {t({ id: 'account.history.delete.confirm' })}
+          </Button>
+        </div>
+      </Modal>
           <Modal
         isOpen={!!cancelTarget}
         onClose={() => !cancelling && setCancelTarget(null)}
