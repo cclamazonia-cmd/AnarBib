@@ -1,4 +1,13 @@
 {
+  "account.retention.banner.title": "Seus rastros pertencem a você.",
+  "account.retention.banner.body": "Seu histórico é conservado para seu uso pessoal. Você pode ocultar uma entrada (reversível, invisível por padrão) ou apagá-la definitivamente a qualquer momento.",
+  "account.retentionPrefs.title": "Preferências de conservação",
+  "account.retentionPrefs.intro": "Desativar a conservação de suas futuras atividades em {library}, por categoria. Sem efeito sobre seu histórico existente.",
+  "account.retentionPrefs.disableLoans": "Não conservar meus futuros empréstimos",
+  "account.retentionPrefs.disableReservations": "Não conservar minhas futuras reservas",
+  "account.retentionPrefs.disableConsultations": "Não conservar minhas futuras consultas",
+  "account.retentionPrefs.saved": "Preferências salvas.",
+  "account.retentionPrefs.note": "Estas opções afetam apenas suas atividades futuras. Para seu histórico passado, use as ações em cada linha acima.",
   "account.history.unhide": "Restaurar",
   "account.history.delete": "Apagar",
   "account.history.delete.confirmTitle": "Apagar definitivamente?",

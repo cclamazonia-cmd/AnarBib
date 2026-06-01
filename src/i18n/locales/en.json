@@ -1,4 +1,13 @@
 {
+  "account.retention.banner.title": "Your records belong to you.",
+  "account.retention.banner.body": "Your history is kept for your personal use. You can hide an entry (reversible, hidden by default) or delete it permanently at any time.",
+  "account.retentionPrefs.title": "Retention preferences",
+  "account.retentionPrefs.intro": "Disable retention of your future activity at {library}, by category. No effect on your existing history.",
+  "account.retentionPrefs.disableLoans": "Don't keep my future loans",
+  "account.retentionPrefs.disableReservations": "Don't keep my future reservations",
+  "account.retentionPrefs.disableConsultations": "Don't keep my future on-site consultations",
+  "account.retentionPrefs.saved": "Preferences saved.",
+  "account.retentionPrefs.note": "These options only affect your future activity. For your past history, use the actions on each row above.",
   "account.history.unhide": "Restore",
   "account.history.delete": "Delete",
   "account.history.delete.confirmTitle": "Delete permanently?",

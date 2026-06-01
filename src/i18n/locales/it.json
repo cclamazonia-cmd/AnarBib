@@ -1,4 +1,13 @@
 {
+  "account.retention.banner.title": "Le tue tracce ti appartengono.",
+  "account.retention.banner.body": "La tua cronologia è conservata per il tuo uso personale. Puoi nascondere una voce (reversibile, invisibile per impostazione predefinita) o eliminarla definitivamente in qualsiasi momento.",
+  "account.retentionPrefs.title": "Preferenze di conservazione",
+  "account.retentionPrefs.intro": "Disattiva la conservazione delle tue future attività presso {library}, per categoria. Senza effetto sulla cronologia esistente.",
+  "account.retentionPrefs.disableLoans": "Non conservare i miei futuri prestiti",
+  "account.retentionPrefs.disableReservations": "Non conservare le mie future prenotazioni",
+  "account.retentionPrefs.disableConsultations": "Non conservare le mie future consultazioni",
+  "account.retentionPrefs.saved": "Preferenze salvate.",
+  "account.retentionPrefs.note": "Queste opzioni riguardano solo le tue attività future. Per la cronologia passata, usa le azioni su ciascuna riga qui sopra.",
   "account.history.unhide": "Ripristina",
   "account.history.delete": "Elimina",
   "account.history.delete.confirmTitle": "Eliminare definitivamente?",

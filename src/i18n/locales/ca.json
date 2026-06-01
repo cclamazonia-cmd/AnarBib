@@ -1,4 +1,13 @@
 {
+  "account.retention.banner.title": "Els vostres rastres us pertanyen.",
+  "account.retention.banner.body": "El vostre historial es conserva per al vostre ús personal. Podeu amagar una entrada (reversible, invisible per defecte) o eliminar-la definitivament en qualsevol moment.",
+  "account.retentionPrefs.title": "Preferències de conservació",
+  "account.retentionPrefs.intro": "Desactiva la conservació de les vostres activitats futures a {library}, per categoria. Sense efecte sobre l'historial existent.",
+  "account.retentionPrefs.disableLoans": "No conservar els meus préstecs futurs",
+  "account.retentionPrefs.disableReservations": "No conservar les meves reserves futures",
+  "account.retentionPrefs.disableConsultations": "No conservar les meves consultes futures",
+  "account.retentionPrefs.saved": "Preferències desades.",
+  "account.retentionPrefs.note": "Aquestes opcions només afecten les vostres activitats futures. Per a l'historial passat, useu les accions de cada línia de dalt.",
   "account.history.unhide": "Restaura",
   "account.history.delete": "Elimina",
   "account.history.delete.confirmTitle": "Voleu eliminar definitivament?",

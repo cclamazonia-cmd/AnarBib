@@ -131,6 +131,10 @@ export default function AccountPage() {
   const [notifPrefs, setNotifPrefs] = useState({ disable_reserva_pronta: false, disable_consulta_pronta: false });
   const [notifPrefsSaving, setNotifPrefsSaving] = useState(false);
   const [notifPrefsMsg, setNotifPrefsMsg] = useState('');
+  // #CL.8 — préférences de rétention prospective (par domaine, pour la biblio active)
+  const [retentionPrefs, setRetentionPrefs] = useState({ loans: false, reservations: false, consultations: false });
+  const [retentionSaving, setRetentionSaving] = useState(false);
+  const [retentionMsg, setRetentionMsg] = useState('');
   const [wishlist, setWishlist] = useState([]);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
@@ -255,6 +259,16 @@ export default function AccountPage() {
           disable_consulta_pronta: !!prefsData[0].disable_consulta_pronta,
         });
       }
+      // #CL.8 — préférences de rétention prospective (filtrées sur la biblio active)
+      const { data: retData } = await supabase.rpc('fn_get_my_retention_preferences');
+      if (Array.isArray(retData) && libraryId) {
+        const forLib = retData.filter(r => r.library_id === libraryId);
+        setRetentionPrefs({
+          loans: !!forLib.find(r => r.domain === 'loans')?.disable_retention,
+          reservations: !!forLib.find(r => r.domain === 'reservations')?.disable_retention,
+          consultations: !!forLib.find(r => r.domain === 'consultations')?.disable_retention,
+        });
+      }
       // Cotisation : statut et historique pour la biblio active
       if (libraryId) {
         const [{ data: memData }, { data: rulesData }, { data: payData }] = await Promise.all([
@@ -326,6 +340,26 @@ export default function AccountPage() {
       setMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
       setMsgIsError(true);
       setDeleteHistoryTarget(null);
+    }
+  };
+
+  // #CL.8 C.4 — sauvegarde des préférences de rétention prospective (3 domaines)
+  const handleSaveRetentionPrefs = async () => {
+    if (!libraryId) return;
+    setRetentionSaving(true);
+    setRetentionMsg('');
+    try {
+      for (const domain of ['loans', 'reservations', 'consultations']) {
+        const { error } = await supabase.rpc('fn_set_my_retention_preference', {
+          p_library_id: libraryId, p_domain: domain, p_disable: retentionPrefs[domain],
+        });
+        if (error) throw error;
+      }
+      setRetentionMsg(t({ id: 'account.retentionPrefs.saved' }));
+    } catch (err) {
+      setRetentionMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
+    } finally {
+      setRetentionSaving(false);
     }
   };
 
@@ -1717,6 +1751,12 @@ export default function AccountPage() {
               <ContaTabHeader title={t({ id: 'account.history.title' })} onRefresh={() => loadData({ silent: true })} />
               <p className="ab-conta-hint">{t({ id: 'account.history.hint' })}</p>
 
+              {/* #CL.8 D.6 — bandeau pédagogique permanent (politique de conservation) */}
+              <div style={{ marginTop: 8, marginBottom: 8, padding: 12, background: 'rgba(96,165,250,.05)', borderRadius: 8, border: '1px solid rgba(96,165,250,.15)', fontSize: '.82rem', color: 'var(--brand-muted)' }}>
+                <strong style={{ color: 'inherit' }}>{t({ id: 'account.retention.banner.title' })}</strong>{' '}
+                {t({ id: 'account.retention.banner.body' })}
+              </div>
+
               {hiddenCount > 0 && (
                 <button type="button" style={{ ...histLinkBtn, marginBottom: 8 }}
                   onClick={() => setShowHiddenHistory(v => !v)}>
@@ -1845,6 +1885,43 @@ export default function AccountPage() {
                 </div>
                 )}
               </div>
+              {/* #CL.8 D.7 — préférences de conservation prospective (par domaine) */}
+              {libraryId && (
+              <div style={{ marginTop: 24, padding: 16, background: 'rgba(96,165,250,.05)', borderRadius: 8, border: '1px solid rgba(96,165,250,.15)' }}>
+                <h3 className="ab-conta-section-title" style={{ fontSize: '1rem', marginTop: 0, marginBottom: 8 }}>
+                  {t({ id: 'account.retentionPrefs.title' })}
+                </h3>
+                <p className="ab-conta-hint" style={{ marginTop: 0, marginBottom: 12 }}>
+                  {t({ id: 'account.retentionPrefs.intro' }, { library: libraryName })}
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 12 }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                    <input type="checkbox" checked={retentionPrefs.loans}
+                      onChange={(e) => setRetentionPrefs(p => ({ ...p, loans: e.target.checked }))} />
+                    <span>{t({ id: 'account.retentionPrefs.disableLoans' })}</span>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                    <input type="checkbox" checked={retentionPrefs.reservations}
+                      onChange={(e) => setRetentionPrefs(p => ({ ...p, reservations: e.target.checked }))} />
+                    <span>{t({ id: 'account.retentionPrefs.disableReservations' })}</span>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                    <input type="checkbox" checked={retentionPrefs.consultations}
+                      onChange={(e) => setRetentionPrefs(p => ({ ...p, consultations: e.target.checked }))} />
+                    <span>{t({ id: 'account.retentionPrefs.disableConsultations' })}</span>
+                  </label>
+                </div>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Button variant="secondary" onClick={handleSaveRetentionPrefs} disabled={retentionSaving}>
+                    {retentionSaving ? t({ id: 'common.saving' }) : t({ id: 'common.save' })}
+                  </Button>
+                  {retentionMsg && <span className="ab-conta-msg" style={{ fontSize: '.85rem' }}>{retentionMsg}</span>}
+                </div>
+                <p className="ab-conta-hint" style={{ marginTop: 12, marginBottom: 0, fontSize: '.78rem', fontStyle: 'italic' }}>
+                  {t({ id: 'account.retentionPrefs.note' })}
+                </p>
+              </div>
+              )}
             </div>
             );
           })()}

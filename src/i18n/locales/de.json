@@ -1,4 +1,13 @@
 {
+  "account.retention.banner.title": "Ihre Spuren gehören Ihnen.",
+  "account.retention.banner.body": "Ihr Verlauf wird für Ihren persönlichen Gebrauch gespeichert. Sie können einen Eintrag ausblenden (umkehrbar, standardmäßig unsichtbar) oder ihn jederzeit endgültig löschen.",
+  "account.retentionPrefs.title": "Aufbewahrungseinstellungen",
+  "account.retentionPrefs.intro": "Deaktivieren Sie die Aufbewahrung Ihrer künftigen Aktivitäten bei {library}, nach Kategorie. Ohne Auswirkung auf Ihren bestehenden Verlauf.",
+  "account.retentionPrefs.disableLoans": "Meine künftigen Ausleihen nicht aufbewahren",
+  "account.retentionPrefs.disableReservations": "Meine künftigen Reservierungen nicht aufbewahren",
+  "account.retentionPrefs.disableConsultations": "Meine künftigen Einsichtnahmen nicht aufbewahren",
+  "account.retentionPrefs.saved": "Einstellungen gespeichert.",
+  "account.retentionPrefs.note": "Diese Optionen betreffen nur Ihre künftigen Aktivitäten. Für Ihren bisherigen Verlauf verwenden Sie die Aktionen in jeder Zeile oben.",
   "account.history.unhide": "Wiederherstellen",
   "account.history.delete": "Löschen",
   "account.history.delete.confirmTitle": "Endgültig löschen?",

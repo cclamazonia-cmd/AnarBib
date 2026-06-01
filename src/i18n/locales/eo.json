@@ -1,4 +1,13 @@
 {
+  "account.retention.banner.title": "Viaj spuroj apartenas al vi.",
+  "account.retention.banner.body": "Via historio estas konservata por via persona uzo. Vi povas kaŝi enigon (malfarebla, defaŭlte nevidebla) aŭ forigi ĝin por ĉiam iam ajn.",
+  "account.retentionPrefs.title": "Konservaj preferoj",
+  "account.retentionPrefs.intro": "Malŝalti la konservadon de viaj estontaj agadoj ĉe {library}, laŭ kategorio. Sen efiko sur via ekzistanta historio.",
+  "account.retentionPrefs.disableLoans": "Ne konservi miajn estontajn pruntojn",
+  "account.retentionPrefs.disableReservations": "Ne konservi miajn estontajn rezervojn",
+  "account.retentionPrefs.disableConsultations": "Ne konservi miajn estontajn surlokajn konsultojn",
+  "account.retentionPrefs.saved": "Preferoj konservitaj.",
+  "account.retentionPrefs.note": "Ĉi tiuj opcioj nur efikas viajn estontajn agadojn. Por via pasinta historio, uzu la agojn sur ĉiu linio supre.",
   "account.history.unhide": "Restarigi",
   "account.history.delete": "Forigi",
   "account.history.delete.confirmTitle": "Ĉu forigi por ĉiam?",
