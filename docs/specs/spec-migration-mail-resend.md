@@ -1,10 +1,16 @@
 # spec-migration-mail-resend.md — Migration du provider mail Brevo → Resend
 
-**Version** : v0.3
-**Date** : 21/05/2026 (révision de la v0.2 du 21/05/2026, archivée sous `docs/specs/archive/spec-migration-mail-resend-v0.2.md` ; la v0.1 du 13/05/2026 est archivée sous `docs/specs/archive/spec-migration-mail-resend-v0.1.md`)
+**Version** : v0.4
+**Date** : 1er juin 2026 (v0.4) — révisions précédentes : v0.3 du 21/05/2026 ; v0.2 du 21/05/2026 (archivée `docs/specs/archive/spec-migration-mail-resend-v0.2.md`) ; v0.1 du 13/05/2026 (archivée `docs/specs/archive/spec-migration-mail-resend-v0.1.md`)
 **Statut** : en cours d'exécution — sous-paquets R.1, R.2 et R.3 clos le 21/05 ; R.4 (bascule de `MAIL_PROVIDER`) à venir
 **Périmètre** : 8 Edge Functions Supabase porteuses d'envoi mail + transport mail partagé
 **Auteur·rices** : Xavier (rédaction politique), Claude (rédaction technique)
+
+---
+
+## Changelog v0.3 → v0.4
+
+La v0.4 corrige la **doctrine de déploiement des Edge Functions**, qui décrivait dans la v0.3 un déploiement CLI manuel EF-par-EF inexistant. La lecture du `.woodpecker.yml` (étape `deploy-edge-functions`) établit le pipeline réel : Woodpecker redéploie **toutes** les EF de `supabase/functions/` à chaque push (`_shared/` exclu), `notify-event` comprise ; `verify_jwt` est porté par `supabase/config.toml` et appliqué par la CLI ; le seul interdit est l'outil MCP `deploy_edge_function` (limite de taille). Les passages §4.6, §5.3 (R.2 et R.3), §6.1 et §6.6 (Règle 2) sont alignés. Conséquence sur l'analyse de risque : une indisponibilité de Woodpecker bloque désormais aussi le déploiement des EF (RQ-9 corrigé) — le code committé dans git reste la sauvegarde, le déploiement reprenant au premier push réussi.
 
 ---
 
@@ -32,7 +38,7 @@ La v0.2 révise la v0.1 sur neuf points, à la lumière de huit jours d'évoluti
 
 4. **Renumérotation.** La v0.1 parlait de « paquet 28 ». La v0.2 adopte la nomenclature du backlog du 21/05 : ce chantier est l'item #110, avec des sous-paquets internes nommés R.1, R.2, etc.
 
-5. **Doctrine d'implémentation renforcée (§6.6).** Les règles de déploiement du projet — migrations SQL par fichier horodaté commité, jamais via l'outil MCP `apply_migration` ; déploiement de `notify-event` par CLI `supabase functions deploy`, jamais via l'outil MCP `deploy_edge_function` ; pas de branche Supabase de développement — sont désormais une section ferme et non une mention incidente.
+5. **Doctrine d'implémentation renforcée (§6.6).** Les règles de déploiement du projet — migrations SQL par fichier horodaté commité, jamais via l'outil MCP `apply_migration` ; déploiement des Edge Functions par le pipeline Woodpecker (étape `deploy-edge-functions`), jamais via l'outil MCP `deploy_edge_function` ; pas de branche Supabase de développement — sont désormais une section ferme et non une mention incidente.
 
 6. **Vérification TLS (§5, préalables).** Le dashboard Resend expose un réglage TLS (mode « Opportunistic TLS » par défaut). La v0.2 inscrit une micro-vérification de ce réglage dans les préalables.
 
@@ -414,7 +420,7 @@ La v0.1 traitait les deux en une fois : bascule du transport **et** refonte du r
 - **Dans le périmètre de la migration #110** : seul le transport de `register` bascule. L'appel Brevo inliné adopte le wrapper `MAIL_PROVIDER`. Le rendu HTML propre de `register` est conservé tel quel. Objectif : que le mail de bienvenue parte de Resend, sans rien changer d'autre.
 - **Hors périmètre de la migration #110** : la refonte du rendu de `register` pour le faire converger vers `renderEmail` est un travail d'hygiène, à rattacher soit au chantier d'alignement R.7, soit au chantier-cadre Biblioteca s'il touche aux mails de `register`. Elle n'est pas traitée ici.
 
-Cette dissociation est cohérente avec l'inversion actée en Q1 : on ne mélange pas une migration de provider avec une refonte de rendu. **Point d'attention pour le sous-paquet `register` (§5)** : `register` a `verify_jwt` activé. Le déploiement CLI devra préserver ce réglage — un déploiement sans le flag adéquat le réinitialiserait, ce qui exposerait l'EF.
+Cette dissociation est cohérente avec l'inversion actée en Q1 : on ne mélange pas une migration de provider avec une refonte de rendu. **Point d'attention pour le sous-paquet `register` (§5)** : `register` a `verify_jwt` activé. Ce réglage est porté par `supabase/config.toml` ; l'étape Woodpecker `deploy-edge-functions` lit ce fichier et applique le bon flag par fonction, donc `verify_jwt` est préservé automatiquement au déploiement — aucun flag manuel à passer.
 
 ### 4.7 Variables d'environnement
 
@@ -507,7 +513,7 @@ La migration #110 se déroule en sept sous-paquets nommés R.1 à R.7. La logiqu
 | R.2.4 | Test runtime, `MAIL_PROVIDER` non défini (donc `brevo`) : déclencher un mail via `notify-event` (par exemple une réservation de test), vérifier que le comportement et le rendu sont strictement identiques à avant. |
 | R.2.5 | Test runtime local, `MAIL_PROVIDER=resend` : via `supabase functions serve` en local, vérifier que `sendViaResend` envoie correctement et que le mail arrive. |
 
-**Déploiement.** `notify-event` est déployé par la CLI `supabase functions deploy notify-event`, jamais par l'outil MCP (cf. §6.6). La fonction fait plus de vingt fichiers une fois le bundle `_shared` inclus ; le déploiement CLI est la seule voie fiable.
+**Déploiement.** `notify-event` est déployée par le pipeline Woodpecker (étape `deploy-edge-functions`) à chaque push, comme toutes les EF (cf. §6.6). Son bundle dépasse vingt fichiers une fois `_shared` inclus (~150 Ko) : il excède la limite de l'outil MCP `deploy_edge_function`, qui est donc proscrit. La CLI Supabase qu'utilise Woodpecker n'a pas cette limite.
 
 **Critère de succès.** `notify-event` déployé avec le wrapper en place ; en production `MAIL_PROVIDER` reste `brevo` et le comportement est inchangé ; `sendViaResend` est validée en local.
 
@@ -523,10 +529,10 @@ Les six transports concernés : la copie privée de `notify-internal-task`, et l
 |---|---|
 | R.3.1 | `notify-internal-task` : sa copie de `_shared/transport/email.ts` reçoit le même traitement qu'en R.2 (renommage `sendViaBrevo`, ajout `sendViaResend` et `sendEmail`). |
 | R.3.2 | Les cinq EF à transport inliné : pour chacune, application de la règle de décision de §4.3 — extraction d'une fonction de transport propre par défaut, bloc conditionnel sur place seulement si l'extraction est disproportionnée. Le choix retenu pour chaque EF est consigné dans le commit correspondant. |
-| R.3.3 | Cas `register` : seul le transport bascule (adoption du wrapper). Le rendu HTML propre de `register` est conservé tel quel (cf. §4.6). **Au déploiement, préserver `verify_jwt` activé** : le déploiement CLI doit passer le flag adéquat, faute de quoi l'EF serait exposée. |
+| R.3.3 | Cas `register` : seul le transport bascule (adoption du wrapper). Le rendu HTML propre de `register` est conservé tel quel (cf. §4.6). **`verify_jwt` reste activé** : le réglage est porté par `supabase/config.toml` et appliqué automatiquement par Woodpecker au déploiement (aucun flag manuel). La non-régression est confirmée au test (cf. R.3.4 / §6.1). |
 | R.3.4 | Test runtime pour chaque EF, `MAIL_PROVIDER` non défini (`brevo`) : déclencher le mail correspondant, vérifier le comportement inchangé. La procédure de test par EF est détaillée en annexe A3. |
 
-**Déploiement.** Chaque EF est déployée individuellement par `supabase functions deploy <nom>`. Un commit par EF, conformément à la doctrine « un fix à la fois ».
+**Déploiement.** Le déploiement se fait au push : l'étape Woodpecker `deploy-edge-functions` redéploie l'ensemble des EF. La doctrine « un fix à la fois » s'applique au commit et au test — un commit ciblé par EF, testé isolément (`MAIL_PROVIDER` à `brevo`) avant de passer à la suivante — et non à la granularité du déploiement, globale à chaque push.
 
 **Risque.** Moyen — c'est l'étape qui touche le plus de fichiers. Mitigation : un commit et un test runtime par EF, dans l'ordre du moins critique au plus critique (suggestion : `notify-mid-loan-reading`, `notify-document-permission-request`, `notify-network-weekly-report`, `notify-weekly-report`, `notify-library-request`, `notify-internal-task`, `register` en dernier car porteuse du `verify_jwt`).
 
@@ -698,7 +704,7 @@ Cette sous-section est une nouveauté de la v0.2. La v0.1 mentionnait ces règle
 
 **Règle 1 — Migrations SQL : fichier horodaté commité, jamais l'outil MCP `apply_migration`.** Toute migration de base de données est écrite dans un fichier horodaté du dossier de migrations, committée, et appliquée par Woodpecker via `db push`. L'outil MCP `apply_migration` est proscrit : il horodate la migration au moment de l'appel, ce qui crée un décalage avec l'ordre des fichiers committés et fait échouer le CI. Le présent chantier ne prévoit pas de migration DB, mais la règle est rappelée car elle est absolue et vaut pour tout travail connexe.
 
-**Règle 2 — `notify-event` : déploiement par CLI `supabase functions deploy`, jamais l'outil MCP `deploy_edge_function`.** La fonction `notify-event`, une fois le bundle `_shared/` inclus, dépasse vingt fichiers et un volume important. L'outil MCP de déploiement d'Edge Function a une limite de taille incompatible avec ce volume. Le déploiement se fait exclusivement par la CLI `supabase functions deploy notify-event`. Cette règle vaut aussi, par cohérence, pour les autres EF du chantier : le déploiement passe par la CLI. Pour `register`, la commande de déploiement doit préserver `verify_jwt` activé (cf. §4.6).
+**Règle 2 — Edge Functions : déploiement par Woodpecker au push ; l'outil MCP `deploy_edge_function` est proscrit.** L'étape `deploy-edge-functions` du pipeline redéploie **toutes** les EF de `supabase/functions/` à chaque push sur `main` (boucle sur les sous-dossiers, `_shared/` exclu), `notify-event` comprise. Le `verify_jwt` de chaque fonction est porté par `supabase/config.toml` et appliqué par la CLI au déploiement — c'est ainsi que `register` conserve son `verify_jwt` activé, sans flag manuel (cf. §4.6). Le seul interdit est l'outil MCP `deploy_edge_function` : il échoue sur les bundles qui dépassent la limite de l'API (`notify-event` ~150 Ko une fois `_shared/` inclus) ; la CLI Supabase qu'utilise Woodpecker n'a pas cette limite. En dépannage hors pipeline, un déploiement manuel se fait par cette même CLI (`supabase functions deploy <nom>`), jamais par MCP.
 
 **Règle 3 — Pas de branche Supabase de développement.** Le flux du projet est Codeberg plus Woodpecker. On ne crée pas de branche Supabase de dev, et on ne recourt pas à un merge de branche Supabase. L'outil MCP `merge_branch` n'a pas d'usage dans ce chantier. Toute évolution passe par un commit sur le dépôt git et le pipeline Woodpecker.
 
@@ -970,8 +976,8 @@ Les variantes `ANARBIB_SENDER_EMAIL`, `NETWORK_SENDER_EMAIL`, `BREVO_SENDER_MAIL
 
 **RQ-9 — Pipeline Woodpecker indisponible pendant le chantier.**
 Probabilité : faible. Impact : moyen.
-Le déploiement des Edge Functions passe par la CLI `supabase functions deploy`. Une indisponibilité de Codeberg ou Woodpecker n'empêche pas ce déploiement, mais bloque l'application d'éventuelles migrations.
-**Mitigation.** Le chantier #110 ne comporte pas de migration DB ; le déploiement des EF par CLL est autonome vis-à-vis de Woodpecker. Si Woodpecker est indisponible, le chantier peut continuer sur sa partie Edge Functions et attendre le rétablissement pour tout ce qui passerait par le pipeline.
+Le déploiement des Edge Functions **et** des migrations passe par Woodpecker (étapes `deploy-edge-functions` et `deploy-migrations`). Une indisponibilité de Codeberg ou Woodpecker bloque donc **tout** déploiement jusqu'au rétablissement.
+**Mitigation.** Le code committé reste en sécurité dans git ; le déploiement reprend automatiquement au premier push réussi après rétablissement. En dépannage extrême et hors pipeline, une EF peut être déployée à la main par CLI (`supabase functions deploy <nom>`), jamais par l'outil MCP.
 
 ### 9.3 Risques politiques
 
@@ -1019,7 +1025,7 @@ Une panne majeure de Resend empêcherait tout envoi. Les EF retourneraient des r
 | RQ-6 | Fenêtre temporelle inadéquate pour R.4 | Faible | Moyen | Faible | Fenêtre calme validée en R.4.1 |
 | RQ-7 | Rollback non exécuté à temps | Faible | Élevé | Modéré | Présence 2h post-bascule + tests immédiats |
 | RQ-8 | Confusion variantes historiques de variables | Moyenne | Faible | Faible | Discipline + nettoyage R.6.3 |
-| RQ-9 | Pipeline Woodpecker indisponible | Faible | Moyen | Faible | Déploiement EF par CLI, autonome |
+| RQ-9 | Pipeline Woodpecker indisponible | Faible | Moyen | Faible | Code committé safe (git) ; reprise du déploiement au rétablissement |
 | RQ-10 | Validation accidentelle page tracking | Faible | Élevé politiquement | Modéré | Garde-fou inscrit à 4 niveaux |
 | RQ-11 | Perception négative de la migration | Faible | Faible | Faible | Note de migration en R.5 |
 | RQ-12 | Pression future pour réactiver tracking | Faible | Élevé politiquement | Modéré | Inscription registre RGPD + critère 8.4.4 |

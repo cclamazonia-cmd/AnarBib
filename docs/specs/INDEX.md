@@ -1,6 +1,6 @@
 # 📚 INDEX du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 31 mai 2026 (audit du corpus, groupe A appliqué, refonte INDEX/INVENTAIRE)
+**Dernière mise à jour** : 1er juin 2026 (statut #CL.8 actualisé : implémentation en cours) — refonte précédente : 31 mai 2026 (audit du corpus, groupe A, refonte INDEX/INVENTAIRE)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document est la **porte d'entrée** du corpus de specs. Pour la description détaillée de chaque spec (statut d'implémentation, dépendances, dates, chantiers liés), voir [`INVENTAIRE.md`](./INVENTAIRE.md).
@@ -40,7 +40,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
 | Notifications lecteur·rice (canal in-app) | [`spec-notifications-lecteur.md`](./spec-notifications-lecteur.md) | v1.0 (31/05/2026) | 🟢 Référence — lien #CL.6 et #CL.7 livrés |
-| Maîtrise lectrice de la rétention de l'historique | [`spec-historico-retencao-lectrice.md`](./spec-historico-retencao-lectrice.md) | v1.0 (31/05/2026) | 🟡 Doctrine arrêtée — implémentation #CL.8 à venir |
+| Maîtrise lectrice de la rétention de l'historique | [`spec-historico-retencao-lectrice.md`](./spec-historico-retencao-lectrice.md) | v1.0 (31/05/2026) | 🟠 En cours — #CL.8 : backend + C.3/C.4 en prod, C.5/C.6 en attente de déploiement |
 | Notification de prorrogação granulaire | [`spec-notify-prorrogacao-granulaire.md`](./spec-notify-prorrogacao-granulaire.md) | v0.1 (29/05/2026) | 🟡 Cadrage, lié `#NOTIFY-Painel-acts` |
 
 ### 📱 Mode terrain / mobile *(nouveau famille)*
@@ -59,7 +59,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Migration mail Brevo → Resend | [`spec-migration-mail-resend.md`](./spec-migration-mail-resend.md) | v0.3 (21/05/2026) | 🟠 En cours (R.1/R.2/R.3 clos, R.4 à venir, R.6 le 05/06) |
+| Migration mail Brevo → Resend | [`spec-migration-mail-resend.md`](./spec-migration-mail-resend.md) | v0.4 (01/06/2026) | 🟠 En cours (R.1/R.2/R.3 clos, R.4 à venir, R.6 le 05/06 ; doctrine déploiement EF corrigée v0.4) |
 | Cartographie du réseau AnarBib | [`spec-cartographie-reseau.md`](./spec-cartographie-reseau.md) | v0.1 (27/05/2026) | 🟡 Brouillon, 12 arbitrages à trancher, lié `#RESEAU-FED` |
 
 ### 🔵 Specs doctrinales de chantier ponctuel — référence historique

@@ -434,7 +434,7 @@ spec-cartographie-reseau v0.1
 **Domaine** : Maîtrise lectrice de la rétention de son historique
 **Version actuelle** : v1.0 (31 mai 2026)
 **Taille** : ~32 Ko, 762 lignes
-**Statut** : 🟡 Doctrine arrêtée — implémentation à venir, lien #CL.8 cahier Dunkerque §2.8
+**Statut** : 🟠 En cours — #CL.8 : backend en prod (C.1a/C.2/C.1b), frontend lectrice C.3/C.4 en prod, C.5/C.6 committés en attente de déploiement. Lien #CL.8 cahier Dunkerque §2.8
 
 **Périmètre** :
 - Politique de rétention de l'historique lecteur (configurable côté lecteur·rice)
@@ -447,7 +447,7 @@ spec-cartographie-reseau v0.1
 **Dépendances sortantes** : aucune directe.
 
 **Chantiers liés** :
-- #CL.8 (maîtrise de l'historique par le lecteur) — implémentation à venir
+- #CL.8 (maîtrise de l'historique par le lecteur) — implémentation en cours (backend + C.3/C.4 en prod, C.5/C.6 en attente de déploiement)
 
 ---
 
@@ -522,7 +522,7 @@ spec-cartographie-reseau v0.1
 ### 📧 `spec-migration-mail-resend.md`
 
 **Domaine** : Migration du provider mail Brevo → Resend
-**Version actuelle** : v0.3 (21 mai 2026)
+**Version actuelle** : v0.4 (1er juin 2026 — doctrine de déploiement EF alignée sur le pipeline Woodpecker réel)
 **Versions précédentes archivées** : v0.1, v0.2 dans `archive/`
 **Taille** : ~162 Ko (très détaillée), 1469 lignes
 **Statut** : 🟠 En cours d'implémentation (item #110 du backlog v23, score 15)
