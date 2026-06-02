@@ -2,16 +2,14 @@
 // AnarBib — i18n
 // Architecture multilingue avec react-intl.
 // Le portugais du Brésil est la locale par défaut.
+//
+// Chargement : pt-BR est embarqué statiquement (défaut + fallback,
+// toujours disponible immédiatement). Les 7 autres langues sont chargées
+// à la demande via import() dynamique — Vite produit un chunk par langue,
+// et chaque visiteur ne télécharge que la sienne.
 // ═══════════════════════════════════════════════════════════
 
 import ptBR from './locales/pt-BR.json';
-import fr from './locales/fr.json';
-import es from './locales/es.json';
-import en from './locales/en.json';
-import it from './locales/it.json';
-import de from './locales/de.json';
-import ca from './locales/ca.json';
-import eo from './locales/eo.json';
 
 export const DEFAULT_LOCALE = 'pt-BR';
 
@@ -33,26 +31,43 @@ export const SUPPORTED_LOCALES = [
   { code: 'eo', label: 'Esperanto' },
 ];
 
-const MESSAGES = {
-  'pt-BR': ptBR,
-  'fr': fr,
-  'es': es,
-  'en': en,
-  'it': it,
-  'de': de,
-  'ca': ca,
-  'eo': eo,
+// Source de vérité des codes supportés (remplace l'ancien map MESSAGES,
+// qui importait toutes les langues statiquement).
+const SUPPORTED_CODES = new Set(SUPPORTED_LOCALES.map((l) => l.code));
+
+// Chargeurs dynamiques des langues non-défaut. pt-BR n'y figure pas :
+// il est embarqué statiquement ci-dessus (fallback immédiat, sans réseau).
+const LOADERS = {
+  fr: () => import('./locales/fr.json'),
+  es: () => import('./locales/es.json'),
+  en: () => import('./locales/en.json'),
+  it: () => import('./locales/it.json'),
+  de: () => import('./locales/de.json'),
+  ca: () => import('./locales/ca.json'),
+  eo: () => import('./locales/eo.json'),
 };
 
 const STORAGE_KEY = 'anarbib.locale';
 const SCROLL_RESTORE_KEY = 'anarbib.scrollRestore';
 
-export function getMessages(locale) {
-  return MESSAGES[locale] || MESSAGES[DEFAULT_LOCALE];
+// Messages de la locale par défaut, disponibles synchroniquement.
+export const defaultMessages = ptBR;
+
+// Charge les messages d'une locale.
+// pt-BR (ou toute locale inconnue) est retourné immédiatement ; les autres
+// sont importées à la demande, avec repli sur pt-BR si le chunk échoue.
+export async function loadMessages(locale) {
+  if (locale === DEFAULT_LOCALE || !LOADERS[locale]) return ptBR;
+  try {
+    const mod = await LOADERS[locale]();
+    return mod.default;
+  } catch {
+    return ptBR;
+  }
 }
 
 export function isSupported(locale) {
-  return Boolean(locale && MESSAGES[locale]);
+  return Boolean(locale && SUPPORTED_CODES.has(locale));
 }
 
 export function detectLocale() {
@@ -75,11 +90,12 @@ export function detectLocale() {
 
   // 3. Navigateur (match partiel: pt → pt-BR, fr-FR → fr)
   try {
+    const codes = SUPPORTED_LOCALES.map((l) => l.code);
     const navLangs = navigator.languages || [navigator.language];
     for (const lang of navLangs) {
       if (isSupported(lang)) return lang;
       const short = (lang || '').split('-')[0];
-      const match = Object.keys(MESSAGES).find(k => k.startsWith(short));
+      const match = codes.find((k) => k.startsWith(short));
       if (match) return match;
     }
   } catch {

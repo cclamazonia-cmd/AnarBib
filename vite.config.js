@@ -1,25 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
-import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    // ── Analyseur de bundle (diagnostic, n'affecte PAS le build) ───
-    // Génère dist/stats.html après chaque `npm run build` : une treemap
-    // qui montre quelle dépendance pèse quoi. Sert à décider quoi
-    // découper en manualChunks. Le plugin n'observe que — il ne
-    // transforme rien dans le bundle de production.
-    // Pour le désactiver une fois le diagnostic fait : commenter
-    // cette ligne (ou retirer le plugin + la dépendance).
-    visualizer({
-      filename: 'dist/stats.html',
-      open: true,        // ouvre la treemap dans le navigateur après build
-      gzipSize: true,    // affiche aussi les tailles gzippées
-      brotliSize: true,  // et brotli, pour comparaison
-    }),
   ],
 
   // ── GitHub Pages / Codeberg Pages ─────────────────────────

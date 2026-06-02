@@ -1,11 +1,11 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LibraryProvider, useLibrary } from '@/contexts/LibraryContext';
 import { ToastProvider } from '@/contexts/ToastContext';
 import { useTheme } from '@/lib/theme';
-import { detectLocale, getMessages } from '@/i18n';
+import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
 import ScrollButtons from '@/components/ScrollButtons';
@@ -46,7 +46,25 @@ function ThemeGate({ children }) {
 // ── App ──────────────────────────────────────────────────────────────
 export default function App() {
   const locale = detectLocale();
-  const messages = getMessages(locale);
+  // pt-BR est embarqué : disponible synchroniquement, aucun délai au démarrage.
+  // Les autres langues sont chargées une seule fois au mount (le changement
+  // de langue passe par un reload, cf. setLocale), donc pas de switch à chaud.
+  const [messages, setMessages] = useState(locale === DEFAULT_LOCALE ? defaultMessages : null);
+
+  useEffect(() => {
+    if (messages) return; // pt-BR déjà présent : rien à charger
+    let alive = true;
+    loadMessages(locale).then((m) => {
+      if (alive) setMessages(m);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [locale, messages]);
+
+  // Bref fallback uniquement pour une langue ≠ pt-BR, le temps de charger
+  // son chunk (~une centaine de Ko). pt-BR n'y passe jamais.
+  if (!messages) return <LoadingFallback />;
 
   return (
     <IntlProvider locale={locale} messages={messages} defaultLocale="pt-BR">
