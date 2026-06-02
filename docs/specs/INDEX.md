@@ -1,9 +1,28 @@
 # 📚 INDEX du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 1er juin 2026 (statut #CL.8 actualisé : implémentation en cours) — refonte précédente : 31 mai 2026 (audit du corpus, groupe A, refonte INDEX/INVENTAIRE)
+**Dernière mise à jour** : 2 juin 2026 (trilogie doctrinale : `spec-multi-appartenance-lecteur` v0.3 + `spec-partenariat-biblios` v0.3 figées, `spec-flux-partage-numerique` v0.2 charpentée ; registre enrichi MULTI/PARTNER/ILL/VALID-β1-γ1) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — + ordre de mise en œuvre) — précédemment : statut #CL.8 actualisé ; 31 mai 2026 (audit du corpus, groupe A, refonte INDEX/INVENTAIRE)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document est la **porte d'entrée** du corpus de specs. Pour la description détaillée de chaque spec (statut d'implémentation, dépendances, dates, chantiers liés), voir [`INVENTAIRE.md`](./INVENTAIRE.md).
+
+---
+
+## ⚠️ Préséance & source de vérité *(à lire en premier — humain comme IA)*
+
+**En cas de conflit entre deux textes, l'ordre de préséance est :**
+
+1. **[`REGISTRE_decisions.md`](./REGISTRE_decisions.md)** — foyer unique des **décisions** (arbitrages) et des **doctrines transverses**. Source de vérité sur *ce qui a été choisi et si ça tient encore*. On cite ses IDs (`DOC-…`, `RES-…`, `CAT-…`), on ne reformule jamais une décision ailleurs.
+2. **La spec courante** du domaine (version la plus récente) — source de vérité sur *le design/comportement*.
+3. **Le backlog** (`AnarBib-Backlog-…-vN.docx`) — source de vérité sur *l'état et les priorités*.
+
+**Tout le reste est de la *trace* non-normative** : `CADRAGE_*`, `CHANTIER_*`, `SESSION_*`, `BILAN_*`, `AUDIT_*`, `QA_*`. Une trace enregistre un raisonnement à un instant T ; sur un conflit avec la couche référence ci-dessus, **la trace est périmée par définition**.
+
+**Faits transverses gouvernés par le registre** (ne pas s'y fier depuis une spec isolée) :
+- **Nombre de locales = 8** (`DOC-I18N-1`). *Tout « 6 locales » lu dans une spec est une trace périmée, pas une consigne.*
+- **Déploiement** = `git push` → Woodpecker (`DOC-DEPLOY-1/2/3`).
+- **RPC v3** (`DOC-RPC-3`), **compteurs « page = périmètre »** (`DOC-PERIM-1`), création d'objets backend v2 (`DOC-OBJ-2`).
+
+> État des drifts connus et corrections en une touche : [`AUDIT_coherence_corpus_2026-06-02.md`](../decisions/AUDIT_coherence_corpus_2026-06-02.md).
 
 ---
 
@@ -42,18 +61,39 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Notifications lecteur·rice (canal in-app) | [`spec-notifications-lecteur.md`](./spec-notifications-lecteur.md) | v1.0 (31/05/2026) | 🟢 Référence — lien #CL.6 et #CL.7 livrés |
 | Maîtrise lectrice de la rétention de l'historique | [`spec-historico-retencao-lectrice.md`](./spec-historico-retencao-lectrice.md) | v1.0 (31/05/2026) | 🟠 En cours — #CL.8 : backend + C.3/C.4 en prod, C.5/C.6 en attente de déploiement |
 | Notification de prorrogação granulaire | [`spec-notify-prorrogacao-granulaire.md`](./spec-notify-prorrogacao-granulaire.md) | v0.1 (29/05/2026) | 🟡 Cadrage, lié `#NOTIFY-Painel-acts` |
+| Multi-appartenance lectrice (plusieurs biblios) | [`spec-multi-appartenance-lecteur.md`](./spec-multi-appartenance-lecteur.md) | v0.3 (02/06/2026) | 🟡 Charpente figée — arbitrée, audit Zone 23 intégré ; remplissage à venir (lié #CL.10). Absorbe `spec-migration-compte` |
 
 ### 📱 Mode terrain / mobile *(nouveau famille)*
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Carte-lecteur AnarBib (phase β) | [`spec-carte-lecteur-v0_1.docx`](./spec-carte-lecteur-v0_1.docx) | v0.1 (28/05/2026) | 🟢 Phase β en prod (génération + révocation), phase γ au Paquet 3 |
+| Carte-lecteur AnarBib (phase β) | [`spec-carte-lecteur-v0_1.md`](./spec-carte-lecteur-v0_1.md) | v0.1 (28/05/2026) | 🟢 Phase β en prod (génération + révocation), phase γ au Paquet 3 |
 
 ### 📐 Modélisation structurelle *(nouveau famille)*
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
 | Granularité du modèle sur l'exemplaire | [`spec-granularite-item.md`](./spec-granularite-item.md) | v1 (23/05/2026) | 🟡 Cadrage, chantier `#MODEL-item-grain` — pierre angulaire |
+
+### 🗂️ Catalogação *(nouvelle famille — chantier Catalogação, 01/06)*
+
+| Domaine | Spec de référence | Version | Statut |
+|---|---|---|---|
+| Fiche, registre & paliers | [`spec-catalogacao-fiche-et-paliers.md`](./spec-catalogacao-fiche-et-paliers.md) | v0.4 (01/06/2026) | 🟡 Spécifiée — premier lot (aucune migration DB) |
+| Exemplaires : circulation & doublons | [`spec-exemplaires-circulation.md`](./spec-exemplaires-circulation.md) | v0.2 (01/06/2026) | 🟡 Spécifiée — coordonnée item-grain + acquisition |
+| Module capas | [`spec-module-capas.md`](./spec-module-capas.md) | v0.2 (01/06/2026) | 🟡 Spécifiée — P1 (fix chemin) livrable immédiatement |
+| Sources externes & autorités | [`spec-sources-externes-autorites.md`](./spec-sources-externes-autorites.md) | v0.2 (01/06/2026) | 🟡 Spécifiée |
+
+> Chantier coordonné avec `spec-granularite-item` (`#MODEL-item-grain`, couche *trace*) et `spec-acquisition-provenance` (couche *provenance* — migration `exemplares` **mutualisée**). Ordre de mise en œuvre et garde-fous : voir `INVENTAIRE.md` § « Ordre de mise en œuvre — chantier Catalogação ».
+
+### 🔎 Catalogue & découverte (lecteur) *(nouvelle famille — atelier RebAL, #OPAC / #CATALOG-EXT)*
+
+| Domaine | Spec de référence | Version | Statut |
+|---|---|---|---|
+| Page catalogue — couche découverte (facettes, sujets, favoris, parcours) | [`spec-catalogue-decouverte.md`](./spec-catalogue-decouverte.md) | v0.1 (01/06/2026) | 🟡 Cadrage — cluster #OPAC7–11 |
+| Notice & autorités enrichies (BookPage / AuthorPage) | [`spec-notice-autorite-enrichie.md`](./spec-notice-autorite-enrichie.md) | v0.1 (01/06/2026) | 🟡 Cadrage — #OPAC1–6 / #AUT1–4 |
+
+> Couche **lecteur** (affichage / découverte), **en aval** du chantier Catalogação : consomme le filtre `visibility` (exemplaires #2), les capas (module capas #3) et la couche autorité (sources & autorités #4). Lignes rouges : anti-tracking (aucun appel tiers révélant une consultation) + autonomie (cloisonnement des compteurs). Annonce une spec dédiée `spec-atelier-autorites`.
 
 ### 📧 Infrastructure transverse
 
@@ -86,12 +126,13 @@ Cinq specs constituent la lecture prioritaire pour comprendre l'état doctrinal 
 
 ---
 
-## 🆕 Specs annoncées (cadrées au backlog v23, pas encore livrées)
+## 🆕 Specs annoncées (cadrées, pas encore remplies)
 
-Le backlog v23 du 31/05/2026 acte la préparation de deux specs à rédiger dans les sessions suivantes :
+- **`spec-partenariat-biblios`** — **charpente figée v0.3 le 02/06** (`PARTNER-D1..D9` au registre ; cadrage `CADRAGE_partenariat_stabilise_2026-06-02.md`). Prolongement du chantier `#PARTNERS` livré le 24/05. Remplissage à venir, après `spec-multi-appartenance-lecteur`.
+- **`spec-flux-partage-numerique`** (#ILL-digital) — circuit d'envoi de documents numériques entre biblios partenaires (`CADRAGE_ILL-digital_2026-05-25`). **Charpente figée v0.2 le 02/06** (`ILL-1..ILL-9` au registre, mandat BLMF) ; remplissage à venir.
+- **`spec-atelier-autorites`** — annonce d'intention (vitrine `anarbib.org`) : face *contribution* de la couche d'autorités (file de propositions, gouvernance par consentement sans vote, autorités collectivité/matière). Préparée frontend par `spec-notice-autorite-enrichie` §5 ; à rédiger après stabilisation du catalogage. Préalable structurant : tables autorités *collectivité* et *matière*.
 
-- **`spec-multi-appartenance-lecteur`** — cadrage doctrinal complet livré le 31/05 (toutes zones d'ombre traitées). Rédaction à venir. Absorbera probablement `spec-migration-compte.md v1.0` (archivée).
-- **`spec-partenariat-biblios`** — nouveau chantier doctrinal identifié, dossier d'ouverture à constituer. Prolongement du chantier `#PARTNERS` livré le 24/05.
+> `spec-multi-appartenance-lecteur` a quitté cette liste : sa charpente v0.3 est désormais une spec du corpus (famille « Compte lecteur — #CL »), au statut 🟡 cadrée.
 
 ---
 

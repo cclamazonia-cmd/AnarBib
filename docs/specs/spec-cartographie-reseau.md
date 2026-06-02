@@ -1,3 +1,10 @@
+---
+Genre : référence
+Statut : 🟡 cadrée (brouillon — 12 arbitrages à trancher)
+Décisions : incarne MAP-A..MAP-L (ouverts) ; cite DOC-I18N-1, DOC-RPC-3, DOC-PERIM-1
+Supersédé par : —
+---
+
 # Spec — Cartographie du réseau AnarBib
 
 **Version :** 0.1 (squelette d'arbitrages)
@@ -25,7 +32,7 @@ Cette spec définit l'architecture cible d'une cartographie pleinement intégré
 ### 0.2 Principes directeurs (non négociables)
 
 - **Une seule source de vérité** : les données vivent dans Supabase. La carte publique et l'onglet interne sont deux vues d'une même réalité.
-- **Compatibilité octolingue** : tout champ visible par l'utilisateur final doit pouvoir s'afficher dans les 6 locales actuelles (pt-BR, fr, es, en, it, de), et l'architecture doit anticiper l'ajout de futures langues sans refonte.
+- **Compatibilité octolingue** : tout champ visible par l'utilisateur final doit pouvoir s'afficher dans les **8 locales** actuelles (pt-BR, fr, es, it, de, en, ca, eo ; cf. registre `DOC-I18N-1`), et l'architecture doit anticiper l'ajout de futures langues sans refonte.
 - **Autonomie des collectifs** : chaque bibliothèque membre doit pouvoir éditer sa propre fiche cartographique depuis son interface AnarBib, sans intermédiaire centralisateur, en cohérence avec la définition du membre actée le 27/05/2026 (cf. §0.3).
 - **Cohérence avec la doctrine RPC v3** : toute écriture passe par une RPC dédiée ; les lectures simples peuvent utiliser `supabase.from()` avec RLS.
 - **Pas de drift identitaire** : la carte est un commun en construction, pas une vitrine ; elle reflète l'extension réelle du réseau, pas une projection marketing.
@@ -69,7 +76,7 @@ Cette définition a une conséquence directe sur la cartographie : **la base Ana
 
 ### 1.2 Arbitrage B — Modèle i18n des contenus cartographiques
 
-**Question** : comment traduire les champs `notes`, `anarbib_label`, et catégories pour les 6 locales ?
+**Question** : comment traduire les champs `notes`, `anarbib_label`, et catégories pour les 8 locales ?
 
 **Option B1** — Tout en pt-BR (langue pivot), interface AnarBib en langue locale mais contenu cartographique mono-langue.
 - ➕ Trivial à implémenter, zéro effort de traduction
@@ -79,14 +86,14 @@ Cette définition a une conséquence directe sur la cartographie : **la base Ana
 **Option B2** — Champs JSONB multilingues : `notes_i18n` contient `{"pt-BR": "...", "fr": "...", "es": "...", ...}`.
 - ➕ Cohérent avec le pattern AnarBib existant (cf. `signature_short_i18n` chantier mail 18/05)
 - ➕ Affichage simple côté front : `notes_i18n[currentLocale] || notes_i18n[default_locale]`
-- ➖ 121 fiches × 6 langues = 726 traductions à produire et à maintenir
-- ➖ Chaque ajout futur multiplie le travail par 6
+- ➖ 121 fiches × 8 langues = 968 traductions à produire et à maintenir
+- ➖ Chaque ajout futur multiplie le travail par 8
 
 **Option B3** — Table de traductions séparée `cartography_translations(entry_id, locale, field, value)`.
 - ➕ Évolutif (ajouter une langue = ajouter des lignes, pas modifier le schéma)
 - ➕ Permet une traduction collaborative (chaque locale peut être traduite par une personne différente)
 - ➖ Plus complexe en lecture (JOIN systématique)
-- ➖ Volume de lignes important (726+ pour démarrer)
+- ➖ Volume de lignes important (968+ pour démarrer)
 
 **Option B4** — Approche hybride : les champs **structurants** (catégorie, statut_anarbib, langue du fonds) traduits humainement via dictionnaires i18n applicatifs ; les **notes éditoriales** laissées en langue d'origine, avec une mention claire de la langue. Chaque collectif rédige ses notes dans la langue qu'il choisit.
 - ➕ Effort de traduction réduit à l'essentiel

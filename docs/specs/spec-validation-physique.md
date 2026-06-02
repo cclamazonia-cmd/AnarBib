@@ -1,3 +1,10 @@
+---
+Genre : référence
+Statut : 🟡 cadrée (amendement par-appartenance 30/05)
+Décisions : incarne VALID-AMD, VALID-C1..C4 ; cite ACCT-MIGRATION, DOC-I18N-1
+Supersédé par : —
+---
+
 # Spec — Validation physique des comptes lecteur·rice
 
 > ## ⚠️ Amendement structurant — 30/05/2026
@@ -665,7 +672,7 @@ Une fois le déploiement effectué :
 
 ### 9.1 — Biblio qui devient inactive
 
-Voir la spec migration de compte (à venir). En résumé : les comptes en attente d'une biblio inactive doivent pouvoir être transférés vers une autre biblio active.
+Voir `spec-multi-appartenance-lecteur` (le socle de `migration-compte`, archivée, y est absorbé — registre `ACCT-MIGRATION`). En résumé : les comptes en attente d'une biblio inactive doivent pouvoir être transférés vers une autre biblio active.
 
 ### 9.2 — User suspendu (`is_restricted = true`) déjà validé
 
@@ -836,4 +843,4 @@ Pas de blocage. Le librarian peut valider un user en attente même si ce user ne
 
 ---
 
-**Spec close. Prochaine étape : spec migration de compte.**
+**Spec close. Prochaine étape : `spec-multi-appartenance-lecteur`** (absorbe le socle de `migration-compte` — acté backlog v25, Option D · VII.1 ; registre `ACCT-MIGRATION`).

@@ -1,3 +1,10 @@
+---
+Genre : référence
+Statut : 🟢 référence (chantier #NOTIFY-prorrogacao livré 30/05)
+Décisions : incarne NPRO-D1..D7 ; cite DOC-I18N-1, DOC-DEPLOY-1
+Supersédé par : —
+---
+
 # Spec — Notification de prorrogação granulaire
 
 **Fichier :** `docs/specs/spec-notify-prorrogacao-granulaire.md`
@@ -46,7 +53,7 @@ Deux défauts confirmés par la trace `net._http_response` et la lecture du code
 | D2 | **Granularité de l'événement** | **Un** événement par action, portant `line_nos[]` des items renouvelés. | Un événement **par item** → 4 mails pour un « tout renouveler » = spam. Rejeté. |
 | D3 | **Payload** | `{ event:'emprestimo_v2_prorrogado', record_id:<emprestimo_id>, line_nos:[…] }`. L'EF relit `extended_until` en DB (pas de date dans le payload → zéro divergence payload/DB). | Passer les dates dans le payload → risque de divergence. Rejeté. |
 | D4 | **Retrait du trigger header** | `DROP TRIGGER trg_notify_emprestimo_prorrogacao` + `DROP FUNCTION` associée (sinon double notification). | Garder le trigger + dédup côté EF → fragile. Rejeté. |
-| D5 | **Texte `loan.renewed.once`** | Reformuler « par exemplaire/document » (le quota est désormais par item, pas par emprunt) × 8 locales dans `mail-strings.ts`. | Laisser « par emprunt » → faux sémantiquement. **Point ouvert : valider la formulation.** |
+| D5 | **Texte `loan.renewed.once`** | Reformuler « par exemplaire/document » (le quota est désormais par item, pas par emprunt) × 8 locales dans `mail-strings.ts`. | Laisser « par emprunt » → faux sémantiquement. **✅ Acté : formulation « par exemplaire » livrée × 8 locales (chantier clos 30/05).** |
 | D6 | **Dates divergentes dans un même mail** | Si tous les items renouvelés ont la même `extended_until` → une date (`loan.newDue`). Sinon → liste « titre — date » par item. | Date unique forcée → imprécis si divergence. |
 | D7 | **Retour global d'un lot partiellement renouvelé** | **Hors périmètre.** Le mail de retour total liste les items rendus, ce qui est correct. | — |
 

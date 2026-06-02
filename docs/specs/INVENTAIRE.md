@@ -1,6 +1,6 @@
 # 📋 INVENTAIRE du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 31 mai 2026 (audit du corpus, groupe A appliqué, refonte des fiches)
+**Dernière mise à jour** : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document décrit **chaque spec active** du corpus AnarBib avec son statut d'implémentation, ses dépendances entrantes et sortantes, sa date de dernière mise à jour, et les chantiers liés. Pour la navigation rapide par domaine, voir [`INDEX.md`](./INDEX.md).
@@ -63,6 +63,25 @@ spec-validation-physique v1.1
   ├──→ spec-gouvernance-roles v1.3 (validation côté staff local)
   └──→ DECISION_validation_par_appartenance_2026-05-30 (source de l'amendement)
 
+spec-multi-appartenance-lecteur (charpente v0.3 — #CL.10, à remplir)
+  ├──→ spec-gouvernance-roles v1.3 (rôle par biblio, Q12/Q15)
+  ├──→ spec-validation-physique v1.1 (validation par-appartenance, β.1)
+  ├──→ spec-historico-retencao-lectrice v1.0 (history_enabled par biblio, #CL.8)
+  ├──→ spec-notifications-lecteur v1.0 (préférences par biblio — F.3 clé composée)
+  └──→ spec-partenariat-biblios (transparence enrichie E.3 — parallèle, non bloquante)
+
+spec-partenariat-biblios (charpente v0.3 figée — chantier partenariat stabilisé)
+  ├──→ #PARTNERS / library_partnerships (infra déclarative, 24/05)
+  ├──→ spec-multi-appartenance-lecteur (transparence enrichie E.3 — parallèle)
+  ├──→ spec-gouvernance-roles v1.3 (coordenador propose/accepte, PARTNER-D7)
+  └──→ spec-flux-partage-numerique (droit digital_share, PARTNER-D9)
+
+spec-flux-partage-numerique (charpente v0.2 figée — #ILL-digital)
+  ├──→ spec-partenariat-biblios (droit du partenariat, ILL-8)
+  ├──→ spec-cycle-vie-peb (circuit DISTINCT — renvoi ISBN/ISSN vers PEB)
+  ├──→ recursos digitais / ResourcePage (ProtectedMediaViewer)
+  └──→ catalogação (visibility CAT-B3 ; verrou libre-de-droits ILL-5)
+
 spec-cycle-vie-peb (autonome — chantier #ILL-lifecycle)
   └──→ spec-flux-consultations-v2.2 (modèle de référence pour machines à états)
 
@@ -87,6 +106,38 @@ spec-carte-lecteur-v0_1
 
 spec-cartographie-reseau v0.1
   └──→ #RESEAU-FED (chantier réseau fédératif)
+
+spec-catalogacao-fiche-et-paliers v0.4 (chantier Catalogação — UX/champs, aucune migration DB)
+  ├──→ spec-exemplaires-circulation (le padrão fiche sème la destination)
+  ├──→ spec-module-capas (emplacement + ancre cover_object_path)
+  └──→ spec-sources-externes-autorites (champs viaf/isni/wikidata — niveau autorité, D6)
+
+spec-exemplaires-circulation v0.2 (couche DESTINATION de l'exemplaire)
+  ├──→ spec-granularite-item (#MODEL-item-grain — couche TRACE, prérequis matrice §6)
+  ├──→ spec-acquisition-provenance (couche PROVENANCE — migration exemplares MUTUALISÉE)
+  └──→ spec-catalogacao-fiche-et-paliers (padrão de circulation)
+
+spec-module-capas v0.2 (couverture — EF cover_lookup)
+  ├──→ spec-catalogacao-fiche-et-paliers (emplacement réservé §5.3)
+  ├──→ spec-exemplaires-circulation (doublon → pas de re-upload de capa)
+  └──→ fetch-url-metadata (EF — og:image, 4ᵉ source)
+
+spec-sources-externes-autorites v0.2 (sources de métadonnées + couche autorité)
+  ├──→ spec-catalogacao-fiche-et-paliers (champs d'autorité au Completo)
+  ├──→ spec-acquisition-provenance (traçabilité de source à l'application d'une candidate)
+  └──→ catalog_metadata_lookup + scraper BN Brasil + fetch-url-metadata (EF existantes réutilisées)
+
+spec-catalogue-decouverte v0.1 (couche découverte lecteur — CatalogPage, #OPAC7-11)
+  ├──→ spec-flux-emprunts v1.1 (boutons réservation déjà câblés dans la liste)
+  ├──→ spec-flux-consultations-v2.2 (boutons consulta déjà câblés)
+  ├──→ spec-exemplaires-circulation (filtre catalogue public visibility, en aval)
+  └──→ spec-module-capas (vignettes de couverture, optionnel)
+
+spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPAC1-6/#AUT1-4)
+  ├──→ spec-sources-externes-autorites (couche autorité VIAF/ISNI/Wikidata + Atelier)
+  ├──→ spec-administrateur-reseau-v0.4 (gouvernance dont l'Atelier s'inspire — consentement sans vote)
+  ├──→ spec-module-capas (capa affichée sur la notice, en aval)
+  └──→ spec-catalogue-decouverte (brique commune : chips sujets #OPAC8 ↔ §4.2)
 ```
 
 ---
@@ -472,7 +523,7 @@ spec-cartographie-reseau v0.1
 
 ---
 
-### 📱 `spec-carte-lecteur-v0_1.docx` *(nouveau v0.1 28/05)*
+### 📱 `spec-carte-lecteur-v0_1.md` *(nouveau v0.1 28/05)*
 
 **Domaine** : Carte-lecteur AnarBib (phase β : génération + révocation)
 **Version actuelle** : v0.1 (28 mai 2026)
@@ -564,6 +615,184 @@ spec-cartographie-reseau v0.1
 
 ---
 
+### 🗂️ `spec-catalogacao-fiche-et-paliers.md` *(nouveau v0.4 01/06)*
+
+**Domaine** : Fiche de catalogage — registre de champs déclaratif, 3 paliers, lisibilité
+**Version actuelle** : v0.4 (1er juin 2026)
+**Statut** : 🟡 Spécification, à implémenter — premier lot du chantier Catalogação (**aucune migration DB**)
+
+**Périmètre** :
+- Registre de champs déclaratif (archi 8.E), rendu piloté par `tier × matériel`
+- Paliers `simple | advanced | complete` (insertion sans remap des valeurs existantes)
+- 12 types de matériel × champs, **sourcés sur les guide strings i18n existantes**
+- Lisibilité = **adoption des classes `.ab-*`** (le kit fournit déjà relief + anneau de focus)
+- i18n 8 locales ; corrections PT-BR *volante* / *lambe-lambe*
+
+**Dépendances entrantes** : `CADRAGE_catalogacao_parite_et_module_capas_2026-06-01` ; maquette v2 (référence visuelle normative).
+
+**Dépendances sortantes** :
+- `spec-exemplaires-circulation` (padrão de circulation)
+- `spec-module-capas` (emplacement + ancre `cover_object_path`)
+- `spec-sources-externes-autorites` (champs d'autorité au Completo)
+
+**Chantiers liés** : chantier Catalogação (cadrage 01/06). Promotion 🟢 après cahier des charges chrome + diff des 7 autres locales.
+
+**Points d'attention** : chrome (header/hero/polices) = harmonisation avec les pages existantes ; arbitrages A1–A3 + D6 actés.
+
+---
+
+### 🗂️ `spec-exemplaires-circulation.md` *(nouveau v0.2 01/06)*
+
+**Domaine** : Couche **destination** de l'exemplaire (`circulation_policy` + `visibility`), doublons fédérés
+**Version actuelle** : v0.2 (1er juin 2026)
+**Statut** : 🟡 Spécification, à implémenter — **coordonnée** avec `#MODEL-item-grain` + acquisition
+
+**Périmètre** :
+- 2 colonnes (`text` + CHECK) sur `exemplares` / `exemplar_drafts`
+- padrão (fiche) → seed → override (exemplaire)
+- flux **doublon → exemplaire** (blocage publish sur ISBN réseau, `api.attach_exemplar`)
+- filtre catalogue public + matrice d'actions + gardes RPC/RLS
+
+**Dépendances entrantes** :
+- `spec-granularite-item` (`#MODEL-item-grain` — couche trace)
+- `spec-acquisition-provenance` (couche provenance — **migration `exemplares` mutualisée**)
+- `spec-catalogacao-fiche-et-paliers` (padrão de circulation)
+
+**Dépendances sortantes** : `spec-module-capas` (pas de re-upload de capa au rattachement d'exemplaire).
+
+**Chantiers liés** : chantier Catalogação. Arbitrages B1–B7 actés.
+
+**Points d'attention** : **migration `exemplares` à co-rédiger** avec acquisition §5.1 (une seule vague) ; la matrice d'actions §6 est **inopérante avant le cœur `#MODEL-item-grain`**.
+
+---
+
+### 🗂️ `spec-module-capas.md` *(nouveau v0.2 01/06)*
+
+**Domaine** : Couverture — stockage stable + recherche automatique (EF `cover_lookup`)
+**Version actuelle** : v0.2 (1er juin 2026)
+**Statut** : 🟡 Spécification — **P1 (correction du chemin) = bug autonome livrable immédiatement**
+
+**Périmètre** :
+- Chemin `bib_ref` / draft-id stable (fin de la collision `books/new/`)
+- EF `cover_lookup` : Open Library + Wikimedia + `og:image` (réutil. `fetch-url-metadata`) + page-1-PDF (différé P3)
+- UI galerie, anti-tracking (fetch serveur, stockage local), attribution `cover_source` / `cover_license`
+
+**Dépendances entrantes** :
+- `spec-catalogacao-fiche-et-paliers` (emplacement réservé §5.3)
+- EF existantes `catalog_metadata_lookup` (jumelle) et `fetch-url-metadata` (og:image)
+
+**Dépendances sortantes** : `spec-exemplaires-circulation` (pas de re-upload au rattachement).
+
+**Chantiers liés** : chantier Catalogação. Arbitrages C1–C3 actés.
+
+**Points d'attention** : la capa appartient à la **fiche partagée** (`book_id`) ; le rendu page-1-PDF est lourd → **sous-paquet différé**.
+
+---
+
+### 🗂️ `spec-sources-externes-autorites.md` *(nouveau v0.2 01/06)*
+
+**Domaine** : Sources de métadonnées + couche **autorité** cross-lingue
+**Version actuelle** : v0.2 (1er juin 2026)
+**Statut** : 🟡 Spécification, à implémenter
+
+**Périmètre** :
+- Métadonnées : réactivation **LoC** (gardée), adaptateurs REST **Wikidata / Open Library** dans `catalog_metadata_lookup`
+- **BN Brasil** : réutilisation de l'**EF scraper Sophia existante** (manuel en repli)
+- Autorité : EF dédiée `authority_lookup`, **Atelier autorités**, `viaf`/`isni` au niveau autorité + `wikidata` aux deux niveaux (D6)
+
+**Dépendances entrantes** :
+- `spec-catalogacao-fiche-et-paliers` (champs d'autorité au Completo)
+- EF existantes `catalog_metadata_lookup`, scraper BN Brasil, `fetch-url-metadata`
+
+**Dépendances sortantes** : `spec-acquisition-provenance` (traçabilité de source à l'application d'une candidate).
+
+**Chantiers liés** : chantier Catalogação. Arbitrages D1–D6 actés.
+
+**Points d'attention** : scraper BN **fragile** (repli manuel + canari) ; LoC = **diagnostic avant réactivation** ; isoler l'autorité dans sa propre EF.
+
+> **Spec sœur à cataloguer.** `spec-acquisition-provenance-v0_1` (01/06) est couplée au chantier (migration `exemplares` mutualisée, couche provenance) mais relève d'un chantier propre — à doter de sa fiche dans une entrée dédiée.
+
+---
+
+## 🧭 Ordre de mise en œuvre — chantier Catalogação
+
+L'ordre n'est pas celui de rédaction des specs (#1→#4) mais celui des **dépendances dures**. Le **chemin critique est étroit** ; le reste se mène **en parallèle**.
+
+**Chemin critique (séquentiel) :**
+- **Phase 0 — `#MODEL-item-grain` cœur** : `item_id` sur tous les circuits (dont consultation). Pierre angulaire — sans elle, la matrice d'actions par exemplaire est impossible.
+- **Phase 1 — Migration foncière `exemplares` / `exemplar_drafts`, EN UNE SEULE VAGUE** : provenance (acquisition §5.1) **+** destination `circulation_policy`/`visibility` (exemplaires §4.2), backfill + DO-block.
+- **Phase 2 — Circulation effective** : padrão→seed→override + matrice d'actions + filtre public + resserrement `#ILL-availability` (dépend de la Phase 0).
+- **Phase 3 — Doublons fédérés** : garde au publish + `api.attach_exemplar`.
+
+**Tracks parallèles (peu de dépendances dures) :**
+- **Track A** — Catalogação fiche/paliers (#1) : aucune migration DB → **démarrable immédiatement**.
+- **Track B** — Capas (#3) : **P1 (fix chemin) livrable tout de suite** ; P2 `cover_lookup` ; P3 page-1-PDF différé.
+- **Track C** — Sources/autorités (#4) : LoC (diagnostic→réactivation) → REST (Wikidata/OL) → BN (réutil. scraper) → `authority_lookup`.
+
+**⛔ Garde-fous durs :**
+1. **Jamais deux migrations séparées sur `exemplares`** → une seule vague co-rédigée (sinon `relation already exists`).
+2. **Jamais la matrice d'actions avant le cœur `#MODEL-item-grain`**.
+3. **Jamais réactiver LoC à l'aveugle** → diagnostic d'abord.
+4. **Jamais faire dépendre la catalogação de la seule BN auto** (scraper fragile) → repli manuel + canari.
+5. **Surveiller la taille de bundle des EF** (cover_lookup + PDF ; authority_lookup) → CLI si > ~150 ko.
+6. **Jamais uploader une capa avant save** (collision `books/new/`) → corriger le chemin d'abord.
+7. **Déploiement uniforme** : `git push` → Woodpecker pour tout. Jamais MCP `apply_migration`/`deploy_edge_function`, jamais SQL Editor.
+
+---
+
+## 🔎 Catalogue & découverte (lecteur) — cluster #OPAC / #CATALOG-EXT
+
+Couche **lecteur** (affichage / découverte), **en aval** du chantier Catalogação : ces deux specs consomment ce que le catalogage produit (filtre `visibility`, capas, autorités). Issues de l'atelier RebAL du 20/05.
+
+### 🔎 `spec-catalogue-decouverte.md` *(nouveau v0.1 01/06)*
+
+**Domaine** : Page catalogue — couche **découverte** lecteur (facettes à compteurs, nuage de sujets, favoris, parcours)
+**Version actuelle** : v0.1 (1er juin 2026 — cadrage)
+**Statut** : 🟡 Spécification, à implémenter — cluster #OPAC7–11
+
+**Périmètre** :
+- `CatalogPage.jsx`, vues `api.catalog_list_anon_v1` / `catalog_list_session_v1`
+- #OPAC7 facettes latérales à compteurs · #OPAC8 nuage de sujets · #OPAC9 favoris (wishlist serveur, OPAC-W1) · #OPAC10 parcours alpha/nouveautés · #OPAC11 courriel/RSS
+- Vignettes de couverture (transverse, optionnel)
+- **Ne touche aucun flux de circulation** (boutons réservation/consulta déjà câblés)
+
+**Dépendances entrantes** :
+- `spec-flux-emprunts` v1.1 et `spec-flux-consultations-v2.2` (boutons déjà câblés)
+- `spec-exemplaires-circulation` (filtre catalogue public `visibility`, en aval)
+- `spec-module-capas` (vignettes, optionnel)
+
+**Dépendances sortantes** : `spec-notice-autorite-enrichie` (brique commune chips sujets #OPAC8 ↔ §4.2).
+
+**Chantiers liés** : cluster #OPAC / #CATALOG-EXT (atelier RebAL 20/05).
+
+**Points d'attention** : **cloisonnement des compteurs (INV-1)** — agréger sur `*_anon_v1` pour les anonymes, **jamais** sur une vue réseau (régression B.7 déjà corrigée) ; anti-tracking INV-5 (aucun appel tiers) ; reco compteurs = RPC dédiée `api.catalog_facets_v1` (OPAC-F1) régie par `DOC-PERIM-1`. Décisions tracées au **registre §20 `OPAC`** ; favoris = **OPAC-W1** (serveur). En-tête normalisé posé.
+
+---
+
+### 🔎 `spec-notice-autorite-enrichie.md` *(nouveau v0.1 01/06)*
+
+**Domaine** : Fiche de **notice** (`BookPage.jsx`) + fiche d'**autorité** (`AuthorPage.jsx`) — affichage lecteur
+**Version actuelle** : v0.1 (1er juin 2026 — cadrage)
+**Statut** : 🟡 Spécification, à implémenter — clusters #OPAC1–6 (notice) / #AUT1–4 (autorité)
+
+**Périmètre** :
+- Notice : combler le retard sur RebAL (citer, similaires, tags…) en distinguant le réellement manquant du déjà-fait-autrement
+- Autorité : dérivations que RebAL ne sait pas faire (réseau intellectuel, sujets, traductions) — **page d'autorité = lieu de mémoire** (réparation historiographique)
+- Horizon amont : l'**Atelier autorités** (orientation seulement ; spec dédiée à venir)
+
+**Dépendances entrantes** :
+- `spec-sources-externes-autorites` (couche autorité VIAF/ISNI/Wikidata + Atelier)
+- `spec-administrateur-reseau-v0.4` (gouvernance dont l'Atelier s'inspire — mais **consentement sans vote**)
+- `spec-module-capas` (capa affichée, en aval) ; chantier criar-conta sans biblio (compte contributeur·rice)
+
+**Dépendances sortantes** : `spec-catalogue-decouverte` (brique commune chips sujets).
+
+**Chantiers liés** : cluster #CATALOG-EXT / #AUT. **Annonce** : `spec-atelier-autorites` (future, dédiée).
+
+**Points d'attention** : **INV-3 anti-tracking** — aucun appel client à Wikidata pour enrichir (fuiterait la consultation) ; moissonnage serveur au catalogage uniquement (cohérent capas/sources) ; **préalable structurant** : tables autorités *collectivité* et *matière* à créer (**OPAC-ATL1**, backlog). Décisions tracées au **registre §20 `OPAC`** (favoris **OPAC-W1** acté serveur, similaires/commentaires/MARC/contributeurs requalifiés) ; autorité externe régie par `CAT-D6`. En-tête normalisé posé.
+
+---
+
 ## 🔵 Specs doctrinales de chantier ponctuel — référence historique
 
 Ces specs documentent des chantiers ponctuels clos. Elles sont **conservées comme références historiques** pour reconstituer le raisonnement passé, mais ne sont **pas mises à jour** : leur doctrine a été absorbée dans les specs de référence. Chacune porte une **note de clôture en blockquote** en en-tête depuis le 31/05/2026.
@@ -615,10 +844,11 @@ Ces specs documentent des chantiers ponctuels clos. Elles sont **conservées com
 
 Les **dépendances entrantes** et **sortantes** doivent être maintenues à jour. Quand on modifie une spec qui ajoute une dépendance vers une autre, mettre à jour les **deux** specs concernées + cet inventaire. Les blocs de dépendances en haut de chaque spec **dupliquent volontairement** l'info de cet inventaire pour faciliter la lecture locale. Quand discrepance détectée, l'INVENTAIRE fait foi (et la spec doit être mise à jour).
 
-### Specs annoncées au backlog v23, non encore livrées
+### Specs annoncées, non encore remplies
 
-- **`spec-multi-appartenance-lecteur`** : cadrage doctrinal complet livré 31/05 (cf. backlog v23 §A.1). Rédaction à venir. Absorbera probablement `spec-migration-compte.md v1.0` (archivée).
-- **`spec-partenariat-biblios`** : nouveau chantier doctrinal identifié (cf. backlog v23 §A.1). Dossier d'ouverture à constituer.
+- **`spec-multi-appartenance-lecteur`** : **charpente v0.3 figée**, intégrée au corpus (famille #CL — voir la carte des dépendances ci-dessus). Socle doctrinal : `CADRAGE_spec-multi-appartenance-lecteur_2026-05-31.md` (doc de décision dédié — *et non « backlog v23 §A.1 », renvoi corrigé le 02/06*). Absorbe `spec-migration-compte.md v1.0` (archivée) — cf. `ACCT-MIGRATION` au registre. Remplissage (~800 l.) en session dédiée.
+- **`spec-partenariat-biblios`** : **charpente figée v0.3 le 02/06** (`PARTNER-D1..D9` au registre ; cadrage `CADRAGE_partenariat_stabilise_2026-06-02.md`). Dossier d'ouverture constitué ; remplissage à venir, après multi-appartenance.
+- **`spec-flux-partage-numerique`** (#ILL-digital) : **charpente figée v0.2 le 02/06** côté conception (`ILL-1..ILL-9` au registre, mandat BLMF ; cadrage `CADRAGE_ILL-digital_2026-05-25` 🔵). Circuit numérique **distinct du PEB** ; droit du partenariat stabilisé (`PARTNER-D9`). Remplissage à venir (DDL, rôles, i18n).
 
 ---
 

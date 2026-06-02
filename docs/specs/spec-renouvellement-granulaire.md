@@ -1,3 +1,10 @@
+---
+Genre : référence
+Statut : 🟡 cadrée (#PAINEL E.3/EA-07)
+Décisions : incarne RENOV-1, RENOV-2, RENOV-3 ; cite NPRO-D1/D4, DOC-I18N-1
+Supersédé par : —
+---
+
 # Spec — Renouvellement granulaire par item
 
 **Statut** : v0.1 — cadrage initial
@@ -136,5 +143,5 @@ Cohérent avec l'esprit « signalement par catégorie » adopté pour les retour
 ## 9. Points ouverts à trancher en cours de chantier
 
 - Le header `renewals_used` est-il déprécié à terme ou conservé comme cache permanent ? (Décision repoussée après phase 2, selon ce que révèle l'adaptation des vues.)
-- La notification de prolongation (`trg_notify_emprestimo_prorrogacao`) doit-elle distinguer « prolongation d'un item » de « prolongation de l'emprunt » dans le contenu du mail ? (À arbitrer phase 2/3 ; dépend aussi de #110 Resend pour le contenu mail.)
+- ~~La notification de prolongation doit-elle distinguer « prolongation d'un item » de « prolongation de l'emprunt » ?~~ **Résolu** par le chantier #NOTIFY-prorrogacao (clos 30/05) : émission **par item** depuis `fn_v2_extend_core`, trigger header `trg_notify_emprestimo_prorrogacao` **retiré**, texte « par exemplaire » × 8 locales. Cf. `spec-notify-prorrogacao-granulaire` D1/D4/D5 (registre `NPRO`).
 - Le bouton « tout renouveler » du lecteur : disparaît-il au profit du seul renouvellement par item, ou cohabite-t-il ? (Décision 2 dit cohabitation ; à confirmer à l'usage.)

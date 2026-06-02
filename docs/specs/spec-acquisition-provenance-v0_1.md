@@ -1,3 +1,10 @@
+---
+Genre : référence
+Statut : 🟡 cadrée (arbitrages à confirmer)
+Décisions : incarne ACQ-Q1..Q4 ; cite DOC-MODELE-1, CAT-B6, DOC-DEPLOY-1, DOC-RPC-3
+Supersédé par : —
+---
+
 # Spec — Acquisition & provenance
 
 - **Version :** 0.1 (cadrage)
@@ -118,6 +125,8 @@ précise), pas de l'œuvre. Cohérent avec la doctrine des Camadas : Camada 1
 (propriétés de la *notice*) ; Camada 3 (exemplaire) = objet matériel → reçoit
 `acquisition_mode` / `acquisition_date` / `provenance_note` /
 `source_library`.
+
+> **Vocabulaire (cf. registre `DOC-MODELE-1`).** « Camadas » = **niveaux de granularité** (œuvre/notice → holding → exemplaire), un axe *vertical*. À ne pas confondre avec les **trois couches** de l'exemplaire — trace / provenance / destination (`spec-exemplaires-circulation` §2) — qui sont des *facettes* du niveau exemplaire (axe horizontal). La couche **provenance** correspond précisément aux propriétés d'acquisition portées au niveau exemplaire (Camada 3).
 
 - **Recommandation :** ajouter les champs d'acquisition à `exemplares` (et
   `exemplar_drafts`). Conserver les champs sur `books` à titre de **valeur par
