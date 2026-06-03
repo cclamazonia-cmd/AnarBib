@@ -1,32 +1,32 @@
 #!/usr/bin/env pwsh
 # =========================================================================
-# Hook git pre-commit AnarBib — Vérification doctrine création objets
+# Hook git pre-commit AnarBib - Verification doctrine creation objets
 # =========================================================================
-# Ce hook scanne les fichiers .sql stagés et refuse le commit si des
-# patterns à risque sont détectés sans les contreparties doctrinales.
+# Ce hook scanne les fichiers .sql stages et refuse le commit si des
+# patterns a risque sont detectes sans les contreparties doctrinales.
 #
-# Doctrine de référence :
+# Doctrine de reference :
 #   docs/decisions/CHANTIER_doctrine_creation_objets_securises_2026-05-12.md
 #
-# Bypass légitime (par exemple paquet L.11 qui documente sciemment une
+# Bypass legitime (par exemple paquet L.11 qui documente sciemment une
 # vue SECURITY DEFINER) :
 #   git commit --no-verify -m "..."
 #
-# INSTALLATION (à faire une seule fois) :
+# INSTALLATION (a faire une seule fois) :
 #   1. Copier ce fichier vers .git/hooks/pre-commit (sans extension)
 #   2. Si Unix : chmod +x .git/hooks/pre-commit
 #   3. Sur Windows avec git Bash : git config core.hooksPath .githooks
-#      et placer le fichier dans .githooks/pre-commit (recommandé pour
+#      et placer le fichier dans .githooks/pre-commit (recommande pour
 #      pouvoir le versionner)
 # =========================================================================
 
 $ErrorActionPreference = "Stop"
 
-# Récupérer les fichiers .sql modifiés ou ajoutés et stagés
+# Recuperer les fichiers .sql modifies ou ajoutes et stages
 $stagedSqlFiles = git diff --cached --name-only --diff-filter=AM | Where-Object { $_ -like "*.sql" }
 
 if (-not $stagedSqlFiles) {
-    # Pas de fichier SQL stagé, rien à vérifier
+    # Pas de fichier SQL stage, rien a verifier
     exit 0
 }
 
@@ -37,25 +37,30 @@ Write-Host ""
 $violations = @()
 
 foreach ($file in $stagedSqlFiles) {
-    # Ignorer le template lui-même (qui contient les patterns à démontrer)
+    # Ignorer le template lui-meme (qui contient les patterns a demontrer)
     if ($file -match "_TEMPLATE\.sql$") {
         continue
     }
 
-    # Ignorer les fichiers d'audit qui peuvent légitimement déroger
+    # Ignorer les fichiers d'audit qui peuvent legitimement deroger
     if ($file -match "paquetL3_audit") {
         continue
     }
 
-    # Lire le contenu du fichier stagé (pas la version disque, qui peut différer)
+    # Lire le contenu du fichier stage (pas la version disque, qui peut differer)
     $content = git show ":$file" 2>$null
     if (-not $content) { continue }
 
     $contentJoined = $content -join "`n"
 
+    # Retirer les commentaires SQL avant analyse (faux positifs #80) : un
+    # mot-cle comme SECURITY DEFINER dans un commentaire ne doit pas bloquer.
+    $scan = $contentJoined -replace '(?s)/\*.*?\*/', ' '
+    $scan = $scan -replace '(?m)--.*$', ''
+
     # ---- Test 1 : SECURITY DEFINER sans SET search_path -----------------
-    if ($contentJoined -match "(?i)SECURITY\s+DEFINER" -and
-        $contentJoined -notmatch "(?i)SET\s+search_path") {
+    if ($scan -match "(?i)SECURITY\s+DEFINER" -and
+        $scan -notmatch "(?i)SET\s+search_path") {
         $violations += @{
             File   = $file
             Rule   = "SECURITY DEFINER sans SET search_path"
@@ -65,22 +70,23 @@ foreach ($file in $stagedSqlFiles) {
     }
 
     # ---- Test 2 : SECURITY DEFINER sans REVOKE EXECUTE FROM PUBLIC ------
-    # On exempte les CREATE OR REPLACE qui font partie d'un refacto et où
-    # le REVOKE existe déjà côté DB
-    if ($contentJoined -match "(?i)CREATE\s+(?:OR\s+REPLACE\s+)?FUNCTION[^;]+SECURITY\s+DEFINER" -and
-        $contentJoined -notmatch "(?i)REVOKE\s+EXECUTE.+FROM\s+PUBLIC") {
+    # #80 : on n'exige le REVOKE que pour les fonctions CREEES (CREATE FUNCTION).
+    # Les CREATE OR REPLACE preservent les grants/REVOKE deja en DB -> exemptees
+    # (c'etait l'intention du commentaire d'origine, jamais codee).
+    if ($scan -match "(?i)CREATE\s+FUNCTION[^;]+SECURITY\s+DEFINER" -and
+        $scan -notmatch "(?i)REVOKE\s+EXECUTE.+FROM\s+PUBLIC") {
         $violations += @{
             File   = $file
             Rule   = "SECURITY DEFINER sans REVOKE EXECUTE FROM PUBLIC"
-            Detail = "Toute nouvelle fonction SECURITY DEFINER DOIT inclure REVOKE EXECUTE FROM PUBLIC suivi de GRANT TO <role ciblé>"
+            Detail = "Toute nouvelle fonction SECURITY DEFINER DOIT inclure REVOKE EXECUTE FROM PUBLIC suivi de GRANT TO <role cible>"
             Doc    = "Template 1 - Bloc complet"
         }
     }
 
     # ---- Test 3 : CREATE TABLE public.* sans ENABLE ROW LEVEL SECURITY --
-    # On regarde uniquement les CREATE TABLE dans le schéma public
-    if ($contentJoined -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?public\.\w+" -and
-        $contentJoined -notmatch "(?i)ENABLE\s+ROW\s+LEVEL\s+SECURITY") {
+    # On regarde uniquement les CREATE TABLE dans le schema public
+    if ($scan -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?public\.\w+" -and
+        $scan -notmatch "(?i)ENABLE\s+ROW\s+LEVEL\s+SECURITY") {
         $violations += @{
             File   = $file
             Rule   = "CREATE TABLE public sans ENABLE ROW LEVEL SECURITY"
@@ -92,8 +98,8 @@ foreach ($file in $stagedSqlFiles) {
     # ---- Test 4 : CREATE VIEW sans security_invoker ---------------------
     # On regarde les CREATE VIEW (pas les materialized views, qui ne
     # supportent pas security_invoker)
-    if ($contentJoined -match "(?im)CREATE\s+(?:OR\s+REPLACE\s+)?VIEW\s+(?!.*MATERIALIZED)" -and
-        $contentJoined -notmatch "(?i)security_invoker\s*=\s*true") {
+    if ($scan -match "(?im)CREATE\s+(?:OR\s+REPLACE\s+)?VIEW\s+(?!.*MATERIALIZED)" -and
+        $scan -notmatch "(?i)security_invoker\s*=\s*true") {
         $violations += @{
             File   = $file
             Rule   = "CREATE VIEW sans security_invoker = true"
@@ -103,11 +109,11 @@ foreach ($file in $stagedSqlFiles) {
     }
 
     # ---- Test 5 : CREATE TABLE public sans GRANT explicite --------------
-    # Test à faible bruit : on cherche juste la présence d'au moins UN GRANT
-    # sur la table créée
-    if ($contentJoined -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?public\.(\w+)") {
+    # Test a faible bruit : on cherche juste la presence d'au moins UN GRANT
+    # sur la table creee
+    if ($scan -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?public\.(\w+)") {
         $tableName = $Matches[1]
-        if ($contentJoined -notmatch "(?im)GRANT\s+\w+.*ON\s+(?:TABLE\s+)?public\.$tableName\s+TO") {
+        if ($scan -notmatch "(?im)GRANT\s+\w+.*ON\s+(?:TABLE\s+)?public\.$tableName\s+TO") {
             $violations += @{
                 File   = $file
                 Rule   = "CREATE TABLE public.$tableName sans GRANT explicite"
@@ -118,7 +124,7 @@ foreach ($file in $stagedSqlFiles) {
     }
 }
 
-# Résumé
+# Resume
 if ($violations.Count -eq 0) {
     Write-Host "[OK] Aucune violation doctrinale detectee dans les $($stagedSqlFiles.Count) fichier(s) SQL stage(s)." -ForegroundColor Green
     Write-Host ""
