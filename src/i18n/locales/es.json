@@ -3133,5 +3133,6 @@
   "catalogacao.duplicate.body": "Una ficha publicada ya usa este ISBN. ¿Qué desea hacer?",
   "catalogacao.duplicate.openExisting": "Abrir la ficha existente",
   "catalogacao.duplicate.attachHere": "Añadir un ejemplar a esta ficha",
-  "catalogacao.duplicate.reviseIsbn": "Revisar el ISBN"
+  "catalogacao.duplicate.reviseIsbn": "Revisar el ISBN",
+  "biblioteca.privacy.purgeActiveNotice": "La eliminación automática está activa: los datos personales se borran según los plazos definidos arriba."
 }

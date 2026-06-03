@@ -3133,5 +3133,6 @@
   "catalogacao.duplicate.body": "Ein veröffentlichter Eintrag verwendet diese ISBN bereits. Was möchtest du tun?",
   "catalogacao.duplicate.openExisting": "Vorhandenen Eintrag öffnen",
   "catalogacao.duplicate.attachHere": "Ein Exemplar zu diesem Eintrag hinzufügen",
-  "catalogacao.duplicate.reviseIsbn": "ISBN überprüfen"
+  "catalogacao.duplicate.reviseIsbn": "ISBN überprüfen",
+  "biblioteca.privacy.purgeActiveNotice": "Die automatische Löschung ist aktiv: Personenbezogene Daten werden gemäß den oben festgelegten Fristen gelöscht."
 }

@@ -3133,5 +3133,6 @@
   "catalogacao.duplicate.body": "Una fitxa publicada ja fa servir aquest ISBN. Què vols fer?",
   "catalogacao.duplicate.openExisting": "Obrir la fitxa existent",
   "catalogacao.duplicate.attachHere": "Afegir un exemplar a aquesta fitxa",
-  "catalogacao.duplicate.reviseIsbn": "Revisar l'ISBN"
+  "catalogacao.duplicate.reviseIsbn": "Revisar l'ISBN",
+  "biblioteca.privacy.purgeActiveNotice": "L'eliminació automàtica està activa: les dades personals s'esborren segons els terminis definits més amunt."
 }

@@ -3133,5 +3133,6 @@
   "catalogacao.duplicate.body": "A published record already uses this ISBN. What would you like to do?",
   "catalogacao.duplicate.openExisting": "Open the existing record",
   "catalogacao.duplicate.attachHere": "Add a copy to this record",
-  "catalogacao.duplicate.reviseIsbn": "Check the ISBN"
+  "catalogacao.duplicate.reviseIsbn": "Check the ISBN",
+  "biblioteca.privacy.purgeActiveNotice": "Automatic deletion is active: personal data is erased according to the retention periods set above."
 }

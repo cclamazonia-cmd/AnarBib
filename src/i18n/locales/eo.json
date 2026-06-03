@@ -3133,5 +3133,6 @@
   "catalogacao.duplicate.body": "Eldonita slipo jam uzas ĉi tiun ISBN. Kion vi volas fari?",
   "catalogacao.duplicate.openExisting": "Malfermi la ekzistantan slipon",
   "catalogacao.duplicate.attachHere": "Aldoni ekzempleron al ĉi tiu slipo",
-  "catalogacao.duplicate.reviseIsbn": "Kontroli la ISBN"
+  "catalogacao.duplicate.reviseIsbn": "Kontroli la ISBN",
+  "biblioteca.privacy.purgeActiveNotice": "La aŭtomata forigo estas aktiva: personaj datumoj estas forigataj laŭ la supre difinitaj limdatoj."
 }
