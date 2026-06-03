@@ -1,16 +1,19 @@
 // ============================================================================
 // mail-strings.ts — i18n des notifications mail (Edge Function notify-event)
 // ============================================================================
-// 6 locales : pt-BR (référence), fr, es, en, it, de
+// 9 locales : pt-BR (référence), fr, es, en, it, de, ca, eo, nl
 //
 // Conventions militantes par locale :
-//   pt-BR : triple forme o/a/e, démonstratifs binôme dest(e/a),
-//           contractions article-préposition triples d(o/a/e)
+//   pt-BR : triple forme o-a-e, démonstratifs binôme dest(e-a),
+//           contractions article-préposition triples d(o-a-e)
 //   fr    : point médian (lecteur·rice, le·la)
 //   es    : neutre argentin e (le, les, une, conectade), participes accordés
 //   en    : neutre standard (épicène)
 //   it    : compagno/a/e ou variantes, JAMAIS camerata
 //   de    : Genderstern (Leser*in, Genoss*in), JAMAIS "Compas"
+//   ca    : Défini par ailleurs
+//   eo    : Défini par ailleurs
+//   nl    : Défini par ailleurs
 //
 // Date du fix : 2026-05-02 (chasse au bug wf.ready / wf.readyShort affichés
 //               en clés brutes dans les mails — clés manquantes du dictionnaire)
