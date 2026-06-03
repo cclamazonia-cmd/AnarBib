@@ -3153,5 +3153,12 @@
   "biblioteca.publicContact.copied": "Vom Netzwerkkontakt übernommen. Prüfen und speichern.",
   "biblioteca.publicContact.save": "Öffentlichen Kontakt speichern",
   "biblioteca.publicContact.saved": "Öffentlicher Kontakt gespeichert.",
-  "biblioteca.publicContact.reload": "Neu laden"
+  "biblioteca.publicContact.reload": "Neu laden",
+  "account.mylib.title": "Meine Bibliothek",
+  "account.mylib.email": "E-Mail",
+  "account.mylib.phone": "Telefon",
+  "account.mylib.whatsapp": "WhatsApp",
+  "account.mylib.address": "Adresse",
+  "account.mylib.note": "Infos",
+  "account.mylib.noPublicContact": "Diese Bibliothek hat ihre Kontaktdaten noch nicht veröffentlicht."
 }

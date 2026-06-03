@@ -3153,5 +3153,12 @@
   "biblioteca.publicContact.copied": "Copiat del contacte de xarxa. Revisa-ho i desa.",
   "biblioteca.publicContact.save": "Desa el contacte públic",
   "biblioteca.publicContact.saved": "Contacte públic desat.",
-  "biblioteca.publicContact.reload": "Torna a carregar"
+  "biblioteca.publicContact.reload": "Torna a carregar",
+  "account.mylib.title": "La meva biblioteca",
+  "account.mylib.email": "Correu",
+  "account.mylib.phone": "Telèfon",
+  "account.mylib.whatsapp": "WhatsApp",
+  "account.mylib.address": "Adreça",
+  "account.mylib.note": "Informació",
+  "account.mylib.noPublicContact": "Aquesta biblioteca encara no ha publicat les seves dades de contacte."
 }

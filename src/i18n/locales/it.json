@@ -3153,5 +3153,12 @@
   "biblioteca.publicContact.copied": "Copiato dal contatto di rete. Controlla e salva.",
   "biblioteca.publicContact.save": "Salva contatto pubblico",
   "biblioteca.publicContact.saved": "Contatto pubblico salvato.",
-  "biblioteca.publicContact.reload": "Ricarica"
+  "biblioteca.publicContact.reload": "Ricarica",
+  "account.mylib.title": "La mia biblioteca",
+  "account.mylib.email": "E-mail",
+  "account.mylib.phone": "Telefono",
+  "account.mylib.whatsapp": "WhatsApp",
+  "account.mylib.address": "Indirizzo",
+  "account.mylib.note": "Informazioni",
+  "account.mylib.noPublicContact": "Questa biblioteca non ha ancora pubblicato i suoi recapiti."
 }

@@ -19,6 +19,7 @@ import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { formatSchedule } from '@/lib/scheduleFormat';
 import { localizeError } from '@/lib/localizeError';
 import DataExportButton from '@/components/account/DataExportButton';
+import MyLibraryContactCard from '@/components/account/MyLibraryContactCard';
 import Modal from '@/components/ui/Modal';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
@@ -1157,6 +1158,8 @@ export default function AccountPage() {
           {/* ═══ PERFIL ═══ */}
           {activeTab === 'perfil' && profile && (
             <div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'flex-start' }}>
+              <div style={{ flex: '1 1 380px', minWidth: 0 }}>
               <h2 className="ab-conta-section-title">{t({ id: 'account.profile.title' })}</h2>
               <p className="ab-conta-hint">{t({ id: 'account.profile.hint' })}</p>
 
@@ -1190,6 +1193,11 @@ export default function AccountPage() {
                   {msg && <span className={`ab-conta-msg ${msgIsError ? 'ab-conta-msg--error' : ''}`}>{msg}</span>}
                 </div>
               </form>
+              </div>
+              <aside style={{ flex: '1 1 280px', minWidth: 0, maxWidth: 360 }}>
+                <MyLibraryContactCard />
+              </aside>
+              </div>
 
               {/* ── Paquet 7 criar-conta — Encadré privacy : biblio mentionnée ──── */}
               {profile.signup_intent_metadata?.library_name_mentioned && (

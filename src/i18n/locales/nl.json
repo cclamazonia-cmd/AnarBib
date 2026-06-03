@@ -3153,5 +3153,12 @@
   "biblioteca.publicContact.copied": "Overgenomen van het netwerkcontact. Controleer en sla op.",
   "biblioteca.publicContact.save": "Openbaar contact opslaan",
   "biblioteca.publicContact.saved": "Openbaar contact opgeslagen.",
-  "biblioteca.publicContact.reload": "Opnieuw laden"
+  "biblioteca.publicContact.reload": "Opnieuw laden",
+  "account.mylib.title": "Mijn bibliotheek",
+  "account.mylib.email": "E-mail",
+  "account.mylib.phone": "Telefoon",
+  "account.mylib.whatsapp": "WhatsApp",
+  "account.mylib.address": "Adres",
+  "account.mylib.note": "Info",
+  "account.mylib.noPublicContact": "Deze bibliotheek heeft haar contactgegevens nog niet gepubliceerd."
 }
