@@ -36,6 +36,7 @@ import ptLocale from 'i18n-iso-countries/langs/pt.json';
 import itLocale from 'i18n-iso-countries/langs/it.json';
 import deLocale from 'i18n-iso-countries/langs/de.json';
 import caLocale from 'i18n-iso-countries/langs/ca.json';
+import nlLocale from 'i18n-iso-countries/langs/nl.json';
 
 countries.registerLocale(enLocale);
 countries.registerLocale(frLocale);
@@ -44,6 +45,7 @@ countries.registerLocale(ptLocale);
 countries.registerLocale(itLocale);
 countries.registerLocale(deLocale);
 countries.registerLocale(caLocale);
+countries.registerLocale(nlLocale);
 
 /**
  * Manual mapping for legacy textual values that i18n-iso-countries
@@ -122,7 +124,7 @@ export function resolveToIsoCode(input) {
   // 3. Try i18n-iso-countries reverse lookup in all supported languages.
   // We start with pt because the legacy database is in Brazilian Portuguese,
   // then try the others in case of mixed data.
-  const tryLocales = ['pt', 'fr', 'en', 'es', 'it', 'de', 'ca'];
+  const tryLocales = ['pt', 'fr', 'en', 'es', 'it', 'de', 'ca', 'nl'];
   for (const loc of tryLocales) {
     const code = countries.getAlpha2Code(trimmed, loc);
     if (code) return code;
