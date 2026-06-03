@@ -56,6 +56,7 @@ export default function ExemplarDraftForm({ mode, batches }) {
     id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending',
     target_bib_ref: '', target_library_id: '', target_holding_id: '',
     tombo: '', notes: '',
+    circulation_policy: '', visibility: 'public',
   });
   const [loc, setLoc] = useState({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
   const [label, setLabel] = useState({ title: '', author: '', cdd: '', note: '' });
@@ -85,7 +86,7 @@ export default function ExemplarDraftForm({ mode, batches }) {
 
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {
-    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', tombo: '', notes: '' });
+    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', tombo: '', notes: '', circulation_policy: '', visibility: 'public' });
     setLoc({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
     setLabel({ title: '', author: '', cdd: '', note: '' });
     setParentBook(null);
@@ -100,6 +101,7 @@ export default function ExemplarDraftForm({ mode, batches }) {
       status: r.status || 'draft', label_status: r.label_status || 'pending',
       target_bib_ref: r.target_bib_ref || '', target_library_id: r.target_library_id || '',
       target_holding_id: String(r.target_holding_id || ''), tombo: r.tombo || '', notes: r.notes || '',
+      circulation_policy: r.circulation_policy || '', visibility: r.visibility || 'public',
     });
     setLoc(parseShelfLocation(r.shelf_location || ''));
     setLabel({ title: r.label_title_override || '', author: r.label_author_override || '', cdd: r.label_cdd_override || '', note: r.label_note || '' });
@@ -115,10 +117,13 @@ export default function ExemplarDraftForm({ mode, batches }) {
     if (!bibRef?.trim()) { setParentBook(null); return; }
     try {
       const { data } = await supabase.from('books')
-        .select('id, titulo, subtitulo, autor, cdd, editora, ano, bib_ref')
+        .select('id, titulo, subtitulo, autor, cdd, editora, ano, bib_ref, loanable')
         .eq('bib_ref', bibRef.trim()).limit(1).single();
       setParentBook(data || null);
       if (data) {
+        // P1.6-a : pré-remplit la circulation de l'exemplaire depuis le padrão de la ficha
+        // (loanable -> 'ambos' selon DOC-CIRC-1, sinon 'consulta'), sans écraser un choix déjà posé.
+        setForm(prev => prev.circulation_policy ? prev : { ...prev, circulation_policy: data.loanable ? 'ambos' : 'consulta' });
         // Auto-fill label from parent book if empty
         setLabel(prev => ({
           title: prev.title || data.titulo || '',
@@ -163,6 +168,8 @@ export default function ExemplarDraftForm({ mode, batches }) {
         label_cdd_override: label.cdd.trim() || null,
         label_note: label.note.trim() || null,
         notes: f('notes').trim() || null,
+        circulation_policy: f('circulation_policy') || null,
+        visibility: f('visibility') || 'public',
         updated_by: user?.id || null,
         ...(isUpdate ? {} : { created_by: user?.id || null }),
       };
@@ -209,6 +216,8 @@ export default function ExemplarDraftForm({ mode, batches }) {
   // ── UI constants ────────────────────────────────────────
   const fs = { width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' };
   const ls = { display: 'block', fontSize: '.78rem', fontWeight: 600, marginBottom: 2, color: 'var(--brand-muted, #bbb)' };
+  const segBtn = { padding: '6px 11px', borderRadius: 6, border: '1px solid rgba(255,255,255,.14)', background: 'rgba(0,0,0,.25)', color: 'var(--brand-muted, #bbb)', fontSize: '.8rem', cursor: 'pointer' };
+  const segBtnOn = { background: 'var(--brand-color-primary, #7a0b14)', color: '#fff', borderColor: 'var(--brand-color-primary, #7a0b14)', fontWeight: 700 };
   const pills = { new: { l: 'Novo', c: 'info' }, saved: { l: 'Salvo', c: 'ok' }, dirty: { l: 'Modificado', c: 'warn' }, ready: { l: 'Pronto', c: 'ok' }, published: { l: 'Publicado', c: 'ok' } };
   const pill = pills[draftState] || pills.new;
   const labelPills = { pending: { l: 'Rótulo pendente', c: 'warn' }, ready: { l: 'Rótulo pronto', c: 'ok' }, published: { l: 'Rótulo publicado', c: 'ok' } };
@@ -360,11 +369,48 @@ export default function ExemplarDraftForm({ mode, batches }) {
         </div>
 
         {/* ═══════════════════════════════════════════════ */}
-        {/* STEP 3: Label — the tag on the spine            */}
+        {/* STEP 3: Circulation policy & visibility (P1.6-a) */}
+        {/* ═══════════════════════════════════════════════ */}
+        <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 14 }}>
+          <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 8 }}>③ {t({ id: 'catalogacao.exemplar.circulationPolicy.label' })} · {t({ id: 'catalogacao.exemplar.visibility.label' })}</div>
+          <div className="cat-book-grid">
+            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.circulationPolicy.label' })}</label>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 2 }}>
+                {['emprestavel', 'consulta', 'ambos'].map(v => (
+                  <button key={v} type="button" onClick={() => set('circulation_policy', v)}
+                    style={{ ...segBtn, ...(f('circulation_policy') === v ? segBtnOn : {}) }}>
+                    {t({ id: `catalogacao.exemplar.circulationPolicy.${v}` })}
+                  </button>
+                ))}
+              </div>
+              <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 4 }}>
+                {t({ id: 'catalogacao.exemplar.circulationPolicy.hint' })}
+              </div>
+            </div>
+            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.visibility.label' })}</label>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 2 }}>
+                {['public', 'staff_only'].map(v => (
+                  <button key={v} type="button" onClick={() => set('visibility', v)}
+                    style={{ ...segBtn, ...(f('visibility') === v ? segBtnOn : {}) }}>
+                    {t({ id: `catalogacao.exemplar.visibility.${v}` })}
+                  </button>
+                ))}
+              </div>
+              <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 4 }}>
+                {t({ id: 'catalogacao.exemplar.visibility.hint' })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ═══════════════════════════════════════════════ */}
+        {/* STEP 4: Label — the tag on the spine            */}
         {/* ═══════════════════════════════════════════════ */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(21,128,61,.04)', border: '1px solid rgba(21,128,61,.15)', marginBottom: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <div style={{ fontSize: '.82rem', fontWeight: 700 }}>③ Rótulo (etiqueta)</div>
+            <div style={{ fontSize: '.82rem', fontWeight: 700 }}>④ Rótulo (etiqueta)</div>
             <span className={`cat-pill ${lPill.c}`} style={{ fontSize: '.65rem' }}>{lPill.l}</span>
           </div>
           <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 10 }}>
