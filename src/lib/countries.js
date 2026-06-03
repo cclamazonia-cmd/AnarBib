@@ -4,9 +4,18 @@
 // Centralizes i18n-iso-countries locale registration and exposes utilities
 // to get country names in the user's active locale.
 //
-// Importing this module from anywhere automatically registers all 6 locales
-// (idempotent thanks to i18n-iso-countries internal dedup, safe to import
-// from multiple files).
+// Importing this module from anywhere automatically registers all 7 locales
+// available in i18n-iso-countries (en, fr, es, pt, it, de, ca). Registration
+// is idempotent thanks to i18n-iso-countries internal dedup, safe to import
+// from multiple files.
+//
+// Locale notes:
+//   - eo (esperanto) is NOT shipped by i18n-iso-countries; intlToIsoLocale
+//     falls back to 'en' for it (see below). Without this, getNames('eo')
+//     returned an empty map and the country dropdowns were blank for eo users.
+//   - ca (catalan) IS shipped and is now registered. It was missing before,
+//     which left Catalan users with blank country dropdowns too.
+//   - nl / el will be registered here at their respective locale activation.
 //
 // Use cases:
 //   - <CountrySelect> (forms) : getCountryNames() returns the full map
@@ -26,6 +35,7 @@ import esLocale from 'i18n-iso-countries/langs/es.json';
 import ptLocale from 'i18n-iso-countries/langs/pt.json';
 import itLocale from 'i18n-iso-countries/langs/it.json';
 import deLocale from 'i18n-iso-countries/langs/de.json';
+import caLocale from 'i18n-iso-countries/langs/ca.json';
 
 countries.registerLocale(enLocale);
 countries.registerLocale(frLocale);
@@ -33,6 +43,7 @@ countries.registerLocale(esLocale);
 countries.registerLocale(ptLocale);
 countries.registerLocale(itLocale);
 countries.registerLocale(deLocale);
+countries.registerLocale(caLocale);
 
 /**
  * Manual mapping for legacy textual values that i18n-iso-countries
@@ -69,6 +80,8 @@ const LEGACY_NAME_MAP_UNICODE = {
  * Maps react-intl locales to i18n-iso-countries locale codes.
  * pt-BR uses Portuguese (pt) names, since i18n-iso-countries does not
  * distinguish pt-PT and pt-BR (country name differences are marginal).
+ * eo (esperanto) is not shipped by i18n-iso-countries, so we fall back
+ * to English country names for esperanto users.
  *
  * @param {string} intlLocale - react-intl locale (e.g. 'pt-BR', 'fr', 'en')
  * @returns {string} i18n-iso-countries locale code (e.g. 'pt', 'fr', 'en')
@@ -76,6 +89,7 @@ const LEGACY_NAME_MAP_UNICODE = {
 export function intlToIsoLocale(intlLocale) {
   if (!intlLocale) return 'en';
   if (intlLocale.startsWith('pt')) return 'pt';
+  if (intlLocale === 'eo') return 'en';  // esperanto absent from i18n-iso-countries
   return intlLocale.split('-')[0];
 }
 
@@ -83,7 +97,7 @@ export function intlToIsoLocale(intlLocale) {
  * Resolves an input value to an ISO 3166-1 alpha-2 code, or null if unrecognizable.
  * Accepts:
  *   - an ISO code directly (e.g. 'BR', 'br', 'IT')
- *   - a textual name in any of the 6 supported languages
+ *   - a textual name in any of the supported languages
  *   - a known legacy text name (cf. LEGACY_NAME_MAP)
  *
  * @param {string} input - country code or name
@@ -105,10 +119,10 @@ export function resolveToIsoCode(input) {
   if (LEGACY_NAME_MAP[trimmed]) return LEGACY_NAME_MAP[trimmed];
   if (LEGACY_NAME_MAP_UNICODE[trimmed]) return LEGACY_NAME_MAP_UNICODE[trimmed];
 
-  // 3. Try i18n-iso-countries reverse lookup in all 6 supported languages.
+  // 3. Try i18n-iso-countries reverse lookup in all supported languages.
   // We start with pt because the legacy database is in Brazilian Portuguese,
   // then try the others in case of mixed data.
-  const tryLocales = ['pt', 'fr', 'en', 'es', 'it', 'de'];
+  const tryLocales = ['pt', 'fr', 'en', 'es', 'it', 'de', 'ca'];
   for (const loc of tryLocales) {
     const code = countries.getAlpha2Code(trimmed, loc);
     if (code) return code;
