@@ -3134,5 +3134,7 @@
   "catalogacao.duplicate.openExisting": "Vorhandenen Eintrag öffnen",
   "catalogacao.duplicate.attachHere": "Ein Exemplar zu diesem Eintrag hinzufügen",
   "catalogacao.duplicate.reviseIsbn": "ISBN überprüfen",
-  "biblioteca.privacy.purgeActiveNotice": "Die automatische Löschung ist aktiv: Personenbezogene Daten werden gemäß den oben festgelegten Fristen gelöscht."
+  "biblioteca.privacy.purgeActiveNotice": "Die automatische Löschung ist aktiv: Personenbezogene Daten werden gemäß den oben festgelegten Fristen gelöscht.",
+  "error.consulta.no_consultable_copy": "Kein Exemplar dieses Dokuments steht zur Einsichtnahme vor Ort zur Verfügung. Die vorhandenen Exemplare sind nur zur Ausleihe oder für den internen Gebrauch des Teams bestimmt.",
+  "error.consulta.all_engaged": "Derzeit sind alle einsehbaren Exemplare dieses Dokuments in Benutzung. Bitte versuchen Sie es später erneut."
 }

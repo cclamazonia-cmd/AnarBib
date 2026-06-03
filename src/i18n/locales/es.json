@@ -3134,5 +3134,7 @@
   "catalogacao.duplicate.openExisting": "Abrir la ficha existente",
   "catalogacao.duplicate.attachHere": "Añadir un ejemplar a esta ficha",
   "catalogacao.duplicate.reviseIsbn": "Revisar el ISBN",
-  "biblioteca.privacy.purgeActiveNotice": "La eliminación automática está activa: los datos personales se borran según los plazos definidos arriba."
+  "biblioteca.privacy.purgeActiveNotice": "La eliminación automática está activa: los datos personales se borran según los plazos definidos arriba.",
+  "error.consulta.no_consultable_copy": "Ningún ejemplar de este documento está disponible para consulta in situ. Los ejemplares existentes son solo para préstamo o de uso interno del equipo.",
+  "error.consulta.all_engaged": "En este momento, todos los ejemplares consultables de este documento están en uso. Inténtalo de nuevo más tarde."
 }

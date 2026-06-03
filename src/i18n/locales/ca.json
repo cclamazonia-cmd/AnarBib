@@ -3134,5 +3134,7 @@
   "catalogacao.duplicate.openExisting": "Obrir la fitxa existent",
   "catalogacao.duplicate.attachHere": "Afegir un exemplar a aquesta fitxa",
   "catalogacao.duplicate.reviseIsbn": "Revisar l'ISBN",
-  "biblioteca.privacy.purgeActiveNotice": "L'eliminació automàtica està activa: les dades personals s'esborren segons els terminis definits més amunt."
+  "biblioteca.privacy.purgeActiveNotice": "L'eliminació automàtica està activa: les dades personals s'esborren segons els terminis definits més amunt.",
+  "error.consulta.no_consultable_copy": "Cap exemplar d'aquest document està disponible per a la consulta in situ. Els exemplars existents són només per a préstec o d'ús intern de l'equip.",
+  "error.consulta.all_engaged": "En aquest moment, tots els exemplars consultables d'aquest document estan en ús. Torna-ho a provar més tard."
 }

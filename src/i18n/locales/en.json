@@ -3134,5 +3134,7 @@
   "catalogacao.duplicate.openExisting": "Open the existing record",
   "catalogacao.duplicate.attachHere": "Add a copy to this record",
   "catalogacao.duplicate.reviseIsbn": "Check the ISBN",
-  "biblioteca.privacy.purgeActiveNotice": "Automatic deletion is active: personal data is erased according to the retention periods set above."
+  "biblioteca.privacy.purgeActiveNotice": "Automatic deletion is active: personal data is erased according to the retention periods set above.",
+  "error.consulta.no_consultable_copy": "No copy of this item is available for on-site consultation. The existing copies are loan-only or restricted to staff use.",
+  "error.consulta.all_engaged": "All consultable copies of this item are currently in use. Please try again later."
 }

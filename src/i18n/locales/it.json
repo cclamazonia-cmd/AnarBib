@@ -3134,5 +3134,7 @@
   "catalogacao.duplicate.openExisting": "Aprire la scheda esistente",
   "catalogacao.duplicate.attachHere": "Aggiungere un esemplare a questa scheda",
   "catalogacao.duplicate.reviseIsbn": "Verificare l'ISBN",
-  "biblioteca.privacy.purgeActiveNotice": "L'eliminazione automatica è attiva: i dati personali vengono cancellati secondo i termini definiti sopra."
+  "biblioteca.privacy.purgeActiveNotice": "L'eliminazione automatica è attiva: i dati personali vengono cancellati secondo i termini definiti sopra.",
+  "error.consulta.no_consultable_copy": "Nessuna copia di questo documento è disponibile per la consultazione in sede. Le copie esistenti sono riservate al prestito o all'uso interno dello staff.",
+  "error.consulta.all_engaged": "Al momento tutte le copie consultabili di questo documento sono in uso. Riprova più tardi."
 }

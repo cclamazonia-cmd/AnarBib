@@ -3134,5 +3134,7 @@
   "catalogacao.duplicate.openExisting": "Malfermi la ekzistantan slipon",
   "catalogacao.duplicate.attachHere": "Aldoni ekzempleron al ĉi tiu slipo",
   "catalogacao.duplicate.reviseIsbn": "Kontroli la ISBN",
-  "biblioteca.privacy.purgeActiveNotice": "La aŭtomata forigo estas aktiva: personaj datumoj estas forigataj laŭ la supre difinitaj limdatoj."
+  "biblioteca.privacy.purgeActiveNotice": "La aŭtomata forigo estas aktiva: personaj datumoj estas forigataj laŭ la supre difinitaj limdatoj.",
+  "error.consulta.no_consultable_copy": "Neniu ekzemplero de ĉi tiu dokumento disponeblas por surloka konsulto. La ekzistantaj ekzempleroj estas nur por pruntedono aŭ por interna uzo de la skipo.",
+  "error.consulta.all_engaged": "Nuntempe ĉiuj konsulteblaj ekzempleroj de ĉi tiu dokumento estas uzataj. Bonvolu reprovi poste."
 }

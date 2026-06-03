@@ -3134,5 +3134,7 @@
   "catalogacao.duplicate.openExisting": "Abrir a ficha existente",
   "catalogacao.duplicate.attachHere": "Adicionar um exemplar a esta ficha",
   "catalogacao.duplicate.reviseIsbn": "Revisar o ISBN",
-  "biblioteca.privacy.purgeActiveNotice": "A exclusão automática está ativa: os dados pessoais são apagados conforme os prazos definidos acima."
+  "biblioteca.privacy.purgeActiveNotice": "A exclusão automática está ativa: os dados pessoais são apagados conforme os prazos definidos acima.",
+  "error.consulta.no_consultable_copy": "Nenhum exemplar deste documento está disponível para consulta no local. As cópias existentes são apenas para empréstimo ou de acesso restrito à equipe.",
+  "error.consulta.all_engaged": "No momento, todos os exemplares consultáveis deste documento estão em uso. Tente novamente mais tarde."
 }
