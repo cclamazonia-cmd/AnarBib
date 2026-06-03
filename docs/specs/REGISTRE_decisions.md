@@ -208,6 +208,15 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 |HIST-PURGE-UI|Bandeaux mis en cohérence : `privacy.s4.notice` (public) **supprimé** (redondant avec `privacy.retention.\*`) ; `biblioteca.privacy.phase4aNotice` → **`purgeActiveNotice`** (« purge active », 8 locales). Label **« Phase 4b » retiré partout** (UI + commentaires).|✅ acté 03/06|commit `8d3dd44`|
 |HIST-PURGE-FIX|Fenêtre fixtures de test : 1re purge non vide attendue **\~début août** (notifications, 90 j). À trancher avant : **figer** (rétention = 0 sur les catégories-fixtures) ou **laisser faire**.|🟡 à décider avant août|—|
 
+**Page de confidentialité — identité & mentions — `PRIV`**
+
+|ID|Décision|Statut|Foyer|
+|-|-|-|-|
+|PRIV-RESP-1|Le sous-traitant affiché sur la page publique = l'**entité légale CCLA** (Centro de Cultura Libertária da Amazônia), **pas** le nom civil de l'opérateur. Justification : l'avis public doit identifier le **responsable de traitement** (les biblios / CCLA — RGPD art. 13/14) ; l'identité civile de l'opérateur du sous-traitant n'est pas un élément obligatoire (elle vit au registre des traitements art. 30 + DPA art. 28). Minimisation de l'exposition personnelle = choix assumé en contexte militant. Réversible : le nom ne réapparaîtrait qu'en cas de désignation formelle d'un encarregado/DPO côté LGPD (et même là, fonction + e-mail suffisent).|✅ acté 03/06|`privacy.s1.body`, 8 locales (article contracté par langue) ; commit privacy CCLA 03/06|
+|PRIV-RESP-2|Propager la même substitution (nom civil → CCLA) aux autres documents légaux publics sous `docs/legal/` (registre des traitements, DPA). Sinon le nom subsiste hors de la page.|🟡 à faire|`docs/legal/`|
+|PRIV-MAJ|`privacy.updated` porté au 3 juin 2026 sur les 8 locales (était au 4 mai 2026).|✅ acté 03/06|`privacy.updated`|
+|PRIV-I18N|`LibraryPrivacySection` : `LOCALE_TO_FILE` complété aux 8 locales (ca, eo) → fallback pt-BR correct au lieu de servir le pt-BR sans bandeau. Une instance de DRIFT-1 (« 6 → 8 locales ») résorbée côté code.|✅ acté 03/06|`src/components/privacy/LibraryPrivacySection.jsx` ; commit ca/eo|
+
 \---
 
 ## 17\. Multi-appartenance lectrice — `MULTI` *(spec-multi-appartenance-lecteur, charpente v0.3 — à rédiger)*
