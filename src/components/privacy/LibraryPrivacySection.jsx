@@ -18,6 +18,8 @@ const LOCALE_TO_FILE = {
   'en': 'privacy-en.md',
   'it': 'privacy-it.md',
   'de': 'privacy-de.md',
+  'ca': 'privacy-ca.md',
+  'eo': 'privacy-eo.md',
 };
 
 // ─── Helper : construit l'URL du fichier .md ────────────────────────────────
