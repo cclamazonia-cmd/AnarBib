@@ -39,17 +39,6 @@ const ulStyle = {
   marginBottom: 10,
 };
 
-const noticeStyle = {
-  padding: '12px 14px',
-  borderRadius: 8,
-  background: 'rgba(180,83,9,.06)',
-  border: '1px solid rgba(180,83,9,.18)',
-  fontSize: '.85rem',
-  color: 'var(--brand-muted, #ccc)',
-  marginTop: 16,
-  marginBottom: 16,
-};
-
 const updatedStyle = {
   fontSize: '.82rem',
   color: 'var(--brand-muted, #999)',
@@ -158,10 +147,9 @@ export default function PrivacyPolicyPage() {
         <section style={sectionStyle}>
           <h2 style={h2Style}>{t({ id: 'privacy.s4.title' })}</h2>
           <p style={pStyle}>{t({ id: 'privacy.s4.body' })}</p>
-          <div style={noticeStyle}>{t({ id: 'privacy.s4.notice' })}</div>
         </section>
 
-        {/* ── Durée de conservation (Phase 4a RGPD) ──────────────────── */}
+        {/* ── Durée de conservation (rétention RGPD) ──────────────────── */}
         <section style={sectionStyle}>
           <h2 style={h2Style}>{t({ id: 'privacy.retention.title' })}</h2>
           <p style={pStyle}>{t({ id: 'privacy.retention.body' })}</p>

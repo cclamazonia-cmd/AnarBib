@@ -689,7 +689,7 @@
   "biblioteca.privacy.notesPlaceholder": "Begründungen, kollektive Entscheidung, Verweis auf ein internes Dokument…",
   "biblioteca.privacy.notifications": "Gelesene Benachrichtigungen",
   "biblioteca.privacy.notificationsHint": "Nach dem Lesen werden Benachrichtigungen nach Ablauf dieses Zeitraums gelöscht.",
-  "biblioteca.privacy.phase4aNotice": "Konfiguration sichtbar, aber die automatische Löschung ist noch nicht aktiv. Sie wird in einem zukünftigen Update aktiviert (Phase 4b).",
+  "biblioteca.privacy.purgeActiveNotice": "Die automatische Löschung ist aktiv: Daten, die die unten festgelegten Fristen überschreiten, werden wöchentlich gelöscht – nach einer Vorankündigung von 30 Tagen an die betroffenen Personen.",
   "biblioteca.privacy.readonlyHint": "Sie befinden sich im Lesemodus. Nur Koordination und Administrator*innen können die Aufbewahrungsrichtlinie ändern.",
   "biblioteca.privacy.reservations": "Reservierungsverlauf",
   "biblioteca.privacy.reservationsHint": "Abgeschlossene Reservierungen (storniert, abgelaufen, abgeholt).",
@@ -2285,7 +2285,6 @@
   "privacy.s3.body": "Die Daten werden ausschließlich gesammelt, um den Betrieb der Bibliothek zu ermöglichen: Ihr Konto verwalten, Ausleihen und Reservierungen erfassen und mit Ihnen zu diesen Vorgängen kommunizieren (Verfügbarkeit eines reservierten Buches, Rückgabeerinnerungen usw.). Keine andere Verwendung erfolgt. Insbesondere: kein Marketing, keine Verhaltensanalyse, kein Profiling.",
   "privacy.s3.title": "Warum diese Daten gesammelt werden",
   "privacy.s4.body": "Ihre Kontodaten werden aufbewahrt, solange Ihr Konto aktiv ist. Sie können Ihr Konto jederzeit auf der Seite „Mein Konto“ löschen, wodurch Ihre persönlichen Daten dauerhaft gelöscht werden. Die Ausleihhistorie wird zu betrieblichen Zwecken aufbewahrt (anonyme Bibliotheksstatistiken, Rückgabemanagement).",
-  "privacy.s4.notice": "In Entwicklung: Ein Mechanismus zur automatischen Löschung abgeschlossener Ausleihen nach einer von jeder Bibliothek konfigurierbaren Dauer ist für ein zukünftiges Update geplant. Diese Seite wird bei dessen Aktivierung aktualisiert.",
   "privacy.s4.title": "Wie lange Daten aufbewahrt werden",
   "privacy.s5.body": "Sie haben gesetzliche Rechte an Ihren persönlichen Daten, die durch die europäische DSGVO und das brasilianische LGPD garantiert sind:",
   "privacy.s5.exercise": "Die meisten dieser Rechte können direkt in der Anwendung ausgeübt werden. Um Ihre Daten einzusehen, zu ändern oder zu löschen, gehen Sie auf",
@@ -3119,5 +3118,5 @@
   "notif.reserva.prontaParaRetirada.body": "Eine deiner Vormerkungen ist bereit. Du kannst sie in der Bibliothek abholen.",
   "notif.consulta.agendada.title": "Lesetermin geplant",
   "notif.consulta.agendada.body": "Einer deiner Lesetermine vor Ort wurde geplant. Prüfe die Uhrzeit im Reiter Vormerkungen und Lesetermine.",
-  "panel.apiError.isbn_duplicado": "Es existiert bereits ein Titel mit derselben ISBN im Netzwerk. \u00dcberpr\u00fcfe die ISBN oder f\u00fcge der bestehenden Aufnahme ein Exemplar hinzu."
+  "panel.apiError.isbn_duplicado": "Es existiert bereits ein Titel mit derselben ISBN im Netzwerk. Überprüfe die ISBN oder füge der bestehenden Aufnahme ein Exemplar hinzu."
 }

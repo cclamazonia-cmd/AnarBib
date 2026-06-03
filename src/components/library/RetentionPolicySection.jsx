@@ -226,9 +226,9 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
         {t({ id: 'biblioteca.privacy.subtitle' })}
       </p>
 
-      {/* Bandeau Phase 4a */}
+      {/* Bandeau purge active */}
       <div style={noticeStyle('info')}>
-        ℹ {t({ id: 'biblioteca.privacy.phase4aNotice' })}
+        ℹ {t({ id: 'biblioteca.privacy.purgeActiveNotice' })}
       </div>
 
       {/* Bandeau de retour utilisateur */}
