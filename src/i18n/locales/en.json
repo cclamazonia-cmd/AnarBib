@@ -3136,5 +3136,22 @@
   "catalogacao.duplicate.reviseIsbn": "Check the ISBN",
   "biblioteca.privacy.purgeActiveNotice": "Automatic deletion is active: personal data is erased according to the retention periods set above.",
   "error.consulta.no_consultable_copy": "No copy of this item is available for on-site consultation. The existing copies are loan-only or restricted to staff use.",
-  "error.consulta.all_engaged": "All consultable copies of this item are currently in use. Please try again later."
+  "error.consulta.all_engaged": "All consultable copies of this item are currently in use. Please try again later.",
+  "biblioteca.publicContact.title": "Public contact (shown to readers)",
+  "biblioteca.publicContact.intro": "Coordinates your library chooses to show its own readers on their account page. Public and opt-in — leave a field empty to hide it. Distinct from the confidential network contact used for inter-library loans.",
+  "biblioteca.publicContact.public_email": "Public e-mail",
+  "biblioteca.publicContact.public_email.placeholder": "E-mail readers can write to.",
+  "biblioteca.publicContact.public_phone": "Phone",
+  "biblioteca.publicContact.public_phone.placeholder": "Contact phone number.",
+  "biblioteca.publicContact.public_whatsapp": "WhatsApp",
+  "biblioteca.publicContact.public_whatsapp.placeholder": "WhatsApp number, if any.",
+  "biblioteca.publicContact.public_address": "Address",
+  "biblioteca.publicContact.public_address.placeholder": "Address for visits or pickup.",
+  "biblioteca.publicContact.public_note": "Note",
+  "biblioteca.publicContact.public_note.placeholder": "e.g. opening hours, access instructions.",
+  "biblioteca.publicContact.copyFromNetwork": "Copy from network contact",
+  "biblioteca.publicContact.copied": "Copied from the network contact. Review and save.",
+  "biblioteca.publicContact.save": "Save public contact",
+  "biblioteca.publicContact.saved": "Public contact saved.",
+  "biblioteca.publicContact.reload": "Reload"
 }

@@ -3136,5 +3136,22 @@
   "catalogacao.duplicate.reviseIsbn": "ISBN überprüfen",
   "biblioteca.privacy.purgeActiveNotice": "Die automatische Löschung ist aktiv: Personenbezogene Daten werden gemäß den oben festgelegten Fristen gelöscht.",
   "error.consulta.no_consultable_copy": "Kein Exemplar dieses Dokuments steht zur Einsichtnahme vor Ort zur Verfügung. Die vorhandenen Exemplare sind nur zur Ausleihe oder für den internen Gebrauch des Teams bestimmt.",
-  "error.consulta.all_engaged": "Derzeit sind alle einsehbaren Exemplare dieses Dokuments in Benutzung. Bitte versuchen Sie es später erneut."
+  "error.consulta.all_engaged": "Derzeit sind alle einsehbaren Exemplare dieses Dokuments in Benutzung. Bitte versuchen Sie es später erneut.",
+  "biblioteca.publicContact.title": "Öffentlicher Kontakt (für Leser*innen sichtbar)",
+  "biblioteca.publicContact.intro": "Kontaktdaten, die deine Bibliothek ihren eigenen Leser*innen auf der Kontoseite zeigen möchte. Öffentlich und optional — lass ein Feld leer, um es auszublenden. Getrennt vom vertraulichen Netzwerkkontakt für die Fernleihe.",
+  "biblioteca.publicContact.public_email": "Öffentliche E-Mail",
+  "biblioteca.publicContact.public_email.placeholder": "E-Mail, an die Leser*innen schreiben können.",
+  "biblioteca.publicContact.public_phone": "Telefon",
+  "biblioteca.publicContact.public_phone.placeholder": "Telefonnummer für den Kontakt.",
+  "biblioteca.publicContact.public_whatsapp": "WhatsApp",
+  "biblioteca.publicContact.public_whatsapp.placeholder": "WhatsApp-Nummer, falls vorhanden.",
+  "biblioteca.publicContact.public_address": "Adresse",
+  "biblioteca.publicContact.public_address.placeholder": "Adresse für Besuch oder Abholung.",
+  "biblioteca.publicContact.public_note": "Hinweis",
+  "biblioteca.publicContact.public_note.placeholder": "z. B. Öffnungszeiten, Zugangshinweise.",
+  "biblioteca.publicContact.copyFromNetwork": "Vom Netzwerkkontakt übernehmen",
+  "biblioteca.publicContact.copied": "Vom Netzwerkkontakt übernommen. Prüfen und speichern.",
+  "biblioteca.publicContact.save": "Öffentlichen Kontakt speichern",
+  "biblioteca.publicContact.saved": "Öffentlicher Kontakt gespeichert.",
+  "biblioteca.publicContact.reload": "Neu laden"
 }

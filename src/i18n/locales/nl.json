@@ -3136,5 +3136,22 @@
   "catalogacao.duplicate.reviseIsbn": "De ISBN controleren",
   "biblioteca.privacy.purgeActiveNotice": "Automatische verwijdering is actief: persoonsgegevens worden gewist volgens de hierboven ingestelde bewaartermijnen.",
   "error.consulta.no_consultable_copy": "Geen enkel exemplaar van dit item is beschikbaar voor raadpleging ter plaatse. De bestaande exemplaren zijn alleen voor uitlening of beperkt tot gebruik door het team.",
-  "error.consulta.all_engaged": "Alle raadpleegbare exemplaren van dit item zijn momenteel in gebruik. Probeer het later opnieuw."
+  "error.consulta.all_engaged": "Alle raadpleegbare exemplaren van dit item zijn momenteel in gebruik. Probeer het later opnieuw.",
+  "biblioteca.publicContact.title": "Openbaar contact (zichtbaar voor lezers)",
+  "biblioteca.publicContact.intro": "Contactgegevens die je bibliotheek aan haar eigen lezers wil tonen, op hun accountpagina. Openbaar en optioneel — laat een veld leeg om het te verbergen. Los van het vertrouwelijke netwerkcontact dat voor interbibliothecair leenverkeer wordt gebruikt.",
+  "biblioteca.publicContact.public_email": "Openbaar e-mailadres",
+  "biblioteca.publicContact.public_email.placeholder": "E-mail waar lezers naartoe kunnen schrijven.",
+  "biblioteca.publicContact.public_phone": "Telefoon",
+  "biblioteca.publicContact.public_phone.placeholder": "Telefoonnummer voor contact.",
+  "biblioteca.publicContact.public_whatsapp": "WhatsApp",
+  "biblioteca.publicContact.public_whatsapp.placeholder": "WhatsApp-nummer, indien aanwezig.",
+  "biblioteca.publicContact.public_address": "Adres",
+  "biblioteca.publicContact.public_address.placeholder": "Adres voor bezoek of afhalen.",
+  "biblioteca.publicContact.public_note": "Opmerking",
+  "biblioteca.publicContact.public_note.placeholder": "Bijv.: openingstijden, toegangsinstructies.",
+  "biblioteca.publicContact.copyFromNetwork": "Overnemen van netwerkcontact",
+  "biblioteca.publicContact.copied": "Overgenomen van het netwerkcontact. Controleer en sla op.",
+  "biblioteca.publicContact.save": "Openbaar contact opslaan",
+  "biblioteca.publicContact.saved": "Openbaar contact opgeslagen.",
+  "biblioteca.publicContact.reload": "Opnieuw laden"
 }

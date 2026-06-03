@@ -3136,5 +3136,22 @@
   "catalogacao.duplicate.reviseIsbn": "Revisar o ISBN",
   "biblioteca.privacy.purgeActiveNotice": "A exclusão automática está ativa: os dados pessoais são apagados conforme os prazos definidos acima.",
   "error.consulta.no_consultable_copy": "Nenhum exemplar deste documento está disponível para consulta no local. As cópias existentes são apenas para empréstimo ou de acesso restrito à equipe.",
-  "error.consulta.all_engaged": "No momento, todos os exemplares consultáveis deste documento estão em uso. Tente novamente mais tarde."
+  "error.consulta.all_engaged": "No momento, todos os exemplares consultáveis deste documento estão em uso. Tente novamente mais tarde.",
+  "biblioteca.publicContact.title": "Contato público (mostrado às leitoras e leitores)",
+  "biblioteca.publicContact.intro": "Dados de contato que sua biblioteca escolhe mostrar às suas próprias leitoras e leitores, na página da conta. Público e opcional — deixe um campo vazio para ocultá-lo. Distinto do contato de rede confidencial usado no empréstimo entre bibliotecas.",
+  "biblioteca.publicContact.public_email": "E-mail público",
+  "biblioteca.publicContact.public_email.placeholder": "E-mail para o qual leitoras e leitores podem escrever.",
+  "biblioteca.publicContact.public_phone": "Telefone",
+  "biblioteca.publicContact.public_phone.placeholder": "Telefone para contato.",
+  "biblioteca.publicContact.public_whatsapp": "WhatsApp",
+  "biblioteca.publicContact.public_whatsapp.placeholder": "Número de WhatsApp, se houver.",
+  "biblioteca.publicContact.public_address": "Endereço",
+  "biblioteca.publicContact.public_address.placeholder": "Endereço para visita ou retirada.",
+  "biblioteca.publicContact.public_note": "Observação",
+  "biblioteca.publicContact.public_note.placeholder": "Ex.: horário de funcionamento, instruções de acesso.",
+  "biblioteca.publicContact.copyFromNetwork": "Copiar do contato de rede",
+  "biblioteca.publicContact.copied": "Copiado do contato de rede. Revise e salve.",
+  "biblioteca.publicContact.save": "Salvar contato público",
+  "biblioteca.publicContact.saved": "Contato público salvo.",
+  "biblioteca.publicContact.reload": "Recarregar"
 }

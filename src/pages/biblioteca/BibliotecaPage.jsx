@@ -18,6 +18,7 @@ import ExchangeProposalForm from '@/components/library/ExchangeProposalForm';
 import ExchangeRequestsList from '@/components/library/ExchangeRequestsList';
 import ExchangeFollowupPanel from '@/components/library/ExchangeFollowupPanel';
 import LibraryContactProfileSection from '@/components/library/LibraryContactProfileSection';
+import LibraryPublicContactSection from '@/components/library/LibraryPublicContactSection';
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
@@ -1196,6 +1197,10 @@ export default function BibliotecaPage() {
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.contactProfile.title' })}</h4>
             <LibraryContactProfileSection libraryId={libraryId} canEdit={isCoord} />
           </div>
+          {/* Vitrine publique de contact (chantier carte ma bibliotheque, etape 2) :
+              coordonnees que la biblio choisit de montrer a SES lecteur-rices,
+              distinct du contact confidentiel ci-dessus. Composant auto-encadre. */}
+          <LibraryPublicContactSection libraryId={libraryId} canEdit={isCoord} />
           {notifPolicy && <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.comms.notifTypes' })}</h4>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:6 }}>

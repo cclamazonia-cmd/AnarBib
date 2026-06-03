@@ -3136,5 +3136,22 @@
   "catalogacao.duplicate.reviseIsbn": "Verificare l'ISBN",
   "biblioteca.privacy.purgeActiveNotice": "L'eliminazione automatica è attiva: i dati personali vengono cancellati secondo i termini definiti sopra.",
   "error.consulta.no_consultable_copy": "Nessuna copia di questo documento è disponibile per la consultazione in sede. Le copie esistenti sono riservate al prestito o all'uso interno dello staff.",
-  "error.consulta.all_engaged": "Al momento tutte le copie consultabili di questo documento sono in uso. Riprova più tardi."
+  "error.consulta.all_engaged": "Al momento tutte le copie consultabili di questo documento sono in uso. Riprova più tardi.",
+  "biblioteca.publicContact.title": "Contatto pubblico (mostrato a lettrici e lettori)",
+  "biblioteca.publicContact.intro": "Recapiti che la tua biblioteca sceglie di mostrare alle proprie lettrici e ai propri lettori, nella pagina del loro account. Pubblico e facoltativo — lascia un campo vuoto per nasconderlo. Distinto dal contatto di rete riservato usato per il prestito interbibliotecario.",
+  "biblioteca.publicContact.public_email": "E-mail pubblica",
+  "biblioteca.publicContact.public_email.placeholder": "E-mail a cui lettrici e lettori possono scrivere.",
+  "biblioteca.publicContact.public_phone": "Telefono",
+  "biblioteca.publicContact.public_phone.placeholder": "Telefono di contatto.",
+  "biblioteca.publicContact.public_whatsapp": "WhatsApp",
+  "biblioteca.publicContact.public_whatsapp.placeholder": "Numero WhatsApp, se presente.",
+  "biblioteca.publicContact.public_address": "Indirizzo",
+  "biblioteca.publicContact.public_address.placeholder": "Indirizzo per visita o ritiro.",
+  "biblioteca.publicContact.public_note": "Nota",
+  "biblioteca.publicContact.public_note.placeholder": "Es.: orari di apertura, istruzioni d’accesso.",
+  "biblioteca.publicContact.copyFromNetwork": "Copia dal contatto di rete",
+  "biblioteca.publicContact.copied": "Copiato dal contatto di rete. Controlla e salva.",
+  "biblioteca.publicContact.save": "Salva contatto pubblico",
+  "biblioteca.publicContact.saved": "Contatto pubblico salvato.",
+  "biblioteca.publicContact.reload": "Ricarica"
 }

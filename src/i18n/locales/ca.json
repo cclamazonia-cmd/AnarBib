@@ -3136,5 +3136,22 @@
   "catalogacao.duplicate.reviseIsbn": "Revisar l'ISBN",
   "biblioteca.privacy.purgeActiveNotice": "L'eliminació automàtica està activa: les dades personals s'esborren segons els terminis definits més amunt.",
   "error.consulta.no_consultable_copy": "Cap exemplar d'aquest document està disponible per a la consulta in situ. Els exemplars existents són només per a préstec o d'ús intern de l'equip.",
-  "error.consulta.all_engaged": "En aquest moment, tots els exemplars consultables d'aquest document estan en ús. Torna-ho a provar més tard."
+  "error.consulta.all_engaged": "En aquest moment, tots els exemplars consultables d'aquest document estan en ús. Torna-ho a provar més tard.",
+  "biblioteca.publicContact.title": "Contacte públic (mostrat a les lectores i lectors)",
+  "biblioteca.publicContact.intro": "Dades de contacte que la teva biblioteca decideix mostrar a les seves pròpies lectores i lectors, a la pàgina del seu compte. Públic i opcional — deixa un camp buit per amagar-lo. Diferent del contacte de xarxa confidencial emprat per al préstec interbibliotecari.",
+  "biblioteca.publicContact.public_email": "Correu públic",
+  "biblioteca.publicContact.public_email.placeholder": "Correu al qual lectores i lectors poden escriure.",
+  "biblioteca.publicContact.public_phone": "Telèfon",
+  "biblioteca.publicContact.public_phone.placeholder": "Telèfon de contacte.",
+  "biblioteca.publicContact.public_whatsapp": "WhatsApp",
+  "biblioteca.publicContact.public_whatsapp.placeholder": "Número de WhatsApp, si n’hi ha.",
+  "biblioteca.publicContact.public_address": "Adreça",
+  "biblioteca.publicContact.public_address.placeholder": "Adreça per a la visita o la recollida.",
+  "biblioteca.publicContact.public_note": "Nota",
+  "biblioteca.publicContact.public_note.placeholder": "Ex.: horari d’obertura, instruccions d’accés.",
+  "biblioteca.publicContact.copyFromNetwork": "Copia del contacte de xarxa",
+  "biblioteca.publicContact.copied": "Copiat del contacte de xarxa. Revisa-ho i desa.",
+  "biblioteca.publicContact.save": "Desa el contacte públic",
+  "biblioteca.publicContact.saved": "Contacte públic desat.",
+  "biblioteca.publicContact.reload": "Torna a carregar"
 }
