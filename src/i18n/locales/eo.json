@@ -3118,5 +3118,6 @@
   "notif.reserva.prontaParaRetirada.title": "Rezervo preta por elpreno",
   "notif.reserva.prontaParaRetirada.body": "Unu el viaj rezervoj estas preta. Vi povas veni preni ĝin en la biblioteko.",
   "notif.consulta.agendada.title": "Konsulto planita",
-  "notif.consulta.agendada.body": "Unu el viaj surlokaj konsultoj estis planita. Kontrolu la horon en la langeto Rezervoj kaj konsultoj."
+  "notif.consulta.agendada.body": "Unu el viaj surlokaj konsultoj estis planita. Kontrolu la horon en la langeto Rezervoj kaj konsultoj.",
+  "panel.apiError.isbn_duplicado": "Jam ekzistas registro kun la sama ISBN en la reto. Reviziu la ISBN a\u016d aldonu ekzempleron al la ekzistanta registro."
 }

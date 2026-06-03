@@ -3118,5 +3118,6 @@
   "notif.reserva.prontaParaRetirada.title": "Réservation prête à retirer",
   "notif.reserva.prontaParaRetirada.body": "Une de tes réservations est prête. Tu peux venir la chercher à la bibliothèque.",
   "notif.consulta.agendada.title": "Consultation programmée",
-  "notif.consulta.agendada.body": "Une de tes consultations sur place a été programmée. Vérifie l'horaire dans l'onglet Réservations et consultations."
+  "notif.consulta.agendada.body": "Une de tes consultations sur place a été programmée. Vérifie l'horaire dans l'onglet Réservations et consultations.",
+  "panel.apiError.isbn_duplicado": "Une fiche portant le m\u00eame ISBN est d\u00e9j\u00e0 publi\u00e9e dans le r\u00e9seau. Corrigez l'ISBN ou ajoutez un exemplaire \u00e0 la fiche existante."
 }

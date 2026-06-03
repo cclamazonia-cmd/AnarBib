@@ -3118,5 +3118,6 @@
   "notif.reserva.prontaParaRetirada.title": "Reserva llesta per recollir",
   "notif.reserva.prontaParaRetirada.body": "Una de les teves reserves està llesta. Pots passar a recollir-la a la biblioteca.",
   "notif.consulta.agendada.title": "Consulta programada",
-  "notif.consulta.agendada.body": "Una de les teves consultes locals ha estat programada. Verifica l'horari a la pestanya Reserves i consultes."
+  "notif.consulta.agendada.body": "Una de les teves consultes locals ha estat programada. Verifica l'horari a la pestanya Reserves i consultes.",
+  "panel.apiError.isbn_duplicado": "Ja existeix una fitxa publicada amb el mateix ISBN a la xarxa. Reviseu l'ISBN o afegiu un exemplar a la fitxa existent."
 }

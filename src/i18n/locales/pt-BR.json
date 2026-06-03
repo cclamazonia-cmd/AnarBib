@@ -3118,5 +3118,6 @@
   "notif.reserva.prontaParaRetirada.title": "Reserva pronta para retirada",
   "notif.reserva.prontaParaRetirada.body": "Uma das tuas reservas está pronta. Podes ir buscá-la na biblioteca.",
   "notif.consulta.agendada.title": "Consulta agendada",
-  "notif.consulta.agendada.body": "Uma das tuas consultas locais foi agendada. Verifica o horário no separador Reservas e consultas."
+  "notif.consulta.agendada.body": "Uma das tuas consultas locais foi agendada. Verifica o horário no separador Reservas e consultas.",
+  "panel.apiError.isbn_duplicado": "J\u00e1 existe uma ficha publicada com o mesmo ISBN nesta rede. Revise o ISBN ou adicione um exemplar \u00e0 ficha existente."
 }

@@ -3118,5 +3118,6 @@
   "notif.reserva.prontaParaRetirada.title": "Reservation ready for pickup",
   "notif.reserva.prontaParaRetirada.body": "One of your reservations is ready. You can come and pick it up at the library.",
   "notif.consulta.agendada.title": "Consultation scheduled",
-  "notif.consulta.agendada.body": "One of your on-site consultations has been scheduled. Check the time in the Reservations and consultations tab."
+  "notif.consulta.agendada.body": "One of your on-site consultations has been scheduled. Check the time in the Reservations and consultations tab.",
+  "panel.apiError.isbn_duplicado": "A record with the same ISBN is already published in the network. Revise the ISBN or add a copy to the existing record."
 }

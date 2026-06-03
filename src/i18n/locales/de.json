@@ -3118,5 +3118,6 @@
   "notif.reserva.prontaParaRetirada.title": "Vormerkung abholbereit",
   "notif.reserva.prontaParaRetirada.body": "Eine deiner Vormerkungen ist bereit. Du kannst sie in der Bibliothek abholen.",
   "notif.consulta.agendada.title": "Lesetermin geplant",
-  "notif.consulta.agendada.body": "Einer deiner Lesetermine vor Ort wurde geplant. Prüfe die Uhrzeit im Reiter Vormerkungen und Lesetermine."
+  "notif.consulta.agendada.body": "Einer deiner Lesetermine vor Ort wurde geplant. Prüfe die Uhrzeit im Reiter Vormerkungen und Lesetermine.",
+  "panel.apiError.isbn_duplicado": "Es existiert bereits ein Titel mit derselben ISBN im Netzwerk. \u00dcberpr\u00fcfe die ISBN oder f\u00fcge der bestehenden Aufnahme ein Exemplar hinzu."
 }
