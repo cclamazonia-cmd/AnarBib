@@ -1,6 +1,6 @@
 # 📋 INVENTAIRE du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
+**Dernière mise à jour** : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** [audit dump schéma 03/06] → `spec-granularite-item` en 🔵 ; ouverture Phase 1 exemplares) — précédemment : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document décrit **chaque spec active** du corpus AnarBib avec son statut d'implémentation, ses dépendances entrantes et sortantes, sa date de dernière mise à jour, et les chantiers liés. Pour la navigation rapide par domaine, voir [`INDEX.md`](./INDEX.md).
@@ -553,7 +553,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Domaine** : Unifier la granularité du modèle sur l'exemplaire (`#MODEL-item-grain`)
 **Version actuelle** : v1 (23 mai 2026 — cadrage)
 **Taille** : ~12 Ko, 270 lignes
-**Statut** : 🟡 Spécification, à implémenter — chantier structurel (pierre angulaire du modèle)
+**Statut** : 🔵 Référence historique — chantier **livré en production** (constaté 03/06 via dump schéma). Cœur (`item_id` sur `consulta_linhas_v2`, FK RESTRICT, 30 lignes migrées) + suite §6.2 `#ILL-availability` en base ; suite §6.1 (frontend) = dépendance dissoute (résolution serveur depuis le holding). Cf. `docs/decisions/CLOTURE_MODEL-item-grain_2026-06-03.md`.
 
 **Périmètre** :
 - Évolution du modèle pour unifier la granularité sur l'exemplaire (item) plutôt que sur le holding ou la transaction
@@ -566,7 +566,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 - `spec-flux-consultations-v2.2` (référence d'architecture)
 
 **Chantiers liés** :
-- `#MODEL-item-grain` (backlog v23, non démarré — chantier de fond, score 14)
+- `#MODEL-item-grain` — ✅ **livré en prod** (constaté 03/06 ; cœur + `#ILL-availability`). Réalignement couche référence : backlog → section E, registre §7 `ITEM-Q2/Q5` livrés.
 
 ---
 
@@ -719,7 +719,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 L'ordre n'est pas celui de rédaction des specs (#1→#4) mais celui des **dépendances dures**. Le **chemin critique est étroit** ; le reste se mène **en parallèle**.
 
 **Chemin critique (séquentiel) :**
-- **Phase 0 — `#MODEL-item-grain` cœur** : `item_id` sur tous les circuits (dont consultation). Pierre angulaire — sans elle, la matrice d'actions par exemplaire est impossible.
+- **Phase 0 — `#MODEL-item-grain` cœur** : ✅ **LIVRÉ** (constaté 03/06). `item_id` sur tous les circuits, consultation comprise. Pierre angulaire posée → garde-fou n°2 levé, la **Phase 1 peut démarrer**.
 - **Phase 1 — Migration foncière `exemplares` / `exemplar_drafts`, EN UNE SEULE VAGUE** : provenance (acquisition §5.1) **+** destination `circulation_policy`/`visibility` (exemplaires §4.2), backfill + DO-block.
 - **Phase 2 — Circulation effective** : padrão→seed→override + matrice d'actions + filtre public + resserrement `#ILL-availability` (dépend de la Phase 0).
 - **Phase 3 — Doublons fédérés** : garde au publish + `api.attach_exemplar`.

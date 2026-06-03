@@ -1,6 +1,6 @@
 # 📚 INDEX du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 2 juin 2026 (trilogie doctrinale : `spec-multi-appartenance-lecteur` v0.3 + `spec-partenariat-biblios` v0.3 figées, `spec-flux-partage-numerique` v0.2 charpentée ; registre enrichi MULTI/PARTNER/ILL/VALID-β1-γ1) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — + ordre de mise en œuvre) — précédemment : statut #CL.8 actualisé ; 31 mai 2026 (audit du corpus, groupe A, refonte INDEX/INVENTAIRE)
+**Dernière mise à jour** : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** via audit du dump schéma 03/06 → `spec-granularite-item` passe en 🔵 référence historique [cœur + suite `#ILL-availability`] ; ouverture Phase 1 exemplares, cf. `docs/decisions/`) — précédemment : 2 juin 2026 (trilogie doctrinale : `spec-multi-appartenance-lecteur` v0.3 + `spec-partenariat-biblios` v0.3 figées, `spec-flux-partage-numerique` v0.2 charpentée ; registre enrichi MULTI/PARTNER/ILL/VALID-β1-γ1) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — + ordre de mise en œuvre) — précédemment : statut #CL.8 actualisé ; 31 mai 2026 (audit du corpus, groupe A, refonte INDEX/INVENTAIRE)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document est la **porte d'entrée** du corpus de specs. Pour la description détaillée de chaque spec (statut d'implémentation, dépendances, dates, chantiers liés), voir [`INVENTAIRE.md`](./INVENTAIRE.md).
@@ -73,7 +73,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Granularité du modèle sur l'exemplaire | [`spec-granularite-item.md`](./spec-granularite-item.md) | v1 (23/05/2026) | 🟡 Cadrage, chantier `#MODEL-item-grain` — pierre angulaire |
+| Granularité du modèle sur l'exemplaire | [`spec-granularite-item.md`](./spec-granularite-item.md) | v1 (23/05/2026) | 🔵 Référence historique — chantier `#MODEL-item-grain` **livré en prod** (cœur + suite `#ILL-availability`, constaté 03/06) |
 
 ### 🗂️ Catalogação *(nouvelle famille — chantier Catalogação, 01/06)*
 
@@ -84,7 +84,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Module capas | [`spec-module-capas.md`](./spec-module-capas.md) | v0.2 (01/06/2026) | 🟡 Spécifiée — P1 (fix chemin) livrable immédiatement |
 | Sources externes & autorités | [`spec-sources-externes-autorites.md`](./spec-sources-externes-autorites.md) | v0.2 (01/06/2026) | 🟡 Spécifiée |
 
-> Chantier coordonné avec `spec-granularite-item` (`#MODEL-item-grain`, couche *trace*) et `spec-acquisition-provenance` (couche *provenance* — migration `exemplares` **mutualisée**). Ordre de mise en œuvre et garde-fous : voir `INVENTAIRE.md` § « Ordre de mise en œuvre — chantier Catalogação ».
+> Chantier coordonné avec `spec-granularite-item` (`#MODEL-item-grain`, couche *trace* — **livrée en prod**) et `spec-acquisition-provenance` (couche *provenance* — migration `exemplares` **mutualisée**). Ordre de mise en œuvre et garde-fous : voir `INVENTAIRE.md` § « Ordre de mise en œuvre — chantier Catalogação ».
 
 ### 🔎 Catalogue & découverte (lecteur) *(nouvelle famille — atelier RebAL, #OPAC / #CATALOG-EXT)*
 
