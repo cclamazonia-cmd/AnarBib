@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
+import { localizeError } from '@/lib/localizeError';
 
 // ── Material type values (labels resolved via t() inside component) ──
 const MATERIAL_TYPE_KEYS = ['livro','periodico','tract','cartaz','audio','audiovisual','recurso_digital','dossie','tese','artigo','relatorio','zine'];
@@ -1031,7 +1032,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved }
       setMsg({ text: 'Ficha publicada com sucesso!', kind: 'ok' });
       onSaved?.();
     } catch (err) {
-      setMsg({ text: `Erro ao publicar: ${err.message}`, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     }
   }
 

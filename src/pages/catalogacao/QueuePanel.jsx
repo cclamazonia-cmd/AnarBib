@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const TYPE_LABELS = { book: 'Documento', author: 'Autoridade', exemplar: 'Exemplar' };
 const STATUS_LABELS = { draft: 'Rascunho', ready: 'Pronto', published: 'Publicado', cancelled: 'Descartado' };
@@ -114,7 +115,7 @@ export default function QueuePanel({ batches }) {
     if (!sel.length) { setMsg({ text: 'Selecione ao menos um item.', kind: 'error' }); return; }
     if (!confirm(`Publicar ${sel.length} rascunho(s) selecionado(s)?`)) return;
     setMsg({ text: '', kind: '' });
-    let ok = 0, fail = 0;
+    let ok = 0, fail = 0; const errs = [];
     for (const { type, id } of sel) {
       try {
         const rpc = type === 'book' ? 'publish_book_draft' : type === 'author' ? 'publish_author_draft' : 'publish_exemplar_draft';
@@ -122,9 +123,16 @@ export default function QueuePanel({ batches }) {
         const { error } = await supabase.rpc(rpc, param);
         if (error) throw error;
         ok++;
-      } catch { fail++; }
+      } catch (err) {
+        fail++;
+        const m = localizeError(err, t);
+        if (m && !errs.includes(m)) errs.push(m);
+      }
     }
-    setMsg({ text: `${ok} publicado(s)${fail ? `, ${fail} com erro` : ''}.`, kind: fail ? 'warn' : 'ok' });
+    setMsg({
+      text: `${ok} publicado(s)${fail ? `, ${fail} com erro` : ''}.` + (errs.length ? ` ${errs.join(' ')}` : ''),
+      kind: fail ? 'warn' : 'ok',
+    });
     await loadQueue(); await loadTrash();
   }
 
