@@ -101,7 +101,7 @@ spec-historico-retencao-lectrice v1.0
 spec-notify-prorrogacao-granulaire v0.1
   └──→ #NOTIFY-Painel-acts (chantier transverse notifications Painel)
 
-spec-carte-lecteur-v0_1
+spec-carte-lecteur-v0_2
   └──→ DECISION_chantier_mobile_arbitrages_2026-05-28 (source des arbitrages A.1-A.4)
 
 spec-cartographie-reseau v0.1
@@ -523,24 +523,25 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 
 ---
 
-### 📱 `spec-carte-lecteur-v0_1.md` *(nouveau v0.1 28/05)*
+### 📱 `spec-carte-lecteur-v0_2.md` *(v0.2 03/06 — supersède v0.1 .docx du 28/05)*
 
-**Domaine** : Carte-lecteur AnarBib (phase β : génération + révocation)
-**Version actuelle** : v0.1 (28 mai 2026)
-**Format** : .docx (exception dans le corpus, à convertir en .md à la première révision substantielle)
-**Statut** : 🟢 **Phase β en prod** depuis le 28/05/2026 — génération + révocation côté reader, modèle complet. Phase γ (résolution staff scan) au Paquet 3 du chantier #MOBILE.
+**Domaine** : Carte-lecteur AnarBib (β : génération + révocation ; γ : résolution staff)
+**Version actuelle** : v0.2 (3 juin 2026)
+**Format** : .md (conversion depuis le .docx v0.1, effectuée à cette révision substantielle)
+**Statut** : 🟢 **Référence** — phase β en prod (28/05) ; **résolution staff `api.resolve_reader_card` livrée backend le 03/06** (UI staff à venir) ; arbitrages A.1-A.4 actés (A.1 séquençage 🟡 ouvert).
 
 **Périmètre** :
 - Mini-table dédiée `reader_card_tokens` (token haché, index unique partiel WHERE status='active')
 - RPC `api.generate_my_reader_card` + `api.revoke_my_reader_card` (SECURITY DEFINER)
 - Capacité activable `libraries.reader_cards_enabled`
 - QR opaque (qrcode), export PNG + PDF (jspdf) anti-tracking
-- Esquisse §9 : RPC de résolution staff (Paquet 3)
+- RPC `api.resolve_reader_card` (résolution staff : jeton scanné/saisi → appartenance, gardée staff `librarian`/`coordenador` + RLS, DEFINER + REVOKE) — **livrée backend 03/06** (esquisse §9 de v0.1 → contrat formalisé §5.3 de v0.2)
 
 **Dépendances entrantes** : aucune.
 
 **Dépendances sortantes** :
 - `docs/decisions/DECISION_chantier_mobile_arbitrages_2026-05-28.md` (arbitrages A.1-A.4 et trois décisions doctrinales)
+- `REGISTRE_decisions.md` §22 `CARD` (A.1-A.4 + CARD-R1 résolution staff)
 
 **Chantiers liés** :
 - Paquet 1 du chantier #MOBILE ✅ livré 28/05

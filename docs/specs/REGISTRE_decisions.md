@@ -201,7 +201,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ## 16. Compte lecteur & autres
 
-`HIST` (historico-retencao v1.0, #CL.8 en cours) · `NOTIFPRO` (cf. NPRO) · `CARD` (carte-lecteur, phase β en prod) · `114A` (🔵 clos 14/05 ; ⚠️ contient « 6 locales » historique). Détail à compléter au fil des chantiers.
+`HIST` (historico-retencao v1.0, #CL.8 en cours) · `NOTIFPRO` (cf. NPRO) · `CARD` (carte-lecteur — **détail désormais en §22** ; β en prod + résolution staff backend 03/06) · `114A` (🔵 clos 14/05 ; ⚠️ contient « 6 locales » historique). Détail à compléter au fil des chantiers.
 
 ---
 
@@ -299,4 +299,18 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
-*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*
+## 22. Carte-lecteur / mode terrain — `CARD` *(spec-carte-lecteur v0.2)*
+
+> La carte = **projection de l'appartenance** en un jeton de présentation **opaque**, inerte hors scan staff (pointeur, pas clé). Objets backend = **DOC-OBJ-2** ; actions DB = **DOC-RPC-3** ; portée/compteurs = **DOC-PERIM-1**. Le séquençage du chantier mobile (A.1) relève de la roadmap (**DOC-COLLECTIVE-1**, échéance Bologne). Les arbitrages A.2/A.3/A.4 ont été **tranchés par l'implémentation du 28/05** (le dossier de chantier les listait « en attente »).
+
+|ID|Décision|Statut|Foyer|
+|-|-|-|-|
+|**CARD-A1**|Séquençage du chantier mobile vis-à-vis de Catalogação : tout après Catalogação, **ou** détacher P0 (socle PWA) / P1 (carte) en avance de phase pour **Bologne (FICEDL sept. 2026)**. P1 est déjà détaché et livré.|🟡 ouvert (roadmap ; cf. DOC-COLLECTIVE-1)|spec-carte-lecteur v0.2 §3|
+|**CARD-A2**|Portée du jeton = **par appartenance** (un·e membre de 3 biblios a 3 cartes) ; **un seul actif par appartenance** (index `uq_reader_card_active_per_membership`). Cohérent DOC-PERIM-1 + la carte porte le logo d'**une** biblio.|✅ acté (implémentation 28/05)|spec-carte-lecteur v0.2 §3-4|
+|**CARD-A3**|Stockage = **mini-table dédiée** `reader_card_tokens` (conserve l'historique des révocations), pas de colonnes jeton/statut sur l'appartenance. Privilégie la traçabilité.|✅ acté (28/05)|spec-carte-lecteur v0.2 §4|
+|**CARD-A4**|Risque résiduel « carte-fichier sur téléphone saisi » (révèle l'appartenance, ne donne **pas** accès au compte) acté/documenté ; **génération = choix du lecteur**.|✅ acté|spec-carte-lecteur v0.2 §2-3|
+|**CARD-R1**|Résolution staff = RPC `api.resolve_reader_card(p_token)` : jeton scanné/saisi → hache (`fn_hash_claim_token`) → appartenance, **gardée staff (`librarian`/`coordenador`) de la biblio du jeton** + RLS ; DEFINER + REVOKE doctrinal ; aucune divulgation hors droit.|✅ backend livré 03/06 (UI staff à venir)|spec-carte-lecteur v0.2 §5.3|
+
+---
+
+*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1, section CARD (carte-lecteur)). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*

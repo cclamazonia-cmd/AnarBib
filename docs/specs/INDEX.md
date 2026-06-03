@@ -1,6 +1,6 @@
 # 📚 INDEX du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** via audit du dump schéma 03/06 → `spec-granularite-item` passe en 🔵 référence historique [cœur + suite `#ILL-availability`] ; ouverture Phase 1 exemplares, cf. `docs/decisions/`) — précédemment : 2 juin 2026 (trilogie doctrinale : `spec-multi-appartenance-lecteur` v0.3 + `spec-partenariat-biblios` v0.3 figées, `spec-flux-partage-numerique` v0.2 charpentée ; registre enrichi MULTI/PARTNER/ILL/VALID-β1-γ1) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — + ordre de mise en œuvre) — précédemment : statut #CL.8 actualisé ; 31 mai 2026 (audit du corpus, groupe A, refonte INDEX/INVENTAIRE)
+**Dernière mise à jour** : 3 juin 2026 (soir) — **dette ponctuelle soldée** (verrou `get_accessible_digital_asset` selon DOC-OBJ-2 ; **USER-EMAIL-1** : `profiles.email` rendu miroir synchronisé de `auth.users.email`, registre §0) + **carte-lecteur v0.2** (résolution staff `api.resolve_reader_card` livrée backend, contrat des 3 RPC, section `CARD` au registre §22) — précédemment : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** via audit du dump schéma 03/06 → `spec-granularite-item` passe en 🔵 référence historique [cœur + suite `#ILL-availability`] ; ouverture Phase 1 exemplares, cf. `docs/decisions/`) — précédemment : 2 juin 2026 (trilogie doctrinale : `spec-multi-appartenance-lecteur` v0.3 + `spec-partenariat-biblios` v0.3 figées, `spec-flux-partage-numerique` v0.2 charpentée ; registre enrichi MULTI/PARTNER/ILL/VALID-β1-γ1) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — + ordre de mise en œuvre) — précédemment : statut #CL.8 actualisé ; 31 mai 2026 (audit du corpus, groupe A, refonte INDEX/INVENTAIRE)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document est la **porte d'entrée** du corpus de specs. Pour la description détaillée de chaque spec (statut d'implémentation, dépendances, dates, chantiers liés), voir [`INVENTAIRE.md`](./INVENTAIRE.md).
@@ -67,7 +67,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Carte-lecteur AnarBib (phase β) | [`spec-carte-lecteur-v0_1.md`](./spec-carte-lecteur-v0_1.md) | v0.1 (28/05/2026) | 🟢 Phase β en prod (génération + révocation), phase γ au Paquet 3 |
+| Carte-lecteur AnarBib | [`spec-carte-lecteur-v0_2.md`](./spec-carte-lecteur-v0_2.md) | v0.2 (03/06/2026) | 🟢 Référence — phase β en prod (génération + révocation) ; **résolution staff `api.resolve_reader_card` livrée backend (03/06)**, UI staff à venir ; arbitrages A.1-A.4 actés (A.1 séquençage 🟡 ouvert). Supersède v0.1 (.docx, 28/05 → archive) |
 
 ### 📐 Modélisation structurelle *(nouveau famille)*
 
