@@ -58,3 +58,6 @@ docs/db/*
 # Seul le document public de recensement est versionné.
 docs/cartographie/*
 !docs/cartographie/AnarBib_recensement_bibliotheques_libertaires.docx
+
+# Fichiers temporaires / verrou MS Office
+~$*
