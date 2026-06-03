@@ -82,14 +82,20 @@ L'exemplaire se décrit sur trois couches **distinctes et complémentaires**. De
 
 `circulation_policy` et `visibility` sont **orthogonaux**, avec une règle : un exemplaire `visibility = staff_only` (arquivo) n'est ni emprunté ni consulté par un lecteur, quelle que soit sa `circulation_policy` (qui reste descriptive de l'usage prévu s'il ressort un jour des archives).
 
-### 4.2 Migration — **mutualisée avec acquisition §5.1** (Q9)
+### 4.2 — Backfill de l'existant *(amendé par DOC-CIRC-1, 03/06/2026)*
 
-Les deux specs touchent les **mêmes tables** (`exemplares`, `exemplar_drafts`). Pour éviter une double vague, la migration est **unique et co-rédigée** : elle ajoute en une transaction les colonnes provenance (acquisition) **et** les colonnes destination (cette spec).
+À la migration, `circulation_policy` est dérivé de l'empruntabilité actuelle de la fiche
+(`books.loanable`) :
 
-- **Backfill** (2 461 exemplaires existants) : `visibility = 'public'` partout ; `circulation_policy` dérivé du champ de circulation actuel de la fiche (`emprestavel` si la fiche est marquée empruntable, sinon `consulta`).
-- **DO-block de vérification** en fin de transaction (présence des colonnes, CHECK actifs, backfill non-NULL). `RAISE EXCEPTION` = rollback.
-- Timestamp UTC, vérifié avant choix ; déploiement `git push` → Woodpecker (jamais MCP `apply_migration` ni SQL Editor).
+- fiche **empruntable** → `'ambos'` (prêt **et** consultation sur place) ;
+- fiche **non empruntable** → `'consulta'`.
 
+`visibility` est initialisé à `'public'` pour tout l'existant.
+
+> **Note (DOC-CIRC-1).** Le défaut est `'ambos'`, **non** `'emprestavel'` : il préserve
+> #consulta-loanable — la consultation sur place reste un droit d'accès par défaut pour
+> tout ouvrage en circulation. `'emprestavel'` (prêt-seul, non consultable) ne s'obtient
+> que par un choix **délibéré** au niveau de l'exemplaire (cf. §6.1, cas BTL).
 ---
 
 ## 5. Padrão (fiche) ↔ destination (exemplaire)
