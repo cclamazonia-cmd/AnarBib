@@ -115,7 +115,7 @@ const EMPTY_FORM = {
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
 
@@ -124,6 +124,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved }
   const CONTRIBUTOR_ROLES = useMemo(() => CONTRIBUTOR_ROLE_KEYS.map(k => ({ value: k, label: t({ id: `catalogacao.role.${k}` }) })), [t]);
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
+  const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
 
@@ -1013,6 +1014,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved }
     const draftId = f('id');
     if (!draftId) { setMsg({ text: 'Salve o rascunho antes de publicar.', kind: 'error' }); return; }
     if (!confirm(t({id:'catalogacao.msg.publishConfirm'}))) return;
+    setDupBanner(null);
 
     try {
       // Mark as ready first
@@ -1032,7 +1034,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved }
       setMsg({ text: 'Ficha publicada com sucesso!', kind: 'ok' });
       onSaved?.();
     } catch (err) {
-      setMsg({ text: localizeError(err, t), kind: 'error' });
+      const raw = typeof err?.message === 'string' ? err.message : '';
+      const code = raw.split(':', 1)[0].trim();
+      if (code === 'isbn_duplicado') {
+        const idPart = raw.includes(':') ? raw.slice(raw.indexOf(':') + 1).trim() : '';
+        const bookId = /^\d+$/.test(idPart) ? Number(idPart) : null;
+        setDupBanner({ bookId });
+        setMsg({ text: '', kind: '' });
+      } else {
+        setDupBanner(null);
+        setMsg({ text: localizeError(err, t), kind: 'error' });
+      }
     }
   }
 
@@ -1196,6 +1208,27 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved }
       {/* Message */}
       {msg.text && (
         <div className={`cat-message show ${msg.kind}`} style={{ marginBottom: 14 }}>{msg.text}</div>
+      )}
+      {dupBanner && (
+        <div className="cat-message show warn" style={{ marginBottom: 14 }}>
+          <div style={{ fontWeight: 700 }}>{t({ id: 'catalogacao.duplicate.title' })}</div>
+          <div style={{ marginTop: 4 }}>{t({ id: 'catalogacao.duplicate.body' })}</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+            {dupBanner.bookId && onOpenBook && (
+              <button type="button" className="cat-btn secondary" onClick={() => onOpenBook(dupBanner.bookId)}>
+                {t({ id: 'catalogacao.duplicate.openExisting' })}
+              </button>
+            )}
+            {dupBanner.bookId && onAttachToBook && (
+              <button type="button" className="cat-btn secondary" onClick={() => { onAttachToBook(dupBanner.bookId); setDupBanner(null); }}>
+                {t({ id: 'catalogacao.duplicate.attachHere' })}
+              </button>
+            )}
+            <button type="button" className="cat-btn" onClick={() => setDupBanner(null)}>
+              {t({ id: 'catalogacao.duplicate.reviseIsbn' })}
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Form */}

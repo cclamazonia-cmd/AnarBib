@@ -44,7 +44,7 @@ function getTrigram(name) {
   return clean ? clean.slice(0,3).padEnd(3,'X') : '---';
 }
 
-export default function ExemplarDraftForm({ mode, batches }) {
+export default function ExemplarDraftForm({ mode, batches, prefillBibRef }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const isComplete = mode === 'complete';
@@ -83,6 +83,16 @@ export default function ExemplarDraftForm({ mode, batches }) {
   }, []);
 
   useEffect(() => { loadDrafts(); }, [loadDrafts]);
+
+  // P1.6-b.2 : pré-ciblage depuis le bandeau doublon — CatalogacaoPage passe le bib_ref
+  // de la ficha existante ; on prépare un exemplaire neuf pointant dessus.
+  useEffect(() => {
+    if (!prefillBibRef) return;
+    resetForm();
+    set('target_bib_ref', prefillBibRef);
+    resolveParentBook(prefillBibRef);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefillBibRef]);
 
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {

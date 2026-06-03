@@ -129,6 +129,20 @@ export default function CatalogacaoPage() {
   // Tab management
   // ═══════════════════════════════════════════════════════
 
+  // P1.6-b.2 : pré-ciblage de l'attache depuis le bandeau doublon (BookDraftForm).
+  const [attachTarget, setAttachTarget] = useState('');
+  function openBook(bookId) {
+    if (bookId) window.open(`/livro/${bookId}`, '_blank', 'noopener');
+  }
+  async function attachToBook(bookId) {
+    if (!bookId) return;
+    try {
+      const { data } = await supabase.from('books').select('bib_ref').eq('id', Number(bookId)).single();
+      if (data?.bib_ref) setAttachTarget(String(data.bib_ref));
+    } catch {}
+    switchTab('indexPanel');
+  }
+
   function switchTab(tabId) {
     if (!TABS.some(t => t.id === tabId)) return;
     setActiveTab(tabId);
@@ -253,7 +267,7 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.documento'})}</h3>
             </div>
-            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} />
+            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} />
           </div>
 
           {/* 2. Autoria */}
@@ -263,7 +277,7 @@ export default function CatalogacaoPage() {
 
           {/* 3. Indexação (exemplar + rótulo + impression étiquettes) */}
           <div className={`cat-panel${activeTab === 'indexPanel' ? ' active' : ''}`}>
-            <ExemplarDraftForm mode={mode} batches={batches} />
+            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} />
             <LabelSheetPrinter />
           </div>
 
