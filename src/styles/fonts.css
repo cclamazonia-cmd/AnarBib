@@ -121,3 +121,17 @@
   src: url('/fonts/FiraSans-ExtraBold.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0100-017F, U+0180-024F, U+0259, U+1E00-1EFF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2190-21FF;
 }
+
+/* ===== GREC (EL) : U+0370-03FF + U+1F00-1FFF, ranges disjointes du latin ===== */
+/* 'Bitter' grec -> Roboto Slab (400 + 700 ; 600->700 et 800->700, vrai gras) */
+@font-face{font-family:'Bitter';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/RobotoSlab-Greek-Regular.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Bitter';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/RobotoSlab-Greek-Bold.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+/* 'Fira Sans' grec -> 8 faces v18 */
+@font-face{font-family:'Fira Sans';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/FiraSans-Greek-Regular.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Fira Sans';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/FiraSans-Greek-Italic.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Fira Sans';font-style:normal;font-weight:600;font-display:swap;src:url('/fonts/FiraSans-Greek-SemiBold.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Fira Sans';font-style:italic;font-weight:600;font-display:swap;src:url('/fonts/FiraSans-Greek-SemiBoldItalic.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Fira Sans';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/FiraSans-Greek-Bold.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Fira Sans';font-style:italic;font-weight:700;font-display:swap;src:url('/fonts/FiraSans-Greek-BoldItalic.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Fira Sans';font-style:normal;font-weight:800;font-display:swap;src:url('/fonts/FiraSans-Greek-ExtraBold.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
+@font-face{font-family:'Fira Sans';font-style:italic;font-weight:800;font-display:swap;src:url('/fonts/FiraSans-Greek-ExtraBoldItalic.woff2') format('woff2');unicode-range:U+0370-03FF,U+1F00-1FFF}
