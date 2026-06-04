@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { supabase } from '@/lib/supabase';
-import { publicAssetUrl } from '@/lib/theme';
+import { resolveLibraryLogo } from '@/lib/theme';
 import {
   canSeeAccount,
   canSeePainel,
@@ -17,24 +17,10 @@ import { Button } from '@/components/ui';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import './layout.css';
 
-// ── Résolution data-driven du logo de la bibliothèque de session ───────
-// Source = library_commons (logo_url, logo_file_key). Plus de map codé en dur
-// (TR-6.2b). Calque la resolveLogo de la carte lecteur :
-//   - logo_url retenu SEULEMENT si URL absolue http(s) (les valeurs relatives
-//     heritees, ex. ./assets/.../logo-btl.png, sont ignorees) ;
-//   - sinon logo_file_key -> chemin bucket via publicAssetUrl ;
-//   - repli : pas de logo de session (le brand AnarBib reste affiche).
-function resolveLogoData(commons) {
-  if (!commons) return null;
-  const url = typeof commons.logo_url === 'string' ? commons.logo_url.trim() : '';
-  if (/^https?:\/\//i.test(url)) return url;
-  const key = commons.logo_file_key;
-  if (typeof key === 'string' && key.trim() !== '') {
-    const tail = key.includes('/') ? key : `themes/${key}/logo-${key}.png`;
-    return publicAssetUrl(tail);
-  }
-  return null;
-}
+// Logo de la bibliothèque de session : résolu data-driven depuis
+// library_commons (logo_url / logo_file_key) via resolveLibraryLogo de
+// @/lib/theme — source partagée avec la carte lecteur (plus de logique
+// dupliquée ici, item 2 ; plus de map codé en dur, TR-6.2b).
 
 // ── Page shell ─────────────────────────────────────────────
 
@@ -68,7 +54,7 @@ export function Topbar() {
           .select('logo_url, logo_file_key')
           .eq('library_id', libraryId)
           .maybeSingle();
-        if (!cancelled) setLogoSrc(resolveLogoData(data));
+        if (!cancelled) setLogoSrc(resolveLibraryLogo(data));
       } catch {
         if (!cancelled) setLogoSrc(null);
       }

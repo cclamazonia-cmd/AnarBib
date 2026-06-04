@@ -8,6 +8,27 @@ export function publicAssetUrl(path) {
   return `${SUPABASE_URL}/storage/v1/object/public/${THEME_BUCKET}/${path}`;
 }
 
+// ── Résolution data-driven du logo d'une bibliothèque (source partagée) ──────
+// Source unique utilisée par la carte lecteur (MyLibraryContactCard) ET le
+// header (Topbar). Auparavant la même logique était DUPLIQUÉE dans les deux
+// (resolveLogo / resolveLogoData), d'où un risque de désync (item 2).
+//   - logo_url retenu SEULEMENT si URL absolue http(s) (les valeurs relatives
+//     héritées, ex. ./assets/.../logo-btl.png, sont ignorées — cf. TR-6.2b) ;
+//   - sinon logo_file_key : chemin complet dans le bucket (convention cible)
+//     OU slug nu hérité (filet : expansé en themes/<slug>/logo-<slug>.png) ;
+//   - sinon null (le composant retombe sur son repli texte).
+export function resolveLibraryLogo(commons) {
+  if (!commons) return null;
+  const url = typeof commons.logo_url === 'string' ? commons.logo_url.trim() : '';
+  if (/^https?:\/\//i.test(url)) return url;
+  const key = commons.logo_file_key;
+  if (typeof key === 'string' && key.trim() !== '') {
+    const tail = key.includes('/') ? key : `themes/${key}/logo-${key}.png`;
+    return publicAssetUrl(tail);
+  }
+  return null;
+}
+
 function setCssVar(name, value) {
   if (value == null || value === '') return;
   document.documentElement.style.setProperty(name, value);
