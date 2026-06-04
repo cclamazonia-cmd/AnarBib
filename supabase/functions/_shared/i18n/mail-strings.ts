@@ -25,6 +25,51 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  "rmsg.staff.sub": {
+    "pt-BR": "Novo recado de uma pessoa da biblioteca",
+    fr: "Nouveau message d'un·e lecteur·rice",
+    es: "Nuevo mensaje de une lectore",
+    en: "New message from a reader",
+    it: "Nuovo messaggio da una persona della biblioteca",
+    de: "Neue Nachricht von einer*einem Leser*in",
+    ca: "Nou missatge d'una persona de la biblioteca",
+    eo: "Nova mesaĝo de leganto",
+    nl: "Nieuw bericht van een lezer"
+  },
+  "rmsg.staff.intro": {
+    "pt-BR": "Uma pessoa associada à sua biblioteca enviou um recado pelo sistema.",
+    fr: "Une personne associée à votre bibliothèque vous a écrit via le système.",
+    es: "Une persona asociade a tu biblioteca te escribió a través del sistema.",
+    en: "Someone connected to your library has sent you a message through the system.",
+    it: "Una persona associata alla vostra biblioteca vi ha scritto tramite il sistema.",
+    de: "Eine mit eurer Bibliothek verbundene Person hat euch über das System geschrieben.",
+    ca: "Una persona vinculada a la vostra biblioteca us ha escrit a través del sistema.",
+    eo: "Persono ligita al via biblioteko skribis al vi per la sistemo.",
+    nl: "Iemand die bij jullie bibliotheek hoort heeft via het systeem een bericht gestuurd."
+  },
+  "rmsg.reader.sub": {
+    "pt-BR": "Seu recado foi enviado",
+    fr: "Ton message a été envoyé",
+    es: "Tu mensaje fue enviado",
+    en: "Your message has been sent",
+    it: "Il tuo messaggio è stato inviato",
+    de: "Deine Nachricht wurde gesendet",
+    ca: "El teu missatge s'ha enviat",
+    eo: "Via mesaĝo estis sendita",
+    nl: "Je bericht is verzonden"
+  },
+  "rmsg.reader.intro": {
+    "pt-BR": "Recebemos seu recado e avisamos a biblioteca. Aqui está uma cópia:",
+    fr: "Nous avons bien reçu ton message et prévenu la bibliothèque. En voici une copie :",
+    es: "Recibimos tu mensaje y avisamos a la biblioteca. Aquí tienes una copia:",
+    en: "We received your message and notified the library. Here is a copy:",
+    it: "Abbiamo ricevuto il tuo messaggio e avvisato la biblioteca. Ecco una copia:",
+    de: "Wir haben deine Nachricht erhalten und die Bibliothek benachrichtigt. Hier eine Kopie:",
+    ca: "Hem rebut el teu missatge i hem avisat la biblioteca. Aquí en tens una còpia:",
+    eo: "Ni ricevis vian mesaĝon kaj avertis la bibliotekon. Jen kopio:",
+    nl: "We hebben je bericht ontvangen en de bibliotheek op de hoogte gebracht. Hier is een kopie:"
+  },
+
   // ===== Greetings ==========================================================
   "greeting.named": {
     "pt-BR": "Olá, {name}!",

@@ -5,12 +5,15 @@ import { handleReservaCriadaV2, handleReservaPickupReplyEvent, handleReservaV2St
 import { handleConsultaCriadaV2, handleConsultaV2LifecycleEvent, handleConsultaV2WorkflowEvent } from "../domain/consultas.ts";
 import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
+import { handleReaderMessageEvent } from "../domain/reader-message.ts";
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
   // Events network.* (gouvernance reseau transverse) - handler dedie, meme outbox que team.*
   if (event.startsWith("network.")) return await handleNetworkEvent(recordId);
+  // Events reader_message* (recad libre lecteur -> sa biblio) - handler dedie, lit reader_library_messages par recordId
+  if (event.startsWith("reader_message")) return await handleReaderMessageEvent(recordId);
   if (event === "reserva_criada") return await handleReservaCriadaOld(recordId);
   // TR-1 (#153.A) : 'emprestimo_prorrogado' retire de la branche legacy.
   // L'evenement n'est plus emis par la base : le seul emetteur de prorogation,
