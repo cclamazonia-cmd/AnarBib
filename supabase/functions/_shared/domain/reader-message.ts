@@ -1,11 +1,11 @@
 // =============================================================================
 // _shared/domain/reader-message.ts
 // =============================================================================
-// Handler notify-event pour l'event reader_message_sent : une personne ecrit a
-// sa bibliotheque via le canal in-systeme (carte « ma bibliotheque » cote
-// lecteur). Envoie :
-//   - un mail au staff (adminTarget, locale biblio) avec le recad,
-//   - un accuse de reception au lecteur·rice (locale perso), copie du recad.
+// Handlers notify-event du canal « messages lecteur <-> biblio » :
+//   - handleReaderMessageEvent  (event reader_message_sent)  : reader -> biblio
+//       mail au staff (adminTarget, locale biblio) + accuse au lecteur·rice.
+//   - handleLibraryMessageEvent (event library_message_sent) : biblio -> reader
+//       mail au DESTINATAIRE seul (pas de copie staff, le staff a initie).
 // Pas d'actionBox (un recad libre n'a pas de CTA tant qu'il n'y a pas de boite
 // in-app). Met a jour mail_status sur reader_library_messages.
 //
@@ -23,7 +23,7 @@ import {
 } from "../transport/email.ts";
 import { adminDisplayName, esc, fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
-import { getReaderMessageBundle, markReaderMessageMailStatus } from "../data/reader-messages.ts";
+import { getReaderMessageBundle, getLibraryMessageBundle, markReaderMessageMailStatus } from "../data/reader-messages.ts";
 
 // Echappe le corps + convertit les retours ligne en <br> pour l'HTML.
 function bodyToHtml(raw: string): string {
@@ -95,9 +95,59 @@ export async function handleReaderMessageEvent(recordId: number) {
     ur = skippedEmailResult("user_mail", "no_reader_recipient");
   }
 
-  // ---- Statut mail : la livraison qui compte est celle au staff ----
   const staffOk = (ar as { ok?: boolean } | null | undefined)?.ok === true;
   await markReaderMessageMailStatus(recordId, staffOk ? "sent" : "failed");
 
   return { user_result: ur, admin_result: ar };
+}
+
+// =============================================================================
+// handleLibraryMessageEvent - reciproque (direction=library)
+// Une biblio ecrit a un·e lecteur·rice. Mail au DESTINATAIRE seul (decision :
+// pas de copie staff, le staff a initie). Pas d'actionBox.
+// =============================================================================
+export async function handleLibraryMessageEvent(recordId: number) {
+  const { message, recipient } = await getLibraryMessageBundle(recordId);
+  const ctx = await resolveLibraryNotificationContext(
+    String(message.library_id || "").trim() || null
+  );
+  const bt = subjectTag(ctx);
+  const user = userTargetFromProfile(recipient);
+
+  const locale = String(recipient?.preferred_language || "").trim() || null;
+  const subject = String(message.subject || "").trim();
+  const body = String(message.body || "").trim();
+  const bodyHtml = bodyToHtml(body);
+
+  let ur;
+  if (user) {
+    const title = tMail(locale, "lmsg.reader.sub");
+    const mailSubject = `${subject || title} - ${bt}`;
+    const intro =
+      `<p style="margin:0 0 10px;">${tMail(locale, "lmsg.reader.intro")}</p>` +
+      (subject ? `<p style="margin:0 0 6px;"><b>${esc(subject)}</b></p>` : "") +
+      `<div style="margin:0;padding:10px 12px;background:rgba(255,255,255,.05);border-left:3px solid rgba(255,255,255,.2);border-radius:4px;line-height:1.55;">${bodyHtml}</div>`;
+
+    const { html, text } = renderEmail({
+      locale: locale,
+      preheader: title,
+      title: title,
+      greeting: greeting(locale, user?.name),
+      introHtml: intro,
+      footerHtml: footerPadrao(ctx, locale),
+      context: ctx,
+      libreDiffusionLabel: tMail(locale, "subj.libreDiffusion")
+    });
+    ur = await safeSendEmail(user, applyBrandingText(mailSubject, ctx), html, text, "user_mail", ctx);
+  } else {
+    ur = skippedEmailResult("user_mail", "no_reader_recipient");
+  }
+
+  const ok = (ur as { ok?: boolean } | null | undefined)?.ok === true;
+  await markReaderMessageMailStatus(recordId, ok ? "sent" : "failed");
+
+  return {
+    user_result: ur,
+    admin_result: skippedEmailResult("admin_copy", "library_message_no_staff_copy")
+  };
 }

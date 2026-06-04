@@ -25,6 +25,29 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  "lmsg.reader.sub": {
+    "pt-BR": "Mensagem da sua biblioteca",
+    fr: "Message de ta bibliothèque",
+    es: "Mensaje de tu biblioteca",
+    en: "A message from your library",
+    it: "Un messaggio dalla tua biblioteca",
+    de: "Eine Nachricht deiner Bibliothek",
+    ca: "Un missatge de la teva biblioteca",
+    eo: "Mesaĝo de via biblioteko",
+    nl: "Een bericht van je bibliotheek"
+  },
+  "lmsg.reader.intro": {
+    "pt-BR": "Sua biblioteca lhe enviou uma mensagem:",
+    fr: "Ta bibliothèque t'a écrit :",
+    es: "Tu biblioteca te escribió:",
+    en: "Your library has sent you a message:",
+    it: "La tua biblioteca ti ha scritto:",
+    de: "Deine Bibliothek hat dir geschrieben:",
+    ca: "La teva biblioteca t'ha escrit:",
+    eo: "Via biblioteko skribis al vi:",
+    nl: "Je bibliotheek heeft je een bericht gestuurd:"
+  },
+
   "rmsg.staff.sub": {
     "pt-BR": "Novo recado de uma pessoa da biblioteca",
     fr: "Nouveau message d'un·e lecteur·rice",
