@@ -1,6 +1,6 @@
 # 📋 INVENTAIRE du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 4 juin 2026 (soir) — **`spec-outils-federalistes` v0.1 créée** ; **FED-O4/O5/O6 tranchés** (registre §`FED` : terme `círculo` ; adhésion opt-out + anti-blackball ; mutualisation axe distinct) — précédemment : 4 juin 2026 (cadrage `CADRAGE_modele_acces_concentrique_2026-06-04` ajouté à la carte des dépendances ; modèle d'accès concentrique → registre §`FED`) — précédemment : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** [audit dump schéma 03/06] → `spec-granularite-item` en 🔵 ; ouverture Phase 1 exemplares) — précédemment : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
+**Dernière mise à jour** : 4 juin 2026 (nuit) — carte-lecteur **phase γ complète** (UI staff `ResolveCardBox` livrée, **gatée `libraries.reader_cards_enabled`** ; hotfix Woodpecker vert) ; **`CADRAGE_importacoes_module_2026-06-04` ouvert** (chantier-cadre Importações, ajouté à la carte des dépendances ; registre §`IMP` ; défère `ACQ-Q4` + `FED-5`) ; `DOC-I18N-1` réaligné **9 locales** (`nl`) — précédemment : 4 juin 2026 (soir) — **`spec-outils-federalistes` v0.1 créée** ; **FED-O4/O5/O6 tranchés** (registre §`FED` : terme `círculo` ; adhésion opt-out + anti-blackball ; mutualisation axe distinct) — précédemment : 4 juin 2026 (cadrage `CADRAGE_modele_acces_concentrique_2026-06-04` ajouté à la carte des dépendances ; modèle d'accès concentrique → registre §`FED`) — précédemment : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** [audit dump schéma 03/06] → `spec-granularite-item` en 🔵 ; ouverture Phase 1 exemplares) — précédemment : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document décrit **chaque spec active** du corpus AnarBib avec son statut d'implémentation, ses dépendances entrantes et sortantes, sa date de dernière mise à jour, et les chantiers liés. Pour la navigation rapide par domaine, voir [`INDEX.md`](./INDEX.md).
@@ -112,6 +112,13 @@ CADRAGE_modele_acces_concentrique_2026-06-04 (trace — accès concentrique + fa
   ├──→ spec-cartographie-reseau v0.1 (carte uMap = gisement de données ; FED-7 verrouille l'agrégat)
   ├──→ #PARTNERS / library_partnerships (agir engage la biblio → coordenador, FED-1/FED-5)
   └──→ CHANTIER_reseau_federatif_2026-05-25 (trace prolongée)
+
+CADRAGE_importacoes_module_2026-06-04 (trace — chantier-cadre Importações, module-chapeau d'import ; foyer registre §IMP)
+  ├──→ registre ACQ-Q4 (frontière : ingestion → Importações / provenance → Catalogação ; déjà tranchée)
+  ├──→ registre FED-5 (rôle = coordenador intégral)
+  ├──→ book_drafts + spec-catalogacao-fiche-et-paliers (cible des imports → couplage révision/publication)
+  ├──→ catalog_partners / #PARTNERS (fédération : pull gaté par consentement, catalog_partner_*_import)
+  └──→ staging import_blmf_* + import_terra_livre_zotero_staging (sources legacy + Zotero)
 
 spec-catalogacao-fiche-et-paliers v0.4 (chantier Catalogação — UX/champs, aucune migration DB)
   ├──→ spec-exemplaires-circulation (le padrão fiche sème la destination)
@@ -534,7 +541,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Domaine** : Carte-lecteur AnarBib (β : génération + révocation ; γ : résolution staff)
 **Version actuelle** : v0.2 (3 juin 2026)
 **Format** : .md (conversion depuis le .docx v0.1, effectuée à cette révision substantielle)
-**Statut** : 🟢 **Référence** — phase β en prod (28/05) ; **résolution staff `api.resolve_reader_card` livrée backend le 03/06** (UI staff à venir) ; arbitrages A.1-A.4 actés (A.1 séquençage 🟡 ouvert).
+**Statut** : 🟢 **Référence** — phase β en prod (28/05) ; **résolution staff `api.resolve_reader_card` livrée backend 03/06 + UI staff `ResolveCardBox` 04/06** (gatée sur `libraries.reader_cards_enabled` — invisible là où la carte n'est pas activée) — **phase γ complète** ; arbitrages A.1-A.4 actés (A.1 séquençage 🟡 ouvert).
 
 **Périmètre** :
 - Mini-table dédiée `reader_card_tokens` (token haché, index unique partiel WHERE status='active')
@@ -551,7 +558,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 
 **Chantiers liés** :
 - Paquet 1 du chantier #MOBILE ✅ livré 28/05
-- Paquet 3 (résolution staff) — à venir
+- Paquet 3 (résolution staff) — ✅ UI `ResolveCardBox` livrée 04/06 (gatée `reader_cards_enabled`) ; scan caméra = suite (socle PWA + scanner, cf. A.1)
 
 ---
 
@@ -857,6 +864,7 @@ Les **dépendances entrantes** et **sortantes** doivent être maintenues à jour
 - **`spec-partenariat-biblios`** : **charpente figée v0.3 le 02/06** (`PARTNER-D1..D9` au registre ; cadrage `CADRAGE_partenariat_stabilise_2026-06-02.md`). Dossier d'ouverture constitué ; remplissage à venir, après multi-appartenance.
 - **`spec-flux-partage-numerique`** (#ILL-digital) : **charpente figée v0.2 le 02/06** côté conception (`ILL-1..ILL-9` au registre, mandat BLMF ; cadrage `CADRAGE_ILL-digital_2026-05-25` 🔵). Circuit numérique **distinct du PEB** ; droit du partenariat stabilisé (`PARTNER-D9`). Remplissage à venir (DDL, rôles, i18n).
 - **`spec-outils-federalistes`** (face fédération) : **v0.1 créée 🟡 cadrée** — cœur = socle + primitive cercle (`círculo`) : annuaire, adhésion opt-out + anti-blackball (FED-O5), cycle de vie ; mutualisation = axe distinct renvoyé (FED-O6). Foyer registre §`FED` (FED-1..7 + FED-O4/O5/O6 tranchés) ; cadrage `CADRAGE_modele_acces_concentrique_2026-06-04.md`. Bloc « Ferramentas federalistas » (nav entre `biblioteca` et `rede`). Prolonge `CHANTIER_reseau_federatif_2026-05-25`. Autres onglets charpentés/renvoyés ; remplissage code à venir.
+- **Importações** (module-chapeau d'import du catalogue) : **chantier-cadre ouvert 04/06** — cadrage `CADRAGE_importacoes_module_2026-06-04.md` (foyer registre §`IMP`). La plomberie de provenance est **déjà posée** (`catalog_ref_*`, cible `book_drafts`, journal `book_draft_import_events`, gardes `catalog_partner_*_import`, staging `import_blmf_*` + Zotero) ; **manque = surface `api.*` + UI**. Trois logiques (legacy BLMF one-shot / Zotero-Terra Livre / fédération partenaires gatée par consentement). **Défère** `ACQ-Q4` (frontière Catalogação) + `FED-5` (rôle coordenador) ; arbitrages `IMP-A1..A5` ouverts. Remplissage après validation du cadrage.
 
 ---
 

@@ -16,7 +16,7 @@ Ce sont les faits recopiés dans presque toutes les specs : c'est là que naisse
 
 |ID|Énoncé|Statut|Foyer / origine|
 |-|-|-|-|
-|**DOC-I18N-1**|**8 locales** : pt-BR, fr, es, it, de, en, **ca**, **eo**. Livraison en une passe, clés plates, LF sans BOM, 2 espaces.|✅ acté (ca/eo ajoutés depuis le « 6 » historique)|acquisition §7 ; notify-prorrogacao D5 ⚠️ **~13 specs disent encore « 6 locales » — voir DRIFT-1**|
+|**DOC-I18N-1**|**9 locales** : pt-BR, fr, es, it, de, en, **ca**, **eo**, **nl**. Chaque clé livrée dans TOUTES les locales en une passe, clés plates, LF sans BOM, 2 espaces.|✅ acté (ca/eo depuis le « 6 » historique ; **nl ajouté ~03/06**)|acquisition §7 ; notify-prorrogacao D5 ⚠️ **~13 specs disent encore « 6 locales » — voir DRIFT-1**|
 |**DOC-DEPLOY-1**|`git push` → Woodpecker déploie tout (`supabase db push --linked` + `deploy-edge-functions`). **Jamais** `apply_migration` MCP, **jamais** SQL Editor avant push, **jamais** CLI manuelle. Migrations horodatées **UTC**, vérifier avant de choisir.|✅ acté (corrigé)|spec-migration-mail-resend §6.6 (v0.4) ; acquisition §7|
 |**DOC-DEPLOY-2**|Exception unique : `notify-event` se déploie en **CLI** (`--no-verify-jwt`, bundle >150 ko). `register` = seule EF avec `verify_jwt`.|✅ acté|migration-mail §6.6|
 |**DOC-DEPLOY-3**|SQL Editor : **interdit** pour toute migration/DDL avant push (le schéma passe par fichier + `git push` → Woodpecker). **Toléré**, à titre exceptionnel et **tracé**, pour (a) le nettoyage ponctuel de données de test/résiduelles (DML sur quelques lignes, jamais de schéma) et (b) les lectures de diagnostic/validation. Toute opération consignée (date + objet) ; si effet durable, reportée en migration ou note de décision.|✅ acté 02/06|régularise cycle-vie-peb (purge PEB test = a) et historico (test = b) — clôt DRIFT-5|
@@ -201,7 +201,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ## 16. Compte lecteur & autres
 
-`HIST` (historico-retencao v1.0, #CL.8 en cours) · `NOTIFPRO` (cf. NPRO) · `CARD` (carte-lecteur — **détail désormais en §22** ; β en prod + résolution staff backend 03/06) · `114A` (🔵 clos 14/05 ; ⚠️ contient « 6 locales » historique). Détail à compléter au fil des chantiers.
+`HIST` (historico-retencao v1.0, #CL.8 en cours) · `NOTIFPRO` (cf. NPRO) · `CARD` (carte-lecteur — **détail désormais en §22** ; β en prod + résolution staff livrée 03-04/06 backend + UI staff — **γ complète**) · `114A` (🔵 clos 14/05 ; ⚠️ contient « 6 locales » historique). Détail à compléter au fil des chantiers.
 
 ---
 
@@ -278,7 +278,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 ## 21. Onboarding & atelier de constitution — `ONBO` *(spec-onboarding-biblioteca v2.0 → v2.1 à produire ; `spec-onboarding-painel` à créer ; cadrage 02/06)*
 
 > Foyer du cadrage : `CADRAGE_onboarding_atelier_2026-06-02.md` (trace). Décisions normatives ci-dessous.
-> i18n des nouvelles clés = **DOC-I18N-1** (8 locales — la spec v2.0 dit encore « ×6 », corriger en v2.1, cf. DRIFT-1). Délibération = **DOC-COLLECTIVE-1**. Écritures = **DOC-RPC-3**. Objets backend = **DOC-OBJ-2**. Déploiement = **DOC-DEPLOY-1**. Clôture par paquet = **DOC-CLOSE-1**. Canal humain = **RES-D9** ; composants partagés `<HumanChannelInlineCallout>` (MM3), `<HumanChannelFooter>` (MM2).
+> i18n des nouvelles clés = **DOC-I18N-1** (9 locales — la spec v2.0 dit encore « ×6 », corriger en v2.1, cf. DRIFT-1). Délibération = **DOC-COLLECTIVE-1**. Écritures = **DOC-RPC-3**. Objets backend = **DOC-OBJ-2**. Déploiement = **DOC-DEPLOY-1**. Clôture par paquet = **DOC-CLOSE-1**. Canal humain = **RES-D9** ; composants partagés `<HumanChannelInlineCallout>` (MM3), `<HumanChannelFooter>` (MM2).
 
 |ID|Décision|Statut|Foyer|
 |-|-|-|-|
@@ -292,7 +292,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 |**ONBO-D2**|**Mode redéfinition** : atelier d'onboarding **étendu** à la reconfiguration post-création. Déclencheur = **demande explicite du collectif** ; axes structurels **sous vote collectif** (PROF E.5).|✅ acté 02/06|cadrage §5 ; cf. PROF (E.5) ; `RIFLEXION_articulation_onboarding_profils §6`|
 |**ONBO-Q7**|**Volet 4 catalogage = déclaration non-contraignante** du système : palette « **classement libre/thématique propre** » (défaut) + CDU + Dewey + « **le nôtre** » (libre). N'entrave jamais le catalogage. L'arbitrage **profond** de la classification relève du chantier **CAT**.|✅ acté 02/06 (résout TODO 2 au périmètre onboarding)|spec-onboarding §6.3 ; cf. CAT|
 |**ONBO-Q8**|**Transfert de mandat coordinateur·rice** : **plusieurs coordenadores possibles** (anti-hiérarchie) ; **ajout = cooptation** (gouvernance v1.1) ; **auto-retrait libre** ; **retrait d'autrui = décision collective** ; **garde-fou « dernier·ère coordenador·a »** (pas de descente à zéro sans passation, miroir RES-Q5). Sans objet si `governance_mode = informal`.|✅ acté 02/06 (résout TODO 3)|spec-gouvernance v1.1 ; cf. D.6, RES-Q5|
-|**ONBO-Q9**|**Parcours d'entrée** : chemin **éditorial sur `anarbib.org`** (charte, portes différenciées, « écris-nous d'abord ») ; **formulaire `/solicitar-biblioteca` sur l'app**. Dépendance actée : créer les **pages d'entrée éditoriales en 8 locales** sur anarbib.org. Direction tranchée ; **réalisation au #111**.|✅ acté 02/06 (résout §6.7)|spec-onboarding §6.7 ; DOC-I18N-1|
+|**ONBO-Q9**|**Parcours d'entrée** : chemin **éditorial sur `anarbib.org`** (charte, portes différenciées, « écris-nous d'abord ») ; **formulaire `/solicitar-biblioteca` sur l'app**. Dépendance actée : créer les **pages d'entrée éditoriales dans toutes les locales** (cf. DOC-I18N-1) sur anarbib.org. Direction tranchée ; **réalisation au #111**.|✅ acté 02/06 (résout §6.7)|spec-onboarding §6.7 ; DOC-I18N-1|
 |**ONBO-Q10**|Entrée en `coordenador_em_constituicao` → **notification digest in-app aux admins réseau actifs** (pas de spam individuel). But = **canal humain proactif** (RES-D10), pas surveillance ; respecte RES-D11 (burnout).|✅ acté 02/06 (résout TODO 5)|cf. RES-D10, RES-Q6, RES-D11|
 |**ONBO-Q11**|**Jamais de blocage** de soumission d'un volet (anti-paternalisme). Incohérence flairée (heuristique, cas Émile-Henry) → **nudge non-bloquant** « ça vaut peut-être un échange » + appui sur ONBO-Q10.|✅ acté 02/06 (résout TODO 6)|spec-onboarding §6.5 ; cf. ONBO-Q10|
 |**ONBO-Q12**|Stats anti-méga-machine = **agrégées et non-individualisantes** (invitations/30 j, taux d'acceptation, délai moyen). **Pas de scoring du silence** ni watchlist des biblios « silencieuses » — réponse = « on est là » général, jamais surveillance.|✅ acté 02/06 (résout TODO 7 ; aligne RES-Q11/Q12)|cf. RES-Q11/Q12|
@@ -309,7 +309,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 |**CARD-A2**|Portée du jeton = **par appartenance** (un·e membre de 3 biblios a 3 cartes) ; **un seul actif par appartenance** (index `uq_reader_card_active_per_membership`). Cohérent DOC-PERIM-1 + la carte porte le logo d'**une** biblio.|✅ acté (implémentation 28/05)|spec-carte-lecteur v0.2 §3-4|
 |**CARD-A3**|Stockage = **mini-table dédiée** `reader_card_tokens` (conserve l'historique des révocations), pas de colonnes jeton/statut sur l'appartenance. Privilégie la traçabilité.|✅ acté (28/05)|spec-carte-lecteur v0.2 §4|
 |**CARD-A4**|Risque résiduel « carte-fichier sur téléphone saisi » (révèle l'appartenance, ne donne **pas** accès au compte) acté/documenté ; **génération = choix du lecteur**.|✅ acté|spec-carte-lecteur v0.2 §2-3|
-|**CARD-R1**|Résolution staff = RPC `api.resolve_reader_card(p_token)` : jeton scanné/saisi → hache (`fn_hash_claim_token`) → appartenance, **gardée staff (`librarian`/`coordenador`) de la biblio du jeton** + RLS ; DEFINER + REVOKE doctrinal ; aucune divulgation hors droit.|✅ backend livré 03/06 (UI staff à venir)|spec-carte-lecteur v0.2 §5.3|
+|**CARD-R1**|Résolution staff = RPC `api.resolve_reader_card(p_token)` : jeton scanné/saisi → hache (`fn_hash_claim_token`) → appartenance, **gardée staff (`librarian`/`coordenador`) de la biblio du jeton** + RLS ; DEFINER + REVOKE doctrinal ; aucune divulgation hors droit. **UI staff** = `ResolveCardBox` dans `TabLeitor`, **gatée sur `libraries.reader_cards_enabled`** (invisible là où la carte n'est pas activée — défaut sûr).|✅ livré : backend 03/06 + UI staff 04/06 — **phase γ complète** (scan caméra = suite, cf. CARD-A1)|spec-carte-lecteur v0.2 §5.3, §7|
 
 ## 23. Réseau fédératif — face fédération & outils fédéralistes — `FED` *(cadrage `CADRAGE_modele_acces_concentrique_2026-06-04.md` ; prolonge `CHANTIER_reseau_federatif_2026-05-25`)*
 
@@ -350,4 +350,21 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
-*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1, section CARD (carte-lecteur) ; enrichi 04/06 : section FED — réseau fédératif / outils fédéralistes ; FED-O4/O5/O6 tranchés le 04/06 ; section MYLIB (carte « ma bibliothèque » + messagerie réciproque)). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*
+## 25. Importações — `IMP` *(cadrage `CADRAGE_importacoes_module_2026-06-04.md` ; chantier-cadre ouvert 04/06)*
+
+> Module-chapeau d'import du catalogue. Constat de cadrage : la **plomberie de provenance est déjà posée** (8 tables `catalog_ref_*`, cible `book_drafts`, journal `book_draft_import_events`, gardes `catalog_partner_*_import`, staging `import_blmf_*` + `..._zotero_staging`) ; le **manque est la surface `api.*` + l'UI**. Trois logiques : legacy BLMF (one-shot) · Zotero/Terra Livre · fédération partenaires (gatée par consentement). Lignes rouges : **provenance honnête** + **humain dans la boucle**.
+
+|ID|Décision|Statut|Foyer|
+|-|-|-|-|
+|**IMP-cadre**|Méthode = parité fonctionnelle + audit doctrinal (comme Biblioteca). Phase 0 posée ; **aucune ligne de code**.|🟠 cadré 04/06|cadrage|
+|**IMP↔ACQ-Q4**|Frontière Importações/Catalogação **déjà tranchée** (renvoi, ne pas ré-arbitrer) : ingestion technique → Importações ; provenance/entrée en collection → Catalogação.|✅ cf. ACQ-Q4|§8 ACQ|
+|**IMP↔FED-5**|Rôle = **coordenador intégral** (config sources/partenaires + run + export), pas de délégation au bibliotecário (renvoi).|✅ cf. FED-5|§23 FED|
+|**IMP-A1**|Séquençage v1 des 3 logiques. Reco cadrage : **fédération d'abord**, BLMF en migration parallèle.|🟡 ouvert|cadrage §7|
+|**IMP-A2**|BLMF = module récurrent **ou** script de migration one-shot ?|🟡 ouvert|cadrage §7|
+|**IMP-A3**|Mécanique du pull partenaire (Z39.50 / OAI-PMH / API ?) — inconnue technique #1, à sonder tôt.|🟡 ouvert|cadrage §7|
+|**IMP-A4**|Mapping staging → `book_drafts` + déduplication (ISBN / CDD / `published_book_id`).|🟡 ouvert|cadrage §7|
+|**IMP-A5**|i18n des `catalog_ref_*` : labels mono-langue **ou** jsonb 9 locales (DOC-I18N-1) ?|🟡 ouvert|cadrage §7|
+
+---
+
+*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1, section CARD (carte-lecteur) ; enrichi 04/06 : section FED — réseau fédératif / outils fédéralistes ; FED-O4/O5/O6 tranchés le 04/06 ; section MYLIB (carte « ma bibliothèque » + messagerie réciproque) ; **section IMP (Importações — chantier-cadre cadré)** ; **carte γ complétée (UI staff livrée, gatée `reader_cards_enabled`)**). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*

@@ -4,7 +4,7 @@
 |-|-|
 | **Genre** | Dossier d'ouverture de chantier-cadre (cadrage — pas une spec, pas une trace) |
 | **Statut** | 🟠 Cadrage v0.1 — 04/06/2026. Aucune ligne de code engagée. À valider avant Phase 1. |
-| **Décisions invoquées** | DOC-RPC-3 (RPC pour actions DB) · DOC-OBJ-2 (REVOKE objets backend) · DOC-DEPLOY-1 (migration → Woodpecker) · DOC-PERIM-1 (page = périmètre) · DOC-I18N-1 (9 locales) · méthode parité + audit doctrinal (registre §26 / stratégie post-Biblioteca) |
+| **Décisions invoquées** | DOC-RPC-3 (RPC pour actions DB) · DOC-OBJ-2 (REVOKE objets backend) · DOC-DEPLOY-1 (migration → Woodpecker) · DOC-PERIM-1 (page = périmètre) · DOC-I18N-1 (9 locales) · **ACQ-Q4** (frontière Catalogação, déjà tranchée) · **FED-5** (rôle = coordenador) · méthode parité + audit doctrinal (stratégie post-Biblioteca) |
 | **Supersession** | Premier document structurant du périmètre Importações. Ne supersède rien. Référencé depuis le backlog (macro-chantier à activer) et le registre. |
 
 > Méthode : identique à Biblioteca — **parité fonctionnelle** (rendre utilisable ce qui existe en plomberie) + **audit doctrinal** (RLS / REVOKE / PII / consentement) + **qualité** (UX non-spécialiste). Séquentiel, cadré avant code.
@@ -74,7 +74,7 @@ Hors périmètre explicite : la **publication** elle-même (book_drafts → cata
 | Nature | Migration de fonds existant | Import d'outil de référence | Mutualisation entre pairs |
 | Fréquence | **One-shot** (par biblio migrant) | Occasionnel / par lots | Récurrent, à la demande |
 | Source | `import_blmf_books_rows` + `_exemplares_rows` (text brut) | `..._zotero_staging` (`_raw` + json) | `catalog_partners` en ligne (`base_url`) |
-| Garde | Admin biblio | Admin biblio | **`catalog_partner_can_import`** (consentement du pair) |
+| Garde | **coordenador** (FED-5) | **coordenador** (FED-5) | **coordenador** + **`catalog_partner_can_import`** (consentement du pair) |
 | Inconnue majeure | Mapping text → `book_drafts`, dédup ISBN/CDD | Parsing des `_raw` Zotero | **Mécanique du pull** (Z39.50 ? OAI-PMH ? API ? — `integration_mode` + `technical_probe`) |
 | Question de fond | One-shot → est-ce un *module* ou un *script de migration* ? | — | C'est la logique la plus « vivante » et la plus alignée politiquement |
 
@@ -93,7 +93,7 @@ Hors périmètre explicite : la **publication** elle-même (book_drafts → cata
 
 ## 6. Couplage avec Catalogação (à arbitrer, structurant)
 
-Importações **produit** des `book_drafts` ; Catalogação **consomme et publie** `book_drafts`. Les deux chantiers partagent la même table-charnière. Le registre §26 prévoit la séquence Importações **puis** Catalogação — mais l'import sans flux de révision aval est un cul-de-sac. **Décision à prendre** : jusqu'où Importações pousse-t-il dans la révision (`review_status_code`) avant de passer la main à Catalogação ? Proposition de cadrage : Importações livre des brouillons en `review_status` initial ; le workflow de revue/publication est du ressort de Catalogação.
+Importações **produit** des `book_drafts` ; Catalogação **consomme et publie** `book_drafts`. Les deux chantiers partagent la même table-charnière. **La frontière est déjà tranchée par `ACQ-Q4` (registre §8)** : *ingestion technique → Importações ; provenance / entrée en collection → Catalogação (onglet Exemplaires)*. Reste de cadrage : Importações livre des brouillons en `review_status` initial ; le workflow de revue/publication est du ressort de Catalogação. La stratégie post-Biblioteca prévoit la séquence Importações **puis** Catalogação — mais l'import sans flux de révision aval est un cul-de-sac, d'où le couplage à garder en vue.
 
 ---
 
@@ -106,7 +106,7 @@ Importações **produit** des `book_drafts` ; Catalogação **consomme et publie
 | **IMP-A3** | **Mécanique du pull partenaire** (Z39.50 / OAI-PMH / API / scraping ?). | Inconnue technique #1. `integration_mode` + `technical_probe_last_at` suggèrent une **détection de capacités** à concevoir. Gros morceau. |
 | **IMP-A4** | **Mapping & dédup** : staging → `book_drafts`, contre quoi déduplique-t-on (`published_book_id`, ISBN, CDD) ? | Cœur technique transverse aux 3 logiques. |
 | **IMP-A5** | **i18n des `catalog_ref_*`** : labels mono-langue ou jsonb 9 locales ? | Conformité DOC-I18N-1 vs réalité de la table. À constater avant de trancher. |
-| **IMP-A6** | **Frontière Importações ↔ Catalogação** (cf. §6). | Évite de re-spécifier deux fois le même flux de révision. |
+| **IMP-A6** | **Frontière Importações ↔ Catalogação** — **déjà tranchée par `ACQ-Q4`** (ingestion → Importações ; provenance/collection → Catalogação). | ✅ clos : ne pas re-spécifier. |
 
 ---
 
