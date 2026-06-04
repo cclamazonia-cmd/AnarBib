@@ -64,7 +64,7 @@ export default function MyLibraryContactCard() {
             .select('public_email, public_phone, public_whatsapp, public_address, public_note')
             .eq('library_id', libraryId).maybeSingle(),
           supabase.from('library_commons')
-            .select('logo_url, logo_file_key, name, short_name')
+            .select('logo_url, logo_file_key, display_name, short_name')
             .eq('library_id', libraryId).maybeSingle(),
         ]);
         if (cancelled) return;
@@ -79,7 +79,7 @@ export default function MyLibraryContactCard() {
     return () => { cancelled = true; };
   }, [libraryId]);
 
-  const name = (commons && (commons.name || commons.short_name)) || libraryName || '';
+  const name = (commons && (commons.display_name || commons.short_name)) || libraryName || '';
   const logoSrc = useMemo(() => resolveLogo(commons), [commons]);
   const hasAnyContact = !!contact && CONTACT_FIELDS.some(f => typeof contact[f] === 'string' && contact[f].trim() !== '');
 
