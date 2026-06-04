@@ -22,8 +22,10 @@
  *
  *  DÉCISIONS D'INTERPRÉTATION & ÉCARTS SPEC↔RENDER (à valider) — voir aussi le
  *  message de livraison :
- *  (D1) `editora.mat` : la spec dit « ≠ digital/audio/audiovisual ». Le schéma
- *       §3.2 n'a pas de `notMat` → exprimé en liste blanche positive (9 codes).
+ *  (D1) `editora.mat` : aligné sur la maquette normative = 6 types
+ *       (livro/periodico/zine/cartaz/tract/dossie ; exclut tese/artigo/relatorio).
+ *       Idem : `issn.mat=[periodico,artigo]`, `local.mat`=6 types, `colecao` tier 3
+ *       mat [livro,tese] — tous calés sur maquette_fiche_catalogacao_v2.html.
  *  (D2) Blocs spéciaux : `special:'contrib'` (autores §5.5, état `contributors[]`
  *       qui synthétise `autor`), `special:'cover'` (§5.3, bouton « Buscar capa »
  *       hors périmètre), `special:'fine'` (zones ISBD générées §5.2 + MARC).
@@ -82,10 +84,9 @@ export const MATERIAL_CODES = [
   'recurso_digital', 'dossie', 'tese', 'artigo', 'relatorio', 'zine',
 ];
 
-// editora : liste blanche positive (D1) = tous sauf audio/audiovisual/recurso_digital.
-const EDITORA_MAT = MATERIAL_CODES.filter(
-  c => !['audio', 'audiovisual', 'recurso_digital'].includes(c),
-);
+// editora (D1, aligné maquette normative) : liste blanche des matériels « édités ».
+// La maquette exclut tese/artigo/relatorio (universidade / fonte / org. émettrice à la place).
+const EDITORA_MAT = ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'];
 
 // Options de sélecteurs/segments — reprises verbatim du render (D3).
 const MATERIAL_OPTS = MATERIAL_CODES.map(c => ({ value: c, label: `catalogacao.material.${c}` }));
@@ -121,13 +122,13 @@ export const REGISTRY = [
       { id: 'subtitulo', label: 'catalogacao.field.subtitle', tier: 2, span: 2 },
       { id: 'edicao', label: 'catalogacao.field.edition', tier: 2, mat: ['livro', 'zine', 'dossie'], phEx: '2. ed.' },
       { id: 'editora', label: 'catalogacao.field.publisher', tier: 1, mat: EDITORA_MAT },
-      { id: 'colecao', label: 'catalogacao.field.collection', tier: 2 },
-      { id: 'local_publicacao', label: 'catalogacao.field.place', tier: 2, ph: 'catalogacao.ph.city' },
+      { id: 'colecao', label: 'catalogacao.field.collection', tier: 3, mat: ['livro', 'tese'] },
+      { id: 'local_publicacao', label: 'catalogacao.field.place', tier: 2, mat: ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'], ph: 'catalogacao.ph.city' },
       { id: 'paginas', label: 'catalogacao.field.pages', tier: 2, mat: ['livro', 'zine', 'dossie'], type: 'number' },
       { id: 'ano', label: 'catalogacao.field.year', tier: 1, phEx: '2016' },
       { id: 'idioma', label: 'catalogacao.field.language', tier: 1, ph: 'catalogacao.ph.language' }, // (D4) texte, spec veut select
       { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro'], watch: 'dup', phEx: '978-2-347-00368-5' },
-      { id: 'issn', label: 'catalogacao.field.issn', tier: 1, mat: ['periodico'], phEx: '0251-1479' },
+      { id: 'issn', label: 'catalogacao.field.issn', tier: 1, mat: ['periodico', 'artigo'], phEx: '0251-1479' },
       { id: 'cdd', label: 'catalogacao.field.cdd', tier: 1, phEx: '335' },
       { id: 'loanable', label: 'catalogacao.ui.circulation', tier: 1, type: 'seg', opts: CIRCULATION_OPTS },
       { id: 'subjects', label: 'catalogacao.field.subjects', tier: 2, type: 'textarea', span: 3, ph: 'catalogacao.ph.subjects' },

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { localizeError } from '@/lib/localizeError';
 import { visibleGroups } from './fieldRegistry.js';
-import { renderMaterialSection } from './CatalogFieldRenderer.jsx';
+import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 
 // ── Material type values (labels resolved via t() inside component) ──
 const MATERIAL_TYPE_KEYS = ['livro','periodico','tract','cartaz','audio','audiovisual','recurso_digital','dossie','tese','artigo','relatorio','zine'];
@@ -1492,17 +1492,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             />
           </div>
 
-          {inp('edicao', t({id:'catalogacao.field.edition'}), { placeholder: '2. ed.', completeOnly: true })}
-          {inp('editora', t({id:'catalogacao.field.publisher'}))}
-          {inp('colecao', t({id:'catalogacao.field.collection'}), { completeOnly: true })}
+          {renderRegistryField('edicao', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('editora', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('colecao', { f, set, t }, catalogTier, materialType)}
 
-          {inp('local_publicacao', t({id:'catalogacao.field.place'}), { placeholder: t({id:'catalogacao.ph.city'}) })}
+          {renderRegistryField('local_publicacao', { f, set, t }, catalogTier, materialType)}
           {inp('ano', t({id:'catalogacao.field.year'}), { placeholder: '2016' })}
           {inp('idioma', t({id:'catalogacao.field.language'}), { placeholder: t({id:'catalogacao.ph.language'}) })}
 
           {/* ── ISBN / ISSN ───────────────────────────── */}
-          {inp('isbn', t({id:'catalogacao.field.isbn'}), { placeholder: '978-2-347-00368-5' })}
-          {inp('issn', t({id:'catalogacao.field.issn'}), { placeholder: '0251-1479' })}
+          {renderRegistryField('isbn', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('issn', { f, set, t }, catalogTier, materialType)}
           {inp('cdd', t({id:'catalogacao.field.cdd'}), { placeholder: '335' })}
 
           {/* ── Périodique fields ──────────────────────── */}
@@ -1518,7 +1518,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           )}
 
           {/* ── Pages + circulação ────────────────────── */}
-          {inp('paginas', t({id:'catalogacao.field.pages'}), { type: 'number', completeOnly: true })}
+          {renderRegistryField('paginas', { f, set, t }, catalogTier, materialType)}
           {sel('loanable', t({id:'catalogacao.ui.circulation'}), [
             { value: 'true', label: t({id:'catalogacao.ui.loanable'}) },
             { value: 'false', label: t({id:'catalogacao.ui.consultOnly'}) },

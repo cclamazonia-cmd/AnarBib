@@ -33,6 +33,8 @@
  *    - ph = clé i18n du placeholder ; phEx = placeholder littéral
  * ────────────────────────────────────────────────────────────────────────── */
 
+import { FIELD_BY_ID, isFieldVisible } from './fieldRegistry.js';
+
 const CONTROL_STYLE = {
   width: '100%', padding: '7px 10px', borderRadius: 6,
   border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)',
@@ -100,6 +102,15 @@ export function renderField(field, ctx) {
       />
     </div>
   );
+}
+
+// Rend un champ du registre par son id, gardé par (tier, material).
+// Renvoie null (donc rien) si le champ n'est pas visible — c'est ce qui applique
+// le filtrage matériel au cœur de la fiche (ex. editora masquée pour áudio).
+export function renderRegistryField(id, ctx, tier, material) {
+  const field = FIELD_BY_ID[id];
+  if (!field || !isFieldVisible(field, tier, material)) return null;
+  return renderField(field, ctx);
 }
 
 // Rend une section « matériel » : en-tête + grille de champs.
