@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import { supabase } from '@/lib/supabase';
 import { publicAssetUrl } from '@/lib/theme';
 import {
   canSeeAccount,
@@ -16,18 +17,23 @@ import { Button } from '@/components/ui';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import './layout.css';
 
-// ── Résolution du logo de la bibliothèque de session ───────
-
-const LIBRARY_LOGO_MAP = {
-  blmf: { path: 'themes/blmf/logo-blmf.png', alt: 'Biblioteca Libertária Maxwell Ferreira' },
-  btl:  { path: 'themes/btl/logo-btl.png', alt: 'Biblioteca Terra Livre' },
-};
-
-function resolveLibraryLogo(slug) {
-  if (!slug) return null;
-  const entry = LIBRARY_LOGO_MAP[slug.toLowerCase()];
-  if (!entry) return null;
-  return { src: publicAssetUrl(entry.path), alt: entry.alt };
+// ── Résolution data-driven du logo de la bibliothèque de session ───────
+// Source = library_commons (logo_url, logo_file_key). Plus de map codé en dur
+// (TR-6.2b). Calque la resolveLogo de la carte lecteur :
+//   - logo_url retenu SEULEMENT si URL absolue http(s) (les valeurs relatives
+//     heritees, ex. ./assets/.../logo-btl.png, sont ignorees) ;
+//   - sinon logo_file_key -> chemin bucket via publicAssetUrl ;
+//   - repli : pas de logo de session (le brand AnarBib reste affiche).
+function resolveLogoData(commons) {
+  if (!commons) return null;
+  const url = typeof commons.logo_url === 'string' ? commons.logo_url.trim() : '';
+  if (/^https?:\/\//i.test(url)) return url;
+  const key = commons.logo_file_key;
+  if (typeof key === 'string' && key.trim() !== '') {
+    const tail = key.includes('/') ? key : `themes/${key}/logo-${key}.png`;
+    return publicAssetUrl(tail);
+  }
+  return null;
 }
 
 // ── Page shell ─────────────────────────────────────────────
@@ -41,17 +47,34 @@ export function PageShell({ children }) {
 export function Topbar() {
   const { formatMessage: t } = useIntl();
   const { user, signOut } = useAuth();
-  const { libraryName, librarySlug, role, isNetworkAdmin } = useLibrary();
+  const { libraryName, libraryId, role, isNetworkAdmin } = useLibrary();
   const location = useLocation();
 
   const isActive = (path) => location.pathname.startsWith(path);
 
-  // Logo de la bibliothèque de session
-  const sessionLogo = user ? resolveLibraryLogo(librarySlug) : null;
+  // Logo de la bibliothèque de session, résolu data-driven depuis library_commons.
+  const [logoSrc, setLogoSrc] = useState(null);
   const [logoError, setLogoError] = useState(false);
 
-  // Reset l'erreur si le slug change
-  useEffect(() => { setLogoError(false); }, [librarySlug]);
+  useEffect(() => {
+    setLogoError(false);
+    setLogoSrc(null);
+    if (!user || !libraryId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from('library_commons')
+          .select('logo_url, logo_file_key')
+          .eq('library_id', libraryId)
+          .maybeSingle();
+        if (!cancelled) setLogoSrc(resolveLogoData(data));
+      } catch {
+        if (!cancelled) setLogoSrc(null);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [libraryId, user?.id]);
 
   return (
     <nav className="ab-topbar">
@@ -62,10 +85,10 @@ export function Topbar() {
           className="ab-topbar__logo"
           data-brand-logo
         />
-        {sessionLogo && !logoError && (
+        {logoSrc && !logoError && (
           <img
-            src={sessionLogo.src}
-            alt={sessionLogo.alt}
+            src={logoSrc}
+            alt={libraryName}
             className="ab-topbar__logo ab-topbar__library-logo"
             onError={() => setLogoError(true)}
           />
@@ -164,7 +187,7 @@ export function Hero({ title, subtitle, actions, children }) {
   );
 }
 
-// ── Footer ─────────────────────────────────────────────────
+// ── Footer ───────────────────────────────────────────────────
 
 export function Footer() {
   const { formatMessage: t } = useIntl();
