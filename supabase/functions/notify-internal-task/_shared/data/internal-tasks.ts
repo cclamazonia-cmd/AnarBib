@@ -11,14 +11,3 @@ export async function fetchInternalTaskOwnerProfile(ownerEmail) {
   }
   return data || null;
 }
-export async function claimInternalTaskNotificationBatch(limit) {
-  const { data, error } = await supabaseAdmin.rpc("claim_internal_task_notification_batch", {
-    p_limit: limit
-  });
-  if (error) throw new Error(`internal_task_queue_claim_failed: ${error.message}`);
-  return Array.isArray(data) ? data : [];
-}
-export async function updateInternalTaskQueueStatus(queueId, patch) {
-  const { error } = await supabaseAdmin.from("internal_task_notification_queue").update(patch).eq("id", queueId);
-  if (error) throw new Error(`internal_task_queue_update_failed: ${error.message}`);
-}
