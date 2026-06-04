@@ -55,7 +55,7 @@ export default function CatalogacaoPage() {
   });
 
   // ── Stats ──────────────────────────────────────────────
-  const [stats, setStats] = useState({ openBatches: 0, drafts: 0, books: 0, authors: 0 });
+  const [stats, setStats] = useState({ openBatches: 0, drafts: 0, books: 0, authors: 0, exemplares: 0 });
 
   // ── Dados de catálogo ────────────────────────────────────
   const [batches, setBatches] = useState([]);
@@ -68,13 +68,14 @@ export default function CatalogacaoPage() {
 
   const loadStats = useCallback(async () => {
     try {
-      const [batchRes, bookDraftRes, authorDraftRes, exemplarDraftRes, booksRes, authorsRes] = await Promise.allSettled([
+      const [batchRes, bookDraftRes, authorDraftRes, exemplarDraftRes, booksRes, authorsRes, exemplaresRes] = await Promise.allSettled([
         supabase.from('catalog_batches').select('id', { count: 'exact', head: true }).eq('status', 'open'),
         supabase.from('book_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']),
         supabase.from('author_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']),
         supabase.from('exemplar_drafts').select('id', { count: 'exact', head: true }).in('status', ['draft', 'ready']),
         supabase.from('books').select('id', { count: 'exact', head: true }),
         supabase.from('authors').select('id', { count: 'exact', head: true }),
+        supabase.from('exemplares').select('id', { count: 'exact', head: true }),
       ]);
 
       const count = (r) => r.status === 'fulfilled' ? (r.value.count ?? 0) : 0;
@@ -84,6 +85,7 @@ export default function CatalogacaoPage() {
         drafts: count(bookDraftRes) + count(authorDraftRes) + count(exemplarDraftRes),
         books: count(booksRes),
         authors: count(authorsRes),
+        exemplares: count(exemplaresRes),
       });
     } catch (err) {
       console.warn('loadStats error:', err);
@@ -251,6 +253,10 @@ export default function CatalogacaoPage() {
             <div className="cat-stat">
               <div className="cat-stat-label">Autores cadastrados</div>
               <div className="cat-stat-value">{stats.authors}</div>
+            </div>
+            <div className="cat-stat">
+              <div className="cat-stat-label">Exemplares publicados</div>
+              <div className="cat-stat-value">{stats.exemplares}</div>
             </div>
           </div>
 
