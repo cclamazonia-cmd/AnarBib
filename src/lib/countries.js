@@ -4,10 +4,10 @@
 // Centralizes i18n-iso-countries locale registration and exposes utilities
 // to get country names in the user's active locale.
 //
-// Importing this module from anywhere automatically registers all 7 locales
-// available in i18n-iso-countries (en, fr, es, pt, it, de, ca). Registration
-// is idempotent thanks to i18n-iso-countries internal dedup, safe to import
-// from multiple files.
+// Importing this module from anywhere automatically registers all 9 locales
+// available in i18n-iso-countries (en, fr, es, pt, it, de, ca, nl, el).
+// Registration is idempotent thanks to i18n-iso-countries internal dedup,
+// safe to import from multiple files.
 //
 // Locale notes:
 //   - eo (esperanto) is NOT shipped by i18n-iso-countries; intlToIsoLocale
@@ -15,7 +15,8 @@
 //     returned an empty map and the country dropdowns were blank for eo users.
 //   - ca (catalan) IS shipped and is now registered. It was missing before,
 //     which left Catalan users with blank country dropdowns too.
-//   - nl / el will be registered here at their respective locale activation.
+//   - nl (dutch) and el (greek) ARE shipped and are registered below, added
+//     at their respective locale activations.
 //
 // Use cases:
 //   - <CountrySelect> (forms) : getCountryNames() returns the full map
@@ -47,7 +48,7 @@ countries.registerLocale(itLocale);
 countries.registerLocale(deLocale);
 countries.registerLocale(caLocale);
 countries.registerLocale(nlLocale);
-registerLocale(elLocale);
+countries.registerLocale(elLocale);
 
 /**
  * Manual mapping for legacy textual values that i18n-iso-countries
