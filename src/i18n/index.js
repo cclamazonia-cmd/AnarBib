@@ -29,7 +29,7 @@ export const SUPPORTED_LOCALES = [
   { code: 'de', label: 'Deutsch' },
   { code: 'ca', label: 'Català' },
   { code: 'eo', label: 'Esperanto' },
-  { code: 'nl', label: 'Nederlands' },
+  { code: 'nl', label: 'Nederlands' }, { code: 'el', label: 'Ελληνικά' },
 ];
 
 // Source de vérité des codes supportés (remplace l'ancien map MESSAGES,
@@ -47,6 +47,7 @@ const LOADERS = {
   ca: () => import('./locales/ca.json'),
   eo: () => import('./locales/eo.json'),
   nl: () => import('./locales/nl.json'),
+  el: () => import('./locales/el.json'),
 };
 
 const STORAGE_KEY = 'anarbib.locale';
