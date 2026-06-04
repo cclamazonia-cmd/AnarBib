@@ -3,12 +3,17 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { localizeError } from '@/lib/localizeError';
+import { visibleGroups } from './fieldRegistry.js';
+import { renderMaterialSection } from './CatalogFieldRenderer.jsx';
 
 // ── Material type values (labels resolved via t() inside component) ──
 const MATERIAL_TYPE_KEYS = ['livro','periodico','tract','cartaz','audio','audiovisual','recurso_digital','dossie','tese','artigo','relatorio','zine'];
 const SERIAL_TYPES = new Set(['periodico', 'boletim', 'revista']);
 const TRACT_TYPES = new Set(['tract', 'cartaz']);
 const NON_LOANABLE_TYPES = new Set(['periodico', 'tract', 'cartaz', 'dossie', 'relatorio']);
+
+// ── Groupes « matériel » rendus par le registre (Track A Lot 2) ──
+const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'material_audiovisual', 'material_digital', 'material_dossie'];
 
 // ── Contributor role values (labels resolved via t() inside component) ──
 const CONTRIBUTOR_ROLE_KEYS = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','editor','outro'];
@@ -209,6 +214,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const isDigitalNative = materialType === 'recurso_digital';
   const isDossier = materialType === 'dossie';
   const isComplete = mode === 'complete';
+  // Track A Lot 2 — palier courant (rendu piloté par registre).
+  // Intérim binaire→tier : complete→3, simple→2. Lot 3 insérera advanced (→2) et fera simple→1.
+  const catalogTier = mode === 'complete' ? 3 : 2;
 
   // ── Cover preview URL ──────────────────────────────────
   const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -1575,83 +1583,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ═══ Material-specific panels ═════════════ */}
 
-          {/* Tract / Cartaz */}
-          {isTract && (
-            <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
-              <h4>{t({id:'catalogacao.section.tract'})}</h4>
-              <div className="cat-book-grid">
-                {inp('tract_campaign', t({id:'catalogacao.field.campaign'}), { placeholder: t({id:'catalogacao.ph.tractCampaign'}) })}
-                {inp('emitter_org', t({id:'catalogacao.field.emitterOrg'}), { placeholder: t({id:'catalogacao.ph.emitterOrg'}) })}
-                {inp('approximate_date', t({id:'catalogacao.field.approxDate'}), { placeholder: t({id:'catalogacao.ph.approxDate'}) })}
-                {inp('diffusion_place', t({id:'catalogacao.field.diffusionPlace'}), { placeholder: t({id:'catalogacao.ph.diffusion'}) })}
-                {sel('recto_verso', t({id:'catalogacao.ui.rectoVerso'}), [
-                  { value: '', label: t({id:'catalogacao.ph.rectoVerso.none'}) }, { value: 'recto', label: t({id:'catalogacao.ph.rectoVerso.recto'}) },
-                  { value: 'verso', label: t({id:'catalogacao.ph.rectoVerso.both'}) },
-                ])}
-                {inp('physical_format', t({id:'catalogacao.field.physicalFormat'}), { placeholder: t({id:'catalogacao.ph.physicalFormat'}) })}
-                {inp('print_technique', t({id:'catalogacao.field.printTechnique'}), { placeholder: t({id:'catalogacao.ph.printTechnique'}), completeOnly: true })}
-                {inp('physical_state', t({id:'catalogacao.field.physicalState'}), { placeholder: t({id:'catalogacao.ph.physicalState'}), completeOnly: true })}
-              </div>
-            </div>
-          )}
-
-          {/* Audio */}
-          {isAudio && (
-            <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
-              <h4>{t({id:'catalogacao.section.audio'})}</h4>
-              <div className="cat-book-grid">
-                {inp('audio_duration', t({id:'catalogacao.field.duration'}), { placeholder: t({id:'catalogacao.ph.audioDuration'}) })}
-                {inp('audio_support', t({id:'catalogacao.field.support'}), { placeholder: t({id:'catalogacao.ph.audioSupport'}) })}
-                {inp('audio_format', t({id:'catalogacao.field.audioFormat'}), { placeholder: t({id:'catalogacao.ph.audioFormatTech'}) })}
-                {inp('audio_language', t({id:'catalogacao.field.audioLang'}), { placeholder: t({id:'catalogacao.ph.language'}) })}
-                {inp('audio_participants', t({id:'catalogacao.field.participants'}), { placeholder: t({id:'catalogacao.ph.audioParticipants'}), span: 2 })}
-                {inp('audio_recording_type', t({id:'catalogacao.field.recordingType'}), { placeholder: t({id:'catalogacao.ph.recordingType'}) })}
-              </div>
-            </div>
-          )}
-
-          {/* Audiovisual */}
-          {isAudiovisual && (
-            <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
-              <h4>{t({id:'catalogacao.section.audiovisual'})}</h4>
-              <div className="cat-book-grid">
-                {inp('audiovisual_duration', t({id:'catalogacao.field.duration'}), { placeholder: t({id:'catalogacao.ph.avDuration'}) })}
-                {inp('audiovisual_support', t({id:'catalogacao.field.support'}), { placeholder: t({id:'catalogacao.ph.avSupport'}) })}
-                {inp('audiovisual_language', t({id:'catalogacao.field.language'}), { placeholder: t({id:'catalogacao.ph.language'}) })}
-                {inp('audiovisual_director', t({id:'catalogacao.field.director'}), { placeholder: t({id:'catalogacao.ph.avDirector'}) })}
-                {inp('audiovisual_participants', t({id:'catalogacao.field.participants'}), { placeholder: t({id:'catalogacao.ph.avParticipants'}), span: 2 })}
-                {inp('audiovisual_subtitles', t({id:'catalogacao.field.subtitles'}), { placeholder: t({id:'catalogacao.ph.avSubtitles'}) })}
-                {inp('audiovisual_access_note', t({id:'catalogacao.field.accessNote'}), { placeholder: t({id:'catalogacao.ph.accessNote'}), span: 2 })}
-              </div>
-            </div>
-          )}
-
-          {/* Digital native */}
-          {isDigitalNative && (
-            <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
-              <h4>{t({id:'catalogacao.section.digital'})}</h4>
-              <div className="cat-book-grid">
-                {inp('digital_native_url', t({id:'catalogacao.field.url'}), { placeholder: 'https://…', span: 2 })}
-                {inp('digital_native_access', t({id:'catalogacao.field.accessCondition'}), { placeholder: t({id:'catalogacao.ph.digitalAccess'}) })}
-                {inp('digital_native_restriction', t({id:'catalogacao.field.restriction'}), { placeholder: t({id:'catalogacao.ph.digitalRestriction'}) })}
-                {inp('digital_native_usage', t({id:'catalogacao.field.usage'}), { placeholder: t({id:'catalogacao.ph.digitalUsage'}) })}
-                {inp('digital_native_file_note', t({id:'catalogacao.field.fileNote'}), { placeholder: t({id:'catalogacao.ph.fileNote'}), completeOnly: true })}
-              </div>
-            </div>
-          )}
-
-          {/* Dossier */}
-          {isDossier && (
-            <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
-              <h4>{t({id:'catalogacao.material.dossie'})}</h4>
-              <div className="cat-book-grid">
-                {inp('dossier_scope', t({id:'catalogacao.field.scope'}), { placeholder: t({id:'catalogacao.ph.dossierScope'}), span: 2 })}
-                {inp('dossier_period', t({id:'catalogacao.field.period'}), { placeholder: t({id:'catalogacao.ph.dossierPeriod'}) })}
-                {inp('dossier_organizations', t({id:'catalogacao.field.organizations'}), { placeholder: t({id:'catalogacao.ph.dossierOrgs'}), span: 2 })}
-                {inp('dossier_context', t({id:'catalogacao.field.context'}), { placeholder: t({id:'catalogacao.ph.context'}), completeOnly: true })}
-              </div>
-            </div>
-          )}
+          {/* ═══ Material-specific panels — registry-driven (Track A Lot 2) ═══ */}
+          {visibleGroups(catalogTier, materialType)
+            .filter(g => MATERIAL_SECTION_IDS.includes(g.id))
+            .map(g => renderMaterialSection(g, { f, set, t }))}
 
           {/* ═══ Acquisition bridge (complete only) ═══ */}
           <div className="cat-material-section mode-complete-only" style={{ gridColumn: 'span 3' }}>
