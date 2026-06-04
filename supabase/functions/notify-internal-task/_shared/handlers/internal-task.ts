@@ -5,6 +5,7 @@ import { fetchInternalTask, fetchInternalTaskOwnerProfile } from "../data/intern
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail, skippedEmailResult } from "../transport/email.ts";
 import { firstNameOnly, formatDateBR, isValidEmail } from "../shared/format.ts";
+import { normalizeTaskLocale, taskFieldLabel, taskPriorityLabel, taskStatusLabel, taskVariant, tTask } from "../i18n/task-mail-strings.ts";
 function ownerTarget(email, profile) {
   const normalized = String(email || "").trim().toLowerCase();
   if (!isValidEmail(normalized)) return null;
@@ -20,25 +21,8 @@ function invitationTarget(email) {
     email: normalized
   };
 }
-function taskStatusLabel(status) {
-  return ({
-    aberta: "Aberta",
-    a_fazer: "A fazer",
-    em_andamento: "Em andamento",
-    bloqueada: "Bloqueada",
-    concluida: "Concluída",
-    cancelada: "Cancelada",
-    arquivada: "Arquivada"
-  })[status] || status || "Aberta";
-}
-function taskPriorityLabel(priority) {
-  return ({
-    alta: "Alta",
-    media: "Média",
-    baixa: "Baixa",
-    urgente: "Urgente"
-  })[priority] || priority || "Média";
-}
+// taskStatusLabel / taskPriorityLabel : desormais importes depuis ../i18n/task-mail-strings.ts
+// signature (locale, value) -> libelle localise, repli pt-BR.
 function taskTagsLabel(tags) {
   if (Array.isArray(tags)) {
     const clean = tags.map((value)=>String(value || "").trim()).filter(Boolean);
@@ -64,64 +48,47 @@ function payloadTaskToRow(taskId, libraryId, task) {
     library_id: libraryId
   };
 }
-function buildTaskEmail(eventType, task, ownerName, brandTag) {
-  const taskTitle = String(task.title || "").trim() || "tarefa sem título";
-  const status = taskStatusLabel(String(task.status || "").trim());
-  const priority = taskPriorityLabel(String(task.priority || "").trim());
+function buildTaskEmail(eventType, task, ownerName, brandTag, locale) {
+  const taskTitle = String(task.title || "").trim() || tTask(locale, "untitled");
+  const status = taskStatusLabel(locale, String(task.status || "").trim());
+  const priority = taskPriorityLabel(locale, String(task.priority || "").trim());
   const due = formatDateBR(task.due_date);
   const tags = taskTagsLabel(task.tags);
   const description = String(task.description || "").trim();
-  let subject = "";
-  let title = "";
-  let introHtml = "";
-  if (eventType === "assigned") {
-    subject = `Nova tarefa interna — ${brandTag}`;
-    title = "Nova tarefa interna";
-    introHtml = `
-      <p style="margin:0 0 10px;">Tu recebeste uma <b>nova tarefa interna</b>.</p>
-      <p style="margin:0;">Consulta o painel para acompanhar o andamento e registrar qualquer atualização necessária.</p>
-    `;
-  } else {
-    subject = `Lembrete de tarefa interna — ${brandTag}`;
-    title = "Lembrete de tarefa interna";
-    introHtml = `
-      <p style="margin:0 0 10px;">Esta tarefa entrou no bloco <b>Trabalho do dia</b>.</p>
-      <p style="margin:0;">Se ela já foi resolvida, vale atualizar o status no painel.</p>
-    `;
-  }
+  const variant = taskVariant(locale, eventType === "assigned" ? "assigned" : "reminder");
   return {
-    subject,
-    title,
-    greeting: ownerName ? `Olá, ${ownerName}!` : "Olá!",
-    introHtml,
+    subject: `${variant.subject} — ${brandTag}`,
+    title: variant.title,
+    greeting: ownerName ? tTask(locale, "greetingNamed", { name: ownerName }) : tTask(locale, "greetingPlain"),
+    introHtml: variant.introHtml,
     details: [
       {
-        label: "Tarefa",
+        label: taskFieldLabel(locale, "tarefa"),
         value: taskTitle
       },
       {
-        label: "Prioridade",
+        label: taskFieldLabel(locale, "prioridade"),
         value: priority
       },
       {
-        label: "Situação",
+        label: taskFieldLabel(locale, "situacao"),
         value: status
       },
       ...due ? [
         {
-          label: "Prazo",
+          label: taskFieldLabel(locale, "prazo"),
           value: due
         }
       ] : [],
       ...tags ? [
         {
-          label: "Marcadores",
+          label: taskFieldLabel(locale, "marcadores"),
           value: tags
         }
       ] : [],
       ...description ? [
         {
-          label: "Descrição",
+          label: taskFieldLabel(locale, "descricao"),
           value: description
         }
       ] : []
@@ -133,107 +100,77 @@ function ensureEmailDelivered(result, contextLabel) {
   const detail = String(result.error || result.reason || "email_send_failed").trim() || "email_send_failed";
   throw new Error(`${contextLabel}:${detail}`);
 }
-function changedFieldLabels(changedFields) {
+function changedFieldLabels(changedFields, locale) {
   const values = Array.isArray(changedFields) ? changedFields : [];
-  return values.map((value)=>String(value || "").trim()).filter(Boolean).map((value)=>({
-      due_date: "Prazo",
-      priority: "Prioridade",
-      status: "Situação",
-      owner: "Organização"
-    })[value] || value);
+  const map = {
+    due_date: taskFieldLabel(locale, "prazo"),
+    priority: taskFieldLabel(locale, "prioridade"),
+    status: taskFieldLabel(locale, "situacao"),
+    owner: taskFieldLabel(locale, "organizacao")
+  };
+  return values.map((value)=>String(value || "").trim()).filter(Boolean).map((value)=>map[value] || value);
 }
-function buildTaskLevelNoticeEmail(recipientRole, eventKind, task, brandTag, changedFields) {
-  const taskTitle = String(task.title || "").trim() || "tarefa sem título";
-  const status = taskStatusLabel(String(task.status || "").trim());
-  const priority = taskPriorityLabel(String(task.priority || "").trim());
+function buildTaskLevelNoticeEmail(recipientRole, eventKind, task, brandTag, changedFields, locale) {
+  const taskTitle = String(task.title || "").trim() || tTask(locale, "untitled");
+  const status = taskStatusLabel(locale, String(task.status || "").trim());
+  const priority = taskPriorityLabel(locale, String(task.priority || "").trim());
   const due = formatDateBR(task.due_date);
   const owner = String(task.owner || "").trim();
   const tags = taskTagsLabel(task.tags);
   const description = String(task.description || "").trim();
-  const changed = changedFieldLabels(changedFields);
-  let subject = "";
-  let title = "";
-  let greeting = "Olá!";
-  let introHtml = "";
+  const changed = changedFieldLabels(changedFields, locale);
+  let variantKey;
   if (recipientRole === "organizer") {
-    greeting = "Olá!";
-    if (eventKind === "task_created") {
-      subject = `Nova tarefa interna sob tua responsabilidade — ${brandTag}`;
-      title = "Nova tarefa interna";
-      introHtml = `
-        <p style="margin:0 0 10px;">Uma <b>nova tarefa interna</b> foi registrada sob tua responsabilidade.</p>
-        <p style="margin:0;">Abre o painel da biblioteca para acompanhar o andamento e organizar os próximos passos.</p>
-      `;
-    } else {
-      subject = `Atualização importante em tarefa interna — ${brandTag}`;
-      title = "Atualização importante em tarefa interna";
-      introHtml = `
-        <p style="margin:0 0 10px;">Uma tarefa interna sob tua responsabilidade recebeu uma <b>atualização importante</b>.</p>
-        <p style="margin:0;">Confere o painel da biblioteca para validar a nova situação e ajustar o acompanhamento.</p>
-      `;
-    }
+    variantKey = eventKind === "task_created" ? "orgCreated" : "orgUpdated";
   } else {
-    if (eventKind === "task_created") {
-      subject = `Nova tarefa interna registrada — ${brandTag}`;
-      title = "Nova tarefa interna registrada";
-      introHtml = `
-        <p style="margin:0 0 10px;">Uma <b>nova tarefa interna</b> foi registrada para esta biblioteca.</p>
-        <p style="margin:0;">Este aviso é informativo e fica separado dos convites individuais enviados aos compas convidados.</p>
-      `;
-    } else {
-      subject = `Atualização importante em tarefa da biblioteca — ${brandTag}`;
-      title = "Atualização importante em tarefa da biblioteca";
-      introHtml = `
-        <p style="margin:0 0 10px;">Uma tarefa interna da biblioteca recebeu uma <b>atualização importante</b>.</p>
-        <p style="margin:0;">Este aviso ajuda a acompanhar mudanças centrais sem depender dos convites individuais.</p>
-      `;
-    }
+    variantKey = eventKind === "task_created" ? "libCreated" : "libUpdated";
   }
+  const variant = taskVariant(locale, variantKey);
   return {
-    subject,
-    title,
-    greeting,
-    introHtml,
+    subject: `${variant.subject} — ${brandTag}`,
+    title: variant.title,
+    greeting: tTask(locale, "greetingPlain"),
+    introHtml: variant.introHtml,
     details: [
       {
-        label: "Tarefa",
+        label: taskFieldLabel(locale, "tarefa"),
         value: taskTitle
       },
       {
-        label: "Prioridade",
+        label: taskFieldLabel(locale, "prioridade"),
         value: priority
       },
       {
-        label: "Situação",
+        label: taskFieldLabel(locale, "situacao"),
         value: status
       },
       ...owner ? [
         {
-          label: "Organização",
+          label: taskFieldLabel(locale, "organizacao"),
           value: owner
         }
       ] : [],
       ...due ? [
         {
-          label: "Prazo",
+          label: taskFieldLabel(locale, "prazo"),
           value: due
         }
       ] : [],
       ...changed.length ? [
         {
-          label: "Mudanças importantes",
+          label: taskFieldLabel(locale, "mudancas"),
           value: changed.join(", ")
         }
       ] : [],
       ...tags ? [
         {
-          label: "Marcadores",
+          label: taskFieldLabel(locale, "marcadores"),
           value: tags
         }
       ] : [],
       ...description ? [
         {
-          label: "Descrição",
+          label: taskFieldLabel(locale, "descricao"),
           value: description
         }
       ] : []
@@ -273,10 +210,11 @@ async function handleTaskLevelNotice(payload, taskId, recipientRole) {
   }
   const libraryId = payloadLibraryId || String(task.library_id || "").trim() || null;
   const notificationContext = payload.notification_context && typeof payload.notification_context === "object" ? normalizeLibraryNotificationContext(payload.notification_context, libraryId) : await resolveLibraryNotificationContext(libraryId);
+  const locale = normalizeTaskLocale(notificationContext.default_locale);
   const ownerProfile = recipientRole === "organizer" ? await fetchInternalTaskOwnerProfile(recipientEmail) : null;
   const target = recipientRole === "organizer" ? ownerTarget(recipientEmail, ownerProfile) || invitationTarget(recipientEmail) : invitationTarget(recipientEmail);
   const brandTag = subjectTag(notificationContext);
-  const email = buildTaskLevelNoticeEmail(recipientRole, eventKind, task, brandTag, changedFields);
+  const email = buildTaskLevelNoticeEmail(recipientRole, eventKind, task, brandTag, changedFields, locale);
   const { html, text } = renderEmail({
     preheader: email.title,
     title: email.title,
@@ -303,56 +241,54 @@ async function handleTaskLevelNotice(payload, taskId, recipientRole) {
     detail: result.error
   };
 }
-function buildTaskInvitationEmail(task, brandTag) {
-  const taskTitle = String(task.title || "").trim() || "tarefa sem título";
-  const status = taskStatusLabel(String(task.status || "").trim());
-  const priority = taskPriorityLabel(String(task.priority || "").trim());
+function buildTaskInvitationEmail(task, brandTag, locale) {
+  const taskTitle = String(task.title || "").trim() || tTask(locale, "untitled");
+  const status = taskStatusLabel(locale, String(task.status || "").trim());
+  const priority = taskPriorityLabel(locale, String(task.priority || "").trim());
   const due = formatDateBR(task.due_date);
   const owner = String(task.owner || "").trim();
   const tags = taskTagsLabel(task.tags);
   const description = String(task.description || "").trim();
+  const variant = taskVariant(locale, "invitation");
   return {
-    subject: `Convite para tarefa interna — ${brandTag}`,
-    title: "Convite para tarefa interna",
-    greeting: "Olá!",
-    introHtml: `
-      <p style="margin:0 0 10px;">Tu recebeste um <b>convite para participar de uma tarefa interna</b> da biblioteca.</p>
-      <p style="margin:0;">Se fizer sentido para ti, abre o painel da biblioteca para acompanhar a organização desta tarefa.</p>
-    `,
+    subject: `${variant.subject} — ${brandTag}`,
+    title: variant.title,
+    greeting: tTask(locale, "greetingPlain"),
+    introHtml: variant.introHtml,
     details: [
       {
-        label: "Tarefa",
+        label: taskFieldLabel(locale, "tarefa"),
         value: taskTitle
       },
       {
-        label: "Prioridade",
+        label: taskFieldLabel(locale, "prioridade"),
         value: priority
       },
       {
-        label: "Situação",
+        label: taskFieldLabel(locale, "situacao"),
         value: status
       },
       ...owner ? [
         {
-          label: "Organização",
+          label: taskFieldLabel(locale, "organizacao"),
           value: owner
         }
       ] : [],
       ...due ? [
         {
-          label: "Prazo",
+          label: taskFieldLabel(locale, "prazo"),
           value: due
         }
       ] : [],
       ...tags ? [
         {
-          label: "Marcadores",
+          label: taskFieldLabel(locale, "marcadores"),
           value: tags
         }
       ] : [],
       ...description ? [
         {
-          label: "Descrição",
+          label: taskFieldLabel(locale, "descricao"),
           value: description
         }
       ] : []
@@ -403,9 +339,10 @@ async function handleTaskInvitation(payload, taskId) {
   }
   const libraryId = payloadLibraryId || String(task.library_id || "").trim() || null;
   const notificationContext = payload.notification_context && typeof payload.notification_context === "object" ? normalizeLibraryNotificationContext(payload.notification_context, libraryId) : await resolveLibraryNotificationContext(libraryId);
+  const locale = normalizeTaskLocale(notificationContext.default_locale);
   const target = invitationTarget(recipientEmail);
   const brandTag = subjectTag(notificationContext);
-  const email = buildTaskInvitationEmail(task, brandTag);
+  const email = buildTaskInvitationEmail(task, brandTag, locale);
   const { html, text } = renderEmail({
     preheader: email.title,
     title: email.title,
@@ -485,10 +422,11 @@ export async function handleInternalTaskNotification(payload) {
     };
   }
   const ctx = await resolveLibraryNotificationContext(String(task.library_id || "").trim() || null);
+  const locale = normalizeTaskLocale(ctx.default_locale);
   const target = ownerTarget(ownerEmail, ownerProfile);
-  const ownerName = firstNameOnly(ownerProfile.first_name || "") || "compa";
+  const ownerName = firstNameOnly(ownerProfile.first_name || "") || tTask(locale, "fallbackName");
   const brandTag = subjectTag(ctx);
-  const email = buildTaskEmail(eventType, task, ownerName, brandTag);
+  const email = buildTaskEmail(eventType, task, ownerName, brandTag, locale);
   const { html, text } = renderEmail({
     preheader: email.title,
     title: email.title,
