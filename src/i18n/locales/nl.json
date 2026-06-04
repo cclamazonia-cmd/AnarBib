@@ -585,7 +585,7 @@
   "biblioteca.ill.coordinationHelp": "Vul de contactpersoon van je bibliotheek in die de andere partij kan bereiken om deze uitlening te regelen.",
   "biblioteca.ill.created": "Interbibliothecaire uitlening #{id} aangemaakt met {count} item(s).",
   "biblioteca.ill.differentLibraries": "De uitlenende en de lenende bibliotheek moeten verschillend zijn.",
-  "biblioteca.ill.discardConfirm": "Interbibliothecaire uitlening #{id} verwerpen? Deze actie kan niet ongedaan worden gemaakt.",
+  "biblioteca.ill.discardConfirm": "Interbibliothecaire uitlening #{id} verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
   "biblioteca.ill.discarded": "Uitlening #{id} verworpen.",
   "biblioteca.ill.dueDate": "Verwachte teruggavedatum",
   "biblioteca.ill.dueDateLabel": "vervalt",

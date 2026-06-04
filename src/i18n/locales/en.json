@@ -585,7 +585,7 @@
   "biblioteca.ill.coordinationHelp": "Enter the contact at your library that the other party can reach to arrange this loan.",
   "biblioteca.ill.created": "Interlibrary loan #{id} created with {count} item(s).",
   "biblioteca.ill.differentLibraries": "The lending and borrowing libraries must be different.",
-  "biblioteca.ill.discardConfirm": "Discard interlibrary loan #{id}? This action cannot be undone.",
+  "biblioteca.ill.discardConfirm": "Delete interlibrary loan #{id}? This action cannot be undone.",
   "biblioteca.ill.discarded": "Loan #{id} discarded.",
   "biblioteca.ill.dueDate": "Expected return date",
   "biblioteca.ill.dueDateLabel": "due",

@@ -585,7 +585,7 @@
   "biblioteca.ill.coordinationHelp": "Indica il contatto della tua biblioteca che l'altra parte potra raggiungere per organizzare questo prestito.",
   "biblioteca.ill.created": "Prestito interbibliotecario n°{id} creato con {count} documento/i.",
   "biblioteca.ill.differentLibraries": "La biblioteca prestatrice e la prendente devono essere diverse.",
-  "biblioteca.ill.discardConfirm": "Scartare il prestito interbibliotecario n°{id}? Questa azione è irreversibile.",
+  "biblioteca.ill.discardConfirm": "Eliminare il prestito interbibliotecario n°{id}? Questa azione è irreversibile.",
   "biblioteca.ill.discarded": "Prestito n°{id} scartato.",
   "biblioteca.ill.dueDate": "Data prevista di rientro",
   "biblioteca.ill.dueDateLabel": "rientro",

@@ -897,7 +897,7 @@
   "biblioteca.templates.cadenceBadge": "Cada {count} {unit}",
   "biblioteca.templates.cadencePrefix": "Cada",
   "biblioteca.templates.created": "Plantilla creada.",
-  "biblioteca.templates.deleteConfirm": "Esborrar la plantilla « {title} »? Les tasques ja creades a partir d’ella no es veuen afectades.",
+  "biblioteca.templates.deleteConfirm": "Voleu suprimir la plantilla « {title} »? Les tasques ja creades a partir d’ella no es veuen afectades.",
   "biblioteca.templates.deleted": "Plantilla esborrada.",
   "biblioteca.templates.edit": "Edita la plantilla",
   "biblioteca.templates.empty": "Encara cap plantilla. Crea’n una a dalt.",

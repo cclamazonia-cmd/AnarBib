@@ -585,7 +585,7 @@
   "biblioteca.ill.coordinationHelp": "Gib die Kontaktperson deiner Bibliothek an, die die andere Seite fuer die Abstimmung dieser Leihe erreichen kann.",
   "biblioteca.ill.created": "Fernleihe Nr. {id} mit {count} Medium/Medien erstellt.",
   "biblioteca.ill.differentLibraries": "Die ausleihende und die entleihende Bibliothek müssen unterschiedlich sein.",
-  "biblioteca.ill.discardConfirm": "Fernleihe Nr. {id} verwerfen? Diese Aktion ist nicht rückgängig zu machen.",
+  "biblioteca.ill.discardConfirm": "Fernleihe Nr. {id} löschen? Diese Aktion ist nicht rückgängig zu machen.",
   "biblioteca.ill.discarded": "Leihe Nr. {id} verworfen.",
   "biblioteca.ill.dueDate": "Voraussichtliches Rückgabedatum",
   "biblioteca.ill.dueDateLabel": "Rückgabe",
