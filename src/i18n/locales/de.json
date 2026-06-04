@@ -3199,5 +3199,14 @@
   "panel.readerInbox.reply": "Antworten",
   "panel.readerInbox.noSubject": "(ohne Betreff)",
   "panel.readerInbox.unknownReader": "Identität nicht verfügbar",
-  "panel.error.readerMessages": "Nachrichten konnten nicht geladen werden."
+  "panel.error.readerMessages": "Nachrichten konnten nicht geladen werden.",
+  "panel.readerInbox.archive": "Archivieren",
+  "panel.readerInbox.unarchive": "Wiederherstellen",
+  "panel.readerInbox.delete": "Löschen",
+  "panel.readerInbox.confirmDelete": "Bestätigen?",
+  "panel.readerInbox.confirmYes": "Bestätigen",
+  "panel.readerInbox.cancel": "Abbrechen",
+  "panel.readerInbox.history": "Verlauf",
+  "panel.readerInbox.historyEmpty": "Keine archivierten Nachrichten.",
+  "panel.error.readerMessageAction": "Aktion konnte nicht ausgeführt werden."
 }

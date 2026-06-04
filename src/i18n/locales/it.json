@@ -3199,5 +3199,14 @@
   "panel.readerInbox.reply": "Rispondi",
   "panel.readerInbox.noSubject": "(senza oggetto)",
   "panel.readerInbox.unknownReader": "Identità non disponibile",
-  "panel.error.readerMessages": "Impossibile caricare i messaggi."
+  "panel.error.readerMessages": "Impossibile caricare i messaggi.",
+  "panel.readerInbox.archive": "Archivia",
+  "panel.readerInbox.unarchive": "Ripristina",
+  "panel.readerInbox.delete": "Elimina",
+  "panel.readerInbox.confirmDelete": "Confermare?",
+  "panel.readerInbox.confirmYes": "Conferma",
+  "panel.readerInbox.cancel": "Annulla",
+  "panel.readerInbox.history": "Cronologia",
+  "panel.readerInbox.historyEmpty": "Nessun messaggio archiviato.",
+  "panel.error.readerMessageAction": "Impossibile eseguire l'azione."
 }

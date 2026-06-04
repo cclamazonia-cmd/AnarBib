@@ -3199,5 +3199,14 @@
   "panel.readerInbox.reply": "Respondi",
   "panel.readerInbox.noSubject": "(sen temo)",
   "panel.readerInbox.unknownReader": "Identeco nedisponebla",
-  "panel.error.readerMessages": "Ne eblis ŝargi la mesaĝojn."
+  "panel.error.readerMessages": "Ne eblis ŝargi la mesaĝojn.",
+  "panel.readerInbox.archive": "Arkivi",
+  "panel.readerInbox.unarchive": "Malarkivi",
+  "panel.readerInbox.delete": "Forigi",
+  "panel.readerInbox.confirmDelete": "Ĉu konfirmi?",
+  "panel.readerInbox.confirmYes": "Konfirmi",
+  "panel.readerInbox.cancel": "Nuligi",
+  "panel.readerInbox.history": "Historio",
+  "panel.readerInbox.historyEmpty": "Neniu arkivita mesaĝo.",
+  "panel.error.readerMessageAction": "Ne eblis plenumi la agon."
 }

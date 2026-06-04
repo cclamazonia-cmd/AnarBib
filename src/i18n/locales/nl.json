@@ -3199,5 +3199,14 @@
   "panel.readerInbox.reply": "Beantwoorden",
   "panel.readerInbox.noSubject": "(geen onderwerp)",
   "panel.readerInbox.unknownReader": "Identiteit niet beschikbaar",
-  "panel.error.readerMessages": "Kan berichten niet laden."
+  "panel.error.readerMessages": "Kan berichten niet laden.",
+  "panel.readerInbox.archive": "Archiveren",
+  "panel.readerInbox.unarchive": "Dearchiveren",
+  "panel.readerInbox.delete": "Verwijderen",
+  "panel.readerInbox.confirmDelete": "Bevestigen?",
+  "panel.readerInbox.confirmYes": "Bevestigen",
+  "panel.readerInbox.cancel": "Annuleren",
+  "panel.readerInbox.history": "Geschiedenis",
+  "panel.readerInbox.historyEmpty": "Geen gearchiveerde berichten.",
+  "panel.error.readerMessageAction": "Kan de actie niet uitvoeren."
 }

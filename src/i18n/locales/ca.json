@@ -3199,5 +3199,14 @@
   "panel.readerInbox.reply": "Respondre",
   "panel.readerInbox.noSubject": "(sense assumpte)",
   "panel.readerInbox.unknownReader": "Identitat no disponible",
-  "panel.error.readerMessages": "No s'han pogut carregar els missatges."
+  "panel.error.readerMessages": "No s'han pogut carregar els missatges.",
+  "panel.readerInbox.archive": "Arxivar",
+  "panel.readerInbox.unarchive": "Desarxivar",
+  "panel.readerInbox.delete": "Suprimir",
+  "panel.readerInbox.confirmDelete": "Confirmar?",
+  "panel.readerInbox.confirmYes": "Confirmar",
+  "panel.readerInbox.cancel": "Cancel·lar",
+  "panel.readerInbox.history": "Historial",
+  "panel.readerInbox.historyEmpty": "Cap missatge arxivat.",
+  "panel.error.readerMessageAction": "No s'ha pogut fer l'acció."
 }

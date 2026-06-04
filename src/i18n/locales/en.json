@@ -3199,5 +3199,14 @@
   "panel.readerInbox.reply": "Reply",
   "panel.readerInbox.noSubject": "(no subject)",
   "panel.readerInbox.unknownReader": "Identity unavailable",
-  "panel.error.readerMessages": "Could not load messages."
+  "panel.error.readerMessages": "Could not load messages.",
+  "panel.readerInbox.archive": "Archive",
+  "panel.readerInbox.unarchive": "Unarchive",
+  "panel.readerInbox.delete": "Delete",
+  "panel.readerInbox.confirmDelete": "Confirm?",
+  "panel.readerInbox.confirmYes": "Confirm",
+  "panel.readerInbox.cancel": "Cancel",
+  "panel.readerInbox.history": "History",
+  "panel.readerInbox.historyEmpty": "No archived messages.",
+  "panel.error.readerMessageAction": "Could not perform the action."
 }
