@@ -1,7 +1,7 @@
 # CHANTIER — Carte « ma bibliothèque » côté lecteur·rice
 
 **Date d'ouverture :** 2026-06-04
-**Statut :** 🟢 CADRAGE VALIDÉ (arbitrages §7 clos le 04/06) — prêt pour l'étape 1 (§5)
+**Statut :** ✅ LIVRÉ ET CLOS (04/06/2026) — chantier complet en production (Moitié 1 + Moitié 2 lecteur·rice→biblio + réciproque biblio→lecteur·rice). Voir §10 (addendum réciproque) et §11 (livraison & clôture). Cadrage initial §1–§9 conservé comme trace.
 **Porteur :** Xavier (dev principal)
 **Périmètre :** `AccountPage.jsx` (onglet `perfil`), backend Supabase, EF `notify-event`
 **Lié à :** EA-20 / #156 (contact confidentiel coopération), TR-6 (résolution logo, audit #153), chantier-cadre Biblioteca (clos)
@@ -264,3 +264,62 @@ supabase functions list            # verifier l'increment de version
 ## 9. Prompt de reprise
 
 > Reprise du chantier **carte « ma bibliothèque » côté lecteur**. Cadrage validé le 2026-06-04 (doc `CHANTIER_carte_ma_bibliotheque_lecteur_2026-06-04.md`). Décisions actées D1–D4 (§2) : vitrine **publique opt-in** `library_public_contact` distincte du confidentiel `library_contact_profiles` ; canal « écrire » **in-système** (`reader_library_messages` → trigger → `notify-event` → `reader-message.ts`) ; logo lu sur `library_commons.logo_url`/`logo_file_key` (jamais le map codé en dur), repli texte. Avant de coder : trancher les questions ouvertes §7. Commencer par l'étape 1 (§5) : migration `library_public_contact`. Respecter la doctrine §6 (Woodpecker, RPC v3, REVOKE, DO-block, NOTIFY pgrst, notify-event --no-verify-jwt, commits ASCII + dual-push).
+
+## 10. Addendum — Moitié 2 réciproque biblio→lecteur·rice (mail-only) — LIVRÉ 04/06
+
+Ajouté **après** le cadrage initial (§1–§9, conservé comme trace). Le sens lecteur·rice→biblio (Moitié 2, §4) une fois livré, on a ouvert le sens **réciproque** biblio→lecteur·rice. Choix v1 assumé : **mail-only** (pas de fil in-app — voir §11, report).
+
+### 10.1 Modèle de données — réutilise `reader_library_messages`
+
+Migration `reader_library_messages_reciproque` (additive) :
+- `ADD COLUMN recipient_id uuid REFERENCES public.profiles(id)` + index partiel sur les lignes `direction='library'` ;
+- **as-built** : la table livrée porte `id bigint GENERATED ... AS IDENTITY` et une colonne `direction text DEFAULT 'reader' CHECK (direction IN ('reader','library'))` — divergence **assumée** vis-à-vis du squelette §4.1 (qui montrait `id uuid DEFAULT gen_random_uuid()` et pas de `direction`). Le squelette §4.1 reste trace ; la réalité fait foi via les migrations.
+- **RLS SELECT** élargie : l'ancienne clause (expéditeur·rice OU staff) devient « `... OR recipient_id = auth.uid()` » (le·a lecteur·rice destinataire voit le message reçu) ;
+- **RLS INSERT** `direction='library'` : autorisée si l'appelant·e est **staff** de `library_id` (`user_has_library_staff_role`) **et** que `recipient_id` est **membre actif** de la biblio.
+
+### 10.2 RPC d'envoi — `api.send_message_to_reader`
+
+`api.send_message_to_reader(p_library_id uuid, p_reader_id uuid, p_subject text, p_body text) RETURNS bigint`, `SECURITY INVOKER`, garde-fou **anti-spam 30 / 24 h** (par biblio). Appelée côté front par `supabase.schema('api').rpc('send_message_to_reader', ...)`. REVOKE/GRANT doctrine + DO-block + `NOTIFY pgrst`.
+
+### 10.3 Trigger & dispatch
+
+Trigger `trg_library_message_dispatch` AFTER INSERT WHEN `direction='library'` → fonction `fn_library_message_dispatch()` (DEFINER, `search_path` figé) → dispatcher `fn_dispatch_notify_event` (renommé — cf. §11) avec event `library_message_sent`.
+
+### 10.4 Handler EF
+
+- `getLibraryMessageBundle` dans `_shared/data/reader-messages.ts` (charge `recipient_id` + profils + `ctx` biblio) ;
+- `handleLibraryMessageEvent` dans `_shared/domain/reader-message.ts` : mail au **destinataire seul**, locale = `recipient.preferred_language`, **sans copie staff**, **sans actionBox** (le·a lecteur·rice n'a pas d'action à faire) ; met à jour `mail_status` ; garde défensive `skipped` si destinataire non résolu ;
+- branche `dispatch.ts` : `if (event.startsWith("library_message")) return await handleLibraryMessageEvent(recordId);` ;
+- clés `mail-strings.ts` : `lmsg.reader.sub` + `lmsg.reader.intro`, **×9 locales**.
+
+### 10.5 Frontend — `WriteToReaderBox.jsx`
+
+Composant **autonome** `src/pages/painel/tabs/WriteToReaderBox.jsx` (état local `useState`, appel inline de la RPC `api`). Branché dans `src/pages/painel/tabs/TabLeitor.jsx` (présentationnel) **avant** le bloc `<details className="ab-painel-edit-profile">`, sous la forme `<WriteToReaderBox t={t} libraryId={libraryId} reader={readerProfile} />`. i18n `panel.reader.write.*` (11 clés ×9 ; ancre d'insertion `"panel.reader.manage":`).
+
+### 10.6 Comportement i18n confirmé
+
+Le **cadre** du mail (en-têtes, libellés, signature) est rendu dans la langue du **destinataire** (par design — `preferred_language`) ; le **sujet et le corps** tapés par l'expéditeur·rice restent dans la langue de saisie. (Faux bug résolu : mail reçu « en espéranto » par un compte test = correct, le compte ayant `preferred_language='eo'`.)
+
+> **Renvoi registre :** MYLIB-5.
+
+---
+
+## 11. Livraison & clôture (04/06) — chantier CLOS ✅
+
+Tout en production (Woodpecker vert à chaque étape), doctrine §6 respectée.
+
+**Moitié 1 — vitrine + carte** (étapes 1–3) : table `library_public_contact` (+ RLS + RPC `upsert_library_public_contact`) ; éditeur `LibraryPublicContactSection.jsx` dans `BibliotecaPage.jsx` ; carte `MyLibraryContactCard.jsx` dans `AccountPage.jsx` (logo data-driven : `logo_url` absolu http(s) sinon `logo_file_key`→bucket `library-ui-assets`, repli texte ; carte jamais masquée). i18n `account.mylib.*`.
+
+**Moitié 2 — lecteur·rice→biblio** (étapes 4–6) : table `reader_library_messages` (`id bigint identity` + `direction`) ; RPC `fn_reader_send_message_to_library` (anti-spam 3 / 24 h) ; trigger `trg_reader_message_dispatch` → event `reader_message_sent` ; handler `handleReaderMessageEvent` (mail staff via `adminTarget` + accusé au·à la lecteur·rice) ; **composer inline** dans la carte (le `WriteToLibraryDialog` du §4.7 a été réalisé en composer **inline**, pas en modal séparé) ; i18n `account.mylib.write.*` ×9.
+
+**Moitié 2 — réciproque** : §10.
+
+**Items de clôture :**
+1. **TR-6.2b clos** — `src/components/layout/index.jsx` dé-hardcodé : `LIBRARY_LOGO_MAP` supprimé → `resolveLogoData(commons)` data-driven + fetch `library_commons` par `libraryId` dans le Topbar. Le **jumeau frontend** de la décision **D4** (cf. note §2 « item de nettoyage séparé ») est donc résolu.
+2. **Donnée** — migration `btl_logo_url_cleanup` : BTL portait un `logo_url` **relatif** (`./assets/img/...`) → `NULL` ; le `logo_file_key='btl'` prend le relais via le bucket. (Garde : on ne nullifie que les `logo_url` non-http(s).)
+3. **Refactor DB** — migration `rename_dispatch_notify_event` : `fn_dispatch_circulation_notify_event` → `fn_dispatch_notify_event` (le dispatcher n'est plus spécifique à la circulation) ; **13 appelants** réécrits programmatiquement (`pg_get_functiondef` + `replace` + `EXECUTE`, ACL/`SECURITY DEFINER`/commentaires préservés) ; DO-block de vérif : nouveau nom présent, ancien absent, **0 référence résiduelle**.
+4. **Corpus** — registre `docs/specs/REGISTRE_decisions.md` enrichi (section **MYLIB**, §24) + le présent addendum (§10–§11).
+
+**Report (horizon — registre MYLIB-O1) :** le **« chat ouvert » in-app** (fil de discussion bidirectionnel persistant, visible côté `perfil` et côté `painel`) est **reporté** — « terrain glissant » : on attend une **demande réelle** d'une biblio inscrite avant d'ouvrir un canal conversationnel persistant. v1 = **mail-only des deux côtés**.
+
+> **Statut final :** chantier « carte ma bibliothèque » côté lecteur·rice + réciproque biblio→lecteur·rice **CLOS** le 04/06/2026. Corpus à jour.

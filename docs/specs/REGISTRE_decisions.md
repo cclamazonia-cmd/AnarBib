@@ -335,4 +335,19 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
-*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1, section CARD (carte-lecteur) ; enrichi 04/06 : section FED — réseau fédératif / outils fédéralistes ; FED-O4/O5/O6 tranchés le 04/06). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*
+## 24. Carte « ma bibliothèque » & messagerie lecteur·rice↔biblio — `MYLIB` *(cadrage `CHANTIER_carte_ma_bibliotheque_lecteur_2026-06-04.md`)*
+
+> Miroir, côté lecteur·rice, de ce que le staff voit d'un·e lecteur·rice : la biblio se rend **joignable et lisible** par ses propres membres. Objets backend = **DOC-OBJ-2** ; écritures = **DOC-RPC-3** (`from()` en lecture sous RLS) ; notification = **DOC-NOTIF-1** ; i18n = **DOC-I18N-1** (clés mail = 9 locales, `nl` inclus). Logo **data-driven** (clôt le jumeau frontend de **TR-6.2b**). Foyer du raisonnement = le cadrage (trace).
+
+|ID|Décision|Statut|Foyer|
+|-|-|-|-|
+|**MYLIB-1**|Vitrine de contact lecteur·rice = **table sœur `library_public_contact`**, **opt-in, vide par défaut**, **distincte** du confidentiel coopération `library_contact_profiles` (classifications séparées, jamais fusionnées). SELECT = **membres actifs only** (pas `anon`) ; édition **coordOnly** via `upsert_library_public_contact`.|✅ acté 04/06|cadrage §2 (D1/D2), §7 ; cf. DOC-RPC-3, DOC-OBJ-2|
+|**MYLIB-2**|Canal « écrire à ma bibliothèque » = **in-système** (`reader_library_messages` → trigger → `notify-event`), **pas `mailto:`** (anti-tracking, trace, i18n du transport). Anti-spam **≤ 3 / 24 h** ; **confirmation au·à la lecteur·rice** (boucle fermée).|✅ acté 04/06|cadrage §2 (D3), §7 ; cf. DOC-NOTIF-1|
+|**MYLIB-3**|Logo de la carte lu **data-driven** (`library_commons.logo_url` absolu sinon `logo_file_key`→bucket `library-ui-assets`), **repli texte** ; **jamais** de map codé en dur. Clôt le **jumeau frontend de TR-6.2b** (`layout/index.jsx` dé-hardcodé le 04/06).|✅ acté 04/06|cadrage §2 (D4) ; cf. TR-6.2b|
+|**MYLIB-4**|Carte « ma bibliothèque » **jamais masquée** : même sans coordonnée publiée, **logo + nom + bouton « écrire »** → point de contact minimal garanti.|✅ acté 04/06|cadrage §3.5, §7|
+|**MYLIB-5**|**Réciproque biblio→lecteur·rice = mail-only** : colonne `direction` (`reader`/`library`) + `recipient_id` sur `reader_library_messages` ; RPC `api.send_message_to_reader` (staff, anti-spam **30 / 24 h**) → event `library_message_sent` → `handleLibraryMessageEvent` : mail au **destinataire seul** (locale `preferred_language`, **sans copie staff ni CTA**). Composant `WriteToReaderBox.jsx` dans `TabLeitor`.|✅ acté 04/06|cadrage §10 ; cf. MYLIB-2|
+|**MYLIB-O1**|**Chat ouvert in-app** (fil bidirectionnel **persistant** côté `perfil` et `painel`) = **reporté** (« terrain glissant ») : à rouvrir sur **demande réelle** d'une biblio inscrite. v1 = **mail-only des deux côtés** (MYLIB-2 + MYLIB-5).|🟡 ouvert (horizon)|cadrage §11|
+
+---
+
+*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1, section CARD (carte-lecteur) ; enrichi 04/06 : section FED — réseau fédératif / outils fédéralistes ; FED-O4/O5/O6 tranchés le 04/06 ; section MYLIB (carte « ma bibliothèque » + messagerie réciproque)). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*
