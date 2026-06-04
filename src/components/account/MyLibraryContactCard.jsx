@@ -1,13 +1,14 @@
 // =============================================================================
 // MyLibraryContactCard.jsx
 // =============================================================================
-// Carte « ma bibliotheque » cote lecteur·rice -- chantier carte ma bibliotheque,
-// etape 3. Montee dans l'onglet perfil du compte (colonne de droite).
+// Carte « ma bibliotheque » cote lecteur·rice -- chantier carte ma bibliotheque.
+// Montee dans l'onglet perfil du compte (colonne de droite).
 //
 // Affiche les coordonnees PUBLIQUES que la biblio a choisi d'exposer
 // (library_public_contact, opt-in, vide par defaut) + son logo. Lecture seule.
-// Le bouton « ecrire a ma bibliotheque » arrivera a l'etape 6 (canal in-systeme) ;
-// il n'est volontairement PAS pose ici (pas de bouton mort).
+// Etape 6 : composer in-systeme « ecrire a ma bibliotheque » (RPC
+// fn_reader_send_message_to_library, anti-spam 3/24h cote DB). Canal toujours
+// disponible (independant du contact public affiche).
 //
 // Sources (lecture simple from(), doctrine RPC v3) :
 //   - library_public_contact : RLS membre actif (le·a lecteur·rice l'est)
@@ -51,6 +52,14 @@ export default function MyLibraryContactCard() {
   const [contact, setContact] = useState(null);
   const [commons, setCommons] = useState(null);
   const [logoBroken, setLogoBroken] = useState(false);
+
+  // Etape 6 : etat du composer « ecrire a ma bibliotheque ».
+  const [writing, setWriting] = useState(false);
+  const [subject, setSubject] = useState('');
+  const [body, setBody] = useState('');
+  const [sending, setSending] = useState(false);
+  const [sendMsg, setSendMsg] = useState('');
+  const [sendErr, setSendErr] = useState(false);
 
   useEffect(() => {
     if (!libraryId) { setLoading(false); return; }
@@ -99,6 +108,19 @@ export default function MyLibraryContactCard() {
     ...logoBox, display: 'flex', alignItems: 'center', justifyContent: 'center',
     fontFamily: 'var(--brand-font-body)', fontSize: '1.2rem', fontWeight: 700, color: 'var(--brand-muted)',
   };
+  const btnPrimary = {
+    padding: '8px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)',
+    background: '#c00000', color: '#fff', fontWeight: 600, fontSize: '.85rem', cursor: 'pointer',
+  };
+  const btnGhost = {
+    padding: '8px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)',
+    background: 'transparent', color: '#cfcfcf', fontSize: '.85rem', cursor: 'pointer',
+  };
+  const inputStyle = {
+    width: '100%', boxSizing: 'border-box', padding: '8px 10px', borderRadius: 8,
+    border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.04)',
+    color: '#f4f4f4', fontSize: '.88rem', fontFamily: 'inherit',
+  };
 
   const waDigits = contact?.public_whatsapp ? contact.public_whatsapp.replace(/[^\d]/g, '') : '';
 
@@ -113,6 +135,37 @@ export default function MyLibraryContactCard() {
       </div>
     );
   };
+
+  const canSend = body.trim().length >= 1 && !sending;
+
+  async function handleSend() {
+    const b = body.trim();
+    if (b.length < 1) { setSendErr(true); setSendMsg(t({ id: 'account.mylib.write.errorEmpty' })); return; }
+    if (b.length > 4000) { setSendErr(true); setSendMsg(t({ id: 'account.mylib.write.errorTooLong' })); return; }
+    setSending(true); setSendMsg(''); setSendErr(false);
+    try {
+      const { error } = await supabase.rpc('fn_reader_send_message_to_library', {
+        p_library_id: libraryId,
+        p_subject: subject.trim() || null,
+        p_body: b,
+      });
+      if (error) {
+        const m = (error.message || '').toLowerCase();
+        const id = m.includes('empty_body') ? 'account.mylib.write.errorEmpty'
+          : m.includes('body_too_long') ? 'account.mylib.write.errorTooLong'
+          : m.includes('rate_limited') ? 'account.mylib.write.errorRate'
+          : 'account.mylib.write.errorGeneric';
+        setSendErr(true); setSendMsg(t({ id }));
+        return;
+      }
+      setSubject(''); setBody(''); setWriting(false);
+      setSendErr(false); setSendMsg(t({ id: 'account.mylib.write.success' }));
+    } catch {
+      setSendErr(true); setSendMsg(t({ id: 'account.mylib.write.errorGeneric' }));
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <div style={box}>
@@ -151,6 +204,51 @@ export default function MyLibraryContactCard() {
           {t({ id: 'account.mylib.noPublicContact' })}
         </div>
       )}
+
+      {/* Etape 6 : canal in-systeme « ecrire a ma bibliotheque » */}
+      <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+        {!writing ? (
+          <button type="button" onClick={() => { setWriting(true); setSendMsg(''); }} style={btnPrimary}>
+            {t({ id: 'account.mylib.write.button' })}
+          </button>
+        ) : (
+          <div>
+            <div style={{ ...labelStyle, marginBottom: 6 }}>{t({ id: 'account.mylib.write.title' })}</div>
+            <input
+              type="text"
+              value={subject}
+              onChange={e => setSubject(e.target.value)}
+              placeholder={t({ id: 'account.mylib.write.subjectPlaceholder' })}
+              maxLength={200}
+              style={inputStyle}
+            />
+            <textarea
+              value={body}
+              onChange={e => setBody(e.target.value)}
+              placeholder={t({ id: 'account.mylib.write.bodyPlaceholder' })}
+              maxLength={4000}
+              rows={5}
+              style={{ ...inputStyle, marginTop: 8, resize: 'vertical', minHeight: 96 }}
+            />
+            <div style={{ fontSize: '.72rem', color: 'var(--brand-muted)', textAlign: 'right', marginTop: 4 }}>
+              {body.length} / 4000
+            </div>
+            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              <button type="button" onClick={handleSend} disabled={!canSend} style={{ ...btnPrimary, opacity: canSend ? 1 : .6 }}>
+                {sending ? t({ id: 'account.mylib.write.sending' }) : t({ id: 'account.mylib.write.send' })}
+              </button>
+              <button type="button" onClick={() => { setWriting(false); setSendMsg(''); }} disabled={sending} style={btnGhost}>
+                {t({ id: 'account.mylib.write.cancel' })}
+              </button>
+            </div>
+          </div>
+        )}
+        {sendMsg ? (
+          <div style={{ marginTop: 10, fontSize: '.82rem', color: sendErr ? '#fca5a5' : '#86efac' }}>
+            {sendMsg}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

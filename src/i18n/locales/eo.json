@@ -3159,6 +3159,18 @@
   "account.mylib.phone": "Telefono",
   "account.mylib.whatsapp": "WhatsApp",
   "account.mylib.address": "Adreso",
+  "account.mylib.write.button": "Skribi al la biblioteko",
+  "account.mylib.write.title": "Skribi al via biblioteko",
+  "account.mylib.write.subjectPlaceholder": "Temo (nedeviga)",
+  "account.mylib.write.bodyPlaceholder": "Via mesaĝo…",
+  "account.mylib.write.send": "Sendi",
+  "account.mylib.write.sending": "Sendante…",
+  "account.mylib.write.cancel": "Nuligi",
+  "account.mylib.write.success": "Mesaĝo sendita. La biblioteko estis avertita.",
+  "account.mylib.write.errorEmpty": "Skribu mesaĝon.",
+  "account.mylib.write.errorTooLong": "Mesaĝo tro longa (maks. 4000).",
+  "account.mylib.write.errorRate": "Vi jam sendis plurajn mesaĝojn hodiaŭ. Reprovu poste.",
+  "account.mylib.write.errorGeneric": "Ne eblis sendi. Reprovu.",
   "account.mylib.note": "Informoj",
   "account.mylib.noPublicContact": "Ĉi tiu biblioteko ankoraŭ ne publikigis siajn kontaktinformojn."
 }

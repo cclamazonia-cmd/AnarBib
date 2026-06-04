@@ -3159,6 +3159,18 @@
   "account.mylib.phone": "Phone",
   "account.mylib.whatsapp": "WhatsApp",
   "account.mylib.address": "Address",
+  "account.mylib.write.button": "Write to the library",
+  "account.mylib.write.title": "Write to your library",
+  "account.mylib.write.subjectPlaceholder": "Subject (optional)",
+  "account.mylib.write.bodyPlaceholder": "Your message…",
+  "account.mylib.write.send": "Send",
+  "account.mylib.write.sending": "Sending…",
+  "account.mylib.write.cancel": "Cancel",
+  "account.mylib.write.success": "Message sent. The library has been notified.",
+  "account.mylib.write.errorEmpty": "Write a message.",
+  "account.mylib.write.errorTooLong": "Message too long (4000 max).",
+  "account.mylib.write.errorRate": "You've already sent several messages today. Try again later.",
+  "account.mylib.write.errorGeneric": "Couldn't send. Please try again.",
   "account.mylib.note": "Info",
   "account.mylib.noPublicContact": "This library has not published its contact details yet."
 }

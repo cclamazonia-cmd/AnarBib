@@ -3159,6 +3159,18 @@
   "account.mylib.phone": "Telefoon",
   "account.mylib.whatsapp": "WhatsApp",
   "account.mylib.address": "Adres",
+  "account.mylib.write.button": "Schrijf naar de bibliotheek",
+  "account.mylib.write.title": "Schrijf naar je bibliotheek",
+  "account.mylib.write.subjectPlaceholder": "Onderwerp (optioneel)",
+  "account.mylib.write.bodyPlaceholder": "Je bericht…",
+  "account.mylib.write.send": "Versturen",
+  "account.mylib.write.sending": "Versturen…",
+  "account.mylib.write.cancel": "Annuleren",
+  "account.mylib.write.success": "Bericht verzonden. De bibliotheek is op de hoogte gebracht.",
+  "account.mylib.write.errorEmpty": "Schrijf een bericht.",
+  "account.mylib.write.errorTooLong": "Bericht te lang (max. 4000).",
+  "account.mylib.write.errorRate": "Je hebt vandaag al meerdere berichten verstuurd. Probeer het later opnieuw.",
+  "account.mylib.write.errorGeneric": "Verzenden mislukt. Probeer opnieuw.",
   "account.mylib.note": "Info",
   "account.mylib.noPublicContact": "Deze bibliotheek heeft haar contactgegevens nog niet gepubliceerd."
 }

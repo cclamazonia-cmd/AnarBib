@@ -3159,6 +3159,18 @@
   "account.mylib.phone": "Telèfon",
   "account.mylib.whatsapp": "WhatsApp",
   "account.mylib.address": "Adreça",
+  "account.mylib.write.button": "Escriure a la biblioteca",
+  "account.mylib.write.title": "Escriure a la teva biblioteca",
+  "account.mylib.write.subjectPlaceholder": "Assumpte (opcional)",
+  "account.mylib.write.bodyPlaceholder": "El teu missatge…",
+  "account.mylib.write.send": "Envia",
+  "account.mylib.write.sending": "Enviant…",
+  "account.mylib.write.cancel": "Cancel·la",
+  "account.mylib.write.success": "Missatge enviat. La biblioteca ha estat avisada.",
+  "account.mylib.write.errorEmpty": "Escriu un missatge.",
+  "account.mylib.write.errorTooLong": "Missatge massa llarg (màx. 4000).",
+  "account.mylib.write.errorRate": "Ja has enviat diversos missatges avui. Torna-ho a provar més tard.",
+  "account.mylib.write.errorGeneric": "No s'ha pogut enviar. Torna-ho a provar.",
   "account.mylib.note": "Informació",
   "account.mylib.noPublicContact": "Aquesta biblioteca encara no ha publicat les seves dades de contacte."
 }
