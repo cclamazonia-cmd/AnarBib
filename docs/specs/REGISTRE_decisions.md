@@ -311,6 +311,24 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 |**CARD-A4**|Risque résiduel « carte-fichier sur téléphone saisi » (révèle l'appartenance, ne donne **pas** accès au compte) acté/documenté ; **génération = choix du lecteur**.|✅ acté|spec-carte-lecteur v0.2 §2-3|
 |**CARD-R1**|Résolution staff = RPC `api.resolve_reader_card(p_token)` : jeton scanné/saisi → hache (`fn_hash_claim_token`) → appartenance, **gardée staff (`librarian`/`coordenador`) de la biblio du jeton** + RLS ; DEFINER + REVOKE doctrinal ; aucune divulgation hors droit.|✅ backend livré 03/06 (UI staff à venir)|spec-carte-lecteur v0.2 §5.3|
 
+## 23. Réseau fédératif — face fédération & outils fédéralistes — `FED` *(cadrage `CADRAGE_modele_acces_concentrique_2026-06-04.md` ; prolonge `CHANTIER_reseau_federatif_2026-05-25`)*
+
+> **Modèle d'accès concentrique** : deux axes distincts — **échelle de l'objet** (anneaux `catálogo → conta → painel → catalogação → importações/exportações → biblioteca → círculos → rede`) et **portée des rôles** (`leitor → bibliotecário → coordenador → administrador`). La portée n'est **pas** une attribution contiguë de 2 anneaux/rôle. Objets backend = **DOC-OBJ-2** ; écritures = **DOC-RPC-3** ; compteurs/intimité = **DOC-PERIM-1** ; délibération politique = **DOC-COLLECTIVE-1** ; anti-méga-machine = **RES-D9**. Foyer du raisonnement = le cadrage (trace).
+
+|ID|Décision|Statut|Foyer|
+|-|-|-|-|
+|**FED-1**|`círculos` (cercles d'affinité reliant des **bibliothèques**) relève de la **face fédération**, pas de `rede`. **Voir** = tout membre rattaché (leitor inclus) ; **agir/engager** (rejoindre/quitter, escrever ao círculo, compartilhar catálogo, traiter le signal) = **coordenador** (`user_can_manage_library`).|✅ acté 04/06|cadrage §6 ; cf. PARTNER|
+|**FED-2**|Bloc **« Ferramentas federalistas »** (círculos = 1er outil), dans la nav **entre `biblioteca` et `rede`**, **contrôle d'accès propre** (rattachement biblio + mandat coord pour agir), distinct de `isNetworkAdmin`.|✅ acté 04/06 (label + terminologie : FED-O4)|cadrage §6|
+|**FED-3**|**Deux axes décollés** : échelle d'objet (anneaux) ≠ portée des rôles. Abandon de la symétrie 2-2-2-2 (fausse symétrie masquant une hiérarchie : `círculos` n'est pas le compagnon admin de `rede`).|✅ acté 04/06|cadrage §2-3|
+|**FED-4**|**« voir ≠ agir »** : actions emboîtées vers l'extérieur (logique FAU) ; lecture emboîtée **sauf** (a) `conta` *first-person* et (b) `círculos` ouvert vers le dedans (lecture jusqu'au leitor).|✅ acté 04/06|cadrage §5 ; cf. DOC-PERIM-1|
+|**FED-5**|**Importações/exportações = `coordenador` intégral** (config sources/partenaires + run + export) : définitions politiques des relations extérieures. Pas de délégation d'exécution au bibliotecário.|✅ acté 04/06|cadrage §6 ; cf. DOC-COLLECTIVE-1, PARTNER|
+|**FED-6**|`conta` reste *first-person* intégral ; **vue limitée des comptes lecteurs dans `painel`** (staff au comptoir), **finalisée** par l'intervention à la demande du lecteur présent — **fonction de service**, pas privilège de rang.|✅ acté 04/06 (bordures FED-O1/O2)|cadrage §6|
+|**FED-7**|**Doctrine anti-panoptique** : aucun outil fédéraliste ne produit de **vue agrégée du tissu relationnel** (cercles + partenariats) ; donnée servie **en 1ʳᵉ personne** ; signaux de santé **situés** (aux membres du cercle), jamais dashboard de surplomb ; **pas de carte relationnelle persistée**. Garde contre la **police idéologique intra-mouvement** + la concentration de pouvoir informationnel.|✅ acté 04/06|cadrage §6 ; sœur DOC-PERIM-1, ONBO-Q12, RES-Q11/Q12|
+|**FED-O1**|Périmètre de la vue `painel` : empréstimos/consultas en cours + état carte = oui ; données perso sensibles + historique complet = non.|🟡 ouvert|cadrage §6 (FED-6)|
+|**FED-O2**|Traçabilité : journaliser les consultations de compte par le staff (qui, quel compte, quand) — service rendu, jamais surveillance.|🟡 ouvert|cadrage §6|
+|**FED-O3**|Scope = **une** biblio (cercles niveau biblio) → **sélecteur de biblio** si la personne est staff de plusieurs.|🟡 ouvert|cadrage §6|
+|**FED-O4**|Label pt-BR du bloc (*Ferramentas federalistas* / *Federalismo*) + terminologie objet (`círculo` / `coletivo` / `afinidade`).|🟡 ouvert|cadrage §6 (FED-2)|
+
 ---
 
-*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1, section CARD (carte-lecteur)). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*
+*Fin du seed v0.1 (enrichi 02/06 : VALID-β1/γ1, sections MULTI, PARTNER, ILL, OPAC, ONBO ; doctrine DOC-COLLECTIVE-1 ; enrichi 03/06 : DOC-CIRC-1, USER-EMAIL-1, section CARD (carte-lecteur) ; enrichi 04/06 : section FED — réseau fédératif / outils fédéralistes). Décisions transverses recensées : 15. Drifts ouverts : voir le rapport d'audit joint.*
