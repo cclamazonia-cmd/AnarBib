@@ -11,9 +11,9 @@
 //   en    : neutre standard (épicène)
 //   it    : compagno/a/e ou variantes, JAMAIS camerata
 //   de    : Genderstern (Leser*in, Genoss*in), JAMAIS "Compas"
-//   ca    : Défini par ailleurs
-//   eo    : Défini par ailleurs
-//   nl    : Défini par ailleurs
+//   ca    : triple forme suffixe -a-e (lector-a-e, bibliotecari-ària-e, coordinador-a-e), déterminant neutre « le » (le lector-a-e), variantes parenthésées (a/e)
+//   eo    : infixe -in- visibilisé par tirets (legant-in-o, kunordigant-in-o, administrant-in-o), pronom neutre ri
+//   nl    : formes communes neutres (lezer, bibliothecaris, coördinator), pronom neutre die, sans marquage de genre
 //
 // Date du fix : 2026-05-02 (chasse au bug wf.ready / wf.readyShort affichés
 //               en clés brutes dans les mails — clés manquantes du dictionnaire)
