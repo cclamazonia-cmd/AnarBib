@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "Ja has enviat diversos missatges avui. Torna-ho a provar més tard.",
   "account.mylib.write.errorGeneric": "No s'ha pogut enviar. Torna-ho a provar.",
   "account.mylib.note": "Informació",
-  "account.mylib.noPublicContact": "Aquesta biblioteca encara no ha publicat les seves dades de contacte."
+  "account.mylib.noPublicContact": "Aquesta biblioteca encara no ha publicat les seves dades de contacte.",
+  "card.resolve.placeholder": "Testimoni de la targeta de lector·a…",
+  "card.resolve.action": "Resol",
+  "card.resolve.loading": "Resolent…",
+  "card.resolve.result.restricted": "Accés restringit",
+  "card.resolve.error.unrecognized": "Testimoni no reconegut per a aquesta biblioteca.",
+  "card.resolve.error.invalid_token": "Testimoni buit o no vàlid.",
+  "card.resolve.error.not_authenticated": "Sessió caducada — torna a iniciar la sessió.",
+  "card.resolve.error.generic": "Error de xarxa — torna-ho a provar."
 }

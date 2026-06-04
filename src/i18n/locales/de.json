@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "Du hast heute schon mehrere Nachrichten gesendet. Versuch es später erneut.",
   "account.mylib.write.errorGeneric": "Senden fehlgeschlagen. Versuch es erneut.",
   "account.mylib.note": "Infos",
-  "account.mylib.noPublicContact": "Diese Bibliothek hat ihre Kontaktdaten noch nicht veröffentlicht."
+  "account.mylib.noPublicContact": "Diese Bibliothek hat ihre Kontaktdaten noch nicht veröffentlicht.",
+  "card.resolve.placeholder": "Token der Leser·innenkarte…",
+  "card.resolve.action": "Auflösen",
+  "card.resolve.loading": "Wird aufgelöst…",
+  "card.resolve.result.restricted": "Eingeschränkter Zugang",
+  "card.resolve.error.unrecognized": "Token für diese Bibliothek nicht erkannt.",
+  "card.resolve.error.invalid_token": "Leeres oder ungültiges Token.",
+  "card.resolve.error.not_authenticated": "Sitzung abgelaufen — bitte erneut anmelden.",
+  "card.resolve.error.generic": "Netzwerkfehler — bitte erneut versuchen."
 }

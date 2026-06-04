@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "You've already sent several messages today. Try again later.",
   "account.mylib.write.errorGeneric": "Couldn't send. Please try again.",
   "account.mylib.note": "Info",
-  "account.mylib.noPublicContact": "This library has not published its contact details yet."
+  "account.mylib.noPublicContact": "This library has not published its contact details yet.",
+  "card.resolve.placeholder": "Reader card token…",
+  "card.resolve.action": "Resolve",
+  "card.resolve.loading": "Resolving…",
+  "card.resolve.result.restricted": "Restricted access",
+  "card.resolve.error.unrecognized": "Token not recognized for this library.",
+  "card.resolve.error.invalid_token": "Empty or invalid token.",
+  "card.resolve.error.not_authenticated": "Session expired — sign in again.",
+  "card.resolve.error.generic": "Network error — try again."
 }

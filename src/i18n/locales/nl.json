@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "Je hebt vandaag al meerdere berichten verstuurd. Probeer het later opnieuw.",
   "account.mylib.write.errorGeneric": "Verzenden mislukt. Probeer opnieuw.",
   "account.mylib.note": "Info",
-  "account.mylib.noPublicContact": "Deze bibliotheek heeft haar contactgegevens nog niet gepubliceerd."
+  "account.mylib.noPublicContact": "Deze bibliotheek heeft haar contactgegevens nog niet gepubliceerd.",
+  "card.resolve.placeholder": "Token van de lezerskaart…",
+  "card.resolve.action": "Opzoeken",
+  "card.resolve.loading": "Bezig met opzoeken…",
+  "card.resolve.result.restricted": "Beperkte toegang",
+  "card.resolve.error.unrecognized": "Token niet herkend voor deze bibliotheek.",
+  "card.resolve.error.invalid_token": "Leeg of ongeldig token.",
+  "card.resolve.error.not_authenticated": "Sessie verlopen — log opnieuw in.",
+  "card.resolve.error.generic": "Netwerkfout — probeer opnieuw."
 }

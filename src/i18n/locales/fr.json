@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "Vous avez déjà envoyé plusieurs messages aujourd'hui. Réessayez plus tard.",
   "account.mylib.write.errorGeneric": "Envoi impossible. Réessayez.",
   "account.mylib.note": "Infos",
-  "account.mylib.noPublicContact": "Cette bibliothèque n’a pas encore publié ses coordonnées."
+  "account.mylib.noPublicContact": "Cette bibliothèque n’a pas encore publié ses coordonnées.",
+  "card.resolve.placeholder": "Jeton de la carte-lecteur…",
+  "card.resolve.action": "Résoudre",
+  "card.resolve.loading": "Résolution…",
+  "card.resolve.result.restricted": "Accès restreint",
+  "card.resolve.error.unrecognized": "Jeton non reconnu pour cette bibliothèque.",
+  "card.resolve.error.invalid_token": "Jeton vide ou invalide.",
+  "card.resolve.error.not_authenticated": "Session expirée — reconnectez-vous.",
+  "card.resolve.error.generic": "Erreur réseau — réessayez."
 }

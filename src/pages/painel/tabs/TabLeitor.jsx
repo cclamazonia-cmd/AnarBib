@@ -8,6 +8,7 @@ import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { supabase } from '@/lib/supabase';
 import { fmtD } from '../_shared';
 import WriteToReaderBox from './WriteToReaderBox';
+import ResolveCardBox from './ResolveCardBox';
 
 // ═══════════════════════════════════════════════════════════
 // TabLeitor — onglet « Gérer lecteur·rice » (chantier E.1 / OT-4)
@@ -51,6 +52,7 @@ export default function TabLeitor({
           onKeyDown={e => e.key === 'Enter' && searchReader()} />
         <Button onClick={searchReader}>{t({ id: 'common.search' })}</Button>
       </div>
+      <ResolveCardBox t={t} onResolved={(r) => setReaderLookup(r.public_id)} />
       {readerMsg && <p className="ab-painel-msg">{readerMsg}</p>}
       {readerProfile && (
         <div className="ab-painel-reader-card">

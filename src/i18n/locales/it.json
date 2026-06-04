@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "Hai già inviato diversi messaggi oggi. Riprova più tardi.",
   "account.mylib.write.errorGeneric": "Invio non riuscito. Riprova.",
   "account.mylib.note": "Informazioni",
-  "account.mylib.noPublicContact": "Questa biblioteca non ha ancora pubblicato i suoi recapiti."
+  "account.mylib.noPublicContact": "Questa biblioteca non ha ancora pubblicato i suoi recapiti.",
+  "card.resolve.placeholder": "Token della tessera lettore…",
+  "card.resolve.action": "Risolvi",
+  "card.resolve.loading": "Risoluzione…",
+  "card.resolve.result.restricted": "Accesso limitato",
+  "card.resolve.error.unrecognized": "Token non riconosciuto per questa biblioteca.",
+  "card.resolve.error.invalid_token": "Token vuoto o non valido.",
+  "card.resolve.error.not_authenticated": "Sessione scaduta — accedi di nuovo.",
+  "card.resolve.error.generic": "Errore di rete — riprova."
 }

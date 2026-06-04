@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "Ya enviaste varios mensajes hoy. Probá más tarde.",
   "account.mylib.write.errorGeneric": "No se pudo enviar. Probá de nuevo.",
   "account.mylib.note": "Información",
-  "account.mylib.noPublicContact": "Esta biblioteca aún no publicó sus datos de contacto."
+  "account.mylib.noPublicContact": "Esta biblioteca aún no publicó sus datos de contacto.",
+  "card.resolve.placeholder": "Token de la tarjeta de lector·a…",
+  "card.resolve.action": "Resolver",
+  "card.resolve.loading": "Resolviendo…",
+  "card.resolve.result.restricted": "Acceso restringido",
+  "card.resolve.error.unrecognized": "Token no reconocido para esta biblioteca.",
+  "card.resolve.error.invalid_token": "Token vacío o inválido.",
+  "card.resolve.error.not_authenticated": "Sesión expirada — vuelve a iniciar sesión.",
+  "card.resolve.error.generic": "Error de red — inténtalo de nuevo."
 }

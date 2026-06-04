@@ -3183,5 +3183,13 @@
   "account.mylib.write.errorRate": "Vi jam sendis plurajn mesaĝojn hodiaŭ. Reprovu poste.",
   "account.mylib.write.errorGeneric": "Ne eblis sendi. Reprovu.",
   "account.mylib.note": "Informoj",
-  "account.mylib.noPublicContact": "Ĉi tiu biblioteko ankoraŭ ne publikigis siajn kontaktinformojn."
+  "account.mylib.noPublicContact": "Ĉi tiu biblioteko ankoraŭ ne publikigis siajn kontaktinformojn.",
+  "card.resolve.placeholder": "Ĵetono de la leganta karto…",
+  "card.resolve.action": "Solvi",
+  "card.resolve.loading": "Solvante…",
+  "card.resolve.result.restricted": "Limigita aliro",
+  "card.resolve.error.unrecognized": "Ĵetono ne rekonita por ĉi tiu biblioteko.",
+  "card.resolve.error.invalid_token": "Malplena aŭ nevalida ĵetono.",
+  "card.resolve.error.not_authenticated": "Seanco eksvalidiĝis — reensalutu.",
+  "card.resolve.error.generic": "Reta eraro — bonvolu reprovi."
 }
