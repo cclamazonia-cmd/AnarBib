@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import { supabase } from '@/lib/supabase';
 
@@ -15,11 +15,30 @@ import { supabase } from '@/lib/supabase';
 // remonte l'identité au parent (ici : pré-remplir la recherche avec le
 // public_id, pour ouvrir la fiche complète sans course d'état).
 // ═══════════════════════════════════════════════════════════
-export default function ResolveCardBox({ t, onResolved }) {
+export default function ResolveCardBox({ t, libraryId, onResolved }) {
   const [token, setToken] = useState('');
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
   const [errMsg, setErrMsg] = useState('');
+
+  // Capacité opt-in par bibliothèque (libraries.reader_cards_enabled).
+  // Le résolveur n'a de sens que là où la carte est activée : on ne
+  // l'affiche pas du tout sinon. Défaut sûr = caché tant que non confirmé
+  // (erreur de lecture / capacité absente → résolveur masqué).
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    if (!libraryId) { setEnabled(false); return undefined; }
+    (async () => {
+      const { data, error } = await supabase
+        .from('libraries')
+        .select('reader_cards_enabled')
+        .eq('id', libraryId)
+        .maybeSingle();
+      if (alive) setEnabled(!error && data?.reader_cards_enabled === true);
+    })();
+    return () => { alive = false; };
+  }, [libraryId]);
 
   const resolve = async () => {
     const tok = token.trim();
@@ -46,6 +65,8 @@ export default function ResolveCardBox({ t, onResolved }) {
       setBusy(false);
     }
   };
+
+  if (!enabled) return null;
 
   return (
     <div>

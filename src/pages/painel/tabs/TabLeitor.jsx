@@ -52,7 +52,7 @@ export default function TabLeitor({
           onKeyDown={e => e.key === 'Enter' && searchReader()} />
         <Button onClick={searchReader}>{t({ id: 'common.search' })}</Button>
       </div>
-      <ResolveCardBox t={t} onResolved={(r) => setReaderLookup(r.public_id)} />
+      <ResolveCardBox t={t} libraryId={libraryId} onResolved={(r) => setReaderLookup(r.public_id)} />
       {readerMsg && <p className="ab-painel-msg">{readerMsg}</p>}
       {readerProfile && (
         <div className="ab-painel-reader-card">
