@@ -30,7 +30,11 @@ const CONTACT_FIELDS = ['public_email', 'public_phone', 'public_whatsapp', 'publ
 // Resolution data-driven du logo (logo_url prioritaire, sinon logo_file_key).
 function resolveLogo(commons) {
   if (!commons) return null;
-  if (typeof commons.logo_url === 'string' && commons.logo_url.trim() !== '') return commons.logo_url;
+  // logo_url pris en compte SEULEMENT si URL absolue http(s).
+  // Valeurs relatives heritees (ex. ./assets/.../logo-btl.png) ignorees :
+  // on retombe sur logo_file_key (chemin bucket). Cf. TR-6.2b.
+  const url = typeof commons.logo_url === 'string' ? commons.logo_url.trim() : '';
+  if (/^https?:\/\//i.test(url)) return url;
   const key = commons.logo_file_key;
   if (typeof key === 'string' && key.trim() !== '') {
     const tail = key.includes('/') ? key : `themes/${key}/logo-${key}.png`;
