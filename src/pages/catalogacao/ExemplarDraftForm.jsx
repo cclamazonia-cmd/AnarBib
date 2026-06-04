@@ -44,7 +44,7 @@ function getTrigram(name) {
   return clean ? clean.slice(0,3).padEnd(3,'X') : '---';
 }
 
-export default function ExemplarDraftForm({ mode, batches, prefillBibRef }) {
+export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const isComplete = mode === 'complete';
@@ -83,6 +83,25 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef }) {
   }, []);
 
   useEffect(() => { loadDrafts(); }, [loadDrafts]);
+
+  // -- Lot 0 -- charger un brouillon a editer (handoff catalogo/fila -> editeur) --
+  useEffect(() => {
+    if (!editingId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.from('exemplar_drafts').select('*').eq('id', Number(editingId)).single();
+        if (cancelled) return;
+        if (error) throw error;
+        if (data) fillFromRecord(data);
+      } catch (e) {
+        if (!cancelled) setMsg({ text: `Erro ao carregar rascunho: ${e.message}`, kind: 'error' });
+      } finally {
+        if (!cancelled) onConsumed?.();
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [editingId]);
 
   // P1.6-b.2 : pré-ciblage depuis le bandeau doublon — CatalogacaoPage passe le bib_ref
   // de la ficha existante ; on prépare un exemplaire neuf pointant dessus.

@@ -57,7 +57,7 @@ function extractStructuredMeta(notes) {
   return { meta, cleanNotes };
 }
 
-export default function AuthorDraftForm({ mode, batches }) {
+export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const [drafts, setDrafts] = useState([]);
@@ -104,6 +104,25 @@ export default function AuthorDraftForm({ mode, batches }) {
   }, []);
 
   useEffect(() => { loadDrafts(); }, [loadDrafts]);
+
+  // -- Lot 0 -- charger un brouillon a editer (handoff catalogo/fila -> editeur) --
+  useEffect(() => {
+    if (!editingId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.from('author_drafts').select('*').eq('id', Number(editingId)).single();
+        if (cancelled) return;
+        if (error) throw error;
+        if (data) fillFromRecord(data);
+      } catch (e) {
+        if (!cancelled) setMsg({ text: `Erro ao carregar rascunho: ${e.message}`, kind: 'error' });
+      } finally {
+        if (!cancelled) onConsumed?.();
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [editingId]);
 
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {

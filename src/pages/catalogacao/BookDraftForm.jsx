@@ -115,7 +115,7 @@ const EMPTY_FORM = {
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
 
@@ -154,6 +154,25 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [digitalSaving, setDigitalSaving] = useState(false);
 
   // ── Field helpers ──────────────────────────────────────
+  // -- Lot 0 -- charger un brouillon a editer (handoff catalogo/fila -> editeur) --
+  useEffect(() => {
+    if (!editingId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.from('book_drafts').select('*').eq('id', Number(editingId)).single();
+        if (cancelled) return;
+        if (error) throw error;
+        if (data) fillFromRecord(data);
+      } catch (e) {
+        if (!cancelled) setMsg({ text: `Erro ao carregar rascunho: ${e.message}`, kind: 'error' });
+      } finally {
+        if (!cancelled) onConsumed?.();
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [editingId]);
+
   function f(key) { return form[key] || ''; }
   function set(key, value) {
     setForm(prev => ({ ...prev, [key]: value }));

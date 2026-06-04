@@ -9,7 +9,7 @@ const MATERIAL_LABELS = {
   dossie: 'Dossiê', tese: 'Tese', artigo: 'Artigo', relatorio: 'Relatório', zine: 'Zine',
 };
 
-export default function CatalogPanel() {
+export default function CatalogPanel({ onEdit }) {
   const { formatMessage: t } = useIntl();
   const [view, setView] = useState('book'); // book | author | exemplar
   const [search, setSearch] = useState('');
@@ -84,7 +84,12 @@ export default function CatalogPanel() {
         : { p_exemplar_id: id };
       const { data, error } = await supabase.rpc(rpc, param);
       if (error) throw error;
-      setMsg({ text: `Rascunho de retomada criado (ID ${data}). Abra o onglet correspondente para editar.`, kind: 'ok' });
+      if (onEdit) {
+        onEdit(type, data);
+        setMsg({ text: `Rascunho de retomada criado (ID ${data}) -- abrindo no editor...`, kind: 'ok' });
+      } else {
+        setMsg({ text: `Rascunho de retomada criado (ID ${data}). Abra a aba correspondente para editar.`, kind: 'ok' });
+      }
     } catch (err) {
       setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
     }

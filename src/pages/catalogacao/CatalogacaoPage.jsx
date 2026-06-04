@@ -60,6 +60,7 @@ export default function CatalogacaoPage() {
   // ── Dados de catálogo ────────────────────────────────────
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editTarget, setEditTarget] = useState(null); // { kind, id } -- handoff catalogo/fila -> editeur (Lot 0)
 
   // ═══════════════════════════════════════════════════════
   // Load stats + batches (same pattern as PanelPage)
@@ -141,6 +142,12 @@ export default function CatalogacaoPage() {
       if (data?.bib_ref) setAttachTarget(String(data.bib_ref));
     } catch {}
     switchTab('indexPanel');
+  }
+
+  function openForEdit(kind, id) {
+    const tabByKind = { book: 'booksPanel', author: 'authorsPanel', exemplar: 'indexPanel' };
+    setEditTarget({ kind, id: id != null ? String(id) : null });
+    switchTab(tabByKind[kind] || 'booksPanel');
   }
 
   function switchTab(tabId) {
@@ -267,17 +274,17 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.documento'})}</h3>
             </div>
-            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} />
+            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
           </div>
 
           {/* 2. Autoria */}
           <div className={`cat-panel${activeTab === 'authorsPanel' ? ' active' : ''}`}>
-            <AuthorDraftForm mode={mode} batches={batches} />
+            <AuthorDraftForm mode={mode} batches={batches} editingId={editTarget?.kind === 'author' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
           </div>
 
           {/* 3. Indexação (exemplar + rótulo + impression étiquettes) */}
           <div className={`cat-panel${activeTab === 'indexPanel' ? ' active' : ''}`}>
-            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} />
+            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
             <LabelSheetPrinter />
           </div>
 
@@ -296,7 +303,7 @@ export default function CatalogacaoPage() {
 
           {/* 6. Catálogo(s) já publicado(s) */}
           <div className={`cat-panel${activeTab === 'catalogPanel' ? ' active' : ''}`}>
-            <CatalogPanel />
+            <CatalogPanel onEdit={openForEdit} />
           </div>
       </div>
       <Footer />
