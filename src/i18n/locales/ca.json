@@ -3191,5 +3191,13 @@
   "card.resolve.error.unrecognized": "Testimoni no reconegut per a aquesta biblioteca.",
   "card.resolve.error.invalid_token": "Testimoni buit o no vàlid.",
   "card.resolve.error.not_authenticated": "Sessió caducada — torna a iniciar la sessió.",
-  "card.resolve.error.generic": "Error de xarxa — torna-ho a provar."
+  "card.resolve.error.generic": "Error de xarxa — torna-ho a provar.",
+  "panel.summary.readerMessages": "Missatges rebuts",
+  "panel.readerInbox.title": "Missatges rebuts",
+  "panel.readerInbox.empty": "Cap missatge rebut.",
+  "panel.readerInbox.pendingBadge": "per respondre",
+  "panel.readerInbox.reply": "Respondre",
+  "panel.readerInbox.noSubject": "(sense assumpte)",
+  "panel.readerInbox.unknownReader": "Identitat no disponible",
+  "panel.error.readerMessages": "No s'han pogut carregar els missatges."
 }

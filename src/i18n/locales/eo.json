@@ -3191,5 +3191,13 @@
   "card.resolve.error.unrecognized": "Ĵetono ne rekonita por ĉi tiu biblioteko.",
   "card.resolve.error.invalid_token": "Malplena aŭ nevalida ĵetono.",
   "card.resolve.error.not_authenticated": "Seanco eksvalidiĝis — reensalutu.",
-  "card.resolve.error.generic": "Reta eraro — bonvolu reprovi."
+  "card.resolve.error.generic": "Reta eraro — bonvolu reprovi.",
+  "panel.summary.readerMessages": "Ricevitaj mesaĝoj",
+  "panel.readerInbox.title": "Ricevitaj mesaĝoj",
+  "panel.readerInbox.empty": "Neniu mesaĝo ricevita.",
+  "panel.readerInbox.pendingBadge": "respondota",
+  "panel.readerInbox.reply": "Respondi",
+  "panel.readerInbox.noSubject": "(sen temo)",
+  "panel.readerInbox.unknownReader": "Identeco nedisponebla",
+  "panel.error.readerMessages": "Ne eblis ŝargi la mesaĝojn."
 }

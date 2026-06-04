@@ -3191,5 +3191,13 @@
   "card.resolve.error.unrecognized": "Token não reconhecido para esta biblioteca.",
   "card.resolve.error.invalid_token": "Token vazio ou inválido.",
   "card.resolve.error.not_authenticated": "Sessão expirada — entre novamente.",
-  "card.resolve.error.generic": "Erro de rede — tente novamente."
+  "card.resolve.error.generic": "Erro de rede — tente novamente.",
+  "panel.summary.readerMessages": "Mensagens recebidas",
+  "panel.readerInbox.title": "Mensagens recebidas",
+  "panel.readerInbox.empty": "Nenhuma mensagem recebida.",
+  "panel.readerInbox.pendingBadge": "a responder",
+  "panel.readerInbox.reply": "Responder",
+  "panel.readerInbox.noSubject": "(sem assunto)",
+  "panel.readerInbox.unknownReader": "Identidade indisponível",
+  "panel.error.readerMessages": "Não foi possível carregar as mensagens."
 }

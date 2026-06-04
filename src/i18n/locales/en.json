@@ -3191,5 +3191,13 @@
   "card.resolve.error.unrecognized": "Token not recognized for this library.",
   "card.resolve.error.invalid_token": "Empty or invalid token.",
   "card.resolve.error.not_authenticated": "Session expired — sign in again.",
-  "card.resolve.error.generic": "Network error — try again."
+  "card.resolve.error.generic": "Network error — try again.",
+  "panel.summary.readerMessages": "Messages received",
+  "panel.readerInbox.title": "Received messages",
+  "panel.readerInbox.empty": "No messages received.",
+  "panel.readerInbox.pendingBadge": "to answer",
+  "panel.readerInbox.reply": "Reply",
+  "panel.readerInbox.noSubject": "(no subject)",
+  "panel.readerInbox.unknownReader": "Identity unavailable",
+  "panel.error.readerMessages": "Could not load messages."
 }

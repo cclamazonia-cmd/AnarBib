@@ -3191,5 +3191,13 @@
   "card.resolve.error.unrecognized": "Token niet herkend voor deze bibliotheek.",
   "card.resolve.error.invalid_token": "Leeg of ongeldig token.",
   "card.resolve.error.not_authenticated": "Sessie verlopen — log opnieuw in.",
-  "card.resolve.error.generic": "Netwerkfout — probeer opnieuw."
+  "card.resolve.error.generic": "Netwerkfout — probeer opnieuw.",
+  "panel.summary.readerMessages": "Ontvangen berichten",
+  "panel.readerInbox.title": "Ontvangen berichten",
+  "panel.readerInbox.empty": "Geen berichten ontvangen.",
+  "panel.readerInbox.pendingBadge": "te beantwoorden",
+  "panel.readerInbox.reply": "Beantwoorden",
+  "panel.readerInbox.noSubject": "(geen onderwerp)",
+  "panel.readerInbox.unknownReader": "Identiteit niet beschikbaar",
+  "panel.error.readerMessages": "Kan berichten niet laden."
 }

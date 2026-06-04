@@ -9,8 +9,12 @@ import { Button } from '@/components/ui';
 // pattern inline des blocs restriction/gel de TabLeitor). Mail-only (pas
 // d'inbox in-app cette manche). Visible pour tout staff ; la RLS INSERT
 // (user_has_library_staff_role + recipient membre actif) gate cote DB.
+//
+// Prop optionnelle onSent() : appelee apres un envoi reussi. Non-breaking
+// (TabLeitor ne la passe pas). Utilisee par la boite de reception
+// (TabTrabalhoDoDia) pour recharger la liste apres reponse.
 // =============================================================================
-export default function WriteToReaderBox({ t, libraryId, reader }) {
+export default function WriteToReaderBox({ t, libraryId, reader, onSent }) {
   const [open, setOpen] = useState(false);
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
@@ -45,6 +49,7 @@ export default function WriteToReaderBox({ t, libraryId, reader }) {
       }
       setSubject(''); setBody(''); setOpen(false);
       setMsgErr(false); setMsg(t({ id: 'panel.reader.write.success' }));
+      if (typeof onSent === 'function') onSent();
     } catch {
       setMsgErr(true); setMsg(t({ id: 'panel.reader.write.errorGeneric' }));
     } finally {

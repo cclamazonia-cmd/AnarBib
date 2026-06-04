@@ -3191,5 +3191,13 @@
   "card.resolve.error.unrecognized": "Token für diese Bibliothek nicht erkannt.",
   "card.resolve.error.invalid_token": "Leeres oder ungültiges Token.",
   "card.resolve.error.not_authenticated": "Sitzung abgelaufen — bitte erneut anmelden.",
-  "card.resolve.error.generic": "Netzwerkfehler — bitte erneut versuchen."
+  "card.resolve.error.generic": "Netzwerkfehler — bitte erneut versuchen.",
+  "panel.summary.readerMessages": "Erhaltene Nachrichten",
+  "panel.readerInbox.title": "Erhaltene Nachrichten",
+  "panel.readerInbox.empty": "Keine Nachrichten erhalten.",
+  "panel.readerInbox.pendingBadge": "zu beantworten",
+  "panel.readerInbox.reply": "Antworten",
+  "panel.readerInbox.noSubject": "(ohne Betreff)",
+  "panel.readerInbox.unknownReader": "Identität nicht verfügbar",
+  "panel.error.readerMessages": "Nachrichten konnten nicht geladen werden."
 }

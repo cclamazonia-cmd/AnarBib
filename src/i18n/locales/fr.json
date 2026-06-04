@@ -3191,5 +3191,13 @@
   "card.resolve.error.unrecognized": "Jeton non reconnu pour cette bibliothèque.",
   "card.resolve.error.invalid_token": "Jeton vide ou invalide.",
   "card.resolve.error.not_authenticated": "Session expirée — reconnectez-vous.",
-  "card.resolve.error.generic": "Erreur réseau — réessayez."
+  "card.resolve.error.generic": "Erreur réseau — réessayez.",
+  "panel.summary.readerMessages": "Messages reçus",
+  "panel.readerInbox.title": "Messages reçus",
+  "panel.readerInbox.empty": "Aucun message reçu.",
+  "panel.readerInbox.pendingBadge": "à répondre",
+  "panel.readerInbox.reply": "Répondre",
+  "panel.readerInbox.noSubject": "(sans objet)",
+  "panel.readerInbox.unknownReader": "Identité indisponible",
+  "panel.error.readerMessages": "Impossible de charger les messages."
 }
