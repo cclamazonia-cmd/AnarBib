@@ -98,8 +98,13 @@ export default function CatalogPanel({ onEdit }) {
   async function discardItem(type, id, label) {
     if (!confirm(`Descartar "${label}" do catálogo publicado?\n\nEsta ação é irreversível. O registro será apagado definitivamente.`)) return;
     try {
-      const table = type === 'book' ? 'books' : type === 'author' ? 'authors' : 'exemplares';
-      const { error } = await supabase.from(table).delete().eq('id', id);
+      const rpc = type === 'book' ? 'discard_book'
+        : type === 'author' ? 'discard_author'
+        : 'discard_exemplar';
+      const param = type === 'book' ? { p_book_id: id }
+        : type === 'author' ? { p_author_id: id }
+        : { p_exemplar_id: id };
+      const { error } = await supabase.rpc(rpc, param);
       if (error) throw error;
       setMsg({ text: `"${label}" descartado do catálogo.`, kind: 'ok' });
       loadItems();
