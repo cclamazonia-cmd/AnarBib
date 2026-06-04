@@ -7,6 +7,7 @@ import { getCountryName } from '@/lib/countries';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { supabase } from '@/lib/supabase';
 import { fmtD } from '../_shared';
+import WriteToReaderBox from './WriteToReaderBox';
 
 // ═══════════════════════════════════════════════════════════
 // TabLeitor — onglet « Gérer lecteur·rice » (chantier E.1 / OT-4)
@@ -94,6 +95,8 @@ export default function TabLeitor({
           })()}
 
           {/* ── Edit profile form ── */}
+          <WriteToReaderBox t={t} libraryId={libraryId} reader={readerProfile} />
+
           <details className="ab-painel-edit-profile">
             <summary className="ab-painel-edit-summary">{t({id:'panel.reader.editProfile'})}</summary>
             <div className="ab-painel-field-grid ab-painel-field-grid--mt">
