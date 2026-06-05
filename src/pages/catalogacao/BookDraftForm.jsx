@@ -253,8 +253,33 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     || (f('cover_object_path') ? `${PROJECT_URL}/storage/v1/object/public/covers/${f('cover_object_path')}` : '');
 
   // ═══════════════════════════════════════════════════════
-  // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, LoC)
+  // Catalog lookup (ISBN/ISSN/title+author → BNE, BnF, DNB, ICCU, LoC, OL, Wikidata + BN Brasil)
   // ═══════════════════════════════════════════════════════
+
+  function normalizeBnToCandidate(item, queryIsbn) {
+    const parts = (item.title || '').split(/\s*:\s*/);
+    const title = parts[0] || '';
+    const subtitle = parts.slice(1).join(' : ');
+    const author = item.author || '';
+    const pubMatch = (item.publication || '').match(/^([^:]+?)(?:\s*:\s*(.+?))?(?:,\s*(\d{4}))?\s*$/);
+    let confidence = 2;
+    const match_reasons = ['bn_brasil_source'];
+    if (queryIsbn) { confidence += 72; match_reasons.push('isbn_lookup'); }
+    if (author) { confidence += 3; match_reasons.push('contributors_present'); }
+    if (pubMatch?.[1] || pubMatch?.[2] || pubMatch?.[3]) { confidence += 3; match_reasons.push('publication_data_present'); }
+    return {
+      source: 'bn_brasil', source_record_id: '', source_url: item.detail_url || '',
+      record_type: 'bibliographic', raw_format: 'bn_brasil_scrape',
+      title, subtitle, responsibility_statement: author,
+      contributors: author ? [{ label: author, normalized_label: author.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(), role: 'author', authority_ids: {} }] : [],
+      edition: '', place: pubMatch?.[1]?.trim() || '', publisher: pubMatch?.[2]?.trim() || '',
+      year: pubMatch?.[3] || '', extent: '', series: '', language: 'por',
+      isbn: queryIsbn ? [queryIsbn] : [], issn: [],
+      subjects: item.subject ? [item.subject] : [],
+      notes: [], classification: [],
+      identifiers: {}, confidence, match_reasons,
+    };
+  }
 
   async function runCatalogLookup() {
     const isbn = (f('isbn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
@@ -270,22 +295,49 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setLookupLoading(true);
     setLookupResult(null);
     setSelectedCandidate(0);
+    setBnResult(null);
     setMsg({ text: t({id:'catalogacao.msg.searchingSources'}), kind: 'info' });
 
     try {
-      const { data, error } = await supabase.functions.invoke('catalog_metadata_lookup', {
-        body: {
-          isbn: isbn || null,
-          issn: issn || null,
-          title: title || null,
-          author: author || null,
-          maximumRecords: 8,
-          includeDebug: false,
-        },
-      });
+      const promises = [
+        supabase.functions.invoke('catalog_metadata_lookup', {
+          body: { isbn: isbn || null, issn: issn || null, title: title || null, author: author || null, maximumRecords: 8, includeDebug: false },
+        }),
+      ];
+      if (isbn) {
+        promises.push(supabase.functions.invoke('bn_isbn_lookup', { body: { isbn } }));
+      }
 
-      if (error && !data) throw error;
-      if (!data?.ok) throw new Error(data?.error || 'A busca assistida falhou.');
+      const settled = await Promise.allSettled(promises);
+
+      const catalogSettled = settled[0];
+      let data;
+      if (catalogSettled.status === 'fulfilled') {
+        const { data: d, error: e } = catalogSettled.value;
+        if (e && !d) throw e;
+        if (!d?.ok) throw new Error(d?.error || 'A busca assistida falhou.');
+        data = d;
+      } else {
+        throw catalogSettled.reason;
+      }
+
+      if (isbn && settled[1]) {
+        const bnSettled = settled[1];
+        const startMs = Date.now();
+        if (bnSettled.status === 'fulfilled') {
+          const bnData = bnSettled.value?.data;
+          if (bnData?.ok && bnData.results?.length) {
+            const bnCandidates = bnData.results.map(item => normalizeBnToCandidate(item, isbn));
+            data.sources = [...(data.sources || []), { id: 'bn_brasil', label: 'BN Brasil', status: 'ok', count: bnCandidates.length, durationMs: Date.now() - startMs }];
+            data.candidates = [...(data.candidates || []), ...bnCandidates].sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
+            data.total = data.candidates.length;
+          } else {
+            data.sources = [...(data.sources || []), { id: 'bn_brasil', label: 'BN Brasil', status: bnData?.ok ? 'empty' : 'error', count: 0, durationMs: Date.now() - startMs }];
+          }
+        } else {
+          data.sources = [...(data.sources || []), { id: 'bn_brasil', label: 'BN Brasil', status: 'error', count: 0, durationMs: 0, error: 'Connection failed' }];
+        }
+      }
 
       setLookupResult(data);
       const total = data.total || 0;
