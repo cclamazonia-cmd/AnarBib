@@ -962,26 +962,24 @@ export default function AccountPage() {
   // Le QR encode UNIQUEMENT le token opaque (pas d'URL, pas de user_id).
   // Generation locale (qrcode + canvas), aucun appel reseau (anti-tracking).
   async function composeCardCanvas(token, slug) {
-    // Canvas carte : fond clair, slug en haut, QR centre.
-    const W = 600, H = 760;
+    // Canvas carte : fond clair, slug en haut, QR compact centre.
+    // QR ~240px sur canvas 400px ≈ 40-45 mm imprime sur A6.
+    const W = 400, H = 380;
+    const QR_SIZE = 240;
     const canvas = document.createElement('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
     // Slug bibliotheque (seule info humaine sur la carte)
     ctx.fillStyle = '#1f1f1f';
-    ctx.font = 'bold 40px sans-serif';
+    ctx.font = 'bold 32px sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(slug, W / 2, 80);
+    ctx.fillText(slug, W / 2, 50);
     // QR du token, genere localement
-    const qrDataUrl = await QRCode.toDataURL(token, { width: 460, margin: 1, errorCorrectionLevel: 'M' });
+    const qrDataUrl = await QRCode.toDataURL(token, { width: QR_SIZE, margin: 1, errorCorrectionLevel: 'M' });
     const qrImg = new Image();
     await new Promise((res, rej) => { qrImg.onload = res; qrImg.onerror = rej; qrImg.src = qrDataUrl; });
-    ctx.drawImage(qrImg, (W - 460) / 2, 120, 460, 460);
-    // Mention sobre en bas
-    ctx.fillStyle = '#666666';
-    ctx.font = '20px sans-serif';
-    ctx.fillText(t({ id: 'account.readerCard.cardFooter' }), W / 2, 640);
+    ctx.drawImage(qrImg, (W - QR_SIZE) / 2, 80, QR_SIZE, QR_SIZE);
     return canvas;
   }
 
