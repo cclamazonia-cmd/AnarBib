@@ -3231,7 +3231,7 @@
   "account.mylib.write.errorGeneric": "No s'ha pogut enviar. Torna-ho a provar.",
   "account.mylib.note": "Informació",
   "account.mylib.noPublicContact": "Aquesta biblioteca encara no ha publicat les seves dades de contacte.",
-  "card.resolve.placeholder": "Testimoni de la targeta de lector·a…",
+  "card.resolve.placeholder": "Testimoni de la targeta de lector-a-e…",
   "card.resolve.action": "Resol",
   "card.resolve.loading": "Resolent…",
   "card.resolve.result.restricted": "Accés restringit",
