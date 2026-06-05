@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { localizeError } from '@/lib/localizeError';
-import { visibleGroups } from './fieldRegistry.js';
+import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 
 // ── Material type values (labels resolved via t() inside component) ──
@@ -212,10 +212,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const isAudiovisual = materialType === 'audiovisual';
   const isDigitalNative = materialType === 'recurso_digital';
   const isDossier = materialType === 'dossie';
-  const isComplete = mode === 'complete';
-  // Track A Lot 2 — palier courant (rendu piloté par registre).
-  // Intérim binaire→tier : complete→3, simple→2. Lot 3 insérera advanced (→2) et fera simple→1.
-  const catalogTier = mode === 'complete' ? 3 : 2;
+  // Track A Lot 3 — ternary tiers: simple→1, advanced→2, complete→3.
+  const catalogTier = tierFromMode(mode);
 
   // ── Cover preview URL ──────────────────────────────────
   const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -1176,12 +1174,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // ── Shared field renderer ──────────────────────────────
   const inp = (key, label, opts = {}) => {
-    const { type = 'text', placeholder, span, completeOnly, rows, readOnly } = opts;
+    const { type = 'text', placeholder, span, rows, readOnly } = opts;
     const style = span ? { gridColumn: `span ${span}` } : {};
-    const cls = completeOnly ? 'cat-field mode-complete-only' : 'cat-field';
     if (rows) {
       return (
-        <div className={cls} style={style}>
+        <div className="cat-field" style={style}>
           <label>{label}</label>
           <textarea value={f(key)} onChange={e => set(key, e.target.value)}
             placeholder={placeholder} rows={rows}
@@ -1191,7 +1188,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       );
     }
     return (
-      <div className={cls} style={style}>
+      <div className="cat-field" style={style}>
         <label>{label}</label>
         <input type={type} value={f(key)} onChange={e => set(key, e.target.value)}
           placeholder={placeholder} readOnly={readOnly}
@@ -1202,11 +1199,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   };
 
   const sel = (key, label, options, opts = {}) => {
-    const { span, completeOnly } = opts;
+    const { span } = opts;
     const style = span ? { gridColumn: `span ${span}` } : {};
-    const cls = completeOnly ? 'cat-field mode-complete-only' : 'cat-field';
     return (
-      <div className={cls} style={style}>
+      <div className="cat-field" style={style}>
         <label>{label}</label>
         <select value={f(key)} onChange={e => set(key, e.target.value)}
           style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}
@@ -1441,8 +1437,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             );
           })()}
 
-          {/* ── Ref compatibilité ─────────────────────── */}
-          {inp('bib_ref', t({id:'catalogacao.field.bibRef'}), { placeholder: t({id:'catalogacao.ph.refCompat'}), completeOnly: true })}
+          {/* ── Ref compatibilité (tier 3, hors registre — champ système) ── */}
+          {catalogTier >= 3 && inp('bib_ref', t({id:'catalogacao.field.bibRef'}), { placeholder: t({id:'catalogacao.ph.refCompat'}) })}
 
           {/* ── Core fields ──────────────────────────── */}
           {inp('titulo', t({id:'catalogacao.field.title'}), { span: 3 })}
@@ -1519,11 +1515,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             { value: 'false', label: t({id:'catalogacao.ui.consultOnly'}) },
           ])}
 
-          {/* ── Prévia de cote / étiquette ────────────── */}
-          {(() => {
+          {/* ── Prévia de cote / étiquette (tier 3) ────── */}
+          {catalogTier >= 3 && (() => {
             const label = buildShelfLabel({ author: f('autor'), title: f('titulo'), cdd: f('cdd') });
             return (
-              <div className="mode-complete-only" style={{ gridColumn: 'span 3' }}>
+              <div style={{ gridColumn: 'span 3' }}>
                 <div style={{
                   padding: 14, borderRadius: 10,
                   background: 'rgba(255,255,255,.03)',
@@ -1573,8 +1569,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {inp('subjects', t({id:'catalogacao.field.subjects'}), { span: 3, placeholder: t({id:'catalogacao.ph.subjects'}) })}
           {inp('notas', t({id:'catalogacao.field.notes'}), { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.notes'}) })}
 
-          {/* ── Cover ────────────────────────────────── */}
-          {inp('cover_object_path', t({id:'catalogacao.field.coverUpload'}), { span: 3, placeholder: 'books/0000123/front.jpg', completeOnly: true })}
+          {/* ── Cover path (registry-driven, tier 3) ─── */}
+          {renderRegistryField('cover_object_path', { f, set, t }, catalogTier, materialType)}
 
           {/* ═══ Material-specific panels ═════════════ */}
 
@@ -1734,10 +1730,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             </div>
           )}
 
-          {/* ═══ MARC JSON (complete only) ════════════ */}
-          <div className="mode-complete-only" style={{ gridColumn: 'span 3' }}>
-            {inp('marc_json', t({id:'catalogacao.field.marcJson'}), { span: 3, rows: 4, placeholder: '{"anarbib_subjects": [...]}' })}
-          </div>
+          {/* ═══ MARC JSON (tier 3) ════════════════════ */}
+          {catalogTier >= 3 && (
+            <div style={{ gridColumn: 'span 3' }}>
+              {inp('marc_json', t({id:'catalogacao.field.marcJson'}), { span: 3, rows: 4, placeholder: '{"anarbib_subjects": [...]}' })}
+            </div>
+          )}
 
         </div>
 

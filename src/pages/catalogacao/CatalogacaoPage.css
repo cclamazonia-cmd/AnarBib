@@ -140,9 +140,8 @@
 }
 
 /* ── Mode visibility ─────────────────────────────────────── */
-
-[data-catalog-mode="simple"] .mode-complete-only { display: none !important; }
-[data-catalog-mode="complete"] .mode-complete-only { display: revert; }
+/* Track A Lot 3: mode-complete-only removed — visibility is now
+   handled by tier gating in JS (catalogTier >= N). */
 
 /* ── Book form grid ───────────────────────────────────────── */
 

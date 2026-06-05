@@ -116,8 +116,10 @@ export default function CatalogacaoPage() {
   // Mode toggle
   // ═══════════════════════════════════════════════════════
 
+  // Track A Lot 3 — ternary tiers: simple | advanced | complete
   function switchMode(nextMode) {
-    const m = nextMode === 'complete' ? 'complete' : 'simple';
+    const VALID = ['simple', 'advanced', 'complete'];
+    const m = VALID.includes(nextMode) ? nextMode : 'simple';
     setMode(m);
     try { localStorage.setItem(MODE_KEY, m); } catch {}
   }
@@ -175,7 +177,9 @@ export default function CatalogacaoPage() {
 
   const modeHint = mode === 'simple'
     ? t({ id: 'catalogacao.modeSimple' })
-    : t({ id: 'catalogacao.modeComplete' });
+    : mode === 'advanced'
+      ? t({ id: 'catalogacao.modeAdvanced' })
+      : t({ id: 'catalogacao.modeComplete' });
 
   return (
     <PageShell>
@@ -199,20 +203,16 @@ export default function CatalogacaoPage() {
           <div className="cat-mode-switch">
           <span className="cat-mode-switch-label">{t({ id: 'catalogacao.modeLabel' })}</span>
           <div className="cat-mode-switch-buttons">
-            <button
-              className={mode === 'simple' ? 'is-mode-active' : ''}
-              aria-pressed={mode === 'simple' ? 'true' : 'false'}
-              onClick={() => switchMode('simple')}
-            >
-              {t({ id: 'catalogacao.interfaceSimple' })}
-            </button>
-            <button
-              className={mode === 'complete' ? 'is-mode-active' : ''}
-              aria-pressed={mode === 'complete' ? 'true' : 'false'}
-              onClick={() => switchMode('complete')}
-            >
-              {t({ id: 'catalogacao.interfaceComplete' })}
-            </button>
+            {['simple', 'advanced', 'complete'].map(m => (
+              <button
+                key={m}
+                className={mode === m ? 'is-mode-active' : ''}
+                aria-pressed={mode === m ? 'true' : 'false'}
+                onClick={() => switchMode(m)}
+              >
+                {t({ id: `catalogacao.interface${m.charAt(0).toUpperCase() + m.slice(1)}` })}
+              </button>
+            ))}
           </div>
           <span className="cat-mode-hint">{modeHint}</span>
         </div>
