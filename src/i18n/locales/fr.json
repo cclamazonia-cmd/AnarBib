@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Délier",
   "catalogacao.authlink.needName": "Saisir un nom de contributeur·rice avant de chercher.",
   "catalogacao.authlink.noResults": "Aucune autorité trouvée.",
-  "catalogacao.authlink.close": "Fermer"
+  "catalogacao.authlink.close": "Fermer",
+  "catalogacao.bio.statusModified": "modifié",
+  "catalogacao.bio.statusReviewed": "revu",
+  "catalogacao.bio.statusDraft": "brouillon",
+  "catalogacao.bio.markReviewed": "marquer comme revu",
+  "catalogacao.bio.markDraft": "repasser en brouillon"
 }

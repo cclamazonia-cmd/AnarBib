@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Malligi",
   "catalogacao.authlink.needName": "Enigu nomon antaŭ ol serĉi.",
   "catalogacao.authlink.noResults": "Neniu aŭtoritato trovita.",
-  "catalogacao.authlink.close": "Fermi"
+  "catalogacao.authlink.close": "Fermi",
+  "catalogacao.bio.statusModified": "modifita",
+  "catalogacao.bio.statusReviewed": "kontrolita",
+  "catalogacao.bio.statusDraft": "malneto",
+  "catalogacao.bio.markReviewed": "marki kiel kontrolita",
+  "catalogacao.bio.markDraft": "reen al malneto"
 }

@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Desvincular",
   "catalogacao.authlink.needName": "Informe um nome de contribuinte antes de buscar.",
   "catalogacao.authlink.noResults": "Nenhuma autoridade encontrada.",
-  "catalogacao.authlink.close": "Fechar"
+  "catalogacao.authlink.close": "Fechar",
+  "catalogacao.bio.statusModified": "modificado",
+  "catalogacao.bio.statusReviewed": "revisado",
+  "catalogacao.bio.statusDraft": "rascunho",
+  "catalogacao.bio.markReviewed": "marcar como revisado",
+  "catalogacao.bio.markDraft": "voltar a rascunho"
 }

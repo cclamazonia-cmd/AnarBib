@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Desvincular",
   "catalogacao.authlink.needName": "Escriu un nom abans de cercar.",
   "catalogacao.authlink.noResults": "Cap autoritat trobada.",
-  "catalogacao.authlink.close": "Tancar"
+  "catalogacao.authlink.close": "Tancar",
+  "catalogacao.bio.statusModified": "modificat",
+  "catalogacao.bio.statusReviewed": "revisat",
+  "catalogacao.bio.statusDraft": "esborrany",
+  "catalogacao.bio.markReviewed": "marcar com a revisat",
+  "catalogacao.bio.markDraft": "tornar a esborrany"
 }

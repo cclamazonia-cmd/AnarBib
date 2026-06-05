@@ -12,6 +12,9 @@ const AUTHORITY_TYPES = [
   { value: 'other', label: 'Outra forma de autoridade' },
 ];
 
+// Locales du widget bio multilingue (= CHECK author_translations.lang).
+const ALLOWED_BIO_LANGS = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+
 const SOURCE_KINDS = [
   { value: '', label: 'Selecione...' },
   { value: 'catalog', label: 'Catálogo (BN, BNE, BnF, LoC…)' },
@@ -58,7 +61,7 @@ function extractStructuredMeta(notes) {
 }
 
 export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed }) {
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   const { user } = useAuth();
   const [drafts, setDrafts] = useState([]);
   const [draftsLoading, setDraftsLoading] = useState(false);
@@ -76,6 +79,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState('');
   const [photoUploading, setPhotoUploading] = useState(false);
   const [bioTranslations, setBioTranslations] = useState([]);
+  const [bioDirty, setBioDirty] = useState(new Set()); // langues éditées (à upserter en status=draft)
+  const [bioReviewBusy, setBioReviewBusy] = useState(null); // lang en cours de bascule de revue
   // Rattachement aux oeuvres (liaison autorite<->livres)
   const [linkMatches, setLinkMatches] = useState(null); // null = pas cherche ; [] = cherche, vide
   const [linkLoading, setLinkLoading] = useState(false);
@@ -203,10 +208,12 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     // brouillon : il collisionne avec les id d'auteurs reels — bug corrige 05/06).
     const authorId = r.published_author_id || null;
     if (authorId) {
-      supabase.from('author_translations').select('lang, biography, author_id').eq('author_id', authorId)
+      supabase.from('author_translations').select('lang, biography, author_id, status, reviewed_at').eq('author_id', authorId)
         .then(({ data }) => { if (data) setBioTranslations(data); });
+      setBioDirty(new Set());
     } else {
       setBioTranslations([]);
+      setBioDirty(new Set());
     }
     setMeta({
       authorityType: parsedMeta.authorityType || 'person',
@@ -325,14 +332,50 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
     setPublishing(true); setMsg({ text: '', kind: '' });
     try {
-      const { error } = await supabase.rpc('publish_author_draft', { p_draft_id: Number(f('id')) });
+      const { data: newAuthorId, error } = await supabase.rpc('publish_author_draft', { p_draft_id: Number(f('id')) });
       if (error) throw error;
+      // Seed bio par défaut dans author_translations (Q1 : locale de l'UI, défaut pt-BR).
+      // ON CONFLICT DO NOTHING : ne jamais écraser une traduction existante (revue).
+      const bio = f('biography')?.trim();
+      const seedLang = ALLOWED_BIO_LANGS.includes(locale) ? locale : 'pt-BR';
+      if (newAuthorId && bio) {
+        await supabase.from('author_translations').upsert(
+          { author_id: Number(newAuthorId), lang: seedLang, biography: bio, status: 'draft', updated_by: user?.id || null },
+          { onConflict: 'author_id,lang', ignoreDuplicates: true },
+        );
+      }
       setDraftState('published');
       await loadDrafts();
       setMsg({ text: 'Autoridade publicada com sucesso no catálogo.', kind: 'ok' });
     } catch (err) {
       setMsg({ text: `Erro publicação: ${err.message}`, kind: 'error' });
     } finally { setPublishing(false); }
+  }
+
+  // Recharge les traductions bio (après save ou bascule de revue).
+  async function reloadBioTranslations() {
+    const authorId = f('published_author_id');
+    if (!authorId) return;
+    const { data } = await supabase.from('author_translations')
+      .select('lang, biography, author_id, status, reviewed_at').eq('author_id', Number(authorId));
+    if (data) setBioTranslations(data);
+    setBioDirty(new Set());
+  }
+
+  // Bascule le statut de revue d'une traduction (RPC staff).
+  async function toggleBioReview(lang, toReviewed) {
+    const authorId = f('published_author_id');
+    if (!authorId) return;
+    setBioReviewBusy(lang);
+    try {
+      const { error } = await supabase.rpc('set_author_translation_review', {
+        p_author_id: Number(authorId), p_lang: lang, p_reviewed: toReviewed,
+      });
+      if (error) throw error;
+      await reloadBioTranslations();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setBioReviewBusy(null); }
   }
 
   // Note : la reprise d'un auteur publie (create_author_draft_from_author) est
@@ -699,13 +742,32 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                   {t({id:'catalogacao.bio.translations'})} {bioTranslations.length > 0 && `(${bioTranslations.map(bt => bt.lang).join(', ')})`}
                 </summary>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
-                  {['pt-BR','fr','es','en','it','de','ca','eo','nl','el'].map(lang => {
+                  {ALLOWED_BIO_LANGS.map(lang => {
                     const existing = bioTranslations.find(bt => bt.lang === lang);
+                    const isDirty = bioDirty.has(lang);
+                    const filled = !!existing?.biography?.trim();
+                    const reviewed = existing?.status === 'reviewed' && !isDirty;
                     return (
                       <div key={lang} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, gap: 6 }}>
                           <span style={{ fontWeight: 700, fontSize: '.82rem' }}>{lang}</span>
-                          {existing && <span style={{ fontSize: '.7rem', color: '#4ade80' }}>✓</span>}
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                            {isDirty ? (
+                              <span style={{ fontSize: '.66rem', color: '#fbbf24' }}>{t({id:'catalogacao.bio.statusModified'})}</span>
+                            ) : reviewed ? (
+                              <span style={{ fontSize: '.66rem', color: '#4ade80' }}>✓ {t({id:'catalogacao.bio.statusReviewed'})}</span>
+                            ) : filled ? (
+                              <span style={{ fontSize: '.66rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.bio.statusDraft'})}</span>
+                            ) : null}
+                            {filled && !isDirty && (
+                              <button type="button" disabled={bioReviewBusy === lang}
+                                onClick={() => toggleBioReview(lang, !reviewed)}
+                                style={{ background: 'none', border: '1px solid rgba(255,255,255,.15)', borderRadius: 5, color: 'var(--brand-muted, #aaa)', cursor: 'pointer', fontSize: '.62rem', padding: '2px 6px' }}
+                                title={reviewed ? t({id:'catalogacao.bio.markDraft'}) : t({id:'catalogacao.bio.markReviewed'})}>
+                                {bioReviewBusy === lang ? '…' : (reviewed ? '↺' : '✓')}
+                              </button>
+                            )}
+                          </span>
                         </div>
                         <textarea
                           rows={3}
@@ -714,9 +776,10 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                           placeholder={t({id:'catalogacao.bio.placeholder'}, {lang})}
                           onChange={e => {
                             const val = e.target.value;
+                            setBioDirty(prev => new Set(prev).add(lang));
                             setBioTranslations(prev => {
                               const copy = prev.filter(bt => bt.lang !== lang);
-                              if (val.trim()) copy.push({ lang, biography: val, author_id: Number(f('published_author_id')) });
+                              copy.push({ ...(existing || {}), lang, biography: val, author_id: Number(f('published_author_id')) });
                               return copy;
                             });
                           }}
@@ -725,15 +788,20 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     );
                   })}
                 </div>
-                <button type="button" className="cat-btn secondary" style={{ marginTop: 8 }} onClick={async () => {
+                <button type="button" className="cat-btn secondary" style={{ marginTop: 8 }} disabled={bioDirty.size === 0} onClick={async () => {
                   try {
-                    for (const bt of bioTranslations) {
-                      if (!bt.biography?.trim()) continue;
+                    for (const lang of bioDirty) {
+                      const bt = bioTranslations.find(x => x.lang === lang);
+                      const bio = bt?.biography?.trim();
+                      if (!bio) continue;
+                      // Une édition (re)pose status=draft : une bio modifiée doit être re-revue (§3.1).
                       await supabase.from('author_translations').upsert({
-                        author_id: bt.author_id, lang: bt.lang, biography: bt.biography.trim(),
-                        updated_at: new Date().toISOString(),
+                        author_id: Number(f('published_author_id')), lang, biography: bio,
+                        status: 'draft', reviewed_by: null, reviewed_at: null,
+                        updated_by: user?.id || null, updated_at: new Date().toISOString(),
                       }, { onConflict: 'author_id,lang' });
                     }
+                    await reloadBioTranslations();
                     setMsg({ text: t({id:'common.dataSaved'}), kind: 'ok' });
                   } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
                 }}>{t({id:'catalogacao.bio.save'})}</button>

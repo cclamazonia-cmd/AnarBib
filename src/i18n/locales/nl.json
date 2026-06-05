@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Ontkoppelen",
   "catalogacao.authlink.needName": "Voer een naam in voordat je zoekt.",
   "catalogacao.authlink.noResults": "Geen autoriteit gevonden.",
-  "catalogacao.authlink.close": "Sluiten"
+  "catalogacao.authlink.close": "Sluiten",
+  "catalogacao.bio.statusModified": "gewijzigd",
+  "catalogacao.bio.statusReviewed": "nagekeken",
+  "catalogacao.bio.statusDraft": "concept",
+  "catalogacao.bio.markReviewed": "markeren als nagekeken",
+  "catalogacao.bio.markDraft": "terug naar concept"
 }

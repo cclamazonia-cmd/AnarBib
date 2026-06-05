@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Αποσύνδεση",
   "catalogacao.authlink.needName": "Εισάγετε ένα όνομα πριν την αναζήτηση.",
   "catalogacao.authlink.noResults": "Δεν βρέθηκε αρχή.",
-  "catalogacao.authlink.close": "Κλείσιμο"
+  "catalogacao.authlink.close": "Κλείσιμο",
+  "catalogacao.bio.statusModified": "τροποποιήθηκε",
+  "catalogacao.bio.statusReviewed": "ελέγχθηκε",
+  "catalogacao.bio.statusDraft": "πρόχειρο",
+  "catalogacao.bio.markReviewed": "σήμανση ως ελεγμένο",
+  "catalogacao.bio.markDraft": "επιστροφή σε πρόχειρο"
 }

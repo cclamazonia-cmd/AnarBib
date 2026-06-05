@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Desvincular",
   "catalogacao.authlink.needName": "Ingresá un nombre de contribuyente antes de buscar.",
   "catalogacao.authlink.noResults": "Ninguna autoridad encontrada.",
-  "catalogacao.authlink.close": "Cerrar"
+  "catalogacao.authlink.close": "Cerrar",
+  "catalogacao.bio.statusModified": "modificado",
+  "catalogacao.bio.statusReviewed": "revisado",
+  "catalogacao.bio.statusDraft": "borrador",
+  "catalogacao.bio.markReviewed": "marcar como revisado",
+  "catalogacao.bio.markDraft": "volver a borrador"
 }

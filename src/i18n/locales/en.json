@@ -3279,5 +3279,10 @@
   "catalogacao.authlink.unlink": "Unlink",
   "catalogacao.authlink.needName": "Enter a contributor name before searching.",
   "catalogacao.authlink.noResults": "No authority found.",
-  "catalogacao.authlink.close": "Close"
+  "catalogacao.authlink.close": "Close",
+  "catalogacao.bio.statusModified": "modified",
+  "catalogacao.bio.statusReviewed": "reviewed",
+  "catalogacao.bio.statusDraft": "draft",
+  "catalogacao.bio.markReviewed": "mark as reviewed",
+  "catalogacao.bio.markDraft": "back to draft"
 }
