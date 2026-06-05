@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Gevonden omslagen",
   "catalogacao.ui.coverLookupEmpty": "Geen omslag gevonden in de geraadpleegde bronnen.",
   "catalogacao.ui.coverLookupNeed": "Geef een ISBN, titel of URL op om een omslag te zoeken.",
+  "catalogacao.ui.coverPdfNone": "Geen PDF gekoppeld aan het record om een omslag uit te halen.",
+  "catalogacao.ui.coverPdfPage1": "Pagina 1 van de PDF",
   "catalogacao.ui.coverSaveFirst": "Sla het concept op voordat je de omslag uploadt.",
   "catalogacao.ui.coverSaved": "Omslag opgeslagen.",
   "catalogacao.ui.coverSearch": "Omslag zoeken…",

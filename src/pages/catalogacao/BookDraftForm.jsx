@@ -18,6 +18,21 @@ const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'material_audi
 // ── Contributor role values (labels resolved via t() inside component) ──
 const CONTRIBUTOR_ROLE_KEYS = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','editor','outro'];
 
+// ── pdf.js loader (capas P3 — page 1 d'un PDF cote client) ──
+// Reutilise le pdf.js deja servi depuis /public/vendor/pdfjs (cf. PdfViewer.jsx).
+const PDFJS_BASE = '/vendor/pdfjs';
+let pdfjsPromiseCat = null;
+function loadPdfjsCat() {
+  if (!pdfjsPromiseCat) {
+    pdfjsPromiseCat = import(/* @vite-ignore */ `${PDFJS_BASE}/build/pdf.mjs`).then((mod) => {
+      const pdfjs = mod.getDocument ? mod : (mod.default || mod);
+      pdfjs.GlobalWorkerOptions.workerSrc = `${PDFJS_BASE}/build/pdf.worker.mjs`;
+      return pdfjs;
+    });
+  }
+  return pdfjsPromiseCat;
+}
+
 // ── Inférer le rôle depuis les données MARC ───────────────
 function inferContributorRole(marcRole = '') {
   const r = (marcRole || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -154,6 +169,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [coverLookupLoading, setCoverLookupLoading] = useState(false);
   const [coverCandidates, setCoverCandidates] = useState([]); // {thumbnailUrl, fullUrl, source, license}
   const [coverStoring, setCoverStoring] = useState(''); // fullUrl en cours d'enregistrement
+  const [coverPdfBusy, setCoverPdfBusy] = useState(false); // generation capa depuis page 1 PDF
 
   // ── Contributors state ─────────────────────────────────
   const [contributors, setContributors] = useState([
@@ -545,6 +561,81 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
     } finally {
       setCoverStoring('');
+    }
+  }
+
+  // Ressource PDF liee a la fiche (pour la capa page 1).
+  function findPdfResource() {
+    return (digitalResources || []).find(
+      (r) => r.mime_type === 'application/pdf'
+        || /\.pdf$/i.test(r.storage_path || '')
+        || /\.pdf(\?|$)/i.test(r.source_url || ''),
+    ) || null;
+  }
+
+  // Capa P3 (cote client) : rend la page 1 du PDF sur un canvas -> upload bucket.
+  async function generateCoverFromPdf() {
+    const stableKey = f('bib_ref') || f('id');
+    if (!stableKey) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverSaveFirst' }), kind: 'error' });
+      return;
+    }
+    const resource = findPdfResource();
+    if (!resource) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverPdfNone' }), kind: 'error' });
+      return;
+    }
+    setCoverPdfBusy(true);
+    try {
+      // 1. Recuperer les octets du PDF (storage de preference, sinon URL source).
+      let arrayBuffer;
+      if (resource.storage_bucket && resource.storage_path) {
+        const { data, error } = await supabase.storage.from(resource.storage_bucket).download(resource.storage_path);
+        if (error) throw error;
+        arrayBuffer = await data.arrayBuffer();
+      } else if (resource.source_url) {
+        const res = await fetch(resource.source_url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        arrayBuffer = await res.arrayBuffer();
+      } else {
+        throw new Error('no source');
+      }
+
+      // 2. Rendre la page 1 sur un canvas hors-ecran.
+      const pdfjs = await loadPdfjsCat();
+      const pdf = await pdfjs.getDocument({
+        data: arrayBuffer,
+        cMapUrl: `${PDFJS_BASE}/web/cmaps/`,
+        cMapPacked: true,
+        standardFontDataUrl: `${PDFJS_BASE}/web/standard_fonts/`,
+      }).promise;
+      const page = await pdf.getPage(1);
+      const base = page.getViewport({ scale: 1 });
+      const targetW = 800;
+      const viewport = page.getViewport({ scale: targetW / base.width });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.floor(viewport.width);
+      canvas.height = Math.floor(viewport.height);
+      const ctx = canvas.getContext('2d');
+      await page.render({ canvasContext: ctx, viewport }).promise;
+      pdf.destroy();
+
+      // 3. Canvas -> blob -> upload bucket covers (blob local, pas de CORS).
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+      if (!blob) throw new Error('toBlob failed');
+      const storagePath = `books/${stableKey}/front.jpg`;
+      const { error: upErr } = await supabase.storage.from('covers').upload(storagePath, blob, { upsert: true, contentType: 'image/jpeg' });
+      if (upErr) throw upErr;
+
+      set('cover_object_path', storagePath);
+      set('cover_source', 'pdf_page1');
+      set('cover_license', '');
+      setCoverPreviewUrl('');
+      setMsg({ text: t({ id: 'catalogacao.ui.coverSaved' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
+    } finally {
+      setCoverPdfBusy(false);
     }
   }
 
@@ -1350,6 +1441,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               onClick={runCoverLookup} disabled={coverLookupLoading}>
               {coverLookupLoading ? t({id:'catalogacao.ui.coverSearching'}) : t({id:'catalogacao.ui.coverSearch'})}
             </button>
+            {findPdfResource() && (
+              <button type="button" className="ab-button ab-button--mini" style={{ width: '100%', marginTop: 4 }}
+                onClick={generateCoverFromPdf} disabled={coverPdfBusy || !(f('bib_ref') || f('id'))}>
+                {coverPdfBusy ? t({id:'catalogacao.ui.coverUploading'}) : t({id:'catalogacao.ui.coverPdfPage1'})}
+              </button>
+            )}
             <label className="ab-button ab-button--mini" style={{ display: 'block', textAlign: 'center', marginTop: 4, cursor: 'pointer', width: '100%' }}>
               {t({id:'catalogacao.ui.chooseCover'})}
               <input type="file" accept="image/*" onChange={handleCoverFileChange} style={{ display: 'none' }} />

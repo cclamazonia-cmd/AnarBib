@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Capas encontradas",
   "catalogacao.ui.coverLookupEmpty": "Nenhuma capa encontrada nas fontes consultadas.",
   "catalogacao.ui.coverLookupNeed": "Informe ISBN, título ou URL para buscar uma capa.",
+  "catalogacao.ui.coverPdfNone": "Nenhum PDF vinculado à ficha para extrair a capa.",
+  "catalogacao.ui.coverPdfPage1": "Página 1 do PDF",
   "catalogacao.ui.coverSaveFirst": "Salve o rascunho antes de enviar a capa.",
   "catalogacao.ui.coverSaved": "Capa salva.",
   "catalogacao.ui.coverSearch": "Buscar capa…",

@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Trovitaj kovriloj",
   "catalogacao.ui.coverLookupEmpty": "Neniu kovrilo trovita en la konsultitaj fontoj.",
   "catalogacao.ui.coverLookupNeed": "Indiku ISBN, titolon aŭ URL por serĉi kovrilon.",
+  "catalogacao.ui.coverPdfNone": "Neniu PDF ligita al la skedo por eltiri kovrilon.",
+  "catalogacao.ui.coverPdfPage1": "Paĝo 1 de la PDF",
   "catalogacao.ui.coverSaveFirst": "Konservu la malneton antaŭ ol alŝuti la kovrilon.",
   "catalogacao.ui.coverSaved": "Kovrilo konservita.",
   "catalogacao.ui.coverSearch": "Serĉi kovrilon…",

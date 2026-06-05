@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Cobertes trobades",
   "catalogacao.ui.coverLookupEmpty": "No s'ha trobat cap coberta a les fonts consultades.",
   "catalogacao.ui.coverLookupNeed": "Indica ISBN, títol o URL per cercar una coberta.",
+  "catalogacao.ui.coverPdfNone": "Cap PDF vinculat a la fitxa per extreure'n la coberta.",
+  "catalogacao.ui.coverPdfPage1": "Pàgina 1 del PDF",
   "catalogacao.ui.coverSaveFirst": "Desa l'esborrany abans d'enviar la coberta.",
   "catalogacao.ui.coverSaved": "Coberta desada.",
   "catalogacao.ui.coverSearch": "Cercar coberta…",

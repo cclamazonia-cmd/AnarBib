@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Covers found",
   "catalogacao.ui.coverLookupEmpty": "No cover found in the consulted sources.",
   "catalogacao.ui.coverLookupNeed": "Provide an ISBN, title, or URL to search for a cover.",
+  "catalogacao.ui.coverPdfNone": "No PDF linked to the record to extract a cover from.",
+  "catalogacao.ui.coverPdfPage1": "Page 1 of the PDF",
   "catalogacao.ui.coverSaveFirst": "Save the draft before uploading the cover.",
   "catalogacao.ui.coverSaved": "Cover saved.",
   "catalogacao.ui.coverSearch": "Search for a cover…",

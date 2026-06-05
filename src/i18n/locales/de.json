@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Gefundene Cover",
   "catalogacao.ui.coverLookupEmpty": "Kein Cover in den abgefragten Quellen gefunden.",
   "catalogacao.ui.coverLookupNeed": "Gib ISBN, Titel oder URL an, um ein Cover zu suchen.",
+  "catalogacao.ui.coverPdfNone": "Kein PDF mit dem Datensatz verknüpft, um ein Cover zu extrahieren.",
+  "catalogacao.ui.coverPdfPage1": "Seite 1 des PDF",
   "catalogacao.ui.coverSaveFirst": "Speichere den Entwurf, bevor du das Cover hochlädst.",
   "catalogacao.ui.coverSaved": "Cover gespeichert.",
   "catalogacao.ui.coverSearch": "Cover suchen…",

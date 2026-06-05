@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Portadas encontradas",
   "catalogacao.ui.coverLookupEmpty": "No se encontró ninguna portada en las fuentes consultadas.",
   "catalogacao.ui.coverLookupNeed": "Indica ISBN, título o URL para buscar una portada.",
+  "catalogacao.ui.coverPdfNone": "Ningún PDF vinculado a la ficha para extraer la portada.",
+  "catalogacao.ui.coverPdfPage1": "Página 1 del PDF",
   "catalogacao.ui.coverSaveFirst": "Guarda el borrador antes de enviar la portada.",
   "catalogacao.ui.coverSaved": "Portada guardada.",
   "catalogacao.ui.coverSearch": "Buscar portada…",

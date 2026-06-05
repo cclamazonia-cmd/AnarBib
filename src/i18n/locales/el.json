@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Εξώφυλλα που βρέθηκαν",
   "catalogacao.ui.coverLookupEmpty": "Δεν βρέθηκε εξώφυλλο στις πηγές που ελέγχθηκαν.",
   "catalogacao.ui.coverLookupNeed": "Δώσε ISBN, τίτλο ή URL για αναζήτηση εξωφύλλου.",
+  "catalogacao.ui.coverPdfNone": "Δεν υπάρχει συνδεδεμένο PDF στην εγγραφή για εξαγωγή εξωφύλλου.",
+  "catalogacao.ui.coverPdfPage1": "Σελίδα 1 του PDF",
   "catalogacao.ui.coverSaveFirst": "Αποθήκευσε το προσχέδιο πριν ανεβάσεις το εξώφυλλο.",
   "catalogacao.ui.coverSaved": "Το εξώφυλλο αποθηκεύτηκε.",
   "catalogacao.ui.coverSearch": "Αναζήτηση εξωφύλλου…",

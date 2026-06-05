@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Copertine trovate",
   "catalogacao.ui.coverLookupEmpty": "Nessuna copertina trovata nelle fonti consultate.",
   "catalogacao.ui.coverLookupNeed": "Indica ISBN, titolo o URL per cercare una copertina.",
+  "catalogacao.ui.coverPdfNone": "Nessun PDF collegato alla scheda per estrarre la copertina.",
+  "catalogacao.ui.coverPdfPage1": "Pagina 1 del PDF",
   "catalogacao.ui.coverSaveFirst": "Salva la bozza prima di caricare la copertina.",
   "catalogacao.ui.coverSaved": "Copertina salvata.",
   "catalogacao.ui.coverSearch": "Cerca copertina…",

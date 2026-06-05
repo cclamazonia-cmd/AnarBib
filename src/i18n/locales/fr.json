@@ -1533,6 +1533,8 @@
   "catalogacao.ui.coverGalleryTitle": "Couvertures trouvées",
   "catalogacao.ui.coverLookupEmpty": "Aucune couverture trouvée dans les sources consultées.",
   "catalogacao.ui.coverLookupNeed": "Renseigne un ISBN, un titre ou une URL pour chercher une couverture.",
+  "catalogacao.ui.coverPdfNone": "Aucun PDF lié à la fiche pour en extraire la couverture.",
+  "catalogacao.ui.coverPdfPage1": "Page 1 du PDF",
   "catalogacao.ui.coverSaveFirst": "Enregistre le brouillon avant d'envoyer la couverture.",
   "catalogacao.ui.coverSaved": "Couverture enregistrée.",
   "catalogacao.ui.coverSearch": "Chercher une couverture…",
