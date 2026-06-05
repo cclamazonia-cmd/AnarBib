@@ -25,6 +25,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
   const [total, setTotal] = useState({ books: 0, authors: 0, exemplars: 0 });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [page, setPage] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
   const PAGE_SIZE = 50;
 
   // ── Load counts ─────────────────────────────────────────
@@ -79,6 +80,20 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
   // Reset page when view/search changes
   useEffect(() => { setPage(0); }, [view, search]);
 
+  // ── Rafraîchir le catalogue public à la demande ─────────
+  async function refreshCatalog() {
+    setRefreshing(true); setMsg({ text: '', kind: '' });
+    try {
+      const { data, error } = await supabase.rpc('request_catalog_refresh');
+      if (error) throw error;
+      setMsg(data === 'busy'
+        ? { text: 'Atualização já em curso — tente de novo em instantes.', kind: 'ok' }
+        : { text: 'Catálogo público atualizado.', kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: `Erro ao atualizar: ${err.message}`, kind: 'error' });
+    } finally { setRefreshing(false); }
+  }
+
   // ── Retake: create draft from published ─────────────────
   async function retakeItem(type, id) {
     if (!confirm(`Criar um rascunho de retomada a partir deste ${TYPE_LABELS[type].toLowerCase()} publicado?`)) return;
@@ -129,13 +144,18 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
 
   return (
     <div>
-      <div className="cat-panel-header" style={{ marginBottom: 12 }}>
+      <div className="cat-panel-header" style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
         <div>
           <h3 style={{ margin: 0 }}>Catálogo(s) já publicado(s)</h3>
           <div style={{ fontSize: '.85rem', color: 'var(--brand-muted, #999)', marginTop: 4 }}>
             Consulte documentos, autoridades e exemplares já publicados. Crie um rascunho de retomada para editar.
           </div>
         </div>
+        <button type="button" className="cat-btn secondary" onClick={refreshCatalog} disabled={refreshing}
+          title="Recompila as listas públicas do catálogo (vínculos de autoridade, disponibilidade). Útil logo após editar uma autoridade — o catálogo público também atualiza sozinho a cada 15 min."
+          style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap', flexShrink: 0, opacity: refreshing ? 0.7 : 1, cursor: refreshing ? 'progress' : 'pointer' }}>
+          {refreshing ? 'Atualizando…' : '↻ Atualizar catálogo público'}
+        </button>
       </div>
 
       {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
