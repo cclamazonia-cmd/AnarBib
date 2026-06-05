@@ -207,7 +207,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // ── Derived state ──────────────────────────────────────
   const materialType = f('tipo_material');
-  const isSerial = SERIAL_TYPES.has(materialType);
   const isTract = TRACT_TYPES.has(materialType);
   const isAudio = materialType === 'audio';
   const isAudiovisual = materialType === 'audiovisual';
@@ -1505,17 +1504,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {renderRegistryField('issn', { f, set, t }, catalogTier, materialType)}
           {inp('cdd', t({id:'catalogacao.field.cdd'}), { placeholder: '335' })}
 
-          {/* ── Périodique fields ──────────────────────── */}
-          {isSerial && (
-            <>
-              {inp('titulo_periodico', t({id:'catalogacao.field.periodTitle'}), { placeholder: t({id:'catalogacao.ph.periodTitle'}) })}
-              {inp('volume', t({id:'catalogacao.field.volume'}), { placeholder: '12' })}
-              {inp('numero', t({id:'catalogacao.field.issue'}), { placeholder: '3' })}
-              {inp('fasciculo', t({id:'catalogacao.field.fascicule'}), { placeholder: 'Especial', completeOnly: true })}
-              {inp('data_edicao', t({id:'catalogacao.field.pubDate'}), { placeholder: 'jan.-mar. 2024' })}
-              {inp('periodicidade', t({id:'catalogacao.field.frequency'}), { placeholder: 'Trimestral', completeOnly: true })}
-            </>
-          )}
+          {/* ── Périodique fields (registry-driven, in-grid — Track A Lot 2c) ── */}
+          {renderRegistryField('titulo_periodico', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('volume', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('numero', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('data_edicao', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('fasciculo', { f, set, t }, catalogTier, materialType)}
+          {renderRegistryField('periodicidade', { f, set, t }, catalogTier, materialType)}
 
           {/* ── Pages + circulação ────────────────────── */}
           {renderRegistryField('paginas', { f, set, t }, catalogTier, materialType)}
@@ -1588,24 +1583,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             .filter(g => MATERIAL_SECTION_IDS.includes(g.id))
             .map(g => renderMaterialSection(g, { f, set, t }))}
 
-          {/* ═══ Acquisition bridge (complete only) ═══ */}
-          <div className="cat-material-section mode-complete-only" style={{ gridColumn: 'span 3' }}>
-            <h4>{t({id:'catalogacao.ui.acquisitionTitle'})}</h4>
-            <div className="cat-book-grid">
-              {inp('acquisition_mode', t({id:'catalogacao.field.acquisitionMode'}), { placeholder: t({id:'catalogacao.ph.acquisitionMode'}) })}
-              {inp('acquisition_date', t({id:'catalogacao.field.acquisitionDate'}), { type: 'date' })}
-              {inp('source_label', t({id:'catalogacao.field.sourceLabel'}), { placeholder: 'Nome da pessoa ou entidade' })}
-              {inp('owner_library', t({id:'catalogacao.field.ownerLibrary'}))}
-              {inp('holder_library', t({id:'catalogacao.field.holderLibrary'}))}
-              {inp('mutualization_status', t({id:'catalogacao.field.mutualizationStatus'}))}
-              {inp('partner_source', t({id:'catalogacao.field.partnerSource'}))}
-              {inp('source_record_id', t({id:'catalogacao.field.sourceRecordId'}))}
-              {inp('source_record_url', t({id:'catalogacao.field.sourceRecordUrl'}), { span: 2 })}
-              {inp('import_format', t({id:'catalogacao.field.importFormat'}))}
-              {inp('import_method', t({id:'catalogacao.field.importMethod'}))}
-              {inp('provenance_note', t({id:'catalogacao.field.provenanceNote'}), { span: 3, rows: 2 })}
-            </div>
-          </div>
+          {/* ═══ Acquisition — registry-driven (Track A Lot 2c) ═══ */}
+          {visibleGroups(catalogTier, materialType)
+            .filter(g => g.id === 'aquisicao')
+            .map(g => renderMaterialSection(g, { f, set, t }))}
 
           {/* ═══ Recursos digitais vinculados ═════════ */}
           {f('id') && (
