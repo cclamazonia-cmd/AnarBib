@@ -81,6 +81,10 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [linkLoading, setLinkLoading] = useState(false);
   const [linkSelected, setLinkSelected] = useState(new Set());
   const [linkBusy, setLinkBusy] = useState(false);
+  // Doublons d'autorite
+  const [dupMatches, setDupMatches] = useState(null); // null = pas cherche
+  const [dupLoading, setDupLoading] = useState(false);
+  const [dupBusy, setDupBusy] = useState(null); // author_id en cours de fusion
 
   const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
   const photoDisplayUrl = photoPreviewUrl
@@ -364,6 +368,39 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
     } finally { setLinkBusy(false); }
+  }
+
+  // ── Doublons d'autorite : detection + fusion ────────────────────────────
+  async function findAuthorDuplicates() {
+    const authorId = f('published_author_id');
+    if (!authorId) return;
+    setDupLoading(true); setDupMatches(null);
+    try {
+      const { data, error } = await supabase.rpc('suggest_author_duplicates', { p_author_id: Number(authorId) });
+      if (error) throw error;
+      setDupMatches(data || []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setDupLoading(false); }
+  }
+
+  // Fusionne le doublon `dupId` DANS l'autorite courante (= canonique).
+  async function mergeDuplicateIntoCurrent(dupId, dupName) {
+    const canonicalId = f('published_author_id');
+    if (!canonicalId) return;
+    if (!confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup: dupName, canonical: f('preferred_name') }))) return;
+    setDupBusy(dupId);
+    try {
+      const { error } = await supabase.rpc('merge_author', {
+        p_canonical_id: Number(canonicalId), p_duplicate_id: Number(dupId),
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.dedup.merged' }, { dup: dupName }), kind: 'ok' });
+      await findAuthorDuplicates(); // rafraichir
+      await loadDrafts();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setDupBusy(null); }
   }
 
   // ── State pill ──────────────────────────────────────────
@@ -656,6 +693,39 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     {linkBusy ? '…' : t({ id: 'catalogacao.link.confirm' }, { count: linkSelected.size })}
                   </button>
                 </>
+              )}
+            </div>
+          )}
+
+          {/* ── Doublons possibles (fusion d'autorites) ─────────────── */}
+          {f('published_author_id') && (
+            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
+                <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.dedup.title' })}</span>
+                <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                  onClick={findAuthorDuplicates} disabled={dupLoading}>
+                  {dupLoading ? t({ id: 'catalogacao.dedup.finding' }) : t({ id: 'catalogacao.dedup.find' })}
+                </button>
+              </div>
+              {dupMatches !== null && dupMatches.length === 0 && (
+                <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.dedup.none' })}</div>
+              )}
+              {dupMatches !== null && dupMatches.length > 0 && (
+                <div style={{ border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, overflow: 'hidden' }}>
+                  {dupMatches.map(d => (
+                    <div key={d.author_id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderBottom: '1px solid rgba(255,255,255,.04)' }}>
+                      <span style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{d.preferred_name}</span>
+                      <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.dedup.books' }, { count: d.linked_books })}</span>
+                      <span className={`cat-pill ${d.match_kind === 'exact' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
+                        {t({ id: d.match_kind === 'exact' ? 'catalogacao.link.exact' : 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
+                      </span>
+                      <button type="button" className="cat-btn ghost" style={{ fontSize: '.7rem', padding: '3px 8px', color: '#f87171' }}
+                        onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}>
+                        {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
+                      </button>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           )}
