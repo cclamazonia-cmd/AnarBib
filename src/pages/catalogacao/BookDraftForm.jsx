@@ -454,9 +454,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   async function uploadCover() {
     if (!coverFile) return null;
-    const draftId = f('id') || 'new';
+    // P1 capas — clé de stockage stable (bib_ref || id), jamais 'new' :
+    // un brouillon non sauvegardé n'a pas d'ancre stable et collisionnerait
+    // sur books/new/ (perte de données). On exige une sauvegarde préalable.
+    const stableKey = f('bib_ref') || f('id');
+    if (!stableKey) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverSaveFirst' }), kind: 'error' });
+      return null;
+    }
     const ext = coverFile.name.split('.').pop() || 'jpg';
-    const storagePath = `books/${draftId}/front.${ext}`;
+    const storagePath = `books/${stableKey}/front.${ext}`;
 
     setCoverUploading(true);
     try {
@@ -468,7 +475,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setCoverFile(null);
       return storagePath;
     } catch (err) {
-      setMsg({ text: `Erro ao enviar capa: ${err.message}`, kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
       return null;
     } finally {
       setCoverUploading(false);
@@ -1279,11 +1286,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             </label>
             {coverFile && (
               <button type="button" className="ab-button ab-button--mini" style={{ width: '100%', marginTop: 4 }}
-                onClick={uploadCover} disabled={coverUploading}>
+                onClick={uploadCover} disabled={coverUploading || !(f('bib_ref') || f('id'))}>
                 {coverUploading ? t({id:'catalogacao.ui.coverUploading'}) : t({id:'catalogacao.ui.coverUploadBtn'})}
               </button>
             )}
             {coverFile && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #aaa)', marginTop: 3, wordBreak: 'break-all' }}>{coverFile.name}</div>}
+            {coverFile && !(f('bib_ref') || f('id')) && (
+              <div style={{ fontSize: '.68rem', color: '#fbbf24', marginTop: 3 }}>{t({id:'catalogacao.ui.coverSaveFirst'})}</div>
+            )}
           </div>
 
           {/* ── Lookup panel (next to cover) ──────────── */}
