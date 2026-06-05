@@ -1172,6 +1172,7 @@
   "catalogacao.bio.placeholder": "Biografie auf {lang}",
   "catalogacao.bio.save": "Übersetzung speichern",
   "catalogacao.bio.translations": "Vorhandene Übersetzungen",
+  "catalogacao.bio.translationsAfterPublish": "Biografie-Übersetzungen sind nach Veröffentlichung der Normdatei verfügbar.",
   "catalogacao.cancelled": "Verworfen",
   "catalogacao.catalog.authorities": "Normdaten",
   "catalogacao.catalog.documents": "Dokumente",

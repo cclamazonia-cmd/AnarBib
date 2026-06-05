@@ -1172,6 +1172,7 @@
   "catalogacao.bio.placeholder": "Biografie in het {lang}",
   "catalogacao.bio.save": "Vertaling opslaan",
   "catalogacao.bio.translations": "Bestaande vertalingen",
+  "catalogacao.bio.translationsAfterPublish": "Biografievertalingen zijn beschikbaar na publicatie van de autoriteit.",
   "catalogacao.cancelled": "Verworpen",
   "catalogacao.catalog.authorities": "Autoriteiten",
   "catalogacao.catalog.documents": "Documenten",

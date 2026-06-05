@@ -1172,6 +1172,7 @@
   "catalogacao.bio.placeholder": "Biografia in {lang}",
   "catalogacao.bio.save": "Salva traduzione",
   "catalogacao.bio.translations": "Traduzioni esistenti",
+  "catalogacao.bio.translationsAfterPublish": "Le traduzioni della biografia saranno disponibili dopo la pubblicazione dell'autorità.",
   "catalogacao.cancelled": "Scartato",
   "catalogacao.catalog.authorities": "Autorità",
   "catalogacao.catalog.documents": "Documenti",

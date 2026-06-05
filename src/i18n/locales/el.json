@@ -1172,6 +1172,7 @@
   "catalogacao.bio.placeholder": "Βιογραφία στα {lang}",
   "catalogacao.bio.save": "Αποθήκευση μετάφρασης",
   "catalogacao.bio.translations": "Υπάρχουσες μεταφράσεις",
+  "catalogacao.bio.translationsAfterPublish": "Οι μεταφράσεις της βιογραφίας θα είναι διαθέσιμες μετά τη δημοσίευση της καθιερωμένης εγγραφής.",
   "catalogacao.cancelled": "Απορρίφθηκε",
   "catalogacao.catalog.authorities": "Καθιερωμένες εγγραφές",
   "catalogacao.catalog.documents": "Τεκμήρια",

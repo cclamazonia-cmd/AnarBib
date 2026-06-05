@@ -1172,6 +1172,7 @@
   "catalogacao.bio.placeholder": "Biografio en {lang}",
   "catalogacao.bio.save": "Konservi la tradukon",
   "catalogacao.bio.translations": "Ekzistantaj tradukoj",
+  "catalogacao.bio.translationsAfterPublish": "La tradukoj de la biografio disponeblos post publikigo de la aŭtoritato.",
   "catalogacao.cancelled": "Forlasita",
   "catalogacao.catalog.authorities": "Aŭtoritatoj",
   "catalogacao.catalog.documents": "Dokumentoj",

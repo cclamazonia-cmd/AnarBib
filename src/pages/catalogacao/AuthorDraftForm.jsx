@@ -187,8 +187,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       photo_object_path: r.photo_object_path || '',
       notes: cleanNotes,
     });
-    // Load biography translations if we have a published author
-    const authorId = r.published_author_id || r.id;
+    // Charger les traductions UNIQUEMENT pour un auteur publie (jamais l'id de
+    // brouillon : il collisionne avec les id d'auteurs reels — bug corrige 05/06).
+    const authorId = r.published_author_id || null;
     if (authorId) {
       supabase.from('author_translations').select('lang, biography, author_id').eq('author_id', authorId)
         .then(({ data }) => { if (data) setBioTranslations(data); });
@@ -521,15 +522,24 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           {/* ── Biography + Notes ─────────────────────── */}
           {inp('biography', t({id:'catalogacao.author.bio'}), { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.bioPlaceholder'}), hint: t({id:'catalogacao.ph.bioHint'}) })}
 
-          {/* ── Biography translations widget ─────────── */}
-          {f('id') && (
+          {/* ── Biography translations widget (auteur publie uniquement) ─── */}
+          {/* Cle sur published_author_id : jamais l'id de brouillon (collision
+              avec les id d'auteurs reels). Editable seulement apres publication. */}
+          {!f('published_author_id') && (
+            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+              <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', fontStyle: 'italic' }}>
+                {t({id:'catalogacao.bio.translationsAfterPublish'})}
+              </div>
+            </div>
+          )}
+          {f('published_author_id') && (
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
               <details>
                 <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '.88rem', marginBottom: 6 }}>
                   {t({id:'catalogacao.bio.translations'})} {bioTranslations.length > 0 && `(${bioTranslations.map(bt => bt.lang).join(', ')})`}
                 </summary>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
-                  {['pt-BR','fr','es','en','it','de','ca','eo'].map(lang => {
+                  {['pt-BR','fr','es','en','it','de','ca','eo','nl','el'].map(lang => {
                     const existing = bioTranslations.find(bt => bt.lang === lang);
                     return (
                       <div key={lang} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
@@ -546,7 +556,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                             const val = e.target.value;
                             setBioTranslations(prev => {
                               const copy = prev.filter(bt => bt.lang !== lang);
-                              if (val.trim()) copy.push({ lang, biography: val, author_id: Number(f('id')) });
+                              if (val.trim()) copy.push({ lang, biography: val, author_id: Number(f('published_author_id')) });
                               return copy;
                             });
                           }}
