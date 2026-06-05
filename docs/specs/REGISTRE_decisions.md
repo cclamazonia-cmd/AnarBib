@@ -30,8 +30,6 @@ Ce sont les faits recopiés dans presque toutes les specs : c'est là que naisse
 | **DOC-MODELE-1** | Vocabulaire des strates du modèle, **deux axes distincts** : (1) **niveaux de granularité** (« Camadas ») = œuvre/notice → holding → exemplaire, axe *vertical* ; (2) **couches de l'exemplaire** = trace / provenance / destination, *facettes* du niveau exemplaire, axe *horizontal*. Ne pas confondre « couche » (facette) et « Camada/niveau » (granularité). La couche *provenance* = propriétés d'acquisition au niveau exemplaire. | ✅ acté 02/06 | exemplaires §2 ; acquisition §4 |
 | **DOC-JSX-1** | Validation **hors bundler** : syntaxe JSX via `tsc transpileModule` (TypeScript ; ni résolution de modules ni typage → zéro faux positif sur imports) ; logique pure (registres, helpers) via harness **ESM `.mjs`** + `node --check`. Garde-fou quand `npm run build` est indisponible ; ne remplace pas le build avant push (`DOC-CLOSE-1`). | ✅ acté 04/06 | Track A catalogação (Lots 1–2b) |
 | **DOC-ADDR-1** | **Registre d'adresse de l'UI = tutoiement.** L'app s'adresse au membre en **« tu »** (horizontal, compagnon ; **zéro « vous »**). Corps de texte et adresse directe en tu + possessifs `ton/ta/tes`. **Titres et intitulés des objets du membre en 1ʳᵉ personne** `mon/ma/mes` (« Mon mot de passe », « Ma carte », « Mes données », « Mes droits », « Mon compte », « Mes notifications »). Décliné par locale selon le registre informel/compagnon de chaque langue (du en de, tu en it, je en nl, εσύ en el, você en pt-BR, ci/vi en eo…) + conventions inclusives en place (point médian fr, Genderstern de…). | ✅ acté 04/06 (validé Xavier) | fr.json (61 chaînes) ; rollout 9 locales en cours |
-| **DOC-DEPLOY-4** | **Réhorodatage de migration** : une migration se place avec un horodatage **strictement supérieur au max présent dans `supabase/migrations/`** ; **jamais « l'heure courante » en aveugle** (des migrations antérieures portent parfois un horodatage « dans le futur »). Garde-fou : `git status --short supabase/migrations/` ne doit montrer que le(s) nouveau(x) fichier(s) avant `git add`. | ✅ acté 05/06 (validé Xavier) | raffinement DOC-DEPLOY-1 ; trace `SESSION_outils_et_securite_2026-06-05` |
-| **DOC-SEC-1** | **Surface DEFINER = architecture, pas dette.** Les fonctions `SECURITY DEFINER` exécutables par `anon` (login, catalogue public, claims) et par `authenticated` (wrappers RPC) sont **intentionnelles** ; ne pas chercher à faire baisser le compteur advisor en révoquant (cela démantèlerait l'app). Réduction de risque = **durcissement par fonction** (`search_path` figé, validation des entrées), audit lent et documenté (posture de transparence). | ✅ acté 05/06 (validé Xavier) | advisors post-P2/P3/P4 ; trace `SESSION_outils_et_securite_2026-06-05` |
 
 ---
 
@@ -206,8 +204,25 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 `HIST` (historico-retencao v1.0, #CL.8 en cours) · `NOTIFPRO` (cf. NPRO) · `CARD` (carte-lecteur, phase β en prod) · `114A` (🔵 clos 14/05 ; ⚠️ contient « 6 locales » historique). Détail à compléter au fil des chantiers.
 
+## 17. Importações / Exportações — `IMP` *(spec-importacoes-exportacoes v0.1)*
+
+| ID | Décision | Statut | Foyer |
+|---|---|---|---|
+| **IMP-1** | Module **bidirectionnel** : la page porte les deux sens — **import** (ingestion technique) ⇄ **export** (partage / sérialisation). Frontière **ACQ-Q4** maintenue : l'ingestion technique vit ici ; l'**entrée-en-collection** (provenance, exemplaires, destination) reste en Catalogação. | ✅ acté 05/06 | spec §1 |
+| **IMP-2** | **Deux axes orthogonaux** : (a) **circuit** = d'où vient / où va le lot (*migração de sistema · importação de arquivo · fontes externas*), nommé par **nature du lot**, jamais par instance (BLMF, Terra Livre = simples exemples) ; (b) **format** = en quelle langue parle le lot. Le format n'est **jamais** un onglet. | ✅ acté 05/06 | spec §2–3 |
+| **IMP-3** | **Format = trois plans** : *structure de transport* (ISO 2709, XML, JSON, tabulaire…) × *vocabulaire/schéma* (UNIMARC, MARC21, INTERMARC, Dublin Core, Zotero/CSL, BibTeX, RIS, ONIX, KBART, BIBFRAME…) × *modèle conceptuel*. AnarBib a **son** modèle (`book_drafts` + autorités) ; un adaptateur **mappe vers lui**, ne le reproduit pas. | ✅ acté 05/06 | spec §4 |
+| **IMP-4** | **Adaptateur = décodeur de structure + mappeur de vocabulaire → `book_drafts`**, piloté par un **profil de mapping réutilisable**. Nouveau format = nouvel adaptateur (souvent une combinaison déjà connue) + profil — **pas** une nouvelle aba ; combinaison sans adaptateur → repli mapping manuel ; le **même registre sérialise** en sortie (export). | ✅ acté 05/06 | spec §5 |
+| **IMP-5** | **Champs descriptifs ≠ points d'accès** : les champs descriptifs alimentent les colonnes de `book_drafts` ; les **points d'accès** (auteur, sujet) **résolvent ou créent des autorités**, jamais du texte libre. | ✅ acté 05/06 (cf. CAT-D3/D4/D6) | spec §6 |
+| **IMP-6** | **Dérivation = passe de nettoyage** : tout import (surtout copy-cataloging « fontes externas ») impose un nettoyage — retrait des identifiants locaux de la source, re-pointage des autorités, traduction des notes. Cette passe **est** la **file de revisão** `book_drafts` ; aucun import ne publie directement. | ✅ acté 05/06 | spec §7 |
+| **IMP-7** | **Symétrie import ↔ export** : ce qui sort est régi par les **mêmes signaux de consentement** que ce qui entre (flags `*_allowed`, dont `mutualize_allowed`) ; la **partilha numérique** par le **périmètre ILL**, et vit entre biblios fédérées (`library_partnerships`), **pas** avec les `catalog_partners`. | ✅ acté 05/06 (renvoi **ILL-1..9**) | spec §8 |
+| **IMP-8** | **Assistant d'import (wizard)** : l'import par lot passe par un stepper guidé — sens + circuit → source / auto-détection (structure + vocabulaire → adaptateur) → profil de mapping → **aperçu/dry-run** (doublons ISBN/EAN, autorités à résoudre, drapeaux de périmètre) → **promotion vers la file de revisão**. La page reste un tableau de bord ; le wizard est l'action « Novo import ». | 🟡 à cadrer | spec §9 |
+
+> Réf. visuelle (trace, non-normative) : `maquette_importacoes_v7.html`.
+
 ---
 
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
+
+*MàJ 05/06/2026 — chantier **Importações/Exportações** ouvert : `IMP-1…IMP-8` (§17) incarnés par `spec-importacoes-exportacoes` v0.1 (squelette). Réf. visuelle : `maquette_importacoes_v7.html`.*
