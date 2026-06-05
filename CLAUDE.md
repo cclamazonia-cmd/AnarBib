@@ -118,8 +118,11 @@ node -e "const fs=require('fs');for(const f of fs.readdirSync('src/i18n/locales'
 
 ### Source unique des conventions
 
-**`notes-audit/anarbib-charte-langage-inclusif-v1.md` est la SOURCE UNIQUE des
-conventions de langage inclusif.** En cas de doute, c'est elle qui fait foi.
+**`notes-audit/anarbib-charte-langage-inclusif-v2.md` est la SOURCE UNIQUE des
+conventions de langage inclusif.** En cas de doute, c'est elle qui fait foi. La
+v2 (2026-06-05) couvre les **10 locales** et officialise la convention italienne
+(astérisque pour les paires régulières, slash abrégé pour les irrégulières). La
+**v1 est dépréciée** et conservée pour l'historique uniquement.
 
 > ⚠️ **`src/i18n/README-i18n-section.md` est OBSOLÈTE/DÉPRÉCIÉ** (indique 6
 > locales, slash pour l'italien, ~1393 clés). **Ne plus s'y référer.**
@@ -139,10 +142,10 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
 | `fr` | Point médian `·` (`lecteur·rice`) | Charte |
 | `es` | `e` neutre argentin ; articles `le`/`les` ; jamais `x` ni `@` | Charte |
 | `en` | Termes épicènes par défaut, singular `they` | Charte |
-| `it` | **Astérisque final** sur paires régulières en `-o`/`-a` (`compagn*`, `attiv*`, `militant*`), cohérent avec le Genderstern allemand ; jamais `camerata`/`camerati` | Officiel |
+| `it` | **Astérisque** sur paires régulières en `-o`/`-a` (`compagn*`, `attiv*`, `bibliotecari*`), cohérent avec le Genderstern allemand ; **slash abrégé** sur paires irrégulières `-tore`/`-trice` (`lettore/trice`, `amministratore/trice`) ; jamais `camerata`/`camerati` | Charte v2 |
 | `de` | Genderstern `*` ASCII (`Genoss*in`) ; jamais `Compas` non traduit | Charte |
-| `ca` | Terminaison triple `lector-a-e` | Documentée au README, **à reverser dans la charte v2** |
-| `eo` | Suffixe (`legant-in-e`, `aŭtor-in-o`, `uzant-in-e`) | Documentée au README, **à reverser dans la charte v2** |
+| `ca` | Terminaison triple `lector-a-e` + article neutre `le` ; géminée `l·l` = graphie standard (non inclusive) | Charte v2 |
+| `eo` | Infixe `-in-` par tirets (`legant-in-o`, `aŭtor-in-o`, `uzant-in-o`) + pronom neutre `ri` | Charte v2 |
 | `nl` | **Provisoire** : privilégier les formes de rôle neutres (`lezer`, `bibliothecaris`…), éviter les suffixes genrés `-ster`/`-e` quand une forme neutre existe, `hen`/`hun` pour le non-binaire. **À valider en communauté.** | Provisoire, non arrêtée |
 | `el` | **Convention inclusive à définir** avec une personne locutrice grecque militante (pas de standard typographique consensuel en grec). **Ne pas proposer de marqueur d'office.** | À définir |
 
@@ -226,8 +229,9 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
    (`nl`) ou à définir (`el`).
 3. **Backlog i18n** : ajouter `nl` et `el` à `src/tests/i18n.test.js` pour que le
    gate CI garantisse la parité des **10** locales (gap identifié au point 2).
-4. **Documentation des locales en retard sur le code** : 10 locales en prod ;
-   charte v1 = 6 ; `ca`/`eo` à reverser en charte v2 ; `nl`/`el` à arrêter.
+4. **Documentation des locales** : charte v2 (2026-06-05) couvre les 10 locales
+   (`ca`/`eo` reversées, `it` officialisée). Reste à **arrêter `nl`** (provisoire)
+   et **`el`** (à définir) avec des relais natifs.
 5. **`README-i18n-section.md` obsolète** : ne pas s'y fier (voir i18n).
 6. **Hook pre-commit non actif par défaut** : nécessite
    `git config core.hooksPath .githooks`.

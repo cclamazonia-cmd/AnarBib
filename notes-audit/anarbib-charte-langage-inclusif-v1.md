@@ -1,8 +1,14 @@
 # Charte de langage inclusif d'AnarBib
 
+> ⚠️ **DOCUMENT DÉPRÉCIÉ (2026-06-05).** Cette v1.0 ne couvre que six locales et
+> décrit une convention italienne (slash provisoire) qui n'est plus en vigueur.
+> **La référence actuelle est `anarbib-charte-langage-inclusif-v2.md`** (dix
+> locales, convention italienne astérisque/slash officialisée). Cette v1 est
+> conservée pour l'historique uniquement — ne plus s'y référer.
+
 **Version** : 1.0
 **Date** : 2026-04-28
-**Statut** : référence du projet
+**Statut** : **déprécié** — remplacé par la v2.0 (2026-06-05)
 
 Ce document fixe les conventions de langage inclusif adoptées dans les six locales d'AnarBib (`pt-BR`, `fr`, `es`, `en`, `it`, `de`). Il s'applique à toute traduction nouvelle, à toute relecture, et à toute contribution future. Il est destiné aux personnes qui contribuent aux fichiers `src/i18n/locales/*.json` et à toute traduction générée par la suite.
 
