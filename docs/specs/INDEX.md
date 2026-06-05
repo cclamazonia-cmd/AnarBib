@@ -18,7 +18,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 **Tout le reste est de la *trace* non-normative** : `CADRAGE_*`, `CHANTIER_*`, `SESSION_*`, `BILAN_*`, `AUDIT_*`, `QA_*`. Une trace enregistre un raisonnement à un instant T ; sur un conflit avec la couche référence ci-dessus, **la trace est périmée par définition**.
 
 **Faits transverses gouvernés par le registre** (ne pas s'y fier depuis une spec isolée) :
-- **Nombre de locales = 8** (`DOC-I18N-1`). *Tout « 6 locales » lu dans une spec est une trace périmée, pas une consigne.*
+- **Nombre de locales** : voir `DOC-I18N-1` au registre (foyer unique — **ne pas recopier le compte ici**). *Tout nombre lu dans une spec ou une trace (« 6 », « 8 », « 9 »…) est périmé par rapport au registre, pas une consigne.*
 - **Déploiement** = `git push` → Woodpecker (`DOC-DEPLOY-1/2/3`).
 - **RPC v3** (`DOC-RPC-3`), **compteurs « page = périmètre »** (`DOC-PERIM-1`), création d'objets backend v2 (`DOC-OBJ-2`).
 
