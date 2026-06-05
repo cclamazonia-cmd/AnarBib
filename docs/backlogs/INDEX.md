@@ -1,6 +1,6 @@
 # 📋 INDEX des backlogs — AnarBib
 
-**Dernière mise à jour** : 3 juin 2026 (version courante v26 du 02/06, historique reconstruit v8→v25, note sur le glissement de convention de nommage des archives)
+**Dernière mise à jour** : 5 juin 2026 (session soir) — gros lot catalogação/autorités livré (cf. note ci-dessous) à **intégrer dans une v27** ; version courante reste **v26** tant que le `.docx` v27 n'est pas produit. Précédemment : 3 juin 2026 (version courante v26 du 02/06, historique reconstruit v8→v25, note sur le glissement de convention de nommage des archives)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce dossier contient les versions successives du **backlog technique** d'AnarBib. Une seule version est vivante à la fois ; les précédentes sont conservées dans `archive/` pour la traçabilité.
@@ -14,6 +14,8 @@ Ce dossier contient les versions successives du **backlog technique** d'AnarBib.
 ➡️ **`AnarBib-Backlog-2026-06-02-v26.docx`**
 
 Backlog v26 du 2 juin 2026. Cette version s'inscrit dans la dynamique post-**audit de cohérence du corpus du 02/06** (`../decisions/AUDIT_coherence_corpus_2026-06-02.md`) qui a institué le REGISTRE des décisions et la règle de préséance documentaire.
+
+> **À intégrer dans v27 — session du 05/06 (soir).** Livré en prod (foyer normatif : `../specs/REGISTRE_decisions.md` §12 `CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1`) : **Track A catalogação complet** (Lots 1→6 + 3b) ; **module capas P1/P2/P3** (P3 page-1-PDF côté client) ; **liaison autorités↔œuvres** (matching + outil « Rattacher aux œuvres ») ; **fusion de doublons** autorités **et** documents (`merge_log`/`merge_author`/`merge_book`) ; **flux contributeurs** brouillon→publié + fiche livre complète ; **socle Ateliers** (`author_translations` étendue). 3 specs nouvelles dans `../specs/`. **Reste backlog** : liaison volet *préventif* (sélecteur d'autorité au form livre) ; notes bio multilingues — sélecteur de langue UI ; Track D (VIAF/ISNI/Wikidata + `authority_lookup`). *(Le `.docx` v27 reste à produire par le lead — cet INDEX en trace le contenu.)*
 
 ---
 
