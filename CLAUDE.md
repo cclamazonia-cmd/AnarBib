@@ -176,6 +176,20 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
 - **193 migrations** `.sql` dans `supabase/migrations/`, format
   `YYYYMMDDHHMMSS_nom.sql`, + `_TEMPLATE.sql` (doctrine création d'objets
   sécurisés).
+  > 🛑 **RÈGLE DURE — horodatage à l'heure EXACTE, jamais approximative.**
+  > Le `YYYYMMDDHHMMSS` d'une migration **doit** être l'horodatage **UTC réel**
+  > du moment de création, **indexé à la seconde près** — **jamais** un nombre
+  > « arrondi », fabriqué ou incrémenté à la louche (pas de `...300000`,
+  > `...310000` choisis de tête). Un horodatage approximatif **entre en
+  > collision** avec une autre migration (notamment quand plusieurs sessions
+  > travaillent en parallèle) : `supabase db push` applique les fichiers par
+  > **ordre lexicographique strict**, deux préfixes identiques ou mal ordonnés
+  > → migration **sautée, dépendances cassées, ou doublon appliqué**. Procédure
+  > obligatoire **avant** de nommer le fichier : (1) lire l'horloge UTC exacte ;
+  > (2) lister le dossier et vérifier que le préfixe choisi est **strictement
+  > supérieur** au max présent ; (3) si l'heure réelle est ≤ au max (sessions
+  > concurrentes), prendre `max + 1 seconde`, pas un saut arbitraire. Une
+  > collision d'horodatage est un incident, pas un détail.
 - Déploiement functions **et** migrations : **automatique par Woodpecker** au
   push sur `main` (`supabase functions deploy` / `supabase db push --linked
   --include-all`).
