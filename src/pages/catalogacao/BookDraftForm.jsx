@@ -13,7 +13,7 @@ const TRACT_TYPES = new Set(['tract', 'cartaz']);
 const NON_LOANABLE_TYPES = new Set(['periodico', 'tract', 'cartaz', 'dossie', 'relatorio']);
 
 // ── Groupes « matériel » rendus par le registre (Track A Lot 2) ──
-const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'material_audiovisual', 'material_digital', 'material_dossie'];
+const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'material_audiovisual', 'material_digital', 'material_dossie', 'material_tese', 'material_artigo', 'material_relatorio', 'material_zine'];
 
 // ── Contributor role values (labels resolved via t() inside component) ──
 const CONTRIBUTOR_ROLE_KEYS = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','editor','outro'];
@@ -114,6 +114,14 @@ const EMPTY_FORM = {
   digital_native_usage: '', digital_native_file_note: '',
   // Dossier
   dossier_scope: '', dossier_period: '', dossier_organizations: '', dossier_context: '',
+  // Tese
+  tese_university: '', tese_advisor: '',
+  // Artigo
+  artigo_source: '', artigo_volume: '', artigo_issue: '', artigo_pages: '',
+  // Relatorio
+  relatorio_org: '', relatorio_recipient: '', relatorio_internal_notes: '',
+  // Zine
+  zine_print_run: '', zine_technique: '',
 };
 
 // ═══════════════════════════════════════════════════════════

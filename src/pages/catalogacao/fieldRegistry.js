@@ -263,7 +263,58 @@ export const REGISTRY = [
     ],
   },
 
-  // ── 10. Aquisição & proveniência (tier 3, legacy fiche-level — §5.7) ──────
+  // ── 10. Tese / dissertação (mat tese) ──────────────────────────────────────
+  {
+    id: 'material_tese',
+    title: 'catalogacao.section.tese',
+    tag: 'catalogacao.tag.material',
+    mat: ['tese'],
+    fields: [
+      { id: 'tese_university', label: 'catalogacao.field.university', tier: 1, ph: 'catalogacao.ph.university' },
+      { id: 'tese_advisor', label: 'catalogacao.field.advisor', tier: 3, ph: 'catalogacao.ph.advisor' },
+    ],
+  },
+
+  // ── 11. Artigo / capítulo (mat artigo) ────────────────────────────────────
+  {
+    id: 'material_artigo',
+    title: 'catalogacao.section.artigo',
+    tag: 'catalogacao.tag.material',
+    mat: ['artigo'],
+    fields: [
+      { id: 'artigo_source', label: 'catalogacao.field.source', tier: 1, span: 2, ph: 'catalogacao.ph.articleSource' },
+      { id: 'artigo_volume', label: 'catalogacao.field.volume', tier: 3, phEx: '12' },
+      { id: 'artigo_issue', label: 'catalogacao.field.issue', tier: 3, phEx: '3' },
+      { id: 'artigo_pages', label: 'catalogacao.field.pages', tier: 3, phEx: '45-72' },
+    ],
+  },
+
+  // ── 12. Relatório / documento interno (mat relatorio) ─────────────────────
+  {
+    id: 'material_relatorio',
+    title: 'catalogacao.section.relatorio',
+    tag: 'catalogacao.tag.material',
+    mat: ['relatorio'],
+    fields: [
+      { id: 'relatorio_org', label: 'catalogacao.field.emitterOrg', tier: 1, span: 2, ph: 'catalogacao.ph.emitterOrg' },
+      { id: 'relatorio_recipient', label: 'catalogacao.field.recipient', tier: 3, ph: 'catalogacao.ph.recipient' },
+      { id: 'relatorio_internal_notes', label: 'catalogacao.field.internalNotes', tier: 3, type: 'textarea', span: 2, rows: 2 },
+    ],
+  },
+
+  // ── 13. Zine / fanzine (mat zine) ─────────────────────────────────────────
+  {
+    id: 'material_zine',
+    title: 'catalogacao.section.zine',
+    tag: 'catalogacao.tag.material',
+    mat: ['zine'],
+    fields: [
+      { id: 'zine_print_run', label: 'catalogacao.field.printRun', tier: 3, phEx: '200' },
+      { id: 'zine_technique', label: 'catalogacao.field.printTechnique', tier: 3, ph: 'catalogacao.ph.printTechnique' },
+    ],
+  },
+
+  // ── 14. Aquisição & proveniência (tier 3, legacy fiche-level — §5.7) ──────
   {
     id: 'aquisicao',
     title: 'catalogacao.ui.acquisitionTitle',
