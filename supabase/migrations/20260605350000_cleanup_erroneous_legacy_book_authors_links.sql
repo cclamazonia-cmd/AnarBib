@@ -131,17 +131,25 @@ DECLARE
   v_dup int;
   v_518 int;
 BEGIN
-  -- a. aucun livre touche ne se retrouve avec 2 contributeurs sur la meme autorite
+  -- a. l'enrichissement n'a cree AUCUN doublon (book_id, author_id) sur un livre
+  --    CIBLE. Borne aux 23 contributeurs lies : un doublon PREEXISTANT ailleurs
+  --    (ex. book 1176 : deux contributeurs deja lies a l'autorite 5) ne doit PAS
+  --    faire echouer cette migration (cf. echec pipeline #990 sur verif globale).
   SELECT count(*) INTO v_dup
-  FROM (
-    SELECT bc.book_id, bc.author_id
-    FROM public.book_contributors bc
-    WHERE bc.author_id IN (1,3,4,5,24,29,10026)
-    GROUP BY bc.book_id, bc.author_id
-    HAVING count(*) > 1
-  ) d;
+  FROM (VALUES
+    (3653,1),(3706,1),(4173,1),
+    (2579,3),(2998,3),(3163,3),(3652,3),(3656,3),(5005,3),
+    (3577,4),(3588,4),(4012,4),(4693,4),
+    (2608,5),(3150,5),(3546,5),(4552,5),(5007,5),(5010,5),
+    (2837,24),(4695,24),
+    (3528,29),
+    (4331,10026)
+  ) AS l(contrib_id, author_id)
+  JOIN public.book_contributors tgt   ON tgt.id = l.contrib_id
+  JOIN public.book_contributors other ON other.book_id = tgt.book_id
+       AND other.author_id = l.author_id AND other.id <> l.contrib_id;
   IF v_dup <> 0 THEN
-    RAISE EXCEPTION 'VERIF_FAIL_a : % livre(s) avec doublon (book_id, author_id) apres enrichissement', v_dup;
+    RAISE EXCEPTION 'VERIF_FAIL_a : enrichissement a cree % doublon(s) (book_id, author_id) sur un livre cible', v_dup;
   END IF;
 
   -- b. book 518 (corrige precedemment) reste intact
