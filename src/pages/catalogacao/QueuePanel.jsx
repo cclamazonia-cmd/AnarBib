@@ -6,7 +6,7 @@ import { localizeError } from '@/lib/localizeError';
 const TYPE_LABELS = { book: 'Documento', author: 'Autoridade', exemplar: 'Exemplar' };
 const STATUS_LABELS = { draft: 'Rascunho', ready: 'Pronto', published: 'Publicado', cancelled: 'Descartado' };
 
-export default function QueuePanel({ batches }) {
+export default function QueuePanel({ batches, onEditItem }) {
   // ── Filters ─────────────────────────────────────────────
   const { formatMessage: t } = useIntl();
   const [typeFilter, setTypeFilter] = useState('');
@@ -266,11 +266,18 @@ export default function QueuePanel({ batches }) {
         </button>
         <span style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{selected.size} selecionado(s)</span>
         <div style={{ flex: 1 }} />
+        {onEditItem && (
+          <button type="button" className="cat-btn secondary" style={{ fontSize: '.72rem', padding: '4px 10px' }}
+            disabled={selected.size !== 1}
+            onClick={() => { const [s] = getSelectedItems(); if (s) onEditItem(s.type, s.id); }}>
+            {t({ id: 'catalogacao.queue.resume' })}
+          </button>
+        )}
         <button type="button" className="cat-btn secondary" style={{ fontSize: '.72rem', padding: '4px 10px' }} onClick={markSelectedReady} disabled={!selected.size}>
-          Marcar como pronto
+          {t({ id: 'catalogacao.queue.markReady' })}
         </button>
         <button type="button" className="cat-btn primary" style={{ fontSize: '.72rem', padding: '4px 10px' }} onClick={publishSelected} disabled={!selected.size}>
-          Publicar selecionados
+          {t({ id: 'catalogacao.queue.publishSelected' })}
         </button>
         <select style={{ ...fs, width: 'auto', fontSize: '.72rem', padding: '4px 8px' }}
           onChange={e => { if (e.target.value) { assignBatchToSelected(e.target.value); e.target.value = ''; } }}>
@@ -317,6 +324,12 @@ export default function QueuePanel({ batches }) {
               <div style={{ fontSize: '.65rem', color: 'var(--brand-muted, #666)', flexShrink: 0, width: 80, textAlign: 'right' }}>
                 {new Date(it.updated_at).toLocaleDateString('pt-BR')}
               </div>
+              {onEditItem && (
+                <button type="button" className="cat-btn secondary" style={{ fontSize: '.68rem', padding: '3px 8px', flexShrink: 0 }}
+                  onClick={() => onEditItem(it._type, it.id)}>
+                  {t({ id: 'catalogacao.queue.resume' })}
+                </button>
+              )}
             </div>
           );
         })}

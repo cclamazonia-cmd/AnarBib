@@ -296,7 +296,7 @@ export default function CatalogacaoPage() {
 
           {/* 4. Fila editorial */}
           <div className={`cat-panel${activeTab === 'queuePanel' ? ' active' : ''}`}>
-            <QueuePanel batches={batches} />
+            <QueuePanel batches={batches} onEditItem={openForEdit} />
           </div>
 
           {/* 6. Lotes */}
