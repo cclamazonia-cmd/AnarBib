@@ -243,6 +243,48 @@
   .ab-span2, .ab-span3 { grid-column: span 1; }
 }
 
+/* ── Duplicate banner (Lot 6, maquette v3 .dup) ────────── */
+
+.ab-dup {
+  display: none; margin: 0 0 16px;
+  align-items: flex-start; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(40,28,4,.5);
+  border: 1px solid rgba(251,191,36,.32);
+  border-radius: var(--brand-radius-sm, 14px);
+  color: #f3dca6; font-size: .88rem; line-height: 1.5;
+}
+.ab-dup.show { display: flex; }
+.ab-dup b { color: #fff; }
+.ab-dup__actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── Cover area (Lot 6, maquette v3 .cover) ─────────────── */
+
+.ab-cover { width: 108px; flex-shrink: 0; }
+.ab-cover__frame {
+  width: 108px; height: 152px;
+  border-radius: var(--brand-radius-sm, 14px);
+  border: 1px dashed var(--brand-panel-border-strong, rgba(255,255,255,.18));
+  background: var(--brand-panel-bg-strong, rgba(10,10,10,.94));
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; color: var(--brand-muted, #d4cec3);
+  font-size: .74rem; padding: 8px; white-space: pre-line;
+  position: relative; overflow: hidden;
+}
+.ab-cover__frame img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: inherit;
+}
+.ab-cover__frame.loading::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,.10) 50%, transparent 80%);
+  transform: translateX(-100%); animation: ab-shimmer 1s infinite;
+}
+@keyframes ab-shimmer { to { transform: translateX(100%); } }
+.ab-cover__frame.found {
+  border-style: solid; border-color: rgba(255,255,255,.16);
+  padding: 0;
+}
+
 .cat-material-section {
   padding: 14px;
   border-radius: 10px;

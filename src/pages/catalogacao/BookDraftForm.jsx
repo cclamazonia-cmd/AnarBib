@@ -1236,54 +1236,54 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       {msg.text && (
         <div className={`cat-message show ${msg.kind}`} style={{ marginBottom: 14 }}>{msg.text}</div>
       )}
-      {dupBanner && (
-        <div className="cat-message show warn" style={{ marginBottom: 14 }}>
-          <div style={{ fontWeight: 700 }}>{t({ id: 'catalogacao.duplicate.title' })}</div>
-          <div style={{ marginTop: 4 }}>{t({ id: 'catalogacao.duplicate.body' })}</div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
-            {dupBanner.bookId && onOpenBook && (
-              <button type="button" className="cat-btn secondary" onClick={() => onOpenBook(dupBanner.bookId)}>
+      {/* ── Bandeau doublon (Lot 6 anchor — logique dans CAT-B5) ── */}
+      <div className={`ab-dup${dupBanner ? ' show' : ''}`}>
+        <span className="ab-pill ab-pill--warn">{t({ id: 'catalogacao.duplicate.badge' })}</span>
+        <div>
+          <b>{t({ id: 'catalogacao.duplicate.title' })}</b>
+          <div>{t({ id: 'catalogacao.duplicate.body' })}</div>
+          <div className="ab-dup__actions">
+            {dupBanner?.bookId && onOpenBook && (
+              <button type="button" className="ab-button ab-button--mini" onClick={() => onOpenBook(dupBanner.bookId)}>
                 {t({ id: 'catalogacao.duplicate.openExisting' })}
               </button>
             )}
-            {dupBanner.bookId && onAttachToBook && (
-              <button type="button" className="cat-btn secondary" onClick={() => { onAttachToBook(dupBanner.bookId); setDupBanner(null); }}>
+            {dupBanner?.bookId && onAttachToBook && (
+              <button type="button" className="ab-button ab-button--mini" onClick={() => { onAttachToBook(dupBanner.bookId); setDupBanner(null); }}>
                 {t({ id: 'catalogacao.duplicate.attachHere' })}
               </button>
             )}
-            <button type="button" className="cat-btn" onClick={() => setDupBanner(null)}>
+            <button type="button" className="ab-button ab-button--mini" onClick={() => setDupBanner(null)}>
               {t({ id: 'catalogacao.duplicate.reviseIsbn' })}
             </button>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Form */}
       <form onSubmit={handleSave}>
 
-        {/* ── Cover upload + preview ─────────────────── */}
+        {/* ── Cover anchor (Lot 6 — logique lookup dans CAT-C3/C4) ── */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-          <div style={{ width: 120, flexShrink: 0 }}>
-            {coverDisplayUrl ? (
-              <img src={coverDisplayUrl} alt={t({id:'catalogacao.ui.coverAlt'})} style={{ width: '100%', borderRadius: 8, border: '1px solid rgba(255,255,255,.1)', objectFit: 'cover', maxHeight: 180 }} />
-            ) : (
-              <div style={{ width: '100%', height: 160, borderRadius: 8, border: '1px dashed rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '.75rem', color: 'var(--brand-muted, #888)' }}>
-                {t({id:'catalogacao.ui.noCover'})}
-              </div>
-            )}
-            <div style={{ marginTop: 6 }}>
-              <label className="cat-btn secondary" style={{ display: 'block', textAlign: 'center', fontSize: '.72rem', padding: '4px 8px', cursor: 'pointer' }}>
-                {t({id:'catalogacao.ui.chooseCover'})}
-                <input type="file" accept="image/*" onChange={handleCoverFileChange} style={{ display: 'none' }} />
-              </label>
-              {coverFile && (
-                <button type="button" className="cat-btn primary" style={{ width: '100%', marginTop: 4, fontSize: '.72rem', padding: '4px 8px' }}
-                  onClick={uploadCover} disabled={coverUploading}>
-                  {coverUploading ? 'Enviando…' : 'Enviar capa'}
-                </button>
+          <div className="ab-cover">
+            <div className={`ab-cover__frame${coverUploading ? ' loading' : coverDisplayUrl ? ' found' : ''}`}>
+              {coverDisplayUrl ? (
+                <img src={coverDisplayUrl} alt={t({id:'catalogacao.ui.coverAlt'})} />
+              ) : (
+                t({id:'catalogacao.ui.noCover'})
               )}
-              {coverFile && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #aaa)', marginTop: 3, wordBreak: 'break-all' }}>{coverFile.name}</div>}
             </div>
+            <label className="ab-button ab-button--mini" style={{ display: 'block', textAlign: 'center', marginTop: 8, cursor: 'pointer', width: '100%' }}>
+              {t({id:'catalogacao.ui.chooseCover'})}
+              <input type="file" accept="image/*" onChange={handleCoverFileChange} style={{ display: 'none' }} />
+            </label>
+            {coverFile && (
+              <button type="button" className="ab-button ab-button--mini" style={{ width: '100%', marginTop: 4 }}
+                onClick={uploadCover} disabled={coverUploading}>
+                {coverUploading ? t({id:'catalogacao.ui.coverUploading'}) : t({id:'catalogacao.ui.coverUploadBtn'})}
+              </button>
+            )}
+            {coverFile && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #aaa)', marginTop: 3, wordBreak: 'break-all' }}>{coverFile.name}</div>}
           </div>
 
           {/* ── Lookup panel (next to cover) ──────────── */}
