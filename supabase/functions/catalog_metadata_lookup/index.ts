@@ -97,12 +97,39 @@ function getEnabledSources() {
       buildUrl: buildLocUrl,
       parser: parseMarcXmlSruResponse,
       retryOnce: true
+    },
+    {
+      id: 'openlibrary',
+      label: 'Open Library',
+      enabled: envBool('CATALOG_METADATA_ENABLE_OPENLIBRARY', true),
+      buildUrl: buildOpenLibraryUrl,
+      parser: parseOpenLibraryResponse
+    },
+    {
+      id: 'wikidata',
+      label: 'Wikidata',
+      enabled: envBool('CATALOG_METADATA_ENABLE_WIKIDATA', true),
+      query: runWikidataQuery
     }
   ];
   return sources.filter((source)=>source.enabled);
 }
 async function runSourceQuery(source, query, maxRecords) {
   const startedAt = Date.now();
+  if (source.query) {
+    try {
+      const candidates = await source.query(query, maxRecords);
+      return {
+        summary: { id: source.id, label: source.label, status: candidates.length ? 'ok' : 'empty', count: candidates.length, durationMs: Date.now() - startedAt },
+        candidates
+      };
+    } catch (error) {
+      return {
+        summary: { id: source.id, label: source.label, status: 'error', count: 0, durationMs: Date.now() - startedAt, error: error instanceof Error ? error.message : 'Unexpected source error' },
+        candidates: []
+      };
+    }
+  }
   const url = source.buildUrl(query, maxRecords);
   try {
     let xmlText;
@@ -309,6 +336,134 @@ function parseIccuRecord(item, source, sourceUrl) {
     identifiers: {
       bid
     },
+    confidence: 0,
+    match_reasons: []
+  };
+}
+function buildOpenLibraryUrl(query, maxRecords) {
+  const override = envGet('CATALOG_METADATA_OPENLIBRARY_BASE_URL');
+  const base = override || 'https://openlibrary.org/search.json';
+  const fields = 'key,title,subtitle,author_name,first_publish_year,publisher,publish_place,isbn,language,subject,number_of_pages_median';
+  const params = new URLSearchParams({ fields, limit: String(Math.min(maxRecords, 5)) });
+  if (query.mode === 'isbn_lookup') params.set('isbn', query.isbn);
+  else if (query.mode === 'issn_lookup') return `${base}?q=${encodeURIComponent(query.issn)}&${params.toString()}`;
+  else {
+    if (query.title) params.set('title', query.title);
+    if (query.author) params.set('author', query.author);
+  }
+  return `${base}?${params.toString()}`;
+}
+function parseOpenLibraryResponse(responseText, sourceId) {
+  try {
+    const data = JSON.parse(responseText);
+    const docs = data?.docs;
+    if (!Array.isArray(docs)) return [];
+    return docs.map((doc)=>parseOpenLibraryDoc(doc, sourceId)).filter((c)=>c.title || c.isbn.length);
+  } catch {
+    return [];
+  }
+}
+function parseOpenLibraryDoc(doc, source) {
+  const title = normalizeWhitespace(doc.title || '');
+  const subtitle = normalizeWhitespace(doc.subtitle || '');
+  const authors = Array.isArray(doc.author_name) ? doc.author_name : [];
+  const year = doc.first_publish_year ? String(doc.first_publish_year) : '';
+  const publishers = Array.isArray(doc.publisher) ? doc.publisher : [];
+  const places = Array.isArray(doc.publish_place) ? doc.publish_place : [];
+  const isbns = Array.isArray(doc.isbn) ? doc.isbn.map(normalizeIsbn).filter(Boolean) : [];
+  const languages = Array.isArray(doc.language) ? doc.language : [];
+  const subjects = Array.isArray(doc.subject) ? doc.subject.slice(0, 10).map(normalizeWhitespace) : [];
+  const pages = doc.number_of_pages_median;
+  const olKey = doc.key || '';
+  const contributors = authors.map((name)=>({
+    label: name,
+    normalized_label: normalizeText(name),
+    role: 'author',
+    authority_ids: {}
+  }));
+  return {
+    source,
+    source_record_id: olKey,
+    source_url: olKey ? `https://openlibrary.org${olKey}` : '',
+    record_type: 'bibliographic',
+    raw_format: 'openlibrary_json',
+    title,
+    subtitle,
+    responsibility_statement: authors.join('; '),
+    contributors,
+    edition: '',
+    place: places[0] || '',
+    publisher: publishers[0] || '',
+    year,
+    extent: pages ? `${pages} p.` : '',
+    series: '',
+    language: languages[0] || '',
+    isbn: distinct(isbns.slice(0, 5)),
+    issn: [],
+    subjects,
+    notes: [],
+    classification: [],
+    identifiers: { openlibrary: olKey },
+    confidence: 0,
+    match_reasons: []
+  };
+}
+async function runWikidataQuery(query, maxRecords) {
+  if (query.mode === 'isbn_lookup' || query.mode === 'issn_lookup') return [];
+  if (!query.title) return [];
+  const searchTerms = [query.title, query.author].filter(Boolean).join(' ');
+  const searchUrl = `https://www.wikidata.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent('haswbstatement:P31=Q7725634 ' + searchTerms)}&srlimit=${Math.min(maxRecords, 5)}&format=json`;
+  const searchText = await fetchText(searchUrl, DEFAULT_TIMEOUT_MS);
+  const searchData = JSON.parse(searchText);
+  const results = searchData?.query?.search || [];
+  if (!results.length) return [];
+  const qids = results.map((r)=>r.title).join('|');
+  const entityUrl = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${qids}&props=claims|labels|descriptions&languages=en|fr|pt|es|de|it|ca&format=json`;
+  const entityText = await fetchText(entityUrl, DEFAULT_TIMEOUT_MS);
+  const entityData = JSON.parse(entityText);
+  const entities = entityData?.entities || {};
+  return Object.entries(entities).map(([qid, entity])=>parseWikidataEntity(qid, entity)).filter((c)=>c.title);
+}
+function parseWikidataEntity(qid, entity) {
+  const claims = entity.claims || {};
+  const labels = entity.labels || {};
+  const descriptions = entity.descriptions || {};
+  const title = (labels.en || labels.fr || labels.pt || labels.es || labels.de || labels.it || Object.values(labels)[0] || {}).value || '';
+  const desc = (descriptions.en || descriptions.fr || Object.values(descriptions)[0] || {}).value || '';
+  const authorFromDesc = desc.match(/(?:book|livre|libro|Buch|obra|livro) (?:by|de|von|di|por) (.+)/i)?.[1] || '';
+  const dateValue = claims.P577?.[0]?.mainsnak?.datavalue?.value?.time || '';
+  const year = dateValue.match(/\+(\d{4})/)?.[1] || '';
+  const isbn13 = (claims.P212 || []).map((c)=>normalizeIsbn(c?.mainsnak?.datavalue?.value || '')).filter(Boolean);
+  const pages = claims.P1104?.[0]?.mainsnak?.datavalue?.value?.amount?.replace('+', '') || '';
+  const contributors = authorFromDesc ? [{
+    label: authorFromDesc,
+    normalized_label: normalizeText(authorFromDesc),
+    role: 'author',
+    authority_ids: {}
+  }] : [];
+  return {
+    source: 'wikidata',
+    source_record_id: qid,
+    source_url: `https://www.wikidata.org/wiki/${qid}`,
+    record_type: 'bibliographic',
+    raw_format: 'wikidata_json',
+    title,
+    subtitle: '',
+    responsibility_statement: authorFromDesc,
+    contributors,
+    edition: '',
+    place: '',
+    publisher: '',
+    year,
+    extent: pages ? `${pages} p.` : '',
+    series: '',
+    language: '',
+    isbn: isbn13.slice(0, 5),
+    issn: [],
+    subjects: [],
+    notes: [],
+    classification: [],
+    identifiers: { wikidata: qid },
     confidence: 0,
     match_reasons: []
   };
@@ -902,6 +1057,8 @@ function scoreCandidate(candidate, query) {
   if (candidate.source === 'dnb') confidence += 2;
   if (candidate.source === 'iccu') confidence += 2;
   if (candidate.source === 'loc') confidence += 1;
+  if (candidate.source === 'openlibrary') confidence += 1;
+  if (candidate.source === 'wikidata') confidence += 1;
   return {
     ...candidate,
     confidence,
