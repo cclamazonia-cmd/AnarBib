@@ -1025,11 +1025,15 @@ function AuthorLinks({ book }) {
 
   if (Array.isArray(chips) && chips.length > 0) {
     return chips.map((chip, i) => (
-      <span key={chip.author_id}>
+      <span key={chip.author_id || `unlinked-${i}`}>
         {i > 0 && ' ; '}
-        <Link to={`/autor/${chip.author_id}`} className="ab-author-link">
-          {chip.label || chip.preferred_name || '?'}
-        </Link>
+        {chip.author_id ? (
+          <Link to={`/autor/${chip.author_id}`} className="ab-author-link">
+            {chip.label || chip.preferred_name || '?'}
+          </Link>
+        ) : (
+          <span>{chip.label || '?'}</span>
+        )}
       </span>
     ));
   }
