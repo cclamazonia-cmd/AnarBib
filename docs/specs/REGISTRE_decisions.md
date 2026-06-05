@@ -28,6 +28,7 @@ Ce sont les faits recopiés dans presque toutes les specs : c'est là que naisse
 | **DOC-PERIM-1** | « **page = périmètre, pas de cross-calcul** » : un compteur s'agrège sur le périmètre de sa page ; pour les anonymes, sur les vues `*_anon_v1`, jamais sur une vue réseau (régression B.7). | ✅ acté v0.2 | admin-reseau §11.1 Q1 ; catalogue-decouverte INV-1 |
 | **DOC-CLOSE-1** | « **close before open** » : committer+vérifier chaque paquet avant le suivant ; `npm run build` avant chaque push ; **étendu à la doc** (un chantier n'est clos que quand ses vérités ont gradué + sa trace est tamponnée). | ✅ acté | acquisition §7 |
 | **DOC-MODELE-1** | Vocabulaire des strates du modèle, **deux axes distincts** : (1) **niveaux de granularité** (« Camadas ») = œuvre/notice → holding → exemplaire, axe *vertical* ; (2) **couches de l'exemplaire** = trace / provenance / destination, *facettes* du niveau exemplaire, axe *horizontal*. Ne pas confondre « couche » (facette) et « Camada/niveau » (granularité). La couche *provenance* = propriétés d'acquisition au niveau exemplaire. | ✅ acté 02/06 | exemplaires §2 ; acquisition §4 |
+| **DOC-JSX-1** | Validation **hors bundler** : syntaxe JSX via `tsc transpileModule` (TypeScript ; ni résolution de modules ni typage → zéro faux positif sur imports) ; logique pure (registres, helpers) via harness **ESM `.mjs`** + `node --check`. Garde-fou quand `npm run build` est indisponible ; ne remplace pas le build avant push (`DOC-CLOSE-1`). | ✅ acté 04/06 | Track A catalogação (Lots 1–2b) |
 | **DOC-ADDR-1** | **Registre d'adresse de l'UI = tutoiement.** L'app s'adresse au membre en **« tu »** (horizontal, compagnon ; **zéro « vous »**). Corps de texte et adresse directe en tu + possessifs `ton/ta/tes`. **Titres et intitulés des objets du membre en 1ʳᵉ personne** `mon/ma/mes` (« Mon mot de passe », « Ma carte », « Mes données », « Mes droits », « Mon compte », « Mes notifications »). Décliné par locale selon le registre informel/compagnon de chaque langue (du en de, tu en it, je en nl, εσύ en el, você en pt-BR, ci/vi en eo…) + conventions inclusives en place (point médian fr, Genderstern de…). | ✅ acté 04/06 (validé Xavier) | fr.json (61 chaînes) ; rollout 9 locales en cours |
 
 ---
@@ -177,6 +178,13 @@ R7–R11 **propagés depuis consultas** par symétrie (✅ 31/05). R8 ne s'appli
 | CAT-D4 | Formes variantes en `JSONB variant_forms` | ✅ |
 | CAT-D5 | LoC = diagnostic avant réactivation | ✅ |
 | CAT-D6 | `viaf`/`isni` au niveau autorité ; `wikidata` aux deux niveaux | ✅ |
+| **CAT-E1** | **Refonte fiche = Track A** (spec-catalogacao-fiche-et-paliers §3). Registre déclaratif `fieldRegistry.js` : source unique des champs (`id`=clé d'état/colonne `book_drafts`, `label`=clé i18n, `tier`/`mat`/`type`/`span`/`opts`) + helpers visibilité §3.3. Lot 1. | ✅ 04/06 |
+| **CAT-E2** | Registre **aligné sur la maquette normative** `maquette_fiche_catalogacao_v2.html` (fait foi pour palier × matériel) : `editora` 6 types (livro/periodico/zine/cartaz/tract/dossie) ; `issn` [periodico,artigo] ; `isbn` [livro] ; `local` 6 types ; `edicao`/`paginas` [livro,zine,dossie] ; `colecao` tier 3 [livro,tese]. Lot 2b. | ✅ 04/06 |
+| **CAT-E3** | **Rendu piloté par le registre** (`CatalogFieldRenderer.jsx` : `renderField`/`renderMaterialSection`/`renderRegistryField`, `null` si invisible). BookDraftForm migré : panneaux matériels (Lot 2a) + 7 champs cœur à restriction matérielle (Lot 2b). **Reste** periódico in-grid + acquisition (Lot 2c). Réf. spec §3.1 / §9 P1. | 🟡 en cours |
+| **CAT-E4** | **Intérim palier→tier** : prop `mode` binaire (CatalogacaoPage) → `catalogTier` complete→3, simple→2. Le Lot 3 (paliers ternaires, **= CAT-A3**, spec §4 / §9 P2) insérera advanced→2 et fera simple→1 ; clé `localStorage` du mode à confirmer ; retrait `.mode-complete-only`. | 🟡 intérim |
+| **CAT-E5** | Spans `titulo`/`subtitulo` gardés **span 3** (layout prod) ; cible maquette (span 2 + réordonnancement du cœur) = **lisibilité (Lot 4, §7)**, pas le rendu. | 🟡 différé Lot 4 |
+| **CAT-E6** | **Différés hors périmètre fiche** : (a) capa = gating par matériel (uploader **+** champ chemin **ensemble**) + champ chemin manuel co-localisé/lecture seule → **module capas** (cf. CAT-C) ; (b) circulation 3 valeurs (`loanable` booléen→enum) → exemplaires/circulation (cf. CAT-B2 `ambos`) ; (c) `viaf`/`isni`/`wikidata` tier 3 absents d'`EMPTY_FORM` → PLANNED, requiert migration+état (cf. CAT-D6) ; (d) `idioma` texte→select 8 langues = décision valeurs stockées vs données existantes ; (e) `bib_ref` omis du registre (système/compat). | 🟡 différé |
+| **CAT-E7** | 7 clés i18n **nouvelles** introduites par le registre, à livrer au **Lot 5** (10 locales, `DOC-I18N-1`, spec §8) : `catalogacao.field.materialType`, `.field.author`, `.section.core`, `.section.periodical`, `.tag.core/.advanced/.complete/.material`. | 🟡 à livrer Lot 5 |
 
 ---
 
@@ -198,4 +206,6 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
-*Fin du seed v0.1. Décisions transverses recensées : 11. Drifts ouverts : voir le rapport d'audit joint.*
+*Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
+
+*MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
