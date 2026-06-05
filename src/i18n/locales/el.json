@@ -3272,5 +3272,12 @@
   "catalogacao.authority.notFound": "Δεν βρέθηκε αρχή στο Wikidata.",
   "catalogacao.authority.clickToLink": "Κάντε κλικ σε ένα αποτέλεσμα για να συνδέσετε την αρχή και να συμπληρώσετε VIAF/ISNI/εναλλακτικές μορφές.",
   "catalogacao.authority.linked": "Αρχή «{name}» ({id}) συνδέθηκε.",
-  "catalogacao.authority.langCount": "{count} γλώσσες"
+  "catalogacao.authority.langCount": "{count} γλώσσες",
+  "catalogacao.authlink.link": "Σύνδεση",
+  "catalogacao.authlink.linkTitle": "Σύνδεση με υπάρχουσα αρχή",
+  "catalogacao.authlink.linkedTitle": "Συνδεδεμένο με αρχή",
+  "catalogacao.authlink.unlink": "Αποσύνδεση",
+  "catalogacao.authlink.needName": "Εισάγετε ένα όνομα πριν την αναζήτηση.",
+  "catalogacao.authlink.noResults": "Δεν βρέθηκε αρχή.",
+  "catalogacao.authlink.close": "Κλείσιμο"
 }

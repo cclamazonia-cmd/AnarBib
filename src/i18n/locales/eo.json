@@ -3272,5 +3272,12 @@
   "catalogacao.authority.notFound": "Neniu aŭtoritato trovita en Vikidatumoj.",
   "catalogacao.authority.clickToLink": "Klaku rezulton por ligi la aŭtoritaton kaj plenigi VIAF/ISNI/variantajn formojn.",
   "catalogacao.authority.linked": "Aŭtoritato “{name}” ({id}) ligita.",
-  "catalogacao.authority.langCount": "{count} lingvoj"
+  "catalogacao.authority.langCount": "{count} lingvoj",
+  "catalogacao.authlink.link": "Ligi",
+  "catalogacao.authlink.linkTitle": "Ligi al ekzistanta aŭtoritato",
+  "catalogacao.authlink.linkedTitle": "Ligita al aŭtoritato",
+  "catalogacao.authlink.unlink": "Malligi",
+  "catalogacao.authlink.needName": "Enigu nomon antaŭ ol serĉi.",
+  "catalogacao.authlink.noResults": "Neniu aŭtoritato trovita.",
+  "catalogacao.authlink.close": "Fermi"
 }

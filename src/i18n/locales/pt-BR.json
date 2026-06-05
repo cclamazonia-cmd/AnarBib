@@ -3272,5 +3272,12 @@
   "catalogacao.authority.notFound": "Nenhuma autoridade encontrada no Wikidata.",
   "catalogacao.authority.clickToLink": "Clique em um resultado para vincular a autoridade e preencher VIAF/ISNI/formas variantes.",
   "catalogacao.authority.linked": "Autoridade “{name}” ({id}) vinculada.",
-  "catalogacao.authority.langCount": "{count} línguas"
+  "catalogacao.authority.langCount": "{count} línguas",
+  "catalogacao.authlink.link": "Vincular",
+  "catalogacao.authlink.linkTitle": "Vincular a uma autoridade existente",
+  "catalogacao.authlink.linkedTitle": "Vinculado a uma autoridade",
+  "catalogacao.authlink.unlink": "Desvincular",
+  "catalogacao.authlink.needName": "Informe um nome de contribuinte antes de buscar.",
+  "catalogacao.authlink.noResults": "Nenhuma autoridade encontrada.",
+  "catalogacao.authlink.close": "Fechar"
 }

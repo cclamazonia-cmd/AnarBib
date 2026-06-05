@@ -3272,5 +3272,12 @@
   "catalogacao.authority.notFound": "No authority found on Wikidata.",
   "catalogacao.authority.clickToLink": "Click a result to link the authority and fill in VIAF/ISNI/variant forms.",
   "catalogacao.authority.linked": "Authority “{name}” ({id}) linked.",
-  "catalogacao.authority.langCount": "{count} languages"
+  "catalogacao.authority.langCount": "{count} languages",
+  "catalogacao.authlink.link": "Link",
+  "catalogacao.authlink.linkTitle": "Link to an existing authority",
+  "catalogacao.authlink.linkedTitle": "Linked to an authority",
+  "catalogacao.authlink.unlink": "Unlink",
+  "catalogacao.authlink.needName": "Enter a contributor name before searching.",
+  "catalogacao.authlink.noResults": "No authority found.",
+  "catalogacao.authlink.close": "Close"
 }

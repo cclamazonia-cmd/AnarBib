@@ -3272,5 +3272,12 @@
   "catalogacao.authority.notFound": "Cap autoritat trobada a Wikidata.",
   "catalogacao.authority.clickToLink": "Fes clic en un resultat per vincular l’autoritat i omplir VIAF/ISNI/formes variants.",
   "catalogacao.authority.linked": "Autoritat “{name}” ({id}) vinculada.",
-  "catalogacao.authority.langCount": "{count} llengües"
+  "catalogacao.authority.langCount": "{count} llengües",
+  "catalogacao.authlink.link": "Vincular",
+  "catalogacao.authlink.linkTitle": "Vincular a una autoritat existent",
+  "catalogacao.authlink.linkedTitle": "Autoritat vinculada",
+  "catalogacao.authlink.unlink": "Desvincular",
+  "catalogacao.authlink.needName": "Escriu un nom abans de cercar.",
+  "catalogacao.authlink.noResults": "Cap autoritat trobada.",
+  "catalogacao.authlink.close": "Tancar"
 }

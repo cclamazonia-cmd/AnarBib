@@ -3272,5 +3272,12 @@
   "catalogacao.authority.notFound": "Keine Autorität auf Wikidata gefunden.",
   "catalogacao.authority.clickToLink": "Klicke auf ein Ergebnis, um die Autorität zu verknüpfen und VIAF/ISNI/Namensvarianten auszufüllen.",
   "catalogacao.authority.linked": "Autorität „{name}“ ({id}) verknüpft.",
-  "catalogacao.authority.langCount": "{count} Sprachen"
+  "catalogacao.authority.langCount": "{count} Sprachen",
+  "catalogacao.authlink.link": "Verknüpfen",
+  "catalogacao.authlink.linkTitle": "Mit einer bestehenden Autorität verknüpfen",
+  "catalogacao.authlink.linkedTitle": "Mit einer Autorität verknüpft",
+  "catalogacao.authlink.unlink": "Trennen",
+  "catalogacao.authlink.needName": "Gib einen Namen ein, bevor du suchst.",
+  "catalogacao.authlink.noResults": "Keine Autorität gefunden.",
+  "catalogacao.authlink.close": "Schließen"
 }

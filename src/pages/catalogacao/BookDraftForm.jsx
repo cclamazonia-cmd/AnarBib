@@ -177,8 +177,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // ── Contributors state ─────────────────────────────────
   const [contributors, setContributors] = useState([
-    { position: 1, name: '', role: 'autor', is_primary: true },
+    { position: 1, name: '', role: 'autor', is_primary: true, author_id: null, author_label: '' },
   ]);
+  // Sélecteur d'autorité (volet préventif) : un panneau de recherche ouvert à la fois
+  const [authorSearch, setAuthorSearch] = useState({ index: null, results: [], loading: false });
 
   // ── ISBD state ─────────────────────────────────────────
   const [isbdEnabled, setIsbdEnabled] = useState(false);
@@ -490,6 +492,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           name: c.label || '',
           role: inferContributorRole(c.role),
           is_primary: i === 0,
+          author_id: null,
+          author_label: '',
         })));
       }
     } else if (candidate.responsibility_statement && !f('autor')) {
@@ -702,7 +706,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   function addContributor(role = 'autor') {
     setContributors(prev => [
       ...prev,
-      { position: prev.length + 1, name: '', role, is_primary: prev.length === 0 },
+      { position: prev.length + 1, name: '', role, is_primary: prev.length === 0, author_id: null, author_label: '' },
     ]);
     if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
   }
@@ -721,6 +725,36 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setContributors(prev => prev.map((c, i) => ({ ...c, is_primary: i === index })));
   }
 
+  // Sélecteur d'autorité (volet préventif) : recherche locale par nom de ligne
+  async function searchAuthorForRow(index) {
+    const name = (contributors[index]?.name || '').trim();
+    if (!name) { setMsg({ text: t({id:'catalogacao.authlink.needName'}), kind: 'error' }); return; }
+    setAuthorSearch({ index, results: [], loading: true });
+    try {
+      const { data, error } = await supabase.rpc('search_authors_by_name', { p_query: name, p_limit: 8 });
+      if (error) throw error;
+      setAuthorSearch({ index, results: data || [], loading: false });
+    } catch (err) {
+      setAuthorSearch({ index: null, results: [], loading: false });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    }
+  }
+
+  function linkAuthorToRow(index, author) {
+    setContributors(prev => prev.map((c, i) => i === index
+      ? { ...c, author_id: author.id, author_label: author.preferred_name || '' }
+      : c));
+    setAuthorSearch({ index: null, results: [], loading: false });
+    if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
+  }
+
+  function unlinkAuthorFromRow(index) {
+    setContributors(prev => prev.map((c, i) => i === index
+      ? { ...c, author_id: null, author_label: '' }
+      : c));
+    if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
+  }
+
   // Synchronise le champ "autor" à partir des contributeurs
   function syncAutorFromContributors() {
     const named = contributors.filter(c => c.name.trim());
@@ -735,6 +769,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ne sont pas copies dans le brouillon), on charge ceux du livre publie via
   // get_book_contributors_public -> lignes editables, sauvegardees au prochain
   // enregistrement du brouillon.
+  // Remplit author_label (preferred_name) pour les lignes deja liees a une autorite.
+  async function enrichAuthorLabels(rows) {
+    const ids = [...new Set(rows.map(r => r.author_id).filter(Boolean))];
+    if (!ids.length) return rows;
+    try {
+      const { data } = await supabase.from('authors').select('id, preferred_name').in('id', ids);
+      const byId = new Map((data || []).map(a => [a.id, a.preferred_name]));
+      return rows.map(r => r.author_id ? { ...r, author_label: byId.get(r.author_id) || '' } : r);
+    } catch {
+      return rows;
+    }
+  }
+
   async function loadContributors(draftId, publishedBookId = null) {
     if (!draftId) return;
     try {
@@ -744,24 +791,28 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         .order('position', { ascending: true });
       if (error) throw error;
       if (data?.length) {
-        setContributors(data.map(c => ({
+        setContributors(await enrichAuthorLabels(data.map(c => ({
           position: c.position,
           name: c.name || '',
           role: c.role || 'autor',
           is_primary: c.is_primary || false,
-        })));
+          author_id: c.author_id || null,
+          author_label: '',
+        }))));
         return;
       }
       // Fallback : reprise d'un livre publie sans contributeurs de brouillon.
       if (publishedBookId) {
         const { data: pub } = await supabase.rpc('get_book_contributors_public', { p_book_id: Number(publishedBookId) });
         if (Array.isArray(pub) && pub.length) {
-          setContributors(pub.map(c => ({
+          setContributors(await enrichAuthorLabels(pub.map(c => ({
             position: c.position,
             name: c.name || '',
             role: c.role || 'autor',
             is_primary: c.is_primary || false,
-          })));
+            author_id: c.author_id || null,
+            author_label: '',
+          }))));
         }
       }
     } catch (err) {
@@ -814,6 +865,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         name: c.name.trim(),
         role: c.role,
         is_primary: c.is_primary,
+        author_id: c.author_id || null,
       }));
       const { error } = await supabase.from('book_draft_contributors').insert(payload);
       if (error) throw error;
@@ -1766,23 +1818,66 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               </div>
             </div>
             {contributors.map((c, i) => (
-              <div key={i} style={{ display: 'flex', gap: 6, marginBottom: 5, alignItems: 'center' }}>
-                <input type="radio" name="primary_contributor" checked={c.is_primary}
-                  onChange={() => togglePrimary(i)} title="Responsabilidade principal"
-                  style={{ flexShrink: 0 }} />
-                <input type="text" value={c.name} placeholder="SOBRENOME, Nome"
-                  onChange={e => updateContributor(i, 'name', e.target.value)}
-                  style={{ flex: 1, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.82rem' }}
-                />
-                <select value={c.role} onChange={e => updateContributor(i, 'role', e.target.value)}
-                  style={{ width: 130, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.78rem' }}
-                >
-                  {CONTRIBUTOR_ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
-                </select>
-                {contributors.length > 1 && (
-                  <button type="button" onClick={() => removeContributor(i)}
-                    style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '1rem', padding: '2px 6px' }}
-                    title="Remover">×</button>
+              <div key={i} style={{ marginBottom: 5 }}>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <input type="radio" name="primary_contributor" checked={c.is_primary}
+                    onChange={() => togglePrimary(i)} title="Responsabilidade principal"
+                    style={{ flexShrink: 0 }} />
+                  <input type="text" value={c.name} placeholder="SOBRENOME, Nome"
+                    onChange={e => updateContributor(i, 'name', e.target.value)}
+                    style={{ flex: 1, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.82rem' }}
+                  />
+                  <select value={c.role} onChange={e => updateContributor(i, 'role', e.target.value)}
+                    style={{ width: 130, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.78rem' }}
+                  >
+                    {CONTRIBUTOR_ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+                  </select>
+                  {c.author_id ? (
+                    <span className="cat-pill ok" style={{ fontSize: '.66rem', display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}
+                      title={t({id:'catalogacao.authlink.linkedTitle'})}>
+                      🔗 {c.author_label || `#${c.author_id}`}
+                      <button type="button" onClick={() => unlinkAuthorFromRow(i)}
+                        style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '.8rem', padding: 0, lineHeight: 1 }}
+                        title={t({id:'catalogacao.authlink.unlink'})}>×</button>
+                    </span>
+                  ) : (
+                    <button type="button" onClick={() => searchAuthorForRow(i)}
+                      disabled={authorSearch.loading && authorSearch.index === i}
+                      style={{ flexShrink: 0, background: 'none', border: '1px solid rgba(255,255,255,.15)', borderRadius: 6, color: 'var(--brand-muted, #aaa)', cursor: 'pointer', fontSize: '.7rem', padding: '5px 8px' }}
+                      title={t({id:'catalogacao.authlink.linkTitle'})}>
+                      {authorSearch.loading && authorSearch.index === i ? '…' : `🔗 ${t({id:'catalogacao.authlink.link'})}`}
+                    </button>
+                  )}
+                  {contributors.length > 1 && (
+                    <button type="button" onClick={() => removeContributor(i)}
+                      style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '1rem', padding: '2px 6px' }}
+                      title="Remover">×</button>
+                  )}
+                </div>
+                {/* Panneau de résultats du sélecteur d'autorité (volet préventif) */}
+                {authorSearch.index === i && !authorSearch.loading && (
+                  <div style={{ marginLeft: 24, marginTop: 4, border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, overflow: 'hidden', maxHeight: 180, overflowY: 'auto' }}>
+                    {authorSearch.results.length === 0 ? (
+                      <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)', padding: '6px 10px' }}>{t({id:'catalogacao.authlink.noResults'})}</div>
+                    ) : authorSearch.results.map(a => (
+                      <div key={a.id} onClick={() => linkAuthorToRow(i, a)}
+                        style={{ padding: '6px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+                        <div style={{ fontSize: '.8rem', fontWeight: 600 }}>
+                          {a.preferred_name}
+                          {(a.birth_year || a.death_year) && <span style={{ fontWeight: 400, color: 'var(--brand-muted, #aaa)' }}> ({a.birth_year || ''}{a.death_year ? `–${a.death_year}` : (a.birth_year ? '–' : '')})</span>}
+                        </div>
+                        <div style={{ fontSize: '.68rem', color: 'rgba(255,255,255,.45)' }}>
+                          {[a.sort_name, a.country, `${a.match_kind} ${Math.round(a.score * 100)}%`].filter(Boolean).join(' · ')}
+                        </div>
+                      </div>
+                    ))}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '4px 8px' }}>
+                      <button type="button" onClick={() => setAuthorSearch({ index: null, results: [], loading: false })}
+                        style={{ background: 'none', border: 'none', color: 'var(--brand-muted, #888)', cursor: 'pointer', fontSize: '.7rem' }}>
+                        {t({id:'catalogacao.authlink.close'})}
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
             ))}

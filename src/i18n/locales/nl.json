@@ -3272,5 +3272,12 @@
   "catalogacao.authority.notFound": "Geen autoriteit gevonden op Wikidata.",
   "catalogacao.authority.clickToLink": "Klik op een resultaat om de autoriteit te koppelen en VIAF/ISNI/naamvarianten in te vullen.",
   "catalogacao.authority.linked": "Autoriteit “{name}” ({id}) gekoppeld.",
-  "catalogacao.authority.langCount": "{count} talen"
+  "catalogacao.authority.langCount": "{count} talen",
+  "catalogacao.authlink.link": "Koppelen",
+  "catalogacao.authlink.linkTitle": "Aan een bestaande autoriteit koppelen",
+  "catalogacao.authlink.linkedTitle": "Gekoppeld aan een autoriteit",
+  "catalogacao.authlink.unlink": "Ontkoppelen",
+  "catalogacao.authlink.needName": "Voer een naam in voordat je zoekt.",
+  "catalogacao.authlink.noResults": "Geen autoriteit gevonden.",
+  "catalogacao.authlink.close": "Sluiten"
 }
