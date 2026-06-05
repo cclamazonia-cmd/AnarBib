@@ -103,6 +103,7 @@ export default function BookPage() {
   const isAuth = !!user;
 
   const [book, setBook] = useState(null);
+  const [contributors, setContributors] = useState([]); // liste complete (lies + non lies)
   const [sessionCtx, setSessionCtx] = useState(null);
   const [digitalAccess, setDigitalAccess] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -128,6 +129,7 @@ export default function BookPage() {
       setLoading(true);
       setDigitalAccess(null);
       setSessionCtx(null);
+      setContributors([]);
       setViewMode('standard');
       setReserveStatus('');
       try {
@@ -143,6 +145,14 @@ export default function BookPage() {
         if (!bookData) return;
 
         const bookId = Number(bookData.book_id || bookData.id || 0);
+
+        if (bookId > 0) {
+          // Liste complete des contributeurs (lies + non lies) — fiche complete.
+          try {
+            const contribRpc = await supabase.rpc('get_book_contributors_public', { p_book_id: bookId });
+            if (Array.isArray(contribRpc.data)) setContributors(contribRpc.data);
+          } catch { /* noop : fallback sur authors_json */ }
+        }
 
         if (bookId > 0) {
           // FIX 2026-05-01 (bonus) : variable locale au lieu de relire digitalAccess
@@ -285,7 +295,7 @@ export default function BookPage() {
       {/* Hero */}
       <Hero title={book.titulo || t({ id: 'book.noTitle' })} subtitle={book.subtitulo || ''}>
         <div className="ab-livro-author">
-          <BookAuthorLinks book={book} />
+          <BookAuthorLinks book={book} contributors={contributors} />
         </div>
         <div className="ab-livro-chips">
           {book.bib_ref && <Pill>{t({ id: 'book.meta.ref' })}: {book.bib_ref}</Pill>}
@@ -494,7 +504,26 @@ function MetaPill({ label, value, always = false }) {
   );
 }
 
-function BookAuthorLinks({ book }) {
+function BookAuthorLinks({ book, contributors }) {
+  // Priorite : liste COMPLETE des contributeurs (lies en <Link>, non lies en
+  // texte). Evite le masquage des contributeurs sans autorite
+  // (#FICHE-AUTEURS-INCOMPLETE). Fallback : authors_json (autorites liees).
+  if (Array.isArray(contributors) && contributors.length > 0) {
+    return contributors.map((c, i) => (
+      <span key={c.author_id || `${c.position}-${i}`}>
+        {i > 0 && ' ; '}
+        {c.author_id ? (
+          <Link to={`/autor/${c.author_id}`} className="ab-livro-author-link">{c.name}</Link>
+        ) : (
+          <span>{c.name}</span>
+        )}
+        {c.role && c.role !== 'autor' && (
+          <span className="ab-livro-author-role"> ({c.role})</span>
+        )}
+      </span>
+    ));
+  }
+
   let authors = book.authors_json || book.author_chips;
   if (typeof authors === 'string') {
     try { authors = JSON.parse(authors); } catch { authors = null; }
