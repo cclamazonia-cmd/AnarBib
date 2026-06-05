@@ -1,6 +1,9 @@
 -- =========================================================================
 -- Paquet fix — fusion globale des fiches authors en double
 -- =========================================================================
+-- (Re-declenchement CI : pousse initialement sous un commit de tete [CI SKIP],
+--  puis pipeline manuel #997 qui ne lance pas deploy-migrations (event=manual).
+--  Ce changement reel force un event=push pour appliquer la migration.)
 -- Date     : 2026-06-05
 -- Chantier : Autorites / dedoublonnage des fiches authors (balayage global)
 -- Auteur   : Xavier + Claude
