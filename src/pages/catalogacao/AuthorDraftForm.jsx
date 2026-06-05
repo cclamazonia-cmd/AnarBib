@@ -85,6 +85,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [dupMatches, setDupMatches] = useState(null); // null = pas cherche
   const [dupLoading, setDupLoading] = useState(false);
   const [dupBusy, setDupBusy] = useState(null); // author_id en cours de fusion
+  // Recherche d'autorite externe (Wikidata → VIAF/ISNI/variant_forms)
+  const [authLookupResults, setAuthLookupResults] = useState(null);
+  const [authLookupLoading, setAuthLookupLoading] = useState(false);
 
   const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
   const photoDisplayUrl = photoPreviewUrl
@@ -288,6 +291,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         viaf_id: f('viaf_id') || null,
         isni: f('isni') || null,
         wikidata_id: f('wikidata_id') || null,
+        variant_forms: form.variant_forms || null,
         photo_object_path: f('photo_object_path') || null,
         notes: structuredNotes || null,
         updated_by: user?.id || null,
@@ -412,6 +416,45 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     published: { label: 'Publicado', cls: 'ok' },
   };
   const pill = pills[draftState] || pills.new;
+
+  // ── Authority lookup (Wikidata → VIAF/ISNI/variant_forms) ──
+  async function runAuthorityLookup() {
+    const name = f('preferred_name')?.trim();
+    if (!name) { setMsg({ text: 'Informe o nome antes de buscar autoridade.', kind: 'error' }); return; }
+    setAuthLookupLoading(true);
+    setAuthLookupResults(null);
+    try {
+      const { data, error } = await supabase.functions.invoke('authority_lookup', { body: { name, maxResults: 5 } });
+      if (error && !data) throw error;
+      if (!data?.ok) throw new Error(data?.error || 'Busca falhou.');
+      setAuthLookupResults(data.candidates || []);
+      setMsg({ text: data.candidates?.length ? `${data.candidates.length} autoridade(s) encontrada(s).` : 'Nenhuma autoridade encontrada.', kind: data.candidates?.length ? 'ok' : 'info' });
+    } catch (err) {
+      setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
+    } finally {
+      setAuthLookupLoading(false);
+    }
+  }
+
+  function applyAuthorityCandidate(candidate) {
+    if (!candidate) return;
+    const updates = {};
+    if (candidate.viaf_id) updates.viaf_id = candidate.viaf_id;
+    if (candidate.isni) updates.isni = candidate.isni;
+    if (candidate.wikidata_id) updates.wikidata_id = candidate.wikidata_id;
+    if (candidate.birth_year && !f('birth_year')) updates.birth_year = candidate.birth_year;
+    if (candidate.death_year && !f('death_year')) updates.death_year = candidate.death_year;
+    if (!f('source_kind')) updates.source_kind = 'wikidata';
+    if (!f('source_label')) updates.source_label = 'Wikidata';
+    if (!f('source_url')) updates.source_url = candidate.source_url;
+    if (candidate.variant_forms && Object.keys(candidate.variant_forms).length) {
+      updates.variant_forms = candidate.variant_forms;
+    }
+    setForm(prev => ({ ...prev, ...updates }));
+    if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
+    setMsg({ text: `Autoridade "${candidate.preferred_name}" (${candidate.wikidata_id}) liée.`, kind: 'ok' });
+    setAuthLookupResults(null);
+  }
 
   // ── Render helpers ──────────────────────────────────────
   const fs = { width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' };
@@ -590,6 +633,46 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
           {isComplete && (
             <>
+              <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+                  <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 14px' }}
+                    onClick={runAuthorityLookup} disabled={authLookupLoading || !f('preferred_name')?.trim()}>
+                    {authLookupLoading ? 'Buscando…' : 'Buscar autoridade (Wikidata)'}
+                  </button>
+                  {(f('viaf_id') || f('wikidata_id')) && (
+                    <span style={{ fontSize: '.72rem', color: '#4ade80' }}>
+                      ✓ {[f('wikidata_id') && `WD: ${f('wikidata_id')}`, f('viaf_id') && `VIAF: ${f('viaf_id')}`, f('isni') && `ISNI: ${f('isni')}`].filter(Boolean).join(' · ')}
+                    </span>
+                  )}
+                </div>
+                {authLookupResults && authLookupResults.length > 0 && (
+                  <div style={{ border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, overflow: 'hidden', maxHeight: 240, overflowY: 'auto', marginBottom: 6 }}>
+                    {authLookupResults.map((c, i) => (
+                      <div key={c.wikidata_id || i} style={{
+                        padding: '8px 10px', cursor: 'pointer',
+                        background: i % 2 === 0 ? 'rgba(0,0,0,.15)' : 'transparent',
+                        borderBottom: '1px solid rgba(255,255,255,.06)',
+                      }} onClick={() => applyAuthorityCandidate(c)}>
+                        <div style={{ fontSize: '.82rem', fontWeight: 600 }}>
+                          {c.preferred_name}
+                          {c.birth_year && <span style={{ fontWeight: 400, color: 'var(--brand-muted, #aaa)' }}> ({c.birth_year}{c.death_year ? `–${c.death_year}` : '–'})</span>}
+                        </div>
+                        <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>{c.description}</div>
+                        <div style={{ fontSize: '.68rem', color: 'rgba(255,255,255,.45)', marginTop: 2 }}>
+                          {[c.wikidata_id, c.viaf_id && `VIAF: ${c.viaf_id}`, c.isni && `ISNI: ${c.isni}`].filter(Boolean).join(' · ')}
+                          {c.variant_forms && ` · ${Object.keys(c.variant_forms).length} langues`}
+                        </div>
+                      </div>
+                    ))}
+                    <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #666)', padding: '6px 10px' }}>
+                      Clique para lier l'autorité et remplir VIAF/ISNI/formes variantes.
+                    </div>
+                  </div>
+                )}
+                {authLookupResults && authLookupResults.length === 0 && (
+                  <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 6 }}>Aucune autorité trouvée dans Wikidata.</div>
+                )}
+              </div>
               {inp('viaf_id', 'VIAF', { placeholder: '12345678' })}
               {inp('isni', 'ISNI', { placeholder: '0000 0001 2345 6789' })}
               {inp('wikidata_id', 'Wikidata', { placeholder: 'Q12345' })}
