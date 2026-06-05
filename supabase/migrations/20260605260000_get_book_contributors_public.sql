@@ -26,7 +26,7 @@ BEGIN;
 
 CREATE OR REPLACE FUNCTION public.get_book_contributors_public(p_book_id bigint)
 RETURNS TABLE (
-  position    integer,
+  "position"  integer,
   name        text,
   role        text,
   is_primary  boolean,
