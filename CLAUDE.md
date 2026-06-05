@@ -156,9 +156,10 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
 3. Traduire dans **toutes** les autres locales selon la charte.
 4. `npm test` (test i18n bloquant en CI).
 
-> ⚠️ **Piège vérifié** : `src/tests/i18n.test.js` n'importe que **8 locales**
-> (`pt-BR, fr, en, de, it, es, ca, eo`). Il **ne teste ni `nl` ni `el`** : leur
-> parité de clés et leur conformité ne sont **pas** garanties par le gate CI.
+> ✅ **Résolu (05/06/2026)** : `src/tests/i18n.test.js` couvre désormais les
+> **10 locales** (`nl` et `el` ajoutés ; les 10 sont à parité exacte, 3286 clés).
+> La parité des 10 est gardée par la CI. *(Avant : seules 8 étaient testées —
+> `nl`/`el` non gardés.)*
 
 ## Backend Supabase
 
@@ -238,11 +239,12 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
    (`lettor*` ne couvre pas la racine `lettric-`). → **Définir le traitement de
    ces paires irrégulières + prévoir un audit d'alignement de `it.json`** sur la
    convention `compagn*`.
-2. **`nl` et `el` non couverts par le test i18n** → parité/conformité non
-   garanties par la CI (voir section i18n). Conventions encore provisoires
-   (`nl`) ou à définir (`el`).
-3. **Backlog i18n** : ajouter `nl` et `el` à `src/tests/i18n.test.js` pour que le
-   gate CI garantisse la parité des **10** locales (gap identifié au point 2).
+2. **`nl` et `el` : parité de clés désormais gardée par la CI** (ajoutés au
+   test le 05/06/2026, point 3 ci-dessous ✅). Reste que leurs **conventions
+   inclusives** sont encore provisoires (`nl`) ou à définir (`el`) — ce que le
+   test de parité ne vérifie pas (il garde les clés, pas la conformité charte).
+3. ✅ **Fait (05/06/2026)** : `nl` et `el` ajoutés à `src/tests/i18n.test.js` —
+   le gate CI garantit la parité des **10** locales (3286 clés chacune).
 4. **Documentation des locales** : charte v2 (2026-06-05) couvre les 10 locales
    (`ca`/`eo` reversées, `it` officialisée). Reste à **arrêter `nl`** (provisoire)
    et **`el`** (à définir) avec des relais natifs.
