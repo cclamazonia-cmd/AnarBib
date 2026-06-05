@@ -26,10 +26,11 @@
 #       read-digital-asset, fetch-url-metadata  (5 utilitaires publics
 #       ou avec auth interne custom)
 #
-#   verify_jwt: true   (5 fonctions, AUCUNE déclaration nécessaire)
+#   verify_jwt: true   (6 fonctions, AUCUNE déclaration nécessaire)
 #     - register (création de compte, JWT Supabase obligatoire)
 #     - probe-partner-catalog
 #     - catalog_metadata_lookup
+#     - cover_lookup (recherche de capas multi-sources, appel frontend authentifié)
 #     - mail-i18n-test
 #     - login (Edge wrapper d'auth)
 #
