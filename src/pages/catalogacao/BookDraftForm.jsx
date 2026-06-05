@@ -150,6 +150,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [coverFile, setCoverFile] = useState(null);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState('');
   const [coverUploading, setCoverUploading] = useState(false);
+  // ── Cover lookup state (capas P2) ──────────────────────
+  const [coverLookupLoading, setCoverLookupLoading] = useState(false);
+  const [coverCandidates, setCoverCandidates] = useState([]); // {thumbnailUrl, fullUrl, source, license}
+  const [coverStoring, setCoverStoring] = useState(''); // fullUrl en cours d'enregistrement
 
   // ── Contributors state ─────────────────────────────────
   const [contributors, setContributors] = useState([
@@ -479,6 +483,68 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       return null;
     } finally {
       setCoverUploading(false);
+    }
+  }
+
+  // ── Cover lookup (capas P2) : galerie multi-sources via EF cover_lookup ──
+  async function runCoverLookup() {
+    const isbn = (f('isbn') || '').replace(/[^0-9Xx]/g, '');
+    const title = f('titulo') || '';
+    const author = f('autor') || '';
+    const url = f('digital_native_url') || '';
+    if (!isbn && !title && !url) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverLookupNeed' }), kind: 'error' });
+      return;
+    }
+    setCoverLookupLoading(true);
+    setCoverCandidates([]);
+    try {
+      const { data, error } = await supabase.functions.invoke('cover_lookup', {
+        body: { action: 'search', isbn: isbn || null, title: title || null, author: author || null, url: url || null },
+      });
+      if (error && !data) throw error;
+      if (!data?.ok) throw new Error(data?.error || 'lookup failed');
+      setCoverCandidates(data.candidates || []);
+      if (!data.candidates?.length) {
+        setMsg({ text: t({ id: 'catalogacao.ui.coverLookupEmpty' }), kind: 'info' });
+      }
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
+    } finally {
+      setCoverLookupLoading(false);
+    }
+  }
+
+  // Selection d'une vignette -> telechargement serveur vers le bucket (CAT-C3).
+  async function selectCoverCandidate(candidate) {
+    const stableKey = f('bib_ref') || f('id');
+    if (!stableKey) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverSaveFirst' }), kind: 'error' });
+      return;
+    }
+    setCoverStoring(candidate.fullUrl);
+    try {
+      const { data, error } = await supabase.functions.invoke('cover_lookup', {
+        body: {
+          action: 'store',
+          imageUrl: candidate.fullUrl,
+          key: stableKey,
+          source: candidate.source || null,
+          license: candidate.license || null,
+        },
+      });
+      if (error && !data) throw error;
+      if (!data?.ok) throw new Error(data?.error || 'store failed');
+      set('cover_object_path', data.storagePath);
+      set('cover_source', data.source || candidate.source || '');
+      set('cover_license', data.license || candidate.license || '');
+      setCoverPreviewUrl('');
+      setCoverCandidates([]);
+      setMsg({ text: t({ id: 'catalogacao.ui.coverSaved' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
+    } finally {
+      setCoverStoring('');
     }
   }
 
@@ -1280,7 +1346,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 t({id:'catalogacao.ui.noCover'})
               )}
             </div>
-            <label className="ab-button ab-button--mini" style={{ display: 'block', textAlign: 'center', marginTop: 8, cursor: 'pointer', width: '100%' }}>
+            <button type="button" className="ab-button ab-button--mini" style={{ width: '100%', marginTop: 8 }}
+              onClick={runCoverLookup} disabled={coverLookupLoading}>
+              {coverLookupLoading ? t({id:'catalogacao.ui.coverSearching'}) : t({id:'catalogacao.ui.coverSearch'})}
+            </button>
+            <label className="ab-button ab-button--mini" style={{ display: 'block', textAlign: 'center', marginTop: 4, cursor: 'pointer', width: '100%' }}>
               {t({id:'catalogacao.ui.chooseCover'})}
               <input type="file" accept="image/*" onChange={handleCoverFileChange} style={{ display: 'none' }} />
             </label>
@@ -1298,6 +1368,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── Lookup panel (next to cover) ──────────── */}
           <div style={{ flex: 1, minWidth: 280 }}>
+            {/* Cover candidate gallery (capas P2) */}
+            {coverCandidates.length > 0 && (
+              <div style={{ marginBottom: 10, padding: 10, borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.08)' }}>
+                <div style={{ fontSize: '.75rem', fontWeight: 700, marginBottom: 6 }}>{t({id:'catalogacao.ui.coverGalleryTitle'})}</div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {coverCandidates.map((c, i) => (
+                    <button key={i} type="button" title={`${c.source}${c.license ? ` · ${c.license}` : ''}`}
+                      onClick={() => selectCoverCandidate(c)} disabled={!!coverStoring}
+                      style={{ padding: 0, border: '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
+                      <img src={c.thumbnailUrl} alt={c.source} style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: '6px 6px 0 0', display: 'block' }} />
+                      <div style={{ fontSize: '.58rem', color: 'var(--brand-muted, #aaa)', padding: '2px 3px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {coverStoring === c.fullUrl ? t({id:'catalogacao.ui.coverUploading'}) : c.source}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
               <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 12px' }}
                 onClick={runCatalogLookup} disabled={lookupLoading}>

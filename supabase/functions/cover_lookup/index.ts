@@ -172,7 +172,64 @@ async function runSource(
   }
 }
 
-async function handle(body: Record<string, unknown>, authHeader: string) {
+// ── Mode store : telechargement serveur de la capa choisie -> bucket [CAT-C3] ──
+// Evite les blocages CORS du navigateur sur OpenLibrary/Google et garde une
+// copie propre (anti link-rot). Ecrit via la Storage REST API avec le JWT de
+// l'appelant·e (memes droits RLS que l'upload manuel du frontend).
+const IMAGE_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'image/gif': 'gif',
+};
+
+function sanitizeKey(key: string): string {
+  // bib_ref (ex. BAK-0042) ou id numerique -> caracteres surs uniquement.
+  return String(key || '').replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 120);
+}
+
+async function handleStore(body: Record<string, unknown>, authHeader: string) {
+  const imageUrl = String(body.imageUrl || '').trim();
+  const key = sanitizeKey(String(body.key || ''));
+  const source = String(body.source || '').trim() || null;
+  const license = String(body.license || '').trim() || null;
+  if (!imageUrl) throw new Error('Provide imageUrl.');
+  if (!key) throw new Error('Provide key (bib_ref or draft id).');
+
+  const base = envGet('SUPABASE_URL');
+  if (!base) throw new Error('SUPABASE_URL unavailable.');
+
+  // Telechargement serveur de l'image choisie.
+  const imgRes = await fetchWithTimeout(imageUrl, { headers: { Accept: 'image/*' } });
+  if (!imgRes.ok) throw new Error(`Image fetch HTTP ${imgRes.status}`);
+  const contentType = (imgRes.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  const ext = IMAGE_EXT[contentType];
+  if (!ext) throw new Error(`Unsupported image type: ${contentType || 'unknown'}`);
+  const bytes = new Uint8Array(await imgRes.arrayBuffer());
+  if (bytes.byteLength === 0) throw new Error('Empty image.');
+
+  const storagePath = `books/${key}/front.${ext}`;
+  const putUrl = `${base}/storage/v1/object/covers/${storagePath}`;
+  const putRes = await fetchWithTimeout(putUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': contentType,
+      'x-upsert': 'true',
+      ...(authHeader ? { Authorization: authHeader } : {}),
+      ...(envGet('SUPABASE_ANON_KEY') ? { apikey: envGet('SUPABASE_ANON_KEY') as string } : {}),
+    },
+    body: bytes,
+  });
+  if (!putRes.ok) {
+    const detail = await putRes.text().catch(() => '');
+    throw new Error(`Storage write HTTP ${putRes.status}${detail ? `: ${detail.slice(0, 200)}` : ''}`);
+  }
+
+  return { ok: true, storagePath, source, license, contentType };
+}
+
+async function handleSearch(body: Record<string, unknown>, authHeader: string) {
   const isbn = normalizeIsbn(String(body.isbn || ''));
   const title = String(body.title || '').trim();
   const author = String(body.author || '').trim();
@@ -206,6 +263,12 @@ async function handle(body: Record<string, unknown>, authHeader: string) {
     candidates: candidates.slice(0, maxRecords),
     sources: settled.map((s) => s.summary),
   };
+}
+
+async function handle(body: Record<string, unknown>, authHeader: string) {
+  const action = String(body.action || 'search').trim();
+  if (action === 'store') return handleStore(body, authHeader);
+  return handleSearch(body, authHeader);
 }
 
 // deno-lint-ignore no-explicit-any
