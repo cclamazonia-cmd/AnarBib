@@ -3264,5 +3264,13 @@
   "panel.readerInbox.cancel": "Ακύρωση",
   "panel.readerInbox.history": "Ιστορικό",
   "panel.readerInbox.historyEmpty": "Κανένα αρχειοθετημένο μήνυμα.",
-  "panel.error.readerMessageAction": "Η ενέργεια δεν μπόρεσε να εκτελεστεί."
+  "panel.error.readerMessageAction": "Η ενέργεια δεν μπόρεσε να εκτελεστεί.",
+  "catalogacao.authority.search": "Αναζήτηση αρχής (Wikidata)",
+  "catalogacao.authority.searching": "Αναζήτηση…",
+  "catalogacao.authority.needName": "Εισάγετε το προτιμώμενο όνομα πριν αναζητήσετε αρχή.",
+  "catalogacao.authority.found": "{count} εγγραφές αρχής βρέθηκαν.",
+  "catalogacao.authority.notFound": "Δεν βρέθηκε αρχή στο Wikidata.",
+  "catalogacao.authority.clickToLink": "Κάντε κλικ σε ένα αποτέλεσμα για να συνδέσετε την αρχή και να συμπληρώσετε VIAF/ISNI/εναλλακτικές μορφές.",
+  "catalogacao.authority.linked": "Αρχή «{name}» ({id}) συνδέθηκε.",
+  "catalogacao.authority.langCount": "{count} γλώσσες"
 }

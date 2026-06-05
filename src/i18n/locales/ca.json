@@ -3264,5 +3264,13 @@
   "panel.readerInbox.cancel": "Cancel·lar",
   "panel.readerInbox.history": "Historial",
   "panel.readerInbox.historyEmpty": "Cap missatge arxivat.",
-  "panel.error.readerMessageAction": "No s'ha pogut fer l'acció."
+  "panel.error.readerMessageAction": "No s'ha pogut fer l'acció.",
+  "catalogacao.authority.search": "Cercar autoritat (Wikidata)",
+  "catalogacao.authority.searching": "Cercant…",
+  "catalogacao.authority.needName": "Escriu el nom preferit abans de cercar una autoritat.",
+  "catalogacao.authority.found": "{count} autoritat(s) trobada-e-es.",
+  "catalogacao.authority.notFound": "Cap autoritat trobada a Wikidata.",
+  "catalogacao.authority.clickToLink": "Fes clic en un resultat per vincular l’autoritat i omplir VIAF/ISNI/formes variants.",
+  "catalogacao.authority.linked": "Autoritat “{name}” ({id}) vinculada.",
+  "catalogacao.authority.langCount": "{count} llengües"
 }

@@ -3264,5 +3264,13 @@
   "panel.readerInbox.cancel": "Annuleren",
   "panel.readerInbox.history": "Geschiedenis",
   "panel.readerInbox.historyEmpty": "Geen gearchiveerde berichten.",
-  "panel.error.readerMessageAction": "Kan de actie niet uitvoeren."
+  "panel.error.readerMessageAction": "Kan de actie niet uitvoeren.",
+  "catalogacao.authority.search": "Autoriteit zoeken (Wikidata)",
+  "catalogacao.authority.searching": "Zoeken…",
+  "catalogacao.authority.needName": "Vul de voorkeursnaam in voordat je een autoriteit zoekt.",
+  "catalogacao.authority.found": "{count} autoriteit(en) gevonden.",
+  "catalogacao.authority.notFound": "Geen autoriteit gevonden op Wikidata.",
+  "catalogacao.authority.clickToLink": "Klik op een resultaat om de autoriteit te koppelen en VIAF/ISNI/naamvarianten in te vullen.",
+  "catalogacao.authority.linked": "Autoriteit “{name}” ({id}) gekoppeld.",
+  "catalogacao.authority.langCount": "{count} talen"
 }

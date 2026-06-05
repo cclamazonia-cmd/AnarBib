@@ -3264,5 +3264,13 @@
   "panel.readerInbox.cancel": "Cancel",
   "panel.readerInbox.history": "History",
   "panel.readerInbox.historyEmpty": "No archived messages.",
-  "panel.error.readerMessageAction": "Could not perform the action."
+  "panel.error.readerMessageAction": "Could not perform the action.",
+  "catalogacao.authority.search": "Search authority (Wikidata)",
+  "catalogacao.authority.searching": "Searching…",
+  "catalogacao.authority.needName": "Enter the preferred name before searching for an authority.",
+  "catalogacao.authority.found": "{count} authority record(s) found.",
+  "catalogacao.authority.notFound": "No authority found on Wikidata.",
+  "catalogacao.authority.clickToLink": "Click a result to link the authority and fill in VIAF/ISNI/variant forms.",
+  "catalogacao.authority.linked": "Authority “{name}” ({id}) linked.",
+  "catalogacao.authority.langCount": "{count} languages"
 }

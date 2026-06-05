@@ -420,7 +420,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // ── Authority lookup (Wikidata → VIAF/ISNI/variant_forms) ──
   async function runAuthorityLookup() {
     const name = f('preferred_name')?.trim();
-    if (!name) { setMsg({ text: 'Informe o nome antes de buscar autoridade.', kind: 'error' }); return; }
+    if (!name) { setMsg({ text: t({id:'catalogacao.authority.needName'}), kind: 'error' }); return; }
     setAuthLookupLoading(true);
     setAuthLookupResults(null);
     try {
@@ -428,7 +428,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       if (error && !data) throw error;
       if (!data?.ok) throw new Error(data?.error || 'Busca falhou.');
       setAuthLookupResults(data.candidates || []);
-      setMsg({ text: data.candidates?.length ? `${data.candidates.length} autoridade(s) encontrada(s).` : 'Nenhuma autoridade encontrada.', kind: data.candidates?.length ? 'ok' : 'info' });
+      setMsg({ text: data.candidates?.length ? t({id:'catalogacao.authority.found'}, {count: data.candidates.length}) : t({id:'catalogacao.authority.notFound'}), kind: data.candidates?.length ? 'ok' : 'info' });
     } catch (err) {
       setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
     } finally {
@@ -452,7 +452,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     }
     setForm(prev => ({ ...prev, ...updates }));
     if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
-    setMsg({ text: `Autoridade "${candidate.preferred_name}" (${candidate.wikidata_id}) liée.`, kind: 'ok' });
+    setMsg({ text: t({id:'catalogacao.authority.linked'}, {name: candidate.preferred_name, id: candidate.wikidata_id}), kind: 'ok' });
     setAuthLookupResults(null);
   }
 
@@ -637,7 +637,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
                   <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 14px' }}
                     onClick={runAuthorityLookup} disabled={authLookupLoading || !f('preferred_name')?.trim()}>
-                    {authLookupLoading ? 'Buscando…' : 'Buscar autoridade (Wikidata)'}
+                    {authLookupLoading ? t({id:'catalogacao.authority.searching'}) : t({id:'catalogacao.authority.search'})}
                   </button>
                   {(f('viaf_id') || f('wikidata_id')) && (
                     <span style={{ fontSize: '.72rem', color: '#4ade80' }}>
@@ -660,17 +660,17 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                         <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>{c.description}</div>
                         <div style={{ fontSize: '.68rem', color: 'rgba(255,255,255,.45)', marginTop: 2 }}>
                           {[c.wikidata_id, c.viaf_id && `VIAF: ${c.viaf_id}`, c.isni && `ISNI: ${c.isni}`].filter(Boolean).join(' · ')}
-                          {c.variant_forms && ` · ${Object.keys(c.variant_forms).length} langues`}
+                          {c.variant_forms && ` · ${t({id:'catalogacao.authority.langCount'}, {count: Object.keys(c.variant_forms).length})}`}
                         </div>
                       </div>
                     ))}
                     <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #666)', padding: '6px 10px' }}>
-                      Clique para lier l'autorité et remplir VIAF/ISNI/formes variantes.
+                      {t({id:'catalogacao.authority.clickToLink'})}
                     </div>
                   </div>
                 )}
                 {authLookupResults && authLookupResults.length === 0 && (
-                  <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 6 }}>Aucune autorité trouvée dans Wikidata.</div>
+                  <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 6 }}>{t({id:'catalogacao.authority.notFound'})}</div>
                 )}
               </div>
               {inp('viaf_id', 'VIAF', { placeholder: '12345678' })}

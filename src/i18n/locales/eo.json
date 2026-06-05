@@ -3264,5 +3264,13 @@
   "panel.readerInbox.cancel": "Nuligi",
   "panel.readerInbox.history": "Historio",
   "panel.readerInbox.historyEmpty": "Neniu arkivita mesaĝo.",
-  "panel.error.readerMessageAction": "Ne eblis plenumi la agon."
+  "panel.error.readerMessageAction": "Ne eblis plenumi la agon.",
+  "catalogacao.authority.search": "Serĉi aŭtoritaton (Wikidata)",
+  "catalogacao.authority.searching": "Serĉado…",
+  "catalogacao.authority.needName": "Enigu la preferatan nomon antaŭ ol serĉi aŭtoritaton.",
+  "catalogacao.authority.found": "{count} aŭtoritataj registroj trovitaj.",
+  "catalogacao.authority.notFound": "Neniu aŭtoritato trovita en Vikidatumoj.",
+  "catalogacao.authority.clickToLink": "Klaku rezulton por ligi la aŭtoritaton kaj plenigi VIAF/ISNI/variantajn formojn.",
+  "catalogacao.authority.linked": "Aŭtoritato “{name}” ({id}) ligita.",
+  "catalogacao.authority.langCount": "{count} lingvoj"
 }

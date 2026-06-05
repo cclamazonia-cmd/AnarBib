@@ -3264,5 +3264,13 @@
   "panel.readerInbox.cancel": "Annulla",
   "panel.readerInbox.history": "Cronologia",
   "panel.readerInbox.historyEmpty": "Nessun messaggio archiviato.",
-  "panel.error.readerMessageAction": "Impossibile eseguire l'azione."
+  "panel.error.readerMessageAction": "Impossibile eseguire l'azione.",
+  "catalogacao.authority.search": "Cercare autorità (Wikidata)",
+  "catalogacao.authority.searching": "Ricerca…",
+  "catalogacao.authority.needName": "Inserire il nome preferito prima di cercare l’autorità.",
+  "catalogacao.authority.found": "{count} autorità trovata/e.",
+  "catalogacao.authority.notFound": "Nessuna autorità trovata su Wikidata.",
+  "catalogacao.authority.clickToLink": "Clicca su un risultato per collegare l’autorità e compilare VIAF/ISNI/forme varianti.",
+  "catalogacao.authority.linked": "Autorità “{name}” ({id}) collegata.",
+  "catalogacao.authority.langCount": "{count} lingue"
 }
