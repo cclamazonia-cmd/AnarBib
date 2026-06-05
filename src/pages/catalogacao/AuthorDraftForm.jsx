@@ -76,6 +76,11 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState('');
   const [photoUploading, setPhotoUploading] = useState(false);
   const [bioTranslations, setBioTranslations] = useState([]);
+  // Rattachement aux oeuvres (liaison autorite<->livres)
+  const [linkMatches, setLinkMatches] = useState(null); // null = pas cherche ; [] = cherche, vide
+  const [linkLoading, setLinkLoading] = useState(false);
+  const [linkSelected, setLinkSelected] = useState(new Set());
+  const [linkBusy, setLinkBusy] = useState(false);
 
   const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
   const photoDisplayUrl = photoPreviewUrl
@@ -325,6 +330,41 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // Note : la reprise d'un auteur publie (create_author_draft_from_author) est
   // pilotee par CatalogPanel.retakeItem -> onEdit('author', draftId) -> openForEdit.
   // Pas de duplication ici.
+
+  // ── Rattachement aux oeuvres (liaison autorite<->livres) ────────────────
+  async function findAuthorBookMatches() {
+    const authorId = f('published_author_id');
+    if (!authorId) return;
+    setLinkLoading(true); setLinkSelected(new Set());
+    try {
+      const { data, error } = await supabase.rpc('suggest_author_book_matches', { p_author_id: Number(authorId) });
+      if (error) throw error;
+      setLinkMatches(data || []);
+      // Pre-cocher les correspondances exactes (validation humaine = un clic global).
+      setLinkSelected(new Set((data || []).filter(m => m.match_kind === 'exact').map(m => m.contributor_id)));
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setLinkLoading(false); }
+  }
+
+  async function confirmAuthorLinks() {
+    const authorId = f('published_author_id');
+    if (!authorId || linkSelected.size === 0) return;
+    setLinkBusy(true);
+    let ok = 0;
+    try {
+      for (const cid of linkSelected) {
+        const { error } = await supabase.rpc('confirm_author_book_link', {
+          p_author_id: Number(authorId), p_contributor_id: Number(cid),
+        });
+        if (!error) ok++;
+      }
+      setMsg({ text: t({ id: 'catalogacao.link.confirmed' }, { count: ok }), kind: 'ok' });
+      await findAuthorBookMatches(); // rafraichir (les rattaches disparaissent de la liste)
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setLinkBusy(false); }
+  }
 
   // ── State pill ──────────────────────────────────────────
   const pills = {
@@ -578,6 +618,45 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                   } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
                 }}>{t({id:'catalogacao.bio.save'})}</button>
               </details>
+            </div>
+          )}
+
+          {/* ── Rattacher aux oeuvres (liaison autorite<->livres) ─────── */}
+          {f('published_author_id') && (
+            <div className="cat-field" style={{ gridColumn: 'span 3' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
+                <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.link.title' })}</span>
+                <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                  onClick={findAuthorBookMatches} disabled={linkLoading}>
+                  {linkLoading ? t({ id: 'catalogacao.link.finding' }) : t({ id: 'catalogacao.link.find' })}
+                </button>
+              </div>
+              {linkMatches !== null && linkMatches.length === 0 && (
+                <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.link.none' })}</div>
+              )}
+              {linkMatches !== null && linkMatches.length > 0 && (
+                <>
+                  <div style={{ border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, overflow: 'hidden', maxHeight: 280, overflowY: 'auto' }}>
+                    {linkMatches.map(m => {
+                      const sel = linkSelected.has(m.contributor_id);
+                      return (
+                        <label key={m.contributor_id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: sel ? 'rgba(29,78,216,.1)' : 'transparent' }}>
+                          <input type="checkbox" checked={sel} onChange={() => setLinkSelected(prev => { const n = new Set(prev); n.has(m.contributor_id) ? n.delete(m.contributor_id) : n.add(m.contributor_id); return n; })} />
+                          <span style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{m.book_title}</span>
+                          <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>{m.contributor_name}</span>
+                          <span className={`cat-pill ${m.match_kind === 'exact' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
+                            {t({ id: m.match_kind === 'exact' ? 'catalogacao.link.exact' : 'catalogacao.link.approx' })} {Math.round(m.score * 100)}%
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  <button type="button" className="cat-btn primary" style={{ marginTop: 8, fontSize: '.78rem', padding: '5px 12px' }}
+                    onClick={confirmAuthorLinks} disabled={linkBusy || linkSelected.size === 0}>
+                    {linkBusy ? '…' : t({ id: 'catalogacao.link.confirm' }, { count: linkSelected.size })}
+                  </button>
+                </>
+              )}
             </div>
           )}
 
