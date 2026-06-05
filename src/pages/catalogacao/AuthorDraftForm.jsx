@@ -450,7 +450,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             </select>
           </div>
 
-          {isComplete && inp('', '', { key: '_skip' }) /* spacer */ || null}
+          {/* Cellule vide pour caler la grille (Sigla en colonne suivante) */}
+          {isComplete && <div className="cat-field" aria-hidden="true" />}
 
           {isComplete && (
             <div className="cat-field">
