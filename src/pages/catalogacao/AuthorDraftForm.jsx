@@ -311,7 +311,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
     setPublishing(true); setMsg({ text: '', kind: '' });
     try {
-      const { data, error } = await supabase.rpc('publish_author_draft', { p_draft_id: Number(f('id')) });
+      const { error } = await supabase.rpc('publish_author_draft', { p_draft_id: Number(f('id')) });
       if (error) throw error;
       setDraftState('published');
       await loadDrafts();
@@ -321,21 +321,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     } finally { setPublishing(false); }
   }
 
-  // ── Create draft from existing published author ─────────
-  async function retakeAuthor(authorId) {
-    try {
-      const { data, error } = await supabase.rpc('create_author_draft_from_author', { p_author_id: Number(authorId) });
-      if (error) throw error;
-      if (data) {
-        const { data: draft } = await supabase.from('author_drafts').select('*').eq('id', Number(data)).single();
-        if (draft) fillFromRecord(draft);
-      }
-      await loadDrafts();
-      setMsg({ text: 'Rascunho criado a partir do autor publicado.', kind: 'ok' });
-    } catch (err) {
-      setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
-    }
-  }
+  // Note : la reprise d'un auteur publie (create_author_draft_from_author) est
+  // pilotee par CatalogPanel.retakeItem -> onEdit('author', draftId) -> openForEdit.
+  // Pas de duplication ici.
 
   // ── State pill ──────────────────────────────────────────
   const pills = {
