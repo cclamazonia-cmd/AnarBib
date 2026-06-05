@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novo import — assistente (wizard) v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700;800&family=Fira+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand-color-primary:#b32025; --brand-panel-bg-strong:rgba(10,10,10,.94);
+    --brand-panel-border:rgba(255,255,255,.14); --brand-panel-border-strong:rgba(255,255,255,.18);
+    --brand-text:#f5f2ea; --brand-muted:#d4cec3;
+    --brand-font-heading:'Bitter','Georgia',serif; --brand-font-body:'Fira Sans','Segoe UI',sans-serif;
+    --brand-radius:20px; --brand-radius-sm:14px; --brand-radius-pill:999px;
+    --brand-shadow:0 12px 32px rgba(0,0,0,.35); --brand-shadow-strong:0 16px 38px rgba(0,0,0,.42);
+    --color-ok:#4ade80; --color-warn:#fbbf24; --color-bad:#fb7185; --color-info:#85B7EB;
+    --brand-panel-bg-image:linear-gradient(135deg,#1a0a0c 0%,#0d0708 100%);
+    --brand-panel-overlay-solid:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.16));
+    --brand-sheet-head-overlay:linear-gradient(180deg,rgba(0,0,0,.20),rgba(0,0,0,.36));
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;color:var(--brand-text);font-family:var(--brand-font-body);background-color:#080808;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:var(--brand-font-heading)}
+  body{min-height:100vh;background:radial-gradient(1100px 520px at 82% -8%,rgba(179,32,37,.10),transparent 60%),#080808}
+  .shell{max-width:1280px;margin:0 auto;padding:24px}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .brand .logo{font-family:var(--brand-font-heading);font-weight:800;font-size:1.25rem;color:#fff}
+  .brand .logo b{color:var(--brand-color-primary)}
+  .nav{display:flex;gap:10px;flex-wrap:wrap}
+  .nav a{color:var(--brand-muted);font-size:.9rem;font-weight:600;padding:6px 10px;border-radius:var(--brand-radius-sm);cursor:pointer;text-decoration:none}
+  .nav a:hover,.nav a.active{color:#fff;background:rgba(255,255,255,.06)}
+  .sep{color:var(--brand-muted);opacity:.35;margin:0 2px}
+
+  .hero{margin-bottom:18px;padding:22px 26px;border:1px solid rgba(140,20,28,.35);border-radius:calc(var(--brand-radius) + 2px);position:relative;overflow:hidden;
+    background:linear-gradient(145deg,rgba(120,10,18,.97),rgba(48,4,10,.99) 70%,rgba(18,2,5,1));box-shadow:0 16px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,80,80,.08)}
+  .hero h1{margin:0 0 6px;font-size:clamp(1.5rem,3vw,2.3rem);color:#fff;font-family:var(--brand-font-body);font-weight:800}
+  .hero p{margin:0;color:rgba(255,220,215,.88)}
+
+  .frontier{display:flex;gap:10px;align-items:flex-start;margin:0 0 18px;padding:11px 14px;border-radius:var(--brand-radius-sm);
+    background:rgba(4,44,83,.28);border:1px solid rgba(24,95,165,.5);color:#bcd8f3;font-size:.85rem;line-height:1.5}
+  .frontier b{color:#fff}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 16px;border:none;border-radius:var(--brand-radius-sm);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;font-family:var(--brand-font-body);box-shadow:var(--brand-shadow-strong);background:linear-gradient(135deg,rgba(225,29,47,.92),var(--brand-color-primary));transition:.18s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--sec{border:1px solid var(--brand-panel-border-strong);background:var(--brand-panel-bg-strong);color:var(--brand-text);box-shadow:none}
+  .btn--mini{min-height:32px;padding:6px 10px;font-size:.82rem;border-radius:11px;border:1px solid var(--brand-panel-border);background:rgba(12,12,12,.84);color:var(--brand-text)}
+
+  .seg{display:inline-flex;background:rgba(12,12,12,.84);border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-pill);padding:4px;gap:2px;margin-bottom:6px;flex-wrap:wrap}
+  .seg button{font-family:var(--brand-font-body);font-weight:700;font-size:.85rem;color:var(--brand-muted);background:transparent;border:0;padding:9px 18px;border-radius:var(--brand-radius-pill);cursor:pointer;transition:.16s}
+  .seg button:hover{color:#fff}
+  .seg button.on{background:linear-gradient(135deg,rgba(225,29,47,.92),var(--brand-color-primary));color:#fff;box-shadow:var(--brand-shadow-strong)}
+  .seg-hint{font-size:.8rem;color:var(--brand-muted);margin:0 0 16px;opacity:.92}
+
+  .sheet{background-color:#0d0708;background-image:var(--brand-panel-overlay-solid),var(--brand-panel-bg-image);background-size:cover;border:1px solid var(--brand-panel-border);border-radius:calc(var(--brand-radius) + 2px);box-shadow:var(--brand-shadow);overflow:hidden;margin-bottom:18px}
+  .sheet__head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background-color:rgba(18,18,18,.86);background-image:var(--brand-sheet-head-overlay),var(--brand-panel-bg-image);background-size:cover;border-bottom:1px solid rgba(255,255,255,.06)}
+  .sheet__title{font-weight:700;font-size:1rem;font-family:var(--brand-font-heading);display:flex;align-items:center;gap:10px}
+  .sheet__body{padding:18px}
+  .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid rgba(255,255,255,.12);border-radius:var(--brand-radius-pill);background:rgba(24,24,24,.8);color:var(--brand-muted);font-size:.78rem;font-weight:600;white-space:nowrap}
+  .pill--ok{color:var(--color-ok);border-color:rgba(74,222,128,.3)}
+  .pill--warn{color:var(--color-warn);border-color:rgba(251,191,36,.3)}
+  .pill--bad{color:var(--color-bad);border-color:rgba(251,113,133,.3)}
+  .pill--info{color:var(--color-info);border-color:rgba(24,95,165,.55);background:rgba(4,44,83,.5)}
+  .pill--muted{opacity:.85}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .stat{flex:1;min-width:140px;padding:13px 15px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-sm);background:rgba(0,0,0,.24)}
+  .stat .n{font-family:var(--brand-font-heading);font-weight:800;font-size:1.5rem;color:#fff;line-height:1}
+  .stat .l{font-size:.78rem;color:var(--brand-muted);margin-top:5px}
+
+  .map{width:100%;border-collapse:collapse;font-size:.85rem}
+  .map th{text-align:left;color:var(--brand-muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;padding:6px 10px;border-bottom:1px solid var(--brand-panel-border)}
+  .map td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+  .map td .arr{color:var(--brand-color-primary);font-weight:800;padding:0 6px}
+  .map code{font-family:ui-monospace,monospace;font-size:.8rem;color:#e6b8bb;background:rgba(179,32,37,.12);padding:1px 6px;border-radius:5px}
+  .map select.mini{font-family:var(--brand-font-body);font-size:.82rem;color:var(--brand-text);background:rgba(10,10,10,.94);border:1px solid var(--brand-panel-border);border-radius:9px;padding:5px 8px;cursor:pointer}
+  .map select.mini:focus{outline:none;border-color:rgba(225,29,47,.9)}
+
+  .partners{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:12px}
+  .pcard{padding:14px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-sm);background:rgba(0,0,0,.24)}
+  .pcard h4{margin:0;font-size:1rem;color:#fff}
+  .pcard .proto{font-size:.74rem;color:var(--brand-muted);margin:4px 0 0}
+  .pcard .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+  .pcard.inst{background:rgba(4,20,40,.2);border-color:rgba(24,95,165,.35)}
+
+  /* ░ v2 : deux plans de relation ░ */
+  .plane-intro{font-size:.85rem;color:var(--brand-muted);line-height:1.55;margin:0 0 18px;padding:12px 14px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-sm);background:rgba(0,0,0,.22)}
+  .plane-intro b{color:var(--brand-text)}
+  .plane-h{font-size:1.02rem;color:#fff;margin:0 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .pcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+  .rel-badge{font-size:.72rem;font-weight:700;color:#e6cfa6;border:1px solid rgba(251,191,36,.4);background:rgba(40,28,4,.5);border-radius:var(--brand-radius-pill);padding:3px 9px;white-space:nowrap}
+  .flags{display:flex;gap:6px;flex-wrap:wrap;margin:11px 0 0}
+  .flagchip{font-size:.72rem;font-weight:600;border-radius:var(--brand-radius-pill);padding:3px 9px;border:1px solid;display:inline-flex;align-items:center;gap:5px}
+  .flagchip::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+  .flagchip.on{color:var(--color-ok);border-color:rgba(74,222,128,.4)}
+  .flagchip.off{color:var(--brand-muted);border-color:var(--brand-panel-border);opacity:.65;text-decoration:line-through}
+  .flagchip.na{color:var(--brand-muted);border-color:var(--brand-panel-border);opacity:.4}
+  .policy{font-size:.78rem;color:var(--brand-muted);line-height:1.45;margin:9px 0 0;font-style:italic}
+
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field label{font-size:.85rem;color:var(--brand-muted);font-weight:600}
+  .input,.select{width:100%;padding:11px 13px;border:1px solid var(--brand-panel-border-strong);border-radius:var(--brand-radius-sm);background:var(--brand-panel-bg-strong);color:var(--brand-text);font-size:.92rem;font-family:var(--brand-font-body);outline:none}
+  .input:focus,.select:focus{border-color:rgba(225,29,47,.95);box-shadow:0 0 0 3px rgba(225,29,47,.22)}
+  .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+  .queue{width:100%;border-collapse:collapse;font-size:.84rem}
+  .queue th{text-align:left;color:var(--brand-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;padding:8px 9px;border-bottom:1px solid var(--brand-panel-border);white-space:nowrap}
+  .queue td{padding:10px 9px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+  .queue tr:hover td{background:rgba(255,255,255,.025)}
+  .queue .ttl{font-weight:600;color:#fff}
+  .queue .au{font-size:.78rem;color:var(--brand-muted)}
+  .queue .rowacts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+
+  .timeline{list-style:none;margin:0;padding:0}
+  .timeline li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.84rem}
+  .timeline li:last-child{border-bottom:0}
+  .timeline .when{color:var(--brand-muted);font-size:.76rem;min-width:96px;flex-shrink:0;font-family:ui-monospace,monospace}
+  .timeline .ev b{color:#fff}
+  .timeline .ev .meta{color:var(--brand-muted);font-size:.78rem;margin-top:3px;display:flex;gap:6px;flex-wrap:wrap}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:rgba(10,10,10,.97);border:1px solid rgba(74,222,128,.45);color:#d9f3df;padding:11px 18px;border-radius:var(--brand-radius-pill);font-size:.88rem;box-shadow:var(--brand-shadow-strong);opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .hidden{display:none}
+  @media (max-width:760px){ .row3{grid-template-columns:1fr} .queue .hide-sm{display:none} }
+
+  /* ░ wizard stepper ░ */
+  .steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+  .step{display:flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-pill);background:rgba(12,12,12,.7);font-size:.82rem;font-weight:600;color:var(--brand-muted)}
+  .step .num{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.76rem;font-weight:800;background:rgba(255,255,255,.08);color:var(--brand-muted)}
+  .step.active{color:#fff;border-color:rgba(225,29,47,.6);background:linear-gradient(135deg,rgba(120,10,18,.5),rgba(48,4,10,.6))}
+  .step.active .num{background:linear-gradient(135deg,rgba(225,29,47,.92),var(--brand-color-primary));color:#fff}
+  .step.done{color:var(--color-ok)}
+  .step.done .num{background:rgba(74,222,128,.18);color:var(--color-ok)}
+  .wizfoot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .dropzone{border:1.5px dashed var(--brand-panel-border-strong);border-radius:var(--brand-radius-sm);padding:28px;text-align:center;color:var(--brand-muted);background:rgba(0,0,0,.18)}
+  .dropzone u{color:#fff;cursor:pointer}
+  .choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .choicecard{padding:16px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-sm);background:rgba(0,0,0,.24);cursor:pointer;transition:.16s}
+  .choicecard:hover{border-color:rgba(225,29,47,.5);transform:translateY(-1px)}
+  .choicecard.sel{border-color:rgba(225,29,47,.85);background:linear-gradient(135deg,rgba(120,10,18,.32),rgba(48,4,10,.45))}
+  .choicecard h4{margin:0 0 6px;color:#fff;font-size:1rem}
+  .choicecard p{margin:0;font-size:.8rem;color:var(--brand-muted);line-height:1.5}
+  .choicecard p i{color:var(--brand-text);font-style:italic;opacity:.85}
+  .note{font-size:.78rem;color:var(--brand-muted);opacity:.92;line-height:1.55}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.76rem;color:var(--brand-muted);margin-top:12px}
+</style>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="brand"><span class="logo"><b>Anar</b>Bib</span></div>
+    <nav class="nav"><a>Importações/Exportações</a><span class="sep">›</span><a class="active">Novo import</a></nav>
+  </div>
+
+  <div class="hero">
+    <h1>Novo import — assistente</h1>
+    <p>Cinco passos guiados. <b>Nada é escrito em book_drafts antes da etapa 5</b> (promoção).</p>
+  </div>
+
+  <div class="frontier">
+    <span aria-hidden="true">⇄</span>
+    <div>O assistente faz a <b>ingestão técnica</b> → rascunhos. A <b>entrada em coleção</b> (proveniência, exemplares) continua em Catalogação. <span class="pill pill--info" style="margin-left:4px">ACQ-Q4</span></div>
+  </div>
+
+  <div class="steps" id="steps">
+    <div class="step active" data-step="1"><span class="num">1</span> Circuito</div>
+    <div class="step" data-step="2"><span class="num">2</span> Fonte</div>
+    <div class="step" data-step="3"><span class="num">3</span> Mapeamento</div>
+    <div class="step" data-step="4"><span class="num">4</span> Pré-visualização</div>
+    <div class="step" data-step="5"><span class="num">5</span> Promoção</div>
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="sheet panel" data-panel="1">
+    <div class="sheet__head"><span class="sheet__title">1 · De onde vem o lote ?</span></div>
+    <div class="sheet__body">
+      <p class="note" style="margin:0 0 14px">O circuito diz a <b style="color:var(--brand-text)">natureza do lote</b> — não a biblioteca. Ele define a etapa seguinte.</p>
+      <div class="choice" id="circuitChoice">
+        <div class="choicecard" data-circuit="migracao"><h4>Migração de sistema</h4><p>Catálogo completo de um SIGB anterior (notícias + exemplares), lote único. <i>Ex.: BLMF (PMB).</i></p></div>
+        <div class="choicecard" data-circuit="arquivo"><h4>Importação de arquivo</h4><p>Base bibliográfica exportada a mapear (Zotero, CSV, MARC, BibTeX…). <i>Ex.: Terra Livre (Zotero).</i></p></div>
+        <div class="choicecard" data-circuit="fontes"><h4>Fontes externas</h4><p>Notícias puxadas em linha : companheiras (consentidas) e institucionais.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 2 (polymorphe) -->
+  <section class="sheet panel hidden" data-panel="2">
+    <div class="sheet__head"><span class="sheet__title">2 · Fonte <span class="pill pill--muted" id="circuitTag">—</span></span></div>
+    <div class="sheet__body">
+      <div class="src" data-src="arquivo">
+        <div class="dropzone">Arraste um arquivo aqui ou <u>escolha</u><div class="note" style="margin-top:8px">.mrc · .xml · .json · .csv · .bib · .ris …</div></div>
+      </div>
+      <div class="src hidden" data-src="migracao">
+        <div class="field" style="max-width:520px"><label>Lote já em staging</label><select class="select"><option>BLMF — 236 livros + 243 exemplares (PMB / UNIMARC)</option><option>— outro lote —</option></select></div>
+      </div>
+      <div class="src hidden" data-src="fontes">
+        <div class="row3">
+          <div class="field"><label>Fonte</label><select class="select"><option>Biblioteca Nacional (institucional)</option><option>WorldCat (institucional)</option><option>CIRA Lausanne — colheita fechada</option></select></div>
+          <div class="field" style="grid-column:span 2"><label>Busca</label><input class="input" placeholder="ISBN, título, autor…"></div>
+        </div>
+        <p class="note" style="margin:10px 0 0">Companheiras (<code style="font-family:ui-monospace,monospace;color:#e6b8bb">catalog_partners</code>) : colheita só se <code style="font-family:ui-monospace,monospace;color:#e6b8bb">mutualize_allowed</code> — abrir relação é ato de coordenação.</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:16px;font-size:.8rem">
+        <span class="note">Detecção automática :</span>
+        <span class="pill">estrutura<b style="color:var(--brand-text);margin-left:5px" id="detStruct">—</b></span>
+        <span class="pill">vocabulário<b style="color:var(--brand-text);margin-left:5px" id="detVocab">—</b></span>
+        <span class="pill pill--ok" id="detAdapter">adaptador resolvido</span>
+        <span class="pill pill--muted">combinação desconhecida → mapeamento manual</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="sheet panel hidden" data-panel="3">
+    <div class="sheet__head"><span class="sheet__title">3 · Mapeamento <span class="pill pill--muted">perfil reutilizável</span></span></div>
+    <div class="sheet__body">
+      <div class="field" style="max-width:340px;margin-bottom:14px"><label>Perfil de mapeamento</label><select class="select"><option>perfil padrão do esquema</option><option>perfil « Terra Livre / Zotero »</option><option>+ novo perfil…</option></select></div>
+      <table class="map"><thead><tr><th>Campo da fonte</th><th></th><th>Destino AnarBib</th></tr></thead><tbody>
+        <tr><td><code>title</code></td><td><span class="arr">→</span></td><td><select class="mini"><option>book_drafts.titulo</option><option>book_drafts.subtitulo</option></select></td></tr>
+        <tr><td><code>creators[]</code></td><td><span class="arr">→</span></td><td><b style="color:#fff">ponto de acesso</b> → autoridade <span class="pill pill--info" style="margin-left:6px">autor</span></td></tr>
+        <tr><td><code>date</code></td><td><span class="arr">→</span></td><td><select class="mini"><option>book_drafts.ano</option></select></td></tr>
+        <tr><td><code>ISBN</code></td><td><span class="arr">→</span></td><td><select class="mini"><option>book_drafts.isbn</option></select></td></tr>
+        <tr><td><code>tags[]</code></td><td><span class="arr">→</span></td><td><b style="color:#fff">ponto de acesso</b> → autoridade <span class="pill pill--info" style="margin-left:6px">assunto</span></td></tr>
+        <tr><td><code>publisher</code></td><td><span class="arr">→</span></td><td><select class="mini"><option>book_drafts.editora</option></select></td></tr>
+      </tbody></table>
+      <p class="note" style="margin:14px 0 0">Campos descritivos → colunas de <code style="font-family:ui-monospace,monospace;color:#e6b8bb">book_drafts</code> ; <b style="color:var(--brand-text)">pontos de acesso</b> (autor, assunto) → <b style="color:var(--brand-text)">autoridades</b>, nunca texto livre.</p>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="sheet panel hidden" data-panel="4">
+    <div class="sheet__head"><span class="sheet__title">4 · Pré-visualização <span class="pill pill--muted">simulação — zero escrita</span></span></div>
+    <div class="sheet__body">
+      <div class="stats">
+        <div class="stat"><div class="n">300</div><div class="l">linhas no lote</div></div>
+        <div class="stat"><div class="n" style="color:var(--color-ok)">271</div><div class="l">mapeáveis</div></div>
+        <div class="stat"><div class="n" style="color:var(--color-warn)">22</div><div class="l">em aviso</div></div>
+        <div class="stat"><div class="n" style="color:var(--color-bad)">7</div><div class="l">bloqueadas</div></div>
+      </div>
+      <table class="queue"><thead><tr><th style="width:34px"></th><th>Notícia</th><th>Estado</th><th class="hide-sm">Motivo</th></tr></thead><tbody>
+        <tr><td><input type="checkbox" checked></td><td><div class="ttl">Deus e o Estado</div><div class="au">Bakunin, Mikhail</div></td><td><span class="pill pill--ok">mapeável</span></td><td class="hide-sm note">—</td></tr>
+        <tr><td><input type="checkbox" checked></td><td><div class="ttl">A Conquista do Pão</div><div class="au">Kropotkin, Piotr</div></td><td><span class="pill pill--warn">aviso</span></td><td class="hide-sm note">autoridade a resolver (autor)</td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="ttl">Manual de autogestão</div><div class="au">ISBN 978-… já no acervo</div></td><td><span class="pill pill--bad">bloqueada</span></td><td class="hide-sm note">doublon ISBN (CAT-B5) → rattachement</td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="ttl">(linha 188)</div><div class="au">sem título exploitável</div></td><td><span class="pill pill--bad">erro</span></td><td class="hide-sm note">não mapeável</td></tr>
+        <tr><td><input type="checkbox" checked></td><td><div class="ttl">Reflexões sobre a violência</div><div class="au">Sorel, Georges</div></td><td><span class="pill pill--warn">aviso</span></td><td class="hide-sm note">confiança baixa</td></tr>
+      </tbody></table>
+      <div class="legend">
+        <span><span class="pill pill--bad" style="padding:2px 8px">bloqueante</span> doublon ISBN · não mapeável</span>
+        <span><span class="pill pill--warn" style="padding:2px 8px">aviso</span> passa em <code style="font-family:ui-monospace,monospace;color:#e6b8bb">pending_review</code> — a fila tranche</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="sheet panel hidden" data-panel="5">
+    <div class="sheet__head"><span class="sheet__title">5 · Promoção <span class="pill pill--muted">uma RPC, em transação</span></span></div>
+    <div class="sheet__body">
+      <div class="stats">
+        <div class="stat"><div class="n" style="color:var(--color-ok)">293</div><div class="l">→ fila de revisão</div></div>
+        <div class="stat"><div class="n">7</div><div class="l">excluídas (bloqueadas)</div></div>
+        <div class="stat"><div class="n" style="color:var(--color-warn)">22</div><div class="l">em pending_review</div></div>
+      </div>
+      <div class="pcard" style="margin-bottom:16px">
+        <div class="pcard-top"><h4>Run d'import</h4><span class="rel-badge">a registar</span></div>
+        <p class="note" style="margin:8px 0 0">circuito <b style="color:var(--brand-text)">arquivo</b> · fonte <b style="color:var(--brand-text)">Terra Livre / Zotero</b> · adaptador <b style="color:var(--brand-text)">CSL-JSON → book_drafts</b> · perfil <b style="color:var(--brand-text)">Terra Livre/Zotero</b> · ator <b style="color:var(--brand-text)">você</b></p>
+      </div>
+      <p class="note" style="margin:0 0 16px">A promoção insere os rascunhos em <code style="font-family:ui-monospace,monospace;color:#e6b8bb">book_drafts</code> e regista em <code style="font-family:ui-monospace,monospace;color:#e6b8bb">book_draft_import_events</code> — <b style="color:var(--brand-text)">numa só transação</b>. Nenhuma publicação direta : tudo passa pela fila de revisão.</p>
+      <button class="btn" id="promote">Promover 293 → fila de revisão</button>
+    </div>
+  </section>
+
+  <div class="wizfoot">
+    <button class="btn btn--sec" id="back" disabled>← Voltar</button>
+    <button class="btn" id="next" disabled>Próximo →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const TOTAL=5; let cur=1, circuit=null;
+const DET={migracao:{s:'ISO 2709',v:'UNIMARC'},arquivo:{s:'CSL-JSON',v:'Zotero / CSL'},fontes:{s:'MARCXML',v:'MARC21'}};
+const LABEL={migracao:'Migração de sistema',arquivo:'Importação de arquivo',fontes:'Fontes externas'};
+function render(){
+  document.querySelectorAll('.step').forEach(s=>{const n=+s.dataset.step;s.classList.toggle('active',n===cur);s.classList.toggle('done',n<cur);});
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('hidden',+p.dataset.panel!==cur));
+  document.getElementById('back').disabled = cur===1;
+  document.getElementById('next').classList.toggle('hidden', cur===TOTAL);
+  document.getElementById('next').disabled = (cur===1 && !circuit);
+}
+document.querySelectorAll('#circuitChoice .choicecard').forEach(c=>c.addEventListener('click',()=>{
+  circuit=c.dataset.circuit;
+  document.querySelectorAll('#circuitChoice .choicecard').forEach(x=>x.classList.toggle('sel',x===c));
+  document.querySelectorAll('.src').forEach(s=>s.classList.toggle('hidden',s.dataset.src!==circuit));
+  document.getElementById('circuitTag').textContent=LABEL[circuit];
+  document.getElementById('detStruct').textContent=DET[circuit].s;
+  document.getElementById('detVocab').textContent=DET[circuit].v;
+  document.getElementById('next').disabled=false;
+}));
+document.getElementById('next').addEventListener('click',()=>{ if(cur<TOTAL){cur++;render();} });
+document.getElementById('back').addEventListener('click',()=>{ if(cur>1){cur--;render();} });
+const toast=document.getElementById('toast');
+document.getElementById('promote').addEventListener('click',()=>{toast.textContent='Maquette : 293 rascunhos promovidos → fila de revisão (pending_review). Nenhuma publicação direta.';toast.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('show'),3400);});
+render();
+</script>
+</body>
+</html>

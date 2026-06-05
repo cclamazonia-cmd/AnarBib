@@ -12,7 +12,7 @@ Supersédé par : —
 | **Version** | v0.1 — **squelette de conception** (charpente ouverte ; reste le remplissage : DDL, RPC, rôles, i18n, wizard) |
 | **Date** | 5 juin 2026 |
 | **Emplacement cible** | `docs/specs/` |
-| **Statut** | Squelette posé (session 05/06). `IMP-1..7` ✅ actés ; `IMP-8` (wizard) 🟡 à cadrer. |
+| **Statut** | Squelette posé (session 05/06) ; **§9 wizard cadré** (`IMP-8`). `IMP-1..7` ✅ actés ; `IMP-8` 🟡 cadré (reste l'impl. : DDL du « run d'import » + ratification des rôles). |
 | **Réfère à** | `#ILL-digital` (`spec-flux-partage-numerique`) ; `#PARTNERS` (`spec-partenariat-biblios`, `library_partnerships`) ; Catalogação (`spec-catalogacao-fiche-et-paliers`) ; provenance (`spec-acquisition-provenance`) ; autorités (`spec-sources-externes-autorites`, `spec-notice-autorite-enrichie`). |
 | **Dépendances** | `book_drafts` + `book_draft_import_events` · `catalog_ref_source_formats`/`_methods`/`_partners`/`_systems` · staging `import_*` · `partner_source_records`/`_holdings`/`_items` · `library_partnerships` · `catalog_partners(_policy_flags_v2)` · Supabase Storage. |
 
@@ -64,14 +64,34 @@ Supersédé par : —
 - **Ser fonte para companheiras** : miroir de « fontes externas » — moisson OAI **ouverte seulement si `mutualize_allowed = true`** (`catalog_partners_policy_flags_v2`).
 - Principe : **les mêmes `*_allowed` régissent les deux sens** ; rien ne sort plus ouvert que ce qu'on assume.
 
-## 9. Assistant d'import (wizard) [IMP-8 — à cadrer]
-Stepper de l'action « Novo import » (la page reste un tableau de bord) :
-1. **Sens + circuit** — souvent pré-rempli selon le point d'entrée.
-2. **Source** — dépôt de fichier / connexion ; **auto-détection** structure + vocabulaire → **adaptateur résolu** (sinon repli manuel).
-3. **Profil de mapping** — confirmer / éditer ; réutiliser un profil sauvegardé (§5).
-4. **Aperçu / dry-run** — N lignes mappées ; **doublons** (match ISBN / EAN sur l'existant, cf. `CAT-B5`) ; **autorités** à résoudre / créer ; **drapeaux de périmètre** — *avant* tout écrit.
-5. **Promotion** vers `book_drafts` (la file de revisão, §7) — jamais de publication directe.
-- À trancher : modale vs page dédiée ; reprise d'un import interrompu ; granularité du dry-run ; rôles autorisés (§12).
+## 9. Assistant d'import (wizard) [A — IMP-8]
+**Forme.** Le wizard est l'**action « Novo import »** lancée depuis le tableau de bord (la page n'est pas un wizard). **Route dédiée** (pas une modale), **stepper linéaire** avec **retour arrière** entre étapes, et **écriture unique à la promotion** (rien ne touche `book_drafts` avant l'étape 5). **Import-only** : l'export reste une machine à états (`ILL-7`), hors wizard.
+
+**Polymorphisme.** L'**étape 2 dépend du circuit** ; les étapes 3–5 convergent.
+
+### 9.1 Étapes
+1. **Circuit** — *migração de sistema · importação de arquivo · fontes externas*. Détermine l'UI de l'étape 2.
+2. **Source** *(selon circuit)* :
+   - *importação de arquivo* → dépôt d'un fichier ;
+   - *migração de sistema* → sélection d'un **lot déjà en staging** (`import_*`) ;
+   - *fontes externas* → requête / connexion à la source (cache `partner_source_records`).
+   Puis **auto-détection structure + vocabulaire → adaptateur résolu** (§4–5) ; combinaison inconnue → repli **mapping manuel**.
+3. **Mapping** — confirmer / éditer le **profil** (`campos da fonte → book_drafts` ; points d'accès → autorités, §6) ; réutiliser un profil sauvegardé.
+4. **Aperçu / dry-run** — **simulation en lecture seule** (une RPC renvoie un rapport, **zéro écriture**). Statut **par ligne** : `mappable` · `doublon` (ISBN/EAN sur l'existant) · `autorité à résoudre` · `hors-périmètre` · `erreur` (non-mappable). On peut **exclure des lignes** ou revenir corriger le mapping (étape 3).
+5. **Promotion** — **une seule RPC** (`DOC-RPC-3`) insère les rascunhos retenus dans `book_drafts` + journalise dans `book_draft_import_events`, **en transaction**. Récap final (N promus · M exclus · P en avertissement).
+
+### 9.2 Doctrine du dry-run
+- **Bloquant** : doublon ISBN réseau (cohérent `CAT-B5` — blocage + rattachement) ; ligne non-mappable.
+- **Avertissement** (non bloquant) : confiance basse, autorité non résolue. Ces lignes **passent quand même** en `book_drafts` avec `review_status = pending_review` + drapeau de confiance — **la file de revisão tranche** (`IMP-6`, §7).
+- **Autorités** : résoudre les évidentes au dry-run (`authority_lookup`, `CAT-D3`) ; **déférer le reste à la file**. On ne bloque jamais un import sur la perfection des autorités.
+- **Idempotence** : matcher `source_record_id` + ISBN/EAN pour ne pas réimporter une notice déjà entrée.
+
+### 9.3 Rôles *(reco — ratification au foyer `spec-gouvernance-roles`)*
+- Lancer le wizard + promouvoir = **`librarian` + `coordenador`** (ingestion dans l'espace staff, pas publication).
+- **Ouvrir une source companheira** (`catalog_partners`, activer `mutualize_allowed`) = **`coordenador`** seulement (acte de relation / gouvernance, cf. PARTNER).
+
+### 9.4 Reprise & état
+Un import est long → **objet « run d'import »** (nouveau, **DDL à trancher** §12) : `{circuit, source, adaptateur, profil, statut, compteurs, acteur, horodatages}`, statut `en préparation → mappé → en revue → promu | abandonné`. Permet de quitter et reprendre, et trace l'audit du lot.
 
 ## 10. Implications techniques
 - **Écritures via RPC** (`DOC-RPC-3`) : promotion de lot, application d'un profil, journalisation. Lectures simples sous RLS tolérées ; `storage.from()` hors périmètre RPC.
@@ -85,7 +105,7 @@ Stepper de l'action « Novo import » (la page reste un tableau de bord) :
 `spec-flux-partage-numerique` (ILL ; **circuit distinct**, ne pas redéfinir) · `spec-partenariat-biblios` (`library_partnerships`, `mutualize_allowed`) · `spec-catalogacao-fiche-et-paliers` (`book_drafts`, `CAT-B3` visibility, `CAT-E*` registre) · `spec-acquisition-provenance` (frontière `ACQ-Q4`) · `spec-sources-externes-autorites` / `spec-notice-autorite-enrichie` (résolution d'autorités) · `DOC-RPC-3` · `DOC-I18N-1`.
 
 ## 12. Points à trancher au remplissage
-1. **Wizard** (`IMP-8`) : modale vs page ; reprise ; granularité du dry-run ; **rôles** (qui importe / qui promeut — lien `spec-gouvernance-roles`).
+1. **Wizard** (`IMP-8`, **cadré §9**) — restent : **DDL du « run d'import »** (table de session, §9.4) ; **ratification des rôles** au foyer `spec-gouvernance-roles` (§9.3) ; détection auto structure + vocabulaire (impl.).
 2. **Profils de mapping** : DDL (table de profils ? jsonb ?), portée (par biblio / par réseau), édition.
 3. **Adaptateurs** : registre (table vs code) ; repli manuel ; détection automatique structure + vocabulaire ; **priorité d'implémentation** — Zotero/CSL · BibTeX · RIS · CSV d'abord (réalité militante), puis UNIMARC / ISO 2709 · Dublin Core / OAI, puis MARC21 · BIBFRAME.
 4. **Résolution d'autorités** à l'import : automatique vs file dédiée ; création vs rattachement.

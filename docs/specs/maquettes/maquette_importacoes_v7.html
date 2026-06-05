@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Importações/Exportações — maquette v6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700;800&family=Fira+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand-color-primary:#b32025; --brand-panel-bg-strong:rgba(10,10,10,.94);
+    --brand-panel-border:rgba(255,255,255,.14); --brand-panel-border-strong:rgba(255,255,255,.18);
+    --brand-text:#f5f2ea; --brand-muted:#d4cec3;
+    --brand-font-heading:'Bitter','Georgia',serif; --brand-font-body:'Fira Sans','Segoe UI',sans-serif;
+    --brand-radius:20px; --brand-radius-sm:14px; --brand-radius-pill:999px;
+    --brand-shadow:0 12px 32px rgba(0,0,0,.35); --brand-shadow-strong:0 16px 38px rgba(0,0,0,.42);
+    --color-ok:#4ade80; --color-warn:#fbbf24; --color-bad:#fb7185; --color-info:#85B7EB;
+    --brand-panel-bg-image:linear-gradient(135deg,#1a0a0c 0%,#0d0708 100%);
+    --brand-panel-overlay-solid:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.16));
+    --brand-sheet-head-overlay:linear-gradient(180deg,rgba(0,0,0,.20),rgba(0,0,0,.36));
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;color:var(--brand-text);font-family:var(--brand-font-body);background-color:#080808;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:var(--brand-font-heading)}
+  body{min-height:100vh;background:radial-gradient(1100px 520px at 82% -8%,rgba(179,32,37,.10),transparent 60%),#080808}
+  .shell{max-width:1280px;margin:0 auto;padding:24px}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .brand .logo{font-family:var(--brand-font-heading);font-weight:800;font-size:1.25rem;color:#fff}
+  .brand .logo b{color:var(--brand-color-primary)}
+  .nav{display:flex;gap:10px;flex-wrap:wrap}
+  .nav a{color:var(--brand-muted);font-size:.9rem;font-weight:600;padding:6px 10px;border-radius:var(--brand-radius-sm);cursor:pointer;text-decoration:none}
+  .nav a:hover,.nav a.active{color:#fff;background:rgba(255,255,255,.06)}
+  .sep{color:var(--brand-muted);opacity:.35;margin:0 2px}
+
+  .hero{margin-bottom:18px;padding:22px 26px;border:1px solid rgba(140,20,28,.35);border-radius:calc(var(--brand-radius) + 2px);position:relative;overflow:hidden;
+    background:linear-gradient(145deg,rgba(120,10,18,.97),rgba(48,4,10,.99) 70%,rgba(18,2,5,1));box-shadow:0 16px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,80,80,.08)}
+  .hero h1{margin:0 0 6px;font-size:clamp(1.5rem,3vw,2.3rem);color:#fff;font-family:var(--brand-font-body);font-weight:800}
+  .hero p{margin:0;color:rgba(255,220,215,.88)}
+
+  .frontier{display:flex;gap:10px;align-items:flex-start;margin:0 0 18px;padding:11px 14px;border-radius:var(--brand-radius-sm);
+    background:rgba(4,44,83,.28);border:1px solid rgba(24,95,165,.5);color:#bcd8f3;font-size:.85rem;line-height:1.5}
+  .frontier b{color:#fff}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 16px;border:none;border-radius:var(--brand-radius-sm);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;font-family:var(--brand-font-body);box-shadow:var(--brand-shadow-strong);background:linear-gradient(135deg,rgba(225,29,47,.92),var(--brand-color-primary));transition:.18s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn--sec{border:1px solid var(--brand-panel-border-strong);background:var(--brand-panel-bg-strong);color:var(--brand-text);box-shadow:none}
+  .btn--mini{min-height:32px;padding:6px 10px;font-size:.82rem;border-radius:11px;border:1px solid var(--brand-panel-border);background:rgba(12,12,12,.84);color:var(--brand-text)}
+
+  .seg{display:inline-flex;background:rgba(12,12,12,.84);border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-pill);padding:4px;gap:2px;margin-bottom:6px;flex-wrap:wrap}
+  .seg button{font-family:var(--brand-font-body);font-weight:700;font-size:.85rem;color:var(--brand-muted);background:transparent;border:0;padding:9px 18px;border-radius:var(--brand-radius-pill);cursor:pointer;transition:.16s}
+  .seg button:hover{color:#fff}
+  .seg button.on{background:linear-gradient(135deg,rgba(225,29,47,.92),var(--brand-color-primary));color:#fff;box-shadow:var(--brand-shadow-strong)}
+  .seg-hint{font-size:.8rem;color:var(--brand-muted);margin:0 0 16px;opacity:.92}
+
+  .sheet{background-color:#0d0708;background-image:var(--brand-panel-overlay-solid),var(--brand-panel-bg-image);background-size:cover;border:1px solid var(--brand-panel-border);border-radius:calc(var(--brand-radius) + 2px);box-shadow:var(--brand-shadow);overflow:hidden;margin-bottom:18px}
+  .sheet__head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background-color:rgba(18,18,18,.86);background-image:var(--brand-sheet-head-overlay),var(--brand-panel-bg-image);background-size:cover;border-bottom:1px solid rgba(255,255,255,.06)}
+  .sheet__title{font-weight:700;font-size:1rem;font-family:var(--brand-font-heading);display:flex;align-items:center;gap:10px}
+  .sheet__body{padding:18px}
+  .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid rgba(255,255,255,.12);border-radius:var(--brand-radius-pill);background:rgba(24,24,24,.8);color:var(--brand-muted);font-size:.78rem;font-weight:600;white-space:nowrap}
+  .pill--ok{color:var(--color-ok);border-color:rgba(74,222,128,.3)}
+  .pill--warn{color:var(--color-warn);border-color:rgba(251,191,36,.3)}
+  .pill--bad{color:var(--color-bad);border-color:rgba(251,113,133,.3)}
+  .pill--info{color:var(--color-info);border-color:rgba(24,95,165,.55);background:rgba(4,44,83,.5)}
+  .pill--muted{opacity:.85}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .stat{flex:1;min-width:140px;padding:13px 15px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-sm);background:rgba(0,0,0,.24)}
+  .stat .n{font-family:var(--brand-font-heading);font-weight:800;font-size:1.5rem;color:#fff;line-height:1}
+  .stat .l{font-size:.78rem;color:var(--brand-muted);margin-top:5px}
+
+  .map{width:100%;border-collapse:collapse;font-size:.85rem}
+  .map th{text-align:left;color:var(--brand-muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;padding:6px 10px;border-bottom:1px solid var(--brand-panel-border)}
+  .map td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+  .map td .arr{color:var(--brand-color-primary);font-weight:800;padding:0 6px}
+  .map code{font-family:ui-monospace,monospace;font-size:.8rem;color:#e6b8bb;background:rgba(179,32,37,.12);padding:1px 6px;border-radius:5px}
+  .map select.mini{font-family:var(--brand-font-body);font-size:.82rem;color:var(--brand-text);background:rgba(10,10,10,.94);border:1px solid var(--brand-panel-border);border-radius:9px;padding:5px 8px;cursor:pointer}
+  .map select.mini:focus{outline:none;border-color:rgba(225,29,47,.9)}
+
+  .partners{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:12px}
+  .pcard{padding:14px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-sm);background:rgba(0,0,0,.24)}
+  .pcard h4{margin:0;font-size:1rem;color:#fff}
+  .pcard .proto{font-size:.74rem;color:var(--brand-muted);margin:4px 0 0}
+  .pcard .row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+  .pcard.inst{background:rgba(4,20,40,.2);border-color:rgba(24,95,165,.35)}
+
+  /* ░ v2 : deux plans de relation ░ */
+  .plane-intro{font-size:.85rem;color:var(--brand-muted);line-height:1.55;margin:0 0 18px;padding:12px 14px;border:1px solid var(--brand-panel-border);border-radius:var(--brand-radius-sm);background:rgba(0,0,0,.22)}
+  .plane-intro b{color:var(--brand-text)}
+  .plane-h{font-size:1.02rem;color:#fff;margin:0 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .pcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+  .rel-badge{font-size:.72rem;font-weight:700;color:#e6cfa6;border:1px solid rgba(251,191,36,.4);background:rgba(40,28,4,.5);border-radius:var(--brand-radius-pill);padding:3px 9px;white-space:nowrap}
+  .flags{display:flex;gap:6px;flex-wrap:wrap;margin:11px 0 0}
+  .flagchip{font-size:.72rem;font-weight:600;border-radius:var(--brand-radius-pill);padding:3px 9px;border:1px solid;display:inline-flex;align-items:center;gap:5px}
+  .flagchip::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+  .flagchip.on{color:var(--color-ok);border-color:rgba(74,222,128,.4)}
+  .flagchip.off{color:var(--brand-muted);border-color:var(--brand-panel-border);opacity:.65;text-decoration:line-through}
+  .flagchip.na{color:var(--brand-muted);border-color:var(--brand-panel-border);opacity:.4}
+  .policy{font-size:.78rem;color:var(--brand-muted);line-height:1.45;margin:9px 0 0;font-style:italic}
+
+  .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .field label{font-size:.85rem;color:var(--brand-muted);font-weight:600}
+  .input,.select{width:100%;padding:11px 13px;border:1px solid var(--brand-panel-border-strong);border-radius:var(--brand-radius-sm);background:var(--brand-panel-bg-strong);color:var(--brand-text);font-size:.92rem;font-family:var(--brand-font-body);outline:none}
+  .input:focus,.select:focus{border-color:rgba(225,29,47,.95);box-shadow:0 0 0 3px rgba(225,29,47,.22)}
+  .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+  .queue{width:100%;border-collapse:collapse;font-size:.84rem}
+  .queue th{text-align:left;color:var(--brand-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;padding:8px 9px;border-bottom:1px solid var(--brand-panel-border);white-space:nowrap}
+  .queue td{padding:10px 9px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+  .queue tr:hover td{background:rgba(255,255,255,.025)}
+  .queue .ttl{font-weight:600;color:#fff}
+  .queue .au{font-size:.78rem;color:var(--brand-muted)}
+  .queue .rowacts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+
+  .timeline{list-style:none;margin:0;padding:0}
+  .timeline li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.84rem}
+  .timeline li:last-child{border-bottom:0}
+  .timeline .when{color:var(--brand-muted);font-size:.76rem;min-width:96px;flex-shrink:0;font-family:ui-monospace,monospace}
+  .timeline .ev b{color:#fff}
+  .timeline .ev .meta{color:var(--brand-muted);font-size:.78rem;margin-top:3px;display:flex;gap:6px;flex-wrap:wrap}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:rgba(10,10,10,.97);border:1px solid rgba(74,222,128,.45);color:#d9f3df;padding:11px 18px;border-radius:var(--brand-radius-pill);font-size:.88rem;box-shadow:var(--brand-shadow-strong);opacity:0;pointer-events:none;transition:.25s;max-width:90vw;text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .hidden{display:none}
+  @media (max-width:760px){ .row3{grid-template-columns:1fr} .queue .hide-sm{display:none} }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="topbar">
+    <span class="brand"><span class="logo">Anar<b>Bib</b></span></span>
+    <div class="nav">
+      <a>Catálogo</a><a>Painel</a><a>Catalogação</a><span class="sep">|</span>
+      <a class="active">Importações/Exportações</a><a>Biblioteca</a><span class="sep">|</span><a>Rede</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h1>Importações/Exportações</h1>
+    <p>Atelier de ingestão técnica do catálogo — três circuitos, uma fila de revisão.</p>
+  </div>
+
+  <!-- ░ v4 : sentido import / export ░ -->
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px">
+    <span style="font-size:.82rem;color:var(--brand-muted);font-weight:700;letter-spacing:.02em">Sentido</span>
+    <div class="seg" role="group" aria-label="Sentido import/export">
+      <button class="on" data-mode="import">Importar</button>
+      <button data-mode="export">Exportar</button>
+    </div>
+    <span style="font-size:.8rem;color:var(--brand-muted);opacity:.85;flex:1;min-width:220px">Mesmos sinais de consentimento (<code style="font-family:ui-monospace,monospace;color:#e6b8bb">*_allowed</code>) e mesmo perímetro ILL nos dois sentidos.</span>
+  </div>
+
+  <div id="mode-import">
+  <div class="frontier">
+    <span aria-hidden="true">⇄</span>
+    <div><b>Importações</b> faz a <b>ingestão técnica</b> : trazer notícias de fora e preparar rascunhos.
+      A <b>entrada em coleção</b> (proveniência, exemplares, destinação) acontece em <b>Catalogação</b> (aba Exemplares). <span class="pill pill--info" style="margin-left:4px">ACQ-Q4</span></div>
+  </div>
+
+  <!-- ░ v4 : camada formato/adaptador — ortogonal ao circuito ░ -->
+  <div class="sheet" id="adapterStrip">
+    <div class="sheet__head"><span class="sheet__title">Estrutura, vocabulário e adaptador <span class="pill pill--muted">ortogonal ao circuito</span></span></div>
+    <div class="sheet__body">
+      <div class="row3" style="margin-bottom:10px">
+        <div class="field"><label>Estrutura (transporte)</label><select class="select"><option>detectar automaticamente</option><option>ISO 2709</option><option>MARCXML</option><option>MODS (XML)</option><option>Dublin Core (XML)</option><option>EAD (XML)</option><option>MARC-in-JSON</option><option>CSL-JSON</option><option>BibTeX</option><option>RIS</option><option>CSV / TSV</option><option>planilha</option><option>entrada manual</option></select></div>
+        <div class="field"><label>Vocabulário (esquema)</label><select class="select"><option>UNIMARC</option><option>MARC21</option><option>INTERMARC</option><option>Dublin Core</option><option>Zotero / CSL</option><option>BibTeX</option><option>RIS</option><option>ONIX</option><option>KBART</option><option>BIBFRAME (dados ligados)</option><option>— genérico / manual</option></select></div>
+        <div class="field"><label>Perfil de mapeamento</label><select class="select"><option>perfil padrão do esquema</option><option>perfil « Terra Livre / Zotero »</option><option>perfil « BLMF / PMB »</option><option>+ novo perfil…</option></select></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;font-size:.8rem">
+        <span style="color:var(--brand-muted)">Adaptador resolvido :</span>
+        <span class="pill pill--ok">UNIMARC · ISO 2709 → book_drafts</span>
+        <span class="pill pill--muted">combinação sem adaptador → mapeamento manual</span>
+      </div>
+      <p style="font-size:.78rem;color:var(--brand-muted);opacity:.9;margin:0;line-height:1.6">A « foultitude » de formatos se decompõe em <b style="color:var(--brand-text)">três planos</b> : a <b style="color:var(--brand-text)">estrutura</b> (o contêiner — ISO 2709, XML, JSON, tabular…), o <b style="color:var(--brand-text)">vocabulário</b> (o sentido dos campos — UNIMARC, MARC21, Dublin Core, Zotero/CSL, BibTeX…) e o <b style="color:var(--brand-text)">modelo conceitual</b> (as entidades). AnarBib tem <i>o seu</i> modelo : todo adaptador <b style="color:var(--brand-text)">mapeia para</b> <code style="font-family:ui-monospace,monospace;color:#e6b8bb">book_drafts</code>, não reproduz o da fonte. Um adaptador = <b style="color:var(--brand-text)">decodificador de estrutura</b> + <b style="color:var(--brand-text)">mapeador de vocabulário</b>. Campos descritivos → colunas de <code style="font-family:ui-monospace,monospace;color:#e6b8bb">book_drafts</code> ; pontos de acesso (autor, assunto) → <b style="color:var(--brand-text)">autoridades</b>, nunca texto livre. Vindo de « Fontes externas », a derivação exige uma <b style="color:var(--brand-text)">passagem de limpeza</b> (retirar os identificadores locais da fonte, re-apontar as autoridades) — é a própria <b style="color:var(--brand-text)">fila de revisão</b>. Novo formato = novo adaptador (muitas vezes só uma nova combinação já conhecida) + perfil reutilizável — <b style="color:var(--brand-text)">não</b> uma nova aba ; o mesmo registro <b style="color:var(--brand-text)">serializa</b> na saída. Horizonte : dados ligados (<b style="color:var(--brand-text)">BIBFRAME</b>) = mais um adaptador, mesma arquitetura.</p>
+    </div>
+  </div>
+
+  <div class="seg" id="circuitSeg" role="group" aria-label="Circuito de importação">
+    <button class="on" data-src="blmf">Migração de sistema</button>
+    <button data-src="zotero">Importação de arquivo</button>
+    <button data-src="fed">Fontes externas</button>
+  </div>
+  <p class="seg-hint" id="segHint"></p>
+
+  <!-- ══ PANEL 1 — Migração de sistema ══ -->
+  <div class="sheet panel" data-panel="blmf">
+    <div class="sheet__head">
+      <span class="sheet__title">Migração de sistema <span class="pill pill--muted">ex.: BLMF · PMB · UNIMARC ISO2709</span></span>
+      <div class="actions"><button class="btn btn--sec btn--mini">Ver mapeamento de campos</button></div>
+    </div>
+    <div class="sheet__body">
+      <div class="stats">
+        <div class="stat"><div class="n">236</div><div class="l">notícias em staging</div></div>
+        <div class="stat"><div class="n">243</div><div class="l">exemplares em staging</div></div>
+        <div class="stat"><div class="n">189</div><div class="l">já promovidas para rascunho</div></div>
+        <div class="stat"><div class="n">47</div><div class="l">pendentes de promoção</div></div>
+      </div>
+      <table class="map" style="margin-bottom:16px">
+        <thead><tr><th>Amostra do staging (import_blmf_books_rows)</th><th>Autoria</th><th>ISBN</th><th>Mapeamento</th></tr></thead>
+        <tbody>
+          <tr><td>A Conquista do Pão</td><td>Kropotkin, Piotr</td><td>—</td><td><span class="pill pill--ok"><span class="dot"></span>OK</span></td></tr>
+          <tr><td>O Apoio Mútuo</td><td>Kropotkin, Piotr</td><td>978-85-…</td><td><span class="pill pill--ok"><span class="dot"></span>OK</span></td></tr>
+          <tr><td>Boletim CCS nº 14</td><td>—</td><td>—</td><td><span class="pill pill--warn"><span class="dot"></span>tipo a confirmar</span></td></tr>
+        </tbody>
+      </table>
+      <div class="row3" style="margin-bottom:14px">
+        <div class="field"><label>Método de importação</label><select class="select"><option>Automática</option><option>Semi-automática</option><option selected>Lote negociado</option></select></div>
+        <div class="field"><label>Confiança padrão do lote</label><select class="select"><option>Baixa</option><option selected>Média</option><option>Alta</option></select></div>
+        <div class="field"><label>Mutualização padrão</label><select class="select"><option selected>Local somente</option><option>Visível na rede</option><option>Mutualizável</option><option>Consulta local</option></select></div>
+      </div>
+      <button class="btn" data-promote="47 notícias migradas de BLMF">Promover 47 pendentes → rascunhos</button>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 2 — Importação de arquivo (mapping éditable) ══ -->
+  <div class="sheet panel hidden" data-panel="zotero">
+    <div class="sheet__head">
+      <span class="sheet__title">Importação de arquivo <span class="pill pill--muted">ex.: Terra Livre · Zotero · json</span></span>
+      <div class="actions"><button class="btn btn--sec btn--mini">Carregar novo export Zotero…</button></div>
+    </div>
+    <div class="sheet__body">
+      <div class="stats">
+        <div class="stat"><div class="n">2 265</div><div class="l">registros Zotero</div></div>
+        <div class="stat"><div class="n">2 118</div><div class="l">mapeados automaticamente</div></div>
+        <div class="stat"><div class="n">147</div><div class="l">com campo a resolver</div></div>
+        <div class="stat"><div class="n">300</div><div class="l">tamanho do lote</div></div>
+      </div>
+      <h4 style="margin:4px 0 8px;font-size:.94rem;color:var(--brand-text)">Mapeamento de campos Zotero → AnarBib <span class="pill pill--muted">editável · perfil reutilizável</span></h4>
+      <table class="map" style="margin-bottom:12px">
+        <thead><tr><th>Campo Zotero</th><th></th><th>Campo AnarBib (book_drafts)</th></tr></thead>
+        <tbody>
+          <tr><td><code>itemType</code></td><td class="arr">→</td><td><select class="mini"><option>tipo_material</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>title</code></td><td class="arr">→</td><td><select class="mini"><option>titulo</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>creators[]</code></td><td class="arr">→</td><td><select class="mini"><option>autoria + contribuintes</option><option>autoria principal</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>date</code></td><td class="arr">→</td><td><select class="mini"><option>ano</option><option>data_publicacao</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>ISBN</code></td><td class="arr">→</td><td><select class="mini"><option>isbn</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>publisher</code></td><td class="arr">→</td><td><select class="mini"><option>editora</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>place</code></td><td class="arr">→</td><td><select class="mini"><option>local_publicacao</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>language</code></td><td class="arr">→</td><td><select class="mini"><option>idioma</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>tags[]</code></td><td class="arr">→</td><td><select class="mini"><option>assuntos</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>url</code></td><td class="arr">→</td><td><select class="mini"><option>url_recurso</option><option>nota_proveniencia</option><option>(ignorar)</option></select></td></tr>
+          <tr><td><code>extra</code></td><td class="arr">→</td><td><select class="mini"><option>(ignorar)</option><option>notas</option><option>nota_proveniencia</option></select></td></tr>
+        </tbody>
+      </table>
+      <button class="btn btn--sec btn--mini" style="margin-bottom:14px">+ regra de mapeamento</button>
+      <div class="row3" style="margin-bottom:14px">
+        <div class="field"><label>Método</label><select class="select"><option selected>Semi-automática</option><option>Automática</option></select></div>
+        <div class="field"><label>Confiança padrão</label><select class="select"><option>Baixa</option><option selected>Média</option><option>Alta</option></select></div>
+        <div class="field"><label>Promover por lote de</label><select class="select"><option>100</option><option selected>300</option><option>todos (2 265)</option></select></div>
+      </div>
+      <button class="btn" data-promote="300 registros Zotero com o mapeamento atual">Mapear e promover lote de 300 → rascunhos</button>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 3 — Parceiros e fontes : DEUX PLANS ══ -->
+  <div class="sheet panel hidden" data-panel="fed">
+    <div class="sheet__head"><span class="sheet__title">Fontes externas <span class="pill pill--muted">companheiras + institucionais</span></span></div>
+    <div class="sheet__body">
+      <p class="plane-intro">Dois planos distintos, deliberadamente. <b>Bibliotecas companheiras</b> : uma relação que se constrói (identificação → contato → acordo → federação) ; a importação só abre por <b>consentimento</b>, e pode um dia levar à integração na rede AnarBib. <b>Fontes institucionais</b> : utilidades de metadados (catalogação por cópia, atribuição) — sem reciprocidade, sem mutualização.</p>
+
+      <!-- Plan A : companheiras -->
+      <h4 class="plane-h">Bibliotecas companheiras <span class="pill pill--muted">relação primeiro · consentida</span></h4>
+      <div class="partners" style="margin-bottom:12px">
+        <div class="pcard">
+          <div class="pcard-top"><h4>CIRA Lausanne</h4><span class="rel-badge">identificada</span></div>
+          <div class="proto">CH · PMB · rank 10</div>
+          <div class="flags"><span class="flagchip off">comparar</span><span class="flagchip off">importar</span><span class="flagchip off">mutualizar</span></div>
+          <div class="policy">Só relação, documentação e teste técnico. Sem comparação ativa nem importação.</div>
+          <div class="row"><span class="pill pill--muted">sem contato registrado</span><button class="btn btn--mini btn--sec">Abrir relação</button></div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-top"><h4>Centro studi libertari / Pinelli</h4><span class="rel-badge">identificada</span></div>
+          <div class="proto">IT · PMB · rank 10</div>
+          <div class="flags"><span class="flagchip off">comparar</span><span class="flagchip off">importar</span><span class="flagchip off">mutualizar</span></div>
+          <div class="policy">Só relação, documentação e teste técnico. Sem comparação ativa nem importação.</div>
+          <div class="row"><span class="pill pill--muted">sem contato registrado</span><button class="btn btn--mini btn--sec">Abrir relação</button></div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-top"><h4>RebAL</h4><span class="rel-badge">a identificar</span></div>
+          <div class="proto">rede ibérica · software a sondar</div>
+          <div class="flags"><span class="flagchip off">comparar</span><span class="flagchip off">importar</span><span class="flagchip off">mutualizar</span></div>
+          <div class="row"><span class="pill pill--muted">—</span><button class="btn btn--mini btn--sec">Registrar parceira</button></div>
+        </div>
+      </div>
+      <p style="font-size:.78rem;color:var(--brand-muted);opacity:.85;margin:0 0 4px;line-height:1.5">Quando os sinais <code style="font-family:ui-monospace,monospace;color:#e6b8bb">importar</code> / <code style="font-family:ui-monospace,monospace;color:#e6b8bb">mutualizar</code> forem ativados por acordo (<code style="font-family:ui-monospace,monospace;color:#e6b8bb">catalog_partners_policy_flags_v2</code>), a busca e a importação seletiva aparecem aqui. Hoje : <b style="color:var(--brand-text)">relação em curso, nada é puxado sem consentimento</b>.</p>
+
+      <!-- Plan B : fontes institucionais -->
+      <h4 class="plane-h" style="margin-top:24px">Fontes institucionais <span class="pill pill--muted">utilidade · sem reciprocidade</span></h4>
+      <div class="partners" style="margin-bottom:14px">
+        <div class="pcard inst"><div class="pcard-top"><h4>Biblioteca Nacional</h4><span class="pill pill--info">SRU</span></div><div class="proto">catálogo BN · cópia de metadados</div><div class="flags"><span class="flagchip on">consultar</span><span class="flagchip on">copiar notícia</span><span class="flagchip na">mutualizar</span></div></div>
+        <div class="pcard inst"><div class="pcard-top"><h4>WorldCat / OCLC</h4><span class="pill pill--info">API</span></div><div class="proto">MARC21 · cópia de metadados</div><div class="flags"><span class="flagchip on">consultar</span><span class="flagchip on">copiar notícia</span><span class="flagchip na">mutualizar</span></div></div>
+      </div>
+      <div class="row3" style="margin-bottom:12px">
+        <div class="field"><label>Fonte</label><select class="select"><option>Biblioteca Nacional</option><option>WorldCat / OCLC</option></select></div>
+        <div class="field" style="grid-column:span 2"><label>Buscar (título, autoria ou ISBN)</label><input class="input" placeholder="9788575591360"></div>
+      </div>
+      <table class="map" style="margin-bottom:14px">
+        <thead><tr><th>Resultado na fonte</th><th>Autoria</th><th>Formato</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>A Conquista do Pão</td><td>Kropotkin, Piotr</td><td><span class="pill pill--muted">MARC21</span></td><td><label style="display:flex;gap:6px;align-items:center;font-size:.8rem;color:var(--brand-muted)"><input type="checkbox" checked>copiar</label></td></tr>
+        </tbody>
+      </table>
+      <button class="btn" data-promote="1 notícia copiada da Biblioteca Nacional (atribuição, sem mutualização)">Copiar notícia → rascunho</button>
+    </div>
+  </div>
+
+  <!-- ══ Fila de revisão (book_drafts) — colonne commune ══ -->
+  <div class="sheet">
+    <div class="sheet__head">
+      <span class="sheet__title">Fila de revisão <span class="pill pill--muted">book_drafts · 513 no total</span></span>
+      <div class="actions"><button class="btn btn--sec btn--mini">Validar lote selecionado</button></div>
+    </div>
+    <div class="sheet__body">
+      <div class="filters">
+        <span style="font-size:.82rem;color:var(--brand-muted);font-weight:600">Filtrar :</span>
+        <select class="select" style="width:auto" id="fSrc"><option value="">todas as fontes</option><option value="blmf">Migração de sistema</option><option value="zotero">Importação de arquivo</option><option value="fed">Fontes externas</option></select>
+        <select class="select" style="width:auto"><option>todos os estados de revisão</option><option>Não revisado</option><option>Revisão pendente</option><option>Revisado localmente</option><option>Revisado com confronto à fonte</option></select>
+      </div>
+      <div style="overflow-x:auto">
+      <table class="queue">
+        <thead><tr><th>Notícia</th><th>Fonte</th><th class="hide-sm">Método</th><th>Confiança</th><th>Revisão</th><th class="hide-sm">Mutualização</th><th></th></tr></thead>
+        <tbody id="queueBody"></tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Journal d'import ══ -->
+  <div class="sheet">
+    <div class="sheet__head"><span class="sheet__title">Diário de importação <span class="pill pill--muted">book_draft_import_events</span></span></div>
+    <div class="sheet__body">
+      <ul class="timeline">
+        <li><span class="when">05/06 14:02</span><div class="ev"><b>Lote promovido</b> — 47 notícias migradas de BLMF<div class="meta"><span class="pill pill--muted">pmb</span><span class="pill pill--muted">UNIMARC</span><span class="pill pill--muted">lote negociado</span><span class="pill pill--warn">confiança média</span></div></div></li>
+        <li><span class="when">05/06 11:30</span><div class="ev"><b>Cópia institucional</b> — « A Conquista do Pão » (Biblioteca Nacional)<div class="meta"><span class="pill pill--info">bn</span><span class="pill pill--muted">MARC21</span><span class="pill pill--muted">atribuição</span></div></div></li>
+        <li><span class="when">04/06 18:15</span><div class="ev"><b>Lote promovido</b> — 300 registros de Terra Livre (Zotero)<div class="meta"><span class="pill pill--info">btl</span><span class="pill pill--muted">json</span><span class="pill pill--muted">semi-automática</span></div></div></li>
+        <li><span class="when">02/06 09:40</span><div class="ev"><b>Relação registrada</b> — CIRA Lausanne identificada (sem importação)<div class="meta"><span class="pill pill--muted">cira</span><span class="pill pill--muted">só relação</span></div></div></li>
+      </ul>
+    </div>
+  </div>
+
+  </div><!-- /mode-import -->
+
+  <!-- ░ v4 : face EXPORTAÇÕES ░ -->
+  <div id="mode-export" class="hidden">
+    <div class="frontier" style="background:rgba(40,28,4,.32);border-color:rgba(251,191,36,.38);color:#f3dca6">
+      <span aria-hidden="true">⇄</span>
+      <div>Exportar = <b>partilhar para fora</b>. O que sai é governado pelos mesmos sinais (<code style="font-family:ui-monospace,monospace;color:#e6b8bb">mutualize_allowed</code>…) e pelo <b>perímetro ILL</b> : material cinza e domínio público sim, obras comerciais (ISBN/ISSN) não. <span class="pill pill--warn" style="margin-left:4px">ILL-1..3 · ILL-9</span></div>
+    </div>
+
+    <!-- Export 1 : partilha ILL-digital -->
+    <div class="sheet">
+      <div class="sheet__head"><span class="sheet__title">Partilha de documento <span class="pill pill--muted">#ILL-digital · spec ILL-1..9 (a codar)</span></span></div>
+      <div class="sheet__body">
+        <p style="font-size:.84rem;color:var(--brand-muted);margin:0 0 12px;line-height:1.55">Uma <b style="color:var(--brand-text)">biblioteca federada</b> pede a digitalização de um documento que só você detém. Fluxo curto, sem retorno de objeto — não é um PEB.</p>
+        <p style="font-size:.78rem;color:var(--brand-muted);opacity:.9;margin:0 0 16px;line-height:1.55">Entre <b style="color:var(--brand-text)">bibliotecas federadas</b> (<code style="font-family:ui-monospace,monospace;color:#e6b8bb">library_partnerships</code>) com o direito <code style="font-family:ui-monospace,monospace;color:#e6b8bb">digital_share</code> ativo — <b style="color:var(--brand-text)">não</b> com os coletivos <code style="font-family:ui-monospace,monospace;color:#e6b8bb">catalog_partners</code> (CIRA, Pinelli…), que saem deste circuito (PARTNER-D6).</p>
+        <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:16px;font-size:.8rem">
+          <span class="pill pill--info">pedido</span><span style="color:var(--brand-muted)">→</span>
+          <span class="pill">aceito · recusado · indisponível</span><span style="color:var(--brand-muted)">→</span>
+          <span class="pill">digitalização</span><span style="color:var(--brand-muted)">→</span>
+          <span class="pill">transmitido</span><span style="color:var(--brand-muted)">→</span>
+          <span class="pill pill--ok">concluído</span>
+        </div>
+        <table class="queue"><thead><tr><th>Pedido recebido</th><th>De (rede AnarBib)</th><th>Perímetro</th><th>Plafond</th><th></th></tr></thead><tbody>
+          <tr><td><div class="ttl">Cartaz « Contra a guerra » (1917)</div><div class="au">domínio público · material cinza</div></td><td><span class="pill pill--info">Biblioteca Terra Livre</span></td><td><span class="pill pill--ok">elegível</span></td><td><span class="pill pill--muted">staff_only ≤ fonte</span></td><td><div class="rowacts"><button class="btn btn--mini">Aceitar e digitalizar</button></div></td></tr>
+          <tr><td><div class="ttl">Manual de autogestão (ISBN 978-…)</div><div class="au">obra comercial · ISBN detectado</div></td><td><span class="pill pill--info">Ateneu Libertário (rede)</span></td><td><span class="pill pill--warn">meio-cadeado</span></td><td><span class="pill pill--muted">—</span></td><td><div class="rowacts"><button class="btn btn--mini btn--sec">Orientar p/ PEB</button></div></td></tr>
+        </tbody></table>
+        <p style="font-size:.78rem;color:var(--brand-muted);opacity:.9;margin:14px 0 0;line-height:1.55"><b style="color:var(--brand-text)">Plafond de difusão (ILL-3/ILL-9)</b> : cada documento carrega um teto <code style="font-family:ui-monospace,monospace;color:#e6b8bb">public</code>/<code style="font-family:ui-monospace,monospace;color:#e6b8bb">staff_only</code> que viaja com ele. A fonte nunca exporta mais aberto do que ela mesma assume ; o receptor pode <b style="color:var(--brand-text)">endurecer, nunca afrouxar</b> ; travado em base + dupla marca temporal. Nenhum caminho torna um documento mais público ao circular.</p>
+        <p style="font-size:.78rem;color:var(--brand-muted);opacity:.9;margin:10px 0 0;line-height:1.55"><b style="color:var(--brand-text)">Meio-cadeado ISBN/ISSN (ILL-2)</b> : sinaliza e orienta ao PEB ; se o documento já figura num catálogo da rede, o export é bloqueado. <b style="color:var(--brand-text)">Modo pontual</b> (padrão, ILL-4) : nenhuma cópia no receptor — URL assinada de TTL curto no <code style="font-family:ui-monospace,monospace;color:#e6b8bb">ProtectedMediaViewer</code>, sem download. <b style="color:var(--brand-text)">Versamento durável</b> só para livres de direitos, que entram no catálogo (ILL-5).</p>
+        <p style="font-size:.78rem;color:var(--brand-muted);opacity:.85;margin:10px 0 0;line-height:1.55">A fonte conserva o patrimônio ; o auditável é « pedido satisfeito », não a cópia (ILL-6). Condições cumuladas : parceria ativa ∧ <code style="font-family:ui-monospace,monospace;color:#e6b8bb">digital_share</code> ∧ plafond compatível (ILL-8).</p>
+      </div>
+    </div>
+
+    <!-- Export 2 : lote -->
+    <div class="sheet">
+      <div class="sheet__head"><span class="sheet__title">Exportação de lote <span class="pill pill--muted">gerar um arquivo</span></span></div>
+      <div class="sheet__body">
+        <div class="row3" style="margin-bottom:12px">
+          <div class="field"><label>Escopo</label><select class="select"><option>todo o catálogo da biblioteca</option><option>uma coleção</option><option>seleção atual</option></select></div>
+          <div class="field"><label>Formato de saída</label><select class="select"><option>MARC21</option><option>MARCXML</option><option>Dublin Core XML</option><option>UNIMARC ISO2709</option><option>CSV</option><option>JSON</option><option>BibTeX</option></select></div>
+          <div class="field"><label>Uso</label><select class="select"><option>backup</option><option>entregar a uma companheira</option><option>migração para outro sistema</option></select></div>
+        </div>
+        <button class="btn" data-promote="o catálogo (MARC21)">Gerar arquivo</button>
+        <span style="font-size:.78rem;color:var(--brand-muted);margin-left:10px">Mesma camada de adaptadores, no sentido inverso (serialização).</span>
+      </div>
+    </div>
+
+    <!-- Export 3 : ser fonte -->
+    <div class="sheet">
+      <div class="sheet__head"><span class="sheet__title">Ser fonte para companheiras <span class="pill pill--muted">reciprocidade · mutualize_allowed</span></span></div>
+      <div class="sheet__body">
+        <p style="font-size:.84rem;color:var(--brand-muted);margin:0 0 14px;line-height:1.55">O espelho de « Fontes externas » : deixar uma companheira <b>consentida</b> colher o seu catálogo (endpoint OAI-PMH). Aberto somente quando <code style="font-family:ui-monospace,monospace;color:#e6b8bb">mutualize_allowed = true</code> para ela — hoje, fechado para as duas.</p>
+        <div class="partners">
+          <div class="pcard"><div class="pcard-top"><h4>CIRA Lausanne</h4><span class="rel-badge">identificada</span></div><div class="flags"><span class="flagchip off">mutualizar</span></div><div class="row" style="margin-top:10px"><span class="pill pill--muted">colheita fechada</span><button class="btn btn--mini btn--sec">Abrir relação</button></div></div>
+          <div class="pcard"><div class="pcard-top"><h4>Centro Pinelli</h4><span class="rel-badge">identificada</span></div><div class="flags"><span class="flagchip off">mutualizar</span></div><div class="row" style="margin-top:10px"><span class="pill pill--muted">colheita fechada</span><button class="btn btn--mini btn--sec">Abrir relação</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="text-align:center;color:var(--brand-muted);font-size:.86rem;padding:14px 0">AnarBib — comum em construção · pt-BR</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SEG_HINT={
+  blmf:'Migração de um catálogo completo desde um SIGB anterior (notícias + exemplares), em lote único. Hoje : acervo da BLMF (sistema PMB, UNIMARC).',
+  zotero:'Importação de uma base bibliográfica exportada (Zotero, CSV, MARC, JSON) — mapeamento editável + promoção por lotes. Hoje : biblioteca Zotero da Terra Livre.',
+  fed:'Notícias puxadas em linha de catálogos externos : bibliotecas companheiras (relação consentida) e fontes institucionais (cópia de metadados).',
+};
+const Q=[
+  {t:'A Conquista do Pão',a:'Kropotkin, Piotr',src:'blmf',srcL:'BLMF',sp:'muted',conf:['warn','Média'],rev:['muted','Não revisado'],mut:'Local somente',pub:false},
+  {t:'Deus e o Estado',a:'Bakunin, Mikhail',src:'zotero',srcL:'Terra Livre',sp:'muted',conf:['warn','Média'],rev:['warn','Revisão pendente'],mut:'Visível na rede',pub:false},
+  {t:'A Conquista do Pão (BN)',a:'Kropotkin, Piotr',src:'fed',srcL:'Biblioteca Nacional',sp:'info',conf:['ok','Alta'],rev:['info','Revisado localmente'],mut:'Local somente',pub:false},
+  {t:'Living My Life',a:'Goldman, Emma',src:'fed',srcL:'WorldCat',sp:'info',conf:['warn','Média'],rev:['info','Revisado localmente'],mut:'Local somente',pub:true},
+  {t:'O Apoio Mútuo',a:'Kropotkin, Piotr',src:'blmf',srcL:'BLMF',sp:'muted',conf:['ok','Alta'],rev:['info','Revisado localmente'],mut:'Local somente',pub:false},
+  {t:'Reflexões sobre a violência',a:'Sorel, Georges',src:'zotero',srcL:'Terra Livre',sp:'muted',conf:['bad','Baixa'],rev:['muted','Não revisado'],mut:'Local somente',pub:false},
+];
+const METHOD={blmf:'Lote negociado',zotero:'Semi-automática',fed:'Cópia institucional'};
+function renderQueue(filter){
+  document.getElementById('queueBody').innerHTML=Q.filter(r=>!filter||r.src===filter).map(r=>`
+    <tr>
+      <td><div class="ttl">${r.t}</div><div class="au">${r.a}</div></td>
+      <td><span class="pill pill--${r.sp}">${r.srcL}</span></td>
+      <td class="hide-sm"><span class="pill pill--muted">${METHOD[r.src]}</span></td>
+      <td><span class="pill pill--${r.conf[0]}"><span class="dot"></span>${r.conf[1]}</span></td>
+      <td><span class="pill pill--${r.rev[0]}"><span class="dot"></span>${r.rev[1]}</span></td>
+      <td class="hide-sm"><span class="pill pill--muted">${r.mut}</span></td>
+      <td><div class="rowacts">${r.pub?'<span class="pill pill--ok">publicado</span>':'<button class="btn btn--mini" data-rev>Revisar em Catalogação →</button>'}</div></td>
+    </tr>`).join('');
+}
+renderQueue('');
+document.querySelectorAll('#circuitSeg button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#circuitSeg button').forEach(x=>x.classList.toggle('on',x===b));
+  const src=b.dataset.src;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('hidden',p.dataset.panel!==src));
+  document.getElementById('segHint').textContent=SEG_HINT[src];
+  document.getElementById('fSrc').value=src; renderQueue(src);
+}));
+document.getElementById('segHint').textContent=SEG_HINT.blmf;
+document.getElementById('fSrc').addEventListener('change',e=>renderQueue(e.target.value));
+const toast=document.getElementById('toast');
+function flash(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('show'),2800);}
+document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-promote]'); if(p){flash('Maquette : promoveria '+p.dataset.promote+' → fila de revisão.');}
+  if(e.target.closest('[data-rev]')){flash('Maquette : abriria a ficha em Catalogação (aba Exemplares).');}
+});document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x===b));
+  const imp=b.dataset.mode==='import';
+  document.getElementById('mode-import').classList.toggle('hidden',!imp);
+  document.getElementById('mode-export').classList.toggle('hidden',imp);
+}));
+</script>
+</body>
+</html>
