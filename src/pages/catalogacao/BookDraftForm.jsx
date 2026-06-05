@@ -673,8 +673,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     set('autor', named.map(c => c.name.trim()).join(' ; '));
   }
 
-  // Charge les contributeurs depuis la DB pour un draft existant
-  async function loadContributors(draftId) {
+  // Charge les contributeurs depuis la DB pour un draft existant.
+  // Fallback (publishedBookId) : si le brouillon n'a aucun contributeur
+  // structure (cas d'une reprise de livre publie, dont les book_contributors
+  // ne sont pas copies dans le brouillon), on charge ceux du livre publie via
+  // get_book_contributors_public -> lignes editables, sauvegardees au prochain
+  // enregistrement du brouillon.
+  async function loadContributors(draftId, publishedBookId = null) {
     if (!draftId) return;
     try {
       const { data, error } = await supabase.from('book_draft_contributors')
@@ -689,6 +694,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           role: c.role || 'autor',
           is_primary: c.is_primary || false,
         })));
+        return;
+      }
+      // Fallback : reprise d'un livre publie sans contributeurs de brouillon.
+      if (publishedBookId) {
+        const { data: pub } = await supabase.rpc('get_book_contributors_public', { p_book_id: Number(publishedBookId) });
+        if (Array.isArray(pub) && pub.length) {
+          setContributors(pub.map(c => ({
+            position: c.position,
+            name: c.name || '',
+            role: c.role || 'autor',
+            is_primary: c.is_primary || false,
+          })));
+        }
       }
     } catch (err) {
       console.warn('loadContributors error:', err);
@@ -1323,8 +1341,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     });
     setDraftState(r.status === 'ready' ? 'ready' : (r.status === 'published' ? 'published' : (r.id ? 'saved' : 'new')));
     setMsg({ text: '', kind: '' });
-    // Load contributors from DB if draft exists
-    if (r.id) loadContributors(r.id);
+    // Load contributors from DB if draft exists (fallback : livre publie repris)
+    if (r.id) loadContributors(r.id, r.published_book_id);
     // Load digital resources
     if (r.id) loadDigitalResources(r.id);
     // Restore ISBD state from marc_json if available
