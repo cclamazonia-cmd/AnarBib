@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Stapel erstellen",
   "catalogacao.dedup.books": "{count} Buch/Bücher",
   "catalogacao.dedup.confirm": "« {dup} » in « {canonical} » zusammenführen? Diese Aktion ist unwiderruflich.",
+  "catalogacao.dedup.copies": "{count} Exemplar(e)",
   "catalogacao.dedup.find": "Duplikate suchen",
   "catalogacao.dedup.finding": "Suche…",
   "catalogacao.dedup.merge": "Hier zusammenführen",

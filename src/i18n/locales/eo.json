@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Krei loton",
   "catalogacao.dedup.books": "{count} libro(j)",
   "catalogacao.dedup.confirm": "Ĉu kunfandi « {dup} » en « {canonical} »? Tiu ago estas neinversigebla.",
+  "catalogacao.dedup.copies": "{count} ekzemplero(j)",
   "catalogacao.dedup.find": "Serĉi duplikatojn",
   "catalogacao.dedup.finding": "Serĉado…",
   "catalogacao.dedup.merge": "Kunfandi ĉi tien",

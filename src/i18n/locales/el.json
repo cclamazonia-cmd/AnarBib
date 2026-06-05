@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Δημιουργία παρτίδας",
   "catalogacao.dedup.books": "{count} βιβλίο(α)",
   "catalogacao.dedup.confirm": "Συγχώνευση « {dup} » στο « {canonical} »; Αυτή η ενέργεια είναι μη αναστρέψιμη.",
+  "catalogacao.dedup.copies": "{count} αντίτυπο(α)",
   "catalogacao.dedup.find": "Αναζήτηση διπλότυπων",
   "catalogacao.dedup.finding": "Αναζήτηση…",
   "catalogacao.dedup.merge": "Συγχώνευση εδώ",

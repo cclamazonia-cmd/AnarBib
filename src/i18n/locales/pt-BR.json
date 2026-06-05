@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Criar lote",
   "catalogacao.dedup.books": "{count} livro(s)",
   "catalogacao.dedup.confirm": "Fundir « {dup} » em « {canonical} »? Esta ação é irreversível.",
+  "catalogacao.dedup.copies": "{count} exemplar(es)",
   "catalogacao.dedup.find": "Buscar duplicatas",
   "catalogacao.dedup.finding": "Buscando…",
   "catalogacao.dedup.merge": "Fundir aqui",

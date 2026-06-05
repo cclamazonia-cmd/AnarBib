@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Create batch",
   "catalogacao.dedup.books": "{count} book(s)",
   "catalogacao.dedup.confirm": "Merge \"{dup}\" into \"{canonical}\"? This action is irreversible.",
+  "catalogacao.dedup.copies": "{count} copy/copies",
   "catalogacao.dedup.find": "Find duplicates",
   "catalogacao.dedup.finding": "Searching…",
   "catalogacao.dedup.merge": "Merge here",

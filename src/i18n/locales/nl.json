@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Lot aanmaken",
   "catalogacao.dedup.books": "{count} boek(en)",
   "catalogacao.dedup.confirm": "« {dup} » samenvoegen in « {canonical} »? Deze actie is onomkeerbaar.",
+  "catalogacao.dedup.copies": "{count} exemplaar/exemplaren",
   "catalogacao.dedup.find": "Duplicaten zoeken",
   "catalogacao.dedup.finding": "Zoeken…",
   "catalogacao.dedup.merge": "Hier samenvoegen",

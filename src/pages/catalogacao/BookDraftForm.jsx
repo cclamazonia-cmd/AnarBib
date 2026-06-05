@@ -153,6 +153,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
+  // Doublons de documents (detection lecture seule, P2a)
+  const [bookDupMatches, setBookDupMatches] = useState(null); // null = pas cherche
+  const [bookDupLoading, setBookDupLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
 
@@ -711,6 +714,20 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     } catch (err) {
       console.warn('loadContributors error:', err);
     }
+  }
+
+  // Doublons de documents : detection (lecture seule, P2a)
+  async function findBookDuplicates() {
+    const bookId = f('published_book_id');
+    if (!bookId) return;
+    setBookDupLoading(true); setBookDupMatches(null);
+    try {
+      const { data, error } = await supabase.rpc('suggest_book_duplicates', { p_book_id: Number(bookId) });
+      if (error) throw error;
+      setBookDupMatches(data || []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setBookDupLoading(false); }
   }
 
   // Sauvegarde les contributeurs (delete all + re-insert)
@@ -1704,6 +1721,38 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               title="Campo autoria sintetizado a partir dos contribuidores acima"
             />
           </div>
+
+          {/* ── Doublons possibles (documents, lecture seule P2a) ─────── */}
+          {f('published_book_id') && (
+            <div className="ab-span3" style={{ gridColumn: 'span 3' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
+                <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.dedup.title' })}</span>
+                <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                  onClick={findBookDuplicates} disabled={bookDupLoading}>
+                  {bookDupLoading ? t({ id: 'catalogacao.dedup.finding' }) : t({ id: 'catalogacao.dedup.find' })}
+                </button>
+              </div>
+              {bookDupMatches !== null && bookDupMatches.length === 0 && (
+                <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.dedup.none' })}</div>
+              )}
+              {bookDupMatches !== null && bookDupMatches.length > 0 && (
+                <div style={{ border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, overflow: 'hidden' }}>
+                  {bookDupMatches.map(d => (
+                    <div key={d.book_id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderBottom: '1px solid rgba(255,255,255,.04)' }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '.82rem' }}>{d.titulo}{d.ano ? ` (${d.ano})` : ''}</div>
+                        <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #aaa)' }}>{d.autor}{d.editora ? ` · ${d.editora}` : ''}{d.isbn ? ` · ISBN ${d.isbn}` : ''}</div>
+                      </div>
+                      <span style={{ fontSize: '.7rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.dedup.copies' }, { count: d.exemplares })}</span>
+                      <span className={`cat-pill ${d.match_kind === 'isbn' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
+                        {d.match_kind === 'isbn' ? 'ISBN' : t({ id: 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {renderRegistryField('edicao', { f, set, t }, catalogTier, materialType)}
           {renderRegistryField('editora', { f, set, t }, catalogTier, materialType)}

@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Crea lotto",
   "catalogacao.dedup.books": "{count} libro/i",
   "catalogacao.dedup.confirm": "Unire « {dup} » a « {canonical} »? Questa azione è irreversibile.",
+  "catalogacao.dedup.copies": "{count} copia/e",
   "catalogacao.dedup.find": "Cerca duplicati",
   "catalogacao.dedup.finding": "Ricerca…",
   "catalogacao.dedup.merge": "Unisci qui",

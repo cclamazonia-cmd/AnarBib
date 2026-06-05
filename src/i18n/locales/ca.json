@@ -1184,6 +1184,7 @@
   "catalogacao.createBatch": "Crear un lot",
   "catalogacao.dedup.books": "{count} llibre(s)",
   "catalogacao.dedup.confirm": "Fusionar « {dup} » en « {canonical} »? Aquesta acció és irreversible.",
+  "catalogacao.dedup.copies": "{count} exemplar(s)",
   "catalogacao.dedup.find": "Cercar duplicats",
   "catalogacao.dedup.finding": "Cercant…",
   "catalogacao.dedup.merge": "Fusionar aquí",
