@@ -154,6 +154,95 @@
 .cat-field { display: flex; flex-direction: column; gap: 3px; }
 .cat-field label { font-size: .85rem; color: var(--brand-muted, #bbb); font-weight: 600; }
 
+/* ── .ab-* design tokens (Track A Lot 4, from maquette v3) ── */
+
+.ab-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ab-field__label { font-size: .9rem; color: var(--brand-muted, #d4cec3); font-weight: 600; }
+
+.ab-input,
+.ab-select,
+.ab-textarea {
+  width: 100%; padding: 12px 14px;
+  border: 1px solid var(--brand-panel-border-strong, rgba(255,255,255,.18));
+  border-radius: var(--brand-radius-sm, 14px);
+  background: var(--brand-panel-bg-strong, rgba(10,10,10,.94));
+  color: var(--brand-text, #f5f2ea);
+  font-size: .95rem; font-family: var(--brand-font-body, inherit);
+  outline: none;
+  box-shadow: var(--brand-shadow-strong, 0 16px 38px rgba(0,0,0,.42));
+}
+.ab-input::placeholder,
+.ab-textarea::placeholder { color: rgba(255,255,255,.42); }
+.ab-input:focus,
+.ab-select:focus,
+.ab-textarea:focus {
+  border-color: rgba(225,29,47,.95);
+  box-shadow: 0 0 0 3px rgba(225,29,47,.24), var(--brand-shadow-strong, 0 16px 38px rgba(0,0,0,.42));
+}
+.ab-input[readonly] { background: rgba(0,0,0,.15); }
+.ab-textarea { min-height: 84px; resize: vertical; line-height: 1.5; }
+.ab-select {
+  font-weight: 600; appearance: none; cursor: pointer; padding-right: 34px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%23d4cec3' stroke-width='1.5'/></svg>");
+  background-repeat: no-repeat; background-position: right 13px center;
+}
+
+/* ── Segmented control (.ab-seg) ────────────────────────── */
+
+.ab-seg {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.ab-seg button {
+  font-family: var(--brand-font-body, inherit); font-weight: 600; font-size: .85rem;
+  color: var(--brand-muted, #d4cec3);
+  background: var(--brand-panel-bg-strong, rgba(10,10,10,.94));
+  border: 1px solid var(--brand-panel-border-strong, rgba(255,255,255,.18));
+  border-radius: var(--brand-radius-sm, 14px);
+  padding: 11px 15px; cursor: pointer; transition: .15s;
+}
+.ab-seg button:hover { border-color: rgba(255,255,255,.34); color: #fff; }
+.ab-seg button[aria-pressed="true"] {
+  background: linear-gradient(135deg, rgba(225,29,47,.92), var(--brand-color-primary, #b32025));
+  border-color: transparent; color: #fff;
+}
+
+/* ── Guide contextuel ───────────────────────────────────── */
+
+.ab-guide {
+  display: flex; gap: 9px; align-items: flex-start;
+  font-size: .84rem; color: var(--brand-muted, #d4cec3);
+  background: rgba(0,0,0,.22);
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: var(--brand-radius-sm, 14px);
+  padding: 11px 13px; line-height: 1.5;
+}
+.ab-guide b { color: var(--brand-text, #f5f2ea); font-weight: 700; }
+
+/* ── Section group header (maquette v3) ─────────────────── */
+
+.ab-group { padding: 18px 0; border-top: 1px solid rgba(255,255,255,.07); }
+.ab-group:first-child { border-top: 0; padding-top: 6px; }
+.ab-group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.ab-group-head h3 {
+  font-family: var(--brand-font-heading, serif); font-weight: 700; font-size: 1.06rem;
+  color: var(--brand-text, #f5f2ea); margin: 0;
+}
+.ab-group-head .ab-tag {
+  font-size: .66rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--brand-muted, #d4cec3);
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: 5px; padding: 2px 7px; opacity: .85;
+}
+
+/* ── Grid spans for .ab-field ───────────────────────────── */
+
+.ab-span2 { grid-column: span 2; }
+.ab-span3 { grid-column: span 3; }
+
+@media (max-width: 820px) {
+  .ab-span2, .ab-span3 { grid-column: span 1; }
+}
+
 .cat-material-section {
   padding: 14px;
   border-radius: 10px;

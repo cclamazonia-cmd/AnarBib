@@ -1173,26 +1173,25 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   // ── Shared field renderer ──────────────────────────────
+  // ── Legacy field renderers (Lot 4: .ab-* classes, no inline styles) ────
   const inp = (key, label, opts = {}) => {
     const { type = 'text', placeholder, span, rows, readOnly } = opts;
-    const style = span ? { gridColumn: `span ${span}` } : {};
+    const cls = `ab-field${span === 2 ? ' ab-span2' : span === 3 ? ' ab-span3' : ''}`;
     if (rows) {
       return (
-        <div className="cat-field" style={style}>
-          <label>{label}</label>
-          <textarea value={f(key)} onChange={e => set(key, e.target.value)}
+        <div className={cls}>
+          <label className="ab-field__label">{label}</label>
+          <textarea className="ab-textarea" value={f(key)} onChange={e => set(key, e.target.value)}
             placeholder={placeholder} rows={rows}
-            style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', resize: 'vertical', fontFamily: 'inherit' }}
           />
         </div>
       );
     }
     return (
-      <div className="cat-field" style={style}>
-        <label>{label}</label>
-        <input type={type} value={f(key)} onChange={e => set(key, e.target.value)}
+      <div className={cls}>
+        <label className="ab-field__label">{label}</label>
+        <input className="ab-input" type={type} value={f(key)} onChange={e => set(key, e.target.value)}
           placeholder={placeholder} readOnly={readOnly}
-          style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: readOnly ? 'rgba(0,0,0,.15)' : 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}
         />
       </div>
     );
@@ -1200,13 +1199,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   const sel = (key, label, options, opts = {}) => {
     const { span } = opts;
-    const style = span ? { gridColumn: `span ${span}` } : {};
+    const cls = `ab-field${span === 2 ? ' ab-span2' : span === 3 ? ' ab-span3' : ''}`;
     return (
-      <div className="cat-field" style={style}>
-        <label>{label}</label>
-        <select value={f(key)} onChange={e => set(key, e.target.value)}
-          style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}
-        >
+      <div className={cls}>
+        <label className="ab-field__label">{label}</label>
+        <select className="ab-select" value={f(key)} onChange={e => set(key, e.target.value)}>
           {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </div>
@@ -1441,8 +1438,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {catalogTier >= 3 && inp('bib_ref', t({id:'catalogacao.field.bibRef'}), { placeholder: t({id:'catalogacao.ph.refCompat'}) })}
 
           {/* ── Core fields ──────────────────────────── */}
-          {inp('titulo', t({id:'catalogacao.field.title'}), { span: 3 })}
-          {inp('subtitulo', t({id:'catalogacao.field.subtitle'}), { span: 3 })}
+          {inp('titulo', t({id:'catalogacao.field.title'}), { span: 2 })}
+          {inp('subtitulo', t({id:'catalogacao.field.subtitle'}), { span: 2 })}
 
           {/* ── Autores e outras responsabilidades ────── */}
           <div style={{ gridColumn: 'span 3' }}>

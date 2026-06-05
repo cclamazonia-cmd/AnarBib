@@ -1,6 +1,6 @@
 /* ──────────────────────────────────────────────────────────────────────────
  *  CatalogFieldRenderer.jsx — Rendu générique piloté par le registre
- *  Track A · Lot 2   (spec-catalogacao-fiche-et-paliers v0.3, §3.1)
+ *  Track A · Lot 4   (spec-catalogacao-fiche-et-paliers v0.3, §3.1 / §7)
  *
  *  RÔLE
  *  ────
@@ -8,17 +8,16 @@
  *  Remplace les helpers ad-hoc `inp()` / `sel()` de BookDraftForm : le rendu
  *  d'un champ découle désormais de sa déclaration, pas d'une branche JSX.
  *
- *  FIDÉLITÉ (Lot 2 = refactor de mécanisme, pas de style)
- *  ──────────────────────────────────────────────────────
- *  Le markup reproduit EXACTEMENT `inp`/`sel` actuels : même `.cat-field`,
- *  mêmes styles inline, même structure label + contrôle. L'adoption des
- *  classes `.ab-*` et le vrai segmented control relèvent du Lot 4 (lisibilité).
+ *  STYLE (Lot 4)
+ *  ─────────────
+ *  Utilise les classes `.ab-*` de la maquette v3. Les styles inline sont
+ *  supprimés ; tout passe par CatalogacaoPage.css.
+ *  `type:'seg'` rend un vrai segmented control (boutons aria-pressed).
  *
  *  VISIBILITÉ
  *  ──────────
  *  Ce module ne décide PAS de la visibilité : l'appelant ne lui passe que des
- *  champs déjà filtrés par `visibleGroups(tier, material)` (§3.3). Donc plus de
- *  `mode-complete-only` ici — un champ non visible n'est tout simplement pas rendu.
+ *  champs déjà filtrés par `visibleGroups(tier, material)` (§3.3).
  *
  *  CONTRAT
  *  ───────
@@ -29,19 +28,12 @@
  *
  *  Descripteur (cf. fieldRegistry.js) :
  *    { id, label, type?, span?, ph?, phEx?, rows?, opts?, readOnly? }
- *    - type omis ⇒ 'text' ; 'seg' rendu comme <select> en Lot 2
+ *    - type omis ⇒ 'text'
+ *    - type 'seg' ⇒ segmented control (boutons mutuellement exclusifs)
  *    - ph = clé i18n du placeholder ; phEx = placeholder littéral
  * ────────────────────────────────────────────────────────────────────────── */
 
 import { FIELD_BY_ID, isFieldVisible } from './fieldRegistry.js';
-
-const CONTROL_STYLE = {
-  width: '100%', padding: '7px 10px', borderRadius: 6,
-  border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)',
-  color: '#f4f4f4', fontSize: '.85rem',
-};
-const READONLY_STYLE = { ...CONTROL_STYLE, background: 'rgba(0,0,0,.15)' };
-const TEXTAREA_STYLE = { ...CONTROL_STYLE, resize: 'vertical', fontFamily: 'inherit' };
 
 function placeholderOf(field, t) {
   if (field.ph) return t({ id: field.ph });
@@ -49,38 +41,66 @@ function placeholderOf(field, t) {
   return undefined;
 }
 
+function spanClass(span) {
+  if (span === 2) return 'ab-span2';
+  if (span === 3) return 'ab-span3';
+  return '';
+}
+
 // Rend un champ unique. À utiliser dans un .map() (la `key` est posée ici).
 export function renderField(field, ctx) {
   const { f, set, t } = ctx;
   const label = t({ id: field.label });
-  const style = field.span ? { gridColumn: `span ${field.span}` } : {};
+  const className = `ab-field ${spanClass(field.span)}`.trim();
   const placeholder = placeholderOf(field, t);
   const type = field.type || 'text';
 
   if (type === 'textarea') {
     return (
-      <div className="cat-field" style={style} key={field.id}>
-        <label>{label}</label>
+      <div className={className} key={field.id}>
+        <label className="ab-field__label">{label}</label>
         <textarea
+          className="ab-textarea"
           value={f(field.id)}
           onChange={e => set(field.id, e.target.value)}
           placeholder={placeholder}
           rows={field.rows || 3}
-          style={TEXTAREA_STYLE}
         />
       </div>
     );
   }
 
-  if (type === 'select' || type === 'seg') {
+  if (type === 'seg') {
+    const options = (field.opts || []).map(o => ({ value: o.value, label: t({ id: o.label }) }));
+    const current = f(field.id);
+    return (
+      <div className={className} key={field.id}>
+        <label className="ab-field__label">{label}</label>
+        <div className="ab-seg">
+          {options.map(o => (
+            <button
+              key={o.value}
+              type="button"
+              aria-pressed={current === o.value ? 'true' : 'false'}
+              onClick={() => set(field.id, o.value)}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (type === 'select') {
     const options = (field.opts || []).map(o => ({ value: o.value, label: t({ id: o.label }) }));
     return (
-      <div className="cat-field" style={style} key={field.id}>
-        <label>{label}</label>
+      <div className={className} key={field.id}>
+        <label className="ab-field__label">{label}</label>
         <select
+          className="ab-select"
           value={f(field.id)}
           onChange={e => set(field.id, e.target.value)}
-          style={CONTROL_STYLE}
         >
           {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
@@ -90,15 +110,15 @@ export function renderField(field, ctx) {
 
   // text | number | date
   return (
-    <div className="cat-field" style={style} key={field.id}>
-      <label>{label}</label>
+    <div className={className} key={field.id}>
+      <label className="ab-field__label">{label}</label>
       <input
+        className="ab-input"
         type={type}
         value={f(field.id)}
         onChange={e => set(field.id, e.target.value)}
         placeholder={placeholder}
         readOnly={field.readOnly}
-        style={field.readOnly ? READONLY_STYLE : CONTROL_STYLE}
       />
     </div>
   );
@@ -113,17 +133,20 @@ export function renderRegistryField(id, ctx, tier, material) {
   return renderField(field, ctx);
 }
 
-// Rend une section « matériel » : en-tête + grille de champs.
-// Reproduit le pattern `.cat-material-section` › h4 › `.cat-book-grid` du legacy.
+// Rend une section « matériel » : en-tête avec tag + grille de champs.
+// Utilise les classes .ab-group de la maquette v3.
 // `group.fields` est déjà filtré par palier/matériel (visibleGroups).
 export function renderMaterialSection(group, ctx) {
   const { t } = ctx;
   return (
-    <div className="cat-material-section" style={{ gridColumn: 'span 3' }} key={group.id}>
-      <h4>{t({ id: group.title })}</h4>
+    <section className="ab-group ab-span3" key={group.id}>
+      <div className="ab-group-head">
+        <h3>{t({ id: group.title })}</h3>
+        {group.tag && <span className="ab-tag">{t({ id: group.tag })}</span>}
+      </div>
       <div className="cat-book-grid">
         {group.fields.map(field => renderField(field, ctx))}
       </div>
-    </div>
+    </section>
   );
 }
