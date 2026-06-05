@@ -153,9 +153,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
-  // Doublons de documents (detection lecture seule, P2a)
+  // Doublons de documents (detection + fusion, P2a/P2b)
   const [bookDupMatches, setBookDupMatches] = useState(null); // null = pas cherche
   const [bookDupLoading, setBookDupLoading] = useState(false);
+  const [bookDupBusy, setBookDupBusy] = useState(null); // book_id en cours de fusion
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
 
@@ -728,6 +729,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
     } finally { setBookDupLoading(false); }
+  }
+
+  // Fusionne le livre doublon `dupId` DANS le livre courant (= canonique).
+  async function mergeBookDuplicateIntoCurrent(dupId, dupTitle) {
+    const canonicalId = f('published_book_id');
+    if (!canonicalId) return;
+    if (!confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup: dupTitle, canonical: f('titulo') }))) return;
+    setBookDupBusy(dupId);
+    try {
+      const { error } = await supabase.rpc('merge_book', {
+        p_canonical_id: Number(canonicalId), p_duplicate_id: Number(dupId),
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.dedup.merged' }, { dup: dupTitle }), kind: 'ok' });
+      await findBookDuplicates(); // rafraichir
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setBookDupBusy(null); }
   }
 
   // Sauvegarde les contributeurs (delete all + re-insert)
@@ -1747,6 +1766,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       <span className={`cat-pill ${d.match_kind === 'isbn' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                         {d.match_kind === 'isbn' ? 'ISBN' : t({ id: 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
                       </span>
+                      <button type="button" className="cat-btn ghost" style={{ fontSize: '.7rem', padding: '3px 8px', color: '#f87171' }}
+                        onClick={() => mergeBookDuplicateIntoCurrent(d.book_id, d.titulo)} disabled={bookDupBusy != null}>
+                        {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
+                      </button>
                     </div>
                   ))}
                 </div>
