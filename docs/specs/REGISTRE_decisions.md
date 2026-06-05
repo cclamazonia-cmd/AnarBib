@@ -218,6 +218,8 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **IMP-8** | **Assistant d'import (wizard)** : l'import par lot passe par un stepper guidé — sens + circuit → source / auto-détection (structure + vocabulaire → adaptateur) → profil de mapping → **aperçu/dry-run** (doublons ISBN/EAN, autorités à résoudre, drapeaux de périmètre) → **promotion vers la file de revisão**. La page reste un tableau de bord ; le wizard est l'action « Novo import ». | 🟡 cadré 05/06 (reste l'impl. : DDL « run d'import » + ratification rôles) | spec §9 |
 
 > Réf. visuelle (trace, non-normative) : `maquette_importacoes_v7.html`.
+>
+> **Foyer du chantier.** Ces décisions `IMP-1..8` **remplacent** les arbitrages `IMP-A1..A5` du `CADRAGE_importacoes_module_2026-06-04` (trace, périmée par préséance : registre > trace) ; les points encore ouverts sont suivis en `spec-importacoes-exportacoes §12`. On ne suit plus le schéma `IMP-A*`.
 
 ---
 
