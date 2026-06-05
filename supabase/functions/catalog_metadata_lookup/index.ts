@@ -93,9 +93,10 @@ function getEnabledSources() {
     {
       id: 'loc',
       label: 'LoC',
-      enabled: envBool('CATALOG_METADATA_ENABLE_LOC', false),
+      enabled: envBool('CATALOG_METADATA_ENABLE_LOC', true),
       buildUrl: buildLocUrl,
-      parser: parseMarcXmlSruResponse
+      parser: parseMarcXmlSruResponse,
+      retryOnce: true
     }
   ];
   return sources.filter((source)=>source.enabled);
@@ -104,7 +105,16 @@ async function runSourceQuery(source, query, maxRecords) {
   const startedAt = Date.now();
   const url = source.buildUrl(query, maxRecords);
   try {
-    const xmlText = await fetchText(url, DEFAULT_TIMEOUT_MS);
+    let xmlText;
+    try {
+      xmlText = await fetchText(url, DEFAULT_TIMEOUT_MS);
+    } catch (firstErr) {
+      if (source.retryOnce && firstErr instanceof Error && firstErr.message.includes('502')) {
+        xmlText = await fetchText(url, DEFAULT_TIMEOUT_MS);
+      } else {
+        throw firstErr;
+      }
+    }
     const candidates = source.parser(xmlText, source.id, url);
     return {
       summary: {
@@ -199,11 +209,11 @@ function buildLocUrl(query, maxRecords) {
   else if (query.mode === 'issn_lookup') params.set('query', `bath.issn=${escapeCql(query.issn)}`);
   else {
     const c = [];
-    if (query.title) c.push(`dc.title="${escapeCql(query.title)}"`);
-    if (query.author) c.push(`dc.creator="${escapeCql(query.author)}"`);
+    if (query.title) c.push(`bath.title="${escapeCql(query.title)}"`);
+    if (query.author) c.push(`bath.author="${escapeCql(query.author)}"`);
     params.set('query', c.join(' and '));
   }
-  return appendQuery(override || 'https://lx2.loc.gov/sru/lcdb', params);
+  return appendQuery(override || 'https://lx2.loc.gov/sru/LCDB', params);
 }
 function buildDnbUrl(query, maxRecords) {
   const override = envGet('CATALOG_METADATA_DNB_BASE_URL');
