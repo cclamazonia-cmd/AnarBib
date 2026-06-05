@@ -566,7 +566,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     );
                   })}
                 </div>
-                <Button style={{ marginTop: 8 }} variant="secondary" onClick={async () => {
+                <button type="button" className="cat-btn secondary" style={{ marginTop: 8 }} onClick={async () => {
                   try {
                     for (const bt of bioTranslations) {
                       if (!bt.biography?.trim()) continue;
@@ -577,7 +577,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     }
                     setMsg({ text: t({id:'common.dataSaved'}), kind: 'ok' });
                   } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
-                }}>{t({id:'catalogacao.bio.save'})}</Button>
+                }}>{t({id:'catalogacao.bio.save'})}</button>
               </details>
             </div>
           )}
