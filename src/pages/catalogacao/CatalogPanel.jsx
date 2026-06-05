@@ -9,9 +9,16 @@ const MATERIAL_LABELS = {
   dossie: 'Dossiê', tese: 'Tese', artigo: 'Artigo', relatorio: 'Relatório', zine: 'Zine',
 };
 
-export default function CatalogPanel({ onEdit }) {
+export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
   const { formatMessage: t } = useIntl();
   const [view, setView] = useState('book'); // book | author | exemplar
+
+  // Sous-vue pilotee depuis les compteurs de CatalogacaoPage (nonce -> re-applique meme vue)
+  useEffect(() => {
+    if (requestedView === 'book' || requestedView === 'author' || requestedView === 'exemplar') {
+      setView(requestedView);
+    }
+  }, [requestedView, requestNonce]);
   const [search, setSearch] = useState('');
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);

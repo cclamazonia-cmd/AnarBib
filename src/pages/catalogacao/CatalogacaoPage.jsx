@@ -61,6 +61,8 @@ export default function CatalogacaoPage() {
   const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editTarget, setEditTarget] = useState(null); // { kind, id } -- handoff catalogo/fila -> editeur (Lot 0)
+  // Pilotage de la sous-vue du CatalogPanel depuis les compteurs (nonce pour re-declencher meme vue)
+  const [catalogReq, setCatalogReq] = useState({ view: 'book', nonce: 0 });
 
   // ═══════════════════════════════════════════════════════
   // Load stats + batches (same pattern as PanelPage)
@@ -161,6 +163,12 @@ export default function CatalogacaoPage() {
     try { window.history.replaceState(null, '', `#tab=${tabId}`); } catch {}
   }
 
+  // Ouvre l'onglet Catalogo sur la sous-vue voulue (depuis les compteurs)
+  function openCatalog(view) {
+    setCatalogReq((r) => ({ view, nonce: r.nonce + 1 }));
+    switchTab('catalogPanel');
+  }
+
   // Listen for hash changes
   useEffect(() => {
     function onHashChange() {
@@ -248,15 +256,42 @@ export default function CatalogacaoPage() {
             </div>
             <div className="cat-stat">
               <div className="cat-stat-label">Livros publicados</div>
-              <div className="cat-stat-value">{stats.books}</div>
+              <div
+                className="cat-stat-value clickable"
+                role="button"
+                tabIndex={0}
+                title="Ver livros publicados"
+                onClick={() => openCatalog('book')}
+                onKeyDown={(e) => e.key === 'Enter' && openCatalog('book')}
+              >
+                {stats.books}
+              </div>
             </div>
             <div className="cat-stat">
               <div className="cat-stat-label">Autores cadastrados</div>
-              <div className="cat-stat-value">{stats.authors}</div>
+              <div
+                className="cat-stat-value clickable"
+                role="button"
+                tabIndex={0}
+                title="Ver autores cadastrados"
+                onClick={() => openCatalog('author')}
+                onKeyDown={(e) => e.key === 'Enter' && openCatalog('author')}
+              >
+                {stats.authors}
+              </div>
             </div>
             <div className="cat-stat">
               <div className="cat-stat-label">Exemplares publicados</div>
-              <div className="cat-stat-value">{stats.exemplares}</div>
+              <div
+                className="cat-stat-value clickable"
+                role="button"
+                tabIndex={0}
+                title="Ver exemplares publicados"
+                onClick={() => openCatalog('exemplar')}
+                onKeyDown={(e) => e.key === 'Enter' && openCatalog('exemplar')}
+              >
+                {stats.exemplares}
+              </div>
             </div>
           </div>
 
@@ -309,7 +344,7 @@ export default function CatalogacaoPage() {
 
           {/* 6. Catálogo(s) já publicado(s) */}
           <div className={`cat-panel${activeTab === 'catalogPanel' ? ' active' : ''}`}>
-            <CatalogPanel onEdit={openForEdit} />
+            <CatalogPanel onEdit={openForEdit} requestedView={catalogReq.view} requestNonce={catalogReq.nonce} />
           </div>
       </div>
       <Footer />
