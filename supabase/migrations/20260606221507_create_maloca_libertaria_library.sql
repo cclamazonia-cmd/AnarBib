@@ -77,7 +77,7 @@ BEGIN
 
   SELECT count(*) INTO v_count
   FROM public.book_drafts
-  WHERE batch_id = 8 AND owner_library = v_lib_id;
+  WHERE batch_id = 8 AND owner_library = v_lib_id::text;
 
   IF v_count = 0 THEN
     RAISE EXCEPTION 'VERIF: aucun draft du lot 8 affecte a mleg (attendu ~415)';
