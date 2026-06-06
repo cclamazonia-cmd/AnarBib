@@ -1118,7 +1118,7 @@
   "catalog.search.suggestions.label": "Snel zoeken in de catalogus",
   "catalog.search.suggestions.listLabel": "Suggesties",
   "catalog.search.suggestions.placeholder": "Zoek titel of auteur…",
-  "catalog.session.connected": "Aangemeld — beschikbaarheid getoond voor je bibliotheek",
+  "catalog.session.connected": "Aangemeld — je ziet de netwerkcatalogus; beschikbaarheid en reserveringen getoond voor je bibliotheek",
   "catalog.sort.author": "Auteur",
   "catalog.sort.availability": "Beschikbaarheid",
   "catalog.sort.publisher": "Uitgever",

@@ -1118,7 +1118,7 @@
   "catalog.search.suggestions.label": "Schnellsuche im Katalog",
   "catalog.search.suggestions.listLabel": "Vorschläge",
   "catalog.search.suggestions.placeholder": "Titel oder Autor*in suchen…",
-  "catalog.session.connected": "Angemeldet — Verfügbarkeiten für Ihre Bibliothek",
+  "catalog.session.connected": "Angemeldet — du siehst den Netzwerkkatalog; Verfügbarkeit und Reservierungen für deine Bibliothek",
   "catalog.sort.author": "Autor*in",
   "catalog.sort.availability": "Verfügbarkeit",
   "catalog.sort.publisher": "Verlag",

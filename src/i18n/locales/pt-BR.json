@@ -1118,7 +1118,7 @@
   "catalog.search.suggestions.label": "Pesquisa rápida no catálogo",
   "catalog.search.suggestions.listLabel": "Sugestões",
   "catalog.search.suggestions.placeholder": "Buscar título ou autor(a/e)…",
-  "catalog.session.connected": "Conectad(o/a/e) — disponibilidades mostradas para sua biblioteca",
+  "catalog.session.connected": "Conectad(o/a/e) — você vê o catálogo da rede; disponibilidade e reservas mostradas para a sua biblioteca",
   "catalog.sort.author": "Autor(a/e)",
   "catalog.sort.availability": "Disponibilidade",
   "catalog.sort.publisher": "Editora",

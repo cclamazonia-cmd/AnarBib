@@ -1118,7 +1118,7 @@
   "catalog.search.suggestions.label": "Γρήγορη αναζήτηση καταλόγου",
   "catalog.search.suggestions.listLabel": "Προτάσεις",
   "catalog.search.suggestions.placeholder": "Αναζήτηση τίτλου ή συγγραφέα…",
-  "catalog.session.connected": "Συνδεδεμένος/η — εμφανίζεται η διαθεσιμότητα για τη βιβλιοθήκη σου",
+  "catalog.session.connected": "Συνδεδεμένος/η — βλέπεις τον κατάλογο του δικτύου· διαθεσιμότητα και κρατήσεις εμφανίζονται για τη βιβλιοθήκη σου",
   "catalog.sort.author": "Συγγραφέας",
   "catalog.sort.availability": "Διαθεσιμότητα",
   "catalog.sort.publisher": "Εκδότης",

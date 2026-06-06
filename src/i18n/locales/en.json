@@ -1118,7 +1118,7 @@
   "catalog.search.suggestions.label": "Quick catalog search",
   "catalog.search.suggestions.listLabel": "Suggestions",
   "catalog.search.suggestions.placeholder": "Search title or author…",
-  "catalog.session.connected": "Signed in — availability shown for your library",
+  "catalog.session.connected": "Signed in — you see the network catalog; availability and reservations shown for your library",
   "catalog.sort.author": "Author",
   "catalog.sort.availability": "Availability",
   "catalog.sort.publisher": "Publisher",
