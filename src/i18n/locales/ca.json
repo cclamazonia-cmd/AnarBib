@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "revisat",
   "catalogacao.bio.statusDraft": "esborrany",
   "catalogacao.bio.markReviewed": "marcar com a revisat",
-  "catalogacao.bio.markDraft": "tornar a esborrany"
+  "catalogacao.bio.markDraft": "tornar a esborrany",
+  "catalogacao.preview.title": "Vista prèvia",
+  "catalogacao.preview.essentials": "essencials {n}/3",
+  "catalogacao.preview.noTitle": "Encara sense títol",
+  "catalogacao.preview.noAuthor": "autoria no indicada",
+  "catalogacao.preview.draftStatus": "Esborrany · no publicat",
+  "catalogacao.preview.explain": "Així apareixerà la fitxa al catàleg. S’actualitza mentre escrius.",
+  "catalogacao.validate.isbn": "Format improbable — un ISBN té 10 o 13 dígits.",
+  "catalogacao.validate.year": "Any improbable."
 }

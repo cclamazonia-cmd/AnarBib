@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "nagekeken",
   "catalogacao.bio.statusDraft": "concept",
   "catalogacao.bio.markReviewed": "markeren als nagekeken",
-  "catalogacao.bio.markDraft": "terug naar concept"
+  "catalogacao.bio.markDraft": "terug naar concept",
+  "catalogacao.preview.title": "Voorbeeld",
+  "catalogacao.preview.essentials": "essentiële {n}/3",
+  "catalogacao.preview.noTitle": "Nog geen titel",
+  "catalogacao.preview.noAuthor": "auteurschap niet opgegeven",
+  "catalogacao.preview.draftStatus": "Concept · niet gepubliceerd",
+  "catalogacao.preview.explain": "Zo verschijnt de fiche in de catalogus. Wordt bijgewerkt terwijl je typt.",
+  "catalogacao.validate.isbn": "Onwaarschijnlijk formaat — een ISBN heeft 10 of 13 cijfers.",
+  "catalogacao.validate.year": "Onwaarschijnlijk jaar."
 }

@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "ελέγχθηκε",
   "catalogacao.bio.statusDraft": "πρόχειρο",
   "catalogacao.bio.markReviewed": "σήμανση ως ελεγμένο",
-  "catalogacao.bio.markDraft": "επιστροφή σε πρόχειρο"
+  "catalogacao.bio.markDraft": "επιστροφή σε πρόχειρο",
+  "catalogacao.preview.title": "Προεπισκόπηση",
+  "catalogacao.preview.essentials": "βασικά {n}/3",
+  "catalogacao.preview.noTitle": "Χωρίς τίτλο ακόμη",
+  "catalogacao.preview.noAuthor": "δεν δηλώθηκε συγγραφή",
+  "catalogacao.preview.draftStatus": "Πρόχειρο · μη δημοσιευμένο",
+  "catalogacao.preview.explain": "Έτσι θα εμφανίζεται η εγγραφή στον κατάλογο. Ενημερώνεται καθώς πληκτρολογείτε.",
+  "catalogacao.validate.isbn": "Απίθανη μορφή — ένα ISBN έχει 10 ή 13 ψηφία.",
+  "catalogacao.validate.year": "Απίθανο έτος."
 }

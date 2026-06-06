@@ -1540,6 +1540,57 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     );
   };
 
+  // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────
+  function renderLivePreview() {
+    const title = f('titulo').trim();
+    const author = f('autor').trim();
+    const year = f('ano').trim();
+    const publisher = f('editora').trim();
+    const place = f('local_publicacao').trim();
+    const language = f('idioma').trim();
+    const cdd = f('cdd').trim();
+    const subjects = f('subjects').split(/[;\n]+/).map(s => s.trim()).filter(Boolean);
+    const typeLabel = MATERIAL_TYPES.find(m => m.value === materialType)?.label || materialType;
+    const isConsult = f('loanable') === 'false';
+    const circLabel = isConsult ? t({ id: 'catalogacao.ui.consultOnly' }) : t({ id: 'catalogacao.ui.loanable' });
+    const meta = [publisher, place, language].filter(Boolean).join(' · ');
+    const essentials = [title, author, year].filter(Boolean).length;
+    const chipCls = essentials >= 3 ? 'ok' : essentials === 2 ? 'warn' : 'danger';
+    // Validations légères
+    const isbnDigits = (f('isbn') || '').replace(/[^0-9Xx]/g, '');
+    const yr = parseInt(year, 10);
+    const warns = [];
+    if (isbnDigits && isbnDigits.length !== 10 && isbnDigits.length !== 13) warns.push(t({ id: 'catalogacao.validate.isbn' }));
+    if (year && (Number.isNaN(yr) || yr < 1700 || yr > 2027)) warns.push(t({ id: 'catalogacao.validate.year' }));
+    return (
+      <aside className="ab-preview">
+        <div className="ab-preview-card">
+          <div className="ab-preview-head">
+            <span className="ttl">{t({ id: 'catalogacao.preview.title' })}</span>
+            <span className={`cat-pill ${chipCls}`}>{t({ id: 'catalogacao.preview.essentials' }, { n: essentials })}</span>
+          </div>
+          <div className="ab-pv-card">
+            <div className="ab-pv-row">
+              <span className="ab-pv-type">{typeLabel}</span>
+              <span className={`cat-pill ${isConsult ? 'warn' : 'ok'}`}>{circLabel}</span>
+            </div>
+            <div className={`ab-pv-title ${title ? '' : 'empty'}`}>{title || t({ id: 'catalogacao.preview.noTitle' })}</div>
+            <div className="ab-pv-author">
+              {author || <span className="yr">{t({ id: 'catalogacao.preview.noAuthor' })}</span>}
+              {year && <span className="yr"> · {year}</span>}
+            </div>
+            {meta && <div className="ab-pv-meta">{meta}</div>}
+            {cdd && <span className="ab-pv-cdd">CDD {cdd}</span>}
+            {subjects.length > 0 && <div className="ab-pv-subjects">{subjects.map((s, i) => <span key={i}>{s}</span>)}</div>}
+            {warns.map((w, i) => <div key={i} className="ab-warnline">⚠ {w}</div>)}
+            <div className="ab-pv-status"><span className="ab-pv-dot" /> {t({ id: 'catalogacao.preview.draftStatus' })}</div>
+          </div>
+          <div className="ab-pv-explain">{t({ id: 'catalogacao.preview.explain' })}</div>
+        </div>
+      </aside>
+    );
+  }
+
   // ── Render ─────────────────────────────────────────────
   const fieldStyle = { fontSize: '.75rem', color: 'var(--brand-muted, #aaa)', marginBottom: 2, display: 'block' };
 
@@ -1582,7 +1633,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         </div>
       </div>
 
-      {/* Form */}
+      {/* Form + aperçu live (maquette v3, TRA-v3) */}
+      <div className="ab-work">
       <form onSubmit={handleSave}>
 
         {/* ── Cover anchor (Lot 6 — logique lookup dans CAT-C3/C4) ── */}
@@ -2348,6 +2400,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           </button>
         </div>
       </form>
+      {renderLivePreview()}
+      </div>
     </div>
   );
 }

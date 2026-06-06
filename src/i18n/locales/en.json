@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "reviewed",
   "catalogacao.bio.statusDraft": "draft",
   "catalogacao.bio.markReviewed": "mark as reviewed",
-  "catalogacao.bio.markDraft": "back to draft"
+  "catalogacao.bio.markDraft": "back to draft",
+  "catalogacao.preview.title": "Preview",
+  "catalogacao.preview.essentials": "essentials {n}/3",
+  "catalogacao.preview.noTitle": "No title yet",
+  "catalogacao.preview.noAuthor": "authorship not provided",
+  "catalogacao.preview.draftStatus": "Draft · not published",
+  "catalogacao.preview.explain": "This is how the record will appear in the catalog. Updates as you type.",
+  "catalogacao.validate.isbn": "Unlikely format — an ISBN has 10 or 13 digits.",
+  "catalogacao.validate.year": "Unlikely year."
 }

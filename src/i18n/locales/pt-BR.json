@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "revisado",
   "catalogacao.bio.statusDraft": "rascunho",
   "catalogacao.bio.markReviewed": "marcar como revisado",
-  "catalogacao.bio.markDraft": "voltar a rascunho"
+  "catalogacao.bio.markDraft": "voltar a rascunho",
+  "catalogacao.preview.title": "Pré-visualização",
+  "catalogacao.preview.essentials": "essenciais {n}/3",
+  "catalogacao.preview.noTitle": "Sem título ainda",
+  "catalogacao.preview.noAuthor": "autoria não informada",
+  "catalogacao.preview.draftStatus": "Rascunho · não publicado",
+  "catalogacao.preview.explain": "É assim que a ficha aparecerá no catálogo. Atualiza enquanto você digita.",
+  "catalogacao.validate.isbn": "Formato improvável — um ISBN tem 10 ou 13 dígitos.",
+  "catalogacao.validate.year": "Ano improvável."
 }

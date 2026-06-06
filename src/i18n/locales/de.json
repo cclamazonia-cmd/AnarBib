@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "geprüft",
   "catalogacao.bio.statusDraft": "Entwurf",
   "catalogacao.bio.markReviewed": "als geprüft markieren",
-  "catalogacao.bio.markDraft": "zurück zu Entwurf"
+  "catalogacao.bio.markDraft": "zurück zu Entwurf",
+  "catalogacao.preview.title": "Vorschau",
+  "catalogacao.preview.essentials": "Pflichtfelder {n}/3",
+  "catalogacao.preview.noTitle": "Noch kein Titel",
+  "catalogacao.preview.noAuthor": "Urheberschaft nicht angegeben",
+  "catalogacao.preview.draftStatus": "Entwurf · nicht veröffentlicht",
+  "catalogacao.preview.explain": "So erscheint der Eintrag im Katalog. Aktualisiert sich beim Tippen.",
+  "catalogacao.validate.isbn": "Unwahrscheinliches Format — eine ISBN hat 10 oder 13 Ziffern.",
+  "catalogacao.validate.year": "Unwahrscheinliches Jahr."
 }

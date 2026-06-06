@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "kontrolita",
   "catalogacao.bio.statusDraft": "malneto",
   "catalogacao.bio.markReviewed": "marki kiel kontrolita",
-  "catalogacao.bio.markDraft": "reen al malneto"
+  "catalogacao.bio.markDraft": "reen al malneto",
+  "catalogacao.preview.title": "Antaŭrigardo",
+  "catalogacao.preview.essentials": "esencaj {n}/3",
+  "catalogacao.preview.noTitle": "Ankoraŭ sen titolo",
+  "catalogacao.preview.noAuthor": "aŭtoreco ne indikita",
+  "catalogacao.preview.draftStatus": "Malneto · ne publikigita",
+  "catalogacao.preview.explain": "Jen kiel la skedo aperos en la katalogo. Ĝisdatiĝas dum vi tajpas.",
+  "catalogacao.validate.isbn": "Neverŝajna formato — ISBN havas 10 aŭ 13 ciferojn.",
+  "catalogacao.validate.year": "Neverŝajna jaro."
 }

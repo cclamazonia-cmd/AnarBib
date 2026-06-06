@@ -3284,5 +3284,13 @@
   "catalogacao.bio.statusReviewed": "revu",
   "catalogacao.bio.statusDraft": "brouillon",
   "catalogacao.bio.markReviewed": "marquer comme revu",
-  "catalogacao.bio.markDraft": "repasser en brouillon"
+  "catalogacao.bio.markDraft": "repasser en brouillon",
+  "catalogacao.preview.title": "Aperçu",
+  "catalogacao.preview.essentials": "essentiels {n}/3",
+  "catalogacao.preview.noTitle": "Pas encore de titre",
+  "catalogacao.preview.noAuthor": "auteur·rice non renseigné·e",
+  "catalogacao.preview.draftStatus": "Brouillon · non publié",
+  "catalogacao.preview.explain": "Voici comment la fiche apparaîtra au catalogue. Mise à jour en temps réel.",
+  "catalogacao.validate.isbn": "Format improbable — un ISBN a 10 ou 13 chiffres.",
+  "catalogacao.validate.year": "Année improbable."
 }
