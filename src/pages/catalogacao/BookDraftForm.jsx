@@ -1567,43 +1567,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     }
   }
 
-  // ── Shared field renderer ──────────────────────────────
-  // ── Legacy field renderers (Lot 4: .ab-* classes, no inline styles) ────
-  const inp = (key, label, opts = {}) => {
-    const { type = 'text', placeholder, span, rows, readOnly } = opts;
-    const cls = `ab-field${span === 2 ? ' ab-span2' : span === 3 ? ' ab-span3' : ''}`;
-    if (rows) {
-      return (
-        <div className={cls}>
-          <label className="ab-field__label">{label}</label>
-          <textarea className="ab-textarea" value={f(key)} onChange={e => set(key, e.target.value)}
-            placeholder={placeholder} rows={rows}
-          />
-        </div>
-      );
-    }
-    return (
-      <div className={cls}>
-        <label className="ab-field__label">{label}</label>
-        <input className="ab-input" type={type} value={f(key)} onChange={e => set(key, e.target.value)}
-          placeholder={placeholder} readOnly={readOnly}
-        />
-      </div>
-    );
-  };
-
-  const sel = (key, label, options, opts = {}) => {
-    const { span } = opts;
-    const cls = `ab-field${span === 2 ? ' ab-span2' : span === 3 ? ' ab-span3' : ''}`;
-    return (
-      <div className={cls}>
-        <label className="ab-field__label">{label}</label>
-        <select className="ab-select" value={f(key)} onChange={e => set(key, e.target.value)}>
-          {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </select>
-      </div>
-    );
-  };
+  // ── Registry-driven context (Lot 2: toutes les entrées passent par le registre) ──
+  const ctx = { f, set, t };
+  const rrf = (id) => renderRegistryField(id, ctx, catalogTier, materialType);
 
   // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────
   function renderLivePreview() {
@@ -1660,8 +1626,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   // ── Render ─────────────────────────────────────────────
-  const fieldStyle = { fontSize: '.75rem', color: 'var(--brand-muted, #aaa)', marginBottom: 2, display: 'block' };
-
   return (
     <div>
       {/* Header bar */}
@@ -1906,14 +1870,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
         <div className="cat-book-grid">
 
-          {/* ── Lote ─────────────────────────────────── */}
-          {sel('batch_id', t({ id: 'catalogacao.field.batch' }), [
-            { value: '', label: t({id:'catalogacao.ui.noLot'}) },
-            ...batches.filter(b => b.status === 'open').map(b => ({ value: String(b.id), label: b.name })),
-          ])}
+          {/* ── Lote (hors registre — options dynamiques depuis le prop batches) ── */}
+          <div className="ab-field">
+            <label className="ab-field__label">{t({ id: 'catalogacao.field.batch' })}</label>
+            <select className="ab-select" value={f('batch_id')} onChange={e => set('batch_id', e.target.value)}>
+              <option value="">{t({id:'catalogacao.ui.noLot'})}</option>
+              {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
+            </select>
+          </div>
 
-          {/* ── Type de matériel ──────────────────────── */}
-          {sel('tipo_material', t({ id: 'catalogacao.field.materialType' }), MATERIAL_TYPES)}
+          {/* ── Type de matériel (registry-driven) ──── */}
+          {rrf('tipo_material')}
 
           {/* ── Guide contextuel ─────────────────────── */}
           {(() => {
@@ -1939,12 +1906,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             );
           })()}
 
-          {/* ── Ref compatibilité (tier 3, hors registre — champ système) ── */}
-          {catalogTier >= 3 && inp('bib_ref', t({id:'catalogacao.field.bibRef'}), { placeholder: t({id:'catalogacao.ph.refCompat'}) })}
-
-          {/* ── Core fields ──────────────────────────── */}
-          {inp('titulo', t({id:'catalogacao.field.title'}), { span: 2 })}
-          {inp('subtitulo', t({id:'catalogacao.field.subtitle'}), { span: 2 })}
+          {/* ── Core fields (registry-driven, Lot 2) ── */}
+          {rrf('bib_ref')}
+          {rrf('titulo')}
+          {rrf('subtitulo')}
 
           {/* ── Autores e outras responsabilidades ────── */}
           <div style={{ gridColumn: 'span 3' }}>
@@ -2068,34 +2033,30 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             </div>
           )}
 
-          {renderRegistryField('edicao', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('editora', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('colecao', { f, set, t }, catalogTier, materialType)}
+          {rrf('edicao')}
+          {rrf('editora')}
+          {rrf('colecao')}
 
-          {renderRegistryField('local_publicacao', { f, set, t }, catalogTier, materialType)}
-          {inp('ano', t({id:'catalogacao.field.year'}), { placeholder: '2016' })}
-          {inp('idioma', t({id:'catalogacao.field.language'}), { placeholder: t({id:'catalogacao.ph.language'}) })}
+          {rrf('local_publicacao')}
+          {rrf('ano')}
+          {rrf('idioma')}
 
-          {/* ── ISBN / ISSN ───────────────────────────── */}
-          {renderRegistryField('isbn', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('issn', { f, set, t }, catalogTier, materialType)}
-          {inp('cdd', t({id:'catalogacao.field.cdd'}), { placeholder: '335' })}
+          {/* ── ISBN / ISSN / CDD ────────────────────── */}
+          {rrf('isbn')}
+          {rrf('issn')}
+          {rrf('cdd')}
 
-          {/* ── Périodique fields (registry-driven, in-grid — Track A Lot 2c) ── */}
-          {renderRegistryField('titulo_periodico', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('volume', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('numero', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('data_edicao', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('fasciculo', { f, set, t }, catalogTier, materialType)}
-          {renderRegistryField('periodicidade', { f, set, t }, catalogTier, materialType)}
+          {/* ── Périodique fields (registry-driven, in-grid) ── */}
+          {rrf('titulo_periodico')}
+          {rrf('volume')}
+          {rrf('numero')}
+          {rrf('data_edicao')}
+          {rrf('fasciculo')}
+          {rrf('periodicidade')}
 
-          {/* ── Pages + circulação ────────────────────── */}
-          {renderRegistryField('paginas', { f, set, t }, catalogTier, materialType)}
-          {sel('circulation_default', t({id:'catalogacao.ui.circulation'}), [
-            { value: 'emprestavel', label: t({id:'catalogacao.ui.loanable'}) },
-            { value: 'consulta', label: t({id:'catalogacao.ui.consultOnly'}) },
-            { value: 'ambos', label: t({id:'catalogacao.ui.circulationBoth'}) },
-          ])}
+          {/* ── Pages + circulação (seg = segmented control, spec §5.6) ── */}
+          {rrf('paginas')}
+          {rrf('circulation_default')}
 
           {/* ── Prévia de cote / étiquette (tier 3) ────── */}
           {catalogTier >= 3 && (() => {
@@ -2147,24 +2108,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             );
           })()}
 
-          {/* ── Assuntos + Notas ──────────────────────── */}
-          {inp('subjects', t({id:'catalogacao.field.subjects'}), { span: 3, placeholder: t({id:'catalogacao.ph.subjects'}) })}
-          {inp('notas', t({id:'catalogacao.field.notes'}), { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.notes'}) })}
+          {/* ── Assuntos + Notas + Cover path ─────────── */}
+          {rrf('subjects')}
+          {rrf('notas')}
+          {rrf('cover_object_path')}
 
-          {/* ── Cover path (registry-driven, tier 3) ─── */}
-          {renderRegistryField('cover_object_path', { f, set, t }, catalogTier, materialType)}
-
-          {/* ═══ Material-specific panels ═════════════ */}
-
-          {/* ═══ Material-specific panels — registry-driven (Track A Lot 2) ═══ */}
+          {/* ═══ Material-specific panels + Acquisition (registry-driven) ═══ */}
           {visibleGroups(catalogTier, materialType)
-            .filter(g => MATERIAL_SECTION_IDS.includes(g.id))
-            .map(g => renderMaterialSection(g, { f, set, t }))}
-
-          {/* ═══ Acquisition — registry-driven (Track A Lot 2c) ═══ */}
-          {visibleGroups(catalogTier, materialType)
-            .filter(g => g.id === 'aquisicao')
-            .map(g => renderMaterialSection(g, { f, set, t }))}
+            .filter(g => MATERIAL_SECTION_IDS.includes(g.id) || g.id === 'aquisicao')
+            .map(g => renderMaterialSection(g, ctx))}
 
           {/* ═══ Recursos digitais vinculados ═════════ */}
           {f('id') && (
@@ -2312,12 +2264,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             </div>
           )}
 
-          {/* ═══ MARC JSON (tier 3) ════════════════════ */}
-          {catalogTier >= 3 && (
-            <div style={{ gridColumn: 'span 3' }}>
-              {inp('marc_json', t({id:'catalogacao.field.marcJson'}), { span: 3, rows: 4, placeholder: '{"anarbib_subjects": [...]}' })}
-            </div>
-          )}
+          {/* ═══ MARC JSON (registry-driven, tier 3) ═══ */}
+          {rrf('marc_json')}
 
         </div>
 

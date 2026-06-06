@@ -128,6 +128,7 @@ export const REGISTRY = [
     mat: 'all',
     fields: [
       { id: 'tipo_material', label: 'catalogacao.field.materialType', tier: 1, type: 'select', opts: MATERIAL_OPTS, pilot: true },
+      { id: 'bib_ref', label: 'catalogacao.field.bibRef', tier: 3, ph: 'catalogacao.ph.refCompat' },
       { id: 'titulo', label: 'catalogacao.field.title', tier: 1, span: 2, req: true },
       { id: 'subtitulo', label: 'catalogacao.field.subtitle', tier: 2, span: 2 },
       { id: 'edicao', label: 'catalogacao.field.edition', tier: 2, mat: ['livro', 'zine', 'dossie'], phEx: '2. ed.' },
