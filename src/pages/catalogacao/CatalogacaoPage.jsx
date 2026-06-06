@@ -197,7 +197,7 @@ export default function CatalogacaoPage() {
         <UserHeroBadge />
         <HeroDocumentationActions
           extraActions={
-            <button className="cat-btn secondary" onClick={refreshAll} disabled={loading}>
+            <button className="ab-button ab-button--secondary" onClick={refreshAll} disabled={loading}>
               {loading ? t({ id: 'common.loading' }) : t({ id: 'common.update' })}
             </button>
           }
@@ -451,7 +451,7 @@ function BatchesPanel({ batches, onRefresh }) {
               }}
             />
           </div>
-          <button className="cat-btn primary" onClick={createBatch} disabled={creating}>
+          <button className="ab-button" onClick={createBatch} disabled={creating}>
             {creating ? t({id:'common.saving'}) : t({id:'catalogacao.createBatch'})}
           </button>
         </div>
@@ -478,9 +478,9 @@ function BatchesPanel({ batches, onRefresh }) {
                   <td style={{ padding: '8px', color: 'var(--brand-muted, #aaa)' }}>{b.notes || '—'}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
-                    <button className="cat-btn secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                    <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                       onClick={() => publishBatch(b.id)}>{t({id:'catalogacao.publishBatch'})}</button>
-                    <button className="cat-btn ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                    <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
                       onClick={() => closeBatch(b.id)}>{t({id:'catalogacao.closeBatch'})}</button>
                   </td>
                 </tr>

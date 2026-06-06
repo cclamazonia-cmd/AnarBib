@@ -263,10 +263,10 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
           <span className={`cat-pill ${lPill.c}`} style={{ fontSize: '.68rem' }}>{lPill.l}</span>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
-          <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 12px' }} onClick={resetForm}>
+          <button type="button" className="ab-button ab-button--sm" onClick={resetForm}>
             Nova indexação
           </button>
-          <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }} onClick={loadDrafts} disabled={draftsLoading}>
+          <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadDrafts} disabled={draftsLoading}>
             {draftsLoading ? 'Atualizando…' : 'Atualizar'}
           </button>
         </div>
@@ -496,7 +496,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
                 </div>
               </div>
               <div style={{ marginTop: 8 }}>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.72rem', padding: '4px 10px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={markLabelReady} disabled={f('label_status') === 'ready'}>
                   Marcar rótulo como pronto
                 </button>
@@ -530,14 +530,14 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
         {/* ── Actions ─────────────────────────────────── */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button type="submit" className="cat-btn primary" disabled={saving}>
+          <button type="submit" className="ab-button" disabled={saving}>
             {saving ? 'Salvando…' : 'Salvar exemplar'}
           </button>
-          <button type="button" className="cat-btn primary" style={{ background: 'rgba(21,128,61,.7)' }}
+          <button type="button" className="ab-button" style={{ background: 'rgba(21,128,61,.7)' }}
             disabled={publishing || !f('id')} onClick={handlePublish}>
             {publishing ? 'Publicando…' : 'Publicar exemplar'}
           </button>
-          <button type="button" className="cat-btn ghost" onClick={resetForm}>Limpar</button>
+          <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>Limpar</button>
         </div>
       </form>
     </div>

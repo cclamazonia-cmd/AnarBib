@@ -218,7 +218,7 @@ export default function QueuePanel({ batches, onEditItem }) {
             Rascunhos ativos de documentos, autoridades e exemplares. Itens publicados saem da fila; descartados vão para a lixeira.
           </div>
         </div>
-        <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }} onClick={() => { loadQueue(); loadTrash(); }} disabled={loading}>
+        <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => { loadQueue(); loadTrash(); }} disabled={loading}>
           {loading ? 'Atualizando…' : 'Atualizar fila'}
         </button>
       </div>
@@ -261,22 +261,22 @@ export default function QueuePanel({ batches, onEditItem }) {
 
       {/* ── Batch actions bar ────────────────────────── */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 10, padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
-        <button type="button" className="cat-btn secondary" style={{ fontSize: '.72rem', padding: '4px 10px' }} onClick={selectAll}>
+        <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={selectAll}>
           {selected.size === items.length && items.length > 0 ? 'Desmarcar tudo' : `Selecionar tudo (${items.length})`}
         </button>
         <span style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{selected.size} selecionado(s)</span>
         <div style={{ flex: 1 }} />
         {onEditItem && (
-          <button type="button" className="cat-btn secondary" style={{ fontSize: '.72rem', padding: '4px 10px' }}
+          <button type="button" className="ab-button ab-button--secondary ab-button--sm"
             disabled={selected.size !== 1}
             onClick={() => { const [s] = getSelectedItems(); if (s) onEditItem(s.type, s.id); }}>
             {t({ id: 'catalogacao.queue.resume' })}
           </button>
         )}
-        <button type="button" className="cat-btn secondary" style={{ fontSize: '.72rem', padding: '4px 10px' }} onClick={markSelectedReady} disabled={!selected.size}>
+        <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={markSelectedReady} disabled={!selected.size}>
           {t({ id: 'catalogacao.queue.markReady' })}
         </button>
-        <button type="button" className="cat-btn primary" style={{ fontSize: '.72rem', padding: '4px 10px' }} onClick={publishSelected} disabled={!selected.size}>
+        <button type="button" className="ab-button ab-button--sm" onClick={publishSelected} disabled={!selected.size}>
           {t({ id: 'catalogacao.queue.publishSelected' })}
         </button>
         <select style={{ ...fs, width: 'auto', fontSize: '.72rem', padding: '4px 8px' }}
@@ -284,7 +284,7 @@ export default function QueuePanel({ batches, onEditItem }) {
           <option value="">Atribuir lote…</option>
           {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
         </select>
-        <button type="button" className="cat-btn ghost" style={{ fontSize: '.72rem', padding: '4px 10px', color: '#f87171' }} onClick={discardSelected} disabled={!selected.size}>
+        <button type="button" className="ab-button ab-button--danger ab-button--sm" onClick={discardSelected} disabled={!selected.size}>
           Descartar
         </button>
       </div>
@@ -325,7 +325,7 @@ export default function QueuePanel({ batches, onEditItem }) {
                 {new Date(it.updated_at).toLocaleDateString('pt-BR')}
               </div>
               {onEditItem && (
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.68rem', padding: '3px 8px', flexShrink: 0 }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ flexShrink: 0 }}
                   onClick={() => onEditItem(it._type, it.id)}>
                   {t({ id: 'catalogacao.queue.resume' })}
                 </button>
@@ -347,10 +347,10 @@ export default function QueuePanel({ batches, onEditItem }) {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
-            <button type="button" className="cat-btn secondary" style={{ fontSize: '.72rem', padding: '4px 10px' }} onClick={loadTrash} disabled={trashLoading}>
+            <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadTrash} disabled={trashLoading}>
               {trashLoading ? '…' : 'Atualizar'}
             </button>
-            <button type="button" className="cat-btn ghost" style={{ fontSize: '.72rem', padding: '4px 10px', color: '#f87171', border: '1px solid rgba(220,38,38,.3)' }}
+            <button type="button" className="ab-button ab-button--danger ab-button--sm"
               onClick={emptyTrash} disabled={!trash.length}>
               Esvaziar lixeira
             </button>
@@ -360,10 +360,10 @@ export default function QueuePanel({ batches, onEditItem }) {
         {trash.length > 0 && (
           <>
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 8 }}>
-              <button type="button" className="cat-btn secondary" style={{ fontSize: '.7rem', padding: '3px 8px' }} onClick={selectAllTrash}>
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={selectAllTrash}>
                 {trashSelected.size === trash.length ? 'Desmarcar' : `Selecionar tudo (${trash.length})`}
               </button>
-              <button type="button" className="cat-btn secondary" style={{ fontSize: '.7rem', padding: '3px 8px' }} onClick={restoreTrashSelected} disabled={!trashSelected.size}>
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={restoreTrashSelected} disabled={!trashSelected.size}>
                 Restaurar selecionados ({trashSelected.size})
               </button>
             </div>
@@ -380,7 +380,7 @@ export default function QueuePanel({ batches, onEditItem }) {
                     <span className={`cat-pill ${it._type === 'book' ? 'info' : it._type === 'author' ? 'warn' : 'ok'}`}
                       style={{ fontSize: '.6rem', flexShrink: 0 }}>{TYPE_LABELS[it._type]}</span>
                     <div style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{it._label}</div>
-                    <button type="button" className="cat-btn ghost" style={{ fontSize: '.68rem', padding: '2px 6px', color: '#f87171' }}
+                    <button type="button" className="ab-button ab-button--danger ab-button--sm"
                       onClick={() => deleteTrashItem(it._type, it.id)}>Apagar</button>
                   </div>
                 );

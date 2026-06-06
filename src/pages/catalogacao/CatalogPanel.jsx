@@ -151,7 +151,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
             Consulte documentos, autoridades e exemplares já publicados. Crie um rascunho de retomada para editar.
           </div>
         </div>
-        <button type="button" className="cat-btn secondary" onClick={refreshCatalog} disabled={refreshing}
+        <button type="button" className="ab-button ab-button--secondary" onClick={refreshCatalog} disabled={refreshing}
           title="Recompila as listas públicas do catálogo (vínculos de autoridade, disponibilidade). Útil logo após editar uma autoridade — o catálogo público também atualiza sozinho a cada 15 min."
           style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap', flexShrink: 0, opacity: refreshing ? 0.7 : 1, cursor: refreshing ? 'progress' : 'pointer' }}>
           {refreshing ? 'Atualizando…' : '↻ Atualizar catálogo público'}
@@ -239,11 +239,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
             )}
 
             <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-              <button type="button" className="cat-btn secondary" style={{ fontSize: '.8rem', padding: '6px 12px' }}
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                 onClick={() => retakeItem(it._type, it.id)}>
                 Retomar
               </button>
-              <button type="button" className="cat-btn ghost" style={{ fontSize: '.8rem', padding: '6px 12px', color: '#f87171' }}
+              <button type="button" className="ab-button ab-button--danger ab-button--sm"
                 onClick={() => discardItem(it._type, it.id, it._type === 'book' ? it.titulo : it._type === 'author' ? it.preferred_name : it.tombo || it.bib_ref)}>
                 Descartar
               </button>
@@ -254,10 +254,10 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
 
       {/* ── Pagination ───────────────────────────────── */}
       <div style={{ display: 'flex', gap: 8, justifyContent: 'center', alignItems: 'center' }}>
-        <button type="button" className="cat-btn secondary" style={{ fontSize: '.85rem', padding: '6px 14px' }}
+        <button type="button" className="ab-button ab-button--secondary ab-button--sm"
           disabled={page === 0} onClick={() => setPage(p => Math.max(0, p - 1))}>← Anterior</button>
         <span style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)' }}>Página {page + 1}</span>
-        <button type="button" className="cat-btn secondary" style={{ fontSize: '.85rem', padding: '6px 14px' }}
+        <button type="button" className="ab-button ab-button--secondary ab-button--sm"
           disabled={items.length < PAGE_SIZE} onClick={() => setPage(p => p + 1)}>Próxima →</button>
       </div>
     </div>

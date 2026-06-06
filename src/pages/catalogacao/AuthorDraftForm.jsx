@@ -528,9 +528,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           <span className={`cat-pill ${pill.cls}`} style={{ fontSize: '.68rem' }}>{pill.label}</span>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
-          <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 12px' }} onClick={resetForm}>{t({id:'catalogacao.ui.newDraft'})}</button>
-          <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }} onClick={resetForm}>{t({id:'catalogacao.ui.clearForm'})}</button>
-          <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }} onClick={loadDrafts} disabled={draftsLoading}>
+          <button type="button" className="ab-button ab-button--sm" onClick={resetForm}>{t({id:'catalogacao.ui.newDraft'})}</button>
+          <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={resetForm}>{t({id:'catalogacao.ui.clearForm'})}</button>
+          <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadDrafts} disabled={draftsLoading}>
             {draftsLoading ? 'Atualizando…' : 'Atualizar lista'}
           </button>
         </div>
@@ -585,7 +585,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           <div style={{ display: 'flex', gap: 8 }}>
             <input type="text" value={assistRaw} onChange={e => setAssistRaw(e.target.value)}
               placeholder="Bakunin, Mikhail Aleksandrovich, 1814-1876" style={{ ...fs, flex: 1 }} />
-            <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '5px 10px' }}
+            <button type="button" className="ab-button ab-button--secondary ab-button--sm"
               onClick={applyNameAssist}>Preencher ficha</button>
           </div>
         </div>
@@ -678,7 +678,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <>
               <div className="cat-field" style={{ gridColumn: 'span 3' }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
-                  <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 14px' }}
+                  <button type="button" className="ab-button ab-button--sm"
                     onClick={runAuthorityLookup} disabled={authLookupLoading || !f('preferred_name')?.trim()}>
                     {authLookupLoading ? t({id:'catalogacao.authority.searching'}) : t({id:'catalogacao.authority.search'})}
                   </button>
@@ -788,7 +788,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     );
                   })}
                 </div>
-                <button type="button" className="cat-btn secondary" style={{ marginTop: 8 }} disabled={bioDirty.size === 0} onClick={async () => {
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ marginTop: 8 }} disabled={bioDirty.size === 0} onClick={async () => {
                   try {
                     for (const lang of bioDirty) {
                       const bt = bioTranslations.find(x => x.lang === lang);
@@ -814,7 +814,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
                 <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.link.title' })}</span>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={findAuthorBookMatches} disabled={linkLoading}>
                   {linkLoading ? t({ id: 'catalogacao.link.finding' }) : t({ id: 'catalogacao.link.find' })}
                 </button>
@@ -839,7 +839,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                       );
                     })}
                   </div>
-                  <button type="button" className="cat-btn primary" style={{ marginTop: 8, fontSize: '.78rem', padding: '5px 12px' }}
+                  <button type="button" className="ab-button ab-button--sm" style={{ marginTop: 8 }}
                     onClick={confirmAuthorLinks} disabled={linkBusy || linkSelected.size === 0}>
                     {linkBusy ? '…' : t({ id: 'catalogacao.link.confirm' }, { count: linkSelected.size })}
                   </button>
@@ -853,7 +853,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
                 <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.dedup.title' })}</span>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={findAuthorDuplicates} disabled={dupLoading}>
                   {dupLoading ? t({ id: 'catalogacao.dedup.finding' }) : t({ id: 'catalogacao.dedup.find' })}
                 </button>
@@ -870,7 +870,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                       <span className={`cat-pill ${d.match_kind === 'exact' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                         {t({ id: d.match_kind === 'exact' ? 'catalogacao.link.exact' : 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
                       </span>
-                      <button type="button" className="cat-btn ghost" style={{ fontSize: '.7rem', padding: '3px 8px', color: '#f87171' }}
+                      <button type="button" className="ab-button ab-button--danger ab-button--sm"
                         onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}>
                         {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
                       </button>
@@ -898,12 +898,12 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                 )}
               </div>
               <div style={{ flex: 1 }}>
-                <label className="cat-btn secondary" style={{ display: 'inline-block', textAlign: 'center', fontSize: '.72rem', padding: '4px 10px', cursor: 'pointer', marginBottom: 4 }}>
+                <label className="ab-button ab-button--secondary ab-button--sm" style={{ display: 'inline-block', textAlign: 'center', cursor: 'pointer', marginBottom: 4 }}>
                   Escolher imagem
                   <input type="file" accept="image/*" onChange={handlePhotoFileChange} style={{ display: 'none' }} />
                 </label>
                 {photoFile && (
-                  <button type="button" className="cat-btn primary" style={{ fontSize: '.72rem', padding: '4px 10px', marginLeft: 6 }}
+                  <button type="button" className="ab-button ab-button--sm" style={{ marginLeft: 6 }}
                     onClick={uploadPhoto} disabled={photoUploading}>
                     {photoUploading ? 'Enviando…' : 'Enviar foto'}
                   </button>
@@ -953,14 +953,14 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
         {/* ── Actions ─────────────────────────────────── */}
         <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
-          <button type="submit" className="cat-btn primary" disabled={saving}>
+          <button type="submit" className="ab-button" disabled={saving}>
             {saving ? 'Salvando…' : 'Salvar rascunho'}
           </button>
-          <button type="button" className="cat-btn primary" style={{ background: 'rgba(21,128,61,.7)' }}
+          <button type="button" className="ab-button" style={{ background: 'rgba(21,128,61,.7)' }}
             disabled={publishing || !f('id')} onClick={handlePublish}>
             {publishing ? 'Publicando…' : 'Publicar este rascunho'}
           </button>
-          <button type="button" className="cat-btn ghost" onClick={resetForm}>{t({id:'catalogacao.ui.clear'})}</button>
+          <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>{t({id:'catalogacao.ui.clear'})}</button>
         </div>
       </form>
     </div>
