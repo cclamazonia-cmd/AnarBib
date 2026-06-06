@@ -128,7 +128,7 @@ export const REGISTRY = [
       { id: 'editora', label: 'catalogacao.field.publisher', tier: 1, mat: EDITORA_MAT },
       { id: 'colecao', label: 'catalogacao.field.collection', tier: 3, mat: ['livro', 'tese'] },
       { id: 'local_publicacao', label: 'catalogacao.field.place', tier: 2, mat: ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'], ph: 'catalogacao.ph.city' },
-      { id: 'paginas', label: 'catalogacao.field.pages', tier: 2, mat: ['livro', 'zine', 'dossie'], type: 'number' },
+      { id: 'paginas', label: 'catalogacao.field.pages', tier: 2, mat: ['livro', 'zine', 'dossie', 'tese'], type: 'number' },
       { id: 'ano', label: 'catalogacao.field.year', tier: 1, phEx: '2016' },
       { id: 'idioma', label: 'catalogacao.field.language', tier: 1, ph: 'catalogacao.ph.language' }, // (D4) texte, spec veut select
       { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro'], watch: 'dup', phEx: '978-2-347-00368-5' },
@@ -231,6 +231,7 @@ export const REGISTRY = [
       { id: 'audiovisual_duration', label: 'catalogacao.field.duration', tier: 1, ph: 'catalogacao.ph.avDuration' },
       { id: 'audiovisual_support', label: 'catalogacao.field.support', tier: 1, ph: 'catalogacao.ph.avSupport' },
       { id: 'audiovisual_director', label: 'catalogacao.field.director', tier: 1, ph: 'catalogacao.ph.avDirector' },
+      { id: 'distribuidora', label: 'catalogacao.field.distribuidora', tier: 1, phEx: 'Califórnia Filmes' },
       // Langue : portée par le champ cœur `idioma` (évite le doublon) ; ici on garde
       // les sous-titres, distincts de la langue parlée.
       { id: 'audiovisual_subtitles', label: 'catalogacao.field.subtitles', tier: 3, ph: 'catalogacao.ph.avSubtitles' },

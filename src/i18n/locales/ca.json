@@ -3362,5 +3362,6 @@
   "catalogacao.shelf.reasonCdd": "CDD indicada",
   "catalogacao.shelf.reasonSurname": "cognom principal",
   "catalogacao.shelf.reasonTitleWord": "paraula significativa del títol",
-  "catalogacao.ui.titleFallback": "Títol"
+  "catalogacao.ui.titleFallback": "Títol",
+  "catalogacao.field.distribuidora": "Distribuïdora"
 }

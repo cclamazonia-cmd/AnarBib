@@ -3362,5 +3362,6 @@
   "catalogacao.shelf.reasonCdd": "DDC angegeben",
   "catalogacao.shelf.reasonSurname": "Hauptnachname",
   "catalogacao.shelf.reasonTitleWord": "signifikantes Titelwort",
-  "catalogacao.ui.titleFallback": "Titel"
+  "catalogacao.ui.titleFallback": "Titel",
+  "catalogacao.field.distribuidora": "Verleih"
 }

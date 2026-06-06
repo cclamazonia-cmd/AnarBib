@@ -3362,5 +3362,6 @@
   "catalogacao.shelf.reasonCdd": "Δόθηκε CDD",
   "catalogacao.shelf.reasonSurname": "κύριο επώνυμο",
   "catalogacao.shelf.reasonTitleWord": "χαρακτηριστική λέξη τίτλου",
-  "catalogacao.ui.titleFallback": "Τίτλος"
+  "catalogacao.ui.titleFallback": "Τίτλος",
+  "catalogacao.field.distribuidora": "Διανομέας"
 }

@@ -3362,5 +3362,6 @@
   "catalogacao.shelf.reasonCdd": "CDD indikita",
   "catalogacao.shelf.reasonSurname": "ĉefa familinomo",
   "catalogacao.shelf.reasonTitleWord": "signifa vorto de la titolo",
-  "catalogacao.ui.titleFallback": "Titolo"
+  "catalogacao.ui.titleFallback": "Titolo",
+  "catalogacao.field.distribuidora": "Distribuanto"
 }

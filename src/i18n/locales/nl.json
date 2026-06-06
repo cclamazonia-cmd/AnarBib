@@ -3362,5 +3362,6 @@
   "catalogacao.shelf.reasonCdd": "CDD opgegeven",
   "catalogacao.shelf.reasonSurname": "primaire achternaam",
   "catalogacao.shelf.reasonTitleWord": "kenmerkend titelwoord",
-  "catalogacao.ui.titleFallback": "Titel"
+  "catalogacao.ui.titleFallback": "Titel",
+  "catalogacao.field.distribuidora": "Distributeur"
 }

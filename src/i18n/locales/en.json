@@ -3362,5 +3362,6 @@
   "catalogacao.shelf.reasonCdd": "CDD provided",
   "catalogacao.shelf.reasonSurname": "primary surname",
   "catalogacao.shelf.reasonTitleWord": "significant title word",
-  "catalogacao.ui.titleFallback": "Title"
+  "catalogacao.ui.titleFallback": "Title",
+  "catalogacao.field.distribuidora": "Distributor"
 }
