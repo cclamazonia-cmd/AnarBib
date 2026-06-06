@@ -1564,9 +1564,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     if (year && (Number.isNaN(yr) || yr < 1700 || yr > 2027)) warns.push(t({ id: 'catalogacao.validate.year' }));
     return (
       <aside className="ab-preview">
-        <div className="ab-preview-card">
-          <div className="ab-preview-head">
-            <span className="ttl">{t({ id: 'catalogacao.preview.title' })}</span>
+        <div className="ab-sheet">
+          <div className="ab-sheet__head">
+            <span className="ab-sheet__title">{t({ id: 'catalogacao.preview.title' })}</span>
             <span className={`cat-pill ${chipCls}`}>{t({ id: 'catalogacao.preview.essentials' }, { n: essentials })}</span>
           </div>
           <div className="ab-pv-card">
@@ -1635,7 +1635,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
       {/* Form + aperçu live (maquette v3, TRA-v3) */}
       <div className="ab-work">
-      <form onSubmit={handleSave}>
+      {/* §7.3 : le formulaire repose sur une surface .ab-sheet (scrim, contraste garanti) */}
+      <form className="ab-sheet ab-sheet__body" onSubmit={handleSave}>
 
         {/* ── Cover anchor (Lot 6 — logique lookup dans CAT-C3/C4) ── */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>

@@ -315,17 +315,7 @@
 /* ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────────── */
 .ab-work { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
 .ab-preview { position: sticky; top: 18px; }
-.ab-preview-card {
-  background: rgba(13, 7, 8, .92);
-  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
-  border-radius: 14px; overflow: hidden;
-}
-.ab-preview-head {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 12px 16px; background: rgba(18,18,18,.86);
-  border-bottom: 1px solid rgba(255,255,255,.06);
-}
-.ab-preview-head .ttl { font-weight: 700; font-size: .92rem; }
+/* L'aperçu réutilise .ab-sheet du design-system (cf. ui.css), pas de carte custom. */
 .ab-pv-card { padding: 16px; }
 .ab-pv-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .ab-pv-type {
