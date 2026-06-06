@@ -57,7 +57,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     target_bib_ref: '', target_library_id: '', target_holding_id: '',
     tombo: '', notes: '',
     circulation_policy: '', visibility: 'public',
-    acquisition_mode: '', acquisition_date: '', provenance_note: '', source_lib: '',
+    acquisition_mode: '', acquisition_date: '', provenance_note: '', source_library: '',
   });
   const [loc, setLoc] = useState({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
   const [label, setLabel] = useState({ title: '', author: '', cdd: '', note: '' });
@@ -126,7 +126,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {
-    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', tombo: '', notes: '', circulation_policy: '', visibility: 'public', acquisition_mode: '', acquisition_date: '', provenance_note: '', source_lib: '' });
+    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', tombo: '', notes: '', circulation_policy: '', visibility: 'public', acquisition_mode: '', acquisition_date: '', provenance_note: '', source_library: '' });
     setLoc({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
     setLabel({ title: '', author: '', cdd: '', note: '' });
     setParentBook(null);
@@ -143,7 +143,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       target_holding_id: String(r.target_holding_id || ''), tombo: r.tombo || '', notes: r.notes || '',
       circulation_policy: r.circulation_policy || '', visibility: r.visibility || 'public',
       acquisition_mode: r.acquisition_mode || '', acquisition_date: r.acquisition_date || '',
-      provenance_note: r.provenance_note || '', source_lib: r.source_lib || '',
+      provenance_note: r.provenance_note || '', source_library: r.source_library || '',
     });
     setLoc(parseShelfLocation(r.shelf_location || ''));
     setLabel({ title: r.label_title_override || '', author: r.label_author_override || '', cdd: r.label_cdd_override || '', note: r.label_note || '' });
@@ -216,7 +216,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         acquisition_mode: f('acquisition_mode') || null,
         acquisition_date: f('acquisition_date') || null,
         provenance_note: f('provenance_note').trim() || null,
-        source_lib: f('source_lib').trim() || null,
+        source_library: f('source_library').trim() || null,
         updated_by: user?.id || null,
         ...(isUpdate ? {} : { created_by: user?.id || null }),
       };
@@ -474,7 +474,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>Biblioteca de origem</label>
-              <input type="text" value={f('source_lib')} onChange={e => set('source_lib', e.target.value)}
+              <input type="text" value={f('source_library')} onChange={e => set('source_library', e.target.value)}
                 placeholder="Doadora, permuta, importação…" style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 6' }}>
