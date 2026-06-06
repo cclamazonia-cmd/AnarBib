@@ -1501,6 +1501,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         const bookId = /^\d+$/.test(idPart) ? Number(idPart) : null;
         setDupBanner({ bookId });
         setMsg({ text: '', kind: '' });
+      } else if (code === 'bib_ref_duplicado') {
+        const idPart = raw.includes(':') ? raw.slice(raw.indexOf(':') + 1).trim() : '';
+        const bookId = /^\d+$/.test(idPart) ? idPart : '?';
+        setDupBanner(null);
+        setMsg({ text: t({ id: 'catalogacao.msg.bibRefDuplicate' }, { bibRef: f('bib_ref') || '?', bookId }), kind: 'error' });
       } else {
         setDupBanner(null);
         setMsg({ text: localizeError(err, t), kind: 'error' });
