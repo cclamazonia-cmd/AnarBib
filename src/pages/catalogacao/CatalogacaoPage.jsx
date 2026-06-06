@@ -33,6 +33,7 @@ export default function CatalogacaoPage() {
     { id: 'booksPanel',     label: t({ id: 'catalogacao.tab.documento' }) },
     { id: 'authorsPanel',   label: t({ id: 'catalogacao.tab.autoria' }) },
     { id: 'indexPanel',     label: t({ id: 'catalogacao.tab.indexacao' }) },
+    { id: 'labelsPanel',    label: t({ id: 'catalogacao.tab.etiquetas' }) },
     { id: 'queuePanel',     label: t({ id: 'catalogacao.tab.fila' }), separator: true },
     { id: 'batchesPanel',   label: t({ id: 'catalogacao.tab.lotes' }) },
     { id: 'catalogPanel',   label: t({ id: 'catalogacao.tab.catalogo' }) },
@@ -323,9 +324,13 @@ export default function CatalogacaoPage() {
             <AuthorDraftForm mode={mode} batches={batches} editingId={editTarget?.kind === 'author' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
           </div>
 
-          {/* 3. Indexação (exemplar + rótulo + impression étiquettes) */}
+          {/* 3. Indexação (exemplar + rótulo) */}
           <div className={`cat-panel${activeTab === 'indexPanel' ? ' active' : ''}`}>
             <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
+          </div>
+
+          {/* 3b. Etiquetas (impressão das etiquetas de cote) */}
+          <div className={`cat-panel${activeTab === 'labelsPanel' ? ' active' : ''}`}>
             <LabelSheetPrinter />
           </div>
 

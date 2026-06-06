@@ -6,7 +6,7 @@ import { Button, Pill, Spinner } from '@/components/ui';
 
 // ═══════════════════════════════════════════════════════════
 // LabelSheetPrinter — Impression d'étiquettes de cote
-// Format A4 paysage, 7 lignes × 3 colonnes = 21 étiquettes/page
+// Format A4 portrait, 7 lignes × 3 colonnes = 21 étiquettes/page
 // Compatible feuilles d'étiquettes standard (type Avery L7160 / 63,5 × 38,1mm)
 // ═══════════════════════════════════════════════════════════
 
@@ -22,18 +22,19 @@ export default function LabelSheetPrinter() {
   const [selected, setSelected] = useState(new Set());
   const [search, setSearch] = useState('');
   const [filterMode, setFilterMode] = useState('all'); // all, unpublished, search
+  const [loadError, setLoadError] = useState('');
 
-  // ── Load labels from v_exemplar_labels ──
+  // ── Load labels via RPC get_exemplar_labels ──
+  // Wrapper SECURITY DEFINER gated staff de v_exemplar_labels : la vue est
+  // security_invoker et appelle resolve_library_holding_bridge() (non executable
+  // par authenticated) -> requete directe en permission denied. La RPC contourne.
   useEffect(() => {
     if (!libraryId) return;
-    setLoading(true);
+    setLoading(true); setLoadError('');
     (async () => {
-      const { data } = await supabase
-        .from('v_exemplar_labels')
-        .select('*')
-        .eq('library_id', libraryId)
-        .order('exemplar_id', { ascending: false });
-      setLabels(data || []);
+      const { data, error } = await supabase.rpc('get_exemplar_labels', { p_library_id: libraryId });
+      if (error) { setLoadError(error.message); setLabels([]); }
+      else setLabels(data || []);
       setLoading(false);
     })();
   }, [libraryId]);
@@ -147,6 +148,12 @@ ${pages.join('\n')}
       <p style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '0 0 12px' }}>
         {t({ id: 'labels.hint' })}
       </p>
+
+      {loadError && (
+        <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.85rem', marginBottom: 10, background: 'rgba(220,38,38,.12)', color: '#f87171' }}>
+          {t({ id: 'common.errorPrefix' }, { message: loadError })}
+        </div>
+      )}
 
       {/* ── Controls ── */}
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
