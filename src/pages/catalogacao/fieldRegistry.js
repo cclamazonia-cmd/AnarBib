@@ -97,6 +97,16 @@ const EDITORA_MAT = ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'];
 // pas pour les médias natifs (audiovisual/audio/recurso_digital). Les thèses la gardent.
 const CDD_MAT = ['livro', 'periodico', 'tract', 'cartaz', 'dossie', 'tese', 'artigo', 'relatorio', 'zine'];
 
+// Langues du catalogue — les 10 locales AnarBib (noms natifs, clés i18n existantes).
+// L'option vide (placeholder) permet la compatibilité avec les fiches existantes
+// qui stockent du texte libre dans `idioma` : elles affichent le placeholder
+// jusqu'à ré-sélection explicite.
+const IDIOMA_CODES = ['pt-BR','fr','es','en','it','de','ca','eo','nl','el'];
+const IDIOMA_OPTS = [
+  { value: '', label: 'catalogacao.ph.language' },
+  ...IDIOMA_CODES.map(c => ({ value: c, label: `language.${c}` })),
+];
+
 // Options de sélecteurs/segments — reprises verbatim du render (D3).
 const MATERIAL_OPTS = MATERIAL_CODES.map(c => ({ value: c, label: `catalogacao.material.${c}` }));
 const CIRCULATION_OPTS = [
@@ -137,7 +147,7 @@ export const REGISTRY = [
       { id: 'local_publicacao', label: 'catalogacao.field.place', tier: 2, mat: ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'], ph: 'catalogacao.ph.city' },
       { id: 'paginas', label: 'catalogacao.field.pages', tier: 2, mat: ['livro', 'zine', 'dossie', 'tese'], type: 'number' },
       { id: 'ano', label: 'catalogacao.field.year', tier: 1, phEx: '2016' },
-      { id: 'idioma', label: 'catalogacao.field.language', tier: 1, ph: 'catalogacao.ph.language' }, // (D4) texte, spec veut select
+      { id: 'idioma', label: 'catalogacao.field.language', tier: 1, type: 'select', opts: IDIOMA_OPTS }, // (D4) résolu : select 10 locales AnarBib
       { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro', 'artigo'], watch: 'dup', phEx: '978-2-347-00368-5', tierOverride: { artigo: 3 } },
       { id: 'issn', label: 'catalogacao.field.issn', tier: 1, mat: ['periodico', 'artigo'], phEx: '0251-1479' },
       { id: 'cdd', label: 'catalogacao.field.cdd', tier: 1, mat: CDD_MAT, phEx: '335' },
