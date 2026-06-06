@@ -86,8 +86,25 @@
 
 /* ── Panels ──────────────────────────────────────────────── */
 
-.cat-panel { display: none; padding: 20px 0; }
-.cat-panel.active { display: block; }
+.cat-panel { display: none; }
+/* §7.3 — chaque onglet repose sur une surface sombre (scrim) délimitant l'aire
+   de travail, quel que soit le hero/thème de la biblio. Réutilise les tokens
+   .ab-sheet du design-system. S'applique à TOUS les onglets de la page. */
+.cat-panel.active {
+  display: block;
+  background-color: var(--brand-panel-bg, rgba(18, 18, 18, 0.82));
+  background-image: var(--brand-panel-overlay-solid), var(--brand-panel-bg-image);
+  background-position: center center;
+  background-size: cover;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: calc(var(--brand-radius, 20px) + 2px);
+  box-shadow: var(--brand-shadow);
+  padding: 20px;
+}
+
+@media (max-width: 720px) {
+  .cat-panel.active { padding: 14px; }
+}
 
 .cat-panel-header {
   display: flex; justify-content: space-between; align-items: center; gap: 12px;

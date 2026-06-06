@@ -1633,10 +1633,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         </div>
       </div>
 
-      {/* Form + aperçu live (maquette v3, TRA-v3) */}
+      {/* Form + aperçu live (maquette v3, TRA-v3). La surface .ab-sheet est portée
+          par le conteneur d'onglet .cat-panel (§7.3, toute la page) ; l'aperçu reste
+          un sheet distinct (carte « catalogue »). */}
       <div className="ab-work">
-      {/* §7.3 : le formulaire repose sur une surface .ab-sheet (scrim, contraste garanti) */}
-      <form className="ab-sheet ab-sheet__body" onSubmit={handleSave}>
+      <form onSubmit={handleSave}>
 
         {/* ── Cover anchor (Lot 6 — logique lookup dans CAT-C3/C4) ── */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
