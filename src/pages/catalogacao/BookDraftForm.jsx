@@ -114,7 +114,9 @@ const EMPTY_FORM = {
   cdd: '', idioma: '', paginas: '', loanable: 'true', circulation_default: 'emprestavel',
   notas: '', subjects: '', cover_object_path: '', marc_json: '',
   // Acquisition bridge
-  acquisition_mode: '', acquisition_date: '', owner_library: '', holder_library: '',
+  acquisition_mode: '', acquisition_date: '',
+  owner_library: '', holder_library: '',
+  owner_library_id: '', holder_library_id: '',
   source_label: '', partner_source: '', source_record_id: '', source_record_url: '',
   import_format: '', import_method: '', provenance_note: '', mutualization_status: '',
   // Tract/cartaz
@@ -298,6 +300,34 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     })();
     return () => { cancelled = true; };
   }, [libraryId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Liste des bibliotheques pour les selects owner/holder ──
+  const [networkLibraries, setNetworkLibraries] = useState([]);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from('libraries')
+        .select('id, name, short_name, slug').order('name');
+      if (!cancelled && data) setNetworkLibraries(data);
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Auto-populate owner/holder with active library on new draft
+  useEffect(() => {
+    if (!libraryId || !networkLibraries.length) return;
+    if (f('action') !== 'create' && f('action') !== '') return;
+    if (f('owner_library_id')) return; // already set
+    const lib = networkLibraries.find(l => l.id === libraryId);
+    if (lib) {
+      setMany({
+        owner_library_id: lib.id,
+        owner_library: lib.name,
+        holder_library_id: lib.id,
+        holder_library: lib.name,
+      });
+    }
+  }, [libraryId, networkLibraries.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Reset ──────────────────────────────────────────────
   function resetForm() {
@@ -1363,6 +1393,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         acquisition_date: f('acquisition_date') || null,
         owner_library: f('owner_library') || null,
         holder_library: f('holder_library') || null,
+        owner_library_id: f('owner_library_id') || null,
+        holder_library_id: f('holder_library_id') || null,
         source_label: f('source_label') || null,
         partner_source: f('partner_source') || null,
         source_record_id: f('source_record_id') || null,
@@ -1552,6 +1584,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       acquisition_date: r.acquisition_date || '',
       owner_library: r.owner_library || '',
       holder_library: r.holder_library || '',
+      owner_library_id: r.owner_library_id || '',
+      holder_library_id: r.holder_library_id || '',
       source_label: r.source_label || '',
       partner_source: r.partner_source || '',
       source_record_id: r.source_record_id || '',
@@ -1616,7 +1650,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   // ── Registry-driven context (Lot 2: toutes les entrées passent par le registre) ──
-  const ctx = { f, set, t };
+  const ctx = { f, set, t, networkLibraries };
   const rrf = (id) => renderRegistryField(id, ctx, catalogTier, materialType);
 
   // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────

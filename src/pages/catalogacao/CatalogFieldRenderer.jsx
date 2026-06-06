@@ -108,6 +108,29 @@ export function renderField(field, ctx) {
     );
   }
 
+  if (type === 'library_select') {
+    // field.id is 'owner_library' or 'holder_library'; paired uuid column is '<id>_id'
+    const idKey = field.id + '_id';
+    const libs = ctx.networkLibraries || [];
+    return (
+      <div className={className} key={field.id}>
+        <label className="ab-field__label">{label}</label>
+        <select
+          className="ab-select"
+          value={f(idKey) || ''}
+          onChange={e => {
+            const lib = libs.find(l => l.id === e.target.value);
+            set(idKey, e.target.value || '');
+            set(field.id, lib ? lib.name : '');
+          }}
+        >
+          <option value="">{placeholder || '—'}</option>
+          {libs.map(l => <option key={l.id} value={l.id}>{l.name}{l.short_name ? ` (${l.short_name})` : ''}</option>)}
+        </select>
+      </div>
+    );
+  }
+
   // text | number | date
   return (
     <div className={className} key={field.id}>
