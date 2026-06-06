@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -23,21 +23,23 @@ export default function LabelSheetPrinter() {
   const [search, setSearch] = useState('');
   const [filterMode, setFilterMode] = useState('all'); // all, unpublished, search
   const [loadError, setLoadError] = useState('');
+  const [sort, setSort] = useState({ key: 'resolved_bib_ref', dir: 'asc' });
+  const [deleting, setDeleting] = useState(false);
+  const [msg, setMsg] = useState('');
 
   // ── Load labels via RPC get_exemplar_labels ──
   // Wrapper SECURITY DEFINER gated staff de v_exemplar_labels : la vue est
   // security_invoker et appelle resolve_library_holding_bridge() (non executable
   // par authenticated) -> requete directe en permission denied. La RPC contourne.
-  useEffect(() => {
+  const loadLabels = useCallback(async () => {
     if (!libraryId) return;
     setLoading(true); setLoadError('');
-    (async () => {
-      const { data, error } = await supabase.rpc('get_exemplar_labels', { p_library_id: libraryId });
-      if (error) { setLoadError(error.message); setLabels([]); }
-      else setLabels(data || []);
-      setLoading(false);
-    })();
+    const { data, error } = await supabase.rpc('get_exemplar_labels', { p_library_id: libraryId });
+    if (error) { setLoadError(error.message); setLabels([]); }
+    else setLabels(data || []);
+    setLoading(false);
   }, [libraryId]);
+  useEffect(() => { loadLabels(); }, [loadLabels]);
 
   // ── Filtered labels ──
   const filtered = useMemo(() => {
@@ -54,8 +56,13 @@ export default function LabelSheetPrinter() {
         (l.cdd_etiqueta || '').toLowerCase().includes(q)
       );
     }
-    return list;
-  }, [labels, filterMode, search]);
+    const { key, dir } = sort;
+    const sorted = [...list].sort((a, b) => {
+      const cmp = (a[key] ?? '').toString().localeCompare((b[key] ?? '').toString(), undefined, { numeric: true, sensitivity: 'base' });
+      return dir === 'asc' ? cmp : -cmp;
+    });
+    return sorted;
+  }, [labels, filterMode, search, sort]);
 
   // ── Selection helpers ──
   function toggleAll() {
@@ -66,6 +73,35 @@ export default function LabelSheetPrinter() {
     const s = new Set(selected);
     s.has(id) ? s.delete(id) : s.add(id);
     setSelected(s);
+  }
+
+  // En-tete de colonne triable (asc/desc).
+  function sortableTh(key, label) {
+    const active = sort.key === key;
+    return (
+      <th style={{ padding: '6px 8px', cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap' }}
+        onClick={() => setSort(s => ({ key, dir: s.key === key && s.dir === 'asc' ? 'desc' : 'asc' }))}>
+        {label}{active ? (sort.dir === 'asc' ? ' ▲' : ' ▼') : ' ↕'}
+      </th>
+    );
+  }
+
+  // ── Suppression des exemplaires selectionnes (via RPC discard_exemplar,
+  //    gardee staff + refus si historique de circulation). ──
+  async function deleteSelected() {
+    const ids = [...selected];
+    if (!ids.length) return;
+    if (!confirm(t({ id: 'labels.deleteConfirm' }, { count: ids.length }))) return;
+    setDeleting(true); setMsg('');
+    let ok = 0, fail = 0;
+    for (const id of ids) {
+      const { error } = await supabase.rpc('discard_exemplar', { p_exemplar_id: id });
+      if (error) fail++; else ok++;
+    }
+    setDeleting(false);
+    setSelected(new Set());
+    setMsg(t({ id: 'labels.deleteDone' }, { ok, fail }));
+    await loadLabels();
   }
 
   // ── Print selected labels as A4 sheet ──
@@ -182,7 +218,13 @@ ${pages.join('\n')}
         <Button onClick={printLabels} disabled={selected.size === 0}>
           {t({ id: 'labels.print' }, { count: selected.size })}
         </Button>
+        <button type="button" className="ab-button ab-button--danger" onClick={deleteSelected} disabled={selected.size === 0 || deleting}>
+          {t({ id: 'labels.deleteSelected' }, { count: selected.size })}
+        </button>
       </div>
+      {msg && (
+        <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: '.82rem', marginBottom: 10, background: 'rgba(21,128,61,.12)', color: '#4ade80' }}>{msg}</div>
+      )}
 
       {/* ── Stats ── */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
@@ -202,11 +244,11 @@ ${pages.join('\n')}
               <th style={{ padding: '6px 8px', width: 30 }}>
                 <input type="checkbox" checked={selected.size === filtered.length && filtered.length > 0} onChange={toggleAll} />
               </th>
-              <th style={{ padding: '6px 8px' }}>REF</th>
-              <th style={{ padding: '6px 8px' }}>{t({ id: 'labels.col.author' })}</th>
-              <th style={{ padding: '6px 8px' }}>{t({ id: 'labels.col.title' })}</th>
-              <th style={{ padding: '6px 8px' }}>CDD</th>
-              <th style={{ padding: '6px 8px' }}>{t({ id: 'labels.col.note' })}</th>
+              {sortableTh('resolved_bib_ref', 'REF')}
+              {sortableTh('autor_etiqueta', t({ id: 'labels.col.author' }))}
+              {sortableTh('titulo_etiqueta', t({ id: 'labels.col.title' }))}
+              {sortableTh('cdd_etiqueta', 'CDD')}
+              {sortableTh('label_note', t({ id: 'labels.col.note' }))}
               <th style={{ padding: '6px 8px' }}>{t({ id: 'labels.col.library' })}</th>
             </tr>
           </thead>
