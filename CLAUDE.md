@@ -115,6 +115,20 @@ alias.publish-app = !git push codeberg main && git push origin main
 **Convention de commits** (historique + README) : Conventional Commits —
 `feat(scope):`, `fix:`, `docs:`, `chore:`, `i18n …`.
 
+> 🪪 **Signature de session (traçabilité multi-sessions).** Plusieurs sessions
+> Claude travaillent **en parallèle** sur ce dépôt (cf. règle d'or sur les push).
+> Pour identifier sans ambiguïté quelle session est à l'origine d'une modif :
+> - **Chaque commit** porte un trailer `Session: <nom de session>` **en plus** du
+>   `Co-Authored-By`. Ainsi `git log --grep='Session: …'` et `git blame`
+>   permettent de remonter à la session d'origine d'une ligne ou d'un fichier.
+> - Les **fichiers à en-tête** (migrations SQL, scripts `.ps1`/`.sh`/`.cjs`)
+>   portent une ligne `Session : <nom>` dans leur bandeau d'en-tête, à côté de
+>   `Auteur`.
+> - Le **nom de session** est un titre court et stable, fixé par la coordination
+>   (ex. « Catalogação work completion », « Exemplaires & nettoyage catalogue »).
+>   En cas de doute sur le nom à employer, demander à la coordination plutôt que
+>   d'en inventer un.
+
 ## i18n
 
 ### Liste EXACTE des locales présentes
