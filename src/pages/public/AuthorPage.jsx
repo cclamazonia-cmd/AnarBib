@@ -37,6 +37,19 @@ function buildHeroIntro(author, booksCount, t, locale) {
   return parts.join(' · ') || '';
 }
 
+// Méta structurée encodée dans notes (cf. AuthorDraftForm.packStructuredMeta) :
+// bloc JSON entre marqueurs. On l'extrait pour afficher periode d'activite /
+// affiliation, et on la retire du texte de notes affiche en biographie.
+const AUTHOR_META_RE = /---anarbib_author_meta---\n([\s\S]*?)\n---end_anarbib_author_meta---/;
+function parseAuthorMeta(notes) {
+  const m = (notes || '').match(AUTHOR_META_RE);
+  if (!m?.[1]) return {};
+  try { return JSON.parse(m[1]); } catch { return {}; }
+}
+function stripAuthorMeta(notes) {
+  return (notes || '').replace(/\n?---anarbib_author_meta---[\s\S]*?---end_anarbib_author_meta---\n?/, '').trim();
+}
+
 export default function AuthorPage() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -113,6 +126,7 @@ export default function AuthorPage() {
   const intro = buildHeroIntro(author, books.length, t, locale);
   const hasPhoto = !!author.photo_object_path;
   const sourceLabel = [author.source_kind, author.source_label].filter(Boolean).join(' · ');
+  const meta = parseAuthorMeta(author.notes);
 
   return (
     <PageShell>
@@ -133,6 +147,9 @@ export default function AuthorPage() {
               du Hero — on ne les répète pas en chips. Ces emplacements accueilleront en B2
               les dates d'activité et l'appartenance (organisation/syndicat) quand les champs
               existeront sur la table authors. */}
+          {/* B2 : periode d'activite + affiliation (depuis la meta structuree de notes). */}
+          {meta.activityPeriod && <Pill>{t({ id: 'author.activityPeriod' })}: {meta.activityPeriod}</Pill>}
+          {meta.affiliation && <Pill>{t({ id: 'author.affiliation' })}: {meta.affiliation}</Pill>}
           {author.viaf_id && (
             <Pill>
               VIAF: <a href={`https://viaf.org/viaf/${author.viaf_id}`} target="_blank" rel="noopener noreferrer">{author.viaf_id}</a>
@@ -181,7 +198,7 @@ export default function AuthorPage() {
                   || i18n['pt-BR']
                   || Object.values(i18n)[0]
                   || author.biography
-                  || author.notes
+                  || stripAuthorMeta(author.notes)
                   || '—';
                 // Show available translations indicator
                 const availLangs = Object.keys(i18n);

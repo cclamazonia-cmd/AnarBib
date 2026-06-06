@@ -486,6 +486,8 @@
   "author.notFound": "Autor-a-e no trobat-da-e al catàleg públic.",
   "author.role": "funció",
   "author.source": "font",
+  "author.activityPeriod": "Activitat",
+  "author.affiliation": "Afiliació",
   "author.title": "Fitxa d'autor-a-e",
   "author.works": "Obres al catàleg",
   "banner.profile.body": "Aquest perfil s'ha definit automàticament en crear la vostra biblioteca. Per confirmar-lo o redefinir-lo col·lectivament, debateu-ne en assemblea i feu servir el mecanisme de vot col·lectiu.",

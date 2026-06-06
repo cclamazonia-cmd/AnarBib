@@ -486,6 +486,8 @@
   "author.notFound": "Autor não encontrado na base pública do catálogo.",
   "author.role": "função",
   "author.source": "fonte",
+  "author.activityPeriod": "Atividade",
+  "author.affiliation": "Filiação",
   "author.title": "Ficha d(o/a/e) autor(a/e)",
   "author.works": "Obras no catálogo",
   "banner.profile.body": "Este perfil foi definido automaticamente na criação da sua biblioteca. Para confirmá-lo ou redefini-lo coletivamente, discutam em assembleia e utilizem o mecanismo de votação coletiva.",

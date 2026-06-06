@@ -486,6 +486,8 @@
   "author.notFound": "Autor*in nicht im öffentlichen Katalog gefunden.",
   "author.role": "Funktion",
   "author.source": "Quelle",
+  "author.activityPeriod": "Aktiv",
+  "author.affiliation": "Zugehörigkeit",
   "author.title": "Autorblatt",
   "author.works": "Werke im Katalog",
   "banner.profile.body": "Dieses Profil wurde bei der Erstellung deiner Bibliothek automatisch festgelegt. Um es kollektiv zu bestatigen oder neu zu definieren, besprecht es in der Versammlung und nutzt den kollektiven Abstimmungsmechanismus.",

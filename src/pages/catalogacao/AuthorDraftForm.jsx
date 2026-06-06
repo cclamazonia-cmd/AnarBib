@@ -67,7 +67,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [draftsLoading, setDraftsLoading] = useState(false);
   const [form, setForm] = useState({});
   const [meta, setMeta] = useState({
-    authorityType: 'person', acronym: '', activityPeriod: '', variantNames: '',
+    authorityType: 'person', acronym: '', activityPeriod: '', affiliation: '', variantNames: '',
     pseudonyms: '', activityPlace: '', contextLinks: '',
   });
   const [assistRaw, setAssistRaw] = useState('');
@@ -144,7 +144,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {
     setForm({ ...EMPTY_FORM });
-    setMeta({ authorityType: 'person', acronym: '', activityPeriod: '', variantNames: '', pseudonyms: '', activityPlace: '', contextLinks: '' });
+    setMeta({ authorityType: 'person', acronym: '', activityPeriod: '', affiliation: '', variantNames: '', pseudonyms: '', activityPlace: '', contextLinks: '' });
     setAssistRaw('');
     setDraftState('new');
     setMsg({ text: '', kind: '' });
@@ -219,6 +219,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       authorityType: parsedMeta.authorityType || 'person',
       acronym: parsedMeta.acronym || '',
       activityPeriod: parsedMeta.activityPeriod || '',
+      affiliation: parsedMeta.affiliation || '',
       variantNames: parsedMeta.variantNames || '',
       pseudonyms: parsedMeta.pseudonyms || '',
       activityPlace: parsedMeta.activityPlace || '',
@@ -629,6 +630,12 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <label style={ls}>Período de atividade</label>
             <input type="text" value={meta.activityPeriod} onChange={e => setM('activityPeriod', e.target.value)}
               placeholder="1910-1936 / década de 1980 / em atividade" style={fs} />
+          </div>
+
+          <div className="cat-field">
+            <label style={ls}>Filiação (organização / sindicato)</label>
+            <input type="text" value={meta.affiliation} onChange={e => setM('affiliation', e.target.value)}
+              placeholder="CNT-FAI / FORA / Federação Anarquista Gaúcha…" style={fs} />
           </div>
 
           {isComplete && (

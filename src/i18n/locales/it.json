@@ -486,6 +486,8 @@
   "author.notFound": "Autore/trice non trovat* nel catalogo pubblico.",
   "author.role": "funzione",
   "author.source": "fonte",
+  "author.activityPeriod": "Attività",
+  "author.affiliation": "Affiliazione",
   "author.title": "Scheda autore/trice",
   "author.works": "Opere nel catalogo",
   "banner.profile.body": "Questo profilo è stato definito automaticamente alla creazione della tua biblioteca. Per confermarlo o ridefinirlo collettivamente, discutetene in assemblea e usate il meccanismo di votazione collettiva.",

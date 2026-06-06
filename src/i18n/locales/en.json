@@ -486,6 +486,8 @@
   "author.notFound": "Author not found in the public catalog.",
   "author.role": "role",
   "author.source": "source",
+  "author.activityPeriod": "Active",
+  "author.affiliation": "Affiliation",
   "author.title": "Author page",
   "author.works": "Works in catalog",
   "banner.profile.body": "This profile was set automatically when your library was created. To confirm it or redefine it collectively, discuss in assembly and use the collective voting mechanism.",
