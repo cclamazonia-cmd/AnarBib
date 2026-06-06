@@ -373,10 +373,10 @@ export const REGISTRY = [
       { id: 'marc_json', label: 'catalogacao.field.marcJson', tier: 3, type: 'textarea', span: 3, rows: 4, phEx: '{"anarbib_subjects": [...]}' },
       // Zones ISBD 0–8 : générées, rendu dédié par le special 'fine'
       // (clés catalogacao.isbd.zone0..zone8 + book.isbd.zone7).
-      // (D6) PLANNED — identifiants d'autorité absents d'EMPTY_FORM, non encodés :
-      //   { id: 'viaf',     label: 'catalogacao.field.viaf',     tier: 3 },
-      //   { id: 'isni',     label: 'catalogacao.field.isni',     tier: 3 },
-      //   { id: 'wikidata', label: 'catalogacao.field.wikidata', tier: 3 },
+      // (D6) Résolu — colonnes ajoutées par migration 20260606183824.
+      { id: 'viaf',     label: 'catalogacao.field.viaf',     tier: 3, phEx: '12345678' },
+      { id: 'isni',     label: 'catalogacao.field.isni',     tier: 3, phEx: '0000 0001 2345 6789' },
+      { id: 'wikidata', label: 'catalogacao.field.wikidata', tier: 3, phEx: 'Q12345' },
     ],
   },
 ];
