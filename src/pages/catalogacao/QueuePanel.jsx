@@ -120,6 +120,42 @@ export default function QueuePanel({ batches, onEditItem }) {
   function toggleTrashSelect(key) { setTrashSelected(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; }); }
   function selectAllTrash() { if (trashSelected.size === trash.length) setTrashSelected(new Set()); else setTrashSelected(new Set(trash.map(it => `${it._type}:${it.id}`))); }
 
+  // Selectionner TOUS les items correspondant au filtre (cross-pages).
+  // Fetch leger : IDs seulement, sans .range(), limite haute de securite.
+  async function selectAllInFilter() {
+    setLoading(true);
+    try {
+      const statuses = statusFilter ? [statusFilter] : ['draft', 'ready'];
+      const s = dSearch.trim().replace(/[,()]/g, ' ').trim();
+      const allIds = [];
+
+      if (!typeFilter || typeFilter === 'book') {
+        let q = supabase.from('book_drafts').select('id').in('status', statuses).limit(5000);
+        if (actionFilter) q = q.eq('action', actionFilter);
+        if (s) q = q.or(`titulo.ilike.%${s}%,subtitulo.ilike.%${s}%,autor.ilike.%${s}%,bib_ref.ilike.%${s}%`);
+        const { data } = await q;
+        (data || []).forEach(d => allIds.push(`book:${d.id}`));
+      }
+      if (!typeFilter || typeFilter === 'author') {
+        let q = supabase.from('author_drafts').select('id').in('status', statuses).limit(5000);
+        if (actionFilter) q = q.eq('action', actionFilter);
+        if (s) q = q.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
+        const { data } = await q;
+        (data || []).forEach(d => allIds.push(`author:${d.id}`));
+      }
+      if (!typeFilter || typeFilter === 'exemplar') {
+        let q = supabase.from('exemplar_drafts').select('id').in('status', statuses).limit(5000);
+        if (actionFilter) q = q.eq('action', actionFilter);
+        if (s) q = q.or(`tombo.ilike.%${s}%,target_bib_ref.ilike.%${s}%`);
+        const { data } = await q;
+        (data || []).forEach(d => allIds.push(`exemplar:${d.id}`));
+      }
+
+      setSelected(new Set(allIds));
+    } catch (err) { setMsg({ text: `Erro: ${err.message}`, kind: 'error' }); }
+    finally { setLoading(false); }
+  }
+
   function getSelectedItems() { return [...selected].map(k => { const [t, id] = k.split(':'); return { type: t, id: Number(id) }; }); }
   function getTrashSelectedItems() { return [...trashSelected].map(k => { const [t, id] = k.split(':'); return { type: t, id: Number(id) }; }); }
 
@@ -280,7 +316,16 @@ export default function QueuePanel({ batches, onEditItem }) {
         <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={selectAll}>
           {selected.size === items.length && items.length > 0 ? 'Desmarcar tudo' : `Selecionar tudo (${items.length})`}
         </button>
-        <span style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{selected.size} selecionado(s)</span>
+        {total > items.length && (
+          <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+            onClick={selectAllInFilter} disabled={loading || selected.size === total}
+            title={`Seleciona les ${total} rascunhos correspondant au filtre actuel, pas seulement la page courante`}>
+            {selected.size >= total ? `✓ ${total} do filtro` : `Selecionar os ${total} do filtro`}
+          </button>
+        )}
+        <span style={{ fontSize: '.75rem', color: selected.size > items.length ? '#4ade80' : 'var(--brand-muted, #aaa)', fontWeight: selected.size > items.length ? 700 : 400 }}>
+          {selected.size} selecionado(s){selected.size > items.length ? ' (cross-page)' : ''}
+        </span>
         <div style={{ flex: 1 }} />
         {onEditItem && (
           <button type="button" className="ab-button ab-button--secondary ab-button--sm"
