@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} exemplar(es) movido(s) para “{library}”.",
   "catalogacao.reassign.hint": "A ação move também todos os exemplares vinculados para a biblioteca escolhida. Ação de rede registrada.",
   "catalogacao.reassign.multiHint": "Esta notícia tem cópias em mais de uma biblioteca; escolha de qual mover.",
+  "catalogacao.bibref.offConvention": "Referência fora da convenção desta biblioteca.",
   "catalogacao.reassign.placeholder": "Escolher uma biblioteca…",
   "catalogacao.reassign.sourceAll": "Toda a notícia (todas as cópias)",
   "catalogacao.reassign.sourcePick": "Escolha a biblioteca de origem…",

@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} exemplar(s) mogut(s) a «{library}».",
   "catalogacao.reassign.hint": "L’acció mou també tots els exemplars vinculats a la biblioteca triada. Acció de xarxa registrada.",
   "catalogacao.reassign.multiHint": "Aquest registre té exemplars en diverses biblioteques; trieu de quina moure.",
+  "catalogacao.bibref.offConvention": "Referència fora de la convenció d'aquesta biblioteca.",
   "catalogacao.reassign.placeholder": "Tria una biblioteca…",
   "catalogacao.reassign.sourceAll": "Tot el registre (totes les còpies)",
   "catalogacao.reassign.sourcePick": "Trieu la biblioteca d'origen…",

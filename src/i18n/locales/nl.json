@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} exempla(a)r(en) verplaatst naar ‘{library}’.",
   "catalogacao.reassign.hint": "De actie verplaatst ook alle gekoppelde exemplaren naar de gekozen bibliotheek. Geregistreerde netwerkactie.",
   "catalogacao.reassign.multiHint": "Deze titel heeft exemplaren in meerdere bibliotheken; kies welke te verplaatsen.",
+  "catalogacao.bibref.offConvention": "Referentie buiten de conventie van deze bibliotheek.",
   "catalogacao.reassign.placeholder": "Kies een bibliotheek…",
   "catalogacao.reassign.sourceAll": "Hele titel (alle exemplaren)",
   "catalogacao.reassign.sourcePick": "Kies de bronbibliotheek…",

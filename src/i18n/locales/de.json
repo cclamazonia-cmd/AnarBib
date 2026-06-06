@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} Exemplar(e) nach „{library}“ verschoben.",
   "catalogacao.reassign.hint": "Die Aktion verschiebt auch alle zugeordneten Exemplare in die gewählte Bibliothek. Protokollierte Netzwerkaktion.",
   "catalogacao.reassign.multiHint": "Dieser Datensatz hat Exemplare in mehreren Bibliotheken; wählen Sie, welche verschoben werden sollen.",
+  "catalogacao.bibref.offConvention": "Referenz außerhalb der Konvention dieser Bibliothek.",
   "catalogacao.reassign.placeholder": "Bibliothek wählen…",
   "catalogacao.reassign.sourceAll": "Ganzer Datensatz (alle Exemplare)",
   "catalogacao.reassign.sourcePick": "Quellbibliothek wählen…",

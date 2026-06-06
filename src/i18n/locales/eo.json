@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} ekzemplero(j) movita(j) al «{library}».",
   "catalogacao.reassign.hint": "La ago ankaŭ movas ĉiujn ligitajn ekzemplerojn al la elektita biblioteko. Protokolita reta ago.",
   "catalogacao.reassign.multiHint": "Ĉi tiu katalogero havas ekzemplerojn en pluraj bibliotekoj; elektu el kiu movi.",
+  "catalogacao.bibref.offConvention": "Referenco ekster la konvencio de ĉi tiu biblioteko.",
   "catalogacao.reassign.placeholder": "Elekti bibliotekon…",
   "catalogacao.reassign.sourceAll": "Tuta katalogero (ĉiuj ekzempleroj)",
   "catalogacao.reassign.sourcePick": "Elektu la fontbibliotekon…",

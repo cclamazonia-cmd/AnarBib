@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} copy/copies moved to “{library}”.",
   "catalogacao.reassign.hint": "This also moves all attached copies to the chosen library. Logged network action.",
   "catalogacao.reassign.multiHint": "This record has copies in several libraries; choose which to move.",
+  "catalogacao.bibref.offConvention": "Reference outside this library's convention.",
   "catalogacao.reassign.placeholder": "Choose a library…",
   "catalogacao.reassign.sourceAll": "Whole record (all copies)",
   "catalogacao.reassign.sourcePick": "Choose the source library…",

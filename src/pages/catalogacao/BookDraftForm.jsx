@@ -151,7 +151,7 @@ const EMPTY_FORM = {
 export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
-  const { isNetworkAdmin } = useLibrary();
+  const { isNetworkAdmin, libraryId } = useLibrary();
 
   // Attribution réseau (admin réseau) : notice + exemplaires → bibliothèque cible
   const [catalogLibraries, setCatalogLibraries] = useState([]);
@@ -278,6 +278,26 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   function setMany(obj) {
     setForm(prev => ({ ...prev, ...obj }));
   }
+
+  // ── #3b : convention de bib_ref de la biblio active (souple) ──
+  // Charge la convention puis pre-remplit la prochaine reference (next_bib_ref)
+  // pour une NOUVELLE fiche encore sans bib_ref. Suggestion non bloquante.
+  const [bibRefConv, setBibRefConv] = useState(null); // { bib_ref_prefix, bib_ref_pad, bib_ref_auto }
+  useEffect(() => {
+    if (!libraryId) { setBibRefConv(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data: conv } = await supabase.from('libraries')
+        .select('bib_ref_prefix, bib_ref_pad, bib_ref_auto').eq('id', libraryId).single();
+      if (cancelled) return;
+      setBibRefConv(conv || null);
+      if (conv?.bib_ref_auto && f('action') === 'create' && !f('bib_ref') && !f('published_book_id')) {
+        const { data: next } = await supabase.rpc('next_bib_ref', { p_library_id: libraryId });
+        if (!cancelled && next) set('bib_ref', next);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [libraryId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Reset ──────────────────────────────────────────────
   function resetForm() {
@@ -1941,6 +1961,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── Core fields (registry-driven, Lot 2) ── */}
           {rrf('bib_ref')}
+          {(() => {
+            const v = f('bib_ref').trim();
+            if (!v || !bibRefConv?.bib_ref_auto) return null;
+            const pad = Math.max(bibRefConv.bib_ref_pad || 1, 1);
+            const re = new RegExp('^' + (bibRefConv.bib_ref_prefix || '') + '\\d{' + pad + ',}$');
+            return re.test(v) ? null : (
+              <div style={{ fontSize: '.72rem', color: '#fbbf24', marginTop: 2 }}>
+                {t({ id: 'catalogacao.bibref.offConvention' })}
+              </div>
+            );
+          })()}
           {rrf('titulo')}
           {rrf('subtitulo')}
 

@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} copia/e spostata/e in «{library}».",
   "catalogacao.reassign.hint": "L’azione sposta anche tutte le copie collegate nella biblioteca scelta. Azione di rete registrata.",
   "catalogacao.reassign.multiHint": "Questa notizia ha copie in più biblioteche; scegli da quale spostare.",
+  "catalogacao.bibref.offConvention": "Riferimento fuori dalla convenzione di questa biblioteca.",
   "catalogacao.reassign.placeholder": "Scegli una biblioteca…",
   "catalogacao.reassign.sourceAll": "Tutta la notizia (tutte le copie)",
   "catalogacao.reassign.sourcePick": "Scegli la biblioteca di origine…",

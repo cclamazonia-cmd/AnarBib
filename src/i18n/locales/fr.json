@@ -1774,6 +1774,7 @@
   "catalogacao.reassign.done": "{count} exemplaire·s déplacé·s vers « {library} ».",
   "catalogacao.reassign.hint": "L’action déplace aussi tous les exemplaires rattachés vers la bibliothèque choisie. Action réseau journalisée.",
   "catalogacao.reassign.multiHint": "Cette notice a des exemplaires dans plusieurs bibliothèques ; choisissez laquelle déplacer.",
+  "catalogacao.bibref.offConvention": "Référence hors de la convention de cette bibliothèque.",
   "catalogacao.reassign.placeholder": "Choisir une bibliothèque…",
   "catalogacao.reassign.sourceAll": "Toute la notice (toutes les copies)",
   "catalogacao.reassign.sourcePick": "Choisissez la bibliothèque d'origine…",
