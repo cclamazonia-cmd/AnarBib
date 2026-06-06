@@ -70,6 +70,15 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
 > committer/pousser (chips spawnés, agents parallèles) ; (3) ne lancer le push
 > que la voie libre. Un push lancé « à l'aveugle » pendant qu'un autre tourne
 > est un incident, pas un détail.
+>
+> 🔁 **Corollaire — sérialiser ses PROPRES push consécutifs.** La règle vaut
+> aussi pour soi-même : ne **jamais** enchaîner un second `git push` tant que le
+> pipeline Woodpecker du push précédent n'est **pas terminé** (vert). Cas typique :
+> pousser une **migration** puis enchaîner aussitôt un push **frontend** « par
+> dessus » → deux pipelines concurrents, deux `supabase db push` qui se
+> chevauchent. Procédure : push migration → **attendre la fin du pipeline**
+> (vert) → push suivant. Si plusieurs lots sont prêts en même temps, les pousser
+> **un par un**, chaque fois pipeline précédent terminé.
 
 **Remotes** (`git remote -v`) :
 
