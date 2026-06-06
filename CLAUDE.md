@@ -59,6 +59,18 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
 
 ## Workflow Git (état réel vérifié)
 
+> 🥇 **RÈGLE D'OR — jamais deux push concurrents.** **Avant** tout `git push`,
+> vérifier qu'**aucun autre push n'est déjà en cours** (autre session/agent, ou
+> pipeline Woodpecker pas encore terminé). Deux push concurrents sur `main` =
+> collisions (rebase forcé, horodatages de migration qui s'entrechoquent,
+> pipeline rouge — cf. la règle d'horodatage exact et le piège des sessions
+> parallèles). Procédure **avant de pousser** : (1) `git fetch` et vérifier que
+> le local n'est **pas en retard** sur `origin/main`/`codeberg main` (sinon
+> intégrer d'abord) ; (2) s'assurer qu'aucune autre session n'est en train de
+> committer/pousser (chips spawnés, agents parallèles) ; (3) ne lancer le push
+> que la voie libre. Un push lancé « à l'aveugle » pendant qu'un autre tourne
+> est un incident, pas un détail.
+
 **Remotes** (`git remote -v`) :
 
 ```
