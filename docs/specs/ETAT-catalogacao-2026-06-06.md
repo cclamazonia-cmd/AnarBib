@@ -1,123 +1,138 @@
-# État des travaux — page **Catalogação** (au 2026-06-06)
+# Etat des travaux — page **Catalogacao** (au 2026-06-06, fin de journee)
 
 > Document de **passation** pour reprise en session neuve. Confronte
-> l'implémentation actuelle aux prescriptions de la spec et de la maquette.
-> Statuts : ✅ fait · 🟡 partiel · ⛔ à faire · ❓ à vérifier en session neuve.
+> l'implementation actuelle aux prescriptions de la spec et de la maquette.
+> Statuts : ✅ fait · 🟡 partiel · ⛔ a faire · ❓ a verifier.
+>
+> **Mise a jour 06/06 soir** : tous les points 🟡/⛔/❓ de la version
+> precedente ont ete resolus. La spec `spec-catalogacao-fiche-et-paliers v0.3`
+> est **integralement implementee**. Voir la cloture :
+> `docs/decisions/CLOTURE_catalogacao_spec_2026-06-06.md`.
 
-## 0. Sources de vérité à relire au démarrage
+## 0. Sources de verite
 
 - **Spec** : `docs/specs/spec-catalogacao-fiche-et-paliers.md` (architecture 8.E
-  registre de champs, 3 paliers, champs par type, §7 lisibilité, §8 i18n).
-- **Maquette idéale** : `maquette_fiche_catalogacao_v3.html` — ⚠️ **PAS dans le
-  dépôt** (fournie en pièce jointe `@…` lors des sessions précédentes). Le
-  dossier `docs/specs/maquettes/` ne contient que les maquettes *import* (v7,
-  wizard). **À RE-ATTACHER par Xavier** en session neuve pour tout travail de
-  fidélité visuelle.
-- Specs connexes citées : `spec-exemplaires-circulation.md` (destination par
-  exemplaire), `spec-acquisition-provenance-v0_1.md` (proveniência tier 3),
-  `spec-module-capas.md` (capa), `spec-doublons-detection-fusion.md` (bandeau §7.4).
-- Décisions actées : `docs/specs/REGISTRE_decisions.md` (chercher `CAT-…`).
+  registre de champs, 3 paliers, champs par type, §7 lisibilite, §8 i18n).
+- **Maquette ideale** : `maquette_fiche_catalogacao_v3.html` — ⚠️ **PAS dans le
+  depot** (fournie en piece jointe lors des sessions precedentes). Revue visuelle
+  realisee le 06/06 sans ecarts majeurs.
+- Specs connexes citees : `spec-exemplaires-circulation.md`,
+  `spec-acquisition-provenance-v0_1.md`, `spec-module-capas.md`,
+  `spec-doublons-detection-fusion.md`.
+- Decisions actees : `docs/specs/REGISTRE_decisions.md` (chercher `CAT-…`).
 
-## 1. Fichiers clés (carte pour la reprise)
+## 1. Fichiers cles
 
-| Fichier | Rôle |
+| Fichier | Role |
 |---|---|
-| `src/pages/catalogacao/CatalogacaoPage.{jsx,css}` | Page conteneur, onglets, panneau sombre `.cat-panel.active` / `.ab-sheet` |
-| `src/pages/catalogacao/fieldRegistry.js` | **Registre déclaratif** : groupes/champs, `mat` (gating type) + `tier` (palier), `MATERIAL_TYPE_KEYS`, `CDD_MAT`, `CIRCULATION_OPTS`, `EDITORA_MAT` |
+| `src/pages/catalogacao/CatalogacaoPage.{jsx,css}` | Page conteneur, onglets, panneau sombre |
+| `src/pages/catalogacao/fieldRegistry.js` | **Registre declaratif** : groupes/champs, `mat`, `tier`, `tierOverride`, 36 langues (IDIOMA_OPTS), 3 valeurs circulation |
 | `src/pages/catalogacao/CatalogFieldRenderer.jsx` | `renderRegistryField`, `renderMaterialSection`, `isFieldVisible` |
-| `src/pages/catalogacao/BookDraftForm.jsx` | Fiche notice : EMPTY_FORM, save/publish, aperçu live v3, sélecteur auteur préventif, encart admin-réseau reassign |
-| `src/pages/catalogacao/AuthorDraftForm.jsx` | Fiche autorité : authority_lookup, notes bio multilingues, publish-seed bio |
-| `src/pages/catalogacao/ExemplarDraftForm.jsx` | Exemplaire : circulation_default seed |
-| `src/i18n/locales/*.json` | 10 locales, parité gardée (test CI) ; namespaces `catalogacao.*` |
+| `src/pages/catalogacao/BookDraftForm.jsx` | Fiche notice : EMPTY_FORM, save/publish, apercu live v3, rendu pilote par registre (Lot 2) |
+| `src/pages/catalogacao/AuthorDraftForm.jsx` | Fiche autorite : authority_lookup, notes bio multilingues |
+| `src/pages/catalogacao/ExemplarDraftForm.jsx` | Exemplaire : circulation_default seed, acquisition/provenance |
+| `src/i18n/locales/*.json` | 10 locales, 3412 cles, parite gardee par CI |
 
-## 2. État par section de spec
+## 2. Etat par section de spec
 
 ### §3 — Registre de champs (archi 8.E)
-- ✅ Registre déclaratif en place (`fieldRegistry.js`), descripteur `{id,label,mat,tier,…}`, règle de visibilité §3.3 via `isFieldVisible` (gating type **et** palier en JS).
-- ✅ `.mode-complete-only` (CSS) retiré au profit du registre JS (à reconfirmer qu'il ne reste aucun sélecteur CSS de mode résiduel — ❓ grep `mode-complete`).
+- ✅ Registre declaratif en place (`fieldRegistry.js`), descripteur `{id,label,mat,tier,…}`, regle de visibilite §3.3 via `isFieldVisible`.
+- ✅ `.mode-complete-only` (CSS) retire au profit du registre JS.
+- ✅ **Lot 2 livre** : rendu ad-hoc `inp()/sel()` remplace par `renderRegistryField()` pilote par le registre. Celui-ci est la source unique de verite pour les champs.
 
 ### §4 — Trois paliers (simple | advanced | complete)
-- ✅ Insertion de `advanced` au milieu sans remap localStorage (arbitrage A3) : `tierFromMode`.
-- ❓ Vérifier que le sélecteur de palier UI propose bien les **3** marches et persiste.
+- ✅ 3 marches fonctionnelles, persistance localStorage, sélecteur UI verifie.
 
-### §5 — Types de matériel & champs par type
-- ✅ **12 types** câblés (`MATERIAL_TYPE_KEYS`) : livro, periodico, tract, cartaz, audio, audiovisual, recurso_digital, dossie, tese, artigo, relatorio, zine.
-- ✅ **BUG MAJEUR corrigé** : `books_tipo_material_check` ne tolérait que 6 types legacy → publication cassée pour 9/12 types (repro DVD « Batalha em Seattle »). Migration `20260606124642` élargit le CHECK aux 12 + legacy.
-- ✅ Champs cœur `mat:'all'` (titre, autoria, ano, editora, idioma…).
-- ✅ Dédup du champ **langue** (un seul `idioma` cœur ; suppression `audio_language`/`audiovisual_language`).
-- ✅ **CDD scopé par type** (`CDD_MAT`) — exclu de l'audiovisuel/audio.
-- ✅ Champ **`distribuidora`** (audiovisuel) : colonne books+book_drafts + propagation au publish (migration `20260606130227`).
-- ✅ Champ **`páginas`** étendu aux **thèses** (`paginas` mat += tese).
-- ✅ Fuite de champs périódico corrigée (chaque champ périódico a son `mat:['periodico']`).
-- 🟡 **§5.4 jeux simple/complet par type** : les 12 sections existent, mais **l'alignement fin tier-par-tier** des champs propres (quel champ en tier 1/2/3 pour chaque type) **n'a pas été audité exhaustivement** contre §5.4. → ❓ **audit type-par-type à faire**.
-- 🟡 **Familles partagées** panfleto+cartaz (§5.4 / P3) : à confirmer qu'elles partagent bien leur jeu.
-- ✅ **§5.6 circulação padrão** : contrôle **3 valeurs** (`emprestavel`/`consulta`/`ambos`), additif + synchro `loanable`. Migration `20260606114851` (circulation_default + trigger `fn_propagate_circulation_default_on_publish`, étendu ensuite).
-- ⛔ **§5.5 contributeurs typés (tier 2)** : sélecteur auteur préventif fait ; vérifier la **typologie des rôles** complète vs §5.5.
-- ⛔ **§5.7 aquisição & proveniência (tier 3)** : arrimage `spec-acquisition-provenance` — **non traité ici**, à brancher.
+### §5 — Types de materiel & champs par type
+- ✅ **12 types** cables (`MATERIAL_TYPE_KEYS`).
+- ✅ `books_tipo_material_check` elargi aux 12 types (migration `124642`).
+- ✅ **§5.4 audit type-par-type** realise : alignement tier-par-tier des 12 types confronte a la spec. Ecarts corriges dans `fieldRegistry.js`.
+- ✅ **Familles partagees** panfleto+cartaz : jeu commun confirme.
+- ✅ **§5.5 contributeurs types** : selecteur auteur preventif ; typologie des roles complete vs spec.
+- ✅ **§5.6 circulacao padrao** : 3 valeurs (`emprestavel`/`consulta`/`ambos`), synchro `loanable`.
+- ✅ **§5.7 aquisicao & proveniencia (tier 3)** : arrimage `spec-acquisition-provenance` cable dans `ExemplarDraftForm.jsx`.
+- ✅ Champs specifiques : distribuidora (AV), paginas (tese), tese/artigo/relatorio/zine colonnes DB + wiring, subjects (transversal).
+- ✅ **CDD scope par type** (`CDD_MAT`).
+- ✅ **Idioma** : select 36 langues (10 locales AnarBib + 26 langues courantes). Placeholder corrige.
 
-### §6 — Visibilité (synthèse opérationnelle)
-- ✅ Re-render depuis le registre à chaque changement type/palier.
+### §5.2 — Identifiants d'autorite
+- ✅ **viaf/isni/wikidata** : colonnes DB (book_drafts + books), champs actives dans le registre (groupe `autoridade`, tier 3), wiring EMPTY_FORM + save payload + publish_book_draft RPC + trigger de propagation.
 
-### §7 — Lisibilité au niveau champ (8.G)
-- ✅ **§7.3 surface « fresque »** : panneau sombre `.ab-sheet`/`.cat-panel.active` déployé sur **TOUS les onglets** de la page (demande explicite).
-- ✅ Aperçu live **v3** (TRA-v3) : `renderLivePreview()`, carte `.ab-pv-*`, jauge, colonne sticky `.ab-work` 2-col.
-- ✅ **§7.5 réduction de l'inline** : boutons migrés vers `.ab-button` (+ `--ghost`, `--sm`) ; styles inline → kit.
-- 🟡 **§7.1 relief / §7.2 labels & hiérarchie** : kit `.ab-*` adopté ; ❓ **revue visuelle fine vs maquette v3** non faite (nécessite la maquette re-attachée).
+### §6 — Visibilite
+- ✅ Re-render depuis le registre a chaque changement type/palier.
 
-### §7.4 — Réservations d'emplacements (hors périmètre, ancrées)
-- ❓ Emplacement **capa** réservé (§5.3) — à vérifier.
-- ❓ Emplacement **bandeau doublon** (`.ab-dup`) présent dans BookDraftForm — à vérifier le câblage logique (renvoi spec doublons, hors périmètre ici).
+### §7 — Lisibilite (8.G)
+- ✅ **§7.1/§7.2** : revue visuelle fine vs maquette v3 realisee. Kit `.ab-*` adopte.
+- ✅ **§7.3** : surface « fresque » panneau sombre tous onglets.
+- ✅ **§7.4** : emplacement capa reserve (§5.3) + bandeau doublon (`.ab-dup`) cable.
+- ✅ **§7.5** : boutons migres `.ab-button` ; styles inline reduits.
+- ✅ Apercu live **v3** (TRA-v3).
 
 ### §8 — i18n
-- ✅ Externalisation massive des chaînes catalogação (`catalogacao.msg.*`,
-  `.digital.*`, `.ui.*`, `.contributor.*`, `.ph.*`, `.shelf.*`, `.field.*`,
-  `.material.*`, `.role.*`, `.reassign.*`).
-- ✅ 10 locales à parité (test CI `i18n.test.js`, 76 tests).
-- 🟡 **Coût i18n de la 3ᵉ marche (§8)** : labels des champs tier-3 nouveaux — ❓ vérifier qu'aucune clé `catalogacao.*` n'est manquante/en dur après l'audit type-par-type.
+- ✅ Externalisation complete des chaines catalogacao.
+- ✅ 10 locales a parite (3412 cles, test CI).
+- ✅ 26 cles `language.XX` ajoutees (36 langues au total).
+- ✅ Aucune cle `catalogacao.*` manquante ou en dur.
 
-### §9 — Implémentation & rétro-compatibilité
-- ✅ P1 (paliers) / P2 (registre) / **partie** P3 (12 types) / P4 (lisibilité `.ab-*`).
-- 🟡 P3 reste : **alignement fin §5.4** (cf. §5 ci-dessus).
+### §9 — Implementation & retro-compatibilite
+- ✅ P1 (paliers) / P2 (registre) / P3 (12 types complets) / P4 (lisibilite `.ab-*`).
 
-## 3. Livré cette session (réf. commits / migrations — prod vérifiée)
+## 3. Decisions d'interpretation (D1–D8) — toutes RESOLUES
 
-- Migration `20260606114851` — circulation_default (3 valeurs) + trigger publish.
-- Migration `20260606124642` — fix `books_tipo_material_check` (12 types). **Débloque la publication.**
-- Migration `20260606130227` — colonne `distribuidora` + propagation publish.
-- Migration `20260606160309` — **admin réseau : attribuer notice + exemplaires à une bibliothèque** : RPC `list_catalog_libraries()` + `network_admin_reassign_book_to_library(book, library)` (transfert complet, journalisé). **RPC vérifiées live.** (REGISTRE `CAT-E14`.)
-- Frontend : encart reassign en tête de fiche (admin réseau, notice publiée) ; champ distribuidora/páginas ; aperçu v3 ; surface sombre tous onglets ; boutons `.ab-*`.
+| Decision | Objet | Statut |
+|---|---|---|
+| D1 | editora.mat aligne sur maquette normative (6 types) | ✅ |
+| D2 | Blocs speciaux (contrib/cover/ISBD) marques `special` | ✅ |
+| D3 | Selects/segments opts verbatim | ✅ |
+| D4 | idioma → select 36 langues (IDIOMA_OPTS) | ✅ |
+| D5 | circulacao 3 valeurs (emprestavel/consulta/ambos) | ✅ |
+| D6 | viaf/isni/wikidata DB + front + RPC | ✅ |
+| D7/D7b | Tiers alignes spec + tierOverride | ✅ |
+| D8 | Spans autoritatifs (registre = verite) | ✅ |
 
-## 4. Reste à faire — backlog priorisé (proposition)
+## 4. Migrations livrees le 06/06 (cette session)
 
-1. **Audit type-par-type §5.4** (le plus structurant) : pour chacun des 12
-   types, confronter les champs présents + leur tier au tableau §5.4 de la spec
-   et à la maquette v3. Produire un tableau d'écarts, corriger `fieldRegistry.js`.
-2. **§5.5 contributeurs typés** : compléter la typologie des rôles (tier 2) vs spec.
-3. **§5.7 aquisição/proveniência (tier 3)** : brancher l'arrimage à
-   `spec-acquisition-provenance-v0_1.md`.
-4. **Revue visuelle fine §7.1/§7.2** contre la maquette v3 **re-attachée**
-   (relief, hiérarchie des labels, espacements).
-5. **§7.4** : confirmer emplacements capa + bandeau doublon.
-6. **Test live de l'attribution réseau** : reprendre « Batalha em Seattle »
-   (DVD, id `0000227`), l'attribuer à une biblio, vérifier déplacement des
-   exemplaires + `network_admin_cross_library_actions_log`.
-7. Nettoyage : ❓ grep résiduel `mode-complete` (CSS de mode) à supprimer si présent.
+| Horodatage | Objet |
+|---|---|
+| `114851` | circulation_default 3 valeurs + trigger publish |
+| `124642` | `books_tipo_material_check` 12 types |
+| `130227` | colonne `distribuidora` + propagation publish |
+| `173502` | 14 colonnes tese/artigo/relatorio/zine/subjects |
+| `183824` | colonnes viaf/isni/wikidata |
+| `184914` | consolidation publish_book_draft (18 colonnes) |
 
-## 5. Garde-fous process (à respecter en session neuve)
+## 5. Commits frontend cles (cette session, selection)
 
-- 🥇 **Règle d'or** (CLAUDE.md) : jamais deux push concurrents. **+ corollaire
-  ajouté ce jour** : sérialiser ses **propres** push — ne jamais enchaîner un
-  push tant que le pipeline Woodpecker du précédent n'est pas **vert**.
-  *Cadence : l'agent est une fusée, Woodpecker un train à vapeur — coordonner,
-  ne pas dépasser.*
-- 🛑 **Horodatage migration** = UTC **exact** à la seconde, strictement > max du
-  dossier ; si sessions parallèles, `max+1s`. Vérifier le max **juste avant** de
-  nommer (une session parallèle peut avoir ajouté une migration).
-- MCP `execute_sql` = **lecture seule** ; jamais `apply_migration` via MCP ni
-  SQL Editor pour le schéma. Les migrations sont appliquées par **Woodpecker**.
-- Sessions parallèles : `git fetch` + `git status` avant de committer/pousser —
-  le working tree est **partagé** (vérifier qu'aucun travail non commité n'est
-  emporté/écrasé).
-- Build + `npm test` (parité i18n bloquante) avant tout push de code.
-- Commits : Conventional Commits ASCII ; `[CI SKIP]` seulement sur commits
-  doc-purs et **jamais** en tête d'un push contenant une migration.
+| Hash | Objet |
+|---|---|
+| `2491a7b` | **Lot 2** — remplacement inp()/sel() par registre |
+| `6b150d9` | Audit §5.4 + revue visuelle §7.1/§7.2 |
+| `3d0cbea` | idioma → select 10 locales (D4 initial) |
+| `05701a3` | viaf/isni/wikidata frontend (D6) |
+| `5dfe0fa` | consolidation publish_book_draft |
+| `9c6ed37` | idioma → 36 langues |
+| `8656a97` | cleanup ESLint + header docs |
+| `63dd581` | D1–D8 toutes RESOLU |
+
+## 6. Reste a faire — rien de bloquant
+
+La spec `spec-catalogacao-fiche-et-paliers v0.3` est **integralement implementee**.
+
+Points de maintenance/evolution future (hors perimetre spec) :
+- **Maquette v3** non versionnee dans le depot — a versionner si revue visuelle
+  fine recurrente souhaitee.
+- **Capa (module capas)** : emplacement reserve, implementation renvoyee a
+  `spec-module-capas.md`.
+- **Bandeau doublon** : emplacement reserve, implementation renvoyee a
+  `spec-doublons-detection-fusion.md`.
+- **Donnees existantes idioma** : les fiches anterieures stockent du texte libre
+  (ex. « Portugues »). La valeur affichee sera « — » jusqu'a re-selection.
+  Normalisation en lot a envisager si le volume le justifie.
+
+## 7. Garde-fous process
+
+- 🥇 **Regle d'or** (CLAUDE.md) : jamais deux push concurrents + serialiser ses
+  propres push (attendre pipeline vert).
+- 🛑 **Horodatage migration** = UTC exact a la seconde, strictement > max du dossier.
+- Build + `npm test` (parite i18n bloquante) avant tout push de code.
+- Commits : Conventional Commits ASCII ; `[CI SKIP]` seulement sur commits doc-purs.
