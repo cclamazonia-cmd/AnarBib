@@ -35,10 +35,8 @@
  *       26 langues courantes en bibliothèque/tradition anarchiste).
  *       L'option vide en tête assure la compatibilité avec les fiches existantes
  *       stockant du texte libre.
- *  (D5) `loanable` (circulação §5.6) : le render est binaire
- *       (Emprestável / Consulta). La spec veut une 3ᵉ valeur « Empréstimo +
- *       consulta ». On conserve 2 valeurs ici : la 3ᵉ change le modèle d'état
- *       (booléen → enum) et relève de la spec exemplaires/circulation. À reprendre.
+ *  (D5) `loanable` (circulação §5.6) : RÉSOLU — 3 valeurs effectives
+ *       (emprestavel / consulta / ambos). CAT-E6 levé le 06/06.
  *  (D6) `viaf`/`isni`/`wikidata` (§5.2, tier 3) : RÉSOLU — colonnes DB créées,
  *       champs activés dans le groupe `autoridade`, wiring complet (EMPTY_FORM,
  *       save payload, publish_book_draft RPC, trigger de propagation).
@@ -52,17 +50,11 @@
  *       cartaz ; `isbn` tier 1 pour livro, tier 3 pour artigo),
  *       `tierOverride: { <mat>: <tier> }` porte l'exception. `isFieldVisible`
  *       applique `tierOverride[material] ?? field.tier`.
- *  (D8) Spans : repris de la spec §5.1 pour le cœur, du render pour le reste ;
- *       quelques écarts mineurs (titulo span 2 spec vs 3 render) à reconcilier
- *       sur la maquette normative au Lot 2.
+ *  (D8) Spans : RÉSOLU — le Lot 2 rend le registre autoritatif. titulo span 2
+ *       conforme spec §5.1.
  *
- *  CLÉS i18n NOUVELLES introduites ici (à ajouter au Lot 5, §8) :
- *    catalogacao.field.materialType   (label du sélecteur — littéral aujourd'hui)
- *    catalogacao.field.author         (champ autor libre en tier 1, §5.5)
- *    catalogacao.section.core
- *    catalogacao.section.periodical
- *    catalogacao.tag.core / .advanced / .complete / .material  (libellés de palier)
- *  Toutes les autres clés existent déjà dans le render.
+ *  CLÉS i18n : toutes les clés référencées par le registre existent dans les
+ *  10 locales (3412 clés, parité gardée par CI).
  * ────────────────────────────────────────────────────────────────────────── */
 
 // ── Paliers ────────────────────────────────────────────────────────────────
