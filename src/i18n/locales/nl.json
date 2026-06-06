@@ -1822,6 +1822,8 @@
   "labels.filterWithContent": "Met ingevuld etiket",
   "labels.filtered": "Gefilterd: {count}",
   "labels.hint": "Selecteer exemplaren om een afdrukbaar etikettenvel te genereren (A4, 7×3 = 21 etiketten per pagina). Klik op rijen om te selecteren.",
+  "labels.col.library": "Bibliotheek",
+  "labels.scopeBanner": "Etiketten van de bibliotheek: {library}",
   "labels.labels": "etiket(ten)",
   "labels.pages": "{count} pagina('s)",
   "labels.print": "{count} etiket(ten) afdrukken",

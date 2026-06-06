@@ -1822,6 +1822,8 @@
   "labels.filterWithContent": "Avec étiquette remplie",
   "labels.filtered": "Filtrés : {count}",
   "labels.hint": "Sélectionnez les exemplaires pour générer une planche d'étiquettes imprimable (A4, 7×3 = 21 étiquettes par feuille). Cliquez sur les lignes pour sélectionner.",
+  "labels.col.library": "Bibliothèque",
+  "labels.scopeBanner": "Étiquettes de la bibliothèque : {library}",
   "labels.labels": "étiquette(s)",
   "labels.pages": "{count} feuille(s)",
   "labels.print": "Imprimer {count} étiquette(s)",

@@ -1822,6 +1822,8 @@
   "labels.filterWithContent": "Amb etiqueta emplenada",
   "labels.filtered": "Filtrats: {count}",
   "labels.hint": "Seleccioneu els exemplars per generar un plec d'etiquetes imprimible (A4, 7×3 = 21 etiquetes per full). Feu clic a les files per seleccionar.",
+  "labels.col.library": "Biblioteca",
+  "labels.scopeBanner": "Etiquetes de la biblioteca: {library}",
   "labels.labels": "etiqueta/etiquetes",
   "labels.pages": "{count} full/fulls",
   "labels.print": "Imprimir {count} etiqueta/etiquetes",

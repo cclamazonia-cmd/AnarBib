@@ -16,7 +16,7 @@ const LABELS_PER_PAGE = LABELS_PER_ROW * ROWS_PER_PAGE; // 21
 
 export default function LabelSheetPrinter() {
   const { formatMessage: t } = useIntl();
-  const { libraryId } = useLibrary();
+  const { libraryId, libraryName } = useLibrary();
   const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(new Set());
@@ -149,6 +149,13 @@ ${pages.join('\n')}
         {t({ id: 'labels.hint' })}
       </p>
 
+      {/* Detrompeur : de quelle bibliotheque on imprime (la liste est toujours
+          mono-bibliotheque, scopee staff par get_exemplar_labels). */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 8, marginBottom: 12, background: 'rgba(29,78,216,.1)', border: '1px solid rgba(29,78,216,.25)', fontSize: '.85rem' }}>
+        <span aria-hidden="true">🏷️</span>
+        <span><strong>{t({ id: 'labels.scopeBanner' }, { library: libraryName })}</strong></span>
+      </div>
+
       {loadError && (
         <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.85rem', marginBottom: 10, background: 'rgba(220,38,38,.12)', color: '#f87171' }}>
           {t({ id: 'common.errorPrefix' }, { message: loadError })}
@@ -200,6 +207,7 @@ ${pages.join('\n')}
               <th style={{ padding: '6px 8px' }}>{t({ id: 'labels.col.title' })}</th>
               <th style={{ padding: '6px 8px' }}>CDD</th>
               <th style={{ padding: '6px 8px' }}>{t({ id: 'labels.col.note' })}</th>
+              <th style={{ padding: '6px 8px' }}>{t({ id: 'labels.col.library' })}</th>
             </tr>
           </thead>
           <tbody>
@@ -216,6 +224,7 @@ ${pages.join('\n')}
                 <td style={{ padding: '5px 8px' }}>{l.titulo_etiqueta || '—'}</td>
                 <td style={{ padding: '5px 8px', fontWeight: 600 }}>{l.cdd_etiqueta || '—'}</td>
                 <td style={{ padding: '5px 8px', color: 'var(--brand-muted)', fontSize: '.78rem' }}>{l.label_note || ''}</td>
+                <td style={{ padding: '5px 8px', color: 'var(--brand-muted)', fontSize: '.78rem' }}>{libraryName}</td>
               </tr>
             ))}
           </tbody>

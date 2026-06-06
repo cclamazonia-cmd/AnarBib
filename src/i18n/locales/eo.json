@@ -1822,6 +1822,8 @@
   "labels.filterWithContent": "Kun plenigita etikedo",
   "labels.filtered": "Filtritaj: {count}",
   "labels.hint": "Elektu la ekzemplerojn por generi printeblan etikedfolion (A4, 7×3 = 21 etikedoj po folio). Alklaku la liniojn por elekti.",
+  "labels.col.library": "Biblioteko",
+  "labels.scopeBanner": "Etikedoj de la biblioteko: {library}",
   "labels.labels": "etikedo(j)",
   "labels.pages": "{count} folio(j)",
   "labels.print": "Printi {count} etikedo(j)n",
