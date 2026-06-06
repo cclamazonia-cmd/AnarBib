@@ -5,6 +5,7 @@ import { localizeError } from '@/lib/localizeError';
 
 const TYPE_LABELS = { book: 'Documento', author: 'Autoridade', exemplar: 'Exemplar' };
 const STATUS_LABELS = { draft: 'Rascunho', ready: 'Pronto', published: 'Publicado', cancelled: 'Descartado' };
+const PAGE_SIZE = 100;
 
 export default function QueuePanel({ batches, onEditItem }) {
   // ── Filters ─────────────────────────────────────────────
@@ -20,6 +21,17 @@ export default function QueuePanel({ batches, onEditItem }) {
   const [selected, setSelected] = useState(new Set());
   const [msg, setMsg] = useState({ text: '', kind: '' });
 
+  // ── Pagination (serveur) ────────────────────────────────
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  // Recherche cote serveur, debounce 300ms ; toute nouvelle recherche revient page 1
+  const [dSearch, setDSearch] = useState('');
+  useEffect(() => {
+    const id = setTimeout(() => { setDSearch(search); setPage(0); }, 300);
+    return () => clearTimeout(id);
+  }, [search]);
+
   // ── Trash ───────────────────────────────────────────────
   const [trash, setTrash] = useState([]);
   const [trashLoading, setTrashLoading] = useState(false);
@@ -29,54 +41,58 @@ export default function QueuePanel({ batches, onEditItem }) {
   const loadQueue = useCallback(async () => {
     setLoading(true); setSelected(new Set());
     try {
+      const from = page * PAGE_SIZE, to = from + PAGE_SIZE - 1;
+      const statuses = statusFilter ? [statusFilter] : ['draft', 'ready'];
+      // Sanitise pour la syntaxe .or() de PostgREST (virgules/parentheses la cassent)
+      const s = dSearch.trim().replace(/[,()]/g, ' ').trim();
       const allItems = [];
+      let totalCount = 0, maxCount = 0;
 
       // Books
       if (!typeFilter || typeFilter === 'book') {
         let q = supabase.from('book_drafts')
-          .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, updated_at')
-          .in('status', statusFilter ? [statusFilter] : ['draft', 'ready'])
-          .order('updated_at', { ascending: false }).limit(200);
+          .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, updated_at', { count: 'exact' })
+          .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
-        const { data } = await q;
+        if (s) q = q.or(`titulo.ilike.%${s}%,subtitulo.ilike.%${s}%,autor.ilike.%${s}%,bib_ref.ilike.%${s}%`);
+        const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
+        totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
         (data || []).forEach(d => allItems.push({ ...d, _type: 'book', _label: d.titulo || '(sem título)', _sub: d.autor || '' }));
       }
 
       // Authors
       if (!typeFilter || typeFilter === 'author') {
         let q = supabase.from('author_drafts')
-          .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, updated_at')
-          .in('status', statusFilter ? [statusFilter] : ['draft', 'ready'])
-          .order('updated_at', { ascending: false }).limit(200);
+          .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, updated_at', { count: 'exact' })
+          .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
-        const { data } = await q;
+        if (s) q = q.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
+        const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
+        totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
         (data || []).forEach(d => allItems.push({ ...d, _type: 'author', _label: d.preferred_name || '(sem nome)', _sub: d.sort_name || '' }));
       }
 
       // Exemplars
       if (!typeFilter || typeFilter === 'exemplar') {
         let q = supabase.from('exemplar_drafts')
-          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, updated_at')
-          .in('status', statusFilter ? [statusFilter] : ['draft', 'ready'])
-          .order('updated_at', { ascending: false }).limit(200);
+          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, updated_at', { count: 'exact' })
+          .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
-        const { data } = await q;
+        if (s) q = q.or(`tombo.ilike.%${s}%,target_bib_ref.ilike.%${s}%`);
+        const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
+        totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
         (data || []).forEach(d => allItems.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || '(sem tombo)', _sub: `ref: ${d.target_bib_ref || '—'}` }));
       }
 
-      // Sort by updated_at desc
+      // Tri par updated_at desc (fusion des couches de la page courante)
       allItems.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-
-      // Text search filter
-      if (search.trim()) {
-        const s = search.toLowerCase();
-        setItems(allItems.filter(it => `${it._label} ${it._sub} ${it._type} ${it.status} ${it.action}`.toLowerCase().includes(s)));
-      } else {
-        setItems(allItems);
-      }
+      setItems(allItems);
+      setTotal(totalCount);
+      // Pages basees sur la couche la plus volumineuse (evite des pages vides en "Todas")
+      setTotalPages(Math.max(1, Math.ceil(maxCount / PAGE_SIZE)));
     } catch (err) { setMsg({ text: `Erro: ${err.message}`, kind: 'error' }); }
     finally { setLoading(false); }
-  }, [typeFilter, statusFilter, actionFilter, search]);
+  }, [typeFilter, statusFilter, actionFilter, dSearch, page]);
 
   useEffect(() => { loadQueue(); }, [loadQueue]);
 
@@ -229,7 +245,7 @@ export default function QueuePanel({ batches, onEditItem }) {
       <div className="cat-book-grid" style={{ marginBottom: 14 }}>
         <div className="cat-field">
           <label style={ls}>Camada</label>
-          <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} style={fs}>
+          <select value={typeFilter} onChange={e => { setTypeFilter(e.target.value); setPage(0); }} style={fs}>
             <option value="">Todas</option>
             <option value="book">{t({ id: 'catalogacao.catalog.documents' })}</option>
             <option value="author">{t({ id: 'catalogacao.catalog.authorities' })}</option>
@@ -238,7 +254,7 @@ export default function QueuePanel({ batches, onEditItem }) {
         </div>
         <div className="cat-field">
           <label style={ls}>Situação</label>
-          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={fs}>
+          <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} style={fs}>
             <option value="">Todas ativas</option>
             <option value="draft">Rascunho</option>
             <option value="ready">Pronto</option>
@@ -246,7 +262,7 @@ export default function QueuePanel({ batches, onEditItem }) {
         </div>
         <div className="cat-field">
           <label style={ls}>Gesto editorial</label>
-          <select value={actionFilter} onChange={e => setActionFilter(e.target.value)} style={fs}>
+          <select value={actionFilter} onChange={e => { setActionFilter(e.target.value); setPage(0); }} style={fs}>
             <option value="">Todos</option>
             <option value="create">Novo</option>
             <option value="update">Retomada</option>
@@ -290,7 +306,7 @@ export default function QueuePanel({ batches, onEditItem }) {
       </div>
 
       {/* ── Queue table ──────────────────────────────── */}
-      <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 400, overflowY: 'auto', marginBottom: 20 }}>
+      <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 400, overflowY: 'auto', marginBottom: 10 }}>
         {items.length === 0 && !loading && (
           <div style={{ padding: 16, textAlign: 'center', fontSize: '.85rem', color: 'var(--brand-muted, #888)' }}>
             Nenhum rascunho ativo neste recorte.
@@ -333,6 +349,19 @@ export default function QueuePanel({ batches, onEditItem }) {
             </div>
           );
         })}
+      </div>
+
+      {/* ── Pagination (serveur) ─────────────────────── */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 20, fontSize: '.8rem', flexWrap: 'wrap' }}>
+        <span style={{ color: 'var(--brand-muted, #999)' }}>
+          {total} rascunho(s) no recorte{total > 0 ? ` · mostrando ${items.length} · página ${page + 1} de ${totalPages}` : ''}
+        </span>
+        <div style={{ display: 'flex', gap: 6 }}>
+          <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+            onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page <= 0 || loading}>← Anterior</button>
+          <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+            onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1 || loading}>Próxima →</button>
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════ */}
