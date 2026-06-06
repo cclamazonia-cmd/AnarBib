@@ -416,8 +416,46 @@ function BatchesPanel({ batches, onRefresh }) {
     }
   }
 
+  async function archiveBatch(id) {
+    if (!confirm(t({id:'catalogacao.archiveBatchConfirm'}))) return;
+    try {
+      const { error } = await supabase.from('catalog_batches')
+        .update({ status: 'archived' })
+        .eq('id', id);
+      if (error) throw error;
+      onRefresh();
+    } catch (err) {
+      alert(t({id:'common.errorPrefix'},{message:err.message}));
+    }
+  }
+
+  async function deleteBatch(id) {
+    if (!confirm(t({id:'catalogacao.deleteBatchConfirm'}))) return;
+    try {
+      // Check for orphan drafts before deleting
+      const counts = await Promise.all([
+        supabase.from('book_drafts').select('id', { count: 'exact', head: true }).eq('batch_id', id),
+        supabase.from('author_drafts').select('id', { count: 'exact', head: true }).eq('batch_id', id),
+        supabase.from('exemplar_drafts').select('id', { count: 'exact', head: true }).eq('batch_id', id),
+      ]);
+      const total = counts.reduce((s, r) => s + (r.count || 0), 0);
+      if (total > 0) {
+        alert(t({id:'catalogacao.batchHasDrafts'},{count: total}));
+        return;
+      }
+      const { error } = await supabase.from('catalog_batches')
+        .delete()
+        .eq('id', id);
+      if (error) throw error;
+      onRefresh();
+    } catch (err) {
+      alert(t({id:'common.errorPrefix'},{message:err.message}));
+    }
+  }
+
   const openBatches = batches.filter(b => b.status === 'open');
-  const closedBatches = batches.filter(b => b.status !== 'open');
+  const closedBatches = batches.filter(b => b.status !== 'open' && b.status !== 'archived');
+  const archivedBatches = batches.filter(b => b.status === 'archived');
 
   function formatDate(v) {
     if (!v) return '—';
@@ -495,11 +533,11 @@ function BatchesPanel({ batches, onRefresh }) {
         </div>
       )}
 
-      {/* Lotes fermés */}
+      {/* Lotes fermés (non archivés) */}
       {closedBatches.length > 0 && (
         <details style={{ marginTop: 12 }}>
           <summary style={{ cursor: 'pointer', fontSize: '.82rem', color: 'var(--brand-muted, #aaa)' }}>
-            Lotes encerrados ({closedBatches.length})
+            {t({id:'catalogacao.closedBatches'},{count: closedBatches.length})}
           </summary>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.82rem', marginTop: 8 }}>
             <thead>
@@ -507,6 +545,7 @@ function BatchesPanel({ batches, onRefresh }) {
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Nome</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Status</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Criado em</th>
+                <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
             <tbody>
@@ -519,6 +558,42 @@ function BatchesPanel({ batches, onRefresh }) {
                     </span>
                   </td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
+                  <td style={{ padding: '8px', textAlign: 'right' }}>
+                    <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
+                      onClick={() => archiveBatch(b.id)}>{t({id:'catalogacao.archiveBatch'})}</button>
+                    <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
+                      onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
+      )}
+
+      {/* Lotes archivés */}
+      {archivedBatches.length > 0 && (
+        <details style={{ marginTop: 12 }}>
+          <summary style={{ cursor: 'pointer', fontSize: '.82rem', color: 'var(--brand-muted, #666)' }}>
+            {t({id:'catalogacao.archivedBatches'},{count: archivedBatches.length})}
+          </summary>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.82rem', marginTop: 8 }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid rgba(255,255,255,.1)' }}>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Nome</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Criado em</th>
+                <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {archivedBatches.map(b => (
+                <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,.06)', opacity: 0.4 }}>
+                  <td style={{ padding: '8px' }}>{b.name}</td>
+                  <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
+                  <td style={{ padding: '8px', textAlign: 'right' }}>
+                    <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
+                      onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -527,7 +602,7 @@ function BatchesPanel({ batches, onRefresh }) {
       )}
 
       {batches.length === 0 && (
-        <div className="cat-placeholder">Nenhum lote encontrado. Crie o primeiro lote acima.</div>
+        <div className="cat-placeholder">{t({id:'catalogacao.noBatches'})}</div>
       )}
     </div>
   );
