@@ -71,7 +71,7 @@ BEGIN
       edicao           = COALESCE(NULLIF(c.edicao,''),           d.edicao),
       local_publicacao = COALESCE(NULLIF(c.local_publicacao,''), d.local_publicacao),
       idioma           = COALESCE(NULLIF(c.idioma,''),           d.idioma),
-      paginas          = COALESCE(NULLIF(c.paginas,''),          d.paginas),
+      paginas          = COALESCE(c.paginas,                     d.paginas),  -- integer : pas de NULLIF('')
       notas            = COALESCE(NULLIF(c.notas,''),            d.notas),
       assuntos         = COALESCE(NULLIF(c.assuntos,''),         d.assuntos),
       colecao          = COALESCE(NULLIF(c.colecao,''),          d.colecao),
