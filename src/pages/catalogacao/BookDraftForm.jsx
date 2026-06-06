@@ -139,7 +139,7 @@ const EMPTY_FORM = {
   // Relatorio
   relatorio_org: '', relatorio_recipient: '', relatorio_internal_notes: '',
   // Zine
-  zine_print_run: '', zine_technique: '',
+  zine_print_run: '', zine_technique: '', zine_format: '',
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -285,6 +285,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const isAudiovisual = materialType === 'audiovisual';
   const isDigitalNative = materialType === 'recurso_digital';
   const isDossier = materialType === 'dossie';
+  const isTese = materialType === 'tese';
+  const isArtigo = materialType === 'artigo';
+  const isRelatorio = materialType === 'relatorio';
+  const isZine = materialType === 'zine';
   // Track A Lot 3 — ternary tiers: simple→1, advanced→2, complete→3.
   const catalogTier = tierFromMode(mode);
 
@@ -1360,6 +1364,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         dossier_period: isDossier ? (f('dossier_period') || null) : null,
         dossier_organizations: isDossier ? (f('dossier_organizations') || null) : null,
         dossier_context: isDossier ? (f('dossier_context') || null) : null,
+        // Tese
+        tese_university: isTese ? (f('tese_university') || null) : null,
+        tese_advisor: isTese ? (f('tese_advisor') || null) : null,
+        // Artigo
+        artigo_source: isArtigo ? (f('artigo_source') || null) : null,
+        artigo_volume: isArtigo ? (f('artigo_volume') || null) : null,
+        artigo_issue: isArtigo ? (f('artigo_issue') || null) : null,
+        artigo_pages: isArtigo ? (f('artigo_pages') || null) : null,
+        // Relatorio
+        relatorio_org: isRelatorio ? (f('relatorio_org') || null) : null,
+        relatorio_recipient: isRelatorio ? (f('relatorio_recipient') || null) : null,
+        relatorio_internal_notes: isRelatorio ? (f('relatorio_internal_notes') || null) : null,
+        // Zine
+        zine_print_run: isZine ? (f('zine_print_run') || null) : null,
+        zine_technique: isZine ? (f('zine_technique') || null) : null,
+        zine_format: isZine ? (f('zine_format') || null) : null,
+        // Subjects (transversal)
+        subjects: f('subjects') || null,
         created_by: user?.id || null,
         updated_by: user?.id || null,
       };

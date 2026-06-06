@@ -323,6 +323,7 @@ export const REGISTRY = [
     fields: [
       { id: 'zine_print_run', label: 'catalogacao.field.printRun', tier: 3, phEx: '200' },
       { id: 'zine_technique', label: 'catalogacao.field.printTechnique', tier: 3, ph: 'catalogacao.ph.printTechnique' },
+      { id: 'zine_format', label: 'catalogacao.field.physicalFormat', tier: 3, ph: 'catalogacao.ph.physicalFormat' },
     ],
   },
 
