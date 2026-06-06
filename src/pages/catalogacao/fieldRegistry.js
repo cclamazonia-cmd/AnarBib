@@ -160,12 +160,12 @@ export const REGISTRY = [
     tag: 'catalogacao.tag.material',
     mat: ['periodico'],
     fields: [
-      { id: 'titulo_periodico', label: 'catalogacao.field.periodTitle', tier: 1, ph: 'catalogacao.ph.periodTitle' },
-      { id: 'volume', label: 'catalogacao.field.volume', tier: 1, phEx: '12' },
-      { id: 'numero', label: 'catalogacao.field.issue', tier: 1, phEx: '3' },
-      { id: 'data_edicao', label: 'catalogacao.field.pubDate', tier: 1, phEx: 'jan.-mar. 2024' },
-      { id: 'fasciculo', label: 'catalogacao.field.fascicule', tier: 3, phEx: 'Especial' },
-      { id: 'periodicidade', label: 'catalogacao.field.frequency', tier: 3, phEx: 'Trimestral' },
+      { id: 'titulo_periodico', label: 'catalogacao.field.periodTitle', tier: 1, mat: ['periodico'], ph: 'catalogacao.ph.periodTitle' },
+      { id: 'volume', label: 'catalogacao.field.volume', tier: 1, mat: ['periodico'], phEx: '12' },
+      { id: 'numero', label: 'catalogacao.field.issue', tier: 1, mat: ['periodico'], phEx: '3' },
+      { id: 'data_edicao', label: 'catalogacao.field.pubDate', tier: 1, mat: ['periodico'], phEx: 'jan.-mar. 2024' },
+      { id: 'fasciculo', label: 'catalogacao.field.fascicule', tier: 3, mat: ['periodico'], phEx: 'Especial' },
+      { id: 'periodicidade', label: 'catalogacao.field.frequency', tier: 3, mat: ['periodico'], phEx: 'Trimestral' },
     ],
   },
 
