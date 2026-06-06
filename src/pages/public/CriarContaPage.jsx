@@ -205,13 +205,31 @@ export default function CriarContaPage() {
         locale: detectLocale(),
       }});
       if (error) {
-        const m = data?.error || error.message || t({id:'auth.networkError'});
-        setMsg({
-          text: (m.includes('already') || m.includes('já existe') || m.includes('exists'))
-            ? t({id:'auth.create.emailAlreadyRegistered'})
-            : m,
-          kind: 'error'
-        });
+        // supabase-js met le corps JSON de l'EF dans error.context (non-2xx),
+        // pas dans data (qui vaut null). On tente les deux pour robustesse.
+        const efBody = error.context ?? data;
+        const code = efBody?.error || '';
+        const detail = efBody?.detail || '';
+        let userMsg;
+        if (code.includes('already') || code.includes('já existe') || code.includes('exists')) {
+          userMsg = t({id:'auth.create.emailAlreadyRegistered'});
+        } else if (code === 'INVALID_LIBRARY' || code === 'LIBRARY_NOT_FOUND') {
+          userMsg = t({id:'auth.create.errorLibraryNotReady'});
+        } else if (code === 'CREATE_USER_FAILED') {
+          userMsg = t({id:'auth.create.errorCreateFailed'});
+        } else if (code === 'PROFILE_UPDATE_FAILED' || code === 'MEMBERSHIP_UPSERT_FAILED') {
+          userMsg = t({id:'auth.create.errorProfileFailed'});
+        } else if (code === 'MISSING_ENV') {
+          userMsg = t({id:'auth.create.errorServerConfig'});
+        } else if (code) {
+          // Code inconnu mais present : afficher un message generique + le code
+          // pour que l'usager puisse le transmettre au support.
+          userMsg = `${t({id:'auth.create.errorGeneric'})} (${code})`;
+        } else {
+          userMsg = error.message || t({id:'auth.networkError'});
+        }
+        setMsg({ text: userMsg, kind: 'error' });
+        if (detail) console.warn('register EF detail:', detail);
         return;
       }
       if (data?.public_id) setPublicId(data.public_id);
