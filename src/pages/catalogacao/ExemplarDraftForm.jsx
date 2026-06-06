@@ -146,13 +146,14 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     if (!bibRef?.trim()) { setParentBook(null); return; }
     try {
       const { data } = await supabase.from('books')
-        .select('id, titulo, subtitulo, autor, cdd, editora, ano, bib_ref, loanable')
+        .select('id, titulo, subtitulo, autor, cdd, editora, ano, bib_ref, loanable, circulation_default')
         .eq('bib_ref', bibRef.trim()).limit(1).single();
       setParentBook(data || null);
       if (data) {
-        // P1.6-a : pré-remplit la circulation de l'exemplaire depuis le padrão de la ficha
-        // (loanable -> 'ambos' selon DOC-CIRC-1, sinon 'consulta'), sans écraser un choix déjà posé.
-        setForm(prev => prev.circulation_policy ? prev : { ...prev, circulation_policy: data.loanable ? 'ambos' : 'consulta' });
+        // P1.6-a : pré-remplit la circulation de l'exemplaire depuis le padrão de la ficha.
+        // §5.6 : on utilise circulation_default (3 valeurs) quand présent ; repli sur le
+        // booléen loanable (DOC-CIRC-1 : true -> 'ambos', sinon 'consulta'). Sans écraser un choix déjà posé.
+        setForm(prev => prev.circulation_policy ? prev : { ...prev, circulation_policy: data.circulation_default || (data.loanable ? 'ambos' : 'consulta') });
         // Auto-fill label from parent book if empty
         setLabel(prev => ({
           title: prev.title || data.titulo || '',

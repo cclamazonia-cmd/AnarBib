@@ -3353,5 +3353,6 @@
   "catalogacao.digital.isPrimary": "Recurso principal",
   "catalogacao.digital.matchValidated": "Correspondência bibliográfica validada",
   "catalogacao.digital.update": "Atualizar recurso",
-  "catalogacao.digital.save": "Salvar recurso"
+  "catalogacao.digital.save": "Salvar recurso",
+  "catalogacao.ui.circulationBoth": "Empréstimo + consulta"
 }

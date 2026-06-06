@@ -3353,5 +3353,6 @@
   "catalogacao.digital.isPrimary": "Recurs principal",
   "catalogacao.digital.matchValidated": "Correspondència bibliogràfica validada",
   "catalogacao.digital.update": "Actualitza el recurs",
-  "catalogacao.digital.save": "Desa el recurs"
+  "catalogacao.digital.save": "Desa el recurs",
+  "catalogacao.ui.circulationBoth": "Préstec + consulta"
 }

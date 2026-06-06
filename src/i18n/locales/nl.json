@@ -3353,5 +3353,6 @@
   "catalogacao.digital.isPrimary": "Hoofdbron",
   "catalogacao.digital.matchValidated": "Bibliografische overeenkomst gevalideerd",
   "catalogacao.digital.update": "Bron bijwerken",
-  "catalogacao.digital.save": "Bron opslaan"
+  "catalogacao.digital.save": "Bron opslaan",
+  "catalogacao.ui.circulationBoth": "Uitlening + raadpleging"
 }

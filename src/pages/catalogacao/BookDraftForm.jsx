@@ -109,7 +109,7 @@ const EMPTY_FORM = {
   edicao: '', editora: '', colecao: '', local_publicacao: '', ano: '',
   isbn: '', issn: '',
   titulo_periodico: '', volume: '', numero: '', fasciculo: '', data_edicao: '', periodicidade: '',
-  cdd: '', idioma: '', paginas: '', loanable: 'true',
+  cdd: '', idioma: '', paginas: '', loanable: 'true', circulation_default: 'emprestavel',
   notas: '', subjects: '', cover_object_path: '', marc_json: '',
   // Acquisition bridge
   acquisition_mode: '', acquisition_date: '', owner_library: '', holder_library: '',
@@ -1271,7 +1271,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         paginas: f('paginas') ? parseInt(f('paginas'), 10) || null : null,
         notas: f('notas') || null,
         tipo_material: materialType,
-        loanable: NON_LOANABLE_TYPES.has(materialType) ? false : f('loanable') === 'true',
+        circulation_default: NON_LOANABLE_TYPES.has(materialType) ? 'consulta' : (f('circulation_default') || 'emprestavel'),
+        loanable: NON_LOANABLE_TYPES.has(materialType) ? false : (f('circulation_default') || 'emprestavel') !== 'consulta',
         colecao: f('colecao') || null,
         cover_object_path: f('cover_object_path') || null,
         marc_json: f('marc_json') ? JSON.parse(f('marc_json')) : null,
@@ -1432,6 +1433,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       idioma: r.idioma || '',
       paginas: r.paginas != null ? String(r.paginas) : '',
       loanable: String(r.loanable ?? true),
+      circulation_default: r.loanable === false ? 'consulta' : (r.circulation_default || 'emprestavel'),
       notas: r.notas || '',
       subjects: r.marc_json?.anarbib_subjects?.join(' ; ') || '',
       cover_object_path: r.cover_object_path || '',
@@ -1551,8 +1553,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     const cdd = f('cdd').trim();
     const subjects = f('subjects').split(/[;\n]+/).map(s => s.trim()).filter(Boolean);
     const typeLabel = MATERIAL_TYPES.find(m => m.value === materialType)?.label || materialType;
-    const isConsult = f('loanable') === 'false';
-    const circLabel = isConsult ? t({ id: 'catalogacao.ui.consultOnly' }) : t({ id: 'catalogacao.ui.loanable' });
+    const circ = f('circulation_default') || 'emprestavel';
+    const isConsult = circ === 'consulta';
+    const circLabel = circ === 'consulta' ? t({ id: 'catalogacao.ui.consultOnly' })
+      : circ === 'ambos' ? t({ id: 'catalogacao.ui.circulationBoth' })
+        : t({ id: 'catalogacao.ui.loanable' });
     const meta = [publisher, place, language].filter(Boolean).join(' · ');
     const essentials = [title, author, year].filter(Boolean).length;
     const chipCls = essentials >= 3 ? 'ok' : essentials === 2 ? 'warn' : 'danger';
@@ -2001,9 +2006,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── Pages + circulação ────────────────────── */}
           {renderRegistryField('paginas', { f, set, t }, catalogTier, materialType)}
-          {sel('loanable', t({id:'catalogacao.ui.circulation'}), [
-            { value: 'true', label: t({id:'catalogacao.ui.loanable'}) },
-            { value: 'false', label: t({id:'catalogacao.ui.consultOnly'}) },
+          {sel('circulation_default', t({id:'catalogacao.ui.circulation'}), [
+            { value: 'emprestavel', label: t({id:'catalogacao.ui.loanable'}) },
+            { value: 'consulta', label: t({id:'catalogacao.ui.consultOnly'}) },
+            { value: 'ambos', label: t({id:'catalogacao.ui.circulationBoth'}) },
           ])}
 
           {/* ── Prévia de cote / étiquette (tier 3) ────── */}
@@ -2285,7 +2291,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     {t({ id: 'catalogacao.ui.recordLabel' })} {[f('autor'), f('editora'), f('local_publicacao'), f('ano')].filter(Boolean).join(' · ') || '—'}
                   </div>
                   <div style={{ color: 'var(--brand-muted, #aaa)', marginBottom: 3 }}>
-                    {t({id:'catalogacao.ui.circulationLabel'})}: {f('loanable') === 'true' ? t({id:'catalogacao.ui.loanable'}) : t({id:'catalogacao.ui.consultOnly'})}
+                    {t({id:'catalogacao.ui.circulationLabel'})}: {(() => { const c = f('circulation_default') || 'emprestavel'; return c === 'consulta' ? t({id:'catalogacao.ui.consultOnly'}) : c === 'ambos' ? t({id:'catalogacao.ui.circulationBoth'}) : t({id:'catalogacao.ui.loanable'}); })()}
                     {f('cdd') && ` · CDD: ${f('cdd')}`}
                     {f('idioma') && ` · ${f('idioma')}`}
                   </div>

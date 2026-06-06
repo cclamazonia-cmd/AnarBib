@@ -91,9 +91,10 @@ const EDITORA_MAT = ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'];
 // Options de sélecteurs/segments — reprises verbatim du render (D3).
 const MATERIAL_OPTS = MATERIAL_CODES.map(c => ({ value: c, label: `catalogacao.material.${c}` }));
 const CIRCULATION_OPTS = [
-  { value: 'true', label: 'catalogacao.ui.loanable' },
-  { value: 'false', label: 'catalogacao.ui.consultOnly' },
-  // (D5) 3ᵉ valeur « Empréstimo + consulta » différée.
+  { value: 'emprestavel', label: 'catalogacao.ui.loanable' },
+  { value: 'consulta', label: 'catalogacao.ui.consultOnly' },
+  { value: 'ambos', label: 'catalogacao.ui.circulationBoth' },
+  // §5.6 : 3 valeurs effectives (différé D5 / CAT-E6 levé le 06/06).
 ];
 const RECTO_VERSO_OPTS = [
   { value: '', label: 'catalogacao.ph.rectoVerso.none' },
@@ -130,7 +131,7 @@ export const REGISTRY = [
       { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro'], watch: 'dup', phEx: '978-2-347-00368-5' },
       { id: 'issn', label: 'catalogacao.field.issn', tier: 1, mat: ['periodico', 'artigo'], phEx: '0251-1479' },
       { id: 'cdd', label: 'catalogacao.field.cdd', tier: 1, phEx: '335' },
-      { id: 'loanable', label: 'catalogacao.ui.circulation', tier: 1, type: 'seg', opts: CIRCULATION_OPTS },
+      { id: 'circulation_default', label: 'catalogacao.ui.circulation', tier: 1, type: 'seg', opts: CIRCULATION_OPTS },
       { id: 'subjects', label: 'catalogacao.field.subjects', tier: 2, type: 'textarea', span: 3, ph: 'catalogacao.ph.subjects' },
       { id: 'notas', label: 'catalogacao.field.notes', tier: 2, type: 'textarea', span: 3, rows: 3, ph: 'catalogacao.ph.notes' },
     ],

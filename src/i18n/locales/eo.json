@@ -3353,5 +3353,6 @@
   "catalogacao.digital.isPrimary": "Ĉefa rimedo",
   "catalogacao.digital.matchValidated": "Bibliografia kongruo validigita",
   "catalogacao.digital.update": "Ĝisdatigi rimedon",
-  "catalogacao.digital.save": "Konservi rimedon"
+  "catalogacao.digital.save": "Konservi rimedon",
+  "catalogacao.ui.circulationBoth": "Prunto + surloka konsulto"
 }

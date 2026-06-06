@@ -3353,5 +3353,6 @@
   "catalogacao.digital.isPrimary": "Hauptressource",
   "catalogacao.digital.matchValidated": "Bibliografische Übereinstimmung bestätigt",
   "catalogacao.digital.update": "Ressource aktualisieren",
-  "catalogacao.digital.save": "Ressource speichern"
+  "catalogacao.digital.save": "Ressource speichern",
+  "catalogacao.ui.circulationBoth": "Ausleihe + Vor-Ort-Einsicht"
 }

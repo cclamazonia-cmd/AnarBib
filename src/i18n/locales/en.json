@@ -3353,5 +3353,6 @@
   "catalogacao.digital.isPrimary": "Primary resource",
   "catalogacao.digital.matchValidated": "Bibliographic match validated",
   "catalogacao.digital.update": "Update resource",
-  "catalogacao.digital.save": "Save resource"
+  "catalogacao.digital.save": "Save resource",
+  "catalogacao.ui.circulationBoth": "Loan + on-site consultation"
 }

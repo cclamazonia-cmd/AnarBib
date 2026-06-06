@@ -3353,5 +3353,6 @@
   "catalogacao.digital.isPrimary": "Κύριος πόρος",
   "catalogacao.digital.matchValidated": "Η βιβλιογραφική αντιστοιχία επικυρώθηκε",
   "catalogacao.digital.update": "Ενημέρωση πόρου",
-  "catalogacao.digital.save": "Αποθήκευση πόρου"
+  "catalogacao.digital.save": "Αποθήκευση πόρου",
+  "catalogacao.ui.circulationBoth": "Δανεισμός + επιτόπια χρήση"
 }
