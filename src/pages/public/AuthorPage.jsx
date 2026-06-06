@@ -110,7 +110,6 @@ export default function AuthorPage() {
   const secondaryName = [author.sort_name, author.preferred_name]
     .map(v => String(v || '').trim())
     .find(v => v && v !== displayName) || '';
-  const years = yearsLabel(author.birth_year, author.death_year);
   const intro = buildHeroIntro(author, books.length, t, locale);
   const hasPhoto = !!author.photo_object_path;
   const sourceLabel = [author.source_kind, author.source_label].filter(Boolean).join(' · ');
@@ -130,9 +129,10 @@ export default function AuthorPage() {
       {/* Hero */}
       <Hero title={displayName} subtitle={intro}>
         <div className="ab-autor-chips">
-          {years && <Pill>{t({ id: 'author.birthDeath' })}: {years}</Pill>}
-          {author.country && <Pill>{t({ id: 'author.country' })}: {getCountryName(author.country, locale) || author.country}</Pill>}
-          {books.length > 0 && <Pill>{t({ id: 'author.booksCount' }, { count: books.length })}</Pill>}
+          {/* B1 : naissance/décès, pays et nombre de livres figurent déjà dans le sous-titre
+              du Hero — on ne les répète pas en chips. Ces emplacements accueilleront en B2
+              les dates d'activité et l'appartenance (organisation/syndicat) quand les champs
+              existeront sur la table authors. */}
           {author.viaf_id && (
             <Pill>
               VIAF: <a href={`https://viaf.org/viaf/${author.viaf_id}`} target="_blank" rel="noopener noreferrer">{author.viaf_id}</a>
