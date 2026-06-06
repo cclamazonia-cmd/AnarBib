@@ -87,13 +87,16 @@ function getStatusInfo(book, isAuth, t) {
   return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
 }
 
-function buildServerFilters({ search, authorFilter, publisherFilter, yearFilter, libraryFilter, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter }) {
+function buildServerFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, libraryFilter, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter }) {
   const f = {};
   if (search.trim()) {
     const p = `%${search.trim()}%`;
     f['or'] = `(titulo.ilike.${p},autor.ilike.${p},editora.ilike.${p},bib_ref.ilike.${p},cdd.ilike.${p},assuntos.ilike.${p},subtitulo.ilike.${p},isbn.ilike.${p})`;
   }
-  if (authorFilter.trim()) f['autor'] = `ilike.%${authorFilter.trim()}%`;
+  // Filtre par LIEN d'autorite (author_id) prioritaire : regroupe toutes les
+  // graphies du contributeur sous une seule fiche. Repli sur le texte brut sinon.
+  if (authorIdFilter && String(authorIdFilter).trim()) f['author_id'] = `eq.${String(authorIdFilter).trim()}`;
+  else if (authorFilter.trim()) f['autor'] = `ilike.%${authorFilter.trim()}%`;
   if (publisherFilter.trim()) f['editora'] = `ilike.%${publisherFilter.trim()}%`;
   if (yearFilter.trim()) {
     const raw = yearFilter.trim();
@@ -233,6 +236,7 @@ export default function CatalogPage() {
   const [filterState] = useState(() => loadSavedFilters() || {});
   const [search, setSearch] = useState(filterState.search || '');
   const [authorFilter, setAuthorFilter] = useState(filterState.authorFilter || '');
+  const [authorIdFilter, setAuthorIdFilter] = useState(filterState.authorIdFilter || '');
   const [publisherFilter, setPublisherFilter] = useState(filterState.publisherFilter || '');
   const [yearFilter, setYearFilter] = useState(filterState.yearFilter || '');
   const [availabilityFilter, setAvailabilityFilter] = useState(filterState.availabilityFilter || '__all__');
@@ -262,8 +266,8 @@ export default function CatalogPage() {
 
   // Sauvegarder les filtres dans sessionStorage à chaque modification
   useEffect(() => {
-    saveFilters({ search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter });
-  }, [search, authorFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter]);
+    saveFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter });
+  }, [search, authorFilter, authorIdFilter, publisherFilter, yearFilter, availabilityFilter, libraryFilter, sortValue, compact, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter]);
 
   // ── Initialisation depuis l'URL (montage uniquement) ───────
   // Doctrine validée : l'URL est la source de vérité. Un lien profond
@@ -292,6 +296,7 @@ export default function CatalogPage() {
     // Autres filtres : valeur de l'URL si présente, sinon remise à zéro.
     setSearch(urlSearchParams.get('q') || '');
     setAuthorFilter(urlSearchParams.get('autor') || '');
+    setAuthorIdFilter('');
     setPublisherFilter(urlSearchParams.get('editora') || '');
     setYearFilter(urlSearchParams.get('ano') || '');
     // Filtres sans représentation URL : remis à zéro pour un écran propre.
@@ -360,7 +365,7 @@ export default function CatalogPage() {
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     try {
-      const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
+      const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, authorIdFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
       const { data, error, totalCount: serverTotal } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
       if (error) throw error;
       const result = data || [];
@@ -373,7 +378,7 @@ export default function CatalogPage() {
       if (serverTotal != null) setTotalCount(serverTotal);
     } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
     finally { setLoading(false); setLoadingMore(false); }
-  }, [viewName, selectCols, sortValue, dSearch, dAuthor, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
+  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
 
@@ -573,7 +578,7 @@ export default function CatalogPage() {
   function si(col) { const [c,d] = sortValue.split('.'); return c === col ? (d==='asc'?' ↑':' ↓') : ''; }
 
   function clearFilters() {
-    setSearch(''); setAuthorFilter(''); setPublisherFilter(''); setYearFilter('');
+    setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setPublisherFilter(''); setYearFilter('');
     setAvailabilityFilter('__all__'); setLibraryFilter('__all__'); setSortValue('__relevance__');
     setIsbnFilter(''); setLanguageFilter(''); setCddFilter(''); setSubjectsFilter('');
     setMaterialFilter('__all__'); setCollectionFilter(''); setPlaceFilter('');
@@ -648,10 +653,17 @@ export default function CatalogPage() {
       <section className="ab-unified-search-wrap">
         <UnifiedSearchCombobox
           onAuthorPick={(author) => {
-            // Filtre la grille par auteur (point 7 des décisions B.7) : on alimente
-            // simplement le champ authorFilter texte. Le système de filtres existant
-            // s'occupe du reste (debouncing, requête PostgREST, persistance localStorage).
-            setAuthorFilter(author.filterValue || author.label);
+            // Filtre la grille par LIEN d'autorite (author_id) plutot que par texte
+            // brut : une fiche d'autorite regroupe toutes les graphies du contributeur
+            // (corrige l'incoherence "1 vs N" entre clic-suggestion et saisie texte).
+            // Repli sur le filtre texte si l'item n'a pas d'id.
+            if (author.id) {
+              setAuthorIdFilter(String(author.id));
+              setAuthorFilter(author.label || author.filterValue || '');
+            } else {
+              setAuthorIdFilter('');
+              setAuthorFilter(author.filterValue || author.label || '');
+            }
             setSearch('');
             setFiltersOpen(true);
           }}
@@ -669,7 +681,7 @@ export default function CatalogPage() {
           <div className="ab-field">
             <label className="ab-field__label">{t({ id: 'catalog.filters.author' })}</label>
             <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.authorPlaceholder' })}
-              value={authorFilter} onChange={e => setAuthorFilter(e.target.value)} />
+              value={authorFilter} onChange={e => { setAuthorFilter(e.target.value); setAuthorIdFilter(''); }} />
           </div>
           <div className="ab-field">
             <label className="ab-field__label">{t({ id: 'catalog.filters.publisher' })}</label>
@@ -764,7 +776,7 @@ export default function CatalogPage() {
           {hasActiveFilters && (
             <div className="ab-active-filters">
               {dSearch && <span className="ab-filter-chip">{t({ id: 'catalog.chip.search' })}: <strong>{dSearch}</strong> <button onClick={() => setSearch('')}>✕</button></span>}
-              {dAuthor && <span className="ab-filter-chip">{t({ id: 'catalog.chip.author' })}: <strong>{dAuthor}</strong> <button onClick={() => setAuthorFilter('')}>✕</button></span>}
+              {dAuthor && <span className="ab-filter-chip">{t({ id: 'catalog.chip.author' })}: <strong>{dAuthor}</strong> <button onClick={() => { setAuthorFilter(''); setAuthorIdFilter(''); }}>✕</button></span>}
               {dPublisher && <span className="ab-filter-chip">{t({ id: 'catalog.chip.publisher' })}: <strong>{dPublisher}</strong> <button onClick={() => setPublisherFilter('')}>✕</button></span>}
               {dYear && <span className="ab-filter-chip">{t({ id: 'catalog.chip.year' })}: <strong>{dYear}</strong> <button onClick={() => setYearFilter('')}>✕</button></span>}
               {availabilityFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.avail' })}: <strong>{availabilityOptions.find(o => o.value === availabilityFilter)?.label}</strong> <button onClick={() => setAvailabilityFilter('__all__')}>✕</button></span>}
