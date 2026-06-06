@@ -57,6 +57,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     target_bib_ref: '', target_library_id: '', target_holding_id: '',
     tombo: '', notes: '',
     circulation_policy: '', visibility: 'public',
+    acquisition_mode: '', acquisition_date: '', provenance_note: '', source_lib: '',
   });
   const [loc, setLoc] = useState({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
   const [label, setLabel] = useState({ title: '', author: '', cdd: '', note: '' });
@@ -65,6 +66,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
+  const [acqModes, setAcqModes] = useState([]);
 
   function f(k) { return form[k] || ''; }
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); if (['saved','ready'].includes(draftState)) setDraftState('dirty'); }
@@ -83,6 +85,15 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   }, []);
 
   useEffect(() => { loadDrafts(); }, [loadDrafts]);
+
+  // Modes d'acquisition (table de reference) pour le menu deroulant
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase.from('catalog_ref_acquisition_modes')
+        .select('code, label').eq('is_active', true).order('sort_order');
+      setAcqModes(data || []);
+    })();
+  }, []);
 
   // -- Lot 0 -- charger un brouillon a editer (handoff catalogo/fila -> editeur) --
   useEffect(() => {
@@ -115,7 +126,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
   // ── Reset / Fill ────────────────────────────────────────
   function resetForm() {
-    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', tombo: '', notes: '', circulation_policy: '', visibility: 'public' });
+    setForm({ id: '', published_exemplar_id: '', batch_id: '', action: 'create', status: 'draft', label_status: 'pending', target_bib_ref: '', target_library_id: '', target_holding_id: '', tombo: '', notes: '', circulation_policy: '', visibility: 'public', acquisition_mode: '', acquisition_date: '', provenance_note: '', source_lib: '' });
     setLoc({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
     setLabel({ title: '', author: '', cdd: '', note: '' });
     setParentBook(null);
@@ -131,6 +142,8 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       target_bib_ref: r.target_bib_ref || '', target_library_id: r.target_library_id || '',
       target_holding_id: String(r.target_holding_id || ''), tombo: r.tombo || '', notes: r.notes || '',
       circulation_policy: r.circulation_policy || '', visibility: r.visibility || 'public',
+      acquisition_mode: r.acquisition_mode || '', acquisition_date: r.acquisition_date || '',
+      provenance_note: r.provenance_note || '', source_lib: r.source_lib || '',
     });
     setLoc(parseShelfLocation(r.shelf_location || ''));
     setLabel({ title: r.label_title_override || '', author: r.label_author_override || '', cdd: r.label_cdd_override || '', note: r.label_note || '' });
@@ -200,6 +213,10 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         notes: f('notes').trim() || null,
         circulation_policy: f('circulation_policy') || null,
         visibility: f('visibility') || 'public',
+        acquisition_mode: f('acquisition_mode') || null,
+        acquisition_date: f('acquisition_date') || null,
+        provenance_note: f('provenance_note').trim() || null,
+        source_lib: f('source_lib').trim() || null,
         updated_by: user?.id || null,
         ...(isUpdate ? {} : { created_by: user?.id || null }),
       };
@@ -434,6 +451,39 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             </div>
           </div>
         </div>
+
+        {/* ═══════════════════════════════════════════════ */}
+        {/* STEP 5: Aquisicao / Proveniencia (repliable)    */}
+        {/* ═══════════════════════════════════════════════ */}
+        <details style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 14 }}>
+          <summary style={{ fontSize: '.82rem', fontWeight: 700, cursor: 'pointer' }}>⑤ Aquisição / Proveniência</summary>
+          <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', margin: '6px 0 10px' }}>
+            Opcional. Origem física do exemplar (compra, doação, permuta…).
+          </div>
+          <div className="cat-book-grid">
+            <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+              <label style={ls}>Modo de aquisição</label>
+              <select value={f('acquisition_mode')} onChange={e => set('acquisition_mode', e.target.value)} style={fs}>
+                <option value="">— não informado —</option>
+                {acqModes.map(m => <option key={m.code} value={m.code}>{m.label || m.code}</option>)}
+              </select>
+            </div>
+            <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+              <label style={ls}>Data de aquisição</label>
+              <input type="date" value={f('acquisition_date')} onChange={e => set('acquisition_date', e.target.value)} style={fs} />
+            </div>
+            <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+              <label style={ls}>Biblioteca de origem</label>
+              <input type="text" value={f('source_lib')} onChange={e => set('source_lib', e.target.value)}
+                placeholder="Doadora, permuta, importação…" style={fs} />
+            </div>
+            <div className="cat-field" style={{ gridColumn: 'span 6' }}>
+              <label style={ls}>Proveniência / nota</label>
+              <input type="text" value={f('provenance_note')} onChange={e => set('provenance_note', e.target.value)}
+                placeholder="Ex.: doação do coletivo X; ex-libris; carimbo de origem." style={fs} />
+            </div>
+          </div>
+        </details>
 
         {/* ═══════════════════════════════════════════════ */}
         {/* STEP 4: Label — the tag on the spine            */}
