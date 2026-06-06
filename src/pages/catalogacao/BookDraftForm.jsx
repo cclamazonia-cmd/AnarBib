@@ -204,7 +204,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         if (error) throw error;
         if (data) fillFromRecord(data);
       } catch (e) {
-        if (!cancelled) setMsg({ text: `Erro ao carregar rascunho: ${e.message}`, kind: 'error' });
+        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.msg.loadDraftError' }, { message: e.message }), kind: 'error' });
       } finally {
         if (!cancelled) onConsumed?.();
       }
@@ -345,12 +345,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       const total = data.total || 0;
       setMsg({
         text: total > 0
-          ? `${total} candidata(s) encontrada(s) nas fontes abertas.`
-          : 'Nenhuma candidata encontrada nas fontes consultadas.',
+          ? t({ id: 'catalogacao.msg.candidatesFound' }, { total })
+          : t({ id: 'catalogacao.msg.noCandidatesFound' }),
         kind: total > 0 ? 'ok' : 'info',
       });
     } catch (err) {
-      setMsg({ text: `Erro na busca: ${err.message || t({id:'catalogacao.msg.connectionFailed'})}`, kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.searchError' }, { message: err.message || t({ id: 'catalogacao.msg.connectionFailed' }) }), kind: 'error' });
     } finally {
       setLookupLoading(false);
     }
@@ -379,10 +379,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   function openIssnPortal() {
     const raw = (f('issn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
-    if (!raw) { setMsg({ text: 'Informe um ISSN.', kind: 'error' }); return; }
+    if (!raw) { setMsg({ text: t({ id: 'catalogacao.msg.needIssn' }), kind: 'error' }); return; }
     const formatted = raw.length === 8 ? `${raw.slice(0, 4)}-${raw.slice(4)}` : raw;
     window.open(`https://portal.issn.org/resource/ISSN/${encodeURIComponent(formatted)}`, '_blank', 'noopener');
-    setMsg({ text: 'Busca de ISSN aberta no Portal ISSN.', kind: 'info' });
+    setMsg({ text: t({ id: 'catalogacao.msg.issnPortalOpened' }), kind: 'info' });
   }
 
   // ═══════════════════════════════════════════════════════
@@ -395,13 +395,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   async function runBnIsbnLookup() {
     const isbn = (f('isbn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
     if (!isbn) {
-      setMsg({ text: 'Informe um ISBN antes de buscar na Biblioteca Nacional.', kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.needIsbnForBn' }), kind: 'error' });
       return;
     }
 
     setBnLoading(true);
     setBnResult(null);
-    setMsg({ text: 'Consultando a Biblioteca Nacional do Brasil…', kind: 'info' });
+    setMsg({ text: t({ id: 'catalogacao.msg.bnSearching' }), kind: 'info' });
 
     try {
       const { data, error } = await supabase.functions.invoke('bn_isbn_lookup', {
@@ -420,7 +420,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         kind: total > 0 ? 'ok' : 'info',
       });
     } catch (err) {
-      setMsg({ text: `Erro BN: ${err.message || t({id:'catalogacao.msg.connectionFailed'})}`, kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.bnError' }, { message: err.message || t({ id: 'catalogacao.msg.connectionFailed' }) }), kind: 'error' });
     } finally {
       setBnLoading(false);
     }
@@ -455,7 +455,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
     setMany(updates);
     if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
-    setMsg({ text: `Resultado BN "${item.title}" aplicado aos campos vazios.`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.msg.bnApplied' }, { title: item.title }), kind: 'ok' });
   }
 
   function clearBnResult() {
@@ -506,7 +506,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
     setMany(updates);
     if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
-    setMsg({ text: `Candidata "${candidate.title}" aplicada aos campos vazios.`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.msg.candidateApplied' }, { title: candidate.title }), kind: 'ok' });
   }
 
   function applySelectedCandidate() {
@@ -1000,7 +1000,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       set('marc_json', JSON.stringify(raw, null, 2));
     } catch {}
 
-    setMsg({ text: `ISBD preparado: ${nonEmptyCount} zona(s) preenchida(s).`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.msg.isbdPrepared' }, { count: nonEmptyCount }), kind: 'ok' });
     if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
   }
 
@@ -1151,10 +1151,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   async function saveDigitalResource() {
     const draftId = f('id');
-    if (!draftId) { setMsg({ text: 'Salve primeiro o rascunho antes de vincular recurso digital.', kind: 'error' }); return; }
+    if (!draftId) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforeDigital' }), kind: 'error' }); return; }
     if (!digitalForm) return;
     if (!digitalForm.storage_path && !digitalForm.source_url) {
-      setMsg({ text: 'Informe ao menos um caminho de armazenamento ou uma URL de fonte.', kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.needPathOrUrl' }), kind: 'error' });
       return;
     }
 
@@ -1193,9 +1193,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
       setDigitalForm(null);
       await loadDigitalResources(draftId);
-      setMsg({ text: 'Recurso digital salvo.', kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.msg.digitalSaved' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: `Erro recurso digital: ${err.message}`, kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.digitalError' }, { message: err.message }), kind: 'error' });
     } finally {
       setDigitalSaving(false);
     }
@@ -1208,9 +1208,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         .delete().eq('id', Number(resourceId));
       if (error) throw error;
       await loadDigitalResources(f('id'));
-      setMsg({ text: 'Recurso digital apagado.', kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.msg.digitalDeleted' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
     }
   }
 
@@ -1357,7 +1357,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       });
       onSaved?.();
     } catch (err) {
-      setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
     } finally {
       setSaving(false);
     }
@@ -1366,7 +1366,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ── Publish draft ──────────────────────────────────────
   async function handlePublish() {
     const draftId = f('id');
-    if (!draftId) { setMsg({ text: 'Salve o rascunho antes de publicar.', kind: 'error' }); return; }
+    if (!draftId) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforePublish' }), kind: 'error' }); return; }
     if (!confirm(t({id:'catalogacao.msg.publishConfirm'}))) return;
     setDupBanner(null);
 
@@ -1385,7 +1385,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       }
 
       setDraftState('published');
-      setMsg({ text: 'Ficha publicada com sucesso!', kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.msg.bookPublished' }), kind: 'ok' });
       onSaved?.();
     } catch (err) {
       const raw = typeof err?.message === 'string' ? err.message : '';
