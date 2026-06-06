@@ -3380,6 +3380,9 @@
   "catalogacao.reassign.placeholder": "Choose a library…",
   "catalogacao.reassign.action": "Assign",
   "catalogacao.reassign.hint": "This also moves all attached copies to the chosen library. Logged network action.",
+  "catalogacao.reassign.sourceAll": "Whole record (all copies)",
+  "catalogacao.reassign.sourcePick": "Choose the source library…",
+  "catalogacao.reassign.multiHint": "This record has copies in several libraries; choose which to move.",
   "catalogacao.reassign.confirm": "Assign this record and its copies to “{library}”?",
   "catalogacao.reassign.done": "{count} copy/copies moved to “{library}”."
 }

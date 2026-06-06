@@ -3380,6 +3380,9 @@
   "catalogacao.reassign.placeholder": "Elekti bibliotekon…",
   "catalogacao.reassign.action": "Atribui",
   "catalogacao.reassign.hint": "La ago ankaŭ movas ĉiujn ligitajn ekzemplerojn al la elektita biblioteko. Protokolita reta ago.",
+  "catalogacao.reassign.sourceAll": "Tuta katalogero (ĉiuj ekzempleroj)",
+  "catalogacao.reassign.sourcePick": "Elektu la fontbibliotekon…",
+  "catalogacao.reassign.multiHint": "Ĉi tiu katalogero havas ekzemplerojn en pluraj bibliotekoj; elektu el kiu movi.",
   "catalogacao.reassign.confirm": "Ĉu atribui ĉi tiun skedon kaj ĝiajn ekzemplerojn al «{library}»?",
   "catalogacao.reassign.done": "{count} ekzemplero(j) movita(j) al «{library}»."
 }

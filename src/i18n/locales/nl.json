@@ -3380,6 +3380,9 @@
   "catalogacao.reassign.placeholder": "Kies een bibliotheek…",
   "catalogacao.reassign.action": "Toewijzen",
   "catalogacao.reassign.hint": "De actie verplaatst ook alle gekoppelde exemplaren naar de gekozen bibliotheek. Geregistreerde netwerkactie.",
+  "catalogacao.reassign.sourceAll": "Hele titel (alle exemplaren)",
+  "catalogacao.reassign.sourcePick": "Kies de bronbibliotheek…",
+  "catalogacao.reassign.multiHint": "Deze titel heeft exemplaren in meerdere bibliotheken; kies welke te verplaatsen.",
   "catalogacao.reassign.confirm": "Deze fiche en haar exemplaren toewijzen aan ‘{library}’?",
   "catalogacao.reassign.done": "{count} exempla(a)r(en) verplaatst naar ‘{library}’."
 }

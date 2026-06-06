@@ -3380,6 +3380,9 @@
   "catalogacao.reassign.placeholder": "Επιλέξτε βιβλιοθήκη…",
   "catalogacao.reassign.action": "Ανάθεση",
   "catalogacao.reassign.hint": "Η ενέργεια μετακινεί επίσης όλα τα συνδεδεμένα αντίτυπα στην επιλεγμένη βιβλιοθήκη. Καταγεγραμμένη ενέργεια δικτύου.",
+  "catalogacao.reassign.sourceAll": "Όλη η εγγραφή (όλα τα αντίτυπα)",
+  "catalogacao.reassign.sourcePick": "Επιλέξτε τη βιβλιοθήκη προέλευσης…",
+  "catalogacao.reassign.multiHint": "Αυτή η εγγραφή έχει αντίτυπα σε πολλές βιβλιοθήκες· επιλέξτε ποια θα μετακινηθούν.",
   "catalogacao.reassign.confirm": "Ανάθεση αυτής της εγγραφής και των αντιτύπων της στη «{library}»;",
   "catalogacao.reassign.done": "{count} αντίτυπο/α μετακινήθηκαν στη «{library}»."
 }

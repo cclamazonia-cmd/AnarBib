@@ -156,7 +156,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // Attribution réseau (admin réseau) : notice + exemplaires → bibliothèque cible
   const [catalogLibraries, setCatalogLibraries] = useState([]);
   const [reassignTarget, setReassignTarget] = useState('');
+  const [reassignSource, setReassignSource] = useState('');  // biblio source (notice multi-biblios)
   const [reassignBusy, setReassignBusy] = useState(false);
+  const [bookLibraries, setBookLibraries] = useState([]);    // biblios ou la notice a des exemplaires
 
   // i18n-aware lists built from t()
   const MATERIAL_TYPES = useMemo(() => MATERIAL_TYPE_KEYS.map(k => ({ value: k, label: t({ id: `catalogacao.material.${k}` }) })), [t]);
@@ -180,12 +182,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     if (!confirm(t({ id: 'catalogacao.reassign.confirm' }, { library: lib?.name || '' }))) return;
     setReassignBusy(true);
     try {
-      const { data, error } = await supabase.rpc('network_admin_reassign_book_to_library', {
-        p_book_id: Number(bookId), p_target_library_id: reassignTarget,
-      });
+      const rpc = reassignSource ? 'network_admin_reassign_book_from_to_library' : 'network_admin_reassign_book_to_library';
+      const params = reassignSource
+        ? { p_book_id: Number(bookId), p_source_library_id: reassignSource, p_target_library_id: reassignTarget }
+        : { p_book_id: Number(bookId), p_target_library_id: reassignTarget };
+      const { data, error } = await supabase.rpc(rpc, params);
       if (error) throw error;
       setMsg({ text: t({ id: 'catalogacao.reassign.done' }, { library: data?.target_library || lib?.name || '', count: data?.exemplares_moved ?? 0 }), kind: 'ok' });
-      setReassignTarget('');
+      setReassignTarget(''); setReassignSource('');
       onSaved?.();
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
@@ -200,6 +204,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [bookDupBusy, setBookDupBusy] = useState(null); // book_id en cours de fusion
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
+
+  // Admin reseau : biblios ou la notice publiee a des exemplaires (alimente le source picker).
+  useEffect(() => {
+    if (!isNetworkAdmin || !form.published_book_id) { setBookLibraries([]); setReassignSource(''); return; }
+    let cancelled = false;
+    supabase.from('book_holdings').select('library_id').eq('book_id', Number(form.published_book_id))
+      .then(({ data }) => {
+        if (cancelled) return;
+        const ids = [...new Set((data || []).map(h => h.library_id).filter(Boolean))];
+        setBookLibraries(ids.map(id => ({ id, name: catalogLibraries.find(l => l.id === id)?.name || id })));
+      });
+    return () => { cancelled = true; };
+  }, [isNetworkAdmin, form.published_book_id, catalogLibraries]);
 
   // ── Lookup state ───────────────────────────────────────
   const [lookupLoading, setLookupLoading] = useState(false);
@@ -1651,16 +1668,26 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             <span style={{ fontSize: '.85rem', fontWeight: 600 }}>{t({ id: 'catalogacao.reassign.title' })}</span>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+            <select value={reassignSource} onChange={e => setReassignSource(e.target.value)}
+              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 220 }}>
+              <option value="">{t({ id: bookLibraries.length > 1 ? 'catalogacao.reassign.sourcePick' : 'catalogacao.reassign.sourceAll' })}</option>
+              {bookLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+            </select>
+            <span aria-hidden="true" style={{ fontSize: '.9rem', color: 'var(--brand-muted,#aaa)' }}>→</span>
             <select value={reassignTarget} onChange={e => setReassignTarget(e.target.value)}
-              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 260 }}>
+              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 220 }}>
               <option value="">{t({ id: 'catalogacao.reassign.placeholder' })}</option>
               {catalogLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
-            <button type="button" className="ab-button ab-button--sm" disabled={!reassignTarget || reassignBusy}
+            <button type="button" className="ab-button ab-button--sm"
+              disabled={!reassignTarget || reassignBusy || (bookLibraries.length > 1 && !reassignSource)}
               onClick={reassignBookToLibrary}>
               {reassignBusy ? t({ id: 'common.saving' }) : t({ id: 'catalogacao.reassign.action' })}
             </button>
           </div>
+          {bookLibraries.length > 1 && (
+            <div style={{ fontSize: '.74rem', color: '#fbbf24', marginTop: 6 }}>{t({ id: 'catalogacao.reassign.multiHint' })}</div>
+          )}
           <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)', marginTop: 6 }}>{t({ id: 'catalogacao.reassign.hint' })}</div>
         </div>
       )}

@@ -3380,6 +3380,9 @@
   "catalogacao.reassign.placeholder": "Scegli una biblioteca…",
   "catalogacao.reassign.action": "Attribuisci",
   "catalogacao.reassign.hint": "L’azione sposta anche tutte le copie collegate nella biblioteca scelta. Azione di rete registrata.",
+  "catalogacao.reassign.sourceAll": "Tutta la notizia (tutte le copie)",
+  "catalogacao.reassign.sourcePick": "Scegli la biblioteca di origine…",
+  "catalogacao.reassign.multiHint": "Questa notizia ha copie in più biblioteche; scegli da quale spostare.",
   "catalogacao.reassign.confirm": "Attribuire questa scheda e le sue copie a «{library}»?",
   "catalogacao.reassign.done": "{count} copia/e spostata/e in «{library}»."
 }

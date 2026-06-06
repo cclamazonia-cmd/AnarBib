@@ -3380,6 +3380,9 @@
   "catalogacao.reassign.placeholder": "Bibliothek wählen…",
   "catalogacao.reassign.action": "Zuweisen",
   "catalogacao.reassign.hint": "Die Aktion verschiebt auch alle zugeordneten Exemplare in die gewählte Bibliothek. Protokollierte Netzwerkaktion.",
+  "catalogacao.reassign.sourceAll": "Ganzer Datensatz (alle Exemplare)",
+  "catalogacao.reassign.sourcePick": "Quellbibliothek wählen…",
+  "catalogacao.reassign.multiHint": "Dieser Datensatz hat Exemplare in mehreren Bibliotheken; wählen Sie, welche verschoben werden sollen.",
   "catalogacao.reassign.confirm": "Diesen Eintrag und seine Exemplare „{library}“ zuweisen?",
   "catalogacao.reassign.done": "{count} Exemplar(e) nach „{library}“ verschoben."
 }

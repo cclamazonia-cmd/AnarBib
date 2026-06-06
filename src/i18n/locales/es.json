@@ -3380,6 +3380,9 @@
   "catalogacao.reassign.placeholder": "Elegir una biblioteca…",
   "catalogacao.reassign.action": "Atribuir",
   "catalogacao.reassign.hint": "La acción mueve también todos los ejemplares vinculados a la biblioteca elegida. Acción de red registrada.",
+  "catalogacao.reassign.sourceAll": "Todo el registro (todas las copias)",
+  "catalogacao.reassign.sourcePick": "Elija la biblioteca de origen…",
+  "catalogacao.reassign.multiHint": "Este registro tiene ejemplares en varias bibliotecas; elija de cuál mover.",
   "catalogacao.reassign.confirm": "¿Atribuir esta noticia y sus ejemplares a «{library}»?",
   "catalogacao.reassign.done": "{count} ejemplar(es) movido(s) a «{library}»."
 }
