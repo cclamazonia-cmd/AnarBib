@@ -47,6 +47,12 @@
  *       quelques champs changent de palier vs le render ad-hoc actuel
  *       (ex. `diffusion_place` 1→3, `edicao`/`colecao` complete→avançado).
  *       C'est l'objet du refactor, pas une régression.
+ *  (D7b) `tierOverride` : quand un champ partagé entre types a des paliers
+ *       différents selon le type (ex. `physical_format` tier 1 pour cartaz,
+ *       tier 3 pour tract ; `approximate_date` tier 1 pour tract, tier 2 pour
+ *       cartaz ; `isbn` tier 1 pour livro, tier 3 pour artigo),
+ *       `tierOverride: { <mat>: <tier> }` porte l'exception. `isFieldVisible`
+ *       applique `tierOverride[material] ?? field.tier`.
  *  (D8) Spans : repris de la spec §5.1 pour le cœur, du render pour le reste ;
  *       quelques écarts mineurs (titulo span 2 spec vs 3 render) à reconcilier
  *       sur la maquette normative au Lot 2.
@@ -131,7 +137,7 @@ export const REGISTRY = [
       { id: 'paginas', label: 'catalogacao.field.pages', tier: 2, mat: ['livro', 'zine', 'dossie', 'tese'], type: 'number' },
       { id: 'ano', label: 'catalogacao.field.year', tier: 1, phEx: '2016' },
       { id: 'idioma', label: 'catalogacao.field.language', tier: 1, ph: 'catalogacao.ph.language' }, // (D4) texte, spec veut select
-      { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro'], watch: 'dup', phEx: '978-2-347-00368-5' },
+      { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro', 'artigo'], watch: 'dup', phEx: '978-2-347-00368-5', tierOverride: { artigo: 3 } },
       { id: 'issn', label: 'catalogacao.field.issn', tier: 1, mat: ['periodico', 'artigo'], phEx: '0251-1479' },
       { id: 'cdd', label: 'catalogacao.field.cdd', tier: 1, mat: CDD_MAT, phEx: '335' },
       { id: 'circulation_default', label: 'catalogacao.ui.circulation', tier: 1, type: 'seg', opts: CIRCULATION_OPTS },
@@ -196,8 +202,8 @@ export const REGISTRY = [
     fields: [
       { id: 'tract_campaign', label: 'catalogacao.field.campaign', tier: 1, ph: 'catalogacao.ph.tractCampaign' },
       { id: 'emitter_org', label: 'catalogacao.field.emitterOrg', tier: 1, ph: 'catalogacao.ph.emitterOrg' },
-      { id: 'approximate_date', label: 'catalogacao.field.approxDate', tier: 1, ph: 'catalogacao.ph.approxDate' },
-      { id: 'physical_format', label: 'catalogacao.field.physicalFormat', tier: 1, ph: 'catalogacao.ph.physicalFormat' },
+      { id: 'approximate_date', label: 'catalogacao.field.approxDate', tier: 1, ph: 'catalogacao.ph.approxDate', tierOverride: { cartaz: 2 } },
+      { id: 'physical_format', label: 'catalogacao.field.physicalFormat', tier: 1, ph: 'catalogacao.ph.physicalFormat', tierOverride: { tract: 3 } },
       { id: 'diffusion_place', label: 'catalogacao.field.diffusionPlace', tier: 3, ph: 'catalogacao.ph.diffusion' }, // (D7)
       { id: 'print_technique', label: 'catalogacao.field.printTechnique', tier: 3, ph: 'catalogacao.ph.printTechnique' },
       { id: 'physical_state', label: 'catalogacao.field.physicalState', tier: 3, ph: 'catalogacao.ph.physicalState' },
@@ -370,7 +376,8 @@ export function matchMat(mat, material) {
 }
 
 export function isFieldVisible(field, tier, material) {
-  return field.tier <= tier && matchMat(field.mat, material);
+  const effectiveTier = field.tierOverride?.[material] ?? field.tier;
+  return effectiveTier <= tier && matchMat(field.mat, material);
 }
 
 export function isGroupVisible(group, tier, material) {

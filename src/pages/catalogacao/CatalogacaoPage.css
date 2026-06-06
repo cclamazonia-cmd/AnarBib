@@ -31,19 +31,25 @@
 .cat-mode-switch {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
-.cat-mode-switch-label { font-size: .9rem; font-weight: 600; color: var(--brand-muted, #d1d1d1); }
-.cat-mode-switch-buttons { display: flex; gap: 4px; }
+.cat-mode-switch-label { font-size: .82rem; font-weight: 600; color: var(--brand-muted, #d4cec3); }
+.cat-mode-switch-buttons {
+  display: inline-flex; gap: 2px; padding: 4px;
+  background: rgba(12,12,12,.84);
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: var(--brand-radius-pill, 999px);
+}
 .cat-mode-switch-buttons button {
-  padding: 6px 14px; font-size: .85rem; font-weight: 600; border-radius: 6px;
-  background: var(--brand-panel-bg, rgba(20,20,20,.8));
-  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.1));
-  color: var(--brand-muted, #d1d1d1); cursor: pointer; transition: all .15s;
+  padding: 8px 18px; font-size: .84rem; font-weight: 700;
+  border-radius: var(--brand-radius-pill, 999px);
+  background: transparent; border: 0;
+  color: var(--brand-muted, #d4cec3); cursor: pointer; transition: .16s;
 }
+.cat-mode-switch-buttons button:hover { color: #fff; }
 .cat-mode-switch-buttons button.is-mode-active {
-  background: var(--brand-color-primary, #7a0b14); color: #fff;
-  border-color: var(--brand-color-primary, #7a0b14);
+  background: linear-gradient(135deg, rgba(225,29,47,.92), var(--brand-color-primary, #b32025));
+  color: #fff; box-shadow: var(--brand-shadow-strong, 0 16px 38px rgba(0,0,0,.42));
 }
-.cat-mode-hint { font-size: .82rem; color: var(--brand-muted, #aaa); }
+.cat-mode-hint { font-size: .8rem; color: var(--brand-muted, #d4cec3); opacity: .9; }
 
 /* ── Statusbar (stats) ───────────────────────────────────── */
 
@@ -57,7 +63,7 @@
 .cat-stat { display: flex; flex-direction: column; gap: 2px; min-width: 100px; }
 .cat-stat .cat-stat-label { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--brand-muted, #aaa); }
 .cat-stat .cat-stat-value {
-  font-size: 1.3rem; font-weight: 800; color: var(--brand-text, #f4f4f4);
+  font-size: 1.3rem; font-weight: 800; color: var(--brand-text, #f5f2ea);
 }
 .cat-stat .cat-stat-value.clickable {
   cursor: pointer; text-decoration: underline; text-decoration-color: rgba(255,255,255,.2);
@@ -74,12 +80,12 @@
 .cat-tab-btn {
   padding: 10px 18px; font-size: .92rem; font-weight: 600;
   background: none; border: none; border-bottom: 2px solid transparent;
-  color: var(--brand-muted, #aaa); cursor: pointer; transition: all .15s;
+  color: var(--brand-muted, #d4cec3); cursor: pointer; transition: all .15s;
   margin-bottom: -2px; white-space: nowrap;
 }
-.cat-tab-btn:hover { color: var(--brand-text, #f4f4f4); }
+.cat-tab-btn:hover { color: var(--brand-text, #f5f2ea); }
 .cat-tab-btn.active {
-  color: var(--brand-text, #f4f4f4);
+  color: var(--brand-text, #f5f2ea);
   border-bottom-color: var(--brand-color-primary, #7a0b14);
 }
 .cat-tab-btn.tab-separator { margin-left: 16px; }
@@ -143,10 +149,10 @@
 }
 .cat-btn.primary { background: var(--brand-color-primary, #7a0b14); color: #fff; border-color: var(--brand-color-primary, #7a0b14); }
 .cat-btn.primary:hover { filter: brightness(1.2); }
-.cat-btn.secondary { background: var(--brand-panel-bg, rgba(30,30,30,.8)); color: var(--brand-text, #f4f4f4); border-color: rgba(255,255,255,.18); }
+.cat-btn.secondary { background: var(--brand-panel-bg-strong, rgba(10,10,10,.94)); color: var(--brand-text, #f5f2ea); border-color: rgba(255,255,255,.18); }
 .cat-btn.secondary:hover { background: rgba(255,255,255,.1); }
-.cat-btn.ghost { background: transparent; color: var(--brand-muted, #bbb); border-color: transparent; }
-.cat-btn.ghost:hover { color: var(--brand-text, #f4f4f4); background: rgba(255,255,255,.04); }
+.cat-btn.ghost { background: transparent; color: var(--brand-muted, #d4cec3); border-color: transparent; }
+.cat-btn.ghost:hover { color: var(--brand-text, #f5f2ea); background: rgba(255,255,255,.04); }
 
 /* ── Placeholder panels ──────────────────────────────────── */
 
@@ -165,11 +171,11 @@
 .cat-book-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 16px 18px;
 }
 
 .cat-field { display: flex; flex-direction: column; gap: 3px; }
-.cat-field label { font-size: .85rem; color: var(--brand-muted, #bbb); font-weight: 600; }
+.cat-field label { font-size: .85rem; color: var(--brand-muted, #d4cec3); font-weight: 600; }
 
 /* ── .ab-* design tokens (Track A Lot 4, from maquette v3) ── */
 
@@ -330,7 +336,7 @@
 }
 
 /* ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────────── */
-.ab-work { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.ab-work { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
 .ab-preview { position: sticky; top: 18px; }
 /* L'aperçu réutilise .ab-sheet du design-system (cf. ui.css), pas de carte custom. */
 .ab-pv-card { padding: 16px; }
