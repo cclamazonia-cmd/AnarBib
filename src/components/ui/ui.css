@@ -48,6 +48,24 @@
   background: linear-gradient(135deg, #dc2626, #991b1b);
 }
 
+/* Ghost — low-emphasis transparent action (composes with --sm). */
+.ab-button--ghost {
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow: none;
+  color: var(--brand-muted);
+}
+.ab-button--ghost:hover { color: var(--brand-text); background: rgba(255, 255, 255, 0.05); }
+
+/* Size-only modifier — composes with any variant without overriding bg/border. */
+.ab-button--sm {
+  min-height: 30px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  gap: 6px;
+}
+
 .ab-button--loading { opacity: 0.7; }
 
 @keyframes ab-spin { to { transform: rotate(360deg); } }

@@ -1602,7 +1602,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           <span className={`cat-pill ${pill.cls}`}>{pill.label}</span>
           {f('id') && <span style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>Rascunho #{f('id')}</span>}
         </div>
-        <button className="cat-btn ghost" onClick={resetForm} type="button">{t({id:'catalogacao.ui.clearForm'})}</button>
+        <button className="ab-button ab-button--ghost ab-button--sm" onClick={resetForm} type="button">{t({id:'catalogacao.ui.clearForm'})}</button>
       </div>
 
       {/* Message */}
@@ -1695,24 +1695,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               </div>
             )}
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 8 }}>
-              <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 12px' }}
+              <button type="button" className="ab-button ab-button--sm"
                 onClick={runCatalogLookup} disabled={lookupLoading}>
                 {lookupLoading ? t({id:'catalogacao.ui.searching'}) : t({id:'catalogacao.ui.searchMeta'})}
               </button>
-              <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }}
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                 onClick={openBnManual}>{t({id:'catalogacao.ui.bnManual'})}</button>
-              <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }}
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                 onClick={runBnIsbnLookup} disabled={bnLoading}>
                 {bnLoading ? t({id:'catalogacao.ui.bnLoading'}) : t({id:'catalogacao.ui.bnIsbn'})}
               </button>
-              <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }}
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                 onClick={openWorldCat}>{t({id:'catalogacao.ui.worldcat'})}</button>
               {f('issn') && (
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.78rem', padding: '5px 12px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={openIssnPortal}>Portal ISSN</button>
               )}
               {lookupResult && (
-                <button type="button" className="cat-btn ghost" style={{ fontSize: '.78rem', padding: '5px 12px' }}
+                <button type="button" className="ab-button ab-button--ghost ab-button--sm"
                   onClick={clearLookup}>Limpar painel</button>
               )}
             </div>
@@ -1756,7 +1756,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   </div>
                 ))}
                 <div style={{ padding: '8px 10px', display: 'flex', gap: 6 }}>
-                  <button type="button" className="cat-btn primary" style={{ fontSize: '.75rem', padding: '4px 12px' }}
+                  <button type="button" className="ab-button ab-button--sm"
                     onClick={applySelectedCandidate}>
                     Aplicar candidata selecionada aos campos vazios
                   </button>
@@ -1775,7 +1775,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               <div style={{ marginTop: 10 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <span style={{ fontSize: '.78rem', fontWeight: 600 }}>Biblioteca Nacional do Brasil — {bnResult.total} resultado(s)</span>
-                  <button type="button" className="cat-btn ghost" style={{ fontSize: '.72rem', padding: '3px 8px' }}
+                  <button type="button" className="ab-button ab-button--ghost ab-button--sm"
                     onClick={clearBnResult}>Limpar BN</button>
                 </div>
                 <div style={{ border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, overflow: 'hidden', maxHeight: 200, overflowY: 'auto' }}>
@@ -1860,13 +1860,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <label style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.ui.contributors'})}</label>
               <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.7rem', padding: '3px 8px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={() => addContributor('autor')}>{t({id:'catalogacao.ui.addAuthor'})}</button>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.7rem', padding: '3px 8px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={() => addContributor('coautor')}>{t({id:'catalogacao.ui.addCoauthor'})}</button>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.7rem', padding: '3px 8px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={() => addContributor('organizacao')}>{t({id:'catalogacao.ui.addCollective'})}</button>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.7rem', padding: '3px 8px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={() => addContributor('tradutor')}>{t({id:'catalogacao.ui.addTranslator'})}</button>
               </div>
             </div>
@@ -1946,7 +1946,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             <div className="ab-span3" style={{ gridColumn: 'span 3' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
                 <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.dedup.title' })}</span>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={findBookDuplicates} disabled={bookDupLoading}>
                   {bookDupLoading ? t({ id: 'catalogacao.dedup.finding' }) : t({ id: 'catalogacao.dedup.find' })}
                 </button>
@@ -1966,7 +1966,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       <span className={`cat-pill ${d.match_kind === 'isbn' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                         {d.match_kind === 'isbn' ? 'ISBN' : t({ id: 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
                       </span>
-                      <button type="button" className="cat-btn ghost" style={{ fontSize: '.7rem', padding: '3px 8px', color: '#f87171' }}
+                      <button type="button" className="ab-button ab-button--danger ab-button--sm"
                         onClick={() => mergeBookDuplicateIntoCurrent(d.book_id, d.titulo)} disabled={bookDupBusy != null}>
                         {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
                       </button>
@@ -2079,7 +2079,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <h4 style={{ margin: 0 }}>Recursos digitais vinculados à ficha</h4>
-                <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={startNewDigitalResource}>
                   + Novo recurso
                 </button>
@@ -2107,9 +2107,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         </div>
                       </div>
                       <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                        <button type="button" className="cat-btn secondary" style={{ fontSize: '.7rem', padding: '3px 8px' }}
+                        <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                           onClick={() => editDigitalResource(res)}>Editar</button>
-                        <button type="button" className="cat-btn ghost" style={{ fontSize: '.7rem', padding: '3px 8px', color: '#f87171' }}
+                        <button type="button" className="ab-button ab-button--danger ab-button--sm"
                           onClick={() => deleteDigitalResource(res.id)}>Apagar</button>
                       </div>
                     </div>
@@ -2208,11 +2208,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                    <button type="button" className="cat-btn primary" style={{ fontSize: '.78rem', padding: '5px 14px' }}
+                    <button type="button" className="ab-button ab-button--sm"
                       onClick={saveDigitalResource} disabled={digitalSaving}>
                       {digitalSaving ? 'Salvando…' : (digitalForm.id ? 'Atualizar recurso' : 'Salvar recurso')}
                     </button>
-                    <button type="button" className="cat-btn ghost" style={{ fontSize: '.78rem', padding: '5px 14px' }}
+                    <button type="button" className="ab-button ab-button--ghost ab-button--sm"
                       onClick={() => setDigitalForm(null)}>Cancelar</button>
                   </div>
                 </div>
@@ -2237,12 +2237,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               <span className={`cat-pill ${isbdEnabled ? 'ok' : 'warn'}`}>
                 {isbdEnabled ? t({id:'catalogacao.ui.isbdReady'}) : t({id:'catalogacao.ui.isbdNotReady'})}
               </span>
-              <button type="button" className="cat-btn secondary" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                 onClick={prepareIsbd}>
                 {isbdEnabled ? t({id:'catalogacao.ui.isbdUpdate'}) : t({id:'catalogacao.ui.isbdPrepare'})}
               </button>
               {isbdEnabled && (
-                <button type="button" className="cat-btn ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
+                <button type="button" className="ab-button ab-button--ghost ab-button--sm"
                   onClick={clearIsbd}>Limpar ISBD</button>
               )}
             </div>
@@ -2388,15 +2388,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
         {/* ── Action buttons ─────────────────────────── */}
         <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
-          <button type="submit" className="cat-btn primary" disabled={saving}>
+          <button type="submit" className="ab-button" disabled={saving}>
             {saving ? t({id:'common.saving'}) : t({id:'catalogacao.ui.saveDraft'})}
           </button>
           {f('id') && draftState !== 'published' && (
-            <button type="button" className="cat-btn secondary" onClick={handlePublish}>
+            <button type="button" className="ab-button ab-button--secondary" onClick={handlePublish}>
               {t({id:'catalogacao.publish'})}
             </button>
           )}
-          <button type="button" className="cat-btn ghost" onClick={resetForm}>
+          <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>
             {t({id:'catalogacao.ui.clear'})}
           </button>
         </div>
