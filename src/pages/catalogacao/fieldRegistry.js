@@ -87,6 +87,9 @@ export const MATERIAL_CODES = [
 // editora (D1, aligné maquette normative) : liste blanche des matériels « édités ».
 // La maquette exclut tese/artigo/relatorio (universidade / fonte / org. émettrice à la place).
 const EDITORA_MAT = ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'];
+// CDD (classification Dewey) : pertinent pour les documents textuels/physiques,
+// pas pour les médias natifs (audiovisual/audio/recurso_digital). Les thèses la gardent.
+const CDD_MAT = ['livro', 'periodico', 'tract', 'cartaz', 'dossie', 'tese', 'artigo', 'relatorio', 'zine'];
 
 // Options de sélecteurs/segments — reprises verbatim du render (D3).
 const MATERIAL_OPTS = MATERIAL_CODES.map(c => ({ value: c, label: `catalogacao.material.${c}` }));
@@ -130,7 +133,7 @@ export const REGISTRY = [
       { id: 'idioma', label: 'catalogacao.field.language', tier: 1, ph: 'catalogacao.ph.language' }, // (D4) texte, spec veut select
       { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro'], watch: 'dup', phEx: '978-2-347-00368-5' },
       { id: 'issn', label: 'catalogacao.field.issn', tier: 1, mat: ['periodico', 'artigo'], phEx: '0251-1479' },
-      { id: 'cdd', label: 'catalogacao.field.cdd', tier: 1, phEx: '335' },
+      { id: 'cdd', label: 'catalogacao.field.cdd', tier: 1, mat: CDD_MAT, phEx: '335' },
       { id: 'circulation_default', label: 'catalogacao.ui.circulation', tier: 1, type: 'seg', opts: CIRCULATION_OPTS },
       { id: 'subjects', label: 'catalogacao.field.subjects', tier: 2, type: 'textarea', span: 3, ph: 'catalogacao.ph.subjects' },
       { id: 'notas', label: 'catalogacao.field.notes', tier: 2, type: 'textarea', span: 3, rows: 3, ph: 'catalogacao.ph.notes' },
@@ -213,7 +216,7 @@ export const REGISTRY = [
       { id: 'audio_support', label: 'catalogacao.field.support', tier: 1, ph: 'catalogacao.ph.audioSupport' },
       { id: 'audio_participants', label: 'catalogacao.field.participants', tier: 1, span: 2, ph: 'catalogacao.ph.audioParticipants' },
       { id: 'audio_format', label: 'catalogacao.field.audioFormat', tier: 3, ph: 'catalogacao.ph.audioFormatTech' },
-      { id: 'audio_language', label: 'catalogacao.field.audioLang', tier: 3, ph: 'catalogacao.ph.language' },
+      // Langue : portée par le champ cœur `idioma` (évite le doublon).
       { id: 'audio_recording_type', label: 'catalogacao.field.recordingType', tier: 3, ph: 'catalogacao.ph.recordingType' },
     ],
   },
@@ -228,7 +231,8 @@ export const REGISTRY = [
       { id: 'audiovisual_duration', label: 'catalogacao.field.duration', tier: 1, ph: 'catalogacao.ph.avDuration' },
       { id: 'audiovisual_support', label: 'catalogacao.field.support', tier: 1, ph: 'catalogacao.ph.avSupport' },
       { id: 'audiovisual_director', label: 'catalogacao.field.director', tier: 1, ph: 'catalogacao.ph.avDirector' },
-      { id: 'audiovisual_language', label: 'catalogacao.field.language', tier: 3, ph: 'catalogacao.ph.language' },
+      // Langue : portée par le champ cœur `idioma` (évite le doublon) ; ici on garde
+      // les sous-titres, distincts de la langue parlée.
       { id: 'audiovisual_subtitles', label: 'catalogacao.field.subtitles', tier: 3, ph: 'catalogacao.ph.avSubtitles' },
       { id: 'audiovisual_participants', label: 'catalogacao.field.participants', tier: 3, span: 2, ph: 'catalogacao.ph.avParticipants' },
       { id: 'audiovisual_access_note', label: 'catalogacao.field.accessNote', tier: 3, span: 2, ph: 'catalogacao.ph.accessNote' },
