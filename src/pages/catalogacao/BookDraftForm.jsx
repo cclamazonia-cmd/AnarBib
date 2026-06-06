@@ -92,11 +92,12 @@ function buildShelfLabel({ author = '', title = '', cdd = '' } = {}) {
   const shelfParts = [];
   if (cleanCDD) shelfParts.push(cleanCDD);
   if (authorCode !== '---') shelfParts.push(authorCode);
-  const reasonParts = [];
-  if (cleanCDD) reasonParts.push('CDD informada');
-  if (surnameKey) reasonParts.push('sobrenome principal');
-  else if (titleKey) reasonParts.push('palavra significativa do título');
-  return { authorCode, shelfLine: shelfParts.join(' / '), reason: reasonParts.join(' + ') || '' };
+  // Codes de raison (traduits au rendu : la fonction est hors composant, sans t).
+  const reasonCodes = [];
+  if (cleanCDD) reasonCodes.push('reasonCdd');
+  if (surnameKey) reasonCodes.push('reasonSurname');
+  else if (titleKey) reasonCodes.push('reasonTitleWord');
+  return { authorCode, shelfLine: shelfParts.join(' / '), reasonCodes };
 }
 
 // ── Guide contextuel par type de matériel — resolved via t('catalogacao.guide.{type}.{field}') ──
@@ -1084,16 +1085,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   ];
 
   const USAGE_TYPES = [
-    { value: 'leitura_online', label: 'Leitura online' },
-    { value: 'download', label: 'Download' },
-    { value: 'escuta_online', label: 'Escuta online' },
+    { value: 'leitura_online', label: t({ id: 'catalogacao.digital.usageReadOnline' }) },
+    { value: 'download', label: t({ id: 'catalogacao.digital.usageDownload' }) },
+    { value: 'escuta_online', label: t({ id: 'catalogacao.digital.usageListenOnline' }) },
     { value: 'visualizacao_online', label: t({id:'catalogacao.digital.online'}) },
     { value: 'link_externo', label: t({ id: 'catalogacao.digital.typeLink' }) },
   ];
 
   const ACCESS_SCOPES = [
     { value: 'publico', label: t({id:'catalogacao.digital.public'}) },
-    { value: 'conta_ativa', label: 'Conta ativa (restrito)' },
+    { value: 'conta_ativa', label: t({ id: 'catalogacao.digital.accessActiveAccount' }) },
   ];
 
   const EMPTY_DIGITAL = {
@@ -2044,7 +2045,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: '.88rem', fontWeight: 700, marginBottom: 2 }}>
-                        {f('titulo') || 'Título'}
+                        {f('titulo') || t({ id: 'catalogacao.ui.titleFallback' })}
                       </div>
                       <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>
                         Autor: {f('autor') || '—'}
@@ -2053,7 +2054,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         CDD: {f('cdd') || '—'}
                       </div>
                       <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #666)', marginTop: 3 }}>
-                        {label ? `Cote: ${label.shelfLine} (${label.reason})` : t({id:'catalogacao.ui.labelFillHint'})}
+                        {label ? `Cote: ${label.shelfLine} (${label.reasonCodes.map(c => t({ id: 'catalogacao.shelf.' + c })).join(' + ')})` : t({id:'catalogacao.ui.labelFillHint'})}
                       </div>
                     </div>
                   </div>
@@ -2334,7 +2335,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 <div style={{ display: 'flex', gap: 6, marginBottom: 6, flexWrap: 'wrap' }}>
                   <span className="cat-pill info">{MATERIAL_TYPES.find(m => m.value === materialType)?.label || materialType}</span>
                 </div>
-                <div style={{ fontSize: '.92rem', fontWeight: 700, marginBottom: 4 }}>{f('titulo') || 'Título'}</div>
+                <div style={{ fontSize: '.92rem', fontWeight: 700, marginBottom: 4 }}>{f('titulo') || t({ id: 'catalogacao.ui.titleFallback' })}</div>
                 <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)' }}>
                   {[f('autor'), f('editora'), f('ano')].filter(Boolean).join(' · ') || '—'}
                 </div>
@@ -2342,7 +2343,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               </div>
               <div style={{ padding: '12px 14px', background: 'rgba(0,0,0,.15)', borderRadius: 8 }}>
                 <div style={{ fontSize: '.7rem', textTransform: 'uppercase', letterSpacing: '.04em', color: 'var(--brand-muted, #888)', marginBottom: 6 }}>{t({ id: 'catalogacao.ui.isbdOpening' })}</div>
-                <div style={{ fontSize: '.92rem', fontWeight: 700, marginBottom: 4 }}>{f('titulo') || 'Título'}</div>
+                <div style={{ fontSize: '.92rem', fontWeight: 700, marginBottom: 4 }}>{f('titulo') || t({ id: 'catalogacao.ui.titleFallback' })}</div>
                 <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 3 }}>
                   {f('subtitulo') && <span>{f('subtitulo')}<br /></span>}
                   {f('autor') && <span>{f('autor')}<br /></span>}

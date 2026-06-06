@@ -3354,5 +3354,13 @@
   "catalogacao.digital.matchValidated": "Correspondència bibliogràfica validada",
   "catalogacao.digital.update": "Actualitza el recurs",
   "catalogacao.digital.save": "Desa el recurs",
-  "catalogacao.ui.circulationBoth": "Préstec + consulta"
+  "catalogacao.ui.circulationBoth": "Préstec + consulta",
+  "catalogacao.digital.usageReadOnline": "Lectura en línia",
+  "catalogacao.digital.usageDownload": "Descàrrega",
+  "catalogacao.digital.usageListenOnline": "Escolta en línia",
+  "catalogacao.digital.accessActiveAccount": "Compte actiu (restringit)",
+  "catalogacao.shelf.reasonCdd": "CDD indicada",
+  "catalogacao.shelf.reasonSurname": "cognom principal",
+  "catalogacao.shelf.reasonTitleWord": "paraula significativa del títol",
+  "catalogacao.ui.titleFallback": "Títol"
 }

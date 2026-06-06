@@ -3354,5 +3354,13 @@
   "catalogacao.digital.matchValidated": "Η βιβλιογραφική αντιστοιχία επικυρώθηκε",
   "catalogacao.digital.update": "Ενημέρωση πόρου",
   "catalogacao.digital.save": "Αποθήκευση πόρου",
-  "catalogacao.ui.circulationBoth": "Δανεισμός + επιτόπια χρήση"
+  "catalogacao.ui.circulationBoth": "Δανεισμός + επιτόπια χρήση",
+  "catalogacao.digital.usageReadOnline": "Ανάγνωση online",
+  "catalogacao.digital.usageDownload": "Λήψη",
+  "catalogacao.digital.usageListenOnline": "Ακρόαση online",
+  "catalogacao.digital.accessActiveAccount": "Ενεργός λογαριασμός (περιορισμένο)",
+  "catalogacao.shelf.reasonCdd": "Δόθηκε CDD",
+  "catalogacao.shelf.reasonSurname": "κύριο επώνυμο",
+  "catalogacao.shelf.reasonTitleWord": "χαρακτηριστική λέξη τίτλου",
+  "catalogacao.ui.titleFallback": "Τίτλος"
 }

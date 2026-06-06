@@ -3354,5 +3354,13 @@
   "catalogacao.digital.matchValidated": "Correspondência bibliográfica validada",
   "catalogacao.digital.update": "Atualizar recurso",
   "catalogacao.digital.save": "Salvar recurso",
-  "catalogacao.ui.circulationBoth": "Empréstimo + consulta"
+  "catalogacao.ui.circulationBoth": "Empréstimo + consulta",
+  "catalogacao.digital.usageReadOnline": "Leitura online",
+  "catalogacao.digital.usageDownload": "Download",
+  "catalogacao.digital.usageListenOnline": "Escuta online",
+  "catalogacao.digital.accessActiveAccount": "Conta ativa (restrito)",
+  "catalogacao.shelf.reasonCdd": "CDD informada",
+  "catalogacao.shelf.reasonSurname": "sobrenome principal",
+  "catalogacao.shelf.reasonTitleWord": "palavra significativa do título",
+  "catalogacao.ui.titleFallback": "Título"
 }

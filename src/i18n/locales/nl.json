@@ -3354,5 +3354,13 @@
   "catalogacao.digital.matchValidated": "Bibliografische overeenkomst gevalideerd",
   "catalogacao.digital.update": "Bron bijwerken",
   "catalogacao.digital.save": "Bron opslaan",
-  "catalogacao.ui.circulationBoth": "Uitlening + raadpleging"
+  "catalogacao.ui.circulationBoth": "Uitlening + raadpleging",
+  "catalogacao.digital.usageReadOnline": "Online lezen",
+  "catalogacao.digital.usageDownload": "Downloaden",
+  "catalogacao.digital.usageListenOnline": "Online luisteren",
+  "catalogacao.digital.accessActiveAccount": "Actief account (beperkt)",
+  "catalogacao.shelf.reasonCdd": "CDD opgegeven",
+  "catalogacao.shelf.reasonSurname": "primaire achternaam",
+  "catalogacao.shelf.reasonTitleWord": "kenmerkend titelwoord",
+  "catalogacao.ui.titleFallback": "Titel"
 }

@@ -3354,5 +3354,13 @@
   "catalogacao.digital.matchValidated": "Bibliographic match validated",
   "catalogacao.digital.update": "Update resource",
   "catalogacao.digital.save": "Save resource",
-  "catalogacao.ui.circulationBoth": "Loan + on-site consultation"
+  "catalogacao.ui.circulationBoth": "Loan + on-site consultation",
+  "catalogacao.digital.usageReadOnline": "Read online",
+  "catalogacao.digital.usageDownload": "Download",
+  "catalogacao.digital.usageListenOnline": "Listen online",
+  "catalogacao.digital.accessActiveAccount": "Active account (restricted)",
+  "catalogacao.shelf.reasonCdd": "CDD provided",
+  "catalogacao.shelf.reasonSurname": "primary surname",
+  "catalogacao.shelf.reasonTitleWord": "significant title word",
+  "catalogacao.ui.titleFallback": "Title"
 }

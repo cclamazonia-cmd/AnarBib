@@ -3354,5 +3354,13 @@
   "catalogacao.digital.matchValidated": "Bibliografia kongruo validigita",
   "catalogacao.digital.update": "Ĝisdatigi rimedon",
   "catalogacao.digital.save": "Konservi rimedon",
-  "catalogacao.ui.circulationBoth": "Prunto + surloka konsulto"
+  "catalogacao.ui.circulationBoth": "Prunto + surloka konsulto",
+  "catalogacao.digital.usageReadOnline": "Reta legado",
+  "catalogacao.digital.usageDownload": "Elŝuto",
+  "catalogacao.digital.usageListenOnline": "Reta aŭskultado",
+  "catalogacao.digital.accessActiveAccount": "Aktiva konto (limigita)",
+  "catalogacao.shelf.reasonCdd": "CDD indikita",
+  "catalogacao.shelf.reasonSurname": "ĉefa familinomo",
+  "catalogacao.shelf.reasonTitleWord": "signifa vorto de la titolo",
+  "catalogacao.ui.titleFallback": "Titolo"
 }

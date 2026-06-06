@@ -3354,5 +3354,13 @@
   "catalogacao.digital.matchValidated": "Bibliografische Übereinstimmung bestätigt",
   "catalogacao.digital.update": "Ressource aktualisieren",
   "catalogacao.digital.save": "Ressource speichern",
-  "catalogacao.ui.circulationBoth": "Ausleihe + Vor-Ort-Einsicht"
+  "catalogacao.ui.circulationBoth": "Ausleihe + Vor-Ort-Einsicht",
+  "catalogacao.digital.usageReadOnline": "Online lesen",
+  "catalogacao.digital.usageDownload": "Download",
+  "catalogacao.digital.usageListenOnline": "Online anhören",
+  "catalogacao.digital.accessActiveAccount": "Aktives Konto (eingeschränkt)",
+  "catalogacao.shelf.reasonCdd": "DDC angegeben",
+  "catalogacao.shelf.reasonSurname": "Hauptnachname",
+  "catalogacao.shelf.reasonTitleWord": "signifikantes Titelwort",
+  "catalogacao.ui.titleFallback": "Titel"
 }
