@@ -376,7 +376,7 @@ BEGIN
     RAISE EXCEPTION 'VERIF: garde isbn_duplicado absente (regression P1.3a)';
   END IF;
 END
-$$;
+$verif$;
 
 -- =========================================================================
 -- Rollback : restaurer la version precedente de publish_book_draft
