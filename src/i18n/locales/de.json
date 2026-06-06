@@ -3363,5 +3363,12 @@
   "catalogacao.shelf.reasonSurname": "Hauptnachname",
   "catalogacao.shelf.reasonTitleWord": "signifikantes Titelwort",
   "catalogacao.ui.titleFallback": "Titel",
-  "catalogacao.field.distribuidora": "Verleih"
+  "catalogacao.field.distribuidora": "Verleih",
+  "catalogacao.reassign.badge": "Netzwerk-Admin",
+  "catalogacao.reassign.title": "Den Eintrag und seine Exemplare einer Bibliothek zuweisen",
+  "catalogacao.reassign.placeholder": "Bibliothek wählen…",
+  "catalogacao.reassign.action": "Zuweisen",
+  "catalogacao.reassign.hint": "Die Aktion verschiebt auch alle zugeordneten Exemplare in die gewählte Bibliothek. Protokollierte Netzwerkaktion.",
+  "catalogacao.reassign.confirm": "Diesen Eintrag und seine Exemplare „{library}“ zuweisen?",
+  "catalogacao.reassign.done": "{count} Exemplar(e) nach „{library}“ verschoben."
 }

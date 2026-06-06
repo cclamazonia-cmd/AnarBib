@@ -3363,5 +3363,12 @@
   "catalogacao.shelf.reasonSurname": "sobrenome principal",
   "catalogacao.shelf.reasonTitleWord": "palavra significativa do título",
   "catalogacao.ui.titleFallback": "Título",
-  "catalogacao.field.distribuidora": "Distribuidora"
+  "catalogacao.field.distribuidora": "Distribuidora",
+  "catalogacao.reassign.badge": "Admin rede",
+  "catalogacao.reassign.title": "Atribuir a notícia e seus exemplares a uma biblioteca",
+  "catalogacao.reassign.placeholder": "Escolher uma biblioteca…",
+  "catalogacao.reassign.action": "Atribuir",
+  "catalogacao.reassign.hint": "A ação move também todos os exemplares vinculados para a biblioteca escolhida. Ação de rede registrada.",
+  "catalogacao.reassign.confirm": "Atribuir esta notícia e seus exemplares a “{library}”?",
+  "catalogacao.reassign.done": "{count} exemplar(es) movido(s) para “{library}”."
 }

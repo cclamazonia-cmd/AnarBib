@@ -3363,5 +3363,12 @@
   "catalogacao.shelf.reasonSurname": "ĉefa familinomo",
   "catalogacao.shelf.reasonTitleWord": "signifa vorto de la titolo",
   "catalogacao.ui.titleFallback": "Titolo",
-  "catalogacao.field.distribuidora": "Distribuanto"
+  "catalogacao.field.distribuidora": "Distribuanto",
+  "catalogacao.reassign.badge": "Reta administranto",
+  "catalogacao.reassign.title": "Atribui la skedon kaj ĝiajn ekzemplerojn al biblioteko",
+  "catalogacao.reassign.placeholder": "Elekti bibliotekon…",
+  "catalogacao.reassign.action": "Atribui",
+  "catalogacao.reassign.hint": "La ago ankaŭ movas ĉiujn ligitajn ekzemplerojn al la elektita biblioteko. Protokolita reta ago.",
+  "catalogacao.reassign.confirm": "Ĉu atribui ĉi tiun skedon kaj ĝiajn ekzemplerojn al «{library}»?",
+  "catalogacao.reassign.done": "{count} ekzemplero(j) movita(j) al «{library}»."
 }

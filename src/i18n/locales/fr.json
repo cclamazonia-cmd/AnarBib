@@ -3363,5 +3363,12 @@
   "catalogacao.shelf.reasonSurname": "nom principal",
   "catalogacao.shelf.reasonTitleWord": "mot significatif du titre",
   "catalogacao.ui.titleFallback": "Titre",
-  "catalogacao.field.distribuidora": "Distributeur"
+  "catalogacao.field.distribuidora": "Distributeur",
+  "catalogacao.reassign.badge": "Admin réseau",
+  "catalogacao.reassign.title": "Attribuer la notice et ses exemplaires à une bibliothèque",
+  "catalogacao.reassign.placeholder": "Choisir une bibliothèque…",
+  "catalogacao.reassign.action": "Attribuer",
+  "catalogacao.reassign.hint": "L’action déplace aussi tous les exemplaires rattachés vers la bibliothèque choisie. Action réseau journalisée.",
+  "catalogacao.reassign.confirm": "Attribuer cette notice et ses exemplaires à « {library} » ?",
+  "catalogacao.reassign.done": "{count} exemplaire·s déplacé·s vers « {library} »."
 }

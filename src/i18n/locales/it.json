@@ -3363,5 +3363,12 @@
   "catalogacao.shelf.reasonSurname": "cognome principale",
   "catalogacao.shelf.reasonTitleWord": "parola significativa del titolo",
   "catalogacao.ui.titleFallback": "Titolo",
-  "catalogacao.field.distribuidora": "Distributore"
+  "catalogacao.field.distribuidora": "Distributore",
+  "catalogacao.reassign.badge": "Admin rete",
+  "catalogacao.reassign.title": "Attribuire la scheda e le sue copie a una biblioteca",
+  "catalogacao.reassign.placeholder": "Scegli una biblioteca…",
+  "catalogacao.reassign.action": "Attribuisci",
+  "catalogacao.reassign.hint": "L’azione sposta anche tutte le copie collegate nella biblioteca scelta. Azione di rete registrata.",
+  "catalogacao.reassign.confirm": "Attribuire questa scheda e le sue copie a «{library}»?",
+  "catalogacao.reassign.done": "{count} copia/e spostata/e in «{library}»."
 }

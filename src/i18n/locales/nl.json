@@ -3363,5 +3363,12 @@
   "catalogacao.shelf.reasonSurname": "primaire achternaam",
   "catalogacao.shelf.reasonTitleWord": "kenmerkend titelwoord",
   "catalogacao.ui.titleFallback": "Titel",
-  "catalogacao.field.distribuidora": "Distributeur"
+  "catalogacao.field.distribuidora": "Distributeur",
+  "catalogacao.reassign.badge": "Netwerkbeheer",
+  "catalogacao.reassign.title": "De fiche en haar exemplaren aan een bibliotheek toewijzen",
+  "catalogacao.reassign.placeholder": "Kies een bibliotheek…",
+  "catalogacao.reassign.action": "Toewijzen",
+  "catalogacao.reassign.hint": "De actie verplaatst ook alle gekoppelde exemplaren naar de gekozen bibliotheek. Geregistreerde netwerkactie.",
+  "catalogacao.reassign.confirm": "Deze fiche en haar exemplaren toewijzen aan ‘{library}’?",
+  "catalogacao.reassign.done": "{count} exempla(a)r(en) verplaatst naar ‘{library}’."
 }

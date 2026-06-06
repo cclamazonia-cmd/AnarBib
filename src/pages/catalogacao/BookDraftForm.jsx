@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
@@ -148,10 +149,46 @@ const EMPTY_FORM = {
 export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
+  const { isNetworkAdmin } = useLibrary();
+
+  // Attribution réseau (admin réseau) : notice + exemplaires → bibliothèque cible
+  const [catalogLibraries, setCatalogLibraries] = useState([]);
+  const [reassignTarget, setReassignTarget] = useState('');
+  const [reassignBusy, setReassignBusy] = useState(false);
 
   // i18n-aware lists built from t()
   const MATERIAL_TYPES = useMemo(() => MATERIAL_TYPE_KEYS.map(k => ({ value: k, label: t({ id: `catalogacao.material.${k}` }) })), [t]);
   const CONTRIBUTOR_ROLES = useMemo(() => CONTRIBUTOR_ROLE_KEYS.map(k => ({ value: k, label: t({ id: `catalogacao.role.${k}` }) })), [t]);
+
+  // Admin réseau : charge les bibliothèques cibles (catalogue présent).
+  useEffect(() => {
+    if (!isNetworkAdmin) return;
+    let cancelled = false;
+    supabase.rpc('list_catalog_libraries').then(({ data }) => {
+      if (!cancelled && Array.isArray(data)) setCatalogLibraries(data);
+    });
+    return () => { cancelled = true; };
+  }, [isNetworkAdmin]);
+
+  // Admin réseau : attribue la notice publiée + ses exemplaires à une bibliothèque.
+  async function reassignBookToLibrary() {
+    const bookId = f('published_book_id');
+    if (!bookId || !reassignTarget) return;
+    const lib = catalogLibraries.find(l => l.id === reassignTarget);
+    if (!confirm(t({ id: 'catalogacao.reassign.confirm' }, { library: lib?.name || '' }))) return;
+    setReassignBusy(true);
+    try {
+      const { data, error } = await supabase.rpc('network_admin_reassign_book_to_library', {
+        p_book_id: Number(bookId), p_target_library_id: reassignTarget,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.reassign.done' }, { library: data?.target_library || lib?.name || '', count: data?.exemplares_moved ?? 0 }), kind: 'ok' });
+      setReassignTarget('');
+      onSaved?.();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    } finally { setReassignBusy(false); }
+  }
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
@@ -1613,6 +1650,28 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         </div>
         <button className="ab-button ab-button--ghost ab-button--sm" onClick={resetForm} type="button">{t({id:'catalogacao.ui.clearForm'})}</button>
       </div>
+
+      {/* ── Admin réseau : attribuer la notice + exemplaires à une bibliothèque (tête de fiche) ── */}
+      {isNetworkAdmin && f('published_book_id') && (
+        <div style={{ marginBottom: 14, padding: '12px 14px', borderRadius: 10, background: 'rgba(29,78,216,.12)', border: '1px solid rgba(96,165,250,.35)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <span className="cat-pill info" style={{ fontSize: '.66rem' }}>{t({ id: 'catalogacao.reassign.badge' })}</span>
+            <span style={{ fontSize: '.85rem', fontWeight: 600 }}>{t({ id: 'catalogacao.reassign.title' })}</span>
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+            <select value={reassignTarget} onChange={e => setReassignTarget(e.target.value)}
+              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 260 }}>
+              <option value="">{t({ id: 'catalogacao.reassign.placeholder' })}</option>
+              {catalogLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+            </select>
+            <button type="button" className="ab-button ab-button--sm" disabled={!reassignTarget || reassignBusy}
+              onClick={reassignBookToLibrary}>
+              {reassignBusy ? t({ id: 'common.saving' }) : t({ id: 'catalogacao.reassign.action' })}
+            </button>
+          </div>
+          <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)', marginTop: 6 }}>{t({ id: 'catalogacao.reassign.hint' })}</div>
+        </div>
+      )}
 
       {/* Message */}
       {msg.text && (
