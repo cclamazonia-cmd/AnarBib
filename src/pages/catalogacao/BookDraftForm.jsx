@@ -1,5 +1,5 @@
 import { useIntl } from 'react-intl';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -804,7 +804,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   function syncAutorFromContributors() {
     const named = contributors.filter(c => c.name.trim());
     if (!named.length) return;
-    const primary = named.find(c => c.is_primary) || named[0];
+    const _primary = named.find(c => c.is_primary) || named[0];
     set('autor', named.map(c => c.name.trim()).join(' ; '));
   }
 

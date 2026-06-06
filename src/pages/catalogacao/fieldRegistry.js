@@ -6,10 +6,9 @@
  *  ────
  *  Source unique et déclarative des champs de la fiche : groupes, champs,
  *  paliers (tiers), filtrage matériel, et helpers de visibilité.
- *  Ce module est ADDITIF : il n'est pas encore importé. Le Lot 2 (« rendu
- *  piloté ») remplacera le rendu ad-hoc `inp()/sel()` de BookDraftForm par une
- *  boucle sur `visibleGroups(tier, material)`. Tant qu'il n'est pas importé,
- *  il n'entre pas dans le graphe de build (npm run build reste vert).
+ *  Importé par BookDraftForm (Lot 2 livré) : le rendu ad-hoc `inp()/sel()`
+ *  a été remplacé par `renderRegistryField()` piloté par ce registre.
+ *  Les blocs spéciaux (contrib, cover, ISBD) restent en rendu dédié.
  *
  *  PRINCIPE D'AUTORITÉ
  *  ───────────────────
@@ -32,17 +31,16 @@
  *       Leur rendu est dédié (Lot 2) ; le registre les marque, sans les détailler.
  *  (D3) Selects/segments : `opts` repris VERBATIM du render
  *       (circulation 2 valeurs, recto_verso 3 valeurs, tipo_material = 12 codes).
- *  (D4) `idioma` : la spec §5.1 veut un select « 8+ langues » mais le render
- *       actuel est un champ texte et n'expose AUCUNE liste de langues. Pour ne
- *       rien inventer, on garde `type:'text'` (refactor fidèle) ; le passage en
- *       select + liste viendra avec sa liste de valeurs.
+ *  (D4) `idioma` : RÉSOLU — select avec les 10 locales AnarBib (IDIOMA_OPTS).
+ *       L'option vide en tête assure la compatibilité avec les fiches existantes
+ *       stockant du texte libre.
  *  (D5) `loanable` (circulação §5.6) : le render est binaire
  *       (Emprestável / Consulta). La spec veut une 3ᵉ valeur « Empréstimo +
  *       consulta ». On conserve 2 valeurs ici : la 3ᵉ change le modèle d'état
  *       (booléen → enum) et relève de la spec exemplaires/circulation. À reprendre.
- *  (D6) `viaf`/`isni`/`wikidata` (§5.2, tier 3) : ABSENTS d'EMPTY_FORM et du
- *       render → non encodés (sinon le Lot 2 référencerait un état inexistant).
- *       Laissés en PLANNED commenté dans le groupe `autoridade`.
+ *  (D6) `viaf`/`isni`/`wikidata` (§5.2, tier 3) : RÉSOLU — colonnes DB créées,
+ *       champs activés dans le groupe `autoridade`, wiring complet (EMPTY_FORM,
+ *       save payload, publish_book_draft RPC, trigger de propagation).
  *  (D7) Tiers alignés sur le mapping §5.4 (guide `.simple`→1 / `.complete`→3) :
  *       quelques champs changent de palier vs le render ad-hoc actuel
  *       (ex. `diffusion_place` 1→3, `edicao`/`colecao` complete→avançado).
