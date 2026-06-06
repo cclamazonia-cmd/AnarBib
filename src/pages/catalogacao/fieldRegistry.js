@@ -31,7 +31,8 @@
  *       Leur rendu est dédié (Lot 2) ; le registre les marque, sans les détailler.
  *  (D3) Selects/segments : `opts` repris VERBATIM du render
  *       (circulation 2 valeurs, recto_verso 3 valeurs, tipo_material = 12 codes).
- *  (D4) `idioma` : RÉSOLU — select avec les 10 locales AnarBib (IDIOMA_OPTS).
+ *  (D4) `idioma` : RÉSOLU — select avec 36 langues (10 locales AnarBib +
+ *       26 langues courantes en bibliothèque/tradition anarchiste).
  *       L'option vide en tête assure la compatibilité avec les fiches existantes
  *       stockant du texte libre.
  *  (D5) `loanable` (circulação §5.6) : le render est binaire
@@ -99,7 +100,14 @@ const CDD_MAT = ['livro', 'periodico', 'tract', 'cartaz', 'dossie', 'tese', 'art
 // L'option vide (placeholder) permet la compatibilité avec les fiches existantes
 // qui stockent du texte libre dans `idioma` : elles affichent le placeholder
 // jusqu'à ré-sélection explicite.
-const IDIOMA_CODES = ['pt-BR','fr','es','en','it','de','ca','eo','nl','el'];
+// 36 langues triees par code ISO — endonymes dans language.XX (i18n).
+// Les 10 locales AnarBib + 26 langues courantes en bibliotheque/tradition anarchiste.
+const IDIOMA_CODES = [
+  'ar','bg','ca','cs','da','de','el','en','eo','es',
+  'eu','fa','fi','fr','gl','he','hi','hr','hu','id',
+  'it','ja','ko','nb','nl','oc','pl','pt-BR','ro','ru',
+  'sk','sr','sv','tr','uk','zh',
+];
 const IDIOMA_OPTS = [
   { value: '', label: 'catalogacao.ph.language' },
   ...IDIOMA_CODES.map(c => ({ value: c, label: `language.${c}` })),
@@ -145,7 +153,7 @@ export const REGISTRY = [
       { id: 'local_publicacao', label: 'catalogacao.field.place', tier: 2, mat: ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'], ph: 'catalogacao.ph.city' },
       { id: 'paginas', label: 'catalogacao.field.pages', tier: 2, mat: ['livro', 'zine', 'dossie', 'tese'], type: 'number' },
       { id: 'ano', label: 'catalogacao.field.year', tier: 1, phEx: '2016' },
-      { id: 'idioma', label: 'catalogacao.field.language', tier: 1, type: 'select', opts: IDIOMA_OPTS }, // (D4) résolu : select 10 locales AnarBib
+      { id: 'idioma', label: 'catalogacao.field.language', tier: 1, type: 'select', opts: IDIOMA_OPTS }, // (D4) résolu : select 36 langues
       { id: 'isbn', label: 'catalogacao.field.isbn', tier: 1, mat: ['livro', 'artigo'], watch: 'dup', phEx: '978-2-347-00368-5', tierOverride: { artigo: 3 } },
       { id: 'issn', label: 'catalogacao.field.issn', tier: 1, mat: ['periodico', 'artigo'], phEx: '0251-1479' },
       { id: 'cdd', label: 'catalogacao.field.cdd', tier: 1, mat: CDD_MAT, phEx: '335' },
