@@ -1076,11 +1076,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   const RESOURCE_TYPES = [
     { value: 'pdf_publico', label: t({id:'catalogacao.digital.pdf'}) },
-    { value: 'pdf_restrito', label: 'PDF restrito' },
+    { value: 'pdf_restrito', label: t({ id: 'catalogacao.digital.typePdf' }) },
     { value: 'audio', label: t({id:'catalogacao.digital.audio'}) },
     { value: 'video', label: t({id:'catalogacao.digital.video'}) },
-    { value: 'image', label: 'Imagem' },
-    { value: 'link_externo', label: 'Link externo' },
+    { value: 'image', label: t({ id: 'catalogacao.digital.typeImage' }) },
+    { value: 'link_externo', label: t({ id: 'catalogacao.digital.typeLink' }) },
   ];
 
   const USAGE_TYPES = [
@@ -1088,7 +1088,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     { value: 'download', label: 'Download' },
     { value: 'escuta_online', label: 'Escuta online' },
     { value: 'visualizacao_online', label: t({id:'catalogacao.digital.online'}) },
-    { value: 'link_externo', label: 'Link externo' },
+    { value: 'link_externo', label: t({ id: 'catalogacao.digital.typeLink' }) },
   ];
 
   const ACCESS_SCOPES = [
@@ -1714,7 +1714,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               )}
               {lookupResult && (
                 <button type="button" className="ab-button ab-button--ghost ab-button--sm"
-                  onClick={clearLookup}>Limpar painel</button>
+                  onClick={clearLookup}>{t({ id: 'catalogacao.ui.clearPanel' })}</button>
               )}
             </div>
 
@@ -1752,14 +1752,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       {c.isbn?.[0] && ` · ISBN ${c.isbn[0]}`}
                     </div>
                     <div style={{ fontSize: '.68rem', color: 'rgba(255,255,255,.4)', marginTop: 2 }}>
-                      Confiança: {c.confidence} · {c.match_reasons?.join(', ')}
+                      {t({ id: 'catalogacao.ui.confidence' })}: {c.confidence} · {c.match_reasons?.join(', ')}
                     </div>
                   </div>
                 ))}
                 <div style={{ padding: '8px 10px', display: 'flex', gap: 6 }}>
                   <button type="button" className="ab-button ab-button--sm"
                     onClick={applySelectedCandidate}>
-                    Aplicar candidata selecionada aos campos vazios
+                    {t({ id: 'catalogacao.ui.applyCandidate' })}
                   </button>
                 </div>
               </div>
@@ -1775,9 +1775,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             {bnResult?.results?.length > 0 && (
               <div style={{ marginTop: 10 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <span style={{ fontSize: '.78rem', fontWeight: 600 }}>Biblioteca Nacional do Brasil — {bnResult.total} resultado(s)</span>
+                  <span style={{ fontSize: '.78rem', fontWeight: 600 }}>{t({ id: 'catalogacao.ui.bnResultsTitle' }, { total: bnResult.total })}</span>
                   <button type="button" className="ab-button ab-button--ghost ab-button--sm"
-                    onClick={clearBnResult}>Limpar BN</button>
+                    onClick={clearBnResult}>{t({ id: 'catalogacao.ui.clearBn' })}</button>
                 </div>
                 <div style={{ border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, overflow: 'hidden', maxHeight: 200, overflowY: 'auto' }}>
                   {bnResult.results.map((item, i) => (
@@ -1794,21 +1794,21 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       </div>
                       {item.subject && (
                         <div style={{ fontSize: '.68rem', color: 'rgba(255,255,255,.4)', marginTop: 2 }}>
-                          Assuntos: {item.subject}
+                          {t({ id: 'catalogacao.ui.subjectsLabel' })} {item.subject}
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
                 <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #666)', marginTop: 4 }}>
-                  Clique em um resultado para aplicar aos campos vazios.
+                  {t({ id: 'catalogacao.ui.bnApplyHint' })}
                 </div>
               </div>
             )}
 
             {bnResult && bnResult.results?.length === 0 && (
               <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #aaa)', padding: '8px 0', marginTop: 6 }}>
-                Nenhum resultado na BN Brasil para este ISBN.
+                {t({ id: 'catalogacao.ui.bnNoResult' })}
               </div>
             )}
           </div>
@@ -1817,13 +1817,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         <div className="cat-book-grid">
 
           {/* ── Lote ─────────────────────────────────── */}
-          {sel('batch_id', 'Lote', [
+          {sel('batch_id', t({ id: 'catalogacao.field.batch' }), [
             { value: '', label: t({id:'catalogacao.ui.noLot'}) },
             ...batches.filter(b => b.status === 'open').map(b => ({ value: String(b.id), label: b.name })),
           ])}
 
           {/* ── Type de matériel ──────────────────────── */}
-          {sel('tipo_material', 'Tipo de material', MATERIAL_TYPES)}
+          {sel('tipo_material', t({ id: 'catalogacao.field.materialType' }), MATERIAL_TYPES)}
 
           {/* ── Guide contextuel ─────────────────────── */}
           {(() => {
@@ -1875,9 +1875,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               <div key={i} style={{ marginBottom: 5 }}>
                 <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                   <input type="radio" name="primary_contributor" checked={c.is_primary}
-                    onChange={() => togglePrimary(i)} title="Responsabilidade principal"
+                    onChange={() => togglePrimary(i)} title={t({ id: 'catalogacao.contributor.primaryTitle' })}
                     style={{ flexShrink: 0 }} />
-                  <input type="text" value={c.name} placeholder="SOBRENOME, Nome"
+                  <input type="text" value={c.name} placeholder={t({ id: 'catalogacao.contributor.namePlaceholder' })}
                     onChange={e => updateContributor(i, 'name', e.target.value)}
                     style={{ flex: 1, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.82rem' }}
                   />
@@ -1905,7 +1905,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   {contributors.length > 1 && (
                     <button type="button" onClick={() => removeContributor(i)}
                       style={{ background: 'none', border: 'none', color: '#f87171', cursor: 'pointer', fontSize: '1rem', padding: '2px 6px' }}
-                      title="Remover">×</button>
+                      title={t({ id: 'catalogacao.contributor.removeTitle' })}>×</button>
                   )}
                 </div>
                 {/* Panneau de résultats du sélecteur d'autorité (volet préventif) */}
@@ -1938,7 +1938,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             {/* Champ autor synthétisé (readonly) */}
             <input type="text" value={f('autor')} readOnly
               style={{ width: '100%', padding: '5px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.06)', background: 'rgba(0,0,0,.15)', color: 'var(--brand-muted, #aaa)', fontSize: '.78rem', marginTop: 4 }}
-              title="Campo autoria sintetizado a partir dos contribuidores acima"
+              title={t({ id: 'catalogacao.contributor.synthTitle' })}
             />
           </div>
 
@@ -2079,10 +2079,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {f('id') && (
             <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                <h4 style={{ margin: 0 }}>Recursos digitais vinculados à ficha</h4>
+                <h4 style={{ margin: 0 }}>{t({ id: 'catalogacao.digital.sectionTitle' })}</h4>
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={startNewDigitalResource}>
-                  + Novo recurso
+                  {t({ id: 'catalogacao.digital.newResource' })}
                 </button>
               </div>
 
@@ -2097,8 +2097,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     }}>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: '.82rem', fontWeight: 600 }}>
-                          {res.label || res.source_name || 'Recurso digital'}
-                          {res.is_primary && <span className="cat-pill ok" style={{ marginLeft: 6, fontSize: '.65rem' }}>Principal</span>}
+                          {res.label || res.source_name || t({ id: 'catalogacao.digital.defaultLabel' })}
+                          {res.is_primary && <span className="cat-pill ok" style={{ marginLeft: 6, fontSize: '.65rem' }}>{t({ id: 'catalogacao.ui.primary' })}</span>}
                         </div>
                         <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>
                           {RESOURCE_TYPES.find(t => t.value === res.resource_type)?.label || res.resource_type}
@@ -2109,9 +2109,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       </div>
                       <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
                         <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-                          onClick={() => editDigitalResource(res)}>Editar</button>
+                          onClick={() => editDigitalResource(res)}>{t({ id: 'common.edit' })}</button>
                         <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                          onClick={() => deleteDigitalResource(res.id)}>Apagar</button>
+                          onClick={() => deleteDigitalResource(res.id)}>{t({ id: 'common.delete' })}</button>
                       </div>
                     </div>
                   ))}
@@ -2120,7 +2120,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
               {digitalResources.length === 0 && !digitalForm && (
                 <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', padding: '8px 0' }}>
-                  Nenhum recurso digital vinculado. Clique em "+ Novo recurso" para adicionar.
+                  {t({ id: 'catalogacao.digital.empty' })}
                 </div>
               )}
 
@@ -2128,57 +2128,57 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               {digitalForm && (
                 <div style={{ padding: 14, borderRadius: 8, background: 'rgba(0,0,0,.2)', border: '1px solid rgba(255,255,255,.1)' }}>
                   <h4 style={{ margin: '0 0 10px', fontSize: '.85rem' }}>
-                    {digitalForm.id ? 'Editar recurso digital' : 'Novo recurso digital'}
+                    {digitalForm.id ? t({ id: 'catalogacao.digital.editTitle' }) : t({ id: 'catalogacao.digital.newTitle' })}
                   </h4>
                   <div className="cat-book-grid">
                     <div className="cat-field">
-                      <label>Tipo de recurso</label>
+                      <label>{t({ id: 'catalogacao.digital.type' })}</label>
                       <select value={digitalForm.resource_type} onChange={e => setDf('resource_type', e.target.value)}
                         style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}>
                         {RESOURCE_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                       </select>
                     </div>
                     <div className="cat-field">
-                      <label>Uso</label>
+                      <label>{t({ id: 'catalogacao.digital.usage' })}</label>
                       <select value={digitalForm.usage_type} onChange={e => setDf('usage_type', e.target.value)}
                         style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}>
                         {USAGE_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                       </select>
                     </div>
                     <div className="cat-field">
-                      <label>Acesso</label>
+                      <label>{t({ id: 'catalogacao.digital.access' })}</label>
                       <select value={digitalForm.access_scope} onChange={e => setDf('access_scope', e.target.value)}
                         style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}>
                         {ACCESS_SCOPES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                       </select>
                     </div>
                     <div className="cat-field">
-                      <label>Bucket de armazenamento</label>
+                      <label>{t({ id: 'catalogacao.digital.bucket' })}</label>
                       <input type="text" value={digitalForm.storage_bucket} onChange={e => setDf('storage_bucket', e.target.value)}
                         placeholder="digital-assets-public" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                      <label>Caminho no armazenamento</label>
+                      <label>{t({ id: 'catalogacao.digital.path' })}</label>
                       <input type="text" value={digitalForm.storage_path} onChange={e => setDf('storage_path', e.target.value)}
                         placeholder="books/12345/documento.pdf" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                      <label>URL da fonte</label>
+                      <label>{t({ id: 'catalogacao.digital.sourceUrl' })}</label>
                       <input type="text" value={digitalForm.source_url} onChange={e => setDf('source_url', e.target.value)}
                         placeholder="https://archive.org/..." style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field">
-                      <label>Nome da fonte</label>
+                      <label>{t({ id: 'catalogacao.digital.sourceName' })}</label>
                       <input type="text" value={digitalForm.source_name} onChange={e => setDf('source_name', e.target.value)}
                         placeholder="Internet Archive" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field">
                       <label>{t({id:'catalogacao.digital.attribution'})}</label>
                       <input type="text" value={digitalForm.attribution_text} onChange={e => setDf('attribution_text', e.target.value)}
-                        placeholder="Digitalizado por…" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
+                        placeholder={t({ id: 'catalogacao.ph.scannedBy' })} style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field">
-                      <label>Status dos direitos</label>
+                      <label>{t({ id: 'catalogacao.digital.rightsStatus' })}</label>
                       <input type="text" value={digitalForm.rights_status} onChange={e => setDf('rights_status', e.target.value)}
                         placeholder="Domínio público, CC-BY…" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
@@ -2188,33 +2188,33 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         placeholder="pt" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field">
-                      <label>Tipo MIME</label>
+                      <label>{t({ id: 'catalogacao.digital.mime' })}</label>
                       <input type="text" value={digitalForm.mime_type} onChange={e => setDf('mime_type', e.target.value)}
                         placeholder="application/pdf" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-                      <label>Notas sobre o recurso</label>
+                      <label>{t({ id: 'catalogacao.digital.notes' })}</label>
                       <input type="text" value={digitalForm.notes || ''} onChange={e => setDf('notes', e.target.value)}
-                        placeholder="Observações internas…" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
+                        placeholder={t({ id: 'catalogacao.ph.internalNotes' })} style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div style={{ gridColumn: 'span 3', display: 'flex', gap: 16, alignItems: 'center' }}>
                       <label style={{ display: 'flex', gap: 5, alignItems: 'center', fontSize: '.82rem', cursor: 'pointer' }}>
                         <input type="checkbox" checked={digitalForm.is_primary} onChange={e => setDf('is_primary', e.target.checked)} />
-                        Recurso principal
+                        {t({ id: 'catalogacao.digital.isPrimary' })}
                       </label>
                       <label style={{ display: 'flex', gap: 5, alignItems: 'center', fontSize: '.82rem', cursor: 'pointer' }}>
                         <input type="checkbox" checked={digitalForm.bibliographic_match_validated} onChange={e => setDf('bibliographic_match_validated', e.target.checked)} />
-                        Correspondência bibliográfica validada
+                        {t({ id: 'catalogacao.digital.matchValidated' })}
                       </label>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
                     <button type="button" className="ab-button ab-button--sm"
                       onClick={saveDigitalResource} disabled={digitalSaving}>
-                      {digitalSaving ? 'Salvando…' : (digitalForm.id ? 'Atualizar recurso' : 'Salvar recurso')}
+                      {digitalSaving ? t({ id: 'common.saving' }) : (digitalForm.id ? t({ id: 'catalogacao.digital.update' }) : t({ id: 'catalogacao.digital.save' }))}
                     </button>
                     <button type="button" className="ab-button ab-button--ghost ab-button--sm"
-                      onClick={() => setDigitalForm(null)}>Cancelar</button>
+                      onClick={() => setDigitalForm(null)}>{t({ id: 'common.cancel' })}</button>
                   </div>
                 </div>
               )}
@@ -2282,7 +2282,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     {f('subtitulo') && <span style={{ fontWeight: 400, color: 'var(--brand-muted, #aaa)' }}> : {f('subtitulo')}</span>}
                   </div>
                   <div style={{ color: 'var(--brand-muted, #aaa)', marginBottom: 3 }}>
-                    Ficha: {[f('autor'), f('editora'), f('local_publicacao'), f('ano')].filter(Boolean).join(' · ') || '—'}
+                    {t({ id: 'catalogacao.ui.recordLabel' })} {[f('autor'), f('editora'), f('local_publicacao'), f('ano')].filter(Boolean).join(' · ') || '—'}
                   </div>
                   <div style={{ color: 'var(--brand-muted, #aaa)', marginBottom: 3 }}>
                     {t({id:'catalogacao.ui.circulationLabel'})}: {f('loanable') === 'true' ? t({id:'catalogacao.ui.loanable'}) : t({id:'catalogacao.ui.consultOnly'})}
@@ -2290,7 +2290,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     {f('idioma') && ` · ${f('idioma')}`}
                   </div>
                   {f('subjects') && (
-                    <div style={{ color: 'var(--brand-muted, #aaa)' }}>Assuntos: {f('subjects')}</div>
+                    <div style={{ color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.ui.subjectsLabel' })} {f('subjects')}</div>
                   )}
                 </div>
               </div>
@@ -2335,14 +2335,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 {f('isbn') && <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)', marginTop: 3 }}>ISBN {f('isbn')}</div>}
               </div>
               <div style={{ padding: '12px 14px', background: 'rgba(0,0,0,.15)', borderRadius: 8 }}>
-                <div style={{ fontSize: '.7rem', textTransform: 'uppercase', letterSpacing: '.04em', color: 'var(--brand-muted, #888)', marginBottom: 6 }}>Abertura da ficha</div>
+                <div style={{ fontSize: '.7rem', textTransform: 'uppercase', letterSpacing: '.04em', color: 'var(--brand-muted, #888)', marginBottom: 6 }}>{t({ id: 'catalogacao.ui.isbdOpening' })}</div>
                 <div style={{ fontSize: '.92rem', fontWeight: 700, marginBottom: 4 }}>{f('titulo') || 'Título'}</div>
                 <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 3 }}>
                   {f('subtitulo') && <span>{f('subtitulo')}<br /></span>}
                   {f('autor') && <span>{f('autor')}<br /></span>}
                   {[f('editora'), f('local_publicacao'), f('ano')].filter(Boolean).join(', ')}
                 </div>
-                {f('subjects') && <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)' }}>Assuntos: {f('subjects')}</div>}
+                {f('subjects') && <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)' }}>{t({ id: 'catalogacao.ui.subjectsLabel' })} {f('subjects')}</div>}
               </div>
             </div>
           )}
@@ -2372,7 +2372,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         <label>Zona {z} — {ZONE_LABELS[z]}</label>
                         <textarea value={isbdData.zones[z]?.value || ''} readOnly rows={2}
                           style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.08)', background: isbdData.zones[z]?.value ? 'rgba(0,0,0,.2)' : 'rgba(0,0,0,.08)', color: isbdData.zones[z]?.value ? '#f4f4f4' : 'var(--brand-muted, #666)', fontSize: '.78rem', resize: 'vertical', fontFamily: 'inherit' }}
-                          placeholder="Ainda não preparada."
+                          placeholder={t({ id: 'catalogacao.ph.notPrepared' })}
                         />
                       </div>
                     ))}
