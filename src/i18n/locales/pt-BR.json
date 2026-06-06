@@ -1818,7 +1818,7 @@
   "labels.filterAll": "Todos os exemplares",
   "labels.filterWithContent": "Com etiqueta preenchida",
   "labels.filtered": "Filtrados: {count}",
-  "labels.hint": "Selecione os exemplares para gerar uma planche d'étiquettes imprimível (A4, 7×3 = 21 étiquettes par feuille). Cliquez sur les lignes pour sélectionner.",
+  "labels.hint": "Selecione os exemplares para gerar uma folha de etiquetas imprimível (A4, 7×3 = 21 etiquetas por folha). Clique nas linhas para selecionar.",
   "labels.labels": "etiqueta(s)",
   "labels.pages": "{count} folha(s)",
   "labels.print": "Imprimir {count} etiqueta(s)",
