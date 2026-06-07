@@ -249,25 +249,50 @@ weiteren Auftragsverarbeiter zurückzugreifen:
 | Weiterer Auftragsverarbeiter | Funktion | Standort | Status |
 |---|---|---|---|
 | **Supabase Inc.** | Datenbank, Authentifizierung, Speicherung, Edge Functions | AWS São Paulo (sa-east-1) | Spezifischer DPA unterzeichnet (Ref TFXNN-HUMKJ-3WKP8-MZMYW, SCC 2021/914 Modul 2) |
-| **Sendinblue (Brevo)** | Versand transaktionaler E-Mails | EU (Frankreich) | Standard-DPA Brevo |
+| **Resend (Plus Five Five, Inc.)** | Versand transaktionaler E-Mails | Vereinigte Staaten | Resend-DPA (SCC 2021/914 Modul 2) + EU-U.S. Data Privacy Framework-Zertifizierung |
 | **Codeberg e.V.** | Hosting des Frontends (Codeberg Pages) | EU (Deutschland) | Verarbeitet keine personenbezogenen Daten (statisches Frontend) |
 
 Jede Änderung dieser Liste wird gemäß Artikel 5.4 mitgeteilt.
 
-## Artikel 8 — Übermittlungen außerhalb der EU/Brasiliens
+## Artikel 8 — Übermittlungen außerhalb der EU
 
-Der Hauptstandort der Daten ist AWS São Paulo (Brasilien), was
-keine Übermittlung außerhalb Brasiliens im Sinne der LGPD
-darstellt.
+Die technische Infrastruktur von AnarBib umfasst zwei
+Übermittlungen personenbezogener Daten außerhalb der
+Europäischen Union, an zwei verschiedene weitere
+Auftragsverarbeiter. Weder Brasilien noch die Vereinigten
+Staaten verfügen zum Datum dieser Vereinbarung über einen
+allgemeinen Angemessenheitsbeschluss der Europäischen Kommission
+im Sinne des Artikels 45 der DSGVO. Beide Übermittlungen stützen
+sich daher auf die in Artikel 46 vorgesehenen geeigneten
+Garantien.
 
-Für in der EU niedergelassene Bibliotheken stellt der
+**Übermittlung nach Brasilien (Datenhosting — Supabase).** Der
+Hauptstandort der Daten ist AWS São Paulo (Brasilien), was keine
+Übermittlung außerhalb Brasiliens im Sinne der LGPD darstellt.
+Für in der EU niedergelassene Bibliotheken stellt dieser
 brasilianische Standort eine Übermittlung außerhalb der EU dar.
 Diese Übermittlung wird durch die mit Supabase unterzeichneten
-Standardvertragsklauseln (SCC 2021/914 Modul 2) eingerahmt, die
-eine angemessene Garantie im Sinne des Artikels 46(2)(c) der DSGVO
-darstellen.
+Standardvertragsklauseln (SCC 2021/914, Modul 2
+controller-to-processor) eingerahmt, die eine angemessene
+Garantie im Sinne des Artikels 46(2)(c) der DSGVO darstellen.
 
-Brevo und Codeberg sind in der EU niedergelassen.
+**Übermittlung in die Vereinigten Staaten (E-Mail-Versand —
+Resend).** Die transaktionalen E-Mails werden über Resend
+(Plus Five Five, Inc.) versandt, ein in den Vereinigten Staaten
+niedergelassenes Unternehmen. Die übermittelten Daten
+(E-Mail-Adresse, Vorname, Inhalt der Benachrichtigung und
+Versand-Metadaten) werden in den Vereinigten Staaten
+gespeichert. Diese Übermittlung stützt sich auf eine doppelte
+Garantie: einerseits die in den Resend-DPA integrierten
+Standardvertragsklauseln (SCC 2021/914, Modul 2
+controller-to-processor); andererseits die Zertifizierung von
+Resend nach dem EU-U.S. Data Privacy Framework beim
+US-Handelsministerium. Die Nachverfolgung von Öffnungen und
+Klicks, die von Resend als Option angeboten wird, ist auf der
+AnarBib-Instanz nicht aktiviert.
+
+Codeberg (Hosting des statischen Frontends) ist in der EU
+niedergelassen und verarbeitet keine personenbezogenen Daten.
 
 ## Artikel 9 — Audit
 
@@ -348,5 +373,17 @@ dar.
 
 *Dieses Dokument bildet den Auftragsverarbeitungsvertrag im Sinne
 des Artikels 28 der DSGVO und des Artikels 39 der LGPD. Version
-1.0 — 4. Mai 2026. Kollektiv erarbeitetes Dokument, verbreitet
+1.1 — 5. Juni 2026. Kollektiv erarbeitetes Dokument, verbreitet
 unter Lizenz CC-BY-SA-4.0.*
+
+*Versionsverlauf: Version 1.0 (4. Mai 2026), Erstfassung.
+Version 1.1 (5. Juni 2026): Ersetzung des weiteren
+Auftragsverarbeiters für den E-Mail-Versand — Brevo (EU) ersetzt
+durch Resend (Plus Five Five, Inc., Vereinigte Staaten);
+Aktualisierung des Artikels 7 und entsprechende Neufassung des
+Artikels 8 (Dokumentation von zwei verschiedenen Übermittlungen
+außerhalb der EU). Diese Änderung des weiteren
+Auftragsverarbeiters wird den beitretenden Bibliotheken gemäß
+Artikel 5.4 mitgeteilt. Eine Bibliothek, die bereits die
+Version 1.0 unterzeichnet hat, verfügt über das in demselben
+Artikel vorgesehene Widerspruchsrecht.*

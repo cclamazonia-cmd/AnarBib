@@ -239,23 +239,46 @@ siguientes encargades ulteriores:
 | Encargade ulterior | Función | Ubicación | Estado |
 |---|---|---|---|
 | **Supabase Inc.** | Base de datos, autenticación, almacenamiento, edge functions | AWS São Paulo (sa-east-1) | DPA específico firmado (ref TFXNN-HUMKJ-3WKP8-MZMYW, CCT 2021/914 módulo 2) |
-| **Sendinblue (Brevo)** | Envío de correos transaccionales | UE (Francia) | DPA estándar Brevo |
+| **Resend (Plus Five Five, Inc.)** | Envío de correos transaccionales | Estados Unidos | DPA Resend (CCT 2021/914 módulo 2) + certificación EU-U.S. Data Privacy Framework |
 | **Codeberg e.V.** | Alojamiento del frontend (Codeberg Pages) | UE (Alemania) | No trata datos personales (frontend estático) |
 
 Toda modificación de esta lista se notificará según el artículo 5.4.
 
-## Artículo 8 — Transferencias fuera de la UE/Brasil
+## Artículo 8 — Transferencias fuera de la UE
 
-La ubicación principal de los datos es AWS São Paulo (Brasil), lo
-cual no constituye una transferencia fuera de Brasil bajo la LGPD.
+La infraestructura técnica de AnarBib implica dos transferencias
+de datos personales fuera de la Unión Europea, hacia dos
+encargades ulteriores distintes. Ni Brasil ni Estados Unidos se
+benefician, en la fecha del presente acuerdo, de una decisión de
+adecuación general de la Comisión Europea en el sentido del
+artículo 45 del RGPD. Las dos transferencias se basan, por tanto,
+en las garantías apropiadas previstas en el artículo 46.
 
-Para las bibliotecas establecidas en la UE, la ubicación brasileña
-constituye una transferencia fuera de la UE. Esta transferencia se
-enmarca en las Cláusulas Contractuales Tipo (CCT 2021/914 módulo 2)
-firmadas con Supabase, que constituyen garantía adecuada en los
-términos del artículo 46(2)(c) del RGPD.
+**Transferencia hacia Brasil (alojamiento de los datos —
+Supabase).** La ubicación principal de los datos es AWS São Paulo
+(Brasil), lo cual no constituye una transferencia fuera de Brasil
+bajo la LGPD. Para las bibliotecas establecidas en la UE, esta
+ubicación brasileña constituye una transferencia fuera de la UE.
+Esta transferencia se enmarca en las Cláusulas Contractuales Tipo
+(CCT 2021/914, módulo 2 controller-to-processor) firmadas con
+Supabase, que constituyen garantía adecuada en los términos del
+artículo 46(2)(c) del RGPD.
 
-Brevo y Codeberg están establecides en la UE.
+**Transferencia hacia Estados Unidos (envío de los correos —
+Resend).** Los correos transaccionales se envían vía Resend
+(Plus Five Five, Inc.), empresa establecida en Estados Unidos.
+Los datos transferidos (dirección de correo, nombre, contenido de
+la notificación y metadatos de envío) se almacenan en Estados
+Unidos. Esta transferencia se basa en una doble garantía: por una
+parte las Cláusulas Contractuales Tipo (CCT 2021/914, módulo 2
+controller-to-processor) integradas al DPA de Resend; por otra
+parte la certificación de Resend al marco EU-U.S. Data Privacy
+Framework ante el Departamento de Comercio de Estados Unidos. El
+seguimiento de aperturas y clics, propuesto como opción por
+Resend, no está activado en la instancia AnarBib.
+
+Codeberg (alojamiento del frontend estático) está establecido en
+la UE y no trata datos personales.
 
 ## Artículo 9 — Auditoría
 
@@ -333,5 +356,16 @@ o de las personas afectadas previstos por el derecho aplicable.
 
 *Este documento constituye el Acuerdo de Tratamiento de Datos en
 los términos del artículo 28 del RGPD y del artículo 39 de la
-LGPD. Versión 1.0 — 4 de mayo de 2026. Documento elaborado
+LGPD. Versión 1.1 — 5 de junio de 2026. Documento elaborado
 colectivamente, distribuido bajo licencia CC-BY-SA-4.0.*
+
+*Historial de versiones: versión 1.0 (4 de mayo de 2026), versión
+inicial. Versión 1.1 (5 de junio de 2026): sustitución del
+encargade ulterior de envío de correos — Brevo (UE) sustituido
+por Resend (Plus Five Five, Inc., Estados Unidos); actualización
+del artículo 7 y reescritura del artículo 8 en consecuencia
+(documentación de dos transferencias fuera de la UE distintas).
+Este cambio de encargade ulterior se notifica a las bibliotecas
+adherentes conforme al artículo 5.4. Una biblioteca que ya haya
+firmado la versión 1.0 dispone del derecho de oposición previsto
+en ese mismo artículo.*

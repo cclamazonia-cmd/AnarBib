@@ -238,23 +238,46 @@ sous-traitants ultérieurs suivants :
 | Sous-traitant | Fonction | Localisation | Statut |
 |---|---|---|---|
 | **Supabase Inc.** | Base de données, authentification, stockage, edge functions | AWS São Paulo (sa-east-1) | DPA spécifique signé (réf TFXNN-HUMKJ-3WKP8-MZMYW, CCT 2021/914 module 2) |
-| **Sendinblue (Brevo)** | Envoi de courriels transactionnels | UE (France) | DPA standard Brevo |
+| **Resend (Plus Five Five, Inc.)** | Envoi de courriels transactionnels | États-Unis | DPA Resend (CCT 2021/914 module 2) + certification EU-U.S. Data Privacy Framework |
 | **Codeberg e.V.** | Hébergement du frontend (Codeberg Pages) | UE (Allemagne) | Ne traite pas de données personnelles (frontend statique) |
 
 Toute modification de cette liste sera notifiée selon l'article 5.4.
 
-## Article 8 — Transferts hors UE/Brésil
+## Article 8 — Transferts hors UE
 
-La localisation principale des données est AWS São Paulo (Brésil),
-ce qui ne constitue pas un transfert hors Brésil au sens de la LGPD.
+L'infrastructure technique d'AnarBib implique deux transferts de
+données personnelles hors de l'Union européenne, vers deux
+sous-traitants ultérieurs distincts. Ni le Brésil ni les
+États-Unis ne bénéficient, à la date du présent accord, d'une
+décision d'adéquation générale de la Commission européenne au
+sens de l'article 45 du RGPD. Les deux transferts reposent donc
+sur les garanties appropriées prévues par l'article 46.
 
-Pour les bibliothèques établies dans l'UE, la localisation
-brésilienne constitue un transfert hors UE. Ce transfert est
-encadré par les Clauses Contractuelles Types (CCT 2021/914 module 2)
-signées avec Supabase, qui constituent une garantie adéquate au
-sens de l'article 46(2)(c) du RGPD.
+**Transfert vers le Brésil (hébergement des données — Supabase).**
+La localisation principale des données est AWS São Paulo
+(Brésil), ce qui ne constitue pas un transfert hors Brésil au
+sens de la LGPD. Pour les bibliothèques établies dans l'UE, cette
+localisation brésilienne constitue un transfert hors UE. Ce
+transfert est encadré par les Clauses Contractuelles Types
+(CCT 2021/914, module 2 controller-to-processor) signées avec
+Supabase, qui constituent une garantie adéquate au sens de
+l'article 46(2)(c) du RGPD.
 
-Brevo et Codeberg sont établis dans l'UE.
+**Transfert vers les États-Unis (envoi des courriels — Resend).**
+Les courriels transactionnels sont envoyés via Resend
+(Plus Five Five, Inc.), société établie aux États-Unis. Les
+données transférées (adresse de courriel, prénom, contenu de la
+notification et métadonnées d'envoi) sont stockées aux
+États-Unis. Ce transfert repose sur une double garantie : d'une
+part les Clauses Contractuelles Types (CCT 2021/914, module 2
+controller-to-processor) intégrées au DPA de Resend ; d'autre
+part la certification de Resend au cadre EU-U.S. Data Privacy
+Framework auprès du Département du Commerce des États-Unis. Le
+suivi des ouvertures et des clics, proposé en option par Resend,
+n'est pas activé sur l'instance AnarBib.
+
+Codeberg (hébergement du frontend statique) est établi dans
+l'UE et ne traite pas de données personnelles.
 
 ## Article 9 — Audit
 
@@ -333,6 +356,17 @@ applicable.
 ---
 
 *Ce document constitue l'Accord de Traitement de Données au titre
-de l'article 28 du RGPD et de l'article 39 de la LGPD. Version 1.0
-— 4 mai 2026. Document élaboré collectivement, distribué sous
+de l'article 28 du RGPD et de l'article 39 de la LGPD. Version 1.1
+— 5 juin 2026. Document élaboré collectivement, distribué sous
 licence CC-BY-SA-4.0.*
+
+*Historique des versions : version 1.0 (4 mai 2026), version
+initiale. Version 1.1 (5 juin 2026) : remplacement du
+sous-traitant d'envoi de courriels — Brevo (UE) remplacé par
+Resend (Plus Five Five, Inc., États-Unis) ; mise à jour de
+l'article 7 et réécriture de l'article 8 en conséquence
+(documentation de deux transferts hors UE distincts). Ce
+changement de sous-traitant ultérieur est notifié aux
+bibliothèques adhérentes conformément à l'article 5.4. Une
+bibliothèque ayant déjà signé la version 1.0 dispose du droit
+d'opposition prévu à ce même article.*

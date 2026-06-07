@@ -228,23 +228,46 @@ sub-operadores:
 | Sub-operador | Função | Localização | Status |
 |---|---|---|---|
 | **Supabase Inc.** | Banco de dados, autenticação, armazenamento, edge functions | AWS São Paulo (sa-east-1) | DPA específico assinado (ref TFXNN-HUMKJ-3WKP8-MZMYW, CCT 2021/914 módulo 2) |
-| **Sendinblue (Brevo)** | Envio de e-mails transacionais | UE (França) | DPA padrão Brevo |
+| **Resend (Plus Five Five, Inc.)** | Envio de e-mails transacionais | Estados Unidos | DPA Resend (CCT 2021/914 módulo 2) + certificação EU-U.S. Data Privacy Framework |
 | **Codeberg e.V.** | Hospedagem do frontend (Codeberg Pages) | UE (Alemanha) | Não trata dados pessoais (frontend estático) |
 
 Qualquer modificação dessa lista será notificada conforme o artigo 5.4.
 
-## Artigo 8 — Transferências para fora da UE/Brasil
+## Artigo 8 — Transferências para fora da UE
 
+A infraestrutura técnica do AnarBib implica duas transferências de
+dados pessoais para fora da União Europeia, para dois
+sub-operadores distintos. Nem o Brasil nem os Estados Unidos
+beneficiam, na data do presente acordo, de uma decisão de
+adequação geral da Comissão Europeia nos termos do artigo 45 do
+RGPD. As duas transferências repousam, portanto, sobre as
+garantias apropriadas previstas no artigo 46.
+
+**Transferência para o Brasil (hospedagem dos dados — Supabase).**
 A localização principal dos dados é AWS São Paulo (Brasil), o que
 não constitui uma transferência para fora do Brasil sob a LGPD.
+Para as bibliotecas estabelecidas na UE, esta localização
+brasileira constitui uma transferência fora UE. Esta transferência
+é enquadrada pelas Cláusulas Contratuais Tipo (CCT 2021/914,
+módulo 2 controller-to-processor) assinadas com Supabase, que
+constituem garantia adequada nos termos do artigo 46(2)(c) do
+RGPD.
 
-Para as bibliotecas estabelecidas na UE, a localização brasileira
-constitui uma transferência fora UE. Esta transferência é
-enquadrada pelas Cláusulas Contratuais Tipo (CCT 2021/914 módulo 2)
-assinadas com Supabase, que constituem garantia adequada nos termos
-do artigo 46(2)(c) do RGPD.
+**Transferência para os Estados Unidos (envio dos e-mails —
+Resend).** Os e-mails transacionais são enviados via Resend
+(Plus Five Five, Inc.), empresa estabelecida nos Estados Unidos.
+Os dados transferidos (endereço de e-mail, nome, conteúdo da
+notificação e metadados de envio) são armazenados nos Estados
+Unidos. Esta transferência repousa sobre uma dupla garantia: por
+um lado as Cláusulas Contratuais Tipo (CCT 2021/914, módulo 2
+controller-to-processor) integradas ao DPA da Resend; por outro
+lado a certificação da Resend ao quadro EU-U.S. Data Privacy
+Framework junto ao Departamento de Comércio dos Estados Unidos. O
+rastreamento de aberturas e cliques, proposto como opção pela
+Resend, não está ativado na instância AnarBib.
 
-Brevo e Codeberg estão estabelecidos na UE.
+Codeberg (hospedagem do frontend estático) está estabelecido na
+UE e não trata dados pessoais.
 
 ## Artigo 9 — Auditoria
 
@@ -320,6 +343,16 @@ pessoas concernidas previstos pelo direito aplicável.
 ---
 
 *Este documento constitui o Acordo de Tratamento de Dados nos
-termos do artigo 28 do RGPD e do artigo 39 da LGPD. Versão 1.0 —
-4 de maio de 2026. Documento elaborado coletivamente, distribuído
+termos do artigo 28 do RGPD e do artigo 39 da LGPD. Versão 1.1 —
+5 de junho de 2026. Documento elaborado coletivamente, distribuído
 sob licença CC-BY-SA-4.0.*
+
+*Histórico das versões: versão 1.0 (4 de maio de 2026), versão
+inicial. Versão 1.1 (5 de junho de 2026): substituição do
+sub-operador de envio de e-mails — Brevo (UE) substituído por
+Resend (Plus Five Five, Inc., Estados Unidos); atualização do
+artigo 7 e reescrita do artigo 8 em consequência (documentação de
+duas transferências fora UE distintas). Esta mudança de
+sub-operador é notificada às bibliotecas aderentes conforme o
+artigo 5.4. Uma biblioteca que já assinou a versão 1.0 dispõe do
+direito de oposição previsto nesse mesmo artigo.*

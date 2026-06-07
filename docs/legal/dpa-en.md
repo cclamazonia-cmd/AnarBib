@@ -225,24 +225,46 @@ sub-processors:
 | Sub-processor | Function | Location | Status |
 |---|---|---|---|
 | **Supabase Inc.** | Database, authentication, storage, edge functions | AWS São Paulo (sa-east-1) | Specific DPA signed (ref TFXNN-HUMKJ-3WKP8-MZMYW, SCC 2021/914 module 2) |
-| **Sendinblue (Brevo)** | Sending of transactional emails | EU (France) | Standard Brevo DPA |
+| **Resend (Plus Five Five, Inc.)** | Sending of transactional emails | United States | Resend DPA (SCC 2021/914 module 2) + EU-U.S. Data Privacy Framework certification |
 | **Codeberg e.V.** | Frontend hosting (Codeberg Pages) | EU (Germany) | Does not process personal data (static frontend) |
 
 Any modification of this list will be notified according to
 Article 5.4.
 
-## Article 8 — Transfers outside the EU/Brazil
+## Article 8 — Transfers outside the EU
 
-The main location of the data is AWS São Paulo (Brazil), which does
-not constitute a transfer outside Brazil under the LGPD.
+AnarBib's technical infrastructure involves two transfers of
+personal data outside the European Union, to two distinct
+sub-processors. Neither Brazil nor the United States benefits, as
+of the date of this agreement, from a general adequacy decision
+of the European Commission within the meaning of Article 45 of
+the GDPR. Both transfers therefore rely on the appropriate
+safeguards provided for in Article 46.
 
-For libraries established in the EU, the Brazilian location
+**Transfer to Brazil (data hosting — Supabase).** The main
+location of the data is AWS São Paulo (Brazil), which does not
+constitute a transfer outside Brazil under the LGPD. For
+libraries established in the EU, this Brazilian location
 constitutes a transfer outside the EU. This transfer is framed by
-the Standard Contractual Clauses (SCC 2021/914 module 2) signed
-with Supabase, which constitute an adequate safeguard within the
-meaning of Article 46(2)(c) of the GDPR.
+the Standard Contractual Clauses (SCC 2021/914, module 2
+controller-to-processor) signed with Supabase, which constitute
+an adequate safeguard within the meaning of Article 46(2)(c) of
+the GDPR.
 
-Brevo and Codeberg are established in the EU.
+**Transfer to the United States (email sending — Resend).**
+Transactional emails are sent via Resend (Plus Five Five, Inc.),
+a company established in the United States. The transferred data
+(email address, first name, notification content and sending
+metadata) is stored in the United States. This transfer relies on
+a double safeguard: on the one hand the Standard Contractual
+Clauses (SCC 2021/914, module 2 controller-to-processor)
+incorporated into Resend's DPA; on the other hand Resend's
+certification under the EU-U.S. Data Privacy Framework with the
+U.S. Department of Commerce. Open and click tracking, offered as
+an option by Resend, is not enabled on the AnarBib instance.
+
+Codeberg (static frontend hosting) is established in the EU and
+does not process personal data.
 
 ## Article 9 — Audit
 
@@ -318,6 +340,16 @@ data subjects provided by applicable law.
 ---
 
 *This document constitutes the Data Processing Agreement under
-Article 28 of the GDPR and Article 39 of the LGPD. Version 1.0 —
-May 4, 2026. Document collectively elaborated, distributed under
+Article 28 of the GDPR and Article 39 of the LGPD. Version 1.1 —
+June 5, 2026. Document collectively elaborated, distributed under
 CC-BY-SA-4.0 license.*
+
+*Version history: version 1.0 (May 4, 2026), initial version.
+Version 1.1 (June 5, 2026): replacement of the email-sending
+sub-processor — Brevo (EU) replaced by Resend (Plus Five Five,
+Inc., United States); update of Article 7 and rewriting of
+Article 8 accordingly (documentation of two distinct transfers
+outside the EU). This change of sub-processor is notified to
+adhering libraries in accordance with Article 5.4. A library
+that has already signed version 1.0 has the right of objection
+provided for in that same article.*

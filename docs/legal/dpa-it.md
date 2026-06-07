@@ -240,25 +240,47 @@ responsabili ulteriori:
 | Responsabile ulteriore | Funzione | Localizzazione | Stato |
 |---|---|---|---|
 | **Supabase Inc.** | Database, autenticazione, archiviazione, edge functions | AWS São Paulo (sa-east-1) | DPA specifico firmato (rif TFXNN-HUMKJ-3WKP8-MZMYW, CCS 2021/914 modulo 2) |
-| **Sendinblue (Brevo)** | Invio di e-mail transazionali | UE (Francia) | DPA standard Brevo |
+| **Resend (Plus Five Five, Inc.)** | Invio di e-mail transazionali | Stati Uniti | DPA Resend (CCS 2021/914 modulo 2) + certificazione EU-U.S. Data Privacy Framework |
 | **Codeberg e.V.** | Hosting del frontend (Codeberg Pages) | UE (Germania) | Non tratta dati personali (frontend statico) |
 
 Qualsiasi modifica di questo elenco sarà notificata secondo
 l'articolo 5.4.
 
-## Articolo 8 — Trasferimenti fuori UE/Brasile
+## Articolo 8 — Trasferimenti fuori UE
 
+L'infrastruttura tecnica di AnarBib implica due trasferimenti di
+dati personali al di fuori dell'Unione Europea, verso due
+responsabili ulteriori distinti. Né il Brasile né gli Stati Uniti
+beneficiano, alla data del presente accordo, di una decisione di
+adeguatezza generale della Commissione Europea ai sensi
+dell'articolo 45 del GDPR. I due trasferimenti si fondano quindi
+sulle garanzie appropriate previste dall'articolo 46.
+
+**Trasferimento verso il Brasile (hosting dei dati — Supabase).**
 La localizzazione principale dei dati è AWS São Paulo (Brasile),
-il che non costituisce un trasferimento fuori dal Brasile ai sensi
-della LGPD.
+il che non costituisce un trasferimento fuori dal Brasile ai
+sensi della LGPD. Per le biblioteche stabilite nell'UE, questa
+localizzazione brasiliana costituisce un trasferimento fuori UE.
+Questo trasferimento è inquadrato dalle Clausole Contrattuali
+Standard (CCS 2021/914, modulo 2 controller-to-processor) firmate
+con Supabase, che costituiscono garanzia adeguata ai sensi
+dell'articolo 46(2)(c) del GDPR.
 
-Per le biblioteche stabilite nell'UE, la localizzazione brasiliana
-costituisce un trasferimento fuori UE. Questo trasferimento è
-inquadrato dalle Clausole Contrattuali Standard (CCS 2021/914
-modulo 2) firmate con Supabase, che costituiscono garanzia adeguata
-ai sensi dell'articolo 46(2)(c) del GDPR.
+**Trasferimento verso gli Stati Uniti (invio delle e-mail —
+Resend).** Le e-mail transazionali sono inviate tramite Resend
+(Plus Five Five, Inc.), società stabilita negli Stati Uniti. I
+dati trasferiti (indirizzo e-mail, nome, contenuto della notifica
+e metadati di invio) sono archiviati negli Stati Uniti. Questo
+trasferimento si fonda su una doppia garanzia: da un lato le
+Clausole Contrattuali Standard (CCS 2021/914, modulo 2
+controller-to-processor) integrate nel DPA di Resend; dall'altro
+la certificazione di Resend al quadro EU-U.S. Data Privacy
+Framework presso il Dipartimento del Commercio degli Stati Uniti.
+Il monitoraggio delle aperture e dei clic, proposto come opzione
+da Resend, non è attivato sull'istanza AnarBib.
 
-Brevo e Codeberg sono stabiliti nell'UE.
+Codeberg (hosting del frontend statico) è stabilito nell'UE e non
+tratta dati personali.
 
 ## Articolo 9 — Audit
 
@@ -338,5 +360,16 @@ applicabile.
 
 *Questo documento costituisce l'Accordo sul Trattamento dei Dati ai
 sensi dell'articolo 28 del GDPR e dell'articolo 39 della LGPD.
-Versione 1.0 — 4 maggio 2026. Documento elaborato collettivamente,
+Versione 1.1 — 5 giugno 2026. Documento elaborato collettivamente,
 distribuito sotto licenza CC-BY-SA-4.0.*
+
+*Cronologia delle versioni: versione 1.0 (4 maggio 2026), versione
+iniziale. Versione 1.1 (5 giugno 2026): sostituzione del
+responsabile ulteriore per l'invio delle e-mail — Brevo (UE)
+sostituito da Resend (Plus Five Five, Inc., Stati Uniti);
+aggiornamento dell'articolo 7 e riscrittura dell'articolo 8 di
+conseguenza (documentazione di due trasferimenti fuori UE
+distinti). Questa modifica del responsabile ulteriore è
+notificata alle biblioteche aderenti conformemente all'articolo
+5.4. Una biblioteca che ha già firmato la versione 1.0 dispone
+del diritto di opposizione previsto dallo stesso articolo.*
