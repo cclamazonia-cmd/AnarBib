@@ -86,13 +86,21 @@ function applyBrandAssets(assets) {
   setCssVar('--brand-bg-repeat', assets.backgroundRepeat || 'no-repeat');
 
   if (assets.favicon) {
-    let link = document.querySelector("link[rel='icon']");
-    if (!link) {
-      link = document.createElement('link');
+    // PATCH 07/06/2026 : reecrire TOUS les <link rel="icon"> (32/192/512), pas
+    // seulement le premier. index.html declare 3 tailles dont 192/512 pointent
+    // sur /img/ (emblème AnarBib) ; le navigateur privilegiant la plus grande
+    // icone, il affichait toujours AnarBib et le favicon par bibliotheque ne
+    // s'appliquait jamais dans l'onglet. On pointe toutes les tailles vers le
+    // favicon du theme (256px, downscale propre par le navigateur).
+    const iconLinks = document.querySelectorAll("link[rel='icon']");
+    if (iconLinks.length === 0) {
+      const link = document.createElement('link');
       link.rel = 'icon';
+      link.href = assets.favicon;
       document.head.appendChild(link);
+    } else {
+      iconLinks.forEach((l) => { l.href = assets.favicon; });
     }
-    link.href = assets.favicon;
   }
 }
 
