@@ -56,6 +56,7 @@ export default function LabelSheetPrinter() {
         (l.autor_etiqueta || '').toLowerCase().includes(q) ||
         (l.titulo_etiqueta || '').toLowerCase().includes(q) ||
         (l.resolved_bib_ref || '').toLowerCase().includes(q) ||
+        (l.tombo || '').toLowerCase().includes(q) ||
         (l.cdd_etiqueta || '').toLowerCase().includes(q)
       );
     }
@@ -147,6 +148,7 @@ export default function LabelSheetPrinter() {
       const title = esc((l.titulo_etiqueta || '').substring(0, 40));
       const cdd = esc(l.cdd_etiqueta || '');
       const ref = esc(l.resolved_bib_ref || '');
+      const tombo = esc(l.tombo || '');
       const note = esc((l.label_note || '').substring(0, 25));
       const qr = qrById[l.exemplar_id];
       const qrCell = qr ? `<div class="label-qr"><img src="${qr}" alt="QR" /></div>` : '';
@@ -156,6 +158,7 @@ export default function LabelSheetPrinter() {
             <div class="label-cdd">${cdd}</div>
             <div class="label-author">${author}</div>
             <div class="label-title">${title}</div>
+            ${tombo ? `<div class="label-tombo">${tombo}</div>` : ''}
             <div class="label-ref">${ref}</div>
             ${note ? `<div class="label-note">${note}</div>` : ''}
           </div>
@@ -204,6 +207,7 @@ export default function LabelSheetPrinter() {
   .label-cdd { font-size: 14pt; font-weight: 800; letter-spacing: .5px; margin-bottom: 1mm; color: #111; }
   .label-author { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; margin-bottom: .5mm; color: #222; }
   .label-title { font-size: 7.5pt; font-style: italic; line-height: 1.2; margin-bottom: 1mm; color: #333; max-height: 12mm; overflow: hidden; }
+  .label-tombo { font-size: 7.5pt; font-family: 'Liberation Mono', 'Courier New', monospace; font-weight: 700; color: #111; letter-spacing: .2px; }
   .label-ref { font-size: 6.5pt; font-family: 'Liberation Mono', 'Courier New', monospace; color: #555; }
   .label-note { font-size: 6pt; color: #888; margin-top: .5mm; }
   @media screen { body { padding: 20px; } .sheet { margin-bottom: 20px; border: 1px solid #ddd; } }
@@ -293,6 +297,7 @@ ${pages.join('\n')}
                 <input type="checkbox" checked={selected.size === filtered.length && filtered.length > 0} onChange={toggleAll} />
               </th>
               {sortableTh('resolved_bib_ref', 'REF')}
+              {sortableTh('tombo', t({ id: 'catalogacao.exemplar.tombo' }))}
               {sortableTh('autor_etiqueta', t({ id: 'labels.col.author' }))}
               {sortableTh('titulo_etiqueta', t({ id: 'labels.col.title' }))}
               {sortableTh('cdd_etiqueta', 'CDD')}
@@ -310,6 +315,7 @@ ${pages.join('\n')}
                   <input type="checkbox" checked={selected.has(l.exemplar_id)} onChange={() => toggle(l.exemplar_id)} />
                 </td>
                 <td style={{ padding: '5px 8px', fontFamily: 'monospace', fontSize: '.78rem' }}>{l.resolved_bib_ref || '—'}</td>
+                <td style={{ padding: '5px 8px', fontFamily: 'monospace', fontSize: '.78rem', fontWeight: 600 }}>{l.tombo || '—'}</td>
                 <td style={{ padding: '5px 8px' }}>{l.autor_etiqueta || '—'}</td>
                 <td style={{ padding: '5px 8px' }}>{l.titulo_etiqueta || '—'}</td>
                 <td style={{ padding: '5px 8px', fontWeight: 600 }}>{l.cdd_etiqueta || '—'}</td>
