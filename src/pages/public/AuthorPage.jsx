@@ -37,18 +37,8 @@ function buildHeroIntro(author, booksCount, t, locale) {
   return parts.join(' · ') || '';
 }
 
-// Méta structurée encodée dans notes (cf. AuthorDraftForm.packStructuredMeta) :
-// bloc JSON entre marqueurs. On l'extrait pour afficher periode d'activite /
-// affiliation, et on la retire du texte de notes affiche en biographie.
-const AUTHOR_META_RE = /---anarbib_author_meta---\n([\s\S]*?)\n---end_anarbib_author_meta---/;
-function parseAuthorMeta(notes) {
-  const m = (notes || '').match(AUTHOR_META_RE);
-  if (!m?.[1]) return {};
-  try { return JSON.parse(m[1]); } catch { return {}; }
-}
-function stripAuthorMeta(notes) {
-  return (notes || '').replace(/\n?---anarbib_author_meta---[\s\S]*?---end_anarbib_author_meta---\n?/, '').trim();
-}
+// Structured meta is now a dedicated jsonb column (authors.structured_meta).
+// Legacy marker-based encoding in notes has been migrated.
 
 export default function AuthorPage() {
   const { id } = useParams();
@@ -126,7 +116,7 @@ export default function AuthorPage() {
   const intro = buildHeroIntro(author, books.length, t, locale);
   const hasPhoto = !!author.photo_object_path;
   const sourceLabel = [author.source_kind, author.source_label].filter(Boolean).join(' · ');
-  const meta = parseAuthorMeta(author.notes);
+  const meta = author.structured_meta || {};
 
   return (
     <PageShell>
@@ -198,7 +188,7 @@ export default function AuthorPage() {
                   || i18n['pt-BR']
                   || Object.values(i18n)[0]
                   || author.biography
-                  || stripAuthorMeta(author.notes)
+                  || author.notes
                   || '—';
                 // Show available translations indicator
                 const availLangs = Object.keys(i18n);

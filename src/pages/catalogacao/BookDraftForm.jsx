@@ -142,8 +142,8 @@ const EMPTY_FORM = {
   relatorio_org: '', relatorio_recipient: '', relatorio_internal_notes: '',
   // Zine
   zine_print_run: '', zine_technique: '', zine_format: '',
-  // Identifiants d'autorite (§5.2)
-  viaf: '', isni: '', wikidata: '',
+  // viaf/isni/wikidata retires du niveau livre — identifiants d'autorite
+  // geres au niveau authors (authors.viaf_id / isni / wikidata_id).
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -1453,10 +1453,6 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         zine_format: isZine ? (f('zine_format') || null) : null,
         // Subjects (transversal)
         subjects: f('subjects') || null,
-        // Identifiants d'autorite (§5.2, transversal)
-        viaf: f('viaf') || null,
-        isni: f('isni') || null,
-        wikidata: f('wikidata') || null,
         created_by: user?.id || null,
         updated_by: user?.id || null,
       };

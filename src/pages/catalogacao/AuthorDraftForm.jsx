@@ -46,19 +46,10 @@ function buildSortName(preferredName, authorityType) {
   return rest ? `${surname}, ${rest}` : surname;
 }
 
-// ── Structured meta in notes ──────────────────────────────
-function packStructuredMeta(meta) {
-  if (!meta || !Object.values(meta).some(Boolean)) return '';
-  return `\n---anarbib_author_meta---\n${JSON.stringify(meta)}\n---end_anarbib_author_meta---`;
-}
-
-function extractStructuredMeta(notes) {
-  const match = (notes || '').match(/---anarbib_author_meta---\n([\s\S]*?)\n---end_anarbib_author_meta---/);
-  const cleanNotes = (notes || '').replace(/\n?---anarbib_author_meta---[\s\S]*?---end_anarbib_author_meta---\n?/, '').trim();
-  let meta = {};
-  if (match?.[1]) { try { meta = JSON.parse(match[1]); } catch {} }
-  return { meta, cleanNotes };
-}
+// ── Structured meta (dedicated jsonb column) ─────────────
+// Legacy: meta was packed as JSON markers inside notes. Now stored in
+// authors.structured_meta / author_drafts.structured_meta (jsonb).
+// The pack/extract helpers are removed; we read/write the column directly.
 
 export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed }) {
   const { formatMessage: t, locale } = useIntl();
@@ -182,7 +173,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   }
 
   function fillFromRecord(r) {
-    const { meta: parsedMeta, cleanNotes } = extractStructuredMeta(r.notes || '');
+    const sm = r.structured_meta || {};
     setForm({
       id: String(r.id || ''),
       published_author_id: String(r.published_author_id || ''),
@@ -202,7 +193,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       isni: r.isni || '',
       wikidata_id: r.wikidata_id || '',
       photo_object_path: r.photo_object_path || '',
-      notes: cleanNotes,
+      notes: r.notes || '',
     });
     // Charger les traductions UNIQUEMENT pour un auteur publie (jamais l'id de
     // brouillon : il collisionne avec les id d'auteurs reels — bug corrige 05/06).
@@ -216,14 +207,14 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       setBioDirty(new Set());
     }
     setMeta({
-      authorityType: parsedMeta.authorityType || 'person',
-      acronym: parsedMeta.acronym || '',
-      activityPeriod: parsedMeta.activityPeriod || '',
-      affiliation: parsedMeta.affiliation || '',
-      variantNames: parsedMeta.variantNames || '',
-      pseudonyms: parsedMeta.pseudonyms || '',
-      activityPlace: parsedMeta.activityPlace || '',
-      contextLinks: parsedMeta.contextLinks || '',
+      authorityType: sm.authorityType || 'person',
+      acronym: sm.acronym || '',
+      activityPeriod: sm.activityPeriod || '',
+      affiliation: sm.affiliation || '',
+      variantNames: sm.variantNames || '',
+      pseudonyms: sm.pseudonyms || '',
+      activityPlace: sm.activityPlace || '',
+      contextLinks: sm.contextLinks || '',
     });
     setDraftState(r.status === 'ready' ? 'ready' : r.status === 'published' ? 'published' : r.id ? 'saved' : 'new');
     setMsg({ text: '', kind: '' });
@@ -279,8 +270,10 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     try {
       // Upload photo if file selected
       if (photoFile) { await uploadPhoto(); }
-      const structuredNotes = (f('notes') || '') + packStructuredMeta(meta);
       const isUpdate = !!f('id');
+      // Build structured_meta: only include non-empty values
+      const smPayload = {};
+      for (const [k, v] of Object.entries(meta)) { if (v) smPayload[k] = v; }
       const payload = {
         ...(isUpdate ? { id: Number(f('id')) } : {}),
         published_author_id: f('published_author_id') ? Number(f('published_author_id')) : null,
@@ -301,7 +294,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         wikidata_id: f('wikidata_id') || null,
         variant_forms: form.variant_forms || null,
         photo_object_path: f('photo_object_path') || null,
-        notes: structuredNotes || null,
+        notes: f('notes') || null,
+        structured_meta: Object.keys(smPayload).length ? smPayload : {},
         updated_by: user?.id || null,
         ...(isUpdate ? {} : { created_by: user?.id || null }),
       };

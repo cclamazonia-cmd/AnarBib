@@ -37,8 +37,8 @@
  *       stockant du texte libre.
  *  (D5) `loanable` (circulação §5.6) : RÉSOLU — 3 valeurs effectives
  *       (emprestavel / consulta / ambos). CAT-E6 levé le 06/06.
- *  (D6) `viaf`/`isni`/`wikidata` (§5.2, tier 3) : RÉSOLU — colonnes DB créées,
- *       champs activés dans le groupe `autoridade`, wiring complet (EMPTY_FORM,
+ *  (D6) `viaf`/`isni`/`wikidata` (§5.2, tier 3) : RETIRÉS du niveau livre —
+ *       ces identifiants appartiennent au niveau autorité (authors table,
  *       save payload, publish_book_draft RPC, trigger de propagation).
  *  (D7) Tiers alignés sur le mapping §5.4 (guide `.simple`→1 / `.complete`→3) :
  *       quelques champs changent de palier vs le render ad-hoc actuel
@@ -371,10 +371,8 @@ export const REGISTRY = [
       { id: 'marc_json', label: 'catalogacao.field.marcJson', tier: 3, type: 'textarea', span: 3, rows: 4, phEx: '{"anarbib_subjects": [...]}' },
       // Zones ISBD 0–8 : générées, rendu dédié par le special 'fine'
       // (clés catalogacao.isbd.zone0..zone8 + book.isbd.zone7).
-      // (D6) Résolu — colonnes ajoutées par migration 20260606183824.
-      { id: 'viaf',     label: 'catalogacao.field.viaf',     tier: 3, phEx: '12345678' },
-      { id: 'isni',     label: 'catalogacao.field.isni',     tier: 3, phEx: '0000 0001 2345 6789' },
-      { id: 'wikidata', label: 'catalogacao.field.wikidata', tier: 3, phEx: 'Q12345' },
+      // viaf/isni/wikidata retirés du niveau livre — ces identifiants
+      // appartiennent au niveau autorité (authors.viaf_id/isni/wikidata_id).
     ],
   },
 ];
