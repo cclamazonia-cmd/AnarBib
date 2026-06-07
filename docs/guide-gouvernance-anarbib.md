@@ -2,7 +2,7 @@
 title: "Guide de gouvernance d'AnarBib"
 subtitle: "À l'usage des coordinateur·rices de biblio et des administrateur·rices du réseau"
 author: "Projet AnarBib"
-date: "Version 1.0 — 11 mai 2026"
+date: "Version 1.1 — 5 juin 2026"
 lang: fr
 ---
 
@@ -1192,6 +1192,15 @@ Exemple type pour une demande de retrait :
 
 Le ton vise à informer factuellement sans dramatiser ni minorer.
 
+### Confidentialité des emails — garde-fou anti-tracking
+
+Les emails de gouvernance, comme toutes les notifications du SIGB, sont expédiés via **Resend**, le sous-traitant d'envoi du réseau (cf. registre des traitements et DPA). Deux garanties politiques encadrent cet envoi :
+
+- **Aucun pistage.** Le suivi des ouvertures et des clics — qui collecterait l'adresse IP, la localisation, l'appareil et le client mail de la personne destinataire — est une option **désactivée** sur l'instance AnarBib. Recevoir un email de gouvernance ne laisse aucune empreinte technique côté réseau.
+- **Minimisation.** Seules les données strictement nécessaires à l'envoi transitent (adresse email, prénom pour la personnalisation, contenu de la notification). Aucune donnée sensible n'est transmise.
+
+Ce garde-fou est doctrinal : il prolonge l'engagement de non-pistage du réseau jusque dans la couche email. Il est documenté au registre des traitements (art. 30 RGPD) et au DPA ; tout changement de sous-traitant mail est notifié aux bibliothèques adhérentes (DPA art. 5.4).
+
 ## 9.5. Le cas des notifications « cross-biblios »
 
 Quand un·e admin réseau intervient sur une biblio (cf. §8.6), deux notifications sont produites :
@@ -1219,7 +1228,7 @@ Ces limites ne sont pas des hypocrisies. Elles correspondent à un équilibre en
 
 **Vous pensez à l'inverse que l'audit log est trop visible** (un·e librarian discret·e ne devrait pas pouvoir « espionner » les actions des coords). C'est aussi défendable. Mais cela contredit P5. À discuter.
 
-**Vous trouvez les emails trop nombreux ou pas assez explicites.** Le contenu est paramétré dans `mail-strings.ts` × 6 locales. Toute modification d'un mail est amendable comme une modification de code. À porter avec les dev.
+**Vous trouvez les emails trop nombreux ou pas assez explicites.** Le contenu est paramétré dans `mail-strings.ts` × 10 locales. Toute modification d'un mail est amendable comme une modification de code. À porter avec les dev.
 
 **Vous pensez que l'audit log réseau devrait être public au moins aux coords locaux** (pour qu'iels puissent voir qui décide quoi au niveau réseau). C'est une option intéressante. À discuter.
 
