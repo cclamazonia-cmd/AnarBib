@@ -210,8 +210,10 @@ async function handleTaskLevelNotice(payload, taskId, recipientRole) {
   }
   const libraryId = payloadLibraryId || String(task.library_id || "").trim() || null;
   const notificationContext = payload.notification_context && typeof payload.notification_context === "object" ? normalizeLibraryNotificationContext(payload.notification_context, libraryId) : await resolveLibraryNotificationContext(libraryId);
-  const locale = normalizeTaskLocale(notificationContext.default_locale);
   const ownerProfile = recipientRole === "organizer" ? await fetchInternalTaskOwnerProfile(recipientEmail) : null;
+  // Locale = langue d'affichage du/de la responsable (organizer) si connue,
+  // sinon langue de la biblio. L'avis "library" (canal admin) reste en langue biblio.
+  const locale = normalizeTaskLocale((recipientRole === "organizer" ? ownerProfile?.preferred_language : null) || notificationContext.default_locale);
   const target = recipientRole === "organizer" ? ownerTarget(recipientEmail, ownerProfile) || invitationTarget(recipientEmail) : invitationTarget(recipientEmail);
   const brandTag = subjectTag(notificationContext);
   const email = buildTaskLevelNoticeEmail(recipientRole, eventKind, task, brandTag, changedFields, locale);
@@ -422,7 +424,8 @@ export async function handleInternalTaskNotification(payload) {
     };
   }
   const ctx = await resolveLibraryNotificationContext(String(task.library_id || "").trim() || null);
-  const locale = normalizeTaskLocale(ctx.default_locale);
+  // Locale = langue d'affichage du/de la responsable (owner), repli langue biblio.
+  const locale = normalizeTaskLocale(ownerProfile.preferred_language || ctx.default_locale);
   const target = ownerTarget(ownerEmail, ownerProfile);
   const ownerName = firstNameOnly(ownerProfile.first_name || "") || tTask(locale, "fallbackName");
   const brandTag = subjectTag(ctx);

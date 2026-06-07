@@ -5,7 +5,7 @@ export async function fetchInternalTask(taskId) {
   return data || null;
 }
 export async function fetchInternalTaskOwnerProfile(ownerEmail) {
-  const { data, error } = await supabaseAdmin.from("profiles").select("id,email,is_librarian,first_name,last_name").ilike("email", ownerEmail).maybeSingle();
+  const { data, error } = await supabaseAdmin.from("profiles").select("id,email,is_librarian,first_name,last_name,preferred_language").ilike("email", ownerEmail).maybeSingle();
   if (error && error.code !== "PGRST116") {
     throw new Error(`internal_task_owner_profile_failed: ${error.message}`);
   }

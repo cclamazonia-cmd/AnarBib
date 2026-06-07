@@ -1,6 +1,6 @@
 // _shared/i18n/task-mail-strings.ts
 // i18n des libellés pour les mails de tâches internes (notify-internal-task).
-// 9 locales (pt-BR, fr, es, en, it, de, ca, eo, nl), repli pt-BR.
+// 10 locales (pt-BR, fr, es, en, it, de, ca, eo, nl, el), repli pt-BR.
 // Ecriture inclusive selon la convention de chaque langue.
 // Patron : table par locale + helpers (tMail-like). Aucune dependance externe.
 
@@ -561,11 +561,75 @@ const TASK_STRINGS = {
       title: "Uitnodiging voor een interne taak",
       introHtml: `<p style="margin:0 0 10px;">Je hebt een <b>uitnodiging gekregen om mee te werken aan een interne taak</b> van de bibliotheek.</p><p style="margin:0;">Als het voor jou klopt, open dan het bibliotheekpaneel om de organisatie van deze taak te volgen.</p>`
     }
+  },
+
+  // el : grec neutre (sans marqueur inclusif — convention el "à définir" selon la
+  // charte). À FAIRE RELIRE par une personne locutrice grecque militante.
+  "el": {
+    status: {
+      aberta: "Ανοιχτή",
+      a_fazer: "Προς εκτέλεση",
+      em_andamento: "Σε εξέλιξη",
+      bloqueada: "Μπλοκαρισμένη",
+      concluida: "Ολοκληρωμένη",
+      cancelada: "Ακυρωμένη",
+      arquivada: "Αρχειοθετημένη"
+    },
+    priority: { alta: "Υψηλή", media: "Μεσαία", baixa: "Χαμηλή", urgente: "Επείγουσα" },
+    label: {
+      tarefa: "Εργασία",
+      prioridade: "Προτεραιότητα",
+      situacao: "Κατάσταση",
+      prazo: "Προθεσμία",
+      marcadores: "Ετικέτες",
+      descricao: "Περιγραφή",
+      organizacao: "Υπεύθυνος",
+      mudancas: "Σημαντικές αλλαγές"
+    },
+    greetingPlain: "Γεια!",
+    greetingNamed: "Γεια σου, {name}!",
+    untitled: "εργασία χωρίς τίτλο",
+    fallbackName: "σύντροφε",
+    assigned: {
+      subject: "Νέα εσωτερική εργασία",
+      title: "Νέα εσωτερική εργασία",
+      introHtml: `<p style="margin:0 0 10px;">Έλαβες μια <b>νέα εσωτερική εργασία</b>.</p><p style="margin:0;">Δες τον πίνακα για να παρακολουθήσεις την πρόοδό της και να καταγράψεις κάθε απαραίτητη ενημέρωση.</p>`
+    },
+    reminder: {
+      subject: "Υπενθύμιση εσωτερικής εργασίας",
+      title: "Υπενθύμιση εσωτερικής εργασίας",
+      introHtml: `<p style="margin:0 0 10px;">Αυτή η εργασία μπήκε στο μπλοκ <b>Δουλειά της ημέρας</b>.</p><p style="margin:0;">Αν έχει ήδη διεκπεραιωθεί, αξίζει να ενημερώσεις την κατάστασή της στον πίνακα.</p>`
+    },
+    orgCreated: {
+      subject: "Νέα εσωτερική εργασία υπό την ευθύνη σου",
+      title: "Νέα εσωτερική εργασία",
+      introHtml: `<p style="margin:0 0 10px;">Καταχωρήθηκε μια <b>νέα εσωτερική εργασία</b> υπό την ευθύνη σου.</p><p style="margin:0;">Άνοιξε τον πίνακα της βιβλιοθήκης για να παρακολουθήσεις την πρόοδο και να οργανώσεις τα επόμενα βήματα.</p>`
+    },
+    orgUpdated: {
+      subject: "Σημαντική ενημέρωση σε εσωτερική εργασία",
+      title: "Σημαντική ενημέρωση σε εσωτερική εργασία",
+      introHtml: `<p style="margin:0 0 10px;">Μια εσωτερική εργασία υπό την ευθύνη σου έλαβε μια <b>σημαντική ενημέρωση</b>.</p><p style="margin:0;">Έλεγξε τον πίνακα της βιβλιοθήκης για να επιβεβαιώσεις τη νέα κατάσταση και να προσαρμόσεις την παρακολούθηση.</p>`
+    },
+    libCreated: {
+      subject: "Νέα εσωτερική εργασία καταχωρήθηκε",
+      title: "Νέα εσωτερική εργασία καταχωρήθηκε",
+      introHtml: `<p style="margin:0 0 10px;">Μια <b>νέα εσωτερική εργασία</b> καταχωρήθηκε για αυτή τη βιβλιοθήκη.</p><p style="margin:0;">Αυτή η ειδοποίηση είναι ενημερωτική και παραμένει ξεχωριστή από τις ατομικές προσκλήσεις που στάλθηκαν στους συντρόφους που προσκλήθηκαν.</p>`
+    },
+    libUpdated: {
+      subject: "Σημαντική ενημέρωση σε εργασία της βιβλιοθήκης",
+      title: "Σημαντική ενημέρωση σε εργασία της βιβλιοθήκης",
+      introHtml: `<p style="margin:0 0 10px;">Μια εσωτερική εργασία της βιβλιοθήκης έλαβε μια <b>σημαντική ενημέρωση</b>.</p><p style="margin:0;">Αυτή η ειδοποίηση βοηθά στην παρακολούθηση των κεντρικών αλλαγών χωρίς να εξαρτάσαι από τις ατομικές προσκλήσεις.</p>`
+    },
+    invitation: {
+      subject: "Πρόσκληση σε εσωτερική εργασία",
+      title: "Πρόσκληση σε εσωτερική εργασία",
+      introHtml: `<p style="margin:0 0 10px;">Έλαβες μια <b>πρόσκληση να συμμετάσχεις σε μια εσωτερική εργασία</b> της βιβλιοθήκης.</p><p style="margin:0;">Αν σου ταιριάζει, άνοιξε τον πίνακα της βιβλιοθήκης για να παρακολουθήσεις την οργάνωση αυτής της εργασίας.</p>`
+    }
   }
 };
 
 const FALLBACK_LOCALE = "pt-BR";
-export const SUPPORTED_TASK_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl"];
+export const SUPPORTED_TASK_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
 
 // Resout une locale arbitraire (ex. "pt", "fr-FR", "PT-br") vers une locale supportee.
 // Repli pt-BR si rien ne correspond.
