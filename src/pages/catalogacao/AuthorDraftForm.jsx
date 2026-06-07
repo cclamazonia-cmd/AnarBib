@@ -253,6 +253,10 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     setM('authorityType', val);
     // Le sigle ne concerne qu'une autorite collective : on le vide sinon.
     if (val !== 'collective') setM('acronym', '');
+    // Pseudonymes / noms de guerre : notion individuelle -> vider hors personne.
+    if (val !== 'person') setM('pseudonyms', '');
+    // Naissance/deces : ni personne ni collectivite -> champs masques, on vide.
+    if (val !== 'person' && val !== 'collective') { set('birth_year', ''); set('death_year', ''); }
     // Re-derive la forme de tri si elle n'a pas ete personnalisee.
     if (!currentSort.trim() || currentSort === buildSortName(pref, prevType)) {
       set('sort_name', buildSortName(pref, val));
@@ -595,7 +599,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       {/* ── Form ─────────────────────────────────────── */}
       <form onSubmit={handleSave}>
 
-        {/* ── Name assist ──────────────────────────── */}
+        {/* ── Name assist (parse un nom de personne BN : personne uniquement) ── */}
+        {meta.authorityType === 'person' && (
         <div style={{ padding: 12, borderRadius: 8, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)', marginBottom: 14 }}>
           <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 4 }}>{t({ id: 'catalogacao.author.nameAssist' })}</div>
           <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 8 }}>
@@ -608,19 +613,20 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               onClick={applyNameAssist}>{t({ id: 'catalogacao.author.nameAssistFill' })}</button>
           </div>
         </div>
+        )}
 
         <div className="cat-book-grid">
           {/* ── Name fields ──────────────────────────── */}
           <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-            <label style={ls}>{t({ id: 'catalogacao.author.preferredNameLabel' })}</label>
+            <label style={ls}>{t({ id: meta.authorityType === 'person' ? 'catalogacao.author.preferredNameLabel' : meta.authorityType === 'collective' ? 'catalogacao.author.preferredNameLabelOrg' : 'catalogacao.author.preferredNameLabelGeneric' })}</label>
             <input type="text" value={f('preferred_name')} onChange={e => handlePreferredNameChange(e.target.value)}
-              placeholder="Osvaldo BAYER" required style={fs} />
+              placeholder={meta.authorityType === 'person' ? 'Osvaldo BAYER' : meta.authorityType === 'collective' ? 'Confederación Nacional del Trabajo' : ''} required style={fs} />
           </div>
 
           <div className="cat-field">
             <label style={ls}>{t({ id: 'catalogacao.author.sortNameLabel' })}</label>
             <input type="text" value={f('sort_name')} onChange={e => set('sort_name', e.target.value)}
-              placeholder="BAYER, Osvaldo" style={{ ...fs, opacity: f('published_author_id') ? 1 : 0.7 }}
+              placeholder={meta.authorityType === 'person' ? 'BAYER, Osvaldo' : meta.authorityType === 'collective' ? 'Confederación Nacional del Trabajo' : ''} style={{ ...fs, opacity: f('published_author_id') ? 1 : 0.7 }}
               readOnly={!f('published_author_id')} />
             <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{t({ id: 'catalogacao.author.sortNameHint' })}</div>
           </div>
@@ -667,13 +673,16 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             </div>
           )}
 
+          {isComplete && meta.authorityType === 'person' && (
+            <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+              <label style={ls}>{t({ id: 'catalogacao.author.pseudonyms' })}</label>
+              <input type="text" value={meta.pseudonyms} onChange={e => setM('pseudonyms', e.target.value)}
+                placeholder="Separar por ponto e vírgula" style={fs} />
+            </div>
+          )}
+
           {isComplete && (
             <>
-              <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                <label style={ls}>{t({ id: 'catalogacao.author.pseudonyms' })}</label>
-                <input type="text" value={meta.pseudonyms} onChange={e => setM('pseudonyms', e.target.value)}
-                  placeholder="Separar por ponto e vírgula" style={fs} />
-              </div>
               <div className="cat-field">
                 <label style={ls}>{t({ id: 'catalogacao.author.activityPlace' })}</label>
                 <input type="text" value={meta.activityPlace} onChange={e => setM('activityPlace', e.target.value)}
@@ -687,9 +696,13 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             </>
           )}
 
-          {/* ── Biographical data ────────────────────── */}
-          {inp('birth_year', t({ id: 'catalogacao.author.birthYear' }), { type: 'number' })}
-          {inp('death_year', t({ id: 'catalogacao.author.deathYear' }), { type: 'number' })}
+          {/* ── Donnees temporelles ──────────────────────
+              Personne : naissance/deces. Collectivite : fondation/dissolution
+              (memes colonnes, libelle adapte). Autres types : masque. */}
+          {(meta.authorityType === 'person' || meta.authorityType === 'collective') &&
+            inp('birth_year', t({ id: meta.authorityType === 'collective' ? 'catalogacao.author.foundingYear' : 'catalogacao.author.birthYear' }), { type: 'number' })}
+          {(meta.authorityType === 'person' || meta.authorityType === 'collective') &&
+            inp('death_year', t({ id: meta.authorityType === 'collective' ? 'catalogacao.author.dissolutionYear' : 'catalogacao.author.deathYear' }), { type: 'number' })}
           {inp('country', t({ id: 'catalogacao.author.country' }), { placeholder: 'Brasil' })}
 
           {/* ── Source + identifiers ──────────────────── */}
