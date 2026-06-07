@@ -1,10 +1,32 @@
 # spec-migration-mail-resend.md — Migration du provider mail Brevo → Resend
 
-**Version** : v0.4
-**Date** : 03/06/2026 (révision de la v0.3 du 21/05/2026, archivée sous `docs/specs/archive/spec-migration-mail-resend-v0.3.md` ; v0.2 du 21/05/2026 sous `docs/specs/archive/spec-migration-mail-resend-v0.2.md` ; v0.1 du 13/05/2026 sous `docs/specs/archive/spec-migration-mail-resend-v0.1.md`)
-**Statut** : en cours d'exécution — sous-paquets R.1, R.2 et R.3 clos le 21/05 ; R.4 (bascule de `MAIL_PROVIDER`) à venir
+**Version** : v0.5
+**Date** : 05/06/2026 (révision de la v0.4 du 03/06/2026 ; v0.1–v0.3 archivées sous `docs/specs/archive/spec-migration-mail-resend-v0.{1,2,3}.md`)
+**Statut** : **terminé** — R.1 à R.5 clos (21/05 → 05/06), R.6 (retrait de Brevo) clos le 05/06/2026. Chantier #110 clos, sous réserve du critère documentaire 8.3.6 (cf. changelog v0.5).
 **Périmètre** : 8 Edge Functions Supabase porteuses d'envoi mail + transport mail partagé
 **Auteur·rices** : Xavier (rédaction politique), Claude (rédaction technique)
+
+---
+
+## Changelog v0.4 → v0.5
+
+La v0.5 acte la **clôture du chantier #110** : la migration Brevo → Resend est terminée et Brevo est retiré du code et des secrets.
+
+1. **R.4 (bascule) et R.5 (surveillance) clos.** `MAIL_PROVIDER` passé à `resend` le 21/05/2026 ; aucun envoi Brevo depuis le 21/05 20h31. Coexistence stable du 21/05 au 05/06 (Resend en statut 200, aucun mail `failed`).
+
+2. **R.6 (retrait de Brevo) clos le 05/06/2026.**
+   - **R.6.1** — code Brevo retiré des 8 transports + 2 `env.ts` partagés (`sendViaBrevo`, dispatch `MAIL_PROVIDER`, lectures `BREVO_*`, coquille `BREVO_SENDER_MAIL`). `sendEmail()` appelle directement `sendViaResend()`. Conservés : `sendViaResend`, inlining base64 des logos, contrats de retour, secret `MAIL_PROVIDER` (retrait reporté à R.7). Déployé, runtime confirmé (notify + register reçus via Resend).
+   - **R.6.2** — 7 secrets `BREVO_*` supprimés (`BREVO_API_KEY`, `_NOTIFICATIONS`, `_NOTIFY_INTERNAL_TASK`, `_NOTIFY_RESERVA`, `_STAGING`, `BREVO_SENDER_EMAIL`, `BREVO_SENDER_NAME`). Point de non-retour franchi après sauvegarde hors-ligne (P.0). Fallbacks sender (`SENDER_EMAIL`/`ANARBIB_SENDER_EMAIL`/`NETWORK_SENDER_EMAIL`) conservés et alignés.
+   - **R.6.3** — couture sender confirmée saine, aucune suppression supplémentaire.
+   - **R.6.4** — compte Brevo en standby (gratuit, sans coût) ; fermeture définitive indicative fin été 2026.
+   - **Gate dur** : `register` exige désormais `RESEND_API_KEY` pour démarrer (remplace l'ancien gate Brevo).
+   - **Cas `register`** : `brevoPayloadToResend` (traduction du payload pivot) **conservée** comme normalisation interne — sa suppression (réécriture des 3 sites d'appel) relève de R.7.
+
+3. **Volet documentaire.** DPA porté en v1.1 dans **10 langues** (ajout ca, el, eo, nl) ; registre des traitements mis à jour (Brevo → Resend, DPA Resend, garde-fou tracking désactivé).
+
+4. **Reste pour R.7** (hygiène, hors #110) : retrait du secret `MAIL_PROVIDER`, rationalisation des variables de sender, réécriture des 3 sites `register` + suppression de `brevoPayloadToResend`, nettoyage des commentaires « brevo » historiques.
+
+**Critères de clôture (§8.3)** : 8.3.1 (grep brevo = commentaires historiques) ✅ ; 8.3.2 (aucun secret Brevo) ✅ ; 8.3.3 (registre RGPD) ✅ ; 8.3.5 (aucun coût Brevo) ✅ (constat) ; 8.3.6 (garde-fou tracking dans le manuel admin réseau) — **en attente** de la mise à jour du manuel.
 
 ---
 
