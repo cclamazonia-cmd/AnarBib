@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import QRCode from 'qrcode';
 import { supabase } from '@/lib/supabase';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { Button, Pill, Spinner } from '@/components/ui';
@@ -26,6 +27,8 @@ export default function LabelSheetPrinter() {
   const [sort, setSort] = useState({ key: 'resolved_bib_ref', dir: 'asc' });
   const [deleting, setDeleting] = useState(false);
   const [msg, setMsg] = useState('');
+  const [includeQr, setIncludeQr] = useState(true);
+  const [printing, setPrinting] = useState(false);
 
   // ── Load labels via RPC get_exemplar_labels ──
   // Wrapper SECURITY DEFINER gated staff de v_exemplar_labels : la vue est
@@ -104,24 +107,60 @@ export default function LabelSheetPrinter() {
     await loadLabels();
   }
 
+  // URL encodee dans chaque QR — lien universel : fonctionne des aujourd'hui
+  // (un appareil photo classique ouvre la fiche publique du livre) ET porte
+  // l'exemplar_id pour le futur module mobile. Pour changer le schema encode
+  // (identifiant compact, deep-link dedie...), il suffit de modifier cette
+  // fonction.
+  function labelQrUrl(l) {
+    const origin = window.location.origin;
+    if (l.book_id) return `${origin}/livro/${l.book_id}?ex=${l.exemplar_id}`;
+    return `${origin}/livro?ex=${l.exemplar_id}`;
+  }
+
   // ── Print selected labels as A4 sheet ──
-  function printLabels() {
+  async function printLabels() {
     const selectedLabels = filtered.filter(l => selected.has(l.exemplar_id));
     if (!selectedLabels.length) return;
+    setPrinting(true);
+
+    // Pre-generation des QR codes (async) AVANT de construire la chaine HTML
+    // (toDataURL renvoie une Promise, le rendu de la feuille est synchrone).
+    const qrById = {};
+    if (includeQr) {
+      await Promise.all(selectedLabels.map(async (l) => {
+        try {
+          qrById[l.exemplar_id] = await QRCode.toDataURL(labelQrUrl(l), {
+            width: 160, margin: 0, errorCorrectionLevel: 'M',
+          });
+        } catch { qrById[l.exemplar_id] = ''; }
+      }));
+    }
+
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]
+    ));
 
     // Build the label content
     const labelCells = selectedLabels.map(l => {
-      const author = (l.autor_etiqueta || '').substring(0, 30);
-      const title = (l.titulo_etiqueta || '').substring(0, 40);
-      const cdd = l.cdd_etiqueta || '';
-      const ref = l.resolved_bib_ref || '';
-      const note = (l.label_note || '').substring(0, 25);
+      const author = esc((l.autor_etiqueta || '').substring(0, 30));
+      const title = esc((l.titulo_etiqueta || '').substring(0, 40));
+      const cdd = esc(l.cdd_etiqueta || '');
+      const ref = esc(l.resolved_bib_ref || '');
+      const note = esc((l.label_note || '').substring(0, 25));
+      const qr = qrById[l.exemplar_id];
+      const qrCell = qr ? `<div class="label-qr"><img src="${qr}" alt="QR" /></div>` : '';
       return `<td class="label">
-        <div class="label-cdd">${cdd}</div>
-        <div class="label-author">${author}</div>
-        <div class="label-title">${title}</div>
-        <div class="label-ref">${ref}</div>
-        ${note ? `<div class="label-note">${note}</div>` : ''}
+        <div class="label-inner">
+          <div class="label-text">
+            <div class="label-cdd">${cdd}</div>
+            <div class="label-author">${author}</div>
+            <div class="label-title">${title}</div>
+            <div class="label-ref">${ref}</div>
+            ${note ? `<div class="label-note">${note}</div>` : ''}
+          </div>
+          ${qrCell}
+        </div>
       </td>`;
     });
 
@@ -158,6 +197,10 @@ export default function LabelSheetPrinter() {
     overflow: hidden;
   }
   .label--empty { border-color: transparent; }
+  .label-inner { display: flex; gap: 2mm; height: 100%; align-items: flex-start; }
+  .label-text { flex: 1; min-width: 0; overflow: hidden; }
+  .label-qr { flex-shrink: 0; width: 16mm; }
+  .label-qr img { width: 16mm; height: 16mm; display: block; }
   .label-cdd { font-size: 14pt; font-weight: 800; letter-spacing: .5px; margin-bottom: 1mm; color: #111; }
   .label-author { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; margin-bottom: .5mm; color: #222; }
   .label-title { font-size: 7.5pt; font-style: italic; line-height: 1.2; margin-bottom: 1mm; color: #333; max-height: 12mm; overflow: hidden; }
@@ -172,6 +215,7 @@ ${pages.join('\n')}
 
     const w = window.open('', '_blank');
     if (w) { w.document.write(html); w.document.close(); }
+    setPrinting(false);
   }
 
   if (loading) return <Spinner />;
@@ -215,8 +259,12 @@ ${pages.join('\n')}
         <Button variant="secondary" onClick={toggleAll}>
           {selected.size === filtered.length ? t({ id: 'labels.deselectAll' }) : t({ id: 'labels.selectAll' })}
         </Button>
-        <Button onClick={printLabels} disabled={selected.size === 0}>
-          {t({ id: 'labels.print' }, { count: selected.size })}
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '.82rem', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+          <input type="checkbox" checked={includeQr} onChange={e => setIncludeQr(e.target.checked)} />
+          {t({ id: 'labels.includeQr' })}
+        </label>
+        <Button onClick={printLabels} disabled={selected.size === 0 || printing}>
+          {printing ? t({ id: 'labels.generating' }) : t({ id: 'labels.print' }, { count: selected.size })}
         </Button>
         <button type="button" className="ab-button ab-button--danger" onClick={deleteSelected} disabled={selected.size === 0 || deleting}>
           {t({ id: 'labels.deleteSelected' }, { count: selected.size })}
