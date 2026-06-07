@@ -265,6 +265,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
+  const [isbnDupHint, setIsbnDupHint] = useState(null); // { bookId, titulo, bibRef, libraries } | null — live ISBN check
   // Doublons de documents (detection + fusion, P2a/P2b)
   const [bookDupMatches, setBookDupMatches] = useState(null); // null = pas cherche
   const [bookDupLoading, setBookDupLoading] = useState(false);
@@ -342,6 +343,29 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setForm(prev => ({ ...prev, [key]: value }));
     if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
   }
+
+  // ── Live ISBN duplicate check (debounced 600ms) ─────────
+  useEffect(() => {
+    const raw = (form.isbn || '').replace(/[^0-9Xx]/g, '').toUpperCase();
+    if (raw.length < 10) { setIsbnDupHint(null); return; }
+    const publishedId = form.published_book_id;
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await supabase.from('books')
+          .select('id, titulo, bib_ref, owner_library_id, libraries:owner_library_id(name)')
+          .ilike('isbn', `%${raw}%`)
+          .limit(3);
+        const match = (data || []).find(b => !publishedId || String(b.id) !== String(publishedId));
+        if (match) {
+          const libName = match.libraries?.name || '';
+          setIsbnDupHint({ bookId: match.id, titulo: match.titulo, bibRef: match.bib_ref, library: libName });
+        } else {
+          setIsbnDupHint(null);
+        }
+      } catch { setIsbnDupHint(null); }
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [form.isbn, form.published_book_id]);
   function setMany(obj) {
     setForm(prev => ({ ...prev, ...obj }));
   }
@@ -1213,17 +1237,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     if (!isbn && !title) return false; // nothing to check
 
     try {
-      // 1. Check by ISBN
+      // 1. Check by ISBN (cross-library: no library_id filter)
       if (isbn) {
         const { data } = await supabase.from('books')
-          .select('id, titulo, autor, bib_ref')
+          .select('id, titulo, autor, bib_ref, owner_library_id, libraries:owner_library_id(name)')
           .ilike('isbn', `%${isbn}%`)
-          .limit(1);
-        if (data?.length && (!publishedId || String(data[0].id) !== publishedId)) {
-          const dup = data[0];
-          const confirmed = confirm(
-            `ISBN já existente no catálogo: "${dup.titulo || '—'}"${dup.bib_ref ? ` (ref. ${dup.bib_ref})` : ''}.\n\nDeseja continuar salvando mesmo assim?`
-          );
+          .limit(3);
+        const dup = (data || []).find(b => !publishedId || String(b.id) !== String(publishedId));
+        if (dup) {
+          const detail = [dup.titulo || '', dup.bib_ref ? `ref. ${dup.bib_ref}` : '', dup.libraries?.name || ''].filter(Boolean).join(' · ');
+          const confirmed = confirm(t({ id: 'catalogacao.presave.isbnExists' }, { detail }));
           return !confirmed; // true = abort
         }
       }
@@ -1232,7 +1255,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       if (title && author) {
         const normalize = (v) => (v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
         const { data } = await supabase.from('books')
-          .select('id, titulo, autor, ano, bib_ref')
+          .select('id, titulo, autor, ano, bib_ref, owner_library_id, libraries:owner_library_id(name)')
           .ilike('titulo', `%${title.slice(0, 40)}%`)
           .limit(10);
         if (data?.length) {
@@ -1242,9 +1265,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             normalize(b.autor || '') === normalize(author)
           );
           if (match) {
-            const confirmed = confirm(
-              `Título + autoria já existentes no catálogo: "${match.titulo}"${match.ano ? ` (${match.ano})` : ''}${match.bib_ref ? ` · ref. ${match.bib_ref}` : ''}.\n\nDeseja continuar salvando mesmo assim?`
-            );
+            const detail = [match.titulo || '', match.ano ? `(${match.ano})` : '', match.bib_ref ? `ref. ${match.bib_ref}` : '', match.libraries?.name || ''].filter(Boolean).join(' · ');
+            const confirmed = confirm(t({ id: 'catalogacao.presave.titleAuthorExists' }, { detail }));
             return !confirmed;
           }
         }
@@ -2216,6 +2238,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── ISBN / ISSN / CDD ────────────────────── */}
           {rrf('isbn')}
+          {isbnDupHint && (
+            <div className="cat-isbn-dup-hint" style={{ fontSize: '.75rem', color: 'var(--brand-warn, #b45309)', margin: '-6px 0 8px 0', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontWeight: 600 }}>{t({ id: 'catalogacao.isbnDup.badge' })}</span>
+              <span>{isbnDupHint.titulo}{isbnDupHint.library ? ` (${isbnDupHint.library})` : ''}</span>
+              {isbnDupHint.bookId && onOpenBook && (
+                <button type="button" className="ab-button ab-button--mini" style={{ fontSize: '.65rem', padding: '1px 6px' }} onClick={() => onOpenBook(isbnDupHint.bookId)}>
+                  {t({ id: 'catalogacao.duplicate.openExisting' })}
+                </button>
+              )}
+            </div>
+          )}
           {rrf('issn')}
           {rrf('cdd')}
 
