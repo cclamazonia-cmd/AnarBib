@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Definitive forigi",
   "catalogacao.queue.description": "Aktivaj malnetoj de dokumentoj, aŭtorecoj kaj ekzempleroj. Administru la vivociklon: redaktu, marku kiel pretan, publikigi aŭ foriĝi.",
   "catalogacao.queue.deselectAll": "Malelekti ĉion",
-  "catalogacao.queue.discardBatch": "Forlasi",
+  "catalogacao.queue.discardBatch": "Forigi",
   "catalogacao.queue.discardConfirm": "Ĉu foriĝi {count} malneto(j)n? Ili estos movitaj al la rubujeto.",
   "catalogacao.queue.discardResult": "{count} malneto(j) foriĝita(j).",
   "catalogacao.queue.empty": "Neniu aktiva malneto en ĉi tiu filtrilo.",

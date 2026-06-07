@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Endgültig löschen",
   "catalogacao.queue.description": "Aktive Entwürfe von Dokumenten, Autoritäten und Exemplaren. Verwalten Sie den Lebenszyklus: bearbeiten, als bereit markieren, veröffentlichen oder verwerfen.",
   "catalogacao.queue.deselectAll": "Auswahl aufheben",
-  "catalogacao.queue.discardBatch": "Verwerfen",
+  "catalogacao.queue.discardBatch": "Löschen",
   "catalogacao.queue.discardConfirm": "{count} Entwurf/Entwürfe verwerfen? Sie werden in den Papierkorb verschoben.",
   "catalogacao.queue.discardResult": "{count} Entwurf/Entwürfe verworfen.",
   "catalogacao.queue.empty": "Keine aktiven Entwürfe in diesem Filter.",

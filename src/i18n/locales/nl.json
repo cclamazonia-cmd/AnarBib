@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Definitief verwijderen",
   "catalogacao.queue.description": "Actieve concepten van documenten, autoriteiten en exemplaren. Beheer de levenscyclus: bewerk, markeer als gereed, publiceer of verwijder.",
   "catalogacao.queue.deselectAll": "Alles deselecteren",
-  "catalogacao.queue.discardBatch": "Verwerpen",
+  "catalogacao.queue.discardBatch": "Verwijderen",
   "catalogacao.queue.discardConfirm": "{count} concept(en) verwijderen? Ze worden naar de prullenbak verplaatst.",
   "catalogacao.queue.discardResult": "{count} concept(en) verwijderd.",
   "catalogacao.queue.empty": "Geen actieve concepten in dit filter.",

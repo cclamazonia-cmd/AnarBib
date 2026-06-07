@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Elimina definitivamente",
   "catalogacao.queue.description": "Bozze attive di documenti, autorità e esemplari. Gestisci il ciclo di vita: modifica, segna come pronto, pubblica o scarta.",
   "catalogacao.queue.deselectAll": "Deseleziona tutto",
-  "catalogacao.queue.discardBatch": "Scarta",
+  "catalogacao.queue.discardBatch": "Elimina",
   "catalogacao.queue.discardConfirm": "Scartare {count} bozza/e? Verranno spostate nel cestino.",
   "catalogacao.queue.discardResult": "{count} bozza/e scartata/e.",
   "catalogacao.queue.empty": "Nessuna bozza attiva in questo filtro.",

@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Delete permanently",
   "catalogacao.queue.description": "Active drafts of documents, authorities and copies. Manage the lifecycle: edit, mark ready, publish or discard.",
   "catalogacao.queue.deselectAll": "Deselect all",
-  "catalogacao.queue.discardBatch": "Discard",
+  "catalogacao.queue.discardBatch": "Delete",
   "catalogacao.queue.discardConfirm": "Discard {count} draft(s)? They will be moved to trash.",
   "catalogacao.queue.discardResult": "{count} draft(s) discarded.",
   "catalogacao.queue.empty": "No active drafts in this filter.",

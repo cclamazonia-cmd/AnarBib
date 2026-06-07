@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Supprimer définitivement",
   "catalogacao.queue.description": "Brouillons actifs de documents, autorités et exemplaires. Gérez le cycle de vie : éditez, marquez comme prêt, publiez ou mettez au rebut.",
   "catalogacao.queue.deselectAll": "Tout désélectionner",
-  "catalogacao.queue.discardBatch": "Abandonner",
+  "catalogacao.queue.discardBatch": "Supprimer",
   "catalogacao.queue.discardConfirm": "Mettre {count} brouillon(s) au rebut ? Ils seront déplacés dans la corbeille.",
   "catalogacao.queue.discardResult": "{count} brouillon(s) mis au rebut.",
   "catalogacao.queue.empty": "Aucun brouillon actif dans ce filtre.",

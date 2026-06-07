@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Eliminar definitivamente",
   "catalogacao.queue.description": "Borradores activos de documentos, autoridades y ejemplares. Gestione el ciclo de vida: edite, marque como listo, publique o descarte.",
   "catalogacao.queue.deselectAll": "Desmarcar todo",
-  "catalogacao.queue.discardBatch": "Descartar",
+  "catalogacao.queue.discardBatch": "Eliminar",
   "catalogacao.queue.discardConfirm": "Descartar {count} borrador(es)? Seran movidos a la papelera.",
   "catalogacao.queue.discardResult": "{count} borrador(es) descartado(s).",
   "catalogacao.queue.empty": "Ningun borrador activo en este filtro.",

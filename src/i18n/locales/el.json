@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Οριστική διαγραφή",
   "catalogacao.queue.description": "Ενεργά προσχέδια εγγράφων, αρχείων και αντιτύπων.",
   "catalogacao.queue.deselectAll": "Αποεπιλογή όλων",
-  "catalogacao.queue.discardBatch": "Απόρριψη",
+  "catalogacao.queue.discardBatch": "Διαγραφή",
   "catalogacao.queue.discardConfirm": "Απόρριψη {count} προσχεδίων; Θα μετακινηθούν στον κάδο.",
   "catalogacao.queue.discardResult": "{count} προσχέδια απορρίφθηκαν.",
   "catalogacao.queue.empty": "Κανένα ενεργό προσχέδιο σε αυτό το φίλτρο.",

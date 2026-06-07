@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Excluir definitivamente",
   "catalogacao.queue.description": "Rascunhos ativos de documentos, autoridades e exemplares. Gerencie o ciclo de vida: edite, marque como pronto, publique ou descarte.",
   "catalogacao.queue.deselectAll": "Desmarcar tudo",
-  "catalogacao.queue.discardBatch": "Descartar",
+  "catalogacao.queue.discardBatch": "Excluir",
   "catalogacao.queue.discardConfirm": "Descartar {count} rascunho(s)? Eles irão para a lixeira.",
   "catalogacao.queue.discardResult": "{count} rascunho(s) descartado(s).",
   "catalogacao.queue.empty": "Nenhum rascunho ativo neste recorte.",

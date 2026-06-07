@@ -1968,7 +1968,7 @@
   "catalogacao.queue.deletePermanent": "Suprimir definitivament",
   "catalogacao.queue.description": "Esborranys actius de documents, autoritats i exemplars. Gestioneu el cicle de vida: editeu, marqueu com a preparat, publiqueu o descarteu.",
   "catalogacao.queue.deselectAll": "Desmarcar-ho tot",
-  "catalogacao.queue.discardBatch": "Abandonar",
+  "catalogacao.queue.discardBatch": "Suprimeix",
   "catalogacao.queue.discardConfirm": "Descartar {count} esborrany(s)? Seran moguts a la paperera.",
   "catalogacao.queue.discardResult": "{count} esborrany(s) descartat(s).",
   "catalogacao.queue.empty": "Cap esborrany actiu en aquest filtre.",
