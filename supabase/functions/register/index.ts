@@ -573,11 +573,15 @@ serve(async (req)=>{
     // reader_orphan : aucun garde-fou de slug.
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    // Gate dur sur la cle mail (chantier #110 R.6) : Resend est le seul provider.
+    // RESEND_API_KEY est lue ici uniquement pour la validation d'env ; l'envoi
+    // reel la relit dans sendViaResend.
+    const RESEND_API_KEY = (Deno.env.get("RESEND_API_KEY") || "").trim();
     const ANARBIB_SENDER_EMAIL = readEnvEmail("ANARBIB_SENDER_EMAIL", DEFAULT_ANARBIB_SENDER_EMAIL);
     const ANARBIB_REPLY_TO_EMAIL = readEnvEmail("ANARBIB_REPLY_TO_EMAIL", DEFAULT_ANARBIB_REPLY_TO_EMAIL);
     const ANARBIB_ADMIN_EMAIL = readEnvEmail("ANARBIB_ADMIN_EMAIL", DEFAULT_ANARBIB_ADMIN_EMAIL);
     const LIBRARY_REQUEST_URL = readEnvString("ANARBIB_LIBRARY_REQUEST_URL", DEFAULT_LIBRARY_REQUEST_URL);
-    if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !ANARBIB_SENDER_EMAIL || !ANARBIB_REPLY_TO_EMAIL || !ANARBIB_ADMIN_EMAIL) {
+    if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !RESEND_API_KEY || !ANARBIB_SENDER_EMAIL || !ANARBIB_REPLY_TO_EMAIL || !ANARBIB_ADMIN_EMAIL) {
       return json({
         error: "MISSING_ENV"
       }, 500);
