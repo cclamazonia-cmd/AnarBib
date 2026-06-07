@@ -12,7 +12,7 @@
 //     notify-weekly-report. Le reste du code reste intentionnellement spécifique.
 //
 // Webhook secret : WEBHOOK_SECRET_NOTIFY_MID_LOAN
-// Brevo key      : BREVO_API_KEY_NOTIFICATIONS (fallback BREVO_API_KEY_NOTIFY_RESERVA)
+// Mail           : Resend (RESEND_API_KEY) — Brevo retire en R.6 (05/06/2026)
 // ============================================================================
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
@@ -106,7 +106,7 @@ function senderNameFromContext(ctx) {
   return normalizeText(ctx?.sender_display_name || (ctx?.use_library_name_as_sender !== false ? ctx?.library_short_name || ctx?.library_name || "" : "") || Deno.env.get("SENDER_NAME") || Deno.env.get("ANARBIB_SENDER_NAME") || Deno.env.get("NETWORK_SENDER_NAME") || "Biblioteca da rede AnarBib") || "Biblioteca da rede AnarBib";
 }
 function senderEmailFromContext(ctx) {
-  return normalizeText(ctx?.sender_visible_email || Deno.env.get("SENDER_EMAIL") || Deno.env.get("ANARBIB_SENDER_EMAIL") || Deno.env.get("NETWORK_SENDER_EMAIL") || Deno.env.get("BREVO_SENDER_MAIL") || "no-reply@example.org");
+  return normalizeText(ctx?.sender_visible_email || Deno.env.get("SENDER_EMAIL") || Deno.env.get("ANARBIB_SENDER_EMAIL") || Deno.env.get("NETWORK_SENDER_EMAIL") || "no-reply@example.org");
 }
 function replyToFromContext(ctx) {
   const email = normalizeText(ctx?.reply_to_email || ctx?.admin_notification_email || Deno.env.get("REPLY_TO_EMAIL") || Deno.env.get("ANARBIB_REPLY_TO_EMAIL") || Deno.env.get("NETWORK_REPLY_TO_EMAIL") || "");
@@ -139,77 +139,23 @@ function canSendForContext(ctx) {
   return true;
 }
 // ============================================================================
-// Transport mail — wrapper neutre + dispatch par provider
+// Transport mail — envoi via Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #1).
-// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3.
-//
-// Decision §4.3 : EXTRACTION PROPRE. sendBrevoEmail etait deja une fonction
-// isolee ; on la dedouble en sendViaBrevo / sendViaResend, exposees derriere
-// un wrapper neutre sendEmail() qui dispatche selon MAIL_PROVIDER. Le site
-// d'appel (le serve) appelle desormais sendEmail().
+// Chantier #110 (migration Brevo -> Resend) : R.3.2 avait introduit un dispatch
+// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
+// sendEmail() appelle desormais directement sendViaResend(). Le secret
+// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// plus lu par le code.
 //
 // CONTRAT DE RETOUR LOCAL PRESERVE : cette EF attend { ok, status, body } et
 // ne throw jamais sur erreur HTTP (le serve lit sendResult.ok / .status /
-// .body). On NE reprend donc PAS le contrat string/throw du transport
-// partage R.2 : sendViaResend renvoie le meme objet { ok, status, body }.
-//
-// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// .body) — sendViaResend renvoie ce meme objet.
 // ============================================================================
-const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
-function resolveMailProvider() {
-  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
-  if (!VALID_MAIL_PROVIDERS.has(raw)) {
-    console.warn(`[mid-loan-reading] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
-    return "brevo";
-  }
-  return raw;
-}
 function formatMailAddress(email, name) {
   const n = (name || "").trim();
   return n ? `${n} <${email}>` : email;
 }
-// --- Implementation Brevo (corps inchange : ancien sendBrevoEmail) ----------
-async function sendViaBrevo(opts) {
-  const senderEmail = senderEmailFromContext(opts.context);
-  const senderName = senderNameFromContext(opts.context);
-  const replyTo = replyToFromContext(opts.context);
-  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "api-key": opts.brevoKey
-    },
-    body: JSON.stringify({
-      sender: {
-        email: senderEmail,
-        name: senderName
-      },
-      to: [
-        {
-          email: opts.toEmail,
-          ...opts.toName ? {
-            name: opts.toName
-          } : {}
-        }
-      ],
-      ...replyTo ? {
-        replyTo
-      } : {},
-      subject: opts.subject,
-      htmlContent: opts.html,
-      textContent: opts.text
-    })
-  });
-  const body = await response.text();
-  return {
-    ok: response.ok,
-    status: response.status,
-    body
-  };
-}
-// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// --- Implementation Resend (cf. spec §4.4) ---------------------------------
 // Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
 // reply_to "Nom <email>", corps html/text. Retour aligne sur le contrat
 // local { ok, status, body } : pas de throw sur erreur HTTP.
@@ -251,15 +197,10 @@ async function sendViaResend(opts) {
   };
 }
 // --- Wrapper neutre --------------------------------------------------------
-// Wrapper neutre : sendEmail() ne mentionne aucun provider, le dispatch est
-// interne. C'est la seule fonction d'envoi connue du reste de l'EF.
+// sendEmail() : seule fonction d'envoi connue du reste de l'EF.
 async function sendEmail(opts) {
-  const provider = resolveMailProvider();
-  console.log(`[mid-loan-reading] envoi via ${provider}`);
-  if (provider === "resend") {
-    return await sendViaResend(opts);
-  }
-  return await sendViaBrevo(opts);
+  console.log(`[mid-loan-reading] envoi via resend`);
+  return await sendViaResend(opts);
 }
 function renderEmail(opts) {
   const brandName = brandNameFromContext(opts.context);
@@ -464,7 +405,6 @@ serve(async (req)=>{
     const dryRun = body?.dry_run === true;
     const limit = Math.min(Math.max(Number(body?.limit || 50), 1), 200);
     const libraryFilter = Array.from(new Set((body?.library_ids || []).map((value)=>normalizeText(value)).filter(Boolean)));
-    const brevoKey = normalizeText(Deno.env.get("BREVO_API_KEY_NOTIFICATIONS")) || normalizeText(Deno.env.get("BREVO_API_KEY_NOTIFY_RESERVA")) || mustEnv("BREVO_API_KEY_NOTIFY_RESERVA");
     const sb = supabaseAdmin;
     let loansQuery = sb.from("emprestimos_v2").select("id,user_id,library_id,due_at,created_at,status_global").eq("status_global", "aberto").gte("due_at", targetDate);
     if (libraryFilter.length) loansQuery = loansQuery.in("library_id", libraryFilter);
@@ -623,7 +563,6 @@ serve(async (req)=>{
           continue;
         }
         sendResult = await sendEmail({
-          brevoKey,
           toEmail: normalizeText(profile.email),
           toName: fullName(profile) || undefined,
           subject,

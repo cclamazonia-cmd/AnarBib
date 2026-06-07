@@ -2,13 +2,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 export const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 export const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 // Note (audit P4 du 06/05/2026) : la const WEBHOOK_SECRET qui pointait vers
-// WEBHOOK_SECRET_NOTIFY_EVENT a été supprimée car (1) jamais importée ailleurs
-// dans notify-internal-task, (2) sémantiquement incorrecte (pointait vers le
-// secret de notify-event au lieu de celui d'internal-task). Le secret réel est
-// défini localement dans index.ts à partir de WEBHOOK_SECRET_NOTIFY_INTERNAL_TASK.
-export const BREVO_KEY = Deno.env.get("BREVO_API_KEY_NOTIFICATIONS");
-export const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || Deno.env.get("ANARBIB_SENDER_EMAIL") || Deno.env.get("NETWORK_SENDER_EMAIL") || Deno.env.get("BREVO_SENDER_MAIL") || "no-reply@example.org";
-export const SENDER_NAME = Deno.env.get("SENDER_NAME") || Deno.env.get("ANARBIB_SENDER_NAME") || Deno.env.get("NETWORK_SENDER_NAME") || Deno.env.get("BREVO_SENDER_NAME") || Deno.env.get("LIBRARY_SENDER_NAME") || "Biblioteca da rede AnarBib";
+// WEBHOOK_SECRET_NOTIFY_EVENT a ï¿½tï¿½ supprimï¿½e car (1) jamais importï¿½e ailleurs
+// dans notify-internal-task, (2) sï¿½mantiquement incorrecte (pointait vers le
+// secret de notify-event au lieu de celui d'internal-task). Le secret rï¿½el est
+// dï¿½fini localement dans index.ts ï¿½ partir de WEBHOOK_SECRET_NOTIFY_INTERNAL_TASK.
+export const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || Deno.env.get("ANARBIB_SENDER_EMAIL") || Deno.env.get("NETWORK_SENDER_EMAIL") || "no-reply@example.org";
+export const SENDER_NAME = Deno.env.get("SENDER_NAME") || Deno.env.get("ANARBIB_SENDER_NAME") || Deno.env.get("NETWORK_SENDER_NAME") || Deno.env.get("LIBRARY_SENDER_NAME") || "Biblioteca da rede AnarBib";
 export const ADMIN_EMAIL = (Deno.env.get("ADMIN_EMAIL") || Deno.env.get("LIBRARY_ADMIN_EMAIL") || Deno.env.get("ANARBIB_ADMIN_EMAIL") || Deno.env.get("NETWORK_ADMIN_EMAIL") || Deno.env.get("ADMIN_EMAIL_NOTIFY_EVENT") || Deno.env.get("BLMF_ADMIN_EMAIL") || "").trim();
 export const ADMIN_NAME = (Deno.env.get("ADMIN_NAME") || Deno.env.get("LIBRARY_ADMIN_NAME") || Deno.env.get("ANARBIB_ADMIN_NAME") || Deno.env.get("NETWORK_ADMIN_NAME") || Deno.env.get("BLMF_ADMIN_NAME") || "Equipe da biblioteca").trim();
 export const LIBRARIAN_PHONE = Deno.env.get("LIBRARIAN_PHONE") || Deno.env.get("ANARBIB_LIBRARIAN_PHONE") || Deno.env.get("NETWORK_LIBRARIAN_PHONE") || "";

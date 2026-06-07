@@ -2,20 +2,14 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustEnv("SUPABASE_SERVICE_ROLE_KEY");
-const BREVO_KEY = mustEnvAny([
-  "BREVO_API_KEY_NOTIFICATIONS",
-  "BREVO_API_KEY"
-]);
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_DOCUMENT_PERMISSION_REQUEST");
 const SENDER_EMAIL = firstEnv([
   "SENDER_EMAIL",
-  "ANARBIB_SENDER_EMAIL",
-  "BREVO_SENDER_EMAIL"
+  "ANARBIB_SENDER_EMAIL"
 ], "admin@anarbib.org");
 const SENDER_NAME = firstEnv([
   "SENDER_NAME",
-  "ANARBIB_SENDER_NAME",
-  "BREVO_SENDER_NAME"
+  "ANARBIB_SENDER_NAME"
 ], "AnarBib");
 const REPLY_TO_EMAIL = firstEnv([
   "REPLY_TO_EMAIL",
@@ -281,78 +275,22 @@ function footerHtml() {
   return parts.join("<br>");
 }
 // ============================================================================
-// Transport mail — wrapper neutre + dispatch par provider
+// Transport mail — envoi via Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #2).
-// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3.
+// Chantier #110 (migration Brevo -> Resend) : R.3.2 avait introduit un dispatch
+// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
+// sendEmail() appelle desormais directement sendViaResend(). Le secret
+// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// plus lu par le code.
 //
-// Decision §4.3 : EXTRACTION PROPRE. sendBrevoEmail etait deja une fonction
-// isolee ; on la dedouble en sendViaBrevo / sendViaResend, exposees derriere
-// un wrapper neutre sendEmail() qui dispatche selon MAIL_PROVIDER. safeSendEmail
-// appelle desormais sendEmail() ; sa signature et son contrat sont inchanges.
-//
-// CONTRAT DE RETOUR LOCAL : string brute en succes, throw sur erreur HTTP.
-// sendViaBrevo et sendViaResend respectent ce contrat a l'identique, donc
-// safeSendEmail (try/catch) n'a rien a adapter.
-//
-// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// CONTRAT DE RETOUR LOCAL : string brute en succes, throw sur erreur HTTP —
+// safeSendEmail (try/catch) inchange.
 // ============================================================================
-const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
-function resolveMailProvider() {
-  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
-  if (!VALID_MAIL_PROVIDERS.has(raw)) {
-    console.warn(`[document-permission-request] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
-    return "brevo";
-  }
-  return raw;
-}
 function formatMailAddress(email, name) {
   const n = String(name || "").trim();
   return n ? `${n} <${email}>` : email;
 }
-// --- Implementation Brevo (corps inchange : ancien sendBrevoEmail) ----------
-async function sendViaBrevo(opts) {
-  const replyTo = isValidEmail(REPLY_TO_EMAIL) ? {
-    email: REPLY_TO_EMAIL,
-    ...REPLY_TO_NAME ? {
-      name: REPLY_TO_NAME
-    } : {}
-  } : undefined;
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "api-key": BREVO_KEY
-    },
-    body: JSON.stringify({
-      sender: {
-        name: SENDER_NAME,
-        email: SENDER_EMAIL
-      },
-      to: [
-        (()=>{
-          const t = {
-            email: opts.toEmail
-          };
-          const n = String(opts.toName || "").trim();
-          if (n) t.name = n;
-          return t;
-        })()
-      ],
-      ...replyTo ? {
-        replyTo
-      } : {},
-      subject: opts.subject,
-      htmlContent: opts.html,
-      textContent: opts.text
-    })
-  });
-  const body = await res.text();
-  if (!res.ok) throw new Error(`Brevo error HTTP ${res.status}: ${body}`);
-  return body;
-}
-// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// --- Implementation Resend (cf. spec §4.4) ---------------------------------
 // Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
 // reply_to "Nom <email>", corps html/text. Contrat identique a sendViaBrevo :
 // renvoie la string brute, throw sur erreur HTTP.
@@ -384,14 +322,9 @@ async function sendViaResend(opts) {
   return body;
 }
 // --- Wrapper neutre --------------------------------------------------------
-// sendEmail() ne mentionne aucun provider, le dispatch est interne.
 async function sendEmail(opts) {
-  const provider = resolveMailProvider();
-  console.log(`[document-permission-request] envoi via ${provider}`);
-  if (provider === "resend") {
-    return await sendViaResend(opts);
-  }
-  return await sendViaBrevo(opts);
+  console.log(`[document-permission-request] envoi via resend`);
+  return await sendViaResend(opts);
 }
 async function safeSendEmail(target, subject, html, text, label) {
   const email = String(target?.email || "").trim().toLowerCase();

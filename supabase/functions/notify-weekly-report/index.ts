@@ -10,7 +10,7 @@
 //     renderReportEmail, group*, tryUpdateRunStatus)
 //
 // Webhook secret : WEBHOOK_SECRET_NOTIFY_WEEKLY_REPORT
-// Brevo key      : BREVO_API_KEY_NOTIFICATIONS (fallback BREVO_API_KEY_NOTIFY_RESERVA)
+// Mail           : Resend (RESEND_API_KEY) — Brevo retire en R.6 (05/06/2026)
 // ============================================================================
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
@@ -282,74 +282,23 @@ async function tryUpdateRunStatus(sb, runId, patch) {
 // ─── Handler principal ─────────────────────────────────────────────────────
 
 // ============================================================================
-// Transport mail — wrapper neutre + dispatch par provider
+// Transport mail — envoi via Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #4).
-// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3.
+// Chantier #110 (migration Brevo -> Resend) : R.3.2 avait introduit un dispatch
+// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
+// sendEmail() appelle desormais directement sendViaResend(). Le secret
+// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// plus lu par le code.
 //
-// Decision §4.3 : EXTRACTION PROPRE. Le fetch Brevo etait inline dans le serve,
-// entrelace avec tryUpdateRunStatus (suivi du run). On extrait UNIQUEMENT le
-// coeur transport (brevoBody + fetch + lecture + throw HTTP) ; les appels
-// tryUpdateRunStatus restent dans le serve car ils relevent de la logique de
-// l'EF, pas du transport. Aucune dette R.7.
-//
-// CONTRAT : string en succes, throw sur erreur HTTP — identique au bloc inline.
-// Le serve garde sa gestion du run : tryUpdateRunStatus(failed) avant re-throw,
-// tryUpdateRunStatus(sent) apres succes. Comportement strictement preserve,
-// y compris la double ecriture 'failed' (serve local + catch global) qui
-// preexiste a ce patch et n'est pas modifiee ici.
-//
-// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// CONTRAT : string en succes, throw sur erreur HTTP. Le serve garde sa gestion
+// du run : tryUpdateRunStatus(failed) avant re-throw, tryUpdateRunStatus(sent)
+// apres succes — comportement strictement preserve.
 // ============================================================================
-const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
-function resolveMailProvider() {
-  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
-  if (!VALID_MAIL_PROVIDERS.has(raw)) {
-    console.warn(`[weekly-report] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
-    return "brevo";
-  }
-  return raw;
-}
 function formatMailAddress(email, name) {
   const n = String(name || "").trim();
   return n ? `${n} <${email}>` : email;
 }
-// --- Implementation Brevo (corps inchange : ancien bloc inline du serve) ----
-// opts : { routing, subject, htmlContent, textContent, brevoKey }
-async function sendViaBrevo(opts) {
-  const { routing, subject, htmlContent, textContent, brevoKey } = opts;
-  const brevoBody = {
-    sender: { email: routing.senderEmail, name: routing.senderName },
-    to: [{
-      email: routing.recipientEmail,
-      ...(routing.recipientName ? { name: routing.recipientName } : {})
-    }],
-    subject,
-    textContent,
-    htmlContent
-  };
-  if (routing.replyToEmail) {
-    brevoBody.replyTo = {
-      email: routing.replyToEmail,
-      ...(routing.replyToName ? { name: routing.replyToName } : {})
-    };
-  }
-  const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "api-key": brevoKey
-    },
-    body: JSON.stringify(brevoBody)
-  });
-  const brevoText = await brevoRes.text();
-  if (!brevoRes.ok) {
-    throw new Error(`Brevo error HTTP ${brevoRes.status}: ${brevoText}`);
-  }
-  return brevoText;
-}
-// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// --- Implementation Resend (cf. spec §4.4) ---------------------------------
 async function sendViaResend(opts) {
   const { routing, subject, htmlContent, textContent } = opts;
   const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
@@ -382,12 +331,8 @@ async function sendViaResend(opts) {
 }
 // --- Wrapper neutre --------------------------------------------------------
 async function sendEmail(opts) {
-  const provider = resolveMailProvider();
-  console.log(`[weekly-report] envoi via ${provider}`);
-  if (provider === "resend") {
-    return await sendViaResend(opts);
-  }
-  return await sendViaBrevo(opts);
+  console.log(`[weekly-report] envoi via resend`);
+  return await sendViaResend(opts);
 }
 
 serve(async (req) => {
@@ -426,7 +371,6 @@ serve(async (req) => {
       });
     }
 
-    const brevoKey = (Deno.env.get("BREVO_API_KEY_NOTIFICATIONS") ?? "").trim() || (Deno.env.get("BREVO_API_KEY_NOTIFY_RESERVA") ?? "").trim() || mustEnv("BREVO_API_KEY_NOTIFY_RESERVA");
     const startISO = toISO00Z(weekStart);
     const endExclusiveISO = addDaysISO(weekEnd, 1);
     const weekEndPlusOneDate = addDaysISO(weekEnd, 1).slice(0, 10);
@@ -696,13 +640,12 @@ serve(async (req) => {
     });
 
     // ─── Envoi mail ─────────────────────────────────────────────────────────
-    // Transport extrait (chantier #110 R.3.2) : wrapper neutre sendEmail(),
-    // dispatch Brevo/Resend selon MAIL_PROVIDER. Le suivi du run
-    // (tryUpdateRunStatus) reste ici car il releve de la logique de l'EF.
-    // En cas d'echec, on ecrit le statut "failed" avant de re-propager
-    // l'exception — comportement identique au bloc inline d'avant R.3.2.
+    // Transport mail : envoi via Resend (chantier #110, Brevo retire en R.6).
+    // Le suivi du run (tryUpdateRunStatus) reste ici car il releve de la
+    // logique de l'EF. En cas d'echec, on ecrit le statut "failed" avant de
+    // re-propager l'exception.
     try {
-      await sendEmail({ routing, subject, htmlContent, textContent, brevoKey });
+      await sendEmail({ routing, subject, htmlContent, textContent });
     } catch (sendError) {
       await tryUpdateRunStatus(sb, runId, { status: "failed", error: String(sendError?.message ?? sendError) });
       throw sendError;

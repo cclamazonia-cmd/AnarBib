@@ -1,82 +1,19 @@
-import { BREVO_KEY } from "../core/env.ts";
 import { resolveMailRouting, transportDisabledReason } from "../context/library-mail-routing.ts";
 import { renderEmail, footerPadrao } from "../mail/layout.ts";
 import { inlineLogosInHtml } from "../mail/inline-images.ts";
 import { firstNameOnly, fullName, isValidEmail } from "../shared/format.ts";
 
 // ============================================================================
-// Transport mail — wrapper neutre + dispatch par provider
+// Transport mail — envoi via Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend), sous-paquet R.2.
-// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.
-//
-// Le point d'entree est sendEmail() : il ne mentionne aucun provider et
-// choisit Brevo ou Resend selon la variable d'environnement MAIL_PROVIDER.
-// safeSendEmail() appelle sendEmail() ; sa signature est inchangee, donc
-// aucun handler de _shared/domain/* n'est touche.
-//
-// Tant que MAIL_PROVIDER n'est pas mis a "resend", le comportement est
-// strictement identique a l'avant-R.2 (defaut = brevo).
+// Chantier #110 (migration Brevo -> Resend) : R.2 avait introduit un dispatch
+// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
+// sendEmail() appelle desormais directement sendViaResend(). Le secret
+// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// plus lu par le code. safeSendEmail() est inchange, donc aucun handler de
+// _shared/domain/* n'est touche.
+// Spec : docs/specs/spec-migration-mail-resend.md.
 // ============================================================================
-
-// --- Dispatch -----------------------------------------------------------
-// MAIL_PROVIDER admet "brevo" ou "resend". Toute autre valeur (typo dans
-// le dashboard Supabase) declenche un avertissement et un repli sur brevo.
-// Cf. spec §6.5 hardening H.2.
-const VALID_PROVIDERS = new Set(["brevo", "resend"]);
-
-function resolveProvider(): "brevo" | "resend" {
-  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
-  if (!VALID_PROVIDERS.has(raw)) {
-    console.warn(`[transport] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
-    return "brevo";
-  }
-  return raw as "brevo" | "resend";
-}
-
-// --- Implementation Brevo -----------------------------------------------
-// Corps inchange par rapport a l'ancien sendBrevoEmail : meme appel, memes
-// champs. Seul le nom de la fonction change (sendBrevoEmail -> sendViaBrevo).
-async function sendViaBrevo(opts) {
-  const r = resolveMailRouting(opts.context);
-  const rt = r.replyToEmail ? {
-    email: r.replyToEmail,
-    ...r.replyToName ? {
-      name: r.replyToName
-    } : {}
-  } : undefined;
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "api-key": BREVO_KEY
-    },
-    body: JSON.stringify({
-      sender: {
-        name: r.senderName,
-        email: r.senderEmail
-      },
-      to: [
-        {
-          email: opts.toEmail,
-          ...opts.toName?.trim() ? {
-            name: opts.toName.trim()
-          } : {}
-        }
-      ],
-      ...rt ? {
-        replyTo: rt
-      } : {},
-      subject: opts.subject,
-      htmlContent: opts.html,
-      textContent: opts.text
-    })
-  });
-  const body = await res.text();
-  if (!res.ok) throw new Error(`Brevo HTTP ${res.status}: ${body}`);
-  return body;
-}
 
 // --- Implementation Resend ----------------------------------------------
 // Nouvelle. Format Resend (cf. spec §4.4) :
@@ -125,12 +62,8 @@ async function sendViaResend(opts) {
 // Point d'entree unique. C'est la seule fonction d'envoi que le reste du
 // module (safeSendEmail) doit connaitre.
 export async function sendEmail(opts) {
-  const provider = resolveProvider();
-  console.log(`[transport] envoi via ${provider} (label=${opts.label ?? "?"})`);
-  if (provider === "resend") {
-    return await sendViaResend(opts);
-  }
-  return await sendViaBrevo(opts);
+  console.log(`[transport] envoi via resend (label=${opts.label ?? "?"})`);
+  return await sendViaResend(opts);
 }
 
 export function skippedEmailResult(label, reason, email) {

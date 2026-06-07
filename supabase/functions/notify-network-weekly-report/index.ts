@@ -197,80 +197,22 @@ function normalizeName(row, ctx) {
   };
 }
 // ============================================================================
-// Transport mail — wrapper neutre + dispatch par provider
+// Transport mail — envoi via Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.2 (EF #3).
-// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3.
+// Chantier #110 (migration Brevo -> Resend) : R.3.2 avait introduit un dispatch
+// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
+// sendEmail() appelle desormais directement sendViaResend(). Le secret
+// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// plus lu par le code.
 //
-// Decision §4.3 : EXTRACTION PROPRE. Le fetch Brevo etait inline dans le serve
-// mais bien delimite (brevoBody construit a partir de routing + subject/html/
-// text deja calcules, aucun entrelacement avec la logique de l'EF). On l'extrait
-// en sendViaBrevo / sendViaResend, exposees derriere un wrapper neutre
-// sendEmail(). Le serve appelle sendEmail() une fois. Aucune dette R.7.
-//
-// CONTRAT : sendEmail ne renvoie rien d'utile au serve (l'envoi est fait pour
-// son effet) et throw sur erreur HTTP, exactement comme le bloc inline d'avant.
-//
-// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// CONTRAT : sendEmail ne renvoie rien d'utile au serve (envoi pour effet) et
+// throw sur erreur HTTP.
 // ============================================================================
-const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
-function resolveMailProvider() {
-  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
-  if (!VALID_MAIL_PROVIDERS.has(raw)) {
-    console.warn(`[network-weekly-report] MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
-    return "brevo";
-  }
-  return raw;
-}
 function formatMailAddress(email, name) {
   const n = String(name || "").trim();
   return n ? `${n} <${email}>` : email;
 }
-// --- Implementation Brevo (corps inchange : ancien bloc inline du serve) ----
-// opts : { routing, subject, html, text, brevoKey }
-async function sendViaBrevo(opts) {
-  const { routing, subject, html, text, brevoKey } = opts;
-  const brevoBody = {
-    sender: {
-      email: routing.senderEmail,
-      name: routing.senderName
-    },
-    to: [
-      {
-        email: routing.recipientEmail,
-        ...routing.recipientName ? {
-          name: routing.recipientName
-        } : {}
-      }
-    ],
-    subject,
-    textContent: text,
-    htmlContent: html
-  };
-  if (routing.replyToEmail) {
-    brevoBody.replyTo = {
-      email: routing.replyToEmail,
-      ...routing.replyToName ? {
-        name: routing.replyToName
-      } : {}
-    };
-  }
-  const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      "api-key": brevoKey
-    },
-    body: JSON.stringify(brevoBody)
-  });
-  const brevoText = await brevoRes.text();
-  if (!brevoRes.ok) {
-    throw new Error(`Brevo error HTTP ${brevoRes.status}: ${brevoText}`);
-  }
-  return brevoText;
-}
-// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// --- Implementation Resend (cf. spec §4.4) ---------------------------------
 // Format Resend : auth Bearer, from "Nom <email>", to tableau de strings,
 // reply_to "Nom <email>", corps html/text. throw sur erreur HTTP.
 async function sendViaResend(opts) {
@@ -305,12 +247,8 @@ async function sendViaResend(opts) {
 }
 // --- Wrapper neutre --------------------------------------------------------
 async function sendEmail(opts) {
-  const provider = resolveMailProvider();
-  console.log(`[network-weekly-report] envoi via ${provider}`);
-  if (provider === "resend") {
-    return await sendViaResend(opts);
-  }
-  return await sendViaBrevo(opts);
+  console.log(`[network-weekly-report] envoi via resend`);
+  return await sendViaResend(opts);
 }
 
 serve(async (req)=>{
@@ -348,7 +286,6 @@ serve(async (req)=>{
         persistSession: false
       }
     });
-    const brevoKey = (Deno.env.get("BREVO_API_KEY_NOTIFICATIONS") ?? "").trim() || (Deno.env.get("BREVO_API_KEY_NOTIFY_RESERVA") ?? "").trim() || mustEnv("BREVO_API_KEY_NOTIFY_RESERVA");
     const routing = resolveRouting();
     if (!routing.recipientEmail || !isValidEmail(routing.recipientEmail)) {
       return json(422, {
@@ -613,14 +550,13 @@ serve(async (req)=>{
       ],
       routing
     });
-    // Transport mail : wrapper neutre, dispatch Brevo/Resend selon MAIL_PROVIDER
-    // (chantier #110 R.3.2). routing / subject / html / text deja calcules.
+    // Transport mail : envoi via Resend (chantier #110, Brevo retire en R.6).
+    // routing / subject / html / text deja calcules.
     await sendEmail({
       routing,
       subject,
       html,
-      text,
-      brevoKey
+      text
     });
     return json(200, {
       ok: true,

@@ -324,40 +324,23 @@ async function cleanupAuthUser(admin, userId, reason) {
   }
 }
 // ============================================================================
-// Transport mail — wrapper neutre + dispatch par provider
+// Transport mail — envoi via Resend
 // ----------------------------------------------------------------------------
-// Chantier #110 (migration Brevo -> Resend), sous-paquet R.3.3 (EF #7 register).
-// Spec : docs/specs/spec-migration-mail-resend.md (v0.2), §4.3, §4.4, §4.6.
+// Chantier #110 (migration Brevo -> Resend) : R.3.3 avait introduit un dispatch
+// Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
+// sendEmail() inline les logos (§4.5) puis appelle sendViaResend(). Le secret
+// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// plus lu par le code.
 //
-// Decision §4.3 : EXTRACTION PROPRE (option beta). register est particulier :
-// ses 3 sites d'appel construisent un payload deja au format Brevo natif
-// ({ sender, to:[{email,name}], replyTo, subject, htmlContent }). §4.6 impose
-// que SEUL le transport bascule : on ne reecrit donc PAS les 3 sites. Le
-// payload format Brevo reste le format d'entree pivot du wrapper sendEmail().
-// sendViaBrevo le consomme tel quel ; sendViaResend le TRADUIT vers le format
-// Resend (fonction pure brevoPayloadToResend). La traduction est isolee et
-// circonscrite -> extraction propre, pas l'exception "bloc conditionnel".
-// Aucune dette R.7.
+// PIVOT CONSERVE : les 3 sites d'appel construisent toujours un payload au
+// format Brevo natif ({ sender, to:[{email,name}], replyTo, subject,
+// htmlContent }) — non reecrits (§4.6). brevoPayloadToResend() le traduit vers
+// le format Resend : cette fonction reste donc necessaire comme normalisation
+// interne (sa suppression releverait d'une reecriture des 3 sites = R.7).
 //
-// CONTRAT DE RETOUR preserve a l'identique : { requested, apiAccepted, status,
-// responseText }. Jamais de throw. Les 3 sites lisent .apiAccepted, inchanges.
-//
-// Multi-destinataire : le to Brevo [{email},...] est traduit en to Resend
-// ["email",...] — un seul appel API pour tous les destinataires, pendant exact
-// du comportement Brevo actuel.
-//
-// register a verify_jwt active et un rendu HTML propre : NON touches (§4.6).
-// Tant que MAIL_PROVIDER n'est pas "resend", comportement = avant-R.3 (brevo).
+// CONTRAT DE RETOUR preserve : { requested, apiAccepted, status, responseText }.
+// Jamais de throw. Les 3 sites lisent .apiAccepted, inchanges.
 // ============================================================================
-const VALID_MAIL_PROVIDERS = new Set(["brevo", "resend"]);
-function resolveMailProvider() {
-  const raw = (Deno.env.get("MAIL_PROVIDER") || "brevo").trim().toLowerCase();
-  if (!VALID_MAIL_PROVIDERS.has(raw)) {
-    console.warn(`register: MAIL_PROVIDER="${raw}" inconnu, repli sur brevo`);
-    return "brevo";
-  }
-  return raw;
-}
 function formatMailAddress(email, name) {
   const n = String(name || "").trim();
   return n ? `${n} <${email}>` : email;
@@ -381,56 +364,7 @@ function brevoPayloadToResend(payload) {
   }
   return resend;
 }
-// --- Implementation Brevo (corps inchange : ancien sendBrevoEmail) ----------
-// payload : deja au format Brevo, htmlContent deja inline (cf. sendEmail).
-async function sendViaBrevo({ apiKey, logLabel, payload }) {
-  if (!apiKey) {
-    console.warn(`register: ${logLabel} skipped, missing BREVO_API_KEY`);
-    return {
-      requested: false,
-      apiAccepted: false,
-      status: null,
-      responseText: "MISSING_BREVO_API_KEY"
-    };
-  }
-  console.log(`register: ${logLabel} request`, {
-    to: payload?.to,
-    subject: payload?.subject
-  });
-  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-  const responseText = await response.text();
-  if (!response.ok) {
-    console.error(`register: ${logLabel} failed`, {
-      status: response.status,
-      responseText
-    });
-    return {
-      requested: true,
-      apiAccepted: false,
-      status: response.status,
-      responseText
-    };
-  }
-  console.log(`register: ${logLabel} accepted`, {
-    status: response.status,
-    responseText
-  });
-  return {
-    requested: true,
-    apiAccepted: true,
-    status: response.status,
-    responseText
-  };
-}
-// --- Implementation Resend (nouvelle, cf. spec §4.4) -----------------------
+// --- Implementation Resend (cf. spec §4.4) ---------------------------------
 // payload : format Brevo, htmlContent deja inline. Traduit puis envoye a
 // api.resend.com. Meme contrat de retour que sendViaBrevo.
 async function sendViaResend({ logLabel, payload }) {
@@ -483,15 +417,13 @@ async function sendViaResend({ logLabel, payload }) {
   };
 }
 // --- Wrapper neutre --------------------------------------------------------
-// Signature { apiKey, logLabel, payload } conservee : les 3 sites d'appel ne
-// changent pas (hormis le nom sendBrevoEmail -> sendEmail). L'inlining des
-// logos est fait ici UNE fois (spec §4.5), avant le dispatch, donc commun aux
-// deux providers. apiKey = cle Brevo ; sendViaResend l'ignore et lit
-// RESEND_API_KEY.
-async function sendEmail({ apiKey, logLabel, payload }) {
-  // Inlining des logos Supabase Storage en data URI base64 — inconditionnel,
-  // commun aux deux providers (spec §4.5). Defensif : en cas d'echec, HTML
-  // d'origine conserve, mail expedie quand meme.
+// Signature { logLabel, payload } : les 3 sites d'appel passent un payload au
+// format Brevo-pivot. L'inlining des logos est fait ici UNE fois (spec §4.5),
+// avant l'envoi. sendViaResend lit RESEND_API_KEY.
+async function sendEmail({ logLabel, payload }) {
+  // Inlining des logos Supabase Storage en data URI base64 — inconditionnel
+  // (spec §4.5). Defensif : en cas d'echec, HTML d'origine conserve, mail
+  // expedie quand meme.
   if (payload?.htmlContent && typeof payload.htmlContent === "string") {
     try {
       payload.htmlContent = await inlineLogosInHtml(payload.htmlContent);
@@ -499,12 +431,8 @@ async function sendEmail({ apiKey, logLabel, payload }) {
       console.warn(`register: ${logLabel} inlineLogosInHtml failed (mail sent anyway):`, e);
     }
   }
-  const provider = resolveMailProvider();
-  console.log(`register: ${logLabel} envoi via ${provider}`);
-  if (provider === "resend") {
-    return await sendViaResend({ apiKey, logLabel, payload });
-  }
-  return await sendViaBrevo({ apiKey, logLabel, payload });
+  console.log(`register: ${logLabel} envoi via resend`);
+  return await sendViaResend({ logLabel, payload });
 }
 serve(async (req)=>{
   if (req.method === "OPTIONS") {
@@ -645,12 +573,11 @@ serve(async (req)=>{
     // reader_orphan : aucun garde-fou de slug.
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    const BREVO_API_KEY = readEnvString("BREVO_API_KEY", readEnvString("BREVO_API_KEY_STAGING"));
     const ANARBIB_SENDER_EMAIL = readEnvEmail("ANARBIB_SENDER_EMAIL", DEFAULT_ANARBIB_SENDER_EMAIL);
     const ANARBIB_REPLY_TO_EMAIL = readEnvEmail("ANARBIB_REPLY_TO_EMAIL", DEFAULT_ANARBIB_REPLY_TO_EMAIL);
     const ANARBIB_ADMIN_EMAIL = readEnvEmail("ANARBIB_ADMIN_EMAIL", DEFAULT_ANARBIB_ADMIN_EMAIL);
     const LIBRARY_REQUEST_URL = readEnvString("ANARBIB_LIBRARY_REQUEST_URL", DEFAULT_LIBRARY_REQUEST_URL);
-    if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !BREVO_API_KEY || !ANARBIB_SENDER_EMAIL || !ANARBIB_REPLY_TO_EMAIL || !ANARBIB_ADMIN_EMAIL) {
+    if (!SUPABASE_URL || !SERVICE_ROLE_KEY || !ANARBIB_SENDER_EMAIL || !ANARBIB_REPLY_TO_EMAIL || !ANARBIB_ADMIN_EMAIL) {
       return json({
         error: "MISSING_ENV"
       }, 500);
@@ -1052,7 +979,6 @@ serve(async (req)=>{
       locale: internalAdminLocale
     });
     const userSendResult = await sendEmail({
-      apiKey: BREVO_API_KEY || "",
       logLabel: "welcome email",
       payload: {
         sender: {
@@ -1092,7 +1018,6 @@ serve(async (req)=>{
     };
     if (effectiveLibraryInternalRecipients.length) {
       librarySendResult = await sendEmail({
-        apiKey: BREVO_API_KEY || "",
         logLabel: "library internal email",
         payload: {
           sender: {
@@ -1119,7 +1044,6 @@ serve(async (req)=>{
     };
     if (adminRecipients.length) {
       adminSendResult = await sendEmail({
-        apiKey: BREVO_API_KEY || "",
         logLabel: "admin internal email",
         payload: {
           sender: {
