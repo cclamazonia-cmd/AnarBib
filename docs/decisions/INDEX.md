@@ -1,6 +1,6 @@
 # 📂 INDEX du dossier decisions/ — AnarBib
 
-**Dernière mise à jour** : 3 juin 2026 (création de l'index — 79 fichiers à organiser sans tomber dans l'exhaustivité illisible)
+**Dernière mise à jour** : 7 juin 2026 (ajout du repère chantier OPAC ; index créé le 3 juin — 79 fichiers à organiser sans tomber dans l'exhaustivité illisible)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce dossier est la **mémoire chronologique vivante** du projet AnarBib : sessions de travail, ouvertures et clôtures de chantiers, bilans, audits, bugs résolus, réflexions doctrinales, décisions de coordination de bibliothèques. **79 fichiers** au 03/06/2026.
@@ -84,6 +84,8 @@ Plutôt qu'un index ligne à ligne des 79 fichiers, voici les **grands moments**
 **Début juin — refonte doctrinale du corpus.** `AUDIT_coherence_corpus_2026-06-02.md` constate les drifts du corpus et **institue le REGISTRE des décisions** comme foyer unique du normatif. Trilogie doctrinale du 02/06 (multi-appartenance, partenariat, flux numérique). Cluster catalogue du 01/06.
 
 **Ouverture des chantiers de modèle.** `CHANTIER_MODEL-item-grain_ouverture_2026-06-03.md` puis `CLOTURE_MODEL-item-grain_2026-06-03.md` (constat de livraison via audit du dump schéma). `CHANTIER_exemplares-phase1_ouverture_2026-06-03.md`.
+
+**Préparation du chantier OPAC (07/06).** `CADRAGE_OPAC_chantier_2026-06-07.md` confronte les deux specs OPAC (`../specs/spec-catalogue-decouverte.md`, `../specs/spec-notice-autorite-enrichie.md`) au code réel (frontend lu + backend sondé sur le projet Supabase) et prépare le chantier de découverte : écart par paquet (#OPAC1–11, #AUT1–4), clé de voûte (RPC d'agrégation des facettes/sujets `api.catalog_facets_v1`), décisions à porter au REGISTRE. Trace, 🟡 cadrée — ne fait pas foi.
 
 ### Décisions de coordination des bibliothèques
 
