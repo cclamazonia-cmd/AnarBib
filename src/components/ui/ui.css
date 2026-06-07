@@ -14,7 +14,7 @@
   padding: 10px 16px;
   border: none;
   border-radius: var(--brand-radius-sm);
-  background: linear-gradient(135deg, rgba(225, 29, 47, 0.92), var(--brand-color-primary));
+  background: linear-gradient(135deg, rgba(var(--brand-action-rgb), 0.92), var(--brand-color-primary));
   color: #fff;
   font-size: 0.9rem;
   font-weight: 700;
@@ -32,7 +32,7 @@
   background: var(--brand-panel-bg-strong);
   color: var(--brand-text);
 }
-.ab-button--secondary:hover { border-color: rgba(225, 29, 47, 0.65); color: #fff; }
+.ab-button--secondary:hover { border-color: rgba(var(--brand-action-rgb), 0.65); color: #fff; }
 
 .ab-button--mini {
   min-height: 34px;
@@ -115,8 +115,8 @@
 .ab-input:focus,
 .ab-select:focus,
 .ab-textarea:focus {
-  border-color: rgba(225, 29, 47, 0.95);
-  box-shadow: 0 0 0 3px rgba(225, 29, 47, 0.24), var(--brand-shadow-strong);
+  border-color: rgba(var(--brand-action-rgb), 0.95);
+  box-shadow: 0 0 0 3px rgba(var(--brand-action-rgb), 0.24), var(--brand-shadow-strong);
 }
 
 .ab-textarea { min-height: 96px; resize: vertical; }
@@ -351,7 +351,7 @@
 
 .ab-scroll-button:hover {
   transform: translateY(-1px);
-  border-color: rgba(225, 29, 47, 0.65);
+  border-color: rgba(var(--brand-action-rgb), 0.65);
 }
 
 @keyframes ab-scroll-button-in {

@@ -30,6 +30,10 @@
   --brand-color-primary: #b32025;
   --brand-color-secondary: #101010;
   --brand-color-accent: #f1ece3;
+  /* Couleur d'action (boutons primaires, focus-ring, bordures actives), en
+     triplet RGB pour composer avec des alphas variés via rgba(). Defaut = rouge
+     AnarBib. Surchargeable par theme via manifest colors.action (cf. theme.js). */
+  --brand-action-rgb: 225, 29, 47;
 
   --brand-panel-bg: rgba(18, 18, 18, 0.82);
   --brand-panel-bg-strong: rgba(10, 10, 10, 0.94);

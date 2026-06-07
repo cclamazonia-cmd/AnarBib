@@ -34,6 +34,15 @@ function setCssVar(name, value) {
   document.documentElement.style.setProperty(name, value);
 }
 
+// Convertit '#RRGGBB' en triplet 'r, g, b' pour --brand-action-rgb (compose
+// avec des alphas variés via rgba() dans ui.css). null si format invalide.
+function hexToRgbTriplet(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || '').trim());
+  if (!m) return null;
+  const n = parseInt(m[1], 16);
+  return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
+}
+
 async function installFont(definition, cssVarName) {
   if (!definition?.family || !definition?.url) return;
   try {
@@ -70,6 +79,13 @@ function applyColors(colors) {
   // setCssVar('--brand-link', colors.link);
   setCssVar('--brand-bg-overlay', colors.bgOverlay);
   setCssVar('--brand-button-text', colors.buttonText);
+  // Couleur d'action themable (boutons primaires, focus-ring, bordures). Le
+  // manifest fournit un hex ; on le convertit en triplet RGB. Sans colors.action,
+  // --brand-action-rgb garde le rouge AnarBib defini dans theme-base.css.
+  if (colors.action) {
+    const rgb = hexToRgbTriplet(colors.action);
+    if (rgb) setCssVar('--brand-action-rgb', rgb);
+  }
 }
 
 function applyBrandAssets(assets) {
