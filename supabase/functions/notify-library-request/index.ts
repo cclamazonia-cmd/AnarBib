@@ -229,7 +229,7 @@ function renderEmail(opts) {
 // Chantier #110 (migration Brevo -> Resend) : R.3.2 avait introduit un dispatch
 // Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
 // sendEmail() inline les logos (spec §4.5) puis appelle sendViaResend(). Le
-// secret MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais
+// secret MAIL_PROVIDER a ete retire de Supabase en R.7 (08/06/2026) ;
 // n'est plus lu par le code.
 //
 // Signature positionnelle (target, subject, html, text) conservee : c'est le

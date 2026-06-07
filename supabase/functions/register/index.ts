@@ -329,14 +329,12 @@ async function cleanupAuthUser(admin, userId, reason) {
 // Chantier #110 (migration Brevo -> Resend) : R.3.3 avait introduit un dispatch
 // Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
 // sendEmail() inline les logos (§4.5) puis appelle sendViaResend(). Le secret
-// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// MAIL_PROVIDER a ete retire de Supabase en R.7 (08/06/2026) ; n'est
 // plus lu par le code.
 //
-// PIVOT CONSERVE : les 3 sites d'appel construisent toujours un payload au
-// format Brevo natif ({ sender, to:[{email,name}], replyTo, subject,
-// htmlContent }) — non reecrits (§4.6). brevoPayloadToResend() le traduit vers
-// le format Resend : cette fonction reste donc necessaire comme normalisation
-// interne (sa suppression releverait d'une reecriture des 3 sites = R.7).
+// R.7 (08/06/2026) : les 3 sites d'appel construisent desormais directement un
+// payload au format Resend ({ from, to:[email...], reply_to, subject, html }) ;
+// la traduction brevoPayloadToResend a ete supprimee. Plus aucune trace de Brevo.
 //
 // CONTRAT DE RETOUR preserve : { requested, apiAccepted, status, responseText }.
 // Jamais de throw. Les 3 sites lisent .apiAccepted, inchanges.
@@ -345,28 +343,9 @@ function formatMailAddress(email, name) {
   const n = String(name || "").trim();
   return n ? `${n} <${email}>` : email;
 }
-// --- Traduction du payload Brevo vers le format Resend (cf. spec §4.4) ------
-// Brevo : { sender:{name,email}, to:[{email,name}], replyTo:{email,name},
-//          subject, htmlContent }
-// Resend: { from:"Nom <email>", to:["email",...], reply_to:"Nom <email>",
-//          subject, html }
-function brevoPayloadToResend(payload) {
-  const sender = payload?.sender || {};
-  const toList = Array.isArray(payload?.to) ? payload.to : [];
-  const resend = {
-    from: formatMailAddress(sender.email, sender.name),
-    to: toList.map((r) => String(r?.email || "").trim()).filter(Boolean),
-    subject: payload?.subject,
-    html: payload?.htmlContent
-  };
-  if (payload?.replyTo && payload.replyTo.email) {
-    resend.reply_to = formatMailAddress(payload.replyTo.email, payload.replyTo.name);
-  }
-  return resend;
-}
 // --- Implementation Resend (cf. spec §4.4) ---------------------------------
-// payload : format Brevo, htmlContent deja inline. Traduit puis envoye a
-// api.resend.com. Meme contrat de retour que sendViaBrevo.
+// payload : deja au format Resend ({ from, to:[email...], reply_to, subject,
+// html }), html deja inline. Envoye tel quel a api.resend.com.
 async function sendViaResend({ logLabel, payload }) {
   const resendKey = (Deno.env.get("RESEND_API_KEY") || "").trim();
   if (!resendKey) {
@@ -378,10 +357,9 @@ async function sendViaResend({ logLabel, payload }) {
       responseText: "MISSING_RESEND_API_KEY"
     };
   }
-  const resendPayload = brevoPayloadToResend(payload);
   console.log(`register: ${logLabel} request`, {
-    to: resendPayload.to,
-    subject: resendPayload.subject
+    to: payload.to,
+    subject: payload.subject
   });
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -390,7 +368,7 @@ async function sendViaResend({ logLabel, payload }) {
       "Content-Type": "application/json",
       Accept: "application/json"
     },
-    body: JSON.stringify(resendPayload)
+    body: JSON.stringify(payload)
   });
   const responseText = await response.text();
   if (!response.ok) {
@@ -418,15 +396,15 @@ async function sendViaResend({ logLabel, payload }) {
 }
 // --- Wrapper neutre --------------------------------------------------------
 // Signature { logLabel, payload } : les 3 sites d'appel passent un payload au
-// format Brevo-pivot. L'inlining des logos est fait ici UNE fois (spec §4.5),
-// avant l'envoi. sendViaResend lit RESEND_API_KEY.
+// format Resend. L'inlining des logos est fait ici UNE fois (spec §4.5), avant
+// l'envoi. sendViaResend lit RESEND_API_KEY.
 async function sendEmail({ logLabel, payload }) {
   // Inlining des logos Supabase Storage en data URI base64 — inconditionnel
   // (spec §4.5). Defensif : en cas d'echec, HTML d'origine conserve, mail
   // expedie quand meme.
-  if (payload?.htmlContent && typeof payload.htmlContent === "string") {
+  if (payload?.html && typeof payload.html === "string") {
     try {
-      payload.htmlContent = await inlineLogosInHtml(payload.htmlContent);
+      payload.html = await inlineLogosInHtml(payload.html);
     } catch (e) {
       console.warn(`register: ${logLabel} inlineLogosInHtml failed (mail sent anyway):`, e);
     }
@@ -985,26 +963,15 @@ serve(async (req)=>{
     const userSendResult = await sendEmail({
       logLabel: "welcome email",
       payload: {
-        sender: {
-          name: senderDisplayName,
-          email: senderEmail
-        },
-        to: [
-          {
-            email,
-            name: `${firstName} ${lastName}`.trim()
-          }
-        ],
-        replyTo: {
-          email: replyToEmail,
-          name: senderDisplayName
-        },
+        from: formatMailAddress(senderEmail, senderDisplayName),
+        to: [email],
+        reply_to: formatMailAddress(replyToEmail, senderDisplayName),
         subject: mailIsOrphan
           ? tMail(userLocale, "welcome.subject.orphan")
           : mailIsWithoutLibrary
             ? tMail(userLocale, "welcome.subject.initial", { displayName })
             : tMail(userLocale, "welcome.subject", { displayName }),
-        htmlContent: userMailHtml
+        html: userMailHtml
       }
     });
     if (!userSendResult.apiAccepted) {
@@ -1024,19 +991,11 @@ serve(async (req)=>{
       librarySendResult = await sendEmail({
         logLabel: "library internal email",
         payload: {
-          sender: {
-            name: senderDisplayName,
-            email: senderEmail
-          },
-          to: effectiveLibraryInternalRecipients.map((recipientEmail)=>({
-              email: recipientEmail
-            })),
-          replyTo: {
-            email: replyToEmail,
-            name: senderDisplayName
-          },
+          from: formatMailAddress(senderEmail, senderDisplayName),
+          to: effectiveLibraryInternalRecipients,
+          reply_to: formatMailAddress(replyToEmail, senderDisplayName),
           subject: tMail(internalLibLocale, "register.internal.subject", { displayName, publicId }),
-          htmlContent: libraryMailHtml
+          html: libraryMailHtml
         }
       });
     }
@@ -1050,19 +1009,11 @@ serve(async (req)=>{
       adminSendResult = await sendEmail({
         logLabel: "admin internal email",
         payload: {
-          sender: {
-            name: senderDisplayName,
-            email: senderEmail
-          },
-          to: adminRecipients.map((recipientEmail)=>({
-              email: recipientEmail
-            })),
-          replyTo: {
-            email: replyToEmail,
-            name: senderDisplayName
-          },
+          from: formatMailAddress(senderEmail, senderDisplayName),
+          to: adminRecipients,
+          reply_to: formatMailAddress(replyToEmail, senderDisplayName),
           subject: tMail(internalAdminLocale, "register.internal.subject", { displayName, publicId }),
-          htmlContent: adminMailHtml
+          html: adminMailHtml
         }
       });
     }

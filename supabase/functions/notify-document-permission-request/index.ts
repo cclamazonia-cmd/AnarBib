@@ -280,7 +280,7 @@ function footerHtml() {
 // Chantier #110 (migration Brevo -> Resend) : R.3.2 avait introduit un dispatch
 // Brevo/Resend pilote par MAIL_PROVIDER ; R.6 (05/06/2026) a retire Brevo.
 // sendEmail() appelle desormais directement sendViaResend(). Le secret
-// MAIL_PROVIDER reste pose cote Supabase (retrait eventuel en R.7) mais n'est
+// MAIL_PROVIDER a ete retire de Supabase en R.7 (08/06/2026) ; n'est
 // plus lu par le code.
 //
 // CONTRAT DE RETOUR LOCAL : string brute en succes, throw sur erreur HTTP —
