@@ -230,12 +230,12 @@ export default function CatalogacaoPage() {
       {/* ── Statusbar (stats) ────────────────────────────── */}
       <div className="cat-statusbar">
             <div className="cat-stat">
-              <div className="cat-stat-label">Lotes abertos</div>
+              <div className="cat-stat-label">{t({id:'catalogacao.stats.openBatches'})}</div>
               <div
                 className="cat-stat-value clickable"
                 role="button"
                 tabIndex={0}
-                title="Ver lotes abertos"
+                title={t({id:'catalogacao.stats.openBatchesTitle'})}
                 onClick={() => switchTab('batchesPanel')}
                 onKeyDown={(e) => e.key === 'Enter' && switchTab('batchesPanel')}
               >
@@ -243,12 +243,12 @@ export default function CatalogacaoPage() {
               </div>
             </div>
             <div className="cat-stat">
-              <div className="cat-stat-label">Rascunhos ativos</div>
+              <div className="cat-stat-label">{t({id:'catalogacao.stats.activeDrafts'})}</div>
               <div
                 className="cat-stat-value clickable"
                 role="button"
                 tabIndex={0}
-                title="Ver rascunhos ativos"
+                title={t({id:'catalogacao.stats.activeDraftsTitle'})}
                 onClick={() => switchTab('queuePanel')}
                 onKeyDown={(e) => e.key === 'Enter' && switchTab('queuePanel')}
               >
@@ -256,12 +256,12 @@ export default function CatalogacaoPage() {
               </div>
             </div>
             <div className="cat-stat">
-              <div className="cat-stat-label">Livros publicados</div>
+              <div className="cat-stat-label">{t({id:'catalogacao.stats.publishedBooks'})}</div>
               <div
                 className="cat-stat-value clickable"
                 role="button"
                 tabIndex={0}
-                title="Ver livros publicados"
+                title={t({id:'catalogacao.stats.publishedBooksTitle'})}
                 onClick={() => openCatalog('book')}
                 onKeyDown={(e) => e.key === 'Enter' && openCatalog('book')}
               >
@@ -269,12 +269,12 @@ export default function CatalogacaoPage() {
               </div>
             </div>
             <div className="cat-stat">
-              <div className="cat-stat-label">Autores cadastrados</div>
+              <div className="cat-stat-label">{t({id:'catalogacao.stats.registeredAuthors'})}</div>
               <div
                 className="cat-stat-value clickable"
                 role="button"
                 tabIndex={0}
-                title="Ver autores cadastrados"
+                title={t({id:'catalogacao.stats.registeredAuthorsTitle'})}
                 onClick={() => openCatalog('author')}
                 onKeyDown={(e) => e.key === 'Enter' && openCatalog('author')}
               >
@@ -282,12 +282,12 @@ export default function CatalogacaoPage() {
               </div>
             </div>
             <div className="cat-stat">
-              <div className="cat-stat-label">Exemplares publicados</div>
+              <div className="cat-stat-label">{t({id:'catalogacao.stats.publishedExemplars'})}</div>
               <div
                 className="cat-stat-value clickable"
                 role="button"
                 tabIndex={0}
-                title="Ver exemplares publicados"
+                title={t({id:'catalogacao.stats.publishedExemplarsTitle'})}
                 onClick={() => openCatalog('exemplar')}
                 onKeyDown={(e) => e.key === 'Enter' && openCatalog('exemplar')}
               >
@@ -367,12 +367,12 @@ function BatchesPanel({ batches, onRefresh }) {
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState('');
   const [newNotes, setNewNotes] = useState('');
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState(null);
 
   async function createBatch() {
-    if (!newName.trim()) { setMsg(t({id:'catalogacao.batchNameRequired'})); return; }
+    if (!newName.trim()) { setMsg({text: t({id:'catalogacao.batchNameRequired'}), kind:'error'}); return; }
     setCreating(true);
-    setMsg('');
+    setMsg(null);
     try {
       const { error } = await supabase.from('catalog_batches').insert({
         name: newName.trim(),
@@ -382,10 +382,10 @@ function BatchesPanel({ batches, onRefresh }) {
       if (error) throw error;
       setNewName('');
       setNewNotes('');
-      setMsg(t({id:'common.dataSaved'}));
+      setMsg({text: t({id:'common.dataSaved'}), kind:'ok'});
       onRefresh();
     } catch (err) {
-      setMsg(t({id:'common.errorPrefix'},{message:err.message}));
+      setMsg({text: t({id:'common.errorPrefix'},{message:err.message}), kind:'error'});
     } finally {
       setCreating(false);
     }
@@ -470,7 +470,7 @@ function BatchesPanel({ batches, onRefresh }) {
         background: 'var(--brand-panel-bg, rgba(16,16,16,.86))',
         border: '1px solid var(--brand-panel-border, rgba(255,255,255,.1))',
       }}>
-        <h4 style={{ margin: '0 0 10px', fontSize: '.9rem', fontWeight: 700 }}>Criar novo lote</h4>
+        <h4 style={{ margin: '0 0 10px', fontSize: '.9rem', fontWeight: 700 }}>{t({id:'catalogacao.batch.createTitle'})}</h4>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <div style={{ flex: '1 1 200px' }}>
             <label style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchName'})}</label>
@@ -484,7 +484,7 @@ function BatchesPanel({ batches, onRefresh }) {
             />
           </div>
           <div style={{ flex: '1 1 200px' }}>
-            <label style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>Notas (opcional)</label>
+            <label style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.notesLabel'})}</label>
             <input
               type="text" value={newNotes} onChange={e => setNewNotes(e.target.value)}
               placeholder={t({id:'catalogacao.batchNotesPlaceholder'})}
@@ -498,20 +498,20 @@ function BatchesPanel({ batches, onRefresh }) {
             {creating ? t({id:'common.saving'}) : t({id:'catalogacao.createBatch'})}
           </button>
         </div>
-        {msg && <div style={{ marginTop: 8, fontSize: '.82rem', color: msg.startsWith('Erro') ? '#f87171' : '#4ade80' }}>{msg}</div>}
+        {msg && <div style={{ marginTop: 8, fontSize: '.82rem', color: msg.kind === 'error' ? '#f87171' : '#4ade80' }}>{msg.text}</div>}
       </div>
 
       {/* Lotes ouverts */}
       {openBatches.length > 0 && (
         <div style={{ marginBottom: 16 }}>
-          <h4 style={{ margin: '0 0 10px', fontSize: '.88rem', fontWeight: 700 }}>Lotes abertos ({openBatches.length})</h4>
+          <h4 style={{ margin: '0 0 10px', fontSize: '.88rem', fontWeight: 700 }}>{t({id:'catalogacao.batch.openBatchesCount'}, {count: openBatches.length})}</h4>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.82rem' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid rgba(255,255,255,.1)' }}>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Nome</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Notas</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Criado em</th>
-                <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Ações</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thName'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thNotes'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
+                <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
             <tbody>
@@ -542,9 +542,9 @@ function BatchesPanel({ batches, onRefresh }) {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.82rem', marginTop: 8 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid rgba(255,255,255,.1)' }}>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Nome</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Status</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Criado em</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thName'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thStatus'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
@@ -580,8 +580,8 @@ function BatchesPanel({ batches, onRefresh }) {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '.82rem', marginTop: 8 }}>
             <thead>
               <tr style={{ borderBottom: '1px solid rgba(255,255,255,.1)' }}>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Nome</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>Criado em</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thName'})}</th>
+                <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>

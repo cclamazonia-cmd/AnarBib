@@ -4,29 +4,42 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 
 // ── Authority types ───────────────────────────────────────
-const AUTHORITY_TYPES = [
-  { value: 'person', label: 'Pessoa' },
-  { value: 'collective', label: 'Coletivo / organização' },
-  { value: 'publisher_series', label: 'Editora / série / revista' },
-  { value: 'place_campaign_theme', label: 'Lugar / campanha / tema' },
-  { value: 'other', label: 'Outra forma de autoridade' },
-];
+const AUTHORITY_TYPE_KEYS = {
+  person: 'catalogacao.author.type.person',
+  collective: 'catalogacao.author.type.collective',
+  publisher_series: 'catalogacao.author.type.publisherSeries',
+  place_campaign_theme: 'catalogacao.author.type.placeCampaignTheme',
+  other: 'catalogacao.author.type.other',
+};
+const AUTHORITY_TYPE_VALUES = ['person', 'collective', 'publisher_series', 'place_campaign_theme', 'other'];
 
 // Locales du widget bio multilingue (= CHECK author_translations.lang).
 const ALLOWED_BIO_LANGS = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
 
-const SOURCE_KINDS = [
-  { value: '', label: 'Selecione...' },
-  { value: 'catalog', label: 'Catálogo (BN, BNE, BnF, LoC…)' },
-  { value: 'viaf', label: 'VIAF / ISNI' },
-  { value: 'wikidata', label: 'Wikidata / Wikipedia' },
-  { value: 'publisher', label: 'Site da editora / coletivo' },
-  { value: 'book', label: 'Livro físico em mãos' },
-  { value: 'other', label: 'Outra fonte' },
-];
+const SOURCE_KIND_KEYS = {
+  '': 'catalogacao.author.sourceKind.select',
+  catalog: 'catalogacao.author.sourceKind.catalog',
+  viaf: 'catalogacao.author.sourceKind.viaf',
+  wikidata: 'catalogacao.author.sourceKind.wikidata',
+  publisher: 'catalogacao.author.sourceKind.publisher',
+  book: 'catalogacao.author.sourceKind.book',
+  other: 'catalogacao.author.sourceKind.other',
+};
+const SOURCE_KIND_VALUES = ['', 'catalog', 'viaf', 'wikidata', 'publisher', 'book', 'other'];
+
+// ── Status keys (for draft list display) ─────────────────
+const STATUS_KEYS = {
+  draft: 'catalogacao.status.draft',
+  ready: 'catalogacao.status.ready',
+  published: 'catalogacao.status.published',
+};
+const ACTION_KEYS = {
+  create: 'catalogacao.status.new',
+  update: 'catalogacao.status.retaken',
+};
 
 // ── Name helpers (sort name from preferred name) ──────────
-function stripDiacritics(v) { return (v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+function stripDiacritics(v) { return (v || '').normalize('NFD').replace(/[̀-ͯ]/g, ''); }
 
 function buildSortName(preferredName, authorityType) {
   const clean = (preferredName || '').replace(/\s+/g, ' ').trim();
@@ -124,7 +137,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         if (error) throw error;
         if (data) fillFromRecord(data);
       } catch (e) {
-        if (!cancelled) setMsg({ text: `Erro ao carregar rascunho: ${e.message}`, kind: 'error' });
+        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.author.loadError' }, { message: e.message }), kind: 'error' });
       } finally {
         if (!cancelled) onConsumed?.();
       }
@@ -162,10 +175,10 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       if (error) throw error;
       set('photo_object_path', storagePath);
       setPhotoPreviewUrl('');
-      setMsg({ text: 'Foto enviada com sucesso.', kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.author.photoSaved' }), kind: 'ok' });
       return storagePath;
     } catch (err) {
-      setMsg({ text: `Erro no envio da foto: ${err.message}`, kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.author.photoError' }, { message: err.message }), kind: 'error' });
       return null;
     } finally {
       setPhotoUploading(false);
@@ -248,23 +261,23 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       if (!f('sort_name')) set('sort_name', `${surname}, ${given}`);
       if (commaMatch[3] && !f('birth_year')) set('birth_year', commaMatch[3]);
       if (commaMatch[4] && !f('death_year')) set('death_year', commaMatch[4]);
-      setMsg({ text: `Sugestão aplicada: "${given} ${surname}"`, kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.author.suggestionApplied' }, { name: `${given} ${surname}` }), kind: 'ok' });
       return;
     }
     // Simple name — just apply as preferred name
     if (!f('preferred_name')) {
       set('preferred_name', raw);
       set('sort_name', buildSortName(raw, meta.authorityType));
-      setMsg({ text: `Nome aplicado: "${raw}"`, kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.author.nameApplied' }, { name: raw }), kind: 'ok' });
     } else {
-      setMsg({ text: 'Nome preferido já preenchido.', kind: 'info' });
+      setMsg({ text: t({ id: 'catalogacao.author.nameAlreadyFilled' }), kind: 'info' });
     }
   }
 
   // ── Save draft ──────────────────────────────────────────
   async function handleSave(e) {
     e?.preventDefault();
-    if (!f('preferred_name').trim()) { setMsg({ text: 'Informe o nome preferido.', kind: 'error' }); return; }
+    if (!f('preferred_name').trim()) { setMsg({ text: t({ id: 'catalogacao.author.nameRequired' }), kind: 'error' }); return; }
 
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
@@ -314,16 +327,16 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       fillFromRecord(result);
       setDraftState('saved');
       await loadDrafts();
-      setMsg({ text: isUpdate ? 'Rascunho de autoridade atualizado.' : 'Rascunho de autoridade criado.', kind: 'ok' });
+      setMsg({ text: isUpdate ? t({ id: 'catalogacao.author.draftUpdated' }) : t({ id: 'catalogacao.author.draftCreated' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
+      setMsg({ text: err.message, kind: 'error' });
     } finally { setSaving(false); }
   }
 
   // ── Publish draft ───────────────────────────────────────
   async function handlePublish() {
-    if (!f('id')) { setMsg({ text: 'Salve o rascunho antes de publicar.', kind: 'error' }); return; }
-    if (!confirm('Publicar esta autoridade no catálogo? Isso criará ou atualizará o registro na tabela de autores publicados.')) return;
+    if (!f('id')) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforePublish' }), kind: 'error' }); return; }
+    if (!confirm(t({ id: 'catalogacao.author.publishConfirm' }))) return;
 
     setPublishing(true); setMsg({ text: '', kind: '' });
     try {
@@ -341,9 +354,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       }
       setDraftState('published');
       await loadDrafts();
-      setMsg({ text: 'Autoridade publicada com sucesso no catálogo.', kind: 'ok' });
+      setMsg({ text: t({ id: 'catalogacao.author.publishSuccess' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: `Erro publicação: ${err.message}`, kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.author.publishError' }, { message: err.message }), kind: 'error' });
     } finally { setPublishing(false); }
   }
 
@@ -447,11 +460,11 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
   // ── State pill ──────────────────────────────────────────
   const pills = {
-    new: { label: 'Novo rascunho', cls: 'info' },
-    saved: { label: 'Salvo', cls: 'ok' },
-    dirty: { label: 'Modificações não salvas', cls: 'warn' },
-    ready: { label: 'Pronto para publicar', cls: 'ok' },
-    published: { label: 'Publicado', cls: 'ok' },
+    new: { label: t({ id: 'catalogacao.ui.newDraft' }), cls: 'info' },
+    saved: { label: t({ id: 'catalogacao.state.saved' }), cls: 'ok' },
+    dirty: { label: t({ id: 'catalogacao.msg.unsavedChanges' }), cls: 'warn' },
+    ready: { label: t({ id: 'catalogacao.msg.readyToPublish' }), cls: 'ok' },
+    published: { label: t({ id: 'catalogacao.msg.alreadyPublished' }), cls: 'ok' },
   };
   const pill = pills[draftState] || pills.new;
 
@@ -464,11 +477,11 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     try {
       const { data, error } = await supabase.functions.invoke('authority_lookup', { body: { name, maxResults: 5 } });
       if (error && !data) throw error;
-      if (!data?.ok) throw new Error(data?.error || 'Busca falhou.');
+      if (!data?.ok) throw new Error(data?.error || t({ id: 'catalogacao.msg.lookupFailed' }));
       setAuthLookupResults(data.candidates || []);
       setMsg({ text: data.candidates?.length ? t({id:'catalogacao.authority.found'}, {count: data.candidates.length}) : t({id:'catalogacao.authority.notFound'}), kind: data.candidates?.length ? 'ok' : 'info' });
     } catch (err) {
-      setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
+      setMsg({ text: err.message, kind: 'error' });
     } finally {
       setAuthLookupLoading(false);
     }
@@ -519,14 +532,14 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       {/* ── Toolbar ──────────────────────────────────── */}
       <div className="cat-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <h3 style={{ margin: 0 }}>Autoria</h3>
+          <h3 style={{ margin: 0 }}>{t({ id: 'catalogacao.author.heading' })}</h3>
           <span className={`cat-pill ${pill.cls}`} style={{ fontSize: '.68rem' }}>{pill.label}</span>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
           <button type="button" className="ab-button ab-button--sm" onClick={resetForm}>{t({id:'catalogacao.ui.newDraft'})}</button>
           <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={resetForm}>{t({id:'catalogacao.ui.clearForm'})}</button>
           <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadDrafts} disabled={draftsLoading}>
-            {draftsLoading ? 'Atualizando…' : 'Atualizar lista'}
+            {draftsLoading ? t({ id: 'catalogacao.ui.refreshing' }) : t({ id: 'catalogacao.ui.refreshList' })}
           </button>
         </div>
       </div>
@@ -554,14 +567,14 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               if (data) fillFromRecord(data);
             }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '.82rem', fontWeight: 600 }}>{d.preferred_name || '(sem nome)'}</div>
+                <div style={{ fontSize: '.82rem', fontWeight: 600 }}>{d.preferred_name || t({ id: 'catalogacao.queue.noName' })}</div>
                 <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
-                  {d.sort_name || '—'} · {d.status === 'draft' ? 'rascunho' : d.status === 'ready' ? 'pronto' : d.status === 'published' ? 'publicado' : d.status} · {d.action === 'create' ? 'novo' : d.action === 'update' ? 'retomada' : d.action}
+                  {d.sort_name || '—'} · {t({ id: STATUS_KEYS[d.status] || d.status }).toLowerCase()} · {t({ id: ACTION_KEYS[d.action] || d.action }).toLowerCase()}
                   {d.published_author_id ? ` · pub #${d.published_author_id}` : ''}
                 </div>
               </div>
               <span className={`cat-pill ${d.status === 'draft' ? 'info' : 'ok'}`} style={{ fontSize: '.62rem', flexShrink: 0 }}>
-                {d.status === 'draft' ? 'Rascunho' : d.status === 'ready' ? 'Pronto' : d.status === 'published' ? 'Publicado' : d.status}
+                {t({ id: STATUS_KEYS[d.status] || d.status })}
               </span>
             </div>
           ))}
@@ -573,39 +586,39 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
         {/* ── Name assist ──────────────────────────── */}
         <div style={{ padding: 12, borderRadius: 8, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)', marginBottom: 14 }}>
-          <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 4 }}>Assistência de nome</div>
+          <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 4 }}>{t({ id: 'catalogacao.author.nameAssist' })}</div>
           <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 8 }}>
-            Use quando o nome vier bruto da BN, de um livro ou outra fonte. O texto entre parênteses é tratado como variante complementar.
+            {t({ id: 'catalogacao.author.nameAssistDesc' })}
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <input type="text" value={assistRaw} onChange={e => setAssistRaw(e.target.value)}
               placeholder="Bakunin, Mikhail Aleksandrovich, 1814-1876" style={{ ...fs, flex: 1 }} />
             <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-              onClick={applyNameAssist}>Preencher ficha</button>
+              onClick={applyNameAssist}>{t({ id: 'catalogacao.author.nameAssistFill' })}</button>
           </div>
         </div>
 
         <div className="cat-book-grid">
           {/* ── Name fields ──────────────────────────── */}
           <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-            <label style={ls}>Nome preferido (Nome SOBRENOME)</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.preferredNameLabel' })}</label>
             <input type="text" value={f('preferred_name')} onChange={e => handlePreferredNameChange(e.target.value)}
               placeholder="Osvaldo BAYER" required style={fs} />
           </div>
 
           <div className="cat-field">
-            <label style={ls}>Nome para ordenação</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.sortNameLabel' })}</label>
             <input type="text" value={f('sort_name')} onChange={e => set('sort_name', e.target.value)}
               placeholder="BAYER, Osvaldo" style={{ ...fs, opacity: f('published_author_id') ? 1 : 0.7 }}
               readOnly={!f('published_author_id')} />
-            <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>Preenchido automaticamente a partir do nome preferido.</div>
+            <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{t({ id: 'catalogacao.author.sortNameHint' })}</div>
           </div>
 
           {/* ── Authority type + enrichment ──────────── */}
           <div className="cat-field">
-            <label style={ls}>Tipo de autoridade</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.authorityTypeLabel' })}</label>
             <select value={meta.authorityType} onChange={e => handleAuthorityTypeChange(e.target.value)} style={fs}>
-              {AUTHORITY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+              {AUTHORITY_TYPE_VALUES.map(at => <option key={at} value={at}>{t({ id: AUTHORITY_TYPE_KEYS[at] })}</option>)}
             </select>
           </div>
 
@@ -614,27 +627,27 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
           {isComplete && (
             <div className="cat-field">
-              <label style={ls}>Sigla / forma curta</label>
+              <label style={ls}>{t({ id: 'catalogacao.author.acronym' })}</label>
               <input type="text" value={meta.acronym} onChange={e => setM('acronym', e.target.value)}
                 placeholder="CGT / FAG / CSL / CIRA" style={fs} />
             </div>
           )}
 
           <div className="cat-field">
-            <label style={ls}>Período de atividade</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.activityPeriod' })}</label>
             <input type="text" value={meta.activityPeriod} onChange={e => setM('activityPeriod', e.target.value)}
               placeholder="1910-1936 / década de 1980 / em atividade" style={fs} />
           </div>
 
           <div className="cat-field">
-            <label style={ls}>Filiação (organização / sindicato)</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.affiliation' })}</label>
             <input type="text" value={meta.affiliation} onChange={e => setM('affiliation', e.target.value)}
               placeholder="CNT-FAI / FORA / Federação Anarquista Gaúcha…" style={fs} />
           </div>
 
           {isComplete && (
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-              <label style={ls}>Formas variantes</label>
+              <label style={ls}>{t({ id: 'catalogacao.author.variantNames' })}</label>
               <textarea value={meta.variantNames} onChange={e => setM('variantNames', e.target.value)}
                 placeholder="Nomes paralelos, grafias alternativas, formas em outras línguas…" style={{ ...fs, resize: 'vertical', minHeight: 44 }} />
             </div>
@@ -643,17 +656,17 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           {isComplete && (
             <>
               <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                <label style={ls}>Pseudônimos / nomes de guerra</label>
+                <label style={ls}>{t({ id: 'catalogacao.author.pseudonyms' })}</label>
                 <input type="text" value={meta.pseudonyms} onChange={e => setM('pseudonyms', e.target.value)}
                   placeholder="Separar por ponto e vírgula" style={fs} />
               </div>
               <div className="cat-field">
-                <label style={ls}>Lugar / ancoragem</label>
+                <label style={ls}>{t({ id: 'catalogacao.author.activityPlace' })}</label>
                 <input type="text" value={meta.activityPlace} onChange={e => setM('activityPlace', e.target.value)}
                   placeholder="Belém, Buenos Aires…" style={fs} />
               </div>
               <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-                <label style={ls}>Vínculos documentários / contextuais</label>
+                <label style={ls}>{t({ id: 'catalogacao.author.contextLinks' })}</label>
                 <input type="text" value={meta.contextLinks} onChange={e => setM('contextLinks', e.target.value)}
                   placeholder="Campanhas, coletivos, periódicos, séries, redes…" style={fs} />
               </div>
@@ -661,19 +674,19 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           )}
 
           {/* ── Biographical data ────────────────────── */}
-          {inp('birth_year', 'Ano de nascimento', { type: 'number' })}
-          {inp('death_year', 'Ano de falecimento', { type: 'number' })}
-          {inp('country', 'País', { placeholder: 'Brasil' })}
+          {inp('birth_year', t({ id: 'catalogacao.author.birthYear' }), { type: 'number' })}
+          {inp('death_year', t({ id: 'catalogacao.author.deathYear' }), { type: 'number' })}
+          {inp('country', t({ id: 'catalogacao.author.country' }), { placeholder: 'Brasil' })}
 
           {/* ── Source + identifiers ──────────────────── */}
           <div className="cat-field">
-            <label style={ls}>Tipo de fonte</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.sourceKindLabel' })}</label>
             <select value={f('source_kind')} onChange={e => set('source_kind', e.target.value)} style={fs}>
-              {SOURCE_KINDS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+              {SOURCE_KIND_VALUES.map(s => <option key={s} value={s}>{t({ id: SOURCE_KIND_KEYS[s] })}</option>)}
             </select>
           </div>
-          {inp('source_label', 'Fonte informada', { placeholder: 'VIAF, BnF, site da editora…' })}
-          {inp('source_url', 'Link da fonte', { placeholder: 'https://...' })}
+          {inp('source_label', t({ id: 'catalogacao.author.sourceLabel' }), { placeholder: 'VIAF, BnF, site da editora…' })}
+          {inp('source_url', t({ id: 'catalogacao.author.sourceUrl' }), { placeholder: 'https://...' })}
 
           {isComplete && (
             <>
@@ -887,26 +900,26 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           {/* ── Photo + Batch ─────────────────────────── */}
           {/* ── Photo upload ─────────────────────────── */}
           <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-            <label style={ls}>Foto do autor</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.photoLabel' })}</label>
             <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
               <div style={{ width: 80, flexShrink: 0 }}>
                 {photoDisplayUrl ? (
                   <img src={photoDisplayUrl} alt="Foto" style={{ width: '100%', borderRadius: 8, border: '1px solid rgba(255,255,255,.1)', objectFit: 'cover', maxHeight: 100 }} />
                 ) : (
                   <div style={{ width: '100%', height: 80, borderRadius: 8, border: '1px dashed rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
-                    Sem foto
+                    {t({ id: 'catalogacao.author.noPhoto' })}
                   </div>
                 )}
               </div>
               <div style={{ flex: 1 }}>
                 <label className="ab-button ab-button--secondary ab-button--sm" style={{ display: 'inline-block', textAlign: 'center', cursor: 'pointer', marginBottom: 4 }}>
-                  Escolher imagem
+                  {t({ id: 'catalogacao.author.chooseImage' })}
                   <input type="file" accept="image/*" onChange={handlePhotoFileChange} style={{ display: 'none' }} />
                 </label>
                 {photoFile && (
                   <button type="button" className="ab-button ab-button--sm" style={{ marginLeft: 6 }}
                     onClick={uploadPhoto} disabled={photoUploading}>
-                    {photoUploading ? 'Enviando…' : 'Enviar foto'}
+                    {photoUploading ? t({ id: 'catalogacao.author.uploadingPhoto' }) : t({ id: 'catalogacao.author.uploadPhoto' })}
                   </button>
                 )}
                 {f('photo_object_path') && (
@@ -917,9 +930,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           </div>
 
           <div className="cat-field" style={isComplete ? undefined : { display: 'none' }}>
-            <label style={ls}>Lote</label>
+            <label style={ls}>{t({ id: 'catalogacao.author.batchLabel' })}</label>
             <select value={f('batch_id')} onChange={e => set('batch_id', e.target.value)} style={fs}>
-              <option value="">Sem lote</option>
+              <option value="">{t({ id: 'catalogacao.author.noBatch' })}</option>
               {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
             </select>
           </div>
@@ -928,25 +941,25 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         {/* ── Architecture documentale ─────────────── */}
         {isComplete && (
           <div style={{ marginTop: 14, padding: 12, borderRadius: 8, background: 'rgba(0,0,0,.1)', border: '1px dashed rgba(255,255,255,.08)' }}>
-            <h4 style={{ margin: '0 0 6px', fontSize: '.82rem' }}>Arquitetura documental desta autoridade</h4>
+            <h4 style={{ margin: '0 0 6px', fontSize: '.82rem' }}>{t({ id: 'catalogacao.author.archTitle' })}</h4>
             <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #888)', lineHeight: 1.6 }}>
               <div style={{ marginBottom: 3 }}>
-                <strong>Forma retida:</strong> {f('preferred_name') || '—'} → {f('sort_name') || '—'}
+                <strong>{t({ id: 'catalogacao.author.archRetained' })}</strong> {f('preferred_name') || '—'} → {f('sort_name') || '—'}
               </div>
               <div style={{ marginBottom: 3 }}>
-                <strong>Tipo:</strong> {AUTHORITY_TYPES.find(t => t.value === meta.authorityType)?.label || meta.authorityType}
+                <strong>{t({ id: 'catalogacao.author.archType' })}</strong> {AUTHORITY_TYPE_KEYS[meta.authorityType] ? t({ id: AUTHORITY_TYPE_KEYS[meta.authorityType] }) : meta.authorityType}
                 {meta.acronym && ` · Sigla: ${meta.acronym}`}
                 {meta.activityPeriod && ` · Período: ${meta.activityPeriod}`}
               </div>
               <div style={{ marginBottom: 3 }}>
-                <strong>Proveniência:</strong> {[f('source_kind'), f('source_label'), f('viaf_id') && `VIAF: ${f('viaf_id')}`, f('wikidata_id') && `WD: ${f('wikidata_id')}`].filter(Boolean).join(' · ') || '—'}
+                <strong>{t({ id: 'catalogacao.author.archProvenance' })}</strong> {[f('source_kind'), f('source_label'), f('viaf_id') && `VIAF: ${f('viaf_id')}`, f('wikidata_id') && `WD: ${f('wikidata_id')}`].filter(Boolean).join(' · ') || '—'}
               </div>
               <div style={{ marginBottom: 3 }}>
-                <strong>Saída pública:</strong> {[f('biography') ? 'Biografia ✓' : 'Sem biografia', f('birth_year') && `${f('birth_year')}–${f('death_year') || '…'}`, f('country')].filter(Boolean).join(' · ')}
+                <strong>{t({ id: 'catalogacao.author.archPublicOutput' })}</strong> {[f('biography') ? t({ id: 'catalogacao.author.archBioYes' }) : t({ id: 'catalogacao.author.archBioNo' }), f('birth_year') && `${f('birth_year')}–${f('death_year') || '…'}`, f('country')].filter(Boolean).join(' · ')}
               </div>
               <div>
-                <strong>Rascunho:</strong> {draftState === 'new' ? 'Novo, não salvo' : draftState === 'saved' ? `Salvo (ID ${f('id')})` : draftState === 'dirty' ? 'Modificações não salvas' : draftState === 'published' ? 'Publicado' : draftState}
-                {f('batch_id') && ` · Lote ${f('batch_id')}`}
+                <strong>{t({ id: 'catalogacao.author.archDraft' })}</strong> {draftState === 'new' ? t({ id: 'catalogacao.author.archNew' }) : draftState === 'saved' ? t({ id: 'catalogacao.author.archSaved' }, { id: f('id') }) : draftState === 'dirty' ? t({ id: 'catalogacao.msg.unsavedChanges' }) : draftState === 'published' ? t({ id: 'catalogacao.msg.alreadyPublished' }) : draftState}
+                {f('batch_id') && ` · ${t({ id: 'catalogacao.author.archBatch' }, { id: f('batch_id') })}`}
               </div>
             </div>
           </div>
@@ -955,11 +968,11 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         {/* ── Actions ─────────────────────────────────── */}
         <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
           <button type="submit" className="ab-button" disabled={saving}>
-            {saving ? 'Salvando…' : 'Salvar rascunho'}
+            {saving ? t({ id: 'catalogacao.saving' }) : t({ id: 'catalogacao.ui.saveDraft' })}
           </button>
           <button type="button" className="ab-button" style={{ background: 'rgba(21,128,61,.7)' }}
             disabled={publishing || !f('id')} onClick={handlePublish}>
-            {publishing ? 'Publicando…' : 'Publicar este rascunho'}
+            {publishing ? t({ id: 'catalogacao.author.publishing' }) : t({ id: 'catalogacao.author.publishDraft' })}
           </button>
           <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>{t({id:'catalogacao.ui.clear'})}</button>
         </div>

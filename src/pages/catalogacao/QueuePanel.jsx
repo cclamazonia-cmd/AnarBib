@@ -3,13 +3,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 
-const TYPE_LABELS = { book: 'Documento', author: 'Autoridade', exemplar: 'Exemplar' };
-const STATUS_LABELS = { draft: 'Rascunho', ready: 'Pronto', published: 'Publicado', cancelled: 'Descartado' };
+// Labels resolved inside component via t()
+const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
+const STATUS_KEYS = { draft: 'catalogacao.status.draft', ready: 'catalogacao.status.ready', published: 'catalogacao.status.published', cancelled: 'catalogacao.status.cancelled' };
 const PAGE_SIZE = 100;
 
 export default function QueuePanel({ batches, onEditItem }) {
   // ── Filters ─────────────────────────────────────────────
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, formatDate } = useIntl();
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [actionFilter, setActionFilter] = useState('');
@@ -57,7 +58,7 @@ export default function QueuePanel({ batches, onEditItem }) {
         if (s) q = q.or(`titulo.ilike.%${s}%,subtitulo.ilike.%${s}%,autor.ilike.%${s}%,bib_ref.ilike.%${s}%`);
         const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
-        (data || []).forEach(d => allItems.push({ ...d, _type: 'book', _label: d.titulo || '(sem título)', _sub: d.autor || '' }));
+        (data || []).forEach(d => allItems.push({ ...d, _type: 'book', _label: d.titulo || t({ id: 'catalogacao.queue.noTitle' }), _sub: d.autor || '' }));
       }
 
       // Authors
@@ -69,7 +70,7 @@ export default function QueuePanel({ batches, onEditItem }) {
         if (s) q = q.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
         const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
-        (data || []).forEach(d => allItems.push({ ...d, _type: 'author', _label: d.preferred_name || '(sem nome)', _sub: d.sort_name || '' }));
+        (data || []).forEach(d => allItems.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: d.sort_name || '' }));
       }
 
       // Exemplars
@@ -81,7 +82,7 @@ export default function QueuePanel({ batches, onEditItem }) {
         if (s) q = q.or(`tombo.ilike.%${s}%,target_bib_ref.ilike.%${s}%`);
         const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
-        (data || []).forEach(d => allItems.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || '(sem tombo)', _sub: `ref: ${d.target_bib_ref || '—'}` }));
+        (data || []).forEach(d => allItems.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: `ref: ${d.target_bib_ref || '—'}` }));
       }
 
       // Tri par updated_at desc (fusion des couches de la page courante)
@@ -90,9 +91,9 @@ export default function QueuePanel({ batches, onEditItem }) {
       setTotal(totalCount);
       // Pages basees sur la couche la plus volumineuse (evite des pages vides en "Todas")
       setTotalPages(Math.max(1, Math.ceil(maxCount / PAGE_SIZE)));
-    } catch (err) { setMsg({ text: `Erro: ${err.message}`, kind: 'error' }); }
+    } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
     finally { setLoading(false); }
-  }, [typeFilter, statusFilter, actionFilter, dSearch, page]);
+  }, [typeFilter, statusFilter, actionFilter, dSearch, page, t]);
 
   useEffect(() => { loadQueue(); }, [loadQueue]);
 
@@ -102,15 +103,15 @@ export default function QueuePanel({ batches, onEditItem }) {
     try {
       const all = [];
       const { data: bk } = await supabase.from('book_drafts').select('id, titulo, autor, status, updated_at').eq('status', 'cancelled').order('updated_at', { ascending: false }).limit(100);
-      (bk || []).forEach(d => all.push({ ...d, _type: 'book', _label: d.titulo || '(sem título)', _sub: d.autor || '' }));
+      (bk || []).forEach(d => all.push({ ...d, _type: 'book', _label: d.titulo || t({ id: 'catalogacao.queue.noTitle' }), _sub: d.autor || '' }));
       const { data: au } = await supabase.from('author_drafts').select('id, preferred_name, status, updated_at').eq('status', 'cancelled').order('updated_at', { ascending: false }).limit(100);
-      (au || []).forEach(d => all.push({ ...d, _type: 'author', _label: d.preferred_name || '(sem nome)', _sub: '' }));
+      (au || []).forEach(d => all.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: '' }));
       const { data: ex } = await supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, updated_at').eq('status', 'cancelled').order('updated_at', { ascending: false }).limit(100);
-      (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || '(sem tombo)', _sub: '' }));
+      (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: '' }));
       all.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
       setTrash(all);
     } catch {} finally { setTrashLoading(false); }
-  }, []);
+  }, [t]);
 
   useEffect(() => { loadTrash(); }, [loadTrash]);
 
@@ -152,7 +153,7 @@ export default function QueuePanel({ batches, onEditItem }) {
       }
 
       setSelected(new Set(allIds));
-    } catch (err) { setMsg({ text: `Erro: ${err.message}`, kind: 'error' }); }
+    } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
     finally { setLoading(false); }
   }
 
@@ -164,8 +165,8 @@ export default function QueuePanel({ batches, onEditItem }) {
   // ── Batch actions ───────────────────────────────────────
   async function publishSelected() {
     const sel = getSelectedItems();
-    if (!sel.length) { setMsg({ text: 'Selecione ao menos um item.', kind: 'error' }); return; }
-    if (!confirm(`Publicar ${sel.length} rascunho(s) selecionado(s)?`)) return;
+    if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
+    if (!confirm(t({ id: 'catalogacao.queue.publishConfirm' }, { count: sel.length }))) return;
     setMsg({ text: '', kind: '' });
     let ok = 0, fail = 0; const errs = [];
     for (const { type, id } of sel) {
@@ -182,7 +183,7 @@ export default function QueuePanel({ batches, onEditItem }) {
       }
     }
     setMsg({
-      text: `${ok} publicado(s)${fail ? `, ${fail} com erro` : ''}.` + (errs.length ? ` ${errs.join(' ')}` : ''),
+      text: t({ id: 'catalogacao.queue.publishResult' }, { ok, fail }) + (errs.length ? ` ${errs.join(' ')}` : ''),
       kind: fail ? 'warn' : 'ok',
     });
     await loadQueue(); await loadTrash();
@@ -190,8 +191,8 @@ export default function QueuePanel({ batches, onEditItem }) {
 
   async function discardSelected() {
     const sel = getSelectedItems();
-    if (!sel.length) { setMsg({ text: 'Selecione ao menos um item.', kind: 'error' }); return; }
-    if (!confirm(`Descartar ${sel.length} rascunho(s)? Eles irão para a lixeira.`)) return;
+    if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
+    if (!confirm(t({ id: 'catalogacao.queue.discardConfirm' }, { count: sel.length }))) return;
     setMsg({ text: '', kind: '' });
     let ok = 0;
     for (const { type, id } of sel) {
@@ -200,30 +201,30 @@ export default function QueuePanel({ batches, onEditItem }) {
         ok++;
       } catch {}
     }
-    setMsg({ text: `${ok} rascunho(s) descartado(s).`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.queue.discardResult' }, { count: ok }), kind: 'ok' });
     await loadQueue(); await loadTrash();
   }
 
   async function markSelectedReady() {
     const sel = getSelectedItems();
-    if (!sel.length) { setMsg({ text: 'Selecione ao menos um item.', kind: 'error' }); return; }
+    if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
     let ok = 0;
     for (const { type, id } of sel) {
       try { await supabase.from(tableFor(type)).update({ status: 'ready' }).eq('id', id); ok++; } catch {}
     }
-    setMsg({ text: `${ok} marcado(s) como pronto(s).`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.queue.markedReadyResult' }, { count: ok }), kind: 'ok' });
     await loadQueue();
   }
 
   async function assignBatchToSelected(batchId) {
     if (!batchId) return;
     const sel = getSelectedItems();
-    if (!sel.length) { setMsg({ text: 'Selecione ao menos um item.', kind: 'error' }); return; }
+    if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
     let ok = 0;
     for (const { type, id } of sel) {
       try { await supabase.from(tableFor(type)).update({ batch_id: Number(batchId) }).eq('id', id); ok++; } catch {}
     }
-    setMsg({ text: `${ok} item(ns) atribuído(s) ao lote.`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok }), kind: 'ok' });
     await loadQueue();
   }
 
@@ -235,25 +236,25 @@ export default function QueuePanel({ batches, onEditItem }) {
     for (const { type, id } of sel) {
       try { await supabase.from(tableFor(type)).update({ status: 'draft' }).eq('id', id); ok++; } catch {}
     }
-    setMsg({ text: `${ok} restaurado(s).`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }), kind: 'ok' });
     await loadQueue(); await loadTrash();
   }
 
   async function deleteTrashItem(type, id) {
-    if (!confirm('Apagar este rascunho de forma irreversível?')) return;
+    if (!confirm(t({ id: 'catalogacao.queue.deleteConfirm' }))) return;
     try { await supabase.from(tableFor(type)).delete().eq('id', id); } catch {}
     await loadTrash();
   }
 
   async function emptyTrash() {
     if (!trash.length) return;
-    if (!confirm(`Esvaziar a lixeira? ${trash.length} rascunho(s) serão apagados de forma irreversível.`)) return;
+    if (!confirm(t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: trash.length }))) return;
     setMsg({ text: '', kind: '' });
     let ok = 0;
     for (const it of trash) {
       try { await supabase.from(tableFor(it._type)).delete().eq('id', it.id); ok++; } catch {}
     }
-    setMsg({ text: `${ok} rascunho(s) apagado(s) definitivamente.`, kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.queue.emptyTrashResult' }, { count: ok }), kind: 'ok' });
     await loadTrash();
   }
 
@@ -267,11 +268,11 @@ export default function QueuePanel({ batches, onEditItem }) {
         <div>
           <h3 style={{ margin: 0 }}>{t({ id: 'catalogacao.queue.title' })}</h3>
           <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #999)', marginTop: 2 }}>
-            Rascunhos ativos de documentos, autoridades e exemplares. Itens publicados saem da fila; descartados vão para a lixeira.
+            {t({ id: 'catalogacao.queue.description' })}
           </div>
         </div>
         <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={() => { loadQueue(); loadTrash(); }} disabled={loading}>
-          {loading ? 'Atualizando…' : 'Atualizar fila'}
+          {loading ? t({ id: 'catalogacao.queue.refreshing' }) : t({ id: 'catalogacao.queue.refresh' })}
         </button>
       </div>
 
@@ -280,51 +281,50 @@ export default function QueuePanel({ batches, onEditItem }) {
       {/* ── Filters ──────────────────────────────────── */}
       <div className="cat-book-grid" style={{ marginBottom: 14 }}>
         <div className="cat-field">
-          <label style={ls}>Camada</label>
+          <label style={ls}>{t({ id: 'catalogacao.queue.layerLabel' })}</label>
           <select value={typeFilter} onChange={e => { setTypeFilter(e.target.value); setPage(0); }} style={fs}>
-            <option value="">Todas</option>
+            <option value="">{t({ id: 'catalogacao.queue.allTypes' })}</option>
             <option value="book">{t({ id: 'catalogacao.catalog.documents' })}</option>
             <option value="author">{t({ id: 'catalogacao.catalog.authorities' })}</option>
             <option value="exemplar">{t({ id: 'catalogacao.catalog.exemplars' })}</option>
           </select>
         </div>
         <div className="cat-field">
-          <label style={ls}>Situação</label>
+          <label style={ls}>{t({ id: 'catalogacao.queue.statusLabel' })}</label>
           <select value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} style={fs}>
-            <option value="">Todas ativas</option>
-            <option value="draft">Rascunho</option>
-            <option value="ready">Pronto</option>
+            <option value="">{t({ id: 'catalogacao.queue.allActive' })}</option>
+            <option value="draft">{t({ id: 'catalogacao.status.draft' })}</option>
+            <option value="ready">{t({ id: 'catalogacao.status.ready' })}</option>
           </select>
         </div>
         <div className="cat-field">
-          <label style={ls}>Gesto editorial</label>
+          <label style={ls}>{t({ id: 'catalogacao.queue.actionLabel' })}</label>
           <select value={actionFilter} onChange={e => { setActionFilter(e.target.value); setPage(0); }} style={fs}>
-            <option value="">Todos</option>
-            <option value="create">Novo</option>
-            <option value="update">Retomada</option>
+            <option value="">{t({ id: 'catalogacao.queue.allActions' })}</option>
+            <option value="create">{t({ id: 'catalogacao.queue.actionCreate' })}</option>
+            <option value="update">{t({ id: 'catalogacao.queue.actionUpdate' })}</option>
           </select>
         </div>
         <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-          <label style={ls}>Buscar na fila</label>
+          <label style={ls}>{t({ id: 'catalogacao.queue.searchLabel' })}</label>
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Título, autor, tombo, referência…" style={fs} />
+            placeholder={t({ id: 'catalogacao.queue.searchPlaceholder' })} style={fs} />
         </div>
       </div>
 
       {/* ── Batch actions bar ────────────────────────── */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 10, padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
         <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={selectAll}>
-          {selected.size === items.length && items.length > 0 ? 'Desmarcar tudo' : `Selecionar tudo (${items.length})`}
+          {selected.size === items.length && items.length > 0 ? t({ id: 'catalogacao.queue.deselectAll' }) : t({ id: 'catalogacao.queue.selectAllCount' }, { count: items.length })}
         </button>
         {total > items.length && (
           <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-            onClick={selectAllInFilter} disabled={loading || selected.size === total}
-            title={`Seleciona les ${total} rascunhos correspondant au filtre actuel, pas seulement la page courante`}>
-            {selected.size >= total ? `✓ ${total} do filtro` : `Selecionar os ${total} do filtro`}
+            onClick={selectAllInFilter} disabled={loading || selected.size === total}>
+            {selected.size >= total ? t({ id: 'catalogacao.queue.selectedAllFilter' }, { count: total }) : t({ id: 'catalogacao.queue.selectAllFilter' }, { count: total })}
           </button>
         )}
         <span style={{ fontSize: '.75rem', color: selected.size > items.length ? '#4ade80' : 'var(--brand-muted, #aaa)', fontWeight: selected.size > items.length ? 700 : 400 }}>
-          {selected.size} selecionado(s){selected.size > items.length ? ' (cross-page)' : ''}
+          {t({ id: 'catalogacao.queue.selectedCount' }, { count: selected.size })}{selected.size > items.length ? t({ id: 'catalogacao.queue.crossPage' }) : ''}
         </span>
         <div style={{ flex: 1 }} />
         {onEditItem && (
@@ -342,11 +342,11 @@ export default function QueuePanel({ batches, onEditItem }) {
         </button>
         <select style={{ ...fs, width: 'auto', fontSize: '.72rem', padding: '4px 8px' }}
           onChange={e => { if (e.target.value) { assignBatchToSelected(e.target.value); e.target.value = ''; } }}>
-          <option value="">Atribuir lote…</option>
+          <option value="">{t({ id: 'catalogacao.queue.assignBatch' })}</option>
           {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
         </select>
         <button type="button" className="ab-button ab-button--danger ab-button--sm" onClick={discardSelected} disabled={!selected.size}>
-          Descartar
+          {t({ id: 'catalogacao.queue.discardBatch' })}
         </button>
       </div>
 
@@ -354,7 +354,7 @@ export default function QueuePanel({ batches, onEditItem }) {
       <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 400, overflowY: 'auto', marginBottom: 10 }}>
         {items.length === 0 && !loading && (
           <div style={{ padding: 16, textAlign: 'center', fontSize: '.85rem', color: 'var(--brand-muted, #888)' }}>
-            Nenhum rascunho ativo neste recorte.
+            {t({ id: 'catalogacao.queue.empty' })}
           </div>
         )}
         {items.map((it, i) => {
@@ -369,21 +369,21 @@ export default function QueuePanel({ batches, onEditItem }) {
               <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(key)} style={{ flexShrink: 0 }} />
               <span className={`cat-pill ${it._type === 'book' ? 'info' : it._type === 'author' ? 'warn' : 'ok'}`}
                 style={{ fontSize: '.6rem', flexShrink: 0, minWidth: 65, textAlign: 'center' }}>
-                {TYPE_LABELS[it._type]}
+                {t({ id: TYPE_KEYS[it._type] })}
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: '.82rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {it._label}
                 </div>
                 <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
-                  {it._sub}{it.batch_id ? ` · lote ${it.batch_id}` : ''} · {it.action === 'create' ? 'novo' : it.action === 'update' ? 'retomada' : it.action}
+                  {it._sub}{it.batch_id ? ` · ${t({ id: 'catalogacao.queue.batchPrefix' }, { id: it.batch_id })}` : ''} · {it.action === 'create' ? t({ id: 'catalogacao.queue.actionCreate' }) : it.action === 'update' ? t({ id: 'catalogacao.queue.actionUpdate' }) : it.action}
                 </div>
               </div>
               <span className={`cat-pill ${it.status === 'ready' ? 'ok' : 'info'}`} style={{ fontSize: '.6rem', flexShrink: 0 }}>
-                {STATUS_LABELS[it.status] || it.status}
+                {STATUS_KEYS[it.status] ? t({ id: STATUS_KEYS[it.status] }) : it.status}
               </span>
               <div style={{ fontSize: '.65rem', color: 'var(--brand-muted, #666)', flexShrink: 0, width: 80, textAlign: 'right' }}>
-                {new Date(it.updated_at).toLocaleDateString('pt-BR')}
+                {formatDate(it.updated_at, { year: 'numeric', month: '2-digit', day: '2-digit' })}
               </div>
               {onEditItem && (
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ flexShrink: 0 }}
@@ -399,13 +399,13 @@ export default function QueuePanel({ batches, onEditItem }) {
       {/* ── Pagination (serveur) ─────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 20, fontSize: '.8rem', flexWrap: 'wrap' }}>
         <span style={{ color: 'var(--brand-muted, #999)' }}>
-          {total} rascunho(s) no recorte{total > 0 ? ` · mostrando ${items.length} · página ${page + 1} de ${totalPages}` : ''}
+          {t({ id: 'catalogacao.queue.paginationInfo' }, { total, showing: items.length, page: page + 1, pages: totalPages })}
         </span>
         <div style={{ display: 'flex', gap: 6 }}>
           <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-            onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page <= 0 || loading}>← Anterior</button>
+            onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page <= 0 || loading}>{t({ id: 'catalogacao.queue.prevPage' })}</button>
           <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-            onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1 || loading}>Próxima →</button>
+            onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1 || loading}>{t({ id: 'catalogacao.queue.nextPage' })}</button>
         </div>
       </div>
 
@@ -415,18 +415,18 @@ export default function QueuePanel({ batches, onEditItem }) {
       <div style={{ padding: 14, borderRadius: 10, background: 'rgba(220,38,38,.04)', border: '1px solid rgba(220,38,38,.12)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
           <div>
-            <h4 style={{ margin: '0 0 4px', fontSize: '.9rem' }}>Lixeira de rascunhos</h4>
+            <h4 style={{ margin: '0 0 4px', fontSize: '.9rem' }}>{t({ id: 'catalogacao.queue.trashTitle' })}</h4>
             <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)' }}>
-              Rascunhos descartados. Você pode restaurar ou apagar definitivamente.
+              {t({ id: 'catalogacao.queue.trashDescription' })}
             </div>
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
             <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadTrash} disabled={trashLoading}>
-              {trashLoading ? '…' : 'Atualizar'}
+              {trashLoading ? '…' : t({ id: 'catalogacao.queue.refreshShort' })}
             </button>
             <button type="button" className="ab-button ab-button--danger ab-button--sm"
               onClick={emptyTrash} disabled={!trash.length}>
-              Esvaziar lixeira
+              {t({ id: 'catalogacao.queue.emptyTrash' })}
             </button>
           </div>
         </div>
@@ -435,10 +435,10 @@ export default function QueuePanel({ batches, onEditItem }) {
           <>
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 8 }}>
               <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={selectAllTrash}>
-                {trashSelected.size === trash.length ? 'Desmarcar' : `Selecionar tudo (${trash.length})`}
+                {trashSelected.size === trash.length ? t({ id: 'catalogacao.queue.deselectAll' }) : t({ id: 'catalogacao.queue.selectAllCount' }, { count: trash.length })}
               </button>
               <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={restoreTrashSelected} disabled={!trashSelected.size}>
-                Restaurar selecionados ({trashSelected.size})
+                {t({ id: 'catalogacao.queue.restoreSelected' }, { count: trashSelected.size })}
               </button>
             </div>
             <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 200, overflowY: 'auto' }}>
@@ -452,10 +452,10 @@ export default function QueuePanel({ batches, onEditItem }) {
                   }}>
                     <input type="checkbox" checked={trashSelected.has(key)} onChange={() => toggleTrashSelect(key)} style={{ flexShrink: 0 }} />
                     <span className={`cat-pill ${it._type === 'book' ? 'info' : it._type === 'author' ? 'warn' : 'ok'}`}
-                      style={{ fontSize: '.6rem', flexShrink: 0 }}>{TYPE_LABELS[it._type]}</span>
+                      style={{ fontSize: '.6rem', flexShrink: 0 }}>{t({ id: TYPE_KEYS[it._type] })}</span>
                     <div style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{it._label}</div>
                     <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                      onClick={() => deleteTrashItem(it._type, it.id)}>Apagar</button>
+                      onClick={() => deleteTrashItem(it._type, it.id)}>{t({ id: 'catalogacao.queue.deletePermanent' })}</button>
                   </div>
                 );
               })}
@@ -463,10 +463,10 @@ export default function QueuePanel({ batches, onEditItem }) {
           </>
         )}
         {trash.length === 0 && (
-          <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', padding: 8 }}>Lixeira vazia.</div>
+          <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', padding: 8 }}>{t({ id: 'catalogacao.queue.trashEmpty' })}</div>
         )}
         <div style={{ fontSize: '.7rem', color: '#ffe0e0', marginTop: 8 }}>
-          Atenção: ao esvaziar a lixeira, os rascunhos descartados serão apagados de forma irreversível.
+          {t({ id: 'catalogacao.queue.trashWarning' })}
         </div>
       </div>
     </div>

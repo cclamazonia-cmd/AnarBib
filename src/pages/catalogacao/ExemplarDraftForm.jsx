@@ -14,7 +14,7 @@ function parseShelfLocation(raw) {
   clean.split(/\s+·\s+/).forEach(part => {
     const sep = part.indexOf(':');
     if (sep === -1) return;
-    const lbl = part.slice(0, sep).replace(/\s+/g, ' ').trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const lbl = part.slice(0, sep).replace(/\s+/g, ' ').trim().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
     const val = part.slice(sep + 1).trim();
     const entry = labels.find(([l]) => lbl === l);
     if (entry && val) { parsed[entry[1]] = val; matched++; }
@@ -28,7 +28,7 @@ function formatShelfLocation(parts) {
 }
 
 // ── Label helpers (trigramme from BookDraftForm) ──────────
-function stripDia(v) { return (v||'').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+function stripDia(v) { return (v||'').normalize('NFD').replace(/[̀-ͯ]/g, ''); }
 function extractSurname(name) {
   const c = (name||'').replace(/\s+/g,' ').trim(); if (!c) return '';
   if (c.includes(',')) return c.split(',')[0].trim();
@@ -106,7 +106,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         if (error) throw error;
         if (data) fillFromRecord(data);
       } catch (e) {
-        if (!cancelled) setMsg({ text: `Erro ao carregar rascunho: ${e.message}`, kind: 'error' });
+        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.exemplar.loadError' }, { message: e.message }), kind: 'error' });
       } finally {
         if (!cancelled) onConsumed?.();
       }
@@ -189,7 +189,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   // ── Save ────────────────────────────────────────────────
   async function handleSave(e) {
     e?.preventDefault();
-    if (!f('target_bib_ref').trim() && !f('tombo').trim()) { setMsg({ text: 'Informe ao menos a referência bibliográfica ou o tombo.', kind: 'error' }); return; }
+    if (!f('target_bib_ref').trim() && !f('tombo').trim()) { setMsg({ text: t({ id: 'catalogacao.exemplar.refOrTomboRequired' }), kind: 'error' }); return; }
 
     setSaving(true); setMsg({ text: '', kind: '' });
     try {
@@ -232,31 +232,31 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       fillFromRecord(result);
       setDraftState('saved');
       await loadDrafts();
-      setMsg({ text: isUpdate ? 'Rascunho de exemplar atualizado.' : 'Rascunho de exemplar criado.', kind: 'ok' });
+      setMsg({ text: isUpdate ? t({ id: 'catalogacao.exemplar.draftUpdated' }) : t({ id: 'catalogacao.exemplar.draftCreated' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: `Erro: ${err.message}`, kind: 'error' });
+      setMsg({ text: err.message, kind: 'error' });
     } finally { setSaving(false); }
   }
 
   // ── Mark label as ready ─────────────────────────────────
   function markLabelReady() {
-    if (!label.title && !label.author && !label.cdd) { setMsg({ text: 'Preencha ao menos autor, título ou CDD no rótulo antes de marcar como pronto.', kind: 'error' }); return; }
+    if (!label.title && !label.author && !label.cdd) { setMsg({ text: t({ id: 'catalogacao.exemplar.labelNeedFields' }), kind: 'error' }); return; }
     set('label_status', 'ready');
-    setMsg({ text: 'Rótulo marcado como pronto. Salve o rascunho para confirmar.', kind: 'ok' });
+    setMsg({ text: t({ id: 'catalogacao.exemplar.labelMarked' }), kind: 'ok' });
   }
 
   // ── Publish ─────────────────────────────────────────────
   async function handlePublish() {
-    if (!f('id')) { setMsg({ text: 'Salve o rascunho antes de publicar.', kind: 'error' }); return; }
-    if (!confirm('Publicar este exemplar no catálogo?')) return;
+    if (!f('id')) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforePublish' }), kind: 'error' }); return; }
+    if (!confirm(t({ id: 'catalogacao.exemplar.publishConfirm' }))) return;
     setPublishing(true); setMsg({ text: '', kind: '' });
     try {
       const { error } = await supabase.rpc('publish_exemplar_draft', { p_draft_id: Number(f('id')) });
       if (error) throw error;
       setDraftState('published');
       await loadDrafts();
-      setMsg({ text: 'Exemplar publicado com sucesso.', kind: 'ok' });
-    } catch (err) { setMsg({ text: `Erro: ${err.message}`, kind: 'error' }); }
+      setMsg({ text: t({ id: 'catalogacao.exemplar.publishSuccess' }), kind: 'ok' });
+    } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
     finally { setPublishing(false); }
   }
 
@@ -265,9 +265,19 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   const ls = { display: 'block', fontSize: '.78rem', fontWeight: 600, marginBottom: 2, color: 'var(--brand-muted, #bbb)' };
   const segBtn = { padding: '6px 11px', borderRadius: 6, border: '1px solid rgba(255,255,255,.14)', background: 'rgba(0,0,0,.25)', color: 'var(--brand-muted, #bbb)', fontSize: '.8rem', cursor: 'pointer' };
   const segBtnOn = { background: 'var(--brand-color-primary, #7a0b14)', color: '#fff', borderColor: 'var(--brand-color-primary, #7a0b14)', fontWeight: 700 };
-  const pills = { new: { l: 'Novo', c: 'info' }, saved: { l: 'Salvo', c: 'ok' }, dirty: { l: 'Modificado', c: 'warn' }, ready: { l: 'Pronto', c: 'ok' }, published: { l: 'Publicado', c: 'ok' } };
+  const pills = {
+    new: { l: t({ id: 'catalogacao.exemplar.pillNew' }), c: 'info' },
+    saved: { l: t({ id: 'catalogacao.exemplar.pillSaved' }), c: 'ok' },
+    dirty: { l: t({ id: 'catalogacao.exemplar.pillDirty' }), c: 'warn' },
+    ready: { l: t({ id: 'catalogacao.exemplar.pillReady' }), c: 'ok' },
+    published: { l: t({ id: 'catalogacao.exemplar.pillPublished' }), c: 'ok' },
+  };
   const pill = pills[draftState] || pills.new;
-  const labelPills = { pending: { l: 'Rótulo pendente', c: 'warn' }, ready: { l: 'Rótulo pronto', c: 'ok' }, published: { l: 'Rótulo publicado', c: 'ok' } };
+  const labelPills = {
+    pending: { l: t({ id: 'catalogacao.exemplar.labelPending' }), c: 'warn' },
+    ready: { l: t({ id: 'catalogacao.exemplar.labelReady' }), c: 'ok' },
+    published: { l: t({ id: 'catalogacao.exemplar.labelPublished' }), c: 'ok' },
+  };
   const lPill = labelPills[f('label_status')] || labelPills.pending;
 
   return (
@@ -275,16 +285,16 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       {/* ── Header ───────────────────────────────────── */}
       <div className="cat-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <h3 style={{ margin: 0 }}>Indexação</h3>
+          <h3 style={{ margin: 0 }}>{t({ id: 'catalogacao.exemplar.heading' })}</h3>
           <span className={`cat-pill ${pill.c}`} style={{ fontSize: '.68rem' }}>{pill.l}</span>
           <span className={`cat-pill ${lPill.c}`} style={{ fontSize: '.68rem' }}>{lPill.l}</span>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
           <button type="button" className="ab-button ab-button--sm" onClick={resetForm}>
-            Nova indexação
+            {t({ id: 'catalogacao.exemplar.newCopy' })}
           </button>
           <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadDrafts} disabled={draftsLoading}>
-            {draftsLoading ? 'Atualizando…' : 'Atualizar'}
+            {draftsLoading ? t({ id: 'catalogacao.ui.refreshing' }) : t({ id: 'catalogacao.queue.refreshShort' })}
           </button>
         </div>
       </div>
@@ -307,15 +317,15 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: '.82rem', fontWeight: 600 }}>
-                  {d.tombo || d.target_bib_ref || '(sem tombo)'}
+                  {d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' })}
                 </div>
                 <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
-                  ref: {d.target_bib_ref || '—'} · {d.status === 'draft' ? 'rascunho' : d.status === 'ready' ? 'pronto' : d.status === 'published' ? 'publicado' : d.status}
-                  {d.label_status !== 'pending' && ` · rótulo: ${d.label_status === 'ready' ? 'pronto' : d.label_status === 'published' ? 'publicado' : d.label_status}`}
+                  ref: {d.target_bib_ref || '—'} · {d.status === 'draft' ? t({ id: 'catalogacao.status.draft' }) : d.status === 'ready' ? t({ id: 'catalogacao.status.ready' }) : d.status === 'published' ? t({ id: 'catalogacao.status.published' }) : d.status}
+                  {d.label_status !== 'pending' && ` · ${d.label_status === 'ready' ? t({ id: 'catalogacao.exemplar.labelReady' }) : d.label_status === 'published' ? t({ id: 'catalogacao.exemplar.labelPublished' }) : d.label_status}`}
                 </div>
               </div>
               <span className={`cat-pill ${d.status === 'draft' ? 'info' : 'ok'}`} style={{ fontSize: '.62rem', flexShrink: 0 }}>
-                {d.status === 'draft' ? 'Rascunho' : d.status === 'ready' ? 'Pronto' : d.status === 'published' ? 'Publicado' : d.status}
+                {d.status === 'draft' ? t({ id: 'catalogacao.status.draft' }) : d.status === 'ready' ? t({ id: 'catalogacao.status.ready' }) : d.status === 'published' ? t({ id: 'catalogacao.status.published' }) : d.status}
               </span>
             </div>
           ))}
@@ -327,23 +337,23 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       {/* ═══════════════════════════════════════════════ */}
       <form onSubmit={handleSave}>
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.15)', marginBottom: 14 }}>
-          <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 6 }}>① Documento de origem</div>
+          <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 6 }}>{t({ id: 'catalogacao.exemplar.originStep' })}</div>
           <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 8 }}>
-            Localize a ficha comum publicada à qual este exemplar pertence.
+            {t({ id: 'catalogacao.exemplar.originStepDesc' })}
           </div>
           <div className="cat-book-grid">
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-              <label style={ls}>Referência bibliográfica (bib_ref do documento publicado)</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.bibRefLabel' })}</label>
               <input type="text" value={f('target_bib_ref')} onChange={e => set('target_bib_ref', e.target.value)}
                 onBlur={handleBibRefBlur} placeholder="0000123" style={fs} />
               <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>
-                Informe e saia do campo para buscar automaticamente. Use o mesmo código presente na ficha publicada.
+                {t({ id: 'catalogacao.exemplar.bibRefHint' })}
               </div>
             </div>
             <div className="cat-field">
-              <label style={ls}>Lote</label>
+              <label style={ls}>{t({ id: 'catalogacao.author.batchLabel' })}</label>
               <select value={f('batch_id')} onChange={e => set('batch_id', e.target.value)} style={fs}>
-                <option value="">Sem lote</option>
+                <option value="">{t({ id: 'catalogacao.author.noBatch' })}</option>
                 {batches.filter(b => b.status === 'open').map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
               </select>
             </div>
@@ -362,7 +372,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
           )}
           {f('target_bib_ref') && !parentBook && (
             <div style={{ marginTop: 8, fontSize: '.78rem', color: '#fbbf24' }}>
-              Nenhum documento encontrado com esta referência. Verifique o código.
+              {t({ id: 'catalogacao.exemplar.noBookFound' })}
             </div>
           )}
         </div>
@@ -371,43 +381,43 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         {/* STEP 2: Physical copy — tombo + location        */}
         {/* ═══════════════════════════════════════════════ */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 14 }}>
-          <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 6 }}>② Exemplar material</div>
+          <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 6 }}>{t({ id: 'catalogacao.exemplar.materialStep' })}</div>
           <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 8 }}>
-            Identifique o objeto físico: tombo, biblioteca e localização nas estantes.
+            {t({ id: 'catalogacao.exemplar.materialStepDesc' })}
           </div>
           <div className="cat-book-grid">
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-              <label style={ls}>Tombo</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.tombo' })}</label>
               <input type="text" value={f('tombo')} onChange={e => set('tombo', e.target.value)}
                 placeholder="123-CCLA-2026 ou 123-CCLA-2026-02" style={fs} />
             </div>
             <div className="cat-field">
-              <label style={ls}>Biblioteca</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.library' })}</label>
               <input type="text" value={loc.library} onChange={e => setL('library', e.target.value)}
                 placeholder="BLMF - Belém do Pará" style={fs} />
             </div>
             <div className="cat-field">
-              <label style={ls}>Setor / sala</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.sectorRoom' })}</label>
               <input type="text" value={loc.sector} onChange={e => setL('sector', e.target.value)}
                 placeholder="Sala 1 / Acervo geral" style={fs} />
             </div>
             <div className="cat-field">
-              <label style={ls}>Estante</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.shelfUnit' })}</label>
               <input type="text" value={loc.shelfUnit} onChange={e => setL('shelfUnit', e.target.value)}
                 placeholder="Estante A" style={fs} />
             </div>
             <div className="cat-field">
-              <label style={ls}>Prateleira</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.shelfLevel' })}</label>
               <input type="text" value={loc.shelfLevel} onChange={e => setL('shelfLevel', e.target.value)}
                 placeholder="Prateleira 3" style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-              <label style={ls}>Observação curta de localização</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.locNote' })}</label>
               <input type="text" value={loc.note} onChange={e => setL('note', e.target.value)}
                 placeholder="Caixa azul / topo / consulta interna" style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
-              <label style={ls}>Observações do exemplar</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.notes' })}</label>
               <textarea value={f('notes')} onChange={e => set('notes', e.target.value)}
                 placeholder="Ex.: lombada danificada; dedicatória manuscrita; carimbo antigo; falta encarte."
                 style={{ ...fs, resize: 'vertical', minHeight: 50 }} />
@@ -456,29 +466,29 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         {/* STEP 5: Aquisicao / Proveniencia (repliable)    */}
         {/* ═══════════════════════════════════════════════ */}
         <details style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 14 }}>
-          <summary style={{ fontSize: '.82rem', fontWeight: 700, cursor: 'pointer' }}>⑤ Aquisição / Proveniência</summary>
+          <summary style={{ fontSize: '.82rem', fontWeight: 700, cursor: 'pointer' }}>{t({ id: 'catalogacao.exemplar.acquisitionStep' })}</summary>
           <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', margin: '6px 0 10px' }}>
-            Opcional. Origem física do exemplar (compra, doação, permuta…).
+            {t({ id: 'catalogacao.exemplar.acquisitionStepDesc' })}
           </div>
           <div className="cat-book-grid">
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-              <label style={ls}>Modo de aquisição</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.acquisitionMode' })}</label>
               <select value={f('acquisition_mode')} onChange={e => set('acquisition_mode', e.target.value)} style={fs}>
-                <option value="">— não informado —</option>
+                <option value="">{t({ id: 'catalogacao.exemplar.acquisitionModeDefault' })}</option>
                 {acqModes.map(m => <option key={m.code} value={m.code}>{m.label || m.code}</option>)}
               </select>
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-              <label style={ls}>Data de aquisição</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.acquisitionDate' })}</label>
               <input type="date" value={f('acquisition_date')} onChange={e => set('acquisition_date', e.target.value)} style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-              <label style={ls}>Biblioteca de origem</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.sourceLibrary' })}</label>
               <input type="text" value={f('source_library')} onChange={e => set('source_library', e.target.value)}
                 placeholder="Doadora, permuta, importação…" style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 6' }}>
-              <label style={ls}>Proveniência / nota</label>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.provenanceNote' })}</label>
               <input type="text" value={f('provenance_note')} onChange={e => set('provenance_note', e.target.value)}
                 placeholder="Ex.: doação do coletivo X; ex-libris; carimbo de origem." style={fs} />
             </div>
@@ -490,11 +500,11 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         {/* ═══════════════════════════════════════════════ */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(21,128,61,.04)', border: '1px solid rgba(21,128,61,.15)', marginBottom: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <div style={{ fontSize: '.82rem', fontWeight: 700 }}>④ Rótulo (etiqueta)</div>
+            <div style={{ fontSize: '.82rem', fontWeight: 700 }}>{t({ id: 'catalogacao.exemplar.labelStep' })}</div>
             <span className={`cat-pill ${lPill.c}`} style={{ fontSize: '.65rem' }}>{lPill.l}</span>
           </div>
           <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 10 }}>
-            O rótulo é calculado a partir do documento de origem. Sobrescreva os campos somente se necessário.
+            {t({ id: 'catalogacao.exemplar.labelStepDesc' })}
           </div>
 
           <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', flexWrap: 'wrap' }}>
@@ -511,7 +521,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
                 fontWeight: 900, fontSize: '1rem', color: '#fff', letterSpacing: '.04em',
               }}>{trigram}</div>
               <div style={{ fontSize: '.7rem', fontWeight: 700, lineHeight: 1.2, marginBottom: 2 }}>
-                {labelTitle || 'Título'}
+                {labelTitle || t({ id: 'catalogacao.ui.titleFallback' })}
               </div>
               <div style={{ fontSize: '.62rem', color: 'var(--brand-muted, #aaa)' }}>
                 {labelCdd || '—'}
@@ -525,22 +535,22 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             <div style={{ flex: 1, minWidth: 280 }}>
               <div className="cat-book-grid">
                 <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                  <label style={ls}>Autor (rótulo)</label>
+                  <label style={ls}>{t({ id: 'catalogacao.exemplar.labelAuthor' })}</label>
                   <input type="text" value={label.author} onChange={e => setLb('author', e.target.value)}
                     placeholder={parentBook?.autor || 'Autor do documento de origem'} style={fs} />
                 </div>
                 <div className="cat-field">
-                  <label style={ls}>CDD (rótulo)</label>
+                  <label style={ls}>{t({ id: 'catalogacao.exemplar.labelCdd' })}</label>
                   <input type="text" value={label.cdd} onChange={e => setLb('cdd', e.target.value)}
                     placeholder={parentBook?.cdd || 'CDD'} style={fs} />
                 </div>
                 <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-                  <label style={ls}>Título (rótulo)</label>
+                  <label style={ls}>{t({ id: 'catalogacao.exemplar.labelTitle' })}</label>
                   <input type="text" value={label.title} onChange={e => setLb('title', e.target.value)}
                     placeholder={parentBook?.titulo || 'Título do documento de origem'} style={fs} />
                 </div>
                 <div className="cat-field">
-                  <label style={ls}>Nota curta (rótulo)</label>
+                  <label style={ls}>{t({ id: 'catalogacao.exemplar.labelNote' })}</label>
                   <input type="text" value={label.note} onChange={e => setLb('note', e.target.value)}
                     placeholder="Vol. 2 / T. 1 / 2ª ed." style={fs} />
                 </div>
@@ -548,7 +558,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
               <div style={{ marginTop: 8 }}>
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={markLabelReady} disabled={f('label_status') === 'ready'}>
-                  Marcar rótulo como pronto
+                  {t({ id: 'catalogacao.exemplar.markLabelReady' })}
                 </button>
               </div>
             </div>
@@ -558,21 +568,21 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         {/* ── Architecture documentale (mode complet) ── */}
         {isComplete && (
           <div style={{ padding: 12, borderRadius: 8, background: 'rgba(0,0,0,.1)', border: '1px dashed rgba(255,255,255,.08)', marginBottom: 14 }}>
-            <h4 style={{ margin: '0 0 6px', fontSize: '.82rem' }}>Arquitetura documental do exemplar</h4>
+            <h4 style={{ margin: '0 0 6px', fontSize: '.82rem' }}>{t({ id: 'catalogacao.exemplar.archTitle' })}</h4>
             <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #888)', lineHeight: 1.6 }}>
               <div style={{ marginBottom: 3 }}>
-                <strong>Ficha comum:</strong> {parentBook ? `${parentBook.titulo} (ref. ${parentBook.bib_ref})` : f('target_bib_ref') || '—'}
+                <strong>{t({ id: 'catalogacao.exemplar.archCommon' })}</strong> {parentBook ? `${parentBook.titulo} (ref. ${parentBook.bib_ref})` : f('target_bib_ref') || '—'}
               </div>
               <div style={{ marginBottom: 3 }}>
-                <strong>Exemplar:</strong> Tombo {f('tombo') || '—'} · {formatShelfLocation(loc) || 'Localização não definida'}
+                <strong>{t({ id: 'catalogacao.exemplar.archExemplar' })}</strong> Tombo {f('tombo') || '—'} · {formatShelfLocation(loc) || t({ id: 'catalogacao.exemplar.noLocation' })}
               </div>
               <div style={{ marginBottom: 3 }}>
-                <strong>Rótulo:</strong> {trigram} / {labelCdd || '—'} · {labelTitle || '—'} · {labelAuthor || '—'}
+                <strong>{t({ id: 'catalogacao.exemplar.archLabel' })}</strong> {trigram} / {labelCdd || '—'} · {labelTitle || '—'} · {labelAuthor || '—'}
                 {label.note && ` · ${label.note}`}
               </div>
               <div>
-                <strong>Estado:</strong> Exemplar {draftState} · Rótulo {f('label_status')}
-                {f('batch_id') && ` · Lote ${f('batch_id')}`}
+                <strong>{t({ id: 'catalogacao.exemplar.archState' })}</strong> {pill.l} · {lPill.l}
+                {f('batch_id') && ` · ${t({ id: 'catalogacao.exemplar.archBatch' }, { id: f('batch_id') })}`}
               </div>
             </div>
           </div>
@@ -581,13 +591,13 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         {/* ── Actions ─────────────────────────────────── */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button type="submit" className="ab-button" disabled={saving}>
-            {saving ? 'Salvando…' : 'Salvar exemplar'}
+            {saving ? t({ id: 'catalogacao.saving' }) : t({ id: 'catalogacao.exemplar.saveExemplar' })}
           </button>
           <button type="button" className="ab-button" style={{ background: 'rgba(21,128,61,.7)' }}
             disabled={publishing || !f('id')} onClick={handlePublish}>
-            {publishing ? 'Publicando…' : 'Publicar exemplar'}
+            {publishing ? t({ id: 'catalogacao.author.publishing' }) : t({ id: 'catalogacao.exemplar.publishExemplar' })}
           </button>
-          <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>Limpar</button>
+          <button type="button" className="ab-button ab-button--ghost" onClick={resetForm}>{t({ id: 'catalogacao.ui.clear' })}</button>
         </div>
       </form>
     </div>

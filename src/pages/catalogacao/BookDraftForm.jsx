@@ -544,7 +544,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       if (catalogSettled.status === 'fulfilled') {
         const { data: d, error: e } = catalogSettled.value;
         if (e && !d) throw e;
-        if (!d?.ok) throw new Error(d?.error || 'A busca assistida falhou.');
+        if (!d?.ok) throw new Error(d?.error || t({id:'catalogacao.msg.lookupFailed'}));
         data = d;
       } else {
         throw catalogSettled.reason;
@@ -636,14 +636,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       });
 
       if (error && !data) throw error;
-      if (!data?.ok) throw new Error(data?.error || 'Busca na BN falhou.');
+      if (!data?.ok) throw new Error(data?.error || t({ id: 'catalogacao.bn.searchFailed' }));
 
       setBnResult(data);
       const total = data.total || 0;
       setMsg({
         text: total > 0
-          ? `${total} resultado(s) encontrado(s) na Biblioteca Nacional do Brasil.`
-          : 'Nenhum resultado na Biblioteca Nacional para este ISBN.',
+          ? t({ id: 'catalogacao.bn.resultsFound' }, { total })
+          : t({ id: 'catalogacao.bn.noResults' }),
         kind: total > 0 ? 'ok' : 'info',
       });
     } catch (err) {
@@ -1129,18 +1129,18 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   function buildIsbdZone0() {
     const mt = f('tipo_material');
-    if (mt === 'cartaz') return 'Imagem (fixa ; bidimensional ; visual) : imediato';
+    if (mt === 'cartaz') return t({id:'catalogacao.isbd.zone0.poster'});
     if (mt === 'audio') return t({id:'catalogacao.isbd.audio'});
     if (mt === 'audiovisual') return t({id:'catalogacao.isbd.video'});
     if (mt === 'recurso_digital') {
       const usage = (f('digital_native_usage') || '').toLowerCase();
-      if (/program|software/.test(usage)) return 'Programa : eletrônico';
-      if (/dados|dataset/.test(usage)) return 'Dados : eletrônico';
-      if (/video|vídeo/.test(usage)) return 'Imagem (animada ; bidimensional ; visual) : eletrônico';
-      if (/audio|podcast/.test(usage)) return 'Palavra falada : eletrônico';
-      return 'Texto (visual) : eletrônico';
+      if (/program|software/.test(usage)) return t({id:'catalogacao.isbd.zone0.program'});
+      if (/dados|dataset/.test(usage)) return t({id:'catalogacao.isbd.zone0.data'});
+      if (/video|vídeo/.test(usage)) return t({id:'catalogacao.isbd.zone0.videoDigital'});
+      if (/audio|podcast/.test(usage)) return t({id:'catalogacao.isbd.zone0.spokenWord'});
+      return t({id:'catalogacao.isbd.zone0.textDigital'});
     }
-    return 'Texto (visual) : imediato';
+    return t({id:'catalogacao.isbd.zone0.textImmediate'});
   }
 
   function buildIsbdZone1() {
@@ -1182,11 +1182,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   function buildIsbdZone5() {
     const mt = f('tipo_material');
-    if (mt === 'audio') return ['1 recurso sonoro', f('audio_duration') ? `(${f('audio_duration')})` : '', f('audio_support') ? `: ${f('audio_support')}` : ''].filter(Boolean).join(' ');
-    if (mt === 'audiovisual') return ['1 recurso audiovisual', f('audiovisual_duration') ? `(${f('audiovisual_duration')})` : '', f('audiovisual_support') ? `: ${f('audiovisual_support')}` : ''].filter(Boolean).join(' ');
-    if (mt === 'recurso_digital') return '1 recurso eletrônico online';
+    if (mt === 'audio') return [t({id:'catalogacao.isbd.zone5.audioResource'}), f('audio_duration') ? `(${f('audio_duration')})` : '', f('audio_support') ? `: ${f('audio_support')}` : ''].filter(Boolean).join(' ');
+    if (mt === 'audiovisual') return [t({id:'catalogacao.isbd.zone5.avResource'}), f('audiovisual_duration') ? `(${f('audiovisual_duration')})` : '', f('audiovisual_support') ? `: ${f('audiovisual_support')}` : ''].filter(Boolean).join(' ');
+    if (mt === 'recurso_digital') return t({id:'catalogacao.isbd.zone5.digitalOnline'});
     if (mt === 'dossie') return f('paginas') ? `1 dossiê (${f('paginas')} p.)` : t({id:'catalogacao.isbd.dossier'});
-    if (mt === 'tract' || mt === 'cartaz') return f('physical_format') ? `1 item ; ${f('physical_format')}` : '1 item';
+    if (mt === 'tract' || mt === 'cartaz') return f('physical_format') ? `${t({id:'catalogacao.isbd.zone5.singleItem'})} ; ${f('physical_format')}` : t({id:'catalogacao.isbd.zone5.singleItem'});
     return f('paginas') ? `${f('paginas')} p.` : '';
   }
 
@@ -1195,8 +1195,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   function buildIsbdZone7() {
     const notes = [];
     if (f('notas')) notes.push(f('notas'));
-    if (f('provenance_note')) notes.push(`Proveniência: ${f('provenance_note')}`);
-    if (f('digital_native_access')) notes.push(`Acesso: ${f('digital_native_access')}`);
+    if (f('provenance_note')) notes.push(`${t({id:'catalogacao.isbd.provenance'})} ${f('provenance_note')}`);
+    if (f('digital_native_access')) notes.push(`${t({id:'catalogacao.isbd.accessNote'})} ${f('digital_native_access')}`);
     return notes.join(' . - ');
   }
 
@@ -1204,8 +1204,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     const parts = [];
     if (f('isbn')) parts.push(`ISBN ${f('isbn')}`);
     if (f('issn')) parts.push(`ISSN ${f('issn')}`);
-    if (f('acquisition_mode')) parts.push(`modalidade de aquisição: ${f('acquisition_mode')}`);
-    if (f('source_label')) parts.push(`origem imediata: ${f('source_label')}`);
+    if (f('acquisition_mode')) parts.push(`${t({id:'catalogacao.isbd.acquisitionMode'})} ${f('acquisition_mode')}`);
+    if (f('source_label')) parts.push(`${t({id:'catalogacao.isbd.immediateOrigin'})} ${f('source_label')}`);
     return parts.join(' ; ');
   }
 
@@ -1436,7 +1436,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   async function deleteDigitalResource(resourceId) {
-    if (!confirm('Apagar este recurso digital?')) return;
+    if (!confirm(t({id:'catalogacao.digital.confirmDelete'}))) return;
     try {
       const { error } = await supabase.from('book_draft_digital_resources')
         .delete().eq('id', Number(resourceId));
@@ -1451,7 +1451,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ── Draft state pill ───────────────────────────────────
   const statePills = {
     new: { label: t({id:'catalogacao.ui.newDraft'}), cls: 'info' },
-    saved: { label: 'Rascunho salvo', cls: 'ok' },
+    saved: { label: t({id:'catalogacao.state.saved'}), cls: 'ok' },
     dirty: { label: t({id:'catalogacao.msg.unsavedChanges'}), cls: 'warn' },
     ready: { label: t({id:'catalogacao.msg.readyToPublish'}), cls: 'ok' },
     published: { label: t({id:'catalogacao.msg.alreadyPublished'}), cls: 'ok' },
@@ -1602,14 +1602,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         syncAutorFromContributors();
         await saveContributors(result.id);
       } catch (contribErr) {
-        warnings.push(`Autores múltiplos: ${contribErr.message}`);
+        warnings.push(t({id:'catalogacao.msg.contribWarning'}, {message: contribErr.message}));
       }
 
       setDraftState('saved');
       setMsg({
         text: warnings.length
-          ? `Rascunho salvo, mas ${warnings.join(' ; ')}.`
-          : 'Rascunho de livro salvo com sucesso.',
+          ? t({id:'catalogacao.msg.draftSavedWithWarnings'}, {warnings: warnings.join(' ; ')})
+          : t({id:'catalogacao.msg.draftSaved'}),
         kind: warnings.length ? 'warn' : 'ok',
       });
       onSaved?.();
@@ -1834,7 +1834,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <span className={`cat-pill ${pill.cls}`}>{pill.label}</span>
-          {f('id') && <span style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>Rascunho #{f('id')}</span>}
+          {f('id') && <span style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.ui.draftId'}, {id: f('id')})}</span>}
         </div>
         <button className="ab-button ab-button--ghost ab-button--sm" onClick={resetForm} type="button">{t({id:'catalogacao.ui.clearForm'})}</button>
       </div>
@@ -1976,7 +1976,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 onClick={openWorldCat}>{t({id:'catalogacao.ui.worldcat'})}</button>
               {f('issn') && (
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-                  onClick={openIssnPortal}>Portal ISSN</button>
+                  onClick={openIssnPortal}>{t({id:'catalogacao.ui.issnPortal'})}</button>
               )}
               {lookupResult && (
                 <button type="button" className="ab-button ab-button--ghost ab-button--sm"
@@ -1989,7 +1989,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
                 {lookupResult.sources.map((s, i) => (
                   <span key={i} className={`cat-pill ${s.status === 'ok' ? 'ok' : s.status === 'empty' ? 'warn' : 'danger'}`}>
-                    {s.label}: {s.status === 'ok' ? `${s.count} resultado(s)` : s.status === 'empty' ? 'vazio' : 'erro'} ({s.durationMs}ms)
+                    {s.label}: {s.status === 'ok' ? t({id:'catalogacao.lookup.results'}, {count: s.count}) : s.status === 'empty' ? t({id:'catalogacao.lookup.empty'}) : t({id:'catalogacao.lookup.error'})} ({s.durationMs}ms)
                   </span>
                 ))}
               </div>
@@ -2342,13 +2342,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         {f('titulo') || t({ id: 'catalogacao.ui.titleFallback' })}
                       </div>
                       <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>
-                        Autor: {f('autor') || '—'}
+                        {t({id:'catalogacao.shelf.authorPrefix'})} {f('autor') || '—'}
                       </div>
                       <div style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>
-                        CDD: {f('cdd') || '—'}
+                        {t({id:'catalogacao.shelf.cddPrefix'})} {f('cdd') || '—'}
                       </div>
                       <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #666)', marginTop: 3 }}>
-                        {label ? `Cote: ${label.shelfLine} (${label.reasonCodes.map(c => t({ id: 'catalogacao.shelf.' + c })).join(' + ')})` : t({id:'catalogacao.ui.labelFillHint'})}
+                        {label ? `${t({id:'catalogacao.shelf.cotePrefix'})} ${label.shelfLine} (${label.reasonCodes.map(c => t({ id: 'catalogacao.shelf.' + c })).join(' + ')})` : t({id:'catalogacao.ui.labelFillHint'})}
                       </div>
                     </div>
                   </div>
@@ -2532,7 +2532,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               </button>
               {isbdEnabled && (
                 <button type="button" className="ab-button ab-button--ghost ab-button--sm"
-                  onClick={clearIsbd}>Limpar ISBD</button>
+                  onClick={clearIsbd}>{t({id:'catalogacao.ui.clearIsbd'})}</button>
               )}
             </div>
           </div>
@@ -2639,12 +2639,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {reviewTab === 'isbd' && (
             <div>
               <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', marginBottom: 10 }}>
-                O botão "Preparar ISBD" relê a ficha na ordem das zonas ISBD e grava no <code>marc_json</code> um pacote técnico para uso futuro na página de índice.
+                {t({id:'catalogacao.isbd.hint'})}
               </div>
               {isbdData ? (
                 <>
                   <div style={{ fontSize: '.78rem', marginBottom: 10 }}>
-                    <strong>ISBD:</strong> {isbdData.nonEmptyCount} zona(s) preenchida(s).
+                    <strong>ISBD:</strong> {t({id:'catalogacao.isbd.zonesFilled'}, {count: isbdData.nonEmptyCount})}
                   </div>
                   {/* Statement */}
                   <div className="cat-field" style={{ marginBottom: 12 }}>
@@ -2657,7 +2657,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
                     {['0','1','2','3','4','5','6','7','8'].map(z => (
                       <div key={z} className="cat-field">
-                        <label>Zona {z} — {ZONE_LABELS[z]}</label>
+                        <label>{t({id:'catalogacao.isbd.zonePrefix'}, {zone: z})} — {ZONE_LABELS[z]}</label>
                         <textarea value={isbdData.zones[z]?.value || ''} readOnly rows={2}
                           style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.08)', background: isbdData.zones[z]?.value ? 'rgba(0,0,0,.2)' : 'rgba(0,0,0,.08)', color: isbdData.zones[z]?.value ? '#f4f4f4' : 'var(--brand-muted, #666)', fontSize: '.78rem', resize: 'vertical', fontFamily: 'inherit' }}
                           placeholder={t({ id: 'catalogacao.ph.notPrepared' })}
@@ -2668,7 +2668,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 </>
               ) : (
                 <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', padding: '16px 0', textAlign: 'center' }}>
-                  <strong>ISBD:</strong> ainda não gerado neste rascunho. Clique em "Preparar ISBD" acima.
+                  {t({id:'catalogacao.isbd.notGenerated'})}
                 </div>
               )}
             </div>
