@@ -44,7 +44,7 @@ function getTrigram(name) {
   return clean ? clean.slice(0,3).padEnd(3,'X') : '---';
 }
 
-export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed }) {
+export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed, onChanged }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const isComplete = mode === 'complete';
@@ -232,6 +232,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       fillFromRecord(result);
       setDraftState('saved');
       await loadDrafts();
+      onChanged?.();
       setMsg({ text: isUpdate ? t({ id: 'catalogacao.exemplar.draftUpdated' }) : t({ id: 'catalogacao.exemplar.draftCreated' }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: err.message, kind: 'error' });
@@ -255,6 +256,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       if (error) throw error;
       setDraftState('published');
       await loadDrafts();
+      onChanged?.();
       setMsg({ text: t({ id: 'catalogacao.exemplar.publishSuccess' }), kind: 'ok' });
     } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
     finally { setPublishing(false); }

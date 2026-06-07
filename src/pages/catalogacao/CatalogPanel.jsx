@@ -12,7 +12,7 @@ const MATERIAL_KEYS = {
   relatorio: 'catalogacao.material.relatorio', zine: 'catalogacao.material.zine',
 };
 
-export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
+export default function CatalogPanel({ onEdit, requestedView, requestNonce, onChanged }) {
   const { formatMessage: t } = useIntl();
   const [view, setView] = useState('book'); // book | author | exemplar
 
@@ -109,6 +109,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
         : { p_exemplar_id: id };
       const { data, error } = await supabase.rpc(rpc, param);
       if (error) throw error;
+      onChanged?.();
       if (onEdit) {
         onEdit(type, data);
         setMsg({ text: t({ id: 'catalogacao.catalog.retakeCreated' }, { id: data }), kind: 'ok' });
@@ -133,6 +134,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce }) {
       if (error) throw error;
       setMsg({ text: t({ id: 'catalogacao.catalog.discardDone' }, { label }), kind: 'ok' });
       loadItems();
+      onChanged?.();
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.catalog.discardError' }, { message: err.message }), kind: 'error' });
     }

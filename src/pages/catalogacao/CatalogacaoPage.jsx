@@ -321,22 +321,22 @@ export default function CatalogacaoPage() {
 
           {/* 2. Autoria */}
           <div className={`cat-panel${activeTab === 'authorsPanel' ? ' active' : ''}`}>
-            <AuthorDraftForm mode={mode} batches={batches} editingId={editTarget?.kind === 'author' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
+            <AuthorDraftForm mode={mode} batches={batches} editingId={editTarget?.kind === 'author' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} />
           </div>
 
           {/* 3. Indexação (exemplar + rótulo) */}
           <div className={`cat-panel${activeTab === 'indexPanel' ? ' active' : ''}`}>
-            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
+            <ExemplarDraftForm mode={mode} batches={batches} prefillBibRef={attachTarget} editingId={editTarget?.kind === 'exemplar' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} />
           </div>
 
           {/* 3b. Etiquetas (impressão das etiquetas de cote) */}
           <div className={`cat-panel${activeTab === 'labelsPanel' ? ' active' : ''}`}>
-            <LabelSheetPrinter />
+            <LabelSheetPrinter onChanged={refreshAll} />
           </div>
 
           {/* 4. Fila editorial */}
           <div className={`cat-panel${activeTab === 'queuePanel' ? ' active' : ''}`}>
-            <QueuePanel batches={batches} onEditItem={openForEdit} />
+            <QueuePanel batches={batches} onEditItem={openForEdit} onChanged={refreshAll} />
           </div>
 
           {/* 6. Lotes */}
@@ -349,7 +349,7 @@ export default function CatalogacaoPage() {
 
           {/* 6. Catálogo(s) já publicado(s) */}
           <div className={`cat-panel${activeTab === 'catalogPanel' ? ' active' : ''}`}>
-            <CatalogPanel onEdit={openForEdit} requestedView={catalogReq.view} requestNonce={catalogReq.nonce} />
+            <CatalogPanel onEdit={openForEdit} requestedView={catalogReq.view} requestNonce={catalogReq.nonce} onChanged={refreshAll} />
           </div>
       </div>
       <Footer />

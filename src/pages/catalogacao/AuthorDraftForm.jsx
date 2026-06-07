@@ -64,7 +64,7 @@ function buildSortName(preferredName, authorityType) {
 // authors.structured_meta / author_drafts.structured_meta (jsonb).
 // The pack/extract helpers are removed; we read/write the column directly.
 
-export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed }) {
+export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed, onChanged }) {
   const { formatMessage: t, locale } = useIntl();
   const { user } = useAuth();
   const [drafts, setDrafts] = useState([]);
@@ -342,6 +342,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       fillFromRecord(result);
       setDraftState('saved');
       await loadDrafts();
+      onChanged?.();
       setMsg({ text: isUpdate ? t({ id: 'catalogacao.author.draftUpdated' }) : t({ id: 'catalogacao.author.draftCreated' }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: err.message, kind: 'error' });
@@ -369,6 +370,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       }
       setDraftState('published');
       await loadDrafts();
+      onChanged?.();
       setMsg({ text: t({ id: 'catalogacao.author.publishSuccess' }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.author.publishError' }, { message: err.message }), kind: 'error' });

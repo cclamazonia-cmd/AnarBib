@@ -8,7 +8,7 @@ const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.aut
 const STATUS_KEYS = { draft: 'catalogacao.status.draft', ready: 'catalogacao.status.ready', published: 'catalogacao.status.published', cancelled: 'catalogacao.status.cancelled' };
 const PAGE_SIZE = 100;
 
-export default function QueuePanel({ batches, onEditItem }) {
+export default function QueuePanel({ batches, onEditItem, onChanged }) {
   // ── Filters ─────────────────────────────────────────────
   const { formatMessage: t, formatDate } = useIntl();
   const [typeFilter, setTypeFilter] = useState('');
@@ -187,6 +187,7 @@ export default function QueuePanel({ batches, onEditItem }) {
       kind: fail ? 'warn' : 'ok',
     });
     await loadQueue(); await loadTrash();
+    onChanged?.();
   }
 
   async function discardSelected() {
@@ -203,6 +204,7 @@ export default function QueuePanel({ batches, onEditItem }) {
     }
     setMsg({ text: t({ id: 'catalogacao.queue.discardResult' }, { count: ok }), kind: 'ok' });
     await loadQueue(); await loadTrash();
+    onChanged?.();
   }
 
   async function markSelectedReady() {
@@ -238,6 +240,7 @@ export default function QueuePanel({ batches, onEditItem }) {
     }
     setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }), kind: 'ok' });
     await loadQueue(); await loadTrash();
+    onChanged?.();
   }
 
   async function deleteTrashItem(type, id) {

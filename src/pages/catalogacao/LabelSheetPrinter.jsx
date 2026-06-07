@@ -15,7 +15,7 @@ const LABELS_PER_ROW = 3;
 const ROWS_PER_PAGE = 7;
 const LABELS_PER_PAGE = LABELS_PER_ROW * ROWS_PER_PAGE; // 21
 
-export default function LabelSheetPrinter() {
+export default function LabelSheetPrinter({ onChanged }) {
   const { formatMessage: t } = useIntl();
   const { libraryId, libraryName } = useLibrary();
   const [labels, setLabels] = useState([]);
@@ -106,6 +106,7 @@ export default function LabelSheetPrinter() {
     setSelected(new Set());
     setMsg(t({ id: 'labels.deleteDone' }, { ok, fail }));
     await loadLabels();
+    onChanged?.();
   }
 
   // URL encodee dans chaque QR — lien universel : fonctionne des aujourd'hui
