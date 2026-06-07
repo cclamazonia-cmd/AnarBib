@@ -46,7 +46,7 @@
 }
 .cat-mode-switch-buttons button:hover { color: #fff; }
 .cat-mode-switch-buttons button.is-mode-active {
-  background: linear-gradient(135deg, rgba(225,29,47,.92), var(--brand-color-primary, #b32025));
+  background: linear-gradient(135deg, rgba(var(--brand-action-rgb),.92), var(--brand-color-primary, #b32025));
   color: #fff; box-shadow: var(--brand-shadow-strong, 0 16px 38px rgba(0,0,0,.42));
 }
 .cat-mode-hint { font-size: .8rem; color: var(--brand-muted, #d4cec3); opacity: .9; }
@@ -199,8 +199,8 @@
 .ab-input:focus,
 .ab-select:focus,
 .ab-textarea:focus {
-  border-color: rgba(225,29,47,.95);
-  box-shadow: 0 0 0 3px rgba(225,29,47,.24), var(--brand-shadow-strong, 0 16px 38px rgba(0,0,0,.42));
+  border-color: rgba(var(--brand-action-rgb),.95);
+  box-shadow: 0 0 0 3px rgba(var(--brand-action-rgb),.24), var(--brand-shadow-strong, 0 16px 38px rgba(0,0,0,.42));
 }
 .ab-input[readonly] { background: rgba(0,0,0,.15); }
 .ab-textarea { min-height: 84px; resize: vertical; line-height: 1.5; }
@@ -225,7 +225,7 @@
 }
 .ab-seg button:hover { border-color: rgba(255,255,255,.34); color: #fff; }
 .ab-seg button[aria-pressed="true"] {
-  background: linear-gradient(135deg, rgba(225,29,47,.92), var(--brand-color-primary, #b32025));
+  background: linear-gradient(135deg, rgba(var(--brand-action-rgb),.92), var(--brand-color-primary, #b32025));
   border-color: transparent; color: #fff;
 }
 

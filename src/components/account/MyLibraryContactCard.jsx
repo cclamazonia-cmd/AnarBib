@@ -99,7 +99,7 @@ export default function MyLibraryContactCard() {
   };
   const btnPrimary = {
     padding: '8px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)',
-    background: '#c00000', color: '#fff', fontWeight: 600, fontSize: '.85rem', cursor: 'pointer',
+    background: 'linear-gradient(135deg, rgba(var(--brand-action-rgb), .92), var(--brand-color-primary))', color: '#fff', fontWeight: 600, fontSize: '.85rem', cursor: 'pointer',
   };
   const btnGhost = {
     padding: '8px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)',

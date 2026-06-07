@@ -84,7 +84,10 @@ function applyColors(colors) {
   // --brand-action-rgb garde le rouge AnarBib defini dans theme-base.css.
   if (colors.action) {
     const rgb = hexToRgbTriplet(colors.action);
-    if (rgb) setCssVar('--brand-action-rgb', rgb);
+    if (rgb) {
+      setCssVar('--brand-action-rgb', rgb);
+      setCssVar('--brand-accent-rgb', rgb);
+    }
   }
 }
 

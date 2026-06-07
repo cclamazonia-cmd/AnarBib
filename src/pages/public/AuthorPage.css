@@ -90,8 +90,8 @@
   transition: border-color .18s, background .18s;
 }
 .ab-autor-book-card:hover {
-  border-color: rgba(179,32,37,.45);
-  background: rgba(179,0,24,.06);
+  border-color: rgba(var(--brand-accent-rgb),.45);
+  background: rgba(var(--brand-accent-rgb),.06);
 }
 
 .ab-autor-book-cover {

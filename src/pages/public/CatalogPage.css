@@ -79,7 +79,7 @@
 .ab-filter-chip {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 10px; border-radius: var(--brand-radius-pill);
-  background: rgba(179,32,37,.15); border: 1px solid rgba(179,32,37,.3);
+  background: rgba(var(--brand-accent-rgb),.15); border: 1px solid rgba(var(--brand-accent-rgb),.3);
   font-size: .84rem; color: var(--brand-text);
 }
 .ab-filter-chip strong { color: #fff; font-weight: 700; }
@@ -343,8 +343,8 @@
   gap: 5px;
   padding: 6px 12px;
   border-radius: var(--brand-radius-sm);
-  border: 1px solid rgba(225, 29, 47, 0.45);
-  background: rgba(179, 32, 37, 0.18);
+  border: 1px solid rgba(var(--brand-action-rgb), 0.45);
+  background: rgba(var(--brand-accent-rgb), 0.18);
   color: var(--brand-text);
   font-family: var(--brand-font-body);
   font-size: 0.84rem;

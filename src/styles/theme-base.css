@@ -34,6 +34,9 @@
      triplet RGB pour composer avec des alphas variés via rgba(). Defaut = rouge
      AnarBib. Surchargeable par theme via manifest colors.action (cf. theme.js). */
   --brand-action-rgb: 225, 29, 47;
+  /* Rouge de marque decoratif (chips/pills, bordures hover, surlignages), aussi
+     en triplet RGB. Defaut = rouge AnarBib b32025. Surcharge par colors.action. */
+  --brand-accent-rgb: 179, 32, 37;
 
   --brand-panel-bg: rgba(18, 18, 18, 0.82);
   --brand-panel-bg-strong: rgba(10, 10, 10, 0.94);
