@@ -47,6 +47,15 @@ export default function BibliotecaPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role, governance_mode } = useLibrary();
   const { formatMessage: t, locale } = useIntl();
+  // i18n titres/descriptions de taches-types et taches : jsonb {locale: texte}
+  // herite du catalogue. Repli locale courante -> pt-BR -> 1re cle -> texte simple.
+  const localizedText = (obj, fallback) => {
+    if (obj && typeof obj === 'object') {
+      const v = obj[locale] || obj['pt-BR'] || Object.values(obj).find(x => x && String(x).trim());
+      if (v && String(v).trim()) return v;
+    }
+    return fallback || '';
+  };
   useDocumentTitle(t({ id: 'pageTitle.biblioteca' }));
   const roleLoaded = role !== null && role !== undefined;
   const isCoord = role === 'coordenador' || role === 'administrador';
@@ -1910,12 +1919,14 @@ export default function BibliotecaPage() {
           const renderTaskRow = (tk, i) => {
             const isStale = !!tk.recurrence_stale_flagged_at;
             const isRecurring = !!tk.recurrence_rule_id;
+            const tkTitle = localizedText(tk.title_i18n, tk.title);
+            const tkDesc = localizedText(tk.description_i18n, tk.description);
             return (
             <div key={tk.id} style={{ ...lr(i), flexDirection:'column', alignItems:'stretch', gap:6 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
                 <div style={{ flex:1 }}>
                   <div style={{ fontSize:'.9rem', fontWeight:600, display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
-                    {tk.title||t({ id: 'common.noTitle' })}
+                    {tkTitle||t({ id: 'common.noTitle' })}
                     {isRecurring && (
                       <span className="cat-pill info" style={{ fontSize:'.62rem', padding:'1px 6px' }}
                         title={t({ id: 'biblioteca.tasks.recurring.hint' })}>
@@ -1933,7 +1944,7 @@ export default function BibliotecaPage() {
                     {tk.owner||'—'}{tk.due_date&&` · ${t({ id: 'biblioteca.tasks.deadlineLabel' })}: ${tk.due_date}`}
                     {tk.tags?.length>0&&` · ${tk.tags.join(', ')}`}
                   </div>
-                  {tk.description && <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>{tk.description}</div>}
+                  {tkDesc && <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>{tkDesc}</div>}
                 </div>
                 <div style={{ display:'flex', gap:4, flexShrink:0, alignItems:'center' }}>
                   <span className={`cat-pill ${tk.priority==='alta'?'danger':tk.priority==='baixa'?'info':'warn'}`} style={{ fontSize:'.65rem' }}>{TASK_PRIO[tk.priority]||tk.priority}</span>
@@ -2152,7 +2163,7 @@ export default function BibliotecaPage() {
                       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
                         <div style={{ flex:1 }}>
                           <div style={{ fontSize:'.9rem', fontWeight:600, display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
-                            {tpl.template_title || t({ id: 'common.noTitle' })}
+                            {localizedText(tpl.title_i18n, tpl.template_title) || t({ id: 'common.noTitle' })}
                             {!tpl.is_active && (
                               <span className="cat-pill" style={{ fontSize:'.62rem', padding:'1px 6px', background:'rgba(255,255,255,.1)' }}>
                                 {t({ id: 'biblioteca.rules.inactive' })}
@@ -2168,9 +2179,9 @@ export default function BibliotecaPage() {
                             {tpl.label || '—'}
                             {tpl.template_tags?.length>0 && ` · ${tpl.template_tags.join(', ')}`}
                           </div>
-                          {tpl.template_description && (
+                          {localizedText(tpl.description_i18n, tpl.template_description) && (
                             <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>
-                              {tpl.template_description}
+                              {localizedText(tpl.description_i18n, tpl.template_description)}
                             </div>
                           )}
                         </div>
