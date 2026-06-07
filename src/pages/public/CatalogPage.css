@@ -477,3 +477,94 @@
 /* ── #OPAC9 — Bouton favori dans la liste ───────────────── */
 
 .ab-wishlist-btn { white-space: nowrap; }
+
+/* ── #OPAC7 — Panneau de facettes de découverte ─────────── */
+
+.ab-facets {
+  margin: 4px 0 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: 10px;
+  background: var(--brand-panel-bg, rgba(18, 18, 18, 0.82));
+}
+
+.ab-facets__title {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  color: var(--brand-text, #f5f2ea);
+}
+
+.ab-facet-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.ab-facet-group:last-child { margin-bottom: 0; }
+
+.ab-facet-group__label {
+  flex: 0 0 auto;
+  min-width: 90px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--brand-muted);
+}
+
+.ab-facet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  flex: 1 1 auto;
+}
+
+.ab-facet-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 3px 9px;
+  font-size: 0.78rem;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--brand-text, #f5f2ea);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.ab-facet-chip:hover { background: rgba(255, 255, 255, 0.1); }
+
+.ab-facet-chip.is-active {
+  background: var(--brand-action, #b32025);
+  border-color: var(--brand-action, #b32025);
+  color: #fff;
+}
+
+.ab-facet-chip__sub {
+  font-size: 0.7rem;
+  color: var(--brand-muted);
+}
+
+.ab-facet-chip.is-active .ab-facet-chip__sub { color: rgba(255, 255, 255, 0.85); }
+
+.ab-facet-chip__count {
+  font-size: 0.68rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.ab-facet-more {
+  padding: 3px 9px;
+  font-size: 0.74rem;
+  background: transparent;
+  border: 1px dashed var(--brand-panel-border, rgba(255, 255, 255, 0.2));
+  border-radius: 999px;
+  color: var(--brand-muted);
+  cursor: pointer;
+}

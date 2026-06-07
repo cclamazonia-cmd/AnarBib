@@ -258,6 +258,9 @@ export default function CatalogPage() {
   const [collectionFilter, setCollectionFilter] = useState(filterState.collectionFilter || '');
   const [placeFilter, setPlaceFilter] = useState(filterState.placeFilter || '');
   const [alphaFilter, setAlphaFilter] = useState(''); // #OPAC10 parcours A–Z par auteur·rice (non persisté)
+  // #OPAC7 / OPAC-F1 : facettes de découverte (CDD / auteur·rice / décennie)
+  const [facets, setFacets] = useState(null);
+  const [showAllCdd, setShowAllCdd] = useState(false);
 
   const dSearch = useDebounce(search);
   const dAuthor = useDebounce(authorFilter);
@@ -388,6 +391,30 @@ export default function CatalogPage() {
   }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
+
+  // #OPAC7 — compteurs de facettes via api.catalog_facets_v1 (un appel JSONB).
+  // Recalcule à chaque évolution des filtres (sémantique « expand » côté RPC).
+  useEffect(() => {
+    (async () => {
+      const yr = (dYear || '').trim();
+      const m = yr.match(/^(\d{4})\s*[-–]\s*(\d{4})$/);
+      const isYear = /^\d{4}$/.test(yr);
+      const p_filters = {
+        q: dSearch || '', author_id: authorIdFilter || '', alpha: alphaFilter || '',
+        publisher: dPublisher || '',
+        year_from: m ? m[1] : (isYear ? yr : ''),
+        year_to: m ? m[2] : (isYear ? yr : ''),
+        library: libraryFilter !== '__all__' ? libraryFilter : '',
+        cdd: dCdd || '', language: dLanguage || '',
+        material: materialFilter !== '__all__' ? materialFilter : '',
+        collection: dCollection || '', place: dPlace || '',
+      };
+      try {
+        const { data } = await supabase.schema('api').rpc('catalog_facets_v1', { p_filters });
+        setFacets(data || null);
+      } catch { setFacets(null); }
+    })();
+  }, [dSearch, authorIdFilter, alphaFilter, dPublisher, dYear, libraryFilter, dCdd, dLanguage, materialFilter, dCollection, dPlace]);
 
   // Regimento da biblioteca (if user logged in)
   useEffect(() => {
@@ -598,6 +625,16 @@ export default function CatalogPage() {
     });
   }
   function si(col) { const [c,d] = sortValue.split('.'); return c === col ? (d==='asc'?' ↑':' ↓') : ''; }
+
+  // #OPAC7 — clic sur une facette : réutilise les filtres existants.
+  function cddLabel(code) { return t({ id: `catalog.cdd.main.${String(code || '')[0] || '0'}` }); }
+  function pickCdd(code) { setCddFilter(prev => prev === code ? '' : code); setAdvancedOpen(true); }
+  function pickDecade(decade) { const d = parseInt(decade, 10); if (d) setYearFilter(`${d}-${d + 9}`); }
+  function pickAuthorFacet(a) {
+    setAuthorFilter(a.label || '');
+    setAuthorIdFilter(a.author_id ? String(a.author_id) : '');
+    setAlphaFilter('');
+  }
 
   function clearFilters() {
     setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setAlphaFilter(''); setPublisherFilter(''); setYearFilter('');
@@ -851,6 +888,61 @@ export default function CatalogPage() {
           ))}
         </div>
       </section>
+
+      {/* ══ #OPAC7 — Facettes de découverte (CDD / auteur·rice / décennie) ══ */}
+      {facets && ((facets.cdd?.length || 0) + (facets.author?.length || 0) + (facets.decade?.length || 0) > 0) && (
+        <section className="ab-facets">
+          <span className="ab-facets__title">{t({ id: 'catalog.facets.title' })}</span>
+          {facets.cdd?.length > 0 && (
+            <div className="ab-facet-group">
+              <span className="ab-facet-group__label">{t({ id: 'catalog.facets.cdd' })}</span>
+              <div className="ab-facet-chips">
+                {(showAllCdd ? facets.cdd : facets.cdd.slice(0, 12)).map(f => (
+                  <button key={f.code} type="button"
+                    className={`ab-facet-chip ${dCdd === f.code ? 'is-active' : ''}`}
+                    onClick={() => pickCdd(f.code)}
+                    title={cddLabel(f.code)}>
+                    <strong>{f.code}</strong>
+                    <span className="ab-facet-chip__sub">{cddLabel(f.code)}</span>
+                    <span className="ab-facet-chip__count">{f.count}</span>
+                  </button>
+                ))}
+                {facets.cdd.length > 12 && (
+                  <button type="button" className="ab-facet-more" onClick={() => setShowAllCdd(s => !s)}>
+                    {showAllCdd ? t({ id: 'catalog.facets.less' }) : t({ id: 'catalog.facets.more' })}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+          {facets.author?.length > 0 && (
+            <div className="ab-facet-group">
+              <span className="ab-facet-group__label">{t({ id: 'catalog.facets.author' })}</span>
+              <div className="ab-facet-chips">
+                {facets.author.map(f => (
+                  <button key={f.label} type="button" className="ab-facet-chip" onClick={() => pickAuthorFacet(f)}>
+                    {f.label}
+                    <span className="ab-facet-chip__count">{f.count}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {facets.decade?.length > 0 && (
+            <div className="ab-facet-group">
+              <span className="ab-facet-group__label">{t({ id: 'catalog.facets.decade' })}</span>
+              <div className="ab-facet-chips">
+                {facets.decade.map(f => (
+                  <button key={f.decade} type="button" className="ab-facet-chip" onClick={() => pickDecade(f.decade)}>
+                    {f.decade}
+                    <span className="ab-facet-chip__count">{f.count}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
 
       {/* ══ STATS PILLS ═══════════════════════════════════════ */}
       <div className="ab-stats">
