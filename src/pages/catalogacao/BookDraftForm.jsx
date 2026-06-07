@@ -2259,14 +2259,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {rrf('edicao')}
           {rrf('editora')}
           {pubSuggestions.length > 0 && (
-            <div className="cat-pub-suggestions" style={{ margin: '-6px 0 8px 0', border: '1px solid var(--brand-border, #ddd)', borderRadius: 6, background: 'var(--brand-surface, #fff)', maxHeight: 180, overflowY: 'auto', fontSize: '.78rem' }}>
+            <div className="cat-pub-suggestions" style={{ margin: '-6px 0 8px 0', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.18))', borderRadius: 6, background: 'var(--brand-panel-bg-strong, rgba(10,10,10,.94))', color: 'var(--brand-text, #f5f2ea)', maxHeight: 180, overflowY: 'auto', fontSize: '.78rem' }}>
               {pubSuggestions.map(pub => (
                 <div key={pub.id} onClick={() => selectPublisher(pub)}
-                  style={{ padding: '4px 10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--brand-border, #eee)' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--brand-hover, #f5f5f5)'}
+                  style={{ padding: '4px 10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--brand-panel-border, rgba(255,255,255,.1))' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,.08)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                   <span style={{ fontWeight: 500 }}>{pub.name}</span>
-                  <span style={{ fontSize: '.65rem', color: 'var(--brand-muted, #888)' }}>
+                  <span style={{ fontSize: '.65rem', color: 'var(--brand-muted, #d4cec3)' }}>
                     {pub.city || ''}{pub.match_kind === 'exact' ? ' ✓' : ` ${Math.round(pub.score * 100)}%`}
                   </span>
                 </div>
