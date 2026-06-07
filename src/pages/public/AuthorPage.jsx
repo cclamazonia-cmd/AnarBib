@@ -24,6 +24,16 @@ function yearsLabel(birth, death) {
   return `– ${d}`;
 }
 
+// #AUT4 — pastille de disponibilité (connecté·es uniquement, doctrine A1/A2/A3).
+function bookAvail(r, t) {
+  if (!r) return null;
+  const c = Number(r.session_available_count) || 0;
+  const h = (r.session_status_hint || '').toLowerCase();
+  if (h === 'consultavel_no_local') return { label: t({ id: 'catalog.avail.consult' }), cls: 'warn' };
+  if (c > 0) return { label: t({ id: 'catalog.avail.availableCount' }, { count: c }), cls: 'ok' };
+  return null; // on n'encombre pas les cartes avec « indisponible »
+}
+
 function buildHeroIntro(author, booksCount, t, locale) {
   const parts = [];
   // FIX B.1: use i18n-iso-countries helper instead of static i18n country keys
@@ -51,7 +61,9 @@ export default function AuthorPage() {
   const [author, setAuthor] = useState(null);
   const [books, setBooks] = useState([]);
   const [related, setRelated] = useState([]); // #AUT1 : réseau d'auteur·rices (par contenu)
+  const [availMap, setAvailMap] = useState({}); // #AUT4 : dispo session-aware par livre
   const [loading, setLoading] = useState(true);
+  const isAuth = !!user;
   const [toast, setToast] = useState(''); // #AUT3 : retour copie permalien
 
   useEffect(() => {
@@ -86,6 +98,20 @@ export default function AuthorPage() {
             return (a.titulo || '').localeCompare(b.titulo || '');
           });
           setBooks(sorted);
+          // #AUT4 — dispo session-aware par livre (connecté·es uniquement)
+          if (user && sorted.length) {
+            try {
+              const ids = sorted.map(b => b.book_id).filter(Boolean);
+              const av = await supabase.schema('api').from('catalog_list_session_v1')
+                .select('book_id, session_status_hint, session_available_count')
+                .in('book_id', ids);
+              if (Array.isArray(av.data)) {
+                const map = {};
+                av.data.forEach(r => { map[r.book_id] = r; });
+                setAvailMap(map);
+              }
+            } catch { /* non-bloquant */ }
+          }
         }
       } catch (err) {
         console.error('Author fetch error:', err);
@@ -93,7 +119,7 @@ export default function AuthorPage() {
         setLoading(false);
       }
     })();
-  }, [id]);
+  }, [id, user?.id]);
 
   useDocumentTitle(
     author
@@ -287,6 +313,10 @@ export default function AuthorPage() {
                       {book.editora && <span>{book.editora}</span>}
                       {book.role && <span>{t({ id: 'author.role' })}: {book.role}</span>}
                     </div>
+                    {isAuth && availMap[book.book_id] && (() => {
+                      const s = bookAvail(availMap[book.book_id], t);
+                      return s ? <div className="ab-autor-book-avail"><span className={`ab-status-dot ab-status-dot--${s.cls}`}>{s.label}</span></div> : null;
+                    })()}
                   </div>
                 </Link>
               ))}

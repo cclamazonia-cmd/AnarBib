@@ -426,7 +426,6 @@ export default function BookPage() {
                   <MetaPill label={t({ id: 'book.meta.translator' })} value={book.tradutor} />
                   <MetaPill label={t({ id: 'book.meta.organizer' })} value={book.organizador} />
                   <MetaPill label={t({ id: 'book.meta.secondaryAuthors' })} value={book.autores_secundarios} />
-                  <MetaPill label={t({ id: 'book.meta.subjects' })} value={book.assuntos} />
                   <MetaPill label={t({ id: 'book.meta.cdd' })} value={book.cdd} always />
                 </div>
                 {book.notas && (<><div className="ab-livro-hr" /><p className="ab-livro-desc">{book.notas}</p></>)}
@@ -448,6 +447,20 @@ export default function BookPage() {
                 </div>
               </div>
             )}
+
+            {/* #OPAC6 — Sujets cliquables (point d'entrée de découverte) */}
+            {book.assuntos && (() => {
+              const subs = String(book.assuntos).split(/\s*[|;]\s*/).map(s => s.trim()).filter(Boolean);
+              if (!subs.length) return null;
+              return (
+                <div className="ab-livro-subjects">
+                  <span className="ab-livro-subjects__label">{t({ id: 'book.meta.subjects' })} :</span>
+                  {subs.map((s, i) => (
+                    <Link key={i} to={`/catalogo?q=${encodeURIComponent(s)}`} className="ab-livro-subject-chip">{s}</Link>
+                  ))}
+                </div>
+              );
+            })()}
 
             {/* Statut */}
             <div className="ab-livro-status-section">

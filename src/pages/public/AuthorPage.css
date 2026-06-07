@@ -171,3 +171,7 @@
   background: var(--brand-action, #b32025);
   color: #fff;
 }
+
+/* ── #AUT4 — Disponibilité dans la bibliographie ────────── */
+
+.ab-autor-book-avail { margin-top: 4px; }
