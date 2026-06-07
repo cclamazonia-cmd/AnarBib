@@ -116,3 +116,23 @@
   font-size: .82rem; color: var(--brand-muted);
   display: flex; gap: 12px; flex-wrap: wrap;
 }
+
+/* ── #AUT3 — Barre d'actions d'autorité ─────────────────── */
+
+.ab-autor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: .82rem;
+}
+
+.ab-autor-toolbar-sep { opacity: .4; }
+
+.ab-autor-toolbar-export { color: var(--brand-muted); }
+
+.ab-autor-toast {
+  color: var(--brand-ok, #7bc47f);
+  font-weight: 600;
+}

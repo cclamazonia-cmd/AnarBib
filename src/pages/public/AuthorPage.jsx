@@ -10,6 +10,7 @@ import { getCountryName } from '@/lib/countries';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './AuthorPage.css';
+import { buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
 
 const PHOTO_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/authors/';
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
@@ -50,6 +51,7 @@ export default function AuthorPage() {
   const [author, setAuthor] = useState(null);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState(''); // #AUT3 : retour copie permalien
 
   useEffect(() => {
     (async () => {
@@ -118,6 +120,26 @@ export default function AuthorPage() {
   const sourceLabel = [author.source_kind, author.source_label].filter(Boolean).join(' · ');
   const meta = author.structured_meta || {};
 
+  // #AUT3 — barre d'actions d'autorité (permalien + export biblio)
+  const permalink = `${window.location.origin}/autor/${id}`;
+  const fileBase = String(author.sort_name || displayName || `autor-${id}`).replace(/[^\w.-]/g, '_');
+  const showToast = (m) => { setToast(m); setTimeout(() => setToast(''), 1800); };
+  const copyText = async (text) => {
+    try { await navigator.clipboard.writeText(text); } catch { /* clipboard indispo */ }
+    showToast(t({ id: 'book.actions.copied' }));
+  };
+  const exportBiblio = (kind) => {
+    if (!books.length) return;
+    const origin = window.location.origin;
+    if (kind === 'bib') {
+      const text = books.map(b => buildBibtex(b, displayName, `${origin}/livro/${b.book_id}`)).join('\n');
+      triggerDownload(`${fileBase}.bib`, text, 'application/x-bibtex;charset=utf-8');
+    } else {
+      const text = books.map(b => buildRis(b, [displayName], `${origin}/livro/${b.book_id}`)).join('');
+      triggerDownload(`${fileBase}.ris`, text, 'application/x-research-info-systems;charset=utf-8');
+    }
+  };
+
   return (
     <PageShell>
       <Topbar />
@@ -128,6 +150,22 @@ export default function AuthorPage() {
         {user
           ? <Button variant="secondary" onClick={() => navigate('/conta')}>{t({ id: 'author.accountPanel' })}</Button>
           : <Button onClick={() => navigate('/cadastro')}>{t({ id: 'nav.login' })}</Button>}
+      </div>
+
+      {/* #AUT3 — Barre d'actions d'autorité */}
+      <div className="ab-autor-toolbar">
+        <button className="ab-button ab-button--mini" onClick={() => copyText(permalink)}>
+          {t({ id: 'book.actions.permalink' })}
+        </button>
+        {books.length > 0 && (
+          <>
+            <span className="ab-autor-toolbar-sep" aria-hidden="true">·</span>
+            <span className="ab-autor-toolbar-export">{t({ id: 'book.actions.export' })} :</span>
+            <button className="ab-button ab-button--mini" onClick={() => exportBiblio('bib')}>BibTeX</button>
+            <button className="ab-button ab-button--mini" onClick={() => exportBiblio('ris')}>RIS</button>
+          </>
+        )}
+        {toast && <span className="ab-autor-toast" role="status">{toast}</span>}
       </div>
 
       {/* Hero */}
