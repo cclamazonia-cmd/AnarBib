@@ -136,3 +136,38 @@
   color: var(--brand-ok, #7bc47f);
   font-weight: 600;
 }
+
+/* ── #AUT1 — Réseau d'auteur·rices ──────────────────────── */
+
+.ab-autor-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ab-autor-related-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--brand-text, #f5f2ea);
+  text-decoration: none;
+  font-size: 0.82rem;
+}
+
+.ab-autor-related-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--brand-action, #b32025);
+}
+
+.ab-autor-related-count {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--brand-action, #b32025);
+  color: #fff;
+}

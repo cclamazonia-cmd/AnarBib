@@ -120,6 +120,8 @@ export default function BookPage() {
   // #OPAC1 : barre d'actions de notice (citer / exporter)
   const [citeOpen, setCiteOpen] = useState(false);
   const [toast, setToast] = useState('');
+  // #OPAC4 : documents similaires (par contenu)
+  const [similar, setSimilar] = useState([]);
 
   // ── Chargement ───────────────────────────────────────────
   // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
@@ -134,6 +136,7 @@ export default function BookPage() {
       setDigitalAccess(null);
       setSessionCtx(null);
       setContributors([]);
+      setSimilar([]);
       setViewMode('standard');
       setReserveStatus('');
       try {
@@ -156,6 +159,11 @@ export default function BookPage() {
             const contribRpc = await supabase.rpc('get_book_contributors_public', { p_book_id: bookId });
             if (Array.isArray(contribRpc.data)) setContributors(contribRpc.data);
           } catch { /* noop : fallback sur authors_json */ }
+          // #OPAC4 — documents similaires (par contenu : auteur*rice / CDD / collection)
+          try {
+            const sim = await supabase.schema('api').rpc('similar_books', { p_book_id: bookId });
+            if (Array.isArray(sim.data)) setSimilar(sim.data);
+          } catch { /* non-bloquant */ }
         }
 
         if (bookId > 0) {
@@ -535,6 +543,27 @@ export default function BookPage() {
           </div>
         </div>
       </div>
+
+      {/* #OPAC4 — Documents similaires (par contenu) */}
+      {similar.length > 0 && (
+        <details className="ab-livro-similar" open>
+          <summary className="ab-livro-similar__summary">{t({ id: 'book.similar.title' })}</summary>
+          <div className="ab-livro-similar__grid">
+            {similar.map(s => (
+              <Link key={s.book_id} to={`/livro/${s.book_id}`} className="ab-livro-similar__card">
+                {s.cover_object_path
+                  ? <img className="ab-livro-similar__cover" src={`${COVER_BASE}${s.cover_object_path}`} alt="" loading="lazy" />
+                  : <div className="ab-livro-similar__cover ab-livro-similar__cover--ph"><span>{(s.titulo || '?')[0]}</span></div>}
+                <div className="ab-livro-similar__info">
+                  <div className="ab-livro-similar__t">{s.titulo}</div>
+                  {s.author_label && <div className="ab-livro-similar__a">{s.author_label}</div>}
+                  <div className="ab-livro-similar__m">{[s.ano, s.editora].filter(Boolean).join(' · ')}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </details>
+      )}
 
       <Footer />
     </PageShell>

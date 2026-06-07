@@ -50,6 +50,7 @@ export default function AuthorPage() {
 
   const [author, setAuthor] = useState(null);
   const [books, setBooks] = useState([]);
+  const [related, setRelated] = useState([]); // #AUT1 : réseau d'auteur·rices (par contenu)
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(''); // #AUT3 : retour copie permalien
 
@@ -57,11 +58,13 @@ export default function AuthorPage() {
     (async () => {
       setLoading(true);
       try {
-        const [authorRes, booksRes, transRes] = await Promise.all([
+        const [authorRes, booksRes, transRes, relRes] = await Promise.all([
           supabase.from('authors').select('*').eq('id', id).single(),
           supabase.from('author_books_public').select('*').eq('author_id', id),
           supabase.from('author_translations').select('lang, biography').eq('author_id', id),
+          supabase.schema('api').rpc('similar_authors', { p_author_id: id }), // #AUT1
         ]);
+        if (Array.isArray(relRes?.data)) setRelated(relRes.data);
 
         if (authorRes.data) {
           const authorData = authorRes.data;
@@ -290,6 +293,21 @@ export default function AuthorPage() {
             </div>
           )}
         </div>
+
+        {/* #AUT1 — Réseau d'auteur·rices (par contenu) */}
+        {related.length > 0 && (
+          <div className="ab-autor-card">
+            <h2 className="ab-autor-section-title">{t({ id: 'author.related.title' })}</h2>
+            <div className="ab-autor-related">
+              {related.map(r => (
+                <Link key={r.author_id} to={`/autor/${r.author_id}`} className="ab-autor-related-chip">
+                  {r.label}
+                  {r.shared_count > 0 && <span className="ab-autor-related-count" title={t({ id: 'author.related.shared' })}>{r.shared_count}</span>}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <Footer />
