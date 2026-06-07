@@ -94,6 +94,72 @@ function buildIsbdZones(b, t) {
   return zones;
 }
 
+// ── #OPAC1 : citations & export bibliographique ────────────
+function citeAuthorString(book, contributors) {
+  if (Array.isArray(contributors) && contributors.length) {
+    const names = contributors.map(c => c.name).filter(Boolean);
+    if (names.length) return names.join('; ');
+  }
+  return book.author_display || book.autor || '';
+}
+
+function citeAuthorList(book, contributors) {
+  if (Array.isArray(contributors) && contributors.length) {
+    const names = contributors.map(c => c.name).filter(Boolean);
+    if (names.length) return names;
+  }
+  const a = book.author_display || book.autor || '';
+  return a ? [a] : [];
+}
+
+// Citations approximatives (métadonnées limitées) — APA / Chicago / MLA, texte brut.
+function buildCitations(book, a) {
+  const year = (book.ano && String(book.ano).trim()) || 's.d.';
+  const title = (book.titulo || '') + (book.subtitulo ? `: ${book.subtitulo}` : '');
+  const pub = book.editora || '';
+  const place = book.local_publicacao || '';
+  const ed = book.edicao || '';
+  const auth = a ? a.trim() : '';
+  const clean = s => s.replace(/\s+/g, ' ').replace(/\s+([.,;:])/g, '$1').replace(/([.,;:]){2,}/g, '$1').trim();
+  return {
+    apa: clean(`${auth ? auth + ' ' : ''}(${year}). ${title}${ed ? ` (${ed})` : ''}. ${place ? place + ': ' : ''}${pub ? pub + '.' : ''}`),
+    chicago: clean(`${auth ? auth + '. ' : ''}${title}. ${place ? place + ': ' : ''}${pub ? pub + ', ' : ''}${year}.`),
+    mla: clean(`${auth ? auth + '. ' : ''}${title}. ${pub ? pub + ', ' : ''}${year}.`),
+  };
+}
+
+function buildBibtex(book, authorStr, url) {
+  const key = (book.bib_ref || `anarbib-${book.book_id || book.id}`).replace(/[^A-Za-z0-9_-]/g, '');
+  const fields = [
+    ['author', authorStr], ['title', book.titulo], ['subtitle', book.subtitulo],
+    ['year', book.ano], ['publisher', book.editora], ['address', book.local_publicacao],
+    ['edition', book.edicao], ['series', book.colecao], ['isbn', book.isbn], ['issn', book.issn],
+    ['language', book.idioma], ['pages', book.paginas], ['url', url],
+  ].filter(([, v]) => v != null && String(v).trim() !== '');
+  const body = fields.map(([k, v]) => `  ${k} = {${String(v).replace(/[{}]/g, '')}}`).join(',\n');
+  return `@book{${key},\n${body}\n}\n`;
+}
+
+function buildRis(book, authors, url) {
+  const lines = ['TY  - BOOK'];
+  authors.forEach(n => lines.push(`AU  - ${n}`));
+  const push = (tag, v) => { if (v != null && String(v).trim() !== '') lines.push(`${tag}  - ${String(v).trim()}`); };
+  push('TI', book.titulo); push('T2', book.subtitulo); push('PY', book.ano);
+  push('PB', book.editora); push('CY', book.local_publicacao); push('ET', book.edicao);
+  push('SN', book.isbn || book.issn); push('LA', book.idioma); push('SP', book.paginas); push('UR', url);
+  lines.push('ER  - ');
+  return lines.join('\r\n') + '\r\n';
+}
+
+function triggerDownload(filename, text, mime) {
+  const blob = new Blob([text], { type: mime || 'text/plain;charset=utf-8' });
+  const href = URL.createObjectURL(blob);
+  const el = document.createElement('a');
+  el.href = href; el.download = filename;
+  document.body.appendChild(el); el.click(); document.body.removeChild(el);
+  setTimeout(() => URL.revokeObjectURL(href), 1000);
+}
+
 export default function BookPage() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -116,6 +182,9 @@ export default function BookPage() {
   // pausada -> aucun bouton ; somente_consulta -> seul Agendar consulta ;
   // funcionamento_normal -> les deux selon loanable.
   const [serviceState, setServiceState] = useState(null);
+  // #OPAC1 : barre d'actions de notice (citer / exporter)
+  const [citeOpen, setCiteOpen] = useState(false);
+  const [toast, setToast] = useState('');
 
   // ── Chargement ───────────────────────────────────────────
   // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
@@ -280,6 +349,19 @@ export default function BookPage() {
   const isbdStatement = buildIsbdStatement(book);
   const isbdZones = buildIsbdZones(book, t);
 
+  // #OPAC1 — citations & export
+  const citeAuthor = citeAuthorString(book, contributors);
+  const citations = buildCitations(book, citeAuthor);
+  const permalink = `${window.location.origin}/livro/${book.book_id || book.id}`;
+  const fileBase = String(book.bib_ref || `notice-${book.book_id || book.id}`).replace(/[^\w.-]/g, '_');
+  const showToast = (m) => { setToast(m); setTimeout(() => setToast(''), 1800); };
+  const copyText = async (text) => {
+    try { await navigator.clipboard.writeText(text); } catch { /* clipboard indispo */ }
+    showToast(t({ id: 'book.actions.copied' }));
+  };
+  const exportBibtex = () => triggerDownload(`${fileBase}.bib`, buildBibtex(book, citeAuthor, permalink), 'application/x-bibtex;charset=utf-8');
+  const exportRis = () => triggerDownload(`${fileBase}.ris`, buildRis(book, citeAuthorList(book, contributors), permalink), 'application/x-research-info-systems;charset=utf-8');
+
   return (
     <PageShell>
       <Topbar />
@@ -334,6 +416,37 @@ export default function BookPage() {
           </div>
 
           <div className="ab-livro-content">
+            {/* #OPAC1 — Barre d'actions de notice */}
+            <div className="ab-livro-toolbar ab-no-print">
+              <button className="ab-button ab-button--mini" onClick={() => setCiteOpen(o => !o)} aria-expanded={citeOpen}>
+                {t({ id: 'book.actions.cite' })}
+              </button>
+              <button className="ab-button ab-button--mini" onClick={() => window.print()}>
+                {t({ id: 'book.actions.print' })}
+              </button>
+              <button className="ab-button ab-button--mini" onClick={() => copyText(permalink)}>
+                {t({ id: 'book.actions.permalink' })}
+              </button>
+              <span className="ab-livro-toolbar-sep" aria-hidden="true">·</span>
+              <span className="ab-livro-toolbar-export">{t({ id: 'book.actions.export' })} :</span>
+              <button className="ab-button ab-button--mini" onClick={exportBibtex}>BibTeX</button>
+              <button className="ab-button ab-button--mini" onClick={exportRis}>RIS</button>
+              {toast && <span className="ab-livro-toast" role="status">{toast}</span>}
+            </div>
+            {citeOpen && (
+              <div className="ab-livro-cite-panel ab-no-print">
+                {[['APA', citations.apa], ['Chicago', citations.chicago], ['MLA', citations.mla]].map(([label, text]) => (
+                  <div key={label} className="ab-livro-cite-row">
+                    <div className="ab-livro-cite-head">
+                      <span className="ab-livro-cite-style">{label}</span>
+                      <button className="ab-button ab-button--mini" onClick={() => copyText(text)}>{t({ id: 'book.actions.copy' })}</button>
+                    </div>
+                    <p className="ab-livro-cite-text">{text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Toggle Standard / ISBD */}
             <div className="ab-livro-detail-header">
               <h2 className="ab-livro-section-title">

@@ -330,3 +330,98 @@
 .ab-livro-digital-source a {
   color: var(--brand-link);
 }
+
+/* ── #OPAC1 — Barre d'actions de notice ─────────────────── */
+
+.ab-livro-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.82rem;
+}
+
+.ab-livro-toolbar-sep { opacity: 0.4; }
+
+.ab-livro-toolbar-export {
+  color: var(--brand-muted);
+}
+
+.ab-livro-toast {
+  color: var(--brand-ok, #7bc47f);
+  font-weight: 600;
+}
+
+.ab-livro-cite-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: 8px;
+  background: var(--brand-panel-bg, rgba(18, 18, 18, 0.82));
+}
+
+.ab-livro-cite-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.ab-livro-cite-style {
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-muted);
+}
+
+.ab-livro-cite-text {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--brand-text);
+}
+
+/* ── Impression de la notice (#OPAC1) ───────────────────── */
+
+@media print {
+  .ab-topbar,
+  .ab-footer,
+  .ab-livro-topbar,
+  .ab-livro-toolbar,
+  .ab-livro-cite-panel,
+  .ab-livro-actions,
+  .ab-livro-status-section,
+  .ab-livro-digital,
+  .ab-livro-digital-source,
+  .ab-livro-reserve-status,
+  .ab-no-print {
+    display: none !important;
+  }
+
+  body,
+  .ab-livro-card,
+  .ab-livro-content {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .ab-livro-card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .ab-hero,
+  .ab-livro-pill__label,
+  .ab-livro-pill__value,
+  .ab-livro-isbd,
+  .ab-livro-isbd-zone-label,
+  .ab-livro-isbd-zone-value {
+    color: #000 !important;
+  }
+}
