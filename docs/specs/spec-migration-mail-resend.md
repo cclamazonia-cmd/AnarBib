@@ -1,10 +1,25 @@
 # spec-migration-mail-resend.md — Migration du provider mail Brevo → Resend
 
-**Version** : v0.5
-**Date** : 05/06/2026 (révision de la v0.4 du 03/06/2026 ; v0.1–v0.3 archivées sous `docs/specs/archive/spec-migration-mail-resend-v0.{1,2,3}.md`)
-**Statut** : **terminé** — R.1 à R.5 clos (21/05 → 05/06), R.6 (retrait de Brevo) clos le 05/06/2026. Chantier #110 clos, sous réserve du critère documentaire 8.3.6 (cf. changelog v0.5).
+**Version** : v0.6
+**Date** : 08/06/2026 (révision de la v0.5 du 05/06/2026 ; v0.1–v0.3 archivées sous `docs/specs/archive/spec-migration-mail-resend-v0.{1,2,3}.md`)
+**Statut** : **terminé et clos** — R.1 à R.5 (21/05 → 05/06), R.6 (retrait de Brevo) le 05/06, hygiène R.7 le 08/06/2026. Chantier #110 clos, critère documentaire 8.3.6 levé (cf. changelog v0.6).
 **Périmètre** : 8 Edge Functions Supabase porteuses d'envoi mail + transport mail partagé
 **Auteur·rices** : Xavier (rédaction politique), Claude (rédaction technique)
+
+---
+
+## Changelog v0.5 → v0.6
+
+La v0.6 acte l'exécution du chantier d'hygiène **R.7** (post-migration, hors #110), le 08/06/2026, et la levée du dernier critère documentaire 8.3.6.
+
+1. **R.7 exécuté (hygiène, sans changement fonctionnel — iso-comportement).**
+   - **Item 1 — `MAIL_PROVIDER`** : secret supprimé côté Supabase ; le code ne le lisait plus depuis R.6. Commentaires d'en-tête des 8 transports actualisés.
+   - **Item 2 — variables de sender** : cascades `ANARBIB_*`/`NETWORK_*`/`LIBRARY_SENDER_NAME` harmonisées sur le couple canonique `SENDER_EMAIL`/`SENDER_NAME` dans 6 Edge Functions. Iso-comportement vérifié par comparaison des digests SHA-256 (toutes les variantes valaient déjà `no-reply@notifications.anarbib.org` / `AnarBib`). Les **5 secrets redondants** ont été retirés après déploiement vert. `register` bascule son expéditeur de `ANARBIB_SENDER_EMAIL` vers `SENDER_EMAIL` (+ gate `MISSING_ENV`) ; `notify-network-weekly-report` abandonne la précédence `NETWORK_SENDER_*`.
+   - **Item 3 — `register`** : les 3 sites d'appel construisent désormais un payload Resend natif (`{ from, to:[email…], reply_to, subject, html }`) ; la fonction de traduction `brevoPayloadToResend` est supprimée. **Plus aucune trace de Brevo dans le code de `register`.**
+
+2. **Critère 8.3.6 levé.** Le guide de gouvernance (manuel admin réseau) a reçu un encart garde-fou anti-tracking (envoi via Resend, suivi ouvertures/clics désactivé) et a été traduit dans les **10 langues** du réseau (`.md` + `.docx`, `docs/governance/`).
+
+**Bilan global du chantier.** Plus aucune trace de Brevo (code et secrets) ; variables de sender rationalisées sur un couple canonique unique. **13 secrets nettoyés** au total : 7 Brevo (R.6.2) + `MAIL_PROVIDER` (R.7) + 5 sender redondants (R.7). Le chantier #110 et son hygiène R.7 sont entièrement clos.
 
 ---
 
