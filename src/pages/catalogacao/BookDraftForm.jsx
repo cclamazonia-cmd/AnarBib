@@ -173,7 +173,7 @@ function buildShelfLabel({ author = '', title = '', cdd = '' } = {}) {
 const EMPTY_FORM = {
   id: '', published_book_id: '', batch_id: '', action: 'create', bib_ref: '',
   tipo_material: 'livro', titulo: '', subtitulo: '', autor: '',
-  edicao: '', editora: '', colecao: '', local_publicacao: '', ano: '',
+  edicao: '', editora: '', publisher_id: '', colecao: '', local_publicacao: '', ano: '',
   isbn: '', issn: '',
   titulo_periodico: '', volume: '', numero: '', fasciculo: '', data_edicao: '', periodicidade: '',
   cdd: '', idioma: '', paginas: '', loanable: 'true', circulation_default: 'emprestavel',
@@ -266,6 +266,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
   const [isbnDupHint, setIsbnDupHint] = useState(null); // { bookId, titulo, bibRef, libraries } | null — live ISBN check
+  const [pubSuggestions, setPubSuggestions] = useState([]); // publisher typeahead results
   // Doublons de documents (detection + fusion, P2a/P2b)
   const [bookDupMatches, setBookDupMatches] = useState(null); // null = pas cherche
   const [bookDupLoading, setBookDupLoading] = useState(false);
@@ -366,6 +367,31 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     }, 600);
     return () => clearTimeout(timer);
   }, [form.isbn, form.published_book_id]);
+
+  // ── Live publisher typeahead (debounced 700ms) ──────────
+  useEffect(() => {
+    const q = (form.editora || '').trim();
+    if (q.length < 2) { setPubSuggestions([]); return; }
+    const timer = setTimeout(async () => {
+      try {
+        const { data, error } = await supabase.rpc('search_publishers_by_name', { p_query: q, p_limit: 6 });
+        if (!error && data?.length) {
+          setPubSuggestions(data);
+        } else {
+          setPubSuggestions([]);
+        }
+      } catch { setPubSuggestions([]); }
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [form.editora]);
+
+  function selectPublisher(pub) {
+    set('editora', pub.name);
+    set('publisher_id', pub.id);
+    setPubSuggestions([]);
+    if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
+  }
+
   function setMany(obj) {
     setForm(prev => ({ ...prev, ...obj }));
   }
@@ -1465,6 +1491,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         edicao: f('edicao') || null,
         local_publicacao: f('local_publicacao') || null,
         editora: f('editora') || null,
+        publisher_id: f('publisher_id') ? Number(f('publisher_id')) : null,
         ano: f('ano') || null,
         isbn: f('isbn') || null,
         issn: f('issn') || null,
@@ -1652,6 +1679,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       autor: r.autor || '',
       edicao: r.edicao || '',
       editora: r.editora || '',
+      publisher_id: r.publisher_id ? String(r.publisher_id) : '',
       colecao: r.colecao || '',
       local_publicacao: r.local_publicacao || '',
       ano: r.ano || '',
@@ -2230,6 +2258,21 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {rrf('edicao')}
           {rrf('editora')}
+          {pubSuggestions.length > 0 && (
+            <div className="cat-pub-suggestions" style={{ margin: '-6px 0 8px 0', border: '1px solid var(--brand-border, #ddd)', borderRadius: 6, background: 'var(--brand-surface, #fff)', maxHeight: 180, overflowY: 'auto', fontSize: '.78rem' }}>
+              {pubSuggestions.map(pub => (
+                <div key={pub.id} onClick={() => selectPublisher(pub)}
+                  style={{ padding: '4px 10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--brand-border, #eee)' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'var(--brand-hover, #f5f5f5)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <span style={{ fontWeight: 500 }}>{pub.name}</span>
+                  <span style={{ fontSize: '.65rem', color: 'var(--brand-muted, #888)' }}>
+                    {pub.city || ''}{pub.match_kind === 'exact' ? ' ✓' : ` ${Math.round(pub.score * 100)}%`}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
           {rrf('colecao')}
 
           {rrf('local_publicacao')}
