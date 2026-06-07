@@ -13,6 +13,36 @@
 
 ---
 
+## 0 — Addendum 08/06/2026 : réalité des données & décisions prises
+
+> Cet addendum **prime** sur les §4–§6 ci-dessous (écrits avant le sondage de densité). Il enregistre la confrontation aux données réelles et les arbitrages tranchés en séance de décision. Foyer normatif à terme : le `REGISTRE_decisions.md` (à graduer).
+
+### 0.1 Réalité des données (catalogue public sondé le 08/06)
+- Vue publique (`api.catalog_list_anon_v1`) = **237 notices, 1 seule bibliothèque** (le reste de `books`, 2426 lignes, n'est pas publié/public).
+- **Sujets (`assuntos`) : 2 notices sur 237**, en `text` (séparateur ` | `), non normalisés (doublons multilingues « Anarchism | anarchism | Anarchisme », autorités mêlées) → **le nuage de sujets #OPAC8/#AUT2 est vide de données**.
+- **CDD : 72 %**, signal thématique réel (335 = anarchisme/socialisme = 58 notices ; 320 politique ; 9xx histoire) → **seul axe thématique peuplé**.
+- Décennie (`ano`) 93 %, auteur (`author_chips` jsonb) OK ; format **96 % « livro »**, langue 54 % (4 valeurs), bibliothèque **1**, collection 11 % → peu ou pas discriminants.
+
+### 0.2 Décisions prises
+| Point | Décision |
+|---|---|
+| **Axe découverte v1** | **CDD** (facette + étagères thématiques, libellés localisés) + facettes **auteur** & **décennie**. Nuage de sujets **différé** (data-blocked). |
+| **D1 — compteurs** | **RPC `api.catalog_facets_v1`** (JSONB, `STABLE SECURITY INVOKER` + REVOKE), agrégée sur `*_anon_v1`/`*_session_v1` (INV-1). À graduer en OPAC-F1 ✅. |
+| **D6 — disposition** | **Sections déroulantes** (cohérent AnarBib, mobile). |
+| **D7 / OPAC-ATL1** | **Collectivité = déjà fait** (`authors.authorityType='collective'`). **Matière = chantier chaîné juste après le v1** (étape 2 : table autorité matière + lien livres + UI catalogage + reprise `assuntos`). |
+| **assuntos « structuré »** | pas de parsing de texte ; les sujets deviennent une **autorité matière** (étape 2). |
+| **D3 — top-N** | **15 + « plus… », tri par fréquence**. |
+| **D4 — mutualisation #OPAC8/#AUT2** | **reportée** avec l'étape matière. |
+| **#OPAC11 RSS** | **différé** ; `mailto:` OK. |
+| **OPAC-W1 wishlist** | **clore** : RLS déjà saine (owner-only, `anon` sans grant) ; ajouter un `WITH CHECK` explicite. |
+
+### 0.3 Séquence révisée
+- **Étape 1 — v1 OPAC** : quick wins frontend (**#OPAC1** actions notice, **#AUT3** export biblio, **#OPAC10** alpha/nouveautés, **#OPAC9** wishlist sur la liste) · facettes **CDD / auteur / décennie** via `api.catalog_facets_v1` · **#OPAC4/#AUT1** (similaires par auteur·CDD·collection) · **#OPAC6/#AUT4** (sections déroulantes, dispo dans la biblio).
+- **Étape 2 — autorité matière** : table sujets normalisés + lien livres + UI catalogage + reprise de l'`assuntos` texte → débloque alors **#OPAC8/#AUT2** (nuage de sujets) et la mutualisation D4.
+- **Réalité d'échelle** : à 237 notices / 1 biblio, l'agrégation est bon marché ; la valeur des facettes croîtra surtout quand d'autres bibliothèques publieront.
+
+---
+
 ## 1. Objet & lignes rouges
 
 L'OPAC est la **couche découverte publique** : permettre à une lectrice d'arriver *sans référence précise* (« qu'y a-t-il sur l'antimilitarisme ? ») et de **tomber sur ce qu'elle ne cherchait pas**. Pour une bibliothèque militante, la découverte par rebonds est un acte d'émancipation documentaire — c'est le cœur de la différence avec un SIGB standard. Le retard constaté face à RebAL (OPAC fédéré) porte précisément là : AnarBib sait chercher quand on sait quoi chercher, mais guide mal la flânerie.
