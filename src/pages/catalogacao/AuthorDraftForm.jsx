@@ -235,16 +235,27 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
   // ── Preferred name → sort name sync ─────────────────────
   function handlePreferredNameChange(val) {
+    const prev = f('preferred_name');
+    const currentSort = f('sort_name');
     set('preferred_name', val);
-    if (!f('published_author_id')) {
+    // Forme de tri auto-remplie tant qu'elle n'a pas ete personnalisee (vide,
+    // ou = derivation du nom precedent). Vaut aussi pour les autorites deja
+    // publiees (l'ancien garde-fou !published_author_id les excluait a tort).
+    if (!currentSort.trim() || currentSort === buildSortName(prev, meta.authorityType)) {
       set('sort_name', buildSortName(val, meta.authorityType));
     }
   }
 
   function handleAuthorityTypeChange(val) {
+    const prevType = meta.authorityType;
+    const currentSort = f('sort_name');
+    const pref = f('preferred_name');
     setM('authorityType', val);
-    if (!f('published_author_id')) {
-      set('sort_name', buildSortName(f('preferred_name'), val));
+    // Le sigle ne concerne qu'une autorite collective : on le vide sinon.
+    if (val !== 'collective') setM('acronym', '');
+    // Re-derive la forme de tri si elle n'a pas ete personnalisee.
+    if (!currentSort.trim() || currentSort === buildSortName(pref, prevType)) {
+      set('sort_name', buildSortName(pref, val));
     }
   }
 
@@ -622,14 +633,17 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             </select>
           </div>
 
-          {/* Cellule vide pour caler la grille (Sigla en colonne suivante) */}
-          {isComplete && <div className="cat-field" aria-hidden="true" />}
+          {/* Sigle : uniquement pour une autorite COLLECTIVE (sigle de l'org, a la
+              place du nom d'une personne). Pour les autres types, redondant avec
+              Affiliation -> masque. La cellule vide cale la grille en regard du type. */}
+          {isComplete && meta.authorityType === 'collective' && <div className="cat-field" aria-hidden="true" />}
 
-          {isComplete && (
+          {isComplete && meta.authorityType === 'collective' && (
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.author.acronym' })}</label>
               <input type="text" value={meta.acronym} onChange={e => setM('acronym', e.target.value)}
                 placeholder="CGT / FAG / CSL / CIRA" style={fs} />
+              <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{t({ id: 'catalogacao.author.acronymHint' })}</div>
             </div>
           )}
 
