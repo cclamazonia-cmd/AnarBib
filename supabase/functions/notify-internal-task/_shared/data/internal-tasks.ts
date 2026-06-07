@@ -1,6 +1,6 @@
 import { supabaseAdmin } from "../core/env.ts";
 export async function fetchInternalTask(taskId) {
-  const { data, error } = await supabaseAdmin.from("painel_internal_tasks").select("id,title,description,priority,status,owner,owner_user_id,due_date,tags,created_at,library_id").eq("id", taskId).maybeSingle();
+  const { data, error } = await supabaseAdmin.from("painel_internal_tasks").select("id,title,description,priority,status,owner,owner_user_id,due_date,tags,created_at,library_id,title_i18n,description_i18n").eq("id", taskId).maybeSingle();
   if (error) throw new Error(`internal_task_fetch_failed: ${error.message}`);
   return data || null;
 }

@@ -30,6 +30,19 @@ function taskTagsLabel(tags) {
   }
   return String(tags || "").trim();
 }
+// Resout un champ i18n (jsonb {locale: texte}) vers la locale cible : locale
+// demandee -> pt-BR -> 1re valeur non vide. Renvoie "" si rien (l'appelant
+// retombe alors sur le texte simple title/description).
+function pickI18nText(obj, locale) {
+  if (!obj || typeof obj !== "object") return "";
+  const primary = obj[locale] || obj["pt-BR"];
+  if (primary != null && String(primary).trim() !== "") return String(primary).trim();
+  for (const key of Object.keys(obj)) {
+    const val = obj[key];
+    if (val != null && String(val).trim() !== "") return String(val).trim();
+  }
+  return "";
+}
 function payloadTaskToRow(taskId, libraryId, task) {
   const row = task || {};
   const title = String(row.title || "").trim();
@@ -44,17 +57,19 @@ function payloadTaskToRow(taskId, libraryId, task) {
     owner_user_id: null,
     due_date: row.due_date == null ? null : String(row.due_date),
     tags: row.tags ?? null,
+    title_i18n: row.title_i18n ?? null,
+    description_i18n: row.description_i18n ?? null,
     created_at: String(row.created_at || "").trim(),
     library_id: libraryId
   };
 }
 function buildTaskEmail(eventType, task, ownerName, brandTag, locale) {
-  const taskTitle = String(task.title || "").trim() || tTask(locale, "untitled");
+  const taskTitle = pickI18nText(task.title_i18n, locale) || String(task.title || "").trim() || tTask(locale, "untitled");
   const status = taskStatusLabel(locale, String(task.status || "").trim());
   const priority = taskPriorityLabel(locale, String(task.priority || "").trim());
   const due = formatDateBR(task.due_date);
   const tags = taskTagsLabel(task.tags);
-  const description = String(task.description || "").trim();
+  const description = pickI18nText(task.description_i18n, locale) || String(task.description || "").trim();
   const variant = taskVariant(locale, eventType === "assigned" ? "assigned" : "reminder");
   return {
     subject: `${variant.subject} — ${brandTag}`,
@@ -111,13 +126,13 @@ function changedFieldLabels(changedFields, locale) {
   return values.map((value)=>String(value || "").trim()).filter(Boolean).map((value)=>map[value] || value);
 }
 function buildTaskLevelNoticeEmail(recipientRole, eventKind, task, brandTag, changedFields, locale) {
-  const taskTitle = String(task.title || "").trim() || tTask(locale, "untitled");
+  const taskTitle = pickI18nText(task.title_i18n, locale) || String(task.title || "").trim() || tTask(locale, "untitled");
   const status = taskStatusLabel(locale, String(task.status || "").trim());
   const priority = taskPriorityLabel(locale, String(task.priority || "").trim());
   const due = formatDateBR(task.due_date);
   const owner = String(task.owner || "").trim();
   const tags = taskTagsLabel(task.tags);
-  const description = String(task.description || "").trim();
+  const description = pickI18nText(task.description_i18n, locale) || String(task.description || "").trim();
   const changed = changedFieldLabels(changedFields, locale);
   let variantKey;
   if (recipientRole === "organizer") {
@@ -244,13 +259,13 @@ async function handleTaskLevelNotice(payload, taskId, recipientRole) {
   };
 }
 function buildTaskInvitationEmail(task, brandTag, locale) {
-  const taskTitle = String(task.title || "").trim() || tTask(locale, "untitled");
+  const taskTitle = pickI18nText(task.title_i18n, locale) || String(task.title || "").trim() || tTask(locale, "untitled");
   const status = taskStatusLabel(locale, String(task.status || "").trim());
   const priority = taskPriorityLabel(locale, String(task.priority || "").trim());
   const due = formatDateBR(task.due_date);
   const owner = String(task.owner || "").trim();
   const tags = taskTagsLabel(task.tags);
-  const description = String(task.description || "").trim();
+  const description = pickI18nText(task.description_i18n, locale) || String(task.description || "").trim();
   const variant = taskVariant(locale, "invitation");
   return {
     subject: `${variant.subject} — ${brandTag}`,
