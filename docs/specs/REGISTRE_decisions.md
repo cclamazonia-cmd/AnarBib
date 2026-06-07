@@ -241,6 +241,23 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
+## 18. OPAC / catalogue de découverte — `OPAC` *(spec-catalogue-decouverte v0.1, spec-notice-autorite-enrichie v0.1)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **OPAC-AXIS1** | **Axe de découverte v1 = CDD** (facette + étagères thématiques, libellés localisés) + facettes **auteur** & **décennie**. Confronté aux données (08/06) : catalogue public = **237 notices / 1 biblio**, `assuntos` **2/237** (vide, non normalisé) vs **CDD 72 %** (signal réel, 335=anarchisme=58). Nuage de sujets (#OPAC8/#AUT2) **différé** (data-blocked) → réactivé par OPAC-ATL1. | ✅ acté 08/06 |
+| **OPAC-F1** | Compteurs de facettes = **RPC `api.catalog_facets_v1(filters jsonb)→jsonb`** (tous compteurs en un appel), `STABLE SECURITY INVOKER` + REVOKE (DOC-OBJ-2), agrégée sur `catalog_list_anon_v1`/`_session_v1` — **jamais** la vue réseau (INV-1/DOC-PERIM-1). Écarte le `count` PostgREST par facette et l'agrégation client. | ✅ acté 08/06 |
+| **OPAC-W1** | Favoris = **`user_wishlist` serveur** (déjà en prod via BookPage). Audit RLS **fait** (08/06) : RLS active, policy unique `auth.uid()=user_id`, `anon` sans grant → isolé staff/réseau (INV-2). Reste : **`WITH CHECK` explicite** + bouton sur la liste (#OPAC9). | ✅ audité 08/06 |
+| **OPAC-ATL1** | Autorité **matière** = **chantier chaîné juste après le v1** (étape 2 : table autorité matière + lien livres + UI catalogage + reprise `assuntos`). **Collectivité = déjà couverte** par `authors.authorityType='collective'` (pas de table dédiée). Débloque ensuite #OPAC8/#AUT2 + mutualisation des nuages (D4). | 🟡 cadré (étape 2) |
+| **OPAC-UI1** | Blocs enrichis notice/autorité (#OPAC4/6, #AUT1/4) en **sections déroulantes** (cohérent AnarBib, mobile #MOBILE), pas en onglets. | ✅ acté 08/06 |
+| **OPAC-SIM1** | Similaires (#OPAC4) / réseau auteur·rices (#AUT1) = recommandation **par contenu seul** (auteur·CDD·collection), jamais comportementale, sans log de navigation (INV-1/3/5). RPC serveur `api.similar_books`/`api.similar_authors` (top-N + score). | 🟡 cadré |
+| **OPAC-RSS1** | Flux RSS de recherche (#OPAC11) **différé** (anti-tracking : l'URL encode la requête en clair). `mailto:` côté client OK. | 🟡 différé |
+| **OPAC-SEQ1** | Séquence : **étape 1 (v1)** = quick wins frontend (#OPAC1, #AUT3, #OPAC10, #OPAC9 sur la liste) + facettes CDD/auteur/décennie + #OPAC4/#AUT1 + #OPAC6/#AUT4 (sections) ; **étape 2** = OPAC-ATL1 → débloque #OPAC8/#AUT2. Top-N facettes = **15 + « plus… », tri par fréquence**. | ✅ acté 08/06 |
+
+> Foyer : ces décisions priment sur la trace `CADRAGE_OPAC_chantier_2026-06-07.md` (registre > trace). Confrontation specs↔code (frontend lu + backend sondé le 08/06) détaillée dans ce cadrage.
+
+---
+
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
@@ -250,3 +267,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 05/06/2026 (session soir) — grosse session catalogação/autorités : **CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1** (Track A complet, capas P1-P3, liaison autorités↔œuvres, fusion de doublons autorités+documents, flux contributeurs, socle Ateliers). 3 specs nouvelles : `spec-autorites-notes-bio-multilingues` v0.2, `spec-liaison-autorites-oeuvres` v0.2, `spec-doublons-detection-fusion` v0.1. **Pièges opérationnels Supabase constatés** (à internaliser) : (1) `[CI SKIP]` sur le commit de TÊTE saute tout le push, migration comprise — ne jamais coiffer une migration d'un commit doc `[CI SKIP]` ; (2) les fonctions d'extension (pg_trgm `similarity`) vivent dans le schéma `extensions` → l'inclure dans le `search_path` des fonctions SECURITY DEFINER (sinon 42883) ; (3) `position` est un mot réservé → quoter `"position"` en colonne de `RETURNS TABLE` ; (4) le catalogue lit des vues matérialisées rafraîchies par cron (≤15 min) → délai entre une écriture et son reflet.*
 
 *MàJ 05/06/2026 (session Track D) — **CAT-D5a** : P1 Track D sources externes — diagnostic et réactivation gardée de la source LoC. Cause : migration FOLIO (juin 2025) a cassé l'endpoint SRU (casse du database name + instabilité MetaProxy). 5ème piège opérationnel constaté : le MetaProxy IndexData est sensible à la casse du database name (`LCDB` ≠ `lcdb`). **CAT-D5b** : P2 Track D — adaptateurs REST Open Library (ISBN + titre/auteur, candidats riches) et Wikidata (titre/auteur seulement, Q-id passerelle vers P4 autorités). `catalog_metadata_lookup` passe de 5 à 7 sources. **CAT-D5c** : P3 Track D — BN Brasil fédéré dans « Buscar metadados » (`Promise.allSettled` parallèle, normalisation candidats, fusion dans le panel unifié). 8 sources au total. **CAT-D5d** : P4 Track D — EF `authority_lookup` (Wikidata → VIAF/ISNI/variant_forms) + Atelier autorités dans AuthorDraftForm (tier Completo). VIAF API inaccessible (403/HTML depuis juin 2025) → Wikidata seul, qui contient les VIAF/ISNI en claims.*
+
+*MàJ 08/06/2026 — chantier **OPAC** ouvert : §18 (`OPAC-AXIS1/F1/W1/ATL1/UI1/SIM1/RSS1/SEQ1`), specs `spec-catalogue-decouverte` v0.1 + `spec-notice-autorite-enrichie` v0.1. Confrontation specs↔code (frontend lu + backend sondé) tracée dans `CADRAGE_OPAC_chantier_2026-06-07.md`. Décision-clé : axe découverte = **CDD** (sujets data-blocked, 2/237), compteurs via RPC `api.catalog_facets_v1`, autorité matière en étape 2 (collectivité déjà couverte par `authors.authorityType='collective'`).*
