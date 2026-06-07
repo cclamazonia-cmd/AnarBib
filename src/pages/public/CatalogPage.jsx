@@ -14,6 +14,7 @@ import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './CatalogPage.css';
 
 const PAGE_SIZE = 100;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''); // #OPAC10 parcours A–Z
 
 // URLs des manuels (stockes sur Supabase Storage, bucket library-ui-assets).
 // Le manuel lecteur est un PDF multilingue unique (8 langues en interne).
@@ -87,15 +88,16 @@ function getStatusInfo(book, isAuth, t) {
   return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
 }
 
-function buildServerFilters({ search, authorFilter, authorIdFilter, publisherFilter, yearFilter, libraryFilter, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter }) {
+function buildServerFilters({ search, authorFilter, authorIdFilter, alphaFilter, publisherFilter, yearFilter, libraryFilter, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter }) {
   const f = {};
   if (search.trim()) {
     const p = `%${search.trim()}%`;
     f['or'] = `(titulo.ilike.${p},autor.ilike.${p},editora.ilike.${p},bib_ref.ilike.${p},cdd.ilike.${p},assuntos.ilike.${p},subtitulo.ilike.${p},isbn.ilike.${p})`;
   }
-  // Filtre par LIEN d'autorite (author_id) prioritaire : regroupe toutes les
-  // graphies du contributeur sous une seule fiche. Repli sur le texte brut sinon.
-  if (authorIdFilter && String(authorIdFilter).trim()) f['author_id'] = `eq.${String(authorIdFilter).trim()}`;
+  // #OPAC10 parcours A–Z (préfixe d'auteur·rice) prioritaire ; sinon filtre par
+  // LIEN d'autorite (author_id, regroupe les graphies) ; sinon texte brut.
+  if (alphaFilter && String(alphaFilter).trim()) f['autor'] = `ilike.${String(alphaFilter).trim()}%`;
+  else if (authorIdFilter && String(authorIdFilter).trim()) f['author_id'] = `eq.${String(authorIdFilter).trim()}`;
   else if (authorFilter.trim()) f['autor'] = `ilike.%${authorFilter.trim()}%`;
   if (publisherFilter.trim()) f['editora'] = `ilike.%${publisherFilter.trim()}%`;
   if (yearFilter.trim()) {
@@ -224,6 +226,9 @@ export default function CatalogPage() {
   // pour la chaine consultation. Doctrine §8 : la consulta a son propre cycle.
   const [consultedBibRefs, setConsultedBibRefs] = useState(new Set());
   const [consultaState, setConsultaState] = useState({});
+  // #OPAC9 : favoris (wishlist) ajoutés depuis la liste
+  const [wishlistedIds, setWishlistedIds] = useState(new Set());
+  const [wishlistBusy, setWishlistBusy] = useState(null);
 
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -252,6 +257,7 @@ export default function CatalogPage() {
   const [materialFilter, setMaterialFilter] = useState(filterState.materialFilter || '__all__');
   const [collectionFilter, setCollectionFilter] = useState(filterState.collectionFilter || '');
   const [placeFilter, setPlaceFilter] = useState(filterState.placeFilter || '');
+  const [alphaFilter, setAlphaFilter] = useState(''); // #OPAC10 parcours A–Z par auteur·rice (non persisté)
 
   const dSearch = useDebounce(search);
   const dAuthor = useDebounce(authorFilter);
@@ -316,6 +322,7 @@ export default function CatalogPage() {
     { value: 'autor.asc', label: t({ id: 'catalog.sort.author' }) },
     { value: 'titulo.asc', label: t({ id: 'catalog.sort.title' }) },
     { value: 'ano.desc', label: t({ id: 'catalog.sort.year' }) },
+    { value: 'created_at.desc', label: t({ id: 'catalog.sort.newest' }) },
     { value: 'editora.asc', label: t({ id: 'catalog.sort.publisher' }) },
     { value: 'status', label: t({ id: 'catalog.sort.availability' }) },
   ], [t]);
@@ -365,7 +372,7 @@ export default function CatalogPage() {
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     try {
-      const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, authorIdFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
+      const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
       const { data, error, totalCount: serverTotal } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
       if (error) throw error;
       const result = data || [];
@@ -378,7 +385,7 @@ export default function CatalogPage() {
       if (serverTotal != null) setTotalCount(serverTotal);
     } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
     finally { setLoading(false); setLoadingMore(false); }
-  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
+  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
 
@@ -520,6 +527,21 @@ export default function CatalogPage() {
     }
   }, [user?.id, t, consultedBibRefs]);
 
+  // #OPAC9 — ajout aux favoris depuis la liste (table user_wishlist, RLS owner-only).
+  const handleWishlist = useCallback(async (book) => {
+    if (!user) return;
+    const bid = book.book_id || book.id;
+    if (!bid || wishlistedIds.has(bid)) return;
+    setWishlistBusy(bid);
+    try {
+      const { error } = await supabase.from('user_wishlist')
+        .upsert({ user_id: user.id, book_id: bid }, { onConflict: 'user_id,book_id' });
+      if (error && error.code !== '23505') throw error; // 23505 = déjà présent → succès
+      setWishlistedIds(prev => new Set(prev).add(bid));
+    } catch (err) { console.error('wishlist error', err); }
+    finally { setWishlistBusy(null); }
+  }, [user?.id, wishlistedIds]);
+
   // Calcul dérivé : le bouton de réservation rapide est-il globalement actif ?
   // Cache pour le rendu de chaque ligne (évalué une fois par render).
   const quickReserveAvailable = useMemo(() => {
@@ -566,7 +588,7 @@ export default function CatalogPage() {
   }, [isAuth]);
 
   // Stats
-  const hasActiveFilters = dSearch || dAuthor || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter !== '__all__' || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
+  const hasActiveFilters = dSearch || dAuthor || alphaFilter || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter !== '__all__' || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
   const availabilityOptions = isAuth ? AVAILABILITY_OPTIONS_AUTH : AVAILABILITY_OPTIONS_ANON;
 
   function handleHeaderSort(col) {
@@ -578,7 +600,7 @@ export default function CatalogPage() {
   function si(col) { const [c,d] = sortValue.split('.'); return c === col ? (d==='asc'?' ↑':' ↓') : ''; }
 
   function clearFilters() {
-    setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setPublisherFilter(''); setYearFilter('');
+    setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setAlphaFilter(''); setPublisherFilter(''); setYearFilter('');
     setAvailabilityFilter('__all__'); setLibraryFilter('__all__'); setSortValue('__relevance__');
     setIsbnFilter(''); setLanguageFilter(''); setCddFilter(''); setSubjectsFilter('');
     setMaterialFilter('__all__'); setCollectionFilter(''); setPlaceFilter('');
@@ -681,7 +703,7 @@ export default function CatalogPage() {
           <div className="ab-field">
             <label className="ab-field__label">{t({ id: 'catalog.filters.author' })}</label>
             <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.authorPlaceholder' })}
-              value={authorFilter} onChange={e => { setAuthorFilter(e.target.value); setAuthorIdFilter(''); }} />
+              value={authorFilter} onChange={e => { setAuthorFilter(e.target.value); setAuthorIdFilter(''); setAlphaFilter(''); }} />
           </div>
           <div className="ab-field">
             <label className="ab-field__label">{t({ id: 'catalog.filters.publisher' })}</label>
@@ -777,6 +799,7 @@ export default function CatalogPage() {
             <div className="ab-active-filters">
               {dSearch && <span className="ab-filter-chip">{t({ id: 'catalog.chip.search' })}: <strong>{dSearch}</strong> <button onClick={() => setSearch('')}>✕</button></span>}
               {dAuthor && <span className="ab-filter-chip">{t({ id: 'catalog.chip.author' })}: <strong>{dAuthor}</strong> <button onClick={() => { setAuthorFilter(''); setAuthorIdFilter(''); }}>✕</button></span>}
+              {alphaFilter && <span className="ab-filter-chip">{t({ id: 'catalog.browse.alpha' })}: <strong>{alphaFilter}</strong> <button onClick={() => setAlphaFilter('')}>✕</button></span>}
               {dPublisher && <span className="ab-filter-chip">{t({ id: 'catalog.chip.publisher' })}: <strong>{dPublisher}</strong> <button onClick={() => setPublisherFilter('')}>✕</button></span>}
               {dYear && <span className="ab-filter-chip">{t({ id: 'catalog.chip.year' })}: <strong>{dYear}</strong> <button onClick={() => setYearFilter('')}>✕</button></span>}
               {availabilityFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.avail' })}: <strong>{availabilityOptions.find(o => o.value === availabilityFilter)?.label}</strong> <button onClick={() => setAvailabilityFilter('__all__')}>✕</button></span>}
@@ -796,6 +819,36 @@ export default function CatalogPage() {
               {compact ? t({ id: 'catalog.actions.compactOn' }) : t({ id: 'catalog.actions.compactOff' })}
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* ══ #OPAC10 — Autres modes de découverte ═════════════ */}
+      <section className="ab-browse-modes">
+        <span className="ab-browse-modes__label">{t({ id: 'catalog.browse.label' })} :</span>
+        <button
+          type="button"
+          className={`ab-button ab-button--mini ${sortValue === 'created_at.desc' ? 'ab-button--active' : ''}`}
+          onClick={() => setSortValue('created_at.desc')}
+        >
+          {t({ id: 'catalog.browse.newest' })}
+        </button>
+        <span className="ab-browse-modes__sep" aria-hidden="true">·</span>
+        <span className="ab-browse-modes__alpha-label">{t({ id: 'catalog.browse.alpha' })}</span>
+        <div className="ab-browse-alpha">
+          {ALPHABET.map(letter => (
+            <button
+              key={letter}
+              type="button"
+              className={`ab-alpha-btn ${alphaFilter === letter ? 'is-active' : ''}`}
+              onClick={() => {
+                const next = alphaFilter === letter ? '' : letter;
+                setAlphaFilter(next);
+                if (next) { setAuthorFilter(''); setAuthorIdFilter(''); }
+              }}
+            >
+              {letter}
+            </button>
+          ))}
         </div>
       </section>
 
@@ -998,6 +1051,28 @@ export default function CatalogPage() {
                                 title={t({ id: 'catalog.quickConsulta.hint' })}
                               >
                                 {t({ id: 'catalog.quickConsulta.label' })}
+                              </button>
+                            );
+                          })()}
+                          {/* #OPAC9 — Favoritar */}
+                          {(() => {
+                            const bid = book.book_id || book.id;
+                            if (wishlistedIds.has(bid)) {
+                              return (
+                                <span className="ab-quick-reserve ab-quick-reserve--done" title={t({ id: 'catalog.wishlist.saved' })}>
+                                  ★ {t({ id: 'catalog.wishlist.saved' })}
+                                </span>
+                              );
+                            }
+                            return (
+                              <button
+                                type="button"
+                                className="ab-quick-reserve ab-wishlist-btn"
+                                disabled={wishlistBusy === bid}
+                                onClick={() => handleWishlist(book)}
+                                title={t({ id: 'catalog.wishlist.add' })}
+                              >
+                                ☆ {t({ id: 'catalog.wishlist.add' })}
                               </button>
                             );
                           })()}

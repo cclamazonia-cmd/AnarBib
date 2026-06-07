@@ -426,3 +426,54 @@
     font-size: 0.78rem;
   }
 }
+
+/* ── #OPAC10 — Autres modes de découverte ───────────────── */
+
+.ab-browse-modes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 12px;
+  font-size: 0.82rem;
+}
+
+.ab-browse-modes__label { color: var(--brand-muted); font-weight: 600; }
+.ab-browse-modes__sep { opacity: 0.4; }
+.ab-browse-modes__alpha-label { color: var(--brand-muted); }
+
+.ab-button--active {
+  background: var(--brand-action, #b32025) !important;
+  border-color: var(--brand-action, #b32025) !important;
+  color: #fff !important;
+}
+
+.ab-browse-alpha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.ab-alpha-btn {
+  min-width: 22px;
+  padding: 2px 5px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--brand-text, #f5f2ea);
+  cursor: pointer;
+}
+
+.ab-alpha-btn:hover { background: rgba(255, 255, 255, 0.07); }
+
+.ab-alpha-btn.is-active {
+  background: var(--brand-action, #b32025);
+  border-color: var(--brand-action, #b32025);
+  color: #fff;
+}
+
+/* ── #OPAC9 — Bouton favori dans la liste ───────────────── */
+
+.ab-wishlist-btn { white-space: nowrap; }
