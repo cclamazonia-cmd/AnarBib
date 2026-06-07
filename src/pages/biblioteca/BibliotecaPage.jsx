@@ -566,6 +566,9 @@ export default function BibliotecaPage() {
       if (error) throw error;
       setMsg({ text: t({ id: 'biblioteca.catalog.adopted' }), kind: 'ok' });
       await loadAll();
+      // La tache-type bascule dans le sous-onglet « modeles » et disparait du
+      // catalogue ; on y amene directement l'utilisateur·rice.
+      setTasksSubtab('modelos');
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
     }
@@ -2226,9 +2229,14 @@ export default function BibliotecaPage() {
               };
               // Regroupement par categorie, ordre = display_order (deja trie
               // au chargement). On conserve l'ordre d'apparition des categories.
+              // Masquer les suggestions deja adoptees en tache-type (lien via
+              // adopted_from_suggestion_code). Supprimer le modele les fait
+              // reapparaitre. Le backfill par titre (migration) couvre l'historique.
+              const adoptedCodes = new Set((templates || []).map(tp => tp.adopted_from_suggestion_code).filter(Boolean));
+              const availableSuggestions = suggestions.filter(s => !adoptedCodes.has(s.code));
               const byCategory = [];
               const seen = new Map();
-              for (const s of suggestions) {
+              for (const s of availableSuggestions) {
                 if (!seen.has(s.category)) {
                   const grp = { category: s.category, items: [] };
                   seen.set(s.category, grp);
@@ -2241,7 +2249,7 @@ export default function BibliotecaPage() {
                 <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:12 }}>
                   {t({ id: 'biblioteca.catalog.hint' })}
                 </div>
-                {suggestions.length===0 && (
+                {availableSuggestions.length===0 && (
                   <div style={{ fontSize:'.88rem', color:'var(--brand-muted)', fontStyle:'italic', padding:'8px 2px' }}>
                     {t({ id: 'biblioteca.catalog.empty' })}
                   </div>
