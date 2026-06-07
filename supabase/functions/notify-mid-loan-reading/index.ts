@@ -103,10 +103,10 @@ function cddPrefix(value, size) {
   return digits.slice(0, size);
 }
 function senderNameFromContext(ctx) {
-  return normalizeText(ctx?.sender_display_name || (ctx?.use_library_name_as_sender !== false ? ctx?.library_short_name || ctx?.library_name || "" : "") || Deno.env.get("SENDER_NAME") || Deno.env.get("ANARBIB_SENDER_NAME") || Deno.env.get("NETWORK_SENDER_NAME") || "Biblioteca da rede AnarBib") || "Biblioteca da rede AnarBib";
+  return normalizeText(ctx?.sender_display_name || (ctx?.use_library_name_as_sender !== false ? ctx?.library_short_name || ctx?.library_name || "" : "") || Deno.env.get("SENDER_NAME") || "Biblioteca da rede AnarBib") || "Biblioteca da rede AnarBib";
 }
 function senderEmailFromContext(ctx) {
-  return normalizeText(ctx?.sender_visible_email || Deno.env.get("SENDER_EMAIL") || Deno.env.get("ANARBIB_SENDER_EMAIL") || Deno.env.get("NETWORK_SENDER_EMAIL") || "no-reply@example.org");
+  return normalizeText(ctx?.sender_visible_email || Deno.env.get("SENDER_EMAIL") || "no-reply@example.org");
 }
 function replyToFromContext(ctx) {
   const email = normalizeText(ctx?.reply_to_email || ctx?.admin_notification_email || Deno.env.get("REPLY_TO_EMAIL") || Deno.env.get("ANARBIB_REPLY_TO_EMAIL") || Deno.env.get("NETWORK_REPLY_TO_EMAIL") || "");

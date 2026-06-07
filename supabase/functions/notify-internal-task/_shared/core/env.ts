@@ -6,8 +6,10 @@ export const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY
 // dans notify-internal-task, (2) s�mantiquement incorrecte (pointait vers le
 // secret de notify-event au lieu de celui d'internal-task). Le secret r�el est
 // d�fini localement dans index.ts � partir de WEBHOOK_SECRET_NOTIFY_INTERNAL_TASK.
-export const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || Deno.env.get("ANARBIB_SENDER_EMAIL") || Deno.env.get("NETWORK_SENDER_EMAIL") || "no-reply@example.org";
-export const SENDER_NAME = Deno.env.get("SENDER_NAME") || Deno.env.get("ANARBIB_SENDER_NAME") || Deno.env.get("NETWORK_SENDER_NAME") || Deno.env.get("LIBRARY_SENDER_NAME") || "Biblioteca da rede AnarBib";
+// R.7 : variables sender harmonisees sur le couple canonique SENDER_EMAIL /
+// SENDER_NAME (anciens fallbacks ANARBIB_*/NETWORK_*/LIBRARY_* alignes).
+export const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || "no-reply@example.org";
+export const SENDER_NAME = Deno.env.get("SENDER_NAME") || "Biblioteca da rede AnarBib";
 export const ADMIN_EMAIL = (Deno.env.get("ADMIN_EMAIL") || Deno.env.get("LIBRARY_ADMIN_EMAIL") || Deno.env.get("ANARBIB_ADMIN_EMAIL") || Deno.env.get("NETWORK_ADMIN_EMAIL") || Deno.env.get("ADMIN_EMAIL_NOTIFY_EVENT") || Deno.env.get("BLMF_ADMIN_EMAIL") || "").trim();
 export const ADMIN_NAME = (Deno.env.get("ADMIN_NAME") || Deno.env.get("LIBRARY_ADMIN_NAME") || Deno.env.get("ANARBIB_ADMIN_NAME") || Deno.env.get("NETWORK_ADMIN_NAME") || Deno.env.get("BLMF_ADMIN_NAME") || "Equipe da biblioteca").trim();
 export const LIBRARIAN_PHONE = Deno.env.get("LIBRARIAN_PHONE") || Deno.env.get("ANARBIB_LIBRARIAN_PHONE") || Deno.env.get("NETWORK_LIBRARIAN_PHONE") || "";

@@ -4,12 +4,10 @@ const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustEnv("SUPABASE_SERVICE_ROLE_KEY");
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_DOCUMENT_PERMISSION_REQUEST");
 const SENDER_EMAIL = firstEnv([
-  "SENDER_EMAIL",
-  "ANARBIB_SENDER_EMAIL"
+  "SENDER_EMAIL"
 ], "admin@anarbib.org");
 const SENDER_NAME = firstEnv([
-  "SENDER_NAME",
-  "ANARBIB_SENDER_NAME"
+  "SENDER_NAME"
 ], "AnarBib");
 const REPLY_TO_EMAIL = firstEnv([
   "REPLY_TO_EMAIL",
@@ -18,7 +16,7 @@ const REPLY_TO_EMAIL = firstEnv([
 const REPLY_TO_NAME = firstEnv([
   "REPLY_TO_NAME",
   "ANARBIB_ADMIN_NAME",
-  "ANARBIB_SENDER_NAME"
+  "SENDER_NAME"
 ], "");
 const ADMIN_EMAIL = firstEnv([
   "ADMIN_EMAIL",

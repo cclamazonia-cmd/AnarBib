@@ -56,10 +56,12 @@ function resolveEnvFooterText() {
   return (Deno.env.get("NETWORK_FOOTER_TEXT") || Deno.env.get("FOOTER_TEXT") || "Mensagem automática de coordenação do AnarBib.").trim();
 }
 function resolveEnvSenderName() {
-  return (Deno.env.get("NETWORK_SENDER_NAME") || Deno.env.get("SENDER_NAME") || resolveEnvBrandName()).trim();
+  // R.7 : harmonise sur SENDER_NAME canonique (NETWORK_SENDER_NAME etait aligne).
+  return (Deno.env.get("SENDER_NAME") || resolveEnvBrandName()).trim();
 }
 function resolveEnvSenderEmail() {
-  return (Deno.env.get("NETWORK_SENDER_EMAIL") || Deno.env.get("SENDER_EMAIL") || "anarbib@anarbib.org").trim();
+  // R.7 : harmonise sur SENDER_EMAIL canonique (NETWORK_SENDER_EMAIL etait aligne).
+  return (Deno.env.get("SENDER_EMAIL") || "anarbib@anarbib.org").trim();
 }
 function resolveEnvReplyToName() {
   return (Deno.env.get("NETWORK_REPLY_TO_NAME") || Deno.env.get("ADMIN_NAME") || resolveEnvSenderName()).trim();
