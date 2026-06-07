@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Gearchiveerde partijen ({count})",
   "catalogacao.areaSubtitle": "Bibliotheekruimte voor concepten, lots, omslagen, auteurs, exemplaren, etiketten en redactionele publicatie",
   "catalogacao.areaTitle": "Catalogisering",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 bijdrager automatisch gekoppeld aan een bestaande autoriteit} other {{count} bijdragers automatisch gekoppeld aan bestaande autoriteiten}}",
   "catalogacao.authlink.close": "Sluiten",
   "catalogacao.authlink.link": "Koppelen",
   "catalogacao.authlink.linkedTitle": "Gekoppeld aan een autoriteit",

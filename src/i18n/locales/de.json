@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Archivierte Posten ({count})",
   "catalogacao.areaSubtitle": "Bibliotheksbereich für Entwürfe, Stapel, Cover, Autor*innen, Exemplare und Veröffentlichung",
   "catalogacao.areaTitle": "Katalogisierung",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 Beitragende*r automatisch mit einer vorhandenen Autorität verknüpft} other {{count} Beitragende automatisch mit vorhandenen Autoritäten verknüpft}}",
   "catalogacao.authlink.close": "Schließen",
   "catalogacao.authlink.link": "Verknüpfen",
   "catalogacao.authlink.linkedTitle": "Mit einer Autorität verknüpft",

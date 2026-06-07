@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Lotti archiviat* ({count})",
   "catalogacao.areaSubtitle": "Area bibliotecaria per bozze, lotti, copertine, autori, esemplari e pubblicazione",
   "catalogacao.areaTitle": "Catalogazione",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 contribut* collegat* automaticamente a un'autorita esistente} other {{count} contribut* collegat* automaticamente ad autorita esistenti}}",
   "catalogacao.authlink.close": "Chiudi",
   "catalogacao.authlink.link": "Collega",
   "catalogacao.authlink.linkedTitle": "Autorità collegata",

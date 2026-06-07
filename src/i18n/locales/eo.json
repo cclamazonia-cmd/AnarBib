@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Arkivitaj lotoj ({count})",
   "catalogacao.areaSubtitle": "Bibliotekista spaco por malnetoj, lotoj, kovriloj, aŭtor-in-oj, ekzempleroj, etikedoj kaj redakcia publikigo",
   "catalogacao.areaTitle": "Katalogado",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 kontribuant-in-o aŭtomate ligita al ekzistanta aŭtoritato} other {{count} kontribuant-in-oj aŭtomate ligitaj al ekzistantaj aŭtoritatoj}}",
   "catalogacao.authlink.close": "Fermi",
   "catalogacao.authlink.link": "Ligi",
   "catalogacao.authlink.linkedTitle": "Ligita al aŭtoritato",

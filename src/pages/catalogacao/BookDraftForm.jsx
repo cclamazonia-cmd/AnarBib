@@ -47,6 +47,71 @@ function inferContributorRole(marcRole = '') {
   return 'autor';
 }
 
+// ── MARC authority auto-linking helpers ───────────────────
+/** Extract numeric VIAF ID from a URI or raw value. */
+function parseViafId(raw) {
+  if (!raw) return '';
+  const s = String(raw).trim();
+  const m = s.match(/viaf\.org\/viaf\/(\d+)/i) || s.match(/^(\d{5,})$/);
+  return m ? m[1] : '';
+}
+
+/**
+ * Auto-match a list of contributor rows to existing authors.
+ *  1) By VIAF ID extracted from MARC authority_ids.external
+ *  2) Fallback: exact normalised-name match via search_authors_by_name
+ * Returns a new array with author_id / author_label filled where matched.
+ */
+async function autoMatchContributors(contribs, marcContribs, sb) {
+  if (!contribs.length) return contribs;
+
+  // ─ Step 1: collect VIAF IDs from MARC subfield $0 ─
+  const viafByIndex = new Map();
+  (marcContribs || []).forEach((mc, i) => {
+    const viaf = parseViafId(mc.authority_ids?.external);
+    if (viaf) viafByIndex.set(i, viaf);
+  });
+
+  // ─ Step 2: batch-query authors by VIAF ─
+  const viafSet = [...new Set(viafByIndex.values())];
+  const viafToAuthor = new Map();
+  if (viafSet.length) {
+    try {
+      const { data } = await sb.from('authors')
+        .select('id, preferred_name, viaf_id')
+        .in('viaf_id', viafSet);
+      (data || []).forEach(a => viafToAuthor.set(a.viaf_id, a));
+    } catch { /* non-blocking */ }
+  }
+
+  // ─ Step 3: for each row, try VIAF then name-based exact match ─
+  const result = await Promise.all(contribs.map(async (c, i) => {
+    if (c.author_id) return c;                       // already linked
+
+    // 3a — VIAF match
+    const viaf = viafByIndex.get(i);
+    if (viaf && viafToAuthor.has(viaf)) {
+      const a = viafToAuthor.get(viaf);
+      return { ...c, author_id: a.id, author_label: a.preferred_name || '' };
+    }
+
+    // 3b — exact name match (score 1.0, single result)
+    const name = (c.name || '').trim();
+    if (name) {
+      try {
+        const { data } = await sb.rpc('search_authors_by_name', { p_query: name, p_limit: 2 });
+        if (data?.length === 1 && data[0].match_kind === 'exact') {
+          return { ...c, author_id: data[0].id, author_label: data[0].preferred_name || '' };
+        }
+      } catch { /* non-blocking */ }
+    }
+
+    return c;
+  }));
+
+  return result;
+}
+
 // ── Prévia de cote / étiquette ────────────────────────────
 function stripDiacritics(value = '') {
   return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -574,7 +639,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setBnResult(null);
   }
 
-  function applyCandidate(candidate) {
+  async function applyCandidate(candidate) {
     if (!candidate) return;
     const updates = {};
     if (candidate.title && !f('titulo')) updates.titulo = candidate.title;
@@ -599,14 +664,23 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       // Also populate the contributors UI
       const hasNamedContributors = contributors.some(c => c.name.trim());
       if (!hasNamedContributors) {
-        setContributors(candidate.contributors.map((c, i) => ({
+        let newContribs = candidate.contributors.map((c, i) => ({
           position: i + 1,
           name: c.label || '',
           role: inferContributorRole(c.role),
           is_primary: i === 0,
           author_id: null,
           author_label: '',
-        })));
+        }));
+        // Auto-link contributors to existing authors (VIAF from MARC + name match)
+        try {
+          newContribs = await autoMatchContributors(newContribs, candidate.contributors, supabase);
+          const linked = newContribs.filter(c => c.author_id).length;
+          if (linked > 0) {
+            setMsg({ text: t({ id: 'catalogacao.authlink.autoLinked' }, { count: linked }), kind: 'ok' });
+          }
+        } catch { /* auto-match is best-effort */ }
+        setContributors(newContribs);
       }
     } else if (candidate.responsibility_statement && !f('autor')) {
       updates.autor = candidate.responsibility_statement;
@@ -621,9 +695,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setMsg({ text: t({ id: 'catalogacao.msg.candidateApplied' }, { title: candidate.title }), kind: 'ok' });
   }
 
-  function applySelectedCandidate() {
+  async function applySelectedCandidate() {
     if (!lookupResult?.candidates?.length) return;
-    applyCandidate(lookupResult.candidates[selectedCandidate] || lookupResult.candidates[0]);
+    await applyCandidate(lookupResult.candidates[selectedCandidate] || lookupResult.candidates[0]);
   }
 
   function clearLookup() {

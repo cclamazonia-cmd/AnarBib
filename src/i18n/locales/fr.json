@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Lots archivés ({count})",
   "catalogacao.areaSubtitle": "Espace bibliothécaire pour brouillons, lots, couvertures, auteurs, exemplaires, étiquettes et publication éditoriale",
   "catalogacao.areaTitle": "Catalogage",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 contributeur·rice lie·e automatiquement a une autorite existante} other {{count} contributeur·rice·s lie·e·s automatiquement a des autorites existantes}}",
   "catalogacao.authlink.close": "Fermer",
   "catalogacao.authlink.link": "Lier",
   "catalogacao.authlink.linkedTitle": "Autorité liée",

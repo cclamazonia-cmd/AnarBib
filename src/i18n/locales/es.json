@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Lotes archivados ({count})",
   "catalogacao.areaSubtitle": "Área bibliotecaria para borradores, lotes, portadas, autores, ejemplares y publicación",
   "catalogacao.areaTitle": "Catalogación",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 contribuyente vinculade automaticamente a una autoridad existente} other {{count} contribuyentes vinculades automaticamente a autoridades existentes}}",
   "catalogacao.authlink.close": "Cerrar",
   "catalogacao.authlink.link": "Vincular",
   "catalogacao.authlink.linkedTitle": "Autoridad vinculada",

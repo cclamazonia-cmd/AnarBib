@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Lots arxivats ({count})",
   "catalogacao.areaSubtitle": "Espai bibliotecari per a esborranys, lots, cobertes, autors-es-es, exemplars, etiquetes i publicació editorial",
   "catalogacao.areaTitle": "Catalogació",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 contribuent-a-e vinculat-ada-ade automaticament a una autoritat existent} other {{count} contribuents-es vinculats-ades automaticament a autoritats existents}}",
   "catalogacao.authlink.close": "Tancar",
   "catalogacao.authlink.link": "Vincular",
   "catalogacao.authlink.linkedTitle": "Autoritat vinculada",

@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Lotes arquivados ({count})",
   "catalogacao.areaSubtitle": "Área bibliotecária para rascunhos, lotes, capas, autores, exemplares, rótulos e publicação editorial",
   "catalogacao.areaTitle": "Catalogação",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 contribuinte vinculado(a/e) automaticamente a uma autoridade existente} other {{count} contribuintes vinculados(as/es) automaticamente a autoridades existentes}}",
   "catalogacao.authlink.close": "Fechar",
   "catalogacao.authlink.link": "Vincular",
   "catalogacao.authlink.linkedTitle": "Vinculado a uma autoridade",

@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Αρχειοθετημένες παρτίδες ({count})",
   "catalogacao.areaSubtitle": "Χώρος της βιβλιοθήκης για πρόχειρα, παρτίδες, εξώφυλλα, συγγραφείς, αντίτυπα, ετικέτες και εκδοτική δημοσίευση",
   "catalogacao.areaTitle": "Καταλογογράφηση",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 contributor automatically linked to an existing authority} other {{count} contributors automatically linked to existing authorities}}",
   "catalogacao.authlink.close": "Κλείσιμο",
   "catalogacao.authlink.link": "Σύνδεση",
   "catalogacao.authlink.linkedTitle": "Συνδεδεμένο με αρχή",

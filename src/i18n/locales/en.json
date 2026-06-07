@@ -1340,6 +1340,7 @@
   "catalogacao.archivedBatches": "Archived batches ({count})",
   "catalogacao.areaSubtitle": "Library area for drafts, batches, covers, authors, copies, labels and editorial publishing",
   "catalogacao.areaTitle": "Cataloging",
+  "catalogacao.authlink.autoLinked": "{count, plural, one {1 contributor automatically linked to an existing authority} other {{count} contributors automatically linked to existing authorities}}",
   "catalogacao.authlink.close": "Close",
   "catalogacao.authlink.link": "Link",
   "catalogacao.authlink.linkedTitle": "Linked to an authority",
