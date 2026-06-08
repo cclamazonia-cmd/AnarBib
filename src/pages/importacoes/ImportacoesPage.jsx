@@ -68,6 +68,12 @@ export default function ImportacoesPage() {
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
 
+  // ── Deposit (format maison) ────────────────────────────
+  const [depositPartnerName, setDepositPartnerName] = useState('');
+  const [depositSourceId, setDepositSourceId] = useState('');
+  const [depositFile, setDepositFile] = useState(null);
+  const [depositBusy, setDepositBusy] = useState(false);
+
   // ── Status labels ──────────────────────────────────────
   const STATUS = useMemo(() => ({
     pending: t({ id: 'importacoes.status.pending' }),
@@ -219,6 +225,49 @@ export default function ImportacoesPage() {
     } catch (err) {
       setMsg({ text: err.message, kind: 'error' });
     } finally { setSearching(false); }
+  }
+
+  // ── Register deposit source (format maison) ────────────
+  async function handleRegisterDepositSource() {
+    if (!depositPartnerName.trim()) return;
+    setDepositBusy(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_import_register_deposit_source', {
+        p_partner_name: depositPartnerName.trim(),
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: data?.created ? 'importacoes.deposit.registered' : 'importacoes.deposit.alreadyExists' }, { name: depositPartnerName.trim() }), kind: 'ok' });
+      setDepositSourceId(String(data.source_id));
+      setDepositPartnerName('');
+      await loadSources();
+    } catch (err) {
+      setMsg({ text: err.message, kind: 'error' });
+    } finally { setDepositBusy(false); }
+  }
+
+  // ── Upload + process deposit ──────────────────────────
+  async function handleProcessDeposit() {
+    if (!depositSourceId) { setMsg({ text: t({ id: 'importacoes.deposit.selectSource' }), kind: 'error' }); return; }
+    if (!depositFile) { setMsg({ text: t({ id: 'importacoes.selectFile' }), kind: 'error' }); return; }
+    setDepositBusy(true);
+    setMsg({ text: t({ id: 'importacoes.deposit.uploading' }), kind: 'info' });
+    try {
+      const storagePath = `${depositSourceId}/${Date.now()}-${(depositFile.name || 'file').replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+      const { error: upErr } = await supabase.storage.from('partner-catalog-deposits').upload(storagePath, depositFile, { upsert: false });
+      if (upErr) throw upErr;
+
+      const { data, error } = await supabase.rpc('fn_import_process_deposit', {
+        p_source_id: Number(depositSourceId),
+        p_storage_path: storagePath,
+        p_original_filename: depositFile.name,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'importacoes.deposit.processed' }, { filename: data?.filename || depositFile.name, format: data?.format || '?' }), kind: 'ok' });
+      setDepositFile(null);
+      await loadRuns();
+    } catch (err) {
+      setMsg({ text: err.message, kind: 'error' });
+    } finally { setDepositBusy(false); }
   }
 
   // ── Ingest candidate → staging_row (Lot 2) ────────────
@@ -478,6 +527,52 @@ export default function ImportacoesPage() {
                     </div>
                   ))}
                 </div>
+
+                {/* Dépôt format maison */}
+                <h4 className="imp-plane-h" style={{ marginTop: 24 }}>
+                  {t({ id: 'importacoes.deposit.title' })}
+                  <Pill>{t({ id: 'importacoes.deposit.pill' })}</Pill>
+                </h4>
+                <p className="imp-note" style={{ marginBottom: 12 }}>
+                  {t({ id: 'importacoes.deposit.desc' })}
+                </p>
+                <div className="imp-row3" style={{ marginBottom: 12 }}>
+                  <div className="ab-field">
+                    <label className="ab-field__label">{t({ id: 'importacoes.deposit.source' })}</label>
+                    <select className="ab-select" value={depositSourceId} onChange={e => setDepositSourceId(e.target.value)}>
+                      <option value="">{t({ id: 'importacoes.deposit.selectSource' })}</option>
+                      {sources.filter(s => s.source_kind === 'partner_deposit').map(s => (
+                        <option key={s.id} value={String(s.id)}>{s.partner_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="ab-field">
+                    <label className="ab-field__label">{t({ id: 'importacoes.deposit.newPartner' })}</label>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <input className="ab-input" value={depositPartnerName} onChange={e => setDepositPartnerName(e.target.value)}
+                        placeholder={t({ id: 'importacoes.deposit.partnerPlaceholder' })}
+                        onKeyDown={e => { if (e.key === 'Enter') handleRegisterDepositSource(); }} />
+                      <button className="cat-btn secondary" onClick={handleRegisterDepositSource}
+                        disabled={depositBusy || !depositPartnerName.trim()} style={{ flexShrink: 0, fontSize: '.82rem' }}>
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div className="ab-field">
+                    <label className="ab-field__label">{t({ id: 'importacoes.deposit.fileLabel' })}</label>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                      <label className="cat-btn secondary" style={{ cursor: 'pointer', fontSize: '.85rem' }}>
+                        {t({ id: 'importacoes.reception.chooseFile' })}
+                        <input type="file" accept={ACCEPTED_EXTENSIONS} onChange={e => setDepositFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
+                      </label>
+                      {depositFile && <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{depositFile.name}</span>}
+                    </div>
+                  </div>
+                </div>
+                <button className="cat-btn primary" onClick={handleProcessDeposit}
+                  disabled={depositBusy || !depositSourceId || !depositFile}>
+                  {depositBusy ? t({ id: 'importacoes.deposit.uploading' }) : t({ id: 'importacoes.deposit.uploadBtn' })}
+                </button>
 
                 {/* Plan B: institucionais */}
                 <h4 className="imp-plane-h" style={{ marginTop: 24 }}>
