@@ -7,6 +7,7 @@ import { handleNetworkEvent } from "../domain/network.ts";
 import { handleReaderMessageEvent, handleLibraryMessageEvent } from "../domain/reader-message.ts";
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
 import { handleCotisationPayment } from "../domain/membership.ts";
+import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
@@ -19,6 +20,14 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // #NOTIFY-Painel-acts famille 1 : reçu de paiement de cotisation (payload-based,
   // record_id factice). Le handler lit membership_payments par payment_id.
   if (event === "cotisation_payment_recorded") return await handleCotisationPayment(payload);
+  // #NOTIFY-Painel-acts famille 2 : restriction locale + gel global (et levées).
+  // Mail membre obligatoire + copie staff (profile_restriction_enabled). Payload-based.
+  if ([
+    "member_restricted_local",
+    "member_unrestricted_local",
+    "member_frozen_global",
+    "member_unfrozen_global"
+  ].includes(event)) return await handleMembershipRestriction(event, payload);
   if (event === "reserva_criada") return await handleReservaCriadaOld(recordId);
   // TR-1 (#153.A) : 'emprestimo_prorrogado' retire de la branche legacy.
   // L'evenement n'est plus emis par la base : le seul emetteur de prorogation,

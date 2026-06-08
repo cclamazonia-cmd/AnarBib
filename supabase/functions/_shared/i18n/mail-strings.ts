@@ -1976,6 +1976,78 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Anders",
     el: "Άλλο"
   },
+  "restriction.global.subject": {
+    "pt-BR": "Conta congelada (rede)",
+    fr: "Compte gelé (réseau)",
+    es: "Cuenta congelada (red)",
+    en: "Account frozen (network)",
+    it: "Account congelato (rete)",
+    de: "Konto gesperrt (Netzwerk)",
+    ca: "Compte congelat (xarxa)",
+    eo: "Konto frostigita (reto)",
+    nl: "Account bevroren (netwerk)",
+    el: "Λογαριασμός παγωμένος (δίκτυο)"
+  },
+  "restriction.global.intro": {
+    "pt-BR": "Sua conta foi congelada em toda a rede.",
+    fr: "Ton compte a été gelé sur l'ensemble du réseau.",
+    es: "Tu cuenta fue congelada en toda la red.",
+    en: "Your account has been frozen across the whole network.",
+    it: "Il tuo account è stato congelato su tutta la rete.",
+    de: "Dein Konto wurde im gesamten Netzwerk gesperrt.",
+    ca: "El teu compte s'ha congelat a tota la xarxa.",
+    eo: "Via konto estis frostigita tra la tuta reto.",
+    nl: "Je account is in het hele netwerk bevroren.",
+    el: "Ο λογαριασμός σου παγώθηκε σε όλο το δίκτυο."
+  },
+  "restriction.lifted.subject": {
+    "pt-BR": "Restrição removida",
+    fr: "Restriction levée",
+    es: "Restricción retirada",
+    en: "Restriction lifted",
+    it: "Restrizione rimossa",
+    de: "Einschränkung aufgehoben",
+    ca: "Restricció retirada",
+    eo: "Restrikto forigita",
+    nl: "Beperking opgeheven",
+    el: "Ο περιορισμός ήρθη"
+  },
+  "restriction.lifted.intro": {
+    "pt-BR": "Sua restrição foi removida. Sua conta está novamente plenamente ativa.",
+    fr: "Ta restriction a été levée. Ton compte est de nouveau pleinement actif.",
+    es: "Tu restricción fue retirada. Tu cuenta vuelve a estar plenamente activa.",
+    en: "Your restriction has been lifted. Your account is fully active again.",
+    it: "La tua restrizione è stata rimossa. Il tuo account è di nuovo pienamente attivo.",
+    de: "Deine Einschränkung wurde aufgehoben. Dein Konto ist wieder voll aktiv.",
+    ca: "La teva restricció s'ha retirat. El teu compte torna a estar plenament actiu.",
+    eo: "Via restrikto estis forigita. Via konto denove estas plene aktiva.",
+    nl: "Je beperking is opgeheven. Je account is weer volledig actief.",
+    el: "Ο περιορισμός σου ήρθη. Ο λογαριασμός σου είναι ξανά πλήρως ενεργός."
+  },
+  "l.scope": {
+    "pt-BR": "Abrangência",
+    fr: "Portée",
+    es: "Alcance",
+    en: "Scope",
+    it: "Ambito",
+    de: "Geltungsbereich",
+    ca: "Abast",
+    eo: "Amplekso",
+    nl: "Bereik",
+    el: "Εμβέλεια"
+  },
+  "restriction.scope.network": {
+    "pt-BR": "Rede AnarBib",
+    fr: "Réseau AnarBib",
+    es: "Red AnarBib",
+    en: "AnarBib network",
+    it: "Rete AnarBib",
+    de: "AnarBib-Netzwerk",
+    ca: "Xarxa AnarBib",
+    eo: "Reto AnarBib",
+    nl: "AnarBib-netwerk",
+    el: "Δίκτυο AnarBib"
+  },
   "prof.restricted": {
     "pt-BR": "Cadastro com restrições",
     fr: "Compte avec restrictions",
