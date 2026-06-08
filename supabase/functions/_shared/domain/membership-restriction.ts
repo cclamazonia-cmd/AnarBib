@@ -131,18 +131,19 @@ export async function handleMembershipRestriction(event, payload) {
     const introText = isLift
       ? tMail(locale, "restriction.lifted.intro")
       : (isGlobal ? tMail(locale, "restriction.global.intro") : tMail(locale, "prof.restricted.intro"));
-    const parts = [introText];
+    const detailParts = [];
     if (!isLift) {
-      parts.push(`${label(locale, "scope")}: ${scopeFor(locale, ctx)}`);
-      if (reason) parts.push(`${label(locale, "reason")}: ${reason}`);
+      detailParts.push(`${label(locale, "scope")}: ${scopeFor(locale, ctx)}`);
+      if (reason) detailParts.push(`${label(locale, "reason")}: ${reason}`);
     }
+    const inappBody = detailParts.length ? `${introText} ${detailParts.join(" · ")}` : introText;
     const category = isLift ? "restriction_lifted" : (isGlobal ? "decision_freeze" : "decision_restriction");
     const { error: eIn } = await supabaseAdmin.from("user_notifications").insert({
       user_id: userId,
       library_id: isGlobal ? null : (brandingLibId || null),
       category,
       title: titleFor(locale),
-      body: parts.join(" ")
+      body: inappBody
     });
     inapp_result = eIn ? { ok: false, error: eIn.message } : { ok: true };
   } catch (eIn) {
