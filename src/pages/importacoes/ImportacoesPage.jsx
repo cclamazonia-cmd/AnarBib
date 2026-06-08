@@ -35,7 +35,7 @@ function formatDate(iso) {
 const CIRCUIT_KEYS = ['migracao', 'arquivo', 'fontes'];
 
 export default function ImportacoesPage() {
-  const { user } = useAuth();
+  useAuth();
   const { role } = useLibrary();
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'importacoes.title' }));
@@ -48,7 +48,7 @@ export default function ImportacoesPage() {
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
   const [runs, setRuns] = useState([]);
-  const [runsLoading, setRunsLoading] = useState(false);
+  const [_runsLoading, setRunsLoading] = useState(false);
   const [selectedRunId, setSelectedRunId] = useState(null);
   const [runRows, setRunRows] = useState([]);
   const [runRowsLoading, setRunRowsLoading] = useState(false);
@@ -111,6 +111,29 @@ export default function ImportacoesPage() {
   }, []);
 
   useEffect(() => { loadSources(); loadRuns(); }, [loadSources, loadRuns]);
+
+  // ── Derived data (hooks must be before early returns) ──
+  const runStats = useMemo(() => {
+    const total = runs.length;
+    const draftsCreated = runs.filter(r => r.run_status === 'drafts_created').length;
+    const pending = runs.filter(r => r.run_status === 'ready_for_review').length;
+    const totalRows = runs.reduce((s, r) => s + (r.imported_rows || 0), 0);
+    return { total, draftsCreated, pending, totalRows };
+  }, [runs]);
+
+  const filteredRunRows = useMemo(() => {
+    let rows = runRows;
+    if (filaStateFilter) {
+      rows = rows.filter(r => r.review_status === filaStateFilter);
+    }
+    return rows;
+  }, [runRows, filaStateFilter]);
+
+  const circuitHints = useMemo(() => ({
+    migracao: t({ id: 'importacoes.circuit.migracao.hint' }),
+    arquivo: t({ id: 'importacoes.circuit.arquivo.hint' }),
+    fontes: t({ id: 'importacoes.circuit.fontes.hint' }),
+  }), [t]);
 
   // ── Role gating ────────────────────────────────────────
   const roleLoaded = role !== null && role !== undefined;
@@ -197,29 +220,6 @@ export default function ImportacoesPage() {
       setMsg({ text: err.message, kind: 'error' });
     } finally { setSearching(false); }
   }
-
-  // ── Derived data ───────────────────────────────────────
-  const runStats = useMemo(() => {
-    const total = runs.length;
-    const draftsCreated = runs.filter(r => r.run_status === 'drafts_created').length;
-    const pending = runs.filter(r => r.run_status === 'ready_for_review').length;
-    const totalRows = runs.reduce((s, r) => s + (r.imported_rows || 0), 0);
-    return { total, draftsCreated, pending, totalRows };
-  }, [runs]);
-
-  const filteredRunRows = useMemo(() => {
-    let rows = runRows;
-    if (filaStateFilter) {
-      rows = rows.filter(r => r.review_status === filaStateFilter);
-    }
-    return rows;
-  }, [runRows, filaStateFilter]);
-
-  const circuitHints = useMemo(() => ({
-    migracao: t({ id: 'importacoes.circuit.migracao.hint' }),
-    arquivo: t({ id: 'importacoes.circuit.arquivo.hint' }),
-    fontes: t({ id: 'importacoes.circuit.fontes.hint' }),
-  }), [t]);
 
   // ── Pill helper ────────────────────────────────────────
   function Pill({ children, variant = 'muted' }) {
