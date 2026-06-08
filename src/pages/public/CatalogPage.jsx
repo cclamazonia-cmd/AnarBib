@@ -17,6 +17,10 @@ const PAGE_SIZE = 100;
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''); // #OPAC10 parcours A–Z
 // #OPAC7 — divisions CDD avec libellé curé (sens anarchiste, cf. cotation-et-cdd.md).
 // Les autres codes retombent sur la classe principale Dewey.
+function localizedSubjectLabel(li, locale) {
+  if (!li || typeof li !== 'object') return '';
+  return li[locale] || li[(locale || '').split('-')[0]] || li['pt-BR'] || Object.values(li)[0] || '';
+}
 const CDD_DIV_LABELS = new Set([
   '070', '301', '303', '305', '320', '321', '322', '323', '324', '331',
   '333', '334', '335', '355', '365', '370', '909', '920', '944', '946',
@@ -203,7 +207,7 @@ function saveFilters(filters) {
 // ── Composant ──────────────────────────────────────────────
 
 export default function CatalogPage() {
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.catalog' }));
   const { user } = useAuth();
   const { libraryName, libraryId, role: libraryRole } = useLibrary();
@@ -266,6 +270,8 @@ export default function CatalogPage() {
   const [collectionFilter, setCollectionFilter] = useState(filterState.collectionFilter || '');
   const [placeFilter, setPlaceFilter] = useState(filterState.placeFilter || '');
   const [alphaFilter, setAlphaFilter] = useState(''); // #OPAC10 parcours A–Z par auteur·rice (non persisté)
+  const [subjectFilter, setSubjectFilter] = useState(''); // #OPAC8 filtre par sujet (slug)
+  const [subjectLabel, setSubjectLabel] = useState('');
   // #OPAC7 / OPAC-F1 : facettes de découverte (CDD / auteur·rice / décennie)
   const [facets, setFacets] = useState(null);
   const [showAllCdd, setShowAllCdd] = useState(false);
@@ -305,7 +311,7 @@ export default function CatalogPage() {
     // on ne touche à rien : comportement historique préservé.
     const hasUrlIntent = libFromUrl
       || urlSearchParams.has('q') || urlSearchParams.has('autor')
-      || urlSearchParams.has('editora') || urlSearchParams.has('ano');
+      || urlSearchParams.has('editora') || urlSearchParams.has('ano') || urlSearchParams.has('subject');
     if (!hasUrlIntent) return;
 
     // Filtre bibliothèque : URL prioritaire, sinon __all__.
@@ -316,6 +322,7 @@ export default function CatalogPage() {
     setAuthorIdFilter('');
     setPublisherFilter(urlSearchParams.get('editora') || '');
     setYearFilter(urlSearchParams.get('ano') || '');
+    setSubjectFilter(urlSearchParams.get('subject') || ''); setSubjectLabel('');
     // Filtres sans représentation URL : remis à zéro pour un écran propre.
     setAvailabilityFilter('__all__');
     setIsbnFilter(''); setLanguageFilter(''); setCddFilter('');
@@ -384,6 +391,16 @@ export default function CatalogPage() {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     try {
       const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryFilter, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
+      // #OPAC8 — filtre par sujet : résout les book_id via book_subjects (table dédiée).
+      if (subjectFilter) {
+        const { data: sd } = await supabase.from('subjects').select('id').eq('slug', subjectFilter).maybeSingle();
+        let ids = [];
+        if (sd?.id) {
+          const { data: bs } = await supabase.from('book_subjects').select('book_id').eq('subject_id', sd.id);
+          ids = (bs || []).map(r => r.book_id);
+        }
+        filters['book_id'] = ids.length ? `in.(${ids.join(',')})` : 'eq.-1';
+      }
       const { data, error, totalCount: serverTotal } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
       if (error) throw error;
       const result = data || [];
@@ -396,7 +413,7 @@ export default function CatalogPage() {
       if (serverTotal != null) setTotalCount(serverTotal);
     } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
     finally { setLoading(false); setLoadingMore(false); }
-  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
+  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
 
@@ -415,14 +432,14 @@ export default function CatalogPage() {
         library: libraryFilter !== '__all__' ? libraryFilter : '',
         cdd: dCdd || '', language: dLanguage || '',
         material: materialFilter !== '__all__' ? materialFilter : '',
-        collection: dCollection || '', place: dPlace || '',
+        collection: dCollection || '', place: dPlace || '', subject: subjectFilter || '',
       };
       try {
         const { data } = await supabase.schema('api').rpc('catalog_facets_v1', { p_filters });
         setFacets(data || null);
       } catch { setFacets(null); }
     })();
-  }, [dSearch, authorIdFilter, alphaFilter, dPublisher, dYear, libraryFilter, dCdd, dLanguage, materialFilter, dCollection, dPlace]);
+  }, [dSearch, authorIdFilter, alphaFilter, dPublisher, dYear, libraryFilter, dCdd, dLanguage, materialFilter, dCollection, dPlace, subjectFilter]);
 
   // Regimento da biblioteca (if user logged in)
   useEffect(() => {
@@ -623,7 +640,7 @@ export default function CatalogPage() {
   }, [isAuth]);
 
   // Stats
-  const hasActiveFilters = dSearch || dAuthor || alphaFilter || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter !== '__all__' || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
+  const hasActiveFilters = dSearch || dAuthor || alphaFilter || subjectFilter || dPublisher || dYear || availabilityFilter !== '__all__' || libraryFilter !== '__all__' || dIsbn || dLanguage || dCdd || dSubjects || materialFilter !== '__all__' || dCollection || dPlace;
   const availabilityOptions = isAuth ? AVAILABILITY_OPTIONS_AUTH : AVAILABILITY_OPTIONS_ANON;
 
   function handleHeaderSort(col) {
@@ -649,9 +666,13 @@ export default function CatalogPage() {
     setAuthorIdFilter(a.author_id ? String(a.author_id) : '');
     setAlphaFilter('');
   }
+  function pickSubject(f) {
+    setSubjectFilter(prev => prev === f.slug ? '' : f.slug);
+    setSubjectLabel(localizedSubjectLabel(f.label_i18n, locale));
+  }
 
   function clearFilters() {
-    setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setAlphaFilter(''); setPublisherFilter(''); setYearFilter('');
+    setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setAlphaFilter(''); setSubjectFilter(''); setPublisherFilter(''); setYearFilter('');
     setAvailabilityFilter('__all__'); setLibraryFilter('__all__'); setSortValue('__relevance__');
     setIsbnFilter(''); setLanguageFilter(''); setCddFilter(''); setSubjectsFilter('');
     setMaterialFilter('__all__'); setCollectionFilter(''); setPlaceFilter('');
@@ -856,6 +877,7 @@ export default function CatalogPage() {
               {dSearch && <span className="ab-filter-chip">{t({ id: 'catalog.chip.search' })}: <strong>{dSearch}</strong> <button onClick={() => setSearch('')}>✕</button></span>}
               {dAuthor && <span className="ab-filter-chip">{t({ id: 'catalog.chip.author' })}: <strong>{dAuthor}</strong> <button onClick={() => { setAuthorFilter(''); setAuthorIdFilter(''); }}>✕</button></span>}
               {alphaFilter && <span className="ab-filter-chip">{t({ id: 'catalog.browse.alpha' })}: <strong>{alphaFilter}</strong> <button onClick={() => setAlphaFilter('')}>✕</button></span>}
+              {subjectFilter && <span className="ab-filter-chip">{t({ id: 'book.meta.subjects' })}: <strong>{subjectLabel || subjectFilter}</strong> <button onClick={() => setSubjectFilter('')}>✕</button></span>}
               {dPublisher && <span className="ab-filter-chip">{t({ id: 'catalog.chip.publisher' })}: <strong>{dPublisher}</strong> <button onClick={() => setPublisherFilter('')}>✕</button></span>}
               {dYear && <span className="ab-filter-chip">{t({ id: 'catalog.chip.year' })}: <strong>{dYear}</strong> <button onClick={() => setYearFilter('')}>✕</button></span>}
               {availabilityFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.avail' })}: <strong>{availabilityOptions.find(o => o.value === availabilityFilter)?.label}</strong> <button onClick={() => setAvailabilityFilter('__all__')}>✕</button></span>}
@@ -916,7 +938,7 @@ export default function CatalogPage() {
       </section>
 
       {/* ══ #OPAC7 — Facettes de découverte (CDD / auteur·rice / décennie) ══ */}
-      {facets && ((facets.cdd?.length || 0) + (facets.author?.length || 0) + (facets.decade?.length || 0) > 0) && (
+      {facets && ((facets.cdd?.length || 0) + (facets.author?.length || 0) + (facets.decade?.length || 0) + (facets.subjects?.length || 0) > 0) && (
         <section className="ab-facets">
           <span className="ab-facets__title">{t({ id: 'catalog.facets.title' })}</span>
           {facets.cdd?.length > 0 && (
@@ -961,6 +983,21 @@ export default function CatalogPage() {
                 {facets.decade.map(f => (
                   <button key={f.decade} type="button" className="ab-facet-chip" onClick={() => pickDecade(f.decade)}>
                     {f.decade}
+                    <span className="ab-facet-chip__count">{f.count}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {facets.subjects?.length > 0 && (
+            <div className="ab-facet-group">
+              <span className="ab-facet-group__label">{t({ id: 'book.meta.subjects' })}</span>
+              <div className="ab-facet-chips">
+                {facets.subjects.map(f => (
+                  <button key={f.subject_id} type="button"
+                    className={`ab-facet-chip ${subjectFilter === f.slug ? 'is-active' : ''}`}
+                    onClick={() => pickSubject(f)}>
+                    {localizedSubjectLabel(f.label_i18n, locale)}
                     <span className="ab-facet-chip__count">{f.count}</span>
                   </button>
                 ))}

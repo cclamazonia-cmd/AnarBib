@@ -15,6 +15,11 @@ import { buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
 const PHOTO_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/authors/';
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
 
+function localizedSubjectLabel(li, locale) {
+  if (!li || typeof li !== 'object') return '';
+  return li[locale] || li[(locale || '').split('-')[0]] || li['pt-BR'] || Object.values(li)[0] || '';
+}
+
 function yearsLabel(birth, death) {
   const b = birth ? String(birth) : '';
   const d = death ? String(death) : '';
@@ -61,6 +66,7 @@ export default function AuthorPage() {
   const [author, setAuthor] = useState(null);
   const [books, setBooks] = useState([]);
   const [related, setRelated] = useState([]); // #AUT1 : réseau d'auteur·rices (par contenu)
+  const [subjectCloud, setSubjectCloud] = useState([]); // #AUT2 : nuage de sujets
   const [availMap, setAvailMap] = useState({}); // #AUT4 : dispo session-aware par livre
   const [loading, setLoading] = useState(true);
   const isAuth = !!user;
@@ -70,13 +76,15 @@ export default function AuthorPage() {
     (async () => {
       setLoading(true);
       try {
-        const [authorRes, booksRes, transRes, relRes] = await Promise.all([
+        const [authorRes, booksRes, transRes, relRes, scRes] = await Promise.all([
           supabase.from('authors').select('*').eq('id', id).single(),
           supabase.from('author_books_public').select('*').eq('author_id', id),
           supabase.from('author_translations').select('lang, biography').eq('author_id', id),
           supabase.schema('api').rpc('similar_authors', { p_author_id: id }), // #AUT1
+          supabase.schema('api').rpc('author_subjects_v1', { p_author_id: id }), // #AUT2
         ]);
         if (Array.isArray(relRes?.data)) setRelated(relRes.data);
+        if (Array.isArray(scRes?.data)) setSubjectCloud(scRes.data);
 
         if (authorRes.data) {
           const authorData = authorRes.data;
@@ -235,6 +243,21 @@ export default function AuthorPage() {
               <Link key={r.author_id} to={`/autor/${r.author_id}`} className="ab-autor-related-chip">
                 {r.label}
                 {r.shared_count > 0 && <span className="ab-autor-related-count" title={t({ id: 'author.related.shared' })}>{r.shared_count}</span>}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* #AUT2 — Nuage de sujets de la bibliographie */}
+      {subjectCloud.length > 0 && (
+        <section className="ab-autor-card ab-autor-related-band">
+          <h2 className="ab-autor-section-title">{t({ id: 'book.meta.subjects' })}</h2>
+          <div className="ab-autor-related">
+            {subjectCloud.map(s => (
+              <Link key={s.subject_id} to={`/catalogo?subject=${encodeURIComponent(s.slug)}`} className="ab-autor-related-chip">
+                {localizedSubjectLabel(s.label_i18n, locale)}
+                {s.count > 0 && <span className="ab-autor-related-count">{s.count}</span>}
               </Link>
             ))}
           </div>
