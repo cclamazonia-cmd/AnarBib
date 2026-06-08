@@ -1320,6 +1320,8 @@
   "catalog.sort.title": "Titel",
   "catalog.sort.year": "Jahr",
   "catalog.facets.title": "Stöbern nach…",
+  "catalog.section.filters": "Filter",
+  "catalog.section.explore": "Entdecken",
   "catalog.facets.cdd": "Thema (DDC)",
   "catalog.facets.decade": "Jahrzehnt",
   "catalog.facets.author": "Autor*in",

@@ -568,3 +568,29 @@
   color: var(--brand-muted);
   cursor: pointer;
 }
+
+/* ── Blocs escamotables (filtres / explorer) ────────────── */
+
+.ab-collapse-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  color: var(--brand-text, #f5f2ea);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.ab-collapse-header:hover { color: var(--brand-action, #b32025); }
+
+.ab-collapse-chevron {
+  font-size: 0.72rem;
+  color: var(--brand-muted);
+}
+
+.ab-explore-toggle { margin: 6px 0 2px; }

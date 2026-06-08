@@ -1320,6 +1320,8 @@
   "catalog.sort.title": "Titre",
   "catalog.sort.year": "Année",
   "catalog.facets.title": "Explorer par…",
+  "catalog.section.filters": "Filtres",
+  "catalog.section.explore": "Explorer",
   "catalog.facets.cdd": "Thème (CDD)",
   "catalog.facets.decade": "Décennie",
   "catalog.facets.author": "Auteur·rice",

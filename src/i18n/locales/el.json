@@ -1320,6 +1320,8 @@
   "catalog.sort.title": "Τίτλος",
   "catalog.sort.year": "Έτος",
   "catalog.facets.title": "Εξερεύνηση κατά…",
+  "catalog.section.filters": "Φίλτρα",
+  "catalog.section.explore": "Εξερεύνηση",
   "catalog.facets.cdd": "Θέμα (DDC)",
   "catalog.facets.decade": "Δεκαετία",
   "catalog.facets.author": "Συγγραφέας",

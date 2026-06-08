@@ -1320,6 +1320,8 @@
   "catalog.sort.title": "Titolo",
   "catalog.sort.year": "Jaro",
   "catalog.facets.title": "Esplori laŭ…",
+  "catalog.section.filters": "Filtriloj",
+  "catalog.section.explore": "Esplori",
   "catalog.facets.cdd": "Temo (DDC)",
   "catalog.facets.decade": "Jardeko",
   "catalog.facets.author": "Aŭtoro",

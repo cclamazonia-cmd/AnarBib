@@ -1320,6 +1320,8 @@
   "catalog.sort.title": "Titel",
   "catalog.sort.year": "Jaar",
   "catalog.facets.title": "Bladeren op…",
+  "catalog.section.filters": "Filters",
+  "catalog.section.explore": "Verkennen",
   "catalog.facets.cdd": "Onderwerp (DDC)",
   "catalog.facets.decade": "Decennium",
   "catalog.facets.author": "Auteur",

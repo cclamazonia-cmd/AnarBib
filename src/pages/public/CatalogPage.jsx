@@ -15,6 +15,13 @@ import './CatalogPage.css';
 
 const PAGE_SIZE = 100;
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''); // #OPAC10 parcours A–Z
+// #OPAC7 — divisions CDD avec libellé curé (sens anarchiste, cf. cotation-et-cdd.md).
+// Les autres codes retombent sur la classe principale Dewey.
+const CDD_DIV_LABELS = new Set([
+  '070', '301', '303', '305', '320', '321', '322', '323', '324', '331',
+  '333', '334', '335', '355', '365', '370', '909', '920', '944', '946',
+  '972', '980', '981',
+]);
 
 // URLs des manuels (stockes sur Supabase Storage, bucket library-ui-assets).
 // Le manuel lecteur est un PDF multilingue unique (8 langues en interne).
@@ -249,6 +256,7 @@ export default function CatalogPage() {
   const [sortValue, setSortValue] = useState(filterState.sortValue || '__relevance__');
   const [compact, setCompact] = useState(filterState.compact || false);
   const [filtersOpen, setFiltersOpen] = useState(true);
+  const [exploreOpen, setExploreOpen] = useState(true); // bloc « Explorer » escamotable
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [isbnFilter, setIsbnFilter] = useState(filterState.isbnFilter || '');
   const [languageFilter, setLanguageFilter] = useState(filterState.languageFilter || '');
@@ -626,8 +634,14 @@ export default function CatalogPage() {
   }
   function si(col) { const [c,d] = sortValue.split('.'); return c === col ? (d==='asc'?' ↑':' ↓') : ''; }
 
-  // #OPAC7 — clic sur une facette : réutilise les filtres existants.
-  function cddLabel(code) { return t({ id: `catalog.cdd.main.${String(code || '')[0] || '0'}` }); }
+  // #OPAC7 — libellé de facette CDD : division curée (sens anarchiste) si connue,
+  // sinon repli sur la classe principale Dewey. Évite la redondance « Ciências
+  // sociais » répétée pour 335/320/370… (cf. cotation-et-cdd.md).
+  function cddLabel(code) {
+    const c = String(code || '');
+    if (CDD_DIV_LABELS.has(c)) return t({ id: `catalog.cdd.div.${c}` });
+    return t({ id: `catalog.cdd.main.${c[0] || '0'}` });
+  }
   function pickCdd(code) { setCddFilter(prev => prev === code ? '' : code); setAdvancedOpen(true); }
   function pickDecade(decade) { const d = parseInt(decade, 10); if (d) setYearFilter(`${d}-${d + 9}`); }
   function pickAuthorFacet(a) {
@@ -729,8 +743,12 @@ export default function CatalogPage() {
         />
       </section>
 
-      {/* ══ FILTRES ═══════════════════════════════════════════ */}
+      {/* ══ FILTRES (escamotable) ════════════════════════════ */}
       <section className="ab-toolbar">
+        <button type="button" className="ab-collapse-header" onClick={() => setFiltersOpen(o => !o)} aria-expanded={filtersOpen}>
+          {t({ id: 'catalog.section.filters' })} <span className="ab-collapse-chevron">{filtersOpen ? '▾' : '▸'}</span>
+        </button>
+        {filtersOpen && (<>
         <div className="ab-filters-grid">
           <div className="ab-field">
             <label className="ab-field__label">{t({ id: 'catalog.filters.searchLabel' })}</label>
@@ -829,6 +847,7 @@ export default function CatalogPage() {
             </div>
           </div>
         )}
+        </>)}
 
         {/* Chips + view controls */}
         <div className="ab-toolbar-meta">
@@ -859,6 +878,13 @@ export default function CatalogPage() {
         </div>
       </section>
 
+      {/* ══ Exploration — modes + facettes (escamotable) ═════ */}
+      <div className="ab-explore-toggle">
+        <button type="button" className="ab-collapse-header" onClick={() => setExploreOpen(o => !o)} aria-expanded={exploreOpen}>
+          {t({ id: 'catalog.section.explore' })} <span className="ab-collapse-chevron">{exploreOpen ? '▾' : '▸'}</span>
+        </button>
+      </div>
+      {exploreOpen && (<>
       {/* ══ #OPAC10 — Autres modes de découverte ═════════════ */}
       <section className="ab-browse-modes">
         <span className="ab-browse-modes__label">{t({ id: 'catalog.browse.label' })} :</span>
@@ -943,6 +969,7 @@ export default function CatalogPage() {
           )}
         </section>
       )}
+      </>)}
 
       {/* ══ STATS PILLS ═══════════════════════════════════════ */}
       <div className="ab-stats">

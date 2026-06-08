@@ -1320,6 +1320,8 @@
   "catalog.sort.title": "Títol",
   "catalog.sort.year": "Any",
   "catalog.facets.title": "Explora per…",
+  "catalog.section.filters": "Filtres",
+  "catalog.section.explore": "Explora",
   "catalog.facets.cdd": "Tema (CDD)",
   "catalog.facets.decade": "Dècada",
   "catalog.facets.author": "Autoria",

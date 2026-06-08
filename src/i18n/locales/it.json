@@ -1320,6 +1320,8 @@
   "catalog.sort.title": "Titolo",
   "catalog.sort.year": "Anno",
   "catalog.facets.title": "Esplora per…",
+  "catalog.section.filters": "Filtri",
+  "catalog.section.explore": "Esplora",
   "catalog.facets.cdd": "Tema (CDD)",
   "catalog.facets.decade": "Decennio",
   "catalog.facets.author": "Autore/trice",
