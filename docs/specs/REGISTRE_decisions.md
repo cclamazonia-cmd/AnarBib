@@ -285,6 +285,156 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
+## 20. Multi-appartenance lecteur — `MULTI` *(spec-multi-appartenance-lecteur v0.3)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **MULTI-MODEL** | Appartenance = `(user_id, library_id)` + attributs locaux ; clé composée. | ✅ acté |
+| **MULTI-A.2 (PRIMARY)** | Biblio principale = `is_primary` existant + contrainte unique partielle (au plus un `true`/`user_id`). | ✅ acté |
+| **MULTI-A.2bis** | Bascule du sélecteur éphémère (session) ; re-marquage de la primaire = action explicite séparée. | ✅ acté |
+| **MULTI-A.4** | Sortie volontaire distincte du retrait staff : `suspended` / `left_with_pending_circulation` / `terminated`. | ✅ acté |
+| **MULTI-STATUS** | 8 statuts (4 existants + 4 nouveaux `suspended`/`left_with_pending_circulation`/`terminated`/`pending_validation`) ; CHECK à étendre. | ✅ acté |
+| **MULTI-B.1/B.2** | Sélecteur de biblio courante à l'entrée de `/conta`, persistance `sessionStorage` ; bandeau de contexte + bascule `--brand-*` de la biblio courante. | ✅ acté |
+| **MULTI-Z19** | Sélecteur + bandeau réservés au multi-biblio : masqués en mono, apparaissent dès 2 appartenances. | ✅ acté |
+| **MULTI-B.3** | Lecture agrégée toutes biblios, action contextuelle (l'action s'attache à la biblio courante). | ✅ acté |
+| **MULTI-C.1–C.4** | Rôle, restrictions, cotisations, plafonds : strictement par biblio, sans agrégation ni transfert de privilège. | ✅ acté |
+| **MULTI-F.1** | 5 conditions pour engager une circulation dans X (appartenance active, validation physique par-appartenance, pas de restriction, cotisation à jour, plafonds non atteints) ; action cross-contexte = refus + proposition de bascule. | ✅ acté |
+| **MULTI-D.1** | Même titre dans deux biblios : toléré, avertissement non-bloquant, jamais bloqué ; la biblio ne coordonne pas. | ✅ acté |
+| **MULTI-E.2** | Numéro lectrice par appartenance, format libre, `UNIQUE (library_id, local_reader_number)`, saisie staff à la validation ; UUID auth transverse inchangé. | ✅ acté |
+| **MULTI-F.2** | Profil transverse (nom, e-mail, langue) = souveraineté lectrice seule, sans validation biblio. | ✅ acté |
+| **MULTI-E.3** | Transparence minimale par défaut (existence des appartenances) ; enrichissement via partenariat stabilisé (§21), opt-out renvoyé à `PARTNER`. | ✅ acté |
+| **MULTI-β.1** | Première auto-inscription libre ; toute inscription supplémentaire exige ≥ 1 appartenance déjà validée (anti-inscription parallèle malveillante). | ✅ acté |
+| **MULTI-γ.1** | Non-cascade : biblio dissoute n'effondre pas les autres appartenances (confiance non transitive). | ✅ acté |
+| **MULTI-F.3** | `user_notification_preferences` en clé composée `(user_id, library_id)` pour les préfs liées à une biblio, transverses globales (hybride). | ✅ acté |
+| **MULTI-Z15** | Propagation du contexte au backend = paramètre RPC explicite `p_library_id`. | ✅ acté |
+| **MULTI-ArbB** | `history_enabled` synchronisé par trigger avec les préférences de rétention #CL.8 (la spec rétention prime). | ✅ acté |
+| **MULTI-Z23** | `fn_my_account_status` garde la vérité de la primaire, complété par `fn_my_memberships_status` (RPC par-biblio). | ✅ acté |
+| **MULTI-MIGRATION** | Aucune migration auto des lectrices existantes ; deux comptes test BTL traités manuellement. | ✅ acté |
+
+> Foyer : design dans `docs/specs/spec-multi-appartenance-lecteur.md` (v0.3, charpente figée) ; trace `docs/decisions/CADRAGE_spec-multi-appartenance-lecteur_2026-05-31.md`. Registre > trace.
+
+---
+
+## 21. Partenariat bibliothèques — `PARTNER` *(spec-partenariat-biblios v0.3)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **PARTNER-D1** | Consentement lectrice : opt-in explicite **par partenariat** ; défaut = transparence minimale. | ✅ acté |
+| **PARTNER-D2** | Granularité : activation **droit par droit** côté biblios (cases réciproques) ; consentement lectrice au niveau du partenariat, pas case par case. | ✅ acté |
+| **PARTNER-D3** | Orthogonalité au cercle : aucun partenariat ne se déduit d'un cercle commun ; le cercle facilite socialement mais ne crée jamais le droit. | ✅ acté |
+| **PARTNER-D4** | Symétrie stricte : un seul jeu de droits réciproques, même périmètre dans les deux sens, attaché au partenariat-paire `{A,B}` (anti-pouvoir). | ✅ acté |
+| **PARTNER-D5** | Révocation : partage = visibilité conditionnée par RLS, jamais copie ; rupture ferme l'accès sans résidu + audit (artefacts ILL transmis exceptés). | ✅ acté |
+| **PARTNER-D6** | Périmètre : droits réservés **biblio↔biblio AnarBib** ; collectifs `catalog_partners` restent déclaratifs, sans droits internes. | ✅ acté |
+| **PARTNER-D7** | Cycle de vie : proposition/acceptation réservées au `coordenador` ; activation **bilatérale** ; rupture **unilatérale** tracée. | ✅ acté |
+| **PARTNER-D8** | Consentement révocable depuis `/conta` (effet immédiat RLS) ; re-sollicitation **vers le haut** seulement (ajout de droit). | ✅ acté |
+| **PARTNER-D9** | Droits portés par table de jonction `partnership_rights (partnership_id, right_key)` sous CHECK/enum ; ajouter un droit = une valeur, pas une migration. | ✅ acté |
+
+> Foyer : `docs/specs/spec-partenariat-biblios.md` v0.3 (charpente figée) ; trace `docs/decisions/CADRAGE_partenariat_stabilise_2026-06-02.md`. Registre > trace.
+
+---
+
+## 22. Prêt inter-bibliothèques / partage numérique — `ILL` *(spec-flux-partage-numerique v0.2)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **ILL-1** | Périmètre = matériel gris non commercialisé (affiches, tracts, brochures) ; ouvrages à ISBN/ISSN hors cible. | ✅ acté |
+| **ILL-2** | Demi-verrou ISBN/ISSN : à la détection, signaler et orienter vers le PEB ; si le document est dans un catalogue du réseau, export bloqué. | ✅ acté |
+| **ILL-3** | Plafond de diffusion qui voyage avec le document : non-élargissable (durcir oui, assouplir non), figé à la transmission. | ✅ acté |
+| **ILL-4** | Deux modes — ponctuel (défaut, aucune copie chez le récepteur, URL signée TTL court) / versement durable en bucket privé. | ✅ acté |
+| **ILL-5** | Cataloguer = affirmer irrévocablement « libre de tous droits » ; seuls les libres de droits entrent au catalogue. **Verrou dépend du filtre `visibility` (CAT-B3, Phase 1 #CATALOGACAO) — non encore câblé dans le catalogue public.** | 🟡 ouvert (dépend `visibility`) |
+| **ILL-6** | La source conserve son scan (préservation) ; l'audit garde la demande satisfaite, pas une copie du fichier. | ✅ acté |
+| **ILL-7** | Flux `demandé → accepté\|refusé\|indisponible → numérisation → transmis → clôturé` ; initiation staff biblio↔biblio ; section dédiée aux comptes-rendus hebdo. | ✅ acté |
+| **ILL-8** | Le partage est le droit `digital_share` d'un partenariat stabilisé (`PARTNER-D9`) ; export = partenariat actif ∧ droit ∧ plafond compatible. | ✅ acté |
+| **ILL-9** | Mécanique du plafond : crans binaires `public`/`staff_only` (aligné `CAT-B3`), verrou en base, trace double horodatée export/réception. | ✅ acté |
+
+> Foyer : REGISTRE §22 (`ILL-1..ILL-9`) fait foi ; conception figée dans `spec-flux-partage-numerique` v0.2 ; trace `CADRAGE_ILL-digital_2026-05-25`. Registre > spec > trace.
+
+---
+
+## 23. Carte-lecteur — `CARD` *(spec-carte-lecteur v0.2)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **CARD-A.2** | Portée **par appartenance** : une carte par appartenance, index UNIQUE `uq_reader_card_active_per_membership` (un seul jeton actif par appartenance). | ✅ acté (impl. 28/05) |
+| **CARD-A.3** | Stockage en mini-table dédiée `public.reader_card_tokens` (conserve l'historique des révocations). | ✅ acté |
+| **CARD-A.4** | **Génération = choix du lecteur·rice** : risque résiduel « carte-fichier sur téléphone saisi » acté et documenté ; un·e lecteur·rice exposé·e peut ne jamais en générer. | ✅ acté |
+| **CARD-A.1** | Séquençage chantier mobile vs Catalogação / échéance Bologne (FICEDL 09/2026) : après Catalogação ou détachement P0/P1 en avance de phase. | 🟡 ouvert |
+| **CARD-TOKEN** | Le QR encode un **jeton opaque** (pointeur, pas clé) : identifie sans authentifier, inerte hors scan staff ; clair jamais stocké (seul `token_hash` SHA-256). | ✅ acté |
+| **CARD-QR** | Génération **locale** du QR côté client ; la carte ne porte que logo/slug de la biblio, aucun nom ni identifiant en clair → anti-tracking. | ✅ acté |
+| **CARD-FLAG** | Activation **par bibliothèque** via `libraries.reader_cards_enabled` ; génération refusée (`cards_disabled`) si non activée. | ✅ acté |
+| **CARD-RPC-GEN** | `api.generate_my_reader_card(p_library_id)` : membre actif tout rôle, révoque le jeton précédent, rend le clair une seule fois. | ✅ livré prod (28/05) |
+| **CARD-RPC-REV** | `api.revoke_my_reader_card(p_token_id)` : le·la lecteur·rice révoque son propre jeton actif. | ✅ livré prod (28/05) |
+| **CARD-RPC-RES** | `api.resolve_reader_card(p_token)` : résolution staff ; garde interne `librarian`/`coordenador` de la **bonne** biblio (sinon `not_staff_of_library`), retour minimisé. | ✅ livré prod (03/06) |
+| **CARD-SCOPE** | Hors périmètre v0.2 : UI scan caméra (socle PWA P0 + scanner P2), permanence mobile (P3) ; saisie manuelle du jeton possible sans caméra. | 🔵 différé |
+
+> Foyer : `docs/specs/spec-carte-lecteur-v0_2.md` (v0.2) ; carte-lecteur **livrée en prod** β (generate/revoke, 28/05) + γ (resolve staff, 03/06). Registre > trace.
+
+---
+
+## 24. Face fédération / outils fédéralistes — `FED` *(spec-outils-federalistes v0.1)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **FED-1** | `círculos` = objet niveau biblio relevant de la **face fédération**, hors `rede` ; voir = tout membre rattaché (leitor inclus), agir = `coordenador`. | ✅ acté |
+| **FED-2** | Bloc **Ferramentas federalistas** (1er outil = `círculos`) en nav entre `biblioteca` et `rede`, contrôle d'accès propre, distinct de `isNetworkAdmin`. | ✅ acté |
+| **FED-3** | Deux axes **décollés** : échelle de l'objet (`catálogo→rede`) vs portée des rôles (`leitor→administrador`) ; symétrie 2-2-2-2 abandonnée. | ✅ acté |
+| **FED-4** | « **Voir ≠ agir** » : actions emboîtées vers l'extérieur, lecture emboîtée sauf (a) `conta` first-person et (b) `círculos` ouvert vers le dedans. | ✅ acté |
+| **FED-5** | Importações/exportações relèvent **intégralement** du `coordenador` (relations extérieures = définitions politiques) ; pas de délégation au bibliotecário. | ✅ acté |
+| **FED-6** | `conta` reste first-person ; une **vue limitée** des comptes lecteurs vit dans `painel` (anneau opérationnel), au comptoir à la demande — service, pas privilège de rang. | ✅ acté |
+| **FED-7** | **Doctrine anti-panoptique** : aucun outil fédéraliste ne produit de vue agrégée du tissu relationnel ; donnée servie à la 1ʳᵉ personne, pas de carte relationnelle persistée. | ✅ acté |
+| **FED-O4** | Terme de la primitive = **`círculo`** ; label du bloc = *Ferramentas federalistas*. | ✅ acté (tranché 04/06) |
+| **FED-O5** | Adhésion = **accueil par défaut (opt-out)**, le silence vaut consentement ; objection motivée tracée, effet **anti-blackball** (objection isolée suspend et ouvre la discussion). | ✅ acté (tranché 04/06) |
+| **FED-O6** | Mutualisation de catalogue = **axe distinct** de la visibilité de fiche ; opt-in par biblio, multi-cercles ; granularité = tout le fonds moins `local_only` ; renvoyée à catalogação. | ✅ acté (tranché 04/06) |
+| **FED-O1** | Périmètre exact de la vue `painel` (empréstimos/consultas en cours + carte oui ; données sensibles + historique complet non) à border en spec. | 🟡 ouvert |
+| **FED-O2** | Traçabilité : journaliser les consultations de compte par le staff (qui, quel compte, quand) — service rendu ≠ surveillance. | 🟡 ouvert |
+| **FED-O3** | Scope = une biblio (cercles niveau biblio) → sélecteur de biblio en tête de page pour le staff multi-biblios. | 🟡 ouvert |
+
+> Foyer : REGISTRE §24 (`FED`) fait foi ; raisonnement dans `docs/decisions/CADRAGE_modele_acces_concentrique_2026-06-04.md`, spec `docs/specs/spec-outils-federalistes.md` v0.1. Registre > trace.
+
+---
+
+## 25. Ma bibliothèque (vitrine lecteur·rice) — `MYLIB` *(trace : CHANTIER_carte_ma_bibliotheque_lecteur)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **MYLIB-1** | Vitrine de contact lecteur·rice = **publique opt-in, vide par défaut**, table sœur `library_public_contact`, distincte du confidentiel `library_contact_profiles` (minimisation). | ✅ acté |
+| **MYLIB-2** | **SELECT vitrine = membres actifs only** (pas de lecture `anon`) ; **édition coordOnly** via RPC `upsert_library_public_contact`. | ✅ acté |
+| **MYLIB-3** | Logo de la carte lu **data-driven** sur `library_commons.logo_url`/`logo_file_key`, jamais le `LIBRARY_LOGO_MAP` codé en dur ; repli texte ; carte jamais masquée. | ✅ acté |
+| **MYLIB-4** | Canal « écrire » = **in-système** (`reader_library_messages` → trigger → `notify-event`), jamais `mailto:` ; anti-spam ≤ 3 / 24 h / lecteur·rice / biblio ; accusé de réception. | ✅ acté |
+| **MYLIB-5** | Canal **réciproque biblio→lecteur·rice = mail-only** (RPC `api.send_message_to_reader`, anti-spam 30/24 h, colonne `direction`) ; mail au destinataire seul, sans copie staff ni actionBox ; cadre en langue du destinataire. | ✅ acté |
+| **MYLIB-6** | **TR-6.2b clos** : `layout/index.jsx` dé-hardcodé (`LIBRARY_LOGO_MAP` supprimé → `resolveLogoData(commons)`) ; migration `btl_logo_url_cleanup`. | ✅ acté |
+| **MYLIB-7** | **Dispatcher renommé** `fn_dispatch_circulation_notify_event` → `fn_dispatch_notify_event` ; 13 appelants réécrits, 0 résidu. | ✅ acté |
+| **MYLIB-O1** | **« Chat ouvert » in-app** (fil bidirectionnel persistant) **reporté** — on attend une demande réelle ; v1 = mail-only des deux côtés. | 🟡 reporté (horizon) |
+
+> Foyer : chantier **livré-clos le 04/06/2026** ; détail as-built dans `CHANTIER_carte_ma_bibliotheque_lecteur_2026-06-04.md` (§10–§11). Registre > trace.
+
+---
+
+## 26. Onboarding — `ONBO` *(spec-onboarding-biblioteca v2.0, spec-onboarding-criar-conta v0.3, CADRAGE atelier 2026-06-02)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **ONBO-Q1** | Un **seul atelier réutilisable** sert la constitution (pré-activation) ET la redéfinition d'une biblio active — pas trois objets distincts. | ✅ acté |
+| **ONBO-Q2** | Atelier et BibliotecaPage = deux vues de la même config ; panneaux embarquant les composants de prod (un seul chemin d'écriture, `library_constitution_progress`). | ✅ acté |
+| **ONBO-Q3** | Pas de bilan rétroactif ; périmètre de test = BLMF en direct, BTL en réunion, BLT fictive. | ✅ acté |
+| **ONBO-Q4** | Painel = **prise en main** (coach-marks + check-list), pas configuration ; visibilité pilotée par `usePanelAvailability`. | ✅ acté |
+| **ONBO-Q5** | Expiration constitution : avertissement + rappels **J+67/J+74**, puis **gel réveillable**. | ✅ acté |
+| **ONBO-Q6** | Changement de profil en cours d'atelier autorisé sans boucle ; volets inapplicables → « sans objet » sans effacement. | ✅ acté |
+| **ONBO-Q7** | L'onboarding ne fixe que la **déclaration** de catalogage (volet 4) ; l'arbitrage de classification appartient au chantier CAT. | ✅ acté |
+| **ONBO-Q8** | Mandat coordinateur·rice : **plusieurs coordenadores** possibles, ajout par cooptation, auto-retrait libre, retrait d'autrui collectif, garde-fou « dernier·ère coordenador·a ». | ✅ acté |
+| **ONBO-Q9** | Parcours d'entrée **éditorial sur `anarbib.org`** (portes différenciées) + formulaire `/solicitar-biblioteca` ; réalisation #111. | ✅ acté (réa. #111) |
+| **ONBO-Q10** | Proactivité admins : digest in-app à l'entrée en constitution → « proposer un échange » (RES-D10), en tenant le risque burnout (RES-D11). | ✅ acté |
+| **ONBO-Q11** | Incohérence flairée → **nudge non-bloquant**, jamais un verrou. | ✅ acté |
+| **ONBO-Q12** | Mesure : stats **agrégées et non-individualisantes**, pas de watchlist du silence. | ✅ acté |
+| **ONBO-D1** | Canal humain Biblioteca : **bannière permanente non-fermable** + `<HumanChannelInlineCallout>` en tête de chaque volet (matérialise DOC-COLLECTIVE-1). | ✅ acté |
+| **ONBO-D2** | **Mode redéfinition** = même atelier ; déclencheur = demande explicite du collectif ; axes structurels **sous vote collectif** (PROF E.5). | ✅ acté |
+| **criar-conta D1/D3/D4** | Compte = **agir sur un catalogue** ; le cas équipe ne passe **pas** par `/criar-conta` (cooptation) ; **3 cas** au sélecteur (biblio active / nouvelle biblio / lectrice orpheline). | ✅ acté |
+| **criar-conta D7/D8** | Bandeau vitrine → galerie `anarbib.org/<lang>/explorar/` (#K2) ; champ « nom de biblio » optionnel pour orpheline + privacy notice, pas de claim `reader_attachment` en v0.1. | ✅ acté |
+
+> Foyer : décisions au registre §26 (ONBO-Q1..Q12, ONBO-D1/D2) + table D1-D9 de `spec-onboarding-criar-conta v0.3` §8 ; specs `spec-onboarding-biblioteca v2.0` + CADRAGE atelier = trace. Registre > trace.
+
+---
+
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
@@ -292,6 +442,8 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 05/06/2026 — chantier **Importações/Exportações** ouvert : `IMP-1…IMP-8` (§17) incarnés par `spec-importacoes-exportacoes` v0.1 (squelette). Réf. visuelle : `maquette_importacoes_v7.html`.*
 
 *MàJ 05/06/2026 (session soir) — grosse session catalogação/autorités : **CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1** (Track A complet, capas P1-P3, liaison autorités↔œuvres, fusion de doublons autorités+documents, flux contributeurs, socle Ateliers). 3 specs nouvelles : `spec-autorites-notes-bio-multilingues` v0.2, `spec-liaison-autorites-oeuvres` v0.2, `spec-doublons-detection-fusion` v0.1. **Pièges opérationnels Supabase constatés** (à internaliser) : (1) `[CI SKIP]` sur le commit de TÊTE saute tout le push, migration comprise — ne jamais coiffer une migration d'un commit doc `[CI SKIP]` ; (2) les fonctions d'extension (pg_trgm `similarity`) vivent dans le schéma `extensions` → l'inclure dans le `search_path` des fonctions SECURITY DEFINER (sinon 42883) ; (3) `position` est un mot réservé → quoter `"position"` en colonne de `RETURNS TABLE` ; (4) le catalogue lit des vues matérialisées rafraîchies par cron (≤15 min) → délai entre une écriture et son reflet.*
+
+*MàJ 08/06/2026 — **#HYG-REG-1 (réinscription du foyer)**. Le registre s'arrêtait à §19 ; inscription des sections citées partout mais absentes : **§20 MULTI · §21 PARTNER · §22 ILL · §23 CARD · §24 FED · §25 MYLIB · §26 ONBO**. Schéma **« foyer souverain »** ratifié (Xavier, 08/06) : §17 IMP / §18 OPAC / §19 BIBLIO **inchangés** (on ne renumérote pas le normatif déjà inscrit) ; les sections manquantes prennent les numéros suivants. **Conséquence** : les renvois de TRACE citant l'ancien schéma dispersé (CADRAGE/INVENTAIRE : « MULTI §17, PARTNER §18, ILL §19, OPAC §20, CARD §22, FED §23, MYLIB §24, ONBO §21 ») sont **à conformer** à ces numéros — sweep trace non-normatif, en suivi. Audit de réconciliation : deux schémas concurrents (foyer vs trace) avec collisions sur §17-19.*
 
 *MàJ 05/06/2026 (session Track D) — **CAT-D5a** : P1 Track D sources externes — diagnostic et réactivation gardée de la source LoC. Cause : migration FOLIO (juin 2025) a cassé l'endpoint SRU (casse du database name + instabilité MetaProxy). 5ème piège opérationnel constaté : le MetaProxy IndexData est sensible à la casse du database name (`LCDB` ≠ `lcdb`). **CAT-D5b** : P2 Track D — adaptateurs REST Open Library (ISBN + titre/auteur, candidats riches) et Wikidata (titre/auteur seulement, Q-id passerelle vers P4 autorités). `catalog_metadata_lookup` passe de 5 à 7 sources. **CAT-D5c** : P3 Track D — BN Brasil fédéré dans « Buscar metadados » (`Promise.allSettled` parallèle, normalisation candidats, fusion dans le panel unifié). 8 sources au total. **CAT-D5d** : P4 Track D — EF `authority_lookup` (Wikidata → VIAF/ISNI/variant_forms) + Atelier autorités dans AuthorDraftForm (tier Completo). VIAF API inaccessible (403/HTML depuis juin 2025) → Wikidata seul, qui contient les VIAF/ISNI en claims.*
 
