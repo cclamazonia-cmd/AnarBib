@@ -2669,6 +2669,7 @@
   "notif.rgpd.purgeWarning.reservations.title": "Το ιστορικό κρατήσεων θα διαγραφεί σύντομα",
   "notif.type.admin_copy_loans": "Αντίγραφο διαχείρισης — δανεισμοί",
   "notif.type.admin_copy_reservations": "Αντίγραφο διαχείρισης — κρατήσεις",
+  "notif.type.cotisation_payment_mail": "Απόδειξη συνδρομής",
   "notif.type.loan_lifecycle": "Κύκλος ζωής δανεισμού (δημιουργία, επιστροφή)",
   "notif.type.loan_overdue": "Ειδοποίηση εκπρόθεσμου",
   "notif.type.loan_reminders": "Υπενθυμίσεις δανεισμού",

@@ -2669,6 +2669,7 @@
   "notif.rgpd.purgeWarning.reservations.title": "Historique de réservations bientôt effacé",
   "notif.type.admin_copy_loans": "Copie admin — emprunts",
   "notif.type.admin_copy_reservations": "Copie admin — réservations",
+  "notif.type.cotisation_payment_mail": "Reçu de cotisation",
   "notif.type.loan_lifecycle": "Cycle de l'emprunt (création, retour)",
   "notif.type.loan_overdue": "Avis de retard",
   "notif.type.loan_reminders": "Rappels d'emprunt",

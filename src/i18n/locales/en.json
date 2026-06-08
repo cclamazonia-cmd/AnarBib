@@ -2669,6 +2669,7 @@
   "notif.rgpd.purgeWarning.reservations.title": "Reservation history will be erased soon",
   "notif.type.admin_copy_loans": "Admin copy — loans",
   "notif.type.admin_copy_reservations": "Admin copy — reservations",
+  "notif.type.cotisation_payment_mail": "Membership receipt",
   "notif.type.loan_lifecycle": "Loan lifecycle (creation, return)",
   "notif.type.loan_overdue": "Overdue notice",
   "notif.type.loan_reminders": "Loan reminders",

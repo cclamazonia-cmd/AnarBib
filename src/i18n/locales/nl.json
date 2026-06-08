@@ -2669,6 +2669,7 @@
   "notif.rgpd.purgeWarning.reservations.title": "Reserveringsgeschiedenis wordt binnenkort gewist",
   "notif.type.admin_copy_loans": "Beheerderskopie — uitleningen",
   "notif.type.admin_copy_reservations": "Beheerderskopie — reserveringen",
+  "notif.type.cotisation_payment_mail": "Bijdragebewijs",
   "notif.type.loan_lifecycle": "Levenscyclus van de uitlening (aanmaak, teruggave)",
   "notif.type.loan_overdue": "Aanmaning bij te laat",
   "notif.type.loan_reminders": "Uitleenherinneringen",

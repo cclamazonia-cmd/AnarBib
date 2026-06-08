@@ -2669,6 +2669,7 @@
   "notif.rgpd.purgeWarning.reservations.title": "L'historial de reserves s'esborrarà aviat",
   "notif.type.admin_copy_loans": "Còpia admin — préstecs",
   "notif.type.admin_copy_reservations": "Còpia admin — reserves",
+  "notif.type.cotisation_payment_mail": "Rebut de quota",
   "notif.type.loan_lifecycle": "Cicle del préstec (creació, devolució)",
   "notif.type.loan_overdue": "Avís d'endarreriment",
   "notif.type.loan_reminders": "Recordatoris de préstec",

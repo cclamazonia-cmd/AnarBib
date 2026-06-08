@@ -2669,6 +2669,7 @@
   "notif.rgpd.purgeWarning.reservations.title": "Reservierungsverlauf wird bald gelöscht",
   "notif.type.admin_copy_loans": "Admin-Kopie — Ausleihen",
   "notif.type.admin_copy_reservations": "Admin-Kopie — Vormerkungen",
+  "notif.type.cotisation_payment_mail": "Beitragsquittung",
   "notif.type.loan_lifecycle": "Ausleihzyklus (Erstellung, Rückgabe)",
   "notif.type.loan_overdue": "Überfälligkeitshinweis",
   "notif.type.loan_reminders": "Ausleiherinnerungen",

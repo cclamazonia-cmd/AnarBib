@@ -2669,6 +2669,7 @@
   "notif.rgpd.purgeWarning.reservations.title": "Historio de rezervoj baldaŭ forigota",
   "notif.type.admin_copy_loans": "Administra kopio — pruntoj",
   "notif.type.admin_copy_reservations": "Administra kopio — rezervoj",
+  "notif.type.cotisation_payment_mail": "Kotizkvitanco",
   "notif.type.loan_lifecycle": "Vivociklo de la prunto (kreado, redono)",
   "notif.type.loan_overdue": "Malfruavizo",
   "notif.type.loan_reminders": "Pruntmemorigoj",

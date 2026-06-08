@@ -39,7 +39,7 @@ const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 const NOTIFICATION_FLAG_KEYS = [
   'reservation_created', 'reservation_status', 'reservation_workflow', 'local_consultation',
   'loan_lifecycle', 'loan_reminders', 'loan_overdue', 'mid_loan_message',
-  'profile_restriction', 'reading_recommendations',
+  'profile_restriction', 'reading_recommendations', 'cotisation_payment_mail',
   'admin_copy_reservations', 'admin_copy_loans', 'tech_alerts', 'task_alerts',
 ];
 

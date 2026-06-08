@@ -123,5 +123,31 @@ export async function handleMembershipRestriction(event, payload) {
       : skippedEmailResult("network_copy", "no_network_email");
   }
 
-  return { user_result, biblio_results, network_result };
+  // (4) Réplique in-app B3 pour le membre (doctrine §4.5 ; NOTIF-PA1 pour les
+  // levées). Stockée dans la langue du membre (title/body = texte). Best-effort :
+  // un échec n'invalide pas le mail (canal primaire déjà parti).
+  let inapp_result = null;
+  try {
+    const introText = isLift
+      ? tMail(locale, "restriction.lifted.intro")
+      : (isGlobal ? tMail(locale, "restriction.global.intro") : tMail(locale, "prof.restricted.intro"));
+    const parts = [introText];
+    if (!isLift) {
+      parts.push(`${label(locale, "scope")}: ${scopeFor(locale, ctx)}`);
+      if (reason) parts.push(`${label(locale, "reason")}: ${reason}`);
+    }
+    const category = isLift ? "restriction_lifted" : (isGlobal ? "decision_freeze" : "decision_restriction");
+    const { error: eIn } = await supabaseAdmin.from("user_notifications").insert({
+      user_id: userId,
+      library_id: isGlobal ? null : (brandingLibId || null),
+      category,
+      title: titleFor(locale),
+      body: parts.join(" ")
+    });
+    inapp_result = eIn ? { ok: false, error: eIn.message } : { ok: true };
+  } catch (eIn) {
+    inapp_result = { ok: false, error: String(eIn?.message || eIn) };
+  }
+
+  return { user_result, biblio_results, network_result, inapp_result };
 }
