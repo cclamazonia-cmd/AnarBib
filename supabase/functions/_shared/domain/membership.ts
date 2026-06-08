@@ -2,8 +2,8 @@ import { resolveLibraryNotificationContext } from "../context/library-notificati
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
 import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
-import { safeSendEmail, skippedEmailResult, userTargetFromProfile } from "../transport/email.ts";
-import { formatDateBR } from "../shared/format.ts";
+import { adminTarget, safeSendEmail, skippedEmailResult, userTargetFromProfile } from "../transport/email.ts";
+import { adminDisplayName, formatDateBR, fullName } from "../shared/format.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
 
 // ============================================================================
@@ -80,6 +80,31 @@ export async function handleCotisationPayment(payload) {
     context: ctx
   });
   const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
-  const ur = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
-  return { user_result: ur };
+  const user_result = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
+
+  // Copie biblio (admin de la biblio du paiement) — même garde que le mail
+  // membre (cotisation_payment_mail_enabled déjà vérifiée). Locale biblio.
+  const aun = adminDisplayName(fullName(profile), user?.email);
+  const libLoc = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
+  const fmtL = (d) => formatDateLocale(d, libLoc) || formatDateBR(d) || "";
+  const periodL = `${fmtL(pay.valid_from)} — ${pay.valid_until ? fmtL(pay.valid_until) : tMail(libLoc, "cot.noExpiry")}`;
+  const methodL = tMail(libLoc, `cot.method.${String(pay.payment_method || "other")}`);
+  const titL = tMail(libLoc, "cotisation.payment.subject");
+  const { html: ha, text: ta } = renderEmail({
+    locale: libLoc,
+    preheader: titL,
+    title: titL,
+    introHtml: `<p>${titL}.</p>`,
+    details: [
+      { label: label(libLoc, "reader"), value: aun },
+      { label: label(libLoc, "cotAmount"), value: amountStr },
+      { label: label(libLoc, "cotPeriod"), value: periodL },
+      { label: label(libLoc, "cotMethod"), value: methodL }
+    ],
+    footerHtml: footerPadrao(ctx, libLoc),
+    context: ctx
+  });
+  const admin_result = await safeSendEmail(adminTarget(ctx), applyBrandingText(`[${bt}] ${titL} — ${aun}`, ctx), ha, ta, "admin_copy", ctx);
+
+  return { user_result, admin_result };
 }
