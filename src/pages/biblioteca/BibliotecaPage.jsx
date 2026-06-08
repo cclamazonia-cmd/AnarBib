@@ -881,14 +881,19 @@ export default function BibliotecaPage() {
   }
 
   async function sendReport() {
-    const email = commons?.contact_email;
-    if (!email) { setMsg({ text: t({id:'biblioteca.report.noEmail'}), kind: 'error' }); return; }
-    const text = generateReportText();
-    // Use mailto as fallback — a proper email send would use notify-event
-    const subject = encodeURIComponent(t({ id: 'biblioteca.report.emailSubject' }, { lib: lib?.name || libraryName, date: new Date().toLocaleDateString(locale) }));
-    const body = encodeURIComponent(text);
-    window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
-    setMsg({ text: t({ id: 'biblioteca.report.prepared' }, { email }), kind: 'ok' });
+    // EA-13 (etape 8) : envoi SERVEUR du rapport hebdomadaire via l'Edge Function
+    // notify-weekly-report (Resend), debloque par la cloture de #110. Remplace le
+    // placeholder mailto: historique. Destinataire resolu cote EF sur
+    // weekly_report_email ; autorisation gardee par la RPC (staff de la biblio).
+    const email = mailChannel?.weekly_report_email?.trim();
+    if (!email) { setMsg({ text: t({id:'biblioteca.report.noWeeklyEmail'}), kind: 'error' }); return; }
+    try {
+      const { error } = await supabase.rpc('fn_send_weekly_report_now', { p_library_id: libraryId });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'biblioteca.report.sent' }, { email }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+    }
   }
 
   // ── Task invite ─────────────────────────────────────────
@@ -1899,7 +1904,7 @@ export default function BibliotecaPage() {
             <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
               <button className="cat-btn primary" onClick={()=>{ navigator.clipboard?.writeText(generateReportText()); setMsg({text:t({id:'biblioteca.report.copiedToast'}),kind:'ok'}); }} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.copy' })}</button>
               <button className="cat-btn secondary" onClick={sendReport} style={{ fontSize:'.88rem' }}>{t({ id: 'biblioteca.reports.sendEmail' })}</button>
-              <span style={{ fontSize:'.82rem', color:'var(--brand-muted)', alignSelf:'center' }}>{t({ id: 'biblioteca.tasks.recipient' })} {commons?.contact_email || t({ id: 'common.notConfigured' })}</span>
+              <span style={{ fontSize:'.82rem', color:'var(--brand-muted)', alignSelf:'center' }}>{t({ id: 'biblioteca.tasks.recipient' })} {mailChannel?.weekly_report_email || t({ id: 'common.notConfigured' })}</span>
             </div>
           </div>
         </div>)}
