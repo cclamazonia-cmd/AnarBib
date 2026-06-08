@@ -1,9 +1,11 @@
 # CADRAGE — Chantier OPAC (catalogue public de découverte)
 
+> ⚠️ **Document de travail — historique (08/06/2026).** Contenu normatif gradué dans `REGISTRE_decisions.md` **§18 OPAC** (foyer). **Ne pas utiliser comme source** ; conservé pour la trace (confrontation specs↔code, analyse d'écart, addendum données). Étapes 1 et 2 livrées.
+
 | Champ | Valeur |
 |-|-|
 | **Genre** | Dossier d'ouverture de chantier (cadrage — trace, pas une spec, pas le registre) |
-| **Statut** | 🟡 Cadrage v0.1 — 07/06/2026. Aucune ligne de code engagée. À valider avant Phase 1. |
+| **Statut** | 🔵 Historique (08/06/2026) — contenu normatif gradué au REGISTRE §18 OPAC. Étapes 1 + 2 livrées. |
 | **Session** | Cadrage chantier OPAC |
 | **Décisions invoquées** | OPAC-W1 (wishlist serveur) · OPAC-F1 (RPC facettes) · OPAC-AGG1 (agrégation sujets mutualisée) · OPAC-ATL1 (tables collectivité/matière) · DOC-PERIM-1 (page = périmètre) · DOC-I18N-1 (10 locales) · DOC-RPC-3 (écritures via RPC) · DOC-OBJ-2 (REVOKE objets backend) · DOC-CLOSE-1 (close before open) · INV-1..6 (anti-tracking, specs OPAC) · CAT-B3 (filtre `visibility`) |
 | **Sources de design** | [`spec-catalogue-decouverte.md`](../specs/spec-catalogue-decouverte.md) (#OPAC7–11) · [`spec-notice-autorite-enrichie.md`](../specs/spec-notice-autorite-enrichie.md) (#OPAC1–6, #AUT1–4). En cas de conflit : [`REGISTRE_decisions.md`](../specs/REGISTRE_decisions.md) prime. |
