@@ -1,6 +1,5 @@
 import { handleEmprestimoOld, handleReservaCriadaOld } from "../domain/legacy.ts";
 import { handleEmprestimoDevolucaoEvent, handleEmprestimoV2, handleEmprestimoV2Reminder } from "../domain/emprestimos.ts";
-import { handleProfileNotice } from "../domain/profiles.ts";
 import { handleReservaCriadaV2, handleReservaPickupReplyEvent, handleReservaV2StatusChange, handleReservaV2WorkflowEvent } from "../domain/reservas.ts";
 import { handleConsultaCriadaV2, handleConsultaV2LifecycleEvent, handleConsultaV2WorkflowEvent } from "../domain/consultas.ts";
 import { handleTeamEvent } from "../domain/team.ts";
@@ -89,7 +88,11 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   if (event === "consulta_v2_criada") return await handleConsultaCriadaV2(recordId);
   if (["consulta_v2_realizada","consulta_v2_cancelada","consulta_v2_expirada"].includes(event)) return await handleConsultaV2LifecycleEvent(recordId, event, payload);
   if (["consulta_v2_em_preparacao","consulta_v2_agendada","consulta_v2_nao_compareceu","consulta_v2_resposta_creneau"].includes(event)) return await handleConsultaV2WorkflowEvent(recordId, event, payload);
-  if (event === "profile_notice") return await handleProfileNotice(recordId);
+  // R.NOTIF-PA / Décision A (08/06/2026) : route 'profile_notice' + handler
+  // handleProfileNotice retirés — handler mort (lisait profile_notice_queue,
+  // table inexistante ; aucun émetteur). La restriction/gel sera (re)câblée
+  // sur le pattern moderne (events member_restricted_*/member_frozen_*),
+  // réutilisant les clés i18n prof.* conservées dans mail-strings.ts.
   // ===== Préavis RGPD purge (Spec §7.1, 31/05/2026) ======================
   // Couvre rgpd_purge_warning_loans / _reservations / _consultations
   if (event.startsWith("rgpd_purge_warning_")) return await handleRgpdPurgeWarning(recordId, event);

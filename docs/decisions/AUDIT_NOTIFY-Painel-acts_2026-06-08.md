@@ -35,7 +35,8 @@ Précisions :
 
 - **Pattern dispatch** (précurseur : `spec-notify-prorrogacao-granulaire`) : `fn_dispatch_notify_event`, `fn_network_notify_event`, `fn_reader_message_dispatch` → outbox/Edge Function → `mail-strings.ts` (`tMail`, i18n). Le câblage de chaque famille suit ce moule : **dispatch (fn/trigger) + handler EF + clés i18n mail**.
 - **In-app reader** : table `user_notifications` (`/conta/avisos`) pour les répliques B3 (restriction/gel).
-- **Amorce de configuration** : `library_notification_policies.profile_restriction_enabled` (boolean) **existe déjà** (1 consommateur en base) mais **n'est branché à aucun émetteur**. Aucune colonne de politique pour la cotisation ni la restriction locale.
+- **Amorce de configuration** : `library_notification_policies.profile_restriction_enabled` (boolean) **existe déjà** mais **n'est branché à aucun émetteur**. Aucune colonne de politique pour la cotisation ni la restriction locale.
+- **Vestige / code mort (découvert le 08/06)** : le handler EF `handleProfileNotice` (event `profile_notice`, routé dans `dispatch.ts`) lit une table `profile_notice_queue` **inexistante en base**, et **aucune fonction** n'émet cet event → handler mort, reliquat d'un design de restriction **pré-EA-10**. Son unique « consommateur » de `profile_restriction_enabled` est ce code mort. Il porte néanmoins des **clés i18n `prof.*`** (restriction, déjà dans `mail-strings.ts`) et une logique user + copie admin réutilisables comme gabarit. **Décision A (08/06, validée)** : nettoyer le handler mort + sa route, réutiliser les clés `prof.*`, construire sur le **pattern moderne** (dispatch + payload, lecture directe `profiles`/`memberships`, sans `profile_notice_queue`), et **repurposer `profile_restriction_enabled` en toggle « copie staff »** (aucun comportement vivant à préserver — cf. NOTIF-PA3).
 
 ## 5. Doctrine applicable (`spec-notifications-lecteur` v1.0)
 
