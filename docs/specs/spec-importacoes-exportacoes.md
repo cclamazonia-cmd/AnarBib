@@ -1,7 +1,7 @@
 ---
 Genre : référence
-Statut : 🟡 squelette de conception (charpente ouverte)
-Décisions : incarne `IMP-1..IMP-8` (REGISTRE §17) ; cite `ACQ-Q4`, `CAT-B3`, `CAT-B5`, `CAT-D3`/`D4`/`D6`, `CAT-E*`, `ILL-1..ILL-9`, `DOC-RPC-3`, `DOC-I18N-1`
+Statut : 🟢 conception consolidée (IMP-1..15 tranchés ; implémentation par lots)
+Décisions : incarne `IMP-1..IMP-15` (REGISTRE §17) ; cite `ACQ-Q4`, `CAT-B3`, `CAT-B5`, `CAT-D3`/`D4`/`D6`, `CAT-E*`, `ILL-1..ILL-9`, `PARTNER-D6`/`D7`/`D9`, `DOC-RPC-3`, `DOC-I18N-1`
 Supersédé par : —
 ---
 
@@ -9,10 +9,10 @@ Supersédé par : —
 
 | | |
 |---|---|
-| **Version** | v0.1 — **squelette de conception** (charpente ouverte ; reste le remplissage : DDL, RPC, rôles, i18n, wizard) |
-| **Date** | 5 juin 2026 |
+| **Version** | v0.2 — **conception consolidée** (les 6 arbitrages du remplissage tranchés le 08/06 ; reste l'implémentation par lots, §13) |
+| **Date** | 8 juin 2026 (révise la v0.1 du 5 juin) |
 | **Emplacement cible** | `docs/specs/` |
-| **Statut** | Squelette posé (session 05/06) ; **§9 wizard cadré** (`IMP-8`). `IMP-1..7` ✅ actés ; `IMP-8` 🟡 cadré (reste l'impl. : DDL du « run d'import » + ratification des rôles). |
+| **Statut** | `IMP-1..8` ✅ actés (05/06) ; **`IMP-9..15` ✅ tranchés (08/06, validés Xavier)** — run d'import, profils de mapping, adaptateurs, autorités, export de lote, rôles, articulation tableau de bord/wizard. Reste l'implémentation **par lots** (§13). |
 | **Réfère à** | `#ILL-digital` (`spec-flux-partage-numerique`) ; `#PARTNERS` (`spec-partenariat-biblios`, `library_partnerships`) ; Catalogação (`spec-catalogacao-fiche-et-paliers`) ; provenance (`spec-acquisition-provenance`) ; autorités (`spec-sources-externes-autorites`, `spec-notice-autorite-enrichie`). |
 | **Dépendances** | `book_drafts` + `book_draft_import_events` · `catalog_ref_source_formats`/`_methods`/`_partners`/`_systems` · staging `import_*` · `partner_source_records`/`_holdings`/`_items` · `library_partnerships` · `catalog_partners(_policy_flags_v2)` · Supabase Storage. |
 
@@ -104,14 +104,39 @@ Un import est long → **objet « run d'import »** (nouveau, **DDL à trancher*
 ## 11. Articulation avec le corpus
 `spec-flux-partage-numerique` (ILL ; **circuit distinct**, ne pas redéfinir) · `spec-partenariat-biblios` (`library_partnerships`, `mutualize_allowed`) · `spec-catalogacao-fiche-et-paliers` (`book_drafts`, `CAT-B3` visibility, `CAT-E*` registre) · `spec-acquisition-provenance` (frontière `ACQ-Q4`) · `spec-sources-externes-autorites` / `spec-notice-autorite-enrichie` (résolution d'autorités) · `DOC-RPC-3` · `DOC-I18N-1`.
 
-## 12. Points à trancher au remplissage
-1. **Wizard** (`IMP-8`, **cadré §9**) — restent : **DDL du « run d'import »** (table de session, §9.4) ; **ratification des rôles** au foyer `spec-gouvernance-roles` (§9.3) ; détection auto structure + vocabulaire (impl.).
-2. **Profils de mapping** : DDL (table de profils ? jsonb ?), portée (par biblio / par réseau), édition.
-3. **Adaptateurs** : registre (table vs code) ; repli manuel ; détection automatique structure + vocabulaire ; **priorité d'implémentation** — Zotero/CSL · BibTeX · RIS · CSV d'abord (réalité militante), puis UNIMARC / ISO 2709 · Dublin Core / OAI, puis MARC21 · BIBFRAME.
-4. **Résolution d'autorités** à l'import : automatique vs file dédiée ; création vs rattachement.
-5. **Exportação de lote** : périmètre (catalogue / collection / sélection) ; formats de sortie ; RPC de sérialisation.
-6. **i18n** (`DOC-I18N-1`) : nouvelles clés du module + du wizard.
+## 12. Arbitrages du remplissage — ✅ tranchés le 08/06/2026
+
+Les six points ouverts de la v0.1 sont tranchés (validés Xavier). Nouveaux IDs au REGISTRE §17.
+
+**IMP-9 — Run d'import (table de session).** Nouvelle table `catalog_import_runs` : `{ circuit, source, structure_code, vocabulary_code, profile_id, status (en_preparation → mapping → preview → promu | abandonne), counts jsonb {staged, mapped, promoted, excluded, errors}, initiated_by, library_id, created_at, updated_at }`. C'est l'**épine du wizard** (quitter/reprendre, §9.4) ; alimente le journal `book_draft_import_events`. Écritures via RPC (`DOC-RPC-3`).
+
+**IMP-10 — Profils de mapping.** Table `catalog_import_mapping_profiles` : `{ name, scope ('library' | 'network'), library_id, structure_code, vocabulary_code, mapping jsonb (champ_source → colonne `book_drafts` | cible autorité), created_by }`. Le mapping lui-même = **jsonb**. Portée **biblio** par défaut, **réseau** optionnel (partage). Éditable en UI (étape 3 du wizard), réutilisable.
+
+**IMP-11 — Adaptateurs (hybride).** Registre **déclaratif** `catalog_import_adapters` (combinaisons structure × vocabulaire connues → profil par défaut + statut) ; la **logique de décodage vit en code** (un parser par structure de transport, côté EF ou frontend). **Détection auto = la structure** (magie ISO 2709, racine XML, forme JSON, sniff CSV) ; le **vocabulaire** est déclaré/choisi. Combinaison inconnue → repli **mapping manuel** (`IMP-4`). **Priorité d'implémentation** : (a) **CSV/TSV · Zotero (CSL-JSON) · BibTeX · RIS** + **UNIMARC ISO 2709** (migration BLMF réelle) ; (b) Dublin Core · MARCXML · OAI-PMH ; (c) MARC21 · BIBFRAME.
+
+**IMP-12 — Résolution d'autorités à l'import.** Au **dry-run** : auto-match des points d'accès contre les autorités existantes (`authority_lookup`, `CAT-D3`). Les non-résolus **ne bloquent pas** : la notice passe en `book_drafts` avec `review_status = pending_review` + drapeau « autorité à résoudre », et la **résolution se fait ensuite en Catalogação** (cohérent `IMP-6` + `ACQ-Q4`). Jamais de blocage d'import sur la perfection des autorités.
+
+**IMP-13 — Exportação de lote.** Périmètre **catalogue / collection / sélection** ; formats de sortie = la **couche adaptateur en sens inverse** (sérialisation) : MARC21 · MARCXML · Dublin Core XML · UNIMARC ISO 2709 · CSV · JSON · BibTeX. **Une RPC/EF de sérialisation**. Le verrou de consentement (`mutualize_allowed`, périmètre ILL, plafond de diffusion) reste régi par §8 / `ILL-1..9` — l'export technique ne contourne rien.
+
+**IMP-14 — Rôles.** **`coordenador`** : lance le wizard, promeut, exporte, gère les relations partenaires + `digital_share` (`PARTNER-D7`). **`librarian`** : consulte + imports fichier simples (espace staff, pas publication). Ratification au foyer `spec-gouvernance-roles`.
+
+**IMP-15 — Articulation tableau de bord / wizard.** Le **tableau de bord v7** (`maquette_importacoes_v7.html`) est la **page canonique** : il porte le modèle (circuits × adaptateurs × profils, fila, journal, export). Le **wizard** est l'action guidée « Novo import » lancée depuis lui (§9). **Ordre de réalisation** : on bâtit d'abord la page v7 (elle fige le modèle + le backend), **puis on re-dérive le wizard** de la page finie (`maquette_wizard_import_v1` → v2 alignée). Construire le wizard avant figerait un flux contre un modèle mouvant.
+
+**Reste transverse** : i18n (`DOC-I18N-1`) — clés du module + wizard externalisées sur les 10 locales, au fil des lots.
+
+## 13. Plan de lots (implémentation)
+
+Cadrage d'abord (cette v0.2) ✅. Puis, **par lots vérifiés** (close-before-open, `DOC-CLOSE-1`) :
+
+- **Lot 0 — fondations backend.** Migrations : `catalog_import_runs` (`IMP-9`), `catalog_import_mapping_profiles` (`IMP-10`), `catalog_import_adapters` (`IMP-11`, registre). RPC : création de run, application de profil, **dry-run** (lecture seule), **promotion** (transaction, `DOC-RPC-3`).
+- **Lot 1 — tableau de bord v7 (frontend).** Refonte `ImportacoesPage.jsx` sur la maquette v7 : toggle Sentido, bandeau adaptateur, 3 circuits, **fila de revisão** (`book_drafts`), **journal** (`book_draft_import_events`). Réutilise l'existant (`fn_bulk_create_book_drafts_from_run`…). i18n.
+- **Lot 2 — circuit « Importação de arquivo » (Zotero / CSL-JSON), de bout en bout.** Adaptateur CSL-JSON + mapping éditable + dry-run + promotion. Cas réel : Terra Livre.
+- **Lot 3 — circuit « Migração de sistema » (UNIMARC ISO 2709).** Adaptateur UNIMARC + lot BLMF (staging → `book_drafts`).
+- **Lot 4 — circuit « Fontes externas ».** Companheiras (consentement `catalog_partners`) + institutionnelles (copy-cataloging, `catalog_metadata_lookup` déjà livré).
+- **Lot 5 — face Export.** Exportação de lote (`IMP-13`, sérialisation) ; partilha ILL **référence** `spec-flux-partage-numerique` ; ser fonte (OAI, `mutualize_allowed`).
+- **Lot 6 — wizard.** Maj `maquette_wizard_import_v1` → v2 alignée sur la page finie, puis implémentation (`IMP-15`).
+- **Formats suivants** (Dublin Core / MARCXML / MARC21 / BIBFRAME) : adaptateurs additionnels au fil des besoins (`IMP-11` priorité c).
 
 ---
 
-*Fin du squelette — v0.1 (conception ouverte). Décisions au REGISTRE `IMP-1..IMP-8` (§17). Trace visuelle : `maquette_importacoes_v7.html`. Remplissage en sessions dédiées (CHARTE_corpus : foyer unique, citer plutôt que recopier).*
+*v0.2 (conception consolidée, 08/06/2026). Décisions au REGISTRE `IMP-1..IMP-15` (§17). Trace visuelle : `maquette_importacoes_v7.html` (tableau de bord) + `maquette_wizard_import_v1.html` (wizard, à re-dériver). Implémentation par lots (§13), foyer unique (CHARTE_corpus : citer plutôt que recopier).*

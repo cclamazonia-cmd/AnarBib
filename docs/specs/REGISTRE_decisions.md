@@ -227,7 +227,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 `HIST` (historico-retencao v1.0, #CL.8 en cours) · `NOTIFPRO` (cf. NPRO) · `CARD` (carte-lecteur, phase β en prod) · `114A` (🔵 clos 14/05 ; ⚠️ contient « 6 locales » historique). Détail à compléter au fil des chantiers.
 
-## 17. Importações / Exportações — `IMP` *(spec-importacoes-exportacoes v0.1)*
+## 17. Importações / Exportações — `IMP` *(spec-importacoes-exportacoes v0.2)*
 
 | ID | Décision | Statut | Foyer |
 |---|---|---|---|
@@ -238,11 +238,18 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **IMP-5** | **Champs descriptifs ≠ points d'accès** : les champs descriptifs alimentent les colonnes de `book_drafts` ; les **points d'accès** (auteur, sujet) **résolvent ou créent des autorités**, jamais du texte libre. | ✅ acté 05/06 (cf. CAT-D3/D4/D6) | spec §6 |
 | **IMP-6** | **Dérivation = passe de nettoyage** : tout import (surtout copy-cataloging « fontes externas ») impose un nettoyage — retrait des identifiants locaux de la source, re-pointage des autorités, traduction des notes. Cette passe **est** la **file de revisão** `book_drafts` ; aucun import ne publie directement. | ✅ acté 05/06 | spec §7 |
 | **IMP-7** | **Symétrie import ↔ export** : ce qui sort est régi par les **mêmes signaux de consentement** que ce qui entre (flags `*_allowed`, dont `mutualize_allowed`) ; la **partilha numérique** par le **périmètre ILL**, et vit entre biblios fédérées (`library_partnerships`), **pas** avec les `catalog_partners`. | ✅ acté 05/06 (renvoi **ILL-1..9**) | spec §8 |
-| **IMP-8** | **Assistant d'import (wizard)** : l'import par lot passe par un stepper guidé — sens + circuit → source / auto-détection (structure + vocabulaire → adaptateur) → profil de mapping → **aperçu/dry-run** (doublons ISBN/EAN, autorités à résoudre, drapeaux de périmètre) → **promotion vers la file de revisão**. La page reste un tableau de bord ; le wizard est l'action « Novo import ». | 🟡 cadré 05/06 (reste l'impl. : DDL « run d'import » + ratification rôles) | spec §9 |
+| **IMP-8** | **Assistant d'import (wizard)** : l'import par lot passe par un stepper guidé — sens + circuit → source / auto-détection (structure + vocabulaire → adaptateur) → profil de mapping → **aperçu/dry-run** (doublons ISBN/EAN, autorités à résoudre, drapeaux de périmètre) → **promotion vers la file de revisão**. La page reste un tableau de bord ; le wizard est l'action « Novo import ». | 🟡 cadré 05/06 ; restes tranchés 08/06 (IMP-9/14/15) | spec §9 |
+| **IMP-9** | **Run d'import** = table de session `catalog_import_runs` {circuit, source, structure/vocabulaire, profil, statut (en_preparation→mapping→preview→promu\|abandonne), compteurs jsonb, acteur, biblio, horodatages}. Épine du wizard (quitter/reprendre) ; alimente `book_draft_import_events`. Écritures via RPC. | ✅ acté 08/06 | spec §12 (v0.2) |
+| **IMP-10** | **Profils de mapping** = table `catalog_import_mapping_profiles` {name, scope library\|network, library_id, structure, vocabulaire, mapping **jsonb** (champ_source→colonne book_drafts\|autorité)}. Portée biblio par défaut, réseau optionnel. Éditable, réutilisable. | ✅ acté 08/06 | spec §12 |
+| **IMP-11** | **Adaptateurs hybrides** : registre déclaratif `catalog_import_adapters` (structure×vocabulaire connus→profil défaut) + logique de décodage **en code** (parser par structure). Détection auto = la **structure** ; vocabulaire déclaré. Priorité : (a) CSV/Zotero-CSL/BibTeX/RIS + UNIMARC ISO2709 ; (b) Dublin Core/MARCXML/OAI ; (c) MARC21/BIBFRAME. | ✅ acté 08/06 | spec §12 |
+| **IMP-12** | **Autorités au dry-run** : auto-match (`authority_lookup`/CAT-D3) ; non résolus **non bloquants** → `book_drafts` `review_status=pending_review` + drapeau, résolution ensuite en Catalogação (IMP-6 + ACQ-Q4). | ✅ acté 08/06 | spec §12 |
+| **IMP-13** | **Exportação de lote** : périmètre catalogue/collection/sélection ; formats = couche adaptateur en sens inverse (MARC21/MARCXML/DC/UNIMARC/CSV/JSON/BibTeX) ; 1 RPC/EF de sérialisation. Verrou consentement régi par §8/ILL-1..9 (ne contourne rien). | ✅ acté 08/06 | spec §12 |
+| **IMP-14** | **Rôles** : `coordenador` lance import + promeut + exporte + gère relations partenaires/`digital_share` (PARTNER-D7) ; `librarian` consulte + imports fichier simples. Ratification `spec-gouvernance-roles`. | ✅ acté 08/06 | spec §12 |
+| **IMP-15** | **Articulation tableau de bord / wizard** : la page v7 (`maquette_importacoes_v7`) est **canonique** (porte le modèle) ; le wizard est l'action guidée lancée d'elle. **Ordre** : bâtir la page v7 d'abord (fige le modèle + backend), **puis re-dériver le wizard** (`maquette_wizard_import_v1`→v2). | ✅ acté 08/06 | spec §12, §13 |
 
 > Réf. visuelle (trace, non-normative) : `maquette_importacoes_v7.html`.
 >
-> **Foyer du chantier.** Ces décisions `IMP-1..8` **remplacent** les arbitrages `IMP-A1..A5` du `CADRAGE_importacoes_module_2026-06-04` (trace, périmée par préséance : registre > trace) ; les points encore ouverts sont suivis en `spec-importacoes-exportacoes §12`. On ne suit plus le schéma `IMP-A*`.
+> **Foyer du chantier.** Ces décisions `IMP-1..8` **remplacent** les arbitrages `IMP-A1..A5` du `CADRAGE_importacoes_module_2026-06-04` (trace, périmée par préséance : registre > trace) ; les 6 points ouverts ont été **tranchés le 08/06** (`IMP-9..15`, spec v0.2 §12) ; reste l'implémentation **par lots** (spec §13). On ne suit plus le schéma `IMP-A*`.
 
 ---
 
@@ -295,3 +302,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 08/06/2026 — chantier **#NOTIFY-Painel-acts** ouvert : §6 (`NOTIF-PA0..4`). Audit préalable (`AUDIT_NOTIFY-Painel-acts_2026-06-08.md`) : 3 familles d'actes Painel muettes (cotisation, restriction locale, gel global) → câblage pattern dispatch + EF + i18n + in-app B3, débloqué par #110. 4 arbitrages tranchés (levées notifiées ; cotisation configurable défaut ON ; restriction/gel mail membre obligatoire + `profile_restriction_enabled` = copie staff ; contenu motif/portée/montant).*
 
 *MàJ 08/06/2026 (soir) — **#NOTIFY-Painel-acts LIVRÉ et vérifié** : câblage e-mail des 3 familles + levées (destinataires membre / toutes biblios concernées / réseau `ADMIN_EMAIL` pour le gel), réplique in-app B3 (`user_notifications`), toggle Painel `cotisation_payment_mail_enabled`. Pattern : dispatch (`fn_record_membership_payment`, `api.restrict_member`/`unrestrict_member`/`freeze_account`/`unfreeze_account`) → `notify-event` → handlers `domain/membership*.ts`. Code mort `handleProfileNotice` nettoyé (décision A). Testé en runtime (pg_net 200, mails reçus, `user_notifications` peuplée).*
+
+*MàJ 08/06/2026 (soir) — cadrage **Importações/Exportações** consolidé : `IMP-9..15` tranchés (§17), spec `spec-importacoes-exportacoes` **v0.2** (run d'import, profils de mapping, adaptateurs hybrides, autorités au dry-run, export de lote, rôles, articulation tableau de bord v7 / wizard re-dérivé). Plan de lots en spec §13 (Lot 0 backend → Lot 1 dashboard v7 → circuits Zotero/UNIMARC/fontes → export → wizard). Implémentation à suivre.*
