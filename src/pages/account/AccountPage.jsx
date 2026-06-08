@@ -21,6 +21,7 @@ import DataExportButton from '@/components/account/DataExportButton';
 import MyLibraryContactCard from '@/components/account/MyLibraryContactCard';
 import Modal from '@/components/ui/Modal';
 import UserHeroBadge from '@/components/UserHeroBadge';
+import LibraryContextBanner from '@/components/LibraryContextBanner';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './AccountPage.css';
 
@@ -31,6 +32,8 @@ const ReaderCardSection = lazy(() => import('@/components/account/ReaderCardSect
 // #REFACTOR 08/06 (onglets lourds) : ReservationCard (~245 lignes) en chunk lazy,
 // chargé seulement depuis l'onglet « reservar ».
 const ReservationCard = lazy(() => import('@/components/account/ReservationCard'));
+// MULTI P5a : onglet « mes biblios » (statut par appartenance) en chunk lazy.
+const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
 
 // ── ContaTabHeader (chantier #CL — recommandation B, refresh par onglet, 31/05/2026) ───
 // Header standard pour les onglets de la page Conta qui méritent un bouton refresh.
@@ -957,6 +960,7 @@ export default function AccountPage() {
     { key: 'historico', label: t({ id: 'account.tab.history' }), hint: t({ id: 'account.tab.history.hint' }) },
     { key: 'avisos', label: `${t({ id: 'account.tab.notifications' })}${unreadCount > 0 ? ` (${unreadCount})` : ''}`, hint: t({ id: 'account.tab.notifications.hint' }) },
     { key: 'desejos', label: `${t({ id: 'account.tab.wishlist' })} (${wishlist.length})`, hint: t({ id: 'account.tab.wishlist.hint' }) },
+    { key: 'biblios', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
@@ -1075,6 +1079,9 @@ export default function AccountPage() {
           </div>
         )}
       </Hero>
+
+      {/* MULTI P5b — bandeau de contexte « biblio courante » (≥2 appartenances) */}
+      <LibraryContextBanner />
 
       {/* Tabs */}
       <div className="ab-conta-card">
@@ -2040,6 +2047,13 @@ export default function AccountPage() {
                 </div>
               )}
             </div>
+          )}
+
+          {/* ═══ MES BIBLIOS (MULTI P5a) ═══ */}
+          {activeTab === 'biblios' && (
+            <Suspense fallback={<p className="ab-conta-hint">{t({ id: 'common.loading' })}</p>}>
+              <TabBiblios />
+            </Suspense>
           )}
         </div>
       </div>
