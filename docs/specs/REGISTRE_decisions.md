@@ -96,6 +96,11 @@ R7–R11 **propagés depuis consultas** par symétrie (✅ 31/05). R8 ne s'appli
 | NOTIF-A | Admission : notifier seulement si **action requise** ou **impact subi** | ✅ |
 | NOTIF-B | Mail = base ; in-app = réplique **restrictive** (B1 délai RGPD / B2 action 100 % in-app / B3 décision sur droits) | ✅ |
 | NOTIF-C | `user_notifications` **réservée au rôle reader** ; staff via outboxes painel ; double notif si concernée aux deux titres | ✅ |
+| **NOTIF-PA0** | **#NOTIFY-Painel-acts** : 3 familles d'actes Painel modifiant le compte d'un membre sont muettes (aucune notif). Déclencheurs réels : `fn_record_membership_payment` (cotisation), `api.restrict_member`/`unrestrict_member` (restriction locale = `user_library_memberships.is_restricted`), `api.freeze_account`/`unfreeze_account` (gel global = `profiles.is_restricted`). Câblage = pattern dispatch + EF + i18n (+ in-app B3 pour restriction/gel). Débloqué par #110. Audit : `AUDIT_NOTIFY-Painel-acts_2026-06-08.md`. | ✅ audit acté 08/06 — câblage à faire |
+| **NOTIF-PA1** | **Levées notifiées** : `unrestrict`/`unfreeze` déclenchent aussi une notif au membre (e-mail + courte réplique in-app) — rétablissement de droits, par symétrie. | ✅ acté 08/06 |
+| **NOTIF-PA2** | **E-mail cotisation configurable par biblio, défaut ON** (souveraineté biblio, Position 1) → nouvelle colonne `library_notification_policies.cotisation_payment_mail_enabled`. | ✅ acté 08/06 |
+| **NOTIF-PA3** | **Restriction/gel = e-mail au membre OBLIGATOIRE** (B3, plancher éthique, non désactivable) ; `profile_restriction_enabled` réinterprété en **copie staff** (optionnelle), jamais en interrupteur du mail membre. | ✅ acté 08/06 |
+| **NOTIF-PA4** | **Contenu** : restriction/gel = motif obligatoire + portée (locale/réseau) + date, « qui » = le collectif/la biblio (pas l'individu, anti-méga-machine) ; cotisation = montant + période de validité + méthode. | ✅ acté 08/06 |
 
 ---
 
@@ -286,3 +291,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 08/06/2026 — chantier **OPAC** ouvert : §18 (`OPAC-AXIS1/F1/W1/ATL1/UI1/SIM1/RSS1/SEQ1`), specs `spec-catalogue-decouverte` v0.1 + `spec-notice-autorite-enrichie` v0.1. Confrontation specs↔code (frontend lu + backend sondé) tracée dans `CADRAGE_OPAC_chantier_2026-06-07.md`. Décision-clé : axe découverte = **CDD** (sujets data-blocked, 2/237), compteurs via RPC `api.catalog_facets_v1`, autorité matière en étape 2 (collectivité déjà couverte par `authors.authorityType='collective'`).*
 
 *MàJ 08/06/2026 — chantier-cadre **Biblioteca** CLOS : §19 (`BIBLIO-CLOSE/9/10`). Étape 8 (mails EA-13/14/19) livrée et vérifiée de bout en bout ; EA-13 = RPC `fn_send_weekly_report_now` recâblant le bouton « Enviar relatório » sur `notify-weekly-report` (débloquée par #110). Étapes 9-10 (parité HTML radicale) reclassées hors chantier : EA-12 ph.2 différée/prod-gated, EA-11 non retenue par défaut. Trace : cartographie §6.4 ; backlog v27 mis à jour.*
+
+*MàJ 08/06/2026 — chantier **#NOTIFY-Painel-acts** ouvert : §6 (`NOTIF-PA0..4`). Audit préalable (`AUDIT_NOTIFY-Painel-acts_2026-06-08.md`) : 3 familles d'actes Painel muettes (cotisation, restriction locale, gel global) → câblage pattern dispatch + EF + i18n + in-app B3, débloqué par #110. 4 arbitrages tranchés (levées notifiées ; cotisation configurable défaut ON ; restriction/gel mail membre obligatoire + `profile_restriction_enabled` = copie staff ; contenu motif/portée/montant).*

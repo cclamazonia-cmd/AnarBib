@@ -3,7 +3,7 @@
 **Date** : 2026-06-08
 **Auteur** : Xavier (lead AnarBib) en session avec Claude
 **Session** : Audit #NOTIFY-Painel-acts
-**Statut** : ✅ audit préalable livré — 4 arbitrages ouverts (recos posées, en attente de validation)
+**Statut** : ✅ audit livré + **4 arbitrages tranchés le 08/06/2026** (validés Xavier) — prêt pour l'ouverture du chantier
 **Foyer normatif** : à graduer au REGISTRE (`BIBLIO`/`NOTIF`) à l'ouverture du câblage
 **Débloqué par** : clôture de #110 (Brevo → Resend) le 05-08/06/2026 — la couche d'envoi est stabilisée
 
@@ -60,16 +60,16 @@ Pour chaque acte : ajouter un appel **dispatch** dans la fonction (ou un trigger
 
 Robustesse : le dispatch est **best-effort** (un échec pg_net/secret ne casse pas l'acte métier — pattern déjà en place dans la circulation) ; gérer le cas **membre sans e-mail** (skip + log, l'in-app reste posée pour restriction/gel).
 
-## 7. Arbitrages ouverts (recommandations posées, à valider)
+## 7. Arbitrages — ✅ tranchés le 08/06/2026 (validés Xavier)
 
 1. **Notifier les levées (unrestrict / unfreeze) ?**
-   - *Reco* : **OUI**. Une levée rétablit des droits — symétrie et transparence avec la notification de restriction. E-mail + courte réplique in-app.
+   - ✅ *Tranché* : **OUI**. Une levée rétablit des droits — symétrie et transparence avec la notification de restriction. E-mail + courte réplique in-app.
 2. **E-mail cotisation : toujours actif ou configurable par biblio ?**
-   - *Reco* : **configurable, défaut ON** (souveraineté biblio, Position 1). Nouvelle colonne `cotisation_payment_mail_enabled`. Une biblio en gestion informelle peut couper.
+   - ✅ *Tranché* : **configurable, défaut ON** (souveraineté biblio, Position 1). Nouvelle colonne `cotisation_payment_mail_enabled`. Une biblio en gestion informelle peut couper.
 3. **`profile_restriction_enabled` (toggle existant) vs « obligatoire/non configurable » de la doctrine.**
-   - *Reco* : le mail **au membre** reste **obligatoire** (plancher éthique : pas de restriction en silence) ; **réinterpréter ce toggle en « copie staff »** (le collectif reçoit une copie/log, optionnelle — cohérent avec les colonnes `admin_copy_*_enabled`). Sinon : vestige documenté, inutilisé.
+   - ✅ *Tranché* : le mail **au membre** reste **obligatoire** (plancher éthique : pas de restriction en silence) ; **réinterpréter ce toggle en « copie staff »** (le collectif reçoit une copie/log, optionnelle — cohérent avec les colonnes `admin_copy_*_enabled`). Sinon : vestige documenté, inutilisé.
 4. **Contenu des mails.**
-   - *Reco* : restriction/gel = **motif obligatoire + portée** (biblio locale vs réseau) + date ; pour le « qui », nommer **le collectif / la biblio** plutôt que l'individu (doctrine anti-méga-machine). Cotisation = **montant + période de validité (nouvelle échéance) + méthode** (un vrai reçu).
+   - ✅ *Tranché* : restriction/gel = **motif obligatoire + portée** (biblio locale vs réseau) + date ; pour le « qui », nommer **le collectif / la biblio** plutôt que l'individu (doctrine anti-méga-machine). Cotisation = **montant + période de validité (nouvelle échéance) + méthode** (un vrai reçu).
 
 ## 8. Dépendances & séquencement
 
@@ -79,4 +79,4 @@ Robustesse : le dispatch est **best-effort** (un échec pg_net/secret ne casse p
 
 ---
 
-*Audit livré le 08/06/2026. Constats factuels établis en base réelle ; les 4 arbitrages restent à trancher avec la coordination avant le câblage.*
+*Audit livré le 08/06/2026. Constats factuels établis en base réelle ; les 4 arbitrages ont été tranchés le 08/06/2026 (validés Xavier). Chantier ouvert au REGISTRE (§6 `NOTIF-PA*`) et au backlog (#NOTIFY-Painel-acts). Câblage à suivre, par famille, en blocs vérifiés.*
