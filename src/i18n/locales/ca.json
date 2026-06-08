@@ -1225,6 +1225,8 @@
   "catalog.actions.compactOff": "Mode compacte: desactivat",
   "catalog.actions.compactOn": "Mode compacte: activat",
   "catalog.actions.copyLink": "Copiar la cerca com a enllaç",
+  "catalog.actions.emailLink": "Envia per correu",
+  "catalog.actions.emailSubject": "Cerca AnarBib",
   "catalog.actions.loadMore": "Carregar-ne més ({loaded} carregats de {total})",
   "catalog.actions.readOnline": "Llegir en línia",
   "catalog.advancedSearch.toggle": "Cerca avançada",

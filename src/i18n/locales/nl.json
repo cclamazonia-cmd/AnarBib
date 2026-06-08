@@ -1225,6 +1225,8 @@
   "catalog.actions.compactOff": "Compacte modus: uit",
   "catalog.actions.compactOn": "Compacte modus: aan",
   "catalog.actions.copyLink": "Zoekopdracht als link kopiëren",
+  "catalog.actions.emailLink": "Per e-mail versturen",
+  "catalog.actions.emailSubject": "AnarBib-zoekopdracht",
   "catalog.actions.loadMore": "Meer laden ({loaded} van {total} geladen)",
   "catalog.actions.readOnline": "Online lezen",
   "catalog.advancedSearch.toggle": "Geavanceerd zoeken",

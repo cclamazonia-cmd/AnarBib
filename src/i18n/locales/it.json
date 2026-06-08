@@ -1225,6 +1225,8 @@
   "catalog.actions.compactOff": "Modo compatto: disattivo",
   "catalog.actions.compactOn": "Modo compatto: attivo",
   "catalog.actions.copyLink": "Copia ricerca come link",
+  "catalog.actions.emailLink": "Invia per e-mail",
+  "catalog.actions.emailSubject": "Ricerca AnarBib",
   "catalog.actions.loadMore": "Carica altro ({loaded} caricati di {total})",
   "catalog.actions.readOnline": "Leggi online",
   "catalog.advancedSearch.toggle": "Ricerca avanzata",

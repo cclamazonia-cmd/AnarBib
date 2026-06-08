@@ -1225,6 +1225,8 @@
   "catalog.actions.compactOff": "Kompakta reĝimo: malŝaltita",
   "catalog.actions.compactOn": "Kompakta reĝimo: ŝaltita",
   "catalog.actions.copyLink": "Kopii la serĉon kiel ligilon",
+  "catalog.actions.emailLink": "Sendi retpoŝte",
+  "catalog.actions.emailSubject": "AnarBib-serĉo",
   "catalog.actions.loadMore": "Ŝargi pli ({loaded} ŝargitaj el {total})",
   "catalog.actions.readOnline": "Legi rete",
   "catalog.advancedSearch.toggle": "Detala serĉo",

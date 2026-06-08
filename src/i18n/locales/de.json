@@ -1225,6 +1225,8 @@
   "catalog.actions.compactOff": "Kompaktmodus: aus",
   "catalog.actions.compactOn": "Kompaktmodus: ein",
   "catalog.actions.copyLink": "Suche als Link kopieren",
+  "catalog.actions.emailLink": "Per E-Mail senden",
+  "catalog.actions.emailSubject": "AnarBib-Suche",
   "catalog.actions.loadMore": "Mehr laden ({loaded} geladen von {total})",
   "catalog.actions.readOnline": "Online lesen",
   "catalog.advancedSearch.toggle": "Erweiterte Suche",

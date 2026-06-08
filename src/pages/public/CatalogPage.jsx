@@ -678,7 +678,7 @@ export default function CatalogPage() {
     setMaterialFilter('__all__'); setCollectionFilter(''); setPlaceFilter('');
   }
 
-  function copySearchLink() {
+  function buildSearchUrl() {
     // Forme propre alignée sur la route alias /catalogo/:slug.
     // La bibliothèque va dans le chemin ; les autres filtres en query params.
     const base = window.location.origin
@@ -688,7 +688,17 @@ export default function CatalogPage() {
     if (dAuthor) url.searchParams.set('autor', dAuthor);
     if (dPublisher) url.searchParams.set('editora', dPublisher);
     if (dYear) url.searchParams.set('ano', dYear);
-    navigator.clipboard.writeText(url.toString()).catch(() => {});
+    if (subjectFilter) url.searchParams.set('subject', subjectFilter);
+    return url.toString();
+  }
+  function copySearchLink() {
+    navigator.clipboard.writeText(buildSearchUrl()).catch(() => {});
+  }
+  function emailSearchLink() {
+    // #OPAC11 — partage par courriel (sans RSS : pas de flux trackable côté serveur).
+    const body = encodeURIComponent(buildSearchUrl());
+    const subject = encodeURIComponent(t({ id: 'catalog.actions.emailSubject' }));
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
   }
 
   function scrollTable(dir) {
@@ -893,6 +903,7 @@ export default function CatalogPage() {
           )}
           <div className="ab-view-controls">
             <button className="ab-mini-action" onClick={copySearchLink}>{t({ id: 'catalog.actions.copyLink' })}</button>
+            <button className="ab-mini-action" onClick={emailSearchLink}>{t({ id: 'catalog.actions.emailLink' })}</button>
             <button className="ab-mini-action" onClick={() => setCompact(!compact)} aria-pressed={compact}>
               {compact ? t({ id: 'catalog.actions.compactOn' }) : t({ id: 'catalog.actions.compactOff' })}
             </button>

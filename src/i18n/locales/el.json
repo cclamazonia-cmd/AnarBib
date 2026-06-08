@@ -1225,6 +1225,8 @@
   "catalog.actions.compactOff": "Συμπαγής λειτουργία: ανενεργή",
   "catalog.actions.compactOn": "Συμπαγής λειτουργία: ενεργή",
   "catalog.actions.copyLink": "Αντιγραφή αναζήτησης ως σύνδεσμο",
+  "catalog.actions.emailLink": "Αποστολή με email",
+  "catalog.actions.emailSubject": "Αναζήτηση AnarBib",
   "catalog.actions.loadMore": "Φόρτωσε περισσότερα ({loaded} από {total})",
   "catalog.actions.readOnline": "Διάβασε online",
   "catalog.advancedSearch.toggle": "Σύνθετη αναζήτηση",
