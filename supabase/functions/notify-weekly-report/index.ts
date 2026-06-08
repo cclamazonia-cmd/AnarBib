@@ -595,6 +595,52 @@ serve(async (req) => {
       ];
     });
 
+    // ─── Activité Trocas (intercâmbios interbibliotecas) — chantier #EA-11 ──
+    // Une troca = document_permission_request d'object_type 'interlibrary_exchange'.
+    // La bibliothèque est « impliquée » qu'elle soit requérante (requester) ou
+    // cible (target). Trois compteurs :
+    //   - propostas  : trocas créées dans la semaine, bibliothèque impliquée
+    //   - aceitas    : trocas acceptées (status='accepted', decided_at dans la
+    //                  semaine), bibliothèque impliquée
+    //   - em curso   : trocas acceptées dont la phase d'exécution n'est ni
+    //                  'completed' ni 'cancelled' (phase manquante/illisible =
+    //                  en cours), bibliothèque impliquée, instantané à la clôture
+    const trocasInvolving = `requester_library_id.eq.${libraryId},target_library_id.eq.${libraryId}`;
+
+    const { count: trocasProposedCount, error: trocasProposedCountErr } = await sb.from("document_permission_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("object_type", "interlibrary_exchange")
+      .or(trocasInvolving)
+      .gte("created_at", startISO).lt("created_at", endExclusiveISO);
+    if (trocasProposedCountErr) throw trocasProposedCountErr;
+
+    const { count: trocasAcceptedCount, error: trocasAcceptedCountErr } = await sb.from("document_permission_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("object_type", "interlibrary_exchange")
+      .eq("status", "accepted")
+      .or(trocasInvolving)
+      .gte("decided_at", startISO).lt("decided_at", endExclusiveISO);
+    if (trocasAcceptedCountErr) throw trocasAcceptedCountErr;
+
+    // En circulation : on récupère les trocas acceptées impliquant la
+    // bibliothèque puis on compte côté JS celles dont la phase n'est ni
+    // 'completed' ni 'cancelled' (object_ref illisible/sans phase = en cours).
+    const { data: trocasOngoingRaw, error: trocasOngoingErr } = await sb.from("document_permission_requests")
+      .select("id,status,object_ref")
+      .eq("object_type", "interlibrary_exchange")
+      .eq("status", "accepted")
+      .or(trocasInvolving);
+    if (trocasOngoingErr) throw trocasOngoingErr;
+    const trocasOngoingCount = (Array.isArray(trocasOngoingRaw) ? trocasOngoingRaw : []).filter((row) => {
+      try {
+        const o = JSON.parse(row.object_ref || "null");
+        const ph = o && o.execution_followup && o.execution_followup.phase;
+        return !["completed", "cancelled"].includes(ph);
+      } catch {
+        return true;
+      }
+    }).length;
+
     // ─── Composition du mail ───────────────────────────────────────────────
     const subject = `${routing.subjectTag} · Relatório semanal (${formatBR(weekStart)} → ${formatBR(weekEnd)})`;
     const title = `Relatório semanal — ${routing.brandName}`;
@@ -637,8 +683,20 @@ serve(async (req) => {
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebBorrowedCount)}</b></td>
           </tr>
           <tr>
-            <td style="padding:10px;"><b>PEB em circulação (à clôture da semana)</b></td>
-            <td style="padding:10px;text-align:right;"><b>${countOr0(pebInCirculationCount)}</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>PEB em circulação (à clôture da semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebInCirculationCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Trocas propostas (semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(trocasProposedCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Trocas aceitas (semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(trocasAcceptedCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;"><b>Trocas em curso</b></td>
+            <td style="padding:10px;text-align:right;"><b>${countOr0(trocasOngoingCount)}</b></td>
           </tr>
         </table>
       </div>
@@ -690,7 +748,8 @@ serve(async (req) => {
         atrasos_ativos: overdueActiveCount ?? 0,
         peb_consentidos: pebLentCount ?? 0,
         peb_solicitados: pebBorrowedCount ?? 0,
-        peb_em_circulacao: pebInCirculationCount ?? 0
+        peb_em_circulacao: pebInCirculationCount ?? 0,
+        trocas: trocasProposedCount ?? 0
       }
     });
   } catch (e) {

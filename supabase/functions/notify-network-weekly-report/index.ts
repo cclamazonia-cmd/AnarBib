@@ -321,6 +321,9 @@ serve(async (req)=>{
       ]));
     const reservations = await fetchAllRows((from, to)=>sb.from("reservas_v2").select("library_id").gte("created_at", startISO).lt("created_at", endExclusiveISO).range(from, to));
     const consultas = await fetchAllRows((from, to)=>sb.from("consultas_locais_v2").select("library_id").gte("created_at", startISO).lt("created_at", endExclusiveISO).range(from, to));
+    // Trocas (intercâmbios) propostas na semana — chantier #EA-11. Attribuées à
+    // la bibliothèque INITIATRICE (requester) pour éviter le double comptage.
+    const trocasCreated = await fetchAllRows((from, to)=>sb.from("document_permission_requests").select("requester_library_id").eq("object_type", "interlibrary_exchange").gte("created_at", startISO).lt("created_at", endExclusiveISO).range(from, to));
     const loansCreated = await fetchAllRows((from, to)=>sb.from("emprestimos_v2").select("library_id,extended_at").gte("created_at", startISO).lt("created_at", endExclusiveISO).range(from, to));
     const renewals = await fetchAllRows((from, to)=>sb.from("emprestimos_v2").select("library_id,extended_at").not("extended_at", "is", null).gte("extended_at", startISO).lt("extended_at", endExclusiveISO).range(from, to));
     const returns = await fetchAllRows((from, to)=>sb.from("emprestimo_itens_v2").select("returned_at,emprestimos_v2!inner(library_id)").not("returned_at", "is", null).gte("returned_at", startISO).lt("returned_at", endExclusiveISO).range(from, to));
@@ -378,6 +381,7 @@ serve(async (req)=>{
         admin_notification_email: ctx?.admin_notification_email || null,
         reservas: 0,
         consultas: 0,
+        trocas: 0,
         emprestimos_criados: 0,
         renovacoes: 0,
         devolucoes: 0,
@@ -393,6 +397,11 @@ serve(async (req)=>{
       const libraryId = String(row.library_id || "").trim();
       if (!libraryId || !summaryByLibrary.has(libraryId)) continue;
       summaryByLibrary.get(libraryId).consultas += 1;
+    }
+    for (const row of trocasCreated){
+      const libraryId = String(row.requester_library_id || "").trim();
+      if (!libraryId || !summaryByLibrary.has(libraryId)) continue;
+      summaryByLibrary.get(libraryId).trocas += 1;
     }
     for (const row of loansCreated){
       const libraryId = String(row.library_id || "").trim();
@@ -424,6 +433,7 @@ serve(async (req)=>{
       acc.canais_desativados += row.channel_active ? 0 : 1;
       acc.reservas += row.reservas;
       acc.consultas += row.consultas;
+      acc.trocas += row.trocas;
       acc.emprestimos_criados += row.emprestimos_criados;
       acc.renovacoes += row.renovacoes;
       acc.devolucoes += row.devolucoes;
@@ -436,6 +446,7 @@ serve(async (req)=>{
       canais_desativados: 0,
       reservas: 0,
       consultas: 0,
+      trocas: 0,
       emprestimos_criados: 0,
       renovacoes: 0,
       devolucoes: 0,
@@ -472,6 +483,10 @@ serve(async (req)=>{
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.consultas)}</b></td>
           </tr>
           <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Trocas propostas</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.trocas)}</b></td>
+          </tr>
+          <tr>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Empréstimos criados</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.emprestimos_criados)}</b></td>
           </tr>
@@ -504,6 +519,7 @@ serve(async (req)=>{
         row.channel_active ? row.delivery_mode : `${row.delivery_mode} (desativado)`,
         countOr0(row.reservas),
         countOr0(row.consultas),
+        countOr0(row.trocas),
         countOr0(row.emprestimos_criados),
         countOr0(row.renovacoes),
         countOr0(row.devolucoes),
@@ -546,6 +562,7 @@ serve(async (req)=>{
           "Canal",
           "Reservas",
           "Consultas",
+          "Trocas",
           "Empréstimos",
           "Renovações",
           "Devoluções",

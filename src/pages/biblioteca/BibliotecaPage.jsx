@@ -147,6 +147,7 @@ export default function BibliotecaPage() {
   // affiche désormais <TeamPanel /> qui charge ses propres données.
   const [members, setMembers] = useState([]);
   const [illLoans, setIllLoans] = useState([]);
+  const [exchanges, setExchanges] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [stats, setStats] = useState({ books:0, authors:0, exemplars:0, readers:0, loansOpen:0, loansOverdue:0, loansCreated7d:0, loansReturned7d:0, loansCreated30d:0, reservationsActive:0, reservations30d:0, consultationsActive:0, librariansActive:0, topBooks:[] });
   const [mailChannel, setMailChannel] = useState(null);
@@ -202,7 +203,7 @@ export default function BibliotecaPage() {
   const loadAll = useCallback(async () => {
     if (!libraryId) return;
     try {
-      const [libR, commR, ssR, regR, psR, dgR, memR, illR, taskR, mcR, npR, mrR, tplR, sugR] = await Promise.all([
+      const [libR, commR, ssR, regR, psR, dgR, memR, illR, exR, taskR, mcR, npR, mrR, tplR, sugR] = await Promise.all([
         supabase.from('libraries').select('*').eq('id', libraryId).single(),
         supabase.from('library_commons').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('*').eq('library_id', libraryId).maybeSingle(),
@@ -218,6 +219,10 @@ export default function BibliotecaPage() {
         // Les PEB archivés sont consultables dans l'onglet Rapports via le
         // composant PebHistorySection (vue api.peb_history_v1).
         supabase.from('interlibrary_loans_v2').select('*').or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`).is('archived_at', null).order('created_at', { ascending: false }).limit(50),
+        // #EA-11 : trocas (intercâmbios) impliquant la bibliothèque (requérante
+        // ou cible), pour la section Trocas du compte-rendu. Lecture simple
+        // protégée par la RLS (doctrine RPC v3 : from() autorisé en lecture).
+        supabase.from('document_permission_requests').select('id, requester_library_id, target_library_id, status, created_at, decided_at, object_ref').eq('object_type', 'interlibrary_exchange').or(`requester_library_id.eq.${libraryId},target_library_id.eq.${libraryId}`).order('created_at', { ascending: false }).limit(200),
         supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }).limit(50),
         supabase.from('library_mail_channels').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_notification_policies').select('*').eq('library_id', libraryId).maybeSingle(),
@@ -234,7 +239,7 @@ export default function BibliotecaPage() {
       setLib(libR.data); setCommons(commR.data); setServiceState(ssR.data);
       setRegDocs(regR.data || []); setDocGov(dgR.data);
       setMembers(memR.data || []);
-      setIllLoans(illR.data || []); setTasks(taskR.data || []);
+      setIllLoans(illR.data || []); setExchanges(exR.data || []); setTasks(taskR.data || []);
       setTemplates(tplR.data || []);
       setSuggestions(sugR.data || []);
       // #ILL-partial — charge les exemplaires de tous les prêts affichés,
@@ -877,6 +882,32 @@ export default function BibliotecaPage() {
           }
         }
         return out;
+      })(),
+      // #EA-11 : section Trocas du compte-rendu. Trois chiffres dérivés de
+      // exchanges (trocas impliquant la bibliothèque, requérante ou cible) :
+      // propostas (créées sur 7 jours), aceitas (acceptées sur 7 jours) et en
+      // cours (acceptées dont la phase d'exécution n'est ni completed ni
+      // cancelled — phase manquante/illisible = en cours).
+      ...(() => {
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const proposed = exchanges.filter(e => new Date(e.created_at) >= sevenDaysAgo).length;
+        const accepted = exchanges.filter(e => e.status === 'accepted' && e.decided_at && new Date(e.decided_at) >= sevenDaysAgo).length;
+        const ongoing = exchanges.filter(e => e.status === 'accepted' && (() => {
+          try {
+            const o = JSON.parse(e.object_ref || 'null');
+            const ph = o && o.execution_followup && o.execution_followup.phase;
+            return !['completed', 'cancelled'].includes(ph);
+          } catch {
+            return true;
+          }
+        })()).length;
+        return [
+          '',
+          t({id:'biblioteca.report.exchangesSection'}) + ':',
+          '  ' + t({id:'biblioteca.report.exchangesProposed'}, {count: proposed}),
+          '  ' + t({id:'biblioteca.report.exchangesAccepted'}, {count: accepted}),
+          '  ' + t({id:'biblioteca.report.exchangesOngoing'}, {count: ongoing}),
+        ];
       })(),
     ];
     return lines.join('\n');
