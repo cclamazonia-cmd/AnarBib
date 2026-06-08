@@ -1,13 +1,13 @@
 ---
 Genre : trace
 Statut : 🔵 historique
-Décisions : incarne PARTNER-D1..D6 (REGISTRE §18)
-Supersédé par : REGISTRE_decisions §18 PARTNER (arbitrages) ; spec-partenariat-biblios (design, à écrire)
+Décisions : incarne PARTNER-D1..D6 (REGISTRE §21)
+Supersédé par : REGISTRE_decisions §21 PARTNER (arbitrages) ; spec-partenariat-biblios (design, à écrire)
 ---
 
 # CADRAGE — Partenariat stabilisé entre bibliothèques
 
-> ⚠️ **Document de travail — historique (tamponné le 02/06/2026).** Les arbitrages D1–D6 ont gradué dans `REGISTRE_decisions.md` §18 `PARTNER`, qui fait désormais foi. Le design graduera dans `spec-partenariat-biblios` (à écrire). Ce cadrage reste lisible comme **contexte de rédaction** (raisonnement, catalogue des droits §4, intersections §6) mais n'est plus normatif : pour les décisions, citer les IDs `PARTNER-*`.
+> ⚠️ **Document de travail — historique (tamponné le 02/06/2026).** Les arbitrages D1–D6 ont gradué dans `REGISTRE_decisions.md` §21 `PARTNER`, qui fait désormais foi. Le design graduera dans `spec-partenariat-biblios` (à écrire). Ce cadrage reste lisible comme **contexte de rédaction** (raisonnement, catalogue des droits §4, intersections §6) mais n'est plus normatif : pour les décisions, citer les IDs `PARTNER-*`.
 
 | | |
 |---|---|
@@ -15,7 +15,7 @@ Supersédé par : REGISTRE_decisions §18 PARTNER (arbitrages) ; spec-partenaria
 | **Version** | v0.2 — arbitrages tranchés |
 | **Date** | 2 juin 2026 |
 | **Emplacement** | `docs/decisions/` |
-| **Statut** | 🔵 historique (tamponné 02/06) — arbitrages gradués au registre §18 `PARTNER`. Reste contexte de rédaction pour `spec-partenariat-biblios`. |
+| **Statut** | 🔵 historique (tamponné 02/06) — arbitrages gradués au registre §21 `PARTNER`. Reste contexte de rédaction pour `spec-partenariat-biblios`. |
 | **Origine** | Émergence en séance le 31/05/2026 (cf. backlog v23 §A.1, ici relogé). Clarification du périmètre 01–02/06 ; arbitrages tranchés le 02/06. |
 | **Articulation** | Socle doctrinal de la future `spec-partenariat-biblios`. Croisé avec `spec-multi-appartenance-lecteur`, `#ILL-digital`, recursos digitais (P2 #7), `spec-acquisition-provenance`, et le chantier réseau fédératif. |
 

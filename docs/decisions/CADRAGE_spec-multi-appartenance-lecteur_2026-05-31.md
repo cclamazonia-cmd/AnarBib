@@ -1,13 +1,13 @@
 ---
 Genre : trace
 Statut : 🔵 historique
-Décisions : incarne MULTI-* (REGISTRE §17) ; cite VALID-β1, VALID-γ1
-Supersédé par : spec-multi-appartenance-lecteur (design) + REGISTRE_decisions §17 MULTI (arbitrages)
+Décisions : incarne MULTI-* (REGISTRE §20) ; cite VALID-β1, VALID-γ1
+Supersédé par : spec-multi-appartenance-lecteur (design) + REGISTRE_decisions §20 MULTI (arbitrages)
 ---
 
 # Cadrage doctrinal — `spec-multi-appartenance-lecteur` (à venir)
 
-> ⚠️ **Document de travail — historique (tamponné le 02/06/2026).** Le contenu normatif a gradué dans `spec-multi-appartenance-lecteur` (design — charpente v0.3) et `REGISTRE_decisions.md` §17 `MULTI` (arbitrages). **Ne pas utiliser comme source** : pour les décisions, le registre fait foi ; pour le design, la spec. Conservé comme trace du raisonnement du 31/05.
+> ⚠️ **Document de travail — historique (tamponné le 02/06/2026).** Le contenu normatif a gradué dans `spec-multi-appartenance-lecteur` (design — charpente v0.3) et `REGISTRE_decisions.md` §20 `MULTI` (arbitrages). **Ne pas utiliser comme source** : pour les décisions, le registre fait foi ; pour le design, la spec. Conservé comme trace du raisonnement du 31/05.
 
 **Date** : 31/05/2026
 **Statut** : 🔵 historique — voir le tampon ci-dessus

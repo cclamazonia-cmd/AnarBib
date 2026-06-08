@@ -318,7 +318,7 @@ Tout en production (Woodpecker vert à chaque étape), doctrine §6 respectée.
 1. **TR-6.2b clos** — `src/components/layout/index.jsx` dé-hardcodé : `LIBRARY_LOGO_MAP` supprimé → `resolveLogoData(commons)` data-driven + fetch `library_commons` par `libraryId` dans le Topbar. Le **jumeau frontend** de la décision **D4** (cf. note §2 « item de nettoyage séparé ») est donc résolu.
 2. **Donnée** — migration `btl_logo_url_cleanup` : BTL portait un `logo_url` **relatif** (`./assets/img/...`) → `NULL` ; le `logo_file_key='btl'` prend le relais via le bucket. (Garde : on ne nullifie que les `logo_url` non-http(s).)
 3. **Refactor DB** — migration `rename_dispatch_notify_event` : `fn_dispatch_circulation_notify_event` → `fn_dispatch_notify_event` (le dispatcher n'est plus spécifique à la circulation) ; **13 appelants** réécrits programmatiquement (`pg_get_functiondef` + `replace` + `EXECUTE`, ACL/`SECURITY DEFINER`/commentaires préservés) ; DO-block de vérif : nouveau nom présent, ancien absent, **0 référence résiduelle**.
-4. **Corpus** — registre `docs/specs/REGISTRE_decisions.md` enrichi (section **MYLIB**, §24) + le présent addendum (§10–§11).
+4. **Corpus** — registre `docs/specs/REGISTRE_decisions.md` enrichi (section **MYLIB**, §25) + le présent addendum (§10–§11).
 
 **Report (horizon — registre MYLIB-O1) :** le **« chat ouvert » in-app** (fil de discussion bidirectionnel persistant, visible côté `perfil` et côté `painel`) est **reporté** — « terrain glissant » : on attend une **demande réelle** d'une biblio inscrite avant d'ouvrir un canal conversationnel persistant. v1 = **mail-only des deux côtés**.
 

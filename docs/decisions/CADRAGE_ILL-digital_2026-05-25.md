@@ -1,11 +1,11 @@
 ---
 Genre : trace (note de cadrage)
 Statut : 🔵 historique — gradué
-Décisions : a gradué au REGISTRE §19 (ILL-1..ILL-9) ; incarné par spec-flux-partage-numerique v0.2
-Supersédé par : REGISTRE §19 (foyer des décisions) + spec-flux-partage-numerique (design)
+Décisions : a gradué au REGISTRE §22 (ILL-1..ILL-9) ; incarné par spec-flux-partage-numerique v0.2
+Supersédé par : REGISTRE §22 (foyer des décisions) + spec-flux-partage-numerique (design)
 ---
 
-> **🔵 Document de travail — historique (tampon du 02/06/2026).** Les questions ouvertes de la section 4 ont toutes été arbitrées le 02/06/2026 (mandat BLMF). Les décisions font foi au **REGISTRE §19** (`ILL-1` à `ILL-9`) et sont incarnées dans `spec-flux-partage-numerique` v0.2 (charpente figée côté conception). Le point structurant de la section 3 (circuit distinct du PEB) est confirmé. Conservé pour mémoire du raisonnement ; en cas de divergence, le REGISTRE prime.
+> **🔵 Document de travail — historique (tampon du 02/06/2026).** Les questions ouvertes de la section 4 ont toutes été arbitrées le 02/06/2026 (mandat BLMF). Les décisions font foi au **REGISTRE §22** (`ILL-1` à `ILL-9`) et sont incarnées dans `spec-flux-partage-numerique` v0.2 (charpente figée côté conception). Le point structurant de la section 3 (circuit distinct du PEB) est confirmé. Conservé pour mémoire du raisonnement ; en cas de divergence, le REGISTRE prime.
 
 # AnarBib — #ILL-digital — Note de cadrage
 ## Partage numérique entre bibliothèques
@@ -36,7 +36,7 @@ C'est la décision de cadrage la plus importante, et elle est déjà prise : le 
 
 ## 4. Questions ouvertes — à trancher avant toute conception
 
-> *Note historique (02/06/2026) : toutes les questions ci-dessous ont été tranchées. Les réponses font foi au REGISTRE §19 (`ILL-1` à `ILL-9`).*
+> *Note historique (02/06/2026) : toutes les questions ci-dessous ont été tranchées. Les réponses font foi au REGISTRE §22 (`ILL-1` à `ILL-9`).*
 
 ### 4.1 Périmètre et statut des documents
 

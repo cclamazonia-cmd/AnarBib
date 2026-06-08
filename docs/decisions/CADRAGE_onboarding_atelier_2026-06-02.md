@@ -6,7 +6,7 @@
 | **Date** | 2026-06-02 |
 | **Auteur·rices** | Xavier (arbitrages) · Claude (rédaction) |
 | **Statut** | Cadré 02/06/2026, **tous arbitrages clos** — alimente le **chantier #111** (Q3 2026) |
-| **Décisions normatives** | `REGISTRE_decisions.md` : **DOC-COLLECTIVE-1** (§0) ; **ONBO-Q1..Q12, ONBO-D1, ONBO-D2** (§21) ; **RES-Q11/Q12** réalignées. *Ce document ne reformule pas ces décisions : il les met en récit.* |
+| **Décisions normatives** | `REGISTRE_decisions.md` : **DOC-COLLECTIVE-1** (§0) ; **ONBO-Q1..Q12, ONBO-D1, ONBO-D2** (§26) ; **RES-Q11/Q12** réalignées. *Ce document ne reformule pas ces décisions : il les met en récit.* |
 | **Préséance** | Registre + spec courante + backlog **priment**. Ce cadrage est une trace ; l'ID au registre fait foi. |
 | **Supersession** | Complète `spec-onboarding-biblioteca v2.0` (à graduer **v2.1** : intégrer ONBO + corriger le drift i18n « ×6 » → 8) ; absorbe les TODO 1-7 ; amorce **`spec-onboarding-painel`** (à créer). |
 | **Maquettes de référence** | `atelier-constitution-biblioteca.html` · `prise-en-main-painel.html` (prototypes cliquables, hors backend). |
@@ -81,4 +81,4 @@ Les prototypes démontrent le **modèle** (disposition, conditionnalité live, c
 
 ---
 
-*Fin du cadrage. Document de trace ; les décisions vivent au registre (§0 DOC-COLLECTIVE-1 ; §21 ONBO).*
+*Fin du cadrage. Document de trace ; les décisions vivent au registre (§0 DOC-COLLECTIVE-1 ; §26 ONBO).*

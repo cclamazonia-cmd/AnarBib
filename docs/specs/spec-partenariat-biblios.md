@@ -1,7 +1,7 @@
 ---
 Genre : référence
 Statut : 🟡 cadrée
-Décisions : incarne PARTNER-D1..D9 (REGISTRE §18) ; cite MULTI-MODEL (transparence E.3), VALID-γ1 (non-cascade), ILL-8 (partage numérique = droit)
+Décisions : incarne PARTNER-D1..D9 (REGISTRE §21) ; cite MULTI-MODEL (transparence E.3), VALID-γ1 (non-cascade), ILL-8 (partage numérique = droit)
 Supersédé par : —
 ---
 

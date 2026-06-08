@@ -566,7 +566,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 
 **Dépendances sortantes** :
 - `docs/decisions/DECISION_chantier_mobile_arbitrages_2026-05-28.md` (arbitrages A.1-A.4 et trois décisions doctrinales)
-- `REGISTRE_decisions.md` §22 `CARD` (A.1-A.4 + CARD-R1 résolution staff)
+- `REGISTRE_decisions.md` §23 `CARD` (A.1-A.4 + CARD-R1 résolution staff)
 
 **Chantiers liés** :
 - Paquet 1 du chantier #MOBILE ✅ livré 28/05
@@ -791,7 +791,7 @@ Couche **lecteur** (affichage / découverte), **en aval** du chantier Catalogaç
 
 **Chantiers liés** : cluster #OPAC / #CATALOG-EXT (atelier RebAL 20/05).
 
-**Points d'attention** : **cloisonnement des compteurs (INV-1)** — agréger sur `*_anon_v1` pour les anonymes, **jamais** sur une vue réseau (régression B.7 déjà corrigée) ; anti-tracking INV-5 (aucun appel tiers) ; reco compteurs = RPC dédiée `api.catalog_facets_v1` (OPAC-F1) régie par `DOC-PERIM-1`. Décisions tracées au **registre §20 `OPAC`** ; favoris = **OPAC-W1** (serveur). En-tête normalisé posé.
+**Points d'attention** : **cloisonnement des compteurs (INV-1)** — agréger sur `*_anon_v1` pour les anonymes, **jamais** sur une vue réseau (régression B.7 déjà corrigée) ; anti-tracking INV-5 (aucun appel tiers) ; reco compteurs = RPC dédiée `api.catalog_facets_v1` (OPAC-F1) régie par `DOC-PERIM-1`. Décisions tracées au **registre §18 `OPAC`** ; favoris = **OPAC-W1** (serveur). En-tête normalisé posé.
 
 ---
 
@@ -815,7 +815,7 @@ Couche **lecteur** (affichage / découverte), **en aval** du chantier Catalogaç
 
 **Chantiers liés** : cluster #CATALOG-EXT / #AUT. **Annonce** : `spec-atelier-autorites` (future, dédiée).
 
-**Points d'attention** : **INV-3 anti-tracking** — aucun appel client à Wikidata pour enrichir (fuiterait la consultation) ; moissonnage serveur au catalogage uniquement (cohérent capas/sources) ; **préalable structurant** : tables autorités *collectivité* et *matière* à créer (**OPAC-ATL1**, backlog). Décisions tracées au **registre §20 `OPAC`** (favoris **OPAC-W1** acté serveur, similaires/commentaires/MARC/contributeurs requalifiés) ; autorité externe régie par `CAT-D6`. En-tête normalisé posé.
+**Points d'attention** : **INV-3 anti-tracking** — aucun appel client à Wikidata pour enrichir (fuiterait la consultation) ; moissonnage serveur au catalogage uniquement (cohérent capas/sources) ; **préalable structurant** : tables autorités *collectivité* et *matière* à créer (**OPAC-ATL1**, backlog). Décisions tracées au **registre §18 `OPAC`** (favoris **OPAC-W1** acté serveur, similaires/commentaires/MARC/contributeurs requalifiés) ; autorité externe régie par `CAT-D6`. En-tête normalisé posé.
 
 ---
 

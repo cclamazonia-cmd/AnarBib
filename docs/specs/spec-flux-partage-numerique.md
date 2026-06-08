@@ -1,7 +1,7 @@
 ---
 Genre : référence
 Statut : 🟡 cadrée
-Décisions : incarne ILL-1..ILL-9 (REGISTRE §19) ; cite PARTNER-D7 (coordenador), PARTNER-D9 (droit `digital_share`), PARTNER-D5 (révocation), CAT-B3 (visibility), DOC-I18N-1 (8 locales)
+Décisions : incarne ILL-1..ILL-9 (REGISTRE §22) ; cite PARTNER-D7 (coordenador), PARTNER-D9 (droit `digital_share`), PARTNER-D5 (révocation), CAT-B3 (visibility), DOC-I18N-1 (8 locales)
 Supersédé par : —
 ---
 

@@ -4,7 +4,7 @@
 |---|---|
 | Référence | `docs/decisions/CADRAGE_modele_acces_concentrique_2026-06-04.md` |
 | Date | 4 juin 2026 |
-| Statut doctrinal | **Trace** (non-normative). Les décisions ci-dessous se canonisent dans le **REGISTRE, section `FED`** (à créer, §23). Ce document en est le foyer / la justification. |
+| Statut doctrinal | **Trace** (non-normative). Les décisions ci-dessous se canonisent dans le **REGISTRE, section `FED`** (à créer, §24). Ce document en est le foyer / la justification. |
 | Périmètre | Modèle d'accès par anneau (qui voit / qui agit) ; relocalisation de `círculos` ; nommage du bloc fédératif ; 2 arbitrages tranchés. **N'implémente rien** — fonde le fond avant la forme (schéma Bologne) et avant la spec des outils. |
 | Méthode | Discussion de conception 04/06 ; appui sur `CHANTIER_reseau_federatif_2026-05-25` (trace), `spec-administrateur-reseau-v0.4` (RES), `spec-cartographie-reseau-v0.1` (MAP), chantier `#PARTNERS`. |
 | Préséance | En cas de conflit : REGISTRE (`FED-…`) + spec courante + backlog. Ce cadrage est périmé par définition s'il contredit la couche référence. |
@@ -81,14 +81,14 @@ Les **actions** se nichent vers l'extérieur (logique FAU : plus d'anneaux = plu
 
 ## 8. Conséquences à propager (étape suivante)
 
-1. **REGISTRE_decisions.md** — créer la **section §23 `FED`** (face fédération / outils fédéralistes) avec FED-1..FED-7 + FED-O1..O4 ; header citant ce cadrage comme foyer.
+1. **REGISTRE_decisions.md** — créer la **section §24 `FED`** (face fédération / outils fédéralistes) avec FED-1..FED-7 + FED-O1..O4 ; header citant ce cadrage comme foyer.
 2. **INDEX.md** — sous « Gouvernance et structure » (ou nouvelle sous-famille « Réseau fédératif »), annoncer la future `spec-outils-federalistes` et lister ce cadrage en trace ; noter que `círculos` / la face fédération est gouvernée par `FED`.
 3. **INVENTAIRE.md** — inscrire le cadrage + ses dépendances (RES, MAP, #PARTNERS, CHANTIER réseau fédératif).
 4. **Forme (Bologne)** — régénérer le schéma concentrique en cohérence, et **assumer la correction comme contenu** (la fédération n'est pas le domaine de l'administrateur) : c'est la posture « commun en construction / méthode comme acte de transparence » (RES-D9).
 
 ## 9. Prompt de reprise
 
-> Le fond du modèle d'accès concentrique est figé (tableau §4, décisions FED-1..7). Étape immédiate : reporter FED-1..7 + FED-O1..O4 dans le REGISTRE (nouvelle section §23 `FED`), puis aligner INDEX et INVENTAIRE. Ensuite seulement : régénérer le schéma de Bologne à partir de ce fond, puis ouvrir la **spec des outils fédéralistes** (premier outil = l'annuaire des cercles ouverts, vue première personne, lecture membres / action coordenador). Bordures à spécifier le moment venu : FED-O1 (périmètre vue painel), FED-O2 (traçabilité), FED-O3 (sélecteur de biblio), FED-O4 (nommage).
+> Le fond du modèle d'accès concentrique est figé (tableau §4, décisions FED-1..7). Étape immédiate : reporter FED-1..7 + FED-O1..O4 dans le REGISTRE (nouvelle section §24 `FED`), puis aligner INDEX et INVENTAIRE. Ensuite seulement : régénérer le schéma de Bologne à partir de ce fond, puis ouvrir la **spec des outils fédéralistes** (premier outil = l'annuaire des cercles ouverts, vue première personne, lecture membres / action coordenador). Bordures à spécifier le moment venu : FED-O1 (périmètre vue painel), FED-O2 (traçabilité), FED-O3 (sélecteur de biblio), FED-O4 (nommage).
 
 ---
 
