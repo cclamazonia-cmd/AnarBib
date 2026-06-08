@@ -258,6 +258,18 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
+## 19. Chantier-cadre Biblioteca — `BIBLIO` *(trace : `decisions/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md`)*
+
+| ID | Décision | Statut |
+|---|---|---|
+| **BIBLIO-CLOSE** | **Chantier-cadre Biblioteca CLOS le 08/06/2026** sur sa mission (12 onglets fonctionnels, parité doctrinale, transports mail câblés). Dernière réserve = **étape 8** (mails EA-13/14/19) livrée et vérifiée de bout en bout, débloquée par la clôture de #110 (Brevo→Resend). EA-13 = RPC `fn_send_weekly_report_now` + bouton « Enviar relatório » recâblé sur `notify-weekly-report` ; EA-14 = cron hebdo actif (`anarbib-notify-weekly-report-weekly`) ; EA-19 = déjà livré (`fn_task_invite`). | ✅ acté 08/06 |
+| **BIBLIO-9** | **EA-12 phase 2** (parité fonctionnelle PEB, ~45 fn JS) = **DIFFÉRÉE / gelée**, conditionnée au retour d'usage réel BLMF↔BTL en prod. Hors chantier-cadre, ticket dormant au backlog ; ne se rouvre que sur manque concret constaté. | ✅ acté 08/06 (différé) |
+| **BIBLIO-10** | **EA-11** (parité HTML radicale des échanges, ~118 fn JS, refonte intégrale) = **NON RETENUE par défaut**. Panneau React des échanges jugé fonctionnellement suffisant ; répliquer l'exhaustivité de l'ancien HTML n'est pas un objectif du réseau. Réouvrable seulement sur décision délibérée. | ✅ acté 08/06 (non retenu) |
+
+> Foyer normatif de la clôture ; la cartographie (`decisions/…`) en est la trace détaillée (§6.4) — registre > trace.
+
+---
+
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
@@ -269,3 +281,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 05/06/2026 (session Track D) — **CAT-D5a** : P1 Track D sources externes — diagnostic et réactivation gardée de la source LoC. Cause : migration FOLIO (juin 2025) a cassé l'endpoint SRU (casse du database name + instabilité MetaProxy). 5ème piège opérationnel constaté : le MetaProxy IndexData est sensible à la casse du database name (`LCDB` ≠ `lcdb`). **CAT-D5b** : P2 Track D — adaptateurs REST Open Library (ISBN + titre/auteur, candidats riches) et Wikidata (titre/auteur seulement, Q-id passerelle vers P4 autorités). `catalog_metadata_lookup` passe de 5 à 7 sources. **CAT-D5c** : P3 Track D — BN Brasil fédéré dans « Buscar metadados » (`Promise.allSettled` parallèle, normalisation candidats, fusion dans le panel unifié). 8 sources au total. **CAT-D5d** : P4 Track D — EF `authority_lookup` (Wikidata → VIAF/ISNI/variant_forms) + Atelier autorités dans AuthorDraftForm (tier Completo). VIAF API inaccessible (403/HTML depuis juin 2025) → Wikidata seul, qui contient les VIAF/ISNI en claims.*
 
 *MàJ 08/06/2026 — chantier **OPAC** ouvert : §18 (`OPAC-AXIS1/F1/W1/ATL1/UI1/SIM1/RSS1/SEQ1`), specs `spec-catalogue-decouverte` v0.1 + `spec-notice-autorite-enrichie` v0.1. Confrontation specs↔code (frontend lu + backend sondé) tracée dans `CADRAGE_OPAC_chantier_2026-06-07.md`. Décision-clé : axe découverte = **CDD** (sujets data-blocked, 2/237), compteurs via RPC `api.catalog_facets_v1`, autorité matière en étape 2 (collectivité déjà couverte par `authors.authorityType='collective'`).*
+
+*MàJ 08/06/2026 — chantier-cadre **Biblioteca** CLOS : §19 (`BIBLIO-CLOSE/9/10`). Étape 8 (mails EA-13/14/19) livrée et vérifiée de bout en bout ; EA-13 = RPC `fn_send_weekly_report_now` recâblant le bouton « Enviar relatório » sur `notify-weekly-report` (débloquée par #110). Étapes 9-10 (parité HTML radicale) reclassées hors chantier : EA-12 ph.2 différée/prod-gated, EA-11 non retenue par défaut. Trace : cartographie §6.4 ; backlog v27 mis à jour.*
