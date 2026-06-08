@@ -74,6 +74,10 @@ export default function ImportacoesPage() {
   const [depositFile, setDepositFile] = useState(null);
   const [depositBusy, setDepositBusy] = useState(false);
 
+  // ── OAI-PMH harvesting ────────────────────────────────
+  const [oaiSources, setOaiSources] = useState([]);
+  const [oaiLoading, setOaiLoading] = useState(false);
+
   // ── Status labels ──────────────────────────────────────
   const STATUS = useMemo(() => ({
     pending: t({ id: 'importacoes.status.pending' }),
@@ -116,7 +120,17 @@ export default function ImportacoesPage() {
     finally { setRunRowsLoading(false); }
   }, []);
 
-  useEffect(() => { loadSources(); loadRuns(); }, [loadSources, loadRuns]);
+  // ── Load OAI sources ────────────────────────────────────
+  const loadOaiSources = useCallback(async () => {
+    setOaiLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_import_list_oai_sources');
+      if (!error && data) setOaiSources(data);
+    } catch { /* guard */ }
+    finally { setOaiLoading(false); }
+  }, []);
+
+  useEffect(() => { loadSources(); loadRuns(); loadOaiSources(); }, [loadSources, loadRuns, loadOaiSources]);
 
   // ── Derived data (hooks must be before early returns) ──
   const runStats = useMemo(() => {
@@ -268,6 +282,26 @@ export default function ImportacoesPage() {
     } catch (err) {
       setMsg({ text: err.message, kind: 'error' });
     } finally { setDepositBusy(false); }
+  }
+
+  // ── Trigger OAI harvest (manual) ────────────────────────
+  async function handleHarvestOai(sourceId) {
+    setMsg({ text: t({ id: 'importacoes.oai.harvesting' }), kind: 'info' });
+    try {
+      const { data, error } = await supabase.rpc('fn_import_harvest_oai', {
+        p_source_id: Number(sourceId),
+      });
+      if (error) throw error;
+      if (data?.note) {
+        setMsg({ text: data.note, kind: 'info' });
+      } else {
+        setMsg({ text: t({ id: 'importacoes.oai.harvestStarted' }, { id: data?.run_id || '?' }), kind: 'ok' });
+      }
+      await loadOaiSources();
+      await loadRuns();
+    } catch (err) {
+      setMsg({ text: err.message, kind: 'error' });
+    }
   }
 
   // ── Ingest candidate → staging_row (Lot 2) ────────────
@@ -624,6 +658,58 @@ export default function ImportacoesPage() {
                       ))}
                     </tbody>
                   </table>
+                )}
+
+                {/* Plan C: OAI-PMH harvesting */}
+                <h4 className="imp-plane-h" style={{ marginTop: 24 }}>
+                  {t({ id: 'importacoes.oai.title' })}
+                  <Pill>OAI-PMH</Pill>
+                </h4>
+                <p className="imp-note" style={{ marginBottom: 12 }}>
+                  {t({ id: 'importacoes.oai.desc' })}
+                </p>
+
+                {oaiLoading && <p className="imp-note">{t({ id: 'common.loading' })}</p>}
+
+                {!oaiLoading && oaiSources.length === 0 && (
+                  <p className="imp-note">{t({ id: 'importacoes.oai.noSources' })}</p>
+                )}
+
+                {oaiSources.length > 0 && (
+                  <div className="imp-partners">
+                    {oaiSources.map(s => (
+                      <div key={s.id} className="imp-pcard">
+                        <div className="imp-pcard__top">
+                          <h4>{s.partner_name}</h4>
+                          <Pill variant={s.harvest_status === 'idle' ? 'muted' : s.harvest_status === 'in_progress' ? 'info' : s.harvest_status === 'error' ? 'danger' : s.harvest_status === 'completed' ? 'ok' : 'warn'}>
+                            {t({ id: `importacoes.oai.status.${s.harvest_status || 'idle'}` })}
+                          </Pill>
+                        </div>
+                        <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginBottom: 6 }}>
+                          {s.oai_endpoint_url}
+                          {s.oai_set && <span> — set: {s.oai_set}</span>}
+                        </div>
+                        <div className="imp-flags" style={{ marginBottom: 8 }}>
+                          <span className="imp-flagchip imp-flagchip--on">{s.oai_metadata_prefix || 'marcxml'}</span>
+                          <span className="imp-flagchip">{t({ id: 'importacoes.oai.lotsPerCycle' }, { n: s.lots_per_cycle || 5 })}</span>
+                          {s.total_records_harvested > 0 && (
+                            <span className="imp-flagchip imp-flagchip--on">{t({ id: 'importacoes.oai.totalHarvested' }, { n: s.total_records_harvested })}</span>
+                          )}
+                          {s.last_harvest_at && (
+                            <span className="imp-flagchip">{t({ id: 'importacoes.oai.lastHarvest' })} {formatDate(s.last_harvest_at)}</span>
+                          )}
+                        </div>
+                        {s.last_error && (
+                          <p style={{ fontSize: '.8rem', color: 'var(--color-danger)', margin: '0 0 8px' }}>{s.last_error}</p>
+                        )}
+                        <button className="cat-btn primary" style={{ fontSize: '.82rem', padding: '5px 14px', minHeight: 0 }}
+                          onClick={() => handleHarvestOai(s.id)}
+                          disabled={s.harvest_status === 'in_progress'}>
+                          {s.harvest_status === 'in_progress' ? t({ id: 'importacoes.oai.harvesting' }) : t({ id: 'importacoes.oai.harvestNow' })}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
