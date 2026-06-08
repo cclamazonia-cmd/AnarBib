@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
+import { useTheme } from '@/lib/theme';
 
 const STORAGE_KEY = 'anarbib.libraryContext';
 
@@ -87,12 +88,22 @@ export function LibraryProvider({ children }) {
   const [ctx, setCtx] = useState(() => readFromUrl() || readFromSession() || DEFAULT_CONTEXT);
   const [libraries, setLibraries] = useState([]);
   const [isNetworkAdmin, setIsNetworkAdmin] = useState(false);
+  // #LOGIN-FIX H1 : true tant que la resolution biblio/theme de l'utilisateur
+  // est en vol (SELECT memberships). LoginPage attend !libraryLoading + themeReady
+  // avant de naviguer, pour ne JAMAIS afficher la page connectee sur l'ancien fond.
+  const [libraryLoading, setLibraryLoading] = useState(false);
+  // #LOGIN-FIX H1 : le theme (manifest) est applique ici (et non plus dans un
+  // ThemeGate separe), pour exposer themeReady au flux de login. On derive
+  // themeReady du settledSlug (slug reellement applique) compare au themeSlug
+  // demande -> evaluation SYNCHRONE au rendu, sans race d'ordre d'effets.
+  const { settledSlug: themeSettledSlug } = useTheme(ctx.themeSlug);
 
   // FIX B.3 (conserve E.3) : depend on user?.id instead of user object reference.
   useEffect(() => {
     if (!user) {
       setLibraries([]);
       setIsNetworkAdmin(false);
+      setLibraryLoading(false);
       const urlCtx = readFromUrl();
       // #PN-2 : visiteur anonyme -> on demarre TOUJOURS sur le theme par defaut
       // (jamais de sonde themes/<slug>/manifest.json depuis l'URL), puis on resout
@@ -126,7 +137,9 @@ export function LibraryProvider({ children }) {
       return;
     }
 
+    setLibraryLoading(true);
     (async () => {
+      try {
       // E.3 : 2 SELECT en parallele (Promise.all)
       //   1. memberships locaux (table user_library_memberships)
       //   2. statut admin reseau (table network_administrators)
@@ -218,6 +231,9 @@ export function LibraryProvider({ children }) {
         setCtx(next);
         writeToSession(next);
       }
+      } finally {
+        setLibraryLoading(false);
+      }
     })();
   }, [user?.id]);
 
@@ -261,8 +277,11 @@ export function LibraryProvider({ children }) {
       isNetworkAdmin,
       effectiveRole,
       hasStaffAccess,
+      // #LOGIN-FIX H1 : themeReady synchrone au rendu (settled === demandé)
+      libraryLoading,
+      themeReady: themeSettledSlug === ctx.themeSlug,
     }),
-    [ctx, setLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess]
+    [ctx, setLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess, libraryLoading, themeSettledSlug]
   );
 
   return (

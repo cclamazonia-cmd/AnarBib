@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button } from '@/components/ui';
 
@@ -49,6 +50,9 @@ export default function LoginPage() {
   // detectera la session et redirigera immediatement sans qu'il ait besoin de
   // re-saisir ses credentials.
   const { user, profile, loading: authLoading } = useAuth();
+  // #LOGIN-FIX H1 : on attend que la biblio + son thème soient résolus avant de
+  // naviguer, pour une transition unique (jamais la page connectée sur l'ancien fond).
+  const { libraryLoading, themeReady } = useLibrary();
   // (pendingLoginRedirect retire au v4 : la decision est prise directement
   // par le useEffect qui reagit a (user, profile, authLoading), pas besoin
   // d'un flag intermediaire.)
@@ -109,10 +113,16 @@ export default function LoginPage() {
     if (profile.must_change_password === true) {
       setView('force-change');
       setLoginLoading(false);
-    } else {
-      navigate(nextUrl);
+      return;
     }
-  }, [authLoading, user, profile, view, navigate, nextUrl]);
+    // #LOGIN-FIX H1 : ne naviguer QUE lorsque la bibliothèque de l'utilisateur ET
+    // son thème sont résolus/appliqués. Sinon la page connectée s'afficherait
+    // brièvement sur l'ancien fond (AnarBib) avant de basculer — la cascade visible
+    // qu'on supprime. Le swap de fond se fait pendant que le panneau login est
+    // encore monté, puis on révèle /conta directement sur le bon fond.
+    if (libraryLoading || !themeReady) return;
+    navigate(nextUrl);
+  }, [authLoading, user, profile, view, navigate, nextUrl, libraryLoading, themeReady]);
 
   async function handleLogin(e) {
     e.preventDefault();

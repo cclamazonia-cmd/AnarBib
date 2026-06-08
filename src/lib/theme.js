@@ -99,7 +99,17 @@ function applyBrandAssets(assets) {
   // (un dégradé rouge AnarBib opaque). Le manifest peut toujours définir
   // --brand-bg-image (image de fond globale de la page), mais les panels/cards
   // utilisent un dégradé pour rester lisibles et identitaires.
-  if (bg) setCssVar('--brand-bg-image', `url("${bg}")`);
+  if (bg) {
+    // #LOGIN-FIX H3 : précharger l'image AVANT d'appliquer la variable CSS, pour
+    // que le basculement de fond (AnarBib → biblio) soit instantané (peint depuis
+    // le cache) au lieu d'un fetch-puis-paint visible. background-image n'étant pas
+    // animable en CSS, le préchargement est le principal levier anti-flash.
+    const apply = () => setCssVar('--brand-bg-image', `url("${bg}")`);
+    const pre = new Image();
+    pre.onload = apply;
+    pre.onerror = apply; // filet : appliquer quand même si le préchargement échoue
+    pre.src = bg;
+  }
   setCssVar('--brand-bg-position', assets.backgroundPosition || 'center center');
   setCssVar('--brand-bg-size', assets.backgroundSize || 'cover');
   setCssVar('--brand-bg-repeat', assets.backgroundRepeat || 'no-repeat');
@@ -173,6 +183,13 @@ async function fetchManifest(themeSlug) {
 export function useTheme(themeSlug = 'default') {
   const [manifest, setManifest] = useState(null);
   const [loading, setLoading] = useState(true);
+  // #LOGIN-FIX H1 : slug pour lequel le thème est RÉELLEMENT appliqué (succès ou
+  // fallback). Exposé pour que les consommateurs dérivent `themeReady` de façon
+  // SYNCHRONE au rendu (settledSlug === themeSlug demandé) : au changement de
+  // themeSlug, settledSlug garde l'ancienne valeur tant que le nouveau manifest
+  // n'est pas appliqué → pas de race d'ordre d'effets, pas de deadlock (le
+  // fallback marque aussi le slug demandé comme settled).
+  const [settledSlug, setSettledSlug] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -198,12 +215,15 @@ export function useTheme(themeSlug = 'default') {
           }
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+          setSettledSlug(themeSlug);
+        }
       }
     })();
 
     return () => { cancelled = true; };
   }, [themeSlug]);
 
-  return { manifest, loading };
+  return { manifest, loading, settledSlug };
 }

@@ -2,10 +2,9 @@ import { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { LibraryProvider, useLibrary } from '@/contexts/LibraryContext';
+import { LibraryProvider } from '@/contexts/LibraryContext';
 import { ToastProvider } from '@/contexts/ToastContext';
-import { useTheme } from '@/lib/theme';
-import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE } from '@/i18n';
+import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE, isSupported } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
 import ScrollButtons from '@/components/ScrollButtons';
@@ -36,23 +35,30 @@ function LoadingFallback() {
   );
 }
 
-// ── Chargement du thème ──────────────────────────────────────────────
-function ThemeGate({ children }) {
-  const { themeSlug } = useLibrary();
-  useTheme(themeSlug);
-  return children;
-}
-
 // ── App ──────────────────────────────────────────────────────────────
 export default function App() {
-  const locale = detectLocale();
   // pt-BR est embarqué : disponible synchroniquement, aucun délai au démarrage.
-  // Les autres langues sont chargées une seule fois au mount (le changement
-  // de langue passe par un reload, cf. setLocale), donc pas de switch à chaud.
-  const [messages, setMessages] = useState(locale === DEFAULT_LOCALE ? defaultMessages : null);
+  // #LOGIN-FIX H2 : la locale est désormais un STATE re-settable. setLocale /
+  // syncLocaleFromProfile (i18n/index.js) émettent l'événement 'anarbib:locale-change'
+  // au lieu de window.location.reload() → swap live des messages, sans remonter
+  // toute l'app (plus de cascade de fonds en plein login).
+  const [locale, setLocaleState] = useState(() => detectLocale());
+  const [messages, setMessages] = useState(() => detectLocale() === DEFAULT_LOCALE ? defaultMessages : null);
 
   useEffect(() => {
-    if (messages) return; // pt-BR déjà présent : rien à charger
+    function onLocaleChange(e) {
+      const next = e?.detail?.locale;
+      if (next && isSupported(next)) setLocaleState(next);
+    }
+    window.addEventListener('anarbib:locale-change', onLocaleChange);
+    return () => window.removeEventListener('anarbib:locale-change', onLocaleChange);
+  }, []);
+
+  useEffect(() => {
+    // pt-BR embarqué (synchrone) ; les autres locales chargées à la volée.
+    // On NE remet PAS messages à null sur changement : on garde l'ancien jeu
+    // jusqu'à l'arrivée du nouveau pour éviter un flash de fallback.
+    if (locale === DEFAULT_LOCALE) { setMessages(defaultMessages); return; }
     let alive = true;
     loadMessages(locale).then((m) => {
       if (alive) setMessages(m);
@@ -60,7 +66,7 @@ export default function App() {
     return () => {
       alive = false;
     };
-  }, [locale, messages]);
+  }, [locale]);
 
   // Bref fallback uniquement pour une langue ≠ pt-BR, le temps de charger
   // son chunk (~une centaine de Ko). pt-BR n'y passe jamais.
@@ -73,7 +79,6 @@ export default function App() {
           <LibraryProvider>
             <IdleTimerGuard>
             <ToastProvider>
-            <ThemeGate>
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
                   {/* ── Pages publiques ───────────── */}
@@ -136,7 +141,6 @@ export default function App() {
                 </Routes>
               </Suspense>
               <ScrollButtons />
-            </ThemeGate>
             </ToastProvider>
             </IdleTimerGuard>
           </LibraryProvider>

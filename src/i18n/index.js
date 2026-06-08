@@ -108,28 +108,13 @@ export function detectLocale() {
   return DEFAULT_LOCALE;
 }
 
-// ── Restauration de la position scroll au reload ───────────
+// ── Restauration de la position scroll (vestigial) ─────────
 //
-// Quand on change de langue, on est obligés de reload la page (react-intl
-// ne sait pas changer de messages dynamiquement sans remount). Pour éviter
-// que l'utilisateur perde sa place dans la page, on sauvegarde scroll +
-// hash dans sessionStorage avant le reload, et on les restaure au mount.
-
-function saveScrollState() {
-  try {
-    const state = {
-      scrollY: window.scrollY,
-      scrollX: window.scrollX,
-      hash: window.location.hash,
-      pathname: window.location.pathname,
-      search: window.location.search,
-      timestamp: Date.now(),
-    };
-    sessionStorage.setItem(SCROLL_RESTORE_KEY, JSON.stringify(state));
-  } catch {
-    // ignore
-  }
-}
+// #LOGIN-FIX H2 : le changement de langue ne recharge plus la page (swap live
+// des messages, cf. setLocale / syncLocaleFromProfile). La sauvegarde de scroll
+// avant reload (saveScrollState) n'a donc plus lieu d'être et a été retirée.
+// Les helpers ci-dessous restent exportés mais deviennent des no-op (aucun état
+// n'est plus sauvegardé), pour ne pas casser d'éventuels appelants au démarrage.
 
 export function consumeScrollRestore() {
   try {
@@ -160,7 +145,11 @@ export function applyScrollRestoreIfAny() {
 
 // ── Setters ────────────────────────────────────────────────
 
-// Changement "soft" de locale : sauvegarde scroll + reload.
+// Changement de locale : SWAP LIVE (plus de window.location.reload).
+// #LOGIN-FIX H2 : on émet 'anarbib:locale-change' ; App.jsx recharge les
+// messages et re-rend l'IntlProvider sans remonter l'app (donc sans relancer
+// la cascade de chargement / fonds d'écran). Le scroll est préservé d'office
+// puisqu'il n'y a plus de rechargement de page.
 export function setLocale(locale) {
   if (!isSupported(locale)) return;
   try {
@@ -168,16 +157,20 @@ export function setLocale(locale) {
   } catch {
     // ignore
   }
-  saveScrollState();
-  window.location.reload();
+  window.dispatchEvent(new CustomEvent('anarbib:locale-change', { detail: { locale } }));
 }
 
 // Synchronise la locale stockée localement avec celle du profil utilisateur.
-// Appelée au login depuis AuthContext. Si la locale stockée diffère de
-// celle du profil, on aligne sur le profil (autorité = base) puis on reload
-// avec restoration de scroll.
+// Appelée au login depuis AuthContext. Si la locale stockée diffère de celle
+// du profil, on aligne sur le profil (autorité = base) puis on émet
+// 'anarbib:locale-change' (SWAP LIVE).
 //
-// Retourne true si un reload a été déclenché, false sinon.
+// #LOGIN-FIX H2 : auparavant cette fonction faisait window.location.reload() en
+// plein login → remontage complet de l'app, re-fetch des thèmes, cascade de
+// fonds d'écran (AnarBib → biblio) très visible pour les comptes dont la langue
+// de profil ≠ navigateur. Désormais swap live, sans rechargement.
+//
+// Retourne true si la locale a été changée, false sinon.
 export function syncLocaleFromProfile(profileLanguage) {
   if (!isSupported(profileLanguage)) return false;
   let stored = null;
@@ -192,7 +185,6 @@ export function syncLocaleFromProfile(profileLanguage) {
   } catch {
     // ignore
   }
-  saveScrollState();
-  window.location.reload();
+  window.dispatchEvent(new CustomEvent('anarbib:locale-change', { detail: { locale: profileLanguage } }));
   return true;
 }
