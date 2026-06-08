@@ -149,7 +149,7 @@ export default function BibliotecaPage() {
   const [illLoans, setIllLoans] = useState([]);
   const [exchanges, setExchanges] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [stats, setStats] = useState({ books:0, authors:0, exemplars:0, readers:0, loansOpen:0, loansOverdue:0, loansCreated7d:0, loansReturned7d:0, loansCreated30d:0, reservationsActive:0, reservations30d:0, consultationsActive:0, librariansActive:0, topBooks:[] });
+  const [stats, setStats] = useState({ books:0, authors:0, exemplars:0, readers:0, loansOpen:0, loansOverdue:0, loansCreated7d:0, loansReturned7d:0, loansCreated30d:0, reservationsActive:0, reservations30d:0, consultationsActive:0, trocasActive:0, librariansActive:0, topBooks:[] });
   const [mailChannel, setMailChannel] = useState(null);
   const [notifPolicy, setNotifPolicy] = useState(null);
   // Cotisation (membership)
@@ -281,6 +281,7 @@ export default function BibliotecaPage() {
         loansCreated30d: cs.loans_created_30d || 0,
         reservationsActive: cs.reservations_active || 0, reservations30d: cs.reservations_30d || 0,
         consultationsActive: cs.consultations_active || 0,
+        trocasActive: cs.trocas_active || 0,
         librariansActive: cs.librarians_active || 0,
         topBooks: cs.top_books_90d || [],
       });
@@ -1895,7 +1896,7 @@ export default function BibliotecaPage() {
           <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.reports.title' })}</h3>
           <div style={bx}>
             <div className="cat-book-grid">
-              {[{v:stats.books,l:t({id:'catalog.stats.documents'})},{v:stats.authors,l:t({id:'catalog.stats.authorities'})},{v:stats.exemplars,l:t({id:'catalog.stats.exemplars'})},{v:stats.readers,l:t({id:'biblioteca.stats.readersActive'})},{v:stats.loansOpen,l:t({id:'biblioteca.stats.loansOpen'})},{v:stats.loansOverdue,l:t({id:'biblioteca.stats.loansOverdue'}),warn:stats.loansOverdue>0},{v:stats.loansCreated7d,l:t({id:'biblioteca.stats.loansCreated7d'})},{v:stats.loansReturned7d,l:t({id:'biblioteca.stats.loansReturned7d'})},{v:stats.reservationsActive,l:t({id:'biblioteca.stats.reservationsActive'})},{v:stats.consultationsActive,l:t({id:'biblioteca.stats.consultationsActive'})},{v:stats.librariansActive,l:t({id:'biblioteca.stats.librariansActive'})}].map((s,i)=>(
+              {[{v:stats.books,l:t({id:'catalog.stats.documents'})},{v:stats.authors,l:t({id:'catalog.stats.authorities'})},{v:stats.exemplars,l:t({id:'catalog.stats.exemplars'})},{v:stats.readers,l:t({id:'biblioteca.stats.readersActive'})},{v:stats.loansOpen,l:t({id:'biblioteca.stats.loansOpen'})},{v:stats.loansOverdue,l:t({id:'biblioteca.stats.loansOverdue'}),warn:stats.loansOverdue>0},{v:stats.loansCreated7d,l:t({id:'biblioteca.stats.loansCreated7d'})},{v:stats.loansReturned7d,l:t({id:'biblioteca.stats.loansReturned7d'})},{v:stats.reservationsActive,l:t({id:'biblioteca.stats.reservationsActive'})},{v:stats.consultationsActive,l:t({id:'biblioteca.stats.consultationsActive'})},{v:stats.trocasActive,l:t({id:'biblioteca.stats.trocasActive'})},{v:stats.librariansActive,l:t({id:'biblioteca.stats.librariansActive'})}].map((s,i)=>(
                 <div key={i} style={{ padding:14, borderRadius:8, background:s.warn?'rgba(220,38,38,.15)':'rgba(0,0,0,.15)', textAlign:'center', border:s.warn?'1px solid rgba(220,38,38,.4)':'none' }}>
                   <div style={{ fontSize:'1.5rem', fontWeight:800 }}>{s.v}</div><div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{s.l}</div>
                 </div>
