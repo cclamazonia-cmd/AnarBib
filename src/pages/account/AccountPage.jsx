@@ -8,9 +8,8 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { useAccountAvailability } from '@/hooks/useAccountAvailability';
 import { useBookAvailability } from '@/hooks/useBookAvailability';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
-import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
+import { Button, Pill, Skeleton } from '@/components/ui';
 import BookAvailability from '@/components/BookAvailability';
-import NegotiationStateBadge from '@/components/reservation/NegotiationStateBadge';
 import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput from '@/components/forms/PhoneInput';
@@ -29,6 +28,9 @@ import './AccountPage.css';
 // (~200 ko+) du bundle AccountPage. Chargée seulement au rendu de la section
 // (biblios reader_cards_enabled, onglet profil).
 const ReaderCardSection = lazy(() => import('@/components/account/ReaderCardSection'));
+// #REFACTOR 08/06 (onglets lourds) : ReservationCard (~245 lignes) en chunk lazy,
+// chargé seulement depuis l'onglet « reservar ».
+const ReservationCard = lazy(() => import('@/components/account/ReservationCard'));
 
 // ── ContaTabHeader (chantier #CL — recommandation B, refresh par onglet, 31/05/2026) ───
 // Header standard pour les onglets de la page Conta qui méritent un bouton refresh.
@@ -1463,6 +1465,7 @@ export default function AccountPage() {
               {reservations.length === 0 ? (
                 <p className="ab-conta-empty">{t({ id: 'account.reservations.empty' })}</p>
               ) : (
+                <Suspense fallback={null}>
                 <div className="ab-conta-items">
                   {reservations.map((r, i) => (
                     <ReservationCard
@@ -1479,6 +1482,7 @@ export default function AccountPage() {
                     />
                   ))}
                 </div>
+                </Suspense>
               )}
 
               {/* Paquet 27.A.5 (4.3) : creneau propose par la biblio, en attente de reponse */}
@@ -2184,310 +2188,10 @@ export default function AccountPage() {
 // Carte réservation avec actions workflow
 // ═══════════════════════════════════════════════════════════
 
-// WORKFLOW_LABELS and PICKUP_REPLY_LABELS are now fully resolved via i18n keys (reservation.workflow.* and reservation.pickup.reply.*)
+// #REFACTOR 08/06 (onglets lourds) : fmtDate + ReservationCard déplacés dans le
+// module lazy src/components/account/ReservationCard.jsx (import lazy en tête).
 
-function fmtDate(d) {
-  if (!d) return '';
-  try { return new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }); }
-  catch { return String(d); }
-}
-
-// ═══════════════════════════════════════════════════════════
-// ReservationCard — refondue paquet 4 (workflow réservation v2 négociation)
-// PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
-// ═══════════════════════════════════════════════════════════
-// Affiche une réservation avec actions contextuelles selon l'état de la
-// négociation symétrique (champs pickup_proposed_by, negotiation_iteration_count).
-//
-// Sémantique v3 :
-//   - retirada_a_combinar = stage de négociation active (forme verbale).
-//     C'est ici que se déroulent toutes les propositions/contre-propositions.
-//   - retirada_agendada = stage d'aboutissement, créneau verrouillé (forme
-//     aboutie). Atteint uniquement par confirmation mutuelle. Plus de boutons
-//     de négociation : juste un message "créneau confirmé, prêt à retirer
-//     bientôt", en attendant la transition vers pronta_para_retirada.
-//   - re-retirada_agendada = déprécié (matrice false partout, fossile pour
-//     résas historiques).
-//
-// 4 états distincts gérés :
-//
-//   1. Stage = retirada_a_combinar ET pickup_proposed_by='biblio'
-//      → la biblio a proposé un créneau, c'est au lecteur·rice de répondre
-//      → 3 boutons : "Aceitar este horário", "Propor outro horário", "Cancelar"
-//      → Le bouton "Propor outro horário" est masqué si compteur >= 3 OU si la
-//        biblio a désactivé reservation_allow_reader_counter_proposal.
-//
-//   2. Stage = retirada_a_combinar ET pickup_proposed_by='leitor'
-//      → le lecteur·rice a déjà contre-proposé, c'est à la biblio de répondre
-//      → 2 boutons : "Modificar minha proposta" et "Cancelar"
-//      → Compteur visible "iteração n/3" pour transparence.
-//
-//   3. Compteur saturé (negotiation_iteration_count >= 3) ET pickup_proposed_by='biblio'
-//      → la négociation a atteint sa limite, redirection vers contact direct
-//      → message d'aide + 1 seul bouton "Cancelar" (et "Aceitar este horário" reste,
-//        car le lecteur peut toujours accepter même au-delà de 3 itérations).
-//
-//   4. Autres stages (solicitada, em_preparacao, retirada_agendada,
-//      pronta_para_retirada, etc.) ou stage retirada_a_combinar avec
-//      pickup_proposed_by=NULL (négociation close avant verrouillage)
-//      → affichage standard, 1 seul bouton "Cancelar" si stage non terminal.
-//      → retirada_agendada affiche un message "créneau verrouillé, livre
-//        bientôt prêt à retirer".
-//
-// La carte intègre un panneau accordion qui se déplie quand le lecteur·rice
-// clique sur "Propor outro horário". Le panneau contient un datetime-local
-// pré-rempli avec le créneau actuel + un champ note + 2 boutons.
-//
-// Le composant <NegotiationStateBadge viewerRole="reader" /> du paquet 3B est
-// réutilisé pour afficher l'état de négociation visuellement.
-// ═══════════════════════════════════════════════════════════
-
-function ReservationCard({
-  r,
-  onCancel,
-  onConfirmPickup,
-  onOpenCounterProposalForm,
-  onCloseCounterProposalForm,
-  onSubmitCounterProposal,
-  negotiationForm,
-  setNegotiationForm,
-}) {
-  const { formatMessage: t } = useIntl();
-
-  const WORKFLOW_LABELS = {
-    solicitada: t({ id: 'reservation.stage.solicitada' }),
-    em_preparacao: t({ id: 'reservation.stage.em_preparacao' }),
-    pronta_para_retirada: t({ id: 'reservation.stage.pronta_para_retirada' }),
-    retirada_a_combinar: t({ id: 'reservation.stage.retirada_a_combinar' }),
-    retirada_agendada: t({ id: 'reservation.stage.retirada_agendada' }),
-    're-retirada_agendada': t({ id: 'reservation.stage.re_retirada_agendada' }),
-    nao_retirada: t({ id: 'reservation.stage.nao_retirada' }),
-    cancelada_leitor: t({ id: 'reservation.stage.cancelada_leitor' }),
-    cancelada_biblioteca: t({ id: 'reservation.stage.cancelada_biblioteca' }),
-    expirada: t({ id: 'reservation.stage.expirada' }),
-  };
-
-  const stage = String(r.workflow_stage_effective || r.status || '').trim();
-  const stageLabel = WORKFLOW_LABELS[stage] || stage || '—';
-  const proposedBy = r.pickup_proposed_by || null;
-  const iterCount = r.negotiation_iteration_count ?? 0;
-  const MAX_ITER = 3;
-
-  // PATCH 09/05/2026 paquet 5b : refactor sémantique v3.
-  // La négociation se déroule dans retirada_a_combinar (forme verbale),
-  // plus dans retirada_agendada/re-retirada_agendada qui sont devenus
-  // respectivement le stage d'aboutissement verrouillé et un fossile déprécié.
-  const inNegotiationStage = stage === 'retirada_a_combinar';
-  // PATCH paquet 5b : retirada_agendada = créneau verrouillé, post-négociation.
-  // Pas de boutons négociation, juste un message d'orientation.
-  const isLockedSlot = stage === 'retirada_agendada';
-  const bibliotaProposed = inNegotiationStage && proposedBy === 'biblio';
-  const leitorAlreadyProposed = inNegotiationStage && proposedBy === 'leitor';
-  const counterMaxReached = iterCount >= MAX_ITER;
-  // Le bouton "Propor outro horário" est désactivé/caché quand :
-  //   - compteur saturé (limite atteinte)
-  //   - le wrapper RPC le rejettera de toute façon avec un code d'erreur clair
-  // Note : on n'affiche pas l'état "biblio a désactivé reservation_allow_reader_counter_proposal"
-  // côté frontend en pré-vérification, parce que la vue UI ne l'expose pas.
-  // Si l'utilisateur clique malgré tout, le wrapper RPC renvoie une erreur lisible.
-  const canCounterPropose = bibliotaProposed && !counterMaxReached;
-
-  // Annulation : possible tant que le stage n'est pas terminal
-  const TERMINAL_STAGES = ['cancelada_leitor', 'cancelada_biblioteca', 'expirada', 'retirada_efetivada', 'liberada_para_circulacao', 'convertida_em_emprestimo'];
-  const canCancel = !TERMINAL_STAGES.includes(stage) && !['cancelada_leitor', 'cancelada_biblioteca', 'expirada'].includes(r.status);
-
-  // Form accordion ouvert pour cette ligne ?
-  const isFormOpen = negotiationForm?.reservaId === r.reserva_id
-                  && negotiationForm?.lineNo === r.line_no;
-
-  return (
-    <div className="ab-conta-item ab-conta-item--reservation">
-      <div className="ab-conta-item__main">
-        <Link to={`/livro/${r.book_id}`} className="ab-conta-item__title">
-          {r.titulo || r.bib_ref || '—'}
-        </Link>
-        <span className="ab-conta-item__meta">
-          ref: {r.bib_ref || '—'} · {r.rotulo || ''} · {r.library_name || ''}
-        </span>
-        <span className="ab-conta-item__status" data-stage={stage}>
-          {stageLabel}
-          {/* Badge négociation symétrique paquet 4 */}
-          {inNegotiationStage && proposedBy && (
-            <span style={{ marginLeft: 8 }}>
-              <NegotiationStateBadge
-                proposedBy={proposedBy}
-                iterationCount={iterCount}
-                stage={stage}
-                viewerRole="reader"
-              />
-            </span>
-          )}
-        </span>
-
-        {/* Próxima etapa (texte d'orientation) */}
-        {stage === 'solicitada' && <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#60a5fa' }}>{t({ id: 'reservation.nextStep.solicitada' })}</span>}
-        {stage === 'em_preparacao' && <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#60a5fa' }}>{t({ id: 'reservation.nextStep.em_preparacao' })}</span>}
-        {stage === 'pronta_para_retirada' && <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#4ade80' }}>{t({ id: 'reservation.nextStep.pronta_para_retirada' })}</span>}
-        {inNegotiationStage && bibliotaProposed && !counterMaxReached && (
-          <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#fbbf24' }}>
-            {t({ id: 'reservation.nextStep.bibliotaProposed' })}
-          </span>
-        )}
-        {inNegotiationStage && leitorAlreadyProposed && (
-          <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#fbbf24' }}>
-            {t({ id: 'reservation.nextStep.leitorProposed' }, { count: iterCount, max: MAX_ITER })}
-          </span>
-        )}
-        {/* PATCH 09/05/2026 paquet 5b : sémantique v3.
-            retirada_agendada = créneau verrouillé après confirmation mutuelle,
-            avant transition vers pronta_para_retirada. Message vert positif. */}
-        {isLockedSlot && (
-          <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#4ade80' }}>
-            {t({ id: 'reservation.nextStep.retirada_agendada' })}
-          </span>
-        )}
-        {stage === 'nao_retirada' && <span className="ab-conta-item__detail" style={{ fontStyle: 'italic', color: '#f87171' }}>{t({ id: 'reservation.nextStep.nao_retirada' })}</span>}
-
-        {/* Créneau proposé */}
-        {r.pickup_scheduled_for && inNegotiationStage && (
-          <span className="ab-conta-item__detail">
-            {bibliotaProposed
-              ? t({ id: 'reservation.pickup.proposedByLibrary' }, { date: fmtDate(r.pickup_scheduled_for) })
-              : leitorAlreadyProposed
-                ? t({ id: 'reservation.pickup.proposedByYou' }, { date: fmtDate(r.pickup_scheduled_for) })
-                : t({ id: 'reservation.pickup.scheduled' }, { date: fmtDate(r.pickup_scheduled_for) })}
-          </span>
-        )}
-        {r.pickup_scheduled_for && !inNegotiationStage && (
-          <span className="ab-conta-item__detail">
-            {t({ id: 'reservation.pickup.scheduled' }, { date: fmtDate(r.pickup_scheduled_for) })}
-          </span>
-        )}
-
-        {/* Message spécifique : compteur saturé */}
-        {counterMaxReached && bibliotaProposed && (
-          <span className="ab-conta-item__detail" style={{ color: '#f87171', fontStyle: 'italic', marginTop: 6 }}>
-            {t({ id: 'reservation.negotiation.maxIterationsReached' })}
-          </span>
-        )}
-
-        {/* PATCH 09/05/2026 paquet 5d : workflow_note MASQUÉE côté lecteur.
-            Cause : workflow_note contient des notes d'audit machine-parseables
-            (ex: "[autoconf-by-reader] 2026-05-08T23:47:33Z — créneau verrouillé
-            (retirada_agendada) après proposition biblio") rédigées en français
-            et destinées au staff/debug, pas au lecteur·rice.
-
-            Décision politique (option C ratifiée) : à terme, séparer le champ
-            actuel en `audit_note` (interne, jamais affiché lecteur) et
-            `reader_visible_note` (communication intentionnelle staff→lecteur).
-            Ce refactor sera traité dans un paquet dédié. En attendant on masque
-            purement et simplement workflow_note côté lecteur — c'est neutre :
-            quand le refactor sera fait, on remplacera ce bloc par un affichage
-            de `reader_visible_note`, sans perte de visibilité réelle pour le
-            lecteur·rice (rien d'intentionnellement adressé n'est masqué). */}
-      </div>
-
-      {/* Actions selon l'état de négociation */}
-      <div className="ab-conta-item__actions">
-        {/* État 1 : biblio a proposé, le lecteur·rice peut répondre */}
-        {bibliotaProposed && (
-          <>
-            <button className="ab-button ab-button--mini"
-              onClick={() => onConfirmPickup(r.reserva_id, r.line_no)}>
-              {t({ id: 'reservation.action.acceptThisSlot' })}
-            </button>
-            {canCounterPropose && (
-              <button className="ab-button ab-button--secondary ab-button--mini"
-                onClick={() => isFormOpen
-                  ? onCloseCounterProposalForm()
-                  : onOpenCounterProposalForm(r.reserva_id, r.line_no, r.pickup_scheduled_for)}>
-                {isFormOpen
-                  ? t({ id: 'reservation.action.closeForm' })
-                  : t({ id: 'reservation.action.proposeOtherSlot' })}
-              </button>
-            )}
-          </>
-        )}
-
-        {/* État 2 : le lecteur·rice a déjà contre-proposé, attend la biblio */}
-        {leitorAlreadyProposed && (
-          <button className="ab-button ab-button--secondary ab-button--mini"
-            onClick={() => isFormOpen
-              ? onCloseCounterProposalForm()
-              : onOpenCounterProposalForm(r.reserva_id, r.line_no, r.pickup_scheduled_for)}>
-            {isFormOpen
-              ? t({ id: 'reservation.action.closeForm' })
-              : t({ id: 'reservation.action.modifyMyProposal' })}
-          </button>
-        )}
-
-        {/* Cancel : disponible dans tous les états non-terminaux */}
-        {canCancel && (
-          <button className="ab-button ab-button--mini ab-button--danger"
-            onClick={() => onCancel(r.reserva_id)}>
-            {t({ id: 'reservation.action.cancel' })}
-          </button>
-        )}
-      </div>
-
-      {/* Panneau accordion : mini-form de contre-proposition */}
-      {isFormOpen && (
-        <div className="ab-conta-item__counter-form" style={{
-          gridColumn: '1 / -1',
-          marginTop: 12,
-          padding: '12px 14px',
-          background: 'rgba(251,191,36,.08)',
-          border: '1px solid rgba(251,191,36,.3)',
-          borderRadius: 6,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 10,
-        }}>
-          <div style={{ fontSize: '.92rem', fontWeight: 600 }}>
-            {leitorAlreadyProposed
-              ? t({ id: 'reservation.counterProposeForm.modifyTitle' })
-              : t({ id: 'reservation.counterProposeForm.title' })}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>
-              {t({ id: 'reservation.counterProposeForm.datetime' })}
-            </label>
-            <input
-              type="datetime-local"
-              value={negotiationForm.datetime}
-              onChange={e => setNegotiationForm(prev => prev ? { ...prev, datetime: e.target.value } : prev)}
-              className="ab-input"
-              style={{ maxWidth: 250 }}
-            />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>
-              {t({ id: 'reservation.counterProposeForm.note' })}
-            </label>
-            <input
-              type="text"
-              value={negotiationForm.note}
-              onChange={e => setNegotiationForm(prev => prev ? { ...prev, note: e.target.value } : prev)}
-              className="ab-input"
-              placeholder={t({ id: 'reservation.counterProposeForm.notePlaceholder' })}
-            />
-          </div>
-
-          <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-            <Button onClick={onSubmitCounterProposal}>
-              {t({ id: 'reservation.counterProposeForm.submit' })}
-            </Button>
-            <Button variant="secondary" onClick={onCloseCounterProposalForm}>
-              {t({ id: 'reservation.action.closeForm' })}
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+// (ReservationCard vit désormais dans src/components/account/ReservationCard.jsx)
 
 // ═══════════════════════════════════════════════════════════
 // Formulaire d'adresse international
