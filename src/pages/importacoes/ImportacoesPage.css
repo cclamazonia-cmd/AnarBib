@@ -1,0 +1,424 @@
+/* ── ImportacoesPage v7 ──────────────────────────────────── */
+
+.imp-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ── Sentido toggle (import/export) ──────────────────────── */
+
+.imp-sentido {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+.imp-sentido__label {
+  font-size: .82rem;
+  color: var(--brand-muted, #d4cec3);
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+.imp-sentido__hint {
+  font-size: .8rem;
+  color: var(--brand-muted, #d4cec3);
+  opacity: .85;
+  flex: 1;
+  min-width: 220px;
+}
+.imp-sentido__hint code {
+  font-family: ui-monospace, monospace;
+  color: #e6b8bb;
+}
+
+/* ── Segmented control (reusable) ────────────────────────── */
+
+.imp-seg {
+  display: inline-flex;
+  background: rgba(12, 12, 12, .84);
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: var(--brand-radius-pill, 999px);
+  padding: 4px;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.imp-seg button {
+  font-family: var(--brand-font-body, 'Fira Sans', sans-serif);
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--brand-muted, #d4cec3);
+  background: transparent;
+  border: 0;
+  padding: 9px 18px;
+  border-radius: var(--brand-radius-pill, 999px);
+  cursor: pointer;
+  transition: .16s;
+}
+.imp-seg button:hover { color: #fff; }
+.imp-seg button.on {
+  background: linear-gradient(135deg, rgba(225,29,47,.92), var(--brand-color-primary, #b32025));
+  color: #fff;
+  box-shadow: var(--brand-shadow-strong, 0 16px 38px rgba(0,0,0,.42));
+}
+.imp-seg-hint {
+  font-size: .8rem;
+  color: var(--brand-muted, #d4cec3);
+  margin: 0 0 16px;
+  opacity: .92;
+}
+
+/* ── Frontier banner ─────────────────────────────────────── */
+
+.imp-frontier {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0 0 18px;
+  padding: 11px 14px;
+  border-radius: var(--brand-radius-sm, 14px);
+  background: rgba(4, 44, 83, .28);
+  border: 1px solid rgba(24, 95, 165, .5);
+  color: #bcd8f3;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.imp-frontier b { color: #fff; }
+.imp-frontier--export {
+  background: rgba(40, 28, 4, .32);
+  border-color: rgba(251, 191, 36, .38);
+  color: #f3dca6;
+}
+.imp-frontier code {
+  font-family: ui-monospace, monospace;
+  color: #e6b8bb;
+}
+
+/* ── Sheet (dark panel with header) ──────────────────────── */
+
+.imp-sheet {
+  background-color: #0d0708;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.16)),
+    linear-gradient(135deg, #1a0a0c 0%, #0d0708 100%);
+  background-size: cover;
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: calc(var(--brand-radius, 20px) + 2px);
+  box-shadow: var(--brand-shadow, 0 12px 32px rgba(0,0,0,.35));
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.imp-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  background-color: rgba(18, 18, 18, .86);
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.20), rgba(0,0,0,.36)),
+    linear-gradient(135deg, #1a0a0c 0%, #0d0708 100%);
+  background-size: cover;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.imp-sheet__title {
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: var(--brand-font-heading, 'Bitter', serif);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.imp-sheet__body { padding: 18px; }
+.imp-sheet__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ── Stat cards ──────────────────────────────────────────── */
+
+.imp-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.imp-stat {
+  flex: 1;
+  min-width: 140px;
+  padding: 13px 15px;
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: var(--brand-radius-sm, 14px);
+  background: rgba(0, 0, 0, .24);
+}
+.imp-stat__n {
+  font-family: var(--brand-font-heading, 'Bitter', serif);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #fff;
+  line-height: 1;
+}
+.imp-stat__l {
+  font-size: .78rem;
+  color: var(--brand-muted, #d4cec3);
+  margin-top: 5px;
+}
+
+/* ── Mapping table ───────────────────────────────────────── */
+
+.imp-map {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .85rem;
+}
+.imp-map th {
+  text-align: left;
+  color: var(--brand-muted, #d4cec3);
+  font-weight: 600;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+}
+.imp-map td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  vertical-align: middle;
+}
+.imp-map code {
+  font-family: ui-monospace, monospace;
+  font-size: .8rem;
+  color: #e6b8bb;
+  background: rgba(179, 32, 37, .12);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.imp-map .arr {
+  color: var(--brand-color-primary, #b32025);
+  font-weight: 800;
+  padding: 0 6px;
+}
+
+/* ── Review queue table ──────────────────────────────────── */
+
+.imp-queue {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
+}
+.imp-queue th {
+  text-align: left;
+  color: var(--brand-muted, #d4cec3);
+  font-weight: 600;
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 8px 9px;
+  border-bottom: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  white-space: nowrap;
+}
+.imp-queue td {
+  padding: 10px 9px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  vertical-align: middle;
+}
+.imp-queue tr:hover td {
+  background: rgba(255,255,255,.025);
+}
+.imp-queue .ttl { font-weight: 600; color: #fff; }
+.imp-queue .au { font-size: .78rem; color: var(--brand-muted, #d4cec3); }
+.imp-queue .rowacts {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* ── Queue filters ───────────────────────────────────────── */
+
+.imp-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.imp-filters__label {
+  font-size: .82rem;
+  color: var(--brand-muted, #d4cec3);
+  font-weight: 600;
+}
+
+/* ── Timeline (diário de importação) ─────────────────────── */
+
+.imp-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.imp-timeline li {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  font-size: .84rem;
+}
+.imp-timeline li:last-child { border-bottom: 0; }
+.imp-timeline__when {
+  color: var(--brand-muted, #d4cec3);
+  font-size: .76rem;
+  min-width: 96px;
+  flex-shrink: 0;
+  font-family: ui-monospace, monospace;
+}
+.imp-timeline__ev b { color: #fff; }
+.imp-timeline__meta {
+  color: var(--brand-muted, #d4cec3);
+  font-size: .78rem;
+  margin-top: 3px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ── Partner cards ───────────────────────────────────────── */
+
+.imp-partners {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  gap: 12px;
+}
+.imp-pcard {
+  padding: 14px;
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: var(--brand-radius-sm, 14px);
+  background: rgba(0, 0, 0, .24);
+}
+.imp-pcard h4 { margin: 0; font-size: 1rem; color: #fff; }
+.imp-pcard__proto {
+  font-size: .74rem;
+  color: var(--brand-muted, #d4cec3);
+  margin: 4px 0 0;
+}
+.imp-pcard__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.imp-pcard__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.imp-pcard--inst {
+  background: rgba(4, 20, 40, .2);
+  border-color: rgba(24, 95, 165, .35);
+}
+.imp-rel-badge {
+  font-size: .72rem;
+  font-weight: 700;
+  color: #e6cfa6;
+  border: 1px solid rgba(251, 191, 36, .4);
+  background: rgba(40, 28, 4, .5);
+  border-radius: var(--brand-radius-pill, 999px);
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+/* ── Flag chips ──────────────────────────────────────────── */
+
+.imp-flags { display: flex; gap: 6px; flex-wrap: wrap; margin: 11px 0 0; }
+.imp-flagchip {
+  font-size: .72rem;
+  font-weight: 600;
+  border-radius: var(--brand-radius-pill, 999px);
+  padding: 3px 9px;
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.imp-flagchip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.imp-flagchip--on {
+  color: var(--color-ok, #4ade80);
+  border-color: rgba(74, 222, 128, .4);
+}
+.imp-flagchip--off {
+  color: var(--brand-muted, #d4cec3);
+  border-color: var(--brand-panel-border, rgba(255,255,255,.14));
+  opacity: .65;
+  text-decoration: line-through;
+}
+.imp-flagchip--na {
+  color: var(--brand-muted, #d4cec3);
+  border-color: var(--brand-panel-border, rgba(255,255,255,.14));
+  opacity: .4;
+}
+
+/* ── Form grid ───────────────────────────────────────────── */
+
+.imp-row3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+/* ── Plane intro (two-plane explanation) ─────────────────── */
+
+.imp-plane-intro {
+  font-size: .85rem;
+  color: var(--brand-muted, #d4cec3);
+  line-height: 1.55;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
+  border-radius: var(--brand-radius-sm, 14px);
+  background: rgba(0, 0, 0, .22);
+}
+.imp-plane-intro b { color: var(--brand-text, #f5f2ea); }
+
+.imp-plane-h {
+  font-size: 1.02rem;
+  color: #fff;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ── Utility ─────────────────────────────────────────────── */
+
+.imp-note {
+  font-size: .78rem;
+  color: var(--brand-muted, #d4cec3);
+  opacity: .9;
+  line-height: 1.55;
+}
+.imp-note b { color: var(--brand-text, #f5f2ea); }
+.imp-note code {
+  font-family: ui-monospace, monospace;
+  color: #e6b8bb;
+}
+
+.imp-hidden { display: none; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .imp-row3 { grid-template-columns: 1fr; }
+  .imp-queue .imp-hide-sm { display: none; }
+}
