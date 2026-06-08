@@ -1163,6 +1163,8 @@ export default function BibliotecaPage() {
           <button className="cat-btn secondary" onClick={handleRefresh} disabled={refreshState==='busy'} title={t({ id: 'biblioteca.refresh.hint' })} style={{ marginLeft:'auto', fontSize:'.8rem', padding:'4px 10px' }}>{t({ id: refreshState==='busy' ? 'biblioteca.refresh.busy' : refreshState==='done' ? 'biblioteca.refresh.done' : 'biblioteca.refresh.label' })}</button>
         </div>
 
+        <div className="cat-panel active">
+
         {/* Paquet E.5 refactor (20/05/2026) : onglet transitions de profil */}
         {tab==='transicoes' && (
           <TransitionsPanel libraryId={libraryId} role={role} />
@@ -2343,6 +2345,7 @@ export default function BibliotecaPage() {
           </div>
           );
         })()}
+        </div>
 
       </div>
     <Footer /></PageShell>
