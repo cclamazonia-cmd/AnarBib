@@ -44,6 +44,40 @@
 const API_ERROR_PREFIX = 'panel.apiError.';
 
 /**
+ * Mapping des noms de contraintes Postgres vers des clés i18n lisibles.
+ * Quand Postgres lève une violation de contrainte brute (CHECK, UNIQUE, NOT
+ * NULL), le message est du type
+ *   'new row for relation "books" violates check constraint "books_tipo_material_check"'
+ * Ce mapping attrape le nom de la contrainte et le redirige vers une clé i18n
+ * que l'utilisateur comprendra dans sa langue.
+ */
+const CONSTRAINT_I18N_MAP = {
+  books_tipo_material_check:      'error.publish.tipo_material_invalid',
+  books_bib_ref_unique:           'error.publish.bib_ref_duplicate_constraint',
+  exemplares_circulation_policy_check: 'error.publish.circulation_policy_invalid',
+  exemplares_visibility_check:    'error.publish.visibility_invalid',
+};
+
+/**
+ * Tente d'extraire un nom de contrainte Postgres d'un message d'erreur brut et
+ * de le traduire via CONSTRAINT_I18N_MAP.
+ *
+ * @param {string} raw - Message d'erreur brut
+ * @param {function} t - Fonction de traduction
+ * @returns {string|null} Message traduit ou null
+ */
+function tryTranslateConstraint(raw, t) {
+  if (!raw) return null;
+  // Pattern Postgres : violates check constraint "xxx" / unique constraint "xxx"
+  const m = raw.match(/constraint\s+"([^"]+)"/);
+  if (!m) return null;
+  const constraintName = m[1];
+  const key = CONSTRAINT_I18N_MAP[constraintName];
+  if (!key) return null;
+  return tryTranslate(t, key);
+}
+
+/**
  * Extrait le code d'erreur brut d'un objet erreur Supabase (espace api).
  * Le code est la portion avant un eventuel ':' dans err.message.
  * Une phrase libre contenant des espaces ne matchera aucun code et sera
@@ -108,7 +142,8 @@ function tryTranslate(t, id) {
 export function localizeError(err, t, actionFallbackKey) {
   if (!err) return t({ id: 'common.error.unknown' });
 
-  // Cas 1 : hint i18n style 'error.library.*' (convention paquet C.4)
+  // Cas 1 : hint i18n style 'error.library.*' ou 'error.publish.*'
+  // (convention paquet C.4 + chantier publish guards)
   if (typeof err === 'object' && typeof err.hint === 'string' && err.hint.startsWith('error.')) {
     const translated = tryTranslate(t, err.hint);
     if (translated) return translated;
@@ -119,6 +154,15 @@ export function localizeError(err, t, actionFallbackKey) {
   if (code) {
     const translated = tryTranslate(t, API_ERROR_PREFIX + code);
     if (translated) return translated;
+  }
+
+  // Cas 2b : violation de contrainte Postgres brute (CHECK, UNIQUE)
+  // Le message ressemble à 'new row for relation "books" violates check
+  // constraint "books_tipo_material_check"'. On extrait le nom de la
+  // contrainte et on tente une traduction via CONSTRAINT_I18N_MAP.
+  if (typeof err === 'object' && typeof err.message === 'string') {
+    const constraintMsg = tryTranslateConstraint(err.message, t);
+    if (constraintMsg) return constraintMsg;
   }
 
   // Cas 3 : message texte natif (fallback historique pour erreurs sans hint

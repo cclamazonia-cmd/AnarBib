@@ -1,5 +1,5 @@
 import { useIntl } from 'react-intl';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
 import { useAuth } from '@/contexts/AuthContext';
@@ -265,6 +265,18 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [msg, setMsg] = useState({ text: '', kind: '' });
+  const msgRef = useRef(null);
+
+  // Scroll vers le message quand il apparaît (chantier E — UX erreurs)
+  const showMsg = useCallback((text, kind) => {
+    setMsg({ text, kind });
+    if (text) {
+      // requestAnimationFrame pour attendre le rendu du message
+      requestAnimationFrame(() => {
+        msgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
+  }, []);
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
   const [isbnDupHint, setIsbnDupHint] = useState(null); // { bookId, titulo, bibRef, libraries } | null — live ISBN check
   const [pubSuggestions, setPubSuggestions] = useState([]); // publisher typeahead results
@@ -1624,7 +1636,22 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ── Publish draft ──────────────────────────────────────
   async function handlePublish() {
     const draftId = f('id');
-    if (!draftId) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforePublish' }), kind: 'error' }); return; }
+    if (!draftId) { showMsg(t({ id: 'catalogacao.msg.saveBeforePublish' }), 'error'); return; }
+
+    // Validation côté client AVANT l'appel serveur (chantier B — UX immédiate)
+    if (!f('titulo')?.trim()) {
+      showMsg(t({ id: 'error.publish.titulo_required' }), 'error');
+      return;
+    }
+    if (!f('bib_ref')?.trim()) {
+      showMsg(t({ id: 'error.publish.bib_ref_required' }), 'error');
+      return;
+    }
+    if (!f('tipo_material')?.trim()) {
+      showMsg(t({ id: 'error.publish.tipo_material_required' }), 'error');
+      return;
+    }
+
     if (!confirm(t({id:'catalogacao.msg.publishConfirm'}))) return;
     setDupBanner(null);
 
@@ -1643,7 +1670,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       }
 
       setDraftState('published');
-      setMsg({ text: t({ id: 'catalogacao.msg.bookPublished' }), kind: 'ok' });
+      showMsg(t({ id: 'catalogacao.msg.bookPublished' }), 'ok');
       onSaved?.();
     } catch (err) {
       const raw = typeof err?.message === 'string' ? err.message : '';
@@ -1652,15 +1679,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         const idPart = raw.includes(':') ? raw.slice(raw.indexOf(':') + 1).trim() : '';
         const bookId = /^\d+$/.test(idPart) ? Number(idPart) : null;
         setDupBanner({ bookId });
-        setMsg({ text: '', kind: '' });
+        showMsg('', '');
       } else if (code === 'bib_ref_duplicado') {
         const idPart = raw.includes(':') ? raw.slice(raw.indexOf(':') + 1).trim() : '';
         const bookId = /^\d+$/.test(idPart) ? idPart : '?';
         setDupBanner(null);
-        setMsg({ text: t({ id: 'catalogacao.msg.bibRefDuplicate' }, { bibRef: f('bib_ref') || '?', bookId }), kind: 'error' });
+        showMsg(t({ id: 'catalogacao.msg.bibRefDuplicate' }, { bibRef: f('bib_ref') || '?', bookId }), 'error');
       } else {
         setDupBanner(null);
-        setMsg({ text: localizeError(err, t), kind: 'error' });
+        showMsg(localizeError(err, t), 'error');
       }
     }
   }
@@ -1874,7 +1901,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
       {/* Message */}
       {msg.text && (
-        <div className={`cat-message show ${msg.kind}`} style={{ marginBottom: 14 }}>{msg.text}</div>
+        <div ref={msgRef} className={`cat-message show ${msg.kind}`} style={{ marginBottom: 14 }}>{msg.text}</div>
       )}
       {/* ── Bandeau doublon (Lot 6 anchor — logique dans CAT-B5) ── */}
       <div className={`ab-dup${dupBanner ? ' show' : ''}`}>
