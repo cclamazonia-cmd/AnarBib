@@ -3,7 +3,7 @@
 **Date** : 2026-06-08
 **Auteur** : Xavier (lead AnarBib) en session avec Claude
 **Session** : Audit #NOTIFY-Painel-acts
-**Statut** : ✅ audit livré + **4 arbitrages tranchés le 08/06/2026** (validés Xavier) — prêt pour l'ouverture du chantier
+**Statut** : ✅ **LIVRÉ et VÉRIFIÉ le 08/06/2026** — audit + 4 arbitrages tranchés + câblage complet (e-mail des 3 familles + levées, destinataires membre/biblio/réseau ; in-app B3 ; toggle Painel), testé en runtime (pg_net 200 + réception confirmée + `user_notifications` peuplée)
 **Foyer normatif** : à graduer au REGISTRE (`BIBLIO`/`NOTIF`) à l'ouverture du câblage
 **Débloqué par** : clôture de #110 (Brevo → Resend) le 05-08/06/2026 — la couche d'envoi est stabilisée
 
@@ -80,4 +80,4 @@ Robustesse : le dispatch est **best-effort** (un échec pg_net/secret ne casse p
 
 ---
 
-*Audit livré le 08/06/2026. Constats factuels établis en base réelle ; les 4 arbitrages ont été tranchés le 08/06/2026 (validés Xavier). Chantier ouvert au REGISTRE (§6 `NOTIF-PA*`) et au backlog (#NOTIFY-Painel-acts). Câblage à suivre, par famille, en blocs vérifiés.*
+*Audit livré le 08/06/2026. Constats factuels établis en base réelle ; les 4 arbitrages ont été tranchés le 08/06/2026 (validés Xavier). Chantier ouvert au REGISTRE (§6 `NOTIF-PA*`) et au backlog (#NOTIFY-Painel-acts). **Câblage livré et vérifié en runtime le 08/06/2026** : e-mail des 3 familles + levées (destinataires membre / toutes les biblios concernées / réseau pour le gel), réplique in-app B3 (`user_notifications`), toggle Painel cotisation. Code mort `handleProfileNotice` nettoyé (décision A). Chantier clos.*
