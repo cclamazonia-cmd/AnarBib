@@ -221,6 +221,21 @@ export default function ImportacoesPage() {
     } finally { setSearching(false); }
   }
 
+  // ── Ingest candidate → staging_row (Lot 2) ────────────
+  async function handleIngestCandidate(candidate) {
+    setMsg({ text: t({ id: 'importacoes.fontes.importingCandidate' }), kind: 'info' });
+    try {
+      const { error } = await supabase.rpc('fn_import_ingest_candidate', {
+        p_candidate: candidate,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'importacoes.fontes.candidateImported' }, { title: candidate.title || '—' }), kind: 'ok' });
+      await loadRuns();
+    } catch (err) {
+      setMsg({ text: err.message, kind: 'error' });
+    }
+  }
+
   // ── Pill helper ────────────────────────────────────────
   function Pill({ children, variant = 'muted' }) {
     return <span className={`cat-pill ${variant}`}>{children}</span>;
@@ -492,13 +507,24 @@ export default function ImportacoesPage() {
 
                 {searchResults.length > 0 && (
                   <table className="imp-map">
-                    <thead><tr><th>{t({ id: 'importacoes.fontes.result' })}</th><th>{t({ id: 'importacoes.fontes.author' })}</th><th>{t({ id: 'importacoes.fontes.format' })}</th></tr></thead>
+                    <thead><tr>
+                      <th>{t({ id: 'importacoes.fontes.result' })}</th>
+                      <th>{t({ id: 'importacoes.fontes.author' })}</th>
+                      <th>{t({ id: 'importacoes.fontes.format' })}</th>
+                      <th></th>
+                    </tr></thead>
                     <tbody>
                       {searchResults.map((c, i) => (
                         <tr key={i}>
                           <td style={{ fontWeight: 600 }}>{c.title}</td>
                           <td style={{ color: 'var(--brand-muted)' }}>{c.responsibility_statement || c.contributors?.[0]?.label || '—'}</td>
                           <td><Pill>{c.source || '—'}</Pill></td>
+                          <td>
+                            <button className="cat-btn primary" style={{ fontSize: '.78rem', padding: '4px 10px', minHeight: 0 }}
+                              onClick={() => handleIngestCandidate(c)}>
+                              {t({ id: 'importacoes.fontes.importCandidate' })}
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
