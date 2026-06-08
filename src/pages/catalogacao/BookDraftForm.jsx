@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
+import SubjectAuthorityPicker from './SubjectAuthorityPicker';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
@@ -2359,6 +2360,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── Assuntos + Notas + Cover path ─────────── */}
           {rrf('subjects')}
+          <SubjectAuthorityPicker draftId={f('id')} />
           {rrf('notas')}
           {rrf('cover_object_path')}
 
