@@ -226,6 +226,21 @@ export default function AuthorPage() {
         </div>
       </Hero>
 
+      {/* #AUT1 — Réseau intellectuel (bandeau pleine largeur, sous le Hero) */}
+      {related.length > 0 && (
+        <section className="ab-autor-card ab-autor-related-band">
+          <h2 className="ab-autor-section-title">{t({ id: 'author.related.title' })}</h2>
+          <div className="ab-autor-related">
+            {related.map(r => (
+              <Link key={r.author_id} to={`/autor/${r.author_id}`} className="ab-autor-related-chip">
+                {r.label}
+                {r.shared_count > 0 && <span className="ab-autor-related-count" title={t({ id: 'author.related.shared' })}>{r.shared_count}</span>}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Grille : détail + livres */}
       <div className="ab-autor-grid">
         {/* Carte biographie */}
@@ -323,21 +338,6 @@ export default function AuthorPage() {
             </div>
           )}
         </div>
-
-        {/* #AUT1 — Réseau d'auteur·rices (par contenu) */}
-        {related.length > 0 && (
-          <div className="ab-autor-card">
-            <h2 className="ab-autor-section-title">{t({ id: 'author.related.title' })}</h2>
-            <div className="ab-autor-related">
-              {related.map(r => (
-                <Link key={r.author_id} to={`/autor/${r.author_id}`} className="ab-autor-related-chip">
-                  {r.label}
-                  {r.shared_count > 0 && <span className="ab-autor-related-count" title={t({ id: 'author.related.shared' })}>{r.shared_count}</span>}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
       <Footer />

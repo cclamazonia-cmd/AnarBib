@@ -175,3 +175,7 @@
 /* ── #AUT4 — Disponibilité dans la bibliographie ────────── */
 
 .ab-autor-book-avail { margin-top: 4px; }
+
+/* ── #AUT1 — Bandeau réseau (pleine largeur sous le Hero) ── */
+
+.ab-autor-related-band { margin-bottom: 16px; }
