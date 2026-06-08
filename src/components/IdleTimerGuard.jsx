@@ -41,26 +41,28 @@ export default function IdleTimerGuard({ children }) {
 
   // Le idle timer ne s'active QUE pour les utilisateur·rices staff connecté·es.
   // Anonymes et lecteurs : aucune protection idle (leur usage ne le justifie pas).
-  console.log('[IdleTimerGuard] render: user=', user?.id || 'anon', 'role=', role);
   const isStaff =
     !!user &&
     (role === 'librarian' || role === 'coordenador' || role === 'administrador');
 
   // ── Migration tokens vers sessionStorage pour les sessions staff ────
-  // Au premier render qui detecte un staff connecte ET pas encore migre,
-  // on copie les tokens supabase de localStorage vers sessionStorage et
-  // on force un reload pour que le client Supabase reparte avec le bon
-  // storage (volet B du paquet 23).
+  // Au premier render qui detecte un staff connecte ET pas encore migre, on
+  // copie les tokens Supabase de localStorage vers sessionStorage et on pose le
+  // flag staff. anarbibStorage (staffStorage.js) route dynamiquement vers
+  // sessionStorage des que le flag est pose (isStaffSession() consulte a chaque
+  // acces) → le storage bascule immediatement, et la session EN MEMOIRE du
+  // client Supabase reste valide. Intention preservee : tokens en sessionStorage
+  // → session staff perdue a la fermeture complete du navigateur.
   //
-  // Apres le reload, isStaffSession() est true → anarbibStorage utilise
-  // sessionStorage → quand le navigateur ferme completement, sessionStorage
-  // est efface par le navigateur → la session est perdue (effet voulu).
+  // #LOGIN-FIX 08/06 : on NE FAIT PLUS window.location.reload() ici. L'ancien
+  // reload remontait toute l'app EN PLEIN LOGIN (cascade de fonds AnarBib→biblio,
+  // panneau de login qui « reapparaissait »). Il etait redondant : l'adapter
+  // dynamique + la session en memoire suffisent, aucun reload n'est requis.
   useEffect(() => {
     if (!isStaff) return;
     if (isStaffSession()) return; // deja migre, rien a faire
     migrateTokensToSessionStorage();
     markStaffSession();
-    window.location.reload();
   }, [isStaff]);
 
   const handleTimeout = useCallback(async () => {

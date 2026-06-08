@@ -23,10 +23,12 @@
 //     pour decider ou lire/ecrire. Pas de cache : la migration prend
 //     effet immediatement.
 //   - Apres avoir pose le flag et migre les tokens existants depuis
-//     localStorage vers sessionStorage, on force un window.location.reload().
-//     Au reload, supabase.js cree le client avec anarbibStorage qui pointe
-//     vers sessionStorage → le client reprend la session staff sans
-//     intervention supplementaire.
+//     localStorage vers sessionStorage, le changement prend effet IMMEDIATEMENT
+//     (l'adapter dynamique ci-dessous consulte le flag a chaque acces) : la
+//     session EN MEMOIRE du client Supabase reste valide et ses ecritures
+//     suivantes vont en sessionStorage. AUCUN reload necessaire.
+//     (#LOGIN-FIX 08/06 : l'ancien window.location.reload() dans IdleTimerGuard
+//     causait une cascade visuelle en plein login et a ete retire.)
 //
 // Pourquoi ce design (et pas un simple if dans supabase.js) :
 //   Supabase JS ne permet pas de changer le storage apres la creation du
@@ -53,8 +55,8 @@ export function isStaffSession() {
 
 /**
  * Marque la session courante comme staff. Appele par IdleTimerGuard au
- * premier render qui detecte un role staff. Provoque ensuite un reload
- * pour que le client Supabase reparte avec sessionStorage.
+ * premier render qui detecte un role staff. Des le flag pose, l'adapter
+ * anarbibStorage route vers sessionStorage (effet immediat, sans reload).
  */
 export function markStaffSession() {
   try {
