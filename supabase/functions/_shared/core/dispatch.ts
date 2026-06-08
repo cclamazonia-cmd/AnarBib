@@ -6,6 +6,7 @@ import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
 import { handleReaderMessageEvent, handleLibraryMessageEvent } from "../domain/reader-message.ts";
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
+import { handleCotisationPayment } from "../domain/membership.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
@@ -15,6 +16,9 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   if (event.startsWith("reader_message")) return await handleReaderMessageEvent(recordId);
   // Events library_message* (reciproque biblio -> lecteur) - meme handler-famille, lit reader_library_messages par recordId
   if (event.startsWith("library_message")) return await handleLibraryMessageEvent(recordId);
+  // #NOTIFY-Painel-acts famille 1 : reçu de paiement de cotisation (payload-based,
+  // record_id factice). Le handler lit membership_payments par payment_id.
+  if (event === "cotisation_payment_recorded") return await handleCotisationPayment(payload);
   if (event === "reserva_criada") return await handleReservaCriadaOld(recordId);
   // TR-1 (#153.A) : 'emprestimo_prorrogado' retire de la branche legacy.
   // L'evenement n'est plus emis par la base : le seul emetteur de prorogation,

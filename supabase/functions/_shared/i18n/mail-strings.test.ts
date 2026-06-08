@@ -26,7 +26,8 @@ import { _allKeys, _supportedLocales, _isComplete } from "./mail-strings.ts";
 const DOMAIN_FILES = [
   "../domain/emprestimos.ts",
   "../domain/reservas.ts",
-  "../domain/legacy.ts"
+  "../domain/legacy.ts",
+  "../domain/membership.ts"
   // domain/profiles.ts retire le 08/06 (handler mort handleProfileNotice) ;
   // les cles prof.* restent definies dans mail-strings.ts pour reuse (restriction/gel).
 ];
