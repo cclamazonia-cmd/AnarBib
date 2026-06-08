@@ -821,6 +821,8 @@ export default function BibliotecaPage() {
       t({id:'biblioteca.report.localExemplars'},{count:stats.exemplars}),
       t({id:'biblioteca.report.registeredReaders'},{count:stats.readers}),
       t({id:'biblioteca.report.openLoans'},{count:stats.loansOpen}),
+      t({id:'biblioteca.report.reservationsActive'},{count:stats.reservationsActive}),
+      t({id:'biblioteca.report.consultationsActive'},{count:stats.consultationsActive}),
       t({id:'biblioteca.report.librarians'},{count:members.filter(m => m.role === 'librarian').length}),
       '',
       t({id:'biblioteca.report.team'}) + ':',

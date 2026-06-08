@@ -410,6 +410,23 @@ serve(async (req) => {
       ];
     });
 
+    // ─── Consultas locais registradas dans la semaine ──────────────────────
+    const { count: consultasCount, error: consultasCountErr } = await sb.from("consultas_locais_v2").select("id", { count: "exact", head: true }).eq("library_id", libraryId).gte("created_at", startISO).lt("created_at", endExclusiveISO);
+    if (consultasCountErr) throw new Error(`Consultations count query failed: ${consultasCountErr.message}`);
+    const { data: consultasRaw, error: consultasErr } = await sb.from("consultas_locais_v2").select("id,user_id,created_at").eq("library_id", libraryId).gte("created_at", startISO).lt("created_at", endExclusiveISO).order("created_at", { ascending: false }).limit(50);
+    if (consultasErr) throw new Error(`Consultations query failed: ${consultasErr.message}`);
+    const consultas = consultasRaw || [];
+    const consultasProfiles = await fetchProfiles(sb, consultas.map((c) => String(c.user_id || "")).filter(Boolean));
+    const consultasRows = consultas.map((c) => {
+      const profile = consultasProfiles.get(String(c.user_id || ""));
+      return [
+        String(c.id ?? "—"),
+        isoDateOnly(c.created_at),
+        String(profile?.email || "—"),
+        fullName(profile) || "—"
+      ];
+    });
+
     // ─── Empréstimos criados dans la semaine ───────────────────────────────
     const { count: loansCreatedCount, error: loansCreatedCountErr } = await sb.from("emprestimos_v2").select("id", { count: "exact", head: true }).eq("library_id", libraryId).gte("created_at", startISO).lt("created_at", endExclusiveISO);
     if (loansCreatedCountErr) throw new Error(`Loans(created) count query failed: ${loansCreatedCountErr.message}`);
@@ -592,6 +609,10 @@ serve(async (req) => {
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(reservasCount)}</b></td>
           </tr>
           <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Consultas registradas</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(consultasCount)}</b></td>
+          </tr>
+          <tr>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Empréstimos criados</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(loansCreatedCount)}</b></td>
           </tr>
@@ -629,6 +650,7 @@ serve(async (req) => {
       summaryHtml,
       tablesHtml: [
         renderTable("Reservas criadas (últimas 50)", ["ID", "Data", "Livro", "Email", "Leitor(a/e)"], reservasRows),
+        renderTable("Consultas registradas (últimas 50)", ["ID", "Data", "Email", "Leitor(a/e)"], consultasRows),
         renderTable("Empréstimos criados (últimos 50)", ["ID", "Criado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], loansCreatedRows),
         renderTable("Renovações (últimas 50)", ["ID", "Renovado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], renewalsRows),
         renderTable("Devoluções (últimas 50 linhas agrupadas por empréstimo)", ["Empréstimo", "Devolvido em", "Livro(s)", "Leitor(a/e)"], returnsRows),
@@ -661,6 +683,7 @@ serve(async (req) => {
       subject,
       summary: {
         reservas: reservasCount ?? 0,
+        consultas: consultasCount ?? 0,
         emprestimos_criados: loansCreatedCount ?? 0,
         renovacoes: renewalsCount ?? 0,
         devolucoes: returnsCount ?? 0,
