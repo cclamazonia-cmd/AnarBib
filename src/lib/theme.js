@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from 'react';
 import { PROJECT_REF } from './supabase';
 
 const THEME_BUCKET = 'library-ui-assets';
@@ -29,201 +28,34 @@ export function resolveLibraryLogo(commons) {
   return null;
 }
 
-function setCssVar(name, value) {
-  if (value == null || value === '') return;
-  document.documentElement.style.setProperty(name, value);
-}
-
-// Convertit '#RRGGBB' en triplet 'r, g, b' pour --brand-action-rgb (compose
-// avec des alphas variés via rgba() dans ui.css). null si format invalide.
-function hexToRgbTriplet(hex) {
-  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || '').trim());
-  if (!m) return null;
-  const n = parseInt(m[1], 16);
-  return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
-}
-
-async function installFont(definition, cssVarName) {
-  if (!definition?.family || !definition?.url) return;
-  try {
-    const fontFace = new FontFace(
-      definition.family,
-      `url(${definition.url})`,
-      {
-        style: definition.style || 'normal',
-        weight: definition.weight || '400',
-        display: definition.display || 'swap',
-      }
-    );
-    const loaded = await fontFace.load();
-    document.fonts.add(loaded);
-    setCssVar(cssVarName, `"${definition.family}"`);
-  } catch (err) {
-    console.warn('[AnarBib] Font load failed:', definition.family, err);
-  }
-}
-
-function applyColors(colors) {
-  if (!colors) return;
-  setCssVar('--brand-color-primary', colors.primary);
-  setCssVar('--brand-color-secondary', colors.secondary);
-  setCssVar('--brand-color-accent', colors.accent);
-  setCssVar('--brand-panel-bg', colors.panelBg);
-  setCssVar('--brand-panel-border', colors.panelBorder);
-  setCssVar('--brand-text', colors.text);
-  setCssVar('--brand-muted', colors.muted);
-  // PATCH 02/05/2026 : --brand-link n'est plus injecté depuis le manifest.
-  // La couleur des liens (notamment titres et auteurs dans les tableaux) est
-  // désormais définie par theme-base.css à #ffffff (blanc cassé), pour
-  // garantir la lisibilité sur le dégradé rouge des briques.
-  // setCssVar('--brand-link', colors.link);
-  setCssVar('--brand-bg-overlay', colors.bgOverlay);
-  setCssVar('--brand-button-text', colors.buttonText);
-  // Couleur d'action themable (boutons primaires, focus-ring, bordures). Le
-  // manifest fournit un hex ; on le convertit en triplet RGB. Sans colors.action,
-  // --brand-action-rgb garde le rouge AnarBib defini dans theme-base.css.
-  if (colors.action) {
-    const rgb = hexToRgbTriplet(colors.action);
-    if (rgb) {
-      setCssVar('--brand-action-rgb', rgb);
-      setCssVar('--brand-accent-rgb', rgb);
-    }
-  }
-}
-
-function applyBrandAssets(assets) {
-  if (!assets) return;
-  const bg = assets.backgroundPage || assets.background || assets.bgImage || '';
-  // PATCH 02/05/2026 : on n'utilise plus l'image de fond pour les briques.
-  // --brand-panel-bg-image conserve sa valeur par défaut de theme-base.css
-  // (un dégradé rouge AnarBib opaque). Le manifest peut toujours définir
-  // --brand-bg-image (image de fond globale de la page), mais les panels/cards
-  // utilisent un dégradé pour rester lisibles et identitaires.
-  if (bg) {
-    // #LOGIN-FIX H3 : précharger l'image AVANT d'appliquer la variable CSS, pour
-    // que le basculement de fond (AnarBib → biblio) soit instantané (peint depuis
-    // le cache) au lieu d'un fetch-puis-paint visible. background-image n'étant pas
-    // animable en CSS, le préchargement est le principal levier anti-flash.
-    const apply = () => setCssVar('--brand-bg-image', `url("${bg}")`);
-    const pre = new Image();
-    pre.onload = apply;
-    pre.onerror = apply; // filet : appliquer quand même si le préchargement échoue
-    pre.src = bg;
-  }
-  setCssVar('--brand-bg-position', assets.backgroundPosition || 'center center');
-  setCssVar('--brand-bg-size', assets.backgroundSize || 'cover');
-  setCssVar('--brand-bg-repeat', assets.backgroundRepeat || 'no-repeat');
-
-  if (assets.favicon) {
-    // PATCH 07/06/2026 : reecrire TOUS les <link rel="icon"> (32/192/512), pas
-    // seulement le premier. index.html declare 3 tailles dont 192/512 pointent
-    // sur /img/ (emblème AnarBib) ; le navigateur privilegiant la plus grande
-    // icone, il affichait toujours AnarBib et le favicon par bibliotheque ne
-    // s'appliquait jamais dans l'onglet. On pointe toutes les tailles vers le
-    // favicon du theme (256px, downscale propre par le navigateur).
-    const iconLinks = document.querySelectorAll("link[rel='icon']");
-    if (iconLinks.length === 0) {
-      const link = document.createElement('link');
-      link.rel = 'icon';
-      link.href = assets.favicon;
-      document.head.appendChild(link);
-    } else {
-      iconLinks.forEach((l) => { l.href = assets.favicon; });
-    }
-  }
-}
-
-function applyLayout(layout) {
-  if (!layout) return;
-  setCssVar('--brand-radius', layout.radius);
-  setCssVar('--brand-shadow', layout.shadow);
-  setCssVar('--brand-hero-max-width', layout.heroMaxWidth);
-  setCssVar('--brand-container-max-width', layout.containerMaxWidth);
-}
-
-async function applyManifest(manifest) {
-  applyBrandAssets(manifest.assets);
-  applyColors(manifest.colors);
-  applyLayout(manifest.layout);
-  // PATCH 02/05/2026 : on ne charge plus les polices heading/accent depuis le manifest.
-  // Le manifest BLMF chargeait "THE BOLD FONT - Free Version" (titre.ttf), une police
-  // display all-caps qui ne contient pas les minuscules accentuées (â, è, é...).
-  // Résultat : "TâCHES INTERNES DE LA BIBLIOTHèQUE" avec un mélange capitales/Times
-  // New Roman fallback sur les diacritiques. Bitter (la valeur par défaut de
-  // theme-base.css) supporte tous les diacritiques nécessaires.
-  //
-  // PATCH 06/05/2026 : on ne charge plus non plus la police body depuis le manifest.
-  // Le manifest default chargeait interface.ttf (~107 kB) depuis le bucket Supabase.
-  // Désormais, Bitter et Fira Sans sont auto-hébergées en woff2 subseté Latin Extended
-  // dans public/fonts/, déclarées dans src/styles/fonts.css avec font-display: swap.
-  // Cela élimine la dépendance au bucket Supabase pour les polices et économise
-  // ~204 kB par chargement (interface.ttf chargée 2x à cause des montages concurrents
-  // de useTheme). Si un jour on veut réactiver les polices custom par biblio, il
-  // suffira de décommenter ces 3 lignes — mais il faudra aussi vider/désactiver
-  // public/fonts/ pour éviter le double chargement.
-  // if (manifest.fonts?.heading) await installFont(manifest.fonts.heading, '--brand-font-heading');
-  // if (manifest.fonts?.body) await installFont(manifest.fonts.body, '--brand-font-body');
-  // if (manifest.fonts?.accent) await installFont(manifest.fonts.accent, '--brand-font-accent');
-}
-
-async function fetchManifest(themeSlug) {
-  const slug = String(themeSlug || 'default').trim().toLowerCase() || 'default';
-  const url = publicAssetUrl(`themes/${slug}/manifest.json`);
-  const res = await fetch(url, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Theme manifest not found: ${slug}`);
-  const manifest = await res.json();
-  manifest.__resolvedSlug = slug;
-  return manifest;
-}
-
 /**
- * Hook React qui charge le thème de la bibliothèque active.
- * Usage : const { manifest, loading } = useTheme('blmf');
+ * Hook React qui expose le slug de thème "settled" de la bibliothèque active.
+ * Usage : const { settledSlug } = useTheme('blmf');
+ *
+ * #THEME-FETCH-DROP (10/06/2026) : suppression du chemin de fetch de manifest.
+ * Historique : useTheme tentait `fetchManifest(slug)` puis, en cas d'échec,
+ * `fetchManifest('default')` pour appeler `applyManifest` (couleurs, assets,
+ * polices, layout via variables CSS --brand-*). Or :
+ *   - aucun `public/themes/<slug>/manifest.json` n'est déployé → CHAQUE fetch
+ *     renvoie un 404 LENT (~7 s) ; la séquence slug→default coûtait ~14 s de
+ *     requêtes inutiles à chaque login / chargement de page (biblio non-default) ;
+ *   - `applyManifest` ne s'exécutait donc JAMAIS — et même s'il l'avait fait, les
+ *     PATCH 02/05 et 06/05/2026 avaient déjà retiré le chargement des couleurs et
+ *     des polices depuis le manifest. Le thème est désormais ENTIÈREMENT piloté
+ *     par le CSS statique (src/styles/theme-base.css, importé dans main.jsx) ;
+ *     le slug ne pilote aucune classe/variable côté JS.
+ * Toute la machinerie morte (fetchManifest, applyManifest, applyColors,
+ * applyBrandAssets, applyLayout, installFont, hexToRgbTriplet, setCssVar) a été
+ * supprimée. Pour réactiver des thèmes par manifest un jour, voir l'historique
+ * git de ce fichier ET déployer réellement les manifests + un timeout
+ * AbortController pour échouer vite.
+ *
+ * Comme il n'y a plus aucun asynchronisme, le slug demandé est immédiatement
+ * "settled" : `settledSlug === themeSlug` à chaque rendu. Les consommateurs qui
+ * dérivent `themeReady = settledSlug === ctx.themeSlug` (LibraryContext) le
+ * voient donc toujours vrai — cohérent avec #LOGIN-FIX H3 (la navigation
+ * post-login ne dépend plus du thème).
  */
 export function useTheme(themeSlug = 'default') {
-  const [manifest, setManifest] = useState(null);
-  const [loading, setLoading] = useState(true);
-  // #LOGIN-FIX H1 : slug pour lequel le thème est RÉELLEMENT appliqué (succès ou
-  // fallback). Exposé pour que les consommateurs dérivent `themeReady` de façon
-  // SYNCHRONE au rendu (settledSlug === themeSlug demandé) : au changement de
-  // themeSlug, settledSlug garde l'ancienne valeur tant que le nouveau manifest
-  // n'est pas appliqué → pas de race d'ordre d'effets, pas de deadlock (le
-  // fallback marque aussi le slug demandé comme settled).
-  const [settledSlug, setSettledSlug] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-
-    (async () => {
-      try {
-        const m = await fetchManifest(themeSlug);
-        if (!cancelled) {
-          await applyManifest(m);
-          setManifest(m);
-        }
-      } catch {
-        if (themeSlug !== 'default') {
-          try {
-            const fallback = await fetchManifest('default');
-            if (!cancelled) {
-              await applyManifest(fallback);
-              setManifest(fallback);
-            }
-          } catch {
-            // no theme at all — CSS defaults will apply
-          }
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-          setSettledSlug(themeSlug);
-        }
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [themeSlug]);
-
-  return { manifest, loading, settledSlug };
+  return { settledSlug: themeSlug };
 }
