@@ -2644,6 +2644,8 @@
   "labels.deleteDone": "{ok} eliminat(s), {fail} amb error.",
   "labels.deleteSelected": "Elimina els seleccionats ({count})",
   "labels.deselectAll": "Desseleccionar-ho tot",
+  "labels.editHint": "Doble clic per editar",
+  "labels.editSaved": "Etiqueta actualitzada.",
   "labels.fieldsConfig": "Camps visibles a l'etiqueta",
   "labels.fieldsConfigHint": "Marqueu els camps opcionals a incloure a les etiquetes impreses.",
   "labels.filterAll": "Tots els exemplars",

@@ -39,6 +39,10 @@ export default function LabelSheetPrinter({ onChanged }) {
   const [printing, setPrinting] = useState(false);
   const [visibleFields, setVisibleFields] = useState(loadFieldPrefs);
   const [fieldsOpen, setFieldsOpen] = useState(false);
+  // ── Inline editing state ──
+  // editing = { exemplarId, field, value } or null
+  const [editing, setEditing] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   function toggleField(key) {
     setVisibleFields(prev => {
@@ -46,6 +50,80 @@ export default function LabelSheetPrinter({ onChanged }) {
       try { localStorage.setItem(FIELD_STORAGE_KEY, JSON.stringify(next)); } catch {}
       return next;
     });
+  }
+
+  // ── Inline cell editing ──
+  // Mapping: column key in the table → RPC param name
+  const EDITABLE_FIELDS = {
+    autor_etiqueta:  'p_label_author',
+    titulo_etiqueta: 'p_label_title',
+    cdd_etiqueta:    'p_label_cdd',
+    label_note:      'p_label_note',
+  };
+
+  function startEdit(exemplarId, field, currentValue) {
+    setEditing({ exemplarId, field, value: currentValue || '' });
+  }
+
+  async function saveEdit() {
+    if (!editing || saving) return;
+    setSaving(true);
+    const paramKey = EDITABLE_FIELDS[editing.field];
+    const { error } = await supabase.rpc('update_exemplar_labels', {
+      p_exemplar_id: editing.exemplarId,
+      [paramKey]: editing.value,
+    });
+    if (error) {
+      setMsg(t({ id: 'common.errorPrefix' }, { message: error.message }));
+    } else {
+      // Optimistic local update (avoid full reload flicker)
+      setLabels(prev => prev.map(l =>
+        l.exemplar_id === editing.exemplarId
+          ? { ...l, [editing.field]: editing.value || null }
+          : l
+      ));
+      setMsg(t({ id: 'labels.editSaved' }));
+    }
+    setEditing(null);
+    setSaving(false);
+  }
+
+  function cancelEdit() { setEditing(null); }
+
+  function handleEditKeyDown(e) {
+    if (e.key === 'Enter') { e.preventDefault(); saveEdit(); }
+    else if (e.key === 'Escape') { e.preventDefault(); cancelEdit(); }
+  }
+
+  // Renders an editable cell: double-click to edit, shows input when active
+  function editableCell(l, field, style = {}) {
+    const isEditing = editing?.exemplarId === l.exemplar_id && editing?.field === field;
+    const value = l[field] || '';
+    if (isEditing) {
+      return (
+        <td style={{ padding: '2px 4px', ...style }} onClick={e => e.stopPropagation()}>
+          <input
+            type="text"
+            autoFocus
+            value={editing.value}
+            onChange={e => setEditing(prev => ({ ...prev, value: e.target.value }))}
+            onBlur={saveEdit}
+            onKeyDown={handleEditKeyDown}
+            disabled={saving}
+            style={{ width: '100%', padding: '3px 6px', fontSize: '.8rem', background: 'rgba(255,255,255,.1)', border: '1px solid rgba(29,78,216,.5)', borderRadius: 4, color: '#e8e0d6', outline: 'none' }}
+          />
+        </td>
+      );
+    }
+    return (
+      <td
+        style={{ padding: '5px 8px', cursor: 'text', ...style }}
+        onDoubleClick={e => { e.stopPropagation(); startEdit(l.exemplar_id, field, value); }}
+        title={t({ id: 'labels.editHint' })}
+      >
+        {value || '—'}
+      </td>
+    );
   }
 
   // ── Load labels via RPC get_exemplar_labels ──
@@ -364,10 +442,10 @@ ${pages.join('\n')}
                 </td>
                 <td style={{ padding: '5px 8px', fontFamily: 'monospace', fontSize: '.78rem' }}>{l.resolved_bib_ref || '—'}</td>
                 <td style={{ padding: '5px 8px', fontFamily: 'monospace', fontSize: '.78rem', fontWeight: 600 }}>{l.tombo || '—'}</td>
-                <td style={{ padding: '5px 8px' }}>{l.autor_etiqueta || '—'}</td>
-                <td style={{ padding: '5px 8px' }}>{l.titulo_etiqueta || '—'}</td>
-                <td style={{ padding: '5px 8px', fontWeight: 600 }}>{l.cdd_etiqueta || '—'}</td>
-                <td style={{ padding: '5px 8px', color: 'var(--brand-muted)', fontSize: '.78rem' }}>{l.label_note || ''}</td>
+                {editableCell(l, 'autor_etiqueta')}
+                {editableCell(l, 'titulo_etiqueta')}
+                {editableCell(l, 'cdd_etiqueta', { fontWeight: 600 })}
+                {editableCell(l, 'label_note', { color: 'var(--brand-muted)', fontSize: '.78rem' })}
                 <td style={{ padding: '5px 8px', color: 'var(--brand-muted)', fontSize: '.78rem' }}>{libraryName}</td>
               </tr>
             ))}

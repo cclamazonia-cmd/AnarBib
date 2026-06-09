@@ -2644,6 +2644,8 @@
   "labels.deleteDone": "{ok} διαγράφηκαν, {fail} απέτυχαν.",
   "labels.deleteSelected": "Διαγραφή επιλεγμένων ({count})",
   "labels.deselectAll": "Αποεπιλογή όλων",
+  "labels.editHint": "Διπλό κλικ για επεξεργασία",
+  "labels.editSaved": "Η ετικέτα ενημερώθηκε.",
   "labels.fieldsConfig": "Ορατά πεδία στην ετικέτα",
   "labels.fieldsConfigHint": "Επιλέξτε τα προαιρετικά πεδία για συμπερίληψη στις εκτυπωμένες ετικέτες.",
   "labels.filterAll": "Όλα τα αντίτυπα",

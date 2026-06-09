@@ -2644,6 +2644,8 @@
   "labels.deleteDone": "{ok} deleted, {fail} failed.",
   "labels.deleteSelected": "Delete selected ({count})",
   "labels.deselectAll": "Deselect all",
+  "labels.editHint": "Double-click to edit",
+  "labels.editSaved": "Label updated.",
   "labels.fieldsConfig": "Visible fields on labels",
   "labels.fieldsConfigHint": "Check the optional fields to include on printed labels.",
   "labels.filterAll": "All copies",

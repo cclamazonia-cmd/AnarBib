@@ -2644,6 +2644,8 @@
   "labels.deleteDone": "{ok} forigita(j), {fail} kun eraro.",
   "labels.deleteSelected": "Forigi elektitajn ({count})",
   "labels.deselectAll": "Malelekti ĉion",
+  "labels.editHint": "Duobla klako por redakti",
+  "labels.editSaved": "Etikedo ĝisdatigita.",
   "labels.fieldsConfig": "Videblaj kampoj sur la etikedo",
   "labels.fieldsConfigHint": "Marku la nedevigajn kampojn por inkluzivi en la presitaj etikedoj.",
   "labels.filterAll": "Ĉiuj ekzempleroj",

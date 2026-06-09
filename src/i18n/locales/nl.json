@@ -2644,6 +2644,8 @@
   "labels.deleteDone": "{ok} verwijderd, {fail} mislukt.",
   "labels.deleteSelected": "Selectie verwijderen ({count})",
   "labels.deselectAll": "Alles deselecteren",
+  "labels.editHint": "Dubbelklik om te bewerken",
+  "labels.editSaved": "Etiket bijgewerkt.",
   "labels.fieldsConfig": "Zichtbare velden op het etiket",
   "labels.fieldsConfigHint": "Vink de optionele velden aan die op de afgedrukte etiketten moeten verschijnen.",
   "labels.filterAll": "Alle exemplaren",

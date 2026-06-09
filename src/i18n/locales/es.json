@@ -2644,6 +2644,8 @@
   "labels.deleteDone": "{ok} eliminado(s), {fail} con error.",
   "labels.deleteSelected": "Eliminar seleccionados ({count})",
   "labels.deselectAll": "Deseleccionar todo",
+  "labels.editHint": "Doble clic para editar",
+  "labels.editSaved": "Etiqueta actualizada.",
   "labels.fieldsConfig": "Campos visibles en la etiqueta",
   "labels.fieldsConfigHint": "Marque los campos opcionales a incluir en las etiquetas impresas.",
   "labels.filterAll": "Todos los ejemplares",

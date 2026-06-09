@@ -2644,6 +2644,8 @@
   "labels.deleteDone": "{ok} gelöscht, {fail} fehlgeschlagen.",
   "labels.deleteSelected": "Auswahl löschen ({count})",
   "labels.deselectAll": "Alle abwählen",
+  "labels.editHint": "Doppelklick zum Bearbeiten",
+  "labels.editSaved": "Etikett aktualisiert.",
   "labels.fieldsConfig": "Sichtbare Felder auf dem Etikett",
   "labels.fieldsConfigHint": "Wählen Sie die optionalen Felder, die auf den gedruckten Etiketten erscheinen sollen.",
   "labels.filterAll": "Alle Exemplare",
