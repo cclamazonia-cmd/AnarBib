@@ -31,17 +31,16 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   const [refreshing, setRefreshing] = useState(false);
   const PAGE_SIZE = 50;
 
-  // ── Load counts ─────────────────────────────────────────
+  // ── Load counts (allSettled: resilient si une requête timeout) ─
   useEffect(() => {
     (async () => {
-      try {
-        const [{ count: bk }, { count: au }, { count: ex }] = await Promise.all([
-          supabase.from('books').select('id', { count: 'exact', head: true }),
-          supabase.from('authors').select('id', { count: 'exact', head: true }),
-          supabase.from('exemplares').select('id', { count: 'exact', head: true }),
-        ]);
-        setTotal({ books: bk || 0, authors: au || 0, exemplars: ex || 0 });
-      } catch {}
+      const [bkRes, auRes, exRes] = await Promise.allSettled([
+        supabase.from('books').select('id', { count: 'exact', head: true }),
+        supabase.from('authors').select('id', { count: 'exact', head: true }),
+        supabase.from('exemplares').select('id', { count: 'exact', head: true }),
+      ]);
+      const c = (r) => r.status === 'fulfilled' ? (r.value.count ?? 0) : 0;
+      setTotal({ books: c(bkRes), authors: c(auRes), exemplars: c(exRes) });
     })();
   }, []);
 
