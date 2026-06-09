@@ -1,5 +1,5 @@
 import { useIntl } from 'react-intl';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
@@ -23,6 +23,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
     }
   }, [requestedView, requestNonce]);
   const [search, setSearch] = useState('');
+  const [dSearch, setDSearch] = useState('');
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState({ books: 0, authors: 0, exemplars: 0 });
@@ -30,6 +31,12 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   const [page, setPage] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const PAGE_SIZE = 50;
+  const fetchNonce = useRef(0);
+
+  useEffect(() => {
+    const id = setTimeout(() => setDSearch(search), 300);
+    return () => clearTimeout(id);
+  }, [search]);
 
   // ── Load counts (allSettled: resilient si une requête timeout) ─
   useEffect(() => {
@@ -46,41 +53,48 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
 
   // ── Load items ──────────────────────────────────────────
   const loadItems = useCallback(async () => {
+    const nonce = ++fetchNonce.current;
     setLoading(true); setMsg({ text: '', kind: '' });
     try {
       const from = page * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
+      let data;
 
       if (view === 'book') {
         let q = supabase.from('books')
           .select('id, titulo, subtitulo, autor, ano, editora, cdd, isbn, bib_ref, tipo_material, updated_at')
           .order('updated_at', { ascending: false }).range(from, to);
-        if (search.trim()) q = q.or(`titulo.ilike.%${search.trim()}%,autor.ilike.%${search.trim()}%,isbn.ilike.%${search.trim()}%,bib_ref.ilike.%${search.trim()}%`);
-        const { data } = await q;
-        setItems((data || []).map(d => ({ ...d, _type: 'book' })));
+        if (dSearch.trim()) q = q.or(`titulo.ilike.%${dSearch.trim()}%,autor.ilike.%${dSearch.trim()}%,isbn.ilike.%${dSearch.trim()}%,bib_ref.ilike.%${dSearch.trim()}%`);
+        ({ data } = await q);
       } else if (view === 'author') {
         let q = supabase.from('authors')
           .select('id, preferred_name, sort_name, birth_year, death_year, country, viaf_id, updated_at')
           .order('preferred_name', { ascending: true }).range(from, to);
-        if (search.trim()) q = q.or(`preferred_name.ilike.%${search.trim()}%,sort_name.ilike.%${search.trim()}%`);
-        const { data } = await q;
-        setItems((data || []).map(d => ({ ...d, _type: 'author' })));
+        if (dSearch.trim()) q = q.or(`preferred_name.ilike.%${dSearch.trim()}%,sort_name.ilike.%${dSearch.trim()}%`);
+        ({ data } = await q);
       } else {
         let q = supabase.from('exemplares')
           .select('id, bib_ref, tombo, shelf_location, label_title_override, label_author_override, label_cdd_override, updated_at')
           .order('updated_at', { ascending: false }).range(from, to);
-        if (search.trim()) q = q.or(`tombo.ilike.%${search.trim()}%,bib_ref.ilike.%${search.trim()}%,label_title_override.ilike.%${search.trim()}%`);
-        const { data } = await q;
-        setItems((data || []).map(d => ({ ...d, _type: 'exemplar' })));
+        if (dSearch.trim()) q = q.or(`tombo.ilike.%${dSearch.trim()}%,bib_ref.ilike.%${dSearch.trim()}%,label_title_override.ilike.%${dSearch.trim()}%`);
+        ({ data } = await q);
       }
-    } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
-    finally { setLoading(false); }
-  }, [view, search, page]);
+
+      if (nonce !== fetchNonce.current) return;
+      const type = view === 'book' ? 'book' : view === 'author' ? 'author' : 'exemplar';
+      setItems((data || []).map(d => ({ ...d, _type: type })));
+    } catch (err) {
+      if (nonce !== fetchNonce.current) return;
+      setMsg({ text: err.message, kind: 'error' });
+    } finally {
+      if (nonce === fetchNonce.current) setLoading(false);
+    }
+  }, [view, dSearch, page]);
 
   useEffect(() => { loadItems(); }, [loadItems]);
 
   // Reset page when view/search changes
-  useEffect(() => { setPage(0); }, [view, search]);
+  useEffect(() => { setPage(0); }, [view, dSearch]);
 
   // ── Rafraichir le catalogue public a la demande ─────────
   async function refreshCatalog() {
