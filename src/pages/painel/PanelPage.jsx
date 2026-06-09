@@ -26,6 +26,8 @@ const TabReservas        = lazy(() => import('./tabs/TabReservas'));
 const TabLeitor          = lazy(() => import('./tabs/TabLeitor'));
 const TabHistorico       = lazy(() => import('./tabs/TabHistorico'));
 const TabContribuicoes   = lazy(() => import('./tabs/TabContribuicoes'));
+// MULTI P5 (volet staff) : validation des inscriptions pending_validation.
+const TabValidacoes      = lazy(() => import('./tabs/TabValidacoes'));
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -1460,6 +1462,10 @@ export default function PanelPage() {
     ...(isCoordOrAdmin ? [
       { key: 'contribuicoes', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
+    // MULTI P5 (volet staff) : validation des inscriptions (librarian/coordenador).
+    ...(isLibrarian ? [
+      { key: 'validacoes', label: t({ id: 'panel.tab.validations' }), hint: t({ id: 'panel.tab.validations.hint' }) },
+    ] : []),
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
@@ -1913,6 +1919,10 @@ export default function PanelPage() {
               openPaymentModal={openPaymentModal}
               loadMembershipOverview={loadMembershipOverview}
             />
+          )}
+
+          {tab === 'validacoes' && isLibrarian && (
+            <TabValidacoes libraryId={libraryId} />
           )}
 
           </Suspense>

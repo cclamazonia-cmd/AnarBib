@@ -1,0 +1,134 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useIntl } from 'react-intl';
+import { Button, EmptyState } from '@/components/ui';
+import { fmtD, TabHeader } from '../_shared';
+import { supabase } from '@/lib/supabase';
+import { useToast } from '@/contexts/ToastContext';
+import { localizeError } from '@/lib/localizeError';
+
+// ═══════════════════════════════════════════════════════════
+// TabValidacoes — MULTI P5 (volet staff) — validation des inscriptions
+// ───────────────────────────────────────────────────────────
+// Liste les appartenances `pending_validation` (rôle reader) de la biblio
+// courante via api.list_pending_validations, et permet de les valider via
+// api.validate_membership (→ active + numéro lecteur·rice local + note +
+// journal). Maillon manquant qui rend l'auto-inscription P5c exploitable.
+//
+// Auto-suffisant (gère son propre fetch + actions, contrairement aux autres
+// onglets du Painel) pour ne pas alourdir PanelPage. La garde de rôle reste
+// côté PanelPage (tab === 'validacoes' && isLibrarian). Spec §8, #CL.10.
+// ═══════════════════════════════════════════════════════════
+export default function TabValidacoes({ libraryId }) {
+  const { formatMessage: t } = useIntl();
+  const { notifySuccess, notifyError } = useToast();
+  const [rows, setRows] = useState(null);
+  const [drafts, setDrafts] = useState({}); // membership_id -> { number, note }
+  const [busyId, setBusyId] = useState(null);
+
+  const load = useCallback(async () => {
+    setRows(null);
+    try {
+      const { data, error } = await supabase
+        .schema('api')
+        .rpc('list_pending_validations', { p_library_id: libraryId || null });
+      if (error) throw error;
+      setRows(Array.isArray(data) ? data : []);
+    } catch (e) {
+      notifyError(localizeError(e, t, 'panel.validations.loadError'), e);
+      setRows([]);
+    }
+  }, [libraryId, notifyError, t]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const patchDraft = (id, patch) =>
+    setDrafts((d) => ({ ...d, [id]: { ...d[id], ...patch } }));
+
+  const validate = useCallback(async (m) => {
+    if (busyId) return;
+    setBusyId(m.membership_id);
+    const draft = drafts[m.membership_id] || {};
+    try {
+      const { data, error } = await supabase.schema('api').rpc('validate_membership', {
+        p_membership_id: m.membership_id,
+        p_local_reader_number: (draft.number || '').trim() || null,
+        p_note: (draft.note || '').trim() || null,
+      });
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (row && row.ok === false) throw new Error(row.message || 'validate_failed');
+      notifySuccess(t({ id: 'panel.validations.validateSuccess' }));
+      await load();
+    } catch (e) {
+      notifyError(localizeError(e, t, 'panel.validations.validateError'), e);
+    } finally {
+      setBusyId(null);
+    }
+  }, [busyId, drafts, load, notifySuccess, notifyError, t]);
+
+  const displayName = (m) =>
+    [m.first_name, m.last_name].filter(Boolean).join(' ').trim() || m.email || m.user_id;
+
+  if (rows === null) {
+    return <p className="ab-painel-memb-hint">{t({ id: 'common.loading' })}</p>;
+  }
+
+  return (
+    <div>
+      <TabHeader title={t({ id: 'panel.validations.title' })} onRefresh={load} />
+      <p className="ab-painel-memb-hint">{t({ id: 'panel.tab.validations.hint' })}</p>
+
+      {rows.length === 0 ? (
+        <EmptyState message={t({ id: 'panel.validations.empty' })} />
+      ) : (
+        <div className="ab-painel-memb-list">
+          {rows.map((m) => {
+            const draft = drafts[m.membership_id] || {};
+            const busy = busyId === m.membership_id;
+            return (
+              <div key={m.membership_id} className="ab-painel-memb-row" style={{ flexWrap: 'wrap', gap: 10 }}>
+                <div className="ab-painel-memb-row__main">
+                  <div className="ab-painel-memb-name">{displayName(m)}</div>
+                  <div className="ab-painel-memb-meta">
+                    {m.email}
+                    {m.email && ' · '}
+                    {t({ id: 'panel.validations.requestedAt' })}: {fmtD(m.requested_at)}
+                  </div>
+                </div>
+                <div className="ab-painel-memb-actions" style={{ flexWrap: 'wrap', gap: 8, alignItems: 'flex-end' }}>
+                  <label style={{ display: 'flex', flexDirection: 'column', gap: 2, fontSize: '.72rem' }}>
+                    {t({ id: 'panel.validations.readerNumber' })}
+                    <input
+                      className="ab-input"
+                      type="text"
+                      value={draft.number || ''}
+                      disabled={busy}
+                      placeholder={t({ id: 'panel.validations.readerNumberPlaceholder' })}
+                      onChange={(e) => patchDraft(m.membership_id, { number: e.target.value })}
+                      style={{ minWidth: 130 }}
+                    />
+                  </label>
+                  <label style={{ display: 'flex', flexDirection: 'column', gap: 2, fontSize: '.72rem' }}>
+                    {t({ id: 'panel.validations.note' })}
+                    <input
+                      className="ab-input"
+                      type="text"
+                      value={draft.note || ''}
+                      disabled={busy}
+                      placeholder={t({ id: 'panel.validations.notePlaceholder' })}
+                      onChange={(e) => patchDraft(m.membership_id, { note: e.target.value })}
+                      style={{ minWidth: 150 }}
+                    />
+                  </label>
+                  <Button onClick={() => validate(m)} disabled={busy}>
+                    {busy ? t({ id: 'common.loading' }) : t({ id: 'panel.validations.validateButton' })}
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
