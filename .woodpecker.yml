@@ -185,6 +185,10 @@ steps:
             echo "→ Skip $fn_name (module partagé)"
             continue
           fi
+          if [ ! -f "${fn_dir}index.ts" ]; then
+            echo "→ Skip $fn_name (pas d'index.ts)"
+            continue
+          fi
           echo "→ Déploiement $fn_name"
           supabase functions deploy "$fn_name" --project-ref "$${SUPABASE_PROJECT_REF}"
         done
