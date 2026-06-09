@@ -15,6 +15,14 @@ const LABELS_PER_ROW = 3;
 const ROWS_PER_PAGE = 7;
 const LABELS_PER_PAGE = LABELS_PER_ROW * ROWS_PER_PAGE; // 21
 
+// ── Champs optionnels des étiquettes (persistés en localStorage) ──
+const FIELD_STORAGE_KEY = 'labels_visible_fields';
+const DEFAULT_FIELDS = { author: true, title: true, tombo: true, note: true };
+function loadFieldPrefs() {
+  try { const s = localStorage.getItem(FIELD_STORAGE_KEY); return s ? { ...DEFAULT_FIELDS, ...JSON.parse(s) } : { ...DEFAULT_FIELDS }; }
+  catch { return { ...DEFAULT_FIELDS }; }
+}
+
 export default function LabelSheetPrinter({ onChanged }) {
   const { formatMessage: t } = useIntl();
   const { libraryId, libraryName } = useLibrary();
@@ -29,6 +37,16 @@ export default function LabelSheetPrinter({ onChanged }) {
   const [msg, setMsg] = useState('');
   const [includeQr, setIncludeQr] = useState(true);
   const [printing, setPrinting] = useState(false);
+  const [visibleFields, setVisibleFields] = useState(loadFieldPrefs);
+  const [fieldsOpen, setFieldsOpen] = useState(false);
+
+  function toggleField(key) {
+    setVisibleFields(prev => {
+      const next = { ...prev, [key]: !prev[key] };
+      try { localStorage.setItem(FIELD_STORAGE_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }
 
   // ── Load labels via RPC get_exemplar_labels ──
   // Wrapper SECURITY DEFINER gated staff de v_exemplar_labels : la vue est
@@ -143,22 +161,23 @@ export default function LabelSheetPrinter({ onChanged }) {
       { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]
     ));
 
-    // Build the label content
+    // Build the label content — respects visibleFields toggles
+    const vf = visibleFields;
     const labelCells = selectedLabels.map(l => {
-      const author = esc((l.autor_etiqueta || '').substring(0, 30));
-      const title = esc((l.titulo_etiqueta || '').substring(0, 40));
       const cdd = esc(l.cdd_etiqueta || '');
       const ref = esc(l.resolved_bib_ref || '');
-      const tombo = esc(l.tombo || '');
-      const note = esc((l.label_note || '').substring(0, 25));
+      const author = vf.author ? esc((l.autor_etiqueta || '').substring(0, 30)) : '';
+      const title  = vf.title  ? esc((l.titulo_etiqueta || '').substring(0, 40)) : '';
+      const tombo  = vf.tombo  ? esc(l.tombo || '') : '';
+      const note   = vf.note   ? esc((l.label_note || '').substring(0, 25)) : '';
       const qr = qrById[l.exemplar_id];
       const qrCell = qr ? `<div class="label-qr"><img src="${qr}" alt="QR" /></div>` : '';
       return `<td class="label">
         <div class="label-inner">
           <div class="label-text">
             <div class="label-cdd">${cdd}</div>
-            <div class="label-author">${author}</div>
-            <div class="label-title">${title}</div>
+            ${author ? `<div class="label-author">${author}</div>` : ''}
+            ${title ? `<div class="label-title">${title}</div>` : ''}
             ${tombo ? `<div class="label-tombo">${tombo}</div>` : ''}
             <div class="label-ref">${ref}</div>
             ${note ? `<div class="label-note">${note}</div>` : ''}
@@ -278,6 +297,34 @@ ${pages.join('\n')}
       {msg && (
         <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: '.82rem', marginBottom: 10, background: 'rgba(21,128,61,.12)', color: '#4ade80' }}>{msg}</div>
       )}
+
+      {/* ── Champs optionnels ── */}
+      <div style={{ marginBottom: 10 }}>
+        <button
+          type="button"
+          onClick={() => setFieldsOpen(o => !o)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--brand-muted)', fontSize: '.82rem', fontWeight: 600, padding: '4px 0', display: 'flex', alignItems: 'center', gap: 6 }}
+        >
+          <span style={{ transition: 'transform .2s', transform: fieldsOpen ? 'rotate(90deg)' : 'rotate(0)' }}>▶</span>
+          {t({ id: 'labels.fieldsConfig' })}
+        </button>
+        {fieldsOpen && (
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', padding: '8px 12px', marginTop: 4, borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)' }}>
+            <span style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginRight: 4 }}>{t({ id: 'labels.fieldsConfigHint' })}</span>
+            {[
+              { key: 'author', label: t({ id: 'labels.col.author' }) },
+              { key: 'title',  label: t({ id: 'labels.col.title' }) },
+              { key: 'tombo',  label: t({ id: 'catalogacao.exemplar.tombo' }) },
+              { key: 'note',   label: t({ id: 'labels.col.note' }) },
+            ].map(f => (
+              <label key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '.82rem', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                <input type="checkbox" checked={visibleFields[f.key]} onChange={() => toggleField(f.key)} />
+                {f.label}
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* ── Stats ── */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>

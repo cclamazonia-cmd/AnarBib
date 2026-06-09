@@ -12,6 +12,7 @@ import ExemplarDraftForm from './ExemplarDraftForm';
 import LabelSheetPrinter from './LabelSheetPrinter';
 import QueuePanel from './QueuePanel';
 import CatalogPanel from './CatalogPanel';
+import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 
@@ -57,6 +58,9 @@ export default function CatalogacaoPage() {
 
   // ── Stats ──────────────────────────────────────────────
   const [stats, setStats] = useState({ openBatches: 0, drafts: 0, books: 0, authors: 0, exemplares: 0 });
+
+  // ── Wizard de découverte ───────────────────────────────
+  const [wizardOpen, setWizardOpen] = useState(() => shouldShowWizard());
 
   // ── Dados de catálogo ────────────────────────────────────
   const [batches, setBatches] = useState([]);
@@ -197,13 +201,24 @@ export default function CatalogacaoPage() {
       <Hero title={t({ id: 'catalogacao.areaTitle' })} subtitle={t({ id: 'catalogacao.areaSubtitle' })}>
         <UserHeroBadge />
         <HeroDocumentationActions
-          extraActions={
+          extraActions={<>
             <button className="ab-button ab-button--secondary" onClick={refreshAll} disabled={loading}>
               {loading ? t({ id: 'common.loading' }) : t({ id: 'common.update' })}
             </button>
-          }
+            <button className="ab-button ab-button--secondary" onClick={() => setWizardOpen(true)} style={{ gap: 6 }}>
+              <span aria-hidden="true">?</span> {t({ id: 'catalogacao.wizard.helpButton' })}
+            </button>
+          </>}
         />
       </Hero>
+
+      {/* ── Wizard de découverte ── */}
+      {wizardOpen && (
+        <CatalogacaoWizard
+          onClose={() => setWizardOpen(false)}
+          onSwitchTab={(tabId) => { switchTab(tabId); setWizardOpen(false); }}
+        />
+      )}
 
       <div className="catalogacao-wrap">
 
