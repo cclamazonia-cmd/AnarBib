@@ -92,23 +92,36 @@ export default function LoginPage() {
   // liens staff + "Sair" (elle lit `user` immediatement) : montrer le
   // formulaire de login EN MEME TEMPS cree l'"entre-deux" incoherent signale.
   // On remplace donc le formulaire par un panneau de transition (spinner).
+  //
+  // Deux declencheurs de la transition :
+  //  1. `redirecting` : session deja active (login frais propage via
+  //     onAuthStateChange, OU session zombie au boot). On attend la resolution
+  //     profil/biblio/theme avant navigate.
+  //  2. `loginLoading` : soumission du formulaire EN VOL (appel EF `login`).
+  //     Des le clic sur Entrar, on bascule sur le spinner — sinon le formulaire
+  //     resterait visible pendant tout l'aller-retour reseau (~800ms : Turnstile
+  //     + rate-limit + signInWithPassword), ce que l'usager percevait comme un
+  //     formulaire qui "traine" avant la bascule. En cas d'ECHEC (mauvais mdp),
+  //     loginLoading repasse a false -> le formulaire revient avec le message
+  //     d'erreur (chemin minoritaire, acceptable).
   const redirecting = !authLoading && !!user && view === 'login';
+  const transitioningToApp = view === 'login' && (redirecting || loginLoading);
 
   // Garde-fou : si la transition reste bloquee trop longtemps (echec de
-  // chargement du profil, reseau coupe), on rebascule sur le formulaire pour
-  // ne pas laisser l'usager sur un spinner infini. Sur navigate reussi, le
-  // composant est demonte et le timer nettoye avant de se declencher.
+  // chargement du profil, reseau coupe, EF qui pend), on rebascule sur le
+  // formulaire pour ne pas laisser l'usager sur un spinner infini. Sur navigate
+  // reussi, le composant est demonte et le timer nettoye avant de se declencher.
   const [transitionTimedOut, setTransitionTimedOut] = useState(false);
   useEffect(() => {
-    if (!redirecting) {
+    if (!transitioningToApp) {
       setTransitionTimedOut(false);
       return;
     }
-    const id = setTimeout(() => setTransitionTimedOut(true), 7000);
+    const id = setTimeout(() => setTransitionTimedOut(true), 9000);
     return () => clearTimeout(id);
-  }, [redirecting]);
+  }, [transitioningToApp]);
 
-  const showTransition = redirecting && !transitionTimedOut;
+  const showTransition = transitioningToApp && !transitionTimedOut;
 
   useEffect(() => {
     const hash = window.location.hash;
