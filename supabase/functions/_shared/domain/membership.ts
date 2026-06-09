@@ -1,6 +1,6 @@
 import { resolveLibraryNotificationContext } from "../context/library-notification-context.ts";
 import { applyBrandingText, subjectTag } from "../context/library-mail-routing.ts";
-import { supabaseAdmin } from "../core/env.ts";
+import { APP_BASE_URL, supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { adminTarget, safeSendEmail, skippedEmailResult, userTargetFromProfile } from "../transport/email.ts";
 import { adminDisplayName, formatDateBR, fullName } from "../shared/format.ts";
@@ -107,4 +107,77 @@ export async function handleCotisationPayment(payload) {
   const admin_result = await safeSendEmail(adminTarget(ctx), applyBrandingText(`[${bt}] ${titL} — ${aun}`, ctx), ha, ta, "admin_copy", ctx);
 
   return { user_result, admin_result };
+}
+
+// ============================================================================
+// MULTI P4b — notification « inscription validée » (validation_confirmed).
+// ----------------------------------------------------------------------------
+// Émis par api.validate_membership via
+//   fn_dispatch_notify_event('validation_confirmed', 1, {user_id, library_id, membership_id})
+// record_id factice = 1 ; la donnée utile (uuid de l'appartenance) vit dans
+// payload. On relit l'appartenance (source autoritaire) par membership_id, on
+// s'assure qu'elle est bien active (validée), puis on envoie à la lectrice
+// l'e-mail de confirmation avec CTA vers son espace /conta. Notif lectrice
+// uniquement : le staff a déclenché la validation, il sait déjà (DOC-NOTIF-1).
+// ============================================================================
+export async function handleValidationConfirmed(payload) {
+  const membershipId = String(payload?.membership_id || "").trim();
+  if (!membershipId) throw new Error("membership_id manquant.");
+
+  const { data: m, error: e1 } = await supabaseAdmin
+    .from("user_library_memberships")
+    .select("id,user_id,library_id,status,local_reader_number")
+    .eq("id", membershipId)
+    .maybeSingle();
+  if (e1) throw e1;
+  if (!m) throw new Error("Associação não encontrada.");
+  // Garde : ne notifier que si réellement active (validée). Évite un faux
+  // positif si l'appartenance a changé d'état entre dispatch et traitement.
+  if (m.status !== "active") {
+    return { user_result: skippedEmailResult("user_mail", "membership_not_active") };
+  }
+
+  const { data: profile, error: e2 } = await supabaseAdmin
+    .from("profiles")
+    .select("id,email,first_name,last_name,preferred_language")
+    .eq("id", m.user_id)
+    .maybeSingle();
+  if (e2) throw e2;
+  if (!profile) throw new Error("Perfil não encontrado.");
+
+  const ctx = await resolveLibraryNotificationContext(String(m.library_id || "").trim() || null);
+  const bt = subjectTag(ctx);
+  const user = userTargetFromProfile(profile);
+  if (!user?.email) {
+    return { user_result: skippedEmailResult("user_mail", "no_recipient_email") };
+  }
+  const locale = String(profile?.preferred_language || "").trim() || null;
+  const libName = String(ctx?.library_name || ctx?.library_short_name || "").trim();
+
+  const tit = tMail(locale, "validation_confirmed.subject");
+  const det = [];
+  if (libName) det.push({ label: tMail(locale, "validation_confirmed.libraryLabel"), value: libName });
+  if (m.local_reader_number) {
+    det.push({ label: tMail(locale, "validation_confirmed.readerNumberLabel"), value: String(m.local_reader_number) });
+  }
+
+  const { html, text } = renderEmail({
+    locale,
+    preheader: tit,
+    title: tit,
+    greeting: greeting(locale, user?.name),
+    introHtml: `<p>${tMail(locale, "validation_confirmed.intro")}</p>`,
+    details: det.length ? det : undefined,
+    actionBox: {
+      kind: "action",
+      title: tMail(locale, "validation_confirmed.actionTitle"),
+      ctaUrl: `${APP_BASE_URL}/conta`,
+      ctaLabel: tMail(locale, "validation_confirmed.cta")
+    },
+    footerHtml: footerPadrao(ctx, locale),
+    context: ctx
+  });
+  const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
+  const user_result = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
+  return { user_result };
 }

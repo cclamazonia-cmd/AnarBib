@@ -1820,6 +1820,78 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
 
   // ===== Profile notices (prof.*) ===========================================
+  "validation_confirmed.subject": {
+    "pt-BR": "Inscrição confirmada",
+    fr: "Inscription confirmée",
+    es: "Inscripción confirmada",
+    en: "Sign-up confirmed",
+    it: "Iscrizione confermata",
+    de: "Anmeldung bestätigt",
+    ca: "Inscripció confirmada",
+    eo: "Aliĝo konfirmita",
+    nl: "Aanmelding bevestigd",
+    el: "Η εγγραφή επιβεβαιώθηκε"
+  },
+  "validation_confirmed.intro": {
+    "pt-BR": "Sua inscrição foi validada pela equipe. Agora você pode reservar e pegar documentos emprestados.",
+    fr: "Ton inscription a été validée par l'équipe. Tu peux désormais réserver et emprunter des documents.",
+    es: "Tu inscripción fue validada por el equipo. Ya puedes reservar y tomar prestados documentos.",
+    en: "Your sign-up has been validated by the team. You can now reserve and borrow items.",
+    it: "La tua iscrizione è stata convalidata dal gruppo. Ora puoi prenotare e prendere in prestito documenti.",
+    de: "Deine Anmeldung wurde vom Team bestätigt. Du kannst jetzt Medien vormerken und ausleihen.",
+    ca: "La teva inscripció ha estat validada per l'equip. Ara pots reservar i agafar en préstec documents.",
+    eo: "Via aliĝo estis validigita de la teamo. Vi nun povas rezervi kaj prunti dokumentojn.",
+    nl: "Je aanmelding is gevalideerd door het team. Je kunt nu materialen reserveren en lenen.",
+    el: "Η εγγραφή σου επικυρώθηκε από την ομάδα. Μπορείς πλέον να κρατάς και να δανείζεσαι τεκμήρια."
+  },
+  "validation_confirmed.libraryLabel": {
+    "pt-BR": "Biblioteca",
+    fr: "Bibliothèque",
+    es: "Biblioteca",
+    en: "Library",
+    it: "Biblioteca",
+    de: "Bibliothek",
+    ca: "Biblioteca",
+    eo: "Biblioteko",
+    nl: "Bibliotheek",
+    el: "Βιβλιοθήκη"
+  },
+  "validation_confirmed.readerNumberLabel": {
+    "pt-BR": "Nº de leitor(a)",
+    fr: "N° de lecteur·rice",
+    es: "Nº de lector·a",
+    en: "Reader no.",
+    it: "N° lettore/trice",
+    de: "Leser*in-Nr.",
+    ca: "Núm. de lector·a",
+    eo: "Leganto-n-ro",
+    nl: "Lezersnr.",
+    el: "Αρ. μέλους"
+  },
+  "validation_confirmed.actionTitle": {
+    "pt-BR": "Acesse seu espaço",
+    fr: "Accède à ton espace",
+    es: "Accede a tu espacio",
+    en: "Go to your account",
+    it: "Vai al tuo spazio",
+    de: "Zu deinem Konto",
+    ca: "Accedeix al teu espai",
+    eo: "Iru al via konto",
+    nl: "Ga naar je account",
+    el: "Μετάβαση στον λογαριασμό σου"
+  },
+  "validation_confirmed.cta": {
+    "pt-BR": "Minha conta",
+    fr: "Mon compte",
+    es: "Mi cuenta",
+    en: "My account",
+    it: "Il mio account",
+    de: "Mein Konto",
+    ca: "El meu compte",
+    eo: "Mia konto",
+    nl: "Mijn account",
+    el: "Ο λογαριασμός μου"
+  },
   "cotisation.payment.subject": {
     "pt-BR": "Pagamento de contribuição registrado",
     fr: "Paiement de cotisation enregistré",
