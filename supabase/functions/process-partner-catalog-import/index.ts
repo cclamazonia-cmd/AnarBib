@@ -1,5 +1,6 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { parseMarcFile, MARC_PARSER_VERSION } from './marc.ts';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-import-secret',
@@ -570,7 +571,12 @@ Deno.serve(async (req)=>{
     const { data: fileBlob, error: downloadError } = await supabaseAdmin.storage.from(bucketId).download(storagePath);
     if (downloadError) throw downloadError;
     if (!fileBlob) throw new Error('Storage download returned no file.');
-    const fileText = await fileBlob.text();
+    // Lecture en octets puis decodage UTF-8 : indispensable pour l'ISO 2709
+    // binaire, dont les offsets du directory se comptent en OCTETS (un decode
+    // texte prealable decalerait les positions sur les caracteres multi-octets).
+    const fileBuffer = await fileBlob.arrayBuffer();
+    const fileBytes = new Uint8Array(fileBuffer);
+    const fileText = new TextDecoder('utf-8').decode(fileBytes);
     if (!clean(fileText)) {
       throw new Error('Import file is empty.');
     }
@@ -580,7 +586,18 @@ Deno.serve(async (req)=>{
     let detectedFormat = 'csv';
     let detectedDelimiterLabel = null;
     let parsedEntries = [];
-    if (risDetected) {
+    // MARC en premier : signatures tres distinctives (MARCXML / ISO 2709), aucun
+    // risque de confusion avec CSV/RIS. Couvre UNIMARC + MARC21 (Lot 4).
+    const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename });
+    if (marcResult) {
+      parsedEntries = marcResult.entries;
+      detectedFormat = marcResult.format; // 'marcxml' | 'marc_iso2709'
+      parserVersion = MARC_PARSER_VERSION;
+      headers = ['leader']; // MARC n'a pas de ligne d'en-tete ; valeur nominale
+      if (!parsedEntries.length) {
+        throw new Error('MARC file contains no records.');
+      }
+    } else if (risDetected) {
       const parsedRis = parseRis(fileText);
       headers = parsedRis.tags;
       parsedEntries = buildParsedEntriesFromRis(parsedRis.records);
@@ -655,7 +672,7 @@ Deno.serve(async (req)=>{
         match_status: 'unreviewed',
         review_status: 'pending',
         confidence: 0,
-        warnings: [],
+        warnings: Array.isArray(entry.warnings) ? entry.warnings : [],
         editorial_decision: 'pending',
         selected_for_draft: false
       };
