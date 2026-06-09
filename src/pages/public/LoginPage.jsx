@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
-import { Card, Input, Button } from '@/components/ui';
+import { Card, Input, Button, Spinner } from '@/components/ui';
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
@@ -82,6 +82,33 @@ export default function LoginPage() {
   // le widget après chaque tentative échouée.
   const [turnstileToken, setTurnstileToken] = useState('');
   const turnstileRef = useRef(null);
+
+  // ── Sas connexion (fix "entre-deux") ────────────────────────
+  // Quand l'usager est deja authentifie (login frais OU session zombie) et
+  // qu'on est encore dans la vue 'login', une redirection est imminente : le
+  // useEffect ci-dessous va soit basculer en force-change, soit navigate(next).
+  // Tant que la biblio + le theme ne sont pas resolus (#LOGIN-FIX H1), la
+  // navigation est retenue. Pendant cette fenetre, la Topbar affiche deja les
+  // liens staff + "Sair" (elle lit `user` immediatement) : montrer le
+  // formulaire de login EN MEME TEMPS cree l'"entre-deux" incoherent signale.
+  // On remplace donc le formulaire par un panneau de transition (spinner).
+  const redirecting = !authLoading && !!user && view === 'login';
+
+  // Garde-fou : si la transition reste bloquee trop longtemps (echec de
+  // chargement du profil, reseau coupe), on rebascule sur le formulaire pour
+  // ne pas laisser l'usager sur un spinner infini. Sur navigate reussi, le
+  // composant est demonte et le timer nettoye avant de se declencher.
+  const [transitionTimedOut, setTransitionTimedOut] = useState(false);
+  useEffect(() => {
+    if (!redirecting) {
+      setTransitionTimedOut(false);
+      return;
+    }
+    const id = setTimeout(() => setTransitionTimedOut(true), 7000);
+    return () => clearTimeout(id);
+  }, [redirecting]);
+
+  const showTransition = redirecting && !transitionTimedOut;
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -388,26 +415,51 @@ export default function LoginPage() {
           </div>
         )}
         <Card>
-          <h1
-            style={{
-              fontSize: '1.5rem',
-              fontWeight: 800,
-              margin: '0 0 4px',
-              fontFamily: 'var(--brand-font-body)',
-              textTransform: 'none',
-            }}
-          >
-            {view === 'force-change'
-              ? t({ id: 'auth.forceChange.pageTitle' })
-              : t({ id: 'auth.login.title' })}
-          </h1>
-          <p style={{ color: 'var(--brand-muted)', margin: '0 0 20px', fontSize: '.9rem' }}>
-            {view === 'force-change'
-              ? t({ id: 'auth.forceChange.pageSubtitle' })
-              : t({ id: 'auth.login.subtitle' })}
-          </p>
+          {!showTransition && (
+            <>
+              <h1
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: 800,
+                  margin: '0 0 4px',
+                  fontFamily: 'var(--brand-font-body)',
+                  textTransform: 'none',
+                }}
+              >
+                {view === 'force-change'
+                  ? t({ id: 'auth.forceChange.pageTitle' })
+                  : t({ id: 'auth.login.title' })}
+              </h1>
+              <p style={{ color: 'var(--brand-muted)', margin: '0 0 20px', fontSize: '.9rem' }}>
+                {view === 'force-change'
+                  ? t({ id: 'auth.forceChange.pageSubtitle' })
+                  : t({ id: 'auth.login.subtitle' })}
+              </p>
+            </>
+          )}
 
-          {view !== 'force-change' && (
+          {/* Panneau de transition : affiche un spinner pendant que la
+              redirection post-login se prepare (profil + biblio + theme),
+              au lieu du formulaire — supprime l'"entre-deux" avec la Topbar
+              deja connectee. */}
+          {view === 'login' && showTransition && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 14,
+                padding: '28px 0',
+              }}
+            >
+              <Spinner size={32} />
+              <span style={{ color: 'var(--brand-muted)', fontSize: '.9rem' }}>
+                {t({ id: 'auth.loggingIn' })}
+              </span>
+            </div>
+          )}
+
+          {view !== 'force-change' && !showTransition && (
             <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
               <Button variant="secondary" onClick={() => navigate('/')}>
                 {t({ id: 'auth.backToCatalog' })}
@@ -418,7 +470,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {view === 'login' && (
+          {view === 'login' && !showTransition && (
             <div>
               <form
                 onSubmit={handleLogin}
