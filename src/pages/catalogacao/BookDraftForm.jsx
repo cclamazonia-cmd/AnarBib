@@ -354,6 +354,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [digitalResources, setDigitalResources] = useState([]);
   const [digitalForm, setDigitalForm] = useState(null); // resource being edited
   const [digitalSaving, setDigitalSaving] = useState(false);
+  const [digitalUploading, setDigitalUploading] = useState(false);
 
   // ── Field helpers ──────────────────────────────────────
   // -- Lot 0 -- charger un brouillon a editer (handoff catalogo/fila -> editeur) --
@@ -1471,6 +1472,51 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     }
   }
 
+  const DIGITAL_BUCKET_BY_MIME = (mime) => {
+    if (mime === 'application/pdf') return 'anarbib-pdf-public';
+    if (/^(image|audio|video)\//.test(mime || '')) return 'anarbib-media-public';
+    return null;
+  };
+  const DIGITAL_RTYPE_BY_MIME = (mime) => {
+    if (mime === 'application/pdf') return 'pdf_publico';
+    if ((mime || '').startsWith('image/')) return 'image';
+    if ((mime || '').startsWith('audio/')) return 'audio';
+    if ((mime || '').startsWith('video/')) return 'video';
+    return 'link_externo';
+  };
+
+  // Outil d'import simplifié : téléverse le fichier dans le bon bucket public
+  // selon son type, et remplit automatiquement bucket/chemin/mime/type.
+  async function uploadDigitalFile(file) {
+    const draftId = f('id');
+    if (!draftId) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforeDigital' }), kind: 'error' }); return; }
+    if (!file) return;
+    const mime = file.type || '';
+    const bucket = DIGITAL_BUCKET_BY_MIME(mime);
+    if (!bucket) { setMsg({ text: t({ id: 'catalogacao.digital.unsupportedType' }), kind: 'error' }); return; }
+    if (file.size > 100 * 1024 * 1024) { setMsg({ text: t({ id: 'catalogacao.digital.fileTooLarge' }), kind: 'error' }); return; }
+    setDigitalUploading(true);
+    try {
+      const safe = file.name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9._-]/g, '_');
+      const path = `books/${draftId}/${Date.now()}_${safe}`;
+      const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: mime });
+      if (error) throw error;
+      setDigitalForm(prev => ({
+        ...(prev || {}),
+        storage_bucket: bucket,
+        storage_path: path,
+        mime_type: mime,
+        resource_type: DIGITAL_RTYPE_BY_MIME(mime),
+        label: (prev && prev.label) || file.name,
+      }));
+      setMsg({ text: t({ id: 'catalogacao.digital.uploaded' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.msg.digitalError' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setDigitalUploading(false);
+    }
+  }
+
   async function deleteDigitalResource(resourceId) {
     if (!confirm(t({id:'catalogacao.digital.confirmDelete'}))) return;
     try {
@@ -2534,6 +2580,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   <h4 style={{ margin: '0 0 10px', fontSize: '.85rem' }}>
                     {digitalForm.id ? t({ id: 'catalogacao.digital.editTitle' }) : t({ id: 'catalogacao.digital.newTitle' })}
                   </h4>
+                  {/* Outil d'import simplifié — téléverser directement le fichier (auto-remplit bucket/chemin/mime) */}
+                  <div style={{ marginBottom: 12, padding: 10, borderRadius: 6, background: 'rgba(90,160,255,.08)', border: '1px dashed rgba(120,180,255,.35)' }}>
+                    <label style={{ display: 'block', fontSize: '.8rem', fontWeight: 600, marginBottom: 5 }}>
+                      {t({ id: 'catalogacao.digital.uploadFile' })}
+                    </label>
+                    <input type="file" accept="application/pdf,image/*,audio/*,video/*"
+                      disabled={digitalUploading}
+                      onChange={e => { const file = e.target.files && e.target.files[0]; if (file) uploadDigitalFile(file); e.target.value = ''; }}
+                      style={{ fontSize: '.8rem', color: '#f4f4f4' }} />
+                    <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #9ab)', marginTop: 5 }}>
+                      {digitalUploading ? t({ id: 'catalogacao.digital.uploading' }) : t({ id: 'catalogacao.digital.uploadHint' })}
+                    </div>
+                    {digitalForm.storage_bucket && digitalForm.storage_path && (
+                      <div style={{ fontSize: '.72rem', color: '#7fd18f', marginTop: 5, wordBreak: 'break-all' }}>
+                        ✓ {digitalForm.storage_bucket} · {digitalForm.storage_path}
+                      </div>
+                    )}
+                  </div>
                   <div className="cat-book-grid">
                     <div className="cat-field">
                       <label>{t({ id: 'catalogacao.digital.type' })}</label>
@@ -2610,12 +2674,18 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         <input type="checkbox" checked={digitalForm.bibliographic_match_validated} onChange={e => setDf('bibliographic_match_validated', e.target.checked)} />
                         {t({ id: 'catalogacao.digital.matchValidated' })}
                       </label>
+                      <label style={{ display: 'flex', gap: 5, alignItems: 'center', fontSize: '.82rem', cursor: 'pointer' }}>
+                        <input type="checkbox"
+                          checked={digitalForm.rights_status === 'livre_de_direitos' && digitalForm.access_scope === 'publico'}
+                          onChange={e => { if (e.target.checked) { setDf('rights_status', 'livre_de_direitos'); setDf('access_scope', 'publico'); } else { setDf('rights_status', ''); } }} />
+                        {t({ id: 'catalogacao.digital.freeRights' })}
+                      </label>
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
                     <button type="button" className="ab-button ab-button--sm"
                       onClick={saveDigitalResource} disabled={digitalSaving}>
-                      {digitalSaving ? t({ id: 'common.saving' }) : (digitalForm.id ? t({ id: 'catalogacao.digital.update' }) : t({ id: 'catalogacao.digital.save' }))}
+                      {digitalSaving ? t({ id: 'common.saving' }) : (digitalForm.id ? t({ id: 'catalogacao.digital.update' }) : t({ id: 'catalogacao.digital.sendToAnarbib' }))}
                     </button>
                     <button type="button" className="ab-button ab-button--ghost ab-button--sm"
                       onClick={() => setDigitalForm(null)}>{t({ id: 'common.cancel' })}</button>
