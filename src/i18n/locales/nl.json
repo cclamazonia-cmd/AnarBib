@@ -3983,5 +3983,9 @@
   "wizard.profile.template.C.desc": "Catalogus gedeeld met het AnarBib-netwerk, informele circulatie, bestuur met afgebakende rollen (bibliothecarissen, coördinatie). Neemt niet deel aan het interbibliothecair leenverkeer.",
   "wizard.profile.template.C.title": "Profiel C — Gefedereerde waarnemer",
   "wizard.profile.template.D.desc": "Volwassen bibliotheek: volledig bibliotheeksysteem (uitleningen, reserveringen, bijdragen), volledige deelname aan het netwerk en het interbibliothecair leenverkeer, formeel bestuur met stemgebonden overgangen.",
-  "wizard.profile.template.D.title": "Profiel D — Volledig betrokken"
+  "wizard.profile.template.D.title": "Profiel D — Volledig betrokken",
+  "panel.reader.otherMemberships.title": "Andere lidmaatschappen",
+  "panel.reader.otherMemberships.restricted": "beperkt in die bibliotheek",
+  "panel.reader.otherMemberships.minimal": "Andere niet-gedetailleerde lidmaatschappen: {count}",
+  "panel.reader.otherMemberships.hint": "Zichtbaar afhankelijk van de toestemming van de lezer (transparantie tussen partnerbibliotheken)."
 }

@@ -3983,5 +3983,9 @@
   "wizard.profile.template.C.desc": "Κατάλογος που μοιράζεται με το δίκτυο AnarBib, άτυπη κυκλοφορία, διακυβέρνηση με καθορισμένους ρόλους (βιβλιοθηκάριοι, συντονισμός). Δεν συμμετέχει σε διαδανεισμούς.",
   "wizard.profile.template.C.title": "Προφίλ C — Ομόσπονδος παρατηρητής",
   "wizard.profile.template.D.desc": "Ώριμη βιβλιοθήκη: πλήρες σύστημα βιβλιοθήκης (δανεισμοί, κρατήσεις, συνδρομές), πλήρης συμμετοχή στο δίκτυο και στους διαδανεισμούς, τυπική διακυβέρνηση με μεταβάσεις μέσω ψηφοφορίας.",
-  "wizard.profile.template.D.title": "Προφίλ D — Πλήρως ενεργό"
+  "wizard.profile.template.D.title": "Προφίλ D — Πλήρως ενεργό",
+  "panel.reader.otherMemberships.title": "Άλλες συμμετοχές",
+  "panel.reader.otherMemberships.restricted": "με περιορισμό σε εκείνη τη βιβλιοθήκη",
+  "panel.reader.otherMemberships.minimal": "Άλλες μη αναλυτικές συμμετοχές: {count}",
+  "panel.reader.otherMemberships.hint": "Εμφανίζεται ανάλογα με τη συγκατάθεση του αναγνώστη (διαφάνεια μεταξύ συνεργαζόμενων βιβλιοθηκών)."
 }

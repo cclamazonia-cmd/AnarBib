@@ -3983,5 +3983,9 @@
   "wizard.profile.template.C.desc": "Catálogo compartilhado com a rede AnarBib, circulação informal, governança com papéis definidos (bibliotecári-as-es, coordenação). Não participa do empréstimo entre bibliotecas.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB completo (empréstimos, reservas, cotizações), participação plena na rede e no empréstimo entre bibliotecas, governança formal com transições por votação.",
-  "wizard.profile.template.D.title": "Perfil D — Completa engajada"
+  "wizard.profile.template.D.title": "Perfil D — Completa engajada",
+  "panel.reader.otherMemberships.title": "Outras associações",
+  "panel.reader.otherMemberships.restricted": "com restrição nessa biblioteca",
+  "panel.reader.otherMemberships.minimal": "Outras associações não detalhadas: {count}",
+  "panel.reader.otherMemberships.hint": "Visível conforme o consentimento da pessoa leitora (transparência entre bibliotecas parceiras)."
 }

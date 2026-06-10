@@ -3983,5 +3983,9 @@
   "wizard.profile.template.C.desc": "Catalogo condiviso con la rete AnarBib, circolazione informale, governance con ruoli definiti (bibliotecari*, coordinazione). Non partecipa al prestito interbibliotecario.",
   "wizard.profile.template.C.title": "Profilo C — Federata osservatrice",
   "wizard.profile.template.D.desc": "Biblioteca matura: ILS completo (prestiti, prenotazioni, quote), piena partecipazione alla rete e al prestito interbibliotecario, governance formale con transizioni per votazione.",
-  "wizard.profile.template.D.title": "Profilo D — Completa impegnata"
+  "wizard.profile.template.D.title": "Profilo D — Completa impegnata",
+  "panel.reader.otherMemberships.title": "Altre affiliazioni",
+  "panel.reader.otherMemberships.restricted": "con restrizione in quella biblioteca",
+  "panel.reader.otherMemberships.minimal": "Altre affiliazioni non dettagliate: {count}",
+  "panel.reader.otherMemberships.hint": "Visibile secondo il consenso di chi legge (trasparenza tra biblioteche partner)."
 }

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import PhoneInput from '@/components/forms/PhoneInput';
 import CountrySelect from '@/components/forms/CountrySelect';
@@ -44,6 +45,27 @@ export default function TabLeitor({
   searchReader,
   openPaymentModal,
 }) {
+  // ── §21 PARTNER — transparence inter-biblios (Zone 21) ──────────────────
+  // Autres appartenances de la lectrice : minimal par défaut (compte sans
+  // identité), enrichi (nom + restriction) uniquement sous partenariat actif
+  // ∧ droit transparence ∧ consentement. Auto-suffisant : la garde et le
+  // filtrage sont faits par la RPC SECURITY DEFINER fn_painel_reader_other_memberships.
+  const [otherMemberships, setOtherMemberships] = useState(null);
+  const readerId = readerProfile?.id;
+  useEffect(() => {
+    let cancelled = false;
+    if (!readerId || !libraryId) { setOtherMemberships(null); return; }
+    (async () => {
+      try {
+        const { data, error } = await supabase.rpc('fn_painel_reader_other_memberships', {
+          p_user_id: readerId, p_viewer_library_id: libraryId,
+        });
+        if (!cancelled) setOtherMemberships(error ? [] : (data || []));
+      } catch { if (!cancelled) setOtherMemberships([]); }
+    })();
+    return () => { cancelled = true; };
+  }, [readerId, libraryId]);
+
   return (
     <div>
       <h2 className="ab-painel-h2">{t({id:'panel.reader.manage'})}</h2>
@@ -93,6 +115,33 @@ export default function TabLeitor({
                 {a.city && <span> · {t({id:'address.city'})}: {a.city}</span>}
                 {a.state_region && <span> · {t({id:'address.state.generic'})}: {a.state_region}</span>}
                 {countryDisplay && <span> · {t({id:'address.country'})}: {countryDisplay}</span>}
+              </div>
+            );
+          })()}
+
+          {/* ── §21 PARTNER : transparence inter-biblios (autres appartenances) ── */}
+          {Array.isArray(otherMemberships) && otherMemberships.length > 0 && (() => {
+            const enriched = otherMemberships.filter(m => m.enriched);
+            const minimalCount = otherMemberships.filter(m => !m.enriched).length;
+            return (
+              <div className="ab-painel-restrict-box">
+                <div className="ab-painel-restrict-title">
+                  {t({ id: 'panel.reader.otherMemberships.title' })}
+                </div>
+                {enriched.map(m => (
+                  <p key={m.library_id} className="ab-painel-restrict-active">
+                    {m.library_name}
+                    {m.is_restricted && (
+                      <span className="ab-painel-restrict-reason"> · {t({ id: 'panel.reader.otherMemberships.restricted' })}</span>
+                    )}
+                  </p>
+                ))}
+                {minimalCount > 0 && (
+                  <p className="ab-painel-restrict-reason">
+                    {t({ id: 'panel.reader.otherMemberships.minimal' }, { count: minimalCount })}
+                  </p>
+                )}
+                <p className="ab-painel-freeze-warn">{t({ id: 'panel.reader.otherMemberships.hint' })}</p>
               </div>
             );
           })()}
