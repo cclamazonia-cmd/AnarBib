@@ -14,14 +14,27 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { serializeCatalog, SUPPORTED_FORMATS } from './serialize.ts';
 
+// CORS : l'export est appele en fetch cross-origin depuis app.anarbib.org (POST
+// avec en-tetes Authorization/apikey -> preflight OPTIONS). Sans ces headers, le
+// navigateur bloque la requete avant meme qu'elle atteigne la fonction.
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Expose-Headers': 'Content-Disposition',
+};
+
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    headers: { ...CORS, 'Content-Type': 'application/json; charset=utf-8' },
   });
 }
 
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: CORS });
+  }
   if (req.method !== 'POST') {
     return json({ error: 'Method not allowed. Use POST.' }, 405);
   }
@@ -85,6 +98,7 @@ Deno.serve(async (req) => {
   return new Response(content, {
     status: 200,
     headers: {
+      ...CORS,
       'Content-Type': serialized.mime,
       'Content-Disposition': `attachment; filename="${filename}"`,
       'X-Record-Count': String(records.length),

@@ -422,3 +422,20 @@
   .imp-row3 { grid-template-columns: 1fr; }
   .imp-queue .imp-hide-sm { display: none; }
 }
+
+/* ── Boutons (.cat-btn) — alignés sur CatalogacaoPage.css ───── */
+/* La page Importações ET le wizard référencent .cat-btn, mais ce style
+   n'était défini que dans CatalogacaoPage.css (non chargée ici) -> les
+   boutons s'affichaient en blanc carré, hors charte. On le définit ici. */
+.cat-btn {
+  padding: 9px 18px; border-radius: 8px; font-size: .9rem; font-weight: 700;
+  cursor: pointer; border: 1px solid var(--brand-panel-border, rgba(255,255,255,.15));
+  transition: all .15s;
+}
+.cat-btn:disabled { opacity: .5; cursor: not-allowed; }
+.cat-btn.primary { background: var(--brand-color-primary, #7a0b14); color: #fff; border-color: var(--brand-color-primary, #7a0b14); }
+.cat-btn.primary:hover { filter: brightness(1.2); }
+.cat-btn.secondary { background: var(--brand-panel-bg-strong, rgba(10,10,10,.94)); color: var(--brand-text, #f5f2ea); border-color: rgba(255,255,255,.18); }
+.cat-btn.secondary:hover { background: rgba(255,255,255,.1); }
+.cat-btn.ghost { background: transparent; color: var(--brand-muted, #d4cec3); border-color: transparent; }
+.cat-btn.ghost:hover { color: var(--brand-text, #f5f2ea); background: rgba(255,255,255,.04); }
