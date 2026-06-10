@@ -619,6 +619,37 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         )}
 
         <div className="cat-book-grid">
+          {/* Photo de l'autorité — en tête du formulaire (cohérence avec le document) */}
+          <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+            <label style={ls}>{t({ id: 'catalogacao.author.photoLabel' })}</label>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <div style={{ width: 80, flexShrink: 0 }}>
+                {photoDisplayUrl ? (
+                  <img src={photoDisplayUrl} alt="Foto" style={{ width: '100%', borderRadius: 8, border: '1px solid rgba(255,255,255,.1)', objectFit: 'cover', maxHeight: 100 }} />
+                ) : (
+                  <div style={{ width: '100%', height: 80, borderRadius: 8, border: '1px dashed rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
+                    {t({ id: 'catalogacao.author.noPhoto' })}
+                  </div>
+                )}
+              </div>
+              <div style={{ flex: 1 }}>
+                <label className="ab-button ab-button--secondary ab-button--sm" style={{ display: 'inline-block', textAlign: 'center', cursor: 'pointer', marginBottom: 4 }}>
+                  {t({ id: 'catalogacao.author.chooseImage' })}
+                  <input type="file" accept="image/*" onChange={handlePhotoFileChange} style={{ display: 'none' }} />
+                </label>
+                {photoFile && (
+                  <button type="button" className="ab-button ab-button--sm" style={{ marginLeft: 6 }}
+                    onClick={uploadPhoto} disabled={photoUploading}>
+                    {photoUploading ? t({ id: 'catalogacao.author.uploadingPhoto' }) : t({ id: 'catalogacao.author.uploadPhoto' })}
+                  </button>
+                )}
+                {f('photo_object_path') && (
+                  <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 4 }}>{f('photo_object_path')}</div>
+                )}
+              </div>
+            </div>
+          </div>
+
           {/* ── Name fields ──────────────────────────── */}
           <div className="cat-field" style={{ gridColumn: 'span 2' }}>
             <label style={ls}>{t({ id: meta.authorityType === 'person' ? 'catalogacao.author.preferredNameLabel' : meta.authorityType === 'collective' ? 'catalogacao.author.preferredNameLabelOrg' : 'catalogacao.author.preferredNameLabelGeneric' })}</label>
@@ -927,38 +958,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
           {inp('notes', t({id:'catalogacao.author.notes'}), { span: 3, rows: 3, placeholder: t({id:'catalogacao.ph.notesPlaceholder'}), hint: t({id:'catalogacao.ph.notesHint'}), completeOnly: true })}
 
-          {/* ── Photo + Batch ─────────────────────────── */}
-          {/* ── Photo upload ─────────────────────────── */}
-          <div className="cat-field" style={{ gridColumn: 'span 2' }}>
-            <label style={ls}>{t({ id: 'catalogacao.author.photoLabel' })}</label>
-            <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-              <div style={{ width: 80, flexShrink: 0 }}>
-                {photoDisplayUrl ? (
-                  <img src={photoDisplayUrl} alt="Foto" style={{ width: '100%', borderRadius: 8, border: '1px solid rgba(255,255,255,.1)', objectFit: 'cover', maxHeight: 100 }} />
-                ) : (
-                  <div style={{ width: '100%', height: 80, borderRadius: 8, border: '1px dashed rgba(255,255,255,.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
-                    {t({ id: 'catalogacao.author.noPhoto' })}
-                  </div>
-                )}
-              </div>
-              <div style={{ flex: 1 }}>
-                <label className="ab-button ab-button--secondary ab-button--sm" style={{ display: 'inline-block', textAlign: 'center', cursor: 'pointer', marginBottom: 4 }}>
-                  {t({ id: 'catalogacao.author.chooseImage' })}
-                  <input type="file" accept="image/*" onChange={handlePhotoFileChange} style={{ display: 'none' }} />
-                </label>
-                {photoFile && (
-                  <button type="button" className="ab-button ab-button--sm" style={{ marginLeft: 6 }}
-                    onClick={uploadPhoto} disabled={photoUploading}>
-                    {photoUploading ? t({ id: 'catalogacao.author.uploadingPhoto' }) : t({ id: 'catalogacao.author.uploadPhoto' })}
-                  </button>
-                )}
-                {f('photo_object_path') && (
-                  <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 4 }}>{f('photo_object_path')}</div>
-                )}
-              </div>
-            </div>
-          </div>
-
+          {/* ── Batch (lot de catalogage) ─────────────── */}
           <div className="cat-field" style={isComplete ? undefined : { display: 'none' }}>
             <label style={ls}>{t({ id: 'catalogacao.author.batchLabel' })}</label>
             <select value={f('batch_id')} onChange={e => set('batch_id', e.target.value)} style={fs}>
