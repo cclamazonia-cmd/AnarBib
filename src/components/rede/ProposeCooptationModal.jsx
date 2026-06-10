@@ -23,6 +23,7 @@
 import { useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const MIN_MOTIVATION_CHARS = 20;
 
@@ -75,7 +76,7 @@ export default function ProposeCooptationModal({ isOpen, onClose, onSuccess }) {
         } else if (msg.includes('proposal_exists')) {
           setError(t({ id: 'rede.cooptation.propose.errors.proposalExists' }));
         } else {
-          setError(t({ id: 'common.errorPrefix' }, { message: msg }));
+          setError(t({ id: 'common.errorPrefix' }, { message: localizeError(rpcErr, t) }));
         }
         return;
       }
@@ -86,7 +87,7 @@ export default function ProposeCooptationModal({ isOpen, onClose, onSuccess }) {
       if (onSuccess) onSuccess();
     } catch (err) {
       console.warn('ProposeCooptationModal:', err);
-      setError(t({ id: 'common.errorPrefix' }, { message: err.message || String(err) }));
+      setError(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setSubmitting(false);
     }

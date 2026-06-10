@@ -25,6 +25,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const BUCKET = 'library-ui-assets';
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -86,7 +87,7 @@ export default function LibraryVisualAssetsSection({ libraryId, librarySlug, lib
       }
       setCacheBust(Date.now());
     } catch (err) {
-      setMsg({ text: t({ id: 'biblioteca.visualAssets.error.load' }, { msg: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'biblioteca.visualAssets.error.load' }, { msg: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -144,7 +145,7 @@ export default function LibraryVisualAssetsSection({ libraryId, librarySlug, lib
       setMsg({ text: t({ id: 'biblioteca.visualAssets.success.uploaded' }, { name: slotKey }), kind: 'ok' });
       await reload();
     } catch (err) {
-      setMsg({ text: t({ id: 'biblioteca.visualAssets.error.upload' }, { name: slotKey, msg: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'biblioteca.visualAssets.error.upload' }, { name: slotKey, msg: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(s => ({ ...s, [slotKey]: false }));
       if (fileRefs.current[slotKey]) fileRefs.current[slotKey].value = '';
@@ -171,7 +172,7 @@ export default function LibraryVisualAssetsSection({ libraryId, librarySlug, lib
       setMsg({ text: t({ id: 'biblioteca.visualAssets.success.removed' }, { name: slotKey }), kind: 'ok' });
       await reload();
     } catch (err) {
-      setMsg({ text: t({ id: 'biblioteca.visualAssets.error.remove' }, { name: slotKey, msg: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'biblioteca.visualAssets.error.remove' }, { name: slotKey, msg: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(s => ({ ...s, [slotKey]: false }));
     }

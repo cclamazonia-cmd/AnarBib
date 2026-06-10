@@ -14,6 +14,18 @@
 //     helper tolerant qui lit hint ET message, sans whitelist coté JS. La
 //     responsabilite de poser une bonne clé reste au backend. Le module
 //     apiErrors est supprimé.
+//   - v4 (chantier anti-opacite, 10/06/2026) : interception des ERREURS
+//     SYSTEME. Le Cas 3 « phrase libre » renvoyait jusqu'ici TOUT err.message
+//     texte tel quel — y compris le jargon Postgres/JS brut (ex.
+//     'record "v_draft" has no field "viaf"', 'Failed to fetch',
+//     'null value in column "x" violates not-null constraint'). Desormais un
+//     message technique n'est JAMAIS montre : on le reconnait (SQLSTATE != P0001
+//     ou signature de jargon) et on renvoie un message generique intelligible
+//     ('common.error.system') ou le fallback contextuel de l'appelant, en
+//     gardant le detail brut en console.error pour le diagnostic. Seuls
+//     restent affiches en clair : les hints i18n, les codes courts mappes, les
+//     contraintes mappees, et les messages libres DELIBERES du backend
+//     (RAISE EXCEPTION, SQLSTATE P0001).
 //
 // DOCTRINE :
 //   - Le backend pose l'information d'erreur de l'une des deux façons :
@@ -123,13 +135,107 @@ function tryTranslate(t, id) {
 }
 
 /**
+ * Signatures de messages d'erreur TECHNIQUES (jargon Postgres / PostgREST / JS).
+ * Servent de filet pour les erreurs SANS code SQLSTATE exploitable (erreurs JS,
+ * reseau, ou retours bruts ou err.code est absent). Si le message correspond a
+ * l'une de ces formes, on le considere comme du jargon a NE PAS montrer.
+ */
+const TECHNICAL_SIGNATURES = [
+  /record "[^"]*" has no field/i,           // plpgsql : champ inexistant sur un record
+  /column "[^"]*"/i,                         // colonne inconnue / ambigue
+  /relation "[^"]*"/i,                       // table/vue inconnue
+  /function [^()]+\([^)]*\) does not exist/i, // fonction RPC absente
+  /operator does not exist/i,
+  /violates (check|unique|foreign key|not-null|exclusion)/i,
+  /null value in column/i,
+  /invalid input syntax/i,
+  /permission denied/i,
+  /must be owner of/i,
+  /could not (find|serialize|open|connect)/i,
+  /syntax error at/i,
+  /out of range/i,
+  /division by zero/i,
+  /deadlock detected/i,
+  /^pgrst/i,                                 // codes PostgREST (PGRST116, ...)
+  /JSON object requested, multiple/i,
+  /cannot read propert/i,                    // TypeError JS
+  /is not a function/i,
+  /is not defined/i,
+  /undefined is not/i,
+  /failed to fetch/i,                        // erreurs reseau fetch
+  /networkerror/i,
+  /load failed/i,
+];
+
+/**
+ * Le message ressemble-t-il a du jargon technique ?
+ * @param {string} msg
+ * @returns {boolean}
+ */
+function looksTechnical(msg) {
+  if (!msg || typeof msg !== 'string') return false;
+  return TECHNICAL_SIGNATURES.some((re) => re.test(msg));
+}
+
+/**
+ * L'erreur est-elle une erreur SYSTEME (interne), par opposition a un message
+ * delibere du backend destine a l'utilisateur ?
+ *
+ * Regle :
+ *   - SQLSTATE 'P0001' (RAISE EXCEPTION) → message choisi par le backend → PAS
+ *     une erreur systeme (on lui fait confiance).
+ *   - Tout autre SQLSTATE (classes 22/23/42/53/54/55/57/58/XX/28/25/08/0A/2F...)
+ *     ou code PostgREST → erreur systeme (message en jargon anglais).
+ *   - Pas de code exploitable → on renifle la forme du message (looksTechnical).
+ *
+ * @param {*} err
+ * @returns {boolean}
+ */
+function isSystemError(err) {
+  if (!err || typeof err !== 'object') return false;
+  const code = typeof err.code === 'string' ? err.code.trim() : '';
+  if (code) {
+    if (code === 'P0001') return false;            // RAISE EXCEPTION delibere
+    if (/^[0-9A-Za-z]{5}$/.test(code)) return true; // SQLSTATE non-P0001
+    if (/^PGRST/i.test(code)) return true;          // code PostgREST
+  }
+  // Pas de code : filet sur la forme du message.
+  return looksTechnical(typeof err.message === 'string' ? err.message : '');
+}
+
+/**
+ * Message d'erreur systeme intelligible. Le detail brut est journalise en
+ * console (diagnostic dev) et JAMAIS rendu a l'utilisateur. Un eventuel code
+ * SQLSTATE est ajoute entre parentheses comme reference courte pour le support
+ * (ce n'est pas du jargon : juste un identifiant a communiquer).
+ *
+ * @param {*} err
+ * @param {function} t
+ * @returns {string}
+ */
+function systemErrorMessage(err, t) {
+  try {
+    console.error('[localizeError] erreur systeme masquee a l\'utilisateur:', err);
+  } catch { /* console indisponible : on ignore */ }
+  const base = tryTranslate(t, 'common.error.system') || t({ id: 'common.error.unknown' });
+  const ref = (err && typeof err === 'object' && typeof err.code === 'string' && err.code.trim())
+    ? err.code.trim()
+    : null;
+  return ref ? `${base} (${ref})` : base;
+}
+
+/**
  * Transforme une erreur Supabase en string traduite.
  *
  * Ordre de résolution :
  *   1. err.hint commence par 'error.' → traduit la clé i18n
  *   2. err.message contient un code court → traduit 'panel.apiError.<code>'
- *   3. err.message est une phrase libre non vide → retournée telle quelle
- *      (compatibilité historique avec messages bruts de cotisation/retard)
+ *   2b. nom de contrainte Postgres mappé → clé i18n (CONSTRAINT_I18N_MAP)
+ *   2c. ERREUR SYSTÈME (SQLSTATE != P0001, code PostgREST, ou jargon reconnu)
+ *       → fallback contextuel si fourni, sinon 'common.error.system' ; le
+ *       détail brut part en console.error, jamais montré à l'utilisateur
+ *   3. err.message est une phrase libre DÉLIBÉRÉE (P0001 / message humain) →
+ *      retournée telle quelle (compat. messages bruts cotisation/retard)
  *   4. actionFallbackKey fourni → traduit cette clé
  *   5. 'common.error.unknown' générique
  *
@@ -163,6 +269,23 @@ export function localizeError(err, t, actionFallbackKey) {
   if (typeof err === 'object' && typeof err.message === 'string') {
     const constraintMsg = tryTranslateConstraint(err.message, t);
     if (constraintMsg) return constraintMsg;
+  }
+
+  // Cas 2c : ERREUR SYSTÈME (jargon technique). On intercepte AVANT le passe-
+  // plat « phrase libre » du Cas 3 : un brut Postgres/JS ne doit jamais être
+  // montré. On privilégie le fallback contextuel de l'appelant (plus parlant),
+  // sinon un message système générique. Le détail brut part en console.
+  if (isSystemError(err)) {
+    if (actionFallbackKey) {
+      const translated = tryTranslate(t, actionFallbackKey);
+      if (translated) {
+        try {
+          console.error('[localizeError] erreur systeme (fallback contextuel):', err);
+        } catch { /* noop */ }
+        return translated;
+      }
+    }
+    return systemErrorMessage(err, t);
   }
 
   // Cas 3 : message texte natif (fallback historique pour erreurs sans hint

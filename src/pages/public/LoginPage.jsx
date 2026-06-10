@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -276,7 +277,7 @@ export default function LoginPage() {
       });
       setForgotMsg(
         error
-          ? { text: error.message, kind: 'error' }
+          ? { text: localizeError(error, t), kind: 'error' }
           : { text: t({ id: 'auth.forgotSent' }), kind: 'ok' }
       );
     } catch {
@@ -308,7 +309,7 @@ export default function LoginPage() {
               ? t({ id: 'auth.resetSamePassword' })
               : r.includes('expired')
               ? t({ id: 'auth.resetExpired' })
-              : error.message,
+              : localizeError(error, t),
           kind: 'error',
         });
         return;
@@ -355,7 +356,7 @@ export default function LoginPage() {
           text:
             r.includes('same') || r.includes('different')
               ? t({ id: 'auth.resetSamePassword' })
-              : authError.message,
+              : localizeError(authError, t),
           kind: 'error',
         });
         return;

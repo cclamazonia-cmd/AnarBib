@@ -29,6 +29,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { localizeError } from '@/lib/localizeError';
 import './AudioPlayer.css';
 
 const PLAYBACK_RATES = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
@@ -123,7 +124,7 @@ export default function AudioPlayer({ src, fileName, onError, watermark, bookmar
         setSrc(blobUrl);
       } catch (err) {
         if (!cancelled) {
-          const msg = t({ id: 'audio.error.loading' }, { error: err.message || String(err) });
+          const msg = t({ id: 'audio.error.loading' }, { error: localizeError(err, t) });
           setError(msg);
           if (onError) onError(msg);
         }

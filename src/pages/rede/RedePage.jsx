@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -173,7 +174,7 @@ export default function RedePage() {
       setMsg({ text: t({id:'common.dataSaved'}), kind: 'ok' });
       setSelectedReq(null); setReviewNote('');
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
   }
 
   // E.4.a : suppression de changeUserRole / addAdmin / removeAdmin.
@@ -194,7 +195,7 @@ export default function RedePage() {
       await supabase.from('libraries').update({ is_active: !currentState }).eq('id', libId);
       setMsg({ text: currentState ? t({id:'biblioteca.deactivated'}) : t({id:'biblioteca.reactivated'}), kind: 'ok' });
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
   }
 
   // ── Styles ──────────────────────────────────────────────

@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -85,11 +86,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       setItems((data || []).map(d => ({ ...d, _type: type })));
     } catch (err) {
       if (nonce !== fetchNonce.current) return;
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally {
       if (nonce === fetchNonce.current) setLoading(false);
     }
-  }, [view, dSearch, page]);
+  }, [view, dSearch, page, t]);
 
   useEffect(() => { loadItems(); }, [loadItems]);
 
@@ -106,7 +107,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
         ? { text: t({ id: 'catalogacao.catalog.refreshBusy' }), kind: 'ok' }
         : { text: t({ id: 'catalogacao.catalog.refreshDone' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.catalog.refreshError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.catalog.refreshError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setRefreshing(false); }
   }
 
@@ -130,7 +131,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
         setMsg({ text: t({ id: 'catalogacao.catalog.retakeCreatedNoEdit' }, { id: data }), kind: 'ok' });
       }
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     }
   }
 
@@ -149,7 +150,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       loadItems();
       onChanged?.();
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.catalog.discardError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.catalog.discardError' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }
 

@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell } from '@/components/layout';
@@ -299,7 +300,7 @@ export default function ReaderPage() {
           await loadPdfFromUrl(payload.access_url);
         }
       } catch (err) {
-        if (!cancelled) setError(`${t({ id: 'reader.errorOpening' })}: ${err.message}`);
+        if (!cancelled) setError(`${t({ id: 'reader.errorOpening' })}: ${localizeError(err, t)}`);
       } finally {
         if (!cancelled) setLoading(false);
       }

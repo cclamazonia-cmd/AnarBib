@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // =============================================================================
 // PolicySetManager (EA-05, chantier-cadre Biblioteca, 21/05/2026)
@@ -112,7 +113,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
         return active ? active.id : (list[0]?.id ?? null);
       });
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -132,7 +133,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
       if (error) throw error;
       setRules(data || []);
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }, [t]);
 
@@ -197,7 +198,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
       await loadSets();
       if (savedId) setSelectedSetId(savedId);
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }
@@ -215,7 +216,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
       setMsg({ text: t({ id: 'biblioteca.policySets.setActivated' }), kind: 'ok' });
       await loadSets();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }
@@ -259,7 +260,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
       setMsg({ text: t({ id: 'biblioteca.rules.saved' }), kind: 'ok' });
       await loadRules(selectedSetId);
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }
@@ -278,7 +279,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
       setMsg({ text: t({ id: 'biblioteca.rules.deleted' }), kind: 'ok' });
       await loadRules(selectedSetId);
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }

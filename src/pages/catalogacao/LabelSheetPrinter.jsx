@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import QRCode from 'qrcode';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { Button, Pill, Spinner } from '@/components/ui';
 
@@ -74,7 +75,7 @@ export default function LabelSheetPrinter({ onChanged }) {
       [paramKey]: editing.value,
     });
     if (error) {
-      setMsg(t({ id: 'common.errorPrefix' }, { message: error.message }));
+      setMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
     } else {
       // Optimistic local update (avoid full reload flicker)
       setLabels(prev => prev.map(l =>
@@ -134,10 +135,10 @@ export default function LabelSheetPrinter({ onChanged }) {
     if (!libraryId) return;
     setLoading(true); setLoadError('');
     const { data, error } = await supabase.rpc('get_exemplar_labels', { p_library_id: libraryId });
-    if (error) { setLoadError(error.message); setLabels([]); }
+    if (error) { setLoadError(localizeError(error, t)); setLabels([]); }
     else setLabels(data || []);
     setLoading(false);
-  }, [libraryId]);
+  }, [libraryId, t]);
   useEffect(() => { loadLabels(); }, [loadLabels]);
 
   // ── Filtered labels ──

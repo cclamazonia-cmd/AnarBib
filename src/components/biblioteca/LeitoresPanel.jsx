@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useLibrary } from '@/contexts/LibraryContext';
 
 /**
@@ -44,7 +45,7 @@ export default function LeitoresPanel({ libraryId }) {
       setReaders(data || []);
     } catch (err) {
       console.warn('LeitoresPanel load:', err);
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -67,7 +68,7 @@ export default function LeitoresPanel({ libraryId }) {
       setMsg({ text: t({ id: 'biblioteca.leitores.promoteSuccess' }, { name }), kind: 'ok' });
       await load();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setBusyUserId(null);
     }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // =============================================================================
 // WorkspaceInspectorModal (EA-01, chantier-cadre Biblioteca, 21/05/2026)
@@ -78,7 +79,7 @@ export default function WorkspaceInspectorModal({ libraryId, open, onClose }) {
       if (rpcError) throw rpcError;
       setWorkspace(data ?? null);
     } catch (err) {
-      setError(err.message || String(err));
+      setError(localizeError(err, t));
       setWorkspace(null);
     } finally {
       setLoading(false);

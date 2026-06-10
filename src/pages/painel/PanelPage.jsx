@@ -1129,7 +1129,7 @@ export default function PanelPage() {
       if (msg.includes('cancel_note_required')) {
         setCancelError(t({ id: 'panel.consultation.cancel.errorBackend' }));
       } else {
-        setCancelError(msg || t({ id: 'panel.consultation.cancel.errorGeneric' }));
+        setCancelError(localizeError(err, t, 'panel.consultation.cancel.errorGeneric'));
       }
     } finally {
       setCancelling(false);
@@ -1306,7 +1306,7 @@ export default function PanelPage() {
       } else {
         setReaderPayments([]);
       }
-    } catch (e) { setReaderMsg(t({id:'common.errorPrefix'}, {message: e.message})); setReaderProfile(null); }
+    } catch (e) { setReaderMsg(t({id:'common.errorPrefix'}, {message: localizeError(e, t)})); setReaderProfile(null); }
   }
 
   // ── Cotisation ───────────────────────────────────────
@@ -1423,7 +1423,7 @@ export default function PanelPage() {
       // Fermer le modal après 1s pour que le user voie le message
       setTimeout(() => closePaymentModal(), 1500);
     } catch (e) {
-      setPaymentMsg(t({ id: 'common.errorPrefix' }, { message: e.message }));
+      setPaymentMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(e, t) }));
       setPaymentMsgIsError(true);
     } finally {
       setPaymentSaving(false);

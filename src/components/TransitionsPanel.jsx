@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 
 // =============================================================================
@@ -118,7 +119,7 @@ export default function TransitionsPanel({ libraryId, role }) {
       }
     } catch (e) {
       console.warn('TransitionsPanel reload:', e);
-      setGlobalMsg({ text: t({ id: 'transitions.error.loadFailed' }, { msg: e.message }), kind: 'error' });
+      setGlobalMsg({ text: t({ id: 'transitions.error.loadFailed' }, { msg: localizeError(e, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -155,7 +156,7 @@ export default function TransitionsPanel({ libraryId, role }) {
       await reload();
     } catch (e) {
       const hint = e?.hint || '';
-      let msg = e.message || String(e);
+      let msg = localizeError(e, t);
       if (hint === 'error.profile_change.motivation_too_short') msg = t({ id: 'transitions.error.motivationTooShort' });
       else if (hint === 'error.profile_change.axis_already_open') msg = t({ id: 'transitions.error.axisLocked' });
       else if (hint === 'error.profile_change.quorum_not_met') msg = t({ id: 'transitions.error.quorumNotMet' });
@@ -192,7 +193,7 @@ export default function TransitionsPanel({ libraryId, role }) {
       setVoteDrafts(prev => { const next = { ...prev }; delete next[proposalId]; return next; });
       await reload();
     } catch (e) {
-      setGlobalMsg({ text: e.message || String(e), kind: 'error' });
+      setGlobalMsg({ text: localizeError(e, t), kind: 'error' });
       setVoteDraft(proposalId, { submitting: false });
     }
   }
@@ -219,7 +220,7 @@ export default function TransitionsPanel({ libraryId, role }) {
       setCancelDrafts(prev => { const next = { ...prev }; delete next[proposalId]; return next; });
       await reload();
     } catch (e) {
-      setGlobalMsg({ text: e.message || String(e), kind: 'error' });
+      setGlobalMsg({ text: localizeError(e, t), kind: 'error' });
       setCancelDraft(proposalId, { submitting: false });
     }
   }

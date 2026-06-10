@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 
@@ -108,7 +109,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         if (error) throw error;
         if (data) fillFromRecord(data);
       } catch (e) {
-        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.exemplar.loadError' }, { message: e.message }), kind: 'error' });
+        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.exemplar.loadError' }, { message: localizeError(e, t) }), kind: 'error' });
       } finally {
         if (!cancelled) onConsumed?.();
       }
@@ -264,7 +265,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       onChanged?.();
       setMsg({ text: isUpdate ? t({ id: 'catalogacao.exemplar.draftUpdated' }) : t({ id: 'catalogacao.exemplar.draftCreated' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setSaving(false); }
   }
 
@@ -287,7 +288,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       await loadDrafts();
       onChanged?.();
       setMsg({ text: t({ id: 'catalogacao.exemplar.publishSuccess' }), kind: 'ok' });
-    } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
+    } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setPublishing(false); }
   }
 

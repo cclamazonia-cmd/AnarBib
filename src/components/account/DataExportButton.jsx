@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import JSZip from 'jszip';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -374,7 +375,7 @@ export default function DataExportButton() {
       console.error('Export error:', err);
       setMessage({
         type: 'error',
-        text: t({ id: 'account.export.error' }, { message: err.message || 'unknown' }),
+        text: t({ id: 'account.export.error' }, { message: localizeError(err, t) }),
       });
     } finally {
       setLoading(false);

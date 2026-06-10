@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -314,7 +315,7 @@ export default function SolicitarBibliotecaPage() {
       setSummaryData(data);
       setMsg({ text: t({ id: 'solicitar.success.registered' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'solicitar.error.generic' }, { msg: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'solicitar.error.generic' }, { msg: localizeError(err, t) }), kind: 'error' });
     } finally { setLoading(false); }
   }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // =============================================================================
 // DocumentGovernanceSection (EA-08, chantier-cadre Biblioteca, 21/05/2026)
@@ -121,7 +122,7 @@ export default function DocumentGovernanceSection({ libraryId, canEdit }) {
       setExistingConfig(cfg);
       setForm(normalizeConfig(cfg));
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -144,7 +145,7 @@ export default function DocumentGovernanceSection({ libraryId, canEdit }) {
       setExistingConfig(payload);
       setMsg({ text: t({ id: 'biblioteca.documents.governance.saved' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }

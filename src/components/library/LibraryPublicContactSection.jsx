@@ -24,6 +24,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // Champs editables de la vitrine, dans l'ordre d'affichage.
 const FIELDS = ['public_email', 'public_phone', 'public_whatsapp', 'public_address', 'public_note'];
@@ -68,7 +69,7 @@ export default function LibraryPublicContactSection({ libraryId, canEdit }) {
       if (error) throw error;
       setForm(normalizeProfile(data));
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -91,7 +92,7 @@ export default function LibraryPublicContactSection({ libraryId, canEdit }) {
       if (error) throw error;
       setMsg({ text: t({ id: 'biblioteca.publicContact.saved' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }
@@ -121,7 +122,7 @@ export default function LibraryPublicContactSection({ libraryId, canEdit }) {
       });
       setMsg({ text: t({ id: 'biblioteca.publicContact.copied' }), kind: 'info' });
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }
 

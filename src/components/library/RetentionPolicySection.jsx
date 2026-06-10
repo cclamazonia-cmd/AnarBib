@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // ─── Constantes ──────────────────────────────────────────────────────────────
 
@@ -175,7 +176,7 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
         setNotesInput(data?.notes || '');
       } catch (err) {
         if (cancelled) return;
-        setNotice({ kind: 'error', text: err.message });
+        setNotice({ kind: 'error', text: localizeError(err, t) });
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -200,7 +201,7 @@ export default function RetentionPolicySection({ libraryId, canEdit = false }) {
       setPolicy(data);
       setNotice({ kind: 'success', text: t({ id: 'biblioteca.privacy.saved' }) });
     } catch (err) {
-      setNotice({ kind: 'error', text: err.message });
+      setNotice({ kind: 'error', text: localizeError(err, t) });
     } finally {
       setSaving(false);
     }

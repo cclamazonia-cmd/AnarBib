@@ -541,7 +541,7 @@ export default function BookPage() {
                     alert(t({ id: 'book.savedToWishlist' }));
                   } catch (err) {
                     if (err.code === '23505') alert(t({ id: 'book.alreadyInWishlist' }));
-                    else alert(`${t({ id: 'common.error' })} ${err.message}`);
+                    else alert(`${t({ id: 'common.error' })} ${localizeError(err, t)}`);
                   }
                 }}>{t({ id: 'book.saveForLater' })}</Button>
               )}

@@ -19,6 +19,7 @@
 import { useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const MIN_REASON_CHARS = 20;
 
@@ -57,7 +58,7 @@ export default function CancelCollectiveRemovalModal({
       );
 
       if (rpcErr) {
-        setError(t({ id: 'common.errorPrefix' }, { message: rpcErr.message || '' }));
+        setError(t({ id: 'common.errorPrefix' }, { message: localizeError(rpcErr, t) }));
         return;
       }
 
@@ -65,7 +66,7 @@ export default function CancelCollectiveRemovalModal({
       if (onSuccess) onSuccess();
     } catch (err) {
       console.warn('CancelCollectiveRemovalModal:', err);
-      setError(t({ id: 'common.errorPrefix' }, { message: err.message || String(err) }));
+      setError(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setSubmitting(false);
     }

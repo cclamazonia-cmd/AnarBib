@@ -41,6 +41,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // Styles alignes sur ceux de BibliotecaPage (champs, labels).
 const fs = { width:'100%', padding:'10px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', fontSize:'.9rem' };
@@ -243,7 +244,7 @@ export default function ExchangeProposalForm({ libraryId, allLibraries = [], t }
       .catch(err => {
         if (!cancelled) {
           setLocalDocs([]);
-          setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+          setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
         }
       })
       .finally(() => { if (!cancelled) setLoadingLocal(false); });
@@ -260,7 +261,7 @@ export default function ExchangeProposalForm({ libraryId, allLibraries = [], t }
       .catch(err => {
         if (!cancelled) {
           setPartnerDocs([]);
-          setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+          setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
         }
       })
       .finally(() => { if (!cancelled) setLoadingPartner(false); });
@@ -364,7 +365,7 @@ export default function ExchangeProposalForm({ libraryId, allLibraries = [], t }
       setMessage('');
       setNote('');
     } catch (err) {
-      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }

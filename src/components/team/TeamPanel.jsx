@@ -35,6 +35,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import {
@@ -107,7 +108,7 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
       setMemberships(data || []);
     } catch (err) {
       console.warn('TeamPanel loadMemberships:', err);
-      setError(err.message || String(err));
+      setError(localizeError(err, t));
     } finally {
       setLoading(false);
     }

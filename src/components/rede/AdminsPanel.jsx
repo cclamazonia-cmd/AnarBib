@@ -21,6 +21,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import NetworkAdminBadge from './NetworkAdminBadge';
 import ProposeCooptationModal from './ProposeCooptationModal';
@@ -78,7 +79,7 @@ export default function AdminsPanel() {
       setRemovalProposals(removalProposalsResult.data || []);
     } catch (err) {
       console.warn('AdminsPanel loadAll:', err);
-      setError(err.message || String(err));
+      setError(localizeError(err, t));
     } finally {
       setLoading(false);
     }

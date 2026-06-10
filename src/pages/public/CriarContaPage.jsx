@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { detectLocale } from '@/i18n';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
@@ -226,7 +227,7 @@ export default function CriarContaPage() {
           // pour que l'usager puisse le transmettre au support.
           userMsg = `${t({id:'auth.create.errorGeneric'})} (${code})`;
         } else {
-          userMsg = error.message || t({id:'auth.networkError'});
+          userMsg = localizeError(error, t, 'auth.networkError');
         }
         setMsg({ text: userMsg, kind: 'error' });
         if (detail) console.warn('register EF detail:', detail);

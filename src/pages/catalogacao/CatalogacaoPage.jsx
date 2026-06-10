@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useIntl } from 'react-intl';
@@ -400,7 +401,7 @@ function BatchesPanel({ batches, onRefresh }) {
       setMsg({text: t({id:'common.dataSaved'}), kind:'ok'});
       onRefresh();
     } catch (err) {
-      setMsg({text: t({id:'common.errorPrefix'},{message:err.message}), kind:'error'});
+      setMsg({text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind:'error'});
     } finally {
       setCreating(false);
     }
@@ -415,7 +416,7 @@ function BatchesPanel({ batches, onRefresh }) {
       if (error) throw error;
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:err.message}));
+      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
     }
   }
 
@@ -427,7 +428,7 @@ function BatchesPanel({ batches, onRefresh }) {
       alert(t({id:'common.dataSaved'}));
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:err.message}));
+      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
     }
   }
 
@@ -440,7 +441,7 @@ function BatchesPanel({ batches, onRefresh }) {
       if (error) throw error;
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:err.message}));
+      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
     }
   }
 
@@ -464,7 +465,7 @@ function BatchesPanel({ batches, onRefresh }) {
       if (error) throw error;
       onRefresh();
     } catch (err) {
-      alert(t({id:'common.errorPrefix'},{message:err.message}));
+      alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
     }
   }
 

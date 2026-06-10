@@ -22,6 +22,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // --- Parsing tolerant de object_ref (JSON compact pose par le paquet 1) -----
 function parseObjectRef(raw) {
@@ -81,7 +82,7 @@ export default function ExchangeRequestsList({ libraryId, allLibraries = [], t }
       setRequests(data || []);
     } catch (err) {
       setRequests([]);
-      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -145,7 +146,7 @@ export default function ExchangeRequestsList({ libraryId, allLibraries = [], t }
       });
       await load(); // recharge pour refleter le nouveau statut
     } catch (err) {
-      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setDeciding(null);
     }

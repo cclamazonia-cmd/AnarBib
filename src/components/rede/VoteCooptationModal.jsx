@@ -28,6 +28,7 @@
 import { useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const MIN_RATIONALE_CHARS = 20;
 
@@ -80,7 +81,7 @@ export default function VoteCooptationModal({
         } else if (msg.includes('disclose_identity_required')) {
           setError(t({ id: 'rede.cooptation.vote.errors.discloseRequired' }));
         } else {
-          setError(t({ id: 'common.errorPrefix' }, { message: msg }));
+          setError(t({ id: 'common.errorPrefix' }, { message: localizeError(rpcErr, t) }));
         }
         return;
       }
@@ -92,7 +93,7 @@ export default function VoteCooptationModal({
       if (onSuccess) onSuccess();
     } catch (err) {
       console.warn('VoteCooptationModal:', err);
-      setError(t({ id: 'common.errorPrefix' }, { message: err.message || String(err) }));
+      setError(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setSubmitting(false);
     }

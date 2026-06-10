@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import LibraryProfileBanner from '@/components/LibraryProfileBanner';
@@ -329,7 +330,7 @@ export default function BibliotecaPage() {
       const { error } = await supabase.from(table).update(data).eq(filterCol, libraryId);
       if (error) throw error;
       setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -343,7 +344,7 @@ export default function BibliotecaPage() {
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
       if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message }).eq('library_id', libraryId);
       setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -369,7 +370,7 @@ export default function BibliotecaPage() {
         }).eq('library_id', libraryId);
       }
       setMsg({ text: t({ id: 'biblioteca.comms.savedOk' }), kind: 'ok' });
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -404,7 +405,7 @@ export default function BibliotecaPage() {
       setMsg({ text: t({ id: 'biblioteca.regulation.published' }), kind: 'ok' });
       regFileRef.current.value = '';
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -429,7 +430,7 @@ export default function BibliotecaPage() {
       setNewTask({ title: '', description: '', priority: 'media', owner: '', dueDate: '', tagsText: '' });
       setMsg({ text: t({ id: 'biblioteca.tasks.created' }), kind: 'ok' });
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
   }
 
   async function updateTaskStatus(taskId, status) {
@@ -442,7 +443,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       await loadAll();
     } catch (err) {
-      setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' });
+      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
     }
   }
 
@@ -527,7 +528,7 @@ export default function BibliotecaPage() {
       setEditingTemplate(null);
       await loadAll();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }
@@ -542,7 +543,7 @@ export default function BibliotecaPage() {
       setMsg({ text: t({ id: 'biblioteca.templates.deleted' }), kind: 'ok' });
       await loadAll();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }
@@ -563,7 +564,7 @@ export default function BibliotecaPage() {
       setMsg({ text: t({ id: 'biblioteca.templates.instantiated' }), kind: 'ok' });
       await loadAll();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }
 
@@ -585,7 +586,7 @@ export default function BibliotecaPage() {
       // catalogue ; on y amene directement l'utilisateur·rice.
       setTasksSubtab('modelos');
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }
 
@@ -607,7 +608,7 @@ export default function BibliotecaPage() {
     });
     if (error) {
       setIllDocResults([]);
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: error.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }), kind: 'error' });
       return;
     }
     setIllDocResults(data || []);
@@ -695,7 +696,7 @@ export default function BibliotecaPage() {
       setMsg({
         text: isAuthz
           ? t({ id: 'biblioteca.ill.notAuthorized' })
-          : t({ id: 'common.errorPrefix' }, { message: raw }),
+          : t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }),
         kind: 'error',
       });
     }
@@ -712,7 +713,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       await loadAll();
     } catch (err) {
-      setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' });
+      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
     }
   }
 
@@ -781,7 +782,7 @@ export default function BibliotecaPage() {
     } catch (err) {
       setIllReturnFeedback(prev => ({ ...prev, [loanId]: {
         busy: false, kind: 'error',
-        msg: t({ id: 'common.errorPrefix' }, { message: err.message }),
+        msg: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }),
       }}));
     }
   }
@@ -796,7 +797,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       setMsg({ text: t({id:'biblioteca.ill.discarded'},{id:loanId}), kind: 'ok' });
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
   }
 
   // #ILL-archive (25/05/2026) : archivage manuel d'un PEB terminé. Le PEB
@@ -811,7 +812,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       setMsg({ text: t({id:'biblioteca.ill.archived'},{id:loanId}), kind: 'ok' });
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
   }
 
   // ── Generate report text ────────────────────────────────
@@ -926,7 +927,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       setMsg({ text: t({ id: 'biblioteca.report.sent' }, { email }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }
 
@@ -945,7 +946,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       setMsg({ text: t({ id: 'biblioteca.tasks.inviteSent' }, { email: email.trim() }), kind: 'ok' });
       await loadAll();
-    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
   }
 
   // ── Cotisation (membership) ──────────────────────────
@@ -957,7 +958,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       setLib(prev => prev ? { ...prev, membership_enabled: next } : prev);
       setMsg({ text: t({ id: next ? 'membership.config.msg.enabledOn' : 'membership.config.msg.enabledOff' }), kind: 'ok' });
-    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -1027,7 +1028,7 @@ export default function BibliotecaPage() {
         setMsg({ text: t({ id: 'membership.config.msg.saved' }), kind: 'ok' });
       }
       setEditingMembershipRule(null);
-    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -1044,7 +1045,7 @@ export default function BibliotecaPage() {
         text: t({ id: willDeactivate ? 'membership.config.msg.deactivated' : 'membership.config.msg.reactivated' }),
         kind: 'ok',
       });
-    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -1062,7 +1063,7 @@ export default function BibliotecaPage() {
       if (error) throw error;
       setMembershipRules(prev => prev.filter(x => x.id !== rule.id));
       setMsg({ text: t({ id: 'membership.config.msg.deleted' }), kind: 'ok' });
-    } catch (e) { setMsg({ text: e.message, kind: 'error' }); }
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
     finally { setSaving(false); }
   }
 
@@ -1992,7 +1993,7 @@ export default function BibliotecaPage() {
                   <select value={tk.status} onChange={e=>updateTaskStatus(tk.id,e.target.value)} style={{ fontSize:'.82rem', padding:'4px 8px', borderRadius:6, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4' }}>
                     <option value="pendente">{t({ id: 'task.status.pendente' })}</option><option value="em_andamento">{t({ id: 'task.status.em_andamento' })}</option><option value="concluida">{t({ id: 'task.status.concluida' })}</option><option value="cancelada">{t({ id: 'task.status.cancelada' })}</option>
                   </select>
-                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm(t({ id: 'biblioteca.tasks.discardConfirm' })))return;try{const{error}=await supabase.rpc('fn_task_delete',{p_task_id:tk.id});if(error)throw error;await loadAll();}catch(err){setMsg({text:t({id:'common.errorPrefix'},{message:err.message}),kind:'error'});}}}>{t({ id: 'common.discard' })}</button>
+                  <button className="cat-btn ghost" style={{ fontSize:'.78rem', padding:'4px 8px', color:'#f87171' }} onClick={async()=>{if(!confirm(t({ id: 'biblioteca.tasks.discardConfirm' })))return;try{const{error}=await supabase.rpc('fn_task_delete',{p_task_id:tk.id});if(error)throw error;await loadAll();}catch(err){setMsg({text:t({id:'common.errorPrefix'},{message:localizeError(err, t)}),kind:'error'});}}}>{t({ id: 'common.discard' })}</button>
                 </div>
               </div>
               {/* Invite row */}

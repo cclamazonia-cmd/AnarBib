@@ -91,7 +91,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       setTotal(totalCount);
       // Pages basees sur la couche la plus volumineuse (evite des pages vides en "Todas")
       setTotalPages(Math.max(1, Math.ceil(maxCount / PAGE_SIZE)));
-    } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
+    } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setLoading(false); }
   }, [typeFilter, statusFilter, actionFilter, dSearch, page, t]);
 
@@ -153,7 +153,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       }
 
       setSelected(new Set(allIds));
-    } catch (err) { setMsg({ text: err.message, kind: 'error' }); }
+    } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setLoading(false); }
   }
 

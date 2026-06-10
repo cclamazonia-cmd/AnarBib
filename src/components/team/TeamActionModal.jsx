@@ -31,6 +31,7 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Modal from '@/components/ui/Modal';
 import { useTeamMutations } from '@/lib/teamMutations';
+import { localizeError } from '@/lib/localizeError';
 
 export default function TeamActionModal({
   isOpen,
@@ -118,7 +119,7 @@ export default function TeamActionModal({
       onSuccess?.(result);
       onClose();
     } else {
-      const dbMsg = result.message || result.error || t({ id: 'team.modal.error.generic' });
+      const dbMsg = localizeError({ code: result.error, message: result.message }, t, 'team.modal.error.generic');
       setErrorMsg(dbMsg);
       onError?.(result);
     }

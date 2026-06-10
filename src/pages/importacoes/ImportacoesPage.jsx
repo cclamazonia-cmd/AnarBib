@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
@@ -209,7 +210,7 @@ export default function ImportacoesPage() {
       setFile(null);
       await loadRuns();
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setUploading(false); }
   }
 
@@ -223,7 +224,7 @@ export default function ImportacoesPage() {
       await loadRuns();
       if (selectedRunId === runId) await loadRunRows(runId);
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     }
   }
 
@@ -243,7 +244,7 @@ export default function ImportacoesPage() {
         setMsg({ text: t({ id: 'importacoes.isbnNotFound' }), kind: 'info' });
       }
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setSearching(false); }
   }
 
@@ -261,7 +262,7 @@ export default function ImportacoesPage() {
       setDepositPartnerName('');
       await loadSources();
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setDepositBusy(false); }
   }
 
@@ -286,7 +287,7 @@ export default function ImportacoesPage() {
       setDepositFile(null);
       await loadRuns();
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setDepositBusy(false); }
   }
 
@@ -306,7 +307,7 @@ export default function ImportacoesPage() {
       await loadOaiSources();
       await loadRuns();
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     }
   }
 
@@ -321,7 +322,7 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.fontes.candidateImported' }, { title: candidate.title || '—' }), kind: 'ok' });
       await loadRuns();
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     }
   }
 
@@ -369,7 +370,7 @@ export default function ImportacoesPage() {
       URL.revokeObjectURL(url);
       setMsg({ text: t({ id: 'importacoes.export.lote.success' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'importacoes.export.lote.error' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'importacoes.export.lote.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setExportLoading(false);
     }

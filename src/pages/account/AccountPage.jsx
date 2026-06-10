@@ -481,7 +481,7 @@ export default function AccountPage() {
       setMsg(t({ id: 'account.reserve.dataSaved' }));
       setMsgIsError(false);
     } catch (err) {
-      setMsg(t({id:'common.errorPrefix'},{message:err.message}));
+      setMsg(t({id:'common.errorPrefix'},{message:localizeError(err, t)}));
       setMsgIsError(true);
     } finally {
       setSaving(false);
@@ -545,7 +545,7 @@ export default function AccountPage() {
       setPwdNew('');
       setPwdConfirm('');
     } catch (err) {
-      setPwdMsg(t({ id: 'common.errorPrefix' }, { message: err.message }));
+      setPwdMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
       setPwdMsgIsError(true);
     } finally {
       setPwdSaving(false);
@@ -708,7 +708,7 @@ export default function AccountPage() {
     } catch (err) {
       // L'API peut renvoyer cancel_blocked_by_stage si une ligne est en stage avancé.
       // Le hint Postgres explique ce qui bloque.
-      const msg = err.hint || err.message || String(err);
+      const msg = localizeError(err, t);
       alert(t({id:'account.reserve.cancelError'},{message: msg}));
     }
   }
@@ -752,7 +752,7 @@ export default function AccountPage() {
       }
       loadData();
     } catch (err) {
-      const msg = err.hint || err.message || String(err);
+      const msg = localizeError(err, t);
       alert(t({ id: 'common.errorPrefix' }, { message: msg }));
     }
   }
@@ -797,7 +797,7 @@ export default function AccountPage() {
       setNegotiationForm(null);
       loadData();
     } catch (err) {
-      const msg = err.hint || err.message || String(err);
+      const msg = localizeError(err, t);
       alert(t({ id: 'common.errorPrefix' }, { message: msg }));
     }
   }
@@ -871,14 +871,14 @@ export default function AccountPage() {
       });
       if (error) {
         console.error('cancel_consulta_as_reader error:', error);
-        alert(t({ id: 'common.errorPrefix' }, { message: error.message }));
+        alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
         return;
       }
       setCancelTarget(null);
       await loadData();
     } catch (err) {
       console.error('cancel_consulta_as_reader exception:', err);
-      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+      alert(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setCancelling(false);
     }
@@ -897,13 +897,13 @@ export default function AccountPage() {
       });
       if (error) {
         console.error('reply_consulta_schedule (confirm) error:', error);
-        alert(t({ id: 'common.errorPrefix' }, { message: error.message }));
+        alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
         return;
       }
       await loadData();
     } catch (err) {
       console.error('reply_consulta_schedule (confirm) exception:', err);
-      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+      alert(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setReplying(false);
     }
@@ -940,14 +940,14 @@ export default function AccountPage() {
       });
       if (error) {
         console.error('reply_consulta_schedule (refuse) error:', error);
-        alert(t({ id: 'common.errorPrefix' }, { message: error.message }));
+        alert(t({ id: 'common.errorPrefix' }, { message: localizeError(error, t) }));
         return;
       }
       setRefuseTarget(null);
       await loadData();
     } catch (err) {
       console.error('reply_consulta_schedule (refuse) exception:', err);
-      alert(t({ id: 'common.errorPrefix' }, { message: err.message }));
+      alert(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setReplying(false);
     }
@@ -1457,7 +1457,7 @@ export default function AccountPage() {
                         if (error) throw error;
                         setNotifPrefsMsg(t({ id: 'account.notifPrefs.saved' }));
                       } catch (err) {
-                        setNotifPrefsMsg(t({ id: 'common.errorPrefix' }, { message: err?.message || 'error' }));
+                        setNotifPrefsMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
                       } finally {
                         setNotifPrefsSaving(false);
                       }
@@ -1500,7 +1500,7 @@ export default function AccountPage() {
                         await supabase.auth.signOut();
                         sessionStorage.removeItem('anarbib.libraryContext');
                         navigate('/');
-                      } catch (err) { alert(t({id:'common.errorPrefix'},{message:err.message})); setDeleting(false); }
+                      } catch (err) { alert(t({id:'common.errorPrefix'},{message:localizeError(err, t)})); setDeleting(false); }
                     }}
                     style={{
                       padding: '10px 20px', borderRadius: 8, fontSize: '.9rem', fontWeight: 700, cursor: deleteConfirm === t({ id: 'account.deleteAccount.confirmText' }) ? 'pointer' : 'not-allowed',

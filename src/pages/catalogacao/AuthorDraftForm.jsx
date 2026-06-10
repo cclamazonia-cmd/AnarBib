@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 
 // ── Authority types ───────────────────────────────────────
@@ -137,7 +138,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         if (error) throw error;
         if (data) fillFromRecord(data);
       } catch (e) {
-        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.author.loadError' }, { message: e.message }), kind: 'error' });
+        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.author.loadError' }, { message: localizeError(e, t) }), kind: 'error' });
       } finally {
         if (!cancelled) onConsumed?.();
       }
@@ -178,7 +179,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       setMsg({ text: t({ id: 'catalogacao.author.photoSaved' }), kind: 'ok' });
       return storagePath;
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.author.photoError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.author.photoError' }, { message: localizeError(err, t) }), kind: 'error' });
       return null;
     } finally {
       setPhotoUploading(false);
@@ -345,7 +346,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       onChanged?.();
       setMsg({ text: isUpdate ? t({ id: 'catalogacao.author.draftUpdated' }) : t({ id: 'catalogacao.author.draftCreated' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setSaving(false); }
   }
 
@@ -373,7 +374,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       onChanged?.();
       setMsg({ text: t({ id: 'catalogacao.author.publishSuccess' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.author.publishError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.author.publishError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setPublishing(false); }
   }
 
@@ -399,7 +400,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       if (error) throw error;
       await reloadBioTranslations();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setBioReviewBusy(null); }
   }
 
@@ -419,7 +420,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       // Pre-cocher les correspondances exactes (validation humaine = un clic global).
       setLinkSelected(new Set((data || []).filter(m => m.match_kind === 'exact').map(m => m.contributor_id)));
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setLinkLoading(false); }
   }
 
@@ -438,7 +439,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       setMsg({ text: t({ id: 'catalogacao.link.confirmed' }, { count: ok }), kind: 'ok' });
       await findAuthorBookMatches(); // rafraichir (les rattaches disparaissent de la liste)
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setLinkBusy(false); }
   }
 
@@ -452,7 +453,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       if (error) throw error;
       setDupMatches(data || []);
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setDupLoading(false); }
   }
 
@@ -471,7 +472,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       await findAuthorDuplicates(); // rafraichir
       await loadDrafts();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setDupBusy(null); }
   }
 
@@ -498,7 +499,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       setAuthLookupResults(data.candidates || []);
       setMsg({ text: data.candidates?.length ? t({id:'catalogacao.authority.found'}, {count: data.candidates.length}) : t({id:'catalogacao.authority.notFound'}), kind: data.candidates?.length ? 'ok' : 'info' });
     } catch (err) {
-      setMsg({ text: err.message, kind: 'error' });
+      setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally {
       setAuthLookupLoading(false);
     }
@@ -846,7 +847,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     }
                     await reloadBioTranslations();
                     setMsg({ text: t({id:'common.dataSaved'}), kind: 'ok' });
-                  } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:err.message}), kind: 'error' }); }
+                  } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
                 }}>{t({id:'catalogacao.bio.save'})}</button>
               </details>
             </div>

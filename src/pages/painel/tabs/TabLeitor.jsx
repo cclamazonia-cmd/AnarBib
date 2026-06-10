@@ -6,6 +6,7 @@ import { getCountryMetadata } from '@/components/forms/countryData';
 import { getCountryName } from '@/lib/countries';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 import { fmtD } from '../_shared';
 import WriteToReaderBox from './WriteToReaderBox';
 import ResolveCardBox from './ResolveCardBox';
@@ -197,7 +198,7 @@ export default function TabLeitor({
                   setReaderProfile(p => ({ ...p, address: formatAddressText(editAddrState, locale) }));
                   setEditProfileMsg(t({id:'panel.reader.profileSaved'}));
                 } catch (err) {
-                  setEditProfileMsg(t({id:'common.errorPrefix'}, {message: err.message}));
+                  setEditProfileMsg(t({id:'common.errorPrefix'}, {message: localizeError(err, t)}));
                 }
               }}>{t({id:'panel.reader.saveProfile'})}</Button>
               {editProfileMsg && (

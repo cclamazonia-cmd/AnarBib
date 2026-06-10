@@ -260,7 +260,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setReassignTarget(''); setReassignSource('');
       onSaved?.();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setReassignBusy(false); }
   }
   const [form, setForm] = useState({ ...EMPTY_FORM });
@@ -367,7 +367,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         if (error) throw error;
         if (data) fillFromRecord(data);
       } catch (e) {
-        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.msg.loadDraftError' }, { message: e.message }), kind: 'error' });
+        if (!cancelled) setMsg({ text: t({ id: 'catalogacao.msg.loadDraftError' }, { message: localizeError(e, t) }), kind: 'error' });
       } finally {
         if (!cancelled) onConsumed?.();
       }
@@ -613,7 +613,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         kind: total > 0 ? 'ok' : 'info',
       });
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.msg.searchError' }, { message: err.message || t({ id: 'catalogacao.msg.connectionFailed' }) }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.searchError' }, { message: localizeError(err, t, 'catalogacao.msg.connectionFailed') }), kind: 'error' });
     } finally {
       setLookupLoading(false);
     }
@@ -683,7 +683,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         kind: total > 0 ? 'ok' : 'info',
       });
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.msg.bnError' }, { message: err.message || t({ id: 'catalogacao.msg.connectionFailed' }) }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.bnError' }, { message: localizeError(err, t, 'catalogacao.msg.connectionFailed') }), kind: 'error' });
     } finally {
       setBnLoading(false);
     }
@@ -827,7 +827,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setCoverFile(null);
       return storagePath;
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
       return null;
     } finally {
       setCoverUploading(false);
@@ -857,7 +857,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         setMsg({ text: t({ id: 'catalogacao.ui.coverLookupEmpty' }), kind: 'info' });
       }
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setCoverLookupLoading(false);
     }
@@ -890,7 +890,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setCoverCandidates([]);
       setMsg({ text: t({ id: 'catalogacao.ui.coverSaved' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setCoverStoring('');
     }
@@ -965,7 +965,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setCoverPreviewUrl('');
       setMsg({ text: t({ id: 'catalogacao.ui.coverSaved' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setCoverPdfBusy(false);
     }
@@ -1008,7 +1008,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setAuthorSearch({ index, results: data || [], loading: false });
     } catch (err) {
       setAuthorSearch({ index: null, results: [], loading: false });
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }
 
@@ -1102,7 +1102,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       if (error) throw error;
       setBookDupMatches(data || []);
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setBookDupLoading(false); }
   }
 
@@ -1120,7 +1120,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setMsg({ text: t({ id: 'catalogacao.dedup.merged' }, { dup: dupTitle }), kind: 'ok' });
       await findBookDuplicates(); // rafraichir
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setBookDupBusy(null); }
   }
 
@@ -1465,7 +1465,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       await loadDigitalResources(draftId);
       setMsg({ text: t({ id: 'catalogacao.msg.digitalSaved' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.msg.digitalError' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'catalogacao.msg.digitalError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setDigitalSaving(false);
     }
@@ -1480,7 +1480,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       await loadDigitalResources(f('id'));
       setMsg({ text: t({ id: 'catalogacao.msg.digitalDeleted' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     }
   }
 
@@ -1650,7 +1650,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       });
       onSaved?.();
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }

@@ -25,6 +25,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
+import { localizeError } from '@/lib/localizeError';
 import './ImageViewer.css';
 
 const ZOOM_MIN = 0.25;
@@ -116,7 +117,7 @@ export default function ImageViewer({ src, fileName, onError, watermark }) {
         setSrc(blobUrl);
       } catch (err) {
         if (!cancelled) {
-          const msg = t({ id: 'image.error.loading' }, { error: err.message || String(err) });
+          const msg = t({ id: 'image.error.loading' }, { error: localizeError(err, t) });
           setError(msg);
           if (onError) onError(msg);
         }

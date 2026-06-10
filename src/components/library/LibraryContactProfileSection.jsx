@@ -27,6 +27,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 // Les 7 champs editables du profil, dans l'ordre d'affichage.
 const FIELDS = [
@@ -72,7 +73,7 @@ export default function LibraryContactProfileSection({ libraryId, canEdit }) {
       if (error) throw error;
       setForm(normalizeProfile(data));
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -96,7 +97,7 @@ export default function LibraryContactProfileSection({ libraryId, canEdit }) {
       if (error) throw error;
       setMsg({ text: t({ id: 'biblioteca.contactProfile.saved' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }

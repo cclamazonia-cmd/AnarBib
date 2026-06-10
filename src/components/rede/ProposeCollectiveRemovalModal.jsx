@@ -21,6 +21,7 @@
 import { useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const MIN_MOTIVATION_CHARS = 50;
 
@@ -65,7 +66,7 @@ export default function ProposeCollectiveRemovalModal({
         } else if (msg.includes('proposal_already_open') || msg.includes('already_open')) {
           setError(t({ id: 'rede.collectiveRemoval.propose.errors.proposalAlreadyOpen' }));
         } else {
-          setError(t({ id: 'common.errorPrefix' }, { message: msg }));
+          setError(t({ id: 'common.errorPrefix' }, { message: localizeError(rpcErr, t) }));
         }
         return;
       }
@@ -74,7 +75,7 @@ export default function ProposeCollectiveRemovalModal({
       if (onSuccess) onSuccess();
     } catch (err) {
       console.warn('ProposeCollectiveRemovalModal:', err);
-      setError(t({ id: 'common.errorPrefix' }, { message: err.message || String(err) }));
+      setError(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
     } finally {
       setSubmitting(false);
     }

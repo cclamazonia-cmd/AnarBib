@@ -29,6 +29,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 const fs = { width:'100%', padding:'8px 10px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', fontSize:'.85rem' };
 const ls = { display:'block', fontSize:'.78rem', color:'var(--brand-muted, #ccc)', marginBottom:4 };
@@ -106,7 +107,7 @@ export default function ExchangeFollowupPanel({ libraryId, allLibraries = [], t 
       setAcceptedRequests(data || []);
     } catch (err) {
       setAcceptedRequests([]);
-      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setLoading(false);
     }
@@ -159,7 +160,7 @@ export default function ExchangeFollowupPanel({ libraryId, allLibraries = [], t 
       setFeedback({ text: t({ id: 'biblioteca.exchanges.followup.saved' }), kind: 'ok' });
       await load(); // recharge pour refleter l'etat fusionne en base
     } catch (err) {
-      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: err.message }), kind: 'error' });
+      setFeedback({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setSaving(false);
     }
