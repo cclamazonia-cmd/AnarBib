@@ -165,6 +165,7 @@
   "account.loans.returned": "retourné",
   "account.loans.returnedOn": "Rendu·e le",
   "account.loans.title": "Emprunts en cours",
+  "account.circ.sameTitleSignal": "Aussi dans une autre de tes bibliothèques",
   "account.mylib.address": "Adresse",
   "account.mylib.email": "E-mail",
   "account.mylib.noPublicContact": "Cette bibliothèque n’a pas encore publié ses coordonnées.",

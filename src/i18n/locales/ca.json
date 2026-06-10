@@ -165,6 +165,7 @@
   "account.loans.returned": "tornat",
   "account.loans.returnedOn": "Tornat-da-e el",
   "account.loans.title": "Préstecs en curs",
+  "account.circ.sameTitleSignal": "També en una altra de les teves biblioteques",
   "account.mylib.address": "Adreça",
   "account.mylib.email": "Correu",
   "account.mylib.noPublicContact": "Aquesta biblioteca encara no ha publicat les seves dades de contacte.",

@@ -124,6 +124,9 @@ export default function AccountPage() {
   const [consultationsHistory, setConsultationsHistory] = useState([]);
   const [renewStatus, setRenewStatus] = useState({});
   const [loans, setLoans] = useState([]);
+  // #CL.10 (MULTI) — map library_id -> biblio (nom/slug), résolue côté client
+  // pour tagguer chaque ligne de circulation par sa biblio d'origine.
+  const [libMap, setLibMap] = useState({});
   const [history, setHistory] = useState([]);
   const [loanHistory, setLoanHistory] = useState([]);
   // #CL.8 — rétention historique lectrice (masquage persistant + suppression)
@@ -298,6 +301,28 @@ export default function AccountPage() {
   }, [user?.id, authLoading, libraryId]);
 
   useEffect(() => { loadData(); }, [loadData]);
+
+  // #CL.10 — résout les biblios (nom/slug) des library_id présents dans la
+  // circulation active, pour les tags par ligne. RLS libraries_public_read.
+  useEffect(() => {
+    const ids = new Set();
+    for (const l of loans) if (l.library_id) ids.add(l.library_id);
+    for (const r of reservations) if (r.library_id) ids.add(r.library_id);
+    if (ids.size === 0) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('libraries')
+        .select('id, name, short_name, slug')
+        .in('id', Array.from(ids));
+      if (!cancelled && Array.isArray(data)) {
+        const m = {};
+        for (const lib of data) m[lib.id] = lib;
+        setLibMap(m);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [loans, reservations]);
 
   // ── #CL.8 — masquage / restauration / suppression de l'historique ───────────
   // Le masquage est persistant (fn_hide_history_item), réversible (fn_unhide),
@@ -964,6 +989,44 @@ export default function AccountPage() {
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
+  // #CL.10 (MULTI) — lecture agrégée : la circulation (fn_my_account_status) est
+  // déjà cross-biblio (chaque ligne porte library_id). On taggue chaque ligne par
+  // sa biblio d'origine UNIQUEMENT si la circulation s'étale sur >= 2 biblios
+  // (sinon bruit pour les lectrices mono-biblio), et on signale un même titre
+  // présent dans 2 biblios distinctes (match par titre normalisé).
+  const circLibIds = new Set();
+  for (const l of loans) if (l.library_id) circLibIds.add(l.library_id);
+  for (const r of reservations) if (r.library_id) circLibIds.add(r.library_id);
+  const multiLib = circLibIds.size >= 2;
+  const crossLibTitles = (() => {
+    const byTitle = new Map();
+    const add = (titulo, lib) => {
+      const k = String(titulo || '').trim().toLowerCase();
+      if (!k || !lib) return;
+      if (!byTitle.has(k)) byTitle.set(k, new Set());
+      byTitle.get(k).add(lib);
+    };
+    for (const l of loans) add(l.titulo, l.library_id);
+    for (const r of reservations) add(r.titulo, r.library_id);
+    const s = new Set();
+    for (const [k, libs] of byTitle) if (libs.size >= 2) s.add(k);
+    return s;
+  })();
+  const isCrossLibTitle = (titulo) => crossLibTitles.has(String(titulo || '').trim().toLowerCase());
+  const renderLibTag = (libraryId) => {
+    if (!multiLib || !libraryId) return null;
+    const lib = libMap[libraryId];
+    if (!lib) return null;
+    const txt = lib.short_name || lib.name || '';
+    const inner = <span style={{ fontSize: '.72rem', color: 'var(--brand-muted)', whiteSpace: 'nowrap' }}>📍 {txt}</span>;
+    return lib.slug
+      ? <Link to={`/catalogo/${lib.slug}`} title={lib.name || txt} style={{ textDecoration: 'none' }}>{inner}</Link>
+      : inner;
+  };
+  const renderSameTitleSignal = (titulo) => isCrossLibTitle(titulo)
+    ? <span className="ab-conta-item__meta" style={{ color: '#a78bfa' }}>⇄ {t({ id: 'account.circ.sameTitleSignal' })}</span>
+    : null;
+
   // #REFACTOR 08/06 : composeCardCanvas + generateReaderCard (et qrcode/jspdf)
   // déplacés dans le composant lazy ReaderCardSection.
 
@@ -1478,6 +1541,8 @@ export default function AccountPage() {
                     <ReservationCard
                       key={i}
                       r={r}
+                      libTag={renderLibTag(r.library_id)}
+                      sameTitleSignal={renderSameTitleSignal(r.titulo)}
                       onCancel={cancelReservation}
                       onConfirmPickup={handleConfirmPickup}
                       onOpenCounterProposalForm={openCounterProposalForm}
@@ -1624,6 +1689,7 @@ export default function AccountPage() {
                               {checkout && <>{t({ id: 'account.loans.group.checkedOutOn' }, { date: new Date(checkout).toLocaleDateString() })}</>}
                               {' · '}{t({ id: 'account.loans.group.bookCount' }, { count: items.length })}
                               {soonest && <>{' · '}<span style={{ color: soonestOverdue ? '#ef4444' : 'inherit' }}>{t({ id: 'account.loans.group.dueBy' }, { date: soonest.toLocaleDateString() })}</span></>}
+                              {(() => { const tag = renderLibTag(items[0].library_id); return tag ? <>{' · '}{tag}</> : null; })()}
                             </div>
                             {showRenewAll && (
                               <Button
@@ -1671,6 +1737,7 @@ export default function AccountPage() {
                                         : <> · {t({ id: 'account.loans.daysLeft' }, { days: daysLeft })}</>)}
                                     </span>
                                     {wasExtended && <span className="ab-conta-item__meta" style={{ color: '#60a5fa' }}>{t({ id: 'account.loans.renewedUntil' }, { date: new Date(l.extended_until + 'T00:00:00').toLocaleDateString() })}</span>}
+                                    {renderSameTitleSignal(l.titulo)}
                                   </div>
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0, alignItems: 'flex-end' }}>
                                     {!(isOverdue || (wasExtended && !canRenew)) && (

@@ -165,6 +165,7 @@
   "account.loans.returned": "restituito",
   "account.loans.returnedOn": "Restituit* il",
   "account.loans.title": "Prestiti in corso",
+  "account.circ.sameTitleSignal": "Anche in un'altra delle tue biblioteche",
   "account.mylib.address": "Indirizzo",
   "account.mylib.email": "E-mail",
   "account.mylib.noPublicContact": "Questa biblioteca non ha ancora pubblicato i suoi recapiti.",

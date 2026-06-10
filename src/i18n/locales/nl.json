@@ -165,6 +165,7 @@
   "account.loans.returned": "teruggegeven",
   "account.loans.returnedOn": "Teruggegeven op",
   "account.loans.title": "Huidige uitleningen",
+  "account.circ.sameTitleSignal": "Ook in een van je andere bibliotheken",
   "account.mylib.address": "Adres",
   "account.mylib.email": "E-mail",
   "account.mylib.noPublicContact": "Deze bibliotheek heeft haar contactgegevens nog niet gepubliceerd.",

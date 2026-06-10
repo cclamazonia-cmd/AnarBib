@@ -165,6 +165,7 @@
   "account.loans.returned": "zurückgegeben",
   "account.loans.returnedOn": "Zurückgegeben am",
   "account.loans.title": "Laufende Ausleihen",
+  "account.circ.sameTitleSignal": "Auch in einer deiner anderen Bibliotheken",
   "account.mylib.address": "Adresse",
   "account.mylib.email": "E-Mail",
   "account.mylib.noPublicContact": "Diese Bibliothek hat ihre Kontaktdaten noch nicht veröffentlicht.",

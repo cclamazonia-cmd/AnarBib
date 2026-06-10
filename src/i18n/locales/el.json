@@ -165,6 +165,7 @@
   "account.loans.returned": "επιστράφηκε",
   "account.loans.returnedOn": "Επιστράφηκε στις",
   "account.loans.title": "Τρέχοντες δανεισμοί",
+  "account.circ.sameTitleSignal": "Επίσης σε άλλη βιβλιοθήκη σου",
   "account.mylib.address": "Διεύθυνση",
   "account.mylib.email": "Email",
   "account.mylib.noPublicContact": "Αυτή η βιβλιοθήκη δεν έχει δημοσιεύσει ακόμη τα στοιχεία επικοινωνίας της.",

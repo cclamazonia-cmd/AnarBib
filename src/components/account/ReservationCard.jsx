@@ -24,6 +24,8 @@ function fmtDate(d) {
 
 export default function ReservationCard({
   r,
+  libTag,            // #CL.10 : tag biblio d'origine (multi-biblio), rendu par AccountPage
+  sameTitleSignal,   // #CL.10 : signal « même titre dans 2 biblios »
   onCancel,
   onConfirmPickup,
   onOpenCounterProposalForm,
@@ -73,8 +75,9 @@ export default function ReservationCard({
           {r.titulo || r.bib_ref || '—'}
         </Link>
         <span className="ab-conta-item__meta">
-          ref: {r.bib_ref || '—'} · {r.rotulo || ''} · {r.library_name || ''}
+          ref: {r.bib_ref || '—'} · {r.rotulo || ''} · {libTag || r.library_name || ''}
         </span>
+        {sameTitleSignal}
         <span className="ab-conta-item__status" data-stage={stage}>
           {stageLabel}
           {inNegotiationStage && proposedBy && (
