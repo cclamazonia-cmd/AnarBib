@@ -1,11 +1,13 @@
 # 📋 INVENTAIRE du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 5 juin 2026 (session soir) — **Track A catalogação complet** + **capas P1/P2/P3** ; **3 specs nouvelles** ajoutées à la carte (`spec-autorites-notes-bio-multilingues` v0.2, `spec-liaison-autorites-oeuvres` v0.2, `spec-doublons-detection-fusion` v0.1) ; liaison autorités↔œuvres, fusion de doublons (autorités+documents), flux contributeurs brouillon→publié livrés (registre `CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1`) ; `spec-exemplaires-circulation` **constatée livrée en prod** — précédemment : 4 juin 2026 (nuit) — carte-lecteur **phase γ complète** (UI staff `ResolveCardBox` livrée, **gatée `libraries.reader_cards_enabled`** ; hotfix Woodpecker vert) ; **`CADRAGE_importacoes_module_2026-06-04` ouvert** (chantier-cadre Importações, ajouté à la carte des dépendances ; registre §`IMP` ; défère `ACQ-Q4` + `FED-5`) ; `DOC-I18N-1` réaligné **9 locales** (`nl`) — précédemment : 4 juin 2026 (soir) — **`spec-outils-federalistes` v0.1 créée** ; **FED-O4/O5/O6 tranchés** (registre §`FED` : terme `círculo` ; adhésion opt-out + anti-blackball ; mutualisation axe distinct) — précédemment : 4 juin 2026 (cadrage `CADRAGE_modele_acces_concentrique_2026-06-04` ajouté à la carte des dépendances ; modèle d'accès concentrique → registre §`FED`) — précédemment : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** [audit dump schéma 03/06] → `spec-granularite-item` en 🔵 ; ouverture Phase 1 exemplares) — précédemment : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
+**Dernière mise à jour** : 10 juin 2026 — **resync prod** : 9 specs implémentées archivées + PARTNER/PEB/Importações reclassés « livrés » (cf. note ⚠️ ci-dessous + v30/audit). Précédemment : 5 juin 2026 (session soir) — **Track A catalogação complet** + **capas P1/P2/P3** ; **3 specs nouvelles** ajoutées à la carte (`spec-autorites-notes-bio-multilingues` v0.2, `spec-liaison-autorites-oeuvres` v0.2, `spec-doublons-detection-fusion` v0.1) ; liaison autorités↔œuvres, fusion de doublons (autorités+documents), flux contributeurs brouillon→publié livrés (registre `CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1`) ; `spec-exemplaires-circulation` **constatée livrée en prod** — précédemment : 4 juin 2026 (nuit) — carte-lecteur **phase γ complète** (UI staff `ResolveCardBox` livrée, **gatée `libraries.reader_cards_enabled`** ; hotfix Woodpecker vert) ; **`CADRAGE_importacoes_module_2026-06-04` ouvert** (chantier-cadre Importações, ajouté à la carte des dépendances ; registre §`IMP` ; défère `ACQ-Q4` + `FED-5`) ; `DOC-I18N-1` réaligné **9 locales** (`nl`) — précédemment : 4 juin 2026 (soir) — **`spec-outils-federalistes` v0.1 créée** ; **FED-O4/O5/O6 tranchés** (registre §`FED` : terme `círculo` ; adhésion opt-out + anti-blackball ; mutualisation axe distinct) — précédemment : 4 juin 2026 (cadrage `CADRAGE_modele_acces_concentrique_2026-06-04` ajouté à la carte des dépendances ; modèle d'accès concentrique → registre §`FED`) — précédemment : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** [audit dump schéma 03/06] → `spec-granularite-item` en 🔵 ; ouverture Phase 1 exemplares) — précédemment : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document décrit **chaque spec active** du corpus AnarBib avec son statut d'implémentation, ses dépendances entrantes et sortantes, sa date de dernière mise à jour, et les chantiers liés. Pour la navigation rapide par domaine, voir [`INDEX.md`](./INDEX.md).
 
 **État du corpus au 31/05/2026** : 22 specs vivantes (21 distinctes — le doublon spec-cartographie-reseau a été résolu le 31/05 avec archivage du .docx) + 17 specs archivées dans `archive/`. Le groupe A de l'audit du 31/05 a été appliqué (notes de clôture sur 3 specs désynchronisées, archivage du doublon, régularisation de 6 fichiers de la convention de nommage archive/).
+
+> **⚠️ Resync 10/06/2026 (sur base prod vérifiée).** **9 specs implémentées en prod** ont été déplacées vers `archive/` avec note de clôture : `spec-multi-appartenance-lecteur`, `spec-validation-physique`, `spec-migration-mail-resend`, `spec-carte-lecteur-v0_2`, `spec-module-capas`, `spec-exemplaires-circulation`, `spec-catalogacao-fiche-et-paliers`, `spec-liaison-autorites-oeuvres`, `spec-doublons-detection-fusion`. Par ailleurs **PARTNER** (`spec-partenariat-biblios`), **PEB** (`spec-cycle-vie-peb`) et **Importações** sont **livrés en prod** (backend, et front pour PARTNER) bien qu'historiquement listés « annoncés/cadrés » — les statuts par-spec ci-dessous sont corrigés en conséquence. **`#FED` reste réellement cadré** (aucune table/RPC `círculo` en prod). Détail étayé : [`v30`](../backlogs/AnarBib-Backlog-2026-06-10-v30.md) + [`audit prod`](../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
 
 ---
 
@@ -266,7 +268,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Version actuelle** : v1.1 (amendée le 30/05/2026 — validation par-appartenance, pas par-compte)
 **Versions précédentes archivées** : v1.0 dans `archive/`
 **Taille** : ~33 Ko
-**Statut** : 🟡 Cadrée + **amendement structurel 30/05** (validation par-appartenance). En attente d'implémentation.
+**Statut** : 🔵 **Implémentée en prod** (VALID C1-C4, §9 bouclée) — archivée le 10/06 (`archive/`).
 
 **Périmètre** :
 - Workflow de validation physique (rencontre avec librarian) requise dans certains modes
@@ -464,7 +466,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Domaine** : Cycle de vie du prêt interbibliothèques (`#ILL-lifecycle`)
 **Version actuelle** : v1 (23 mai 2026 — cadrage)
 **Taille** : ~12 Ko, 266 lignes
-**Statut** : 🟡 Spécification, à implémenter — chantier `#ILL-lifecycle`
+**Statut** : ✅ **Implémentée en prod** (constatée 10/06) — 14 `fn_peb_*` (lifecycle complet : create_loan_with_items, propagate/validate_status, archive, search_exemplares) + `fn_v2_dispatch_emprestimo_interbibliotecas` + EF `notify-interlibrary-loan`. À passer 🔵 après audit UX.
 
 **Périmètre** :
 - Machine à états du PEB (création, transit, retour, archivage)
@@ -553,7 +555,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Domaine** : Carte-lecteur AnarBib (β : génération + révocation ; γ : résolution staff)
 **Version actuelle** : v0.2 (3 juin 2026)
 **Format** : .md (conversion depuis le .docx v0.1, effectuée à cette révision substantielle)
-**Statut** : 🟢 **Référence** — phase β en prod (28/05) ; **résolution staff `api.resolve_reader_card` livrée backend 03/06 + UI staff `ResolveCardBox` 04/06** (gatée sur `libraries.reader_cards_enabled` — invisible là où la carte n'est pas activée) — **phase γ complète** ; arbitrages A.1-A.4 actés (A.1 séquençage 🟡 ouvert).
+**Statut** : 🔵 **Implémentée en prod** (phases β + γ : génération/révocation + résolution staff `api.resolve_reader_card`/`ResolveCardBox`) — archivée le 10/06 (`archive/`).
 
 **Périmètre** :
 - Mini-table dédiée `reader_card_tokens` (token haché, index unique partiel WHERE status='active')
@@ -602,7 +604,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Version actuelle** : v0.4 (1er juin 2026 — doctrine de déploiement EF alignée sur le pipeline Woodpecker réel)
 **Versions précédentes archivées** : v0.1, v0.2 dans `archive/`
 **Taille** : ~162 Ko (très détaillée), 1469 lignes
-**Statut** : 🟠 En cours d'implémentation (item #110 du backlog v23, score 15)
+**Statut** : 🔵 **Implémentée** — #110 clos (Brevo entièrement retiré, R.6+R.7) — archivée le 10/06 (`archive/`).
 
 **Périmètre** :
 - Motivation politique (Brevo trace par domaine inaccessible à VPN/anti-tracker)
@@ -645,7 +647,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 
 **Domaine** : Fiche de catalogage — registre de champs déclaratif, 3 paliers, lisibilité
 **Version actuelle** : v0.4 (1er juin 2026)
-**Statut** : 🟡 Spécification, à implémenter — premier lot du chantier Catalogação (**aucune migration DB**)
+**Statut** : 🔵 **Implémentée en prod** — Track A complet (Lots 1→6 + 3b, paliers ternaires) — archivée le 10/06 (`archive/`).
 
 **Périmètre** :
 - Registre de champs déclaratif (archi 8.E), rendu piloté par `tier × matériel`
@@ -671,7 +673,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 
 **Domaine** : Couche **destination** de l'exemplaire (`circulation_policy` + `visibility`), doublons fédérés
 **Version actuelle** : v0.2 (1er juin 2026)
-**Statut** : 🟡 Spécification, à implémenter — **coordonnée** avec `#MODEL-item-grain` + acquisition
+**Statut** : 🔵 **Implémentée en prod** — Phase 1-3 exemplares (`circulation_policy`/`visibility`/`source_library`, `api.attach_exemplar`, filtre public) — archivée le 10/06 (`archive/`).
 
 **Périmètre** :
 - 2 colonnes (`text` + CHECK) sur `exemplares` / `exemplar_drafts`
@@ -696,7 +698,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 
 **Domaine** : Couverture — stockage stable + recherche automatique (EF `cover_lookup`)
 **Version actuelle** : v0.2 (1er juin 2026)
-**Statut** : 🟡 Spécification — **P1 (correction du chemin) = bug autonome livrable immédiatement**
+**Statut** : 🔵 **Implémentée en prod** — module capas P1/P2/P3 (EF `cover_lookup`, 4 sources) — archivée le 10/06 (`archive/`).
 
 **Périmètre** :
 - Chemin `bib_ref` / draft-id stable (fin de la collision `books/new/`)
@@ -870,13 +872,13 @@ Ces specs documentent des chantiers ponctuels clos. Elles sont **conservées com
 
 Les **dépendances entrantes** et **sortantes** doivent être maintenues à jour. Quand on modifie une spec qui ajoute une dépendance vers une autre, mettre à jour les **deux** specs concernées + cet inventaire. Les blocs de dépendances en haut de chaque spec **dupliquent volontairement** l'info de cet inventaire pour faciliter la lecture locale. Quand discrepance détectée, l'INVENTAIRE fait foi (et la spec doit être mise à jour).
 
-### Specs annoncées, non encore remplies
+### Specs annoncées — état réel (plusieurs désormais implémentées, cf. resync 10/06)
 
-- **`spec-multi-appartenance-lecteur`** : **charpente v0.3 figée**, intégrée au corpus (famille #CL — voir la carte des dépendances ci-dessus). Socle doctrinal : `CADRAGE_spec-multi-appartenance-lecteur_2026-05-31.md` (doc de décision dédié — *et non « backlog v23 §A.1 », renvoi corrigé le 02/06*). Absorbe `spec-migration-compte.md v1.0` (archivée) — cf. `ACCT-MIGRATION` au registre. Remplissage (~800 l.) en session dédiée.
-- **`spec-partenariat-biblios`** : **charpente figée v0.3 le 02/06** (`PARTNER-D1..D9` au registre ; cadrage `CADRAGE_partenariat_stabilise_2026-06-02.md`). Dossier d'ouverture constitué ; remplissage à venir, après multi-appartenance.
-- **`spec-flux-partage-numerique`** (#ILL-digital) : **charpente figée v0.2 le 02/06** côté conception (`ILL-1..ILL-9` au registre, mandat BLMF ; cadrage `CADRAGE_ILL-digital_2026-05-25` 🔵). Circuit numérique **distinct du PEB** ; droit du partenariat stabilisé (`PARTNER-D9`). Remplissage à venir (DDL, rôles, i18n).
+- ✅ **`spec-multi-appartenance-lecteur`** : **implémentée en prod (P1-P5)** et **archivée le 10/06** (`archive/`). Absorbe `spec-migration-compte.md v1.0` (archivée) — cf. `ACCT-MIGRATION` au registre.
+- ✅ **`spec-partenariat-biblios`** : **implémentée en prod (PARTNER §21 P1-P6, front+back)** — `fn_partnership_*` (propose/accept/refuse/break/consent/rights/sync/transparence), tables `library_partnerships`/`partnership_rights`/`reader_partnership_consent`, console coordenador + encart consentement `/conta`. À reverser au corpus actif (statut réel ≠ « annoncée »).
+- ⚠️ **`spec-flux-partage-numerique`** (#ILL-digital) : **backend livré** — `digital_assets`, `book_digital_resources`, EF `read-digital-asset`, `notify-document-permission-request` + `fn_notify_document_permission_request_now`, composants `library/Exchange*`. **Parité UX à auditer** avant clôture. Circuit distinct du PEB ; droit du partenariat stabilisé (`PARTNER-D9`).
 - **`spec-outils-federalistes`** (face fédération) : **v0.1 créée 🟡 cadrée** — cœur = socle + primitive cercle (`círculo`) : annuaire, adhésion opt-out + anti-blackball (FED-O5), cycle de vie ; mutualisation = axe distinct renvoyé (FED-O6). Foyer registre §`FED` (FED-1..7 + FED-O4/O5/O6 tranchés) ; cadrage `CADRAGE_modele_acces_concentrique_2026-06-04.md`. Bloc « Ferramentas federalistas » (nav entre `biblioteca` et `rede`). Prolonge `CHANTIER_reseau_federatif_2026-05-25`. Autres onglets charpentés/renvoyés ; remplissage code à venir.
-- **Importações/Exportações** (module bidirectionnel d'ingestion ⇄ export) : **`spec-importacoes-exportacoes` v0.1 créée 🟡 squelette** (`docs/specs/`). Plomberie de provenance **déjà posée** (`catalog_ref_*`, cible `book_drafts`, journal `book_draft_import_events`, gardes `catalog_partner_*_import`, staging `import_blmf_*` + Zotero) ; couche format = adaptateurs (structure × vocabulaire × modèle). Foyer = **registre §17 `IMP-1..8`** (`IMP-1..7` actés ; `IMP-8` wizard §9 cadré). **Défère** `ACQ-Q4` (frontière Catalogação) + `FED-5` (rôle coordenador) ; export référence `ILL-1..9`. Réf. visuelles : `maquette_importacoes_v7.html` + `maquette_wizard_import_v1.html`. Reste : DDL « run d'import » + ratification rôles + remplissage (§12). Le cadrage 04/06 (trace) est **supersédé** — schéma `IMP-A1..A5` remplacé par `IMP-1..8`.
+- ⚠️ **Importações/Exportações** : **backend livré** — 16 RPC `fn_import_*` (create/dispatch/harvest_oai/ingest/promote/register OAI+deposit/set_editorial) + EFs `process-partner-catalog-import`, `probe-partner-catalog`, `export-catalog-lote` ; **parité UX (parcours page Importações) à auditer**. *(Historique du cadrage ci-dessous.)* **`spec-importacoes-exportacoes` v0.1** (`docs/specs/`). Plomberie de provenance **déjà posée** (`catalog_ref_*`, cible `book_drafts`, journal `book_draft_import_events`, gardes `catalog_partner_*_import`, staging `import_blmf_*` + Zotero) ; couche format = adaptateurs (structure × vocabulaire × modèle). Foyer = **registre §17 `IMP-1..8`** (`IMP-1..7` actés ; `IMP-8` wizard §9 cadré). **Défère** `ACQ-Q4` (frontière Catalogação) + `FED-5` (rôle coordenador) ; export référence `ILL-1..9`. Réf. visuelles : `maquette_importacoes_v7.html` + `maquette_wizard_import_v1.html`. Reste : DDL « run d'import » + ratification rôles + remplissage (§12). Le cadrage 04/06 (trace) est **supersédé** — schéma `IMP-A1..A5` remplacé par `IMP-1..8`.
 
 ---
 
