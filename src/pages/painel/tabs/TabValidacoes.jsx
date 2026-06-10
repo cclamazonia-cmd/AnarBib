@@ -24,6 +24,7 @@ export default function TabValidacoes({ libraryId }) {
   const [rows, setRows] = useState(null);
   const [drafts, setDrafts] = useState({}); // membership_id -> { number, note }
   const [busyId, setBusyId] = useState(null);
+  const [bulkBusy, setBulkBusy] = useState(false); // VALID-C1 : validation en lot
 
   const load = useCallback(async () => {
     setRows(null);
@@ -66,6 +67,32 @@ export default function TabValidacoes({ libraryId }) {
     }
   }, [busyId, drafts, load, notifySuccess, notifyError, t]);
 
+  // VALID-C1 — valider en lot toutes les demandes en attente (sans numéro local ;
+  // les numéros restent assignables individuellement). Confirmation explicite.
+  const validateAll = useCallback(async () => {
+    if (bulkBusy || !Array.isArray(rows) || rows.length === 0) return;
+    if (!window.confirm(t({ id: 'panel.validations.bulkConfirm' }, { count: rows.length }))) return;
+    setBulkBusy(true);
+    let ok = 0, fail = 0;
+    for (const m of rows) {
+      try {
+        const { data, error } = await supabase.schema('api').rpc('validate_membership', {
+          p_membership_id: m.membership_id,
+          p_local_reader_number: null,
+          p_note: null,
+        });
+        if (error) throw error;
+        const row = Array.isArray(data) ? data[0] : data;
+        if (row && row.ok === false) throw new Error('failed');
+        ok++;
+      } catch { fail++; }
+    }
+    if (ok > 0) notifySuccess(t({ id: 'panel.validations.bulkDone' }, { count: ok }));
+    if (fail > 0) notifyError(t({ id: 'panel.validations.bulkPartial' }, { count: fail }));
+    await load();
+    setBulkBusy(false);
+  }, [bulkBusy, rows, load, notifySuccess, notifyError, t]);
+
   const displayName = (m) =>
     [m.first_name, m.last_name].filter(Boolean).join(' ').trim() || m.email || m.user_id;
 
@@ -77,6 +104,14 @@ export default function TabValidacoes({ libraryId }) {
     <div>
       <TabHeader title={t({ id: 'panel.validations.title' })} onRefresh={load} />
       <p className="ab-painel-memb-hint">{t({ id: 'panel.tab.validations.hint' })}</p>
+
+      {rows.length >= 2 && (
+        <div style={{ marginBottom: 12 }}>
+          <Button onClick={validateAll} disabled={bulkBusy}>
+            {bulkBusy ? t({ id: 'common.loading' }) : t({ id: 'panel.validations.bulkButton' }, { count: rows.length })}
+          </Button>
+        </div>
+      )}
 
       {rows.length === 0 ? (
         <EmptyState message={t({ id: 'panel.validations.empty' })} />

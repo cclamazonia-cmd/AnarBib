@@ -213,6 +213,7 @@ export default function PanelPage() {
   }, [isCoordOrAdmin, isLibrarian]);
 
   const [tab, setTab] = useState('trabalho-do-dia');
+  const [pendingValidCount, setPendingValidCount] = useState(0); // VALID-C4 : compteur « comptes en attente »
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState([]);
   const [consultations, setConsultations] = useState([]);
@@ -1343,6 +1344,20 @@ export default function PanelPage() {
   useEffect(() => { loadMembershipConfig(); }, [loadMembershipConfig]);
   useEffect(() => { if (tab === 'contribuicoes') loadMembershipOverview(); }, [tab, loadMembershipOverview]);
 
+  // VALID-C4 — compteur des inscriptions en attente (badge d'onglet Validações).
+  // Rafraîchi au changement d'onglet (donc après une validation dans l'onglet).
+  useEffect(() => {
+    if (!isLibrarian || !libraryId) { setPendingValidCount(0); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase.schema('api').rpc('list_pending_validations', { p_library_id: libraryId });
+        if (!cancelled) setPendingValidCount(Array.isArray(data) ? data.length : 0);
+      } catch { if (!cancelled) setPendingValidCount(0); }
+    })();
+    return () => { cancelled = true; };
+  }, [isLibrarian, libraryId, tab]);
+
   // Ouvrir le modal de paiement
   function openPaymentModal(target) {
     if (membershipRules.length === 0) {
@@ -1464,7 +1479,7 @@ export default function PanelPage() {
     ] : []),
     // MULTI P5 (volet staff) : validation des inscriptions (librarian/coordenador).
     ...(isLibrarian ? [
-      { key: 'validacoes', label: t({ id: 'panel.tab.validations' }), hint: t({ id: 'panel.tab.validations.hint' }) },
+      { key: 'validacoes', label: `${t({ id: 'panel.tab.validations' })}${pendingValidCount > 0 ? ` (${pendingValidCount})` : ''}`, hint: t({ id: 'panel.tab.validations.hint' }) },
     ] : []),
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
