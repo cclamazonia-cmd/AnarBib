@@ -66,12 +66,16 @@ export function AuthProvider({ children }) {
       setProfile(null);
       return null;
     }
+    // [LOGIN-DEBUG] temporaire (à retirer) — traquer un loadProfile lent/qui pend.
+    const _t0 = performance.now();
+    console.log('[LOGIN-DEBUG] loadProfile START', userId);
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select(PROFILE_COLUMNS)
         .eq('id', userId)
         .maybeSingle();
+      console.log('[LOGIN-DEBUG] loadProfile END', { ms: Math.round(performance.now() - _t0), hasData: !!data, error: error?.message || null });
       if (error) {
         console.warn('[AuthContext] Failed to load profile:', error);
         return null;
@@ -89,6 +93,7 @@ export function AuthProvider({ children }) {
       }
       return null;
     } catch (err) {
+      console.log('[LOGIN-DEBUG] loadProfile THREW', { ms: Math.round(performance.now() - _t0), err: String(err) });
       console.warn('[AuthContext] loadProfile failed:', err);
       return null;
     }
@@ -111,6 +116,7 @@ export function AuthProvider({ children }) {
     // tâche de fond ; les composants qui en dépendent doivent gérer
     // profile === null pendant la latence (~100-200ms).
     supabase.auth.getSession().then(({ data: { session: s } }) => {
+      console.log('[LOGIN-DEBUG] boot getSession', { hasUser: !!s?.user });
       setSession(s);
       setLoading(false);
       if (s?.user?.id) {
@@ -137,6 +143,7 @@ export function AuthProvider({ children }) {
     // apiQuery/apiRpc.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, s) => {
+        console.log('[LOGIN-DEBUG] onAuthStateChange', event, { hasUser: !!s?.user });
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }

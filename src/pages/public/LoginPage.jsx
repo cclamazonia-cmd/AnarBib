@@ -50,10 +50,12 @@ export default function LoginPage() {
   // detectera la session et redirigera immediatement sans qu'il ait besoin de
   // re-saisir ses credentials.
   const { user, profile, loading: authLoading } = useAuth();
-  // #LOGIN-FIX H3 : on attend la résolution de la biblio (rapide) avant de
-  // naviguer. On n'attend PLUS le thème (themeReady) : ses manifests sont 404
-  // lents (~14s) et aucun ne s'applique de toute façon (thème piloté par CSS).
-  const { libraryLoading } = useLibrary();
+  // #LOGIN-FIX H1 (restauré 10/06) : on attend que la biblio ET son thème soient
+  // résolus avant de naviguer, pour une transition unique (jamais la page
+  // connectée sur l'ancien fond). themeReady résout en ~160ms (manifest depuis le
+  // Storage), PAS 14s — la mesure "404 lents" qui avait fait retirer ce gate
+  // (f0e8aac) testait la mauvaise URL (origin Pages au lieu du bucket storage).
+  const { libraryLoading, themeReady } = useLibrary();
   // (pendingLoginRedirect retire au v4 : la decision est prise directement
   // par le useEffect qui reagit a (user, profile, authLoading), pas besoin
   // d'un flag intermediaire.)
@@ -88,8 +90,8 @@ export default function LoginPage() {
   // Quand l'usager est deja authentifie (login frais OU session zombie) et
   // qu'on est encore dans la vue 'login', une redirection est imminente : le
   // useEffect ci-dessous va soit basculer en force-change, soit navigate(next).
-  // Tant que la biblio n'est pas resolue (#LOGIN-FIX H3), la navigation est
-  // retenue (au plus 2,5s). Pendant cette fenetre, la Topbar affiche deja les
+  // Tant que la biblio + le theme ne sont pas resolus (#LOGIN-FIX H1), la
+  // navigation est retenue. Pendant cette fenetre, la Topbar affiche deja les
   // liens staff + "Sair" (elle lit `user` immediatement) : montrer le
   // formulaire de login EN MEME TEMPS cree l'"entre-deux" incoherent signale.
   // On remplace donc le formulaire par un panneau de transition (spinner).
@@ -118,7 +120,10 @@ export default function LoginPage() {
       setTransitionTimedOut(false);
       return;
     }
-    const id = setTimeout(() => setTransitionTimedOut(true), 9000);
+    const id = setTimeout(() => {
+      console.log('[LOGIN-DEBUG] transitionTimedOut FIRED (9s) — le formulaire va resurgir');
+      setTransitionTimedOut(true);
+    }, 9000);
     return () => clearTimeout(id);
   }, [transitioningToApp]);
 
@@ -146,6 +151,12 @@ export default function LoginPage() {
   //    en cours (par exemple si l'usager change son mdp sur recovery,
   //    il faut le laisser finir, pas le rediriger en cours de route)
   useEffect(() => {
+    // [LOGIN-DEBUG] temporaire (à retirer) — trace quelle condition bloque la
+    // redirection post-login. Filtrer la console sur "LOGIN-DEBUG".
+    console.log('[LOGIN-DEBUG] redirect', {
+      authLoading, user: !!user, profile: !!profile, view,
+      must: profile?.must_change_password === true, libraryLoading, themeReady,
+    });
     if (authLoading) return;
     if (!user) return;
     if (!profile) return;
@@ -156,23 +167,14 @@ export default function LoginPage() {
       setLoginLoading(false);
       return;
     }
-    // #LOGIN-FIX H3 (10/06/2026) : on NE bloque PLUS la navigation sur themeReady.
-    // Les manifests de thème sont servis en 404 LENTS (~7s chacun) par Codeberg
-    // Pages ; useTheme retombe sur 'default' (404 lui aussi) -> themeReady mettait
-    // ~14s à devenir vrai. La redirection post-login pendait, et le garde-fou de
-    // transition rebasculait sur le formulaire (le bug "le formulaire de login
-    // resurgit après le card Entrando"). Or aucun manifest ne s'applique (404, y
-    // compris 'default') : le thème vient entièrement du CSS, il n'y a aucun swap
-    // de fond à attendre — le gate H1 était à la fois vacant ET nocif.
-    // On attend uniquement la résolution biblio (SELECT memberships, rapide), avec
-    // un garde-fou de 2,5s pour ne JAMAIS pendre si cette requête tarde.
-    if (!libraryLoading) {
-      navigate(nextUrl);
-      return;
-    }
-    const fallbackId = setTimeout(() => navigate(nextUrl), 2500);
-    return () => clearTimeout(fallbackId);
-  }, [authLoading, user, profile, view, navigate, nextUrl, libraryLoading]);
+    // #LOGIN-FIX H1 (restauré) : ne naviguer que lorsque la biblio ET le thème
+    // sont résolus, pour révéler /conta directement sur le bon fond (pas de
+    // cascade de fonds AnarBib -> biblio). themeReady résout en ~160ms (manifest
+    // Storage), donc aucun risque de hang ici (contrairement à ce que f0e8aac
+    // supposait sur une mesure 404 erronée).
+    if (libraryLoading || !themeReady) return;
+    navigate(nextUrl);
+  }, [authLoading, user, profile, view, navigate, nextUrl, libraryLoading, themeReady]);
 
   async function handleLogin(e) {
     e.preventDefault();
