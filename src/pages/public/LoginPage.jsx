@@ -153,10 +153,10 @@ export default function LoginPage() {
   useEffect(() => {
     // [LOGIN-DEBUG] temporaire (à retirer) — trace quelle condition bloque la
     // redirection post-login. Filtrer la console sur "LOGIN-DEBUG".
-    console.log('[LOGIN-DEBUG] redirect', {
+    console.log('[LOGIN-DEBUG] redirect ' + JSON.stringify({
       authLoading, user: !!user, profile: !!profile, view,
       must: profile?.must_change_password === true, libraryLoading, themeReady,
-    });
+    }));
     if (authLoading) return;
     if (!user) return;
     if (!profile) return;

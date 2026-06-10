@@ -30,6 +30,10 @@ const PROFILE_COLUMNS = [
   'is_librarian',
 ].join(', ');
 
+// [LOGIN-DEBUG] temporaire (à retirer) — compteur de séquence pour corréler les
+// START/END de loadProfile et rendre la concurrence visible.
+let _lpSeq = 0;
+
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -68,14 +72,15 @@ export function AuthProvider({ children }) {
     }
     // [LOGIN-DEBUG] temporaire (à retirer) — traquer un loadProfile lent/qui pend.
     const _t0 = performance.now();
-    console.log('[LOGIN-DEBUG] loadProfile START', userId);
+    const _seq = ++_lpSeq;
+    console.log('[LOGIN-DEBUG] loadProfile START #' + _seq + ' user=' + String(userId).slice(0, 8));
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select(PROFILE_COLUMNS)
         .eq('id', userId)
         .maybeSingle();
-      console.log('[LOGIN-DEBUG] loadProfile END', { ms: Math.round(performance.now() - _t0), hasData: !!data, error: error?.message || null });
+      console.log('[LOGIN-DEBUG] loadProfile END #' + _seq + ' ' + JSON.stringify({ ms: Math.round(performance.now() - _t0), hasData: !!data, error: error?.message || null }));
       if (error) {
         console.warn('[AuthContext] Failed to load profile:', error);
         return null;
@@ -93,7 +98,7 @@ export function AuthProvider({ children }) {
       }
       return null;
     } catch (err) {
-      console.log('[LOGIN-DEBUG] loadProfile THREW', { ms: Math.round(performance.now() - _t0), err: String(err) });
+      console.log('[LOGIN-DEBUG] loadProfile THREW #' + _seq + ' ' + JSON.stringify({ ms: Math.round(performance.now() - _t0), err: String(err) }));
       console.warn('[AuthContext] loadProfile failed:', err);
       return null;
     }
@@ -116,7 +121,7 @@ export function AuthProvider({ children }) {
     // tâche de fond ; les composants qui en dépendent doivent gérer
     // profile === null pendant la latence (~100-200ms).
     supabase.auth.getSession().then(({ data: { session: s } }) => {
-      console.log('[LOGIN-DEBUG] boot getSession', { hasUser: !!s?.user });
+      console.log('[LOGIN-DEBUG] boot getSession ' + JSON.stringify({ hasUser: !!s?.user }));
       setSession(s);
       setLoading(false);
       if (s?.user?.id) {
@@ -143,7 +148,7 @@ export function AuthProvider({ children }) {
     // apiQuery/apiRpc.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, s) => {
-        console.log('[LOGIN-DEBUG] onAuthStateChange', event, { hasUser: !!s?.user });
+        console.log('[LOGIN-DEBUG] onAuthStateChange ' + event + ' ' + JSON.stringify({ hasUser: !!s?.user }));
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }
