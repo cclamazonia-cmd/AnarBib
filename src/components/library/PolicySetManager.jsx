@@ -10,7 +10,7 @@ import { supabase } from '@/lib/supabase';
 //
 // Restaure la fonctionnalité du HTML d'origine absente du JSX : le JSX ne
 // montrait que le jeu ACTIF (.eq('is_active',true).maybeSingle()) sans aucun
-// moyen de gérer les jeux. Cf. docs/decisions/CHANTIER_audit_biblioteca_...md
+// moyen de gérer les jeux. Cf. docs/journal/chantiers/CHANTIER_audit_biblioteca_...md
 //
 // Doctrine RPC v3 (21/05) :
 //   - lecture jeux + règles : supabase.from() simple (lecture protégée RLS)

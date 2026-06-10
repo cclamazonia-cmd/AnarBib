@@ -276,7 +276,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
-## 19. Chantier-cadre Biblioteca — `BIBLIO` *(trace : `decisions/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md`)*
+## 19. Chantier-cadre Biblioteca — `BIBLIO` *(trace : `journal/chantiers/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md`)*
 
 | ID | Décision | Statut |
 |---|---|---|
@@ -314,7 +314,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **MULTI-Z23** | `fn_my_account_status` garde la vérité de la primaire, complété par `fn_my_memberships_status` (RPC par-biblio). | ✅ acté |
 | **MULTI-MIGRATION** | Aucune migration auto des lectrices existantes ; deux comptes test BTL traités manuellement. | ✅ acté |
 
-> Foyer : design dans `docs/specs/spec-multi-appartenance-lecteur.md` (v0.3, charpente figée) ; trace `docs/decisions/CADRAGE_spec-multi-appartenance-lecteur_2026-05-31.md`. Registre > trace.
+> Foyer : design dans `docs/specs/spec-multi-appartenance-lecteur.md` (v0.3, charpente figée) ; trace `docs/journal/cadrages/CADRAGE_spec-multi-appartenance-lecteur_2026-05-31.md`. Registre > trace.
 
 > ✅ **Implémenté & déployé 08-10/06/2026** (session MULTI P5). **Backend** : P1 modèle 8 statuts + validation par-appartenance + n° local + journal (`20260608145936`) ; P2 statut par biblio `fn_my_memberships_status` (`20260608151435`) ; P3 gate de circulation `fn_membership_can_engage_circulation` + triggers emprunt/consulta — MULTI-F.1 cond. 1-4 (`20260608153720`) ; P4 auto-inscription `request_membership` (garde β.1) + validation staff `validate_membership` (`20260608154320`). **Frontend (P5)** : onglet « Mes biblios » (TabBiblios), bandeau de contexte « biblio courante » ≥2 appartenances (MULTI-B.1/B.2/Z19, re-thème + sessionStorage via LibraryContext), auto-inscription lectrice, UI validation staff (onglet Validações). **#CL.10 / B.3 / D.1** : lecture agrégée — tag biblio d'origine par ligne de circulation + signal « même titre dans 2 biblios » (frontend pur, résolution `library_id`→biblio côté client ; commit `49d464a`). **Notifs e-mail 10 langues** : `validation_confirmed` (lectrice, P4b) + `membership_validation_requested` (staff, VALID-C3). Reste **non implémenté** : MULTI-F.1 cond. 5 (plafonds, pas de config), §21 PARTNER (partage inter-biblios sur consentement). Détail validation physique → §9 VALID.
 
@@ -334,7 +334,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **PARTNER-D8** | Consentement révocable depuis `/conta` (effet immédiat RLS) ; re-sollicitation **vers le haut** seulement (ajout de droit). | ✅ acté |
 | **PARTNER-D9** | Droits portés par table de jonction `partnership_rights (partnership_id, right_key)` sous CHECK/enum ; ajouter un droit = une valeur, pas une migration. | ✅ acté |
 
-> Foyer : `docs/specs/spec-partenariat-biblios.md` v0.3 (charpente figée) ; trace `docs/decisions/CADRAGE_partenariat_stabilise_2026-06-02.md`. Registre > trace.
+> Foyer : `docs/specs/spec-partenariat-biblios.md` v0.3 (charpente figée) ; trace `docs/journal/cadrages/CADRAGE_partenariat_stabilise_2026-06-02.md`. Registre > trace.
 
 ---
 
@@ -394,7 +394,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **FED-O2** | Traçabilité : journaliser les consultations de compte par le staff (qui, quel compte, quand) — service rendu ≠ surveillance. | 🟡 ouvert |
 | **FED-O3** | Scope = une biblio (cercles niveau biblio) → sélecteur de biblio en tête de page pour le staff multi-biblios. | 🟡 ouvert |
 
-> Foyer : REGISTRE §24 (`FED`) fait foi ; raisonnement dans `docs/decisions/CADRAGE_modele_acces_concentrique_2026-06-04.md`, spec `docs/specs/spec-outils-federalistes.md` v0.1. Registre > trace.
+> Foyer : REGISTRE §24 (`FED`) fait foi ; raisonnement dans `docs/journal/cadrages/CADRAGE_modele_acces_concentrique_2026-06-04.md`, spec `docs/specs/spec-outils-federalistes.md` v0.1. Registre > trace.
 
 ---
 
@@ -464,4 +464,4 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 *MàJ 08/06/2026 (soir) — cadrage **Importações/Exportações** consolidé : `IMP-9..15` tranchés (§17), spec `spec-importacoes-exportacoes` **v0.2** (run d'import, profils de mapping, adaptateurs hybrides, autorités au dry-run, export de lote, rôles, articulation tableau de bord v7 / wizard re-dérivé). Plan de lots en spec §13 (Lot 0 backend → Lot 1 dashboard v7 → circuits Zotero/UNIMARC/fontes → export → wizard). Implémentation à suivre.*
 
-*MàJ 08/06/2026 (soir, correction) — confrontation au backend réel : **le pipeline d'import EXISTE** dans le schéma **`ingest`** (`partner_catalog_import_runs`/`_sources`/`_staging_rows`, matching, promotion, journal, vues UI). IMP-9 corrigé (réutilise `ingest`, pas de nouvelle table) ; IMP-10/11 → schéma `ingest`. Constats : mapping codé en dur dans l'EF, **fontes externas = lookup-only** (pas d'aboutissement staging), **export 100% à construire**, **RPC `ingest.*` = service_role seul + garde-fou frontend** (à durcir, DOC-RPC-3). Plan de lots corrigé (Lot 0 durcissement → Lot 1 frontend v7 → fontes externas → profils → MARC → export). Doc : `decisions/CADRAGE_importacoes_refonte_2026-06-08.md`.*
+*MàJ 08/06/2026 (soir, correction) — confrontation au backend réel : **le pipeline d'import EXISTE** dans le schéma **`ingest`** (`partner_catalog_import_runs`/`_sources`/`_staging_rows`, matching, promotion, journal, vues UI). IMP-9 corrigé (réutilise `ingest`, pas de nouvelle table) ; IMP-10/11 → schéma `ingest`. Constats : mapping codé en dur dans l'EF, **fontes externas = lookup-only** (pas d'aboutissement staging), **export 100% à construire**, **RPC `ingest.*` = service_role seul + garde-fou frontend** (à durcir, DOC-RPC-3). Plan de lots corrigé (Lot 0 durcissement → Lot 1 frontend v7 → fontes externas → profils → MARC → export). Doc : `journal/cadrages/CADRAGE_importacoes_refonte_2026-06-08.md`.*

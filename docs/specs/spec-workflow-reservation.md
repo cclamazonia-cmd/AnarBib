@@ -6,7 +6,7 @@
 >
 > La doctrine sémantique du refactor v3 (cf. `spec-refactor-v3-semantique.md`) a été appliquée à cette spec lors du paquet 5b.
 >
-> Source : résumé `docs/decisions/AnarBib_decisions_synthese_2026-05-29.docx`, section « Acquis », entrée Paquet 5b.
+> Source : résumé `docs/journal/arbitrages/AnarBib_decisions_synthese_2026-05-29.docx`, section « Acquis », entrée Paquet 5b.
 >
 > Le bloc de métadonnées ci-dessous est celui de la rédaction d'origine, conservé pour traçabilité.
 

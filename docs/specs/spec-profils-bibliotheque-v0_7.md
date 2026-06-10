@@ -807,7 +807,7 @@ comme legacy ou si on le supprime dans v0.8.
 
 **Specs et bilans** :
 - `docs/specs/spec-profils-bibliotheque-v0.7.md` (ce document)
-- `docs/decisions/SESSION_2026-05-19_au_20_chantier_profils_cloture.docx`
+- `docs/journal/sessions/SESSION_2026-05-19_au_20_chantier_profils_cloture.docx`
 
 ### Doctrines de session a propager dans le Grand Livre Blanc v14+
 

@@ -9,7 +9,7 @@
   - **`docs/specs/spec-administrateur-reseau.md v0.4`** (v0.3.1 enrichie le 20/05 avec la doctrine anti-méga-machine + bouton « proposer un échange ») — workflow de gouvernance des administrateurs du réseau (cooptation unanime, retrait collectif). Cette spec onboarding utilise les admins réseau comme évaluateur·rices.
   - **`docs/specs/spec-gouvernance-roles.md v1.1`** (refonte 15/05/2026) — rôles locaux. À l'activation, le·la coordinateur·rice initial·e reçoit le rôle `coordenador` local de sa biblio.
   - **`docs/specs/spec-profils-bibliotheque-v0_7.md`** (clôture chantier 19/05/2026) — 4 axes orthogonaux de profil d'adoption. **Le volet 0 du wizard de constitution est livré en prod** sous forme du composant `LibraryProfileWizard.jsx` (330 lignes) intégré dans `SolicitarBibliotecaPage.jsx`.
-  - **`docs/decisions/RIFLEXION_articulation_onboarding_profils_2026-05-20.md`** (345 lignes) — capture conversationnelle de la session marathon 19-20/05 qui a fait émerger la doctrine anti-méga-machine. Cette spec v2.0 intègre normativement la doctrine.
+  - **`docs/journal/arbitrages/RIFLEXION_articulation_onboarding_profils_2026-05-20.md`** (345 lignes) — capture conversationnelle de la session marathon 19-20/05 qui a fait émerger la doctrine anti-méga-machine. Cette spec v2.0 intègre normativement la doctrine.
   - `docs/specs/spec-validation-physique.md` (à rédiger) — s'applique aux comptes lecteur·rice rattachés à une biblio existante
   - `docs/specs/spec-migration-compte.md` (940 lignes, cadrée 03/05/2026) — s'applique aux migrations entre biblios existantes (distinct du présent parcours)
 
@@ -1146,7 +1146,7 @@ Un·e admin réseau a proposé une décision, puis perd son statut (auto-retrait
 
 ## Annexe — *(Nouveau v2.0)* Scénario pédagogique Émile-Henry
 
-**Statut** : annexe normative. Reprise depuis le RIFLEXION du 19-20/05/2026 (`docs/decisions/RIFLEXION_articulation_onboarding_profils_2026-05-20.md` §3) pour donner une illustration vivante de la doctrine anti-méga-machine §1.4.
+**Statut** : annexe normative. Reprise depuis le RIFLEXION du 19-20/05/2026 (`docs/journal/arbitrages/RIFLEXION_articulation_onboarding_profils_2026-05-20.md` §3) pour donner une illustration vivante de la doctrine anti-méga-machine §1.4.
 
 ### A.1 — Le cas
 
@@ -1203,7 +1203,7 @@ Avec la doctrine anti-méga-machine :
 
 ## Annexe — *(Nouveau v2.0)* Changelog v1.1 → v2.0
 
-**Objet de la version** : enrichissement doctrinal post-clôture du chantier profils d'adoption (paquets E.0-E.5, F.0-F.4, G livrés en marathon 19-20/05/2026). Intégration normative de la **doctrine anti-méga-machine** émergée pendant cette session marathon et capturée dans `docs/decisions/RIFLEXION_articulation_onboarding_profils_2026-05-20.md` (345 lignes).
+**Objet de la version** : enrichissement doctrinal post-clôture du chantier profils d'adoption (paquets E.0-E.5, F.0-F.4, G livrés en marathon 19-20/05/2026). Intégration normative de la **doctrine anti-méga-machine** émergée pendant cette session marathon et capturée dans `docs/journal/arbitrages/RIFLEXION_articulation_onboarding_profils_2026-05-20.md` (345 lignes).
 
 **Origine politique de la v2.0** : la session marathon a livré la fondation backend + frontend du modèle profils d'adoption (4 axes orthogonaux, transitions, wizard volet 0). En réfléchissant à l'articulation avec le futur chantier #111 (wizard onboarding biblio complet, volets 1-10), une doctrine politique nouvelle a émergé : la complexité technique légitime d'AnarBib ne doit jamais effacer le canal humain de la fédération. Le SIGB est un outil ; les camarades qui s'en servent sont l'horizon.
 

@@ -91,7 +91,7 @@ Tous les commits poussés sur Codeberg + GitHub via `origin`.
 
 **Exécution** : script SQL `cleanup-frt-2026-05-15.sql` exécuté manuellement dans Supabase SQL Editor en transaction `BEGIN`/`COMMIT` avec DO-blocks de vérification pré et post. Pas de migration formelle (action ponctuelle).
 
-**Résultat** : prod nettoyée, 2 biblios actives (BLMF + BTL). Note de décision commitée dans `docs/decisions/CLEANUP_FRT_2026-05-15.md`. Trace SQL commitée dans `tests/sql/cleanup-frt-2026-05-15.sql`.
+**Résultat** : prod nettoyée, 2 biblios actives (BLMF + BTL). Note de décision commitée dans `docs/journal/operations/CLEANUP_FRT_2026-05-15.md`. Trace SQL commitée dans `tests/sql/cleanup-frt-2026-05-15.sql`.
 
 ---
 
@@ -223,7 +223,7 @@ Le toggle `admin_copy_consultas_enabled = true` est probablement le mécanisme c
 **Conclusion** : la décision de spec v2.1 §11.2 R6 de remplacer Phase 6 E2E par une QA manuelle est validée. La QA manuelle a un coût (1h ici) mais une valeur élevée pour détecter les écarts entre intention politique (spec) et implémentation (code).
 
 **À inscrire dans la doctrine du projet** :
-> Une QA manuelle structurée après chaque livraison majeure de feature est plus précieuse que des tests E2E partiels et fragiles. Documenter les résultats dans `docs/decisions/QA_MANUELLE_*.md`.
+> Une QA manuelle structurée après chaque livraison majeure de feature est plus précieuse que des tests E2E partiels et fragiles. Documenter les résultats dans `docs/journal/audits/QA_MANUELLE_*.md`.
 
 ---
 

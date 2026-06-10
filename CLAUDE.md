@@ -292,7 +292,7 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
    (bundle volumineux). Utiliser la CLI (c'est ce que fait la CI).
 9. **`apply-patch.ps1` fait `npm run deploy`** en plus du push : doublon possible
    avec le déploiement Pages de Woodpecker.
-10. Doctrines internalisées documentées dans `README.md` / `docs/decisions/`
+10. Doctrines internalisées documentées dans `README.md` / `docs/journal/`
     (à respecter) : ordre des UPDATE en RPC, distinction
     `workflow_note`/`schedule_reply_note`, pas d'`async` dans
     `supabase.auth.onAuthStateChange`, pièges UTF-8 sous PowerShell Windows,

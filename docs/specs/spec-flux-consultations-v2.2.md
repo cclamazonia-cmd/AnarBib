@@ -1186,7 +1186,7 @@ Audit Phase 0 ajouté §2.4-§2.8 (aucun trigger, aucune clé mail, aucun handle
 
 **Objet de la version** : intégration normative des doctrines techniques issues du **chantier hardening #141** (16/05/2026) et du **chantier #142** (17/05/2026). Ces chantiers ont résolu 7+1 bugs en production sur la chaîne de notifications consultas et fait émerger 5 doctrines techniques (R7 à R11) qui restaient inscrites uniquement en mémoire d'équipe et dans le code, sans inscription normative.
 
-**Origine** : sessions des 16/05 (hardening #141) et 17/05 (#142 mail coordination + #143 onglet Historique) — cf. `docs/decisions/SESSION_141-hardening-notifications-consultas_2026-05-16.docx` (référence externe).
+**Origine** : sessions des 16/05 (hardening #141) et 17/05 (#142 mail coordination + #143 onglet Historique) — cf. `docs/journal/sessions/SESSION_141-hardening-notifications-consultas_2026-05-16.docx` (référence externe).
 
 **Sections ajoutées** :
 - En-tête : référence au chantier #141 intégré, mention specs liées v0.4/v2.0/v0.7 du 20/05

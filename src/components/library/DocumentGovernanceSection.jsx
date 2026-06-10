@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 // =============================================================================
 // Éditeur de la politique de gouvernance documentale d'une biblioteca.
 // Restaure la fonctionnalité du HTML d'origine (bloc documentos) absente du
-// JSX — cf. docs/decisions/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md
+// JSX — cf. docs/journal/chantiers/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md
 //
 // Doctrine actée (21/05) : gouvernance documentale = attribut LOCAL par
 // biblioteca. Chaque biblioteca est souveraine sur ses conditions de

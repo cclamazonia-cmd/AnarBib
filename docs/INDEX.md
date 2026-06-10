@@ -1,6 +1,6 @@
 # 📚 INDEX général de la documentation — AnarBib
 
-**Dernière mise à jour** : 3 juin 2026 (refonte structurelle — inscription de la préséance documentaire, introduction du REGISTRE, prise en compte des dossiers `GLB/`, `cartographie/`, `db/`)
+**Dernière mise à jour** : 10 juin 2026 (réorganisation de `decisions/` → `journal/` en sous-dossiers stricts par type ; ajout de `governance/` à l'index et de l'état d'avancement multi-sessions ; rafraîchissement des versions/comptes). *Refonte structurelle initiale : 3 juin 2026 — préséance documentaire, introduction du REGISTRE.*
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document est la **porte d'entrée de toute la documentation** d'AnarBib. Il décrit la règle de préséance qui gouverne le corpus, oriente vers les documents transverses de référence, et présente l'organisation du dossier `docs/` avec ses index spécialisés.
@@ -16,7 +16,7 @@ Le corpus AnarBib est vaste et vivant : il s'enrichit chaque semaine. Pour évit
 
 En cas de doute ou de conflit apparent entre deux documents : **lire le REGISTRE d'abord.** Une spec qui dit « 6 locales » alors que `DOC-I18N-1` du registre dit 8 est une trace périmée d'avant l'ajout de ca/eo, pas une consigne — c'est le registre qui fait foi.
 
-Cette règle a été formalisée par l'**audit de cohérence du corpus du 02/06/2026** (`decisions/AUDIT_coherence_corpus_2026-06-02.md`), qui a constaté que les drifts détectés relèvent quasi tous d'une même pathologie : un fait transverse (locales, doctrine de déploiement…) recopié dans chaque spec au lieu d'être cité depuis un foyer unique. Le REGISTRE est ce foyer.
+Cette règle a été formalisée par l'**audit de cohérence du corpus du 02/06/2026** (`journal/audits/AUDIT_coherence_corpus_2026-06-02.md`), qui a constaté que les drifts détectés relèvent quasi tous d'une même pathologie : un fait transverse (locales, doctrine de déploiement…) recopié dans chaque spec au lieu d'être cité depuis un foyer unique. Le REGISTRE est ce foyer.
 
 **Conséquence pour la lecture** : un nouveau venu lit le REGISTRE (~317 lignes, condensé) avant tout autre document — il y trouve les doctrines transverses et les arbitrages structurants.
 
@@ -53,12 +53,21 @@ docs/
 │   ├── REGISTRE_decisions.md         → ★ foyer unique des décisions (préséance)
 │   └── archive/                      → anciennes versions des specs
 │
-├── decisions/                        Mémoire chronologique (trace non-normative)
+├── journal/                          Mémoire chronologique (trace non-normative) — ex-`decisions/`, réorganisé en sous-dossiers par type (10/06/2026)
 │   ├── INDEX.md                      → index chronologique + thématique
+│   ├── cadrages/                     → CADRAGE_* (cadrage de chantier/spec)
+│   ├── chantiers/                    → CHANTIER_* (documentation de chantier)
+│   ├── sessions/                     → SESSION_* + BILAN_* (comptes-rendus)
+│   ├── audits/                       → AUDIT_* / AUDITORIA_* / QA_*
+│   ├── arbitrages/                   → DECISION_* / DECISOES_* / AMENDEMENT_* / CLOTURE_* / RIFLEXION_*
+│   ├── bugs/                         → BUG_*
+│   ├── operations/                   → CLEANUP_ / DEPLOIEMENT_ / REDEPLOY_ / REFACTOR_ / SETUP_
+│   ├── references/                   → cles_ / ref_ / INVENTAIRE_addendum / PROMPT_reprise
 │   └── archive/                      → prompts de reprise obsolètes, doublons
 │
-├── backlogs/                         Versions successives du backlog technique
+├── backlogs/                         Backlog technique + état d'avancement multi-sessions
 │   ├── INDEX.md                      → version courante + historique
+│   ├── ETAT-AVANCEMENT-multisessions.md → ★ consolidation git-trackée de toutes les sessions
 │   └── archive/                      → anciennes versions
 │
 ├── GLB/                              Grand Livre Blanc (livre blanc vivant)
@@ -79,6 +88,9 @@ docs/
 │
 ├── db/                               Dumps Supabase (hors git — README uniquement)
 │   └── README.md                     → convention de dump (les *.sql ne sont pas suivis)
+│
+├── governance/                       Guide de gouvernance traduit (10 langues, .md + .docx)
+│   └── guide-gouvernance-{ca,de,el,en,eo,es,fr,it,nl,pt-BR}.{md,docx}
 │
 └── legal/                            Documentation réglementaire (RGPD/LGPD)
     ├── README.md
@@ -101,13 +113,13 @@ Le cœur documentaire technique. **22 specs vivantes** au 03/06/2026, organisée
 
 **Trilogie doctrinale du 02/06** : `spec-multi-appartenance-lecteur`, `spec-partenariat-biblios` (figées) + `spec-flux-partage-numerique` (charpentée). **Cluster catalogue 01/06** : 6 specs (4 catalogage + 2 découverte lecteur).
 
-### `decisions/` — Mémoire chronologique (trace non-normative)
+### `journal/` — Mémoire chronologique (trace non-normative) *(ex-`decisions/`)*
 
-L'historique vivant du projet : sessions, chantiers, bilans, bugs, audits, riflexions, décisions de coordination de bibliothèque. **89 fichiers** au 03/06. Ce dossier est de la **trace** : il documente *comment* on est arrivés aux décisions, pas ce qui *fait foi* — pour cela, voir le REGISTRE.
+L'historique vivant du projet. **~91 fichiers** réorganisés le **10/06/2026** en **sous-dossiers stricts par type de document** (le dossier était auparavant un dépôt plat « `decisions/` » devenu illisible) : `cadrages/`, `chantiers/`, `sessions/`, `audits/`, `arbitrages/`, `bugs/`, `operations/`, `references/`, `archive/`. Ce dossier est de la **trace** : il documente *comment* on est arrivés aux décisions, pas ce qui *fait foi* — pour cela, voir le REGISTRE. (Le nom `journal/` reflète mieux ce contenu chronologique que l'ancien `decisions/` : les vraies décisions vivent au REGISTRE.)
 
-➡️ [`decisions/INDEX.md`](./decisions/INDEX.md) — index chronologique et thématique, avec sélection des documents doctrinaux centraux.
+➡️ [`journal/INDEX.md`](./journal/INDEX.md) — index chronologique et thématique, avec sélection des documents doctrinaux centraux.
 
-**Document fondateur de la doctrine documentaire actuelle** : `AUDIT_coherence_corpus_2026-06-02.md` — qui a institué le REGISTRE et la règle de préséance.
+**Document fondateur de la doctrine documentaire actuelle** : `journal/audits/AUDIT_coherence_corpus_2026-06-02.md` — qui a institué le REGISTRE et la règle de préséance.
 
 ### `backlogs/` — Backlog technique
 
@@ -115,7 +127,7 @@ Versions successives. Seule la dernière est vivante, les autres sont historique
 
 ➡️ [`backlogs/INDEX.md`](./backlogs/INDEX.md) — version courante + historique
 
-**Version courante** : `AnarBib-Backlog-2026-06-02-v26.docx`. Le backlog a un rythme d'incrémentation rapide depuis la fin mai (v8 → v26 en deux semaines) — le **préfixe daté** reste la référence fiable.
+**Version courante** : `AnarBib-Backlog-2026-06-10-v29.docx`. Le backlog a un rythme d'incrémentation rapide (v8 → v29 en trois semaines) — le **préfixe daté** reste la référence fiable. Depuis le 10/06, la **source vivante** est [`backlogs/ETAT-AVANCEMENT-multisessions.md`](./backlogs/ETAT-AVANCEMENT-multisessions.md) (markdown git-tracké, consolidation de toutes les sessions) ; le `.docx` en est un export/snapshot.
 
 ### `GLB/` — Grand Livre Blanc
 
@@ -141,6 +153,10 @@ DPA en 6 langues, registre des traitements, procédure de réponse aux incidents
 
 *(Pas d'index dédié — structure plate, voir le `README.md` du dossier.)*
 
+### `governance/` — Guide de gouvernance traduit
+
+Le guide de gouvernance d'AnarBib en **10 langues** (`ca, de, el, en, eo, es, fr, it, nl, pt-BR`), en `.md` + `.docx`. Pendant traduit du `guide-gouvernance-anarbib.md` racine. Documentation stable.
+
 ---
 
 ## 🧭 Comment naviguer dans la documentation
@@ -149,7 +165,7 @@ DPA en 6 langues, registre des traitements, procédure de réponse aux incidents
 
 **« Je veux comprendre un domaine technique »** → [`specs/INDEX.md`](./specs/INDEX.md) puis la spec de référence.
 
-**« Je veux savoir ce qui a été décidé/fait à telle date »** → [`decisions/INDEX.md`](./decisions/INDEX.md), recherche chronologique. Pour la valeur normative d'une décision, vérifier ensuite au REGISTRE.
+**« Je veux savoir ce qui a été décidé/fait à telle date »** → [`journal/INDEX.md`](./journal/INDEX.md), recherche chronologique. Pour la valeur normative d'une décision, vérifier ensuite au REGISTRE.
 
 **« Je veux la liste des tâches à faire »** → [`backlogs/INDEX.md`](./backlogs/INDEX.md) puis la version courante.
 
@@ -157,7 +173,7 @@ DPA en 6 langues, registre des traitements, procédure de réponse aux incidents
 
 **« Je veux comprendre la gouvernance du projet »** → [`guide-gouvernance-anarbib.md`](./guide-gouvernance-anarbib.md) (vue d'ensemble) puis `specs/spec-gouvernance-roles.md` et `specs/spec-administrateur-reseau-v0.4.md` (détails techniques).
 
-**« Je veux comprendre comment créer un objet backend proprement »** → REGISTRE entrée `DOC-OBJ-2`, qui pointe vers `decisions/CHANTIER_doctrine_creation_objets_securises_2026-05-12.md` pour la trace détaillée.
+**« Je veux comprendre comment créer un objet backend proprement »** → REGISTRE entrée `DOC-OBJ-2`, qui pointe vers `journal/chantiers/CHANTIER_doctrine_creation_objets_securises_2026-05-12.md` pour la trace détaillée.
 
 **« Où en est la carte publique ? »** → [`cartographie/GUIDE_carte_publique_explorar.md`](./cartographie/GUIDE_carte_publique_explorar.md).
 
@@ -165,22 +181,27 @@ DPA en 6 langues, registre des traitements, procédure de réponse aux incidents
 
 ## 📐 Conventions documentaires
 
-### Nommage des fichiers dans `decisions/`
+### Nommage et rangement des fichiers dans `journal/`
 
-- `SESSION_*` — compte-rendu d'une session de travail
-- `CHANTIER_*` — documentation d'un chantier (en cours ou clos)
-- `BILAN_*` — bilan d'une période
-- `BUG_*` — analyse d'un bug
-- `QA_*` — plan ou résultat de QA manuelle
-- `AUDIT_*` / `AUDITORIA_*` — audit technique
-- `RIFLEXION_*` — capture conversationnelle d'une réflexion doctrinale
-- `DECISOES_*` — décisions de coordination d'une biblio (pt-BR)
-- `DECISION_*` — décision projet ou arbitrage d'ouverture
-- `Prompt-Reprise-*` — mémento de reprise de chantier (⚠️ obsolète une fois le chantier clos → archive)
+Depuis le 10/06/2026, le **préfixe détermine le sous-dossier** (rangement strict par type de document) :
+
+| Préfixe | Sous-dossier | Sens |
+|---|---|---|
+| `CADRAGE_*` | `cadrages/` | cadrage d'un chantier ou d'une spec |
+| `CHANTIER_*` (+ `EA-13_`, `EA05_`, `MODULE_*STATUT`, `Dossier_ouverture_*`) | `chantiers/` | documentation d'un chantier |
+| `SESSION_*`, `BILAN_*` | `sessions/` | compte-rendu de session / bilan de période |
+| `AUDIT_*`, `AUDITORIA_*`, `QA_*` | `audits/` | audit technique, QA manuelle |
+| `DECISION_*`, `DECISOES_*` (coord. biblio pt-BR), `AMENDEMENT_*`, `CLOTURE_*`, `RIFLEXION_*`, `DEFINITION_*` | `arbitrages/` | décisions, clôtures, réflexions doctrinales |
+| `BUG_*` | `bugs/` | analyse d'un bug |
+| `CLEANUP_*`, `DEPLOIEMENT_*`, `REDEPLOY_*`, `REFACTOR_*`, `SETUP_*` | `operations/` | opérations infra/maintenance ponctuelles |
+| `cles_*`, `ref_*`, `INVENTAIRE_addendum`, `PROMPT_reprise_*` | `references/` | données de référence, mémentos de reprise |
+| `Prompt-Reprise-*` obsolètes, doublons | `archive/` | trace remplacée (⚠️ jamais supprimée) |
+
+> Un nouveau document de trace va dans le sous-dossier de son type. En cas de doute, `references/` ou `chantiers/`.
 
 ### Dossiers `archive/`
 
-Chaque sous-dossier qui accumule des versions (`specs/`, `decisions/`, `backlogs/`, `GLB/`) a un sous-dossier `archive/` pour les versions remplacées. **Ne jamais supprimer une archive** — elle peut servir dans plusieurs mois.
+Chaque sous-dossier qui accumule des versions (`specs/`, `journal/`, `backlogs/`, `GLB/`) a un sous-dossier `archive/` pour les versions remplacées. **Ne jamais supprimer une archive** — elle peut servir dans plusieurs mois.
 
 ### Statuts visuels
 
@@ -212,7 +233,7 @@ Cet INDEX et les index spécialisés sont mis à jour :
 - à chaque nettoyage du corpus.
 
 **Audits récents :**
-- **2 juin 2026** — audit de cohérence du corpus (`decisions/AUDIT_coherence_corpus_2026-06-02.md`) → naissance du REGISTRE et formalisation de la préséance documentaire.
+- **2 juin 2026** — audit de cohérence du corpus (`journal/audits/AUDIT_coherence_corpus_2026-06-02.md`) → naissance du REGISTRE et formalisation de la préséance documentaire.
 - **20 mai 2026** — nettoyage complet : réécriture des specs, archivage des versions périmées, création des index spécialisés.
 
 **Discipline « close before open » étendue à la doc** (DOC-CLOSE-1 du REGISTRE) : un chantier n'est clos que quand ses vérités ont gradué au REGISTRE/à la spec courante, et que sa trace est tamponnée. On ne laisse pas une décision en suspens entre une session et la suivante.

@@ -225,7 +225,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 - `spec-profils-bibliotheque-v0_7` (volet 0 = choix initial du profil d'adoption)
 - `spec-validation-physique v1.1` (post-onboarding pour les memberships créés)
 - `spec-onboarding-criar-conta v0.3` (parcours public antérieur à la soumission)
-- `docs/decisions/RIFLEXION_articulation_onboarding_profils_2026-05-20.md`
+- `docs/journal/arbitrages/RIFLEXION_articulation_onboarding_profils_2026-05-20.md`
 
 **Dépendances sortantes** : aucune directe.
 
@@ -276,7 +276,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Dépendances entrantes** :
 - `spec-onboarding-biblioteca-v2.0`
 - `spec-gouvernance-roles v1.3`
-- `docs/decisions/DECISION_validation_par_appartenance_2026-05-30.md`
+- `docs/journal/arbitrages/DECISION_validation_par_appartenance_2026-05-30.md`
 
 **Points d'attention** :
 - L'amendement structurel précède l'implémentation et indique précisément les sections à ajuster (3, 4, 5, 8). Ne réécrit pas la spec.
@@ -335,7 +335,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Chantiers liés** :
 - Paquet 11+ (rôles + carence + audit log) ✅ clos
 - Conditionnalité governance_mode : intégrée dans paquets D-E du chantier profils
-- Amendement TM-A inscrit 24/05 (cf. `docs/decisions/AMENDEMENT_TM-A_spec-gouvernance-roles_2026-05-24.md`)
+- Amendement TM-A inscrit 24/05 (cf. `docs/journal/arbitrages/AMENDEMENT_TM-A_spec-gouvernance-roles_2026-05-24.md`)
 
 ---
 
@@ -565,7 +565,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Dépendances entrantes** : aucune.
 
 **Dépendances sortantes** :
-- `docs/decisions/DECISION_chantier_mobile_arbitrages_2026-05-28.md` (arbitrages A.1-A.4 et trois décisions doctrinales)
+- `docs/journal/arbitrages/DECISION_chantier_mobile_arbitrages_2026-05-28.md` (arbitrages A.1-A.4 et trois décisions doctrinales)
 - `REGISTRE_decisions.md` §23 `CARD` (A.1-A.4 + CARD-R1 résolution staff)
 
 **Chantiers liés** :
@@ -579,7 +579,7 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 **Domaine** : Unifier la granularité du modèle sur l'exemplaire (`#MODEL-item-grain`)
 **Version actuelle** : v1 (23 mai 2026 — cadrage)
 **Taille** : ~12 Ko, 270 lignes
-**Statut** : 🔵 Référence historique — chantier **livré en production** (constaté 03/06 via dump schéma). Cœur (`item_id` sur `consulta_linhas_v2`, FK RESTRICT, 30 lignes migrées) + suite §6.2 `#ILL-availability` en base ; suite §6.1 (frontend) = dépendance dissoute (résolution serveur depuis le holding). Cf. `docs/decisions/CLOTURE_MODEL-item-grain_2026-06-03.md`.
+**Statut** : 🔵 Référence historique — chantier **livré en production** (constaté 03/06 via dump schéma). Cœur (`item_id` sur `consulta_linhas_v2`, FK RESTRICT, 30 lignes migrées) + suite §6.2 `#ILL-availability` en base ; suite §6.1 (frontend) = dépendance dissoute (résolution serveur depuis le holding). Cf. `docs/journal/arbitrages/CLOTURE_MODEL-item-grain_2026-06-03.md`.
 
 **Périmètre** :
 - Évolution du modèle pour unifier la granularité sur l'exemplaire (item) plutôt que sur le holding ou la transaction

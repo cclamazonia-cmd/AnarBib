@@ -7,7 +7,7 @@
 
 **Dépendances mutuelles** :
 - **`docs/specs/spec-onboarding-biblioteca.md v2.0`** (20/05/2026) — décrit le mécanisme symétrique « Proposer un échange » pour les **solicitantes** (admins réseau ↔ biblios candidates en évaluation ou en constitution). La présente spec v0.4 décrit le mécanisme équivalent pour les **biblios membres** (admins réseau ↔ coordenadores en difficulté sur leur biblio existante). Les deux mécanismes partagent la même doctrine §1.4 anti-méga-machine et le même pattern technique (table `*_invitations`, RPC `fn_propose_exchange`, events mail dédiés).
-- **`docs/decisions/RIFLEXION_articulation_onboarding_profils_2026-05-20.md`** (345 lignes) — capture conversationnelle de la session marathon 19-20/05 qui a fait émerger la doctrine anti-méga-machine.
+- **`docs/journal/arbitrages/RIFLEXION_articulation_onboarding_profils_2026-05-20.md`** (345 lignes) — capture conversationnelle de la session marathon 19-20/05 qui a fait émerger la doctrine anti-méga-machine.
 - **`docs/specs/spec-profils-bibliotheque-v0_7.md`** (clôture chantier 19/05) — la doctrine s'applique en particulier aux moments où une biblio doit reconfigurer son profil d'adoption (transitions E.5).
 
 **Historique de version** :
@@ -1223,7 +1223,7 @@ Quelques **détails à implémenter** restent :
 
 **Objet de la version** : enrichissement doctrinal anti-méga-machine, intégration d'un mécanisme de canal humain proactif vers les biblios membres, et reconnaissance du risque de surcharge des admins réseau. La v0.4 ne remet en cause **aucun** élément doctrinal ou technique de v0.3.1 (qui reste implémentée et stable en production). Elle **étend** la doctrine pour préparer un futur chantier d'implémentation (post-#111 ou en parallèle).
 
-**Origine** : session marathon 19-20/05/2026 (clôture du chantier profils d'adoption). La doctrine anti-méga-machine a émergé en réfléchissant à l'articulation avec le futur chantier #111. Capture dans `docs/decisions/RIFLEXION_articulation_onboarding_profils_2026-05-20.md` (345 lignes), inscription normative dans deux specs miroir : la présente v0.4 et `spec-onboarding-biblioteca.md v2.0` (qui décrit le mécanisme symétrique pour les solicitantes).
+**Origine** : session marathon 19-20/05/2026 (clôture du chantier profils d'adoption). La doctrine anti-méga-machine a émergé en réfléchissant à l'articulation avec le futur chantier #111. Capture dans `docs/journal/arbitrages/RIFLEXION_articulation_onboarding_profils_2026-05-20.md` (345 lignes), inscription normative dans deux specs miroir : la présente v0.4 et `spec-onboarding-biblioteca.md v2.0` (qui décrit le mécanisme symétrique pour les solicitantes).
 
 **Sections ajoutées** :
 - **Préambule politique** : paragraphe « Décision politique additionnelle (20/05/2026, v0.4) : doctrine anti-méga-machine » avec formulation politique + conséquence directe sur le rôle d'admin réseau

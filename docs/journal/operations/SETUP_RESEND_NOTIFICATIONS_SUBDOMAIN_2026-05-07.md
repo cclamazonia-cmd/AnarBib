@@ -126,4 +126,4 @@ Decisão: cada email será enviado de um endereço identificável vinculado ao s
 - Conta Resend (CCLA) : https://resend.com
 - Domain configuration : Resend Dashboard → Domains → notifications.anarbib.org
 - DNS Zone : OVH Manager → Web Cloud → Domaines → anarbib.org → Zone DNS
-- Bug logos Brevo (origem da migração) : `docs/decisions/BUG_LOGOS_BREVO_TRACKER_2026-05-06.md`
+- Bug logos Brevo (origem da migração) : `docs/journal/bugs/BUG_LOGOS_BREVO_TRACKER_2026-05-06.md`

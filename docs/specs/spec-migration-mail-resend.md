@@ -841,7 +841,7 @@ Les mails envoyés après la migration auront, eux, des CTAs pointant directemen
 
 Plusieurs documents internes mentionnent Brevo de manière incidente. Liste indicative des emplacements à vérifier et mettre à jour en R.6 ou immédiatement après :
 
-- `docs/decisions/BUG_LOGOS_BREVO_TRACKER_2026-05-06.md` : ce document explique le rationale du module `_shared/mail/inline-images.ts`. Il reste pertinent comme archive historique et n'a pas besoin d'être supprimé. Une note de clôture peut être ajoutée en R.6 : « contre-mesure rendue inutile par la migration Resend, conservée pour archivage durable des logos ».
+- `docs/journal/bugs/BUG_LOGOS_BREVO_TRACKER_2026-05-06.md` : ce document explique le rationale du module `_shared/mail/inline-images.ts`. Il reste pertinent comme archive historique et n'a pas besoin d'être supprimé. Une note de clôture peut être ajoutée en R.6 : « contre-mesure rendue inutile par la migration Resend, conservée pour archivage durable des logos ».
 - Les éventuels READMEs des EF qui mentionneraient Brevo dans leur description. À grep en R.6.
 - Le `docs/specs/spec-administrateur-reseau.md` (v0.3 du 11/05/2026) mentionne probablement Brevo dans la section sur les notifications de cooptation. À vérifier et mettre à jour.
 - Les commit messages historiques mentionnant Brevo ne sont pas modifiables et restent en l'état.

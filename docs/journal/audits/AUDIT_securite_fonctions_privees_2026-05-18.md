@@ -152,7 +152,7 @@ La garde existe, fait le bon check (`network_staff × is_active × can_view_netw
 
 ## 6. Doctrine étendue
 
-Voir `docs/decisions/CHANTIER_doctrine_creation_objets_securises_*.md` (mise à jour 18/05). Points clés ajoutés :
+Voir `docs/journal/chantiers/CHANTIER_doctrine_creation_objets_securises_*.md` (mise à jour 18/05). Points clés ajoutés :
 
 - **Pattern de REVOKE étendu** : toute fonction privée (cron, helper interne, trigger callée par triggers non-DEFINER) doit être créée avec `REVOKE EXECUTE ... FROM PUBLIC, anon, authenticated, service_role` — `FROM PUBLIC` seul est insuffisant à cause d'`ALTER DEFAULT PRIVILEGES` Supabase.
 - **Triggers non-DEFINER** : si un trigger non-SECURITY-DEFINER appelle une SECURITY DEFINER REVOKE-ed, le trigger plantera. Patcher le trigger en SECURITY DEFINER + `search_path` fixé avant le REVOKE.

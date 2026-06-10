@@ -163,7 +163,7 @@ Reprendre les scénarios QA 1, 6, 9 et vérifier que la note apparaît bien dans
 
 ### 3.6. Étape 6 — Trace décision (30 min)
 
-Inscrire dans `docs/decisions/SESSION_hardening-notifications-consultas-AAAA-MM-JJ.md` :
+Inscrire dans `docs/journal/sessions/SESSION_hardening-notifications-consultas-AAAA-MM-JJ.md` :
 - Cause exacte de B3 généralisé
 - Doctrine de propagation : « toute note workflow saisie doit être propagée au payload et affichée dans le mail correspondant »
 - Pattern doctrinal à inscrire pour les futurs triggers de notification

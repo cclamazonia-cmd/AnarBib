@@ -281,7 +281,7 @@ livraison du câblage.
 
 4. **Doctrine v2 création objets backend** : si on ajoute une RPC
    `fn_v2_check_peb_preconditions`, suivre le template
-   `docs/decisions/CHANTIER_doctrine_creation_objets_securises_2026-05-12.md`.
+   `docs/journal/chantiers/CHANTIER_doctrine_creation_objets_securises_2026-05-12.md`.
 
 5. **UTF-8 PowerShell** : si on patche les JSON i18n, méthode
    `[System.IO.File]::ReadAllText/WriteAllText` avec `UTF8Encoding(false)`.

@@ -133,7 +133,7 @@ Trois jours d'enchaînement sans relâche qui ont fait passer AnarBib **du stade
   - 3 records DNS (DKIM TXT + MX feedback + SPF TXT) posés dans la zone OVH
   - Vérification Resend confirmée
   - Test envoi brut validé : URLs et images **non réécrites**, mail reçu en inbox
-  - Doc `docs/decisions/SETUP_RESEND_NOTIFICATIONS_SUBDOMAIN_2026-05-07.md`
+  - Doc `docs/journal/operations/SETUP_RESEND_NOTIFICATIONS_SUBDOMAIN_2026-05-07.md`
 - **Commit** : `df24f8a`
 
 #### Lot 4 — Crons gouvernance

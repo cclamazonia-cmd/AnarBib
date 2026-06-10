@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase';
 // Modale de lecture de la configuration institutionnelle brute d'une
 // bibliotheque. Restaure le sous-encart « workspace JSON / Ver tudo » du
 // HTML d'origine, absent du JSX.
-// Cf. docs/decisions/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md
+// Cf. docs/journal/chantiers/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md
 //
 // Outil de DIAGNOSTIC en lecture seule : affiche l'objet renvoye par
 // api.get_library_institutional_workspace (10 blocs : library, service_state,

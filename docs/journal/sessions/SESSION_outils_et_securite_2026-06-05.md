@@ -2,7 +2,7 @@
 
 - **Nature :** *trace non-normative* (préfixe `SESSION_`). En cas de conflit avec le registre / la spec courante / le backlog, **cette trace est périmée par définition** (cf. INDEX § Préséance).
 - **Maintenu par :** Xavier (lead dev) + Claude (assistant·e).
-- **Emplacement suggéré :** `docs/decisions/SESSION_outils_et_securite_2026-06-05.md`.
+- **Emplacement suggéré :** `docs/journal/sessions/SESSION_outils_et_securite_2026-06-05.md`.
 - **Objet :** consigner ce qui a été réalisé pendant la session du 05/06 — mise en place d'outillage Claude Code, nettoyage de sécurité de la base (advisors), et un galop d'essai d'artéfact UX.
 
 ---

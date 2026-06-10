@@ -13,7 +13,7 @@ Ce dossier contient les versions successives du **backlog technique** d'AnarBib.
 
 ➡️ **`AnarBib-Backlog-2026-06-02-v26.docx`**
 
-Backlog v26 du 2 juin 2026. Cette version s'inscrit dans la dynamique post-**audit de cohérence du corpus du 02/06** (`../decisions/AUDIT_coherence_corpus_2026-06-02.md`) qui a institué le REGISTRE des décisions et la règle de préséance documentaire.
+Backlog v26 du 2 juin 2026. Cette version s'inscrit dans la dynamique post-**audit de cohérence du corpus du 02/06** (`../journal/audits/AUDIT_coherence_corpus_2026-06-02.md`) qui a institué le REGISTRE des décisions et la règle de préséance documentaire.
 
 > **À intégrer dans v27 — session du 05/06 (soir).** Livré en prod (foyer normatif : `../specs/REGISTRE_decisions.md` §12 `CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1`) : **Track A catalogação complet** (Lots 1→6 + 3b) ; **module capas P1/P2/P3** (P3 page-1-PDF côté client) ; **liaison autorités↔œuvres** (matching + outil « Rattacher aux œuvres ») ; **fusion de doublons** autorités **et** documents (`merge_log`/`merge_author`/`merge_book`) ; **flux contributeurs** brouillon→publié + fiche livre complète ; **socle Ateliers** (`author_translations` étendue). 3 specs nouvelles dans `../specs/`.
 >

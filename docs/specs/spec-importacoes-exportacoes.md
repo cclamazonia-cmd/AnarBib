@@ -108,7 +108,7 @@ Un import est long → **objet « run d'import »** (nouveau, **DDL à trancher*
 
 Les six points ouverts de la v0.1 sont tranchés (validés Xavier). Nouveaux IDs au REGISTRE §17.
 
-**IMP-9 — Run d'import.** ⚠️ **Corrigé le 08/06** (cf. `decisions/CADRAGE_importacoes_refonte_2026-06-08.md`) : le run **existe déjà** — **`ingest.partner_catalog_import_runs`** (`run_status`, compteurs `imported_rows/selected_rows/created_drafts`, `summary`, `error_log`, `detected_format`, `parser_version`). On le **réutilise** ; on ne crée **pas** `catalog_import_runs`. Le **dry-run = le staging** `ingest.partner_catalog_staging_rows` (porte `match_status`/`confidence`/`warnings` avant promotion). Promotion = `ingest.fn_bulk_create_book_drafts_from_run` (transaction → `catalog_batches` + `book_drafts` + journal `book_draft_import_events`). Tout le pipeline (create → dispatch/EF parser → match → review → promote) est déjà câblé. Écritures via RPC (`DOC-RPC-3`).
+**IMP-9 — Run d'import.** ⚠️ **Corrigé le 08/06** (cf. `journal/cadrages/CADRAGE_importacoes_refonte_2026-06-08.md`) : le run **existe déjà** — **`ingest.partner_catalog_import_runs`** (`run_status`, compteurs `imported_rows/selected_rows/created_drafts`, `summary`, `error_log`, `detected_format`, `parser_version`). On le **réutilise** ; on ne crée **pas** `catalog_import_runs`. Le **dry-run = le staging** `ingest.partner_catalog_staging_rows` (porte `match_status`/`confidence`/`warnings` avant promotion). Promotion = `ingest.fn_bulk_create_book_drafts_from_run` (transaction → `catalog_batches` + `book_drafts` + journal `book_draft_import_events`). Tout le pipeline (create → dispatch/EF parser → match → review → promote) est déjà câblé. Écritures via RPC (`DOC-RPC-3`).
 
 **IMP-10 — Profils de mapping.** Table **`ingest.import_mapping_profiles`** (schéma `ingest`, pas `public`) : `{ name, scope ('library' | 'network'), library_id, structure_code, vocabulary_code, mapping jsonb (champ_source → colonne `book_drafts` | cible autorité), created_by }`. Le mapping = **jsonb**. ⚠️ Aujourd'hui le mapping est **codé en dur** dans l'EF `process-partner-catalog-import` (alias par format : `mapRecord`/`mapRisRecord`) ; IMP-10 = faire **consulter cette table** par l'EF (+ UI d'édition). Portée **biblio** par défaut, **réseau** optionnel.
 
@@ -126,7 +126,7 @@ Les six points ouverts de la v0.1 sont tranchés (validés Xavier). Nouveaux IDs
 
 ## 13. Plan de lots (implémentation) — corrigé sur le backend réel
 
-⚠️ **Le backend d'import EST construit** (schéma `ingest` ; cf. `decisions/CADRAGE_importacoes_refonte_2026-06-08.md`). Le chantier n'est donc **pas** un « Lot 0 de tables » mais surtout du **frontend** + des compléments. Par lots vérifiés (close-before-open, `DOC-CLOSE-1`) :
+⚠️ **Le backend d'import EST construit** (schéma `ingest` ; cf. `journal/cadrages/CADRAGE_importacoes_refonte_2026-06-08.md`). Le chantier n'est donc **pas** un « Lot 0 de tables » mais surtout du **frontend** + des compléments. Par lots vérifiés (close-before-open, `DOC-CLOSE-1`) :
 
 - **Lot 0 — durcissement RPC + exposition** *(petit, prérequis)*. `GRANT … TO authenticated` + **validation de rôle dans les RPC `ingest.*`** (`DOC-RPC-3`, `IMP-14`) ; exposer `review_status` dans les vues UI. Sans ça l'import ne marche pas pour le staff.
 - **Lot 1 — frontend v7 (face import)** *(le cœur visible)*. Refonte `ImportacoesPage.jsx` sur la maquette v7 : toggle Sentido, bandeau adaptateur (lecture), **3 circuits**, **fila de revisão** (avec états de révision), **journal**. Branché sur le pipeline `ingest` **existant** (`fn_create_partner_catalog_import` → `dispatch` → staging → review → `fn_bulk_create_book_drafts_from_run`). i18n (10 locales).
@@ -138,4 +138,4 @@ Les six points ouverts de la v0.1 sont tranchés (validés Xavier). Nouveaux IDs
 
 ---
 
-*v0.2 (conception consolidée, 08/06/2026 ; corrigée le 08/06 sur le backend réel). Décisions au REGISTRE `IMP-1..IMP-15` (§17). Cadrage technique : `decisions/CADRAGE_importacoes_refonte_2026-06-08.md`. Traces visuelles : `maquette_importacoes_v7.html` (tableau de bord) + `maquette_wizard_import_v1.html` (wizard, à re-dériver). Implémentation par lots (§13), foyer unique (CHARTE_corpus : citer plutôt que recopier).*
+*v0.2 (conception consolidée, 08/06/2026 ; corrigée le 08/06 sur le backend réel). Décisions au REGISTRE `IMP-1..IMP-15` (§17). Cadrage technique : `journal/cadrages/CADRAGE_importacoes_refonte_2026-06-08.md`. Traces visuelles : `maquette_importacoes_v7.html` (tableau de bord) + `maquette_wizard_import_v1.html` (wizard, à re-dériver). Implémentation par lots (§13), foyer unique (CHARTE_corpus : citer plutôt que recopier).*

@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
  * --------------------------------------------------------------------------
  * Consultation des prêts entre bibliothèques (PEB) archivés.
  * Chantier #ILL-archive, étape frontend.
- * Spec : docs/decisions/CHANTIER_cloture_ILL_2026-05-24.md (section 4)
+ * Spec : docs/journal/chantiers/CHANTIER_cloture_ILL_2026-05-24.md (section 4)
  *
  * Affiché dans l'onglet Rapports de la page Biblioteca. Liste les PEB
  * archivés de la bibliothèque (ceux que le staff a sortis de la file

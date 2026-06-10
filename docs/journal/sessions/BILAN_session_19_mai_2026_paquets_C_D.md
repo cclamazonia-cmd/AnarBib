@@ -54,7 +54,7 @@ resolues en cours de session.
 - **Module PEB frontend** : backend 100% pret, frontend JSX contient
   anti-patterns `.from('interlibrary_loans_v2')` directs au lieu d'appeler
   les RPC SECURITY DEFINER. Diagnostic complet dans
-  `docs/decisions/CHANTIER_peb_frontend_diagnostic_2026-05-19.md`.
+  `docs/journal/chantiers/CHANTIER_peb_frontend_diagnostic_2026-05-19.md`.
   Reporte a session fraiche dediee.
 
 ## Bugs diagnostiques + resolus en session

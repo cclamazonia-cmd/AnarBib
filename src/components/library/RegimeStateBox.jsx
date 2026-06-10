@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 // =============================================================================
 // Encart de lecture du régime, en tête de l'onglet regulation de
 // BibliotecaPage. Restaure le `regimeStateBox` du HTML d'origine, absent
-// du JSX. Cf. docs/decisions/CHANTIER_audit_biblioteca_...md
+// du JSX. Cf. docs/journal/chantiers/CHANTIER_audit_biblioteca_...md
 //
 // Diagnostic de LECTURE : il calcule l'un des 5 états du régime selon le
 // croisement (jeu actif) × (texte de régiment actif) × (lien entre les deux)

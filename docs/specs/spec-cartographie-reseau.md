@@ -349,7 +349,7 @@ Liste des points qui méritent réflexion mais qui ne bloquent pas la première 
 
 ## 7. Documents liés
 
-- `docs/decisions/DEFINITION_MEMBRE_2026-05-27.md` *(à créer)*
+- `docs/journal/arbitrages/DEFINITION_MEMBRE_2026-05-27.md` *(à créer)*
 - `docs/cartographie/anarbib_bibliotheques_libertaires.geojson` *(à archiver)*
 - `docs/cartographie/AnarBib_recensement_bibliotheques_libertaires.docx` *(à archiver)*
 - `docs/specs/spec-administrateur-reseau-v0_4.md` (articulation droits)

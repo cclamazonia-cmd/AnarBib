@@ -7,7 +7,7 @@
 > **Mise a jour 06/06 soir** : tous les points 🟡/⛔/❓ de la version
 > precedente ont ete resolus. La spec `spec-catalogacao-fiche-et-paliers v0.3`
 > est **integralement implementee**. Voir la cloture :
-> `docs/decisions/CLOTURE_catalogacao_spec_2026-06-06.md`.
+> `docs/journal/arbitrages/CLOTURE_catalogacao_spec_2026-06-06.md`.
 
 ## 0. Sources de verite
 

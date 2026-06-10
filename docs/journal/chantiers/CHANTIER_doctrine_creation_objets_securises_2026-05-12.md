@@ -658,7 +658,7 @@ foreach ($p in $patterns) {
 
 ### 8.6 Référence — état du chantier #150
 
-Le chantier #150 a appliqué cette méthode à ~160 fonctions SECURITY DEFINER du schéma public. Résultat : 28 fonctions Cat 3 isolées + 1 trigger patché en SECURITY DEFINER, en 3 sous-paquets (SP1 / SP2 / SP3). Détails dans `docs/decisions/AUDIT_securite_fonctions_privees_2026-05-18.md`.
+Le chantier #150 a appliqué cette méthode à ~160 fonctions SECURITY DEFINER du schéma public. Résultat : 28 fonctions Cat 3 isolées + 1 trigger patché en SECURITY DEFINER, en 3 sous-paquets (SP1 / SP2 / SP3). Détails dans `docs/journal/audits/AUDIT_securite_fonctions_privees_2026-05-18.md`.
 
 ---
 
@@ -696,7 +696,7 @@ Pour proposer une évolution : créer une note `CHANTIER_doctrine_evolution_AAAA
 - Chantier linter L.* (sessions 11-12 mai 2026) : 9 paquets, ~270 → ~184 alertes
 - Document de synthèse du chantier : `AnarBib_Recap_Chantier_Linter_2026-05-12.docx`
 - Note de décision SECURITY DEFINER assumé : `CHANTIER_linter_security_definer_assume_2026-05-12.md`
-- Audit sécurité chantier #150 : `docs/decisions/AUDIT_securite_fonctions_privees_2026-05-18.md`
+- Audit sécurité chantier #150 : `docs/journal/audits/AUDIT_securite_fonctions_privees_2026-05-18.md`
 - Paquet L.12 (cleanup zero risk) : `supabase/migrations/20260519300000_paquetL12_cleanup_zero_risk.sql`
 - Paquet L.12ter (hotfix RLS archives) : `supabase/migrations/20260519320000_paquetL12ter_hotfix_rls_archives_tolerant.sql`
 - Migration chantier #150 SP2 (exemple de patch trigger non-DEFINER) : `supabase/migrations/20260518160000_chantier150_sp2_revoke_notifications_helpers.sql`

@@ -5,7 +5,7 @@
 //   - page = scope, no cross-calculation
 //   - chaque page raconte l'histoire de son périmètre
 //
-// Cf. docs/decisions/CHANTIER_harmonisation_heros_2026-05-19.md §2.3 et §3.3
+// Cf. docs/journal/chantiers/CHANTIER_harmonisation_heros_2026-05-19.md §2.3 et §3.3
 // Cf. Guide de gouvernance d'AnarBib v1.0 §2.3
 
 import { useMemo } from 'react';

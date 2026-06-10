@@ -13,7 +13,7 @@ Le chantier a été **ouvert et cadré le 08/06/2026** (session « Refonte Impor
 ## 2. Documents d'autorité (à relire AVANT de coder)
 1. **`docs/specs/spec-importacoes-exportacoes.md` v0.2** — la conception consolidée. `IMP-1..15` tranchés. §12 = les arbitrages ; §13 = le plan de lots (corrigé sur le backend réel).
 2. **`docs/specs/REGISTRE_decisions.md` §17 (`IMP-1..15`)** — **foyer normatif** (préséance : REGISTRE > spec > backlog > trace). En cas de doute, c'est lui qui tranche.
-3. **`docs/decisions/CADRAGE_importacoes_refonte_2026-06-08.md`** — **LE doc clé** : le contrat exact du backend `ingest` (pipeline + RPC + modèle de données) + l'analyse d'écart + le plan de lots. À lire en entier.
+3. **`docs/journal/cadrages/CADRAGE_importacoes_refonte_2026-06-08.md`** — **LE doc clé** : le contrat exact du backend `ingest` (pipeline + RPC + modèle de données) + l'analyse d'écart + le plan de lots. À lire en entier.
 
 Specs liées : `spec-flux-partage-numerique` (ILL, pour l'export), `spec-partenariat-biblios` (`library_partnerships`, `digital_share`), `spec-acquisition-provenance` (frontière `ACQ-Q4` : ingestion ici, entrée-en-collection en Catalogação).
 

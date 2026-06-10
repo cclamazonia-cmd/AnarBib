@@ -9,7 +9,7 @@ Supersédé par : —
 
 > ## ⚠️ Amendement structurant — 30/05/2026
 >
-> **La validation physique est désormais portée par l'appartenance (`user_library_memberships`), pas par le compte (`profiles`).** Décision actée dans `docs/decisions/DECISION_validation_par_appartenance_2026-05-30.md`.
+> **La validation physique est désormais portée par l'appartenance (`user_library_memberships`), pas par le compte (`profiles`).** Décision actée dans `docs/journal/arbitrages/DECISION_validation_par_appartenance_2026-05-30.md`.
 >
 > Cet amendement précède l'implémentation de la spec. Il ne réécrit pas la spec mais désigne les sections à ajuster lors de la rédaction de la migration SQL. La section 3 reste valable dans sa structure ; ce sont les **emplacements** (table cible, FK) qui changent.
 >

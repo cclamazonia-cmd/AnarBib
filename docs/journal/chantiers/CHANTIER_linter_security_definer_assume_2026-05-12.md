@@ -150,4 +150,4 @@ D'ici là, la vue reste en `SECURITY DEFINER`, le linter affiche 1 ERROR, et c'e
 - Paquet de migration : `supabase/migrations/20260515140000_paquetL11_my_access_security_invoker.sql`
 - Documentation Supabase de l'alerte : <https://supabase.com/docs/guides/database/database-linter?lint=0010_security_definer_view>
 - Pattern PostgreSQL `SECURITY DEFINER` recommandé : <https://www.postgresql.org/docs/current/sql-createfunction.html#SQL-CREATEFUNCTION-SECURITY>
-- Document de synthèse du chantier linter : `docs/decisions/AnarBib_Recap_Chantier_Linter_2026-05-12.docx`
+- Document de synthèse du chantier linter : `docs/journal/chantiers/AnarBib_Recap_Chantier_Linter_2026-05-12.docx`

@@ -2,7 +2,7 @@
 
 **Date** : 2026-06-06
 **Spec** : `docs/specs/spec-catalogacao-fiche-et-paliers.md`
-**Etat** : `docs/specs/ETAT-catalogacao-2026-06-06.md`
+**Etat** : `docs/journal/sessions/ETAT-catalogacao-2026-06-06.md`
 
 ---
 

@@ -5,7 +5,7 @@
 > **Statut actuel** : référence historique — décision actée et appliquée en production.
 > Cette doctrine sémantique a été appliquée au **paquet 5b du 09/05/2026**, qui a aligné les labels des stages sur leur mécanique de négociation effective. La spec sert désormais à reconstituer le raisonnement d'origine.
 >
-> Source : résumé `docs/decisions/AnarBib_decisions_synthese_2026-05-29.docx`, section « Acquis », entrée Paquet 5b.
+> Source : résumé `docs/journal/arbitrages/AnarBib_decisions_synthese_2026-05-29.docx`, section « Acquis », entrée Paquet 5b.
 >
 > Le bloc de métadonnées ci-dessous est celui de la rédaction d'origine, conservé pour traçabilité.
 

@@ -79,7 +79,7 @@ Esta trajetória **não constitui um fracasso**: o teste em parceria terá produ
 
 A presença e o estatuto da BTL são tracejados em dois lugares:
 
-1. **Documental** — este documento (`docs/decisions/DECISOES_COORDENACAO_BTL_2026-05-06.md`)
+1. **Documental** — este documento (`docs/journal/arbitrages/DECISOES_COORDENACAO_BTL_2026-05-06.md`)
 2. **Técnico** — coluna `admin_notes` da tabela `public.libraries`, onde uma anotação foi inscrita em 2026-05-06 referenciando este documento
 
 ---

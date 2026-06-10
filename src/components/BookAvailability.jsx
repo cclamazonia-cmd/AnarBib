@@ -32,7 +32,7 @@ import { Pill } from '@/components/ui';
  *
  * **Doctrine** : la dispo est celle de la biblio courante de la lectrice,
  * pas celle de la biblio où le livre a été emprunté historiquement. Cf.
- * docs/decisions/DECISION_validation_par_appartenance_2026-05-30.md (α).
+ * docs/journal/arbitrages/DECISION_validation_par_appartenance_2026-05-30.md (α).
  */
 export default function BookAvailability({ availability, variant = 'inline' }) {
   const { formatMessage: t, formatDate } = useIntl();

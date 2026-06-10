@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
  * --------------------------------------------------------------------------
  * Editeur des partenaires de correspondance d'une bibliotheque.
  * Chantier « Partenaires de correspondance », etape 3.
- * Spec : docs/decisions/CHANTIER_partenaires_correspondance_2026-05-24.md
+ * Spec : docs/journal/chantiers/CHANTIER_partenaires_correspondance_2026-05-24.md
  *
  * Un partenaire de correspondance est, au choix :
  *   - une autre bibliotheque AnarBib federee (partner_library_id) ;

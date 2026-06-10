@@ -95,7 +95,7 @@ Le commentaire historique des lignes 211-220 du `.woodpecker.yml` est obsolète.
   # NOTE HISTORIQUE :
   # Les migrations antérieures au paquet 14 (01/05 → 10/05/2026, format
   # hétérogène) sont archivées dans `docs/archive/db-migrations-legacy-pre-woodpecker/`.
-  # L'audit du 29/05/2026 (cf. `docs/decisions/CLEANUP_db_migrations_2026-05-29.md`)
+  # L'audit du 29/05/2026 (cf. `docs/journal/operations/CLEANUP_db_migrations_2026-05-29.md`)
   # a vérifié que 100 % des objets créés par ces migrations sont soit en prod,
   # soit volontairement retirés par un chantier ultérieur tracé. Aucune dette
   # résiduelle. Depuis le paquet 14, toutes les nouvelles migrations passent

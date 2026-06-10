@@ -1588,7 +1588,7 @@ export default function BibliotecaPage() {
               Chaque biblioteca choisit desormais ses propres partenaires
               (bibliotheques federees ou collectifs catalogue). Reserve au
               staff de coordination (canEdit=isCoord, l'onglet est coordOnly).
-              Spec : docs/decisions/CHANTIER_partenaires_correspondance_2026-05-24. */}
+              Spec : docs/journal/chantiers/CHANTIER_partenaires_correspondance_2026-05-24. */}
           <LibraryPartnershipsSection
             libraryId={libraryId}
             canEdit={isCoord}

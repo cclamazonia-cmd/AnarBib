@@ -2,7 +2,7 @@
 
 | Champ | Valeur |
 |---|---|
-| Référence | `docs/decisions/CADRAGE_modele_acces_concentrique_2026-06-04.md` |
+| Référence | `docs/journal/cadrages/CADRAGE_modele_acces_concentrique_2026-06-04.md` |
 | Date | 4 juin 2026 |
 | Statut doctrinal | **Trace** (non-normative). Les décisions ci-dessous se canonisent dans le **REGISTRE, section `FED`** (à créer, §24). Ce document en est le foyer / la justification. |
 | Périmètre | Modèle d'accès par anneau (qui voit / qui agit) ; relocalisation de `círculos` ; nommage du bloc fédératif ; 2 arbitrages tranchés. **N'implémente rien** — fonde le fond avant la forme (schéma Bologne) et avant la spec des outils. |
