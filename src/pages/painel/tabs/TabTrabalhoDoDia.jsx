@@ -36,6 +36,8 @@ export default function TabTrabalhoDoDia({
   internalTasks,
   setTab,
   loadData,
+  pendingValidCount = 0,   // VALID-C4 : inscriptions en attente (card synthèse)
+  isLibrarian = false,
 }) {
   const { notifyError } = useToast();
   const { libraryId } = useLibrary();
@@ -182,6 +184,7 @@ export default function TabTrabalhoDoDia({
         <SummaryCard label={t({ id: 'panel.summary.pendingReservations' })} count={activeRes.filter(r => r.workflow_stage_effective === 'solicitada').length} variant="warn" />
         <SummaryCard label={t({ id: 'panel.summary.overdueLoans' })} count={overdueLoans.length} variant="bad" />
         <SummaryCard label={t({ id: 'panel.summary.pendingConsultations' })} count={consultations.filter(c => c.workflow_stage_effective === 'solicitada').length} variant="warn" />
+        {isLibrarian && <SummaryCard label={t({ id: 'panel.summary.pendingValidations' })} count={pendingValidCount} variant="warn" />}
         <SummaryCard label={t({ id: 'panel.summary.internalTasks' })} count={internalTasks.length} variant={internalTasks.some(t => t.priority === 'alta') ? 'bad' : 'warn'} />
         <SummaryCard label={t({ id: 'panel.summary.readerMessages' })} count={activeMsgs.length} variant="warn" />
       </div>

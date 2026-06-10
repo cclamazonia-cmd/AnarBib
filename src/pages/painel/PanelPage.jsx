@@ -1764,6 +1764,8 @@ export default function PanelPage() {
               internalTasks={internalTasks}
               setTab={setTab}
               loadData={loadData}
+              pendingValidCount={pendingValidCount}
+              isLibrarian={isLibrarian}
             />
           )}
 

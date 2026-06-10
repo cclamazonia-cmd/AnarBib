@@ -3211,6 +3211,7 @@
   "panel.summary.monitoring": "Seguimiento",
   "panel.summary.overdueLoans": "Préstamos en retraso",
   "panel.summary.pendingConsultations": "Consultas pendientes",
+  "panel.summary.pendingValidations": "Inscripciones pendientes",
   "panel.summary.pendingReservations": "Reservas pendientes",
   "panel.summary.readerMessages": "Mensajes recibidos",
   "panel.summary.today": "Hoy",

@@ -3211,6 +3211,7 @@
   "panel.summary.monitoring": "Seguiment",
   "panel.summary.overdueLoans": "Préstecs endarrerits",
   "panel.summary.pendingConsultations": "Consultes pendents",
+  "panel.summary.pendingValidations": "Inscripcions pendents",
   "panel.summary.pendingReservations": "Reserves pendents",
   "panel.summary.readerMessages": "Missatges rebuts",
   "panel.summary.today": "Avui",

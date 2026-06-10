@@ -3211,6 +3211,7 @@
   "panel.summary.monitoring": "Παρακολούθηση",
   "panel.summary.overdueLoans": "Εκπρόθεσμοι δανεισμοί",
   "panel.summary.pendingConsultations": "Εκκρεμείς μελέτες",
+  "panel.summary.pendingValidations": "Εκκρεμείς εγγραφές",
   "panel.summary.pendingReservations": "Εκκρεμείς κρατήσεις",
   "panel.summary.readerMessages": "Ληφθέντα μηνύματα",
   "panel.summary.today": "Σήμερα",

@@ -3211,6 +3211,7 @@
   "panel.summary.monitoring": "Verfolgung",
   "panel.summary.overdueLoans": "Überfällige Ausleihen",
   "panel.summary.pendingConsultations": "Ausstehende Einsichtnahmen",
+  "panel.summary.pendingValidations": "Ausstehende Anmeldungen",
   "panel.summary.pendingReservations": "Ausstehende Vormerkungen",
   "panel.summary.readerMessages": "Erhaltene Nachrichten",
   "panel.summary.today": "Heute",
