@@ -375,3 +375,12 @@
   .ab-work { grid-template-columns: 1fr; }
   .ab-preview { position: static; }
 }
+
+
+/* #UX-CAT (10/06) -- champ biblio a datalist : masque la fleche d''indicateur de
+   datalist (Chromium ::-webkit-calendar-picker-indicator), qui suggere un menu
+   deroulant cliquable inexistant. L''interaction reelle est la frappe -> pop-up
+   de suggestions. Cible uniquement les inputs a datalist (pas les champs date). */
+.cat-field input[list]::-webkit-calendar-picker-indicator {
+  display: none;
+}
