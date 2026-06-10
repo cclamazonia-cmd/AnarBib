@@ -189,29 +189,9 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     else setParentBook(null);
   }
 
-  // ── Auto-tombo : suggestion basée sur la convention bib_ref de la biblio ──
-  // Si la bibliothèque a une convention (bib_ref_auto = true), on suggère le
-  // prochain tombo = prochain bib_ref. Sinon, on pré-remplit avec la bib_ref
-  // de la fiche parente si elle existe (convention tombo = bib_ref).
-  const [tomboAuto, setTomboAuto] = useState(false); // true si le tombo a été pré-rempli automatiquement
-  useEffect(() => {
-    if (!libraryId) return;
-    let cancelled = false;
-    (async () => {
-      const { data: conv } = await supabase.from('libraries')
-        .select('bib_ref_prefix, bib_ref_pad, bib_ref_auto')
-        .eq('id', libraryId).single();
-      if (cancelled || !conv?.bib_ref_auto) return;
-      // Suggérer le prochain tombo seulement pour un nouvel exemplaire sans tombo
-      if (f('id') || f('tombo')) return;
-      const { data: next } = await supabase.rpc('next_bib_ref', { p_library_id: libraryId });
-      if (!cancelled && next && !f('tombo')) {
-        set('tombo', next);
-        setTomboAuto(true);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [libraryId]); // eslint-disable-line react-hooks/exhaustive-deps
+  // #UX-CAT (10/06) — auto-tombo (pré-remplissage du champ Tombo au chargement)
+  // RETIRÉ à la demande : on ne pré-remplit plus le Tombo. La saisie est manuelle,
+  // aidée par le « dernier tombo de la série » affiché au-dessus du champ (lastTombo).
 
   // ── Resolve parent book from bib_ref ────────────────────
   async function resolveParentBook(bibRef) {
@@ -226,9 +206,10 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         // §5.6 : on utilise circulation_default (3 valeurs) quand présent ; repli sur le
         // booléen loanable (DOC-CIRC-1 : true -> 'ambos', sinon 'consulta'). Sans écraser un choix déjà posé.
         setForm(prev => prev.circulation_policy ? prev : { ...prev, circulation_policy: data.circulation_default || (data.loanable ? 'ambos' : 'consulta') });
-        // Auto-fill tombo from bib_ref if empty (convention: tombo = bib_ref)
+        // Auto-fill tombo from bib_ref if empty (convention: tombo = bib_ref).
+        // (le pré-remplissage AU CHARGEMENT via next_bib_ref a été retiré ; ici on
+        //  ne fait que la convention tombo=bib_ref quand on lie un document.)
         setForm(prev => prev.tombo ? prev : { ...prev, tombo: data.bib_ref || '' });
-        if (!f('tombo') && data.bib_ref) setTomboAuto(true);
         // Auto-fill label from parent book if empty
         setLabel(prev => ({
           title: prev.title || data.titulo || '',
@@ -472,13 +453,8 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
                   {t({ id: 'catalogacao.exemplar.lastTomboHint' }, { tombo: lastTombo })}
                 </div>
               )}
-              <input type="text" value={f('tombo')} onChange={e => { set('tombo', e.target.value); setTomboAuto(false); }}
+              <input type="text" value={f('tombo')} onChange={e => set('tombo', e.target.value)}
                 placeholder="123-CCLA-2026 ou 123-CCLA-2026-02" style={fs} />
-              {tomboAuto && (
-                <div style={{ fontSize: '.7rem', color: '#4ade80', marginTop: 3 }}>
-                  {t({ id: 'catalogacao.exemplar.tomboAutoHint' })}
-                </div>
-              )}
             </div>
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.exemplar.sectorRoom' })}</label>

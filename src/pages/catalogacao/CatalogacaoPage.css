@@ -381,6 +381,6 @@
    datalist (Chromium ::-webkit-calendar-picker-indicator), qui suggere un menu
    deroulant cliquable inexistant. L''interaction reelle est la frappe -> pop-up
    de suggestions. Cible uniquement les inputs a datalist (pas les champs date). */
-.cat-field input[list]::-webkit-calendar-picker-indicator {
-  display: none;
+input[list]::-webkit-calendar-picker-indicator {
+  display: none !important;
 }
