@@ -24,6 +24,7 @@ import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
 import LibraryPartnershipsSection from '@/components/library/LibraryPartnershipsSection';
+import StabilizedPartnershipsSection from '@/components/library/StabilizedPartnershipsSection';
 import PebHistorySection from '@/components/library/PebHistorySection';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
@@ -1591,6 +1592,13 @@ export default function BibliotecaPage() {
               staff de coordination (canEdit=isCoord, l'onglet est coordOnly).
               Spec : docs/journal/chantiers/CHANTIER_partenaires_correspondance_2026-05-24. */}
           <LibraryPartnershipsSection
+            libraryId={libraryId}
+            canEdit={isCoord}
+            allLibraries={allLibraries}
+          />
+          {/* §21 PARTNER P5b : console des partenariats STABILISÉS (cycle de vie +
+              droits réciproques), au-dessus de l'annuaire déclaratif ci-dessus. */}
+          <StabilizedPartnershipsSection
             libraryId={libraryId}
             canEdit={isCoord}
             allLibraries={allLibraries}
