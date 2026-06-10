@@ -30,10 +30,6 @@ const PROFILE_COLUMNS = [
   'is_librarian',
 ].join(', ');
 
-// [LOGIN-DEBUG] temporaire (à retirer) — compteur de séquence pour corréler les
-// START/END de loadProfile et rendre la concurrence visible.
-let _lpSeq = 0;
-
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -43,6 +39,12 @@ export function AuthProvider({ children }) {
   // et par chargement d'app. Sans ça, certains re-render de session pourraient
   // déclencher un reload en boucle.
   const syncedForUserRef = useRef(null);
+
+  // #LOGIN-FIX H4 : dédup de loadProfile. SIGNED_IN + getSession (boot) +
+  // INITIAL_SESSION déclenchent sinon 3 requêtes profil SIMULTANÉES pour le même
+  // user — surface du deadlock supabase-js documenté plus bas. On ne garde qu'UN
+  // appel en vol par userId ; les appels concurrents réutilisent sa promesse.
+  const inflightProfileRef = useRef(null); // { userId, promise } | null
 
   // ── Chargement du profil ────────────────────────────────────────────────
   //
@@ -70,38 +72,46 @@ export function AuthProvider({ children }) {
       setProfile(null);
       return null;
     }
-    // [LOGIN-DEBUG] temporaire (à retirer) — traquer un loadProfile lent/qui pend.
-    const _t0 = performance.now();
-    const _seq = ++_lpSeq;
-    console.log('[LOGIN-DEBUG] loadProfile START #' + _seq + ' user=' + String(userId).slice(0, 8));
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select(PROFILE_COLUMNS)
-        .eq('id', userId)
-        .maybeSingle();
-      console.log('[LOGIN-DEBUG] loadProfile END #' + _seq + ' ' + JSON.stringify({ ms: Math.round(performance.now() - _t0), hasData: !!data, error: error?.message || null }));
-      if (error) {
-        console.warn('[AuthContext] Failed to load profile:', error);
-        return null;
-      }
-      if (data) {
-        setProfile(data);
-        // Synchro langue conditionnelle. On ne la déclenche qu'au premier
-        // chargement par user_id, pas sur les refreshProfile() ultérieurs
-        // (qui n'ont pas vocation à provoquer un reload de page).
-        if (syncLocale && data.preferred_language && syncedForUserRef.current !== userId) {
-          syncedForUserRef.current = userId;
-          syncLocaleFromProfile(data.preferred_language);
-        }
-        return data;
-      }
-      return null;
-    } catch (err) {
-      console.log('[LOGIN-DEBUG] loadProfile THREW #' + _seq + ' ' + JSON.stringify({ ms: Math.round(performance.now() - _t0), err: String(err) }));
-      console.warn('[AuthContext] loadProfile failed:', err);
-      return null;
+    // Dédup : si un chargement pour ce user est déjà en vol, on réutilise sa
+    // promesse au lieu de lancer une 2e/3e requête concurrente.
+    if (inflightProfileRef.current && inflightProfileRef.current.userId === userId) {
+      return inflightProfileRef.current.promise;
     }
+    const promise = (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select(PROFILE_COLUMNS)
+          .eq('id', userId)
+          .maybeSingle();
+        if (error) {
+          console.warn('[AuthContext] Failed to load profile:', error);
+          return null;
+        }
+        if (data) {
+          setProfile(data);
+          // Synchro langue conditionnelle. On ne la déclenche qu'au premier
+          // chargement par user_id, pas sur les refreshProfile() ultérieurs
+          // (qui n'ont pas vocation à provoquer un reload de page).
+          if (syncLocale && data.preferred_language && syncedForUserRef.current !== userId) {
+            syncedForUserRef.current = userId;
+            syncLocaleFromProfile(data.preferred_language);
+          }
+          return data;
+        }
+        return null;
+      } catch (err) {
+        console.warn('[AuthContext] loadProfile failed:', err);
+        return null;
+      } finally {
+        // Libère le verrou de concurrence pour ce user.
+        if (inflightProfileRef.current && inflightProfileRef.current.userId === userId) {
+          inflightProfileRef.current = null;
+        }
+      }
+    })();
+    inflightProfileRef.current = { userId, promise };
+    return promise;
   }, []);
 
   // Exposée aux composants pour forcer un refresh du profil après une
@@ -121,7 +131,6 @@ export function AuthProvider({ children }) {
     // tâche de fond ; les composants qui en dépendent doivent gérer
     // profile === null pendant la latence (~100-200ms).
     supabase.auth.getSession().then(({ data: { session: s } }) => {
-      console.log('[LOGIN-DEBUG] boot getSession ' + JSON.stringify({ hasUser: !!s?.user }));
       setSession(s);
       setLoading(false);
       if (s?.user?.id) {
@@ -148,7 +157,6 @@ export function AuthProvider({ children }) {
     // apiQuery/apiRpc.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, s) => {
-        console.log('[LOGIN-DEBUG] onAuthStateChange ' + event + ' ' + JSON.stringify({ hasUser: !!s?.user }));
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }

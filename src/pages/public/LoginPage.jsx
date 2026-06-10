@@ -110,24 +110,14 @@ export default function LoginPage() {
   const redirecting = !authLoading && !!user && view === 'login';
   const transitioningToApp = view === 'login' && (redirecting || loginLoading);
 
-  // Garde-fou : si la transition reste bloquee trop longtemps (echec de
-  // chargement du profil, reseau coupe, EF qui pend), on rebascule sur le
-  // formulaire pour ne pas laisser l'usager sur un spinner infini. Sur navigate
-  // reussi, le composant est demonte et le timer nettoye avant de se declencher.
-  const [transitionTimedOut, setTransitionTimedOut] = useState(false);
-  useEffect(() => {
-    if (!transitioningToApp) {
-      setTransitionTimedOut(false);
-      return;
-    }
-    const id = setTimeout(() => {
-      console.log('[LOGIN-DEBUG] transitionTimedOut FIRED (9s) — le formulaire va resurgir');
-      setTransitionTimedOut(true);
-    }, 9000);
-    return () => clearTimeout(id);
-  }, [transitioningToApp]);
-
-  const showTransition = transitioningToApp && !transitionTimedOut;
+  // Pendant la transition (session active OU appel EF en vol), on affiche le
+  // spinner a la place du formulaire. Il n'y a PLUS de garde-fou qui "rebascule
+  // sur le formulaire" : si la resolution profil/biblio/theme tarde, c'est le
+  // useEffect de redirection ci-dessous qui AVANCE (navigate) au lieu de reculer
+  // -> le "formulaire qui resurgit" devient structurellement impossible une fois
+  // authentifie. En cas d'ECHEC du login (mauvais mdp), loginLoading repasse a
+  // false -> showTransition devient false -> le formulaire revient avec l'erreur.
+  const showTransition = transitioningToApp;
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -151,29 +141,30 @@ export default function LoginPage() {
   //    en cours (par exemple si l'usager change son mdp sur recovery,
   //    il faut le laisser finir, pas le rediriger en cours de route)
   useEffect(() => {
-    // [LOGIN-DEBUG] temporaire (à retirer) — trace quelle condition bloque la
-    // redirection post-login. Filtrer la console sur "LOGIN-DEBUG".
-    console.log('[LOGIN-DEBUG] redirect ' + JSON.stringify({
-      authLoading, user: !!user, profile: !!profile, view,
-      must: profile?.must_change_password === true, libraryLoading, themeReady,
-    }));
     if (authLoading) return;
     if (!user) return;
-    if (!profile) return;
     if (view !== 'login') return;
-    // Decision :
-    if (profile.must_change_password === true) {
+    // Premier login avec mdp provisoire : bascule vers le formulaire dedie.
+    if (profile?.must_change_password === true) {
       setView('force-change');
       setLoginLoading(false);
       return;
     }
-    // #LOGIN-FIX H1 (restauré) : ne naviguer que lorsque la biblio ET le thème
-    // sont résolus, pour révéler /conta directement sur le bon fond (pas de
-    // cascade de fonds AnarBib -> biblio). themeReady résout en ~160ms (manifest
-    // Storage), donc aucun risque de hang ici (contrairement à ce que f0e8aac
-    // supposait sur une mesure 404 erronée).
-    if (libraryLoading || !themeReady) return;
-    navigate(nextUrl);
+    // #LOGIN-FIX H1 : transition propre — on navigue des que profil + biblio +
+    // theme sont resolus, pour reveler /conta directement sur le bon fond (pas
+    // de cascade de fonds). themeReady resout en ~160ms (manifest Storage).
+    if (profile && !libraryLoading && themeReady) {
+      navigate(nextUrl);
+      return;
+    }
+    // #LOGIN-FIX H4 (10/06) : garde-fou FORWARD. L'usager est authentifie mais la
+    // resolution profil/biblio/theme tarde (rare : un loadProfile concurrent qui
+    // pend, reseau). Plutot que de laisser la transition bloquee (et, avant,
+    // re-afficher le formulaire au bout de 9s = le bug "formulaire qui resurgit"),
+    // on AVANCE vers /conta apres un delai borne. AccountPage / ProtectedRoute
+    // prennent le relais. On ne revient JAMAIS au formulaire une fois authentifie.
+    const fwd = setTimeout(() => navigate(nextUrl), 4000);
+    return () => clearTimeout(fwd);
   }, [authLoading, user, profile, view, navigate, nextUrl, libraryLoading, themeReady]);
 
   async function handleLogin(e) {
