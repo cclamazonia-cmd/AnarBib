@@ -1,22 +1,20 @@
 import { useState, useEffect, useCallback, useMemo, Fragment, lazy, Suspense } from 'react';
-import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiQuery, notifyEvent } from '@/lib/supabase';
+import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
-import { Button, Pill, Spinner, Skeleton, EmptyState } from '@/components/ui';
+import { Button, Pill, Spinner, Skeleton } from '@/components/ui';
 import { parseAddressText } from '@/lib/addressFormat';
-import { formatSchedule } from '@/lib/scheduleFormat';
 import Modal from '@/components/ui/Modal';
 import { useToast } from '@/contexts/ToastContext';
 import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
-import { fmtD, UserDisplay, useSort, SortHeader, StageFilterBar } from './_shared';
+import { fmtD, useSort } from './_shared';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
 const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
