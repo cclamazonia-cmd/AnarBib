@@ -181,3 +181,62 @@ export async function handleValidationConfirmed(payload) {
   const user_result = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
   return { user_result };
 }
+
+// ============================================================================
+// VALID-C3 — notification staff « compte en attente de validation ».
+// ----------------------------------------------------------------------------
+// Émis par api.request_membership via fn_dispatch_notify_event(
+//   'membership_validation_requested', 1, {user_id, library_id, membership_id}).
+// Prévient la biblio (adresse de contact, locale biblio) qu'une demande attend
+// validation, avec CTA vers /painel — pour que le vetting humain (vraie
+// personne ? camarade ?) se fasse promptement. Pendant « staff » de
+// validation_confirmed (P4b, côté lectrice).
+// ============================================================================
+export async function handleMembershipValidationRequested(payload) {
+  const membershipId = String(payload?.membership_id || "").trim();
+  if (!membershipId) throw new Error("membership_id manquant.");
+
+  const { data: m, error: e1 } = await supabaseAdmin
+    .from("user_library_memberships")
+    .select("id,user_id,library_id,status")
+    .eq("id", membershipId)
+    .maybeSingle();
+  if (e1) throw e1;
+  if (!m) throw new Error("Associação não encontrada.");
+  // Ne notifier que si toujours en attente (l'état peut avoir changé entre
+  // dispatch et traitement — ex. validation immédiate).
+  if (m.status !== "pending_validation") {
+    return { admin_result: skippedEmailResult("admin_copy", "membership_not_pending") };
+  }
+
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("id,email,first_name,last_name")
+    .eq("id", m.user_id)
+    .maybeSingle();
+
+  const ctx = await resolveLibraryNotificationContext(String(m.library_id || "").trim() || null);
+  const bt = subjectTag(ctx);
+  const libLoc = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
+  const applicant = adminDisplayName(fullName(profile), profile?.email);
+
+  const tit = tMail(libLoc, "membership_validation_requested.subject");
+  const { html, text } = renderEmail({
+    locale: libLoc,
+    preheader: tit,
+    title: tit,
+    introHtml: `<p>${tMail(libLoc, "membership_validation_requested.intro")}</p>`,
+    details: [{ label: label(libLoc, "reader"), value: applicant }],
+    actionBox: {
+      kind: "action",
+      title: tMail(libLoc, "membership_validation_requested.actionTitle"),
+      ctaUrl: `${APP_BASE_URL}/painel`,
+      ctaLabel: tMail(libLoc, "membership_validation_requested.cta")
+    },
+    footerHtml: footerPadrao(ctx, libLoc),
+    context: ctx
+  });
+  const sub = applyBrandingText(`[${bt}] ${tit}`, ctx);
+  const admin_result = await safeSendEmail(adminTarget(ctx), sub, html, text, "admin_copy", ctx);
+  return { admin_result };
+}

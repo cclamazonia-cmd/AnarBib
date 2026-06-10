@@ -6,7 +6,7 @@ import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
 import { handleReaderMessageEvent, handleLibraryMessageEvent } from "../domain/reader-message.ts";
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
-import { handleCotisationPayment, handleValidationConfirmed } from "../domain/membership.ts";
+import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested } from "../domain/membership.ts";
 import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
@@ -23,6 +23,9 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // MULTI P4b : inscription validée par le staff -> e-mail de confirmation à la
   // lectrice (CTA /conta). Payload-based, lit user_library_memberships par uuid.
   if (event === "validation_confirmed") return await handleValidationConfirmed(payload);
+  // VALID-C3 : nouvelle demande d'inscription -> alerte la biblio (CTA /painel)
+  // qu'un compte attend validation. Payload-based, lit la membership par uuid.
+  if (event === "membership_validation_requested") return await handleMembershipValidationRequested(payload);
   // #NOTIFY-Painel-acts famille 2 : restriction locale + gel global (et levées).
   // Mail membre obligatoire + copie staff (profile_restriction_enabled). Payload-based.
   if ([

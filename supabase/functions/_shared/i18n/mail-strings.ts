@@ -1820,6 +1820,54 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
 
   // ===== Profile notices (prof.*) ===========================================
+  "membership_validation_requested.subject": {
+    "pt-BR": "Nova solicitação de inscrição",
+    fr: "Nouvelle demande d'inscription",
+    es: "Nueva solicitud de inscripción",
+    en: "New sign-up request",
+    it: "Nuova richiesta di iscrizione",
+    de: "Neue Anmeldeanfrage",
+    ca: "Nova sol·licitud d'inscripció",
+    eo: "Nova aliĝpeto",
+    nl: "Nieuw aanmeldverzoek",
+    el: "Νέο αίτημα εγγραφής"
+  },
+  "membership_validation_requested.intro": {
+    "pt-BR": "Uma pessoa solicitou ingressar na sua biblioteca e aguarda validação presencial.",
+    fr: "Une personne demande à rejoindre votre bibliothèque et attend une validation en présentiel.",
+    es: "Una persona ha solicitado unirse a vuestra biblioteca y espera una validación presencial.",
+    en: "Someone has requested to join your library and is awaiting in-person validation.",
+    it: "Una persona ha chiesto di unirsi alla vostra biblioteca e attende una convalida di persona.",
+    de: "Jemand möchte eurer Bibliothek beitreten und wartet auf eine Bestätigung vor Ort.",
+    ca: "Una persona ha sol·licitat unir-se a la vostra biblioteca i espera una validació presencial.",
+    eo: "Iu petis aliĝi al via biblioteko kaj atendas surlokan validon.",
+    nl: "Iemand heeft gevraagd om lid te worden van jullie bibliotheek en wacht op validatie ter plaatse.",
+    el: "Κάποιο άτομο ζήτησε να εγγραφεί στη βιβλιοθήκη σας και αναμένει δια ζώσης επικύρωση."
+  },
+  "membership_validation_requested.actionTitle": {
+    "pt-BR": "Validar a inscrição",
+    fr: "Valider l'inscription",
+    es: "Validar la inscripción",
+    en: "Validate the sign-up",
+    it: "Convalida l'iscrizione",
+    de: "Anmeldung bestätigen",
+    ca: "Validar la inscripció",
+    eo: "Validigi la aliĝon",
+    nl: "Aanmelding valideren",
+    el: "Επικύρωση της εγγραφής"
+  },
+  "membership_validation_requested.cta": {
+    "pt-BR": "Abrir o painel",
+    fr: "Ouvrir le panneau",
+    es: "Abrir el panel",
+    en: "Open the panel",
+    it: "Apri il pannello",
+    de: "Panel öffnen",
+    ca: "Obrir el tauler",
+    eo: "Malfermi la panelon",
+    nl: "Paneel openen",
+    el: "Άνοιγμα του πίνακα"
+  },
   "validation_confirmed.subject": {
     "pt-BR": "Inscrição confirmada",
     fr: "Inscription confirmée",
