@@ -36,7 +36,7 @@ const CIRCUIT_KEYS = ['migracao', 'arquivo', 'fontes'];
 
 export default function ImportacoesPage() {
   useAuth();
-  const { role } = useLibrary();
+  const { role, libraryId } = useLibrary();
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'importacoes.title' }));
 
@@ -44,6 +44,9 @@ export default function ImportacoesPage() {
   const [sentido, setSentido] = useState('import');
   const [circuit, setCircuit] = useState('migracao');
   const [msg, setMsg] = useState({ text: '', kind: '' });
+  // ── Export de lote (Lot 5, IMP-13) ─────────────────────
+  const [exportFormat, setExportFormat] = useState('csv');
+  const [exportLoading, setExportLoading] = useState(false);
 
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
@@ -316,6 +319,56 @@ export default function ImportacoesPage() {
       await loadRuns();
     } catch (err) {
       setMsg({ text: err.message, kind: 'error' });
+    }
+  }
+
+  // ── Export de lote : appelle l'EF export-catalog-lote, télécharge le fichier ──
+  // L'accès (coordenador de la biblio, IMP-14) est re-validé côté RPC ; un rôle
+  // insuffisant renvoie 403 et le message d'erreur s'affiche.
+  async function handleExportLote() {
+    if (!libraryId) {
+      setMsg({ text: t({ id: 'account.export.error' }, { message: 'library_id' }), kind: 'error' });
+      return;
+    }
+    setExportLoading(true);
+    setMsg({ text: t({ id: 'account.export.loading' }), kind: 'info' });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-catalog-lote`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ library_id: libraryId, format: exportFormat }),
+        }
+      );
+      if (!res.ok) {
+        let m = `HTTP ${res.status}`;
+        try { const j = await res.json(); if (j?.error) m = j.error; } catch { /* corps non-JSON */ }
+        throw new Error(m);
+      }
+      const blob = await res.blob();
+      const cd = res.headers.get('Content-Disposition') || '';
+      const match = cd.match(/filename="?([^"]+)"?/);
+      const ext = exportFormat === 'marcxml' ? 'xml' : exportFormat;
+      const filename = match ? match[1] : `catalogo.${ext}`;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setMsg({ text: t({ id: 'account.export.success' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'account.export.error' }, { message: err.message }), kind: 'error' });
+    } finally {
+      setExportLoading(false);
     }
   }
 
@@ -881,10 +934,29 @@ export default function ImportacoesPage() {
 
             <div className="imp-sheet">
               <div className="imp-sheet__head">
-                <span className="imp-sheet__title">{t({ id: 'importacoes.export.lote.title' })}</span>
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.lote.title' })}<Pill variant="ok">CSV · MARCXML · JSON</Pill></span>
               </div>
               <div className="imp-sheet__body">
-                <p className="imp-note">{t({ id: 'importacoes.export.lote.desc' })}</p>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <select
+                    className="ab-select"
+                    value={exportFormat}
+                    onChange={(e) => setExportFormat(e.target.value)}
+                    disabled={exportLoading}
+                    style={{ maxWidth: 240 }}
+                  >
+                    <option value="csv">CSV</option>
+                    <option value="marcxml">MARCXML (MARC21)</option>
+                    <option value="json">JSON</option>
+                  </select>
+                  <button
+                    className="cat-btn primary"
+                    onClick={handleExportLote}
+                    disabled={exportLoading || !libraryId}
+                  >
+                    {exportLoading ? t({ id: 'account.export.loading' }) : t({ id: 'book.actions.export' })}
+                  </button>
+                </div>
               </div>
             </div>
 
