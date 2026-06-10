@@ -36,7 +36,7 @@ const CIRCUIT_KEYS = ['migracao', 'arquivo', 'fontes'];
 
 export default function ImportacoesPage() {
   useAuth();
-  const { role, libraryId } = useLibrary();
+  const { role, libraryId, isNetworkAdmin } = useLibrary();
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'importacoes.title' }));
 
@@ -160,7 +160,10 @@ export default function ImportacoesPage() {
 
   // ── Role gating ────────────────────────────────────────
   const roleLoaded = role !== null && role !== undefined;
-  const canImport = role === 'librarian' || role === 'coordenador' || role === 'administrador';
+  // IMP-14 : import/export sous l'autorité des coordinateurs (aligné sur le
+  // backend fn_import_* coordenador-only + la nav canSeeImportacoes=isCoord).
+  // Les librarians sont volontairement exclus ici.
+  const canImport = role === 'coordenador' || role === 'administrador' || isNetworkAdmin;
 
   if (!roleLoaded) return (
     <PageShell><Topbar />
