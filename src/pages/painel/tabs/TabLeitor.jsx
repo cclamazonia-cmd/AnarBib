@@ -27,7 +27,7 @@ export default function TabLeitor({
   libraryId,
   libraryName,
   isNetworkAdmin,
-  isCoordOrAdmin,
+  isLibrarian,
   membershipEnabled,
   // état
   readerLookup, setReaderLookup,
@@ -371,7 +371,8 @@ export default function TabLeitor({
           })()}
 
           {/* ── Histórico de contribuições (cotisation) ── */}
-          {isCoordOrAdmin && membershipEnabled && (
+          {/* Tout staff (librarian inclus) gère les cotisations au quotidien. */}
+          {isLibrarian && membershipEnabled && (
             <div className="ab-painel-pay-box">
               <div className="ab-painel-pay-head">
                 <h4 className="ab-painel-pay-title">{t({ id: 'membership.payment.historyTitle' })}</h4>

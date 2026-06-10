@@ -1299,8 +1299,9 @@ export default function PanelPage() {
         const { data: rs } = await supabase.schema('api').rpc('get_member_restriction', { p_user_id: p.id, p_library_id: libraryId });
         setRestrictionState(rs?.ok ? rs : null);
       } catch { setRestrictionState(null); }
-      // Charger l'historique de cotisation pour ce lecteur
-      if (membershipEnabled && (isCoordOrAdmin)) {
+      // Charger l'historique de cotisation pour ce lecteur (tout staff peut gérer
+      // les cotisations au quotidien — décision gouvernance 10/06, sauf gel global).
+      if (membershipEnabled && isLibrarian) {
         const { data: payments } = await supabase.rpc('fn_list_membership_payments_for_user', { p_user_id: p.id });
         setReaderPayments(payments || []);
       } else {
@@ -1313,7 +1314,7 @@ export default function PanelPage() {
 
   // Chargement de la config et des règles de cotisation
   const loadMembershipConfig = useCallback(async () => {
-    if (!libraryId || !isCoordOrAdmin) return;
+    if (!libraryId || !isLibrarian) return;
     try {
       // E.0 (paquet profils 19/05) : membership_enabled est deja expose par le
       // LibraryContext. Plus de SELECT redondant ici. On charge uniquement les regles.
@@ -1325,7 +1326,7 @@ export default function PanelPage() {
         .order('display_order');
       setMembershipRules(rules || []);
     } catch (e) { console.warn('loadMembershipConfig:', e); }
-  }, [libraryId, isCoordOrAdmin]);
+  }, [libraryId, isLibrarian]);
 
   // Chargement de l'aperçu global (tableau Contribuições)
   const loadMembershipOverview = useCallback(async () => {
@@ -1881,7 +1882,7 @@ export default function PanelPage() {
               libraryId={libraryId}
               libraryName={libraryName}
               isNetworkAdmin={isNetworkAdmin}
-              isCoordOrAdmin={isCoordOrAdmin}
+              isLibrarian={isLibrarian}
               membershipEnabled={membershipEnabled}
               readerLookup={readerLookup}
               setReaderLookup={setReaderLookup}
