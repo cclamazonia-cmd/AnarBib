@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Übernahme läuft…",
   "importacoes.wizard.promote.done": "Import abgeschlossen! {n} Entwurf/Entwürfe erstellt.",
   "importacoes.wizard.promote.viewDrafts": "Entwürfe ansehen (Katalogisierung)",
-  "importacoes.wizard.promote.finish": "Abschließen"
+  "importacoes.wizard.promote.finish": "Abschließen",
+  "importacoes.wizard.preview.dupTitle": "{n} Datensatz/Datensätze bereits im Netzwerkkatalog",
+  "importacoes.wizard.preview.dupBody": "In einem geteilten Katalog erzeugt ein Duplikat schwere Inkonsistenzen. Diese Zeilen werden NICHT automatisch übernommen — prüfe sie und verknüpfe bevorzugt mit dem bestehenden Datensatz.",
+  "importacoes.wizard.preview.dupBadge": "schon im Katalog",
+  "importacoes.wizard.promote.plan": "{novos} neue(r) Datensatz/Datensätze → Entwürfe. {retenus} Zeile(n) zurückgehalten (Duplikate oder zu prüfen).",
+  "importacoes.wizard.promote.heldBack": "{n} Zeile(n) zurückgehalten, nicht übernommen (mögliche Duplikate oder zu prüfen) — manuell behandeln, um Inkonsistenzen zu vermeiden."
 }

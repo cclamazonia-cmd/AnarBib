@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Promovent…",
   "importacoes.wizard.promote.done": "Importació completada! {n} esborrany(s) creat(s).",
   "importacoes.wizard.promote.viewDrafts": "Mostra els esborranys (Catalogació)",
-  "importacoes.wizard.promote.finish": "Finalitza"
+  "importacoes.wizard.promote.finish": "Finalitza",
+  "importacoes.wizard.preview.dupTitle": "{n} fitxa/fitxes ja present(s) al catàleg de la xarxa",
+  "importacoes.wizard.preview.dupBody": "En un catàleg mutualitzat, crear un duplicat genera incoherències greus. Aquestes línies NO es promouran automàticament — verifiqueu-les i prefereixu vincular a la fitxa existent.",
+  "importacoes.wizard.preview.dupBadge": "ja al catàleg",
+  "importacoes.wizard.promote.plan": "{novos} nova/es fitxa/es → esborranys. {retenus} línia/es retinguda/es (duplicats o a revisar).",
+  "importacoes.wizard.promote.heldBack": "{n} línia/es retinguda/es, no promogudes (duplicats potencials o a revisar) — tracteu-les manualment per evitar incoherències."
 }

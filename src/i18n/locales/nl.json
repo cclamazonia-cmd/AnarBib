@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Bezig met promoveren…",
   "importacoes.wizard.promote.done": "Import voltooid! {n} concept(en) aangemaakt.",
   "importacoes.wizard.promote.viewDrafts": "Concepten bekijken (Catalogiseren)",
-  "importacoes.wizard.promote.finish": "Voltooien"
+  "importacoes.wizard.promote.finish": "Voltooien",
+  "importacoes.wizard.preview.dupTitle": "{n} record(s) al aanwezig in de netwerkcatalogus",
+  "importacoes.wizard.preview.dupBody": "In een gedeelde catalogus veroorzaakt een duplicaat ernstige inconsistenties. Deze rijen worden NIET automatisch gepromoveerd — controleer ze en koppel bij voorkeur aan het bestaande record.",
+  "importacoes.wizard.preview.dupBadge": "al in catalogus",
+  "importacoes.wizard.promote.plan": "{novos} nieuw(e) record(s) → concepten. {retenus} rij(en) achtergehouden (duplicaten of te beoordelen).",
+  "importacoes.wizard.promote.heldBack": "{n} rij(en) achtergehouden, niet gepromoveerd (mogelijke duplicaten of te beoordelen) — behandel ze handmatig om inconsistenties te voorkomen."
 }

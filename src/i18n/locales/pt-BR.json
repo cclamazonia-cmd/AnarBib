@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Promovendo…",
   "importacoes.wizard.promote.done": "Import concluído! {n} rascunho(s) criado(s).",
   "importacoes.wizard.promote.viewDrafts": "Ver os rascunhos (Catalogação)",
-  "importacoes.wizard.promote.finish": "Concluir"
+  "importacoes.wizard.promote.finish": "Concluir",
+  "importacoes.wizard.preview.dupTitle": "{n} notícia(s) já presente(s) no catálogo da rede",
+  "importacoes.wizard.preview.dupBody": "Num catálogo mutualizado, criar um duplicado gera incoerências graves. Estas linhas NÃO serão promovidas automaticamente — verifique-as e prefira o vínculo à notícia existente.",
+  "importacoes.wizard.preview.dupBadge": "já no catálogo",
+  "importacoes.wizard.promote.plan": "{novos} nova(s) notícia(s) → rascunhos. {retenus} linha(s) retida(s) (duplicados ou a revisar).",
+  "importacoes.wizard.promote.heldBack": "{n} linha(s) retida(s), não promovidas (duplicados potenciais ou a revisar) — trate-as manualmente para evitar incoerências."
 }

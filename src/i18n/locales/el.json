@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Προαγωγή…",
   "importacoes.wizard.promote.done": "Η εισαγωγή ολοκληρώθηκε! Δημιουργήθηκαν {n} προσχέδιο/α.",
   "importacoes.wizard.promote.viewDrafts": "Προβολή προσχεδίων (Καταλογογράφηση)",
-  "importacoes.wizard.promote.finish": "Ολοκλήρωση"
+  "importacoes.wizard.promote.finish": "Ολοκλήρωση",
+  "importacoes.wizard.preview.dupTitle": "{n} εγγραφή/ές ήδη στον κατάλογο του δικτύου",
+  "importacoes.wizard.preview.dupBody": "Σε έναν κοινό κατάλογο, η δημιουργία διπλότυπου προκαλεί σοβαρές ασυνέπειες. Αυτές οι γραμμές ΔΕΝ θα προαχθούν αυτόματα — ελέγξτε τες και προτιμήστε τη σύνδεση με την υπάρχουσα εγγραφή.",
+  "importacoes.wizard.preview.dupBadge": "ήδη στον κατάλογο",
+  "importacoes.wizard.promote.plan": "{novos} νέα/ες εγγραφή/ές → προσχέδια. {retenus} γραμμή/ές σε αναμονή (διπλότυπα ή προς έλεγχο).",
+  "importacoes.wizard.promote.heldBack": "{n} γραμμή/ές σε αναμονή, δεν προήχθησαν (πιθανά διπλότυπα ή προς έλεγχο) — χειριστείτε τες χειροκίνητα για αποφυγή ασυνεπειών."
 }

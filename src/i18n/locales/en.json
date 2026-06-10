@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Promoting…",
   "importacoes.wizard.promote.done": "Import complete! {n} draft(s) created.",
   "importacoes.wizard.promote.viewDrafts": "View drafts (Cataloging)",
-  "importacoes.wizard.promote.finish": "Finish"
+  "importacoes.wizard.promote.finish": "Finish",
+  "importacoes.wizard.preview.dupTitle": "{n} record(s) already in the network catalog",
+  "importacoes.wizard.preview.dupBody": "On a shared catalog, creating a duplicate causes serious inconsistencies. These rows will NOT be promoted automatically — review them and prefer linking to the existing record.",
+  "importacoes.wizard.preview.dupBadge": "already in catalog",
+  "importacoes.wizard.promote.plan": "{novos} new record(s) → drafts. {retenus} row(s) held back (duplicates or to review).",
+  "importacoes.wizard.promote.heldBack": "{n} row(s) held back, not promoted (potential duplicates or to review) — handle them manually to avoid inconsistencies."
 }

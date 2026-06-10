@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Promociado…",
   "importacoes.wizard.promote.done": "Importo finita! {n} malneto(j) kreita(j).",
   "importacoes.wizard.promote.viewDrafts": "Vidi la malnetojn (Katalogado)",
-  "importacoes.wizard.promote.finish": "Fini"
+  "importacoes.wizard.promote.finish": "Fini",
+  "importacoes.wizard.preview.dupTitle": "{n} registro(j) jam en la reta katalogo",
+  "importacoes.wizard.preview.dupBody": "En komuna katalogo, krei duplikaton kaŭzas gravajn malkoherecojn. Ĉi tiuj linioj NE estos aŭtomate promociitaj — kontrolu ilin kaj preferu ligon al la ekzistanta registro.",
+  "importacoes.wizard.preview.dupBadge": "jam en katalogo",
+  "importacoes.wizard.promote.plan": "{novos} nova(j) registro(j) → malnetoj. {retenus} linio(j) retenita(j) (duplikatoj aŭ por revizii).",
+  "importacoes.wizard.promote.heldBack": "{n} linio(j) retenita(j), ne promociitaj (eblaj duplikatoj aŭ por revizii) — traktu ilin permane por eviti malkoherecojn."
 }

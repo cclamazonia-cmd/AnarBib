@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Promotion en cours…",
   "importacoes.wizard.promote.done": "Import terminé ! {n} brouillon(s) créé(s).",
   "importacoes.wizard.promote.viewDrafts": "Voir les brouillons (Catalogage)",
-  "importacoes.wizard.promote.finish": "Terminer"
+  "importacoes.wizard.promote.finish": "Terminer",
+  "importacoes.wizard.preview.dupTitle": "{n} notice(s) déjà présente(s) dans le catalogue réseau",
+  "importacoes.wizard.preview.dupBody": "Sur un catalogue mutualisé, créer un doublon génère des incohérences graves. Ces lignes ne seront PAS promues automatiquement — vérifiez-les et privilégiez le rattachement à la notice existante.",
+  "importacoes.wizard.preview.dupBadge": "déjà au catalogue",
+  "importacoes.wizard.promote.plan": "{novos} nouvelle(s) notice(s) → brouillons. {retenus} ligne(s) retenue(s) (doublons ou à revoir).",
+  "importacoes.wizard.promote.heldBack": "{n} ligne(s) retenue(s), non promues (doublons potentiels ou à revoir) — traitez-les manuellement pour éviter les incohérences."
 }

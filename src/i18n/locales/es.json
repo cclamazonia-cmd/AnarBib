@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Promoviendo…",
   "importacoes.wizard.promote.done": "¡Importación completada! {n} borrador(es) creado(s).",
   "importacoes.wizard.promote.viewDrafts": "Ver los borradores (Catalogación)",
-  "importacoes.wizard.promote.finish": "Finalizar"
+  "importacoes.wizard.promote.finish": "Finalizar",
+  "importacoes.wizard.preview.dupTitle": "{n} ficha(s) ya presente(s) en el catálogo de la red",
+  "importacoes.wizard.preview.dupBody": "En un catálogo mutualizado, crear un duplicado genera incoherencias graves. Estas líneas NO se promoverán automáticamente — verifíquelas y prefiera vincular a la ficha existente.",
+  "importacoes.wizard.preview.dupBadge": "ya en el catálogo",
+  "importacoes.wizard.promote.plan": "{novos} nueva(s) ficha(s) → borradores. {retenus} línea(s) retenida(s) (duplicados o a revisar).",
+  "importacoes.wizard.promote.heldBack": "{n} línea(s) retenida(s), no promovidas (duplicados potenciales o a revisar) — trátelas manualmente para evitar incoherencias."
 }

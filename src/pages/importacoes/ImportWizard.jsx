@@ -29,6 +29,11 @@ const STEPS = [
   { n: 4, key: 'promote' },
 ];
 
+// match_status indiquant une correspondance avec une notice DEJA au catalogue
+// (doublon potentiel) -> sur un catalogue mutualise, ne JAMAIS promouvoir a
+// l'aveugle. Ces lignes sont surlignees + jamais auto-promues.
+const DUP_STATUSES = new Set(['possible_duplicate', 'matched_book', 'matched_draft']);
+
 function detectFileKind(fileName) {
   const n = (fileName || '').toLowerCase();
   if (n.endsWith('.csv')) return 'csv';
@@ -180,6 +185,19 @@ export default function ImportWizard() {
     setBusy(true);
     setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
     try {
+      // Sécurité dédup : on n'accepte AUTOMATIQUEMENT que les notices NEUVES
+      // (match_status = 'new_record'). Les doublons potentiels restent en attente
+      // (editorial_decision 'pending') -> jamais promus a l'aveugle. L'usager·ère
+      // les traitera explicitement (rattachement) plus tard.
+      const newRowIds = rows.filter((r) => r.match_status === 'new_record').map((r) => r.id);
+      if (newRowIds.length) {
+        await supabase.rpc('fn_import_set_editorial', {
+          p_run_id: Number(runId),
+          p_row_ids: newRowIds,
+          p_editorial_decision: 'accept_new',
+          p_editorial_note: 'wizard: auto-accept nouveautes',
+        });
+      }
       const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId) });
       if (error) throw error;
       setPromoteResult(data || {});
@@ -302,6 +320,7 @@ export default function ImportWizard() {
   }
 
   function renderPreview() {
+    const dupCount = rows.filter((r) => DUP_STATUSES.has(r.match_status)).length;
     return (
       <div className="imp-sheet">
         <div className="imp-sheet__head">
@@ -312,21 +331,48 @@ export default function ImportWizard() {
           {!rowsLoading && rows.length === 0 && <p className="imp-note">{t({ id: 'importacoes.wizard.preview.empty' })}</p>}
           {!rowsLoading && rows.length > 0 && (
             <>
-              <p className="imp-note" style={{ marginBottom: 10 }}>{t({ id: 'importacoes.wizard.preview.summary' }, { n: rows.length })}</p>
-              <div style={{ display: 'grid', gap: 6, maxHeight: 380, overflow: 'auto' }}>
-                {rows.map((r) => (
-                  <div key={r.id} style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
-                    <strong style={{ display: 'block', fontSize: '.9rem' }}>{r.title || '—'}</strong>
-                    <span className="imp-note">
-                      {[Array.isArray(r.authors) ? r.authors.join(', ') : (r.responsibility_statement || ''), r.publisher, r.publication_year].filter(Boolean).join(' · ')}
-                    </span>
-                    {(r.match_status || typeof r.confidence === 'number') && (
-                      <span className="imp-note" style={{ display: 'block', marginTop: 2, opacity: 0.8 }}>
-                        {[r.match_status, typeof r.confidence === 'number' ? `${Math.round(r.confidence * 100)}%` : null, Array.isArray(r.warnings) && r.warnings.length ? `⚠ ${r.warnings.length}` : null].filter(Boolean).join(' · ')}
-                      </span>
-                    )}
+              {dupCount > 0 && (
+                <div role="alert" style={{
+                  padding: '12px 14px', borderRadius: 8, marginBottom: 12,
+                  background: 'rgba(180,83,9,.16)', border: '1px solid rgba(245,158,11,.5)',
+                  fontSize: '.88rem', lineHeight: 1.45,
+                }}>
+                  <strong style={{ color: '#fbbf24' }}>⚠ {t({ id: 'importacoes.wizard.preview.dupTitle' }, { n: dupCount })}</strong>
+                  <div style={{ marginTop: 4, color: 'var(--brand-fg, #e8e2d6)', opacity: 0.92 }}>
+                    {t({ id: 'importacoes.wizard.preview.dupBody' })}
                   </div>
-                ))}
+                </div>
+              )}
+              <p className="imp-note" style={{ marginBottom: 10 }}>{t({ id: 'importacoes.wizard.preview.summary' }, { n: rows.length })}</p>
+              <div style={{ display: 'grid', gap: 6, maxHeight: 360, overflow: 'auto' }}>
+                {rows.map((r) => {
+                  const isDup = DUP_STATUSES.has(r.match_status);
+                  return (
+                    <div key={r.id} style={{
+                      padding: '8px 12px', borderRadius: 8,
+                      background: isDup ? 'rgba(180,83,9,.12)' : 'rgba(255,255,255,.03)',
+                      border: '1px solid ' + (isDup ? 'rgba(245,158,11,.5)' : 'rgba(255,255,255,.08)'),
+                    }}>
+                      <strong style={{ display: 'block', fontSize: '.9rem' }}>
+                        {isDup && <span style={{ color: '#fbbf24', marginRight: 6 }}>⚠</span>}
+                        {r.title || '—'}
+                        {isDup && (
+                          <span style={{ marginLeft: 8, fontSize: '.7rem', fontWeight: 700, color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '.03em' }}>
+                            {t({ id: 'importacoes.wizard.preview.dupBadge' })}
+                          </span>
+                        )}
+                      </strong>
+                      <span className="imp-note">
+                        {[Array.isArray(r.authors) ? r.authors.join(', ') : (r.responsibility_statement || ''), r.publisher, r.publication_year].filter(Boolean).join(' · ')}
+                      </span>
+                      {(r.match_status || typeof r.confidence === 'number') && (
+                        <span className="imp-note" style={{ display: 'block', marginTop: 2, opacity: 0.8 }}>
+                          {[r.match_status, typeof r.confidence === 'number' ? `${Math.round(r.confidence * 100)}%` : null, Array.isArray(r.warnings) && r.warnings.length ? `⚠ ${r.warnings.length}` : null].filter(Boolean).join(' · ')}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </>
           )}
@@ -359,18 +405,25 @@ export default function ImportWizard() {
         </div>
       );
     }
+    const newCount = rows.filter((r) => r.match_status === 'new_record').length;
+    const heldBack = rows.length - newCount;
     return (
       <div className="imp-sheet">
         <div className="imp-sheet__head">
           <span className="imp-sheet__title">{t({ id: 'importacoes.wizard.step.promote' })}</span>
         </div>
         <div className="imp-sheet__body" style={{ display: 'grid', gap: 12 }}>
-          <p className="imp-note">{t({ id: 'importacoes.wizard.preview.summary' }, { n: rows.length })}</p>
+          <p className="imp-note">{t({ id: 'importacoes.wizard.promote.plan' }, { novos: newCount, retenus: heldBack })}</p>
           <div>
-            <button className="cat-btn primary" type="button" onClick={handlePromote} disabled={busy || rows.length === 0}>
+            <button className="cat-btn primary" type="button" onClick={handlePromote} disabled={busy || newCount === 0}>
               {busy ? t({ id: 'importacoes.wizard.promote.promoting' }) : t({ id: 'importacoes.wizard.promote.button' })}
             </button>
           </div>
+          {heldBack > 0 && (
+            <p className="imp-note" style={{ color: '#fbbf24', opacity: 0.95 }}>
+              {t({ id: 'importacoes.wizard.promote.heldBack' }, { n: heldBack })}
+            </p>
+          )}
         </div>
       </div>
     );

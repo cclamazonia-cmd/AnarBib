@@ -4065,5 +4065,10 @@
   "importacoes.wizard.promote.promoting": "Promozione…",
   "importacoes.wizard.promote.done": "Importazione completata! {n} bozza/e creata/e.",
   "importacoes.wizard.promote.viewDrafts": "Vedi le bozze (Catalogazione)",
-  "importacoes.wizard.promote.finish": "Concludi"
+  "importacoes.wizard.promote.finish": "Concludi",
+  "importacoes.wizard.preview.dupTitle": "{n} scheda/e già presente/i nel catalogo della rete",
+  "importacoes.wizard.preview.dupBody": "In un catalogo mutualizzato, creare un duplicato genera incoerenze gravi. Queste righe NON saranno promosse automaticamente — verificatele e preferite il collegamento alla scheda esistente.",
+  "importacoes.wizard.preview.dupBadge": "già in catalogo",
+  "importacoes.wizard.promote.plan": "{novos} nuova/e scheda/e → bozze. {retenus} riga/righe trattenuta/e (duplicati o da rivedere).",
+  "importacoes.wizard.promote.heldBack": "{n} riga/righe trattenuta/e, non promosse (potenziali duplicati o da rivedere) — gestitele manualmente per evitare incoerenze."
 }
