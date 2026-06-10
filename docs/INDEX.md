@@ -126,7 +126,7 @@ Versions successives. Seule la dernière est vivante, les autres sont historique
 
 ➡️ [`backlogs/INDEX.md`](./backlogs/INDEX.md) — version courante + historique
 
-**Version courante** : `AnarBib-Backlog-2026-06-10-v29.docx`. Le backlog a un rythme d'incrémentation rapide (v8 → v29 en trois semaines) — le **préfixe daté** reste la référence fiable. Depuis le 10/06, la **source vivante** est [`journal/sessions/ETAT-AVANCEMENT-multisessions.md`](./journal/sessions/ETAT-AVANCEMENT-multisessions.md) (markdown git-tracké, consolidation de toutes les sessions) ; le `.docx` en est un export/snapshot.
+**Version courante** : `AnarBib-Backlog-2026-06-10-v30.md` (Markdown — réécriture critique sur base prod vérifiée ; v29 et antérieurs `.docx` archivés). Le backlog a un rythme d'incrémentation rapide (v8 → v30 en trois semaines). Depuis le 10/06, la **source vivante** est [`journal/sessions/ETAT-AVANCEMENT-multisessions.md`](./journal/sessions/ETAT-AVANCEMENT-multisessions.md) (markdown git-tracké, consolidation de toutes les sessions) ; les backlogs versionnés en sont des snapshots datés.
 
 ### `GLB/` — Grand Livre Blanc
 

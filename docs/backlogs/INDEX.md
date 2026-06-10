@@ -1,6 +1,6 @@
 # 📋 INDEX des backlogs — AnarBib
 
-**Dernière mise à jour** : 5 juin 2026 (session tard) — Track D complet + liaison préventive + notes bio UI + gate i18n 10 locales livrés (cf. note ci-dessous, foyer `REGISTRE` §12 `CAT-D5a…d, CAT-G3, CAT-I2`) à **intégrer dans une v27** ; version courante reste **v26** tant que le `.docx` v27 n'est pas promu par le lead. Précédemment : 3 juin 2026 (version courante v26 du 02/06, historique reconstruit v8→v25, note sur le glissement de convention de nommage des archives)
+**Dernière mise à jour** : 10 juin 2026 — **v30 promu version courante** (réécriture critique sur base prod vérifiée, format **Markdown**) ; **v29 archivé**. Le backlog vit désormais en Markdown ; les `.docx` v8→v29 sont des snapshots conservés dans `archive/`. Source vivante de l'avancement : [`../journal/sessions/ETAT-AVANCEMENT-multisessions.md`](../journal/sessions/ETAT-AVANCEMENT-multisessions.md).
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce dossier contient les versions successives du **backlog technique** d'AnarBib. Une seule version est vivante à la fois ; les précédentes sont conservées dans `archive/` pour la traçabilité.
@@ -11,13 +11,11 @@ Ce dossier contient les versions successives du **backlog technique** d'AnarBib.
 
 ## ✅ Version courante
 
-➡️ **`AnarBib-Backlog-2026-06-02-v26.docx`**
+➡️ **`AnarBib-Backlog-2026-06-10-v30.md`**
 
-Backlog v26 du 2 juin 2026. Cette version s'inscrit dans la dynamique post-**audit de cohérence du corpus du 02/06** (`../journal/audits/AUDIT_coherence_corpus_2026-06-02.md`) qui a institué le REGISTRE des décisions et la règle de préséance documentaire.
+Backlog **v30** du 10 juin 2026 — **réécriture critique** reconstruite depuis la prod vérifiée (`uflwmikiyjfnikiphtcp`, 309 migrations, 21 Edge Functions), et non depuis le texte du v29 qui était gravement désynchronisé. Corrige les statuts (#CATALOGACAO bouclé ; #IMPORT/PARTNER/PEB/ILL-digital backend livré ; arbitrages F.6/F.10 caducs) et dégraisse le backlog réel (#MOBILE/#MM/#FED réellement ouverts). Preuves : [`AUDIT_backlog-v29-vs-prod_2026-06-10`](../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
 
-> **À intégrer dans v27 — session du 05/06 (soir).** Livré en prod (foyer normatif : `../specs/REGISTRE_decisions.md` §12 `CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1`) : **Track A catalogação complet** (Lots 1→6 + 3b) ; **module capas P1/P2/P3** (P3 page-1-PDF côté client) ; **liaison autorités↔œuvres** (matching + outil « Rattacher aux œuvres ») ; **fusion de doublons** autorités **et** documents (`merge_log`/`merge_author`/`merge_book`) ; **flux contributeurs** brouillon→publié + fiche livre complète ; **socle Ateliers** (`author_translations` étendue). 3 specs nouvelles dans `../specs/`.
->
-> **À intégrer aussi — session du 05/06 (tard) : le « reste backlog » ci-dessus est désormais LIVRÉ.** Foyer normatif `REGISTRE_decisions.md` §12 : **Track D complet** (`CAT-D5a` réactivation LoC post-FOLIO ; `CAT-D5b` adaptateurs REST Open Library + Wikidata ; `CAT-D5c` BN Brasil fédéré dans « Buscar metadados » ; `CAT-D5d` EF `authority_lookup` + Atelier autorités + seed `variant_forms` au publish) ; **liaison volet préventif** (`CAT-G3` : sélecteur d'autorité par contributeur au form livre, RPC `search_authors_by_name`, `book_draft_contributors.author_id`) ; **notes bio multilingues — UI de revue** (`CAT-I2` : statut draft/reviewed par langue, RPC `set_author_translation_review`, seed bio locale UI au publish). Hors §12 : **gate CI i18n étendu aux 10 locales** (`nl`/`el` ajoutés à `i18n.test.js`) ; règle dure horodatage migrations exact dans `CLAUDE.md`. **Reste backlog** : dédoublonnage des clusters d'autorités restants (Abad de Santillán 24/10036, Cappelletti 10027/10044, Tolstoï 10108/10109 — *traité dans une session dédiée*). *(Le `.docx` v27 reste à produire par le lead — cet INDEX en trace le contenu ; un fichier `AnarBib-Backlog-2026-06-05-v27.docx` existe déjà à la racine mais la version courante listée reste v26 tant que le lead ne l'a pas promu.)*
+> **Format.** Depuis le 10/06, le backlog vit en **Markdown** (git-tracké, diffable). Les anciennes versions `.docx` (v8→v29) sont conservées dans `archive/` comme snapshots historiques. Le contenu « à intégrer » des sessions des 05-08/06 (Track A/D, capas, liaison, doublons, clôtures #BIBLIO/#110/#NOTIFY, MULTI/VALID/#CL.10) est **livré et reflété dans le v30** — voir l'audit prod et le REGISTRE pour le détail normatif.
 
 ---
 
@@ -59,6 +57,10 @@ L'INDEX du 20/05 prescrivait de renommer les versions archivées avec le préfix
 | `AnarBib-Backlog-2026-05-31-v23.docx` | 31/05 | — |
 | `AnarBib-Backlog-2026-05-31-v24.docx` | 31/05 | — |
 | `AnarBib-Backlog-2026-06-01-v25.docx` | 01/06 | Réinjection du chantier catalogue (cf. `specs/INDEX.md`). |
+| `AnarBib-Backlog-2026-06-02-v26.docx` | 02/06 | Institution du REGISTRE des décisions + règle de préséance (audit cohérence corpus 02/06). |
+| `AnarBib-Backlog-2026-06-05-v27.docx` | 05/06 | Track A/D catalogação + capas livrés ; FED & Importações cadrés ; passe advisors P1-P4. |
+| `AnarBib-Backlog-2026-06-08-v28.docx` | 08/06 | Clôtures #BIBLIO / #110 / #NOTIFY-Painel-acts ; #HYG-rapports-consultas. |
+| `AnarBib-Backlog-2026-06-10-v29.docx` | 10/06 | MULTI / VALID / #CL.10 livrés. **Gravement désynchronisé de la prod → remplacé par le v30 (réécriture critique, cf. audit).** |
 
 **Cadence d'incrémentation** : v8 → v26 en 13 jours, soit ≈1,4 version/jour. Le rythme s'explique par la pratique « un arbitrage acté ⇒ un incrément » : le backlog porte les décisions courantes (par exemple `HYGIENE-SPECS-0106` ou les choix d'option d'un chantier), qui passent ensuite dans le REGISTRE. La règle « numéro strictement croissant, peu importe la date » est respectée — deux versions le même jour (v20/v21 le 29/05, v23/v24 le 31/05) sont normales.
 
@@ -72,7 +74,7 @@ Quand une nouvelle version du backlog est produite :
 3. **Mettre à jour** cet index (version courante + ligne dans le tableau d'historique).
 4. Si l'incrément introduit une **décision normative** (doctrine, arbitrage transverse), inscrire l'ID au [`REGISTRE`](../specs/REGISTRE_decisions.md). Le backlog porte le travail à faire ; le registre porte ce qui fait foi.
 
-**Convention de nommage** : `AnarBib-Backlog-<YYYY-MM-DD>-v<N>.docx`. Numéro strictement croissant — plusieurs versions le même jour sont autorisées et normales si elles tracent des incréments distincts.
+**Convention de nommage** : `AnarBib-Backlog-<YYYY-MM-DD>-v<N>.md` (**Markdown depuis v30** ; `.docx` pour les versions historiques ≤ v29, conservées dans `archive/`). Numéro strictement croissant — plusieurs versions le même jour sont autorisées et normales si elles tracent des incréments distincts.
 
 ---
 
