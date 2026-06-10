@@ -4023,5 +4023,11 @@
   "account.partnerships.state.valid": "Compartit (hi has consentit)",
   "account.partnerships.state.stale": "Per reconfirmar (els drets han canviat)",
   "account.partnerships.consent": "Consentir",
-  "account.partnerships.revoke": "Retirar"
+  "account.partnerships.revoke": "Retirar",
+  "catalogacao.author.portraitSearch": "Cercar retrat",
+  "catalogacao.author.portraitSearching": "Cercant…",
+  "catalogacao.author.portraitNeedName": "Indica un nom o un ID de Wikidata.",
+  "catalogacao.author.portraitError": "Error de retrat: {message}",
+  "catalogacao.author.portraitStored": "Retrat desat.",
+  "catalogacao.author.portraitNone": "No s'ha trobat cap retrat a Wikidata/Commons."
 }

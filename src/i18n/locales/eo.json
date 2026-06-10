@@ -4023,5 +4023,11 @@
   "account.partnerships.state.valid": "Kunhavigita (vi konsentis)",
   "account.partnerships.state.stale": "Rekonfirmenda (la rajtoj ŝanĝiĝis)",
   "account.partnerships.consent": "Konsenti",
-  "account.partnerships.revoke": "Revoki"
+  "account.partnerships.revoke": "Revoki",
+  "catalogacao.author.portraitSearch": "Serĉi portreton",
+  "catalogacao.author.portraitSearching": "Serĉante…",
+  "catalogacao.author.portraitNeedName": "Indiku nomon aŭ Wikidata-identigilon.",
+  "catalogacao.author.portraitError": "Eraro pri portreto: {message}",
+  "catalogacao.author.portraitStored": "Portreto konservita.",
+  "catalogacao.author.portraitNone": "Neniu portreto trovita en Wikidata/Commons."
 }

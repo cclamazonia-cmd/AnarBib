@@ -4023,5 +4023,11 @@
   "account.partnerships.state.valid": "Partagé (vous avez consenti)",
   "account.partnerships.state.stale": "À reconfirmer (les droits ont changé)",
   "account.partnerships.consent": "Consentir",
-  "account.partnerships.revoke": "Retirer"
+  "account.partnerships.revoke": "Retirer",
+  "catalogacao.author.portraitSearch": "Chercher un portrait",
+  "catalogacao.author.portraitSearching": "Recherche…",
+  "catalogacao.author.portraitNeedName": "Renseigne un nom ou un identifiant Wikidata.",
+  "catalogacao.author.portraitError": "Erreur portrait : {message}",
+  "catalogacao.author.portraitStored": "Portrait enregistré.",
+  "catalogacao.author.portraitNone": "Aucun portrait trouvé sur Wikidata/Commons."
 }

@@ -4023,5 +4023,11 @@
   "account.partnerships.state.valid": "Gedeeld (je hebt toegestemd)",
   "account.partnerships.state.stale": "Opnieuw bevestigen (rechten gewijzigd)",
   "account.partnerships.consent": "Toestaan",
-  "account.partnerships.revoke": "Intrekken"
+  "account.partnerships.revoke": "Intrekken",
+  "catalogacao.author.portraitSearch": "Portret zoeken",
+  "catalogacao.author.portraitSearching": "Zoeken…",
+  "catalogacao.author.portraitNeedName": "Geef een naam of een Wikidata-ID op.",
+  "catalogacao.author.portraitError": "Portretfout: {message}",
+  "catalogacao.author.portraitStored": "Portret opgeslagen.",
+  "catalogacao.author.portraitNone": "Geen portret gevonden op Wikidata/Commons."
 }

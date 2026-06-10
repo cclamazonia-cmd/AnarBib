@@ -83,6 +83,10 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState('');
   const [photoUploading, setPhotoUploading] = useState(false);
+  // ── Portrait lookup (Wikidata P18 → Commons) ──
+  const [portraitCandidates, setPortraitCandidates] = useState(null);
+  const [portraitLoading, setPortraitLoading] = useState(false);
+  const [portraitStoring, setPortraitStoring] = useState('');
   const [bioTranslations, setBioTranslations] = useState([]);
   const [bioDirty, setBioDirty] = useState(new Set()); // langues éditées (à upserter en status=draft)
   const [bioReviewBusy, setBioReviewBusy] = useState(null); // lang en cours de bascule de revue
@@ -186,6 +190,54 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     }
   }
 
+  // ── Portrait : recherche Wikidata/Commons ──────────────
+  async function searchPortraits() {
+    const wid = f('wikidata_id').trim();
+    const nm = f('preferred_name').trim();
+    if (!wid && !nm) { setMsg({ text: t({ id: 'catalogacao.author.portraitNeedName' }), kind: 'error' }); return; }
+    setPortraitLoading(true); setPortraitCandidates(null);
+    try {
+      const { data, error } = await supabase.functions.invoke('author_portrait_lookup', {
+        body: { wikidata_id: wid || undefined, name: nm || undefined },
+      });
+      if (error) throw error;
+      setPortraitCandidates(data?.candidates || []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.author.portraitError' }, { message: localizeError(err, t) }), kind: 'error' });
+      setPortraitCandidates([]);
+    } finally {
+      setPortraitLoading(false);
+    }
+  }
+
+  // Récupère l'image choisie et la stocke dans le bucket authors + attribution
+  // (licence/crédit) dans structured_meta.portrait — stockée, non exposée.
+  async function storePortrait(cand) {
+    if (portraitStoring) return;
+    setPortraitStoring(cand.filename);
+    try {
+      const resp = await fetch(cand.full_url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const blob = await resp.blob();
+      const draftId = form.id || 'new';
+      const storagePath = `authors/${draftId}_${Date.now()}.jpg`;
+      const { error } = await supabase.storage.from('authors').upload(storagePath, blob, { upsert: true, contentType: blob.type || 'image/jpeg' });
+      if (error) throw error;
+      set('photo_object_path', storagePath);
+      setM('portrait', {
+        license: cand.license || '', credit: cand.credit || '',
+        source_url: cand.source_url || '', wikidata_id: cand.wikidata_id || '',
+      });
+      setPhotoPreviewUrl('');
+      setPortraitCandidates(null);
+      setMsg({ text: t({ id: 'catalogacao.author.portraitStored' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.author.portraitError' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setPortraitStoring('');
+    }
+  }
+
   function fillFromRecord(r) {
     const sm = r.structured_meta || {};
     setForm({
@@ -229,6 +281,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       pseudonyms: sm.pseudonyms || '',
       activityPlace: sm.activityPlace || '',
       contextLinks: sm.contextLinks || '',
+      portrait: sm.portrait || null,
     });
     setDraftState(r.status === 'ready' ? 'ready' : r.status === 'published' ? 'published' : r.id ? 'saved' : 'new');
     setMsg({ text: '', kind: '' });
@@ -637,6 +690,10 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                   {t({ id: 'catalogacao.author.chooseImage' })}
                   <input type="file" accept="image/*" onChange={handlePhotoFileChange} style={{ display: 'none' }} />
                 </label>
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ marginLeft: 6 }}
+                  onClick={searchPortraits} disabled={portraitLoading}>
+                  {portraitLoading ? t({ id: 'catalogacao.author.portraitSearching' }) : t({ id: 'catalogacao.author.portraitSearch' })}
+                </button>
                 {photoFile && (
                   <button type="button" className="ab-button ab-button--sm" style={{ marginLeft: 6 }}
                     onClick={uploadPhoto} disabled={photoUploading}>
@@ -645,6 +702,21 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                 )}
                 {f('photo_object_path') && (
                   <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 4 }}>{f('photo_object_path')}</div>
+                )}
+                {portraitCandidates && portraitCandidates.length > 0 && (
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 8 }}>
+                    {portraitCandidates.map(c => (
+                      <button key={c.filename} type="button" onClick={() => storePortrait(c)} disabled={!!portraitStoring}
+                        title={`${c.label || ''}${c.license ? ' — ' + c.license : ''}`}
+                        style={{ padding: 0, border: '1px solid rgba(255,255,255,.15)', borderRadius: 6, overflow: 'hidden', cursor: 'pointer', background: 'none', width: 64 }}>
+                        <img src={c.thumb_url} alt={c.label || ''} style={{ width: 64, height: 64, objectFit: 'cover', display: 'block', opacity: portraitStoring === c.filename ? 0.4 : 1 }} />
+                        <div style={{ fontSize: '.55rem', padding: '2px 3px', color: 'var(--brand-muted, #aaa)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.license || '?'}</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {portraitCandidates && portraitCandidates.length === 0 && (
+                  <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 6 }}>{t({ id: 'catalogacao.author.portraitNone' })}</div>
                 )}
               </div>
             </div>

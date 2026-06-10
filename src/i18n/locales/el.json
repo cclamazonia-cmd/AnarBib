@@ -4023,5 +4023,11 @@
   "account.partnerships.state.valid": "Κοινοποιείται (συναινέσατε)",
   "account.partnerships.state.stale": "Χρειάζεται επιβεβαίωση (τα δικαιώματα άλλαξαν)",
   "account.partnerships.consent": "Επιτρέπω",
-  "account.partnerships.revoke": "Ανάκληση"
+  "account.partnerships.revoke": "Ανάκληση",
+  "catalogacao.author.portraitSearch": "Αναζήτηση πορτρέτου",
+  "catalogacao.author.portraitSearching": "Αναζήτηση…",
+  "catalogacao.author.portraitNeedName": "Δώστε όνομα ή Wikidata ID.",
+  "catalogacao.author.portraitError": "Σφάλμα πορτρέτου: {message}",
+  "catalogacao.author.portraitStored": "Το πορτρέτο αποθηκεύτηκε.",
+  "catalogacao.author.portraitNone": "Δεν βρέθηκε πορτρέτο στο Wikidata/Commons."
 }
