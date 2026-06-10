@@ -137,9 +137,11 @@ R7–R11 **propagés depuis consultas** par symétrie (✅ 31/05). R8 ne s'appli
 |---|---|---|
 | VALID-AMD | Bascule structurelle vers **validation par-appartenance** (et non plus par-compte) | ✅ amendement 30/05 |
 | **ACCT-MIGRATION** | Migration de compte entre biblios : `spec-migration-compte v1.0` **archivée**, son socle **absorbé dans `spec-multi-appartenance-lecteur`** (à rédiger). Foyer désormais = multi-appartenance. | ✅ acté (backlog v25, Option D · VII.1) |
-| VALID-C1..C4 | Bouton « valider en lot » ; note coordenador auto-validé ; notif compte en attente ; compteur d'attente | 🟡 ouvert (impl.) |
+| VALID-C1..C4 | Bouton « valider en lot » ; note coordenador auto-validé ; notif compte en attente ; compteur d'attente | ✅ **livré 10/06/2026** |
 
 ✅ Clôture réalignée 02/06 : pointe désormais vers `spec-multi-appartenance-lecteur` (cf. ACCT-MIGRATION) — DRIFT-2 corrigé.
+
+> 🆕 **Livré 10/06/2026** (session MULTI P5). Validation par-appartenance, en présentiel, par le staff (canal humain premier, RES-D9) — c'est le filtre anti-infiltration (vraie personne ? camarade ?). Écran staff **unitaire** livré avec MULTI (onglet `Validações`, RPC `list_pending_validations` + `api.validate_membership`). Puis **C1** « valider en lot » + **C3** notification staff « compte en attente » (`request_membership` → event `membership_validation_requested` → e-mail biblio, CTA /painel ; pendant staff du `validation_confirmed` côté lectrice) + **C4** compteur (badge onglet + card « Inscrições pendentes » dans *Trabalho do dia*). **C2 sans code** : appartenances coordenador créées `active` par promotion d'équipe, jamais `pending` (confiance par rôle déjà acquise). Migrations `20260608154320` (validate), `20260609225414` (notif lectrice P4b), `20260610014812` (notif staff C3). Confiance **non transitive** (MULTI-γ.1) préservée : chaque biblio valide la sienne, pas d'autorité centrale.
 
 ## 10. Renouvellement granulaire — `RENOV` *(spec-renouvellement-granulaire v0.1)*
 
@@ -313,6 +315,8 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **MULTI-MIGRATION** | Aucune migration auto des lectrices existantes ; deux comptes test BTL traités manuellement. | ✅ acté |
 
 > Foyer : design dans `docs/specs/spec-multi-appartenance-lecteur.md` (v0.3, charpente figée) ; trace `docs/decisions/CADRAGE_spec-multi-appartenance-lecteur_2026-05-31.md`. Registre > trace.
+
+> ✅ **Implémenté & déployé 08-10/06/2026** (session MULTI P5). **Backend** : P1 modèle 8 statuts + validation par-appartenance + n° local + journal (`20260608145936`) ; P2 statut par biblio `fn_my_memberships_status` (`20260608151435`) ; P3 gate de circulation `fn_membership_can_engage_circulation` + triggers emprunt/consulta — MULTI-F.1 cond. 1-4 (`20260608153720`) ; P4 auto-inscription `request_membership` (garde β.1) + validation staff `validate_membership` (`20260608154320`). **Frontend (P5)** : onglet « Mes biblios » (TabBiblios), bandeau de contexte « biblio courante » ≥2 appartenances (MULTI-B.1/B.2/Z19, re-thème + sessionStorage via LibraryContext), auto-inscription lectrice, UI validation staff (onglet Validações). **#CL.10 / B.3 / D.1** : lecture agrégée — tag biblio d'origine par ligne de circulation + signal « même titre dans 2 biblios » (frontend pur, résolution `library_id`→biblio côté client ; commit `49d464a`). **Notifs e-mail 10 langues** : `validation_confirmed` (lectrice, P4b) + `membership_validation_requested` (staff, VALID-C3). Reste **non implémenté** : MULTI-F.1 cond. 5 (plafonds, pas de config), §21 PARTNER (partage inter-biblios sur consentement). Détail validation physique → §9 VALID.
 
 ---
 
