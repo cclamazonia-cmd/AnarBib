@@ -50,7 +50,7 @@ confiance transitive (MULTI-γ.1).
 - **#CL.10 / B.3 / D.1** — lecture agrégée : tag biblio d'origine par ligne de
   circulation + signal « même titre dans 2 biblios » (frontend pur, `library_id`
   → biblio résolu côté client). Commit `49d464a`.
-- **Reste** : MULTI-F.1 cond. 5 (plafonds — manque config) ⬜.
+- **MULTI-F.1 cond. 5** (plafonds de circulation simultanée) ✅ livré par une session parallèle (`4b5934d`, 10/06) — les 5 conditions de la porte sont posées.
 
 ## ✅ VALID — Validation physique (§9)
 *Session : MULTI P5. Livré 10/06/2026.*
@@ -122,7 +122,6 @@ premier). Le logiciel met la demande sous les yeux d'un·e humain·e qui vette.
 |---|---|---|
 | **PARTNER** — partenariat biblios | §21 | Partage inter-biblios **sur consentement** (opt-in par partenariat, réciproque). C'est le canal contrôlé du cross-biblio (vs MULTI-γ.1 non transitif). |
 | **ILL** — prêt inter-bibliothèques | §22 | Périmètre `library_partnerships` ; dépendance CAT-B8 levée (visibilité exemplaire). |
-| **MULTI-F.1 cond. 5** — plafonds | §20 | Manque la config des plafonds de circulation. |
 | Finition import/export | §12 | Compléter la refonte (Lots en cours). |
 
 ---
