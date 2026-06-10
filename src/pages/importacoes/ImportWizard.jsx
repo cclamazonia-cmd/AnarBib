@@ -62,6 +62,10 @@ export default function ImportWizard() {
   // fontes
   const [isbn, setIsbn] = useState('');
   const [candidates, setCandidates] = useState([]);
+  // preview / promote
+  const [rows, setRows] = useState([]);
+  const [rowsLoading, setRowsLoading] = useState(false);
+  const [promoteResult, setPromoteResult] = useState(null);
 
   const loadSources = useCallback(async () => {
     try {
@@ -70,10 +74,25 @@ export default function ImportWizard() {
     } catch { /* guard */ }
   }, []);
 
+  const loadRows = useCallback(async (rid) => {
+    if (!rid) return;
+    setRowsLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_import_list_run_rows', { p_run_id: Number(rid) });
+      if (!error && Array.isArray(data)) setRows(data);
+    } catch { /* guard */ }
+    finally { setRowsLoading(false); }
+  }, []);
+
   // Charge les sources en entrant à l'étape 2 des circuits à fichier.
   useEffect(() => {
     if (step === 2 && (circuit === 'arquivo' || circuit === 'migracao')) loadSources();
   }, [step, circuit, loadSources]);
+
+  // Charge les lignes du staging en entrant à l'étape 3.
+  useEffect(() => {
+    if (step === 3 && runId) loadRows(runId);
+  }, [step, runId, loadRows]);
 
   if (!canImport) {
     return (
@@ -151,6 +170,20 @@ export default function ImportWizard() {
       setRunId(Number(newRunId));
       setMsg({ text: t({ id: 'importacoes.wizard.source.ingested' }), kind: 'ok' });
       setStep(3);
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setBusy(false); }
+  }
+
+  async function handlePromote() {
+    if (!runId) return;
+    setBusy(true);
+    setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
+    try {
+      const { data, error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId) });
+      if (error) throw error;
+      setPromoteResult(data || {});
+      setMsg({ text: '', kind: '' });
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setBusy(false); }
@@ -268,14 +301,76 @@ export default function ImportWizard() {
     );
   }
 
-  function renderWip(stepKey) {
+  function renderPreview() {
     return (
       <div className="imp-sheet">
         <div className="imp-sheet__head">
-          <span className="imp-sheet__title">{t({ id: `importacoes.wizard.step.${stepKey}` })}</span>
+          <span className="imp-sheet__title">{t({ id: 'importacoes.wizard.step.preview' })}</span>
         </div>
         <div className="imp-sheet__body">
-          <p className="imp-note">{t({ id: 'importacoes.wizard.wip' })}</p>
+          {rowsLoading && <p className="imp-note">{t({ id: 'importacoes.wizard.preview.loading' })}</p>}
+          {!rowsLoading && rows.length === 0 && <p className="imp-note">{t({ id: 'importacoes.wizard.preview.empty' })}</p>}
+          {!rowsLoading && rows.length > 0 && (
+            <>
+              <p className="imp-note" style={{ marginBottom: 10 }}>{t({ id: 'importacoes.wizard.preview.summary' }, { n: rows.length })}</p>
+              <div style={{ display: 'grid', gap: 6, maxHeight: 380, overflow: 'auto' }}>
+                {rows.map((r) => (
+                  <div key={r.id} style={{ padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)' }}>
+                    <strong style={{ display: 'block', fontSize: '.9rem' }}>{r.title || '—'}</strong>
+                    <span className="imp-note">
+                      {[Array.isArray(r.authors) ? r.authors.join(', ') : (r.responsibility_statement || ''), r.publisher, r.publication_year].filter(Boolean).join(' · ')}
+                    </span>
+                    {(r.match_status || typeof r.confidence === 'number') && (
+                      <span className="imp-note" style={{ display: 'block', marginTop: 2, opacity: 0.8 }}>
+                        {[r.match_status, typeof r.confidence === 'number' ? `${Math.round(r.confidence * 100)}%` : null, Array.isArray(r.warnings) && r.warnings.length ? `⚠ ${r.warnings.length}` : null].filter(Boolean).join(' · ')}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  function renderPromote() {
+    if (promoteResult) {
+      const n = promoteResult.created_drafts ?? promoteResult.created ?? promoteResult.count ?? rows.length;
+      return (
+        <div className="imp-sheet">
+          <div className="imp-sheet__head">
+            <span className="imp-sheet__title">{t({ id: 'importacoes.wizard.step.promote' })}</span>
+          </div>
+          <div className="imp-sheet__body" style={{ display: 'grid', gap: 12 }}>
+            <p style={{ fontSize: '1rem', color: '#4ade80', fontWeight: 600, margin: 0 }}>
+              {t({ id: 'importacoes.wizard.promote.done' }, { n })}
+            </p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <Link to="/catalogacao" style={{ textDecoration: 'none' }}>
+                <button className="cat-btn primary" type="button">{t({ id: 'importacoes.wizard.promote.viewDrafts' })}</button>
+              </Link>
+              <Link to="/importacoes" style={{ textDecoration: 'none' }}>
+                <button className="cat-btn secondary" type="button">{t({ id: 'importacoes.wizard.promote.finish' })}</button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="imp-sheet">
+        <div className="imp-sheet__head">
+          <span className="imp-sheet__title">{t({ id: 'importacoes.wizard.step.promote' })}</span>
+        </div>
+        <div className="imp-sheet__body" style={{ display: 'grid', gap: 12 }}>
+          <p className="imp-note">{t({ id: 'importacoes.wizard.preview.summary' }, { n: rows.length })}</p>
+          <div>
+            <button className="cat-btn primary" type="button" onClick={handlePromote} disabled={busy || rows.length === 0}>
+              {busy ? t({ id: 'importacoes.wizard.promote.promoting' }) : t({ id: 'importacoes.wizard.promote.button' })}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -313,8 +408,8 @@ export default function ImportWizard() {
 
         {step === 1 && renderCircuit()}
         {step === 2 && renderSource()}
-        {step === 3 && renderWip('preview')}
-        {step === 4 && renderWip('promote')}
+        {step === 3 && renderPreview()}
+        {step === 4 && renderPromote()}
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 22 }}>
           <button className="cat-btn secondary" type="button" disabled={step === 1 || busy} onClick={() => setStep((s) => Math.max(1, s - 1))}>

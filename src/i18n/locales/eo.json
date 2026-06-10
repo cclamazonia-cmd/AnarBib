@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Serĉi",
   "importacoes.wizard.source.ingest": "Importi",
-  "importacoes.wizard.source.ingested": "Registro importita. Iru al antaŭrigardo."
+  "importacoes.wizard.source.ingested": "Registro importita. Iru al antaŭrigardo.",
+  "importacoes.wizard.preview.loading": "Ŝargado…",
+  "importacoes.wizard.preview.empty": "Neniu linio por importi.",
+  "importacoes.wizard.preview.summary": "{n} registro(j) preta(j) por promocio.",
+  "importacoes.wizard.promote.button": "Promocii al malnetoj",
+  "importacoes.wizard.promote.promoting": "Promociado…",
+  "importacoes.wizard.promote.done": "Importo finita! {n} malneto(j) kreita(j).",
+  "importacoes.wizard.promote.viewDrafts": "Vidi la malnetojn (Katalogado)",
+  "importacoes.wizard.promote.finish": "Fini"
 }

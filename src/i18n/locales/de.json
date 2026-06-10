@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Suchen",
   "importacoes.wizard.source.ingest": "Importieren",
-  "importacoes.wizard.source.ingested": "Datensatz importiert. Weiter zur Vorschau."
+  "importacoes.wizard.source.ingested": "Datensatz importiert. Weiter zur Vorschau.",
+  "importacoes.wizard.preview.loading": "Wird geladen…",
+  "importacoes.wizard.preview.empty": "Keine Zeile zum Importieren.",
+  "importacoes.wizard.preview.summary": "{n} Datensatz/Datensätze bereit zur Übernahme.",
+  "importacoes.wizard.promote.button": "In Entwürfe übernehmen",
+  "importacoes.wizard.promote.promoting": "Übernahme läuft…",
+  "importacoes.wizard.promote.done": "Import abgeschlossen! {n} Entwurf/Entwürfe erstellt.",
+  "importacoes.wizard.promote.viewDrafts": "Entwürfe ansehen (Katalogisierung)",
+  "importacoes.wizard.promote.finish": "Abschließen"
 }

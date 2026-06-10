@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Cerca",
   "importacoes.wizard.source.ingest": "Importa",
-  "importacoes.wizard.source.ingested": "Scheda importata. Vai all'anteprima."
+  "importacoes.wizard.source.ingested": "Scheda importata. Vai all'anteprima.",
+  "importacoes.wizard.preview.loading": "Caricamento…",
+  "importacoes.wizard.preview.empty": "Nessuna riga da importare.",
+  "importacoes.wizard.preview.summary": "{n} scheda/e pronta/e per la promozione.",
+  "importacoes.wizard.promote.button": "Promuovi alle bozze",
+  "importacoes.wizard.promote.promoting": "Promozione…",
+  "importacoes.wizard.promote.done": "Importazione completata! {n} bozza/e creata/e.",
+  "importacoes.wizard.promote.viewDrafts": "Vedi le bozze (Catalogazione)",
+  "importacoes.wizard.promote.finish": "Concludi"
 }

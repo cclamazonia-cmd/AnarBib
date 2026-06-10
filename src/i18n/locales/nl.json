@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Zoeken",
   "importacoes.wizard.source.ingest": "Importeren",
-  "importacoes.wizard.source.ingested": "Record geïmporteerd. Ga naar voorbeeld."
+  "importacoes.wizard.source.ingested": "Record geïmporteerd. Ga naar voorbeeld.",
+  "importacoes.wizard.preview.loading": "Laden…",
+  "importacoes.wizard.preview.empty": "Geen rij om te importeren.",
+  "importacoes.wizard.preview.summary": "{n} record(s) klaar voor promotie.",
+  "importacoes.wizard.promote.button": "Promoveren naar concepten",
+  "importacoes.wizard.promote.promoting": "Bezig met promoveren…",
+  "importacoes.wizard.promote.done": "Import voltooid! {n} concept(en) aangemaakt.",
+  "importacoes.wizard.promote.viewDrafts": "Concepten bekijken (Catalogiseren)",
+  "importacoes.wizard.promote.finish": "Voltooien"
 }

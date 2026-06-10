@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Rechercher",
   "importacoes.wizard.source.ingest": "Importer",
-  "importacoes.wizard.source.ingested": "Notice importée. Passez à l'aperçu."
+  "importacoes.wizard.source.ingested": "Notice importée. Passez à l'aperçu.",
+  "importacoes.wizard.preview.loading": "Chargement…",
+  "importacoes.wizard.preview.empty": "Aucune ligne à importer.",
+  "importacoes.wizard.preview.summary": "{n} notice(s) prête(s) à être promue(s).",
+  "importacoes.wizard.promote.button": "Promouvoir vers les brouillons",
+  "importacoes.wizard.promote.promoting": "Promotion en cours…",
+  "importacoes.wizard.promote.done": "Import terminé ! {n} brouillon(s) créé(s).",
+  "importacoes.wizard.promote.viewDrafts": "Voir les brouillons (Catalogage)",
+  "importacoes.wizard.promote.finish": "Terminer"
 }

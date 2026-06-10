@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Search",
   "importacoes.wizard.source.ingest": "Import",
-  "importacoes.wizard.source.ingested": "Record imported. Go to preview."
+  "importacoes.wizard.source.ingested": "Record imported. Go to preview.",
+  "importacoes.wizard.preview.loading": "Loading…",
+  "importacoes.wizard.preview.empty": "No row to import.",
+  "importacoes.wizard.preview.summary": "{n} record(s) ready for promotion.",
+  "importacoes.wizard.promote.button": "Promote to drafts",
+  "importacoes.wizard.promote.promoting": "Promoting…",
+  "importacoes.wizard.promote.done": "Import complete! {n} draft(s) created.",
+  "importacoes.wizard.promote.viewDrafts": "View drafts (Cataloging)",
+  "importacoes.wizard.promote.finish": "Finish"
 }

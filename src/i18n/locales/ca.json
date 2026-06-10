@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Cerca",
   "importacoes.wizard.source.ingest": "Importa",
-  "importacoes.wizard.source.ingested": "Fitxa importada. Aneu a la vista prèvia."
+  "importacoes.wizard.source.ingested": "Fitxa importada. Aneu a la vista prèvia.",
+  "importacoes.wizard.preview.loading": "S'està carregant…",
+  "importacoes.wizard.preview.empty": "Cap línia per importar.",
+  "importacoes.wizard.preview.summary": "{n} fitxa/fitxes a punt per a la promoció.",
+  "importacoes.wizard.promote.button": "Promou als esborranys",
+  "importacoes.wizard.promote.promoting": "Promovent…",
+  "importacoes.wizard.promote.done": "Importació completada! {n} esborrany(s) creat(s).",
+  "importacoes.wizard.promote.viewDrafts": "Mostra els esborranys (Catalogació)",
+  "importacoes.wizard.promote.finish": "Finalitza"
 }

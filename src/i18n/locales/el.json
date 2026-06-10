@@ -4057,5 +4057,13 @@
   "importacoes.wizard.source.isbnLabel": "ISBN",
   "importacoes.wizard.source.search": "Αναζήτηση",
   "importacoes.wizard.source.ingest": "Εισαγωγή",
-  "importacoes.wizard.source.ingested": "Η εγγραφή εισήχθη. Πηγαίνετε στην προεπισκόπηση."
+  "importacoes.wizard.source.ingested": "Η εγγραφή εισήχθη. Πηγαίνετε στην προεπισκόπηση.",
+  "importacoes.wizard.preview.loading": "Φόρτωση…",
+  "importacoes.wizard.preview.empty": "Καμία γραμμή προς εισαγωγή.",
+  "importacoes.wizard.preview.summary": "{n} εγγραφή/ές έτοιμη/ες για προαγωγή.",
+  "importacoes.wizard.promote.button": "Προαγωγή σε προσχέδια",
+  "importacoes.wizard.promote.promoting": "Προαγωγή…",
+  "importacoes.wizard.promote.done": "Η εισαγωγή ολοκληρώθηκε! Δημιουργήθηκαν {n} προσχέδιο/α.",
+  "importacoes.wizard.promote.viewDrafts": "Προβολή προσχεδίων (Καταλογογράφηση)",
+  "importacoes.wizard.promote.finish": "Ολοκλήρωση"
 }
