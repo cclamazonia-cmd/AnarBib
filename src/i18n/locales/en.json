@@ -4045,5 +4045,17 @@
   "importacoes.wizard.circuit.fontes": "External sources",
   "importacoes.wizard.back": "Back",
   "importacoes.wizard.next": "Next",
-  "importacoes.wizard.wip": "Step under construction (coming soon)."
+  "importacoes.wizard.wip": "Step under construction (coming soon).",
+  "importacoes.wizard.source.uploadTitle": "Upload a file",
+  "importacoes.wizard.source.fontesTitle": "Search external sources",
+  "importacoes.wizard.source.sourceLabel": "Partner source",
+  "importacoes.wizard.source.noSources": "No partner source. Create one from the Importações page.",
+  "importacoes.wizard.source.fileLabel": "File (CSV, RIS, MARCXML, MARC…)",
+  "importacoes.wizard.source.import": "Import the file",
+  "importacoes.wizard.source.importing": "Importing…",
+  "importacoes.wizard.source.ready": "Batch imported (run #{id}). Go to preview.",
+  "importacoes.wizard.source.isbnLabel": "ISBN",
+  "importacoes.wizard.source.search": "Search",
+  "importacoes.wizard.source.ingest": "Import",
+  "importacoes.wizard.source.ingested": "Record imported. Go to preview."
 }

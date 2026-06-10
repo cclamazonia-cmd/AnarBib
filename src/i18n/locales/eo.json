@@ -4045,5 +4045,17 @@
   "importacoes.wizard.circuit.fontes": "Eksteraj fontoj",
   "importacoes.wizard.back": "Reen",
   "importacoes.wizard.next": "Sekva",
-  "importacoes.wizard.wip": "Paŝo en konstruado (baldaŭ)."
+  "importacoes.wizard.wip": "Paŝo en konstruado (baldaŭ).",
+  "importacoes.wizard.source.uploadTitle": "Alŝuti dosieron",
+  "importacoes.wizard.source.fontesTitle": "Serĉi en eksteraj fontoj",
+  "importacoes.wizard.source.sourceLabel": "Partnera fonto",
+  "importacoes.wizard.source.noSources": "Neniu partnera fonto. Kreu unu el la paĝo Importações.",
+  "importacoes.wizard.source.fileLabel": "Dosiero (CSV, RIS, MARCXML, MARC…)",
+  "importacoes.wizard.source.import": "Importi la dosieron",
+  "importacoes.wizard.source.importing": "Importado…",
+  "importacoes.wizard.source.ready": "Loto importita (rulo #{id}). Iru al antaŭrigardo.",
+  "importacoes.wizard.source.isbnLabel": "ISBN",
+  "importacoes.wizard.source.search": "Serĉi",
+  "importacoes.wizard.source.ingest": "Importi",
+  "importacoes.wizard.source.ingested": "Registro importita. Iru al antaŭrigardo."
 }

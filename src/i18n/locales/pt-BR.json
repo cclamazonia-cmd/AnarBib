@@ -4045,5 +4045,17 @@
   "importacoes.wizard.circuit.fontes": "Fontes externas",
   "importacoes.wizard.back": "Voltar",
   "importacoes.wizard.next": "Próximo",
-  "importacoes.wizard.wip": "Etapa em construção (em breve)."
+  "importacoes.wizard.wip": "Etapa em construção (em breve).",
+  "importacoes.wizard.source.uploadTitle": "Depositar um arquivo",
+  "importacoes.wizard.source.fontesTitle": "Buscar em fontes externas",
+  "importacoes.wizard.source.sourceLabel": "Fonte parceira",
+  "importacoes.wizard.source.noSources": "Nenhuma fonte parceira. Crie uma na página Importações.",
+  "importacoes.wizard.source.fileLabel": "Arquivo (CSV, RIS, MARCXML, MARC…)",
+  "importacoes.wizard.source.import": "Importar o arquivo",
+  "importacoes.wizard.source.importing": "Importando…",
+  "importacoes.wizard.source.ready": "Lote importado (run #{id}). Vá para a pré-visualização.",
+  "importacoes.wizard.source.isbnLabel": "ISBN",
+  "importacoes.wizard.source.search": "Buscar",
+  "importacoes.wizard.source.ingest": "Importar",
+  "importacoes.wizard.source.ingested": "Notícia importada. Vá para a pré-visualização."
 }

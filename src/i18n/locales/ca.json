@@ -4045,5 +4045,17 @@
   "importacoes.wizard.circuit.fontes": "Fonts externes",
   "importacoes.wizard.back": "Enrere",
   "importacoes.wizard.next": "Següent",
-  "importacoes.wizard.wip": "Etapa en construcció (properament)."
+  "importacoes.wizard.wip": "Etapa en construcció (properament).",
+  "importacoes.wizard.source.uploadTitle": "Dipositar un fitxer",
+  "importacoes.wizard.source.fontesTitle": "Cercar en fonts externes",
+  "importacoes.wizard.source.sourceLabel": "Font associada",
+  "importacoes.wizard.source.noSources": "Cap font associada. Creeu-ne una des de la pàgina Importações.",
+  "importacoes.wizard.source.fileLabel": "Fitxer (CSV, RIS, MARCXML, MARC…)",
+  "importacoes.wizard.source.import": "Importa el fitxer",
+  "importacoes.wizard.source.importing": "Important…",
+  "importacoes.wizard.source.ready": "Lot importat (run #{id}). Aneu a la vista prèvia.",
+  "importacoes.wizard.source.isbnLabel": "ISBN",
+  "importacoes.wizard.source.search": "Cerca",
+  "importacoes.wizard.source.ingest": "Importa",
+  "importacoes.wizard.source.ingested": "Fitxa importada. Aneu a la vista prèvia."
 }

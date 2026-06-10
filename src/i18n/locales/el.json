@@ -4045,5 +4045,17 @@
   "importacoes.wizard.circuit.fontes": "Εξωτερικές πηγές",
   "importacoes.wizard.back": "Πίσω",
   "importacoes.wizard.next": "Επόμενο",
-  "importacoes.wizard.wip": "Βήμα υπό κατασκευή (σύντομα)."
+  "importacoes.wizard.wip": "Βήμα υπό κατασκευή (σύντομα).",
+  "importacoes.wizard.source.uploadTitle": "Μεταφόρτωση αρχείου",
+  "importacoes.wizard.source.fontesTitle": "Αναζήτηση σε εξωτερικές πηγές",
+  "importacoes.wizard.source.sourceLabel": "Πηγή-εταίρος",
+  "importacoes.wizard.source.noSources": "Καμία πηγή-εταίρος. Δημιουργήστε μία από τη σελίδα Importações.",
+  "importacoes.wizard.source.fileLabel": "Αρχείο (CSV, RIS, MARCXML, MARC…)",
+  "importacoes.wizard.source.import": "Εισαγωγή του αρχείου",
+  "importacoes.wizard.source.importing": "Εισαγωγή…",
+  "importacoes.wizard.source.ready": "Η παρτίδα εισήχθη (run #{id}). Πηγαίνετε στην προεπισκόπηση.",
+  "importacoes.wizard.source.isbnLabel": "ISBN",
+  "importacoes.wizard.source.search": "Αναζήτηση",
+  "importacoes.wizard.source.ingest": "Εισαγωγή",
+  "importacoes.wizard.source.ingested": "Η εγγραφή εισήχθη. Πηγαίνετε στην προεπισκόπηση."
 }

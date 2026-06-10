@@ -4045,5 +4045,17 @@
   "importacoes.wizard.circuit.fontes": "Externe bronnen",
   "importacoes.wizard.back": "Terug",
   "importacoes.wizard.next": "Volgende",
-  "importacoes.wizard.wip": "Stap in aanbouw (binnenkort)."
+  "importacoes.wizard.wip": "Stap in aanbouw (binnenkort).",
+  "importacoes.wizard.source.uploadTitle": "Een bestand uploaden",
+  "importacoes.wizard.source.fontesTitle": "Externe bronnen doorzoeken",
+  "importacoes.wizard.source.sourceLabel": "Partnerbron",
+  "importacoes.wizard.source.noSources": "Geen partnerbron. Maak er een aan op de Importações-pagina.",
+  "importacoes.wizard.source.fileLabel": "Bestand (CSV, RIS, MARCXML, MARC…)",
+  "importacoes.wizard.source.import": "Bestand importeren",
+  "importacoes.wizard.source.importing": "Bezig met importeren…",
+  "importacoes.wizard.source.ready": "Partij geïmporteerd (run #{id}). Ga naar voorbeeld.",
+  "importacoes.wizard.source.isbnLabel": "ISBN",
+  "importacoes.wizard.source.search": "Zoeken",
+  "importacoes.wizard.source.ingest": "Importeren",
+  "importacoes.wizard.source.ingested": "Record geïmporteerd. Ga naar voorbeeld."
 }

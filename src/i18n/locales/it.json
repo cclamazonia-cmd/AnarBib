@@ -4045,5 +4045,17 @@
   "importacoes.wizard.circuit.fontes": "Fonti esterne",
   "importacoes.wizard.back": "Indietro",
   "importacoes.wizard.next": "Avanti",
-  "importacoes.wizard.wip": "Fase in costruzione (prossimamente)."
+  "importacoes.wizard.wip": "Fase in costruzione (prossimamente).",
+  "importacoes.wizard.source.uploadTitle": "Caricare un file",
+  "importacoes.wizard.source.fontesTitle": "Cercare in fonti esterne",
+  "importacoes.wizard.source.sourceLabel": "Fonte partner",
+  "importacoes.wizard.source.noSources": "Nessuna fonte partner. Creane una dalla pagina Importações.",
+  "importacoes.wizard.source.fileLabel": "File (CSV, RIS, MARCXML, MARC…)",
+  "importacoes.wizard.source.import": "Importa il file",
+  "importacoes.wizard.source.importing": "Importazione…",
+  "importacoes.wizard.source.ready": "Lotto importato (run #{id}). Vai all'anteprima.",
+  "importacoes.wizard.source.isbnLabel": "ISBN",
+  "importacoes.wizard.source.search": "Cerca",
+  "importacoes.wizard.source.ingest": "Importa",
+  "importacoes.wizard.source.ingested": "Scheda importata. Vai all'anteprima."
 }
