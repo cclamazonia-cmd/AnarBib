@@ -2294,7 +2294,7 @@
   "catalogacao.wizard.step.indexacao.tip": "O campo Tombo é preenchido automaticamente com a próxima referência da convenção da sua biblioteca.",
   "catalogacao.wizard.step.indexacao.title": "Indexação",
   "catalogacao.wizard.step.welcome.body": "Este guia apresenta as principais funcionalidades do módulo de catalogação. Navegue pelos passos para descobrir cada aba e suas ferramentas.",
-  "catalogacao.wizard.step.welcome.title": "Bem-vindo(a/e) ao Catalogação!",
+  "catalogacao.wizard.step.welcome.title": "Bem-vindo(a/e) à Catalogação!",
   "catalogacao.wizard.stepOf": "{current} de {total}",
   "circulation.systemRule.base_legada_consultation_allowed.label": "Base legada — consulta local permitida",
   "circulation.systemRule.base_legada_consultation_allowed.publicNote": "Consulta local permitida na base transitória, sujeita ao funcionamento e aos horários da biblioteca.",
