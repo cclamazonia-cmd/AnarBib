@@ -331,7 +331,7 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.documento'})}</h3>
             </div>
-            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} />
+            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} />
           </div>
 
           {/* 2. Autoria */}

@@ -216,7 +216,7 @@ const EMPTY_FORM = {
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const { isNetworkAdmin, libraryId } = useLibrary();
@@ -299,6 +299,29 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       });
     return () => { cancelled = true; };
   }, [isNetworkAdmin, form.published_book_id, catalogLibraries]);
+
+  // ── Exemplaires liés (card "para informação", anti-orphelin) ──
+  const [linkedExemplars, setLinkedExemplars] = useState([]); // [{ library_id, library_name, count }]
+  useEffect(() => {
+    const pubId = form.published_book_id;
+    if (!pubId) { setLinkedExemplars([]); return; }
+    let cancelled = false;
+    (async () => {
+      const { data: holdings } = await supabase.from('book_holdings').select('id, library_id').eq('book_id', Number(pubId));
+      if (cancelled) return;
+      if (!holdings || holdings.length === 0) { setLinkedExemplars([]); return; }
+      const { data: exs } = await supabase.from('exemplares').select('id, library_id').in('holding_id', holdings.map(h => h.id));
+      if (cancelled) return;
+      const byLib = {};
+      for (const e of (exs || [])) byLib[e.library_id] = (byLib[e.library_id] || 0) + 1;
+      const lname = (lid) => {
+        const l = catalogLibraries.find(x => x.id === lid);
+        return l?.short_name || l?.name || lid;
+      };
+      setLinkedExemplars(Object.entries(byLib).map(([lid, count]) => ({ library_id: lid, count, library_name: lname(lid) })));
+    })();
+    return () => { cancelled = true; };
+  }, [form.published_book_id, catalogLibraries]);
 
   // ── Lookup state ───────────────────────────────────────
   const [lookupLoading, setLookupLoading] = useState(false);
@@ -1802,6 +1825,65 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const rrf = (id) => renderRegistryField(id, ctx, catalogTier, materialType);
 
   // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────
+  // Cards "para informação" : auteur lié + exemplaires par biblio (anti-orphelin).
+  function renderInfoCards() {
+    const cardStyle = { marginTop: 12, border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: '10px 12px', cursor: 'pointer', background: 'rgba(0,0,0,.18)' };
+    const headStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 };
+    const titleStyle = { fontWeight: 700, fontSize: '.82rem' };
+    const tagStyle = { fontSize: '.6rem', textTransform: 'uppercase', letterSpacing: '.04em', color: 'var(--brand-muted,#9aa)', border: '1px solid rgba(255,255,255,.15)', borderRadius: 4, padding: '1px 5px' };
+    const lineStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, fontSize: '.8rem', padding: '2px 0' };
+    const ctaStyle = { marginTop: 6, fontSize: '.74rem', color: 'var(--brand-color-primary,#c0392b)', fontWeight: 600 };
+    const emptyStyle = { fontSize: '.78rem', color: 'var(--brand-muted,#888)', fontStyle: 'italic' };
+    const pillStyle = { flexShrink: 0, fontSize: '.6rem' };
+    const authors = contributors.filter(c => (c.name || '').trim());
+    const goAuthor = () => onNavigateTab?.('authorsPanel');
+    const goExemplar = () => onNavigateTab?.('indexPanel');
+    return (
+      <div className="ab-info-cards">
+        {/* Card AUTORIA */}
+        <div style={cardStyle} role="button" tabIndex={0} onClick={goAuthor}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goAuthor(); } }}
+          title={t({ id: 'catalogacao.infocard.goAuthor' })}>
+          <div style={headStyle}>
+            <span style={titleStyle}>{t({ id: 'catalogacao.infocard.authorTitle' })}</span>
+            <span style={tagStyle}>{t({ id: 'catalogacao.infocard.forInfo' })}</span>
+          </div>
+          {authors.length === 0
+            ? <div style={emptyStyle}>{t({ id: 'catalogacao.infocard.noAuthor' })}</div>
+            : authors.map((c, i) => (
+                <div key={i} style={lineStyle}>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.name}</span>
+                  <span className={`cat-pill ${c.author_id ? 'ok' : 'warn'}`} style={pillStyle}>
+                    {c.author_id ? t({ id: 'catalogacao.infocard.linked' }) : t({ id: 'catalogacao.infocard.unlinked' })}
+                  </span>
+                </div>
+              ))}
+          <div style={ctaStyle}>{t({ id: 'catalogacao.infocard.goAuthor' })} →</div>
+        </div>
+        {/* Card EXEMPLARES */}
+        <div style={cardStyle} role="button" tabIndex={0} onClick={goExemplar}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goExemplar(); } }}
+          title={t({ id: 'catalogacao.infocard.goExemplar' })}>
+          <div style={headStyle}>
+            <span style={titleStyle}>{t({ id: 'catalogacao.infocard.exemplarTitle' })}</span>
+            <span style={tagStyle}>{t({ id: 'catalogacao.infocard.forInfo' })}</span>
+          </div>
+          {!form.published_book_id
+            ? <div style={emptyStyle}>{t({ id: 'catalogacao.infocard.exemplarUnsaved' })}</div>
+            : linkedExemplars.length === 0
+              ? <div style={emptyStyle}>{t({ id: 'catalogacao.infocard.noExemplar' })}</div>
+              : linkedExemplars.map((r, i) => (
+                  <div key={i} style={lineStyle}>
+                    <span>{r.library_name}</span>
+                    <span className="cat-pill ok" style={pillStyle}>{t({ id: 'catalogacao.infocard.exemplarCount' }, { n: r.count })}</span>
+                  </div>
+                ))}
+          <div style={ctaStyle}>{t({ id: 'catalogacao.infocard.goExemplar' })} →</div>
+        </div>
+      </div>
+    );
+  }
+
   function renderLivePreview() {
     const title = f('titulo').trim();
     const author = f('autor').trim();
@@ -1851,6 +1933,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           </div>
           <div className="ab-pv-explain">{t({ id: 'catalogacao.preview.explain' })}</div>
         </div>
+        {renderInfoCards()}
       </aside>
     );
   }
