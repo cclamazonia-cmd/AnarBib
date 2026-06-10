@@ -374,17 +374,30 @@ export default function CatalogPage() {
   useEffect(() => {
     (async () => {
       const { data } = await apiQuery('libraries_public_v1', {
-        select: 'slug,name',
+        select: 'slug,name,short_name,city',
         order: 'name.asc',
       });
       if (data?.length) {
         setLibraryOptions([
           { value: '__all__', label: t({ id: 'catalog.avail.all' }) },
-          ...data.map(l => ({ value: l.slug, label: l.name || l.slug })),
+          ...data.map(l => ({
+            value: l.slug,
+            label: l.city ? `${l.name || l.slug} — ${l.city}` : (l.name || l.slug),
+            short_name: l.short_name, name: l.name, city: l.city,
+          })),
         ]);
       }
     })();
   }, []);
+
+  // Map biblio → ville (afficher la ville à côté du nom dans la liste — clarté lecteurs)
+  const cityByLib = useMemo(() => {
+    const m = {};
+    for (const o of libraryOptions) {
+      if (o.city) { if (o.short_name) m[o.short_name] = o.city; if (o.name) m[o.name] = o.city; }
+    }
+    return m;
+  }, [libraryOptions]);
 
   // Fetch
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
@@ -1084,7 +1097,10 @@ export default function CatalogPage() {
                 {books.map((book, idx) => {
                   const status = getStatusInfo(book, isAuth, t);
                   const icon = TIPO_ICONS[book.tipo_material] || '';
-                  const libs = parseLibraryNames(book);
+                  const libsRaw = parseLibraryNames(book);
+                  const libs = libsRaw
+                    ? libsRaw.split(', ').map(nm => cityByLib[nm] ? `${nm} (${cityByLib[nm]})` : nm).join(', ')
+                    : '';
                   return (
                     <tr key={`${book.book_id}-${book.library_slug}-${idx}`}>
                       <td><Link to={`/livro/${book.book_id}`}>{book.bib_ref || '—'}</Link></td>
