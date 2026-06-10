@@ -4007,5 +4007,13 @@
   "biblioteca.stabPartners.right.transparence": "Transparantie (gemeenschappelijke lezers)",
   "biblioteca.stabPartners.right.digital_share": "Digitaal delen",
   "biblioteca.stabPartners.right.mutualisation": "Catalogusmutualisatie",
-  "biblioteca.stabPartners.right.peb": "Interbibliothecair leenverkeer"
+  "biblioteca.stabPartners.right.peb": "Interbibliothecair leenverkeer",
+  "account.partnerships.title": "Delen tussen partnerbibliotheken",
+  "account.partnerships.hint": "Je bent lid van twee partnerbibliotheken. Je kunt toestaan (of weigeren) dat ze informatie over je lidmaatschap delen. Direct van kracht, op elk moment intrekbaar.",
+  "account.partnerships.between": "Tussen {a} en {b}",
+  "account.partnerships.state.none": "Niet gedeeld",
+  "account.partnerships.state.valid": "Gedeeld (je hebt toegestemd)",
+  "account.partnerships.state.stale": "Opnieuw bevestigen (rechten gewijzigd)",
+  "account.partnerships.consent": "Toestaan",
+  "account.partnerships.revoke": "Intrekken"
 }

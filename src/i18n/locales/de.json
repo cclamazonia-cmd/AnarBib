@@ -4007,5 +4007,13 @@
   "biblioteca.stabPartners.right.transparence": "Transparenz (gemeinsame Lesende)",
   "biblioteca.stabPartners.right.digital_share": "Digitales Teilen",
   "biblioteca.stabPartners.right.mutualisation": "Katalog-Mutualisierung",
-  "biblioteca.stabPartners.right.peb": "Fernleihe"
+  "biblioteca.stabPartners.right.peb": "Fernleihe",
+  "account.partnerships.title": "Teilen zwischen Partnerbibliotheken",
+  "account.partnerships.hint": "Du bist Mitglied zweier Partnerbibliotheken. Du kannst erlauben (oder ablehnen), dass sie Informationen über deine Mitgliedschaft teilen. Sofort wirksam, jederzeit widerrufbar.",
+  "account.partnerships.between": "Zwischen {a} und {b}",
+  "account.partnerships.state.none": "Nicht geteilt",
+  "account.partnerships.state.valid": "Geteilt (du hast zugestimmt)",
+  "account.partnerships.state.stale": "Erneut zu bestätigen (Rechte geändert)",
+  "account.partnerships.consent": "Zustimmen",
+  "account.partnerships.revoke": "Widerrufen"
 }

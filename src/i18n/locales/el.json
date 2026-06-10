@@ -4007,5 +4007,13 @@
   "biblioteca.stabPartners.right.transparence": "Διαφάνεια (κοινοί αναγνώστες)",
   "biblioteca.stabPartners.right.digital_share": "Ψηφιακή κοινή χρήση",
   "biblioteca.stabPartners.right.mutualisation": "Αμοιβαιοποίηση καταλόγου",
-  "biblioteca.stabPartners.right.peb": "Διαδανεισμός"
+  "biblioteca.stabPartners.right.peb": "Διαδανεισμός",
+  "account.partnerships.title": "Κοινή χρήση μεταξύ συνεργαζόμενων βιβλιοθηκών",
+  "account.partnerships.hint": "Είστε μέλος δύο συνεργαζόμενων βιβλιοθηκών. Μπορείτε να επιτρέψετε (ή να αρνηθείτε) να μοιράζονται πληροφορίες για τη συμμετοχή σας. Άμεση ισχύς, ανακλητό ανά πάσα στιγμή.",
+  "account.partnerships.between": "Μεταξύ {a} και {b}",
+  "account.partnerships.state.none": "Δεν κοινοποιείται",
+  "account.partnerships.state.valid": "Κοινοποιείται (συναινέσατε)",
+  "account.partnerships.state.stale": "Χρειάζεται επιβεβαίωση (τα δικαιώματα άλλαξαν)",
+  "account.partnerships.consent": "Επιτρέπω",
+  "account.partnerships.revoke": "Ανάκληση"
 }

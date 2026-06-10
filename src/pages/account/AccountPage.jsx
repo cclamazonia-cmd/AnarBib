@@ -34,6 +34,7 @@ const ReaderCardSection = lazy(() => import('@/components/account/ReaderCardSect
 const ReservationCard = lazy(() => import('@/components/account/ReservationCard'));
 // MULTI P5a : onglet « mes biblios » (statut par appartenance) en chunk lazy.
 const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
+import MyPartnershipsConsentSection from '@/components/account/MyPartnershipsConsentSection';
 
 // ── ContaTabHeader (chantier #CL — recommandation B, refresh par onglet, 31/05/2026) ───
 // Header standard pour les onglets de la page Conta qui méritent un bouton refresh.
@@ -2120,6 +2121,8 @@ export default function AccountPage() {
           {activeTab === 'biblios' && (
             <Suspense fallback={<p className="ab-conta-hint">{t({ id: 'common.loading' })}</p>}>
               <TabBiblios />
+              {/* §21 PARTNER P6b : consentement de la lectrice à la transparence */}
+              <MyPartnershipsConsentSection />
             </Suspense>
           )}
         </div>

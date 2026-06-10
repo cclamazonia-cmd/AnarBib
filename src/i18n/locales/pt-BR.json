@@ -4007,5 +4007,13 @@
   "biblioteca.stabPartners.right.transparence": "Transparência (leitor·as comuns)",
   "biblioteca.stabPartners.right.digital_share": "Compartilhamento digital",
   "biblioteca.stabPartners.right.mutualisation": "Mutualização de catálogo",
-  "biblioteca.stabPartners.right.peb": "Empréstimo entre bibliotecas"
+  "biblioteca.stabPartners.right.peb": "Empréstimo entre bibliotecas",
+  "account.partnerships.title": "Compartilhamento entre bibliotecas parceiras",
+  "account.partnerships.hint": "Você é membro de duas bibliotecas parceiras. Pode autorizar (ou recusar) que compartilhem informações sobre sua associação. Efeito imediato, reversível a qualquer momento.",
+  "account.partnerships.between": "Entre {a} e {b}",
+  "account.partnerships.state.none": "Não compartilhado",
+  "account.partnerships.state.valid": "Compartilhado (você consentiu)",
+  "account.partnerships.state.stale": "A reconfirmar (os direitos mudaram)",
+  "account.partnerships.consent": "Consentir",
+  "account.partnerships.revoke": "Retirar"
 }

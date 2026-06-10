@@ -4007,5 +4007,13 @@
   "biblioteca.stabPartners.right.transparence": "Transparència (lectors comuns)",
   "biblioteca.stabPartners.right.digital_share": "Compartició digital",
   "biblioteca.stabPartners.right.mutualisation": "Mutualització del catàleg",
-  "biblioteca.stabPartners.right.peb": "Préstec interbibliotecari"
+  "biblioteca.stabPartners.right.peb": "Préstec interbibliotecari",
+  "account.partnerships.title": "Compartició entre biblioteques associades",
+  "account.partnerships.hint": "Ets membre de dues biblioteques associades. Pots autoritzar (o refusar) que comparteixin informació sobre la teva pertinença. Efecte immediat, revocable en qualsevol moment.",
+  "account.partnerships.between": "Entre {a} i {b}",
+  "account.partnerships.state.none": "No compartit",
+  "account.partnerships.state.valid": "Compartit (hi has consentit)",
+  "account.partnerships.state.stale": "Per reconfirmar (els drets han canviat)",
+  "account.partnerships.consent": "Consentir",
+  "account.partnerships.revoke": "Retirar"
 }

@@ -4007,5 +4007,13 @@
   "biblioteca.stabPartners.right.transparence": "Travidebleco (komunaj legantoj)",
   "biblioteca.stabPartners.right.digital_share": "Cifereca kunhavigo",
   "biblioteca.stabPartners.right.mutualisation": "Kataloga kunigo",
-  "biblioteca.stabPartners.right.peb": "Interbiblioteka prunto"
+  "biblioteca.stabPartners.right.peb": "Interbiblioteka prunto",
+  "account.partnerships.title": "Kunhavigo inter partneraj bibliotekoj",
+  "account.partnerships.hint": "Vi estas membro de du partneraj bibliotekoj. Vi povas permesi (aŭ rifuzi) ke ili kunhavigu informojn pri via membreco. Tuja efiko, revokebla iam ajn.",
+  "account.partnerships.between": "Inter {a} kaj {b}",
+  "account.partnerships.state.none": "Ne kunhavigita",
+  "account.partnerships.state.valid": "Kunhavigita (vi konsentis)",
+  "account.partnerships.state.stale": "Rekonfirmenda (la rajtoj ŝanĝiĝis)",
+  "account.partnerships.consent": "Konsenti",
+  "account.partnerships.revoke": "Revoki"
 }
