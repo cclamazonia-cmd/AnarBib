@@ -57,7 +57,7 @@ docs/
 │   ├── INDEX.md                      → index chronologique + thématique
 │   ├── cadrages/                     → CADRAGE_* (cadrage de chantier/spec)
 │   ├── chantiers/                    → CHANTIER_* (documentation de chantier)
-│   ├── sessions/                     → SESSION_* + BILAN_* (comptes-rendus)
+│   ├── sessions/                     → SESSION_* + BILAN_* + ETAT-AVANCEMENT-multisessions (★ consolidation git-trackée)
 │   ├── audits/                       → AUDIT_* / AUDITORIA_* / QA_*
 │   ├── arbitrages/                   → DECISION_* / DECISOES_* / AMENDEMENT_* / CLOTURE_* / RIFLEXION_*
 │   ├── bugs/                         → BUG_*
@@ -65,9 +65,8 @@ docs/
 │   ├── references/                   → cles_ / ref_ / INVENTAIRE_addendum / PROMPT_reprise
 │   └── archive/                      → prompts de reprise obsolètes, doublons
 │
-├── backlogs/                         Backlog technique + état d'avancement multi-sessions
+├── backlogs/                         Backlog technique (versions .docx)
 │   ├── INDEX.md                      → version courante + historique
-│   ├── ETAT-AVANCEMENT-multisessions.md → ★ consolidation git-trackée de toutes les sessions
 │   └── archive/                      → anciennes versions
 │
 ├── GLB/                              Grand Livre Blanc (livre blanc vivant)
@@ -127,7 +126,7 @@ Versions successives. Seule la dernière est vivante, les autres sont historique
 
 ➡️ [`backlogs/INDEX.md`](./backlogs/INDEX.md) — version courante + historique
 
-**Version courante** : `AnarBib-Backlog-2026-06-10-v29.docx`. Le backlog a un rythme d'incrémentation rapide (v8 → v29 en trois semaines) — le **préfixe daté** reste la référence fiable. Depuis le 10/06, la **source vivante** est [`backlogs/ETAT-AVANCEMENT-multisessions.md`](./backlogs/ETAT-AVANCEMENT-multisessions.md) (markdown git-tracké, consolidation de toutes les sessions) ; le `.docx` en est un export/snapshot.
+**Version courante** : `AnarBib-Backlog-2026-06-10-v29.docx`. Le backlog a un rythme d'incrémentation rapide (v8 → v29 en trois semaines) — le **préfixe daté** reste la référence fiable. Depuis le 10/06, la **source vivante** est [`journal/sessions/ETAT-AVANCEMENT-multisessions.md`](./journal/sessions/ETAT-AVANCEMENT-multisessions.md) (markdown git-tracké, consolidation de toutes les sessions) ; le `.docx` en est un export/snapshot.
 
 ### `GLB/` — Grand Livre Blanc
 
