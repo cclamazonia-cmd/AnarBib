@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Δώστε όνομα ή Wikidata ID.",
   "catalogacao.author.portraitError": "Σφάλμα πορτρέτου: {message}",
   "catalogacao.author.portraitStored": "Το πορτρέτο αποθηκεύτηκε.",
-  "catalogacao.author.portraitNone": "Δεν βρέθηκε πορτρέτο στο Wikidata/Commons."
+  "catalogacao.author.portraitNone": "Δεν βρέθηκε πορτρέτο στο Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Περικοπή (φωτο 3×4)",
+  "catalogacao.author.cropHint": "Σύρετε για να τοποθετήσετε το πρόσωπο και χρησιμοποιήστε τον ρυθμιστή για μεγέθυνση. Μορφή 3×4.",
+  "catalogacao.author.cropConfirm": "Περικοπή και αποθήκευση"
 }

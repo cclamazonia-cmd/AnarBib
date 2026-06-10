@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Renseigne un nom ou un identifiant Wikidata.",
   "catalogacao.author.portraitError": "Erreur portrait : {message}",
   "catalogacao.author.portraitStored": "Portrait enregistré.",
-  "catalogacao.author.portraitNone": "Aucun portrait trouvé sur Wikidata/Commons."
+  "catalogacao.author.portraitNone": "Aucun portrait trouvé sur Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Recadrer (format 3×4)",
+  "catalogacao.author.cropHint": "Glissez pour positionner le visage, zoomez avec le curseur. Format 3×4.",
+  "catalogacao.author.cropConfirm": "Recadrer et enregistrer"
 }

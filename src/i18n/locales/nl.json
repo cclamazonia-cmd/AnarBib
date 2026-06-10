@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Geef een naam of een Wikidata-ID op.",
   "catalogacao.author.portraitError": "Portretfout: {message}",
   "catalogacao.author.portraitStored": "Portret opgeslagen.",
-  "catalogacao.author.portraitNone": "Geen portret gevonden op Wikidata/Commons."
+  "catalogacao.author.portraitNone": "Geen portret gevonden op Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Bijsnijden (pasfoto 3×4)",
+  "catalogacao.author.cropHint": "Sleep om het gezicht te plaatsen en zoom met de schuifregelaar. Formaat 3×4.",
+  "catalogacao.author.cropConfirm": "Bijsnijden en opslaan"
 }

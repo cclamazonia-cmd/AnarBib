@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Indiku nomon aŭ Wikidata-identigilon.",
   "catalogacao.author.portraitError": "Eraro pri portreto: {message}",
   "catalogacao.author.portraitStored": "Portreto konservita.",
-  "catalogacao.author.portraitNone": "Neniu portreto trovita en Wikidata/Commons."
+  "catalogacao.author.portraitNone": "Neniu portreto trovita en Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Tranĉi (foto 3×4)",
+  "catalogacao.author.cropHint": "Trenu por loki la vizaĝon kaj uzu la regilon por zomi. Formato 3×4.",
+  "catalogacao.author.cropConfirm": "Tranĉi kaj konservi"
 }

@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Enter a name or a Wikidata ID.",
   "catalogacao.author.portraitError": "Portrait error: {message}",
   "catalogacao.author.portraitStored": "Portrait saved.",
-  "catalogacao.author.portraitNone": "No portrait found on Wikidata/Commons."
+  "catalogacao.author.portraitNone": "No portrait found on Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Crop (3×4 ID photo)",
+  "catalogacao.author.cropHint": "Drag to position the face and use the slider to zoom. 3×4 format.",
+  "catalogacao.author.cropConfirm": "Crop and save"
 }

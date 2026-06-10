@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Inserisci un nome o un ID Wikidata.",
   "catalogacao.author.portraitError": "Errore ritratto: {message}",
   "catalogacao.author.portraitStored": "Ritratto salvato.",
-  "catalogacao.author.portraitNone": "Nessun ritratto trovato su Wikidata/Commons."
+  "catalogacao.author.portraitNone": "Nessun ritratto trovato su Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Ritaglia (foto 3×4)",
+  "catalogacao.author.cropHint": "Trascina per posizionare il volto e usa il cursore per ingrandire. Formato 3×4.",
+  "catalogacao.author.cropConfirm": "Ritaglia e salva"
 }

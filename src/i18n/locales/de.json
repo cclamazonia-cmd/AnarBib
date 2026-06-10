@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Gib einen Namen oder eine Wikidata-ID an.",
   "catalogacao.author.portraitError": "Porträt-Fehler: {message}",
   "catalogacao.author.portraitStored": "Porträt gespeichert.",
-  "catalogacao.author.portraitNone": "Kein Porträt auf Wikidata/Commons gefunden."
+  "catalogacao.author.portraitNone": "Kein Porträt auf Wikidata/Commons gefunden.",
+  "catalogacao.author.cropTitle": "Zuschneiden (Passfoto 3×4)",
+  "catalogacao.author.cropHint": "Ziehen, um das Gesicht zu positionieren, mit dem Regler zoomen. Format 3×4.",
+  "catalogacao.author.cropConfirm": "Zuschneiden und speichern"
 }

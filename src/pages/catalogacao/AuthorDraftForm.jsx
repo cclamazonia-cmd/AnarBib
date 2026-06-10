@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
+import PortraitCropper from '@/components/catalogacao/PortraitCropper';
 
 // ── Authority types ───────────────────────────────────────
 const AUTHORITY_TYPE_KEYS = {
@@ -87,6 +88,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   const [portraitCandidates, setPortraitCandidates] = useState(null);
   const [portraitLoading, setPortraitLoading] = useState(false);
   const [portraitStoring, setPortraitStoring] = useState('');
+  // Recadrage « foto 3×4 » : { src (blob URL), attribution } | null
+  const [cropState, setCropState] = useState(null);
   const [bioTranslations, setBioTranslations] = useState([]);
   const [bioDirty, setBioDirty] = useState(new Set()); // langues éditées (à upserter en status=draft)
   const [bioReviewBusy, setBioReviewBusy] = useState(null); // lang en cours de bascule de revue
@@ -165,8 +168,8 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
   function handlePhotoFileChange(e) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setPhotoFile(file);
-    setPhotoPreviewUrl(URL.createObjectURL(file));
+    setCropState({ src: URL.createObjectURL(file), attribution: null });
+    e.target.value = '';
   }
 
   async function uploadPhoto() {
@@ -219,23 +222,44 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
       const resp = await fetch(cand.full_url);
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       const blob = await resp.blob();
-      const draftId = form.id || 'new';
-      const storagePath = `authors/${draftId}_${Date.now()}.jpg`;
-      const { error } = await supabase.storage.from('authors').upload(storagePath, blob, { upsert: true, contentType: blob.type || 'image/jpeg' });
-      if (error) throw error;
-      set('photo_object_path', storagePath);
-      setM('portrait', {
-        license: cand.license || '', credit: cand.credit || '',
-        source_url: cand.source_url || '', wikidata_id: cand.wikidata_id || '',
+      // Ouvre le recadreur ; l'upload se fait à la confirmation du cadrage.
+      setCropState({
+        src: URL.createObjectURL(blob),
+        attribution: {
+          license: cand.license || '', credit: cand.credit || '',
+          source_url: cand.source_url || '', wikidata_id: cand.wikidata_id || '',
+        },
       });
-      setPhotoPreviewUrl('');
       setPortraitCandidates(null);
-      setMsg({ text: t({ id: 'catalogacao.author.portraitStored' }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: t({ id: 'catalogacao.author.portraitError' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setPortraitStoring('');
     }
+  }
+
+  // Confirmation du recadrage : upload du JPEG 3×4 + attribution (si portrait Wikidata)
+  async function onCropConfirm(blob) {
+    const cs = cropState;
+    try {
+      const draftId = form.id || 'new';
+      const storagePath = `authors/${draftId}_${Date.now()}.jpg`;
+      const { error } = await supabase.storage.from('authors').upload(storagePath, blob, { upsert: true, contentType: 'image/jpeg' });
+      if (error) throw error;
+      set('photo_object_path', storagePath);
+      if (cs?.attribution) setM('portrait', cs.attribution);
+      setPhotoPreviewUrl('');
+      setMsg({ text: t({ id: 'catalogacao.author.portraitStored' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.author.portraitError' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      if (cs?.src) URL.revokeObjectURL(cs.src);
+      setCropState(null);
+    }
+  }
+  function onCropCancel() {
+    if (cropState?.src) URL.revokeObjectURL(cropState.src);
+    setCropState(null);
   }
 
   function fillFromRecord(r) {
@@ -654,6 +678,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
 
       {/* ── Form ─────────────────────────────────────── */}
       <form onSubmit={handleSave}>
+        {cropState && (
+          <PortraitCropper src={cropState.src} onConfirm={onCropConfirm} onCancel={onCropCancel} />
+        )}
 
         {/* ── Name assist (parse un nom de personne BN : personne uniquement) ── */}
         {meta.authorityType === 'person' && (

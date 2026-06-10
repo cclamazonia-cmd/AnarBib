@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Indica un nom o un ID de Wikidata.",
   "catalogacao.author.portraitError": "Error de retrat: {message}",
   "catalogacao.author.portraitStored": "Retrat desat.",
-  "catalogacao.author.portraitNone": "No s'ha trobat cap retrat a Wikidata/Commons."
+  "catalogacao.author.portraitNone": "No s'ha trobat cap retrat a Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Retallar (foto 3×4)",
+  "catalogacao.author.cropHint": "Arrossega per col·locar el rostre i fes servir el control per ampliar. Format 3×4.",
+  "catalogacao.author.cropConfirm": "Retallar i desar"
 }

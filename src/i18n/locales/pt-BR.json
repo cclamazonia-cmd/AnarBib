@@ -4029,5 +4029,8 @@
   "catalogacao.author.portraitNeedName": "Informe um nome ou um ID Wikidata.",
   "catalogacao.author.portraitError": "Erro no retrato: {message}",
   "catalogacao.author.portraitStored": "Retrato salvo.",
-  "catalogacao.author.portraitNone": "Nenhum retrato encontrado no Wikidata/Commons."
+  "catalogacao.author.portraitNone": "Nenhum retrato encontrado no Wikidata/Commons.",
+  "catalogacao.author.cropTitle": "Recortar (foto 3×4)",
+  "catalogacao.author.cropHint": "Arraste para posicionar o rosto e use o controle para ampliar. Formato 3×4.",
+  "catalogacao.author.cropConfirm": "Recortar e salvar"
 }
