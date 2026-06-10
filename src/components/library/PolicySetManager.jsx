@@ -31,6 +31,16 @@ import { supabase } from '@/lib/supabase';
 
 const SET_STATUSES = ['draft', 'active', 'archived'];
 
+// '' si null/undefined, sinon la valeur en chaîne (pour les inputs number contrôlés)
+const numToStr = (v) => (v == null ? '' : String(v));
+// '' → null ; sinon entier >= 0, ou null si invalide (plafond de circulation)
+const strToLimit = (v) => {
+  const s = String(v ?? '').trim();
+  if (s === '') return null;
+  const n = parseInt(s, 10);
+  return Number.isFinite(n) && n >= 0 ? n : null;
+};
+
 function emptySetForm() {
   return {
     id: null,
@@ -40,6 +50,9 @@ function emptySetForm() {
     effective_from: '',
     effective_until: '',
     scope_note: '',
+    max_concurrent_loans: '',
+    max_concurrent_reservations: '',
+    max_concurrent_consultations: '',
   };
 }
 
@@ -52,6 +65,9 @@ function setRowToForm(row) {
     effective_from: row.effective_from || '',
     effective_until: row.effective_until || '',
     scope_note: row.scope_note || '',
+    max_concurrent_loans: numToStr(row.max_concurrent_loans),
+    max_concurrent_reservations: numToStr(row.max_concurrent_reservations),
+    max_concurrent_consultations: numToStr(row.max_concurrent_consultations),
   };
 }
 
@@ -164,8 +180,20 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
         p_payload: payload,
       });
       if (error) throw error;
+      const savedId = data?.id ?? setForm.id ?? null;
+
+      // Plafonds de circulation simultanée (MULTI-F.1 cond.5) — posés sur le jeu.
+      if (savedId) {
+        const { error: limErr } = await supabase.rpc('fn_set_circulation_limits', {
+          p_policy_set_id: savedId,
+          p_max_loans: strToLimit(setForm.max_concurrent_loans),
+          p_max_reservations: strToLimit(setForm.max_concurrent_reservations),
+          p_max_consultations: strToLimit(setForm.max_concurrent_consultations),
+        });
+        if (limErr) throw limErr;
+      }
+
       setMsg({ text: t({ id: 'biblioteca.policySets.setSaved' }), kind: 'ok' });
-      const savedId = data?.id ?? null;
       await loadSets();
       if (savedId) setSelectedSetId(savedId);
     } catch (err) {
@@ -416,6 +444,33 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
               <label style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.fieldScopeNote' })}</label>
               <input type="text" style={styles.input} value={setForm.scope_note}
                 onChange={e => setField('scope_note', e.target.value)} />
+            </div>
+
+            {/* ── Plafonds de circulation simultanée (MULTI-F.1 cond.5) ──── */}
+            <div style={{ gridColumn: '1 / -1', marginTop: 4, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+              <div style={{ ...styles.fieldLabel, fontWeight: 600, marginBottom: 4 }}>
+                {t({ id: 'biblioteca.policySets.limitsTitle' })}
+              </div>
+              <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginBottom: 8 }}>
+                {t({ id: 'biblioteca.policySets.limitsHint' })}
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.maxConcurrentLoans' })}</label>
+                  <input type="number" min="0" style={styles.input} value={setForm.max_concurrent_loans}
+                    onChange={e => setField('max_concurrent_loans', e.target.value)} />
+                </div>
+                <div>
+                  <label style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.maxConcurrentReservations' })}</label>
+                  <input type="number" min="0" style={styles.input} value={setForm.max_concurrent_reservations}
+                    onChange={e => setField('max_concurrent_reservations', e.target.value)} />
+                </div>
+                <div>
+                  <label style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.maxConcurrentConsultations' })}</label>
+                  <input type="number" min="0" style={styles.input} value={setForm.max_concurrent_consultations}
+                    onChange={e => setField('max_concurrent_consultations', e.target.value)} />
+                </div>
+              </div>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
