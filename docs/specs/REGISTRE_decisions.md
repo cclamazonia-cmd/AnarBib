@@ -443,6 +443,30 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
+## 27. Identité lecteur·rice locale — `CARD-LOCAL` *(trace : CADRAGE_identite_lecteur_numero_local v2, 10/06 ; spec à rédiger)*
+
+> Étend MULTI-E.2 (§20) : le champ `local_reader_number` **existe et est en prod** ; ce chantier l'**ouvre** (recherche, attribution, roster, canaux) et ajoute un **modèle côté biblio**. ✅ = acté aujourd'hui ; 🟡 = à arbitrer (Xavier/collectif) avant inscription définitive.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **CARD-LOCAL-IDENT** | `local_reader_number` porte une **identité locale** (numéro, **nom** ou autre schéma maison), pas seulement un nombre ; libellés UI **neutres**. Extension de MULTI-E.2. | ✅ acté (Xavier 10/06) |
+| **CARD-LOCAL-STAFF** | L'identité locale est **toujours** un acte **staff** ; le·la lecteur·rice ne se l'attribue jamais (wizard/e-mails **informent**, ne font pas saisir). | ✅ acté (Xavier 10/06) |
+| **CARD-LOCAL-GATE** | L'identité locale **n'est pas** une condition de circulation : le gate reste sur l'appartenance **validée** (`status='active'`). L'état intermédiaire bloquant = `pending_validation` (déjà en place). Clarifie MULTI-F.1. | ✅ acté (clarification) |
+| **CARD-LOCAL-UNIQ** | Unicité par biblio (index `ux_ulm_local_reader_number`, MULTI-E.2) ; message de collision **sans divulguer** le compte existant. | ✅ unicité / 🟡 UX |
+| **CARD-LOCAL-1** | **Recherche painel** par identité locale, **scopée à la biblio courante** ; repli « toutes mes biblios » si zéro résultat (biblio d'origine signalée). Préalable : lire la def hors-migration de `fn_painel_find_profile_by_lookup`. | 🟡 ouvert |
+| **CARD-LOCAL-2** | **Modèle d'identité par biblio** (N5) : `{numéro libre · numéro séquencé · nom · aucun}`, **guide non bloquant** + cache « dernière identité attribuée » (hint à l'ouverture de l'espace). | 🟡 ouvert |
+| **CARD-LOCAL-3** | **Mode de validation par biblio** (présentielle / à distance / aucune) — pilote le message « identité envoyée par e-mail ou au premier passage ». À confirmer vs `network_access_mode` de spec-validation-physique. | 🟡 ouvert |
+| **CARD-LOCAL-5** | **Marqueur legacy vs AnarBib** explicite sur l'appartenance (reco), exporté dans le roster. | 🟡 ouvert |
+| **CARD-LOCAL-6** | **Réutilisation d'identité après `removed`** : NULL à la sortie **ou** réactivation de la même appartenance **ou** index unique limité aux statuts actifs. | 🟡 ouvert |
+| **CARD-LOCAL-N3** | **Roster** dans un **onglet Rapports** (à créer) : NOM, prénom, inscrit·e depuis, e-mail, UUID, identité, statut (+ emprunts/résa/consultations/cotisation optionnels) ; **legacy/AnarBib** ; export staff/coordenador, scopé biblio (RLS). | 🟡 ouvert |
+| **CARD-LOCAL-N4** | **Notif réconciliation** à l'**attribution** (validation **ou** édition N2) : lectrice **+ biblio** ; **dé-dupliquer** avec `validation_confirmed` ; via `notify-event` (déploiement tributaire Woodpecker). | 🟡 ouvert |
+| **CARD-LOCAL-CANAL** | **Boussole canal** (CADRAGE §6) : à la **création** → UUID + identifiant de login + « comment marche ta biblio » + « tu es en attente » ; identité locale → à la **validation/attribution**, jamais à la création (n'existe pas encore). | 🟡 ouvert |
+| **CARD-LOCAL-I18N** | Tous les messages (champ, hint, erreur, colonnes roster, e-mails) × **10 locales** (DOC-I18N-1), libellés **neutres** (identité, pas « numéro »). | 🟡 ouvert |
+
+> Foyer : trace `docs/journal/cadrages/CADRAGE_identite_lecteur_numero_local_2026-06-10.md` (v2). Parent : **MULTI-E.2** (§20). Articulation : VALID-C1..C4 (§9, validation où l'identité s'attribue) ; CARD-FLAG (§23, `reader_cards_enabled`). Le **wizard de création** fera l'objet d'un cadrage dédié. Registre > trace.
+
+---
+
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
@@ -468,3 +492,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 08/06/2026 (soir) — cadrage **Importações/Exportações** consolidé : `IMP-9..15` tranchés (§17), spec `spec-importacoes-exportacoes` **v0.2** (run d'import, profils de mapping, adaptateurs hybrides, autorités au dry-run, export de lote, rôles, articulation tableau de bord v7 / wizard re-dérivé). Plan de lots en spec §13 (Lot 0 backend → Lot 1 dashboard v7 → circuits Zotero/UNIMARC/fontes → export → wizard). Implémentation à suivre.*
 
 *MàJ 08/06/2026 (soir, correction) — confrontation au backend réel : **le pipeline d'import EXISTE** dans le schéma **`ingest`** (`partner_catalog_import_runs`/`_sources`/`_staging_rows`, matching, promotion, journal, vues UI). IMP-9 corrigé (réutilise `ingest`, pas de nouvelle table) ; IMP-10/11 → schéma `ingest`. Constats : mapping codé en dur dans l'EF, **fontes externas = lookup-only** (pas d'aboutissement staging), **export 100% à construire**, **RPC `ingest.*` = service_role seul + garde-fou frontend** (à durcir, DOC-RPC-3). Plan de lots corrigé (Lot 0 durcissement → Lot 1 frontend v7 → fontes externas → profils → MARC → export). Doc : `journal/cadrages/CADRAGE_importacoes_refonte_2026-06-08.md`.*
+
+*MàJ 10/06/2026 — chantier **Identité lecteur·rice locale** : §27 (`CARD-LOCAL-*`) ouvert. Réécriture v2 du cadrage `CADRAGE_identite_lecteur_numero_local_2026-06-10.md` après vérif code (socle §20 MULTI **déjà en prod**) + recadrage Xavier : on parle d'**identité** (numéro **ou nom** ou autre), pas de « numéro » ; l'identité est un **acte staff** (le lecteur ne se l'attribue jamais) ; elle **ne gate pas** la circulation (l'état bloquant = `pending_validation`). 3 décisions actées (IDENT, STAFF, GATE) ; 9 ouvertes (recherche, modèle biblio, mode validation, marqueur legacy, réutilisation post-removed, roster onglet Rapports, notif réconciliation, boussole canal, i18n). Le **wizard de création** = cadrage dédié à venir. Décisions 🟡 à arbitrer avant inscription définitive.*
