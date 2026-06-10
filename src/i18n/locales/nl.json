@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Voer een URL in.",
   "importacoes.export.frontier.desc": "Collectierecords exporteren naar andere bibliotheken, voor federale uitwisseling of als open bron.",
   "importacoes.export.frontier.title": "Record-export",
-  "importacoes.export.lote.desc": "Een selectie van records exporteren in een gestandaardiseerd formaat (UNIMARC, CSV, JSON). Functionaliteit in ontwikkeling.",
+  "importacoes.export.lote.desc": "Exporteer de volledige catalogus van de bibliotheek in een genormaliseerd formaat (CSV, MARCXML, JSON), voor back-up, migratie of uitwisseling tussen bibliotheken.",
   "importacoes.export.lote.title": "Batch-export",
   "importacoes.export.partilha.desc": "Interbibliothecair leenverkeer tussen gefedereerde bibliotheken (circuit ILL-1..9). Functionaliteit in ontwikkeling.",
   "importacoes.export.partilha.title": "ILL-uitwisseling",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Catalogus gedeeld met het AnarBib-netwerk, informele circulatie, bestuur met afgebakende rollen (bibliothecarissen, coördinatie). Neemt niet deel aan het interbibliothecair leenverkeer.",
   "wizard.profile.template.C.title": "Profiel C — Gefedereerde waarnemer",
   "wizard.profile.template.D.desc": "Volwassen bibliotheek: volledig bibliotheeksysteem (uitleningen, reserveringen, bijdragen), volledige deelname aan het netwerk en het interbibliothecair leenverkeer, formeel bestuur met stemgebonden overgangen.",
-  "wizard.profile.template.D.title": "Profiel D — Volledig betrokken"
+  "wizard.profile.template.D.title": "Profiel D — Volledig betrokken",
+  "importacoes.export.lote.format": "Exportformaat",
+  "importacoes.export.lote.download": "Catalogus exporteren",
+  "importacoes.export.lote.exporting": "Bestand wordt gegenereerd…",
+  "importacoes.export.lote.success": "Klaar! De download is gestart.",
+  "importacoes.export.lote.error": "Fout bij exporteren: {message}"
 }

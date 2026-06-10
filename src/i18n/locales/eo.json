@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Indiku URL-on.",
   "importacoes.export.frontier.desc": "Eksporti kolektajn registrojn al aliaj bibliotekoj, por federacia interŝanĝo aŭ kiel malferma fonto.",
   "importacoes.export.frontier.title": "Eksportado de registroj",
-  "importacoes.export.lote.desc": "Eksporti selekton da registroj en normigita formato (UNIMARC, CSV, JSON). Funkcieco en evoluo.",
+  "importacoes.export.lote.desc": "Eksporti la tutan katalogon de la biblioteko en normigita formato (CSV, MARCXML, JSON), por sekurkopio, migrado aŭ interŝanĝo inter bibliotekoj.",
   "importacoes.export.lote.title": "Poeksportado",
   "importacoes.export.partilha.desc": "Interbibliotekan prunton inter federaciaj bibliotekoj (cirkvito ILL-1..9). Funkcieco en evoluo.",
   "importacoes.export.partilha.title": "ILL-kunhavigo",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Katalogo kunhavigita kun la reto AnarBib, neformala cirkulado, memmastrumado kun difinitaj roloj (bibliotekist-in-oj, kunordigo). Ne partoprenas en la interbiblioteka prunto.",
   "wizard.profile.template.C.title": "Profilo C — Federita observanta",
   "wizard.profile.template.D.desc": "Matura biblioteko: kompleta SIGB (pruntoj, rezervoj, kotizoj), plena partopreno en la reto kaj en la interbiblioteka prunto, formala memmastrumado kun transiroj per voĉdono.",
-  "wizard.profile.template.D.title": "Profilo D — Kompleta engaĝita"
+  "wizard.profile.template.D.title": "Profilo D — Kompleta engaĝita",
+  "importacoes.export.lote.format": "Eksporta formato",
+  "importacoes.export.lote.download": "Eksporti katalogon",
+  "importacoes.export.lote.exporting": "Generado de la dosiero…",
+  "importacoes.export.lote.success": "Preta! La elŝuto komenciĝis.",
+  "importacoes.export.lote.error": "Eraro dum eksporto: {message}"
 }

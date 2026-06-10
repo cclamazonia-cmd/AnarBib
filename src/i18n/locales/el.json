@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Δώσε ένα URL.",
   "importacoes.export.frontier.desc": "Εξαγωγή εγγραφών της συλλογής σε άλλες βιβλιοθήκες, για ομοσπονδιακή ανταλλαγή ή ως ανοιχτή πηγή.",
   "importacoes.export.frontier.title": "Εξαγωγή εγγραφών",
-  "importacoes.export.lote.desc": "Εξαγωγή επιλογής εγγραφών σε τυποποιημένη μορφή (UNIMARC, CSV, JSON). Λειτουργία υπό ανάπτυξη.",
+  "importacoes.export.lote.desc": "Εξαγωγή ολόκληρου του καταλόγου της βιβλιοθήκης σε τυποποιημένη μορφή (CSV, MARCXML, JSON), για αντίγραφο ασφαλείας, μετεγκατάσταση ή ανταλλαγή μεταξύ βιβλιοθηκών.",
   "importacoes.export.lote.title": "Μαζική εξαγωγή",
   "importacoes.export.partilha.desc": "Διαδανεισμός μεταξύ ομοσπονδιακών βιβλιοθηκών (κύκλωμα ILL-1..9). Λειτουργία υπό ανάπτυξη.",
   "importacoes.export.partilha.title": "Ανταλλαγή ILL",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Κατάλογος που μοιράζεται με το δίκτυο AnarBib, άτυπη κυκλοφορία, διακυβέρνηση με καθορισμένους ρόλους (βιβλιοθηκάριοι, συντονισμός). Δεν συμμετέχει σε διαδανεισμούς.",
   "wizard.profile.template.C.title": "Προφίλ C — Ομόσπονδος παρατηρητής",
   "wizard.profile.template.D.desc": "Ώριμη βιβλιοθήκη: πλήρες σύστημα βιβλιοθήκης (δανεισμοί, κρατήσεις, συνδρομές), πλήρης συμμετοχή στο δίκτυο και στους διαδανεισμούς, τυπική διακυβέρνηση με μεταβάσεις μέσω ψηφοφορίας.",
-  "wizard.profile.template.D.title": "Προφίλ D — Πλήρως ενεργό"
+  "wizard.profile.template.D.title": "Προφίλ D — Πλήρως ενεργό",
+  "importacoes.export.lote.format": "Μορφή εξαγωγής",
+  "importacoes.export.lote.download": "Εξαγωγή καταλόγου",
+  "importacoes.export.lote.exporting": "Δημιουργία του αρχείου…",
+  "importacoes.export.lote.success": "Έτοιμο! Η λήψη ξεκίνησε.",
+  "importacoes.export.lote.error": "Σφάλμα κατά την εξαγωγή: {message}"
 }

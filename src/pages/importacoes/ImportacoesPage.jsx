@@ -327,11 +327,11 @@ export default function ImportacoesPage() {
   // insuffisant renvoie 403 et le message d'erreur s'affiche.
   async function handleExportLote() {
     if (!libraryId) {
-      setMsg({ text: t({ id: 'account.export.error' }, { message: 'library_id' }), kind: 'error' });
+      setMsg({ text: t({ id: 'importacoes.export.lote.error' }, { message: 'library_id' }), kind: 'error' });
       return;
     }
     setExportLoading(true);
-    setMsg({ text: t({ id: 'account.export.loading' }), kind: 'info' });
+    setMsg({ text: t({ id: 'importacoes.export.lote.exporting' }), kind: 'info' });
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch(
@@ -364,9 +364,9 @@ export default function ImportacoesPage() {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      setMsg({ text: t({ id: 'account.export.success' }), kind: 'ok' });
+      setMsg({ text: t({ id: 'importacoes.export.lote.success' }), kind: 'ok' });
     } catch (err) {
-      setMsg({ text: t({ id: 'account.export.error' }, { message: err.message }), kind: 'error' });
+      setMsg({ text: t({ id: 'importacoes.export.lote.error' }, { message: err.message }), kind: 'error' });
     } finally {
       setExportLoading(false);
     }
@@ -937,9 +937,11 @@ export default function ImportacoesPage() {
                 <span className="imp-sheet__title">{t({ id: 'importacoes.export.lote.title' })}<Pill variant="ok">CSV · MARCXML · JSON</Pill></span>
               </div>
               <div className="imp-sheet__body">
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                <p className="imp-note">{t({ id: 'importacoes.export.lote.desc' })}</p>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
                   <select
                     className="ab-select"
+                    aria-label={t({ id: 'importacoes.export.lote.format' })}
                     value={exportFormat}
                     onChange={(e) => setExportFormat(e.target.value)}
                     disabled={exportLoading}
@@ -954,7 +956,7 @@ export default function ImportacoesPage() {
                     onClick={handleExportLote}
                     disabled={exportLoading || !libraryId}
                   >
-                    {exportLoading ? t({ id: 'account.export.loading' }) : t({ id: 'book.actions.export' })}
+                    {exportLoading ? t({ id: 'importacoes.export.lote.exporting' }) : t({ id: 'importacoes.export.lote.download' })}
                   </button>
                 </div>
               </div>

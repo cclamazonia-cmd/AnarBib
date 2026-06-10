@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Indique una URL.",
   "importacoes.export.frontier.desc": "Exportar registros de la colección a otras bibliotecas, para el intercambio federado o como fuente abierta.",
   "importacoes.export.frontier.title": "Exportación de registros",
-  "importacoes.export.lote.desc": "Exportar una selección de registros en formato normalizado (UNIMARC, CSV, JSON). Funcionalidad en desarrollo.",
+  "importacoes.export.lote.desc": "Exportar todo el catálogo de la biblioteca en formato normalizado (CSV, MARCXML, JSON), para copia de seguridad, migración o intercambio entre bibliotecas.",
   "importacoes.export.lote.title": "Exportación por lote",
   "importacoes.export.partilha.desc": "Préstamo entre bibliotecas federadas (circuito ILL-1..9). Funcionalidad en desarrollo.",
   "importacoes.export.partilha.title": "Intercambio ILL",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Catálogo compartido con la red AnarBib, circulación informal, gobernanza con roles definidos (bibliotecaries, coordinación). No participa del préstamo interbibliotecario.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB completo (préstamos, reservas, cotizaciones), participación plena en la red y en el préstamo interbibliotecario, gobernanza formal con transiciones por votación.",
-  "wizard.profile.template.D.title": "Perfil D — Completa comprometida"
+  "wizard.profile.template.D.title": "Perfil D — Completa comprometida",
+  "importacoes.export.lote.format": "Formato de exportación",
+  "importacoes.export.lote.download": "Exportar catálogo",
+  "importacoes.export.lote.exporting": "Generando el archivo…",
+  "importacoes.export.lote.success": "¡Listo! La descarga comenzó.",
+  "importacoes.export.lote.error": "Error al exportar: {message}"
 }

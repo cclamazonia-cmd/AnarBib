@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Geben Sie eine URL an.",
   "importacoes.export.frontier.desc": "Sammlungsdatensätze an andere Bibliotheken exportieren, für den föderierten Austausch oder als offene Quelle.",
   "importacoes.export.frontier.title": "Datensatz-Export",
-  "importacoes.export.lote.desc": "Eine Auswahl von Datensätzen in einem standardisierten Format (UNIMARC, CSV, JSON) exportieren. Funktion in Entwicklung.",
+  "importacoes.export.lote.desc": "Den gesamten Katalog der Bibliothek in einem normalisierten Format (CSV, MARCXML, JSON) exportieren — für Backup, Migration oder Austausch zwischen Bibliotheken.",
   "importacoes.export.lote.title": "Chargenexport",
   "importacoes.export.partilha.desc": "Fernleihe zwischen föderierten Bibliotheken (Kreislauf ILL-1..9). Funktion in Entwicklung.",
   "importacoes.export.partilha.title": "ILL-Austausch",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Katalog mit dem AnarBib-Netzwerk geteilt, informelle Zirkulation, Selbstverwaltung mit definierten Rollen (Bibliothekar*innen, Koordination). Nimmt nicht an der Fernleihe teil.",
   "wizard.profile.template.C.title": "Profil C — Foderiert beobachtend",
   "wizard.profile.template.D.desc": "Etablierte Bibliothek: komplettes ILS (Ausleihen, Reservierungen, Beitrage), volle Netzwerk- und Fernleihe-Teilnahme, formale Selbstverwaltung mit Abstimmungs-Transitionen.",
-  "wizard.profile.template.D.title": "Profil D — Voll engagiert"
+  "wizard.profile.template.D.title": "Profil D — Voll engagiert",
+  "importacoes.export.lote.format": "Exportformat",
+  "importacoes.export.lote.download": "Katalog exportieren",
+  "importacoes.export.lote.exporting": "Datei wird erstellt…",
+  "importacoes.export.lote.success": "Fertig! Der Download wurde gestartet.",
+  "importacoes.export.lote.error": "Fehler beim Export: {message}"
 }

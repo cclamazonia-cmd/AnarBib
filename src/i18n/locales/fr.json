@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Indiquez une URL.",
   "importacoes.export.frontier.desc": "Exporter des notices de la collection vers d’autres bibliothèques, pour l’échange fédéré ou comme source ouverte.",
   "importacoes.export.frontier.title": "Exportation de notices",
-  "importacoes.export.lote.desc": "Exporter une sélection de notices en format normalisé (UNIMARC, CSV, JSON). Fonctionnalité en développement.",
+  "importacoes.export.lote.desc": "Exporter tout le catalogue de la bibliothèque dans un format normalisé (CSV, MARCXML, JSON), pour la sauvegarde, la migration ou l'échange entre bibliothèques.",
   "importacoes.export.lote.title": "Exportation par lot",
   "importacoes.export.partilha.desc": "Prêt entre bibliothèques fédérées (circuit ILL-1..9). Fonctionnalité en développement.",
   "importacoes.export.partilha.title": "Partage ILL",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Catalogue partagé avec le réseau AnarBib, circulation informelle, gouvernance avec rôles définis (bibliothécaires, coordination). Ne participe pas au prêt entre bibliothèques.",
   "wizard.profile.template.C.title": "Profil C — Fédérée observatrice",
   "wizard.profile.template.D.desc": "Bibliothèque mûre : SIGB complet (emprunts, réservations, cotisations), participation pleine au réseau et au prêt entre bibliothèques, gouvernance formelle avec transitions par vote.",
-  "wizard.profile.template.D.title": "Profil D — Complète engagée"
+  "wizard.profile.template.D.title": "Profil D — Complète engagée",
+  "importacoes.export.lote.format": "Format d'export",
+  "importacoes.export.lote.download": "Exporter le catalogue",
+  "importacoes.export.lote.exporting": "Génération du fichier…",
+  "importacoes.export.lote.success": "C'est prêt ! Le téléchargement a commencé.",
+  "importacoes.export.lote.error": "Erreur à l'export : {message}"
 }

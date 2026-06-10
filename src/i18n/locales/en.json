@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Enter a URL.",
   "importacoes.export.frontier.desc": "Export collection records to other libraries, for federated exchange or as an open source.",
   "importacoes.export.frontier.title": "Record export",
-  "importacoes.export.lote.desc": "Export a selection of records in a standardised format (UNIMARC, CSV, JSON). Feature under development.",
+  "importacoes.export.lote.desc": "Export the library's full catalog in a normalized format (CSV, MARCXML, JSON), for backup, migration or exchange between libraries.",
   "importacoes.export.lote.title": "Batch export",
   "importacoes.export.partilha.desc": "Inter-library loan across federated libraries (circuit ILL-1..9). Feature under development.",
   "importacoes.export.partilha.title": "ILL sharing",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Catalog shared with the AnarBib network, informal circulation, governance with defined roles (librarians, coordination). Does not participate in interlibrary loans.",
   "wizard.profile.template.C.title": "Profile C — Federated observer",
   "wizard.profile.template.D.desc": "Mature library: full ILS (loans, reservations, dues), full participation in the network and interlibrary loans, formal governance with voting transitions.",
-  "wizard.profile.template.D.title": "Profile D — Fully engaged"
+  "wizard.profile.template.D.title": "Profile D — Fully engaged",
+  "importacoes.export.lote.format": "Export format",
+  "importacoes.export.lote.download": "Export catalog",
+  "importacoes.export.lote.exporting": "Generating the file…",
+  "importacoes.export.lote.success": "Done! The download has started.",
+  "importacoes.export.lote.error": "Export error: {message}"
 }

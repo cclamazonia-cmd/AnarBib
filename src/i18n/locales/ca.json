@@ -2474,7 +2474,7 @@
   "importacoes.enterUrl": "Indiqueu una URL.",
   "importacoes.export.frontier.desc": "Exportar registres de la col·lecció a altres biblioteques, per a l’intercanvi federat o com a font oberta.",
   "importacoes.export.frontier.title": "Exportació de registres",
-  "importacoes.export.lote.desc": "Exportar una selecció de registres en format normalitzat (UNIMARC, CSV, JSON). Funcionalitat en desenvolupament.",
+  "importacoes.export.lote.desc": "Exportar tot el catàleg de la biblioteca en un format normalitzat (CSV, MARCXML, JSON), per a còpia de seguretat, migració o intercanvi entre biblioteques.",
   "importacoes.export.lote.title": "Exportació per lot",
   "importacoes.export.partilha.desc": "Préstec interbibliotecari entre biblioteques federades (circuit ILL-1..9). Funcionalitat en desenvolupament.",
   "importacoes.export.partilha.title": "Intercanvi ILL",
@@ -3950,5 +3950,10 @@
   "wizard.profile.template.C.desc": "Catàleg compartit amb la xarxa AnarBib, circulació informal, governança amb rols definits (bibliotecaris-àries-es, coordinació). No participa en el préstec interbibliotecari.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB complet (préstecs, reserves, quotes), participació plena a la xarxa i al préstec interbibliotecari, governança formal amb transicions per vot.",
-  "wizard.profile.template.D.title": "Perfil D — Completa compromesa"
+  "wizard.profile.template.D.title": "Perfil D — Completa compromesa",
+  "importacoes.export.lote.format": "Format d'exportació",
+  "importacoes.export.lote.download": "Exporta el catàleg",
+  "importacoes.export.lote.exporting": "S'està generant el fitxer…",
+  "importacoes.export.lote.success": "Fet! La baixada ha començat.",
+  "importacoes.export.lote.error": "Error en exportar: {message}"
 }
