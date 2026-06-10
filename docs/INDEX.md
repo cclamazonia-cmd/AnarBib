@@ -12,7 +12,7 @@ Ce document est la **porte d'entrée de toute la documentation** d'AnarBib. Il d
 Le corpus AnarBib est vaste et vivant : il s'enrichit chaque semaine. Pour éviter qu'un fait recopié dans dix endroits devienne dix sources de vérité divergentes, **une règle de préséance gouverne tout le corpus** :
 
 > **Font foi (couche normative)** : le **REGISTRE des décisions** (`specs/REGISTRE_decisions.md`), puis la **spec courante** du domaine concerné, puis le **backlog** courant.
-> **Trace non-normative** : les documents `CADRAGE_*`, `CHANTIER_*`, `SESSION_*`, `BILAN_*`, `AUDIT_*`, `RIFLEXION_*`, `DECISOES_*` du dossier `decisions/`. Ce sont des **traces historiques** précieuses, mais elles n'arbitrent pas.
+> **Trace non-normative** : les documents `CADRAGE_*`, `CHANTIER_*`, `SESSION_*`, `BILAN_*`, `AUDIT_*`, `RIFLEXION_*`, `DECISOES_*` du dossier `journal/`. Ce sont des **traces historiques** précieuses, mais elles n'arbitrent pas.
 
 En cas de doute ou de conflit apparent entre deux documents : **lire le REGISTRE d'abord.** Une spec qui dit « 6 locales » alors que `DOC-I18N-1` du registre dit 8 est une trace périmée d'avant l'ajout de ca/eo, pas une consigne — c'est le registre qui fait foi.
 
@@ -105,7 +105,7 @@ docs/
 
 ### `specs/` — Spécifications et REGISTRE
 
-Le cœur documentaire technique. **22 specs vivantes** au 03/06/2026, organisées par domaine. Contient également le **REGISTRE des décisions** (`REGISTRE_decisions.md`), foyer unique du corpus.
+Le cœur documentaire technique. **~36 specs vivantes** (`spec-*.md`), organisées par domaine. Contient également le **REGISTRE des décisions** (`REGISTRE_decisions.md`), foyer unique du corpus.
 
 ➡️ [`specs/INDEX.md`](./specs/INDEX.md) — navigation par domaine, à jour au 3 juin 2026
 ➡️ [`specs/INVENTAIRE.md`](./specs/INVENTAIRE.md) — description détaillée et carte des dépendances

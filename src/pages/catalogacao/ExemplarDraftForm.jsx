@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLibrary } from '@/contexts/LibraryContext';
 
 // ── Shelf location structured format ──────────────────────
 function parseShelfLocation(raw) {
@@ -49,7 +48,6 @@ function getTrigram(name) {
 export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editingId = null, onConsumed, onChanged }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
-  const { libraryId } = useLibrary();
   const isComplete = mode === 'complete';
 
   // ── State ───────────────────────────────────────────────

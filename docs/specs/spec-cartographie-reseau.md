@@ -287,7 +287,7 @@ Le fichier `anarbib_bibliotheques_libertaires.geojson` (121 fiches, 24 pays) con
 
 **Phase 0** — sauvegarde et documentation :
 - Archiver le GeoJSON et le DOCX dans `docs/cartographie/` du dépôt
-- Acter la définition du membre dans `docs/decisions/`
+- Acter la définition du membre dans `docs/journal/`
 
 **Phase 1** — création du schéma et import initial :
 - Migration SQL pour créer `cartography_entries`
