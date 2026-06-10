@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Biblioteca di provenienza",
   "catalogacao.exemplar.tombo": "Numero di inventario",
   "catalogacao.exemplar.tomboAutoHint": "Compilato automaticamente secondo la convenzione della biblioteca.",
+  "catalogacao.exemplar.lastTomboHint": "Ultimo numero di inventario della serie di questa biblioteca: {tombo}",
   "catalogacao.exemplar.trigram": "Trigramma",
   "catalogacao.exemplar.visibility.hint": "«Solo squadra» rimuove l'esemplare dal catalogo pubblico (archivio: non circola).",
   "catalogacao.exemplar.visibility.label": "Visibilità",

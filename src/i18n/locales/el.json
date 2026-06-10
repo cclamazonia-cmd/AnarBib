@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Βιβλιοθήκη προέλευσης",
   "catalogacao.exemplar.tombo": "Αριθμός εισαγωγής",
   "catalogacao.exemplar.tomboAutoHint": "Συμπληρώθηκε αυτόματα σύμφωνα με τη σύμβαση της βιβλιοθήκης.",
+  "catalogacao.exemplar.lastTomboHint": "Τελευταίος αριθμός εισαγωγής της σειράς αυτής της βιβλιοθήκης: {tombo}",
   "catalogacao.exemplar.trigram": "Τριγράμματο",
   "catalogacao.exemplar.visibility.hint": "«Μόνο ομάδα» αφαιρεί το αντίτυπο από τον δημόσιο κατάλογο (αρχείο: δεν κυκλοφορεί).",
   "catalogacao.exemplar.visibility.label": "Ορατότητα",

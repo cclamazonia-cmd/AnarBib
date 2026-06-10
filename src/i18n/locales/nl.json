@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Bronbibliotheek",
   "catalogacao.exemplar.tombo": "Aanwinstnummer",
   "catalogacao.exemplar.tomboAutoHint": "Automatisch ingevuld volgens de conventie van de bibliotheek.",
+  "catalogacao.exemplar.lastTomboHint": "Laatste inventarisnummer in de reeks van deze bibliotheek: {tombo}",
   "catalogacao.exemplar.trigram": "Trigram",
   "catalogacao.exemplar.visibility.hint": "„Alleen team” verwijdert het exemplaar uit de openbare catalogus (archief: circuleert niet).",
   "catalogacao.exemplar.visibility.label": "Zichtbaarheid",

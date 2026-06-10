@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Biblioteca de origen",
   "catalogacao.exemplar.tombo": "Número de registro",
   "catalogacao.exemplar.tomboAutoHint": "Rellenado automáticamente según la convención de la biblioteca.",
+  "catalogacao.exemplar.lastTomboHint": "Último número de registro de la serie de esta biblioteca: {tombo}",
   "catalogacao.exemplar.trigram": "Trigrama",
   "catalogacao.exemplar.visibility.hint": "«Solo equipo» retira el ejemplar del catálogo público (archivo: no circula).",
   "catalogacao.exemplar.visibility.label": "Visibilidad",

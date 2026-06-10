@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Source library",
   "catalogacao.exemplar.tombo": "Accession number",
   "catalogacao.exemplar.tomboAutoHint": "Filled in automatically based on the library's convention.",
+  "catalogacao.exemplar.lastTomboHint": "Last accession number in this library's series: {tombo}",
   "catalogacao.exemplar.trigram": "Trigram",
   "catalogacao.exemplar.visibility.hint": "“Team only” removes the copy from the public catalogue (archive: does not circulate).",
   "catalogacao.exemplar.visibility.label": "Visibility",

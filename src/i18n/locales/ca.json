@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Biblioteca d'origen",
   "catalogacao.exemplar.tombo": "Núm. d'inventari",
   "catalogacao.exemplar.tomboAutoHint": "Emplenat automàticament segons la convenció de la biblioteca.",
+  "catalogacao.exemplar.lastTomboHint": "Últim número de registre de la sèrie d'aquesta biblioteca: {tombo}",
   "catalogacao.exemplar.trigram": "Trigrama",
   "catalogacao.exemplar.visibility.hint": "«Només equip» retira l'exemplar del catàleg públic (arxiu: no circula).",
   "catalogacao.exemplar.visibility.label": "Visibilitat",

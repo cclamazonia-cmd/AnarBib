@@ -63,6 +63,38 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     acquisition_mode: '', acquisition_date: '', provenance_note: '', source_library: '',
   });
   const [loc, setLoc] = useState({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
+  // #UX-CAT (10/06) — aide à la saisie : biblio identifiée intuitivement (slug /
+  // nom / nom+ville) → affiche le dernier tombo de sa série au-dessus du Tombo.
+  const [libOptions, setLibOptions] = useState([]);
+  const [lastTombo, setLastTombo] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from('libraries')
+        .select('id, name, short_name, slug, city')
+        .eq('is_active', true).order('name');
+      if (!cancelled && Array.isArray(data)) setLibOptions(data);
+    })();
+    return () => { cancelled = true; };
+  }, []);
+  useEffect(() => {
+    const q = String(loc.library || '').trim().toLowerCase();
+    const lib = q ? libOptions.find((l) => {
+      const slug = String(l.slug || '').toLowerCase();
+      const sn = String(l.short_name || '').toLowerCase();
+      const nm = String(l.name || '').toLowerCase();
+      return (slug && q.includes(slug)) || (sn && q.includes(sn)) || (nm && q.includes(nm)) || (nm && nm.includes(q) && q.length >= 3);
+    }) : null;
+    if (!lib) { setLastTombo(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from('exemplares')
+        .select('tombo').eq('library_id', lib.id).not('tombo', 'is', null)
+        .order('created_at', { ascending: false }).limit(1).maybeSingle();
+      if (!cancelled) setLastTombo(data?.tombo || null);
+    })();
+    return () => { cancelled = true; };
+  }, [loc.library, libOptions]);
   const [label, setLabel] = useState({ title: '', author: '', cdd: '', note: '' });
   const [parentBook, setParentBook] = useState(null); // resolved book from bib_ref
   const [draftState, setDraftState] = useState('new');
@@ -423,8 +455,23 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             {t({ id: 'catalogacao.exemplar.materialStepDesc' })}
           </div>
           <div className="cat-book-grid">
+            <div className="cat-field">
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.library' })}</label>
+              <input type="text" list="cat-lib-options" value={loc.library} onChange={e => setL('library', e.target.value)}
+                placeholder="BLMF - Belém do Pará" style={fs} />
+              <datalist id="cat-lib-options">
+                {libOptions.map(l => (
+                  <option key={l.id} value={`${l.short_name || l.name}${l.city ? ' - ' + l.city : ''}`} />
+                ))}
+              </datalist>
+            </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.tombo' })}</label>
+              {lastTombo && (
+                <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #aaa)', marginBottom: 3 }}>
+                  {t({ id: 'catalogacao.exemplar.lastTomboHint' }, { tombo: lastTombo })}
+                </div>
+              )}
               <input type="text" value={f('tombo')} onChange={e => { set('tombo', e.target.value); setTomboAuto(false); }}
                 placeholder="123-CCLA-2026 ou 123-CCLA-2026-02" style={fs} />
               {tomboAuto && (
@@ -432,11 +479,6 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
                   {t({ id: 'catalogacao.exemplar.tomboAutoHint' })}
                 </div>
               )}
-            </div>
-            <div className="cat-field">
-              <label style={ls}>{t({ id: 'catalogacao.exemplar.library' })}</label>
-              <input type="text" value={loc.library} onChange={e => setL('library', e.target.value)}
-                placeholder="BLMF - Belém do Pará" style={fs} />
             </div>
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.exemplar.sectorRoom' })}</label>

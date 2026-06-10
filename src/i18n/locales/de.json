@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Herkunftsbibliothek",
   "catalogacao.exemplar.tombo": "Zugangsnummer",
   "catalogacao.exemplar.tomboAutoHint": "Automatisch gemäß der Bibliothekskonvention ausgefüllt.",
+  "catalogacao.exemplar.lastTomboHint": "Letzte Inventarnummer der Serie dieser Bibliothek: {tombo}",
   "catalogacao.exemplar.trigram": "Trigramm",
   "catalogacao.exemplar.visibility.hint": "„Nur Team“ entfernt das Exemplar aus dem öffentlichen Katalog (Archiv: zirkuliert nicht).",
   "catalogacao.exemplar.visibility.label": "Sichtbarkeit",

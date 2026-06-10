@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Bibliothèque d'origine",
   "catalogacao.exemplar.tombo": "N° d'inventaire",
   "catalogacao.exemplar.tomboAutoHint": "Rempli automatiquement selon la convention de la bibliothèque.",
+  "catalogacao.exemplar.lastTomboHint": "Dernier tombo de la série de cette bibliothèque : {tombo}",
   "catalogacao.exemplar.trigram": "Trigramme",
   "catalogacao.exemplar.visibility.hint": "«Équipe uniquement» retire l'exemplaire du catalogue public (archive : ne circule pas).",
   "catalogacao.exemplar.visibility.label": "Visibilité",

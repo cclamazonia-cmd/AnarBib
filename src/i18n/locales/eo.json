@@ -1728,6 +1728,7 @@
   "catalogacao.exemplar.sourceLibrary": "Devena biblioteko",
   "catalogacao.exemplar.tombo": "Inventarnumero",
   "catalogacao.exemplar.tomboAutoHint": "Aŭtomate plenumita laŭ la konvencio de la biblioteko.",
+  "catalogacao.exemplar.lastTomboHint": "Lasta inventarnumero de la serio de ĉi tiu biblioteko: {tombo}",
   "catalogacao.exemplar.trigram": "Trigramo",
   "catalogacao.exemplar.visibility.hint": "«Nur teamo» forigas la ekzempleron el la publika katalogo (arkivo: ne cirkulas).",
   "catalogacao.exemplar.visibility.label": "Videbleco",
