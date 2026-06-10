@@ -1,5 +1,7 @@
 # Spec — CatalogaçãoPage : fiche, registre de champs & paliers
 
+> **🔵 Clôture (2026-06-10) — implémentée en production, spec archivée.** Track A complet (Lots 1→6 + 3b, paliers ternaires). Référence historique (corps non modifié). Preuves : [`AUDIT backlog v29 vs prod`](../../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
+
 - **Version :** 0.3 (arbitrages A1–A3 actés)
 - **Date :** 2026-06-01
 - **Statut :** 🟡 Spécification, à implémenter — premier lot du chantier Catalogação (lot UX/champs, Q1 du cadrage)

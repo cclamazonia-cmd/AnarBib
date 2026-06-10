@@ -1,5 +1,7 @@
 # spec-migration-mail-resend.md — Migration du provider mail Brevo → Resend
 
+> **🔵 Clôture (2026-06-10) — implémentée en production, spec archivée.** Chantier #110 clos (Brevo entièrement retiré, R.6+R.7). Référence historique (corps non modifié). Preuves : [`AUDIT backlog v29 vs prod`](../../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
+
 **Version** : v0.6
 **Date** : 08/06/2026 (révision de la v0.5 du 05/06/2026 ; v0.1–v0.3 archivées sous `docs/specs/archive/spec-migration-mail-resend-v0.{1,2,3}.md`)
 **Statut** : **terminé et clos** — R.1 à R.5 (21/05 → 05/06), R.6 (retrait de Brevo) le 05/06, hygiène R.7 le 08/06/2026. Chantier #110 clos, critère documentaire 8.3.6 levé (cf. changelog v0.6).

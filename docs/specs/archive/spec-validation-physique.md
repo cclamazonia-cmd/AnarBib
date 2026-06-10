@@ -1,6 +1,6 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée (amendement par-appartenance 30/05)
+Statut : 🔵 Référence historique — implémentée en prod (VALID C1-C4, §9), archivée 2026-06-10
 Décisions : incarne VALID-AMD, VALID-C1..C4 ; cite ACCT-MIGRATION, DOC-I18N-1
 Supersédé par : —
 ---

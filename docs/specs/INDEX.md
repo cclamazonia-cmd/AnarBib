@@ -42,7 +42,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 |---|---|---|---|
 | Onboarding d'une bibliothèque | [`spec-onboarding-biblioteca-v2.0.md`](./spec-onboarding-biblioteca-v2.0.md) | v2.0 (20/05/2026) | 🟡 volet 0 livré, volets 1-10 perspective Q3 2026 (chantier #111) |
 | Onboarding `/criar-conta` | [`spec-onboarding-criar-conta.md`](./spec-onboarding-criar-conta.md) | v0.3 (21/05/2026) | 🟡 Brouillon de cadrage, cœur (paquets 1, 2, 4, 6, 7, 8) prêt à exécuter |
-| Validation physique du compte lecteur·rice | [`spec-validation-physique.md`](./spec-validation-physique.md) | v1.1 (30/05/2026) | 🟡 Cadrée + amendement structurel (validation par-appartenance) |
+| Validation physique du compte lecteur·rice | [`spec-validation-physique.md`](./archive/spec-validation-physique.md) | v1.1 (30/05/2026) | ✅ Implémenté en prod (VALID C1-C4, §9) — archivé 2026-06-10 |
 
 ### 📖 Flux opérationnels (circulation)
 
@@ -61,13 +61,13 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Notifications lecteur·rice (canal in-app) | [`spec-notifications-lecteur.md`](./spec-notifications-lecteur.md) | v1.0 (31/05/2026) | 🟢 Référence — lien #CL.6 et #CL.7 livrés |
 | Maîtrise lectrice de la rétention de l'historique | [`spec-historico-retencao-lectrice.md`](./spec-historico-retencao-lectrice.md) | v1.0 (31/05/2026) | 🟠 En cours — #CL.8 : backend + C.3/C.4 en prod, C.5/C.6 en attente de déploiement |
 | Notification de prorrogação granulaire | [`spec-notify-prorrogacao-granulaire.md`](./spec-notify-prorrogacao-granulaire.md) | v0.1 (29/05/2026) | 🟡 Cadrage, lié `#NOTIFY-Painel-acts` |
-| Multi-appartenance lectrice (plusieurs biblios) | [`spec-multi-appartenance-lecteur.md`](./spec-multi-appartenance-lecteur.md) | v0.3 (02/06/2026) | 🟡 Charpente figée — arbitrée, audit Zone 23 intégré ; remplissage à venir (lié #CL.10). Absorbe `spec-migration-compte` |
+| Multi-appartenance lectrice (plusieurs biblios) | [`spec-multi-appartenance-lecteur.md`](./archive/spec-multi-appartenance-lecteur.md) | v0.3 (02/06/2026) | ✅ Implémenté en prod (P1-P5) — archivé 2026-06-10. Absorbe `spec-migration-compte` |
 
 ### 📱 Mode terrain / mobile *(nouveau famille)*
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Carte-lecteur AnarBib | [`spec-carte-lecteur-v0_2.md`](./spec-carte-lecteur-v0_2.md) | v0.2 (03/06/2026) | 🟢 Référence — phase β en prod (génération + révocation) ; **résolution staff `api.resolve_reader_card` livrée backend (03/06) + UI staff `ResolveCardBox` (04/06, gatée `reader_cards_enabled`)** — **phase γ complète** ; arbitrages A.1-A.4 actés (A.1 séquençage 🟡 ouvert). Supersède v0.1 (.docx, 28/05 → archive) |
+| Carte-lecteur AnarBib | [`spec-carte-lecteur-v0_2.md`](./archive/spec-carte-lecteur-v0_2.md) | v0.2 (03/06/2026) | ✅ Implémenté en prod (phases β + γ) — archivé 2026-06-10 ; **résolution staff `api.resolve_reader_card` livrée backend (03/06) + UI staff `ResolveCardBox` (04/06, gatée `reader_cards_enabled`)** — **phase γ complète** ; arbitrages A.1-A.4 actés (A.1 séquençage 🟡 ouvert). Supersède v0.1 (.docx, 28/05 → archive) |
 
 ### 📐 Modélisation structurelle *(nouveau famille)*
 
@@ -79,13 +79,13 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Fiche, registre & paliers | [`spec-catalogacao-fiche-et-paliers.md`](./spec-catalogacao-fiche-et-paliers.md) | v0.4 (01/06/2026) | ✅ **Track A complet** (Lots 1→6 + 3b, 05/06) |
-| Exemplaires : circulation & doublons | [`spec-exemplaires-circulation.md`](./spec-exemplaires-circulation.md) | v0.2 (01/06/2026) | ✅ **Livré en prod** (constaté 05/06, CAT-E9) |
-| Module capas | [`spec-module-capas.md`](./spec-module-capas.md) | v0.2 (01/06/2026) | ✅ **P1/P2/P3 livré** (P3 page-1-PDF côté client, CAT-C5) |
+| Fiche, registre & paliers | [`spec-catalogacao-fiche-et-paliers.md`](./archive/spec-catalogacao-fiche-et-paliers.md) | v0.4 (01/06/2026) | ✅ **Track A complet** (Lots 1→6 + 3b, 05/06) |
+| Exemplaires : circulation & doublons | [`spec-exemplaires-circulation.md`](./archive/spec-exemplaires-circulation.md) | v0.2 (01/06/2026) | ✅ **Livré en prod** (constaté 05/06, CAT-E9) |
+| Module capas | [`spec-module-capas.md`](./archive/spec-module-capas.md) | v0.2 (01/06/2026) | ✅ **P1/P2/P3 livré** (P3 page-1-PDF côté client, CAT-C5) |
 | Sources externes & autorités | [`spec-sources-externes-autorites.md`](./spec-sources-externes-autorites.md) | v0.2 (01/06/2026) | 🟠 Socle autorité avancé (liaison + dédup livrées) ; reste VIAF/ISNI/Wikidata + `authority_lookup` |
 | Notes bio multilingues (Ateliers, socle) | [`spec-autorites-notes-bio-multilingues.md`](./spec-autorites-notes-bio-multilingues.md) | v0.2 (05/06/2026) | ✅ Socle livré (CAT-I1) ; sélecteur de langue UI = reste |
-| Liaison autorités ↔ œuvres | [`spec-liaison-autorites-oeuvres.md`](./spec-liaison-autorites-oeuvres.md) | v0.2 (05/06/2026) | ✅ Rétroactif livré (CAT-G1) ; volet préventif = backlog |
-| Détection & fusion de doublons | [`spec-doublons-detection-fusion.md`](./spec-doublons-detection-fusion.md) | v0.1 (05/06/2026) | ✅ Autorités + documents livrés (CAT-H1) |
+| Liaison autorités ↔ œuvres | [`spec-liaison-autorites-oeuvres.md`](./archive/spec-liaison-autorites-oeuvres.md) | v0.2 (05/06/2026) | ✅ Rétroactif livré (CAT-G1) ; volet préventif = backlog |
+| Détection & fusion de doublons | [`spec-doublons-detection-fusion.md`](./archive/spec-doublons-detection-fusion.md) | v0.1 (05/06/2026) | ✅ Autorités + documents livrés (CAT-H1) |
 
 > Chantier coordonné avec `spec-granularite-item` (`#MODEL-item-grain`, couche *trace* — **livrée en prod**) et `spec-acquisition-provenance` (couche *provenance* — migration `exemplares` **mutualisée**). Ordre de mise en œuvre et garde-fous : voir `INVENTAIRE.md` § « Ordre de mise en œuvre — chantier Catalogação ».
 
@@ -102,7 +102,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Migration mail Brevo → Resend | [`spec-migration-mail-resend.md`](./spec-migration-mail-resend.md) | v0.4 (01/06/2026) | 🟠 En cours (R.1/R.2/R.3 clos, R.4 à venir, R.6 le 05/06 ; doctrine déploiement EF corrigée v0.4) |
+| Migration mail Brevo → Resend | [`spec-migration-mail-resend.md`](./archive/spec-migration-mail-resend.md) | v0.4 (01/06/2026) | ✅ #110 clos — Brevo entièrement retiré (R.6+R.7) — archivé 2026-06-10 |
 | Cartographie du réseau AnarBib | [`spec-cartographie-reseau.md`](./spec-cartographie-reseau.md) | v0.1 (27/05/2026) | 🟡 Brouillon, 12 arbitrages à trancher, lié `#RESEAU-FED` |
 
 ### 🔵 Specs doctrinales de chantier ponctuel — référence historique
@@ -125,7 +125,7 @@ Cinq specs constituent la lecture prioritaire pour comprendre l'état doctrinal 
 2. **[`spec-administrateur-reseau-v0.4.md`](./spec-administrateur-reseau-v0.4.md)** — préambule politique enrichi, §4.7 canal humain proactif, §8.8 risque burnout admin réseau.
 3. **[`spec-flux-consultations-v2.2.md`](./spec-flux-consultations-v2.2.md)** — doctrines techniques R1-R11, source normative pour les autres specs flux.
 4. **[`spec-flux-emprunts.md`](./spec-flux-emprunts.md)** *(v1.1 du 31/05)* — propagation des doctrines R7-R11 depuis consultas, audit R9 (traçabilité coordination) inscrit.
-5. **[`spec-validation-physique.md`](./spec-validation-physique.md)** *(amendement 30/05)* — bascule structurelle vers la validation par-appartenance (et non plus par-compte).
+5. **[`spec-validation-physique.md`](./archive/spec-validation-physique.md)** *(amendement 30/05)* — bascule structurelle vers la validation par-appartenance (et non plus par-compte).
 
 ---
 
@@ -138,7 +138,7 @@ Cinq specs constituent la lecture prioritaire pour comprendre l'état doctrinal 
 
 - **Importações/Exportações** (module bidirectionnel : ingestion technique ⇄ export) — **`spec-importacoes-exportacoes` v0.1 créée 🟡 squelette** (`docs/specs/`). Plomberie de provenance déjà posée (`catalog_ref_*`, cible `book_drafts`, journal `book_draft_import_events`, staging BLMF + Zotero) ; couche format = **adaptateurs** (structure × vocabulaire × modèle). Doctrine au **registre §17 `IMP-1..8`** (`IMP-1..7` actés ; `IMP-8` wizard §9 **cadré**). Frontière `ACQ-Q4` (ingestion → `book_drafts`) ; export référence `ILL-1..9` (`spec-flux-partage-numerique`). Réf. visuelles : `maquette_importacoes_v7.html` (tableau de bord) + `maquette_wizard_import_v1.html` (assistant). Reste : DDL « run d'import » + ratification rôles (`spec-gouvernance-roles`) + remplissage (§12). Le **cadrage 04/06** (`CADRAGE_importacoes_module`, trace) est **supersédé** : son schéma `IMP-A1..A5` est remplacé par `IMP-1..8` (REGISTRE §17) + points ouverts §12 (préséance registre > trace).
 
-> `spec-multi-appartenance-lecteur` a quitté cette liste : sa charpente v0.3 est désormais une spec du corpus (famille « Compte lecteur — #CL »), au statut 🟡 cadrée.
+> `spec-multi-appartenance-lecteur` : **implémentée en prod (P1-P5) et archivée le 2026-06-10** (`archive/`). Cf. [`AUDIT backlog v29 vs prod`](../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
 
 ---
 

@@ -1,5 +1,7 @@
 # spec — Détection & fusion de doublons (autorités + documents)
 
+> **🔵 Clôture (2026-06-10) — implémentée en production, spec archivée.** Fusion autorités + documents livrée (CAT-H1). Référence historique (corps non modifié). Preuves : [`AUDIT backlog v29 vs prod`](../../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
+
 > **Statut** : mini-spec (à valider) · v0.1 · 2026-06-05
 > **Chantier** : qualité du catalogue — repérer et fusionner les fiches en double.
 > **Périmètre** : autorités (auteurs) **et** documents (livres). Décision Xavier

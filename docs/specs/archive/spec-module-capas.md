@@ -1,5 +1,7 @@
 # Spec — Module capas (couverture)
 
+> **🔵 Clôture (2026-06-10) — implémentée en production, spec archivée.** Module capas P1/P2/P3 livré (CAT-C5). Référence historique (corps non modifié). Preuves : [`AUDIT backlog v29 vs prod`](../../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
+
 - **Version :** 0.2 (C1–C3 actés + 4ᵉ source `og:image`)
 - **Date :** 2026-06-01
 - **Statut :** 🟡 Spécification, à implémenter — lot #3 du chantier Catalogação (Q1 du cadrage)

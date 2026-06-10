@@ -1,5 +1,7 @@
 # Spec — Carte-lecteur (jeton de présentation)
 
+> **🔵 Clôture (2026-06-10) — implémentée en production, spec archivée.** Phases β + γ livrées. Référence historique (corps non modifié). Preuves : [`AUDIT backlog v29 vs prod`](../../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
+
 > **Statut** : v0.2 du 03/06/2026. Paquet 1 (génération + révocation côté lecteur) **livré en production le 28/05/2026**. Cette version consolide le design en spec opérationnelle et **ajoute le contrat de la RPC de résolution staff** — le morceau différé que le commentaire de table notait « Résolution via RPC staff (Paquet 3, hors bêta) ».
 >
 > **Lignée** : dossier d'ouverture `CHANTIER_extension_mobile_mode_terrain_2026-05-26` (états 1→3 du concept de carte, § 3). Cette spec en est la décantation opérationnelle.

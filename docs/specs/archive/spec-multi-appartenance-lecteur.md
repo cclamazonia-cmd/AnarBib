@@ -1,6 +1,6 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée
+Statut : 🔵 Référence historique — implémentée en prod (P1-P5), archivée 2026-06-10
 Décisions : incarne MULTI-MODEL/CTX/F3/D1/Z19/B2/PRIMARY ; cite VALID-β1, VALID-γ1, ACCT-MIGRATION, PARTNER-* (parallèle)
 Supersédé par : —
 ---

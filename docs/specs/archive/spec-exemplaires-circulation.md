@@ -1,6 +1,6 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée (à implémenter — coordonnée #MODEL-item-grain + acquisition)
+Statut : 🔵 Référence historique — implémentée en prod (Phase 1-3 exemplares), archivée 2026-06-10
 Décisions : incarne CAT-B1..B7 ; cite DOC-MODELE-1, ITEM-Q1..Q5, ACQ-Q1
 Supersédé par : —
 ---

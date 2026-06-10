@@ -1,5 +1,7 @@
 # spec — Liaison autorités ↔ œuvres (rattachement des contributeurs)
 
+> **🔵 Clôture (2026-06-10) — implémentée en production, spec archivée.** Volets rétroactif (CAT-G1) + préventif (CAT-G3) livrés. Référence historique (corps non modifié). Preuves : [`AUDIT backlog v29 vs prod`](../../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md).
+
 > **Statut** : mini-spec · **v0.2** · 2026-06-05 (Q1–Q6 actées)
 > **Chantier** : contrôle d'autorité — relier une autorité publiée à ses œuvres
 > (volet du module « Ateliers d'Autorités »).
