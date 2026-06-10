@@ -4032,5 +4032,18 @@
   "catalogacao.author.portraitNone": "Kein Porträt auf Wikidata/Commons gefunden.",
   "catalogacao.author.cropTitle": "Zuschneiden (Passfoto 3×4)",
   "catalogacao.author.cropHint": "Ziehen, um das Gesicht zu positionieren, mit dem Regler zoomen. Format 3×4.",
-  "catalogacao.author.cropConfirm": "Zuschneiden und speichern"
+  "catalogacao.author.cropConfirm": "Zuschneiden und speichern",
+  "importacoes.wizard.title": "Neuer Import",
+  "importacoes.wizard.subtitle": "Geführter Import-Assistent, Schritt für Schritt.",
+  "importacoes.wizard.launch": "Neuer Import",
+  "importacoes.wizard.step.circuit": "Importweg",
+  "importacoes.wizard.step.source": "Quelle",
+  "importacoes.wizard.step.preview": "Vorschau",
+  "importacoes.wizard.step.promote": "Übernahme",
+  "importacoes.wizard.circuit.migracao": "Systemmigration",
+  "importacoes.wizard.circuit.arquivo": "Datei-Import",
+  "importacoes.wizard.circuit.fontes": "Externe Quellen",
+  "importacoes.wizard.back": "Zurück",
+  "importacoes.wizard.next": "Weiter",
+  "importacoes.wizard.wip": "Schritt in Arbeit (bald verfügbar)."
 }

@@ -4032,5 +4032,18 @@
   "catalogacao.author.portraitNone": "Geen portret gevonden op Wikidata/Commons.",
   "catalogacao.author.cropTitle": "Bijsnijden (pasfoto 3×4)",
   "catalogacao.author.cropHint": "Sleep om het gezicht te plaatsen en zoom met de schuifregelaar. Formaat 3×4.",
-  "catalogacao.author.cropConfirm": "Bijsnijden en opslaan"
+  "catalogacao.author.cropConfirm": "Bijsnijden en opslaan",
+  "importacoes.wizard.title": "Nieuwe import",
+  "importacoes.wizard.subtitle": "Begeleide import-assistent, stap voor stap.",
+  "importacoes.wizard.launch": "Nieuwe import",
+  "importacoes.wizard.step.circuit": "Traject",
+  "importacoes.wizard.step.source": "Bron",
+  "importacoes.wizard.step.preview": "Voorbeeld",
+  "importacoes.wizard.step.promote": "Promotie",
+  "importacoes.wizard.circuit.migracao": "Systeemmigratie",
+  "importacoes.wizard.circuit.arquivo": "Bestandsimport",
+  "importacoes.wizard.circuit.fontes": "Externe bronnen",
+  "importacoes.wizard.back": "Terug",
+  "importacoes.wizard.next": "Volgende",
+  "importacoes.wizard.wip": "Stap in aanbouw (binnenkort)."
 }

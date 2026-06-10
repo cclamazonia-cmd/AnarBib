@@ -4032,5 +4032,18 @@
   "catalogacao.author.portraitNone": "No portrait found on Wikidata/Commons.",
   "catalogacao.author.cropTitle": "Crop (3×4 ID photo)",
   "catalogacao.author.cropHint": "Drag to position the face and use the slider to zoom. 3×4 format.",
-  "catalogacao.author.cropConfirm": "Crop and save"
+  "catalogacao.author.cropConfirm": "Crop and save",
+  "importacoes.wizard.title": "New import",
+  "importacoes.wizard.subtitle": "Guided step-by-step import assistant.",
+  "importacoes.wizard.launch": "New import",
+  "importacoes.wizard.step.circuit": "Circuit",
+  "importacoes.wizard.step.source": "Source",
+  "importacoes.wizard.step.preview": "Preview",
+  "importacoes.wizard.step.promote": "Promotion",
+  "importacoes.wizard.circuit.migracao": "System migration",
+  "importacoes.wizard.circuit.arquivo": "File import",
+  "importacoes.wizard.circuit.fontes": "External sources",
+  "importacoes.wizard.back": "Back",
+  "importacoes.wizard.next": "Next",
+  "importacoes.wizard.wip": "Step under construction (coming soon)."
 }

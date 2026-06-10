@@ -4032,5 +4032,18 @@
   "catalogacao.author.portraitNone": "No s'ha trobat cap retrat a Wikidata/Commons.",
   "catalogacao.author.cropTitle": "Retallar (foto 3×4)",
   "catalogacao.author.cropHint": "Arrossega per col·locar el rostre i fes servir el control per ampliar. Format 3×4.",
-  "catalogacao.author.cropConfirm": "Retallar i desar"
+  "catalogacao.author.cropConfirm": "Retallar i desar",
+  "importacoes.wizard.title": "Nova importació",
+  "importacoes.wizard.subtitle": "Assistent d'importació guiat, pas a pas.",
+  "importacoes.wizard.launch": "Nova importació",
+  "importacoes.wizard.step.circuit": "Circuit",
+  "importacoes.wizard.step.source": "Font",
+  "importacoes.wizard.step.preview": "Vista prèvia",
+  "importacoes.wizard.step.promote": "Promoció",
+  "importacoes.wizard.circuit.migracao": "Migració de sistema",
+  "importacoes.wizard.circuit.arquivo": "Importació de fitxer",
+  "importacoes.wizard.circuit.fontes": "Fonts externes",
+  "importacoes.wizard.back": "Enrere",
+  "importacoes.wizard.next": "Següent",
+  "importacoes.wizard.wip": "Etapa en construcció (properament)."
 }

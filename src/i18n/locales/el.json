@@ -4032,5 +4032,18 @@
   "catalogacao.author.portraitNone": "Δεν βρέθηκε πορτρέτο στο Wikidata/Commons.",
   "catalogacao.author.cropTitle": "Περικοπή (φωτο 3×4)",
   "catalogacao.author.cropHint": "Σύρετε για να τοποθετήσετε το πρόσωπο και χρησιμοποιήστε τον ρυθμιστή για μεγέθυνση. Μορφή 3×4.",
-  "catalogacao.author.cropConfirm": "Περικοπή και αποθήκευση"
+  "catalogacao.author.cropConfirm": "Περικοπή και αποθήκευση",
+  "importacoes.wizard.title": "Νέα εισαγωγή",
+  "importacoes.wizard.subtitle": "Καθοδηγούμενος βοηθός εισαγωγής, βήμα προς βήμα.",
+  "importacoes.wizard.launch": "Νέα εισαγωγή",
+  "importacoes.wizard.step.circuit": "Διαδρομή",
+  "importacoes.wizard.step.source": "Πηγή",
+  "importacoes.wizard.step.preview": "Προεπισκόπηση",
+  "importacoes.wizard.step.promote": "Προαγωγή",
+  "importacoes.wizard.circuit.migracao": "Μετεγκατάσταση συστήματος",
+  "importacoes.wizard.circuit.arquivo": "Εισαγωγή αρχείου",
+  "importacoes.wizard.circuit.fontes": "Εξωτερικές πηγές",
+  "importacoes.wizard.back": "Πίσω",
+  "importacoes.wizard.next": "Επόμενο",
+  "importacoes.wizard.wip": "Βήμα υπό κατασκευή (σύντομα)."
 }

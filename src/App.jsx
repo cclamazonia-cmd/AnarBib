@@ -23,6 +23,7 @@ const LoginPage = lazy(() => import('@/pages/public/LoginPage'));
 const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibliotecaPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
 const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage'));
+const ImportWizard = lazy(() => import('@/pages/importacoes/ImportWizard'));
 const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
 const RedePage = lazy(() => import('@/pages/rede/RedePage'));
 
@@ -122,6 +123,9 @@ export default function App() {
                   {/* ── Importações ──────────────────────── */}
                   <Route path="/importacoes" element={
                     <ProtectedRoute><ImportacoesPage /></ProtectedRoute>
+                  } />
+                  <Route path="/importacoes/novo" element={
+                    <ProtectedRoute><ImportWizard /></ProtectedRoute>
                   } />
 
                   {/* ── Catalogação ─────────────────────── */}

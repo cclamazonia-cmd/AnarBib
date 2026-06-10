@@ -4032,5 +4032,18 @@
   "catalogacao.author.portraitNone": "Nessun ritratto trovato su Wikidata/Commons.",
   "catalogacao.author.cropTitle": "Ritaglia (foto 3×4)",
   "catalogacao.author.cropHint": "Trascina per posizionare il volto e usa il cursore per ingrandire. Formato 3×4.",
-  "catalogacao.author.cropConfirm": "Ritaglia e salva"
+  "catalogacao.author.cropConfirm": "Ritaglia e salva",
+  "importacoes.wizard.title": "Nuovo import",
+  "importacoes.wizard.subtitle": "Assistente di importazione guidato, passo dopo passo.",
+  "importacoes.wizard.launch": "Nuovo import",
+  "importacoes.wizard.step.circuit": "Circuito",
+  "importacoes.wizard.step.source": "Fonte",
+  "importacoes.wizard.step.preview": "Anteprima",
+  "importacoes.wizard.step.promote": "Promozione",
+  "importacoes.wizard.circuit.migracao": "Migrazione di sistema",
+  "importacoes.wizard.circuit.arquivo": "Importazione di file",
+  "importacoes.wizard.circuit.fontes": "Fonti esterne",
+  "importacoes.wizard.back": "Indietro",
+  "importacoes.wizard.next": "Avanti",
+  "importacoes.wizard.wip": "Fase in costruzione (prossimamente)."
 }

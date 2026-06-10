@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -431,6 +432,15 @@ export default function ImportacoesPage() {
               {t({ id: 'importacoes.import.frontier.desc' })}{' '}
               <Pill variant="info">ACQ-Q4</Pill>
             </div>
+          </div>
+
+          {/* ── CTA : assistant « Novo import » (wizard IMP-8) ─── */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
+            <Link to="/importacoes/novo" style={{ textDecoration: 'none' }}>
+              <button className="cat-btn primary" type="button">
+                {t({ id: 'importacoes.wizard.launch' })}
+              </button>
+            </Link>
           </div>
 
           {/* ── Adapter strip (read-only) ───────────────── */}

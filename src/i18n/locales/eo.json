@@ -4032,5 +4032,18 @@
   "catalogacao.author.portraitNone": "Neniu portreto trovita en Wikidata/Commons.",
   "catalogacao.author.cropTitle": "Tranĉi (foto 3×4)",
   "catalogacao.author.cropHint": "Trenu por loki la vizaĝon kaj uzu la regilon por zomi. Formato 3×4.",
-  "catalogacao.author.cropConfirm": "Tranĉi kaj konservi"
+  "catalogacao.author.cropConfirm": "Tranĉi kaj konservi",
+  "importacoes.wizard.title": "Nova enporto",
+  "importacoes.wizard.subtitle": "Gvidata enporta asistanto, paŝon post paŝo.",
+  "importacoes.wizard.launch": "Nova enporto",
+  "importacoes.wizard.step.circuit": "Vojo",
+  "importacoes.wizard.step.source": "Fonto",
+  "importacoes.wizard.step.preview": "Antaŭrigardo",
+  "importacoes.wizard.step.promote": "Promocio",
+  "importacoes.wizard.circuit.migracao": "Sistema migrado",
+  "importacoes.wizard.circuit.arquivo": "Dosiera enporto",
+  "importacoes.wizard.circuit.fontes": "Eksteraj fontoj",
+  "importacoes.wizard.back": "Reen",
+  "importacoes.wizard.next": "Sekva",
+  "importacoes.wizard.wip": "Paŝo en konstruado (baldaŭ)."
 }
