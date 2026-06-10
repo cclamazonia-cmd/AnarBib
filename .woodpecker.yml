@@ -115,28 +115,40 @@ steps:
         branch: main
 
   # ---------------------------------------------------------------------------
-  # 6. Miroir Codeberg → GitHub
+  # 6. Miroir Codeberg → GitHub (redondance, NON bloquant)
   # ---------------------------------------------------------------------------
-  # Pousse main vers cclamazonia-cmd/AnarBib pour redondance.
-  # ATTENTION : --force est destructif côté GitHub. C'est voulu (Codeberg
-  # est la source de vérité), mais ça veut dire que tout commit fait
-  # directement sur GitHub sera écrasé.
+  # Pousse main vers cclamazonia-cmd/AnarBib pour redondance. Codeberg reste la
+  # source de vérité (--force destructif côté GitHub : voulu, tout commit fait
+  # directement sur GitHub est écrasé).
+  #
+  # AUTH = DEPLOY KEY SSH (write), PAS un PAT. Les PAT expirent et re-cassent le
+  # miroir périodiquement (gel constaté à 91e1102, 10/06 21:29) ; une deploy key
+  # SSH n'expire pas et est limitée à ce seul dépôt. Le secret `github_deploy_key`
+  # contient la clé privée SSH encodée en base64 (évite tout souci de retours-ligne
+  # dans les secrets CI).
+  #
+  # `failure: ignore` : le miroir est une pure redondance — son échec ne doit
+  # JAMAIS faire échouer le pipeline (Pages / Edge Functions / migrations sont des
+  # steps indépendants, ils continuent).
   # ---------------------------------------------------------------------------
   mirror-to-github:
     image: alpine/git
+    failure: ignore
     environment:
-      GITHUB_TOKEN:
-        from_secret: github_token
-      GITHUB_USER:
-        from_secret: github_user
+      GITHUB_DEPLOY_KEY:
+        from_secret: github_deploy_key
       GITHUB_REPO:
         from_secret: github_app_repo
     commands:
+      - apk add --no-cache openssh-client
+      - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+      - echo "$${GITHUB_DEPLOY_KEY}" | base64 -d > ~/.ssh/id_ed25519
+      - chmod 600 ~/.ssh/id_ed25519
+      - ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
       - git config --global user.email "ci@anarbib.codeberg.page"
       - git config --global user.name "AnarBib CI"
-      - git remote add github "https://$${GITHUB_USER}:$${GITHUB_TOKEN}@github.com/$${GITHUB_REPO}.git" || git remote set-url github "https://$${GITHUB_USER}:$${GITHUB_TOKEN}@github.com/$${GITHUB_REPO}.git"
-      - git push github main:main --force
-      - git push github --tags --force
+      - git remote add github "git@github.com:$${GITHUB_REPO}.git" || git remote set-url github "git@github.com:$${GITHUB_REPO}.git"
+      - git push github HEAD:refs/heads/main --force
       - echo "✓ Miroir GitHub à jour"
     depends_on: [build]
     when:
