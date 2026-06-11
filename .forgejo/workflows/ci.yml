@@ -25,10 +25,12 @@ concurrency:
 
 jobs:
   cicd:
-    # codeberg-small avait une socket podman flaky (timeout sur l'archivage
-    # post-step SUMMARY.md/cmd.txt) → on passe sur medium (plus de ressources).
-    # Si medium flake aussi : essayer codeberg-medium-lazy (runner éphémère frais).
-    runs-on: codeberg-medium
+    # Historique runner :
+    #  - codeberg-small : dispo vite MAIS socket podman flaky (timeout d'archivage
+    #    post-step SUMMARY.md/cmd.txt) → faux échec en fin de step aléatoire.
+    #  - codeberg-medium : ne prenait pas le job (congestionné > 4 min).
+    #  → codeberg-small-lazy : runner ÉPHÉMÈRE à la demande = dispo + podman frais.
+    runs-on: codeberg-small-lazy
     container:
       image: node:20
     steps:
