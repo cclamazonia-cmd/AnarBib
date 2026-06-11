@@ -8,7 +8,7 @@ import { handleReaderMessageEvent, handleLibraryMessageEvent } from "../domain/r
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
 import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested } from "../domain/membership.ts";
 import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
-import { handlePartnershipLifecycle } from "../domain/partnership.ts";
+import { handlePartnershipLifecycle, handleTransparenceEnabled } from "../domain/partnership.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
@@ -118,5 +118,7 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   if (event.startsWith("rgpd_purge_warning_")) return await handleRgpdPurgeWarning(recordId, event);
   // §21 PARTNER NOTIF-1 : cycle de vie partenariat → coordenador (payload-based, uuid).
   if (["partnership_proposed","partnership_accepted","partnership_refused","partnership_broken"].includes(event)) return await handlePartnershipLifecycle(event, payload);
+  // §21 PARTNER NOTIF-2 : transparence activée → fan-out lectrices communes (consentement).
+  if (event === "partnership_transparence_enabled") return await handleTransparenceEnabled(payload);
   return null;
 }

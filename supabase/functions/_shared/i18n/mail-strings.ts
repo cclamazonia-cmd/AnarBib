@@ -1960,6 +1960,47 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Het partnerschap met de onderstaande partnerbibliotheek is beëindigd. De wederzijdse rechten zijn aan beide kanten uitgeschakeld.",
     el: "Η συνεργασία με την παρακάτω συνεργαζόμενη βιβλιοθήκη τερματίστηκε. Τα αμοιβαία δικαιώματα απενεργοποιήθηκαν και στις δύο πλευρές."
   },
+  "partnership_transparence_enabled.subject": {
+    "pt-BR": "Compartilhamento entre suas bibliotecas: seu consentimento",
+    fr: "Partage entre tes bibliothèques : ton consentement",
+    es: "Compartir entre tus bibliotecas: tu consentimiento",
+    en: "Sharing between your libraries: your consent",
+    it: "Condivisione tra le tue biblioteche: il tuo consenso",
+    de: "Austausch zwischen deinen Bibliotheken: deine Zustimmung",
+    ca: "Compartició entre les teves biblioteques: el teu consentiment",
+    eo: "Kunhavigo inter viaj bibliotekoj: via konsento",
+    nl: "Delen tussen je bibliotheken: jouw toestemming",
+    el: "Κοινή χρήση μεταξύ των βιβλιοθηκών σου: η συγκατάθεσή σου"
+  },
+  "partnership_transparence_enabled.intro": {
+    "pt-BR": "Duas bibliotecas das quais você é membro(a/e) formaram uma parceria e ativaram um compartilhamento de informações sobre você entre elas (« transparência »). Esse compartilhamento só vale se você consentir. Você pode dar ou retirar seu consentimento a qualquer momento no seu espaço.",
+    fr: "Deux bibliothèques dont tu es membre ont formé un partenariat et activé un partage d'informations te concernant entre elles (« transparence »). Ce partage ne prend effet que si tu y consens. Tu peux donner ou retirer ton consentement à tout moment depuis ton espace.",
+    es: "Dos bibliotecas de las que sos miembre formaron una asociación y activaron un intercambio de información sobre vos entre ellas (« transparencia »). Ese intercambio solo tiene efecto si das tu consentimiento. Podés darlo o retirarlo en cualquier momento desde tu espacio.",
+    en: "Two libraries you belong to have formed a partnership and enabled sharing of information about you between them (« transparency »). This sharing only takes effect if you consent to it. You can give or withdraw your consent at any time from your account.",
+    it: "Due biblioteche di cui fai parte hanno avviato un partenariato e attivato una condivisione di informazioni che ti riguardano tra di loro (« trasparenza »). Questa condivisione ha effetto solo se vi acconsenti. Puoi dare o revocare il tuo consenso in qualsiasi momento dal tuo spazio.",
+    de: "Zwei Bibliotheken, in denen du Mitglied bist, sind eine Partnerschaft eingegangen und haben einen Austausch von Informationen über dich zwischen ihnen aktiviert (« Transparenz »). Dieser Austausch wird nur wirksam, wenn du zustimmst. Du kannst deine Zustimmung jederzeit in deinem Konto geben oder widerrufen.",
+    ca: "Dues biblioteques de les quals ets membre han format un partenariat i han activat una compartició d'informació sobre tu entre elles (« transparència »). Aquesta compartició només té efecte si hi dónes el teu consentiment. Pots donar-lo o retirar-lo en qualsevol moment des del teu espai.",
+    eo: "Du bibliotekoj, al kiuj vi apartenas, formis partnerecon kaj aktivigis kunhavigon de informoj pri vi inter ili (« travidebleco »). Tiu kunhavigo efikas nur se vi konsentas. Vi povas doni aŭ retiri vian konsenton iam ajn el via konto.",
+    nl: "Twee bibliotheken waar je lid van bent zijn een partnerschap aangegaan en hebben het delen van informatie over jou tussen hen ingeschakeld (« transparantie »). Dit delen werkt alleen als je ermee instemt. Je kunt je toestemming op elk moment geven of intrekken vanuit je account.",
+    el: "Δύο βιβλιοθήκες στις οποίες ανήκεις σύναψαν συνεργασία και ενεργοποίησαν την κοινή χρήση πληροφοριών που σε αφορούν μεταξύ τους (« διαφάνεια »). Η κοινή χρήση ισχύει μόνο αν συναινέσεις. Μπορείς να δώσεις ή να ανακαλέσεις τη συγκατάθεσή σου ανά πάσα στιγμή από τον λογαριασμό σου."
+  },
+  "partnership_transparence_enabled.librariesLabel": {
+    "pt-BR": "Bibliotecas envolvidas", fr: "Bibliothèques concernées", es: "Bibliotecas implicadas",
+    en: "Libraries involved", it: "Biblioteche coinvolte", de: "Beteiligte Bibliotheken",
+    ca: "Biblioteques implicades", eo: "Koncernataj bibliotekoj", nl: "Betrokken bibliotheken",
+    el: "Εμπλεκόμενες βιβλιοθήκες"
+  },
+  "partnership_transparence_enabled.actionTitle": {
+    "pt-BR": "Gerir seu consentimento", fr: "Gérer ton consentement", es: "Gestionar tu consentimiento",
+    en: "Manage your consent", it: "Gestisci il tuo consenso", de: "Deine Zustimmung verwalten",
+    ca: "Gestionar el teu consentiment", eo: "Administri vian konsenton", nl: "Je toestemming beheren",
+    el: "Διαχείριση της συγκατάθεσής σου"
+  },
+  "partnership_transparence_enabled.cta": {
+    "pt-BR": "Minha conta", fr: "Mon compte", es: "Mi cuenta", en: "My account",
+    it: "Il mio spazio", de: "Mein Konto", ca: "El meu compte", eo: "Mia konto",
+    nl: "Mijn account", el: "Ο λογαριασμός μου"
+  },
   "validation_confirmed.subject": {
     "pt-BR": "Inscrição confirmada",
     fr: "Inscription confirmée",
