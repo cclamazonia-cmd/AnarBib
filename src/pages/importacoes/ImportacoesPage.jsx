@@ -140,6 +140,7 @@ export default function ImportacoesPage() {
   // Refresh manuel : le traitement (parse + matching) est asynchrone côté EF ;
   // les compteurs/états ne se mettent pas à jour en direct. Ce bouton recharge.
   const [refreshing, setRefreshing] = useState(false);
+  const [showArchived, setShowArchived] = useState(false);
   async function handleRefresh() {
     setRefreshing(true);
     try {
@@ -272,7 +273,6 @@ export default function ImportacoesPage() {
   }
 
   // ── Archiver / désarchiver un run (masquage doux) ─────
-  const [showArchived, setShowArchived] = useState(false);
   async function handleArchiveRun(runId, archived) {
     setMsg({ text: t({ id: 'importacoes.archiving' }), kind: 'info' });
     try {
