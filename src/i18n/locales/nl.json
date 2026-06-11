@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Concept aangemaakt",
   "importacoes.fila.loadMore": "50 meer laden",
   "importacoes.fila.showing": "{shown} van {total} weergegeven.",
-  "importacoes.fila.showingAll": "{total} rijen."
+  "importacoes.fila.showingAll": "{total} rijen.",
+  "importacoes.fila.selectAll": "Alles selecteren",
+  "importacoes.fila.selectedCount": "{n} geselecteerd",
+  "importacoes.fila.createSelected": "{n} concept(en) maken",
+  "importacoes.fila.clearSelection": "Selectie wissen",
+  "importacoes.fila.allMatches": "Alle overeenkomsten",
+  "importacoes.fila.filterNew": "Nieuw",
+  "importacoes.fila.filterDup": "Mogelijke duplicaten"
 }

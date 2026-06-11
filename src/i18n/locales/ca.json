@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Esborrany creat",
   "importacoes.fila.loadMore": "Carrega’n 50 més",
   "importacoes.fila.showing": "Mostrant {shown} de {total}.",
-  "importacoes.fila.showingAll": "{total} línies."
+  "importacoes.fila.showingAll": "{total} línies.",
+  "importacoes.fila.selectAll": "Selecciona-ho tot",
+  "importacoes.fila.selectedCount": "{n} seleccionada/es",
+  "importacoes.fila.createSelected": "Crea {n} esborrany(s)",
+  "importacoes.fila.clearSelection": "Esborra la selecció",
+  "importacoes.fila.allMatches": "Totes les correspondències",
+  "importacoes.fila.filterNew": "Novetats",
+  "importacoes.fila.filterDup": "Possibles duplicats"
 }

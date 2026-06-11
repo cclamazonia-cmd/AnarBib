@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Δημιουργήθηκε προσχέδιο",
   "importacoes.fila.loadMore": "Φόρτωση 50 ακόμη",
   "importacoes.fila.showing": "Εμφάνιση {shown} από {total}.",
-  "importacoes.fila.showingAll": "{total} γραμμές."
+  "importacoes.fila.showingAll": "{total} γραμμές.",
+  "importacoes.fila.selectAll": "Επιλογή όλων",
+  "importacoes.fila.selectedCount": "{n} επιλεγμένες",
+  "importacoes.fila.createSelected": "Δημιουργία {n} προσχεδίων",
+  "importacoes.fila.clearSelection": "Καθαρισμός επιλογής",
+  "importacoes.fila.allMatches": "Όλες οι αντιστοιχίσεις",
+  "importacoes.fila.filterNew": "Νέες εγγραφές",
+  "importacoes.fila.filterDup": "Πιθανά διπλότυπα"
 }

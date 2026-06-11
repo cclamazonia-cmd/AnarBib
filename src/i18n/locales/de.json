@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Entwurf erstellt",
   "importacoes.fila.loadMore": "50 weitere laden",
   "importacoes.fila.showing": "{shown} von {total} angezeigt.",
-  "importacoes.fila.showingAll": "{total} Zeilen."
+  "importacoes.fila.showingAll": "{total} Zeilen.",
+  "importacoes.fila.selectAll": "Alle auswählen",
+  "importacoes.fila.selectedCount": "{n} ausgewählt",
+  "importacoes.fila.createSelected": "{n} Entwurf/Entwürfe erstellen",
+  "importacoes.fila.clearSelection": "Auswahl aufheben",
+  "importacoes.fila.allMatches": "Alle Treffer",
+  "importacoes.fila.filterNew": "Neuzugänge",
+  "importacoes.fila.filterDup": "Mögliche Duplikate"
 }

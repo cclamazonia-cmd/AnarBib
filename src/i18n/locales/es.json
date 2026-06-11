@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Borrador creado",
   "importacoes.fila.loadMore": "Cargar 50 más",
   "importacoes.fila.showing": "Mostrando {shown} de {total}.",
-  "importacoes.fila.showingAll": "{total} líneas."
+  "importacoes.fila.showingAll": "{total} líneas.",
+  "importacoes.fila.selectAll": "Seleccionar todo",
+  "importacoes.fila.selectedCount": "{n} seleccionada(s)",
+  "importacoes.fila.createSelected": "Crear {n} borrador(es)",
+  "importacoes.fila.clearSelection": "Borrar selección",
+  "importacoes.fila.allMatches": "Todas las correspondencias",
+  "importacoes.fila.filterNew": "Novedades",
+  "importacoes.fila.filterDup": "Posibles duplicados"
 }

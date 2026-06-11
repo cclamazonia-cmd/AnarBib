@@ -142,6 +142,10 @@ export default function ImportacoesPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
   const [rowLimit, setRowLimit] = useState(50);
+  // Validation par-ligne : sélection de nouveautés à promouvoir en lot.
+  const [selectedRows, setSelectedRows] = useState(() => new Set());
+  const [promotingSel, setPromotingSel] = useState(false);
+  const [filaMatchFilter, setFilaMatchFilter] = useState('');
   async function handleRefresh() {
     setRefreshing(true);
     try {
@@ -164,11 +168,23 @@ export default function ImportacoesPage() {
     if (filaStateFilter) {
       rows = rows.filter(r => r.review_status === filaStateFilter);
     }
+    if (filaMatchFilter === 'new') {
+      rows = rows.filter(r => r.match_status === 'new_record');
+    } else if (filaMatchFilter === 'dup') {
+      rows = rows.filter(r => ['possible_duplicate', 'matched_book', 'matched_draft'].includes(r.match_status));
+    }
     return rows;
-  }, [runRows, filaStateFilter]);
+  }, [runRows, filaStateFilter, filaMatchFilter]);
 
-  // Réinitialise la pagination quand on change de run ou de filtre.
-  useEffect(() => { setRowLimit(50); }, [selectedRunId, filaStateFilter]);
+  // Nouveautés sélectionnables : non encore promues (sans brouillon créé).
+  const selectableIds = useMemo(
+    () => filteredRunRows.filter(r => r.match_status === 'new_record' && !r.created_book_draft_id).map(r => r.id),
+    [filteredRunRows]
+  );
+  const allVisibleSelected = selectableIds.length > 0 && selectableIds.every(id => selectedRows.has(id));
+
+  // Réinitialise pagination + sélection quand on change de run ou de filtre.
+  useEffect(() => { setRowLimit(50); setSelectedRows(new Set()); }, [selectedRunId, filaStateFilter, filaMatchFilter]);
 
   const circuitHints = useMemo(() => ({
     migracao: t({ id: 'importacoes.circuit.migracao.hint' }),
@@ -258,6 +274,48 @@ export default function ImportacoesPage() {
       if (selectedRunId === runId) await loadRunRows(runId);
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
+  // ── Validation par-ligne : sélection puis promotion en lot ─────
+  function toggleRow(id) {
+    setSelectedRows(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+  function toggleAllVisible() {
+    setSelectedRows(prev => {
+      const allSel = selectableIds.length > 0 && selectableIds.every(id => prev.has(id));
+      return allSel ? new Set() : new Set(selectableIds);
+    });
+  }
+  async function handlePromoteSelected() {
+    const ids = [...selectedRows];
+    if (!ids.length || !selectedRunId) return;
+    setPromotingSel(true);
+    setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
+    try {
+      // On accepte les nouveautés sélectionnées (accept_new) ; promote ne crée
+      // alors un brouillon que pour ces lignes (les autres restent en attente,
+      // celles déjà promues sont ignorées car created_book_draft_id non nul).
+      await supabase.rpc('fn_import_set_editorial', {
+        p_run_id: Number(selectedRunId),
+        p_row_ids: ids,
+        p_editorial_decision: 'accept_new',
+        p_editorial_note: 'page import: validation individuelle',
+      });
+      const { error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(selectedRunId) });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'importacoes.draftsCreated' }), kind: 'ok' });
+      setSelectedRows(new Set());
+      await loadRuns();
+      await loadRunRows(selectedRunId);
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally {
+      setPromotingSel(false);
     }
   }
 
@@ -887,6 +945,11 @@ export default function ImportacoesPage() {
                   <option value="approved">{t({ id: 'importacoes.fila.state.approved' })}</option>
                   <option value="rejected">{t({ id: 'importacoes.fila.state.rejected' })}</option>
                 </select>
+                <select className="ab-select" style={{ width: 'auto' }} value={filaMatchFilter} onChange={e => setFilaMatchFilter(e.target.value)}>
+                  <option value="">{t({ id: 'importacoes.fila.allMatches' })}</option>
+                  <option value="new">{t({ id: 'importacoes.fila.filterNew' })}</option>
+                  <option value="dup">{t({ id: 'importacoes.fila.filterDup' })}</option>
+                </select>
               </div>
 
               {/* Run selector */}
@@ -911,10 +974,26 @@ export default function ImportacoesPage() {
                 <div style={{ overflowX: 'auto' }}>
                   {runRowsLoading && <p className="imp-note">{t({ id: 'importacoes.loadingRows' })}</p>}
                   {!runRowsLoading && filteredRunRows.length === 0 && <p className="imp-note">{t({ id: 'importacoes.noRowsAvailable' })}</p>}
+                  {selectedRows.size > 0 && (
+                    <div className="imp-batchbar" style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '4px 0 12px', padding: '8px 12px', background: 'var(--brand-surface-2, rgba(0,0,0,.04))', borderRadius: 8, flexWrap: 'wrap' }}>
+                      <span className="imp-note">{t({ id: 'importacoes.fila.selectedCount' }, { n: selectedRows.size })}</span>
+                      <button className="cat-btn" disabled={promotingSel} onClick={handlePromoteSelected}>
+                        {promotingSel ? t({ id: 'importacoes.generatingDrafts' }) : t({ id: 'importacoes.fila.createSelected' }, { n: selectedRows.size })}
+                      </button>
+                      <button className="cat-btn secondary" disabled={promotingSel} onClick={() => setSelectedRows(new Set())}>
+                        {t({ id: 'importacoes.fila.clearSelection' })}
+                      </button>
+                    </div>
+                  )}
                   {filteredRunRows.length > 0 && (
                     <table className="imp-queue">
                       <thead>
                         <tr>
+                          <th style={{ width: 28 }}>
+                            <input type="checkbox" aria-label={t({ id: 'importacoes.fila.selectAll' })}
+                              checked={allVisibleSelected} disabled={selectableIds.length === 0}
+                              onChange={toggleAllVisible} />
+                          </th>
                           <th>{t({ id: 'importacoes.fila.col.record' })}</th>
                           <th>{t({ id: 'importacoes.fila.col.source' })}</th>
                           <th>{t({ id: 'importacoes.fila.col.match' })}</th>
@@ -928,8 +1007,15 @@ export default function ImportacoesPage() {
                           const isNew = ms === 'new_record';
                           const isDup = ms === 'possible_duplicate' || ms === 'matched_book' || ms === 'matched_draft';
                           const ed = row.editorial_decision || 'pending';
+                          const selectable = isNew && !row.created_book_draft_id;
                           return (
                             <tr key={row.id}>
+                              <td>
+                                {selectable && (
+                                  <input type="checkbox" checked={selectedRows.has(row.id)}
+                                    onChange={() => toggleRow(row.id)} />
+                                )}
+                              </td>
                               <td>
                                 <div className="ttl">{row.title || t({ id: 'importacoes.noTitle' })}</div>
                                 <div className="au">{row.responsibility_statement || '—'}</div>

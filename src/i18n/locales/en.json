@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Draft created",
   "importacoes.fila.loadMore": "Load 50 more",
   "importacoes.fila.showing": "Showing {shown} of {total}.",
-  "importacoes.fila.showingAll": "{total} rows."
+  "importacoes.fila.showingAll": "{total} rows.",
+  "importacoes.fila.selectAll": "Select all",
+  "importacoes.fila.selectedCount": "{n} selected",
+  "importacoes.fila.createSelected": "Create {n} draft(s)",
+  "importacoes.fila.clearSelection": "Clear selection",
+  "importacoes.fila.allMatches": "All matches",
+  "importacoes.fila.filterNew": "New records",
+  "importacoes.fila.filterDup": "Possible duplicates"
 }

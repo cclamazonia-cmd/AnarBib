@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Brouillon créé",
   "importacoes.fila.loadMore": "Charger 50 de plus",
   "importacoes.fila.showing": "Affichage de {shown} sur {total}.",
-  "importacoes.fila.showingAll": "{total} lignes."
+  "importacoes.fila.showingAll": "{total} lignes.",
+  "importacoes.fila.selectAll": "Tout sélectionner",
+  "importacoes.fila.selectedCount": "{n} sélectionnée(s)",
+  "importacoes.fila.createSelected": "Créer {n} brouillon(s)",
+  "importacoes.fila.clearSelection": "Effacer la sélection",
+  "importacoes.fila.allMatches": "Toutes les correspondances",
+  "importacoes.fila.filterNew": "Nouveautés",
+  "importacoes.fila.filterDup": "Doublons possibles"
 }

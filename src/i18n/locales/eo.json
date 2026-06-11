@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Malneto kreita",
   "importacoes.fila.loadMore": "Ŝargi pliajn 50",
   "importacoes.fila.showing": "Montrante {shown} el {total}.",
-  "importacoes.fila.showingAll": "{total} linioj."
+  "importacoes.fila.showingAll": "{total} linioj.",
+  "importacoes.fila.selectAll": "Elekti ĉion",
+  "importacoes.fila.selectedCount": "{n} elektita(j)",
+  "importacoes.fila.createSelected": "Krei {n} malneto(j)n",
+  "importacoes.fila.clearSelection": "Vakigi elekton",
+  "importacoes.fila.allMatches": "Ĉiuj kongruoj",
+  "importacoes.fila.filterNew": "Novaĵoj",
+  "importacoes.fila.filterDup": "Eblaj duplikatoj"
 }

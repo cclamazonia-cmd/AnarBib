@@ -4113,5 +4113,12 @@
   "importacoes.fila.draftCreated": "Bozza creata",
   "importacoes.fila.loadMore": "Carica altri 50",
   "importacoes.fila.showing": "Visualizzati {shown} di {total}.",
-  "importacoes.fila.showingAll": "{total} righe."
+  "importacoes.fila.showingAll": "{total} righe.",
+  "importacoes.fila.selectAll": "Seleziona tutto",
+  "importacoes.fila.selectedCount": "{n} selezionata/e",
+  "importacoes.fila.createSelected": "Crea {n} bozza/e",
+  "importacoes.fila.clearSelection": "Annulla selezione",
+  "importacoes.fila.allMatches": "Tutte le corrispondenze",
+  "importacoes.fila.filterNew": "Novità",
+  "importacoes.fila.filterDup": "Possibili duplicati"
 }
