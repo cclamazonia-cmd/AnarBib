@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
 
 /**
  * ExternalDepositPartnerSection
@@ -85,7 +86,7 @@ export default function ExternalDepositPartnerSection({ libraryId, canEdit }) {
       });
       setName(''); setBaseUrl(''); setCountry(''); setNotes(''); setSuggestions([]);
     } catch (err) {
-      setMsg({ kind: 'warn', text: err?.message || t({ id: 'biblioteca.extPartner.error' }) });
+      setMsg({ kind: 'warn', text: localizeError(err, t) || t({ id: 'biblioteca.extPartner.error' }) });
     } finally { setBusy(false); }
   }
 
