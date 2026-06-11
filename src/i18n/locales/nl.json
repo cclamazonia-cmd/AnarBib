@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "In een gedeelde catalogus veroorzaakt een duplicaat ernstige inconsistenties. Deze rijen worden NIET automatisch gepromoveerd — controleer ze en koppel bij voorkeur aan het bestaande record.",
   "importacoes.wizard.preview.dupBadge": "al in catalogus",
   "importacoes.wizard.promote.plan": "{novos} nieuw(e) record(s) → concepten. {retenus} rij(en) achtergehouden (duplicaten of te beoordelen).",
-  "importacoes.wizard.promote.heldBack": "{n} rij(en) achtergehouden, niet gepromoveerd (mogelijke duplicaten of te beoordelen) — behandel ze handmatig om inconsistenties te voorkomen."
+  "importacoes.wizard.promote.heldBack": "{n} rij(en) achtergehouden, niet gepromoveerd (mogelijke duplicaten of te beoordelen) — behandel ze handmatig om inconsistenties te voorkomen.",
+  "biblioteca.extPartner.title": "Externe depotpartner",
+  "biblioteca.extPartner.hint": "Registreer een extern collectief (dat zijn catalogus als bestand heeft aangeleverd, bv. een Zotero-export). Het wordt aangemaakt als partnerentiteit en komt beschikbaar als bron bij het importeren.",
+  "biblioteca.extPartner.name": "Naam van de partner",
+  "biblioteca.extPartner.namePlaceholder": "Bijv. CIRA Marseille",
+  "biblioteca.extPartner.country": "Land (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "Catalogus-URL (optioneel)",
+  "biblioteca.extPartner.notes": "Notities (optioneel)",
+  "biblioteca.extPartner.dupHint": "Vergelijkbare partners al geregistreerd — controleer voordat je een duplicaat aanmaakt:",
+  "biblioteca.extPartner.importAuth": "Staat het importeren van gegevens van deze partner toe",
+  "biblioteca.extPartner.register": "Partner registreren",
+  "biblioteca.extPartner.registering": "Bezig met registreren…",
+  "biblioteca.extPartner.created": "Partner ‘{name}’ aangemaakt en beschikbaar bij het importeren.",
+  "biblioteca.extPartner.linked": "Partner ‘{name}’ bestond al — depotbron gekoppeld.",
+  "biblioteca.extPartner.error": "Fout bij het registreren van de partner."
 }

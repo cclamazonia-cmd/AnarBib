@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "En un catàleg mutualitzat, crear un duplicat genera incoherències greus. Aquestes línies NO es promouran automàticament — verifiqueu-les i prefereixu vincular a la fitxa existent.",
   "importacoes.wizard.preview.dupBadge": "ja al catàleg",
   "importacoes.wizard.promote.plan": "{novos} nova/es fitxa/es → esborranys. {retenus} línia/es retinguda/es (duplicats o a revisar).",
-  "importacoes.wizard.promote.heldBack": "{n} línia/es retinguda/es, no promogudes (duplicats potencials o a revisar) — tracteu-les manualment per evitar incoherències."
+  "importacoes.wizard.promote.heldBack": "{n} línia/es retinguda/es, no promogudes (duplicats potencials o a revisar) — tracteu-les manualment per evitar incoherències.",
+  "biblioteca.extPartner.title": "Soci extern de dipòsit",
+  "biblioteca.extPartner.hint": "Registreu un col·lectiu extern (que ha lliurat el seu catàleg en fitxer, p. ex. exportació Zotero). Es crearà com a entitat sòcia i estarà disponible com a font a la importació.",
+  "biblioteca.extPartner.name": "Nom del soci",
+  "biblioteca.extPartner.namePlaceholder": "Ex.: CIRA Marseille",
+  "biblioteca.extPartner.country": "País (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "URL del catàleg (opcional)",
+  "biblioteca.extPartner.notes": "Notes (opcional)",
+  "biblioteca.extPartner.dupHint": "Socis similars ja registrats — verifiqueu abans de crear un duplicat:",
+  "biblioteca.extPartner.importAuth": "Autoritza la importació de dades d’aquest soci",
+  "biblioteca.extPartner.register": "Registra el soci",
+  "biblioteca.extPartner.registering": "S’està registrant…",
+  "biblioteca.extPartner.created": "Soci «{name}» creat i disponible a la importació.",
+  "biblioteca.extPartner.linked": "Soci «{name}» ja existia — font de dipòsit vinculada.",
+  "biblioteca.extPartner.error": "Error en registrar el soci."
 }

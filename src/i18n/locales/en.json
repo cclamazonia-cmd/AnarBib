@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "On a shared catalog, creating a duplicate causes serious inconsistencies. These rows will NOT be promoted automatically — review them and prefer linking to the existing record.",
   "importacoes.wizard.preview.dupBadge": "already in catalog",
   "importacoes.wizard.promote.plan": "{novos} new record(s) → drafts. {retenus} row(s) held back (duplicates or to review).",
-  "importacoes.wizard.promote.heldBack": "{n} row(s) held back, not promoted (potential duplicates or to review) — handle them manually to avoid inconsistencies."
+  "importacoes.wizard.promote.heldBack": "{n} row(s) held back, not promoted (potential duplicates or to review) — handle them manually to avoid inconsistencies.",
+  "biblioteca.extPartner.title": "External deposit partner",
+  "biblioteca.extPartner.hint": "Register an external collective (who handed over their catalog as a file, e.g. a Zotero export). It will be created as a partner entity and become an available source at import.",
+  "biblioteca.extPartner.name": "Partner name",
+  "biblioteca.extPartner.namePlaceholder": "E.g. CIRA Marseille",
+  "biblioteca.extPartner.country": "Country (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "Catalog URL (optional)",
+  "biblioteca.extPartner.notes": "Notes (optional)",
+  "biblioteca.extPartner.dupHint": "Similar partners already registered — check before creating a duplicate:",
+  "biblioteca.extPartner.importAuth": "Authorizes importing data from this partner",
+  "biblioteca.extPartner.register": "Register the partner",
+  "biblioteca.extPartner.registering": "Registering…",
+  "biblioteca.extPartner.created": "Partner “{name}” created and available at import.",
+  "biblioteca.extPartner.linked": "Partner “{name}” already existed — deposit source linked.",
+  "biblioteca.extPartner.error": "Error registering the partner."
 }

@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "Sur un catalogue mutualisé, créer un doublon génère des incohérences graves. Ces lignes ne seront PAS promues automatiquement — vérifiez-les et privilégiez le rattachement à la notice existante.",
   "importacoes.wizard.preview.dupBadge": "déjà au catalogue",
   "importacoes.wizard.promote.plan": "{novos} nouvelle(s) notice(s) → brouillons. {retenus} ligne(s) retenue(s) (doublons ou à revoir).",
-  "importacoes.wizard.promote.heldBack": "{n} ligne(s) retenue(s), non promues (doublons potentiels ou à revoir) — traitez-les manuellement pour éviter les incohérences."
+  "importacoes.wizard.promote.heldBack": "{n} ligne(s) retenue(s), non promues (doublons potentiels ou à revoir) — traitez-les manuellement pour éviter les incohérences.",
+  "biblioteca.extPartner.title": "Partenaire externe de dépôt",
+  "biblioteca.extPartner.hint": "Enregistrez un collectif externe (qui a fourni son catalogue en fichier, ex. export Zotero). Il sera créé comme entité partenaire et deviendra une source disponible à l’import.",
+  "biblioteca.extPartner.name": "Nom du partenaire",
+  "biblioteca.extPartner.namePlaceholder": "Ex. : CIRA Marseille",
+  "biblioteca.extPartner.country": "Pays (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "URL du catalogue (optionnel)",
+  "biblioteca.extPartner.notes": "Notes (optionnel)",
+  "biblioteca.extPartner.dupHint": "Partenaires similaires déjà enregistrés — vérifiez avant de créer un doublon :",
+  "biblioteca.extPartner.importAuth": "Autorise l’import de données de ce partenaire",
+  "biblioteca.extPartner.register": "Enregistrer le partenaire",
+  "biblioteca.extPartner.registering": "Enregistrement…",
+  "biblioteca.extPartner.created": "Partenaire « {name} » créé et disponible à l’import.",
+  "biblioteca.extPartner.linked": "Partenaire « {name} » déjà existant — source de dépôt liée.",
+  "biblioteca.extPartner.error": "Erreur lors de l’enregistrement du partenaire."
 }

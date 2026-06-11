@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "Num catálogo mutualizado, criar um duplicado gera incoerências graves. Estas linhas NÃO serão promovidas automaticamente — verifique-as e prefira o vínculo à notícia existente.",
   "importacoes.wizard.preview.dupBadge": "já no catálogo",
   "importacoes.wizard.promote.plan": "{novos} nova(s) notícia(s) → rascunhos. {retenus} linha(s) retida(s) (duplicados ou a revisar).",
-  "importacoes.wizard.promote.heldBack": "{n} linha(s) retida(s), não promovidas (duplicados potenciais ou a revisar) — trate-as manualmente para evitar incoerências."
+  "importacoes.wizard.promote.heldBack": "{n} linha(s) retida(s), não promovidas (duplicados potenciais ou a revisar) — trate-as manualmente para evitar incoerências.",
+  "biblioteca.extPartner.title": "Parceiro externo de depósito",
+  "biblioteca.extPartner.hint": "Registre um coletivo externo (que entregou seu catálogo em arquivo, ex. export Zotero). Será criado como entidade parceira e ficará disponível como fonte na importação.",
+  "biblioteca.extPartner.name": "Nome do parceiro",
+  "biblioteca.extPartner.namePlaceholder": "Ex.: CIRA Marseille",
+  "biblioteca.extPartner.country": "País (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "URL do catálogo (opcional)",
+  "biblioteca.extPartner.notes": "Notas (opcional)",
+  "biblioteca.extPartner.dupHint": "Parceiros semelhantes já registrados — verifique antes de criar um duplicado:",
+  "biblioteca.extPartner.importAuth": "Autoriza a importação de dados deste parceiro",
+  "biblioteca.extPartner.register": "Registrar o parceiro",
+  "biblioteca.extPartner.registering": "Registrando…",
+  "biblioteca.extPartner.created": "Parceiro «{name}» criado e disponível na importação.",
+  "biblioteca.extPartner.linked": "Parceiro «{name}» já existia — fonte de depósito vinculada.",
+  "biblioteca.extPartner.error": "Erro ao registrar o parceiro."
 }

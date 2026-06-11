@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "In un catalogo mutualizzato, creare un duplicato genera incoerenze gravi. Queste righe NON saranno promosse automaticamente — verificatele e preferite il collegamento alla scheda esistente.",
   "importacoes.wizard.preview.dupBadge": "già in catalogo",
   "importacoes.wizard.promote.plan": "{novos} nuova/e scheda/e → bozze. {retenus} riga/righe trattenuta/e (duplicati o da rivedere).",
-  "importacoes.wizard.promote.heldBack": "{n} riga/righe trattenuta/e, non promosse (potenziali duplicati o da rivedere) — gestitele manualmente per evitare incoerenze."
+  "importacoes.wizard.promote.heldBack": "{n} riga/righe trattenuta/e, non promosse (potenziali duplicati o da rivedere) — gestitele manualmente per evitare incoerenze.",
+  "biblioteca.extPartner.title": "Partner esterno di deposito",
+  "biblioteca.extPartner.hint": "Registra un collettivo esterno (che ha fornito il suo catalogo come file, es. esportazione Zotero). Sarà creato come entità partner e diventerà una fonte disponibile all’importazione.",
+  "biblioteca.extPartner.name": "Nome del partner",
+  "biblioteca.extPartner.namePlaceholder": "Es.: CIRA Marseille",
+  "biblioteca.extPartner.country": "Paese (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "URL del catalogo (opzionale)",
+  "biblioteca.extPartner.notes": "Note (opzionale)",
+  "biblioteca.extPartner.dupHint": "Partner simili già registrati — verifica prima di creare un duplicato:",
+  "biblioteca.extPartner.importAuth": "Autorizza l’importazione dei dati di questo partner",
+  "biblioteca.extPartner.register": "Registra il partner",
+  "biblioteca.extPartner.registering": "Registrazione…",
+  "biblioteca.extPartner.created": "Partner «{name}» creato e disponibile all’importazione.",
+  "biblioteca.extPartner.linked": "Partner «{name}» già esistente — fonte di deposito collegata.",
+  "biblioteca.extPartner.error": "Errore nella registrazione del partner."
 }

@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "En komuna katalogo, krei duplikaton kaŭzas gravajn malkoherecojn. Ĉi tiuj linioj NE estos aŭtomate promociitaj — kontrolu ilin kaj preferu ligon al la ekzistanta registro.",
   "importacoes.wizard.preview.dupBadge": "jam en katalogo",
   "importacoes.wizard.promote.plan": "{novos} nova(j) registro(j) → malnetoj. {retenus} linio(j) retenita(j) (duplikatoj aŭ por revizii).",
-  "importacoes.wizard.promote.heldBack": "{n} linio(j) retenita(j), ne promociitaj (eblaj duplikatoj aŭ por revizii) — traktu ilin permane por eviti malkoherecojn."
+  "importacoes.wizard.promote.heldBack": "{n} linio(j) retenita(j), ne promociitaj (eblaj duplikatoj aŭ por revizii) — traktu ilin permane por eviti malkoherecojn.",
+  "biblioteca.extPartner.title": "Ekstera deponeja partnero",
+  "biblioteca.extPartner.hint": "Registru eksteran kolektivon (kiu transdonis sian katalogon kiel dosieron, ekz. Zotero-eksporto). Ĝi estos kreita kiel partnera ento kaj fariĝos disponebla fonto ĉe importo.",
+  "biblioteca.extPartner.name": "Nomo de la partnero",
+  "biblioteca.extPartner.namePlaceholder": "Ekz.: CIRA Marseille",
+  "biblioteca.extPartner.country": "Lando (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "URL de la katalogo (nedeviga)",
+  "biblioteca.extPartner.notes": "Notoj (nedeviga)",
+  "biblioteca.extPartner.dupHint": "Similaj partneroj jam registritaj — kontrolu antaŭ ol krei duplikaton:",
+  "biblioteca.extPartner.importAuth": "Permesas la importon de datumoj de ĉi tiu partnero",
+  "biblioteca.extPartner.register": "Registri la partneron",
+  "biblioteca.extPartner.registering": "Registrado…",
+  "biblioteca.extPartner.created": "Partnero «{name}» kreita kaj disponebla ĉe importo.",
+  "biblioteca.extPartner.linked": "Partnero «{name}» jam ekzistis — deponeja fonto ligita.",
+  "biblioteca.extPartner.error": "Eraro dum registrado de la partnero."
 }

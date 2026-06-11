@@ -25,6 +25,7 @@ import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
 import LibraryPartnershipsSection from '@/components/library/LibraryPartnershipsSection';
 import StabilizedPartnershipsSection from '@/components/library/StabilizedPartnershipsSection';
+import ExternalDepositPartnerSection from '@/components/library/ExternalDepositPartnerSection';
 import PebHistorySection from '@/components/library/PebHistorySection';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
@@ -1595,6 +1596,15 @@ export default function BibliotecaPage() {
             libraryId={libraryId}
             canEdit={isCoord}
             allLibraries={allLibraries}
+          />
+          {/* Inc. B2 : enregistrer un partenaire EXTERNE de dépôt (ex. CIRA
+              Marseille) -> crée l'entité catalog_partners + la source de dépôt
+              liée, qui apparaît ensuite à l'import. Remplace le « + » texte-libre
+              cassé de la page Import. Spec : docs/journal/cadrages/
+              CADRAGE_partenaire_import_unification_2026-06-11.md */}
+          <ExternalDepositPartnerSection
+            libraryId={libraryId}
+            canEdit={isCoord}
           />
           {/* §21 PARTNER P5b : console des partenariats STABILISÉS (cycle de vie +
               droits réciproques), au-dessus de l'annuaire déclaratif ci-dessus. */}

@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "En un catálogo mutualizado, crear un duplicado genera incoherencias graves. Estas líneas NO se promoverán automáticamente — verifíquelas y prefiera vincular a la ficha existente.",
   "importacoes.wizard.preview.dupBadge": "ya en el catálogo",
   "importacoes.wizard.promote.plan": "{novos} nueva(s) ficha(s) → borradores. {retenus} línea(s) retenida(s) (duplicados o a revisar).",
-  "importacoes.wizard.promote.heldBack": "{n} línea(s) retenida(s), no promovidas (duplicados potenciales o a revisar) — trátelas manualmente para evitar incoherencias."
+  "importacoes.wizard.promote.heldBack": "{n} línea(s) retenida(s), no promovidas (duplicados potenciales o a revisar) — trátelas manualmente para evitar incoherencias.",
+  "biblioteca.extPartner.title": "Socio externo de depósito",
+  "biblioteca.extPartner.hint": "Registre un colectivo externo (que entregó su catálogo en archivo, p. ej. exportación Zotero). Se creará como entidad asociada y estará disponible como fuente en la importación.",
+  "biblioteca.extPartner.name": "Nombre del socio",
+  "biblioteca.extPartner.namePlaceholder": "Ej.: CIRA Marseille",
+  "biblioteca.extPartner.country": "País (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "URL del catálogo (opcional)",
+  "biblioteca.extPartner.notes": "Notas (opcional)",
+  "biblioteca.extPartner.dupHint": "Socios similares ya registrados — verifique antes de crear un duplicado:",
+  "biblioteca.extPartner.importAuth": "Autoriza la importación de datos de este socio",
+  "biblioteca.extPartner.register": "Registrar el socio",
+  "biblioteca.extPartner.registering": "Registrando…",
+  "biblioteca.extPartner.created": "Socio «{name}» creado y disponible en la importación.",
+  "biblioteca.extPartner.linked": "Socio «{name}» ya existía — fuente de depósito vinculada.",
+  "biblioteca.extPartner.error": "Error al registrar el socio."
 }

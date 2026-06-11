@@ -4070,5 +4070,19 @@
   "importacoes.wizard.preview.dupBody": "In einem geteilten Katalog erzeugt ein Duplikat schwere Inkonsistenzen. Diese Zeilen werden NICHT automatisch übernommen — prüfe sie und verknüpfe bevorzugt mit dem bestehenden Datensatz.",
   "importacoes.wizard.preview.dupBadge": "schon im Katalog",
   "importacoes.wizard.promote.plan": "{novos} neue(r) Datensatz/Datensätze → Entwürfe. {retenus} Zeile(n) zurückgehalten (Duplikate oder zu prüfen).",
-  "importacoes.wizard.promote.heldBack": "{n} Zeile(n) zurückgehalten, nicht übernommen (mögliche Duplikate oder zu prüfen) — manuell behandeln, um Inkonsistenzen zu vermeiden."
+  "importacoes.wizard.promote.heldBack": "{n} Zeile(n) zurückgehalten, nicht übernommen (mögliche Duplikate oder zu prüfen) — manuell behandeln, um Inkonsistenzen zu vermeiden.",
+  "biblioteca.extPartner.title": "Externer Depot-Partner",
+  "biblioteca.extPartner.hint": "Registriere ein externes Kollektiv (das seinen Katalog als Datei übergeben hat, z. B. Zotero-Export). Es wird als Partner-Entität angelegt und steht beim Import als Quelle zur Verfügung.",
+  "biblioteca.extPartner.name": "Partnername",
+  "biblioteca.extPartner.namePlaceholder": "Z. B. CIRA Marseille",
+  "biblioteca.extPartner.country": "Land (ISO-2)",
+  "biblioteca.extPartner.baseUrl": "Katalog-URL (optional)",
+  "biblioteca.extPartner.notes": "Notizen (optional)",
+  "biblioteca.extPartner.dupHint": "Ähnliche Partner bereits registriert — vor dem Anlegen eines Duplikats prüfen:",
+  "biblioteca.extPartner.importAuth": "Erlaubt den Datenimport von diesem Partner",
+  "biblioteca.extPartner.register": "Partner registrieren",
+  "biblioteca.extPartner.registering": "Wird registriert…",
+  "biblioteca.extPartner.created": "Partner „{name}“ angelegt und beim Import verfügbar.",
+  "biblioteca.extPartner.linked": "Partner „{name}“ existierte bereits — Depot-Quelle verknüpft.",
+  "biblioteca.extPartner.error": "Fehler beim Registrieren des Partners."
 }
