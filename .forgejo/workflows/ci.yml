@@ -84,7 +84,15 @@ jobs:
           git add -A
           git commit -m "Deploy from main@${GITHUB_SHA:0:8}"
           git remote add origin "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
-          git push --force origin pages
+          # Push lourd (tout le dist/ en commit orphelin) → Codeberg renvoie parfois
+          # un HTTP 504 transitoire. Retry 3× au lieu de faire échouer le job.
+          n=0
+          until git push --force origin pages; do
+            n=$((n+1))
+            if [ "$n" -ge 3 ]; then echo "✗ push Pages échoué après 3 tentatives"; exit 1; fi
+            echo "↻ push Pages échoué (tentative $n/3 — Codeberg 504 ?) — nouvelle tentative dans 10s…"
+            sleep 10
+          done
           echo "✓ Pages déployé"
 
   # ──────────────────── Job 2 : backend (Supabase) — sur push ────────────────
