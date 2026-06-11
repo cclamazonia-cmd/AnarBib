@@ -230,6 +230,22 @@ export default function ImportacoesPage() {
   async function handlePromote(runId) {
     setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
     try {
+      // Sécurité dédup : fn_import_promote ne promeut que les lignes dont
+      // editorial_decision est 'accept_new'/'accept_duplicate'. Or les lignes de
+      // staging sont 'pending' par défaut -> sans cette étape, 0 brouillon créé
+      // (les boutons « semblaient ne pas marcher »). On auto-accepte les notices
+      // NEUVES (new_record) ; les doublons restent en attente (jamais promus à
+      // l'aveugle). Même logique que le wizard.
+      const { data: rrows } = await supabase.rpc('fn_import_list_run_rows', { p_run_id: Number(runId) });
+      const newIds = (Array.isArray(rrows) ? rrows : []).filter(r => r.match_status === 'new_record').map(r => r.id);
+      if (newIds.length) {
+        await supabase.rpc('fn_import_set_editorial', {
+          p_run_id: Number(runId),
+          p_row_ids: newIds,
+          p_editorial_decision: 'accept_new',
+          p_editorial_note: 'page import: auto-accept nouveautes',
+        });
+      }
       const { error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId) });
       if (error) throw error;
       setMsg({ text: t({ id: 'importacoes.draftsCreated' }), kind: 'ok' });
