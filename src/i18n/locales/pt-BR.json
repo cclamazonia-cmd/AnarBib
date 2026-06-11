@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Correspondência no catálogo — verificar",
   "importacoes.fila.reject": "Rejeitar {n}",
   "importacoes.fila.rejecting": "Rejeitando linhas…",
-  "importacoes.fila.rejected": "Linhas rejeitadas."
+  "importacoes.fila.rejected": "Linhas rejeitadas.",
+  "importacoes.dashboard.title": "Visão geral",
+  "importacoes.add.title": "Adicionar registros",
+  "importacoes.add.mode.arquivo": "Arquivo",
+  "importacoes.add.mode.busca": "Busca externa",
+  "importacoes.add.mode.oai": "Coleta OAI",
+  "importacoes.lotes.title": "Lotes de importação",
+  "importacoes.lotes.empty": "Nenhum lote ainda."
 }

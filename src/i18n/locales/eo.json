@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Kongruo en katalogo — kontroli",
   "importacoes.fila.reject": "Malakcepti {n}",
   "importacoes.fila.rejecting": "Malakceptante liniojn…",
-  "importacoes.fila.rejected": "Linioj malakceptitaj."
+  "importacoes.fila.rejected": "Linioj malakceptitaj.",
+  "importacoes.dashboard.title": "Superrigardo",
+  "importacoes.add.title": "Aldoni registrojn",
+  "importacoes.add.mode.arquivo": "Dosiero",
+  "importacoes.add.mode.busca": "Ekstera serĉo",
+  "importacoes.add.mode.oai": "OAI-rikolto",
+  "importacoes.lotes.title": "Importaj lotoj",
+  "importacoes.lotes.empty": "Ankoraŭ neniu loto."
 }

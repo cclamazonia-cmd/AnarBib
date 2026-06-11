@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Coincidència al catàleg — verificar",
   "importacoes.fila.reject": "Rebutja {n}",
   "importacoes.fila.rejecting": "Rebutjant línies…",
-  "importacoes.fila.rejected": "Línies rebutjades."
+  "importacoes.fila.rejected": "Línies rebutjades.",
+  "importacoes.dashboard.title": "Visió general",
+  "importacoes.add.title": "Afegir registres",
+  "importacoes.add.mode.arquivo": "Fitxer",
+  "importacoes.add.mode.busca": "Cerca externa",
+  "importacoes.add.mode.oai": "Recol·lecció OAI",
+  "importacoes.lotes.title": "Lots d’importació",
+  "importacoes.lotes.empty": "Encara cap lot."
 }

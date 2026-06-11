@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Katalogtreffer — prüfen",
   "importacoes.fila.reject": "{n} ablehnen",
   "importacoes.fila.rejecting": "Zeilen werden abgelehnt…",
-  "importacoes.fila.rejected": "Zeilen abgelehnt."
+  "importacoes.fila.rejected": "Zeilen abgelehnt.",
+  "importacoes.dashboard.title": "Übersicht",
+  "importacoes.add.title": "Datensätze hinzufügen",
+  "importacoes.add.mode.arquivo": "Datei",
+  "importacoes.add.mode.busca": "Externe Suche",
+  "importacoes.add.mode.oai": "OAI-Ernte",
+  "importacoes.lotes.title": "Import-Stapel",
+  "importacoes.lotes.empty": "Noch keine Stapel."
 }

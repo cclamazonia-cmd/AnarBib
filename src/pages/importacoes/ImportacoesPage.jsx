@@ -34,8 +34,6 @@ function formatDate(iso) {
     + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
-const CIRCUIT_KEYS = ['migracao', 'arquivo', 'fontes'];
-
 export default function ImportacoesPage() {
   useAuth();
   const { role, libraryId, isNetworkAdmin } = useLibrary();
@@ -44,7 +42,8 @@ export default function ImportacoesPage() {
 
   // ── Core UI state ──────────────────────────────────────
   const [sentido, setSentido] = useState('import');
-  const [circuit, setCircuit] = useState('migracao');
+  // Origine d'ajout (fusion des 3 ex-circuits) : fichier / busca / oai.
+  const [addMode, setAddMode] = useState('arquivo');
   const [msg, setMsg] = useState({ text: '', kind: '' });
   // ── Export de lote (Lot 5, IMP-13) ─────────────────────
   const [exportFormat, setExportFormat] = useState('csv');
@@ -72,12 +71,6 @@ export default function ImportacoesPage() {
   const [searchSource, setSearchSource] = useState('bn');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
-
-  // ── Deposit (format maison) ────────────────────────────
-  const [depositPartnerName, setDepositPartnerName] = useState('');
-  const [depositSourceId, setDepositSourceId] = useState('');
-  const [depositFile, setDepositFile] = useState(null);
-  const [depositBusy, setDepositBusy] = useState(false);
 
   // ── OAI-PMH harvesting ────────────────────────────────
   const [oaiSources, setOaiSources] = useState([]);
@@ -200,12 +193,6 @@ export default function ImportacoesPage() {
   // Réinitialise pagination + sélection quand on change de run ou de filtre.
   useEffect(() => { setRowLimit(50); setSelectedRows(new Set()); }, [selectedRunId, filaStateFilter, filaMatchFilter]);
 
-  const circuitHints = useMemo(() => ({
-    migracao: t({ id: 'importacoes.circuit.migracao.hint' }),
-    arquivo: t({ id: 'importacoes.circuit.arquivo.hint' }),
-    fontes: t({ id: 'importacoes.circuit.fontes.hint' }),
-  }), [t]);
-
   // ── Role gating ────────────────────────────────────────
   const roleLoaded = role !== null && role !== undefined;
   // IMP-14 : import/export sous l'autorité des coordinateurs (aligné sur le
@@ -259,36 +246,6 @@ export default function ImportacoesPage() {
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setUploading(false); }
-  }
-
-  // ── Promote run → book_drafts ──────────────────────────
-  async function handlePromote(runId) {
-    setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
-    try {
-      // Sécurité dédup : fn_import_promote ne promeut que les lignes dont
-      // editorial_decision est 'accept_new'/'accept_duplicate'. Or les lignes de
-      // staging sont 'pending' par défaut -> sans cette étape, 0 brouillon créé
-      // (les boutons « semblaient ne pas marcher »). On auto-accepte les notices
-      // NEUVES (new_record) ; les doublons restent en attente (jamais promus à
-      // l'aveugle). Même logique que le wizard.
-      const { data: rrows } = await supabase.rpc('fn_import_list_run_rows', { p_run_id: Number(runId) });
-      const newIds = (Array.isArray(rrows) ? rrows : []).filter(r => r.match_status === 'new_record').map(r => r.id);
-      if (newIds.length) {
-        await supabase.rpc('fn_import_set_editorial', {
-          p_run_id: Number(runId),
-          p_row_ids: newIds,
-          p_editorial_decision: 'accept_new',
-          p_editorial_note: 'page import: auto-accept nouveautes',
-        });
-      }
-      const { error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(runId) });
-      if (error) throw error;
-      setMsg({ text: t({ id: 'importacoes.draftsCreated' }), kind: 'ok' });
-      await loadRuns();
-      if (selectedRunId === runId) await loadRunRows(runId);
-    } catch (err) {
-      setMsg({ text: localizeError(err, t), kind: 'error' });
-    }
   }
 
   // ── Validation par-ligne : sélection puis promotion en lot ─────
@@ -406,49 +363,6 @@ export default function ImportacoesPage() {
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setSearching(false); }
-  }
-
-  // ── Register deposit source (format maison) ────────────
-  async function handleRegisterDepositSource() {
-    if (!depositPartnerName.trim()) return;
-    setDepositBusy(true);
-    try {
-      const { data, error } = await supabase.rpc('fn_import_register_deposit_source', {
-        p_partner_name: depositPartnerName.trim(),
-      });
-      if (error) throw error;
-      setMsg({ text: t({ id: data?.created ? 'importacoes.deposit.registered' : 'importacoes.deposit.alreadyExists' }, { name: depositPartnerName.trim() }), kind: 'ok' });
-      setDepositSourceId(String(data.source_id));
-      setDepositPartnerName('');
-      await loadSources();
-    } catch (err) {
-      setMsg({ text: localizeError(err, t), kind: 'error' });
-    } finally { setDepositBusy(false); }
-  }
-
-  // ── Upload + process deposit ──────────────────────────
-  async function handleProcessDeposit() {
-    if (!depositSourceId) { setMsg({ text: t({ id: 'importacoes.deposit.selectSource' }), kind: 'error' }); return; }
-    if (!depositFile) { setMsg({ text: t({ id: 'importacoes.selectFile' }), kind: 'error' }); return; }
-    setDepositBusy(true);
-    setMsg({ text: t({ id: 'importacoes.deposit.uploading' }), kind: 'info' });
-    try {
-      const storagePath = `${depositSourceId}/${Date.now()}-${(depositFile.name || 'file').replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-      const { error: upErr } = await supabase.storage.from('partner-catalog-deposits').upload(storagePath, depositFile, { upsert: false });
-      if (upErr) throw upErr;
-
-      const { data, error } = await supabase.rpc('fn_import_process_deposit', {
-        p_source_id: Number(depositSourceId),
-        p_storage_path: storagePath,
-        p_original_filename: depositFile.name,
-      });
-      if (error) throw error;
-      setMsg({ text: t({ id: 'importacoes.deposit.processed' }, { filename: data?.filename || depositFile.name, format: data?.format || '?' }), kind: 'ok' });
-      setDepositFile(null);
-      await loadRuns();
-    } catch (err) {
-      setMsg({ text: localizeError(err, t), kind: 'error' });
-    } finally { setDepositBusy(false); }
   }
 
   // ── Trigger OAI harvest (manual) ────────────────────────
@@ -639,158 +553,218 @@ export default function ImportacoesPage() {
             </div>
           </div>
 
-          {/* ── Circuit selector ─────────────────────────── */}
-          <div className="imp-seg" role="group" style={{ marginBottom: 6 }}>
-            {CIRCUIT_KEYS.map(c => (
-              <button key={c} className={circuit === c ? 'on' : ''} onClick={() => { setCircuit(c); setSelectedRunId(null); }}>
-                {t({ id: `importacoes.circuit.${c}` })}
-              </button>
-            ))}
-          </div>
-          <p className="imp-seg-hint">{circuitHints[circuit]}</p>
-
-          {/* ── Panel: Migração de sistema ────────────────── */}
-          {circuit === 'migracao' && (
-            <div className="imp-sheet">
-              <div className="imp-sheet__head">
-                <span className="imp-sheet__title">
-                  {t({ id: 'importacoes.circuit.migracao' })}
-                  <Pill>UNIMARC · ISO2709</Pill>
-                </span>
-              </div>
-              <div className="imp-sheet__body">
-                <div className="imp-stats">
-                  <div className="imp-stat"><div className="imp-stat__n">{runStats.totalRows}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.stagingRows' })}</div></div>
-                  <div className="imp-stat"><div className="imp-stat__n">{runStats.draftsCreated}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.promoted' })}</div></div>
-                  <div className="imp-stat"><div className="imp-stat__n">{runStats.pending}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.pending' })}</div></div>
-                  <div className="imp-stat"><div className="imp-stat__n">{runStats.total}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.runs' })}</div></div>
-                </div>
-                {runs.filter(r => r.run_status === 'ready_for_review').length > 0 && (
-                  <button className="cat-btn primary" onClick={() => {
-                    const pending = runs.find(r => r.run_status === 'ready_for_review');
-                    if (pending) handlePromote(pending.id);
-                  }}>
-                    {t({ id: 'importacoes.migracao.promote' }, { count: runs.filter(r => r.run_status === 'ready_for_review').length })}
-                  </button>
-                )}
-                {runs.filter(r => r.run_status === 'ready_for_review').length === 0 && (
-                  <p className="imp-note">{t({ id: 'importacoes.migracao.noPending' })}</p>
-                )}
+          {/* ── Tableau de bord ─────────────────────────── */}
+          <div className="imp-sheet" style={{ marginBottom: 18 }}>
+            <div className="imp-sheet__head">
+              <span className="imp-sheet__title">{t({ id: 'importacoes.dashboard.title' })}</span>
+            </div>
+            <div className="imp-sheet__body">
+              <div className="imp-stats">
+                <div className="imp-stat"><div className="imp-stat__n">{runStats.total}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.runs' })}</div></div>
+                <div className="imp-stat"><div className="imp-stat__n">{runStats.totalRows}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.stagingRows' })}</div></div>
+                <div className="imp-stat"><div className="imp-stat__n">{runStats.pending}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.pending' })}</div></div>
+                <div className="imp-stat"><div className="imp-stat__n">{runStats.draftsCreated}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.promoted' })}</div></div>
               </div>
             </div>
-          )}
+          </div>
 
-          {/* ── Panel: Importação de arquivo ──────────────── */}
-          {circuit === 'arquivo' && (
-            <div className="imp-sheet">
-              <div className="imp-sheet__head">
-                <span className="imp-sheet__title">
-                  {t({ id: 'importacoes.circuit.arquivo' })}
-                  <Pill>CSV · JSON · RIS · BibTeX</Pill>
-                </span>
+          {/* ── Adicionar registros (origine unique : fichier / busca / oai) ── */}
+          <div className="imp-sheet" style={{ marginBottom: 18 }}>
+            <div className="imp-sheet__head">
+              <span className="imp-sheet__title">{t({ id: 'importacoes.add.title' })}</span>
+            </div>
+            <div className="imp-sheet__body">
+              <div className="imp-seg" role="group" style={{ marginBottom: 14 }}>
+                {['arquivo', 'busca', 'oai'].map(m => (
+                  <button key={m} className={addMode === m ? 'on' : ''} onClick={() => setAddMode(m)}>
+                    {t({ id: 'importacoes.add.mode.' + m })}
+                  </button>
+                ))}
               </div>
-              <div className="imp-sheet__body">
-                <div className="imp-stats">
-                  <div className="imp-stat"><div className="imp-stat__n">{runs.length}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.runs' })}</div></div>
-                  <div className="imp-stat"><div className="imp-stat__n">{runStats.totalRows}</div><div className="imp-stat__l">{t({ id: 'importacoes.stat.stagingRows' })}</div></div>
-                </div>
 
-                {/* Upload */}
-                <div className="imp-row3" style={{ marginBottom: 14 }}>
-                  <div className="ab-field">
-                    <label className="ab-field__label">{t({ id: 'importacoes.file.source' })}</label>
-                    <select className="ab-select" value={sourceId} onChange={e => setSourceId(e.target.value)}>
-                      <option value="">{t({ id: 'importacoes.reception.selectSourcePlaceholder' })}</option>
-                      {sources.map(s => <option key={s.id} value={String(s.id)}>{s.partner_name}</option>)}
-                    </select>
-                  </div>
-                  <div className="ab-field" style={{ gridColumn: 'span 2' }}>
-                    <label className="ab-field__label">{t({ id: 'importacoes.arquivo.fileLabel' })}</label>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                      <label className="cat-btn secondary" style={{ cursor: 'pointer', fontSize: '.85rem' }}>
-                        {t({ id: 'importacoes.reception.chooseFile' })}
-                        <input type="file" accept={ACCEPTED_EXTENSIONS} onChange={e => setFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
-                      </label>
-                      {file && <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{file.name} ({(file.size / 1024).toFixed(0)} KB)</span>}
+              {/* Origine : fichier — upload unifié, toute source, via fn_import_create */}
+              {addMode === 'arquivo' && (
+                <>
+                  <div className="imp-row3" style={{ marginBottom: 14 }}>
+                    <div className="ab-field">
+                      <label className="ab-field__label">{t({ id: 'importacoes.file.source' })}</label>
+                      <select className="ab-select" value={sourceId} onChange={e => setSourceId(e.target.value)}>
+                        <option value="">{t({ id: 'importacoes.reception.selectSourcePlaceholder' })}</option>
+                        {sources.map(s => <option key={s.id} value={String(s.id)}>{s.partner_name}</option>)}
+                      </select>
+                    </div>
+                    <div className="ab-field" style={{ gridColumn: 'span 2' }}>
+                      <label className="ab-field__label">{t({ id: 'importacoes.arquivo.fileLabel' })}</label>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <label className="cat-btn secondary" style={{ cursor: 'pointer', fontSize: '.85rem' }}>
+                          {t({ id: 'importacoes.reception.chooseFile' })}
+                          <input type="file" accept={ACCEPTED_EXTENSIONS} onChange={e => setFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
+                        </label>
+                        {file && <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{file.name} ({(file.size / 1024).toFixed(0)} KB)</span>}
+                      </div>
                     </div>
                   </div>
-                </div>
+                  <button className="cat-btn primary" onClick={handleUploadAndProcess} disabled={uploading || !file || !sourceId}>
+                    {uploading ? t({ id: 'importacoes.uploading' }) : t({ id: 'importacoes.arquivo.uploadAndProcess' })}
+                  </button>
+                </>
+              )}
 
-                <button className="cat-btn primary" onClick={handleUploadAndProcess} disabled={uploading || !file || !sourceId}>
-                  {uploading ? t({ id: 'importacoes.uploading' }) : t({ id: 'importacoes.arquivo.uploadAndProcess' })}
-                </button>
-
-                {/* Run list for this circuit */}
-                {runs.length > 0 && (
-                  <div style={{ marginTop: 16 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 0 8px' }}>
-                      <h4 style={{ margin: 0, fontSize: '.94rem' }}>{t({ id: 'importacoes.arquivo.recentRuns' })}</h4>
-                      <label style={{ fontSize: '.78rem', color: 'var(--brand-muted)', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
-                        <input type="checkbox" checked={showArchived} onChange={e => setShowArchived(e.target.checked)} />
-                        {t({ id: 'importacoes.showArchived' })}
-                      </label>
+              {/* Origine : recherche externe (BN / WorldCat) */}
+              {addMode === 'busca' && (
+                <>
+                  <div className="imp-row3" style={{ marginBottom: 12 }}>
+                    <div className="ab-field">
+                      <label className="ab-field__label">{t({ id: 'importacoes.fontes.sourceLabel' })}</label>
+                      <select className="ab-select" value={searchSource} onChange={e => setSearchSource(e.target.value)}>
+                        <option value="bn">Biblioteca Nacional</option>
+                        <option value="worldcat">WorldCat / OCLC</option>
+                      </select>
                     </div>
-                    <div style={{ maxHeight: 200, overflowY: 'auto', border: '1px solid rgba(255,255,255,.06)', borderRadius: 8 }}>
-                      {runs.filter(r => showArchived || !r.archived_at).slice(0, 12).map(r => (
-                        <div key={r.id} onClick={() => { setSelectedRunId(r.id); loadRunRows(r.id); }}
-                          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: selectedRunId === r.id ? 'rgba(29,78,216,.12)' : 'transparent', opacity: r.archived_at ? 0.5 : 1 }}>
-                          <div>
-                            <span style={{ fontWeight: 600, fontSize: '.88rem' }}>#{r.id}</span>
-                            <span style={{ color: 'var(--brand-muted)', fontSize: '.82rem', marginLeft: 8 }}>{r.original_filename || '—'}</span>
-                          </div>
-                          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                            <Pill variant={r.run_status === 'drafts_created' ? 'ok' : r.run_status === 'failed' ? 'danger' : r.run_status === 'ready_for_review' ? 'warn' : 'info'}>
-                              {STATUS[r.run_status] || r.run_status}
-                            </Pill>
-                            {r.run_status === 'ready_for_review' && (
+                    <div className="ab-field" style={{ gridColumn: 'span 2' }}>
+                      <label className="ab-field__label">{t({ id: 'importacoes.fontes.searchLabel' })}</label>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <input className="ab-input" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                          placeholder="9788575591360"
+                          onKeyDown={e => { if (e.key === 'Enter') handleSearch(); }} />
+                        <button className="cat-btn primary" onClick={handleSearch} disabled={searching} style={{ flexShrink: 0 }}>
+                          {searching ? t({ id: 'common.searching' }) : t({ id: 'importacoes.fontes.search' })}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {searchResults.length > 0 && (
+                    <table className="imp-map">
+                      <thead><tr>
+                        <th>{t({ id: 'importacoes.fontes.result' })}</th>
+                        <th>{t({ id: 'importacoes.fontes.author' })}</th>
+                        <th>{t({ id: 'importacoes.fontes.format' })}</th>
+                        <th></th>
+                      </tr></thead>
+                      <tbody>
+                        {searchResults.map((c, i) => (
+                          <tr key={i}>
+                            <td style={{ fontWeight: 600 }}>{c.title}</td>
+                            <td style={{ color: 'var(--brand-muted)' }}>{c.responsibility_statement || c.contributors?.[0]?.label || '—'}</td>
+                            <td><Pill>{c.source || '—'}</Pill></td>
+                            <td>
                               <button className="cat-btn primary" style={{ fontSize: '.78rem', padding: '4px 10px', minHeight: 0 }}
-                                onClick={e => { e.stopPropagation(); handlePromote(r.id); }}>
-                                {t({ id: 'importacoes.generateDrafts' })}
+                                onClick={() => handleIngestCandidate(c)}>
+                                {t({ id: 'importacoes.fontes.importCandidate' })}
                               </button>
-                            )}
-                            <button className="cat-btn ghost" title={t({ id: r.archived_at ? 'importacoes.unarchiveRun' : 'importacoes.archiveRun' })}
-                              style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
-                              onClick={e => { e.stopPropagation(); handleArchiveRun(r.id, !r.archived_at); }}>
-                              {r.archived_at ? '↩' : '🗄'}
-                            </button>
-                            <button className="cat-btn ghost" title={t({ id: 'importacoes.deleteRun' })}
-                              style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
-                              onClick={e => { e.stopPropagation(); handleDeleteRun(r.id); }}>
-                              🗑
-                            </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </>
+              )}
+
+              {/* Origine : moisson OAI-PMH */}
+              {addMode === 'oai' && (
+                <>
+                  <p className="imp-note" style={{ marginBottom: 12 }}>{t({ id: 'importacoes.oai.desc' })}</p>
+                  {oaiLoading && <p className="imp-note">{t({ id: 'common.loading' })}</p>}
+                  {!oaiLoading && oaiSources.length === 0 && (
+                    <p className="imp-note">{t({ id: 'importacoes.oai.noSources' })}</p>
+                  )}
+                  {oaiSources.length > 0 && (
+                    <div className="imp-partners">
+                      {oaiSources.map(s => (
+                        <div key={s.id} className="imp-pcard">
+                          <div className="imp-pcard__top">
+                            <h4>{s.partner_name}</h4>
+                            <Pill variant={s.harvest_status === 'idle' ? 'muted' : s.harvest_status === 'in_progress' ? 'info' : s.harvest_status === 'error' ? 'danger' : s.harvest_status === 'completed' ? 'ok' : 'warn'}>
+                              {t({ id: `importacoes.oai.status.${s.harvest_status || 'idle'}` })}
+                            </Pill>
                           </div>
+                          <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginBottom: 6 }}>
+                            {s.oai_endpoint_url}
+                            {s.oai_set && <span> — set: {s.oai_set}</span>}
+                          </div>
+                          <div className="imp-flags" style={{ marginBottom: 8 }}>
+                            <span className="imp-flagchip imp-flagchip--on">{s.oai_metadata_prefix || 'marcxml'}</span>
+                            <span className="imp-flagchip">{t({ id: 'importacoes.oai.lotsPerCycle' }, { n: s.lots_per_cycle || 5 })}</span>
+                            {s.total_records_harvested > 0 && (
+                              <span className="imp-flagchip imp-flagchip--on">{t({ id: 'importacoes.oai.totalHarvested' }, { n: s.total_records_harvested })}</span>
+                            )}
+                            {s.last_harvest_at && (
+                              <span className="imp-flagchip">{t({ id: 'importacoes.oai.lastHarvest' })} {formatDate(s.last_harvest_at)}</span>
+                            )}
+                          </div>
+                          {s.last_error && (
+                            <p style={{ fontSize: '.8rem', color: 'var(--color-danger)', margin: '0 0 8px' }}>{s.last_error}</p>
+                          )}
+                          <button className="cat-btn primary" style={{ fontSize: '.82rem', padding: '5px 14px', minHeight: 0 }}
+                            onClick={() => handleHarvestOai(s.id)}
+                            disabled={s.harvest_status === 'in_progress'}>
+                            {s.harvest_status === 'in_progress' ? t({ id: 'importacoes.oai.harvesting' }) : t({ id: 'importacoes.oai.harvestNow' })}
+                          </button>
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </>
+              )}
             </div>
-          )}
+          </div>
 
-          {/* ── Panel: Fontes externas ────────────────────── */}
-          {circuit === 'fontes' && (
+          {/* ── Lotes de importação (liste unique : archiver / supprimer) ── */}
+          <div className="imp-sheet" style={{ marginBottom: 18 }}>
+            <div className="imp-sheet__head">
+              <span className="imp-sheet__title">{t({ id: 'importacoes.lotes.title' })}</span>
+              <label style={{ fontSize: '.78rem', color: 'var(--brand-muted)', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
+                <input type="checkbox" checked={showArchived} onChange={e => setShowArchived(e.target.checked)} />
+                {t({ id: 'importacoes.showArchived' })}
+              </label>
+            </div>
+            <div className="imp-sheet__body">
+              {runs.filter(r => showArchived || !r.archived_at).length === 0 && (
+                <p className="imp-note">{t({ id: 'importacoes.lotes.empty' })}</p>
+              )}
+              {runs.filter(r => showArchived || !r.archived_at).length > 0 && (
+                <div style={{ maxHeight: 260, overflowY: 'auto', border: '1px solid rgba(255,255,255,.06)', borderRadius: 8 }}>
+                  {runs.filter(r => showArchived || !r.archived_at).slice(0, 20).map(r => (
+                    <div key={r.id} onClick={() => { setSelectedRunId(r.id); loadRunRows(r.id); }}
+                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: selectedRunId === r.id ? 'rgba(29,78,216,.12)' : 'transparent', opacity: r.archived_at ? 0.5 : 1 }}>
+                      <div>
+                        <span style={{ fontWeight: 600, fontSize: '.88rem' }}>#{r.id}</span>
+                        <span style={{ color: 'var(--brand-muted)', fontSize: '.82rem', marginLeft: 8 }}>{r.source_name || r.original_filename || '—'}</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                        <Pill variant={r.run_status === 'drafts_created' ? 'ok' : r.run_status === 'failed' ? 'danger' : r.run_status === 'ready_for_review' ? 'warn' : 'info'}>
+                          {STATUS[r.run_status] || r.run_status}
+                        </Pill>
+                        <button className="cat-btn ghost" title={t({ id: r.archived_at ? 'importacoes.unarchiveRun' : 'importacoes.archiveRun' })}
+                          style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
+                          onClick={e => { e.stopPropagation(); handleArchiveRun(r.id, !r.archived_at); }}>
+                          {r.archived_at ? '↩' : '🗄'}
+                        </button>
+                        <button className="cat-btn ghost" title={t({ id: 'importacoes.deleteRun' })}
+                          style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
+                          onClick={e => { e.stopPropagation(); handleDeleteRun(r.id); }}>
+                          🗑
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Fontes parceiras (référence : qui autorise l'import) ── */}
+          {sources.filter(s => s.source_kind !== 'institutional').length > 0 && (
             <div className="imp-sheet">
               <div className="imp-sheet__head">
                 <span className="imp-sheet__title">
-                  {t({ id: 'importacoes.circuit.fontes' })}
-                  <Pill>{t({ id: 'importacoes.fontes.subtitle' })}</Pill>
+                  {t({ id: 'importacoes.fontes.companheiras' })}
+                  <Pill>{t({ id: 'importacoes.fontes.consentFirst' })}</Pill>
                 </span>
               </div>
               <div className="imp-sheet__body">
-                <p className="imp-plane-intro">
-                  {t({ id: 'importacoes.fontes.twoPlanes' })}
-                </p>
-
-                {/* Plan A: companheiras */}
-                <h4 className="imp-plane-h">
-                  {t({ id: 'importacoes.fontes.companheiras' })}
-                  <Pill>{t({ id: 'importacoes.fontes.consentFirst' })}</Pill>
-                </h4>
-                <div className="imp-partners" style={{ marginBottom: 16 }}>
-                  {sources.filter(s => s.source_kind !== 'institutional').length === 0 && (
-                    <p className="imp-note">{t({ id: 'importacoes.fontes.noCompanheiras' })}</p>
-                  )}
+                <div className="imp-partners">
                   {sources.filter(s => s.source_kind !== 'institutional').map(s => (
                     <div key={s.id} className="imp-pcard">
                       <div className="imp-pcard__top">
@@ -805,156 +779,6 @@ export default function ImportacoesPage() {
                     </div>
                   ))}
                 </div>
-
-                {/* Dépôt format maison */}
-                <h4 className="imp-plane-h" style={{ marginTop: 24 }}>
-                  {t({ id: 'importacoes.deposit.title' })}
-                  <Pill>{t({ id: 'importacoes.deposit.pill' })}</Pill>
-                </h4>
-                <p className="imp-note" style={{ marginBottom: 12 }}>
-                  {t({ id: 'importacoes.deposit.desc' })}
-                </p>
-                <div className="imp-row3" style={{ marginBottom: 12 }}>
-                  <div className="ab-field">
-                    <label className="ab-field__label">{t({ id: 'importacoes.deposit.source' })}</label>
-                    <select className="ab-select" value={depositSourceId} onChange={e => setDepositSourceId(e.target.value)}>
-                      <option value="">{t({ id: 'importacoes.deposit.selectSource' })}</option>
-                      {sources.filter(s => s.source_kind === 'partner_deposit').map(s => (
-                        <option key={s.id} value={String(s.id)}>{s.partner_name}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="ab-field">
-                    <label className="ab-field__label">{t({ id: 'importacoes.deposit.newPartner' })}</label>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <input className="ab-input" value={depositPartnerName} onChange={e => setDepositPartnerName(e.target.value)}
-                        placeholder={t({ id: 'importacoes.deposit.partnerPlaceholder' })}
-                        onKeyDown={e => { if (e.key === 'Enter') handleRegisterDepositSource(); }} />
-                      <button className="cat-btn secondary" onClick={handleRegisterDepositSource}
-                        disabled={depositBusy || !depositPartnerName.trim()} style={{ flexShrink: 0, fontSize: '.82rem' }}>
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div className="ab-field">
-                    <label className="ab-field__label">{t({ id: 'importacoes.deposit.fileLabel' })}</label>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                      <label className="cat-btn secondary" style={{ cursor: 'pointer', fontSize: '.85rem' }}>
-                        {t({ id: 'importacoes.reception.chooseFile' })}
-                        <input type="file" accept={ACCEPTED_EXTENSIONS} onChange={e => setDepositFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
-                      </label>
-                      {depositFile && <span style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{depositFile.name}</span>}
-                    </div>
-                  </div>
-                </div>
-                <button className="cat-btn primary" onClick={handleProcessDeposit}
-                  disabled={depositBusy || !depositSourceId || !depositFile}>
-                  {depositBusy ? t({ id: 'importacoes.deposit.uploading' }) : t({ id: 'importacoes.deposit.uploadBtn' })}
-                </button>
-
-                {/* Plan B: institucionais */}
-                <h4 className="imp-plane-h" style={{ marginTop: 24 }}>
-                  {t({ id: 'importacoes.fontes.institucionais' })}
-                  <Pill>{t({ id: 'importacoes.fontes.noReciprocity' })}</Pill>
-                </h4>
-                <div className="imp-row3" style={{ marginBottom: 12 }}>
-                  <div className="ab-field">
-                    <label className="ab-field__label">{t({ id: 'importacoes.fontes.sourceLabel' })}</label>
-                    <select className="ab-select" value={searchSource} onChange={e => setSearchSource(e.target.value)}>
-                      <option value="bn">Biblioteca Nacional</option>
-                      <option value="worldcat">WorldCat / OCLC</option>
-                    </select>
-                  </div>
-                  <div className="ab-field" style={{ gridColumn: 'span 2' }}>
-                    <label className="ab-field__label">{t({ id: 'importacoes.fontes.searchLabel' })}</label>
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <input className="ab-input" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                        placeholder="9788575591360"
-                        onKeyDown={e => { if (e.key === 'Enter') handleSearch(); }} />
-                      <button className="cat-btn primary" onClick={handleSearch} disabled={searching} style={{ flexShrink: 0 }}>
-                        {searching ? t({ id: 'common.searching' }) : t({ id: 'importacoes.fontes.search' })}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {searchResults.length > 0 && (
-                  <table className="imp-map">
-                    <thead><tr>
-                      <th>{t({ id: 'importacoes.fontes.result' })}</th>
-                      <th>{t({ id: 'importacoes.fontes.author' })}</th>
-                      <th>{t({ id: 'importacoes.fontes.format' })}</th>
-                      <th></th>
-                    </tr></thead>
-                    <tbody>
-                      {searchResults.map((c, i) => (
-                        <tr key={i}>
-                          <td style={{ fontWeight: 600 }}>{c.title}</td>
-                          <td style={{ color: 'var(--brand-muted)' }}>{c.responsibility_statement || c.contributors?.[0]?.label || '—'}</td>
-                          <td><Pill>{c.source || '—'}</Pill></td>
-                          <td>
-                            <button className="cat-btn primary" style={{ fontSize: '.78rem', padding: '4px 10px', minHeight: 0 }}
-                              onClick={() => handleIngestCandidate(c)}>
-                              {t({ id: 'importacoes.fontes.importCandidate' })}
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-
-                {/* Plan C: OAI-PMH harvesting */}
-                <h4 className="imp-plane-h" style={{ marginTop: 24 }}>
-                  {t({ id: 'importacoes.oai.title' })}
-                  <Pill>OAI-PMH</Pill>
-                </h4>
-                <p className="imp-note" style={{ marginBottom: 12 }}>
-                  {t({ id: 'importacoes.oai.desc' })}
-                </p>
-
-                {oaiLoading && <p className="imp-note">{t({ id: 'common.loading' })}</p>}
-
-                {!oaiLoading && oaiSources.length === 0 && (
-                  <p className="imp-note">{t({ id: 'importacoes.oai.noSources' })}</p>
-                )}
-
-                {oaiSources.length > 0 && (
-                  <div className="imp-partners">
-                    {oaiSources.map(s => (
-                      <div key={s.id} className="imp-pcard">
-                        <div className="imp-pcard__top">
-                          <h4>{s.partner_name}</h4>
-                          <Pill variant={s.harvest_status === 'idle' ? 'muted' : s.harvest_status === 'in_progress' ? 'info' : s.harvest_status === 'error' ? 'danger' : s.harvest_status === 'completed' ? 'ok' : 'warn'}>
-                            {t({ id: `importacoes.oai.status.${s.harvest_status || 'idle'}` })}
-                          </Pill>
-                        </div>
-                        <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginBottom: 6 }}>
-                          {s.oai_endpoint_url}
-                          {s.oai_set && <span> — set: {s.oai_set}</span>}
-                        </div>
-                        <div className="imp-flags" style={{ marginBottom: 8 }}>
-                          <span className="imp-flagchip imp-flagchip--on">{s.oai_metadata_prefix || 'marcxml'}</span>
-                          <span className="imp-flagchip">{t({ id: 'importacoes.oai.lotsPerCycle' }, { n: s.lots_per_cycle || 5 })}</span>
-                          {s.total_records_harvested > 0 && (
-                            <span className="imp-flagchip imp-flagchip--on">{t({ id: 'importacoes.oai.totalHarvested' }, { n: s.total_records_harvested })}</span>
-                          )}
-                          {s.last_harvest_at && (
-                            <span className="imp-flagchip">{t({ id: 'importacoes.oai.lastHarvest' })} {formatDate(s.last_harvest_at)}</span>
-                          )}
-                        </div>
-                        {s.last_error && (
-                          <p style={{ fontSize: '.8rem', color: 'var(--color-danger)', margin: '0 0 8px' }}>{s.last_error}</p>
-                        )}
-                        <button className="cat-btn primary" style={{ fontSize: '.82rem', padding: '5px 14px', minHeight: 0 }}
-                          onClick={() => handleHarvestOai(s.id)}
-                          disabled={s.harvest_status === 'in_progress'}>
-                          {s.harvest_status === 'in_progress' ? t({ id: 'importacoes.oai.harvesting' }) : t({ id: 'importacoes.oai.harvestNow' })}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
           )}

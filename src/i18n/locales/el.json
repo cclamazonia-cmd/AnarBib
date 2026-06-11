@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Αντιστοίχιση στον κατάλογο — έλεγχος",
   "importacoes.fila.reject": "Απόρριψη {n}",
   "importacoes.fila.rejecting": "Απόρριψη γραμμών…",
-  "importacoes.fila.rejected": "Οι γραμμές απορρίφθηκαν."
+  "importacoes.fila.rejected": "Οι γραμμές απορρίφθηκαν.",
+  "importacoes.dashboard.title": "Επισκόπηση",
+  "importacoes.add.title": "Προσθήκη εγγραφών",
+  "importacoes.add.mode.arquivo": "Αρχείο",
+  "importacoes.add.mode.busca": "Εξωτερική αναζήτηση",
+  "importacoes.add.mode.oai": "Συγκομιδή OAI",
+  "importacoes.lotes.title": "Παρτίδες εισαγωγής",
+  "importacoes.lotes.empty": "Καμία παρτίδα ακόμη."
 }

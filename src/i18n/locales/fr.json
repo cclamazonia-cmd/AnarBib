@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Correspondance au catalogue — à vérifier",
   "importacoes.fila.reject": "Rejeter {n}",
   "importacoes.fila.rejecting": "Rejet des lignes…",
-  "importacoes.fila.rejected": "Lignes écartées."
+  "importacoes.fila.rejected": "Lignes écartées.",
+  "importacoes.dashboard.title": "Vue d’ensemble",
+  "importacoes.add.title": "Ajouter des notices",
+  "importacoes.add.mode.arquivo": "Fichier",
+  "importacoes.add.mode.busca": "Recherche externe",
+  "importacoes.add.mode.oai": "Moisson OAI",
+  "importacoes.lotes.title": "Lots d’import",
+  "importacoes.lotes.empty": "Aucun lot pour l’instant."
 }

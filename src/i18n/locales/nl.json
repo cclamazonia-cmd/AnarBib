@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Catalogusmatch — controleren",
   "importacoes.fila.reject": "{n} afwijzen",
   "importacoes.fila.rejecting": "Regels afwijzen…",
-  "importacoes.fila.rejected": "Regels afgewezen."
+  "importacoes.fila.rejected": "Regels afgewezen.",
+  "importacoes.dashboard.title": "Overzicht",
+  "importacoes.add.title": "Records toevoegen",
+  "importacoes.add.mode.arquivo": "Bestand",
+  "importacoes.add.mode.busca": "Externe zoekopdracht",
+  "importacoes.add.mode.oai": "OAI-oogst",
+  "importacoes.lotes.title": "Importbatches",
+  "importacoes.lotes.empty": "Nog geen batches."
 }

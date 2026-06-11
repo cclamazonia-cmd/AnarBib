@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Catalog match — to verify",
   "importacoes.fila.reject": "Reject {n}",
   "importacoes.fila.rejecting": "Rejecting rows…",
-  "importacoes.fila.rejected": "Rows rejected."
+  "importacoes.fila.rejected": "Rows rejected.",
+  "importacoes.dashboard.title": "Overview",
+  "importacoes.add.title": "Add records",
+  "importacoes.add.mode.arquivo": "File",
+  "importacoes.add.mode.busca": "External search",
+  "importacoes.add.mode.oai": "OAI harvest",
+  "importacoes.lotes.title": "Import batches",
+  "importacoes.lotes.empty": "No batches yet."
 }

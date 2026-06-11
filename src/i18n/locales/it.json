@@ -4129,5 +4129,12 @@
   "importacoes.fila.matchVerify": "Corrispondenza in catalogo — da verificare",
   "importacoes.fila.reject": "Rifiuta {n}",
   "importacoes.fila.rejecting": "Rifiuto righe…",
-  "importacoes.fila.rejected": "Righe rifiutate."
+  "importacoes.fila.rejected": "Righe rifiutate.",
+  "importacoes.dashboard.title": "Panoramica",
+  "importacoes.add.title": "Aggiungere notizie",
+  "importacoes.add.mode.arquivo": "File",
+  "importacoes.add.mode.busca": "Ricerca esterna",
+  "importacoes.add.mode.oai": "Raccolta OAI",
+  "importacoes.lotes.title": "Lotti di importazione",
+  "importacoes.lotes.empty": "Ancora nessun lotto."
 }
