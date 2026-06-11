@@ -317,3 +317,8 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
     `workflow_note`/`schedule_reply_note`, pas d'`async` dans
     `supabase.auth.onAuthStateChange`, pièges UTF-8 sous PowerShell Windows,
     contrat `actionBox` de `renderEmail`.
+11. **Backlog — archiver l'obsolète (RÈGLE).** Le backlog technique vit dans
+    `docs/backlogs/` (`AnarBib-Backlog-AAAA-MM-JJ-vNN.md`). **Toute nouvelle version
+    rend la précédente obsolète → la déplacer AUSSITÔT dans `docs/backlogs/archive/`**
+    (`git mv`). Une **seule** version courante à la racine. Tenir `docs/backlogs/INDEX.md`
+    à jour (pointer la version courante). *(Le `.docx` lisible va dans `Downloads`, hors dépôt.)*
