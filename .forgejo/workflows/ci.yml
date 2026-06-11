@@ -11,8 +11,12 @@
 #     `backend: needs: app` → sérialise et garde le gate lint/test avant tout déploiement.
 #     Durable (plus tard) : runner auto-hébergé (act_runner) = aucune limite.
 #
-# Runner : `codeberg-small-lazy`. Miroir GitHub : assuré par le dual-push `origin`
-# (Codeberg bloque les miroirs natifs) → hors CI. [skip ci]/[ci skip] = run sauté.
+# Runner : `anarbib-local` — runner AUTO-HÉBERGÉ (act_runner sur le WSL2 de Xavier).
+# Plus de limite ~5 min ni de file mutualisée ; tourne quand sa machine est allumée
+# (= quand il dev). Le découpage app/backend ci-dessous n'est donc plus imposé par
+# la limite, mais on le garde (isolation + parallélisme). Si le runner local est
+# hors-ligne, les runs attendent — c'est voulu (seul dev). Miroir GitHub : dual-push
+# `origin` (Codeberg bloque les miroirs natifs). [skip ci]/[ci skip] = run sauté.
 # Déploiements : uniquement sur push (jamais en run manuel workflow_dispatch).
 # =============================================================================
 name: CI/CD
@@ -30,7 +34,7 @@ concurrency:
 jobs:
   # ───────────────────────── Job 1 : app (build + Pages) ─────────────────────
   app:
-    runs-on: codeberg-small-lazy
+    runs-on: anarbib-local
     container:
       image: node:20
     steps:
@@ -89,7 +93,7 @@ jobs:
   backend:
     needs: app
     if: github.event_name == 'push'
-    runs-on: codeberg-small-lazy
+    runs-on: anarbib-local
     container:
       image: node:20
     steps:
