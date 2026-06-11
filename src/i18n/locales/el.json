@@ -4096,5 +4096,22 @@
   "importacoes.showArchived": "Εμφάνιση αρχειοθετημένων",
   "importacoes.archiving": "Ενημέρωση…",
   "importacoes.runArchived": "Η επεξεργασία αρχειοθετήθηκε.",
-  "importacoes.runUnarchived": "Η επεξεργασία επαναφέρθηκε."
+  "importacoes.runUnarchived": "Η επεξεργασία επαναφέρθηκε.",
+  "importacoes.fila.col.match": "Αντιστοίχιση",
+  "importacoes.fila.col.decision": "Απόφαση",
+  "importacoes.fila.col.state": "Κατάσταση",
+  "importacoes.fila.match.new_record": "Νέο",
+  "importacoes.fila.match.possible_duplicate": "Πιθανό διπλότυπο",
+  "importacoes.fila.match.matched_book": "Ήδη στον κατάλογο",
+  "importacoes.fila.match.matched_draft": "Ήδη προσχέδιο",
+  "importacoes.fila.match.manual_decision": "Χειροκίνητη απόφαση",
+  "importacoes.fila.match.unreviewed": "Μη ελεγμένο",
+  "importacoes.fila.decision.accept_new": "Αποδεκτό (νέο)",
+  "importacoes.fila.decision.accept_duplicate": "Αποδεκτό (συνδεδεμένο)",
+  "importacoes.fila.decision.reject": "Απορρίφθηκε",
+  "importacoes.fila.decision.pending": "Σε εκκρεμότητα",
+  "importacoes.fila.draftCreated": "Δημιουργήθηκε προσχέδιο",
+  "importacoes.fila.loadMore": "Φόρτωση 50 ακόμη",
+  "importacoes.fila.showing": "Εμφάνιση {shown} από {total}.",
+  "importacoes.fila.showingAll": "{total} γραμμές."
 }

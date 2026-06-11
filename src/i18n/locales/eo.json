@@ -4096,5 +4096,22 @@
   "importacoes.showArchived": "Montri arkivitajn",
   "importacoes.archiving": "Ĝisdatigado…",
   "importacoes.runArchived": "Traktado arkivita.",
-  "importacoes.runUnarchived": "Traktado malarkivita."
+  "importacoes.runUnarchived": "Traktado malarkivita.",
+  "importacoes.fila.col.match": "Kongruo",
+  "importacoes.fila.col.decision": "Decido",
+  "importacoes.fila.col.state": "Stato",
+  "importacoes.fila.match.new_record": "Novaĵo",
+  "importacoes.fila.match.possible_duplicate": "Ebla duplikato",
+  "importacoes.fila.match.matched_book": "Jam en katalogo",
+  "importacoes.fila.match.matched_draft": "Jam malneto",
+  "importacoes.fila.match.manual_decision": "Mana decido",
+  "importacoes.fila.match.unreviewed": "Nekontrolita",
+  "importacoes.fila.decision.accept_new": "Akceptita (nova)",
+  "importacoes.fila.decision.accept_duplicate": "Akceptita (ligita)",
+  "importacoes.fila.decision.reject": "Malakceptita",
+  "importacoes.fila.decision.pending": "Atendanta",
+  "importacoes.fila.draftCreated": "Malneto kreita",
+  "importacoes.fila.loadMore": "Ŝargi pliajn 50",
+  "importacoes.fila.showing": "Montrante {shown} el {total}.",
+  "importacoes.fila.showingAll": "{total} linioj."
 }

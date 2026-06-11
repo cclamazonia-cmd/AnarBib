@@ -141,6 +141,7 @@ export default function ImportacoesPage() {
   // les compteurs/états ne se mettent pas à jour en direct. Ce bouton recharge.
   const [refreshing, setRefreshing] = useState(false);
   const [showArchived, setShowArchived] = useState(false);
+  const [rowLimit, setRowLimit] = useState(50);
   async function handleRefresh() {
     setRefreshing(true);
     try {
@@ -165,6 +166,9 @@ export default function ImportacoesPage() {
     }
     return rows;
   }, [runRows, filaStateFilter]);
+
+  // Réinitialise la pagination quand on change de run ou de filtre.
+  useEffect(() => { setRowLimit(50); }, [selectedRunId, filaStateFilter]);
 
   const circuitHints = useMemo(() => ({
     migracao: t({ id: 'importacoes.circuit.migracao.hint' }),
@@ -913,51 +917,63 @@ export default function ImportacoesPage() {
                         <tr>
                           <th>{t({ id: 'importacoes.fila.col.record' })}</th>
                           <th>{t({ id: 'importacoes.fila.col.source' })}</th>
-                          <th className="imp-hide-sm">{t({ id: 'importacoes.fila.col.confidence' })}</th>
-                          <th>{t({ id: 'importacoes.fila.col.review' })}</th>
-                          <th className="imp-hide-sm">{t({ id: 'importacoes.fila.col.editorial' })}</th>
-                          <th></th>
+                          <th>{t({ id: 'importacoes.fila.col.match' })}</th>
+                          <th className="imp-hide-sm">{t({ id: 'importacoes.fila.col.decision' })}</th>
+                          <th>{t({ id: 'importacoes.fila.col.state' })}</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredRunRows.slice(0, 50).map(row => (
-                          <tr key={row.id}>
-                            <td>
-                              <div className="ttl">{row.title || t({ id: 'importacoes.noTitle' })}</div>
-                              <div className="au">{row.responsibility_statement || '—'}</div>
-                            </td>
-                            <td><Pill>{runs.find(r => r.id === row.run_id)?.source_name || '—'}</Pill></td>
-                            <td className="imp-hide-sm">
-                              <Pill variant={row.confidence >= 0.7 ? 'ok' : row.confidence >= 0.4 ? 'warn' : 'danger'}>
-                                {row.confidence != null ? `${(row.confidence * 100).toFixed(0)}%` : '—'}
-                              </Pill>
-                            </td>
-                            <td>
-                              <Pill variant={row.review_status === 'approved' ? 'ok' : row.review_status === 'rejected' ? 'danger' : 'warn'}>
-                                {row.review_status || 'pending'}
-                              </Pill>
-                            </td>
-                            <td className="imp-hide-sm">
-                              <Pill variant={row.editorial_decision === 'accept_new' || row.editorial_decision === 'accept_duplicate' ? 'ok' : row.editorial_decision === 'reject' ? 'danger' : 'muted'}>
-                                {row.editorial_decision || 'pending'}
-                              </Pill>
-                            </td>
-                            <td>
-                              <div className="rowacts">
+                        {filteredRunRows.slice(0, rowLimit).map(row => {
+                          const ms = row.match_status || 'unreviewed';
+                          const isNew = ms === 'new_record';
+                          const isDup = ms === 'possible_duplicate' || ms === 'matched_book' || ms === 'matched_draft';
+                          const ed = row.editorial_decision || 'pending';
+                          return (
+                            <tr key={row.id}>
+                              <td>
+                                <div className="ttl">{row.title || t({ id: 'importacoes.noTitle' })}</div>
+                                <div className="au">{row.responsibility_statement || '—'}</div>
+                              </td>
+                              <td><Pill>{runs.find(r => r.id === row.run_id)?.source_name || '—'}</Pill></td>
+                              <td>
+                                <Pill variant={isNew ? 'ok' : isDup ? 'warn' : 'muted'}>
+                                  {t({ id: 'importacoes.fila.match.' + ms })}
+                                </Pill>
+                                {isDup && row.confidence != null && (
+                                  <span className="imp-note" style={{ marginLeft: 6, fontSize: '.72rem' }}>
+                                    {(row.confidence * 100).toFixed(0)}%
+                                  </span>
+                                )}
+                              </td>
+                              <td className="imp-hide-sm">
+                                <Pill variant={ed === 'accept_new' || ed === 'accept_duplicate' ? 'ok' : ed === 'reject' ? 'danger' : 'muted'}>
+                                  {t({ id: 'importacoes.fila.decision.' + ed })}
+                                </Pill>
+                              </td>
+                              <td>
                                 {row.created_book_draft_id
-                                  ? <Pill variant="ok">{t({ id: 'importacoes.fila.published' })}</Pill>
-                                  : <Pill>{t({ id: 'importacoes.fila.inQueue' })}</Pill>
-                                }
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                                  ? <Pill variant="ok">{t({ id: 'importacoes.fila.draftCreated' })}</Pill>
+                                  : <Pill>{t({ id: 'importacoes.fila.inQueue' })}</Pill>}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   )}
-                  {filteredRunRows.length > 50 && (
+                  {filteredRunRows.length > rowLimit && (
+                    <div style={{ marginTop: 10, textAlign: 'center' }}>
+                      <button className="cat-btn secondary" onClick={() => setRowLimit(rowLimit + 50)}>
+                        {t({ id: 'importacoes.fila.loadMore' })}
+                      </button>
+                      <p className="imp-note" style={{ marginTop: 6 }}>
+                        {t({ id: 'importacoes.fila.showing' }, { shown: Math.min(rowLimit, filteredRunRows.length), total: filteredRunRows.length })}
+                      </p>
+                    </div>
+                  )}
+                  {filteredRunRows.length > 50 && filteredRunRows.length <= rowLimit && (
                     <p className="imp-note" style={{ marginTop: 8 }}>
-                      {t({ id: 'importacoes.fila.truncated' }, { shown: 50, total: filteredRunRows.length })}
+                      {t({ id: 'importacoes.fila.showingAll' }, { total: filteredRunRows.length })}
                     </p>
                   )}
                 </div>

@@ -4096,5 +4096,22 @@
   "importacoes.showArchived": "Show archived",
   "importacoes.archiving": "Updating…",
   "importacoes.runArchived": "Run archived.",
-  "importacoes.runUnarchived": "Run unarchived."
+  "importacoes.runUnarchived": "Run unarchived.",
+  "importacoes.fila.col.match": "Match",
+  "importacoes.fila.col.decision": "Decision",
+  "importacoes.fila.col.state": "State",
+  "importacoes.fila.match.new_record": "New",
+  "importacoes.fila.match.possible_duplicate": "Possible duplicate",
+  "importacoes.fila.match.matched_book": "Already in catalog",
+  "importacoes.fila.match.matched_draft": "Already a draft",
+  "importacoes.fila.match.manual_decision": "Manual decision",
+  "importacoes.fila.match.unreviewed": "Unreviewed",
+  "importacoes.fila.decision.accept_new": "Accepted (new)",
+  "importacoes.fila.decision.accept_duplicate": "Accepted (linked)",
+  "importacoes.fila.decision.reject": "Rejected",
+  "importacoes.fila.decision.pending": "Pending",
+  "importacoes.fila.draftCreated": "Draft created",
+  "importacoes.fila.loadMore": "Load 50 more",
+  "importacoes.fila.showing": "Showing {shown} of {total}.",
+  "importacoes.fila.showingAll": "{total} rows."
 }

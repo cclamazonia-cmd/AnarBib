@@ -4096,5 +4096,22 @@
   "importacoes.showArchived": "Mostra archiviati",
   "importacoes.archiving": "Aggiornamento…",
   "importacoes.runArchived": "Elaborazione archiviata.",
-  "importacoes.runUnarchived": "Archiviazione annullata."
+  "importacoes.runUnarchived": "Archiviazione annullata.",
+  "importacoes.fila.col.match": "Corrispondenza",
+  "importacoes.fila.col.decision": "Decisione",
+  "importacoes.fila.col.state": "Stato",
+  "importacoes.fila.match.new_record": "Novità",
+  "importacoes.fila.match.possible_duplicate": "Possibile duplicato",
+  "importacoes.fila.match.matched_book": "Già in catalogo",
+  "importacoes.fila.match.matched_draft": "Già in bozza",
+  "importacoes.fila.match.manual_decision": "Decisione manuale",
+  "importacoes.fila.match.unreviewed": "Non valutato",
+  "importacoes.fila.decision.accept_new": "Accettato (nuovo)",
+  "importacoes.fila.decision.accept_duplicate": "Accettato (collegato)",
+  "importacoes.fila.decision.reject": "Rifiutato",
+  "importacoes.fila.decision.pending": "In attesa",
+  "importacoes.fila.draftCreated": "Bozza creata",
+  "importacoes.fila.loadMore": "Carica altri 50",
+  "importacoes.fila.showing": "Visualizzati {shown} di {total}.",
+  "importacoes.fila.showingAll": "{total} righe."
 }

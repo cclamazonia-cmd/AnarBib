@@ -4096,5 +4096,22 @@
   "importacoes.showArchived": "Mostra arxivats",
   "importacoes.archiving": "S’està actualitzant…",
   "importacoes.runArchived": "Tractament arxivat.",
-  "importacoes.runUnarchived": "Tractament desarxivat."
+  "importacoes.runUnarchived": "Tractament desarxivat.",
+  "importacoes.fila.col.match": "Correspondència",
+  "importacoes.fila.col.decision": "Decisió",
+  "importacoes.fila.col.state": "Estat",
+  "importacoes.fila.match.new_record": "Novetat",
+  "importacoes.fila.match.possible_duplicate": "Possible duplicat",
+  "importacoes.fila.match.matched_book": "Ja al catàleg",
+  "importacoes.fila.match.matched_draft": "Ja en esborrany",
+  "importacoes.fila.match.manual_decision": "Decisió manual",
+  "importacoes.fila.match.unreviewed": "Sense revisar",
+  "importacoes.fila.decision.accept_new": "Acceptat (nou)",
+  "importacoes.fila.decision.accept_duplicate": "Acceptat (vinculat)",
+  "importacoes.fila.decision.reject": "Rebutjat",
+  "importacoes.fila.decision.pending": "Pendent",
+  "importacoes.fila.draftCreated": "Esborrany creat",
+  "importacoes.fila.loadMore": "Carrega’n 50 més",
+  "importacoes.fila.showing": "Mostrant {shown} de {total}.",
+  "importacoes.fila.showingAll": "{total} línies."
 }

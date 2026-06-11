@@ -4096,5 +4096,22 @@
   "importacoes.showArchived": "Archivierte anzeigen",
   "importacoes.archiving": "Wird aktualisiert…",
   "importacoes.runArchived": "Lauf archiviert.",
-  "importacoes.runUnarchived": "Lauf wiederhergestellt."
+  "importacoes.runUnarchived": "Lauf wiederhergestellt.",
+  "importacoes.fila.col.match": "Treffer",
+  "importacoes.fila.col.decision": "Entscheidung",
+  "importacoes.fila.col.state": "Status",
+  "importacoes.fila.match.new_record": "Neu",
+  "importacoes.fila.match.possible_duplicate": "Mögliches Duplikat",
+  "importacoes.fila.match.matched_book": "Schon im Katalog",
+  "importacoes.fila.match.matched_draft": "Schon Entwurf",
+  "importacoes.fila.match.manual_decision": "Manuelle Entscheidung",
+  "importacoes.fila.match.unreviewed": "Ungeprüft",
+  "importacoes.fila.decision.accept_new": "Übernommen (neu)",
+  "importacoes.fila.decision.accept_duplicate": "Übernommen (verknüpft)",
+  "importacoes.fila.decision.reject": "Abgelehnt",
+  "importacoes.fila.decision.pending": "Ausstehend",
+  "importacoes.fila.draftCreated": "Entwurf erstellt",
+  "importacoes.fila.loadMore": "50 weitere laden",
+  "importacoes.fila.showing": "{shown} von {total} angezeigt.",
+  "importacoes.fila.showingAll": "{total} Zeilen."
 }

@@ -4096,5 +4096,22 @@
   "importacoes.showArchived": "Gearchiveerde tonen",
   "importacoes.archiving": "Bijwerken…",
   "importacoes.runArchived": "Run gearchiveerd.",
-  "importacoes.runUnarchived": "Run gedearchiveerd."
+  "importacoes.runUnarchived": "Run gedearchiveerd.",
+  "importacoes.fila.col.match": "Overeenkomst",
+  "importacoes.fila.col.decision": "Beslissing",
+  "importacoes.fila.col.state": "Status",
+  "importacoes.fila.match.new_record": "Nieuw",
+  "importacoes.fila.match.possible_duplicate": "Mogelijk duplicaat",
+  "importacoes.fila.match.matched_book": "Al in catalogus",
+  "importacoes.fila.match.matched_draft": "Al een concept",
+  "importacoes.fila.match.manual_decision": "Handmatige beslissing",
+  "importacoes.fila.match.unreviewed": "Niet beoordeeld",
+  "importacoes.fila.decision.accept_new": "Geaccepteerd (nieuw)",
+  "importacoes.fila.decision.accept_duplicate": "Geaccepteerd (gekoppeld)",
+  "importacoes.fila.decision.reject": "Afgewezen",
+  "importacoes.fila.decision.pending": "In afwachting",
+  "importacoes.fila.draftCreated": "Concept aangemaakt",
+  "importacoes.fila.loadMore": "50 meer laden",
+  "importacoes.fila.showing": "{shown} van {total} weergegeven.",
+  "importacoes.fila.showingAll": "{total} rijen."
 }
