@@ -15,43 +15,52 @@ seules : le **socle fondateur** (tables `books`, `authors`, `profiles`, `librari
 mono-biblio du 18/03). Le dossier `migrations/` ne porte que **l'incrémental** depuis ce
 socle.
 - **Conséquence** : `supabase db reset` ne rejoue pas le socle → **reproductibilité partielle**.
-- **Nature** : fait architectural connu, **pas un chantier oublié**. À combler un jour par un
-  **baseline dump versionné** si on veut une repro complète (gros chantier, non urgent).
+- **Nature** : fait architectural connu, **pas un chantier oublié**.
+- **✅ Mitigation (11/06)** : un **snapshot de référence** du schéma complet est désormais
+  versionné — [`../schema/baseline_schema_2026-06-11.sql`](../schema/baseline_schema_2026-06-11.sql)
+  (DDL `public`/`api`/`ingest`, ~2 Mo ; cf. `../schema/README.md`). Assurance reprise-après-sinistre.
+  Reste à faire un jour (gros, non urgent) : un **squash** rendant `db reset` reproductible de bout en bout.
 - **Drift récent confirmé** (objet créé en cours de route, hors migration) :
   **`mv_books_catalog_list_v1`** (MV publique du catalogue — cf. mémoire `catalog-mv-project-location`).
 
 ## Morceaux non résolus (survey sessions, bruit filtré)
 
-### 🔴 À vérifier — changement possiblement non pérennisé
-- **« évolution catalogage à pérenniser au prochain push »** — *[session « Document cataloging
-  fields missing », 10/06]*. **Lire la session pour le détail exact** ; risque : modif DB
-  appliquée hors migration pendant la panne Woodpecker, jamais committée.
+### ✅ « À pérenniser » — RÉSOLU (faux positif, élucidé 11/06)
+- Le « il faudra pérenniser » de la session 10/06 = le scoring de **`api.similar_books`**
+  (LIMIT 16 + sujets comptés). Il était **déjà persisté** dans
+  `20260609204931_persist_similar_books_scoring_v4.sql` (06-09). Prod == migration vérifié →
+  **aucune perte, rien à faire**. (L'audit a confirmé qu'il n'y avait pas de vraie perte.)
 
 ### 🟠 Chantiers à finir
-- **#CL.10** : `<LibraryInfoCard>` par ligne de circulation + signal « même titre » —
-  *[« Spec multi-appartenance », 10/06]*. ⚠️ **Probablement couvert par la session identité /
-  multi-appartenance active** — confirmer avant d'y toucher.
+- ✅ **#CL.10** — **FAIT** (vérifié 11/06) : `libTag` + `sameTitleSignal` dans
+  `ReservationCard.jsx` / `AccountPage.jsx` (tag biblio d'origine + signal « même titre » par
+  titre normalisé ; i18n `account.circ.sameTitleSignal`). Rien à faire.
 - **i18n sujets** : traduits seulement `pt-BR/fr/es/en`, autres locales en fallback
-  (« à compléter au fil de l'eau ») — *[idem]*.
+  (« à compléter au fil de l'eau ») — *[« Spec multi-appartenance »]*. **Reste ouvert** (non bloquant).
 
 ### 🟡 Différés CONSCIENTS (décision prise, pas oubliés)
 - **#OPAC11** — RSS / courriel du catalogue, **différé anti-tracking** — *[« Spec
   multi-appartenance » / cadrage OPAC]*.
-- **EA-12 phase 2** (échange inter-bibliothèque) — **gelé, conditionné** à un besoin prod
-  réel BLMF↔BTL — *[« Importações/Exportações », 08/06]*.
+- **EA-12 phase 2** (parité PEB, **~45 fn JS**) — **gelé** par décision **REGISTRE BIBLIO-9**
+  (08/06), conditionné à un besoin prod réel BLMF↔BTL. Vérifié 11/06 : **pas un quick-win**,
+  décision délibérée → **on laisse gelé**.
 
-### ⚪ Reliquats cosmétiques (optionnels)
+### ⚪ Reliquats cosmétiques (optionnels) — SEUL actionnable restant
 - « Trocas ativas » à ajouter dans la grille de chiffres ; `loansCreated30d` calculé mais
-  jamais affiché (métrique morte) — *[« Chantiers annexes », 08/06]*.
+  jamais affiché (métrique morte) — *[« Chantiers annexes », 08/06]*. **Reportés** (optionnels,
+  non bloquants) → à solder en quick-win une prochaine fois.
 
-### ✅ Délégué / tracé ailleurs — NE PAS re-traiter
+### ✅ Délégué / livré ailleurs — NE PAS re-traiter
 - **Baqueiro** (docs de consignes) : brouillons MLEG, orphelins d'autorité, indexation
   sujets, enrichissement dates auteurs.
 - **N4 — numéro/identité local·e** (mail réconciliation UUID ↔ identité) → **session identité
-  dédiée** (en cours).
+  dédiée** (en cours ; CARD-LOCAL Lot 0 déployé le 11/06).
 - **Corpus `.ris` CIRA** → local, non commité (sans consentement explicite).
 - **§21 PARTNER notifications** (NOTIF-1/2/3) → **livrées en prod** le 11/06.
-- **CI** → migré Woodpecker→Forgejo Actions + runner auto-hébergé WSL2 (11/06).
+- **CI** → migré Woodpecker→Forgejo Actions, **runner auto-hébergé WSL2**, **retry-Pages**
+  (504 Codeberg transitoires), 2 jobs `app`/`backend` (11/06). Runbook
+  `../journal/operations/SETUP_runner_wsl2_2026-06-11.md`.
+- **Baseline schéma** → snapshot de référence versionné (`../schema/`, 11/06).
 
 ## Sessions actives au 11/06 (ne pas marcher dessus)
 - **« Import/export wizard refactor »** — wizard « Novo import ».
@@ -59,5 +68,8 @@ socle.
 - **Session identité lecteur·rice** (N1→N5, dont N4) — *aspects identité/numéro local*.
 
 ---
+*Rafraîchi le 11/06/2026 en fin de session (« Catalogação work completion ») : 🔴 pérennisation
+résolue, #CL.10 fait, EA-12 confirmé gelé, baseline snapshot livré — ne reste qu'un reliquat
+cosmétique optionnel.*
 *Maintenir ce fichier quand on livre/clôt un chantier. En cas de doute sur un statut :
 revérifier dans le code, pas se fier à cette trace seule.*
