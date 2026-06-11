@@ -1868,6 +1868,98 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Paneel openen",
     el: "Άνοιγμα του πίνακα"
   },
+  "partnership.partnerLabel": {
+    "pt-BR": "Biblioteca parceira", fr: "Bibliothèque partenaire", es: "Biblioteca asociada",
+    en: "Partner library", it: "Biblioteca partner", de: "Partnerbibliothek",
+    ca: "Biblioteca associada", eo: "Partnera biblioteko", nl: "Partnerbibliotheek",
+    el: "Συνεργαζόμενη βιβλιοθήκη"
+  },
+  "partnership.actionTitle": {
+    "pt-BR": "Gerir a parceria", fr: "Gérer le partenariat", es: "Gestionar la asociación",
+    en: "Manage the partnership", it: "Gestisci il partenariato", de: "Partnerschaft verwalten",
+    ca: "Gestionar el partenariat", eo: "Administri la partnerecon", nl: "Partnerschap beheren",
+    el: "Διαχείριση της συνεργασίας"
+  },
+  "partnership.cta": {
+    "pt-BR": "Abrir a biblioteca", fr: "Ouvrir la bibliothèque", es: "Abrir la biblioteca",
+    en: "Open the library", it: "Apri la biblioteca", de: "Bibliothek öffnen",
+    ca: "Obrir la biblioteca", eo: "Malfermi la bibliotekon", nl: "Bibliotheek openen",
+    el: "Άνοιγμα της βιβλιοθήκης"
+  },
+  "partnership_proposed.subject": {
+    "pt-BR": "Nova proposta de parceria", fr: "Nouvelle proposition de partenariat",
+    es: "Nueva propuesta de asociación", en: "New partnership proposal",
+    it: "Nuova proposta di partenariato", de: "Neuer Partnerschaftsvorschlag",
+    ca: "Nova proposta de partenariat", eo: "Nova propono de partnereco",
+    nl: "Nieuw partnerschapsvoorstel", el: "Νέα πρόταση συνεργασίας"
+  },
+  "partnership_proposed.intro": {
+    "pt-BR": "A biblioteca parceira abaixo propôs uma parceria à sua biblioteca. Você pode aceitá-la ou recusá-la na página da biblioteca.",
+    fr: "La bibliothèque partenaire ci-dessous propose un partenariat à votre bibliothèque. Vous pouvez l'accepter ou la refuser depuis la page de la bibliothèque.",
+    es: "La biblioteca asociada indicada abajo ha propuesto una asociación a vuestra biblioteca. Podéis aceptarla o rechazarla desde la página de la biblioteca.",
+    en: "The partner library below has proposed a partnership to your library. You can accept or decline it from the library page.",
+    it: "La biblioteca partner qui sotto ha proposto un partenariato alla vostra biblioteca. Potete accettarlo o rifiutarlo dalla pagina della biblioteca.",
+    de: "Die unten genannte Partnerbibliothek hat eurer Bibliothek eine Partnerschaft vorgeschlagen. Ihr könnt sie auf der Bibliotheksseite annehmen oder ablehnen.",
+    ca: "La biblioteca associada de sota ha proposat un partenariat a la vostra biblioteca. Podeu acceptar-lo o rebutjar-lo des de la pàgina de la biblioteca.",
+    eo: "La suba partnera biblioteko proponis partnerecon al via biblioteko. Vi povas akcepti aŭ rifuzi ĝin el la bibliotekpaĝo.",
+    nl: "De onderstaande partnerbibliotheek heeft jullie bibliotheek een partnerschap voorgesteld. Je kunt het accepteren of weigeren op de bibliotheekpagina.",
+    el: "Η παρακάτω συνεργαζόμενη βιβλιοθήκη πρότεινε συνεργασία στη βιβλιοθήκη σας. Μπορείτε να την αποδεχτείτε ή να την απορρίψετε από τη σελίδα της βιβλιοθήκης."
+  },
+  "partnership_accepted.subject": {
+    "pt-BR": "Parceria aceita", fr: "Partenariat accepté", es: "Asociación aceptada",
+    en: "Partnership accepted", it: "Partenariato accettato", de: "Partnerschaft angenommen",
+    ca: "Partenariat acceptat", eo: "Partnereco akceptita", nl: "Partnerschap geaccepteerd",
+    el: "Η συνεργασία έγινε δεκτή"
+  },
+  "partnership_accepted.intro": {
+    "pt-BR": "A biblioteca parceira aceitou sua proposta de parceria. A parceria está agora ativa: você pode ativar os direitos recíprocos na página da biblioteca.",
+    fr: "La bibliothèque partenaire a accepté votre proposition de partenariat. Le partenariat est désormais actif : vous pouvez activer les droits réciproques depuis la page de la bibliothèque.",
+    es: "La biblioteca asociada ha aceptado vuestra propuesta de asociación. La asociación está ahora activa: podéis activar los derechos recíprocos desde la página de la biblioteca.",
+    en: "The partner library has accepted your partnership proposal. The partnership is now active: you can enable the reciprocal rights from the library page.",
+    it: "La biblioteca partner ha accettato la vostra proposta di partenariato. Il partenariato è ora attivo: potete attivare i diritti reciproci dalla pagina della biblioteca.",
+    de: "Die Partnerbibliothek hat euren Partnerschaftsvorschlag angenommen. Die Partnerschaft ist nun aktiv: Ihr könnt die gegenseitigen Rechte auf der Bibliotheksseite aktivieren.",
+    ca: "La biblioteca associada ha acceptat la vostra proposta de partenariat. El partenariat ja és actiu: podeu activar els drets recíprocs des de la pàgina de la biblioteca.",
+    eo: "La partnera biblioteko akceptis vian proponon de partnereco. La partnereco nun estas aktiva: vi povas aktivigi la reciprokajn rajtojn el la bibliotekpaĝo.",
+    nl: "De partnerbibliotheek heeft jullie partnerschapsvoorstel geaccepteerd. Het partnerschap is nu actief: je kunt de wederzijdse rechten op de bibliotheekpagina inschakelen.",
+    el: "Η συνεργαζόμενη βιβλιοθήκη αποδέχτηκε την πρότασή σας για συνεργασία. Η συνεργασία είναι πλέον ενεργή: μπορείτε να ενεργοποιήσετε τα αμοιβαία δικαιώματα από τη σελίδα της βιβλιοθήκης."
+  },
+  "partnership_refused.subject": {
+    "pt-BR": "Proposta de parceria recusada", fr: "Proposition de partenariat refusée",
+    es: "Propuesta de asociación rechazada", en: "Partnership proposal declined",
+    it: "Proposta di partenariato rifiutata", de: "Partnerschaftsvorschlag abgelehnt",
+    ca: "Proposta de partenariat rebutjada", eo: "Propono de partnereco rifuzita",
+    nl: "Partnerschapsvoorstel geweigerd", el: "Η πρόταση συνεργασίας απορρίφθηκε"
+  },
+  "partnership_refused.intro": {
+    "pt-BR": "A biblioteca parceira recusou sua proposta de parceria. Você pode propor novamente mais tarde, se desejar.",
+    fr: "La bibliothèque partenaire a refusé votre proposition de partenariat. Vous pourrez en proposer une nouvelle plus tard si vous le souhaitez.",
+    es: "La biblioteca asociada ha rechazado vuestra propuesta de asociación. Podréis proponer otra más adelante si lo deseáis.",
+    en: "The partner library has declined your partnership proposal. You may propose again later if you wish.",
+    it: "La biblioteca partner ha rifiutato la vostra proposta di partenariato. Potete riproporla più avanti, se lo desiderate.",
+    de: "Die Partnerbibliothek hat euren Partnerschaftsvorschlag abgelehnt. Ihr könnt später erneut einen Vorschlag machen, wenn ihr möchtet.",
+    ca: "La biblioteca associada ha rebutjat la vostra proposta de partenariat. Podeu tornar a proposar-ne una més endavant si voleu.",
+    eo: "La partnera biblioteko rifuzis vian proponon de partnereco. Vi povas reproponi poste, se vi deziras.",
+    nl: "De partnerbibliotheek heeft jullie partnerschapsvoorstel geweigerd. Je kunt later opnieuw een voorstel doen als je wilt.",
+    el: "Η συνεργαζόμενη βιβλιοθήκη απέρριψε την πρότασή σας για συνεργασία. Μπορείτε να προτείνετε ξανά αργότερα, αν θέλετε."
+  },
+  "partnership_broken.subject": {
+    "pt-BR": "Parceria encerrada", fr: "Partenariat rompu", es: "Asociación finalizada",
+    en: "Partnership ended", it: "Partenariato terminato", de: "Partnerschaft beendet",
+    ca: "Partenariat finalitzat", eo: "Partnereco ĉesigita", nl: "Partnerschap beëindigd",
+    el: "Η συνεργασία τερματίστηκε"
+  },
+  "partnership_broken.intro": {
+    "pt-BR": "A parceria com a biblioteca parceira abaixo foi encerrada. Os direitos recíprocos foram desativados nos dois lados.",
+    fr: "Le partenariat avec la bibliothèque partenaire ci-dessous a été rompu. Les droits réciproques ont été désactivés des deux côtés.",
+    es: "La asociación con la biblioteca asociada indicada abajo ha finalizado. Los derechos recíprocos se han desactivado en ambos lados.",
+    en: "The partnership with the partner library below has ended. The reciprocal rights have been disabled on both sides.",
+    it: "Il partenariato con la biblioteca partner qui sotto è terminato. I diritti reciproci sono stati disattivati da entrambi i lati.",
+    de: "Die Partnerschaft mit der unten genannten Partnerbibliothek wurde beendet. Die gegenseitigen Rechte wurden auf beiden Seiten deaktiviert.",
+    ca: "El partenariat amb la biblioteca associada de sota ha finalitzat. Els drets recíprocs s'han desactivat a banda i banda.",
+    eo: "La partnereco kun la suba partnera biblioteko ĉesis. La reciprokaj rajtoj estis malaktivigitaj ambaŭflanke.",
+    nl: "Het partnerschap met de onderstaande partnerbibliotheek is beëindigd. De wederzijdse rechten zijn aan beide kanten uitgeschakeld.",
+    el: "Η συνεργασία με την παρακάτω συνεργαζόμενη βιβλιοθήκη τερματίστηκε. Τα αμοιβαία δικαιώματα απενεργοποιήθηκαν και στις δύο πλευρές."
+  },
   "validation_confirmed.subject": {
     "pt-BR": "Inscrição confirmada",
     fr: "Inscription confirmée",
