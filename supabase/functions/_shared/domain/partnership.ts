@@ -161,3 +161,89 @@ export async function handleTransparenceEnabled(payload: any) {
   }
   return { sent, recipients: common.length };
 }
+
+// ============================================================================
+// §21 PARTNER — NOTIF-3 : config élargie → re-solliciter les consentements stale.
+// ----------------------------------------------------------------------------
+// Émis par fn_partnership_set_right quand un droit NON-transparence est ajouté
+// (bump config_version) : fn_dispatch_notify_event('partnership_config_expanded',
+// 1, {partnership_id=CANONIQUE, library_a, library_b}). On re-sollicite seulement
+// les lectrices au consentement STALE (reader_partnership_consent, revoked_at NULL,
+// config_version < courante) — clé sur l'id canonique. Mail lectrice (sa locale),
+// CTA /conta pour réexaminer/renouveler. Réutilise les libellés librariesLabel/cta
+// de partnership_transparence_enabled (génériques).
+// ============================================================================
+export async function handleConfigExpanded(payload: any) {
+  const canon = String(payload?.partnership_id || "").trim();
+  const libA = String(payload?.library_a || "").trim();
+  const libB = String(payload?.library_b || "").trim();
+  if (!canon) throw new Error("partnership_id (canonique) manquant.");
+
+  const { data: lp } = await supabaseAdmin
+    .from("library_partnerships")
+    .select("config_version")
+    .eq("id", canon)
+    .maybeSingle();
+  const currentCv = Number(lp?.config_version ?? 0);
+
+  // Lectrices au consentement STALE : non révoqué, à une version antérieure.
+  const { data: stale } = await supabaseAdmin
+    .from("reader_partnership_consent")
+    .select("user_id")
+    .eq("partnership_id", canon)
+    .is("revoked_at", null)
+    .lt("config_version", currentCv);
+  const userIds = (stale || []).map((r: any) => String(r.user_id));
+  if (userIds.length === 0) {
+    return { sent: 0, skipped: "no_stale_consent" };
+  }
+
+  const { data: libs } = await supabaseAdmin
+    .from("libraries")
+    .select("id,short_name,name")
+    .in("id", [libA, libB].filter(Boolean));
+  const nameOf = (id: string) => {
+    const l = (libs || []).find((x: any) => String(x.id) === id);
+    return String(l?.short_name || l?.name || "").trim();
+  };
+  const libNames = [nameOf(libA), nameOf(libB)].filter(Boolean).join(" — ");
+
+  const ctx = await resolveLibraryNotificationContext(libA || null);
+  const bt = subjectTag(ctx);
+
+  const { data: profiles } = await supabaseAdmin
+    .from("profiles")
+    .select("id,email,first_name,last_name,preferred_language")
+    .in("id", userIds);
+
+  let sent = 0;
+  for (const profile of profiles || []) {
+    const user = userTargetFromProfile(profile);
+    if (!user?.email) continue;
+    const locale = String(profile?.preferred_language || "").trim() || null;
+    const tit = tMail(locale, "partnership_config_expanded.subject");
+    const details = libNames
+      ? [{ label: tMail(locale, "partnership_transparence_enabled.librariesLabel"), value: libNames }]
+      : undefined;
+    const { html, text } = renderEmail({
+      locale,
+      preheader: tit,
+      title: tit,
+      greeting: greeting(locale, user?.name),
+      introHtml: `<p>${tMail(locale, "partnership_config_expanded.intro")}</p>`,
+      details,
+      actionBox: {
+        kind: "action",
+        title: tMail(locale, "partnership_config_expanded.actionTitle"),
+        ctaUrl: `${APP_BASE_URL}/conta`,
+        ctaLabel: tMail(locale, "partnership_transparence_enabled.cta"),
+      },
+      footerHtml: footerPadrao(ctx, locale),
+      context: ctx,
+    });
+    const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
+    await safeSendEmail(user, sub, html, text, "user_mail", ctx);
+    sent++;
+  }
+  return { sent, recipients: userIds.length };
+}

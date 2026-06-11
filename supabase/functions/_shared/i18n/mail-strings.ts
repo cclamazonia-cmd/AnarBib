@@ -2001,6 +2001,37 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     it: "Il mio spazio", de: "Mein Konto", ca: "El meu compte", eo: "Mia konto",
     nl: "Mijn account", el: "Ο λογαριασμός μου"
   },
+  "partnership_config_expanded.subject": {
+    "pt-BR": "Os termos de uma parceria mudaram: revise seu consentimento",
+    fr: "Les conditions d'un partenariat ont changé : réexamine ton consentement",
+    es: "Cambiaron las condiciones de una asociación: revisá tu consentimiento",
+    en: "A partnership's terms changed: review your consent",
+    it: "Le condizioni di un partenariato sono cambiate: rivedi il tuo consenso",
+    de: "Die Bedingungen einer Partnerschaft haben sich geändert: prüfe deine Zustimmung",
+    ca: "Han canviat les condicions d'un partenariat: revisa el teu consentiment",
+    eo: "La kondiĉoj de partnereco ŝanĝiĝis: rekontrolu vian konsenton",
+    nl: "De voorwaarden van een partnerschap zijn gewijzigd: herzie je toestemming",
+    el: "Οι όροι μιας συνεργασίας άλλαξαν: αναθεώρησε τη συγκατάθεσή σου"
+  },
+  "partnership_config_expanded.intro": {
+    "pt-BR": "Uma parceria entre duas bibliotecas das quais você é membro(a/e) ampliou seu compartilhamento. Seu consentimento anterior não cobre mais os novos termos: enquanto você não o revisar, o compartilhamento ampliado sobre você fica pausado. Você pode reexaminar e renovar (ou recusar) seu consentimento no seu espaço.",
+    fr: "Un partenariat entre deux bibliothèques dont tu es membre a élargi son partage. Ton consentement précédent ne couvre plus les nouvelles conditions : tant que tu ne l'as pas réexaminé, le partage élargi te concernant reste en pause. Tu peux réexaminer et renouveler (ou refuser) ton consentement depuis ton espace.",
+    es: "Una asociación entre dos bibliotecas de las que sos miembre amplió su intercambio. Tu consentimiento anterior ya no cubre las nuevas condiciones: mientras no lo revisés, el intercambio ampliado sobre vos queda en pausa. Podés revisar y renovar (o rechazar) tu consentimiento desde tu espacio.",
+    en: "A partnership between two libraries you belong to has expanded its sharing. Your previous consent no longer covers the new terms: until you review it, the expanded sharing about you stays paused. You can review and renew (or refuse) your consent from your account.",
+    it: "Un partenariato tra due biblioteche di cui fai parte ha ampliato la sua condivisione. Il tuo consenso precedente non copre più le nuove condizioni: finché non lo riesamini, la condivisione ampliata che ti riguarda resta sospesa. Puoi riesaminare e rinnovare (o rifiutare) il tuo consenso dal tuo spazio.",
+    de: "Eine Partnerschaft zwischen zwei Bibliotheken, in denen du Mitglied bist, hat ihren Austausch erweitert. Deine bisherige Zustimmung deckt die neuen Bedingungen nicht mehr ab: Bis du sie prüfst, bleibt der erweiterte Austausch über dich pausiert. Du kannst deine Zustimmung in deinem Konto prüfen und erneuern (oder ablehnen).",
+    ca: "Un partenariat entre dues biblioteques de les quals ets membre ha ampliat la seva compartició. El teu consentiment anterior ja no cobreix les noves condicions: mentre no el revisis, la compartició ampliada sobre tu queda en pausa. Pots revisar i renovar (o rebutjar) el teu consentiment des del teu espai.",
+    eo: "Partnereco inter du bibliotekoj, al kiuj vi apartenas, plilarĝigis sian kunhavigon. Via antaŭa konsento ne plu kovras la novajn kondiĉojn: ĝis vi rekontrolas ĝin, la plilarĝigita kunhavigo pri vi restas paŭzigita. Vi povas rekontroli kaj renovigi (aŭ rifuzi) vian konsenton el via konto.",
+    nl: "Een partnerschap tussen twee bibliotheken waar je lid van bent heeft het delen uitgebreid. Je vorige toestemming dekt de nieuwe voorwaarden niet meer: zolang je het niet herziet, blijft het uitgebreide delen over jou gepauzeerd. Je kunt je toestemming herzien en vernieuwen (of weigeren) vanuit je account.",
+    el: "Μια συνεργασία μεταξύ δύο βιβλιοθηκών στις οποίες ανήκεις διεύρυνε την κοινή χρήση της. Η προηγούμενη συγκατάθεσή σου δεν καλύπτει πλέον τους νέους όρους: μέχρι να την αναθεωρήσεις, η διευρυμένη κοινή χρήση που σε αφορά παραμένει σε παύση. Μπορείς να αναθεωρήσεις και να ανανεώσεις (ή να αρνηθείς) τη συγκατάθεσή σου από τον λογαριασμό σου."
+  },
+  "partnership_config_expanded.actionTitle": {
+    "pt-BR": "Reexaminar seu consentimento", fr: "Réexaminer ton consentement",
+    es: "Revisar tu consentimiento", en: "Review your consent",
+    it: "Riesaminare il tuo consenso", de: "Deine Zustimmung prüfen",
+    ca: "Revisar el teu consentiment", eo: "Rekontroli vian konsenton",
+    nl: "Je toestemming herzien", el: "Αναθεώρηση της συγκατάθεσής σου"
+  },
   "validation_confirmed.subject": {
     "pt-BR": "Inscrição confirmada",
     fr: "Inscription confirmée",
