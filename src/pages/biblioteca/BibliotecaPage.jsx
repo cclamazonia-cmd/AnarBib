@@ -46,6 +46,11 @@ const NOTIFICATION_FLAG_KEYS = [
   'admin_copy_reservations', 'admin_copy_loans', 'tech_alerts', 'task_alerts',
 ];
 
+// Perf (12/06/2026) : onglets dont l'affichage consomme les groupes de donnees
+// « lourds » (membres, PEB, intercambios, taches). Leur 1re visite declenche
+// loadHeavy() ; les autres onglets se contentent du noyau charge au montage.
+const HEAVY_TABS = ['ill', 'exchanges', 'tasks', 'reports'];
+
 export default function BibliotecaPage() {
   const { user } = useAuth();
   const { libraryId, libraryName, role, governance_mode } = useLibrary();
@@ -203,52 +208,77 @@ export default function BibliotecaPage() {
   );
 
   // ── Carregamento ────────────────────────────────────────
-  const loadAll = useCallback(async () => {
+  // Perf (12/06/2026) : le montage ne charge plus que le « noyau » -- config
+  // legere mono-ligne + bandeau KPI (stats) + allLibraries (selects PEB /
+  // onglets documents-exchanges), commun a tous les onglets. Les groupes lourds
+  // (membres, PEB+items, intercambios, taches/modeles/suggestions) ne sont
+  // charges qu'a la 1re visite d'un onglet consommateur (cf. HEAVY_TABS), via
+  // loadHeavy(). Avant, loadAll tirait ~24 requetes au montage, pour tous les
+  // onglets a la fois. Le fetch library_circulation_policy_sets a ete retire :
+  // il etait charge puis jamais utilise (RegimeStateBox charge le sien).
+  const heavyLoadedRef = useRef(false);
+
+  const loadCore = useCallback(async () => {
     if (!libraryId) return;
     try {
-      const [libR, commR, ssR, regR, psR, dgR, memR, illR, exR, taskR, mcR, npR, mrR, tplR, sugR] = await Promise.all([
+      const [libR, commR, ssR, regR, dgR, mcR, npR, mrR] = await Promise.all([
         supabase.from('libraries').select('*').eq('id', libraryId).single(),
         supabase.from('library_commons').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_regulation_documents').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }),
-        supabase.from('library_circulation_policy_sets').select('*').eq('library_id', libraryId).eq('is_active', true).maybeSingle(),
         supabase.from('library_document_governance').select('*').eq('library_id', libraryId).maybeSingle(),
-        // Chantier « Partenaires de correspondance » 24/05/2026 : le fetch
-        // catalog_partners a ete retire d'ici. L'editeur LibraryPartnershipsSection
-        // (onglet documents) charge desormais lui-meme catalog_partners et la vue
-        // api.library_partnerships_ui. Le state `partners` de la page est supprime.
-        supabase.from('user_library_memberships').select('*, profiles:user_id(email, first_name, last_name)').eq('library_id', libraryId).order('created_at'),
-        // #ILL-archive (25/05/2026) : la file active exclut les PEB archivés.
-        // Les PEB archivés sont consultables dans l'onglet Rapports via le
-        // composant PebHistorySection (vue api.peb_history_v1).
-        supabase.from('interlibrary_loans_v2').select('*').or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`).is('archived_at', null).order('created_at', { ascending: false }).limit(50),
-        // #EA-11 : trocas (intercâmbios) impliquant la bibliothèque (requérante
-        // ou cible), pour la section Trocas du compte-rendu. Lecture simple
-        // protégée par la RLS (doctrine RPC v3 : from() autorisé en lecture).
-        supabase.from('document_permission_requests').select('id, requester_library_id, target_library_id, status, created_at, decided_at, object_ref').eq('object_type', 'interlibrary_exchange').or(`requester_library_id.eq.${libraryId},target_library_id.eq.${libraryId}`).order('created_at', { ascending: false }).limit(200),
-        supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }).limit(50),
         supabase.from('library_mail_channels').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_notification_policies').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_membership_rules').select('*').eq('library_id', libraryId).order('display_order', { ascending: true }).order('created_at', { ascending: true }),
-        // Chantier #TASKS etape 6 paquet 2 : tâches-types. Lecture simple
-        // protegee par la RLS painel_recurring_task_rules_select (doctrine
-        // RPC v3 : from() autorise pour les lectures protegees par RLS).
-        supabase.from('painel_recurring_task_rules').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }),
-        // Chantier #TASKS etape 6 paquet 3 : catalogue de suggestions. Table
-        // globale (sans library_id), lecture seule reservee au staff par la
-        // RLS painel_task_suggestion_catalog_select_staff.
-        supabase.from('painel_task_suggestion_catalog').select('*').eq('is_active', true).order('display_order', { ascending: true }),
       ]);
       setLib(libR.data); setCommons(commR.data); setServiceState(ssR.data);
       setRegDocs(regR.data || []); setDocGov(dgR.data);
+      setMailChannel(mcR.data); setNotifPolicy(npR.data);
+      setMembershipRules(mrR.data || []);
+      // allLibraries : selects PEB + onglets documents/exchanges + rapport.
+      const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name, network_mode, circulation_mode, is_active').order('name');
+      setAllLibraries(allLibs || []);
+      // Stats KPI : bandeau toujours visible au-dessus des onglets -> noyau.
+      const [au, circStats] = await Promise.all([
+        supabase.from('authors').select('id', { count: 'exact', head: true }),
+        supabase.schema('api').from('library_circulation_stats').select('*').eq('library_id', libraryId).maybeSingle(),
+      ]);
+      const cs = circStats.data || {};
+      setStats({
+        // DOCUMENTOS = holdings de cette biblio (scope par library_id via la vue).
+        books: cs.holdings_count || 0, authors: au.count || 0,
+        exemplars: cs.exemplars_count || 0, readers: cs.readers_active || 0,
+        loansOpen: cs.loans_open || 0, loansOverdue: cs.loans_overdue || 0,
+        loansCreated7d: cs.loans_created_7d || 0, loansReturned7d: cs.loans_returned_7d || 0,
+        loansCreated30d: cs.loans_created_30d || 0,
+        reservationsActive: cs.reservations_active || 0, reservations30d: cs.reservations_30d || 0,
+        consultationsActive: cs.consultations_active || 0,
+        trocasActive: cs.trocas_active || 0,
+        librariansActive: cs.librarians_active || 0,
+        topBooks: cs.top_books_90d || [],
+      });
+    } catch (err) { console.warn('loadCore:', err); }
+  }, [libraryId]);
+
+  const loadHeavy = useCallback(async () => {
+    if (!libraryId) return;
+    try {
+      const [memR, illR, exR, taskR, tplR, sugR] = await Promise.all([
+        supabase.from('user_library_memberships').select('*, profiles:user_id(email, first_name, last_name)').eq('library_id', libraryId).order('created_at'),
+        // #ILL-archive : la file active exclut les PEB archives (onglet Rapports
+        // -> PebHistorySection, vue api.peb_history_v1).
+        supabase.from('interlibrary_loans_v2').select('*').or(`lender_library_id.eq.${libraryId},borrower_library_id.eq.${libraryId}`).is('archived_at', null).order('created_at', { ascending: false }).limit(50),
+        // #EA-11 : trocas (intercambios) impliquant la bibliotheque.
+        supabase.from('document_permission_requests').select('id, requester_library_id, target_library_id, status, created_at, decided_at, object_ref').eq('object_type', 'interlibrary_exchange').or(`requester_library_id.eq.${libraryId},target_library_id.eq.${libraryId}`).order('created_at', { ascending: false }).limit(200),
+        supabase.from('painel_internal_tasks').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }).limit(50),
+        supabase.from('painel_recurring_task_rules').select('*').eq('library_id', libraryId).order('created_at', { ascending: false }),
+        supabase.from('painel_task_suggestion_catalog').select('*').eq('is_active', true).order('display_order', { ascending: true }),
+      ]);
       setMembers(memR.data || []);
       setIllLoans(illR.data || []); setExchanges(exR.data || []); setTasks(taskR.data || []);
       setTemplates(tplR.data || []);
       setSuggestions(sugR.data || []);
-      // #ILL-partial — charge les exemplaires de tous les prêts affichés,
-      // regroupés par prêt. Lecture simple protégée par la RLS
-      // interlibrary_loan_items_v2_select (doctrine RPC v3 : from() autorisé
-      // pour les lectures protégées par RLS).
+      // #ILL-partial — exemplaires des prets affiches, regroupes par pret.
       const loanIds = (illR.data || []).map(l => l.id);
       if (loanIds.length > 0) {
         const { data: itemsData } = await supabase
@@ -264,47 +294,42 @@ export default function BibliotecaPage() {
       } else {
         setIllItemsByLoan({});
       }
-      setMailChannel(mcR.data); setNotifPolicy(npR.data);
-      setMembershipRules(mrR.data || []);
-      // Load all libraries for ILL selects
-      const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name, network_mode, circulation_mode, is_active').order('name');
-      setAllLibraries(allLibs || []);
-      const [au, circStats] = await Promise.all([
-        supabase.from('authors').select('id', { count: 'exact', head: true }),
-        supabase.schema('api').from('library_circulation_stats').select('*').eq('library_id', libraryId).maybeSingle(),
-      ]);
-      const cs = circStats.data || {};
-      setStats({
-        // DOCUMENTOS = holdings de cette biblio (scope par library_id via la vue).
-        // Anciennement count(*) sur books sans filtre -> comptait tout le reseau (bug).
-        books: cs.holdings_count || 0, authors: au.count || 0,
-        exemplars: cs.exemplars_count || 0, readers: cs.readers_active || 0,
-        loansOpen: cs.loans_open || 0, loansOverdue: cs.loans_overdue || 0,
-        loansCreated7d: cs.loans_created_7d || 0, loansReturned7d: cs.loans_returned_7d || 0,
-        loansCreated30d: cs.loans_created_30d || 0,
-        reservationsActive: cs.reservations_active || 0, reservations30d: cs.reservations_30d || 0,
-        consultationsActive: cs.consultations_active || 0,
-        trocasActive: cs.trocas_active || 0,
-        librariansActive: cs.librarians_active || 0,
-        topBooks: cs.top_books_90d || [],
-      });
-    } catch (err) { console.warn('loadAll:', err); }
+      heavyLoadedRef.current = true;
+    } catch (err) { console.warn('loadHeavy:', err); }
   }, [libraryId]);
 
-  useEffect(() => { loadAll(); }, [loadAll]);
+  // loadAll = rechargement complet (saves, refresh manuel, generateReportText).
+  const loadAll = useCallback(async () => {
+    await loadCore();
+    await loadHeavy();
+  }, [loadCore, loadHeavy]);
+
+  // Montage : noyau seulement (paint rapide de l'onglet par defaut).
+  useEffect(() => { loadCore(); }, [loadCore]);
+
+  // Changement de bibliotheque active : le cache lourd redevient invalide.
+  useEffect(() => { heavyLoadedRef.current = false; }, [libraryId]);
+
+  // Chargement paresseux des groupes lourds a la 1re visite d'un onglet
+  // consommateur (idempotent via heavyLoadedRef).
+  useEffect(() => {
+    if (HEAVY_TABS.includes(tab) && !heavyLoadedRef.current) { loadHeavy(); }
+  }, [tab, libraryId, loadHeavy]);
 
   // Correctif EA-02 : recharge avec feedback visuel (busy -> done -> idle).
+  // Recharge le noyau ; le lourd uniquement s'il a deja ete charge.
   const handleRefresh = useCallback(async () => {
     if (refreshState === 'busy') return;
     setRefreshState('busy');
     try {
-      await loadAll();
+      await loadCore();
+      if (heavyLoadedRef.current) await loadHeavy();
       setRefreshState('done');
       setTimeout(() => setRefreshState('idle'), 2000);
     } catch {
       setRefreshState('idle');
     }
-  }, [loadAll, refreshState]);
+  }, [loadCore, loadHeavy, refreshState]);
 
   // ── Save helpers ────────────────────────────────────────
   function setL(k,v){ setLib(p=>p?{...p,[k]:v}:p); }
