@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "Registering…",
   "biblioteca.extPartner.created": "Partner “{name}” created and available at import.",
   "biblioteca.extPartner.linked": "Partner “{name}” already existed — deposit source linked.",
-  "biblioteca.extPartner.error": "Error registering the partner."
+  "biblioteca.extPartner.error": "Error registering the partner.",
+  "importacoes.refresh": "Refresh",
+  "importacoes.refreshing": "Refreshing…"
 }

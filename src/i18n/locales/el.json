@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "Καταχώριση…",
   "biblioteca.extPartner.created": "Ο εταίρος «{name}» δημιουργήθηκε και είναι διαθέσιμος στην εισαγωγή.",
   "biblioteca.extPartner.linked": "Ο εταίρος «{name}» υπήρχε ήδη — η πηγή κατάθεσης συνδέθηκε.",
-  "biblioteca.extPartner.error": "Σφάλμα κατά την καταχώριση του εταίρου."
+  "biblioteca.extPartner.error": "Σφάλμα κατά την καταχώριση του εταίρου.",
+  "importacoes.refresh": "Ανανέωση",
+  "importacoes.refreshing": "Ανανέωση…"
 }

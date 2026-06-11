@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "Registrazione…",
   "biblioteca.extPartner.created": "Partner «{name}» creato e disponibile all’importazione.",
   "biblioteca.extPartner.linked": "Partner «{name}» già esistente — fonte di deposito collegata.",
-  "biblioteca.extPartner.error": "Errore nella registrazione del partner."
+  "biblioteca.extPartner.error": "Errore nella registrazione del partner.",
+  "importacoes.refresh": "Aggiorna",
+  "importacoes.refreshing": "Aggiornamento…"
 }

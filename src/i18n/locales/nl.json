@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "Bezig met registreren…",
   "biblioteca.extPartner.created": "Partner ‘{name}’ aangemaakt en beschikbaar bij het importeren.",
   "biblioteca.extPartner.linked": "Partner ‘{name}’ bestond al — depotbron gekoppeld.",
-  "biblioteca.extPartner.error": "Fout bij het registreren van de partner."
+  "biblioteca.extPartner.error": "Fout bij het registreren van de partner.",
+  "importacoes.refresh": "Vernieuwen",
+  "importacoes.refreshing": "Bezig met vernieuwen…"
 }

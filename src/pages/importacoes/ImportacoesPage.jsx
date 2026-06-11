@@ -137,6 +137,17 @@ export default function ImportacoesPage() {
 
   useEffect(() => { loadSources(); loadRuns(); loadOaiSources(); }, [loadSources, loadRuns, loadOaiSources]);
 
+  // Refresh manuel : le traitement (parse + matching) est asynchrone côté EF ;
+  // les compteurs/états ne se mettent pas à jour en direct. Ce bouton recharge.
+  const [refreshing, setRefreshing] = useState(false);
+  async function handleRefresh() {
+    setRefreshing(true);
+    try {
+      await Promise.all([loadSources(), loadRuns(), loadOaiSources()]);
+      if (selectedRunId) await loadRunRows(selectedRunId);
+    } finally { setRefreshing(false); }
+  }
+
   // ── Derived data (hooks must be before early returns) ──
   const runStats = useMemo(() => {
     const total = runs.length;
@@ -435,7 +446,10 @@ export default function ImportacoesPage() {
           </div>
 
           {/* ── CTA : assistant « Novo import » (wizard IMP-8) ─── */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 14 }}>
+            <button className="cat-btn secondary" type="button" onClick={handleRefresh} disabled={refreshing}>
+              {refreshing ? t({ id: 'importacoes.refreshing' }) : t({ id: 'importacoes.refresh' })}
+            </button>
             <Link to="/importacoes/novo" style={{ textDecoration: 'none' }}>
               <button className="cat-btn primary" type="button">
                 {t({ id: 'importacoes.wizard.launch' })}
@@ -787,7 +801,6 @@ export default function ImportacoesPage() {
             <div className="imp-sheet__head">
               <span className="imp-sheet__title">
                 {t({ id: 'importacoes.fila.title' })}
-                <Pill>{t({ id: 'importacoes.fila.table' })}</Pill>
               </span>
             </div>
             <div className="imp-sheet__body">

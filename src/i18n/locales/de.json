@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "Wird registriert…",
   "biblioteca.extPartner.created": "Partner „{name}“ angelegt und beim Import verfügbar.",
   "biblioteca.extPartner.linked": "Partner „{name}“ existierte bereits — Depot-Quelle verknüpft.",
-  "biblioteca.extPartner.error": "Fehler beim Registrieren des Partners."
+  "biblioteca.extPartner.error": "Fehler beim Registrieren des Partners.",
+  "importacoes.refresh": "Aktualisieren",
+  "importacoes.refreshing": "Wird aktualisiert…"
 }

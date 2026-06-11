@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "Registrando…",
   "biblioteca.extPartner.created": "Socio «{name}» creado y disponible en la importación.",
   "biblioteca.extPartner.linked": "Socio «{name}» ya existía — fuente de depósito vinculada.",
-  "biblioteca.extPartner.error": "Error al registrar el socio."
+  "biblioteca.extPartner.error": "Error al registrar el socio.",
+  "importacoes.refresh": "Actualizar",
+  "importacoes.refreshing": "Actualizando…"
 }

@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "Registrado…",
   "biblioteca.extPartner.created": "Partnero «{name}» kreita kaj disponebla ĉe importo.",
   "biblioteca.extPartner.linked": "Partnero «{name}» jam ekzistis — deponeja fonto ligita.",
-  "biblioteca.extPartner.error": "Eraro dum registrado de la partnero."
+  "biblioteca.extPartner.error": "Eraro dum registrado de la partnero.",
+  "importacoes.refresh": "Aktualigi",
+  "importacoes.refreshing": "Aktualigado…"
 }

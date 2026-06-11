@@ -4084,5 +4084,7 @@
   "biblioteca.extPartner.registering": "S’està registrant…",
   "biblioteca.extPartner.created": "Soci «{name}» creat i disponible a la importació.",
   "biblioteca.extPartner.linked": "Soci «{name}» ja existia — font de dipòsit vinculada.",
-  "biblioteca.extPartner.error": "Error en registrar el soci."
+  "biblioteca.extPartner.error": "Error en registrar el soci.",
+  "importacoes.refresh": "Actualitza",
+  "importacoes.refreshing": "S’està actualitzant…"
 }
