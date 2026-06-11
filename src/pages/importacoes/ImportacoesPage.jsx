@@ -485,8 +485,7 @@ export default function ImportacoesPage() {
             <span aria-hidden="true">⇄</span>
             <div>
               <b>{t({ id: 'importacoes.import.frontier.title' })}</b>{' '}
-              {t({ id: 'importacoes.import.frontier.desc' })}{' '}
-              <Pill variant="info">ACQ-Q4</Pill>
+              {t({ id: 'importacoes.import.frontier.desc' })}
             </div>
           </div>
 
