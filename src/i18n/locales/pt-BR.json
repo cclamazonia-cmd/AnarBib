@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Parceiro «{name}» já existia — fonte de depósito vinculada.",
   "biblioteca.extPartner.error": "Erro ao registrar o parceiro.",
   "importacoes.refresh": "Atualizar",
-  "importacoes.refreshing": "Atualizando…"
+  "importacoes.refreshing": "Atualizando…",
+  "importacoes.deleteRun": "Excluir o tratamento",
+  "importacoes.deleteRunConfirm": "Excluir o tratamento #{id} e seu arquivo? Os rascunhos já criados são mantidos.",
+  "importacoes.deletingRun": "Excluindo…",
+  "importacoes.runDeleted": "Tratamento excluído."
 }

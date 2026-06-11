@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Partnero «{name}» jam ekzistis — deponeja fonto ligita.",
   "biblioteca.extPartner.error": "Eraro dum registrado de la partnero.",
   "importacoes.refresh": "Aktualigi",
-  "importacoes.refreshing": "Aktualigado…"
+  "importacoes.refreshing": "Aktualigado…",
+  "importacoes.deleteRun": "Forigi la traktadon",
+  "importacoes.deleteRunConfirm": "Ĉu forigi la traktadon #{id} kaj ĝian dosieron? La jam kreitaj malnetoj restas.",
+  "importacoes.deletingRun": "Forigado…",
+  "importacoes.runDeleted": "Traktado forigita."
 }

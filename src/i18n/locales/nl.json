@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Partner ‘{name}’ bestond al — depotbron gekoppeld.",
   "biblioteca.extPartner.error": "Fout bij het registreren van de partner.",
   "importacoes.refresh": "Vernieuwen",
-  "importacoes.refreshing": "Bezig met vernieuwen…"
+  "importacoes.refreshing": "Bezig met vernieuwen…",
+  "importacoes.deleteRun": "Run verwijderen",
+  "importacoes.deleteRunConfirm": "Run #{id} en het bestand verwijderen? Reeds aangemaakte concepten blijven behouden.",
+  "importacoes.deletingRun": "Bezig met verwijderen…",
+  "importacoes.runDeleted": "Run verwijderd."
 }

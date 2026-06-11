@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Partenaire « {name} » déjà existant — source de dépôt liée.",
   "biblioteca.extPartner.error": "Erreur lors de l’enregistrement du partenaire.",
   "importacoes.refresh": "Actualiser",
-  "importacoes.refreshing": "Actualisation…"
+  "importacoes.refreshing": "Actualisation…",
+  "importacoes.deleteRun": "Supprimer le run",
+  "importacoes.deleteRunConfirm": "Supprimer le run #{id} et son fichier ? Les brouillons déjà créés sont conservés.",
+  "importacoes.deletingRun": "Suppression…",
+  "importacoes.runDeleted": "Run supprimé."
 }

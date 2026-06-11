@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Partner «{name}» già esistente — fonte di deposito collegata.",
   "biblioteca.extPartner.error": "Errore nella registrazione del partner.",
   "importacoes.refresh": "Aggiorna",
-  "importacoes.refreshing": "Aggiornamento…"
+  "importacoes.refreshing": "Aggiornamento…",
+  "importacoes.deleteRun": "Elimina l’elaborazione",
+  "importacoes.deleteRunConfirm": "Eliminare l’elaborazione #{id} e il suo file? Le bozze già create vengono mantenute.",
+  "importacoes.deletingRun": "Eliminazione…",
+  "importacoes.runDeleted": "Elaborazione eliminata."
 }

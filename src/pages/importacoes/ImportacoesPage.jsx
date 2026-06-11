@@ -256,6 +256,21 @@ export default function ImportacoesPage() {
     }
   }
 
+  // ── Supprimer un run d'import (+ son fichier) ──────────
+  async function handleDeleteRun(runId) {
+    if (!window.confirm(t({ id: 'importacoes.deleteRunConfirm' }, { id: runId }))) return;
+    setMsg({ text: t({ id: 'importacoes.deletingRun' }), kind: 'info' });
+    try {
+      const { error } = await supabase.rpc('fn_import_delete_run', { p_run_id: Number(runId) });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'importacoes.runDeleted' }), kind: 'ok' });
+      if (selectedRunId === runId) { setSelectedRunId(null); setRunRows([]); }
+      await loadRuns();
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
   // ── Fontes externas search (ISBN lookup via EF) ────────
   async function handleSearch() {
     if (!searchQuery.trim()) return;
@@ -611,6 +626,11 @@ export default function ImportacoesPage() {
                                 {t({ id: 'importacoes.generateDrafts' })}
                               </button>
                             )}
+                            <button className="cat-btn ghost" title={t({ id: 'importacoes.deleteRun' })}
+                              style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
+                              onClick={e => { e.stopPropagation(); handleDeleteRun(r.id); }}>
+                              🗑
+                            </button>
                           </div>
                         </div>
                       ))}

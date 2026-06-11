@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Partner “{name}” already existed — deposit source linked.",
   "biblioteca.extPartner.error": "Error registering the partner.",
   "importacoes.refresh": "Refresh",
-  "importacoes.refreshing": "Refreshing…"
+  "importacoes.refreshing": "Refreshing…",
+  "importacoes.deleteRun": "Delete run",
+  "importacoes.deleteRunConfirm": "Delete run #{id} and its file? Drafts already created are kept.",
+  "importacoes.deletingRun": "Deleting…",
+  "importacoes.runDeleted": "Run deleted."
 }

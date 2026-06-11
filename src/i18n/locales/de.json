@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Partner „{name}“ existierte bereits — Depot-Quelle verknüpft.",
   "biblioteca.extPartner.error": "Fehler beim Registrieren des Partners.",
   "importacoes.refresh": "Aktualisieren",
-  "importacoes.refreshing": "Wird aktualisiert…"
+  "importacoes.refreshing": "Wird aktualisiert…",
+  "importacoes.deleteRun": "Lauf löschen",
+  "importacoes.deleteRunConfirm": "Lauf #{id} und seine Datei löschen? Bereits erstellte Entwürfe bleiben erhalten.",
+  "importacoes.deletingRun": "Wird gelöscht…",
+  "importacoes.runDeleted": "Lauf gelöscht."
 }

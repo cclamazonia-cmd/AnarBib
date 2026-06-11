@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Soci «{name}» ja existia — font de dipòsit vinculada.",
   "biblioteca.extPartner.error": "Error en registrar el soci.",
   "importacoes.refresh": "Actualitza",
-  "importacoes.refreshing": "S’està actualitzant…"
+  "importacoes.refreshing": "S’està actualitzant…",
+  "importacoes.deleteRun": "Suprimeix el tractament",
+  "importacoes.deleteRunConfirm": "Voleu suprimir el tractament #{id} i el seu fitxer? Els esborranys ja creats es conserven.",
+  "importacoes.deletingRun": "S’està suprimint…",
+  "importacoes.runDeleted": "Tractament suprimit."
 }

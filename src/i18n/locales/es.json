@@ -4086,5 +4086,9 @@
   "biblioteca.extPartner.linked": "Socio «{name}» ya existía — fuente de depósito vinculada.",
   "biblioteca.extPartner.error": "Error al registrar el socio.",
   "importacoes.refresh": "Actualizar",
-  "importacoes.refreshing": "Actualizando…"
+  "importacoes.refreshing": "Actualizando…",
+  "importacoes.deleteRun": "Eliminar el tratamiento",
+  "importacoes.deleteRunConfirm": "¿Eliminar el tratamiento #{id} y su archivo? Los borradores ya creados se conservan.",
+  "importacoes.deletingRun": "Eliminando…",
+  "importacoes.runDeleted": "Tratamiento eliminado."
 }
