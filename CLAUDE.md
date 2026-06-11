@@ -30,13 +30,21 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
   `react-markdown`, `react-phone-number-input`.
 - **Outils dev** : ESLint 9 (flat config), Vitest 4, jsdom,
   `@testing-library/react`, `gh-pages`.
-- **CI/CD** : Woodpecker CI sur Codeberg (`.woodpecker.yml`), déclenché sur
-  `push`/`manual` de `main`. Pipeline : install → **lint (bloquant)** →
-  **test (bloquant)** → build Vite → deploy Codeberg Pages (branche `pages`,
-  commit orphelin force-push) → miroir GitHub (force-push) → deploy Edge
-  Functions → deploy migrations SQL.
-- Bypass CI : `[CI SKIP]` dans le message de commit.
-- CI utilise la **CLI Supabase v2.98.1** (téléchargée dans le pipeline).
+- **CI/CD** : **Forgejo Actions** (natif Codeberg, fichier
+  `.forgejo/workflows/ci.yml`), déclenché sur `push`/`workflow_dispatch` de `main`.
+  **Migré depuis Woodpecker le 11/06/2026** (Woodpecker hébergé devenu instable,
+  ~22 % d'uptime). **Deux jobs** (la limite ~5 min/job des runners mutualisés
+  imposait le découpage) : **`app`** (install → **lint bloquant** → **test
+  bloquant** → build Vite → deploy Codeberg Pages, branche `pages`, commit
+  orphelin force-push) puis **`backend`** (`needs: app` → edge functions →
+  `supabase db push`). Le **miroir GitHub n'est plus une étape CI** : il est tenu
+  à jour par le **dual-push `origin`** (cf. Workflow Git).
+- **Runner : `anarbib-local` — AUTO-HÉBERGÉ** (`forgejo-runner` sur le WSL2 de
+  Xavier, service systemd, depuis le 11/06). Tourne quand sa machine est allumée
+  (seul dev) ; hors ligne → les runs **attendent**. Runbook :
+  `docs/journal/operations/SETUP_runner_wsl2_2026-06-11.md`.
+- Bypass CI : `[CI SKIP]` / `[skip ci]` dans le message de commit.
+- CI utilise la **CLI Supabase v2.98.1** (téléchargée dans le job `backend`).
 - `vite.config.js` : `base: '/'`, alias `@` → `src/`, `pdfjs-dist` exclu de
   l'optimizeDeps, `manualChunks` (react/supabase/i18n/phone vendors).
 
@@ -54,14 +62,14 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
 
 `restart.sh` (bash) : purge `node_modules/.vite` puis `npx vite --force`.
 
-> ⚠️ En usage normal le déploiement passe par **Woodpecker** (push sur `main`).
+> ⚠️ En usage normal le déploiement passe par **Forgejo Actions** (push sur `main`).
 > Les scripts `npm run deploy*` sont des déploiements manuels alternatifs.
 
 ## Workflow Git (état réel vérifié)
 
 > 🥇 **RÈGLE D'OR — jamais deux push concurrents.** **Avant** tout `git push`,
 > vérifier qu'**aucun autre push n'est déjà en cours** (autre session/agent, ou
-> pipeline Woodpecker pas encore terminé). Deux push concurrents sur `main` =
+> run Forgejo pas encore terminé). Deux push concurrents sur `main` =
 > collisions (rebase forcé, horodatages de migration qui s'entrechoquent,
 > pipeline rouge — cf. la règle d'horodatage exact et le piège des sessions
 > parallèles). Procédure **avant de pousser** : (1) `git fetch` et vérifier que
@@ -73,12 +81,18 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
 >
 > 🔁 **Corollaire — sérialiser ses PROPRES push consécutifs.** La règle vaut
 > aussi pour soi-même : ne **jamais** enchaîner un second `git push` tant que le
-> pipeline Woodpecker du push précédent n'est **pas terminé** (vert). Cas typique :
+> run Forgejo du push précédent n'est **pas terminé** (vert). Cas typique :
 > pousser une **migration** puis enchaîner aussitôt un push **frontend** « par
 > dessus » → deux pipelines concurrents, deux `supabase db push` qui se
 > chevauchent. Procédure : push migration → **attendre la fin du pipeline**
 > (vert) → push suivant. Si plusieurs lots sont prêts en même temps, les pousser
-> **un par un**, chaque fois pipeline précédent terminé.
+> **un par un**, chaque fois run précédent terminé.
+>
+> *(Filets de sécurité Forgejo : le workflow porte `concurrency: cicd-main`
+> [`cancel-in-progress: false`] qui **sérialise** les runs sur `main`, et le runner
+> auto-hébergé traite **un job à la fois** — donc deux runs ne s'exécutent pas en
+> parallèle. Mais la discipline `git fetch`-avant-push + horodatage exact reste
+> requise : ces filets n'empêchent pas une collision d'horodatage de migration.)*
 
 **Remotes** (`git remote -v`) :
 
@@ -92,8 +106,12 @@ origin    https://codeberg.org/anarbib/anarbib.git        (push)
 - `origin` **fetch depuis GitHub**, mais a **deux URLs de push** (GitHub *et*
   Codeberg). La branche `main` suit `origin/main` → un simple `git push` (sur
   `main`) pousse vers les deux URLs de `origin`.
-- Codeberg = source de vérité (déclenche Woodpecker) ; GitHub = miroir
-  (force-pushé par la CI → tout commit fait directement sur GitHub est écrasé).
+- Codeberg = source de vérité (déclenche Forgejo Actions) ; GitHub = miroir
+  tenu à jour par le **dual-push `origin`** (un `git push origin main` pousse vers
+  les deux URLs). ⚠️ Le miroir n'est **plus une étape CI** (retirée le 11/06 ;
+  Codeberg bloque par ailleurs les miroirs natifs) → un commit poussé **uniquement**
+  sur `codeberg` (sans `origin`) laisse GitHub **en retard**. Pousser via `origin`
+  (ou l'alias `publish-app`).
 
 **Alias** (`git config --get-regexp ^alias\.`) — un seul :
 
@@ -226,9 +244,9 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
   > supérieur** au max présent ; (3) si l'heure réelle est ≤ au max (sessions
   > concurrentes), prendre `max + 1 seconde`, pas un saut arbitraire. Une
   > collision d'horodatage est un incident, pas un détail.
-- Déploiement functions **et** migrations : **automatique par Woodpecker** au
-  push sur `main` (`supabase functions deploy` / `supabase db push --linked
-  --include-all`).
+- Déploiement functions **et** migrations : **automatique par Forgejo Actions**
+  (job `backend`) au push sur `main` (`supabase functions deploy` / `supabase db
+  push --linked --include-all`).
 - Tests SQL d'acceptation : `tests/sql/*.sql` (lancés manuellement). Présents :
   `paquet19_loan_wrappers_tests`, `paquet24_consulta_helpers_tests`,
   `paquet25_consulta_wrappers_tests`,
@@ -286,12 +304,14 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
 5. **`README-i18n-section.md` obsolète** : ne pas s'y fier (voir i18n).
 6. **Hook pre-commit non actif par défaut** : nécessite
    `git config core.hooksPath .githooks`.
-7. **Miroir GitHub force-pushé par la CI** : tout commit poussé directement sur
-   GitHub est écrasé au prochain push Codeberg→main.
+7. **Miroir GitHub via dual-push `origin`** (plus d'étape CI depuis le 11/06) :
+   pousser via `origin` (ou `publish-app`) garde GitHub synchro ; un push
+   `codeberg`-seul le laisse en retard. Un commit fait *directement* sur GitHub
+   est écrasé au prochain `git push origin main`.
 8. **MCP Supabase limité en taille** : ne peut pas déployer `notify-event`
    (bundle volumineux). Utiliser la CLI (c'est ce que fait la CI).
 9. **`apply-patch.ps1` fait `npm run deploy`** en plus du push : doublon possible
-   avec le déploiement Pages de Woodpecker.
+   avec le déploiement Pages de Forgejo Actions.
 10. Doctrines internalisées documentées dans `README.md` / `docs/journal/`
     (à respecter) : ordre des UPDATE en RPC, distinction
     `workflow_note`/`schedule_reply_note`, pas d'`async` dans
