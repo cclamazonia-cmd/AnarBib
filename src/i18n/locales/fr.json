@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Effacer la sélection",
   "importacoes.fila.allMatches": "Toutes les correspondances",
   "importacoes.fila.filterNew": "Nouveautés",
-  "importacoes.fila.filterDup": "Doublons possibles"
+  "importacoes.fila.filterDup": "Doublons possibles",
+  "importacoes.fila.processing.title": "Import en cours de traitement",
+  "importacoes.fila.processing.desc": "Les lignes sont encore analysées et comparées au catalogue. Patientez et actualisez dans un instant.",
+  "importacoes.fila.failed.title": "Import échoué",
+  "importacoes.fila.failed.desc": "Ce lot n’a pas pu être traité. Vous pouvez l’archiver ou le supprimer dans la liste des lots.",
+  "importacoes.fila.matchAgainst": "Doublon possible de : {title}",
+  "importacoes.fila.matchVerify": "Correspondance au catalogue — à vérifier",
+  "importacoes.fila.reject": "Rejeter {n}",
+  "importacoes.fila.rejecting": "Rejet des lignes…",
+  "importacoes.fila.rejected": "Lignes écartées."
 }

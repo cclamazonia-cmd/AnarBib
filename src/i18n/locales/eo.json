@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Vakigi elekton",
   "importacoes.fila.allMatches": "Ĉiuj kongruoj",
   "importacoes.fila.filterNew": "Novaĵoj",
-  "importacoes.fila.filterDup": "Eblaj duplikatoj"
+  "importacoes.fila.filterDup": "Eblaj duplikatoj",
+  "importacoes.fila.processing.title": "Importo traktata",
+  "importacoes.fila.processing.desc": "La linioj ankoraŭ estas analizataj kaj komparataj kun la katalogo. Bonvolu atendi kaj aktualigi post momento.",
+  "importacoes.fila.failed.title": "Importo malsukcesis",
+  "importacoes.fila.failed.desc": "Ĉi tiu loto ne povis esti traktita. Vi povas arkivi aŭ forigi ĝin en la listo de lotoj.",
+  "importacoes.fila.matchAgainst": "Ebla duplikato de: {title}",
+  "importacoes.fila.matchVerify": "Kongruo en katalogo — kontroli",
+  "importacoes.fila.reject": "Malakcepti {n}",
+  "importacoes.fila.rejecting": "Malakceptante liniojn…",
+  "importacoes.fila.rejected": "Linioj malakceptitaj."
 }

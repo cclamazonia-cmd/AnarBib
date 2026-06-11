@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Esborra la selecció",
   "importacoes.fila.allMatches": "Totes les correspondències",
   "importacoes.fila.filterNew": "Novetats",
-  "importacoes.fila.filterDup": "Possibles duplicats"
+  "importacoes.fila.filterDup": "Possibles duplicats",
+  "importacoes.fila.processing.title": "Importació en procés",
+  "importacoes.fila.processing.desc": "Les línies encara s’analitzen i es comparen amb el catàleg. Espereu i actualitzeu d’aquí a poc.",
+  "importacoes.fila.failed.title": "La importació ha fallat",
+  "importacoes.fila.failed.desc": "Aquest lot no s’ha pogut processar. El podeu arxivar o eliminar a la llista de lots.",
+  "importacoes.fila.matchAgainst": "Possible duplicat de: {title}",
+  "importacoes.fila.matchVerify": "Coincidència al catàleg — verificar",
+  "importacoes.fila.reject": "Rebutja {n}",
+  "importacoes.fila.rejecting": "Rebutjant línies…",
+  "importacoes.fila.rejected": "Línies rebutjades."
 }

@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Auswahl aufheben",
   "importacoes.fila.allMatches": "Alle Treffer",
   "importacoes.fila.filterNew": "Neuzugänge",
-  "importacoes.fila.filterDup": "Mögliche Duplikate"
+  "importacoes.fila.filterDup": "Mögliche Duplikate",
+  "importacoes.fila.processing.title": "Import wird verarbeitet",
+  "importacoes.fila.processing.desc": "Die Zeilen werden noch analysiert und mit dem Katalog abgeglichen. Bitte warten und gleich aktualisieren.",
+  "importacoes.fila.failed.title": "Import fehlgeschlagen",
+  "importacoes.fila.failed.desc": "Dieser Stapel konnte nicht verarbeitet werden. Sie können ihn in der Stapelliste archivieren oder löschen.",
+  "importacoes.fila.matchAgainst": "Mögliches Duplikat von: {title}",
+  "importacoes.fila.matchVerify": "Katalogtreffer — prüfen",
+  "importacoes.fila.reject": "{n} ablehnen",
+  "importacoes.fila.rejecting": "Zeilen werden abgelehnt…",
+  "importacoes.fila.rejected": "Zeilen abgelehnt."
 }

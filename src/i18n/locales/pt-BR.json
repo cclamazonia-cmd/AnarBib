@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Limpar seleção",
   "importacoes.fila.allMatches": "Todas as correspondências",
   "importacoes.fila.filterNew": "Novidades",
-  "importacoes.fila.filterDup": "Possíveis duplicados"
+  "importacoes.fila.filterDup": "Possíveis duplicados",
+  "importacoes.fila.processing.title": "Importação em processamento",
+  "importacoes.fila.processing.desc": "As linhas ainda estão sendo analisadas e comparadas com o catálogo. Aguarde e atualize em alguns instantes.",
+  "importacoes.fila.failed.title": "Importação falhou",
+  "importacoes.fila.failed.desc": "Este lote não pôde ser processado. Você pode arquivá-lo ou excluí-lo na lista de lotes.",
+  "importacoes.fila.matchAgainst": "Possível duplicado de: {title}",
+  "importacoes.fila.matchVerify": "Correspondência no catálogo — verificar",
+  "importacoes.fila.reject": "Rejeitar {n}",
+  "importacoes.fila.rejecting": "Rejeitando linhas…",
+  "importacoes.fila.rejected": "Linhas rejeitadas."
 }

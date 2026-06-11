@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Καθαρισμός επιλογής",
   "importacoes.fila.allMatches": "Όλες οι αντιστοιχίσεις",
   "importacoes.fila.filterNew": "Νέες εγγραφές",
-  "importacoes.fila.filterDup": "Πιθανά διπλότυπα"
+  "importacoes.fila.filterDup": "Πιθανά διπλότυπα",
+  "importacoes.fila.processing.title": "Επεξεργασία εισαγωγής",
+  "importacoes.fila.processing.desc": "Οι γραμμές αναλύονται ακόμη και αντιπαραβάλλονται με τον κατάλογο. Περιμένετε και ανανεώστε σε λίγο.",
+  "importacoes.fila.failed.title": "Η εισαγωγή απέτυχε",
+  "importacoes.fila.failed.desc": "Αυτή η παρτίδα δεν μπόρεσε να επεξεργαστεί. Μπορείτε να την αρχειοθετήσετε ή να τη διαγράψετε στη λίστα παρτίδων.",
+  "importacoes.fila.matchAgainst": "Πιθανό διπλότυπο του: {title}",
+  "importacoes.fila.matchVerify": "Αντιστοίχιση στον κατάλογο — έλεγχος",
+  "importacoes.fila.reject": "Απόρριψη {n}",
+  "importacoes.fila.rejecting": "Απόρριψη γραμμών…",
+  "importacoes.fila.rejected": "Οι γραμμές απορρίφθηκαν."
 }

@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Clear selection",
   "importacoes.fila.allMatches": "All matches",
   "importacoes.fila.filterNew": "New records",
-  "importacoes.fila.filterDup": "Possible duplicates"
+  "importacoes.fila.filterDup": "Possible duplicates",
+  "importacoes.fila.processing.title": "Import processing",
+  "importacoes.fila.processing.desc": "Rows are still being parsed and matched against the catalog. Please wait and refresh in a moment.",
+  "importacoes.fila.failed.title": "Import failed",
+  "importacoes.fila.failed.desc": "This batch could not be processed. You can archive or delete it in the batch list.",
+  "importacoes.fila.matchAgainst": "Possible duplicate of: {title}",
+  "importacoes.fila.matchVerify": "Catalog match — to verify",
+  "importacoes.fila.reject": "Reject {n}",
+  "importacoes.fila.rejecting": "Rejecting rows…",
+  "importacoes.fila.rejected": "Rows rejected."
 }

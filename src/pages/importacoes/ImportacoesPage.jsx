@@ -176,12 +176,26 @@ export default function ImportacoesPage() {
     return rows;
   }, [runRows, filaStateFilter, filaMatchFilter]);
 
-  // Nouveautés sélectionnables : non encore promues (sans brouillon créé).
+  // Run sélectionné + barrière : on ne montre les lignes que si le traitement
+  // (parse + matching) est terminé. Sinon « en cours » ou « échoué ».
+  const selectedRun = useMemo(() => runs.find(r => r.id === selectedRunId) || null, [runs, selectedRunId]);
+  const runProcessing = !!selectedRun && ['pending', 'uploaded', 'parsing', 'parsed'].includes(selectedRun.run_status);
+  const runFailed = !!selectedRun && selectedRun.run_status === 'failed';
+
+  // Lignes à traiter (sélectionnables) : non promues ET décision encore en
+  // attente — nouveautés ET doublons (pour pouvoir les écarter/rejeter).
   const selectableIds = useMemo(
-    () => filteredRunRows.filter(r => r.match_status === 'new_record' && !r.created_book_draft_id).map(r => r.id),
+    () => filteredRunRows
+      .filter(r => !r.created_book_draft_id && (r.editorial_decision == null || r.editorial_decision === 'pending'))
+      .map(r => r.id),
     [filteredRunRows]
   );
   const allVisibleSelected = selectableIds.length > 0 && selectableIds.every(id => selectedRows.has(id));
+  // Combien de sélectionnées sont des nouveautés promouvables (pour le bouton Criar).
+  const selectedNewCount = useMemo(
+    () => filteredRunRows.filter(r => selectedRows.has(r.id) && r.match_status === 'new_record' && !r.created_book_draft_id).length,
+    [filteredRunRows, selectedRows]
+  );
 
   // Réinitialise pagination + sélection quand on change de run ou de filtre.
   useEffect(() => { setRowLimit(50); setSelectedRows(new Set()); }, [selectedRunId, filaStateFilter, filaMatchFilter]);
@@ -292,14 +306,17 @@ export default function ImportacoesPage() {
     });
   }
   async function handlePromoteSelected() {
-    const ids = [...selectedRows];
-    if (!ids.length || !selectedRunId) return;
+    if (!selectedRunId) return;
+    // On ne promeut QUE les nouveautés sélectionnées (les doublons ne se créent
+    // pas à l'aveugle — ils s'écartent via Rejeter, ou se rapprochent par
+    // l'Adaptador). On filtre donc la sélection sur match_status='new_record'.
+    const ids = filteredRunRows
+      .filter(r => selectedRows.has(r.id) && r.match_status === 'new_record' && !r.created_book_draft_id)
+      .map(r => r.id);
+    if (!ids.length) return;
     setPromotingSel(true);
     setMsg({ text: t({ id: 'importacoes.generatingDrafts' }), kind: 'info' });
     try {
-      // On accepte les nouveautés sélectionnées (accept_new) ; promote ne crée
-      // alors un brouillon que pour ces lignes (les autres restent en attente,
-      // celles déjà promues sont ignorées car created_book_draft_id non nul).
       await supabase.rpc('fn_import_set_editorial', {
         p_run_id: Number(selectedRunId),
         p_row_ids: ids,
@@ -311,6 +328,30 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.draftsCreated' }), kind: 'ok' });
       setSelectedRows(new Set());
       await loadRuns();
+      await loadRunRows(selectedRunId);
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally {
+      setPromotingSel(false);
+    }
+  }
+  // Écarter des lignes (doublons, hors-sujet) : décision 'reject'. Elles ne
+  // seront jamais promues et apparaissent « Rejeitada » (rouge).
+  async function handleRejectSelected() {
+    const ids = [...selectedRows];
+    if (!ids.length || !selectedRunId) return;
+    setPromotingSel(true);
+    setMsg({ text: t({ id: 'importacoes.fila.rejecting' }), kind: 'info' });
+    try {
+      const { error } = await supabase.rpc('fn_import_set_editorial', {
+        p_run_id: Number(selectedRunId),
+        p_row_ids: ids,
+        p_editorial_decision: 'reject',
+        p_editorial_note: 'page import: écarté (doublon / non pertinent)',
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'importacoes.fila.rejected' }), kind: 'ok' });
+      setSelectedRows(new Set());
       await loadRunRows(selectedRunId);
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
@@ -969,16 +1010,41 @@ export default function ImportacoesPage() {
                 </div>
               )}
 
-              {/* Rows table */}
-              {selectedRunId && (
+              {/* Barrière : import en cours de traitement (parse + matching) */}
+              {selectedRunId && runProcessing && (
+                <div className="imp-sheet" style={{ textAlign: 'center', padding: '28px 20px' }}>
+                  <div style={{ fontSize: '1.6rem', marginBottom: 8 }}>⏳</div>
+                  <p style={{ fontWeight: 600, margin: '0 0 6px' }}>{t({ id: 'importacoes.fila.processing.title' })}</p>
+                  <p className="imp-note" style={{ maxWidth: 520, margin: '0 auto 14px' }}>{t({ id: 'importacoes.fila.processing.desc' })}</p>
+                  <button className="cat-btn secondary" disabled={refreshing} onClick={handleRefresh}>
+                    {refreshing ? t({ id: 'importacoes.refreshing' }) : t({ id: 'importacoes.refresh' })}
+                  </button>
+                </div>
+              )}
+
+              {/* Barrière : import échoué */}
+              {selectedRunId && runFailed && (
+                <div className="imp-sheet" style={{ textAlign: 'center', padding: '28px 20px' }}>
+                  <div style={{ fontSize: '1.6rem', marginBottom: 8 }}>⚠️</div>
+                  <p style={{ fontWeight: 600, margin: '0 0 6px' }}>{t({ id: 'importacoes.fila.failed.title' })}</p>
+                  <p className="imp-note" style={{ maxWidth: 520, margin: '0 auto' }}>{t({ id: 'importacoes.fila.failed.desc' })}</p>
+                </div>
+              )}
+
+              {/* Rows table (uniquement si traitement terminé) */}
+              {selectedRunId && !runProcessing && !runFailed && (
                 <div style={{ overflowX: 'auto' }}>
                   {runRowsLoading && <p className="imp-note">{t({ id: 'importacoes.loadingRows' })}</p>}
                   {!runRowsLoading && filteredRunRows.length === 0 && <p className="imp-note">{t({ id: 'importacoes.noRowsAvailable' })}</p>}
                   {selectedRows.size > 0 && (
                     <div className="imp-batchbar" style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '4px 0 12px', padding: '8px 12px', background: 'var(--brand-surface-2, rgba(0,0,0,.04))', borderRadius: 8, flexWrap: 'wrap' }}>
                       <span className="imp-note">{t({ id: 'importacoes.fila.selectedCount' }, { n: selectedRows.size })}</span>
-                      <button className="cat-btn" disabled={promotingSel} onClick={handlePromoteSelected}>
-                        {promotingSel ? t({ id: 'importacoes.generatingDrafts' }) : t({ id: 'importacoes.fila.createSelected' }, { n: selectedRows.size })}
+                      <button className="cat-btn" disabled={promotingSel || selectedNewCount === 0} onClick={handlePromoteSelected}>
+                        {promotingSel ? t({ id: 'importacoes.generatingDrafts' }) : t({ id: 'importacoes.fila.createSelected' }, { n: selectedNewCount })}
+                      </button>
+                      <button className="cat-btn secondary" disabled={promotingSel} onClick={handleRejectSelected}
+                        style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
+                        {t({ id: 'importacoes.fila.reject' }, { n: selectedRows.size })}
                       </button>
                       <button className="cat-btn secondary" disabled={promotingSel} onClick={() => setSelectedRows(new Set())}>
                         {t({ id: 'importacoes.fila.clearSelection' })}
@@ -1005,13 +1071,15 @@ export default function ImportacoesPage() {
                         {filteredRunRows.slice(0, rowLimit).map(row => {
                           const ms = row.match_status || 'unreviewed';
                           const isNew = ms === 'new_record';
-                          const isDup = ms === 'possible_duplicate' || ms === 'matched_book' || ms === 'matched_draft';
+                          const isMatched = ms === 'matched_book' || ms === 'matched_draft';
+                          const isDup = ms === 'possible_duplicate' || isMatched;
                           const ed = row.editorial_decision || 'pending';
-                          const selectable = isNew && !row.created_book_draft_id;
+                          // Sélectionnable : pas encore promue ET décision en attente.
+                          const reviewable = !row.created_book_draft_id && ed === 'pending';
                           return (
-                            <tr key={row.id}>
+                            <tr key={row.id} style={ed === 'reject' ? { opacity: 0.55 } : undefined}>
                               <td>
-                                {selectable && (
+                                {reviewable && (
                                   <input type="checkbox" checked={selectedRows.has(row.id)}
                                     onChange={() => toggleRow(row.id)} />
                                 )}
@@ -1022,13 +1090,15 @@ export default function ImportacoesPage() {
                               </td>
                               <td><Pill>{runs.find(r => r.id === row.run_id)?.source_name || '—'}</Pill></td>
                               <td>
-                                <Pill variant={isNew ? 'ok' : isDup ? 'warn' : 'muted'}>
+                                <Pill variant={isNew ? 'ok' : isMatched ? 'info' : isDup ? 'warn' : 'muted'}>
                                   {t({ id: 'importacoes.fila.match.' + ms })}
                                 </Pill>
-                                {isDup && row.confidence != null && (
-                                  <span className="imp-note" style={{ marginLeft: 6, fontSize: '.72rem' }}>
-                                    {(row.confidence * 100).toFixed(0)}%
-                                  </span>
+                                {isDup && (
+                                  <div className="imp-note" style={{ marginTop: 3, fontSize: '.72rem' }}>
+                                    {row.proposed_title
+                                      ? t({ id: 'importacoes.fila.matchAgainst' }, { title: row.proposed_title })
+                                      : t({ id: 'importacoes.fila.matchVerify' })}
+                                  </div>
                                 )}
                               </td>
                               <td className="imp-hide-sm">

@@ -4120,5 +4120,14 @@
   "importacoes.fila.clearSelection": "Selectie wissen",
   "importacoes.fila.allMatches": "Alle overeenkomsten",
   "importacoes.fila.filterNew": "Nieuw",
-  "importacoes.fila.filterDup": "Mogelijke duplicaten"
+  "importacoes.fila.filterDup": "Mogelijke duplicaten",
+  "importacoes.fila.processing.title": "Import wordt verwerkt",
+  "importacoes.fila.processing.desc": "De regels worden nog verwerkt en vergeleken met de catalogus. Wacht even en vernieuw zo.",
+  "importacoes.fila.failed.title": "Import mislukt",
+  "importacoes.fila.failed.desc": "Deze batch kon niet worden verwerkt. U kunt hem archiveren of verwijderen in de batchlijst.",
+  "importacoes.fila.matchAgainst": "Mogelijk duplicaat van: {title}",
+  "importacoes.fila.matchVerify": "Catalogusmatch — controleren",
+  "importacoes.fila.reject": "{n} afwijzen",
+  "importacoes.fila.rejecting": "Regels afwijzen…",
+  "importacoes.fila.rejected": "Regels afgewezen."
 }
