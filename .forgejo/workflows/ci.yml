@@ -1,0 +1,140 @@
+# =============================================================================
+# Forgejo Actions — CI/CD AnarBib   (remplace .woodpecker.yml)
+# Transposition fidèle du pipeline Woodpecker v4 :
+#   install → lint(BLOQUANT) → test(BLOQUANT) → build →
+#   deploy Pages → miroir GitHub(SSH, non bloquant) → edge functions → migrations
+#
+# Runner Codeberg : label `codeberg-small` (passer à `codeberg-medium` si le build
+# manque de RAM). [skip ci] / [ci skip] dans le message de commit = run sauté (natif).
+#
+# Tout en UN SEUL job (même conteneur) : le dist/ du build reste dispo pour les
+# steps de déploiement, sans passer par des artefacts inter-jobs.
+# Les steps de déploiement ne s'exécutent que sur `push` (pas en run manuel).
+# =============================================================================
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Sérialise les pipelines main (la « règle d'or » anti-push-concurrent, native).
+concurrency:
+  group: cicd-main
+  cancel-in-progress: false
+
+jobs:
+  cicd:
+    runs-on: codeberg-small
+    container:
+      image: node:20
+    steps:
+      - name: Outils système (git, ssh, curl, tar)
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq git openssh-client curl tar >/dev/null
+          echo "✓ outils prêts"
+
+      - name: Checkout (historique complet — requis pour le miroir force-push)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install des dépendances
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint (ESLint) — BLOQUANT
+        run: npm run lint
+
+      - name: Tests (vitest) — BLOQUANT
+        run: npm test
+
+      - name: Build Vite
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
+        run: |
+          npm run build
+          test -d dist || (echo "✗ dist/ introuvable" && exit 1)
+          echo "✓ build OK"
+
+      # ----- Déploiements : uniquement sur push (jamais en run manuel) ----------
+      - name: Deploy Pages (branche `pages`, commit orphelin)
+        if: github.event_name == 'push'
+        env:
+          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+          CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
+          CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN }}
+        run: |
+          cd dist
+          echo "$CUSTOM_DOMAIN" > .domains
+          cp index.html 404.html   # fallback SPA pour le routing client
+          git init -b pages
+          git config user.email "ci@anarbib.codeberg.page"
+          git config user.name "AnarBib CI"
+          git add -A
+          git commit -m "Deploy from main@${GITHUB_SHA:0:8}"
+          git remote add origin "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
+          git push --force origin pages
+          echo "✓ Pages déployé"
+
+      - name: Miroir Codeberg → GitHub (SSH, NON bloquant)
+        if: github.event_name == 'push'
+        continue-on-error: true     # = `failure: ignore` Woodpecker : pure redondance
+        env:
+          # NB : préfixes GITHUB_/GITEA_/FORGEJO_ INTERDITS pour les secrets ET les
+          # env vars utilisateur (réservés Forgejo) → on nomme MIRROR_*.
+          MIRROR_DEPLOY_KEY: ${{ secrets.MIRROR_DEPLOY_KEY }}   # clé privée SSH, base64
+          MIRROR_REPO: ${{ secrets.MIRROR_REPO }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "$MIRROR_DEPLOY_KEY" | base64 -d > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+          git config --global user.email "ci@anarbib.codeberg.page"
+          git config --global user.name "AnarBib CI"
+          git remote add github "git@github.com:${MIRROR_REPO}.git" 2>/dev/null \
+            || git remote set-url github "git@github.com:${MIRROR_REPO}.git"
+          git push github HEAD:refs/heads/main --force
+          echo "✓ miroir GitHub à jour"
+
+      - name: Deploy Edge Functions (Supabase CLI)
+        if: github.event_name == 'push'
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
+          curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/download/v2.98.1/supabase_linux_amd64.tar.gz
+          tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
+          chmod +x /usr/local/bin/supabase
+          supabase --version
+          supabase link --project-ref "$SUPABASE_PROJECT_REF"
+          set -e
+          for fn_dir in supabase/functions/*/; do
+            fn_name=$(basename "$fn_dir")
+            [ "$fn_name" = "_shared" ] && { echo "→ skip _shared (module partagé)"; continue; }
+            [ -f "${fn_dir}index.ts" ] || { echo "→ skip $fn_name (pas d'index.ts)"; continue; }
+            echo "→ deploy $fn_name"
+            supabase functions deploy "$fn_name" --project-ref "$SUPABASE_PROJECT_REF"
+          done
+          echo "✓ Edge Functions déployées"
+
+      - name: Deploy Migrations SQL (supabase db push)
+        if: github.event_name == 'push'
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+        run: |
+          if [ ! -d supabase/migrations ] || [ -z "$(ls -A supabase/migrations 2>/dev/null)" ]; then
+            echo "→ aucune migration, rien à déployer"; exit 0
+          fi
+          if ! command -v supabase >/dev/null 2>&1; then
+            curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/download/v2.98.1/supabase_linux_amd64.tar.gz
+            tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
+            chmod +x /usr/local/bin/supabase
+          fi
+          supabase link --project-ref "$SUPABASE_PROJECT_REF"
+          supabase db push --linked --include-all
+          echo "✓ migrations synchronisées"
