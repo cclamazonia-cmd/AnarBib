@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Elimina l’elaborazione",
   "importacoes.deleteRunConfirm": "Eliminare l’elaborazione #{id} e il suo file? Le bozze già create vengono mantenute.",
   "importacoes.deletingRun": "Eliminazione…",
-  "importacoes.runDeleted": "Elaborazione eliminata."
+  "importacoes.runDeleted": "Elaborazione eliminata.",
+  "importacoes.archiveRun": "Archivia",
+  "importacoes.unarchiveRun": "Annulla archiviazione",
+  "importacoes.showArchived": "Mostra archiviati",
+  "importacoes.archiving": "Aggiornamento…",
+  "importacoes.runArchived": "Elaborazione archiviata.",
+  "importacoes.runUnarchived": "Archiviazione annullata."
 }

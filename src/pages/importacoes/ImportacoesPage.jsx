@@ -271,6 +271,20 @@ export default function ImportacoesPage() {
     }
   }
 
+  // ── Archiver / désarchiver un run (masquage doux) ─────
+  const [showArchived, setShowArchived] = useState(false);
+  async function handleArchiveRun(runId, archived) {
+    setMsg({ text: t({ id: 'importacoes.archiving' }), kind: 'info' });
+    try {
+      const { error } = await supabase.rpc('fn_import_archive_run', { p_run_id: Number(runId), p_archived: archived });
+      if (error) throw error;
+      setMsg({ text: t({ id: archived ? 'importacoes.runArchived' : 'importacoes.runUnarchived' }), kind: 'ok' });
+      await loadRuns();
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
+  }
+
   // ── Fontes externas search (ISBN lookup via EF) ────────
   async function handleSearch() {
     if (!searchQuery.trim()) return;
@@ -607,11 +621,17 @@ export default function ImportacoesPage() {
                 {/* Run list for this circuit */}
                 {runs.length > 0 && (
                   <div style={{ marginTop: 16 }}>
-                    <h4 style={{ margin: '0 0 8px', fontSize: '.94rem' }}>{t({ id: 'importacoes.arquivo.recentRuns' })}</h4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 0 8px' }}>
+                      <h4 style={{ margin: 0, fontSize: '.94rem' }}>{t({ id: 'importacoes.arquivo.recentRuns' })}</h4>
+                      <label style={{ fontSize: '.78rem', color: 'var(--brand-muted)', display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
+                        <input type="checkbox" checked={showArchived} onChange={e => setShowArchived(e.target.checked)} />
+                        {t({ id: 'importacoes.showArchived' })}
+                      </label>
+                    </div>
                     <div style={{ maxHeight: 200, overflowY: 'auto', border: '1px solid rgba(255,255,255,.06)', borderRadius: 8 }}>
-                      {runs.slice(0, 10).map(r => (
+                      {runs.filter(r => showArchived || !r.archived_at).slice(0, 12).map(r => (
                         <div key={r.id} onClick={() => { setSelectedRunId(r.id); loadRunRows(r.id); }}
-                          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: selectedRunId === r.id ? 'rgba(29,78,216,.12)' : 'transparent' }}>
+                          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: selectedRunId === r.id ? 'rgba(29,78,216,.12)' : 'transparent', opacity: r.archived_at ? 0.5 : 1 }}>
                           <div>
                             <span style={{ fontWeight: 600, fontSize: '.88rem' }}>#{r.id}</span>
                             <span style={{ color: 'var(--brand-muted)', fontSize: '.82rem', marginLeft: 8 }}>{r.original_filename || '—'}</span>
@@ -626,6 +646,11 @@ export default function ImportacoesPage() {
                                 {t({ id: 'importacoes.generateDrafts' })}
                               </button>
                             )}
+                            <button className="cat-btn ghost" title={t({ id: r.archived_at ? 'importacoes.unarchiveRun' : 'importacoes.archiveRun' })}
+                              style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
+                              onClick={e => { e.stopPropagation(); handleArchiveRun(r.id, !r.archived_at); }}>
+                              {r.archived_at ? '↩' : '🗄'}
+                            </button>
                             <button className="cat-btn ghost" title={t({ id: 'importacoes.deleteRun' })}
                               style={{ fontSize: '.9rem', padding: '4px 8px', minHeight: 0 }}
                               onClick={e => { e.stopPropagation(); handleDeleteRun(r.id); }}>

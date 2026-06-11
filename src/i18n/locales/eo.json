@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Forigi la traktadon",
   "importacoes.deleteRunConfirm": "Ĉu forigi la traktadon #{id} kaj ĝian dosieron? La jam kreitaj malnetoj restas.",
   "importacoes.deletingRun": "Forigado…",
-  "importacoes.runDeleted": "Traktado forigita."
+  "importacoes.runDeleted": "Traktado forigita.",
+  "importacoes.archiveRun": "Arkivi",
+  "importacoes.unarchiveRun": "Malarkivi",
+  "importacoes.showArchived": "Montri arkivitajn",
+  "importacoes.archiving": "Ĝisdatigado…",
+  "importacoes.runArchived": "Traktado arkivita.",
+  "importacoes.runUnarchived": "Traktado malarkivita."
 }

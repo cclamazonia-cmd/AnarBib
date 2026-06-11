@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Supprimer le run",
   "importacoes.deleteRunConfirm": "Supprimer le run #{id} et son fichier ? Les brouillons déjà créés sont conservés.",
   "importacoes.deletingRun": "Suppression…",
-  "importacoes.runDeleted": "Run supprimé."
+  "importacoes.runDeleted": "Run supprimé.",
+  "importacoes.archiveRun": "Archiver",
+  "importacoes.unarchiveRun": "Désarchiver",
+  "importacoes.showArchived": "Afficher les archivés",
+  "importacoes.archiving": "Mise à jour…",
+  "importacoes.runArchived": "Run archivé.",
+  "importacoes.runUnarchived": "Run désarchivé."
 }

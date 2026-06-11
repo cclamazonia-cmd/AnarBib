@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Suprimeix el tractament",
   "importacoes.deleteRunConfirm": "Voleu suprimir el tractament #{id} i el seu fitxer? Els esborranys ja creats es conserven.",
   "importacoes.deletingRun": "S’està suprimint…",
-  "importacoes.runDeleted": "Tractament suprimit."
+  "importacoes.runDeleted": "Tractament suprimit.",
+  "importacoes.archiveRun": "Arxiva",
+  "importacoes.unarchiveRun": "Desarxiva",
+  "importacoes.showArchived": "Mostra arxivats",
+  "importacoes.archiving": "S’està actualitzant…",
+  "importacoes.runArchived": "Tractament arxivat.",
+  "importacoes.runUnarchived": "Tractament desarxivat."
 }

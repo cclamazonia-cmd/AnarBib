@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Διαγραφή επεξεργασίας",
   "importacoes.deleteRunConfirm": "Διαγραφή της επεξεργασίας #{id} και του αρχείου της; Τα προσχέδια που έχουν ήδη δημιουργηθεί διατηρούνται.",
   "importacoes.deletingRun": "Διαγραφή…",
-  "importacoes.runDeleted": "Η επεξεργασία διαγράφηκε."
+  "importacoes.runDeleted": "Η επεξεργασία διαγράφηκε.",
+  "importacoes.archiveRun": "Αρχειοθέτηση",
+  "importacoes.unarchiveRun": "Επαναφορά",
+  "importacoes.showArchived": "Εμφάνιση αρχειοθετημένων",
+  "importacoes.archiving": "Ενημέρωση…",
+  "importacoes.runArchived": "Η επεξεργασία αρχειοθετήθηκε.",
+  "importacoes.runUnarchived": "Η επεξεργασία επαναφέρθηκε."
 }

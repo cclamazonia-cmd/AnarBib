@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Eliminar el tratamiento",
   "importacoes.deleteRunConfirm": "¿Eliminar el tratamiento #{id} y su archivo? Los borradores ya creados se conservan.",
   "importacoes.deletingRun": "Eliminando…",
-  "importacoes.runDeleted": "Tratamiento eliminado."
+  "importacoes.runDeleted": "Tratamiento eliminado.",
+  "importacoes.archiveRun": "Archivar",
+  "importacoes.unarchiveRun": "Desarchivar",
+  "importacoes.showArchived": "Mostrar archivados",
+  "importacoes.archiving": "Actualizando…",
+  "importacoes.runArchived": "Tratamiento archivado.",
+  "importacoes.runUnarchived": "Tratamiento desarchivado."
 }

@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Excluir o tratamento",
   "importacoes.deleteRunConfirm": "Excluir o tratamento #{id} e seu arquivo? Os rascunhos já criados são mantidos.",
   "importacoes.deletingRun": "Excluindo…",
-  "importacoes.runDeleted": "Tratamento excluído."
+  "importacoes.runDeleted": "Tratamento excluído.",
+  "importacoes.archiveRun": "Arquivar",
+  "importacoes.unarchiveRun": "Desarquivar",
+  "importacoes.showArchived": "Mostrar arquivados",
+  "importacoes.archiving": "Atualizando…",
+  "importacoes.runArchived": "Tratamento arquivado.",
+  "importacoes.runUnarchived": "Tratamento desarquivado."
 }

@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Delete run",
   "importacoes.deleteRunConfirm": "Delete run #{id} and its file? Drafts already created are kept.",
   "importacoes.deletingRun": "Deleting…",
-  "importacoes.runDeleted": "Run deleted."
+  "importacoes.runDeleted": "Run deleted.",
+  "importacoes.archiveRun": "Archive",
+  "importacoes.unarchiveRun": "Unarchive",
+  "importacoes.showArchived": "Show archived",
+  "importacoes.archiving": "Updating…",
+  "importacoes.runArchived": "Run archived.",
+  "importacoes.runUnarchived": "Run unarchived."
 }

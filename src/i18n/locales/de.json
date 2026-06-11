@@ -4090,5 +4090,11 @@
   "importacoes.deleteRun": "Lauf löschen",
   "importacoes.deleteRunConfirm": "Lauf #{id} und seine Datei löschen? Bereits erstellte Entwürfe bleiben erhalten.",
   "importacoes.deletingRun": "Wird gelöscht…",
-  "importacoes.runDeleted": "Lauf gelöscht."
+  "importacoes.runDeleted": "Lauf gelöscht.",
+  "importacoes.archiveRun": "Archivieren",
+  "importacoes.unarchiveRun": "Wiederherstellen",
+  "importacoes.showArchived": "Archivierte anzeigen",
+  "importacoes.archiving": "Wird aktualisiert…",
+  "importacoes.runArchived": "Lauf archiviert.",
+  "importacoes.runUnarchived": "Lauf wiederhergestellt."
 }
