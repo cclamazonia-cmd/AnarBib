@@ -1,0 +1,63 @@
+# État d'avancement — backlog consolidé multi-sessions · 2026-06-11
+
+> **Reconstitué le 11/06/2026** (le doc précédemment référencé en mémoire avait disparu).
+> **Source** : croisement des transcrits des 12 sessions archivées (05→10/06) + audit de
+> drift schéma (prod vs `supabase/migrations/`).
+> ⚠️ **Trace vivante, non normative.** Le normatif = [`../specs/REGISTRE_decisions.md`](../specs/REGISTRE_decisions.md).
+> Une session « Error message clarity » (10/06) avait déjà constaté que l'ancien backlog
+> était « massivement en retard sur sa réalité » → ne jamais traiter ce fichier comme une
+> vérité d'état sans revérifier dans le code.
+
+## ⚠️ Risque structurel — migrations INCRÉMENTALES, pas un schéma complet
+L'audit drift (11/06) révèle que la base **ne se reconstruit PAS** depuis les migrations
+seules : le **socle fondateur** (tables `books`, `authors`, `profiles`, `libraries`, … +
+~150 fonctions/vues) a été créé **hors `migrations/`** (projet Supabase initial / prototype
+mono-biblio du 18/03). Le dossier `migrations/` ne porte que **l'incrémental** depuis ce
+socle.
+- **Conséquence** : `supabase db reset` ne rejoue pas le socle → **reproductibilité partielle**.
+- **Nature** : fait architectural connu, **pas un chantier oublié**. À combler un jour par un
+  **baseline dump versionné** si on veut une repro complète (gros chantier, non urgent).
+- **Drift récent confirmé** (objet créé en cours de route, hors migration) :
+  **`mv_books_catalog_list_v1`** (MV publique du catalogue — cf. mémoire `catalog-mv-project-location`).
+
+## Morceaux non résolus (survey sessions, bruit filtré)
+
+### 🔴 À vérifier — changement possiblement non pérennisé
+- **« évolution catalogage à pérenniser au prochain push »** — *[session « Document cataloging
+  fields missing », 10/06]*. **Lire la session pour le détail exact** ; risque : modif DB
+  appliquée hors migration pendant la panne Woodpecker, jamais committée.
+
+### 🟠 Chantiers à finir
+- **#CL.10** : `<LibraryInfoCard>` par ligne de circulation + signal « même titre » —
+  *[« Spec multi-appartenance », 10/06]*. ⚠️ **Probablement couvert par la session identité /
+  multi-appartenance active** — confirmer avant d'y toucher.
+- **i18n sujets** : traduits seulement `pt-BR/fr/es/en`, autres locales en fallback
+  (« à compléter au fil de l'eau ») — *[idem]*.
+
+### 🟡 Différés CONSCIENTS (décision prise, pas oubliés)
+- **#OPAC11** — RSS / courriel du catalogue, **différé anti-tracking** — *[« Spec
+  multi-appartenance » / cadrage OPAC]*.
+- **EA-12 phase 2** (échange inter-bibliothèque) — **gelé, conditionné** à un besoin prod
+  réel BLMF↔BTL — *[« Importações/Exportações », 08/06]*.
+
+### ⚪ Reliquats cosmétiques (optionnels)
+- « Trocas ativas » à ajouter dans la grille de chiffres ; `loansCreated30d` calculé mais
+  jamais affiché (métrique morte) — *[« Chantiers annexes », 08/06]*.
+
+### ✅ Délégué / tracé ailleurs — NE PAS re-traiter
+- **Baqueiro** (docs de consignes) : brouillons MLEG, orphelins d'autorité, indexation
+  sujets, enrichissement dates auteurs.
+- **N4 — numéro/identité local·e** (mail réconciliation UUID ↔ identité) → **session identité
+  dédiée** (en cours).
+- **Corpus `.ris` CIRA** → local, non commité (sans consentement explicite).
+- **§21 PARTNER notifications** (NOTIF-1/2/3) → **livrées en prod** le 11/06.
+- **CI** → migré Woodpecker→Forgejo Actions + runner auto-hébergé WSL2 (11/06).
+
+## Sessions actives au 11/06 (ne pas marcher dessus)
+- **« Import/export wizard refactor »** — wizard « Novo import ».
+- **« Italian schwa and hardcoded strings »** — i18n.
+- **Session identité lecteur·rice** (N1→N5, dont N4) — *aspects identité/numéro local*.
+
+---
+*Maintenir ce fichier quand on livre/clôt un chantier. En cas de doute sur un statut :
+revérifier dans le code, pas se fier à cette trace seule.*
