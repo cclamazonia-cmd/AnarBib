@@ -1,18 +1,19 @@
 # =============================================================================
 # Forgejo Actions — CI/CD AnarBib   (a remplacé Woodpecker hébergé instable)
-# Pipeline :
-#   install → lint(BLOQUANT) → test(BLOQUANT) → build →
-#   deploy Pages → edge functions → migrations SQL
-# Le miroir GitHub est passé en PUSH-MIRROR NATIF Codeberg (Paramètres → Miroir),
-# server-side → retiré du CI (plus de step fragile + checkout shallow possible).
 #
-# Runner Codeberg : `codeberg-small-lazy` (éphémère = dispo + podman frais ;
-# small persistant flaky, medium congestionné — cf. commentaire runs-on).
-# [skip ci] / [ci skip] dans le message de commit = run sauté (natif).
+# ⏱️  Les runners mutualisés Codeberg coupent un job à ~5 min de temps d'exécution
+#     (« The runner cancelled the job because it exceeds the maximum run time »).
+#     Notre pipeline monolithique frôlait les 5 min → annulations aléatoires à
+#     l'étape en cours (le « podman context deadline exceeded » n'était QUE le
+#     symptôme du conteneur tué à la limite). La limite étant PAR JOB, on scinde :
+#       • job `app`     : install → lint(BLOQUANT) → test(BLOQUANT) → build → Pages  (~4 min)
+#       • job `backend` : edge functions → migrations SQL   (~2 min, PAS de npm install)
+#     `backend: needs: app` → sérialise et garde le gate lint/test avant tout déploiement.
+#     Durable (plus tard) : runner auto-hébergé (act_runner) = aucune limite.
 #
-# Tout en UN SEUL job (même conteneur) : le dist/ du build reste dispo pour les
-# steps de déploiement, sans passer par des artefacts inter-jobs.
-# Les steps de déploiement ne s'exécutent que sur `push` (pas en run manuel).
+# Runner : `codeberg-small-lazy`. Miroir GitHub : assuré par le dual-push `origin`
+# (Codeberg bloque les miroirs natifs) → hors CI. [skip ci]/[ci skip] = run sauté.
+# Déploiements : uniquement sur push (jamais en run manuel workflow_dispatch).
 # =============================================================================
 name: CI/CD
 
@@ -27,12 +28,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  cicd:
-    # Historique runner :
-    #  - codeberg-small : dispo vite MAIS socket podman flaky (timeout d'archivage
-    #    post-step SUMMARY.md/cmd.txt) → faux échec en fin de step aléatoire.
-    #  - codeberg-medium : ne prenait pas le job (congestionné > 4 min).
-    #  → codeberg-small-lazy : runner ÉPHÉMÈRE à la demande = dispo + podman frais.
+  # ───────────────────────── Job 1 : app (build + Pages) ─────────────────────
+  app:
     runs-on: codeberg-small-lazy
     container:
       image: node:20
@@ -43,7 +40,7 @@ jobs:
           apt-get install -y -qq git curl tar >/dev/null
           echo "✓ outils prêts"
 
-      - name: Checkout (shallow — miroir confié au push-mirror natif Codeberg)
+      - name: Checkout (shallow)
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
@@ -67,7 +64,6 @@ jobs:
           test -d dist || (echo "✗ dist/ introuvable" && exit 1)
           echo "✓ build OK"
 
-      # ----- Déploiements : uniquement sur push (jamais en run manuel) ----------
       - name: Deploy Pages (branche `pages`, commit orphelin)
         if: github.event_name == 'push'
         env:
@@ -87,16 +83,39 @@ jobs:
           git push --force origin pages
           echo "✓ Pages déployé"
 
-      - name: Deploy Edge Functions (Supabase CLI)
-        if: github.event_name == 'push'
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+  # ──────────────────── Job 2 : backend (Supabase) — sur push ────────────────
+  # needs: app → ne déploie QUE si lint/test/build ont réussi (gate préservé).
+  # Pas de npm install ici (CLI Supabase autonome) → job court, bien sous 5 min.
+  backend:
+    needs: app
+    if: github.event_name == 'push'
+    runs-on: codeberg-small-lazy
+    container:
+      image: node:20
+    steps:
+      - name: Outils système (git, curl, tar)
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq git curl tar >/dev/null
+          echo "✓ outils prêts"
+
+      - name: Checkout (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Installer la CLI Supabase
         run: |
           curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/download/v2.98.1/supabase_linux_amd64.tar.gz
           tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
           chmod +x /usr/local/bin/supabase
           supabase --version
+
+      - name: Deploy Edge Functions (Supabase CLI)
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+        run: |
           supabase link --project-ref "$SUPABASE_PROJECT_REF"
           set -e
           for fn_dir in supabase/functions/*/; do
@@ -109,7 +128,6 @@ jobs:
           echo "✓ Edge Functions déployées"
 
       - name: Deploy Migrations SQL (supabase db push)
-        if: github.event_name == 'push'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
@@ -117,11 +135,6 @@ jobs:
         run: |
           if [ ! -d supabase/migrations ] || [ -z "$(ls -A supabase/migrations 2>/dev/null)" ]; then
             echo "→ aucune migration, rien à déployer"; exit 0
-          fi
-          if ! command -v supabase >/dev/null 2>&1; then
-            curl -sLo /tmp/supabase.tar.gz https://github.com/supabase/cli/releases/download/v2.98.1/supabase_linux_amd64.tar.gz
-            tar -xzf /tmp/supabase.tar.gz -C /usr/local/bin/
-            chmod +x /usr/local/bin/supabase
           fi
           supabase link --project-ref "$SUPABASE_PROJECT_REF"
           supabase db push --linked --include-all
