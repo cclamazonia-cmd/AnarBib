@@ -4035,7 +4035,7 @@
   "catalogacao.author.cropConfirm": "Crop and save",
   "importacoes.wizard.title": "New import",
   "importacoes.wizard.subtitle": "Guided step-by-step import assistant.",
-  "importacoes.wizard.launch": "New import",
+  "importacoes.wizard.launch": "Guide",
   "importacoes.wizard.step.circuit": "Circuit",
   "importacoes.wizard.step.source": "Source",
   "importacoes.wizard.step.preview": "Preview",

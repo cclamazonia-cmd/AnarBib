@@ -4035,7 +4035,7 @@
   "catalogacao.author.cropConfirm": "Zuschneiden und speichern",
   "importacoes.wizard.title": "Neuer Import",
   "importacoes.wizard.subtitle": "Geführter Import-Assistent, Schritt für Schritt.",
-  "importacoes.wizard.launch": "Neuer Import",
+  "importacoes.wizard.launch": "Anleitung",
   "importacoes.wizard.step.circuit": "Importweg",
   "importacoes.wizard.step.source": "Quelle",
   "importacoes.wizard.step.preview": "Vorschau",

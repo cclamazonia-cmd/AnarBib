@@ -897,7 +897,6 @@ export default function ImportacoesPage() {
             <div className="imp-sheet__head">
               <span className="imp-sheet__title">
                 {t({ id: 'importacoes.diario.title' })}
-                <Pill>book_draft_import_events</Pill>
               </span>
             </div>
             <div className="imp-sheet__body">

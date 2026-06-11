@@ -4035,7 +4035,7 @@
   "catalogacao.author.cropConfirm": "Recadrer et enregistrer",
   "importacoes.wizard.title": "Nouvel import",
   "importacoes.wizard.subtitle": "Assistant d'import guidé, étape par étape.",
-  "importacoes.wizard.launch": "Nouvel import",
+  "importacoes.wizard.launch": "Guide",
   "importacoes.wizard.step.circuit": "Circuit",
   "importacoes.wizard.step.source": "Source",
   "importacoes.wizard.step.preview": "Aperçu",
