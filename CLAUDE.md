@@ -4,6 +4,26 @@
 > **Tout ce qui suit a été vérifié dans le dépôt.** Les rares incertitudes
 > résiduelles sont marquées « À CONFIRMER ».
 
+## 🐧 RÈGLE D'OR ABSOLUE — TOUTES les sessions travaillent EXCLUSIVEMENT sous WSL2
+
+> **Lancer Claude TOUJOURS depuis WSL : `cd ~/anarbib && claude`. JAMAIS depuis Windows.**
+> Cette règle prime sur toutes les autres. Apprise à la dure (incident du 12/06/2026).
+
+- **Clone canonique UNIQUE = WSL** : `/home/accattone/anarbib` (`~/anarbib`).
+  Lui seul fait tourner `npm run dev` (localhost:5173) et pousse vers Codeberg.
+- **Le clone Windows (`C:\Users\accat\Claude's AnarBib\...`) a été SUPPRIMÉ**
+  (100 % redondant, 0 commit unique). **Ne jamais le recréer.** Toute session
+  lancée côté Windows recrée ce clone fantôme et désynchronise tout le dépôt.
+- **Pourquoi (incident du 12/06/2026)** : une session lancée côté Windows (outils
+  cloués sur `C:\...`) pendant que le dev server et les autres sessions vivaient
+  dans WSL → **deux clones désynchronisés, edits invisibles, prod en avance sur
+  le local**. Cause racine de toute la pagaille de la journée.
+- **Contrainte technique dure** : les outils Read/Edit/Write **ne peuvent PAS**
+  atteindre les fichiers natifs WSL via UNC (`\\wsl.localhost\...` → accès refusé).
+  D'où l'obligation **absolue** d'être lancé *dans* WSL pour éditer le dépôt.
+- **Si tu lis ceci depuis une session Windows : STOP.** Ne touche à rien côté
+  Windows, préviens l'humain, et redémarre la session via `cd ~/anarbib && claude`.
+
 ## Présentation
 
 AnarBib est un **SIGB (système intégré de gestion de bibliothèques) pour
