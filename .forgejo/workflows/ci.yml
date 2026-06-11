@@ -79,26 +79,6 @@ jobs:
           git push --force origin pages
           echo "✓ Pages déployé"
 
-      - name: Miroir Codeberg → GitHub (SSH, NON bloquant)
-        if: github.event_name == 'push'
-        continue-on-error: true     # = `failure: ignore` Woodpecker : pure redondance
-        env:
-          # NB : préfixes GITHUB_/GITEA_/FORGEJO_ INTERDITS pour les secrets ET les
-          # env vars utilisateur (réservés Forgejo) → on nomme MIRROR_*.
-          MIRROR_DEPLOY_KEY: ${{ secrets.MIRROR_DEPLOY_KEY }}   # clé privée SSH, base64
-          MIRROR_REPO: ${{ secrets.MIRROR_REPO }}
-        run: |
-          mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          echo "$MIRROR_DEPLOY_KEY" | base64 -d > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
-          git config --global user.email "ci@anarbib.codeberg.page"
-          git config --global user.name "AnarBib CI"
-          git remote add github "git@github.com:${MIRROR_REPO}.git" 2>/dev/null \
-            || git remote set-url github "git@github.com:${MIRROR_REPO}.git"
-          git push github HEAD:refs/heads/main --force
-          echo "✓ miroir GitHub à jour"
-
       - name: Deploy Edge Functions (Supabase CLI)
         if: github.event_name == 'push'
         env:
@@ -138,3 +118,27 @@ jobs:
           supabase link --project-ref "$SUPABASE_PROJECT_REF"
           supabase db push --linked --include-all
           echo "✓ migrations synchronisées"
+
+      # ----- Miroir EN DERNIER : pure redondance, isolé + timeboxé -------------
+      # Mis à la fin pour que Pages/edge/migrations finissent TOUJOURS, même si
+      # le miroir (réseau GitHub / hoquet runner podman) choke. continue-on-error
+      # + timeout-minutes : un blocage ne peut plus saboter le reste du pipeline.
+      - name: Miroir Codeberg → GitHub (SSH, NON bloquant, en dernier)
+        if: github.event_name == 'push'
+        continue-on-error: true
+        timeout-minutes: 3
+        env:
+          MIRROR_DEPLOY_KEY: ${{ secrets.MIRROR_DEPLOY_KEY }}   # clé privée SSH, base64
+          MIRROR_REPO: ${{ secrets.MIRROR_REPO }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "$MIRROR_DEPLOY_KEY" | base64 -d > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -T 15 github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+          git config --global user.email "ci@anarbib.codeberg.page"
+          git config --global user.name "AnarBib CI"
+          git remote add github "git@github.com:${MIRROR_REPO}.git" 2>/dev/null \
+            || git remote set-url github "git@github.com:${MIRROR_REPO}.git"
+          GIT_SSH_COMMAND="ssh -o ConnectTimeout=15 -o BatchMode=yes" \
+            git push github HEAD:refs/heads/main --force
+          echo "✓ miroir GitHub à jour"
