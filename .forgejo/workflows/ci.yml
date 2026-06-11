@@ -1,11 +1,14 @@
 # =============================================================================
-# Forgejo Actions — CI/CD AnarBib   (remplace .woodpecker.yml)
-# Transposition fidèle du pipeline Woodpecker v4 :
+# Forgejo Actions — CI/CD AnarBib   (a remplacé Woodpecker hébergé instable)
+# Pipeline :
 #   install → lint(BLOQUANT) → test(BLOQUANT) → build →
-#   deploy Pages → miroir GitHub(SSH, non bloquant) → edge functions → migrations
+#   deploy Pages → edge functions → migrations SQL
+# Le miroir GitHub est passé en PUSH-MIRROR NATIF Codeberg (Paramètres → Miroir),
+# server-side → retiré du CI (plus de step fragile + checkout shallow possible).
 #
-# Runner Codeberg : label `codeberg-small` (passer à `codeberg-medium` si le build
-# manque de RAM). [skip ci] / [ci skip] dans le message de commit = run sauté (natif).
+# Runner Codeberg : `codeberg-small-lazy` (éphémère = dispo + podman frais ;
+# small persistant flaky, medium congestionné — cf. commentaire runs-on).
+# [skip ci] / [ci skip] dans le message de commit = run sauté (natif).
 #
 # Tout en UN SEUL job (même conteneur) : le dist/ du build reste dispo pour les
 # steps de déploiement, sans passer par des artefacts inter-jobs.
@@ -34,16 +37,16 @@ jobs:
     container:
       image: node:20
     steps:
-      - name: Outils système (git, ssh, curl, tar)
+      - name: Outils système (git, curl, tar)
         run: |
           apt-get update -qq
-          apt-get install -y -qq git openssh-client curl tar >/dev/null
+          apt-get install -y -qq git curl tar >/dev/null
           echo "✓ outils prêts"
 
-      - name: Checkout (historique complet — requis pour le miroir force-push)
+      - name: Checkout (shallow — miroir confié au push-mirror natif Codeberg)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Install des dépendances
         run: npm ci --no-audit --no-fund
@@ -123,27 +126,3 @@ jobs:
           supabase link --project-ref "$SUPABASE_PROJECT_REF"
           supabase db push --linked --include-all
           echo "✓ migrations synchronisées"
-
-      # ----- Miroir EN DERNIER : pure redondance, isolé + timeboxé -------------
-      # Mis à la fin pour que Pages/edge/migrations finissent TOUJOURS, même si
-      # le miroir (réseau GitHub / hoquet runner podman) choke. continue-on-error
-      # + timeout-minutes : un blocage ne peut plus saboter le reste du pipeline.
-      - name: Miroir Codeberg → GitHub (SSH, NON bloquant, en dernier)
-        if: github.event_name == 'push'
-        continue-on-error: true
-        timeout-minutes: 3
-        env:
-          MIRROR_DEPLOY_KEY: ${{ secrets.MIRROR_DEPLOY_KEY }}   # clé privée SSH, base64
-          MIRROR_REPO: ${{ secrets.MIRROR_REPO }}
-        run: |
-          mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          echo "$MIRROR_DEPLOY_KEY" | base64 -d > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -T 15 github.com >> ~/.ssh/known_hosts 2>/dev/null || true
-          git config --global user.email "ci@anarbib.codeberg.page"
-          git config --global user.name "AnarBib CI"
-          git remote add github "git@github.com:${MIRROR_REPO}.git" 2>/dev/null \
-            || git remote set-url github "git@github.com:${MIRROR_REPO}.git"
-          GIT_SSH_COMMAND="ssh -o ConnectTimeout=15 -o BatchMode=yes" \
-            git push github HEAD:refs/heads/main --force
-          echo "✓ miroir GitHub à jour"
