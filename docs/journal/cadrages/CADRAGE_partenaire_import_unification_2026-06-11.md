@@ -107,3 +107,60 @@ partenaire **déjà autorisé**.
 *Note : pour le test 301 CIRA de cette nuit, on ne dépend pas de cette refonte —
 il suffit d'une source d'import « CIRA Marseille » créée (chemin minimal). La
 refonte ci-dessus est le cadre propre, à bâtir à tête reposée et en coordination.*
+
+---
+
+## ✅ Réalisé — 2026-06-11 (B1 + B2 livrés et déployés)
+
+**Découverte clé qui a guidé l'implémentation** : l'« autorisation d'import »
+**n'est PAS un flag** séparé — c'est `public.catalog_partners.relationship_status
+= 'importacao_autorizada'` (valeurs CHECK : `identificada, contatada, em_discussao,
+acordo_parcial, acordo_tecnico, importacao_autorizada, mutualizacao_autorizada`).
+La vue `catalog_partners_policy_flags_v2.import_allowed` en **découle**. Et CIRA
+Marseille est un **dépôt** (export Zotero), pas un catalogue fédéré : modèle
+`catalog_partners` (entité) + `ingest.partner_catalog_sources` (source par biblio).
+
+### B1 — Backend
+Migration `supabase/migrations/20260611090151_partner_register_deposit_and_link.sql`
+(commit `37d0772`, **déployé et vérifié en base** ✓) :
+- `ingest.partner_catalog_sources.catalog_partner_id` (FK → `catalog_partners`, ON DELETE SET NULL).
+- `public.fn_partner_register_deposit_source(display_name, base_url, country, notes, import_authorized)`
+  — `SECURITY DEFINER`, coordenador-only : slugifie, **dédup par slug exact**
+  (réutilise l'entité existante), crée `catalog_partners` (`integration_mode='file_deposit'`,
+  `relationship_status` = `importacao_autorizada` si import coché) + crée/relie la
+  source de dépôt de la biblio appelante (`source_kind='partner_deposit'`,
+  `import_enabled`, `catalog_partner_id`).
+- `public.fn_partner_search(query)` — suggestions de doublon (nom/slug, ILIKE).
+- Les deux : `SET search_path` + `REVOKE EXECUTE FROM PUBLIC` + `GRANT … TO authenticated`.
+
+### B2 — Frontend
+Commit `d7ebf10` (déployé via Pages) :
+- `src/components/library/ExternalDepositPartnerSection.jsx` (**nouveau**, autonome,
+  styles inline) : formulaire nom / pays / URL / notes + **case « autorise l'import »**
+  + **détection de doublon en direct** (`fn_partner_search`, debounce). Coordenador-only.
+- `src/pages/biblioteca/BibliotecaPage.jsx` : import + montage dans l'onglet
+  Relações, après `LibraryPartnershipsSection` (10 lignes ajoutées).
+- 14 clés i18n `biblioteca.extPartner.*` × 10 locales (parité **4086**).
+
+### Non fait / suites
+- **B3 (Importações)** : **aucun changement nécessaire** — le select « Deposito
+  formato caseiro » liste déjà `ingest.partner_catalog_sources` (source_kind=
+  'partner_deposit') ⇒ le partenaire enregistré **y apparaît automatiquement**.
+  Le « + » texte-libre (cassé, l'appel RPC pend côté client) **subsiste** : à
+  retirer dans une passe ultérieure.
+- **B4** : `book_drafts.catalog_partner_id` (continuité de la provenance) — **non fait**.
+- **Slug** : pas de repli d'accents (`unaccent` non utilisé) — OK pour les noms ASCII (CIRA Marseille) ; à raffiner si besoin.
+
+### Coordination (multi-sessions)
+Édition de `BibliotecaPage.jsx` (domaine partenariat = **session parallèle**)
+faite avec l'**autorisation explicite de Xavier** (« à la baguette des deux côtés »).
+Diff vérifié : seules mes 2 modifs (import + montage), aucun travail parallèle embarqué.
+
+### Procédure de test — CIRA Marseille
+1. **Biblioteca → Relações → « Partenaire externe de dépôt »** : nom `CIRA Marseille`,
+   pays `FR`, URL `https://bibliotheque.cira-marseille.info` (optionnel), case
+   « autorise l'import » cochée → **Enregistrer**. (Le doublon `CIRA Lausanne`
+   apparaît en suggestion mais n'est PAS le même → on crée bien `cira-marseille`.)
+2. **Importações → Deposito formato caseiro** : sélectionner « CIRA Marseille »
+   dans le menu → choisir le `.ris` → **Depositar e processar**.
+3. Staging → **aperçu (dédup proéminente)** → **promotion** en brouillons privés.
