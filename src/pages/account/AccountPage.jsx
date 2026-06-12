@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -90,6 +90,10 @@ function ContaTabHeader({ title, onRefresh, actions }) {
     </div>
   );
 }
+
+// Onglet dont les données (historiques terminés + prefs de rétention) sont
+// chargées en lazy (loadHeavy) à la 1re visite, pas au montage. Cf. loadCore/loadHeavy.
+const HEAVY_TABS = ['historico'];
 
 export default function AccountPage() {
   const { user, loading: authLoading } = useAuth();
@@ -221,51 +225,56 @@ export default function AccountPage() {
 
   // ── Chargement des données ───────────────────────────────
 
-  const loadData = useCallback(async (opts = {}) => {
+  // ── Carregamento (perf 12/06/2026, miroir BibliotecaPage) ───────────────
+  // Le montage ne charge plus que le « noyau » (loadCore) : profil, circulation
+  // active (réservations/consultas/emprunts + statut de renouvellement), service
+  // state, statut de compte, notifications + wishlist (leurs compteurs sont dans
+  // les libellés d'onglets, toujours visibles), préférences de notif et cotisation
+  // — tout ce que l'en-tête (chips, bandeaux) et l'onglet par défaut « perfil »
+  // affichent. Les HISTORIQUES (emprunts/réservations/consultas terminés) + les
+  // préférences de rétention ne sont tirés (loadHeavy) qu'à la 1re visite de
+  // l'onglet « historico » (cf. HEAVY_TABS), idempotent via heavyLoadedRef.
+  // Avant : ~25 endpoints au montage, pour tous les onglets à la fois.
+  const heavyLoadedRef = useRef(false);
+
+  // Mode 'silent' (chantier #CL — recommandation B, 31/05/2026) : appelé depuis
+  // le bouton refresh des onglets via ContaTabHeader. On ne met PAS
+  // setLoading(true), pour ne pas faire disparaître l'affichage actuel
+  // (skeletons full-page) ; le feedback visuel du clic est porté par l'état
+  // 'busy' interne au ContaTabHeader.
+  const loadCore = useCallback(async (opts = {}) => {
     if (authLoading || !user) return;
-    // Mode 'silent' (chantier #CL — recommandation B, 31/05/2026) : appelé
-    // depuis le bouton refresh des onglets via ContaTabHeader. On ne met PAS
-    // setLoading(true), pour ne pas faire disparaître l'affichage actuel
-    // (skeletons full-page). Le feedback visuel du clic est porté par l'état
-    // 'busy' interne au ContaTabHeader (bouton grisé pendant l'appel).
-    // Mode normal (chargement initial via useEffect ci-dessous) : skeletons
-    // affichés pendant la résolution des chargements en parallèle.
     if (!opts.silent) setLoading(true);
     try {
-      const [profileRes, reservRes, consultRes, consultHistRes, loansRes, renewStatusRes, histRes, loanHistRes, svcRes, statusRes] = await Promise.all([
+      const [profileRes, reservRes, consultRes, loansRes, renewStatusRes, svcRes, statusRes] = await Promise.all([
         supabase.from('profiles').select('*').eq('id', user.id).single(),
         apiQuery('my_reservations_active_v2'),
         apiQuery('my_consultas_active_v2'),
-        apiQuery('my_consultas_history_v2'),
         apiQuery('emprestimo_itens_ui'),
         apiQuery('my_loans_renewal_status_by_item_v1'),
-        apiQuery('my_reservations_history_v2'),
-        apiQuery('my_loans_history_v1'),
         supabase.from('library_service_state').select('*'),
         supabase.rpc('fn_my_account_status'),
       ]);
       setProfile(profileRes.data);
       setReservations(reservRes.data || []);
       setConsultations(consultRes.data || []);
-      setConsultationsHistory(consultHistRes.data || []);
       setLoans(loansRes.data || []);
       setRenewStatus(Object.fromEntries(
         (renewStatusRes.data || []).map(r => [r.sub_id, r])
       ));
-      setHistory(histRes.data || []);
-      setLoanHistory(loanHistRes.data || []);
       // Service state for the user's library
       if (svcRes.data?.length) setServiceState(svcRes.data[0]);
       // Account status (déplacé du useEffect indépendant 29/05/2026 — bug fix
       // désynchronisation du cache : le useEffect ne se redéclenchait qu'au
       // changement de user?.id, le banner restait figé après ajout d'emprunts)
       if (statusRes?.data) setAccountStatus(statusRes.data);
-      // Notifications and wishlist
+      // Notifications + wishlist : leurs compteurs sont affichés dans les
+      // libellés d'onglets (toujours visibles) -> noyau.
       const { data: notifData } = await supabase.from('user_notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(100);
       setNotifications(notifData || []);
       const { data: wishData } = await supabase.from('user_wishlist').select('*, books:book_id(id, titulo, autor, bib_ref, editora, ano)').eq('user_id', user.id).order('created_at', { ascending: false });
       setWishlist(wishData || []);
-      // #CL.7 — préférences de notification (vide = défauts respectés)
+      // #CL.7 — préférences de notification (affichées dans l'onglet perfil -> noyau)
       const { data: prefsData } = await supabase.rpc('fn_get_my_notification_preferences');
       if (Array.isArray(prefsData) && prefsData.length > 0) {
         setNotifPrefs({
@@ -273,17 +282,7 @@ export default function AccountPage() {
           disable_consulta_pronta: !!prefsData[0].disable_consulta_pronta,
         });
       }
-      // #CL.8 — préférences de rétention prospective (filtrées sur la biblio active)
-      const { data: retData } = await supabase.rpc('fn_get_my_retention_preferences');
-      if (Array.isArray(retData) && libraryId) {
-        const forLib = retData.filter(r => r.library_id === libraryId);
-        setRetentionPrefs({
-          loans: !!forLib.find(r => r.domain === 'loans')?.disable_retention,
-          reservations: !!forLib.find(r => r.domain === 'reservations')?.disable_retention,
-          consultations: !!forLib.find(r => r.domain === 'consultations')?.disable_retention,
-        });
-      }
-      // Cotisation : statut et historique pour la biblio active
+      // Cotisation : statut et historique pour la biblio active (onglet perfil -> noyau)
       if (libraryId) {
         const [{ data: memData }, { data: rulesData }, { data: payData }] = await Promise.all([
           supabase.from('v_active_memberships').select('*').eq('user_id', user.id).eq('library_id', libraryId).maybeSingle(),
@@ -295,13 +294,60 @@ export default function AccountPage() {
         setMembershipPayments(payData || []);
       }
     } catch (err) {
-      console.error('Account load error:', err);
+      console.error('Account loadCore error:', err);
     } finally {
       if (!opts.silent) setLoading(false);
     }
   }, [user?.id, authLoading, libraryId]);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  // loadHeavy : historiques (emprunts/réservations/consultas terminés) + prefs de
+  // rétention. Consommés UNIQUEMENT par l'onglet « historico ». Ne touche pas
+  // setLoading (chargement de fond). Marque heavyLoadedRef à la fin.
+  const loadHeavy = useCallback(async () => {
+    if (authLoading || !user) return;
+    try {
+      const [consultHistRes, histRes, loanHistRes] = await Promise.all([
+        apiQuery('my_consultas_history_v2'),
+        apiQuery('my_reservations_history_v2'),
+        apiQuery('my_loans_history_v1'),
+      ]);
+      setConsultationsHistory(consultHistRes.data || []);
+      setHistory(histRes.data || []);
+      setLoanHistory(loanHistRes.data || []);
+      // #CL.8 — préférences de rétention prospective (filtrées sur la biblio active)
+      const { data: retData } = await supabase.rpc('fn_get_my_retention_preferences');
+      if (Array.isArray(retData) && libraryId) {
+        const forLib = retData.filter(r => r.library_id === libraryId);
+        setRetentionPrefs({
+          loans: !!forLib.find(r => r.domain === 'loans')?.disable_retention,
+          reservations: !!forLib.find(r => r.domain === 'reservations')?.disable_retention,
+          consultations: !!forLib.find(r => r.domain === 'consultations')?.disable_retention,
+        });
+      }
+      heavyLoadedRef.current = true;
+    } catch (err) {
+      console.error('Account loadHeavy error:', err);
+    }
+  }, [user?.id, authLoading, libraryId]);
+
+  // loadData = rechargement complet (mutations, refresh manuel). Garde la
+  // sémantique 'silent'. Le lourd n'est rechargé que s'il a déjà été chargé.
+  const loadData = useCallback(async (opts = {}) => {
+    await loadCore(opts);
+    if (heavyLoadedRef.current) await loadHeavy();
+  }, [loadCore, loadHeavy]);
+
+  // Montage : noyau seulement (paint rapide de l'onglet par défaut « perfil »).
+  useEffect(() => { loadCore(); }, [loadCore]);
+
+  // Changement de biblio active : le cache lourd redevient invalide.
+  useEffect(() => { heavyLoadedRef.current = false; }, [libraryId]);
+
+  // Chargement paresseux de l'historique à la 1re visite de l'onglet consommateur
+  // (idempotent via heavyLoadedRef).
+  useEffect(() => {
+    if (HEAVY_TABS.includes(activeTab) && !heavyLoadedRef.current) { loadHeavy(); }
+  }, [activeTab, libraryId, loadHeavy]);
 
   // #CL.10 — résout les biblios (nom/slug) des library_id présents dans la
   // circulation active, pour les tags par ligne. RLS libraries_public_read.
