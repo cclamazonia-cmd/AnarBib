@@ -1,0 +1,46 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   HumanChannelInlineCallout — encadré canal humain (ONBO-D1, §6.5)
+   En tête de volet, non-fermable. Ton « léger » (vert, égal) par défaut ;
+   ton « fort » (accent rouge) pour les volets fortement configurants.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ab-hcc{
+  --hcc-accent:#7ee0a8;                 /* léger : vert (canal présent, égal) */
+  --hcc-accent-soft:rgba(126,224,168,.08);
+  --hcc-line:rgba(126,224,168,.32);
+  border:1px solid var(--hcc-line);
+  background:var(--hcc-accent-soft);
+  border-radius:12px;
+  padding:14px 16px;
+  margin-bottom:18px;
+}
+.ab-hcc.is-strong{
+  --hcc-accent:var(--brand-color-primary,#d6453b);
+  --hcc-accent-soft:rgba(214,69,59,.10);
+  --hcc-line:rgba(214,69,59,.42);
+}
+
+.ab-hcc-tag{
+  font-size:.64rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--hcc-accent); margin-bottom:6px;
+}
+.ab-hcc-text{
+  font-size:.86rem; line-height:1.5; color:var(--brand-text,#e7dfe6); margin:0 0 12px;
+}
+.ab-hcc-links{ display:flex; gap:9px; flex-wrap:wrap; align-items:center; }
+.ab-hcc-chan{
+  text-decoration:none; color:var(--brand-text,#f4f1ee); font-weight:600; font-size:.82rem;
+  padding:7px 11px; border:1px solid var(--brand-panel-border,rgba(255,255,255,.12));
+  border-radius:9px; background:rgba(255,255,255,.03); transition:.15s;
+}
+.ab-hcc-chan:hover{ background:rgba(255,255,255,.07); }
+.ab-hcc-cta{
+  text-decoration:none; font-weight:700; font-size:.82rem; padding:7px 13px; border-radius:9px;
+  border:1px solid var(--hcc-accent); color:var(--hcc-accent); background:transparent;
+  transition:.15s; margin-left:auto;
+}
+.ab-hcc-cta:hover{ background:var(--hcc-accent-soft); }
+
+@media (max-width:520px){
+  .ab-hcc-cta{ margin-left:0; }
+}
