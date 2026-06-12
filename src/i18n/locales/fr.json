@@ -4136,5 +4136,6 @@
   "importacoes.add.mode.busca": "Recherche externe",
   "importacoes.add.mode.oai": "Moisson OAI",
   "importacoes.lotes.title": "Lots d’import",
-  "importacoes.lotes.empty": "Aucun lot pour l’instant."
+  "importacoes.lotes.empty": "Aucun lot pour l’instant.",
+  "catalogacao.status.retaken": "mise à jour"
 }

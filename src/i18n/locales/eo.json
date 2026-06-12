@@ -4136,5 +4136,6 @@
   "importacoes.add.mode.busca": "Ekstera serĉo",
   "importacoes.add.mode.oai": "OAI-rikolto",
   "importacoes.lotes.title": "Importaj lotoj",
-  "importacoes.lotes.empty": "Ankoraŭ neniu loto."
+  "importacoes.lotes.empty": "Ankoraŭ neniu loto.",
+  "catalogacao.status.retaken": "ĝisdatigo"
 }

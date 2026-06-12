@@ -34,6 +34,7 @@ const STATUS_KEYS = {
   draft: 'catalogacao.status.draft',
   ready: 'catalogacao.status.ready',
   published: 'catalogacao.status.published',
+  cancelled: 'catalogacao.status.cancelled',
 };
 const ACTION_KEYS = {
   create: 'catalogacao.status.new',

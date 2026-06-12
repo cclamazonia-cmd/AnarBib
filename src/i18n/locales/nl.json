@@ -4136,5 +4136,6 @@
   "importacoes.add.mode.busca": "Externe zoekopdracht",
   "importacoes.add.mode.oai": "OAI-oogst",
   "importacoes.lotes.title": "Importbatches",
-  "importacoes.lotes.empty": "Nog geen batches."
+  "importacoes.lotes.empty": "Nog geen batches.",
+  "catalogacao.status.retaken": "bijwerking"
 }

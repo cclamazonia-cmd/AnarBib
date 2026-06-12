@@ -4136,5 +4136,6 @@
   "importacoes.add.mode.busca": "Εξωτερική αναζήτηση",
   "importacoes.add.mode.oai": "Συγκομιδή OAI",
   "importacoes.lotes.title": "Παρτίδες εισαγωγής",
-  "importacoes.lotes.empty": "Καμία παρτίδα ακόμη."
+  "importacoes.lotes.empty": "Καμία παρτίδα ακόμη.",
+  "catalogacao.status.retaken": "ενημέρωση"
 }

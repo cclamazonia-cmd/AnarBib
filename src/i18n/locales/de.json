@@ -4136,5 +4136,6 @@
   "importacoes.add.mode.busca": "Externe Suche",
   "importacoes.add.mode.oai": "OAI-Ernte",
   "importacoes.lotes.title": "Import-Stapel",
-  "importacoes.lotes.empty": "Noch keine Stapel."
+  "importacoes.lotes.empty": "Noch keine Stapel.",
+  "catalogacao.status.retaken": "aktualisierung"
 }

@@ -4136,5 +4136,6 @@
   "importacoes.add.mode.busca": "Cerca externa",
   "importacoes.add.mode.oai": "Recol·lecció OAI",
   "importacoes.lotes.title": "Lots d’importació",
-  "importacoes.lotes.empty": "Encara cap lot."
+  "importacoes.lotes.empty": "Encara cap lot.",
+  "catalogacao.status.retaken": "actualització"
 }

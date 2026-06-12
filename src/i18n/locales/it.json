@@ -4136,5 +4136,6 @@
   "importacoes.add.mode.busca": "Ricerca esterna",
   "importacoes.add.mode.oai": "Raccolta OAI",
   "importacoes.lotes.title": "Lotti di importazione",
-  "importacoes.lotes.empty": "Ancora nessun lotto."
+  "importacoes.lotes.empty": "Ancora nessun lotto.",
+  "catalogacao.status.retaken": "aggiornamento"
 }
