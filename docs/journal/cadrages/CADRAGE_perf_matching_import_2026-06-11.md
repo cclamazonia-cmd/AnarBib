@@ -97,8 +97,53 @@ Migration `20260611174540_lift_statement_timeout_partner_matching.sql` :
 > (migration `20260612005406`, commit `23efba2` : `confidence` = meilleur score
 > candidat, persisté dans le wrapper + backfill).
 
-Le **vrai fix perf** (volets A immutable / B réécriture des requêtes / C index
-d'expression / D chunking) **n'est pas fait** : seul le **band-aid**
-`SET statement_timeout = '0'` (migration `20260611174540`) est en place. Les petits
-lots (301 CIRA) passent ; les gros lots (~2500+) resteraient à risque de timeout /
-dépassement EF. **Chantier à reprendre** (à froid, hors session import/export).
+État réel des volets (audité le 12/06) :
+- **Volet A (IMMUTABLE)** — ✅ **DÉJÀ FAIT**. Les fonctions de normalisation
+  (`fn_match_normalize_text`, `fn_normalize_isxn`, `fn_match_normalize_publisher`,
+  `fn_match_normalize_responsibility`, `fn_extract_year4`, `fn_format_partner_authors`,
+  `fn_match_responsibility_initialism`) sont **toutes `IMMUTABLE`** et déterministes
+  (pur string/regex, aucun accès table) → indexables.
+- **Volet B (réécriture des requêtes)** — ❌ à faire. `fn_match_partner_catalog_row`
+  utilise encore `to_jsonb(b)->>'col'` sur les requêtes `books` (les requêtes
+  `book_drafts` sont déjà en accès direct `d.col`). `to_jsonb` n'étant pas IMMUTABLE,
+  ce détour **interdit l'usage de tout index** côté `books`.
+- **Volet C (index d'expression)** — ❌ à faire. **Aucun** index normalisé sur
+  `public.books` (2673 lignes) ni `public.book_drafts`.
+- **Volet D (chunking)** — optionnel, si gros lots réels.
+
+Seul le **band-aid** `SET statement_timeout = '0'` (migration `20260611174540`) est en
+place : les petits lots (301 CIRA) passent ; les gros (~2500+) resteraient à risque.
+
+### Recette prête (B + C) — validée le 12/06, à exécuter en session OUTILLÉE (psql/CLI authentifiée) + test sur branche
+
+**Volet B** — générer la fonction réécrite **sans transcription** (transform validée :
+70 occurrences `to_jsonb(b)->>'col'` → `b.col`, 0 résidu, **sémantiquement neutre**
+donc résultats de matching inchangés) :
+```bash
+psql "$DB_URL" -At -c "select regexp_replace(
+  pg_get_functiondef('ingest.fn_match_partner_catalog_row(bigint)'::regprocedure),
+  'to_jsonb\(b\)\s*->>\s*''([a-zA-Z_]+)''', 'b.\1', 'g')" | tr -d '\r' > /tmp/fn_match_rewritten.sql
+# Contrôle d'intégrité — DOIT valoir 0d2625ad117dc22affd34908015dd605 :
+md5sum /tmp/fn_match_rewritten.sql
+```
+La migration reprend ce CREATE OR REPLACE (garder `SET statement_timeout = '0'`, déjà
+dans la def) + `REVOKE EXECUTE … FROM PUBLIC` / `GRANT … TO service_role` (SECURITY DEFINER).
+
+**Volet C** — index d'expression (même migration) :
+```sql
+CREATE INDEX IF NOT EXISTS idx_books_isbn_norm    ON public.books (ingest.fn_normalize_isxn(isbn));
+CREATE INDEX IF NOT EXISTS idx_books_issn_norm    ON public.books (ingest.fn_normalize_isxn(issn));
+CREATE INDEX IF NOT EXISTS idx_books_tit_aut_norm ON public.books (ingest.fn_match_normalize_text(titulo), ingest.fn_match_normalize_text(autor));
+CREATE INDEX IF NOT EXISTS idx_bd_isbn_norm    ON public.book_drafts (ingest.fn_normalize_isxn(isbn));
+CREATE INDEX IF NOT EXISTS idx_bd_issn_norm    ON public.book_drafts (ingest.fn_normalize_isxn(issn));
+CREATE INDEX IF NOT EXISTS idx_bd_tit_aut_norm ON public.book_drafts (ingest.fn_match_normalize_text(titulo), ingest.fn_match_normalize_text(autor));
+```
+
+**Validation** : `EXPLAIN ANALYZE` d'une recherche candidate → **Index Scan** (vs Seq Scan
+sur 2673 livres) ; re-jouer le run 14 (301 CIRA) → quelques secondes ; comparer que les
+`match_status`/scores des lignes sont **inchangés** (la réécriture est neutre). Puis,
+dans un **suivi** : retirer le band-aid `statement_timeout=0` (ou le borner).
+
+**Pré-requis de tooling** : cette session (12/06) était lancée côté Windows, sans psql ni
+CLI Supabase authentifiée → la fonction de 27 Ko n'a pas pu être matérialisée proprement.
+À reprendre depuis WSL avec `supabase login` (ou un `$DB_URL` direct).
