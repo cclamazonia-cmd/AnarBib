@@ -396,8 +396,9 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **FED-O1** | Périmètre exact de la vue `painel` (empréstimos/consultas en cours + carte oui ; données sensibles + historique complet non) à border en spec. | 🟡 ouvert |
 | **FED-O2** | Traçabilité : journaliser les consultations de compte par le staff (qui, quel compte, quand) — service rendu ≠ surveillance. | 🟡 ouvert |
 | **FED-O3** | Scope = une biblio (cercles niveau biblio) → sélecteur de biblio en tête de page pour le staff multi-biblios. | 🟡 ouvert |
+| **FED-O7** | **Gouvernance des autorités partagées = prérogative fédérale démocratisée** (par consentement, jamais un·e admin seul·e). Articulation *split* : le modèle de proposition/fusion + la grammaire de consentement relèvent de `spec-atelier-autorites` (à créer) ; la face fédération **expose/surface** le rituel de décision et y renvoie. Mécanisme bas niveau déjà livré = `CAT-H1` (`merge_author`/`merge_book`, `merge_log`). Signal amont = rapports `rede` **R3b** (doublons d'autorités) & **R4** (incohérences) du **paquet RAPPORTS-REDE** (12/06). **À trancher** : portée (réseau entier vs cercle), réemploi de la grammaire `FED-O5` (opt-out/anti-blackball) ou régime dédié, qui propose / qui peut objecter, quorum. | 🟡 ouvert (12/06) |
 
-> Foyer : REGISTRE §24 (`FED`) fait foi ; raisonnement dans `docs/journal/cadrages/CADRAGE_modele_acces_concentrique_2026-06-04.md`, spec `docs/specs/spec-outils-federalistes.md` v0.1. Registre > trace.
+> Foyer : REGISTRE §24 (`FED`) fait foi ; raisonnement dans `docs/journal/cadrages/CADRAGE_modele_acces_concentrique_2026-06-04.md`, spec `docs/specs/spec-outils-federalistes.md` v0.2. Registre > trace.
 
 ---
 

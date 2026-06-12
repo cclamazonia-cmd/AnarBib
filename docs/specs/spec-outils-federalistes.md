@@ -3,11 +3,11 @@
 | Champ | Valeur |
 |---|---|
 | **Domaine** | Réseau fédératif — **face fédération** (bloc *Ferramentas federalistas*, nav entre `biblioteca` et `rede`) |
-| **Version** | v0.1 (4 juin 2026 — cadrage) |
-| **Statut** | 🟡 Cadrée, **arbitrages FED-O4/O5/O6 tranchés (04/06)**, non implémentée. Cœur **rempli** : socle + primitive cercle (étapes 1-2 du chantier). Autres onglets **charpentés/renvoyés**. |
+| **Version** | v0.2 (12 juin 2026 — passe de fraîcheur + ouverture FED-O7) |
+| **Statut** | 🟡 Cadrée, **arbitrages FED-O4/O5/O6 tranchés (04/06)**, non implémentée. Cœur **rempli** : socle + primitive cercle (étapes 1-2 du chantier). Autres onglets **charpentés/renvoyés**. **v0.2 (12/06)** : faits transverses réalignés (i18n → `DOC-I18N-1` ; déploiement → `DOC-DEPLOY-1`, runner non nommé) ; ouverture **FED-O7** (gouvernance des autorités partagées = prérogative fédérale, liée aux rapports `rede` R3b/R4). |
 | **Foyer décisions** | **REGISTRE §`FED`** (FED-1..7, FED-O1..O6) — *on cite l'ID, on ne reformule jamais ici.* Raisonnement : `CADRAGE_modele_acces_concentrique_2026-06-04.md`. Cadre politique : `CHANTIER_reseau_federatif_2026-05-25` (trace). |
 | **Dépendances entrantes** | `spec-administrateur-reseau-v0.4` (face administration `rede`, cooptation) · `spec-gouvernance-roles` (rôle coordenador, `user_can_manage_library`) · `spec-partenariat-biblios` (FED-7, tissu relationnel) · `spec-cartographie-reseau` (onglet Carte → MAP) |
-| **Dépendances sortantes** | À venir : `spec-assembleias`, `spec-gazeta` (non créées). Mutualisation de catalogue → chantier **catalogação** + `fn_library_visible_to_caller`. |
+| **Dépendances sortantes** | À venir : `spec-assembleias`, `spec-gazeta` (non créées). Mutualisation de catalogue → chantier **catalogação** + `fn_library_visible_to_caller`. **Gouvernance des autorités partagées** (FED-O7) → `spec-atelier-autorites` (à créer) ; **signal amont** = rapports `rede` R3b/R4 (paquet RAPPORTS-REDE) + mécanisme `CAT-H1` (`merge_author`/`merge_book`). |
 | **Préséance** | En cas de conflit : REGISTRE + cette spec + backlog font foi ; CADRAGE/CHANTIER = trace. |
 
 ---
@@ -127,7 +127,7 @@ Objets backend : doctrine **DOC-OBJ-2** (REVOKE `FROM PUBLIC, anon, authenticate
 
 ## 6. RPC & sécurité
 
-RPC-first pour toute écriture (**DOC-RPC-3**) ; `supabase.from()` toléré pour les lectures simples sous RLS (vues §5.3) ; `storage.from()` hors périmètre RPC. Objets backend selon **DOC-OBJ-2**. Déploiement : `git push` → Woodpecker (**DOC-DEPLOY-1**) ; migrations DDL en fichiers horodatés UTC dans `supabase/migrations/`, **jamais** SQL Editor ni `apply_migration` MCP.
+RPC-first pour toute écriture (**DOC-RPC-3**) ; `supabase.from()` toléré pour les lectures simples sous RLS (vues §5.3) ; `storage.from()` hors périmètre RPC. Objets backend selon **DOC-OBJ-2**. Déploiement : `git push` → CI (**DOC-DEPLOY-1** — foyer du runner, ne pas le nommer ici) ; migrations DDL en fichiers horodatés UTC dans `supabase/migrations/`, **jamais** SQL Editor ni `apply_migration` MCP.
 
 ## 7. Notifications
 
@@ -135,7 +135,7 @@ Events militants via l'infrastructure existante (`notify-event`, fan-out par `li
 
 ## 8. i18n
 
-Toutes les nouvelles clés en **8 locales** (`DOC-I18N-1` : pt-BR, fr, es, it, de, en, ca, eo — langage inclusif compris), livrées en une passe, clés plates, LF sans BOM. *(Le chantier dit « six langues » : trace périmée, corriger en suivant DOC-I18N-1.)* Le **nom** d'un cercle n'est pas i18n (nom propre) ; seuls les **libellés d'interface** le sont. Terme de la primitive = **`círculo`** (FED-O4).
+Toutes les nouvelles clés dans le nombre de locales fixé par **`DOC-I18N-1`** (foyer unique — **ne pas recopier le compte ici** ; **10** au 12/06 : pt-BR, fr, es, it, de, en, ca, eo, nl, el — langage inclusif compris), livrées en une passe, clés plates, LF sans BOM. *(Les traces antérieures disant « six » ou « huit langues » sont périmées : suivre DOC-I18N-1.)* Le **nom** d'un cercle n'est pas i18n (nom propre) ; seuls les **libellés d'interface** le sont. Terme de la primitive = **`círculo`** (FED-O4).
 
 ## 9. Périmètre v0.1 vs ultérieur
 
@@ -147,12 +147,13 @@ Toutes les nouvelles clés en **8 locales** (`DOC-I18N-1` : pt-BR, fr, es, it, d
 - **Carta** → `spec-cartographie-reseau` (MAP) — respecte la visibilité par biblio (`fn_library_visible_to_caller`) ; réserve sécurité (biblios non localisées).
 - **Entreajuda & memória** (étapes 4/7) — banque d'offres/besoins ; archives (chartes de cercle, comptes rendus).
 - **Mutualisation de catalogue** (piste lourde) + **circulation inter-bibliothèques portée par le cercle** — chantiers à part entière (FED-O6).
+- **Gouvernance des autorités partagées** (fusion / édition démocratisée) — **prérogative fédérale** (**FED-O7**, ouvert). Articulation *split* : le modèle de proposition/fusion + la grammaire de consentement relèvent de `spec-atelier-autorites` (à créer) ; la face fédération **surface** le rituel de décision et y renvoie. Mécanisme bas niveau déjà livré = `CAT-H1` (`merge_author`/`merge_book`, `merge_log`). **Signal amont** : les rapports `rede` **R3b** (doublons d'autorités) & **R4** (incohérences) du **paquet RAPPORTS-REDE** (12/06) pointent déjà « fusion à proposer au cercle fédéral » — ils alimentent, ne décident pas.
 
 ## 10. Points ouverts
 
 **Tranchés le 04/06 et inscrits au REGISTRE §`FED`** : **FED-O4** (terme = `círculo` ; label *Ferramentas federalistas*), **FED-O5** (adhésion opt-out + anti-blackball B), **FED-O6** (mutualisation = axe distinct ; opt-in biblio multi-cercles ; granularité (i)).
 
-**Restent ouverts** (au registre) : **FED-O1** (périmètre vue `painel`), **FED-O2** (traçabilité consultations compte), **FED-O3** (sélecteur de biblio si staff multi-biblios).
+**Restent ouverts** (au registre) : **FED-O1** (périmètre vue `painel`), **FED-O2** (traçabilité consultations compte), **FED-O3** (sélecteur de biblio si staff multi-biblios), **FED-O7** (gouvernance des autorités partagées = prérogative fédérale ; articulation *split* avec `spec-atelier-autorites` ; signal amont = rapports `rede` R3b/R4 ; à trancher : portée réseau vs cercle, réemploi de la grammaire FED-O5, qui propose / qui objecte, quorum).
 
 À caler lors du remplissage : délai exact d'objection (FED-O5 propose ~14 j) ; seuil du signal de sommeil (§5.5).
 
@@ -160,8 +161,8 @@ Hérités du chantier §8.2 : régime de vote des assemblées ; mandat impérati
 
 ## 11. Prompt de reprise
 
-> Spec v0.1 cadrée, validée, **arbitrages FED-O4/O5/O6 tranchés et inscrits au registre (04/06)**. Prochaine étape = code, un paquet à la fois (DOC-CLOSE-1) : (1) **migration cercles** — tables `circles` + `circle_memberships` (+ `circle_join_requests` / `circle_join_objections` pour FED-O5), RLS, vues `*_v1`, RPC `fn_circle_*` selon DOC-OBJ-2/DOC-RPC-3 ; `git push` → Woodpecker ; (2) **frontend** face fédération + onglet Círculos sur la base de la maquette `anarbib-circulos-preview.html` (theme-aware `var(--brand-*)`), i18n 8 locales. L'étape 1 du chantier (page + accès + Início) peut précéder ou accompagner la primitive cercle.
+> Spec v0.2 cadrée, validée, **arbitrages FED-O4/O5/O6 tranchés et inscrits au registre (04/06)** ; **FED-O7 ouvert (12/06)** = gouvernance des autorités partagées (renvoi `spec-atelier-autorites`, signal amont rapports `rede` R3b/R4). Prochaine étape = code, un paquet à la fois (DOC-CLOSE-1) : (1) **migration cercles** — tables `circles` + `circle_memberships` (+ `circle_join_requests` / `circle_join_objections` pour FED-O5), RLS, vues `*_v1`, RPC `fn_circle_*` selon DOC-OBJ-2/DOC-RPC-3 ; `git push` → CI (DOC-DEPLOY-1) ; (2) **frontend** face fédération + onglet Círculos sur la base de la maquette `anarbib-circulos-preview.html` (theme-aware `var(--brand-*)`), i18n selon DOC-I18N-1. L'étape 1 du chantier (page + accès + Início) peut précéder ou accompagner la primitive cercle.
 
 ---
 
-*Fin de la spec v0.1. Décisions opposables : voir REGISTRE §`FED`. Cette spec décrit le design/comportement ; elle ne tranche pas les décisions, elle les cite.*
+*Fin de la spec v0.2. Décisions opposables : voir REGISTRE §`FED`. Cette spec décrit le design/comportement ; elle ne tranche pas les décisions, elle les cite.*
