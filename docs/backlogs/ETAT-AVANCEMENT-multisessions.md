@@ -54,7 +54,10 @@ socle.
 - **Baqueiro** (docs de consignes) : brouillons MLEG, orphelins d'autorité, indexation
   sujets, enrichissement dates auteurs.
 - **N4 — numéro/identité local·e** (mail réconciliation UUID ↔ identité) → **session identité
-  dédiée** (en cours ; CARD-LOCAL Lot 0 déployé le 11/06).
+  dédiée**. CARD-LOCAL **Lot 0 déployé le 11/06** ; **Lots 1→5 construits le 12/06**
+  (recherche painel N1, attribution/édition N2, modèle biblio N5, roster PDF/CSV N3,
+  notif réconciliation N4 + finition CI Pages non bloquant) — commités en local,
+  **en attente de push** (sérialisation avec les autres sessions).
 - **Corpus `.ris` CIRA** → local, non commité (sans consentement explicite).
 - **§21 PARTNER notifications** (NOTIF-1/2/3) → **livrées en prod** le 11/06.
 - **CI** → migré Woodpecker→Forgejo Actions, **runner auto-hébergé WSL2**, **retry-Pages**

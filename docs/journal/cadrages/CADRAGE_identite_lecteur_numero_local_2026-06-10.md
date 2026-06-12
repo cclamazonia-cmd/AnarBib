@@ -1,6 +1,8 @@
 ---
 Genre : trace (cadrage de chantier) — **v2 (réécriture)**
-Statut : 🟡 ouvert — à arbitrer puis exécuter
+Statut : ✅ arbitré (REGISTRE §27 `CARD-LOCAL`, 11/06) — Lots 0→5 construits (Lot 0
+déployé 11/06 ; Lots 1→5 le 12/06, en attente de push). Le §9 ci-dessous est conservé
+comme TRACE de l'arbitrage : sa source de vérité est désormais le **REGISTRE §27**.
 Date : 2026-06-10 (v1) · réécrit 2026-06-10 (v2)
 Session : Catalogação work completion (v1) · réécriture v2 avec Xavier
 Préséance : ce document est une TRACE non-normative. Les décisions, une fois prises,
@@ -234,6 +236,10 @@ et staff**.
     **ne pas introduire** de hard-delete sur ce chemin.
 
 ## 9. Décisions à arbitrer (hypothèses + reco — à porter au REGISTRE)
+
+> ✅ **ARBITRÉ (11/06/2026)** — ce bloc a été **inscrit au REGISTRE §27 `CARD-LOCAL`**
+> (12 décisions actées). **La source de vérité est désormais le REGISTRE §27** ; le
+> texte ci-dessous est conservé comme trace de l'arbitrage et ne fait plus foi.
 
 > Bloc prêt à inscrire au REGISTRE (nouvelle section **§27 `CARD-LOCAL`**) **après
 > arbitrage**. Statuts honnêtes : ✅ = déjà vrai/acté aujourd'hui ; 🟡 = à trancher.
