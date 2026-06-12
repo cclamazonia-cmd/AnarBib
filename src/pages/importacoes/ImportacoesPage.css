@@ -1,5 +1,16 @@
 /* ── ImportacoesPage v7 ──────────────────────────────────── */
 
+/* ── Pastilles (autonomes : ne pas dépendre de CatalogacaoPage.css) ── */
+.cat-pill {
+  display: inline-block; padding: 4px 12px; font-size: .78rem; font-weight: 700;
+  border-radius: 5px; text-transform: uppercase; letter-spacing: .03em;
+}
+.cat-pill.info   { background: rgba(29,78,216,.18);  color: #60a5fa; }
+.cat-pill.ok     { background: rgba(21,128,61,.18);  color: #4ade80; }
+.cat-pill.warn   { background: rgba(180,83,9,.18);   color: #fbbf24; }
+.cat-pill.danger { background: rgba(220,38,38,.18);  color: #f87171; }
+.cat-pill.muted  { background: rgba(148,163,184,.15); color: #94a3b8; }
+
 .imp-wrap {
   max-width: 1280px;
   margin: 0 auto;
