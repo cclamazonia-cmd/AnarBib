@@ -164,3 +164,20 @@ Diff vérifié : seules mes 2 modifs (import + montage), aucun travail parallèl
 2. **Importações → Deposito formato caseiro** : sélectionner « CIRA Marseille »
    dans le menu → choisir le `.ris` → **Depositar e processar**.
 3. Staging → **aperçu (dédup proéminente)** → **promotion** en brouillons privés.
+
+---
+
+## ✅ CLÔTURE — 2026-06-12 (session « Import/Export — fiabilisation matching & rapprochement »)
+
+Cadrage considéré **clos**. Le flux d'import a été achevé par-dessus B1/B2 :
+- **Fusion des 3 circuits** en un flux unique (Livraison 2, commit `7a0d8bf`) :
+  le « + » texte-libre cassé et le « dépôt format maison » ont été **retirés** de
+  `ImportacoesPage.jsx` (le point « à retirer dans une passe ultérieure » du §B3
+  est donc soldé côté page fusionnée).
+- **Rapprochement (chantier B, commit `1987da8`)** : un doublon confirmé contre un
+  livre publié crée un **brouillon d'exemplaire** (`exemplar_drafts`) au nom de la
+  biblio, rattaché au `proposed_book_id`, au lieu d'un `book_draft`.
+- **Reliquats optionnels non bloquants** : **B4** (`book_drafts.catalog_partner_id`,
+  continuité de provenance) reste **non fait** ; l'assistant `/importacoes/novo`
+  (`ImportWizard.jsx`, session « wizard refactor ») coexiste avec la page fusionnée
+  et reste **actif** (ses clés i18n `circuit/migracao` ne sont donc PAS orphelines).

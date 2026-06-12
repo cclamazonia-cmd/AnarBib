@@ -87,3 +87,18 @@ Migration `20260611174540_lift_statement_timeout_partner_matching.sql` :
   (vs ~15-30 s aujourd'hui).
 - Lot synthétique ~2500 lignes : doit aboutir sans timeout ni dépassement EF.
 - `EXPLAIN ANALYZE` d'une recherche candidate : **Index Scan**, pas Seq Scan.
+
+---
+
+## Statut au 2026-06-12 — TOUJOURS OUVERT (band-aid seul)
+
+> ⚠️ Ne pas confondre ce cadrage (**performance** du matching) avec le bug de
+> **confidence** (chantier A), qui était distinct et a été **corrigé séparément**
+> (migration `20260612005406`, commit `23efba2` : `confidence` = meilleur score
+> candidat, persisté dans le wrapper + backfill).
+
+Le **vrai fix perf** (volets A immutable / B réécriture des requêtes / C index
+d'expression / D chunking) **n'est pas fait** : seul le **band-aid**
+`SET statement_timeout = '0'` (migration `20260611174540`) est en place. Les petits
+lots (301 CIRA) passent ; les gros lots (~2500+) resteraient à risque de timeout /
+dépassement EF. **Chantier à reprendre** (à froid, hors session import/export).

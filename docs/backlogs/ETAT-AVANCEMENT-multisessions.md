@@ -67,6 +67,21 @@ socle.
 - **« Italian schwa and hardcoded strings »** — i18n.
 - **Session identité lecteur·rice** (N1→N5, dont N4) — *aspects identité/numéro local*.
 
+## Import/Export — livré 2026-06-12 (session « fiabilisation matching & rapprochement »)
+- ✅ **Fila de revisão** : pastilles autonomes (`aa69051`) ; **confidence réelle**
+  affichée (= meilleur score candidat, fini le « 0% » trompeur ; migration
+  `20260612005406`, `23efba2`, données backfillées) ; **rapprochement** d'un doublon
+  publié → **brouillon d'exemplaire** (`exemplar_drafts`) au lieu d'un `book_draft`
+  (migration `20260612011854`, `1987da8`).
+- 🔸 **i18n `importacoes.circuit/migracao/deposit.*` NON orphelines** : utilisées par
+  `ImportWizard.jsx` (`/importacoes/novo`, session wizard) et la feature dépôt partenaire
+  (`fn_partner_register_deposit_source`, vivante). **Ne pas supprimer.**
+- 🔸 **Pipeline `ingest` d'import (tables + ~23 fonctions) hors `migrations/`** = relève
+  du **socle fondateur** ci-dessus (déjà capturé dans le baseline du 11/06, à jour). Pas
+  un chantier oublié ; un *db reset* from-scratch ne le rejoue pas (cf. squash différé).
+- 🟠 **Perf matching** (cadrage `CADRAGE_perf_matching_import`) : **toujours ouvert**
+  (band-aid `statement_timeout=0` seul ; vrai fix immutable+index non fait).
+
 ---
 *Rafraîchi le 11/06/2026 en fin de session (« Catalogação work completion ») : 🔴 pérennisation
 résolue, #CL.10 fait, EA-12 confirmé gelé, baseline snapshot livré — ne reste qu'un reliquat
