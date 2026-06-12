@@ -14,10 +14,19 @@ import './PanelOnboarding.css';
 //
 // Piloté par le profil (circulation_mode) et la disponibilité réelle des
 // onglets (availability). Aucune configuration : c'est de la prise en main.
-// Persistance localStorage par biblio (pas de migration). Rejouable.
+//
+// Persistance (deux niveaux, pas de migration) :
+//   • opt-out PERMANENT (localStorage) : posé UNIQUEMENT quand la personne coche
+//     « ne plus afficher ». Tant qu'il n'est pas posé, la visite se rejoue à
+//     CHAQUE nouvelle connexion.
+//   • « déjà vu cette session » (sessionStorage) : évite que la visite se
+//     relance à chaque navigation/re-montage au sein d'une même connexion. Une
+//     nouvelle connexion (nouvelle session navigateur) la fait réapparaître.
+// Rejouable à la demande via « Refaire la visite » (ignore les deux niveaux).
 // ═══════════════════════════════════════════════════════════════════════════
 
-const SEEN_KEY_PREFIX = 'painel_onboarding_seen:';
+const OPTOUT_KEY_PREFIX = 'painel_onboarding_optout:';     // localStorage (permanent)
+const SESSION_KEY_PREFIX = 'painel_onboarding_shown:';     // sessionStorage (par connexion)
 const HOLE_PAD = 6;
 
 // Adresses réseau (constantes, non traduites).
@@ -44,17 +53,29 @@ const FIRST_STEPS = [
   { id: 'day', need: () => true, labelKey: 'panel.onboarding.step.day.label', subKey: 'panel.onboarding.step.day.sub', whereKey: 'panel.tab.dailyWork' },
 ];
 
+function isOptedOut(libraryId) {
+  if (!libraryId) return false;
+  try { return localStorage.getItem(OPTOUT_KEY_PREFIX + libraryId) === '1'; } catch { return false; }
+}
+function isSessionShown(libraryId) {
+  if (!libraryId) return false;
+  try { return sessionStorage.getItem(SESSION_KEY_PREFIX + libraryId) === '1'; } catch { return false; }
+}
+// La visite s'auto-lance si la personne n'a pas opté-out (permanent) ET ne l'a
+// pas déjà vue dans cette session navigateur (évite le re-déclenchement à
+// chaque navigation). Une nouvelle connexion la fait réapparaître.
 export function shouldShowPanelOnboarding(libraryId) {
   if (!libraryId) return false;
-  try { return localStorage.getItem(SEEN_KEY_PREFIX + libraryId) !== '1'; } catch { return false; }
+  return !isOptedOut(libraryId) && !isSessionShown(libraryId);
 }
 
 export default function PanelOnboarding({ availability, circulationMode, libraryId, onNavigate }) {
   const { formatMessage: t } = useIntl();
   const cm = circulationMode || 'full_sigb';
 
-  // Zone d'accueil (check-list + canal humain) visible ?
-  const [zoneOpen, setZoneOpen] = useState(() => shouldShowPanelOnboarding(libraryId));
+  // Zone d'accueil (check-list + canal humain) : visible tant que la personne
+  // n'a pas opté-out de façon permanente (« Concluir e ocultar »).
+  const [zoneOpen, setZoneOpen] = useState(() => !isOptedOut(libraryId));
   // Cases cochées (mémoire de session seulement — pas un examen)
   const [doneSteps, setDoneSteps] = useState({});
 
@@ -74,9 +95,16 @@ export default function PanelOnboarding({ availability, circulationMode, library
   const steps = useMemo(() => FIRST_STEPS.filter(s => s.need(cm)), [cm]);
   const doneCount = steps.filter(s => doneSteps[s.id]).length;
 
-  const persistSeen = useCallback(() => {
+  // Marque « déjà vu cette session » (sessionStorage) — empêche le re-déclenchement
+  // automatique au sein de la même connexion.
+  const markSessionShown = useCallback(() => {
     if (!libraryId) return;
-    try { localStorage.setItem(SEEN_KEY_PREFIX + libraryId, '1'); } catch { /* ignore */ }
+    try { sessionStorage.setItem(SESSION_KEY_PREFIX + libraryId, '1'); } catch { /* ignore */ }
+  }, [libraryId]);
+  // Opt-out PERMANENT (localStorage) — posé uniquement sur action explicite.
+  const persistOptout = useCallback(() => {
+    if (!libraryId) return;
+    try { localStorage.setItem(OPTOUT_KEY_PREFIX + libraryId, '1'); } catch { /* ignore */ }
   }, [libraryId]);
 
   // ── Positionnement du spotlight + de la carte coach ───────────────────
@@ -102,13 +130,14 @@ export default function PanelOnboarding({ availability, circulationMode, library
     setZoneOpen(true);
     setTi(0);
     setTourActive(true);
-  }, []);
+    markSessionShown();
+  }, [markSessionShown]);
 
   const endTour = useCallback(() => {
     setTourActive(false);
     setHole(null);
-    persistSeen();
-  }, [persistSeen]);
+    markSessionShown();
+  }, [markSessionShown]);
 
   // Quand la visite devient active ou change d'étape : naviguer vers l'onglet
   // ciblé (contexte visuel) puis repositionner après le rendu.
@@ -136,13 +165,13 @@ export default function PanelOnboarding({ availability, circulationMode, library
     };
   }, [tourActive, reposition]);
 
-  // Démarrage auto à la première visite (laisser la page se peindre).
+  // Démarrage auto (1ʳᵉ fois de la session, sauf opt-out permanent).
   useEffect(() => {
-    if (!libraryId) return;
     if (!shouldShowPanelOnboarding(libraryId)) return;
+    markSessionShown();
     const id = setTimeout(() => setTourActive(true), 480);
     return () => clearTimeout(id);
-  }, [libraryId]);
+  }, [libraryId, markSessionShown]);
 
   // Raccourcis clavier pendant la visite.
   useEffect(() => {
@@ -161,10 +190,12 @@ export default function PanelOnboarding({ availability, circulationMode, library
     else endTour();
   }, [ti, tour.length, endTour]);
 
+  // « Concluir e ocultar » = opt-out permanent (ne réapparaît plus aux connexions
+  // suivantes, sauf « Refazer a visita »).
   const dismissZone = useCallback(() => {
     setZoneOpen(false);
-    persistSeen();
-  }, [persistSeen]);
+    persistOptout();
+  }, [persistOptout]);
 
   const replay = useCallback(() => {
     setDoneSteps({});

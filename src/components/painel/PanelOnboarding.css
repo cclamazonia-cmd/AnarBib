@@ -101,7 +101,10 @@
 .ab-pon-coach .ab-pon-cstep{ font-size:.66rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--pon-staff-fg); }
 .ab-pon-coach h4{ font-weight:700; font-size:1.12rem; margin:6px 0 6px; }
 .ab-pon-coach p{ font-size:.86rem; color:#d9d2da; margin:0 0 14px; }
-.ab-pon-nav{ display:flex; align-items:center; gap:8px; }
+/* flex-wrap + justify-end : si la rangée pastilles + boutons dépasse la largeur
+   du cadre (libellés longs, ex. de), les boutons reviennent à la ligne en
+   restant alignés à droite — jamais de débordement hors de la carte coach. */
+.ab-pon-nav{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; row-gap:10px; justify-content:flex-end; }
 .ab-pon-dots{ display:flex; gap:5px; margin-right:auto; }
 .ab-pon-dot{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.18); }
 .ab-pon-dot.is-on{ background:var(--pon-staff-fg); }
