@@ -179,7 +179,7 @@ export default function ImportacoesPage() {
   // attente — nouveautés ET doublons (pour pouvoir les écarter/rejeter).
   const selectableIds = useMemo(
     () => filteredRunRows
-      .filter(r => !r.created_book_draft_id && (r.editorial_decision == null || r.editorial_decision === 'pending'))
+      .filter(r => !r.created_book_draft_id && !r.created_exemplar_draft_id && (r.editorial_decision == null || r.editorial_decision === 'pending'))
       .map(r => r.id),
     [filteredRunRows]
   );
@@ -187,6 +187,14 @@ export default function ImportacoesPage() {
   // Combien de sélectionnées sont des nouveautés promouvables (pour le bouton Criar).
   const selectedNewCount = useMemo(
     () => filteredRunRows.filter(r => selectedRows.has(r.id) && r.match_status === 'new_record' && !r.created_book_draft_id).length,
+    [filteredRunRows, selectedRows]
+  );
+  // Combien de sélectionnées sont des doublons rapprochables (livre publié) — bouton Rapprocher.
+  const selectedDupCount = useMemo(
+    () => filteredRunRows.filter(r => selectedRows.has(r.id)
+      && r.proposed_book_id
+      && !r.created_exemplar_draft_id
+      && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book')).length,
     [filteredRunRows, selectedRows]
   );
 
@@ -283,6 +291,33 @@ export default function ImportacoesPage() {
       const { error } = await supabase.rpc('fn_import_promote', { p_run_id: Number(selectedRunId) });
       if (error) throw error;
       setMsg({ text: t({ id: 'importacoes.draftsCreated' }), kind: 'ok' });
+      setSelectedRows(new Set());
+      await loadRuns();
+      await loadRunRows(selectedRunId);
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally {
+      setPromotingSel(false);
+    }
+  }
+  // Rapprocher des doublons (livre déjà publié au catalogue) : crée un brouillon
+  // d'exemplaire pour la biblio, rattaché au proposed_book_id (pas un book_draft).
+  async function handleReconcileSelected() {
+    if (!selectedRunId) return;
+    const ids = filteredRunRows
+      .filter(r => selectedRows.has(r.id) && r.proposed_book_id && !r.created_exemplar_draft_id
+        && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book'))
+      .map(r => r.id);
+    if (!ids.length) return;
+    setPromotingSel(true);
+    setMsg({ text: t({ id: 'importacoes.fila.reconciling' }), kind: 'info' });
+    try {
+      const { error } = await supabase.rpc('fn_import_reconcile_duplicates', {
+        p_run_id: Number(selectedRunId),
+        p_row_ids: ids,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'importacoes.fila.reconciled' }), kind: 'ok' });
       setSelectedRows(new Set());
       await loadRuns();
       await loadRunRows(selectedRunId);
@@ -866,6 +901,9 @@ export default function ImportacoesPage() {
                       <button className="cat-btn" disabled={promotingSel || selectedNewCount === 0} onClick={handlePromoteSelected}>
                         {promotingSel ? t({ id: 'importacoes.generatingDrafts' }) : t({ id: 'importacoes.fila.createSelected' }, { n: selectedNewCount })}
                       </button>
+                      <button className="cat-btn" disabled={promotingSel || selectedDupCount === 0} onClick={handleReconcileSelected}>
+                        {t({ id: 'importacoes.fila.reconcile' }, { n: selectedDupCount })}
+                      </button>
                       <button className="cat-btn secondary" disabled={promotingSel} onClick={handleRejectSelected}
                         style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
                         {t({ id: 'importacoes.fila.reject' }, { n: selectedRows.size })}
@@ -899,7 +937,7 @@ export default function ImportacoesPage() {
                           const isDup = ms === 'possible_duplicate' || isMatched;
                           const ed = row.editorial_decision || 'pending';
                           // Sélectionnable : pas encore promue ET décision en attente.
-                          const reviewable = !row.created_book_draft_id && ed === 'pending';
+                          const reviewable = !row.created_book_draft_id && !row.created_exemplar_draft_id && ed === 'pending';
                           return (
                             <tr key={row.id} style={ed === 'reject' ? { opacity: 0.55 } : undefined}>
                               <td>
@@ -938,6 +976,8 @@ export default function ImportacoesPage() {
                               <td>
                                 {row.created_book_draft_id
                                   ? <Pill variant="ok">{t({ id: 'importacoes.fila.draftCreated' })}</Pill>
+                                  : row.created_exemplar_draft_id
+                                  ? <Pill variant="ok">{t({ id: 'importacoes.fila.exemplarCreated' })}</Pill>
                                   : <Pill>{t({ id: 'importacoes.fila.inQueue' })}</Pill>}
                               </td>
                             </tr>
