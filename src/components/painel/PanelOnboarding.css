@@ -1,0 +1,111 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PanelOnboarding — prise en main du Painel (ONBO-Q4)
+   Coach-marks (spotlight ancré aux vrais onglets) + check-list de premières
+   actions + canal humain. Porté de la maquette prise-en-main-painel.html.
+   Palette staff (badge bibliothécaire) alignée sur UserHeroBadge.css.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ab-pon{
+  --pon-staff-bg:#042C53;
+  --pon-staff-fg:#85B7EB;
+  --pon-staff-bd:#185FA5;
+  --pon-ok:#7ee0a8;
+  --pon-line:rgba(255,255,255,.09);
+  --pon-line-soft:rgba(255,255,255,.05);
+  --pon-card:rgba(255,255,255,.035);
+  --pon-card-hi:rgba(255,255,255,.06);
+  --pon-muted:var(--brand-muted,#9a93a6);
+  --pon-fg:var(--brand-text,#f4f1ee);
+}
+
+/* ── Zone d'accueil (check-list + canal humain) ─────────────────────────── */
+.ab-pon-zone{ display:flex; flex-direction:column; gap:18px; margin-top:22px; }
+
+.ab-pon-firststeps{
+  border:1px solid var(--pon-line); border-radius:14px;
+  background:var(--pon-card); padding:20px;
+}
+.ab-pon-fh{ display:flex; align-items:center; gap:12px; margin-bottom:4px; flex-wrap:wrap; }
+.ab-pon-fh h2{ font-weight:700; font-size:1.2rem; margin:0; }
+.ab-pon-miniring{ margin-left:auto; font-size:.78rem; font-weight:700; color:var(--pon-ok); white-space:nowrap; }
+.ab-pon-fp{ font-size:.86rem; color:var(--pon-muted); margin:2px 0 16px; }
+
+.ab-pon-step{ display:flex; align-items:flex-start; gap:13px; padding:13px 0; border-bottom:1px solid var(--pon-line-soft); }
+.ab-pon-step:last-child{ border-bottom:0; }
+.ab-pon-tick{
+  width:26px; height:26px; border-radius:8px; border:1.5px solid var(--pon-line);
+  background:transparent; flex:none; cursor:pointer; display:grid; place-items:center;
+  color:transparent; transition:.15s; font-weight:800; font-size:.85rem;
+}
+.ab-pon-step.is-done .ab-pon-tick{ background:var(--pon-ok); border-color:var(--pon-ok); color:#10231a; }
+.ab-pon-si{ flex:1; min-width:0; }
+.ab-pon-si b{ font-size:.95rem; display:block; }
+.ab-pon-step.is-done .ab-pon-si b{ text-decoration:line-through; color:var(--pon-muted); }
+.ab-pon-si span{ font-size:.82rem; color:var(--pon-muted); }
+.ab-pon-where{
+  font-size:.72rem; color:var(--pon-staff-fg); font-weight:700;
+  border:1px solid var(--pon-staff-bd); background:var(--pon-staff-bg);
+  padding:3px 9px; border-radius:30px; white-space:nowrap; flex:none; margin-top:2px;
+}
+.ab-pon-firststeps-foot{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+
+/* ── Canal humain ───────────────────────────────────────────────────────── */
+.ab-pon-human{
+  border:1px solid rgba(126,224,168,.32); border-radius:14px;
+  background:rgba(126,224,168,.05); padding:18px 20px;
+  display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+}
+.ab-pon-human .ab-pon-ht{ flex:1; min-width:220px; }
+.ab-pon-tag{ font-size:.64rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pon-ok); }
+.ab-pon-human h3{ font-weight:700; font-size:1.1rem; margin:6px 0 4px; }
+.ab-pon-human p{ font-size:.85rem; color:var(--pon-muted); margin:0; }
+.ab-pon-links{ display:flex; gap:10px; flex-wrap:wrap; }
+.ab-pon-links a{
+  text-decoration:none; color:var(--pon-fg); font-weight:600; font-size:.84rem;
+  padding:9px 13px; border:1px solid var(--pon-line); border-radius:9px;
+  transition:.15s; background:rgba(255,255,255,.03);
+}
+.ab-pon-links a:hover{ background:var(--pon-card-hi); }
+
+/* ── Barre repliée (visite déjà vue) ────────────────────────────────────── */
+.ab-pon-replaybar{ margin-top:16px; display:flex; }
+.ab-pon-btn{
+  appearance:none; border:1px solid var(--pon-line); background:transparent;
+  color:var(--pon-fg); font-family:inherit; font-weight:700; font-size:.82rem;
+  padding:8px 14px; border-radius:10px; cursor:pointer; transition:.15s;
+}
+.ab-pon-btn:hover{ background:var(--pon-card-hi); }
+.ab-pon-btn.is-staff{ background:var(--pon-staff-bd); border-color:var(--pon-staff-bd); color:#fff; }
+.ab-pon-btn.is-staff:hover{ background:#1f6fc0; }
+.ab-pon-btn.is-ghost{ border-color:transparent; color:var(--pon-muted); }
+.ab-pon-btn.is-ghost:hover{ color:var(--pon-fg); }
+
+/* ── Spotlight (coach-marks) ────────────────────────────────────────────── */
+.ab-pon-spot{ position:fixed; inset:0; z-index:1200; pointer-events:none; opacity:0; transition:.2s; }
+.ab-pon-spot.is-on{ opacity:1; pointer-events:auto; }
+/* la découpe : rectangle transparent sur la cible ; son immense ombre portée
+   assombrit tout le pourtour, la cible reste pleinement visible. */
+.ab-pon-hole{
+  position:fixed; z-index:1201; pointer-events:none; border-radius:11px; opacity:0;
+  transition:opacity .2s, top .25s, left .25s, width .25s, height .25s;
+  box-shadow:0 0 0 2px var(--pon-staff-fg), 0 0 0 7px rgba(133,183,235,.28),
+             0 0 28px 4px rgba(133,183,235,.30), 0 0 0 9999px rgba(8,7,10,.62);
+}
+.ab-pon-hole.is-on{ opacity:1; }
+.ab-pon-coach{
+  position:fixed; z-index:1204; width:min(330px,calc(100vw - 32px));
+  background:var(--brand-panel-bg, #1d1a22); border:1px solid var(--pon-staff-bd);
+  border-radius:13px; padding:16px 17px; box-shadow:0 24px 60px rgba(0,0,0,.55);
+  transition:top .25s,left .25s; color:var(--pon-fg);
+}
+.ab-pon-coach .ab-pon-cstep{ font-size:.66rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--pon-staff-fg); }
+.ab-pon-coach h4{ font-weight:700; font-size:1.12rem; margin:6px 0 6px; }
+.ab-pon-coach p{ font-size:.86rem; color:#d9d2da; margin:0 0 14px; }
+.ab-pon-nav{ display:flex; align-items:center; gap:8px; }
+.ab-pon-dots{ display:flex; gap:5px; margin-right:auto; }
+.ab-pon-dot{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.18); }
+.ab-pon-dot.is-on{ background:var(--pon-staff-fg); }
+
+@media (max-width:560px){
+  .ab-pon-human{ flex-direction:column; align-items:flex-start; }
+}

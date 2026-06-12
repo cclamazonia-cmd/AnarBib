@@ -14,6 +14,7 @@ import './PanelPage.css';
 import { usePanelAvailability } from '@/hooks/usePanelAvailability';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
+import PanelOnboarding from '@/components/painel/PanelOnboarding';
 import { fmtD, useSort } from './_shared';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
@@ -1750,6 +1751,7 @@ export default function PanelPage() {
           {TABS.map(t => (
             <Fragment key={t.key}>
               <button className={`ab-painel-tab ${tab === t.key ? 'active' : ''}`}
+                data-painel-tab={t.key}
                 onClick={() => setTab(t.key)} role="tab">
                 {t.label}
                 <span className="ab-painel-tab__hint">{t.hint}</span>
@@ -2060,6 +2062,15 @@ export default function PanelPage() {
 
         </div>
       </div>
+
+      {/* ONBO-Q4 : prise en main du Painel (coach-marks + check-list + canal humain) */}
+      <PanelOnboarding
+        availability={availability}
+        circulationMode={circulation_mode}
+        libraryId={libraryId}
+        onNavigate={setTab}
+      />
+
       <Footer />
           {/* Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta */}
       <Modal
