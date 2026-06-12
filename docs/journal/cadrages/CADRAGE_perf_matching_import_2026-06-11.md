@@ -90,7 +90,17 @@ Migration `20260611174540_lift_statement_timeout_partner_matching.sql` :
 
 ---
 
-## Statut au 2026-06-12 — TOUJOURS OUVERT (band-aid seul)
+## Statut au 2026-06-12 — ✅ B+C LIVRÉS (reste : retrait du band-aid)
+
+> ✅ **Volets B + C déployés et vérifiés** (commit `618312db`, pipeline vert).
+> Fonction `fn_match_partner_catalog_row` réécrite (`to_jsonb(b)->>'col'` → `b.col`,
+> md5 `0d2625ad117dc22affd34908015dd605`, **sémantiquement neutre**) + **6 index
+> d'expression** sur `books`/`book_drafts`. `EXPLAIN ANALYZE` confirme l'**Index Scan**
+> (sub-ms) sur les recherches ISBN et titre+auteur — le seq scan O(2673 livres) par
+> ligne est éliminé. **Reste** : (1) retirer le band-aid `statement_timeout=0` (petit
+> `ALTER FUNCTION … RESET statement_timeout`, après confirmation sur un vrai gros
+> import) ; (2) optionnel, volet D (chunking) pour les très gros lots.
+> *(La « Recette prête » plus bas est conservée pour traçabilité.)*
 
 > ⚠️ Ne pas confondre ce cadrage (**performance** du matching) avec le bug de
 > **confidence** (chantier A), qui était distinct et a été **corrigé séparément**
