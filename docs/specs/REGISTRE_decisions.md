@@ -396,7 +396,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **FED-O1** | Périmètre exact de la vue `painel` (empréstimos/consultas en cours + carte oui ; données sensibles + historique complet non) à border en spec. | 🟡 ouvert |
 | **FED-O2** | Traçabilité : journaliser les consultations de compte par le staff (qui, quel compte, quand) — service rendu ≠ surveillance. | 🟡 ouvert |
 | **FED-O3** | Scope = une biblio (cercles niveau biblio) → sélecteur de biblio en tête de page pour le staff multi-biblios. | 🟡 ouvert |
-| **FED-O7** | **Gouvernance des autorités partagées = prérogative fédérale démocratisée** (par consentement, jamais un·e admin seul·e). Articulation *split* : le modèle de proposition/fusion + la grammaire de consentement relèvent de `spec-atelier-autorites` (à créer) ; la face fédération **expose/surface** le rituel de décision et y renvoie. Mécanisme bas niveau déjà livré = `CAT-H1` (`merge_author`/`merge_book`, `merge_log`). Signal amont = rapports `rede` **R3b** (doublons d'autorités) & **R4** (incohérences) du **paquet RAPPORTS-REDE** (12/06). **À trancher** : portée (réseau entier vs cercle), réemploi de la grammaire `FED-O5` (opt-out/anti-blackball) ou régime dédié, qui propose / qui peut objecter, quorum. | 🟡 ouvert (12/06) |
+| **FED-O7** | **Gouvernance des autorités partagées = prérogative fédérale démocratisée** (par consentement, jamais un·e admin seul·e). Articulation *split* : le modèle de proposition/fusion + la grammaire de consentement relèvent de `spec-atelier-autorites` (**v0.1 cadrage, 12/06**) ; la face fédération **expose/surface** le rituel de décision et y renvoie. Mécanisme bas niveau déjà livré = `CAT-H1` (`merge_author`/`merge_book`, `merge_log`). Signal amont = rapports `rede` **R3b** (doublons d'autorités) & **R4** (incohérences) du **paquet RAPPORTS-REDE** (12/06). **Tranché (12/06) par `ATE-1..4` (§28)** : portée **réseau entier**, parties prenantes dérivées des données (ATE-1) ; **réemploi `FED-O5`** opt-out/anti-blackball, fenêtre modulée par l'impact (ATE-2) ; propose = `network_contributors` + staff, objecte = `coordenador` utilisatrice + coord. atelier (ATE-3) ; **pas de quorum** (ATE-4). | 🟢 instruit (12/06, renvoi `spec-atelier-autorites`) |
 
 > Foyer : REGISTRE §24 (`FED`) fait foi ; raisonnement dans `docs/journal/cadrages/CADRAGE_modele_acces_concentrique_2026-06-04.md`, spec `docs/specs/spec-outils-federalistes.md` v0.2. Registre > trace.
 
@@ -468,6 +468,26 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
+## 28. Atelier autorités — `ATE` *(spec : spec-atelier-autorites v0.1)*
+
+> Instruit **FED-O7** (§24). Face *contribution* du corpus d'autorités partagé (personnes, collectivités, matières). Foyer = `docs/specs/spec-atelier-autorites.md`. Registre > spec.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **ATE-1** | **Portée = réseau entier** (corpus partagé), *pas* par cercle. Parties prenantes d'une proposition **dérivées des données** : biblios utilisatrices de l'autorité (≥ 1 doc lié) + coordination atelier. Aucun « super-cercle fédéral » (anti-hiérarchie, FED-7). | ✅ tranché (12/06) |
+| **ATE-2** | **Grammaire = réemploi `FED-O5`** (opt-out, silence = consentement, anti-blackball : objection isolée suspend + ouvre, refus ssi **≥ 2 biblios utilisatrices distinctes**). **Fenêtre modulée par l'impact** : courte (création/édition/traduction), ≈ 14 j (fusion). **Pas de vote.** | ✅ tranché (12/06) |
+| **ATE-3** | **Propose** = `network_contributors` (4ᵉ cercle, compte réseau non rattaché) + staff biblio ; *propose, n'édite jamais*. **Objecte** = `coordenador` d'une biblio utilisatrice (FED-4) + coord. atelier ; un contributeur n'est jamais seul juge. **Exécute** = `merge_author`/`merge_book` (CAT-H1), tracé `merge_log` + journal. | ✅ tranché (12/06) |
+| **ATE-4** | **Aucun quorum** : consentement = absence d'objection motivée dans la fenêtre, jamais un décompte (reprend `spec-notice-autorite-enrichie` INV-6). | ✅ tranché (12/06) |
+| **ATE-O1** | `network_contributors` : table dédiée vs rôle sur compte réseau existant ; droits exacts (proposer / lire le corpus / suivre ses propositions). | 🟡 ouvert |
+| **ATE-O2** | Longueurs de fenêtre par type (création/édition/traduction courtes vs fusion ≈ 14 j) : valeurs à fixer. | 🟡 ouvert |
+| **ATE-O3** | Tables **collectivité**/**matière** : créées dans ce chantier ou renvoyées à un paquet structurant amont (spec-notice-autorite-enrichie D7) ? | 🟡 ouvert |
+| **ATE-O4** | Outbox events : famille générique réutilisée vs `authority_proposal_notification_outbox` dédiée. | 🟡 ouvert |
+| **ATE-O5** | Surface frontend (paquet 2) : onglet face fédération, page autorité, ou les deux. | 🟡 ouvert |
+
+> Foyer : `docs/specs/spec-atelier-autorites.md` v0.1 (cadrage validé 12/06). Parent : **FED-O7** (§24). Articulation : **CAT-H1** (fusion bas niveau), **FED-O5** (grammaire), `R3b`/`R4` (signal amont, RAPPORTS-REDE). Registre > spec.
+
+---
+
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
@@ -497,3 +517,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 10/06/2026 — chantier **Identité lecteur·rice locale** : §27 (`CARD-LOCAL-*`) ouvert. Réécriture v2 du cadrage `CADRAGE_identite_lecteur_numero_local_2026-06-10.md` après vérif code (socle §20 MULTI **déjà en prod**) + recadrage Xavier : on parle d'**identité** (numéro **ou nom** ou autre), pas de « numéro » ; l'identité est un **acte staff** (le lecteur ne se l'attribue jamais) ; elle **ne gate pas** la circulation (l'état bloquant = `pending_validation`). 3 décisions actées (IDENT, STAFF, GATE) ; 9 ouvertes (recherche, modèle biblio, mode validation, marqueur legacy, réutilisation post-removed, roster onglet Rapports, notif réconciliation, boussole canal, i18n). Le **wizard de création** = cadrage dédié à venir. Décisions 🟡 à arbitrer avant inscription définitive.*
 
 *MàJ 12/06/2026 — **CARD-LOCAL §27 : Lots 1→5 construits** (session « Identité lecteur·rice locale »). **N1** recherche painel par UUID / e-mail / **identité locale** scopée biblio courante + repli signalé (`fn_painel_search_reader`). **N2** attribution/édition staff de l'identité (`api.set_local_reader_identity`, indépendante de la validation ; unicité via trigger Lot 0 → HINT i18n `error.cardLocal.identityTaken`). **N5** config biblio (modèle d'identité + mode de validation dans l'onglet identité ; « dernier identifiant attribué » **dérivé** via `api.get_last_assigned_reader_identity`, pas de cache). **N3** roster coordenador (`api.get_reader_roster`) + export **PDF tableau** (jspdf manuel, lazy) **et CSV**, distinction legacy/AnarBib. **N4** notif réconciliation à l'attribution hors validation (`reader_identity_assigned` → `handleReaderIdentityAssigned` : lectrice + copie biblio ; **dédup** avec `validation_confirmed` car dispatch seulement si appartenance déjà active). i18n × 10 (libellés neutres). Finition CI : **Deploy Pages non bloquant** (`continue-on-error`). Commités en local, **en attente de push** (sérialisation). Reste : **canaux/welcome** (CARD-LOCAL-CANAL, register/CriarContaPage) et **wizard de création** (cadrage dédié).*
+
+*MàJ 12/06/2026 — **FED-O7 instruit** (§24 → 🟢) par `spec-atelier-autorites` **v0.1 cadrage** (`docs/specs/`). Arbitrages tranchés = **ATE-1..4** (§28) : portée **réseau entier** + parties prenantes dérivées des données (ATE-1) ; **réemploi FED-O5** opt-out/anti-blackball, fenêtre modulée par l'impact (ATE-2) ; propose = `network_contributors` + staff / objecte = `coordenador` utilisatrice + coord. atelier / exécute via `merge_author`/`merge_book` (CAT-H1) (ATE-3) ; **pas de quorum** (ATE-4). 5 décisions ouvertes (**ATE-O1..O5**, dont préalable tables **collectivité/matière**, spec-notice D7). **Sous-paquet 1b events** cadré (spec §6) : le « blocage uuid » est un faux problème — `notify-event` lit l'id **bigint** de la ligne d'outbox, la proposition reste **uuid** dans le payload (pattern `painel_internal_task`) ; catalogue `authority.*` + handler `handleAuthorityEvent` (solde aussi le 1b cercles). **Spec + registre non encore stagés.***
