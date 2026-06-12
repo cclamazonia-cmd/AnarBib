@@ -2104,6 +2104,66 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Mijn account",
     el: "Ο λογαριασμός μου"
   },
+  "reader_identity_assigned.subject": {
+    "pt-BR": "Tua identidade de leitor(a/e)",
+    fr: "Ton identité de lecteur·rice",
+    es: "Tu identidad de lectore",
+    en: "Your reader identity",
+    it: "La tua identità di lettore/trice",
+    de: "Deine Leser*in-Kennung",
+    ca: "La teva identitat de lector-a-e",
+    eo: "Via legant-in-a identigo",
+    nl: "Je lezersidentiteit",
+    el: "Η ταυτότητά σου ως αναγνώστη/στριας"
+  },
+  "reader_identity_assigned.intro": {
+    "pt-BR": "A equipe te atribuiu uma identidade nesta biblioteca. Podes apresentá-la nas tuas visitas.",
+    fr: "L'équipe t'a attribué une identité dans cette bibliothèque. Tu peux la présenter lors de tes passages.",
+    es: "El equipo te asignó una identidad en esta biblioteca. Puedes presentarla en tus visitas.",
+    en: "The team assigned you an identity at this library. You can show it when you visit.",
+    it: "Il gruppo ti ha assegnato un'identità in questa biblioteca. Puoi mostrarla quando passi.",
+    de: "Das Team hat dir in dieser Bibliothek eine Kennung zugewiesen. Du kannst sie bei deinen Besuchen vorzeigen.",
+    ca: "L'equip t'ha assignat una identitat en aquesta biblioteca. Pots presentar-la a les teves visites.",
+    eo: "La teamo atribuis al vi identigon en ĉi tiu biblioteko. Vi povas montri ĝin dum viaj vizitoj.",
+    nl: "Het team heeft je een identiteit toegekend bij deze bibliotheek. Je kunt die tonen bij je bezoek.",
+    el: "Η ομάδα σού απέδωσε μια ταυτότητα σε αυτή τη βιβλιοθήκη. Μπορείς να την δείχνεις στις επισκέψεις σου."
+  },
+  "reader_identity_assigned.identityLabel": {
+    "pt-BR": "Identidade",
+    fr: "Identité",
+    es: "Identidad",
+    en: "Identity",
+    it: "Identità",
+    de: "Kennung",
+    ca: "Identitat",
+    eo: "Identigo",
+    nl: "Identiteit",
+    el: "Ταυτότητα"
+  },
+  "reader_identity_assigned.adminSubject": {
+    "pt-BR": "Identidade atribuída",
+    fr: "Identité attribuée",
+    es: "Identidad asignada",
+    en: "Identity assigned",
+    it: "Identità assegnata",
+    de: "Kennung zugewiesen",
+    ca: "Identitat assignada",
+    eo: "Identigo atribuita",
+    nl: "Identiteit toegekend",
+    el: "Αποδόθηκε ταυτότητα"
+  },
+  "reader_identity_assigned.adminIntro": {
+    "pt-BR": "Uma identidade local foi atribuída a {reader} em {library}.",
+    fr: "Une identité locale a été attribuée à {reader} dans {library}.",
+    es: "Se asignó una identidad local a {reader} en {library}.",
+    en: "A local identity was assigned to {reader} at {library}.",
+    it: "È stata assegnata un'identità locale a {reader} in {library}.",
+    de: "{reader} wurde in {library} eine lokale Kennung zugewiesen.",
+    ca: "S'ha assignat una identitat local a {reader} a {library}.",
+    eo: "Loka identigo estis atribuita al {reader} en {library}.",
+    nl: "Aan {reader} is een lokale identiteit toegekend bij {library}.",
+    el: "Αποδόθηκε τοπική ταυτότητα σε {reader} στη {library}."
+  },
   "cotisation.payment.subject": {
     "pt-BR": "Pagamento de contribuição registrado",
     fr: "Paiement de cotisation enregistré",

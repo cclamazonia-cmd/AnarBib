@@ -6,7 +6,7 @@ import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
 import { handleReaderMessageEvent, handleLibraryMessageEvent } from "../domain/reader-message.ts";
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
-import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested } from "../domain/membership.ts";
+import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested, handleReaderIdentityAssigned } from "../domain/membership.ts";
 import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
 import { handlePartnershipLifecycle, handleTransparenceEnabled, handleConfigExpanded } from "../domain/partnership.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
@@ -24,6 +24,9 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // MULTI P4b : inscription validée par le staff -> e-mail de confirmation à la
   // lectrice (CTA /conta). Payload-based, lit user_library_memberships par uuid.
   if (event === "validation_confirmed") return await handleValidationConfirmed(payload);
+  // CARD-LOCAL-N4 : identité locale attribuée/éditée hors validation -> e-mail de
+  // réconciliation à la lectrice + copie biblio. Payload-based, lit la membership par uuid.
+  if (event === "reader_identity_assigned") return await handleReaderIdentityAssigned(payload);
   // VALID-C3 : nouvelle demande d'inscription -> alerte la biblio (CTA /painel)
   // qu'un compte attend validation. Payload-based, lit la membership par uuid.
   if (event === "membership_validation_requested") return await handleMembershipValidationRequested(payload);

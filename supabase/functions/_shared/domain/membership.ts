@@ -183,6 +183,99 @@ export async function handleValidationConfirmed(payload) {
 }
 
 // ============================================================================
+// CARD-LOCAL-N4 — notification « identité attribuée » (reader_identity_assigned).
+// ----------------------------------------------------------------------------
+// Émis par api.set_local_reader_identity (édition staff) UNIQUEMENT quand
+// l'appartenance est déjà active et que l'identité change vers une valeur non
+// nulle → e-mail de réconciliation. DÉDUP avec validation_confirmed : à la
+// validation, l'identité passe déjà dans cet e-mail-là ; on ne redouble pas
+// (la RPC ne dispatche pas sur une appartenance pending_validation).
+// CARD-LOCAL-N4 : lectrice + COPIE biblio.
+// ============================================================================
+export async function handleReaderIdentityAssigned(payload) {
+  const membershipId = String(payload?.membership_id || "").trim();
+  if (!membershipId) throw new Error("membership_id manquant.");
+
+  const { data: m, error: e1 } = await supabaseAdmin
+    .from("user_library_memberships")
+    .select("id,user_id,library_id,status,local_reader_number")
+    .eq("id", membershipId)
+    .maybeSingle();
+  if (e1) throw e1;
+  if (!m) throw new Error("Associação não encontrada.");
+  // Garde : seulement sur appartenance active + identité présente (la dédup est
+  // déjà faite côté RPC, c'est un filet en cas d'état changé entre-temps).
+  if (m.status !== "active") {
+    return { user_result: skippedEmailResult("user_mail", "membership_not_active") };
+  }
+  if (!m.local_reader_number) {
+    return { user_result: skippedEmailResult("user_mail", "no_identity") };
+  }
+
+  const { data: profile, error: e2 } = await supabaseAdmin
+    .from("profiles")
+    .select("id,email,first_name,last_name,preferred_language")
+    .eq("id", m.user_id)
+    .maybeSingle();
+  if (e2) throw e2;
+  if (!profile) throw new Error("Perfil não encontrado.");
+
+  const ctx = await resolveLibraryNotificationContext(String(m.library_id || "").trim() || null);
+  const bt = subjectTag(ctx);
+  const user = userTargetFromProfile(profile);
+  const locale = String(profile?.preferred_language || "").trim() || null;
+  const libName = String(ctx?.library_name || ctx?.library_short_name || "").trim();
+  const identity = String(m.local_reader_number);
+
+  const det = [];
+  if (libName) det.push({ label: tMail(locale, "validation_confirmed.libraryLabel"), value: libName });
+  det.push({ label: tMail(locale, "reader_identity_assigned.identityLabel"), value: identity });
+
+  // 1) E-mail à la lectrice (réconciliation).
+  let user_result;
+  if (!user?.email) {
+    user_result = skippedEmailResult("user_mail", "no_recipient_email");
+  } else {
+    const tit = tMail(locale, "reader_identity_assigned.subject");
+    const { html, text } = renderEmail({
+      locale,
+      preheader: tit,
+      title: tit,
+      greeting: greeting(locale, user?.name),
+      introHtml: `<p>${tMail(locale, "reader_identity_assigned.intro")}</p>`,
+      details: det,
+      actionBox: {
+        kind: "action",
+        title: tMail(locale, "validation_confirmed.actionTitle"),
+        ctaUrl: `${APP_BASE_URL}/conta`,
+        ctaLabel: tMail(locale, "validation_confirmed.cta")
+      },
+      footerHtml: footerPadrao(ctx, locale),
+      context: ctx
+    });
+    const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
+    user_result = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
+  }
+
+  // 2) Copie biblio (CARD-LOCAL-N4 : lectrice + biblio). Même langue que la lectrice.
+  const readerName = fullName(profile) || user?.email || "—";
+  const aTit = tMail(locale, "reader_identity_assigned.adminSubject");
+  const { html: aHtml, text: aText } = renderEmail({
+    locale,
+    preheader: aTit,
+    title: aTit,
+    introHtml: `<p>${tMail(locale, "reader_identity_assigned.adminIntro", { reader: readerName, library: libName || "—" })}</p>`,
+    details: det,
+    footerHtml: footerPadrao(ctx, locale),
+    context: ctx
+  });
+  const aSub = applyBrandingText(`${aTit} — ${bt}`, ctx);
+  const admin_result = await safeSendEmail(adminTarget(ctx), aSub, aHtml, aText, "admin_copy", ctx);
+
+  return { user_result, admin_result };
+}
+
+// ============================================================================
 // VALID-C3 — notification staff « compte en attente de validation ».
 // ----------------------------------------------------------------------------
 // Émis par api.request_membership via fn_dispatch_notify_event(
