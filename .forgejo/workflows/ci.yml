@@ -6,7 +6,7 @@
 #     Notre pipeline monolithique frôlait les 5 min → annulations aléatoires à
 #     l'étape en cours (le « podman context deadline exceeded » n'était QUE le
 #     symptôme du conteneur tué à la limite). La limite étant PAR JOB, on scinde :
-#       • job `app`     : install → lint(BLOQUANT) → test(BLOQUANT) → build → Pages  (~4 min)
+#       • job `app`     : install → lint(BLOQUANT) → test(BLOQUANT) → build → Pages(non bloquant)  (~4 min)
 #       • job `backend` : edge functions → migrations SQL   (~2 min, PAS de npm install)
 #     `backend: needs: app` → sérialise et garde le gate lint/test avant tout déploiement.
 #     Durable (plus tard) : runner auto-hébergé (act_runner) = aucune limite.
@@ -70,6 +70,11 @@ jobs:
 
       - name: Deploy Pages (branche `pages`, commit orphelin)
         if: github.event_name == 'push'
+        # NON BLOQUANT : un 504 Codeberg persistant sur Pages (après les 3 retries
+        # ci-dessous) ne doit PAS faire échouer le job `app` et donc priver le job
+        # `backend` (needs: app) du déploiement des migrations/EF. Le gate qualité
+        # reste assuré par lint/test/build (steps bloquants au-dessus).
+        continue-on-error: true
         env:
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
           CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
