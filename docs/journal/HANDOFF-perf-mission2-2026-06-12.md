@@ -16,9 +16,12 @@ invisibles, prod en avance sur le local.
 - **Le clone Windows a été supprimé** (il était 100 % redondant, 0 commit unique).
 - **Lance toujours `claude` depuis WSL** : `cd ~/anarbib && claude`. Une session
   Windows recrée le clone fantôme et on y retourne.
-- Les outils Read/Edit/Write ne peuvent PAS atteindre les fichiers natifs WSL via
-  UNC (`\\wsl.localhost\...` → accès refusé). D'où l'obligation d'être lancé
-  dans WSL.
+- **Correctif factuel (12/06/2026)** : contrairement à ce qui était écrit ici,
+  l'accès UNC `\\wsl.localhost\...` au FS WSL **fonctionne** en lecture/écriture
+  via Read/Edit/Write (vérifié sur ce poste, WSL2 Ubuntu-26.04). Ce n'est donc
+  PAS un blocage technique. La règle « lancer depuis WSL » reste néanmoins bonne
+  sur ses fondements valides : un seul clone canonique dans WSL, CWD propre, pas
+  de clone fantôme, outils ergonomiques.
 
 ## 1. ÉTAT À LA REPRISE (tout sur Codeberg = prod)
 

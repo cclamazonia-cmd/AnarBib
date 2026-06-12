@@ -18,11 +18,20 @@
   cloués sur `C:\...`) pendant que le dev server et les autres sessions vivaient
   dans WSL → **deux clones désynchronisés, edits invisibles, prod en avance sur
   le local**. Cause racine de toute la pagaille de la journée.
-- **Contrainte technique dure** : les outils Read/Edit/Write **ne peuvent PAS**
-  atteindre les fichiers natifs WSL via UNC (`\\wsl.localhost\...` → accès refusé).
-  D'où l'obligation **absolue** d'être lancé *dans* WSL pour éditer le dépôt.
-- **Si tu lis ceci depuis une session Windows : STOP.** Ne touche à rien côté
-  Windows, préviens l'humain, et redémarre la session via `cd ~/anarbib && claude`.
+- **Pourquoi techniquement (correctif factuel 12/06/2026)** : une session lancée
+  côté Windows pointe son CWD sur un chemin Windows et risque de **recréer un
+  clone fantôme désynchronisé**. *(Note : l'ancienne version affirmait ici que
+  Read/Edit/Write « ne peuvent PAS atteindre WSL via UNC `\\wsl.localhost\...` →
+  accès refusé » ; c'est **faux** sur ce poste — WSL2 Ubuntu-26.04, Win11 build
+  26200 — où Read + Write + Edit via UNC fonctionnent en lecture/écriture
+  (fichier créé avec owner `accattone`, fins de ligne LF). Ce n'est donc plus un
+  blocage technique, mais la règle reste sur ses fondements valides : un seul
+  clone canonique dans WSL, CWD propre, outils ergonomiques.)*
+- **Si tu lis ceci depuis une session Windows** : ne recrée **jamais** de clone
+  côté Windows. Tu peux dépanner en éditant le clone canonique WSL via UNC
+  (`\\wsl.localhost\Ubuntu-26.04\home\accattone\anarbib`) et en lançant git/npm
+  via `wsl.exe -d Ubuntu-26.04 -- bash -lc '...'`, mais l'ergonomie (CWD propre,
+  outils natifs) reste meilleure en lançant `cd ~/anarbib && claude` depuis WSL.
 
 ## Présentation
 
