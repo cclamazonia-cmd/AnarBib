@@ -10,6 +10,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import TeamPanel from '@/components/team/TeamPanel';
 import '@/components/team/TeamPanel.css';
 import AdminsPanel from '@/components/rede/AdminsPanel';
+import ReportsPanel from '@/components/rede/ReportsPanel';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import '../catalogacao/CatalogacaoPage.css';
@@ -52,6 +53,7 @@ export default function RedePage() {
     { id: 'libraries', label: t({ id: 'rede.tab.libraries' }) },
     { id: 'members', label: t({ id: 'rede.tab.members' }) },
     { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
+    { id: 'reports', label: t({ id: 'rede.tab.reports' }) },
   ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
   // E.4.a : garde stricte v0.3. Seuls les admins reseau actifs accedent
@@ -400,6 +402,15 @@ export default function RedePage() {
             Cooptation et retrait collectif suivent en E.4.b/c. */}
         {tab === 'admins' && (
           <AdminsPanel />
+        )}
+
+        {/* ═══ 6. RAPPORTS DIAGNOSTIQUES (PDF) ════════════════ */}
+        {/* Paquet RAPPORTS-REDE (12/06/2026) : diagnostics réseau lecture
+            seule (documents/autorités incomplets, doublons, incohérences),
+            servis par les fonctions SECURITY DEFINER api.report_* gated par
+            fn_caller_is_network_admin(). Exportables en PDF. Aucune écriture. */}
+        {tab === 'reports' && (
+          <ReportsPanel />
         )}
 
       </div>
