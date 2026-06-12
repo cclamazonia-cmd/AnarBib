@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "Vor Ort",
   "biblioteca.readerIdentity.mode.remote": "Aus der Ferne",
   "biblioteca.readerIdentity.mode.none": "Keiner",
+  "biblioteca.readerIdentity.publicSignup": "Öffentliche Anmeldungen zulassen",
+  "biblioteca.readerIdentity.publicSignup.hint": "Wenn aktiviert, erscheint deine Bibliothek in der Liste der Bibliotheken, denen jede Person im Netzwerk beitreten kann. Andernfalls erfolgt die Mitgliedschaft nur durch manuelle Aufnahme durch das Team.",
   "biblioteca.readerIdentity.lastAssigned": "Zuletzt vergebene numerische Kennung: {value}",
   "biblioteca.identity.replyEmail": "Antwort-E-Mail",
   "biblioteca.identity.save": "Änderungen speichern",

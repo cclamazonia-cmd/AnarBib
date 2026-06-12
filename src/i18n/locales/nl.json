@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "Ter plaatse",
   "biblioteca.readerIdentity.mode.remote": "Op afstand",
   "biblioteca.readerIdentity.mode.none": "Geen",
+  "biblioteca.readerIdentity.publicSignup": "Openbare inschrijvingen toestaan",
+  "biblioteca.readerIdentity.publicSignup.hint": "Indien ingeschakeld verschijnt je bibliotheek in de lijst van bibliotheken waar iedereen in het netwerk lid van kan vragen te worden. Anders verloopt het lidmaatschap alleen via handmatige toelating door het team.",
   "biblioteca.readerIdentity.lastAssigned": "Laatst toegewezen numerieke identificatie: {value}",
   "biblioteca.identity.replyEmail": "Antwoord-e-mail",
   "biblioteca.identity.save": "Wijzigingen opslaan",

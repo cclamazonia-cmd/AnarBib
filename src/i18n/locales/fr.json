@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "Présentiel",
   "biblioteca.readerIdentity.mode.remote": "À distance",
   "biblioteca.readerIdentity.mode.none": "Aucun",
+  "biblioteca.readerIdentity.publicSignup": "Accepter les inscriptions publiques",
+  "biblioteca.readerIdentity.publicSignup.hint": "Si activé, ta bibliothèque apparaît dans la liste des bibliothèques que toute personne du réseau peut demander à rejoindre. Sinon, l'adhésion se fait uniquement par admission manuelle de l'équipe.",
   "biblioteca.readerIdentity.lastAssigned": "Dernier identifiant numérique attribué : {value}",
   "biblioteca.identity.replyEmail": "E-mail de réponse",
   "biblioteca.identity.save": "Enregistrer les modifications",

@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "Με φυσική παρουσία",
   "biblioteca.readerIdentity.mode.remote": "Εξ αποστάσεως",
   "biblioteca.readerIdentity.mode.none": "Κανένας",
+  "biblioteca.readerIdentity.publicSignup": "Αποδοχή δημόσιων εγγραφών",
+  "biblioteca.readerIdentity.publicSignup.hint": "Όταν είναι ενεργό, η βιβλιοθήκη σου εμφανίζεται στη λίστα βιβλιοθηκών στις οποίες μπορεί να ζητήσει εγγραφή οποιοσδήποτε στο δίκτυο. Αλλιώς, η συμμετοχή γίνεται μόνο με χειροκίνητη αποδοχή από την ομάδα.",
   "biblioteca.readerIdentity.lastAssigned": "Τελευταίο αριθμητικό αναγνωριστικό που αποδόθηκε: {value}",
   "biblioteca.identity.replyEmail": "Email απάντησης",
   "biblioteca.identity.save": "Αποθήκευση αλλαγών",

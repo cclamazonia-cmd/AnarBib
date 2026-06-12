@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "In person",
   "biblioteca.readerIdentity.mode.remote": "Remote",
   "biblioteca.readerIdentity.mode.none": "None",
+  "biblioteca.readerIdentity.publicSignup": "Accept public registrations",
+  "biblioteca.readerIdentity.publicSignup.hint": "When enabled, your library appears in the list of libraries anyone on the network can request to join. When disabled, membership happens only through manual admission by the team.",
   "biblioteca.readerIdentity.lastAssigned": "Last numeric identifier assigned: {value}",
   "biblioteca.identity.replyEmail": "Reply email",
   "biblioteca.identity.save": "Save changes",

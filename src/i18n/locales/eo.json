@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "Ĉeesta",
   "biblioteca.readerIdentity.mode.remote": "Defora",
   "biblioteca.readerIdentity.mode.none": "Neniu",
+  "biblioteca.readerIdentity.publicSignup": "Akcepti publikajn aliĝojn",
+  "biblioteca.readerIdentity.publicSignup.hint": "Kiam ŝaltita, via biblioteko aperas en la listo de bibliotekoj al kiuj iu ajn en la reto povas peti aliĝon. Alie, membreco okazas nur per mana akcepto de la teamo.",
   "biblioteca.readerIdentity.lastAssigned": "Lasta atribuita numera identigo: {value}",
   "biblioteca.identity.replyEmail": "Respondretpoŝto",
   "biblioteca.identity.save": "Konservi la modifojn",

@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "Presencial",
   "biblioteca.readerIdentity.mode.remote": "Remoto",
   "biblioteca.readerIdentity.mode.none": "Nenhum",
+  "biblioteca.readerIdentity.publicSignup": "Aceitar inscrições públicas",
+  "biblioteca.readerIdentity.publicSignup.hint": "Quando ativado, a tua biblioteca aparece na lista de bibliotecas que qualquer pessoa da rede pode solicitar para ingressar. Quando desativado, a associação ocorre apenas por admissão manual da equipe.",
   "biblioteca.readerIdentity.lastAssigned": "Último identificador numérico atribuído: {value}",
   "biblioteca.identity.replyEmail": "E-mail de resposta",
   "biblioteca.identity.save": "Salvar alterações",

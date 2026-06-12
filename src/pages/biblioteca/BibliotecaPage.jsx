@@ -380,7 +380,7 @@ export default function BibliotecaPage() {
       // PATCH 09/05/2026 paquet 6.3 : default_locale ajouté à l'update.
       // C'est l'identité linguistique de la biblio, configurable depuis le
       // sélecteur ajouté dans la grille identité (champ après country).
-      await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential' }).eq('id', libraryId);
+      await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential', accepts_public_signup:lib.accepts_public_signup===true }).eq('id', libraryId);
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
       if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message }).eq('library_id', libraryId);
       setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
@@ -1273,6 +1273,8 @@ export default function BibliotecaPage() {
                   <option value="none">{t({id:'biblioteca.readerIdentity.mode.none'})}</option>
                 </select>
               </div>
+              {/* #LIB-SIGNUP-UI — interrupteur d'ouverture des inscriptions publiques (accepts_public_signup) */}
+              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={{...ls,display:'flex',gap:8,alignItems:'flex-start'}}><input type="checkbox" checked={lib.accepts_public_signup||false} onChange={e=>setL('accepts_public_signup',e.target.checked)} style={{marginTop:3}} /> <span><span>{t({id:'biblioteca.readerIdentity.publicSignup'})}</span><br/><span style={{fontSize:'.8rem',color:'var(--brand-muted)',fontWeight:400}}>{t({id:'biblioteca.readerIdentity.publicSignup.hint'})}</span></span></label></div>
               {lastAssignedIdentity != null && lastAssignedIdentity !== '' && (
                 <div className="cat-field" style={{ gridColumn:'span 3' }}>
                   <span style={{ fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.readerIdentity.lastAssigned' }, { value: lastAssignedIdentity })}</span>

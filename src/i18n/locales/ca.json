@@ -734,6 +734,8 @@
   "biblioteca.readerIdentity.mode.presential": "Presencial",
   "biblioteca.readerIdentity.mode.remote": "A distància",
   "biblioteca.readerIdentity.mode.none": "Cap",
+  "biblioteca.readerIdentity.publicSignup": "Acceptar inscripcions públiques",
+  "biblioteca.readerIdentity.publicSignup.hint": "Si està activat, la teva biblioteca apareix a la llista de biblioteques a què qualsevol persona de la xarxa pot demanar unir-se. Si no, l'associació només es fa per admissió manual de l'equip.",
   "biblioteca.readerIdentity.lastAssigned": "Últim identificador numèric assignat: {value}",
   "biblioteca.identity.replyEmail": "Correu electrònic de resposta",
   "biblioteca.identity.save": "Desar les modificacions",
