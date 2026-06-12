@@ -59,6 +59,24 @@ export default function CriarContaPage() {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [loading, setLoading] = useState(false);
   const [publicId, setPublicId] = useState('');
+  // Wizard CARD-LOCAL-CANAL — étapes : 1 biblio · 2 toi · 3 adresse+accords · 4 confirmation.
+  const [step, setStep] = useState(1);
+  const scrollTop = () => { try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { /* noop */ } };
+  // Validation par étape : on réutilise EXACTEMENT les règles de handleSubmit.
+  function goNext() {
+    setMsg({ text: '', kind: '' });
+    if (step === 1 && !form.library_slug) {
+      setMsg({ text: t({id:'auth.create.selectLibraryRequired'}), kind: 'error' }); return;
+    }
+    if (step === 2) {
+      if (!form.first_name.trim() || !form.last_name.trim() || !form.email.trim() || !form.phone.trim()) {
+        setMsg({ text: t({id:'auth.create.fillRequired'}), kind: 'error' }); return;
+      }
+      if (!isValidPhoneNumber(form.phone)) { setMsg({ text: t({id:'address.phone.invalid'}), kind: 'error' }); return; }
+    }
+    setStep(s => Math.min(3, s + 1)); scrollTop();
+  }
+  function goBack() { setMsg({ text: '', kind: '' }); setStep(s => Math.max(1, s - 1)); scrollTop(); }
 
   // Métadonnées de pays pour adapter labels et listes (CEP/PLZ/CP/ZIP, Estado/Bundesland/etc.)
   const countryMeta = getCountryMetadata(form.country);
@@ -66,7 +84,7 @@ export default function CriarContaPage() {
   useEffect(() => {
     (async () => {
       try {
-        const { data: libs } = await supabase.from('v_libraries_for_signup').select('id, slug, name, short_name, city');
+        const { data: libs } = await supabase.from('v_libraries_for_signup').select('id, slug, name, short_name, city, reader_cards_enabled, reader_validation_mode');
 
         if (!libs?.length) return;
         const { data: commons } = await supabase.from('library_commons').select('library_id, logo_url, logo_file_key');
@@ -250,6 +268,7 @@ export default function CriarContaPage() {
         okMsgKey = 'auth.create.success';
       }
       setMsg({ text: t({id: okMsgKey}), kind: emailFailed ? 'warn' : 'ok' });
+      setStep(4); scrollTop();   // wizard : écran de confirmation/bienvenue (CANAL)
     } catch {
       setMsg({ text: t({id:'auth.networkError'}), kind: 'error' });
     } finally {
@@ -269,6 +288,18 @@ export default function CriarContaPage() {
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'auth.create.title'})}</h1>
         <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>{t({id:'auth.create.subtitle'})}</p>
 
+        {/* Wizard — barre d'étapes (1 biblio · 2 toi · 3 adresse · 4 c'est fait) */}
+        <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
+          {[1, 2, 3, 4].map(n => (
+            <div key={n} style={{ flex: 1, height: 4, borderRadius: 2, background: n <= step ? '#4ade80' : 'rgba(255,255,255,.12)' }} />
+          ))}
+        </div>
+
+        {/* Message d'erreur / succès — visible à toutes les étapes */}
+        {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.85rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : msg.kind === 'warn' ? 'rgba(180,83,9,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : msg.kind === 'warn' ? '#fbbf24' : '#f87171', border: `1px solid ${msg.kind === 'ok' ? 'rgba(21,128,61,.25)' : msg.kind === 'warn' ? 'rgba(180,83,9,.25)' : 'rgba(220,38,38,.25)'}` }}>{msg.text}</div>}
+
+        {/* ═══ Étape 1 — Ta bibliothèque ═══ */}
+        {step === 1 && (<>
         {/* Bandeau vitrine — doctrine onboarding v0.2 : un compte sert à
             AGIR ; la consultation libre des catalogues publics n'en
             demande pas. On offre la sortie « explorer sans compte »
@@ -368,16 +399,17 @@ export default function CriarContaPage() {
         </div>
 
         <p style={hs}>{req}{t({id:'auth.create.required'})}</p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+          <Button variant="secondary" type="button" onClick={() => navigate(-1)}>{t({id:'auth.create.back'})}</Button>
+          <Button variant="primary" type="button" onClick={goNext}>{t({id:'auth.create.wizard.next'})}</Button>
+        </div>
+        </>)}
 
-        {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.85rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : msg.kind === 'warn' ? 'rgba(180,83,9,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : msg.kind === 'warn' ? '#fbbf24' : '#f87171', border: `1px solid ${msg.kind === 'ok' ? 'rgba(21,128,61,.25)' : msg.kind === 'warn' ? 'rgba(180,83,9,.25)' : 'rgba(220,38,38,.25)'}` }}>{msg.text}</div>}
-
-        {publicId && <div style={{ padding: 16, borderRadius: 10, background: 'rgba(21,128,61,.12)', border: '1px solid rgba(21,128,61,.3)', marginBottom: 16, textAlign: 'center' }}>
-          <strong>{t({id:'auth.create.yourPublicId'})}</strong>
-          <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>{t({id:'auth.create.publicIdHint'})}</div>
-          <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '.05em', color: '#4ade80' }}>{publicId}</div>
-        </div>}
-
+        {/* ═══ Étapes 2-3 — formulaire (submit à l'étape 3) ═══ */}
+        {(step === 2 || step === 3) && (
         <form onSubmit={handleSubmit}>
+          {/* ═══ Étape 2 — Toi ═══ */}
+          {step === 2 && (<>
           {/* Nom + Prénom */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
             <div>
@@ -417,7 +449,14 @@ export default function CriarContaPage() {
             </select>
             <div style={hs}>{t({id:'auth.create.genderOptional'})}</div>
           </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginTop: 10 }}>
+            <Button variant="secondary" type="button" onClick={goBack}>{t({id:'auth.create.wizard.back'})}</Button>
+            <Button variant="primary" type="button" onClick={goNext}>{t({id:'auth.create.wizard.next'})}</Button>
+          </div>
+          </>)}
 
+          {/* ═══ Étape 3 — Adresse & accords ═══ */}
+          {step === 3 && (<>
           {/* ─── Section Adresse ─── */}
           <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 10, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'address.title'})}</h2>
 
@@ -508,15 +547,50 @@ export default function CriarContaPage() {
             <span>{t({id:'auth.create.consentEmail'})}</span>
           </label>
 
-          {/* Boutons d'action */}
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          {/* Boutons d'action — étape 3 (submit du formulaire) */}
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>
+            <Button variant="secondary" type="button" onClick={goBack}>{t({id:'auth.create.wizard.back'})}</Button>
             <Button variant="primary" type="submit" disabled={loading}>{loading ? t({id:'auth.create.submitting'}) : t({id:'auth.create.submit'})}</Button>
-            <Button variant="secondary" onClick={() => navigate(-1)}>{t({id:'auth.create.back'})}</Button>
-            <Link to="/login" style={{ textDecoration: 'none' }}>
-              <Button variant="secondary">{t({id:'auth.create.haveAccount'})}</Button>
-            </Link>
           </div>
+          </>)}
         </form>
+        )}
+
+        {/* ═══ Étape 4 — C'est fait / bienvenue (CARD-LOCAL-CANAL) ═══ */}
+        {step === 4 && (
+          <div>
+            {publicId && <div style={{ padding: 16, borderRadius: 10, background: 'rgba(21,128,61,.12)', border: '1px solid rgba(21,128,61,.3)', marginBottom: 16, textAlign: 'center' }}>
+              <strong>{t({id:'auth.create.yourPublicId'})}</strong>
+              <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>{t({id:'auth.create.publicIdHint'})}</div>
+              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '.05em', color: '#4ade80' }}>{publicId}</div>
+            </div>}
+
+            {/* Rappel de connexion (login : e-mail OU ID public + mdp provisoire) */}
+            <div style={{ padding: 14, borderRadius: 10, background: 'rgba(29,78,216,.08)', border: '1px solid rgba(29,78,216,.2)', marginBottom: 16, fontSize: '.85rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+              <strong>{t({id:'auth.create.wizard.confirm.loginTitle'})}</strong>
+              <p style={{ margin: '6px 0 0' }}>{t({id:'auth.create.wizard.confirm.login'})}</p>
+            </div>
+
+            {/* « Comment marche ta biblio » conditionné à la config (CANAL).
+                currentLib null pour orphan/new-library → bloc masqué. L'identité
+                locale n'est JAMAIS affichée ici (acte staff, donnée plus tard). */}
+            {currentLib && (
+              <div style={{ padding: 14, borderRadius: 10, background: 'rgba(21,128,61,.08)', border: '1px solid rgba(21,128,61,.25)', marginBottom: 16, fontSize: '.85rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+                <strong>{t({id:'auth.create.wizard.confirm.howItWorksTitle'})}</strong>
+                {currentLib.reader_cards_enabled && <p style={{ margin: '6px 0 0' }}>{t({id:'auth.create.wizard.confirm.card'})}</p>}
+                {currentLib.reader_validation_mode === 'remote' && <p style={{ margin: '6px 0 0' }}>{t({id:'auth.create.wizard.confirm.identity.remote'})}</p>}
+                {currentLib.reader_validation_mode === 'presential' && <p style={{ margin: '6px 0 0' }}>{t({id:'auth.create.wizard.confirm.identity.presential'})}</p>}
+                {(currentLib.reader_validation_mode === 'remote' || currentLib.reader_validation_mode === 'presential') && <p style={{ margin: '8px 0 0', color: '#fbbf24' }}>{t({id:'auth.create.wizard.confirm.pending'})}</p>}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <Link to="/login" style={{ textDecoration: 'none' }}>
+                <Button variant="primary">{t({id:'auth.create.wizard.confirm.goLogin'})}</Button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </PageShell>
