@@ -179,8 +179,13 @@ async function fetchManifest(themeSlug) {
 /**
  * Hook React qui charge le thème de la bibliothèque active.
  * Usage : const { manifest, loading } = useTheme('blmf');
+ *
+ * `ready` (P1, 12/06/2026) : quand false, le hook NE charge AUCUN manifest. Sert
+ * à attendre que le slug effectif de la biblio soit résolu (cf. LibraryContext)
+ * avant de fetcher, pour ne pas charger `default` puis le vrai thème (double
+ * chargement). Pendant l'attente, le CSS de base (theme-base.css) fait le rendu.
  */
-export function useTheme(themeSlug = 'default') {
+export function useTheme(themeSlug = 'default', ready = true) {
   const [manifest, setManifest] = useState(null);
   const [loading, setLoading] = useState(true);
   // #LOGIN-FIX H1 : slug pour lequel le thème est RÉELLEMENT appliqué (succès ou
@@ -192,6 +197,10 @@ export function useTheme(themeSlug = 'default') {
   const [settledSlug, setSettledSlug] = useState(null);
 
   useEffect(() => {
+    // P1 : tant que le slug effectif n'est pas résolu (ready=false), on ne charge
+    // aucun manifest -> évite le fetch 'default' transitoire suivi du fetch du vrai
+    // thème. Le CSS de base (theme-base.css) assure le rendu pendant ce court délai.
+    if (!ready) return;
     let cancelled = false;
     setLoading(true);
 
@@ -223,7 +232,7 @@ export function useTheme(themeSlug = 'default') {
     })();
 
     return () => { cancelled = true; };
-  }, [themeSlug]);
+  }, [themeSlug, ready]);
 
   return { manifest, loading, settledSlug };
 }

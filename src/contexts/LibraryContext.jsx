@@ -84,7 +84,7 @@ function computeHasStaffAccess(effectiveRole) {
 }
 
 export function LibraryProvider({ children }) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [ctx, setCtx] = useState(() => readFromUrl() || readFromSession() || DEFAULT_CONTEXT);
   const [libraries, setLibraries] = useState([]);
   const [isNetworkAdmin, setIsNetworkAdmin] = useState(false);
@@ -96,10 +96,24 @@ export function LibraryProvider({ children }) {
   // ThemeGate separe), pour exposer themeReady au flux de login. On derive
   // themeReady du settledSlug (slug reellement applique) compare au themeSlug
   // demande -> evaluation SYNCHRONE au rendu, sans race d'ordre d'effets.
-  const { settledSlug: themeSettledSlug } = useTheme(ctx.themeSlug);
+  // P1 (12/06/2026) : evite le double chargement de theme (default -> slug reel).
+  // themeResolved passe a true une fois la resolution biblio/theme terminee. Tant
+  // qu'il est false ET que le slug est encore 'default' (pas encore resolu), on ne
+  // fetch AUCUN manifest (le CSS de base theme-base.css fournit le rendu). Des
+  // qu'un slug non-default est connu (cache session/URL) OU que la resolution est
+  // finie, on fetch le theme effectif UNE seule fois (fini le default-puis-reel).
+  const [themeResolved, setThemeResolved] = useState(false);
+  const { settledSlug: themeSettledSlug } = useTheme(
+    ctx.themeSlug,
+    themeResolved || ctx.themeSlug !== 'default',
+  );
 
   // FIX B.3 (conserve E.3) : depend on user?.id instead of user object reference.
   useEffect(() => {
+    // P1 : attendre la fin du boot auth avant de resoudre biblio/theme. Sinon la
+    // branche anon ci-dessous tire le theme 'default' pendant que la session se
+    // restaure, puis la branche user tire le vrai theme -> double chargement.
+    if (authLoading) return;
     if (!user) {
       setLibraries([]);
       setIsNetworkAdmin(false);
@@ -116,6 +130,9 @@ export function LibraryProvider({ children }) {
       setCtx(base);
       writeToSession(base);
       if (urlCtx && urlCtx.librarySlug !== 'default') {
+        // P1 : on garde le gate ferme (themeResolved false) le temps de resoudre
+        // theme_slug en base, puis on l'ouvre dans le finally -> un seul fetch.
+        setThemeResolved(false);
         (async () => {
           try {
             const { data } = await supabase
@@ -132,12 +149,17 @@ export function LibraryProvider({ children }) {
             setCtx(next);
             writeToSession(next);
           } catch { /* reste en default */ }
+          finally { setThemeResolved(true); }
         })();
+      } else {
+        // Pas de resolution asynchrone : le theme 'default' est definitif.
+        setThemeResolved(true);
       }
       return;
     }
 
     setLibraryLoading(true);
+    setThemeResolved(false);
     (async () => {
       try {
       // E.3 : 2 SELECT en parallele (Promise.all)
@@ -233,9 +255,10 @@ export function LibraryProvider({ children }) {
       }
       } finally {
         setLibraryLoading(false);
+        setThemeResolved(true);
       }
     })();
-  }, [user?.id]);
+  }, [user?.id, authLoading]);
 
   const setLibrary = useCallback((slug) => {
     const membership = libraries.find(m => m.libraries?.slug === slug);
