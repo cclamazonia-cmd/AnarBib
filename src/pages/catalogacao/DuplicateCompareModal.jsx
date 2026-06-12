@@ -58,8 +58,14 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
     return () => { alive = false; };
   }, [draftId, t]);
 
-  // Une valeur candidate est « reprenable » si elle diffère de la cible et n'est pas vide.
-  const canTake = (srcVal, candVal) => norm(candVal) !== '' && norm(candVal) !== norm(srcVal);
+  // Sens du merge (asymétrique) :
+  //   • candidat publié (A) : c'est la FICHE (candidat) qui survit → elle adopte la
+  //     valeur DU BROUILLON (src) pour les champs cochés ;
+  //   • candidat brouillon (B) : c'est le BROUILLON-SOURCE qui survit → il adopte la
+  //     valeur DU CANDIDAT pour les champs cochés.
+  const otherVal  = (c, col) => (c.source === 'book' ? src?.[col] : c[col]);   // valeur adoptée si cochée
+  const targetVal = (c, col) => (c.source === 'book' ? c[col] : src?.[col]);   // valeur de la cible (survivante)
+  const canTake   = (c, col) => norm(otherVal(c, col)) !== '' && norm(otherVal(c, col)) !== norm(targetVal(c, col));
   const togglePick = (i, col) => setPicks((p) => ({ ...p, [`${i}:${col}`]: !p[`${i}:${col}`] }));
 
   const cellBg = (srcVal, candVal, picked) => {
@@ -72,7 +78,7 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
   async function doMerge(cand, i) {
     const fields = {};
     for (const [col] of FIELDS) {
-      if (picks[`${i}:${col}`] && canTake(src?.[col], cand[col])) fields[col] = cand[col];
+      if (picks[`${i}:${col}`] && canTake(cand, col)) fields[col] = otherVal(cand, col);
     }
     if (!window.confirm(t({ id: 'catalogacao.dup.mergeConfirm' }))) return;
     setMerging(true); setMergeErr('');
@@ -172,15 +178,18 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                       <td style={lblTd}>{t({ id: key })}</td>
                       <td style={{ ...td, background: 'rgba(29,78,216,.06)' }}>{src?.[col] || '—'}</td>
                       {cands.map((c, i) => {
-                        const takeable = canTake(src?.[col], c[col]);
+                        const takeable = canTake(c, col);
                         const picked = !!picks[`${i}:${col}`];
+                        const other = otherVal(c, col);
+                        // En scénario A la valeur adoptée (brouillon) diffère de la valeur affichée (fiche) → on l'explicite.
+                        const append = takeable && norm(other) !== norm(c[col]);
                         return (
                           <td key={i} style={{ ...td, background: cellBg(src?.[col], c[col], picked && takeable) }}>
                             <div>{c[col] || '—'}</div>
                             {takeable && (
                               <label style={{ display: 'inline-flex', gap: 4, alignItems: 'center', marginTop: 3, fontSize: '.64rem', color: 'var(--brand-muted, #9bb)', cursor: 'pointer' }}>
                                 <input type="checkbox" checked={picked} disabled={merging} onChange={() => togglePick(i, col)} />
-                                {t({ id: 'catalogacao.dup.fieldTake' })}
+                                <span>{t({ id: 'catalogacao.dup.fieldTake' })}{append ? ` « ${other} »` : ''}</span>
                               </label>
                             )}
                           </td>
