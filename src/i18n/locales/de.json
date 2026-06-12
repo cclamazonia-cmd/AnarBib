@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Dieser Entwurf ist nicht mehr in der Warteschlange.",
   "error.merge.book_not_found": "Veröffentlichter Datensatz nicht gefunden.",
   "error.merge.same_draft": "Ein Entwurf kann nicht mit sich selbst zusammengeführt werden.",
-  "error.merge.cross_library": "Zusammenführung nicht möglich: die Entwürfe gehören zu verschiedenen Bibliotheken."
+  "error.merge.cross_library": "Zusammenführung nicht möglich: die Entwürfe gehören zu verschiedenen Bibliotheken.",
+  "importacoes.fila.rejectHoldingsWarn": "Achtung: {n} ausgewählte Zeile(n) sind Dubletten eines bereits im Katalog vorhandenen Dokuments — Ihre Bibliothek erklärt, ein Exemplar zu besitzen. Ablehnen verwirft die Zeile und erfasst dieses Exemplar NICHT. Wenn Ihre Bibliothek dieses Dokument besitzt, brechen Sie ab und nutzen Sie die Schaltfläche Exemplar anlegen. Trotzdem ablehnen?",
+  "importacoes.fila.reconcileTitle": "Erfasst Ihr Exemplar am bereits vorhandenen Katalogeintrag, ohne einen doppelten Eintrag anzulegen.",
+  "importacoes.fila.rejectTitle": "Verwirft die Zeile (kein Eintrag, kein Exemplar). Nur für eine falsche Dublette oder ein Dokument, das Ihre Bibliothek nicht besitzt.",
+  "importacoes.fila.reconcileRowHint": "→ Besitzt Ihre Bibliothek dieses Dokument? Nutzen Sie Exemplar anlegen (nicht Ablehnen).",
+  "importacoes.fila.gesturesHelp": "Bei einer Dublette: Exemplar anlegen erfasst Ihr Exemplar am vorhandenen Eintrag; Ablehnen verwirft alles (nur wenn Sie dieses Dokument nicht besitzen)."
 }

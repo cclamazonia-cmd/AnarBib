@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Aquest esborrany ja no és a la cua.",
   "error.merge.book_not_found": "Fitxa publicada no trobada.",
   "error.merge.same_draft": "No es pot fusionar un esborrany amb si mateix.",
-  "error.merge.cross_library": "Fusió impossible: els esborranys pertanyen a biblioteques diferents."
+  "error.merge.cross_library": "Fusió impossible: els esborranys pertanyen a biblioteques diferents.",
+  "importacoes.fila.rejectHoldingsWarn": "Atenció: {n} fila/files seleccionada/es són duplicats d'un document ja al catàleg — la teva biblioteca declara que en posseeix un exemplar. Rebutjar descarta la fila i NO registra aquest exemplar. Si la teva biblioteca té aquest document, cancel·la i fes servir el botó Crear exemplar. Rebutjar igualment?",
+  "importacoes.fila.reconcileTitle": "Registra el teu exemplar a la fitxa ja existent al catàleg, sense crear una fitxa duplicada.",
+  "importacoes.fila.rejectTitle": "Descarta la fila (ni fitxa, ni exemplar). Fes-ho servir només per a un fals duplicat o un document que la teva biblioteca no té.",
+  "importacoes.fila.reconcileRowHint": "→ La teva biblioteca té aquest document? Fes servir Crear exemplar (no Rebutjar).",
+  "importacoes.fila.gesturesHelp": "En un duplicat: Crear exemplar registra el teu exemplar a la fitxa existent; Rebutjar descarta tot (només si no tens aquest document)."
 }

@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Dit concept staat niet meer in de wachtrij.",
   "error.merge.book_not_found": "Gepubliceerd record niet gevonden.",
   "error.merge.same_draft": "Een concept kan niet met zichzelf worden samengevoegd.",
-  "error.merge.cross_library": "Samenvoegen niet mogelijk: de concepten horen bij verschillende bibliotheken."
+  "error.merge.cross_library": "Samenvoegen niet mogelijk: de concepten horen bij verschillende bibliotheken.",
+  "importacoes.fila.rejectHoldingsWarn": "Let op: {n} geselecteerde rij(en) zijn duplicaten van een document dat al in de catalogus staat — jouw bibliotheek verklaart er een exemplaar van te bezitten. Afwijzen verwerpt de rij en registreert dat exemplaar NIET. Als jouw bibliotheek dit document bezit, annuleer en gebruik de knop Exemplaar aanmaken. Toch afwijzen?",
+  "importacoes.fila.reconcileTitle": "Registreert jouw exemplaar bij het bestaande catalogusrecord, zonder een dubbel record aan te maken.",
+  "importacoes.fila.rejectTitle": "Verwerpt de rij (geen record, geen exemplaar). Gebruik alleen voor een vals duplicaat of een document dat jouw bibliotheek niet bezit.",
+  "importacoes.fila.reconcileRowHint": "→ Bezit jouw bibliotheek dit document? Gebruik Exemplaar aanmaken (niet Afwijzen).",
+  "importacoes.fila.gesturesHelp": "Bij een duplicaat: Exemplaar aanmaken registreert jouw exemplaar bij het bestaande record; Afwijzen verwerpt alles (alleen als je dit document niet bezit)."
 }

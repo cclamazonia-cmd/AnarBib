@@ -332,6 +332,14 @@ export default function ImportacoesPage() {
   async function handleRejectSelected() {
     const ids = [...selectedRows];
     if (!ids.length || !selectedRunId) return;
+    // ── Filet de sécurité : ne jamais jeter un exemplaire réel par mégarde ──
+    // Une ligne en doublon = la biblio déclare détenir un exemplaire de ce
+    // document. « Rejeter » NE l'enregistre PAS (≠ « Rapprocher »).
+    const heldDupCount = filteredRunRows.filter(r => selectedRows.has(r.id)
+      && (r.match_status === 'possible_duplicate' || r.match_status === 'matched_book' || r.match_status === 'matched_draft')).length;
+    if (heldDupCount > 0 && !window.confirm(t({ id: 'importacoes.fila.rejectHoldingsWarn' }, { n: heldDupCount }))) {
+      return;
+    }
     setPromotingSel(true);
     setMsg({ text: t({ id: 'importacoes.fila.rejecting' }), kind: 'info' });
     try {
@@ -901,16 +909,20 @@ export default function ImportacoesPage() {
                       <button className="cat-btn" disabled={promotingSel || selectedNewCount === 0} onClick={handlePromoteSelected}>
                         {promotingSel ? t({ id: 'importacoes.generatingDrafts' }) : t({ id: 'importacoes.fila.createSelected' }, { n: selectedNewCount })}
                       </button>
-                      <button className="cat-btn" disabled={promotingSel || selectedDupCount === 0} onClick={handleReconcileSelected}>
+                      <button className="cat-btn" disabled={promotingSel || selectedDupCount === 0} onClick={handleReconcileSelected} title={t({ id: 'importacoes.fila.reconcileTitle' })}>
                         {t({ id: 'importacoes.fila.reconcile' }, { n: selectedDupCount })}
                       </button>
                       <button className="cat-btn secondary" disabled={promotingSel} onClick={handleRejectSelected}
+                        title={t({ id: 'importacoes.fila.rejectTitle' })}
                         style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
                         {t({ id: 'importacoes.fila.reject' }, { n: selectedRows.size })}
                       </button>
                       <button className="cat-btn secondary" disabled={promotingSel} onClick={() => setSelectedRows(new Set())}>
                         {t({ id: 'importacoes.fila.clearSelection' })}
                       </button>
+                      <p className="imp-note" style={{ flexBasis: '100%', margin: '2px 0 0', fontSize: '.72rem', opacity: .85 }}>
+                        {t({ id: 'importacoes.fila.gesturesHelp' })}
+                      </p>
                     </div>
                   )}
                   {filteredRunRows.length > 0 && (
@@ -965,6 +977,11 @@ export default function ImportacoesPage() {
                                     {row.proposed_title
                                       ? t({ id: 'importacoes.fila.matchAgainst' }, { title: row.proposed_title })
                                       : t({ id: 'importacoes.fila.matchVerify' })}
+                                  </div>
+                                )}
+                                {isDup && row.proposed_book_id && !row.created_exemplar_draft_id && (
+                                  <div className="imp-note" style={{ marginTop: 2, fontSize: '.7rem', color: 'var(--brand-info, #60a5fa)' }}>
+                                    {t({ id: 'importacoes.fila.reconcileRowHint' })}
                                   </div>
                                 )}
                               </td>

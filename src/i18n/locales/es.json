@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Este borrador ya no está en la cola.",
   "error.merge.book_not_found": "Ficha publicada no encontrada.",
   "error.merge.same_draft": "No se puede fusionar un borrador consigo mismo.",
-  "error.merge.cross_library": "Fusión imposible: los borradores pertenecen a bibliotecas diferentes."
+  "error.merge.cross_library": "Fusión imposible: los borradores pertenecen a bibliotecas diferentes.",
+  "importacoes.fila.rejectHoldingsWarn": "Atención: {n} fila(s) seleccionada(s) son duplicados de un documento ya en el catálogo — tu biblioteca declara poseer un ejemplar. Rechazar descarta la fila y NO registra ese ejemplar. Si tu biblioteca posee este documento, cancela y usa el botón Crear ejemplar. ¿Rechazar de todos modos?",
+  "importacoes.fila.reconcileTitle": "Registra tu ejemplar en la ficha ya existente en el catálogo, sin crear una ficha duplicada.",
+  "importacoes.fila.rejectTitle": "Descarta la fila (ni ficha, ni ejemplar). Úsalo solo para un falso duplicado o un documento que tu biblioteca no posee.",
+  "importacoes.fila.reconcileRowHint": "→ ¿Tu biblioteca posee este documento? Usa Crear ejemplar (no Rechazar).",
+  "importacoes.fila.gesturesHelp": "En un duplicado: Crear ejemplar registra tu ejemplar en la ficha existente; Rechazar descarta todo (solo si no posees este documento)."
 }

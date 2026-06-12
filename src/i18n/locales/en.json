@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "This draft is no longer in the queue.",
   "error.merge.book_not_found": "Published record not found.",
   "error.merge.same_draft": "Cannot merge a draft with itself.",
-  "error.merge.cross_library": "Cannot merge: the drafts belong to different libraries."
+  "error.merge.cross_library": "Cannot merge: the drafts belong to different libraries.",
+  "importacoes.fila.rejectHoldingsWarn": "Warning: {n} selected row(s) are duplicates of a document already in the catalogue — your library is declaring it holds a copy. Reject discards the row and does NOT record that copy. If your library holds this document, cancel and use the Create copy button. Reject anyway?",
+  "importacoes.fila.reconcileTitle": "Records your copy on the existing catalogue record, without creating a duplicate record.",
+  "importacoes.fila.rejectTitle": "Discards the row (no record, no copy). Use only for a false duplicate or a document your library does not hold.",
+  "importacoes.fila.reconcileRowHint": "→ Does your library hold this document? Use Create copy (not Reject).",
+  "importacoes.fila.gesturesHelp": "On a duplicate: Create copy records your copy on the existing record; Reject discards everything (only if you do not hold this document)."
 }

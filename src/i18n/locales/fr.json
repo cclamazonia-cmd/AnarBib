@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Ce brouillon n'est plus dans la file.",
   "error.merge.book_not_found": "Fiche publiée introuvable.",
   "error.merge.same_draft": "Impossible de fusionner un brouillon avec lui-même.",
-  "error.merge.cross_library": "Fusion impossible : les brouillons appartiennent à des bibliothèques différentes."
+  "error.merge.cross_library": "Fusion impossible : les brouillons appartiennent à des bibliothèques différentes.",
+  "importacoes.fila.rejectHoldingsWarn": "Attention : {n} ligne(s) sélectionnée(s) sont des doublons d'un document déjà au catalogue — votre bibliothèque déclare en détenir un exemplaire. Rejeter écarte la ligne et N'enregistre PAS cet exemplaire. Si votre bibliothèque détient ce document, annulez et utilisez le bouton Rapprocher. Rejeter quand même ?",
+  "importacoes.fila.reconcileTitle": "Enregistre votre exemplaire sur la fiche déjà au catalogue, sans créer de fiche en double.",
+  "importacoes.fila.rejectTitle": "Écarte la ligne (ni fiche, ni exemplaire). À réserver à un faux doublon ou un document que votre bibliothèque ne détient pas.",
+  "importacoes.fila.reconcileRowHint": "→ Votre bibliothèque détient ce document ? Utilisez Rapprocher (pas Rejeter).",
+  "importacoes.fila.gesturesHelp": "Sur un doublon : Rapprocher enregistre votre exemplaire sur la fiche existante ; Rejeter écarte tout (seulement si vous ne détenez pas ce document)."
 }

@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Ĉi tiu malneto ne plu estas en la atendovico.",
   "error.merge.book_not_found": "Publikigita slipo ne trovita.",
   "error.merge.same_draft": "Ne eblas kunfandi malneton kun si mem.",
-  "error.merge.cross_library": "Kunfando neebla: la malnetoj apartenas al malsamaj bibliotekoj."
+  "error.merge.cross_library": "Kunfando neebla: la malnetoj apartenas al malsamaj bibliotekoj.",
+  "importacoes.fila.rejectHoldingsWarn": "Atentu: {n} elektita(j) linio(j) estas duoblaĵoj de dokumento jam en la katalogo — via biblioteko deklaras posedi ekzempleron. Malakcepti forĵetas la linion kaj NE registras tiun ekzempleron. Se via biblioteko posedas ĉi tiun dokumenton, nuligu kaj uzu la butonon Krei ekzempleron. Ĉu tamen malakcepti?",
+  "importacoes.fila.reconcileTitle": "Registras vian ekzempleron sur la jam ekzistanta kataloga slipo, sen krei duoblan slipon.",
+  "importacoes.fila.rejectTitle": "Forĵetas la linion (nek slipo, nek ekzemplero). Uzu nur por falsa duoblaĵo aŭ dokumento kiun via biblioteko ne posedas.",
+  "importacoes.fila.reconcileRowHint": "→ Ĉu via biblioteko posedas ĉi tiun dokumenton? Uzu Krei ekzempleron (ne Malakcepti).",
+  "importacoes.fila.gesturesHelp": "Ĉe duoblaĵo: Krei ekzempleron registras vian ekzempleron sur la ekzistanta slipo; Malakcepti forĵetas ĉion (nur se vi ne posedas ĉi tiun dokumenton)."
 }

@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Questa bozza non è più in coda.",
   "error.merge.book_not_found": "Scheda pubblicata non trovata.",
   "error.merge.same_draft": "Impossibile unire una bozza con sé stessa.",
-  "error.merge.cross_library": "Unione impossibile: le bozze appartengono a biblioteche diverse."
+  "error.merge.cross_library": "Unione impossibile: le bozze appartengono a biblioteche diverse.",
+  "importacoes.fila.rejectHoldingsWarn": "Attenzione: {n} riga/righe selezionata/e sono duplicati di un documento già a catalogo — la tua biblioteca dichiara di possederne un esemplare. Rifiutare scarta la riga e NON registra quell'esemplare. Se la tua biblioteca possiede questo documento, annulla e usa il pulsante Crea esemplare. Rifiutare comunque?",
+  "importacoes.fila.reconcileTitle": "Registra il tuo esemplare sulla scheda già presente a catalogo, senza creare una scheda duplicata.",
+  "importacoes.fila.rejectTitle": "Scarta la riga (né scheda, né esemplare). Usalo solo per un falso duplicato o un documento che la tua biblioteca non possiede.",
+  "importacoes.fila.reconcileRowHint": "→ La tua biblioteca possiede questo documento? Usa Crea esemplare (non Rifiutare).",
+  "importacoes.fila.gesturesHelp": "Su un duplicato: Crea esemplare registra il tuo esemplare sulla scheda esistente; Rifiutare scarta tutto (solo se non possiedi questo documento)."
 }

@@ -4267,5 +4267,10 @@
   "error.merge.draft_not_in_queue": "Este rascunho não está mais na fila.",
   "error.merge.book_not_found": "Ficha publicada não encontrada.",
   "error.merge.same_draft": "Não é possível fundir um rascunho com ele mesmo.",
-  "error.merge.cross_library": "Fusão impossível: os rascunhos pertencem a bibliotecas diferentes."
+  "error.merge.cross_library": "Fusão impossível: os rascunhos pertencem a bibliotecas diferentes.",
+  "importacoes.fila.rejectHoldingsWarn": "Atenção: {n} linha(s) selecionada(s) são duplicatas de um documento já no catálogo — sua biblioteca declara possuir um exemplar. Rejeitar descarta a linha e NÃO registra esse exemplar. Se sua biblioteca possui este documento, cancele e use o botão Criar exemplar. Rejeitar mesmo assim?",
+  "importacoes.fila.reconcileTitle": "Registra seu exemplar na ficha já existente no catálogo, sem criar uma ficha duplicada.",
+  "importacoes.fila.rejectTitle": "Descarta a linha (nem ficha, nem exemplar). Use só para um falso duplicado ou um documento que sua biblioteca não possui.",
+  "importacoes.fila.reconcileRowHint": "→ Sua biblioteca possui este documento? Use Criar exemplar (não Rejeitar).",
+  "importacoes.fila.gesturesHelp": "Em um duplicado: Criar exemplar registra seu exemplar na ficha existente; Rejeitar descarta tudo (use só se você não possui este documento)."
 }
