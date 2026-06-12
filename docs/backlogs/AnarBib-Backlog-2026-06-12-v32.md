@@ -135,6 +135,15 @@
   `MM4` page `/conversemos`, `MM5` bandeau SolicitarBiblioteca. **Aucun** livré.
 - **#FED** — socle page « Ferramentas federalistas » + primitive `círculo` : **aucune**
   table/RPC/écran en prod (seuls la spec v0.1 et les crons de gouvernance réseau existent).
+- **#LIB-SIGNUP-UI** `P2` — **aucune surface** pour qu'un·e coordenador·a/administrador·a **ouvre
+  ou ferme les inscriptions publiques de sa biblio** (`libraries.accepts_public_signup`). Le flag
+  n'est modifiable que par `UPDATE` direct sous RLS `libraries_staff_update` — invisible côté UI.
+  Cas vécu (13/06) : MLEG (créée le 06/06) est née `false` → absente du « Solicitar inscrição »
+  jusqu'à bascule manuelle. Le **gap *default false*** à la création (annoncé par le paquet L.1.1,
+  jamais soldé) est désormais corrigé côté RPC d'activation (migration
+  `20260612222920_fix_activation_rpc_accepts_public_signup_a3` : pose le flag selon les axes A3),
+  **mais changer d'avis après coup reste sans écran**. À loger dans l'admin *Biblioteca* / painel,
+  proche du chantier wizard signup (cf. `../journal/cadrages/CADRAGE_wizard_creation_compte_2026-06-12.md`).
 
 ### 2.2 — Cotisations (moteur livré, finitions ouvertes)
 - **#25** notifications d'expiration cotisation 7 j / 1 j / J — **aucun cron** d'expiration → **ouvert**.
