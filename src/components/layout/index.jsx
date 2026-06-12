@@ -11,6 +11,7 @@ import {
   canSeeCatalogacao,
   canSeeImportacoes,
   canSeeBiblioteca,
+  canSeeFederacao,
   canSeeRede,
 } from '@/lib/roles';
 import { Button } from '@/components/ui';
@@ -123,6 +124,17 @@ export function Topbar() {
           <Link to="/biblioteca" className={isActive('/biblioteca') ? 'active' : ''}>
             {t({ id: 'nav.library' })}
           </Link>
+        )}
+
+        {/* ── Ferramentas federalistas : tout membre rattache (FED-2),
+              entre biblioteca et rede (gradation d'echelle) ── */}
+        {canSeeFederacao(role) && (
+          <>
+            <span className="ab-topbar__sep" aria-hidden="true">|</span>
+            <Link to="/federacao" className={isActive('/federacao') ? 'active' : ''}>
+              {t({ id: 'nav.federacao' })}
+            </Link>
+          </>
         )}
 
         {/* ── Groupe 4 : administrador AnarBib uniquement (Rede) ── */}

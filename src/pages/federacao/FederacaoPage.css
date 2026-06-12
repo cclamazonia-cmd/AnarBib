@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FederacaoPage — face fédération (cercles). Réutilise le shell .cat-* (scrim
+   sombre, norme des autres pages). Styles propres aux cartes de cercle ci-dessous.
+   Theme-aware : hérite des --brand-* de la biblio de session.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ab-fed-label{
+  font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--brand-muted,#9a93a6); margin:26px 0 12px;
+}
+.ab-fed-label:first-of-type{ margin-top:6px; }
+
+.ab-fed-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-bottom:4px; }
+.ab-fed-head .ab-fed-sub{ color:var(--brand-muted,#9a93a6); font-size:.92rem; margin-top:4px; }
+
+.ab-fed-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+
+.ab-fed-card{
+  background-color:rgba(255,255,255,.03);
+  border:1px solid var(--brand-panel-border,rgba(255,255,255,.1));
+  border-radius:var(--brand-radius-sm,14px); padding:16px 18px;
+}
+.ab-fed-card.is-list{ margin-bottom:12px; }
+.ab-fed-crow{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.ab-fed-cname{ font-weight:700; font-size:1.05rem; }
+.ab-fed-cdesc{ color:var(--brand-muted,#9a93a6); font-size:.86rem; margin:7px 0 12px; }
+.ab-fed-cfoot{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+.ab-fed-meta{ display:flex; align-items:center; gap:6px; font-size:.84rem; color:var(--brand-muted,#9a93a6); }
+.ab-fed-hint{ font-size:.8rem; color:var(--brand-muted,#9a93a6); margin-bottom:10px; }
+
+.ab-fed-pill{
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(255,255,255,.05); border:1px solid var(--brand-panel-border,rgba(255,255,255,.1));
+  color:var(--brand-muted,#9a93a6); border-radius:999px; padding:3px 10px; font-size:.72rem; white-space:nowrap;
+}
+.ab-fed-pill.is-dormant{ color:var(--color-warn,#fbbf24); border-color:rgba(251,191,36,.4); background:rgba(251,191,36,.1); }
+.ab-fed-pill.is-pending{ color:var(--color-warn,#fbbf24); border-color:rgba(251,191,36,.4); background:rgba(251,191,36,.1); }
+.ab-fed-pill.is-archived{ color:var(--brand-muted,#9a93a6); border-style:dashed; }
+
+.ab-fed-expand{ border-top:1px solid var(--brand-panel-border,rgba(255,255,255,.1)); margin-top:14px; padding-top:13px; }
+.ab-fed-minilabel{ font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--brand-muted,#9a93a6); margin-bottom:8px; }
+.ab-fed-chips{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; }
+.ab-fed-chip{ background:rgba(255,255,255,.05); border:1px solid var(--brand-panel-border,rgba(255,255,255,.1)); border-radius:999px; padding:4px 11px; font-size:.78rem; }
+.ab-fed-tools{ display:flex; flex-wrap:wrap; gap:8px; }
+.ab-fed-deferred{ font-size:.8rem; color:var(--brand-muted,#9a93a6); margin-top:11px; font-style:italic; }
+
+.ab-fed-banner{
+  background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.4); border-radius:12px;
+  padding:11px 14px; margin-top:13px; font-size:.86rem; color:var(--color-warn,#fbbf24);
+}
+.ab-fed-banner .ab-fed-banner-actions{ display:flex; gap:8px; margin-top:9px; flex-wrap:wrap; }
+
+.ab-fed-createform{
+  background:rgba(255,255,255,.03); border:1px solid var(--brand-panel-border,rgba(255,255,255,.1));
+  border-radius:var(--brand-radius-sm,14px); padding:16px; margin:14px 0;
+}
+.ab-fed-createform input, .ab-fed-createform select{
+  width:100%; font-family:inherit; font-size:.9rem; color:var(--brand-text,#f5f2ea);
+  background:rgba(255,255,255,.05); border:1px solid var(--brand-panel-border,rgba(255,255,255,.14));
+  border-radius:10px; padding:9px 12px; margin-bottom:9px; outline:none;
+}
+.ab-fed-createform label.ab-fed-check{ display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--brand-muted,#9a93a6); margin-bottom:10px; }
+.ab-fed-createform label.ab-fed-check input{ width:auto; margin:0; }
+
+.ab-fed-foot{
+  margin-top:28px; padding-top:16px; border-top:1px solid var(--brand-panel-border,rgba(255,255,255,.1));
+  color:var(--brand-muted,#9a93a6); font-size:.82rem; text-align:center;
+}
+.ab-fed-placeholder{ padding:30px 10px; text-align:center; color:var(--brand-muted,#9a93a6); }
+.ab-fed-placeholder h3{ font-weight:700; margin:0 0 8px; color:var(--brand-text,#f5f2ea); }
+.ab-fed-note{ font-size:.86rem; color:var(--brand-muted,#9a93a6); margin-top:10px; padding-left:11px; border-left:2px solid var(--brand-panel-border,rgba(255,255,255,.18)); }

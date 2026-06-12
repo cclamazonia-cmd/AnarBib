@@ -26,6 +26,7 @@ const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage')
 const ImportWizard = lazy(() => import('@/pages/importacoes/ImportWizard'));
 const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
 const RedePage = lazy(() => import('@/pages/rede/RedePage'));
+const FederacaoPage = lazy(() => import('@/pages/federacao/FederacaoPage'));
 
 // ── Fallback de chargement ───────────────────────────────────────────
 function LoadingFallback() {
@@ -103,6 +104,14 @@ export default function App() {
                   {/* ── Biblioteca ───────────────────────── */}
                   <Route path="/biblioteca" element={
                     <ProtectedRoute><BibliotecaPage /></ProtectedRoute>
+                  } />
+
+                  {/* ── Federacao (tout membre rattache, FED-2) ── */}
+                  <Route path="/federacao" element={
+                    <ProtectedRoute><FederacaoPage /></ProtectedRoute>
+                  } />
+                  <Route path="/federacao/:tab" element={
+                    <ProtectedRoute><FederacaoPage /></ProtectedRoute>
                   } />
 
                   {/* ── Rede (administrador only) ──────────── */}

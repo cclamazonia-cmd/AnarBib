@@ -53,6 +53,11 @@ export function canSeeCatalogacao(role) { return isLibrarian(role); }
 export function canSeeImportacoes(role) { return isCoord(role); }
 export function canSeeBiblioteca(role) { return isCoord(role); }
 
+// canSeeFederacao : face fédération (cercles). Voir = tout membre rattaché à
+// une biblio (FED-2, « voir ≠ agir ») ; agir est gardé coordenador côté RPC.
+// Distinct de isNetworkAdmin (la fédération n'est pas de l'admin réseau).
+export function canSeeFederacao(role) { return Boolean(role); }
+
 // canSeeRede : prend isNetworkAdmin (booléen depuis LibraryContext),
 // PAS le role local. Doctrine v0.3 : la page Rede est le périmètre des
 // admins réseau, pas des admins locaux (qui n'existent plus).
