@@ -73,6 +73,12 @@ export default defineConfig({
           'i18n-vendor': ['react-intl', 'i18n-iso-countries'],
           // Phone input (utilisé seulement dans CriarConta + Conta)
           'phone-vendor': ['react-phone-number-input'],
+          // Locale par défaut pt-BR (~70 Ko gz) : chunk dédié. Import STATIQUE
+          // conservé dans i18n/index.js -> Vite le modulepreload en parallèle de
+          // l'entry (pas de RTT supplémentaire ni de flash de fallback, contrairement
+          // à un import dynamique), mais il sort du chunk `index` (~moitié) et reste
+          // caché séparément entre déploiements (les traductions changent rarement).
+          'locale-pt-BR': ['./src/i18n/locales/pt-BR.json'],
           // Le code applicatif reste dans index.js (et les pages déjà
           // lazy-loadées par React Router restent dans leurs chunks)
         },
