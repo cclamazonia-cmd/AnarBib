@@ -41,6 +41,7 @@ export default function TabLeitor({
   freezeReason, setFreezeReason,
   readerPayments,
   membershipRules,
+  readerMatchInfo,
   // handlers
   searchReader,
   openPaymentModal,
@@ -75,11 +76,20 @@ export default function TabLeitor({
           onKeyDown={e => e.key === 'Enter' && searchReader()} />
         <Button onClick={searchReader}>{t({ id: 'common.search' })}</Button>
       </div>
+      <p className="ab-painel-hint">{t({id:'panel.reader.searchHintIdentity'})}</p>
       <ResolveCardBox t={t} libraryId={libraryId} onResolved={(r) => setReaderLookup(r.public_id)} />
       {readerMsg && <p className="ab-painel-msg">{readerMsg}</p>}
+      {readerProfile && readerMatchInfo?.isFallback && readerMatchInfo?.matchedLibraryName && (
+        <p className="ab-painel-freeze-warn">
+          {t({id:'panel.reader.foundInOtherLibrary'}, {library: readerMatchInfo.matchedLibraryName})}
+        </p>
+      )}
       {readerProfile && (
         <div className="ab-painel-reader-card">
           <h3>{readerProfile.first_name} {readerProfile.last_name}</h3>
+          {readerMatchInfo?.localIdentity && (
+            <p className="ab-painel-reader-identity">{t({id:'panel.reader.localIdentity'})}: <strong>{readerMatchInfo.localIdentity}</strong></p>
+          )}
           <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'}</p>
           <p>{t({id:'panel.reader.registered'})}: {fmtD(readerProfile.created_at)} · {t({id:'panel.reader.restricted'})}: {readerProfile.is_restricted ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})} · {t({id:'panel.reader.passwordPending'})}: {readerProfile.must_change_password ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})}</p>
 

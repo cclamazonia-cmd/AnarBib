@@ -400,6 +400,8 @@ export default function PanelPage() {
   const [readerLookup, setReaderLookup] = useState('');
   const [readerProfile, setReaderProfile] = useState(null);
   const [readerMsg, setReaderMsg] = useState('');
+  // CARD-LOCAL-1 : méta de correspondance (identité locale, biblio d'origine si repli)
+  const [readerMatchInfo, setReaderMatchInfo] = useState(null);
   // State local du formulaire d'édition d'adresse, séparé de readerProfile.address
   // pour éviter la boucle parse→format→parse à chaque frappe (qui mangeait les
   // espaces de fin via .trim() dans parseAddressText). Initialisé/réinitialisé
@@ -1286,11 +1288,21 @@ export default function PanelPage() {
     if (!readerLookup.trim()) { setReaderMsg(t({id:'panel.loan.errorMissing'})); return; }
     setReaderMsg(t({id:'common.searching'}));
     try {
-      const { data, error } = await supabase.rpc('fn_painel_find_profile_by_lookup', { p_lookup: readerLookup.trim() });
+      // CARD-LOCAL-1 : recherche par UUID / e-mail / identité locale, scopée à la
+      // biblio courante avec repli « toutes mes biblios » (biblio d'origine signalée).
+      const { data, error } = await supabase.rpc('fn_painel_search_reader', { p_lookup: readerLookup.trim(), p_library_id: libraryId });
       if (error) throw error;
-      const p = Array.isArray(data) ? data[0] : data;
-      if (!p) { setReaderMsg(t({id:'panel.reader.notFound'})); setReaderProfile(null); return; }
+      const res = Array.isArray(data) ? data[0] : data;
+      const p = res?.profile || null;
+      if (!p) { setReaderMsg(t({id:'panel.reader.notFound'})); setReaderProfile(null); setReaderMatchInfo(null); return; }
       setReaderProfile(p);
+      setReaderMatchInfo(res ? {
+        matchedVia: res.matched_via || null,
+        matchedLibraryId: res.matched_library_id || null,
+        matchedLibraryName: res.matched_library_name || null,
+        localIdentity: res.local_identity || null,
+        isFallback: !!res.is_fallback,
+      } : null);
       setReaderMsg('');
       // EA-10 : charger l'etat de restriction (local + global)
       try {
@@ -1305,7 +1317,7 @@ export default function PanelPage() {
       } else {
         setReaderPayments([]);
       }
-    } catch (e) { setReaderMsg(t({id:'common.errorPrefix'}, {message: localizeError(e, t)})); setReaderProfile(null); }
+    } catch (e) { setReaderMsg(t({id:'common.errorPrefix'}, {message: localizeError(e, t)})); setReaderProfile(null); setReaderMatchInfo(null); }
   }
 
   // ── Cotisation ───────────────────────────────────────
@@ -1886,6 +1898,7 @@ export default function PanelPage() {
               setReaderLookup={setReaderLookup}
               readerProfile={readerProfile}
               setReaderProfile={setReaderProfile}
+              readerMatchInfo={readerMatchInfo}
               readerMsg={readerMsg}
               setReaderMsg={setReaderMsg}
               editAddrState={editAddrState}
