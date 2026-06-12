@@ -250,6 +250,10 @@ export default function RedePage() {
           {TABS.map(t => <button key={t.id} className={`cat-tab-btn${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.label}{t.id==='requests'&&requests.filter(r=>r.request_status==='pendente').length>0?` (${requests.filter(r=>r.request_status==='pendente').length})`:''}</button>)}
         </div>
 
+        {/* Norme visuelle (cf. autres pages) : zone de travail sur surface sombre
+            (scrim .cat-panel) pour la lisibilite quel que soit le hero/theme. */}
+        <div className="cat-panel active">
+
         {/* ═══ 1. RESUMO DA REDE ═══════════════════════ */}
         {tab==='overview' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'rede.overview.title' })}</h3>
@@ -413,6 +417,7 @@ export default function RedePage() {
           <ReportsPanel />
         )}
 
+        </div>{/* .cat-panel.active */}
       </div>
     <Footer /></PageShell>
   );
