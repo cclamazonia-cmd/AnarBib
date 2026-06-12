@@ -124,6 +124,19 @@ export default function BibliotecaPage() {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [saving, setSaving] = useState(false);
   const regFileRef = useRef(null);
+  // CARD-LOCAL-2/N5 : « dernier identifiant attribué » dérivé (hint config, coord).
+  const [lastAssignedIdentity, setLastAssignedIdentity] = useState(null);
+  useEffect(() => {
+    if (tab !== 'identity' || !isCoord || !libraryId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase.schema('api').rpc('get_last_assigned_reader_identity', { p_library_id: libraryId });
+        if (!cancelled) setLastAssignedIdentity(data ?? null);
+      } catch { if (!cancelled) setLastAssignedIdentity(null); }
+    })();
+    return () => { cancelled = true; };
+  }, [tab, isCoord, libraryId]);
 
   // ── Dados ───────────────────────────────────────────────
   const [lib, setLib] = useState(null);
@@ -367,7 +380,7 @@ export default function BibliotecaPage() {
       // PATCH 09/05/2026 paquet 6.3 : default_locale ajouté à l'update.
       // C'est l'identité linguistique de la biblio, configurable depuis le
       // sélecteur ajouté dans la grille identité (champ après country).
-      await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true }).eq('id', libraryId);
+      await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential' }).eq('id', libraryId);
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
       if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message }).eq('library_id', libraryId);
       setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
@@ -1238,6 +1251,35 @@ export default function BibliotecaPage() {
               <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.identity.publicMessage' })}</label><textarea value={serviceState.public_message||''} onChange={e=>setSS('public_message',e.target.value)} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({id:'biblioteca.identity.publicMessagePlaceholder'})} /></div>
             </div>
           </div>}
+          {/* CARD-LOCAL-2/3 (N5) — modèle d'identité lecteur·rice + mode de validation */}
+          <div style={bx}>
+            <h4 style={{ margin:'0 0 4px' }}>{t({ id: 'biblioteca.readerIdentity.title' })}</h4>
+            <p style={{ margin:'0 0 10px', fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.readerIdentity.hint' })}</p>
+            <div className="cat-book-grid">
+              <div className="cat-field">
+                <label style={ls}>{t({ id: 'biblioteca.readerIdentity.model' })}</label>
+                <select value={lib.reader_identity_model||'free_number'} onChange={e=>setL('reader_identity_model',e.target.value)} style={fs}>
+                  <option value="free_number">{t({id:'biblioteca.readerIdentity.model.free_number'})}</option>
+                  <option value="sequenced_number">{t({id:'biblioteca.readerIdentity.model.sequenced_number'})}</option>
+                  <option value="name">{t({id:'biblioteca.readerIdentity.model.name'})}</option>
+                  <option value="none">{t({id:'biblioteca.readerIdentity.model.none'})}</option>
+                </select>
+              </div>
+              <div className="cat-field">
+                <label style={ls}>{t({ id: 'biblioteca.readerIdentity.mode' })}</label>
+                <select value={lib.reader_validation_mode||'presential'} onChange={e=>setL('reader_validation_mode',e.target.value)} style={fs}>
+                  <option value="presential">{t({id:'biblioteca.readerIdentity.mode.presential'})}</option>
+                  <option value="remote">{t({id:'biblioteca.readerIdentity.mode.remote'})}</option>
+                  <option value="none">{t({id:'biblioteca.readerIdentity.mode.none'})}</option>
+                </select>
+              </div>
+              {lastAssignedIdentity != null && lastAssignedIdentity !== '' && (
+                <div className="cat-field" style={{ gridColumn:'span 3' }}>
+                  <span style={{ fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.readerIdentity.lastAssigned' }, { value: lastAssignedIdentity })}</span>
+                </div>
+              )}
+            </div>
+          </div>
           <LibraryVisualAssetsSection
             libraryId={libraryId}
             librarySlug={lib.slug}
