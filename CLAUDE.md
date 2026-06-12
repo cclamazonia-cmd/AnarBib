@@ -66,8 +66,9 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
   imposait le découpage) : **`app`** (install → **lint bloquant** → **test
   bloquant** → build Vite → deploy Codeberg Pages, branche `pages`, commit
   orphelin force-push) puis **`backend`** (`needs: app` → edge functions →
-  `supabase db push`). Le **miroir GitHub n'est plus une étape CI** : il est tenu
-  à jour par le **dual-push `origin`** (cf. Workflow Git).
+  `supabase db push`). Le **miroir GitHub n'est plus une étape CI** et, depuis la
+  consolidation des remotes sur Codeberg (12/06), **n'est plus alimenté par git**
+  (cf. Workflow Git) — il est en retard tant que l'auth GitHub n'est pas rétablie.
 - **Runner : `anarbib-local` — AUTO-HÉBERGÉ** (`forgejo-runner` sur le WSL2 de
   Xavier, service systemd, depuis le 11/06). Tourne quand sa machine est allumée
   (seul dev) ; hors ligne → les runs **attendent**. Runbook :
@@ -123,24 +124,25 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
 > parallèle. Mais la discipline `git fetch`-avant-push + horodatage exact reste
 > requise : ces filets n'empêchent pas une collision d'horodatage de migration.)*
 
-**Remotes** (`git remote -v`) :
+**Remotes** (`git remote -v`) — **état réel vérifié le 12/06/2026** :
 
 ```
-codeberg  https://codeberg.org/anarbib/anarbib.git        (fetch + push)
-origin    https://github.com/cclamazonia-cmd/AnarBib.git  (fetch)
-origin    https://github.com/cclamazonia-cmd/AnarBib.git  (push)
-origin    https://codeberg.org/anarbib/anarbib.git        (push)
+codeberg  https://codeberg.org/anarbib/anarbib.git  (fetch + push)
+origin    https://codeberg.org/anarbib/anarbib.git  (fetch + push)
 ```
 
-- `origin` **fetch depuis GitHub**, mais a **deux URLs de push** (GitHub *et*
-  Codeberg). La branche `main` suit `origin/main` → un simple `git push` (sur
-  `main`) pousse vers les deux URLs de `origin`.
-- Codeberg = source de vérité (déclenche Forgejo Actions) ; GitHub = miroir
-  tenu à jour par le **dual-push `origin`** (un `git push origin main` pousse vers
-  les deux URLs). ⚠️ Le miroir n'est **plus une étape CI** (retirée le 11/06 ;
-  Codeberg bloque par ailleurs les miroirs natifs) → un commit poussé **uniquement**
-  sur `codeberg` (sans `origin`) laisse GitHub **en retard**. Pousser via `origin`
-  (ou l'alias `publish-app`).
+- ⚠️ **Plus de dual-push, plus de remote GitHub.** `origin` **et** `codeberg`
+  pointent désormais **tous deux** sur `codeberg.org/anarbib/anarbib`. Un
+  `git push origin main` (ou `git push codeberg main`) ne pousse donc **que vers
+  Codeberg**. *(L'ancienne version de ce guide décrivait un `origin` à deux URLs
+  de push GitHub+Codeberg : **caduc** — config consolidée sur Codeberg.)*
+- Codeberg = **source de vérité** (déclenche Forgejo Actions : CI, tests,
+  déploiement Pages, edge functions, `supabase db push`).
+- **Miroir GitHub `cclamazonia-cmd/AnarBib`** : **plus alimenté par git** (aucun
+  remote GitHub configuré ; n'est de toute façon plus une étape CI depuis le 11/06).
+  Il est donc **en retard** (constaté à `37f8ec7b` le 12/06). Le resynchroniser
+  exigerait une auth GitHub par **PAT ou clé SSH** (GitHub a supprimé l'auth par
+  mot de passe) ; sans cela il reste tel quel — **sans impact** sur prod/CI/déploiement.
 
 **Alias** (`git config --get-regexp ^alias\.`) — un seul :
 
@@ -148,14 +150,17 @@ origin    https://codeberg.org/anarbib/anarbib.git        (push)
 alias.publish-app = !git push codeberg main && git push origin main
 ```
 
-**Connectivité réelle constatée** (`git ls-remote --heads`, lecture seule) :
+⚠️ Depuis la consolidation sur Codeberg, `codeberg` et `origin` pointent au même
+endroit : `publish-app` pousse donc **deux fois vers Codeberg** (la seconde est un
+no-op) et **ne synchronise plus GitHub**. Un simple `git push origin main` suffit.
 
-- `codeberg` : **répond** — `main` + branche `pages`. `main` synchronisé avec le
-  HEAD local au moment du contrôle.
-- `origin` (GitHub) : **répond** — `main` + branche `gh-pages`. `main`
-  synchronisé avec le HEAD local au moment du contrôle.
-- ⚠️ Côté pages déployées, les deux remotes diffèrent : Codeberg = branche
-  `pages`, GitHub = branche `gh-pages`.
+**Connectivité réelle constatée** (`git ls-remote --heads`, lecture seule, 12/06) :
+
+- `codeberg` : **répond** — `main` + branche `pages`.
+- `origin` pointe désormais sur **Codeberg** (plus GitHub) → mêmes refs que `codeberg`.
+- ⚠️ Le **miroir GitHub** déployait historiquement les Pages sur la branche
+  `gh-pages` (≠ Codeberg `pages`), mais n'est plus alimenté tant que l'auth GitHub
+  (PAT/SSH) n'est pas rétablie.
 - Le README signale que l'auth Codeberg via Windows Credential Manager peut
   casser périodiquement — au moment du contrôle, aucun problème.
 
@@ -333,10 +338,12 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
 5. **`README-i18n-section.md` obsolète** : ne pas s'y fier (voir i18n).
 6. **Hook pre-commit non actif par défaut** : nécessite
    `git config core.hooksPath .githooks`.
-7. **Miroir GitHub via dual-push `origin`** (plus d'étape CI depuis le 11/06) :
-   pousser via `origin` (ou `publish-app`) garde GitHub synchro ; un push
-   `codeberg`-seul le laisse en retard. Un commit fait *directement* sur GitHub
-   est écrasé au prochain `git push origin main`.
+7. **Miroir GitHub désormais NON synchronisé** (config remotes consolidée sur
+   Codeberg le 12/06 : `origin` = `codeberg` = codeberg.org, plus aucun remote
+   GitHub ; auth GitHub par mot de passe supprimée → PAT/SSH requis). Le miroir
+   `cclamazonia-cmd/AnarBib` est **en retard** et le restera tant que l'auth n'est
+   pas rétablie. **Sans impact** : Codeberg porte CI, déploiement et source de
+   vérité. *(Ancienne doctrine « dual-push origin » : caduque.)*
 8. **MCP Supabase limité en taille** : ne peut pas déployer `notify-event`
    (bundle volumineux). Utiliser la CLI (c'est ce que fait la CI).
 9. **`apply-patch.ps1` fait `npm run deploy`** en plus du push : doublon possible
