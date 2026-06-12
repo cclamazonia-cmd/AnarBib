@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "Alias bestaat",
   "rede.reports.status.needs_seed": "Aan te maken",
   "rede.reports.incoherence.divergence": "Afwijking",
-  "rede.reports.incoherence.manque_dans_book_authors": "Ontbreekt in book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Ontbreekt in book_authors",
+  "catalogacao.dup.mergeInto": "Samenvoegen in dit record",
+  "catalogacao.dup.mergeDrafts": "Deze concepten samenvoegen",
+  "catalogacao.dup.fieldTake": "deze overnemen",
+  "catalogacao.dup.mergeConfirm": "Samenvoegen? Het dubbele concept gaat naar de prullenbak.",
+  "catalogacao.dup.mergeOk": "Samenvoeging voltooid."
 }

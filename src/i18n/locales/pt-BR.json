@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "Alias já existe",
   "rede.reports.status.needs_seed": "A criar",
   "rede.reports.incoherence.divergence": "Divergência",
-  "rede.reports.incoherence.manque_dans_book_authors": "Ausente em book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Ausente em book_authors",
+  "catalogacao.dup.mergeInto": "Fundir nesta ficha",
+  "catalogacao.dup.mergeDrafts": "Fundir estes rascunhos",
+  "catalogacao.dup.fieldTake": "usar este",
+  "catalogacao.dup.mergeConfirm": "Fundir? O rascunho duplicado vai para a lixeira.",
+  "catalogacao.dup.mergeOk": "Fusão concluída."
 }

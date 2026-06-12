@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "L’àlies ja existeix",
   "rede.reports.status.needs_seed": "Per crear",
   "rede.reports.incoherence.divergence": "Divergència",
-  "rede.reports.incoherence.manque_dans_book_authors": "Absent a book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Absent a book_authors",
+  "catalogacao.dup.mergeInto": "Fusiona en aquesta fitxa",
+  "catalogacao.dup.mergeDrafts": "Fusiona aquests esborranys",
+  "catalogacao.dup.fieldTake": "usa aquest",
+  "catalogacao.dup.mergeConfirm": "Voleu fusionar? L'esborrany duplicat anirà a la paperera.",
+  "catalogacao.dup.mergeOk": "Fusió completada."
 }

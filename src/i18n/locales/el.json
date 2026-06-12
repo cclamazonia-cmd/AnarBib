@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "Υπάρχει ψευδώνυμο",
   "rede.reports.status.needs_seed": "Προς δημιουργία",
   "rede.reports.incoherence.divergence": "Απόκλιση",
-  "rede.reports.incoherence.manque_dans_book_authors": "Λείπει από το book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Λείπει από το book_authors",
+  "catalogacao.dup.mergeInto": "Συγχώνευση σε αυτή την εγγραφή",
+  "catalogacao.dup.mergeDrafts": "Συγχώνευση αυτών των προσχεδίων",
+  "catalogacao.dup.fieldTake": "λήψη αυτού",
+  "catalogacao.dup.mergeConfirm": "Συγχώνευση; Το διπλότυπο προσχέδιο πηγαίνει στον κάδο.",
+  "catalogacao.dup.mergeOk": "Η συγχώνευση ολοκληρώθηκε."
 }

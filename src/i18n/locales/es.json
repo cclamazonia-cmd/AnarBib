@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "El alias ya existe",
   "rede.reports.status.needs_seed": "Por crear",
   "rede.reports.incoherence.divergence": "Divergencia",
-  "rede.reports.incoherence.manque_dans_book_authors": "Ausente en book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Ausente en book_authors",
+  "catalogacao.dup.mergeInto": "Fusionar en esta ficha",
+  "catalogacao.dup.mergeDrafts": "Fusionar estos borradores",
+  "catalogacao.dup.fieldTake": "usar este",
+  "catalogacao.dup.mergeConfirm": "¿Fusionar? El borrador duplicado se enviará a la papelera.",
+  "catalogacao.dup.mergeOk": "Fusión completada."
 }

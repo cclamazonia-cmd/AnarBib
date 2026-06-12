@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "Kromnomo ekzistas",
   "rede.reports.status.needs_seed": "Kreenda",
   "rede.reports.incoherence.divergence": "Diverĝo",
-  "rede.reports.incoherence.manque_dans_book_authors": "Mankas en book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Mankas en book_authors",
+  "catalogacao.dup.mergeInto": "Kunfandi en ĉi tiun slipon",
+  "catalogacao.dup.mergeDrafts": "Kunfandi ĉi tiujn malnetojn",
+  "catalogacao.dup.fieldTake": "preni ĉi tiun",
+  "catalogacao.dup.mergeConfirm": "Ĉu kunfandi? La duobla malneto iros al la rubujo.",
+  "catalogacao.dup.mergeOk": "Kunfando finita."
 }

@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "Alias vorhanden",
   "rede.reports.status.needs_seed": "Anzulegen",
   "rede.reports.incoherence.divergence": "Abweichung",
-  "rede.reports.incoherence.manque_dans_book_authors": "Fehlt in book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Fehlt in book_authors",
+  "catalogacao.dup.mergeInto": "In diesen Datensatz zusammenführen",
+  "catalogacao.dup.mergeDrafts": "Diese Entwürfe zusammenführen",
+  "catalogacao.dup.fieldTake": "übernehmen",
+  "catalogacao.dup.mergeConfirm": "Zusammenführen? Der doppelte Entwurf wandert in den Papierkorb.",
+  "catalogacao.dup.mergeOk": "Zusammenführung abgeschlossen."
 }

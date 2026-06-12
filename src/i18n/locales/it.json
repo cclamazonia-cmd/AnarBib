@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "Alias esistente",
   "rede.reports.status.needs_seed": "Da creare",
   "rede.reports.incoherence.divergence": "Divergenza",
-  "rede.reports.incoherence.manque_dans_book_authors": "Assente in book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Assente in book_authors",
+  "catalogacao.dup.mergeInto": "Unisci in questa scheda",
+  "catalogacao.dup.mergeDrafts": "Unisci queste bozze",
+  "catalogacao.dup.fieldTake": "usa questo",
+  "catalogacao.dup.mergeConfirm": "Unire? La bozza duplicata va nel cestino.",
+  "catalogacao.dup.mergeOk": "Unione completata."
 }

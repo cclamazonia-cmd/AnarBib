@@ -4246,5 +4246,10 @@
   "rede.reports.status.alias_exists": "Alias exists",
   "rede.reports.status.needs_seed": "To create",
   "rede.reports.incoherence.divergence": "Divergence",
-  "rede.reports.incoherence.manque_dans_book_authors": "Missing from book_authors"
+  "rede.reports.incoherence.manque_dans_book_authors": "Missing from book_authors",
+  "catalogacao.dup.mergeInto": "Merge into this record",
+  "catalogacao.dup.mergeDrafts": "Merge these drafts",
+  "catalogacao.dup.fieldTake": "take this",
+  "catalogacao.dup.mergeConfirm": "Merge? The duplicate draft goes to the trash.",
+  "catalogacao.dup.mergeOk": "Merge complete."
 }

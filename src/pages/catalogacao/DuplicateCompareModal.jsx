@@ -21,18 +21,22 @@ const FIELDS = [
 const norm = (v) => (v == null ? '' : String(v).trim().toLowerCase());
 
 /**
- * Comparaison de doublons d'un brouillon (#152) — file éditoriale.
+ * Comparaison + fusion de doublons d'un brouillon (#152) — file éditoriale.
  * Appelle api.suggest_draft_duplicates(p_draft_id) + relit le brouillon source,
- * et affiche une comparaison côte-à-côte des champs cruciaux (différences
- * surlignées). Lecture seule (détecter + comparer) ; les actions de fusion
- * viendront en complément.
+ * affiche une comparaison côte-à-côte des champs cruciaux (différences surlignées),
+ * et permet — champ par champ — de reprendre une valeur d'un candidat puis de fusionner :
+ *   • candidat publié → api.merge_draft_into_book (enrichit la fiche, absorbe le brouillon) ;
+ *   • candidat brouillon → api.merge_book_drafts (enrichit ce brouillon, écarte le doublon).
  */
-export default function DuplicateCompareModal({ draftId, draftLabel, onClose, onEditItem }) {
+export default function DuplicateCompareModal({ draftId, draftLabel, onClose, onEditItem, onMerged }) {
   const { formatMessage: t } = useIntl();
   const [src, setSrc] = useState(null);
   const [cands, setCands] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState('');
+  const [picks, setPicks] = useState({});     // `${i}:${col}` → true (reprendre la valeur du candidat i)
+  const [merging, setMerging] = useState(false);
+  const [mergeErr, setMergeErr] = useState('');
 
   useEffect(() => {
     let alive = true;
@@ -54,11 +58,40 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
     return () => { alive = false; };
   }, [draftId, t]);
 
-  const cellBg = (srcVal, candVal) => {
+  // Une valeur candidate est « reprenable » si elle diffère de la cible et n'est pas vide.
+  const canTake = (srcVal, candVal) => norm(candVal) !== '' && norm(candVal) !== norm(srcVal);
+  const togglePick = (i, col) => setPicks((p) => ({ ...p, [`${i}:${col}`]: !p[`${i}:${col}`] }));
+
+  const cellBg = (srcVal, candVal, picked) => {
+    if (picked) return 'rgba(29,78,216,.30)';
     const a = norm(srcVal), b = norm(candVal);
     if (!a || !b) return 'transparent';
     return a === b ? 'rgba(21,128,61,.18)' : 'rgba(180,83,9,.18)';
   };
+
+  async function doMerge(cand, i) {
+    const fields = {};
+    for (const [col] of FIELDS) {
+      if (picks[`${i}:${col}`] && canTake(src?.[col], cand[col])) fields[col] = cand[col];
+    }
+    if (!window.confirm(t({ id: 'catalogacao.dup.mergeConfirm' }))) return;
+    setMerging(true); setMergeErr('');
+    try {
+      const isBook = cand.source === 'book';
+      const fn = isBook ? 'merge_draft_into_book' : 'merge_book_drafts';
+      const params = isBook
+        ? { p_draft_id: draftId, p_book_id: cand.candidate_id, p_fields: fields }
+        : { p_survivor_id: draftId, p_loser_id: cand.candidate_id, p_fields: fields };
+      const { error } = await supabase.schema('api').rpc(fn, params);
+      if (error) throw error;
+      onMerged?.();
+      onClose();
+    } catch (e) {
+      setMergeErr(localizeError(e, t));
+    } finally {
+      setMerging(false);
+    }
+  }
 
   const th = { padding: '8px 10px', textAlign: 'left', fontSize: '.72rem', fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,.12)', verticalAlign: 'bottom' };
   const td = { padding: '6px 10px', fontSize: '.8rem', borderBottom: '1px solid rgba(255,255,255,.05)', verticalAlign: 'top' };
@@ -100,6 +133,7 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
 
           {!loading && !err && cands.length > 0 && (
             <div style={{ overflowX: 'auto' }}>
+              {mergeErr && <div style={{ fontSize: '.82rem', color: '#f87171', marginBottom: 8 }}>{mergeErr}</div>}
               <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: 520 }}>
                 <thead>
                   <tr>
@@ -107,7 +141,7 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                     <th style={{ ...th, background: 'rgba(29,78,216,.12)' }}>{t({ id: 'catalogacao.dup.source' })}</th>
                     {cands.map((c, i) => (
                       <th key={i} style={th}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                           <span style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
                             <span className={`cat-pill ${c.source === 'book' ? 'ok' : 'info'}`} style={{ fontSize: '.58rem' }}>
                               {t({ id: c.source === 'book' ? 'catalogacao.status.published' : 'catalogacao.status.draft' })}
@@ -117,8 +151,12 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                             </span>
                             <span style={{ fontSize: '.66rem', color: 'var(--brand-muted, #aaa)' }}>{Math.round((Number(c.score) || 0) * 100)}%</span>
                           </span>
+                          <button type="button" className="ab-button ab-button--sm" disabled={merging}
+                            onClick={() => doMerge(c, i)} style={{ alignSelf: 'flex-start', fontSize: '.66rem', padding: '3px 8px' }}>
+                            {t({ id: c.source === 'book' ? 'catalogacao.dup.mergeInto' : 'catalogacao.dup.mergeDrafts' })}
+                          </button>
                           {c.source === 'draft' && onEditItem && (
-                            <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ alignSelf: 'flex-start', fontSize: '.66rem', padding: '2px 6px' }}
+                            <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}
                               onClick={() => { onClose(); onEditItem('book', c.candidate_id); }}>
                               {t({ id: 'catalogacao.queue.resume' })}
                             </button>
@@ -133,9 +171,21 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                     <tr key={col}>
                       <td style={lblTd}>{t({ id: key })}</td>
                       <td style={{ ...td, background: 'rgba(29,78,216,.06)' }}>{src?.[col] || '—'}</td>
-                      {cands.map((c, i) => (
-                        <td key={i} style={{ ...td, background: cellBg(src?.[col], c[col]) }}>{c[col] || '—'}</td>
-                      ))}
+                      {cands.map((c, i) => {
+                        const takeable = canTake(src?.[col], c[col]);
+                        const picked = !!picks[`${i}:${col}`];
+                        return (
+                          <td key={i} style={{ ...td, background: cellBg(src?.[col], c[col], picked && takeable) }}>
+                            <div>{c[col] || '—'}</div>
+                            {takeable && (
+                              <label style={{ display: 'inline-flex', gap: 4, alignItems: 'center', marginTop: 3, fontSize: '.64rem', color: 'var(--brand-muted, #9bb)', cursor: 'pointer' }}>
+                                <input type="checkbox" checked={picked} disabled={merging} onChange={() => togglePick(i, col)} />
+                                {t({ id: 'catalogacao.dup.fieldTake' })}
+                              </label>
+                            )}
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                 </tbody>

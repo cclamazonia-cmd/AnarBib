@@ -512,6 +512,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
           draftLabel={dupItem._label}
           onClose={() => setDupItem(null)}
           onEditItem={onEditItem}
+          onMerged={async () => {
+            setMsg({ text: t({ id: 'catalogacao.dup.mergeOk' }), kind: 'ok' });
+            await loadQueue(); await loadTrash(); onChanged?.();
+          }}
         />
       )}
     </div>
