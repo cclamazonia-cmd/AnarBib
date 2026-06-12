@@ -12,6 +12,46 @@ import { fmtD } from '../_shared';
 import WriteToReaderBox from './WriteToReaderBox';
 import ResolveCardBox from './ResolveCardBox';
 
+// ───────────────────────────────────────────────────────────
+// CARD-LOCAL-2 (N2) — éditeur de l'identité locale (acte staff).
+// Attribue/édite ulm.local_reader_number pour la biblio COURANTE. Indépendant
+// de la validation (CARD-LOCAL-GATE). L'unicité est gérée par le trigger côté
+// base : une collision remonte HINT 'error.cardLocal.identityTaken' → localizeError.
+// ───────────────────────────────────────────────────────────
+function LocalIdentityEditor({ t, userId, libraryId, initialValue }) {
+  const [value, setValue] = useState(initialValue || '');
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+  // Re-synchronise quand on change de lectrice (ou de valeur initiale).
+  useEffect(() => { setValue(initialValue || ''); setMsg(''); }, [initialValue, userId]);
+
+  async function save() {
+    setBusy(true); setMsg('');
+    try {
+      const { data, error } = await supabase.schema('api').rpc('set_local_reader_identity', {
+        p_user_id: userId, p_library_id: libraryId, p_value: value,
+      });
+      if (error) throw error;
+      setValue(data || '');
+      setMsg(t({ id: 'panel.reader.identity.saved' }));
+    } catch (e) {
+      setMsg(localizeError(e, t));
+    } finally { setBusy(false); }
+  }
+
+  return (
+    <div className="ab-painel-reader-identity">
+      <label>{t({ id: 'panel.reader.localIdentity' })}</label>
+      <input type="text" className="ab-painel-input" value={value}
+        onChange={e => setValue(e.target.value)}
+        placeholder={t({ id: 'panel.reader.identity.placeholder' })}
+        onKeyDown={e => { if (e.key === 'Enter' && !busy) save(); }} />
+      <Button onClick={save} disabled={busy}>{busy ? t({ id: 'common.saving' }) : t({ id: 'common.save' })}</Button>
+      {msg && <span className="ab-painel-msg">{msg}</span>}
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════
 // TabLeitor — onglet « Gérer lecteur·rice » (chantier E.1 / OT-4)
 // ───────────────────────────────────────────────────────────
@@ -87,9 +127,14 @@ export default function TabLeitor({
       {readerProfile && (
         <div className="ab-painel-reader-card">
           <h3>{readerProfile.first_name} {readerProfile.last_name}</h3>
-          {readerMatchInfo?.localIdentity && (
+          {/* CARD-LOCAL-2 : édition de l'identité pour la biblio courante (si la
+              lectrice y est inscrite) ; en repli (autre biblio), affichage seul. */}
+          {readerMatchInfo && !readerMatchInfo.isFallback ? (
+            <LocalIdentityEditor t={t} userId={readerProfile.id} libraryId={libraryId}
+              initialValue={readerMatchInfo.localIdentity} />
+          ) : (readerMatchInfo?.localIdentity && (
             <p className="ab-painel-reader-identity">{t({id:'panel.reader.localIdentity'})}: <strong>{readerMatchInfo.localIdentity}</strong></p>
-          )}
+          ))}
           <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'}</p>
           <p>{t({id:'panel.reader.registered'})}: {fmtD(readerProfile.created_at)} · {t({id:'panel.reader.restricted'})}: {readerProfile.is_restricted ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})} · {t({id:'panel.reader.passwordPending'})}: {readerProfile.must_change_password ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})}</p>
 
