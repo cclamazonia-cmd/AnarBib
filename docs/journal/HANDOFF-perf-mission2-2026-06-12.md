@@ -50,6 +50,32 @@ invisibles, prod en avance sur le local.
 
 ## 2. RESTE À FAIRE (aucune migration SQL nécessaire sur tout ça)
 
+> ✅ **TOUT FAIT le 12/06/2026** (session « Perf mission 2/3 + cleanup », poussé
+> sur `codeberg/main`, CI verte). Le détail ci-dessous est conservé pour l'historique.
+> - **2-P0 bis (AccountPage)** — `136b4df`. Split `loadCore`/`loadHeavy`. Carto
+>   préalable : cotisation + notifPrefs sont rendus par l'onglet par défaut
+>   `perfil` → gardés au noyau (la liste ci-dessous les mettait à tort en lourd) ;
+>   les compteurs des libellés d'onglets forcent notifications/wishlist/circulation
+>   au montage. Seul `historico` est différé (3 historiques + prefs rétention).
+> - **2-P1 (double thème)** — `842d411`. `useTheme(slug, ready)` : aucun manifest
+>   tant que le slug n'est pas résolu ; gate `themeResolved || slug !== 'default'`
+>   (cache/URL non-default = fetch immédiat, pas de flash) + garde `authLoading`.
+>   pt-BR statique conservé (pas de RTT) — cf. 2-P2.
+> - **2-P2 (bundle + N+1)** — `4a1e10f` (N+1 `/rede` batché en `.in(...)`) +
+>   `c928ecf` (pt-BR sorti via `manualChunks`, import STATIQUE conservé +
+>   `modulepreload` parallèle → `index` 484→212 kB gz 139→67, pas de flash de
+>   fallback contrairement à l'async envisagé ici).
+> - **Cleanup console** — `b2e8bcb`. `catalogacao.status.retaken` ajoutée ×10 +
+>   `cancelled` mappé. ⚠️ **La `key` React manquante dans `TabTrabalhoDoDia` NE se
+>   reproduit PAS** dans le code actuel : toutes les listes du sous-arbre sont
+>   keyées (vérifié). Laissé tel quel — probable mauvaise lecture de la stack.
+> - **Mission 3 (filtre Lot)** — `153aad7`. Voir §ci-dessous, fait intégralement.
+> - i18n : ajout de clés via script `.cjs` **additif en INSERTION TEXTUELLE** (les
+>   locales ne sont PAS triées alpha → un `JSON.stringify` trié réécrit tout le
+>   fichier ; le pattern `add-queue-keys.cjs` est donc à éviter pour ça).
+> - Vérif live des pages protégées (/conta, file, thème au login) encore à faire
+>   par un humain (Chrome MCP = Turnstile + mot de passe).
+
 ### 2-P0 bis — AccountPage (`src/pages/account/AccountPage.jsx`) — MÊME traitement
 - Symptôme mesuré (F12 live, /conta) : **~25 endpoints REST uniques au montage**,
   trou systémique de ~1,2 s, stabilisation ~3,8 s.
