@@ -351,3 +351,10 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
     rend la précédente obsolète → la déplacer AUSSITÔT dans `docs/backlogs/archive/`**
     (`git mv`). Une **seule** version courante à la racine. Tenir `docs/backlogs/INDEX.md`
     à jour (pointer la version courante). *(Le `.docx` lisible va dans `Downloads`, hors dépôt.)*
+12. **Notifier & documenter les conséquences backlog (RÈGLE D'OR).** Quand on **règle
+    une spec** ou qu'on **implémente/modifie un module** ayant des **conséquences sur des
+    items du backlog** (item soldé, partiellement adressé, déplacé, ou nouvellement créé),
+    on le **notifie et documente AUSSITÔT** : nouvelle version datée du backlog (cf. #11)
+    annotant les items touchés (✅ / partiel + renvoi au commit/à la migration), et au
+    **REGISTRE** si ça fait doctrine. **Pas de livraison silencieuse** qui laisse le backlog
+    diverger de la réalité prod.

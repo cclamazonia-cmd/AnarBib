@@ -1,6 +1,6 @@
 # 📋 INDEX des backlogs — AnarBib
 
-**Dernière mise à jour** : 11 juin 2026 (soir) — **v31 promu version courante** (report du v30 + livraisons du 11/06 : CI auto-hébergé, notifications §21 PARTNER, baseline schéma) ; **v30 archivé**. Le backlog vit en Markdown ; les `.docx` historiques (v8→v29) sont dans `archive/`. Source vivante de l'avancement : [`ETAT-AVANCEMENT-multisessions.md`](ETAT-AVANCEMENT-multisessions.md).
+**Dernière mise à jour** : 12 juin 2026 — **v32 promu version courante** (livraison **détection + comparaison + fusion de doublons en file éditoriale** ; cf. §0) ; **v31 archivé**. Le backlog vit en Markdown ; les `.docx` historiques (v8→v29) sont dans `archive/`. Source vivante de l'avancement : [`ETAT-AVANCEMENT-multisessions.md`](ETAT-AVANCEMENT-multisessions.md).
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce dossier contient les versions successives du **backlog technique** d'AnarBib. Une seule version est vivante à la fois ; les précédentes sont conservées dans `archive/` pour la traçabilité.
@@ -11,9 +11,9 @@ Ce dossier contient les versions successives du **backlog technique** d'AnarBib.
 
 ## ✅ Version courante
 
-➡️ **`AnarBib-Backlog-2026-06-11-v31.md`**
+➡️ **`AnarBib-Backlog-2026-06-12-v32.md`**
 
-Backlog **v31** du 11 juin 2026 (soir) — **report du v30** (base prod vérifiée `uflwmikiyjfnikiphtcp`) + les livraisons de la session du 11/06 : **CI auto-hébergé** (Forgejo Actions + runner WSL2 + retry-Pages), **notifications §21 PARTNER** (NOTIF-1/2/3 en prod), **snapshot schéma de référence** (`../schema/`), et reliquats multi-sessions tranchés (`similar_books` déjà persisté, #CL.10 fait, EA-12 gelé, cosmétiques soldés). Le **vrai reste ouvert** (§2) : #MOBILE, #MM, #FED, finitions cotisations, sécurité/Bologne, OPAC longue traîne, i18n rollout. Le v30 reste la base d'audit prod ([`AUDIT_backlog-v29-vs-prod_2026-06-10`](../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md)).
+Backlog **v32** du 12 juin 2026 — reporte le **v31** avec la livraison de la **détection + comparaison + fusion de doublons en file éditoriale** (`api.suggest_draft_duplicates`, `api.merge_draft_into_book`, `api.merge_book_drafts`, modale de comparaison champ-par-champ, erreurs i18n `error.merge.*`) — **facette catalogage de #152**, cf. §0. *Reprend le v31 (11/06) :* report du v30 (base prod vérifiée `uflwmikiyjfnikiphtcp`) + **CI auto-hébergé**, **notifications §21 PARTNER**, **snapshot schéma**. Le **vrai reste ouvert** (§2) : #MOBILE, #MM, #FED, finitions cotisations, sécurité/Bologne, OPAC longue traîne, i18n rollout. Le v30 reste la base d'audit prod ([`AUDIT_backlog-v29-vs-prod_2026-06-10`](../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md)).
 
 > **Format.** Depuis le 10/06, le backlog vit en **Markdown** (git-tracké, diffable). Les anciennes versions `.docx` (v8→v29) sont conservées dans `archive/` comme snapshots historiques. Le contenu « à intégrer » des sessions des 05-08/06 (Track A/D, capas, liaison, doublons, clôtures #BIBLIO/#110/#NOTIFY, MULTI/VALID/#CL.10) est **livré et reflété dans le v30** — voir l'audit prod et le REGISTRE pour le détail normatif.
 
@@ -62,6 +62,7 @@ L'INDEX du 20/05 prescrivait de renommer les versions archivées avec le préfix
 | `AnarBib-Backlog-2026-06-08-v28.docx` | 08/06 | Clôtures #BIBLIO / #110 / #NOTIFY-Painel-acts ; #HYG-rapports-consultas. |
 | `AnarBib-Backlog-2026-06-10-v29.docx` | 10/06 | MULTI / VALID / #CL.10 livrés. **Gravement désynchronisé de la prod → remplacé par le v30 (réécriture critique, cf. audit).** |
 | `AnarBib-Backlog-2026-06-10-v30.md` | 10/06 | Réécriture critique sur base prod vérifiée (309 migrations, 21 EF). **Reporté au v31 le 11/06** (CI auto-hébergé, notifs §21 PARTNER, baseline schéma). |
+| `AnarBib-Backlog-2026-06-11-v31.md` | 11/06 | Report du v30 + livraisons 11/06 (CI auto-hébergé, §21 PARTNER, snapshot schéma). **Reporté au v32 le 12/06** (détection + fusion de doublons en file éditoriale). |
 
 **Cadence d'incrémentation** : v8 → v26 en 13 jours, soit ≈1,4 version/jour. Le rythme s'explique par la pratique « un arbitrage acté ⇒ un incrément » : le backlog porte les décisions courantes (par exemple `HYGIENE-SPECS-0106` ou les choix d'option d'un chantier), qui passent ensuite dans le REGISTRE. La règle « numéro strictement croissant, peu importe la date » est respectée — deux versions le même jour (v20/v21 le 29/05, v23/v24 le 31/05) sont normales.
 
