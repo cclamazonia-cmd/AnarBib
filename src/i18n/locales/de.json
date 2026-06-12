@@ -4137,5 +4137,8 @@
   "importacoes.add.mode.oai": "OAI-Ernte",
   "importacoes.lotes.title": "Import-Stapel",
   "importacoes.lotes.empty": "Noch keine Stapel.",
-  "catalogacao.status.retaken": "aktualisierung"
+  "catalogacao.status.retaken": "aktualisierung",
+  "catalogacao.queue.batchLabel": "Charge",
+  "catalogacao.queue.allBatches": "Alle Chargen",
+  "catalogacao.queue.noBatch": "Ohne Charge"
 }

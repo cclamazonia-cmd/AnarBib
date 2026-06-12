@@ -4137,5 +4137,8 @@
   "importacoes.add.mode.oai": "OAI-oogst",
   "importacoes.lotes.title": "Importbatches",
   "importacoes.lotes.empty": "Nog geen batches.",
-  "catalogacao.status.retaken": "bijwerking"
+  "catalogacao.status.retaken": "bijwerking",
+  "catalogacao.queue.batchLabel": "Batch",
+  "catalogacao.queue.allBatches": "Alle batches",
+  "catalogacao.queue.noBatch": "Zonder batch"
 }

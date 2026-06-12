@@ -4137,5 +4137,8 @@
   "importacoes.add.mode.oai": "Συγκομιδή OAI",
   "importacoes.lotes.title": "Παρτίδες εισαγωγής",
   "importacoes.lotes.empty": "Καμία παρτίδα ακόμη.",
-  "catalogacao.status.retaken": "ενημέρωση"
+  "catalogacao.status.retaken": "ενημέρωση",
+  "catalogacao.queue.batchLabel": "Παρτίδα",
+  "catalogacao.queue.allBatches": "Όλες οι παρτίδες",
+  "catalogacao.queue.noBatch": "Χωρίς παρτίδα"
 }

@@ -4137,5 +4137,8 @@
   "importacoes.add.mode.oai": "Moisson OAI",
   "importacoes.lotes.title": "Lots d’import",
   "importacoes.lotes.empty": "Aucun lot pour l’instant.",
-  "catalogacao.status.retaken": "mise à jour"
+  "catalogacao.status.retaken": "mise à jour",
+  "catalogacao.queue.batchLabel": "Lot",
+  "catalogacao.queue.allBatches": "Tous les lots",
+  "catalogacao.queue.noBatch": "Sans lot"
 }

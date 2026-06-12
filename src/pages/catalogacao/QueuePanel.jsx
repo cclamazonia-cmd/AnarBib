@@ -14,6 +14,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [actionFilter, setActionFilter] = useState('');
+  // Filtre par lot (Mission 3) : '' = tous les lots, 'none' = sans lot
+  // (batch_id null), sinon l'id du lot. Branche loadQueue ET selectAllInFilter
+  // pour que la selection cross-pages capture exactement le lot choisi.
+  const [batchFilter, setBatchFilter] = useState('');
   const [search, setSearch] = useState('');
 
   // ── Active queue ────────────────────────────────────────
@@ -55,6 +59,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
           .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, updated_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
+        if (batchFilter === 'none') q = q.is('batch_id', null);
+        else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`titulo.ilike.%${s}%,subtitulo.ilike.%${s}%,autor.ilike.%${s}%,bib_ref.ilike.%${s}%`);
         const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
@@ -67,6 +73,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
           .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, updated_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
+        if (batchFilter === 'none') q = q.is('batch_id', null);
+        else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
         const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
@@ -79,6 +87,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
           .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, updated_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
+        if (batchFilter === 'none') q = q.is('batch_id', null);
+        else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`tombo.ilike.%${s}%,target_bib_ref.ilike.%${s}%`);
         const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
@@ -93,7 +103,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       setTotalPages(Math.max(1, Math.ceil(maxCount / PAGE_SIZE)));
     } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setLoading(false); }
-  }, [typeFilter, statusFilter, actionFilter, dSearch, page, t]);
+  }, [typeFilter, statusFilter, actionFilter, batchFilter, dSearch, page, t]);
 
   useEffect(() => { loadQueue(); }, [loadQueue]);
 
@@ -133,6 +143,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       if (!typeFilter || typeFilter === 'book') {
         let q = supabase.from('book_drafts').select('id').in('status', statuses).limit(5000);
         if (actionFilter) q = q.eq('action', actionFilter);
+        if (batchFilter === 'none') q = q.is('batch_id', null);
+        else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`titulo.ilike.%${s}%,subtitulo.ilike.%${s}%,autor.ilike.%${s}%,bib_ref.ilike.%${s}%`);
         const { data } = await q;
         (data || []).forEach(d => allIds.push(`book:${d.id}`));
@@ -140,6 +152,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       if (!typeFilter || typeFilter === 'author') {
         let q = supabase.from('author_drafts').select('id').in('status', statuses).limit(5000);
         if (actionFilter) q = q.eq('action', actionFilter);
+        if (batchFilter === 'none') q = q.is('batch_id', null);
+        else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
         const { data } = await q;
         (data || []).forEach(d => allIds.push(`author:${d.id}`));
@@ -147,6 +161,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       if (!typeFilter || typeFilter === 'exemplar') {
         let q = supabase.from('exemplar_drafts').select('id').in('status', statuses).limit(5000);
         if (actionFilter) q = q.eq('action', actionFilter);
+        if (batchFilter === 'none') q = q.is('batch_id', null);
+        else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`tombo.ilike.%${s}%,target_bib_ref.ilike.%${s}%`);
         const { data } = await q;
         (data || []).forEach(d => allIds.push(`exemplar:${d.id}`));
@@ -306,6 +322,14 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
             <option value="">{t({ id: 'catalogacao.queue.allActions' })}</option>
             <option value="create">{t({ id: 'catalogacao.queue.actionCreate' })}</option>
             <option value="update">{t({ id: 'catalogacao.queue.actionUpdate' })}</option>
+          </select>
+        </div>
+        <div className="cat-field">
+          <label style={ls}>{t({ id: 'catalogacao.queue.batchLabel' })}</label>
+          <select value={batchFilter} onChange={e => { setBatchFilter(e.target.value); setPage(0); }} style={fs}>
+            <option value="">{t({ id: 'catalogacao.queue.allBatches' })}</option>
+            <option value="none">{t({ id: 'catalogacao.queue.noBatch' })}</option>
+            {batches.map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
           </select>
         </div>
         <div className="cat-field" style={{ gridColumn: 'span 2' }}>

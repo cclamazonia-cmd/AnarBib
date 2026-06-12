@@ -4137,5 +4137,8 @@
   "importacoes.add.mode.oai": "OAI harvest",
   "importacoes.lotes.title": "Import batches",
   "importacoes.lotes.empty": "No batches yet.",
-  "catalogacao.status.retaken": "update"
+  "catalogacao.status.retaken": "update",
+  "catalogacao.queue.batchLabel": "Batch",
+  "catalogacao.queue.allBatches": "All batches",
+  "catalogacao.queue.noBatch": "No batch"
 }

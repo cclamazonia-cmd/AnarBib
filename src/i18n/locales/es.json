@@ -4137,5 +4137,8 @@
   "importacoes.add.mode.oai": "Recolección OAI",
   "importacoes.lotes.title": "Lotes de importación",
   "importacoes.lotes.empty": "Ningún lote todavía.",
-  "catalogacao.status.retaken": "actualización"
+  "catalogacao.status.retaken": "actualización",
+  "catalogacao.queue.batchLabel": "Lote",
+  "catalogacao.queue.allBatches": "Todos los lotes",
+  "catalogacao.queue.noBatch": "Sin lote"
 }
