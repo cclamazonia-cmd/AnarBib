@@ -4140,5 +4140,15 @@
   "catalogacao.status.retaken": "aggiornamento",
   "catalogacao.queue.batchLabel": "Lotto",
   "catalogacao.queue.allBatches": "Tutti i lotti",
-  "catalogacao.queue.noBatch": "Senza lotto"
+  "catalogacao.queue.noBatch": "Senza lotto",
+  "importacoes.fila.reconcile": "Crea esemplare ({n})",
+  "importacoes.fila.reconciling": "Creazione esemplare…",
+  "importacoes.fila.reconciled": "Bozza di esemplare creata",
+  "importacoes.fila.exemplarCreated": "Esemplare creato",
+  "catalogacao.dup.check": "Duplicati",
+  "catalogacao.dup.title": "Possibili duplicati",
+  "catalogacao.dup.none": "Nessun duplicato rilevato.",
+  "catalogacao.dup.source": "Questa bozza",
+  "catalogacao.dup.byIsbn": "Stesso ISBN",
+  "catalogacao.dup.byApprox": "Titolo/autore simile"
 }

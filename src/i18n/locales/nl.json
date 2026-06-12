@@ -4140,5 +4140,15 @@
   "catalogacao.status.retaken": "bijwerking",
   "catalogacao.queue.batchLabel": "Batch",
   "catalogacao.queue.allBatches": "Alle batches",
-  "catalogacao.queue.noBatch": "Zonder batch"
+  "catalogacao.queue.noBatch": "Zonder batch",
+  "importacoes.fila.reconcile": "Exemplaar aanmaken ({n})",
+  "importacoes.fila.reconciling": "Exemplaar aanmaken…",
+  "importacoes.fila.reconciled": "Exemplaarconcept aangemaakt",
+  "importacoes.fila.exemplarCreated": "Exemplaar aangemaakt",
+  "catalogacao.dup.check": "Duplicaten",
+  "catalogacao.dup.title": "Mogelijke duplicaten",
+  "catalogacao.dup.none": "Geen duplicaten gevonden.",
+  "catalogacao.dup.source": "Dit concept",
+  "catalogacao.dup.byIsbn": "Zelfde ISBN",
+  "catalogacao.dup.byApprox": "Vergelijkbare titel/auteur"
 }

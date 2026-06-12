@@ -4140,5 +4140,15 @@
   "catalogacao.status.retaken": "ενημέρωση",
   "catalogacao.queue.batchLabel": "Παρτίδα",
   "catalogacao.queue.allBatches": "Όλες οι παρτίδες",
-  "catalogacao.queue.noBatch": "Χωρίς παρτίδα"
+  "catalogacao.queue.noBatch": "Χωρίς παρτίδα",
+  "importacoes.fila.reconcile": "Δημιουργία αντιτύπου ({n})",
+  "importacoes.fila.reconciling": "Δημιουργία αντιτύπου…",
+  "importacoes.fila.reconciled": "Δημιουργήθηκε προσχέδιο αντιτύπου",
+  "importacoes.fila.exemplarCreated": "Αντίτυπο δημιουργήθηκε",
+  "catalogacao.dup.check": "Διπλότυπα",
+  "catalogacao.dup.title": "Πιθανά διπλότυπα",
+  "catalogacao.dup.none": "Δεν βρέθηκαν διπλότυπα.",
+  "catalogacao.dup.source": "Αυτό το προσχέδιο",
+  "catalogacao.dup.byIsbn": "Ίδιο ISBN",
+  "catalogacao.dup.byApprox": "Παρόμοιος τίτλος/συγγραφέας"
 }

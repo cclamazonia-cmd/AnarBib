@@ -4140,5 +4140,15 @@
   "catalogacao.status.retaken": "update",
   "catalogacao.queue.batchLabel": "Batch",
   "catalogacao.queue.allBatches": "All batches",
-  "catalogacao.queue.noBatch": "No batch"
+  "catalogacao.queue.noBatch": "No batch",
+  "importacoes.fila.reconcile": "Create copy ({n})",
+  "importacoes.fila.reconciling": "Creating copy…",
+  "importacoes.fila.reconciled": "Copy draft created",
+  "importacoes.fila.exemplarCreated": "Copy created",
+  "catalogacao.dup.check": "Duplicates",
+  "catalogacao.dup.title": "Possible duplicates",
+  "catalogacao.dup.none": "No duplicates found.",
+  "catalogacao.dup.source": "This draft",
+  "catalogacao.dup.byIsbn": "Same ISBN",
+  "catalogacao.dup.byApprox": "Similar title/author"
 }

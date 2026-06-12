@@ -4140,5 +4140,15 @@
   "catalogacao.status.retaken": "ĝisdatigo",
   "catalogacao.queue.batchLabel": "Loĉo",
   "catalogacao.queue.allBatches": "Ĉiuj loĉoj",
-  "catalogacao.queue.noBatch": "Sen loĉo"
+  "catalogacao.queue.noBatch": "Sen loĉo",
+  "importacoes.fila.reconcile": "Krei ekzempleron ({n})",
+  "importacoes.fila.reconciling": "Kreado de ekzemplero…",
+  "importacoes.fila.reconciled": "Skizo de ekzemplero kreita",
+  "importacoes.fila.exemplarCreated": "Ekzemplero kreita",
+  "catalogacao.dup.check": "Duplikatoj",
+  "catalogacao.dup.title": "Eblaj duplikatoj",
+  "catalogacao.dup.none": "Neniu duplikato trovita.",
+  "catalogacao.dup.source": "Ĉi tiu malneto",
+  "catalogacao.dup.byIsbn": "Sama ISBN",
+  "catalogacao.dup.byApprox": "Simila titolo/aŭtoro"
 }

@@ -4140,5 +4140,15 @@
   "catalogacao.status.retaken": "actualització",
   "catalogacao.queue.batchLabel": "Lot",
   "catalogacao.queue.allBatches": "Tots els lots",
-  "catalogacao.queue.noBatch": "Sense lot"
+  "catalogacao.queue.noBatch": "Sense lot",
+  "importacoes.fila.reconcile": "Crear exemplar ({n})",
+  "importacoes.fila.reconciling": "Creant exemplar…",
+  "importacoes.fila.reconciled": "Esborrany d'exemplar creat",
+  "importacoes.fila.exemplarCreated": "Exemplar creat",
+  "catalogacao.dup.check": "Duplicats",
+  "catalogacao.dup.title": "Possibles duplicats",
+  "catalogacao.dup.none": "Cap duplicat detectat.",
+  "catalogacao.dup.source": "Aquest esborrany",
+  "catalogacao.dup.byIsbn": "Mateix ISBN",
+  "catalogacao.dup.byApprox": "Títol/autor proper"
 }

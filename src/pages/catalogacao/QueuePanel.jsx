@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import DuplicateCompareModal from './DuplicateCompareModal';
 
 // Labels resolved inside component via t()
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
@@ -25,6 +26,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(new Set());
   const [msg, setMsg] = useState({ text: '', kind: '' });
+  // #152 : brouillon (book) en cours de comparaison de doublons (modale)
+  const [dupItem, setDupItem] = useState(null);
 
   // ── Pagination (serveur) ────────────────────────────────
   const [page, setPage] = useState(0);
@@ -412,6 +415,12 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
               <div style={{ fontSize: '.65rem', color: 'var(--brand-muted, #666)', flexShrink: 0, width: 80, textAlign: 'right' }}>
                 {formatDate(it.updated_at, { year: 'numeric', month: '2-digit', day: '2-digit' })}
               </div>
+              {it._type === 'book' && (
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ flexShrink: 0 }}
+                  title={t({ id: 'catalogacao.dup.title' })} onClick={() => setDupItem(it)}>
+                  {t({ id: 'catalogacao.dup.check' })}
+                </button>
+              )}
               {onEditItem && (
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ flexShrink: 0 }}
                   onClick={() => onEditItem(it._type, it.id)}>
@@ -496,6 +505,15 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
           {t({ id: 'catalogacao.queue.trashWarning' })}
         </div>
       </div>
+
+      {dupItem && (
+        <DuplicateCompareModal
+          draftId={dupItem.id}
+          draftLabel={dupItem._label}
+          onClose={() => setDupItem(null)}
+          onEditItem={onEditItem}
+        />
+      )}
     </div>
   );
 }
