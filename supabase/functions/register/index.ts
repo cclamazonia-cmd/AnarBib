@@ -203,7 +203,7 @@ function projectUrl(locale) {
   const slug = SITE_PROJECT_SLUG_BY_LOCALE[String(locale || "").trim()] || "projeto";
   return `https://anarbib.org/${lang}/${slug}/`;
 }
-function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR" }) {
+function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR", readerCardsEnabled = false, readerValidationMode = null }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
@@ -246,6 +246,11 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
     }) : ""}
     ${isOrphan && galleryUrl ? buildParagraph(`${tMail(locale, "welcome.orphan.fallback")}<br>${escapeHtml(galleryUrl)}`) : ""}
     ${isOrphan && aboutUrl ? buildParagraph(`${tMail(locale, "welcome.orphan.aboutIntro")}<br><a href="${escapeHtml(aboutUrl)}">${escapeHtml(aboutUrl)}</a>`) : ""}
+    ${!isWithoutLibrary ? buildParagraph(`<b>${tMail(locale, "welcome.howItWorks.title")}</b>`) : ""}
+    ${!isWithoutLibrary && readerCardsEnabled ? buildParagraph(tMail(locale, "welcome.howItWorks.card")) : ""}
+    ${!isWithoutLibrary && readerValidationMode === "remote" ? buildParagraph(tMail(locale, "welcome.howItWorks.identity.remote")) : ""}
+    ${!isWithoutLibrary && readerValidationMode === "presential" ? buildParagraph(tMail(locale, "welcome.howItWorks.identity.presential")) : ""}
+    ${!isWithoutLibrary && (readerValidationMode === "remote" || readerValidationMode === "presential") ? buildParagraph(tMail(locale, "welcome.pending")) : ""}
     ${!isWithoutLibrary && postalAddress ? buildParagraph(`<b>${tMail(locale, "welcome.libraryAddressLabel")}</b> ${escapeHtml(postalAddress)}`) : ""}
     ${!isWithoutLibrary && contactEmail ? buildParagraph(`<b>${tMail(locale, "welcome.libraryContactLabel")}</b> ${escapeHtml(contactEmail)}`) : ""}
     <div style="margin-top:18px; padding:14px 16px; border-radius:14px; border:1px solid ${MAIL_BRAND.colors.borderLight}; background:${MAIL_BRAND.colors.surfaceAlt}; color:${MAIL_BRAND.colors.mutedOnLight}; font-size:13px; line-height:1.6;">
@@ -598,7 +603,7 @@ serve(async (req)=>{
           library_slug: effectiveLibrarySlug
         }, 400);
       }
-      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, logo_url").eq("slug", effectiveLibrarySlug).maybeSingle();
+      const { data: foundLibraryRow, error: libraryRowError } = await admin.from("libraries").select("id, slug, name, default_locale, logo_url, reader_cards_enabled, reader_validation_mode").eq("slug", effectiveLibrarySlug).maybeSingle();
       if (libraryRowError || !foundLibraryRow?.id) {
         console.error("register: library not found in libraries", {
           librarySlug: effectiveLibrarySlug,
@@ -896,7 +901,11 @@ serve(async (req)=>{
       libraryRequestUrl: libraryRequestClaimUrl,
       galleryUrl: mailIsOrphan ? `https://anarbib.org/${localeToSiteLang(userLocale)}/explorar/` : "",
       aboutUrl: mailIsOrphan ? projectUrl(userLocale) : "",
-      locale: userLocale
+      locale: userLocale,
+      // CARD-LOCAL-CANAL : « comment marche ta biblio » conditionné à la config
+      // (libraryRow null pour orphan/new-library → !isWithoutLibrary les masque).
+      readerCardsEnabled: libraryRow?.reader_cards_enabled === true,
+      readerValidationMode: libraryRow?.reader_validation_mode || null
     });
     // ── TR-4 (#153.B) — libellés internes internationalisés ───────────────
     // Doctrine 2C : le mail biblio est rendu dans la locale de la biblio

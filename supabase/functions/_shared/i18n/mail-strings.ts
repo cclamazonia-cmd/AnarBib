@@ -3710,6 +3710,66 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Contact van de bibliotheek:",
     el: "Επαφή βιβλιοθήκης:"
   },
+  "welcome.howItWorks.title": {
+    "pt-BR": "Como funciona tua biblioteca",
+    fr: "Comment marche ta bibliothèque",
+    es: "Cómo funciona tu biblioteca",
+    en: "How your library works",
+    it: "Come funziona la tua biblioteca",
+    de: "So funktioniert deine Bibliothek",
+    ca: "Com funciona la teva biblioteca",
+    eo: "Kiel funkcias via biblioteko",
+    nl: "Hoe je bibliotheek werkt",
+    el: "Πώς λειτουργεί η βιβλιοθήκη σου"
+  },
+  "welcome.howItWorks.card": {
+    "pt-BR": "Vais receber uma carteira de leitor(a/e).",
+    fr: "Tu recevras une carte de lecteur·rice.",
+    es: "Recibirás una tarjeta de lectore.",
+    en: "You'll receive a reader card.",
+    it: "Riceverai una tessera di lettore/trice.",
+    de: "Du erhältst einen Leser*in-Ausweis.",
+    ca: "Rebràs un carnet de lector-a-e.",
+    eo: "Vi ricevos legant-in-an karton.",
+    nl: "Je ontvangt een lezerspas.",
+    el: "Θα λάβεις κάρτα αναγνώστη/στριας."
+  },
+  "welcome.howItWorks.identity.remote": {
+    "pt-BR": "Tua identidade de leitor(a/e) te será enviada por e-mail.",
+    fr: "Ton identité de lecteur·rice te sera envoyée par e-mail.",
+    es: "Tu identidad de lectore te será enviada por correo.",
+    en: "Your reader identity will be sent to you by e-mail.",
+    it: "La tua identità di lettore/trice ti sarà inviata via email.",
+    de: "Deine Leser*in-Kennung wird dir per E-Mail zugeschickt.",
+    ca: "La teva identitat de lector-a-e t'arribarà per correu electrònic.",
+    eo: "Via legant-in-a identigo estos sendita al vi retpoŝte.",
+    nl: "Je lezersidentiteit wordt je per e-mail toegestuurd.",
+    el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου σταλεί με email."
+  },
+  "welcome.howItWorks.identity.presential": {
+    "pt-BR": "Tua identidade de leitor(a/e) te será atribuída na tua primeira visita.",
+    fr: "Ton identité de lecteur·rice te sera attribuée à ton premier passage.",
+    es: "Tu identidad de lectore te será asignada en tu primera visita.",
+    en: "Your reader identity will be assigned on your first visit.",
+    it: "La tua identità di lettore/trice ti sarà assegnata alla tua prima visita.",
+    de: "Deine Leser*in-Kennung wird dir bei deinem ersten Besuch zugewiesen.",
+    ca: "La teva identitat de lector-a-e t'assignaran a la teva primera visita.",
+    eo: "Via legant-in-a identigo estos atribuita al vi dum via unua vizito.",
+    nl: "Je lezersidentiteit wordt toegekend bij je eerste bezoek.",
+    el: "Η ταυτότητά σου ως αναγνώστη/στριας θα σου αποδοθεί στην πρώτη σου επίσκεψη."
+  },
+  "welcome.pending": {
+    "pt-BR": "Tua inscrição precisa ser validada pela equipe: poderás pegar emprestado e reservar assim que for validada.",
+    fr: "Ton inscription doit être validée par l'équipe : tu pourras emprunter et réserver une fois validée.",
+    es: "Tu inscripción debe ser validada por el equipo: podrás tomar prestado y reservar una vez validada.",
+    en: "Your sign-up must be validated by the team: you'll be able to borrow and reserve once validated.",
+    it: "La tua iscrizione deve essere convalidata dal gruppo: potrai prendere in prestito e prenotare una volta convalidata.",
+    de: "Deine Anmeldung muss vom Team bestätigt werden: sobald sie bestätigt ist, kannst du ausleihen und vormerken.",
+    ca: "La teva inscripció ha de ser validada per l'equip: podràs agafar en préstec i reservar un cop validada.",
+    eo: "Via aliĝo devas esti validigita de la teamo: vi povos prunti kaj rezervi post validigo.",
+    nl: "Je aanmelding moet door het team worden gevalideerd: zodra dat gebeurd is, kun je lenen en reserveren.",
+    el: "Η εγγραφή σου πρέπει να επικυρωθεί από την ομάδα: μόλις επικυρωθεί, θα μπορείς να δανείζεσαι και να κρατάς."
+  },
   "welcome.autoMessage": {
     "pt-BR": "Mensagem automática do cadastro AnarBib. As respostas a este e-mail serão encaminhadas para a gestão do projeto.",
     fr: "Message automatique de l'inscription AnarBib. Les réponses à cet e-mail sont transmises à la gestion du projet.",
