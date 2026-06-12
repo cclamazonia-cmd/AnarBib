@@ -917,6 +917,11 @@ export default function ImportacoesPage() {
                                 <Pill variant={isNew ? 'ok' : isMatched ? 'info' : isDup ? 'warn' : 'muted'}>
                                   {t({ id: 'importacoes.fila.match.' + ms })}
                                 </Pill>
+                                {Number(row.confidence) > 0 && (
+                                  <span style={{ marginLeft: 6, fontSize: '.72rem', fontWeight: 700, color: 'var(--brand-muted, #94a3b8)' }}>
+                                    {Math.round(Number(row.confidence))}%
+                                  </span>
+                                )}
                                 {isDup && (
                                   <div className="imp-note" style={{ marginTop: 3, fontSize: '.72rem' }}>
                                     {row.proposed_title
