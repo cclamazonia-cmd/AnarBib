@@ -86,17 +86,22 @@ export default function RedePage() {
       const { data: commons } = await supabase.from('library_commons').select('library_id, display_name, contact_email, logo_file_key');
       const { data: svcStates } = await supabase.from('library_service_state').select('library_id, service_mode, allows_new_loans, allows_new_reservations, public_message');
 
-      // Per-library counts — bascule sur la vue canonique api.library_circulation_stats
-      // (même source que BibliotecaPage onglet Rapports). Garantit cohérence
-      // cross-pages et règle le bug du filtre status_global mal formé.
-      // 1 requête par biblio au lieu de 7.
-      const enriched = await Promise.all((libs || []).map(async lib => {
+      // Per-library counts — vue canonique api.library_circulation_stats (même
+      // source que BibliotecaPage onglet Rapports). Garantit cohérence cross-pages.
+      // Perf (12/06/2026) : fix N+1 — au lieu d'une requête par biblio (boucle),
+      // on tire TOUTES les stats en UNE requête (.in('library_id', [...])) puis on
+      // indexe par library_id côté client.
+      const libIds = (libs || []).map(l => l.id);
+      const { data: allStats } = libIds.length
+        ? await supabase
+            .schema('api').from('library_circulation_stats')
+            .select('*').in('library_id', libIds)
+        : { data: [] };
+      const statsByLib = new Map((allStats || []).map(s => [s.library_id, s]));
+      const enriched = (libs || []).map(lib => {
         const commRow = (commons || []).find(c => c.library_id === lib.id);
         const svcRow = (svcStates || []).find(s => s.library_id === lib.id);
-        const { data: cs } = await supabase
-          .schema('api').from('library_circulation_stats')
-          .select('*').eq('library_id', lib.id).maybeSingle();
-        const s = cs || {};
+        const s = statsByLib.get(lib.id) || {};
         return {
           ...lib, ...commRow, ...svcRow,
           readers: s.readers_active || 0,
@@ -106,7 +111,7 @@ export default function RedePage() {
           loansOverdue: s.loans_overdue || 0,
           resActive: s.reservations_active || 0,
         };
-      }));
+      });
       setLibCards(enriched);
 
       // 2. Global stats
