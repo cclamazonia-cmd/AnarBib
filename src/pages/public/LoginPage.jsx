@@ -154,10 +154,16 @@ export default function LoginPage() {
     // #LOGIN-FIX H1 : transition propre — on navigue des que profil + biblio +
     // theme sont resolus, pour reveler /conta directement sur le bon fond (pas
     // de cascade de fonds). themeReady resout en ~160ms (manifest Storage).
+    // ONBO — coordinatrice en constitution : on l'amène à l'atelier (son unique
+    // chantier) dès que le PROFIL est chargé, SANS attendre la résolution
+    // biblio/thème : une biblio pré-active ne se résout pas comme une biblio active,
+    // donc libraryLoading/themeReady ne doivent pas bloquer (sinon fallback -> /conta).
+    if (profile?.solicitante_state === 'coordenador_em_constituicao') {
+      navigate('/atelier');
+      return;
+    }
     if (profile && !libraryLoading && themeReady) {
-      // ONBO — coordinatrice encore en constitution : on l'amène directement à
-      // l'atelier (son unique chantier) plutôt qu'à /conta.
-      navigate(profile.solicitante_state === 'coordenador_em_constituicao' ? '/atelier' : nextUrl);
+      navigate(nextUrl);
       return;
     }
     // #LOGIN-FIX H4 (10/06) : garde-fou FORWARD. L'usager est authentifie mais la
