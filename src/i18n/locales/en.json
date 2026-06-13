@@ -4433,6 +4433,7 @@
   "atelier.progress.sub": "Steps discussed together",
   "atelier.progress.title": "Collective progress",
   "atelier.regimento.banner": "The rules below are a skeleton to discuss — not a certificate. Download them, discuss them in assembly, amend them freely, and only then upload.",
+  "atelier.regimento.locked": "Complete all applicable steps before generating the regimento.",
   "atelier.regimento.download": "Download the rules skeleton (PDF)",
   "atelier.regimento.save": "Register the rules",
   "atelier.regimento.uploadHint": "Paste the link to the final rules (after collective validation). File upload is coming soon.",

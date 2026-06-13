@@ -16,7 +16,11 @@ const AXIS_KEYS = {
   governance_mode: 'atelier.axis.governance',
 };
 
-export async function buildRegimentoPdf({ progress, axes, applicable, t }) {
+// config (optionnel) : { [voletN]: string[] } — décisions provisoires réellement
+// saisies dans l'atelier (déjà localisées « Label : valeur »), imprimées sous chaque
+// section concernée. Le PDF reste un point de départ : ces décisions sont marquées
+// [À DISCUTER]. Si absent, sections génériques (rétrocompat).
+export async function buildRegimentoPdf({ progress, axes, applicable, t, config }) {
   const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = 210;
@@ -75,6 +79,14 @@ export async function buildRegimentoPdf({ progress, axes, applicable, t }) {
     if (v.regimento) return; // le volet 10 = ce document lui-même
     heading(`${t({ id: 'atelier.voletLabel' }, { n: v.n })} — ${t({ id: `atelier.${v.key}.title` })}`, 13);
     para(t({ id: `atelier.${v.key}.sub` }));
+    // Décisions provisoires réellement saisies dans l'atelier (déjà localisées),
+    // imprimées en puces sous la section. Elles restent [À DISCUTER].
+    const entries = config?.[v.n] || [];
+    entries.forEach(line => {
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(55, 55, 55);
+      doc.splitTextToSize(`•  ${line}`, CW - 4).forEach(l => { ensureSpace(5.4); doc.text(l, M + 4, y); y += 5; });
+    });
+    if (entries.length) y += 1;
     tag(t({ id: 'atelier.pdf.toDiscuss' }));
     y += 3;
   });

@@ -4433,6 +4433,7 @@
   "atelier.progress.sub": "samen besproken Stappen",
   "atelier.progress.title": "Collectieve voortgang",
   "atelier.regimento.banner": "Het reglement hieronder is een geraamte om te bespreken — geen certificaat. Download het, bespreek het in de vergadering, amendeer het vrij, en upload het pas daarna.",
+  "atelier.regimento.locked": "Voltooi eerst alle van toepassing zijnde etappes voordat je het reglement genereert.",
   "atelier.regimento.download": "Het reglementgeraamte downloaden (PDF)",
   "atelier.regimento.save": "Het reglement registreren",
   "atelier.regimento.uploadHint": "Plak de link van het definitieve reglement (na collectieve validatie). Het uploaden van bestanden komt binnenkort.",

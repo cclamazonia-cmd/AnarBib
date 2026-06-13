@@ -4433,6 +4433,7 @@
   "atelier.progress.sub": "Tappa discussi insieme",
   "atelier.progress.title": "Avanzamento collettivo",
   "atelier.regimento.banner": "Il regolamento qui sotto è uno scheletro da discutere — non un certificato. Scaricalo, discutilo in assemblea, emendalo liberamente, e solo allora caricalo.",
+  "atelier.regimento.locked": "Completa prima tutte le tappe applicabili prima di generare il regimento.",
   "atelier.regimento.download": "Scaricare lo scheletro di regolamento (PDF)",
   "atelier.regimento.save": "Registrare il regolamento",
   "atelier.regimento.uploadHint": "Incolla il link del regolamento finale (dopo la validazione collettiva). Il caricamento del file arriva presto.",

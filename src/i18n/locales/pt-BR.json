@@ -4433,6 +4433,7 @@
   "atelier.progress.sub": "etapas discutidas em conjunto",
   "atelier.progress.title": "Avanço coletivo",
   "atelier.regimento.banner": "O regimento abaixo é um esqueleto para discutir — não um certificado. Baixe, discuta em assembleia, emende livremente, e só então faça o upload.",
+  "atelier.regimento.locked": "Conclua todas as etapas aplicáveis antes de gerar o regimento.",
   "atelier.regimento.download": "Baixar o esqueleto de regimento (PDF)",
   "atelier.regimento.save": "Registrar o regimento",
   "atelier.regimento.uploadHint": "Cole o link do regimento final (após validação coletiva). O upload de arquivo chega em breve.",

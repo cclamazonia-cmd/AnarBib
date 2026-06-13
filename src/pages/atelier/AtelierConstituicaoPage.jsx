@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { apiQuery, apiRpc } from '@/lib/supabase';
+import { apiQuery, apiRpc, supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -88,6 +88,9 @@ export default function AtelierConstituicaoPage() {
   const applicable = useMemo(() => VOLETS.filter(v => v.applies(profile)), [profile]);
   const doneCount = applicable.filter(v => prog?.[v.flag]).length;
   const den = applicable.length;
+  // Verrou regimento (ONBO-Q2 Lot 3) : générer/sauver le regimento exige que TOUS
+  // les volets applicables hors regimento soient marqués terminés.
+  const deliberationDone = applicable.filter(v => !v.regimento).every(v => !!prog?.[v.flag]);
 
   const daysLeft = useMemo(() => {
     if (!prog?.deadline_at) return null;
@@ -126,8 +129,52 @@ export default function AtelierConstituicaoPage() {
 
   const complete = () => run(() => apiRpc('fn_constitution_complete', { p_request_id: prog.request_id }), 'atelier.toast.completed');
 
-  function downloadRegimento() {
-    buildRegimentoPdf({ progress: prog, axes, applicable, t });
+  // Décisions provisoires réellement saisies aux volets, agrégées pour le regimento
+  // (ONBO-Q2 Lot 3). Lecture best-effort sur la biblio pré-active (RLS staff) ;
+  // si une lecture échoue, la section reste générique. Valeurs déjà localisées.
+  async function buildVoletConfig(libraryId) {
+    const cfg = {};
+    if (!libraryId) return cfg;
+    const yn = b => t({ id: b ? 'common.yes' : 'common.no' });
+    try {
+      const [{ data: lib }, { data: ss }, { data: lc }] = await Promise.all([
+        supabase.from('libraries').select('cataloging_policy_notes, accepts_public_signup, reader_validation_mode, membership_enabled').eq('id', libraryId).maybeSingle(),
+        supabase.from('library_service_state').select('service_mode, allows_new_loans, allows_new_reservations, public_message').eq('library_id', libraryId).maybeSingle(),
+        supabase.from('library_commons').select('contact_email, reply_to_email, email_delivery_mode').eq('library_id', libraryId).maybeSingle(),
+      ]);
+      if (ss) {
+        const e = [];
+        if (ss.service_mode) e.push(`${t({ id: 'biblioteca.identity.serviceMode' })} : ${t({ id: `rede.serviceMode.${ss.service_mode}` })}`);
+        e.push(`${t({ id: 'biblioteca.identity.allowsLoans' })} : ${yn(ss.allows_new_loans)}`);
+        e.push(`${t({ id: 'biblioteca.identity.allowsReservations' })} : ${yn(ss.allows_new_reservations)}`);
+        if (ss.public_message) e.push(`${t({ id: 'biblioteca.identity.publicMessage' })} : ${ss.public_message}`);
+        cfg[2] = e;
+      }
+      if (lib?.cataloging_policy_notes) cfg[4] = [lib.cataloging_policy_notes];
+      if (lib) cfg[6] = [
+        `${t({ id: 'biblioteca.readerIdentity.publicSignup' })} : ${yn(lib.accepts_public_signup)}`,
+        `${t({ id: 'biblioteca.readerIdentity.mode' })} : ${t({ id: `biblioteca.readerIdentity.mode.${lib.reader_validation_mode || 'presential'}` })}`,
+        `${t({ id: 'membership.config.enabled' })} : ${yn(lib.membership_enabled)}`,
+      ];
+      if (lc) {
+        const e = [];
+        if (lc.contact_email) e.push(`${t({ id: 'biblioteca.comms.sendEmail' })} : ${lc.contact_email}`);
+        if (lc.reply_to_email) e.push(`${t({ id: 'biblioteca.identity.replyEmail' })} : ${lc.reply_to_email}`);
+        e.push(`${t({ id: 'biblioteca.comms.sendMode' })} : ${t({ id: `biblioteca.comms.sendMode.${lc.email_delivery_mode || 'normal'}` })}`);
+        cfg[7] = e;
+      }
+    } catch { /* best-effort : PDF générique si lecture KO */ }
+    return cfg;
+  }
+
+  async function downloadRegimento() {
+    if (!deliberationDone) { notifyError(t({ id: 'atelier.regimento.locked' })); return; }
+    setBusy(true);
+    try {
+      const config = await buildVoletConfig(prog.library_id);
+      await buildRegimentoPdf({ progress: prog, axes, applicable, t, config });
+    } catch (e) { notifyError(localizeError(e, t)); }
+    finally { setBusy(false); }
   }
 
   if (loading) {
@@ -264,10 +311,11 @@ export default function AtelierConstituicaoPage() {
               {cur.regimento ? (
                 <>
                   <div className="ab-atl-regimento">{t({ id: 'atelier.regimento.banner' })}</div>
-                  <button className="ab-atl-btn" disabled={busy} onClick={downloadRegimento}>↓ {t({ id: 'atelier.regimento.download' })}</button>
+                  {!deliberationDone && <p className="ab-atl-locked">{t({ id: 'atelier.regimento.locked' })}</p>}
+                  <button className="ab-atl-btn" disabled={busy || !deliberationDone} onClick={downloadRegimento}>↓ {t({ id: 'atelier.regimento.download' })}</button>
                   <div className="ab-atl-field">
                     <label>{t({ id: 'atelier.regimento.uploadLabel' })}</label>
-                    <input type="url" value={regUrl} onChange={e => setRegUrl(e.target.value)} placeholder="https://…" disabled={completed} />
+                    <input type="url" value={regUrl} onChange={e => setRegUrl(e.target.value)} placeholder="https://…" disabled={completed || !deliberationDone} />
                     <span className="ab-atl-hint">{t({ id: 'atelier.regimento.uploadHint' })}</span>
                   </div>
                 </>
@@ -284,7 +332,7 @@ export default function AtelierConstituicaoPage() {
             </div>
             <div className="ab-atl-panel-foot">
               {cur.regimento ? (
-                <button className="ab-atl-btn primary" disabled={busy || completed} onClick={() => { saveRegimento(); }}>
+                <button className="ab-atl-btn primary" disabled={busy || completed || !deliberationDone} onClick={() => { saveRegimento(); }}>
                   {t({ id: 'atelier.regimento.save' })}
                 </button>
               ) : (

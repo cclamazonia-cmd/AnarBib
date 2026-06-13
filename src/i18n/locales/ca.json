@@ -4433,6 +4433,7 @@
   "atelier.progress.sub": "Etapes debatuts conjuntament",
   "atelier.progress.title": "Avenç col·lectiu",
   "atelier.regimento.banner": "El reglament de sota és un esquelet per debatre — no un certificat. Descarrega'l, debat-lo en assemblea, esmena'l lliurement, i només llavors puja'l.",
+  "atelier.regimento.locked": "Completa primer totes les etapes aplicables abans de generar el reglament.",
   "atelier.regimento.download": "Descarregar l'esquelet de reglament (PDF)",
   "atelier.regimento.save": "Registrar el reglament",
   "atelier.regimento.uploadHint": "Enganxa l'enllaç del reglament final (després de la validació col·lectiva). La pujada d'arxiu arriba aviat.",
