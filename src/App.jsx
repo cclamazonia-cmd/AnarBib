@@ -8,6 +8,7 @@ import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE, isSupporte
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
 import ScrollButtons from '@/components/ScrollButtons';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Spinner } from '@/components/ui';
 
 // ── Lazy-loaded pages ────────────────────────────────────────────────
@@ -82,6 +83,7 @@ export default function App() {
           <LibraryProvider>
             <IdleTimerGuard>
             <ToastProvider>
+              <ErrorBoundary>
               <Suspense fallback={<LoadingFallback />}>
                 <Routes>
                   {/* ── Pages publiques ───────────── */}
@@ -156,6 +158,7 @@ export default function App() {
                   } />
                 </Routes>
               </Suspense>
+              </ErrorBoundary>
               <ScrollButtons />
             </ToastProvider>
             </IdleTimerGuard>
