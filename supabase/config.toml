@@ -17,14 +17,16 @@
 #
 # Inventaire au 2026-05-07 (cf. supabase functions list) :
 #
-#   verify_jwt: false  (13 fonctions, déclarées ci-dessous)
+#   verify_jwt: false  (17 fonctions, déclarées ci-dessous)
 #     - notify-event, notify-internal-task, notify-library-request,
 #       notify-weekly-report, notify-network-weekly-report,
 #       notify-mid-loan-reading, notify-document-permission-request,
-#       notify-interlibrary-loan  (8 mailers via webhook secret)
+#       notify-interlibrary-loan, notify-oai-opening  (9 mailers via webhook secret)
 #     - read-pdf, bn_isbn_lookup, process-partner-catalog-import,
-#       read-digital-asset, fetch-url-metadata  (5 utilitaires publics
-#       ou avec auth interne custom)
+#       read-digital-asset, fetch-url-metadata, oai-pmh-provider
+#       (6 utilitaires publics ou avec auth interne custom ; oai-pmh-provider
+#        = endpoint OAI-PMH moissonnable par des harvesters externes sans JWT,
+#        gate applicatif via fn_oai_harvestable_* — paquet OAI-O2, 12/06/2026)
 #
 #   verify_jwt: true   (6 fonctions, AUCUNE déclaration nécessaire)
 #     - register (création de compte, JWT Supabase obligatoire)
@@ -62,6 +64,16 @@ verify_jwt = false
 [functions.notify-interlibrary-loan]
 verify_jwt = false
 
+# Gouvernance OAI « être source » (paquet OAI-O4) — émis depuis l'adresse fédérale
+# via webhook secret WEBHOOK_SECRET_NOTIFY_OAI_OPENING (dispatch fn_oai_*).
+[functions.notify-oai-opening]
+verify_jwt = false
+
+# Flux de partage numérique ILL (paquet ILL-I4) — notifs biblio↔biblio via webhook
+# secret WEBHOOK_SECRET_NOTIFY_DIGITAL_SHARE (dispatch fn_ill_*).
+[functions.notify-digital-share]
+verify_jwt = false
+
 # =============================================================================
 # Utilitaires publics ou avec authentification custom
 # =============================================================================
@@ -79,4 +91,15 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.fetch-url-metadata]
+verify_jwt = false
+
+# OAI-PMH provider (« etre source », paquet OAI-O2) : moissonne par des biblios
+# externes sans JWT. N'expose QUE les biblios a ouverture active (gate applicatif
+# fn_oai_harvestable_libraries / _records, service_role). Catalogue ferme => rien.
+[functions.oai-pmh-provider]
+verify_jwt = false
+
+# Accès au reçu d'un partage numérique ILL (paquet ILL-I2) : JWT usager relayé,
+# autorisation re-validée par fn_ill_signed_url ; URL signée TTL court (mode ponctuel).
+[functions.read-ill-shared-asset]
 verify_jwt = false

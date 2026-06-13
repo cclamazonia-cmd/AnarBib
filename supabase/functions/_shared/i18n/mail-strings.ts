@@ -6358,6 +6358,274 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Als je je gegevens vóór verwijdering wilt exporteren, neem dan contact op met de bibliotheek via de gebruikelijke kanalen.",
     el: "Αν θέλεις να εξαγάγεις τα δεδομένα σου πριν τη διαγραφή, επικοινώνησε με τη βιβλιοθήκη μέσω των συνηθισμένων καναλιών."
   },
+
+  // ========================================================================
+  // OAI « être source » — gouvernance d'ouverture du endpoint (paquet OAI-O4)
+  // Params : {lib} {entity} {date} {target}. Adresse fédérale = expéditeur.
+  // ========================================================================
+  "oai.requested.sub": {
+    "pt-BR": "Pedido de abertura OAI — {lib}", fr: "Demande d'ouverture OAI — {lib}",
+    es: "Solicitud de apertura OAI — {lib}", en: "OAI opening request — {lib}",
+    it: "Richiesta di apertura OAI — {lib}", de: "OAI-Öffnungsanfrage — {lib}",
+    ca: "Sol·licitud d'obertura OAI — {lib}", eo: "Peto de malfermo OAI — {lib}",
+    nl: "OAI-openstellingsverzoek — {lib}", el: "Αίτημα ανοίγματος OAI — {lib}"
+  },
+  "oai.requested.intro": {
+    "pt-BR": "A biblioteca {lib} pede a abertura do seu catálogo à colheita OAI-PMH. Basta o acordo de uma admin da rede para validar.",
+    fr: "La bibliothèque {lib} demande l'ouverture de son catalogue au moissonnage OAI-PMH. Un seul accord d'admin réseau suffit pour valider.",
+    es: "La biblioteca {lib} pide abrir su catálogo a la recolección OAI-PMH. Basta el acuerdo de una admin de la red para validar.",
+    en: "The library {lib} requests opening its catalog to OAI-PMH harvesting. A single network admin's approval is enough.",
+    it: "La biblioteca {lib} chiede di aprire il proprio catalogo alla raccolta OAI-PMH. Basta l'accordo di una admin della rete.",
+    de: "Die Bibliothek {lib} möchte ihren Katalog für die OAI-PMH-Ernte öffnen. Die Zustimmung einer Netz-Admin genügt.",
+    ca: "La biblioteca {lib} demana obrir el seu catàleg a la collita OAI-PMH. Amb l'acord d'una admin de la xarxa n'hi ha prou.",
+    eo: "La biblioteko {lib} petas malfermi sian katalogon al rikolto OAI-PMH. Sufiĉas la konsento de unu reta administranto.",
+    nl: "De bibliotheek {lib} vraagt om haar catalogus open te stellen voor OAI-PMH-oogst. De goedkeuring van één netwerkbeheerder volstaat.",
+    el: "Η βιβλιοθήκη {lib} ζητά να ανοίξει τον κατάλογό της σε συγκομιδή OAI-PMH. Αρκεί η έγκριση μίας διαχειρίστριας του δικτύου."
+  },
+  "oai.approved.sub": {
+    "pt-BR": "Abertura OAI aprovada — {lib}", fr: "Ouverture OAI approuvée — {lib}",
+    es: "Apertura OAI aprobada — {lib}", en: "OAI opening approved — {lib}",
+    it: "Apertura OAI approvata — {lib}", de: "OAI-Öffnung genehmigt — {lib}",
+    ca: "Obertura OAI aprovada — {lib}", eo: "Malfermo OAI aprobita — {lib}",
+    nl: "OAI-openstelling goedgekeurd — {lib}", el: "Το άνοιγμα OAI εγκρίθηκε — {lib}"
+  },
+  "oai.approved.intro": {
+    "pt-BR": "Seu pedido de abertura OAI para {lib} foi aprovado. Lembre-se de fechar assim que a colheita for confirmada como concluída.",
+    fr: "Ta demande d'ouverture OAI pour {lib} a été approuvée. Pense à refermer dès que le moissonnage est confirmé terminé.",
+    es: "Tu solicitud de apertura OAI para {lib} ha sido aprobada. Recuerda cerrarla en cuanto la recolección se confirme terminada.",
+    en: "Your OAI opening request for {lib} has been approved. Remember to close it once harvesting is confirmed complete.",
+    it: "La tua richiesta di apertura OAI per {lib} è stata approvata. Ricordati di chiudere appena la raccolta è confermata conclusa.",
+    de: "Deine OAI-Öffnungsanfrage für {lib} wurde genehmigt. Denk daran zu schließen, sobald die Ernte als abgeschlossen bestätigt ist.",
+    ca: "La teva sol·licitud d'obertura OAI per a {lib} ha estat aprovada. Recorda tancar-la tan bon punt la collita es confirmi acabada.",
+    eo: "Via peto de malfermo OAI por {lib} estis aprobita. Memoru fermi tuj kiam la rikolto estas konfirmita finita.",
+    nl: "Je OAI-openstellingsverzoek voor {lib} is goedgekeurd. Denk eraan te sluiten zodra de oogst als voltooid is bevestigd.",
+    el: "Το αίτημα ανοίγματος OAI για {lib} εγκρίθηκε. Θυμήσου να το κλείσεις μόλις επιβεβαιωθεί ότι η συγκομιδή ολοκληρώθηκε."
+  },
+  "oai.refused.sub": {
+    "pt-BR": "Abertura OAI recusada — {lib}", fr: "Ouverture OAI refusée — {lib}",
+    es: "Apertura OAI rechazada — {lib}", en: "OAI opening refused — {lib}",
+    it: "Apertura OAI rifiutata — {lib}", de: "OAI-Öffnung abgelehnt — {lib}",
+    ca: "Obertura OAI rebutjada — {lib}", eo: "Malfermo OAI rifuzita — {lib}",
+    nl: "OAI-openstelling geweigerd — {lib}", el: "Το άνοιγμα OAI απορρίφθηκε — {lib}"
+  },
+  "oai.refused.intro": {
+    "pt-BR": "Seu pedido de abertura OAI para {lib} foi recusado por uma admin da rede.",
+    fr: "Ta demande d'ouverture OAI pour {lib} a été refusée par une admin réseau.",
+    es: "Tu solicitud de apertura OAI para {lib} ha sido rechazada por una admin de la red.",
+    en: "Your OAI opening request for {lib} was refused by a network admin.",
+    it: "La tua richiesta di apertura OAI per {lib} è stata rifiutata da una admin della rete.",
+    de: "Deine OAI-Öffnungsanfrage für {lib} wurde von einer Netz-Admin abgelehnt.",
+    ca: "La teva sol·licitud d'obertura OAI per a {lib} ha estat rebutjada per una admin de la xarxa.",
+    eo: "Via peto de malfermo OAI por {lib} estis rifuzita de reta administranto.",
+    nl: "Je OAI-openstellingsverzoek voor {lib} is geweigerd door een netwerkbeheerder.",
+    el: "Το αίτημα ανοίγματος OAI για {lib} απορρίφθηκε από διαχειρίστρια του δικτύου."
+  },
+  "oai.proposed.sub": {
+    "pt-BR": "Consulta da rede — colheita por {entity}", fr: "Consultation réseau — moissonnage par {entity}",
+    es: "Consulta de la red — recolección por {entity}", en: "Network consultation — harvesting by {entity}",
+    it: "Consultazione della rete — raccolta da {entity}", de: "Netz-Abstimmung — Ernte durch {entity}",
+    ca: "Consulta de la xarxa — collita per {entity}", eo: "Reta konsulto — rikolto de {entity}",
+    nl: "Netwerkraadpleging — oogst door {entity}", el: "Διαβούλευση δικτύου — συγκομιδή από {entity}"
+  },
+  "oai.proposed.intro": {
+    "pt-BR": "{entity} pede para colher o catálogo da rede. Sua biblioteca está envolvida: vote até {date}. Sem resposta, seu acordo é presumido; um único recuso bloqueia.",
+    fr: "{entity} demande à moissonner le catalogue du réseau. Ta bibliothèque est concernée : vote avant le {date}. Sans réponse, ton accord est présumé ; un seul refus bloque.",
+    es: "{entity} solicita recolectar el catálogo de la red. Tu biblioteca está implicada: vota antes del {date}. Sin respuesta, se presume tu acuerdo; un solo rechazo bloquea.",
+    en: "{entity} requests to harvest the network catalog. Your library is concerned: vote by {date}. No reply means consent; a single refusal blocks it.",
+    it: "{entity} chiede di raccogliere il catalogo della rete. La tua biblioteca è coinvolta: vota entro il {date}. Senza risposta l'accordo è presunto; un solo rifiuto blocca.",
+    de: "{entity} möchte den Netzkatalog ernten. Deine Bibliothek ist betroffen: stimme bis {date} ab. Ohne Antwort gilt Zustimmung; eine einzige Ablehnung blockiert.",
+    ca: "{entity} demana collir el catàleg de la xarxa. La teva biblioteca hi està implicada: vota abans del {date}. Sense resposta, es presumeix el teu acord; un sol rebuig ho bloqueja.",
+    eo: "{entity} petas rikolti la retan katalogon. Via biblioteko estas koncernata: voĉdonu antaŭ {date}. Sen respondo, via konsento estas supozata; unu sola rifuzo blokas.",
+    nl: "{entity} vraagt om de netwerkcatalogus te oogsten. Jouw bibliotheek is betrokken: stem vóór {date}. Geen antwoord betekent instemming; één weigering blokkeert.",
+    el: "Η/Ο {entity} ζητά να συγκομίσει τον κατάλογο του δικτύου. Η βιβλιοθήκη σου εμπλέκεται: ψήφισε έως {date}. Χωρίς απάντηση τεκμαίρεται συναίνεση· μία άρνηση μπλοκάρει."
+  },
+  "oai.resolvedOpen.sub": {
+    "pt-BR": "Consulta OAI concluída — {entity}", fr: "Consultation OAI aboutie — {entity}",
+    es: "Consulta OAI concluida — {entity}", en: "OAI consultation passed — {entity}",
+    it: "Consultazione OAI conclusa — {entity}", de: "OAI-Abstimmung angenommen — {entity}",
+    ca: "Consulta OAI conclosa — {entity}", eo: "Konsulto OAI sukcesa — {entity}",
+    nl: "OAI-raadpleging geslaagd — {entity}", el: "Η διαβούλευση OAI ολοκληρώθηκε — {entity}"
+  },
+  "oai.resolvedOpen.intro": {
+    "pt-BR": "A consulta para {entity} é unânime: a rede está aberta à colheita.",
+    fr: "La consultation pour {entity} est unanime : le réseau est ouvert au moissonnage.",
+    es: "La consulta para {entity} es unánime: la red está abierta a la recolección.",
+    en: "The consultation for {entity} is unanimous: the network is open to harvesting.",
+    it: "La consultazione per {entity} è unanime: la rete è aperta alla raccolta.",
+    de: "Die Abstimmung für {entity} ist einstimmig: das Netz ist zur Ernte geöffnet.",
+    ca: "La consulta per a {entity} és unànime: la xarxa està oberta a la collita.",
+    eo: "La konsulto por {entity} estas unuanima: la reto estas malfermita al rikoltado.",
+    nl: "De raadpleging voor {entity} is unaniem: het netwerk staat open voor oogst.",
+    el: "Η διαβούλευση για {entity} είναι ομόφωνη: το δίκτυο είναι ανοιχτό σε συγκομιδή."
+  },
+  "oai.resolvedRefused.sub": {
+    "pt-BR": "Consulta OAI encerrada — {entity}", fr: "Consultation OAI close — {entity}",
+    es: "Consulta OAI cerrada — {entity}", en: "OAI consultation closed — {entity}",
+    it: "Consultazione OAI chiusa — {entity}", de: "OAI-Abstimmung abgelehnt — {entity}",
+    ca: "Consulta OAI tancada — {entity}", eo: "Konsulto OAI fermita — {entity}",
+    nl: "OAI-raadpleging gesloten — {entity}", el: "Η διαβούλευση OAI έκλεισε — {entity}"
+  },
+  "oai.resolvedRefused.intro": {
+    "pt-BR": "A consulta para {entity} foi bloqueada por um recuso: a rede não está aberta.",
+    fr: "La consultation pour {entity} est bloquée par un refus : le réseau n'est pas ouvert.",
+    es: "La consulta para {entity} ha sido bloqueada por un rechazo: la red no está abierta.",
+    en: "The consultation for {entity} was blocked by a refusal: the network is not opened.",
+    it: "La consultazione per {entity} è stata bloccata da un rifiuto: la rete non è aperta.",
+    de: "Die Abstimmung für {entity} wurde durch eine Ablehnung blockiert: das Netz ist nicht geöffnet.",
+    ca: "La consulta per a {entity} ha estat bloquejada per un rebuig: la xarxa no està oberta.",
+    eo: "La konsulto por {entity} estis blokita de rifuzo: la reto ne estas malfermita.",
+    nl: "De raadpleging voor {entity} is geblokkeerd door een weigering: het netwerk is niet opengesteld.",
+    el: "Η διαβούλευση για {entity} μπλοκαρίστηκε από μία άρνηση: το δίκτυο δεν ανοίγει."
+  },
+  "oai.closed.sub": {
+    "pt-BR": "Abertura OAI fechada — {target}", fr: "Ouverture OAI refermée — {target}",
+    es: "Apertura OAI cerrada — {target}", en: "OAI opening closed — {target}",
+    it: "Apertura OAI chiusa — {target}", de: "OAI-Öffnung geschlossen — {target}",
+    ca: "Obertura OAI tancada — {target}", eo: "Malfermo OAI fermita — {target}",
+    nl: "OAI-openstelling gesloten — {target}", el: "Το άνοιγμα OAI έκλεισε — {target}"
+  },
+  "oai.closed.intro": {
+    "pt-BR": "Uma abertura OAI referente a {target} foi fechada.",
+    fr: "Une ouverture OAI concernant {target} a été refermée.",
+    es: "Una apertura OAI relativa a {target} ha sido cerrada.",
+    en: "An OAI opening concerning {target} has been closed.",
+    it: "Un'apertura OAI relativa a {target} è stata chiusa.",
+    de: "Eine OAI-Öffnung betreffend {target} wurde geschlossen.",
+    ca: "Una obertura OAI relativa a {target} s'ha tancat.",
+    eo: "Malfermo OAI koncernanta {target} estis fermita.",
+    nl: "Een OAI-openstelling met betrekking tot {target} is gesloten.",
+    el: "Ένα άνοιγμα OAI σχετικά με {target} έκλεισε."
+  },
+  "oai.networkWord": {
+    "pt-BR": "a rede", fr: "le réseau", es: "la red", en: "the network", it: "la rete",
+    de: "das Netz", ca: "la xarxa", eo: "la reto", nl: "het netwerk", el: "το δίκτυο"
+  },
+  "oai.cta": {
+    "pt-BR": "Abrir na Rede", fr: "Ouvrir dans Réseau", es: "Abrir en Red", en: "Open in Network",
+    it: "Apri in Rete", de: "Im Netz öffnen", ca: "Obrir a Xarxa", eo: "Malfermi en Reto",
+    nl: "Openen in Netwerk", el: "Άνοιγμα στο Δίκτυο"
+  },
+
+  // ========================================================================
+  // ILL — partage numérique inter-biblios (paquet ILL-I4)
+  // Params : {requester} {source} {book} {reason}.
+  // ========================================================================
+  "ill.requested.sub": {
+    "pt-BR": "Pedido de partilha digital — {book}", fr: "Demande de partage numérique — {book}",
+    es: "Solicitud de compartición digital — {book}", en: "Digital sharing request — {book}",
+    it: "Richiesta di condivisione digitale — {book}", de: "Anfrage zur digitalen Teilung — {book}",
+    ca: "Sol·licitud de compartició digital — {book}", eo: "Peto de cifereca kunhavigo — {book}",
+    nl: "Verzoek om digitaal delen — {book}", el: "Αίτημα ψηφιακής κοινοποίησης — {book}"
+  },
+  "ill.requested.intro": {
+    "pt-BR": "{requester} solicita a partilha digital do documento « {book} ». A ti aceitar, recusar ou sinalizar a indisponibilidade.",
+    fr: "{requester} sollicite le partage numérique du document « {book} ». À toi d'accepter, refuser ou signaler l'indisponibilité.",
+    es: "{requester} solicita la compartición digital del documento « {book} ». Te toca aceptar, rechazar o señalar la indisponibilidad.",
+    en: "{requester} requests the digital sharing of « {book} ». It's up to you to accept, refuse or mark it unavailable.",
+    it: "{requester} chiede la condivisione digitale del documento « {book} ». Tocca a te accettare, rifiutare o segnalare l'indisponibilità.",
+    de: "{requester} bittet um die digitale Teilung von « {book} ». Du kannst annehmen, ablehnen oder als nicht verfügbar melden.",
+    ca: "{requester} sol·licita la compartició digital del document « {book} ». Et toca acceptar, rebutjar o assenyalar la indisponibilitat.",
+    eo: "{requester} petas la ciferecan kunhavigon de la dokumento « {book} ». Vi povas akcepti, rifuzi aŭ signali nedisponeblon.",
+    nl: "{requester} vraagt om het digitaal delen van « {book} ». Aan jou om te accepteren, te weigeren of als onbeschikbaar te melden.",
+    el: "Η/Ο {requester} ζητά την ψηφιακή κοινοποίηση του τεκμηρίου « {book} ». Σε εσένα να αποδεχθείς, να αρνηθείς ή να δηλώσεις μη διαθεσιμότητα."
+  },
+  "ill.accepted.sub": {
+    "pt-BR": "Partilha aceita — {book}", fr: "Partage accepté — {book}", es: "Compartición aceptada — {book}",
+    en: "Sharing accepted — {book}", it: "Condivisione accettata — {book}", de: "Teilung angenommen — {book}",
+    ca: "Compartició acceptada — {book}", eo: "Kunhavigo akceptita — {book}",
+    nl: "Delen geaccepteerd — {book}", el: "Η κοινοποίηση έγινε δεκτή — {book}"
+  },
+  "ill.accepted.intro": {
+    "pt-BR": "{source} aceitou seu pedido de partilha para « {book} ». A digitalização segue.",
+    fr: "{source} a accepté ta demande de partage pour « {book} ». La numérisation suit.",
+    es: "{source} aceptó tu solicitud de compartición para « {book} ». La digitalización sigue.",
+    en: "{source} accepted your sharing request for « {book} ». Digitization follows.",
+    it: "{source} ha accettato la tua richiesta di condivisione per « {book} ». La digitalizzazione segue.",
+    de: "{source} hat deine Teilungsanfrage für « {book} » angenommen. Die Digitalisierung folgt.",
+    ca: "{source} ha acceptat la teva sol·licitud de compartició per a « {book} ». La digitalització segueix.",
+    eo: "{source} akceptis vian peton de kunhavigo por « {book} ». La ciferecigo sekvas.",
+    nl: "{source} heeft je deelverzoek voor « {book} » geaccepteerd. Digitalisering volgt.",
+    el: "Η/Ο {source} αποδέχθηκε το αίτημά σου για « {book} ». Ακολουθεί η ψηφιοποίηση."
+  },
+  "ill.refused.sub": {
+    "pt-BR": "Partilha recusada — {book}", fr: "Partage refusé — {book}", es: "Compartición rechazada — {book}",
+    en: "Sharing refused — {book}", it: "Condivisione rifiutata — {book}", de: "Teilung abgelehnt — {book}",
+    ca: "Compartició rebutjada — {book}", eo: "Kunhavigo rifuzita — {book}",
+    nl: "Delen geweigerd — {book}", el: "Η κοινοποίηση απορρίφθηκε — {book}"
+  },
+  "ill.refused.intro": {
+    "pt-BR": "{source} recusou seu pedido de partilha para « {book} ». Motivo: {reason}",
+    fr: "{source} a refusé ta demande de partage pour « {book} ». Motif : {reason}",
+    es: "{source} rechazó tu solicitud de compartición para « {book} ». Motivo: {reason}",
+    en: "{source} refused your sharing request for « {book} ». Reason: {reason}",
+    it: "{source} ha rifiutato la tua richiesta di condivisione per « {book} ». Motivo: {reason}",
+    de: "{source} hat deine Teilungsanfrage für « {book} » abgelehnt. Grund: {reason}",
+    ca: "{source} ha rebutjat la teva sol·licitud de compartició per a « {book} ». Motiu: {reason}",
+    eo: "{source} rifuzis vian peton de kunhavigo por « {book} ». Kialo: {reason}",
+    nl: "{source} heeft je deelverzoek voor « {book} » geweigerd. Reden: {reason}",
+    el: "Η/Ο {source} αρνήθηκε το αίτημά σου για « {book} ». Αιτία: {reason}"
+  },
+  "ill.unavailable.sub": {
+    "pt-BR": "Documento indisponível — {book}", fr: "Document indisponible — {book}",
+    es: "Documento no disponible — {book}", en: "Document unavailable — {book}",
+    it: "Documento non disponibile — {book}", de: "Dokument nicht verfügbar — {book}",
+    ca: "Document no disponible — {book}", eo: "Dokumento nedisponebla — {book}",
+    nl: "Document niet beschikbaar — {book}", el: "Μη διαθέσιμο τεκμήριο — {book}"
+  },
+  "ill.unavailable.intro": {
+    "pt-BR": "{source} sinaliza que « {book} » está indisponível para partilha no momento.",
+    fr: "{source} signale que « {book} » est indisponible au partage pour le moment.",
+    es: "{source} señala que « {book} » no está disponible para compartir por ahora.",
+    en: "{source} reports that « {book} » is unavailable for sharing at the moment.",
+    it: "{source} segnala che « {book} » è al momento non disponibile per la condivisione.",
+    de: "{source} meldet, dass « {book} » derzeit nicht zur Teilung verfügbar ist.",
+    ca: "{source} assenyala que « {book} » no està disponible per compartir de moment.",
+    eo: "{source} signalas, ke « {book} » estas nuntempe nedisponebla por kunhavigo.",
+    nl: "{source} meldt dat « {book} » momenteel niet beschikbaar is om te delen.",
+    el: "Η/Ο {source} αναφέρει ότι το « {book} » δεν είναι διαθέσιμο για κοινοποίηση αυτή τη στιγμή."
+  },
+  "ill.transmitted.sub": {
+    "pt-BR": "Documento transmitido — {book}", fr: "Document transmis — {book}",
+    es: "Documento transmitido — {book}", en: "Document transmitted — {book}",
+    it: "Documento trasmesso — {book}", de: "Dokument übermittelt — {book}",
+    ca: "Document transmès — {book}", eo: "Dokumento transdonita — {book}",
+    nl: "Document verzonden — {book}", el: "Το τεκμήριο διαβιβάστηκε — {book}"
+  },
+  "ill.transmitted.intro": {
+    "pt-BR": "{source} transmitiu « {book} ». Você pode consultá-lo no espaço de partilha.",
+    fr: "{source} a transmis « {book} ». Tu peux le consulter dans l'espace de partage.",
+    es: "{source} transmitió « {book} ». Puedes consultarlo en el espacio de compartición.",
+    en: "{source} transmitted « {book} ». You can view it in the sharing space.",
+    it: "{source} ha trasmesso « {book} ». Puoi consultarlo nello spazio di condivisione.",
+    de: "{source} hat « {book} » übermittelt. Du kannst es im Teilungsbereich ansehen.",
+    ca: "{source} ha transmès « {book} ». El pots consultar a l'espai de compartició.",
+    eo: "{source} transdonis « {book} ». Vi povas konsulti ĝin en la kunhaviga spaco.",
+    nl: "{source} heeft « {book} » verzonden. Je kunt het bekijken in de deelruimte.",
+    el: "Η/Ο {source} διαβίβασε το « {book} ». Μπορείς να το δεις στον χώρο κοινοποίησης."
+  },
+  "ill.closed.sub": {
+    "pt-BR": "Partilha encerrada — {book}", fr: "Partage clôturé — {book}", es: "Compartición cerrada — {book}",
+    en: "Sharing closed — {book}", it: "Condivisione chiusa — {book}", de: "Teilung abgeschlossen — {book}",
+    ca: "Compartició tancada — {book}", eo: "Kunhavigo fermita — {book}",
+    nl: "Delen afgesloten — {book}", el: "Η κοινοποίηση έκλεισε — {book}"
+  },
+  "ill.closed.intro": {
+    "pt-BR": "A partilha digital de « {book} » foi encerrada.",
+    fr: "Le partage numérique de « {book} » est clôturé.",
+    es: "La compartición digital de « {book} » ha sido cerrada.",
+    en: "The digital sharing of « {book} » has been closed.",
+    it: "La condivisione digitale di « {book} » è stata chiusa.",
+    de: "Die digitale Teilung von « {book} » wurde abgeschlossen.",
+    ca: "La compartició digital de « {book} » s'ha tancat.",
+    eo: "La cifereca kunhavigo de « {book} » estis fermita.",
+    nl: "Het digitaal delen van « {book} » is afgesloten.",
+    el: "Η ψηφιακή κοινοποίηση του « {book} » έκλεισε."
+  },
+  "ill.cta": {
+    "pt-BR": "Abrir a partilha", fr: "Ouvrir le partage", es: "Abrir la compartición", en: "Open the share",
+    it: "Apri la condivisione", de: "Teilung öffnen", ca: "Obrir la compartició", eo: "Malfermi la kunhavigon",
+    nl: "Delen openen", el: "Άνοιγμα κοινοποίησης"
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";

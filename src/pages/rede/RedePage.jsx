@@ -11,6 +11,7 @@ import TeamPanel from '@/components/team/TeamPanel';
 import '@/components/team/TeamPanel.css';
 import AdminsPanel from '@/components/rede/AdminsPanel';
 import ReportsPanel from '@/components/rede/ReportsPanel';
+import OaiSourcePanel from '@/components/rede/OaiSourcePanel'; /* OAI-O3 */
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import '../catalogacao/CatalogacaoPage.css';
@@ -54,6 +55,7 @@ export default function RedePage() {
     { id: 'members', label: t({ id: 'rede.tab.members' }) },
     { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
     { id: 'reports', label: t({ id: 'rede.tab.reports' }) },
+    { id: 'oaisource', label: t({ id: 'rede.tab.oaiSource' }) }, /* OAI-O3 */
   ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
   // E.4.a : garde stricte v0.3. Seuls les admins reseau actifs accedent
@@ -61,8 +63,13 @@ export default function RedePage() {
   // seraient pas admins reseau sont exclus — leur rang reste actif (en
   // attente du paquet F qui supprime le role 'administrador' local).
   const isAdmin = isNetworkAdmin;
+  // OAI-O3 : le coordenador (non admin réseau) accède à RedePage UNIQUEMENT pour
+  // l'onglet « être source » (demande d'ouverture OAI de sa biblio + votes réseau).
+  const isCoord = role === 'coordenador';
 
   const [tab, setTab] = useState('overview');
+  // OAI-O3 : un coordenador non-admin n'a que l'onglet OAI -> l'ouvrir d'emblée.
+  useEffect(() => { if (roleLoaded && !isAdmin && isCoord) setTab('oaisource'); }, [roleLoaded, isAdmin, isCoord]);
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [loading, setLoading] = useState(false);
 
@@ -220,7 +227,7 @@ export default function RedePage() {
 
   // ── Guards ──────────────────────────────────────────────
   if (!roleLoaded) return <PageShell><Topbar /><div style={{ textAlign:'center', padding:60, color:'var(--brand-muted)' }}>{t({id:'common.loading'})}</div><Footer /></PageShell>;
-  if (!isAdmin) return (
+  if (!isAdmin && !isCoord) return ( /* OAI-O3 : coordenador admis (onglet OAI seul) */
     <PageShell><Topbar />
       <Hero title={t({ id: 'rede.title' })} subtitle={t({ id: 'rede.restricted' })} />
     <Footer /></PageShell>
@@ -247,7 +254,7 @@ export default function RedePage() {
         {msg.text && <div style={{ padding:'10px 14px', borderRadius:8, fontSize:'.9rem', marginBottom:14, background:msg.kind==='ok'?'rgba(21,128,61,.12)':'rgba(220,38,38,.12)', color:msg.kind==='ok'?'#4ade80':'#f87171' }}>{msg.text}</div>}
 
         <div className="cat-tabs" style={{ marginBottom:18 }}>
-          {TABS.map(t => <button key={t.id} className={`cat-tab-btn${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.label}{t.id==='requests'&&requests.filter(r=>r.request_status==='pendente').length>0?` (${requests.filter(r=>r.request_status==='pendente').length})`:''}</button>)}
+          {TABS.filter(tb => isAdmin || tb.id === 'oaisource').map(t => <button key={t.id} className={`cat-tab-btn${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.label}{t.id==='requests'&&requests.filter(r=>r.request_status==='pendente').length>0?` (${requests.filter(r=>r.request_status==='pendente').length})`:''}</button>)}
         </div>
 
         {/* Norme visuelle (cf. autres pages) : zone de travail sur surface sombre
@@ -415,6 +422,14 @@ export default function RedePage() {
             fn_caller_is_network_admin(). Exportables en PDF. Aucune écriture. */}
         {tab === 'reports' && (
           <ReportsPanel />
+        )}
+
+        {/* ═══ 7. ÊTRE SOURCE — OUVERTURE OAI-PMH (OAI-O3) ════ */}
+        {/* Gouvernance d'ouverture du endpoint OAI-PMH (« ser fonte »,
+            spec importacoes-exportacoes §8). Composant autonome ; accessible
+            aussi au coordenador (demande ascendante + vote descendant). */}
+        {tab === 'oaisource' && (
+          <OaiSourcePanel />
         )}
 
         </div>{/* .cat-panel.active */}
