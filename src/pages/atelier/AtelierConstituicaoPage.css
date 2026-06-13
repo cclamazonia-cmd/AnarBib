@@ -115,3 +115,12 @@
    noir solide sur le select ET les options (sinon le popup d'options reste transparent). */
 .ab-atl-field select{ width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--brand-panel-border,rgba(255,255,255,.14)); background:rgba(0,0,0,.3); color:var(--brand-text,#f4f1ee); font-family:inherit; font-size:.84rem; }
 .ab-atl-field select option{ background:#0d0b12; color:var(--brand-text,#f4f1ee); }
+/* ONBO-Q2 Lot 3 — composants réutilisés (PolicySetManager, TeamPanel…) rendus dans le
+   slide-over : leurs boutons cat-btn ont un fond clair qui jure sur le fond sombre de
+   l'atelier. On les passe en fond sombre cohérent (le primary garde la couleur d'action).
+   Idem options des <select> des composants (sinon dropdown transparent, cf. la langue). */
+.ab-atl-panel-body .cat-btn{ background:rgba(0,0,0,.4); color:var(--brand-text,#f4f1ee); border:1px solid var(--brand-panel-border,rgba(255,255,255,.18)); }
+.ab-atl-panel-body .cat-btn:hover:not(:disabled){ background:rgba(255,255,255,.08); }
+.ab-atl-panel-body .cat-btn.primary{ background:var(--brand-color-primary,#d6453b); border-color:var(--brand-color-primary,#d6453b); color:#fff; }
+.ab-atl-panel-body .cat-btn.primary:hover:not(:disabled){ background:#b91c1c; }
+.ab-atl-panel-body select option{ background:#0d0b12; color:var(--brand-text,#f4f1ee); }
