@@ -110,3 +110,8 @@
 .ab-atl-field{ margin-top:14px; display:flex; flex-direction:column; gap:6px; }
 .ab-atl-field label{ font-size:.78rem; color:var(--brand-muted,#9a93a6); }
 .ab-atl-field input{ width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--brand-panel-border,rgba(255,255,255,.14)); background:rgba(0,0,0,.3); color:var(--brand-text,#f4f1ee); font-family:inherit; font-size:.84rem; }
+/* ONBO-Q2 — <select> des volets (ex. langue d'identité). Sans règle dédiée, le select
+   était sans fond et le dropdown natif laissait transparaître l'image de fond. Fond
+   noir solide sur le select ET les options (sinon le popup d'options reste transparent). */
+.ab-atl-field select{ width:100%; padding:9px 12px; border-radius:9px; border:1px solid var(--brand-panel-border,rgba(255,255,255,.14)); background:rgba(0,0,0,.3); color:var(--brand-text,#f4f1ee); font-family:inherit; font-size:.84rem; }
+.ab-atl-field select option{ background:#0d0b12; color:var(--brand-text,#f4f1ee); }

@@ -31,7 +31,8 @@ const HOLE_PAD = 6;
 
 // Adresses réseau (constantes, non traduites).
 const NET_EMAIL = 'anarbib@proton.me';
-const NET_MATRIX = '#anarbib:libreflux.fr';
+const NET_MATRIX_URL = 'https://matrix.to/#/!RfxYttorZNdTIZXIRJ:matrix.org?via=matrix.org';
+const NET_MATRIX_LABEL = 'Projeto AnarBib';
 
 // Étapes de la visite, ancrées à des onglets (vrais clés prod). Filtrées par
 // la disponibilité réelle des onglets (un onglet masqué = étape sautée).
@@ -257,7 +258,7 @@ export default function PanelOnboarding({ availability, circulationMode, library
             </div>
             <div className="ab-pon-links">
               <a href={`mailto:${NET_EMAIL}`}>✉ {NET_EMAIL}</a>
-              <a href={`https://matrix.to/#/${NET_MATRIX}`} target="_blank" rel="noreferrer">⌗ {NET_MATRIX}</a>
+              <a href={NET_MATRIX_URL} target="_blank" rel="noreferrer">⌗ {NET_MATRIX_LABEL}</a>
             </div>
           </section>
         </div>

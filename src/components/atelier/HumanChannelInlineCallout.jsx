@@ -17,7 +17,8 @@ import './HumanChannelInlineCallout.css';
 // ═══════════════════════════════════════════════════════════════════════════
 
 const NET_EMAIL = 'anarbib@proton.me';
-const NET_MATRIX = '#anarbib:libreflux.fr';
+const NET_MATRIX_URL = 'https://matrix.to/#/!RfxYttorZNdTIZXIRJ:matrix.org?via=matrix.org';
+const NET_MATRIX_LABEL = 'Projeto AnarBib';
 const STRONG_VOLETS = new Set([0, 4, 5, 9, 10]);
 
 export default function HumanChannelInlineCallout({ volet, subjectLabel }) {
@@ -34,7 +35,7 @@ export default function HumanChannelInlineCallout({ volet, subjectLabel }) {
       <p className="ab-hcc-text">{t({ id: `atelier.human.volet${volet}` })}</p>
       <div className="ab-hcc-links">
         <a className="ab-hcc-chan" href={`mailto:${NET_EMAIL}`}>✉ {NET_EMAIL}</a>
-        <a className="ab-hcc-chan" href={`https://matrix.to/#/${NET_MATRIX}`} target="_blank" rel="noreferrer">⌗ {NET_MATRIX}</a>
+        <a className="ab-hcc-chan" href={NET_MATRIX_URL} target="_blank" rel="noreferrer">⌗ {NET_MATRIX_LABEL}</a>
         <a className="ab-hcc-cta" href={ctaHref}>{t({ id: 'atelier.human.requestExchange' })}</a>
       </div>
     </aside>
