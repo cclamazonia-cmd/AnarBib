@@ -4570,5 +4570,10 @@
   "atelier.form.lang": "Idioma",
   "atelier.form.bio": "Biografia traduzida",
   "atelier.form.error.authorId": "Informe o ID da autoridade (pessoa).",
-  "atelier.form.error.bio": "Escreva a biografia traduzida."
+  "atelier.form.error.bio": "Escreva a biografia traduzida.",
+  "atelier.action.newProposal": "Fazer uma proposta",
+  "atelier.form.nameDup": "Nome da duplicata",
+  "atelier.form.nameCan": "Nome da canônica",
+  "atelier.form.nameAuthor": "Nome da autoridade (pessoa/coletivo)",
+  "atelier.form.error.names": "Informe o nome da autoridade."
 }

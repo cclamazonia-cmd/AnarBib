@@ -55,6 +55,12 @@ const T = {
   'atelier.form.bio':            ['Biografia traduzida', 'Biographie traduite', 'Biografía traducida', 'Translated biography'],
   'atelier.form.error.authorId': ['Informe o ID da autoridade (pessoa).', "Indiquez l'ID de l'autorité (personne).", 'Indique el ID de la autoridad (persona).', 'Provide the authority ID (person).'],
   'atelier.form.error.bio':      ['Escreva a biografia traduzida.', 'Saisissez la biographie traduite.', 'Escriba la biografía traducida.', 'Write the translated biography.'],
+  // Bouton générique + champs nom (id + nom de l'autorité).
+  'atelier.action.newProposal':  ['Fazer uma proposta', 'Faire une proposition', 'Hacer una propuesta', 'Make a proposal'],
+  'atelier.form.nameDup':        ['Nome da duplicata', 'Nom de la duplicata', 'Nombre del duplicado', 'Duplicate name'],
+  'atelier.form.nameCan':        ['Nome da canônica', 'Nom de la canonique', 'Nombre de la canónica', 'Canonical name'],
+  'atelier.form.nameAuthor':     ['Nome da autoridade (pessoa/coletivo)', "Nom de l'autorité (personne/collectif)", 'Nombre de la autoridad (persona/colectivo)', 'Authority name (person/collective)'],
+  'atelier.form.error.names':    ['Informe o nome da autoridade.', "Indiquez le nom de l'autorité.", 'Indique el nombre de la autoridad.', 'Provide the authority name.'],
 };
 
 function valFor(loc, quad) {
