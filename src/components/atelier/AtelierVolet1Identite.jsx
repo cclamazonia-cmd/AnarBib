@@ -21,7 +21,7 @@ import LibraryContactProfileSection from '@/components/library/LibraryContactPro
 // ═══════════════════════════════════════════════════════════════════════════
 export default function AtelierVolet1Identite({ libraryId, canEdit }) {
   const { formatMessage: t } = useIntl();
-  const { notifyError } = useToast();
+  const { notifyError, notifySuccess } = useToast();
   const [locale, setLocale] = useState(null);
   const [savingLocale, setSavingLocale] = useState(false);
 
@@ -42,9 +42,10 @@ export default function AtelierVolet1Identite({ libraryId, canEdit }) {
     try {
       const { error } = await supabase.from('libraries').update({ default_locale: loc }).eq('id', libraryId);
       if (error) throw error;
+      notifySuccess(t({ id: 'atelier.toast.saved' }));
     } catch (e) { notifyError(localizeError(e, t)); }
     finally { setSavingLocale(false); }
-  }, [libraryId, notifyError, t]);
+  }, [libraryId, notifyError, notifySuccess, t]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

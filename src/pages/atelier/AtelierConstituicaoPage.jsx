@@ -7,7 +7,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import LibraryProfileWizard from '@/components/LibraryProfileWizard';
 import HumanChannelInlineCallout from '@/components/atelier/HumanChannelInlineCallout';
-import AtelierVolet1Identite from '@/components/atelier/AtelierVolet1Identite';
+import AtelierVoletEditor, { WIRED_VOLETS } from '@/components/atelier/AtelierVoletEditor';
 import { buildRegimentoPdf } from '@/lib/regimentoPdf';
 import './AtelierConstituicaoPage.css';
 
@@ -271,9 +271,9 @@ export default function AtelierConstituicaoPage() {
                     <span className="ab-atl-hint">{t({ id: 'atelier.regimento.uploadHint' })}</span>
                   </div>
                 </>
-              ) : cur.n === 1 && prog.library_id ? (
-                /* ONBO-Q2 Lot 2 — volet 1 câblé sur la biblio pré-active (fin du leurre) */
-                <AtelierVolet1Identite libraryId={prog.library_id} canEdit={!completed} />
+              ) : WIRED_VOLETS.has(cur.n) && prog.library_id ? (
+                /* ONBO-Q2 — volet câblé sur la biblio pré-active (fin du leurre) */
+                <AtelierVoletEditor voletN={cur.n} libraryId={prog.library_id} canEdit={!completed} />
               ) : (
                 <div className="ab-atl-reuse">
                   <div className="ab-atl-reuse-lbl">{t({ id: 'atelier.panel.reuseLabel' })}</div>
