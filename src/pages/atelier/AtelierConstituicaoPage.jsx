@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { apiQuery, apiRpc, supabase } from '@/lib/supabase';
@@ -52,6 +52,7 @@ export default function AtelierConstituicaoPage() {
   const [busy, setBusy] = useState(false);
   const [openVolet, setOpenVolet] = useState(null); // n du volet ouvert (slide-over)
   const [regUrl, setRegUrl] = useState('');
+  const regFileRef = useRef(null);
 
   // Axes profil (volet 0), en state local miroir de la progression.
   const [axes, setAxes] = useState({ catalog_mode: '', circulation_mode: '', network_mode: '', governance_mode: '', profile_template_chosen: null });
@@ -179,6 +180,32 @@ export default function AtelierConstituicaoPage() {
     try {
       const config = await buildVoletConfig(prog.library_id);
       await buildRegimentoPdf({ progress: prog, axes, applicable, t, config });
+    } catch (e) { notifyError(localizeError(e, t)); }
+    finally { setBusy(false); }
+  }
+
+  // Téléversement direct du regimento final (PDF) — stocké par AnarBib (bucket public
+  // library-regimentos-public), pas d'hébergeur externe à trouver. Chemin
+  // regimentos/<slug>/… → la policy storage scopée au slug (migration 20260613142457)
+  // autorise l'upload même sur la biblio pré-active. On enregistre l'URL publique via
+  // le mécanisme existant fn_constitution_set_regimento.
+  async function uploadRegimentoFile() {
+    if (!deliberationDone) { notifyError(t({ id: 'atelier.regimento.locked' })); return; }
+    const file = regFileRef.current?.files?.[0];
+    if (!file) return;
+    setBusy(true);
+    try {
+      const slug = prog.library_slug || 'biblioteca';
+      const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const path = `regimentos/${slug}/${Date.now()}-${safe}`;
+      const { error: upErr } = await supabase.storage.from('library-regimentos-public').upload(path, file, { upsert: true });
+      if (upErr) throw upErr;
+      const publicUrl = supabase.storage.from('library-regimentos-public').getPublicUrl(path).data.publicUrl;
+      const { error: rpcErr } = await apiRpc('fn_constitution_set_regimento', { p_request_id: prog.request_id, p_url: publicUrl });
+      if (rpcErr) throw rpcErr;
+      if (regFileRef.current) regFileRef.current.value = '';
+      notifySuccess(t({ id: 'atelier.toast.regimentoSaved' }));
+      await load();
     } catch (e) { notifyError(localizeError(e, t)); }
     finally { setBusy(false); }
   }
@@ -319,6 +346,16 @@ export default function AtelierConstituicaoPage() {
                   <div className="ab-atl-regimento">{t({ id: 'atelier.regimento.banner' })}</div>
                   {!deliberationDone && <p className="ab-atl-locked">{t({ id: 'atelier.regimento.locked' })}</p>}
                   <button className="ab-atl-btn" disabled={busy || !deliberationDone} onClick={downloadRegimento}>↓ {t({ id: 'atelier.regimento.download' })}</button>
+                  {/* Téléversement direct (stocké par AnarBib) */}
+                  <div className="ab-atl-field">
+                    <label>{t({ id: 'atelier.regimento.uploadFileLabel' })}</label>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                      <input ref={regFileRef} type="file" accept="application/pdf" disabled={completed || !deliberationDone} />
+                      <button className="ab-atl-btn" disabled={busy || completed || !deliberationDone} onClick={uploadRegimentoFile}>↥ {t({ id: 'atelier.regimento.uploadFileBtn' })}</button>
+                    </div>
+                    <span className="ab-atl-hint">{t({ id: 'atelier.regimento.uploadFileHint' })}</span>
+                  </div>
+                  {/* Alternative : lien vers un règlement hébergé ailleurs */}
                   <div className="ab-atl-field">
                     <label>{t({ id: 'atelier.regimento.uploadLabel' })}</label>
                     <input type="url" value={regUrl} onChange={e => setRegUrl(e.target.value)} placeholder="https://…" disabled={completed || !deliberationDone} />
