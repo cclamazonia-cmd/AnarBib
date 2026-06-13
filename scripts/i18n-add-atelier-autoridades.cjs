@@ -35,6 +35,16 @@ const T = {
   'auth.create.intent.optionContributor': ['Sou contribuinte de autoridades (sem biblioteca)', "Je suis contributeur·rice d'autorités (sans bibliothèque)", 'Soy contribuyente de autoridades (sin biblioteca)', "I'm an authorities contributor (no library)"],
   'auth.create.intent.contributor.title': ['Conta de contribuinte de autoridades', 'Compte de contribution aux autorités', 'Cuenta de contribución a autoridades', 'Authorities contributor account'],
   'auth.create.intent.contributor.body':  ['Uma conta de rede, sem vínculo a uma biblioteca, para colaborar com o corpus compartilhado de autoridades (pessoas, coletividades, matérias): propor fusões, correções, traduções. Você propõe; a aplicação se dá por consentimento.', "Un compte réseau, sans rattachement à une bibliothèque, pour collaborer au corpus partagé d'autorités (personnes, collectivités, matières) : proposer des fusions, corrections, traductions. Vous proposez ; l'application se fait par consentement.", 'Una cuenta de red, sin vínculo a una biblioteca, para colaborar con el corpus compartido de autoridades (personas, colectividades, materias): proponer fusiones, correcciones, traducciones. Tú propones; la aplicación se hace por consentimiento.', 'A network account, not tied to a library, to collaborate on the shared authorities corpus (people, collectivities, subjects): propose merges, corrections, translations. You propose; application happens by consent.'],
+  // Objection (atelier page) — coordenador d'une biblio utilisatrice.
+  'atelier.action.object':   ['Objetar', 'Objecter', 'Objetar', 'Object'],
+  'atelier.obj.library':     ['Biblioteca que objeta', 'Bibliothèque qui objecte', 'Biblioteca que objeta', 'Objecting library'],
+  'atelier.obj.libraryPh':   ['Escolha…', 'Choisir…', 'Elegir…', 'Choose…'],
+  'atelier.obj.reason':      ['Motivação (mín. 20 caracteres)', 'Motivation (min. 20 caractères)', 'Motivación (mín. 20 caracteres)', 'Reason (min. 20 characters)'],
+  'atelier.obj.submit':      ['Registrar objeção', "Enregistrer l'objection", 'Registrar objeción', 'Register objection'],
+  'atelier.obj.error.lib':   ['Selecione a biblioteca que objeta.', 'Choisissez la bibliothèque qui objecte.', 'Seleccione la biblioteca que objeta.', 'Select the objecting library.'],
+  'atelier.obj.error.reason':['A objeção precisa de uma motivação (mín. 20 caracteres).', "L'objection requiert une motivation (min. 20 caractères).", 'La objeción necesita una motivación (mín. 20 caracteres).', 'The objection needs a reason (min. 20 characters).'],
+  'atelier.obj.refused':     ['Objeção registrada — a proposta foi recusada (2+ bibliotecas usuárias).', 'Objection enregistrée — la proposition est refusée (2+ bibliothèques utilisatrices).', 'Objeción registrada — la propuesta fue rechazada (2+ bibliotecas usuarias).', 'Objection registered — the proposal was refused (2+ using libraries).'],
+  'atelier.obj.contested':   ['Objeção registrada — a discussão está aberta.', 'Objection enregistrée — la discussion est ouverte.', 'Objeción registrada — la discusión está abierta.', 'Objection registered — the discussion is open.'],
 };
 
 function valFor(loc, quad) {

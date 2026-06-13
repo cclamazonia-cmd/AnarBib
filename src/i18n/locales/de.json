@@ -4552,5 +4552,14 @@
   "atelier.row.objections": "{n} objection(s)",
   "auth.create.intent.optionContributor": "I'm an authorities contributor (no library)",
   "auth.create.intent.contributor.title": "Authorities contributor account",
-  "auth.create.intent.contributor.body": "A network account, not tied to a library, to collaborate on the shared authorities corpus (people, collectivities, subjects): propose merges, corrections, translations. You propose; application happens by consent."
+  "auth.create.intent.contributor.body": "A network account, not tied to a library, to collaborate on the shared authorities corpus (people, collectivities, subjects): propose merges, corrections, translations. You propose; application happens by consent.",
+  "atelier.action.object": "Object",
+  "atelier.obj.library": "Objecting library",
+  "atelier.obj.libraryPh": "Choose…",
+  "atelier.obj.reason": "Reason (min. 20 characters)",
+  "atelier.obj.submit": "Register objection",
+  "atelier.obj.error.lib": "Select the objecting library.",
+  "atelier.obj.error.reason": "The objection needs a reason (min. 20 characters).",
+  "atelier.obj.refused": "Objection registered — the proposal was refused (2+ using libraries).",
+  "atelier.obj.contested": "Objection registered — the discussion is open."
 }

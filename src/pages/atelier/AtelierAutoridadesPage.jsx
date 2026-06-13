@@ -38,6 +38,10 @@ export default function AtelierAutoridadesPage() {
   const [form, setForm] = useState({ targetKind: 'author', targetId: '', mergeIntoId: '', rationale: '' });
   const [submitting, setSubmitting] = useState(false);
 
+  const [myLibs, setMyLibs] = useState([]);
+  const [objectingId, setObjectingId] = useState(null);
+  const [objForm, setObjForm] = useState({ libraryId: '', reason: '' });
+
   const load = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase.schema('api').rpc('fn_authority_list');
@@ -51,6 +55,19 @@ export default function AtelierAutoridadesPage() {
   }, [t]);
 
   useEffect(() => { load(); }, [load]);
+
+  // Mes bibliothèques où je suis staff (pour objecter au nom d'une biblio utilisatrice).
+  useEffect(() => {
+    if (!user) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from('user_library_memberships')
+        .select('library_id, role, libraries(name, short_name)')
+        .eq('user_id', user.id).eq('status', 'active').in('role', ['librarian', 'coordenador']);
+      if (!cancelled) setMyLibs(Array.isArray(data) ? data : []);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   async function propose(e) {
     e.preventDefault();
@@ -85,6 +102,29 @@ export default function AtelierAutoridadesPage() {
     const { error } = await supabase.schema('api').rpc(rpcName, args);
     setBusyId(null);
     if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); return; }
+    load();
+  }
+
+  async function objecter(proposalId) {
+    if (!objForm.libraryId) {
+      setMsg({ text: t({ id: 'atelier.obj.error.lib', defaultMessage: 'Selecione a biblioteca que objeta.' }), kind: 'error' }); return;
+    }
+    if (objForm.reason.trim().length < 20) {
+      setMsg({ text: t({ id: 'atelier.obj.error.reason', defaultMessage: 'A objeção precisa de uma motivação (mín. 20 caracteres).' }), kind: 'error' }); return;
+    }
+    setBusyId(proposalId); setMsg({ text: '', kind: '' });
+    const { data, error } = await supabase.schema('api').rpc('fn_authority_object', {
+      p_proposal_id: proposalId, p_library_id: objForm.libraryId, p_reason: objForm.reason.trim(),
+    });
+    setBusyId(null);
+    if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); return; }
+    setMsg({
+      text: data === 'refused'
+        ? t({ id: 'atelier.obj.refused', defaultMessage: 'Objeção registrada — a proposta foi recusada (2+ bibliotecas usuárias).' })
+        : t({ id: 'atelier.obj.contested', defaultMessage: 'Objeção registrada — a discussão está aberta.' }),
+      kind: 'ok',
+    });
+    setObjectingId(null); setObjForm({ libraryId: '', reason: '' });
     load();
   }
 
@@ -193,7 +233,27 @@ export default function AtelierAutoridadesPage() {
                       {t({ id: 'atelier.action.withdraw', defaultMessage: 'Retirar' })}
                     </Button>
                   )}
+                  {myLibs.length > 0 && (r.status === 'open' || r.status === 'contested') && (
+                    <Button variant="secondary" disabled={busyId === r.id}
+                      onClick={() => { setObjectingId(objectingId === r.id ? null : r.id); setObjForm({ libraryId: myLibs.length === 1 ? myLibs[0].library_id : '', reason: '' }); setMsg({ text: '', kind: '' }); }}>
+                      {t({ id: 'atelier.action.object', defaultMessage: 'Objetar' })}
+                    </Button>
+                  )}
                 </div>
+                {objectingId === r.id && (
+                  <div style={{ marginTop: 10, padding: 12, borderRadius: 8, background: 'rgba(251,191,36,.06)', border: '1px solid rgba(251,191,36,.25)' }}>
+                    <label style={ls}>{t({ id: 'atelier.obj.library', defaultMessage: 'Biblioteca que objeta' })}</label>
+                    <select value={objForm.libraryId} onChange={e => setObjForm(f => ({ ...f, libraryId: e.target.value }))} style={{ ...fs, marginBottom: 8 }}>
+                      <option value="">{t({ id: 'atelier.obj.libraryPh', defaultMessage: 'Escolha…' })}</option>
+                      {myLibs.map(m => <option key={m.library_id} value={m.library_id}>{m.libraries?.short_name || m.libraries?.name || m.library_id}</option>)}
+                    </select>
+                    <label style={ls}>{t({ id: 'atelier.obj.reason', defaultMessage: 'Motivação (mín. 20 caracteres)' })}</label>
+                    <textarea value={objForm.reason} onChange={e => setObjForm(f => ({ ...f, reason: e.target.value }))} style={{ ...fs, resize: 'vertical', minHeight: 56, marginBottom: 8 }} />
+                    <Button variant="primary" disabled={busyId === r.id} onClick={() => objecter(r.id)}>
+                      {t({ id: 'atelier.obj.submit', defaultMessage: 'Registrar objeção' })}
+                    </Button>
+                  </div>
+                )}
               </div>
             );
           })

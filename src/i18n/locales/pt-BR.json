@@ -4552,5 +4552,14 @@
   "atelier.row.objections": "{n} objeção(ões)",
   "auth.create.intent.optionContributor": "Sou contribuinte de autoridades (sem biblioteca)",
   "auth.create.intent.contributor.title": "Conta de contribuinte de autoridades",
-  "auth.create.intent.contributor.body": "Uma conta de rede, sem vínculo a uma biblioteca, para colaborar com o corpus compartilhado de autoridades (pessoas, coletividades, matérias): propor fusões, correções, traduções. Você propõe; a aplicação se dá por consentimento."
+  "auth.create.intent.contributor.body": "Uma conta de rede, sem vínculo a uma biblioteca, para colaborar com o corpus compartilhado de autoridades (pessoas, coletividades, matérias): propor fusões, correções, traduções. Você propõe; a aplicação se dá por consentimento.",
+  "atelier.action.object": "Objetar",
+  "atelier.obj.library": "Biblioteca que objeta",
+  "atelier.obj.libraryPh": "Escolha…",
+  "atelier.obj.reason": "Motivação (mín. 20 caracteres)",
+  "atelier.obj.submit": "Registrar objeção",
+  "atelier.obj.error.lib": "Selecione a biblioteca que objeta.",
+  "atelier.obj.error.reason": "A objeção precisa de uma motivação (mín. 20 caracteres).",
+  "atelier.obj.refused": "Objeção registrada — a proposta foi recusada (2+ bibliotecas usuárias).",
+  "atelier.obj.contested": "Objeção registrada — a discussão está aberta."
 }
