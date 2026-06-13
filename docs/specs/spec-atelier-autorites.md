@@ -132,9 +132,9 @@ L'EF `notify-event` exige un **`record_id` numérique** (`index.ts` : `Number(pa
 
 ## 7. Découpage en paquets
 
-1. **Paquet 1 (backend)** — préalables (tables collectivité/matière ; `network_contributors`) + `authority_proposals`/`_objections` + RLS + RPC `fn_authority_*` + cron `resolve_due`. Réutilise CAT-H1 en exécution.
+1. **Paquet 1 (backend) — ✅ LIVRÉ (13/06)** : `network_contributors` + `authority_proposals`/`_objections` + RLS + helpers + RPC `fn_authority_propose`/`object`/`withdraw`/`resolve_due`/`apply` + cron quotidien. **Voie B** : consentement auto (`resolve_due` → `resolved_consent`), application **confirmée par staff** (`fn_authority_apply` → `applied`) réutilisant `merge_author`/`merge_subject` (fusion) + édition authors/subjects. Migrations `20260613150000` (lot 1) / `20260613150100` (lot 2), validées BEGIN/ROLLBACK. *Apply création/traduction différé ; events = sous-paquet 1b.*
 2. **Sous-paquet 1b (events)** — §6 : outbox + handler + branche `dispatch.ts` + mail-strings 10 locales + cron reconcile. **Dépend du paquet 1** (rien à notifier sans entités).
-3. **Paquet 2 (frontend)** — Atelier : file de propositions, tableau de bord contributeur·rice, journal des contributions validées ; surface sur la face fédération (renvoi `spec-outils-federalistes`) et/ou la page autorité (`spec-notice` §5.3).
+3. **Paquet 2 (frontend)** — Atelier : file de propositions, tableau de bord contributeur·rice, journal des contributions validées. **Accès** : (a) **criar-conta** — option « compte contributeur » **distincte et identifiable**, via `signup_intent='contribuidor'` → crée un `network_contributors` (modèle `SolicitarBibliotecaPage`) ; (b) **vitrine `anarbib.org`** (site séparé, apex) → lien vers l'entrée app (`app.anarbib.org` : criar-conta intent contributeur, ou page publique dédiée). Surface aussi sur la face fédération et/ou la page autorité (`spec-notice` §5.3). i18n erreurs `atelier.error.*`.
 
 **Ordre** : 1 → 1b → 2. **Bloqueur amont** : ratifier ATE-1..4 (FED-O7) + lever le préalable collectivité/matière (D7).
 
@@ -152,8 +152,8 @@ L'EF `notify-event` exige un **`record_id` numérique** (`index.ts` : `Number(pa
 
 ## 9. Décisions ouvertes
 
-- **ATE-O1** — `network_contributors` : table dédiée vs rôle sur le compte réseau existant ? Droits exacts (proposer ; lire le corpus ; voir l'état de ses propositions).
-- **ATE-O2** — Longueurs de fenêtre par type (création/édition/traduction courtes ; fusion ≈ 14 j) : valeurs à fixer.
+- **ATE-O1** — ✅ **tranché (13/06)** : **table dédiée** `network_contributors` (calquée sur `network_administrators`, pas un rôle `user_library_memberships` — FED-3). Livrée au paquet 1.
+- **ATE-O2** — ✅ **tranché (13/06)** : **7 j** création/édition/traduction, **14 j** fusion (aligné cercles FED-O5). Appliqué dans `fn_authority_propose`.
 - **ATE-O3** — ✅ **tranché (13/06)** : collectivité/matière **existent déjà** (cf. §2/§5) ; préalable caduc. Livré : `merge_subject` + `suggest_subject_duplicates` (primitif de fusion matière, migration `20260613120000`, validé BEGIN/ROLLBACK).
 - **ATE-O4** — Réutiliser l'outbox d'une famille existante (générique) vs table dédiée `authority_proposal_notification_outbox` (§6.2).
 - **ATE-O5** — Surface du paquet 2 : onglet face fédération, page autorité, ou les deux.
