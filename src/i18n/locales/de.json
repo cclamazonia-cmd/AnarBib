@@ -3616,6 +3616,8 @@
   "rede.serviceMode.funcionamento_reduzido": "Eingeschränkter Betrieb",
   "rede.serviceMode.recesso": "Geschlossen",
   "rede.serviceMode.suspenso": "Vorübergehend ausgesetzt",
+  "rede.serviceMode.somente_consulta": "Nur Einsichtnahme",
+  "rede.serviceMode.pausada": "Pausiert",
   "rede.since": "Seit {date}",
   "rede.stats.authorities": "Normdaten",
   "rede.stats.documents": "Dokumente",

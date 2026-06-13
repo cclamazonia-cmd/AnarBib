@@ -3616,6 +3616,8 @@
   "rede.serviceMode.funcionamento_reduzido": "Μειωμένη λειτουργία",
   "rede.serviceMode.recesso": "Σε διακοπή",
   "rede.serviceMode.suspenso": "Προσωρινά σε αναστολή",
+  "rede.serviceMode.somente_consulta": "Μόνο επιτόπια μελέτη",
+  "rede.serviceMode.pausada": "Σε παύση",
   "rede.since": "Από {date}",
   "rede.stats.authorities": "Καθιερωμένες εγγραφές",
   "rede.stats.documents": "Τεκμήρια",

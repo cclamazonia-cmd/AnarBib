@@ -3616,6 +3616,8 @@
   "rede.serviceMode.funcionamento_reduzido": "Beperkte werking",
   "rede.serviceMode.recesso": "Op reces",
   "rede.serviceMode.suspenso": "Tijdelijk opgeschort",
+  "rede.serviceMode.somente_consulta": "Alleen raadpleging",
+  "rede.serviceMode.pausada": "Gepauzeerd",
   "rede.since": "Sinds {date}",
   "rede.stats.authorities": "Autoriteiten",
   "rede.stats.documents": "Documenten",

@@ -3616,6 +3616,8 @@
   "rede.serviceMode.funcionamento_reduzido": "Reduced operation",
   "rede.serviceMode.recesso": "On break",
   "rede.serviceMode.suspenso": "Temporarily suspended",
+  "rede.serviceMode.somente_consulta": "Consultation only",
+  "rede.serviceMode.pausada": "Paused",
   "rede.since": "Since {date}",
   "rede.stats.authorities": "Authorities",
   "rede.stats.documents": "Documents",

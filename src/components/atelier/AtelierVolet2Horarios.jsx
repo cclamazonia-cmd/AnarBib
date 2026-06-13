@@ -18,11 +18,13 @@ export default function AtelierVolet2Horarios({ libraryId, canEdit }) {
   const [ss, setSs] = useState(null);
   const [saving, setSaving] = useState(false);
 
+  // Valeurs autorisées par le CHECK library_service_state_service_mode_check
+  // (funcionamento_normal | somente_consulta | pausada). NB : SERVICE_MODES de
+  // BibliotecaPage est périmé (funcionamento_reduzido/recesso/suspenso) → 23514.
   const SERVICE_MODES = useMemo(() => ([
-    { value: 'funcionamento_normal',   label: t({ id: 'rede.serviceMode.funcionamento_normal' }) },
-    { value: 'funcionamento_reduzido', label: t({ id: 'rede.serviceMode.funcionamento_reduzido' }) },
-    { value: 'recesso',                label: t({ id: 'rede.serviceMode.recesso' }) },
-    { value: 'suspenso',               label: t({ id: 'rede.serviceMode.suspenso' }) },
+    { value: 'funcionamento_normal', label: t({ id: 'rede.serviceMode.funcionamento_normal' }) },
+    { value: 'somente_consulta',     label: t({ id: 'rede.serviceMode.somente_consulta' }) },
+    { value: 'pausada',              label: t({ id: 'rede.serviceMode.pausada' }) },
   ]), [t]);
 
   useEffect(() => {

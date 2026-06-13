@@ -3616,6 +3616,8 @@
   "rede.serviceMode.funcionamento_reduzido": "Reduktita funkciado",
   "rede.serviceMode.recesso": "En paŭzo",
   "rede.serviceMode.suspenso": "Provizore suspendita",
+  "rede.serviceMode.somente_consulta": "Nur surloka konsulto",
+  "rede.serviceMode.pausada": "Paŭzigita",
   "rede.since": "Ekde la {date}",
   "rede.stats.authorities": "Aŭtoritatoj",
   "rede.stats.documents": "Dokumentoj",

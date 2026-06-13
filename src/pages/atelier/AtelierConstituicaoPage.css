@@ -124,3 +124,10 @@
 .ab-atl-panel-body .cat-btn.primary{ background:var(--brand-color-primary,#d6453b); border-color:var(--brand-color-primary,#d6453b); color:#fff; }
 .ab-atl-panel-body .cat-btn.primary:hover:not(:disabled){ background:#b91c1c; }
 .ab-atl-panel-body select option{ background:#0d0b12; color:var(--brand-text,#f4f1ee); }
+/* Idem champs de saisie + <select> des composants (TeamPanel, PolicySetManager…) :
+   fond clair qui jure -> fond sombre cohérent. On exclut les cases/radios. */
+.ab-atl-panel-body input:not([type="checkbox"]):not([type="radio"]),
+.ab-atl-panel-body select,
+.ab-atl-panel-body textarea{ background:rgba(0,0,0,.3); color:var(--brand-text,#f4f1ee); border:1px solid var(--brand-panel-border,rgba(255,255,255,.18)); border-radius:8px; }
+.ab-atl-panel-body input::placeholder,
+.ab-atl-panel-body textarea::placeholder{ color:var(--brand-muted,#9a93a6); }
