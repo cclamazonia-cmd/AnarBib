@@ -1,0 +1,66 @@
+// Ajoute les clés i18n de la page « Oficina de autoridades » (/atelier-autoridades)
+// aux 10 locales. pt-BR / fr / es / en traduits ; de / it / ca / nl / el / eo en
+// repli anglais (à traduire au fil de l'eau, cf. DOC-I18N-1). Idempotent.
+// Miroir de scripts/i18n-add-painel-onboarding.cjs (append avant le `}` final).
+const fs = require('fs');
+const path = require('path');
+
+const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+
+// Valeurs en quadruplet [pt-BR, fr, es, en]. Les autres locales reprennent l'anglais.
+const T = {
+  'atelier.page.title':           ['Oficina de autoridades', "Atelier des autorités", 'Taller de autoridades', 'Authorities workshop'],
+  'atelier.page.subtitle':        ['A fila de propostas de contribuição ao corpus compartilhado de autoridades (pessoas, coletividades, matérias). As decisões se dão por consentimento: sem objeção motivada até o prazo, a proposta é aplicada por um membro da equipe.', "La file des propositions de contribution au corpus partagé d'autorités (personnes, collectivités, matières). Les décisions se prennent par consentement : sans objection motivée avant l'échéance, la proposition est appliquée par un membre de l'équipe.", 'La cola de propuestas de contribución al corpus compartido de autoridades (personas, colectividades, materias). Las decisiones se toman por consentimiento: sin objeción motivada antes del plazo, la propuesta la aplica un miembro del equipo.', 'The queue of contribution proposals to the shared authorities corpus (people, collectivities, subjects). Decisions are made by consent: with no motivated objection by the deadline, the proposal is applied by a team member.'],
+  'atelier.action.closeForm':     ['Fechar', 'Fermer', 'Cerrar', 'Close'],
+  'atelier.action.newFusion':     ['Propor uma fusão', 'Proposer une fusion', 'Proponer una fusión', 'Propose a merge'],
+  'atelier.action.refresh':       ['Atualizar', 'Actualiser', 'Actualizar', 'Refresh'],
+  'atelier.action.apply':         ['Aplicar', 'Appliquer', 'Aplicar', 'Apply'],
+  'atelier.action.withdraw':      ['Retirar', 'Retirer', 'Retirar', 'Withdraw'],
+  'atelier.form.error.ids':       ['Informe os dois identificadores (duplicata e canônica).', 'Indiquez les deux identifiants (duplicata et canonique).', 'Indique los dos identificadores (duplicado y canónico).', 'Provide both identifiers (duplicate and canonical).'],
+  'atelier.form.error.rationale': ['Explique brevemente o motivo da proposta.', 'Expliquez brièvement le motif de la proposition.', 'Explique brevemente el motivo de la propuesta.', 'Briefly explain the reason for the proposal.'],
+  'atelier.form.success':         ['Proposta registrada. A discussão fica aberta até o prazo.', "Proposition enregistrée. La discussion reste ouverte jusqu'à l'échéance.", 'Propuesta registrada. La discusión queda abierta hasta el plazo.', 'Proposal registered. The discussion stays open until the deadline.'],
+  'atelier.form.title':           ['Propor a fusão de uma duplicata', "Proposer la fusion d'une duplicata", 'Proponer la fusión de un duplicado', 'Propose merging a duplicate'],
+  'atelier.form.targetKind':      ['Tipo de autoridade', "Type d'autorité", 'Tipo de autoridad', 'Authority type'],
+  'atelier.form.duplicate':       ['ID da duplicata (a remover)', 'ID de la duplicata (à supprimer)', 'ID del duplicado (a eliminar)', 'Duplicate ID (to remove)'],
+  'atelier.form.canonical':       ['ID da canônica (a manter)', 'ID de la canonique (à conserver)', 'ID de la canónica (a mantener)', 'Canonical ID (to keep)'],
+  'atelier.form.rationale':       ['Motivo', 'Motif', 'Motivo', 'Reason'],
+  'atelier.form.sending':         ['Enviando…', 'Envoi…', 'Enviando…', 'Sending…'],
+  'atelier.form.submit':          ['Registrar proposta', 'Enregistrer la proposition', 'Registrar propuesta', 'Register proposal'],
+  'atelier.kind.author':          ['Pessoa / coletividade (author)', 'Personne / collectivité (author)', 'Persona / colectividad (author)', 'Person / collectivity (author)'],
+  'atelier.kind.subject':         ['Matéria (subject)', 'Matière (subject)', 'Materia (subject)', 'Subject'],
+  'atelier.row.by':               ['por {name}', 'par {name}', 'por {name}', 'by {name}'],
+  'atelier.row.deadline':         ['prazo: {date}', 'échéance : {date}', 'plazo: {date}', 'deadline: {date}'],
+  'atelier.row.objections':       ['{n} objeção(ões)', '{n} objection(s)', '{n} objeción(es)', '{n} objection(s)'],
+};
+
+function valFor(loc, quad) {
+  switch (loc) {
+    case 'pt-BR': return quad[0];
+    case 'fr':    return quad[1];
+    case 'es':    return quad[2];
+    default:      return quad[3]; // en + repli (de/it/ca/nl/el/eo)
+  }
+}
+
+let total = 0;
+for (const loc of LOCALES) {
+  const file = path.join(__dirname, '..', 'src', 'i18n', 'locales', loc + '.json');
+  let content = fs.readFileSync(file, 'utf8');
+  const existing = JSON.parse(content);
+  const entries = [];
+  for (const [k, quad] of Object.entries(T)) {
+    if (k in existing) continue;
+    entries.push('  ' + JSON.stringify(k) + ': ' + JSON.stringify(valFor(loc, quad)));
+  }
+  if (entries.length === 0) { console.log(loc + ': rien a ajouter'); continue; }
+  const marker = content.lastIndexOf('}');
+  const head = content.slice(0, marker).replace(/\s*$/, '');
+  const tail = content.slice(marker);
+  content = head + ',\n' + entries.join(',\n') + '\n' + tail;
+  if (!content.endsWith('\n')) content += '\n';
+  fs.writeFileSync(file, content, 'utf8');
+  JSON.parse(fs.readFileSync(file, 'utf8')); // valide le JSON
+  console.log(loc + ': +' + entries.length + ' cles');
+  total += entries.length;
+}
+console.log('Total: ' + total + ' entrees ajoutees.');
