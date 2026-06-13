@@ -31,6 +31,10 @@ const T = {
   'atelier.row.by':               ['por {name}', 'par {name}', 'por {name}', 'by {name}'],
   'atelier.row.deadline':         ['prazo: {date}', 'échéance : {date}', 'plazo: {date}', 'deadline: {date}'],
   'atelier.row.objections':       ['{n} objeção(ões)', '{n} objection(s)', '{n} objeción(es)', '{n} objection(s)'],
+  // criar-conta : option « compte contributeur » (Atelier autorités).
+  'auth.create.intent.optionContributor': ['Sou contribuinte de autoridades (sem biblioteca)', "Je suis contributeur·rice d'autorités (sans bibliothèque)", 'Soy contribuyente de autoridades (sin biblioteca)', "I'm an authorities contributor (no library)"],
+  'auth.create.intent.contributor.title': ['Conta de contribuinte de autoridades', 'Compte de contribution aux autorités', 'Cuenta de contribución a autoridades', 'Authorities contributor account'],
+  'auth.create.intent.contributor.body':  ['Uma conta de rede, sem vínculo a uma biblioteca, para colaborar com o corpus compartilhado de autoridades (pessoas, coletividades, matérias): propor fusões, correções, traduções. Você propõe; a aplicação se dá por consentimento.', "Un compte réseau, sans rattachement à une bibliothèque, pour collaborer au corpus partagé d'autorités (personnes, collectivités, matières) : proposer des fusions, corrections, traductions. Vous proposez ; l'application se fait par consentement.", 'Una cuenta de red, sin vínculo a una biblioteca, para colaborar con el corpus compartido de autoridades (personas, colectividades, materias): proponer fusiones, correcciones, traducciones. Tú propones; la aplicación se hace por consentimiento.', 'A network account, not tied to a library, to collaborate on the shared authorities corpus (people, collectivities, subjects): propose merges, corrections, translations. You propose; application happens by consent.'],
 };
 
 function valFor(loc, quad) {

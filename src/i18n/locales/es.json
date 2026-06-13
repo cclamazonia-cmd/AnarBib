@@ -4549,5 +4549,8 @@
   "atelier.kind.subject": "Materia (subject)",
   "atelier.row.by": "por {name}",
   "atelier.row.deadline": "plazo: {date}",
-  "atelier.row.objections": "{n} objeción(es)"
+  "atelier.row.objections": "{n} objeción(es)",
+  "auth.create.intent.optionContributor": "Soy contribuyente de autoridades (sin biblioteca)",
+  "auth.create.intent.contributor.title": "Cuenta de contribución a autoridades",
+  "auth.create.intent.contributor.body": "Una cuenta de red, sin vínculo a una biblioteca, para colaborar con el corpus compartido de autoridades (personas, colectividades, materias): proponer fusiones, correcciones, traducciones. Tú propones; la aplicación se hace por consentimiento."
 }

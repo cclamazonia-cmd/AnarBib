@@ -4549,5 +4549,8 @@
   "atelier.kind.subject": "Subject",
   "atelier.row.by": "by {name}",
   "atelier.row.deadline": "deadline: {date}",
-  "atelier.row.objections": "{n} objection(s)"
+  "atelier.row.objections": "{n} objection(s)",
+  "auth.create.intent.optionContributor": "I'm an authorities contributor (no library)",
+  "auth.create.intent.contributor.title": "Authorities contributor account",
+  "auth.create.intent.contributor.body": "A network account, not tied to a library, to collaborate on the shared authorities corpus (people, collectivities, subjects): propose merges, corrections, translations. You propose; application happens by consent."
 }

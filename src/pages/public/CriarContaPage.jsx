@@ -114,7 +114,7 @@ export default function CriarContaPage() {
     //  - '__new_library__' → collective_candidate (ouvrir une nouvelle biblio)
     // La sentinelle est mémorisée dans library_slug et le formulaire continue
     // normalement ; le signup_intent est dérivé à la soumission.
-    if (slug === '__orphan__' || slug === '__new_library__') {
+    if (slug === '__orphan__' || slug === '__new_library__' || slug === '__contributor__') {
       set('library_slug', slug);
       set('acceptRules', true); // pas de regimento de biblio à accepter
       setCurrentLib(null);
@@ -129,6 +129,7 @@ export default function CriarContaPage() {
   function deriveSignupIntent(slug) {
     if (slug === '__orphan__') return 'reader_orphan';
     if (slug === '__new_library__') return 'collective_candidate';
+    if (slug === '__contributor__') return 'contributor';
     return 'reader_pending';
   }
   function libLogo(lib) {
@@ -340,6 +341,7 @@ export default function CriarContaPage() {
             <optgroup label={t({id:'auth.create.intent.groupOtherCases'})}>
               <option value="__orphan__">{t({id:'auth.create.intent.optionOrphan'})}</option>
               <option value="__new_library__">{t({id:'auth.create.intent.optionNewLibrary'})}</option>
+              <option value="__contributor__">{t({id:'auth.create.intent.optionContributor'})}</option>
             </optgroup>
           </select>
           <div style={hs}>{t({id:'auth.create.libraryHint'})}</div>
@@ -376,6 +378,18 @@ export default function CriarContaPage() {
             </strong>
             <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
               {t({id:'auth.create.intent.newLibrary.body'})}
+            </div>
+          </div>
+        )}
+
+        {/* Atelier autorités — compte contributeur (réseau, sans biblio). */}
+        {form.library_slug === '__contributor__' && (
+          <div style={{ padding: 14, borderRadius: 10, background: 'rgba(29,78,216,.08)', border: '1px solid rgba(29,78,216,.25)', marginBottom: 16 }}>
+            <strong style={{ fontSize: '.92rem', display: 'block', marginBottom: 6 }}>
+              {t({id:'auth.create.intent.contributor.title'})}
+            </strong>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+              {t({id:'auth.create.intent.contributor.body'})}
             </div>
           </div>
         )}

@@ -486,7 +486,8 @@ serve(async (req)=>{
     const VALID_SIGNUP_INTENTS = new Set([
       "reader_pending",
       "reader_orphan",
-      "collective_candidate"
+      "collective_candidate",
+      "contributor"
     ]);
     const rawSignupIntent = String(body?.signup_intent || "").trim();
     let signupIntent: string;
@@ -852,7 +853,9 @@ serve(async (req)=>{
     // Paquet 6 criar-conta — reader_orphan a désormais son registre i18n
     // dédié (welcome.*.orphan) et son bloc CTA galerie. mailIsOrphan
     // implique toujours mailIsWithoutLibrary (cf. les 3 cas ci-dessus).
-    const mailIsOrphan = signupIntent === "reader_orphan";
+    // 'contributor' (compte réseau Atelier autorités, sans biblio) réutilise le
+    // registre de bienvenue orphelin (générique, sans biblio/CTA) — Atelier paquet 2.
+    const mailIsOrphan = signupIntent === "reader_orphan" || signupIntent === "contributor";
     const displayName = firstNonEmptyString(libraryMeta?.display_name, libraryRow?.name, requestedLibraryName, mailIsWithoutLibrary ? "AnarBib" : effectiveLibrarySlug);
     const contactEmail = normalizeEmail(libraryMeta?.contact_email);
     const postalAddress = String(libraryMeta?.postal_address || "").trim();
