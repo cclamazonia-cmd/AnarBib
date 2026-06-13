@@ -70,11 +70,13 @@ export default function BibliotecaPage() {
   const isLibrarian = role === 'librarian' || isCoord;
 
   // SERVICE_MODES localized via t() — was hardcoded pt-BR before audit 07/05/2026.
+  // Valeurs alignées sur le CHECK library_service_state_service_mode_check
+  // (funcionamento_normal | somente_consulta | pausada). Les anciennes valeurs
+  // (funcionamento_reduzido/recesso/suspenso) violaient le CHECK → 23514 au save.
   const SERVICE_MODES = useMemo(() => ([
-    { value: 'funcionamento_normal',   label: t({ id: 'rede.serviceMode.funcionamento_normal' }) },
-    { value: 'funcionamento_reduzido', label: t({ id: 'rede.serviceMode.funcionamento_reduzido' }) },
-    { value: 'recesso',                label: t({ id: 'rede.serviceMode.recesso' }) },
-    { value: 'suspenso',               label: t({ id: 'rede.serviceMode.suspenso' }) },
+    { value: 'funcionamento_normal', label: t({ id: 'rede.serviceMode.funcionamento_normal' }) },
+    { value: 'somente_consulta',     label: t({ id: 'rede.serviceMode.somente_consulta' }) },
+    { value: 'pausada',              label: t({ id: 'rede.serviceMode.pausada' }) },
   ]), [t]);
 
   // TASK_PRIO localized via t() — was hardcoded pt-BR before audit 07/05/2026.

@@ -33,10 +33,9 @@ export default function RedePage() {
   useDocumentTitle(t({ id: 'pageTitle.network' }));
 
   const SERVICE_LABELS = useMemo(() => ({
-    funcionamento_normal:    t({ id: 'rede.serviceMode.funcionamento_normal' }),
-    funcionamento_reduzido:  t({ id: 'rede.serviceMode.funcionamento_reduzido' }),
-    recesso:                 t({ id: 'rede.serviceMode.recesso' }),
-    suspenso:                t({ id: 'rede.serviceMode.suspenso' }),
+    funcionamento_normal: t({ id: 'rede.serviceMode.funcionamento_normal' }),
+    somente_consulta:     t({ id: 'rede.serviceMode.somente_consulta' }),
+    pausada:              t({ id: 'rede.serviceMode.pausada' }),
   }), [t]);
 
   const REQ_STATUS = useMemo(() => ({
