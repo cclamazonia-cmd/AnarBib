@@ -155,7 +155,9 @@ export default function LoginPage() {
     // theme sont resolus, pour reveler /conta directement sur le bon fond (pas
     // de cascade de fonds). themeReady resout en ~160ms (manifest Storage).
     if (profile && !libraryLoading && themeReady) {
-      navigate(nextUrl);
+      // ONBO — coordinatrice encore en constitution : on l'amène directement à
+      // l'atelier (son unique chantier) plutôt qu'à /conta.
+      navigate(profile.solicitante_state === 'coordenador_em_constituicao' ? '/atelier' : nextUrl);
       return;
     }
     // #LOGIN-FIX H4 (10/06) : garde-fou FORWARD. L'usager est authentifie mais la

@@ -28,6 +28,10 @@ const PROFILE_COLUMNS = [
   'password_changed_at',
   'is_restricted',
   'is_librarian',
+  // ONBO — état d'onboarding du compte ('coordenador_em_constituicao' tant que la
+  // biblio passe l'atelier de constitution). Lu par ProtectedRoute/LoginPage pour
+  // rediriger la coordinatrice vers /atelier.
+  'solicitante_state',
 ].join(', ');
 
 export function AuthProvider({ children }) {
