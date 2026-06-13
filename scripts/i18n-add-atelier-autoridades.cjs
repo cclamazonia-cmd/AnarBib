@@ -45,6 +45,16 @@ const T = {
   'atelier.obj.error.reason':['A objeção precisa de uma motivação (mín. 20 caracteres).', "L'objection requiert une motivation (min. 20 caractères).", 'La objeción necesita una motivación (mín. 20 caracteres).', 'The objection needs a reason (min. 20 characters).'],
   'atelier.obj.refused':     ['Objeção registrada — a proposta foi recusada (2+ bibliotecas usuárias).', 'Objection enregistrée — la proposition est refusée (2+ bibliothèques utilisatrices).', 'Objeción registrada — la propuesta fue rechazada (2+ bibliotecas usuarias).', 'Objection registered — the proposal was refused (2+ using libraries).'],
   'atelier.obj.contested':   ['Objeção registrada — a discussão está aberta.', 'Objection enregistrée — la discussion est ouverte.', 'Objeción registrada — la discusión está abierta.', 'Objection registered — the discussion is open.'],
+  // Feature traduction (mode du formulaire de proposition).
+  'atelier.form.newTitle':       ['Nova proposta', 'Nouvelle proposition', 'Nueva propuesta', 'New proposal'],
+  'atelier.form.kind':           ['Tipo de proposta', 'Type de proposition', 'Tipo de propuesta', 'Proposal type'],
+  'atelier.kindProp.fusion':     ['Fusão de duplicata', 'Fusion de duplicata', 'Fusión de duplicado', 'Merge a duplicate'],
+  'atelier.kindProp.traduction': ['Tradução de biografia (pessoa)', 'Traduction de biographie (personne)', 'Traducción de biografía (persona)', 'Biography translation (person)'],
+  'atelier.form.authorId':       ['ID da autoridade (pessoa)', "ID de l'autorité (personne)", 'ID de la autoridad (persona)', 'Authority ID (person)'],
+  'atelier.form.lang':           ['Idioma', 'Langue', 'Idioma', 'Language'],
+  'atelier.form.bio':            ['Biografia traduzida', 'Biographie traduite', 'Biografía traducida', 'Translated biography'],
+  'atelier.form.error.authorId': ['Informe o ID da autoridade (pessoa).', "Indiquez l'ID de l'autorité (personne).", 'Indique el ID de la autoridad (persona).', 'Provide the authority ID (person).'],
+  'atelier.form.error.bio':      ['Escreva a biografia traduzida.', 'Saisissez la biographie traduite.', 'Escriba la biografía traducida.', 'Write the translated biography.'],
 };
 
 function valFor(loc, quad) {

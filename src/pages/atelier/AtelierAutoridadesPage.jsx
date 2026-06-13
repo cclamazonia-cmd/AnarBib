@@ -35,7 +35,7 @@ export default function AtelierAutoridadesPage() {
   const [busyId, setBusyId] = useState(null);
 
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ targetKind: 'author', targetId: '', mergeIntoId: '', rationale: '' });
+  const [form, setForm] = useState({ kind: 'fusion', targetKind: 'author', targetId: '', mergeIntoId: '', lang: 'pt-BR', biography: '', rationale: '' });
   const [submitting, setSubmitting] = useState(false);
 
   const [myLibs, setMyLibs] = useState([]);
@@ -72,27 +72,33 @@ export default function AtelierAutoridadesPage() {
   async function propose(e) {
     e.preventDefault();
     setMsg({ text: '', kind: '' });
-    const dup = parseInt(form.targetId, 10);
-    const can = parseInt(form.mergeIntoId, 10);
-    if (!Number.isInteger(dup) || !Number.isInteger(can)) {
-      setMsg({ text: t({ id: 'atelier.form.error.ids', defaultMessage: 'Informe os dois identificadores (duplicata e canônica).' }), kind: 'error' }); return;
-    }
     if (form.rationale.trim().length < 10) {
       setMsg({ text: t({ id: 'atelier.form.error.rationale', defaultMessage: 'Explique brevemente o motivo da proposta.' }), kind: 'error' }); return;
     }
+    let args;
+    if (form.kind === 'traduction') {
+      const aid = parseInt(form.targetId, 10);
+      if (!Number.isInteger(aid)) {
+        setMsg({ text: t({ id: 'atelier.form.error.authorId', defaultMessage: 'Informe o ID da autoridade (pessoa).' }), kind: 'error' }); return;
+      }
+      if (form.biography.trim().length < 10) {
+        setMsg({ text: t({ id: 'atelier.form.error.bio', defaultMessage: 'Escreva a biografia traduzida.' }), kind: 'error' }); return;
+      }
+      args = { p_kind: 'traduction', p_target_kind: 'author', p_target_id: aid, p_merge_into_id: null, p_payload: { lang: form.lang, biography: form.biography.trim() }, p_rationale: form.rationale.trim() };
+    } else {
+      const dup = parseInt(form.targetId, 10);
+      const can = parseInt(form.mergeIntoId, 10);
+      if (!Number.isInteger(dup) || !Number.isInteger(can)) {
+        setMsg({ text: t({ id: 'atelier.form.error.ids', defaultMessage: 'Informe os dois identificadores (duplicata e canônica).' }), kind: 'error' }); return;
+      }
+      args = { p_kind: 'fusion', p_target_kind: form.targetKind, p_target_id: dup, p_merge_into_id: can, p_payload: {}, p_rationale: form.rationale.trim() };
+    }
     setSubmitting(true);
-    const { error } = await supabase.schema('api').rpc('fn_authority_propose', {
-      p_kind: 'fusion',
-      p_target_kind: form.targetKind,
-      p_target_id: dup,
-      p_merge_into_id: can,
-      p_payload: {},
-      p_rationale: form.rationale.trim(),
-    });
+    const { error } = await supabase.schema('api').rpc('fn_authority_propose', args);
     setSubmitting(false);
     if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); return; }
     setMsg({ text: t({ id: 'atelier.form.success', defaultMessage: 'Proposta registrada. A discussão fica aberta até o prazo.' }), kind: 'ok' });
-    setForm({ targetKind: 'author', targetId: '', mergeIntoId: '', rationale: '' });
+    setForm({ kind: 'fusion', targetKind: 'author', targetId: '', mergeIntoId: '', lang: 'pt-BR', biography: '', rationale: '' });
     setShowForm(false);
     load();
   }
@@ -165,8 +171,17 @@ export default function AtelierAutoridadesPage() {
         {showForm && (
           <form onSubmit={propose} style={{ ...card, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.2)', padding: 16, marginBottom: 18 }}>
             <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 10, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
-              {t({ id: 'atelier.form.title', defaultMessage: 'Propor a fusão de uma duplicata' })}
+              {t({ id: 'atelier.form.newTitle', defaultMessage: 'Nova proposta' })}
             </h2>
+            <div style={{ marginBottom: 10 }}>
+              <label style={ls}>{t({ id: 'atelier.form.kind', defaultMessage: 'Tipo de proposta' })}</label>
+              <select value={form.kind} onChange={e => setForm(f => ({ ...f, kind: e.target.value }))} style={fs}>
+                <option value="fusion">{t({ id: 'atelier.kindProp.fusion', defaultMessage: 'Fusão de duplicata' })}</option>
+                <option value="traduction">{t({ id: 'atelier.kindProp.traduction', defaultMessage: 'Tradução de biografia (pessoa)' })}</option>
+              </select>
+            </div>
+
+            {form.kind === 'fusion' && (<>
             <div style={{ marginBottom: 10 }}>
               <label style={ls}>{t({ id: 'atelier.form.targetKind', defaultMessage: 'Tipo de autoridade' })}</label>
               <select value={form.targetKind} onChange={e => setForm(f => ({ ...f, targetKind: e.target.value }))} style={fs}>
@@ -184,6 +199,26 @@ export default function AtelierAutoridadesPage() {
                 <input type="number" value={form.mergeIntoId} onChange={e => setForm(f => ({ ...f, mergeIntoId: e.target.value }))} style={fs} />
               </div>
             </div>
+            </>)}
+
+            {form.kind === 'traduction' && (<>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 10 }}>
+              <div>
+                <label style={ls}>{t({ id: 'atelier.form.authorId', defaultMessage: 'ID da autoridade (pessoa)' })}</label>
+                <input type="number" value={form.targetId} onChange={e => setForm(f => ({ ...f, targetId: e.target.value }))} style={fs} />
+              </div>
+              <div>
+                <label style={ls}>{t({ id: 'atelier.form.lang', defaultMessage: 'Idioma' })}</label>
+                <select value={form.lang} onChange={e => setForm(f => ({ ...f, lang: e.target.value }))} style={fs}>
+                  {['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'].map(L => <option key={L} value={L}>{L}</option>)}
+                </select>
+              </div>
+            </div>
+            <div style={{ marginBottom: 10 }}>
+              <label style={ls}>{t({ id: 'atelier.form.bio', defaultMessage: 'Biografia traduzida' })}</label>
+              <textarea value={form.biography} onChange={e => setForm(f => ({ ...f, biography: e.target.value }))} style={{ ...fs, resize: 'vertical', minHeight: 90 }} />
+            </div>
+            </>)}
             <div style={{ marginBottom: 12 }}>
               <label style={ls}>{t({ id: 'atelier.form.rationale', defaultMessage: 'Motivo' })}</label>
               <textarea value={form.rationale} onChange={e => setForm(f => ({ ...f, rationale: e.target.value }))} style={{ ...fs, resize: 'vertical', minHeight: 64 }} />

@@ -4561,5 +4561,14 @@
   "atelier.obj.error.lib": "Selecione a biblioteca que objeta.",
   "atelier.obj.error.reason": "A objeção precisa de uma motivação (mín. 20 caracteres).",
   "atelier.obj.refused": "Objeção registrada — a proposta foi recusada (2+ bibliotecas usuárias).",
-  "atelier.obj.contested": "Objeção registrada — a discussão está aberta."
+  "atelier.obj.contested": "Objeção registrada — a discussão está aberta.",
+  "atelier.form.newTitle": "Nova proposta",
+  "atelier.form.kind": "Tipo de proposta",
+  "atelier.kindProp.fusion": "Fusão de duplicata",
+  "atelier.kindProp.traduction": "Tradução de biografia (pessoa)",
+  "atelier.form.authorId": "ID da autoridade (pessoa)",
+  "atelier.form.lang": "Idioma",
+  "atelier.form.bio": "Biografia traduzida",
+  "atelier.form.error.authorId": "Informe o ID da autoridade (pessoa).",
+  "atelier.form.error.bio": "Escreva a biografia traduzida."
 }

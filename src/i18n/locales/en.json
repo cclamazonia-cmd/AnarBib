@@ -4561,5 +4561,14 @@
   "atelier.obj.error.lib": "Select the objecting library.",
   "atelier.obj.error.reason": "The objection needs a reason (min. 20 characters).",
   "atelier.obj.refused": "Objection registered — the proposal was refused (2+ using libraries).",
-  "atelier.obj.contested": "Objection registered — the discussion is open."
+  "atelier.obj.contested": "Objection registered — the discussion is open.",
+  "atelier.form.newTitle": "New proposal",
+  "atelier.form.kind": "Proposal type",
+  "atelier.kindProp.fusion": "Merge a duplicate",
+  "atelier.kindProp.traduction": "Biography translation (person)",
+  "atelier.form.authorId": "Authority ID (person)",
+  "atelier.form.lang": "Language",
+  "atelier.form.bio": "Translated biography",
+  "atelier.form.error.authorId": "Provide the authority ID (person).",
+  "atelier.form.error.bio": "Write the translated biography."
 }
