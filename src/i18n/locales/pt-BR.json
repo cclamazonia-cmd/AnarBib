@@ -4483,14 +4483,14 @@
   "rede.oai.closed": "Abertura encerrada.",
   "rede.oai.close": "Fechar",
   "rede.oai.coord.title": "Abrir o catálogo da minha biblioteca",
-  "rede.oai.coord.desc": "Peça a abertura às admins da rede. Basta uma admin para validar. Você pode fechar a qualquer momento.",
+  "rede.oai.coord.desc": "Peça a abertura a(o/a/e)s admins da rede. Basta um(a/e) admin para validar. Você pode fechar a qualquer momento.",
   "rede.oai.state.open": "Aberto",
-  "rede.oai.state.pendingAdmin": "Aguardando uma admin",
+  "rede.oai.state.pendingAdmin": "Aguardando um(a/e) admin",
   "rede.oai.state.closed": "Fechado",
   "rede.oai.state.networkOpen": "Aberto (decisão da rede)",
   "rede.oai.state.pendingVote": "Votação em curso",
   "rede.oai.state.networkOpenShort": "Rede aberta",
-  "rede.oai.requested": "Pedido enviado às admins.",
+  "rede.oai.requested": "Pedido enviado a(o/a/e)s admins.",
   "rede.oai.requestOpen": "Pedir abertura",
   "rede.oai.votes.title": "Consultas da rede para votar",
   "rede.oai.votes.prompt": "{entity} pede para colher o catálogo da rede. Seu voto por {lib}:",
@@ -4515,5 +4515,5 @@
   "rede.oai.admin.active.networkVote": "Rede → {entity} — votação até {date}",
   "rede.oai.admin.active.progress": "{consented}/{concerned} bibliotecas consentiram",
   "rede.oai.admin.active.libraryRow": "Biblioteca aberta desde {date}",
-  "rede.oai.noAccess": "Aba reservada à coordenação das bibliotecas e às admins da rede."
+  "rede.oai.noAccess": "Aba reservada à coordenação das bibliotecas e a(o/a/e)s admins da rede."
 }

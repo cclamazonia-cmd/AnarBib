@@ -6371,7 +6371,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "OAI-openstellingsverzoek — {lib}", el: "Αίτημα ανοίγματος OAI — {lib}"
   },
   "oai.requested.intro": {
-    "pt-BR": "A biblioteca {lib} pede a abertura do seu catálogo à colheita OAI-PMH. Basta o acordo de uma admin da rede para validar.",
+    "pt-BR": "A biblioteca {lib} pede a abertura do seu catálogo à colheita OAI-PMH. Basta o acordo de um(a/e) admin da rede para validar.",
     fr: "La bibliothèque {lib} demande l'ouverture de son catalogue au moissonnage OAI-PMH. Un seul accord d'admin réseau suffit pour valider.",
     es: "La biblioteca {lib} pide abrir su catálogo a la recolección OAI-PMH. Basta el acuerdo de una admin de la red para validar.",
     en: "The library {lib} requests opening its catalog to OAI-PMH harvesting. A single network admin's approval is enough.",
@@ -6409,7 +6409,7 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "OAI-openstelling geweigerd — {lib}", el: "Το άνοιγμα OAI απορρίφθηκε — {lib}"
   },
   "oai.refused.intro": {
-    "pt-BR": "Seu pedido de abertura OAI para {lib} foi recusado por uma admin da rede.",
+    "pt-BR": "Seu pedido de abertura OAI para {lib} foi recusado por um(a/e) admin da rede.",
     fr: "Ta demande d'ouverture OAI pour {lib} a été refusée par une admin réseau.",
     es: "Tu solicitud de apertura OAI para {lib} ha sido rechazada por una admin de la red.",
     en: "Your OAI opening request for {lib} was refused by a network admin.",

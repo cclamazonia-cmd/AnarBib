@@ -80,7 +80,12 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
 
   const url = new URL(req.url);
-  const baseUrl = `${url.origin}${url.pathname}`;
+  // Derrière le proxy Supabase, url.origin/pathname sont réécrits (http + segment
+  // /functions/v1 retiré). On reconstruit l'URL publique réelle pour la conformité
+  // OAI (baseURL dans Identify, echo de la requête).
+  const proto = req.headers.get('x-forwarded-proto') || 'https';
+  const host = req.headers.get('x-forwarded-host') || url.host;
+  const baseUrl = `${proto}://${host}/functions/v1/oai-pmh-provider`;
 
   // Paramètres : query (GET) + corps urlencodé (POST).
   const p: Record<string, string> = {};

@@ -28,14 +28,20 @@ const FEDERAL_NAME = (Deno.env.get('OAI_ADMIN_NAME') || 'Administration AnarBib'
 const FEDERAL_LOCALE = (Deno.env.get('OAI_ADMIN_LOCALE') || 'fr').trim();
 const REDE_URL = `${(APP_BASE_URL || 'https://app.anarbib.org').replace(/\/+$/, '')}/rede`;
 
-// Contexte mail « fédéral » : expéditeur = adresse fédérale, logo réseau, canal actif.
+// Contexte mail « fédéral ». IMPORTANT : on NE force PAS sender_visible_email sur
+// l'adresse fédérale — sinon Resend renvoie 403 si le domaine de cette adresse
+// (ex. anarbib.org) n'est pas vérifié pour la clé API. On laisse donc l'expéditeur
+// retomber sur SENDER_EMAIL (déjà vérifié, commun à tous les mailers) ; l'identité
+// fédérale est portée par le NOM d'expéditeur + le reply-to (les réponses + les
+// demandes ascendantes arrivent bien sur la boîte fédérale, qui reste destinataire).
 const FEDERAL_CTX = {
-  sender_visible_email: FEDERAL_EMAIL,
   sender_display_name: FEDERAL_NAME,
   use_library_logo: false,
   use_library_name_as_sender: false,
   channel_active: true,
-  delivery_mode: 'platform_shared',
+  delivery_mode: 'platform_shared_local_reply',
+  reply_to_email: FEDERAL_EMAIL,
+  reply_to_name: FEDERAL_NAME,
   admin_notification_email: FEDERAL_EMAIL,
 };
 const FEDERAL_TARGET = { email: FEDERAL_EMAIL, name: FEDERAL_NAME };
