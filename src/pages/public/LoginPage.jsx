@@ -50,7 +50,7 @@ export default function LoginPage() {
   // (session zombie en localStorage, refresh accidentel, etc.), le useEffect
   // detectera la session et redirigera immediatement sans qu'il ait besoin de
   // re-saisir ses credentials.
-  const { user, profile, loading: authLoading } = useAuth();
+  const { user, profile, loading: authLoading, recovery } = useAuth();
   // #LOGIN-FIX H1 (restauré 10/06) : on attend que la biblio ET son thème soient
   // résolus avant de naviguer, pour une transition unique (jamais la page
   // connectée sur l'ancien fond). themeReady résout en ~160ms (manifest depuis le
@@ -125,6 +125,15 @@ export default function LoginPage() {
     if (hash.includes('type=recovery') || hash.includes('access_token')) setView('recovery');
   }, []);
 
+  // Détection FIABLE du flow recovery : l'événement PASSWORD_RECOVERY (capté par
+  // AuthContext) arrive même quand detectSessionInUrl a déjà effacé le hash — ce qui
+  // rendait la lecture ci-dessus inopérante en pratique (l'usager atterrissait sur le
+  // formulaire de login au lieu du « nouveau mot de passe »). On bascule sur la vue
+  // recovery dès que le flag passe à true.
+  useEffect(() => {
+    if (recovery) setView('recovery');
+  }, [recovery]);
+
   // Bascule auto vers la destination (paquet 25.6).
   //
   // Se declenche dans deux cas :
@@ -143,6 +152,11 @@ export default function LoginPage() {
   //    il faut le laisser finir, pas le rediriger en cours de route)
   useEffect(() => {
     if (authLoading) return;
+    // Flow récupération MDP : ne JAMAIS rediriger vers l'app — l'usager doit voir le
+    // formulaire « nouveau mot de passe ». Garde indépendante de `view` (qui peut
+    // encore valoir 'login' le temps que setView('recovery') s'applique, d'où la
+    // redirection intempestive observée avant ce fix).
+    if (recovery) return;
     if (!user) return;
     if (view !== 'login') return;
     // Premier login avec mdp provisoire : bascule vers le formulaire dedie.
@@ -174,7 +188,7 @@ export default function LoginPage() {
     // prennent le relais. On ne revient JAMAIS au formulaire une fois authentifie.
     const fwd = setTimeout(() => navigate(nextUrl), 4000);
     return () => clearTimeout(fwd);
-  }, [authLoading, user, profile, view, navigate, nextUrl, libraryLoading, themeReady]);
+  }, [authLoading, user, profile, view, navigate, nextUrl, libraryLoading, themeReady, recovery]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -323,7 +337,15 @@ export default function LoginPage() {
         return;
       }
       setResetMsg({ text: t({ id: 'auth.resetSuccess' }), kind: 'ok' });
-      setTimeout(() => setView('login'), 2000);
+      // Reset réussi via le lien de récup : on déconnecte la session de récupération
+      // (signOut → SIGNED_OUT → recovery=false) puis on renvoie au login pour une
+      // connexion fraîche avec le nouveau MDP. Sans le signOut, la garde
+      // anti-redirection (if recovery return) resterait active et bloquerait la
+      // connexion suivante.
+      setTimeout(async () => {
+        await supabase.auth.signOut();
+        setView('login');
+      }, 2000);
     } catch {
       setResetMsg({ text: t({ id: 'auth.networkError' }), kind: 'error' });
     } finally {

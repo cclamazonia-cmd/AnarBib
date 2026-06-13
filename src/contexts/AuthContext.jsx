@@ -38,6 +38,12 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  // Flow récupération MDP : l'événement PASSWORD_RECOVERY (émis par detectSessionInUrl
+  // à l'arrivée via le lien de reset) établit une session MAIS doit afficher le
+  // formulaire « nouveau mot de passe », pas connecter l'usager. On expose ce flag :
+  // lire window.location.hash dans LoginPage est non fiable (hash effacé par le client
+  // Supabase avant le montage du composant).
+  const [recovery, setRecovery] = useState(false);
 
   // Anti-rebond locale : on ne synchronise la locale qu'une fois par user_id
   // et par chargement d'app. Sans ça, certains re-render de session pourraient
@@ -164,6 +170,11 @@ export function AuthProvider({ children }) {
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }
+        // Lien de récupération MDP : on marque le mode recovery pour que LoginPage
+        // affiche le formulaire « nouveau mot de passe » et NE redirige PAS vers l'app.
+        if (event === 'PASSWORD_RECOVERY') {
+          setRecovery(true);
+        }
         setSession(s);
         if (s?.user?.id) {
           // setTimeout 0 obligatoire — sinon deadlock supabase-js (cf. ci-dessus)
@@ -176,6 +187,7 @@ export function AuthProvider({ children }) {
         // prochaine connexion (potentiellement avec un autre user)
         if (event === 'SIGNED_OUT') {
           syncedForUserRef.current = null;
+          setRecovery(false);
         }
       }
     );
@@ -198,6 +210,7 @@ export function AuthProvider({ children }) {
         user: session?.user ?? null,
         profile,
         loading,
+        recovery,
         signOut,
         refreshProfile,
       }}
