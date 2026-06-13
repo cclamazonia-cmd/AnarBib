@@ -40,6 +40,9 @@
   transition:.15s; margin-left:auto;
 }
 .ab-hcc-cta:hover{ background:var(--hcc-accent-soft); }
+/* Volets « forts » : le rouge primaire (#d6453b) est trop sombre pour du texte —
+   on éclaircit le CTA vers le rouge doux du design system pour la lisibilité. */
+.ab-hcc.is-strong .ab-hcc-cta{ color:var(--brand-color-secondary-soft,#e0695f); border-color:rgba(224,105,95,.5); }
 
 @media (max-width:520px){
   .ab-hcc-cta{ margin-left:0; }
