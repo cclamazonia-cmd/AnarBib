@@ -114,6 +114,13 @@ h1, h2, h3, h4, h5, h6 {
 a { color: var(--brand-link); text-decoration-thickness: 1px; text-underline-offset: 0.12em; }
 button, input, select, textarea { font: inherit; }
 
+/* Popup natif des <select> : les <option> héritent d'un fond transparent et
+   le navigateur compose par-dessus le blanc système → texte clair illisible
+   (blanc sur blanc / gris faible contraste selon le fond du select). On force
+   un fond opaque sombre globalement. Rend redondants les patchs locaux
+   (LocaleSwitcher, TeamPanel, FederacaoPage). */
+select option { background: var(--brand-bg, #1a0a0c); color: var(--brand-text, #f5f2ea); }
+
 /* ═══════════════════════════════════════════════════════════
    PATCH 02/05/2026 v4 — Briques avec dégradé sombre teinté bordeaux
    
