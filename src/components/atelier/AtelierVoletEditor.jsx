@@ -1,4 +1,5 @@
 import AtelierVolet1Identite from './AtelierVolet1Identite';
+import AtelierVolet2Horarios from './AtelierVolet2Horarios';
 import TeamPanel from '@/components/team/TeamPanel';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
 import PolicySetManager from '@/components/library/PolicySetManager';
@@ -20,13 +21,15 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 // v4 catalogação, v5 circulação (PolicySetManager/RegimeStateBox), v6 adhesão, v7 emails
 // (in-page), v8 partenariats (LibraryPartnershipsSection → nécessite la liste réseau).
 // ═══════════════════════════════════════════════════════════════════════════
-export const WIRED_VOLETS = new Set([1, 3, 5, 8, 9]);
+export const WIRED_VOLETS = new Set([1, 2, 3, 5, 8, 9]);
 
 export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
   if (!libraryId) return null;
   switch (voletN) {
     case 1:
       return <AtelierVolet1Identite libraryId={libraryId} canEdit={canEdit} />;
+    case 2:
+      return <AtelierVolet2Horarios libraryId={libraryId} canEdit={canEdit} />;
     case 3:
       // Pessoas responsáveis — TeamPanel charge ses propres données (membships +
       // RPC fn_team_*, staff-based → OK pré-active). La coordinatrice y est seule
