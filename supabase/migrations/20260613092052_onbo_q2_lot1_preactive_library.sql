@@ -170,9 +170,13 @@ begin
 end;
 $function$;
 
-REVOKE EXECUTE ON FUNCTION public.fn_provision_preactive_library(uuid) FROM PUBLIC;
+-- REVOKE explicite à authenticated/anon EN PLUS de PUBLIC : Supabase accorde EXECUTE à
+-- ces rôles par défaut sur les nouvelles fonctions public (ALTER DEFAULT PRIVILEGES), donc
+-- un simple REVOKE FROM PUBLIC laisserait la fonction appelable par n'importe quel·le
+-- utilisateur·rice authentifié·e (création de biblio !). Strictement interne.
+REVOKE EXECUTE ON FUNCTION public.fn_provision_preactive_library(uuid) FROM PUBLIC, authenticated, anon;
 -- INTERNE : appelée uniquement par les RPC SECDEF d'approbation/activation (exécutées avec
--- les droits du propriétaire). Aucun GRANT à anon/authenticated.
+-- les droits du propriétaire).
 
 COMMENT ON FUNCTION public.fn_provision_preactive_library(uuid) IS
   'Crée la biblio PRÉ-ACTIVE (is_active=false) d''une demande approuvée : libraries + '
