@@ -53,6 +53,23 @@ export function AuthProvider({ children }) {
     try { return localStorage.getItem('anarbib:pw-recovery') === '1'; } catch { return false; }
   });
 
+  // Sort du mode récup (efface le flag persistant + le state). Exposé pour le bouton
+  // « annuler » de la vue reset, et utilisé par le filet anti-piège ci-dessous.
+  const exitRecovery = useCallback(() => {
+    try { localStorage.removeItem('anarbib:pw-recovery'); } catch { /* ignore */ }
+    setRecovery(false);
+  }, []);
+
+  // Filet anti-piège : un flag de récup persistant SANS session valide (lien expiré, ou
+  // session de récup perdue après fermeture/réouverture du navigateur) rendrait le
+  // formulaire de reset inutilisable (updateUser exige une session) TOUT EN bloquant
+  // l'accès au login → impasse. Dès que le chargement initial est terminé et qu'il n'y a
+  // pas de session, on nettoie le flag → retour au login normal (l'usager redemande un
+  // lien). La sécurité reste : tant qu'une session de récup valide existe, le flag tient.
+  useEffect(() => {
+    if (!loading && recovery && !session) exitRecovery();
+  }, [loading, recovery, session, exitRecovery]);
+
   // Anti-rebond locale : on ne synchronise la locale qu'une fois par user_id
   // et par chargement d'app. Sans ça, certains re-render de session pourraient
   // déclencher un reload en boucle.
@@ -222,6 +239,7 @@ export function AuthProvider({ children }) {
         profile,
         loading,
         recovery,
+        exitRecovery,
         signOut,
         refreshProfile,
       }}

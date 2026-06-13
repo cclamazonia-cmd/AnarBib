@@ -50,7 +50,7 @@ export default function LoginPage() {
   // (session zombie en localStorage, refresh accidentel, etc.), le useEffect
   // detectera la session et redirigera immediatement sans qu'il ait besoin de
   // re-saisir ses credentials.
-  const { user, profile, loading: authLoading, recovery } = useAuth();
+  const { user, profile, loading: authLoading, recovery, exitRecovery } = useAuth();
   // #LOGIN-FIX H1 (restauré 10/06) : on attend que la biblio ET son thème soient
   // résolus avant de naviguer, pour une transition unique (jamais la page
   // connectée sur l'ancien fond). themeReady résout en ~160ms (manifest depuis le
@@ -328,15 +328,25 @@ export default function LoginPage() {
       const { error } = await supabase.auth.updateUser({ password: newPw });
       if (error) {
         const r = (error.message || '').toLowerCase();
+        // Session de récup perdue/expirée (lien périmé, navigateur rouvert entre le clic
+        // et la saisie) : updateUser échoue faute de session. On traite comme un lien
+        // expiré, on SORT du mode récup et on renvoie au login pour redemander un lien —
+        // sinon l'usager reste piégé sur un formulaire inutilisable.
+        const sessionGone = r.includes('session') || r.includes('missing') ||
+          r.includes('not authenticated') || r.includes('jwt');
         setResetMsg({
           text:
             r.includes('same') || r.includes('different')
               ? t({ id: 'auth.resetSamePassword' })
-              : r.includes('expired')
+              : (r.includes('expired') || sessionGone)
               ? t({ id: 'auth.resetExpired' })
               : localizeError(error, t),
           kind: 'error',
         });
+        if (sessionGone) {
+          exitRecovery();
+          setTimeout(() => setView('login'), 2500);
+        }
         return;
       }
       setResetMsg({ text: t({ id: 'auth.resetSuccess' }), kind: 'ok' });
@@ -662,7 +672,7 @@ export default function LoginPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={async () => { await supabase.auth.signOut(); setView('login'); }}
+                  onClick={async () => { try { await supabase.auth.signOut(); } catch { /* pas de session : on nettoie quand même */ } exitRecovery(); setView('login'); }}
                   style={{ background: 'none', border: 'none', color: 'var(--brand-muted)', textDecoration: 'underline', cursor: 'pointer', fontSize: '.82rem', padding: 0, alignSelf: 'flex-start' }}
                 >
                   {t({ id: 'common.cancel' })}
