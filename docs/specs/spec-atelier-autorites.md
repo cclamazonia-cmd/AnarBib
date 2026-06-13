@@ -3,7 +3,7 @@
 | Champ | Valeur |
 |---|---|
 | **Domaine** | Couche d'autorités partagée — **face contribution** (personnes, collectivités, matières). Pendant *production* de la lecture enrichie de `spec-notice-autorite-enrichie` §4. |
-| **Version** | v0.1 (12 juin 2026) — cadrage. Arbitrages FED-O7 (**ATE-1..4**) **validés le 12/06** ; à inscrire au REGISTRE (§10). Aucune implémentation. |
+| **Version** | v0.1 (12 juin 2026) — cadrage. Arbitrages FED-O7 (**ATE-1..4**) **validés le 12/06**, inscrits au REGISTRE §28. **Révision 13/06** : ATE-O3 tranché (collectivité/matière existent déjà ; `merge_subject` livré en migration `20260613120000`). |
 | **Statut** | 🟡 Cadrage validé (arbitrages tranchés). **Instruit FED-O7.** Préalables structurants non levés (tables collectivité/matière ; rôle contributeur) ; ATE-O1..O5 ouvertes. |
 | **Foyer décisions** | **REGISTRE** : parent **FED-O7** (gouvernance des autorités partagées) ; décisions propres = série **`ATE-*`** (proposées ici, à inscrire après validation). *On cite l'ID, on ne reformule pas le registre.* |
 | **Dépendances entrantes** | `spec-notice-autorite-enrichie` §5 (vision de l'atelier, INV-6) · `spec-outils-federalistes` (face fédération, grammaire **FED-O5**) · `spec-doublons-detection-fusion` (mécanisme **CAT-H1**) · `spec-autorites-notes-bio-multilingues` (socle **CAT-I1**) · paquet **RAPPORTS-REDE** (signal amont R3b/R4). |
@@ -39,7 +39,7 @@ Quatre principes (hérités, non négociables) :
 **Absent (le gap que cette spec adresse) :**
 - Toute table de **propositions d'autorité** (création / modification / fusion).
 - Le rôle / compte **`network_contributors`** (le 4ᵉ cercle de contribution).
-- Les tables d'autorité **collectivité** et **matière** (préalable structurant, `spec-notice` D7).
+- ~~Les tables d'autorité collectivité/matière~~ → **caduc (vérifié prod 13/06)** : collectivité = `authors` + `structured_meta->>'authorityType'`, matière = table `subjects`. Le seul vrai manque côté matière = le **primitif de fusion** (CAT-H1 ne couvrait pas les sujets) → livré par `merge_subject`/`suggest_subject_duplicates` (ATE-O3, migration `20260613120000`).
 - Tout **événement d'autorité** câblé dans `notify-event` (le sous-paquet 1b, §6).
 
 ---
@@ -93,8 +93,9 @@ Consentement = **absence d'objection motivée** dans la fenêtre (modèle opt-ou
 - **`network_contributors`** — compte réseau **non rattaché à une biblio** (s'appuie sur criar-conta sans biblio, déjà livré). Rôle distinct de `{reader, librarian, coordenador}` **et** de `network_administrators`. Droit : **proposer**, jamais éditer directement (ATE-3). *Décision ouverte : table dédiée vs rôle sur le compte réseau existant.*
 - **`authority_proposals`** — `id uuid`, `kind` (creation/edition/fusion/traduction), `target_authority_id bigint` (null si création), `payload jsonb` (diff proposé / id doublon→canonique), `status`, `deadline timestamptz`, `proposed_by`, `created_at`. RLS : lecture = parties prenantes (ATE-1) ; écriture = via RPC.
 - **`authority_proposal_objections`** — `id uuid`, `proposal_id uuid`, `objecting_library_id uuid`, `objecting_by uuid`, `reason text`, `created_at`. (Symétrie avec `circle_join_objections`.)
-- **Autorités `collectivité` et `matière`** — **préalable** (`spec-notice` D7) ; sans elles l'atelier ne travaille que les personnes (`authors`).
+- **Autorités `collectivité` et `matière`** — **existent déjà** (vérifié prod 13/06, pas un préalable) : collectivité = `authors` + `structured_meta->>'authorityType'='collective'` ; matière = table `subjects` (slug, `label_i18n`, `parent_id`, `scope_note`).
 - **Réutilisé tel quel** : `merge_author`/`merge_book`/`merge_log` (CAT-H1), `author_translations`/`variant_forms` (CAT-I1).
+- **Ajouté (ATE-O3, migration `20260613120000`)** : `merge_subject` + `suggest_subject_duplicates` (primitif de fusion matière, calqué CAT-H1 ; `merge_log.entity_type` étendu à `subject`).
 
 **RPC (DOC-RPC-3, schéma `api`)** : `fn_authority_propose(kind, target, payload)` · `fn_authority_object(proposal_id, library_id, reason)` · `fn_authority_withdraw(proposal_id)` · `fn_authority_resolve_due()` (cron, idempotent).
 
@@ -153,7 +154,7 @@ L'EF `notify-event` exige un **`record_id` numérique** (`index.ts` : `Number(pa
 
 - **ATE-O1** — `network_contributors` : table dédiée vs rôle sur le compte réseau existant ? Droits exacts (proposer ; lire le corpus ; voir l'état de ses propositions).
 - **ATE-O2** — Longueurs de fenêtre par type (création/édition/traduction courtes ; fusion ≈ 14 j) : valeurs à fixer.
-- **ATE-O3** — Préalable collectivité/matière : créer ces tables **dans** ce chantier ou les renvoyer à un paquet structurant amont (`spec-notice` D7) ?
+- **ATE-O3** — ✅ **tranché (13/06)** : collectivité/matière **existent déjà** (cf. §2/§5) ; préalable caduc. Livré : `merge_subject` + `suggest_subject_duplicates` (primitif de fusion matière, migration `20260613120000`, validé BEGIN/ROLLBACK).
 - **ATE-O4** — Réutiliser l'outbox d'une famille existante (générique) vs table dédiée `authority_proposal_notification_outbox` (§6.2).
 - **ATE-O5** — Surface du paquet 2 : onglet face fédération, page autorité, ou les deux.
 
