@@ -29,6 +29,7 @@ const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
 const RedePage = lazy(() => import('@/pages/rede/RedePage'));
 const FederacaoPage = lazy(() => import('@/pages/federacao/FederacaoPage'));
 const AtelierConstituicaoPage = lazy(() => import('@/pages/atelier/AtelierConstituicaoPage'));
+const AtelierAutoridadesPage = lazy(() => import('@/pages/atelier/AtelierAutoridadesPage'));
 
 // ── Fallback de chargement ───────────────────────────────────────────
 function LoadingFallback() {
@@ -103,6 +104,8 @@ export default function App() {
                   <Route path="/conta" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
                   {/* Oficina de constituição (coordenador_em_constituicao) — auto-gardée */}
                   <Route path="/atelier" element={<ProtectedRoute><AtelierConstituicaoPage /></ProtectedRoute>} />
+                  {/* Oficina de autoridades (atelier autorités) — file de propositions */}
+                  <Route path="/atelier-autoridades" element={<ProtectedRoute><AtelierAutoridadesPage /></ProtectedRoute>} />
                   <Route path="/painel" element={<ProtectedRoute><PanelPage /></ProtectedRoute>} />
                   <Route path="/painel/:tab" element={<ProtectedRoute><PanelPage /></ProtectedRoute>} />
 
