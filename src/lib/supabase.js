@@ -193,7 +193,11 @@ export async function apiRpc(functionName, args = {}) {
       console.error(`apiRpc ${functionName} failed:`, res.status, text);
       return { data: null, error: { status: res.status, message: text } };
     }
-    const data = await res.json();
+    // RPC RETURNS void → corps de réponse vide : appeler res.json() à l'aveugle lève
+    // « Unexpected end of JSON input ». On lit le texte et on ne parse que s'il y a un
+    // corps (sinon data = null). Corrige l'échec faux-positif des fn_constitution_*.
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : null;
     return { data, error: null };
   } catch (err) {
     console.error(`apiRpc ${functionName} network error:`, err);
