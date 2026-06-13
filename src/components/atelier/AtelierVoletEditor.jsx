@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import AtelierVolet1Identite from './AtelierVolet1Identite';
 import AtelierVolet2Horarios from './AtelierVolet2Horarios';
 import AtelierVolet4Catalogacao from './AtelierVolet4Catalogacao';
@@ -20,12 +21,16 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 // la lecture sur is_active) → fonctionnent sur une biblio pré-active où la coordinatrice
 // a une membership coordenador active.
 //
-// Reste non câblé : seulement le volet 8 « partenariats » (LibraryPartnershipsSection
-// → nécessite la liste réseau) ; le volet 8 ne rend ici que DocumentGovernanceSection.
+// Volet 8 : gouvernance documentaire (DocumentGovernanceSection) + une note. Les
+// partenariats de correspondance NE sont PAS éditables ici par choix doctrinal : une
+// biblio encore en constitution (pas active/publique) ne déclare pas de partenaires —
+// ça se fait dans Biblioteca une fois activée. (Techniquement faisable pré-actif, mais
+// non souhaité ; décision 2026-06-13.)
 // ═══════════════════════════════════════════════════════════════════════════
 export const WIRED_VOLETS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
 export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
+  const { formatMessage: t } = useIntl();
   if (!libraryId) return null;
   switch (voletN) {
     case 1:
@@ -57,7 +62,20 @@ export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
       // (sinon fn_library_visible_to_caller bloque le SELECT sur une biblio pré-active).
       return <AtelierVolet7Emails libraryId={libraryId} canEdit={canEdit} />;
     case 8:
-      return <DocumentGovernanceSection libraryId={libraryId} canEdit={canEdit} />;
+      // Visibilidade : gouvernance documentaire éditable ici ; les partenariats se
+      // déclarent plus tard dans Biblioteca (biblio active) — simple note.
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <DocumentGovernanceSection libraryId={libraryId} canEdit={canEdit} />
+          <p style={{
+            margin: 0, padding: '10px 12px', borderRadius: 9,
+            background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.10)',
+            fontSize: '.82rem', color: 'var(--brand-muted)', lineHeight: 1.5,
+          }}>
+            {t({ id: 'atelier.volet8.partnershipsNote' })}
+          </p>
+        </div>
+      );
     case 9:
       return <RetentionPolicySection libraryId={libraryId} canEdit={canEdit} />;
     default:
