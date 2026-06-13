@@ -9,7 +9,7 @@ import { Spinner } from '@/components/ui';
 const CONSTITUTION_ALLOWED = ['/atelier', '/conta'];
 
 export function ProtectedRoute({ children }) {
-  const { user, profile, loading } = useAuth();
+  const { user, profile, loading, recovery } = useAuth();
   const { pathname } = useLocation();
 
   if (loading) {
@@ -18,6 +18,17 @@ export function ProtectedRoute({ children }) {
         <Spinner size={32} />
       </div>
     );
+  }
+
+  // Durcissement récupération MDP : une session de récup (lien de reset cliqué) est une
+  // vraie session persistée, mais elle ne doit PAS donner accès à l'app tant que le mot
+  // de passe n'a pas été changé. Tant que le flag recovery est posé (AuthContext, persisté
+  // en localStorage), on renvoie vers /login (qui affiche le formulaire « nouveau mot de
+  // passe »). Bloque l'accès à /conta & co par navigation directe ou rechargement avec la
+  // seule session de récup — l'attaquant éventuel est forcé de changer le MDP (visible
+  // par la victime) au lieu d'accéder silencieusement aux données.
+  if (recovery) {
+    return <Navigate to="/login" replace />;
   }
 
   if (!user) {

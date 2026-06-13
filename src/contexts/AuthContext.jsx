@@ -40,10 +40,18 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   // Flow récupération MDP : l'événement PASSWORD_RECOVERY (émis par detectSessionInUrl
   // à l'arrivée via le lien de reset) établit une session MAIS doit afficher le
-  // formulaire « nouveau mot de passe », pas connecter l'usager. On expose ce flag :
+  // formulaire « nouveau mot de passe », pas donner accès à l'app. On expose ce flag :
   // lire window.location.hash dans LoginPage est non fiable (hash effacé par le client
   // Supabase avant le montage du composant).
-  const [recovery, setRecovery] = useState(false);
+  //
+  // Persisté en localStorage (PAS juste un state React) pour DURCIR : une session de
+  // récup est une vraie session persistée ; sans ce flag persistant, un rechargement
+  // ou une réouverture d'onglet ferait tomber le garde-fou et donnerait accès à l'app
+  // SANS changement de MDP (cf. ProtectedRoute). Nettoyé au SIGNED_OUT (le reset réussi
+  // et le bouton « annuler » déclenchent tous deux un signOut).
+  const [recovery, setRecovery] = useState(() => {
+    try { return localStorage.getItem('anarbib:pw-recovery') === '1'; } catch { return false; }
+  });
 
   // Anti-rebond locale : on ne synchronise la locale qu'une fois par user_id
   // et par chargement d'app. Sans ça, certains re-render de session pourraient
@@ -170,9 +178,11 @@ export function AuthProvider({ children }) {
         if (event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
           return;
         }
-        // Lien de récupération MDP : on marque le mode recovery pour que LoginPage
-        // affiche le formulaire « nouveau mot de passe » et NE redirige PAS vers l'app.
+        // Lien de récupération MDP : on marque le mode recovery (persistant) pour que
+        // LoginPage affiche le formulaire « nouveau mot de passe » ET que ProtectedRoute
+        // BLOQUE tout accès à l'app tant que le MDP n'est pas changé.
         if (event === 'PASSWORD_RECOVERY') {
+          try { localStorage.setItem('anarbib:pw-recovery', '1'); } catch { /* ignore */ }
           setRecovery(true);
         }
         setSession(s);
@@ -187,6 +197,7 @@ export function AuthProvider({ children }) {
         // prochaine connexion (potentiellement avec un autre user)
         if (event === 'SIGNED_OUT') {
           syncedForUserRef.current = null;
+          try { localStorage.removeItem('anarbib:pw-recovery'); } catch { /* ignore */ }
           setRecovery(false);
         }
       }

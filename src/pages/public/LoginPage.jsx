@@ -294,8 +294,11 @@ export default function LoginPage() {
     setForgotLoading(true);
     setForgotMsg({ text: '', kind: '' });
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail.trim(), {
-        redirectTo: `${window.location.origin}/login`,
+      // Récup MDP localisée : on passe par notre edge function (mail rendu dans la
+      // langue de l'usager via preferred_language) au lieu du mail natif Supabase
+      // à langue figée. La fonction renvoie toujours 200 (anti-énumération).
+      const { error } = await supabase.functions.invoke('request-password-reset', {
+        body: { email: forgotEmail.trim() },
       });
       setForgotMsg(
         error
@@ -657,6 +660,13 @@ export default function LoginPage() {
                     {showPw ? t({ id: 'auth.hidePassword' }) : t({ id: 'auth.showPassword' })}
                   </Button>
                 </div>
+                <button
+                  type="button"
+                  onClick={async () => { await supabase.auth.signOut(); setView('login'); }}
+                  style={{ background: 'none', border: 'none', color: 'var(--brand-muted)', textDecoration: 'underline', cursor: 'pointer', fontSize: '.82rem', padding: 0, alignSelf: 'flex-start' }}
+                >
+                  {t({ id: 'common.cancel' })}
+                </button>
                 {resetMsg.text && <div style={ms(resetMsg.kind)}>{resetMsg.text}</div>}
               </form>
             </div>
