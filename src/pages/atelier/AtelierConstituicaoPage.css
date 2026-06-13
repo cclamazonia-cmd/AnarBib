@@ -88,6 +88,12 @@
 .ab-atl-btn.primary:hover{ background:#b91c1c; }
 .ab-atl-btn[disabled]{ opacity:.55; cursor:default; }
 
+/* Champ fichier natif (volet 10 upload) : bouton « Choisir un fichier » en fond sombre */
+.ab-atl-panel-body input[type="file"]{ color:var(--brand-muted,#b8b2ab); font-size:.8rem; max-width:100%; }
+.ab-atl-panel-body input[type="file"]::file-selector-button,
+.ab-atl-panel-body input[type="file"]::-webkit-file-upload-button{ appearance:none; border:1px solid var(--brand-panel-border,rgba(255,255,255,.14)); background:rgba(0,0,0,.35); color:var(--brand-text,#f4f1ee); font-family:inherit; font-weight:700; font-size:.78rem; padding:7px 12px; border-radius:9px; cursor:pointer; margin-right:10px; transition:.15s; }
+.ab-atl-panel-body input[type="file"]::file-selector-button:hover{ background:rgba(255,255,255,.08); }
+
 /* Slide-over */
 .ab-atl-scrim{ position:fixed; inset:0; background:rgba(0,0,0,.55); opacity:0; pointer-events:none; transition:.22s; z-index:1100; backdrop-filter:blur(2px); }
 .ab-atl-scrim.is-open{ opacity:1; pointer-events:auto; }
