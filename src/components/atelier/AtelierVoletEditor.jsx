@@ -1,5 +1,6 @@
 import AtelierVolet1Identite from './AtelierVolet1Identite';
 import AtelierVolet2Horarios from './AtelierVolet2Horarios';
+import AtelierVolet6Adesao from './AtelierVolet6Adesao';
 import TeamPanel from '@/components/team/TeamPanel';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
 import PolicySetManager from '@/components/library/PolicySetManager';
@@ -21,7 +22,7 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 // v4 catalogação, v5 circulação (PolicySetManager/RegimeStateBox), v6 adhesão, v7 emails
 // (in-page), v8 partenariats (LibraryPartnershipsSection → nécessite la liste réseau).
 // ═══════════════════════════════════════════════════════════════════════════
-export const WIRED_VOLETS = new Set([1, 2, 3, 5, 8, 9]);
+export const WIRED_VOLETS = new Set([1, 2, 3, 5, 6, 8, 9]);
 
 export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
   if (!libraryId) return null;
@@ -44,6 +45,8 @@ export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
           <PolicySetManager libraryId={libraryId} canEdit={canEdit} />
         </div>
       );
+    case 6:
+      return <AtelierVolet6Adesao libraryId={libraryId} canEdit={canEdit} />;
     case 8:
       return <DocumentGovernanceSection libraryId={libraryId} canEdit={canEdit} />;
     case 9:
