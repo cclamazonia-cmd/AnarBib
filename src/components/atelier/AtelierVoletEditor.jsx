@@ -2,6 +2,7 @@ import AtelierVolet1Identite from './AtelierVolet1Identite';
 import AtelierVolet2Horarios from './AtelierVolet2Horarios';
 import AtelierVolet4Catalogacao from './AtelierVolet4Catalogacao';
 import AtelierVolet6Adesao from './AtelierVolet6Adesao';
+import AtelierVolet7Emails from './AtelierVolet7Emails';
 import TeamPanel from '@/components/team/TeamPanel';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
 import PolicySetManager from '@/components/library/PolicySetManager';
@@ -19,10 +20,10 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 // la lecture sur is_active) → fonctionnent sur une biblio pré-active où la coordinatrice
 // a une membership coordenador active.
 //
-// À câbler au lot suivant : v7 emails (in-page, nécessite library_commons_staff_read),
-// v8 partenariats (LibraryPartnershipsSection → nécessite la liste réseau).
+// Reste non câblé : seulement le volet 8 « partenariats » (LibraryPartnershipsSection
+// → nécessite la liste réseau) ; le volet 8 ne rend ici que DocumentGovernanceSection.
 // ═══════════════════════════════════════════════════════════════════════════
-export const WIRED_VOLETS = new Set([1, 2, 3, 4, 5, 6, 8, 9]);
+export const WIRED_VOLETS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
 export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
   if (!libraryId) return null;
@@ -51,6 +52,10 @@ export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
       );
     case 6:
       return <AtelierVolet6Adesao libraryId={libraryId} canEdit={canEdit} />;
+    case 7:
+      // E-mails — identité d'envoi (library_commons), lue via library_commons_staff_read
+      // (sinon fn_library_visible_to_caller bloque le SELECT sur une biblio pré-active).
+      return <AtelierVolet7Emails libraryId={libraryId} canEdit={canEdit} />;
     case 8:
       return <DocumentGovernanceSection libraryId={libraryId} canEdit={canEdit} />;
     case 9:
