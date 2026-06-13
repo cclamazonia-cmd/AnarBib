@@ -138,7 +138,7 @@ export default function AtelierConstituicaoPage() {
     const yn = b => t({ id: b ? 'common.yes' : 'common.no' });
     try {
       const [{ data: lib }, { data: ss }, { data: lc }] = await Promise.all([
-        supabase.from('libraries').select('cataloging_policy_notes, accepts_public_signup, reader_validation_mode, membership_enabled').eq('id', libraryId).maybeSingle(),
+        supabase.from('libraries').select('cataloging_classification_system, cataloging_mandatory_fields, cataloging_policy_notes, accepts_public_signup, reader_validation_mode, membership_enabled').eq('id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('service_mode, allows_new_loans, allows_new_reservations, public_message').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_commons').select('contact_email, reply_to_email, email_delivery_mode').eq('library_id', libraryId).maybeSingle(),
       ]);
@@ -150,7 +150,13 @@ export default function AtelierConstituicaoPage() {
         if (ss.public_message) e.push(`${t({ id: 'biblioteca.identity.publicMessage' })} : ${ss.public_message}`);
         cfg[2] = e;
       }
-      if (lib?.cataloging_policy_notes) cfg[4] = [lib.cataloging_policy_notes];
+      if (lib) {
+        const e4 = [];
+        if (lib.cataloging_classification_system) e4.push(`${t({ id: 'atelier.volet4.classifSystem' })} : ${t({ id: `atelier.volet4.classif.${lib.cataloging_classification_system}` })}`);
+        if (lib.cataloging_mandatory_fields?.length) e4.push(`${t({ id: 'atelier.volet4.mandatoryFields' })} : ${lib.cataloging_mandatory_fields.map(f => t({ id: `catalogacao.field.${f}` })).join(', ')}`);
+        if (lib.cataloging_policy_notes) e4.push(`${t({ id: 'atelier.volet4.notes' })} : ${lib.cataloging_policy_notes}`);
+        if (e4.length) cfg[4] = e4;
+      }
       if (lib) cfg[6] = [
         `${t({ id: 'biblioteca.readerIdentity.publicSignup' })} : ${yn(lib.accepts_public_signup)}`,
         `${t({ id: 'biblioteca.readerIdentity.mode' })} : ${t({ id: `biblioteca.readerIdentity.mode.${lib.reader_validation_mode || 'presential'}` })}`,
