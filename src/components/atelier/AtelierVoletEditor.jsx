@@ -1,5 +1,7 @@
 import AtelierVolet1Identite from './AtelierVolet1Identite';
 import TeamPanel from '@/components/team/TeamPanel';
+import RegimeStateBox from '@/components/library/RegimeStateBox';
+import PolicySetManager from '@/components/library/PolicySetManager';
 import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
 
@@ -18,7 +20,7 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 // v4 catalogação, v5 circulação (PolicySetManager/RegimeStateBox), v6 adhesão, v7 emails
 // (in-page), v8 partenariats (LibraryPartnershipsSection → nécessite la liste réseau).
 // ═══════════════════════════════════════════════════════════════════════════
-export const WIRED_VOLETS = new Set([1, 3, 8, 9]);
+export const WIRED_VOLETS = new Set([1, 3, 5, 8, 9]);
 
 export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
   if (!libraryId) return null;
@@ -30,6 +32,15 @@ export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
       // RPC fn_team_*, staff-based → OK pré-active). La coordinatrice y est seule
       // membre active au départ.
       return <TeamPanel scope="library" libraryId={libraryId} />;
+    case 5:
+      // Circulação — état de service + jeux de règles de circulation (RPC staff-based).
+      // seedT/regulationDocs optionnels (fallbacks dans les composants).
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <RegimeStateBox libraryId={libraryId} />
+          <PolicySetManager libraryId={libraryId} canEdit={canEdit} />
+        </div>
+      );
     case 8:
       return <DocumentGovernanceSection libraryId={libraryId} canEdit={canEdit} />;
     case 9:
