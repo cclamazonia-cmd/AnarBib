@@ -1,5 +1,6 @@
 import AtelierVolet1Identite from './AtelierVolet1Identite';
 import AtelierVolet2Horarios from './AtelierVolet2Horarios';
+import AtelierVolet4Catalogacao from './AtelierVolet4Catalogacao';
 import AtelierVolet6Adesao from './AtelierVolet6Adesao';
 import TeamPanel from '@/components/team/TeamPanel';
 import RegimeStateBox from '@/components/library/RegimeStateBox';
@@ -18,11 +19,10 @@ import RetentionPolicySection from '@/components/library/RetentionPolicySection'
 // la lecture sur is_active) → fonctionnent sur une biblio pré-active où la coordinatrice
 // a une membership coordenador active.
 //
-// À câbler au lot suivant : v2 horaires (service_state, in-page), v3 pessoas (TeamPanel),
-// v4 catalogação, v5 circulação (PolicySetManager/RegimeStateBox), v6 adhesão, v7 emails
-// (in-page), v8 partenariats (LibraryPartnershipsSection → nécessite la liste réseau).
+// À câbler au lot suivant : v7 emails (in-page, nécessite library_commons_staff_read),
+// v8 partenariats (LibraryPartnershipsSection → nécessite la liste réseau).
 // ═══════════════════════════════════════════════════════════════════════════
-export const WIRED_VOLETS = new Set([1, 2, 3, 5, 6, 8, 9]);
+export const WIRED_VOLETS = new Set([1, 2, 3, 4, 5, 6, 8, 9]);
 
 export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
   if (!libraryId) return null;
@@ -31,6 +31,10 @@ export default function AtelierVoletEditor({ voletN, libraryId, canEdit }) {
       return <AtelierVolet1Identite libraryId={libraryId} canEdit={canEdit} />;
     case 2:
       return <AtelierVolet2Horarios libraryId={libraryId} canEdit={canEdit} />;
+    case 4:
+      // Catalogação — le catalog_mode est déjà choisi au volet 0 ; ici, notes
+      // libres de politique de catalogage (libraries.cataloging_policy_notes).
+      return <AtelierVolet4Catalogacao libraryId={libraryId} canEdit={canEdit} />;
     case 3:
       // Pessoas responsáveis — TeamPanel charge ses propres données (membships +
       // RPC fn_team_*, staff-based → OK pré-active). La coordinatrice y est seule
