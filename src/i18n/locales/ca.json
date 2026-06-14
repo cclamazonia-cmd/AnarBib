@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Enviar el lot",
   "importacoes.export.fonds.directSending": "Enviant…",
   "importacoes.export.fonds.directSent": "Lot dipositat a la biblioteca sòcia: {count} registres, {files} fitxers. El trobarà a la seva cua de revisió.",
-  "importacoes.export.fonds.directNoPartner": "Cap biblioteca sòcia amb el dret « mutualització » actiu. Activa'l primer en una associació."
+  "importacoes.export.fonds.directNoPartner": "Cap biblioteca sòcia amb el dret « mutualització » actiu. Activa'l primer en una associació.",
+  "importacoes.export.curate.title": "Preparar l'elegibilitat per a l'export",
+  "importacoes.export.curate.desc": "Perquè una fitxa sigui exportable, un dels seus fitxers públics ha de validar-se com a « domini públic » (acte diferent del « lliure de drets » marcat a la catalogació). Aquests són els fitxers públics encara no validats.",
+  "importacoes.export.curate.load": "Carregar els fitxers a validar",
+  "importacoes.export.curate.loading": "Carregant…",
+  "importacoes.export.curate.empty": "Cap fitxer públic a validar (o tots ja validats).",
+  "importacoes.export.curate.validate": "Validar (domini públic)",
+  "importacoes.export.curate.validating": "Validant…",
+  "importacoes.export.curate.validated": "« {title} » ja és elegible per a l'export.",
+  "importacoes.export.curate.error": "Error: {message}"
 }

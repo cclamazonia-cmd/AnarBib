@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Enviar el lote",
   "importacoes.export.fonds.directSending": "Enviando…",
   "importacoes.export.fonds.directSent": "Lote depositado en la biblioteca asociada: {count} registros, {files} archivos. Lo encontrará en su cola de revisión.",
-  "importacoes.export.fonds.directNoPartner": "Ninguna biblioteca asociada con el derecho « mutualización » activo. Actívalo en una asociación primero."
+  "importacoes.export.fonds.directNoPartner": "Ninguna biblioteca asociada con el derecho « mutualización » activo. Actívalo en una asociación primero.",
+  "importacoes.export.curate.title": "Preparar la elegibilidad para el export",
+  "importacoes.export.curate.desc": "Para que una ficha sea exportable, uno de sus archivos públicos debe validarse como « dominio público » (acto distinto del « libre de derechos » marcado en la catalogación). Estos son los archivos públicos aún no validados.",
+  "importacoes.export.curate.load": "Cargar los archivos a validar",
+  "importacoes.export.curate.loading": "Cargando…",
+  "importacoes.export.curate.empty": "Ningún archivo público que validar (o todos ya validados).",
+  "importacoes.export.curate.validate": "Validar (dominio público)",
+  "importacoes.export.curate.validating": "Validando…",
+  "importacoes.export.curate.validated": "« {title} » ya es elegible para el export.",
+  "importacoes.export.curate.error": "Error: {message}"
 }

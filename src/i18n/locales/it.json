@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Inviare il lotto",
   "importacoes.export.fonds.directSending": "Invio in corso…",
   "importacoes.export.fonds.directSent": "Lotto depositato presso la biblioteca partner: {count} schede, {files} file. Lo troverà nella sua coda di revisione.",
-  "importacoes.export.fonds.directNoPartner": "Nessuna biblioteca partner con il diritto « mutualizzazione » attivo. Attivalo prima su una partnership."
+  "importacoes.export.fonds.directNoPartner": "Nessuna biblioteca partner con il diritto « mutualizzazione » attivo. Attivalo prima su una partnership.",
+  "importacoes.export.curate.title": "Preparare l'idoneità all'export",
+  "importacoes.export.curate.desc": "Perché una scheda sia esportabile, uno dei suoi file pubblici deve essere validato come « dominio pubblico » (atto distinto dal « libero da diritti » spuntato in catalogazione). Ecco i file pubblici non ancora validati.",
+  "importacoes.export.curate.load": "Caricare i file da validare",
+  "importacoes.export.curate.loading": "Caricamento…",
+  "importacoes.export.curate.empty": "Nessun file pubblico da validare (o tutti già validati).",
+  "importacoes.export.curate.validate": "Validare (dominio pubblico)",
+  "importacoes.export.curate.validating": "Validazione…",
+  "importacoes.export.curate.validated": "« {title} » ora è idonea all'export.",
+  "importacoes.export.curate.error": "Errore: {message}"
 }

@@ -58,6 +58,11 @@ export default function ImportacoesPage() {
   const [fondsPartners, setFondsPartners] = useState([]);
   const [fondsPartnersLoaded, setFondsPartnersLoaded] = useState(false);
   const [fondsSending, setFondsSending] = useState(false);
+  // ── Curation des fichiers pour l'export (Solution 1, entrée a) ──
+  const [pubResources, setPubResources] = useState([]);
+  const [pubLoaded, setPubLoaded] = useState(false);
+  const [pubLoading, setPubLoading] = useState(false);
+  const [pubPromotingId, setPubPromotingId] = useState(null);
 
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
@@ -628,6 +633,39 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setFondsSending(false);
+    }
+  }
+
+  // ── Curation : promouvoir un fichier public en digital_asset vérifié (Sol. 1a) ──
+  // Rend une fiche éligible à l'export de fonds (EX-1 exige un digital_asset
+  // public_domain_confirmed, distinct du « libre de droits » coché au catalogage).
+  async function loadPublishableResources() {
+    if (!libraryId) return;
+    setPubLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_export_publishable_resources', { p_library_id: libraryId });
+      if (error) throw error;
+      setPubResources(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.curate.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setPubLoaded(true);
+      setPubLoading(false);
+    }
+  }
+
+  async function handlePublishResource(res) {
+    setPubPromotingId(res.resource_id);
+    try {
+      const { error } = await supabase.rpc('fn_publish_digital_asset_from_resource', { p_resource_id: res.resource_id });
+      if (error) throw error;
+      setPubResources((prev) => prev.filter((r) => r.resource_id !== res.resource_id));
+      setMsg({ text: t({ id: 'importacoes.export.curate.validated' }, { title: res.book_title || res.label || '—' }), kind: 'ok' });
+      if (fondsCount != null) await loadFondsEligibleCount();
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.curate.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setPubPromotingId(null);
     }
   }
 
@@ -1241,6 +1279,38 @@ export default function ImportacoesPage() {
                     {exportLoading ? t({ id: 'importacoes.export.lote.exporting' }) : t({ id: 'importacoes.export.lote.download' })}
                   </button>
                 </div>
+              </div>
+            </div>
+
+            <div className="imp-sheet">
+              <div className="imp-sheet__head">
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.curate.title' })}</span>
+              </div>
+              <div className="imp-sheet__body">
+                <p className="imp-note">{t({ id: 'importacoes.export.curate.desc' })}</p>
+                <div style={{ marginTop: 8 }}>
+                  <button className="cat-btn secondary" type="button" onClick={loadPublishableResources} disabled={pubLoading || !libraryId}>
+                    {pubLoading ? t({ id: 'importacoes.export.curate.loading' }) : t({ id: 'importacoes.export.curate.load' })}
+                  </button>
+                </div>
+                {pubLoaded && pubResources.length === 0 && (
+                  <p className="imp-note" style={{ opacity: 0.8, marginTop: 8 }}>{t({ id: 'importacoes.export.curate.empty' })}</p>
+                )}
+                {pubResources.length > 0 && (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
+                    {pubResources.map((res) => (
+                      <li key={res.resource_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 6, marginBottom: 4, background: 'rgba(127,127,127,0.08)' }}>
+                        <span style={{ minWidth: 0, fontSize: '.85rem' }}>
+                          <b>{res.book_title || '—'}</b>{res.label ? ` · ${res.label}` : ''}
+                          {res.is_primary && <Pill variant="ok">★</Pill>}
+                        </span>
+                        <button className="cat-btn primary" type="button" onClick={() => handlePublishResource(res)} disabled={pubPromotingId === res.resource_id}>
+                          {pubPromotingId === res.resource_id ? t({ id: 'importacoes.export.curate.validating' }) : t({ id: 'importacoes.export.curate.validate' })}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 

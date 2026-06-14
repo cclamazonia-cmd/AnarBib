@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Sendi la aron",
   "importacoes.export.fonds.directSending": "Sendado…",
   "importacoes.export.fonds.directSent": "Aro deponita ĉe la partnera biblioteko: {count} registroj, {files} dosieroj. Ĝi troviĝos en ĝia revizia atendovico.",
-  "importacoes.export.fonds.directNoPartner": "Neniu partnera biblioteko kun aktiva rajto « reciproka kunhavigo ». Unue ŝaltu ĝin ĉe partnereco."
+  "importacoes.export.fonds.directNoPartner": "Neniu partnera biblioteko kun aktiva rajto « reciproka kunhavigo ». Unue ŝaltu ĝin ĉe partnereco.",
+  "importacoes.export.curate.title": "Prepari la elekteblecon por eksporto",
+  "importacoes.export.curate.desc": "Por ke registro estu eksportebla, unu el ĝiaj publikaj dosieroj devas esti validigita kiel « publika havaĵo » (ago distinga de la « senrajta » markita en katalogado). Jen la publikaj dosieroj ankoraŭ ne validigitaj.",
+  "importacoes.export.curate.load": "Ŝargi la validigotajn dosierojn",
+  "importacoes.export.curate.loading": "Ŝargado…",
+  "importacoes.export.curate.empty": "Neniu publika dosiero por validigi (aŭ ĉiuj jam validigitaj).",
+  "importacoes.export.curate.validate": "Validigi (publika havaĵo)",
+  "importacoes.export.curate.validating": "Validigado…",
+  "importacoes.export.curate.validated": "« {title} » nun estas elektebla por eksporto.",
+  "importacoes.export.curate.error": "Eraro: {message}"
 }

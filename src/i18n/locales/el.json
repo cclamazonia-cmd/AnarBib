@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Αποστολή παρτίδας",
   "importacoes.export.fonds.directSending": "Αποστολή…",
   "importacoes.export.fonds.directSent": "Η παρτίδα κατατέθηκε στη συνεργαζόμενη βιβλιοθήκη: {count} εγγραφές, {files} αρχεία. Θα τη βρει στην ουρά ελέγχου της.",
-  "importacoes.export.fonds.directNoPartner": "Καμία συνεργαζόμενη βιβλιοθήκη με ενεργό το δικαίωμα « αμοιβαιοποίηση ». Ενεργοποιήστε το πρώτα σε μια σύμπραξη."
+  "importacoes.export.fonds.directNoPartner": "Καμία συνεργαζόμενη βιβλιοθήκη με ενεργό το δικαίωμα « αμοιβαιοποίηση ». Ενεργοποιήστε το πρώτα σε μια σύμπραξη.",
+  "importacoes.export.curate.title": "Προετοιμασία επιλεξιμότητας εξαγωγής",
+  "importacoes.export.curate.desc": "Για να είναι μια εγγραφή εξαγώγιμη, ένα από τα δημόσια αρχεία της πρέπει να επικυρωθεί ως « δημόσια κτήση » (πράξη διακριτή από το « ελεύθερο δικαιωμάτων » της καταλογογράφησης). Ιδού τα δημόσια αρχεία που δεν έχουν ακόμη επικυρωθεί.",
+  "importacoes.export.curate.load": "Φόρτωση αρχείων προς επικύρωση",
+  "importacoes.export.curate.loading": "Φόρτωση…",
+  "importacoes.export.curate.empty": "Κανένα δημόσιο αρχείο προς επικύρωση (ή όλα ήδη επικυρωμένα).",
+  "importacoes.export.curate.validate": "Επικύρωση (δημόσια κτήση)",
+  "importacoes.export.curate.validating": "Επικύρωση…",
+  "importacoes.export.curate.validated": "Το « {title} » είναι τώρα επιλέξιμο για εξαγωγή.",
+  "importacoes.export.curate.error": "Σφάλμα: {message}"
 }

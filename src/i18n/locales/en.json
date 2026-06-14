@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Send the batch",
   "importacoes.export.fonds.directSending": "Sending…",
   "importacoes.export.fonds.directSent": "Batch deposited at the partner library: {count} records, {files} files. They will find it in their review queue.",
-  "importacoes.export.fonds.directNoPartner": "No partner library with the « mutualization » right active. Enable it on a partnership first."
+  "importacoes.export.fonds.directNoPartner": "No partner library with the « mutualization » right active. Enable it on a partnership first.",
+  "importacoes.export.curate.title": "Prepare export eligibility",
+  "importacoes.export.curate.desc": "For a record to be exportable, one of its public files must be validated as « public domain » (a distinct act from the « free of rights » ticked in cataloging). Here are the public files not yet validated.",
+  "importacoes.export.curate.load": "Load files to validate",
+  "importacoes.export.curate.loading": "Loading…",
+  "importacoes.export.curate.empty": "No public file to validate (or all already validated).",
+  "importacoes.export.curate.validate": "Validate (public domain)",
+  "importacoes.export.curate.validating": "Validating…",
+  "importacoes.export.curate.validated": "« {title} » is now eligible for export.",
+  "importacoes.export.curate.error": "Error: {message}"
 }

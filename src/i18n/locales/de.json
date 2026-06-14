@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Stapel senden",
   "importacoes.export.fonds.directSending": "Wird gesendet…",
   "importacoes.export.fonds.directSent": "Stapel bei der Partnerbibliothek hinterlegt: {count} Datensätze, {files} Dateien. Sie findet ihn in ihrer Prüfwarteschlange.",
-  "importacoes.export.fonds.directNoPartner": "Keine Partnerbibliothek mit aktivem Recht « Mutualisierung ». Aktiviere es zuerst bei einer Partnerschaft."
+  "importacoes.export.fonds.directNoPartner": "Keine Partnerbibliothek mit aktivem Recht « Mutualisierung ». Aktiviere es zuerst bei einer Partnerschaft.",
+  "importacoes.export.curate.title": "Export-Berechtigung vorbereiten",
+  "importacoes.export.curate.desc": "Damit ein Datensatz exportierbar ist, muss eine seiner öffentlichen Dateien als « gemeinfrei » bestätigt werden (ein vom « rechtefrei » in der Katalogisierung getrennter Akt). Hier die noch nicht bestätigten öffentlichen Dateien.",
+  "importacoes.export.curate.load": "Zu bestätigende Dateien laden",
+  "importacoes.export.curate.loading": "Wird geladen…",
+  "importacoes.export.curate.empty": "Keine öffentliche Datei zu bestätigen (oder alle bereits bestätigt).",
+  "importacoes.export.curate.validate": "Bestätigen (gemeinfrei)",
+  "importacoes.export.curate.validating": "Wird bestätigt…",
+  "importacoes.export.curate.validated": "« {title} » ist jetzt exportberechtigt.",
+  "importacoes.export.curate.error": "Fehler: {message}"
 }

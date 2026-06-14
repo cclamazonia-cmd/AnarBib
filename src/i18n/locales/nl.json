@@ -4706,5 +4706,14 @@
   "importacoes.export.fonds.directSend": "Partij verzenden",
   "importacoes.export.fonds.directSending": "Verzenden…",
   "importacoes.export.fonds.directSent": "Partij gedeponeerd bij de partnerbibliotheek: {count} records, {files} bestanden. Ze vinden het in hun beoordelingswachtrij.",
-  "importacoes.export.fonds.directNoPartner": "Geen partnerbibliotheek met het recht « mutualisering » actief. Schakel het eerst in op een partnerschap."
+  "importacoes.export.fonds.directNoPartner": "Geen partnerbibliotheek met het recht « mutualisering » actief. Schakel het eerst in op een partnerschap.",
+  "importacoes.export.curate.title": "Exportgeschiktheid voorbereiden",
+  "importacoes.export.curate.desc": "Om een record exporteerbaar te maken, moet een van zijn openbare bestanden als « publiek domein » worden gevalideerd (los van het « rechtenvrij » dat bij de catalogisering is aangevinkt). Hier de openbare bestanden die nog niet zijn gevalideerd.",
+  "importacoes.export.curate.load": "Te valideren bestanden laden",
+  "importacoes.export.curate.loading": "Laden…",
+  "importacoes.export.curate.empty": "Geen openbaar bestand om te valideren (of alle al gevalideerd).",
+  "importacoes.export.curate.validate": "Valideren (publiek domein)",
+  "importacoes.export.curate.validating": "Valideren…",
+  "importacoes.export.curate.validated": "« {title} » is nu geschikt voor export.",
+  "importacoes.export.curate.error": "Fout: {message}"
 }
