@@ -16,7 +16,7 @@ const CatalogPage = lazy(() => import('@/pages/public/CatalogPage'));
 const BookPage = lazy(() => import('@/pages/public/BookPage'));
 const AuthorPage = lazy(() => import('@/pages/public/AuthorPage'));
 const ReaderPage = lazy(() => import('@/pages/public/ReaderPage'));
-const AccountPage = lazy(() => import('@/pages/account/AccountPage'));
+const ContaRouter = lazy(() => import('@/pages/account/ContaRouter'));
 const PanelPage = lazy(() => import('@/pages/painel/PanelPage'));
 const CatalogacaoPage = lazy(() => import('@/pages/catalogacao/CatalogacaoPage'));
 const CriarContaPage = lazy(() => import('@/pages/public/CriarContaPage'));
@@ -101,7 +101,7 @@ export default function App() {
                   <Route path="/privacidade/:slug" element={<PrivacyPolicyPage />} />
 
                   {/* ── Pages authentifiées ────────── */}
-                  <Route path="/conta" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
+                  <Route path="/conta" element={<ProtectedRoute><ContaRouter /></ProtectedRoute>} />
                   {/* Oficina de constituição (coordenador_em_constituicao) — auto-gardée */}
                   <Route path="/atelier" element={<ProtectedRoute><AtelierConstituicaoPage /></ProtectedRoute>} />
                   {/* Oficina de autoridades (atelier autorités) — file de propositions */}
