@@ -4582,5 +4582,6 @@
   "auth.create.motivation": "Ta motivation (facultatif)",
   "auth.create.motivationHint": "Quelques mots sur ce qui t'amène à AnarBib. Ce message est transmis à l'équipe.",
   "account.profile.org": "Organisation ou collectif",
-  "panel.reader.org": "Organisation ou collectif"
+  "panel.reader.org": "Organisation ou collectif",
+  "auth.create.consentEmailContributor": "J'accepte de recevoir des communications par e-mail du réseau AnarBib (facultatif)."
 }

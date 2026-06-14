@@ -57,6 +57,14 @@ const T = {
     'Organización o colectivo',
     'Organization or collective'
   ],
+  // Consentement e-mail — variante compte contributeur (sans mention d'emprunt
+  // ni de bibliothèque ; facultatif).
+  'auth.create.consentEmailContributor': [
+    'Aceito receber comunicações por e-mail da rede AnarBib (opcional).',
+    "J'accepte de recevoir des communications par e-mail du réseau AnarBib (facultatif).",
+    'Acepto recibir comunicaciones por correo electrónico de la red AnarBib (opcional).',
+    'I agree to receive email communications from the AnarBib network (optional).'
+  ],
 };
 
 function valFor(loc, quad) {

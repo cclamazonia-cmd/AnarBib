@@ -538,7 +538,10 @@ serve(async (req)=>{
     // CONSENT : acceptation des règles requise sauf pour les cas sans biblio
     // à rejoindre (collective_candidate et reader_orphan ne rejoignent pas
     // une biblio existante). Pendant exact de l'ancien !signupWithoutLibrary.
-    if (!consentEmail || (signupIntent === "reader_pending" && !acceptRules)) {
+    // Consentement e-mail : requis pour tous SAUF le compte contributeur (réseau,
+    // ne vient pas emprunter) — il peut s'inscrire sans cocher. acceptRules : requis
+    // seulement pour reader_pending (rejoint une biblio avec règlement).
+    if ((signupIntent !== "contributor" && !consentEmail) || (signupIntent === "reader_pending" && !acceptRules)) {
       return json({
         error: "CONSENT_REQUIRED"
       }, 400);
@@ -632,8 +635,9 @@ serve(async (req)=>{
       }, 500);
     }
     if (Array.isArray(existingProfiles) && existingProfiles.length > 0) {
+      // Code stable (mappé/localisé côté frontend) plutôt qu'un message figé.
       return json({
-        error: "Este e-mail já está cadastrado. Se você já tem uma conta, faça login em “Conta do/a/e leitor/a/e”."
+        error: "EMAIL_ALREADY_REGISTERED"
       }, 400);
     }
     const tempPassword = generateTempPassword();
@@ -702,7 +706,7 @@ serve(async (req)=>{
       gender: gender || null,
       affiliation_org: affiliationOrg || null,
       address: fullAddress || null,
-      consent_email: true,
+      consent_email: consentEmail,
       consent_email_at: consentEmailAt,
       must_change_password: true,
     }).eq("id", userId).select("id, email, public_id").maybeSingle();

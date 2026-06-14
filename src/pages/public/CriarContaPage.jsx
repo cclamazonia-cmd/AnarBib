@@ -168,7 +168,7 @@ export default function CriarContaPage() {
       setMsg({ text: t({id:'address.phone.invalid'}), kind: 'error' });
       return;
     }
-    if (!form.consent) { setMsg({ text: t({id:'auth.create.checkConsent'}), kind: 'error' }); return; }
+    if (!form.consent && form.library_slug !== '__contributor__') { setMsg({ text: t({id:'auth.create.checkConsent'}), kind: 'error' }); return; }
     if (currentLib?.has_regimento && !form.acceptRules) { setMsg({ text: t({id:'auth.create.acceptRulesRequired'}), kind: 'error' }); return; }
 
     setLoading(true); setMsg({ text: '', kind: '' }); setPublicId('');
@@ -207,8 +207,8 @@ export default function CriarContaPage() {
         state_code: stateCode,              // code ISO 3166-2 (vide si pays sans liste fermée)
         country: form.country,              // code ISO ('BR', 'FR', 'AR'…)
         country_code: form.country,         // alias explicite pour la nouvelle API
-        consent_email: true,
-        consent_email_at: new Date().toISOString(),
+        consent_email: form.consent,
+        consent_email_at: form.consent ? new Date().toISOString() : null,
         accept_rules: currentLib?.has_regimento ? form.acceptRules : true,
         library_slug: isReaderPending ? form.library_slug : '',
         library_name: currentLib?.name || '',
@@ -227,13 +227,22 @@ export default function CriarContaPage() {
         locale: detectLocale(),
       }});
       if (error) {
-        // supabase-js met le corps JSON de l'EF dans error.context (non-2xx),
-        // pas dans data (qui vaut null). On tente les deux pour robustesse.
-        const efBody = error.context ?? data;
+        // supabase-js v2 : pour un non-2xx, error.context est l'objet Response
+        // (PAS le corps JSON). On lit le corps pour récupérer le code d'erreur de
+        // l'EF ; sinon repli sur data (parsé sur 2xx). Sans ça, tout 400 retombait
+        // à tort sur « Erreur de connexion ».
+        let efBody = data;
+        try {
+          if (error.context && typeof error.context.json === 'function') {
+            efBody = await error.context.clone().json();
+          } else if (error.context && typeof error.context === 'object') {
+            efBody = error.context;
+          }
+        } catch { /* corps illisible : on garde le fallback */ }
         const code = efBody?.error || '';
         const detail = efBody?.detail || '';
         let userMsg;
-        if (code.includes('already') || code.includes('já existe') || code.includes('exists')) {
+        if (code === 'EMAIL_ALREADY_REGISTERED' || /already|exists|já/i.test(code)) {
           userMsg = t({id:'auth.create.emailAlreadyRegistered'});
         } else if (code === 'INVALID_LIBRARY' || code === 'LIBRARY_NOT_FOUND') {
           userMsg = t({id:'auth.create.errorLibraryNotReady'});
@@ -572,8 +581,8 @@ export default function CriarContaPage() {
 
           {/* Consentement email */}
           <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 16, fontSize: '.85rem', cursor: 'pointer' }}>
-            <input type="checkbox" checked={form.consent} onChange={e => set('consent', e.target.checked)} required style={{ marginTop: 3 }} />
-            <span>{t({id:'auth.create.consentEmail'})}</span>
+            <input type="checkbox" checked={form.consent} onChange={e => set('consent', e.target.checked)} required={form.library_slug !== '__contributor__'} style={{ marginTop: 3 }} />
+            <span>{t({id: form.library_slug === '__contributor__' ? 'auth.create.consentEmailContributor' : 'auth.create.consentEmail'})}</span>
           </label>
 
           {/* Motivation libre — transmise aux admins dans l'e-mail interne */}
