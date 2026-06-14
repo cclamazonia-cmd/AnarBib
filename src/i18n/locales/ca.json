@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Adjuntar a aquest llibre",
   "importacoes.export.attach.attaching": "Adjuntant…",
   "importacoes.export.attach.attached": "Fitxer adjuntat a « {title} » (verificat domini públic).",
-  "importacoes.export.attach.error": "Error: {message}"
+  "importacoes.export.attach.error": "Error: {message}",
+  "federacao.gazeta.empty": "Cap número publicat de moment.",
+  "federacao.gazeta.error": "No s’ha pogut carregar la gaseta.",
+  "federacao.gazeta.retry": "Torna-ho a provar"
 }

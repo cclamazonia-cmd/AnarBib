@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Επισύναψη σε αυτό το βιβλίο",
   "importacoes.export.attach.attaching": "Επισύναψη…",
   "importacoes.export.attach.attached": "Το αρχείο επισυνάφθηκε στο « {title} » (επαληθευμένη δημόσια κτήση).",
-  "importacoes.export.attach.error": "Σφάλμα: {message}"
+  "importacoes.export.attach.error": "Σφάλμα: {message}",
+  "federacao.gazeta.empty": "Κανένα τεύχος δεν έχει δημοσιευτεί ακόμη.",
+  "federacao.gazeta.error": "Δεν ήταν δυνατή η φόρτωση της εφημερίδας.",
+  "federacao.gazeta.retry": "Επανάληψη"
 }

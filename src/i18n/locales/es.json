@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Adjuntar a este libro",
   "importacoes.export.attach.attaching": "Adjuntando…",
   "importacoes.export.attach.attached": "Archivo adjuntado a « {title} » (verificado dominio público).",
-  "importacoes.export.attach.error": "Error: {message}"
+  "importacoes.export.attach.error": "Error: {message}",
+  "federacao.gazeta.empty": "Ningún número publicado por ahora.",
+  "federacao.gazeta.error": "No se pudo cargar la gaceta.",
+  "federacao.gazeta.retry": "Reintentar"
 }

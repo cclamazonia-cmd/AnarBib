@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Alligi al ĉi tiu libro",
   "importacoes.export.attach.attaching": "Alligado…",
   "importacoes.export.attach.attached": "Dosiero alligita al « {title} » (konfirmita publika havaĵo).",
-  "importacoes.export.attach.error": "Eraro: {message}"
+  "importacoes.export.attach.error": "Eraro: {message}",
+  "federacao.gazeta.empty": "Ankoraŭ neniu numero publikigita.",
+  "federacao.gazeta.error": "Ne eblis ŝargi la gazeton.",
+  "federacao.gazeta.retry": "Reprovi"
 }

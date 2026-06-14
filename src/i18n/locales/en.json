@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Attach to this book",
   "importacoes.export.attach.attaching": "Attaching…",
   "importacoes.export.attach.attached": "File attached to « {title} » (verified public domain).",
-  "importacoes.export.attach.error": "Error: {message}"
+  "importacoes.export.attach.error": "Error: {message}",
+  "federacao.gazeta.empty": "No issue published yet.",
+  "federacao.gazeta.error": "The gazette could not be loaded.",
+  "federacao.gazeta.retry": "Retry"
 }

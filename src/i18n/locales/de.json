@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "An dieses Buch anhängen",
   "importacoes.export.attach.attaching": "Wird angehängt…",
   "importacoes.export.attach.attached": "Datei an « {title} » angehängt (gemeinfrei bestätigt).",
-  "importacoes.export.attach.error": "Fehler: {message}"
+  "importacoes.export.attach.error": "Fehler: {message}",
+  "federacao.gazeta.empty": "Noch keine Ausgabe veröffentlicht.",
+  "federacao.gazeta.error": "Die Gazette konnte nicht geladen werden.",
+  "federacao.gazeta.retry": "Erneut versuchen"
 }

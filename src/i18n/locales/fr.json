@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Attacher à ce livre",
   "importacoes.export.attach.attaching": "Attache en cours…",
   "importacoes.export.attach.attached": "Fichier attaché à « {title} » (vérifié domaine public).",
-  "importacoes.export.attach.error": "Erreur : {message}"
+  "importacoes.export.attach.error": "Erreur : {message}",
+  "federacao.gazeta.empty": "Aucun numéro publié pour l’instant.",
+  "federacao.gazeta.error": "Impossible de charger la gazette.",
+  "federacao.gazeta.retry": "Réessayer"
 }

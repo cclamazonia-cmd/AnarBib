@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Anexar a este livro",
   "importacoes.export.attach.attaching": "Anexando…",
   "importacoes.export.attach.attached": "Ficheiro anexado a « {title} » (verificado domínio público).",
-  "importacoes.export.attach.error": "Erro: {message}"
+  "importacoes.export.attach.error": "Erro: {message}",
+  "federacao.gazeta.empty": "Nenhum número publicado por enquanto.",
+  "federacao.gazeta.error": "Não foi possível carregar a gazeta.",
+  "federacao.gazeta.retry": "Tentar de novo"
 }

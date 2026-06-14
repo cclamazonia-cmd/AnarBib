@@ -4728,5 +4728,8 @@
   "importacoes.export.attach.attachHere": "Aan dit boek koppelen",
   "importacoes.export.attach.attaching": "Koppelen…",
   "importacoes.export.attach.attached": "Bestand gekoppeld aan « {title} » (geverifieerd publiek domein).",
-  "importacoes.export.attach.error": "Fout: {message}"
+  "importacoes.export.attach.error": "Fout: {message}",
+  "federacao.gazeta.empty": "Nog geen nummer gepubliceerd.",
+  "federacao.gazeta.error": "De gazette kon niet worden geladen.",
+  "federacao.gazeta.retry": "Opnieuw proberen"
 }

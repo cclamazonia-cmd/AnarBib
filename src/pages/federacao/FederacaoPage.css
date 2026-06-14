@@ -110,3 +110,28 @@
 }
 .ab-fed-inicio-soon-t{ font-weight:700; font-size:.9rem; }
 .ab-fed-inicio-soon-s{ font-size:.76rem; color:var(--brand-muted,#9a93a6); }
+
+/* ── Onglet Gazette ───────────────────────────────────────────────────────── */
+.ab-gz{ display:flex; flex-direction:column; gap:14px; }
+.ab-gz-bar{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.ab-gz-bar label{
+  font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--brand-muted,#9a93a6);
+}
+.ab-gz-bar select{
+  font-family:inherit; font-size:.9rem; color:var(--brand-text,#f5f2ea);
+  background:rgba(255,255,255,.05); border:1px solid var(--brand-panel-border,rgba(255,255,255,.14));
+  border-radius:10px; padding:8px 12px; outline:none; cursor:pointer;
+}
+/* Garde-fou anti blanc-sur-blanc des <option> natives (cf. correctif global). */
+.ab-gz-bar select option{ background:#1e1b26; color:#f5f2ea; }
+.ab-gz-spacer{ flex:1; }
+.ab-gz-pending{
+  background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.4); border-radius:12px;
+  padding:10px 14px; font-size:.86rem; color:var(--color-warn,#fbbf24);
+}
+.ab-gz-frame{
+  width:100%; border:0; display:block; min-height:480px;
+  border-radius:var(--brand-radius-sm,14px); background:#efe9dc;
+  box-shadow:0 2px 16px rgba(0,0,0,.25);
+}
