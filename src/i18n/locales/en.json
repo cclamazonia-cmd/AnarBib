@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Note (optional)",
   "digishare.req.submit": "Send request",
   "digishare.req.cancel": "Cancel",
-  "digishare.req.greyOnly": "Target: non-commercial grey material. Documents with ISBN/ISSN are redirected to physical ILL."
+  "digishare.req.greyOnly": "Target: non-commercial grey material. Documents with ISBN/ISSN are redirected to physical ILL.",
+  "importacoes.export.fonds.title": "Fonds export",
+  "importacoes.export.fonds.desc": "Hand a batch of digitized grey material (records + files) to a partner library, as a ZIP package. Only confirmed public-domain files are included.",
+  "importacoes.export.fonds.gated": "Coordination only. An act of fonds mutualization: only « confirmed public domain » files travel with their records and their provenance.",
+  "importacoes.export.fonds.format": "Records format",
+  "importacoes.export.fonds.preview": "Preview eligible",
+  "importacoes.export.fonds.previewing": "Counting…",
+  "importacoes.export.fonds.eligible": "{count} eligible records (≥ 1 confirmed public-domain file).",
+  "importacoes.export.fonds.eligibleZero": "No eligible record (at least one confirmed public-domain file is required).",
+  "importacoes.export.fonds.download": "Download the ZIP",
+  "importacoes.export.fonds.preparing": "Preparing the package…",
+  "importacoes.export.fonds.success": "Ready! The download has started.",
+  "importacoes.export.fonds.truncated": "Batch truncated (size limit reached): {count} files included. Narrow the selection for a complete export.",
+  "importacoes.export.fonds.error": "Fonds export error: {message}"
 }

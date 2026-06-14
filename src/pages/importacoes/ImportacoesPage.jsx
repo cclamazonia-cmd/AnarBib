@@ -48,6 +48,11 @@ export default function ImportacoesPage() {
   // ── Export de lote (Lot 5, IMP-13) ─────────────────────
   const [exportFormat, setExportFormat] = useState('csv');
   const [exportLoading, setExportLoading] = useState(false);
+  // ── Export de fonds (EX-5, IMP-16 — niveau 2 : notices + fichiers) ───
+  const [fondsFormat, setFondsFormat] = useState('json');
+  const [fondsCount, setFondsCount] = useState(null);
+  const [fondsCounting, setFondsCounting] = useState(false);
+  const [fondsLoading, setFondsLoading] = useState(false);
 
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
@@ -490,6 +495,81 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.export.lote.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setExportLoading(false);
+    }
+  }
+
+  // ── Export de fonds (EX-5, IMP-16) : aperçu éligibles + ZIP notices+fichiers ──
+  // Niveau 2 — remise d'un lot à une biblioteca companheira. Miroir de
+  // handleExportLote, mais via l'EF export-fonds-bundle (EX-2) : le ZIP embarque
+  // les notices sérialisées + un manifeste + les fichiers « domaine public
+  // confirmé » (P3 strict). Le gate coordenador (IMP-14) est re-validé côté RPC.
+  async function loadFondsEligibleCount() {
+    if (!libraryId) {
+      setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: 'library_id' }), kind: 'error' });
+      return;
+    }
+    setFondsCounting(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_export_fonds_eligible_count', { p_library_id: libraryId });
+      if (error) throw error;
+      setFondsCount(Number(data) || 0);
+    } catch (err) {
+      setFondsCount(null);
+      setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setFondsCounting(false);
+    }
+  }
+
+  async function handleExportFonds() {
+    if (!libraryId) {
+      setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: 'library_id' }), kind: 'error' });
+      return;
+    }
+    setFondsLoading(true);
+    setMsg({ text: t({ id: 'importacoes.export.fonds.preparing' }), kind: 'info' });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-fonds-bundle`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ library_id: libraryId, format: fondsFormat }),
+        }
+      );
+      if (!res.ok) {
+        let m = `HTTP ${res.status}`;
+        try { const j = await res.json(); if (j?.error) m = j.error; } catch { /* corps non-JSON */ }
+        throw new Error(m);
+      }
+      const blob = await res.blob();
+      const cd = res.headers.get('Content-Disposition') || '';
+      const match = cd.match(/filename="?([^"]+)"?/);
+      const filename = match ? match[1] : `fonds-${libraryId}.zip`;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      const truncated = (res.headers.get('X-Truncated') || '') === 'true';
+      const fileCount = res.headers.get('X-File-Count') || '0';
+      if (truncated) {
+        setMsg({ text: t({ id: 'importacoes.export.fonds.truncated' }, { count: fileCount }), kind: 'info' });
+      } else {
+        setMsg({ text: t({ id: 'importacoes.export.fonds.success' }), kind: 'ok' });
+      }
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setFondsLoading(false);
     }
   }
 
@@ -1101,6 +1181,53 @@ export default function ImportacoesPage() {
                     disabled={exportLoading || !libraryId}
                   >
                     {exportLoading ? t({ id: 'importacoes.export.lote.exporting' }) : t({ id: 'importacoes.export.lote.download' })}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="imp-sheet">
+              <div className="imp-sheet__head">
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.fonds.title' })}<Pill variant="ok">ZIP</Pill></span>
+              </div>
+              <div className="imp-sheet__body">
+                <p className="imp-note">{t({ id: 'importacoes.export.fonds.desc' })}</p>
+                <p className="imp-note" style={{ opacity: 0.8 }}>{t({ id: 'importacoes.export.fonds.gated' })}</p>
+                {fondsCount != null && (
+                  <p className="imp-note">
+                    {fondsCount > 0
+                      ? t({ id: 'importacoes.export.fonds.eligible' }, { count: fondsCount })
+                      : t({ id: 'importacoes.export.fonds.eligibleZero' })}
+                  </p>
+                )}
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+                  <select
+                    className="ab-select"
+                    aria-label={t({ id: 'importacoes.export.fonds.format' })}
+                    value={fondsFormat}
+                    onChange={(e) => setFondsFormat(e.target.value)}
+                    disabled={fondsLoading}
+                    style={{ maxWidth: 240 }}
+                  >
+                    <option value="json">JSON</option>
+                    <option value="csv">CSV</option>
+                    <option value="marcxml">MARCXML (MARC21)</option>
+                  </select>
+                  <button
+                    className="cat-btn secondary"
+                    type="button"
+                    onClick={loadFondsEligibleCount}
+                    disabled={fondsCounting || !libraryId}
+                  >
+                    {fondsCounting ? t({ id: 'importacoes.export.fonds.previewing' }) : t({ id: 'importacoes.export.fonds.preview' })}
+                  </button>
+                  <button
+                    className="cat-btn primary"
+                    type="button"
+                    onClick={handleExportFonds}
+                    disabled={fondsLoading || !libraryId}
+                  >
+                    {fondsLoading ? t({ id: 'importacoes.export.fonds.preparing' }) : t({ id: 'importacoes.export.fonds.download' })}
                   </button>
                 </div>
               </div>

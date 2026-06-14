@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Noto (nedeviga)",
   "digishare.req.submit": "Sendi la peton",
   "digishare.req.cancel": "Nuligi",
-  "digishare.req.greyOnly": "Celo: nekomerca griza materialo. Dokumentoj kun ISBN/ISSN estas redirektataj al la interbiblioteka prunto."
+  "digishare.req.greyOnly": "Celo: nekomerca griza materialo. Dokumentoj kun ISBN/ISSN estas redirektataj al la interbiblioteka prunto.",
+  "importacoes.export.fonds.title": "Eksporto de kolekto",
+  "importacoes.export.fonds.desc": "Transdoni aron da ciferecigita griza materialo (registroj + dosieroj) al partnera biblioteko, kiel ZIP-pakaĵon. Nur konfirmitaj publik-havaj dosieroj estas inkluzivitaj.",
+  "importacoes.export.fonds.gated": "Nur por la kunordigo. Ago de reciproka kunhavigo de havaĵo: nur dosieroj « konfirmita publika havaĵo » vojaĝas kun siaj registroj kaj deveno.",
+  "importacoes.export.fonds.format": "Formato de registroj",
+  "importacoes.export.fonds.preview": "Antaŭrigardi elekteblajn",
+  "importacoes.export.fonds.previewing": "Kalkulado…",
+  "importacoes.export.fonds.eligible": "{count} elekteblaj registroj (≥ 1 konfirmita publik-hava dosiero).",
+  "importacoes.export.fonds.eligibleZero": "Neniu elektebla registro (necesas almenaŭ unu konfirmita publik-hava dosiero).",
+  "importacoes.export.fonds.download": "Elŝuti la ZIP",
+  "importacoes.export.fonds.preparing": "Preparado de la pakaĵo…",
+  "importacoes.export.fonds.success": "Preta! La elŝuto komenciĝis.",
+  "importacoes.export.fonds.truncated": "Aro distranĉita (volumena limo atingita): {count} dosieroj inkluzivitaj. Afinu la elekton por kompleta eksporto.",
+  "importacoes.export.fonds.error": "Eraro dum eksporto de havaĵo: {message}"
 }

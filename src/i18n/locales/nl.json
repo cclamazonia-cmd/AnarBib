@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Notitie (optioneel)",
   "digishare.req.submit": "Verzoek versturen",
   "digishare.req.cancel": "Annuleren",
-  "digishare.req.greyOnly": "Doel: niet-commerciële grijze literatuur. Documenten met ISBN/ISSN worden doorverwezen naar de fysieke IBL."
+  "digishare.req.greyOnly": "Doel: niet-commerciële grijze literatuur. Documenten met ISBN/ISSN worden doorverwezen naar de fysieke IBL.",
+  "importacoes.export.fonds.title": "Collectie-export",
+  "importacoes.export.fonds.desc": "Een partij gedigitaliseerd grijs materiaal (records + bestanden) overdragen aan een partnerbibliotheek, als ZIP-pakket. Alleen bevestigde publiek-domeinbestanden worden opgenomen.",
+  "importacoes.export.fonds.gated": "Alleen voor de coördinatie. Een daad van collectie-mutualisering: alleen bestanden met « bevestigd publiek domein » reizen mee met hun records en hun herkomst.",
+  "importacoes.export.fonds.format": "Formaat van de records",
+  "importacoes.export.fonds.preview": "Geschikte tonen",
+  "importacoes.export.fonds.previewing": "Berekenen…",
+  "importacoes.export.fonds.eligible": "{count} geschikte records (≥ 1 bevestigd publiek-domeinbestand).",
+  "importacoes.export.fonds.eligibleZero": "Geen geschikt record (ten minste één bevestigd publiek-domeinbestand vereist).",
+  "importacoes.export.fonds.download": "ZIP downloaden",
+  "importacoes.export.fonds.preparing": "Pakket voorbereiden…",
+  "importacoes.export.fonds.success": "Klaar! De download is gestart.",
+  "importacoes.export.fonds.truncated": "Partij afgekapt (groottelimiet bereikt): {count} bestanden opgenomen. Verfijn de selectie voor een volledige export.",
+  "importacoes.export.fonds.error": "Fout bij collectie-export: {message}"
 }

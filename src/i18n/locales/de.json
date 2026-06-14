@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Notiz (optional)",
   "digishare.req.submit": "Anfrage senden",
   "digishare.req.cancel": "Abbrechen",
-  "digishare.req.greyOnly": "Ziel: nicht kommerzielle graue Literatur. Dokumente mit ISBN/ISSN werden zur Fernleihe umgeleitet."
+  "digishare.req.greyOnly": "Ziel: nicht kommerzielle graue Literatur. Dokumente mit ISBN/ISSN werden zur Fernleihe umgeleitet.",
+  "importacoes.export.fonds.title": "Bestandsexport",
+  "importacoes.export.fonds.desc": "Einen Stapel digitalisierter grauer Literatur (Datensätze + Dateien) an eine Partnerbibliothek übergeben, als ZIP-Paket. Nur bestätigte gemeinfreie Dateien werden aufgenommen.",
+  "importacoes.export.fonds.gated": "Nur für die Koordination. Ein Akt der Bestands-Mutualisierung: nur Dateien mit « bestätigter Gemeinfreiheit » reisen mit ihren Datensätzen und ihrer Provenienz.",
+  "importacoes.export.fonds.format": "Format der Datensätze",
+  "importacoes.export.fonds.preview": "Berechtigte anzeigen",
+  "importacoes.export.fonds.previewing": "Wird berechnet…",
+  "importacoes.export.fonds.eligible": "{count} berechtigte Datensätze (≥ 1 bestätigte gemeinfreie Datei).",
+  "importacoes.export.fonds.eligibleZero": "Kein berechtigter Datensatz (mindestens eine bestätigte gemeinfreie Datei ist erforderlich).",
+  "importacoes.export.fonds.download": "ZIP herunterladen",
+  "importacoes.export.fonds.preparing": "Paket wird vorbereitet…",
+  "importacoes.export.fonds.success": "Fertig! Der Download wurde gestartet.",
+  "importacoes.export.fonds.truncated": "Stapel abgeschnitten (Größenlimit erreicht): {count} Dateien enthalten. Schränke die Auswahl für einen vollständigen Export ein.",
+  "importacoes.export.fonds.error": "Fehler beim Bestandsexport: {message}"
 }

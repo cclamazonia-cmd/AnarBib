@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Nota (facoltativa)",
   "digishare.req.submit": "Inviare la richiesta",
   "digishare.req.cancel": "Annulla",
-  "digishare.req.greyOnly": "Obiettivo: materiale grigio non commercializzato. I documenti con ISBN/ISSN sono reindirizzati al prestito interbibliotecario."
+  "digishare.req.greyOnly": "Obiettivo: materiale grigio non commercializzato. I documenti con ISBN/ISSN sono reindirizzati al prestito interbibliotecario.",
+  "importacoes.export.fonds.title": "Esportazione di fondo",
+  "importacoes.export.fonds.desc": "Consegnare un lotto di materiale grigio digitalizzato (schede + file) a una biblioteca partner, in un pacchetto ZIP. Sono inclusi solo i file di dominio pubblico confermato.",
+  "importacoes.export.fonds.gated": "Riservato alla coordinazione. Atto di mutualizzazione di fondo: solo i file « dominio pubblico confermato » viaggiano con le loro schede e la loro provenienza.",
+  "importacoes.export.fonds.format": "Formato delle schede",
+  "importacoes.export.fonds.preview": "Anteprima idonei",
+  "importacoes.export.fonds.previewing": "Calcolo…",
+  "importacoes.export.fonds.eligible": "{count} schede idonee (≥ 1 file di dominio pubblico confermato).",
+  "importacoes.export.fonds.eligibleZero": "Nessuna scheda idonea (serve almeno un file di dominio pubblico confermato).",
+  "importacoes.export.fonds.download": "Scaricare lo ZIP",
+  "importacoes.export.fonds.preparing": "Preparazione del pacchetto…",
+  "importacoes.export.fonds.success": "Pronto! Il download è iniziato.",
+  "importacoes.export.fonds.truncated": "Lotto troncato (limite di volume raggiunto): {count} file inclusi. Affina la selezione per un'esportazione completa.",
+  "importacoes.export.fonds.error": "Errore nell'esportazione del fondo: {message}"
 }

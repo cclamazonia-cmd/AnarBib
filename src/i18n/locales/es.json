@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Nota (opcional)",
   "digishare.req.submit": "Enviar la solicitud",
   "digishare.req.cancel": "Cancelar",
-  "digishare.req.greyOnly": "Objetivo: material gris no comercializado. Los documentos con ISBN/ISSN se redirigen al PIB."
+  "digishare.req.greyOnly": "Objetivo: material gris no comercializado. Los documentos con ISBN/ISSN se redirigen al PIB.",
+  "importacoes.export.fonds.title": "Exportación de fondo",
+  "importacoes.export.fonds.desc": "Entregar un lote de material gris digitalizado (registros + archivos) a una biblioteca asociada, en un paquete ZIP. Solo se incluyen los archivos de dominio público confirmado.",
+  "importacoes.export.fonds.gated": "Reservado a la coordinación. Acto de mutualización de fondo: solo los archivos « dominio público confirmado » viajan con sus registros y su procedencia.",
+  "importacoes.export.fonds.format": "Formato de los registros",
+  "importacoes.export.fonds.preview": "Vista previa de elegibles",
+  "importacoes.export.fonds.previewing": "Calculando…",
+  "importacoes.export.fonds.eligible": "{count} registros elegibles (≥ 1 archivo de dominio público confirmado).",
+  "importacoes.export.fonds.eligibleZero": "Ningún registro elegible (se necesita al menos un archivo de dominio público confirmado).",
+  "importacoes.export.fonds.download": "Descargar el ZIP",
+  "importacoes.export.fonds.preparing": "Preparando el paquete…",
+  "importacoes.export.fonds.success": "¡Listo! La descarga ha comenzado.",
+  "importacoes.export.fonds.truncated": "Lote truncado (límite de volumen alcanzado): {count} archivos incluidos. Afina la selección para una exportación completa.",
+  "importacoes.export.fonds.error": "Error al exportar el fondo: {message}"
 }

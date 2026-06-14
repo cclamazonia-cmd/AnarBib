@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Nota (opcional)",
   "digishare.req.submit": "Enviar la sol·licitud",
   "digishare.req.cancel": "Cancel·la",
-  "digishare.req.greyOnly": "Objectiu: material gris no comercialitzat. Els documents amb ISBN/ISSN es redirigeixen al PIB."
+  "digishare.req.greyOnly": "Objectiu: material gris no comercialitzat. Els documents amb ISBN/ISSN es redirigeixen al PIB.",
+  "importacoes.export.fonds.title": "Exportació de fons",
+  "importacoes.export.fonds.desc": "Lliurar un lot de material gris digitalitzat (registres + fitxers) a una biblioteca sòcia, en un paquet ZIP. Només s'hi inclouen els fitxers de domini públic confirmat.",
+  "importacoes.export.fonds.gated": "Reservat a la coordinació. Acte de mutualització de fons: només els fitxers « domini públic confirmat » viatgen amb els seus registres i la seva procedència.",
+  "importacoes.export.fonds.format": "Format dels registres",
+  "importacoes.export.fonds.preview": "Vista prèvia d'elegibles",
+  "importacoes.export.fonds.previewing": "Calculant…",
+  "importacoes.export.fonds.eligible": "{count} registres elegibles (≥ 1 fitxer de domini públic confirmat).",
+  "importacoes.export.fonds.eligibleZero": "Cap registre elegible (cal almenys un fitxer de domini públic confirmat).",
+  "importacoes.export.fonds.download": "Baixar el ZIP",
+  "importacoes.export.fonds.preparing": "Preparant el paquet…",
+  "importacoes.export.fonds.success": "Llest! La baixada ha començat.",
+  "importacoes.export.fonds.truncated": "Lot truncat (límit de volum assolit): {count} fitxers inclosos. Afina la selecció per a una exportació completa.",
+  "importacoes.export.fonds.error": "Error en exportar el fons: {message}"
 }

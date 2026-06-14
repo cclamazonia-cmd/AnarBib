@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Note (optionnel)",
   "digishare.req.submit": "Envoyer la demande",
   "digishare.req.cancel": "Annuler",
-  "digishare.req.greyOnly": "Cible : matériel gris non commercialisé. Les documents à ISBN/ISSN sont redirigés vers le PEB."
+  "digishare.req.greyOnly": "Cible : matériel gris non commercialisé. Les documents à ISBN/ISSN sont redirigés vers le PEB.",
+  "importacoes.export.fonds.title": "Export de fonds",
+  "importacoes.export.fonds.desc": "Remettre un lot de matériel gris numérisé (notices + fichiers) à une bibliothèque partenaire, dans un paquet ZIP. Seuls les fichiers du domaine public confirmé sont inclus.",
+  "importacoes.export.fonds.gated": "Réservé à la coordination. Acte de mutualisation de fonds : seuls les fichiers « domaine public confirmé » voyagent avec leurs notices et leur provenance.",
+  "importacoes.export.fonds.format": "Format des notices",
+  "importacoes.export.fonds.preview": "Aperçu des éligibles",
+  "importacoes.export.fonds.previewing": "Calcul…",
+  "importacoes.export.fonds.eligible": "{count} notices éligibles (≥ 1 fichier du domaine public confirmé).",
+  "importacoes.export.fonds.eligibleZero": "Aucune notice éligible (il faut au moins un fichier du domaine public confirmé).",
+  "importacoes.export.fonds.download": "Télécharger le ZIP",
+  "importacoes.export.fonds.preparing": "Préparation du paquet…",
+  "importacoes.export.fonds.success": "C'est prêt ! Le téléchargement a commencé.",
+  "importacoes.export.fonds.truncated": "Lot tronqué (borne de volumétrie atteinte) : {count} fichiers inclus. Affine la sélection pour un export complet.",
+  "importacoes.export.fonds.error": "Erreur à l'export de fonds : {message}"
 }

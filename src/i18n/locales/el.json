@@ -4677,5 +4677,18 @@
   "digishare.req.note": "Σημείωση (προαιρετικά)",
   "digishare.req.submit": "Αποστολή αιτήματος",
   "digishare.req.cancel": "Άκυρο",
-  "digishare.req.greyOnly": "Στόχος: μη εμπορική γκρίζα βιβλιογραφία. Τα τεκμήρια με ISBN/ISSN ανακατευθύνονται στον διαδανεισμό."
+  "digishare.req.greyOnly": "Στόχος: μη εμπορική γκρίζα βιβλιογραφία. Τα τεκμήρια με ISBN/ISSN ανακατευθύνονται στον διαδανεισμό.",
+  "importacoes.export.fonds.title": "Εξαγωγή αρχειακού υλικού",
+  "importacoes.export.fonds.desc": "Παράδοση μιας παρτίδας ψηφιοποιημένης γκρίζας βιβλιογραφίας (εγγραφές + αρχεία) σε μια συνεργαζόμενη βιβλιοθήκη, ως πακέτο ZIP. Περιλαμβάνονται μόνο τα επιβεβαιωμένα αρχεία δημόσιας κτήσης.",
+  "importacoes.export.fonds.gated": "Μόνο για τον συντονισμό. Πράξη αμοιβαιοποίησης αρχειακού υλικού: μόνο τα αρχεία « επιβεβαιωμένης δημόσιας κτήσης » ταξιδεύουν με τις εγγραφές και την προέλευσή τους.",
+  "importacoes.export.fonds.format": "Μορφή εγγραφών",
+  "importacoes.export.fonds.preview": "Προεπισκόπηση επιλέξιμων",
+  "importacoes.export.fonds.previewing": "Υπολογισμός…",
+  "importacoes.export.fonds.eligible": "{count} επιλέξιμες εγγραφές (≥ 1 επιβεβαιωμένο αρχείο δημόσιας κτήσης).",
+  "importacoes.export.fonds.eligibleZero": "Καμία επιλέξιμη εγγραφή (απαιτείται τουλάχιστον ένα επιβεβαιωμένο αρχείο δημόσιας κτήσης).",
+  "importacoes.export.fonds.download": "Λήψη του ZIP",
+  "importacoes.export.fonds.preparing": "Προετοιμασία του πακέτου…",
+  "importacoes.export.fonds.success": "Έτοιμο! Η λήψη ξεκίνησε.",
+  "importacoes.export.fonds.truncated": "Η παρτίδα περικόπηκε (επιτεύχθηκε το όριο όγκου): {count} αρχεία περιλήφθηκαν. Περιορίστε την επιλογή για πλήρη εξαγωγή.",
+  "importacoes.export.fonds.error": "Σφάλμα κατά την εξαγωγή αρχειακού υλικού: {message}"
 }
