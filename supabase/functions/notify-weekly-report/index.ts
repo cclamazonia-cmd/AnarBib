@@ -641,6 +641,50 @@ serve(async (req) => {
       }
     }).length;
 
+    // ─── Activité Partage numérique (ILL-digital) — chantier #ILL-7 ────────
+    // La biblioteca est tantôt fonte (source_library_id), tantôt solicitante
+    // (requester_library_id). Trois compteurs :
+    //   - fornecidas  : partages où elle est source, demandés dans la semaine
+    //   - solicitadas : partages où elle est demandeuse, demandés dans la semaine
+    //   - em curso    : partages (tout rôle) non terminaux (≠ refuse/indisponible/cloture)
+    const pdInvolving = `requester_library_id.eq.${libraryId},source_library_id.eq.${libraryId}`;
+    const pdOngoingStates = ["demande", "accepte", "numerisation", "transmis"];
+
+    const { count: pdProvidedCount, error: pdProvErr } = await sb.from("ill_digital_shares")
+      .select("id", { count: "exact", head: true })
+      .eq("source_library_id", libraryId)
+      .gte("requested_at", startISO).lt("requested_at", endExclusiveISO);
+    if (pdProvErr) throw pdProvErr;
+
+    const { count: pdRequestedCount, error: pdReqErr } = await sb.from("ill_digital_shares")
+      .select("id", { count: "exact", head: true })
+      .eq("requester_library_id", libraryId)
+      .gte("requested_at", startISO).lt("requested_at", endExclusiveISO);
+    if (pdReqErr) throw pdReqErr;
+
+    const { count: pdOngoingCount, error: pdOngErr } = await sb.from("ill_digital_shares")
+      .select("id", { count: "exact", head: true })
+      .or(pdInvolving)
+      .in("flux_state", pdOngoingStates);
+    if (pdOngErr) throw pdOngErr;
+
+    const { data: pdRowsRaw, error: pdRowsErr } = await sb.from("ill_digital_shares")
+      .select("id,requester_library_id,source_library_id,flux_state,requested_at,books(titulo),requester:libraries!requester_library_id(name,short_name),source:libraries!source_library_id(name,short_name)")
+      .or(pdInvolving)
+      .gte("requested_at", startISO).lt("requested_at", endExclusiveISO)
+      .order("requested_at", { ascending: false }).limit(50);
+    if (pdRowsErr) throw pdRowsErr;
+    const pdRows = (Array.isArray(pdRowsRaw) ? pdRowsRaw : []).map((s) => {
+      const isSource = String(s.source_library_id) === libraryId;
+      const partner = isSource ? s.requester : s.source;
+      return [
+        String(s.books?.titulo || "—"),
+        isSource ? "Fornecedora" : "Solicitante",
+        String(partner?.short_name || partner?.name || "—"),
+        String(s.flux_state || "—")
+      ];
+    });
+
     // ─── Composition du mail ───────────────────────────────────────────────
     const subject = `${routing.subjectTag} · Relatório semanal (${formatBR(weekStart)} → ${formatBR(weekEnd)})`;
     const title = `Relatório semanal — ${routing.brandName}`;
@@ -687,6 +731,18 @@ serve(async (req) => {
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pebInCirculationCount)}</b></td>
           </tr>
           <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Partilhas digitais fornecidas (semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdProvidedCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Partilhas digitais solicitadas (semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdRequestedCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Partilhas digitais em curso (à clôture da semana)</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(pdOngoingCount)}</b></td>
+          </tr>
+          <tr>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Trocas propostas (semana)</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(trocasProposedCount)}</b></td>
           </tr>
@@ -713,7 +769,8 @@ serve(async (req) => {
         renderTable("Renovações (últimas 50)", ["ID", "Renovado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], renewalsRows),
         renderTable("Devoluções (últimas 50 linhas agrupadas por empréstimo)", ["Empréstimo", "Devolvido em", "Livro(s)", "Leitor(a/e)"], returnsRows),
         renderTable("Atrasos ativos (top 50)", ["Empréstimo", "Vencimento", "Livro(s)", "Leitor(a/e)"], overdueRows),
-        renderTable("Intercâmbios interbibliotecas (PEB criados na semana, últimos 50)", ["Referência", "Papel", "Biblioteca parceira", "Estado", "Documentos"], pebRows)
+        renderTable("Intercâmbios interbibliotecas (PEB criados na semana, últimos 50)", ["Referência", "Papel", "Biblioteca parceira", "Estado", "Documentos"], pebRows),
+        renderTable("Partilhas digitais (pedidos da semana, últimos 50)", ["Documento", "Papel", "Biblioteca parceira", "Estado"], pdRows)
       ],
       context: ctx,
       routing
@@ -749,7 +806,10 @@ serve(async (req) => {
         peb_consentidos: pebLentCount ?? 0,
         peb_solicitados: pebBorrowedCount ?? 0,
         peb_em_circulacao: pebInCirculationCount ?? 0,
-        trocas: trocasProposedCount ?? 0
+        trocas: trocasProposedCount ?? 0,
+        partilhas_fornecidas: pdProvidedCount ?? 0,
+        partilhas_solicitadas: pdRequestedCount ?? 0,
+        partilhas_em_curso: pdOngoingCount ?? 0
       }
     });
   } catch (e) {

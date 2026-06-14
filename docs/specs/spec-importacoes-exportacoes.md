@@ -133,7 +133,11 @@ Les six points ouverts de la v0.1 sont tranchés (validés Xavier). Nouveaux IDs
 - **Lot 2 — fontes externas, bout-en-bout.** Câbler candidat `catalog_metadata_lookup` → `staging_row` (institutionnelles, aujourd'hui **lookup-only**) ; cadrer le **pull companheira** OAI/Z39.50 → staging (l'inconnue technique).
 - **Lot 3 — profils de mapping (`IMP-10`).** Table `ingest.import_mapping_profiles` + l'EF consulte la table au lieu des alias codés en dur + UI d'édition.
 - **Lot 4 — parser MARC/UNIMARC** (migração BLMF, ISO 2709) : décodeur à ajouter à l'EF.
-- **Lot 5 — face Export** *(100 % à construire)*. Exportação de lote (`IMP-13`, sérialisation) ; partilha ILL **référence** `spec-flux-partage-numerique` ; ser fonte (endpoint OAI, `mutualize_allowed`).
+- **Lot 5 — face Export** : ✅ **exportação de lote** (`IMP-13`, EF `export-catalog-lote`) ; ✅ **ser
+  fonte** = endpoint OAI-PMH **gouverné** (paquets OAI-O1..O5 du 12/06, `spec-oai-provider-gouvernance`,
+  EF `oai-pmh-provider`) ; ✅ **partilha ILL** = flux numérique (lots ILL-I1..I5 du 13/06,
+  `spec-flux-partage-numerique` implémenté). 🟢 **Face Export complète.** *(Niveau 2 restant : export
+  de fonds en lot — `CADRAGE_export_fonds_numeriques_2026-06-12`, plan EX-1..5, non construit.)*
 - **Lot 6 — wizard.** Maj `maquette_wizard_import_v1` → v2 alignée sur la page finie, puis implémentation (`IMP-15`).
 
 ---

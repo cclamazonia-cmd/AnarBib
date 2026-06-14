@@ -1,6 +1,6 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée
+Statut : 🟢 implémenté (lots ILL-I1..I5 livrés + déployés le 13/06/2026)
 Décisions : incarne ILL-1..ILL-9 (REGISTRE §22) ; cite PARTNER-D7 (coordenador), PARTNER-D9 (droit `digital_share`), PARTNER-D5 (révocation), CAT-B3 (visibility), DOC-I18N-1 (8 locales)
 Supersédé par : —
 ---
@@ -9,10 +9,10 @@ Supersédé par : —
 
 | | |
 |---|---|
-| **Version** | v0.2 — charpente **figée côté conception** (`ILL-1..ILL-9` incarnés ; reste le remplissage : DDL, rôles, i18n) |
-| **Date** | 2 juin 2026 |
+| **Version** | v0.3 — **implémenté** (lots ILL-I1..I5, 13/06/2026) ; charpente `ILL-1..ILL-9` réalisée |
+| **Date** | 2 juin 2026 (impl. 13/06/2026) |
 | **Emplacement cible** | `docs/specs/` |
-| **Statut** | Charpente **figée côté conception** (`ILL-1..ILL-9`, mandat BLMF 02/06) ; aucun arbitrage doctrinal ouvert. Reste le remplissage (§12 : rôles, DDL, i18n). |
+| **Statut** | 🟢 **Implémenté & déployé** (13/06/2026). DDL + RPC `fn_ill_*` (I1), accès ponctuel `read-ill-shared-asset` (I2), frontend BibliotecaPage onglet `ill` `LibraryDigitalSharesSection` (I3), notif `notify-digital-share` (I4), section hebdo + i18n `digishare.*` ×10 (I5). Gaté par le droit `digital_share` (inactif sans partenariat le portant). |
 | **Réfère à** | `#ILL-digital` (cadrage `CADRAGE_ILL-digital_2026-05-25`, 🔵 trace) ; `#PARTNERS` (table `library_partnerships`). |
 | **Dépendances** | `spec-partenariat-biblios` (le partage est un **droit du partenariat**, `PARTNER-D9`) · recursos digitais / `ResourcePage` (`ProtectedMediaViewer`) · catalogação (`visibility`, `CAT-B3`) · `spec-cycle-vie-peb` (**circuit distinct** du PEB) · Supabase Storage. |
 
@@ -78,12 +78,22 @@ Supersédé par : —
 ## 11. Réserve juridique
 - Le dispositif (périmètre gris, plafond non-élargissable, ponctuel sans copie, catalogage = libre de droits) est une **prudence *by-design***. Il **n'établit pas** la licéité d'un partage donné. La responsabilité réelle (CCLA / BLMF) relève d'un **conseil compétent**.
 
-## 12. Points à trancher au remplissage
+## 12. Remplissage — RÉALISÉ (lots ILL-I1..I5, 13/06/2026)
 *(Plafond résolu : crans / verrou / trace → `ILL-9`, intégrés au §3.)*
-1. **Rôles** (§7) : qui initie / accepte un partage une fois le partenariat actif — reco : **tout staff actif** (`librarian` ou `coordenador`), le cadre politique étant déjà posé par les coordinations (`PARTNER-D7`) ; à confirmer (lien `spec-gouvernance-roles`). Relances et gestion de l'« indisponible ».
-2. **Modèle de données** (§9) : DDL `partnership_rights` (`digital_share`), objet de partage, emplacement du `document_ref`, mécanique de purge (pg_cron + EF).
-3. **i18n** : nouvelles clés en 8 locales (`DOC-I18N-1`).
+1. ✅ **Rôles** (§7) : **tout staff actif** des deux biblios initie/répond (`user_can_act_as_staff_on_library`),
+   gaté par partenariat actif + droit `digital_share` (`fn_partnership_has_active_right`). Gestion
+   accepte/refuse/**indisponible** dans le flux (`fn_ill_respond`).
+2. ✅ **Modèle de données** (§9) : tables `ill_digital_shares` (objet de partage : requester/source,
+   book_id, digital_asset_id, mode, plafond, flux_state, timestamps) + `ill_digital_share_events`
+   (audit append-only, trace double horodatée). RPC `fn_ill_request/respond/start_digitization/
+   transmit/acknowledge/close` + `fn_ill_signed_url`. Verrou `staff_only ≠ durable` (§5) + demi-verrou
+   ISBN/ISSN (ILL-2). Accès ponctuel : EF `read-ill-shared-asset` (URL signée TTL court, re-validation
+   par appel). *(Migration `20260612230500_ill_digital_share_flux_lot_i1`.)*
+3. ✅ **i18n** : clés frontend `digishare.*` ×10 locales (`DOC-I18N-1`) + notif `ill.*` ×10 (mail maison).
+4. ✅ **Frontend** (I3) : `LibraryDigitalSharesSection` dans BibliotecaPage onglet `ill` (zone PEB/échanges).
+   **Notif** (I4) : EF `notify-digital-share`. **Hebdo** (I5) : section « Partilhas digitais » dans
+   `notify-weekly-report` (ILL-7).
 
 ---
 
-*Fin de la charpente — v0.2 **figée** (conception). Le remplissage suit en session dédiée (CHARTE_corpus : en-tête, foyer unique, citer plutôt que recopier). Décisions au registre `ILL-1..ILL-9`.*
+*v0.3 — **implémenté & déployé** le 13/06/2026 (lots ILL-I1..I5). Décisions au registre `ILL-1..ILL-9` (§22).*
