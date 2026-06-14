@@ -50,7 +50,10 @@ function esc(s) {
 function dropIcon(L, color, isMember) {
   const inner = isMember
     ? `<img src="/img/icon-192.png" alt="" width="17" height="17" style="position:absolute;left:6.5px;top:5.5px;border-radius:50%;background:#fff;object-fit:contain;box-shadow:0 0 0 1.5px #fff;" />`
-    : `<span style="position:absolute;left:10px;top:9px;width:10px;height:10px;border-radius:50%;background:#fff;"></span>`;
+    : `<svg width="17" height="17" viewBox="0 0 24 24" style="position:absolute;left:6.5px;top:6px;">`
+      + `<circle cx="12" cy="12" r="8.3" fill="none" stroke="#fff" stroke-width="2.2"/>`
+      + `<path d="M8 17.5L12 6.5L16 17.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/>`
+      + `<path d="M3.4 14.2H20.6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>`;
   const svg = `<svg width="30" height="42" viewBox="0 0 30 42" xmlns="http://www.w3.org/2000/svg">`
     + `<path d="M15 41C15 41 28 24 28 14A13 13 0 1 0 2 14C2 24 15 41 15 41Z" fill="${esc(color)}" stroke="#ffffff" stroke-width="1.5"/></svg>`;
   return L.divIcon({
