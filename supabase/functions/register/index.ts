@@ -203,7 +203,7 @@ function projectUrl(locale) {
   const slug = SITE_PROJECT_SLUG_BY_LOCALE[String(locale || "").trim()] || "projeto";
   return `https://anarbib.org/${lang}/${slug}/`;
 }
-function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR", readerCardsEnabled = false, readerValidationMode = null }) {
+function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalAddress, contactEmail, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, isOrphan = false, isContributor = false, atelierUrl, catalogUrl, libraryRequestUrl, galleryUrl, aboutUrl, locale = "pt-BR", readerCardsEnabled = false, readerValidationMode = null }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
@@ -213,11 +213,13 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
   // Section "context" : message d'intro adapté au cas.
   // isOrphan implique isWithoutLibrary (cf. site d'appel). Si un 4e cas
   // d'inscription apparaît, refondre ces booléens en énum mailKind.
-  const contextParagraph = isOrphan
-    ? buildParagraph(tMail(locale, "welcome.context.orphan"))
-    : isWithoutLibrary
-      ? buildParagraph(tMail(locale, "welcome.context.initial"))
-      : buildParagraph(tMail(locale, "welcome.context.standard", { libraryName: escapeHtml(libraryName) }));
+  const contextParagraph = isContributor
+    ? buildParagraph(tMail(locale, "welcome.context.contributor"))
+    : isOrphan
+      ? buildParagraph(tMail(locale, "welcome.context.orphan"))
+      : isWithoutLibrary
+        ? buildParagraph(tMail(locale, "welcome.context.initial"))
+        : buildParagraph(tMail(locale, "welcome.context.standard", { libraryName: escapeHtml(libraryName) }));
   const contentHtml = `
     ${buildParagraph(tMail(locale, "welcome.greeting", { firstName: escapeHtml(firstName) }))}
     ${contextParagraph}
@@ -234,18 +236,23 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
     ${buildParagraph(tMail(locale, "welcome.nextAccess"))}
     ${buildParagraph(tMail(locale, "welcome.important"))}
     ${buildParagraph(tMail(locale, "welcome.forgotHint"))}
-    ${isWithoutLibrary && !isOrphan && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.intro")) : ""}
-    ${isWithoutLibrary && !isOrphan && libraryRequestUrl ? buildActionButton({
+    ${isWithoutLibrary && !isOrphan && !isContributor && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.intro")) : ""}
+    ${isWithoutLibrary && !isOrphan && !isContributor && libraryRequestUrl ? buildActionButton({
       href: libraryRequestUrl,
       label: tMail(locale, "welcome.libraryRequest.cta")
     }) : ""}
-    ${isWithoutLibrary && !isOrphan && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.fallback")) : ""}
+    ${isWithoutLibrary && !isOrphan && !isContributor && libraryRequestUrl ? buildParagraph(tMail(locale, "welcome.libraryRequest.fallback")) : ""}
     ${isOrphan && galleryUrl ? buildActionButton({
       href: galleryUrl,
       label: tMail(locale, "welcome.orphan.exploreCta")
     }) : ""}
     ${isOrphan && galleryUrl ? buildParagraph(`${tMail(locale, "welcome.orphan.fallback")}<br>${escapeHtml(galleryUrl)}`) : ""}
     ${isOrphan && aboutUrl ? buildParagraph(`${tMail(locale, "welcome.orphan.aboutIntro")}<br><a href="${escapeHtml(aboutUrl)}">${escapeHtml(aboutUrl)}</a>`) : ""}
+    ${isContributor && atelierUrl ? buildActionButton({
+      href: atelierUrl,
+      label: tMail(locale, "welcome.contributor.atelierCta")
+    }) : ""}
+    ${isContributor && catalogUrl ? buildParagraph(`${tMail(locale, "welcome.contributor.catalogIntro")}<br><a href="${escapeHtml(catalogUrl)}">${escapeHtml(catalogUrl)}</a>`) : ""}
     ${!isWithoutLibrary ? buildParagraph(`<b>${tMail(locale, "welcome.howItWorks.title")}</b>`) : ""}
     ${!isWithoutLibrary && readerCardsEnabled ? buildParagraph(tMail(locale, "welcome.howItWorks.card")) : ""}
     ${!isWithoutLibrary && readerValidationMode === "remote" ? buildParagraph(tMail(locale, "welcome.howItWorks.identity.remote")) : ""}
@@ -258,26 +265,30 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
     </div>
   `;
   return buildMailShell({
-    pretitle: isOrphan
-      ? tMail(locale, "welcome.pretitle.orphan")
-      : isWithoutLibrary ? tMail(locale, "welcome.pretitle.initial") : tMail(locale, "welcome.pretitle"),
+    pretitle: isContributor
+      ? tMail(locale, "welcome.pretitle.contributor")
+      : isOrphan
+        ? tMail(locale, "welcome.pretitle.orphan")
+        : isWithoutLibrary ? tMail(locale, "welcome.pretitle.initial") : tMail(locale, "welcome.pretitle"),
     // Paquet 25.11 — Pour le cas signup_without_library, on utilise un titre
     // SANS placeholder libraryName : "Bienvenue dans le réseau AnarBib" plutot
     // que "Bienvenue à la AnarBib" qui est grammaticalement faux dans plusieurs
     // langues (preposition+article fusionnes attendus avec un nom feminin
     // de bibliotheque, pas avec "AnarBib").
     // Paquet 6 — reader_orphan a son propre titre welcome.title.orphan.
-    title: isOrphan
-      ? tMail(locale, "welcome.title.orphan")
-      : isWithoutLibrary
-        ? tMail(locale, "welcome.title.initial")
-        : tMail(locale, "welcome.title", { libraryName }),
-    subtitle: tMail(locale, "welcome.subtitle"),
+    title: isContributor
+      ? tMail(locale, "welcome.title.contributor")
+      : isOrphan
+        ? tMail(locale, "welcome.title.orphan")
+        : isWithoutLibrary
+          ? tMail(locale, "welcome.title.initial")
+          : tMail(locale, "welcome.title", { libraryName }),
+    subtitle: isContributor ? tMail(locale, "welcome.subtitle.contributor") : tMail(locale, "welcome.subtitle"),
     logoTable,
     contentHtml
   });
 }
-function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, publicId, userEmail, phone, libraryName, fullAddress, affiliationOrg = "", motivation = "", isTestContext, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, locale = "pt-BR" }) {
+function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, publicId, userEmail, phone, libraryName, fullAddress, affiliationOrg = "", motivation = "", isContributor = false, isTestContext, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, locale = "pt-BR" }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
@@ -288,7 +299,7 @@ function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, pub
   // destinataire institutionnel — locale biblio pour le mail biblio, pt-BR pour
   // le mail gestion AnarBib (doctrine 2C, transmise par l'appelant).
   const contentHtml = `
-    ${buildParagraph(`<b>${label(locale, "library")}:</b> ${escapeHtml(libraryName)}`)}
+    ${isContributor ? "" : buildParagraph(`<b>${label(locale, "library")}:</b> ${escapeHtml(libraryName)}`)}
     ${buildParagraph(`<b>${label(locale, "publicId")}:</b> ${escapeHtml(publicId)}`)}
     ${buildParagraph(`<b>${label(locale, "name")}:</b> ${escapeHtml(`${firstName} ${lastName}`.trim())}`)}
     ${buildParagraph(`<b>${label(locale, "email")}:</b> ${escapeHtml(userEmail)}`)}
@@ -867,9 +878,11 @@ serve(async (req)=>{
     // Paquet 6 criar-conta — reader_orphan a désormais son registre i18n
     // dédié (welcome.*.orphan) et son bloc CTA galerie. mailIsOrphan
     // implique toujours mailIsWithoutLibrary (cf. les 3 cas ci-dessus).
-    // 'contributor' (compte réseau Atelier autorités, sans biblio) réutilise le
-    // registre de bienvenue orphelin (générique, sans biblio/CTA) — Atelier paquet 2.
-    const mailIsOrphan = signupIntent === "reader_orphan" || signupIntent === "contributor";
+    // 'contributor' (compte réseau bénévole, atelier autorités, sans biblio) a
+    // désormais son propre gabarit (welcome.*.contributor + CTA atelier/catalogue),
+    // distinct du registre orphelin.
+    const mailIsContributor = signupIntent === "contributor";
+    const mailIsOrphan = signupIntent === "reader_orphan";
     const displayName = firstNonEmptyString(libraryMeta?.display_name, libraryRow?.name, requestedLibraryName, mailIsWithoutLibrary ? "AnarBib" : effectiveLibrarySlug);
     const contactEmail = normalizeEmail(libraryMeta?.contact_email);
     const postalAddress = String(libraryMeta?.postal_address || "").trim();
@@ -915,6 +928,9 @@ serve(async (req)=>{
       libraryLogoUrl,
       isWithoutLibrary: mailIsWithoutLibrary,
       isOrphan: mailIsOrphan,
+      isContributor: mailIsContributor,
+      atelierUrl: mailIsContributor ? "https://app.anarbib.org/atelier-autoridades" : "",
+      catalogUrl: mailIsContributor ? "https://app.anarbib.org/catalogo" : "",
       libraryRequestUrl: libraryRequestClaimUrl,
       galleryUrl: mailIsOrphan ? `https://anarbib.org/${localeToSiteLang(userLocale)}/explorar/` : "",
       aboutUrl: mailIsOrphan ? projectUrl(userLocale) : "",
@@ -943,6 +959,9 @@ serve(async (req)=>{
       } else if (signupIntent === "collective_candidate") {
         title = tMail(loc, "register.internal.title.initial", { displayName });
         subtitle = tMail(loc, "register.internal.subtitle.initial", { publicId });
+      } else if (signupIntent === "contributor") {
+        title = tMail(loc, "register.internal.title.contributor", { displayName });
+        subtitle = tMail(loc, "register.internal.subtitle.contributor", { publicId });
       } else {
         title = tMail(loc, "register.internal.title.standard", { displayName });
         subtitle = tMail(loc, "register.internal.subtitle.standard", { publicId });
@@ -969,6 +988,7 @@ serve(async (req)=>{
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,
+      isContributor: mailIsContributor,
       isWithoutLibrary: mailIsWithoutLibrary,
       locale: internalLibLocale
     });
@@ -988,6 +1008,7 @@ serve(async (req)=>{
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,
+      isContributor: mailIsContributor,
       isWithoutLibrary: mailIsWithoutLibrary,
       locale: internalAdminLocale
     });
@@ -997,11 +1018,13 @@ serve(async (req)=>{
         from: formatMailAddress(senderEmail, senderDisplayName),
         to: [email],
         reply_to: formatMailAddress(replyToEmail, senderDisplayName),
-        subject: mailIsOrphan
-          ? tMail(userLocale, "welcome.subject.orphan")
-          : mailIsWithoutLibrary
-            ? tMail(userLocale, "welcome.subject.initial", { displayName })
-            : tMail(userLocale, "welcome.subject", { displayName }),
+        subject: mailIsContributor
+          ? tMail(userLocale, "welcome.subject.contributor")
+          : mailIsOrphan
+            ? tMail(userLocale, "welcome.subject.orphan")
+            : mailIsWithoutLibrary
+              ? tMail(userLocale, "welcome.subject.initial", { displayName })
+              : tMail(userLocale, "welcome.subject", { displayName }),
         html: userMailHtml
       }
     });
