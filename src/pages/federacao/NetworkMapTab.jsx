@@ -44,6 +44,22 @@ function esc(s) {
   return String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
+// Marqueur « goutte » (style uMap « Drop ») coloré par catégorie. Les membres
+// d'AnarBib (BLMF, Maloca…) portent l'emblème du réseau ; les autres, une
+// pastille blanche.
+function dropIcon(L, color, isMember) {
+  const inner = isMember
+    ? `<img src="/img/icon-192.png" alt="" width="17" height="17" style="position:absolute;left:6.5px;top:5.5px;border-radius:50%;background:#fff;object-fit:contain;box-shadow:0 0 0 1.5px #fff;" />`
+    : `<span style="position:absolute;left:10px;top:9px;width:10px;height:10px;border-radius:50%;background:#fff;"></span>`;
+  const svg = `<svg width="30" height="42" viewBox="0 0 30 42" xmlns="http://www.w3.org/2000/svg">`
+    + `<path d="M15 41C15 41 28 24 28 14A13 13 0 1 0 2 14C2 24 15 41 15 41Z" fill="${esc(color)}" stroke="#ffffff" stroke-width="1.5"/></svg>`;
+  return L.divIcon({
+    html: `<div class="ab-map-pin">${svg}${inner}</div>`,
+    className: 'ab-map-pinwrap',
+    iconSize: [30, 42], iconAnchor: [15, 41], popupAnchor: [0, -38],
+  });
+}
+
 export default function NetworkMapTab() {
   const { formatMessage: t, locale } = useIntl();
   const lang = locale && locale.startsWith('pt') ? 'pt' : 'fr';
@@ -112,7 +128,7 @@ export default function NetworkMapTab() {
 
         markersRef.current = gj.features.map((f) => {
           const p = f.properties; const [lon, lat] = f.geometry.coordinates;
-          const marker = L.circleMarker([lat, lon], { radius: 7, color: '#ffffff', weight: 1.5, fillColor: p.color, fillOpacity: 0.9 });
+          const marker = L.marker([lat, lon], { icon: dropIcon(L, p.color, p.anarbib) });
           marker.bindPopup(popupHtml(p), { maxWidth: 300 });
           const fr = p.i18n.fr; const pt = p.i18n.pt;
           const text = [fr.name, fr.city, fr.country, pt.name, pt.city, pt.country].join(' ').toLowerCase();
