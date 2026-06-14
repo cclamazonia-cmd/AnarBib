@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "The directory of collectives",
   "federacao.inicio.toCircles": "Open the circles",
   "federacao.inicio.toAnnuaire": "Open the directory",
-  "federacao.inicio.soon": "Coming soon"
+  "federacao.inicio.soon": "Coming soon",
+  "importacoes.wizard.source.fondsHint": "A .zip file is handled as a received fonds batch: its records enter the review queue and its files are deposited."
 }

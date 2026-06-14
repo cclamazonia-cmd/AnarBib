@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "Ο κατάλογος των συλλογικοτήτων",
   "federacao.inicio.toCircles": "Άνοιγμα των κύκλων",
   "federacao.inicio.toAnnuaire": "Άνοιγμα του καταλόγου",
-  "federacao.inicio.soon": "Σύντομα"
+  "federacao.inicio.soon": "Σύντομα",
+  "importacoes.wizard.source.fondsHint": "Ένα αρχείο .zip αντιμετωπίζεται ως ληφθείσα παρτίδα αρχειακού υλικού: οι εγγραφές μπαίνουν στην ουρά ελέγχου και τα αρχεία αποθηκεύονται."
 }

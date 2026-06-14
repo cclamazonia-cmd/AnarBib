@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "L’annuaire des collectifs",
   "federacao.inicio.toCircles": "Ouvrir les cercles",
   "federacao.inicio.toAnnuaire": "Ouvrir l’annuaire",
-  "federacao.inicio.soon": "À venir"
+  "federacao.inicio.soon": "À venir",
+  "importacoes.wizard.source.fondsHint": "Un fichier .zip est traité comme un lot de fonds reçu : ses notices alimentent la file de revue et ses fichiers sont déposés."
 }

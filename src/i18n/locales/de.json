@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "Das Verzeichnis der Kollektive",
   "federacao.inicio.toCircles": "Kreise öffnen",
   "federacao.inicio.toAnnuaire": "Verzeichnis öffnen",
-  "federacao.inicio.soon": "Demnächst"
+  "federacao.inicio.soon": "Demnächst",
+  "importacoes.wizard.source.fondsHint": "Eine .zip-Datei wird als empfangener Bestands-Stapel behandelt: ihre Datensätze kommen in die Prüfwarteschlange und ihre Dateien werden hinterlegt."
 }

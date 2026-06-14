@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "O diretório dos coletivos",
   "federacao.inicio.toCircles": "Abrir os círculos",
   "federacao.inicio.toAnnuaire": "Abrir o diretório",
-  "federacao.inicio.soon": "Em breve"
+  "federacao.inicio.soon": "Em breve",
+  "importacoes.wizard.source.fondsHint": "Um ficheiro .zip é tratado como um lote de fundo recebido: os registros entram na fila de revisão e os ficheiros são depositados."
 }

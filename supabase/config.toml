@@ -87,6 +87,11 @@ verify_jwt = false
 [functions.process-partner-catalog-import]
 verify_jwt = false
 
+# Réception d'un lot de fonds (paquet EX-3) : appelée server-to-server par le
+# dispatch SQL (detected_format='zip') avec auth interne x-import-secret, sans JWT.
+[functions.receive-fonds-bundle]
+verify_jwt = false
+
 [functions.read-digital-asset]
 verify_jwt = false
 

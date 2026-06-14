@@ -44,6 +44,7 @@ function detectFileKind(fileName) {
   if (n.endsWith('.marcxml')) return 'marcxml';
   if (n.endsWith('.json')) return 'json';
   if (n.endsWith('.xml')) return 'xml';
+  if (n.endsWith('.zip')) return 'zip'; // EX-3 : paquet de fonds (manifest + fichiers)
   return 'unknown';
 }
 
@@ -285,7 +286,8 @@ export default function ImportWizard() {
               </label>
               <label style={{ display: 'grid', gap: 6 }}>
                 <span className="imp-note">{t({ id: 'importacoes.wizard.source.fileLabel' })}</span>
-                <input type="file" accept=".csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.marc,.marcxml,.xml,.json" onChange={(e) => setFile(e.target.files?.[0] || null)} disabled={busy} />
+                <input type="file" accept=".csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.marc,.marcxml,.xml,.json,.zip" onChange={(e) => setFile(e.target.files?.[0] || null)} disabled={busy} />
+                <span className="imp-note" style={{ opacity: 0.8 }}>{t({ id: 'importacoes.wizard.source.fondsHint' })}</span>
               </label>
               <div>
                 <button className="cat-btn primary" type="button" onClick={handleUpload} disabled={busy || !file || !sourceId}>

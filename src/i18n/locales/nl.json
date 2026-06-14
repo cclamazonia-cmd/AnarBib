@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "De gids van de collectieven",
   "federacao.inicio.toCircles": "Kringen openen",
   "federacao.inicio.toAnnuaire": "Gids openen",
-  "federacao.inicio.soon": "Binnenkort"
+  "federacao.inicio.soon": "Binnenkort",
+  "importacoes.wizard.source.fondsHint": "Een .zip-bestand wordt behandeld als een ontvangen collectiepartij: de records komen in de beoordelingswachtrij en de bestanden worden gedeponeerd."
 }

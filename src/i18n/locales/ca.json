@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "El directori dels col·lectius",
   "federacao.inicio.toCircles": "Obrir els cercles",
   "federacao.inicio.toAnnuaire": "Obrir el directori",
-  "federacao.inicio.soon": "Properament"
+  "federacao.inicio.soon": "Properament",
+  "importacoes.wizard.source.fondsHint": "Un fitxer .zip es tracta com un lot de fons rebut: els registres entren a la cua de revisió i els fitxers es dipositen."
 }

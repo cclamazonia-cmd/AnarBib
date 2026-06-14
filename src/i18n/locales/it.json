@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "L’elenco dei collettivi",
   "federacao.inicio.toCircles": "Apri i cerchi",
   "federacao.inicio.toAnnuaire": "Apri l’elenco",
-  "federacao.inicio.soon": "Prossimamente"
+  "federacao.inicio.soon": "Prossimamente",
+  "importacoes.wizard.source.fondsHint": "Un file .zip è trattato come un lotto di fondo ricevuto: le schede entrano nella coda di revisione e i file sono depositati."
 }

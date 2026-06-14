@@ -4697,5 +4697,6 @@
   "federacao.inicio.annuaire": "La adresaro de la kolektivoj",
   "federacao.inicio.toCircles": "Malfermi la rondojn",
   "federacao.inicio.toAnnuaire": "Malfermi la adresaron",
-  "federacao.inicio.soon": "Baldaŭ"
+  "federacao.inicio.soon": "Baldaŭ",
+  "importacoes.wizard.source.fondsHint": "Dosiero .zip estas traktata kiel ricevita aro de havaĵo: ĝiaj registroj eniras la revizian atendovicon kaj ĝiaj dosieroj estas deponitaj."
 }
