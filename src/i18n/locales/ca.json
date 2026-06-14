@@ -4715,5 +4715,18 @@
   "importacoes.export.curate.validate": "Validar (domini públic)",
   "importacoes.export.curate.validating": "Validant…",
   "importacoes.export.curate.validated": "« {title} » ja és elegible per a l'export.",
-  "importacoes.export.curate.error": "Error: {message}"
+  "importacoes.export.curate.error": "Error: {message}",
+  "importacoes.export.attach.title": "Adjuntar els fitxers rebuts",
+  "importacoes.export.attach.desc": "Enllaça un fitxer rebut (fons mutualitzat) a un llibre del teu catàleg: esdevé un fitxer verificat « domini públic » i la fitxa passa a ser exportable al seu torn.",
+  "importacoes.export.attach.load": "Carregar els fitxers rebuts",
+  "importacoes.export.attach.loading": "Carregant…",
+  "importacoes.export.attach.empty": "Cap fitxer rebut pendent d'adjuntar.",
+  "importacoes.export.attach.choose": "Triar el llibre",
+  "importacoes.export.attach.searchPh": "Títol, ISBN, referència…",
+  "importacoes.export.attach.search": "Cercar",
+  "importacoes.export.attach.searching": "Cercant…",
+  "importacoes.export.attach.attachHere": "Adjuntar a aquest llibre",
+  "importacoes.export.attach.attaching": "Adjuntant…",
+  "importacoes.export.attach.attached": "Fitxer adjuntat a « {title} » (verificat domini públic).",
+  "importacoes.export.attach.error": "Error: {message}"
 }

@@ -4715,5 +4715,18 @@
   "importacoes.export.curate.validate": "Επικύρωση (δημόσια κτήση)",
   "importacoes.export.curate.validating": "Επικύρωση…",
   "importacoes.export.curate.validated": "Το « {title} » είναι τώρα επιλέξιμο για εξαγωγή.",
-  "importacoes.export.curate.error": "Σφάλμα: {message}"
+  "importacoes.export.curate.error": "Σφάλμα: {message}",
+  "importacoes.export.attach.title": "Επισύναψη ληφθέντων αρχείων",
+  "importacoes.export.attach.desc": "Συνδέει ένα ληφθέν αρχείο (αμοιβαιοποιημένο αρχειακό υλικό) με ένα βιβλίο του καταλόγου σου: γίνεται επαληθευμένο αρχείο « δημόσιας κτήσης » και η εγγραφή γίνεται με τη σειρά της εξαγώγιμη.",
+  "importacoes.export.attach.load": "Φόρτωση ληφθέντων αρχείων",
+  "importacoes.export.attach.loading": "Φόρτωση…",
+  "importacoes.export.attach.empty": "Κανένα ληφθέν αρχείο σε αναμονή επισύναψης.",
+  "importacoes.export.attach.choose": "Επιλογή βιβλίου",
+  "importacoes.export.attach.searchPh": "Τίτλος, ISBN, αναφορά…",
+  "importacoes.export.attach.search": "Αναζήτηση",
+  "importacoes.export.attach.searching": "Αναζήτηση…",
+  "importacoes.export.attach.attachHere": "Επισύναψη σε αυτό το βιβλίο",
+  "importacoes.export.attach.attaching": "Επισύναψη…",
+  "importacoes.export.attach.attached": "Το αρχείο επισυνάφθηκε στο « {title} » (επαληθευμένη δημόσια κτήση).",
+  "importacoes.export.attach.error": "Σφάλμα: {message}"
 }

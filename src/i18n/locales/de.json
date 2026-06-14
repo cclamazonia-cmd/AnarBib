@@ -4715,5 +4715,18 @@
   "importacoes.export.curate.validate": "Bestätigen (gemeinfrei)",
   "importacoes.export.curate.validating": "Wird bestätigt…",
   "importacoes.export.curate.validated": "« {title} » ist jetzt exportberechtigt.",
-  "importacoes.export.curate.error": "Fehler: {message}"
+  "importacoes.export.curate.error": "Fehler: {message}",
+  "importacoes.export.attach.title": "Empfangene Dateien anhängen",
+  "importacoes.export.attach.desc": "Verknüpft eine empfangene Datei (mutualisierter Bestand) mit einem Buch deines Katalogs: sie wird eine bestätigte « gemeinfreie » Datei und der Datensatz wird seinerseits exportierbar.",
+  "importacoes.export.attach.load": "Empfangene Dateien laden",
+  "importacoes.export.attach.loading": "Wird geladen…",
+  "importacoes.export.attach.empty": "Keine empfangene Datei wartet auf Anhängen.",
+  "importacoes.export.attach.choose": "Buch wählen",
+  "importacoes.export.attach.searchPh": "Titel, ISBN, Referenz…",
+  "importacoes.export.attach.search": "Suchen",
+  "importacoes.export.attach.searching": "Suche…",
+  "importacoes.export.attach.attachHere": "An dieses Buch anhängen",
+  "importacoes.export.attach.attaching": "Wird angehängt…",
+  "importacoes.export.attach.attached": "Datei an « {title} » angehängt (gemeinfrei bestätigt).",
+  "importacoes.export.attach.error": "Fehler: {message}"
 }

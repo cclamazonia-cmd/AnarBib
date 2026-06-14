@@ -63,6 +63,15 @@ export default function ImportacoesPage() {
   const [pubLoaded, setPubLoaded] = useState(false);
   const [pubLoading, setPubLoading] = useState(false);
   const [pubPromotingId, setPubPromotingId] = useState(null);
+  // ── Attache des fonds reçus (Solution 1, entrée b) ──
+  const [recvAssets, setRecvAssets] = useState([]);
+  const [recvLoaded, setRecvLoaded] = useState(false);
+  const [recvLoading, setRecvLoading] = useState(false);
+  const [attachTarget, setAttachTarget] = useState(null);
+  const [bookQuery, setBookQuery] = useState('');
+  const [bookResults, setBookResults] = useState([]);
+  const [bookSearching, setBookSearching] = useState(false);
+  const [attaching, setAttaching] = useState(false);
 
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
@@ -666,6 +675,74 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.export.curate.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setPubPromotingId(null);
+    }
+  }
+
+  // ── Attache d'un fichier de fonds reçu à un livre (Solution 1b) ──────────────
+  async function loadReceivedAssets() {
+    if (!libraryId) return;
+    setRecvLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_list_received_assets_to_attach', { p_library_id: libraryId });
+      if (error) throw error;
+      setRecvAssets(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.attach.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setRecvLoaded(true);
+      setRecvLoading(false);
+    }
+  }
+
+  function startAttach(asset) {
+    setAttachTarget(asset);
+    setBookQuery('');
+    setBookResults([]);
+  }
+
+  async function searchBooks() {
+    if (!libraryId || !bookQuery.trim()) return;
+    setBookSearching(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_search_library_books', { p_library_id: libraryId, p_query: bookQuery.trim() });
+      if (error) throw error;
+      setBookResults(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.attach.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setBookSearching(false);
+    }
+  }
+
+  async function handleAttach(book) {
+    if (!attachTarget) return;
+    setAttaching(true);
+    setMsg({ text: t({ id: 'importacoes.export.attach.attaching' }), kind: 'info' });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/attach-received-asset`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ received_asset_id: attachTarget.received_asset_id, book_id: book.book_id }),
+        }
+      );
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out?.error || `HTTP ${res.status}`);
+      setRecvAssets((prev) => prev.filter((a) => a.received_asset_id !== attachTarget.received_asset_id));
+      setAttachTarget(null);
+      setBookResults([]);
+      setBookQuery('');
+      setMsg({ text: t({ id: 'importacoes.export.attach.attached' }, { title: book.title || '—' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.attach.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setAttaching(false);
     }
   }
 
@@ -1390,6 +1467,62 @@ export default function ImportacoesPage() {
                     <p className="imp-note" style={{ opacity: 0.8 }}>{t({ id: 'importacoes.export.fonds.directNoPartner' })}</p>
                   )}
                 </div>
+              </div>
+            </div>
+
+            <div className="imp-sheet">
+              <div className="imp-sheet__head">
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.attach.title' })}</span>
+              </div>
+              <div className="imp-sheet__body">
+                <p className="imp-note">{t({ id: 'importacoes.export.attach.desc' })}</p>
+                <div style={{ marginTop: 8 }}>
+                  <button className="cat-btn secondary" type="button" onClick={loadReceivedAssets} disabled={recvLoading || !libraryId}>
+                    {recvLoading ? t({ id: 'importacoes.export.attach.loading' }) : t({ id: 'importacoes.export.attach.load' })}
+                  </button>
+                </div>
+                {recvLoaded && recvAssets.length === 0 && (
+                  <p className="imp-note" style={{ opacity: 0.8, marginTop: 8 }}>{t({ id: 'importacoes.export.attach.empty' })}</p>
+                )}
+                {recvAssets.length > 0 && (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
+                    {recvAssets.map((a) => (
+                      <li key={a.received_asset_id} style={{ padding: '8px 10px', borderRadius: 6, marginBottom: 6, background: 'rgba(127,127,127,0.08)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+                          <span style={{ minWidth: 0, fontSize: '.85rem' }}>
+                            <b>{a.title || '—'}</b>{a.source_name ? ` · ${a.source_name}` : ''}{a.asset_kind ? ` · ${a.asset_kind}` : ''}
+                          </span>
+                          <button className="cat-btn secondary" type="button" onClick={() => startAttach(a)} disabled={attaching}>
+                            {t({ id: 'importacoes.export.attach.choose' })}
+                          </button>
+                        </div>
+                        {attachTarget && attachTarget.received_asset_id === a.received_asset_id && (
+                          <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(127,127,127,0.2)' }}>
+                            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                              <input className="ab-input" value={bookQuery} onChange={(e) => setBookQuery(e.target.value)}
+                                placeholder={t({ id: 'importacoes.export.attach.searchPh' })} style={{ flex: 1, minWidth: 160 }} />
+                              <button className="cat-btn secondary" type="button" onClick={searchBooks} disabled={bookSearching || !bookQuery.trim()}>
+                                {bookSearching ? t({ id: 'importacoes.export.attach.searching' }) : t({ id: 'importacoes.export.attach.search' })}
+                              </button>
+                            </div>
+                            {bookResults.length > 0 && (
+                              <ul style={{ listStyle: 'none', padding: 0, margin: '8px 0 0' }}>
+                                {bookResults.map((b) => (
+                                  <li key={b.book_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '6px 8px' }}>
+                                    <span style={{ fontSize: '.82rem' }}>{b.title || '—'}{b.isbn ? ` · ${b.isbn}` : ''}</span>
+                                    <button className="cat-btn primary" type="button" onClick={() => handleAttach(b)} disabled={attaching}>
+                                      {attaching ? t({ id: 'importacoes.export.attach.attaching' }) : t({ id: 'importacoes.export.attach.attachHere' })}
+                                    </button>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 

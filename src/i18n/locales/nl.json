@@ -4715,5 +4715,18 @@
   "importacoes.export.curate.validate": "Valideren (publiek domein)",
   "importacoes.export.curate.validating": "Valideren…",
   "importacoes.export.curate.validated": "« {title} » is nu geschikt voor export.",
-  "importacoes.export.curate.error": "Fout: {message}"
+  "importacoes.export.curate.error": "Fout: {message}",
+  "importacoes.export.attach.title": "Ontvangen bestanden koppelen",
+  "importacoes.export.attach.desc": "Koppelt een ontvangen bestand (gemutualiseerde collectie) aan een boek in je catalogus: het wordt een geverifieerd « publiek domein »-bestand en het record wordt op zijn beurt exporteerbaar.",
+  "importacoes.export.attach.load": "Ontvangen bestanden laden",
+  "importacoes.export.attach.loading": "Laden…",
+  "importacoes.export.attach.empty": "Geen ontvangen bestand wacht op koppeling.",
+  "importacoes.export.attach.choose": "Boek kiezen",
+  "importacoes.export.attach.searchPh": "Titel, ISBN, referentie…",
+  "importacoes.export.attach.search": "Zoeken",
+  "importacoes.export.attach.searching": "Zoeken…",
+  "importacoes.export.attach.attachHere": "Aan dit boek koppelen",
+  "importacoes.export.attach.attaching": "Koppelen…",
+  "importacoes.export.attach.attached": "Bestand gekoppeld aan « {title} » (geverifieerd publiek domein).",
+  "importacoes.export.attach.error": "Fout: {message}"
 }

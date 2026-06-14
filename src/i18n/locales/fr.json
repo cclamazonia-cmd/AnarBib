@@ -4715,5 +4715,18 @@
   "importacoes.export.curate.validate": "Valider (domaine public)",
   "importacoes.export.curate.validating": "Validation…",
   "importacoes.export.curate.validated": "« {title} » est maintenant éligible à l'export.",
-  "importacoes.export.curate.error": "Erreur : {message}"
+  "importacoes.export.curate.error": "Erreur : {message}",
+  "importacoes.export.attach.title": "Attacher les fichiers reçus",
+  "importacoes.export.attach.desc": "Lie un fichier reçu (fonds mutualisé) à un livre de ton catalogue : il devient un fichier vérifié « domaine public » et la fiche devient exportable à son tour.",
+  "importacoes.export.attach.load": "Charger les fichiers reçus",
+  "importacoes.export.attach.loading": "Chargement…",
+  "importacoes.export.attach.empty": "Aucun fichier reçu en attente d'attache.",
+  "importacoes.export.attach.choose": "Choisir le livre",
+  "importacoes.export.attach.searchPh": "Titre, ISBN, référence…",
+  "importacoes.export.attach.search": "Chercher",
+  "importacoes.export.attach.searching": "Recherche…",
+  "importacoes.export.attach.attachHere": "Attacher à ce livre",
+  "importacoes.export.attach.attaching": "Attache en cours…",
+  "importacoes.export.attach.attached": "Fichier attaché à « {title} » (vérifié domaine public).",
+  "importacoes.export.attach.error": "Erreur : {message}"
 }

@@ -4715,5 +4715,18 @@
   "importacoes.export.curate.validate": "Validate (public domain)",
   "importacoes.export.curate.validating": "Validating…",
   "importacoes.export.curate.validated": "« {title} » is now eligible for export.",
-  "importacoes.export.curate.error": "Error: {message}"
+  "importacoes.export.curate.error": "Error: {message}",
+  "importacoes.export.attach.title": "Attach received files",
+  "importacoes.export.attach.desc": "Links a received file (mutualized fonds) to a book in your catalog: it becomes a verified « public domain » file and the record turns exportable in turn.",
+  "importacoes.export.attach.load": "Load received files",
+  "importacoes.export.attach.loading": "Loading…",
+  "importacoes.export.attach.empty": "No received file awaiting attachment.",
+  "importacoes.export.attach.choose": "Choose book",
+  "importacoes.export.attach.searchPh": "Title, ISBN, reference…",
+  "importacoes.export.attach.search": "Search",
+  "importacoes.export.attach.searching": "Searching…",
+  "importacoes.export.attach.attachHere": "Attach to this book",
+  "importacoes.export.attach.attaching": "Attaching…",
+  "importacoes.export.attach.attached": "File attached to « {title} » (verified public domain).",
+  "importacoes.export.attach.error": "Error: {message}"
 }
