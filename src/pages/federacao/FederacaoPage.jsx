@@ -9,6 +9,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { isCoord } from '@/lib/roles';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
+import NetworkMapTab from './NetworkMapTab';
 import '../catalogacao/CatalogacaoPage.css';
 import './FederacaoPage.css';
 
@@ -28,8 +29,8 @@ import './FederacaoPage.css';
 // events circle.* + fn_circle_message = sous-paquet 1b ; mutualisation = FED-O6.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const TAB_KEYS = ['inicio', 'circulos', 'assembleias', 'gazeta', 'carta', 'entreajuda'];
-const WIRED = new Set(['circulos', 'inicio']);
+const TAB_KEYS = ['inicio', 'circulos', 'carte', 'assembleias', 'gazeta', 'carta', 'entreajuda'];
+const WIRED = new Set(['circulos', 'inicio', 'carte']);
 
 const NATURE_OPTIONS = ['afinitario', 'geografico', 'linguistico', 'federacao'];
 
@@ -222,6 +223,8 @@ export default function FederacaoPage() {
               <p>{t({ id: 'federacao.inicio.body' })}</p>
             </div>
           )}
+
+          {tab === 'carte' && <NetworkMapTab />}
 
           {!WIRED.has(tab) && (
             <div className="ab-fed-placeholder">
