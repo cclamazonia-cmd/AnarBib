@@ -4575,5 +4575,12 @@
   "atelier.form.nameDup": "Duplicate name",
   "atelier.form.nameCan": "Canonical name",
   "atelier.form.nameAuthor": "Authority name (person/collective)",
-  "atelier.form.error.names": "Provide the authority name."
+  "atelier.form.error.names": "Provide the authority name.",
+  "auth.create.subtitleContributor": "Fill in the fields below to sign up as a contributor.",
+  "auth.create.org": "Organization or collective (optional)",
+  "auth.create.orgHint": "If you belong to a collective, organization or group, mention it here.",
+  "auth.create.motivation": "Your motivation (optional)",
+  "auth.create.motivationHint": "A few words about what brings you to AnarBib. This message is sent to the team.",
+  "account.profile.org": "Organization or collective",
+  "panel.reader.org": "Organization or collective"
 }

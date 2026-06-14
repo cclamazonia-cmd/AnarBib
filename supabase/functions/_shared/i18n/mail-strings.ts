@@ -4901,6 +4901,30 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Testcontext",
     el: "Πλαίσιο δοκιμής"
   },
+  "l.organization": {
+    "pt-BR": "Organização / coletivo",
+    fr: "Organisation / collectif",
+    es: "Organización / colectivo",
+    en: "Organization / collective",
+    it: "Organizzazione / collettivo",
+    de: "Organisation / Kollektiv",
+    ca: "Organització / col·lectiu",
+    eo: "Organizo / kolektivo",
+    nl: "Organisatie / collectief",
+    el: "Οργάνωση / συλλογικότητα"
+  },
+  "l.motivation": {
+    "pt-BR": "Motivação",
+    fr: "Motivation",
+    es: "Motivación",
+    en: "Motivation",
+    it: "Motivazione",
+    de: "Beweggrund",
+    ca: "Motivació",
+    eo: "Motivo",
+    nl: "Motivatie",
+    el: "Κίνητρο"
+  },
   "network.cooptation_voted.cta": {
     "pt-BR": "Acessar a proposta e votar",
     fr: "Accéder à la proposition et voter",

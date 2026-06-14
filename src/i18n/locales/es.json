@@ -4575,5 +4575,12 @@
   "atelier.form.nameDup": "Nombre del duplicado",
   "atelier.form.nameCan": "Nombre de la canónica",
   "atelier.form.nameAuthor": "Nombre de la autoridad (persona/colectivo)",
-  "atelier.form.error.names": "Indique el nombre de la autoridad."
+  "atelier.form.error.names": "Indique el nombre de la autoridad.",
+  "auth.create.subtitleContributor": "Rellena los campos a continuación para registrarte como contribuyente.",
+  "auth.create.org": "Organización o colectivo (opcional)",
+  "auth.create.orgHint": "Si formas parte de un colectivo, organización o grupo, indícalo aquí.",
+  "auth.create.motivation": "Tu motivación (opcional)",
+  "auth.create.motivationHint": "Unas palabras sobre lo que te trae a AnarBib. Este mensaje se envía al equipo.",
+  "account.profile.org": "Organización o colectivo",
+  "panel.reader.org": "Organización o colectivo"
 }

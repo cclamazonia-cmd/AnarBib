@@ -522,6 +522,7 @@ export default function AccountPage() {
         last_name: profile.last_name,
         phone: profile.phone,
         gender: profile.gender,
+        affiliation_org: profile.affiliation_org,
         address: addrText,
       }).eq('id', user.id);
       if (error) throw error;
@@ -1235,6 +1236,7 @@ export default function AccountPage() {
                     <option value="outro">{t({ id: 'account.profile.gender.other' })}</option>
                   </select>
                 </label>
+                <label>{t({ id: 'account.profile.org' })} <input type="text" value={profile.affiliation_org || ''} maxLength={200} onChange={e => updateProfile('affiliation_org', e.target.value)} /></label>
 
                 <hr className="ab-conta-hr" />
                 <h3 style={{ fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'address.title' })}</h3>

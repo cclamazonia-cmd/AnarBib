@@ -277,7 +277,7 @@ function buildUserMail({ firstName, libraryName, publicId, tempPassword, postalA
     contentHtml
   });
 }
-function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, publicId, userEmail, phone, libraryName, fullAddress, isTestContext, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, locale = "pt-BR" }) {
+function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, publicId, userEmail, phone, libraryName, fullAddress, affiliationOrg = "", motivation = "", isTestContext, anarbibLogoUrl, libraryLogoUrl, isWithoutLibrary = false, locale = "pt-BR" }) {
   const logoTable = buildLogoTable({
     anarbibLogoUrl,
     libraryLogoUrl,
@@ -294,6 +294,8 @@ function buildInternalMail({ title, pretitle, subtitle, firstName, lastName, pub
     ${buildParagraph(`<b>${label(locale, "email")}:</b> ${escapeHtml(userEmail)}`)}
     ${buildParagraph(`<b>${label(locale, "phone")}:</b> ${escapeHtml(phone)}`)}
     ${fullAddress ? buildParagraph(`<b>${label(locale, "address")}:</b> ${escapeHtml(fullAddress)}`) : ""}
+    ${affiliationOrg ? buildParagraph(`<b>${label(locale, "organization")}:</b> ${escapeHtml(affiliationOrg)}`) : ""}
+    ${motivation ? buildParagraph(`<b>${label(locale, "motivation")}:</b> ${escapeHtml(motivation).replace(/\n/g, "<br>")}`) : ""}
     ${buildParagraph(`<b>${label(locale, "registrationDate")}:</b> ${escapeHtml(new Date().toISOString())}`)}
     ${isTestContext ? `<div style="margin-top:18px; padding:14px 16px; border-radius:14px; border:1px solid ${MAIL_BRAND.colors.borderLight}; background:${MAIL_BRAND.colors.surfaceAlt}; color:${MAIL_BRAND.colors.redDeep}; font-size:13px; line-height:1.6;"><b>${label(locale, "testContext")}:</b> ${tMail(locale, "register.internal.testContextNote")}</div>` : ""}
   `;
@@ -435,6 +437,9 @@ serve(async (req)=>{
     const lastName = String(body?.last_name || "").trim();
     const phone = String(body?.phone || "").trim();
     const gender = String(body?.gender || "").trim();
+    // Champs libres criar-conta : organisation d'appartenance + motivation.
+    const affiliationOrg = String(body?.affiliation_org || "").trim().slice(0, 200);
+    const signupMotivation = String(body?.signup_motivation || "").trim().slice(0, 1000);
     const address1 = String(body?.address_1 || "").trim();
     const address2 = String(body?.address_2 || "").trim();
     const addressUnit = String(body?.address_unit || "").trim();
@@ -695,6 +700,7 @@ serve(async (req)=>{
       last_name: lastName,
       phone,
       gender: gender || null,
+      affiliation_org: affiliationOrg || null,
       address: fullAddress || null,
       consent_email: true,
       consent_email_at: consentEmailAt,
@@ -823,6 +829,10 @@ serve(async (req)=>{
     // Second UPDATE dédié : signupIntentMetadata n'est complet qu'ici (le
     // claim_id n'existe qu'après l'insert du claim). Colonnes créées par la
     // migration 20260521120000_profiles_signup_intent.sql.
+    // Conserve la motivation libre (one-shot, non éditable) dans le metadata du
+    // signup_intent. L'org d'appartenance, elle, vit dans la colonne canonique
+    // profiles.affiliation_org (éditable ensuite dans /conta + backstage).
+    if (signupMotivation) signupIntentMetadata = { ...signupIntentMetadata, motivation: signupMotivation };
     const { error: signupIntentUpdateError } = await admin.from("profiles").update({
       signup_intent: signupIntent,
       signup_intent_metadata: signupIntentMetadata,
@@ -950,6 +960,8 @@ serve(async (req)=>{
       phone,
       libraryName: displayName,
       fullAddress,
+      affiliationOrg,
+      motivation: signupMotivation,
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,
@@ -967,6 +979,8 @@ serve(async (req)=>{
       phone,
       libraryName: displayName,
       fullAddress,
+      affiliationOrg,
+      motivation: signupMotivation,
       isTestContext: isTestMode || Boolean(libraryInternalRedirectEmail),
       anarbibLogoUrl,
       libraryLogoUrl,

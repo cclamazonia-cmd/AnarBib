@@ -135,7 +135,7 @@ export default function TabLeitor({
           ) : (readerMatchInfo?.localIdentity && (
             <p className="ab-painel-reader-identity">{t({id:'panel.reader.localIdentity'})}: <strong>{readerMatchInfo.localIdentity}</strong></p>
           ))}
-          <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'}</p>
+          <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'} · {t({id:'panel.reader.org'})}: {readerProfile.affiliation_org || '—'}</p>
           <p>{t({id:'panel.reader.registered'})}: {fmtD(readerProfile.created_at)} · {t({id:'panel.reader.restricted'})}: {readerProfile.is_restricted ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})} · {t({id:'panel.reader.passwordPending'})}: {readerProfile.must_change_password ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})}</p>
 
           {/* EA-10 : indicateur visuel du gel GLOBAL (detail dans le bloc dedie plus bas) */}
@@ -231,6 +231,9 @@ export default function TabLeitor({
                   <option value="outro">{t({id:'account.profile.gender.other'})}</option>
                 </select>
               </label>
+              <label>{t({id:'panel.reader.org'})}
+                <input type="text" className="ab-painel-input" value={readerProfile.affiliation_org || ''} maxLength={200} onChange={e => setReaderProfile(p => ({...p, affiliation_org: e.target.value}))} />
+              </label>
             </div>
 
             {/* ── Address fields ── Uses shared CountrySelect/StateSelect components.
@@ -292,6 +295,7 @@ export default function TabLeitor({
                   const updateData = {
                     first_name: readerProfile.first_name, last_name: readerProfile.last_name,
                     phone: readerProfile.phone, gender: readerProfile.gender,
+                    affiliation_org: readerProfile.affiliation_org,
                     email: readerProfile.email,
                     address: formatAddressText(editAddrState, locale),
                   };

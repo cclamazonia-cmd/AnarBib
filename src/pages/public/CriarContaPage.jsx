@@ -50,7 +50,7 @@ export default function CriarContaPage() {
     orphan_library_name: '',
     // phone est désormais au format E.164 ('+5511999999999')
     phone: '',
-    gender: '', addr1: '', addr2: '', unit: '', cep: '', bairro: '',
+    gender: '', org: '', motivation: '', addr1: '', addr2: '', unit: '', cep: '', bairro: '',
     city: '',
     state: '',
     country: DEFAULT_COUNTRY,
@@ -195,6 +195,8 @@ export default function CriarContaPage() {
         last_name: form.last_name.trim(),
         phone: form.phone.trim(), // au format E.164
         gender: form.gender,
+        affiliation_org: form.org.trim(),
+        signup_motivation: form.motivation.trim(),
         address_1: form.addr1.trim(),
         address_2: form.addr2.trim(),       // Complément (sans préfixe)
         address_unit: form.unit.trim(),     // Numéro / Casa-Apto
@@ -287,7 +289,7 @@ export default function CriarContaPage() {
     <PageShell><Topbar />
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '24px 16px' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({id:'auth.create.title'})}</h1>
-        <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>{t({id:'auth.create.subtitle'})}</p>
+        <p style={{ color: 'var(--brand-muted)', marginBottom: 20, fontSize: '.9rem' }}>{t({id: form.library_slug === '__contributor__' ? 'auth.create.subtitleContributor' : 'auth.create.subtitle'})}</p>
 
         {/* Wizard — barre d'étapes (1 biblio · 2 toi · 3 adresse · 4 c'est fait) */}
         <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
@@ -455,7 +457,9 @@ export default function CriarContaPage() {
             <div style={hs}>{t({id:'address.phone.hint'})}</div>
           </div>
 
-          {/* Genre */}
+          {/* Genre — visible pour tous SAUF les contributeur·rices (compte réseau
+              sans biblio) : champ conservé, non bloquant, cohérent avec /conta + backstage. */}
+          {form.library_slug !== '__contributor__' && (
           <div style={{ marginBottom: 16 }}>
             <label style={ls}>{t({id:'auth.create.gender'})}</label>
             <select value={form.gender} onChange={e => set('gender', e.target.value)} style={fs}>
@@ -463,6 +467,17 @@ export default function CriarContaPage() {
             </select>
             <div style={hs}>{t({id:'auth.create.genderOptional'})}</div>
           </div>
+          )}
+
+          {/* Organisation / collectif d'appartenance — UNIQUEMENT pour les
+              contributeur·rices (remplace le champ genre, saisie libre optionnelle). */}
+          {form.library_slug === '__contributor__' && (
+          <div style={{ marginBottom: 16 }}>
+            <label style={ls}>{t({id:'auth.create.org'})}</label>
+            <input type="text" value={form.org} onChange={e => set('org', e.target.value)} maxLength={200} style={fs} />
+            <div style={hs}>{t({id:'auth.create.orgHint'})}</div>
+          </div>
+          )}
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginTop: 10 }}>
             <Button variant="secondary" type="button" onClick={goBack}>{t({id:'auth.create.wizard.back'})}</Button>
             <Button variant="primary" type="button" onClick={goNext}>{t({id:'auth.create.wizard.next'})}</Button>
@@ -560,6 +575,13 @@ export default function CriarContaPage() {
             <input type="checkbox" checked={form.consent} onChange={e => set('consent', e.target.checked)} required style={{ marginTop: 3 }} />
             <span>{t({id:'auth.create.consentEmail'})}</span>
           </label>
+
+          {/* Motivation libre — transmise aux admins dans l'e-mail interne */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={ls}>{t({id:'auth.create.motivation'})}</label>
+            <textarea value={form.motivation} onChange={e => set('motivation', e.target.value)} maxLength={1000} rows={4} style={{ ...fs, resize: 'vertical', minHeight: 90, fontFamily: 'inherit' }} />
+            <div style={hs}>{t({id:'auth.create.motivationHint'})}</div>
+          </div>
 
           {/* Boutons d'action — étape 3 (submit du formulaire) */}
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>
