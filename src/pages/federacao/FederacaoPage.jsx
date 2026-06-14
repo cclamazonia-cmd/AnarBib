@@ -38,12 +38,13 @@ export default function FederacaoPage() {
   const { formatMessage: t, locale } = useIntl();
   const { tab: tabParam } = useParams();
   const navigate = useNavigate();
-  const { libraryId, libraryName, role } = useLibrary();
+  const { libraryId, role } = useLibrary();
   const { notifySuccess, notifyError } = useToast();
-  useDocumentTitle(t({ id: 'federacao.pageTitle' }));
+  useDocumentTitle(t({ id: 'federacao.title' }));
 
-  const tab = TAB_KEYS.includes(tabParam) ? tabParam : 'circulos';
-  const setTab = (k) => navigate(k === 'circulos' ? '/federacao' : `/federacao/${k}`);
+  // Accueil = onglet par défaut (URL nue /federacao). Les autres ont /federacao/<tab>.
+  const tab = TAB_KEYS.includes(tabParam) ? tabParam : 'inicio';
+  const setTab = (k) => navigate(k === 'inicio' ? '/federacao' : `/federacao/${k}`);
 
   const canAct = isCoord(role) && !!libraryId;
   const roleLoaded = role !== null && role !== undefined;
@@ -183,7 +184,7 @@ export default function FederacaoPage() {
 
   return (
     <PageShell><Topbar />
-      <Hero title={t({ id: 'federacao.title' })} subtitle={libraryName || t({ id: 'federacao.subtitle' })}>
+      <Hero title={t({ id: 'federacao.title' })} subtitle={t({ id: 'federacao.subtitle' })}>
         <UserHeroBadge />
       </Hero>
 
