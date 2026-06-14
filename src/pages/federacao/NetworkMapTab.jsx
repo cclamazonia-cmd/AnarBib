@@ -67,7 +67,8 @@ export default function NetworkMapTab() {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const clusterRef = useRef(null);
-  const markersRef = useRef([]);          // [{ marker, cat, text }]
+  const memberLayerRef = useRef(null);    // membres AnarBib hors cluster (toujours visibles)
+  const markersRef = useRef([]);          // [{ marker, cat, text, member }]
   const filtersRef = useRef({ active: new Set(CATEGORIES.map((c) => c.key)), query: '' });
 
   const [status, setStatus] = useState('loading'); // loading | ready | error
@@ -95,12 +96,15 @@ export default function NetworkMapTab() {
   }
 
   function applyFilters() {
-    const cluster = clusterRef.current; const L = window.L; if (!cluster || !L) return;
+    const cluster = clusterRef.current; const memberLayer = memberLayerRef.current; const L = window.L;
+    if (!cluster || !memberLayer || !L) return;
     const { active: act, query: q } = filtersRef.current;
     const qq = q.trim().toLowerCase();
     const matched = markersRef.current.filter((m) => act.has(m.cat) && (!qq || m.text.includes(qq)));
-    cluster.clearLayers();
-    cluster.addLayers(matched.map((m) => m.marker));
+    cluster.clearLayers(); memberLayer.clearLayers();
+    // Membres AnarBib : hors cluster, TOUJOURS visibles (emblème mis en avant, jamais noyé).
+    cluster.addLayers(matched.filter((m) => !m.member).map((m) => m.marker));
+    matched.filter((m) => m.member).forEach((m) => memberLayer.addLayer(m.marker));
     setShown(matched.length);
     if (qq && matched.length && mapRef.current) {
       try { mapRef.current.fitBounds(L.featureGroup(matched.map((m) => m.marker)).getBounds().pad(0.2), { maxZoom: 8 }); } catch { /* ignore */ }
@@ -120,7 +124,8 @@ export default function NetworkMapTab() {
         }).addTo(map);
         const cluster = L.markerClusterGroup({ maxClusterRadius: 45, chunkedLoading: true });
         map.addLayer(cluster);
-        mapRef.current = map; clusterRef.current = cluster;
+        const memberLayer = L.layerGroup().addTo(map);
+        mapRef.current = map; clusterRef.current = cluster; memberLayerRef.current = memberLayer;
 
         const { data: gj, error: gErr } = await supabase.functions.invoke('network-map');
         if (gErr || !gj || !gj.features) throw new Error('network-map ' + (gErr?.message || 'no data'));
@@ -132,7 +137,7 @@ export default function NetworkMapTab() {
           marker.bindPopup(popupHtml(p), { maxWidth: 300 });
           const fr = p.i18n.fr; const pt = p.i18n.pt;
           const text = [fr.name, fr.city, fr.country, pt.name, pt.city, pt.country].join(' ').toLowerCase();
-          return { marker, cat: p.category, text };
+          return { marker, cat: p.category, text, member: !!p.anarbib };
         });
         setTotal(markersRef.current.length);
         applyFilters();
