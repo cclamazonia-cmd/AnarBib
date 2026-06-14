@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Carta",
   "federacao.tab.entreajuda": "Ajuda mútua",
   "federacao.inicio.title": "Inici",
-  "federacao.inicio.body": "La porta d'entrada de la federació: assemblees per venir, darrer butlletí, darrers articles. Sense tauler, sense xifres — arriba aviat.",
+  "federacao.inicio.body": "Sense panell, sense números — els teus cercles, les portes obertes i el directori dels col·lectius.",
   "federacao.circle.nature.afinitario": "Afinitari",
   "federacao.circle.nature.geografico": "Geogràfic",
   "federacao.circle.nature.linguistico": "Lingüístic",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Preparant el paquet…",
   "importacoes.export.fonds.success": "Llest! La baixada ha començat.",
   "importacoes.export.fonds.truncated": "Lot truncat (límit de volum assolit): {count} fitxers inclosos. Afina la selecció per a una exportació completa.",
-  "importacoes.export.fonds.error": "Error en exportar el fons: {message}"
+  "importacoes.export.fonds.error": "Error en exportar el fons: {message}",
+  "federacao.inicio.welcome": "Benvinguda a la federació",
+  "federacao.inicio.pending": "El que t’espera",
+  "federacao.inicio.pending.body": "Una sol·licitud d’adhesió espera el consentiment del cercle « {circle} ».",
+  "federacao.inicio.annuaire": "El directori dels col·lectius",
+  "federacao.inicio.toCircles": "Obrir els cercles",
+  "federacao.inicio.toAnnuaire": "Obrir el directori",
+  "federacao.inicio.soon": "Properament"
 }

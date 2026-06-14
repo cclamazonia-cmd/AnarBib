@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Επιστολή",
   "federacao.tab.entreajuda": "Αλληλοβοήθεια",
   "federacao.inicio.title": "Αρχή",
-  "federacao.inicio.body": "Η πύλη εισόδου της ομοσπονδίας: επερχόμενες συνελεύσεις, τελευταίο δελτίο, τελευταία άρθρα. Χωρίς πίνακα, χωρίς αριθμούς — έρχεται σύντομα.",
+  "federacao.inicio.body": "Κανένας πίνακας, κανένας αριθμός — οι κύκλοι σου, οι ανοιχτές πόρτες, και ο κατάλογος των συλλογικοτήτων.",
   "federacao.circle.nature.afinitario": "Συγγενικός",
   "federacao.circle.nature.geografico": "Γεωγραφικός",
   "federacao.circle.nature.linguistico": "Γλωσσικός",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Προετοιμασία του πακέτου…",
   "importacoes.export.fonds.success": "Έτοιμο! Η λήψη ξεκίνησε.",
   "importacoes.export.fonds.truncated": "Η παρτίδα περικόπηκε (επιτεύχθηκε το όριο όγκου): {count} αρχεία περιλήφθηκαν. Περιορίστε την επιλογή για πλήρη εξαγωγή.",
-  "importacoes.export.fonds.error": "Σφάλμα κατά την εξαγωγή αρχειακού υλικού: {message}"
+  "importacoes.export.fonds.error": "Σφάλμα κατά την εξαγωγή αρχειακού υλικού: {message}",
+  "federacao.inicio.welcome": "Καλώς ήρθατε στην ομοσπονδία",
+  "federacao.inicio.pending": "Τι σας περιμένει",
+  "federacao.inicio.pending.body": "Ένα αίτημα ένταξης περιμένει τη συναίνεση του κύκλου « {circle} ».",
+  "federacao.inicio.annuaire": "Ο κατάλογος των συλλογικοτήτων",
+  "federacao.inicio.toCircles": "Άνοιγμα των κύκλων",
+  "federacao.inicio.toAnnuaire": "Άνοιγμα του καταλόγου",
+  "federacao.inicio.soon": "Σύντομα"
 }

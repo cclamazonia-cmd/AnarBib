@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Lettera",
   "federacao.tab.entreajuda": "Mutuo soccorso",
   "federacao.inicio.title": "Inizio",
-  "federacao.inicio.body": "La porta d'ingresso della federazione: assemblee in arrivo, ultimo bollettino, ultimi articoli. Nessun pannello, nessun numero — arriva presto.",
+  "federacao.inicio.body": "Nessun pannello, nessun numero — i tuoi cerchi, le porte aperte e l’elenco dei collettivi.",
   "federacao.circle.nature.afinitario": "Affinitario",
   "federacao.circle.nature.geografico": "Geografico",
   "federacao.circle.nature.linguistico": "Linguistico",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Preparazione del pacchetto…",
   "importacoes.export.fonds.success": "Pronto! Il download è iniziato.",
   "importacoes.export.fonds.truncated": "Lotto troncato (limite di volume raggiunto): {count} file inclusi. Affina la selezione per un'esportazione completa.",
-  "importacoes.export.fonds.error": "Errore nell'esportazione del fondo: {message}"
+  "importacoes.export.fonds.error": "Errore nell'esportazione del fondo: {message}",
+  "federacao.inicio.welcome": "Benvenuti nella federazione",
+  "federacao.inicio.pending": "Ciò che ti aspetta",
+  "federacao.inicio.pending.body": "Una richiesta di adesione attende il consenso del circolo « {circle} ».",
+  "federacao.inicio.annuaire": "L’elenco dei collettivi",
+  "federacao.inicio.toCircles": "Apri i cerchi",
+  "federacao.inicio.toAnnuaire": "Apri l’elenco",
+  "federacao.inicio.soon": "Prossimamente"
 }

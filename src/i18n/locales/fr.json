@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Lettre",
   "federacao.tab.entreajuda": "Entraide",
   "federacao.inicio.title": "Accueil",
-  "federacao.inicio.body": "La porte d'entrée de la fédération : assemblées à venir, dernier bulletin, derniers articles. Pas de tableau de bord, pas de chiffres — arrive bientôt.",
+  "federacao.inicio.body": "Pas de tableau de bord, pas de chiffres — tes cercles, les portes ouvertes, et l’annuaire des collectifs.",
   "federacao.circle.nature.afinitario": "Affinitaire",
   "federacao.circle.nature.geografico": "Géographique",
   "federacao.circle.nature.linguistico": "Linguistique",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Préparation du paquet…",
   "importacoes.export.fonds.success": "C'est prêt ! Le téléchargement a commencé.",
   "importacoes.export.fonds.truncated": "Lot tronqué (borne de volumétrie atteinte) : {count} fichiers inclus. Affine la sélection pour un export complet.",
-  "importacoes.export.fonds.error": "Erreur à l'export de fonds : {message}"
+  "importacoes.export.fonds.error": "Erreur à l'export de fonds : {message}",
+  "federacao.inicio.welcome": "Bienvenue dans la fédération",
+  "federacao.inicio.pending": "Ce qui t’attend",
+  "federacao.inicio.pending.body": "Une demande d’adhésion attend le consentement du cercle « {circle} ».",
+  "federacao.inicio.annuaire": "L’annuaire des collectifs",
+  "federacao.inicio.toCircles": "Ouvrir les cercles",
+  "federacao.inicio.toAnnuaire": "Ouvrir l’annuaire",
+  "federacao.inicio.soon": "À venir"
 }

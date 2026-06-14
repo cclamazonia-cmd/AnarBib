@@ -87,7 +87,7 @@ export default function FederacaoPage() {
     setLoading(false);
   }, [libraryId]);
 
-  useEffect(() => { if (tab === 'circulos' && libraryId) load(); }, [tab, libraryId, load]);
+  useEffect(() => { if ((tab === 'circulos' || tab === 'inicio') && libraryId) load(); }, [tab, libraryId, load]);
 
   // Annuaire = cercles ouverts MOINS ceux où ma biblio est déjà membre/pendente.
   const mineIds = useMemo(() => new Set(myCircles.map(c => c.circle_id)), [myCircles]);
@@ -218,10 +218,11 @@ export default function FederacaoPage() {
           )}
 
           {tab === 'inicio' && (
-            <div className="ab-fed-placeholder">
-              <h3>{t({ id: 'federacao.inicio.title' })}</h3>
-              <p>{t({ id: 'federacao.inicio.body' })}</p>
-            </div>
+            <InicioTab
+              t={t} locale={locale} loading={loading}
+              myCircles={myCircles} openCircles={openCircles} openRequests={openRequests}
+              setTab={setTab}
+            />
           )}
 
           {tab === 'carte' && <NetworkMapTab />}
@@ -236,6 +237,87 @@ export default function FederacaoPage() {
       </div>
       <Footer />
     </PageShell>
+  );
+}
+
+// ── Onglet Accueil ──────────────────────────────────────────────────────────
+// Porte d'entrée : qualitatif, sans tableau de bord (doctrine). Réutilise les
+// données déjà chargées (cercles, portes ouvertes, demandes en attente) + teaser
+// annuaire ; les espaces non encore construits sont posés en « à venir ».
+function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, setTab }) {
+  const fmtDate = (d) => new Date(d).toLocaleDateString(locale);
+  const natureLabel = (n) => t({ id: `federacao.circle.nature.${n}` });
+  const circleName = (id) => (myCircles.find((c) => c.circle_id === id) || {}).name || '—';
+
+  return (
+    <div className="ab-fed-inicio">
+      <div className="ab-fed-welcome">
+        <h3>{t({ id: 'federacao.inicio.welcome' })}</h3>
+        <p>{t({ id: 'federacao.inicio.body' })}</p>
+      </div>
+
+      {!loading && openRequests.length > 0 && (
+        <div className="ab-fed-inicio-alert">
+          <div className="ab-fed-minilabel">{t({ id: 'federacao.inicio.pending' })}</div>
+          {openRequests.map((r) => (
+            <div key={r.id} className="ab-fed-inicio-reqrow">
+              <span>{t({ id: 'federacao.inicio.pending.body' }, { circle: circleName(r.circle_id) })}</span>
+              <span className="ab-fed-pill is-pending">{t({ id: 'federacao.circulos.request.deadline' }, { date: fmtDate(r.decision_deadline) })}</span>
+            </div>
+          ))}
+          <button className="cat-btn ghost" onClick={() => setTab('circulos')}>{t({ id: 'federacao.inicio.toCircles' })} →</button>
+        </div>
+      )}
+
+      <div className="ab-fed-inicio-cols">
+        <div className="ab-fed-inicio-box">
+          <div className="ab-fed-label">{t({ id: 'federacao.circulos.mine' })}</div>
+          {loading ? <p className="ab-fed-hint">{t({ id: 'common.loading' })}</p>
+            : myCircles.length === 0 ? <p className="ab-fed-hint">{t({ id: 'federacao.circulos.mine.empty' })}</p>
+              : myCircles.slice(0, 6).map((c) => (
+                <div key={c.circle_id} className="ab-fed-inicio-line">
+                  <span>{c.name}</span><span className="ab-fed-pill">{natureLabel(c.nature)}</span>
+                </div>
+              ))}
+          <button className="cat-btn ghost" onClick={() => setTab('circulos')}>{t({ id: 'federacao.inicio.toCircles' })} →</button>
+        </div>
+        <div className="ab-fed-inicio-box">
+          <div className="ab-fed-label">{t({ id: 'federacao.circulos.open' })}</div>
+          {loading ? <p className="ab-fed-hint">{t({ id: 'common.loading' })}</p>
+            : openCircles.length === 0 ? <p className="ab-fed-hint">{t({ id: 'federacao.circulos.open.empty' })}</p>
+              : openCircles.slice(0, 6).map((c) => (
+                <div key={c.id} className="ab-fed-inicio-line">
+                  <span>{c.name}</span><span className="ab-fed-pill">{natureLabel(c.nature)}</span>
+                </div>
+              ))}
+          <button className="cat-btn ghost" onClick={() => setTab('circulos')}>{t({ id: 'federacao.inicio.toCircles' })} →</button>
+        </div>
+      </div>
+
+      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('carte')}>
+        <svg width="26" height="34" viewBox="0 0 30 42" aria-hidden="true" style={{ flex: 'none' }}>
+          <path d="M15 41C15 41 28 24 28 14A13 13 0 1 0 2 14C2 24 15 41 15 41Z" fill="#c00000" stroke="#fff" strokeWidth="1.5" />
+          <circle cx="15" cy="14" r="5" fill="#fff" />
+        </svg>
+        <span className="ab-fed-inicio-annuaire-txt">
+          <span className="ab-fed-inicio-annuaire-t">{t({ id: 'federacao.inicio.annuaire' })}</span>
+          <span className="ab-fed-inicio-annuaire-d">{t({ id: 'federacao.carte.lead' })}</span>
+        </span>
+        <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toAnnuaire' })} →</span>
+      </button>
+
+      <div>
+        <div className="ab-fed-label">{t({ id: 'federacao.inicio.soon' })}</div>
+        <div className="ab-fed-inicio-soon">
+          {['assembleias', 'gazeta', 'carta', 'entreajuda'].map((k) => (
+            <div key={k} className="ab-fed-inicio-soon-card">
+              <span className="ab-fed-inicio-soon-t">{t({ id: `federacao.tab.${k}` })}</span>
+              <span className="ab-fed-inicio-soon-s">{t({ id: 'federacao.soon' })}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

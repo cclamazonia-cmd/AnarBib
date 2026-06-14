@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Brief",
   "federacao.tab.entreajuda": "Gegenseitige Hilfe",
   "federacao.inicio.title": "Start",
-  "federacao.inicio.body": "Das Eingangstor der Föderation: kommende Versammlungen, letzter Rundbrief, neueste Artikel. Kein Dashboard, keine Zahlen — kommt bald.",
+  "federacao.inicio.body": "Kein Dashboard, keine Zahlen — deine Kreise, die offenen Türen und das Verzeichnis der Kollektive.",
   "federacao.circle.nature.afinitario": "Affinitär",
   "federacao.circle.nature.geografico": "Geografisch",
   "federacao.circle.nature.linguistico": "Sprachlich",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Paket wird vorbereitet…",
   "importacoes.export.fonds.success": "Fertig! Der Download wurde gestartet.",
   "importacoes.export.fonds.truncated": "Stapel abgeschnitten (Größenlimit erreicht): {count} Dateien enthalten. Schränke die Auswahl für einen vollständigen Export ein.",
-  "importacoes.export.fonds.error": "Fehler beim Bestandsexport: {message}"
+  "importacoes.export.fonds.error": "Fehler beim Bestandsexport: {message}",
+  "federacao.inicio.welcome": "Willkommen in der Föderation",
+  "federacao.inicio.pending": "Was dich erwartet",
+  "federacao.inicio.pending.body": "Ein Beitrittsgesuch wartet auf die Zustimmung des Kreises « {circle} ».",
+  "federacao.inicio.annuaire": "Das Verzeichnis der Kollektive",
+  "federacao.inicio.toCircles": "Kreise öffnen",
+  "federacao.inicio.toAnnuaire": "Verzeichnis öffnen",
+  "federacao.inicio.soon": "Demnächst"
 }

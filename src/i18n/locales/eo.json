@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Letero",
   "federacao.tab.entreajuda": "Reciproka helpo",
   "federacao.inicio.title": "Komenco",
-  "federacao.inicio.body": "La enirpordo de la federacio: venontaj asembleoj, lasta bulteno, lastaj artikoloj. Sen panelo, sen ciferoj — venas baldaŭ.",
+  "federacao.inicio.body": "Neniu panelo, neniuj nombroj — viaj rondoj, la malfermitaj pordoj, kaj la adresaro de la kolektivoj.",
   "federacao.circle.nature.afinitario": "Afineca",
   "federacao.circle.nature.geografico": "Geografia",
   "federacao.circle.nature.linguistico": "Lingva",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Preparado de la pakaĵo…",
   "importacoes.export.fonds.success": "Preta! La elŝuto komenciĝis.",
   "importacoes.export.fonds.truncated": "Aro distranĉita (volumena limo atingita): {count} dosieroj inkluzivitaj. Afinu la elekton por kompleta eksporto.",
-  "importacoes.export.fonds.error": "Eraro dum eksporto de havaĵo: {message}"
+  "importacoes.export.fonds.error": "Eraro dum eksporto de havaĵo: {message}",
+  "federacao.inicio.welcome": "Bonvenon al la federacio",
+  "federacao.inicio.pending": "Kio atendas vin",
+  "federacao.inicio.pending.body": "Aliĝpeto atendas la konsenton de la rondo « {circle} ».",
+  "federacao.inicio.annuaire": "La adresaro de la kolektivoj",
+  "federacao.inicio.toCircles": "Malfermi la rondojn",
+  "federacao.inicio.toAnnuaire": "Malfermi la adresaron",
+  "federacao.inicio.soon": "Baldaŭ"
 }

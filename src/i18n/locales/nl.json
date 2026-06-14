@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Brief",
   "federacao.tab.entreajuda": "Wederzijdse hulp",
   "federacao.inicio.title": "Start",
-  "federacao.inicio.body": "De toegangspoort van de federatie: komende vergaderingen, laatste nieuwsbrief, laatste artikelen. Geen dashboard, geen cijfers — komt binnenkort.",
+  "federacao.inicio.body": "Geen dashboard, geen cijfers — jouw kringen, de open deuren, en de gids van de collectieven.",
   "federacao.circle.nature.afinitario": "Affinitair",
   "federacao.circle.nature.geografico": "Geografisch",
   "federacao.circle.nature.linguistico": "Talig",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Pakket voorbereiden…",
   "importacoes.export.fonds.success": "Klaar! De download is gestart.",
   "importacoes.export.fonds.truncated": "Partij afgekapt (groottelimiet bereikt): {count} bestanden opgenomen. Verfijn de selectie voor een volledige export.",
-  "importacoes.export.fonds.error": "Fout bij collectie-export: {message}"
+  "importacoes.export.fonds.error": "Fout bij collectie-export: {message}",
+  "federacao.inicio.welcome": "Welkom bij de federatie",
+  "federacao.inicio.pending": "Wat je te wachten staat",
+  "federacao.inicio.pending.body": "Een toetredingsverzoek wacht op de instemming van de kring « {circle} ».",
+  "federacao.inicio.annuaire": "De gids van de collectieven",
+  "federacao.inicio.toCircles": "Kringen openen",
+  "federacao.inicio.toAnnuaire": "Gids openen",
+  "federacao.inicio.soon": "Binnenkort"
 }

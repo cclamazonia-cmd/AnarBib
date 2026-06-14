@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Carta",
   "federacao.tab.entreajuda": "Entreajuda",
   "federacao.inicio.title": "Início",
-  "federacao.inicio.body": "A porta de entrada da federação: assembleias por vir, último boletim, últimos artigos. Sem painel, sem números — chega em breve.",
+  "federacao.inicio.body": "Sem painel, sem números — seus círculos, as portas abertas, e o diretório dos coletivos.",
   "federacao.circle.nature.afinitario": "Afinitário",
   "federacao.circle.nature.geografico": "Geográfico",
   "federacao.circle.nature.linguistico": "Linguístico",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Preparando o pacote…",
   "importacoes.export.fonds.success": "Pronto! O download começou.",
   "importacoes.export.fonds.truncated": "Lote truncado (limite de volume atingido): {count} ficheiros incluídos. Refine a seleção para uma exportação completa.",
-  "importacoes.export.fonds.error": "Erro ao exportar o fundo: {message}"
+  "importacoes.export.fonds.error": "Erro ao exportar o fundo: {message}",
+  "federacao.inicio.welcome": "Boas-vindas à federação",
+  "federacao.inicio.pending": "O que te espera",
+  "federacao.inicio.pending.body": "Um pedido de adesão aguarda o consentimento do círculo « {circle} ».",
+  "federacao.inicio.annuaire": "O diretório dos coletivos",
+  "federacao.inicio.toCircles": "Abrir os círculos",
+  "federacao.inicio.toAnnuaire": "Abrir o diretório",
+  "federacao.inicio.soon": "Em breve"
 }

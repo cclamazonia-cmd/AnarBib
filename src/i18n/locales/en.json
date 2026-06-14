@@ -4322,7 +4322,7 @@
   "federacao.tab.carta": "Letter",
   "federacao.tab.entreajuda": "Mutual aid",
   "federacao.inicio.title": "Home",
-  "federacao.inicio.body": "The federation's entry point: upcoming assemblies, latest bulletin, latest articles. No dashboard, no numbers — coming soon.",
+  "federacao.inicio.body": "No dashboard, no numbers — your circles, the open doors, and the directory of collectives.",
   "federacao.circle.nature.afinitario": "Affinity",
   "federacao.circle.nature.geografico": "Geographic",
   "federacao.circle.nature.linguistico": "Linguistic",
@@ -4690,5 +4690,12 @@
   "importacoes.export.fonds.preparing": "Preparing the package…",
   "importacoes.export.fonds.success": "Ready! The download has started.",
   "importacoes.export.fonds.truncated": "Batch truncated (size limit reached): {count} files included. Narrow the selection for a complete export.",
-  "importacoes.export.fonds.error": "Fonds export error: {message}"
+  "importacoes.export.fonds.error": "Fonds export error: {message}",
+  "federacao.inicio.welcome": "Welcome to the federation",
+  "federacao.inicio.pending": "What awaits you",
+  "federacao.inicio.pending.body": "A membership request is awaiting the consent of the « {circle} » circle.",
+  "federacao.inicio.annuaire": "The directory of collectives",
+  "federacao.inicio.toCircles": "Open the circles",
+  "federacao.inicio.toAnnuaire": "Open the directory",
+  "federacao.inicio.soon": "Coming soon"
 }
