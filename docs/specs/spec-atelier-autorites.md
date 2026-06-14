@@ -101,7 +101,9 @@ Consentement = **absence d'objection motivée** dans la fenêtre (modèle opt-ou
 
 ---
 
-## 6. Sous-paquet 1b — Événements & notifications
+## 6. Sous-paquet 1b — Événements & notifications — ✅ LIVRÉ (14/06)
+
+> Livré : migration `20260614140000_atelier_1b_events.sql` (outbox + `fn_authority_emit` + `fn_authority_using_libraries` + émissions dans les RPC + cron `reconcile-authority-dispatch`), handler `_shared/domain/authority.ts` + branche `authority.*` dans `dispatch.ts`, 21 clés `authority.*` (mail-strings, 10 locales). Migration validée BEGIN/ROLLBACK contre la prod (zéro persistance). ATE-O4 tranché → table dédiée.
 
 > Le sujet immédiat : la couche *events* du cycle ci-dessus. Elle suit la mécanique `notify-event` existante.
 
@@ -133,7 +135,7 @@ L'EF `notify-event` exige un **`record_id` numérique** (`index.ts` : `Number(pa
 ## 7. Découpage en paquets
 
 1. **Paquet 1 (backend) — ✅ LIVRÉ (13/06)** : `network_contributors` + `authority_proposals`/`_objections` + RLS + helpers + RPC `fn_authority_propose`/`object`/`withdraw`/`resolve_due`/`apply` + cron quotidien. **Voie B** : consentement auto (`resolve_due` → `resolved_consent`), application **confirmée par staff** (`fn_authority_apply` → `applied`) réutilisant `merge_author`/`merge_subject` (fusion) + édition authors/subjects. Migrations `20260613150000` (lot 1) / `20260613150100` (lot 2), validées BEGIN/ROLLBACK. *Apply création/traduction différé ; events = sous-paquet 1b.*
-2. **Sous-paquet 1b (events)** — §6 : outbox + handler + branche `dispatch.ts` + mail-strings 10 locales + cron reconcile. **Dépend du paquet 1** (rien à notifier sans entités).
+2. **Sous-paquet 1b (events) — ✅ LIVRÉ (14/06)** : §6 : outbox + handler + branche `dispatch.ts` + mail-strings 10 locales + cron reconcile. 6 events (`proposal_opened`/`objected`/`refused`/`resolved_consent`/`merge_executed`/`edit_applied`). Migration `20260614140000`.
 3. **Paquet 2 (frontend)** — Atelier : file de propositions, tableau de bord contributeur·rice, journal des contributions validées. **Accès** : (a) **criar-conta** — option « compte contributeur » **distincte et identifiable**, via `signup_intent='contribuidor'` → crée un `network_contributors` (modèle `SolicitarBibliotecaPage`) ; (b) **vitrine `anarbib.org`** (site séparé, apex) → lien vers l'entrée app (`app.anarbib.org` : criar-conta intent contributeur, ou page publique dédiée). Surface aussi sur la face fédération et/ou la page autorité (`spec-notice` §5.3). i18n erreurs `atelier.error.*`.
 
 **Ordre** : 1 → 1b → 2. **Bloqueur amont** : ratifier ATE-1..4 (FED-O7) + lever le préalable collectivité/matière (D7).

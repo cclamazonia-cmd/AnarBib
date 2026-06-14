@@ -9,11 +9,16 @@ import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
 import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested, handleReaderIdentityAssigned } from "../domain/membership.ts";
 import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
 import { handlePartnershipLifecycle, handleTransparenceEnabled, handleConfigExpanded } from "../domain/partnership.ts";
+import { handleAuthorityEvent } from "../domain/authority.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
   // Events network.* (gouvernance reseau transverse) - handler dedie, meme outbox que team.*
   if (event.startsWith("network.")) return await handleNetworkEvent(recordId);
+  // Events authority.* (atelier autorites, sous-paquet 1b) - handler dedie, lit
+  // authority_proposal_notification_outbox par recordId ; fan-out (biblios
+  // utilisatrices + admins reseau + proposeur) selon l'event.
+  if (event.startsWith("authority.")) return await handleAuthorityEvent(recordId);
   // Events reader_message* (recad libre lecteur -> sa biblio) - handler dedie, lit reader_library_messages par recordId
   if (event.startsWith("reader_message")) return await handleReaderMessageEvent(recordId);
   // Events library_message* (reciproque biblio -> lecteur) - meme handler-famille, lit reader_library_messages par recordId
