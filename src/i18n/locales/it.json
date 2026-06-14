@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Apri i cerchi",
   "federacao.inicio.toAnnuaire": "Apri l’elenco",
   "federacao.inicio.soon": "Prossimamente",
-  "importacoes.wizard.source.fondsHint": "Un file .zip è trattato come un lotto di fondo ricevuto: le schede entrano nella coda di revisione e i file sono depositati."
+  "importacoes.wizard.source.fondsHint": "Un file .zip è trattato come un lotto di fondo ricevuto: le schede entrano nella coda di revisione e i file sono depositati.",
+  "importacoes.export.fonds.directTitle": "Oppure: invio diretto a una biblioteca partner",
+  "importacoes.export.fonds.directDesc": "Trasferisce il lotto (schede + file) direttamente nella coda di revisione della biblioteca partner, senza ZIP. Richiede una partnership attiva con il diritto « mutualizzazione ».",
+  "importacoes.export.fonds.directPartner": "Biblioteca partner destinataria",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Scegliere una biblioteca partner…",
+  "importacoes.export.fonds.directSend": "Inviare il lotto",
+  "importacoes.export.fonds.directSending": "Invio in corso…",
+  "importacoes.export.fonds.directSent": "Lotto depositato presso la biblioteca partner: {count} schede, {files} file. Lo troverà nella sua coda di revisione.",
+  "importacoes.export.fonds.directNoPartner": "Nessuna biblioteca partner con il diritto « mutualizzazione » attivo. Attivalo prima su una partnership."
 }

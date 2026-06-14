@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Open the circles",
   "federacao.inicio.toAnnuaire": "Open the directory",
   "federacao.inicio.soon": "Coming soon",
-  "importacoes.wizard.source.fondsHint": "A .zip file is handled as a received fonds batch: its records enter the review queue and its files are deposited."
+  "importacoes.wizard.source.fondsHint": "A .zip file is handled as a received fonds batch: its records enter the review queue and its files are deposited.",
+  "importacoes.export.fonds.directTitle": "Or: direct transfer to a partner library",
+  "importacoes.export.fonds.directDesc": "Transfers the batch (records + files) straight into the partner library's review queue, no ZIP. Requires an active partnership with the « mutualization » right.",
+  "importacoes.export.fonds.directPartner": "Recipient partner library",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Choose a partner library…",
+  "importacoes.export.fonds.directSend": "Send the batch",
+  "importacoes.export.fonds.directSending": "Sending…",
+  "importacoes.export.fonds.directSent": "Batch deposited at the partner library: {count} records, {files} files. They will find it in their review queue.",
+  "importacoes.export.fonds.directNoPartner": "No partner library with the « mutualization » right active. Enable it on a partnership first."
 }

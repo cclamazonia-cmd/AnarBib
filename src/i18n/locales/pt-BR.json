@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Abrir os círculos",
   "federacao.inicio.toAnnuaire": "Abrir o diretório",
   "federacao.inicio.soon": "Em breve",
-  "importacoes.wizard.source.fondsHint": "Um ficheiro .zip é tratado como um lote de fundo recebido: os registros entram na fila de revisão e os ficheiros são depositados."
+  "importacoes.wizard.source.fondsHint": "Um ficheiro .zip é tratado como um lote de fundo recebido: os registros entram na fila de revisão e os ficheiros são depositados.",
+  "importacoes.export.fonds.directTitle": "Ou: envio direto a uma biblioteca parceira",
+  "importacoes.export.fonds.directDesc": "Transfere diretamente o lote (registros + ficheiros) para a fila de revisão da parceira, sem ZIP. Requer uma parceria ativa com o direito « mutualização ».",
+  "importacoes.export.fonds.directPartner": "Biblioteca parceira destinatária",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Escolher uma parceira…",
+  "importacoes.export.fonds.directSend": "Enviar o lote",
+  "importacoes.export.fonds.directSending": "Enviando…",
+  "importacoes.export.fonds.directSent": "Lote depositado na parceira: {count} registros, {files} ficheiros. Ela o encontrará na sua fila de revisão.",
+  "importacoes.export.fonds.directNoPartner": "Nenhuma biblioteca parceira com o direito « mutualização » ativo. Ative-o numa parceria primeiro."
 }

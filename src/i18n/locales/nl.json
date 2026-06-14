@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Kringen openen",
   "federacao.inicio.toAnnuaire": "Gids openen",
   "federacao.inicio.soon": "Binnenkort",
-  "importacoes.wizard.source.fondsHint": "Een .zip-bestand wordt behandeld als een ontvangen collectiepartij: de records komen in de beoordelingswachtrij en de bestanden worden gedeponeerd."
+  "importacoes.wizard.source.fondsHint": "Een .zip-bestand wordt behandeld als een ontvangen collectiepartij: de records komen in de beoordelingswachtrij en de bestanden worden gedeponeerd.",
+  "importacoes.export.fonds.directTitle": "Of: directe overdracht naar een partnerbibliotheek",
+  "importacoes.export.fonds.directDesc": "Draagt de partij (records + bestanden) rechtstreeks over naar de beoordelingswachtrij van de partnerbibliotheek, zonder ZIP. Vereist een actief partnerschap met het recht « mutualisering ».",
+  "importacoes.export.fonds.directPartner": "Ontvangende partnerbibliotheek",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Kies een partnerbibliotheek…",
+  "importacoes.export.fonds.directSend": "Partij verzenden",
+  "importacoes.export.fonds.directSending": "Verzenden…",
+  "importacoes.export.fonds.directSent": "Partij gedeponeerd bij de partnerbibliotheek: {count} records, {files} bestanden. Ze vinden het in hun beoordelingswachtrij.",
+  "importacoes.export.fonds.directNoPartner": "Geen partnerbibliotheek met het recht « mutualisering » actief. Schakel het eerst in op een partnerschap."
 }

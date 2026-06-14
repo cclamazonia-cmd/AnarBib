@@ -53,6 +53,11 @@ export default function ImportacoesPage() {
   const [fondsCount, setFondsCount] = useState(null);
   const [fondsCounting, setFondsCounting] = useState(false);
   const [fondsLoading, setFondsLoading] = useState(false);
+  // ── EX-4 : envoi direct à une companheira (droit mutualisation) ──
+  const [fondsTarget, setFondsTarget] = useState('');
+  const [fondsPartners, setFondsPartners] = useState([]);
+  const [fondsPartnersLoaded, setFondsPartnersLoaded] = useState(false);
+  const [fondsSending, setFondsSending] = useState(false);
 
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
@@ -570,6 +575,59 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setFondsLoading(false);
+    }
+  }
+
+  // ── Envoi direct d'un lot de fonds à une companheira (EX-4) ──────────────────
+  // Charge les partenariats actifs portant le droit `mutualisation` (miroir
+  // digishare : fn_partnership_list_mine). Le transfert lui-même est gaté côté SQL.
+  async function loadFondsPartners() {
+    if (!libraryId) return;
+    try {
+      const { data, error } = await supabase.rpc('fn_partnership_list_mine', { p_library_id: libraryId });
+      if (error) throw error;
+      const muta = (data || []).filter(
+        (r) => r.direction === 'active' && Array.isArray(r.rights) && r.rights.includes('mutualisation'),
+      );
+      setFondsPartners(muta);
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setFondsPartnersLoaded(true);
+    }
+  }
+
+  async function handleDepositFondsDirect() {
+    if (!libraryId || !fondsTarget) {
+      setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: 'companheira' }), kind: 'error' });
+      return;
+    }
+    setFondsSending(true);
+    setMsg({ text: t({ id: 'importacoes.export.fonds.directSending' }), kind: 'info' });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/deposit-fonds-direct`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ source_library_id: libraryId, target_library_id: fondsTarget }),
+        }
+      );
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out?.error || `HTTP ${res.status}`);
+      setMsg({
+        text: t({ id: 'importacoes.export.fonds.directSent' }, { count: out?.inserted_rows ?? 0, files: out?.received_files_deposited ?? 0 }),
+        kind: 'ok',
+      });
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.fonds.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setFondsSending(false);
     }
   }
 
@@ -1229,6 +1287,38 @@ export default function ImportacoesPage() {
                   >
                     {fondsLoading ? t({ id: 'importacoes.export.fonds.preparing' }) : t({ id: 'importacoes.export.fonds.download' })}
                   </button>
+                </div>
+
+                <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid rgba(127,127,127,0.25)' }}>
+                  <p className="imp-note"><b>{t({ id: 'importacoes.export.fonds.directTitle' })}</b></p>
+                  <p className="imp-note" style={{ opacity: 0.8 }}>{t({ id: 'importacoes.export.fonds.directDesc' })}</p>
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+                    <select
+                      className="ab-select"
+                      aria-label={t({ id: 'importacoes.export.fonds.directPartner' })}
+                      value={fondsTarget}
+                      onChange={(e) => setFondsTarget(e.target.value)}
+                      onFocus={() => { if (!fondsPartnersLoaded) loadFondsPartners(); }}
+                      disabled={fondsSending}
+                      style={{ maxWidth: 320 }}
+                    >
+                      <option value="">{t({ id: 'importacoes.export.fonds.directPartnerPlaceholder' })}</option>
+                      {fondsPartners.map((p) => (
+                        <option key={p.partnership_id} value={p.partner_library_id}>{p.partner_name}</option>
+                      ))}
+                    </select>
+                    <button
+                      className="cat-btn primary"
+                      type="button"
+                      onClick={handleDepositFondsDirect}
+                      disabled={fondsSending || !libraryId || !fondsTarget}
+                    >
+                      {fondsSending ? t({ id: 'importacoes.export.fonds.directSending' }) : t({ id: 'importacoes.export.fonds.directSend' })}
+                    </button>
+                  </div>
+                  {fondsPartnersLoaded && fondsPartners.length === 0 && (
+                    <p className="imp-note" style={{ opacity: 0.8 }}>{t({ id: 'importacoes.export.fonds.directNoPartner' })}</p>
+                  )}
                 </div>
               </div>
             </div>

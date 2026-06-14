@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Obrir els cercles",
   "federacao.inicio.toAnnuaire": "Obrir el directori",
   "federacao.inicio.soon": "Properament",
-  "importacoes.wizard.source.fondsHint": "Un fitxer .zip es tracta com un lot de fons rebut: els registres entren a la cua de revisió i els fitxers es dipositen."
+  "importacoes.wizard.source.fondsHint": "Un fitxer .zip es tracta com un lot de fons rebut: els registres entren a la cua de revisió i els fitxers es dipositen.",
+  "importacoes.export.fonds.directTitle": "O: enviament directe a una biblioteca sòcia",
+  "importacoes.export.fonds.directDesc": "Transfereix el lot (registres + fitxers) directament a la cua de revisió de la biblioteca sòcia, sense ZIP. Requereix una associació activa amb el dret « mutualització ».",
+  "importacoes.export.fonds.directPartner": "Biblioteca sòcia destinatària",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Triar una biblioteca sòcia…",
+  "importacoes.export.fonds.directSend": "Enviar el lot",
+  "importacoes.export.fonds.directSending": "Enviant…",
+  "importacoes.export.fonds.directSent": "Lot dipositat a la biblioteca sòcia: {count} registres, {files} fitxers. El trobarà a la seva cua de revisió.",
+  "importacoes.export.fonds.directNoPartner": "Cap biblioteca sòcia amb el dret « mutualització » actiu. Activa'l primer en una associació."
 }

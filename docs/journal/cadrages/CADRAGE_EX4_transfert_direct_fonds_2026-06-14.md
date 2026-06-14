@@ -4,7 +4,7 @@
 |---|---|
 | **Genre** | cadrage (framing — non normatif tant que non ratifié au REGISTRE) |
 | **Date** | 14 juin 2026 |
-| **Statut** | 🟢 v0.2 — **modèle VALIDÉ (Xavier 14/06)** : dépôt semi-auto gaté `mutualisation` (le droit suffit, pas d'accusé préalable — D1 reco retenue) + **EF sœur `deposit-fonds-direct`** (D2). Dépend d'EX-3 (réutilise sa réception) → à coder après. D3/D4 : reco retenues par défaut. |
+| **Statut** | 🟢 v0.3 — **IMPLÉMENTÉ (14/06)** : migration `20260614200000` (RPC `fn_deposit_fonds_direct_prepare`, cross-tenant gaté coordenador-source + `mutualisation`) + **EF sœur `deposit-fonds-direct`** (copie storage intra-projet + réutilise la réception EX-3) + déclencheur dans le panneau « Exportação de fonds » (mode envoi direct, select companheira via `fn_partnership_list_mine`). D1/D2 retenus ; D3 (notif) non fait dans ce lot ; D4 borne 80 Mo. |
 | **Chantier** | Importações/Exportações — transfert direct (P1.a), niveau 2 |
 | **Réfère à** | `CADRAGE_export_fonds_numeriques_2026-06-12.md` (P1.a, P4 « dépôt semi-auto en ingest ») ; `CADRAGE_EX3_reception_fonds_2026-06-14.md` (la réception est mutualisée) ; `fn_partnership_has_active_right` ; table `fonds_export_runs` ; pipeline `ingest`. |
 

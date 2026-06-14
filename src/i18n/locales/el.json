@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Άνοιγμα των κύκλων",
   "federacao.inicio.toAnnuaire": "Άνοιγμα του καταλόγου",
   "federacao.inicio.soon": "Σύντομα",
-  "importacoes.wizard.source.fondsHint": "Ένα αρχείο .zip αντιμετωπίζεται ως ληφθείσα παρτίδα αρχειακού υλικού: οι εγγραφές μπαίνουν στην ουρά ελέγχου και τα αρχεία αποθηκεύονται."
+  "importacoes.wizard.source.fondsHint": "Ένα αρχείο .zip αντιμετωπίζεται ως ληφθείσα παρτίδα αρχειακού υλικού: οι εγγραφές μπαίνουν στην ουρά ελέγχου και τα αρχεία αποθηκεύονται.",
+  "importacoes.export.fonds.directTitle": "Ή: απευθείας μεταφορά σε συνεργαζόμενη βιβλιοθήκη",
+  "importacoes.export.fonds.directDesc": "Μεταφέρει την παρτίδα (εγγραφές + αρχεία) απευθείας στην ουρά ελέγχου της συνεργαζόμενης βιβλιοθήκης, χωρίς ZIP. Απαιτεί ενεργή σύμπραξη με το δικαίωμα « αμοιβαιοποίηση ».",
+  "importacoes.export.fonds.directPartner": "Παραλήπτρια συνεργαζόμενη βιβλιοθήκη",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Επιλογή συνεργαζόμενης βιβλιοθήκης…",
+  "importacoes.export.fonds.directSend": "Αποστολή παρτίδας",
+  "importacoes.export.fonds.directSending": "Αποστολή…",
+  "importacoes.export.fonds.directSent": "Η παρτίδα κατατέθηκε στη συνεργαζόμενη βιβλιοθήκη: {count} εγγραφές, {files} αρχεία. Θα τη βρει στην ουρά ελέγχου της.",
+  "importacoes.export.fonds.directNoPartner": "Καμία συνεργαζόμενη βιβλιοθήκη με ενεργό το δικαίωμα « αμοιβαιοποίηση ». Ενεργοποιήστε το πρώτα σε μια σύμπραξη."
 }

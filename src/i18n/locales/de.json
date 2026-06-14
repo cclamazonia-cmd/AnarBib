@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Kreise öffnen",
   "federacao.inicio.toAnnuaire": "Verzeichnis öffnen",
   "federacao.inicio.soon": "Demnächst",
-  "importacoes.wizard.source.fondsHint": "Eine .zip-Datei wird als empfangener Bestands-Stapel behandelt: ihre Datensätze kommen in die Prüfwarteschlange und ihre Dateien werden hinterlegt."
+  "importacoes.wizard.source.fondsHint": "Eine .zip-Datei wird als empfangener Bestands-Stapel behandelt: ihre Datensätze kommen in die Prüfwarteschlange und ihre Dateien werden hinterlegt.",
+  "importacoes.export.fonds.directTitle": "Oder: Direktübertragung an eine Partnerbibliothek",
+  "importacoes.export.fonds.directDesc": "Überträgt den Stapel (Datensätze + Dateien) direkt in die Prüfwarteschlange der Partnerbibliothek, ohne ZIP. Erfordert eine aktive Partnerschaft mit dem Recht « Mutualisierung ».",
+  "importacoes.export.fonds.directPartner": "Empfangende Partnerbibliothek",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Partnerbibliothek wählen…",
+  "importacoes.export.fonds.directSend": "Stapel senden",
+  "importacoes.export.fonds.directSending": "Wird gesendet…",
+  "importacoes.export.fonds.directSent": "Stapel bei der Partnerbibliothek hinterlegt: {count} Datensätze, {files} Dateien. Sie findet ihn in ihrer Prüfwarteschlange.",
+  "importacoes.export.fonds.directNoPartner": "Keine Partnerbibliothek mit aktivem Recht « Mutualisierung ». Aktiviere es zuerst bei einer Partnerschaft."
 }

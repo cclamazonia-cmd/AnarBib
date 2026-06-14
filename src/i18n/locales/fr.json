@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Ouvrir les cercles",
   "federacao.inicio.toAnnuaire": "Ouvrir l’annuaire",
   "federacao.inicio.soon": "À venir",
-  "importacoes.wizard.source.fondsHint": "Un fichier .zip est traité comme un lot de fonds reçu : ses notices alimentent la file de revue et ses fichiers sont déposés."
+  "importacoes.wizard.source.fondsHint": "Un fichier .zip est traité comme un lot de fonds reçu : ses notices alimentent la file de revue et ses fichiers sont déposés.",
+  "importacoes.export.fonds.directTitle": "Ou : envoi direct à une bibliothèque partenaire",
+  "importacoes.export.fonds.directDesc": "Transfère directement le lot (notices + fichiers) dans la file de revue de la bibliothèque partenaire, sans ZIP. Nécessite un partenariat actif avec le droit « mutualisation ».",
+  "importacoes.export.fonds.directPartner": "Bibliothèque partenaire destinataire",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Choisir une bibliothèque partenaire…",
+  "importacoes.export.fonds.directSend": "Envoyer le lot",
+  "importacoes.export.fonds.directSending": "Envoi en cours…",
+  "importacoes.export.fonds.directSent": "Lot déposé chez la partenaire : {count} notices, {files} fichiers. Elle le retrouvera dans sa file de revue.",
+  "importacoes.export.fonds.directNoPartner": "Aucune bibliothèque partenaire avec le droit « mutualisation » actif. Active-le sur un partenariat d'abord."
 }

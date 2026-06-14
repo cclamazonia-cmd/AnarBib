@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Malfermi la rondojn",
   "federacao.inicio.toAnnuaire": "Malfermi la adresaron",
   "federacao.inicio.soon": "Baldaŭ",
-  "importacoes.wizard.source.fondsHint": "Dosiero .zip estas traktata kiel ricevita aro de havaĵo: ĝiaj registroj eniras la revizian atendovicon kaj ĝiaj dosieroj estas deponitaj."
+  "importacoes.wizard.source.fondsHint": "Dosiero .zip estas traktata kiel ricevita aro de havaĵo: ĝiaj registroj eniras la revizian atendovicon kaj ĝiaj dosieroj estas deponitaj.",
+  "importacoes.export.fonds.directTitle": "Aŭ: rekta transdono al partnera biblioteko",
+  "importacoes.export.fonds.directDesc": "Transdonas la aron (registroj + dosieroj) rekte en la revizian atendovicon de la partnera biblioteko, sen ZIP. Postulas aktivan partnerecon kun la rajto « reciproka kunhavigo ».",
+  "importacoes.export.fonds.directPartner": "Ricevanta partnera biblioteko",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Elekti partneran bibliotekon…",
+  "importacoes.export.fonds.directSend": "Sendi la aron",
+  "importacoes.export.fonds.directSending": "Sendado…",
+  "importacoes.export.fonds.directSent": "Aro deponita ĉe la partnera biblioteko: {count} registroj, {files} dosieroj. Ĝi troviĝos en ĝia revizia atendovico.",
+  "importacoes.export.fonds.directNoPartner": "Neniu partnera biblioteko kun aktiva rajto « reciproka kunhavigo ». Unue ŝaltu ĝin ĉe partnereco."
 }

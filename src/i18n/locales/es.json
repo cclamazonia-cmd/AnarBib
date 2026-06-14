@@ -4698,5 +4698,13 @@
   "federacao.inicio.toCircles": "Abrir los círculos",
   "federacao.inicio.toAnnuaire": "Abrir el directorio",
   "federacao.inicio.soon": "Próximamente",
-  "importacoes.wizard.source.fondsHint": "Un archivo .zip se trata como un lote de fondo recibido: sus registros entran en la cola de revisión y sus archivos se depositan."
+  "importacoes.wizard.source.fondsHint": "Un archivo .zip se trata como un lote de fondo recibido: sus registros entran en la cola de revisión y sus archivos se depositan.",
+  "importacoes.export.fonds.directTitle": "O: envío directo a una biblioteca asociada",
+  "importacoes.export.fonds.directDesc": "Transfiere el lote (registros + archivos) directamente a la cola de revisión de la biblioteca asociada, sin ZIP. Requiere una asociación activa con el derecho « mutualización ».",
+  "importacoes.export.fonds.directPartner": "Biblioteca asociada destinataria",
+  "importacoes.export.fonds.directPartnerPlaceholder": "Elegir una biblioteca asociada…",
+  "importacoes.export.fonds.directSend": "Enviar el lote",
+  "importacoes.export.fonds.directSending": "Enviando…",
+  "importacoes.export.fonds.directSent": "Lote depositado en la biblioteca asociada: {count} registros, {files} archivos. Lo encontrará en su cola de revisión.",
+  "importacoes.export.fonds.directNoPartner": "Ninguna biblioteca asociada con el derecho « mutualización » activo. Actívalo en una asociación primero."
 }
