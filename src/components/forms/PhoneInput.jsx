@@ -13,9 +13,12 @@
 // Référence : https://gitlab.com/catamphetamine/react-phone-number-input
 // ═══════════════════════════════════════════════════════════
 
+import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import PhoneInputBase, { isValidPhoneNumber } from 'react-phone-number-input';
+import enPhoneLabels from 'react-phone-number-input/locale/en.json';
 import 'react-phone-number-input/style.css';
+import { getCountryNames } from '@/lib/countries';
 
 /**
  * Heuristique simple : à partir de la locale react-intl,
@@ -57,6 +60,15 @@ export default function PhoneInput({
   // séparé), l'utiliser. Sinon, deviner depuis la locale.
   const defaultCountry = countryCode || defaultCountryFromLocale(locale);
 
+  // Liste déroulante des pays localisée dans la langue active : on réutilise les
+  // noms de i18n-iso-countries (même source que le <CountrySelect> de l'adresse,
+  // donc noms cohérents entre les deux listes) ; l'anglais reste pour les rares
+  // libellés d'UI (ext / country / phone / ZZ « International »).
+  const countryLabels = useMemo(
+    () => ({ ...enPhoneLabels, ...getCountryNames(locale) }),
+    [locale],
+  );
+
   const isInvalid = value && !isValidPhoneNumber(value);
 
   return (
@@ -67,6 +79,7 @@ export default function PhoneInput({
         international
         countryCallingCodeEditable={false}
         defaultCountry={defaultCountry}
+        labels={countryLabels}
         value={value}
         onChange={onChange}
         disabled={disabled}
