@@ -24,6 +24,7 @@ function detectFileKind(fileName) {
   if (n.endsWith('.marcxml')) return 'marcxml';
   if (n.endsWith('.json')) return 'json';
   if (n.endsWith('.xml')) return 'xml';
+  if (n.endsWith('.zip')) return 'zip'; // EX-3 : paquet de fonds (manifest + fichiers)
   return 'unknown';
 }
 
