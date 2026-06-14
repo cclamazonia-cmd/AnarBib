@@ -73,6 +73,11 @@ export default function ImportacoesPage() {
   const [bookResults, setBookResults] = useState([]);
   const [bookSearching, setBookSearching] = useState(false);
   const [attaching, setAttaching] = useState(false);
+  // ── Dé-vérification des digital_assets (entrée c) ──
+  const [verifiedAssets, setVerifiedAssets] = useState([]);
+  const [verifiedLoaded, setVerifiedLoaded] = useState(false);
+  const [verifiedLoading, setVerifiedLoading] = useState(false);
+  const [revokingId, setRevokingId] = useState(null);
 
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
@@ -744,6 +749,54 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.export.attach.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setAttaching(false);
+    }
+  }
+
+  // ── Dé-vérifier un digital_asset (annuler une revendication domaine public, entrée c) ──
+  async function loadVerifiedAssets() {
+    if (!libraryId) return;
+    setVerifiedLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_list_verified_digital_assets', { p_library_id: libraryId });
+      if (error) throw error;
+      setVerifiedAssets(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.verified.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setVerifiedLoaded(true);
+      setVerifiedLoading(false);
+    }
+  }
+
+  async function handleRevoke(asset) {
+    if (!window.confirm(t({ id: 'importacoes.export.verified.confirm' }, { title: asset.book_title || '—' }))) return;
+    setRevokingId(asset.asset_id);
+    setMsg({ text: t({ id: 'importacoes.export.verified.revoking' }), kind: 'info' });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/revoke-digital-asset`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+            apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ asset_id: asset.asset_id }),
+        }
+      );
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out?.error || `HTTP ${res.status}`);
+      setVerifiedAssets((prev) => prev.filter((a) => a.asset_id !== asset.asset_id));
+      setMsg({
+        text: t({ id: out?.file_removed ? 'importacoes.export.verified.revokedFile' : 'importacoes.export.verified.revoked' }, { title: asset.book_title || '—' }),
+        kind: 'ok',
+      });
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.verified.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setRevokingId(null);
     }
   }
 
@@ -1520,6 +1573,43 @@ export default function ImportacoesPage() {
                             )}
                           </div>
                         )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+
+            <div className="imp-sheet">
+              <div className="imp-sheet__head">
+                <span className="imp-sheet__title">{t({ id: 'importacoes.export.verified.title' })}</span>
+              </div>
+              <div className="imp-sheet__body">
+                <p className="imp-note">{t({ id: 'importacoes.export.verified.desc' })}</p>
+                <div style={{ marginTop: 8 }}>
+                  <button className="cat-btn secondary" type="button" onClick={loadVerifiedAssets} disabled={verifiedLoading || !libraryId}>
+                    {verifiedLoading ? t({ id: 'importacoes.export.verified.loading' }) : t({ id: 'importacoes.export.verified.load' })}
+                  </button>
+                </div>
+                {verifiedLoaded && verifiedAssets.length === 0 && (
+                  <p className="imp-note" style={{ opacity: 0.8, marginTop: 8 }}>{t({ id: 'importacoes.export.verified.empty' })}</p>
+                )}
+                {verifiedAssets.length > 0 && (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
+                    {verifiedAssets.map((a) => (
+                      <li key={a.asset_id} style={{ padding: '8px 10px', borderRadius: 6, marginBottom: 6, background: 'rgba(127,127,127,0.08)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+                          <span style={{ minWidth: 0, fontSize: '.85rem' }}>
+                            <b>{a.book_title || '—'}</b>
+                            {a.asset_kind ? ` · ${a.asset_kind}` : ''}
+                            {a.source_name ? ` · ${a.source_name}` : ''}
+                            {a.from_received ? ` · ${t({ id: 'importacoes.export.verified.fromReceived' })}` : ''}
+                          </span>
+                          <button className="cat-btn secondary" type="button" onClick={() => handleRevoke(a)} disabled={revokingId === a.asset_id}
+                            style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
+                            {revokingId === a.asset_id ? t({ id: 'importacoes.export.verified.revoking' }) : t({ id: 'importacoes.export.verified.revoke' })}
+                          </button>
+                        </div>
                       </li>
                     ))}
                   </ul>
