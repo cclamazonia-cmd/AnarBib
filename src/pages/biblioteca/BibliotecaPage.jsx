@@ -27,6 +27,7 @@ import LibraryPartnershipsSection from '@/components/library/LibraryPartnerships
 import StabilizedPartnershipsSection from '@/components/library/StabilizedPartnershipsSection';
 import ExternalDepositPartnerSection from '@/components/library/ExternalDepositPartnerSection';
 import PebHistorySection from '@/components/library/PebHistorySection';
+import LibraryDigitalSharesSection from '@/components/library/LibraryDigitalSharesSection';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -1981,6 +1982,9 @@ export default function BibliotecaPage() {
               </div>);
             })}</div>
           </div>)}
+
+          {/* ═══ 7b. Partage numérique inter-biblios (ILL-digital, I3) ═══ */}
+          <LibraryDigitalSharesSection libraryId={libraryId} canEdit={isCoord} />
         </div>)}
 
         {/* ═══ 8. Relatórios e resumos ═════════════════ */}
