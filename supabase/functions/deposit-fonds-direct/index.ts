@@ -210,6 +210,9 @@ Deno.serve(async (req) => {
     }).eq('id', runId);
     if (finErr) throw finErr;
 
+    // D3 (point 7) : notifier la réceptrice par une tâche in-app (non bloquant).
+    try { await service.rpc('fn_notify_fonds_deposit_received', { p_run_id: runId }); } catch (_) { /* non bloquant */ }
+
     return json({
       ok: true, run_id: runId, source_name: sourceName, target_library_id: targetLibraryId,
       inserted_rows: stagingRows.length, received_files_deposited: deposited,
