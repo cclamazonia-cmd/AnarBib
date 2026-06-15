@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Carregando…",
   "importacoes.export.curate.empty": "Nenhum ficheiro público a validar (ou todos já validados).",
   "importacoes.export.curate.validate": "Validar (domínio público)",
+  "importacoes.export.curate.selectAll": "Selecionar tudo",
+  "importacoes.export.curate.selectNone": "Desmarcar",
+  "importacoes.export.curate.bulkValidate": "Validar a seleção ({n})",
+  "importacoes.export.curate.bulkValidating": "Validação ({n})…",
+  "importacoes.export.curate.bulkDone": "Validados: {ok} · falhas: {fail}.",
   "importacoes.export.curate.validating": "Validando…",
   "importacoes.export.curate.validated": "« {title} » agora está elegível ao export.",
   "importacoes.export.curate.error": "Erro: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Erro: {message}",
   "federacao.gazeta.empty": "Nenhum número publicado por enquanto.",
   "federacao.gazeta.error": "Não foi possível carregar a gazeta.",
-  "federacao.gazeta.retry": "Tentar de novo"
+  "federacao.gazeta.retry": "Tentar de novo",
+  "federacao.inicio.gazeta": "A gazeta da rede",
+  "federacao.inicio.gazeta.desc": "Números mensais — lutas, culturas, agenda, apoio mútuo.",
+  "federacao.inicio.toGazeta": "Abrir a gazeta",
+  "federacao.inicio.new": "Novo"
 }

@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Caricamento…",
   "importacoes.export.curate.empty": "Nessun file pubblico da validare (o tutti già validati).",
   "importacoes.export.curate.validate": "Validare (dominio pubblico)",
+  "importacoes.export.curate.selectAll": "Seleziona tutto",
+  "importacoes.export.curate.selectNone": "Deseleziona",
+  "importacoes.export.curate.bulkValidate": "Convalida la selezione ({n})",
+  "importacoes.export.curate.bulkValidating": "Convalida ({n})…",
+  "importacoes.export.curate.bulkDone": "Convalidati: {ok} · falliti: {fail}.",
   "importacoes.export.curate.validating": "Validazione…",
   "importacoes.export.curate.validated": "« {title} » ora è idonea all'export.",
   "importacoes.export.curate.error": "Errore: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Errore: {message}",
   "federacao.gazeta.empty": "Nessun numero pubblicato per ora.",
   "federacao.gazeta.error": "Impossibile caricare la gazzetta.",
-  "federacao.gazeta.retry": "Riprova"
+  "federacao.gazeta.retry": "Riprova",
+  "federacao.inicio.gazeta": "La gazzetta della rete",
+  "federacao.inicio.gazeta.desc": "Numeri mensili — lotte, culture, agenda, mutuo soccorso.",
+  "federacao.inicio.toGazeta": "Apri la gazzetta",
+  "federacao.inicio.new": "Nuovo"
 }

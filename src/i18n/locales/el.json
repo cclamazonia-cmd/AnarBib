@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Φόρτωση…",
   "importacoes.export.curate.empty": "Κανένα δημόσιο αρχείο προς επικύρωση (ή όλα ήδη επικυρωμένα).",
   "importacoes.export.curate.validate": "Επικύρωση (δημόσια κτήση)",
+  "importacoes.export.curate.selectAll": "Επιλογή όλων",
+  "importacoes.export.curate.selectNone": "Αποεπιλογή",
+  "importacoes.export.curate.bulkValidate": "Επικύρωση επιλογής ({n})",
+  "importacoes.export.curate.bulkValidating": "Επικύρωση ({n})…",
+  "importacoes.export.curate.bulkDone": "Επικυρώθηκαν: {ok} · αποτυχίες: {fail}.",
   "importacoes.export.curate.validating": "Επικύρωση…",
   "importacoes.export.curate.validated": "Το « {title} » είναι τώρα επιλέξιμο για εξαγωγή.",
   "importacoes.export.curate.error": "Σφάλμα: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Σφάλμα: {message}",
   "federacao.gazeta.empty": "Κανένα τεύχος δεν έχει δημοσιευτεί ακόμη.",
   "federacao.gazeta.error": "Δεν ήταν δυνατή η φόρτωση της εφημερίδας.",
-  "federacao.gazeta.retry": "Επανάληψη"
+  "federacao.gazeta.retry": "Επανάληψη",
+  "federacao.inicio.gazeta": "Η εφημερίδα του δικτύου",
+  "federacao.inicio.gazeta.desc": "Μηνιαία τεύχη — αγώνες, κουλτούρες, ατζέντα, αλληλοβοήθεια.",
+  "federacao.inicio.toGazeta": "Άνοιγμα της εφημερίδας",
+  "federacao.inicio.new": "Νέο"
 }

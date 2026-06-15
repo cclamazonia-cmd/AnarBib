@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Loading…",
   "importacoes.export.curate.empty": "No public file to validate (or all already validated).",
   "importacoes.export.curate.validate": "Validate (public domain)",
+  "importacoes.export.curate.selectAll": "Select all",
+  "importacoes.export.curate.selectNone": "Deselect",
+  "importacoes.export.curate.bulkValidate": "Validate selection ({n})",
+  "importacoes.export.curate.bulkValidating": "Validating ({n})…",
+  "importacoes.export.curate.bulkDone": "Validated: {ok} · failed: {fail}.",
   "importacoes.export.curate.validating": "Validating…",
   "importacoes.export.curate.validated": "« {title} » is now eligible for export.",
   "importacoes.export.curate.error": "Error: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Error: {message}",
   "federacao.gazeta.empty": "No issue published yet.",
   "federacao.gazeta.error": "The gazette could not be loaded.",
-  "federacao.gazeta.retry": "Retry"
+  "federacao.gazeta.retry": "Retry",
+  "federacao.inicio.gazeta": "The network gazette",
+  "federacao.inicio.gazeta.desc": "Monthly issues — struggles, cultures, agenda, mutual aid.",
+  "federacao.inicio.toGazeta": "Open the gazette",
+  "federacao.inicio.new": "New"
 }

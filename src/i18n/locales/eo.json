@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Ŝargado…",
   "importacoes.export.curate.empty": "Neniu publika dosiero por validigi (aŭ ĉiuj jam validigitaj).",
   "importacoes.export.curate.validate": "Validigi (publika havaĵo)",
+  "importacoes.export.curate.selectAll": "Elekti ĉion",
+  "importacoes.export.curate.selectNone": "Malelekti",
+  "importacoes.export.curate.bulkValidate": "Validigi la elekton ({n})",
+  "importacoes.export.curate.bulkValidating": "Validigado ({n})…",
+  "importacoes.export.curate.bulkDone": "Validigitaj: {ok} · malsukcesoj: {fail}.",
   "importacoes.export.curate.validating": "Validigado…",
   "importacoes.export.curate.validated": "« {title} » nun estas elektebla por eksporto.",
   "importacoes.export.curate.error": "Eraro: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Eraro: {message}",
   "federacao.gazeta.empty": "Ankoraŭ neniu numero publikigita.",
   "federacao.gazeta.error": "Ne eblis ŝargi la gazeton.",
-  "federacao.gazeta.retry": "Reprovi"
+  "federacao.gazeta.retry": "Reprovi",
+  "federacao.inicio.gazeta": "La gazeto de la reto",
+  "federacao.inicio.gazeta.desc": "Monataj numeroj — luktoj, kulturoj, tagordo, reciproka helpo.",
+  "federacao.inicio.toGazeta": "Malfermi la gazeton",
+  "federacao.inicio.new": "Nova"
 }

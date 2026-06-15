@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Laden…",
   "importacoes.export.curate.empty": "Geen openbaar bestand om te valideren (of alle al gevalideerd).",
   "importacoes.export.curate.validate": "Valideren (publiek domein)",
+  "importacoes.export.curate.selectAll": "Alles selecteren",
+  "importacoes.export.curate.selectNone": "Deselecteren",
+  "importacoes.export.curate.bulkValidate": "Selectie valideren ({n})",
+  "importacoes.export.curate.bulkValidating": "Valideren ({n})…",
+  "importacoes.export.curate.bulkDone": "Gevalideerd: {ok} · mislukt: {fail}.",
   "importacoes.export.curate.validating": "Valideren…",
   "importacoes.export.curate.validated": "« {title} » is nu geschikt voor export.",
   "importacoes.export.curate.error": "Fout: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Fout: {message}",
   "federacao.gazeta.empty": "Nog geen nummer gepubliceerd.",
   "federacao.gazeta.error": "De gazette kon niet worden geladen.",
-  "federacao.gazeta.retry": "Opnieuw proberen"
+  "federacao.gazeta.retry": "Opnieuw proberen",
+  "federacao.inicio.gazeta": "De gazette van het netwerk",
+  "federacao.inicio.gazeta.desc": "Maandelijkse nummers — strijd, cultuur, agenda, wederzijdse hulp.",
+  "federacao.inicio.toGazeta": "Gazette openen",
+  "federacao.inicio.new": "Nieuw"
 }

@@ -64,6 +64,8 @@ export default function ImportacoesPage() {
   const [pubLoaded, setPubLoaded] = useState(false);
   const [pubLoading, setPubLoading] = useState(false);
   const [pubPromotingId, setPubPromotingId] = useState(null);
+  const [selectedPub, setSelectedPub] = useState(() => new Set()); // multi-sélection promotion (point 5)
+  const [bulkPromoting, setBulkPromoting] = useState(false);
   // ── Attache des fonds reçus (Solution 1, entrée b) ──
   const [recvAssets, setRecvAssets] = useState([]);
   const [recvLoaded, setRecvLoaded] = useState(false);
@@ -684,6 +686,35 @@ export default function ImportacoesPage() {
     } finally {
       setPubPromotingId(null);
     }
+  }
+
+  // Multi-sélection : valider plusieurs fichiers d'un coup (point 5). Boucle sur la RPC par-item
+  // (jamais un « tout valider » : tout fichier public n'est pas forcément domaine public).
+  function togglePub(id) {
+    setSelectedPub((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+  async function handleBulkPublish() {
+    const ids = pubResources.filter((r) => selectedPub.has(r.resource_id)).map((r) => r.resource_id);
+    if (ids.length === 0) return;
+    setBulkPromoting(true);
+    setMsg({ text: t({ id: 'importacoes.export.curate.bulkValidating' }, { n: ids.length }), kind: 'info' });
+    let ok = 0, fail = 0;
+    for (const id of ids) {
+      try {
+        const { error } = await supabase.rpc('fn_publish_digital_asset_from_resource', { p_resource_id: id });
+        if (error) throw error;
+        ok += 1;
+      } catch { fail += 1; }
+    }
+    setSelectedPub(new Set());
+    if (fondsCount != null) await loadFondsEligibleCount();
+    await loadPublishableResources();
+    setMsg({ text: t({ id: 'importacoes.export.curate.bulkDone' }, { ok, fail }), kind: fail ? 'error' : 'ok' });
+    setBulkPromoting(false);
   }
 
   // ── Attache d'un fichier de fonds reçu à un livre (Solution 1b) ──────────────
@@ -1448,19 +1479,32 @@ export default function ImportacoesPage() {
                   <p className="imp-note" style={{ opacity: 0.8, marginTop: 8 }}>{t({ id: 'importacoes.export.curate.empty' })}</p>
                 )}
                 {pubResources.length > 0 && (
-                  <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
-                    {pubResources.map((res) => (
-                      <li key={res.resource_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 6, marginBottom: 4, background: 'rgba(127,127,127,0.08)' }}>
-                        <span style={{ minWidth: 0, fontSize: '.85rem' }}>
-                          <b>{res.book_title || '—'}</b>{res.label ? ` · ${res.label}` : ''}
-                          {res.is_primary && <Pill variant="ok">★</Pill>}
-                        </span>
-                        <button className="cat-btn primary" type="button" onClick={() => handlePublishResource(res)} disabled={pubPromotingId === res.resource_id}>
-                          {pubPromotingId === res.resource_id ? t({ id: 'importacoes.export.curate.validating' }) : t({ id: 'importacoes.export.curate.validate' })}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                  <>
+                    <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', margin: '10px 0 0' }}>
+                      <button className="cat-btn secondary" type="button" disabled={bulkPromoting}
+                        onClick={() => setSelectedPub((prev) => (prev.size === pubResources.length ? new Set() : new Set(pubResources.map((r) => r.resource_id))))}>
+                        {selectedPub.size === pubResources.length ? t({ id: 'importacoes.export.curate.selectNone' }) : t({ id: 'importacoes.export.curate.selectAll' })}
+                      </button>
+                      <button className="cat-btn primary" type="button" disabled={bulkPromoting || selectedPub.size === 0} onClick={handleBulkPublish}>
+                        {bulkPromoting
+                          ? t({ id: 'importacoes.export.curate.bulkValidating' }, { n: selectedPub.size })
+                          : t({ id: 'importacoes.export.curate.bulkValidate' }, { n: selectedPub.size })}
+                      </button>
+                    </div>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
+                      {pubResources.map((res) => (
+                        <li key={res.resource_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 6, marginBottom: 4, background: 'rgba(127,127,127,0.08)' }}>
+                          <span style={{ minWidth: 0, fontSize: '.85rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <input type="checkbox" checked={selectedPub.has(res.resource_id)} onChange={() => togglePub(res.resource_id)} disabled={bulkPromoting} />
+                            <span><b>{res.book_title || '—'}</b>{res.label ? ` · ${res.label}` : ''}{res.is_primary && <Pill variant="ok">★</Pill>}</span>
+                          </span>
+                          <button className="cat-btn primary" type="button" onClick={() => handlePublishResource(res)} disabled={pubPromotingId === res.resource_id || bulkPromoting}>
+                            {pubPromotingId === res.resource_id ? t({ id: 'importacoes.export.curate.validating' }) : t({ id: 'importacoes.export.curate.validate' })}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
                 )}
               </div>
             </div>

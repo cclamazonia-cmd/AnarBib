@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Wird geladen…",
   "importacoes.export.curate.empty": "Keine öffentliche Datei zu bestätigen (oder alle bereits bestätigt).",
   "importacoes.export.curate.validate": "Bestätigen (gemeinfrei)",
+  "importacoes.export.curate.selectAll": "Alle auswählen",
+  "importacoes.export.curate.selectNone": "Abwählen",
+  "importacoes.export.curate.bulkValidate": "Auswahl bestätigen ({n})",
+  "importacoes.export.curate.bulkValidating": "Bestätigung ({n})…",
+  "importacoes.export.curate.bulkDone": "Bestätigt: {ok} · Fehler: {fail}.",
   "importacoes.export.curate.validating": "Wird bestätigt…",
   "importacoes.export.curate.validated": "« {title} » ist jetzt exportberechtigt.",
   "importacoes.export.curate.error": "Fehler: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Fehler: {message}",
   "federacao.gazeta.empty": "Noch keine Ausgabe veröffentlicht.",
   "federacao.gazeta.error": "Die Gazette konnte nicht geladen werden.",
-  "federacao.gazeta.retry": "Erneut versuchen"
+  "federacao.gazeta.retry": "Erneut versuchen",
+  "federacao.inicio.gazeta": "Die Gazette des Netzwerks",
+  "federacao.inicio.gazeta.desc": "Monatliche Ausgaben — Kämpfe, Kulturen, Termine, gegenseitige Hilfe.",
+  "federacao.inicio.toGazeta": "Gazette öffnen",
+  "federacao.inicio.new": "Neu"
 }

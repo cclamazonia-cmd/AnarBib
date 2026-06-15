@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Carregant…",
   "importacoes.export.curate.empty": "Cap fitxer públic a validar (o tots ja validats).",
   "importacoes.export.curate.validate": "Validar (domini públic)",
+  "importacoes.export.curate.selectAll": "Selecciona-ho tot",
+  "importacoes.export.curate.selectNone": "Desselecciona",
+  "importacoes.export.curate.bulkValidate": "Validar la selecció ({n})",
+  "importacoes.export.curate.bulkValidating": "Validació ({n})…",
+  "importacoes.export.curate.bulkDone": "Validats: {ok} · errors: {fail}.",
   "importacoes.export.curate.validating": "Validant…",
   "importacoes.export.curate.validated": "« {title} » ja és elegible per a l'export.",
   "importacoes.export.curate.error": "Error: {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Error: {message}",
   "federacao.gazeta.empty": "Cap número publicat de moment.",
   "federacao.gazeta.error": "No s’ha pogut carregar la gaseta.",
-  "federacao.gazeta.retry": "Torna-ho a provar"
+  "federacao.gazeta.retry": "Torna-ho a provar",
+  "federacao.inicio.gazeta": "La gaseta de la xarxa",
+  "federacao.inicio.gazeta.desc": "Números mensuals — lluites, cultures, agenda, suport mutu.",
+  "federacao.inicio.toGazeta": "Obrir la gaseta",
+  "federacao.inicio.new": "Nou"
 }

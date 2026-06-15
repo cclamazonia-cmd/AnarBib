@@ -4713,6 +4713,11 @@
   "importacoes.export.curate.loading": "Chargement…",
   "importacoes.export.curate.empty": "Aucun fichier public à valider (ou tous déjà validés).",
   "importacoes.export.curate.validate": "Valider (domaine public)",
+  "importacoes.export.curate.selectAll": "Tout sélectionner",
+  "importacoes.export.curate.selectNone": "Désélectionner",
+  "importacoes.export.curate.bulkValidate": "Valider la sélection ({n})",
+  "importacoes.export.curate.bulkValidating": "Validation ({n})…",
+  "importacoes.export.curate.bulkDone": "Validés : {ok} · échecs : {fail}.",
   "importacoes.export.curate.validating": "Validation…",
   "importacoes.export.curate.validated": "« {title} » est maintenant éligible à l'export.",
   "importacoes.export.curate.error": "Erreur : {message}",
@@ -4754,5 +4759,9 @@
   "importacoes.export.attach.error": "Erreur : {message}",
   "federacao.gazeta.empty": "Aucun numéro publié pour l’instant.",
   "federacao.gazeta.error": "Impossible de charger la gazette.",
-  "federacao.gazeta.retry": "Réessayer"
+  "federacao.gazeta.retry": "Réessayer",
+  "federacao.inicio.gazeta": "La gazette du réseau",
+  "federacao.inicio.gazeta.desc": "Numéros mensuels — luttes, cultures, agenda, entraide.",
+  "federacao.inicio.toGazeta": "Ouvrir la gazette",
+  "federacao.inicio.new": "Nouveau"
 }
