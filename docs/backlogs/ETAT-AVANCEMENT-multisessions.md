@@ -23,6 +23,37 @@ socle.
 - **Drift récent confirmé** (objet créé en cours de route, hors migration) :
   **`mv_books_catalog_list_v1`** (MV publique du catalogue — cf. mémoire `catalog-mv-project-location`).
 
+## ✅ Session « Perf UX + nettoyage advisors sécurité » (15-16/06) — livré
+
+Bloc livré et **déployé en prod** (pipelines verts) au cours de cette session :
+
+- **Sécurité advisors** : Lot 1 (REVOKE EXECUTE sur 14 fn trigger SECDEF), Lot 2
+  (triage helpers internes surexposés), **fuite MV réseau fermée** (option C —
+  wrappers déplacés en schéma `private` non exposé ; cf. mémoire
+  `catalogue-anon-mv-publique`). ~28 advisors retirés du dashboard, confirmé.
+- **MOBILE — scan & PWA** :
+  - **P0 socle PWA** (manifest + service worker ; le SW ne cache **jamais** l'API).
+  - **P2 scan carte-lecteur** (Painel › Leitor, `CardScanner` + `ResolveCardBox`)
+    + message **`card_revoked`** clair (régénérer une carte révoque l'ancienne).
+  - **P2b scan ISBN au catalogage** (code-barres EAN → `catalog_metadata_lookup`
+    + `bn_isbn_lookup`). Repli **ZXing** universel (Brave/iOS/Firefox n'ont pas
+    `BarcodeDetector`). Limite webcam desktop = matérielle (assumée).
+  - **P4 récolement** (inventaire par scan) : backend persisté (4 RPC SECDEF
+    staff) **+ UI** (onglet Painel « Récolement », scan **continu** des étiquettes
+    QR, rapport présents/manquants/intrus, export CSV/PDF).
+- **Onboarding** : case **« ne plus afficher »** rendue accessible **depuis la
+  visite guidée Painel** (et à chaque étape du wizard catalogação) → l'opt-out
+  permanent ne réapparaît plus à chaque connexion.
+- **Doc du commun** : guide pt-BR scan/QR pour Rodrigo (BTL) →
+  [`../guides/guide-scan-qr-pt-BR.md`](../guides/guide-scan-qr-pt-BR.md) (esprit
+  charte relationnelle / entraide).
+
+**Reste (non bloquant)** : audit d'archivage du corpus de specs (notamment
+`spec-flux-partage-numerique` ⚠️→🔵 si la parité UX est confirmée) — curation à
+mener avec Xavier. Perf TOP 2-5 (memo lignes catalogue, virtualisation) — backlog.
+
+— *Session: Perf UX + nettoyage advisors sécurité*
+
 ## Morceaux non résolus (survey sessions, bruit filtré)
 
 ### ✅ « À pérenniser » — RÉSOLU (faux positif, élucidé 11/06)
