@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Εγχειρίδιο χρήσης",
   "federacao.communs.doc.manuel.desc": "Πρώτα βήματα στο AnarBib, βήμα βήμα.",
   "federacao.communs.doc.cotation.title": "Ταξινομικά σύμβολα & αναρχική ταξινόμηση",
-  "federacao.communs.doc.cotation.desc": "Ένα πρότυπο ταξινομικού και ένας αναθεωρημένος πίνακας Dewey — ένα παράδειγμα τοποθετημένης καταλογογράφησης."
+  "federacao.communs.doc.cotation.desc": "Ένα πρότυπο ταξινομικού και ένας αναθεωρημένος πίνακας Dewey — ένα παράδειγμα τοποθετημένης καταλογογράφησης.",
+  "federacao.inicio.communs": "Τα Κοινά",
+  "federacao.inicio.communs.desc": "Χάρτες, οδηγοί και εγχειρίδια του δικτύου — ζωντανά, και αναγνώσιμα εδώ.",
+  "federacao.inicio.toCommuns": "Άνοιγμα των κοινών",
+  "federacao.inicio.entraide": "Η Αλληλοβοήθεια",
+  "federacao.inicio.entraide.desc": "Χρειάζεσαι ένα χέρι, ή θες να προσφέρεις ένα; Εδώ είναι.",
+  "federacao.inicio.toEntraide": "Στην αλληλοβοήθεια"
 }

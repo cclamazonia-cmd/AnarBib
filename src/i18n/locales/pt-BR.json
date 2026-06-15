@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Manual de uso",
   "federacao.communs.doc.manuel.desc": "Aprender a usar o AnarBib, passo a passo.",
   "federacao.communs.doc.cotation.title": "Cotação & classificação anarquista",
-  "federacao.communs.doc.cotation.desc": "Uma norma de cota e uma grade Dewey revisitada — um exemplo de catalogação situada."
+  "federacao.communs.doc.cotation.desc": "Uma norma de cota e uma grade Dewey revisitada — um exemplo de catalogação situada.",
+  "federacao.inicio.communs": "Os Comuns",
+  "federacao.inicio.communs.desc": "Cartas, guias e vade-mécuns da rede — vivos, e legíveis aqui mesmo.",
+  "federacao.inicio.toCommuns": "Abrir os comuns",
+  "federacao.inicio.entraide": "A Entreajuda",
+  "federacao.inicio.entraide.desc": "Precisa de uma mão, ou quer emprestar a sua? É aqui.",
+  "federacao.inicio.toEntraide": "Ir para a entreajuda"
 }

@@ -334,6 +334,35 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
         <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toGazeta' })} →</span>
       </button>
 
+      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('communs')}>
+        <svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true" style={{ flex: 'none' }}>
+          <path d="M14 7C11 5 7 4.5 3.5 5V20C7 19.5 11 20 14 21.5M14 7C17 5 21 4.5 24.5 5V20C21 19.5 17 20 14 21.5M14 7V21.5" fill="none" stroke="#c00000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span className="ab-fed-inicio-annuaire-txt">
+          <span className="ab-fed-inicio-annuaire-t">
+            {t({ id: 'federacao.inicio.communs' })}
+            <span className="ab-fed-pill is-new">{t({ id: 'federacao.inicio.new' })}</span>
+          </span>
+          <span className="ab-fed-inicio-annuaire-d">{t({ id: 'federacao.inicio.communs.desc' })}</span>
+        </span>
+        <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toCommuns' })} →</span>
+      </button>
+
+      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('entreajuda')}>
+        <svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true" style={{ flex: 'none' }}>
+          <path d="M14 8.2C13.2 6.8 11 6.6 10 8 9 9.4 9.8 11 14 13.6 18.2 11 19 9.4 18 8 17 6.6 14.8 6.8 14 8.2Z" fill="none" stroke="#c00000" strokeWidth="1.5" strokeLinejoin="round" />
+          <path d="M3.5 15C5.5 14.2 8 14.8 10 17.5 11 19 12.5 20.5 14 21M14 21C15.5 20.5 17 19 18 17.5 20 14.8 22.5 14.2 24.5 15" fill="none" stroke="#c00000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span className="ab-fed-inicio-annuaire-txt">
+          <span className="ab-fed-inicio-annuaire-t">
+            {t({ id: 'federacao.inicio.entraide' })}
+            <span className="ab-fed-pill is-new">{t({ id: 'federacao.inicio.new' })}</span>
+          </span>
+          <span className="ab-fed-inicio-annuaire-d">{t({ id: 'federacao.inicio.entraide.desc' })}</span>
+        </span>
+        <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toEntraide' })} →</span>
+      </button>
+
       <div>
         <div className="ab-fed-label">{t({ id: 'federacao.inicio.soon' })}</div>
         <div className="ab-fed-inicio-soon">

@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Uzmanlibro",
   "federacao.communs.doc.manuel.desc": "Ekuzi AnarBib, paŝon post paŝo.",
   "federacao.communs.doc.cotation.title": "Bretsigno & anarkiisma klasifiko",
-  "federacao.communs.doc.cotation.desc": "Normo de bretsigno kaj reviziita Dewey-tabelo — ekzemplo de situita katalogado."
+  "federacao.communs.doc.cotation.desc": "Normo de bretsigno kaj reviziita Dewey-tabelo — ekzemplo de situita katalogado.",
+  "federacao.inicio.communs": "La Komunaĵoj",
+  "federacao.inicio.communs.desc": "Ĉartoj, gvidiloj kaj manlibroj de la reto — vivaj, kaj legeblaj ĝuste ĉi tie.",
+  "federacao.inicio.toCommuns": "Malfermi la komunaĵojn",
+  "federacao.inicio.entraide": "La Reciproka Helpo",
+  "federacao.inicio.entraide.desc": "Ĉu vi bezonas helpon, aŭ volas oferti ĝin? Ĉi tie.",
+  "federacao.inicio.toEntraide": "Iri al la reciproka helpo"
 }

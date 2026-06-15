@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "User manual",
   "federacao.communs.doc.manuel.desc": "Getting started with AnarBib, step by step.",
   "federacao.communs.doc.cotation.title": "Shelfmarks & anarchist classification",
-  "federacao.communs.doc.cotation.desc": "A shelfmark standard and a reworked Dewey grid — one example of situated cataloging."
+  "federacao.communs.doc.cotation.desc": "A shelfmark standard and a reworked Dewey grid — one example of situated cataloging.",
+  "federacao.inicio.communs": "The Commons",
+  "federacao.inicio.communs.desc": "The network’s charters, guides and handbooks — alive, and readable right here.",
+  "federacao.inicio.toCommuns": "Open the commons",
+  "federacao.inicio.entraide": "Mutual Aid",
+  "federacao.inicio.entraide.desc": "Need a hand, or want to lend one? It’s here.",
+  "federacao.inicio.toEntraide": "Go to mutual aid"
 }

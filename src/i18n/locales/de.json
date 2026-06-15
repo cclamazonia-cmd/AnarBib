@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Benutzungshandbuch",
   "federacao.communs.doc.manuel.desc": "AnarBib Schritt für Schritt kennenlernen.",
   "federacao.communs.doc.cotation.title": "Signatur & anarchistische Klassifikation",
-  "federacao.communs.doc.cotation.desc": "Eine Signaturnorm und ein überarbeitetes Dewey-Raster — ein Beispiel situierter Katalogisierung."
+  "federacao.communs.doc.cotation.desc": "Eine Signaturnorm und ein überarbeitetes Dewey-Raster — ein Beispiel situierter Katalogisierung.",
+  "federacao.inicio.communs": "Die Commons",
+  "federacao.inicio.communs.desc": "Chartas, Leitfäden und Handbücher des Netzwerks — lebendig und gleich hier lesbar.",
+  "federacao.inicio.toCommuns": "Commons öffnen",
+  "federacao.inicio.entraide": "Die Gegenseitige Hilfe",
+  "federacao.inicio.entraide.desc": "Brauchst du Hilfe oder möchtest du welche anbieten? Hier entlang.",
+  "federacao.inicio.toEntraide": "Zur gegenseitigen Hilfe"
 }

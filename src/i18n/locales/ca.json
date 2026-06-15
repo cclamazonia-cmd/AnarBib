@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Manual d’ús",
   "federacao.communs.doc.manuel.desc": "Aprendre a fer servir AnarBib, pas a pas.",
   "federacao.communs.doc.cotation.title": "Signatura & classificació anarquista",
-  "federacao.communs.doc.cotation.desc": "Una norma de signatura i una graella Dewey revisada — un exemple de catalogació situada."
+  "federacao.communs.doc.cotation.desc": "Una norma de signatura i una graella Dewey revisada — un exemple de catalogació situada.",
+  "federacao.inicio.communs": "Els Comuns",
+  "federacao.inicio.communs.desc": "Cartes, guies i vademècums de la xarxa — vius, i llegibles aquí mateix.",
+  "federacao.inicio.toCommuns": "Obrir els comuns",
+  "federacao.inicio.entraide": "El Suport Mutu",
+  "federacao.inicio.entraide.desc": "Necessites un cop de mà, o en vols oferir un? És aquí.",
+  "federacao.inicio.toEntraide": "Anar al suport mutu"
 }

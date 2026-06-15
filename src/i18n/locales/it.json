@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Manuale d’uso",
   "federacao.communs.doc.manuel.desc": "Imparare a usare AnarBib, passo dopo passo.",
   "federacao.communs.doc.cotation.title": "Collocazione & classificazione anarchica",
-  "federacao.communs.doc.cotation.desc": "Una norma di collocazione e una griglia Dewey rivista — un esempio di catalogazione situata."
+  "federacao.communs.doc.cotation.desc": "Una norma di collocazione e una griglia Dewey rivista — un esempio di catalogazione situata.",
+  "federacao.inicio.communs": "I Beni Comuni",
+  "federacao.inicio.communs.desc": "Carte, guide e vademecum della rete — vivi, e leggibili proprio qui.",
+  "federacao.inicio.toCommuns": "Aprire i beni comuni",
+  "federacao.inicio.entraide": "Il Mutuo Aiuto",
+  "federacao.inicio.entraide.desc": "Ti serve una mano, o vuoi offrirne una? È qui.",
+  "federacao.inicio.toEntraide": "Vai al mutuo aiuto"
 }

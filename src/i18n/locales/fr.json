@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Manuel d’utilisation",
   "federacao.communs.doc.manuel.desc": "Prendre AnarBib en main, pas à pas.",
   "federacao.communs.doc.cotation.title": "Cotation & classification anarchiste",
-  "federacao.communs.doc.cotation.desc": "Une norme de cote et une grille Dewey revisitée — un exemple de catalogage situé."
+  "federacao.communs.doc.cotation.desc": "Une norme de cote et une grille Dewey revisitée — un exemple de catalogage situé.",
+  "federacao.inicio.communs": "Les Communs",
+  "federacao.inicio.communs.desc": "Chartes, guides et vade-mecum du réseau — vivants, et lisibles ici même.",
+  "federacao.inicio.toCommuns": "Ouvrir les communs",
+  "federacao.inicio.entraide": "L’Entraide",
+  "federacao.inicio.entraide.desc": "Besoin d’un coup de main, ou envie d’en prêter un ? C’est ici.",
+  "federacao.inicio.toEntraide": "Aller à l’entraide"
 }

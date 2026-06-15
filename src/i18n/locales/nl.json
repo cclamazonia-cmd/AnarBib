@@ -4864,5 +4864,11 @@
   "federacao.communs.doc.manuel.title": "Handleiding",
   "federacao.communs.doc.manuel.desc": "AnarBib leren gebruiken, stap voor stap.",
   "federacao.communs.doc.cotation.title": "Plaatskenmerk & anarchistische classificatie",
-  "federacao.communs.doc.cotation.desc": "Een plaatskenmerknorm en een herwerkt Dewey-raster — een voorbeeld van gesitueerd catalogiseren."
+  "federacao.communs.doc.cotation.desc": "Een plaatskenmerknorm en een herwerkt Dewey-raster — een voorbeeld van gesitueerd catalogiseren.",
+  "federacao.inicio.communs": "De Commons",
+  "federacao.inicio.communs.desc": "Handvesten, gidsen en handleidingen van het netwerk — levend, en hier meteen leesbaar.",
+  "federacao.inicio.toCommuns": "Commons openen",
+  "federacao.inicio.entraide": "De Onderlinge Hulp",
+  "federacao.inicio.entraide.desc": "Hulp nodig, of wil je hulp bieden? Hier.",
+  "federacao.inicio.toEntraide": "Naar de onderlinge hulp"
 }
