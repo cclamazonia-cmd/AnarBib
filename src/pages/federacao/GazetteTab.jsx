@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { apiQuery } from '@/lib/supabase';
+import GazetteContributeForm from './GazetteContributeForm';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // GazetteTab — onglet « Gazette » de la page Fédération.
@@ -276,6 +277,7 @@ export default function GazetteTab() {
   const [loc, setLoc] = useState(() => (GZ_LOCALES.includes(appLocale) ? appLocale : 'fr'));
   const frameRef = useRef(null);
   const [frameH, setFrameH] = useState(640);
+  const [contributing, setContributing] = useState(false);
 
   const fetchGazette = useCallback(async () => {
     setState((s) => ({ ...s, status: 'loading' }));
@@ -355,8 +357,13 @@ export default function GazetteTab() {
           ))}
         </select>
         <span className="ab-gz-spacer" />
+        <button type="button" className="cat-btn ghost" onClick={() => setContributing((v) => !v)}>
+          {t({ id: 'federacao.gazeta.contribute.cta' })}
+        </button>
         <button type="button" className="cat-btn primary" onClick={printPdf}>{ui.pdf}</button>
       </div>
+
+      {contributing && <GazetteContributeForm onClose={() => setContributing(false)} />}
 
       {!hasLoc && ui.pending && <div className="ab-gz-pending">{ui.pending}</div>}
 

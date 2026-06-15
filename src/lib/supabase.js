@@ -204,3 +204,35 @@ export async function apiRpc(functionName, args = {}) {
     return { data: null, error: err };
   }
 }
+
+/**
+ * Appelle une Edge Function publique (verify_jwt=false) avec la clé ANON uniquement.
+ *
+ * Jamais de service_role côté front. Renvoie le status HTTP brut pour permettre
+ * un mapping fin (201 succès / 422 validation / 429 rate-limit / 5xx). Utilisé
+ * par le formulaire de contribution à la Gazette (submit-gazette-contribution).
+ *
+ * @param {string} name - slug de la fonction (ex: 'submit-gazette-contribution')
+ * @param {object} body - corps JSON
+ * @returns {Promise<{ ok: boolean, status: number, data: any }>}
+ */
+export async function callEdgeFunction(name, body) {
+  const url = `${SUPABASE_URL}/functions/v1/${name}`;
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    let data = null;
+    try { data = await res.json(); } catch { /* corps vide ou non-JSON */ }
+    return { ok: res.ok, status: res.status, data };
+  } catch (err) {
+    console.error(`callEdgeFunction ${name} network error:`, err);
+    return { ok: false, status: 0, data: null };
+  }
+}
