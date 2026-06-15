@@ -12,6 +12,7 @@ import '@/components/team/TeamPanel.css';
 import AdminsPanel from '@/components/rede/AdminsPanel';
 import ReportsPanel from '@/components/rede/ReportsPanel';
 import OaiSourcePanel from '@/components/rede/OaiSourcePanel'; /* OAI-O3 */
+import GazetteStaffPanel from '@/components/rede/GazetteStaffPanel';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import '../catalogacao/CatalogacaoPage.css';
@@ -54,6 +55,7 @@ export default function RedePage() {
     { id: 'members', label: t({ id: 'rede.tab.members' }) },
     { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
     { id: 'reports', label: t({ id: 'rede.tab.reports' }) },
+    { id: 'gazeta', label: t({ id: 'rede.tab.gazeta' }) },
     { id: 'oaisource', label: t({ id: 'rede.tab.oaiSource' }) }, /* OAI-O3 */
   ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
@@ -427,6 +429,11 @@ export default function RedePage() {
         {/* Gouvernance d'ouverture du endpoint OAI-PMH (« ser fonte »,
             spec importacoes-exportacoes §8). Composant autonome ; accessible
             aussi au coordenador (demande ascendante + vote descendant). */}
+        {/* ═══ GAZETTE — triage des contributions + publication ══════════════ */}
+        {tab === 'gazeta' && (
+          <GazetteStaffPanel />
+        )}
+
         {tab === 'oaisource' && (
           <OaiSourcePanel />
         )}

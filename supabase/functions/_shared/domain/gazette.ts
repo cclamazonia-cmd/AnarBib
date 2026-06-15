@@ -102,7 +102,7 @@ async function handleContributionReceived(payload, ctx) {
   let introHtml = `<p>${esc(tMail(locale, "gazette.contribution.received.intro", { rubric, title, author }))}</p>`;
   if (excerpt) introHtml += `<blockquote style="margin:.6rem 0;padding-left:.8rem;border-left:3px solid #cf1f27;color:#444">${esc(excerpt)}</blockquote>`;
   if (link) introHtml += `<p><a href="${esc(link)}">${esc(link)}</a></p>`;
-  introHtml += `<p><a href="${APP_URL}/federacao/gazeta">${APP_URL}/federacao/gazeta</a></p>`;
+  introHtml += `<p><a href="${APP_URL}/rede">${APP_URL}/rede</a></p>`;
 
   const { html, text } = renderEmail({
     locale,
@@ -132,7 +132,7 @@ async function handleDraftReady(payload, ctx) {
     const sub = tMail(locale, "gazette.draft.ready_for_review.sub", { number });
     const introHtml =
       `<p>${esc(tMail(locale, "gazette.draft.ready_for_review.intro", { number }))}</p>`
-      + `<p><a href="${APP_URL}/federacao/gazeta">${APP_URL}/federacao/gazeta</a></p>`;
+      + `<p><a href="${APP_URL}/rede">${APP_URL}/rede</a></p>`;
     const { html, text } = renderEmail({
       locale,
       preheader: sub,

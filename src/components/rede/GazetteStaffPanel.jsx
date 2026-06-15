@@ -1,0 +1,279 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useIntl } from 'react-intl';
+import { supabase } from '@/lib/supabase';
+import { localizeError } from '@/lib/localizeError';
+import { useAuth } from '@/contexts/AuthContext';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GazetteStaffPanel — onglet « Gazette » de RedePage (réservé network_staff).
+//
+// 100% frontend : accès direct aux tables (RLS *_network_staff en ALL autorise
+// la lecture des brouillons + l'écriture). Deux sections :
+//   • Contributions : triage des gazette_submissions (accepter / rejeter).
+//   • Numéros : liste (brouillons inclus), aperçu de relecture des 10 locales,
+//     et publication (draft → published). PAS d'auto-publication ailleurs.
+// La diffusion à tout le staff (bouton « Diffuser ») viendra à l'Étape C.
+// ═══════════════════════════════════════════════════════════════════════════
+
+const GZ_LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
+const SUB_STATUSES = ['new', 'accepted', 'rejected', 'published'];
+
+function blockText(b) {
+  // Extrait le texte lisible d'un bloc de contenu (pour la relecture).
+  const parts = [];
+  if (b.label) parts.push(b.label);
+  if (b.h) parts.push(b.h);
+  if (b.title) parts.push(b.title);
+  if (b.byline) parts.push(b.byline);
+  if (Array.isArray(b.p)) parts.push(...b.p);
+  if (b.src) parts.push('— ' + b.src);
+  if (Array.isArray(b.items)) {
+    for (const it of b.items) parts.push(Array.isArray(it) ? it.join(' · ') : String(it));
+  }
+  return parts;
+}
+
+export default function GazetteStaffPanel() {
+  const { formatMessage: t, locale } = useIntl();
+  const { user } = useAuth();
+  const [section, setSection] = useState('contributions');
+  const [subs, setSubs] = useState([]);
+  const [subFilter, setSubFilter] = useState('new');
+  const [issues, setIssues] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(null);
+  const [msg, setMsg] = useState({ text: '', kind: '' });
+  const [preview, setPreview] = useState(null); // { issue, byLocale, loc }
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [s, i] = await Promise.all([
+        supabase.from('gazette_submissions')
+          .select('id,rubric,locale,title,body,link,event_date,contributor_name,contributor_collective,status,created_at')
+          .order('created_at', { ascending: false }),
+        supabase.from('gazette_issues')
+          .select('id,number,slug,masthead_title,cover_date,status,published_at')
+          .order('number', { ascending: false }),
+      ]);
+      if (s.error) throw s.error;
+      if (i.error) throw i.error;
+      setSubs(s.data || []);
+      setIssues(i.data || []);
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  }, [t]);
+  useEffect(() => { load(); }, [load]);
+
+  async function decideSubmission(id, status) {
+    setBusy('sub:' + id);
+    try {
+      const { error } = await supabase.from('gazette_submissions')
+        .update({ status, reviewed_by: user?.id || null, reviewed_at: new Date().toISOString() })
+        .eq('id', id);
+      if (error) throw error;
+      setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
+      await load();
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function publishIssue(issue) {
+    if (!window.confirm(t({ id: 'rede.gazeta.publishConfirm' }, { number: issue.number }))) return;
+    setBusy('pub:' + issue.id);
+    try {
+      const { error } = await supabase.from('gazette_issues')
+        .update({ status: 'published', published_at: issue.published_at || new Date().toISOString() })
+        .eq('id', issue.id);
+      if (error) throw error;
+      setMsg({ text: t({ id: 'rede.gazeta.published' }, { number: issue.number }), kind: 'ok' });
+      await load();
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function openPreview(issue) {
+    setBusy('prev:' + issue.id);
+    try {
+      const { data, error } = await supabase.from('gazette_issue_locales')
+        .select('locale,tagline,masthead,content,translation_status')
+        .eq('issue_id', issue.id);
+      if (error) throw error;
+      const byLocale = Object.fromEntries((data || []).map((r) => [r.locale, r]));
+      const loc = GZ_LOCALES.find((l) => byLocale[l]) || null;
+      setPreview({ issue, byLocale, loc });
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  const fmtDate = (d) => (d ? new Date(d).toLocaleDateString(locale) : '—');
+  const subStatusPill = (s) => (s === 'accepted' ? 'ok' : s === 'rejected' ? 'danger' : s === 'published' ? 'info' : 'warn');
+  const filteredSubs = subFilter ? subs.filter((s) => s.status === subFilter) : subs;
+
+  const box = { padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 14 };
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+        <button className={`cat-tab-btn${section === 'contributions' ? ' active' : ''}`} onClick={() => setSection('contributions')}>
+          {t({ id: 'rede.gazeta.contributions' })}{subs.filter((s) => s.status === 'new').length > 0 ? ` (${subs.filter((s) => s.status === 'new').length})` : ''}
+        </button>
+        <button className={`cat-tab-btn${section === 'issues' ? ' active' : ''}`} onClick={() => setSection('issues')}>
+          {t({ id: 'rede.gazeta.issues' })}
+        </button>
+        <span style={{ flex: 1 }} />
+        <button className="cat-btn secondary" onClick={load} disabled={loading}>
+          {loading ? t({ id: 'rede.refreshing' }) : t({ id: 'rede.refresh' })}
+        </button>
+      </div>
+
+      {msg.text && (
+        <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>
+          {msg.text}
+        </div>
+      )}
+
+      {/* ─── Contributions ─── */}
+      {section === 'contributions' && (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 10, flexWrap: 'wrap' }}>
+            <h3 style={{ margin: 0 }}>{t({ id: 'rede.gazeta.contributions' })} ({filteredSubs.length})</h3>
+            <select value={subFilter} onChange={(e) => setSubFilter(e.target.value)} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem' }}>
+              <option value="">{t({ id: 'common.all' })}</option>
+              {SUB_STATUSES.map((s) => <option key={s} value={s}>{t({ id: `rede.gazeta.status.${s}` })}</option>)}
+            </select>
+          </div>
+          {filteredSubs.length === 0 && <div style={{ ...box, color: 'var(--brand-muted)' }}>{t({ id: 'common.empty' })}</div>}
+          {filteredSubs.map((s) => (
+            <div key={s.id} style={box}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+                <div style={{ flex: 1, minWidth: 220 }}>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 4 }}>
+                    <span className="cat-pill" style={{ fontSize: '.68rem' }}>{t({ id: `federacao.gazeta.rubric.${s.rubric}` })}</span>
+                    {s.locale && <span className="cat-pill" style={{ fontSize: '.68rem' }}>{s.locale}</span>}
+                    <span className={`cat-pill ${subStatusPill(s.status)}`} style={{ fontSize: '.68rem' }}>{t({ id: `rede.gazeta.status.${s.status}` })}</span>
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: '.98rem' }}>{s.title}</div>
+                  <div style={{ fontSize: '.86rem', color: 'var(--brand-muted)', margin: '4px 0', whiteSpace: 'pre-wrap' }}>{s.body}</div>
+                  <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>
+                    {[s.contributor_name, s.contributor_collective].filter(Boolean).join(' · ') || '—'}
+                    {s.event_date ? ` · ${fmtDate(s.event_date)}` : ''} · {fmtDate(s.created_at)}
+                    {s.link && <> · <a href={s.link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-link, #7fb0e0)' }}>{t({ id: 'rede.gazeta.source' })}</a></>}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-end' }}>
+                  {s.status !== 'accepted' && (
+                    <button className="cat-btn primary" disabled={busy === 'sub:' + s.id} onClick={() => decideSubmission(s.id, 'accepted')}>
+                      {t({ id: 'rede.gazeta.accept' })}
+                    </button>
+                  )}
+                  {s.status !== 'rejected' && (
+                    <button className="cat-btn ghost" style={{ color: '#f87171' }} disabled={busy === 'sub:' + s.id} onClick={() => decideSubmission(s.id, 'rejected')}>
+                      {t({ id: 'rede.gazeta.reject' })}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ─── Numéros & publication ─── */}
+      {section === 'issues' && (
+        <div>
+          <h3 style={{ marginBottom: 12 }}>{t({ id: 'rede.gazeta.issues' })} ({issues.length})</h3>
+          {issues.length === 0 && <div style={{ ...box, color: 'var(--brand-muted)' }}>{t({ id: 'common.empty' })}</div>}
+          {issues.map((iss) => (
+            <div key={iss.id} style={box}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '1rem' }}>
+                    N°{String(iss.number).padStart(2, '0')} — {iss.masthead_title || iss.slug}
+                    <span className={`cat-pill ${iss.status === 'published' ? 'ok' : 'warn'}`} style={{ fontSize: '.66rem', marginLeft: 8 }}>
+                      {t({ id: `rede.gazeta.status.${iss.status}` })}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '.8rem', color: 'var(--brand-muted)' }}>
+                    {fmtDate(iss.cover_date)}{iss.published_at ? ` · ${t({ id: 'rede.gazeta.publishedAt' }, { date: fmtDate(iss.published_at) })}` : ''}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  <button className="cat-btn secondary" disabled={busy === 'prev:' + iss.id} onClick={() => openPreview(iss)}>
+                    {t({ id: 'rede.gazeta.preview' })}
+                  </button>
+                  {iss.status !== 'published' && (
+                    <button className="cat-btn primary" disabled={busy === 'pub:' + iss.id} onClick={() => publishIssue(iss)}>
+                      {t({ id: 'rede.gazeta.publish' })}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ─── Aperçu de relecture (modale simple) ─── */}
+      {preview && (
+        <div
+          onClick={() => setPreview(null)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 1000, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '4vh 12px', overflow: 'auto' }}
+        >
+          <div onClick={(e) => e.stopPropagation()} style={{ background: '#17141d', border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, maxWidth: 820, width: '100%', padding: 18 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
+              <h3 style={{ margin: 0 }}>{t({ id: 'rede.gazeta.previewTitle' }, { number: preview.issue.number })}</h3>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <select value={preview.loc || ''} onChange={(e) => setPreview((p) => ({ ...p, loc: e.target.value }))} style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4' }}>
+                  {GZ_LOCALES.filter((l) => preview.byLocale[l]).map((l) => (
+                    <option key={l} value={l}>{l}{preview.byLocale[l]?.translation_status === 'machine' ? ' · machine' : ''}</option>
+                  ))}
+                </select>
+                <button className="cat-btn ghost" onClick={() => setPreview(null)}>{t({ id: 'common.close' })}</button>
+              </div>
+            </div>
+            {(() => {
+              const row = preview.loc ? preview.byLocale[preview.loc] : null;
+              if (!row) return <p style={{ color: 'var(--brand-muted)' }}>{t({ id: 'rede.gazeta.previewEmpty' })}</p>;
+              const pages = Array.isArray(row.content) ? row.content : [];
+              return (
+                <div style={{ maxHeight: '70vh', overflow: 'auto' }}>
+                  <div style={{ color: 'var(--brand-muted)', fontSize: '.85rem', marginBottom: 10 }}>
+                    {row.tagline} · {row.masthead?.mid || ''} · <span className="cat-pill" style={{ fontSize: '.62rem' }}>{row.translation_status || 'machine'}</span>
+                  </div>
+                  {pages.map((pg, pi) => (
+                    <div key={pi} style={{ marginBottom: 14, paddingBottom: 10, borderBottom: '1px solid rgba(255,255,255,.07)' }}>
+                      <div style={{ fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.04em', fontSize: '.8rem', color: '#cf6f6f', marginBottom: 4 }}>
+                        {String(pi + 1).padStart(2, '0')} · {pg.sec}
+                      </div>
+                      {pg.intro && <div style={{ fontStyle: 'italic', color: 'var(--brand-muted)', fontSize: '.85rem', marginBottom: 6 }}>{pg.intro}</div>}
+                      {(pg.blocks || []).map((b, bi) => (
+                        <div key={bi} style={{ marginBottom: 8 }}>
+                          {blockText(b).map((line, li) => (
+                            <div key={li} style={{ fontSize: li === 0 ? '.95rem' : '.86rem', fontWeight: li === 0 ? 700 : 400, color: li === 0 ? 'inherit' : 'var(--brand-muted)', lineHeight: 1.5 }}>{line}</div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
