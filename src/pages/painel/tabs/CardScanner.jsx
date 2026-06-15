@@ -107,13 +107,13 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
               ean_13: zxlib.BarcodeFormat.EAN_13,
               ean_8: zxlib.BarcodeFormat.EAN_8,
             };
-            const hints = new Map([[
-              zxlib.DecodeHintType.POSSIBLE_FORMATS,
-              wanted.map((fmt) => zxMap[fmt]).filter((v) => v !== undefined),
-            ]]);
+            const hints = new Map([
+              [zxlib.DecodeHintType.POSSIBLE_FORMATS, wanted.map((fmt) => zxMap[fmt]).filter((v) => v !== undefined)],
+              [zxlib.DecodeHintType.TRY_HARDER, true], // décodage plus insistant (utile webcam desktop)
+            ]);
             const reader = new BrowserMultiFormatReader(hints);
             zxingControls = await reader.decodeFromConstraints(
-              { video: { facingMode: { ideal: 'environment' } } },
+              { video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } } },
               videoRef.current,
               (result) => { if (result) handleToken(result.getText()); },
             );
@@ -134,7 +134,9 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
       // 2) Ouverture de la caméra arrière.
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: 'environment' } },
+          // Haute résolution : plus de pixels sur le code-barres (1D exigeant),
+          // décisif sur webcam desktop ; `ideal` retombe sur le mieux disponible.
+          video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } },
           audio: false,
         });
         if (cancelled) { stream.getTracks().forEach((tr) => tr.stop()); return; }
@@ -172,7 +174,7 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
             ref={videoRef}
             muted
             playsInline
-            style={{ width: '100%', maxWidth: 320, aspectRatio: '1 / 1', objectFit: 'cover', borderRadius: 10, background: '#000' }}
+            style={{ width: '100%', maxWidth: 420, aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: 10, background: '#000' }}
           />
           <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)', margin: 0 }}>
             {prompt || t({ id: 'card.resolve.scan.prompt' })}
