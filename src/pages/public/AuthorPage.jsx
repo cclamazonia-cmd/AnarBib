@@ -272,7 +272,7 @@ export default function AuthorPage() {
             {/* Photo */}
             <div className="ab-autor-photo">
               {hasPhoto ? (
-                <img src={`${PHOTO_BASE}${author.photo_object_path}`} alt={displayName} />
+                <img src={`${PHOTO_BASE}${author.photo_object_path}`} alt={displayName} loading="lazy" />
               ) : (
                 <div className="ab-autor-photo__placeholder">
                   <span>{displayName[0]}</span>

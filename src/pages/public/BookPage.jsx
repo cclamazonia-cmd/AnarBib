@@ -354,7 +354,7 @@ export default function BookPage() {
           {/* Couverture */}
           <div className="ab-livro-cover">
             {hasCover
-              ? <img src={`${COVER_BASE}${book.cover_object_path}`} alt={book.titulo} />
+              ? <img src={`${COVER_BASE}${book.cover_object_path}`} alt={book.titulo} loading="lazy" />
               : <div className="ab-livro-cover__placeholder"><span>{(book.titulo||'?')[0]}</span></div>}
           </div>
 

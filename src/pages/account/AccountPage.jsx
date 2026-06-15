@@ -1943,7 +1943,7 @@ export default function AccountPage() {
                     const isFinal = ['cancelada_leitor','cancelada_biblioteca','expirada','retirada_efetivada','liberada_para_circulacao','convertida_em_emprestimo'].includes(h.workflow_stage_effective || h.status);
                     return (
                       <div key={`res-${h.reserva_item_id ?? i}`} className="ab-conta-item ab-conta-item--history" style={{ display: 'flex', gap: 10, opacity: h.is_hidden_by_user ? 0.55 : 1 }}>
-                        {coverUrl && <img src={coverUrl} alt="" style={{ width: 40, height: 56, objectFit: 'cover', borderRadius: 4, flexShrink: 0, background: 'rgba(0,0,0,.2)' }} onError={e => { e.target.style.display = 'none'; }} />}
+                        {coverUrl && <img src={coverUrl} alt="" loading="lazy" style={{ width: 40, height: 56, objectFit: 'cover', borderRadius: 4, flexShrink: 0, background: 'rgba(0,0,0,.2)' }} onError={e => { e.target.style.display = 'none'; }} />}
                         <div className="ab-conta-item__main" style={{ flex: 1 }}>
                           <Link to={`/livro/${h.book_id}`} className="ab-conta-item__title">{h.titulo || h.bib_ref || '\u2014'}</Link>
                           <span className="ab-conta-item__meta">{h.autor || '\u2014'}{h.editora && ` \u00b7 ${h.editora}`}{h.ano && ` (${h.ano})`}</span>
