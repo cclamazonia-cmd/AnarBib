@@ -10,6 +10,7 @@ import { handleCotisationPayment, handleValidationConfirmed, handleMembershipVal
 import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
 import { handlePartnershipLifecycle, handleTransparenceEnabled, handleConfigExpanded } from "../domain/partnership.ts";
 import { handleAuthorityEvent } from "../domain/authority.ts";
+import { handleGazetteEvent } from "../domain/gazette.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
@@ -19,6 +20,10 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // authority_proposal_notification_outbox par recordId ; fan-out (biblios
   // utilisatrices + admins reseau + proposeur) selon l'event.
   if (event.startsWith("authority.")) return await handleAuthorityEvent(recordId);
+  // Events gazette.* (notifications Gazette) - handler dedie, lit
+  // gazette_submission_notification_outbox par recordId. contribution.received
+  // -> fede@anarbib.org ; draft.ready_for_review -> network_staff (fan-out).
+  if (event.startsWith("gazette.")) return await handleGazetteEvent(recordId);
   // Events reader_message* (recad libre lecteur -> sa biblio) - handler dedie, lit reader_library_messages par recordId
   if (event.startsWith("reader_message")) return await handleReaderMessageEvent(recordId);
   // Events library_message* (reciproque biblio -> lecteur) - meme handler-famille, lit reader_library_messages par recordId

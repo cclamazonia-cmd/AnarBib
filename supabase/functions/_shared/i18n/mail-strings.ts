@@ -28,6 +28,56 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  // ── Gazette (notify-event · Étape A) ──────────────────────────────────────
+  "gazette.contribution.received.sub": {
+    "pt-BR": "Nova nota proposta para a Gazeta",
+    fr: "Nouvelle brève proposée à la Gazette",
+    es: "Nueva nota propuesta para la Gaceta",
+    en: "New note suggested for the Gazette",
+    it: "Nuova nota proposta per la Gazzetta",
+    de: "Neue Notiz für die Gazette vorgeschlagen",
+    ca: "Nova nota proposada per a la Gaseta",
+    eo: "Nova noto proponita por la Gazeto",
+    nl: "Nieuw bericht voorgesteld voor de Gazette",
+    el: "Νέο σημείωμα προτάθηκε για την εφημερίδα"
+  },
+  "gazette.contribution.received.intro": {
+    "pt-BR": "Uma nova nota foi proposta para a rubrica « {rubric} »: {title}. Proposta por {author}. Para triar (aceitar ou rejeitar) no painel da rede.",
+    fr: "Une nouvelle brève a été proposée pour la rubrique « {rubric} » : {title}. Proposée par {author}. À trier (accepter ou rejeter) dans le panneau réseau.",
+    es: "Se ha propuesto una nueva nota para la sección « {rubric} »: {title}. Propuesta por {author}. Para clasificar (aceptar o rechazar) en el panel de la red.",
+    en: "A new note has been suggested for the « {rubric} » section: {title}. Suggested by {author}. To triage (accept or reject) in the network panel.",
+    it: "È stata proposta una nuova nota per la sezione « {rubric} »: {title}. Proposta da {author}. Da smistare (accettare o rifiutare) nel pannello della rete.",
+    de: "Eine neue Notiz wurde für die Rubrik « {rubric} » vorgeschlagen: {title}. Vorgeschlagen von {author}. Zu sichten (annehmen oder ablehnen) im Netzwerk-Panel.",
+    ca: "S'ha proposat una nova nota per a la secció « {rubric} »: {title}. Proposada per {author}. Per triar (acceptar o rebutjar) al tauler de la xarxa.",
+    eo: "Nova noto estis proponita por la rubriko « {rubric} »: {title}. Proponita de {author}. Por trakti (akcepti aŭ malakcepti) en la reta panelo.",
+    nl: "Er is een nieuw bericht voorgesteld voor de rubriek « {rubric} »: {title}. Voorgesteld door {author}. Te sorteren (accepteren of weigeren) in het netwerkpaneel.",
+    el: "Προτάθηκε ένα νέο σημείωμα για την ενότητα « {rubric} »: {title}. Προτάθηκε από {author}. Για διαλογή (αποδοχή ή απόρριψη) στον πίνακα του δικτύου."
+  },
+  "gazette.draft.ready_for_review.sub": {
+    "pt-BR": "Rascunho da Gazeta n.º {number} para revisar",
+    fr: "Brouillon de la Gazette n°{number} à relire",
+    es: "Borrador de la Gaceta n.º {number} para revisar",
+    en: "Gazette draft no. {number} ready for review",
+    it: "Bozza della Gazzetta n. {number} da rivedere",
+    de: "Gazette-Entwurf Nr. {number} zur Durchsicht",
+    ca: "Esborrany de la Gaseta núm. {number} per revisar",
+    eo: "Malneto de la Gazeto n-ro {number} por revizii",
+    nl: "Concept van de Gazette nr. {number} om na te kijken",
+    el: "Πρόχειρο της εφημερίδας αρ. {number} προς αναθεώρηση"
+  },
+  "gazette.draft.ready_for_review.intro": {
+    "pt-BR": "O rascunho mensal da Gazeta (n.º {number}) está pronto. Revise as 10 locales, corrija se necessário e publique pelo painel da rede. Nada é publicado automaticamente.",
+    fr: "Le brouillon mensuel de la Gazette (n°{number}) est prêt. Relis les 10 locales, corrige si besoin, puis publie-le depuis le panneau réseau. Rien n'est publié automatiquement.",
+    es: "El borrador mensual de la Gaceta (n.º {number}) está listo. Revisa las 10 locales, corrige si hace falta y publícalo desde el panel de la red. Nada se publica automáticamente.",
+    en: "The monthly Gazette draft (no. {number}) is ready. Review the 10 locales, correct if needed, then publish it from the network panel. Nothing is published automatically.",
+    it: "La bozza mensile della Gazzetta (n. {number}) è pronta. Rivedi le 10 lingue, correggi se serve, poi pubblicala dal pannello della rete. Niente viene pubblicato automaticamente.",
+    de: "Der monatliche Gazette-Entwurf (Nr. {number}) ist fertig. Prüfe die 10 Sprachen, korrigiere bei Bedarf und veröffentliche ihn über das Netzwerk-Panel. Es wird nichts automatisch veröffentlicht.",
+    ca: "L'esborrany mensual de la Gaseta (núm. {number}) està a punt. Revisa les 10 locales, corregeix si cal i publica'l des del tauler de la xarxa. No es publica res automàticament.",
+    eo: "La monata malneto de la Gazeto (n-ro {number}) estas preta. Reviziu la 10 lingvojn, korektu se necese, poste publikigu ĝin el la reta panelo. Nenio estas publikigita aŭtomate.",
+    nl: "Het maandelijkse concept van de Gazette (nr. {number}) is klaar. Bekijk de 10 talen, corrigeer indien nodig en publiceer het via het netwerkpaneel. Er wordt niets automatisch gepubliceerd.",
+    el: "Το μηνιαίο πρόχειρο της εφημερίδας (αρ. {number}) είναι έτοιμο. Έλεγξε τις 10 γλώσσες, διόρθωσε αν χρειάζεται και δημοσίευσέ το από τον πίνακα του δικτύου. Τίποτα δεν δημοσιεύεται αυτόματα."
+  },
+
   "lmsg.reader.sub": {
     "pt-BR": "Mensagem da sua biblioteca",
     fr: "Message de ta bibliothèque",
