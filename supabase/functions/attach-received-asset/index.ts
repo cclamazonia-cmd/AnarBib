@@ -2,9 +2,9 @@
 //
 // Attache un fichier de fonds REÇU (EX-3 ZIP / EX-4 direct), parqué dans
 // `ingest.partner_catalog_received_assets` (bucket de réception partner-catalog-deposits),
-// à un LIVRE de la réceptrice : DÉPLACE le fichier vers un bucket final puis crée le
-// `digital_asset` public_domain_confirmed via la RPC gatée fn_attach_received_asset_record.
-// Rend la fiche reçue éligible à l'export à son tour (couche curée, Solution 1).
+// à un LIVRE de la réceptrice : DÉPLACE le fichier vers un bucket final RESTREINT puis crée le
+// `digital_asset` en rights_status=to_review via la RPC gatée fn_attach_received_asset_record
+// (point 1 : la confirmation « domaine public » est un acte séparé du coordenador).
 //
 // Déclenché depuis le panneau « Attacher les fichiers reçus » (face Export) par un·e
 // coordenador. verify_jwt par défaut (true) : JWT usager requis et relayé à la RPC (gate).
@@ -63,11 +63,11 @@ Deno.serve(async (req) => {
   if (ra.attached_digital_asset_id) return json({ error: 'Fichier déjà attaché.', asset_id: ra.attached_digital_asset_id }, 409);
   if (ra.deposit_status !== 'deposited' || !ra.deposit_path) return json({ error: 'Aucun fichier déposé à attacher.' }, 422);
 
-  // Bucket final + type selon le MIME (cohérent avec le CHECK digital_assets).
+  // Bucket final RESTREINT (point 1 : fonds reçu en to_review) + type selon le MIME (CHECK digital_assets).
   const mime: string = ra.mime_type || '';
   let finalBucket: string | null = null;
-  if (mime === 'application/pdf') finalBucket = 'anarbib-pdf-public';
-  else if (mime.startsWith('image/') || mime.startsWith('audio/') || mime.startsWith('video/')) finalBucket = 'anarbib-media-public';
+  if (mime === 'application/pdf') finalBucket = 'pdf-restrito';
+  else if (mime.startsWith('image/') || mime.startsWith('audio/') || mime.startsWith('video/')) finalBucket = 'anarbib-media-restricted';
   if (!finalBucket) return json({ error: `Type MIME « ${mime || '—'} » non supporté pour un asset.` }, 422);
 
   // Déplacement intra-projet : dépôt → bucket final.

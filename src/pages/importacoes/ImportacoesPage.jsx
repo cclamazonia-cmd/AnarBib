@@ -78,6 +78,7 @@ export default function ImportacoesPage() {
   const [verifiedLoaded, setVerifiedLoaded] = useState(false);
   const [verifiedLoading, setVerifiedLoading] = useState(false);
   const [revokingId, setRevokingId] = useState(null);
+  const [confirmingId, setConfirmingId] = useState(null);
 
   // ── Data state ─────────────────────────────────────────
   const [sources, setSources] = useState([]);
@@ -797,6 +798,23 @@ export default function ImportacoesPage() {
       setMsg({ text: t({ id: 'importacoes.export.verified.error' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally {
       setRevokingId(null);
+    }
+  }
+
+  // ── Confirmer « domaine public » un asset to_review (acte explicite, point 1) ──
+  async function handleConfirm(asset) {
+    if (!window.confirm(t({ id: 'importacoes.export.verified.confirmAsk' }, { title: asset.book_title || '—', source: asset.source_name || '—' }))) return;
+    setConfirmingId(asset.asset_id);
+    setMsg({ text: t({ id: 'importacoes.export.verified.confirming' }), kind: 'info' });
+    try {
+      const { error } = await supabase.rpc('fn_confirm_digital_asset_rights', { p_asset_id: asset.asset_id });
+      if (error) throw error;
+      setVerifiedAssets((prev) => prev.map((a) => (a.asset_id === asset.asset_id ? { ...a, rights_status: 'public_domain_confirmed' } : a)));
+      setMsg({ text: t({ id: 'importacoes.export.verified.confirmedDP' }, { title: asset.book_title || '—' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'importacoes.export.verified.error' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally {
+      setConfirmingId(null);
     }
   }
 
@@ -1604,11 +1622,22 @@ export default function ImportacoesPage() {
                             {a.asset_kind ? ` · ${a.asset_kind}` : ''}
                             {a.source_name ? ` · ${a.source_name}` : ''}
                             {a.from_received ? ` · ${t({ id: 'importacoes.export.verified.fromReceived' })}` : ''}
+                            {' · '}
+                            <span style={{ fontWeight: 700, color: a.rights_status === 'to_review' ? 'var(--brand-warning, #b45309)' : 'var(--brand-ok, #15803d)' }}>
+                              {a.rights_status === 'to_review' ? t({ id: 'importacoes.export.verified.statusToReview' }) : t({ id: 'importacoes.export.verified.statusConfirmed' })}
+                            </span>
                           </span>
-                          <button className="cat-btn secondary" type="button" onClick={() => handleRevoke(a)} disabled={revokingId === a.asset_id}
-                            style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
-                            {revokingId === a.asset_id ? t({ id: 'importacoes.export.verified.revoking' }) : t({ id: 'importacoes.export.verified.revoke' })}
-                          </button>
+                          <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                            {a.rights_status === 'to_review' && (
+                              <button className="cat-btn primary" type="button" onClick={() => handleConfirm(a)} disabled={confirmingId === a.asset_id || revokingId === a.asset_id}>
+                                {confirmingId === a.asset_id ? t({ id: 'importacoes.export.verified.confirming' }) : t({ id: 'importacoes.export.verified.confirmDP' })}
+                              </button>
+                            )}
+                            <button className="cat-btn secondary" type="button" onClick={() => handleRevoke(a)} disabled={revokingId === a.asset_id || confirmingId === a.asset_id}
+                              style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
+                              {revokingId === a.asset_id ? t({ id: 'importacoes.export.verified.revoking' }) : t({ id: 'importacoes.export.verified.revoke' })}
+                            </button>
+                          </div>
                         </div>
                       </li>
                     ))}
