@@ -33,6 +33,13 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/img/icon-512.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
 
+  <!-- PWA — manifest + capacités iOS (socle mobile, MOBILE Paquet 0) -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AnarBib" />
+
   <!-- Preconnect Supabase pour gagner ~200-500ms sur le 1er fetch (TCP + TLS handshake en parallèle du parse JS) -->
   <link rel="preconnect" href="https://uflwmikiyjfnikiphtcp.supabase.co" crossorigin />
   <link rel="dns-prefetch" href="https://uflwmikiyjfnikiphtcp.supabase.co" />
