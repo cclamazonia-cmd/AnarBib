@@ -310,6 +310,24 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
         <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toAnnuaire' })} →</span>
       </button>
 
+      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('gazeta')}>
+        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" style={{ flex: 'none' }}>
+          <rect x="3" y="4.5" width="13.5" height="15" rx="1.4" fill="none" stroke="#c00000" strokeWidth="1.8" />
+          <path d="M16.5 8.5H19.6A1 1 0 0 1 20.6 9.5V17.5A2 2 0 0 1 18.6 19.5H6" fill="none" stroke="#c00000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <line x1="6" y1="8.5" x2="13.5" y2="8.5" stroke="#c00000" strokeWidth="1.8" strokeLinecap="round" />
+          <line x1="6" y1="12" x2="13.5" y2="12" stroke="#c00000" strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="6" y1="15.2" x2="11" y2="15.2" stroke="#c00000" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+        <span className="ab-fed-inicio-annuaire-txt">
+          <span className="ab-fed-inicio-annuaire-t">
+            {t({ id: 'federacao.inicio.gazeta' })}
+            <span className="ab-fed-pill is-new">{t({ id: 'federacao.inicio.new' })}</span>
+          </span>
+          <span className="ab-fed-inicio-annuaire-d">{t({ id: 'federacao.inicio.gazeta.desc' })}</span>
+        </span>
+        <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toGazeta' })} →</span>
+      </button>
+
       <div>
         <div className="ab-fed-label">{t({ id: 'federacao.inicio.soon' })}</div>
         <div className="ab-fed-inicio-soon">

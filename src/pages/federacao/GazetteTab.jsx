@@ -22,7 +22,7 @@ import { apiQuery } from '@/lib/supabase';
 const GZ_LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
 
 const LOCALE_NAMES = {
-  'pt-BR': 'Português (BR)', fr: 'Français', es: 'Español', en: 'English',
+  'pt-BR': 'Português (BR)', fr: 'Français', es: 'Castellano', en: 'English',
   it: 'Italiano', de: 'Deutsch', el: 'Ελληνικά', ca: 'Català', eo: 'Esperanto', nl: 'Nederlands',
 };
 
