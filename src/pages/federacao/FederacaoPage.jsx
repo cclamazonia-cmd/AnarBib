@@ -11,6 +11,8 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import NetworkMapTab from './NetworkMapTab';
 import GazetteTab from './GazetteTab';
+import CommunsTab from './CommunsTab';
+import EntraideTab from './EntraideTab';
 import '../catalogacao/CatalogacaoPage.css';
 import './FederacaoPage.css';
 
@@ -30,8 +32,8 @@ import './FederacaoPage.css';
 // events circle.* + fn_circle_message = sous-paquet 1b ; mutualisation = FED-O6.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const TAB_KEYS = ['inicio', 'circulos', 'carte', 'assembleias', 'gazeta', 'carta', 'entreajuda'];
-const WIRED = new Set(['circulos', 'inicio', 'carte', 'gazeta']);
+const TAB_KEYS = ['inicio', 'circulos', 'carte', 'assembleias', 'gazeta', 'carta', 'entreajuda', 'communs'];
+const WIRED = new Set(['circulos', 'inicio', 'carte', 'gazeta', 'communs', 'entreajuda']);
 
 const NATURE_OPTIONS = ['afinitario', 'geografico', 'linguistico', 'federacao'];
 
@@ -231,6 +233,10 @@ export default function FederacaoPage() {
 
           {tab === 'gazeta' && <GazetteTab />}
 
+          {tab === 'communs' && <CommunsTab />}
+
+          {tab === 'entreajuda' && <EntraideTab />}
+
           {!WIRED.has(tab) && (
             <div className="ab-fed-placeholder">
               <h3>{t({ id: `federacao.tab.${tab}` })}</h3>
@@ -331,7 +337,7 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
       <div>
         <div className="ab-fed-label">{t({ id: 'federacao.inicio.soon' })}</div>
         <div className="ab-fed-inicio-soon">
-          {['assembleias', 'carta', 'entreajuda'].map((k) => (
+          {['assembleias', 'carta'].map((k) => (
             <div key={k} className="ab-fed-inicio-soon-card">
               <span className="ab-fed-inicio-soon-t">{t({ id: `federacao.tab.${k}` })}</span>
               <span className="ab-fed-inicio-soon-s">{t({ id: 'federacao.soon' })}</span>

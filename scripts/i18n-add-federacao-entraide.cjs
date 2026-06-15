@@ -1,0 +1,47 @@
+/* ===========================================================================
+ * i18n-add-federacao-entraide.cjs
+ * Onglet « Entraide » (tableau d'appels à l'aide, v1) : 20 clés × 10 locales.
+ * Idempotent (sentinelle federacao.entraide.intro).
+ * =========================================================================== */
+const fs = require('fs');
+const path = require('path');
+
+const LOCALES = ['ca', 'de', 'el', 'en', 'eo', 'es', 'fr', 'it', 'nl', 'pt-BR'];
+const DIR = path.join(__dirname, '..', 'src', 'i18n', 'locales');
+const SENTINEL = 'federacao.entraide.intro';
+
+const K = [
+  'intro', 'post', 'subjectPlaceholder', 'bodyPlaceholder', 'submit', 'tooShort',
+  'posted', 'empty', 'mine', 'someLibrary', 'offers', 'canHelp', 'offerPlaceholder',
+  'offerSend', 'offerSent', 'noOffers', 'visio', 'resolve', 'resolved', 'note',
+];
+
+const V = {
+  fr: ['Besoin d’un coup de main pour cataloguer (ou autre) ? Pose un appel ; les autres biblios peuvent t’aider.', 'Poser un appel', 'Sujet — ex. « indexer un·e auteur·rice sous pseudo »', 'Décris ta difficulté. (Pas de données de catalogue ici — juste ta question.)', 'Publier l’appel', 'Un sujet et une description sont requis.', 'Appel publié.', 'Aucun appel ouvert pour l’instant.', 'ton appel', 'une biblio du réseau', 'Réponses', 'Je peux aider', 'Un mot (optionnel)', 'Proposer mon aide', 'Ton aide a été proposée.', 'Pas encore de réponse.', 'Rejoindre la visio', 'Marquer résolu', 'Appel marqué comme résolu.', 'Un appel demande un savoir-faire, pas un partage de catalogue. La visio se fait dans ta langue — le routage par cercle viendra.'],
+  'pt-BR': ['Precisa de uma mão para catalogar (ou outra coisa)? Faça um chamado; as outras bibliotecas podem te ajudar.', 'Fazer um chamado', 'Assunto — ex. « indexar alguém sob pseudônimo »', 'Descreve tua dificuldade. (Sem dados de catálogo aqui — só a tua pergunta.)', 'Publicar o chamado', 'Um assunto e uma descrição são obrigatórios.', 'Chamado publicado.', 'Nenhum chamado aberto por enquanto.', 'teu chamado', 'uma biblioteca da rede', 'Respostas', 'Posso ajudar', 'Uma palavra (opcional)', 'Oferecer minha ajuda', 'Tua ajuda foi oferecida.', 'Ainda sem resposta.', 'Entrar na videochamada', 'Marcar como resolvido', 'Chamado marcado como resolvido.', 'Um chamado pede um saber-fazer, não um compartilhamento de catálogo. A videochamada é na tua língua — o roteamento por círculo virá.'],
+  es: ['¿Necesitas una mano para catalogar (u otra cosa)? Lanza una llamada; las demás bibliotecas pueden ayudarte.', 'Lanzar una llamada', 'Asunto — ej. « indexar a alguien bajo seudónimo »', 'Describe tu dificultad. (Sin datos de catálogo aquí — solo tu pregunta.)', 'Publicar la llamada', 'Se requieren un asunto y una descripción.', 'Llamada publicada.', 'Ninguna llamada abierta por ahora.', 'tu llamada', 'una biblioteca de la red', 'Respuestas', 'Puedo ayudar', 'Unas palabras (opcional)', 'Ofrecer mi ayuda', 'Tu ayuda se ha ofrecido.', 'Aún sin respuesta.', 'Unirse a la videollamada', 'Marcar como resuelta', 'Llamada marcada como resuelta.', 'Una llamada pide un saber hacer, no un compartir de catálogo. La videollamada es en tu lengua — el enrutamiento por círculo llegará.'],
+  en: ['Need a hand with cataloging (or anything else)? Post a call; other libraries can help.', 'Post a call', 'Subject — e.g. “indexing a pseudonymous author”', 'Describe your difficulty. (No catalog data here — just your question.)', 'Publish the call', 'A subject and a description are required.', 'Call published.', 'No open calls for now.', 'your call', 'a network library', 'Responses', 'I can help', 'A word (optional)', 'Offer my help', 'Your help has been offered.', 'No response yet.', 'Join the video call', 'Mark as resolved', 'Call marked as resolved.', 'A call asks for know-how, not a catalog share. The video call is in your language — circle routing is coming.'],
+  it: ['Ti serve una mano per catalogare (o altro)? Lancia un appello; le altre biblioteche possono aiutarti.', 'Lanciare un appello', 'Oggetto — es. « indicizzare un nome sotto pseudonimo »', 'Descrivi la tua difficoltà. (Niente dati di catalogo qui — solo la tua domanda.)', 'Pubblica l’appello', 'Oggetto e descrizione sono obbligatori.', 'Appello pubblicato.', 'Nessun appello aperto per ora.', 'il tuo appello', 'una biblioteca della rete', 'Risposte', 'Posso aiutare', 'Una parola (facoltativo)', 'Offrire il mio aiuto', 'Il tuo aiuto è stato offerto.', 'Ancora nessuna risposta.', 'Entra nella videochiamata', 'Segna come risolto', 'Appello segnato come risolto.', 'Un appello chiede un saper fare, non una condivisione di catalogo. La videochiamata è nella tua lingua — l’instradamento per cerchio arriverà.'],
+  de: ['Brauchst du Hilfe beim Katalogisieren (oder anderem)? Stell einen Aufruf ein; andere Bibliotheken können helfen.', 'Aufruf einstellen', 'Betreff — z. B. „einen Namen unter Pseudonym indexieren“', 'Beschreibe deine Schwierigkeit. (Keine Katalogdaten hier — nur deine Frage.)', 'Aufruf veröffentlichen', 'Betreff und Beschreibung sind erforderlich.', 'Aufruf veröffentlicht.', 'Zurzeit keine offenen Aufrufe.', 'dein Aufruf', 'eine Bibliothek des Netzwerks', 'Antworten', 'Ich kann helfen', 'Ein Wort (optional)', 'Meine Hilfe anbieten', 'Deine Hilfe wurde angeboten.', 'Noch keine Antwort.', 'Der Videokonferenz beitreten', 'Als erledigt markieren', 'Aufruf als erledigt markiert.', 'Ein Aufruf bittet um Know-how, nicht um eine Katalogfreigabe. Die Videokonferenz ist in deiner Sprache — das Kreis-Routing kommt.'],
+  ca: ['Necessites un cop de mà per catalogar (o altra cosa)? Fes una crida; les altres biblioteques poden ajudar-te.', 'Fer una crida', 'Tema — ex. « indexar algú sota pseudònim »', 'Descriu la teva dificultat. (Cap dada de catàleg aquí — només la teva pregunta.)', 'Publicar la crida', 'Cal un tema i una descripció.', 'Crida publicada.', 'Cap crida oberta de moment.', 'la teva crida', 'una biblioteca de la xarxa', 'Respostes', 'Puc ajudar', 'Un mot (opcional)', 'Oferir la meva ajuda', 'La teva ajuda s’ha ofert.', 'Encara cap resposta.', 'Unir-se a la videotrucada', 'Marcar com a resolta', 'Crida marcada com a resolta.', 'Una crida demana un saber fer, no una compartició de catàleg. La videotrucada és en la teva llengua — l’encaminament per cercle arribarà.'],
+  eo: ['Ĉu vi bezonas helpon por katalogi (aŭ alion)? Faru alvokon; la aliaj bibliotekoj povas helpi.', 'Fari alvokon', 'Temo — ekz. « indeksi iun sub kaŝnomo »', 'Priskribu vian malfacilaĵon. (Neniuj katalogdatumoj ĉi tie — nur via demando.)', 'Publikigi la alvokon', 'Temo kaj priskribo estas postulataj.', 'Alvoko publikigita.', 'Neniu malfermita alvoko nuntempe.', 'via alvoko', 'biblioteko de la reto', 'Respondoj', 'Mi povas helpi', 'Vorto (nedeviga)', 'Oferti mian helpon', 'Via helpo estis oferita.', 'Ankoraŭ neniu respondo.', 'Aliĝi al la videovoko', 'Marki kiel solvita', 'Alvoko markita kiel solvita.', 'Alvoko petas scipovon, ne katalogan kunhavigon. La videovoko estas en via lingvo — la rondo-vojigo venos.'],
+  nl: ['Hulp nodig bij catalogiseren (of iets anders)? Plaats een oproep; andere bibliotheken kunnen helpen.', 'Een oproep plaatsen', 'Onderwerp — bv. “iemand onder pseudoniem indexeren”', 'Beschrijf je probleem. (Geen catalogusgegevens hier — alleen je vraag.)', 'Oproep publiceren', 'Een onderwerp en een beschrijving zijn vereist.', 'Oproep gepubliceerd.', 'Voorlopig geen open oproepen.', 'jouw oproep', 'een bibliotheek van het netwerk', 'Reacties', 'Ik kan helpen', 'Een woord (optioneel)', 'Mijn hulp aanbieden', 'Je hulp is aangeboden.', 'Nog geen reactie.', 'Deelnemen aan het videogesprek', 'Als opgelost markeren', 'Oproep als opgelost gemarkeerd.', 'Een oproep vraagt om knowhow, geen catalogusdeling. Het videogesprek is in jouw taal — routering per kring komt eraan.'],
+  el: ['Χρειάζεσαι βοήθεια για καταλογογράφηση (ή κάτι άλλο); Κάνε ένα κάλεσμα· οι άλλες βιβλιοθήκες μπορούν να βοηθήσουν.', 'Κάνε ένα κάλεσμα', 'Θέμα — π.χ. «ευρετηρίαση κάποιου/ας με ψευδώνυμο»', 'Περίγραψε τη δυσκολία σου. (Καθόλου δεδομένα καταλόγου εδώ — μόνο η ερώτησή σου.)', 'Δημοσίευση του καλέσματος', 'Απαιτούνται θέμα και περιγραφή.', 'Το κάλεσμα δημοσιεύτηκε.', 'Κανένα ανοιχτό κάλεσμα προς το παρόν.', 'το κάλεσμά σου', 'μια βιβλιοθήκη του δικτύου', 'Απαντήσεις', 'Μπορώ να βοηθήσω', 'Μια λέξη (προαιρετικά)', 'Πρόσφερε τη βοήθειά μου', 'Η βοήθειά σου προσφέρθηκε.', 'Καμία απάντηση ακόμη.', 'Σύνδεση στην κλήση βίντεο', 'Σήμανση ως επιλύθηκε', 'Το κάλεσμα σημάνθηκε ως επιλυμένο.', 'Ένα κάλεσμα ζητά τεχνογνωσία, όχι κοινοποίηση καταλόγου. Η βιντεοκλήση είναι στη γλώσσα σου — η δρομολόγηση ανά κύκλο έρχεται.'],
+};
+
+for (const loc of LOCALES) {
+  const file = path.join(DIR, loc + '.json');
+  let content = fs.readFileSync(file, 'utf8');
+  if (!content.includes('"' + SENTINEL + '"')) {
+    const vals = V[loc];
+    if (!vals || vals.length !== K.length) throw new Error('Valeurs manquantes: ' + loc);
+    const entries = K.map((k, i) => '  ' + JSON.stringify('federacao.entraide.' + k) + ': ' + JSON.stringify(vals[i]));
+    const marker = content.lastIndexOf('}');
+    content = content.slice(0, marker).replace(/\s*$/, '') + ',\n' + entries.join(',\n') + '\n' + content.slice(marker);
+    if (!content.endsWith('\n')) content += '\n';
+    fs.writeFileSync(file, content, 'utf8');
+  }
+  JSON.parse(fs.readFileSync(file, 'utf8'));
+  console.log(loc + ': 20 clés entraide (si absentes), JSON valide.');
+}
+console.log('\nTerminé.');
