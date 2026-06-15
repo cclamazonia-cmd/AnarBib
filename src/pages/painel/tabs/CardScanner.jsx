@@ -11,12 +11,13 @@ import { Button } from '@/components/ui';
 // onScan(token) est appelé au 1er code lu, puis la caméra est relâchée.
 // Repli ultime si rien ne marche : la saisie manuelle de ResolveCardBox.
 // ═══════════════════════════════════════════════════════════
-export default function CardScanner({ t, onScan, onClose }) {
+export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'], prompt }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const rafRef = useRef(0);
   const onScanRef = useRef(onScan);
   const tRef = useRef(t);
+  const formatsRef = useRef(formats); // capturé au montage (stable par ouverture)
   onScanRef.current = onScan;
   tRef.current = t;
 
@@ -68,20 +69,28 @@ export default function CardScanner({ t, onScan, onClose }) {
     };
 
     (async () => {
-      // 1) Choix du décodeur : BarcodeDetector natif d'abord, sinon jsQR lazy.
+      // 1) Choix du décodeur : BarcodeDetector natif (multi-format) d'abord.
+      const wanted = formatsRef.current;
       try {
         if ('BarcodeDetector' in window) {
-          const fmts = await window.BarcodeDetector.getSupportedFormats?.();
-          if (!fmts || fmts.includes('qr_code')) {
-            detector = new window.BarcodeDetector({ formats: ['qr_code'] });
-          }
+          const supported = (await window.BarcodeDetector.getSupportedFormats?.()) || wanted;
+          const usable = wanted.filter((fmt) => supported.includes(fmt));
+          if (usable.length) detector = new window.BarcodeDetector({ formats: usable });
         }
       } catch { detector = null; }
+      // 2) Repli jsQR : QR UNIQUEMENT. Si un format 1D (ex. code-barres ISBN/EAN)
+      //    est demandé sans BarcodeDetector, aucun décodeur → saisie manuelle.
       if (!detector) {
-        try {
-          const mod = await import('jsqr');
-          decodeJsqr = mod.default || mod;
-        } catch {
+        const onlyQr = wanted.every((fmt) => fmt === 'qr_code');
+        if (onlyQr) {
+          try {
+            const mod = await import('jsqr');
+            decodeJsqr = mod.default || mod;
+          } catch {
+            if (!cancelled) setError(tRef.current({ id: 'card.resolve.scan.error.unsupported' }));
+            return;
+          }
+        } else {
           if (!cancelled) setError(tRef.current({ id: 'card.resolve.scan.error.unsupported' }));
           return;
         }
@@ -131,7 +140,7 @@ export default function CardScanner({ t, onScan, onClose }) {
             style={{ width: '100%', maxWidth: 320, aspectRatio: '1 / 1', objectFit: 'cover', borderRadius: 10, background: '#000' }}
           />
           <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #aaa)', margin: 0 }}>
-            {t({ id: 'card.resolve.scan.prompt' })}
+            {prompt || t({ id: 'card.resolve.scan.prompt' })}
           </p>
         </>
       )}

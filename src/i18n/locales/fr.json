@@ -4877,5 +4877,7 @@
   "card.resolve.scan.error.permission": "Accès à la caméra refusé. Autorisez-le pour scanner, ou saisissez le code.",
   "card.resolve.scan.error.nocamera": "Aucune caméra détectée. Saisissez le code à la main.",
   "card.resolve.scan.error.unsupported": "Le scan n'est pas pris en charge par ce navigateur. Saisissez le code à la main.",
-  "card.resolve.scan.error.generic": "Impossible d'ouvrir la caméra. Saisissez le code à la main."
+  "card.resolve.scan.error.generic": "Impossible d'ouvrir la caméra. Saisissez le code à la main.",
+  "catalogacao.isbn.scan.action": "Scanner l'ISBN",
+  "catalogacao.isbn.scan.prompt": "Visez le code-barres ISBN du livre"
 }

@@ -4877,5 +4877,7 @@
   "card.resolve.scan.error.permission": "Camera access denied. Allow it to scan, or type the code.",
   "card.resolve.scan.error.nocamera": "No camera found. Type the code by hand.",
   "card.resolve.scan.error.unsupported": "Scanning isn't supported by this browser. Type the code by hand.",
-  "card.resolve.scan.error.generic": "Couldn't open the camera. Type the code by hand."
+  "card.resolve.scan.error.generic": "Couldn't open the camera. Type the code by hand.",
+  "catalogacao.isbn.scan.action": "Scan ISBN",
+  "catalogacao.isbn.scan.prompt": "Point at the book's ISBN barcode"
 }

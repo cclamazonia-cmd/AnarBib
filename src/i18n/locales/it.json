@@ -4877,5 +4877,7 @@
   "card.resolve.scan.error.permission": "Accesso alla fotocamera negato. Consentilo per scansionare, oppure digita il codice.",
   "card.resolve.scan.error.nocamera": "Nessuna fotocamera rilevata. Digita il codice a mano.",
   "card.resolve.scan.error.unsupported": "La scansione non è supportata da questo browser. Digita il codice a mano.",
-  "card.resolve.scan.error.generic": "Impossibile aprire la fotocamera. Digita il codice a mano."
+  "card.resolve.scan.error.generic": "Impossibile aprire la fotocamera. Digita il codice a mano.",
+  "catalogacao.isbn.scan.action": "Scansiona l'ISBN",
+  "catalogacao.isbn.scan.prompt": "Inquadra il codice a barre (ISBN) del libro"
 }

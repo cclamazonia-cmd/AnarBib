@@ -4877,5 +4877,7 @@
   "card.resolve.scan.error.permission": "Kamerazugriff verweigert. Erlaube ihn zum Scannen, oder gib den Code ein.",
   "card.resolve.scan.error.nocamera": "Keine Kamera gefunden. Gib den Code von Hand ein.",
   "card.resolve.scan.error.unsupported": "Das Scannen wird von diesem Browser nicht unterstützt. Gib den Code von Hand ein.",
-  "card.resolve.scan.error.generic": "Die Kamera konnte nicht geöffnet werden. Gib den Code von Hand ein."
+  "card.resolve.scan.error.generic": "Die Kamera konnte nicht geöffnet werden. Gib den Code von Hand ein.",
+  "catalogacao.isbn.scan.action": "ISBN scannen",
+  "catalogacao.isbn.scan.prompt": "Richte die Kamera auf den ISBN-Barcode des Buches"
 }

@@ -7,6 +7,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
+import CardScanner from '@/pages/painel/tabs/CardScanner';
 
 // ── Material type values (labels resolved via t() inside component) ──
 const MATERIAL_TYPE_KEYS = ['livro','periodico','tract','cartaz','audio','audiovisual','recurso_digital','dossie','tese','artigo','relatorio','zine'];
@@ -325,6 +326,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // ── Lookup state ───────────────────────────────────────
   const [lookupLoading, setLookupLoading] = useState(false);
+  const [isbnScanning, setIsbnScanning] = useState(false);
   const [lookupResult, setLookupResult] = useState(null); // { candidates, sources, summary }
   const [selectedCandidate, setSelectedCandidate] = useState(0);
 
@@ -547,8 +549,18 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     };
   }
 
-  async function runCatalogLookup() {
-    const isbn = (f('isbn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
+  // Scan ISBN (MOBILE P2b) : le code-barres lu remplit le champ + lance le lookup.
+  function handleIsbnScanned(code) {
+    const clean = (code || '').replace(/[^0-9Xx]/g, '').toUpperCase();
+    setIsbnScanning(false);
+    if (!clean) return;
+    setForm(prev => ({ ...prev, isbn: clean }));
+    runCatalogLookup({ isbn: clean });
+  }
+
+  async function runCatalogLookup(opts) {
+    const scannedIsbn = opts && typeof opts.isbn === 'string' ? opts.isbn : null;
+    const isbn = ((scannedIsbn ?? f('isbn')) || '').replace(/[^0-9Xx]/g, '').toUpperCase();
     const issn = (f('issn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
     const title = f('titulo').trim();
     const author = f('autor').trim();
@@ -2124,6 +2136,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 {lookupLoading ? t({id:'catalogacao.ui.searching'}) : t({id:'catalogacao.ui.searchMeta'})}
               </button>
               <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                onClick={() => setIsbnScanning(s => !s)} disabled={lookupLoading}>
+                {isbnScanning ? t({id:'card.resolve.scan.close'}) : t({id:'catalogacao.isbn.scan.action'})}
+              </button>
+              <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                 onClick={openBnManual}>{t({id:'catalogacao.ui.bnManual'})}</button>
               <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                 onClick={runBnIsbnLookup} disabled={bnLoading}>
@@ -2140,6 +2156,16 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   onClick={clearLookup}>{t({ id: 'catalogacao.ui.clearPanel' })}</button>
               )}
             </div>
+
+            {isbnScanning && (
+              <CardScanner
+                t={t}
+                formats={['ean_13', 'ean_8']}
+                prompt={t({ id: 'catalogacao.isbn.scan.prompt' })}
+                onScan={handleIsbnScanned}
+                onClose={() => setIsbnScanning(false)}
+              />
+            )}
 
             {/* Lookup sources status */}
             {lookupResult?.sources && (

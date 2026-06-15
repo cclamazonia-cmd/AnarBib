@@ -4877,5 +4877,7 @@
   "card.resolve.scan.error.permission": "Acceso a la cámara denegado. Permitilo para escanear, o escribí el código.",
   "card.resolve.scan.error.nocamera": "No se detectó ninguna cámara. Escribí el código a mano.",
   "card.resolve.scan.error.unsupported": "El escaneo no es compatible con este navegador. Escribí el código a mano.",
-  "card.resolve.scan.error.generic": "No se pudo abrir la cámara. Escribí el código a mano."
+  "card.resolve.scan.error.generic": "No se pudo abrir la cámara. Escribí el código a mano.",
+  "catalogacao.isbn.scan.action": "Escanear ISBN",
+  "catalogacao.isbn.scan.prompt": "Apuntá al código de barras (ISBN) del libro"
 }
