@@ -624,3 +624,31 @@
   min-height: 120px;
   padding: 40px;
 }
+
+/* ── MOBILE P4 : récolement (inventaire par scan) ───────────────────── */
+.ab-recolement h2.ab-painel-section-title { font-size: 1.05rem; font-weight: 700; margin: 0 0 4px; }
+.ab-recolement h3.ab-painel-subtitle { font-size: .92rem; font-weight: 700; margin: 18px 0 6px; }
+.ab-recolement-start { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.ab-recolement-resume { width: 100%; }
+.ab-recolement-sessions { list-style: none; padding: 0; margin: 6px 0 0; display: flex; flex-direction: column; gap: 6px; }
+.ab-recolement-sessions li {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: .85rem; padding: 6px 10px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
+}
+.ab-recolement-scan { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.ab-recolement-counter { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+.ab-recolement-counter span { font-size: 1.1rem; color: var(--brand-muted); font-weight: 600; }
+.ab-recolement-counter__label { font-size: .82rem !important; }
+.ab-recolement-last { font-size: .9rem; font-weight: 600; margin: 0; padding: 6px 10px; border-radius: 8px; }
+.ab-recolement-last--ok { color: #b7f0c2; background: rgba(46,160,67,.16); }
+.ab-recolement-last--dup { color: var(--brand-muted); background: rgba(255,255,255,.06); }
+.ab-recolement-last--warn { color: #ffd7a8; background: rgba(210,120,30,.16); }
+.ab-recolement-manual { display: flex; gap: 8px; align-items: center; }
+.ab-recolement-manual .ab-painel-input { max-width: 260px; }
+.ab-recolement-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.ab-recolement-report { display: flex; flex-direction: column; }
+.ab-recolement-stats { display: flex; flex-wrap: wrap; gap: 14px; font-size: .9rem; margin-bottom: 12px; }
+.ab-recolement-stat--warn { color: #ffd7a8; }
+.ab-recolement-list { list-style: none; padding: 0; margin: 4px 0 0; display: flex; flex-direction: column; gap: 3px; font-size: .85rem; }
+.ab-recolement-list code { font-family: 'Liberation Mono', monospace; font-weight: 700; color: var(--brand-text); }
+.ab-recolement-list em { color: var(--brand-muted); font-style: normal; }

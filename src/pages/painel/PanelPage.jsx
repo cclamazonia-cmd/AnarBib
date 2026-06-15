@@ -27,6 +27,7 @@ const TabHistorico       = lazy(() => import('./tabs/TabHistorico'));
 const TabContribuicoes   = lazy(() => import('./tabs/TabContribuicoes'));
 // MULTI P5 (volet staff) : validation des inscriptions pending_validation.
 const TabValidacoes      = lazy(() => import('./tabs/TabValidacoes'));
+const TabRecolement      = lazy(() => import('./tabs/TabRecolement'));
 
 // ═══════════════════════════════════════════════════════════
 // Workflow labels and stage lists are built inside the component using t()
@@ -42,6 +43,10 @@ export default function PanelPage() {
   const roleLoaded = role !== null && role !== undefined;
   const isLibrarian = role === 'librarian' || role === 'coordenador' || role === 'administrador';
   const isCoordOrAdmin = role === 'coordenador' || role === 'administrador';
+  // Récolement (MOBILE P4) : aligné EXACTEMENT sur fn_recolement_is_staff côté
+  // serveur (librarian/coordenador, PAS administrador) pour ne pas afficher un
+  // onglet que la RPC rejetterait.
+  const canRecolement = role === 'librarian' || role === 'coordenador';
 
   // i18n-aware workflow labels
   // PATCH EA-13 (27/05/2026) : exhaustivité garantie sur reservas.
@@ -1493,6 +1498,10 @@ export default function PanelPage() {
     ...(isLibrarian ? [
       { key: 'validacoes', label: `${t({ id: 'panel.tab.validations' })}${pendingValidCount > 0 ? ` (${pendingValidCount})` : ''}`, hint: t({ id: 'panel.tab.validations.hint' }) },
     ] : []),
+    // MOBILE P4 : récolement (inventaire par scan). Staff de terrain uniquement.
+    ...(canRecolement ? [
+      { key: 'recolement', label: t({ id: 'panel.tab.recolement' }), hint: t({ id: 'panel.tab.recolement.hint' }) },
+    ] : []),
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
@@ -1954,6 +1963,11 @@ export default function PanelPage() {
 
           {tab === 'validacoes' && isLibrarian && (
             <TabValidacoes libraryId={libraryId} />
+          )}
+
+          {/* ═══ Récolement (inventaire par scan, MOBILE P4) ═══════ */}
+          {tab === 'recolement' && canRecolement && (
+            <TabRecolement t={t} locale={locale} libraryId={libraryId} libraryName={libraryName} />
           )}
 
           </Suspense>

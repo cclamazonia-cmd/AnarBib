@@ -12,13 +12,14 @@ import { Button } from '@/components/ui';
 // onScan(token) est appelé au 1er code lu, puis la caméra est relâchée.
 // Repli ultime si rien ne marche : la saisie manuelle de ResolveCardBox.
 // ═══════════════════════════════════════════════════════════
-export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'], prompt }) {
+export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'], prompt, continuous = false }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const rafRef = useRef(0);
   const onScanRef = useRef(onScan);
   const tRef = useRef(t);
   const formatsRef = useRef(formats); // capturé au montage (stable par ouverture)
+  const continuousRef = useRef(continuous); // récolement : enchaîner les scans sans relâcher la caméra
   onScanRef.current = onScan;
   tRef.current = t;
 
@@ -40,9 +41,20 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
       if (zxingControls) { try { zxingControls.stop(); } catch { /* déjà arrêté */ } zxingControls = null; }
     };
 
+    let lastTok = '';
+    let lastAt = 0;
     const handleToken = (raw) => {
       const tok = (raw || '').trim();
       if (!tok) return false;
+      if (continuousRef.current) {
+        // Récolement : la caméra reste ouverte pour enchaîner. Anti-doublon —
+        // on ignore le même code tant qu'il reste ~2 s dans le cadre.
+        const now = Date.now();
+        if (tok === lastTok && now - lastAt < 2000) return false;
+        lastTok = tok; lastAt = now;
+        onScanRef.current?.(tok);
+        return true;
+      }
       stopCamera();
       onScanRef.current?.(tok);
       return true;
@@ -53,9 +65,11 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
       const video = videoRef.current;
       if (video && video.readyState >= 2 && video.videoWidth) {
         try {
+          // En mode continu, handleToken ne coupe pas la caméra : on ne sort de
+          // la boucle que pour un scan unique (handleToken vrai && !continuous).
           if (detector) {
             const codes = await detector.detect(video);
-            if (codes && codes.length && handleToken(codes[0].rawValue)) return;
+            if (codes && codes.length && handleToken(codes[0].rawValue) && !continuousRef.current) return;
           } else if (decodeJsqr) {
             if (!canvas) canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
@@ -64,7 +78,7 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const res = decodeJsqr(img.data, img.width, img.height);
-            if (res && res.data && handleToken(res.data)) return;
+            if (res && res.data && handleToken(res.data) && !continuousRef.current) return;
           }
         } catch { /* frame illisible : on continue */ }
       }
