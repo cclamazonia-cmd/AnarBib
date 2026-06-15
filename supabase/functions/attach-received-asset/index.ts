@@ -41,6 +41,8 @@ Deno.serve(async (req) => {
   try { body = await req.json(); } catch { return json({ error: 'Body must be valid JSON.' }, 400); }
   const receivedAssetId = Number(body?.received_asset_id);
   const bookId = Number(body?.book_id);
+  // Destination (point 6) : export (digital_asset) / read (book_digital_resources) / both.
+  const mode = ['export', 'read', 'both'].includes(body?.mode) ? body.mode : 'both';
   if (!Number.isInteger(receivedAssetId) || receivedAssetId <= 0) return json({ error: 'received_asset_id requis.' }, 400);
   if (!Number.isInteger(bookId) || bookId <= 0) return json({ error: 'book_id requis.' }, 400);
 
@@ -80,17 +82,17 @@ Deno.serve(async (req) => {
   });
   if (upErr) return json({ error: `Dépôt dans le bucket final échoué : ${upErr.message}` }, 500);
 
-  // Création du digital_asset (RPC gatée coordenador, JWT usager).
+  // Création de l'asset et/ou de la ressource catalogue selon le mode (RPC gatée, JWT usager).
   const { data: rec, error: recErr } = await userClient.rpc('fn_attach_received_asset_record', {
     p_received_asset_id: receivedAssetId, p_book_id: bookId,
-    p_bucket_name: finalBucket, p_object_path: finalPath,
+    p_bucket_name: finalBucket, p_object_path: finalPath, p_mode: mode,
   });
   if (recErr) {
-    // Nettoyage best-effort du fichier déplacé si la création d'asset a échoué.
+    // Nettoyage best-effort du fichier déplacé si la création a échoué.
     try { await service.storage.from(finalBucket).remove([finalPath]); } catch (_) { /* no-op */ }
     const restricted = /coordenador|restrito|pertence|inválid|obrigatori/i.test(recErr.message || '');
     return json({ error: recErr.message }, restricted ? 403 : 500);
   }
 
-  return json({ ok: true, asset_id: rec?.asset_id ?? null, book_id: bookId, bucket: finalBucket, path: finalPath });
+  return json({ ok: true, mode, asset_id: rec?.asset_id ?? null, resource_id: rec?.resource_id ?? null, book_id: bookId, bucket: finalBucket, path: finalPath });
 });

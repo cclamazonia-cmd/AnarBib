@@ -73,6 +73,7 @@ export default function ImportacoesPage() {
   const [bookResults, setBookResults] = useState([]);
   const [bookSearching, setBookSearching] = useState(false);
   const [attaching, setAttaching] = useState(false);
+  const [attachMode, setAttachMode] = useState({}); // received_asset_id → 'export'|'read'|'both' (point 6)
   // ── Dé-vérification des digital_assets (entrée c) ──
   const [verifiedAssets, setVerifiedAssets] = useState([]);
   const [verifiedLoaded, setVerifiedLoaded] = useState(false);
@@ -723,6 +724,7 @@ export default function ImportacoesPage() {
 
   async function handleAttach(asset, book) {
     if (!asset || !book?.book_id) return;
+    const mode = attachMode[asset.received_asset_id] || 'both';
     setAttaching(true);
     setMsg({ text: t({ id: 'importacoes.export.attach.attaching' }), kind: 'info' });
     try {
@@ -736,7 +738,7 @@ export default function ImportacoesPage() {
             apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ received_asset_id: asset.received_asset_id, book_id: book.book_id }),
+          body: JSON.stringify({ received_asset_id: asset.received_asset_id, book_id: book.book_id, mode }),
         }
       );
       const out = await res.json().catch(() => ({}));
@@ -1564,7 +1566,15 @@ export default function ImportacoesPage() {
                           <span style={{ minWidth: 0, fontSize: '.85rem' }}>
                             <b>{a.title || '—'}</b>{a.source_name ? ` · ${a.source_name}` : ''}{a.asset_kind ? ` · ${a.asset_kind}` : ''}
                           </span>
-                          <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                          <div style={{ display: 'flex', gap: 8, flexShrink: 0, alignItems: 'center' }}>
+                            <select className="ab-select" style={{ fontSize: '.76rem', padding: '2px 6px', width: 'auto' }}
+                              value={attachMode[a.received_asset_id] || 'both'} disabled={attaching}
+                              onChange={(e) => setAttachMode((prev) => ({ ...prev, [a.received_asset_id]: e.target.value }))}
+                              title={t({ id: 'importacoes.export.attach.modeLabel' })}>
+                              <option value="both">{t({ id: 'importacoes.export.attach.modeBoth' })}</option>
+                              <option value="read">{t({ id: 'importacoes.export.attach.modeRead' })}</option>
+                              <option value="export">{t({ id: 'importacoes.export.attach.modeExport' })}</option>
+                            </select>
                             {a.suggested_book_id && (
                               <button className="cat-btn primary" type="button"
                                 onClick={() => handleAttach(a, { book_id: a.suggested_book_id, title: a.suggested_book_title })} disabled={attaching}>
