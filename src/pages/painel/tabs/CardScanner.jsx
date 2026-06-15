@@ -4,9 +4,10 @@ import { Button } from '@/components/ui';
 // ═══════════════════════════════════════════════════════════
 // CardScanner — scan caméra du QR de carte-lecteur (MOBILE Paquet 2)
 // ───────────────────────────────────────────────────────────
-// Universel : utilise l'API native BarcodeDetector quand elle existe
-// (Android/Chrome — zéro dépendance), sinon charge jsQR À LA DEMANDE
-// (iOS/Safari, Firefox). Décodage 100 % LOCAL : aucune image n'est
+// Universel : API native BarcodeDetector quand elle existe (Android/Chrome),
+// sinon repli chargé À LA DEMANDE — jsQR pour le QR, ZXing pour les codes-barres
+// 1D (ISBN/EAN) — couvrant Brave, iOS/Safari, Firefox. Décodage 100 % LOCAL :
+// aucune image n'est
 // envoyée nulle part. Le QR ne porte qu'un jeton opaque (cf. CARD-TOKEN) ;
 // onScan(token) est appelé au 1er code lu, puis la caméra est relâchée.
 // Repli ultime si rien ne marche : la saisie manuelle de ResolveCardBox.
@@ -28,6 +29,7 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
     let detector = null;
     let decodeJsqr = null;
     let canvas = null;
+    let zxingControls = null; // ZXing : repli 1D (code-barres ISBN/EAN sans BarcodeDetector)
 
     const stopCamera = () => {
       cancelAnimationFrame(rafRef.current);
@@ -35,6 +37,7 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
         streamRef.current.getTracks().forEach((tr) => tr.stop());
         streamRef.current = null;
       }
+      if (zxingControls) { try { zxingControls.stop(); } catch { /* déjà arrêté */ } zxingControls = null; }
     };
 
     const handleToken = (raw) => {
@@ -91,8 +94,40 @@ export default function CardScanner({ t, onScan, onClose, formats = ['qr_code'],
             return;
           }
         } else {
-          if (!cancelled) setError(tRef.current({ id: 'card.resolve.scan.error.unsupported' }));
-          return;
+          // Format 1D (code-barres ISBN/EAN) SANS BarcodeDetector (Brave,
+          // iOS/Safari, Firefox) → ZXing (pur-JS, universel), chargé à la demande.
+          // ZXing ouvre et gère sa propre caméra arrière sur l'élément vidéo.
+          try {
+            const [{ BrowserMultiFormatReader }, zxlib] = await Promise.all([
+              import('@zxing/browser'),
+              import('@zxing/library'),
+            ]);
+            const zxMap = {
+              qr_code: zxlib.BarcodeFormat.QR_CODE,
+              ean_13: zxlib.BarcodeFormat.EAN_13,
+              ean_8: zxlib.BarcodeFormat.EAN_8,
+            };
+            const hints = new Map([[
+              zxlib.DecodeHintType.POSSIBLE_FORMATS,
+              wanted.map((fmt) => zxMap[fmt]).filter((v) => v !== undefined),
+            ]]);
+            const reader = new BrowserMultiFormatReader(hints);
+            zxingControls = await reader.decodeFromConstraints(
+              { video: { facingMode: { ideal: 'environment' } } },
+              videoRef.current,
+              (result) => { if (result) handleToken(result.getText()); },
+            );
+            if (cancelled && zxingControls) { try { zxingControls.stop(); } catch { /* */ } }
+          } catch (e) {
+            if (!cancelled) {
+              const name = e && e.name;
+              const key = (name === 'NotAllowedError' || name === 'SecurityError')
+                ? 'card.resolve.scan.error.permission'
+                : 'card.resolve.scan.error.unsupported';
+              setError(tRef.current({ id: key, defaultMessage: tRef.current({ id: 'card.resolve.scan.error.generic' }) }));
+            }
+          }
+          return; // ZXing gère sa caméra → ne pas passer par le getUserMedia ci-dessous.
         }
       }
 
