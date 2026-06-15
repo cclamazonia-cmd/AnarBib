@@ -3856,6 +3856,7 @@
   "panel.onboarding.tour.actions.title": "Prêter et rendre",
   "panel.onboarding.tour.dailyWork.text": "« Travail du jour » résume ce qui a besoin de toi aujourd’hui : retards, réservations et consultations en attente, tâches internes. C’est ton point de départ.",
   "panel.onboarding.tour.dailyWork.title": "Commence toujours ici",
+  "panel.onboarding.tour.dontShowAgain": "Ne plus afficher la visite",
   "panel.onboarding.tour.finish": "Terminer",
   "panel.onboarding.tour.history.text": "Tout ce qui a déjà été conclu et archivé reste ici, si tu as besoin de rouvrir ou de consulter.",
   "panel.onboarding.tour.history.title": "La mémoire de la bibliothèque",

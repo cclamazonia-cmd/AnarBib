@@ -213,13 +213,13 @@ export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
           </div>
         </div>
 
-        {/* Don't show again */}
-        {isLast && (
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center', marginTop: 12, fontSize: '.78rem', color: 'var(--brand-muted)', cursor: 'pointer' }}>
-            <input type="checkbox" checked={dontShow} onChange={e => setDontShow(e.target.checked)} />
-            {t({ id: 'catalogacao.wizard.dontShowAgain' })}
-          </label>
-        )}
+        {/* Don't show again — disponible a CHAQUE etape (et pas seulement a la
+            derniere) : fermer tot (croix / Echap / clic overlay) avec la case
+            cochee pose bien l'opt-out, sinon le wizard reapparait a chaque visite. */}
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center', marginTop: 12, fontSize: '.78rem', color: 'var(--brand-muted)', cursor: 'pointer' }}>
+          <input type="checkbox" checked={dontShow} onChange={e => setDontShow(e.target.checked)} />
+          {t({ id: 'catalogacao.wizard.dontShowAgain' })}
+        </label>
       </div>
     </div>
   );

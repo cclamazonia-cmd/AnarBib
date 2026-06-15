@@ -3856,6 +3856,7 @@
   "panel.onboarding.tour.actions.title": "Lend and return",
   "panel.onboarding.tour.dailyWork.text": "“Daily work” sums up what needs you today: overdue items, pending reservations and on-site consultations, internal tasks. It is your starting point.",
   "panel.onboarding.tour.dailyWork.title": "Always start here",
+  "panel.onboarding.tour.dontShowAgain": "Don’t show this tour again",
   "panel.onboarding.tour.finish": "Finish",
   "panel.onboarding.tour.history.text": "Everything already completed and archived stays here, in case you need to reopen or look something up.",
   "panel.onboarding.tour.history.title": "The library’s memory",

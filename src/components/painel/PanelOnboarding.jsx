@@ -86,6 +86,10 @@ export default function PanelOnboarding({ availability, circulationMode, library
   const [hole, setHole] = useState(null);           // {top,left,width,height}
   const [coachPos, setCoachPos] = useState(null);   // {top,left}
   const coachRef = useRef(null);
+  // « Ne plus afficher » coché DANS la visite : fermer la visite (skip/Échap/fin)
+  // pose alors l'opt-out permanent — la visite ne se relance plus aux connexions
+  // suivantes (réactivable via « Refaire la visite »).
+  const [dontShow, setDontShow] = useState(false);
 
   // Étapes de visite réellement applicables (onglet visible).
   const tour = useMemo(
@@ -138,7 +142,9 @@ export default function PanelOnboarding({ availability, circulationMode, library
     setTourActive(false);
     setHole(null);
     markSessionShown();
-  }, [markSessionShown]);
+    // Si « ne plus afficher » a été coché pendant la visite → opt-out permanent.
+    if (dontShow) persistOptout();
+  }, [markSessionShown, dontShow, persistOptout]);
 
   // Quand la visite devient active ou change d'étape : naviguer vers l'onglet
   // ciblé (contexte visuel) puis repositionner après le rendu.
@@ -292,6 +298,14 @@ export default function PanelOnboarding({ availability, circulationMode, library
             </div>
             <h4>{t({ id: currentStep.titleKey })}</h4>
             <p>{t({ id: currentStep.textKey })}</p>
+            <label className="ab-pon-dontshow">
+              <input
+                type="checkbox"
+                checked={dontShow}
+                onChange={(e) => setDontShow(e.target.checked)}
+              />
+              {t({ id: 'panel.onboarding.tour.dontShowAgain' })}
+            </label>
             <div className="ab-pon-nav">
               <div className="ab-pon-dots">
                 {tour.map((_, i) => <div key={i} className={`ab-pon-dot${i === ti ? ' is-on' : ''}`} />)}

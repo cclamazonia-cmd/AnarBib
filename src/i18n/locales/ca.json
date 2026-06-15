@@ -3856,6 +3856,7 @@
   "panel.onboarding.tour.actions.title": "Prestar i retornar",
   "panel.onboarding.tour.dailyWork.text": "« Treball del dia » resumeix el que avui necessita de tu: retards, reserves i consultes pendents, tasques internes. És el teu punt de partida.",
   "panel.onboarding.tour.dailyWork.title": "Comença sempre aquí",
+  "panel.onboarding.tour.dontShowAgain": "No tornis a mostrar la visita",
   "panel.onboarding.tour.finish": "Finalitzar",
   "panel.onboarding.tour.history.text": "Tot el que ja s’ha conclòs i arxivat queda aquí, per si necessites reobrir o consultar.",
   "panel.onboarding.tour.history.title": "La memòria de la biblioteca",
