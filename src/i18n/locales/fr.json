@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Ouvrir les communs",
   "federacao.inicio.entraide": "L’Entraide",
   "federacao.inicio.entraide.desc": "Besoin d’un coup de main, ou envie d’en prêter un ? C’est ici.",
-  "federacao.inicio.toEntraide": "Aller à l’entraide"
+  "federacao.inicio.toEntraide": "Aller à l’entraide",
+  "card.resolve.scan.action": "Scanner la carte",
+  "card.resolve.scan.close": "Fermer",
+  "card.resolve.scan.prompt": "Visez le QR de la carte",
+  "card.resolve.scan.error.permission": "Accès à la caméra refusé. Autorisez-le pour scanner, ou saisissez le code.",
+  "card.resolve.scan.error.nocamera": "Aucune caméra détectée. Saisissez le code à la main.",
+  "card.resolve.scan.error.unsupported": "Le scan n'est pas pris en charge par ce navigateur. Saisissez le code à la main.",
+  "card.resolve.scan.error.generic": "Impossible d'ouvrir la caméra. Saisissez le code à la main."
 }

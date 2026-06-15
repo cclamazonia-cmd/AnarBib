@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Commons öffnen",
   "federacao.inicio.entraide": "Die Gegenseitige Hilfe",
   "federacao.inicio.entraide.desc": "Brauchst du Hilfe oder möchtest du welche anbieten? Hier entlang.",
-  "federacao.inicio.toEntraide": "Zur gegenseitigen Hilfe"
+  "federacao.inicio.toEntraide": "Zur gegenseitigen Hilfe",
+  "card.resolve.scan.action": "Karte scannen",
+  "card.resolve.scan.close": "Schließen",
+  "card.resolve.scan.prompt": "Richte die Kamera auf den QR-Code der Karte",
+  "card.resolve.scan.error.permission": "Kamerazugriff verweigert. Erlaube ihn zum Scannen, oder gib den Code ein.",
+  "card.resolve.scan.error.nocamera": "Keine Kamera gefunden. Gib den Code von Hand ein.",
+  "card.resolve.scan.error.unsupported": "Das Scannen wird von diesem Browser nicht unterstützt. Gib den Code von Hand ein.",
+  "card.resolve.scan.error.generic": "Die Kamera konnte nicht geöffnet werden. Gib den Code von Hand ein."
 }

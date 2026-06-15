@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import { supabase } from '@/lib/supabase';
+import CardScanner from './CardScanner';
 
 // ═══════════════════════════════════════════════════════════
 // ResolveCardBox — résolution staff d'une carte-lecteur
@@ -20,6 +21,7 @@ export default function ResolveCardBox({ t, libraryId, onResolved }) {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
   const [errMsg, setErrMsg] = useState('');
+  const [scanning, setScanning] = useState(false);
 
   // Capacité opt-in par bibliothèque (libraries.reader_cards_enabled).
   // Le résolveur n'a de sens que là où la carte est activée : on ne
@@ -40,8 +42,8 @@ export default function ResolveCardBox({ t, libraryId, onResolved }) {
     return () => { alive = false; };
   }, [libraryId]);
 
-  const resolve = async () => {
-    const tok = token.trim();
+  const resolve = async (tokenOverride) => {
+    const tok = (typeof tokenOverride === 'string' ? tokenOverride : token).trim();
     if (!tok || busy) return;
     setBusy(true); setErrMsg(''); setResult(null);
     try {
@@ -66,6 +68,13 @@ export default function ResolveCardBox({ t, libraryId, onResolved }) {
     }
   };
 
+  // Scan caméra (MOBILE P2) : le jeton lu pré-remplit le champ et résout aussitôt.
+  const handleScanned = (tok) => {
+    setScanning(false);
+    setToken(tok);
+    resolve(tok);
+  };
+
   if (!enabled) return null;
 
   return (
@@ -83,7 +92,11 @@ export default function ResolveCardBox({ t, libraryId, onResolved }) {
         <Button onClick={resolve} disabled={busy}>
           {busy ? t({ id: 'card.resolve.loading' }) : t({ id: 'card.resolve.action' })}
         </Button>
+        <Button onClick={() => setScanning((s) => !s)} disabled={busy}>
+          {scanning ? t({ id: 'card.resolve.scan.close' }) : t({ id: 'card.resolve.scan.action' })}
+        </Button>
       </div>
+      {scanning && <CardScanner t={t} onScan={handleScanned} onClose={() => setScanning(false)} />}
       {errMsg && <p className="ab-painel-msg">{errMsg}</p>}
       {result && (
         <div className="ab-painel-reader-card">

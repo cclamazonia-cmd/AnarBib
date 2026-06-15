@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Abrir los comunes",
   "federacao.inicio.entraide": "La Ayuda Mutua",
   "federacao.inicio.entraide.desc": "¿Necesitas una mano, o quieres prestar la tuya? Es aquí.",
-  "federacao.inicio.toEntraide": "Ir a la ayuda mutua"
+  "federacao.inicio.toEntraide": "Ir a la ayuda mutua",
+  "card.resolve.scan.action": "Escanear la tarjeta",
+  "card.resolve.scan.close": "Cerrar",
+  "card.resolve.scan.prompt": "Apuntá al QR de la tarjeta",
+  "card.resolve.scan.error.permission": "Acceso a la cámara denegado. Permitilo para escanear, o escribí el código.",
+  "card.resolve.scan.error.nocamera": "No se detectó ninguna cámara. Escribí el código a mano.",
+  "card.resolve.scan.error.unsupported": "El escaneo no es compatible con este navegador. Escribí el código a mano.",
+  "card.resolve.scan.error.generic": "No se pudo abrir la cámara. Escribí el código a mano."
 }

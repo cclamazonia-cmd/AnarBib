@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Άνοιγμα των κοινών",
   "federacao.inicio.entraide": "Η Αλληλοβοήθεια",
   "federacao.inicio.entraide.desc": "Χρειάζεσαι ένα χέρι, ή θες να προσφέρεις ένα; Εδώ είναι.",
-  "federacao.inicio.toEntraide": "Στην αλληλοβοήθεια"
+  "federacao.inicio.toEntraide": "Στην αλληλοβοήθεια",
+  "card.resolve.scan.action": "Σάρωση κάρτας",
+  "card.resolve.scan.close": "Κλείσιμο",
+  "card.resolve.scan.prompt": "Στρέψτε στο QR της κάρτας",
+  "card.resolve.scan.error.permission": "Η πρόσβαση στην κάμερα απορρίφθηκε. Επιτρέψτε την για σάρωση ή πληκτρολογήστε τον κωδικό.",
+  "card.resolve.scan.error.nocamera": "Δεν βρέθηκε κάμερα. Πληκτρολογήστε τον κωδικό με το χέρι.",
+  "card.resolve.scan.error.unsupported": "Η σάρωση δεν υποστηρίζεται από αυτό το πρόγραμμα περιήγησης. Πληκτρολογήστε τον κωδικό με το χέρι.",
+  "card.resolve.scan.error.generic": "Δεν ήταν δυνατό το άνοιγμα της κάμερας. Πληκτρολογήστε τον κωδικό με το χέρι."
 }

@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Commons openen",
   "federacao.inicio.entraide": "De Onderlinge Hulp",
   "federacao.inicio.entraide.desc": "Hulp nodig, of wil je hulp bieden? Hier.",
-  "federacao.inicio.toEntraide": "Naar de onderlinge hulp"
+  "federacao.inicio.toEntraide": "Naar de onderlinge hulp",
+  "card.resolve.scan.action": "Kaart scannen",
+  "card.resolve.scan.close": "Sluiten",
+  "card.resolve.scan.prompt": "Richt op de QR-code van de kaart",
+  "card.resolve.scan.error.permission": "Toegang tot de camera geweigerd. Sta het toe om te scannen, of typ de code.",
+  "card.resolve.scan.error.nocamera": "Geen camera gevonden. Typ de code met de hand.",
+  "card.resolve.scan.error.unsupported": "Scannen wordt niet ondersteund door deze browser. Typ de code met de hand.",
+  "card.resolve.scan.error.generic": "Kan de camera niet openen. Typ de code met de hand."
 }

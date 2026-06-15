@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Abrir os comuns",
   "federacao.inicio.entraide": "A Entreajuda",
   "federacao.inicio.entraide.desc": "Precisa de uma mão, ou quer emprestar a sua? É aqui.",
-  "federacao.inicio.toEntraide": "Ir para a entreajuda"
+  "federacao.inicio.toEntraide": "Ir para a entreajuda",
+  "card.resolve.scan.action": "Escanear cartão",
+  "card.resolve.scan.close": "Fechar",
+  "card.resolve.scan.prompt": "Aponte para o QR do cartão",
+  "card.resolve.scan.error.permission": "Acesso à câmera negado. Permita o acesso para escanear ou digite o código.",
+  "card.resolve.scan.error.nocamera": "Nenhuma câmera detectada. Digite o código manualmente.",
+  "card.resolve.scan.error.unsupported": "A leitura não é compatível com este navegador. Digite o código manualmente.",
+  "card.resolve.scan.error.generic": "Não foi possível abrir a câmera. Digite o código manualmente."
 }

@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Malfermi la komunaĵojn",
   "federacao.inicio.entraide": "La Reciproka Helpo",
   "federacao.inicio.entraide.desc": "Ĉu vi bezonas helpon, aŭ volas oferti ĝin? Ĉi tie.",
-  "federacao.inicio.toEntraide": "Iri al la reciproka helpo"
+  "federacao.inicio.toEntraide": "Iri al la reciproka helpo",
+  "card.resolve.scan.action": "Skani la karton",
+  "card.resolve.scan.close": "Fermi",
+  "card.resolve.scan.prompt": "Celu la QR-kodon de la karto",
+  "card.resolve.scan.error.permission": "Aliro al la kamerao rifuzita. Permesu ĝin por skani, aŭ tajpu la kodon.",
+  "card.resolve.scan.error.nocamera": "Neniu kamerao trovita. Tajpu la kodon mane.",
+  "card.resolve.scan.error.unsupported": "Ĉi tiu retumilo ne subtenas skanadon. Tajpu la kodon mane.",
+  "card.resolve.scan.error.generic": "Ne eblis malfermi la kameraon. Tajpu la kodon mane."
 }

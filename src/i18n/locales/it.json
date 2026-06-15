@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Aprire i beni comuni",
   "federacao.inicio.entraide": "Il Mutuo Aiuto",
   "federacao.inicio.entraide.desc": "Ti serve una mano, o vuoi offrirne una? È qui.",
-  "federacao.inicio.toEntraide": "Vai al mutuo aiuto"
+  "federacao.inicio.toEntraide": "Vai al mutuo aiuto",
+  "card.resolve.scan.action": "Scansiona la tessera",
+  "card.resolve.scan.close": "Chiudi",
+  "card.resolve.scan.prompt": "Inquadra il QR della tessera",
+  "card.resolve.scan.error.permission": "Accesso alla fotocamera negato. Consentilo per scansionare, oppure digita il codice.",
+  "card.resolve.scan.error.nocamera": "Nessuna fotocamera rilevata. Digita il codice a mano.",
+  "card.resolve.scan.error.unsupported": "La scansione non è supportata da questo browser. Digita il codice a mano.",
+  "card.resolve.scan.error.generic": "Impossibile aprire la fotocamera. Digita il codice a mano."
 }

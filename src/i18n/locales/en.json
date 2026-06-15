@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Open the commons",
   "federacao.inicio.entraide": "Mutual Aid",
   "federacao.inicio.entraide.desc": "Need a hand, or want to lend one? It’s here.",
-  "federacao.inicio.toEntraide": "Go to mutual aid"
+  "federacao.inicio.toEntraide": "Go to mutual aid",
+  "card.resolve.scan.action": "Scan card",
+  "card.resolve.scan.close": "Close",
+  "card.resolve.scan.prompt": "Point at the card's QR code",
+  "card.resolve.scan.error.permission": "Camera access denied. Allow it to scan, or type the code.",
+  "card.resolve.scan.error.nocamera": "No camera found. Type the code by hand.",
+  "card.resolve.scan.error.unsupported": "Scanning isn't supported by this browser. Type the code by hand.",
+  "card.resolve.scan.error.generic": "Couldn't open the camera. Type the code by hand."
 }

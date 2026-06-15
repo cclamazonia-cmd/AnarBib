@@ -4870,5 +4870,12 @@
   "federacao.inicio.toCommuns": "Obrir els comuns",
   "federacao.inicio.entraide": "El Suport Mutu",
   "federacao.inicio.entraide.desc": "Necessites un cop de mà, o en vols oferir un? És aquí.",
-  "federacao.inicio.toEntraide": "Anar al suport mutu"
+  "federacao.inicio.toEntraide": "Anar al suport mutu",
+  "card.resolve.scan.action": "Escaneja la targeta",
+  "card.resolve.scan.close": "Tanca",
+  "card.resolve.scan.prompt": "Apunta al QR de la targeta",
+  "card.resolve.scan.error.permission": "Accés a la càmera denegat. Permet-lo per escanejar, o escriu el codi.",
+  "card.resolve.scan.error.nocamera": "No s'ha detectat cap càmera. Escriu el codi a mà.",
+  "card.resolve.scan.error.unsupported": "Aquest navegador no admet l'escaneig. Escriu el codi a mà.",
+  "card.resolve.scan.error.generic": "No s'ha pogut obrir la càmera. Escriu el codi a mà."
 }
