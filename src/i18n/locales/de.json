@@ -4740,6 +4740,7 @@
   "importacoes.export.attach.loading": "Wird geladen…",
   "importacoes.export.attach.empty": "Keine empfangene Datei wartet auf Anhängen.",
   "importacoes.export.attach.choose": "Buch wählen",
+  "importacoes.export.attach.attachSuggested": "An „{title}“ anhängen (vorgeschlagen)",
   "importacoes.export.attach.searchPh": "Titel, ISBN, Referenz…",
   "importacoes.export.attach.search": "Suchen",
   "importacoes.export.attach.searching": "Suche…",

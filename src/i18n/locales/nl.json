@@ -4740,6 +4740,7 @@
   "importacoes.export.attach.loading": "Laden…",
   "importacoes.export.attach.empty": "Geen ontvangen bestand wacht op koppeling.",
   "importacoes.export.attach.choose": "Boek kiezen",
+  "importacoes.export.attach.attachSuggested": "Koppelen aan ‘{title}’ (voorgesteld)",
   "importacoes.export.attach.searchPh": "Titel, ISBN, referentie…",
   "importacoes.export.attach.search": "Zoeken",
   "importacoes.export.attach.searching": "Zoeken…",

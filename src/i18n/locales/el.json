@@ -4740,6 +4740,7 @@
   "importacoes.export.attach.loading": "Φόρτωση…",
   "importacoes.export.attach.empty": "Κανένα ληφθέν αρχείο σε αναμονή επισύναψης.",
   "importacoes.export.attach.choose": "Επιλογή βιβλίου",
+  "importacoes.export.attach.attachSuggested": "Επισύναψη στο «{title}» (προτεινόμενο)",
   "importacoes.export.attach.searchPh": "Τίτλος, ISBN, αναφορά…",
   "importacoes.export.attach.search": "Αναζήτηση",
   "importacoes.export.attach.searching": "Αναζήτηση…",

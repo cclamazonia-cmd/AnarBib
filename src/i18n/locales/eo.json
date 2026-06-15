@@ -4740,6 +4740,7 @@
   "importacoes.export.attach.loading": "Ŝargado…",
   "importacoes.export.attach.empty": "Neniu ricevita dosiero atendas alligon.",
   "importacoes.export.attach.choose": "Elekti libron",
+  "importacoes.export.attach.attachSuggested": "Aldoni al « {title} » (sugestita)",
   "importacoes.export.attach.searchPh": "Titolo, ISBN, referenco…",
   "importacoes.export.attach.search": "Serĉi",
   "importacoes.export.attach.searching": "Serĉado…",

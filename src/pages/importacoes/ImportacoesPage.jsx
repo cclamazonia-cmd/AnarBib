@@ -721,8 +721,8 @@ export default function ImportacoesPage() {
     }
   }
 
-  async function handleAttach(book) {
-    if (!attachTarget) return;
+  async function handleAttach(asset, book) {
+    if (!asset || !book?.book_id) return;
     setAttaching(true);
     setMsg({ text: t({ id: 'importacoes.export.attach.attaching' }), kind: 'info' });
     try {
@@ -736,12 +736,12 @@ export default function ImportacoesPage() {
             apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ received_asset_id: attachTarget.received_asset_id, book_id: book.book_id }),
+          body: JSON.stringify({ received_asset_id: asset.received_asset_id, book_id: book.book_id }),
         }
       );
       const out = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(out?.error || `HTTP ${res.status}`);
-      setRecvAssets((prev) => prev.filter((a) => a.received_asset_id !== attachTarget.received_asset_id));
+      setRecvAssets((prev) => prev.filter((a) => a.received_asset_id !== asset.received_asset_id));
       setAttachTarget(null);
       setBookResults([]);
       setBookQuery('');
@@ -1564,9 +1564,17 @@ export default function ImportacoesPage() {
                           <span style={{ minWidth: 0, fontSize: '.85rem' }}>
                             <b>{a.title || '—'}</b>{a.source_name ? ` · ${a.source_name}` : ''}{a.asset_kind ? ` · ${a.asset_kind}` : ''}
                           </span>
-                          <button className="cat-btn secondary" type="button" onClick={() => startAttach(a)} disabled={attaching}>
-                            {t({ id: 'importacoes.export.attach.choose' })}
-                          </button>
+                          <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                            {a.suggested_book_id && (
+                              <button className="cat-btn primary" type="button"
+                                onClick={() => handleAttach(a, { book_id: a.suggested_book_id, title: a.suggested_book_title })} disabled={attaching}>
+                                {t({ id: 'importacoes.export.attach.attachSuggested' }, { title: a.suggested_book_title || '—' })}
+                              </button>
+                            )}
+                            <button className="cat-btn secondary" type="button" onClick={() => startAttach(a)} disabled={attaching}>
+                              {t({ id: 'importacoes.export.attach.choose' })}
+                            </button>
+                          </div>
                         </div>
                         {attachTarget && attachTarget.received_asset_id === a.received_asset_id && (
                           <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(127,127,127,0.2)' }}>
@@ -1582,7 +1590,7 @@ export default function ImportacoesPage() {
                                 {bookResults.map((b) => (
                                   <li key={b.book_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '6px 8px' }}>
                                     <span style={{ fontSize: '.82rem' }}>{b.title || '—'}{b.isbn ? ` · ${b.isbn}` : ''}</span>
-                                    <button className="cat-btn primary" type="button" onClick={() => handleAttach(b)} disabled={attaching}>
+                                    <button className="cat-btn primary" type="button" onClick={() => handleAttach(a, b)} disabled={attaching}>
                                       {attaching ? t({ id: 'importacoes.export.attach.attaching' }) : t({ id: 'importacoes.export.attach.attachHere' })}
                                     </button>
                                   </li>
