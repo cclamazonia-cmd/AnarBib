@@ -582,35 +582,37 @@ Deno.serve(async (req)=>{
     }
     const filenameLooksRis = (originalFilename ?? '').toLowerCase().endsWith('.ris');
     const risDetected = filenameLooksRis || detectRis(fileText);
+    // Overrides de l'adaptateur (axes orthogonaux) : forced_format saute la detection
+    // de structure ; forced_vocabulary force le dialecte MARC (sinon detectDialect, auto).
+    const adapterOv = (run && run.adapter_overrides) || {};
+    const forcedFormat = clean(adapterOv.forced_format);         // 'marc'|'ris'|'csv'|'tsv'|null
+    const forcedVocabulary = clean(adapterOv.forced_vocabulary); // 'unimarc'|'marc21'|null
     let headers = [];
     let detectedFormat = 'csv';
     let detectedDelimiterLabel = null;
     let parsedEntries = [];
-    // MARC en premier : signatures tres distinctives (MARCXML / ISO 2709), aucun
-    // risque de confusion avec CSV/RIS. Couvre UNIMARC + MARC21 (Lot 4).
-    const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename });
-    if (marcResult) {
+    // Parseurs unitaires (reutilises en auto comme en force).
+    const runMarc = () => {
+      const marcResult = parseMarcFile({ text: fileText, bytes: fileBytes, filename: originalFilename, forcedDialect: forcedVocabulary });
+      if (!marcResult) return false;
       parsedEntries = marcResult.entries;
       detectedFormat = marcResult.format; // 'marcxml' | 'marc_iso2709'
       parserVersion = MARC_PARSER_VERSION;
       headers = ['leader']; // MARC n'a pas de ligne d'en-tete ; valeur nominale
-      if (!parsedEntries.length) {
-        throw new Error('MARC file contains no records.');
-      }
-    } else if (risDetected) {
+      if (!parsedEntries.length) throw new Error('MARC file contains no records.');
+      return true;
+    };
+    const runRis = () => {
       const parsedRis = parseRis(fileText);
       headers = parsedRis.tags;
       parsedEntries = buildParsedEntriesFromRis(parsedRis.records);
       detectedFormat = 'ris';
       parserVersion = RIS_PARSER_VERSION;
-      if (!headers.length) {
-        throw new Error('RIS tags not found.');
-      }
-      if (!parsedEntries.length) {
-        throw new Error('RIS contains no records.');
-      }
-    } else {
-      const delimiter = detectDelimiter(fileText);
+      if (!headers.length) throw new Error('RIS tags not found.');
+      if (!parsedEntries.length) throw new Error('RIS contains no records.');
+    };
+    const runCsv = (forcedDelimiter) => {
+      const delimiter = forcedDelimiter || detectDelimiter(fileText);
       const parsedCsv = parseCsv(fileText, delimiter);
       const parsedObjects = rowsToObjects(parsedCsv);
       headers = parsedObjects.headers;
@@ -618,11 +620,22 @@ Deno.serve(async (req)=>{
       detectedFormat = delimiter === '\t' ? 'tsv' : 'csv';
       detectedDelimiterLabel = delimiter === '\t' ? '\\t' : delimiter;
       parserVersion = CSV_PARSER_VERSION;
-      if (!headers.length) {
-        throw new Error('CSV header row not found.');
-      }
-      if (!parsedEntries.length) {
-        throw new Error('CSV contains a header row but no data rows.');
+      if (!headers.length) throw new Error('CSV header row not found.');
+      if (!parsedEntries.length) throw new Error('CSV contains a header row but no data rows.');
+    };
+    if (forcedFormat === 'marc') {
+      if (!runMarc()) throw new Error('Format MARC force, mais le fichier n\'est pas reconnu comme MARC (MARCXML/ISO 2709).');
+    } else if (forcedFormat === 'ris') {
+      runRis();
+    } else if (forcedFormat === 'tsv') {
+      runCsv('\t');
+    } else if (forcedFormat === 'csv') {
+      runCsv(null);
+    } else {
+      // Auto : MARC en premier (signatures distinctives), puis RIS, puis CSV.
+      if (!runMarc()) {
+        if (risDetected) runRis();
+        else runCsv(null);
       }
     }
     const stagingRows = parsedEntries.map((entry)=>{

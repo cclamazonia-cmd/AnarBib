@@ -99,6 +99,9 @@ export default function ImportacoesPage() {
   const [file, setFile] = useState(null);
   const [sourceId, setSourceId] = useState('');
   const [uploading, setUploading] = useState(false);
+  // ── Adaptateur : overrides Estrutura / Vocabulário ('auto' = laisser l'auto-détection) ──
+  const [adapterFormat, setAdapterFormat] = useState('auto');
+  const [adapterVocabulary, setAdapterVocabulary] = useState('auto');
 
   // ── Fontes externas search ─────────────────────────────
   const [searchQuery, setSearchQuery] = useState('');
@@ -279,6 +282,14 @@ export default function ImportacoesPage() {
       const runId = createData?.run_id;
       if (!runId) throw new Error(t({ id: 'importacoes.noRunId' }));
 
+      // Adaptateur : si l'usager a forcé un axe, on le pose sur le run avant le dispatch.
+      if (adapterFormat !== 'auto' || adapterVocabulary !== 'auto') {
+        await supabase.rpc('fn_import_set_adapter_overrides', {
+          p_run_id: Number(runId),
+          p_forced_format: adapterFormat === 'auto' ? null : adapterFormat,
+          p_forced_vocabulary: adapterVocabulary === 'auto' ? null : adapterVocabulary,
+        });
+      }
       setMsg({ text: t({ id: 'importacoes.runCreatedDispatching' }, { id: runId }), kind: 'info' });
       await supabase.rpc('fn_import_dispatch', { p_run_id: Number(runId) });
 
@@ -931,14 +942,20 @@ export default function ImportacoesPage() {
               <div className="imp-row3" style={{ marginBottom: 10 }}>
                 <div className="ab-field">
                   <label className="ab-field__label">{t({ id: 'importacoes.adapter.structure' })}</label>
-                  <select className="ab-select" disabled>
-                    <option>{t({ id: 'importacoes.adapter.autoDetect' })}</option>
+                  <select className="ab-select" value={adapterFormat} onChange={e => setAdapterFormat(e.target.value)} disabled={uploading}>
+                    <option value="auto">{t({ id: 'importacoes.adapter.autoDetect' })}</option>
+                    <option value="marc">MARC</option>
+                    <option value="ris">RIS</option>
+                    <option value="csv">CSV</option>
+                    <option value="tsv">TSV</option>
                   </select>
                 </div>
                 <div className="ab-field">
                   <label className="ab-field__label">{t({ id: 'importacoes.adapter.vocabulary' })}</label>
-                  <select className="ab-select" disabled>
-                    <option>UNIMARC</option>
+                  <select className="ab-select" value={adapterVocabulary} onChange={e => setAdapterVocabulary(e.target.value)} disabled={uploading}>
+                    <option value="auto">{t({ id: 'importacoes.adapter.autoDetect' })}</option>
+                    <option value="unimarc">UNIMARC</option>
+                    <option value="marc21">MARC21</option>
                   </select>
                 </div>
                 <div className="ab-field">

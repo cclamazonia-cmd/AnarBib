@@ -388,9 +388,10 @@ export function parseMarcIso2709(bytes) {
 
 // Construit les entrees normalisees a partir d'enregistrements MARC deja parses.
 // Chaque entree : { rowNo, rawPayload, mapped, warnings, dialect }.
-export function buildParsedEntriesFromMarc(records, baseWarnings = []) {
+export function buildParsedEntriesFromMarc(records, baseWarnings = [], forcedDialect = null) {
   return records.map((record, idx) => {
-    const dialect = detectDialect(record);
+    // forcedDialect ('unimarc' | 'marc21') = override de l'axe Vocabulário ; sinon auto.
+    const dialect = forcedDialect || detectDialect(record);
     const mapped = mapMarcRecord(record, dialect);
     return {
       rowNo: idx + 1,
@@ -405,14 +406,14 @@ export function buildParsedEntriesFromMarc(records, baseWarnings = []) {
 // Detecte + parse un fichier MARC. Retourne null si ce n'est pas du MARC,
 // sinon { format, entries }.
 //   format : 'marcxml' | 'marc_iso2709'
-export function parseMarcFile({ text, bytes, filename }) {
+export function parseMarcFile({ text, bytes, filename, forcedDialect = null }) {
   const name = (filename || '').toLowerCase();
 
   // 1. MARCXML (texte). Prioritaire : signature XML tres distinctive.
   if (looksLikeMarcXml(text) || (name.endsWith('.xml') && /<(?:\w+:)?record\b/.test(text || ''))) {
     const records = parseMarcXml(text);
     if (records.length) {
-      return { format: 'marcxml', entries: buildParsedEntriesFromMarc(records) };
+      return { format: 'marcxml', entries: buildParsedEntriesFromMarc(records, [], forcedDialect) };
     }
   }
 
@@ -421,7 +422,7 @@ export function parseMarcFile({ text, bytes, filename }) {
     if (looksLikeIso2709(bytes)) {
       const { records, warnings } = parseMarcIso2709(bytes);
       if (records.length) {
-        return { format: 'marc_iso2709', entries: buildParsedEntriesFromMarc(records, warnings) };
+        return { format: 'marc_iso2709', entries: buildParsedEntriesFromMarc(records, warnings, forcedDialect) };
       }
     }
   }
