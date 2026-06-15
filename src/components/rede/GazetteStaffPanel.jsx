@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import { supabase } from '@/lib/supabase';
+import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -53,7 +53,7 @@ export default function GazetteStaffPanel() {
           .select('id,rubric,locale,title,body,link,event_date,contributor_name,contributor_collective,status,created_at')
           .order('created_at', { ascending: false }),
         supabase.from('gazette_issues')
-          .select('id,number,slug,masthead_title,cover_date,status,published_at')
+          .select('id,number,slug,masthead_title,cover_date,status,published_at,published_broadcast_at')
           .order('number', { ascending: false }),
       ]);
       if (s.error) throw s.error;
@@ -93,6 +93,21 @@ export default function GazetteStaffPanel() {
         .eq('id', issue.id);
       if (error) throw error;
       setMsg({ text: t({ id: 'rede.gazeta.published' }, { number: issue.number }), kind: 'ok' });
+      await load();
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function broadcastIssue(issue) {
+    if (!window.confirm(t({ id: 'rede.gazeta.broadcastConfirm' }, { number: issue.number }))) return;
+    setBusy('bc:' + issue.id);
+    try {
+      const { data, error } = await apiRpc('fn_gazette_broadcast', { p_issue_id: issue.id });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'rede.gazeta.broadcastDone' }, { count: data ?? 0 }), kind: 'ok' });
       await load();
     } catch (e) {
       setMsg({ text: localizeError(e, t), kind: 'error' });
@@ -218,6 +233,16 @@ export default function GazetteStaffPanel() {
                     <button className="cat-btn primary" disabled={busy === 'pub:' + iss.id} onClick={() => publishIssue(iss)}>
                       {t({ id: 'rede.gazeta.publish' })}
                     </button>
+                  )}
+                  {iss.status === 'published' && !iss.published_broadcast_at && (
+                    <button className="cat-btn" style={{ background: 'rgba(52,211,153,.15)', borderColor: 'rgba(52,211,153,.45)', color: '#34d399' }} disabled={busy === 'bc:' + iss.id} onClick={() => broadcastIssue(iss)}>
+                      {t({ id: 'rede.gazeta.broadcast' })}
+                    </button>
+                  )}
+                  {iss.published_broadcast_at && (
+                    <span className="cat-pill ok" style={{ fontSize: '.66rem', alignSelf: 'center' }}>
+                      {t({ id: 'rede.gazeta.broadcastedAt' }, { date: fmtDate(iss.published_broadcast_at) })}
+                    </span>
                   )}
                 </div>
               </div>

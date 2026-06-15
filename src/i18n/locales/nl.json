@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Voorbeeld",
   "rede.gazeta.publishedAt": "gepubliceerd op {date}",
   "rede.gazeta.previewTitle": "Nalezen — Nr. {number}",
-  "rede.gazeta.previewEmpty": "Geen inhoud voor deze taal."
+  "rede.gazeta.previewEmpty": "Geen inhoud voor deze taal.",
+  "rede.gazeta.broadcast": "Verspreiden",
+  "rede.gazeta.broadcastConfirm": "Nummer {number} per e-mail naar het hele netwerkteam verspreiden?",
+  "rede.gazeta.broadcastDone": "Verzonden naar {count} ontvangers.",
+  "rede.gazeta.broadcastedAt": "verspreid op {date}"
 }

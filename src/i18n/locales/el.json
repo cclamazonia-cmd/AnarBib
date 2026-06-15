@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Προεπισκόπηση",
   "rede.gazeta.publishedAt": "δημοσιεύτηκε στις {date}",
   "rede.gazeta.previewTitle": "Αναθεώρηση — Αρ. {number}",
-  "rede.gazeta.previewEmpty": "Δεν υπάρχει περιεχόμενο για αυτήν τη γλώσσα."
+  "rede.gazeta.previewEmpty": "Δεν υπάρχει περιεχόμενο για αυτήν τη γλώσσα.",
+  "rede.gazeta.broadcast": "Διάδοση",
+  "rede.gazeta.broadcastConfirm": "Διάδοση του τεύχους αρ. {number} με e-mail σε όλο το προσωπικό του δικτύου;",
+  "rede.gazeta.broadcastDone": "Στάλθηκε σε {count} παραλήπτες.",
+  "rede.gazeta.broadcastedAt": "διαδόθηκε στις {date}"
 }

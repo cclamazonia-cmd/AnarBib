@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Vorschau",
   "rede.gazeta.publishedAt": "veröffentlicht am {date}",
   "rede.gazeta.previewTitle": "Durchsicht — Nr. {number}",
-  "rede.gazeta.previewEmpty": "Kein Inhalt für diese Sprache."
+  "rede.gazeta.previewEmpty": "Kein Inhalt für diese Sprache.",
+  "rede.gazeta.broadcast": "Verbreiten",
+  "rede.gazeta.broadcastConfirm": "Ausgabe {number} per E-Mail an das gesamte Netzwerk-Team senden?",
+  "rede.gazeta.broadcastDone": "An {count} Personen gesendet.",
+  "rede.gazeta.broadcastedAt": "verbreitet am {date}"
 }

@@ -77,6 +77,30 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Het maandelijkse concept van de Gazette (nr. {number}) is klaar. Bekijk de 10 talen, corrigeer indien nodig en publiceer het via het netwerkpaneel. Er wordt niets automatisch gepubliceerd.",
     el: "Το μηνιαίο πρόχειρο της εφημερίδας (αρ. {number}) είναι έτοιμο. Έλεγξε τις 10 γλώσσες, διόρθωσε αν χρειάζεται και δημοσίευσέ το από τον πίνακα του δικτύου. Τίποτα δεν δημοσιεύεται αυτόματα."
   },
+  "gazette.issue.published.sub": {
+    "pt-BR": "A Gazeta n.º {number} foi publicada!",
+    fr: "La Gazette n°{number} est parue !",
+    es: "¡La Gaceta n.º {number} ya está disponible!",
+    en: "Gazette no. {number} is out!",
+    it: "È uscita la Gazzetta n. {number}!",
+    de: "Die Gazette Nr. {number} ist da!",
+    ca: "Ja ha sortit la Gaseta núm. {number}!",
+    eo: "La Gazeto n-ro {number} aperis!",
+    nl: "Gazette nr. {number} is uit!",
+    el: "Κυκλοφόρησε η εφημερίδα αρ. {number}!"
+  },
+  "gazette.issue.published.intro": {
+    "pt-BR": "O número {number} da Gazeta da rede acaba de sair. Boa leitura — e fique à vontade para divulgá-la.",
+    fr: "Le numéro {number} de la Gazette du réseau vient de paraître. Bonne lecture — et n'hésite pas à la diffuser autour de toi.",
+    es: "El número {number} de la Gaceta de la red acaba de salir. Buena lectura — y no dudes en difundirla.",
+    en: "Issue {number} of the network Gazette has just been published. Enjoy — and feel free to share it around.",
+    it: "È appena uscito il numero {number} della Gazzetta della rete. Buona lettura — e sentiti libero di diffonderla.",
+    de: "Ausgabe {number} der Netzwerk-Gazette ist soeben erschienen. Viel Freude beim Lesen — und teile sie gern weiter.",
+    ca: "Acaba de sortir el número {number} de la Gaseta de la xarxa. Bona lectura — i no dubtis a difondre-la.",
+    eo: "Ĵus aperis la numero {number} de la reta Gazeto. Bonan legadon — kaj disvastigu ĝin laŭplaĉe.",
+    nl: "Nummer {number} van de netwerk-Gazette is zojuist verschenen. Veel leesplezier — en deel het gerust.",
+    el: "Μόλις κυκλοφόρησε το τεύχος {number} της εφημερίδας του δικτύου. Καλή ανάγνωση — και μη διστάσεις να τη διαδώσεις."
+  },
 
   "lmsg.reader.sub": {
     "pt-BR": "Mensagem da sua biblioteca",

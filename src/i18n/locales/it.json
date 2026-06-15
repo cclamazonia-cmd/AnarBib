@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Anteprima",
   "rede.gazeta.publishedAt": "pubblicata il {date}",
   "rede.gazeta.previewTitle": "Revisione — N. {number}",
-  "rede.gazeta.previewEmpty": "Nessun contenuto per questa lingua."
+  "rede.gazeta.previewEmpty": "Nessun contenuto per questa lingua.",
+  "rede.gazeta.broadcast": "Diffondi",
+  "rede.gazeta.broadcastConfirm": "Diffondere il n. {number} via e-mail a tutto lo staff della rete?",
+  "rede.gazeta.broadcastDone": "Diffuso a {count} destinatari.",
+  "rede.gazeta.broadcastedAt": "diffuso il {date}"
 }

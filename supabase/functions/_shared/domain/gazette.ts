@@ -69,6 +69,8 @@ export async function handleGazetteEvent(recordId) {
       result = await handleContributionReceived(payload, ctx);
     } else if (event === "gazette.draft.ready_for_review") {
       result = await handleDraftReady(payload, ctx);
+    } else if (event === "gazette.issue.published") {
+      result = await handleIssuePublished(payload, ctx);
     } else {
       console.warn(`[gazette] unknown event: ${event}`);
       await markOutboxSkipped(outbox.id);
@@ -146,4 +148,31 @@ async function handleDraftReady(payload, ctx) {
     results.push(await safeSendEmail(target, sub, html, text, "gazette_draft_review", ctx));
   }
   return { recipients_count: results.length, results };
+}
+
+// gazette.issue.published → 1 destinataire (le fan-out est fait à l'énumération
+// par api.fn_gazette_broadcast : 1 ligne d'outbox par personne). Mail dans la
+// locale du destinataire ; lien vers la gazette PUBLIQUE (le numéro est publié).
+async function handleIssuePublished(payload, ctx) {
+  const to = String(payload.to || "").trim();
+  if (!to) return { recipients_count: 0, reason: "no_email" };
+  const locale = String(payload.locale || "").trim() || ctx?.default_locale || "pt-BR";
+  const number = String(payload.issue_number ?? "");
+  const sub = tMail(locale, "gazette.issue.published.sub", { number });
+  const introHtml =
+    `<p>${esc(tMail(locale, "gazette.issue.published.intro", { number }))}</p>`
+    + `<p><a href="${APP_URL}/federacao/gazeta">${APP_URL}/federacao/gazeta</a></p>`;
+  const { html, text } = renderEmail({
+    locale,
+    preheader: sub,
+    title: sub,
+    greeting: greeting(locale, payload.to_name || undefined),
+    introHtml,
+    details: [],
+    footerHtml: footerPadrao(ctx, locale),
+    context: ctx,
+  });
+  const target = { email: to, name: payload.to_name || undefined };
+  const result = await safeSendEmail(target, sub, html, text, "gazette_published", ctx);
+  return { recipients_count: 1, result };
 }

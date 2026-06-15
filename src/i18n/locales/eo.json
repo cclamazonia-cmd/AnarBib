@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Antaŭrigardo",
   "rede.gazeta.publishedAt": "publikigita la {date}",
   "rede.gazeta.previewTitle": "Revizio — N-ro {number}",
-  "rede.gazeta.previewEmpty": "Neniu enhavo por ĉi tiu lingvo."
+  "rede.gazeta.previewEmpty": "Neniu enhavo por ĉi tiu lingvo.",
+  "rede.gazeta.broadcast": "Disvastigi",
+  "rede.gazeta.broadcastConfirm": "Ĉu disvastigi la n-ron {number} retpoŝte al la tuta reta teamo?",
+  "rede.gazeta.broadcastDone": "Sendita al {count} ricevantoj.",
+  "rede.gazeta.broadcastedAt": "disvastigita la {date}"
 }

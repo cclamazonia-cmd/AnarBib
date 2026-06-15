@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Previsualització",
   "rede.gazeta.publishedAt": "publicada el {date}",
   "rede.gazeta.previewTitle": "Revisió — Núm. {number}",
-  "rede.gazeta.previewEmpty": "Cap contingut per a aquesta locale."
+  "rede.gazeta.previewEmpty": "Cap contingut per a aquesta locale.",
+  "rede.gazeta.broadcast": "Difondre",
+  "rede.gazeta.broadcastConfirm": "Difondre el núm. {number} per correu a tot l’staff de la xarxa?",
+  "rede.gazeta.broadcastDone": "Difós a {count} destinataris.",
+  "rede.gazeta.broadcastedAt": "difós el {date}"
 }

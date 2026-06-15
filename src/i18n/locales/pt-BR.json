@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Pré-visualizar",
   "rede.gazeta.publishedAt": "publicada em {date}",
   "rede.gazeta.previewTitle": "Revisão — N.º {number}",
-  "rede.gazeta.previewEmpty": "Nenhum conteúdo para esta locale."
+  "rede.gazeta.previewEmpty": "Nenhum conteúdo para esta locale.",
+  "rede.gazeta.broadcast": "Difundir",
+  "rede.gazeta.broadcastConfirm": "Difundir o n.º {number} por e-mail a todo o staff da rede?",
+  "rede.gazeta.broadcastDone": "Difundido a {count} destinatários.",
+  "rede.gazeta.broadcastedAt": "difundido em {date}"
 }

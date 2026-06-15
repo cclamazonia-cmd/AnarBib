@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Preview",
   "rede.gazeta.publishedAt": "published on {date}",
   "rede.gazeta.previewTitle": "Review — No. {number}",
-  "rede.gazeta.previewEmpty": "No content for this locale."
+  "rede.gazeta.previewEmpty": "No content for this locale.",
+  "rede.gazeta.broadcast": "Broadcast",
+  "rede.gazeta.broadcastConfirm": "Broadcast issue {number} by email to all network staff?",
+  "rede.gazeta.broadcastDone": "Sent to {count} recipients.",
+  "rede.gazeta.broadcastedAt": "broadcast on {date}"
 }

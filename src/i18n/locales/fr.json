@@ -4806,5 +4806,9 @@
   "rede.gazeta.preview": "Aperçu",
   "rede.gazeta.publishedAt": "publié le {date}",
   "rede.gazeta.previewTitle": "Relecture — N°{number}",
-  "rede.gazeta.previewEmpty": "Aucun contenu pour cette locale."
+  "rede.gazeta.previewEmpty": "Aucun contenu pour cette locale.",
+  "rede.gazeta.broadcast": "Diffuser",
+  "rede.gazeta.broadcastConfirm": "Diffuser le n°{number} par e-mail à tout le staff du réseau ?",
+  "rede.gazeta.broadcastDone": "Diffusé à {count} destinataires.",
+  "rede.gazeta.broadcastedAt": "diffusé le {date}"
 }
