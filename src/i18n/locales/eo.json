@@ -4879,5 +4879,6 @@
   "card.resolve.scan.error.unsupported": "Ĉi tiu retumilo ne subtenas skanadon. Tajpu la kodon mane.",
   "card.resolve.scan.error.generic": "Ne eblis malfermi la kameraon. Tajpu la kodon mane.",
   "catalogacao.isbn.scan.action": "Skani la ISBN",
-  "catalogacao.isbn.scan.prompt": "Celu la strikodon (ISBN) de la libro"
+  "catalogacao.isbn.scan.prompt": "Celu la strikodon (ISBN) de la libro",
+  "card.resolve.error.card_revoked": "Ĉi tiu karto estis anstataŭigita per pli nova. Petu ĝisdatigitan karton."
 }

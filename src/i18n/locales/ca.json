@@ -4879,5 +4879,6 @@
   "card.resolve.scan.error.unsupported": "Aquest navegador no admet l'escaneig. Escriu el codi a mà.",
   "card.resolve.scan.error.generic": "No s'ha pogut obrir la càmera. Escriu el codi a mà.",
   "catalogacao.isbn.scan.action": "Escaneja l'ISBN",
-  "catalogacao.isbn.scan.prompt": "Apunta al codi de barres (ISBN) del llibre"
+  "catalogacao.isbn.scan.prompt": "Apunta al codi de barres (ISBN) del llibre",
+  "card.resolve.error.card_revoked": "Aquesta targeta s'ha substituït per una de més recent. Demana una targeta actualitzada."
 }

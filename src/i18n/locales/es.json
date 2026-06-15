@@ -4879,5 +4879,6 @@
   "card.resolve.scan.error.unsupported": "El escaneo no es compatible con este navegador. Escribí el código a mano.",
   "card.resolve.scan.error.generic": "No se pudo abrir la cámara. Escribí el código a mano.",
   "catalogacao.isbn.scan.action": "Escanear ISBN",
-  "catalogacao.isbn.scan.prompt": "Apuntá al código de barras (ISBN) del libro"
+  "catalogacao.isbn.scan.prompt": "Apuntá al código de barras (ISBN) del libro",
+  "card.resolve.error.card_revoked": "Esta tarjeta fue reemplazada por una más reciente. Pedí una tarjeta actualizada."
 }

@@ -4879,5 +4879,6 @@
   "card.resolve.scan.error.unsupported": "Das Scannen wird von diesem Browser nicht unterstützt. Gib den Code von Hand ein.",
   "card.resolve.scan.error.generic": "Die Kamera konnte nicht geöffnet werden. Gib den Code von Hand ein.",
   "catalogacao.isbn.scan.action": "ISBN scannen",
-  "catalogacao.isbn.scan.prompt": "Richte die Kamera auf den ISBN-Barcode des Buches"
+  "catalogacao.isbn.scan.prompt": "Richte die Kamera auf den ISBN-Barcode des Buches",
+  "card.resolve.error.card_revoked": "Diese Karte wurde durch eine neuere ersetzt. Bitte um eine aktuelle Karte."
 }

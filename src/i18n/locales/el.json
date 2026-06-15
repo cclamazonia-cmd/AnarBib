@@ -4879,5 +4879,6 @@
   "card.resolve.scan.error.unsupported": "Η σάρωση δεν υποστηρίζεται από αυτό το πρόγραμμα περιήγησης. Πληκτρολογήστε τον κωδικό με το χέρι.",
   "card.resolve.scan.error.generic": "Δεν ήταν δυνατό το άνοιγμα της κάμερας. Πληκτρολογήστε τον κωδικό με το χέρι.",
   "catalogacao.isbn.scan.action": "Σάρωση ISBN",
-  "catalogacao.isbn.scan.prompt": "Στρέψτε στο barcode ISBN του βιβλίου"
+  "catalogacao.isbn.scan.prompt": "Στρέψτε στο barcode ISBN του βιβλίου",
+  "card.resolve.error.card_revoked": "Αυτή η κάρτα αντικαταστάθηκε από νεότερη. Ζητήστε μια ενημερωμένη κάρτα."
 }

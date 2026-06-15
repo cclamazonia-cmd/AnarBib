@@ -4879,5 +4879,6 @@
   "card.resolve.scan.error.unsupported": "Scannen wordt niet ondersteund door deze browser. Typ de code met de hand.",
   "card.resolve.scan.error.generic": "Kan de camera niet openen. Typ de code met de hand.",
   "catalogacao.isbn.scan.action": "ISBN scannen",
-  "catalogacao.isbn.scan.prompt": "Richt op de ISBN-streepjescode van het boek"
+  "catalogacao.isbn.scan.prompt": "Richt op de ISBN-streepjescode van het boek",
+  "card.resolve.error.card_revoked": "Deze kaart is vervangen door een nieuwere. Vraag om een actuele kaart."
 }
