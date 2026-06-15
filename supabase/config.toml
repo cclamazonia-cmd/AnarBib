@@ -81,6 +81,10 @@ verify_jwt = false
 [functions.read-pdf]
 verify_jwt = false
 
+# Contributions ouvertes à la Gazette (réception publique, rate-limitée).
+[functions.submit-gazette-contribution]
+verify_jwt = false
+
 [functions.bn_isbn_lookup]
 verify_jwt = false
 
@@ -90,6 +94,11 @@ verify_jwt = false
 # Réception d'un lot de fonds (paquet EX-3) : appelée server-to-server par le
 # dispatch SQL (detected_format='zip') avec auth interne x-import-secret, sans JWT.
 [functions.receive-fonds-bundle]
+verify_jwt = false
+
+# GC des dépôts attachés (point 2) : appelée par le cron SQL (ingest.fn_cron_gc_deposits)
+# avec auth interne x-import-secret, sans JWT.
+[functions.gc-deposits]
 verify_jwt = false
 
 [functions.read-digital-asset]
