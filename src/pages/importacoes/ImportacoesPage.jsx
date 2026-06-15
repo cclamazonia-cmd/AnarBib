@@ -13,6 +13,9 @@ import './ImportacoesPage.css';
 
 const BUCKET = 'catalogos_parceiros_raw';
 const ACCEPTED_EXTENSIONS = '.csv,.tsv,.txt,.ris,.bib,.bibtex,.mrc,.xlsx,.xls,.ods,.pdf,.json,.xml,.zip,.marc,.marcxml';
+// Champs cibles d'un profil d'import (mapping colonne→champ + valeurs par défaut).
+// Clés techniques alignées sur le parseur (process-partner-catalog-import).
+const PROFILE_FIELDS = ['title', 'subtitle', 'author', 'publisher', 'place', 'year', 'language', 'subjects', 'isbn', 'issn', 'edition', 'itemType', 'externalKey'];
 
 function detectFileKind(fileName) {
   const n = (fileName || '').toLowerCase();
@@ -102,6 +105,14 @@ export default function ImportacoesPage() {
   // ── Adaptateur : overrides Estrutura / Vocabulário ('auto' = laisser l'auto-détection) ──
   const [adapterFormat, setAdapterFormat] = useState('auto');
   const [adapterVocabulary, setAdapterVocabulary] = useState('auto');
+  // ── Profils d'import (axe Perfil) ──────────────────────
+  const [adapterProfile, setAdapterProfile] = useState(''); // '' = Padrão (aucun)
+  const [profiles, setProfiles] = useState([]);
+  const [profileFormOpen, setProfileFormOpen] = useState(false);
+  const [profileName, setProfileName] = useState('');
+  const [profileMapRows, setProfileMapRows] = useState([{ field: 'title', column: '' }]);
+  const [profileDefRows, setProfileDefRows] = useState([{ field: 'language', value: '' }]);
+  const [profileSaving, setProfileSaving] = useState(false);
 
   // ── Fontes externas search ─────────────────────────────
   const [searchQuery, setSearchQuery] = useState('');
@@ -238,6 +249,17 @@ export default function ImportacoesPage() {
   // Réinitialise pagination + sélection quand on change de run ou de filtre.
   useEffect(() => { setRowLimit(50); setSelectedRows(new Set()); }, [selectedRunId, filaStateFilter, filaMatchFilter]);
 
+  // Profils d'import de la biblio (axe Perfil de l'adaptateur).
+  useEffect(() => {
+    if (!libraryId) return undefined;
+    let active = true;
+    supabase.rpc('fn_import_profiles_list', { p_library_id: libraryId }).then(({ data, error }) => {
+      if (!active) return;
+      if (!error && data) setProfiles(Array.isArray(data) ? data : []);
+    });
+    return () => { active = false; };
+  }, [libraryId]);
+
   // ── Role gating ────────────────────────────────────────
   const roleLoaded = role !== null && role !== undefined;
   // IMP-14 : import/export sous l'autorité des coordinateurs (aligné sur le
@@ -290,6 +312,10 @@ export default function ImportacoesPage() {
           p_forced_vocabulary: adapterVocabulary === 'auto' ? null : adapterVocabulary,
         });
       }
+      // Adaptateur (axe Perfil) : associe le profil choisi au run (après les overrides, qui remplacent).
+      if (adapterProfile) {
+        await supabase.rpc('fn_import_set_profile', { p_run_id: Number(runId), p_profile_id: Number(adapterProfile) });
+      }
       setMsg({ text: t({ id: 'importacoes.runCreatedDispatching' }, { id: runId }), kind: 'info' });
       await supabase.rpc('fn_import_dispatch', { p_run_id: Number(runId) });
 
@@ -299,6 +325,46 @@ export default function ImportacoesPage() {
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setUploading(false); }
+  }
+
+  // ── Profils d'import (axe Perfil) : liste / création / suppression ──────────
+  async function reloadProfiles() {
+    if (!libraryId) return;
+    const { data, error } = await supabase.rpc('fn_import_profiles_list', { p_library_id: libraryId });
+    if (!error && data) setProfiles(Array.isArray(data) ? data : []);
+  }
+  async function handleCreateProfile() {
+    if (!libraryId || !profileName.trim()) return;
+    const mappings = {};
+    for (const r of profileMapRows) { if (r.field && r.column.trim()) mappings[r.field] = r.column.trim(); }
+    const defaults = {};
+    for (const r of profileDefRows) { if (r.field && r.value.trim()) defaults[r.field] = r.value.trim(); }
+    setProfileSaving(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_import_profile_create', {
+        p_library_id: libraryId, p_name: profileName.trim(),
+        p_column_mappings: mappings, p_default_values: defaults,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'importacoes.adapter.profileCreated' }, { name: profileName.trim() }), kind: 'ok' });
+      setProfileName(''); setProfileMapRows([{ field: 'title', column: '' }]); setProfileDefRows([{ field: 'language', value: '' }]);
+      setProfileFormOpen(false);
+      await reloadProfiles();
+      if (data?.id) setAdapterProfile(String(data.id));
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setProfileSaving(false); }
+  }
+  async function handleDeleteProfile(id) {
+    if (!window.confirm(t({ id: 'importacoes.adapter.profileDeleteConfirm' }))) return;
+    try {
+      const { error } = await supabase.rpc('fn_import_profile_delete', { p_profile_id: Number(id) });
+      if (error) throw error;
+      if (String(id) === adapterProfile) setAdapterProfile('');
+      await reloadProfiles();
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    }
   }
 
   // ── Validation par-ligne : sélection puis promotion en lot ─────
@@ -960,11 +1026,70 @@ export default function ImportacoesPage() {
                 </div>
                 <div className="ab-field">
                   <label className="ab-field__label">{t({ id: 'importacoes.adapter.profile' })}</label>
-                  <select className="ab-select" disabled>
-                    <option>{t({ id: 'importacoes.adapter.defaultProfile' })}</option>
+                  <select className="ab-select" value={adapterProfile} onChange={e => setAdapterProfile(e.target.value)} disabled={uploading}>
+                    <option value="">{t({ id: 'importacoes.adapter.defaultProfile' })}</option>
+                    {profiles.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                   </select>
                 </div>
               </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 8 }}>
+                <button className="cat-btn secondary" type="button" onClick={() => setProfileFormOpen(o => !o)}>
+                  {profileFormOpen ? t({ id: 'importacoes.adapter.profileClose' }) : t({ id: 'importacoes.adapter.profileManage' })}
+                </button>
+                {adapterProfile && (
+                  <button className="cat-btn secondary" type="button" onClick={() => handleDeleteProfile(adapterProfile)}
+                    style={{ borderColor: 'var(--brand-danger, #b42318)', color: 'var(--brand-danger, #b42318)' }}>
+                    {t({ id: 'importacoes.adapter.profileDelete' })}
+                  </button>
+                )}
+              </div>
+              {profileFormOpen && (
+                <div style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(127,127,127,0.08)', marginBottom: 10 }}>
+                  <input className="ab-input" value={profileName} onChange={e => setProfileName(e.target.value)}
+                    placeholder={t({ id: 'importacoes.adapter.profileName' })} style={{ width: '100%', marginBottom: 10 }} />
+                  <p className="imp-note" style={{ margin: '0 0 4px', fontWeight: 600 }}>{t({ id: 'importacoes.adapter.profileMappings' })}</p>
+                  {profileMapRows.map((row, idx) => (
+                    <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+                      <input className="ab-input" value={row.column}
+                        onChange={e => setProfileMapRows(rows => rows.map((r, i) => i === idx ? { ...r, column: e.target.value } : r))}
+                        placeholder={t({ id: 'importacoes.adapter.profileColumn' })} style={{ flex: 1 }} />
+                      <span style={{ alignSelf: 'center' }}>→</span>
+                      <select className="ab-select" value={row.field} style={{ width: 150 }}
+                        onChange={e => setProfileMapRows(rows => rows.map((r, i) => i === idx ? { ...r, field: e.target.value } : r))}>
+                        {PROFILE_FIELDS.map(f => <option key={f} value={f}>{f}</option>)}
+                      </select>
+                      <button className="cat-btn secondary" type="button" onClick={() => setProfileMapRows(rows => rows.filter((_, i) => i !== idx))}>×</button>
+                    </div>
+                  ))}
+                  <button className="cat-btn secondary" type="button" style={{ marginBottom: 12 }}
+                    onClick={() => setProfileMapRows(rows => [...rows, { field: 'title', column: '' }])}>
+                    {t({ id: 'importacoes.adapter.profileAddRow' })}
+                  </button>
+                  <p className="imp-note" style={{ margin: '0 0 4px', fontWeight: 600 }}>{t({ id: 'importacoes.adapter.profileDefaults' })}</p>
+                  {profileDefRows.map((row, idx) => (
+                    <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+                      <select className="ab-select" value={row.field} style={{ width: 150 }}
+                        onChange={e => setProfileDefRows(rows => rows.map((r, i) => i === idx ? { ...r, field: e.target.value } : r))}>
+                        {PROFILE_FIELDS.map(f => <option key={f} value={f}>{f}</option>)}
+                      </select>
+                      <span style={{ alignSelf: 'center' }}>=</span>
+                      <input className="ab-input" value={row.value}
+                        onChange={e => setProfileDefRows(rows => rows.map((r, i) => i === idx ? { ...r, value: e.target.value } : r))}
+                        placeholder={t({ id: 'importacoes.adapter.profileValue' })} style={{ flex: 1 }} />
+                      <button className="cat-btn secondary" type="button" onClick={() => setProfileDefRows(rows => rows.filter((_, i) => i !== idx))}>×</button>
+                    </div>
+                  ))}
+                  <button className="cat-btn secondary" type="button" style={{ marginBottom: 12 }}
+                    onClick={() => setProfileDefRows(rows => [...rows, { field: 'language', value: '' }])}>
+                    {t({ id: 'importacoes.adapter.profileAddRow' })}
+                  </button>
+                  <div>
+                    <button className="cat-btn primary" type="button" disabled={profileSaving || !profileName.trim()} onClick={handleCreateProfile}>
+                      {profileSaving ? t({ id: 'importacoes.adapter.profileSaving' }) : t({ id: 'importacoes.adapter.profileSave' })}
+                    </button>
+                  </div>
+                </div>
+              )}
               <p className="imp-note" style={{ margin: 0 }}>
                 {t({ id: 'importacoes.adapter.explanation' })}
               </p>

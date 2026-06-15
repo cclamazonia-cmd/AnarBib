@@ -316,12 +316,27 @@ function mapRisRecord(record) {
     externalKey
   };
 }
-function buildParsedEntries(records) {
+function buildParsedEntries(records, columnMappings) {
   return records.map((record, idx)=>({
       rowNo: idx + 2,
       rawPayload: record,
-      mapped: mapRecord(record)
+      mapped: mapRecord(record, columnMappings)
     }));
+}
+// Profil (axe Perfil) — défauts : clé canonique -> champ scalaire de l'objet mapped
+// (les champs tableau author/subjects ne sont pas défautés).
+const PROFILE_DEFAULT_TARGETS = {
+  title: 'title', subtitle: 'subtitle', publisher: 'publisher',
+  place: 'placeOfPublication', year: 'publicationYear', language: 'language',
+  isbn: 'isbn', issn: 'issn', edition: 'editionStatement', itemType: 'itemType', externalKey: 'externalKey'
+};
+function applyProfileDefaults(mapped, defaults) {
+  if (!mapped || !defaults) return;
+  for (const field of Object.keys(PROFILE_DEFAULT_TARGETS)){
+    const target = PROFILE_DEFAULT_TARGETS[field];
+    const dv = clean(defaults[field]);
+    if (dv && !clean(mapped[target])) mapped[target] = dv;
+  }
 }
 function buildParsedEntriesFromRis(records) {
   return records.map((record, idx)=>({
@@ -337,20 +352,27 @@ function firstNonEmpty(record, aliases) {
   }
   return null;
 }
-function mapRecord(record) {
-  const title = firstNonEmpty(record, [
+function mapRecord(record, columnMappings) {
+  const cm = columnMappings || {};
+  // Profil (axe Perfil) : si une colonne est explicitement mappee pour ce champ, on la
+  // prepend aux alias auto (donc prioritaire). La colonne est normalisee comme les en-tetes.
+  const get = (field, aliases) => {
+    const col = cm[field];
+    return firstNonEmpty(record, col ? [normalizeHeader(String(col)), ...aliases] : aliases);
+  };
+  const title = get('title', [
     'title',
     'titulo',
     'titulo_livro',
     'titulo_principal',
     'name'
   ]);
-  const subtitle = firstNonEmpty(record, [
+  const subtitle = get('subtitle', [
     'subtitle',
     'subtitulo',
     'sub_title'
   ]);
-  const author = firstNonEmpty(record, [
+  const author = get('author', [
     'author',
     'authors',
     'autor',
@@ -358,32 +380,32 @@ function mapRecord(record) {
     'creator',
     'creators'
   ]);
-  const publisher = firstNonEmpty(record, [
+  const publisher = get('publisher', [
     'publisher',
     'editora',
     'editor',
     'imprint'
   ]);
-  const placeOfPublication = firstNonEmpty(record, [
+  const placeOfPublication = get('place', [
     'place_of_publication',
     'publication_place',
     'local_de_publicacao',
     'cidade',
     'place'
   ]);
-  const publicationYearRaw = firstNonEmpty(record, [
+  const publicationYearRaw = get('year', [
     'publication_year',
     'year',
     'ano',
     'date',
     'publication_date'
   ]);
-  const language = firstNonEmpty(record, [
+  const language = get('language', [
     'language',
     'idioma',
     'lang'
   ]);
-  const subjectsRaw = firstNonEmpty(record, [
+  const subjectsRaw = get('subjects', [
     'subjects',
     'subject',
     'assuntos',
@@ -392,25 +414,25 @@ function mapRecord(record) {
     'keywords',
     'tags'
   ]);
-  const isbn = firstNonEmpty(record, [
+  const isbn = get('isbn', [
     'isbn',
     'isbn_10',
     'isbn_13'
   ]);
-  const issn = firstNonEmpty(record, [
+  const issn = get('issn', [
     'issn'
   ]);
-  const editionStatement = firstNonEmpty(record, [
+  const editionStatement = get('edition', [
     'edition_statement',
     'edition',
     'edicao'
   ]);
-  const itemType = firstNonEmpty(record, [
+  const itemType = get('itemType', [
     'item_type',
     'type',
     'document_type'
   ]);
-  const externalKey = firstNonEmpty(record, [
+  const externalKey = get('externalKey', [
     'external_key',
     'id_externo',
     'partner_id',
@@ -587,6 +609,16 @@ Deno.serve(async (req)=>{
     const adapterOv = (run && run.adapter_overrides) || {};
     const forcedFormat = clean(adapterOv.forced_format);         // 'marc'|'ris'|'csv'|'tsv'|null
     const forcedVocabulary = clean(adapterOv.forced_vocabulary); // 'unimarc'|'marc21'|null
+    // Profil (axe Perfil) : column_mappings (prioritaires sur les alias CSV) + default_values.
+    const profileId = adapterOv.profile_id ? Number(adapterOv.profile_id) : null;
+    let profileColumnMappings = null;
+    let profileDefaults = null;
+    if (profileId) {
+      const { data: profileRow } = await supabaseAdmin.schema('ingest').from('import_profiles')
+        .select('column_mappings, default_values').eq('id', profileId).maybeSingle();
+      profileColumnMappings = (profileRow && profileRow.column_mappings) || null;
+      profileDefaults = (profileRow && profileRow.default_values) || null;
+    }
     let headers = [];
     let detectedFormat = 'csv';
     let detectedDelimiterLabel = null;
@@ -616,7 +648,7 @@ Deno.serve(async (req)=>{
       const parsedCsv = parseCsv(fileText, delimiter);
       const parsedObjects = rowsToObjects(parsedCsv);
       headers = parsedObjects.headers;
-      parsedEntries = buildParsedEntries(parsedObjects.records);
+      parsedEntries = buildParsedEntries(parsedObjects.records, profileColumnMappings);
       detectedFormat = delimiter === '\t' ? 'tsv' : 'csv';
       detectedDelimiterLabel = delimiter === '\t' ? '\\t' : delimiter;
       parserVersion = CSV_PARSER_VERSION;
@@ -637,6 +669,10 @@ Deno.serve(async (req)=>{
         if (risDetected) runRis();
         else runCsv(null);
       }
+    }
+    // Profil (axe Perfil) : valeurs par défaut sur les champs scalaires vides (tous formats).
+    if (profileDefaults) {
+      for (const entry of parsedEntries) applyProfileDefaults(entry.mapped, profileDefaults);
     }
     const stagingRows = parsedEntries.map((entry)=>{
       const mapped = entry.mapped;
