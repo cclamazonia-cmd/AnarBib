@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import QRCode from 'qrcode';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -227,6 +226,7 @@ export default function LabelSheetPrinter({ onChanged }) {
     // (toDataURL renvoie une Promise, le rendu de la feuille est synchrone).
     const qrById = {};
     if (includeQr) {
+      const QRCode = (await import('qrcode')).default;
       await Promise.all(selectedLabels.map(async (l) => {
         try {
           qrById[l.exemplar_id] = await QRCode.toDataURL(labelQrUrl(l), {

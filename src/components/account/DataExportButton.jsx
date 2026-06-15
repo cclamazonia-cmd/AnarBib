@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
-import JSZip from 'jszip';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
@@ -310,7 +309,8 @@ export default function DataExportButton() {
       if (error) throw error;
       if (!data) throw new Error('No data returned');
 
-      // 2. Construire le zip
+      // 2. Construire le zip (jszip chargé à la demande — hors du bundle initial)
+      const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
 
       // README explicatif

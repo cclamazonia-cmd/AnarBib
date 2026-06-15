@@ -4,8 +4,6 @@ import { supabase } from '@/lib/supabase';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { Button } from '@/components/ui';
-import QRCode from 'qrcode';
-import { jsPDF } from 'jspdf';
 
 // ── Carte-lecteur (chantier mobile, 28/05/2026) ─────────────────────────────
 // Extrait d'AccountPage en composant LAZY (refactor 08/06/2026) : c'est la seule
@@ -17,6 +15,8 @@ import { jsPDF } from 'jspdf';
 // Génération locale (qrcode + canvas), aucun appel réseau (anti-tracking).
 
 async function composeCardCanvas(token, slug) {
+  // qrcode chargé à la demande (defer ~50 ko hors du chunk de la section)
+  const QRCode = (await import('qrcode')).default;
   // Canvas carte : fond clair, slug en haut, QR compact centré.
   // QR ~240px sur canvas 400px ≈ 40-45 mm imprimé sur A6.
   const W = 400, H = 380;
@@ -70,6 +70,7 @@ export default function ReaderCardSection() {
       });
       // Export PDF (impression) : carte centrée sur une page A6
       const pngDataUrl = canvas.toDataURL('image/png');
+      const { jsPDF } = await import('jspdf');
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a6' });
       const pw = pdf.internal.pageSize.getWidth();
       const imgW = pw - 20;
