@@ -122,6 +122,22 @@
 .ab-textarea { min-height: 96px; resize: vertical; }
 .ab-select { font-weight: 600; }
 
+/* ── Mobile (≤ 640px) — cibles tactiles & anti-zoom iOS ─────────────────
+   Chantier mobile/responsive — Phase A (cf. docs/decisions/CADRAGE_mobile_
+   responsive_2026-06-16). Surcharges co-localisees pour garantir la cascade
+   (memes selecteurs, regle posterieure). Desktop inchange. */
+@media (max-width: 640px) {
+  /* >= 44px : cible tactile minimale (WCAG 2.5.5, iOS HIG, Material). */
+  .ab-button,
+  .ab-button--mini,
+  .ab-button--sm { min-height: 44px; }
+
+  /* >= 16px : empeche le zoom automatique d'iOS Safari au focus du champ. */
+  .ab-input,
+  .ab-select,
+  .ab-textarea { font-size: 16px; }
+}
+
 /* ── Card ───────────────────────────────────────────────────────────── */
 
 .ab-card {

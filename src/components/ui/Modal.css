@@ -94,6 +94,7 @@
 
 .ab-modal__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   justify-content: flex-end;
   margin-top: 20px;
