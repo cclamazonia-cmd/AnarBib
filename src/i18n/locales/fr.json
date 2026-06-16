@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "Quelques sujets déjà sur la table pour une première assemblée :",
   "federacao.assembleias.firstPoints.rules": "Se doter de nos propres règles d’assemblée (date, quorum, mandat, ordre du jour) — confirmer ou amender ce qui précède.",
   "federacao.assembleias.firstPoints.subjects": "Ouvrir l’édition des sujets et mots-clés aux contributeur·rices (aujourd’hui réservée à la coordination).",
-  "federacao.assembleias.firstPoints.terms": "La fabrique des termes : comment on adopte (ou objecte) un terme, et jusqu’où on accepte des variantes par langue plutôt qu’une formulation unique."
+  "federacao.assembleias.firstPoints.terms": "La fabrique des termes : comment on adopte (ou objecte) un terme, et jusqu’où on accepte des variantes par langue plutôt qu’une formulation unique.",
+  "federacao.inicio.assembleias": "Assemblées générales",
+  "federacao.inicio.assembleias.desc": "Préfiguration de l’assemblée du réseau : principe, règles, ordre du jour.",
+  "federacao.inicio.toAssembleias": "Ouvrir les assemblées"
 }

@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "Alguns temes ja damunt la taula per a una primera assemblea:",
   "federacao.assembleias.firstPoints.rules": "Dotar-nos de les nostres pròpies regles d’assemblea (data, quòrum, mandat, ordre del dia) — confirmar o esmenar el que precedeix.",
   "federacao.assembleias.firstPoints.subjects": "Obrir l’edició dels temes i les paraules clau a qui hi col·labora (avui reservada a la coordinació).",
-  "federacao.assembleias.firstPoints.terms": "La fàbrica dels termes: com s’adopta (o s’objecta) un terme, i fins on acceptem variants per llengua en lloc d’una formulació única."
+  "federacao.assembleias.firstPoints.terms": "La fàbrica dels termes: com s’adopta (o s’objecta) un terme, i fins on acceptem variants per llengua en lloc d’una formulació única.",
+  "federacao.inicio.assembleias": "Assemblees generals",
+  "federacao.inicio.assembleias.desc": "Prefiguració de l’assemblea de la xarxa: principi, regles, ordre del dia.",
+  "federacao.inicio.toAssembleias": "Obrir les assemblees"
 }

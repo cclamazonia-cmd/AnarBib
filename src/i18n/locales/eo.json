@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "Kelkaj temoj jam sur la tablo por unua asembleo:",
   "federacao.assembleias.firstPoints.rules": "Doni al ni niajn proprajn asembleajn regulojn (dato, kvorumo, mandato, tagordo) — konfirmi aŭ ŝanĝi la antaŭan.",
   "federacao.assembleias.firstPoints.subjects": "Malfermi la redaktadon de la temoj kaj ŝlosilvortoj al la kontribuantoj (hodiaŭ rezervita al la kunordigo).",
-  "federacao.assembleias.firstPoints.terms": "La fabriko de la terminoj: kiel oni adoptas (aŭ kontraŭdiras) terminon, kaj ĝis kie ni akceptas variantojn laŭ lingvo anstataŭ unu sola formulo."
+  "federacao.assembleias.firstPoints.terms": "La fabriko de la terminoj: kiel oni adoptas (aŭ kontraŭdiras) terminon, kaj ĝis kie ni akceptas variantojn laŭ lingvo anstataŭ unu sola formulo.",
+  "federacao.inicio.assembleias": "Ĝeneralaj asembleoj",
+  "federacao.inicio.assembleias.desc": "Antaŭpreparo de la reta asembleo: principo, reguloj, tagordo.",
+  "federacao.inicio.toAssembleias": "Malfermi la asembleojn"
 }

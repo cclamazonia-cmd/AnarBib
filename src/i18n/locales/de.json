@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "Einige Themen, die schon für eine erste Versammlung auf dem Tisch liegen:",
   "federacao.assembleias.firstPoints.rules": "Uns eigene Versammlungsregeln geben (Datum, Quorum, Mandat, Tagesordnung) — das Obige bestätigen oder ändern.",
   "federacao.assembleias.firstPoints.subjects": "Das Bearbeiten der Themen und Schlagwörter für Mitwirkende öffnen (heute der Koordination vorbehalten).",
-  "federacao.assembleias.firstPoints.terms": "Die Werkstatt der Begriffe: wie ein Begriff angenommen (oder beeinsprucht) wird, und wie weit wir Varianten je Sprache zulassen statt einer einzigen Formulierung."
+  "federacao.assembleias.firstPoints.terms": "Die Werkstatt der Begriffe: wie ein Begriff angenommen (oder beeinsprucht) wird, und wie weit wir Varianten je Sprache zulassen statt einer einzigen Formulierung.",
+  "federacao.inicio.assembleias": "Vollversammlungen",
+  "federacao.inicio.assembleias.desc": "Vorbereitung der Netzwerkversammlung: Prinzip, Regeln, Tagesordnung.",
+  "federacao.inicio.toAssembleias": "Versammlungen öffnen"
 }

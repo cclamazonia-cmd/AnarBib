@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "A few topics already on the table for a first assembly:",
   "federacao.assembleias.firstPoints.rules": "Giving ourselves our own assembly rules (date, quorum, mandate, agenda) — confirming or amending the above.",
   "federacao.assembleias.firstPoints.subjects": "Opening the editing of subjects and keywords to contributors (today restricted to coordination).",
-  "federacao.assembleias.firstPoints.terms": "The making of terms: how a term is adopted (or objected to), and how far we accept variants per language rather than a single wording."
+  "federacao.assembleias.firstPoints.terms": "The making of terms: how a term is adopted (or objected to), and how far we accept variants per language rather than a single wording.",
+  "federacao.inicio.assembleias": "General assemblies",
+  "federacao.inicio.assembleias.desc": "Prefiguring the network assembly: principle, rules, agenda.",
+  "federacao.inicio.toAssembleias": "Open the assemblies"
 }

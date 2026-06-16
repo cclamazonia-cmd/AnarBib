@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "Alcuni temi già sul tavolo per una prima assemblea:",
   "federacao.assembleias.firstPoints.rules": "Darci le nostre regole di assemblea (data, quorum, mandato, ordine del giorno) — confermare o emendare quanto sopra.",
   "federacao.assembleias.firstPoints.subjects": "Aprire la modifica dei soggetti e delle parole chiave a chi contribuisce (oggi riservata al coordinamento).",
-  "federacao.assembleias.firstPoints.terms": "La fabbrica dei termini: come si adotta (o si obietta) un termine, e fino a che punto accettiamo varianti per lingua invece di un’unica formulazione."
+  "federacao.assembleias.firstPoints.terms": "La fabbrica dei termini: come si adotta (o si obietta) un termine, e fino a che punto accettiamo varianti per lingua invece di un’unica formulazione.",
+  "federacao.inicio.assembleias": "Assemblee generali",
+  "federacao.inicio.assembleias.desc": "Prefigurazione dell’assemblea della rete: principio, regole, ordine del giorno.",
+  "federacao.inicio.toAssembleias": "Apri le assemblee"
 }

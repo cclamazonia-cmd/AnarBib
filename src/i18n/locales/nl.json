@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "Enkele onderwerpen die al op tafel liggen voor een eerste vergadering:",
   "federacao.assembleias.firstPoints.rules": "Onszelf eigen vergaderregels geven (datum, quorum, mandaat, agenda) — het bovenstaande bevestigen of wijzigen.",
   "federacao.assembleias.firstPoints.subjects": "Het bewerken van de onderwerpen en trefwoorden openstellen voor wie bijdraagt (vandaag voorbehouden aan de coördinatie).",
-  "federacao.assembleias.firstPoints.terms": "De werkplaats van de termen: hoe een term wordt aangenomen (of er bezwaar tegen wordt gemaakt), en hoever we varianten per taal aanvaarden in plaats van één enkele formulering."
+  "federacao.assembleias.firstPoints.terms": "De werkplaats van de termen: hoe een term wordt aangenomen (of er bezwaar tegen wordt gemaakt), en hoever we varianten per taal aanvaarden in plaats van één enkele formulering.",
+  "federacao.inicio.assembleias": "Algemene vergaderingen",
+  "federacao.inicio.assembleias.desc": "Voorbereiding van de netwerkvergadering: beginsel, regels, agenda.",
+  "federacao.inicio.toAssembleias": "Vergaderingen openen"
 }

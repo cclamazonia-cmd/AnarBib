@@ -4980,5 +4980,8 @@
   "federacao.assembleias.firstPoints.intro": "Alguns temas já sobre a mesa para uma primeira assembleia:",
   "federacao.assembleias.firstPoints.rules": "Dar-nos nossas próprias regras de assembleia (data, quórum, mandato, ordem do dia) — confirmar ou emendar o que vem acima.",
   "federacao.assembleias.firstPoints.subjects": "Abrir a edição dos assuntos e palavras-chave a quem contribui (hoje reservada à coordenação).",
-  "federacao.assembleias.firstPoints.terms": "A fábrica dos termos: como se adota (ou se objeta) um termo, e até onde aceitamos variantes por língua em vez de uma formulação única."
+  "federacao.assembleias.firstPoints.terms": "A fábrica dos termos: como se adota (ou se objeta) um termo, e até onde aceitamos variantes por língua em vez de uma formulação única.",
+  "federacao.inicio.assembleias": "Assembleias gerais",
+  "federacao.inicio.assembleias.desc": "Prefiguração da assembleia da rede: princípio, regras, ordem do dia.",
+  "federacao.inicio.toAssembleias": "Abrir as assembleias"
 }

@@ -377,6 +377,26 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
       </button>
       )}
 
+      {hasStaffAccess && (
+      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('assembleias')}>
+        <svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true" style={{ flex: 'none' }}>
+          <circle cx="14" cy="7" r="3.2" fill="none" stroke="#c00000" strokeWidth="1.8" />
+          <circle cx="6" cy="10" r="2.6" fill="none" stroke="#c00000" strokeWidth="1.6" />
+          <circle cx="22" cy="10" r="2.6" fill="none" stroke="#c00000" strokeWidth="1.6" />
+          <path d="M9 21c0-3 2.2-5 5-5s5 2 5 5" fill="none" stroke="#c00000" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M2 20c0-2.4 1.6-4 4-4M26 20c0-2.4-1.6-4-4-4" fill="none" stroke="#c00000" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+        <span className="ab-fed-inicio-annuaire-txt">
+          <span className="ab-fed-inicio-annuaire-t">
+            {t({ id: 'federacao.inicio.assembleias' })}
+            <span className="ab-fed-pill is-new">{t({ id: 'federacao.inicio.new' })}</span>
+          </span>
+          <span className="ab-fed-inicio-annuaire-d">{t({ id: 'federacao.inicio.assembleias.desc' })}</span>
+        </span>
+        <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toAssembleias' })} →</span>
+      </button>
+      )}
+
       <div>
         <div className="ab-fed-label">{t({ id: 'federacao.inicio.soon' })}</div>
         <div className="ab-fed-inicio-soon">
