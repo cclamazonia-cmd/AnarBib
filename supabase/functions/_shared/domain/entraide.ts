@@ -38,10 +38,20 @@ export async function handleEntraideRequestCircle(payload) {
   const libIds = Array.from(new Set((members || []).map((m) => m.library_id)));
   if (libIds.length === 0) return { ok: true, recipients_count: 0, reason: "no_member_libraries" };
 
-  // Staff actif de ces biblios (hors l'auteur·rice de l'appel).
+  // Exclure la/les biblio(s) de l'auteur·rice : les collègues de la même biblio se
+  // parlent IRL avant d'avoir besoin d'une visio ; le cercle sert à toucher les
+  // AUTRES biblios du cercle.
+  const { data: authorLibs } = await supabaseAdmin
+    .from("user_library_memberships").select("library_id")
+    .eq("user_id", authorUserId).eq("status", "active");
+  const authorLibIds = new Set((authorLibs || []).map((m) => m.library_id));
+  const recipientLibIds = libIds.filter((id) => !authorLibIds.has(id));
+  if (recipientLibIds.length === 0) return { ok: true, recipients_count: 0, reason: "only_author_library" };
+
+  // Staff actif des AUTRES biblios du cercle (hors biblio(s) de l'auteur·rice, hors l'auteur·rice).
   const { data: staffRows } = await supabaseAdmin
     .from("user_library_memberships").select("user_id")
-    .in("library_id", libIds).eq("status", "active")
+    .in("library_id", recipientLibIds).eq("status", "active")
     .in("role", ["librarian", "coordenador", "administrador"]);
   const userIds = Array.from(new Set((staffRows || []).map((s) => s.user_id))).filter((id) => id !== authorUserId);
   if (userIds.length === 0) return { ok: true, recipients_count: 0, reason: "no_staff" };

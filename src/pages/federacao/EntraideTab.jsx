@@ -4,7 +4,6 @@ import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
-import VisioRoom from './VisioRoom';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // EntraideTab — onglet « Entraide » de la Fédération (v1).
@@ -18,6 +17,9 @@ import VisioRoom from './VisioRoom';
 // par appel pour que demandeur·euse et aidant·e se retrouvent.
 // ═══════════════════════════════════════════════════════════════════════════
 
+
+const JITSI_DOMAIN = (import.meta.env.VITE_JITSI_DOMAIN || 'meet.jit.si')
+  .replace(/^https?:\/\//, '').replace(/\/+$/, '');
 
 export default function EntraideTab() {
   const { formatMessage: t, locale } = useIntl();
@@ -40,7 +42,6 @@ export default function EntraideTab() {
   const [circleNames, setCircleNames] = useState({}); // circle_id -> name (affichage)
   const [offerOn, setOfferOn] = useState(null);
   const [offerMsg, setOfferMsg] = useState('');
-  const [visioRoom, setVisioRoom] = useState(null); // nom de salle Jitsi à afficher (null = fermée)
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -114,7 +115,9 @@ export default function EntraideTab() {
   }
 
   function joinVisio(reqId) {
-    setVisioRoom(`anarbib-entraide-${reqId}`);
+    // Onglet dédié (pas de modale embarquée) : la visio vit indépendamment de la
+    // session AnarBib, et on contourne le blocage d'iframe de certaines instances.
+    window.open(`https://${JITSI_DOMAIN}/anarbib-entraide-${reqId}`, '_blank', 'noopener,noreferrer');
   }
 
   const fmtDate = (d) => new Date(d).toLocaleDateString(locale);
@@ -122,7 +125,6 @@ export default function EntraideTab() {
 
   return (
     <div>
-      {visioRoom && <VisioRoom roomName={visioRoom} onClose={() => setVisioRoom(null)} />}
       {msg.text && (
         <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>
           {msg.text}
