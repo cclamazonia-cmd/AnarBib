@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useIntl } from 'react-intl';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
@@ -9,10 +9,13 @@ import { useToast } from '@/contexts/ToastContext';
 import { isCoord } from '@/lib/roles';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
-import NetworkMapTab from './NetworkMapTab';
-import GazetteTab from './GazetteTab';
-import CommunsTab from './CommunsTab';
-import EntraideTab from './EntraideTab';
+// Onglets en lazy : chacun (et ses deps lourdes — ex. react-markdown dans
+// CommunsTab) part dans son propre chunk, chargé À L'OUVERTURE de l'onglet, pas
+// au montage de FederacaoPage. Évite le chunk initial monolithique (~1,5 Mo).
+const NetworkMapTab = lazy(() => import('./NetworkMapTab'));
+const GazetteTab = lazy(() => import('./GazetteTab'));
+const CommunsTab = lazy(() => import('./CommunsTab'));
+const EntraideTab = lazy(() => import('./EntraideTab'));
 import '../catalogacao/CatalogacaoPage.css';
 import './FederacaoPage.css';
 
@@ -229,13 +232,12 @@ export default function FederacaoPage() {
             />
           )}
 
-          {tab === 'carte' && <NetworkMapTab />}
-
-          {tab === 'gazeta' && <GazetteTab />}
-
-          {tab === 'communs' && <CommunsTab />}
-
-          {tab === 'entreajuda' && <EntraideTab />}
+          <Suspense fallback={<p className="ab-fed-hint" style={{ padding: 24 }}>{t({ id: 'common.loading' })}</p>}>
+            {tab === 'carte' && <NetworkMapTab />}
+            {tab === 'gazeta' && <GazetteTab />}
+            {tab === 'communs' && <CommunsTab />}
+            {tab === 'entreajuda' && <EntraideTab />}
+          </Suspense>
 
           {!WIRED.has(tab) && (
             <div className="ab-fed-placeholder">
