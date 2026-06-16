@@ -4949,5 +4949,6 @@
   "catalogacao.subjectGov.editHidden": "Variantes (busca)",
   "catalogacao.subjectGov.editSave": "Salvar os rótulos",
   "catalogacao.subjectGov.editSaved": "Rótulos salvos.",
-  "catalogacao.subjectGov.editClose": "Fechar"
+  "catalogacao.subjectGov.editClose": "Fechar",
+  "catalogacao.subjectGov.editNotation": "Notação (CDD)"
 }

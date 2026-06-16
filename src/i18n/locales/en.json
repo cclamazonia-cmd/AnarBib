@@ -4949,5 +4949,6 @@
   "catalogacao.subjectGov.editHidden": "Variants (search)",
   "catalogacao.subjectGov.editSave": "Save labels",
   "catalogacao.subjectGov.editSaved": "Labels saved.",
-  "catalogacao.subjectGov.editClose": "Close"
+  "catalogacao.subjectGov.editClose": "Close",
+  "catalogacao.subjectGov.editNotation": "Notation (DDC)"
 }

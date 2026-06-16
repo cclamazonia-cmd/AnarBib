@@ -4949,5 +4949,6 @@
   "catalogacao.subjectGov.editHidden": "Variants (cerca)",
   "catalogacao.subjectGov.editSave": "Desar les etiquetes",
   "catalogacao.subjectGov.editSaved": "Etiquetes desades.",
-  "catalogacao.subjectGov.editClose": "Tancar"
+  "catalogacao.subjectGov.editClose": "Tancar",
+  "catalogacao.subjectGov.editNotation": "Notació (CDD)"
 }

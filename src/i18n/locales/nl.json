@@ -4949,5 +4949,6 @@
   "catalogacao.subjectGov.editHidden": "Varianten (zoeken)",
   "catalogacao.subjectGov.editSave": "Labels opslaan",
   "catalogacao.subjectGov.editSaved": "Labels opgeslagen.",
-  "catalogacao.subjectGov.editClose": "Sluiten"
+  "catalogacao.subjectGov.editClose": "Sluiten",
+  "catalogacao.subjectGov.editNotation": "Notatie (DDC)"
 }

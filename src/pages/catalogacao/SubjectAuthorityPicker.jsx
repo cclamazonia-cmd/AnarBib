@@ -146,6 +146,7 @@ export default function SubjectAuthorityPicker({ draftId }) {
             <button key={r.id} type="button" onClick={() => addSubject(r)} disabled={busy} style={resultBtn}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                 <span>{localizedLabel(r.label_i18n, locale)}</span>
+                {r.notation && <span style={notationBadge}>{r.notation}</span>}
                 {r.parent_label && <span style={muted}>· {localizedLabel(r.parent_label, locale)}</span>}
                 {r.status === 'proposto' && <span style={badge}>{t({ id: 'catalogacao.subjects.proposed' })}</span>}
                 {isMissingLabel(r.label_i18n, locale) && (
@@ -175,6 +176,7 @@ const chipX = { background: 'transparent', border: 'none', color: '#fff', cursor
 // Badge « proposé » — translucide clair, lisible sur chip rouge ET sur dropdown sombre.
 const badge = { fontSize: '.6rem', textTransform: 'uppercase', letterSpacing: '.03em', padding: '0 5px', borderRadius: 4, background: 'rgba(255,255,255,.22)', color: '#fff', whiteSpace: 'nowrap' };
 const flag = { fontSize: '.72rem', color: 'rgba(255,255,255,.6)', cursor: 'help' };
+const notationBadge = { fontSize: '.66rem', fontFamily: 'monospace', padding: '0 4px', borderRadius: 3, background: 'rgba(255,255,255,.1)', color: 'var(--brand-muted, #bbb)' };
 const resultsBox = { marginTop: 4, border: '1px solid var(--brand-panel-border, rgba(255,255,255,.14))', borderRadius: 6, background: 'var(--brand-panel-bg-strong, rgba(10,10,10,.94))', maxHeight: 240, overflowY: 'auto' };
 const resultBtn = { display: 'block', width: '100%', textAlign: 'left', padding: '5px 10px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--brand-panel-border, rgba(255,255,255,.08))', color: 'var(--brand-text, #f5f2ea)', cursor: 'pointer', fontSize: '.82rem' };
 const scopeNote = { display: 'block', fontSize: '.7rem', color: 'var(--brand-muted, #999)', marginTop: 2, lineHeight: 1.3 };

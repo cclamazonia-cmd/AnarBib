@@ -4949,5 +4949,6 @@
   "catalogacao.subjectGov.editHidden": "Παραλλαγές (αναζήτηση)",
   "catalogacao.subjectGov.editSave": "Αποθήκευση ετικετών",
   "catalogacao.subjectGov.editSaved": "Οι ετικέτες αποθηκεύτηκαν.",
-  "catalogacao.subjectGov.editClose": "Κλείσιμο"
+  "catalogacao.subjectGov.editClose": "Κλείσιμο",
+  "catalogacao.subjectGov.editNotation": "Σημείωση (DDC)"
 }

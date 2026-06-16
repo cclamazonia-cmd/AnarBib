@@ -29,6 +29,7 @@ export default function SubjectLabelEditor() {
   const [pref, setPref] = useState({});
   const [alt, setAlt] = useState({});
   const [hidden, setHidden] = useState({});
+  const [notation, setNotation] = useState('');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
 
@@ -47,7 +48,7 @@ export default function SubjectLabelEditor() {
   async function pick(id) {
     setBusy(true); setMsg(null);
     const { data, error } = await supabase.from('subjects')
-      .select('id, slug, label_i18n, alt_i18n, hidden_i18n').eq('id', id).single();
+      .select('id, slug, label_i18n, alt_i18n, hidden_i18n, notation').eq('id', id).single();
     if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); setBusy(false); return; }
     const p = {}, a = {}, h = {};
     for (const loc of LOCALES) {
@@ -55,7 +56,7 @@ export default function SubjectLabelEditor() {
       a[loc] = (data.alt_i18n && Array.isArray(data.alt_i18n[loc])) ? data.alt_i18n[loc].join(', ') : '';
       h[loc] = (data.hidden_i18n && Array.isArray(data.hidden_i18n[loc])) ? data.hidden_i18n[loc].join(', ') : '';
     }
-    setSubj(data); setPref(p); setAlt(a); setHidden(h);
+    setSubj(data); setPref(p); setAlt(a); setHidden(h); setNotation(data.notation || '');
     setResults([]); setQuery('');
     setBusy(false);
   }
@@ -72,7 +73,14 @@ export default function SubjectLabelEditor() {
     const { error } = await supabase.schema('api').rpc('fn_subject_update_labels', {
       p_subject_id: subj.id, p_label_i18n: label_i18n, p_alt_i18n: alt_i18n, p_hidden_i18n: hidden_i18n,
     });
-    if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
+    let nErr = null;
+    if (!error) {
+      const res = await supabase.schema('api').rpc('fn_subject_set_notation', {
+        p_subject_id: subj.id, p_notation: notation.trim() || null,
+      });
+      nErr = res.error;
+    }
+    if (error || nErr) setMsg({ text: localizeError(error || nErr, t), kind: 'error' });
     else setMsg({ text: t({ id: 'catalogacao.subjectGov.editSaved' }), kind: 'ok' });
     setBusy(false);
   }
@@ -100,6 +108,10 @@ export default function SubjectLabelEditor() {
         <div style={{ marginTop: 12 }}>
           <div style={{ fontWeight: 600, marginBottom: 8 }}>
             {lbl(subj.label_i18n, locale)} <span style={{ fontSize: '.75rem', color: 'var(--brand-muted, #888)' }}>· {subj.slug}</span>
+          </div>
+          <div style={{ marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <label style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.subjectGov.editNotation' })}</label>
+            <input style={{ ...cell, maxWidth: 150, fontFamily: 'monospace' }} value={notation} onChange={(e) => setNotation(e.target.value)} placeholder="335" />
           </div>
           <table style={{ width: '100%', fontSize: '.8rem', borderCollapse: 'collapse' }}>
             <thead>

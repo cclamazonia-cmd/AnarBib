@@ -4949,5 +4949,6 @@
   "catalogacao.subjectGov.editHidden": "Variantes (recherche)",
   "catalogacao.subjectGov.editSave": "Enregistrer les libellés",
   "catalogacao.subjectGov.editSaved": "Libellés enregistrés.",
-  "catalogacao.subjectGov.editClose": "Fermer"
+  "catalogacao.subjectGov.editClose": "Fermer",
+  "catalogacao.subjectGov.editNotation": "Notation (CDD)"
 }
