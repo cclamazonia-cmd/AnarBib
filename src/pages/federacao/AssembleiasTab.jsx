@@ -4,7 +4,8 @@ import { useIntl } from 'react-intl';
 // AssembleiasTab — onglet « Assembleias » de la Fédération (présentation v0).
 //
 // Onglet purement présentatif (préfiguration de l'AG du réseau) : principe,
-// fonctionnement technique (visio Jitsi — cf. VisioRoom / VITE_JITSI_DOMAIN),
+// fonctionnement technique (visio Jitsi en link-out vers vc.autistici.org via
+// VITE_JITSI_DOMAIN — salle d'AG anarbib-assembleia-<uuid> ouverte dans un onglet),
 // règles de décision PAR DÉFAUT (date = disponibilité + préférence ; quorum =
 // collectifs + diversité ; décisions = consentement), proposition d'un point à
 // l'ODJ (modèle « pas de gardien, l'assemblée adopte ») et premiers points
