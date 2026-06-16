@@ -1,6 +1,6 @@
 # Spécification — Cycle de vie du prêt interbibliothèques (`#ILL-lifecycle`)
 
-**Statut** : spécification, à implémenter
+**Statut** : 🔵 **implémentée en prod** *(MAJ 16/06/2026, vérif prod : 13 `fn_peb_*` + cron, tables `interlibrary_loans_v2`/items/events/transitions, vues UI `interlibrary_loans_painel_ui`/`_reports_ui`/`peb_history_v1`, frontend `PebHistorySection`)*. Référence du chantier #ILL-lifecycle. Cf. INVENTAIRE « Resync 16/06 ».
 **Chantier** : `#ILL-lifecycle` (backlog v14)
 **Date de cadrage** : 23/05/2026
 **Pré-requis** : aucun. Ce chantier est autonome.

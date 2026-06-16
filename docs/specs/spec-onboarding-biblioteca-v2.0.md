@@ -3,7 +3,7 @@
 **Version** : 2.0 — 2026-05-20 (enrichissement post-clôture chantier profils + doctrine anti-méga-machine)
 **Cible** : Bologna FICEDL, septembre 2026
 **Auteur·rices** : Xavier (spec et arbitrages) + Claude (rédaction)
-**Statut** : Cadrée le 05/05/2026 (v1.0), refondue le 15/05/2026 (v1.1), enrichie le 20/05/2026 (v2.0). **En attente d'implémentation pour les volets 1-10 (chantier #111, perspective Q3 2026)**. Le volet 0 a été livré le 19/05/2026 dans le cadre du chantier profils d'adoption (paquet F.3).
+**Statut** : Cadrée le 05/05/2026 (v1.0), refondue le 15/05/2026 (v1.1), enrichie le 20/05/2026 (v2.0). 🟠 **Cœur implémenté en prod** *(MAJ 16/06/2026)* : Oficina de constituição `AtelierConstituicaoPage` (routée `/atelier`, gardée `coordenador_em_constituicao`) + `fn_constitution_*` ×5 + **9/10 volets câblés** (`WIRED_VOLETS = {1..9}` ; composants `AtelierVolet1/2/4/6/7` + éditeur générique) + PDF regimento. Volet 0 livré le 19/05/2026 (chantier profils, paquet F.3). Reste : finition volet 10 + enrichissements #111. *(Ancien : « volets 1-10 en attente, Q3 2026 ».)* Cf. INVENTAIRE Resync 16/06.
 
 **Dépendances** :
   - **`docs/specs/spec-administrateur-reseau.md v0.4`** (v0.3.1 enrichie le 20/05 avec la doctrine anti-méga-machine + bouton « proposer un échange ») — workflow de gouvernance des administrateurs du réseau (cooptation unanime, retrait collectif). Cette spec onboarding utilise les admins réseau comme évaluateur·rices.

@@ -1,6 +1,6 @@
 ---
 Genre : référence
-Statut : 🟢 conception consolidée (IMP-1..15 tranchés ; implémentation par lots)
+Statut : 🟢 implémentée en prod (front+back) — MAJ 16/06/2026, ~22 fn_import_* + 6 vues partner_catalog_import_*_ui + pages ImportacoesPage + ImportWizard ; finitions par lots résiduelles (§13). Cf. INVENTAIRE Resync 16/06.
 Décisions : incarne `IMP-1..IMP-15` (REGISTRE §17) ; cite `ACQ-Q4`, `CAT-B3`, `CAT-B5`, `CAT-D3`/`D4`/`D6`, `CAT-E*`, `ILL-1..ILL-9`, `PARTNER-D6`/`D7`/`D9`, `DOC-RPC-3`, `DOC-I18N-1`
 Supersédé par : —
 ---

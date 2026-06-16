@@ -1,13 +1,13 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée
+Statut : 🟠 partiel — MAJ 16/06/2026, OPAC7 (facettes api.catalog_facets_v1) + OPAC9 (favoris user_wishlist) livrés et câblés dans CatalogPage ; restent OPAC8 (nuage sujets) / OPAC10 (parcours) / OPAC11 (RSS différé anti-tracking). Cf. INVENTAIRE Resync 16/06.
 Décisions : incarne OPAC-F1, OPAC-AGG1 ; cite OPAC-W1, DOC-PERIM-1, DOC-I18N-1
 Supersédé par : —
 ---
 
 # Spec — Enrichissement de la page catalogue (couche découverte)
 
-> **Statut** : v0.1 du 01/06/2026 — **cadrage**, non implémenté. Issue de l'atelier RebAL (chat « Nouvelle lectrice de la Biblioteca Terra Livre » du 20/05/2026) et des deux captures d'écran de la fiche de résultats RebAL.
+> **Statut** : v0.1 du 01/06/2026 — **🟠 partiellement implémenté** (MAJ 16/06 : OPAC7 facettes + OPAC9 favoris en prod, câblés `CatalogPage` ; restent OPAC8/10/11). Issue de l'atelier RebAL (chat « Nouvelle lectrice de la Biblioteca Terra Livre » du 20/05/2026) et des deux captures d'écran de la fiche de résultats RebAL.
 > **Périmètre** : la **page de résultats / liste** du catalogue (`CatalogPage.jsx`, vues `api.catalog_list_anon_v1` et `api.catalog_list_session_v1`). C'est la surface équivalente aux captures RebAL « Résultats de la recherche » + « Affiner les résultats ».
 > **Hors périmètre** : la **fiche de notice** d'un livre unique (`BookPage.jsx` / ancien `livro.html`). Les six fonctionnalités notice issues du même atelier RebAL sont couvertes par **#OPAC1 à #OPAC6** (cluster #CATALOG-EXT du GLB) et ne sont **pas** reprises ici.
 > **Distinction fondatrice** : l'atelier du 20/05 a enrichi la *notice* (citer, MARC, autorités, documents similaires, tags, description). La présente spec enrichit la *découverte en liste* (facettes à compteurs, nuage de sujets, favoris, modes de parcours). Les deux sont complémentaires mais distinctes.

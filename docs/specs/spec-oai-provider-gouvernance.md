@@ -1,6 +1,6 @@
 ---
 Genre : référence
-Statut : 🟢 conception actée (arbitrages Xavier 12/06/2026) ; implémentation lots OAI-O1..O3 livrés (non poussés)
+Statut : 🟢 implémentée & déployée en prod — MAJ 16/06/2026, lots OAI-O1..O3 désormais poussés/déployés (fn_oai_* + tables oai_opening_requests/oai_opening_votes + frontend OaiSourcePanel). Cf. INVENTAIRE Resync 16/06.
 Décisions : incarne `OAI-1..OAI-9` (à ratifier au REGISTRE §17, prolonge `IMP-13` « ser fonte ») ; cite `PARTNER-*`, `DOC-RPC-3`, `DOC-I18N-1`
 Supersédé par : —
 ---

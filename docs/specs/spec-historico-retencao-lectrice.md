@@ -2,7 +2,7 @@
 
 **Version** : 1.0
 **Date** : 31/05/2026
-**Statut** : Doctrine arrêtée — implémentation à venir
+**Statut** : 🟢 **implémentée en prod** *(MAJ 16/06/2026 : C.1-C.4 lectrice + C.5/C.6 policy biblio déployés — `fn_get/set_retention_policy`, `fn_get/set_my_retention_preference`, tables `library_retention_policies` + `user_history_retention_preferences`)*. Cf. INVENTAIRE Resync 16/06.
 **Réfère à** : #CL.8 du méga-item conta, cahier Dunkerque §2.8
 **Auteur·rice·s** : Xavier (CCLA) + Claude
 

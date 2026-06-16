@@ -2,7 +2,7 @@
 
 - **Version :** 0.2 (arbitrages D1–D6 actés + EF réelles intégrées)
 - **Date :** 2026-06-01
-- **Statut :** 🟡 Spécification, à implémenter — lot #4 du chantier Catalogação (Q1 du cadrage)
+- **Statut :** 🟠 Partiellement implémentée *(MAJ 16/06/2026)* — EF `authority_lookup` + `author_portrait_lookup` déployées (couche autorité/sources). Reste : LoC, adaptateurs Wikidata/OL dans `catalog_metadata_lookup`, finitions. Lot #4 du chantier Catalogação. Cf. INVENTAIRE Resync 16/06.
 - **Périmètre :** enrichissement de l'agrégateur de métadonnées (sources) + couche **autorité** cross-lingue (VIAF/ISNI/Wikidata) et son Atelier.
 - **Auteur :** Xavier (coordination AnarBib) — rédaction assistée
 - **Méthode :** parité fonctionnelle + qualitative + audit doctrinal (même grille que #BIBLIO / Importações / Catalogação)

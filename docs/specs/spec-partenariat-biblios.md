@@ -1,6 +1,6 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée
+Statut : 🟢 implémentée en prod (front+back) — MAJ 16/06/2026, vérifié — fn_partnership_* complet, tables library_partnerships/partnership_rights/reader_partnership_consent/partnership_break_log, vue library_partnerships_ui, console coordenador + encart consentement /conta. Cf. INVENTAIRE Resync 16/06. (Ancien : « cadrée ».)
 Décisions : incarne PARTNER-D1..D9 (REGISTRE §21) ; cite MULTI-MODEL (transparence E.3), VALID-γ1 (non-cascade), ILL-8 (partage numérique = droit)
 Supersédé par : —
 ---
