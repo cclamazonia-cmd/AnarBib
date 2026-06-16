@@ -5063,5 +5063,12 @@
   "federacao.assembleias.fac.dates.scheduled": "Διεξαγωγή (Η-0)",
   "federacao.assembleias.fac.dates.save": "Αποθήκευση των ημερομηνιών",
   "federacao.assembleias.fac.saved": "Τροποποιήθηκε.",
-  "federacao.assembleias.fac.defer": "Αναβολή"
+  "federacao.assembleias.fac.defer": "Αναβολή",
+  "rede.lettre.body": "Σώμα της επιστολής (markdown), ανά γλώσσα",
+  "rede.lettre.bodyTitle": "Τίτλος (αυτή η γλώσσα)",
+  "rede.lettre.bodyPlaceholder": "Γράψε την επιστολή σε markdown (τίτλοι, λίστες, έντονα, σύνδεσμοι…)",
+  "rede.lettre.saveLocale": "Αποθήκευση αυτής της γλώσσας",
+  "rede.lettre.ts.machine": "Αυτόματη μετάφραση",
+  "rede.lettre.ts.reviewed": "Ελεγμένο από άνθρωπο",
+  "rede.lettre.ts.original": "Πρωτότυπο (γλώσσα πηγής)"
 }

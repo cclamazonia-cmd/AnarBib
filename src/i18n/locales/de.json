@@ -5063,5 +5063,12 @@
   "federacao.assembleias.fac.dates.scheduled": "Durchführung (T-0)",
   "federacao.assembleias.fac.dates.save": "Termine speichern",
   "federacao.assembleias.fac.saved": "Geändert.",
-  "federacao.assembleias.fac.defer": "Vertagen"
+  "federacao.assembleias.fac.defer": "Vertagen",
+  "rede.lettre.body": "Brieftext (Markdown), pro Sprache",
+  "rede.lettre.bodyTitle": "Titel (diese Sprache)",
+  "rede.lettre.bodyPlaceholder": "Schreibe den Brief in Markdown (Überschriften, Listen, fett, Links…)",
+  "rede.lettre.saveLocale": "Diese Sprache speichern",
+  "rede.lettre.ts.machine": "Maschinelle Übersetzung",
+  "rede.lettre.ts.reviewed": "Von Mensch geprüft",
+  "rede.lettre.ts.original": "Original (Ausgangssprache)"
 }

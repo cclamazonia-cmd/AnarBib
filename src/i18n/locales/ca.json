@@ -5063,5 +5063,12 @@
   "federacao.assembleias.fac.dates.scheduled": "Realització (D-0)",
   "federacao.assembleias.fac.dates.save": "Desar les dates",
   "federacao.assembleias.fac.saved": "Modificat.",
-  "federacao.assembleias.fac.defer": "Ajornar"
+  "federacao.assembleias.fac.defer": "Ajornar",
+  "rede.lettre.body": "Cos de la carta (markdown), per llengua",
+  "rede.lettre.bodyTitle": "Títol (aquesta llengua)",
+  "rede.lettre.bodyPlaceholder": "Escriu la carta en markdown (títols, llistes, negreta, enllaços…)",
+  "rede.lettre.saveLocale": "Desa aquesta llengua",
+  "rede.lettre.ts.machine": "Traducció automàtica",
+  "rede.lettre.ts.reviewed": "Revisat per persona",
+  "rede.lettre.ts.original": "Original (llengua font)"
 }

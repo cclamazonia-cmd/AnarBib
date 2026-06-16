@@ -5063,5 +5063,12 @@
   "federacao.assembleias.fac.dates.scheduled": "Realização (D-0)",
   "federacao.assembleias.fac.dates.save": "Salvar as datas",
   "federacao.assembleias.fac.saved": "Alterado.",
-  "federacao.assembleias.fac.defer": "Adiar"
+  "federacao.assembleias.fac.defer": "Adiar",
+  "rede.lettre.body": "Corpo da carta (markdown), por idioma",
+  "rede.lettre.bodyTitle": "Título (este idioma)",
+  "rede.lettre.bodyPlaceholder": "Escreve a carta em markdown (títulos, listas, negrito, links…)",
+  "rede.lettre.saveLocale": "Guardar este idioma",
+  "rede.lettre.ts.machine": "Tradução automática",
+  "rede.lettre.ts.reviewed": "Revisado por pessoa",
+  "rede.lettre.ts.original": "Original (idioma fonte)"
 }

@@ -12,6 +12,8 @@ import { useIntl } from 'react-intl';
 import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 
+const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
+
 export default function LettreStaffPanel() {
   const { formatMessage: t, locale } = useIntl();
   const [issues, setIssues] = useState([]);
@@ -51,8 +53,43 @@ export default function LettreStaffPanel() {
     }
   }
 
-  function startEdit(iss) {
-    setEditing({ id: iss.id, intro: iss.intro_md || '', items: Array.isArray(iss.items) ? iss.items.map((it) => ({ ...it })) : [] });
+  async function startEdit(iss) {
+    setBusy('edit:' + iss.id);
+    let locales = {};
+    try {
+      const { data } = await supabase.from('lettre_issue_locales')
+        .select('locale,title,body_md,translation_status').eq('issue_id', iss.id);
+      locales = Object.fromEntries((data || []).map((r) => [r.locale, r]));
+    } catch { /* best-effort */ }
+    const loc = 'fr';
+    setEditing({
+      id: iss.id, intro: iss.intro_md || '',
+      items: Array.isArray(iss.items) ? iss.items.map((it) => ({ ...it })) : [],
+      locales, loc,
+      locTitle: locales[loc]?.title || '', locBody: locales[loc]?.body_md || '',
+      locStatus: locales[loc]?.translation_status || 'machine',
+    });
+    setBusy(null);
+  }
+  function pickLoc(loc) {
+    setEditing((e) => ({ ...e, loc, locTitle: e.locales[loc]?.title || '', locBody: e.locales[loc]?.body_md || '', locStatus: e.locales[loc]?.translation_status || 'machine' }));
+  }
+  async function saveLocale() {
+    setBusy('saveloc');
+    try {
+      const { error } = await apiRpc('fn_lettre_set_locale', {
+        p_issue_id: editing.id, p_locale: editing.loc,
+        p_title: editing.locTitle.trim(), p_body_md: editing.locBody,
+        p_translation_status: editing.locStatus,
+      });
+      if (error) throw error;
+      setEditing((e) => ({ ...e, locales: { ...e.locales, [e.loc]: { title: e.locTitle, body_md: e.locBody, translation_status: e.locStatus } } }));
+      setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
   }
   function toggleItem(idx) {
     setEditing((e) => ({ ...e, items: e.items.map((it, i) => (i === idx ? { ...it, _excluded: !it._excluded } : it)) }));
@@ -101,6 +138,7 @@ export default function LettreStaffPanel() {
     return JSON.stringify(it);
   };
   const box = { padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 14 };
+  const selStyle = { padding: '6px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' };
 
   return (
     <div>
@@ -143,7 +181,7 @@ export default function LettreStaffPanel() {
             </div>
             {iss.status === 'draft' && (
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                <button className="cat-btn secondary" onClick={() => startEdit(iss)}>{t({ id: 'rede.lettre.edit' })}</button>
+                <button className="cat-btn secondary" disabled={busy === 'edit:' + iss.id} onClick={() => startEdit(iss)}>{t({ id: 'rede.lettre.edit' })}</button>
                 <button className="cat-btn primary" disabled={busy === 'send:' + iss.id} onClick={() => sendIssue(iss)}>{t({ id: 'rede.lettre.send' })}</button>
               </div>
             )}
@@ -161,7 +199,7 @@ export default function LettreStaffPanel() {
       {/* ─── Modale d'édition du brouillon ─── */}
       {editing && (
         <div onClick={() => setEditing(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 1000, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '6vh 12px', overflow: 'auto' }}>
-          <div onClick={(e) => e.stopPropagation()} style={{ background: '#17141d', border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, maxWidth: 620, width: '100%', padding: 18 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: '#17141d', border: '1px solid rgba(255,255,255,.12)', borderRadius: 14, maxWidth: 760, width: '100%', padding: 18 }}>
             <h3 style={{ marginTop: 0 }}>{t({ id: 'rede.lettre.editTitle' })}</h3>
 
             <label style={{ display: 'block', fontSize: '.85rem', color: 'var(--brand-muted)', marginBottom: 4 }}>{t({ id: 'rede.lettre.intro' })}</label>
@@ -180,6 +218,36 @@ export default function LettreStaffPanel() {
                 <span style={{ fontSize: '.88rem' }}>{itemLabel(it)}</span>
               </label>
             ))}
+
+            {/* Corps multilingue (lettre éditoriale riche) — édité langue par langue (fn_lettre_set_locale). */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,.1)', marginTop: 16, paddingTop: 14 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+                <div style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{t({ id: 'rede.lettre.body' })}</div>
+                <select value={editing.loc} onChange={(e) => pickLoc(e.target.value)} style={selStyle}>
+                  {LOCALES.map((l) => <option key={l} value={l}>{l}{editing.locales[l] ? ' ✓' : ''}</option>)}
+                </select>
+              </div>
+              <input
+                value={editing.locTitle}
+                onChange={(e) => setEditing((ed) => ({ ...ed, locTitle: e.target.value }))}
+                placeholder={t({ id: 'rede.lettre.bodyTitle' })}
+                style={{ width: '100%', fontFamily: 'inherit', fontSize: '.9rem', color: '#f4f4f4', background: 'rgba(0,0,0,.3)', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: '8px 11px', marginBottom: 8 }}
+              />
+              <textarea
+                value={editing.locBody}
+                onChange={(e) => setEditing((ed) => ({ ...ed, locBody: e.target.value }))}
+                rows={12} placeholder={t({ id: 'rede.lettre.bodyPlaceholder' })}
+                style={{ width: '100%', fontFamily: 'monospace', fontSize: '.85rem', color: '#f4f4f4', background: 'rgba(0,0,0,.3)', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: '8px 11px' }}
+              />
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 8, flexWrap: 'wrap' }}>
+                <select value={editing.locStatus} onChange={(e) => setEditing((ed) => ({ ...ed, locStatus: e.target.value }))} style={selStyle}>
+                  <option value="machine">{t({ id: 'rede.lettre.ts.machine' })}</option>
+                  <option value="human_reviewed">{t({ id: 'rede.lettre.ts.reviewed' })}</option>
+                  <option value="original">{t({ id: 'rede.lettre.ts.original' })}</option>
+                </select>
+                <button className="cat-btn secondary" disabled={busy === 'saveloc'} onClick={saveLocale}>{t({ id: 'rede.lettre.saveLocale' })}</button>
+              </div>
+            </div>
 
             <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
               <button className="cat-btn primary" disabled={busy === 'save'} onClick={saveEdit}>{t({ id: 'common.save' })}</button>

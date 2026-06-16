@@ -5063,5 +5063,12 @@
   "federacao.assembleias.fac.dates.scheduled": "Plaatsvinden (D-0)",
   "federacao.assembleias.fac.dates.save": "Data opslaan",
   "federacao.assembleias.fac.saved": "Gewijzigd.",
-  "federacao.assembleias.fac.defer": "Uitstellen"
+  "federacao.assembleias.fac.defer": "Uitstellen",
+  "rede.lettre.body": "Brieftekst (markdown), per taal",
+  "rede.lettre.bodyTitle": "Titel (deze taal)",
+  "rede.lettre.bodyPlaceholder": "Schrijf de brief in markdown (koppen, lijsten, vet, links…)",
+  "rede.lettre.saveLocale": "Deze taal opslaan",
+  "rede.lettre.ts.machine": "Machinevertaling",
+  "rede.lettre.ts.reviewed": "Door mens nagekeken",
+  "rede.lettre.ts.original": "Origineel (brontaal)"
 }

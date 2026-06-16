@@ -5063,5 +5063,12 @@
   "federacao.assembleias.fac.dates.scheduled": "Tenue (J-0)",
   "federacao.assembleias.fac.dates.save": "Enregistrer les dates",
   "federacao.assembleias.fac.saved": "Modifié.",
-  "federacao.assembleias.fac.defer": "Différer"
+  "federacao.assembleias.fac.defer": "Différer",
+  "rede.lettre.body": "Corps de la lettre (markdown), par langue",
+  "rede.lettre.bodyTitle": "Titre (cette langue)",
+  "rede.lettre.bodyPlaceholder": "Écris la lettre en markdown (titres, listes, gras, liens…)",
+  "rede.lettre.saveLocale": "Enregistrer cette langue",
+  "rede.lettre.ts.machine": "Traduction machine",
+  "rede.lettre.ts.reviewed": "Relu·e par une personne",
+  "rede.lettre.ts.original": "Original (langue source)"
 }

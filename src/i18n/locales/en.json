@@ -5063,5 +5063,12 @@
   "federacao.assembleias.fac.dates.scheduled": "Held (D-0)",
   "federacao.assembleias.fac.dates.save": "Save the dates",
   "federacao.assembleias.fac.saved": "Updated.",
-  "federacao.assembleias.fac.defer": "Defer"
+  "federacao.assembleias.fac.defer": "Defer",
+  "rede.lettre.body": "Letter body (markdown), per language",
+  "rede.lettre.bodyTitle": "Title (this language)",
+  "rede.lettre.bodyPlaceholder": "Write the letter in markdown (headings, lists, bold, links…)",
+  "rede.lettre.saveLocale": "Save this language",
+  "rede.lettre.ts.machine": "Machine translation",
+  "rede.lettre.ts.reviewed": "Human-reviewed",
+  "rede.lettre.ts.original": "Original (source language)"
 }
