@@ -244,6 +244,66 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Έτοιμο: διαγράφηκες από το ενημερωτικό δελτίο του δικτύου."
   },
 
+  // === Lettre de la fédération — numéros (Lot 3) ===
+  "lettre.issue.subject": {
+    "pt-BR": "Boletim da rede — n.º {number}",
+    fr: "Lettre de la fédération — n°{number}",
+    es: "Boletín de la red — n.º {number}",
+    en: "Federation letter — no. {number}",
+    it: "Lettera della rete — n. {number}",
+    de: "Netzwerk-Rundbrief — Nr. {number}",
+    ca: "Butlletí de la xarxa — núm. {number}",
+    eo: "Reta bulteno — n-ro {number}",
+    nl: "Nieuwsbrief van het netwerk — nr. {number}",
+    el: "Ενημερωτικό δελτίο του δικτύου — αρ. {number}"
+  },
+  "lettre.issue.section.circles": {
+    "pt-BR": "Novos círculos", fr: "Nouveaux cercles", es: "Nuevos círculos", en: "New circles",
+    it: "Nuovi circoli", de: "Neue Kreise", ca: "Nous cercles", eo: "Novaj rondoj",
+    nl: "Nieuwe kringen", el: "Νέοι κύκλοι"
+  },
+  "lettre.issue.section.assemblies": {
+    "pt-BR": "Assembleias por vir", fr: "Assemblées à venir", es: "Asambleas próximas", en: "Upcoming assemblies",
+    it: "Assemblee in arrivo", de: "Kommende Versammlungen", ca: "Assemblees properes", eo: "Venontaj asembleoj",
+    nl: "Komende vergaderingen", el: "Επερχόμενες συνελεύσεις"
+  },
+  "lettre.issue.gazetteLink": {
+    "pt-BR": "Saiu o n.º {number} da Rizoma — vem ler",
+    fr: "Le n°{number} de Rizoma est paru — à lire",
+    es: "Ya salió el n.º {number} de Rizoma — a leer",
+    en: "Rizoma no. {number} is out — read it",
+    it: "È uscito il n. {number} di Rizoma — da leggere",
+    de: "Rizoma Nr. {number} ist da — zum Lesen",
+    ca: "Ja ha sortit el núm. {number} de Rizoma — a llegir",
+    eo: "Aperis la n-ro {number} de Rizoma — legu ĝin",
+    nl: "Rizoma nr. {number} is uit — lees mee",
+    el: "Κυκλοφόρησε το αρ. {number} της Rizoma — διάβασέ το"
+  },
+  "lettre.issue.empty": {
+    "pt-BR": "Nada de novo desta vez — até breve.", fr: "Rien de neuf cette fois — à très vite.",
+    es: "Nada nuevo esta vez — hasta pronto.", en: "Nothing new this time — see you soon.",
+    it: "Niente di nuovo stavolta — a presto.", de: "Diesmal nichts Neues — bis bald.",
+    ca: "Res de nou aquest cop — fins aviat.", eo: "Nenio nova ĉi-foje — ĝis baldaŭ.",
+    nl: "Niets nieuws deze keer — tot snel.", el: "Τίποτα νέο αυτή τη φορά — τα λέμε σύντομα."
+  },
+  "lettre.issue.unsubscribePrefix": {
+    "pt-BR": "Recebes este boletim porque te inscreveste nele.",
+    fr: "Tu reçois cette lettre parce que tu t'y es abonné·e.",
+    es: "Recibes este boletín porque te suscribiste a él.",
+    en: "You're receiving this letter because you subscribed to it.",
+    it: "Ricevi questa lettera perché ti sei iscritt* a essa.",
+    de: "Du erhältst diesen Rundbrief, weil du ihn abonniert hast.",
+    ca: "Reps aquest butlletí perquè t'hi vas subscriure.",
+    eo: "Vi ricevas ĉi tiun bultenon ĉar vi abonis ĝin.",
+    nl: "Je ontvangt deze nieuwsbrief omdat je je ervoor hebt ingeschreven.",
+    el: "Λαμβάνεις αυτό το δελτίο επειδή εγγράφηκες σε αυτό."
+  },
+  "lettre.issue.unsubscribeLink": {
+    "pt-BR": "Cancelar inscrição", fr: "Se désabonner", es: "Darse de baja", en: "Unsubscribe",
+    it: "Disiscriviti", de: "Abbestellen", ca: "Donar-se de baixa", eo: "Malaboni",
+    nl: "Uitschrijven", el: "Διαγραφή"
+  },
+
   "lmsg.reader.sub": {
     "pt-BR": "Mensagem da sua biblioteca",
     fr: "Message de ta bibliothèque",
