@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Fonte",
   "catalogacao.field.sourceRecordId": "ID do registro fonte",
   "catalogacao.field.sourceRecordUrl": "URL do registro fonte",
-  "catalogacao.field.subjects": "Assuntos",
+  "catalogacao.field.subjects": "Schlagwörter",
   "catalogacao.field.subtitle": "Subtítulo",
   "catalogacao.field.subtitles": "Legendas",
   "catalogacao.field.support": "Suporte",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Profil D — Voll engagiert",
   "catalogacao.subjects.proposed": "vorgeschlagen",
   "catalogacao.subjects.proposedHint": "Vorgeschlagener Begriff — wartet auf Freischaltung durch die Katalogisierungskoordination.",
-  "catalogacao.subjects.missingLabelHint": "Keine Bezeichnung in deiner Sprache — als Rückfall angezeigt. Du kannst sie ergänzen."
+  "catalogacao.subjects.missingLabelHint": "Keine Bezeichnung in deiner Sprache — als Rückfall angezeigt. Du kannst sie ergänzen.",
+  "federacao.communs.doc.guideScan.title": "Scan & QR — Ausweis, ISBN, Bestandskontrolle",
+  "federacao.communs.doc.guideScan.desc": "Mit der Kamera einen Ausweis erkennen, eine ISBN erfassen oder die Bestandskontrolle machen — 100 % lokale Dekodierung."
 }

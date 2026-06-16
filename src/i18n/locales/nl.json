@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Bron",
   "catalogacao.field.sourceRecordId": "ID van het bronrecord",
   "catalogacao.field.sourceRecordUrl": "URL van het bronrecord",
-  "catalogacao.field.subjects": "Onderwerpen",
+  "catalogacao.field.subjects": "Trefwoorden",
   "catalogacao.field.subtitle": "Ondertitel",
   "catalogacao.field.subtitles": "Ondertiteling",
   "catalogacao.field.support": "Drager",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Profiel D — Volledig betrokken",
   "catalogacao.subjects.proposed": "voorgesteld",
   "catalogacao.subjects.proposedHint": "Voorgestelde term — wacht op activering door de catalogiseringscoördinatie.",
-  "catalogacao.subjects.missingLabelHint": "Geen label in jouw taal — weergegeven als terugval. Je kunt het aanvullen."
+  "catalogacao.subjects.missingLabelHint": "Geen label in jouw taal — weergegeven als terugval. Je kunt het aanvullen.",
+  "federacao.communs.doc.guideScan.title": "Scan & QR — pas, ISBN, inventarisatie",
+  "federacao.communs.doc.guideScan.desc": "De camera gebruiken om een pas te herkennen, een ISBN vast te leggen of de inventarisatie te doen — 100 % lokale decodering."
 }

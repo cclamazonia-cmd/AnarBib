@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Source",
   "catalogacao.field.sourceRecordId": "Source record ID",
   "catalogacao.field.sourceRecordUrl": "Source record URL",
-  "catalogacao.field.subjects": "Subjects",
+  "catalogacao.field.subjects": "Keywords",
   "catalogacao.field.subtitle": "Subtitle",
   "catalogacao.field.subtitles": "Legendas",
   "catalogacao.field.support": "Support",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Profile D — Fully engaged",
   "catalogacao.subjects.proposed": "proposed",
   "catalogacao.subjects.proposedHint": "Proposed term — awaiting activation by the cataloging coordination.",
-  "catalogacao.subjects.missingLabelHint": "No label in your language — shown by fallback. You can complete it."
+  "catalogacao.subjects.missingLabelHint": "No label in your language — shown by fallback. You can complete it.",
+  "federacao.communs.doc.guideScan.title": "Scan & QR — card, ISBN, stocktake",
+  "federacao.communs.doc.guideScan.desc": "Use the camera to identify a card, capture an ISBN, or do stocktaking — 100 % local decoding."
 }

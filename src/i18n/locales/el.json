@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Πηγή",
   "catalogacao.field.sourceRecordId": "ID εγγραφής πηγής",
   "catalogacao.field.sourceRecordUrl": "URL εγγραφής πηγής",
-  "catalogacao.field.subjects": "Θέματα",
+  "catalogacao.field.subjects": "Λέξεις-κλειδιά",
   "catalogacao.field.subtitle": "Υπότιτλος",
   "catalogacao.field.subtitles": "Υπότιτλοι",
   "catalogacao.field.support": "Φορέας",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Προφίλ D — Πλήρως ενεργό",
   "catalogacao.subjects.proposed": "προτεινόμενο",
   "catalogacao.subjects.proposedHint": "Προτεινόμενος όρος — αναμένει ενεργοποίηση από τον συντονισμό καταλογογράφησης.",
-  "catalogacao.subjects.missingLabelHint": "Καμία ετικέτα στη γλώσσα σου — εμφανίζεται εφεδρικά. Μπορείς να τη συμπληρώσεις."
+  "catalogacao.subjects.missingLabelHint": "Καμία ετικέτα στη γλώσσα σου — εμφανίζεται εφεδρικά. Μπορείς να τη συμπληρώσεις.",
+  "federacao.communs.doc.guideScan.title": "Σάρωση & QR — κάρτα, ISBN, απογραφή",
+  "federacao.communs.doc.guideScan.desc": "Χρήση της κάμερας για αναγνώριση κάρτας, καταχώριση ISBN ή απογραφή — αποκωδικοποίηση 100 % τοπική."
 }

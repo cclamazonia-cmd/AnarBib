@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Fonto",
   "catalogacao.field.sourceRecordId": "ID de la fonta registro",
   "catalogacao.field.sourceRecordUrl": "URL de la fonta registro",
-  "catalogacao.field.subjects": "Temoj",
+  "catalogacao.field.subjects": "Ŝlosilvortoj",
   "catalogacao.field.subtitle": "Subtitolo",
   "catalogacao.field.subtitles": "Subtekstoj",
   "catalogacao.field.support": "Subtenilo",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Profilo D — Kompleta engaĝita",
   "catalogacao.subjects.proposed": "proponita",
   "catalogacao.subjects.proposedHint": "Proponita termino — atendas aktivigon de la kataloga kunordigo.",
-  "catalogacao.subjects.missingLabelHint": "Neniu etikedo en via lingvo — montrita per repuŝo. Vi povas kompletigi ĝin."
+  "catalogacao.subjects.missingLabelHint": "Neniu etikedo en via lingvo — montrita per repuŝo. Vi povas kompletigi ĝin.",
+  "federacao.communs.doc.guideScan.title": "Skanado & QR — karto, ISBN, stokkontrolo",
+  "federacao.communs.doc.guideScan.desc": "Uzi la kameraon por identigi karton, kapti ISBN-on aŭ fari stokkontrolon — dekodado 100 % loka."
 }

@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Fonte",
   "catalogacao.field.sourceRecordId": "ID do registro fonte",
   "catalogacao.field.sourceRecordUrl": "URL do registro fonte",
-  "catalogacao.field.subjects": "Assuntos",
+  "catalogacao.field.subjects": "Parole chiave",
   "catalogacao.field.subtitle": "Subtítulo",
   "catalogacao.field.subtitles": "Legendas",
   "catalogacao.field.support": "Suporte",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Profilo D — Completa impegnata",
   "catalogacao.subjects.proposed": "proposto",
   "catalogacao.subjects.proposedHint": "Termine proposto — in attesa di attivazione dalla coordinazione di catalogazione.",
-  "catalogacao.subjects.missingLabelHint": "Nessuna etichetta nella tua lingua — mostrata per ripiego. Puoi completarla."
+  "catalogacao.subjects.missingLabelHint": "Nessuna etichetta nella tua lingua — mostrata per ripiego. Puoi completarla.",
+  "federacao.communs.doc.guideScan.title": "Scan & QR — tessera, ISBN, inventario",
+  "federacao.communs.doc.guideScan.desc": "Usare la fotocamera per identificare una tessera, acquisire un ISBN o fare l’inventario — decodifica 100 % locale."
 }

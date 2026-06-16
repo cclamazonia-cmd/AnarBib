@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Fonte",
   "catalogacao.field.sourceRecordId": "ID do registro fonte",
   "catalogacao.field.sourceRecordUrl": "URL do registro fonte",
-  "catalogacao.field.subjects": "Assuntos",
+  "catalogacao.field.subjects": "Palabras clave",
   "catalogacao.field.subtitle": "Subtítulo",
   "catalogacao.field.subtitles": "Legendas",
   "catalogacao.field.support": "Suporte",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Perfil D — Completa comprometida",
   "catalogacao.subjects.proposed": "propuesto",
   "catalogacao.subjects.proposedHint": "Término propuesto — a la espera de activación por la coordinación de catalogación.",
-  "catalogacao.subjects.missingLabelHint": "Sin etiqueta en tu idioma — mostrado por defecto. Puedes completarlo."
+  "catalogacao.subjects.missingLabelHint": "Sin etiqueta en tu idioma — mostrado por defecto. Puedes completarlo.",
+  "federacao.communs.doc.guideScan.title": "Escaneo & QR — carné, ISBN, recuento",
+  "federacao.communs.doc.guideScan.desc": "Usar la cámara para identificar un carné, capturar un ISBN o hacer el recuento — decodificación 100 % local."
 }

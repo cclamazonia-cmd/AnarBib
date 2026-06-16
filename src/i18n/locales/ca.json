@@ -2100,7 +2100,7 @@
   "catalogacao.field.sourceLabel": "Font",
   "catalogacao.field.sourceRecordId": "ID del registre font",
   "catalogacao.field.sourceRecordUrl": "URL del registre font",
-  "catalogacao.field.subjects": "Matèries",
+  "catalogacao.field.subjects": "Paraules clau",
   "catalogacao.field.subtitle": "Subtítol",
   "catalogacao.field.subtitles": "Subtítols",
   "catalogacao.field.support": "Suport",
@@ -4927,5 +4927,7 @@
   "wizard.profile.template.D.title": "Perfil D — Completa compromesa",
   "catalogacao.subjects.proposed": "proposat",
   "catalogacao.subjects.proposedHint": "Terme proposat — a l’espera d’activació per la coordinació de catalogació.",
-  "catalogacao.subjects.missingLabelHint": "Sense etiqueta en la teva llengua — mostrada per defecte. Pots completar-la."
+  "catalogacao.subjects.missingLabelHint": "Sense etiqueta en la teva llengua — mostrada per defecte. Pots completar-la.",
+  "federacao.communs.doc.guideScan.title": "Escaneig & QR — carnet, ISBN, recompte",
+  "federacao.communs.doc.guideScan.desc": "Fer servir la càmera per identificar un carnet, capturar un ISBN o fer el recompte — descodificació 100 % local."
 }

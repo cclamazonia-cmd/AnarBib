@@ -20,6 +20,7 @@ import charteInclusive  from '../../../docs/notes-audit/anarbib-charte-langage-i
 import cadrageEntraide  from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15.md?raw';
 import manuel           from '../../../docs/manual.md?raw';
 import cotation         from '../../../docs/cotation-et-cdd.md?raw';
+import guideScan        from '../../../docs/guides/guide-scan-qr-pt-BR.md?raw';
 
 import gouvCa   from '../../../docs/governance/guide-gouvernance-ca.md?raw';
 import gouvDe   from '../../../docs/governance/guide-gouvernance-de.md?raw';
@@ -69,6 +70,14 @@ export const COMMUNS_DOCS = [
     titleKey: 'federacao.communs.doc.cotation.title',
     descKey: 'federacao.communs.doc.cotation.desc',
     md: cotation,
+  },
+  {
+    // Écrit en pt-BR (pour Rodrigo/BTL) ; servi tel quel partout (repli), les
+    // co-écritures par langue viendront — cf. cadrage §3. Module : session MOBILE.
+    id: 'guide-scan', cat: 'vademecums',
+    titleKey: 'federacao.communs.doc.guideScan.title',
+    descKey: 'federacao.communs.doc.guideScan.desc',
+    md: guideScan,
   },
   {
     id: 'cadrage-entraide', cat: 'cadrages',
