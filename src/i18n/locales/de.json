@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Vorgeschlagener Begriff — wartet auf Freischaltung durch die Katalogisierungskoordination.",
   "catalogacao.subjects.missingLabelHint": "Keine Bezeichnung in deiner Sprache — als Rückfall angezeigt. Du kannst sie ergänzen.",
   "federacao.communs.doc.guideScan.title": "Scan & QR — Ausweis, ISBN, Bestandskontrolle",
-  "federacao.communs.doc.guideScan.desc": "Mit der Kamera einen Ausweis erkennen, eine ISBN erfassen oder die Bestandskontrolle machen — 100 % lokale Dekodierung."
+  "federacao.communs.doc.guideScan.desc": "Mit der Kamera einen Ausweis erkennen, eine ISBN erfassen oder die Bestandskontrolle machen — 100 % lokale Dekodierung.",
+  "catalogacao.tab.materia": "Sachthemen",
+  "catalogacao.subjectGov.title": "Sachthemen-Koordination",
+  "catalogacao.subjectGov.intro": "Die beim Katalogisieren vorgeschlagenen Begriffe warten hier auf ihre Freischaltung. Alle sehen sie; nur die Koordination schaltet sie frei.",
+  "catalogacao.subjectGov.empty": "Keine Begriffe ausstehend.",
+  "catalogacao.subjectGov.activate": "Freischalten",
+  "catalogacao.subjectGov.deprecate": "Verwerfen",
+  "catalogacao.subjectGov.statusUpdated": "Status aktualisiert.",
+  "catalogacao.subjectGov.coordOnly": "Die Freischaltung ist der Katalogisierungskoordination vorbehalten (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Vorgeschlagen am {date}"
 }

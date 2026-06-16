@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Proposed term — awaiting activation by the cataloging coordination.",
   "catalogacao.subjects.missingLabelHint": "No label in your language — shown by fallback. You can complete it.",
   "federacao.communs.doc.guideScan.title": "Scan & QR — card, ISBN, stocktake",
-  "federacao.communs.doc.guideScan.desc": "Use the camera to identify a card, capture an ISBN, or do stocktaking — 100 % local decoding."
+  "federacao.communs.doc.guideScan.desc": "Use the camera to identify a card, capture an ISBN, or do stocktaking — 100 % local decoding.",
+  "catalogacao.tab.materia": "Subjects",
+  "catalogacao.subjectGov.title": "Subject coordination",
+  "catalogacao.subjectGov.intro": "Terms proposed during cataloging await activation here. Everyone can see them; only the coordination activates them.",
+  "catalogacao.subjectGov.empty": "No terms pending.",
+  "catalogacao.subjectGov.activate": "Activate",
+  "catalogacao.subjectGov.deprecate": "Deprecate",
+  "catalogacao.subjectGov.statusUpdated": "Status updated.",
+  "catalogacao.subjectGov.coordOnly": "Activation is reserved for the cataloging coordination (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Proposed on {date}"
 }

@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Voorgestelde term — wacht op activering door de catalogiseringscoördinatie.",
   "catalogacao.subjects.missingLabelHint": "Geen label in jouw taal — weergegeven als terugval. Je kunt het aanvullen.",
   "federacao.communs.doc.guideScan.title": "Scan & QR — pas, ISBN, inventarisatie",
-  "federacao.communs.doc.guideScan.desc": "De camera gebruiken om een pas te herkennen, een ISBN vast te leggen of de inventarisatie te doen — 100 % lokale decodering."
+  "federacao.communs.doc.guideScan.desc": "De camera gebruiken om een pas te herkennen, een ISBN vast te leggen of de inventarisatie te doen — 100 % lokale decodering.",
+  "catalogacao.tab.materia": "Onderwerpen",
+  "catalogacao.subjectGov.title": "Onderwerpcoördinatie",
+  "catalogacao.subjectGov.intro": "De tijdens het catalogiseren voorgestelde termen wachten hier op activering. Iedereen ziet ze; alleen de coördinatie activeert ze.",
+  "catalogacao.subjectGov.empty": "Geen termen in afwachting.",
+  "catalogacao.subjectGov.activate": "Activeren",
+  "catalogacao.subjectGov.deprecate": "Afkeuren",
+  "catalogacao.subjectGov.statusUpdated": "Status bijgewerkt.",
+  "catalogacao.subjectGov.coordOnly": "Activering is voorbehouden aan de catalogiseringscoördinatie (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Voorgesteld op {date}"
 }

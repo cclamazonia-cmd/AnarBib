@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Terme proposat — a l’espera d’activació per la coordinació de catalogació.",
   "catalogacao.subjects.missingLabelHint": "Sense etiqueta en la teva llengua — mostrada per defecte. Pots completar-la.",
   "federacao.communs.doc.guideScan.title": "Escaneig & QR — carnet, ISBN, recompte",
-  "federacao.communs.doc.guideScan.desc": "Fer servir la càmera per identificar un carnet, capturar un ISBN o fer el recompte — descodificació 100 % local."
+  "federacao.communs.doc.guideScan.desc": "Fer servir la càmera per identificar un carnet, capturar un ISBN o fer el recompte — descodificació 100 % local.",
+  "catalogacao.tab.materia": "Matèria",
+  "catalogacao.subjectGov.title": "Coordinació de matèria",
+  "catalogacao.subjectGov.intro": "Els termes proposats a la catalogació esperen aquí la seva activació. Tothom els veu; només la coordinació els activa.",
+  "catalogacao.subjectGov.empty": "Cap terme pendent.",
+  "catalogacao.subjectGov.activate": "Activar",
+  "catalogacao.subjectGov.deprecate": "Descartar",
+  "catalogacao.subjectGov.statusUpdated": "Estat actualitzat.",
+  "catalogacao.subjectGov.coordOnly": "L’activació està reservada a la coordinació de catalogació (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Proposat el {date}"
 }

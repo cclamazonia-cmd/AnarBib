@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Termine proposto — in attesa di attivazione dalla coordinazione di catalogazione.",
   "catalogacao.subjects.missingLabelHint": "Nessuna etichetta nella tua lingua — mostrata per ripiego. Puoi completarla.",
   "federacao.communs.doc.guideScan.title": "Scan & QR — tessera, ISBN, inventario",
-  "federacao.communs.doc.guideScan.desc": "Usare la fotocamera per identificare una tessera, acquisire un ISBN o fare l’inventario — decodifica 100 % locale."
+  "federacao.communs.doc.guideScan.desc": "Usare la fotocamera per identificare una tessera, acquisire un ISBN o fare l’inventario — decodifica 100 % locale.",
+  "catalogacao.tab.materia": "Soggetti",
+  "catalogacao.subjectGov.title": "Coordinamento dei soggetti",
+  "catalogacao.subjectGov.intro": "I termini proposti in catalogazione attendono qui la loro attivazione. Tutti li vedono; solo il coordinamento li attiva.",
+  "catalogacao.subjectGov.empty": "Nessun termine in attesa.",
+  "catalogacao.subjectGov.activate": "Attiva",
+  "catalogacao.subjectGov.deprecate": "Deprecare",
+  "catalogacao.subjectGov.statusUpdated": "Stato aggiornato.",
+  "catalogacao.subjectGov.coordOnly": "L’attivazione è riservata al coordinamento di catalogazione (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Proposto il {date}"
 }

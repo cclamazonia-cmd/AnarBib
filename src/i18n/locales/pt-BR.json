@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Termo proposto — aguardando ativação pela coordenação de catalogação.",
   "catalogacao.subjects.missingLabelHint": "Sem rótulo no teu idioma — exibido por padrão. Podes completá-lo.",
   "federacao.communs.doc.guideScan.title": "Scan & QR — carteirinha, ISBN, acervo",
-  "federacao.communs.doc.guideScan.desc": "Usar a câmera para identificar uma carteirinha, puxar um ISBN ou conferir o acervo — decodificação 100 % local."
+  "federacao.communs.doc.guideScan.desc": "Usar a câmera para identificar uma carteirinha, puxar um ISBN ou conferir o acervo — decodificação 100 % local.",
+  "catalogacao.tab.materia": "Matéria",
+  "catalogacao.subjectGov.title": "Coordenação de matéria",
+  "catalogacao.subjectGov.intro": "Os termos propostos na catalogação aguardam aqui sua ativação. Todo mundo os vê; só a coordenação os ativa.",
+  "catalogacao.subjectGov.empty": "Nenhum termo pendente.",
+  "catalogacao.subjectGov.activate": "Ativar",
+  "catalogacao.subjectGov.deprecate": "Descontinuar",
+  "catalogacao.subjectGov.statusUpdated": "Status atualizado.",
+  "catalogacao.subjectGov.coordOnly": "A ativação é reservada à coordenação de catalogação (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Proposto em {date}"
 }

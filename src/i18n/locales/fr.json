@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Terme proposé — en attente d’activation par la coordination catalogage.",
   "catalogacao.subjects.missingLabelHint": "Aucun libellé dans ta langue — affiché par repli. Tu peux le compléter.",
   "federacao.communs.doc.guideScan.title": "Scan & QR — carte, ISBN, récolement",
-  "federacao.communs.doc.guideScan.desc": "Utiliser la caméra pour identifier une carte, saisir un ISBN ou faire le récolement — décodage 100 % local."
+  "federacao.communs.doc.guideScan.desc": "Utiliser la caméra pour identifier une carte, saisir un ISBN ou faire le récolement — décodage 100 % local.",
+  "catalogacao.tab.materia": "Matière",
+  "catalogacao.subjectGov.title": "Coordination matière",
+  "catalogacao.subjectGov.intro": "Les termes proposés au catalogage attendent ici leur activation. Tout le monde les voit ; seule la coordination les active.",
+  "catalogacao.subjectGov.empty": "Aucun terme en attente.",
+  "catalogacao.subjectGov.activate": "Activer",
+  "catalogacao.subjectGov.deprecate": "Déprécier",
+  "catalogacao.subjectGov.statusUpdated": "Statut mis à jour.",
+  "catalogacao.subjectGov.coordOnly": "L’activation est réservée à la coordination catalogage (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Proposé le {date}"
 }

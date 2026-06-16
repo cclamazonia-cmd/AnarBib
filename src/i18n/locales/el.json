@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Προτεινόμενος όρος — αναμένει ενεργοποίηση από τον συντονισμό καταλογογράφησης.",
   "catalogacao.subjects.missingLabelHint": "Καμία ετικέτα στη γλώσσα σου — εμφανίζεται εφεδρικά. Μπορείς να τη συμπληρώσεις.",
   "federacao.communs.doc.guideScan.title": "Σάρωση & QR — κάρτα, ISBN, απογραφή",
-  "federacao.communs.doc.guideScan.desc": "Χρήση της κάμερας για αναγνώριση κάρτας, καταχώριση ISBN ή απογραφή — αποκωδικοποίηση 100 % τοπική."
+  "federacao.communs.doc.guideScan.desc": "Χρήση της κάμερας για αναγνώριση κάρτας, καταχώριση ISBN ή απογραφή — αποκωδικοποίηση 100 % τοπική.",
+  "catalogacao.tab.materia": "Θεματική",
+  "catalogacao.subjectGov.title": "Συντονισμός θεματικής",
+  "catalogacao.subjectGov.intro": "Οι όροι που προτείνονται κατά την καταλογογράφηση αναμένουν εδώ την ενεργοποίησή τους. Όλες/οι τους βλέπουν· μόνο ο συντονισμός τους ενεργοποιεί.",
+  "catalogacao.subjectGov.empty": "Κανένας όρος σε εκκρεμότητα.",
+  "catalogacao.subjectGov.activate": "Ενεργοποίηση",
+  "catalogacao.subjectGov.deprecate": "Κατάργηση",
+  "catalogacao.subjectGov.statusUpdated": "Η κατάσταση ενημερώθηκε.",
+  "catalogacao.subjectGov.coordOnly": "Η ενεργοποίηση προορίζεται για τον συντονισμό καταλογογράφησης (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Προτάθηκε στις {date}"
 }

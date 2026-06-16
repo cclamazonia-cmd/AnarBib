@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Término propuesto — a la espera de activación por la coordinación de catalogación.",
   "catalogacao.subjects.missingLabelHint": "Sin etiqueta en tu idioma — mostrado por defecto. Puedes completarlo.",
   "federacao.communs.doc.guideScan.title": "Escaneo & QR — carné, ISBN, recuento",
-  "federacao.communs.doc.guideScan.desc": "Usar la cámara para identificar un carné, capturar un ISBN o hacer el recuento — decodificación 100 % local."
+  "federacao.communs.doc.guideScan.desc": "Usar la cámara para identificar un carné, capturar un ISBN o hacer el recuento — decodificación 100 % local.",
+  "catalogacao.tab.materia": "Materia",
+  "catalogacao.subjectGov.title": "Coordinación de materia",
+  "catalogacao.subjectGov.intro": "Los términos propuestos en la catalogación esperan aquí su activación. Todo el mundo los ve; solo la coordinación los activa.",
+  "catalogacao.subjectGov.empty": "Ningún término pendiente.",
+  "catalogacao.subjectGov.activate": "Activar",
+  "catalogacao.subjectGov.deprecate": "Descartar",
+  "catalogacao.subjectGov.statusUpdated": "Estado actualizado.",
+  "catalogacao.subjectGov.coordOnly": "La activación está reservada a la coordinación de catalogación (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Propuesto el {date}"
 }

@@ -4929,5 +4929,14 @@
   "catalogacao.subjects.proposedHint": "Proponita termino — atendas aktivigon de la kataloga kunordigo.",
   "catalogacao.subjects.missingLabelHint": "Neniu etikedo en via lingvo — montrita per repuŝo. Vi povas kompletigi ĝin.",
   "federacao.communs.doc.guideScan.title": "Skanado & QR — karto, ISBN, stokkontrolo",
-  "federacao.communs.doc.guideScan.desc": "Uzi la kameraon por identigi karton, kapti ISBN-on aŭ fari stokkontrolon — dekodado 100 % loka."
+  "federacao.communs.doc.guideScan.desc": "Uzi la kameraon por identigi karton, kapti ISBN-on aŭ fari stokkontrolon — dekodado 100 % loka.",
+  "catalogacao.tab.materia": "Temaro",
+  "catalogacao.subjectGov.title": "Kunordigo de temaro",
+  "catalogacao.subjectGov.intro": "La terminoj proponitaj dum katalogado atendas ĉi tie sian aktivigon. Ĉiuj vidas ilin; nur la kunordigo aktivigas ilin.",
+  "catalogacao.subjectGov.empty": "Neniu termino atendanta.",
+  "catalogacao.subjectGov.activate": "Aktivigi",
+  "catalogacao.subjectGov.deprecate": "Malrekomendi",
+  "catalogacao.subjectGov.statusUpdated": "Statuso ĝisdatigita.",
+  "catalogacao.subjectGov.coordOnly": "La aktivigo estas rezervita al la kataloga kunordigo (coordenador / administrador).",
+  "catalogacao.subjectGov.proposedAt": "Proponita la {date}"
 }

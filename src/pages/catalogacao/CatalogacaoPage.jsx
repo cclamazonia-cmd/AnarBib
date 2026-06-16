@@ -13,6 +13,7 @@ import ExemplarDraftForm from './ExemplarDraftForm';
 import LabelSheetPrinter from './LabelSheetPrinter';
 import QueuePanel from './QueuePanel';
 import CatalogPanel from './CatalogPanel';
+import SubjectGovernancePanel from './SubjectGovernancePanel';
 import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
@@ -39,6 +40,7 @@ export default function CatalogacaoPage() {
     { id: 'queuePanel',     label: t({ id: 'catalogacao.tab.fila' }), separator: true },
     { id: 'batchesPanel',   label: t({ id: 'catalogacao.tab.lotes' }) },
     { id: 'catalogPanel',   label: t({ id: 'catalogacao.tab.catalogo' }) },
+    { id: 'materiaPanel',   label: t({ id: 'catalogacao.tab.materia' }), separator: true },
   ];
 
   // ── Mode simple / completo ─────────────────────────────
@@ -366,6 +368,11 @@ export default function CatalogacaoPage() {
           {/* 6. Catálogo(s) já publicado(s) */}
           <div className={`cat-panel${activeTab === 'catalogPanel' ? ' active' : ''}`}>
             <CatalogPanel onEdit={openForEdit} requestedView={catalogReq.view} requestNonce={catalogReq.nonce} onChanged={refreshAll} />
+          </div>
+
+          {/* 7. Coordenação de matéria (gouvernance thésaurus — étape 2c) */}
+          <div className={`cat-panel${activeTab === 'materiaPanel' ? ' active' : ''}`}>
+            <SubjectGovernancePanel />
           </div>
       </div>
       <Footer />
