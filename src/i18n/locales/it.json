@@ -4940,5 +4940,14 @@
   "catalogacao.subjectGov.coordOnly": "L’attivazione è riservata al coordinamento di catalogazione (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposto il {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indicizzare per soggetto",
-  "federacao.communs.doc.indexarAssunto.desc": "Scegliere un soggetto del tesauro, proporre un termine, parole chiave libere — l’artigianato dell’indicizzazione per soggetto."
+  "federacao.communs.doc.indexarAssunto.desc": "Scegliere un soggetto del tesauro, proporre un termine, parole chiave libere — l’artigianato dell’indicizzazione per soggetto.",
+  "catalogacao.subjectGov.editTitle": "Modificare le etichette di un soggetto",
+  "catalogacao.subjectGov.editHint": "Cerca un soggetto, poi completa o correggi le etichette per lingua. Sinonimi e varianti: separati da virgole.",
+  "catalogacao.subjectGov.editSearch": "Cerca un soggetto da modificare…",
+  "catalogacao.subjectGov.editPref": "Etichetta",
+  "catalogacao.subjectGov.editAlt": "Sinonimi",
+  "catalogacao.subjectGov.editHidden": "Varianti (ricerca)",
+  "catalogacao.subjectGov.editSave": "Salva le etichette",
+  "catalogacao.subjectGov.editSaved": "Etichette salvate.",
+  "catalogacao.subjectGov.editClose": "Chiudi"
 }

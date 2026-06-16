@@ -4940,5 +4940,14 @@
   "catalogacao.subjectGov.coordOnly": "A ativação é reservada à coordenação de catalogação (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposto em {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexar por assunto",
-  "federacao.communs.doc.indexarAssunto.desc": "Escolher um assunto do tesauro, propor um termo, palavras-chave livres — o artesanato da indexação por assunto."
+  "federacao.communs.doc.indexarAssunto.desc": "Escolher um assunto do tesauro, propor um termo, palavras-chave livres — o artesanato da indexação por assunto.",
+  "catalogacao.subjectGov.editTitle": "Editar os rótulos de um assunto",
+  "catalogacao.subjectGov.editHint": "Busca um assunto, depois completa ou corrige os rótulos por língua. Sinônimos e variantes: separados por vírgulas.",
+  "catalogacao.subjectGov.editSearch": "Buscar um assunto para editar…",
+  "catalogacao.subjectGov.editPref": "Rótulo",
+  "catalogacao.subjectGov.editAlt": "Sinônimos",
+  "catalogacao.subjectGov.editHidden": "Variantes (busca)",
+  "catalogacao.subjectGov.editSave": "Salvar os rótulos",
+  "catalogacao.subjectGov.editSaved": "Rótulos salvos.",
+  "catalogacao.subjectGov.editClose": "Fechar"
 }

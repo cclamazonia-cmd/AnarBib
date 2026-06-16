@@ -4940,5 +4940,14 @@
   "catalogacao.subjectGov.coordOnly": "Η ενεργοποίηση προορίζεται για τον συντονισμό καταλογογράφησης (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Προτάθηκε στις {date}",
   "federacao.communs.doc.indexarAssunto.title": "Ευρετηρίαση κατά θέμα",
-  "federacao.communs.doc.indexarAssunto.desc": "Επιλογή θέματος από τον θησαυρό, πρόταση όρου, ελεύθερες λέξεις-κλειδιά — η τέχνη της θεματικής ευρετηρίασης."
+  "federacao.communs.doc.indexarAssunto.desc": "Επιλογή θέματος από τον θησαυρό, πρόταση όρου, ελεύθερες λέξεις-κλειδιά — η τέχνη της θεματικής ευρετηρίασης.",
+  "catalogacao.subjectGov.editTitle": "Επεξεργασία ετικετών ενός θέματος",
+  "catalogacao.subjectGov.editHint": "Αναζήτησε ένα θέμα, μετά συμπλήρωσε ή διόρθωσε τις ετικέτες ανά γλώσσα. Συνώνυμα και παραλλαγές: χωρισμένα με κόμματα.",
+  "catalogacao.subjectGov.editSearch": "Αναζήτηση θέματος για επεξεργασία…",
+  "catalogacao.subjectGov.editPref": "Ετικέτα",
+  "catalogacao.subjectGov.editAlt": "Συνώνυμα",
+  "catalogacao.subjectGov.editHidden": "Παραλλαγές (αναζήτηση)",
+  "catalogacao.subjectGov.editSave": "Αποθήκευση ετικετών",
+  "catalogacao.subjectGov.editSaved": "Οι ετικέτες αποθηκεύτηκαν.",
+  "catalogacao.subjectGov.editClose": "Κλείσιμο"
 }

@@ -4940,5 +4940,14 @@
   "catalogacao.subjectGov.coordOnly": "L’activació està reservada a la coordinació de catalogació (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposat el {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexar per matèria",
-  "federacao.communs.doc.indexarAssunto.desc": "Triar una matèria del tesaurus, proposar un terme, paraules clau lliures — l’ofici de la indexació per matèria."
+  "federacao.communs.doc.indexarAssunto.desc": "Triar una matèria del tesaurus, proposar un terme, paraules clau lliures — l’ofici de la indexació per matèria.",
+  "catalogacao.subjectGov.editTitle": "Editar les etiquetes d’una matèria",
+  "catalogacao.subjectGov.editHint": "Cerca una matèria, després completa o corregeix les etiquetes per llengua. Sinònims i variants: separats per comes.",
+  "catalogacao.subjectGov.editSearch": "Cercar una matèria per editar…",
+  "catalogacao.subjectGov.editPref": "Etiqueta",
+  "catalogacao.subjectGov.editAlt": "Sinònims",
+  "catalogacao.subjectGov.editHidden": "Variants (cerca)",
+  "catalogacao.subjectGov.editSave": "Desar les etiquetes",
+  "catalogacao.subjectGov.editSaved": "Etiquetes desades.",
+  "catalogacao.subjectGov.editClose": "Tancar"
 }

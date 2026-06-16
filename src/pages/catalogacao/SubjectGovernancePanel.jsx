@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import SubjectLabelEditor from './SubjectLabelEditor';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SubjectGovernancePanel — thésaurus v1 étape 2c : coordination matière.
@@ -107,6 +108,8 @@ export default function SubjectGovernancePanel() {
           </tbody>
         </table>
       )}
+
+      {isCoord && <SubjectLabelEditor />}
     </div>
   );
 }

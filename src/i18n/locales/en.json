@@ -4940,5 +4940,14 @@
   "catalogacao.subjectGov.coordOnly": "Activation is reserved for the cataloging coordination (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposed on {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexing by subject",
-  "federacao.communs.doc.indexarAssunto.desc": "Choosing a thesaurus subject, proposing a term, free keywords — the craft of subject indexing."
+  "federacao.communs.doc.indexarAssunto.desc": "Choosing a thesaurus subject, proposing a term, free keywords — the craft of subject indexing.",
+  "catalogacao.subjectGov.editTitle": "Edit a subject’s labels",
+  "catalogacao.subjectGov.editHint": "Search a subject, then fill or fix the labels per language. Synonyms and variants: comma-separated.",
+  "catalogacao.subjectGov.editSearch": "Search a subject to edit…",
+  "catalogacao.subjectGov.editPref": "Label",
+  "catalogacao.subjectGov.editAlt": "Synonyms",
+  "catalogacao.subjectGov.editHidden": "Variants (search)",
+  "catalogacao.subjectGov.editSave": "Save labels",
+  "catalogacao.subjectGov.editSaved": "Labels saved.",
+  "catalogacao.subjectGov.editClose": "Close"
 }

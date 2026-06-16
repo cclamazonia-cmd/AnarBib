@@ -4940,5 +4940,14 @@
   "catalogacao.subjectGov.coordOnly": "L’activation est réservée à la coordination catalogage (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposé le {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexer par sujet",
-  "federacao.communs.doc.indexarAssunto.desc": "Choisir un sujet du thésaurus, proposer un terme, mots-clés libres — l’artisanat de l’indexation matière."
+  "federacao.communs.doc.indexarAssunto.desc": "Choisir un sujet du thésaurus, proposer un terme, mots-clés libres — l’artisanat de l’indexation matière.",
+  "catalogacao.subjectGov.editTitle": "Éditer les libellés d’un sujet",
+  "catalogacao.subjectGov.editHint": "Cherche un sujet, puis complète ou corrige les libellés par langue. Synonymes et variantes : séparés par des virgules.",
+  "catalogacao.subjectGov.editSearch": "Chercher un sujet à éditer…",
+  "catalogacao.subjectGov.editPref": "Libellé",
+  "catalogacao.subjectGov.editAlt": "Synonymes",
+  "catalogacao.subjectGov.editHidden": "Variantes (recherche)",
+  "catalogacao.subjectGov.editSave": "Enregistrer les libellés",
+  "catalogacao.subjectGov.editSaved": "Libellés enregistrés.",
+  "catalogacao.subjectGov.editClose": "Fermer"
 }

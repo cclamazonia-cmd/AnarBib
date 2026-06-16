@@ -4940,5 +4940,14 @@
   "catalogacao.subjectGov.coordOnly": "La activación está reservada a la coordinación de catalogación (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Propuesto el {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexar por materia",
-  "federacao.communs.doc.indexarAssunto.desc": "Elegir una materia del tesauro, proponer un término, palabras clave libres — el oficio de la indización por materia."
+  "federacao.communs.doc.indexarAssunto.desc": "Elegir una materia del tesauro, proponer un término, palabras clave libres — el oficio de la indización por materia.",
+  "catalogacao.subjectGov.editTitle": "Editar las etiquetas de una materia",
+  "catalogacao.subjectGov.editHint": "Busca una materia, luego completa o corrige las etiquetas por idioma. Sinónimos y variantes: separados por comas.",
+  "catalogacao.subjectGov.editSearch": "Buscar una materia para editar…",
+  "catalogacao.subjectGov.editPref": "Etiqueta",
+  "catalogacao.subjectGov.editAlt": "Sinónimos",
+  "catalogacao.subjectGov.editHidden": "Variantes (búsqueda)",
+  "catalogacao.subjectGov.editSave": "Guardar las etiquetas",
+  "catalogacao.subjectGov.editSaved": "Etiquetas guardadas.",
+  "catalogacao.subjectGov.editClose": "Cerrar"
 }
