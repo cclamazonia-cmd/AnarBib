@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import Markdown from 'react-markdown';
-import { apiRpc, apiQuery } from '@/lib/supabase';
+import { supabase, apiRpc, apiQuery } from '@/lib/supabase';
+import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -20,6 +21,7 @@ const LOC_ORDER = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'
 
 export default function LettreTab() {
   const { formatMessage: t, locale: appLocale } = useIntl();
+  const { hasStaffAccess } = useLibrary();
 
   // — Lecture du dernier numéro envoyé —
   const [letter, setLetter] = useState(null);   // { number, byLocale }
@@ -39,19 +41,36 @@ export default function LettreTab() {
       if (Array.isArray(data) && data.length > 0) {
         setConsent({ consent_lettre: !!data[0].consent_lettre, pending: !!data[0].pending });
       }
-      // Dernier numéro envoyé + ses locales
-      const iss = await apiQuery('lettre_public_v1', { order: 'number.desc' });
-      const latest = iss.data?.[0];
-      if (latest) {
-        const locs = await apiQuery('lettre_locales_public_v1', { filters: { issue_number: `eq.${latest.number}` } });
-        const byLocale = Object.fromEntries((locs.data || []).map((r) => [r.locale, r]));
-        setLetter({ number: latest.number, byLocale });
+      // Lecture : le staff voit le dernier numéro (brouillon inclus, lu directement
+      // dans les tables sous RLS staff) ; les non-staff, le dernier numéro ENVOYÉ
+      // (vues publiques). Les brouillons ne sont jamais publics.
+      let latest = null;
+      let byLocale = {};
+      if (hasStaffAccess) {
+        const { data: iss } = await supabase.from('lettre_issues')
+          .select('id,number,status').order('number', { ascending: false }).limit(1);
+        latest = iss?.[0] || null;
+        if (latest) {
+          const { data: locs } = await supabase.from('lettre_issue_locales')
+            .select('locale,title,body_md,translation_status').eq('issue_id', latest.id);
+          byLocale = Object.fromEntries((locs || []).map((r) => [r.locale, r]));
+        }
+      } else {
+        const iss = await apiQuery('lettre_public_v1', { order: 'number.desc' });
+        latest = iss.data?.[0] ? { ...iss.data[0], status: 'sent' } : null;
+        if (latest) {
+          const locs = await apiQuery('lettre_locales_public_v1', { filters: { issue_number: `eq.${latest.number}` } });
+          byLocale = Object.fromEntries((locs.data || []).map((r) => [r.locale, r]));
+        }
+      }
+      if (latest && Object.keys(byLocale).length) {
+        setLetter({ number: latest.number, status: latest.status, byLocale });
         setReadLoc(byLocale[appLocale] ? appLocale : (byLocale.fr ? 'fr' : Object.keys(byLocale)[0] || null));
       }
     } finally {
       setLoading(false);
     }
-  }, [appLocale]);
+  }, [appLocale, hasStaffAccess]);
   useEffect(() => { load(); }, [load]);
 
   async function toggle(want) {
@@ -93,6 +112,9 @@ export default function LettreTab() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
             <div className="ab-fed-label" style={{ margin: 0 }}>
               {current.title || `N°${String(letter.number).padStart(2, '0')}`}
+              {letter.status === 'draft' && (
+                <span className="ab-fed-pill is-pending" style={{ marginLeft: 8 }}>{t({ id: 'rede.lettre.status.draft' })}</span>
+              )}
             </div>
             {readableLocs.length > 1 && (
               <select
