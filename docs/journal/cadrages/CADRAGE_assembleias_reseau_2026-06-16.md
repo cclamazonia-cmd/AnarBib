@@ -1,0 +1,123 @@
+# 🧭 CADRAGE — Assemblée du réseau : mécanisme de décision & tenue non-présentielle
+
+| Champ | Valeur |
+|---|---|
+| Référence | `docs/journal/cadrages/CADRAGE_assembleias_reseau_2026-06-16.md` |
+| Date | 16 juin 2026 |
+| Statut doctrinal | **Trace (non-normative).** Précurseur du **`spec-assembleias`** (non encore créée), annoncé par `spec-outils-federalistes` (onglet *Assembleias* « charpenté & renvoyé », étape 5). Les décisions ci-dessous se canoniseront ultérieurement au **REGISTRE, section `FED`** (ou une section assemblées dédiée). **N'implémente rien.** |
+| Périmètre | (a) Mécanisme de choix de **date/horaire** d'une AG ; (b) **machinerie de tenue non-présentielle** (réemploi Jitsi d'entraide) ; (c) cadrage des **deux sujets de fond** déjà identifiés à débattre en AG. **Hors périmètre** : régime de vote des décisions de fond (renvoyé au consentement), implémentation, mandat impératif vs représentatif (hérité chantier §8.2). |
+| Méthode | Discussion de conception du 16/06 (ligne de travail fédération). Appuis : `spec-outils-federalistes` (REGISTRE §`FED`), `CADRAGE_modele_acces_concentrique_2026-06-04`, `HEBERGEURS_jitsi_militants_2026-06-16`. Doctrine mémoire : *l'ouverture des permissions contributeur·rices aux sujets/mots-clés est une décision d'AG réseau, pas unilatérale.* |
+| Préséance | En cas de conflit : REGISTRE (`FED-…`) + spec courante + backlog font foi. Ce cadrage est périmé par définition s'il contredit la couche référence. |
+
+---
+
+## 1. Objet
+
+La tenue d'une AG du réseau AnarBib est **encore lointaine**, mais le **mécanisme de décision** est précisément ce qu'on bâcle dans l'urgence de la première convocation — alors que c'est lui qui **fonde la légitimité** de tout ce qui en sortira. Ce cadrage pose le **fond avant la forme** (méthode du projet) sur trois points déjà mûrs : comment **choisir la date/l'horaire**, comment **tenir l'AG à distance**, et comment **formuler les deux sujets de fond** déjà sur la table. Il **ne tranche rien** : il prépare la discussion et le futur `spec-assembleias`.
+
+## 2. Doctrine d'ancrage (rappel normatif — REGISTRE §`FED`)
+
+Le cadre politique de la face fédération s'applique tel quel à l'AG :
+
+- **Le consentement plutôt que le décompte** (FED) — grammaire de l'absence d'objection motivée, réutilisée de la cooptation des admins réseau et de l'adhésion aux cercles (FED-O5, anti-blackball B).
+- **Autonomie locale souveraine** — **une décision d'assemblée est une recommandation**, jamais une contrainte qui s'impose à une bibliothèque. Cela **dédramatise** le choix de la machinerie : on n'élit pas un pouvoir, on coordonne un commun.
+- **Fédéralisme, pas hiérarchie** — aucune AG « mère », aucune voix prépondérante, aucun échelon au-dessus des bibliothèques.
+- **Légitimité = étalement, pas masse** — ce qui fait foi est *combien de collectifs distincts* participent et *leur diversité* (langues / régions), pas le nombre de têtes.
+
+## 3. Distinction clé — deux natures de décision à ne jamais confondre
+
+| | **Logistique** (date, horaire, plateforme) | **Fond** (sujets, termes, normes) |
+|---|---|---|
+| Nature | Optimisation sous contrainte | Décision politique |
+| Critère | Participation effective la plus large | Adhésion / absence d'objection |
+| Outil légitime | Méthode majoritaire / de score (cf. §4) | **Consentement / objection** (grammaire FED) |
+| Risque si on se trompe d'outil | — | Importer une logique « gagnants/perdants » là où le réseau veut du consentement |
+
+> **Règle :** pour *fixer une date*, une méthode d'optimisation est légitime (c'est de la coordination, pas un acte politique). Pour les *sujets de fond*, c'est la **machine consentement/objection** qui tranche — **jamais** un vote préférentiel. Garder ces deux outils distincts est le garde-fou principal de ce cadrage.
+
+## 4. Choix de date/horaire
+
+### 4.1 Pourquoi le vote préférentiel « à l'australienne » (IRV) n'est pas l'outil idéal
+
+L'intuition (classer ses préférences dans l'ordre, façon scrutin australien / *instant-runoff*) est séduisante, mais l'IRV est conçu pour **désigner UN gagnant parmi des candidatures rivales** — pas pour une **optimisation sous contrainte de disponibilité**. Deux problèmes :
+
+1. **Le classement capte la préférence, pas la contrainte dure.** « Je préfère mardi » et « je ne *peux pas* mardi » se ressemblent dans un rang bas, alors qu'ils sont opposés. Pour une AG, l'indisponibilité réelle prime sur le goût.
+2. **Effets contre-intuitifs documentés** de l'élimination par tours (non-monotonie : mieux classer un créneau peut le faire perdre ; report de voix opaque). Devoir expliquer « pourquoi B gagne alors que plus de collectifs ont mis A en premier » est un **coût de légitimité** injustifié pour fixer une date.
+
+### 4.2 Les deux méthodes envisagées — **option A retenue (16/06)**
+
+- **Option A — Disponibilité + préférence en départage** *(✅ **orientation retenue, 16/06** — colle au consentement).* Chaque collectif marque d'abord ce qu'il **peut** (contrainte dure : oui / non / si vraiment nécessaire), puis, *parmi ce qu'il peut*, ordonne. On retient le créneau qui **maximise la participation effective**, départagé par les préférences. Récit : *« le créneau qui laisse le moins de collectifs dehors »* — exactement le cadre minimisation-des-exclusions, cohérent avec la grammaire d'objection.
+- **Option B — Vote par score** *(alternative écartée, conservée pour trace).* Note 0–5 par créneau (`0 = impossible`) ; plus riche qu'un oui/non, **monotone**, trivial à expliquer, réintroduit la contrainte dure via le 0 ; plus simple à coder que l'IRV. Écartée au profit de A, qui distingue mieux *contrainte* et *préférence*.
+
+### 4.3 Garde-fous transverses (valables pour A comme B)
+
+- **Pré-filtrage des créneaux par la coordination** : proposer **4–6 fenêtres** respectant déjà l'éventail de fuseaux, plutôt que laisser proposer n'importe quoi (sinon l'espace explose et rien ne converge).
+- **Quorum par collectif, pas par tête** : le critère gagnant = « le créneau qui atteint le quorum avec le **spectre de collectifs le plus large** » (étalement langues/régions pondéré).
+- **Fuseaux horaires** : réseau multilingue, collectifs sur plusieurs continents (pt-BR par défaut, Europe, Amérique latine) → fenêtre commune **étroite**. Stockage **UTC**, affichage en heure locale. Ce point conditionne la faisabilité même de la fenêtre.
+
+### 4.4 Forme concrète de l'option A retenue
+
+1. **Saisie — par collectif et par créneau pré-filtré (§4.3)** : un marqueur de disponibilité `oui` / `non` / `si vraiment nécessaire` (la contrainte dure), puis, parmi les créneaux `oui` / `si nécessaire`, un **ordre de préférence**.
+2. **Faisabilité** : pour chaque créneau, l'ensemble des collectifs qui peuvent (les `oui`, le `si nécessaire` comptant de façon **escomptée** — il élargit la faisabilité sans masquer qu'un collectif est à la peine).
+3. **Filtre quorum (§4.3)** : ne garder que les créneaux atteignant le quorum — **nombre de collectifs distincts ET diversité** langues/régions.
+4. **Sélection** : parmi les créneaux qualifiés, celui qui **maximise la participation effective** ; **départage** par préférence agrégée, puis si besoin par diversité.
+
+Cohérent avec §3, la date reste une **optimisation sans droit de veto** : un collectif gêné par le créneau retenu n'objecte pas (ce serait importer le consentement dans la logistique) — sa contrainte est déjà portée par son marqueur de disponibilité.
+
+## 5. Tenue non-présentielle (réemploi Jitsi)
+
+La visio est le morceau **déjà résolu** : l'entraide pointe sur Jitsi via une **unique variable de build** `VITE_JITSI_DOMAIN` (défaut `meet.jit.si`), salle non devinable `anarbib-entraide-<uuid de l'appel>`. Une AG réutilise tel quel ce socle — salle `anarbib-assembleia-<uuid>` — **sans changement de code**. Le choix d'un **hôte militant** (idéalement lusophone) est traité par `HEBERGEURS_jitsi_militants_2026-06-16`. **Hôte confirmé (16/06) : Autistici/Inventati — `vc.autistici.org`** (italophone, ~35 pers., aucun enregistrement) : `VITE_JITSI_DOMAIN` y pointe désormais, en **link-out** (onglet dédié, plus de modale embarquée — le composant `VisioRoom` a été retiré). Salle d'AG : `anarbib-assembleia-<uuid>`, ouverte dans un onglet.
+
+> **Ce qui est neuf**, ce n'est donc pas la salle, c'est la **machinerie amont** : convocation (réemploi de `notify-event`, fan-out par `library_id`), recueil des disponibilités/préférences (§4), calcul du créneau + **quorum par collectif**, et publication dans l'onglet *Início* / *Assembleias* de la face fédération.
+
+## 6. Les deux sujets de fond (à *débattre* en AG — non tranchés ici)
+
+> Le fil rouge des deux : **une seule tension posée deux fois** — jusqu'où le réseau **converge sur une norme unique** vs jusqu'où il **laisse coexister des variantes fédérées** (consensus ↔ fédéralisme/pluralisme). Il peut être utile de la nommer comme telle en AG.
+
+### 6.1 Ouvrir aux contributeur·rices l'édition sujets/mots-clés (actuellement coordination seule)
+
+- **État actuel** : les contributeur·rices éditent les **autorités dans leur langue** ; les **libellés de sujets** (thésaurus matière) restent **coordination seule**. L'élargissement aux sujets/mots-clés est **explicitement une décision d'AG réseau**, pas un arbitrage unilatéral (doctrine mémoire).
+- **À débattre** : périmètre de l'ouverture (proposer vs valider ?), articulation avec le **thésaurus matière** existant (cf. `CADRAGE_thesaurus_matiere_v2_2026-06-16`), garde-fous (qui arbitre un désaccord ?).
+
+### 6.2 Machine consentement/objection des termes + curseur « variantes admises ↔ convergence »
+
+- **À débattre** : la **grammaire de décision sur les termes** (réemploi de la grammaire FED : délai d'objection, motivation longue obligatoire, traçabilité, anti-blackball) **et** le réglage du **curseur** : impose-t-on une norme unique, ou admet-on des variantes fédérées ?
+- **Note de réalité** : le réseau **admet déjà des variantes de fait** — la charte de langage inclusif fixe des conventions **par locale** (point médian fr, `e` neutre es, astérisque it, Genderstern de…), et certaines sont encore **provisoires (`nl`)** ou **à définir (`el`)**. Le curseur n'est donc pas « variantes ou pas » mais *« où placer le seuil de convergence, langue par langue »*. La grammaire d'objection est le bon outil ; le **régime de vote des décisions de fond** reste un point ouvert (hérité chantier §8.2).
+
+## 6bis. Ordre du jour — inscription d'un point (modèle retenu 16/06)
+
+**Modèle retenu : pas de gardien, l'assemblée adopte son ODJ.** Tout collectif membre peut inscrire un point, à condition de le déposer **avant un délai minimal `D-X`** précédant l'AG. Trois principes :
+
+- **Aucune autorité ne décide de l'admission.** Le dépôt avant l'échéance **inscrit** le point. Une **facilitation** (coordination ou cercle tournant) ne fait qu'**organiser** : regrouper les doublons, proposer un ordre et un temps par point, signaler ce qui relèverait d'un autre espace — **jamais supprimer**. Toute réorganisation est **visible et contestable** par le collectif proposant (la transparence est le garde-fou, comme pour l'objection FED-O5).
+- **L'assemblée est souveraine sur son ODJ.** À l'ouverture, l'AG **adopte l'ordre du jour par consentement** : elle peut ajouter un point tardif (par consentement, motif d'urgence), en différer un, fusionner. Le pouvoir reste à l'assemblée, pas à un filtre amont.
+- **Le délai n'est pas un filtre, c'est une condition de préparation.** Son rôle : laisser à chaque collectif le temps de **traduire** le point (réseau multilingue) et surtout de **mandater** sa·son délégué·e dessus. Les dépôts après l'échéance vont en *varia* / prochaine AG, sauf consentement de l'assemblée à les ajouter.
+
+**Lien fort avec le mandat (point ouvert §8).** Si les collectifs **mandatent** leurs délégué·es (mandat impératif), le délai `D-X` devient **structurant** : on ne mandate pas sur un point découvert le jour même. Le réglage de `D-X` dépend donc du régime de mandat retenu.
+
+## 7. Articulation outillage (neuf vs réemploi)
+
+| Brique | Statut |
+|---|---|
+| Salle visio | **Réemploi** Jitsi (`VITE_JITSI_DOMAIN`) |
+| Convocation / notifications | **Réemploi** `notify-event` (fan-out `library_id`, désactivable) |
+| Décision de fond (termes, permissions) | **Réemploi** grammaire consentement/objection (FED-O5) |
+| Recueil disponibilités/préférences + créneau + **quorum par collectif** | **Neuf** — cœur probable d'une migration `spec-assembleias` (tables assemblée / créneaux / disponibilités, RPC-first, RLS, vues `*_v1` selon DOC-OBJ-2/DOC-RPC-3) |
+| Dépôt / adoption d'un point d'**ODJ** (§6bis) | **Neuf** — table des points proposés + RPC de dépôt (garde *membre rattaché*), clôture auto à `D-X`, vue d'ODJ ; la facilitation **ordonne sans supprimer** (différé/archive, jamais `delete` — mémoire) |
+
+## 8. Points ouverts (à trancher pour `spec-assembleias`)
+
+- ✅ **Méthode de date — tranchée (16/06) : option A** (disponibilité + préférence en départage, §4.4). Restent à régler : sémantique exacte du « si vraiment nécessaire », forme de la saisie.
+- **Quorum** : ✅ principe retenu (16/06) — compter les **collectifs distincts** + pondérer la **diversité** langues/régions. Restent ouverts : les **seuils** (combien de collectifs, combien de langues/régions), les **axes de diversité** exacts, et — point fédéraliste — **qui ratifie ces règles** (la coordination propose un défaut ; l'AG elle-même les bénit ?).
+- ✅ **Inscription à l'ODJ — modèle retenu (16/06)** : pas de gardien, l'assemblée adopte son ODJ par consentement (§6bis).
+- **Délais** : convocation (AG ≥ N semaines avant), fenêtre de recueil des disponibilités, et **délai minimal `D-X` de dépôt d'un point** à l'ODJ (lié au régime de mandat — §6bis).
+- Qui **propose les créneaux** pré-filtrés (coordination ? un cercle ?).
+- Statut d'une AG **non-présentielle** vs présentielle (équivalence décisionnelle ?).
+- **Mandat impératif vs représentatif** ; régime de vote des décisions de fond (hérités chantier §8.2).
+
+## 9. Prochaine étape
+
+Ce cadrage est le **germe** du `spec-assembleias`. Quand les points ouverts §8 seront mûrs, ils se **canonisent au REGISTRE §`FED`** (ou section assemblées dédiée), puis se déclinent en spec + migration. D'ici là, ce document **raisonne, il ne tranche pas**.
+
+---
+
+*Fin du cadrage (trace, non-normative). Décisions opposables : REGISTRE §`FED`. Ce document prépare le `spec-assembleias` ; il ne crée aucune décision.*
