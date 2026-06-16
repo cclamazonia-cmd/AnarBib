@@ -3583,6 +3583,8 @@
   "nav.library": "Bibliothek",
   "nav.login": "Anmelden",
   "nav.logout": "Abmelden",
+
+  "nav.menu": "Menü",
   "nav.manual.complete": "Vollstaendiges Handbuch",
   "nav.manual.reader": "Leser*innen-Handbuch",
   "nav.network": "Netzwerk",

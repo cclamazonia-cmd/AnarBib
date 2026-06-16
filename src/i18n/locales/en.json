@@ -3583,6 +3583,8 @@
   "nav.library": "Library",
   "nav.login": "Sign in",
   "nav.logout": "Sign out",
+
+  "nav.menu": "Menu",
   "nav.manual.complete": "Full manual",
   "nav.manual.reader": "Reader's manual",
   "nav.network": "Network",

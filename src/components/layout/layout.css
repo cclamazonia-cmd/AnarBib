@@ -86,9 +86,45 @@
 
 .ab-topbar__logout:hover { color: #fff; border-color: rgba(255, 255, 255, 0.22); }
 
+/* M6 (chantier mobile Phase B) — bouton hamburger : masqué en desktop, visible
+   seulement sous le breakpoint mobile (cf. media query ci-dessous). */
+.ab-topbar__burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--brand-panel-border);
+  color: var(--brand-text);
+  padding: 8px 10px;
+  border-radius: var(--brand-radius-sm);
+  cursor: pointer;
+}
+.ab-topbar__burger:hover { color: #fff; border-color: rgba(255, 255, 255, 0.22); }
+
 @media (max-width: 640px) {
   .ab-topbar__logo { height: 44px; }
   .ab-topbar__nav { gap: 6px; }
+
+  /* Nav en tiroir : le ☰ apparaît, la nav se replie en colonne pleine largeur
+     sous la barre et ne s'affiche qu'à l'ouverture (.ab-topbar__nav--open). */
+  .ab-topbar__burger { display: inline-flex; }
+  .ab-topbar__nav {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .ab-topbar__nav.ab-topbar__nav--open { display: flex; }
+  .ab-topbar__nav a,
+  .ab-topbar__logout {
+    padding: 12px 14px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .ab-topbar__sep { display: none; }
 }
 
 /* ── Hero — rouge profond AnarBib ────────────────────────── */

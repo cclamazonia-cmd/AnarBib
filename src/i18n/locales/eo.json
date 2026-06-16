@@ -3583,6 +3583,8 @@
   "nav.library": "Biblioteko",
   "nav.login": "Ensaluti",
   "nav.logout": "Elsaluti",
+
+  "nav.menu": "Menuo",
   "nav.manual.complete": "Kompleta manlibro",
   "nav.manual.reader": "Manlibro de la legant-in-o",
   "nav.network": "Reto",

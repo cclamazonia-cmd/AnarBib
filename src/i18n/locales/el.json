@@ -3583,6 +3583,8 @@
   "nav.library": "Βιβλιοθήκη",
   "nav.login": "Σύνδεση",
   "nav.logout": "Αποσύνδεση",
+
+  "nav.menu": "Μενού",
   "nav.manual.complete": "Πλήρες εγχειρίδιο",
   "nav.manual.reader": "Εγχειρίδιο αναγνώστη/στριας",
   "nav.network": "Δίκτυο",

@@ -43,6 +43,9 @@ export function Topbar() {
   const [logoSrc, setLogoSrc] = useState(null);
   const [logoError, setLogoError] = useState(false);
 
+  // Menu mobile (≤640px) — tiroir hamburger (chantier mobile Phase B, M6).
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     setLogoError(false);
     setLogoSrc(null);
@@ -63,6 +66,9 @@ export function Topbar() {
     return () => { cancelled = true; };
   }, [libraryId, user?.id]);
 
+  // Referme le tiroir à chaque navigation.
+  useEffect(() => { setMenuOpen(false); }, [location.pathname]);
+
   return (
     <nav className="ab-topbar">
       <Link to="/" className="ab-topbar__brand">
@@ -82,7 +88,24 @@ export function Topbar() {
         )}
       </Link>
 
-      <div className="ab-topbar__nav">
+      <button
+        type="button"
+        className="ab-topbar__burger"
+        aria-label={t({ id: 'nav.menu' })}
+        aria-expanded={menuOpen}
+        aria-controls="ab-topbar-nav"
+        onClick={() => setMenuOpen((o) => !o)}
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+        </svg>
+      </button>
+
+      <div
+        id="ab-topbar-nav"
+        className={`ab-topbar__nav${menuOpen ? ' ab-topbar__nav--open' : ''}`}
+        onClick={() => setMenuOpen(false)}
+      >
         {/* ── Groupe 1 : accessible à tout user ─────────────── */}
         <Link to="/" className={isActive('/catalogo') || location.pathname === '/' ? 'active' : ''}>
           {t({ id: 'nav.catalog' })}
