@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Konservi ĉi tiun lingvon",
   "rede.lettre.ts.machine": "Maŝina traduko",
   "rede.lettre.ts.reviewed": "Reviziita de homo",
-  "rede.lettre.ts.original": "Originalo (fontlingvo)"
+  "rede.lettre.ts.original": "Originalo (fontlingvo)",
+  "federacao.assembleias.fac.volunteer": "Mi proponas min por faciligi",
+  "federacao.assembleias.fac.volunteer.done": "Propono registrita.",
+  "federacao.assembleias.fac.unvolunteer": "Retiri mian proponon",
+  "federacao.assembleias.fac.unvolunteer.done": "Propono retirita.",
+  "federacao.assembleias.fac.youFacilitate": "Vi faciligas ĉi tiun asembleon.",
+  "federacao.assembleias.fac.volunteers.label": "Kiuj proponas sin por faciligi",
+  "federacao.assembleias.fac.volunteers.none": "Neniu propono ĝis nun.",
+  "federacao.assembleias.fac.designate": "Nomumi",
+  "federacao.assembleias.fac.designate.done": "Persono nomumita por faciligi.",
+  "federacao.assembleias.fac.designated.label": "Kiuj faciligas",
+  "federacao.assembleias.fac.remove": "Forigi",
+  "federacao.assembleias.fac.remove.done": "Forigita el la faciligado.",
+  "federacao.assembleias.fac.order.up": "↑ Supren",
+  "federacao.assembleias.fac.order.down": "↓ Malsupren",
+  "federacao.assembleias.fac.anon": "Membro",
+  "federacao.assembleias.fac.rotativityHint": "Rotaciaj funkcioj: alternu de unu AG al alia — por eviti la aktivulan elĉerpiĝon kaj ke potenco enradikiĝu."
 }

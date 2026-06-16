@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Enregistrer cette langue",
   "rede.lettre.ts.machine": "Traduction machine",
   "rede.lettre.ts.reviewed": "Relu·e par une personne",
-  "rede.lettre.ts.original": "Original (langue source)"
+  "rede.lettre.ts.original": "Original (langue source)",
+  "federacao.assembleias.fac.volunteer": "Je me propose pour faciliter",
+  "federacao.assembleias.fac.volunteer.done": "Proposition enregistrée.",
+  "federacao.assembleias.fac.unvolunteer": "Retirer ma proposition",
+  "federacao.assembleias.fac.unvolunteer.done": "Proposition retirée.",
+  "federacao.assembleias.fac.youFacilitate": "Tu facilites cette assemblée.",
+  "federacao.assembleias.fac.volunteers.label": "Volontaires pour faciliter",
+  "federacao.assembleias.fac.volunteers.none": "Aucune proposition pour l’instant.",
+  "federacao.assembleias.fac.designate": "Désigner",
+  "federacao.assembleias.fac.designate.done": "Facilitateur·rice désigné·e.",
+  "federacao.assembleias.fac.designated.label": "Facilitateur·rices désigné·es",
+  "federacao.assembleias.fac.remove": "Retirer",
+  "federacao.assembleias.fac.remove.done": "Retiré·e de la facilitation.",
+  "federacao.assembleias.fac.order.up": "↑ Remonter",
+  "federacao.assembleias.fac.order.down": "↓ Descendre",
+  "federacao.assembleias.fac.anon": "Membre",
+  "federacao.assembleias.fac.rotativityHint": "Fonctions tournantes : alternez d’une AG à l’autre — pour éviter l’épuisement militant et qu’un pouvoir s’installe."
 }

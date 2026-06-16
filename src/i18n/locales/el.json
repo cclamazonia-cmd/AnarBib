@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Αποθήκευση αυτής της γλώσσας",
   "rede.lettre.ts.machine": "Αυτόματη μετάφραση",
   "rede.lettre.ts.reviewed": "Ελεγμένο από άνθρωπο",
-  "rede.lettre.ts.original": "Πρωτότυπο (γλώσσα πηγής)"
+  "rede.lettre.ts.original": "Πρωτότυπο (γλώσσα πηγής)",
+  "federacao.assembleias.fac.volunteer": "Προτείνομαι για διευκόλυνση",
+  "federacao.assembleias.fac.volunteer.done": "Η πρόταση καταγράφηκε.",
+  "federacao.assembleias.fac.unvolunteer": "Απόσυρση της πρότασής μου",
+  "federacao.assembleias.fac.unvolunteer.done": "Η πρόταση αποσύρθηκε.",
+  "federacao.assembleias.fac.youFacilitate": "Διευκολύνεις αυτή τη συνέλευση.",
+  "federacao.assembleias.fac.volunteers.label": "Όσα άτομα προτείνονται για διευκόλυνση",
+  "federacao.assembleias.fac.volunteers.none": "Καμία πρόταση προς το παρόν.",
+  "federacao.assembleias.fac.designate": "Ορισμός",
+  "federacao.assembleias.fac.designate.done": "Ορίστηκε άτομο για τη διευκόλυνση.",
+  "federacao.assembleias.fac.designated.label": "Όσα άτομα διευκολύνουν",
+  "federacao.assembleias.fac.remove": "Αφαίρεση",
+  "federacao.assembleias.fac.remove.done": "Αφαιρέθηκε από τη διευκόλυνση.",
+  "federacao.assembleias.fac.order.up": "↑ Πάνω",
+  "federacao.assembleias.fac.order.down": "↓ Κάτω",
+  "federacao.assembleias.fac.anon": "Μέλος",
+  "federacao.assembleias.fac.rotativityHint": "Εναλλασσόμενες λειτουργίες: εναλλάσσεστε από τη μία ΓΣ στην άλλη — για να αποφεύγεται η ακτιβιστική εξάντληση και η παγίωση εξουσίας."
 }

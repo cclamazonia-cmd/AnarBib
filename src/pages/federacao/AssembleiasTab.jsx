@@ -8,18 +8,17 @@ import { useToast } from '@/contexts/ToastContext';
 import { isCoord } from '@/lib/roles';
 
 // ═══════════════════════════════════════════════════════════════════════════
-// AssembleiasTab — onglet « Assembleias » de la Fédération (P2, data-driven).
+// AssembleiasTab — onglet « Assembleias » de la Fédération (P2/P2b/P2c, data-driven).
 //
-// LIVE (backend ASSEMBLEIAS, migrations 20260616191226 + P2b) :
-//   - Membre : liste des assemblées + ODJ ; dépôt d'un point (coordenador) + retrait.
-//   - Facilitation (isNetworkAdmin OU facilitateur·rice désigné·e de l'AG, cadrage
-//     §6quinquies) : créer une assemblée (admin réseau — convocation neutre), poser
-//     les jalons (J-30/J-15/J-10/J-0), changer le statut, différer un point.
-//     1ʳᵉ AG = bootstrap admins (aucun·e facilitateur·rice désigné·e).
+// LIVE (backend ASSEMBLEIAS, migrations P1 + P2b + P2c) :
+//   - Membre : liste des assemblées + ODJ ; dépôt d'un point (coordenador) + retrait ;
+//     se proposer pour faciliter (volontariat opt-in) / retirer sa proposition.
+//   - Facilitation (isNetworkAdmin OU facilitateur·rice DÉSIGNÉ·E, cadrage §6quinquies) :
+//     créer une assemblée (admin réseau), jalons J-30/J-15/J-10/J-0, statut, différer,
+//     ordonner l'ODJ ; DÉSIGNER parmi les volontaires (anti-panoptique : on ne voit
+//     que qui a levé la main) / retirer. Rotativité = anti-épuisement militant.
+//     1ʳᵉ AG = bootstrap admins (aucun·e désigné·e).
 // CHARTE présentative en bas (principe / Jitsi / langues / règles / ODJ / points).
-//
-// Différé (P2b-suite) : UI de désignation des facilitateur·rices (sélecteur de
-// personne) et ordonnancement fin de l'ODJ.
 // Design : spec-assembleias §5-6 ; CADRAGE_assembleias_reseau_2026-06-16.md §6quinquies
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -34,6 +33,7 @@ const fromInput = (v) => (v ? new Date(v).toISOString() : null);
 const A_STATUSES = ['em_preparacao', 'convocada', 'em_curso', 'encerrada', 'arquivada'];
 const selectStyle = { fontFamily: 'inherit', fontSize: '.88rem', color: 'var(--brand-text)', background: 'rgba(255,255,255,.05)', border: '1px solid var(--brand-panel-border)', borderRadius: 8, padding: '6px 10px' };
 const dateInputStyle = { width: '100%', fontFamily: 'inherit', fontSize: '.88rem', color: 'var(--brand-text)', background: 'rgba(255,255,255,.05)', border: '1px solid var(--brand-panel-border)', borderRadius: 10, padding: '8px 11px', marginBottom: 8 };
+const rowStyle = { justifyContent: 'space-between', marginTop: 4 };
 
 export default function AssembleiasTab() {
   const { formatMessage: t, locale } = useIntl();
@@ -43,8 +43,8 @@ export default function AssembleiasTab() {
   const canAct = isCoord(role) && !!libraryId;
 
   const [assemblies, setAssemblies] = useState([]);
-  const [agenda, setAgenda] = useState({});            // assembleia_id -> [items]
-  const [facilitators, setFacilitators] = useState({}); // assembleia_id -> Set(user_id)
+  const [agenda, setAgenda] = useState({});             // assembleia_id -> [items]
+  const [facilitators, setFacilitators] = useState({}); // assembleia_id -> [{user_id, status, display_name}]
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(null);
 
@@ -57,7 +57,7 @@ export default function AssembleiasTab() {
   const [createOpen, setCreateOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newKind, setNewKind] = useState('ordinaria');
-  const [datesFor, setDatesFor] = useState(null);      // assembleia_id dont le formulaire de dates est ouvert
+  const [datesFor, setDatesFor] = useState(null);
   const [dConv, setDConv] = useState('');
   const [dDead, setDDead] = useState('');
   const [dPub, setDPub] = useState('');
@@ -80,15 +80,17 @@ export default function AssembleiasTab() {
     const facs = await apiQuery('assembleia_facilitators_v1', {});
     const fmap = {};
     (facs.data || []).forEach((f) => {
-      if (!fmap[f.assembleia_id]) fmap[f.assembleia_id] = new Set();
-      fmap[f.assembleia_id].add(f.user_id);
+      if (!fmap[f.assembleia_id]) fmap[f.assembleia_id] = [];
+      fmap[f.assembleia_id].push({ user_id: f.user_id, status: f.status, display_name: f.display_name });
     });
     setFacilitators(fmap);
     setLoading(false);
   }, []);
   useEffect(() => { load(); }, [load]);
 
-  const canFacilitate = (a) => isNetworkAdmin || (facilitators[a.id] && facilitators[a.id].has(user?.id));
+  const facRows = (a) => facilitators[a.id] || [];
+  const canFacilitate = (a) => isNetworkAdmin || facRows(a).some((f) => f.user_id === user?.id && f.status === 'designated');
+  const myFacRow = (a) => facRows(a).find((f) => f.user_id === user?.id);
 
   async function runRpc(key, fn, okMsgId) {
     setBusy(key);
@@ -138,9 +140,26 @@ export default function AssembleiasTab() {
   const deferItem = (itemId) => runRpc('defer:' + itemId,
     () => apiRpc('fn_assembleia_defer_item', { p_item_id: itemId }), 'federacao.assembleias.fac.saved');
 
+  // Volontariat / désignation (P2c)
+  const volunteer = (a) => runRpc('vol:' + a.id,
+    () => apiRpc('fn_assembleia_volunteer', { p_assembleia_id: a.id }), 'federacao.assembleias.fac.volunteer.done');
+  const unvolunteer = (a) => runRpc('unvol:' + a.id,
+    () => apiRpc('fn_assembleia_unvolunteer', { p_assembleia_id: a.id }), 'federacao.assembleias.fac.unvolunteer.done');
+  const designate = (a, uid) => runRpc('des:' + a.id + ':' + uid,
+    () => apiRpc('fn_assembleia_add_facilitator', { p_assembleia_id: a.id, p_user_id: uid }), 'federacao.assembleias.fac.designate.done');
+  const removeFac = (a, uid) => runRpc('rmf:' + a.id + ':' + uid,
+    () => apiRpc('fn_assembleia_remove_facilitator', { p_assembleia_id: a.id, p_user_id: uid }), 'federacao.assembleias.fac.remove.done');
+
+  // Ordre de l'ODJ : « remonter en tête » / « descendre en fin » (v0.1, 1 RPC).
+  const orderItem = (id, n) => runRpc('ord:' + id,
+    () => apiRpc('fn_assembleia_order_item', { p_item_id: id, p_display_order: n }), 'federacao.assembleias.fac.saved');
+  const moveTop = (items, it) => { const os = items.map((x) => x.display_order).filter((x) => x != null); orderItem(it.id, (os.length ? Math.min(...os) : 0) - 1); };
+  const moveBottom = (items, it) => { const os = items.map((x) => x.display_order).filter((x) => x != null); orderItem(it.id, (os.length ? Math.max(...os) : 0) + 1); };
+
   const fmtDate = (d) => (d ? new Date(d).toLocaleDateString(locale) : '—');
   const aStatus = (s) => t({ id: `federacao.assembleias.astatus.${s}` });
   const iStatus = (s) => t({ id: `federacao.assembleias.istatus.${s}` });
+  const personName = (f) => f.display_name || t({ id: 'federacao.assembleias.fac.anon' });
 
   return (
     <div className="ab-fed-assembleias">
@@ -186,6 +205,9 @@ export default function AssembleiasTab() {
           const depositClosed = a.status === 'encerrada' || a.status === 'arquivada';
           const late = a.agenda_deadline_at && new Date(a.agenda_deadline_at) < new Date();
           const fac = canFacilitate(a);
+          const mine = myFacRow(a);
+          const volunteers = facRows(a).filter((f) => f.status === 'volunteer');
+          const designated = facRows(a).filter((f) => f.status === 'designated');
           return (
             <div key={a.id} className="ab-fed-card is-list">
               <div className="ab-fed-crow">
@@ -196,6 +218,21 @@ export default function AssembleiasTab() {
                 {t({ id: 'federacao.assembleias.live.deadline' }, { date: fmtDate(a.agenda_deadline_at) })}
                 {a.scheduled_at ? ` · ${t({ id: 'federacao.assembleias.live.scheduled' }, { date: fmtDate(a.scheduled_at) })}` : ''}
               </div>
+
+              {/* Se proposer pour faciliter (volontariat, tout membre rattaché) */}
+              {!depositClosed && (
+                mine?.status === 'designated' ? (
+                  <div className="ab-fed-hint" style={{ marginTop: 4 }}>✓ {t({ id: 'federacao.assembleias.fac.youFacilitate' })}</div>
+                ) : mine?.status === 'volunteer' ? (
+                  <button className="cat-btn ghost" style={{ marginTop: 4 }} disabled={busy === 'unvol:' + a.id} onClick={() => unvolunteer(a)}>
+                    {t({ id: 'federacao.assembleias.fac.unvolunteer' })}
+                  </button>
+                ) : (
+                  <button className="cat-btn ghost" style={{ marginTop: 4 }} disabled={busy === 'vol:' + a.id} onClick={() => volunteer(a)}>
+                    {t({ id: 'federacao.assembleias.fac.volunteer' })}
+                  </button>
+                )
+              )}
 
               <div className="ab-fed-minilabel" style={{ marginTop: 12 }}>{t({ id: 'federacao.assembleias.live.agenda' })}</div>
               {items.length === 0 && <p className="ab-fed-hint">{t({ id: 'federacao.assembleias.live.agendaEmpty' })}</p>}
@@ -217,6 +254,12 @@ export default function AssembleiasTab() {
                       <button className="cat-btn ghost" disabled={busy === 'defer:' + it.id} onClick={() => deferItem(it.id)}>
                         {t({ id: 'federacao.assembleias.fac.defer' })}
                       </button>
+                    )}
+                    {fac && items.length > 1 && (
+                      <>
+                        <button className="cat-btn ghost" disabled={!!busy} onClick={() => moveTop(items, it)}>{t({ id: 'federacao.assembleias.fac.order.up' })}</button>
+                        <button className="cat-btn ghost" disabled={!!busy} onClick={() => moveBottom(items, it)}>{t({ id: 'federacao.assembleias.fac.order.down' })}</button>
+                      </>
                     )}
                   </div>
                 </div>
@@ -276,6 +319,33 @@ export default function AssembleiasTab() {
                   ) : (
                     <button className="cat-btn ghost" onClick={() => openDates(a)}>{t({ id: 'federacao.assembleias.fac.dates.edit' })}</button>
                   )}
+
+                  {/* Volontaires à désigner */}
+                  <div className="ab-fed-minilabel" style={{ marginTop: 14 }}>{t({ id: 'federacao.assembleias.fac.volunteers.label' })}</div>
+                  {volunteers.length === 0 ? (
+                    <p className="ab-fed-hint">{t({ id: 'federacao.assembleias.fac.volunteers.none' })}</p>
+                  ) : volunteers.map((v) => (
+                    <div key={v.user_id} className="ab-fed-meta" style={rowStyle}>
+                      <span>{personName(v)}</span>
+                      <button className="cat-btn ghost" disabled={busy === 'des:' + a.id + ':' + v.user_id} onClick={() => designate(a, v.user_id)}>
+                        {t({ id: 'federacao.assembleias.fac.designate' })}
+                      </button>
+                    </div>
+                  ))}
+
+                  {/* Facilitateur·rices désigné·es */}
+                  <div className="ab-fed-minilabel" style={{ marginTop: 12 }}>{t({ id: 'federacao.assembleias.fac.designated.label' })}</div>
+                  {designated.length === 0 ? (
+                    <p className="ab-fed-hint">—</p>
+                  ) : designated.map((d) => (
+                    <div key={d.user_id} className="ab-fed-meta" style={rowStyle}>
+                      <span>{personName(d)}</span>
+                      <button className="cat-btn ghost" style={{ color: '#f87171' }} disabled={busy === 'rmf:' + a.id + ':' + d.user_id} onClick={() => removeFac(a, d.user_id)}>
+                        {t({ id: 'federacao.assembleias.fac.remove' })}
+                      </button>
+                    </div>
+                  ))}
+                  <div className="ab-fed-note" style={{ marginTop: 8 }}>{t({ id: 'federacao.assembleias.fac.rotativityHint' })}</div>
                 </div>
               )}
             </div>

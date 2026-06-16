@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Desa aquesta llengua",
   "rede.lettre.ts.machine": "Traducció automàtica",
   "rede.lettre.ts.reviewed": "Revisat per persona",
-  "rede.lettre.ts.original": "Original (llengua font)"
+  "rede.lettre.ts.original": "Original (llengua font)",
+  "federacao.assembleias.fac.volunteer": "Em proposo per facilitar",
+  "federacao.assembleias.fac.volunteer.done": "Proposta registrada.",
+  "federacao.assembleias.fac.unvolunteer": "Retirar la meva proposta",
+  "federacao.assembleias.fac.unvolunteer.done": "Proposta retirada.",
+  "federacao.assembleias.fac.youFacilitate": "Facilites aquesta assemblea.",
+  "federacao.assembleias.fac.volunteers.label": "Qui es proposa per facilitar",
+  "federacao.assembleias.fac.volunteers.none": "Cap proposta de moment.",
+  "federacao.assembleias.fac.designate": "Designar",
+  "federacao.assembleias.fac.designate.done": "Persona designada per facilitar.",
+  "federacao.assembleias.fac.designated.label": "Qui facilita",
+  "federacao.assembleias.fac.remove": "Retirar",
+  "federacao.assembleias.fac.remove.done": "Persona retirada de la facilitació.",
+  "federacao.assembleias.fac.order.up": "↑ Pujar",
+  "federacao.assembleias.fac.order.down": "↓ Baixar",
+  "federacao.assembleias.fac.anon": "Membre",
+  "federacao.assembleias.fac.rotativityHint": "Funcions rotatives: alterneu d’una AG a l’altra — per evitar l’esgotament militant i que s’instal·li un poder."
 }

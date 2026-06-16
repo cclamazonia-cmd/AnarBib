@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Guardar este idioma",
   "rede.lettre.ts.machine": "Tradução automática",
   "rede.lettre.ts.reviewed": "Revisado por pessoa",
-  "rede.lettre.ts.original": "Original (idioma fonte)"
+  "rede.lettre.ts.original": "Original (idioma fonte)",
+  "federacao.assembleias.fac.volunteer": "Proponho-me para facilitar",
+  "federacao.assembleias.fac.volunteer.done": "Proposta registrada.",
+  "federacao.assembleias.fac.unvolunteer": "Retirar minha proposta",
+  "federacao.assembleias.fac.unvolunteer.done": "Proposta retirada.",
+  "federacao.assembleias.fac.youFacilitate": "Você facilita esta assembleia.",
+  "federacao.assembleias.fac.volunteers.label": "Quem se propôs a facilitar",
+  "federacao.assembleias.fac.volunteers.none": "Nenhuma proposta por enquanto.",
+  "federacao.assembleias.fac.designate": "Designar",
+  "federacao.assembleias.fac.designate.done": "Pessoa designada para facilitar.",
+  "federacao.assembleias.fac.designated.label": "Pessoas que facilitam",
+  "federacao.assembleias.fac.remove": "Retirar",
+  "federacao.assembleias.fac.remove.done": "Pessoa retirada da facilitação.",
+  "federacao.assembleias.fac.order.up": "↑ Subir",
+  "federacao.assembleias.fac.order.down": "↓ Descer",
+  "federacao.assembleias.fac.anon": "Membro",
+  "federacao.assembleias.fac.rotativityHint": "Funções rotativas: alternem de uma AG para outra — para evitar o esgotamento militante e que um poder se instale."
 }

@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Save this language",
   "rede.lettre.ts.machine": "Machine translation",
   "rede.lettre.ts.reviewed": "Human-reviewed",
-  "rede.lettre.ts.original": "Original (source language)"
+  "rede.lettre.ts.original": "Original (source language)",
+  "federacao.assembleias.fac.volunteer": "Volunteer to facilitate",
+  "federacao.assembleias.fac.volunteer.done": "Offer recorded.",
+  "federacao.assembleias.fac.unvolunteer": "Withdraw my offer",
+  "federacao.assembleias.fac.unvolunteer.done": "Offer withdrawn.",
+  "federacao.assembleias.fac.youFacilitate": "You facilitate this assembly.",
+  "federacao.assembleias.fac.volunteers.label": "Volunteers to facilitate",
+  "federacao.assembleias.fac.volunteers.none": "No offers yet.",
+  "federacao.assembleias.fac.designate": "Designate",
+  "federacao.assembleias.fac.designate.done": "Facilitator designated.",
+  "federacao.assembleias.fac.designated.label": "Designated facilitators",
+  "federacao.assembleias.fac.remove": "Remove",
+  "federacao.assembleias.fac.remove.done": "Removed from facilitation.",
+  "federacao.assembleias.fac.order.up": "↑ Move up",
+  "federacao.assembleias.fac.order.down": "↓ Move down",
+  "federacao.assembleias.fac.anon": "Member",
+  "federacao.assembleias.fac.rotativityHint": "Rotating roles: alternate from one AG to the next — to avoid activist burnout and prevent entrenched power."
 }

@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Deze taal opslaan",
   "rede.lettre.ts.machine": "Machinevertaling",
   "rede.lettre.ts.reviewed": "Door mens nagekeken",
-  "rede.lettre.ts.original": "Origineel (brontaal)"
+  "rede.lettre.ts.original": "Origineel (brontaal)",
+  "federacao.assembleias.fac.volunteer": "Ik stel me kandidaat om te faciliteren",
+  "federacao.assembleias.fac.volunteer.done": "Aanbod geregistreerd.",
+  "federacao.assembleias.fac.unvolunteer": "Mijn aanbod intrekken",
+  "federacao.assembleias.fac.unvolunteer.done": "Aanbod ingetrokken.",
+  "federacao.assembleias.fac.youFacilitate": "Jij faciliteert deze vergadering.",
+  "federacao.assembleias.fac.volunteers.label": "Wie zich aanbiedt om te faciliteren",
+  "federacao.assembleias.fac.volunteers.none": "Nog geen aanbod.",
+  "federacao.assembleias.fac.designate": "Aanwijzen",
+  "federacao.assembleias.fac.designate.done": "Persoon aangewezen om te faciliteren.",
+  "federacao.assembleias.fac.designated.label": "Wie faciliteert",
+  "federacao.assembleias.fac.remove": "Verwijderen",
+  "federacao.assembleias.fac.remove.done": "Uit de facilitatie verwijderd.",
+  "federacao.assembleias.fac.order.up": "↑ Omhoog",
+  "federacao.assembleias.fac.order.down": "↓ Omlaag",
+  "federacao.assembleias.fac.anon": "Lid",
+  "federacao.assembleias.fac.rotativityHint": "Roterende functies: wissel elkaar af van de ene AV naar de andere — tegen activisme-uitputting en vastgeroeste macht."
 }

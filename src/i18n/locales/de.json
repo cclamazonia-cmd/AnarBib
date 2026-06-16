@@ -5070,5 +5070,21 @@
   "rede.lettre.saveLocale": "Diese Sprache speichern",
   "rede.lettre.ts.machine": "Maschinelle Übersetzung",
   "rede.lettre.ts.reviewed": "Von Mensch geprüft",
-  "rede.lettre.ts.original": "Original (Ausgangssprache)"
+  "rede.lettre.ts.original": "Original (Ausgangssprache)",
+  "federacao.assembleias.fac.volunteer": "Ich melde mich zum Moderieren",
+  "federacao.assembleias.fac.volunteer.done": "Angebot gespeichert.",
+  "federacao.assembleias.fac.unvolunteer": "Mein Angebot zurückziehen",
+  "federacao.assembleias.fac.unvolunteer.done": "Angebot zurückgezogen.",
+  "federacao.assembleias.fac.youFacilitate": "Du moderierst diese Versammlung.",
+  "federacao.assembleias.fac.volunteers.label": "Wer sich zum Moderieren meldet",
+  "federacao.assembleias.fac.volunteers.none": "Noch keine Meldung.",
+  "federacao.assembleias.fac.designate": "Benennen",
+  "federacao.assembleias.fac.designate.done": "Person zum Moderieren benannt.",
+  "federacao.assembleias.fac.designated.label": "Wer moderiert",
+  "federacao.assembleias.fac.remove": "Entfernen",
+  "federacao.assembleias.fac.remove.done": "Aus der Moderation entfernt.",
+  "federacao.assembleias.fac.order.up": "↑ Hoch",
+  "federacao.assembleias.fac.order.down": "↓ Runter",
+  "federacao.assembleias.fac.anon": "Mitglied",
+  "federacao.assembleias.fac.rotativityHint": "Rotierende Funktionen: wechselt euch von einer VV zur nächsten ab — gegen Aktivismus-Erschöpfung und festgesetzte Macht."
 }
