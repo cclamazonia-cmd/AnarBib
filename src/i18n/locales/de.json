@@ -4995,5 +4995,8 @@
   "federacao.assembleias.lang.title": "In welcher Sprache?",
   "federacao.assembleias.lang.body": "Die Versammlung ist mehrsprachig: jede*r spricht in der eigenen Sprache. Keine Sprache wird aufgezwungen — schon gar nicht Englisch als Standard. Um sich zu verstehen, werden die Beiträge in einige Pivot-Sprachen zusammengefasst (Portugiesisch, Spanisch, Englisch), mit gegenseitiger Hilfe beim Dolmetschen und einem schriftlichen Strang parallel zur Stimme.",
   "federacao.assembleias.lang.prep": "Vor allem werden die Tagesordnung und die Begründung jedes Punktes vor der Versammlung übersetzt und verteilt: du kommst an, nachdem du in deiner eigenen Sprache gelesen hast, was entschieden werden soll. Und die Entscheidungen und ihre Begründungen werden in einem mehrsprachigen Protokoll festgehalten — dieses ist für deine Bibliothek maßgeblich.",
-  "federacao.assembleias.lang.note": "Das Sekretariat wird zu Beginn bestimmt; diese Sprachregeln kann die Versammlung bestätigen oder anpassen."
+  "federacao.assembleias.lang.note": "Das Sekretariat wird zu Beginn bestimmt; diese Sprachregeln kann die Versammlung bestätigen oder anpassen.",
+  "federacao.inicio.lettre": "Netzwerk-Rundbrief",
+  "federacao.inicio.lettre.desc": "Das Notizbuch des Netzwerks in deinem Postfach, wenn du möchtest.",
+  "federacao.inicio.toLettre": "Abonnieren"
 }

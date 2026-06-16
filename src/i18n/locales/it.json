@@ -4995,5 +4995,8 @@
   "federacao.assembleias.lang.title": "In che lingua?",
   "federacao.assembleias.lang.body": "L’assemblea è plurilingue: ognun* interviene nella propria lingua. Nessuna lingua è imposta — tanto meno l’inglese per default. Per capirci, gli interventi sono riassunti in alcune lingue-perno (portoghese, spagnolo, inglese), con aiuto reciproco nell’interpretazione e un filo scritto in parallelo alla voce.",
   "federacao.assembleias.lang.prep": "Soprattutto, l’ordine del giorno e la motivazione di ogni punto sono tradotti e diffusi prima dell’assemblea: si arriva avendo letto, nella propria lingua, ciò che si deciderà. E le decisioni e le loro motivazioni sono messe a verbale in un resoconto multilingue — è esso a fare fede per la tua biblioteca.",
-  "federacao.assembleias.lang.note": "La segreteria è designata all’apertura; queste regole linguistiche, l’assemblea può confermarle o modificarle."
+  "federacao.assembleias.lang.note": "La segreteria è designata all’apertura; queste regole linguistiche, l’assemblea può confermarle o modificarle.",
+  "federacao.inicio.lettre": "Lettera della rete",
+  "federacao.inicio.lettre.desc": "Il taccuino della rete nella tua casella, se lo chiedi.",
+  "federacao.inicio.toLettre": "Iscrivermi"
 }

@@ -4995,5 +4995,8 @@
   "federacao.assembleias.lang.title": "In welke taal?",
   "federacao.assembleias.lang.body": "De vergadering is meertalig: iedereen spreekt in de eigen taal. Geen enkele taal wordt opgelegd — al helemaal niet het Engels als standaard. Om elkaar te begrijpen worden de bijdragen samengevat in enkele spiltalen (Portugees, Spaans, Engels), met onderlinge hulp bij het tolken en een geschreven draad naast de stem.",
   "federacao.assembleias.lang.prep": "Vooral worden de agenda en de motivering van elk punt vóór de vergadering vertaald en verspreid: je komt aan nadat je, in je eigen taal, hebt gelezen wat er beslist gaat worden. En de besluiten en hun motivering worden vastgelegd in een meertalig verslag — dat is wat telt voor jouw bibliotheek.",
-  "federacao.assembleias.lang.note": "Het secretariaat wordt bij de opening aangewezen; deze taalregels kan de vergadering bevestigen of bijstellen."
+  "federacao.assembleias.lang.note": "Het secretariaat wordt bij de opening aangewezen; deze taalregels kan de vergadering bevestigen of bijstellen.",
+  "federacao.inicio.lettre": "Nieuwsbrief van het netwerk",
+  "federacao.inicio.lettre.desc": "Het logboek van het netwerk in je inbox, als je erom vraagt.",
+  "federacao.inicio.toLettre": "Inschrijven"
 }

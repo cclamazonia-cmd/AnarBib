@@ -4995,5 +4995,8 @@
   "federacao.assembleias.lang.title": "En kiu lingvo?",
   "federacao.assembleias.lang.body": "La asembleo estas plurlingva: ĉiu parolas en sia propra lingvo. Neniu lingvo estas altrudata — des malpli la angla defaŭlte. Por interkompreniĝi, la kontribuoj estas resumataj en kelkajn pivot-lingvojn (portugala, hispana, angla), kun reciproka helpo por interpretado kaj skriba fadeno paralele al la voĉo.",
   "federacao.assembleias.lang.prep": "Precipe, la tagordo kaj la motivigo de ĉiu punkto estas tradukataj kaj diskonigataj antaŭ la asembleo: oni alvenas leginte, en sia propra lingvo, kio estos decidata. Kaj la decidoj kaj iliaj motivigoj estas registrataj en plurlingva protokolo — ĝi estas tiu, kiu validas por via biblioteko.",
-  "federacao.assembleias.lang.note": "La sekretario estas nomumata ĉe la malfermo; tiujn lingvajn regulojn la asembleo povas konfirmi aŭ ĝustigi."
+  "federacao.assembleias.lang.note": "La sekretario estas nomumata ĉe la malfermo; tiujn lingvajn regulojn la asembleo povas konfirmi aŭ ĝustigi.",
+  "federacao.inicio.lettre": "Reta bulteno",
+  "federacao.inicio.lettre.desc": "La kajero de la reto en via leterkesto, se vi petas.",
+  "federacao.inicio.toLettre": "Aboni"
 }

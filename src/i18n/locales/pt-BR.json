@@ -4995,5 +4995,8 @@
   "federacao.assembleias.lang.title": "Em que língua?",
   "federacao.assembleias.lang.body": "A assembleia é plurilíngue: cada pessoa fala na sua língua. Nenhuma língua é imposta — muito menos o inglês por padrão. Para nos entendermos, as falas são resumidas em algumas línguas-pivô (português, espanhol, inglês), com apoio mútuo na interpretação e um fio escrito em paralelo à voz.",
   "federacao.assembleias.lang.prep": "Sobretudo, a ordem do dia e a justificativa de cada ponto são traduzidas e divulgadas antes da assembleia: chega-se tendo lido, na própria língua, o que vai se decidir. E as decisões e suas justificativas ficam registradas numa ata multilíngue — é ela que vale para a sua biblioteca.",
-  "federacao.assembleias.lang.note": "A secretaria é designada na abertura; estas regras de língua, a assembleia pode confirmá-las ou ajustá-las."
+  "federacao.assembleias.lang.note": "A secretaria é designada na abertura; estas regras de língua, a assembleia pode confirmá-las ou ajustá-las.",
+  "federacao.inicio.lettre": "Boletim da rede",
+  "federacao.inicio.lettre.desc": "O caderno da rede na tua caixa de entrada, se pedires.",
+  "federacao.inicio.toLettre": "Inscrever-me"
 }

@@ -237,7 +237,7 @@ export default function FederacaoPage() {
             <InicioTab
               t={t} locale={locale} loading={loading}
               myCircles={myCircles} openCircles={openCircles} openRequests={openRequests}
-              setTab={setTab} hasStaffAccess={hasStaffAccess}
+              setTab={setTab} hasStaffAccess={hasStaffAccess} navigate={navigate}
             />
           )}
 
@@ -266,7 +266,7 @@ export default function FederacaoPage() {
 // Porte d'entrée : qualitatif, sans tableau de bord (doctrine). Réutilise les
 // données déjà chargées (cercles, portes ouvertes, demandes en attente) + teaser
 // annuaire ; les espaces non encore construits sont posés en « à venir ».
-function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, setTab, hasStaffAccess }) {
+function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, setTab, hasStaffAccess, navigate }) {
   const fmtDate = (d) => new Date(d).toLocaleDateString(locale);
   const natureLabel = (n) => t({ id: `federacao.circle.nature.${n}` });
   const circleName = (id) => (myCircles.find((c) => c.circle_id === id) || {}).name || '—';
@@ -278,7 +278,7 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
         <p>{t({ id: 'federacao.inicio.body' })}</p>
       </div>
 
-      {!loading && openRequests.length > 0 && (
+      {hasStaffAccess && !loading && openRequests.length > 0 && (
         <div className="ab-fed-inicio-alert">
           <div className="ab-fed-minilabel">{t({ id: 'federacao.inicio.pending' })}</div>
           {openRequests.map((r) => (
@@ -291,6 +291,7 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
         </div>
       )}
 
+      {hasStaffAccess && (<>
       <div className="ab-fed-inicio-cols">
         <div className="ab-fed-inicio-box">
           <div className="ab-fed-label">{t({ id: 'federacao.circulos.mine' })}</div>
@@ -326,6 +327,23 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
           <span className="ab-fed-inicio-annuaire-d">{t({ id: 'federacao.carte.lead' })}</span>
         </span>
         <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toAnnuaire' })} →</span>
+      </button>
+      </>)}
+
+      {/* Pill « Lettre de la fédération » — ouvert à tous·tes ; abonnement opt-in depuis /conta. */}
+      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => navigate('/conta')}>
+        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" style={{ flex: 'none' }}>
+          <rect x="3" y="6" width="18" height="13" rx="1.6" fill="none" stroke="#c00000" strokeWidth="1.8" />
+          <path d="M3.5 7.5 12 13.5 20.5 7.5" fill="none" stroke="#c00000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span className="ab-fed-inicio-annuaire-txt">
+          <span className="ab-fed-inicio-annuaire-t">
+            {t({ id: 'federacao.inicio.lettre' })}
+            <span className="ab-fed-pill is-new">{t({ id: 'federacao.inicio.new' })}</span>
+          </span>
+          <span className="ab-fed-inicio-annuaire-d">{t({ id: 'federacao.inicio.lettre.desc' })}</span>
+        </span>
+        <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toLettre' })} →</span>
       </button>
 
       <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('gazeta')}>

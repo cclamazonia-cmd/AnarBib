@@ -4995,5 +4995,8 @@
   "federacao.assembleias.lang.title": "In which language?",
   "federacao.assembleias.lang.body": "The assembly is plurilingual: everyone speaks in their own language. No language is imposed — least of all English by default. To understand one another, contributions are summarised into a few pivot languages (Portuguese, Spanish, English), with mutual aid for interpretation and a written thread alongside the voice.",
   "federacao.assembleias.lang.prep": "Above all, the agenda and the rationale for each item are translated and circulated before the assembly: you arrive having read, in your own language, what is to be decided. And decisions and their rationale are recorded in multilingual minutes — these are what count for your library.",
-  "federacao.assembleias.lang.note": "The secretariat is appointed at the opening; these language rules can be confirmed or adjusted by the assembly."
+  "federacao.assembleias.lang.note": "The secretariat is appointed at the opening; these language rules can be confirmed or adjusted by the assembly.",
+  "federacao.inicio.lettre": "Federation letter",
+  "federacao.inicio.lettre.desc": "The network’s notebook in your inbox, if you ask for it.",
+  "federacao.inicio.toLettre": "Subscribe"
 }
