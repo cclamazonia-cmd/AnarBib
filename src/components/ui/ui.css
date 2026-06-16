@@ -278,8 +278,8 @@
 
 .ab-toast-viewport {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  right: max(20px, env(safe-area-inset-right));
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -339,8 +339,8 @@
 
 .ab-scroll-buttons {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
   z-index: 9990; /* sous le toast (9999), au-dessus du contenu */
   display: flex;
   flex-direction: column;
@@ -377,7 +377,7 @@
 
 /* Sur les écrans étroits, on resserre un peu pour ne pas gêner le pouce. */
 @media (max-width: 540px) {
-  .ab-scroll-buttons { right: 12px; bottom: 12px; }
+  .ab-scroll-buttons { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
   .ab-scroll-button { width: 38px; height: 38px; }
 }
 
