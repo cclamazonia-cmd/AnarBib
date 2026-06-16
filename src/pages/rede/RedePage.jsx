@@ -13,6 +13,7 @@ import AdminsPanel from '@/components/rede/AdminsPanel';
 import ReportsPanel from '@/components/rede/ReportsPanel';
 import OaiSourcePanel from '@/components/rede/OaiSourcePanel'; /* OAI-O3 */
 import GazetteStaffPanel from '@/components/rede/GazetteStaffPanel';
+import LettreStaffPanel from '@/components/rede/LettreStaffPanel';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import '../catalogacao/CatalogacaoPage.css';
@@ -56,6 +57,7 @@ export default function RedePage() {
     { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
     { id: 'reports', label: t({ id: 'rede.tab.reports' }) },
     { id: 'gazeta', label: t({ id: 'rede.tab.gazeta' }) },
+    { id: 'lettre', label: t({ id: 'rede.tab.lettre' }) },
     { id: 'oaisource', label: t({ id: 'rede.tab.oaiSource' }) }, /* OAI-O3 */
   ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
@@ -432,6 +434,10 @@ export default function RedePage() {
         {/* ═══ GAZETTE — triage des contributions + publication ══════════════ */}
         {tab === 'gazeta' && (
           <GazetteStaffPanel />
+        )}
+
+        {tab === 'lettre' && (
+          <LettreStaffPanel />
         )}
 
         {tab === 'oaisource' && (
