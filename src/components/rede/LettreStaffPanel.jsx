@@ -168,7 +168,7 @@ export default function LettreStaffPanel() {
             <textarea
               value={editing.intro}
               onChange={(e) => setEditing((ed) => ({ ...ed, intro: e.target.value }))}
-              rows={3} maxLength={1000}
+              rows={6} maxLength={1750}
               style={{ width: '100%', fontFamily: 'inherit', fontSize: '.9rem', color: '#f4f4f4', background: 'rgba(0,0,0,.3)', border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: '8px 11px', marginBottom: 14 }}
             />
 
