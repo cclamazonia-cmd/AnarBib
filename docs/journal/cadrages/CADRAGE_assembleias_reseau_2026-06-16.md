@@ -86,13 +86,26 @@ La visio est le morceau **déjà résolu** : l'entraide pointe sur Jitsi via une
 
 ## 6bis. Ordre du jour — inscription d'un point (modèle retenu 16/06)
 
-**Modèle retenu : pas de gardien, l'assemblée adopte son ODJ.** Tout collectif membre peut inscrire un point, à condition de le déposer **avant un délai minimal `D-X`** précédant l'AG. Trois principes :
+**Modèle retenu : pas de gardien, l'assemblée adopte son ODJ.** Tout collectif membre peut inscrire un point, à condition de le déposer **avant J-15** (quinze jours avant l'AG). Trois principes :
 
 - **Aucune autorité ne décide de l'admission.** Le dépôt avant l'échéance **inscrit** le point. Une **facilitation** (coordination ou cercle tournant) ne fait qu'**organiser** : regrouper les doublons, proposer un ordre et un temps par point, signaler ce qui relèverait d'un autre espace — **jamais supprimer**. Toute réorganisation est **visible et contestable** par le collectif proposant (la transparence est le garde-fou, comme pour l'objection FED-O5).
 - **L'assemblée est souveraine sur son ODJ.** À l'ouverture, l'AG **adopte l'ordre du jour par consentement** : elle peut ajouter un point tardif (par consentement, motif d'urgence), en différer un, fusionner. Le pouvoir reste à l'assemblée, pas à un filtre amont.
 - **Le délai n'est pas un filtre, c'est une condition de préparation.** Son rôle : laisser à chaque collectif le temps de **traduire** le point (réseau multilingue) et surtout de **mandater** sa·son délégué·e dessus. Les dépôts après l'échéance vont en *varia* / prochaine AG, sauf consentement de l'assemblée à les ajouter.
 
-**Lien fort avec le mandat (point ouvert §8).** Si les collectifs **mandatent** leurs délégué·es (mandat impératif), le délai `D-X` devient **structurant** : on ne mandate pas sur un point découvert le jour même. Le réglage de `D-X` dépend donc du régime de mandat retenu.
+**Lien avec le mandat — calendrier retenu (16/06).** Le réseau retient le **mandat impératif** (le·la délégué·e porte la position mandatée par sa base, pas la sienne). L'horloge qui compte n'est donc pas « dépôt → AG » mais la **fenêtre de mandatement** (ODJ figé + traduit → AG). D'où **trois jalons** :
+- **Convocation** (date + ODJ en formation) : **J-30 minimum**, pour que chaque collectif cale sa réunion locale de mandatement ;
+- **Dépôt d'un point** : **J-15** (plancher) ;
+- **ODJ figé, traduit (10 langues) et publié** : **~J-10** → ~10 jours de fenêtre de mandatement.
+
+Un collectif à cadence lente s'appuie sur la **convocation précoce (J-30)**, pas sur le délai de dépôt — c'est elle qui rend le mandat impératif praticable.
+
+## 6ter. Quorum, mandat & AG constitutive (retenu 16/06)
+
+**Quorum permanent : 60% des zones géographiques ∧ 50% des langues** présentes — les **deux** conditions (le « et » empêche qu'un seul bloc régional/linguistique fasse quorum à lui seul ; légitimité = étalement, §2). Trois précisions tranchées :
+
+- **Dénominateur sur les constituantes réelles**, pas l'interface : le % se calcule sur les **zones et langues ayant au moins un collectif membre**, jamais sur les 10 locales d'UI (plusieurs — eo, el, nl… — sont des traductions sans collectif derrière ; les inclure rendrait le seuil quasi inatteignable).
+- **Présence = ≥ 1 collectif mandaté** par zone/langue. Si le quorum n'est pas atteint, **filet** : l'AG se tient quand même, mais ses décisions sont **provisoires**, à ratifier en asynchrone — pas d'échec sec qu'une absence ponctuelle déclencherait.
+- **AG constitutive exemptée.** La toute première AG a pour objet de **se doter de ces règles** (dont le quorum) : la verrouiller d'emblée derrière 60/50 serait circulaire (pas de quorum → pas de règles). Elle tourne donc sous **quorum allégé/indicatif**, ne **pose que des jalons** (décisions provisoires), et le 60/50 devient la règle permanente qu'elle adopte pour les AG suivantes.
 
 ## 7. Articulation outillage (neuf vs réemploi)
 
@@ -106,13 +119,19 @@ La visio est le morceau **déjà résolu** : l'entraide pointe sur Jitsi via une
 
 ## 8. Points ouverts (à trancher pour `spec-assembleias`)
 
-- ✅ **Méthode de date — tranchée (16/06) : option A** (disponibilité + préférence en départage, §4.4). Restent à régler : sémantique exacte du « si vraiment nécessaire », forme de la saisie.
-- **Quorum** : ✅ principe retenu (16/06) — compter les **collectifs distincts** + pondérer la **diversité** langues/régions. Restent ouverts : les **seuils** (combien de collectifs, combien de langues/régions), les **axes de diversité** exacts, et — point fédéraliste — **qui ratifie ces règles** (la coordination propose un défaut ; l'AG elle-même les bénit ?).
-- ✅ **Inscription à l'ODJ — modèle retenu (16/06)** : pas de gardien, l'assemblée adopte son ODJ par consentement (§6bis).
-- **Délais** : convocation (AG ≥ N semaines avant), fenêtre de recueil des disponibilités, et **délai minimal `D-X` de dépôt d'un point** à l'ODJ (lié au régime de mandat — §6bis).
+**Tranchés le 16/06** (orientations, à canoniser au REGISTRE §`FED`) :
+- ✅ **Méthode de date : option A** — disponibilité + préférence en départage (§4.4).
+- ✅ **Inscription à l'ODJ** : pas de gardien, l'assemblée adopte son ODJ par consentement (§6bis).
+- ✅ **Mandat : impératif** ; **calendrier** J-30 convocation / J-15 dépôt / ~J-10 ODJ publié (§6bis).
+- ✅ **Quorum permanent** : 60% des zones ∧ 50% des langues, dénominateur sur les constituantes réelles, présence = ≥ 1 collectif mandaté, filet « décisions provisoires » ; **AG constitutive à quorum allégé** (§6ter).
+
+**Restent ouverts :**
+- **Liste canonique des zones géographiques** (et des langues-constituantes) servant de dénominateur au quorum.
+- **Mécanique de ratification asynchrone** des décisions provisoires (filet quorum + jalons de l'AG constitutive).
+- Sémantique exacte du « si vraiment nécessaire » et **forme de la saisie** disponibilités/préférences (§4.4).
 - Qui **propose les créneaux** pré-filtrés (coordination ? un cercle ?).
 - Statut d'une AG **non-présentielle** vs présentielle (équivalence décisionnelle ?).
-- **Mandat impératif vs représentatif** ; régime de vote des décisions de fond (hérités chantier §8.2).
+- **Régime de vote des décisions de fond** (au-delà du consentement par défaut — hérité chantier §8.2).
 
 ## 9. Prochaine étape
 
