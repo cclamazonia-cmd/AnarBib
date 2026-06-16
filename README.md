@@ -211,7 +211,7 @@ anarbib/
 │   └── legal/              # Documents juridiques (RGPD, licence CC-BY-SA)
 │
 ├── .gitignore             # Ignore .bak.*, create-*.cjs, fix-*.cjs (scripts one-shot)
-├── deno.lock / package.json / package-lock.json
+├── package.json / package-lock.json
 ├── eslint.config.js / vite.config.js / vitest.config.js
 ├── restart.sh             # Purge cache Vite + relance dev
 ├── CLAUDE.md              # Guide de travail des agents (état vérifié du dépôt)
