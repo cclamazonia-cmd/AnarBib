@@ -283,6 +283,8 @@ export default function CatalogPage() {
   const [subjectFilter, setSubjectFilter] = useState(''); // #OPAC8 filtre par sujet (slug)
   const [subjectLabel, setSubjectLabel] = useState('');
   const [relatedSubjects, setRelatedSubjects] = useState([]); // v3-A « voir aussi »
+  const [subjectTree, setSubjectTree] = useState(null);        // v3-C arbre des sujets
+  const [openTreeNodes, setOpenTreeNodes] = useState({});      // id -> déplié ?
   // #OPAC7 / OPAC-F1 : facettes de découverte (CDD / auteur·rice / décennie)
   const [facets, setFacets] = useState(null);
   const [showAllCdd, setShowAllCdd] = useState(false);
@@ -492,6 +494,19 @@ export default function CatalogPage() {
     })();
     return () => { cancelled = true; };
   }, [subjectFilter]);
+
+  // v3-C — arbre des sujets (chargé une fois, à l'ouverture de l'exploration).
+  useEffect(() => {
+    if (!exploreOpen || subjectTree) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase.schema('api').rpc('subject_tree_v1');
+        if (!cancelled) setSubjectTree(Array.isArray(data) ? data : []);
+      } catch { if (!cancelled) setSubjectTree([]); }
+    })();
+    return () => { cancelled = true; };
+  }, [exploreOpen, subjectTree]);
 
   // Regimento da biblioteca (if user logged in)
   useEffect(() => {
@@ -1037,6 +1052,42 @@ export default function CatalogPage() {
           ))}
         </div>
       </section>
+
+      {/* ══ v3-C — Parcourir par sujet (arbre hiérarchique) ══════════════════ */}
+      {subjectTree && subjectTree.length > 0 && (() => {
+        const roots = subjectTree.filter(s => s.parent_id == null);
+        const childrenOf = (pid) => subjectTree.filter(s => s.parent_id === pid);
+        const SubjectNode = (node, isChild) => (
+          <li key={node.id} className="ab-tree__node">
+            <div className="ab-tree__row">
+              {(!isChild && childrenOf(node.id).length > 0) ? (
+                <button type="button" className="ab-tree__toggle"
+                  aria-expanded={!!openTreeNodes[node.id]}
+                  onClick={() => setOpenTreeNodes(s => ({ ...s, [node.id]: !s[node.id] }))}>
+                  {openTreeNodes[node.id] ? '▾' : '▸'}
+                </button>
+              ) : <span className="ab-tree__toggle ab-tree__toggle--leaf" aria-hidden="true" />}
+              <button type="button"
+                className={`ab-tree__label ${subjectFilter === node.slug ? 'is-active' : ''}`}
+                onClick={() => pickSubject({ slug: node.slug, label_i18n: node.label_i18n })}>
+                {localizedSubjectLabel(node.label_i18n, locale)}
+                {node.book_count > 0 && <span className="ab-tree__count">{node.book_count}</span>}
+              </button>
+            </div>
+            {!isChild && openTreeNodes[node.id] && childrenOf(node.id).length > 0 && (
+              <ul className="ab-tree ab-tree--child">
+                {childrenOf(node.id).map(kid => SubjectNode(kid, true))}
+              </ul>
+            )}
+          </li>
+        );
+        return (
+          <section className="ab-subject-tree">
+            <span className="ab-facets__title">{t({ id: 'catalog.tree.title' })}</span>
+            <ul className="ab-tree">{roots.map(node => SubjectNode(node, false))}</ul>
+          </section>
+        );
+      })()}
 
       {/* ══ #OPAC7 — Facettes de découverte (CDD / auteur·rice / décennie) ══ */}
       {facets && ((facets.cdd?.length || 0) + (facets.author?.length || 0) + (facets.decade?.length || 0) + (facets.subjects?.length || 0) > 0) && (
