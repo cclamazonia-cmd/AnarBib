@@ -4991,5 +4991,9 @@
   "account.lettre.pending": "Confirmation en attente : vérifie ta boîte mail (et les indésirables).",
   "account.lettre.subscribed": "Ton abonnement est actif.",
   "account.lettre.unsubscribed": "Ton abonnement est annulé.",
-  "account.lettre.note": "Désabonnement possible à tout moment, en un clic. Aucun pistage, aucune revente."
+  "account.lettre.note": "Désabonnement possible à tout moment, en un clic. Aucun pistage, aucune revente.",
+  "federacao.assembleias.lang.title": "Dans quelle langue ?",
+  "federacao.assembleias.lang.body": "L’assemblée est plurilingue : on intervient dans sa langue. Aucune langue n’est imposée — surtout pas l’anglais par défaut. Pour se comprendre, les échanges sont résumés vers quelques langues-pivots (portugais, espagnol, anglais), avec de l’entraide à l’interprétation et un fil écrit en parallèle de la voix.",
+  "federacao.assembleias.lang.prep": "Surtout, l’ordre du jour et la motivation de chaque point sont traduits et diffusés avant l’assemblée : on arrive en ayant lu, dans sa langue, ce qui va se décider. Et les décisions et leurs motivations sont consignées dans un compte rendu multilingue — c’est lui qui fait foi pour ta bibliothèque.",
+  "federacao.assembleias.lang.note": "Le secrétariat est désigné à l’ouverture ; ces règles de langue, l’assemblée peut les confirmer ou les ajuster."
 }

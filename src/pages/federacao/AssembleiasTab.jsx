@@ -35,6 +35,13 @@ export default function AssembleiasTab() {
       </div>
 
       <div className="ab-fed-card is-list">
+        <div className="ab-fed-label">{t({ id: 'federacao.assembleias.lang.title' })}</div>
+        <p className="ab-fed-cdesc">{t({ id: 'federacao.assembleias.lang.body' })}</p>
+        <p className="ab-fed-cdesc" style={{ marginTop: 10 }}>{t({ id: 'federacao.assembleias.lang.prep' })}</p>
+        <p className="ab-fed-hint" style={{ marginTop: 10, marginBottom: 0 }}>{t({ id: 'federacao.assembleias.lang.note' })}</p>
+      </div>
+
+      <div className="ab-fed-card is-list">
         <div className="ab-fed-label">{t({ id: 'federacao.assembleias.rules.title' })}</div>
         <p className="ab-fed-hint">{t({ id: 'federacao.assembleias.rules.intro' })}</p>
         <ul className="ab-fed-rules">

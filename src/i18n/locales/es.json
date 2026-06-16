@@ -4991,5 +4991,9 @@
   "account.lettre.pending": "Confirmación pendiente: revisa tu bandeja de entrada (y el spam).",
   "account.lettre.subscribed": "Tu suscripción está activa.",
   "account.lettre.unsubscribed": "Tu suscripción ha sido cancelada.",
-  "account.lettre.note": "Puedes darte de baja en cualquier momento, con un clic. Sin rastreo, sin reventa."
+  "account.lettre.note": "Puedes darte de baja en cualquier momento, con un clic. Sin rastreo, sin reventa.",
+  "federacao.assembleias.lang.title": "¿En qué lengua?",
+  "federacao.assembleias.lang.body": "La asamblea es plurilingüe: cada quien interviene en su lengua. Ninguna lengua se impone — y mucho menos el inglés por defecto. Para entendernos, las intervenciones se resumen en algunas lenguas-pivote (portugués, español, inglés), con apoyo mutuo en la interpretación y un hilo escrito en paralelo a la voz.",
+  "federacao.assembleias.lang.prep": "Sobre todo, el orden del día y la motivación de cada punto se traducen y difunden antes de la asamblea: se llega habiendo leído, en la propia lengua, lo que se va a decidir. Y las decisiones y sus motivaciones quedan registradas en un acta multilingüe — es ella la que vale para tu biblioteca.",
+  "federacao.assembleias.lang.note": "La secretaría se designa en la apertura; estas reglas de lengua, la asamblea puede confirmarlas o ajustarlas."
 }

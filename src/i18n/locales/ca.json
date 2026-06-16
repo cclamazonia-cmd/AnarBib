@@ -4991,5 +4991,9 @@
   "account.lettre.pending": "Confirmació pendent: revisa la teva safata d’entrada (i el correu brossa).",
   "account.lettre.subscribed": "La teva subscripció és activa.",
   "account.lettre.unsubscribed": "La teva subscripció s’ha cancel·lat.",
-  "account.lettre.note": "Pots donar-te de baixa en qualsevol moment, amb un clic. Sense rastreig, sense revenda."
+  "account.lettre.note": "Pots donar-te de baixa en qualsevol moment, amb un clic. Sense rastreig, sense revenda.",
+  "federacao.assembleias.lang.title": "En quina llengua?",
+  "federacao.assembleias.lang.body": "L’assemblea és plurilingüe: cadascú intervé en la seva llengua. Cap llengua no s’imposa — i molt menys l’anglès per defecte. Per entendre’ns, les intervencions es resumeixen en algunes llengües-pivot (portuguès, espanyol, anglès), amb ajuda mútua en la interpretació i un fil escrit en paral·lel a la veu.",
+  "federacao.assembleias.lang.prep": "Sobretot, l’ordre del dia i la motivació de cada punt es tradueixen i es difonen abans de l’assemblea: s’hi arriba havent llegit, en la pròpia llengua, el que es decidirà. I les decisions i les seves motivacions queden registrades en una acta multilingüe — és ella la que fa fe per a la teva biblioteca.",
+  "federacao.assembleias.lang.note": "La secretaria es designa a l’obertura; aquestes regles de llengua, l’assemblea pot confirmar-les o ajustar-les."
 }

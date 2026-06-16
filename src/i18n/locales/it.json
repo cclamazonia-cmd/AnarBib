@@ -4991,5 +4991,9 @@
   "account.lettre.pending": "Conferma in sospeso: controlla la tua casella di posta (e lo spam).",
   "account.lettre.subscribed": "La tua iscrizione è attiva.",
   "account.lettre.unsubscribed": "La tua iscrizione è stata annullata.",
-  "account.lettre.note": "Puoi disiscriverti in qualsiasi momento, con un clic. Nessun tracciamento, nessuna rivendita."
+  "account.lettre.note": "Puoi disiscriverti in qualsiasi momento, con un clic. Nessun tracciamento, nessuna rivendita.",
+  "federacao.assembleias.lang.title": "In che lingua?",
+  "federacao.assembleias.lang.body": "L’assemblea è plurilingue: ognun* interviene nella propria lingua. Nessuna lingua è imposta — tanto meno l’inglese per default. Per capirci, gli interventi sono riassunti in alcune lingue-perno (portoghese, spagnolo, inglese), con aiuto reciproco nell’interpretazione e un filo scritto in parallelo alla voce.",
+  "federacao.assembleias.lang.prep": "Soprattutto, l’ordine del giorno e la motivazione di ogni punto sono tradotti e diffusi prima dell’assemblea: si arriva avendo letto, nella propria lingua, ciò che si deciderà. E le decisioni e le loro motivazioni sono messe a verbale in un resoconto multilingue — è esso a fare fede per la tua biblioteca.",
+  "federacao.assembleias.lang.note": "La segreteria è designata all’apertura; queste regole linguistiche, l’assemblea può confermarle o modificarle."
 }

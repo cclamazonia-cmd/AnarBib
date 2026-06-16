@@ -4991,5 +4991,9 @@
   "account.lettre.pending": "Confirmation pending: check your inbox (and spam folder).",
   "account.lettre.subscribed": "Your subscription is active.",
   "account.lettre.unsubscribed": "Your subscription has been cancelled.",
-  "account.lettre.note": "Unsubscribe any time, in one click. No tracking, no reselling."
+  "account.lettre.note": "Unsubscribe any time, in one click. No tracking, no reselling.",
+  "federacao.assembleias.lang.title": "In which language?",
+  "federacao.assembleias.lang.body": "The assembly is plurilingual: everyone speaks in their own language. No language is imposed — least of all English by default. To understand one another, contributions are summarised into a few pivot languages (Portuguese, Spanish, English), with mutual aid for interpretation and a written thread alongside the voice.",
+  "federacao.assembleias.lang.prep": "Above all, the agenda and the rationale for each item are translated and circulated before the assembly: you arrive having read, in your own language, what is to be decided. And decisions and their rationale are recorded in multilingual minutes — these are what count for your library.",
+  "federacao.assembleias.lang.note": "The secretariat is appointed at the opening; these language rules can be confirmed or adjusted by the assembly."
 }
