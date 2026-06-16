@@ -11,6 +11,7 @@ import { handleMembershipRestriction } from "../domain/membership-restriction.ts
 import { handlePartnershipLifecycle, handleTransparenceEnabled, handleConfigExpanded } from "../domain/partnership.ts";
 import { handleAuthorityEvent } from "../domain/authority.ts";
 import { handleGazetteEvent } from "../domain/gazette.ts";
+import { handleEntraideRequestCircle } from "../domain/entraide.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
@@ -135,5 +136,8 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   if (event === "partnership_transparence_enabled") return await handleTransparenceEnabled(payload);
   // §21 PARTNER NOTIF-3 : config élargie → re-sollicitation des consentements stale.
   if (event === "partnership_config_expanded") return await handleConfigExpanded(payload);
+  // Entraide : appel routé vers un cercle → notif aux membres du cercle (payload-based,
+  // record_id factice ; lit circle_id/subject/author dans le payload).
+  if (event === "entraide_request_circle") return await handleEntraideRequestCircle(payload);
   return null;
 }

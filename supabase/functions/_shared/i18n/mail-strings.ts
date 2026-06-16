@@ -28,6 +28,32 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  // ── Entraide (notify-event · notif au cercle) ─────────────────────────────
+  "entraide.request_circle.sub": {
+    "pt-BR": "Novo chamado de apoio mútuo no teu círculo {circle}",
+    fr: "Nouvel appel d'entraide dans ton cercle {circle}",
+    es: "Nueva llamada de ayuda mutua en tu círculo {circle}",
+    en: "New mutual-aid call in your circle {circle}",
+    it: "Nuovo appello di mutuo aiuto nel tuo cerchio {circle}",
+    de: "Neuer Hilferuf in deinem Kreis {circle}",
+    ca: "Nova crida de suport mutu al teu cercle {circle}",
+    eo: "Nova alvoko de reciproka helpo en via rondo {circle}",
+    nl: "Nieuwe hulpoproep in jouw kring {circle}",
+    el: "Νέο κάλεσμα αλληλοβοήθειας στον κύκλο σου {circle}"
+  },
+  "entraide.request_circle.intro": {
+    "pt-BR": "Uma biblioteca do teu círculo « {circle} » publicou um chamado de apoio mútuo: {subject}. Podes responder na aba Apoio mútuo.",
+    fr: "Une biblio de ton cercle « {circle} » a posté un appel à l'aide : {subject}. Tu peux y répondre dans l'onglet Entraide.",
+    es: "Una biblioteca de tu círculo « {circle} » publicó una llamada de ayuda: {subject}. Puedes responder en la pestaña Ayuda mutua.",
+    en: "A library in your circle “{circle}” posted a help call: {subject}. You can respond in the Mutual Aid tab.",
+    it: "Una biblioteca del tuo cerchio « {circle} » ha pubblicato un appello d'aiuto: {subject}. Puoi rispondere nella scheda Mutuo aiuto.",
+    de: "Eine Bibliothek aus deinem Kreis „{circle}“ hat einen Hilferuf gepostet: {subject}. Du kannst in der Registerkarte Gegenseitige Hilfe antworten.",
+    ca: "Una biblioteca del teu cercle « {circle} » ha publicat una crida d'ajuda: {subject}. Pots respondre a la pestanya Suport mutu.",
+    eo: "Biblioteko de via rondo « {circle} » afiŝis alvokon por helpo: {subject}. Vi povas respondi en la langeto Reciproka helpo.",
+    nl: "Een bibliotheek uit jouw kring “{circle}” heeft een hulpoproep geplaatst: {subject}. Je kunt reageren op het tabblad Onderlinge hulp.",
+    el: "Μια βιβλιοθήκη του κύκλου σου « {circle} » δημοσίευσε ένα κάλεσμα βοήθειας: {subject}. Μπορείς να απαντήσεις στην καρτέλα Αλληλοβοήθεια."
+  },
+
   // ── Gazette (notify-event · Étape A) ──────────────────────────────────────
   "gazette.contribution.received.sub": {
     "pt-BR": "Nova nota proposta para a Gazeta",
