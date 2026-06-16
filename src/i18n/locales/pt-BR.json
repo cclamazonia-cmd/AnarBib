@@ -4953,6 +4953,7 @@
   "catalogacao.subjectGov.editSaved": "Rótulos salvos.",
   "catalog.related.subjects": "Veja também",
   "catalog.tree.title": "Navegar por assunto",
+  "catalog.tree.export": "Baixar:",
   "catalogacao.subjectGov.relAdd": "Relacionar um assunto…",
   "catalogacao.subjectGov.relNone": "Nenhum assunto relacionado.",
   "catalogacao.subjectGov.relTitle": "Veja também (assuntos relacionados)",

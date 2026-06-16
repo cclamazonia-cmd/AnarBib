@@ -86,7 +86,9 @@
 }
 /* v3-C — arbre des sujets */
 .ab-subject-tree { margin: 12px 0; }
-.ab-subject-tree .ab-facets__title { display: block; margin-bottom: 8px; }
+.ab-subject-tree__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.ab-subject-tree__head .ab-facets__title { margin-bottom: 0; }
+.ab-tree__export { display: inline-flex; align-items: center; gap: 6px; font-size: .74rem; color: var(--brand-muted); }
 .ab-tree { list-style: none; margin: 0; padding: 0; }
 .ab-tree--child { margin-left: 18px; padding-left: 6px; border-left: 1px solid var(--brand-panel-border, rgba(255,255,255,.12)); }
 .ab-tree__row { display: flex; align-items: center; gap: 4px; }

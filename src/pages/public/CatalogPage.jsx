@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -738,6 +739,16 @@ export default function CatalogPage() {
     setSubjectLabel(localizedSubjectLabel(f.label_i18n, locale));
   }
 
+  // v3-B — export SKOS public du thésaurus (Turtle / JSON-LD).
+  async function downloadThesaurus(format) {
+    try {
+      const { data } = await supabase.schema('api').rpc('thesaurus_export_v1');
+      if (!data) return;
+      if (format === 'jsonld') downloadText('anarbib-thesaurus.jsonld', toJsonLd(data), 'application/ld+json');
+      else downloadText('anarbib-thesaurus.ttl', toTurtle(data), 'text/turtle');
+    } catch { /* noop */ }
+  }
+
   function clearFilters() {
     setSearch(''); setAuthorFilter(''); setAuthorIdFilter(''); setAlphaFilter(''); setSubjectFilter(''); setPublisherFilter(''); setYearFilter('');
     setAvailabilityFilter('__all__'); setLibraryFilter([]); setSortValue('__relevance__');
@@ -1083,7 +1094,14 @@ export default function CatalogPage() {
         );
         return (
           <section className="ab-subject-tree">
-            <span className="ab-facets__title">{t({ id: 'catalog.tree.title' })}</span>
+            <div className="ab-subject-tree__head">
+              <span className="ab-facets__title">{t({ id: 'catalog.tree.title' })}</span>
+              <span className="ab-tree__export">
+                {t({ id: 'catalog.tree.export' })}
+                <button type="button" className="ab-mini-action" onClick={() => downloadThesaurus('ttl')}>SKOS/Turtle</button>
+                <button type="button" className="ab-mini-action" onClick={() => downloadThesaurus('jsonld')}>JSON-LD</button>
+              </span>
+            </div>
             <ul className="ab-tree">{roots.map(node => SubjectNode(node, false))}</ul>
           </section>
         );
