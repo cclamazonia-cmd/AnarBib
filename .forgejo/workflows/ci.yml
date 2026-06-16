@@ -24,6 +24,13 @@ name: CI/CD
 on:
   push:
     branches: [main]
+    # Bypass robuste des pushes 100 % documentaires (indépendant de la casse :
+    # Forgejo n'a pas honoré « [CI SKIP] » majuscule). Un push MIXTE docs+code
+    # déclenche quand même (paths-ignore ne saute que si TOUS les fichiers matchent).
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'notes-audit/**'
   workflow_dispatch: {}
 
 # Sérialise les pipelines main (la « règle d'or » anti-push-concurrent, native).

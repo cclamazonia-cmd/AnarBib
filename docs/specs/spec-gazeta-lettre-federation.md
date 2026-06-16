@@ -4,7 +4,7 @@
 |---|---|
 | **Domaine** | Face fédération — onglet `Gazeta` (renvoyé par `spec-outils-federalistes` §9). Deux objets, deux canaux. |
 | **Version** | v0.1 (16 juin 2026 — cadrage : sépare l'éditorial *pull* déjà en prod du carnet de réseau *push* à construire) |
-| **Statut** | 🟡 **Cadrée.** **Gazette (pull) = construite & en prod** (documentée ici rétroactivement). **Lettre (push) = cadrée, non construite.** |
+| **Statut** | 🟢 **Lot 2 + Lot 3 + 2b-bis en prod (16/06)** : opt-in (`/conta`, onglet & pill « Lettre », case signup), envoi des numéros + UI staff (`/rede`). Gazette « Rizoma » (pull) en prod. |
 | **Foyer décisions** | **REGISTRE §29 `GAZ`** (GAZ-1..6) — *on cite l'ID, on ne reformule jamais ici.* Parent : **§24 `FED`** (onglet Gazeta). Anti-marketing : **`REGISTRE_TRAITEMENTS` §2.4 / §4.2 + Charte art. 4**. |
 | **Dépendances entrantes** | `spec-outils-federalistes` v0.2 (§9 renvoie « bulletin de vie » + « gazette éditoriale ») · infra mail `notify-event` + Resend (`spec-migration-mail-resend`) · `profiles.consent_email_at` (transactionnel, RGPD art. 7) |
 | **Dépendances sortantes** | **Fiche de traitement RGPD dédiée** pour la lettre (`REGISTRE_TRAITEMENTS` §2.6 à créer — **lot 3**) · flag de consentement `consent_lettre_at` (migration, lot 2) |
@@ -111,8 +111,9 @@ Toutes les nouvelles chaînes (surfaces d'opt-in, gabarit de la lettre, libellé
 
 - **Lot 1 — cadrage (CE DOCUMENT).** ✅ Spec v0.1 + **REGISTRE §29 `GAZ`** + résolution du point ouvert FED. *(Gazette pull = déjà en prod, documentée.)*
 - **Lot 1bis — dégrossissage.** ✅ Tranché 16/06 (Xavier) : **GAZ-4** = au fil de l'eau plafonné mensuel ; **GAZ-3** = hybride (brouillon auto + relecture/envoi manuel).
-- **Lot 2 — opt-in** : migration `consent_lettre_at` + surfaces `/conta` & `criar-conta` (OFF par défaut) + endpoint de désabonnement signé + i18n. *(Pas d'envoi encore.)*
-- **Lot 3 — RGPD + envoi** : **fiche de traitement `REGISTRE_TRAITEMENTS` §2.6** + pipeline de composition (option retenue) + handler/event + dispatch Resend par locale + gabarit de la lettre. *Aucun envoi avant la fiche.*
+- **Lot 2 — opt-in.** ✅ **en prod** : `consent_lettre[_at/_pending_at]` + `lettre_consent_tokens` + outbox + dispatch ; RPC request/confirm/unsubscribe/cancel ; EFs publiques `lettre-confirm`/`lettre-unsubscribe` ; toggle `/conta` + **onglet & pill « Lettre »** (face fédération) ; 11 clés mail ×10.
+- **Lot 2b-bis — case signup `criar-conta`.** ✅ **en prod** : RPC `fn_lettre_optin_for_user` (service_role, même double opt-in) + case facultative + EF register.
+- **Lot 3 — RGPD + envoi.** ✅ **en prod** : fiche RGPD `REGISTRE_TRAITEMENTS §2.6` ; `lettre_issues` + RPC `fn_lettre_draft_create`/`_update`/`_send` (brouillon auto-assemblé, fan-out idempotent) ; handler `lettre.issue.sent` + 7 clés mail ×10 ; **UI staff** `LettreStaffPanel` (onglet « Lettre » de `/rede`).
 
 ## 9. Points ouverts
 
