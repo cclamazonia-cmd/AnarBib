@@ -120,7 +120,7 @@ La langue, en assemblée, est une question de **pouvoir**. Principe : **aucune l
 
 La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, tenir le temps) est une **fonction de service**, pas une autorité — et elle **ne doit pas devenir une prérogative des admins réseau** (qui tiennent les clés techniques). Décision :
 
-- **Phasage.** **1ʳᵉ AG (constituinte) : facilitation assurée par les admins réseau** (bootstrap, faute d'autre mécanisme). **Ensuite : rôle de facilitation distinct**, désigné par l'AG.
+- **Phasage & cycle « créer vs faciliter » (tranché 16/06).** *Créer* une assemblée = acte de **convocation neutre** → `network_admin`. *Animer* (dater, publier l'ODJ, ordonner, différer) = **admins réseau en bootstrap**, puis — **dès que la 1ʳᵉ AG en aura statué** (c'est un **point d'ODJ** de cette AG : instituer le rôle + désigner les facilitateur·rices) — **le travail des facilitateur·rices désigné·es**. La 1ʳᵉ AG est donc animée par les admins ; elle institue, en séance, le passage de relais.
 - **Accès propre, pas « instruction aux admins ».** Les facilitateur·rices désigné·es ont leur **propre accès** à l'outil (créer / dater / ordonner directement) — *pas* un schéma où iels dicteraient à des admins « exécutants » (qui resteraient alors un **goulot** et un **pouvoir de fait** : tarder, être absent·e, mal interpréter). Les admins réseau sortent **complètement** de l'animation politique : ils ne font plus que l'**infrastructure** (serveurs, comptes, sauvegardes).
 - **Rotation / par AG.** Désignation **pour une AG donnée** (cercle tournant), jamais un corps installé.
 - **Bornée.** Quel que soit qui facilite, la règle « **organise, ne supprime jamais** » (§6bis) tient : l'AG adopte son ODJ. Démocratiser *qui* tient le rôle ne suffit pas — c'est la **borne sur ce que le rôle peut faire** qui protège.
@@ -146,11 +146,10 @@ La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, 
 - ✅ **Mandat : impératif** ; **calendrier** J-30 convocation / J-15 dépôt / ~J-10 ODJ publié (§6bis).
 - ✅ **Quorum permanent** : 60% des zones ∧ 50% des langues, dénominateur sur les constituantes réelles, présence = ≥ 1 collectif mandaté, filet « décisions provisoires » ; **AG constitutive à quorum allégé** (§6ter).
 - ✅ **Facilitation : rôle distinct dès la 2ᵉ AG** (1ʳᵉ = admins réseau, bootstrap) — **accès propre** (pas « instruction aux admins »), désigné par l'AG, rotatif, borné, ≠ délégation (§6quinquies).
+- ✅ **Cycle « créer vs faciliter » (16/06)** : *créer* = `network_admin` (convocation neutre) ; *animer* = admins en bootstrap → facilitateur·rices **dès que la 1ʳᵉ AG l'a statué** (point d'ODJ : instituer/désigner) (§6quinquies).
 
 **Restent ouverts :**
-- **Liste canonique des zones géographiques** (et des langues-constituantes) servant de dénominateur au quorum.
-- **Cycle « créer vs faciliter » + désignation des facilitateur·rices** (qui crée l'assemblée — acte de convocation ; qui enregistre la désignation par l'AG — admin bootstrap ? facilitateur·rices sortant·es ?) — à trancher avant **P2b** (§6quinquies).
-- **Langues-pivots de séance** (proposition pt/es/en, §6quater) — à acter, candidat à décision de l'AG constitutive.
+- **Liste canonique des zones géographiques** (et des langues-constituantes) servant de dénominateur au quorum.- **Langues-pivots de séance** (proposition pt/es/en, §6quater) — à acter, candidat à décision de l'AG constitutive.
 - **Mécanique de ratification asynchrone** des décisions provisoires (filet quorum + jalons de l'AG constitutive).
 - Sémantique exacte du « si vraiment nécessaire » et **forme de la saisie** disponibilités/préférences (§4.4).
 - Qui **propose les créneaux** pré-filtrés (coordination ? un cercle ?).
