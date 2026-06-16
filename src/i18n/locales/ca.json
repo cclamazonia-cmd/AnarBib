@@ -4952,5 +4952,9 @@
   "catalogacao.subjectGov.editClose": "Tancar",
   "catalogacao.subjectGov.editNotation": "Notació (CDD)",
   "catalogacao.subjects.suggestions": "Suggeriments:",
-  "catalogacao.subjects.suggestionsHint": "A partir dels altres llibres de l’autoria. Clica per afegir."
+  "catalogacao.subjects.suggestionsHint": "A partir dels altres llibres de l’autoria. Clica per afegir.",
+  "federacao.entraide.circleLabel": "Encaminar a un cercle:",
+  "federacao.entraide.networkWide": "Tota la xarxa",
+  "federacao.entraide.escalated": "Ampliat a la xarxa",
+  "federacao.entraide.circle": "Cercle"
 }

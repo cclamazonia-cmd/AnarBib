@@ -4952,5 +4952,9 @@
   "catalogacao.subjectGov.editClose": "Κλείσιμο",
   "catalogacao.subjectGov.editNotation": "Σημείωση (DDC)",
   "catalogacao.subjects.suggestions": "Προτάσεις:",
-  "catalogacao.subjects.suggestionsHint": "Από τα άλλα βιβλία της συγγραφής. Κάνε κλικ για προσθήκη."
+  "catalogacao.subjects.suggestionsHint": "Από τα άλλα βιβλία της συγγραφής. Κάνε κλικ για προσθήκη.",
+  "federacao.entraide.circleLabel": "Δρομολόγηση σε κύκλο:",
+  "federacao.entraide.networkWide": "Όλο το δίκτυο",
+  "federacao.entraide.escalated": "Διευρύνθηκε στο δίκτυο",
+  "federacao.entraide.circle": "Κύκλος"
 }

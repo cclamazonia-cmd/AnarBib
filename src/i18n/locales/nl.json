@@ -4952,5 +4952,9 @@
   "catalogacao.subjectGov.editClose": "Sluiten",
   "catalogacao.subjectGov.editNotation": "Notatie (DDC)",
   "catalogacao.subjects.suggestions": "Suggesties:",
-  "catalogacao.subjects.suggestionsHint": "Uit de andere boeken van de auteur. Klik om toe te voegen."
+  "catalogacao.subjects.suggestionsHint": "Uit de andere boeken van de auteur. Klik om toe te voegen.",
+  "federacao.entraide.circleLabel": "Naar een kring sturen:",
+  "federacao.entraide.networkWide": "Het hele netwerk",
+  "federacao.entraide.escalated": "Uitgebreid naar netwerk",
+  "federacao.entraide.circle": "Kring"
 }

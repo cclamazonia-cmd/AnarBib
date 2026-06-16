@@ -4952,5 +4952,9 @@
   "catalogacao.subjectGov.editClose": "Fermi",
   "catalogacao.subjectGov.editNotation": "Notacio (CDD)",
   "catalogacao.subjects.suggestions": "Sugestoj:",
-  "catalogacao.subjects.suggestionsHint": "El la aliaj libroj de la aŭtor-in-o. Klaku por aldoni."
+  "catalogacao.subjects.suggestionsHint": "El la aliaj libroj de la aŭtor-in-o. Klaku por aldoni.",
+  "federacao.entraide.circleLabel": "Sendi al rondo:",
+  "federacao.entraide.networkWide": "La tuta reto",
+  "federacao.entraide.escalated": "Vastigita al la reto",
+  "federacao.entraide.circle": "Rondo"
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
-import { supabase } from '@/lib/supabase';
+import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -35,22 +35,35 @@ export default function EntraideTab() {
   const [createOpen, setCreateOpen] = useState(false);
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
+  const [circleId, setCircleId] = useState('');     // routage à la création ('' = réseau)
+  const [myCircles, setMyCircles] = useState([]);   // [{id, name}] cercles de ma biblio (membro)
+  const [circleNames, setCircleNames] = useState({}); // circle_id -> name (affichage)
   const [offerOn, setOfferOn] = useState(null);
   const [offerMsg, setOfferMsg] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [reqs, libRows] = await Promise.all([
+    // Escalade paresseuse (cercle → réseau après silence), best-effort (idempotente).
+    supabase.schema('api').rpc('fn_entraide_escalate_due').then(() => {}, () => {});
+    const [reqs, libRows, myCirc, dirCirc] = await Promise.all([
       supabase.from('entraide_help_requests')
-        .select('id,author_user_id,author_library_id,subject,body,status,created_at')
+        .select('id,author_user_id,author_library_id,subject,body,status,created_at,circle_id,escalated_at')
         .eq('status', 'open').order('created_at', { ascending: false }),
       supabase.from('libraries').select('id,name,short_name'),
+      libraryId ? apiQuery('my_library_circles_v1', { filters: { library_id: `eq.${libraryId}` } }) : Promise.resolve({ data: [] }),
+      apiQuery('circles_directory_v1', {}),
     ]);
     if (reqs.error) setMsg({ text: localizeError(reqs.error, t), kind: 'error' });
     else setRequests(reqs.data || []);
     setLibs(Object.fromEntries((libRows.data || []).map((l) => [l.id, l.short_name || l.name])));
+    const mine = (myCirc?.data || []).filter((c) => c.membership_status === 'membro');
+    setMyCircles(mine.map((c) => ({ id: c.circle_id, name: c.name })));
+    const cn = {};
+    for (const c of (dirCirc?.data || [])) cn[c.id] = c.name;
+    for (const c of (myCirc?.data || [])) cn[c.circle_id] = c.name;
+    setCircleNames(cn);
     setLoading(false);
-  }, [t]);
+  }, [t, libraryId]);
   useEffect(() => { load(); }, [load]);
 
   async function loadOffers(reqId) {
@@ -72,10 +85,10 @@ export default function EntraideTab() {
     setBusy('create');
     const { error } = await supabase.from('entraide_help_requests').insert({
       author_user_id: user?.id, author_library_id: libraryId || null,
-      subject: subject.trim(), body: body.trim(),
+      subject: subject.trim(), body: body.trim(), circle_id: circleId || null,
     });
     if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
-    else { setMsg({ text: t({ id: 'federacao.entraide.posted' }), kind: 'ok' }); setSubject(''); setBody(''); setCreateOpen(false); await load(); }
+    else { setMsg({ text: t({ id: 'federacao.entraide.posted' }), kind: 'ok' }); setSubject(''); setBody(''); setCircleId(''); setCreateOpen(false); await load(); }
     setBusy(null);
   }
 
@@ -124,6 +137,16 @@ export default function EntraideTab() {
           <input value={subject} onChange={(e) => setSubject(e.target.value)} maxLength={160} placeholder={t({ id: 'federacao.entraide.subjectPlaceholder' })} />
           <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={4000} rows={4} placeholder={t({ id: 'federacao.entraide.bodyPlaceholder' })}
             style={{ width: '100%', fontFamily: 'inherit', fontSize: '.9rem', color: 'var(--brand-text)', background: 'rgba(255,255,255,.05)', border: '1px solid var(--brand-panel-border)', borderRadius: 10, padding: '9px 12px', marginBottom: 9, resize: 'vertical' }} />
+          {myCircles.length > 0 && (
+            <div style={{ marginBottom: 9, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              <label style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>{t({ id: 'federacao.entraide.circleLabel' })}</label>
+              <select value={circleId} onChange={(e) => setCircleId(e.target.value)}
+                style={{ fontFamily: 'inherit', fontSize: '.88rem', color: 'var(--brand-text)', background: 'rgba(255,255,255,.05)', border: '1px solid var(--brand-panel-border)', borderRadius: 8, padding: '6px 10px' }}>
+                <option value="">{t({ id: 'federacao.entraide.networkWide' })}</option>
+                {myCircles.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+          )}
           <div style={{ display: 'flex', gap: 8 }}>
             <button className="cat-btn primary" disabled={busy === 'create'} onClick={createRequest}>{t({ id: 'federacao.entraide.submit' })}</button>
             <button className="cat-btn ghost" onClick={() => setCreateOpen(false)}>{t({ id: 'common.cancel' })}</button>
@@ -145,6 +168,8 @@ export default function EntraideTab() {
               <div className="ab-fed-crow">
                 <div className="ab-fed-cname">{r.subject}</div>
                 {mine && <span className="ab-fed-pill is-pending">{t({ id: 'federacao.entraide.mine' })}</span>}
+                {r.circle_id && !r.escalated_at && <span className="ab-fed-pill">{circleNames[r.circle_id] || t({ id: 'federacao.entraide.circle' })}</span>}
+                {r.escalated_at && <span className="ab-fed-pill is-dormant">{t({ id: 'federacao.entraide.escalated' })}</span>}
               </div>
               <div className="ab-fed-cdesc" style={{ whiteSpace: 'pre-wrap' }}>{r.body}</div>
               <div className="ab-fed-cfoot">

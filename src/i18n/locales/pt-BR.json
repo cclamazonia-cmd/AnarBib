@@ -4952,5 +4952,9 @@
   "catalogacao.subjectGov.editClose": "Fechar",
   "catalogacao.subjectGov.editNotation": "Notação (CDD)",
   "catalogacao.subjects.suggestions": "Sugestões:",
-  "catalogacao.subjects.suggestionsHint": "A partir dos outros livros da autoria. Clica para adicionar."
+  "catalogacao.subjects.suggestionsHint": "A partir dos outros livros da autoria. Clica para adicionar.",
+  "federacao.entraide.circleLabel": "Encaminhar a um círculo:",
+  "federacao.entraide.networkWide": "Toda a rede",
+  "federacao.entraide.escalated": "Ampliado à rede",
+  "federacao.entraide.circle": "Círculo"
 }

@@ -4952,5 +4952,9 @@
   "catalogacao.subjectGov.editClose": "Close",
   "catalogacao.subjectGov.editNotation": "Notation (DDC)",
   "catalogacao.subjects.suggestions": "Suggestions:",
-  "catalogacao.subjects.suggestionsHint": "From the author’s other books. Click to add."
+  "catalogacao.subjects.suggestionsHint": "From the author’s other books. Click to add.",
+  "federacao.entraide.circleLabel": "Route to a circle:",
+  "federacao.entraide.networkWide": "Whole network",
+  "federacao.entraide.escalated": "Widened to network",
+  "federacao.entraide.circle": "Circle"
 }
