@@ -11,7 +11,7 @@
 Rendez-vous sur l'URL de votre instance AnarBib et cliquez sur **Entrar** (ou le bouton de connexion dans la langue de votre interface). Saisissez votre e-mail et votre mot de passe.
 
 ### Changer la langue
-Le sélecteur de langue se trouve en haut à droite de chaque page (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪). Le choix est sauvegardé localement.
+Le sélecteur de langue se trouve en haut à droite de chaque page (🇧🇷🇵🇹 / 🇫🇷 / 🇪🇸 / 🇬🇧 / 🇮🇹 / 🇩🇪 / 🇳🇱 / 🇬🇷 / Català / Esperanto). Le choix est sauvegardé localement.
 
 ---
 
@@ -130,13 +130,17 @@ La page **Réseau** (accessible aux coordinateurs et administrateurs) permet de 
 
 ## 6. Langues disponibles
 
-L'interface est disponible en 6 langues :
+L'interface est disponible en 10 langues :
 - 🇧🇷🇵🇹 Português (langue de référence)
 - 🇫🇷 Français
 - 🇪🇸 Castellano
 - 🇬🇧 English
 - 🇮🇹 Italiano
 - 🇩🇪 Deutsch
+- 🇳🇱 Nederlands
+- 🇬🇷 Ελληνικά
+- Català
+- Esperanto
 
 Les biographies d'auteurs peuvent être traduites indépendamment dans chaque langue.
 
