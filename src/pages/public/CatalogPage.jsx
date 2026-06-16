@@ -1128,7 +1128,7 @@ export default function CatalogPage() {
             </div>
           </div>
           <div className="ab-table-wrap" ref={tableRef}>
-            <table className={`ab-table ${compact ? 'ab-table--compact' : ''}`}>
+            <table className={`ab-table ab-table--cards ${compact ? 'ab-table--compact' : ''}`}>
               <thead>
                 <tr>
                   <th onClick={() => handleHeaderSort('bib_ref')}>{t({ id: 'catalog.table.ref' })}{si('bib_ref')}</th>
@@ -1153,9 +1153,9 @@ export default function CatalogPage() {
                     : '';
                   return (
                     <tr key={`${book.book_id}-${book.library_slug}-${idx}`}>
-                      <td><Link to={`/livro/${book.book_id}`}>{book.bib_ref || '—'}</Link></td>
-                      <td><AuthorLinks book={book} /></td>
-                      <td>
+                      <td data-label={t({ id: 'catalog.table.ref' })}><Link to={`/livro/${book.book_id}`}>{book.bib_ref || '—'}</Link></td>
+                      <td data-label={t({ id: 'catalog.table.author' })}><AuthorLinks book={book} /></td>
+                      <td data-label={t({ id: 'catalog.table.bookTitle' })}>
                         <Link to={`/livro/${book.book_id}`}>
                           {icon && <span className="ab-tipo-icon">{icon} </span>}
                           {book.titulo}
@@ -1163,10 +1163,10 @@ export default function CatalogPage() {
                         </Link>
                         {book.has_online_reading && <span className="ab-online-badge">{t({ id: 'catalog.actions.readOnline' })}</span>}
                       </td>
-                      <td>{book.ano || '—'}</td>
-                      <td>{book.editora || '—'}</td>
-                      <td>{libs || '—'}</td>
-                      <td><span className={`ab-status-dot ab-status-dot--${status.cls}`}>{status.label}</span></td>
+                      <td data-label={t({ id: 'catalog.table.year' })}>{book.ano || '—'}</td>
+                      <td data-label={t({ id: 'catalog.table.publisher' })}>{book.editora || '—'}</td>
+                      <td data-label={t({ id: 'catalog.table.libraries' })}>{libs || '—'}</td>
+                      <td data-label={t({ id: 'catalog.table.availability' })}><span className={`ab-status-dot ab-status-dot--${status.cls}`}>{status.label}</span></td>
                       {isAuth && (
                         <td className="ab-table__actions-cell">
                           {(() => {

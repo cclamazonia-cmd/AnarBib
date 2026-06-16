@@ -427,6 +427,47 @@
   }
 }
 
+/* ─── M8 (chantier mobile Phase B) : catalogue OPAC en cartes sur mobile ────
+   La table catalogue (min-width 900px) défilait horizontalement. Sous 768px,
+   chaque ligne devient une carte avec libellés à gauche (même pattern que le
+   Painel / l'Historique). Seules les cellules avec data-label sont étiquetées ;
+   la colonne actions reste pleine largeur. Desktop/tablette ≥768px inchangés. */
+@media (max-width: 768px) {
+  .ab-table-wrap { max-height: none; }
+  .ab-table--cards { min-width: 0; }
+  .ab-table--cards,
+  .ab-table--cards thead,
+  .ab-table--cards tbody,
+  .ab-table--cards tr,
+  .ab-table--cards th,
+  .ab-table--cards td {
+    display: block;
+  }
+  .ab-table--cards thead { display: none; }
+  .ab-table--cards tbody tr {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--brand-radius-sm);
+    margin-bottom: 12px;
+    padding: 10px 12px;
+  }
+  .ab-table--cards tbody td { border: none; padding: 4px 0; }
+  .ab-table--cards tbody td[data-label] {
+    position: relative;
+    padding-left: 40%;
+    min-height: 24px;
+  }
+  .ab-table--cards tbody td[data-label]::before {
+    content: attr(data-label) ':';
+    position: absolute;
+    left: 0;
+    width: 35%;
+    font-weight: 700;
+    color: var(--brand-muted);
+    font-size: .78rem;
+  }
+}
+
 /* ── #OPAC10 — Autres modes de découverte ───────────────── */
 
 .ab-browse-modes {
