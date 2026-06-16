@@ -17,6 +17,7 @@ const GazetteTab = lazy(() => import('./GazetteTab'));
 const CommunsTab = lazy(() => import('./CommunsTab'));
 const EntraideTab = lazy(() => import('./EntraideTab'));
 const AssembleiasTab = lazy(() => import('./AssembleiasTab'));
+const LettreTab = lazy(() => import('./LettreTab'));
 import '../catalogacao/CatalogacaoPage.css';
 import './FederacaoPage.css';
 
@@ -37,7 +38,7 @@ import './FederacaoPage.css';
 // ═══════════════════════════════════════════════════════════════════════════
 
 const TAB_KEYS = ['inicio', 'circulos', 'carte', 'assembleias', 'gazeta', 'carta', 'entreajuda', 'communs'];
-const WIRED = new Set(['circulos', 'inicio', 'carte', 'gazeta', 'communs', 'entreajuda', 'assembleias']);
+const WIRED = new Set(['circulos', 'inicio', 'carte', 'gazeta', 'communs', 'entreajuda', 'assembleias', 'carta']);
 
 // Onglets réservés au staff (librarian/coordenador/admin réseau). Les autres
 // (inicio, gazeta, carta, communs) sont ouverts à tout membre rattaché — lecteur·rices
@@ -247,6 +248,7 @@ export default function FederacaoPage() {
             {tab === 'communs' && <CommunsTab />}
             {tab === 'entreajuda' && <EntraideTab />}
             {tab === 'assembleias' && <AssembleiasTab />}
+            {tab === 'carta' && <LettreTab />}
           </Suspense>
 
           {!WIRED.has(tab) && (
@@ -266,7 +268,7 @@ export default function FederacaoPage() {
 // Porte d'entrée : qualitatif, sans tableau de bord (doctrine). Réutilise les
 // données déjà chargées (cercles, portes ouvertes, demandes en attente) + teaser
 // annuaire ; les espaces non encore construits sont posés en « à venir ».
-function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, setTab, hasStaffAccess, navigate }) {
+function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, setTab, hasStaffAccess }) {
   const fmtDate = (d) => new Date(d).toLocaleDateString(locale);
   const natureLabel = (n) => t({ id: `federacao.circle.nature.${n}` });
   const circleName = (id) => (myCircles.find((c) => c.circle_id === id) || {}).name || '—';
@@ -331,7 +333,7 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
       </>)}
 
       {/* Pill « Lettre de la fédération » — ouvert à tous·tes ; abonnement opt-in depuis /conta. */}
-      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => navigate('/conta')}>
+      <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('carta')}>
         <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" style={{ flex: 'none' }}>
           <rect x="3" y="6" width="18" height="13" rx="1.6" fill="none" stroke="#c00000" strokeWidth="1.8" />
           <path d="M3.5 7.5 12 13.5 20.5 7.5" fill="none" stroke="#c00000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -415,17 +417,6 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
       </button>
       )}
 
-      <div>
-        <div className="ab-fed-label">{t({ id: 'federacao.inicio.soon' })}</div>
-        <div className="ab-fed-inicio-soon">
-          {['carta'].map((k) => (
-            <div key={k} className="ab-fed-inicio-soon-card">
-              <span className="ab-fed-inicio-soon-t">{t({ id: `federacao.tab.${k}` })}</span>
-              <span className="ab-fed-inicio-soon-s">{t({ id: 'federacao.soon' })}</span>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } fro
 import { Link, useNavigate } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase, apiQuery } from '@/lib/supabase';
+import { supabase, apiQuery, apiRpc } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { useAccountAvailability } from '@/hooks/useAccountAvailability';
@@ -287,7 +287,7 @@ export default function AccountPage() {
         });
       }
       // Lettre de la fédération — état d'abonnement (opt-in, Lot 2)
-      const { data: lettreData } = await supabase.rpc('fn_get_my_lettre_consent');
+      const { data: lettreData } = await apiRpc('fn_get_my_lettre_consent');
       if (Array.isArray(lettreData) && lettreData.length > 0) {
         setLettreConsent({
           consent_lettre: !!lettreData[0].consent_lettre,
@@ -1557,7 +1557,7 @@ export default function AccountPage() {
                       setLettreMsg('');
                       try {
                         if (want) {
-                          const { data, error } = await supabase.rpc('fn_lettre_request_optin');
+                          const { data, error } = await apiRpc('fn_lettre_request_optin');
                           if (error) throw error;
                           if (data === 'already_subscribed') {
                             setLettreConsent({ consent_lettre: true, pending: false });
@@ -1566,7 +1566,7 @@ export default function AccountPage() {
                             setLettreMsg(t({ id: 'account.lettre.confirmationSent' }));
                           }
                         } else {
-                          const { error } = await supabase.rpc('fn_lettre_cancel');
+                          const { error } = await apiRpc('fn_lettre_cancel');
                           if (error) throw error;
                           setLettreConsent({ consent_lettre: false, pending: false });
                           setLettreMsg(t({ id: 'account.lettre.unsubscribed' }));
