@@ -76,9 +76,20 @@ import cdIt   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2
 import cdNl   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-nl.md?raw';
 import cdPtBR from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-pt-BR.md?raw';
 
-// ── Documents encore monolingues (pt-BR) — co-écriture par langue à venir ────
+// ── Guide scan — encore mono-pt-BR (co-écriture par langue à venir) ──────────
 import guideScan   from '../../../docs/guides/guide-scan-qr-pt-BR.md?raw';
-import guideIndexar from '../../../docs/guides/guide-indexar-assunto-pt-BR.md?raw';
+
+// ── Guide « Indexer un sujet » — 10 locales ─────────────────────────────────
+import giCa   from '../../../docs/guides/guide-indexar-assunto-ca.md?raw';
+import giDe   from '../../../docs/guides/guide-indexar-assunto-de.md?raw';
+import giEl   from '../../../docs/guides/guide-indexar-assunto-el.md?raw';
+import giEn   from '../../../docs/guides/guide-indexar-assunto-en.md?raw';
+import giEo   from '../../../docs/guides/guide-indexar-assunto-eo.md?raw';
+import giEs   from '../../../docs/guides/guide-indexar-assunto-es.md?raw';
+import giFr   from '../../../docs/guides/guide-indexar-assunto-fr.md?raw';
+import giIt   from '../../../docs/guides/guide-indexar-assunto-it.md?raw';
+import giNl   from '../../../docs/guides/guide-indexar-assunto-nl.md?raw';
+import giPtBR from '../../../docs/guides/guide-indexar-assunto-pt-BR.md?raw';
 
 // ── Guide de gouvernance — 10 locales (déjà existant) ───────────────────────
 import gouvCa   from '../../../docs/governance/guide-gouvernance-ca.md?raw';
@@ -120,6 +131,11 @@ const CADRAGE_BY_LOCALE = {
 const GOUVERNANCE_BY_LOCALE = {
   ca: gouvCa, de: gouvDe, el: gouvEl, en: gouvEn, eo: gouvEo,
   es: gouvEs, fr: gouvFr, it: gouvIt, nl: gouvNl, 'pt-BR': gouvPtBR,
+};
+
+const GUIDE_INDEXAR_BY_LOCALE = {
+  ca: giCa, de: giDe, el: giEl, en: giEn, eo: giEo,
+  es: giEs, fr: giFr, it: giIt, nl: giNl, 'pt-BR': giPtBR,
 };
 
 export const COMMUNS_CATS = ['chartes', 'guides', 'vademecums', 'cadrages'];
@@ -164,12 +180,12 @@ export const COMMUNS_DOCS = [
     md: guideScan,
   },
   {
-    // Écrit en pt-BR (artisanat de l'indexation matière, pour les catalogueur·euses) ;
-    // co-écritures par langue à suivre. Adossé au thésaurus v1 (étapes 1-2c).
+    // Artisanat de l'indexation matière (pour les catalogueur·euses), 10 locales —
+    // co-écriture par communauté de langue (via Cowork). Adossé au thésaurus.
     id: 'guide-indexar', cat: 'vademecums',
     titleKey: 'federacao.communs.doc.indexarAssunto.title',
     descKey: 'federacao.communs.doc.indexarAssunto.desc',
-    md: guideIndexar,
+    byLocale: GUIDE_INDEXAR_BY_LOCALE,
   },
   {
     id: 'cadrage-entraide', cat: 'cadrages',
