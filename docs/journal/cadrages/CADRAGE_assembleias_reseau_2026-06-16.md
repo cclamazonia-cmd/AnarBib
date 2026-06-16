@@ -107,6 +107,15 @@ Un collectif à cadence lente s'appuie sur la **convocation précoce (J-30)**, p
 - **Présence = ≥ 1 collectif mandaté** par zone/langue. Si le quorum n'est pas atteint, **filet** : l'AG se tient quand même, mais ses décisions sont **provisoires**, à ratifier en asynchrone — pas d'échec sec qu'une absence ponctuelle déclencherait.
 - **AG constitutive exemptée.** La toute première AG a pour objet de **se doter de ces règles** (dont le quorum) : la verrouiller d'emblée derrière 60/50 serait circulaire (pas de quorum → pas de règles). Elle tourne donc sous **quorum allégé/indicatif**, ne **pose que des jalons** (décisions provisoires), et le 60/50 devient la règle permanente qu'elle adopte pour les AG suivantes.
 
+## 6quater. Régime linguistique de l'AG (retenu 16/06)
+
+La langue, en assemblée, est une question de **pouvoir**. Principe : **aucune langue-trône**, et en particulier **pas d'anglais par défaut** — ce serait importer la hégémonie linguistique qu'un réseau anarchiste à base lusophone / Sud-global refuse (et c'est **pt-BR, non l'anglais**, qui est la langue de référence de l'app).
+
+- **Séance plurilingue.** On intervient dans sa langue ; les échanges sont résumés vers un **socle restreint de langues-pivots** (proposition : **pt + es + en** — pt = base, es = bloc hispanophone proche, en = relais de seconde langue ; l'anglais est *un* relais, pas le trône). Relais d'interprétation **bénévole** par grappes linguistiques ; **canal texte** (chat Jitsi) en parallèle de la voix (accessible, traduisible, nourrit le PV).
+- **Compréhension chargée en amont.** L'ODJ et la **motivation écrite de chaque point** sont **traduits et diffusés avant l'AG** (calendrier J-30/J-15/J-10, §6bis) : chacun·e arrive en ayant lu, dans sa langue, ce qui se décide — et en ayant mandaté. Le live ne porte plus toute la traduction.
+- **PV multilingue = pièce porteuse.** Décisions **et motivations** consignées dans un **procès-verbal multilingue** — non négociable : avec le **mandat impératif**, les collectifs **ratifient et agissent à partir du PV**, il doit donc être dans leur langue. PV concis (pas verbatim) ; brouillon éventuellement machine-assisté, mais **relecture humaine obligatoire des termes** (charte inclusive — c'est le curseur variantes ↔ convergence, §6). La **fenêtre de ratification asynchrone** (filet quorum, §6ter) donne le temps de traduire.
+- **Secrétariat & souveraineté.** La **convocation déclare** le régime par défaut (langues-pivots, séance plurilingue, PV multilingue) et **appelle au secrétariat et aux relais d'interprétation** (volontaires signalés en amont). L'**assemblée nomme son secrétariat à l'ouverture** et peut **amender** le régime — le régime linguistique est lui-même une **règle que l'AG constitutive acte** (§6ter).
+
 ## 7. Articulation outillage (neuf vs réemploi)
 
 | Brique | Statut |
@@ -127,6 +136,7 @@ Un collectif à cadence lente s'appuie sur la **convocation précoce (J-30)**, p
 
 **Restent ouverts :**
 - **Liste canonique des zones géographiques** (et des langues-constituantes) servant de dénominateur au quorum.
+- **Langues-pivots de séance** (proposition pt/es/en, §6quater) — à acter, candidat à décision de l'AG constitutive.
 - **Mécanique de ratification asynchrone** des décisions provisoires (filet quorum + jalons de l'AG constitutive).
 - Sémantique exacte du « si vraiment nécessaire » et **forme de la saisie** disponibilités/préférences (§4.4).
 - Qui **propose les créneaux** pré-filtrés (coordination ? un cercle ?).
