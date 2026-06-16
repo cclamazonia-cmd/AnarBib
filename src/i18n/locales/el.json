@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Κατάργηση",
   "catalogacao.subjectGov.statusUpdated": "Η κατάσταση ενημερώθηκε.",
   "catalogacao.subjectGov.coordOnly": "Η ενεργοποίηση προορίζεται για τον συντονισμό καταλογογράφησης (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Προτάθηκε στις {date}"
+  "catalogacao.subjectGov.proposedAt": "Προτάθηκε στις {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Ευρετηρίαση κατά θέμα",
+  "federacao.communs.doc.indexarAssunto.desc": "Επιλογή θέματος από τον θησαυρό, πρόταση όρου, ελεύθερες λέξεις-κλειδιά — η τέχνη της θεματικής ευρετηρίασης."
 }

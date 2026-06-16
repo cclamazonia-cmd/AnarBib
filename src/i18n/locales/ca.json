@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Descartar",
   "catalogacao.subjectGov.statusUpdated": "Estat actualitzat.",
   "catalogacao.subjectGov.coordOnly": "L’activació està reservada a la coordinació de catalogació (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Proposat el {date}"
+  "catalogacao.subjectGov.proposedAt": "Proposat el {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Indexar per matèria",
+  "federacao.communs.doc.indexarAssunto.desc": "Triar una matèria del tesaurus, proposar un terme, paraules clau lliures — l’ofici de la indexació per matèria."
 }

@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Verwerfen",
   "catalogacao.subjectGov.statusUpdated": "Status aktualisiert.",
   "catalogacao.subjectGov.coordOnly": "Die Freischaltung ist der Katalogisierungskoordination vorbehalten (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Vorgeschlagen am {date}"
+  "catalogacao.subjectGov.proposedAt": "Vorgeschlagen am {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Nach Sachthema erschließen",
+  "federacao.communs.doc.indexarAssunto.desc": "Ein Sachthema aus dem Thesaurus wählen, einen Begriff vorschlagen, freie Schlagwörter — das Handwerk der Sacherschließung."
 }

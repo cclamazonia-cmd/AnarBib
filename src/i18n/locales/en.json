@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Deprecate",
   "catalogacao.subjectGov.statusUpdated": "Status updated.",
   "catalogacao.subjectGov.coordOnly": "Activation is reserved for the cataloging coordination (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Proposed on {date}"
+  "catalogacao.subjectGov.proposedAt": "Proposed on {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Indexing by subject",
+  "federacao.communs.doc.indexarAssunto.desc": "Choosing a thesaurus subject, proposing a term, free keywords — the craft of subject indexing."
 }

@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Déprécier",
   "catalogacao.subjectGov.statusUpdated": "Statut mis à jour.",
   "catalogacao.subjectGov.coordOnly": "L’activation est réservée à la coordination catalogage (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Proposé le {date}"
+  "catalogacao.subjectGov.proposedAt": "Proposé le {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Indexer par sujet",
+  "federacao.communs.doc.indexarAssunto.desc": "Choisir un sujet du thésaurus, proposer un terme, mots-clés libres — l’artisanat de l’indexation matière."
 }

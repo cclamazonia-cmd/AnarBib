@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Afkeuren",
   "catalogacao.subjectGov.statusUpdated": "Status bijgewerkt.",
   "catalogacao.subjectGov.coordOnly": "Activering is voorbehouden aan de catalogiseringscoördinatie (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Voorgesteld op {date}"
+  "catalogacao.subjectGov.proposedAt": "Voorgesteld op {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Indexeren op onderwerp",
+  "federacao.communs.doc.indexarAssunto.desc": "Een onderwerp uit de thesaurus kiezen, een term voorstellen, vrije trefwoorden — het ambacht van onderwerpsindexering."
 }

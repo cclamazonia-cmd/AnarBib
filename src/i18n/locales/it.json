@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Deprecare",
   "catalogacao.subjectGov.statusUpdated": "Stato aggiornato.",
   "catalogacao.subjectGov.coordOnly": "L’attivazione è riservata al coordinamento di catalogazione (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Proposto il {date}"
+  "catalogacao.subjectGov.proposedAt": "Proposto il {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Indicizzare per soggetto",
+  "federacao.communs.doc.indexarAssunto.desc": "Scegliere un soggetto del tesauro, proporre un termine, parole chiave libere — l’artigianato dell’indicizzazione per soggetto."
 }

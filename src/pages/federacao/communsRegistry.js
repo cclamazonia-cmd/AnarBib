@@ -21,6 +21,7 @@ import cadrageEntraide  from '../../../docs/journal/cadrages/CADRAGE_entraide_ca
 import manuel           from '../../../docs/manual.md?raw';
 import cotation         from '../../../docs/cotation-et-cdd.md?raw';
 import guideScan        from '../../../docs/guides/guide-scan-qr-pt-BR.md?raw';
+import guideIndexar      from '../../../docs/guides/guide-indexar-assunto-pt-BR.md?raw';
 
 import gouvCa   from '../../../docs/governance/guide-gouvernance-ca.md?raw';
 import gouvDe   from '../../../docs/governance/guide-gouvernance-de.md?raw';
@@ -78,6 +79,14 @@ export const COMMUNS_DOCS = [
     titleKey: 'federacao.communs.doc.guideScan.title',
     descKey: 'federacao.communs.doc.guideScan.desc',
     md: guideScan,
+  },
+  {
+    // Écrit en pt-BR (artisanat de l'indexation matière, pour les catalogueur·euses) ;
+    // co-écritures par langue à suivre. Adossé au thésaurus v1 (étapes 1-2c).
+    id: 'guide-indexar', cat: 'vademecums',
+    titleKey: 'federacao.communs.doc.indexarAssunto.title',
+    descKey: 'federacao.communs.doc.indexarAssunto.desc',
+    md: guideIndexar,
   },
   {
     id: 'cadrage-entraide', cat: 'cadrages',

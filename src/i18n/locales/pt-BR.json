@@ -4938,5 +4938,7 @@
   "catalogacao.subjectGov.deprecate": "Descontinuar",
   "catalogacao.subjectGov.statusUpdated": "Status atualizado.",
   "catalogacao.subjectGov.coordOnly": "A ativação é reservada à coordenação de catalogação (coordenador / administrador).",
-  "catalogacao.subjectGov.proposedAt": "Proposto em {date}"
+  "catalogacao.subjectGov.proposedAt": "Proposto em {date}",
+  "federacao.communs.doc.indexarAssunto.title": "Indexar por assunto",
+  "federacao.communs.doc.indexarAssunto.desc": "Escolher um assunto do tesauro, propor um termo, palavras-chave livres — o artesanato da indexação por assunto."
 }
