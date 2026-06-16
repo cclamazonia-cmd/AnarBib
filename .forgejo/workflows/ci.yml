@@ -159,7 +159,17 @@ jobs:
             [ "$fn_name" = "_shared" ] && { echo "→ skip _shared (module partagé)"; continue; }
             [ -f "${fn_dir}index.ts" ] || { echo "→ skip $fn_name (pas d'index.ts)"; continue; }
             echo "→ deploy $fn_name"
-            supabase functions deploy "$fn_name" --project-ref "$SUPABASE_PROJECT_REF"
+            # Retry par fonction : un 502 transitoire de Supabase sur UNE fonction ne
+            # doit plus abattre tout le job (set -e) — fonctions suivantes + étape
+            # `db push` comprises. Vécu 16/06 (502 sur notify-interlibrary-loan a bloqué
+            # le déploiement de register + l'application d'une migration). 3 essais / 8s.
+            n=0
+            until supabase functions deploy "$fn_name" --project-ref "$SUPABASE_PROJECT_REF"; do
+              n=$((n+1))
+              if [ "$n" -ge 3 ]; then echo "✗ deploy $fn_name échoué après 3 tentatives"; exit 1; fi
+              echo "↻ deploy $fn_name KO (tentative $n/3 — 502 transitoire ?) — retry 8s…"
+              sleep 8
+            done
           done
           echo "✓ Edge Functions déployées"
 
