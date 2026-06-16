@@ -54,7 +54,7 @@ export default function CriarContaPage() {
     city: '',
     state: '',
     country: DEFAULT_COUNTRY,
-    acceptRules: false, consent: false,
+    acceptRules: false, consent: false, lettre: false,
   });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [loading, setLoading] = useState(false);
@@ -209,6 +209,7 @@ export default function CriarContaPage() {
         country_code: form.country,         // alias explicite pour la nouvelle API
         consent_email: form.consent,
         consent_email_at: form.consent ? new Date().toISOString() : null,
+        consent_lettre: form.lettre,
         accept_rules: currentLib?.has_regimento ? form.acceptRules : true,
         library_slug: isReaderPending ? form.library_slug : '',
         library_name: currentLib?.name || '',
@@ -583,6 +584,12 @@ export default function CriarContaPage() {
           <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 16, fontSize: '.85rem', cursor: 'pointer' }}>
             <input type="checkbox" checked={form.consent} onChange={e => set('consent', e.target.checked)} required={form.library_slug !== '__contributor__'} style={{ marginTop: 3 }} />
             <span>{t({id: form.library_slug === '__contributor__' ? 'auth.create.consentEmailContributor' : 'auth.create.consentEmail'})}</span>
+          </label>
+
+          {/* Lettre de la fédération — opt-in facultatif (double opt-in : un e-mail de confirmation suit). */}
+          <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 16, fontSize: '.85rem', cursor: 'pointer' }}>
+            <input type="checkbox" checked={form.lettre} onChange={e => set('lettre', e.target.checked)} style={{ marginTop: 3 }} />
+            <span>{t({id: 'auth.create.consentLettre'})}</span>
           </label>
 
           {/* Motivation libre — transmise aux admins dans l'e-mail interne */}

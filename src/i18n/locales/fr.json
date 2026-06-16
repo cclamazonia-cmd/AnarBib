@@ -5043,5 +5043,6 @@
   "rede.lettre.items": "Éléments à inclure",
   "rede.lettre.item.circle": "Cercle",
   "rede.lettre.item.assembly": "Assemblée",
-  "rede.lettre.item.gazette": "Rizoma n°{number}"
+  "rede.lettre.item.gazette": "Rizoma n°{number}",
+  "auth.create.consentLettre": "Je veux aussi recevoir la Lettre de la fédération (désabonnement à tout moment)."
 }

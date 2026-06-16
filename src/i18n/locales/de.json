@@ -5043,5 +5043,6 @@
   "rede.lettre.items": "Einzuschließende Elemente",
   "rede.lettre.item.circle": "Kreis",
   "rede.lettre.item.assembly": "Versammlung",
-  "rede.lettre.item.gazette": "Rizoma Nr. {number}"
+  "rede.lettre.item.gazette": "Rizoma Nr. {number}",
+  "auth.create.consentLettre": "Ich möchte auch den Netzwerk-Rundbrief erhalten (jederzeit abbestellbar)."
 }

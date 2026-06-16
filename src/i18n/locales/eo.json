@@ -5043,5 +5043,6 @@
   "rede.lettre.items": "Eroj por inkluzivi",
   "rede.lettre.item.circle": "Rondo",
   "rede.lettre.item.assembly": "Asembleo",
-  "rede.lettre.item.gazette": "Rizoma n-ro {number}"
+  "rede.lettre.item.gazette": "Rizoma n-ro {number}",
+  "auth.create.consentLettre": "Mi ankaŭ volas ricevi la retan bultenon (mi povas malaboni iam ajn)."
 }

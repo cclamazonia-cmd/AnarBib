@@ -5043,5 +5043,6 @@
   "rede.lettre.items": "Items to include",
   "rede.lettre.item.circle": "Circle",
   "rede.lettre.item.assembly": "Assembly",
-  "rede.lettre.item.gazette": "Rizoma no. {number}"
+  "rede.lettre.item.gazette": "Rizoma no. {number}",
+  "auth.create.consentLettre": "I’d also like to receive the federation letter (unsubscribe any time)."
 }

@@ -5043,5 +5043,6 @@
   "rede.lettre.items": "Elementos a incluir",
   "rede.lettre.item.circle": "Círculo",
   "rede.lettre.item.assembly": "Asamblea",
-  "rede.lettre.item.gazette": "Rizoma n.º {number}"
+  "rede.lettre.item.gazette": "Rizoma n.º {number}",
+  "auth.create.consentLettre": "También quiero recibir el Boletín de la red (puedo darme de baja cuando quiera)."
 }

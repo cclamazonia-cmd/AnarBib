@@ -5043,5 +5043,6 @@
   "rede.lettre.items": "Στοιχεία προς συμπερίληψη",
   "rede.lettre.item.circle": "Κύκλος",
   "rede.lettre.item.assembly": "Συνέλευση",
-  "rede.lettre.item.gazette": "Rizoma αρ. {number}"
+  "rede.lettre.item.gazette": "Rizoma αρ. {number}",
+  "auth.create.consentLettre": "Θέλω επίσης να λαμβάνω το ενημερωτικό δελτίο του δικτύου (διαγραφή οποτεδήποτε)."
 }

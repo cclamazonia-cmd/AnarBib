@@ -5043,5 +5043,6 @@
   "rede.lettre.items": "Items om op te nemen",
   "rede.lettre.item.circle": "Kring",
   "rede.lettre.item.assembly": "Vergadering",
-  "rede.lettre.item.gazette": "Rizoma nr. {number}"
+  "rede.lettre.item.gazette": "Rizoma nr. {number}",
+  "auth.create.consentLettre": "Ik wil ook de nieuwsbrief van het netwerk ontvangen (uitschrijven kan altijd)."
 }

@@ -470,6 +470,7 @@ serve(async (req)=>{
     // (peut être un code ISO 2 lettres ou un nom textuel selon legacy).
     const countryCode = String(body?.country_code || "").trim().toUpperCase();
     const consentEmail = body?.consent_email === true;
+    const consentLettre = body?.consent_lettre === true;
     // Phase 6 RGPD : timestamp explicite du consentement (art. 7(1) RGPD).
     // On accepte une valeur fournie par le frontend (ISO string), sinon on
     // utilise l'heure du serveur. Validation : doit être un timestamp ISO valide
@@ -732,6 +733,17 @@ serve(async (req)=>{
         error: "PROFILE_UPDATE_FAILED"
       }, 500);
     }
+
+    // 2b-bis : opt-in facultatif à la Lettre de la fédération (double opt-in).
+    // Best-effort : on n'échoue jamais la création de compte là-dessus.
+    if (consentLettre) {
+      try {
+        await admin.schema("api").rpc("fn_lettre_optin_for_user", { p_user_id: userId });
+      } catch (e) {
+        console.warn("register: lettre opt-in failed (non bloquant):", String(e?.message || e));
+      }
+    }
+
     // ── Paquet 2 — aiguillage des 3 cas (spec criar-conta v0.3 §4.2.2) ─────
     // Le profil est déjà créé/rempli en amont. signup_intent + metadata
     // sont écrits juste après cette section, une fois claim_id connu.
