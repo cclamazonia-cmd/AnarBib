@@ -116,6 +116,18 @@ La langue, en assemblée, est une question de **pouvoir**. Principe : **aucune l
 - **PV multilingue = pièce porteuse.** Décisions **et motivations** consignées dans un **procès-verbal multilingue** — non négociable : avec le **mandat impératif**, les collectifs **ratifient et agissent à partir du PV**, il doit donc être dans leur langue. PV concis (pas verbatim) ; brouillon éventuellement machine-assisté, mais **relecture humaine obligatoire des termes** (charte inclusive — c'est le curseur variantes ↔ convergence, §6). La **fenêtre de ratification asynchrone** (filet quorum, §6ter) donne le temps de traduire.
 - **Secrétariat & souveraineté.** La **convocation déclare** le régime par défaut (langues-pivots, séance plurilingue, PV multilingue) et **appelle au secrétariat et aux relais d'interprétation** (volontaires signalés en amont). L'**assemblée nomme son secrétariat à l'ouverture** et peut **amender** le régime — le régime linguistique est lui-même une **règle que l'AG constitutive acte** (§6ter).
 
+## 6quinquies. Facilitation — rôle, phasage, bornes (retenu 16/06)
+
+La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, tenir le temps) est une **fonction de service**, pas une autorité — et elle **ne doit pas devenir une prérogative des admins réseau** (qui tiennent les clés techniques). Décision :
+
+- **Phasage.** **1ʳᵉ AG (constituinte) : facilitation assurée par les admins réseau** (bootstrap, faute d'autre mécanisme). **Ensuite : rôle de facilitation distinct**, désigné par l'AG.
+- **Accès propre, pas « instruction aux admins ».** Les facilitateur·rices désigné·es ont leur **propre accès** à l'outil (créer / dater / ordonner directement) — *pas* un schéma où iels dicteraient à des admins « exécutants » (qui resteraient alors un **goulot** et un **pouvoir de fait** : tarder, être absent·e, mal interpréter). Les admins réseau sortent **complètement** de l'animation politique : ils ne font plus que l'**infrastructure** (serveurs, comptes, sauvegardes).
+- **Rotation / par AG.** Désignation **pour une AG donnée** (cercle tournant), jamais un corps installé.
+- **Bornée.** Quel que soit qui facilite, la règle « **organise, ne supprime jamais** » (§6bis) tient : l'AG adopte son ODJ. Démocratiser *qui* tient le rôle ne suffit pas — c'est la **borne sur ce que le rôle peut faire** qui protège.
+- **≠ délégation.** Les facilitateur·rices animent (service), ne décident pas → pas de mandat impératif comme les délégué·es, mais **révocables par l'AG** et redevables devant elle.
+
+**Outillage (P2b).** Rôle `facilitateur·rice` **attribué par assemblée** (p. ex. table `assembleia_facilitators`) ; RPC de facilitation gardées **`network_admin` OU facilitateur·rice désigné·e de cette AG** (la migration P1 ne gardait que `fn_caller_is_network_admin()` — P2b ajoute l'**OU**). 1ʳᵉ AG = cas-limite sans facilitateur·rice désigné·e → les admins agissent.
+
 ## 7. Articulation outillage (neuf vs réemploi)
 
 | Brique | Statut |
@@ -133,9 +145,11 @@ La langue, en assemblée, est une question de **pouvoir**. Principe : **aucune l
 - ✅ **Inscription à l'ODJ** : pas de gardien, l'assemblée adopte son ODJ par consentement (§6bis).
 - ✅ **Mandat : impératif** ; **calendrier** J-30 convocation / J-15 dépôt / ~J-10 ODJ publié (§6bis).
 - ✅ **Quorum permanent** : 60% des zones ∧ 50% des langues, dénominateur sur les constituantes réelles, présence = ≥ 1 collectif mandaté, filet « décisions provisoires » ; **AG constitutive à quorum allégé** (§6ter).
+- ✅ **Facilitation : rôle distinct dès la 2ᵉ AG** (1ʳᵉ = admins réseau, bootstrap) — **accès propre** (pas « instruction aux admins »), désigné par l'AG, rotatif, borné, ≠ délégation (§6quinquies).
 
 **Restent ouverts :**
 - **Liste canonique des zones géographiques** (et des langues-constituantes) servant de dénominateur au quorum.
+- **Cycle « créer vs faciliter » + désignation des facilitateur·rices** (qui crée l'assemblée — acte de convocation ; qui enregistre la désignation par l'AG — admin bootstrap ? facilitateur·rices sortant·es ?) — à trancher avant **P2b** (§6quinquies).
 - **Langues-pivots de séance** (proposition pt/es/en, §6quater) — à acter, candidat à décision de l'AG constitutive.
 - **Mécanique de ratification asynchrone** des décisions provisoires (filet quorum + jalons de l'AG constitutive).
 - Sémantique exacte du « si vraiment nécessaire » et **forme de la saisie** disponibilités/préférences (§4.4).
