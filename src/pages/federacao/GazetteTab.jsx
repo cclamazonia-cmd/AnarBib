@@ -254,7 +254,7 @@ function buildDocHTML(data, ui, locale) {
       inner += `<div class="masthead">
         <div class="topline"><span>${S(m.left)}</span><span class="mid">${S(m.mid)}</span><span>${S(m.right)}</span></div>
         <div class="lockup">${EMBLEM}
-          <div class="wordmark">Anar<b>Bib</b><span class="tag">${S(data.tagline)}</span></div>
+          <div class="wordmark">Rizo<b>ma</b><span class="tag">${S(data.tagline)}</span></div>
         </div></div>`;
     }
     inner += `<div class="kicker"><div class="sec"><span class="n">${String(idx + 1).padStart(2, '0')}</span>${S(pg.sec)}</div>

@@ -18,10 +18,19 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
 const TRANSLATE_TARGETS = LOCALES.filter((l) => l !== "fr"); // fr = original curé
-const SOURCES = [
-  { name: "infolibertaire.net", feed: "https://www.infolibertaire.net/feed/" },
-  { name: "noticiasanarquistas", feed: "https://noticiasanarquistas.noblogs.org/feed/" },
+// Repli si la table gazette_sources est vide / inaccessible.
+const FALLBACK_SOURCES = [
+  { id: null as string | null, name: "Info Libertaire", feed: "https://www.infolibertaire.net/feed/" },
+  { id: null as string | null, name: "Notícias Anarquistas (ANA)", feed: "https://noticiasanarquistas.noblogs.org/feed/" },
 ];
+
+// Sources actives lues depuis le registre éditable par network_staff (table gazette_sources).
+async function loadSources() {
+  const { data, error } = await sb.from("gazette_sources")
+    .select("id,name,feed_url").eq("active", true).order("locale");
+  if (error || !data || data.length === 0) return FALLBACK_SOURCES;
+  return data.map((s) => ({ id: s.id as string, name: s.name as string, feed: s.feed_url as string }));
+}
 const ANTHROPIC_MODEL = "claude-opus-4-8"; // ajuster si besoin
 const sb = createClient(
   Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -95,11 +104,28 @@ HTML minimal autorisé dans les textes : <b>…</b>. Toujours renseigner "src" (
 async function stepStart() {
   const { number, slug, cover_date } = issueForToday();
   await sb.from("gazette_issues").upsert(
-    { number, slug, masthead_title: "AnarBib — La Gazette du réseau", cover_date, status: "draft" },
+    { number, slug, masthead_title: "Rizoma — la gazette du réseau AnarBib", cover_date, status: "draft" },
     { onConflict: "number" },
   );
   const sources: Record<string, unknown> = {};
-  for (const s of SOURCES) sources[s.name] = await fetchFeedItems(s.feed);
+  for (const s of await loadSources()) {
+    try {
+      const items = await fetchFeedItems(s.feed);
+      sources[s.name] = items;
+      const newest = items.map((i) => i.date).filter(Boolean)
+        .map((d) => new Date(d as string).getTime()).sort((a, b) => b - a)[0];
+      if (s.id) await sb.from("gazette_sources").update({
+        last_fetched_at: new Date().toISOString(),
+        last_item_at: newest ? new Date(newest).toISOString() : null,
+        last_status: items.length ? "ok" : "empty", last_error: null,
+      }).eq("id", s.id);
+    } catch (e) {
+      sources[s.name] = [];
+      if (s.id) await sb.from("gazette_sources").update({
+        last_fetched_at: new Date().toISOString(), last_status: "error", last_error: String(e).slice(0, 500),
+      }).eq("id", s.id);
+    }
+  }
   await sb.from("gazette_build_jobs").upsert(
     { issue_number: number, status: "curating", sources, step_error: null },
     { onConflict: "issue_number" },
