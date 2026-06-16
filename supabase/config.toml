@@ -89,6 +89,13 @@ verify_jwt = false
 [functions.gazette-monthly-build]
 verify_jwt = false
 
+# Lettre de la fédération : confirmation double opt-in + désabonnement 1-clic (publics, token-gated).
+[functions.lettre-confirm]
+verify_jwt = false
+
+[functions.lettre-unsubscribe]
+verify_jwt = false
+
 [functions.bn_isbn_lookup]
 verify_jwt = false
 

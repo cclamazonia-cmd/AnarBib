@@ -128,6 +128,122 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Μόλις κυκλοφόρησε το τεύχος {number} της εφημερίδας του δικτύου. Καλή ανάγνωση — και μη διστάσεις να τη διαδώσεις."
   },
 
+  // === Lettre de la fédération (double opt-in : confirmation + pages de retour) ===
+  "lettre.optin.confirm.sub": {
+    "pt-BR": "Confirma tua inscrição no Boletim da rede",
+    fr: "Confirme ton abonnement à la Lettre de la fédération",
+    es: "Confirma tu suscripción al Boletín de la red",
+    en: "Confirm your subscription to the federation letter",
+    it: "Conferma la tua iscrizione alla Lettera della rete",
+    de: "Bestätige dein Abo des Netzwerk-Rundbriefs",
+    ca: "Confirma la teva subscripció al Butlletí de la xarxa",
+    eo: "Konfirmu vian abonon al la reta bulteno",
+    nl: "Bevestig je inschrijving op de nieuwsbrief van het netwerk",
+    el: "Επιβεβαίωσε την εγγραφή σου στο ενημερωτικό δελτίο του δικτύου"
+  },
+  "lettre.optin.confirm.intro": {
+    "pt-BR": "Tu pediste para receber o Boletim da rede. Para confirmar tua inscrição, clica no botão abaixo.",
+    fr: "Tu as demandé à recevoir la Lettre de la fédération. Pour confirmer ton abonnement, clique sur le bouton ci-dessous.",
+    es: "Pediste recibir el Boletín de la red. Para confirmar tu suscripción, haz clic en el botón de abajo.",
+    en: "You asked to receive the federation letter. To confirm your subscription, click the button below.",
+    it: "Hai chiesto di ricevere la Lettera della rete. Per confermare la tua iscrizione, clicca sul pulsante qui sotto.",
+    de: "Du hast den Netzwerk-Rundbrief abonniert. Klicke zur Bestätigung deines Abos auf die Schaltfläche unten.",
+    ca: "Has demanat rebre el Butlletí de la xarxa. Per confirmar la teva subscripció, fes clic al botó de sota.",
+    eo: "Vi petis ricevi la retan bultenon. Por konfirmi vian abonon, klaku la suban butonon.",
+    nl: "Je hebt je aangemeld voor de nieuwsbrief van het netwerk. Klik op de knop hieronder om je inschrijving te bevestigen.",
+    el: "Ζήτησες να λαμβάνεις το ενημερωτικό δελτίο του δικτύου. Για να επιβεβαιώσεις την εγγραφή σου, πάτησε το κουμπί παρακάτω."
+  },
+  "lettre.optin.confirm.cta": {
+    "pt-BR": "Confirmar minha inscrição",
+    fr: "Confirmer mon abonnement",
+    es: "Confirmar mi suscripción",
+    en: "Confirm my subscription",
+    it: "Conferma la mia iscrizione",
+    de: "Mein Abo bestätigen",
+    ca: "Confirma la meva subscripció",
+    eo: "Konfirmi mian abonon",
+    nl: "Mijn inschrijving bevestigen",
+    el: "Επιβεβαίωση της εγγραφής μου"
+  },
+  "lettre.optin.confirm.note": {
+    "pt-BR": "Se não foste tu quem fez este pedido, ignora esta mensagem: nada será enviado sem tua confirmação.",
+    fr: "Si tu n'es pas à l'origine de cette demande, ignore ce message : rien ne te sera envoyé sans ta confirmation.",
+    es: "Si no hiciste esta solicitud, ignora este mensaje: no se te enviará nada sin tu confirmación.",
+    en: "If you didn't make this request, just ignore this message: nothing will be sent without your confirmation.",
+    it: "Se non hai fatto questa richiesta, ignora questo messaggio: non ti verrà inviato nulla senza la tua conferma.",
+    de: "Wenn du diese Anfrage nicht gestellt hast, ignoriere diese Nachricht einfach: ohne deine Bestätigung wird dir nichts zugeschickt.",
+    ca: "Si no has fet aquesta sol·licitud, ignora aquest missatge: no se t'enviarà res sense la teva confirmació.",
+    eo: "Se vi ne faris ĉi tiun peton, simple ignoru ĉi tiun mesaĝon: nenio estos sendita sen via konfirmo.",
+    nl: "Heb je dit niet aangevraagd? Negeer dit bericht dan: zonder je bevestiging wordt er niets verstuurd.",
+    el: "Αν δεν έκανες εσύ αυτό το αίτημα, αγνόησε αυτό το μήνυμα: τίποτα δεν θα σταλεί χωρίς την επιβεβαίωσή σου."
+  },
+  "lettre.landing.cta": {
+    "pt-BR": "Voltar ao AnarBib", fr: "Retour à AnarBib", es: "Volver a AnarBib", en: "Back to AnarBib",
+    it: "Torna ad AnarBib", de: "Zurück zu AnarBib", ca: "Torna a AnarBib", eo: "Reen al AnarBib",
+    nl: "Terug naar AnarBib", el: "Επιστροφή στο AnarBib"
+  },
+  "lettre.landing.confirmed": {
+    "pt-BR": "Inscrição confirmada! Vais receber o Boletim da rede.",
+    fr: "Abonnement confirmé ! Tu recevras la Lettre de la fédération.",
+    es: "¡Suscripción confirmada! Recibirás el Boletín de la red.",
+    en: "Subscription confirmed! You'll receive the federation letter.",
+    it: "Iscrizione confermata! Riceverai la Lettera della rete.",
+    de: "Abo bestätigt! Du erhältst künftig den Netzwerk-Rundbrief.",
+    ca: "Subscripció confirmada! Rebràs el Butlletí de la xarxa.",
+    eo: "Abono konfirmita! Vi ricevos la retan bultenon.",
+    nl: "Inschrijving bevestigd! Je ontvangt voortaan de nieuwsbrief van het netwerk.",
+    el: "Η εγγραφή επιβεβαιώθηκε! Θα λαμβάνεις το ενημερωτικό δελτίο του δικτύου."
+  },
+  "lettre.landing.already": {
+    "pt-BR": "Tua inscrição já estava confirmada.",
+    fr: "Ton abonnement était déjà confirmé.",
+    es: "Tu suscripción ya estaba confirmada.",
+    en: "Your subscription was already confirmed.",
+    it: "La tua iscrizione era già confermata.",
+    de: "Dein Abo war bereits bestätigt.",
+    ca: "La teva subscripció ja estava confirmada.",
+    eo: "Via abono jam estis konfirmita.",
+    nl: "Je inschrijving was al bevestigd.",
+    el: "Η εγγραφή σου είχε ήδη επιβεβαιωθεί."
+  },
+  "lettre.landing.expired": {
+    "pt-BR": "Este link de confirmação expirou. Podes pedir um novo a partir da tua conta.",
+    fr: "Ce lien de confirmation a expiré. Tu peux en redemander un depuis ton compte.",
+    es: "Este enlace de confirmación ha caducado. Puedes pedir uno nuevo desde tu cuenta.",
+    en: "This confirmation link has expired. You can request a new one from your account.",
+    it: "Questo link di conferma è scaduto. Puoi richiederne uno nuovo dal tuo account.",
+    de: "Dieser Bestätigungslink ist abgelaufen. In deinem Konto kannst du einen neuen anfordern.",
+    ca: "Aquest enllaç de confirmació ha caducat. Pots demanar-ne un de nou des del teu compte.",
+    eo: "Ĉi tiu konfirma ligilo eksvalidiĝis. Vi povas peti novan el via konto.",
+    nl: "Deze bevestigingslink is verlopen. Je kunt een nieuwe aanvragen vanuit je account.",
+    el: "Αυτός ο σύνδεσμος επιβεβαίωσης έληξε. Μπορείς να ζητήσεις νέον από τον λογαριασμό σου."
+  },
+  "lettre.landing.invalid": {
+    "pt-BR": "Link inválido ou expirado.", fr: "Lien invalide ou expiré.", es: "Enlace no válido o caducado.",
+    en: "Invalid or expired link.", it: "Link non valido o scaduto.", de: "Ungültiger oder abgelaufener Link.",
+    ca: "Enllaç no vàlid o caducat.", eo: "Nevalida aŭ eksvalidiĝinta ligilo.", nl: "Ongeldige of verlopen link.",
+    el: "Μη έγκυρος ή ληγμένος σύνδεσμος."
+  },
+  "lettre.landing.error": {
+    "pt-BR": "Ocorreu um erro. Tenta de novo mais tarde.", fr: "Une erreur est survenue. Réessaie plus tard.",
+    es: "Se ha producido un error. Inténtalo de nuevo más tarde.", en: "Something went wrong. Please try again later.",
+    it: "Si è verificato un errore. Riprova più tardi.", de: "Etwas ist schiefgelaufen. Bitte versuche es später erneut.",
+    ca: "S'ha produït un error. Torna-ho a provar més tard.", eo: "Okazis eraro. Bonvolu reprovi poste.",
+    nl: "Er ging iets mis. Probeer het later opnieuw.", el: "Κάτι πήγε στραβά. Δοκίμασε ξανά αργότερα."
+  },
+  "lettre.landing.unsubscribed": {
+    "pt-BR": "Pronto! Deixaste de receber o Boletim da rede.",
+    fr: "C'est fait : tu es désabonné·e de la Lettre de la fédération.",
+    es: "Listo: te has dado de baja del Boletín de la red.",
+    en: "Done: you've been unsubscribed from the federation letter.",
+    it: "Fatto: la tua iscrizione alla Lettera della rete è stata annullata.",
+    de: "Erledigt: Du hast den Netzwerk-Rundbrief abbestellt.",
+    ca: "Fet: t'has donat de baixa del Butlletí de la xarxa.",
+    eo: "Farite: vi malabonis la retan bultenon.",
+    nl: "Klaar: je bent uitgeschreven voor de nieuwsbrief van het netwerk.",
+    el: "Έτοιμο: διαγράφηκες από το ενημερωτικό δελτίο του δικτύου."
+  },
+
   "lmsg.reader.sub": {
     "pt-BR": "Mensagem da sua biblioteca",
     fr: "Message de ta bibliothèque",
