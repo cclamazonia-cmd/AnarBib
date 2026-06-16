@@ -7,7 +7,7 @@
 | **Statut** | 🟡 Cadrée, **arbitrages FED-O4/O5/O6 tranchés (04/06)**, non implémentée. Cœur **rempli** : socle + primitive cercle (étapes 1-2 du chantier). Autres onglets **charpentés/renvoyés**. **v0.2 (12/06)** : faits transverses réalignés (i18n → `DOC-I18N-1` ; déploiement → `DOC-DEPLOY-1`, runner non nommé) ; ouverture **FED-O7** (gouvernance des autorités partagées = prérogative fédérale, liée aux rapports `rede` R3b/R4). |
 | **Foyer décisions** | **REGISTRE §`FED`** (FED-1..7, FED-O1..O6) — *on cite l'ID, on ne reformule jamais ici.* Raisonnement : `CADRAGE_modele_acces_concentrique_2026-06-04.md`. Cadre politique : `CHANTIER_reseau_federatif_2026-05-25` (trace). |
 | **Dépendances entrantes** | `spec-administrateur-reseau-v0.4` (face administration `rede`, cooptation) · `spec-gouvernance-roles` (rôle coordenador, `user_can_manage_library`) · `spec-partenariat-biblios` (FED-7, tissu relationnel) · `spec-cartographie-reseau` (onglet Carte → MAP) |
-| **Dépendances sortantes** | À venir : `spec-assembleias`, `spec-gazeta` (non créées). Mutualisation de catalogue → chantier **catalogação** + `fn_library_visible_to_caller`. **Gouvernance des autorités partagées** (FED-O7) → `spec-atelier-autorites` (à créer) ; **signal amont** = rapports `rede` R3b/R4 (paquet RAPPORTS-REDE) + mécanisme `CAT-H1` (`merge_author`/`merge_book`). |
+| **Dépendances sortantes** | À venir : `spec-assembleias` (non créée). **`spec-gazeta-lettre-federation` v0.1 créée (16/06)** → onglet `Gazeta` dissocié : Gazette *pull* (en prod) / Lettre de la fédération *push* opt-in (REGISTRE §29 `GAZ`). Mutualisation de catalogue → chantier **catalogação** + `fn_library_visible_to_caller`. **Gouvernance des autorités partagées** (FED-O7) → `spec-atelier-autorites` (à créer) ; **signal amont** = rapports `rede` R3b/R4 (paquet RAPPORTS-REDE) + mécanisme `CAT-H1` (`merge_author`/`merge_book`). |
 | **Préséance** | En cas de conflit : REGISTRE + cette spec + backlog font foi ; CADRAGE/CHANTIER = trace. |
 
 ---
@@ -143,7 +143,7 @@ Toutes les nouvelles clés dans le nombre de locales fixé par **`DOC-I18N-1`** 
 
 **Charpenté & renvoyé** :
 - **Assembleias** (étape 5) — cycle de vie complet réseau/cercle ; régime de vote, mandat → ouverts (chantier §8.2).
-- **Gazeta** (étapes 3/6) — bulletin de vie (réemploi de la synthèse hebdomadaire existante) puis gazette éditoriale (réemploi du flux catalogação).
+- **Gazeta** (étapes 3/6) — bulletin de vie (réemploi de la synthèse hebdomadaire existante) puis gazette éditoriale (réemploi du flux catalogação). → **Dissocié et cadré (16/06) : `spec-gazeta-lettre-federation` v0.1 / REGISTRE §29 `GAZ`** — Gazette *pull* **en prod**, Lettre de la fédération *push* opt-in **à construire** (le « bulletin de vie » = la lettre).
 - **Carta** → `spec-cartographie-reseau` (MAP) — respecte la visibilité par biblio (`fn_library_visible_to_caller`) ; réserve sécurité (biblios non localisées).
 - **Entreajuda & memória** (étapes 4/7) — banque d'offres/besoins ; archives (chartes de cercle, comptes rendus).
 - **Mutualisation de catalogue** (piste lourde) + **circulation inter-bibliothèques portée par le cercle** — chantiers à part entière (FED-O6).
@@ -157,7 +157,7 @@ Toutes les nouvelles clés dans le nombre de locales fixé par **`DOC-I18N-1`** 
 
 À caler lors du remplissage : délai exact d'objection (FED-O5 propose ~14 j) ; seuil du signal de sommeil (§5.5).
 
-Hérités du chantier §8.2 : régime de vote des assemblées ; mandat impératif vs représentatif ; rythme bulletin/gazette ; reprise RPC des 2 écritures directes de `rede` (dette).
+Hérités du chantier §8.2 : régime de vote des assemblées ; mandat impératif vs représentatif ; rythme bulletin/gazette **(✅ résolu — REGISTRE §29 `GAZ`, séparation pull/push, 16/06)** ; reprise RPC des 2 écritures directes de `rede` (dette).
 
 ## 11. Prompt de reprise
 
