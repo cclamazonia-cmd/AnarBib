@@ -76,8 +76,17 @@ import cdIt   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2
 import cdNl   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-nl.md?raw';
 import cdPtBR from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-pt-BR.md?raw';
 
-// ── Guide scan — encore mono-pt-BR (co-écriture par langue à venir) ──────────
-import guideScan   from '../../../docs/guides/guide-scan-qr-pt-BR.md?raw';
+// ── Guide scan — 10 locales (co-écriture par communauté de langue, via Cowork) ─
+import gsCa   from '../../../docs/guides/guide-scan-qr-ca.md?raw';
+import gsDe   from '../../../docs/guides/guide-scan-qr-de.md?raw';
+import gsEl   from '../../../docs/guides/guide-scan-qr-el.md?raw';
+import gsEn   from '../../../docs/guides/guide-scan-qr-en.md?raw';
+import gsEo   from '../../../docs/guides/guide-scan-qr-eo.md?raw';
+import gsEs   from '../../../docs/guides/guide-scan-qr-es.md?raw';
+import gsFr   from '../../../docs/guides/guide-scan-qr-fr.md?raw';
+import gsIt   from '../../../docs/guides/guide-scan-qr-it.md?raw';
+import gsNl   from '../../../docs/guides/guide-scan-qr-nl.md?raw';
+import gsPtBR from '../../../docs/guides/guide-scan-qr-pt-BR.md?raw';
 
 // ── Guide « Indexer un sujet » — 10 locales ─────────────────────────────────
 import giCa   from '../../../docs/guides/guide-indexar-assunto-ca.md?raw';
@@ -138,6 +147,11 @@ const GUIDE_INDEXAR_BY_LOCALE = {
   es: giEs, fr: giFr, it: giIt, nl: giNl, 'pt-BR': giPtBR,
 };
 
+const GUIDE_SCAN_BY_LOCALE = {
+  ca: gsCa, de: gsDe, el: gsEl, en: gsEn, eo: gsEo,
+  es: gsEs, fr: gsFr, it: gsIt, nl: gsNl, 'pt-BR': gsPtBR,
+};
+
 export const COMMUNS_CATS = ['chartes', 'guides', 'vademecums', 'cadrages'];
 
 export const COMMUNS_DOCS = [
@@ -172,12 +186,12 @@ export const COMMUNS_DOCS = [
     byLocale: COTATION_BY_LOCALE,
   },
   {
-    // Écrit en pt-BR (pour Rodrigo/BTL) ; servi tel quel partout (repli), les
-    // co-écritures par langue viendront — cf. cadrage §3. Module : session MOBILE.
+    // Co-écrit par communauté de langue (via Cowork), 10 locales présentes.
+    // Repli fr si une locale manquait (sans objet ici). Source : pt-BR.
     id: 'guide-scan', cat: 'vademecums',
     titleKey: 'federacao.communs.doc.guideScan.title',
     descKey: 'federacao.communs.doc.guideScan.desc',
-    md: guideScan,
+    byLocale: GUIDE_SCAN_BY_LOCALE,
   },
   {
     // Artisanat de l'indexation matière (pour les catalogueur·euses), 10 locales —
