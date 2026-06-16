@@ -78,7 +78,11 @@ jobs:
         # ci-dessous) ne doit PAS faire échouer le job `app` et donc priver le job
         # `backend` (needs: app) du déploiement des migrations/EF. Le gate qualité
         # reste assuré par lint/test/build (steps bloquants au-dessus).
+        # timeout-minutes : backstop DUR. continue-on-error ignore les échecs, PAS les
+        # hangs : un push Pages qui ne répond jamais (Codeberg muet) faisait tourner
+        # l'étape à l'infini → `app` jamais fini → `backend` (migrations/EF) jamais lancé.
         continue-on-error: true
+        timeout-minutes: 10
         env:
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
           CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
@@ -95,11 +99,15 @@ jobs:
           git remote add origin "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
           # Push lourd (tout le dist/ en commit orphelin) → Codeberg renvoie parfois
           # un HTTP 504 transitoire. Retry 3× au lieu de faire échouer le job.
+          # `timeout 150` : un push qui HANG (Codeberg ne répond pas) est tué à 150s et
+          # retourne en échec → la boucle `until` retente. Sans ça, `until` ne se
+          # relançait QUE sur échec, jamais sur hang (d'où les runs bloqués 20 min+).
+          # 3 tentatives × 150s + sleeps ≈ 8 min, sous le backstop timeout-minutes: 10.
           n=0
-          until git push --force origin pages; do
+          until timeout 150 git push --force origin pages; do
             n=$((n+1))
-            if [ "$n" -ge 3 ]; then echo "✗ push Pages échoué après 3 tentatives"; exit 1; fi
-            echo "↻ push Pages échoué (tentative $n/3 — Codeberg 504 ?) — nouvelle tentative dans 10s…"
+            if [ "$n" -ge 3 ]; then echo "✗ push Pages KO/hang après 3 tentatives"; exit 1; fi
+            echo "↻ push Pages KO (tentative $n/3 — Codeberg 504/hang ?) — nouvelle tentative dans 10s…"
             sleep 10
           done
           echo "✓ Pages déployé"
