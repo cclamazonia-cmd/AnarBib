@@ -4983,5 +4983,13 @@
   "federacao.assembleias.firstPoints.terms": "La fábrica de los términos: cómo se adopta (u objeta) un término, y hasta dónde aceptamos variantes por lengua en vez de una formulación única.",
   "federacao.inicio.assembleias": "Asambleas generales",
   "federacao.inicio.assembleias.desc": "Prefiguración de la asamblea de la red: principio, reglas, orden del día.",
-  "federacao.inicio.toAssembleias": "Abrir las asambleas"
+  "federacao.inicio.toAssembleias": "Abrir las asambleas",
+  "account.lettre.title": "Boletín de la red",
+  "account.lettre.intro": "Un cuaderno de la vida de la red, enviado por correo solo si lo pides.",
+  "account.lettre.toggle": "Recibir el Boletín de la red",
+  "account.lettre.confirmationSent": "Te hemos enviado un correo de confirmación: haz clic en el enlace para validar tu suscripción.",
+  "account.lettre.pending": "Confirmación pendiente: revisa tu bandeja de entrada (y el spam).",
+  "account.lettre.subscribed": "Tu suscripción está activa.",
+  "account.lettre.unsubscribed": "Tu suscripción ha sido cancelada.",
+  "account.lettre.note": "Puedes darte de baja en cualquier momento, con un clic. Sin rastreo, sin reventa."
 }

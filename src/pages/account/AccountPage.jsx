@@ -152,6 +152,10 @@ export default function AccountPage() {
   const [notifPrefs, setNotifPrefs] = useState({ disable_reserva_pronta: false, disable_consulta_pronta: false });
   const [notifPrefsSaving, setNotifPrefsSaving] = useState(false);
   const [notifPrefsMsg, setNotifPrefsMsg] = useState('');
+  // Lettre de la fédération — abonnement opt-in (Lot 2, REGISTRE §29 GAZ-5). Double opt-in.
+  const [lettreConsent, setLettreConsent] = useState({ consent_lettre: false, pending: false });
+  const [lettreSaving, setLettreSaving] = useState(false);
+  const [lettreMsg, setLettreMsg] = useState('');
   // #CL.8 — préférences de rétention prospective (par domaine, pour la biblio active)
   const [retentionPrefs, setRetentionPrefs] = useState({ loans: false, reservations: false, consultations: false });
   const [retentionSaving, setRetentionSaving] = useState(false);
@@ -280,6 +284,14 @@ export default function AccountPage() {
         setNotifPrefs({
           disable_reserva_pronta: !!prefsData[0].disable_reserva_pronta,
           disable_consulta_pronta: !!prefsData[0].disable_consulta_pronta,
+        });
+      }
+      // Lettre de la fédération — état d'abonnement (opt-in, Lot 2)
+      const { data: lettreData } = await supabase.rpc('fn_get_my_lettre_consent');
+      if (Array.isArray(lettreData) && lettreData.length > 0) {
+        setLettreConsent({
+          consent_lettre: !!lettreData[0].consent_lettre,
+          pending: !!lettreData[0].pending,
         });
       }
       // Cotisation : statut et historique pour la biblio active (onglet perfil -> noyau)
@@ -1522,6 +1534,67 @@ export default function AccountPage() {
 
                 <p className="ab-conta-hint" style={{ marginTop: 12, marginBottom: 0, fontSize: '.78rem', fontStyle: 'italic' }}>
                   {t({ id: 'account.notifPrefs.alwaysActive' })}
+                </p>
+              </div>
+
+              {/* Lettre de la fédération — abonnement opt-in (Lot 2, GAZ-5). Double opt-in :
+                  cocher déclenche un e-mail de confirmation ; rien n'est envoyé sans le clic de validation. */}
+              <div style={{ marginTop: 24, padding: 16, background: 'rgba(207,31,39,.05)', borderRadius: 8, border: '1px solid rgba(207,31,39,.15)' }}>
+                <h3 className="ab-conta-section-title" style={{ fontSize: '1rem', marginTop: 0, marginBottom: 8 }}>
+                  {t({ id: 'account.lettre.title' })}
+                </h3>
+                <p className="ab-conta-hint" style={{ marginTop: 0, marginBottom: 12 }}>
+                  {t({ id: 'account.lettre.intro' })}
+                </p>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: lettreSaving ? 'wait' : 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={lettreConsent.consent_lettre || lettreConsent.pending}
+                    disabled={lettreSaving}
+                    onChange={async (e) => {
+                      const want = e.target.checked;
+                      setLettreSaving(true);
+                      setLettreMsg('');
+                      try {
+                        if (want) {
+                          const { data, error } = await supabase.rpc('fn_lettre_request_optin');
+                          if (error) throw error;
+                          if (data === 'already_subscribed') {
+                            setLettreConsent({ consent_lettre: true, pending: false });
+                          } else {
+                            setLettreConsent((c) => ({ ...c, pending: true }));
+                            setLettreMsg(t({ id: 'account.lettre.confirmationSent' }));
+                          }
+                        } else {
+                          const { error } = await supabase.rpc('fn_lettre_cancel');
+                          if (error) throw error;
+                          setLettreConsent({ consent_lettre: false, pending: false });
+                          setLettreMsg(t({ id: 'account.lettre.unsubscribed' }));
+                        }
+                      } catch (err) {
+                        setLettreMsg(t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }));
+                      } finally {
+                        setLettreSaving(false);
+                      }
+                    }}
+                  />
+                  <span>{t({ id: 'account.lettre.toggle' })}</span>
+                </label>
+                {lettreConsent.pending && (
+                  <p className="ab-conta-hint" style={{ marginTop: 10, marginBottom: 0, fontSize: '.82rem' }}>
+                    {t({ id: 'account.lettre.pending' })}
+                  </p>
+                )}
+                {lettreConsent.consent_lettre && !lettreConsent.pending && (
+                  <p className="ab-conta-hint" style={{ marginTop: 10, marginBottom: 0, fontSize: '.82rem' }}>
+                    {t({ id: 'account.lettre.subscribed' })}
+                  </p>
+                )}
+                {lettreMsg && (
+                  <p className="ab-conta-msg" style={{ marginTop: 10, marginBottom: 0, fontSize: '.85rem' }}>{lettreMsg}</p>
+                )}
+                <p className="ab-conta-hint" style={{ marginTop: 12, marginBottom: 0, fontSize: '.78rem', fontStyle: 'italic' }}>
+                  {t({ id: 'account.lettre.note' })}
                 </p>
               </div>
 

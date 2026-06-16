@@ -4983,5 +4983,13 @@
   "federacao.assembleias.firstPoints.terms": "La fàbrica dels termes: com s’adopta (o s’objecta) un terme, i fins on acceptem variants per llengua en lloc d’una formulació única.",
   "federacao.inicio.assembleias": "Assemblees generals",
   "federacao.inicio.assembleias.desc": "Prefiguració de l’assemblea de la xarxa: principi, regles, ordre del dia.",
-  "federacao.inicio.toAssembleias": "Obrir les assemblees"
+  "federacao.inicio.toAssembleias": "Obrir les assemblees",
+  "account.lettre.title": "Butlletí de la xarxa",
+  "account.lettre.intro": "Un quadern de la vida de la xarxa, enviat per correu només si ho demanes.",
+  "account.lettre.toggle": "Rebre el Butlletí de la xarxa",
+  "account.lettre.confirmationSent": "T’hem enviat un correu de confirmació: fes clic a l’enllaç per validar la teva subscripció.",
+  "account.lettre.pending": "Confirmació pendent: revisa la teva safata d’entrada (i el correu brossa).",
+  "account.lettre.subscribed": "La teva subscripció és activa.",
+  "account.lettre.unsubscribed": "La teva subscripció s’ha cancel·lat.",
+  "account.lettre.note": "Pots donar-te de baixa en qualsevol moment, amb un clic. Sense rastreig, sense revenda."
 }

@@ -4983,5 +4983,13 @@
   "federacao.assembleias.firstPoints.terms": "De werkplaats van de termen: hoe een term wordt aangenomen (of er bezwaar tegen wordt gemaakt), en hoever we varianten per taal aanvaarden in plaats van één enkele formulering.",
   "federacao.inicio.assembleias": "Algemene vergaderingen",
   "federacao.inicio.assembleias.desc": "Voorbereiding van de netwerkvergadering: beginsel, regels, agenda.",
-  "federacao.inicio.toAssembleias": "Vergaderingen openen"
+  "federacao.inicio.toAssembleias": "Vergaderingen openen",
+  "account.lettre.title": "Nieuwsbrief van het netwerk",
+  "account.lettre.intro": "Een logboek van het leven van het netwerk, alleen per e-mail als je erom vraagt.",
+  "account.lettre.toggle": "De nieuwsbrief van het netwerk ontvangen",
+  "account.lettre.confirmationSent": "We hebben je een bevestigingsmail gestuurd — klik op de link om je inschrijving te bevestigen.",
+  "account.lettre.pending": "Bevestiging in afwachting: controleer je inbox (en de spammap).",
+  "account.lettre.subscribed": "Je inschrijving is actief.",
+  "account.lettre.unsubscribed": "Je inschrijving is geannuleerd.",
+  "account.lettre.note": "Je kunt je op elk moment met één klik uitschrijven. Geen tracking, geen doorverkoop."
 }

@@ -4983,5 +4983,13 @@
   "federacao.assembleias.firstPoints.terms": "La fabrique des termes : comment on adopte (ou objecte) un terme, et jusqu’où on accepte des variantes par langue plutôt qu’une formulation unique.",
   "federacao.inicio.assembleias": "Assemblées générales",
   "federacao.inicio.assembleias.desc": "Préfiguration de l’assemblée du réseau : principe, règles, ordre du jour.",
-  "federacao.inicio.toAssembleias": "Ouvrir les assemblées"
+  "federacao.inicio.toAssembleias": "Ouvrir les assemblées",
+  "account.lettre.title": "Lettre de la fédération",
+  "account.lettre.intro": "Un carnet de la vie du réseau, envoyé par e-mail seulement si tu le demandes.",
+  "account.lettre.toggle": "Recevoir la Lettre de la fédération",
+  "account.lettre.confirmationSent": "On t’a envoyé un e-mail de confirmation — clique sur le lien pour valider ton abonnement.",
+  "account.lettre.pending": "Confirmation en attente : vérifie ta boîte mail (et les indésirables).",
+  "account.lettre.subscribed": "Ton abonnement est actif.",
+  "account.lettre.unsubscribed": "Ton abonnement est annulé.",
+  "account.lettre.note": "Désabonnement possible à tout moment, en un clic. Aucun pistage, aucune revente."
 }

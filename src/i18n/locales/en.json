@@ -4983,5 +4983,13 @@
   "federacao.assembleias.firstPoints.terms": "The making of terms: how a term is adopted (or objected to), and how far we accept variants per language rather than a single wording.",
   "federacao.inicio.assembleias": "General assemblies",
   "federacao.inicio.assembleias.desc": "Prefiguring the network assembly: principle, rules, agenda.",
-  "federacao.inicio.toAssembleias": "Open the assemblies"
+  "federacao.inicio.toAssembleias": "Open the assemblies",
+  "account.lettre.title": "Federation letter",
+  "account.lettre.intro": "A notebook of the network’s life, sent by email only if you ask for it.",
+  "account.lettre.toggle": "Receive the federation letter",
+  "account.lettre.confirmationSent": "We’ve sent you a confirmation email — click the link to confirm your subscription.",
+  "account.lettre.pending": "Confirmation pending: check your inbox (and spam folder).",
+  "account.lettre.subscribed": "Your subscription is active.",
+  "account.lettre.unsubscribed": "Your subscription has been cancelled.",
+  "account.lettre.note": "Unsubscribe any time, in one click. No tracking, no reselling."
 }

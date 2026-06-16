@@ -4983,5 +4983,13 @@
   "federacao.assembleias.firstPoints.terms": "La fabriko de la terminoj: kiel oni adoptas (aŭ kontraŭdiras) terminon, kaj ĝis kie ni akceptas variantojn laŭ lingvo anstataŭ unu sola formulo.",
   "federacao.inicio.assembleias": "Ĝeneralaj asembleoj",
   "federacao.inicio.assembleias.desc": "Antaŭpreparo de la reta asembleo: principo, reguloj, tagordo.",
-  "federacao.inicio.toAssembleias": "Malfermi la asembleojn"
+  "federacao.inicio.toAssembleias": "Malfermi la asembleojn",
+  "account.lettre.title": "Reta bulteno",
+  "account.lettre.intro": "Kajero pri la vivo de la reto, sendata retpoŝte nur se vi petas.",
+  "account.lettre.toggle": "Ricevi la retan bultenon",
+  "account.lettre.confirmationSent": "Ni sendis al vi konfirman retmesaĝon — klaku la ligilon por validigi vian abonon.",
+  "account.lettre.pending": "Konfirmo atendata: kontrolu vian poŝtkeston (kaj la spamujon).",
+  "account.lettre.subscribed": "Via abono estas aktiva.",
+  "account.lettre.unsubscribed": "Via abono estas nuligita.",
+  "account.lettre.note": "Vi povas malaboni iam ajn, per unu klako. Neniu spurado, neniu revendo."
 }

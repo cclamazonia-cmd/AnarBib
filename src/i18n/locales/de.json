@@ -4983,5 +4983,13 @@
   "federacao.assembleias.firstPoints.terms": "Die Werkstatt der Begriffe: wie ein Begriff angenommen (oder beeinsprucht) wird, und wie weit wir Varianten je Sprache zulassen statt einer einzigen Formulierung.",
   "federacao.inicio.assembleias": "Vollversammlungen",
   "federacao.inicio.assembleias.desc": "Vorbereitung der Netzwerkversammlung: Prinzip, Regeln, Tagesordnung.",
-  "federacao.inicio.toAssembleias": "Versammlungen öffnen"
+  "federacao.inicio.toAssembleias": "Versammlungen öffnen",
+  "account.lettre.title": "Netzwerk-Rundbrief",
+  "account.lettre.intro": "Ein Notizbuch aus dem Leben des Netzwerks — nur per E-Mail, wenn du es möchtest.",
+  "account.lettre.toggle": "Den Netzwerk-Rundbrief erhalten",
+  "account.lettre.confirmationSent": "Wir haben dir eine Bestätigungs-E-Mail geschickt — klicke auf den Link, um dein Abo zu bestätigen.",
+  "account.lettre.pending": "Bestätigung ausstehend: Sieh in deinem Postfach nach (auch im Spam).",
+  "account.lettre.subscribed": "Dein Abo ist aktiv.",
+  "account.lettre.unsubscribed": "Dein Abo wurde gekündigt.",
+  "account.lettre.note": "Jederzeit mit einem Klick abbestellbar. Kein Tracking, kein Weiterverkauf."
 }
