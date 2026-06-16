@@ -72,7 +72,12 @@ GRANT EXECUTE ON FUNCTION public.fn_assembleia_facilitator_name(uuid) TO authent
 -- =========================================================================
 -- SECTION 3 — VUE (+ status + display_name)
 -- =========================================================================
-CREATE OR REPLACE VIEW api.assembleia_facilitators_v1
+-- DROP+CREATE (et non CREATE OR REPLACE) : la vue P2b avait (id, assembleia_id,
+-- user_id, designated_at) ; on insère `status` AVANT designated_at + on ajoute
+-- display_name → CREATE OR REPLACE refuse de réordonner les colonnes existantes.
+-- Aucune dépendance sur cette vue (lue seulement par PostgREST). GRANT ré-accordé ci-dessous.
+DROP VIEW IF EXISTS api.assembleia_facilitators_v1;
+CREATE VIEW api.assembleia_facilitators_v1
 WITH (security_invoker = true) AS
     SELECT f.id, f.assembleia_id, f.user_id, f.status, f.designated_at,
            public.fn_assembleia_facilitator_name(f.user_id) AS display_name
