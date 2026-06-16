@@ -12,6 +12,7 @@ import { supabaseAdmin } from "../core/env.ts";
 import { footerPadrao, renderEmail } from "../mail/layout.ts";
 import { safeSendEmail } from "../transport/email.ts";
 import { tMail, greeting } from "../i18n/mail-strings.ts";
+import { marked } from "https://esm.sh/marked@12";
 
 const OUTBOX = "lettre_notification_outbox";
 const APP_URL = "https://app.anarbib.org";
@@ -20,6 +21,30 @@ const FUNCTIONS_BASE = (Deno.env.get("SUPABASE_URL") || "").replace(/\/+$/, "") 
 function esc(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// Markdown → HTML (corps riche d'un numéro) + sanitisation basique (contenu
+// staff-authored ; défense en profondeur : retire script/style, attributs on*, javascript:).
+function sanitizeHtml(html) {
+  return String(html)
+    .replace(/<\s*script[\s\S]*?<\s*\/\s*script\s*>/gi, "")
+    .replace(/<\s*style[\s\S]*?<\s*\/\s*style\s*>/gi, "")
+    .replace(/\son\w+\s*=\s*"[^"]*"/gi, "")
+    .replace(/\son\w+\s*=\s*'[^']*'/gi, "")
+    .replace(/javascript:/gi, "");
+}
+function renderMarkdown(md) {
+  try { return sanitizeHtml(marked.parse(String(md || ""), { async: false })); }
+  catch { return `<p>${esc(String(md || ""))}</p>`; }
+}
+// Corps d'un numéro pour une locale : locale demandée, repli sur 'fr', puis vide.
+async function fetchLocaleBody(issueId, locale) {
+  for (const loc of [locale, "fr"]) {
+    const { data } = await supabaseAdmin.from("lettre_issue_locales")
+      .select("title,body_md").eq("issue_id", issueId).eq("locale", loc).maybeSingle();
+    if (data?.body_md) return { title: data.title || "", body: data.body_md };
+  }
+  return { title: "", body: "" };
 }
 
 async function markOutboxSent(id) {
@@ -105,35 +130,42 @@ async function handleIssueSent(payload, ctx) {
   const items = Array.isArray(payload.items) ? payload.items : [];
   const unsubToken = String(payload.unsub_token || "").trim();
 
-  const sub = tMail(locale, "lettre.issue.subject", { number });
+  const issueId = String(payload.issue_id || "");
+  // Lettre v2 : si le numéro a un corps markdown pour cette locale, on l'envoie ;
+  // sinon repli sur le digest structuré (intro libre + items).
+  const lettre = issueId ? await fetchLocaleBody(issueId, locale) : { title: "", body: "" };
+  const sub = lettre.title || tMail(locale, "lettre.issue.subject", { number });
   const H = `style="font-size:1rem;margin:1.2rem 0 .4rem;color:#cf1f27"`;
   let body = "";
-  if (intro) body += `<p>${esc(intro)}</p>`;
 
-  const circles = items.filter((i) => i && i.kind === "circle");
-  const assemblies = items.filter((i) => i && i.kind === "assembly");
-  const gazette = items.find((i) => i && i.kind === "gazette");
-
-  if (circles.length) {
-    body += `<h3 ${H}>${esc(tMail(locale, "lettre.issue.section.circles"))}</h3><ul style="margin:.2rem 0 .6rem;padding-left:1.2rem">`;
-    for (const c of circles) body += `<li>${esc(c.name)}</li>`;
-    body += `</ul>`;
-  }
-  if (assemblies.length) {
-    body += `<h3 ${H}>${esc(tMail(locale, "lettre.issue.section.assemblies"))}</h3><ul style="margin:.2rem 0 .6rem;padding-left:1.2rem">`;
-    for (const a of assemblies) {
-      let when = "";
-      try { when = a.scheduled_at ? ` — ${new Date(a.scheduled_at).toLocaleDateString(locale)}` : ""; } catch { when = ""; }
-      body += `<li>${esc(a.title)}${esc(when)}</li>`;
+  if (lettre.body) {
+    body += renderMarkdown(lettre.body);
+  } else {
+    if (intro) body += `<p>${esc(intro)}</p>`;
+    const circles = items.filter((i) => i && i.kind === "circle");
+    const assemblies = items.filter((i) => i && i.kind === "assembly");
+    const gazette = items.find((i) => i && i.kind === "gazette");
+    if (circles.length) {
+      body += `<h3 ${H}>${esc(tMail(locale, "lettre.issue.section.circles"))}</h3><ul style="margin:.2rem 0 .6rem;padding-left:1.2rem">`;
+      for (const c of circles) body += `<li>${esc(c.name)}</li>`;
+      body += `</ul>`;
     }
-    body += `</ul>`;
-  }
-  if (gazette) {
-    body += `<p><a href="${APP_URL}/federacao/gazeta">`
-      + `${esc(tMail(locale, "lettre.issue.gazetteLink", { number: String(gazette.number ?? "") }))}</a></p>`;
-  }
-  if (!intro && !circles.length && !assemblies.length && !gazette) {
-    body += `<p>${esc(tMail(locale, "lettre.issue.empty"))}</p>`;
+    if (assemblies.length) {
+      body += `<h3 ${H}>${esc(tMail(locale, "lettre.issue.section.assemblies"))}</h3><ul style="margin:.2rem 0 .6rem;padding-left:1.2rem">`;
+      for (const a of assemblies) {
+        let when = "";
+        try { when = a.scheduled_at ? ` — ${new Date(a.scheduled_at).toLocaleDateString(locale)}` : ""; } catch { when = ""; }
+        body += `<li>${esc(a.title)}${esc(when)}</li>`;
+      }
+      body += `</ul>`;
+    }
+    if (gazette) {
+      body += `<p><a href="${APP_URL}/federacao/gazeta">`
+        + `${esc(tMail(locale, "lettre.issue.gazetteLink", { number: String(gazette.number ?? "") }))}</a></p>`;
+    }
+    if (!intro && !circles.length && !assemblies.length && !gazette) {
+      body += `<p>${esc(tMail(locale, "lettre.issue.empty"))}</p>`;
+    }
   }
 
   // Désabonnement 1-clic (token stable) ; repli sur /conta si token absent.
