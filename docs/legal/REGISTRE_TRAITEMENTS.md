@@ -112,6 +112,24 @@ AnarBib effectue **cinq traitements** distincts. Chacun est documenté ci-dessou
 | **Destinataires externes** | Aucun |
 | **Note** | La validation physique inter-bibliothèque suppose un partage volontaire d'identité entre bibliothèques du réseau. Cette adhésion est explicite (pas implicite) et révocable à tout moment. |
 
+### 2.6 — Lettre de la fédération (communication associative opt-in)
+
+| Champ | Valeur |
+|---|---|
+| **Finalité** | Informer de la vie de la fédération (assemblées à venir, nouveaux cercles, parution de la gazette « Rizoma ») les membres qui l'ont **explicitement demandé** |
+| **Base légale** | **Consentement** (art. 6.1.a) — **distinct** du transactionnel (§2.4, art. 6.1.b). Conforme à l'**article 4 de la Charte AnarBib** (« aucune communication commerciale, aucune newsletter non sollicitée ») |
+| **Recueil du consentement** | **Double opt-in** : case **décochée par défaut** dans `/conta` → e-mail de confirmation → abonnement validé **au clic**. Preuve horodatée (`profiles.consent_lettre_at`). Le consentement transactionnel (`consent_email`) ne vaut **pas** consentement à la Lettre |
+| **Personnes concernées** | Comptes abonnés (lecteur·rices incluses) ayant **confirmé** leur abonnement |
+| **Données collectées** | Email, prénom (personnalisation), langue (`preferred_language`), horodatage de consentement |
+| **Sous-traitant** | Resend (Plus Five Five, Inc.), voir section 5. Transfert vers les États-Unis documenté en section 6. (Même sous-traitant que §2.4.) |
+| **Durée de conservation** | Jusqu'au **désabonnement** (retrait du consentement) : `consent_lettre` repasse à `false`. L'horodatage d'opt-in initial peut être conservé comme **preuve** d'un consentement passé |
+| **Suivi des ouvertures (tracking)** | **Désactivé** (comme §2.4 / §4.2). Aucune collecte d'ouverture ni de clic |
+| **Droit de retrait** | **Désabonnement en 1 clic, sans connexion** (lien signé par token, présent dans **chaque** envoi) **et** depuis `/conta`. Effet immédiat |
+| **Destinataires** | La personne abonnée **uniquement** ; aucune copie à des tiers |
+| **Pas de marketing, jamais** | Communication **associative**, non commerciale : le contenu est la **vie du réseau**, jamais de la publicité ni de la sollicitation commerciale (art. 4 de la Charte) |
+
+> Mise en œuvre : socle opt-in `profiles.consent_lettre[_at]` + `lettre_consent_tokens` + RPC `fn_lettre_request_optin`/`confirm`/`unsubscribe`/`cancel` (Lot 2) ; envoi des numéros `lettre_issues` → `lettre_notification_outbox` → `notify-event` (Lot 3). Foyer décisionnel : **REGISTRE §29 `GAZ`**.
+
 ---
 
 ## 3. Droits des personnes concernées
