@@ -4950,5 +4950,7 @@
   "catalogacao.subjectGov.editSave": "Desar les etiquetes",
   "catalogacao.subjectGov.editSaved": "Etiquetes desades.",
   "catalogacao.subjectGov.editClose": "Tancar",
-  "catalogacao.subjectGov.editNotation": "Notació (CDD)"
+  "catalogacao.subjectGov.editNotation": "Notació (CDD)",
+  "catalogacao.subjects.suggestions": "Suggeriments:",
+  "catalogacao.subjects.suggestionsHint": "A partir dels altres llibres de l’autoria. Clica per afegir."
 }

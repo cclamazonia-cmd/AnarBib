@@ -4950,5 +4950,7 @@
   "catalogacao.subjectGov.editSave": "Konservi la etikedojn",
   "catalogacao.subjectGov.editSaved": "Etikedoj konservitaj.",
   "catalogacao.subjectGov.editClose": "Fermi",
-  "catalogacao.subjectGov.editNotation": "Notacio (CDD)"
+  "catalogacao.subjectGov.editNotation": "Notacio (CDD)",
+  "catalogacao.subjects.suggestions": "Sugestoj:",
+  "catalogacao.subjects.suggestionsHint": "El la aliaj libroj de la aŭtor-in-o. Klaku por aldoni."
 }

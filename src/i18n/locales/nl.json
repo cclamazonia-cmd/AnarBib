@@ -4950,5 +4950,7 @@
   "catalogacao.subjectGov.editSave": "Labels opslaan",
   "catalogacao.subjectGov.editSaved": "Labels opgeslagen.",
   "catalogacao.subjectGov.editClose": "Sluiten",
-  "catalogacao.subjectGov.editNotation": "Notatie (DDC)"
+  "catalogacao.subjectGov.editNotation": "Notatie (DDC)",
+  "catalogacao.subjects.suggestions": "Suggesties:",
+  "catalogacao.subjects.suggestionsHint": "Uit de andere boeken van de auteur. Klik om toe te voegen."
 }

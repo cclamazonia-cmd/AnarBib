@@ -33,6 +33,7 @@ export default function SubjectAuthorityPicker({ draftId }) {
   const [selected, setSelected] = useState([]); // [{subject_id, slug, label_i18n, status}]
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
+  const [suggestions, setSuggestions] = useState([]); // sujets suggérés par auteur·rice (G)
   const [busy, setBusy] = useState(false);
 
   // Charger les sujets déjà liés au brouillon (avec status pour le badge).
@@ -49,6 +50,19 @@ export default function SubjectAuthorityPicker({ draftId }) {
           label_i18n: r.subjects?.label_i18n, status: r.subjects?.status,
         })));
       }
+    })();
+    return () => { cancelled = true; };
+  }, [draftId]);
+
+  // Suggestions (G) : sujets fréquents des autres livres des auteur·rices du brouillon.
+  useEffect(() => {
+    if (!draftId) { setSuggestions([]); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase.schema('api').rpc('fn_suggest_subjects_for_draft', { p_book_draft_id: draftId });
+        if (!cancelled) setSuggestions(Array.isArray(data) ? data : []);
+      } catch { if (!cancelled) setSuggestions([]); }
     })();
     return () => { cancelled = true; };
   }, [draftId]);
@@ -138,6 +152,21 @@ export default function SubjectAuthorityPicker({ draftId }) {
         ))}
         {selected.length === 0 && <span style={hint}>{t({ id: 'catalogacao.subjects.none' })}</span>}
       </div>
+      {(() => {
+        const fresh = suggestions.filter(sg => !selected.some(s => s.subject_id === sg.id));
+        if (fresh.length === 0) return null;
+        return (
+          <div style={{ marginBottom: 8, display: 'flex', flexWrap: 'wrap', gap: 5, alignItems: 'center' }}>
+            <span style={{ ...hint, marginRight: 2 }} title={t({ id: 'catalogacao.subjects.suggestionsHint' })}>{t({ id: 'catalogacao.subjects.suggestions' })}</span>
+            {fresh.map(sg => (
+              <button key={sg.id} type="button" style={suggestionChip} disabled={busy}
+                title={t({ id: 'catalogacao.subjects.suggestionsHint' })} onClick={() => addSubject(sg)}>
+                + {localizedLabel(sg.label_i18n, locale)}
+              </button>
+            ))}
+          </div>
+        );
+      })()}
       <input className="ab-input" type="search" value={query} onChange={e => setQuery(e.target.value)}
         placeholder={t({ id: 'catalogacao.subjects.searchPh' })} />
       {(results.length > 0 || canCreate) && (
@@ -177,6 +206,7 @@ const chipX = { background: 'transparent', border: 'none', color: '#fff', cursor
 const badge = { fontSize: '.6rem', textTransform: 'uppercase', letterSpacing: '.03em', padding: '0 5px', borderRadius: 4, background: 'rgba(255,255,255,.22)', color: '#fff', whiteSpace: 'nowrap' };
 const flag = { fontSize: '.72rem', color: 'rgba(255,255,255,.6)', cursor: 'help' };
 const notationBadge = { fontSize: '.66rem', fontFamily: 'monospace', padding: '0 4px', borderRadius: 3, background: 'rgba(255,255,255,.1)', color: 'var(--brand-muted, #bbb)' };
+const suggestionChip = { fontSize: '.76rem', padding: '2px 9px', borderRadius: 999, background: 'rgba(255,255,255,.06)', border: '1px dashed var(--brand-panel-border, rgba(255,255,255,.22))', color: 'var(--brand-text, #f5f2ea)', cursor: 'pointer' };
 const resultsBox = { marginTop: 4, border: '1px solid var(--brand-panel-border, rgba(255,255,255,.14))', borderRadius: 6, background: 'var(--brand-panel-bg-strong, rgba(10,10,10,.94))', maxHeight: 240, overflowY: 'auto' };
 const resultBtn = { display: 'block', width: '100%', textAlign: 'left', padding: '5px 10px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--brand-panel-border, rgba(255,255,255,.08))', color: 'var(--brand-text, #f5f2ea)', cursor: 'pointer', fontSize: '.82rem' };
 const scopeNote = { display: 'block', fontSize: '.7rem', color: 'var(--brand-muted, #999)', marginTop: 2, lineHeight: 1.3 };

@@ -4950,5 +4950,7 @@
   "catalogacao.subjectGov.editSave": "Save labels",
   "catalogacao.subjectGov.editSaved": "Labels saved.",
   "catalogacao.subjectGov.editClose": "Close",
-  "catalogacao.subjectGov.editNotation": "Notation (DDC)"
+  "catalogacao.subjectGov.editNotation": "Notation (DDC)",
+  "catalogacao.subjects.suggestions": "Suggestions:",
+  "catalogacao.subjects.suggestionsHint": "From the author’s other books. Click to add."
 }

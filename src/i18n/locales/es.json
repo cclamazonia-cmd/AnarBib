@@ -4950,5 +4950,7 @@
   "catalogacao.subjectGov.editSave": "Guardar las etiquetas",
   "catalogacao.subjectGov.editSaved": "Etiquetas guardadas.",
   "catalogacao.subjectGov.editClose": "Cerrar",
-  "catalogacao.subjectGov.editNotation": "Notación (CDD)"
+  "catalogacao.subjectGov.editNotation": "Notación (CDD)",
+  "catalogacao.subjects.suggestions": "Sugerencias:",
+  "catalogacao.subjects.suggestionsHint": "A partir de los otros libros de la autoría. Haz clic para añadir."
 }

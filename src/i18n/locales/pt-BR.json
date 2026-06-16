@@ -4950,5 +4950,7 @@
   "catalogacao.subjectGov.editSave": "Salvar os rótulos",
   "catalogacao.subjectGov.editSaved": "Rótulos salvos.",
   "catalogacao.subjectGov.editClose": "Fechar",
-  "catalogacao.subjectGov.editNotation": "Notação (CDD)"
+  "catalogacao.subjectGov.editNotation": "Notação (CDD)",
+  "catalogacao.subjects.suggestions": "Sugestões:",
+  "catalogacao.subjects.suggestionsHint": "A partir dos outros livros da autoria. Clica para adicionar."
 }

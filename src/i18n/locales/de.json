@@ -4950,5 +4950,7 @@
   "catalogacao.subjectGov.editSave": "Bezeichnungen speichern",
   "catalogacao.subjectGov.editSaved": "Bezeichnungen gespeichert.",
   "catalogacao.subjectGov.editClose": "Schließen",
-  "catalogacao.subjectGov.editNotation": "Notation (DDC)"
+  "catalogacao.subjectGov.editNotation": "Notation (DDC)",
+  "catalogacao.subjects.suggestions": "Vorschläge:",
+  "catalogacao.subjects.suggestionsHint": "Aus den anderen Büchern der Autor*innen. Zum Hinzufügen klicken."
 }
