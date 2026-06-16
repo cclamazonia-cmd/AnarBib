@@ -33,8 +33,25 @@ createRoot(document.getElementById('root')).render(
 // Le SW ne cache que le shell same-origin ; il n'intercepte jamais l'API/Storage
 // Supabase ni l'auth (stratégie documentée en en-tête de public/sw.js).
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  // Quand un nouveau SW prend le contrôle (déploiement → skipWaiting +
+  // clients.claim), on recharge UNE fois pour servir le build à jour, au lieu
+  // de laisser tourner l'ancien code avec des chunks périmés. Gardes :
+  //  - seulement si la page était déjà contrôlée (hadController) → pas de reload
+  //    parasite à la toute première visite ;
+  //  - 'refreshing' empêche toute boucle de rechargement.
+  const hadController = !!navigator.serviceWorker.controller;
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing || !hadController) return;
+    refreshing = true;
+    window.location.reload();
+  });
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      // Vérifie une mise à jour du SW à chaque chargement (sinon le navigateur
+      // ne re-fetch sw.js qu'à la navigation ou ~24 h).
+      reg.update?.();
+    }).catch((err) => {
       console.warn('[PWA] enregistrement du service worker échoué :', err);
     });
   });

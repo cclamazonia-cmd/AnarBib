@@ -34,3 +34,24 @@ export function reloadOnceForStaleChunk() {
   window.location.reload();
   return true;
 }
+
+// Échappatoire « dur » : désinscrit le(s) service worker(s) et vide TOUS les
+// caches avant de recharger. Garantit la sortie d'un SW empoisonné (shell
+// périmé servi en boucle → « Atualização disponível » / « Algo deu errado »).
+// Branché sur le bouton « Recarregar » de l'ErrorBoundary, où l'utilisateur·rice
+// demande explicitement à repartir d'un état propre.
+export async function hardReloadClearingSW() {
+  try {
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((r) => r.unregister()));
+    }
+    if (typeof caches !== 'undefined') {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    }
+  } catch {
+    // best-effort : on recharge quand même.
+  }
+  window.location.reload();
+}

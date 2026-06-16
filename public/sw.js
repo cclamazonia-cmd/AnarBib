@@ -33,7 +33,12 @@
  *   version du cache (CACHE) lors d'un changement de stratégie pour invalider.
  * ========================================================================= */
 
-const CACHE = 'anarbib-shell-v1';
+// v2 (chantier mobile Phase B, 2026-06-16) : la navigation network-first
+// RAFRAÎCHIT désormais le shell '/' en cache à chaque succès → plus de repli
+// vers un index.html périmé dont les chunks hashés ont disparu (404/424 →
+// « Atualização disponível » en boucle ou « Algo deu errado »). Le bump v1→v2
+// purge l'ancien cache (build périmé) à l'activate.
+const CACHE = 'anarbib-shell-v2';
 const SHELL = ['/', '/manifest.webmanifest', '/img/icon-192.png', '/img/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -62,11 +67,23 @@ self.addEventListener('fetch', (event) => {
   // n'est pas intercepté → réseau normal, jamais mis en cache.
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  // Navigation : network-first, repli shell hors-ligne.
+  // Navigation : network-first. En cas de succès, on RAFRAÎCHIT le shell '/'
+  // en cache (clé de repli) pour qu'une ouverture hors-ligne ultérieure pointe
+  // vers le index.html le plus récent — et non un build périmé dont les chunks
+  // ont disparu. On ne met en cache que les réponses 200 (pas les 404 SPA).
   if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req).catch(() => caches.match('/').then((r) => r || Response.error()))
-    );
+    event.respondWith((async () => {
+      try {
+        const res = await fetch(req);
+        if (res && res.ok) {
+          const cache = await caches.open(CACHE);
+          cache.put('/', res.clone());
+        }
+        return res;
+      } catch {
+        return (await caches.match('/')) || Response.error();
+      }
+    })());
     return;
   }
 

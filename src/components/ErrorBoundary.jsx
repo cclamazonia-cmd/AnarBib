@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { isChunkLoadError, reloadOnceForStaleChunk } from '@/lib/chunkReload';
+import { isChunkLoadError, reloadOnceForStaleChunk, hardReloadClearingSW } from '@/lib/chunkReload';
 
 // Filet de sécurité de rendu. Aujourd'hui l'app n'a AUCUN error boundary : la
 // moindre erreur de rendu (ou un chunk lazy en 404 après déploiement) fait
@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component {
             : 'Ocorreu um erro inesperado nesta página.'}
         </p>
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => hardReloadClearingSW()}
           style={{
             font: 'inherit', fontWeight: 600, cursor: 'pointer',
             padding: '10px 20px', borderRadius: 10,
