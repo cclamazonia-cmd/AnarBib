@@ -432,6 +432,17 @@
 @media (max-width: 760px) {
   .imp-row3 { grid-template-columns: 1fr; }
   .imp-queue .imp-hide-sm { display: none; }
+
+  /* M5 (chantier mobile Phase A) — tables larges : scroll horizontal
+     encapsulé sur mobile. display:block génère une boîte de table anonyme
+     interne (la table reste lisible) et le débordement scrolle dans le
+     conteneur au lieu de pousser tout l'écran. Desktop inchangé. */
+  .imp-map,
+  .imp-queue {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* ── Boutons (.cat-btn) — alignés sur CatalogacaoPage.css ───── */

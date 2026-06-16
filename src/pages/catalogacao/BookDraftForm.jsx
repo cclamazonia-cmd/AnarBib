@@ -2818,7 +2818,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── Saída pública ──────────────────────── */}
           {reviewTab === 'public' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: 12 }}>
               <div style={{ padding: '12px 14px', background: 'rgba(0,0,0,.15)', borderRadius: 8 }}>
                 <div style={{ fontSize: '.7rem', textTransform: 'uppercase', letterSpacing: '.04em', color: 'var(--brand-muted, #888)', marginBottom: 6 }}>{t({id:'catalogacao.public.catalogLine'})}</div>
                 <div style={{ display: 'flex', gap: 6, marginBottom: 6, flexWrap: 'wrap' }}>
@@ -2862,7 +2862,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     />
                   </div>
                   {/* Individual zones */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: 10 }}>
                     {['0','1','2','3','4','5','6','7','8'].map(z => (
                       <div key={z} className="cat-field">
                         <label>{t({id:'catalogacao.isbd.zonePrefix'}, {zone: z})} — {ZONE_LABELS[z]}</label>
