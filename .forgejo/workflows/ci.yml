@@ -63,6 +63,10 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
+          # Visio d'entraide : instance Jitsi militante Autistici/Inventati (accord A/I
+          # du 16/06 — « usage direct », pas d'embedding : on ouvre en onglet dédié).
+          # Valeur publique (pas un secret). Repli meet.jit.si si non défini.
+          VITE_JITSI_DOMAIN: vc.autistici.org
         run: |
           npm run build
           test -d dist || (echo "✗ dist/ introuvable" && exit 1)
