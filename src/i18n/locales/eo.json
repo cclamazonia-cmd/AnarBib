@@ -4924,5 +4924,8 @@
   "wizard.profile.template.C.desc": "Katalogo kunhavigita kun la reto AnarBib, neformala cirkulado, memmastrumado kun difinitaj roloj (bibliotekist-in-oj, kunordigo). Ne partoprenas en la interbiblioteka prunto.",
   "wizard.profile.template.C.title": "Profilo C — Federita observanta",
   "wizard.profile.template.D.desc": "Matura biblioteko: kompleta SIGB (pruntoj, rezervoj, kotizoj), plena partopreno en la reto kaj en la interbiblioteka prunto, formala memmastrumado kun transiroj per voĉdono.",
-  "wizard.profile.template.D.title": "Profilo D — Kompleta engaĝita"
+  "wizard.profile.template.D.title": "Profilo D — Kompleta engaĝita",
+  "catalogacao.subjects.proposed": "proponita",
+  "catalogacao.subjects.proposedHint": "Proponita termino — atendas aktivigon de la kataloga kunordigo.",
+  "catalogacao.subjects.missingLabelHint": "Neniu etikedo en via lingvo — montrita per repuŝo. Vi povas kompletigi ĝin."
 }

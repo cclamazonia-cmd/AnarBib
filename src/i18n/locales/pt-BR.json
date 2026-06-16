@@ -4924,5 +4924,8 @@
   "wizard.profile.template.C.desc": "Catálogo compartilhado com a rede AnarBib, circulação informal, governança com papéis definidos (bibliotecári-as-es, coordenação). Não participa do empréstimo entre bibliotecas.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB completo (empréstimos, reservas, cotizações), participação plena na rede e no empréstimo entre bibliotecas, governança formal com transições por votação.",
-  "wizard.profile.template.D.title": "Perfil D — Completa engajada"
+  "wizard.profile.template.D.title": "Perfil D — Completa engajada",
+  "catalogacao.subjects.proposed": "proposto",
+  "catalogacao.subjects.proposedHint": "Termo proposto — aguardando ativação pela coordenação de catalogação.",
+  "catalogacao.subjects.missingLabelHint": "Sem rótulo no teu idioma — exibido por padrão. Podes completá-lo."
 }

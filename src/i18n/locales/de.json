@@ -4924,5 +4924,8 @@
   "wizard.profile.template.C.desc": "Katalog mit dem AnarBib-Netzwerk geteilt, informelle Zirkulation, Selbstverwaltung mit definierten Rollen (Bibliothekar*innen, Koordination). Nimmt nicht an der Fernleihe teil.",
   "wizard.profile.template.C.title": "Profil C — Foderiert beobachtend",
   "wizard.profile.template.D.desc": "Etablierte Bibliothek: komplettes ILS (Ausleihen, Reservierungen, Beitrage), volle Netzwerk- und Fernleihe-Teilnahme, formale Selbstverwaltung mit Abstimmungs-Transitionen.",
-  "wizard.profile.template.D.title": "Profil D — Voll engagiert"
+  "wizard.profile.template.D.title": "Profil D — Voll engagiert",
+  "catalogacao.subjects.proposed": "vorgeschlagen",
+  "catalogacao.subjects.proposedHint": "Vorgeschlagener Begriff — wartet auf Freischaltung durch die Katalogisierungskoordination.",
+  "catalogacao.subjects.missingLabelHint": "Keine Bezeichnung in deiner Sprache — als Rückfall angezeigt. Du kannst sie ergänzen."
 }

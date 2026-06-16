@@ -4924,5 +4924,8 @@
   "wizard.profile.template.C.desc": "Catàleg compartit amb la xarxa AnarBib, circulació informal, governança amb rols definits (bibliotecaris-àries-es, coordinació). No participa en el préstec interbibliotecari.",
   "wizard.profile.template.C.title": "Perfil C — Federada observadora",
   "wizard.profile.template.D.desc": "Biblioteca madura: SIGB complet (préstecs, reserves, quotes), participació plena a la xarxa i al préstec interbibliotecari, governança formal amb transicions per vot.",
-  "wizard.profile.template.D.title": "Perfil D — Completa compromesa"
+  "wizard.profile.template.D.title": "Perfil D — Completa compromesa",
+  "catalogacao.subjects.proposed": "proposat",
+  "catalogacao.subjects.proposedHint": "Terme proposat — a l’espera d’activació per la coordinació de catalogació.",
+  "catalogacao.subjects.missingLabelHint": "Sense etiqueta en la teva llengua — mostrada per defecte. Pots completar-la."
 }

@@ -4924,5 +4924,8 @@
   "wizard.profile.template.C.desc": "Catalog shared with the AnarBib network, informal circulation, governance with defined roles (librarians, coordination). Does not participate in interlibrary loans.",
   "wizard.profile.template.C.title": "Profile C — Federated observer",
   "wizard.profile.template.D.desc": "Mature library: full ILS (loans, reservations, dues), full participation in the network and interlibrary loans, formal governance with voting transitions.",
-  "wizard.profile.template.D.title": "Profile D — Fully engaged"
+  "wizard.profile.template.D.title": "Profile D — Fully engaged",
+  "catalogacao.subjects.proposed": "proposed",
+  "catalogacao.subjects.proposedHint": "Proposed term — awaiting activation by the cataloging coordination.",
+  "catalogacao.subjects.missingLabelHint": "No label in your language — shown by fallback. You can complete it."
 }
