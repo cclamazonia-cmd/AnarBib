@@ -16,6 +16,7 @@ const NetworkMapTab = lazy(() => import('./NetworkMapTab'));
 const GazetteTab = lazy(() => import('./GazetteTab'));
 const CommunsTab = lazy(() => import('./CommunsTab'));
 const EntraideTab = lazy(() => import('./EntraideTab'));
+const AssembleiasTab = lazy(() => import('./AssembleiasTab'));
 import '../catalogacao/CatalogacaoPage.css';
 import './FederacaoPage.css';
 
@@ -36,7 +37,12 @@ import './FederacaoPage.css';
 // ═══════════════════════════════════════════════════════════════════════════
 
 const TAB_KEYS = ['inicio', 'circulos', 'carte', 'assembleias', 'gazeta', 'carta', 'entreajuda', 'communs'];
-const WIRED = new Set(['circulos', 'inicio', 'carte', 'gazeta', 'communs', 'entreajuda']);
+const WIRED = new Set(['circulos', 'inicio', 'carte', 'gazeta', 'communs', 'entreajuda', 'assembleias']);
+
+// Onglets réservés au staff (librarian/coordenador/admin réseau). Les autres
+// (inicio, gazeta, carta, communs) sont ouverts à tout membre rattaché — lecteur·rices
+// + contributeur·rices. Gate UI = défense en profondeur, en plus de la RLS des données.
+const STAFF_ONLY_TABS = new Set(['entreajuda', 'circulos', 'carte', 'assembleias']);
 
 const NATURE_OPTIONS = ['afinitario', 'geografico', 'linguistico', 'federacao'];
 
@@ -44,12 +50,14 @@ export default function FederacaoPage() {
   const { formatMessage: t, locale } = useIntl();
   const { tab: tabParam } = useParams();
   const navigate = useNavigate();
-  const { libraryId, role } = useLibrary();
+  const { libraryId, role, hasStaffAccess } = useLibrary();
   const { notifySuccess, notifyError } = useToast();
   useDocumentTitle(t({ id: 'federacao.title' }));
 
   // Accueil = onglet par défaut (URL nue /federacao). Les autres ont /federacao/<tab>.
-  const tab = TAB_KEYS.includes(tabParam) ? tabParam : 'inicio';
+  const requestedTab = TAB_KEYS.includes(tabParam) ? tabParam : 'inicio';
+  // Gate UI : un onglet staff-only atteint en URL directe par un·e non-staff retombe sur l'accueil.
+  const tab = (STAFF_ONLY_TABS.has(requestedTab) && !hasStaffAccess) ? 'inicio' : requestedTab;
   const setTab = (k) => navigate(k === 'inicio' ? '/federacao' : `/federacao/${k}`);
 
   const canAct = isCoord(role) && !!libraryId;
@@ -186,7 +194,8 @@ export default function FederacaoPage() {
     );
   }
 
-  const TABS = TAB_KEYS.map(k => ({ id: k, label: t({ id: `federacao.tab.${k}` }) }));
+  const visibleTabKeys = TAB_KEYS.filter(k => hasStaffAccess || !STAFF_ONLY_TABS.has(k));
+  const TABS = visibleTabKeys.map(k => ({ id: k, label: t({ id: `federacao.tab.${k}` }) }));
 
   return (
     <PageShell><Topbar />
@@ -228,7 +237,7 @@ export default function FederacaoPage() {
             <InicioTab
               t={t} locale={locale} loading={loading}
               myCircles={myCircles} openCircles={openCircles} openRequests={openRequests}
-              setTab={setTab}
+              setTab={setTab} hasStaffAccess={hasStaffAccess}
             />
           )}
 
@@ -237,6 +246,7 @@ export default function FederacaoPage() {
             {tab === 'gazeta' && <GazetteTab />}
             {tab === 'communs' && <CommunsTab />}
             {tab === 'entreajuda' && <EntraideTab />}
+            {tab === 'assembleias' && <AssembleiasTab />}
           </Suspense>
 
           {!WIRED.has(tab) && (
@@ -256,7 +266,7 @@ export default function FederacaoPage() {
 // Porte d'entrée : qualitatif, sans tableau de bord (doctrine). Réutilise les
 // données déjà chargées (cercles, portes ouvertes, demandes en attente) + teaser
 // annuaire ; les espaces non encore construits sont posés en « à venir ».
-function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, setTab }) {
+function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, setTab, hasStaffAccess }) {
   const fmtDate = (d) => new Date(d).toLocaleDateString(locale);
   const natureLabel = (n) => t({ id: `federacao.circle.nature.${n}` });
   const circleName = (id) => (myCircles.find((c) => c.circle_id === id) || {}).name || '—';
@@ -350,6 +360,7 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
         <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toCommuns' })} →</span>
       </button>
 
+      {hasStaffAccess && (
       <button type="button" className="ab-fed-inicio-annuaire" onClick={() => setTab('entreajuda')}>
         <svg width="28" height="26" viewBox="0 0 28 26" aria-hidden="true" style={{ flex: 'none' }}>
           <path d="M14 8.2C13.2 6.8 11 6.6 10 8 9 9.4 9.8 11 14 13.6 18.2 11 19 9.4 18 8 17 6.6 14.8 6.8 14 8.2Z" fill="none" stroke="#c00000" strokeWidth="1.5" strokeLinejoin="round" />
@@ -364,11 +375,12 @@ function InicioTab({ t, locale, loading, myCircles, openCircles, openRequests, s
         </span>
         <span className="ab-fed-inicio-annuaire-go">{t({ id: 'federacao.inicio.toEntraide' })} →</span>
       </button>
+      )}
 
       <div>
         <div className="ab-fed-label">{t({ id: 'federacao.inicio.soon' })}</div>
         <div className="ab-fed-inicio-soon">
-          {['assembleias', 'carta'].map((k) => (
+          {['carta'].map((k) => (
             <div key={k} className="ab-fed-inicio-soon-card">
               <span className="ab-fed-inicio-soon-t">{t({ id: `federacao.tab.${k}` })}</span>
               <span className="ab-fed-inicio-soon-s">{t({ id: 'federacao.soon' })}</span>
