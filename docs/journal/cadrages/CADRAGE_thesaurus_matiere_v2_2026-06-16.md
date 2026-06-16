@@ -58,10 +58,12 @@ rejette** (jamais imposé). Sources possibles :
 - **Décision G1** : quelle(s) source(s) pour le v2 (reco : b + c d'abord, a ensuite).
 
 ### Axe H — Écran de gouvernance riche (au-delà de l'activation)
-- **Éditeur de libellés multilingue** : remplir/corriger `label_i18n` par locale,
-  **par communauté de langue** (branche le drapeau ⚐ + le workflow Cowork). C'est
-  ce qui fait *vivre* le multilingue. Gardé : coordination, ou contributeur·rice
-  de la langue ?
+- **Éditeur de libellés multilingue** : remplir/corriger `label_i18n` (pref) +
+  `alt_i18n` + `hidden_i18n` par locale (branche le drapeau ⚐ + le workflow
+  Cowork). C'est ce qui fait *vivre* le multilingue. **Gate (tranché 16/06) :
+  coordination seule** (`fn_is_catalog_coordinator`). L'ouverture aux
+  contributeur·rices (qui éditent déjà les *autorités* dans leur langue) sur les
+  sujets/mots-clés = **après décision d'une première AG réseau**, pas avant.
 - **Fusion de doublons** (l'outil `ate_o3` existe) surfacé en action gouvernée + tracée.
 - **Dépréciation avec redirection** : déprécier un terme **réaffecte** ses
   `book_subjects` vers un remplaçant (pas de notice orpheline).
