@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Publicar la llamada",
   "federacao.entraide.tooShort": "Se requieren un asunto y una descripción.",
   "federacao.entraide.visio": "Unirse a la videollamada",
+  "federacao.entraide.visioFallback": "La videollamada no se cargó. Ábrela en una pestaña.",
+  "federacao.entraide.visioNewTab": "Abrir en una pestaña",
   "federacao.gazeta.contribute.cta": "Proponer una nota",
   "federacao.gazeta.contribute.error.generic": "El envío ha fallado. Inténtalo de nuevo.",
   "federacao.gazeta.contribute.error.rateLimited": "Demasiadas propuestas enviadas. Inténtalo más tarde.",

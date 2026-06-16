@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Oproep publiceren",
   "federacao.entraide.tooShort": "Een onderwerp en een beschrijving zijn vereist.",
   "federacao.entraide.visio": "Deelnemen aan het videogesprek",
+  "federacao.entraide.visioFallback": "Het videogesprek is niet geladen. Open het in een tabblad.",
+  "federacao.entraide.visioNewTab": "In een tabblad openen",
   "federacao.gazeta.contribute.cta": "Een bericht voorstellen",
   "federacao.gazeta.contribute.error.generic": "Verzenden mislukt. Probeer het opnieuw.",
   "federacao.gazeta.contribute.error.rateLimited": "Te veel inzendingen. Probeer het later opnieuw.",

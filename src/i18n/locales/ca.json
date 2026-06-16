@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Publicar la crida",
   "federacao.entraide.tooShort": "Cal un tema i una descripció.",
   "federacao.entraide.visio": "Unir-se a la videotrucada",
+  "federacao.entraide.visioFallback": "La videotrucada no s'ha carregat. Obre-la en una pestanya.",
+  "federacao.entraide.visioNewTab": "Obre en una pestanya",
   "federacao.gazeta.contribute.cta": "Proposar una nota",
   "federacao.gazeta.contribute.error.generic": "L’enviament ha fallat. Torna-ho a provar.",
   "federacao.gazeta.contribute.error.rateLimited": "Massa propostes enviades. Torna-ho a provar més tard.",

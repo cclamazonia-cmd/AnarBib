@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Publicar o chamado",
   "federacao.entraide.tooShort": "Um assunto e uma descrição são obrigatórios.",
   "federacao.entraide.visio": "Entrar na videochamada",
+  "federacao.entraide.visioFallback": "A videochamada não carregou. Abre numa aba.",
+  "federacao.entraide.visioNewTab": "Abrir em uma aba",
   "federacao.gazeta.contribute.cta": "Propor uma nota",
   "federacao.gazeta.contribute.error.generic": "Falha no envio. Tente novamente em instantes.",
   "federacao.gazeta.contribute.error.rateLimited": "Muitas propostas enviadas. Tente novamente mais tarde.",

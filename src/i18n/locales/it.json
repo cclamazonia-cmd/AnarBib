@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Pubblica l’appello",
   "federacao.entraide.tooShort": "Oggetto e descrizione sono obbligatori.",
   "federacao.entraide.visio": "Entra nella videochiamata",
+  "federacao.entraide.visioFallback": "La videochiamata non si è caricata. Aprila in una scheda.",
+  "federacao.entraide.visioNewTab": "Apri in una scheda",
   "federacao.gazeta.contribute.cta": "Proporre una nota",
   "federacao.gazeta.contribute.error.generic": "Invio non riuscito. Riprova.",
   "federacao.gazeta.contribute.error.rateLimited": "Troppe proposte inviate. Riprova più tardi.",

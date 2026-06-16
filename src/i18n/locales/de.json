@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Aufruf veröffentlichen",
   "federacao.entraide.tooShort": "Betreff und Beschreibung sind erforderlich.",
   "federacao.entraide.visio": "Der Videokonferenz beitreten",
+  "federacao.entraide.visioFallback": "Die Videokonferenz wurde nicht geladen. Öffne sie in einem Tab.",
+  "federacao.entraide.visioNewTab": "In einem Tab öffnen",
   "federacao.gazeta.contribute.cta": "Eine Notiz vorschlagen",
   "federacao.gazeta.contribute.error.generic": "Senden fehlgeschlagen. Bitte versuche es erneut.",
   "federacao.gazeta.contribute.error.rateLimited": "Zu viele Einsendungen. Bitte versuche es später erneut.",

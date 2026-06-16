@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Δημοσίευση του καλέσματος",
   "federacao.entraide.tooShort": "Απαιτούνται θέμα και περιγραφή.",
   "federacao.entraide.visio": "Σύνδεση στην κλήση βίντεο",
+  "federacao.entraide.visioFallback": "Η κλήση βίντεο δεν φορτώθηκε. Άνοιξέ την σε καρτέλα.",
+  "federacao.entraide.visioNewTab": "Άνοιγμα σε καρτέλα",
   "federacao.gazeta.contribute.cta": "Πρόταση σημειώματος",
   "federacao.gazeta.contribute.error.generic": "Η αποστολή απέτυχε. Δοκίμασε ξανά.",
   "federacao.gazeta.contribute.error.rateLimited": "Πάρα πολλές υποβολές. Δοκίμασε ξανά αργότερα.",

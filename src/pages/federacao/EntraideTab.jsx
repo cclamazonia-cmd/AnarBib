@@ -4,6 +4,7 @@ import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import VisioRoom from './VisioRoom';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // EntraideTab — onglet « Entraide » de la Fédération (v1).
@@ -17,7 +18,6 @@ import { useLibrary } from '@/contexts/LibraryContext';
 // par appel pour que demandeur·euse et aidant·e se retrouvent.
 // ═══════════════════════════════════════════════════════════════════════════
 
-const JITSI_BASE = 'https://meet.jit.si'; // v2 : instance militante configurable
 
 export default function EntraideTab() {
   const { formatMessage: t, locale } = useIntl();
@@ -40,6 +40,7 @@ export default function EntraideTab() {
   const [circleNames, setCircleNames] = useState({}); // circle_id -> name (affichage)
   const [offerOn, setOfferOn] = useState(null);
   const [offerMsg, setOfferMsg] = useState('');
+  const [visioRoom, setVisioRoom] = useState(null); // nom de salle Jitsi à afficher (null = fermée)
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -113,7 +114,7 @@ export default function EntraideTab() {
   }
 
   function joinVisio(reqId) {
-    window.open(`${JITSI_BASE}/anarbib-entraide-${reqId}`, '_blank', 'noopener,noreferrer');
+    setVisioRoom(`anarbib-entraide-${reqId}`);
   }
 
   const fmtDate = (d) => new Date(d).toLocaleDateString(locale);
@@ -121,6 +122,7 @@ export default function EntraideTab() {
 
   return (
     <div>
+      {visioRoom && <VisioRoom roomName={visioRoom} onClose={() => setVisioRoom(null)} />}
       {msg.text && (
         <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>
           {msg.text}

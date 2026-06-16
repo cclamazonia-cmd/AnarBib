@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Publikigi la alvokon",
   "federacao.entraide.tooShort": "Temo kaj priskribo estas postulataj.",
   "federacao.entraide.visio": "Aliĝi al la videovoko",
+  "federacao.entraide.visioFallback": "La videovoko ne ŝargiĝis. Malfermu ĝin en langeto.",
+  "federacao.entraide.visioNewTab": "Malfermi en langeto",
   "federacao.gazeta.contribute.cta": "Proponi noton",
   "federacao.gazeta.contribute.error.generic": "Sendado malsukcesis. Bonvolu reprovi.",
   "federacao.gazeta.contribute.error.rateLimited": "Tro da proponoj senditaj. Reprovu poste.",

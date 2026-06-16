@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Publish the call",
   "federacao.entraide.tooShort": "A subject and a description are required.",
   "federacao.entraide.visio": "Join the video call",
+  "federacao.entraide.visioFallback": "The video call didn't load. Open it in a tab.",
+  "federacao.entraide.visioNewTab": "Open in a tab",
   "federacao.gazeta.contribute.cta": "Suggest a note",
   "federacao.gazeta.contribute.error.generic": "Sending failed. Please try again.",
   "federacao.gazeta.contribute.error.rateLimited": "Too many submissions. Please try again later.",

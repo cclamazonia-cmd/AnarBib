@@ -2891,6 +2891,8 @@
   "federacao.entraide.submit": "Publier l’appel",
   "federacao.entraide.tooShort": "Un sujet et une description sont requis.",
   "federacao.entraide.visio": "Rejoindre la visio",
+  "federacao.entraide.visioFallback": "La visio ne s'est pas chargée. Ouvre-la dans un onglet.",
+  "federacao.entraide.visioNewTab": "Ouvrir dans un onglet",
   "federacao.gazeta.contribute.cta": "Proposer une brève",
   "federacao.gazeta.contribute.error.generic": "L’envoi a échoué. Réessaie dans un instant.",
   "federacao.gazeta.contribute.error.rateLimited": "Trop de propositions envoyées. Réessaie plus tard.",
