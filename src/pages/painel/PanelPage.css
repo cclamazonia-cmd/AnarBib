@@ -399,6 +399,46 @@
   }
 }
 
+/* ─── M7 (chantier mobile Phase B) : cartes pour les tables actives ─────────
+   Réservations & Consultations portent .ab-painel-table--cards. Seules les
+   cellules avec data-label reçoivent l'étiquette + le retrait ; case-à-cocher,
+   colonne actions et ligne accordéon de contre-proposition restent en bloc
+   pleine largeur. Les autres .ab-painel-table (sans le modificateur) gardent
+   le défilement horizontal. Desktop inchangé. */
+@media (max-width: 768px) {
+  .ab-painel-table--cards,
+  .ab-painel-table--cards thead,
+  .ab-painel-table--cards tbody,
+  .ab-painel-table--cards tr,
+  .ab-painel-table--cards th,
+  .ab-painel-table--cards td {
+    display: block;
+  }
+  .ab-painel-table--cards thead { display: none; }
+  .ab-painel-table--cards tbody tr {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--brand-radius-sm);
+    margin-bottom: 12px;
+    padding: 10px 12px;
+  }
+  .ab-painel-table--cards td { border: none; padding: 4px 0; }
+  .ab-painel-table--cards td[data-label] {
+    position: relative;
+    padding-left: 40%;
+    min-height: 24px;
+  }
+  .ab-painel-table--cards td[data-label]::before {
+    content: attr(data-label) ':';
+    position: absolute;
+    left: 0;
+    width: 35%;
+    font-weight: 700;
+    color: var(--brand-muted);
+    font-size: .78rem;
+  }
+}
+
 /* Audit UX 25/05/2026 (P3) : filtre par etape de workflow. */
 /* Calque .ab-painel-history-pill pour coherence avec l onglet Historique. */
 .ab-painel-stage-filter {

@@ -41,7 +41,7 @@ export default function TabConsultasLocais({
         })} />
       ) : (
       <div className="ab-painel-table-wrap">
-        <table className="ab-painel-table">
+        <table className="ab-painel-table ab-painel-table--cards">
           <thead><tr>
             <SortHeader sortKey="sub_id" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.subId'})}</SortHeader>
             <SortHeader sortKey="user_name" current={sortCon.sortKey} dir={sortCon.sortDir} onClick={sortCon.toggleSort}>{t({id:'panel.table.reader'})}</SortHeader>
@@ -54,8 +54,8 @@ export default function TabConsultasLocais({
           <tbody>
             {sortCon.sortedItems.map((c, i) => (
               <tr key={i}>
-                <td>{c.sub_id}</td>
-                <td>
+                <td data-label={t({id:'panel.table.subId'})}>{c.sub_id}</td>
+                <td data-label={t({id:'panel.table.reader'})}>
                   <UserDisplay
                     name={c.user_name}
                     email={c.user_email}
@@ -63,10 +63,10 @@ export default function TabConsultasLocais({
                     userId={c.user_id}
                   />
                 </td>
-                <td><Link to={`/livro/${c.book_id}`}>{c.titulo || '—'}</Link></td>
-                <td>{c.bib_ref}</td>
-                <td><span className="ab-painel-stage" data-stage={c.workflow_stage_effective}>{CONSULT_WORKFLOW[c.workflow_stage_effective] || CONSULT_WORKFLOW[c.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
-                <td>
+                <td data-label={t({id:'panel.table.book'})}><Link to={`/livro/${c.book_id}`}>{c.titulo || '—'}</Link></td>
+                <td data-label={t({id:'panel.table.ref'})}>{c.bib_ref}</td>
+                <td data-label={t({id:'panel.table.step'})}><span className="ab-painel-stage" data-stage={c.workflow_stage_effective}>{CONSULT_WORKFLOW[c.workflow_stage_effective] || CONSULT_WORKFLOW[c.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
+                <td data-label={t({ id: 'panel.loan.scheduling' })}>
                   {c.consultation_starts_at ? (
                     <>
                       <div>{formatSchedule(c)}</div>

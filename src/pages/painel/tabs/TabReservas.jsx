@@ -118,7 +118,7 @@ export default function TabReservas({
         })} />
       ) : (
       <div className="ab-painel-table-wrap">
-        <table className="ab-painel-table">
+        <table className="ab-painel-table ab-painel-table--cards">
           <thead>
             <tr>
               <th><input type="checkbox" checked={selectedRes.size === activeRes.length && activeRes.length > 0} onChange={toggleAllRes} /></th>
@@ -154,8 +154,8 @@ export default function TabReservas({
                 <Fragment key={i}>
                   <tr className={selectedRes.has(key) ? 'selected' : ''}>
                     <td><input type="checkbox" checked={selectedRes.has(key)} onChange={() => toggleRes(key)} /></td>
-                    <td>{r.sub_id}</td>
-                    <td>
+                    <td data-label={t({id:'panel.table.subId'})}>{r.sub_id}</td>
+                    <td data-label={t({id:'panel.table.reader'})}>
                       <UserDisplay
                         name={r.user_name}
                         email={r.user_email}
@@ -163,14 +163,14 @@ export default function TabReservas({
                         userId={r.user_id}
                       />
                     </td>
-                    <td><Link to={`/livro/${r.book_id}`}>{r.titulo || '—'}</Link></td>
-                    <td>{r.bib_ref}</td>
-                    <td>{r.rotulo || '—'}</td>
-                    <td><span className="ab-painel-stage" data-stage={r.workflow_stage_effective}>{WORKFLOW_LABELS[r.workflow_stage_effective] || WORKFLOW_LABELS[r.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
-                    <td>{fmtD(r.pickup_scheduled_for)}</td>
-                    <td>{fmtD(r.expires_at)}</td>
+                    <td data-label={t({id:'panel.table.book'})}><Link to={`/livro/${r.book_id}`}>{r.titulo || '—'}</Link></td>
+                    <td data-label={t({id:'panel.table.ref'})}>{r.bib_ref}</td>
+                    <td data-label={t({id:'panel.table.label'})}>{r.rotulo || '—'}</td>
+                    <td data-label={t({id:'panel.table.step'})}><span className="ab-painel-stage" data-stage={r.workflow_stage_effective}>{WORKFLOW_LABELS[r.workflow_stage_effective] || WORKFLOW_LABELS[r.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
+                    <td data-label={t({id:'panel.table.pickup'})}>{fmtD(r.pickup_scheduled_for)}</td>
+                    <td data-label={t({id:'panel.table.validity'})}>{fmtD(r.expires_at)}</td>
                     {/* Colonne Negociação : badge d'état */}
-                    <td>
+                    <td data-label={t({id:'panel.table.negotiation'})}>
                       <NegotiationStateBadge
                         proposedBy={r.pickup_proposed_by}
                         iterationCount={r.negotiation_iteration_count}
