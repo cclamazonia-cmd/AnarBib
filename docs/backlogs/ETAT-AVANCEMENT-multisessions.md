@@ -54,6 +54,19 @@ mener avec Xavier. Perf TOP 2-5 (memo lignes catalogue, virtualisation) — back
 
 — *Session: Perf UX + nettoyage advisors sécurité*
 
+## ✅ Session « Fédération — Communs & Entraide » (16/06) — livré
+
+Bloc livré et **déployé en prod** (pipelines verts, branche `pages` vérifiée). Doctrine au **REGISTRE §30 `THES`** + **§24 `FED-O8/O9/O10`**.
+
+- **Communs** : tous les docs Communs servis en **10 locales** — dernier mono-langue (guide « Scan & QR ») résorbé (16/06, `byLocale` dans `communsRegistry`). Intégration ⇄ accueil fédération.
+- **Thésaurus matière v1→v3** (§30 `THES`) : gouvernance statuts + file d'activation (v1) ; synonymes `alt`/`hidden`, éditeur libellés multilingue, notation CDD, suggestions assistées (v2) ; **relations « voir aussi »** (`subject_relations`, skos:related) + **arbre OPAC** (`subject_tree_v1`, compte visibilité-safe via `catalog_list_anon_v1`) + **export SKOS public** (Turtle/JSON-LD, URI stable `app.anarbib.org/thesaurus/`) (v3). **CDD-par-classe reporté** (0 notation ; cotage Baqueiro).
+- **Entraide degré 3** : routage + **notification par cercles** (exclut la biblio de l'auteur·rice) ; **visio Jitsi** en **onglet dédié**, hôte militant **Autistici `vc.autistici.org`** (accord A/I 16/06, `VITE_JITSI_DOMAIN`, pas d'embedding) ; doc de démarche hébergeurs (`../journal/operations/HEBERGEURS_jitsi_militants_2026-06-16.md`).
+- **Gating fédération** (§24 `FED-O8`) : onglets staff-only (entraide/cercles/carte/assemblées) vs ouverts (início/gazette/lettre/communs), défense en profondeur **UI + RLS**.
+
+**Coordination** : câblage `AssembleiasTab` d'une **autre session** (AG planning) avalé par un commit (worktree partagé) → build CI cassé, réparé en committant leur `AssembleiasTab.jsx` (i18n + câblage déjà sur main) ; session AG **notifiée** (pill accueil « Assemblées » + CSS `.ab-fed-assembleias` à finir de leur côté).
+
+— *Session: Fédération — Communs & Entraide*
+
 ## Morceaux non résolus (survey sessions, bruit filtré)
 
 ### ✅ « À pérenniser » — RÉSOLU (faux positif, élucidé 11/06)
