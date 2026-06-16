@@ -76,6 +76,14 @@
 /* ── Chips ──────────────────────────────────────────────── */
 
 .ab-active-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.ab-related-subjects {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  margin-top: 8px;
+}
+.ab-related-subjects__label {
+  font-size: 0.74rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .03em; color: var(--brand-muted);
+}
 .ab-filter-chip {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 10px; border-radius: var(--brand-radius-pill);

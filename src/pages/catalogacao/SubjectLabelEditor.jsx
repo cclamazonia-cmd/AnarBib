@@ -30,8 +30,18 @@ export default function SubjectLabelEditor() {
   const [alt, setAlt] = useState({});
   const [hidden, setHidden] = useState({});
   const [notation, setNotation] = useState('');
+  const [related, setRelated] = useState([]);      // sujets reliés « voir aussi » (v3-A)
+  const [relQuery, setRelQuery] = useState('');
+  const [relResults, setRelResults] = useState([]);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
+
+  async function loadRelated(subjectId) {
+    try {
+      const { data } = await supabase.schema('api').rpc('subject_related_v1', { p_subject_id: subjectId });
+      setRelated(Array.isArray(data) ? data : []);
+    } catch { setRelated([]); }
+  }
 
   useEffect(() => {
     const q = query.trim();
@@ -57,7 +67,38 @@ export default function SubjectLabelEditor() {
       h[loc] = (data.hidden_i18n && Array.isArray(data.hidden_i18n[loc])) ? data.hidden_i18n[loc].join(', ') : '';
     }
     setSubj(data); setPref(p); setAlt(a); setHidden(h); setNotation(data.notation || '');
+    setRelQuery(''); setRelResults([]); await loadRelated(data.id);
     setResults([]); setQuery('');
+    setBusy(false);
+  }
+
+  // Recherche pour relier un sujet (exclut soi-même + déjà reliés).
+  useEffect(() => {
+    const q = relQuery.trim();
+    if (q.length < 2 || !subj) { setRelResults([]); return; }
+    const h = setTimeout(async () => {
+      try {
+        const { data } = await supabase.schema('api').rpc('search_subjects', { p_query: q, p_limit: 8 });
+        const relIds = new Set(related.map((r) => r.id));
+        setRelResults((Array.isArray(data) ? data : []).filter((r) => r.id !== subj.id && !relIds.has(r.id)));
+      } catch { setRelResults([]); }
+    }, 300);
+    return () => clearTimeout(h);
+  }, [relQuery, subj, related]);
+
+  async function addRelation(relId) {
+    setBusy(true); setMsg(null);
+    const { error } = await supabase.schema('api').rpc('fn_subject_add_relation', { p_subject_id: subj.id, p_related_id: relId });
+    if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
+    else { setRelQuery(''); setRelResults([]); await loadRelated(subj.id); }
+    setBusy(false);
+  }
+
+  async function removeRelation(relId) {
+    setBusy(true); setMsg(null);
+    const { error } = await supabase.schema('api').rpc('fn_subject_remove_relation', { p_subject_id: subj.id, p_related_id: relId });
+    if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
+    else await loadRelated(subj.id);
     setBusy(false);
   }
 
@@ -135,7 +176,32 @@ export default function SubjectLabelEditor() {
               ))}
             </tbody>
           </table>
-          <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)', marginBottom: 6 }}>{t({ id: 'catalogacao.subjectGov.relTitle' })}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+              {related.length === 0 && <span style={{ fontSize: '.78rem', color: 'var(--brand-muted, #777)' }}>{t({ id: 'catalogacao.subjectGov.relNone' })}</span>}
+              {related.map((r) => (
+                <span key={r.id} style={relChip}>
+                  {lbl(r.label_i18n, locale)}
+                  <button type="button" disabled={busy} onClick={() => removeRelation(r.id)} style={relChipX} aria-label="✕">✕</button>
+                </span>
+              ))}
+            </div>
+            <input className="ab-input" type="search" value={relQuery} onChange={(e) => setRelQuery(e.target.value)}
+              placeholder={t({ id: 'catalogacao.subjectGov.relAdd' })} style={{ maxWidth: 380 }} />
+            {relResults.length > 0 && (
+              <div style={resultsBox}>
+                {relResults.map((r) => (
+                  <button key={r.id} type="button" style={resultBtn} disabled={busy} onClick={() => addRelation(r.id)}>
+                    + {lbl(r.label_i18n, locale)} {r.status === 'proposto' && <span style={{ opacity: .6 }}>· {t({ id: 'catalogacao.subjects.proposed' })}</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
             <button className="ab-button" disabled={busy} onClick={save}>{t({ id: 'catalogacao.subjectGov.editSave' })}</button>
             <button className="ab-button ab-button--ghost" onClick={() => { setSubj(null); setMsg(null); }}>{t({ id: 'catalogacao.subjectGov.editClose' })}</button>
           </div>
@@ -150,3 +216,5 @@ const td = { padding: '3px 6px', verticalAlign: 'middle' };
 const cell = { width: '100%', fontSize: '.8rem', color: 'var(--brand-text, #f5f2ea)', background: 'rgba(255,255,255,.05)', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.14))', borderRadius: 6, padding: '4px 7px' };
 const resultsBox = { marginTop: 4, maxWidth: 380, border: '1px solid var(--brand-panel-border, rgba(255,255,255,.14))', borderRadius: 6, background: 'var(--brand-panel-bg-strong, rgba(10,10,10,.94))', maxHeight: 200, overflowY: 'auto' };
 const resultBtn = { display: 'block', width: '100%', textAlign: 'left', padding: '5px 10px', background: 'transparent', border: 'none', borderBottom: '1px solid var(--brand-panel-border, rgba(255,255,255,.08))', color: 'var(--brand-text, #f5f2ea)', cursor: 'pointer', fontSize: '.82rem' };
+const relChip = { display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 6px 3px 10px', borderRadius: 999, fontSize: '.78rem', background: 'rgba(255,255,255,.06)', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.14))', color: 'var(--brand-text, #f5f2ea)' };
+const relChipX = { background: 'transparent', border: 'none', color: 'var(--brand-muted, #aaa)', cursor: 'pointer', fontSize: '.72rem', lineHeight: 1, padding: 2 };

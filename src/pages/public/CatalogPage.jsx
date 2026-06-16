@@ -282,6 +282,7 @@ export default function CatalogPage() {
   const [alphaFilter, setAlphaFilter] = useState(''); // #OPAC10 parcours A–Z par auteur·rice (non persisté)
   const [subjectFilter, setSubjectFilter] = useState(''); // #OPAC8 filtre par sujet (slug)
   const [subjectLabel, setSubjectLabel] = useState('');
+  const [relatedSubjects, setRelatedSubjects] = useState([]); // v3-A « voir aussi »
   // #OPAC7 / OPAC-F1 : facettes de découverte (CDD / auteur·rice / décennie)
   const [facets, setFacets] = useState(null);
   const [showAllCdd, setShowAllCdd] = useState(false);
@@ -476,6 +477,21 @@ export default function CatalogPage() {
       } catch { setFacets(null); }
     })();
   }, [dSearch, authorIdFilter, alphaFilter, dPublisher, dYear, libraryFilter, dCdd, dLanguage, materialFilter, dCollection, dPlace, subjectFilter]);
+
+  // v3-A — « voir aussi » : sujets reliés au sujet filtré (skos:related).
+  useEffect(() => {
+    if (!subjectFilter) { setRelatedSubjects([]); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data: sd } = await supabase.from('subjects').select('id').eq('slug', subjectFilter).maybeSingle();
+        if (!sd?.id) { if (!cancelled) setRelatedSubjects([]); return; }
+        const { data } = await supabase.schema('api').rpc('subject_related_v1', { p_subject_id: sd.id });
+        if (!cancelled) setRelatedSubjects(Array.isArray(data) ? data : []);
+      } catch { if (!cancelled) setRelatedSubjects([]); }
+    })();
+    return () => { cancelled = true; };
+  }, [subjectFilter]);
 
   // Regimento da biblioteca (if user logged in)
   useEffect(() => {
@@ -961,6 +977,17 @@ export default function CatalogPage() {
               {materialFilter !== '__all__' && <span className="ab-filter-chip">{t({ id: 'catalog.chip.material' })}: <strong>{t({ id: `catalogacao.material.${materialFilter}` })}</strong> <button onClick={() => setMaterialFilter('__all__')}>✕</button></span>}
               {dCollection && <span className="ab-filter-chip">{t({ id: 'catalog.chip.collection' })}: <strong>{dCollection}</strong> <button onClick={() => setCollectionFilter('')}>✕</button></span>}
               {dPlace && <span className="ab-filter-chip">{t({ id: 'catalog.chip.place' })}: <strong>{dPlace}</strong> <button onClick={() => setPlaceFilter('')}>✕</button></span>}
+            </div>
+          )}
+          {subjectFilter && relatedSubjects.length > 0 && (
+            <div className="ab-related-subjects">
+              <span className="ab-related-subjects__label">{t({ id: 'catalog.related.subjects' })}</span>
+              {relatedSubjects.map((r) => (
+                <button key={r.id} type="button" className="ab-facet-chip"
+                  onClick={() => pickSubject({ slug: r.slug, label_i18n: r.label_i18n })}>
+                  {localizedSubjectLabel(r.label_i18n, locale)}
+                </button>
+              ))}
             </div>
           )}
           <div className="ab-view-controls">
