@@ -24,7 +24,7 @@
 > publique, #PUB6 rebond OPAC, **PUBLIB-O1** carte OSM (clic-pour-charger, anti-tracking) et **logos
 > réels** sur cards/fiche. **Cloisonnement anon vérifié en prod** (biblio `network` exclue même opt-in ;
 > défaut OFF → rien ne fuit). → §1, table §1 et §2.7 passés ✅ ; REGISTRE §31 (note de livraison +
-> PUBLIB-O1 ✅). **Reste seul** : `PUBLIB-SCHED-1` (consolidation des 3 représentations d'horaires, futur).
+> PUBLIB-O1 ✅). **`PUBLIB-SCHED-1` aussi soldé (17/06)** : sondage du réel — `consultation_schedule_struct` **conservé** (réservation de consultation, usage distinct), `service_schedule_text` (colonne **MORTE**) supprimée, `library_opening_hours` canonique, frontière documentée (migration `20260617061715`). **→ chantier #PUBLIB entièrement clos.**
 >
 > **Provenance de vérification (légende).**
 > - **✅ prod** — constaté cette session (requête lecture seule / code en prod lu).
@@ -115,7 +115,7 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
   éditeur + vitrine membre (`c509ea51`/`983e57b5`).
 - **#PUBLIB — annuaire/fiche publics** ✅ **EN PROD** *(§31)* : annuaire `/bibliotecas` + fiche
   `/bibliotecas/:slug` + opt-in fin (toggles admin + vues gated) + carte OSM (`PUBLIB-O1`) + **logos réels**
-  (`795ba6ed`→`8346f57e`→`ec91023f`→`44bcabec`) ; cloisonnement anon vérifié. Reste `PUBLIB-SCHED-1` (futur).
+  (`795ba6ed`→`8346f57e`→`ec91023f`→`44bcabec`→`d0681b61`) ; cloisonnement anon vérifié. **`PUBLIB-SCHED-1` soldé** (colonne morte `service_schedule_text` supprimée, frontière documentée). **#PUBLIB clos.**
 
 ---
 
@@ -143,7 +143,7 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 | — | **#THES (thésaurus matière)** | 🟢 **v1→v3 en prod** (relations, arbre OPAC, export SKOS) | §0ter (§30) |
 | — | **#GAZ (Gazette + Lettre)** | 🟢 **En prod** (Rizoma + Lettre opt-in v2 multilingue) | §0ter (§29) |
 | — | **#ASSEMBLEIAS (AG)** | ✅ **v0.1→P3 en prod** ; v0.2 + P3b ouverts | §0ter (§32 / §2.7) |
-| — | **#PUBLIB (annuaire/fiche publics)** | ✅ **En prod** (annuaire+fiche+opt-in+carte OSM+logos) ; reste `PUBLIB-SCHED-1` | §0ter (§31) · livré 17/06 (`44bcabec`) |
+| — | **#PUBLIB (annuaire/fiche publics)** | ✅ **CLOS en prod** (annuaire+fiche+opt-in+carte OSM+logos + `PUBLIB-SCHED-1` soldé) | §0ter (§31) · 17/06 (`44bcabec`→`d0681b61`) |
 | — | **#BIBLIO horaires** | ✅ **En prod** (`library_opening_hours`) | §0ter (§19) |
 
 ---
@@ -185,8 +185,8 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 - **#PUBLIB** : ✅ **LIVRÉ EN PROD (17/06)** — annuaire `/bibliotecas` (#PUB1), fiche `/bibliotecas/:slug`
   (#PUB2), drapeaux `*_is_public` + RPC coordenador + vues `library_*_public_v1` (INVOKER, grant anon,
   filtre opt-in), nav (#PUB-NAV-1) + rebond OPAC (#PUB6), **carte OSM** (`PUBLIB-O1`, clic-pour-charger)
-  et **logos réels** sur cards/fiche. Cloisonnement anon vérifié. **Reste seul** : `PUBLIB-SCHED-1`
-  (consolidation des 3 représentations d'horaires — chantier ultérieur).
+  et **logos réels** sur cards/fiche. Cloisonnement anon vérifié. **`PUBLIB-SCHED-1` soldé** :
+  `service_schedule_text` (mort) supprimé ; `consultation_schedule_struct` conservé (réservation de consultation) ; frontière documentée. **→ #PUBLIB entièrement clos.**
 
 ---
 

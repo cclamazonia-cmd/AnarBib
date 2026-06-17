@@ -5,7 +5,7 @@
 | Champ | Valeur |
 |-|-|
 | **Genre** | Dossier d'ouverture de chantier (cadrage — trace) |
-| **Statut** | ✅ **Livré en prod (17/06/2026)** — annuaire + fiche + opt-in fin + carte OSM (`PUBLIB-O1`) + logos ; gradué au **REGISTRE §31 `PUBLIB`**. Reste `PUBLIB-SCHED-1` (consolidation horaires). |
+| **Statut** | ✅ **CLOS en prod (17/06/2026)** — annuaire + fiche + opt-in fin + carte OSM (`PUBLIB-O1`) + logos + `PUBLIB-SCHED-1` (dette horaires soldée) ; gradué au **REGISTRE §31 `PUBLIB`**. Chantier entièrement bouclé. |
 | **Session** | Gazette Rizoma & Lettre federation (commande Xavier, 17/06) |
 | **Décisions invoquées** | DOC-PERIM-1 (page = périmètre / cloisonnement anon) · DOC-I18N-1 (10 locales) · DOC-RPC-3 (écritures via RPC) · DOC-OBJ-2 (REVOKE objets backend) · INV-1/3/5 (anti-tracking, vues `*_anon`) · CAT-B3 (`visibility`) · modèle d'accès concentrique (`libraries.visibility_level`) |
 | **Sources de design** | À créer : `spec-fiche-publique-bibliotheque.md`. Modèle de visibilité : [`CADRAGE_modele_acces_concentrique_2026-06-04.md`](CADRAGE_modele_acces_concentrique_2026-06-04.md). En cas de conflit, [`REGISTRE_decisions.md`](../../specs/REGISTRE_decisions.md) prime. |
@@ -93,7 +93,7 @@ Légende : ✅ présent · ⚠️ partiel · ❌ absent. *(Intention = ce chanti
 | **#PUB4** contact public anon | fiche | ❌ | ❌ | `api.library_contact_public_v1` (opt-in) + rendu |
 | **#PUB5** horaires public anon | fiche | ❌ | ❌ | `api.library_opening_hours_public_v1` (opt-in) + rendu |
 | **#PUB6** entrée OPAC → fiche | Catalog | ❌ | ✅ | lien « à propos de cette bibliothèque » depuis le filtre biblio |
-| **#PUB7** consolidation horaires | data | — | ⚠️ | trancher source canonique (§4.2) ; éventuelle migration |
+| **#PUB7** consolidation horaires | data | — | ✅ | **SOLDÉ** : `service_schedule_text` (mort) supprimé, `consultation_schedule_struct` conservé (réservation consultation), `library_opening_hours` canonique, frontière documentée (migration `20260617061715`) |
 
 ---
 
