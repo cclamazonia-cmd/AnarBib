@@ -83,6 +83,17 @@ Bloc livré et **déployé en prod** (pipelines verts, branche `pages` vérifié
 
 — *Session: Fédération — Assemblée du réseau (AG)*
 
+## ✅ Session « File éditoriale — tri & supports AV » (17/06) — livré
+
+Bloc livré et **déployé en prod** (`main` `ae7e25d8` ; DB appliquée via MCP puis tracée en migrations idempotentes ; doc `caca8518` `[CI SKIP]`). Doctrine au **REGISTRE §12 CAT-E15/E16** (CAT-E16 **résout le gap noté CAT-E13** : `editora` absent de l'audiovisuel). Backlog **v33** amendé.
+
+- **File éditoriale** (`QueuePanel`) : **tri par en-tête** (asc/desc, ▲/▼) sur Type/Titre-Nom/Statut/Ouvert le/Dern. modif. + nouvelle colonne **« Ouvert le »** — `last_opened_at` sur les 3 tables brouillon + RPC `fn_touch_draft_opened` + **garde GUC** `anarbib.skip_touch_updated_at` sur le trigger partagé `touch_updated_at` (ouvrir ≠ modifier). Migr. `20260617103939`.
+- **Rôles de contributeur conditionnés au `tipo_material`** : audiovisuel (réalisateur·rice/scénariste/acteur·rice/interprète/compositeur·rice/narrateur·rice/producteur·rice), audio (+voix) ; écrits inchangés. Garde rôle hors-liste sur reprise. i18n ×10.
+- **Auteur catalogue dérivé du rôle créateur principal du média** : `v_book_authors_canonical` → `realizador` (AV) / `compositor` (audio) si pas d'`autor` ; écrits inchangés (migr. `20260617120646`, REFRESH des 2 MV).
+- **Éditeur → distributeur / maison de disques** : champ `gravadora` (audio) + copie au publish (migr. `123948`/`124826`) ; libellé adapté au support sur la **fiche** (`v_book_detail_public_v2`, migr. `125221`) et la **liste OPAC** (`publisher_display` = CASE par média repli `editora` ; `private.fn_publisher_display` + vues `api.catalog_list_*_v1`, migr. `130551` ; icône 🎬/💿 + tooltip). Tri/filtre liste restent sur `editora` (≈2 lignes AV/audio sur 503 — limite assumée).
+
+— *Session: File éditoriale — tri & supports AV*
+
 ## Morceaux non résolus (survey sessions, bruit filtré)
 
 ### ✅ « À pérenniser » — RÉSOLU (faux positif, élucidé 11/06)
