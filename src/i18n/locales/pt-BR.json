@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "sistema",
   "notif.consulta.agendada.body": "Uma das tuas consultas locais foi agendada. Verifica o horário no separador Reservas e consultas.",
   "notif.consulta.agendada.title": "Consulta agendada",
+  "notif.rede.gazette.body": "Saiu uma nova edição.",
+  "notif.rede.gazette.title": "Nova Gazeta da rede",
   "notif.rede.lettre.body": "Saiu uma nova edição.",
   "notif.rede.lettre.title": "Nova Carta da federação",
   "notif.reserva.prontaParaRetirada.body": "Uma das tuas reservas está pronta. Podes ir buscá-la na biblioteca.",

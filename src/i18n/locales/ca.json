@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "sistema",
   "notif.consulta.agendada.body": "Una de les teves consultes locals ha estat programada. Verifica l'horari a la pestanya Reserves i consultes.",
   "notif.consulta.agendada.title": "Consulta programada",
+  "notif.rede.gazette.body": "Acaba de sortir un nou número.",
+  "notif.rede.gazette.title": "Nova Gaseta de la xarxa",
   "notif.rede.lettre.body": "Acaba de sortir un nou número.",
   "notif.rede.lettre.title": "Nova Carta de la federació",
   "notif.reserva.prontaParaRetirada.body": "Una de les teves reserves està llesta. Pots passar a recollir-la a la biblioteca.",

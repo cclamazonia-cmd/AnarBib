@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "système",
   "notif.consulta.agendada.body": "Une de tes consultations sur place a été programmée. Vérifie l'horaire dans l'onglet Réservations et consultations.",
   "notif.consulta.agendada.title": "Consultation programmée",
+  "notif.rede.gazette.body": "Un nouveau numéro vient de paraître.",
+  "notif.rede.gazette.title": "Nouvelle Gazette du réseau",
   "notif.rede.lettre.body": "Un nouveau numéro vient de paraître.",
   "notif.rede.lettre.title": "Nouvelle Lettre de la fédération",
   "notif.reserva.prontaParaRetirada.body": "Une de tes réservations est prête. Tu peux venir la chercher à la bibliothèque.",

@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "System",
   "notif.consulta.agendada.body": "Einer deiner Lesetermine vor Ort wurde geplant. Prüfe die Uhrzeit im Reiter Vormerkungen und Lesetermine.",
   "notif.consulta.agendada.title": "Lesetermin geplant",
+  "notif.rede.gazette.body": "Eine neue Ausgabe ist erschienen.",
+  "notif.rede.gazette.title": "Neue Netzwerk-Gazette",
   "notif.rede.lettre.body": "Eine neue Ausgabe ist erschienen.",
   "notif.rede.lettre.title": "Neuer Rundbrief der Föderation",
   "notif.reserva.prontaParaRetirada.body": "Eine deiner Vormerkungen ist bereit. Du kannst sie in der Bibliothek abholen.",

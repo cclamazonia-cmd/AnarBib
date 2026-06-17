@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "sistemo",
   "notif.consulta.agendada.body": "Unu el viaj surlokaj konsultoj estis planita. Kontrolu la horon en la langeto Rezervoj kaj konsultoj.",
   "notif.consulta.agendada.title": "Konsulto planita",
+  "notif.rede.gazette.body": "Nova numero ĵus aperis.",
+  "notif.rede.gazette.title": "Nova Gazeto de la reto",
   "notif.rede.lettre.body": "Nova numero ĵus aperis.",
   "notif.rede.lettre.title": "Nova Letero de la federacio",
   "notif.reserva.prontaParaRetirada.body": "Unu el viaj rezervoj estas preta. Vi povas veni preni ĝin en la biblioteko.",

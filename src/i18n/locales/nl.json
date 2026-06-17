@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "systeem",
   "notif.consulta.agendada.body": "Een van je raadplegingen ter plaatse is ingepland. Bekijk het tijdstip in het tabblad Reserveringen en raadplegingen.",
   "notif.consulta.agendada.title": "Raadpleging ingepland",
+  "notif.rede.gazette.body": "Er is een nieuw nummer verschenen.",
+  "notif.rede.gazette.title": "Nieuwe netwerk-Gazette",
   "notif.rede.lettre.body": "Er is een nieuw nummer verschenen.",
   "notif.rede.lettre.title": "Nieuwe Brief van de federatie",
   "notif.reserva.prontaParaRetirada.body": "Een van je reserveringen is klaar. Je kunt ze ophalen bij de bibliotheek.",

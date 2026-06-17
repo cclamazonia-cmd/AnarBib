@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "σύστημα",
   "notif.consulta.agendada.body": "Μία από τις επιτόπιες μελέτες σου προγραμματίστηκε. Έλεγξε τον χρόνο στην καρτέλα Κρατήσεις και μελέτες.",
   "notif.consulta.agendada.title": "Η μελέτη προγραμματίστηκε",
+  "notif.rede.gazette.body": "Μόλις κυκλοφόρησε ένα νέο τεύχος.",
+  "notif.rede.gazette.title": "Νέα Εφημερίδα του δικτύου",
   "notif.rede.lettre.body": "Μόλις κυκλοφόρησε ένα νέο τεύχος.",
   "notif.rede.lettre.title": "Νέα Επιστολή της ομοσπονδίας",
   "notif.reserva.prontaParaRetirada.body": "Μία από τις κρατήσεις σου είναι έτοιμη. Μπορείς να έρθεις να την παραλάβεις από τη βιβλιοθήκη.",

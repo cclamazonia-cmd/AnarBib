@@ -3617,6 +3617,8 @@
   "notif.category.sistema": "system",
   "notif.consulta.agendada.body": "One of your on-site consultations has been scheduled. Check the time in the Reservations and consultations tab.",
   "notif.consulta.agendada.title": "Consultation scheduled",
+  "notif.rede.gazette.body": "A new issue has just been published.",
+  "notif.rede.gazette.title": "New network Gazette",
   "notif.rede.lettre.body": "A new issue has just been published.",
   "notif.rede.lettre.title": "New federation Letter",
   "notif.reserva.prontaParaRetirada.body": "One of your reservations is ready. You can come and pick it up at the library.",
