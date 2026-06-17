@@ -55,6 +55,9 @@ verify_jwt = false
 [functions.notify-network-weekly-report]
 verify_jwt = false
 
+[functions.notify-rede-digest]
+verify_jwt = false
+
 [functions.notify-mid-loan-reading]
 verify_jwt = false
 

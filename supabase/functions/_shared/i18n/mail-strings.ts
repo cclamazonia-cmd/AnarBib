@@ -28,6 +28,80 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  // ── Actus réseau : digest hebdomadaire (EF notify-rede-digest) ────────────
+  "rede.digest.subject": {
+    "pt-BR": "{brand} · Novidades da rede",
+    fr: "{brand} · Nouveautés du réseau",
+    es: "{brand} · Novedades de la red",
+    en: "{brand} · Network news",
+    it: "{brand} · Novità della rete",
+    de: "{brand} · Netzwerk-Neuigkeiten",
+    ca: "{brand} · Novetats de la xarxa",
+    eo: "{brand} · Novaĵoj de la reto",
+    nl: "{brand} · Netwerknieuws",
+    el: "{brand} · Νέα του δικτύου"
+  },
+  "rede.digest.title": {
+    "pt-BR": "Novidades da rede",
+    fr: "Nouveautés du réseau",
+    es: "Novedades de la red",
+    en: "Network news",
+    it: "Novità della rete",
+    de: "Netzwerk-Neuigkeiten",
+    ca: "Novetats de la xarxa",
+    eo: "Novaĵoj de la reto",
+    nl: "Netwerknieuws",
+    el: "Νέα του δικτύου"
+  },
+  "rede.digest.intro": {
+    "pt-BR": "Aqui está o que há de novo na rede desde a última vez.",
+    fr: "Voici ce qui est nouveau sur le réseau depuis la dernière fois.",
+    es: "Esto es lo nuevo en la red desde la última vez.",
+    en: "Here's what's new across the network since last time.",
+    it: "Ecco le novità della rete dall'ultima volta.",
+    de: "Das ist neu im Netzwerk seit dem letzten Mal.",
+    ca: "Això és el que hi ha de nou a la xarxa des de l'última vegada.",
+    eo: "Jen kio novas en la reto ekde la lasta fojo.",
+    nl: "Dit is er nieuw in het netwerk sinds de vorige keer.",
+    el: "Να τι νέο υπάρχει στο δίκτυο από την τελευταία φορά."
+  },
+  "rede.digest.gazette.heading": {
+    "pt-BR": "Gazeta",
+    fr: "Gazette",
+    es: "Gaceta",
+    en: "Gazette",
+    it: "Gazzetta",
+    de: "Gazette",
+    ca: "Gaseta",
+    eo: "Gazeto",
+    nl: "Gazette",
+    el: "Εφημερίδα"
+  },
+  "rede.digest.circles.heading": {
+    "pt-BR": "Novos círculos",
+    fr: "Nouveaux cercles",
+    es: "Nuevos círculos",
+    en: "New circles",
+    it: "Nuovi circoli",
+    de: "Neue Kreise",
+    ca: "Nous cercles",
+    eo: "Novaj rondoj",
+    nl: "Nieuwe kringen",
+    el: "Νέοι κύκλοι"
+  },
+  "rede.digest.unsub": {
+    "pt-BR": "Cancelar a inscrição na Carta da federação",
+    fr: "Se désabonner de la Lettre de la fédération",
+    es: "Darse de baja de la Carta de la federación",
+    en: "Unsubscribe from the federation Letter",
+    it: "Annullare l'iscrizione alla Lettera della federazione",
+    de: "Den Rundbrief der Föderation abbestellen",
+    ca: "Donar-se de baixa de la Carta de la federació",
+    eo: "Malaboni la Leteron de la federacio",
+    nl: "Uitschrijven van de Brief van de federatie",
+    el: "Διαγραφή από την Επιστολή της ομοσπονδίας"
+  },
+
   // ── Cotisation : expiration (notify-event · #25, J-7 rappel) ──────────────
   "cotisation.expiring.subject": {
     "pt-BR": "A tua contribuição está perto do vencimento",
