@@ -20,6 +20,10 @@ const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'material_audi
 
 // ── Contributor role values (labels resolved via t() inside component) ──
 const CONTRIBUTOR_ROLE_KEYS = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','editor','outro'];
+// #auteur-collectif (17/06) — rôles affichés comme « auteur » (catalogue + aperçu),
+// alignés sur v_book_authors_canonical. Inclut les collectifs ; exclut tradutor,
+// ilustrador, prefaciador, coordenador, editor, outro.
+const AUTHOR_DISPLAY_ROLES = ['autor','coautor','coletivo','organizacao','organizador'];
 
 // ── pdf.js loader (capas P3 — page 1 d'un PDF cote client) ──
 // Reutilise le pdf.js deja servi depuis /public/vendor/pdfjs (cf. PdfViewer.jsx).
@@ -1944,7 +1948,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   function renderLivePreview() {
     const title = f('titulo').trim();
-    const author = f('autor').trim();
+    // #auteur-collectif (17/06) — repli sur les contributeurs (rôles auteur, collectifs
+    // inclus) quand le texte legacy `autor` est vide ; sinon l'aperçu affichait
+    // « auteur·rice non renseigné·e » alors qu'un collectif est lié.
+    const author = f('autor').trim()
+      || contributors.filter(c => (c.name || '').trim() && AUTHOR_DISPLAY_ROLES.includes(c.role))
+                     .map(c => c.name.trim()).join(' ; ');
     const year = f('ano').trim();
     const publisher = f('editora').trim();
     const place = f('local_publicacao').trim();
