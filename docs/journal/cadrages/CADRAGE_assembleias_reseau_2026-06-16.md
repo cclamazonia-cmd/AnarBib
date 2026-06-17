@@ -149,6 +149,8 @@ La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, 
 - **`…item_proposed`** — au dépôt d'un point → vers la **facilitation** (DOC-NOTIF-1 : pas l'auteur·rice).
 - *(option P3b)* **rappels** J-15 (« le dépôt ferme ») et J-1 (« demain, lien Jitsi ») via **pg_cron** (motif `fn_circle_resolve_due`).
 
+**Destinataires de la convocation (tranché 17/06) — anti-rétention.** `convocada` / `agenda_published` vont à **chaque coordenador·e individuellement** de chaque biblio fédérée (`network_mode='federated'`), **pas à une boîte mail de coordination unique** : envoyer à chacun·e évite la **rétention d'information** par qui tiendrait la boîte, et permet la discussion interne. Canal **obligatoire** (≠ Lettre de la fédération, opt-in : une convocation doit atteindre tout le monde pour pouvoir mandater). **Inclusion des bibliothécaires = en suspens**, à rendre **optionnel par biblio** : selon que la biblio fait (ou non) participer ses bibliothécaires à la désignation de son·sa délégué·e — régime interne propre à chaque collectif, non imposable d'en haut (BLMF : plutôt favorable ; ailleurs, à voir).
+
 **Le point dur `uuid`↔`bigint` est RÉSOLU par la voie outbox/jsonb (vérifié 17/06).** On **n'utilise pas** le dispatcher historique `fn_dispatch_notify_event` (qui exige un `record_id bigint` — ce qui avait différé les events cercles). On réemploie la voie **moderne** (gouvernance d'équipe / lettre) : `fn_network_notify_event(p_event 'network.%', p_payload jsonb)` → insère dans `team_notification_outbox` → trigger `trg_team_outbox_dispatch` → POST vers l'EF `notify-event`, qui **résout le fan-out depuis le payload**. **L'uuid de l'assemblée voyage dans le payload** — aucun `bigint`.
 
 **Ce que P3 ajoute :**
