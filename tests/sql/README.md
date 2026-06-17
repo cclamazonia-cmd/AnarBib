@@ -45,6 +45,23 @@ Tests d'acceptation des wrappers `api.*` créés au paquet 19 + helper `fn_check
 | Arthur (lecteur) | `614d887d-4e8d-401d-a208-77c56a1cd5ea` | `reader` |
 | Patricia (sans rôle) | `2a42b6bd-d159-4ee0-b66b-28a03062232b` | `null` |
 
+### `paquet_cotisation_tests.sql` (18 tests + 1 best-effort)
+
+Tests d'acceptation du module **cotisations / gate de circulation** (Audit 360 #33).
+Fixtures résolues **dynamiquement** (pas d'UUID codé en dur, qui se périment) : un
+profil sans adhésion BLMF (sujet pilotable) + un coordenador actif de BLMF (acteur
+staff). Tout est seedé dans la transaction et `ROLLBACK` à la fin.
+
+**Couverture** :
+- `fn_compute_membership_validity` (annual/rolling, calendar, lifetime) — 3
+- `fn_is_loan_blocked_by_dues` (never_paid / up_to_date / expired / disabled) — 4
+- `fn_membership_can_engage_circulation` (OK / no_active_membership / restricted / dues) — 4
+- `fn_record_membership_payment` (anon, non-staff, montant < min, happy path staff) — 4
+- Câblage du gate (trigger sur `emprestimos_v2` + `consultas_locais_v2`) + verrou
+  anti-régression du fix §6.1 (`fn_v2_extend_core` revérifie l'éligibilité) — 3
+- (best-effort) renouvellement self d'un membre restreint → `reason=restricted`
+  (SKIP si aucun prêt ouvert en base).
+
 ## Comment lancer
 
 ### Option 1 : Supabase Studio (recommandé)
