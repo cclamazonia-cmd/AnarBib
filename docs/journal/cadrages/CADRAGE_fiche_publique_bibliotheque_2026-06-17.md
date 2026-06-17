@@ -1,11 +1,11 @@
 # CADRAGE — Fiche & annuaire publics des bibliothèques (surface anon)
 
-> ⚠️ **Document de travail — ouvert (17/06/2026).** Cadrage : prépare le terrain, **ne crée aucune décision normative**. Les arbitrages signalés (opt-in fin, consolidation des horaires, périmètre des vues) doivent être **portés au `REGISTRE_decisions.md`** avant toute implémentation. Pas une spec, pas le registre.
+> ✅ **Chantier LIVRÉ EN PROD (17/06/2026).** L'annuaire `/bibliotecas` + la fiche `/bibliotecas/:slug` + l'opt-in fin (contact/horaires) + la carte OSM (`PUBLIB-O1`) + les logos réels sont **déployés** (commits `795ba6ed`→`8346f57e`→`ec91023f`→`44bcabec` ; cloisonnement anon vérifié en prod). Les arbitrages ont été **gradués au `REGISTRE §31 PUBLIB`** (foyer normatif) ; ce cadrage reste la **trace** du raisonnement. **Reste seul** : `PUBLIB-SCHED-1` (consolidation des 3 représentations d'horaires, futur). Pas une spec, pas le registre.
 
 | Champ | Valeur |
 |-|-|
 | **Genre** | Dossier d'ouverture de chantier (cadrage — trace) |
-| **Statut** | 🟢 Décisions tranchées (17/06/2026) — graduées au **REGISTRE §31 `PUBLIB`** ; spec à rédiger, **non construit** (`PUBLIB-O1` modalité carte ouverte) |
+| **Statut** | ✅ **Livré en prod (17/06/2026)** — annuaire + fiche + opt-in fin + carte OSM (`PUBLIB-O1`) + logos ; gradué au **REGISTRE §31 `PUBLIB`**. Reste `PUBLIB-SCHED-1` (consolidation horaires). |
 | **Session** | Gazette Rizoma & Lettre federation (commande Xavier, 17/06) |
 | **Décisions invoquées** | DOC-PERIM-1 (page = périmètre / cloisonnement anon) · DOC-I18N-1 (10 locales) · DOC-RPC-3 (écritures via RPC) · DOC-OBJ-2 (REVOKE objets backend) · INV-1/3/5 (anti-tracking, vues `*_anon`) · CAT-B3 (`visibility`) · modèle d'accès concentrique (`libraries.visibility_level`) |
 | **Sources de design** | À créer : `spec-fiche-publique-bibliotheque.md`. Modèle de visibilité : [`CADRAGE_modele_acces_concentrique_2026-06-04.md`](CADRAGE_modele_acces_concentrique_2026-06-04.md). En cas de conflit, [`REGISTRE_decisions.md`](../../specs/REGISTRE_decisions.md) prime. |

@@ -16,6 +16,16 @@
 > **corrige** les lignes §1 devenues fausses (#MOBILE, #FED, #BG), ajoute **§2.7** (suites AG/PUBLIB)
 > et canonise **§32 `AG`** au REGISTRE. Contenu OPAC d'origine **inchangé**.
 >
+> **Amendement 17/06 (session « Gazette Rizoma & Lettre fédération », soir) — #PUBLIB LIVRÉ EN PROD.**
+> Le chantier **annuaire + fiche publics des bibliothèques** est **intégralement déployé** (plus
+> « frontend ouvert ») : migration opt-in `795ba6ed` → frontend `8346f57e` → carte OSM `ec91023f` →
+> logos `44bcabec`. Couvre #PUB1 annuaire `/bibliotecas`, #PUB2 fiche `/bibliotecas/:slug`, #PUB3
+> toggles admin « Fiche publique », #PUB4/#PUB5 sections contact+horaires (vues gated), #PUB-NAV-1 nav
+> publique, #PUB6 rebond OPAC, **PUBLIB-O1** carte OSM (clic-pour-charger, anti-tracking) et **logos
+> réels** sur cards/fiche. **Cloisonnement anon vérifié en prod** (biblio `network` exclue même opt-in ;
+> défaut OFF → rien ne fuit). → §1, table §1 et §2.7 passés ✅ ; REGISTRE §31 (note de livraison +
+> PUBLIB-O1 ✅). **Reste seul** : `PUBLIB-SCHED-1` (consolidation des 3 représentations d'horaires, futur).
+>
 > **Provenance de vérification (légende).**
 > - **✅ prod** — constaté cette session (requête lecture seule / code en prod lu).
 > - **📦 sandbox** — livré + testé hors worktree, **pas encore déployé**.
@@ -103,8 +113,9 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
   destinations, notif réceptrice — `f5be3319`→`d14d8974`).
 - **#BIBLIO — horaires/permanences** ✅ *(§19)* : `library_opening_hours` + RPC coordenador +
   éditeur + vitrine membre (`c509ea51`/`983e57b5`).
-- **#PUBLIB — annuaire/fiche publics** 🟡 *(§31, cadré)* : 4 arbitrages tranchés, backend public
-  déjà là, **frontend `/bibliotecas` à construire** (cf. §2.7).
+- **#PUBLIB — annuaire/fiche publics** ✅ **EN PROD** *(§31)* : annuaire `/bibliotecas` + fiche
+  `/bibliotecas/:slug` + opt-in fin (toggles admin + vues gated) + carte OSM (`PUBLIB-O1`) + **logos réels**
+  (`795ba6ed`→`8346f57e`→`ec91023f`→`44bcabec`) ; cloisonnement anon vérifié. Reste `PUBLIB-SCHED-1` (futur).
 
 ---
 
@@ -132,7 +143,7 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 | — | **#THES (thésaurus matière)** | 🟢 **v1→v3 en prod** (relations, arbre OPAC, export SKOS) | §0ter (§30) |
 | — | **#GAZ (Gazette + Lettre)** | 🟢 **En prod** (Rizoma + Lettre opt-in v2 multilingue) | §0ter (§29) |
 | — | **#ASSEMBLEIAS (AG)** | ✅ **v0.1→P3 en prod** ; v0.2 + P3b ouverts | §0ter (§32 / §2.7) |
-| — | **#PUBLIB (annuaire/fiche publics)** | 🟡 **Cadré** (backend là) ; frontend ouvert | §0ter (§31 / §2.7) |
+| — | **#PUBLIB (annuaire/fiche publics)** | ✅ **En prod** (annuaire+fiche+opt-in+carte OSM+logos) ; reste `PUBLIB-SCHED-1` | §0ter (§31) · livré 17/06 (`44bcabec`) |
 | — | **#BIBLIO horaires** | ✅ **En prod** (`library_opening_hours`) | §0ter (§19) |
 
 ---
@@ -171,9 +182,11 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
   60 % zones ∧ 50 % langues** (besoin liste canonique zones/langues-constituantes), **vote/
   consentement** des décisions de fond + **ratification asynchrone** + **PV multilingue**.
   *(spec-assembleias §11.)*
-- **#PUBLIB** : **annuaire `/bibliotecas` (#PUB1) + fiche `/bibliotecas/:slug` (#PUB2)** — drapeaux
-  `*_is_public` par section + RPC coordenador + vues `library_*_public_v1` (INVOKER + grant anon,
-  filtre opt-in) + carte anti-tracking (`PUBLIB-O1` ouverte). Backend public déjà là (§31).
+- **#PUBLIB** : ✅ **LIVRÉ EN PROD (17/06)** — annuaire `/bibliotecas` (#PUB1), fiche `/bibliotecas/:slug`
+  (#PUB2), drapeaux `*_is_public` + RPC coordenador + vues `library_*_public_v1` (INVOKER, grant anon,
+  filtre opt-in), nav (#PUB-NAV-1) + rebond OPAC (#PUB6), **carte OSM** (`PUBLIB-O1`, clic-pour-charger)
+  et **logos réels** sur cards/fiche. Cloisonnement anon vérifié. **Reste seul** : `PUBLIB-SCHED-1`
+  (consolidation des 3 représentations d'horaires — chantier ultérieur).
 
 ---
 
