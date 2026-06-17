@@ -1,0 +1,235 @@
+/* OcrImportPanel.css — POC OCR navigateur (P1). Styles autonomes, dev only. */
+
+.ab-ocr {
+  max-width: 880px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: inherit;
+}
+
+.ab-ocr__head h1 {
+  font-size: 1.5rem;
+  margin: 0 0 .25rem;
+}
+
+.ab-ocr__sub {
+  color: var(--brand-muted, #555);
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+}
+
+.ab-ocr__sub code {
+  background: rgba(0, 0, 0, .06);
+  padding: 0 .25rem;
+  border-radius: 3px;
+}
+
+/* Zone de dépôt */
+.ab-ocr__drop {
+  border: 2px dashed var(--brand-accent, #888);
+  border-radius: 10px;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  color: var(--brand-muted, #555);
+  background: rgba(0, 0, 0, .02);
+  transition: background .15s, border-color .15s;
+  user-select: none;
+}
+
+.ab-ocr__drop:hover,
+.ab-ocr__drop:focus-visible {
+  background: rgba(0, 0, 0, .05);
+  border-color: var(--brand-primary, #444);
+  outline: none;
+}
+
+.ab-ocr__drop--busy {
+  cursor: progress;
+  opacity: .7;
+}
+
+/* Progression */
+.ab-ocr__progress {
+  margin-top: 1rem;
+}
+
+.ab-ocr__stage {
+  font-size: .95rem;
+  color: var(--brand-muted, #555);
+  margin-bottom: .4rem;
+}
+
+.ab-ocr__bar {
+  height: 8px;
+  background: rgba(0, 0, 0, .1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ab-ocr__bar-fill {
+  height: 100%;
+  background: var(--brand-primary, #3a7);
+  transition: width .2s;
+}
+
+/* Erreur */
+.ab-ocr__error {
+  margin-top: 1rem;
+  padding: .85rem 1rem;
+  border-radius: 8px;
+  background: rgba(200, 40, 40, .08);
+  color: #a22;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+/* Résultat */
+.ab-ocr__result {
+  margin-top: 1.5rem;
+}
+
+.ab-ocr__meta {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+  margin-bottom: .75rem;
+}
+
+.ab-ocr__badge {
+  font-size: .85rem;
+  font-weight: 600;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+}
+
+.ab-ocr__badge--native { background: rgba(40, 120, 200, .15); color: #1763a8; }
+.ab-ocr__badge--ocr { background: rgba(140, 80, 200, .15); color: #6a35a8; }
+
+.ab-ocr__score {
+  font-weight: 600;
+  padding: .2rem .6rem;
+  border-radius: 6px;
+}
+
+.ab-ocr__score--good { background: rgba(40, 160, 80, .15); color: #1c7a3e; }
+.ab-ocr__score--mid { background: rgba(200, 150, 30, .18); color: #976b00; }
+.ab-ocr__score--low { background: rgba(200, 60, 40, .15); color: #a22; }
+
+.ab-ocr__detail {
+  font-size: .85rem;
+  color: var(--brand-muted, #666);
+}
+
+.ab-ocr__btn {
+  margin-left: auto;
+  padding: .35rem .8rem;
+  border: 1px solid var(--brand-accent, #888);
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: .85rem;
+}
+
+.ab-ocr__btn:hover { background: rgba(0, 0, 0, .05); }
+
+.ab-ocr__diag {
+  margin-bottom: .75rem;
+  font-size: .8rem;
+}
+
+.ab-ocr__diag pre {
+  background: rgba(0, 0, 0, .04);
+  padding: .6rem;
+  border-radius: 6px;
+  overflow: auto;
+  margin: .4rem 0 0;
+}
+
+/* P2 — formulaire brouillon pré-rempli */
+.ab-ocr__form {
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: 8px;
+  padding: 1rem 1.1rem 1.2rem;
+  margin: 0 0 1.25rem;
+}
+
+.ab-ocr__form legend {
+  font-weight: 600;
+  padding: 0 .4rem;
+}
+
+.ab-ocr__form-note {
+  font-weight: 400;
+  font-size: .8rem;
+  color: var(--brand-muted, #777);
+}
+
+.ab-ocr__warn {
+  margin: 0 0 .75rem;
+  padding: .4rem .6rem;
+  background: rgba(200, 150, 30, .12);
+  color: #976b00;
+  border-radius: 6px;
+  font-size: .85rem;
+}
+
+.ab-ocr__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: .75rem 1rem;
+}
+
+.ab-ocr__field {
+  display: flex;
+  flex-direction: column;
+}
+
+.ab-ocr__field--wide {
+  grid-column: 1 / -1;
+}
+
+.ab-ocr__field label {
+  font-size: .8rem;
+  font-weight: 600;
+  margin-bottom: .25rem;
+  color: var(--brand-muted, #555);
+}
+
+.ab-ocr__field input,
+.ab-ocr__field select {
+  padding: .4rem .5rem;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 6px;
+  font-size: .9rem;
+  box-sizing: border-box;
+}
+
+.ab-ocr__flag { color: #b8860b; }
+
+.ab-ocr__hint {
+  margin: .6rem 0 0;
+  font-size: .8rem;
+  color: var(--brand-muted, #777);
+}
+
+.ab-ocr__label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: .35rem;
+}
+
+.ab-ocr__text {
+  width: 100%;
+  font-family: ui-monospace, monospace;
+  font-size: .85rem;
+  line-height: 1.45;
+  padding: .75rem;
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+}

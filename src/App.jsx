@@ -32,6 +32,13 @@ const RedePage = lazy(() => import('@/pages/rede/RedePage'));
 const FederacaoPage = lazy(() => import('@/pages/federacao/FederacaoPage'));
 const AtelierConstituicaoPage = lazy(() => import('@/pages/atelier/AtelierConstituicaoPage'));
 const AtelierAutoridadesPage = lazy(() => import('@/pages/atelier/AtelierAutoridadesPage'));
+// Route jetable de test du POC OCR navigateur (piste B, P1/P2) — cf. /dev/ocr.
+// Gardee derriere import.meta.env.DEV : en prod, le ternaire devient `null`,
+// l'import() dynamique est elimine (dead-code) => aucun chunk OCR ni tesseract.js
+// ne part dans le build public.
+const OcrPocPage = import.meta.env.DEV
+  ? lazy(() => import('@/pages/dev/OcrPocPage'))
+  : null;
 
 // ── Fallback de chargement ───────────────────────────────────────────
 function LoadingFallback() {
@@ -156,6 +163,13 @@ export default function App() {
                       <CatalogacaoPage />
                     </ProtectedRoute>
                   } />
+
+                  {/* ── POC OCR navigateur (piste B, P1/P2) — route dev jetable ──
+                      Dev uniquement : import.meta.env.DEV => tree-shakee du build
+                      prod, l'ecran de test n'est pas expose sur le site public. */}
+                  {OcrPocPage && (
+                    <Route path="/dev/ocr" element={<OcrPocPage />} />
+                  )}
 
                   {/* ── 404 ────────────────────── */}
                   <Route path="*" element={

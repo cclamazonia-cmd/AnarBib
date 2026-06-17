@@ -1,0 +1,6 @@
+tesseract.js        : 7.0.0
+tesseract.js-core   : 7.0.0
+traineddata variant : 4.0.0_best_int
+langues             : por
+Régénéré par        : scripts/install-tesseract.sh
+Hébergement prod    : bucket anarbib-media-public/ocr/ (cadrage §2/§8) — P2/P3

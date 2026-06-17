@@ -53,11 +53,20 @@ fix-*.cjs
 docs/db/*
 !docs/db/README.md
 
-# Données cartographiques privées — non publiables tant que les collectifs
-# n'ont pas validé leur apparition (cf. définition du membre AnarBib, 27/05/2026)
-# Seul le document public de recensement est versionné.
+# Donnï¿½es cartographiques privï¿½es ï¿½ non publiables tant que les collectifs
+# n'ont pas validï¿½ leur apparition (cf. dï¿½finition du membre AnarBib, 27/05/2026)
+# Seul le document public de recensement est versionnï¿½.
 docs/cartographie/*
 !docs/cartographie/AnarBib_recensement_bibliotheques_libertaires.docx
+
+# OCR navigateur (piste B) â€” assets WASM tesseract.js vendorisÃ©s localement.
+# RÃ©gÃ©nÃ©rÃ©s par scripts/install-tesseract.sh ; cible prod = bucket
+# anarbib-media-public/ocr/ (cadrage Â§2/Â§8). On versionne le script + la note
+# VERSION, jamais les ~13 Mo de WASM/traineddata.
+public/vendor/tesseract/*.wasm.js
+public/vendor/tesseract/worker.min.js
+public/vendor/tesseract/worker.min.js.LICENSE.txt
+public/vendor/tesseract/lang/
 
 # Fichiers temporaires / verrou MS Office
 ~$*
