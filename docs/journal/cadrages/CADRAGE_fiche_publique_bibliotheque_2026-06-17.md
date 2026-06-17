@@ -5,7 +5,7 @@
 | Champ | Valeur |
 |-|-|
 | **Genre** | Dossier d'ouverture de chantier (cadrage — trace) |
-| **Statut** | 🟡 Ouvert (17/06/2026) — décisions à arbitrer puis graduer au REGISTRE |
+| **Statut** | 🟢 Décisions tranchées (17/06/2026) — graduées au **REGISTRE §31 `PUBLIB`** ; spec à rédiger, **non construit** (`PUBLIB-O1` modalité carte ouverte) |
 | **Session** | Gazette Rizoma & Lettre federation (commande Xavier, 17/06) |
 | **Décisions invoquées** | DOC-PERIM-1 (page = périmètre / cloisonnement anon) · DOC-I18N-1 (10 locales) · DOC-RPC-3 (écritures via RPC) · DOC-OBJ-2 (REVOKE objets backend) · INV-1/3/5 (anti-tracking, vues `*_anon`) · CAT-B3 (`visibility`) · modèle d'accès concentrique (`libraries.visibility_level`) |
 | **Sources de design** | À créer : `spec-fiche-publique-bibliotheque.md`. Modèle de visibilité : [`CADRAGE_modele_acces_concentrique_2026-06-04.md`](CADRAGE_modele_acces_concentrique_2026-06-04.md). En cas de conflit, [`REGISTRE_decisions.md`](../../specs/REGISTRE_decisions.md) prime. |
@@ -130,6 +130,8 @@ Sondé : **trois** structures décrivent des horaires, avec recouvrement :
 ---
 
 ## 5 — Décisions à trancher avant de coder
+
+> ✅ **Tranché le 17/06 (Xavier) et gradué au `REGISTRE_decisions.md` §31 `PUBLIB`.** Synthèse : opt-in **deux drapeaux par section** (PUB-OPTIN-1) · **coordenador + rappel collectif** (PUB-OPTIN-2) · **`library_opening_hours` canonique** (PUB-SCHED-1) · **adresse opt-in + carte bordée anti-tracking** (PUB-GEO-1) · `public_libraries` = `visibility_level='public'` **confirmé** (PUB-VIS-1) · nav publique + rebond OPAC (PUB-NAV-1) · annuaire dans l'app, le site vitrine renvoie (PUB-VITRINE-1). **Reste ouvert** : modalité exacte de la carte (`PUBLIB-O1`). Le tableau ci-dessous est conservé comme trace du raisonnement.
 
 | ID / sujet | État | Recommandation de cadrage |
 |---|---|---|
