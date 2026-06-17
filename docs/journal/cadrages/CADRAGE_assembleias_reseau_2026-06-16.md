@@ -129,6 +129,60 @@ La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, 
 
 **Outillage (P2b).** Rôle `facilitateur·rice` **attribué par assemblée** (p. ex. table `assembleia_facilitators`) ; RPC de facilitation gardées **`network_admin` OU facilitateur·rice désigné·e de cette AG** (la migration P1 ne gardait que `fn_caller_is_network_admin()` — P2b ajoute l'**OU**). 1ʳᵉ AG = cas-limite sans facilitateur·rice désigné·e → les admins agissent. **P2c** : désignation **sur volontariat** — colonne `status` (`volunteer`/`designated`) sur `assembleia_facilitators`, RPC `fn_assembleia_volunteer` (soi-même, opt-in) ; désigner = passage `volunteer`→`designated` ; seuls les `designated` ont les droits d'animation.
 
+## 6sexies. ODJ pressenti de l'AG constitutive — questions de fond (proposées 17/06)
+
+> L'ODJ de la 1ʳᵉ AG (constitutive) « se peuple de manière intéressante ». Au-delà des **points
+> d'auto-institution** déjà identifiés ici — adopter le **quorum 60/50** (§6ter), le **régime
+> linguistique** (§6quater), **instituer la facilitation** + désigner les facilitateur·rices
+> (§6quinquies), et les **deux sujets « termes »** (§6.1 ouverture de l'édition sujets/mots-clés,
+> §6.2 machine consentement + curseur variantes↔convergence) — Xavier (17/06) verse **huit
+> questions de fond** à débattre. Ce sont des **questions ouvertes** (à trancher *par* l'AG, pas
+> ici) ; on les consigne pour ne pas les perdre. Quand une AG constitutive sera réellement
+> convoquée, elles formeront le cœur de son ODJ.
+
+**A. Architecture & technique du commun**
+
+1. **Méta-catalogue : centralisé ou fédéré ?** Index unique vs fédération d'index interrogés —
+   c'est la tension consensus↔fédéralisme du §6 posée sur l'infrastructure (souveraineté des
+   données locales ↔ découvrabilité globale). Recoupe le débat OAI / moisson de notices (§17 IMP).
+2. **Prêts : anonymat total ou pseudonymat ?** Jusqu'où la circulation est-elle traçable —
+   anonymat fort (rien de nominatif) ↔ pseudonymat (identité locale réversible) ? Arbitrage vie
+   privée ↔ gestion (relances, responsabilité de l'exemplaire). Recoupe l'identité locale (§27
+   CARD-LOCAL) et la doctrine anti-tracking (`REGISTRE_TRAITEMENTS`).
+3. **Fonds acquis « illégalement » (samizdat) : comment les gérer ?** Catalogage, visibilité,
+   responsabilité juridique partagée, opacité sélective / signalement. Touche la visibilité
+   (`visibility_level`, `local_only`) et l'exposition publique vs réseau (sécurité).
+4. **Interopérabilité avec les bibliothèques institutionnelles alliées ?** Jusqu'où s'ouvrir
+   (MARC/OAI, échange de notices, PEB) **sans se faire absorber** par la norme institutionnelle —
+   alliance ≠ alignement. Recoupe l'OAI-provider gouverné (§17) et l'intégration FICEDL.
+
+**B. Gouvernance du projet & régime de décision**
+
+5. **Quelle gouvernance pour le projet lui-même ?** Qui décide des orientations d'AnarBib
+   (technique, infra, roadmap) — l'AG réseau ? un cercle technique ? la coordination ? À articuler
+   avec l'anti-panoptique (FED-7) et la **sortie des admins de l'animation politique**
+   (§6quinquies : admins = infrastructure seulement).
+6. **Qui vote — une bibliothèque = une voix ?** *Déjà ± cadré* : légitimité = **étalement**, pas
+   têtes (quorum **zones ∧ langues**, §6ter). Reste à **confirmer en séance** que la voix est la
+   **bibliothèque** (non l'individu) et le sort des biblios multi-zones / multi-langues. Réinscrit
+   car peut resurgir.
+7. **Consentement ou majorité — place de l'abstention et des seuils ?** Le cadrage retient le
+   **consentement/objection** pour le fond (§3, §6.2), **jamais le vote préférentiel**. Reste
+   **ouvert** (hérité chantier §8.2, cf. §8) : que fait-on quand le consentement échoue (bascule
+   majorité qualifiée ? seuils ?), comment compte l'**abstention** (ne bloque pas / hors
+   dénominateur ?), articulation avec l'**anti-blackball** (FED-O5).
+8. **Mandat impératif ou représentatif ?** *Déjà posé* : le réseau retient le **mandat impératif**
+   (§6bis, §6ter ; REGISTRE **AG-2**) — le·la délégué·e porte la position mandatée, pas la sienne.
+   Réinscrit ici car **peut réapparaître dans les débats** (coût de mandatement, réactivité) :
+   autant anticiper l'argumentaire plutôt que le rouvrir à froid.
+
+> **Statut.** Questions **ouvertes** (trace, pas doctrine) — elles n'entrent au REGISTRE §`AG`
+> *que* tranchées en AG. Les n° 6 et 8 ont une **orientation déjà retenue** (AG-1/AG-2, §6ter) :
+> gardées à l'ODJ pour **ratification explicite** et parce qu'un débat constitutif peut les rouvrir.
+> **Inscription technique** : ces points relèvent de l'**auto-institution** (portés par la
+> facilitation/coordination), pas d'un dépôt « une biblio propose » ; à porter via
+> `fn_assembleia_propose_item` (ou un seed) **quand l'AG constitutive sera créée**.
+
 ## 7. Articulation outillage (neuf vs réemploi)
 
 | Brique | Statut |
