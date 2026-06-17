@@ -9,6 +9,13 @@
 > reste est surtout de la **donnée** (indexation, traductions, enrichissement),
 > chiffrée ici. **REGISTRE > spec > backlog** inchangé.
 >
+> **Amendement 17/06 (session « Fédération — Assemblée du réseau »).** Le v33 d'origine
+> porte sur l'OPAC ; cet amendement ajoute le **§0ter** (vague multi-sessions **hors OPAC** :
+> mobile/PWA/scanner/recolement, fédération/cercles/visio, **Assembleias v0.1→P3**, Gazette+Lettre,
+> thésaurus v1→v3, advisors lot 1, import/export, horaires, PUBLIB — **vérifiée par commit/MCP**),
+> **corrige** les lignes §1 devenues fausses (#MOBILE, #FED, #BG), ajoute **§2.7** (suites AG/PUBLIB)
+> et canonise **§32 `AG`** au REGISTRE. Contenu OPAC d'origine **inchangé**.
+>
 > **Provenance de vérification (légende).**
 > - **✅ prod** — constaté cette session (requête lecture seule / code en prod lu).
 > - **📦 sandbox** — livré + testé hors worktree, **pas encore déployé**.
@@ -59,6 +66,48 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 
 ---
 
+## 0ter. Vague multi-sessions 15-17/06 (hors OPAC) — vérifiée
+
+> Amendement (session « Fédération — Assemblée du réseau »). Le reste de la vague des 3 jours,
+> **constaté par commit `feat` sur `main`** (= déployé par la CI app/backend ; le **P3 assembleias**
+> en plus **vérifié via MCP** : migration appliquée, RPC émettent, EF redéployée). Corrige des lignes
+> §1 du report v32 devenues fausses (#FED « ouvert », #MOBILE « scanner cadré »).
+
+- **#MOBILE — socle terrain LIVRÉ** ✅ : PWA installable (`0fe66b9d`, SW prod-only shell-only) +
+  MAJ SW fiable (`a08cea04`) ; **scanner** QR carte (`8db079d7`) + **ISBN universel ZXing**
+  (`15250c52`/`ad2cee8f`) + scan ISBN catalogage (`5e7fd83f`) + carte révoquée (`731e688c`) ;
+  **recolement** backend (`dfdd9f0a`) + UI scan (`b7274838`) ; **responsive A/B/C** (`f385d8b1`,
+  hamburger `e1b94b79`, cartes Painel `38f54401`, catalogue cartes `f46c8c79`, safe-area `91f62924`,
+  code-split `de26c311`). *(Le report v32 disait « scanner cadré » → en fait **livré**.)*
+- **#FED — face fédération en prod** ✅ *(corrige « 🟡 ouvert »)* : gating onglets (`c120d87f`,
+  FED-O8), **cercles** backend+front (`4738b7dd`/`1e289567`) + notif cercle hors biblio auteur·rice
+  (FED-O10) + **visio Jitsi Autistici** en onglet dédié (FED-O9, `VITE_JITSI_DOMAIN`), Communs
+  5 docs/guides ×10 locales.
+- **#ASSEMBLEIAS (AG) — v0.1→P3 en prod** ✅ : objet AG + dépôt ODJ (`b25d2560`) + onglet
+  data-driven 10 locales (`916f0451`), section Langues (régime linguistique), **P2b** facilitation
+  (`79f86919`/`9cdbe3c7`), **P2c** volontariat (`64409ff3`), **P3 notifications** (migration
+  `20260617004735` + handler EF `domain/assembleia.ts` + mail-strings 10 locales ; émission
+  `network.assembleia.{convocada,agenda_published,item_proposed}`, **vérifié MCP**). → **§32 `AG`**
+  au REGISTRE ; suites = **§2.7**.
+- **#GAZ — Gazette « Rizoma » + Lettre v2** ✅ *(§29)* : Gazette (contribution+build `98e5d702`,
+  cron mensuel `22823565`, panneau staff `6ee5730d`, diffuser `605d446c`, sources RSS `04fc3857`) ;
+  Lettre opt-in (Lot 2/3) + **v2 corps multilingue L1-L5** (`cd491c48`→`4b645f8c`) + lecture in-app.
+- **#THES — thésaurus matière v1→v3** ✅ *(§30)* : v1 gouvernance/picker/mots-clés, v2 synonymes/
+  notation CDD/libellés multilingue/suggestions, v3 relations `skos:related`/arbre OPAC/export SKOS
+  + URI stable. *(Recoupe le §0bis/§5 OPAC de cette v33 côté sujets.)*
+- **#BG — sécurité** ✅ : advisors **lot 1** (revoke 14 fns trigger SECDEF `b9090213`) + **MV
+  catalogue verrouillées** (option C `4b18b3b2`, wrappers schéma privé `fb2de8c9`, revoke anon
+  `2c6f7d54`). *(Lot 1 = plafond sûr, cf. mémoire `secu-advisors-definer-intentional`.)*
+- **#IMPORT / export** 🟢 : import adaptateur Perfil + overrides Estrutura/Vocabulário + GC fonds
+  (`1b3ba4ae`/`1525fb06`/`c625f55c`) ; **export fonds D3** (palier `to_review`, auto-suggestion,
+  destinations, notif réceptrice — `f5be3319`→`d14d8974`).
+- **#BIBLIO — horaires/permanences** ✅ *(§19)* : `library_opening_hours` + RPC coordenador +
+  éditeur + vitrine membre (`c509ea51`/`983e57b5`).
+- **#PUBLIB — annuaire/fiche publics** 🟡 *(§31, cadré)* : 4 arbitrages tranchés, backend public
+  déjà là, **frontend `/bibliotecas` à construire** (cf. §2.7).
+
+---
+
 ## 1. Macro-chantiers — statuts
 
 | # | Macro-chantier | Statut | Note |
@@ -69,25 +118,30 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 | 4 | #CL (carte-lecteur) | ↩︎ ✅ Clos (+ CARD-LOCAL Lot 0, suite N1-N5) | report v32 |
 | 5 | #CATALOGACAO | ↩︎ ✅ Bouclé | report v32 |
 | 6 | #110 mail | ↩︎ ✅ Clos | report v32 |
-| 7 | #MOBILE | 🟠 socle **PWA livré 15/06** (mémoire `pwa-socle-p0`), scanner cadré ; reste P3-P5 | non re-vérifié ici |
+| 7 | **#MOBILE** | 🟢 **socle livré** : PWA ✅ + **scanner ✅** (QR+ISBN ZXing) + recolement ✅ + responsive A/B/C ✅ ; reste P3 permanence/P5 push/finitions | **§0ter (vérifié ; corrige « scanner cadré »)** |
 | 8 | #NOTIFY-Painel | ↩︎ ✅ Livré | report v32 |
 | 9 | #COTISATIONS | ↩︎ 🟡 Partiel (#25/#33/#36) | report v32 |
 | 10 | #MM | ↩︎ 🟡 Ouvert | report v32 |
-| 11 | #FED | ↩︎ 🟡 Ouvert | report v32 |
+| 11 | **#FED** | 🟢 **Livré largement** : cercles, Communs, Entraide+visio, Gazette, Lettre, **Assembleias v0.1→P3** | **§0ter (vérifié ; corrige « ouvert »)** |
 | 12 | #MODEL | ↩︎ ✅ specs implémentées | report v32 |
-| 13 | #BG-PREP (sécurité) | ↩︎ 🟠 En cours — **advisors non re-sondés cette session** | cf. mémoire `secu-advisors-definer-intentional` (NE PAS revoke de masse) |
+| 13 | #BG-PREP (sécurité) | 🟠 En cours — **advisors lot 1 + MV catalogue verrouillées** (15/06) ; reste à re-sonder | §0ter · mémoire `secu-advisors-definer-intentional` (NE PAS revoke de masse) |
 | 14 | **#CATALOG-EXT (OPAC)** | ✅ **quasi complet** (cf. §0bis) | reliquats = #OPAC5 user-tags, #OPAC11 différé, #152 facette OPAC, (1b) chemin session |
 | 15 | #HYGIENE-PERF-i18n | 🟡 Partiel — **#I18N-sujets 📦 réglé en sandbox** ; rollout-10 / charte / INVENTAIRE ouverts | — |
 | — | #CI / infra | ↩︎ ✅ Refondé (Forgejo + runner) | report v32 |
 | — | #PARTNER notifications | ↩︎ ✅ Livré (UX à auditer) | report v32 |
+| — | **#THES (thésaurus matière)** | 🟢 **v1→v3 en prod** (relations, arbre OPAC, export SKOS) | §0ter (§30) |
+| — | **#GAZ (Gazette + Lettre)** | 🟢 **En prod** (Rizoma + Lettre opt-in v2 multilingue) | §0ter (§29) |
+| — | **#ASSEMBLEIAS (AG)** | ✅ **v0.1→P3 en prod** ; v0.2 + P3b ouverts | §0ter (§32 / §2.7) |
+| — | **#PUBLIB (annuaire/fiche publics)** | 🟡 **Cadré** (backend là) ; frontend ouvert | §0ter (§31 / §2.7) |
+| — | **#BIBLIO horaires** | ✅ **En prod** (`library_opening_hours`) | §0ter (§19) |
 
 ---
 
 ## 2. Backlog réel — ce qui reste
 
 ### 2.1 — Frontend / terrain  ↩︎ (report v32, non re-vérifié)
-- **#MOBILE** : socle **PWA livré 15/06** (mémoire `pwa-socle-p0`) ; reste scanner P2 (cadré), P3 permanence, P4 récolement, P5 push, `#MOB-QR-A4`.
-- **#MM** (MM1-5), **#FED** (page + primitive `círculo`), **#LIB-SIGNUP-UI P2** (écran on/off inscriptions) — report v32.
+- **#MOBILE** : socle **livré** (PWA + **scanner P2 ✅** + recolement P4 ✅ + responsive A/B/C ✅, cf. §0ter) ; reste **P3 permanence, P5 push, `#MOB-QR-A4`**, finitions responsive.
+- **#MM** (MM1-5 ; l'axe comm est partiellement couvert par **Gazette/Lettre** §29, mais ces items spécifiques restent), **#LIB-SIGNUP-UI P2** (écran on/off inscriptions) — report v32. *(**#FED** n'est plus « ouvert » : page + cercles + face fédération **livrés**, cf. §0ter.)*
 
 ### 2.2 — Cotisations  ↩︎ (report v32)
 - **#25** cron expiration (7j/1j/J) ouvert, **#33** test blocage, **#36** CIRA Marseille, **#22** COALESCE trivial.
@@ -108,6 +162,19 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 ### 2.6 — Reliquats cosmétiques / différés  ↩︎
 - ⚪ Cosmétiques soldés 11/06. 🟡 **EA-12 ph.2** gelé (BIBLIO-9). 🟡 **#OPAC11 RSS** différé.
 
+### 2.7 — Fédération : suites (chantiers #ASSEMBLEIAS & #PUBLIB)
+> #FED est livré (§0ter) ; restent ces suites **consciemment différées**.
+- **#ASSEMBLEIAS — P3b** : **rappels J-15/J-1** via pg_cron (motif `fn_circle_resolve_due`) —
+  **prématuré tant qu'aucune AG n'est datée** (le cron scannerait le vide) ; **inclusion optionnelle
+  des bibliothécaires** à la convocation — **bloquée** sur le régime interne par bibliothèque.
+- **#ASSEMBLEIAS — v0.2** (cœur délibératif) : **choix de date** (dispo + préférence), **quorum
+  60 % zones ∧ 50 % langues** (besoin liste canonique zones/langues-constituantes), **vote/
+  consentement** des décisions de fond + **ratification asynchrone** + **PV multilingue**.
+  *(spec-assembleias §11.)*
+- **#PUBLIB** : **annuaire `/bibliotecas` (#PUB1) + fiche `/bibliotecas/:slug` (#PUB2)** — drapeaux
+  `*_is_public` par section + RPC coordenador + vues `library_*_public_v1` (INVOKER + grant anon,
+  filtre opt-in) + carte anti-tracking (`PUBLIB-O1` ouverte). Backend public déjà là (§31).
+
 ---
 
 ## 5. Données de découverte — état chiffré (lecture seule prod, 16-17/06)
@@ -125,8 +192,9 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 
 ## 3. Dérive documentaire à résorber (méta)
 1. **`INDEX.md`** → pointer **v33** ; **`git mv` v32 → `archive/`** (règle #11) à l'intégration.
-2. **`INVENTAIRE.md`** / specs — report v32.
-3. **ce backlog** : règle #12 — items OPAC soldés annotés ci-dessus avec renvoi aux migrations sandbox.
+2. **`INVENTAIRE.md`** / specs — report v32 (plusieurs specs nouvelles 15-17/06 à resynchroniser : assembleias, gazeta-lettre, thésaurus, fiche publique).
+3. **ce backlog** : règle #12 — items OPAC soldés annotés ci-dessus avec renvoi aux migrations sandbox ; **§0ter** ajoute la vague multi-sessions hors OPAC.
+4. **`REGISTRE`** : **§32 `AG`** (Assemblée du réseau) ajouté avec cet amendement (canonise ODJ sans gardien/consentement/quorum/calendrier/régime linguistique/facilitation/convocation anti-rétention) ; §29 GAZ, §30 THES, §31 PUBLIB déjà inscrits par leurs sessions.
 
 ---
 
