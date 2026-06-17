@@ -5,6 +5,20 @@
 > métadonnée » (scans image) se catalogue très bien dès qu'on en extrait le texte. Piste B =
 > rendre cette capacité **réutilisable directement dans AnarBib** pour tout collectif.
 
+> ### 🔧 Amendement 2026-06-17 — intégration (P3b) : Catalogação direct, PAS le wizard
+> Après audit du code, **l'intégration se fait par création directe de brouillon dans
+> Catalogação** (et non comme circuit du wizard d'import, contrairement à §4/§10 ci-dessous).
+> **Pourquoi** : `BookDraftForm` réalise déjà le flux exact (créer un `book_draft` + upload PDF
+> dans `anarbib-pdf-public` + `book_draft_subjects`), avec les RLS catalogação **déjà
+> permissives** ; le pré-remplissage heuristique porte déjà les noms de colonnes réels →
+> **un seul mapping, zéro SQL nouveau**. Le pipeline du wizard (`fn_import_*`, staging,
+> matching) est conçu pour des imports **tabulaires externes** : l'y faire entrer imposerait
+> deux couches de mapping + du SQL pour rattacher le PDF + une machinerie de matching inutile
+> pour un scan frais. L'exigence réelle du cadrage (« réutilise `book_drafts` + bucket +
+> `book_draft_subjects` ») est ainsi **mieux** satisfaite. La revue par lot (« j'ai déposé
+> 40 scans, je revois, je valide ») reste offerte **côté client** (P3d), sans staging.
+> Lire §4/§7/§10 à la lumière de cet amendement. *(Décision validée le 2026-06-17.)*
+
 ## 0. En une phrase
 
 Un·e catalogueur·euse **dépose un tas de PDF scannés** dans AnarBib → l'app les **OCRise dans le
