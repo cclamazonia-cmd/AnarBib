@@ -49,12 +49,23 @@ BEGIN
 END;
 $fn$;
 
--- Job hebdomadaire : lundi 09:00 UTC (après les rapports existants). UPSERT par nom.
-SELECT cron.schedule('anarbib-rede-digest-weekly', '0 9 * * 1',
-                     $$SELECT public.fn_rede_digest_call()$$);
-
--- INACTIF par défaut (doctrine) : aucun envoi tant que l'activation n'est pas faite.
-UPDATE cron.job SET active = false WHERE jobname = 'anarbib-rede-digest-weekly';
+-- Job hebdomadaire (lundi 09:00 UTC) créé puis DÉSACTIVÉ via cron.alter_job.
+-- ⚠️ PAS d'UPDATE direct sur cron.job : cette table exige des privilèges NON
+-- accordés au rôle qui exécute la migration (db push) ; cron.alter_job, elle,
+-- fonctionne avec les permissions du propriétaire du job (cf. paquet C.5c).
+-- cron.schedule UPSERTE par nom -> migration ré-exécutable (idempotente).
+DO $$
+DECLARE
+  v_job_id bigint;
+BEGIN
+  v_job_id := cron.schedule(
+    job_name := 'anarbib-rede-digest-weekly',
+    schedule := '0 9 * * 1',
+    command  := 'SELECT public.fn_rede_digest_call();'
+  );
+  PERFORM cron.alter_job(job_id := v_job_id, active := false);
+END;
+$$;
 
 COMMIT;
 
@@ -67,7 +78,9 @@ COMMIT;
 --        select vault.create_secret('<valeur-forte>', 'rede_digest_webhook_secret');
 --   4) Test à blanc (fenêtre sans nouveauté -> skipped, ou avec un secret valide) :
 --        select public.fn_rede_digest_call();
---   5) Activer le cron :
---        update cron.job set active = true where jobname = 'anarbib-rede-digest-weekly';
+--   5) Activer le cron (via cron.alter_job, pas UPDATE direct) :
+--        select cron.alter_job(
+--          job_id := (select jobid from cron.job where jobname = 'anarbib-rede-digest-weekly'),
+--          active := true);
 -- Pour retirer :  select cron.unschedule('anarbib-rede-digest-weekly');
 -- =========================================================================
