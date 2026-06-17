@@ -1,6 +1,6 @@
 # 📋 INDEX des backlogs — AnarBib
 
-**Dernière mise à jour** : 12 juin 2026 — **v32 promu version courante** (livraison **détection + comparaison + fusion de doublons en file éditoriale** ; cf. §0) ; **v31 archivé**. Le backlog vit en Markdown ; les `.docx` historiques (v8→v29) sont dans `archive/`. Source vivante de l'avancement : [`ETAT-AVANCEMENT-multisessions.md`](ETAT-AVANCEMENT-multisessions.md).
+**Dernière mise à jour** : 17 juin 2026 — **v33 promu version courante** (audit de la **longue traîne OPAC** : très largement livrée en prod ; + 5 livrables de session en sandbox hors worktree, à intégrer) ; **v32 à archiver**. Le backlog vit en Markdown ; les `.docx` historiques (v8→v29) sont dans `archive/`. Source vivante de l'avancement : [`ETAT-AVANCEMENT-multisessions.md`](ETAT-AVANCEMENT-multisessions.md).
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce dossier contient les versions successives du **backlog technique** d'AnarBib. Une seule version est vivante à la fois ; les précédentes sont conservées dans `archive/` pour la traçabilité.
@@ -11,9 +11,9 @@ Ce dossier contient les versions successives du **backlog technique** d'AnarBib.
 
 ## ✅ Version courante
 
-➡️ **`AnarBib-Backlog-2026-06-12-v32.md`**
+➡️ **`AnarBib-Backlog-2026-06-17-v33.md`**
 
-Backlog **v32** du 12 juin 2026 — reporte le **v31** avec la livraison de la **détection + comparaison + fusion de doublons en file éditoriale** (`api.suggest_draft_duplicates`, `api.merge_draft_into_book`, `api.merge_book_drafts`, modale de comparaison champ-par-champ, erreurs i18n `error.merge.*`) — **facette catalogage de #152**, cf. §0. *Reprend le v31 (11/06) :* report du v30 (base prod vérifiée `uflwmikiyjfnikiphtcp`) + **CI auto-hébergé**, **notifications §21 PARTNER**, **snapshot schéma**. Le **vrai reste ouvert** (§2) : #MOBILE, #MM, #FED, finitions cotisations, sécurité/Bologne, OPAC longue traîne, i18n rollout. Le v30 reste la base d'audit prod ([`AUDIT_backlog-v29-vs-prod_2026-06-10`](../journal/audits/AUDIT_backlog-v29-vs-prod_2026-06-10.md)).
+Backlog **v33** du 17 juin 2026 — reporte le **v32** (12/06). Apporte l'**audit complet de la longue traîne OPAC** (item #14) : la plupart des items que le v32 listait « ouverts » (#OPAC4/6/9/10, #AUT1-4, #61, #58/#62) sont **en fait livrés en prod** (vérifié en lecture seule) ; #14 passe de « partiel avancé » à **quasi complet**. Intègre **5 livrables de session** produits **hors worktree** (sandbox `~/anarbib-traine`, non déployés) : recherche **multi-mots** (1a), **formes du nom** sur la fiche auteur (2), **traduction des 30 sujets ×10 locales**, **enrichissement `variant_forms`** de 9 auteur·rices (Wikidata), et un **brouillon (1b)** recherche accents/pertinence. Le reste OPAC = données (indexation 72 % du public sans sujet, enrichissement ~1-2 %) délégué à Baqueiro. Le **vrai reste ouvert** (§2) : #MOBILE (socle PWA livré 15/06), #MM, #FED, cotisations, sécurité/Bologne, i18n rollout.
 
 > **Format.** Depuis le 10/06, le backlog vit en **Markdown** (git-tracké, diffable). Les anciennes versions `.docx` (v8→v29) sont conservées dans `archive/` comme snapshots historiques. Le contenu « à intégrer » des sessions des 05-08/06 (Track A/D, capas, liaison, doublons, clôtures #BIBLIO/#110/#NOTIFY, MULTI/VALID/#CL.10) est **livré et reflété dans le v30** — voir l'audit prod et le REGISTRE pour le détail normatif.
 
