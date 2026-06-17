@@ -166,6 +166,8 @@ export default function BibliotecaPage() {
   const [commons, setCommons] = useState(null);
   const [serviceState, setServiceState] = useState(null);
   const [openingHours, setOpeningHours] = useState({ slots: [], public_note: '' });
+  const [fichePublic, setFichePublic] = useState({ contact_is_public: false, hours_is_public: false });
+  const [fpSaving, setFpSaving] = useState('');
   const [ohSaving, setOhSaving] = useState(false);
   const [ohMsg, setOhMsg] = useState('');
   const [regDocs, setRegDocs] = useState([]);
@@ -240,7 +242,7 @@ export default function BibliotecaPage() {
   const loadCore = useCallback(async () => {
     if (!libraryId) return;
     try {
-      const [libR, commR, ssR, regR, dgR, mcR, npR, mrR, ohR] = await Promise.all([
+      const [libR, commR, ssR, regR, dgR, mcR, npR, mrR, ohR, pcR] = await Promise.all([
         supabase.from('libraries').select('*').eq('id', libraryId).single(),
         supabase.from('library_commons').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_service_state').select('*').eq('library_id', libraryId).maybeSingle(),
@@ -249,10 +251,12 @@ export default function BibliotecaPage() {
         supabase.from('library_mail_channels').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_notification_policies').select('*').eq('library_id', libraryId).maybeSingle(),
         supabase.from('library_membership_rules').select('*').eq('library_id', libraryId).order('display_order', { ascending: true }).order('created_at', { ascending: true }),
-        supabase.from('library_opening_hours').select('slots,public_note').eq('library_id', libraryId).maybeSingle(),
+        supabase.from('library_opening_hours').select('slots,public_note,is_public').eq('library_id', libraryId).maybeSingle(),
+        supabase.from('library_public_contact').select('is_public').eq('library_id', libraryId).maybeSingle(),
       ]);
       setLib(libR.data); setCommons(commR.data); setServiceState(ssR.data);
       setOpeningHours({ slots: Array.isArray(ohR.data?.slots) ? ohR.data.slots : [], public_note: ohR.data?.public_note || '' });
+      setFichePublic({ contact_is_public: !!pcR.data?.is_public, hours_is_public: !!ohR.data?.is_public });
       setRegDocs(regR.data || []); setDocGov(dgR.data);
       setMailChannel(mcR.data); setNotifPolicy(npR.data);
       setMembershipRules(mrR.data || []);
@@ -364,6 +368,17 @@ export default function BibliotecaPage() {
     try { return new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(new Date(2024, 0, Number(d) || 1)); }
     catch { return String(d); }
   }, [locale]);
+  // PUBLIB-OPTIN-1/2 (#PUB3) : bascule d'une section en public (coordenador), via RPC.
+  async function toggleFiche(which, value){
+    setFpSaving(which);
+    try {
+      const fn = which === 'contact' ? 'fn_set_library_contact_public' : 'fn_set_library_hours_public';
+      const { error } = await apiRpc(fn, { p_library_id: libraryId, p_is_public: value });
+      if (error) throw error;
+      setFichePublic(p => ({ ...p, [which === 'contact' ? 'contact_is_public' : 'hours_is_public']: value }));
+    } catch { /* silencieux : l'état ne bascule pas si l'RPC échoue */ }
+    finally { setFpSaving(''); }
+  }
   function addSlot(){ setOpeningHours(p => ({ ...p, slots: [...p.slots, { day:1, start:'18:00', end:'20:00', label:'' }] })); setOhMsg(''); }
   function updateSlot(i,k,v){ setOpeningHours(p => ({ ...p, slots: p.slots.map((s,j)=> j===i ? { ...s, [k]: v } : s) })); setOhMsg(''); }
   function removeSlot(i){ setOpeningHours(p => ({ ...p, slots: p.slots.filter((_,j)=> j!==i) })); setOhMsg(''); }
@@ -1325,6 +1340,21 @@ export default function BibliotecaPage() {
               <button type="button" onClick={saveHours} disabled={ohSaving} style={{ padding:'10px 18px', borderRadius:8, border:'none', background:'var(--brand-accent, #c0392b)', color:'#fff', cursor:ohSaving?'wait':'pointer', fontWeight:600, fontSize:'.9rem', opacity:ohSaving?.6:1 }}>{t({ id: 'common.save' })}</button>
               {ohMsg && <span style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{ohMsg}</span>}
             </div>
+          </div>
+          {/* FICHE-PUBLIQUE (#PUB3) — opt-in niveau 2 : ce qui apparaît sur /bibliotecas/:slug */}
+          <div style={bx}>
+            <h4 style={{ margin:'0 0 4px' }}>{t({ id: 'biblioteca.publicFiche.title' })}</h4>
+            <p style={{ margin:'0 0 4px', fontSize:'.8rem', color:'var(--brand-muted)' }}>{t({ id: 'biblioteca.publicFiche.hint' })}</p>
+            <p style={{ margin:'0 0 12px', fontSize:'.78rem', color:'var(--brand-muted)', fontStyle:'italic' }}>{t({ id: 'biblioteca.publicFiche.requiresPublic' })}</p>
+            <label style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8, cursor: fpSaving==='contact'?'wait':'pointer' }}>
+              <input type="checkbox" checked={fichePublic.contact_is_public} disabled={fpSaving==='contact'} onChange={e=>toggleFiche('contact', e.target.checked)} />
+              <span>{t({ id: 'biblioteca.publicFiche.contactToggle' })}</span>
+            </label>
+            <label style={{ display:'flex', gap:8, alignItems:'center', marginBottom:12, cursor: fpSaving==='hours'?'wait':'pointer' }}>
+              <input type="checkbox" checked={fichePublic.hours_is_public} disabled={fpSaving==='hours'} onChange={e=>toggleFiche('hours', e.target.checked)} />
+              <span>{t({ id: 'biblioteca.publicFiche.hoursToggle' })}</span>
+            </label>
+            <p style={{ margin:0, fontSize:'.78rem', color:'var(--brand-muted)' }}>⚠ {t({ id: 'biblioteca.publicFiche.collective' })}</p>
           </div>
           {/* CARD-LOCAL-2/3 (N5) — modèle d'identité lecteur·rice + mode de validation */}
           <div style={bx}>

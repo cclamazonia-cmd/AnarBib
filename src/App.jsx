@@ -23,6 +23,8 @@ const CriarContaPage = lazy(() => import('@/pages/public/CriarContaPage'));
 const LoginPage = lazy(() => import('@/pages/public/LoginPage'));
 const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibliotecaPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
+const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
+const BibliotecaPublicaPage = lazy(() => import('@/pages/public/BibliotecaPublicaPage'));
 const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage'));
 const ImportWizard = lazy(() => import('@/pages/importacoes/ImportWizard'));
 const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
@@ -99,6 +101,9 @@ export default function App() {
                   <Route path="/ler-recurso" element={<ReaderPage />} />
                   <Route path="/privacidade" element={<PrivacyPolicyPage />} />
                   <Route path="/privacidade/:slug" element={<PrivacyPolicyPage />} />
+                  {/* Annuaire & fiche publics des bibliothèques (chantier PUBLIB, REGISTRE §31) */}
+                  <Route path="/bibliotecas" element={<BibliotecasPage />} />
+                  <Route path="/bibliotecas/:slug" element={<BibliotecaPublicaPage />} />
 
                   {/* ── Pages authentifiées ────────── */}
                   <Route path="/conta" element={<ProtectedRoute><ContaRouter /></ProtectedRoute>} />

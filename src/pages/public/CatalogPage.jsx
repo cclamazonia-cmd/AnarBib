@@ -830,6 +830,16 @@ export default function CatalogPage() {
         />
       </Hero>
 
+      {/* ── Rebond OPAC → fiche publique (#PUB6) : quand le catalogue est scopé
+            sur une bibliothèque via /catalogo/:slug, lien vers sa fiche. ── */}
+      {routeLibrarySlug && (
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '10px 16px 0' }}>
+          <Link to={`/bibliotecas/${routeLibrarySlug}`} style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.88rem' }}>
+            {t({ id: 'catalog.aboutLibrary' })}
+          </Link>
+        </div>
+      )}
+
       {/* ── Bandeau règlement de la bibliothèque ──────────────
           Identique au bandeau de la page conta (AccountPage) :
           icône PDF + hint i18n + bouton vers le PDF public.

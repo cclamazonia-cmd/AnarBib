@@ -111,6 +111,11 @@ export function Topbar() {
           {t({ id: 'nav.catalog' })}
         </Link>
 
+        {/* Annuaire public des bibliothèques (chantier PUBLIB) — visible de tout le monde, anon compris */}
+        <Link to="/bibliotecas" className={isActive('/bibliotecas') ? 'active' : ''}>
+          {t({ id: 'nav.bibliotecas' })}
+        </Link>
+
         {user && canSeeAccount(role) && (
           <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
             {t({ id: 'nav.account' })}
