@@ -28,6 +28,57 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  // ── Cotisation : expiration (notify-event · #25, J-7 rappel) ──────────────
+  "cotisation.expiring.subject": {
+    "pt-BR": "A tua contribuição está perto do vencimento",
+    fr: "Ta cotisation arrive à échéance",
+    es: "Tu cuota está por vencer",
+    en: "Your membership dues are about to expire",
+    it: "La tua quota sta per scadere",
+    de: "Dein Mitgliedsbeitrag läuft bald ab",
+    ca: "La teva quota està a punt de vèncer",
+    eo: "Via kotizo baldaŭ eksvalidiĝos",
+    nl: "Je lidmaatschapsbijdrage verloopt binnenkort",
+    el: "Η συνδρομή σου λήγει σύντομα"
+  },
+  "cotisation.expiring.intro": {
+    "pt-BR": "A tua contribuição à {library} vence em {date}. Lembra-te de renová-la junto à biblioteca para continuar a pegar emprestado.",
+    fr: "Ta cotisation à {library} expire le {date}. Pense à la renouveler auprès de la bibliothèque pour continuer à emprunter.",
+    es: "Tu cuota en {library} vence el {date}. Acordate de renovarla en la biblioteca para seguir tomando préstamos.",
+    en: "Your membership dues at {library} expire on {date}. Remember to renew them with the library to keep borrowing.",
+    it: "La tua quota a {library} scade il {date}. Ricordati di rinnovarla in biblioteca per continuare a prendere in prestito.",
+    de: "Dein Mitgliedsbeitrag bei {library} läuft am {date} ab. Denk daran, ihn in der Bibliothek zu erneuern, um weiter ausleihen zu können.",
+    ca: "La teva quota a {library} venç el {date}. Recorda renovar-la a la biblioteca per continuar fent préstecs.",
+    eo: "Via kotizo ĉe {library} eksvalidiĝos je {date}. Memoru renovigi ĝin ĉe la biblioteko por daŭre prunti.",
+    nl: "Je lidmaatschapsbijdrage bij {library} verloopt op {date}. Vergeet niet om die bij de bibliotheek te verlengen zodat je kunt blijven lenen.",
+    el: "Η συνδρομή σου στη {library} λήγει στις {date}. Θυμήσου να την ανανεώσεις στη βιβλιοθήκη για να συνεχίσεις να δανείζεσαι."
+  },
+  // ── Cotisation : expiration (notify-event · #25, J-0 jour J) ──────────────
+  "cotisation.expiring_today.subject": {
+    "pt-BR": "A tua contribuição vence hoje",
+    fr: "Ta cotisation expire aujourd'hui",
+    es: "Tu cuota vence hoy",
+    en: "Your membership dues expire today",
+    it: "La tua quota scade oggi",
+    de: "Dein Mitgliedsbeitrag läuft heute ab",
+    ca: "La teva quota venç avui",
+    eo: "Via kotizo eksvalidiĝas hodiaŭ",
+    nl: "Je lidmaatschapsbijdrage verloopt vandaag",
+    el: "Η συνδρομή σου λήγει σήμερα"
+  },
+  "cotisation.expiring_today.intro": {
+    "pt-BR": "A tua contribuição à {library} vence hoje ({date}). Renova-a junto à biblioteca para continuar a pegar emprestado.",
+    fr: "Ta cotisation à {library} expire aujourd'hui ({date}). Renouvelle-la auprès de la bibliothèque pour continuer à emprunter.",
+    es: "Tu cuota en {library} vence hoy ({date}). Renovala en la biblioteca para seguir tomando préstamos.",
+    en: "Your membership dues at {library} expire today ({date}). Renew them with the library to keep borrowing.",
+    it: "La tua quota a {library} scade oggi ({date}). Rinnovala in biblioteca per continuare a prendere in prestito.",
+    de: "Dein Mitgliedsbeitrag bei {library} läuft heute ab ({date}). Erneuere ihn in der Bibliothek, um weiter ausleihen zu können.",
+    ca: "La teva quota a {library} venç avui ({date}). Renova-la a la biblioteca per continuar fent préstecs.",
+    eo: "Via kotizo ĉe {library} eksvalidiĝas hodiaŭ ({date}). Renovigu ĝin ĉe la biblioteko por daŭre prunti.",
+    nl: "Je lidmaatschapsbijdrage bij {library} verloopt vandaag ({date}). Verleng die bij de bibliotheek zodat je kunt blijven lenen.",
+    el: "Η συνδρομή σου στη {library} λήγει σήμερα ({date}). Ανανέωσέ την στη βιβλιοθήκη για να συνεχίσεις να δανείζεσαι."
+  },
+
   // ── Entraide (notify-event · notif au cercle) ─────────────────────────────
   "entraide.request_circle.sub": {
     "pt-BR": "Novo chamado de apoio mútuo no teu círculo {circle}",

@@ -333,3 +333,83 @@ export async function handleMembershipValidationRequested(payload) {
   const admin_result = await safeSendEmail(adminTarget(ctx), sub, html, text, "admin_copy", ctx);
   return { admin_result };
 }
+
+// ============================================================================
+// #25 — notification d'expiration de cotisation (cotisation_expiring).
+// ----------------------------------------------------------------------------
+// Émise par le cron public.fn_cron_notify_membership_expiry via
+//   fn_dispatch_notify_event('cotisation_expiring', 1,
+//     {membership_id, user_id, library_id, threshold_days, valid_until}).
+// threshold_days = 7 (rappel J-7) ou 0 (jour J). E-mail au membre seul
+// (DOC-NOTIF-1), même garde que le reçu de paiement (cotisation_payment_mail_-
+// enabled, défaut ON). Le bandeau /conta (days_until_expiry) fait l'in-app (§4.4).
+// ============================================================================
+export async function handleCotisationExpiring(payload) {
+  const membershipId = String(payload?.membership_id || "").trim();
+  if (!membershipId) throw new Error("membership_id manquant.");
+  const threshold = Number(payload?.threshold_days);
+  const validUntil = String(payload?.valid_until || "").trim();
+
+  const { data: m, error: e1 } = await supabaseAdmin
+    .from("user_library_memberships")
+    .select("id,user_id,library_id,status")
+    .eq("id", membershipId)
+    .maybeSingle();
+  if (e1) throw e1;
+  if (!m) throw new Error("Associação não encontrada.");
+  // Garde : ne notifier que si l'appartenance est toujours active.
+  if (m.status !== "active") {
+    return { user_result: skippedEmailResult("user_mail", "membership_not_active") };
+  }
+
+  // Politique biblio (réutilise le drapeau cotisation, défaut ON).
+  const { data: pol } = await supabaseAdmin
+    .from("library_notification_policies")
+    .select("cotisation_payment_mail_enabled")
+    .eq("library_id", m.library_id)
+    .maybeSingle();
+  if (pol && pol.cotisation_payment_mail_enabled === false) {
+    return { user_result: skippedEmailResult("user_mail", "cotisation_mail_disabled") };
+  }
+
+  const { data: profile, error: e2 } = await supabaseAdmin
+    .from("profiles")
+    .select("id,email,first_name,last_name,preferred_language")
+    .eq("id", m.user_id)
+    .maybeSingle();
+  if (e2) throw e2;
+  if (!profile) throw new Error("Perfil não encontrado.");
+
+  const ctx = await resolveLibraryNotificationContext(String(m.library_id || "").trim() || null);
+  const bt = subjectTag(ctx);
+  const user = userTargetFromProfile(profile);
+  if (!user?.email) {
+    return { user_result: skippedEmailResult("user_mail", "no_recipient_email") };
+  }
+  const locale = String(profile?.preferred_language || "").trim() || null;
+  const libName = String(ctx?.library_name || ctx?.library_short_name || "").trim() || "—";
+  const dateStr = formatDateLocale(validUntil, locale) || formatDateBR(validUntil) || validUntil;
+
+  const base = threshold === 0 ? "cotisation.expiring_today" : "cotisation.expiring";
+  const tit = tMail(locale, `${base}.subject`);
+  const intro = tMail(locale, `${base}.intro`, { library: libName, date: dateStr });
+
+  const { html, text } = renderEmail({
+    locale,
+    preheader: tit,
+    title: tit,
+    greeting: greeting(locale, user?.name),
+    introHtml: `<p>${intro}</p>`,
+    actionBox: {
+      kind: "action",
+      title: tMail(locale, "validation_confirmed.actionTitle"),
+      ctaUrl: `${APP_BASE_URL}/conta`,
+      ctaLabel: tMail(locale, "validation_confirmed.cta")
+    },
+    footerHtml: footerPadrao(ctx, locale),
+    context: ctx
+  });
+  const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
+  const user_result = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
+  return { user_result };
+}

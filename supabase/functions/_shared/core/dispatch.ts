@@ -6,7 +6,7 @@ import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
 import { handleReaderMessageEvent, handleLibraryMessageEvent } from "../domain/reader-message.ts";
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
-import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested, handleReaderIdentityAssigned } from "../domain/membership.ts";
+import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested, handleReaderIdentityAssigned, handleCotisationExpiring } from "../domain/membership.ts";
 import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
 import { handlePartnershipLifecycle, handleTransparenceEnabled, handleConfigExpanded } from "../domain/partnership.ts";
 import { handleAuthorityEvent } from "../domain/authority.ts";
@@ -39,6 +39,9 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // #NOTIFY-Painel-acts famille 1 : reçu de paiement de cotisation (payload-based,
   // record_id factice). Le handler lit membership_payments par payment_id.
   if (event === "cotisation_payment_recorded") return await handleCotisationPayment(payload);
+  // #25 : rappel/avis d'expiration de cotisation (J-7 / J-0), émis par le cron
+  // fn_cron_notify_membership_expiry. Payload-based (membership_id, threshold_days).
+  if (event === "cotisation_expiring") return await handleCotisationExpiring(payload);
   // MULTI P4b : inscription validée par le staff -> e-mail de confirmation à la
   // lectrice (CTA /conta). Payload-based, lit user_library_memberships par uuid.
   if (event === "validation_confirmed") return await handleValidationConfirmed(payload);
