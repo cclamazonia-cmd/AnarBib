@@ -13,6 +13,7 @@ import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { apiQuery } from '@/lib/supabase';
+import { resolveLibraryLogo } from '@/lib/theme';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 function initials(name) {
@@ -76,8 +77,8 @@ export default function BibliotecasPage() {
             {libs.map((lib) => (
               <div key={lib.id} style={card}>
                 <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                  {lib.logo_url ? (
-                    <img src={lib.logo_url} alt="" style={logoBox} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                  {resolveLibraryLogo(lib) ? (
+                    <img src={resolveLibraryLogo(lib)} alt={lib.name} style={logoBox} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                   ) : (
                     <div style={logoFallback} aria-hidden="true">{initials(lib.name)}</div>
                   )}

@@ -15,6 +15,7 @@ import { useIntl } from 'react-intl';
 import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { apiQuery } from '@/lib/supabase';
+import { resolveLibraryLogo } from '@/lib/theme';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 function initials(name) {
@@ -118,8 +119,8 @@ export default function BibliotecaPublicaPage() {
             {/* ── En-tête identité (opt-in niveau 1) ── */}
             <div style={{ ...box, marginTop: 16 }}>
               <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-                {lib.logo_url ? (
-                  <img src={lib.logo_url} alt="" style={logoBox} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                {resolveLibraryLogo(lib) ? (
+                  <img src={resolveLibraryLogo(lib)} alt={lib.name} style={logoBox} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                 ) : (
                   <div style={logoFallback} aria-hidden="true">{initials(lib.name)}</div>
                 )}
