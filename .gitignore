@@ -70,3 +70,8 @@ public/vendor/tesseract/lang/
 
 # Fichiers temporaires / verrou MS Office
 ~$*
+
+# Config de sauvegarde REMPLIE (#BG2) : secrets DB/restic — jamais committer.
+# Seul le .example (sans secret) est versionné.
+scripts/backup/*.env
+*.pass
