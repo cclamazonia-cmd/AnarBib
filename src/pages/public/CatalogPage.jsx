@@ -70,7 +70,9 @@ const TIPO_ICONS = {
 // Storage → vraies vignettes (~7 Ko en width=64 vs ~155 Ko la pleine résolution).
 const COVER_RENDER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/render/image/public/covers/';
 function coverThumb(path) {
-  return path ? `${COVER_RENDER_BASE}${path}?width=64&quality=70` : null;
+  // height + resize=contain REQUIS : avec width seul, l'endpoint render ne
+  // rescale pas la hauteur → bande déformée. Box 64×96 (ratio couverture).
+  return path ? `${COVER_RENDER_BASE}${path}?width=64&height=96&resize=contain&quality=70` : null;
 }
 
 // ── Helpers ────────────────────────────────────────────────

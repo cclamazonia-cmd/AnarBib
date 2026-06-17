@@ -187,12 +187,12 @@
 .ab-cat-title { display: flex; gap: 9px; align-items: flex-start; }
 .ab-cat-thumb { flex: 0 0 auto; display: block; line-height: 0; }
 .ab-cat-thumb img {
-  width: 30px; height: 42px; object-fit: cover; border-radius: 3px;
+  width: 30px; height: 44px; object-fit: contain; border-radius: 3px;
   box-shadow: 0 1px 4px rgba(0,0,0,.4); background: rgba(255,255,255,.04);
 }
 .ab-cat-thumb__ph {
   display: flex; align-items: center; justify-content: center;
-  width: 30px; height: 42px; border-radius: 3px;
+  width: 30px; height: 44px; border-radius: 3px;
   background: rgba(255,255,255,.04);
   border: 1px solid var(--brand-panel-border, rgba(255,255,255,.12));
   font-size: .92rem; opacity: .6;
