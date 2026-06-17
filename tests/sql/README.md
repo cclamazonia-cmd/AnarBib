@@ -62,6 +62,14 @@ staff). Tout est seedé dans la transaction et `ROLLBACK` à la fin.
 - (best-effort) renouvellement self d'un membre restreint → `reason=restricted`
   (SKIP si aucun prêt ouvert en base).
 
+### `paquet_renouvellement_granulaire_tests.sql` (9 tests + 1 best-effort)
+
+Couvre les RPC de renouvellement **par item** du 29/05 (`api.renew_my_loan_item`,
+`api.extend_loan_item_as_library`), absentes de `paquet19`. Existence + délégation
+au cœur `fn_v2_extend_core` (héritage du recheck §6.1 + logique par-item), rejet
+anonyme, `not_found` authentifié, ownership ; E2E best-effort sur un prêt ouvert.
+Fixtures résolues dynamiquement.
+
 ## Comment lancer
 
 ### Option 1 : Supabase Studio (recommandé)
