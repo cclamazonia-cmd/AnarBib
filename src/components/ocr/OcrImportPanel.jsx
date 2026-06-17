@@ -18,6 +18,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { processPdf } from './ocrPipeline';
 import { extractFields, MATERIAL_TYPES } from './heuristics';
+import { OCR_ASSET_BASE } from './assetBase';
 import './OcrImportPanel.css';
 
 // Champs du brouillon affichés dans le formulaire pré-rempli (P2).
@@ -82,6 +83,7 @@ export default function OcrImportPanel() {
     try {
       const res = await processPdf(file, {
         lang: 'por',
+        tessBase: OCR_ASSET_BASE,
         onStage: (stage, info) => {
           setStageLabel(STAGE_LABELS[stage] || stage);
           if (stage === 'ocr-page' && info?.total) {

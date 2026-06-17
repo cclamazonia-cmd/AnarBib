@@ -22,8 +22,13 @@
 import { createWorker, OEM } from 'tesseract.js';
 
 // ─── Chemins de service (Vite sert public/ à la racine) ──────────────────
+// pdf.js est committé dans public/vendor/pdfjs et déployé sur Pages → même
+// chemin en dev et en prod. tesseract, lui, est gitignoré : en prod ses assets
+// vivent dans le bucket anarbib-media-public/ocr/ (cf. P3a). On NE résout PAS
+// cette URL ici (ocrPipeline reste pur, sans dépendance app) : le composant
+// passe `tessBase` ; à défaut on prend le vendor local (dev).
 const PDFJS_BASE = '/vendor/pdfjs';
-const TESS_BASE = '/vendor/tesseract';
+export const DEFAULT_TESS_BASE = '/vendor/tesseract';
 
 // ─── pdf.js : réutilise le vendor déjà servi (cf. PdfViewer.jsx) ─────────
 let pdfjsPromise = null;
@@ -158,15 +163,17 @@ export async function rasterizePage(pdf, pageNum, { targetWidth = 1600 } = {}) {
  *
  * @param {string} lang code traineddata (défaut 'por')
  * @param {function} [onProgress] (m:{status,progress}) => void  (logger natif)
+ * @param {string} [tessBase] base des assets tesseract (défaut vendor local)
  * @returns {Promise<object>} worker tesseract (à terminer par le code appelant)
  */
-export async function createOcrWorker(lang = 'por', onProgress) {
+export async function createOcrWorker(lang = 'por', onProgress, tessBase = DEFAULT_TESS_BASE) {
+  const base = tessBase.replace(/\/$/, '');
   return createWorker(lang, OEM.LSTM_ONLY, {
-    workerPath: `${TESS_BASE}/worker.min.js`,
+    workerPath: `${base}/worker.min.js`,
     // Répertoire → la lib choisit la variante WASM selon le support du
     // navigateur (relaxed-SIMD → SIMD → scalaire).
-    corePath: `${TESS_BASE}/`,
-    langPath: `${TESS_BASE}/lang`,
+    corePath: `${base}/`,
+    langPath: `${base}/lang`,
     logger: typeof onProgress === 'function' ? onProgress : undefined,
   });
 }
@@ -178,11 +185,12 @@ export async function createOcrWorker(lang = 'por', onProgress) {
  * @param {string} [opts.lang='por']
  * @param {function} [opts.onProgress] logger tesseract (status/progress)
  * @param {function} [opts.onPageDone] (index, total) => void
+ * @param {string} [opts.tessBase] base des assets tesseract
  * @returns {Promise<{text:string, confidence:number,
  *                    perPage:Array<{confidence:number, chars:number}>}>}
  */
-export async function runOcr(canvases, { lang = 'por', onProgress, onPageDone } = {}) {
-  const worker = await createOcrWorker(lang, onProgress);
+export async function runOcr(canvases, { lang = 'por', onProgress, onPageDone, tessBase } = {}) {
+  const worker = await createOcrWorker(lang, onProgress, tessBase);
   try {
     const perPage = [];
     const chunks = [];
@@ -214,10 +222,11 @@ export async function runOcr(canvases, { lang = 'por', onProgress, onPageDone } 
  * @param {string} [opts.lang='por']
  * @param {function} [opts.onStage] (stage:string, info?:object) => void
  * @param {function} [opts.onProgress] logger tesseract (status/progress 0..1)
+ * @param {string} [opts.tessBase] base des assets tesseract (dev vendor ↔ bucket prod)
  * @returns {Promise<{mode:'born-digital'|'ocr', text:string, confidence:number,
  *                    numPages:number, detection:object, pages?:number[]}>}
  */
-export async function processPdf(file, { lang = 'por', onStage, onProgress } = {}) {
+export async function processPdf(file, { lang = 'por', onStage, onProgress, tessBase } = {}) {
   const stage = (s, info) => { if (typeof onStage === 'function') onStage(s, info); };
 
   stage('reading');
@@ -257,6 +266,7 @@ export async function processPdf(file, { lang = 'por', onStage, onProgress } = {
     const { text, confidence, perPage } = await runOcr(canvases, {
       lang,
       onProgress,
+      tessBase,
       onPageDone: (done, total) => stage('ocr-page', { done, total }),
     });
 

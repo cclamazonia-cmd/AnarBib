@@ -221,7 +221,7 @@ const EMPTY_FORM = {
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, prefillRecord = null, prefillFile = null }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const { isNetworkAdmin, libraryId } = useLibrary();
@@ -381,6 +381,46 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     })();
     return () => { cancelled = true; };
   }, [editingId]);
+
+  // ── Pré-remplissage OCR (piste B, P3b) ─────────────────────
+  // Quand le composant est monté depuis le dépôt OCR (et non en édition d'un
+  // brouillon existant), on amorce le formulaire avec les champs heuristiques
+  // et on retient le PDF déposé pour le rattacher automatiquement au save.
+  const ocrFileRef = useRef(null);
+  const prefillSeededRef = useRef(false);
+  useEffect(() => {
+    if (editingId || prefillSeededRef.current || !prefillRecord) return;
+    prefillSeededRef.current = true;
+    fillFromRecord(prefillRecord);
+    ocrFileRef.current = prefillFile || null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefillRecord, editingId]);
+
+  // Rattache le PDF scanné (déposé via le dépôt OCR) à un brouillon fraîchement
+  // créé : upload dans le bucket public + insertion de la ressource numérique.
+  // Réutilise exactement la convention de uploadDigitalFile (books/<id>/...).
+  async function attachOcrPdf(draftId, file) {
+    if (!draftId || !file) return;
+    const bucket = 'anarbib-pdf-public';
+    const safe = file.name.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9._-]/g, '_');
+    const path = `books/${draftId}/${Date.now()}_${safe}`;
+    const { error: upErr } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: 'application/pdf' });
+    if (upErr) throw upErr;
+    const { error: insErr } = await supabase.from('book_draft_digital_resources').insert({
+      book_draft_id: Number(draftId),
+      resource_type: 'pdf_publico',
+      usage_type: 'leitura_online',
+      access_scope: 'publico',
+      status: 'draft',
+      is_active: true,
+      storage_bucket: bucket,
+      storage_path: path,
+      mime_type: 'application/pdf',
+      is_primary: true,
+      label: file.name,
+    });
+    if (insErr) throw insErr;
+  }
 
   function f(key) { return form[key] || ''; }
   function set(key, value) {
@@ -1701,6 +1741,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         await saveContributors(result.id);
       } catch (contribErr) {
         warnings.push(t({id:'catalogacao.msg.contribWarning'}, {message: contribErr.message}));
+      }
+
+      // OCR (piste B) : rattache le PDF scanné déposé au brouillon créé.
+      if (!isUpdate && ocrFileRef.current) {
+        try {
+          await attachOcrPdf(result.id, ocrFileRef.current);
+          ocrFileRef.current = null;
+          await loadDigitalResources(result.id);
+        } catch (pdfErr) {
+          warnings.push(t({ id: 'catalogacao.msg.ocrPdfWarning' }, { message: localizeError(pdfErr, t) }));
+        }
       }
 
       setDraftState('saved');

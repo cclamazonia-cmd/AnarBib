@@ -8,6 +8,7 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import './CatalogacaoPage.css';
 import BookDraftForm from './BookDraftForm';
+import OcrDepositTab from './OcrDepositTab';
 import AuthorDraftForm from './AuthorDraftForm';
 import ExemplarDraftForm from './ExemplarDraftForm';
 import LabelSheetPrinter from './LabelSheetPrinter';
@@ -34,6 +35,7 @@ export default function CatalogacaoPage() {
 
   const TABS = [
     { id: 'booksPanel',     label: t({ id: 'catalogacao.tab.documento' }) },
+    { id: 'ocrPanel',       label: t({ id: 'catalogacao.tab.ocr' }) },
     { id: 'authorsPanel',   label: t({ id: 'catalogacao.tab.autoria' }) },
     { id: 'indexPanel',     label: t({ id: 'catalogacao.tab.indexacao' }) },
     { id: 'labelsPanel',    label: t({ id: 'catalogacao.tab.etiquetas' }) },
@@ -335,6 +337,16 @@ export default function CatalogacaoPage() {
               <h3>{t({id:'catalogacao.tab.documento'})}</h3>
             </div>
             <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} />
+          </div>
+
+          {/* 1b. Fundo escaneado (OCR navegador) — piste B */}
+          <div className={`cat-panel${activeTab === 'ocrPanel' ? ' active' : ''}`}>
+            <div className="cat-panel-header">
+              <h3>{t({id:'catalogacao.tab.ocr'})}</h3>
+            </div>
+            {activeTab === 'ocrPanel' && (
+              <OcrDepositTab batches={batches} mode={mode} onSaved={refreshAll} />
+            )}
           </div>
 
           {/* 2. Autoria */}
