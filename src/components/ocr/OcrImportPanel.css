@@ -233,3 +233,48 @@
   resize: vertical;
   box-sizing: border-box;
 }
+
+/* ── Variante embarquee (Catalogacao, theme sombre) ──────────────────────
+   Le CSS de base vise le panneau de dev (fond clair) : les <button> et badges
+   y prennent une couleur sombre par defaut, invisible sur le fond fonce de
+   Catalogacao. Ici on remet du texte clair et des contrastes lisibles. */
+.ab-ocr--embed .ab-ocr__sub,
+.ab-ocr--embed .ab-ocr__stage,
+.ab-ocr--embed .ab-ocr__detail,
+.ab-ocr--embed .ab-ocr__hint,
+.ab-ocr--embed .ab-ocr__drop {
+  color: rgba(244, 244, 244, .82);
+}
+
+.ab-ocr--embed .ab-ocr__drop {
+  background: rgba(255, 255, 255, .03);
+  border-color: rgba(255, 255, 255, .25);
+}
+.ab-ocr--embed .ab-ocr__drop:hover,
+.ab-ocr--embed .ab-ocr__drop:focus-visible {
+  background: rgba(255, 255, 255, .07);
+  border-color: rgba(255, 255, 255, .45);
+}
+
+.ab-ocr--embed .ab-ocr__btn {
+  color: #f4f4f4;
+  border-color: rgba(255, 255, 255, .3);
+}
+.ab-ocr--embed .ab-ocr__btn:hover {
+  background: rgba(255, 255, 255, .08);
+}
+
+.ab-ocr--embed .ab-ocr__badge--native { background: rgba(70, 140, 230, .28); color: #bcd8ff; }
+.ab-ocr--embed .ab-ocr__badge--ocr { background: rgba(160, 110, 230, .28); color: #d9bcff; }
+
+.ab-ocr--embed .ab-ocr__score--good { background: rgba(40, 160, 80, .25); color: #79e3a0; }
+.ab-ocr--embed .ab-ocr__score--mid { background: rgba(200, 150, 30, .25); color: #f0c659; }
+.ab-ocr--embed .ab-ocr__score--low { background: rgba(200, 60, 40, .25); color: #ff9a8a; }
+
+.ab-ocr--embed .ab-ocr__diag summary { color: rgba(244, 244, 244, .7); }
+.ab-ocr--embed .ab-ocr__diag pre { background: rgba(255, 255, 255, .05); }
+
+.ab-ocr--embed .ab-ocr__warn {
+  background: rgba(200, 150, 30, .15);
+  color: #f0c659;
+}

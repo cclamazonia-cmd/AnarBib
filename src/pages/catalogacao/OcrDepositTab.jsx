@@ -109,7 +109,7 @@ export default function OcrDepositTab({ batches = [], mode = 'simple', onSaved }
   // ── Handoff : formulaire de brouillon pré-rempli ───────────────────────
   if (phase === 'draft' && draftRecord) {
     return (
-      <div className="ab-ocr">
+      <div className="ab-ocr ab-ocr--embed">
         <div className="ab-ocr__meta">
           <span className="ab-ocr__detail">{t({ id: 'catalogacao.ocr.handoffIntro' })}</span>
           <button type="button" className="ab-ocr__btn" onClick={reset}>
@@ -128,7 +128,7 @@ export default function OcrDepositTab({ batches = [], mode = 'simple', onSaved }
   }
 
   return (
-    <div className="ab-ocr">
+    <div className="ab-ocr ab-ocr--embed">
       <header className="ab-ocr__head">
         <h1>{t({ id: 'catalogacao.ocr.title' })}</h1>
         <p className="ab-ocr__sub">{t({ id: 'catalogacao.ocr.intro' })}</p>

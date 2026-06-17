@@ -35,10 +35,11 @@ export default function CatalogacaoPage() {
 
   const TABS = [
     { id: 'booksPanel',     label: t({ id: 'catalogacao.tab.documento' }) },
-    { id: 'ocrPanel',       label: t({ id: 'catalogacao.tab.ocr' }) },
     { id: 'authorsPanel',   label: t({ id: 'catalogacao.tab.autoria' }) },
     { id: 'indexPanel',     label: t({ id: 'catalogacao.tab.indexacao' }) },
     { id: 'labelsPanel',    label: t({ id: 'catalogacao.tab.etiquetas' }) },
+    // Flux d'ingestion distinct (depot de scans OCR) — isole entre 2 separateurs.
+    { id: 'ocrPanel',       label: t({ id: 'catalogacao.tab.ocr' }), separator: true },
     { id: 'queuePanel',     label: t({ id: 'catalogacao.tab.fila' }), separator: true },
     { id: 'batchesPanel',   label: t({ id: 'catalogacao.tab.lotes' }) },
     { id: 'catalogPanel',   label: t({ id: 'catalogacao.tab.catalogo' }) },
@@ -346,16 +347,6 @@ export default function CatalogacaoPage() {
             <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} />
           </div>
 
-          {/* 1b. Fundo escaneado (OCR navegador) — piste B */}
-          <div className={`cat-panel${activeTab === 'ocrPanel' ? ' active' : ''}`}>
-            <div className="cat-panel-header">
-              <h3>{t({id:'catalogacao.tab.ocr'})}</h3>
-            </div>
-            {activeTab === 'ocrPanel' && (
-              <OcrDepositTab batches={batches} mode={mode} onSaved={refreshAll} />
-            )}
-          </div>
-
           {/* 2. Autoria */}
           <div className={`cat-panel${activeTab === 'authorsPanel' ? ' active' : ''}`}>
             <AuthorDraftForm mode={mode} batches={batches} editingId={editTarget?.kind === 'author' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onChanged={refreshAll} />
@@ -369,6 +360,16 @@ export default function CatalogacaoPage() {
           {/* 3b. Etiquetas (impressão das etiquetas de cote) */}
           <div className={`cat-panel${activeTab === 'labelsPanel' ? ' active' : ''}`}>
             <LabelSheetPrinter onChanged={refreshAll} />
+          </div>
+
+          {/* 3c. Fundo escaneado (OCR navegador) — piste B, flux d'ingestion distinct */}
+          <div className={`cat-panel${activeTab === 'ocrPanel' ? ' active' : ''}`}>
+            <div className="cat-panel-header">
+              <h3>{t({id:'catalogacao.tab.ocr'})}</h3>
+            </div>
+            {activeTab === 'ocrPanel' && (
+              <OcrDepositTab batches={batches} mode={mode} onSaved={refreshAll} />
+            )}
           </div>
 
           {/* 4. Fila editorial */}
