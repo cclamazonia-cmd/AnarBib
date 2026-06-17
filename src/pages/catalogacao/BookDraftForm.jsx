@@ -19,7 +19,17 @@ const NON_LOANABLE_TYPES = new Set(['periodico', 'tract', 'cartaz', 'dossie', 'r
 const MATERIAL_SECTION_IDS = ['material_tract', 'material_audio', 'material_audiovisual', 'material_digital', 'material_dossie', 'material_tese', 'material_artigo', 'material_relatorio', 'material_zine'];
 
 // ── Contributor role values (labels resolved via t() inside component) ──
-const CONTRIBUTOR_ROLE_KEYS = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','editor','outro'];
+// Rôles proposés selon le TYPE DE DOCUMENT (menu déroulant conditionné).
+// Écrits & assimilés (défaut) : jeu historique. Audiovisuel / audio : rôles
+// dédiés (réalisateur·rice, interprète, acteur·rice, compositeur·rice, etc.).
+const ROLE_KEYS_TEXT = ['autor','coautor','organizacao','organizador','tradutor','ilustrador','prefaciador','coordenador','editor','outro'];
+const ROLE_KEYS_AUDIOVISUAL = ['autor','realizador','roteirista','ator','interprete','compositor','narrador','produtor','tradutor','organizacao','coautor','outro'];
+const ROLE_KEYS_AUDIO = ['autor','interprete','compositor','narrador','locutor','produtor','tradutor','organizacao','coautor','outro'];
+function roleKeysForMaterial(materialType) {
+  if (materialType === 'audiovisual') return ROLE_KEYS_AUDIOVISUAL;
+  if (materialType === 'audio') return ROLE_KEYS_AUDIO;
+  return ROLE_KEYS_TEXT;
+}
 // #auteur-collectif (17/06) — rôles affichés comme « auteur » (catalogue + aperçu),
 // alignés sur v_book_authors_canonical. Inclut les collectifs ; exclut tradutor,
 // ilustrador, prefaciador, coordenador, editor, outro.
@@ -235,7 +245,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // i18n-aware lists built from t()
   const MATERIAL_TYPES = useMemo(() => MATERIAL_TYPE_KEYS.map(k => ({ value: k, label: t({ id: `catalogacao.material.${k}` }) })), [t]);
-  const CONTRIBUTOR_ROLES = useMemo(() => CONTRIBUTOR_ROLE_KEYS.map(k => ({ value: k, label: t({ id: `catalogacao.role.${k}` }) })), [t]);
+  const roleLabel = useCallback((k) => t({ id: `catalogacao.role.${k}` }), [t]);
 
   // Admin réseau : charge les bibliothèques cibles (catalogue présent).
   useEffect(() => {
@@ -547,6 +557,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // ── Derived state ──────────────────────────────────────
   const materialType = f('tipo_material');
+  // Rôles proposés dans le menu déroulant, conditionnés au type de document.
+  const availableRoleKeys = roleKeysForMaterial(materialType);
   const isTract = TRACT_TYPES.has(materialType);
   const isAudio = materialType === 'audio';
   const isAudiovisual = materialType === 'audiovisual';
@@ -2405,7 +2417,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   <select value={c.role} onChange={e => updateContributor(i, 'role', e.target.value)}
                     style={{ width: 130, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.78rem' }}
                   >
-                    {CONTRIBUTOR_ROLES.map(r => <option key={r.value} value={r.value}>{r.label}</option>)}
+                    {/* Garde : un rôle déjà posé hors-liste (notice reprise) reste sélectionnable */}
+                    {(availableRoleKeys.includes(c.role) ? availableRoleKeys : [c.role, ...availableRoleKeys]).map(k => (
+                      <option key={k} value={k}>{roleLabel(k)}</option>
+                    ))}
                   </select>
                   {c.author_id ? (
                     <span className="cat-pill ok" style={{ fontSize: '.66rem', display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}

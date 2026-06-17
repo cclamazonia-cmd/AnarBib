@@ -162,6 +162,13 @@ export default function CatalogacaoPage() {
 
   function openForEdit(kind, id) {
     const tabByKind = { book: 'booksPanel', author: 'authorsPanel', exemplar: 'indexPanel' };
+    // Trace la dernière ouverture du brouillon (colonne « Ouvert le » de la file
+    // éditoriale). Fire-and-forget : ne bloque pas la navigation et n'altère pas
+    // updated_at (cf. RPC fn_touch_draft_opened + garde anarbib.skip_touch_updated_at).
+    if (id != null) {
+      supabase.rpc('fn_touch_draft_opened', { p_type: kind, p_id: Number(id) })
+        .then(({ error }) => { if (error) console.warn('fn_touch_draft_opened:', error.message); });
+    }
     setEditTarget({ kind, id: id != null ? String(id) : null });
     switchTab(tabByKind[kind] || 'booksPanel');
   }

@@ -8,6 +8,34 @@ import DuplicateCompareModal from './DuplicateCompareModal';
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const STATUS_KEYS = { draft: 'catalogacao.status.draft', ready: 'catalogacao.status.ready', published: 'catalogacao.status.published', cancelled: 'catalogacao.status.cancelled' };
 const PAGE_SIZE = 100;
+// Colonnes physiques présentes dans les 3 tables brouillon → triables côté serveur.
+const SERVER_SORT_COLS = ['updated_at', 'last_opened_at', 'status'];
+// Largeurs de colonnes partagées entre l'en-tête cliquable et les lignes (alignement).
+const COLW = { check: 16, type: 66, status: 78, opened: 80, updated: 84, actions: 210 };
+
+// Comparateur de la file fusionnée (multi-couches) selon la colonne de tri choisie.
+// Les colonnes physiques sont aussi poussées au serveur (cf. loadQueue) pour cadrer
+// la fenêtre ; ce tri client réordonne la fusion des 3 couches de façon cohérente.
+function makeComparator(sortBy, sortDir) {
+  const dir = sortDir === 'asc' ? 1 : -1;
+  return (a, b) => {
+    if (sortBy === 'last_opened_at') {
+      const ta = a.last_opened_at ? new Date(a.last_opened_at).getTime() : null;
+      const tb = b.last_opened_at ? new Date(b.last_opened_at).getTime() : null;
+      if (ta === null && tb === null) return 0;
+      if (ta === null) return 1;   // jamais ouvert → toujours en bas
+      if (tb === null) return -1;
+      return (ta - tb) * dir;
+    }
+    if (sortBy === 'type' || sortBy === 'label' || sortBy === 'status') {
+      const key = sortBy === 'type' ? '_type' : sortBy === 'label' ? '_label' : 'status';
+      const va = (a[key] || '').toString().toLowerCase();
+      const vb = (b[key] || '').toString().toLowerCase();
+      return va < vb ? -dir : va > vb ? dir : 0;
+    }
+    return (new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()) * dir;  // updated_at (défaut)
+  };
+}
 
 export default function QueuePanel({ batches, onEditItem, onChanged }) {
   // ── Filters ─────────────────────────────────────────────
@@ -28,6 +56,15 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   // #152 : brouillon (book) en cours de comparaison de doublons (modale)
   const [dupItem, setDupItem] = useState(null);
+
+  // ── Tri par en-tête de colonne ──────────────────────────
+  const [sortBy, setSortBy] = useState('updated_at');
+  const [sortDir, setSortDir] = useState('desc');
+  function toggleSort(col) {
+    if (sortBy === col) { setSortDir(d => (d === 'asc' ? 'desc' : 'asc')); }
+    else { setSortBy(col); setSortDir(col === 'updated_at' || col === 'last_opened_at' ? 'desc' : 'asc'); }
+    setPage(0);
+  }
 
   // ── Pagination (serveur) ────────────────────────────────
   const [page, setPage] = useState(0);
@@ -55,17 +92,21 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       const s = dSearch.trim().replace(/[,()]/g, ' ').trim();
       const allItems = [];
       let totalCount = 0, maxCount = 0;
+      // Tri : colonnes physiques → ordre serveur ; sinon fenêtre récente (updated_at desc) + tri client.
+      const orderCol = SERVER_SORT_COLS.includes(sortBy) ? sortBy : 'updated_at';
+      const orderAsc = SERVER_SORT_COLS.includes(sortBy) ? sortDir === 'asc' : false;
+      const orderOpts = { ascending: orderAsc, nullsFirst: false };
 
       // Books
       if (!typeFilter || typeFilter === 'book') {
         let q = supabase.from('book_drafts')
-          .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, updated_at', { count: 'exact' })
+          .select('id, titulo, subtitulo, autor, status, action, batch_id, published_book_id, bib_ref, updated_at, last_opened_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`titulo.ilike.%${s}%,subtitulo.ilike.%${s}%,autor.ilike.%${s}%,bib_ref.ilike.%${s}%`);
-        const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
+        const { data, count } = await q.order(orderCol, orderOpts).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
         (data || []).forEach(d => allItems.push({ ...d, _type: 'book', _label: d.titulo || t({ id: 'catalogacao.queue.noTitle' }), _sub: d.autor || '' }));
       }
@@ -73,13 +114,13 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       // Authors
       if (!typeFilter || typeFilter === 'author') {
         let q = supabase.from('author_drafts')
-          .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, updated_at', { count: 'exact' })
+          .select('id, preferred_name, sort_name, status, action, batch_id, published_author_id, updated_at, last_opened_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`preferred_name.ilike.%${s}%,sort_name.ilike.%${s}%`);
-        const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
+        const { data, count } = await q.order(orderCol, orderOpts).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
         (data || []).forEach(d => allItems.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: d.sort_name || '' }));
       }
@@ -87,26 +128,26 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       // Exemplars
       if (!typeFilter || typeFilter === 'exemplar') {
         let q = supabase.from('exemplar_drafts')
-          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, updated_at', { count: 'exact' })
+          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, updated_at, last_opened_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
         else if (batchFilter) q = q.eq('batch_id', Number(batchFilter));
         if (s) q = q.or(`tombo.ilike.%${s}%,target_bib_ref.ilike.%${s}%`);
-        const { data, count } = await q.order('updated_at', { ascending: false }).range(from, to);
+        const { data, count } = await q.order(orderCol, orderOpts).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
         (data || []).forEach(d => allItems.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: `ref: ${d.target_bib_ref || '—'}` }));
       }
 
-      // Tri par updated_at desc (fusion des couches de la page courante)
-      allItems.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+      // Tri de la fusion des couches de la page courante selon la colonne choisie.
+      allItems.sort(makeComparator(sortBy, sortDir));
       setItems(allItems);
       setTotal(totalCount);
       // Pages basees sur la couche la plus volumineuse (evite des pages vides en "Todas")
       setTotalPages(Math.max(1, Math.ceil(maxCount / PAGE_SIZE)));
     } catch (err) { setMsg({ text: localizeError(err, t), kind: 'error' }); }
     finally { setLoading(false); }
-  }, [typeFilter, statusFilter, actionFilter, batchFilter, dSearch, page, t]);
+  }, [typeFilter, statusFilter, actionFilter, batchFilter, dSearch, page, sortBy, sortDir, t]);
 
   useEffect(() => { loadQueue(); }, [loadQueue]);
 
@@ -284,6 +325,23 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
   const fs = { padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', width: '100%' };
   const ls = { display: 'block', fontSize: '.78rem', fontWeight: 600, marginBottom: 2, color: 'var(--brand-muted, #bbb)' };
 
+  // En-tête de colonne cliquable : tri asc/desc avec indicateur (▲/▼ actif, ↕ inactif).
+  function renderHeaderCell(col, label, cellStyle) {
+    const active = sortBy === col;
+    return (
+      <button type="button" onClick={() => toggleSort(col)} title={label}
+        style={{
+          ...cellStyle, display: 'flex', alignItems: 'center', gap: 3,
+          background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit',
+          fontSize: '.68rem', fontWeight: active ? 700 : 600,
+          color: active ? '#cbd5e1' : 'var(--brand-muted, #888)',
+        }}>
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
+        <span style={{ flexShrink: 0, opacity: active ? 1 : 0.3 }}>{active ? (sortDir === 'asc' ? '▲' : '▼') : '↕'}</span>
+      </button>
+    );
+  }
+
   return (
     <div>
       <div className="cat-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
@@ -381,7 +439,21 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
       </div>
 
       {/* ── Queue table ──────────────────────────────── */}
-      <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 400, overflowY: 'auto', marginBottom: 10 }}>
+      <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 400, overflowY: 'auto', overflowX: 'auto', marginBottom: 10 }}>
+        {/* En-têtes cliquables (tri asc/desc) — alignées sur les cellules via COLW */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
+          position: 'sticky', top: 0, zIndex: 1, background: 'rgba(18,20,24,.97)',
+          borderBottom: '1px solid rgba(255,255,255,.12)',
+        }}>
+          <span style={{ width: COLW.check, flexShrink: 0 }} />
+          {renderHeaderCell('type', t({ id: 'catalogacao.queue.colType' }), { width: COLW.type, flexShrink: 0, justifyContent: 'center' })}
+          {renderHeaderCell('label', t({ id: 'catalogacao.queue.colTitle' }), { flex: 1, minWidth: 0 })}
+          {renderHeaderCell('status', t({ id: 'catalogacao.queue.statusLabel' }), { width: COLW.status, flexShrink: 0 })}
+          {renderHeaderCell('last_opened_at', t({ id: 'catalogacao.queue.colOpened' }), { width: COLW.opened, flexShrink: 0, justifyContent: 'flex-end' })}
+          {renderHeaderCell('updated_at', t({ id: 'catalogacao.queue.colUpdated' }), { width: COLW.updated, flexShrink: 0, justifyContent: 'flex-end' })}
+          <span style={{ width: COLW.actions, flexShrink: 0 }} />
+        </div>
         {items.length === 0 && !loading && (
           <div style={{ padding: 16, textAlign: 'center', fontSize: '.85rem', color: 'var(--brand-muted, #888)' }}>
             {t({ id: 'catalogacao.queue.empty' })}
@@ -396,9 +468,11 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
               background: isSelected ? 'rgba(29,78,216,.1)' : i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent',
               borderBottom: '1px solid rgba(255,255,255,.04)',
             }}>
-              <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(key)} style={{ flexShrink: 0 }} />
+              <span style={{ width: COLW.check, flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(key)} />
+              </span>
               <span className={`cat-pill ${it._type === 'book' ? 'info' : it._type === 'author' ? 'warn' : 'ok'}`}
-                style={{ fontSize: '.6rem', flexShrink: 0, minWidth: 65, textAlign: 'center' }}>
+                style={{ fontSize: '.6rem', flexShrink: 0, width: COLW.type, textAlign: 'center' }}>
                 {t({ id: TYPE_KEYS[it._type] })}
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -409,24 +483,31 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
                   {it._sub}{it.batch_id ? ` · ${t({ id: 'catalogacao.queue.batchPrefix' }, { id: it.batch_id })}` : ''} · {it.action === 'create' ? t({ id: 'catalogacao.queue.actionCreate' }) : it.action === 'update' ? t({ id: 'catalogacao.queue.actionUpdate' }) : it.action}
                 </div>
               </div>
-              <span className={`cat-pill ${it.status === 'ready' ? 'ok' : 'info'}`} style={{ fontSize: '.6rem', flexShrink: 0 }}>
-                {STATUS_KEYS[it.status] ? t({ id: STATUS_KEYS[it.status] }) : it.status}
+              <span style={{ width: COLW.status, flexShrink: 0, display: 'flex' }}>
+                <span className={`cat-pill ${it.status === 'ready' ? 'ok' : 'info'}`} style={{ fontSize: '.6rem' }}>
+                  {STATUS_KEYS[it.status] ? t({ id: STATUS_KEYS[it.status] }) : it.status}
+                </span>
               </span>
-              <div style={{ fontSize: '.65rem', color: 'var(--brand-muted, #666)', flexShrink: 0, width: 80, textAlign: 'right' }}>
+              <div style={{ fontSize: '.65rem', color: 'var(--brand-muted, #666)', flexShrink: 0, width: COLW.opened, textAlign: 'right' }}>
+                {it.last_opened_at ? formatDate(it.last_opened_at, { year: 'numeric', month: '2-digit', day: '2-digit' }) : '—'}
+              </div>
+              <div style={{ fontSize: '.65rem', color: 'var(--brand-muted, #666)', flexShrink: 0, width: COLW.updated, textAlign: 'right' }}>
                 {formatDate(it.updated_at, { year: 'numeric', month: '2-digit', day: '2-digit' })}
               </div>
-              {it._type === 'book' && (
-                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ flexShrink: 0 }}
-                  title={t({ id: 'catalogacao.dup.title' })} onClick={() => setDupItem(it)}>
-                  {t({ id: 'catalogacao.dup.check' })}
-                </button>
-              )}
-              {onEditItem && (
-                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ flexShrink: 0 }}
-                  onClick={() => onEditItem(it._type, it.id)}>
-                  {t({ id: 'catalogacao.queue.resume' })}
-                </button>
-              )}
+              <div style={{ width: COLW.actions, flexShrink: 0, display: 'flex', gap: 6, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+                {it._type === 'book' && (
+                  <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                    title={t({ id: 'catalogacao.dup.title' })} onClick={() => setDupItem(it)}>
+                    {t({ id: 'catalogacao.dup.check' })}
+                  </button>
+                )}
+                {onEditItem && (
+                  <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                    onClick={() => onEditItem(it._type, it.id)}>
+                    {t({ id: 'catalogacao.queue.resume' })}
+                  </button>
+                )}
+              </div>
             </div>
           );
         })}
