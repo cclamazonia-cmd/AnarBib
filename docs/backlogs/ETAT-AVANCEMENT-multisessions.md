@@ -67,6 +67,22 @@ Bloc livré et **déployé en prod** (pipelines verts, branche `pages` vérifié
 
 — *Session: Fédération — Communs & Entraide*
 
+### Assemblée du réseau (AG) — chantier livré (16–17/06)
+
+- **v0.1 + P2b + P2c** (16/06) : objet assemblée + dépôt ODJ sans gardien ; rôle
+  `assembleia_facilitators` (animation hors admins) ; volontariat + désignation parmi
+  les volontaires. Onglet **data-driven** 10 locales, **staff-only**.
+- **P3 — notifications** (17/06, **EN PROD**, vérifié MCP) : migration `20260617004735`
+  (émission best-effort `network.assembleia.{convocada,agenda_published,item_proposed}`
+  via `fn_network_notify_event`, voie outbox/jsonb — l'`uuid` voyage dans le payload, pas
+  de `bigint`) ; handler EF `domain/assembleia.ts` (routé avant `network.*`) ; `mail-strings`
+  **10 locales**. Convocation → **chaque coordenador·e** fédéré·e (anti-rétention, canal
+  obligatoire) ; `item_proposed` → **facilitation**. Commits `29ba8214` + `33b1f2df`.
+- **Différé P3b** : rappels J-15/J-1 (pg_cron) ; inclusion optionnelle des bibliothécaires
+  par biblio. **v0.2** : choix de date, quorum 60/50, vote, ratification asynchrone.
+
+— *Session: Fédération — Assemblée du réseau (AG)*
+
 ## Morceaux non résolus (survey sessions, bruit filtré)
 
 ### ✅ « À pérenniser » — RÉSOLU (faux positif, élucidé 11/06)

@@ -141,6 +141,8 @@ La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, 
 
 ## 7bis. Paquet P3 — notifications de l'AG (cadrage 17/06)
 
+> ✅ **LIVRÉ EN PROD le 17/06/2026** — commits `29ba8214` (migration `20260617004735_paquet_assembleias_p3_notify`) + `33b1f2df` (handler EF `domain/assembleia.ts` routé avant `network.*` dans `dispatch.ts` ; `mail-strings` **10 locales** ; `assembleia.ts` ajouté au test de parité). **Vérifié via MCP** : migration appliquée, les 3 RPC émettent `network.assembleia.*`, `notify-event` redéployée. **P3b** (rappels J-15/J-1 via pg_cron) **différé**.
+
 **Objet.** Le *push* qui complète le *pull* de l'onglet : prévenir les collectifs **aux jalons**. Sans lui, le **calendrier de mandatement** (J-30/J-15/J-10) est lettre morte — personne ne reçoit la convocation à temps pour mandater sa base. P3 rend la convocation **vivante**.
 
 **Events & déclencheurs** (préfixe `network.assembleia.*`) :
@@ -155,7 +157,7 @@ La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, 
 
 **Ce que P3 ajoute :**
 1. **Émission** des events dans les RPC existantes — `fn_assembleia_set_status` (convocada / publication), `fn_assembleia_propose_item` (item_proposed) — en **best-effort** (l'échec d'émission ne casse jamais la RPC métier, motif `fn_network_notify_event`).
-2. **Handler outbox** dans l'EF `notify-event` pour les `network.assembleia.*` : résolution des **destinataires** (réseau pour convocada/published ; facilitation pour item_proposed) + rendu via **`_shared/i18n/mail-strings.ts` / `tMail`** — ⚠️ **8 langues** (système e-mail distinct des 10 locales React).
+2. **Handler outbox** dans l'EF `notify-event` pour les `network.assembleia.*` : résolution des **destinataires** (réseau pour convocada/published ; facilitation pour item_proposed) + rendu via **`_shared/i18n/mail-strings.ts` / `tMail`** — **10 locales** (corrigé en build : `mail-strings` est à parité **10** via `_supportedLocales()`, `el` incluse en forme neutre ; gardé par `mail-strings.test.ts`).
 3. **Désactivable** (gouvernance d'équipe) ; **DOC-NOTIF-1** (notifier qui n'a pas initié).
 
 **À confirmer en build** : la branche **outbox** exacte de l'EF (comment elle calcule le fan-out depuis le payload — champ destinataires explicite ? scope « réseau » ?) et la résolution « tout collectif membre » pour la convocation.
