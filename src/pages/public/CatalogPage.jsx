@@ -473,7 +473,11 @@ export default function CatalogPage() {
       }
     } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
     finally { setLoading(false); setLoadingMore(false); }
-  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
+    // libraryShortNames (et pas seulement libraryFilter) DOIT être une dep : sur un
+    // lien profond /catalogo/:slug, libraryFilter est posé au montage AVANT le chargement
+    // async des options ; libraryShortNames se résout après → sans cette dep, le fetch
+    // ne se rejoue pas et le filtre biblio reste inappliqué (course + closure périmée).
+  }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, libraryShortNames, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
 
