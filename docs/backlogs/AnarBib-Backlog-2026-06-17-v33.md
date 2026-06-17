@@ -26,6 +26,12 @@
 > défaut OFF → rien ne fuit). → §1, table §1 et §2.7 passés ✅ ; REGISTRE §31 (note de livraison +
 > PUBLIB-O1 ✅). **`PUBLIB-SCHED-1` aussi soldé (17/06)** : sondage du réel — `consultation_schedule_struct` **conservé** (réservation de consultation, usage distinct), `service_schedule_text` (colonne **MORTE**) supprimée, `library_opening_hours` canonique, frontière documentée (migration `20260617061715`). **→ chantier #PUBLIB entièrement clos.**
 >
+> **Amendement 17/06 (session « File éditoriale — tri & supports AV »).** Livré + **en prod** (`main` `ae7e25d8`, DB appliquée via MCP puis tracée en migrations idempotentes). Trois axes :
+> **(1) File éditoriale** (`QueuePanel`) — **tri par en-tête** de colonne (asc/desc, ▲/▼) sur Type/Titre-Nom/Statut/Ouvert le/Dern. modif. + nouvelle colonne **« Ouvert le »** (`last_opened_at` sur les 3 tables brouillon + RPC `fn_touch_draft_opened` + **garde GUC** `anarbib.skip_touch_updated_at` sur le trigger partagé `touch_updated_at` : ouvrir ≠ modifier). Migr. `20260617103939`.
+> **(2) Supports non écrits approfondis** — rôles de contributeur **conditionnés au type de document** (audiovisuel : réalisateur·rice/scénariste/acteur·rice/interprète/compositeur·rice/narrateur·rice/producteur·rice ; audio : interprète/compositeur·rice/narrateur·rice/voix/producteur·rice ; écrits inchangés) ; **auteur catalogue** dérivé du rôle créateur principal du média (`v_book_authors_canonical` : `realizador`→AV, `compositor`→audio si pas d'`autor`). Migr. `20260617120646` (REFRESH 2 MV).
+> **(3) Éditeur → distributeur / maison de disques** — **résout le gap noté CAT-E13** (`editora` absent de l'AV) : champ **`gravadora`** (audio) ajouté (colonne + form + copie au publish, migr. `20260617123948`/`124826`) ; libellé adapté au support sur la **fiche** (`v_book_detail_public_v2` expose distribuidora+gravadora, migr. `125221`) et la **liste OPAC** (`publisher_display` = CASE `tipo_material` repli `editora` ; `private.fn_publisher_display` + vues `api.catalog_list_*_v1`, migr. `130551` ; icône 🎬/💿 + tooltip ; export aligné ; tri/filtre liste restent sur `editora` — limite assumée).
+> i18n ×10 (parité). build + 84 tests + lint 0 erreur. → REGISTRE **CAT-E15** (file éditoriale) + **CAT-E16** (supports non écrits, **résout CAT-E13**), + Phase 4 auteur AV/audio.
+>
 > **Provenance de vérification (légende).**
 > - **✅ prod** — constaté cette session (requête lecture seule / code en prod lu).
 > - **📦 sandbox** — livré + testé hors worktree, **pas encore déployé**.
