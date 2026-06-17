@@ -9,6 +9,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { isCoord } from '@/lib/roles';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import UserHeroBadge from '@/components/UserHeroBadge';
+import SubjectMultiSelect from '@/components/forms/SubjectMultiSelect';
 // Onglets en lazy : chacun (et ses deps lourdes — ex. react-markdown dans
 // CommunsTab) part dans son propre chunk, chargé À L'OUVERTURE de l'onglet, pas
 // au montage de FederacaoPage. Évite le chunk initial monolithique (~1,5 Mo).
@@ -83,6 +84,8 @@ export default function FederacaoPage() {
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newIsOpen, setNewIsOpen] = useState(true);
+  // Phase 3 actus réseau : sujets du thésaurus pour cibler l'avis par affinité.
+  const [newSubjectIds, setNewSubjectIds] = useState([]);
 
   const load = useCallback(async () => {
     if (!libraryId) return;
@@ -142,8 +145,9 @@ export default function FederacaoPage() {
     const ok = await runAction('create', () => apiRpc('fn_circle_create', {
       p_nature: newNature, p_name: newName.trim(),
       p_description: newDesc.trim() || null, p_library_id: libraryId, p_is_open: newIsOpen,
+      p_subject_ids: newSubjectIds.map(s => s.id),
     }), 'federacao.circulos.create.done');
-    if (ok) { setCreateOpen(false); setNewName(''); setNewDesc(''); setNewNature('afinitario'); setNewIsOpen(true); }
+    if (ok) { setCreateOpen(false); setNewName(''); setNewDesc(''); setNewNature('afinitario'); setNewIsOpen(true); setNewSubjectIds([]); }
   }
 
   const requestJoin = (circleId) => runAction(`join:${circleId}`,
@@ -226,6 +230,7 @@ export default function FederacaoPage() {
               newName={newName} setNewName={setNewName}
               newDesc={newDesc} setNewDesc={setNewDesc}
               newIsOpen={newIsOpen} setNewIsOpen={setNewIsOpen}
+              newSubjectIds={newSubjectIds} setNewSubjectIds={setNewSubjectIds}
               createCircle={createCircle}
               requestJoin={requestJoin} leaveCircle={leaveCircle} setDormancy={setDormancy}
               objectingId={objectingId} setObjectingId={setObjectingId}
@@ -428,7 +433,7 @@ function CirculosTab(props) {
     myCircles, openCircles, members, openRequests, expanded, busy,
     toggleExpand,
     createOpen, setCreateOpen, newNature, setNewNature, newName, setNewName,
-    newDesc, setNewDesc, newIsOpen, setNewIsOpen, createCircle,
+    newDesc, setNewDesc, newIsOpen, setNewIsOpen, newSubjectIds, setNewSubjectIds, createCircle,
     requestJoin, leaveCircle, setDormancy,
     objectingId, setObjectingId, objectionReason, setObjectionReason, objectRequest,
   } = props;
@@ -456,6 +461,7 @@ function CirculosTab(props) {
             {NATURE_OPTIONS.map(n => <option key={n} value={n}>{natureLabel(n)}</option>)}
           </select>
           <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder={t({ id: 'federacao.circulos.create.descPlaceholder' })} maxLength={240} />
+          <SubjectMultiSelect value={newSubjectIds} onChange={setNewSubjectIds} />
           <label className="ab-fed-check">
             <input type="checkbox" checked={newIsOpen} onChange={e => setNewIsOpen(e.target.checked)} />
             {t({ id: 'federacao.circulos.create.isOpen' })}
