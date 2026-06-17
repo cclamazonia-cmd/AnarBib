@@ -388,27 +388,80 @@ export default function CatalogPage() {
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
     try {
-      const filters = buildServerFilters({ search:dSearch, authorFilter:dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryShortNames, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
+      // (1b) Recherche INSENSIBLE AUX ACCENTS + classée par pertinence via le RPC
+      // api.catalog_search_ids_v1 (branche anon/session selon la visibilité de
+      // l'appelant·e). En cas d'erreur ou de RPC absent, on RETOMBE sur la
+      // recherche multi-mots ilike (buildServerFilters) → dégradation gracieuse,
+      // jamais pire que l'existant.
+      let rankedIds = null; // null = pas de recherche RPC ; sinon book_id ordonnés par rang
+      if (dSearch.trim()) {
+        try {
+          const { data: sr, error: srErr } = await supabase.schema('api')
+            .rpc('catalog_search_ids_v1', { p_q: dSearch.trim() });
+          if (!srErr && Array.isArray(sr)) rankedIds = sr.map(r => r.book_id);
+        } catch { /* repli ilike ci-dessous */ }
+      }
+      const useRpc = rankedIds !== null;
+
+      // Avec le RPC, le terme de recherche est géré côté serveur → on ne l'ajoute
+      // PAS au ilike (search:''), mais tous les autres filtres restent actifs.
+      const filters = buildServerFilters({ search: useRpc ? '' : dSearch, authorFilter:dAuthor, authorIdFilter, alphaFilter, publisherFilter:dPublisher, yearFilter:dYear, libraryShortNames, availabilityFilter, isAuth, isbnFilter:dIsbn, languageFilter:dLanguage, cddFilter:dCdd, subjectsFilter:dSubjects, materialFilter, collectionFilter:dCollection, placeFilter:dPlace });
+
       // #OPAC8 — filtre par sujet : résout les book_id via book_subjects (table dédiée).
+      let subjectIds = null;
       if (subjectFilter) {
         const { data: sd } = await supabase.from('subjects').select('id').eq('slug', subjectFilter).maybeSingle();
-        let ids = [];
+        subjectIds = [];
         if (sd?.id) {
           const { data: bs } = await supabase.from('book_subjects').select('book_id').eq('subject_id', sd.id);
-          ids = (bs || []).map(r => r.book_id);
+          subjectIds = (bs || []).map(r => r.book_id);
         }
-        filters['book_id'] = ids.length ? `in.(${ids.join(',')})` : 'eq.-1';
       }
-      const { data, error, totalCount: serverTotal } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
-      if (error) throw error;
-      const result = data || [];
-      if (append) setBooks(prev => [...prev, ...result]);
-      else setBooks(result);
-      setTotalFetched(offset + result.length);
-      setHasMore(result.length === PAGE_SIZE);
-      // Phase B.7 : utiliser le totalCount du Content-Range plutôt qu'un appel séparé à books_count_v1
-      // (cohérent avec la grille, respecte automatiquement la visibility par matérialisée)
-      if (serverTotal != null) setTotalCount(serverTotal);
+
+      // Contrainte book_id = recherche RPC ∩ sujet (selon ce qui est actif).
+      let idConstraint = null;
+      if (useRpc && subjectIds !== null) {
+        const set = new Set(subjectIds);
+        idConstraint = rankedIds.filter(id => set.has(id));
+      } else if (useRpc) {
+        idConstraint = rankedIds;
+      } else if (subjectIds !== null) {
+        idConstraint = subjectIds;
+      }
+      if (idConstraint !== null) {
+        filters['book_id'] = idConstraint.length ? `in.(${idConstraint.join(',')})` : 'eq.-1';
+      }
+
+      if (useRpc) {
+        // Recherche : ensemble borné (RPC ≤ 500) récupéré en un appel, trié par
+        // pertinence (ordre du RPC) si le tri est « Pertinence » ; sinon on
+        // respecte le tri choisi. Pas de pagination serveur dans ce mode.
+        if (idConstraint.length === 0) {
+          if (!append) setBooks([]);
+          setTotalFetched(0); setHasMore(false); setTotalCount(0);
+        } else {
+          const byRelevance = sortValue === '__relevance__';
+          const { data, error } = await apiQuery(viewName, { select:selectCols, order: byRelevance ? undefined : resolveOrder(), rangeFrom:0, rangeTo:idConstraint.length - 1, filters });
+          if (error) throw error;
+          let rows = data || [];
+          if (byRelevance) {
+            const pos = new Map(rankedIds.map((id, i) => [id, i]));
+            rows = [...rows].sort((a, b) => (pos.get(a.book_id) ?? 1e9) - (pos.get(b.book_id) ?? 1e9));
+          }
+          setBooks(rows); setTotalFetched(rows.length); setHasMore(false); setTotalCount(rows.length);
+        }
+      } else {
+        // Parcours (sans recherche, ou repli) : pagination serveur + tri choisi.
+        const { data, error, totalCount: serverTotal } = await apiQuery(viewName, { select:selectCols, order:resolveOrder(), rangeFrom:offset, rangeTo:offset+PAGE_SIZE-1, filters });
+        if (error) throw error;
+        const result = data || [];
+        if (append) setBooks(prev => [...prev, ...result]);
+        else setBooks(result);
+        setTotalFetched(offset + result.length);
+        setHasMore(result.length === PAGE_SIZE);
+        // Phase B.7 : totalCount via Content-Range (cohérent avec la grille, respecte la visibility).
+        if (serverTotal != null) setTotalCount(serverTotal);
+      }
     } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
     finally { setLoading(false); setLoadingMore(false); }
   }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
