@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Recommencer",
   "catalogacao.ocr.handoffIntro": "Vérifiez et complétez le brouillon pré-rempli, puis enregistrez. Le PDF sera joint automatiquement.",
   "catalogacao.ocr.errorPrefix": "Erreur :",
-  "catalogacao.msg.ocrPdfWarning": "Brouillon enregistré, mais le PDF n'a pas pu être joint : {message}"
+  "catalogacao.msg.ocrPdfWarning": "Brouillon enregistré, mais le PDF n'a pas pu être joint : {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Questions de fond pressenties (à débattre) :",
+  "federacao.assembleias.firstPoints.q1": "Méta-catalogue : centralisé ou fédéré ?",
+  "federacao.assembleias.firstPoints.q2": "Prêts : anonymat total ou pseudonymat ?",
+  "federacao.assembleias.firstPoints.q3": "Fonds « illégaux » (samizdat) : comment les gérer ?",
+  "federacao.assembleias.firstPoints.q4": "Interopérabilité avec les bibliothèques institutionnelles alliées ?",
+  "federacao.assembleias.firstPoints.q5": "Quelle gouvernance pour le projet lui-même ?",
+  "federacao.assembleias.firstPoints.q6": "Qui vote : une bibliothèque = une voix ?",
+  "federacao.assembleias.firstPoints.q7": "Consentement ou majorité — abstention et seuils ?",
+  "federacao.assembleias.firstPoints.q8": "Mandat impératif ou représentatif ?"
 }

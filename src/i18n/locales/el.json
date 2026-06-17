@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Έναρξη από την αρχή",
   "catalogacao.ocr.handoffIntro": "Ελέγξτε και συμπληρώστε το προσυμπληρωμένο πρόχειρο, μετά αποθηκεύστε. Το PDF θα επισυναφθεί αυτόματα.",
   "catalogacao.ocr.errorPrefix": "Σφάλμα:",
-  "catalogacao.msg.ocrPdfWarning": "Το πρόχειρο αποθηκεύτηκε, αλλά το PDF δεν μπόρεσε να επισυναφθεί: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Το πρόχειρο αποθηκεύτηκε, αλλά το PDF δεν μπόρεσε να επισυναφθεί: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Αναμενόμενα ουσιαστικά ζητήματα (προς συζήτηση):",
+  "federacao.assembleias.firstPoints.q1": "Μετα-κατάλογος: συγκεντρωτικός ή ομοσπονδιακός;",
+  "federacao.assembleias.firstPoints.q2": "Δανεισμοί: πλήρης ανωνυμία ή ψευδωνυμία;",
+  "federacao.assembleias.firstPoints.q3": "« Παράνομες » συλλογές (samizdat): πώς να τις διαχειριστούμε;",
+  "federacao.assembleias.firstPoints.q4": "Διαλειτουργικότητα με συμμαχικές θεσμικές βιβλιοθήκες;",
+  "federacao.assembleias.firstPoints.q5": "Ποια διακυβέρνηση για το ίδιο το έργο;",
+  "federacao.assembleias.firstPoints.q6": "Ποιος ψηφίζει: μία βιβλιοθήκη = μία ψήφος;",
+  "federacao.assembleias.firstPoints.q7": "Συναίνεση ή πλειοψηφία — αποχή και κατώφλια;",
+  "federacao.assembleias.firstPoints.q8": "Επιτακτική ή αντιπροσωπευτική εντολή;"
 }

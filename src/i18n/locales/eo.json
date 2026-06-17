@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Rekomenci",
   "catalogacao.ocr.handoffIntro": "Kontrolu kaj kompletigu la antaŭplenigitan malneton, poste konservu. La PDF estos aŭtomate alligita.",
   "catalogacao.ocr.errorPrefix": "Eraro:",
-  "catalogacao.msg.ocrPdfWarning": "Malneto konservita, sed la PDF ne povis esti alligita: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Malneto konservita, sed la PDF ne povis esti alligita: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Antaŭviditaj enhavaj demandoj (pridiskutotaj):",
+  "federacao.assembleias.firstPoints.q1": "Metakatalogo: centra aŭ federa?",
+  "federacao.assembleias.firstPoints.q2": "Pruntoj: plena anonimeco aŭ kaŝnomeco?",
+  "federacao.assembleias.firstPoints.q3": "« Kontraŭleĝaj » fondusoj (samizdato): kiel administri ilin?",
+  "federacao.assembleias.firstPoints.q4": "Interoperaciebleco kun aliancanaj instituciaj bibliotekoj?",
+  "federacao.assembleias.firstPoints.q5": "Kia regado por la projekto mem?",
+  "federacao.assembleias.firstPoints.q6": "Kiu voĉdonas: unu biblioteko = unu voĉo?",
+  "federacao.assembleias.firstPoints.q7": "Konsento aŭ plimulto — sindeteno kaj sojloj?",
+  "federacao.assembleias.firstPoints.q8": "Nepra aŭ reprezenta mandato?"
 }

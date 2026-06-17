@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Opnieuw beginnen",
   "catalogacao.ocr.handoffIntro": "Controleer en vul het vooringevulde concept aan en sla het op. De PDF wordt automatisch bijgevoegd.",
   "catalogacao.ocr.errorPrefix": "Fout:",
-  "catalogacao.msg.ocrPdfWarning": "Concept opgeslagen, maar de PDF kon niet worden bijgevoegd: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Concept opgeslagen, maar de PDF kon niet worden bijgevoegd: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Verwachte inhoudelijke vragen (te bespreken):",
+  "federacao.assembleias.firstPoints.q1": "Metacatalogus: gecentraliseerd of gefedereerd?",
+  "federacao.assembleias.firstPoints.q2": "Uitleningen: volledige anonimiteit of pseudonimiteit?",
+  "federacao.assembleias.firstPoints.q3": "« Illegale » collecties (samizdat): hoe ermee omgaan?",
+  "federacao.assembleias.firstPoints.q4": "Interoperabiliteit met bevriende institutionele bibliotheken?",
+  "federacao.assembleias.firstPoints.q5": "Welk bestuur voor het project zelf?",
+  "federacao.assembleias.firstPoints.q6": "Wie stemt: één bibliotheek = één stem?",
+  "federacao.assembleias.firstPoints.q7": "Consensus of meerderheid — onthouding en drempels?",
+  "federacao.assembleias.firstPoints.q8": "Imperatief of representatief mandaat?"
 }

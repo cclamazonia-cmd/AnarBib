@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Start over",
   "catalogacao.ocr.handoffIntro": "Review and complete the pre-filled draft, then save. The PDF will be attached automatically.",
   "catalogacao.ocr.errorPrefix": "Error:",
-  "catalogacao.msg.ocrPdfWarning": "Draft saved, but the PDF could not be attached: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Draft saved, but the PDF could not be attached: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Expected substantive questions (to debate):",
+  "federacao.assembleias.firstPoints.q1": "Meta-catalogue: centralised or federated?",
+  "federacao.assembleias.firstPoints.q2": "Loans: full anonymity or pseudonymity?",
+  "federacao.assembleias.firstPoints.q3": "“Illegal” holdings (samizdat): how to handle them?",
+  "federacao.assembleias.firstPoints.q4": "Interoperability with allied institutional libraries?",
+  "federacao.assembleias.firstPoints.q5": "What governance for the project itself?",
+  "federacao.assembleias.firstPoints.q6": "Who votes: one library = one vote?",
+  "federacao.assembleias.firstPoints.q7": "Consent or majority — abstention and thresholds?",
+  "federacao.assembleias.firstPoints.q8": "Imperative or representative mandate?"
 }

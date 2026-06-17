@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Empezar de nuevo",
   "catalogacao.ocr.handoffIntro": "Revisa y completa el borrador pre-rellenado, luego guarda. El PDF se adjuntará automáticamente.",
   "catalogacao.ocr.errorPrefix": "Error:",
-  "catalogacao.msg.ocrPdfWarning": "Borrador guardado, pero el PDF no se pudo adjuntar: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Borrador guardado, pero el PDF no se pudo adjuntar: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Cuestiones de fondo previstas (a debatir):",
+  "federacao.assembleias.firstPoints.q1": "Metacatálogo: ¿centralizado o federado?",
+  "federacao.assembleias.firstPoints.q2": "Préstamos: ¿anonimato total o seudonimato?",
+  "federacao.assembleias.firstPoints.q3": "Fondos « ilegales » (samizdat): ¿cómo gestionarlos?",
+  "federacao.assembleias.firstPoints.q4": "¿Interoperabilidad con las bibliotecas institucionales aliadas?",
+  "federacao.assembleias.firstPoints.q5": "¿Qué gobernanza para el propio proyecto?",
+  "federacao.assembleias.firstPoints.q6": "¿Quién vota: una biblioteca = un voto?",
+  "federacao.assembleias.firstPoints.q7": "¿Consenso o mayoría — abstención y umbrales?",
+  "federacao.assembleias.firstPoints.q8": "¿Mandato imperativo o representativo?"
 }

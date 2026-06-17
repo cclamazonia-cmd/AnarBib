@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Tornar a començar",
   "catalogacao.ocr.handoffIntro": "Revisa i completa l'esborrany preomplert, després desa. El PDF s'adjuntarà automàticament.",
   "catalogacao.ocr.errorPrefix": "Error:",
-  "catalogacao.msg.ocrPdfWarning": "Esborrany desat, però el PDF no s'ha pogut adjuntar: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Esborrany desat, però el PDF no s'ha pogut adjuntar: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Qüestions de fons previstes (a debatre):",
+  "federacao.assembleias.firstPoints.q1": "Metacatàleg: centralitzat o federat?",
+  "federacao.assembleias.firstPoints.q2": "Préstecs: anonimat total o pseudonimat?",
+  "federacao.assembleias.firstPoints.q3": "Fons « il·legals » (samizdat): com gestionar-los?",
+  "federacao.assembleias.firstPoints.q4": "Interoperabilitat amb les biblioteques institucionals aliades?",
+  "federacao.assembleias.firstPoints.q5": "Quina governança per al projecte mateix?",
+  "federacao.assembleias.firstPoints.q6": "Qui vota: una biblioteca = un vot?",
+  "federacao.assembleias.firstPoints.q7": "Consens o majoria — abstenció i llindars?",
+  "federacao.assembleias.firstPoints.q8": "Mandat imperatiu o representatiu?"
 }

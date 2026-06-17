@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Neu beginnen",
   "catalogacao.ocr.handoffIntro": "Prüfe und vervollständige den vorausgefüllten Entwurf, dann speichere. Das PDF wird automatisch angehängt.",
   "catalogacao.ocr.errorPrefix": "Fehler:",
-  "catalogacao.msg.ocrPdfWarning": "Entwurf gespeichert, aber das PDF konnte nicht angehängt werden: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Entwurf gespeichert, aber das PDF konnte nicht angehängt werden: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Voraussichtliche inhaltliche Fragen (zu diskutieren):",
+  "federacao.assembleias.firstPoints.q1": "Meta-Katalog: zentralisiert oder föderiert?",
+  "federacao.assembleias.firstPoints.q2": "Ausleihen: völlige Anonymität oder Pseudonymität?",
+  "federacao.assembleias.firstPoints.q3": "« Illegale » Bestände (Samisdat): wie damit umgehen?",
+  "federacao.assembleias.firstPoints.q4": "Interoperabilität mit verbündeten institutionellen Bibliotheken?",
+  "federacao.assembleias.firstPoints.q5": "Welche Governance für das Projekt selbst?",
+  "federacao.assembleias.firstPoints.q6": "Wer stimmt ab: eine Bibliothek = eine Stimme?",
+  "federacao.assembleias.firstPoints.q7": "Konsens oder Mehrheit — Enthaltung und Schwellen?",
+  "federacao.assembleias.firstPoints.q8": "Imperatives oder repräsentatives Mandat?"
 }

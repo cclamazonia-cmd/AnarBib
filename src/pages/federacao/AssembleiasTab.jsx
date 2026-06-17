@@ -397,6 +397,17 @@ export default function AssembleiasTab() {
           <li>{t({ id: 'federacao.assembleias.firstPoints.terms' })}</li>
           <li>{t({ id: 'federacao.assembleias.firstPoints.facilitation' })}</li>
         </ul>
+        <p className="ab-fed-hint" style={{ marginTop: 12, marginBottom: 0 }}>{t({ id: 'federacao.assembleias.firstPoints.fondIntro' })}</p>
+        <ul className="ab-fed-rules">
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q1' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q2' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q3' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q4' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q5' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q6' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q7' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q8' })}</li>
+        </ul>
       </div>
     </div>
   );

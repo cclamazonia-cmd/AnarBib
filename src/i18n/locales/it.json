@@ -5162,5 +5162,14 @@
   "catalogacao.ocr.restart": "Ricomincia",
   "catalogacao.ocr.handoffIntro": "Controlla e completa la bozza precompilata, poi salva. Il PDF sarà allegato automaticamente.",
   "catalogacao.ocr.errorPrefix": "Errore:",
-  "catalogacao.msg.ocrPdfWarning": "Bozza salvata, ma il PDF non è stato allegato: {message}"
+  "catalogacao.msg.ocrPdfWarning": "Bozza salvata, ma il PDF non è stato allegato: {message}",
+  "federacao.assembleias.firstPoints.fondIntro": "Questioni di fondo previste (da discutere):",
+  "federacao.assembleias.firstPoints.q1": "Metacatalogo: centralizzato o federato?",
+  "federacao.assembleias.firstPoints.q2": "Prestiti: anonimato totale o pseudonimato?",
+  "federacao.assembleias.firstPoints.q3": "Fondi « illegali » (samizdat): come gestirli?",
+  "federacao.assembleias.firstPoints.q4": "Interoperabilità con le biblioteche istituzionali alleate?",
+  "federacao.assembleias.firstPoints.q5": "Quale governance per il progetto stesso?",
+  "federacao.assembleias.firstPoints.q6": "Chi vota: una biblioteca = un voto?",
+  "federacao.assembleias.firstPoints.q7": "Consenso o maggioranza — astensione e soglie?",
+  "federacao.assembleias.firstPoints.q8": "Mandato imperativo o rappresentativo?"
 }
