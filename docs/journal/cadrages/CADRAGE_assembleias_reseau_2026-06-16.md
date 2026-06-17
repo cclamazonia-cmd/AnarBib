@@ -139,6 +139,27 @@ La facilitation (préparer/publier l'ODJ, poser les dates, ordonner les points, 
 | Recueil disponibilités/préférences + créneau + **quorum par collectif** | **Neuf** — cœur probable d'une migration `spec-assembleias` (tables assemblée / créneaux / disponibilités, RPC-first, RLS, vues `*_v1` selon DOC-OBJ-2/DOC-RPC-3) |
 | Dépôt / adoption d'un point d'**ODJ** (§6bis) | **Neuf** — table des points proposés + RPC de dépôt (garde *membre rattaché*), clôture auto à `D-X`, vue d'ODJ ; la facilitation **ordonne sans supprimer** (différé/archive, jamais `delete` — mémoire) |
 
+## 7bis. Paquet P3 — notifications de l'AG (cadrage 17/06)
+
+**Objet.** Le *push* qui complète le *pull* de l'onglet : prévenir les collectifs **aux jalons**. Sans lui, le **calendrier de mandatement** (J-30/J-15/J-10) est lettre morte — personne ne reçoit la convocation à temps pour mandater sa base. P3 rend la convocation **vivante**.
+
+**Events & déclencheurs** (préfixe `network.assembleia.*`) :
+- **`…convocada`** — à la convocation (statut → `convocada`, ~J-30) → fan-out **tout le réseau** (coordenador·es des biblios membres) : « AG convoquée, l'ODJ se constitue, mandatez-vous ».
+- **`…agenda_published`** — ODJ figé/traduit publié (~J-10) → fan-out réseau : « voici les points, préparez le mandat ».
+- **`…item_proposed`** — au dépôt d'un point → vers la **facilitation** (DOC-NOTIF-1 : pas l'auteur·rice).
+- *(option P3b)* **rappels** J-15 (« le dépôt ferme ») et J-1 (« demain, lien Jitsi ») via **pg_cron** (motif `fn_circle_resolve_due`).
+
+**Le point dur `uuid`↔`bigint` est RÉSOLU par la voie outbox/jsonb (vérifié 17/06).** On **n'utilise pas** le dispatcher historique `fn_dispatch_notify_event` (qui exige un `record_id bigint` — ce qui avait différé les events cercles). On réemploie la voie **moderne** (gouvernance d'équipe / lettre) : `fn_network_notify_event(p_event 'network.%', p_payload jsonb)` → insère dans `team_notification_outbox` → trigger `trg_team_outbox_dispatch` → POST vers l'EF `notify-event`, qui **résout le fan-out depuis le payload**. **L'uuid de l'assemblée voyage dans le payload** — aucun `bigint`.
+
+**Ce que P3 ajoute :**
+1. **Émission** des events dans les RPC existantes — `fn_assembleia_set_status` (convocada / publication), `fn_assembleia_propose_item` (item_proposed) — en **best-effort** (l'échec d'émission ne casse jamais la RPC métier, motif `fn_network_notify_event`).
+2. **Handler outbox** dans l'EF `notify-event` pour les `network.assembleia.*` : résolution des **destinataires** (réseau pour convocada/published ; facilitation pour item_proposed) + rendu via **`_shared/i18n/mail-strings.ts` / `tMail`** — ⚠️ **8 langues** (système e-mail distinct des 10 locales React).
+3. **Désactivable** (gouvernance d'équipe) ; **DOC-NOTIF-1** (notifier qui n'a pas initié).
+
+**À confirmer en build** : la branche **outbox** exacte de l'EF (comment elle calcule le fan-out depuis le payload — champ destinataires explicite ? scope « réseau » ?) et la résolution « tout collectif membre » pour la convocation.
+
+**Périmètre P3** : `convocada` + `agenda_published` + `item_proposed`. **Différé P3b** : rappels J-15/J-1 (pg_cron). **Backend surtout** (émission + handler EF + mail-strings) ; pas de frontend.
+
 ## 8. Points ouverts (à trancher pour `spec-assembleias`)
 
 **Tranchés le 16/06** (orientations, à canoniser au REGISTRE §`FED`) :
