@@ -72,5 +72,26 @@ chantier (peut casser la chaîne). À faire : sur une **branche Supabase de dev*
 d'abord, avec un `db reset` de validation AVANT de toucher `main`, plan de
 rollback clair. **Jamais en fin de session / dans la précipitation.**
 
+## MISE À JOUR (même soir) — racine confirmée par un `db reset`
+
+Un `supabase db reset` **local** (stack Docker, **prod intacte**) échoue sur la
+**1re migration** (`20260510183000`) : `relation "public.book_holdings" does not
+exist`. Vérifié : **aucune migration ne crée** `book_holdings`, `books`,
+`profiles`, `libraries`, `exemplares` — toute la **base socle préexiste à
+l'historique** (qui démarre le 2026-05-10). La dérive n'est donc pas « ~150
+fonctions » mais **le socle entier non capturé** (tables fondatrices + MV/vues
+catalogue + fonctions hors-migration).
+
+**Correctif au plan ci-dessus** :
+- `supabase db diff` et `db reset` **ne peuvent PAS tourner** tant que la baseline
+  n'existe pas (ils reconstruisent depuis les migrations → même mur). Ne pas
+  s'appuyer dessus. (L'étape ①/`db diff` ci-dessus est donc inopérante en l'état.)
+- Artefact à produire = **`supabase db dump --linked -f docs/db/schema_live_*.sql`**
+  : il lit la live directement (ignore les migrations) → **marche**, et c'est la
+  matière de la baseline.
+- Reprise : transformer ce dump en **migration baseline placée AVANT
+  `20260510183000`** (ou squash de tout l'historique en une baseline). Ensuite
+  `db reset` rejoue : socle → migrations → live reproductible.
+
 ---
 *Audit produit en lecture seule le 17/06/2026 (session « Audit 360 — correctifs P0 »).*
