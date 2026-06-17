@@ -39,7 +39,7 @@ const PUBLIC_COLS = [
   'library_slug','library_name','biblioteca',
   'global_available_count','global_exemplares_total','available_count',
   'exemplares_total','loanable','bibliotecas_count',
-  'has_online_reading','holding_library_names_json',
+  'has_online_reading','holding_library_names_json','cover_object_path',
 ].join(',');
 
 const SESSION_COLS = [
@@ -53,7 +53,7 @@ const SESSION_COLS = [
   'has_online_reading','holding_library_names_json',
   'session_library_id','session_library_slug','session_library_name',
   'session_exemplares_total','session_has_holding','session_status_hint',
-  'session_available_count','session_loanable',
+  'session_available_count','session_loanable','cover_object_path',
 ].join(',');
 
 // Sort options, availability options, and status labels are built inside the component using t()
@@ -65,6 +65,13 @@ const TIPO_ICONS = {
   audio:'🎧', audiovisual:'🎬', recurso_digital:'💻',
   dossie:'📁', outro:'📎',
 };
+
+// Miniatures de couverture : endpoint de transformation d'image de Supabase
+// Storage → vraies vignettes (~7 Ko en width=64 vs ~155 Ko la pleine résolution).
+const COVER_RENDER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/render/image/public/covers/';
+function coverThumb(path) {
+  return path ? `${COVER_RENDER_BASE}${path}?width=64&quality=70` : null;
+}
 
 // ── Helpers ────────────────────────────────────────────────
 
@@ -1263,12 +1270,20 @@ export default function CatalogPage() {
                       <td data-label={t({ id: 'catalog.table.ref' })}><Link to={`/livro/${book.book_id}`}>{book.bib_ref || '—'}</Link></td>
                       <td data-label={t({ id: 'catalog.table.author' })}><AuthorLinks book={book} /></td>
                       <td data-label={t({ id: 'catalog.table.bookTitle' })}>
-                        <Link to={`/livro/${book.book_id}`}>
-                          {icon && <span className="ab-tipo-icon">{icon} </span>}
-                          {book.titulo}
-                          {book.subtitulo && <span className="ab-subtitulo"> — {book.subtitulo}</span>}
-                        </Link>
-                        {book.has_online_reading && <span className="ab-online-badge">{t({ id: 'catalog.actions.readOnline' })}</span>}
+                        <div className="ab-cat-title">
+                          <Link to={`/livro/${book.book_id}`} className="ab-cat-thumb" tabIndex={-1} aria-hidden="true">
+                            {book.cover_object_path
+                              ? <img src={coverThumb(book.cover_object_path)} alt="" loading="lazy" decoding="async" width="30" height="42" />
+                              : <span className="ab-cat-thumb__ph">{icon || '📖'}</span>}
+                          </Link>
+                          <span className="ab-cat-title__text">
+                            <Link to={`/livro/${book.book_id}`}>
+                              {book.titulo}
+                              {book.subtitulo && <span className="ab-subtitulo"> — {book.subtitulo}</span>}
+                            </Link>
+                            {book.has_online_reading && <span className="ab-online-badge">{t({ id: 'catalog.actions.readOnline' })}</span>}
+                          </span>
+                        </div>
                       </td>
                       <td data-label={t({ id: 'catalog.table.year' })}>{book.ano || '—'}</td>
                       <td data-label={t({ id: 'catalog.table.publisher' })}>{book.editora || '—'}</td>

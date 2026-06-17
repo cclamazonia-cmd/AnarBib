@@ -181,6 +181,25 @@
 
 .ab-tipo-icon { margin-right: 4px; }
 .ab-subtitulo { color: var(--brand-muted); font-style: italic; }
+
+/* Miniature de couverture dans la cellule titre (lazy, ~7 Ko). Placeholder
+   propre (icône de type) pour les ~62 % de notices sans couverture. */
+.ab-cat-title { display: flex; gap: 9px; align-items: flex-start; }
+.ab-cat-thumb { flex: 0 0 auto; display: block; line-height: 0; }
+.ab-cat-thumb img {
+  width: 30px; height: 42px; object-fit: cover; border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.4); background: rgba(255,255,255,.04);
+}
+.ab-cat-thumb__ph {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 42px; border-radius: 3px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--brand-panel-border, rgba(255,255,255,.12));
+  font-size: .92rem; opacity: .6;
+}
+.ab-cat-title__text { min-width: 0; }
+.ab-table--compact .ab-cat-thumb img,
+.ab-table--compact .ab-cat-thumb__ph { width: 24px; height: 34px; }
 .ab-online-badge {
   display: inline-block; margin-left: 8px; padding: 2px 8px;
   font-size: .76rem; font-weight: 700; border-radius: var(--brand-radius-pill);
