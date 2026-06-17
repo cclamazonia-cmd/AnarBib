@@ -229,6 +229,7 @@ export const REGISTRY = [
     fields: [
       { id: 'audio_duration', label: 'catalogacao.field.duration', tier: 1, ph: 'catalogacao.ph.audioDuration' },
       { id: 'audio_support', label: 'catalogacao.field.support', tier: 1, ph: 'catalogacao.ph.audioSupport' },
+      { id: 'gravadora', label: 'catalogacao.field.gravadora', tier: 1, phEx: 'Sub Pop' },
       { id: 'audio_participants', label: 'catalogacao.field.participants', tier: 1, span: 2, ph: 'catalogacao.ph.audioParticipants' },
       { id: 'audio_format', label: 'catalogacao.field.audioFormat', tier: 3, ph: 'catalogacao.ph.audioFormatTech' },
       // Langue : portée par le champ cœur `idioma` (évite le doublon).

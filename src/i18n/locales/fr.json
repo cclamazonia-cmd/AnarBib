@@ -2050,6 +2050,7 @@
   "catalogacao.field.discard": "Supprimer le brouillon",
   "catalogacao.field.discardConfirm": "Supprimer ce brouillon ?",
   "catalogacao.field.distribuidora": "Distributeur",
+  "catalogacao.field.gravadora": "Maison de disques",
   "catalogacao.field.duration": "Durée",
   "catalogacao.field.edition": "Édition",
   "catalogacao.field.emitterOrg": "Organisation émettrice",

@@ -2050,6 +2050,7 @@
   "catalogacao.field.discard": "Descartar rascunho",
   "catalogacao.field.discardConfirm": "Descartar este rascunho?",
   "catalogacao.field.distribuidora": "Verleih",
+  "catalogacao.field.gravadora": "Plattenlabel",
   "catalogacao.field.duration": "Dauer",
   "catalogacao.field.edition": "Ausgabe",
   "catalogacao.field.emitterOrg": "Herausgebende Organisation",

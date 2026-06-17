@@ -2050,6 +2050,7 @@
   "catalogacao.field.discard": "Discard draft",
   "catalogacao.field.discardConfirm": "Discard this draft?",
   "catalogacao.field.distribuidora": "Distributor",
+  "catalogacao.field.gravadora": "Record label",
   "catalogacao.field.duration": "Duration",
   "catalogacao.field.edition": "Edition",
   "catalogacao.field.emitterOrg": "Issuing organisation",
