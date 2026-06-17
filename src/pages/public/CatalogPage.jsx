@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { buildServerFilters } from '@/lib/catalogFilters';
 import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -100,52 +101,9 @@ function getStatusInfo(book, isAuth, t) {
   return { label: t({ id: 'catalog.avail.check' }), cls: 'muted' };
 }
 
-function buildServerFilters({ search, authorFilter, authorIdFilter, alphaFilter, publisherFilter, yearFilter, libraryShortNames, availabilityFilter, isAuth, isbnFilter, languageFilter, cddFilter, subjectsFilter, materialFilter, collectionFilter, placeFilter }) {
-  const f = {};
-  if (search.trim()) {
-    const p = `%${search.trim()}%`;
-    f['or'] = `(titulo.ilike.${p},autor.ilike.${p},editora.ilike.${p},bib_ref.ilike.${p},cdd.ilike.${p},assuntos.ilike.${p},subtitulo.ilike.${p},isbn.ilike.${p})`;
-  }
-  // #OPAC10 parcours A–Z (préfixe d'auteur·rice) prioritaire ; sinon filtre par
-  // LIEN d'autorite (author_id, regroupe les graphies) ; sinon texte brut.
-  if (alphaFilter && String(alphaFilter).trim()) f['autor'] = `ilike.${String(alphaFilter).trim()}%`;
-  else if (authorIdFilter && String(authorIdFilter).trim()) f['author_id'] = `eq.${String(authorIdFilter).trim()}`;
-  else if (authorFilter.trim()) f['autor'] = `ilike.%${authorFilter.trim()}%`;
-  if (publisherFilter.trim()) f['editora'] = `ilike.%${publisherFilter.trim()}%`;
-  if (yearFilter.trim()) {
-    const raw = yearFilter.trim();
-    const m = raw.match(/^(\d{4})\s*[-–]\s*(\d{4})$/);
-    if (m) f['and'] = `(ano.gte.${m[1]},ano.lte.${m[2]})`;
-    else f['ano'] = `eq.${raw}`;
-  }
-  if (Array.isArray(libraryShortNames) && libraryShortNames.length > 0) {
-    if (libraryShortNames.length === 1) f['holding_library_names_json'] = `cs.["${libraryShortNames[0]}"]`;
-    else f['or'] = `(${libraryShortNames.map(sn => `holding_library_names_json.cs.["${sn}"]`).join(',')})`;
-  }
-  // Advanced filters
-  if (isbnFilter.trim()) f['isbn'] = `ilike.%${isbnFilter.trim().replace(/[-\s]/g, '')}%`;
-  if (languageFilter.trim()) f['idioma'] = `ilike.%${languageFilter.trim()}%`;
-  if (cddFilter.trim()) f['cdd'] = `ilike.${cddFilter.trim()}%`;
-  if (subjectsFilter.trim()) f['assuntos'] = `ilike.%${subjectsFilter.trim()}%`;
-  if (materialFilter && materialFilter !== '__all__') f['tipo_material'] = `eq.${materialFilter}`;
-  if (collectionFilter.trim()) f['colecao'] = `ilike.%${collectionFilter.trim()}%`;
-  if (placeFilter.trim()) f['local_publicacao'] = `ilike.%${placeFilter.trim()}%`;
-
-  if (availabilityFilter && availabilityFilter !== '__all__' && isAuth) {
-    switch (availabilityFilter) {
-      case 'available': f['session_status_hint'] = 'eq.no_acervo_da_sua_biblioteca'; f['session_available_count'] = 'gt.0'; break;
-      case 'consult': f['session_status_hint'] = 'eq.consultavel_no_local'; break;
-      case 'unavailable_user': f['session_status_hint'] = 'eq.indisponivel_para_voce'; break;
-      case 'unavailable_now': f['session_status_hint'] = 'eq.no_acervo_da_sua_biblioteca'; f['session_available_count'] = 'eq.0'; break;
-      case 'unavailable_other': f['session_has_holding'] = 'is.false'; break;
-      case 'check': f['session_status_hint'] = 'eq.sem_biblioteca_de_sessao'; break;
-    }
-  }
-  // Doctrine A1/A2/A3 : aucun filtre availabilityFilter ne s'applique pour l'anon
-  // (branche consult && !isAuth retiree car AVAILABILITY_OPTIONS_ANON ne contient
-  // plus que '__all__').
-  return f;
-}
+// buildServerFilters est désormais une fonction pure extraite dans
+// src/lib/catalogFilters.js (recherche multi-mots + tests unitaires
+// src/tests/catalogFilters.test.js).
 
 function sortLabel(v, opts) { return opts.find(o => o.value === v)?.label || ''; }
 

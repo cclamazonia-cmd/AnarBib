@@ -29,6 +29,39 @@ function yearsLabel(birth, death) {
   return `– ${d}`;
 }
 
+const VARIANT_CAP = 10; // formes du nom affichées avant le « + N de plus »
+
+// #AUT — Formes du nom (authors.variant_forms : { langue: [graphies] }). On agrège
+// toutes les langues, on déduplique de façon insensible à la casse et aux accents,
+// on retire les formes identiques au nom retenu, puis on priorise la locale active
+// et quelques langues à graphie latine avant le reste. Sert à la découverte
+// translingue : une même autorité cherchée sous diverses graphies ou alphabets
+// (ex. Kropotkine / Kropotkin / Кропоткин).
+function collectVariantForms(variantForms, locale, excludeNames) {
+  if (!variantForms || typeof variantForms !== 'object') return [];
+  const norm = (s) => String(s || '')
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+    .trim().toLowerCase().replace(/\s+/g, ' ');
+  const seen = new Set((excludeNames || []).map(norm).filter(Boolean));
+  const base = (locale || '').split('-')[0];
+  const priority = [base, 'en', 'fr', 'es', 'pt', 'it', 'de', 'ca', 'nl', 'eo'];
+  const langs = Object.keys(variantForms).sort((a, b) => {
+    const ia = priority.indexOf(a), ib = priority.indexOf(b);
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+  });
+  const out = [];
+  for (const lang of langs) {
+    const arr = Array.isArray(variantForms[lang]) ? variantForms[lang] : [];
+    for (const name of arr) {
+      const k = norm(name);
+      if (!k || seen.has(k)) continue;
+      seen.add(k);
+      out.push(String(name).trim());
+    }
+  }
+  return out;
+}
+
 // #AUT4 — pastille de disponibilité (connecté·es uniquement, doctrine A1/A2/A3).
 function bookAvail(r, t) {
   if (!r) return null;
@@ -71,6 +104,7 @@ export default function AuthorPage() {
   const [loading, setLoading] = useState(true);
   const isAuth = !!user;
   const [toast, setToast] = useState(''); // #AUT3 : retour copie permalien
+  const [variantsExpanded, setVariantsExpanded] = useState(false); // #AUT : formes du nom
 
   useEffect(() => {
     (async () => {
@@ -156,6 +190,8 @@ export default function AuthorPage() {
   const hasPhoto = !!author.photo_object_path;
   const sourceLabel = [author.source_kind, author.source_label].filter(Boolean).join(' · ');
   const meta = author.structured_meta || {};
+  // #AUT — formes du nom (variant_forms) hors nom retenu, dédupliquées.
+  const variantNames = collectVariantForms(author.variant_forms, locale, [displayName, author.preferred_name, author.sort_name, secondaryName]);
 
   // #AUT3 — barre d'actions d'autorité (permalien + export biblio)
   const permalink = `${window.location.origin}/autor/${id}`;
@@ -215,6 +251,8 @@ export default function AuthorPage() {
           {/* B2 : periode d'activite + affiliation (depuis la meta structuree de notes). */}
           {meta.activityPeriod && <Pill>{t({ id: 'author.activityPeriod' })}: {meta.activityPeriod}</Pill>}
           {meta.affiliation && <Pill>{t({ id: 'author.affiliation' })}: {meta.affiliation}</Pill>}
+          {meta.activityPlace && <Pill>{t({ id: 'author.activityPlace' })}: {meta.activityPlace}</Pill>}
+          {meta.pseudonyms && <Pill>{t({ id: 'author.pseudonyms' })}: {meta.pseudonyms}</Pill>}
           {author.viaf_id && (
             <Pill>
               VIAF: <a href={`https://viaf.org/viaf/${author.viaf_id}`} target="_blank" rel="noopener noreferrer">{author.viaf_id}</a>
@@ -315,6 +353,24 @@ export default function AuthorPage() {
                   </>
                 );
               })()}
+
+              {variantNames.length > 0 && (
+                <div className="ab-autor-variants">
+                  <h3 className="ab-autor-variants__title">{t({ id: 'author.variantForms' })}</h3>
+                  <div className="ab-autor-variants__list">
+                    {(variantsExpanded ? variantNames : variantNames.slice(0, VARIANT_CAP)).map((name, i) => (
+                      <span key={i} className="ab-autor-variant">{name}</span>
+                    ))}
+                    {variantNames.length > VARIANT_CAP && (
+                      <button type="button" className="ab-autor-variants__more" onClick={() => setVariantsExpanded(e => !e)}>
+                        {variantsExpanded
+                          ? t({ id: 'author.variantForms.less' })
+                          : t({ id: 'author.variantForms.more' }, { count: variantNames.length - VARIANT_CAP })}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

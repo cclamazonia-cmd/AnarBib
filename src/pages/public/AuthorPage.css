@@ -179,3 +179,34 @@
 /* ── #AUT1 — Bandeau réseau (pleine largeur sous le Hero) ── */
 
 .ab-autor-related-band { margin-bottom: 16px; }
+
+/* ── #AUT — Formes du nom (variant_forms) ───────────────── */
+
+.ab-autor-variants { margin-top: 18px; }
+
+.ab-autor-variants__title {
+  margin: 0 0 8px;
+  font-size: .76rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--brand-muted);
+}
+
+.ab-autor-variants__list {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+
+.ab-autor-variant {
+  display: inline-flex; align-items: center;
+  padding: 3px 9px;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--brand-muted);
+  font-size: .8rem;
+}
+
+.ab-autor-variants__more {
+  background: none; border: none; cursor: pointer;
+  color: var(--brand-link, #cf8b8d);
+  font-size: .8rem; font-weight: 600; padding: 3px 6px;
+}
+.ab-autor-variants__more:hover { text-decoration: underline; }
