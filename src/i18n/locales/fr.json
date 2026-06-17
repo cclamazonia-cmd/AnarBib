@@ -5195,5 +5195,7 @@
   "reader.epub.readingTime": "Temps de lecture : {time}",
   "reader.epub.tocEmpty": "Pas de sommaire",
   "reader.epub.note": "Note {num}",
-  "reader.epub.noteClose": "Fermer"
+  "reader.epub.noteClose": "Fermer",
+  "account.renew.no_active_membership": "Ton adhésion à cette bibliothèque n'est plus active. Réactive-la avant de renouveler.",
+  "account.renew.restricted": "Ton compte est restreint dans cette bibliothèque. Contacte l'équipe avant de renouveler."
 }

@@ -5195,5 +5195,7 @@
   "reader.epub.readingTime": "Temps de lectura: {time}",
   "reader.epub.tocEmpty": "Sense índex",
   "reader.epub.note": "Nota {num}",
-  "reader.epub.noteClose": "Tanca"
+  "reader.epub.noteClose": "Tanca",
+  "account.renew.no_active_membership": "La teva afiliació a aquesta biblioteca ja no està activa. Reactiva-la abans de renovar.",
+  "account.renew.restricted": "El teu compte està restringit en aquesta biblioteca. Contacta amb l'equip abans de renovar."
 }

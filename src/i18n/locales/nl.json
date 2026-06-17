@@ -5195,5 +5195,7 @@
   "reader.epub.readingTime": "Leestijd: {time}",
   "reader.epub.tocEmpty": "Geen inhoud",
   "reader.epub.note": "Noot {num}",
-  "reader.epub.noteClose": "Sluiten"
+  "reader.epub.noteClose": "Sluiten",
+  "account.renew.no_active_membership": "Je lidmaatschap bij deze bibliotheek is niet meer actief. Activeer het opnieuw voordat je verlengt.",
+  "account.renew.restricted": "Je account is beperkt bij deze bibliotheek. Neem contact op met het team voordat je verlengt."
 }

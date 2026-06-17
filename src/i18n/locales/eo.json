@@ -5195,5 +5195,7 @@
   "reader.epub.readingTime": "Legtempo: {time}",
   "reader.epub.tocEmpty": "Neniu enhavo",
   "reader.epub.note": "Noto {num}",
-  "reader.epub.noteClose": "Fermi"
+  "reader.epub.noteClose": "Fermi",
+  "account.renew.no_active_membership": "Via aliĝo al ĉi tiu biblioteko ne plu estas aktiva. Reaktivigu ĝin antaŭ ol renovigi.",
+  "account.renew.restricted": "Via konto estas limigita en ĉi tiu biblioteko. Kontaktu la teamon antaŭ ol renovigi."
 }

@@ -5195,5 +5195,7 @@
   "reader.epub.readingTime": "Χρόνος ανάγνωσης: {time}",
   "reader.epub.tocEmpty": "Χωρίς περιεχόμενα",
   "reader.epub.note": "Σημείωση {num}",
-  "reader.epub.noteClose": "Κλείσιμο"
+  "reader.epub.noteClose": "Κλείσιμο",
+  "account.renew.no_active_membership": "Η ιδιότητα μέλους σου σε αυτή τη βιβλιοθήκη δεν είναι πλέον ενεργή. Ενεργοποίησέ την ξανά πριν την ανανέωση.",
+  "account.renew.restricted": "Ο λογαριασμός σου έχει περιορισμό σε αυτή τη βιβλιοθήκη. Επικοινώνησε με την ομάδα πριν την ανανέωση."
 }
