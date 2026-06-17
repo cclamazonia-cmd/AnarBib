@@ -149,7 +149,7 @@ export default function AccountPage() {
   // #CL.7 (31/05/2026) — Préférences de notification lectrice.
   // Position 1 (souveraineté biblio + réduction lectrice) ; cf. spec-notifications-lecteur.md.
   // Chargées via fn_get_my_notification_preferences au montage, sauvées via fn_set_my_notification_preferences.
-  const [notifPrefs, setNotifPrefs] = useState({ disable_reserva_pronta: false, disable_consulta_pronta: false });
+  const [notifPrefs, setNotifPrefs] = useState({ disable_reserva_pronta: false, disable_consulta_pronta: false, disable_rede_news: false });
   const [notifPrefsSaving, setNotifPrefsSaving] = useState(false);
   const [notifPrefsMsg, setNotifPrefsMsg] = useState('');
   // Lettre de la fédération — abonnement opt-in (Lot 2, REGISTRE §29 GAZ-5). Double opt-in.
@@ -284,6 +284,7 @@ export default function AccountPage() {
         setNotifPrefs({
           disable_reserva_pronta: !!prefsData[0].disable_reserva_pronta,
           disable_consulta_pronta: !!prefsData[0].disable_consulta_pronta,
+          disable_rede_news: !!prefsData[0].disable_rede_news,
         });
       }
       // Lettre de la fédération — état d'abonnement (opt-in, Lot 2)
@@ -1502,6 +1503,15 @@ export default function AccountPage() {
                     />
                     <span>{t({ id: 'account.notifPrefs.disableConsultaPronta' })}</span>
                   </label>
+                  {/* Phase 1 actus réseau : un seul toggle gouverne Lettre/Gazette/cercles */}
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={notifPrefs.disable_rede_news}
+                      onChange={(e) => setNotifPrefs(p => ({ ...p, disable_rede_news: e.target.checked }))}
+                    />
+                    <span>{t({ id: 'account.notifPrefs.disableRedeNews' })}</span>
+                  </label>
                 </div>
 
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1514,6 +1524,7 @@ export default function AccountPage() {
                         const { error } = await supabase.rpc('fn_set_my_notification_preferences', {
                           p_disable_reserva_pronta: notifPrefs.disable_reserva_pronta,
                           p_disable_consulta_pronta: notifPrefs.disable_consulta_pronta,
+                          p_disable_rede_news: notifPrefs.disable_rede_news,
                         });
                         if (error) throw error;
                         setNotifPrefsMsg(t({ id: 'account.notifPrefs.saved' }));
@@ -2146,10 +2157,10 @@ export default function AccountPage() {
                     }}>
                       <div className="ab-conta-item__main" style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{(n.category || '').startsWith('rgpd_retention_') && n.title ? t({ id: n.title, defaultMessage: n.title }) : n.title}</span>
+                          <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{/^(rgpd_retention_|rede_)/.test(n.category || '') && n.title ? t({ id: n.title, defaultMessage: n.title }) : n.title}</span>
                           {!n.is_read && <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', flexShrink: 0 }} />}
                         </div>
-                        {n.body && <span className="ab-conta-item__meta">{(n.category || '').startsWith('rgpd_retention_') ? t({ id: n.body, defaultMessage: n.body }) : n.body}</span>}
+                        {n.body && <span className="ab-conta-item__meta">{/^(rgpd_retention_|rede_)/.test(n.category || '') ? t({ id: n.body, defaultMessage: n.body }) : n.body}</span>}
                         <span className="ab-conta-item__meta" style={{ fontSize: '.78rem' }}>
                           {new Date(n.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
                           {n.category && <> · {n.category}</>}
@@ -2157,6 +2168,7 @@ export default function AccountPage() {
                       </div>
                       <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
                         {n.link_type === 'livro' && n.link_id && <Link to={`/livro/${n.link_id}`}><Button variant="mini">{t({ id: 'account.notifications.seeBook' })}</Button></Link>}
+                        {(n.link_type || '').startsWith('rede_') && <Link to={n.link_type === 'rede_gazette' ? '/federacao/gazeta' : n.link_type === 'rede_circulo' ? '/federacao/circulos' : '/federacao/carta'}><Button variant="mini">{t({ id: 'account.notifications.openNetwork' })}</Button></Link>}
                         {!n.is_read && (
                           <Button variant="mini" onClick={async () => {
                             await supabase.rpc('fn_mark_notifications_read', { p_ids: [n.id] });
