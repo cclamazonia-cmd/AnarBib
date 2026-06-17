@@ -23,7 +23,7 @@ function loadFieldPrefs() {
   catch { return { ...DEFAULT_FIELDS }; }
 }
 
-export default function LabelSheetPrinter({ onChanged }) {
+export default function LabelSheetPrinter({ onChanged, isActive = true }) {
   const { formatMessage: t } = useIntl();
   const { libraryId, libraryName } = useLibrary();
   const [labels, setLabels] = useState([]);
@@ -138,7 +138,11 @@ export default function LabelSheetPrinter({ onChanged }) {
     else setLabels(data || []);
     setLoading(false);
   }, [libraryId, t]);
-  useEffect(() => { loadLabels(); }, [loadLabels]);
+  // Recharge a CHAQUE activation de l'onglet (et au changement de biblio) :
+  // les panneaux de CatalogacaoPage restent montes (affiches/masques en CSS),
+  // donc sans ce declencheur la liste resterait figee au chargement de la page
+  // et un exemplaire publie depuis l'onglet Indexacao n'apparaitrait jamais ici.
+  useEffect(() => { if (isActive) loadLabels(); }, [isActive, loadLabels]);
 
   // ── Filtered labels ──
   const filtered = useMemo(() => {

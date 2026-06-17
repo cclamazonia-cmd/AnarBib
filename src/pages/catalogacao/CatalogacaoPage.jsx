@@ -359,7 +359,7 @@ export default function CatalogacaoPage() {
 
           {/* 3b. Etiquetas (impressão das etiquetas de cote) */}
           <div className={`cat-panel${activeTab === 'labelsPanel' ? ' active' : ''}`}>
-            <LabelSheetPrinter onChanged={refreshAll} />
+            <LabelSheetPrinter onChanged={refreshAll} isActive={activeTab === 'labelsPanel'} />
           </div>
 
           {/* 3c. Fundo escaneado (OCR navegador) — piste B, flux d'ingestion distinct */}
