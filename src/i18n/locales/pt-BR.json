@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Subir",
   "federacao.assembleias.fac.order.down": "↓ Descer",
   "federacao.assembleias.fac.anon": "Membro",
-  "federacao.assembleias.fac.rotativityHint": "Funções rotativas: alternem de uma AG para outra — para evitar o esgotamento militante e que um poder se instale."
+  "federacao.assembleias.fac.rotativityHint": "Funções rotativas: alternem de uma AG para outra — para evitar o esgotamento militante e que um poder se instale.",
+  "biblioteca.openingHours.title": "Horários de atendimento / plantões",
+  "biblioteca.openingHours.hint": "Faixas semanais — adiciona quantas precisares (plantões, aberturas…). Visível pelos membros da biblioteca.",
+  "biblioteca.openingHours.start": "Início",
+  "biblioteca.openingHours.end": "Fim",
+  "biblioteca.openingHours.labelPlaceholder": "Rótulo (opcional)",
+  "biblioteca.openingHours.addSlot": "+ Adicionar faixa",
+  "biblioteca.openingHours.empty": "Nenhuma faixa definida por enquanto.",
+  "biblioteca.openingHours.note": "Nota (opcional)",
+  "biblioteca.openingHours.notePlaceholder": "Ex.: com hora marcada, fechado em agosto…",
+  "account.mylib.hours": "Horários / plantões"
 }

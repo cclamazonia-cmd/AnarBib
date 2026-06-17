@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Omhoog",
   "federacao.assembleias.fac.order.down": "↓ Omlaag",
   "federacao.assembleias.fac.anon": "Lid",
-  "federacao.assembleias.fac.rotativityHint": "Roterende functies: wissel elkaar af van de ene AV naar de andere — tegen activisme-uitputting en vastgeroeste macht."
+  "federacao.assembleias.fac.rotativityHint": "Roterende functies: wissel elkaar af van de ene AV naar de andere — tegen activisme-uitputting en vastgeroeste macht.",
+  "biblioteca.openingHours.title": "Openingsuren / diensten",
+  "biblioteca.openingHours.hint": "Wekelijkse tijdvakken — voeg er zoveel toe als nodig (diensten, openingen…). Zichtbaar voor bibliotheekleden.",
+  "biblioteca.openingHours.start": "Begin",
+  "biblioteca.openingHours.end": "Einde",
+  "biblioteca.openingHours.labelPlaceholder": "Label (optioneel)",
+  "biblioteca.openingHours.addSlot": "+ Tijdvak toevoegen",
+  "biblioteca.openingHours.empty": "Nog geen tijdvak ingesteld.",
+  "biblioteca.openingHours.note": "Notitie (optioneel)",
+  "biblioteca.openingHours.notePlaceholder": "Bijv. op afspraak, gesloten in augustus…",
+  "account.mylib.hours": "Uren / diensten"
 }

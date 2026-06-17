@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Subir",
   "federacao.assembleias.fac.order.down": "↓ Bajar",
   "federacao.assembleias.fac.anon": "Integrante",
-  "federacao.assembleias.fac.rotativityHint": "Funciones rotativas: alternen de una AG a otra — para evitar el agotamiento militante y que se instale un poder."
+  "federacao.assembleias.fac.rotativityHint": "Funciones rotativas: alternen de una AG a otra — para evitar el agotamiento militante y que se instale un poder.",
+  "biblioteca.openingHours.title": "Horarios de atención / turnos",
+  "biblioteca.openingHours.hint": "Franjas semanales — añade las que necesites (turnos, aperturas…). Visible para los miembros de la biblioteca.",
+  "biblioteca.openingHours.start": "Inicio",
+  "biblioteca.openingHours.end": "Fin",
+  "biblioteca.openingHours.labelPlaceholder": "Etiqueta (opcional)",
+  "biblioteca.openingHours.addSlot": "+ Añadir franja",
+  "biblioteca.openingHours.empty": "Ninguna franja definida por ahora.",
+  "biblioteca.openingHours.note": "Nota (opcional)",
+  "biblioteca.openingHours.notePlaceholder": "Ej.: con cita previa, cerrado en agosto…",
+  "account.mylib.hours": "Horarios / turnos"
 }

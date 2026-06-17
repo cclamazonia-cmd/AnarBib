@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Move up",
   "federacao.assembleias.fac.order.down": "↓ Move down",
   "federacao.assembleias.fac.anon": "Member",
-  "federacao.assembleias.fac.rotativityHint": "Rotating roles: alternate from one AG to the next — to avoid activist burnout and prevent entrenched power."
+  "federacao.assembleias.fac.rotativityHint": "Rotating roles: alternate from one AG to the next — to avoid activist burnout and prevent entrenched power.",
+  "biblioteca.openingHours.title": "Opening hours / shifts",
+  "biblioteca.openingHours.hint": "Weekly slots — add as many as you need (shifts, openings…). Visible to library members.",
+  "biblioteca.openingHours.start": "Start",
+  "biblioteca.openingHours.end": "End",
+  "biblioteca.openingHours.labelPlaceholder": "Label (optional)",
+  "biblioteca.openingHours.addSlot": "+ Add a slot",
+  "biblioteca.openingHours.empty": "No slot defined yet.",
+  "biblioteca.openingHours.note": "Note (optional)",
+  "biblioteca.openingHours.notePlaceholder": "E.g. by appointment, closed in August…",
+  "account.mylib.hours": "Hours / shifts"
 }

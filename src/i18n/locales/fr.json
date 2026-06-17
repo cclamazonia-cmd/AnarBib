@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Remonter",
   "federacao.assembleias.fac.order.down": "↓ Descendre",
   "federacao.assembleias.fac.anon": "Membre",
-  "federacao.assembleias.fac.rotativityHint": "Fonctions tournantes : alternez d’une AG à l’autre — pour éviter l’épuisement militant et qu’un pouvoir s’installe."
+  "federacao.assembleias.fac.rotativityHint": "Fonctions tournantes : alternez d’une AG à l’autre — pour éviter l’épuisement militant et qu’un pouvoir s’installe.",
+  "biblioteca.openingHours.title": "Horaires d'ouverture / permanences",
+  "biblioteca.openingHours.hint": "Créneaux hebdomadaires — ajoute autant de plages que nécessaire (permanences, ouvertures…). Visible par les membres de la biblio.",
+  "biblioteca.openingHours.start": "Début",
+  "biblioteca.openingHours.end": "Fin",
+  "biblioteca.openingHours.labelPlaceholder": "Libellé (facultatif)",
+  "biblioteca.openingHours.addSlot": "+ Ajouter un créneau",
+  "biblioteca.openingHours.empty": "Aucun créneau défini pour l'instant.",
+  "biblioteca.openingHours.note": "Note (facultative)",
+  "biblioteca.openingHours.notePlaceholder": "Ex. : sur rendez-vous, fermé en août…",
+  "account.mylib.hours": "Horaires / permanences"
 }

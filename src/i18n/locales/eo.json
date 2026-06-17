@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Supren",
   "federacao.assembleias.fac.order.down": "↓ Malsupren",
   "federacao.assembleias.fac.anon": "Membro",
-  "federacao.assembleias.fac.rotativityHint": "Rotaciaj funkcioj: alternu de unu AG al alia — por eviti la aktivulan elĉerpiĝon kaj ke potenco enradikiĝu."
+  "federacao.assembleias.fac.rotativityHint": "Rotaciaj funkcioj: alternu de unu AG al alia — por eviti la aktivulan elĉerpiĝon kaj ke potenco enradikiĝu.",
+  "biblioteca.openingHours.title": "Malfermaj horoj / deĵoroj",
+  "biblioteca.openingHours.hint": "Semajnaj fenestroj — aldonu kiom necesas (deĵoroj, malfermoj…). Videbla por la membroj de la biblioteko.",
+  "biblioteca.openingHours.start": "Komenco",
+  "biblioteca.openingHours.end": "Fino",
+  "biblioteca.openingHours.labelPlaceholder": "Etikedo (nedeviga)",
+  "biblioteca.openingHours.addSlot": "+ Aldoni fenestron",
+  "biblioteca.openingHours.empty": "Ankoraŭ neniu fenestro difinita.",
+  "biblioteca.openingHours.note": "Noto (nedeviga)",
+  "biblioteca.openingHours.notePlaceholder": "Ekz.: laŭ interkonsento, fermita en aŭgusto…",
+  "account.mylib.hours": "Horoj / deĵoroj"
 }

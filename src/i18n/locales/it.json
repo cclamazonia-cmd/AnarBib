@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Su",
   "federacao.assembleias.fac.order.down": "↓ Giù",
   "federacao.assembleias.fac.anon": "Persona",
-  "federacao.assembleias.fac.rotativityHint": "Funzioni a rotazione: alternatevi da un’AG all’altra — per evitare l’esaurimento militante e che si installi un potere."
+  "federacao.assembleias.fac.rotativityHint": "Funzioni a rotazione: alternatevi da un’AG all’altra — per evitare l’esaurimento militante e che si installi un potere.",
+  "biblioteca.openingHours.title": "Orari di apertura / turni",
+  "biblioteca.openingHours.hint": "Fasce settimanali — aggiungi quante ne servono (turni, aperture…). Visibile ai membri della biblioteca.",
+  "biblioteca.openingHours.start": "Inizio",
+  "biblioteca.openingHours.end": "Fine",
+  "biblioteca.openingHours.labelPlaceholder": "Etichetta (facoltativa)",
+  "biblioteca.openingHours.addSlot": "+ Aggiungi fascia",
+  "biblioteca.openingHours.empty": "Nessuna fascia definita per ora.",
+  "biblioteca.openingHours.note": "Nota (facoltativa)",
+  "biblioteca.openingHours.notePlaceholder": "Es.: su appuntamento, chiuso ad agosto…",
+  "account.mylib.hours": "Orari / turni"
 }

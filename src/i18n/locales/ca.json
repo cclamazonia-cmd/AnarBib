@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Pujar",
   "federacao.assembleias.fac.order.down": "↓ Baixar",
   "federacao.assembleias.fac.anon": "Membre",
-  "federacao.assembleias.fac.rotativityHint": "Funcions rotatives: alterneu d’una AG a l’altra — per evitar l’esgotament militant i que s’instal·li un poder."
+  "federacao.assembleias.fac.rotativityHint": "Funcions rotatives: alterneu d’una AG a l’altra — per evitar l’esgotament militant i que s’instal·li un poder.",
+  "biblioteca.openingHours.title": "Horaris d'atenció / torns",
+  "biblioteca.openingHours.hint": "Franges setmanals — afegeix-ne tantes com calgui (torns, obertures…). Visible per als membres de la biblioteca.",
+  "biblioteca.openingHours.start": "Inici",
+  "biblioteca.openingHours.end": "Fi",
+  "biblioteca.openingHours.labelPlaceholder": "Etiqueta (opcional)",
+  "biblioteca.openingHours.addSlot": "+ Afegeix una franja",
+  "biblioteca.openingHours.empty": "Cap franja definida de moment.",
+  "biblioteca.openingHours.note": "Nota (opcional)",
+  "biblioteca.openingHours.notePlaceholder": "Ex.: amb cita prèvia, tancat a l'agost…",
+  "account.mylib.hours": "Horaris / torns"
 }

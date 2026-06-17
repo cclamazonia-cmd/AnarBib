@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Πάνω",
   "federacao.assembleias.fac.order.down": "↓ Κάτω",
   "federacao.assembleias.fac.anon": "Μέλος",
-  "federacao.assembleias.fac.rotativityHint": "Εναλλασσόμενες λειτουργίες: εναλλάσσεστε από τη μία ΓΣ στην άλλη — για να αποφεύγεται η ακτιβιστική εξάντληση και η παγίωση εξουσίας."
+  "federacao.assembleias.fac.rotativityHint": "Εναλλασσόμενες λειτουργίες: εναλλάσσεστε από τη μία ΓΣ στην άλλη — για να αποφεύγεται η ακτιβιστική εξάντληση και η παγίωση εξουσίας.",
+  "biblioteca.openingHours.title": "Ώρες λειτουργίας / βάρδιες",
+  "biblioteca.openingHours.hint": "Εβδομαδιαία διαστήματα — πρόσθεσε όσα χρειάζεσαι (βάρδιες, ανοίγματα…). Ορατό στα μέλη της βιβλιοθήκης.",
+  "biblioteca.openingHours.start": "Έναρξη",
+  "biblioteca.openingHours.end": "Λήξη",
+  "biblioteca.openingHours.labelPlaceholder": "Ετικέτα (προαιρετική)",
+  "biblioteca.openingHours.addSlot": "+ Προσθήκη διαστήματος",
+  "biblioteca.openingHours.empty": "Δεν έχει οριστεί διάστημα ακόμη.",
+  "biblioteca.openingHours.note": "Σημείωση (προαιρετική)",
+  "biblioteca.openingHours.notePlaceholder": "Π.χ. κατόπιν ραντεβού, κλειστά τον Αύγουστο…",
+  "account.mylib.hours": "Ώρες / βάρδιες"
 }

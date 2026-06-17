@@ -5086,5 +5086,15 @@
   "federacao.assembleias.fac.order.up": "↑ Hoch",
   "federacao.assembleias.fac.order.down": "↓ Runter",
   "federacao.assembleias.fac.anon": "Mitglied",
-  "federacao.assembleias.fac.rotativityHint": "Rotierende Funktionen: wechselt euch von einer VV zur nächsten ab — gegen Aktivismus-Erschöpfung und festgesetzte Macht."
+  "federacao.assembleias.fac.rotativityHint": "Rotierende Funktionen: wechselt euch von einer VV zur nächsten ab — gegen Aktivismus-Erschöpfung und festgesetzte Macht.",
+  "biblioteca.openingHours.title": "Öffnungszeiten / Dienste",
+  "biblioteca.openingHours.hint": "Wöchentliche Zeitfenster — füge so viele hinzu wie nötig (Dienste, Öffnungen…). Sichtbar für Bibliotheksmitglieder.",
+  "biblioteca.openingHours.start": "Beginn",
+  "biblioteca.openingHours.end": "Ende",
+  "biblioteca.openingHours.labelPlaceholder": "Bezeichnung (optional)",
+  "biblioteca.openingHours.addSlot": "+ Zeitfenster hinzufügen",
+  "biblioteca.openingHours.empty": "Noch kein Zeitfenster festgelegt.",
+  "biblioteca.openingHours.note": "Hinweis (optional)",
+  "biblioteca.openingHours.notePlaceholder": "Z. B. nach Vereinbarung, im August geschlossen…",
+  "account.mylib.hours": "Zeiten / Dienste"
 }

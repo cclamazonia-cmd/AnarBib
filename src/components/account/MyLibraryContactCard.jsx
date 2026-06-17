@@ -34,12 +34,13 @@ function initials(name) {
 }
 
 export default function MyLibraryContactCard() {
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   const { libraryId, libraryName } = useLibrary();
 
   const [loading, setLoading] = useState(true);
   const [contact, setContact] = useState(null);
   const [commons, setCommons] = useState(null);
+  const [hours, setHours] = useState(null);   // { slots:[], public_note }
   const [logoBroken, setLogoBroken] = useState(false);
 
   // Etape 6 : etat du composer « ecrire a ma bibliotheque ».
@@ -57,17 +58,21 @@ export default function MyLibraryContactCard() {
       setLoading(true);
       setLogoBroken(false);
       try {
-        const [pc, cm] = await Promise.all([
+        const [pc, cm, oh] = await Promise.all([
           supabase.from('library_public_contact')
             .select('public_email, public_phone, public_whatsapp, public_address, public_note')
             .eq('library_id', libraryId).maybeSingle(),
           supabase.from('library_commons')
             .select('logo_url, logo_file_key, display_name, short_name')
             .eq('library_id', libraryId).maybeSingle(),
+          supabase.from('library_opening_hours')
+            .select('slots, public_note')
+            .eq('library_id', libraryId).maybeSingle(),
         ]);
         if (cancelled) return;
         setContact(pc.data || null);
         setCommons(cm.data || null);
+        setHours(oh.data ? { slots: Array.isArray(oh.data.slots) ? oh.data.slots : [], public_note: oh.data.public_note || '' } : null);
       } catch {
         // Silencieux : la carte degrade proprement (nom + message).
       } finally {
@@ -80,6 +85,17 @@ export default function MyLibraryContactCard() {
   const name = (commons && (commons.display_name || commons.short_name)) || libraryName || '';
   const logoSrc = useMemo(() => resolveLibraryLogo(commons), [commons]);
   const hasAnyContact = !!contact && CONTACT_FIELDS.some(f => typeof contact[f] === 'string' && contact[f].trim() !== '');
+
+  // Horaires/permanences : day ISO 1..7 (lundi=1) ; 2024-01-01 est un lundi.
+  const dayName = (d) => {
+    try { return new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(new Date(2024, 0, Number(d) || 1)); }
+    catch { return String(d); }
+  };
+  const sortedSlots = useMemo(() => {
+    const s = (hours?.slots || []).filter(x => x && x.start && x.end);
+    return [...s].sort((a, b) => (Number(a.day) - Number(b.day)) || String(a.start).localeCompare(String(b.start)));
+  }, [hours]);
+  const hasHours = sortedSlots.length > 0 || !!(hours?.public_note);
 
   // Lecteur·rice sans biblio d'attache (orphelin·e) : pas de carte.
   if (!libraryId) return null;
@@ -191,6 +207,27 @@ export default function MyLibraryContactCard() {
       ) : (
         <div style={{ ...valueStyle, marginTop: 12, color: 'var(--brand-muted)' }}>
           {t({ id: 'account.mylib.noPublicContact' })}
+        </div>
+      )}
+
+      {/* Horaires / permanences hebdomadaires (lecture membre actif) */}
+      {!loading && hasHours && (
+        <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+          <div style={labelStyle}>{t({ id: 'account.mylib.hours' })}</div>
+          {sortedSlots.length > 0 && (
+            <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {sortedSlots.map((s, i) => (
+                <div key={i} style={valueStyle}>
+                  <span style={{ fontWeight: 600, textTransform: 'capitalize' }}>{dayName(s.day)}</span>
+                  {' · '}{s.start}–{s.end}
+                  {s.label ? <span style={{ color: 'var(--brand-muted)' }}>{' — '}{s.label}</span> : null}
+                </div>
+              ))}
+            </div>
+          )}
+          {hours?.public_note ? (
+            <div style={{ ...valueStyle, marginTop: 6, color: 'var(--brand-muted)', fontStyle: 'italic' }}>{hours.public_note}</div>
+          ) : null}
         </div>
       )}
 
