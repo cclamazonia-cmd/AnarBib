@@ -56,11 +56,22 @@ export default function BibliotecasPage() {
     borderRadius: 999, border: '1px solid rgba(255,255,255,.14)', color: 'var(--brand-muted)',
   };
   const linkStyle = { color: '#93c5fd', textDecoration: 'none', fontSize: '.85rem' };
+  // Panneau « zone de travail » sombre, à l'instar du reste de l'app (recette .ab-conta-card).
+  const panel = {
+    backgroundColor: 'var(--brand-panel-bg)',
+    backgroundImage: 'var(--brand-panel-overlay-solid), var(--brand-panel-bg-image)',
+    backgroundPosition: 'center', backgroundSize: 'cover',
+    border: '1px solid var(--brand-panel-border)',
+    borderRadius: 'calc(var(--brand-radius) + 2px)',
+    boxShadow: 'var(--brand-shadow)',
+    padding: '24px 24px 32px',
+  };
 
   return (
     <PageShell>
       <Topbar />
       <div style={{ maxWidth: 1040, margin: '0 auto', padding: '24px 16px 48px' }}>
+        <div style={panel}>
         <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: 6, fontFamily: 'var(--brand-font-body)' }}>
           {t({ id: 'bibliotecas.title' })}
         </h1>
@@ -121,6 +132,7 @@ export default function BibliotecasPage() {
             ))}
           </div>
         )}
+        </div>
       </div>
       <Footer />
     </PageShell>
