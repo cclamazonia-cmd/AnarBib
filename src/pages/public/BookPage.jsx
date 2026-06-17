@@ -305,6 +305,15 @@ export default function BookPage() {
   const exportBibtex = () => triggerDownload(`${fileBase}.bib`, buildBibtex(book, citeAuthor, permalink), 'application/x-bibtex;charset=utf-8');
   const exportRis = () => triggerDownload(`${fileBase}.ris`, buildRis(book, citeAuthorList(book, contributors), permalink), 'application/x-research-info-systems;charset=utf-8');
 
+  // Libellé « éditeur » adapté au support : distributeur (audiovisuel), maison de
+  // disques (audio), éditeur (écrits). Champs exposés par v_book_detail_public_v2.
+  const publisherLabelKey = book.tipo_material === 'audiovisual' ? 'catalogacao.field.distribuidora'
+    : book.tipo_material === 'audio' ? 'catalogacao.field.gravadora'
+    : 'book.meta.publisher';
+  const publisherValue = book.tipo_material === 'audiovisual' ? book.distribuidora
+    : book.tipo_material === 'audio' ? book.gravadora
+    : book.editora;
+
   return (
     <PageShell>
       <Topbar />
@@ -325,7 +334,7 @@ export default function BookPage() {
         <div className="ab-livro-chips">
           {book.bib_ref && <Pill>{t({ id: 'book.meta.ref' })}: {book.bib_ref}</Pill>}
           {book.ano && <Pill>{t({ id: 'book.meta.year' })}: {book.ano}</Pill>}
-          {book.editora && <Pill>{t({ id: 'book.meta.publisher' })}: {book.editora}</Pill>}
+          {publisherValue && <Pill>{t({ id: publisherLabelKey })}: {publisherValue}</Pill>}
           {book.global_exemplares_total > 0 && <Pill>{t({ id: 'book.copies' })}: {book.global_exemplares_total}</Pill>}
           {book.earliest_due_back_at && book.available_count === 0 && (
             <Pill variant="warn">{t({ id: 'book.nextAvailable' }, { date: new Date(book.earliest_due_back_at).toLocaleDateString() })}</Pill>
@@ -413,7 +422,7 @@ export default function BookPage() {
                     <MetaPill label={t({ id: 'book.meta.tombo' })} value={tombosJson.join(', ')} />
                   )}
                   <MetaPill label={t({ id: 'book.meta.year' })} value={book.ano} always />
-                  <MetaPill label={t({ id: 'book.meta.publisher' })} value={book.editora} always />
+                  <MetaPill label={t({ id: publisherLabelKey })} value={publisherValue} always />
                   <MetaPill label={t({ id: 'book.meta.place' })} value={book.local_publicacao} />
                   <MetaPill label={t({ id: 'book.meta.edition' })} value={book.edicao} />
                   <MetaPill label={t({ id: 'book.meta.isbn' })} value={book.isbn} />
