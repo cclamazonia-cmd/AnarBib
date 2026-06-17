@@ -29,7 +29,8 @@ const DOMAIN_FILES = [
   "../domain/legacy.ts",
   "../domain/membership.ts",
   "../domain/membership-restriction.ts",
-  "../domain/authority.ts"
+  "../domain/authority.ts",
+  "../domain/assembleia.ts"
   // domain/profiles.ts retire le 08/06 (handler mort handleProfileNotice) ;
   // les cles prof.* restent definies dans mail-strings.ts pour reuse (restriction/gel).
 ];

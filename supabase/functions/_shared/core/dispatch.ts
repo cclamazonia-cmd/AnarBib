@@ -13,9 +13,12 @@ import { handleAuthorityEvent } from "../domain/authority.ts";
 import { handleGazetteEvent } from "../domain/gazette.ts";
 import { handleLettreEvent } from "../domain/lettre.ts";
 import { handleEntraideRequestCircle } from "../domain/entraide.ts";
+import { handleAssembleiaEvent } from "../domain/assembleia.ts";
 export async function dispatchNotifyEvent(event, recordId, payload) {
   // Events team.* (gouvernance biblio locale) - handler dedie, lit team_notification_outbox par recordId
   if (event.startsWith("team.")) return await handleTeamEvent(recordId);
+  // Events network.assembleia.* (AG du reseau, P3) - handler dedie, AVANT le network.* generique.
+  if (event.startsWith("network.assembleia.")) return await handleAssembleiaEvent(recordId);
   // Events network.* (gouvernance reseau transverse) - handler dedie, meme outbox que team.*
   if (event.startsWith("network.")) return await handleNetworkEvent(recordId);
   // Events authority.* (atelier autorites, sous-paquet 1b) - handler dedie, lit

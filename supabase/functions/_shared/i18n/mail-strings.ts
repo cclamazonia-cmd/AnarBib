@@ -4499,6 +4499,115 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
 //   {pendingDeadline} date lisible (proposal expires_at)
 // ============================================================================
 
+  // ── Assemblée du réseau (AG, paquet P3) ──────────────────────────────────
+  "network.assembleia.convocada.sub": {
+    "pt-BR": "Assembleia da rede convocada — {title}",
+    fr: "Assemblée du réseau convoquée — {title}",
+    es: "Asamblea de la red convocada — {title}",
+    en: "Network assembly convened — {title}",
+    it: "Assemblea della rete convocata — {title}",
+    de: "Netzwerkversammlung einberufen — {title}",
+    ca: "Assemblea de la xarxa convocada — {title}",
+    eo: "Reta asembleo kunvokita — {title}",
+    nl: "Netwerkvergadering bijeengeroepen — {title}",
+    el: "Συνέλευση του δικτύου συγκλήθηκε — {title}"
+  },
+  "network.assembleia.convocada.intro": {
+    "pt-BR": "Uma assembleia da rede foi convocada: « {title} ». A ordem do dia está se constituindo — é hora de avisar sua biblioteca e preparar o mandato de quem vos representará.",
+    fr: "Une assemblée du réseau est convoquée : « {title} ». L'ordre du jour se constitue — c'est le moment de prévenir ta bibliothèque et de préparer le mandat de votre délégué·e.",
+    es: "Se ha convocado una asamblea de la red: « {title} ». El orden del día se está formando — es momento de avisar a tu biblioteca y preparar el mandato de quien os represente.",
+    en: "A network assembly has been convened: “{title}”. The agenda is taking shape — it's time to inform your library and prepare your delegate's mandate.",
+    it: "È stata convocata un'assemblea della rete: « {title} ». L'ordine del giorno si sta formando — è il momento di avvisare la tua biblioteca e preparare il mandato di chi vi rappresenterà.",
+    de: "Eine Netzwerkversammlung wurde einberufen: « {title} ». Die Tagesordnung entsteht — informiere jetzt deine Bibliothek und bereitet das Mandat eurer Delegation vor.",
+    ca: "S'ha convocat una assemblea de la xarxa: « {title} ». L'ordre del dia s'està constituint — és el moment d'avisar la teva biblioteca i preparar el mandat de qui us representi.",
+    eo: "Reta asembleo estas kunvokita: « {title} ». La tagordo formiĝas — jen la momento por averti vian bibliotekon kaj prepari la mandaton de via reprezentanto.",
+    nl: "Er is een netwerkvergadering bijeengeroepen: « {title} ». De agenda krijgt vorm — informeer nu je bibliotheek en bereid het mandaat van jullie afgevaardigde voor.",
+    el: "Συγκλήθηκε συνέλευση του δικτύου: « {title} ». Η ημερήσια διάταξη διαμορφώνεται — είναι η στιγμή να ενημερώσετε τη βιβλιοθήκη σας και να προετοιμάσετε την εντολή του εκπροσώπου σας."
+  },
+  "network.assembleia.convocada.cta": {
+    "pt-BR": "Ver a assembleia",
+    fr: "Voir l'assemblée",
+    es: "Ver la asamblea",
+    en: "View the assembly",
+    it: "Vedi l'assemblea",
+    de: "Versammlung ansehen",
+    ca: "Veure l'assemblea",
+    eo: "Vidi la asembleon",
+    nl: "Vergadering bekijken",
+    el: "Δείτε τη συνέλευση"
+  },
+  "network.assembleia.agenda_published.sub": {
+    "pt-BR": "Ordem do dia publicada — {title}",
+    fr: "Ordre du jour publié — {title}",
+    es: "Orden del día publicado — {title}",
+    en: "Agenda published — {title}",
+    it: "Ordine del giorno pubblicato — {title}",
+    de: "Tagesordnung veröffentlicht — {title}",
+    ca: "Ordre del dia publicat — {title}",
+    eo: "Tagordo publikigita — {title}",
+    nl: "Agenda gepubliceerd — {title}",
+    el: "Δημοσιεύτηκε η ημερήσια διάταξη — {title}"
+  },
+  "network.assembleia.agenda_published.intro": {
+    "pt-BR": "A ordem do dia de « {title} » está fixada e traduzida. Tomem conhecimento e mandatem quem vos representará ponto a ponto antes da realização.",
+    fr: "L'ordre du jour de « {title} » est figé et traduit. Prenez-en connaissance et mandatez votre délégué·e point par point avant la tenue.",
+    es: "El orden del día de « {title} » está fijado y traducido. Tomen conocimiento y manden a quien os represente punto por punto antes de la celebración.",
+    en: "The agenda for “{title}” is finalised and translated. Review it and mandate your delegate point by point before the assembly is held.",
+    it: "L'ordine del giorno di « {title} » è fissato e tradotto. Prendetene visione e mandatate chi vi rappresenterà punto per punto prima dello svolgimento.",
+    de: "Die Tagesordnung von « {title} » steht fest und ist übersetzt. Nehmt sie zur Kenntnis und mandatiert eure Delegation Punkt für Punkt vor der Durchführung.",
+    ca: "L'ordre del dia de « {title} » està fixat i traduït. Preneu-ne coneixement i mandateu qui us representi punt per punt abans de la realització.",
+    eo: "La tagordo de « {title} » estas fiksita kaj tradukita. Konatiĝu kun ĝi kaj mandatu vian reprezentanton punkton post punkto antaŭ la okazigo.",
+    nl: "De agenda van « {title} » is vastgesteld en vertaald. Neem er kennis van en mandateer jullie afgevaardigde punt voor punt vóór de bijeenkomst.",
+    el: "Η ημερήσια διάταξη της « {title} » οριστικοποιήθηκε και μεταφράστηκε. Λάβετε γνώση και δώστε εντολή στον εκπρόσωπό σας σημείο προς σημείο πριν από τη διεξαγωγή."
+  },
+  "network.assembleia.agenda_published.cta": {
+    "pt-BR": "Ler a ordem do dia",
+    fr: "Lire l'ordre du jour",
+    es: "Leer el orden del día",
+    en: "Read the agenda",
+    it: "Leggere l'ordine del giorno",
+    de: "Tagesordnung lesen",
+    ca: "Llegir l'ordre del dia",
+    eo: "Legi la tagordon",
+    nl: "Agenda lezen",
+    el: "Διαβάστε την ημερήσια διάταξη"
+  },
+  "network.assembleia.item_proposed.sub": {
+    "pt-BR": "Novo ponto na ordem do dia — {title}",
+    fr: "Nouveau point à l'ordre du jour — {title}",
+    es: "Nuevo punto en el orden del día — {title}",
+    en: "New agenda item — {title}",
+    it: "Nuovo punto all'ordine del giorno — {title}",
+    de: "Neuer Tagesordnungspunkt — {title}",
+    ca: "Nou punt a l'ordre del dia — {title}",
+    eo: "Nova tagordero — {title}",
+    nl: "Nieuw agendapunt — {title}",
+    el: "Νέο σημείο στην ημερήσια διάταξη — {title}"
+  },
+  "network.assembleia.item_proposed.intro": {
+    "pt-BR": "{library} inscreveu um ponto: « {itemTitle} ». A ordenar na ordem do dia no momento certo — sem nunca suprimi-lo.",
+    fr: "{library} a déposé un point : « {itemTitle} ». À ordonner dans l'ordre du jour le moment venu — sans jamais le supprimer.",
+    es: "{library} inscribió un punto: « {itemTitle} ». A ordenar en el orden del día llegado el momento — sin suprimirlo nunca.",
+    en: "{library} submitted an item: “{itemTitle}”. To be ordered in the agenda when the time comes — never removed.",
+    it: "{library} ha inserito un punto: « {itemTitle} ». Da ordinare nell'ordine del giorno al momento giusto — senza mai eliminarlo.",
+    de: "{library} hat einen Punkt eingereicht: « {itemTitle} ». Zur gegebenen Zeit in der Tagesordnung einzuordnen — niemals zu entfernen.",
+    ca: "{library} ha inscrit un punt: « {itemTitle} ». A ordenar a l'ordre del dia quan sigui el moment — sense suprimir-lo mai.",
+    eo: "{library} enskribis punkton: « {itemTitle} ». Ordigenda en la tagordo ĝustatempe — neniam forigenda.",
+    nl: "{library} heeft een punt ingediend: « {itemTitle} ». Te ordenen in de agenda wanneer het moment daar is — nooit te verwijderen.",
+    el: "{library} κατέθεσε ένα σημείο: « {itemTitle} ». Προς τακτοποίηση στην ημερήσια διάταξη όταν έρθει η ώρα — χωρίς ποτέ να αφαιρεθεί."
+  },
+  "network.assembleia.item_proposed.cta": {
+    "pt-BR": "Ver a ordem do dia",
+    fr: "Voir l'ordre du jour",
+    es: "Ver el orden del día",
+    en: "View the agenda",
+    it: "Vedi l'ordine del giorno",
+    de: "Tagesordnung ansehen",
+    ca: "Veure l'ordre del dia",
+    eo: "Vidi la tagordon",
+    nl: "Agenda bekijken",
+    el: "Δείτε την ημερήσια διάταξη"
+  },
   // ===== network.cooptation_proposed ========================================
   // Envoye aux autres admins actifs (hors proposeur, hors target).
   // Le target n'est PAS notifie a cette etape : sa cooptation se discute
