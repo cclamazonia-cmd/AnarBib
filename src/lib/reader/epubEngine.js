@@ -214,7 +214,7 @@ svg, img { width:100% !important; height:100% !important; max-height:100% !impor
       if (!t) return true;                                              // ancre vide (retour en icône)
       if (/[←↩⤴↑]/.test(t)) return true;       // contient une flèche de retour (« ←1 », « ↩ »…)
       if (/(retour|voltar|volta|back|return)/i.test(t)) return true;
-      if (/^[\[(]?\d{1,4}[\])]?\.?$/.test(t)) return true;             // [1] (1) 1 1. = marqueur de retour
+      if (/^[[(]?\d{1,4}[\])]?\.?$/.test(t)) return true;             // [1] (1) 1 1. = marqueur de retour
       return false;
     } catch (e) { return false; }
   }
@@ -236,7 +236,7 @@ svg, img { width:100% !important; height:100% !important; max-height:100% !impor
         anchors.forEach((a) => { if (isBackrefAnchor(a)) a.remove(); });
         html = clone.outerHTML || html;
       });
-      safe(() => { html = html.replace(/\[\s*\]/g, '').replace(/\(\s*\)/g, '').replace(/>(?:\s|&nbsp;| )+</g, '><'); });
+      safe(() => { html = html.replace(/\[\s*\]/g, '').replace(/\(\s*\)/g, '').replace(/>(?:\s|&nbsp;)+</g, '><'); });
       return html || '';
     } catch (e) { return ''; }
   }
