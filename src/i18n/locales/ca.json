@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Mostrar els horaris / torns",
   "biblioteca.publicFiche.collective": "Fer pública informació compromet el col·lectiu: decidiu-ho juntes.",
   "biblioteca.publicFiche.requiresPublic": "Només té efecte si la biblioteca apareix públicament.",
-  "bibliotecaPublica.contact": "Contacte"
+  "bibliotecaPublica.contact": "Contacte",
+  "bibliotecaPublica.viewOnMap": "Veure al mapa"
 }

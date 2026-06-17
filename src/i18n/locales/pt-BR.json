@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Mostrar os horários / plantões",
   "biblioteca.publicFiche.collective": "Tornar informações públicas compromete o coletivo: decidam juntes.",
   "biblioteca.publicFiche.requiresPublic": "Só tem efeito se a biblioteca estiver listada publicamente.",
-  "bibliotecaPublica.contact": "Contato"
+  "bibliotecaPublica.contact": "Contato",
+  "bibliotecaPublica.viewOnMap": "Ver no mapa"
 }

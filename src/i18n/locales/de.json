@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Öffnungszeiten / Dienste anzeigen",
   "biblioteca.publicFiche.collective": "Informationen öffentlich zu machen betrifft das Kollektiv – gemeinsam entscheiden.",
   "biblioteca.publicFiche.requiresPublic": "Nur wirksam, wenn die Bibliothek öffentlich gelistet ist.",
-  "bibliotecaPublica.contact": "Kontakt"
+  "bibliotecaPublica.contact": "Kontakt",
+  "bibliotecaPublica.viewOnMap": "Auf der Karte ansehen"
 }

@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Montri la horojn / deĵorojn",
   "biblioteca.publicFiche.collective": "Publikigi informojn engaĝas la kolektivon: decidu kune.",
   "biblioteca.publicFiche.requiresPublic": "Efika nur se la biblioteko estas publike listigita.",
-  "bibliotecaPublica.contact": "Kontakto"
+  "bibliotecaPublica.contact": "Kontakto",
+  "bibliotecaPublica.viewOnMap": "Vidi sur la mapo"
 }

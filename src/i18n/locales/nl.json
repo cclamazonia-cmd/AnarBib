@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Openingsuren / diensten tonen",
   "biblioteca.publicFiche.collective": "Informatie openbaar maken betreft het collectief – beslis samen.",
   "biblioteca.publicFiche.requiresPublic": "Alleen van kracht als de bibliotheek openbaar vermeld is.",
-  "bibliotecaPublica.contact": "Contact"
+  "bibliotecaPublica.contact": "Contact",
+  "bibliotecaPublica.viewOnMap": "Bekijk op de kaart"
 }

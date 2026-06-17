@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Show opening hours / shifts",
   "biblioteca.publicFiche.collective": "Making information public commits the collective — decide together.",
   "biblioteca.publicFiche.requiresPublic": "Only effective if the library is publicly listed.",
-  "bibliotecaPublica.contact": "Contact"
+  "bibliotecaPublica.contact": "Contact",
+  "bibliotecaPublica.viewOnMap": "View on map"
 }

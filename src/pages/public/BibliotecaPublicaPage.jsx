@@ -64,7 +64,21 @@ export default function BibliotecaPublicaPage() {
     ['public_email', 'account.mylib.email', (v) => <a href={`mailto:${v}`} style={{ color: '#93c5fd', textDecoration: 'none' }}>{v}</a>],
     ['public_phone', 'account.mylib.phone', (v) => <a href={`tel:${v.replace(/\s+/g, '')}`} style={{ color: '#93c5fd', textDecoration: 'none' }}>{v}</a>],
     ['public_whatsapp', 'account.mylib.whatsapp', (v) => <span>{v}</span>],
-    ['public_address', 'account.mylib.address', (v) => <span style={{ whiteSpace: 'pre-line' }}>{v}</span>],
+    ['public_address', 'account.mylib.address', (v) => (
+      <span style={{ whiteSpace: 'pre-line' }}>
+        {v}
+        {' · '}
+        {/* PUBLIB-O1 : « voir sur la carte » = lien OSM (clic-pour-charger ; aucune tuile
+            ni géocodage sur notre page, le clic navigue vers OSM = consentement explicite). */}
+        <a
+          href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(v)}`}
+          target="_blank" rel="noopener noreferrer"
+          style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '.82rem', whiteSpace: 'nowrap' }}
+        >
+          {t({ id: 'bibliotecaPublica.viewOnMap' })} ↗
+        </a>
+      </span>
+    )],
     ['public_note', 'account.mylib.note', (v) => <span style={{ whiteSpace: 'pre-line' }}>{v}</span>],
   ];
   const hasContact = contact && contactFields.some(([k]) => (contact[k] || '').trim() !== '');

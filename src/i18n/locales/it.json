@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Mostrare gli orari / turni",
   "biblioteca.publicFiche.collective": "Rendere pubbliche informazioni impegna il collettivo: decidete insieme.",
   "biblioteca.publicFiche.requiresPublic": "Ha effetto solo se la biblioteca è elencata pubblicamente.",
-  "bibliotecaPublica.contact": "Contatti"
+  "bibliotecaPublica.contact": "Contatti",
+  "bibliotecaPublica.viewOnMap": "Vedi sulla mappa"
 }

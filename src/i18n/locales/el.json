@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Εμφάνιση ωραρίων / βαρδιών",
   "biblioteca.publicFiche.collective": "Η δημοσιοποίηση πληροφοριών αφορά τη συλλογικότητα — αποφασίστε μαζί.",
   "biblioteca.publicFiche.requiresPublic": "Ισχύει μόνο αν η βιβλιοθήκη είναι δημόσια καταχωρισμένη.",
-  "bibliotecaPublica.contact": "Επικοινωνία"
+  "bibliotecaPublica.contact": "Επικοινωνία",
+  "bibliotecaPublica.viewOnMap": "Δείτε στον χάρτη"
 }

@@ -5122,5 +5122,6 @@
   "biblioteca.publicFiche.hoursToggle": "Afficher les horaires / permanences",
   "biblioteca.publicFiche.collective": "Rendre des informations publiques engage le collectif : à décider ensemble.",
   "biblioteca.publicFiche.requiresPublic": "Effectif seulement si la bibliothèque est répertoriée publiquement.",
-  "bibliotecaPublica.contact": "Contact"
+  "bibliotecaPublica.contact": "Contact",
+  "bibliotecaPublica.viewOnMap": "Voir sur la carte"
 }
