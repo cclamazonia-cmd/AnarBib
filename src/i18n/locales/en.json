@@ -187,7 +187,7 @@
   "account.mylib.write.title": "Write to your library",
   "account.notifPrefs.alwaysActive": "Always active: collective decisions that concern you, GDPR alerts, restrictions and exclusions. These notifications cannot be disabled because they touch on your rights.",
   "account.notifPrefs.disableConsultaPronta": "Don't notify me when one of my consultations is scheduled",
-  "account.notifPrefs.disableRedeNews": "Don’t receive network news (Letter, Gazette, circles)",
+  "account.notifPrefs.disableRedeNews": "Don’t show network news in my notifications",
   "account.notifPrefs.disableReservaPronta": "Don't notify me when one of my reservations is ready for pickup",
   "account.notifPrefs.intro": "You can adjust the notifications you receive in this app, within what your library transmits.",
   "account.notifPrefs.saved": "Preferences saved.",

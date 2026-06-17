@@ -187,7 +187,7 @@
   "account.mylib.write.title": "An meine Bibliothek schreiben",
   "account.notifPrefs.alwaysActive": "Immer aktiv: kollektive Entscheidungen, die dich betreffen, DSGVO-Warnungen, Einschränkungen und Ausschlüsse. Diese Benachrichtigungen sind nicht deaktivierbar, weil sie deine Rechte berühren.",
   "account.notifPrefs.disableConsultaPronta": "Keine Benachrichtigung erhalten, wenn ein Lesetermin von mir geplant ist",
-  "account.notifPrefs.disableRedeNews": "Keine Netzwerk-Neuigkeiten erhalten (Rundbrief, Gazette, Kreise)",
+  "account.notifPrefs.disableRedeNews": "Netzwerk-Neuigkeiten nicht in meinen Benachrichtigungen anzeigen",
   "account.notifPrefs.disableReservaPronta": "Keine Benachrichtigung erhalten, wenn eine meiner Vormerkungen abholbereit ist",
   "account.notifPrefs.intro": "Du kannst die Benachrichtigungen, die du in dieser App erhältst, innerhalb dessen anpassen, was deine Bibliothek versendet.",
   "account.notifPrefs.saved": "Einstellungen gespeichert.",

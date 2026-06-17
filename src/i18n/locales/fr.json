@@ -187,7 +187,7 @@
   "account.mylib.write.title": "Écrire à ma bibliothèque",
   "account.notifPrefs.alwaysActive": "Toujours actives : décisions collectives qui te concernent, alertes RGPD, restrictions et exclusions. Ces notifications ne sont pas désactivables car elles touchent à tes droits.",
   "account.notifPrefs.disableConsultaPronta": "Ne pas recevoir d'avis quand une de mes consultations est programmée",
-  "account.notifPrefs.disableRedeNews": "Ne plus recevoir les actus du réseau (Lettre, Gazette, cercles)",
+  "account.notifPrefs.disableRedeNews": "Ne plus afficher les nouveautés du réseau dans mes avis",
   "account.notifPrefs.disableReservaPronta": "Ne pas recevoir d'avis quand une de mes réservations est prête à retirer",
   "account.notifPrefs.intro": "Tu peux ajuster les notifications que tu reçois dans cette app, dans la limite de ce que ta bibliothèque transmet.",
   "account.notifPrefs.saved": "Préférences enregistrées.",
