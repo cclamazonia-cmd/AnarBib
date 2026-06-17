@@ -91,6 +91,11 @@
 .ab-tree__export { display: inline-flex; align-items: center; gap: 6px; font-size: .74rem; color: var(--brand-muted); }
 .ab-tree { list-style: none; margin: 0; padding: 0; }
 .ab-tree--child { margin-left: 18px; padding-left: 6px; border-left: 1px solid var(--brand-panel-border, rgba(255,255,255,.12)); }
+/* Racine de l'arbre en multi-colonnes : autant de colonnes que la largeur le
+   permet, ordre alphabétique préservé (lecture haut→bas, colonne par colonne).
+   Les sous-arbres dépliés (.ab-tree--child) restent en une seule colonne. */
+.ab-subject-tree > .ab-tree { columns: 200px; column-gap: 22px; }
+.ab-subject-tree > .ab-tree > .ab-tree__node { break-inside: avoid; -webkit-column-break-inside: avoid; }
 .ab-tree__row { display: flex; align-items: center; gap: 4px; }
 .ab-tree__toggle {
   flex: 0 0 auto; width: 18px; height: 18px; line-height: 1;
