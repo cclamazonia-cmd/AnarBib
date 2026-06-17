@@ -310,8 +310,8 @@ export default function BookPage() {
   const publisherLabelKey = book.tipo_material === 'audiovisual' ? 'catalogacao.field.distribuidora'
     : book.tipo_material === 'audio' ? 'catalogacao.field.gravadora'
     : 'book.meta.publisher';
-  const publisherValue = book.tipo_material === 'audiovisual' ? book.distribuidora
-    : book.tipo_material === 'audio' ? book.gravadora
+  const publisherValue = book.tipo_material === 'audiovisual' ? (book.distribuidora || book.editora)
+    : book.tipo_material === 'audio' ? (book.gravadora || book.editora)
     : book.editora;
 
   return (

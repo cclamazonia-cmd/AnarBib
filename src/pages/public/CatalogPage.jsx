@@ -34,7 +34,7 @@ const CDD_DIV_LABELS = new Set([
 const PUBLIC_COLS = [
   'book_id','bib_ref','titulo','subtitulo','autor','author_display',
   'author_id','author_chips',
-  'editora','ano','cdd','tipo_material','idioma',
+  'editora','publisher_display','ano','cdd','tipo_material','idioma',
   'isbn','issn','assuntos','colecao','local_publicacao',
   'library_slug','library_name','biblioteca',
   'global_available_count','global_exemplares_total','available_count',
@@ -45,7 +45,7 @@ const PUBLIC_COLS = [
 const SESSION_COLS = [
   'book_id','bib_ref','titulo','subtitulo','autor','author_display',
   'author_id','author_chips',
-  'editora','ano','cdd','tipo_material','idioma',
+  'editora','publisher_display','ano','cdd','tipo_material','idioma',
   'isbn','issn','assuntos','colecao','local_publicacao',
   'library_slug','library_name','biblioteca',
   'global_available_count','global_exemplares_total',
@@ -126,7 +126,7 @@ function useDebounce(value, delay = 400) {
 
 function exportCSV(books) {
   const header = ['ref','autor','titulo','ano','editora','biblioteca'];
-  const rows = books.map(b => [b.bib_ref||'', (b.author_display||b.autor||'').replace(/"/g,'""'), (b.titulo||'').replace(/"/g,'""'), b.ano||'', (b.editora||'').replace(/"/g,'""'), parseLibraryNames(b).replace(/"/g,'""')]);
+  const rows = books.map(b => [b.bib_ref||'', (b.author_display||b.autor||'').replace(/"/g,'""'), (b.titulo||'').replace(/"/g,'""'), b.ano||'', ((b.publisher_display||b.editora)||'').replace(/"/g,'""'), parseLibraryNames(b).replace(/"/g,'""')]);
   const csv = [header.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
   const blob = new Blob(['\uFEFF'+csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
@@ -137,7 +137,7 @@ function exportCSV(books) {
 function exportPDF(books, t) {
   const now = new Date().toLocaleDateString('pt-BR');
   const rows = books.map(b =>
-    `<tr><td>${b.bib_ref||'—'}</td><td>${b.author_display||b.autor||'—'}</td><td>${b.titulo||'—'}${b.subtitulo?` — ${b.subtitulo}`:''}</td><td>${b.ano||'—'}</td><td>${b.editora||'—'}</td><td>${parseLibraryNames(b)||'—'}</td></tr>`
+    `<tr><td>${b.bib_ref||'—'}</td><td>${b.author_display||b.autor||'—'}</td><td>${b.titulo||'—'}${b.subtitulo?` — ${b.subtitulo}`:''}</td><td>${b.ano||'—'}</td><td>${b.publisher_display||b.editora||'—'}</td><td>${parseLibraryNames(b)||'—'}</td></tr>`
   ).join('');
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>AnarBib — ${t({id:'catalog.title'})} — ${now}</title>
 <style>
@@ -1302,7 +1302,13 @@ export default function CatalogPage() {
                         </div>
                       </td>
                       <td data-label={t({ id: 'catalog.table.year' })}>{book.ano || '—'}</td>
-                      <td data-label={t({ id: 'catalog.table.publisher' })}>{book.editora || '—'}</td>
+                      <td data-label={t({ id: 'catalog.table.publisher' })}>
+                        {book.publisher_display ? (<>
+                          {book.tipo_material === 'audiovisual' && <span title={t({ id: 'catalogacao.field.distribuidora' })}>🎬 </span>}
+                          {book.tipo_material === 'audio' && <span title={t({ id: 'catalogacao.field.gravadora' })}>💿 </span>}
+                          {book.publisher_display}
+                        </>) : '—'}
+                      </td>
                       <td data-label={t({ id: 'catalog.table.libraries' })}>{libs || '—'}</td>
                       <td data-label={t({ id: 'catalog.table.availability' })}><span className={`ab-status-dot ab-status-dot--${status.cls}`}>{status.label}</span></td>
                       {isAuth && (
