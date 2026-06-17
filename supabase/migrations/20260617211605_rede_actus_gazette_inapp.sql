@@ -7,7 +7,7 @@
 -- Session  : Avis & notifications — feeding réseau (Phase 2 Gazette)
 -- Branche  : rede-actus-notifs-inapp (hors worktree partagé)
 --
--- Suite de la Phase 1 (Lettre, migration 20260617181625). Même gabarit appliqué
+-- Suite de la Phase 1 (Lettre, migration 20260617211604). Même gabarit appliqué
 -- à api.fn_gazette_broadcast : en plus du fan-out e-mail STAFF existant (inchangé :
 -- bibliothécaires/coordinateur·rices + network_staff), insère un avis in-app
 -- (category 'rede_gazette', titre/corps = clés i18n résolues côté front, lien ->
