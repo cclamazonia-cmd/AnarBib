@@ -90,6 +90,14 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         .select('tombo').eq('library_id', lib.id).not('tombo', 'is', null)
         .order('created_at', { ascending: false }).limit(1).maybeSingle();
       if (!cancelled) setLastTombo(data?.tombo || null);
+      // #tombo-serie (17/06) — propose le PROCHAIN tombo libre de la serie de la
+      // biblio (fn_next_tombo) dans le champ Tombo s'il est encore vide. Remplace
+      // l'ancienne convention tombo=bib_ref qui retombait toujours sur le tombo
+      // deja pris par l'exemplaire auto-cree -> collision exemplares_unique_tombo.
+      try {
+        const { data: nextT } = await supabase.rpc('fn_next_tombo', { p_library_id: lib.id });
+        if (!cancelled && nextT) setForm(prev => prev.tombo ? prev : { ...prev, tombo: nextT });
+      } catch { /* biblio sans tombo_pattern -> saisie manuelle */ }
     })();
     return () => { cancelled = true; };
   }, [loc.library, libOptions]);
@@ -204,10 +212,11 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         // §5.6 : on utilise circulation_default (3 valeurs) quand présent ; repli sur le
         // booléen loanable (DOC-CIRC-1 : true -> 'ambos', sinon 'consulta'). Sans écraser un choix déjà posé.
         setForm(prev => prev.circulation_policy ? prev : { ...prev, circulation_policy: data.circulation_default || (data.loanable ? 'ambos' : 'consulta') });
-        // Auto-fill tombo from bib_ref if empty (convention: tombo = bib_ref).
-        // (le pré-remplissage AU CHARGEMENT via next_bib_ref a été retiré ; ici on
-        //  ne fait que la convention tombo=bib_ref quand on lie un document.)
-        setForm(prev => prev.tombo ? prev : { ...prev, tombo: data.bib_ref || '' });
+        // #tombo-serie (17/06) — on ne pre-remplit PLUS le tombo avec le bib_ref :
+        // l'exemplaire auto-cree de la fiche occupe deja ce tombo -> collision
+        // exemplares_unique_tombo garantie. Le tombo est desormais propose depuis
+        // la serie de la biblio (fn_next_tombo) des qu'une biblio est identifiee,
+        // cf. le useEffect [loc.library] plus haut.
         // Auto-fill label from parent book if empty
         setLabel(prev => ({
           title: prev.title || data.titulo || '',
@@ -632,7 +641,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
                 <strong>{t({ id: 'catalogacao.exemplar.archCommon' })}</strong> {parentBook ? `${parentBook.titulo} (ref. ${parentBook.bib_ref})` : f('target_bib_ref') || '—'}
               </div>
               <div style={{ marginBottom: 3 }}>
-                <strong>{t({ id: 'catalogacao.exemplar.archExemplar' })}</strong> Tombo {f('tombo') || '—'} · {formatShelfLocation(loc) || t({ id: 'catalogacao.exemplar.noLocation' })}
+                <strong>{t({ id: 'catalogacao.exemplar.archExemplar' })}</strong> {t({ id: 'catalogacao.exemplar.tombo' })} {f('tombo') || '—'} · {formatShelfLocation(loc) || t({ id: 'catalogacao.exemplar.noLocation' })}
               </div>
               <div style={{ marginBottom: 3 }}>
                 <strong>{t({ id: 'catalogacao.exemplar.archLabel' })}</strong> {trigram} / {labelCdd || '—'} · {labelTitle || '—'} · {labelAuthor || '—'}
