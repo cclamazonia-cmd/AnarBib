@@ -13,7 +13,7 @@
 | `audio` | `audio` | `<AudioPlayer />` | ✅ Code prêt, pas d'asset en base |
 | `video` | `video` | `<VideoPlayer />` | ✅ Code prêt, pas d'asset en base |
 | `image` | `image` | `<ImageViewer />` | ✅ Code prêt, pas d'asset en base |
-| `epub` | (mappé sur `generic`) | Fallback "ouvrir dans nouvel onglet" | ⏳ Viewer à créer |
+| `epub` | `epub` | `<EpubReader />` (moteur partagé `epubEngine` + epub.js ; filigrane, anti-copie, reprise serveur) | ✅ Branche `lecteur-epub` (17/06/2026) |
 | `archive` | (mappé sur `generic`) | Fallback "télécharger" | ⏳ Viewer à créer |
 | `external_link` | `external_link` | Notice + bouton "ouvrir le site" | ✅ Code prêt |
 | `generic` | `generic` | Fallback "ouvrir dans nouvel onglet" | ✅ Code prêt |
@@ -134,7 +134,7 @@ Le filigrane est l'élément central : il **attribue** une fuite à la personne 
 
 3. **Sous-titres vidéo** : l'API existe (prop `tracks`) mais n'est pas branchée à `book_digital_resources` (pas de colonne pour les `.vtt`). Backlog : ajouter `subtitle_tracks JSONB`.
 
-4. **EPUB et archive** : tombent en `generic` actuellement. Pour EPUB : `epub.js` + nouveau `<EpubReader />` (~ 1 j de travail). Pour archive : décompression côté client ou téléchargement direct (à arbitrer).
+4. **EPUB** : ✅ livré (branche `lecteur-epub`, 17/06/2026). `<EpubReader />` (`src/components/viewers/`) sur le **moteur partagé** `src/lib/reader/epubEngine.js` (epub.js, framework-agnostic) : filigrane + anti-copie dans l'iframe, sommaire, thèmes/polices/marges, notes cross-file, double-page/zen/plein écran, et **reprise de lecture côté serveur** (`public.reading_progress` + RPC `api.fn_get/upsert_reading_progress`). Le même moteur alimentera la version standalone CCLA (Phase 2). **Archive** : tombe encore en `generic` — décompression côté client ou téléchargement direct (à arbitrer).
 
 ## Conventions militantes i18n
 

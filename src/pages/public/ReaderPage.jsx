@@ -12,6 +12,7 @@ import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import AudioPlayer from '@/components/viewers/AudioPlayer';
 import VideoPlayer from '@/components/viewers/VideoPlayer';
 import ImageViewer from '@/components/viewers/ImageViewer';
+import EpubReader from '@/components/viewers/EpubReader';
 import './ReaderPage.css';
 
 const SUPABASE_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -654,6 +655,19 @@ export default function ReaderPage() {
           <p className="ab-reader-notice">
             {t({id:'reader.notice'})}
           </p>
+        </div>
+      ) : viewerKind === 'epub' && accessUrl ? (
+        // ────────────────────────────────────────────────────
+        // ePub
+        // ────────────────────────────────────────────────────
+        <div className="ab-reader-viewer-shell">
+          <EpubReader
+            src={accessUrl}
+            fileName={assetMeta?.label || bookTitle}
+            watermark={wm}
+            resourceId={resolvedAssetId}
+            onError={(msg) => setError(msg)}
+          />
         </div>
       ) : viewerKind === 'audio' && accessUrl ? (
         // ────────────────────────────────────────────────────

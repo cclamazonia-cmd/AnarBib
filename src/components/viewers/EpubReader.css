@@ -1,0 +1,162 @@
+/* ═══════════════════════════════════════════════════════════
+   EpubReader — coquille de lecture ePub AnarBib
+   Thème clair par défaut, nuit via .ab-epub--night (variables locales).
+   ═══════════════════════════════════════════════════════════ */
+
+.ab-epub {
+  --e-bg: #ffffff;
+  --e-fg: #1a1a1a;
+  --e-bar: #f3f3f5;
+  --e-border: #dcdce0;
+  --e-btn: #ffffff;
+  --e-btn-active: #d7e3ff;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--e-bg);
+  color: var(--e-fg);
+}
+
+.ab-epub--night {
+  --e-bg: #0f1115;
+  --e-fg: #e9edf1;
+  --e-bar: #1b1f27;
+  --e-border: #2a2f3a;
+  --e-btn: #232834;
+  --e-btn-active: #2f4a7a;
+}
+
+.ab-epub--fullscreen { height: 100vh; }
+
+/* ── Barre d'outils ── */
+.ab-epub-toolbar {
+  display: flex;
+  flex-wrap: wrap;            /* pas de débordement horizontal (leçon mobile P0) */
+  gap: 6px;
+  align-items: center;
+  padding: 8px;
+  background: var(--e-bar);
+  border-bottom: 1px solid var(--e-border);
+}
+.ab-epub-toolbar--hidden,
+.ab-epub-status--hidden { display: none; }
+
+.ab-epub-toolbar__group { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.ab-epub-toolbar__group:nth-child(2) { flex: 1; }
+
+.ab-epub-tb-btn {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 4px 9px;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--e-fg);
+  background: var(--e-btn);
+  border: 1px solid var(--e-border);
+  border-radius: 6px;
+}
+.ab-epub-tb-btn:hover { filter: brightness(0.97); }
+.ab-epub-tb-btn:disabled { opacity: 0.4; cursor: default; }
+.ab-epub-tb-btn.is-active { background: var(--e-btn-active); font-weight: 700; }
+
+.ab-epub-tb-select {
+  min-height: 36px;
+  padding: 4px 6px;
+  font-size: 13px;
+  color: var(--e-fg);
+  background: var(--e-btn);
+  border: 1px solid var(--e-border);
+  border-radius: 6px;
+}
+
+/* ── Barre d'état + progression ── */
+.ab-epub-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--e-border);
+}
+.ab-epub-status__loc { opacity: 0.6; }
+.ab-epub-range { flex: 1; min-width: 120px; accent-color: #0b57d0; }
+
+/* ── Corps : sommaire + scène ── */
+.ab-epub-body { flex: 1; min-height: 0; display: flex; }
+
+.ab-epub-toc {
+  width: 260px;
+  max-width: 70%;
+  overflow: auto;
+  padding: 8px 0;
+  border-right: 1px solid var(--e-border);
+  background: var(--e-bg);
+}
+.ab-epub-toc__item {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--e-fg);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.ab-epub-toc__item:hover { background: var(--e-bar); }
+.ab-epub-toc__empty { padding: 12px; opacity: 0.6; font-size: 13px; }
+
+.ab-epub-stage { flex: 1; min-width: 0; position: relative; }
+.ab-epub-host { height: 100%; }
+
+.ab-epub-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  opacity: 0.7;
+}
+.ab-epub-overlay--error { color: #c0392b; opacity: 1; }
+
+/* ── Notice ── */
+.ab-epub-notice {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.6;
+  border-top: 1px solid var(--e-border);
+}
+
+/* ── Modale de note ── */
+.ab-epub-note-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+}
+.ab-epub-note-box {
+  width: min(560px, 100% - 2rem);   /* pas de débordement sur mobile */
+  max-height: 70vh;
+  overflow: auto;
+  padding: 20px;
+  background: var(--e-bg);
+  color: var(--e-fg);
+  border: 1px solid var(--e-border);
+  border-radius: 10px;
+}
+.ab-epub-note-title { margin: 0 0 10px; font-size: 15px; }
+.ab-epub-note-content { font-size: 14px; line-height: 1.5; }
+.ab-epub-note-content :is(a) { color: #0b57d0; }
+.ab-epub--night .ab-epub-note-content :is(a) { color: #8ab4f8; }

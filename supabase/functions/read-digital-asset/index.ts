@@ -35,6 +35,7 @@ function inferViewerKind(resourceType, mimeType, sourceUrl) {
   if (rt === "audio" || mt.startsWith("audio/")) return "audio";
   if (rt === "video" || mt.startsWith("video/")) return "video";
   if (rt === "image" || mt.startsWith("image/")) return "image";
+  if (rt === "epub" || mt === "application/epub+zip" || su.endsWith(".epub")) return "epub";
   if (rt === "pdf_publico" || rt === "pdf_restrito" || mt === "application/pdf" || su.endsWith(".pdf")) return "pdf";
   return "generic";
 }
