@@ -679,6 +679,7 @@
   "auth.newPassword": "Nuova password",
   "auth.notConfirmed": "Conferma la tua email prima di accedere.",
   "auth.password": "Password",
+  "auth.passwordPolicy": "La password deve avere almeno 6 caratteri.",
   "auth.publicId": "Email o ID pubblico",
   "auth.publicIdPh": "Inserisci la tua email o ID pubblico",
   "auth.resetExpired": "Link scaduto. Richiedi una nuova email di recupero.",

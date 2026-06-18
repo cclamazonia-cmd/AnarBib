@@ -679,6 +679,7 @@
   "auth.newPassword": "Νέος κωδικός",
   "auth.notConfirmed": "Επιβεβαίωσε το email σου πριν συνδεθείς.",
   "auth.password": "Κωδικός",
+  "auth.passwordPolicy": "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες.",
   "auth.publicId": "Email ή δημόσιο αναγνωριστικό",
   "auth.publicIdPh": "Γράψε το email ή το δημόσιο αναγνωριστικό σου",
   "auth.resetExpired": "Ο σύνδεσμος έληξε. Ζήτησε νέο email ανάκτησης.",

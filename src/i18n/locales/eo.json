@@ -679,6 +679,7 @@
   "auth.newPassword": "Nova pasvorto",
   "auth.notConfirmed": "Konfirmu vian retpoŝton antaŭ ol ensaluti.",
   "auth.password": "Pasvorto",
+  "auth.passwordPolicy": "La pasvorto havu almenaŭ 6 signojn.",
   "auth.publicId": "Retpoŝto aŭ publika ID",
   "auth.publicIdPh": "Entajpu vian retpoŝton aŭ publikan ID-on",
   "auth.resetExpired": "Ligilo eksvalidiĝinta. Petu novan retpoŝton de reakiro.",

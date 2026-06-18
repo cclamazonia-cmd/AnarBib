@@ -679,6 +679,7 @@
   "auth.newPassword": "Nieuw wachtwoord",
   "auth.notConfirmed": "Bevestig je e-mailadres voordat je je aanmeldt.",
   "auth.password": "Wachtwoord",
+  "auth.passwordPolicy": "Het wachtwoord moet minstens 6 tekens lang zijn.",
   "auth.publicId": "E-mailadres of openbare ID",
   "auth.publicIdPh": "Voer je e-mailadres of openbare ID in",
   "auth.resetExpired": "Link verlopen. Vraag een nieuwe herstelmail aan.",

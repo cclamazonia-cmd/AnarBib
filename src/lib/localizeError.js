@@ -248,6 +248,23 @@ function systemErrorMessage(err, t) {
 export function localizeError(err, t, actionFallbackKey) {
   if (!err) return t({ id: 'common.error.unknown' });
 
+  // Cas 0 : mot de passe trop faible (Supabase Auth — politique de robustesse).
+  // Le message brut est en anglais et technique ("Password should contain at
+  // least one character of each: ...") et il contient des espaces, donc il
+  // échapperait à l'extraction de code (cas 2) et au filet système (cas 2c)
+  // pour ressortir TEL QUEL au cas 3. On l'intercepte ici -> message localisé.
+  {
+    const wpCode = (typeof err === 'object' && typeof err.code === 'string') ? err.code : '';
+    const wpMsg = (typeof err === 'object' && typeof err.message === 'string') ? err.message
+      : (typeof err === 'string' ? err : '');
+    if (wpCode === 'weak_password'
+        || /weak[_\s-]?password/i.test(wpMsg)
+        || /password should contain/i.test(wpMsg)) {
+      const translated = tryTranslate(t, 'auth.passwordPolicy');
+      if (translated) return translated;
+    }
+  }
+
   // Cas 1 : hint i18n style 'error.library.*' ou 'error.publish.*'
   // (convention paquet C.4 + chantier publish guards)
   if (typeof err === 'object' && typeof err.hint === 'string' && err.hint.startsWith('error.')) {

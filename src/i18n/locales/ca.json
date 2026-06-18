@@ -679,6 +679,7 @@
   "auth.newPassword": "Nova contrasenya",
   "auth.notConfirmed": "Confirmeu el vostre correu electrònic abans d'iniciar la sessió.",
   "auth.password": "Contrasenya",
+  "auth.passwordPolicy": "La contrasenya ha de tenir com a mínim 6 caràcters.",
   "auth.publicId": "Correu electrònic o ID públic",
   "auth.publicIdPh": "Introduïu el vostre correu electrònic o ID públic",
   "auth.resetExpired": "Enllaç expirat. Demaneu un nou correu electrònic de recuperació.",

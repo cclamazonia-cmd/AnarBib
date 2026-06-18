@@ -679,6 +679,7 @@
   "auth.newPassword": "Nueva contraseña",
   "auth.notConfirmed": "Confirma tu correo antes de entrar.",
   "auth.password": "Contraseña",
+  "auth.passwordPolicy": "La contraseña debe tener al menos 6 caracteres.",
   "auth.publicId": "Correo o ID público",
   "auth.publicIdPh": "Escribe tu correo o ID público",
   "auth.resetExpired": "Enlace expirado. Solicita un nuevo correo de recuperación.",

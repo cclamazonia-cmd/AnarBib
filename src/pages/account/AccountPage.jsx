@@ -17,6 +17,7 @@ import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { formatSchedule } from '@/lib/scheduleFormat';
 import { localizeError } from '@/lib/localizeError';
+import { isPasswordPolicyOk } from '@/lib/passwordPolicy';
 import { decodeSystemNote } from '@/lib/systemNotes';
 import DataExportButton from '@/components/account/DataExportButton';
 import MyLibraryContactCard from '@/components/account/MyLibraryContactCard';
@@ -582,8 +583,8 @@ export default function AccountPage() {
     e.preventDefault();
     setPwdMsg('');
     setPwdMsgIsError(false);
-    if (!pwdNew || pwdNew.length < 8) {
-      setPwdMsg(t({ id: 'account.changePassword.error.tooShort', defaultMessage: 'A nova senha deve ter pelo menos 8 caracteres.' }));
+    if (!isPasswordPolicyOk(pwdNew)) {
+      setPwdMsg(t({ id: 'auth.passwordPolicy' }));
       setPwdMsgIsError(true);
       return;
     }
