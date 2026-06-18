@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { IntlProvider } from 'react-intl';
+import { IntlProvider, useIntl } from 'react-intl';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LibraryProvider } from '@/contexts/LibraryContext';
 import { ToastProvider } from '@/contexts/ToastContext';
@@ -45,6 +45,18 @@ function LoadingFallback() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
       <Spinner size={36} />
+    </div>
+  );
+}
+
+// ── 404 ── Composant dédié (consommateur d'IntlProvider, qu'App fournit mais ne
+// consomme pas) : permet d'i18n le message d'erreur via useIntl.
+function NotFound() {
+  const { formatMessage: t } = useIntl();
+  return (
+    <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>
+      <h1>404</h1>
+      <p>{t({ id: 'notfound.message' })}</p>
     </div>
   );
 }
@@ -172,12 +184,7 @@ export default function App() {
                   )}
 
                   {/* ── 404 ────────────────────── */}
-                  <Route path="*" element={
-                    <div style={{ textAlign: 'center', padding: 60, color: 'var(--brand-muted)' }}>
-                      <h1>404</h1>
-                      <p>Página não encontrada.</p>
-                    </div>
-                  } />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>
               </ErrorBoundary>

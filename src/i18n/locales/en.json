@@ -5206,5 +5206,6 @@
   "reader.epub.note": "Note {num}",
   "reader.epub.noteClose": "Close",
   "account.renew.no_active_membership": "Your membership in this library is no longer active. Reactivate it before renewing.",
-  "account.renew.restricted": "Your account is restricted in this library. Contact the team before renewing."
+  "account.renew.restricted": "Your account is restricted in this library. Contact the team before renewing.",
+  "notfound.message": "Page not found."
 }

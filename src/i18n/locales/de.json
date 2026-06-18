@@ -5206,5 +5206,6 @@
   "reader.epub.note": "Anmerkung {num}",
   "reader.epub.noteClose": "Schließen",
   "account.renew.no_active_membership": "Deine Mitgliedschaft in dieser Bibliothek ist nicht mehr aktiv. Reaktiviere sie vor der Verlängerung.",
-  "account.renew.restricted": "Dein Konto ist in dieser Bibliothek eingeschränkt. Wende dich an das Team vor der Verlängerung."
+  "account.renew.restricted": "Dein Konto ist in dieser Bibliothek eingeschränkt. Wende dich an das Team vor der Verlängerung.",
+  "notfound.message": "Seite nicht gefunden."
 }

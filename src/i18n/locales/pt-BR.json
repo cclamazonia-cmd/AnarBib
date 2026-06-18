@@ -5206,5 +5206,6 @@
   "reader.epub.note": "Nota {num}",
   "reader.epub.noteClose": "Fechar",
   "account.renew.no_active_membership": "Seu vínculo com esta biblioteca não está mais ativo. Reative-o antes de renovar.",
-  "account.renew.restricted": "Sua conta está com restrição nesta biblioteca. Fale com a equipe antes de renovar."
+  "account.renew.restricted": "Sua conta está com restrição nesta biblioteca. Fale com a equipe antes de renovar.",
+  "notfound.message": "Página não encontrada."
 }
