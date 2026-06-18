@@ -1036,6 +1036,12 @@ export default function AccountPage() {
   const visibleNotifications = notifications.filter(n =>
     notifViewMode === 'active' ? !n.archived_at : !!n.archived_at
   );
+  // Les notifications récentes (reserva, consulta, rede, rgpd…) stockent une CLÉ
+  // i18n (ex. « notif.reserva.prontaParaRetirada.title ») à traduire au rendu ;
+  // les anciennes stockent du texte littéral. On traduit donc tout ce qui a la
+  // forme d'une clé (points, sans espace), avec repli sur la valeur brute pour
+  // le littéral — sinon la clé brute s'affiche (bug onglet Avisos).
+  const tNotifText = (s) => (s && /^[\w.]+$/.test(s) && s.includes('.')) ? t({ id: s, defaultMessage: s }) : s;
 
   // Paquet E.4.2 (20/05/2026) : filtrage des onglets AccountPage par availability
   // selon profil de biblio (1 lecteur·rice = 1 biblio, cf. doctrine ancrage).
@@ -2157,10 +2163,10 @@ export default function AccountPage() {
                     }}>
                       <div className="ab-conta-item__main" style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{/^(rgpd_retention_|rede_)/.test(n.category || '') && n.title ? t({ id: n.title, defaultMessage: n.title }) : n.title}</span>
+                          <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{tNotifText(n.title)}</span>
                           {!n.is_read && <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', flexShrink: 0 }} />}
                         </div>
-                        {n.body && <span className="ab-conta-item__meta">{/^(rgpd_retention_|rede_)/.test(n.category || '') ? t({ id: n.body, defaultMessage: n.body }) : n.body}</span>}
+                        {n.body && <span className="ab-conta-item__meta">{tNotifText(n.body)}</span>}
                         <span className="ab-conta-item__meta" style={{ fontSize: '.78rem' }}>
                           {new Date(n.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
                           {n.category && <> · {n.category}</>}
