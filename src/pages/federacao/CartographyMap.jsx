@@ -84,7 +84,7 @@ export default function CartographyMap({ viewName }) {
   const clusterRef = useRef(null);
   const memberLayerRef = useRef(null);
   const markersRef = useRef([]);          // [{ marker, props, cat, scope, text, member }]
-  const filtersRef = useRef({ active: new Set(CATEGORIES.map((c) => c.key)), scopes: new Set(SCOPES), query: '' });
+  const filtersRef = useRef({ active: new Set(CATEGORIES.map((c) => c.key)), scopes: new Set(SCOPES), query: '', pebOnly: false });
 
   const [status, setStatus] = useState('loading'); // loading | ready | error
   const [total, setTotal] = useState(0);
@@ -92,6 +92,8 @@ export default function CartographyMap({ viewName }) {
   const [active, setActive] = useState(() => new Set(CATEGORIES.map((c) => c.key)));
   const [scopes, setScopes] = useState(() => new Set(SCOPES));
   const [query, setQuery] = useState('');
+  const [pebOnly, setPebOnly] = useState(false);
+  const [hasPeb, setHasPeb] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
   function popupHtml(p) {
@@ -105,11 +107,13 @@ export default function CartographyMap({ viewName }) {
     const editBtn = p.canEdit
       ? `<button type="button" class="ab-map-edit-btn" data-entry-id="${esc(p.id)}" style="margin-top:8px;padding:4px 11px;border-radius:6px;border:1px solid rgba(0,0,0,.18);background:#2563eb;color:#fff;font-size:.8rem;cursor:pointer;">${esc(t({ id: 'federacao.carte.edit' }))}</button>`
       : '';
+    const pebLine = p.peb ? `<div class="ab-map-pop-net">✔ ${esc(t({ id: 'biblioteca.stabPartners.right.peb' }))}</div>` : '';
     return `<div class="ab-map-popup">
       <div class="ab-map-pop-title"><span class="ab-map-dot" style="background:${esc(p.color)}"></span>${esc(i.name)}${badge}</div>
       ${typeLabel ? `<div class="ab-map-pop-type">${esc(typeLabel)}</div>` : ''}
       ${loc ? `<div class="ab-map-pop-loc">${esc(loc)}</div>` : ''}
       ${p.reseau ? `<div class="ab-map-pop-net">${esc(t({ id: 'federacao.carte.network' }))} : ${esc(p.reseau)}</div>` : ''}
+      ${pebLine}
       ${site ? `<div class="ab-map-pop-site">${site}</div>` : ''}
       ${i.notes ? `<div class="ab-map-pop-notes">${esc(i.notes)}</div>` : ''}
       ${editBtn}
@@ -119,9 +123,9 @@ export default function CartographyMap({ viewName }) {
   function applyFilters() {
     const cluster = clusterRef.current; const memberLayer = memberLayerRef.current; const L = window.L;
     if (!cluster || !memberLayer || !L) return;
-    const { active: act, scopes: scp, query: q } = filtersRef.current;
+    const { active: act, scopes: scp, query: q, pebOnly: peb } = filtersRef.current;
     const qq = q.trim().toLowerCase();
-    const matched = markersRef.current.filter((m) => act.has(m.cat) && scp.has(m.scope) && (!qq || m.text.includes(qq)));
+    const matched = markersRef.current.filter((m) => act.has(m.cat) && scp.has(m.scope) && (!peb || m.peb) && (!qq || m.text.includes(qq)));
     cluster.clearLayers(); memberLayer.clearLayers();
     cluster.addLayers(matched.filter((m) => !m.member).map((m) => m.marker));
     matched.filter((m) => m.member).forEach((m) => memberLayer.addLayer(m.marker));
@@ -150,13 +154,14 @@ export default function CartographyMap({ viewName }) {
           notes: (row.notes_i18n || {})[lc] || '',
         };
       }
-      const p = { id: row.id, canEdit: !!row.can_edit, color: COLOR[category] || '#2C2C2C', category, anarbib, reseau: row.reseau, site: row.site_url, i18n };
+      const p = { id: row.id, canEdit: !!row.can_edit, peb: !!row.peb, color: COLOR[category] || '#2C2C2C', category, anarbib, reseau: row.reseau, site: row.site_url, i18n };
       const marker = L.marker([Number(row.lat), Number(row.lon)], { icon: dropIcon(L, p.color, anarbib) });
       marker.bindPopup(popupHtml(p), { maxWidth: 300 });
       const text = Object.values(i18n).flatMap((x) => [x.name, x.city, x.country]).filter(Boolean).join(' ').toLowerCase();
-      return { marker, props: p, cat: category, scope, text, member: anarbib };
+      return { marker, props: p, cat: category, scope, text, member: anarbib, peb: !!row.peb };
     });
     setTotal(markersRef.current.length);
+    setHasPeb(markersRef.current.some((m) => m.peb));
     applyFilters();
   }
 
@@ -199,9 +204,9 @@ export default function CartographyMap({ viewName }) {
 
   // Re-filtrage quand légende / scope / recherche changent.
   useEffect(() => {
-    filtersRef.current = { active, scopes, query };
+    filtersRef.current = { active, scopes, query, pebOnly };
     if (status === 'ready') applyFilters();
-  }, [active, scopes, query, status]);
+  }, [active, scopes, query, pebOnly, status]);
 
   // Re-localiser les popups quand la langue change (sans re-télécharger).
   useEffect(() => {
@@ -244,6 +249,19 @@ export default function CartographyMap({ viewName }) {
             <span className="ab-map-dot" style={{ background: c.color }} />{t({ id: `federacao.carte.cat.${c.key}` })}
           </button>
         ))}
+        {hasPeb && (
+          <>
+            <span className="ab-map-legsep" aria-hidden="true" />
+            <button
+              type="button"
+              className={`ab-map-leg ab-map-scope${pebOnly ? '' : ' off'}`}
+              onClick={() => setPebOnly((v) => !v)}
+              title={t({ id: 'biblioteca.stabPartners.right.peb' })}
+            >
+              {t({ id: 'biblioteca.stabPartners.right.peb' })}
+            </button>
+          </>
+        )}
       </div>
       <div className="ab-map-canvas" ref={containerRef} />
       {status === 'loading' && <div className="ab-map-status">{t({ id: 'common.loading' })}</div>}
