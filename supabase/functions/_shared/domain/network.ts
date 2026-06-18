@@ -197,6 +197,8 @@ export async function handleNetworkEvent(recordId) {
       result = await handleCooptationCompleted(payload, ctx, bt);
     } else if (event === "network.cooptation_reminder") {
       result = await handleCooptationReminder(payload, ctx, bt);
+    } else if (event === "network.request_eval_digest") {
+      result = await handleRequestEvalDigest(payload, ctx, bt);
     } else if (event === "network.collective_removal_proposed") {
       result = await handleCollectiveRemovalProposed(payload, ctx, bt);
     } else if (event === "network.collective_removal_vote_cast") {
@@ -753,6 +755,62 @@ async function handleCooptationReminder(payload, ctx, bt) {
     }
   }
 
+  return { recipients_count: results.filter((r) => !r.skipped).length, results };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// #111 — digest d'évaluation des demandes d'adhésion (network.request_eval_digest)
+// Émis par fn_cron_request_eval_digest (cron INACTIF jusqu'à activation). Deux kinds :
+//   - open_proposal : fan-out vers pending_voters[] (admins n'ayant pas voté) ;
+//   - pending_backlog : fan-out vers tous les admins actifs (rappel du backlog).
+// Localisé (tMail) + CTA vers le panneau réseau. Calqué sur cooptation_reminder.
+// ═══════════════════════════════════════════════════════════════════════════
+async function handleRequestEvalDigest(payload, ctx, bt) {
+  const kind = String(payload.kind || "").trim();
+  let recipients = [];
+  if (kind === "open_proposal") {
+    const pv = Array.isArray(payload.pending_voters) ? payload.pending_voters : [];
+    recipients = await loadProfilesByIds(pv);
+  } else if (kind === "pending_backlog") {
+    recipients = await loadActiveNetworkAdmins();
+  } else {
+    throw new Error(`request_eval_digest: invalid kind "${kind}"`);
+  }
+  const count = String(Number(payload.pending_count || 0));
+  const redeUrl = "https://app.anarbib.org/rede";
+  const results = [];
+  for (const r of recipients) {
+    const locale = r.preferred_language || null;
+    const userTarget = userTargetFromProfile(r);
+    if (!userTarget) {
+      results.push({ user_id: r.id, skipped: true, reason: "invalid_email" });
+      continue;
+    }
+    const tit = tMail(locale, "network.request_eval_digest.sub");
+    const introKey = kind === "open_proposal"
+      ? "network.request_eval_digest.intro_proposal"
+      : "network.request_eval_digest.intro_backlog";
+    const introHtml = `<p>${tMail(locale, introKey, { count })}</p>`;
+    const { html, text } = renderEmail({
+      locale,
+      preheader: tit,
+      title: tit,
+      greeting: greeting(locale, r.first_name || undefined),
+      introHtml,
+      details: [],
+      actionBox: {
+        kind: "action",
+        title: tit,
+        ctaUrl: redeUrl,
+        ctaLabel: tMail(locale, "network.request_eval_digest.cta")
+      },
+      footerHtml: footerPadrao(ctx, locale),
+      context: ctx
+    });
+    const sub = `${tit} — ${bt}`;
+    const res = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "network_request_eval_digest", ctx);
+    results.push({ user_id: r.id, email: r.email, ...res });
+  }
   return { recipients_count: results.filter((r) => !r.skipped).length, results };
 }
 

@@ -4377,6 +4377,56 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η πρόταση λήγει στις {pendingDeadline}."
   },
 
+  // ===== network.request_eval_digest (#111 — digest d'évaluation des demandes) =====
+  "network.request_eval_digest.sub": {
+    "pt-BR": "Avaliação de solicitações — ação necessária",
+    fr: "Évaluation des demandes — action requise",
+    es: "Evaluación de solicitudes — acción necesaria",
+    en: "Membership requests — action needed",
+    it: "Valutazione delle richieste — azione necessaria",
+    de: "Bewertung der Anträge — Aktion erforderlich",
+    ca: "Avaluació de sol·licituds — acció necessària",
+    eo: "Pritakso de petoj — ago necesa",
+    nl: "Beoordeling van aanvragen — actie nodig",
+    el: "Αξιολόγηση αιτημάτων — απαιτείται ενέργεια"
+  },
+  "network.request_eval_digest.intro_proposal": {
+    "pt-BR": "Uma proposta de decisão sobre uma solicitação de adesão aguarda vosso voto. A unanimidade d(o/a/e)s administrador(a/e)s ativ(o/a/e)s da rede é necessária.",
+    fr: "Une proposition de décision sur une demande d'adhésion attend votre vote. L'unanimité des administrateur·rices réseau actif·ves est requise.",
+    es: "Una propuesta de decisión sobre una solicitud de adhesión espera vuestro voto. Se requiere la unanimidad de les administradores activos de la red.",
+    en: "A decision proposal on a membership request is awaiting your vote. Unanimity among active network administrators is required.",
+    it: "Una proposta di decisione su una richiesta di adesione attende il vostro voto. È necessaria l'unanimità degli amministratori/trici attiv* della rete.",
+    de: "Ein Entscheidungsvorschlag zu einem Aufnahmeantrag wartet auf Ihre Stimme. Einstimmigkeit der aktiven Netzwerk-Administrator*innen ist erforderlich.",
+    ca: "Una proposta de decisió sobre una sol·licitud d'adhesió espera el vostre vot. Cal la unanimitat de les administradores actives de la xarxa.",
+    eo: "Decid-propono pri aliĝpeto atendas vian voĉdonon. Necesas la unuanimeco de la aktivaj retaj administrant-in-oj.",
+    nl: "Een beslissingsvoorstel over een toetredingsaanvraag wacht op je stem. Unanimiteit onder de actieve netwerkbeheerders is vereist.",
+    el: "Μια πρόταση απόφασης για ένα αίτημα ένταξης αναμένει την ψήφο σας. Απαιτείται ομοφωνία των ενεργών διαχειριστών/στριών του δικτύου."
+  },
+  "network.request_eval_digest.intro_backlog": {
+    "pt-BR": "{count} solicitação(ões) de adesão aguardam avaliação pela coordenação da rede.",
+    fr: "{count} demande·s d'adhésion attendent une évaluation par la coordination du réseau.",
+    es: "{count} solicitud·es de adhesión esperan evaluación por la coordinación de la red.",
+    en: "{count} membership request(s) are awaiting evaluation by the network coordination.",
+    it: "{count} richiesta/e di adesione attendono una valutazione da parte della coordinazione della rete.",
+    de: "{count} Aufnahmeantrag/-anträge warten auf eine Bewertung durch die Netzwerkkoordination.",
+    ca: "{count} sol·licitud·s d'adhesió esperen una avaluació per la coordinació de la xarxa.",
+    eo: "{count} aliĝpeto(j) atendas pritakson de la reta kunordigado.",
+    nl: "{count} toetredingsaanvraag/-aanvragen wachten op beoordeling door de netwerkcoördinatie.",
+    el: "{count} αίτημα(τα) ένταξης αναμένουν αξιολόγηση από τον συντονισμό του δικτύου."
+  },
+  "network.request_eval_digest.cta": {
+    "pt-BR": "Abrir o painel de rede",
+    fr: "Ouvrir le panneau réseau",
+    es: "Abrir el panel de red",
+    en: "Open the network panel",
+    it: "Aprire il pannello di rete",
+    de: "Netzwerk-Panel öffnen",
+    ca: "Obrir el tauler de xarxa",
+    eo: "Malfermi la retan panelon",
+    nl: "Het netwerkpaneel openen",
+    el: "Άνοιγμα του πίνακα δικτύου"
+  },
+
   // ===== network.collective_removal_proposed ================================
   // Envoyé aux autres admins actifs (hors proposeur, hors target).
   // Le target n'est pas notifié à cette étape (doctrine v0.3 §Q5).
