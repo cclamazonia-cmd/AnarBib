@@ -759,10 +759,14 @@ export default function PanelPage() {
     setLoanBusy(true);
     setLoanMsg(t({id:'panel.loan.resolving'}));
     try {
-      // Resolve borrower
-      const lookupRes = await supabase.rpc('fn_painel_find_profile_by_lookup', { p_lookup: borrowerLookup.trim() });
+      // Resolve borrower — CARD-LOCAL : même résolution que « gerir leitor·a »
+      // (fn_painel_search_reader), qui accepte aussi l'identité locale (n°
+      // lecteur·rice) en plus de l'UUID / ID public / e-mail, scopée à la biblio
+      // courante avec repli « toutes mes biblios ». Renvoie { profile, … }.
+      const lookupRes = await supabase.rpc('fn_painel_search_reader', { p_lookup: borrowerLookup.trim(), p_library_id: libraryId });
       if (lookupRes.error) throw lookupRes.error;
-      const borrower = Array.isArray(lookupRes.data) ? lookupRes.data[0] : lookupRes.data;
+      const lookupData = Array.isArray(lookupRes.data) ? lookupRes.data[0] : lookupRes.data;
+      const borrower = lookupData?.profile || null;
       if (!borrower?.id) { setLoanMsg(t({ id: 'panel.loan.readerNotFound' })); return; }
 
       // Resolve holdings
