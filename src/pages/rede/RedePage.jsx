@@ -87,6 +87,15 @@ export default function RedePage() {
   const [transferPid, setTransferPid] = useState('');
   const [transferReason, setTransferReason] = useState('');
   const [transferring, setTransferring] = useState(false);
+  // #111 — évaluation collaborative : votes + commentaires de la demande sélectionnée.
+  const [evalVotes, setEvalVotes] = useState([]);
+  const [evalComments, setEvalComments] = useState([]);
+  const [discloseId, setDiscloseId] = useState(false);
+  const [refusalCat, setRefusalCat] = useState('info_insuffisante');
+  const [refusalReason, setRefusalReason] = useState('');
+  const [voteRationale, setVoteRationale] = useState('');
+  const [commentText, setCommentText] = useState('');
+  const [evalBusy, setEvalBusy] = useState(false);
   // E.4.a : allMembers, newAdminEmail et l'agregation distincte staff/reader
   // au niveau reseau ont ete supprimes. AdminsPanel charge maintenant ses
   // propres donnees via api.network_administrators_public_v1. Les stats
@@ -240,6 +249,64 @@ export default function RedePage() {
     } finally { setTransferring(false); }
   }
 
+  // ── #111 — évaluation collaborative ─────────────────────
+  // Charge votes + commentaires de la demande sélectionnée (RLS : admin réseau).
+  async function loadRequestDetail(reqId) {
+    setEvalVotes([]); setEvalComments([]);
+    if (!reqId) return;
+    try {
+      const [{ data: votes }, { data: comments }] = await Promise.all([
+        supabase.from('library_request_votes').select('*').eq('request_id', reqId).order('voted_at', { ascending: true }),
+        supabase.from('library_request_comments').select('*').eq('request_id', reqId).order('created_at', { ascending: true }),
+      ]);
+      setEvalVotes(votes || []); setEvalComments(comments || []);
+    } catch (err) { console.warn('loadRequestDetail:', err); }
+  }
+
+  async function proposeDecision(reqId, decision) {
+    setEvalBusy(true);
+    try {
+      const args = { p_request_id: reqId, p_decision: decision, p_disclose_identity: discloseId };
+      if (decision === 'recusa') { args.p_refusal_category = refusalCat; args.p_refusal_reason = refusalReason || null; }
+      const { error } = await apiRpc('fn_request_propose_decision', args);
+      if (error) throw new Error(error.message || 'propose failed');
+      setMsg({ text: t({ id: 'rede.eval.proposed' }), kind: 'ok' });
+      setRefusalReason(''); setSelectedReq(null); setReviewNote('');
+      await loadAll();
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+    finally { setEvalBusy(false); }
+  }
+
+  async function castVote(reqId, vote) {
+    if (vote === 'opposed' && (voteRationale || '').trim().length < 20) {
+      setMsg({ text: t({ id: 'rede.eval.rationaleTooShort' }), kind: 'error' }); return;
+    }
+    setEvalBusy(true);
+    try {
+      const { error } = await apiRpc('fn_request_vote', {
+        p_request_id: reqId, p_vote: vote, p_disclose_identity: discloseId,
+        p_rationale: voteRationale || null,
+      });
+      if (error) throw new Error(error.message || 'vote failed');
+      setMsg({ text: t({ id: 'rede.eval.voted' }), kind: 'ok' });
+      setVoteRationale(''); setSelectedReq(null);
+      await loadAll();
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+    finally { setEvalBusy(false); }
+  }
+
+  async function addComment(reqId) {
+    if (!(commentText || '').trim()) return;
+    setEvalBusy(true);
+    try {
+      const { error } = await apiRpc('fn_request_comment', { p_request_id: reqId, p_content: commentText });
+      if (error) throw new Error(error.message || 'comment failed');
+      setCommentText('');
+      await loadRequestDetail(reqId);
+    } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+    finally { setEvalBusy(false); }
+  }
+
   // E.4.a : suppression de changeUserRole / addAdmin / removeAdmin.
   // Ces fonctions faisaient des UPDATE directs sur user_library_memberships.role
   // pour gerer l'ancien onglet "admins" (workflow ante-v0.3). Elles sont
@@ -374,7 +441,7 @@ export default function RedePage() {
             <div style={lw}>
               {filteredReqs.length===0 && <div style={{ padding:16, fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({id:'common.empty'})}</div>}
               {filteredReqs.map((r,i) => (
-                <div key={r.id} style={{...lr(i), cursor:'pointer', background: selectedReq?.id===r.id?'rgba(29,78,216,.12)':lr(i).background}} onClick={()=>{setSelectedReq(r);setReviewNote(r.review_notes||'');}}>
+                <div key={r.id} style={{...lr(i), cursor:'pointer', background: selectedReq?.id===r.id?'rgba(29,78,216,.12)':lr(i).background}} onClick={()=>{setSelectedReq(r);setReviewNote(r.review_notes||'');setDiscloseId(false);setRefusalReason('');setVoteRationale('');setCommentText('');loadRequestDetail(r.id);}}>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:'.9rem', fontWeight:600 }}>{r.library_name || t({ id: 'common.noName' })}</div>
                     <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>{r.city||'—'}{r.state_region&&`, ${r.state_region}`} · {new Date(r.created_at).toLocaleDateString(locale)}</div>
@@ -403,11 +470,62 @@ export default function RedePage() {
                   </div>
                   <label style={ls}>{t({ id: 'rede.requests.reviewNote' })}</label>
                   <textarea value={reviewNote} onChange={e=>setReviewNote(e.target.value)} rows={3} style={{...fs,resize:'vertical',marginBottom:10}} placeholder={t({ id: 'rede.requests.reviewPlaceholder' })} />
-                  <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
-                    <button className="cat-btn secondary" onClick={()=>updateRequestStatus(selectedReq.id,'em_analise')}>{t({ id: 'rede.requests.inReview' })}</button>
-                    <button className="cat-btn primary" onClick={()=>updateRequestStatus(selectedReq.id,'aprovada')}>{t({ id: 'rede.requests.approve' })}</button>
-                    <button className="cat-btn ghost" style={{ color:'#f87171' }} onClick={()=>updateRequestStatus(selectedReq.id,'recusada')}>{t({ id: 'rede.requests.refuse' })}</button>
-                  </div>
+
+                  {/* #111 — canal d'évaluation collaborative (proposer / voter / commenter).
+                      En mode dégradé (< 3 admins) proposer = auto-confirmer (= comportement actuel). */}
+                  {['pendente','em_analise','aguardando_info'].includes(selectedReq.request_status) && (
+                    <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                      <button className="cat-btn secondary" style={{ alignSelf:'flex-start' }} onClick={()=>updateRequestStatus(selectedReq.id,'em_analise')}>{t({ id: 'rede.requests.inReview' })}</button>
+                      <label style={{ fontSize:'.82rem', display:'flex', gap:6, alignItems:'center' }}>
+                        <input type="checkbox" checked={discloseId} onChange={e=>setDiscloseId(e.target.checked)} /> {t({ id: 'rede.eval.discloseIdentity' })}
+                      </label>
+                      <button className="cat-btn primary" disabled={evalBusy} onClick={()=>proposeDecision(selectedReq.id,'aprovacao')}>{t({ id: 'rede.eval.proposeAccept' })}</button>
+                      <div>
+                        <label style={ls}>{t({ id: 'rede.eval.refusalCategory' })}</label>
+                        <select value={refusalCat} onChange={e=>setRefusalCat(e.target.value)} style={fs}>
+                          {['info_insuffisante','non_verifiable','desalignement_politique','doublon','prematuro','repeticao_sem_evolucao','autre'].map(c=>(
+                            <option key={c} value={c}>{t({ id: 'rede.refusalCat.'+c })}</option>
+                          ))}
+                        </select>
+                        <input value={refusalReason} onChange={e=>setRefusalReason(e.target.value)} placeholder={t({ id: 'rede.eval.refusalReason' })} style={{...fs, marginTop:6}} />
+                        <button className="cat-btn ghost" style={{ color:'#f87171', marginTop:6 }} disabled={evalBusy} onClick={()=>proposeDecision(selectedReq.id,'recusa')}>{t({ id: 'rede.eval.proposeRefuse' })}</button>
+                      </div>
+                      <p style={{ fontSize:'.75rem', color:'var(--brand-muted)', margin:0 }}>{t({ id: 'rede.eval.degradedHint' })}</p>
+                    </div>
+                  )}
+
+                  {/* Proposition ouverte → vote des autres admins (unanimité) */}
+                  {['proposta_aprovacao','proposta_recusa'].includes(selectedReq.request_status) && (
+                    <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                      <div style={{ fontSize:'.88rem', fontWeight:600 }}>
+                        {t({ id: selectedReq.request_status==='proposta_aprovacao' ? 'rede.eval.openProposalAccept' : 'rede.eval.openProposalRefuse' })}
+                      </div>
+                      <div style={{ fontSize:'.8rem', color:'var(--brand-muted)' }}>
+                        {t({ id: 'rede.eval.votesTitle' })} : {evalVotes.length===0 ? '—' : evalVotes.map(v=>v.vote==='favorable'?'✓':v.vote==='opposed'?'✗':'○').join(' ')}
+                      </div>
+                      <label style={{ fontSize:'.82rem', display:'flex', gap:6, alignItems:'center' }}>
+                        <input type="checkbox" checked={discloseId} onChange={e=>setDiscloseId(e.target.checked)} /> {t({ id: 'rede.eval.discloseIdentity' })}
+                      </label>
+                      <textarea value={voteRationale} onChange={e=>setVoteRationale(e.target.value)} rows={2} placeholder={t({ id: 'rede.eval.rationale' })} style={{...fs, resize:'vertical'}} />
+                      <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+                        <button className="cat-btn primary" disabled={evalBusy} onClick={()=>castVote(selectedReq.id,'favorable')}>{t({ id: 'rede.eval.voteFavorable' })}</button>
+                        <button className="cat-btn ghost" style={{ color:'#f87171' }} disabled={evalBusy} onClick={()=>castVote(selectedReq.id,'opposed')}>{t({ id: 'rede.eval.voteOpposed' })}</button>
+                        <button className="cat-btn secondary" disabled={evalBusy} onClick={()=>castVote(selectedReq.id,'abstain')}>{t({ id: 'rede.eval.voteAbstain' })}</button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Commentaires internes admins */}
+                  {['pendente','em_analise','aguardando_info','proposta_aprovacao','proposta_recusa'].includes(selectedReq.request_status) && (
+                    <div style={{ marginTop:14, paddingTop:12, borderTop:'1px solid rgba(255,255,255,.08)' }}>
+                      <h5 style={{ margin:'0 0 6px' }}>{t({ id: 'rede.eval.commentsTitle' })} ({evalComments.length})</h5>
+                      {evalComments.map(c=>(
+                        <div key={c.id} style={{ fontSize:'.82rem', marginBottom:4, color:'#e0e0e0' }}>• {c.content}</div>
+                      ))}
+                      <textarea value={commentText} onChange={e=>setCommentText(e.target.value)} rows={2} placeholder={t({ id: 'rede.eval.commentPlaceholder' })} style={{...fs, resize:'vertical', margin:'6px 0'}} />
+                      <button className="cat-btn secondary" disabled={evalBusy} onClick={()=>addComment(selectedReq.id)}>{t({ id: 'rede.eval.addComment' })}</button>
+                    </div>
+                  )}
 
                   {/* ONBO-Q13 — transfert du mandat de coordination (demande approuvée, en constitution) */}
                   {selectedReq.request_status === 'aprovada' && (
