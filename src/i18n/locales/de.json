@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Partner",
   "federacao.carte.statut.cible": "Ziel",
   "cartografia.nav": "Netzwerkkarte",
-  "federacao.carte.edit.position": "Position (klicken oder Markierung ziehen)"
+  "federacao.carte.edit.position": "Position (klicken oder Markierung ziehen)",
+  "cartografia.add": "Meine Bibliothek hinzufügen",
+  "cartografia.add.title": "Meine Bibliothek zur Karte hinzufügen",
+  "cartografia.add.intro": "Euer Kollektiv ist noch nicht auf der Karte? Schlagt es hier vor.",
+  "cartografia.add.consent": "Meldet nur eure eigene Bibliothek. Nichts erscheint öffentlich ohne Prüfung durch die Koordination und euer Einverständnis.",
+  "cartografia.add.submitterNote": "Nachricht an die Koordination (optional)",
+  "cartografia.add.submit": "Senden",
+  "cartografia.add.sending": "Senden…",
+  "cartografia.add.success": "Danke! Euer Vorschlag wurde an die Koordination gesendet.",
+  "cartografia.add.error": "Senden fehlgeschlagen. Bitte erneut versuchen.",
+  "cartografia.mod": "Einträge moderieren",
+  "cartografia.mod.title": "Moderation der Karteneinträge",
+  "cartografia.mod.empty": "Keine offenen Vorschläge.",
+  "cartografia.mod.approve": "Genehmigen",
+  "cartografia.mod.reject": "Ablehnen",
+  "cartografia.mod.rejectReason": "Grund der Ablehnung (optional):",
+  "cartografia.mod.done": "Erledigt.",
+  "cartografia.mod.error": "Aktion nicht möglich (nur Koordination)."
 }

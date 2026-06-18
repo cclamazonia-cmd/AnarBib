@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Soci",
   "federacao.carte.statut.cible": "Objectiu",
   "cartografia.nav": "Mapa de la xarxa",
-  "federacao.carte.edit.position": "Posició (fes clic o arrossega el marcador)"
+  "federacao.carte.edit.position": "Posició (fes clic o arrossega el marcador)",
+  "cartografia.add": "Afegir la meva biblioteca",
+  "cartografia.add.title": "Afegir la meva biblioteca al mapa",
+  "cartografia.add.intro": "El teu col·lectiu encara no és al mapa? Proposa'l aquí.",
+  "cartografia.add.consent": "Declara només la teva pròpia biblioteca. Res no apareix públicament sense validació de la coordinació i el teu consentiment.",
+  "cartografia.add.submitterNote": "Missatge a la coordinació (opcional)",
+  "cartografia.add.submit": "Envia",
+  "cartografia.add.sending": "Enviant…",
+  "cartografia.add.success": "Gràcies! La teva proposta s'ha enviat a la coordinació.",
+  "cartografia.add.error": "Error en enviar. Torna-ho a provar.",
+  "cartografia.mod": "Modera les addicions",
+  "cartografia.mod.title": "Moderació de les addicions al mapa",
+  "cartografia.mod.empty": "Cap proposta pendent.",
+  "cartografia.mod.approve": "Aprova",
+  "cartografia.mod.reject": "Rebutja",
+  "cartografia.mod.rejectReason": "Motiu del rebuig (opcional):",
+  "cartografia.mod.done": "Fet.",
+  "cartografia.mod.error": "Acció no permesa (només coordinació)."
 }

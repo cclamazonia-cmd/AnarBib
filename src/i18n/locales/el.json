@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Εταίρος",
   "federacao.carte.statut.cible": "Στόχος",
   "cartografia.nav": "Χάρτης δικτύου",
-  "federacao.carte.edit.position": "Θέση (κάντε κλικ ή σύρετε τον δείκτη)"
+  "federacao.carte.edit.position": "Θέση (κάντε κλικ ή σύρετε τον δείκτη)",
+  "cartografia.add": "Προσθήκη της βιβλιοθήκης μου",
+  "cartografia.add.title": "Προσθήκη της βιβλιοθήκης μου στον χάρτη",
+  "cartografia.add.intro": "Το συλλογικό σας δεν είναι ακόμη στον χάρτη; Προτείνετέ το εδώ.",
+  "cartografia.add.consent": "Δηλώστε μόνο τη δική σας βιβλιοθήκη. Τίποτα δεν εμφανίζεται δημόσια χωρίς έλεγχο από τον συντονισμό και τη συγκατάθεσή σας.",
+  "cartografia.add.submitterNote": "Μήνυμα προς τον συντονισμό (προαιρετικό)",
+  "cartografia.add.submit": "Υποβολή",
+  "cartografia.add.sending": "Αποστολή…",
+  "cartografia.add.success": "Ευχαριστούμε! Η πρότασή σας στάλθηκε στον συντονισμό.",
+  "cartografia.add.error": "Η αποστολή απέτυχε. Δοκιμάστε ξανά.",
+  "cartografia.mod": "Έλεγχος προσθηκών",
+  "cartografia.mod.title": "Έλεγχος προσθηκών στον χάρτη",
+  "cartografia.mod.empty": "Καμία εκκρεμής πρόταση.",
+  "cartografia.mod.approve": "Έγκριση",
+  "cartografia.mod.reject": "Απόρριψη",
+  "cartografia.mod.rejectReason": "Λόγος απόρριψης (προαιρετικό):",
+  "cartografia.mod.done": "Έγινε.",
+  "cartografia.mod.error": "Μη επιτρεπτή ενέργεια (μόνο συντονισμός)."
 }

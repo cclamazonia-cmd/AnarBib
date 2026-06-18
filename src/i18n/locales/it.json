@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Partner",
   "federacao.carte.statut.cible": "Obiettivo",
   "cartografia.nav": "Mappa della rete",
-  "federacao.carte.edit.position": "Posizione (clicca o trascina il segnaposto)"
+  "federacao.carte.edit.position": "Posizione (clicca o trascina il segnaposto)",
+  "cartografia.add": "Aggiungi la mia biblioteca",
+  "cartografia.add.title": "Aggiungere la mia biblioteca alla mappa",
+  "cartografia.add.intro": "Il tuo collettivo non è ancora sulla mappa? Proponilo qui.",
+  "cartografia.add.consent": "Dichiara solo la tua biblioteca. Nulla appare pubblicamente senza la validazione del coordinamento e il tuo consenso.",
+  "cartografia.add.submitterNote": "Messaggio al coordinamento (facoltativo)",
+  "cartografia.add.submit": "Invia",
+  "cartografia.add.sending": "Invio…",
+  "cartografia.add.success": "Grazie! La tua proposta è stata inviata al coordinamento.",
+  "cartografia.add.error": "Invio non riuscito. Riprova.",
+  "cartografia.mod": "Modera le aggiunte",
+  "cartografia.mod.title": "Moderazione delle aggiunte alla mappa",
+  "cartografia.mod.empty": "Nessuna proposta in attesa.",
+  "cartografia.mod.approve": "Approva",
+  "cartografia.mod.reject": "Rifiuta",
+  "cartografia.mod.rejectReason": "Motivo del rifiuto (facoltativo):",
+  "cartografia.mod.done": "Fatto.",
+  "cartografia.mod.error": "Azione non consentita (riservato al coordinamento)."
 }

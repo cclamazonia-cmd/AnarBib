@@ -88,6 +88,10 @@ verify_jwt = false
 [functions.submit-gazette-contribution]
 verify_jwt = false
 
+# Auto-déclaration « ajouter ma biblio » sur la carte (MAP-J, réception publique, rate-limitée).
+[functions.submit-cartography-entry]
+verify_jwt = false
+
 # Build mensuel de la Gazette (orchestré par pg_cron, protégé par X-Cron-Secret).
 [functions.gazette-monthly-build]
 verify_jwt = false

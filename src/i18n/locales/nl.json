@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Partner",
   "federacao.carte.statut.cible": "Doelwit",
   "cartografia.nav": "Netwerkkaart",
-  "federacao.carte.edit.position": "Locatie (klik of sleep de markering)"
+  "federacao.carte.edit.position": "Locatie (klik of sleep de markering)",
+  "cartografia.add": "Mijn bibliotheek toevoegen",
+  "cartografia.add.title": "Mijn bibliotheek aan de kaart toevoegen",
+  "cartografia.add.intro": "Staat jullie collectief nog niet op de kaart? Stel het hier voor.",
+  "cartografia.add.consent": "Meld alleen je eigen bibliotheek aan. Niets verschijnt openbaar zonder controle door de coördinatie en jouw toestemming.",
+  "cartografia.add.submitterNote": "Bericht aan de coördinatie (optioneel)",
+  "cartografia.add.submit": "Versturen",
+  "cartografia.add.sending": "Versturen…",
+  "cartografia.add.success": "Bedankt! Je voorstel is naar de coördinatie gestuurd.",
+  "cartografia.add.error": "Verzenden mislukt. Probeer opnieuw.",
+  "cartografia.mod": "Toevoegingen modereren",
+  "cartografia.mod.title": "Moderatie van kaarttoevoegingen",
+  "cartografia.mod.empty": "Geen openstaande voorstellen.",
+  "cartografia.mod.approve": "Goedkeuren",
+  "cartografia.mod.reject": "Afwijzen",
+  "cartografia.mod.rejectReason": "Reden voor afwijzing (optioneel):",
+  "cartografia.mod.done": "Klaar.",
+  "cartografia.mod.error": "Actie niet toegestaan (alleen coördinatie)."
 }

@@ -9,12 +9,15 @@
 // =============================================================================
 
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
+import { useAuth } from '@/contexts/AuthContext';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import CartographyMap from '@/pages/federacao/CartographyMap';
 
 export default function CartografiaPage() {
   const { formatMessage: t } = useIntl();
+  const { user } = useAuth();
   useDocumentTitle(t({ id: 'cartografia.title' }));
 
   const panel = {
@@ -35,9 +38,21 @@ export default function CartografiaPage() {
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: 6, fontFamily: 'var(--brand-font-body)' }}>
             {t({ id: 'cartografia.title' })}
           </h1>
-          <p style={{ color: 'var(--brand-muted)', marginBottom: 18 }}>
+          <p style={{ color: 'var(--brand-muted)', marginBottom: 14 }}>
             {t({ id: 'cartografia.intro' })}
           </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
+            <Link to="/cartografia/ajouter"
+              style={{ padding: '8px 16px', borderRadius: 8, background: 'var(--brand-accent, #2563eb)', color: '#fff', fontWeight: 700, fontSize: '.85rem', textDecoration: 'none' }}>
+              {t({ id: 'cartografia.add' })}
+            </Link>
+            {user && (
+              <Link to="/cartografia/moderacao"
+                style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid rgba(255,255,255,.16)', color: 'var(--brand-muted)', fontSize: '.85rem', textDecoration: 'none' }}>
+                {t({ id: 'cartografia.mod' })}
+              </Link>
+            )}
+          </div>
           <CartographyMap viewName="cartography_public_v1" />
         </div>
       </div>

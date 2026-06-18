@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Partenaire",
   "federacao.carte.statut.cible": "Cible",
   "cartografia.nav": "Carte du réseau",
-  "federacao.carte.edit.position": "Position (cliquez ou glissez le repère)"
+  "federacao.carte.edit.position": "Position (cliquez ou glissez le repère)",
+  "cartografia.add": "Ajouter ma bibliothèque",
+  "cartografia.add.title": "Ajouter ma bibliothèque à la carte",
+  "cartografia.add.intro": "Votre collectif n'est pas encore sur la carte ? Proposez-le ici.",
+  "cartografia.add.consent": "Ne déclarez que votre propre bibliothèque. Rien n'apparaît publiquement sans validation par la coordination et votre accord.",
+  "cartografia.add.submitterNote": "Message à la coordination (facultatif)",
+  "cartografia.add.submit": "Envoyer",
+  "cartografia.add.sending": "Envoi…",
+  "cartografia.add.success": "Merci ! Votre proposition a été envoyée à la coordination.",
+  "cartografia.add.error": "Échec de l'envoi. Réessayez.",
+  "cartografia.mod": "Modérer les ajouts",
+  "cartografia.mod.title": "Modération des ajouts à la carte",
+  "cartografia.mod.empty": "Aucune proposition en attente.",
+  "cartografia.mod.approve": "Approuver",
+  "cartografia.mod.reject": "Refuser",
+  "cartografia.mod.rejectReason": "Motif du refus (facultatif) :",
+  "cartografia.mod.done": "Fait.",
+  "cartografia.mod.error": "Action impossible (réservé à la coordination)."
 }

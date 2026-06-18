@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Partnero",
   "federacao.carte.statut.cible": "Celo",
   "cartografia.nav": "Reto-mapo",
-  "federacao.carte.edit.position": "Pozicio (alklaku aŭ trenu la markilon)"
+  "federacao.carte.edit.position": "Pozicio (alklaku aŭ trenu la markilon)",
+  "cartografia.add": "Aldoni mian bibliotekon",
+  "cartografia.add.title": "Aldoni mian bibliotekon al la mapo",
+  "cartografia.add.intro": "Via kolektivo ankoraŭ ne estas sur la mapo? Proponu ĝin ĉi tie.",
+  "cartografia.add.consent": "Deklaru nur vian propran bibliotekon. Nenio aperas publike sen kontrolo de la kunordigo kaj via konsento.",
+  "cartografia.add.submitterNote": "Mesaĝo al la kunordigo (nedeviga)",
+  "cartografia.add.submit": "Sendi",
+  "cartografia.add.sending": "Sendante…",
+  "cartografia.add.success": "Dankon! Via propono estis sendita al la kunordigo.",
+  "cartografia.add.error": "Sendado malsukcesis. Bonvolu reprovi.",
+  "cartografia.mod": "Moderigi aldonojn",
+  "cartografia.mod.title": "Moderigo de aldonoj al la mapo",
+  "cartografia.mod.empty": "Neniu atendanta propono.",
+  "cartografia.mod.approve": "Aprobi",
+  "cartografia.mod.reject": "Malakcepti",
+  "cartografia.mod.rejectReason": "Kialo de malakcepto (nedeviga):",
+  "cartografia.mod.done": "Farite.",
+  "cartografia.mod.error": "Ago malpermesita (nur kunordigo)."
 }

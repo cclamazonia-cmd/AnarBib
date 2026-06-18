@@ -5248,5 +5248,22 @@
   "federacao.carte.statut.partenaire": "Socio",
   "federacao.carte.statut.cible": "Objetivo",
   "cartografia.nav": "Mapa de la red",
-  "federacao.carte.edit.position": "Posición (haz clic o arrastra el marcador)"
+  "federacao.carte.edit.position": "Posición (haz clic o arrastra el marcador)",
+  "cartografia.add": "Añadir mi biblioteca",
+  "cartografia.add.title": "Añadir mi biblioteca al mapa",
+  "cartografia.add.intro": "¿Tu colectivo aún no está en el mapa? Proponlo aquí.",
+  "cartografia.add.consent": "Declara solo tu propia biblioteca. Nada aparece públicamente sin validación de la coordinación y tu consentimiento.",
+  "cartografia.add.submitterNote": "Mensaje a la coordinación (opcional)",
+  "cartografia.add.submit": "Enviar",
+  "cartografia.add.sending": "Enviando…",
+  "cartografia.add.success": "¡Gracias! Tu propuesta se ha enviado a la coordinación.",
+  "cartografia.add.error": "Error al enviar. Inténtalo de nuevo.",
+  "cartografia.mod": "Moderar añadidos",
+  "cartografia.mod.title": "Moderación de añadidos al mapa",
+  "cartografia.mod.empty": "No hay propuestas pendientes.",
+  "cartografia.mod.approve": "Aprobar",
+  "cartografia.mod.reject": "Rechazar",
+  "cartografia.mod.rejectReason": "Motivo del rechazo (opcional):",
+  "cartografia.mod.done": "Hecho.",
+  "cartografia.mod.error": "Acción no permitida (reservado a la coordinación)."
 }

@@ -26,6 +26,8 @@ const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'))
 const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
 const BibliotecaPublicaPage = lazy(() => import('@/pages/public/BibliotecaPublicaPage'));
 const CartografiaPage = lazy(() => import('@/pages/public/CartografiaPage'));
+const CartografiaAjouterPage = lazy(() => import('@/pages/public/CartografiaAjouterPage'));
+const CartografiaModeracaoPage = lazy(() => import('@/pages/federacao/CartografiaModeracaoPage'));
 const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage'));
 const ImportWizard = lazy(() => import('@/pages/importacoes/ImportWizard'));
 const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
@@ -126,6 +128,10 @@ export default function App() {
                   <Route path="/bibliotecas/:slug" element={<BibliotecaPublicaPage />} />
                   {/* Carte publique du réseau (MAP-C, REGISTRE §34) */}
                   <Route path="/cartografia" element={<CartografiaPage />} />
+                  {/* Auto-déclaration publique « ajouter ma biblio » (MAP-J) */}
+                  <Route path="/cartografia/ajouter" element={<CartografiaAjouterPage />} />
+                  {/* Modération des auto-déclarations (coordination réseau, MAP-J) */}
+                  <Route path="/cartografia/moderacao" element={<ProtectedRoute><CartografiaModeracaoPage /></ProtectedRoute>} />
 
                   {/* ── Pages authentifiées ────────── */}
                   <Route path="/conta" element={<ProtectedRoute><ContaRouter /></ProtectedRoute>} />
