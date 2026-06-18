@@ -1,0 +1,76 @@
+# =============================================================================
+# Forgejo Actions — Tests SQL d'acceptation (AnarBib)
+#
+# But : exécuter les suites SQL (tests/sql/*) automatiquement quand le SCHÉMA ou
+# les tests changent, pour attraper les régressions des fonctions métier
+# (cotisation, renouvellement, …). Complète le gate lint/vitest de ci.yml.
+#
+# Déclenché UNIQUEMENT sur les chemins pertinents (migrations / seed / tests/sql /
+# le runner) — PAS à chaque push (un push 100 % frontend ne reconstruit pas la
+# base). Cf. cadrage validé (réutilise les suites DO-block existantes + seed.sql).
+#
+# Mécanique (cf. scripts/ci/run-sql-suites.sh) : un `services:` postgres
+# (image db du stack) fournit le serveur ; le job s'y connecte en psql, crée une
+# base FRAÎCHE (TEMPLATE template0 → aucun event trigger hérité), stube le schéma
+# `auth`, applique baseline + forward + seed, puis joue les suites du manifeste
+# tests/sql/ci-suites.txt. 100 % isolé : NE TOUCHE JAMAIS la prod.
+#
+# Indépendant de ci.yml (groupe de concurrence distinct) : c'est un SIGNAL de
+# régression, pas un gate du déploiement (le `supabase db push` vit dans ci.yml).
+# Runner : `anarbib-local` (auto-hébergé WSL2). [skip ci]/[ci skip] = run sauté.
+# =============================================================================
+name: Tests SQL
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/migrations/**'
+      - 'supabase/seed.sql'
+      - 'tests/sql/**'
+      - 'scripts/ci/run-sql-suites.sh'
+      - '.forgejo/workflows/sql-tests.yml'
+  workflow_dispatch: {}
+
+# Groupe DISTINCT de cicd-main : on ne veut pas qu'un run sql-tests et un run
+# ci.yml déclenchés par le même push s'annulent mutuellement (pending superseded).
+# Le runner mono-machine les sérialise de toute façon à l'exécution.
+concurrency:
+  group: cicd-sql-tests
+  cancel-in-progress: false
+
+jobs:
+  sql-tests:
+    runs-on: anarbib-local
+    container:
+      image: node:20
+    services:
+      db:
+        image: public.ecr.aws/supabase/postgres:17.6.1.084  # = image db du stack local
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Health TCP : l'image lance un serveur d'amorçage (socket-only) puis le
+        # serveur FINAL (TCP) — on n'est « healthy » qu'au serveur final.
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 30
+          --health-start-period 10s
+    steps:
+      - name: Outils système (git, psql)
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq git postgresql-client >/dev/null
+          echo "✓ outils prêts ($(psql --version))"
+
+      - name: Checkout (shallow)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Suites SQL d'acceptation
+        env:
+          PGHOST: db
+          PGPASSWORD: postgres
+        run: bash scripts/ci/run-sql-suites.sh

@@ -1,0 +1,15 @@
+# ci-suites.txt — suites SQL exécutées par le job CI « sql-tests ».
+# ---------------------------------------------------------------------------
+# Une suite par ligne (chemin relatif à la racine du dépôt). # = commentaire.
+# Allowlist EXPLICITE : on n'exécute PAS automatiquement tous les paquet*.sql —
+# les anciennes suites (paquet19/24/25/26/A/A1…) supposent des données LIVE et
+# échoueraient contre la base reconstruite (baseline + seed synthétique). Une
+# suite n'arrive ici que lorsqu'elle a des fixtures dynamiques + est compatible
+# du seed (cf. supabase/seed.sql) et signale son bilan « … OK : N/N ».
+#
+# Convention de bilan attendue (cf. runner) : la suite finit par
+#   RAISE EXCEPTION '<NOM> OK : N/N tests passés …'   -> succès
+#   RAISE EXCEPTION '<NOM> ECHEC : …'                 -> échec
+# (le RAISE sert au rollback des fixtures ; le runner parse le message.)
+tests/sql/paquet_cotisation_tests.sql
+tests/sql/paquet_renouvellement_granulaire_tests.sql
