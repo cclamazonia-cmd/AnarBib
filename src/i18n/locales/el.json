@@ -3957,7 +3957,7 @@
   "panel.reader.search": "Αναζήτηση",
   "panel.reader.searchHintIdentity": "Αναζήτηση με UUID, email ή τοπική ταυτότητα (αριθμός, όνομα…).",
   "panel.reader.searchPlaceholder": "Δημόσιο ID, email ή όνομα…",
-  "panel.reader.searchPlaceholderFull": "Δημόσιο ID (U000085) ή email",
+  "panel.reader.searchPlaceholderFull": "Δημόσιο ID (U000085), email ή τοπική ταυτότητα",
   "panel.reader.since": "Εγγραφή: {date} · Περιορισμένος: {restricted} · Εκκρεμεί κωδικός: {password}",
   "panel.reader.title": "Διαχείριση αναγνώστη/στριας",
   "panel.reader.unfreezeAction": "Άρση καθολικού παγώματος",

@@ -3957,7 +3957,7 @@
   "panel.reader.search": "Buscar",
   "panel.reader.searchHintIdentity": "Busca por UUID, correo o identidad local (número, nombre…).",
   "panel.reader.searchPlaceholder": "ID público, correo o nombre…",
-  "panel.reader.searchPlaceholderFull": "ID público (U000085) o correo",
+  "panel.reader.searchPlaceholderFull": "ID público (U000085), correo o identidad local",
   "panel.reader.since": "Registro: {date} · Restringido: {restricted} · Contraseña pendiente: {password}",
   "panel.reader.title": "Gestionar le lectore",
   "panel.reader.unfreezeAction": "Descongelar globalmente",

@@ -3957,7 +3957,7 @@
   "panel.reader.search": "Rechercher",
   "panel.reader.searchHintIdentity": "Cherche par UUID, e-mail ou identité locale (numéro, nom…).",
   "panel.reader.searchPlaceholder": "ID public, e-mail ou nom…",
-  "panel.reader.searchPlaceholderFull": "ID public (U000085) ou e-mail",
+  "panel.reader.searchPlaceholderFull": "ID public (U000085), e-mail ou identité locale",
   "panel.reader.since": "Inscription : {date} · Restreint : {restricted} · Mot de passe en attente : {password}",
   "panel.reader.title": "Gérer lecteur·rice",
   "panel.reader.unfreezeAction": "Lever le gel global",

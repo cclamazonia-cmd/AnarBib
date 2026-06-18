@@ -3957,7 +3957,7 @@
   "panel.reader.search": "Zoeken",
   "panel.reader.searchHintIdentity": "Zoek op UUID, e-mail of lokale identiteit (nummer, naam…).",
   "panel.reader.searchPlaceholder": "Openbare ID, e-mail of naam…",
-  "panel.reader.searchPlaceholderFull": "Openbare ID (U000085) of e-mail",
+  "panel.reader.searchPlaceholderFull": "Openbare ID (U000085), e-mail of lokale identiteit",
   "panel.reader.since": "Geregistreerd: {date} · Beperkt: {restricted} · Wachtwoord in afwachting: {password}",
   "panel.reader.title": "Lezer beheren",
   "panel.reader.unfreezeAction": "Globale bevriezing opheffen",
