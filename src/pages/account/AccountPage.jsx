@@ -19,6 +19,7 @@ import { formatSchedule } from '@/lib/scheduleFormat';
 import { localizeError } from '@/lib/localizeError';
 import DataExportButton from '@/components/account/DataExportButton';
 import MyLibraryContactCard from '@/components/account/MyLibraryContactCard';
+import MinhaSolicitacaoPanel from '@/components/account/MinhaSolicitacaoPanel';
 import Modal from '@/components/ui/Modal';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import LibraryContextBanner from '@/components/LibraryContextBanner';
@@ -1175,6 +1176,9 @@ export default function AccountPage() {
             </div>
           );
         })()}
+
+        {/* #111 Lot 3b — « Ma demande » (auto-masqué si aucune demande d'adhésion) */}
+        <MinhaSolicitacaoPanel />
 
         {serviceState && (() => {
           const mode = serviceState.service_mode || 'funcionamento_normal';
