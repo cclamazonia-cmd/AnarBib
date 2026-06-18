@@ -19,6 +19,14 @@ const CATEGORIES = [
   { key: 'misto', color: '#2C2C2C' },
 ];
 
+// Locales servies par le GeoJSON de l'annuaire (i18n par collectif). Les 10
+// locales de l'app y figurent ; `pt-BR` est servi par `pt`. Repli sur `fr`.
+const MAP_LOCALES = ['fr', 'pt', 'it', 'es', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+function resolveMapLang(locale) {
+  const base = (locale || '').toLowerCase().startsWith('pt') ? 'pt' : (locale || '').slice(0, 2).toLowerCase();
+  return MAP_LOCALES.includes(base) ? base : 'fr';
+}
+
 function loadCss(href) {
   if ([...document.querySelectorAll('link[rel="stylesheet"]')].some((l) => l.href.includes(href))) return;
   const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l);
@@ -65,7 +73,7 @@ function dropIcon(L, color, isMember) {
 
 export default function NetworkMapTab() {
   const { formatMessage: t, locale } = useIntl();
-  const lang = locale && locale.startsWith('pt') ? 'pt' : 'fr';
+  const lang = resolveMapLang(locale);
 
   const containerRef = useRef(null);
   const mapRef = useRef(null);
@@ -138,9 +146,12 @@ export default function NetworkMapTab() {
           const p = f.properties; const [lon, lat] = f.geometry.coordinates;
           const marker = L.marker([lat, lon], { icon: dropIcon(L, p.color, p.anarbib) });
           marker.bindPopup(popupHtml(p), { maxWidth: 300 });
-          const fr = p.i18n.fr; const pt = p.i18n.pt;
-          const text = [fr.name, fr.city, fr.country, pt.name, pt.city, pt.country].join(' ').toLowerCase();
-          return { marker, cat: p.category, text, member: !!p.anarbib };
+          // Texte de recherche : nom/ville/pays dans TOUTES les locales, pour
+          // retrouver un collectif quelle que soit la langue saisie.
+          const text = Object.values(p.i18n || {})
+            .flatMap((x) => [x.name, x.city, x.country])
+            .filter(Boolean).join(' ').toLowerCase();
+          return { marker, props: p, cat: p.category, text, member: !!p.anarbib };
         });
         setTotal(markersRef.current.length);
         applyFilters();
@@ -160,6 +171,15 @@ export default function NetworkMapTab() {
     filtersRef.current = { active, query };
     if (status === 'ready') applyFilters();
   }, [active, query, status]);
+
+  // Re-localiser les popups quand la langue change (sans re-télécharger les données).
+  useEffect(() => {
+    if (status !== 'ready') return;
+    for (const m of markersRef.current) {
+      try { m.marker.setPopupContent(popupHtml(m.props)); } catch { /* ignore */ }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang, status]);
 
   const toggleCat = (key) => setActive((prev) => {
     const n = new Set(prev); if (n.has(key)) n.delete(key); else n.add(key);
