@@ -1100,6 +1100,20 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Een lezer heeft de eigen reservering geannuleerd. De betreffende exemplaren zijn automatisch terug in circulatie gebracht. Er is geen actie van het team nodig.",
     el: "Ένας/Μία αναγνώστης/στρια ακύρωσε τη δική του/της κράτηση. Τα σχετικά αντίτυπα επέστρεψαν αυτόματα στην κυκλοφορία. Δεν απαιτείται καμία ενέργεια από την ομάδα."
   },
+  // Sujet de la COPIE BIBLIO (≠ sujet lecteur·rice « …par toi/vous ») : doit
+  // indiquer que c'est le/la lecteur·rice qui a annulé, jamais la biblio.
+  "res.cancelReader.adminSub": {
+    "pt-BR": "Reserva cancelada pelo(a/e) leitor(a/e)",
+    fr: "Réservation annulée par le·la lecteur·rice",
+    es: "Reserva cancelada por le lector(a/e)",
+    en: "Reservation cancelled by the reader",
+    it: "Prenotazione annullata dal lettore/trice",
+    de: "Vormerkung von der lesenden Person storniert",
+    ca: "Reserva cancel·lada per le lector-a-e",
+    eo: "Rezervo nuligita de la legant-in-o",
+    nl: "Reservering geannuleerd door de lezer",
+    el: "Η κράτηση ακυρώθηκε από τον/την αναγνώστη/στρια"
+  },
   "res.expired.sub": {
     "pt-BR": "Reserva expirada",
     fr: "Réservation expirée",

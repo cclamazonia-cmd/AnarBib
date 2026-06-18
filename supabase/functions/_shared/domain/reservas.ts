@@ -190,7 +190,13 @@ export async function handleReservaV2StatusChange(recordId, event) {
   // Admin — locale biblio (paquet 6). #153.D-2 : titre = .sub, intro = .adminIntro
   // (intro staff differenciee de l'intro lecteur·rice). Meme regle de point
   // final conditionnel que pour le mail lecteur·rice.
-  const adminTit = tMail(libLocale, titleKey);
+  // #153.D-2bis : si la famille différencie le SUJET côté staff (cas
+  // res.cancelReader : le/la lecteur·rice voit « annulée par toi/vous », mais la
+  // biblio NE doit PAS lire « par vous »), on emploie .adminSub ; sinon repli
+  // sur .sub (titre neutre partagé). tMail renvoie la clé brute si absente.
+  const adminSubKey = resKey("adminSub");
+  const adminSubTr = isResFamily ? tMail(libLocale, adminSubKey) : "";
+  const adminTit = (adminSubTr && adminSubTr !== adminSubKey) ? adminSubTr : tMail(libLocale, titleKey);
   const adminIntro = `<p>${tMail(libLocale, resKey("adminIntro"))}${introDot}</p>` + (motivo ? `<p>${label(libLocale, "reason")}: <b>${esc(motivo)}</b>.</p>` : "");
   const { html: ha, text: ta } = renderEmail({
     locale: libLocale,
