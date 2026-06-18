@@ -613,7 +613,7 @@ export default function CatalogPage() {
       const createRes = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
         p_user_id: user.id,
         p_holding_ids: [Number(row.session_holding_id)],
-        p_notes: t({ id: 'catalog.quickReserve.note' }),
+        p_notes: '@@note:catalog.quickReserve.note', // Route B : code système (décodé à l'affichage)
       });
       if (createRes.error) throw createRes.error;
 
@@ -655,7 +655,7 @@ export default function CatalogPage() {
       const createRes = await supabase.schema('api').rpc('create_consulta_local', {
         p_user_id: user.id,
         p_holding_ids: [Number(row.session_holding_id)],
-        p_notes: t({ id: 'catalog.quickConsulta.note' }),
+        p_notes: '@@note:catalog.quickConsulta.note', // Route B : code système (décodé à l'affichage)
       });
       if (createRes.error) throw createRes.error;
 

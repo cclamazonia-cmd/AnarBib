@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { decodeSystemNote } from '@/lib/systemNotes';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -1232,7 +1233,7 @@ export default function PanelPage() {
         });
       }
       if (stage === 'nao_retirada') {
-        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.notPickedUp'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: r.workflow_note || t({id:'panel.task.detail.check'}), actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.notPickedUp'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: decodeSystemNote(r.workflow_note, t) || t({id:'panel.task.detail.check'}), actionType: 'reserva', reserva_id: r.reserva_id });
       }
       // PATCH 09/05/2026 paquet 4 (approche A) : rendre visible le stage
       // retirada_a_combinar dans Trabalho do dia. Sinon ces résas restent
@@ -1246,7 +1247,7 @@ export default function PanelPage() {
           bucket: 'atencao',
           kind: t({id:'panel.task.toScheduleWithReader'}),
           label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`,
-          detail: r.workflow_note || t({id:'panel.task.detail.scheduleHint'}),
+          detail: decodeSystemNote(r.workflow_note, t) || t({id:'panel.task.detail.scheduleHint'}),
           actionType: 'reserva',
           reserva_id: r.reserva_id,
         });

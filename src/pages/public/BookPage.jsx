@@ -262,7 +262,7 @@ export default function BookPage() {
       const { error } = await supabase.schema('api').rpc('create_consulta_local', {
         p_user_id: user.id,
         p_holding_ids: [sessionCtx.session_holding_id],
-        p_notes: t({ id: 'book.reserve.consult.note' }),
+        p_notes: '@@note:book.reserve.consult.note', // Route B : code système (décodé à l'affichage)
       });
       if (error) throw error;
       setReserveStatus(t({ id: 'book.reserve.consult.success' }));

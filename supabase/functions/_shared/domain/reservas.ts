@@ -9,6 +9,7 @@ import { adminDisplayName, esc, firstNameOnly, formatDateBR, formatDateTimeInZon
 import { normalizeReservaPickupReplyEvent, normalizeReservaStatusChangeEvent, normalizeReservaWorkflowEvent, pickupReplyLabel, workflowStageFromEvent, workflowStageLabel } from "../shared/events.ts";
 import { getPayloadValue, normalizeLineNos, normalizeWorkflowItems } from "../shared/payload.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
+import { decodeSystemNote } from "../i18n/systemNotes.ts";
 export async function handleReservaCriadaV2(recordId) {
   const { reserva, profile, items } = await getReservaV2Bundle(recordId);
   const ctx = await resolveLibraryNotificationContext(String(reserva.library_id || "").trim() || null);
@@ -445,7 +446,7 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
     ...note ? [
       {
         label: label(locale, "note"),
-        value: note
+        value: decodeSystemNote(note, locale)
       }
     ] : []
   ];
@@ -530,7 +531,7 @@ export async function handleReservaV2WorkflowEvent(recordId, event, payload) {
       ...note ? [
         {
           label: label(libLocale, "note"),
-          value: note
+          value: decodeSystemNote(note, libLocale)
         }
       ] : []
     ];
