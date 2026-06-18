@@ -346,73 +346,30 @@ async function safeSendEmail(label, target, subject, html, text) {
     };
   }
 }
-function statusLabel(status) {
-  return ({
-    pendente: "Pendente",
-    em_analise: "Em análise",
-    aprovada: "Aprovada",
-    recusada: "Recusada",
-    arquivada: "Arquivada"
-  })[status] || status || "—";
+// #111 follow-up mail Phase 2 — libellés de valeur localisés (fallback : la valeur brute).
+function labelOr(locale, prefix, value) {
+  const v = tr(locale, prefix + value);
+  return v === prefix + value ? (value || "—") : v;
 }
-function projectStageLabel(value) {
-  return ({
-    em_formacao: "Em formação",
-    em_organizacao: "Em organização",
-    em_funcionamento: "Já em funcionamento"
-  })[value] || value || "—";
-}
-function firstManagerLabel(value) {
-  return ({
-    sim: "Sim",
-    nao: "Não",
-    a_definir: "A definir"
-  })[value] || value || "—";
-}
+function statusLabel(locale, status) { return labelOr(locale, "status.", status); }
+function projectStageLabel(locale, value) { return labelOr(locale, "stage.", value); }
+function firstManagerLabel(locale, value) { return labelOr(locale, "mgr.", value); }
 function normalizeReviewNotesForEmail(value, stripComplementPrefix = false) {
   const raw = String(value || "").trim();
   if (!raw) return "";
   if (!stripComplementPrefix) return raw;
   return raw.replace(/^pedido\s+de\s+complemento\s*:\s*/i, "").trim() || raw;
 }
-function commonDetails(row) {
+function commonDetails(locale, row) {
   return [
-    {
-      label: "Biblioteca",
-      value: row.library_name
-    },
-    {
-      label: "Sigla",
-      value: row.library_short_name || "—"
-    },
-    {
-      label: "Local",
-      value: [
-        row.city,
-        row.state_region,
-        row.country
-      ].filter(Boolean).join(" · ") || "—"
-    },
-    {
-      label: "Situação",
-      value: projectStageLabel(row.project_stage)
-    },
-    {
-      label: "Contato",
-      value: row.contact_name
-    },
-    {
-      label: "E-mail de contato",
-      value: row.contact_email
-    },
-    {
-      label: "Primeiro perfil responsável",
-      value: firstManagerLabel(row.first_manager_intent)
-    },
-    {
-      label: "Status atual",
-      value: statusLabel(row.request_status)
-    }
+    { label: tr(locale, "lbl.library"), value: row.library_name },
+    { label: tr(locale, "lbl.shortName"), value: row.library_short_name || "—" },
+    { label: tr(locale, "lbl.location"), value: [row.city, row.state_region, row.country].filter(Boolean).join(" · ") || "—" },
+    { label: tr(locale, "lbl.stage"), value: projectStageLabel(locale, row.project_stage) },
+    { label: tr(locale, "lbl.contact"), value: row.contact_name },
+    { label: tr(locale, "lbl.contactEmail"), value: row.contact_email },
+    { label: tr(locale, "lbl.firstManager"), value: firstManagerLabel(locale, row.first_manager_intent) },
+    { label: tr(locale, "lbl.currentStatus"), value: statusLabel(locale, row.request_status) },
   ];
 }
 function greetingFor(locale, name) {
@@ -426,19 +383,18 @@ const APPLICANT_EV = {
   library_request_approved: "approved",
   library_request_refused: "refused",
 };
-// #111 follow-up mail — sujet/titre/salutation/intro localisés (strings.ts) selon
-// la langue du·de la destinataire ; les libellés du tableau de détails restent
-// en pt-BR (phase 2). row.library_name est interpolé dans l'intro.
+// #111 follow-up mail — tout localisé selon la langue du·de la destinataire
+// (sujet/titre/salutation/intro + libellés du tableau via strings.ts). {library} interpolé.
 function buildApplicantEmail(locale, eventType, row, reviewerName) {
   const evKey = APPLICANT_EV[eventType] || "in_analysis";
-  const details = [...commonDetails(row)];
+  const details = [...commonDetails(locale, row)];
   if (eventType === "library_request_created") {
-    details.push({ label: "Enviada em", value: formatDateTimeBR(row.created_at) || "—" });
+    details.push({ label: tr(locale, "lbl.sentAt"), value: formatDateTimeBR(row.created_at) || "—" });
   } else if (reviewerName) {
-    details.push({ label: "Coordenação", value: reviewerName });
+    details.push({ label: tr(locale, "lbl.coordination"), value: reviewerName });
   }
   if (row.review_notes && ["library_request_more_info", "library_request_approved", "library_request_refused"].includes(eventType)) {
-    details.push({ label: "Mensagem da coordenação", value: normalizeReviewNotesForEmail(row.review_notes, eventType === "library_request_more_info") });
+    details.push({ label: tr(locale, "lbl.coordinationMessage"), value: normalizeReviewNotesForEmail(row.review_notes, eventType === "library_request_more_info") });
   }
   return {
     locale,
@@ -452,18 +408,18 @@ function buildApplicantEmail(locale, eventType, row, reviewerName) {
 function buildAdminEmail(locale, eventType, row, reviewerName) {
   const evKey = eventType === "library_request_created" ? "admin_created" : "admin_update";
   const details = [
-    ...commonDetails(row),
-    { label: "E-mail da biblioteca", value: row.library_email },
-    { label: "Telefone da biblioteca", value: row.library_phone || "—" },
-    { label: "E-mail do envio", value: row.submitted_by_email_snapshot || "—" },
+    ...commonDetails(locale, row),
+    { label: tr(locale, "lbl.libraryEmail"), value: row.library_email },
+    { label: tr(locale, "lbl.libraryPhone"), value: row.library_phone || "—" },
+    { label: tr(locale, "lbl.submitterEmail"), value: row.submitted_by_email_snapshot || "—" },
   ];
   if (eventType === "library_request_created") {
-    details.push({ label: "Apresentação", value: row.summary || "—" });
+    details.push({ label: tr(locale, "lbl.presentation"), value: row.summary || "—" });
   } else {
-    details.push({ label: "Novo status", value: statusLabel(row.request_status) });
+    details.push({ label: tr(locale, "lbl.newStatus"), value: statusLabel(locale, row.request_status) });
   }
-  if (reviewerName) details.push({ label: "Coordenação", value: reviewerName });
-  if (row.review_notes) details.push({ label: "Nota de revisão", value: row.review_notes });
+  if (reviewerName) details.push({ label: tr(locale, "lbl.coordination"), value: reviewerName });
+  if (row.review_notes) details.push({ label: tr(locale, "lbl.reviewNote"), value: row.review_notes });
   return {
     locale,
     subject: `[${BRAND_NAME}] ${tr(locale, evKey + ".subject")}`,
@@ -476,7 +432,7 @@ function buildAdminEmail(locale, eventType, row, reviewerName) {
 // #111 Lot 2b — échange humain : messages + invitations (« proposer um diálogo »)
 // L'enqueue ne transmet que {request_id, event_type} : on récupère le message /
 // l'invitation le·la plus récent·e de la demande (volume faible, workflow dormant
-// jusqu'à Bologne). Rendu pt-BR, cohérent avec le reste de l'EF (non localisée).
+// jusqu'à Bologne). Rendu localisé (strings.ts) selon la langue du·de la destinataire.
 // ============================================================================
 async function fetchLatestMessage(requestId) {
   const { data, error } = await supabaseAdmin.from("library_request_messages").select("*").eq("request_id", requestId).order("created_at", { ascending: false }).limit(1).maybeSingle();
@@ -502,7 +458,7 @@ function buildMessageEmail(locale, row, msg, toSolicitante) {
     title: tr(locale, evKey + ".subject"),
     greeting: toSolicitante ? greetingFor(locale, row.contact_name) : "",
     introHtml: `<p style="margin:0;">${esc(tr(locale, evKey + ".intro", { library: row.library_name }))}</p>`,
-    details: [{ label: "Mensagem", value: msg.content }],
+    details: [{ label: tr(locale, "lbl.message"), value: msg.content }],
   };
 }
 function buildInvitationEmail(locale, row, inv, notifySolicitante, isResponse) {
@@ -511,8 +467,8 @@ function buildInvitationEmail(locale, row, inv, notifySolicitante, isResponse) {
   const evKey = !isResponse
     ? (notifySolicitante ? "invitation_proposed" : "admin_invitation")
     : (notifySolicitante ? "invitation_response" : "admin_invitation");
-  const details = [{ label: "Assunto", value: inv.subject }];
-  if (inv.proposed_at_text) details.push({ label: "Momento proposto", value: inv.proposed_at_text });
+  const details = [{ label: tr(locale, "lbl.subject"), value: inv.subject }];
+  if (inv.proposed_at_text) details.push({ label: tr(locale, "lbl.proposedTime"), value: inv.proposed_at_text });
   return {
     locale,
     subject: `[${BRAND_NAME}] ${tr(locale, evKey + ".subject")}`,
