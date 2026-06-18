@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
+import { tr, normalizeLocale, FALLBACK_LOCALE } from "./strings.ts";
 const SUPABASE_URL = mustEnv("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = mustEnv("SUPABASE_SERVICE_ROLE_KEY");
 const WEBHOOK_SECRET = mustEnv("WEBHOOK_SECRET_NOTIFY_LIBRARY_REQUEST");
@@ -107,9 +108,43 @@ async function fetchRequest(requestId) {
 async function fetchProfile(profileId) {
   const id = String(profileId || "").trim();
   if (!id) return null;
-  const { data, error } = await supabaseAdmin.from("profiles").select("id,email,first_name,last_name,public_id").eq("id", id).maybeSingle();
+  const { data, error } = await supabaseAdmin.from("profiles").select("id,email,first_name,last_name,public_id,preferred_language").eq("id", id).maybeSingle();
   if (error) throw new Error(`profile_fetch_failed: ${error.message}`);
   return data || null;
+}
+// #111 follow-up mail — langue du·de la solicitante (preferred_language du profil).
+async function resolveSubmitterLocale(row) {
+  const p = await fetchProfile(row.submitted_by_user_id).catch(() => null);
+  return normalizeLocale(p?.preferred_language);
+}
+// Admins réseau actif·ves avec e-mail + langue (fan-out individuel, chacun·e
+// dans sa langue) — remplace l'envoi à une boîte ADMIN_EMAIL unique.
+async function fetchActiveAdmins() {
+  const { data: admins, error } = await supabaseAdmin.from("network_administrators").select("user_id").eq("status", "active");
+  if (error || !admins?.length) return [];
+  const ids = admins.map((a) => a.user_id);
+  const { data: profs } = await supabaseAdmin.from("profiles").select("email,preferred_language").in("id", ids);
+  return (profs || []).filter((p) => isValidEmail(p.email)).map((p) => ({
+    email: String(p.email).trim().toLowerCase(),
+    locale: normalizeLocale(p.preferred_language),
+  }));
+}
+// Fan-out vers les admins actif·ves (fallback ADMIN_EMAIL si aucun·e résolu·e,
+// pour ne jamais perdre une notification). buildFn(locale) -> e-mail rendu.
+async function sendToAdmins(label, buildFn, results) {
+  let admins = await fetchActiveAdmins();
+  if (admins.length === 0) {
+    const a = adminTarget();
+    if (a) admins = [{ email: a.email, locale: FALLBACK_LOCALE }];
+  }
+  const seen = new Set();
+  for (const ad of admins) {
+    if (seen.has(ad.email)) continue;
+    seen.add(ad.email);
+    const email = buildFn(ad.locale);
+    const rendered = renderEmail(email);
+    results.push(await safeSendEmail(label, { email: ad.email }, email.subject, rendered.html, rendered.text));
+  }
 }
 function dedupeTargets(...targets) {
   const seen = new Set();
@@ -137,7 +172,7 @@ function adminTarget() {
     name: ADMIN_NAME || undefined
   };
 }
-function footerHtml() {
+function footerHtml(locale) {
   const parts = [];
   if (REGIMENTO_URL) {
     parts.push(`Regimento da rede: <a href="${esc(REGIMENTO_URL)}" style="color:#fff;text-decoration:underline;">abrir</a>`);
@@ -145,14 +180,14 @@ function footerHtml() {
   if (LIBRARIAN_PHONE) {
     parts.push(`Contato rápido: <b>${esc(LIBRARIAN_PHONE)}</b>`);
   }
-  parts.push(esc(FOOTER_TEXT));
+  parts.push(esc(tr(locale || FALLBACK_LOCALE, "footer")));
   return parts.join("<br>");
 }
-function footerText() {
+function footerText(locale) {
   const parts = [];
   if (REGIMENTO_URL) parts.push(`Regimento da rede: ${REGIMENTO_URL}`);
   if (LIBRARIAN_PHONE) parts.push(`Contato rápido: ${LIBRARIAN_PHONE}`);
-  parts.push(FOOTER_TEXT);
+  parts.push(tr(locale || FALLBACK_LOCALE, "footer"));
   return parts.join("\n");
 }
 function renderEmail(opts) {
@@ -184,7 +219,7 @@ function renderEmail(opts) {
                 ${logoHtml}
                 <div>
                   <div style="font-size:18px;font-weight:800;line-height:1.2;">${esc(BRAND_NAME)}</div>
-                  <div style="font-size:13px;color:#cfcfcf;line-height:1.2;">Solicitação institucional · notificação automática</div>
+                  <div style="font-size:13px;color:#cfcfcf;line-height:1.2;">${esc(tr(opts.locale || FALLBACK_LOCALE, "subtitle"))}</div>
                 </div>
               </div>
               <div style="height:3px;background:#c00000;"></div>
@@ -193,7 +228,7 @@ function renderEmail(opts) {
                 ${greetingHtml}
                 <div style="font-size:16px;line-height:1.55;color:#f2f2f2;">${opts.introHtml}</div>
                 ${detailsHtml}
-                <div style="margin:16px 0 0;font-size:13px;line-height:1.5;color:#cfcfcf;">${footerHtml()}</div>
+                <div style="margin:16px 0 0;font-size:13px;line-height:1.5;color:#cfcfcf;">${footerHtml(opts.locale)}</div>
               </div>
             </td>
           </tr>
@@ -216,7 +251,7 @@ function renderEmail(opts) {
     "",
     ...(opts.details || []).map((row)=>`${row.label}: ${row.value}`),
     "",
-    footerText()
+    footerText(opts.locale)
   ].filter((line, index, arr)=>!(line === "" && arr[index - 1] === "")).join("\n");
   return {
     html,
@@ -380,198 +415,61 @@ function commonDetails(row) {
     }
   ];
 }
-function buildApplicantEmail(eventType, row, reviewerName) {
-  const details = commonDetails(row);
-  const greeting = firstNameOnly(row.contact_name) ? `Olá, ${firstNameOnly(row.contact_name)}!` : "Olá!";
+function greetingFor(locale, name) {
+  const n = firstNameOnly(name);
+  return n ? tr(locale, "greetingNamed", { name: n }) : tr(locale, "greeting");
+}
+const APPLICANT_EV = {
+  library_request_created: "created",
+  library_request_in_analysis: "in_analysis",
+  library_request_more_info: "more_info",
+  library_request_approved: "approved",
+  library_request_refused: "refused",
+};
+// #111 follow-up mail — sujet/titre/salutation/intro localisés (strings.ts) selon
+// la langue du·de la destinataire ; les libellés du tableau de détails restent
+// en pt-BR (phase 2). row.library_name est interpolé dans l'intro.
+function buildApplicantEmail(locale, eventType, row, reviewerName) {
+  const evKey = APPLICANT_EV[eventType] || "in_analysis";
+  const details = [...commonDetails(row)];
   if (eventType === "library_request_created") {
-    return {
-      subject: `[${BRAND_NAME}] Solicitação recebida`,
-      title: "Solicitação institucional recebida",
-      greeting,
-      introHtml: `
-        <p style="margin:0 0 10px;">Recebemos a solicitação institucional da biblioteca <b>${esc(row.library_name)}</b>.</p>
-        <p style="margin:0;">A coordenação da rede AnarBib vai analisar as informações antes de qualquer liberação de acesso às áreas de gestão bibliotecária.</p>
-      `,
-      details: [
-        ...details,
-        {
-          label: "Enviada em",
-          value: formatDateTimeBR(row.created_at) || "—"
-        }
-      ]
-    };
+    details.push({ label: "Enviada em", value: formatDateTimeBR(row.created_at) || "—" });
+  } else if (reviewerName) {
+    details.push({ label: "Coordenação", value: reviewerName });
   }
-  if (eventType === "library_request_in_analysis") {
-    return {
-      subject: `[${BRAND_NAME}] Solicitação em análise`,
-      title: "Solicitação em análise",
-      greeting,
-      introHtml: `
-        <p style="margin:0 0 10px;">A coordenação da rede colocou a solicitação da biblioteca <b>${esc(row.library_name)}</b> em <b>análise</b>.</p>
-        <p style="margin:0;">Se precisarmos de informações complementares, enviaremos uma nova mensagem.</p>
-      `,
-      details: [
-        ...details,
-        ...reviewerName ? [
-          {
-            label: "Análise por",
-            value: reviewerName
-          }
-        ] : [],
-        ...row.reviewed_at ? [
-          {
-            label: "Atualizada em",
-            value: formatDateTimeBR(row.reviewed_at)
-          }
-        ] : []
-      ]
-    };
-  }
-  if (eventType === "library_request_more_info") {
-    return {
-      subject: `[${BRAND_NAME}] Precisamos de informações complementares`,
-      title: "Pedido de complemento",
-      greeting,
-      introHtml: `
-        <p style="margin:0 0 10px;">A coordenação da rede precisa de <b>informações complementares</b> para continuar a análise da solicitação da biblioteca <b>${esc(row.library_name)}</b>.</p>
-        <p style="margin:0;">Lê com atenção a mensagem abaixo e responde diretamente a este e-mail com os elementos pedidos.</p>
-      `,
-      details: [
-        ...details,
-        ...reviewerName ? [
-          {
-            label: "Mensagem enviada por",
-            value: reviewerName
-          }
-        ] : [],
-        ...row.review_notes ? [
-          {
-            label: "Mensagem da coordenação",
-            value: normalizeReviewNotesForEmail(row.review_notes, true)
-          }
-        ] : []
-      ]
-    };
-  }
-  if (eventType === "library_request_approved") {
-    return {
-      subject: `[${BRAND_NAME}] Solicitação aprovada`,
-      title: "Solicitação aprovada",
-      greeting,
-      introHtml: `
-        <p style="margin:0 0 10px;">A solicitação institucional da biblioteca <b>${esc(row.library_name)}</b> foi <b>aprovada</b>.</p>
-        <p style="margin:0;">Isso confirma a validação política e organizativa da entrada na rede. A etapa técnica e os acessos definitivos podem ainda exigir um último alinhamento.</p>
-      `,
-      details: [
-        ...details,
-        ...reviewerName ? [
-          {
-            label: "Aprovação por",
-            value: reviewerName
-          }
-        ] : [],
-        ...row.review_notes ? [
-          {
-            label: "Observação da coordenação",
-            value: row.review_notes
-          }
-        ] : []
-      ]
-    };
+  if (row.review_notes && ["library_request_more_info", "library_request_approved", "library_request_refused"].includes(eventType)) {
+    details.push({ label: "Mensagem da coordenação", value: normalizeReviewNotesForEmail(row.review_notes, eventType === "library_request_more_info") });
   }
   return {
-    subject: `[${BRAND_NAME}] Solicitação recusada`,
-    title: "Solicitação recusada",
-    greeting,
-    introHtml: `
-      <p style="margin:0 0 10px;">A solicitação institucional da biblioteca <b>${esc(row.library_name)}</b> foi <b>recusada</b> nesta etapa.</p>
-      <p style="margin:0;">Se houver uma observação da coordenação abaixo, ela resume o motivo ou o contexto desta decisão.</p>
-    `,
-    details: [
-      ...details,
-      ...reviewerName ? [
-        {
-          label: "Resposta por",
-          value: reviewerName
-        }
-      ] : [],
-      ...row.review_notes ? [
-        {
-          label: "Observação da coordenação",
-          value: row.review_notes
-        }
-      ] : []
-    ]
+    locale,
+    subject: `[${BRAND_NAME}] ${tr(locale, evKey + ".subject")}`,
+    title: tr(locale, evKey + ".subject"),
+    greeting: greetingFor(locale, row.contact_name),
+    introHtml: `<p style="margin:0;">${esc(tr(locale, evKey + ".intro", { library: row.library_name }))}</p>`,
+    details,
   };
 }
-function buildAdminEmail(eventType, row, reviewerName) {
+function buildAdminEmail(locale, eventType, row, reviewerName) {
+  const evKey = eventType === "library_request_created" ? "admin_created" : "admin_update";
   const details = [
     ...commonDetails(row),
-    {
-      label: "E-mail da biblioteca",
-      value: row.library_email
-    },
-    {
-      label: "Telefone da biblioteca",
-      value: row.library_phone || "—"
-    },
-    {
-      label: "Função do contato",
-      value: row.contact_role || "—"
-    },
-    {
-      label: "E-mail do envio",
-      value: row.submitted_by_email_snapshot || "—"
-    },
-    {
-      label: "Enviada em",
-      value: formatDateTimeBR(row.created_at) || "—"
-    }
+    { label: "E-mail da biblioteca", value: row.library_email },
+    { label: "Telefone da biblioteca", value: row.library_phone || "—" },
+    { label: "E-mail do envio", value: row.submitted_by_email_snapshot || "—" },
   ];
   if (eventType === "library_request_created") {
-    return {
-      subject: `[${BRAND_NAME}] Nova solicitação institucional`,
-      title: "Nova solicitação institucional",
-      introHtml: `
-        <p style="margin:0 0 10px;">Uma nova solicitação institucional de entrada na rede foi registrada.</p>
-        <p style="margin:0;">Consulta o painel de rede para analisar o pedido e responder à biblioteca.</p>
-      `,
-      details: [
-        ...details,
-        {
-          label: "Apresentação",
-          value: row.summary || "—"
-        }
-      ]
-    };
+    details.push({ label: "Apresentação", value: row.summary || "—" });
+  } else {
+    details.push({ label: "Novo status", value: statusLabel(row.request_status) });
   }
-  const statusText = eventType === "library_request_approved" ? "aprovada" : eventType === "library_request_refused" ? "recusada" : eventType === "library_request_more_info" ? "pedido de complemento enviado" : "em análise";
+  if (reviewerName) details.push({ label: "Coordenação", value: reviewerName });
+  if (row.review_notes) details.push({ label: "Nota de revisão", value: row.review_notes });
   return {
-    subject: `[${BRAND_NAME}] Atualização de solicitação institucional`,
-    title: `Solicitação ${statusText}`,
-    introHtml: `
-      <p style="margin:0 0 10px;">Uma solicitação institucional foi atualizada no painel de rede.</p>
-      <p style="margin:0;">Este e-mail serve como cópia de acompanhamento da coordenação.</p>
-    `,
-    details: [
-      ...details,
-      {
-        label: "Novo status",
-        value: statusLabel(row.request_status)
-      },
-      ...reviewerName ? [
-        {
-          label: "Atualizado por",
-          value: reviewerName
-        }
-      ] : [],
-      ...row.review_notes ? [
-        {
-          label: "Nota de revisão",
-          value: row.review_notes
-        }
-      ] : []
-    ]
+    locale,
+    subject: `[${BRAND_NAME}] ${tr(locale, evKey + ".subject")}`,
+    title: tr(locale, evKey + ".subject"),
+    introHtml: `<p style="margin:0;">${esc(tr(locale, evKey + ".intro", { library: row.library_name }))}</p>`,
+    details,
   };
 }
 // ============================================================================
@@ -596,74 +494,48 @@ function summarize(requestId, eventType, results) {
   const failedCount = results.filter((x)=>x.ok === false && !x.skipped).length;
   return { ok: failedCount === 0, request_id: requestId, event_type: eventType, sent_count: sentCount, skipped_count: skippedCount, failed_count: failedCount, results };
 }
-function buildMessageEmail(row, msg, toSolicitante) {
-  const details = [{ label: "Mensagem", value: msg.content }, { label: "Biblioteca", value: row.library_name }];
-  if (toSolicitante) {
-    const greeting = firstNameOnly(row.contact_name) ? `Olá, ${firstNameOnly(row.contact_name)}!` : "Olá!";
-    return {
-      subject: `[${BRAND_NAME}] Nova mensagem da coordenação`,
-      title: "Mensagem da coordenação da rede",
-      greeting,
-      introHtml: `<p style="margin:0 0 10px;">A coordenação da rede AnarBib enviou uma mensagem sobre a solicitação da biblioteca <b>${esc(row.library_name)}</b>.</p><p style="margin:0;">Podes responder na tua área « Minha solicitação » em ${esc(BRAND_NAME)}.</p>`,
-      details
-    };
-  }
+function buildMessageEmail(locale, row, msg, toSolicitante) {
+  const evKey = toSolicitante ? "message" : "admin_message";
   return {
-    subject: `[${BRAND_NAME}] Nova mensagem de uma biblioteca solicitante`,
-    title: "Mensagem de uma biblioteca solicitante",
-    introHtml: `<p style="margin:0 0 10px;">A biblioteca <b>${esc(row.library_name)}</b> respondeu na sua solicitação institucional.</p><p style="margin:0;">Consulta o painel de rede para dar seguimento.</p>`,
-    details
+    locale,
+    subject: `[${BRAND_NAME}] ${tr(locale, evKey + ".subject")}`,
+    title: tr(locale, evKey + ".subject"),
+    greeting: toSolicitante ? greetingFor(locale, row.contact_name) : "",
+    introHtml: `<p style="margin:0;">${esc(tr(locale, evKey + ".intro", { library: row.library_name }))}</p>`,
+    details: [{ label: "Mensagem", value: msg.content }],
   };
 }
-function buildInvitationEmail(row, inv, notifySolicitante, isResponse) {
+function buildInvitationEmail(locale, row, inv, notifySolicitante, isResponse) {
+  // proposition côté solicitante → 'invitation_proposed' ; côté admin → 'admin_invitation' ;
+  // réponse côté solicitante → 'invitation_response' ; côté admin → 'admin_invitation' (réutilisé).
+  const evKey = !isResponse
+    ? (notifySolicitante ? "invitation_proposed" : "admin_invitation")
+    : (notifySolicitante ? "invitation_response" : "admin_invitation");
   const details = [{ label: "Assunto", value: inv.subject }];
   if (inv.proposed_at_text) details.push({ label: "Momento proposto", value: inv.proposed_at_text });
-  details.push({ label: "Biblioteca", value: row.library_name });
-  const greeting = firstNameOnly(row.contact_name) ? `Olá, ${firstNameOnly(row.contact_name)}!` : "Olá!";
-  if (!isResponse) {
-    if (notifySolicitante) {
-      return {
-        subject: `[${BRAND_NAME}] Convite para uma conversa`,
-        title: "Convite para um diálogo",
-        greeting,
-        introHtml: `<p style="margin:0 0 10px;">A coordenação da rede propõe uma conversa sobre a solicitação da biblioteca <b>${esc(row.library_name)}</b>.</p><p style="margin:0;">Podes aceitar ou recusar o convite na tua área « Minha solicitação ».</p>`,
-        details
-      };
-    }
-    return {
-      subject: `[${BRAND_NAME}] Pedido de conversa de uma solicitante`,
-      title: "Pedido de diálogo",
-      introHtml: `<p style="margin:0;">A biblioteca <b>${esc(row.library_name)}</b> pede uma conversa com a coordenação da rede.</p>`,
-      details
-    };
-  }
-  const verb = inv.status === "accepted" ? "aceitou" : "recusou";
-  if (notifySolicitante) {
-    return {
-      subject: `[${BRAND_NAME}] Resposta ao teu convite`,
-      title: "Resposta a um convite",
-      greeting,
-      introHtml: `<p style="margin:0;">A coordenação ${verb} o convite para conversar sobre a solicitação da biblioteca <b>${esc(row.library_name)}</b>.</p>`,
-      details
-    };
-  }
   return {
-    subject: `[${BRAND_NAME}] Resposta a um convite`,
-    title: "Resposta a um convite",
-    introHtml: `<p style="margin:0;">A biblioteca <b>${esc(row.library_name)}</b> ${verb} o convite proposto.</p>`,
-    details
+    locale,
+    subject: `[${BRAND_NAME}] ${tr(locale, evKey + ".subject")}`,
+    title: tr(locale, evKey + ".subject"),
+    greeting: notifySolicitante ? greetingFor(locale, row.contact_name) : "",
+    introHtml: `<p style="margin:0;">${esc(tr(locale, evKey + ".intro", { library: row.library_name }))}</p>`,
+    details,
   };
 }
 async function handleMessageNotify(row) {
   const msg = await fetchLatestMessage(row.id);
   if (!msg) return { ok: true, skipped: "no_message", request_id: row.id, event_type: "library_request_message" };
   const toSolicitante = msg.direction === "admin_to_solicitante";
-  const targets = toSolicitante ? applicantTargets(row) : [adminTarget()].filter(Boolean);
-  const email = buildMessageEmail(row, msg, toSolicitante);
-  const rendered = renderEmail(email);
   const results = [];
-  for (const target of targets){
-    results.push(await safeSendEmail("message", target, email.subject, rendered.html, rendered.text));
+  if (toSolicitante) {
+    const locale = await resolveSubmitterLocale(row);
+    const email = buildMessageEmail(locale, row, msg, true);
+    const rendered = renderEmail(email);
+    for (const target of applicantTargets(row)) {
+      results.push(await safeSendEmail("message", target, email.subject, rendered.html, rendered.text));
+    }
+  } else {
+    await sendToAdmins("message", (loc) => buildMessageEmail(loc, row, msg, false), results);
   }
   return summarize(row.id, "library_request_message", results);
 }
@@ -673,12 +545,16 @@ async function handleInvitationNotify(row) {
   const isResponse = inv.status === "accepted" || inv.status === "declined";
   // proposition → notifie l'autre côté ; réponse → notifie l'initiateur·rice.
   const notifySolicitante = isResponse ? (inv.initiator_side === "solicitante") : (inv.initiator_side === "admin");
-  const targets = notifySolicitante ? applicantTargets(row) : [adminTarget()].filter(Boolean);
-  const email = buildInvitationEmail(row, inv, notifySolicitante, isResponse);
-  const rendered = renderEmail(email);
   const results = [];
-  for (const target of targets){
-    results.push(await safeSendEmail("invitation", target, email.subject, rendered.html, rendered.text));
+  if (notifySolicitante) {
+    const locale = await resolveSubmitterLocale(row);
+    const email = buildInvitationEmail(locale, row, inv, true, isResponse);
+    const rendered = renderEmail(email);
+    for (const target of applicantTargets(row)) {
+      results.push(await safeSendEmail("invitation", target, email.subject, rendered.html, rendered.text));
+    }
+  } else {
+    await sendToAdmins("invitation", (loc) => buildInvitationEmail(loc, row, inv, false, isResponse), results);
   }
   return summarize(row.id, "library_request_invitation", results);
 }
@@ -721,18 +597,17 @@ async function handleNotify(payload) {
   if (eventType === "library_request_invitation") return await handleInvitationNotify(row);
   const reviewer = await fetchProfile(row.reviewed_by_user_id).catch(()=>null);
   const reviewerName = reviewer ? fullName(reviewer.first_name, reviewer.last_name) || reviewer.public_id || reviewer.email || null : null;
-  const applicantTargetsList = applicantTargets(row);
-  const applicantEmail = buildApplicantEmail(eventType, row, reviewerName);
+  // E-mail au·à la solicitante dans SA langue (preferred_language).
+  const applicantLocale = await resolveSubmitterLocale(row);
+  const applicantEmail = buildApplicantEmail(applicantLocale, eventType, row, reviewerName);
   const applicantRendered = renderEmail(applicantEmail);
   const results = [];
-  for (const target of applicantTargetsList){
+  for (const target of applicantTargets(row)){
     results.push(await safeSendEmail("applicant", target, applicantEmail.subject, applicantRendered.html, applicantRendered.text));
   }
+  // Copie à la coordination : fan-out vers chaque admin actif·ve, dans sa langue.
   if (eventType === "library_request_created") {
-    const admin = adminTarget();
-    const adminEmail = buildAdminEmail(eventType, row, reviewerName);
-    const adminRendered = renderEmail(adminEmail);
-    results.push(await safeSendEmail("admin_copy", admin, adminEmail.subject, adminRendered.html, adminRendered.text));
+    await sendToAdmins("admin_copy", (loc) => buildAdminEmail(loc, eventType, row, reviewerName), results);
   }
   const sentCount = results.filter((x)=>x.ok === true).length;
   const skippedCount = results.filter((x)=>x.skipped === true).length;
