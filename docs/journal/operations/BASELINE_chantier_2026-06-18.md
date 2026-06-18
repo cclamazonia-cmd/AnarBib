@@ -84,8 +84,21 @@ fenêtre calme.
 7. Idéalement : **répéter d'abord 1→5 sur une branche Supabase de dev** pour
    répéter sans risque.
 
-## 5. État au 18/06
+## 5. État au 18/06 — ✅ CHANTIER TERMINÉ (②+③ faits)
 
-- ② validé (ci-dessus). Worktree de validation : `~/anarbib-baseline` (scratch,
-  supprimable). Baseline assemblé conservé : `docs/db/baseline_assembled_2026-06-18.sql`.
-- ③ : non exécuté (attente fenêtre coordonnée). Procédure ci-dessus prête.
+- **② validé** : `supabase db reset` reconstruit fidèlement (161 tables / 676 fns
+  / socle + orphelins). Baseline assemblé : `docs/db/baseline_assembled_2026-06-18.sql`.
+- **③ EXÉCUTÉ le 18/06** (les 3 branches abandonnées ayant été nettoyées au
+  préalable → plus de blocage) :
+  - Sauvegarde réversibilité : `docs/db/backup_schema_migrations_2026-06-18.sql`
+    (dump data-only de `schema_migrations`, 3,6 Mo) — conservée hors git.
+  - Squash repo : commit `dffabc42` — `migrations/` = `20260510000000_baseline_live.sql`
+    seul (439 anciennes retirées, présentes dans l'historique git). `[CI SKIP]`.
+  - `migration repair --linked` : 439 versions `reverted` + `20260510000000`
+    `applied` (rc=0). **La prod n'a PAS été re-jouée.**
+  - Vérif : `migration list --linked` → Local = Remote = `20260510000000`.
+  - Baseline déployé = **md5-identique** à l'artefact validé en ② (`a0a85726…`).
+- **Résultat** : `supabase db reset` est désormais reconstructible ; `db push`
+  est un no-op (repo et distant alignés). La dérive socle est dissoute.
+- Restant (mineur) : doublon de migration `v_active_memberships` (absorbé par le
+  squash) ; surveiller que les futures migrations forward partent bien du baseline.
