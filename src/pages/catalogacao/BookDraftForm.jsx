@@ -2751,7 +2751,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     <div className="cat-field">
                       <label>{t({ id: 'catalogacao.digital.rightsStatus' })}</label>
                       <input type="text" value={digitalForm.rights_status} onChange={e => setDf('rights_status', e.target.value)}
-                        placeholder="Domínio público, CC-BY…" style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
+                        placeholder={t({ id: 'catalogacao.digital.rightsStatus.ph' })} style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field">
                       <label>{t({ id: 'catalogacao.form.language' })}</label>

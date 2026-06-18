@@ -344,7 +344,7 @@ Liste des points qui méritent réflexion mais qui ne bloquent pas la première 
 
 1. **Moteur cartographique côté front** : Leaflet (libre, mature, simple) vs MapLibre GL (plus moderne, plus lourd). Décision technique, peu structurante.
 2. **Fond de carte** : OpenStreetMap (cohérent avec le reste de l'écosystème AnarBib) — quasi acté par défaut, mais à confirmer.
-3. **Géocodage** : qui transforme une adresse en lat/lon quand un bibliothécaire saisit sa fiche ? Nominatim (OSM) en self-hosted ? Service tiers (à risque vis-à-vis de la doctrine anti-tracking, cf. migration Brevo → Resend) ?
+3. **Géocodage** : qui transforme une adresse en lat/lon quand un bibliothécaire saisit sa fiche ? Nominatim (OSM) en self-hosted ? Service tiers (à risque vis-à-vis de la doctrine anti-tracking, cf. migration Brevo → Resend) ? — ✅ **Tranché (MAP-F)** : Nominatim self-hosted. Le **positionnement manuel** (pin clic/glisser) est **déjà livré** ; le **géocodage automatique** (adresse → GPS) reste à faire — détail des étapes en **§7**.
 4. **Affichage des lieux non-membres** : la décision politique de continuer à les afficher (utilité documentaire) ou de ne montrer que le réseau (lisibilité du projet) reste à trancher. Mon avis : les deux, avec un filtre clair.
 5. **Vue spécifique « Réseau AnarBib »** : icône distincte pour les membres (logo AnarBib), comme dans l'uMap actuelle ? À conserver.
 6. **Articulation avec le module PEB** (#114 et suites) : la carte interne devrait-elle indiquer le statut PEB de chaque bibliothèque (PEB actif, PEB suspendu, pas de PEB) ? Probablement oui, mais c'est une dépendance à formaliser.
@@ -361,7 +361,7 @@ Liste des points qui méritent réflexion mais qui ne bloquent pas la première 
 | **MAP-C** | Hébergement carte publique | **C1** — route publique dans le SPA (cohérent PUBLIB ; révise le C2 du brouillon) |
 | **MAP-D** | Validation des éditions | **D1** identitaires (autonomie) + **D3** structurants GPS/catégorie (coord) |
 | **MAP-E** | ⚠️ Confidentialité & consentement | **opt-in `statut_public=FALSE`** + accès concentrique PUBLIB ; non-membres = pin ville **sans contact** ; **aucun import public en masse** |
-| **MAP-F** | Géocodage & fond de carte | **OSM + Nominatim self-hosted**, anti-tracking (INV-5) |
+| **MAP-F** | Géocodage & fond de carte | **OSM + Nominatim self-hosted**, anti-tracking (INV-5) — positionnement manuel **livré** ; géocodage **auto** reste à faire (cf. **§7**) |
 | **MAP-G** | Non-membres sur la carte | **affichés + filtre clair** réseau AnarBib vs paysage libertaire |
 | **MAP-H** | Icône réseau AnarBib | **conservée** (membres distingués) |
 | **MAP-I** | Statut PEB (carte interne) | **oui à terme** — dépendance #114 → différé |
@@ -372,7 +372,51 @@ Liste des points qui méritent réflexion mais qui ne bloquent pas la première 
 
 ---
 
-## 7. Documents liés
+## 7. MAP-F — Géocodage automatique : état & reste à faire
+
+> Ajouté le 18/06/2026, après livraison des cartes interne/publique et de l'édition.
+
+**Contexte.** MAP-F a été tranché : OSM + **Nominatim self-hosted** — jamais de géocodeur
+tiers qui fuiterait les requêtes (anti-tracking INV-5 / PUBLIB-O1).
+
+**Déjà livré — n'exige PAS Nominatim.** Le **positionnement manuel** des points est en place :
+- carte interne : picker clic/glisser réservé à la coordination (paquet CARTO-6) ;
+- formulaire public d'auto-déclaration : pin posé au clic par le soumetteur (paquet CARTO-7) ;
+- la coordination peut poser/affiner n'importe quelle coordonnée via `api.fn_cartography_update_admin`.
+
+Le besoin courant (placer ou repositionner un point) est donc **couvert sans aucune infra**.
+
+**Reste à faire — le géocodage AUTOMATIQUE (adresse → lat/lon).** Il ne sert qu'à éviter la
+saisie manuelle du point ; tout le reste fonctionne sans lui. Étapes :
+
+1. **Infra — instance Nominatim self-hosted**
+   - conteneur Docker `mediagis/nominatim` (PostgreSQL + service web) ;
+   - importer un **extrait OSM** (Geofabrik), *pas* le planet (100+ Go) : commencer par les
+     régions réellement couvertes (Europe + Amériques, voire pays par pays) → disque / RAM /
+     temps d'import fortement réduits ;
+   - hébergement sur la machine de Xavier (import lourd mais ponctuel) — **pas de VPS payant**
+     (doctrine « ne pas reproposer de dépense ») ;
+   - endpoint **interne uniquement**, jamais appelé depuis le navigateur.
+
+2. **Backend — proxy de géocodage** : une Edge Function (ex. `geocode`) qui reçoit une
+   adresse, interroge l'instance Nominatim **côté serveur** (jamais le client → aucune
+   fuite), renvoie `{lat, lon, confiance}`. Rate-limitée ; secret = URL de l'instance.
+
+3. **Front — bouton « localiser depuis l'adresse »** dans la modale d'édition (CARTO-5) et le
+   formulaire d'auto-déclaration (CARTO-7) : appelle le proxy, pré-remplit le pin (toujours
+   ajustable à la main). Repli silencieux sur le picker manuel si l'instance est indisponible.
+
+4. **Garde anti-tracking** : vérifier qu'**aucune** requête de géocodage ne parte vers
+   `nominatim.openstreetmap.org` ni un tiers — uniquement vers l'instance self-hosted, via le
+   proxy serveur (INV-5).
+
+**Tant que l'étape (1) n'existe pas**, on reste au positionnement manuel (déjà livré) : c'est
+un choix assumé, pas un manque bloquant. Aucun code front/back ne dépend de Nominatim
+aujourd'hui — l'ajout du géocodage auto sera purement additif (un bouton + un proxy).
+
+---
+
+## 8. Documents liés
 
 - `docs/journal/arbitrages/DEFINITION_MEMBRE_2026-05-27.md` *(à créer)*
 - `docs/cartographie/anarbib_bibliotheques_libertaires.geojson` *(à archiver)*

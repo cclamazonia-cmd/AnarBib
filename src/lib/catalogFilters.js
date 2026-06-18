@@ -27,13 +27,20 @@ export function buildServerFilters({ search, authorFilter, authorIdFilter, alpha
   const f = {};
   const andClauses = [];
 
-  // Recherche libre multi-mots. On retire les caractères qui casseraient la
-  // grammaire and()/or() de PostgREST, et on plafonne à 6 mots (anti-URL
-  // pathologique). Chaque mot => un groupe or() sur toutes les colonnes.
-  const terms = String(search || '').trim().split(/\s+/)
-    .map(tm => tm.replace(/[(),]/g, '').trim())
-    .filter(Boolean)
-    .slice(0, 6);
+  // Recherche libre. Une phrase entre guillemets ("apoio mútuo") compte pour UN
+  // terme contigu ; le reste est découpé en mots. ET entre les termes, OU entre
+  // les colonnes. On retire les caractères qui casseraient la grammaire
+  // and()/or() de PostgREST (et les guillemets, structurels), et on plafonne à
+  // 6 termes (anti-URL pathologique). Chaque terme => un groupe or() sur toutes
+  // les colonnes.
+  const terms = [];
+  const tokenRe = /"([^"]+)"|(\S+)/g;
+  let tk;
+  while ((tk = tokenRe.exec(String(search || ''))) !== null) {
+    const term = (tk[1] ?? tk[2]).replace(/[(),"]/g, '').trim();
+    if (term) terms.push(term);
+    if (terms.length >= 6) break;
+  }
   for (const term of terms) {
     const esc = `%${term}%`;
     andClauses.push(`or(${SEARCH_COLS.map(c => `${c}.ilike.${esc}`).join(',')})`);

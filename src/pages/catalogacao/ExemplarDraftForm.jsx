@@ -466,27 +466,27 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.exemplar.sectorRoom' })}</label>
               <input type="text" value={loc.sector} onChange={e => setL('sector', e.target.value)}
-                placeholder="Sala 1 / Acervo geral" style={fs} />
+                placeholder={t({ id: 'catalogacao.exemplar.sectorRoom.ph' })} style={fs} />
             </div>
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.exemplar.shelfUnit' })}</label>
               <input type="text" value={loc.shelfUnit} onChange={e => setL('shelfUnit', e.target.value)}
-                placeholder="Estante A" style={fs} />
+                placeholder={t({ id: 'catalogacao.exemplar.shelfUnit.ph' })} style={fs} />
             </div>
             <div className="cat-field">
               <label style={ls}>{t({ id: 'catalogacao.exemplar.shelfLevel' })}</label>
               <input type="text" value={loc.shelfLevel} onChange={e => setL('shelfLevel', e.target.value)}
-                placeholder="Prateleira 3" style={fs} />
+                placeholder={t({ id: 'catalogacao.exemplar.shelfLevel.ph' })} style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.locNote' })}</label>
               <input type="text" value={loc.note} onChange={e => setL('note', e.target.value)}
-                placeholder="Caixa azul / topo / consulta interna" style={fs} />
+                placeholder={t({ id: 'catalogacao.exemplar.locNote.ph' })} style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.notes' })}</label>
               <textarea value={f('notes')} onChange={e => set('notes', e.target.value)}
-                placeholder="Ex.: lombada danificada; dedicatória manuscrita; carimbo antigo; falta encarte."
+                placeholder={t({ id: 'catalogacao.exemplar.notes.ph' })}
                 style={{ ...fs, resize: 'vertical', minHeight: 50 }} />
             </div>
           </div>
@@ -552,12 +552,12 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.sourceLibrary' })}</label>
               <input type="text" value={f('source_library')} onChange={e => set('source_library', e.target.value)}
-                placeholder="Doadora, permuta, importação…" style={fs} />
+                placeholder={t({ id: 'catalogacao.exemplar.sourceLibrary.ph' })} style={fs} />
             </div>
             <div className="cat-field" style={{ gridColumn: 'span 6' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.provenanceNote' })}</label>
               <input type="text" value={f('provenance_note')} onChange={e => set('provenance_note', e.target.value)}
-                placeholder="Ex.: doação do coletivo X; ex-libris; carimbo de origem." style={fs} />
+                placeholder={t({ id: 'catalogacao.exemplar.provenanceNote.ph' })} style={fs} />
             </div>
           </div>
         </details>

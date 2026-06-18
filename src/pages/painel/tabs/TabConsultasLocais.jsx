@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { EmptyState } from '@/components/ui';
 import { formatSchedule } from '@/lib/scheduleFormat';
 import { fmtD, UserDisplay, SortHeader, StageFilterBar, TabHeader } from '../_shared';
+import { decodeSystemNote } from '@/lib/systemNotes';
 
 // ═══════════════════════════════════════════════════════════
 // TabConsultasLocais — onglet « Consultations » (chantier E.1 / OT-4)
@@ -82,7 +83,7 @@ export default function TabConsultasLocais({
                           </span>
                           {c.schedule_reply_note && (
                             <div className="ab-painel-reply-note">
-                              {t({ id: 'panel.consultation.refuseReason' })} {c.schedule_reply_note}
+                              {t({ id: 'panel.consultation.refuseReason' })} {decodeSystemNote(c.schedule_reply_note, t)}
                             </div>
                           )}
                         </div>

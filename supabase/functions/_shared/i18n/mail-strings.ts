@@ -1100,6 +1100,20 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Een lezer heeft de eigen reservering geannuleerd. De betreffende exemplaren zijn automatisch terug in circulatie gebracht. Er is geen actie van het team nodig.",
     el: "Ένας/Μία αναγνώστης/στρια ακύρωσε τη δική του/της κράτηση. Τα σχετικά αντίτυπα επέστρεψαν αυτόματα στην κυκλοφορία. Δεν απαιτείται καμία ενέργεια από την ομάδα."
   },
+  // Sujet de la COPIE BIBLIO (≠ sujet lecteur·rice « …par toi/vous ») : doit
+  // indiquer que c'est le/la lecteur·rice qui a annulé, jamais la biblio.
+  "res.cancelReader.adminSub": {
+    "pt-BR": "Reserva cancelada pelo(a/e) leitor(a/e)",
+    fr: "Réservation annulée par le·la lecteur·rice",
+    es: "Reserva cancelada por le lector(a/e)",
+    en: "Reservation cancelled by the reader",
+    it: "Prenotazione annullata dal lettore/trice",
+    de: "Vormerkung von der lesenden Person storniert",
+    ca: "Reserva cancel·lada per le lector-a-e",
+    eo: "Rezervo nuligita de la legant-in-o",
+    nl: "Reservering geannuleerd door de lezer",
+    el: "Η κράτηση ακυρώθηκε από τον/την αναγνώστη/στρια"
+  },
   "res.expired.sub": {
     "pt-BR": "Reserva expirada",
     fr: "Réservation expirée",
@@ -7189,6 +7203,120 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     "pt-BR": "Abrir a partilha", fr: "Ouvrir le partage", es: "Abrir la compartición", en: "Open the share",
     it: "Apri la condivisione", de: "Teilung öffnen", ca: "Obrir la compartició", eo: "Malfermi la kunhavigon",
     nl: "Delen openen", el: "Άνοιγμα κοινοποίησης"
+  },
+
+  // ── Notes système consulta/réserve (Route B) ──────────────────────────────
+  // Décodage des sentinelles @@note:<clé> dans le corps des mails
+  // (cf. _shared/i18n/systemNotes.ts → decodeSystemNote). Les 5 clés réutilisées
+  // reprennent mot pour mot les libellés des locales React ; les 4 systemNote.*
+  // sont nouvelles. Toute clé décodable atteignant un mail doit figurer ici.
+  "account.reserve.noteConsult": {
+    "pt-BR": "Pedido de consulta local criado pela conta do(a-e) leitor(a-e).",
+    fr: "Demande de consultation créée depuis le compte lecteur·rice.",
+    es: "Solicitud de consulta local creada desde la cuenta de le lectore.",
+    en: "Local consultation request created from reader account.",
+    it: "Richiesta di consultazione creata dall'account lettore/trice.",
+    de: "Einsichtnahme-Anfrage aus dem Leserkonto erstellt.",
+    ca: "Sol·licitud de consulta creada des del compte de lector-a-e.",
+    eo: "Konsultpeto kreita el la konto de legant-in-o.",
+    nl: "Aanvraag voor raadpleging ter plaatse aangemaakt vanuit het lezersaccount.",
+    el: "Αίτημα επιτόπιας μελέτης που δημιουργήθηκε από λογαριασμό αναγνώστη/στριας."
+  },
+  "account.reserve.noteLoan": {
+    "pt-BR": "Reserva criada pela conta do(a-e) leitor(a-e).",
+    fr: "Réservation créée depuis le compte lecteur·rice.",
+    es: "Reserva creada desde la cuenta de le lectore.",
+    en: "Reservation created from reader account.",
+    it: "Prenotazione creata dall'account lettore/trice.",
+    de: "Vormerkung aus dem Leserkonto erstellt.",
+    ca: "Reserva creada des del compte de lector-a-e.",
+    eo: "Rezervo kreita el la konto de legant-in-o.",
+    nl: "Reservering aangemaakt vanuit het lezersaccount.",
+    el: "Κράτηση που δημιουργήθηκε από λογαριασμό αναγνώστη/στριας."
+  },
+  "catalog.quickReserve.note": {
+    "pt-BR": "Reserva criada a partir do catálogo.",
+    fr: "Réservation créée depuis le catalogue.",
+    es: "Reserva creada desde el catálogo.",
+    en: "Reservation created from the catalog.",
+    it: "Prenotazione creata dal catalogo.",
+    de: "Reservierung aus dem Katalog erstellt.",
+    ca: "Reserva creada des del catàleg.",
+    eo: "Rezervo kreita el la katalogo.",
+    nl: "Reservering aangemaakt vanuit de catalogus.",
+    el: "Η κράτηση δημιουργήθηκε από τον κατάλογο."
+  },
+  "catalog.quickConsulta.note": {
+    "pt-BR": "Pedido feito desde a busca",
+    fr: "Demande faite depuis la recherche",
+    es: "Pedido hecho desde la búsqueda",
+    en: "Requested from search",
+    it: "Richiesto dalla ricerca",
+    de: "Aus der Suche angefragt",
+    ca: "Sol·licitud feta des de la cerca",
+    eo: "Peto farita el la serĉo",
+    nl: "Aangevraagd vanuit de zoekopdracht",
+    el: "Ζητήθηκε από την αναζήτηση"
+  },
+  "book.reserve.consult.note": {
+    "pt-BR": "Pedido feito desde a página do documento",
+    fr: "Demande faite depuis la fiche du document",
+    es: "Pedido hecho desde la página del documento",
+    en: "Requested from the document page",
+    it: "Richiesto dalla pagina del documento",
+    de: "Über die Dokumentseite angefragt",
+    ca: "Sol·licitud feta des de la fitxa del document",
+    eo: "Peto farita el la slipo de la dokumento",
+    nl: "Aangevraagd vanaf de documentpagina",
+    el: "Ζητήθηκε από τη σελίδα του τεκμηρίου"
+  },
+  "systemNote.consultaReceived": {
+    "pt-BR": "Pedido de consulta local recebido.",
+    fr: "Demande de consultation locale reçue.",
+    es: "Solicitud de consulta local recibida.",
+    en: "Local consultation request received.",
+    it: "Richiesta di consultazione ricevuta.",
+    de: "Einsichtnahme-Anfrage eingegangen.",
+    ca: "Sol·licitud de consulta rebuda.",
+    eo: "Konsultpeto ricevita.",
+    nl: "Aanvraag voor raadpleging ter plaatse ontvangen.",
+    el: "Το αίτημα επιτόπιας μελέτης ελήφθη."
+  },
+  "systemNote.reservaReceived": {
+    "pt-BR": "Reserva recebida.",
+    fr: "Réservation reçue.",
+    es: "Reserva recibida.",
+    en: "Reservation received.",
+    it: "Prenotazione ricevuta.",
+    de: "Vormerkung eingegangen.",
+    ca: "Reserva rebuda.",
+    eo: "Rezervo ricevita.",
+    nl: "Reservering ontvangen.",
+    el: "Η κράτηση ελήφθη."
+  },
+  "systemNote.cancelRequestedByReader": {
+    "pt-BR": "Cancelamento solicitado pela conta do(a-e) leitor(a-e).",
+    fr: "Annulation demandée depuis le compte lecteur·rice.",
+    es: "Cancelación solicitada desde la cuenta de le lectore.",
+    en: "Cancellation requested from reader account.",
+    it: "Annullamento richiesto dall'account lettore/trice.",
+    de: "Stornierung aus dem Leserkonto angefordert.",
+    ca: "Cancel·lació sol·licitada des del compte de lector-a-e.",
+    eo: "Nuligo petita el la konto de legant-in-o.",
+    nl: "Annulering aangevraagd vanuit het lezersaccount.",
+    el: "Ακύρωση που ζητήθηκε από λογαριασμό αναγνώστη/στριας."
+  },
+  "systemNote.cancelledByLibrary": {
+    "pt-BR": "Cancelamento efetuado pela biblioteca.",
+    fr: "Annulation effectuée par la bibliothèque.",
+    es: "Cancelación realizada por la biblioteca.",
+    en: "Cancellation made by the library.",
+    it: "Annullamento effettuato dalla biblioteca.",
+    de: "Stornierung durch die Bibliothek.",
+    ca: "Cancel·lació efectuada per la biblioteca.",
+    eo: "Nuligo farita de la biblioteko.",
+    nl: "Annulering uitgevoerd door de bibliotheek.",
+    el: "Ακύρωση που πραγματοποιήθηκε από τη βιβλιοθήκη."
   },
 };
 

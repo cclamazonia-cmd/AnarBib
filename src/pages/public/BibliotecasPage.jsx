@@ -21,8 +21,12 @@ function initials(name) {
   return name.trim().split(/\s+/).slice(0, 2).map((w) => w[0] || '').join('').toUpperCase() || '?';
 }
 
-function placeLine(lib) {
-  return [lib.city, lib.country].filter(Boolean).join(' · ');
+function placeLine(lib, t) {
+  // Cadrage politique : l'État « occupe » le territoire (mention i18n devant le pays).
+  const country = lib.country
+    ? `${t({ id: 'bibliotecas.occupiedTerritory' })} ${lib.country}`
+    : null;
+  return [lib.city, country].filter(Boolean).join(' · ');
 }
 
 export default function BibliotecasPage() {
@@ -97,8 +101,8 @@ export default function BibliotecasPage() {
                     <Link to={`/bibliotecas/${lib.slug}`} style={{ color: '#f4f4f4', textDecoration: 'none', fontWeight: 700, fontSize: '1.02rem', wordBreak: 'break-word' }}>
                       {lib.name}
                     </Link>
-                    {placeLine(lib) && (
-                      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginTop: 2 }}>{placeLine(lib)}</div>
+                    {placeLine(lib, t) && (
+                      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginTop: 2 }}>{placeLine(lib, t)}</div>
                     )}
                   </div>
                 </div>

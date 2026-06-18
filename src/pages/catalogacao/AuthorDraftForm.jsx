@@ -790,7 +790,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
           <div className="cat-field">
             <label style={ls}>{t({ id: 'catalogacao.author.activityPeriod' })}</label>
             <input type="text" value={meta.activityPeriod} onChange={e => setM('activityPeriod', e.target.value)}
-              placeholder="1910-1936 / década de 1980 / em atividade" style={fs} />
+              placeholder={t({ id: 'catalogacao.author.activityPeriod.ph' })} style={fs} />
           </div>
 
           <div className="cat-field">
@@ -803,7 +803,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <div className="cat-field" style={{ gridColumn: 'span 3' }}>
               <label style={ls}>{t({ id: 'catalogacao.author.variantNames' })}</label>
               <textarea value={meta.variantNames} onChange={e => setM('variantNames', e.target.value)}
-                placeholder="Nomes paralelos, grafias alternativas, formas em outras línguas…" style={{ ...fs, resize: 'vertical', minHeight: 44 }} />
+                placeholder={t({ id: 'catalogacao.author.variantNames.ph' })} style={{ ...fs, resize: 'vertical', minHeight: 44 }} />
             </div>
           )}
 
@@ -811,7 +811,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>{t({ id: 'catalogacao.author.pseudonyms' })}</label>
               <input type="text" value={meta.pseudonyms} onChange={e => setM('pseudonyms', e.target.value)}
-                placeholder="Separar por ponto e vírgula" style={fs} />
+                placeholder={t({ id: 'catalogacao.author.pseudonyms.ph' })} style={fs} />
             </div>
           )}
 
@@ -825,7 +825,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
               <div className="cat-field" style={{ gridColumn: 'span 3' }}>
                 <label style={ls}>{t({ id: 'catalogacao.author.contextLinks' })}</label>
                 <input type="text" value={meta.contextLinks} onChange={e => setM('contextLinks', e.target.value)}
-                  placeholder="Campanhas, coletivos, periódicos, séries, redes…" style={fs} />
+                  placeholder={t({ id: 'catalogacao.author.contextLinks.ph' })} style={fs} />
               </div>
             </>
           )}
