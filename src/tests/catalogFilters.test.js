@@ -61,4 +61,19 @@ describe('buildServerFilters — recherche multi-mots', () => {
     const groups = f.and.slice(1, -1).split('),or(').length; // compte approximatif des or()
     expect(groups).toBe(6);
   });
+
+  it('phrase entre guillemets → un seul terme contigu (pas découpée en mots)', () => {
+    const f = buildServerFilters({ ...base, search: '"apoio mútuo"' });
+    expect(f.and).toBe(`(${orGroup('apoio mútuo')})`);
+  });
+
+  it('phrase entre guillemets + mot libre → deux termes ANDés', () => {
+    const f = buildServerFilters({ ...base, search: '"apoio mútuo" anarquia' });
+    expect(f.and).toBe(`(${orGroup('apoio mútuo')},${orGroup('anarquia')})`);
+  });
+
+  it('guillemet orphelin nettoyé → mots séparés, aucun motif pollué', () => {
+    const f = buildServerFilters({ ...base, search: '"apoio mútuo' });
+    expect(f.and).toBe(`(${orGroup('apoio')},${orGroup('mútuo')})`);
+  });
 });
