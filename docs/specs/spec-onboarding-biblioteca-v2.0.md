@@ -3,7 +3,7 @@
 **Version** : 2.0 — 2026-05-20 (enrichissement post-clôture chantier profils + doctrine anti-méga-machine)
 **Cible** : Bologna FICEDL, septembre 2026
 **Auteur·rices** : Xavier (spec et arbitrages) + Claude (rédaction)
-**Statut** : Cadrée le 05/05/2026 (v1.0), refondue le 15/05/2026 (v1.1), enrichie le 20/05/2026 (v2.0). 🟠 **Cœur implémenté en prod** *(MAJ 16/06/2026)* : Oficina de constituição `AtelierConstituicaoPage` (routée `/atelier`, gardée `coordenador_em_constituicao`) + `fn_constitution_*` ×5 + **9/10 volets câblés** (`WIRED_VOLETS = {1..9}` ; composants `AtelierVolet1/2/4/6/7` + éditeur générique) + PDF regimento. Volet 0 livré le 19/05/2026 (chantier profils, paquet F.3). Reste : finition volet 10 + enrichissements #111. *(Ancien : « volets 1-10 en attente, Q3 2026 ».)* Cf. INVENTAIRE Resync 16/06.
+**Statut** : Cadrée le 05/05/2026 (v1.0), refondue le 15/05/2026 (v1.1), enrichie le 20/05/2026 (v2.0). 🟠 **Cœur implémenté en prod** *(MAJ 16/06/2026)* : Oficina de constituição `AtelierConstituicaoPage` (routée `/atelier`, gardée `coordenador_em_constituicao`) + `fn_constitution_*` ×5 + **9/10 volets câblés** (`WIRED_VOLETS = {1..9}` ; composants `AtelierVolet1/2/4/6/7` + éditeur générique) + PDF regimento. Volet 0 livré le 19/05/2026 (chantier profils, paquet F.3). **TODO §10 réconciliés (18/06)** avec `ONBO-Q5..Q12` du REGISTRE §26 (qui les tranchaient déjà) ; seul **TODO 3** (transfert de mandat, cas 8.5) reste résiduel. **🔴 À résoudre au plus vite** : chantier **#111** (workflow d'évaluation admin réseau, dormant/non bâti) + **TODO 3** (qui en dépend) + **finition du volet 10** (PDF règlement). *(Ancien label « volets 1-10 en attente, Q3 2026 » : **périmé** — le wizard volets 1-9 est en prod.)* Cf. INVENTAIRE Resync 16/06.
 
 **Dépendances** :
   - **`docs/specs/spec-administrateur-reseau.md v0.4`** (v0.3.1 enrichie le 20/05 avec la doctrine anti-méga-machine + bouton « proposer un échange ») — workflow de gouvernance des administrateurs du réseau (cooptation unanime, retrait collectif). Cette spec onboarding utilise les admins réseau comme évaluateur·rices.
@@ -1077,18 +1077,19 @@ Un·e admin réseau a proposé une décision, puis perd son statut (auto-retrait
 
 ---
 
-## TODO ouverts (à arbitrer plus tard)
+## TODO — réconciliés avec le REGISTRE §26 (état au 18/06/2026)
 
-- **TODO 1** : Que se passe-t-il à l'expiration des 60 jours du parcours de constitution ?
-  - Option a : avertissement à J+45, gel à J+60 (réveillable par admin réseau)
-  - Option b : avertissement à J+45, révocation à J+60 (compte → `solicitante_recusada`)
-  - Option c : avertissement uniquement, jamais de gel auto
-- **TODO 2** : Volet 4 (catalogage) — choix libre du système de classification ou liste fermée à définir collectivement ?
-- **TODO 3** : Mécanisme technique de transfert du mandat coordinateur·rice (cas 8.5)
-- **TODO 4** *(nouveau v1.1)* : pendant le wizard de constitution, faut-il permettre à la biblio de **modifier son profil** (volet 0) après avoir commencé les volets suivants ? Si oui, comment gérer les données déjà saisies dans des volets devenus sans objet ?
-- **TODO 5** *(nouveau v1.1)* : faut-il un mécanisme de notification spécifique aux admins réseau quand une nouvelle biblio est acceptée et démarre son wizard, ou les rappels J+45 / J+60 suffisent-ils ?
-- **TODO 6** *(nouveau v2.0)* : doit-on bloquer la soumission d'un volet tant qu'aucun échange humain n'a eu lieu, dans certains cas critiques (par exemple le volet 0 si le profil choisi semble incohérent avec le récit de la demande) ? Plutôt non par défaut, car ce serait paternaliste — mais à discuter au moment du chantier #111.
-- **TODO 7** *(nouveau v2.0)* : faut-il prévoir une **statistique anti-méga-machine** dans le tableau de bord admin réseau ? Par exemple : nombre d'invitations émises sur les 30 derniers jours, taux d'acceptation, durée moyenne d'un échange. Pour mesurer si la doctrine est effectivement appliquée et pour identifier les biblios qui n'utilisent jamais le canal humain (signe potentiel de difficulté silencieuse). À discuter.
+⚠️ Ces TODO ont été rédigés en v2.0 (20/05). Ils ont été **tranchés depuis** par les décisions `ONBO-Q5..Q12` du REGISTRE §26 (cadrage atelier 02/06+) — **le REGISTRE fait foi**. Réconciliation :
+
+- **TODO 1 (expiration des 60 j)** → tranché **ONBO-Q5** : avertissement + rappels **J+67/J+74**, puis **gel réveillable** (jamais de révocation punitive).
+- **TODO 2 (volet 4 catalogage)** → tranché **ONBO-Q7** : l'onboarding ne fixe que la **déclaration** de catalogage ; l'arbitrage de classification appartient au chantier **CAT**.
+- **TODO 3 (transfert technique du mandat, cas 8.5)** → 🟡 **RÉSIDUEL — différé jusqu'à #111, à résoudre au plus vite.** `ONBO-Q8` pose le modèle **multi-coordenadores** (cooptation / auto-retrait / retrait collectif / garde-fou dernier·ère coordenador·a), qui **atténue** le cas ; mais le **transfert technique quand il n'y a qu'un·e seul·e coordenador·a** reste à outiller. Repli **manuel** d'un·e admin en attendant ; voie cible (Lot 5 / #111) : RPC `fn_constitution_transfer_mandate(request_id, nouveau_coordenador_user_id)` (re-pointe `coordenador_id` + déplace la membership de la biblio pré-active + **préserve les volets saisis** + notifie). Cf. `ONBO-Q13`.
+- **TODO 4 (modifier le profil en cours)** → tranché **ONBO-Q6** : autorisé sans boucle ; volets inapplicables → « sans objet » **sans effacement**.
+- **TODO 5 (notifier les admins au démarrage)** → tranché **ONBO-Q10** : **oui** — digest in-app à l'entrée en constitution → « proposer un échange » (RES-D10), en tenant le risque burnout (RES-D11). Réalisation **#111**.
+- **TODO 6 (bloquer un volet sans échange)** → tranché **ONBO-Q11** : **nudge non-bloquant**, jamais un verrou.
+- **TODO 7 (stats anti-méga-machine)** → tranché **ONBO-Q12** : stats **agrégées et non-individualisantes**, pas de watchlist du silence.
+
+> 🔴 **À RÉSOUDRE AU PLUS VITE** : **(a)** chantier **#111** — workflow d'évaluation admin réseau (tables `library_request_votes`/`_invitations`/`_comments`/`_messages`, vote-à-l'unanimité, « proposer un échange » §5/§5.7 ; + le digest proactif `ONBO-Q10` ; + le parcours `anarbib.org` `ONBO-Q9`) — **actuellement dormant/non bâti** ; **(b)** **TODO 3** (transfert de mandat, cas 8.5, dépend de #111) ; **(c)** la **finition du volet 10** (PDF de règlement pré-rempli + ré-upload du document délibéré, §6.6).
 
 ---
 

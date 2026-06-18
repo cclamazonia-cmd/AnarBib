@@ -41,7 +41,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Onboarding d'une bibliothèque | [`spec-onboarding-biblioteca-v2.0.md`](./spec-onboarding-biblioteca-v2.0.md) | v2.0 (20/05/2026) | 🟡 volet 0 livré, volets 1-10 perspective Q3 2026 (chantier #111) |
+| Onboarding d'une bibliothèque | [`spec-onboarding-biblioteca-v2.0.md`](./spec-onboarding-biblioteca-v2.0.md) | v2.0 (20/05/2026) | 🟠 Wizard de constitution (volets 0-9) **en prod** ; volet 10 en finition ; TODO §10 réconciliés `ONBO-Q5..Q12` — **🔴 #111 (éval admin) + TODO 3 + volet 10 = à résoudre au plus vite** |
 | Onboarding `/criar-conta` | [`spec-onboarding-criar-conta.md`](./spec-onboarding-criar-conta.md) | v0.3 (21/05/2026) | 🟡 Brouillon de cadrage, cœur (paquets 1, 2, 4, 6, 7, 8) prêt à exécuter |
 | Validation physique du compte lecteur·rice | [`spec-validation-physique.md`](./archive/spec-validation-physique.md) | v1.1 (30/05/2026) | ✅ Implémenté en prod (VALID C1-C4, §9) — archivé 2026-06-10 |
 
