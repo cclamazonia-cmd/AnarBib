@@ -1,0 +1,193 @@
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { apiRpc } from '@/lib/supabase';
+
+// Modale d'édition d'une fiche cartographique (Phase 3, MAP-D). Ouverte depuis la
+// carte interne (clic « Éditer » sur un marqueur éditable). Pré-remplie via
+// api.fn_cartography_get_for_edit (révèle les contacts N2 aux seuls éditeurs).
+// Enregistre via update_self (staff de la biblio liée, D1) ou update_admin
+// (coordination, can_admin → champs structurants D3). Le nom et les notes sont
+// édités dans la langue d'affichage courante (fusion dans le JSONB 10 locales).
+
+const CATS = ['biblioteca', 'arquivo', 'centro_doc', 'ateneu', 'livraria', 'misto'];
+const STATUTS = ['membre', 'partenaire', 'cible'];
+const MAP_LOCALES = ['fr', 'pt', 'it', 'es', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
+function mapLang(locale) {
+  const b = (locale || '').toLowerCase().startsWith('pt') ? 'pt' : (locale || '').slice(0, 2).toLowerCase();
+  return MAP_LOCALES.includes(b) ? b : 'fr';
+}
+
+export default function CartographyEditModal({ entryId, onClose, onSaved }) {
+  const { formatMessage: t, locale } = useIntl();
+  const lang = mapLang(locale);
+  const [row, setRow] = useState(null);
+  const [form, setForm] = useState(null);
+  const [err, setErr] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    let cancel = false;
+    (async () => {
+      const { data, error } = await apiRpc('fn_cartography_get_for_edit', { p_entry_id: entryId });
+      if (cancel) return;
+      if (error || !Array.isArray(data) || !data[0]) { setErr(t({ id: 'federacao.carte.edit.error' })); return; }
+      const r = data[0];
+      setRow(r);
+      setForm({
+        name: (r.name_i18n || {})[lang] || '',
+        city: (r.city_i18n || {})[lang] || '',
+        country: (r.country_i18n || {})[lang] || '',
+        notes: (r.notes_i18n || {})[lang] || '',
+        langue_fonds: (r.langue_fonds || []).join(', '),
+        site_url: r.site_url || '',
+        email: r.email || '',
+        tel: r.tel || '',
+        adresse: r.adresse || '',
+        statut_public: !!r.statut_public,
+        contact_public: !!r.contact_public,
+        categorie: r.categorie,
+        statut_anarbib: r.statut_anarbib,
+      });
+    })();
+    return () => { cancel = true; };
+  }, [entryId, lang, t]);
+
+  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  async function save() {
+    setSaving(true); setErr('');
+    const payload = {
+      name_i18n: { ...(row.name_i18n || {}), [lang]: form.name },
+      city_i18n: { ...(row.city_i18n || {}), [lang]: form.city },
+      country_i18n: { ...(row.country_i18n || {}), [lang]: form.country },
+      notes_i18n: { ...(row.notes_i18n || {}), [lang]: form.notes },
+      langue_fonds: form.langue_fonds.split(/[,;]+/).map((s) => s.trim()).filter(Boolean),
+      site_url: form.site_url,
+      email: form.email,
+      tel: form.tel,
+      adresse: form.adresse,
+      statut_public: form.statut_public,
+      contact_public: form.contact_public,
+    };
+    if (row.can_admin) {
+      payload.categorie = form.categorie;
+      payload.statut_anarbib = form.statut_anarbib;
+    }
+    const fn = row.can_admin ? 'fn_cartography_update_admin' : 'fn_cartography_update_self';
+    const { error } = await apiRpc(fn, { p_entry_id: entryId, p_payload: payload });
+    setSaving(false);
+    if (error) { setErr(t({ id: 'federacao.carte.edit.error' })); return; }
+    onSaved();
+  }
+
+  const overlay = {
+    position: 'fixed', inset: 0, zIndex: 4000, background: 'rgba(0,0,0,.55)',
+    display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '5vh 16px', overflowY: 'auto',
+  };
+  const panel = {
+    width: '100%', maxWidth: 520,
+    backgroundColor: 'var(--brand-panel-bg)',
+    backgroundImage: 'var(--brand-panel-overlay-solid), var(--brand-panel-bg-image)',
+    backgroundPosition: 'center', backgroundSize: 'cover',
+    border: '1px solid var(--brand-panel-border)', borderRadius: 'calc(var(--brand-radius) + 2px)',
+    boxShadow: 'var(--brand-shadow)', padding: '22px 22px 26px',
+  };
+  const label = { display: 'block', fontSize: '.78rem', color: 'var(--brand-muted)', margin: '12px 0 4px' };
+  const input = {
+    width: '100%', boxSizing: 'border-box', padding: '8px 10px', borderRadius: 8,
+    border: '1px solid rgba(255,255,255,.14)', background: 'rgba(255,255,255,.04)', color: 'inherit', fontSize: '.9rem',
+  };
+  const checkRow = { display: 'flex', alignItems: 'center', gap: 8, marginTop: 12, fontSize: '.88rem' };
+
+  return (
+    <div style={overlay} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div style={panel} role="dialog" aria-modal="true">
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: 4 }}>{t({ id: 'federacao.carte.edit.title' })}</h2>
+        {!form ? (
+          <p style={{ color: 'var(--brand-muted)' }}>{err || t({ id: 'common.loading' })}</p>
+        ) : (
+          <>
+            <p style={{ fontSize: '.78rem', color: 'var(--brand-muted)', margin: '2px 0 6px' }}>
+              {t({ id: 'federacao.carte.edit.localeNote' })} ({lang})
+            </p>
+
+            <label style={label}>{t({ id: 'federacao.carte.edit.name' })}</label>
+            <input style={input} value={form.name} onChange={(e) => set('name', e.target.value)} />
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{ flex: 1 }}>
+                <label style={label}>{t({ id: 'federacao.carte.edit.city' })}</label>
+                <input style={input} value={form.city} onChange={(e) => set('city', e.target.value)} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={label}>{t({ id: 'federacao.carte.edit.country' })}</label>
+                <input style={input} value={form.country} onChange={(e) => set('country', e.target.value)} />
+              </div>
+            </div>
+
+            <label style={label}>{t({ id: 'federacao.carte.edit.notes' })}</label>
+            <textarea style={{ ...input, minHeight: 80, resize: 'vertical' }} value={form.notes} onChange={(e) => set('notes', e.target.value)} />
+
+            <label style={label}>{t({ id: 'federacao.carte.edit.langs' })}</label>
+            <input style={input} value={form.langue_fonds} onChange={(e) => set('langue_fonds', e.target.value)} placeholder="fr, es, it" />
+
+            <label style={label}>{t({ id: 'federacao.carte.edit.site' })}</label>
+            <input style={input} value={form.site_url} onChange={(e) => set('site_url', e.target.value)} />
+
+            <div style={{ display: 'flex', gap: 10 }}>
+              <div style={{ flex: 1 }}>
+                <label style={label}>{t({ id: 'federacao.carte.edit.email' })}</label>
+                <input style={input} value={form.email} onChange={(e) => set('email', e.target.value)} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={label}>{t({ id: 'federacao.carte.edit.tel' })}</label>
+                <input style={input} value={form.tel} onChange={(e) => set('tel', e.target.value)} />
+              </div>
+            </div>
+
+            <label style={label}>{t({ id: 'federacao.carte.edit.address' })}</label>
+            <input style={input} value={form.adresse} onChange={(e) => set('adresse', e.target.value)} />
+
+            <label style={checkRow}>
+              <input type="checkbox" checked={form.statut_public} onChange={(e) => set('statut_public', e.target.checked)} />
+              {t({ id: 'federacao.carte.edit.public' })}
+            </label>
+            <label style={checkRow}>
+              <input type="checkbox" checked={form.contact_public} onChange={(e) => set('contact_public', e.target.checked)} />
+              {t({ id: 'federacao.carte.edit.contactPublic' })}
+            </label>
+
+            {row.can_admin && (
+              <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,.10)' }}>
+                <div style={{ fontSize: '.78rem', fontWeight: 700, color: 'var(--brand-muted)', textTransform: 'uppercase', letterSpacing: '.03em' }}>
+                  {t({ id: 'federacao.carte.edit.adminSection' })}
+                </div>
+                <label style={label}>{t({ id: 'federacao.carte.edit.category' })}</label>
+                <select style={input} value={form.categorie} onChange={(e) => set('categorie', e.target.value)}>
+                  {CATS.map((c) => <option key={c} value={c}>{t({ id: `federacao.carte.cat.${c}` })}</option>)}
+                </select>
+                <label style={label}>{t({ id: 'federacao.carte.edit.status' })}</label>
+                <select style={input} value={form.statut_anarbib} onChange={(e) => set('statut_anarbib', e.target.value)}>
+                  {STATUTS.map((s) => <option key={s} value={s}>{t({ id: `federacao.carte.statut.${s}` })}</option>)}
+                </select>
+              </div>
+            )}
+
+            {err && <p style={{ color: '#fca5a5', fontSize: '.85rem', marginTop: 12 }}>{err}</p>}
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
+              <button type="button" onClick={onClose} disabled={saving}
+                style={{ ...input, width: 'auto', cursor: 'pointer', background: 'transparent' }}>
+                {t({ id: 'federacao.carte.edit.cancel' })}
+              </button>
+              <button type="button" onClick={save} disabled={saving}
+                style={{ ...input, width: 'auto', cursor: 'pointer', background: 'var(--brand-accent, #2563eb)', borderColor: 'transparent', fontWeight: 700 }}>
+                {t({ id: 'federacao.carte.edit.save' })}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { apiQuery } from '@/lib/supabase';
+import CartographyEditModal from './CartographyEditModal';
 import './NetworkMap.css';
 
 // Composant carte partagé de l'annuaire géographique du réseau. Leaflet +
 // markercluster VENDORISÉS (public/vendor/leaflet/, chargés à la volée). Source =
 // table public.cartography_entries via une vue api SECDEF (N1 uniquement : jamais
 // email/tél/adresse — MAP-E). Utilisé par :
-//   - NetworkMapTab (interne, authentifié·e) → api.cartography_network_v1
+//   - NetworkMapTab (interne, authentifié·e) → api.cartography_network_v1 (+ can_edit)
 //   - CartografiaPage (publique, anon)        → api.cartography_public_v1 (opt-in)
-// Prop : viewName (vue api à lire).
+// Édition (MAP-D) : sur la carte interne, les marqueurs éditables (can_edit) portent
+// un bouton « Éditer » ouvrant CartographyEditModal. Prop : viewName.
 
 const CATEGORIES = [
   { key: 'biblioteca', color: '#C8102E' },
@@ -24,8 +26,7 @@ const COLOR = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.color]));
 // Filtre MAP-G : réseau AnarBib (membres + partenaires) vs paysage libertaire (cibles).
 const SCOPES = ['reseau', 'paysage'];
 
-// Locales servies par la donnée (i18n par collectif). Les 10 locales de l'app ;
-// `pt-BR` est servi par `pt`. Repli sur `fr`.
+// Locales servies par la donnée (i18n par collectif). `pt-BR` → `pt`. Repli `fr`.
 const MAP_LOCALES = ['fr', 'pt', 'it', 'es', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
 function resolveMapLang(locale) {
   const base = (locale || '').toLowerCase().startsWith('pt') ? 'pt' : (locale || '').slice(0, 2).toLowerCase();
@@ -57,8 +58,7 @@ function esc(s) {
   return String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
 
-// Marqueur « goutte » coloré par catégorie. Les membres d'AnarBib portent
-// l'emblème du réseau (MAP-H) ; les autres une pastille blanche.
+// Marqueur « goutte » coloré par catégorie. Membres AnarBib = emblème réseau (MAP-H).
 function dropIcon(L, color, isMember) {
   const inner = isMember
     ? `<img src="/img/icon-192.png" alt="" width="17" height="17" style="position:absolute;left:6.5px;top:5.5px;border-radius:50%;background:#fff;object-fit:contain;box-shadow:0 0 0 1.5px #fff;" />`
@@ -82,7 +82,7 @@ export default function CartographyMap({ viewName }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const clusterRef = useRef(null);
-  const memberLayerRef = useRef(null);    // membres AnarBib hors cluster (toujours visibles)
+  const memberLayerRef = useRef(null);
   const markersRef = useRef([]);          // [{ marker, props, cat, scope, text, member }]
   const filtersRef = useRef({ active: new Set(CATEGORIES.map((c) => c.key)), scopes: new Set(SCOPES), query: '' });
 
@@ -92,6 +92,7 @@ export default function CartographyMap({ viewName }) {
   const [active, setActive] = useState(() => new Set(CATEGORIES.map((c) => c.key)));
   const [scopes, setScopes] = useState(() => new Set(SCOPES));
   const [query, setQuery] = useState('');
+  const [editingId, setEditingId] = useState(null);
 
   function popupHtml(p) {
     const i = (p.i18n[lang] && p.i18n[lang].name) ? p.i18n[lang] : ((p.i18n.fr && p.i18n.fr.name) ? p.i18n.fr : (p.i18n.pt || {}));
@@ -101,6 +102,9 @@ export default function CartographyMap({ viewName }) {
       : '';
     const badge = p.anarbib ? `<span class="ab-map-badge">${esc(t({ id: 'federacao.carte.member' }))}</span>` : '';
     const typeLabel = p.category ? t({ id: `federacao.carte.cat.${p.category}` }) : '';
+    const editBtn = p.canEdit
+      ? `<button type="button" class="ab-map-edit-btn" data-entry-id="${esc(p.id)}" style="margin-top:8px;padding:4px 11px;border-radius:6px;border:1px solid rgba(0,0,0,.18);background:#2563eb;color:#fff;font-size:.8rem;cursor:pointer;">${esc(t({ id: 'federacao.carte.edit' }))}</button>`
+      : '';
     return `<div class="ab-map-popup">
       <div class="ab-map-pop-title"><span class="ab-map-dot" style="background:${esc(p.color)}"></span>${esc(i.name)}${badge}</div>
       ${typeLabel ? `<div class="ab-map-pop-type">${esc(typeLabel)}</div>` : ''}
@@ -108,6 +112,7 @@ export default function CartographyMap({ viewName }) {
       ${p.reseau ? `<div class="ab-map-pop-net">${esc(t({ id: 'federacao.carte.network' }))} : ${esc(p.reseau)}</div>` : ''}
       ${site ? `<div class="ab-map-pop-site">${site}</div>` : ''}
       ${i.notes ? `<div class="ab-map-pop-notes">${esc(i.notes)}</div>` : ''}
+      ${editBtn}
     </div>`;
   }
 
@@ -126,9 +131,43 @@ export default function CartographyMap({ viewName }) {
     }
   }
 
-  // Init (une fois) : Leaflet + tuiles + données + marqueurs.
+  // Charge (ou recharge) les données et reconstruit les marqueurs. Réutilise la
+  // carte Leaflet déjà montée (window.L). Appelé à l'init et après une édition.
+  async function loadData() {
+    const L = window.L;
+    const { data: rows, error: qErr } = await apiQuery(viewName);
+    if (qErr || !Array.isArray(rows)) throw new Error(viewName + ' ' + (qErr?.message || 'no data'));
+    markersRef.current = rows.map((row) => {
+      const category = row.categorie;
+      const anarbib = row.statut_anarbib === 'membre';
+      const scope = row.statut_anarbib === 'cible' ? 'paysage' : 'reseau';
+      const i18n = {};
+      for (const lc of MAP_LOCALES) {
+        i18n[lc] = {
+          name: (row.name_i18n || {})[lc] || '',
+          city: (row.city_i18n || {})[lc] || '',
+          country: (row.country_i18n || {})[lc] || '',
+          notes: (row.notes_i18n || {})[lc] || '',
+        };
+      }
+      const p = { id: row.id, canEdit: !!row.can_edit, color: COLOR[category] || '#2C2C2C', category, anarbib, reseau: row.reseau, site: row.site_url, i18n };
+      const marker = L.marker([Number(row.lat), Number(row.lon)], { icon: dropIcon(L, p.color, anarbib) });
+      marker.bindPopup(popupHtml(p), { maxWidth: 300 });
+      const text = Object.values(i18n).flatMap((x) => [x.name, x.city, x.country]).filter(Boolean).join(' ').toLowerCase();
+      return { marker, props: p, cat: category, scope, text, member: anarbib };
+    });
+    setTotal(markersRef.current.length);
+    applyFilters();
+  }
+
+  // Init (une fois) : Leaflet + tuiles + données + délégation du clic « Éditer ».
   useEffect(() => {
     let cancelled = false;
+    const containerEl = containerRef.current;
+    const onEditClick = (e) => {
+      const btn = e.target.closest && e.target.closest('.ab-map-edit-btn');
+      if (btn && btn.dataset.entryId) { e.preventDefault(); setEditingId(btn.dataset.entryId); }
+    };
     (async () => {
       try {
         const L = await loadLeaflet();
@@ -141,39 +180,20 @@ export default function CartographyMap({ viewName }) {
         map.addLayer(cluster);
         const memberLayer = L.layerGroup().addTo(map);
         mapRef.current = map; clusterRef.current = cluster; memberLayerRef.current = memberLayer;
-
-        const { data: rows, error: qErr } = await apiQuery(viewName);
-        if (qErr || !Array.isArray(rows)) throw new Error(viewName + ' ' + (qErr?.message || 'no data'));
+        if (containerEl) containerEl.addEventListener('click', onEditClick);
+        await loadData();
         if (cancelled) return;
-
-        markersRef.current = rows.map((row) => {
-          const category = row.categorie;
-          const anarbib = row.statut_anarbib === 'membre';
-          const scope = row.statut_anarbib === 'cible' ? 'paysage' : 'reseau';
-          const i18n = {};
-          for (const lc of MAP_LOCALES) {
-            i18n[lc] = {
-              name: (row.name_i18n || {})[lc] || '',
-              city: (row.city_i18n || {})[lc] || '',
-              country: (row.country_i18n || {})[lc] || '',
-              notes: (row.notes_i18n || {})[lc] || '',
-            };
-          }
-          const p = { color: COLOR[category] || '#2C2C2C', category, anarbib, reseau: row.reseau, site: row.site_url, i18n };
-          const marker = L.marker([Number(row.lat), Number(row.lon)], { icon: dropIcon(L, p.color, anarbib) });
-          marker.bindPopup(popupHtml(p), { maxWidth: 300 });
-          const text = Object.values(i18n).flatMap((x) => [x.name, x.city, x.country]).filter(Boolean).join(' ').toLowerCase();
-          return { marker, props: p, cat: category, scope, text, member: anarbib };
-        });
-        setTotal(markersRef.current.length);
-        applyFilters();
         setStatus('ready');
         setTimeout(() => { try { map.invalidateSize(); } catch { /* ignore */ } }, 200);
       } catch (e) {
         if (!cancelled) { console.error('[CartographyMap]', e); setStatus('error'); }
       }
     })();
-    return () => { cancelled = true; if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; } };
+    return () => {
+      cancelled = true;
+      if (containerEl) containerEl.removeEventListener('click', onEditClick);
+      if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewName]);
 
@@ -194,7 +214,7 @@ export default function CartographyMap({ viewName }) {
 
   const toggleCat = (key) => setActive((prev) => {
     const n = new Set(prev); if (n.has(key)) n.delete(key); else n.add(key);
-    return n.size ? n : prev; // ne jamais tout masquer
+    return n.size ? n : prev;
   });
   const toggleScope = (key) => setScopes((prev) => {
     const n = new Set(prev); if (n.has(key)) n.delete(key); else n.add(key);
@@ -232,6 +252,13 @@ export default function CartographyMap({ viewName }) {
         <div className="ab-map-status">{t({ id: 'federacao.carte.empty' })}</div>
       )}
       <div className="ab-map-foot">{t({ id: 'federacao.carte.attribution' })}</div>
+      {editingId && (
+        <CartographyEditModal
+          entryId={editingId}
+          onClose={() => setEditingId(null)}
+          onSaved={() => { setEditingId(null); loadData(); }}
+        />
+      )}
     </div>
   );
 }

@@ -116,6 +116,11 @@ export function Topbar() {
           {t({ id: 'nav.bibliotecas' })}
         </Link>
 
+        {/* Carte publique du réseau (cartographie, REGISTRE §34) — visible de tout le monde */}
+        <Link to="/cartografia" className={isActive('/cartografia') ? 'active' : ''}>
+          {t({ id: 'cartografia.nav' })}
+        </Link>
+
         {user && canSeeAccount(role) && (
           <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
             {t({ id: 'nav.account' })}
