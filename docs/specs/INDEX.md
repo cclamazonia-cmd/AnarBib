@@ -35,6 +35,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Administration réseau | [`spec-administrateur-reseau-v0.4.md`](./spec-administrateur-reseau-v0.4.md) | v0.4 (20/05/2026) | 🟢 Référence — v0.3.1 en prod, enrichissements v0.4 à implémenter |
 | Gouvernance locale (rôles, status, transitions) | [`spec-gouvernance-roles.md`](./spec-gouvernance-roles.md) | v1.3 (24/05/2026) | 🟢 Référence — partiellement en prod |
 | Profils d'adoption (4 axes orthogonaux) | [`spec-profils-bibliotheque-v0_7.md`](./spec-profils-bibliotheque-v0_7.md) | v0.7 (19/05/2026) | 🟢 Référence post-clôture chantier #98 — entièrement en prod |
+| Écran de gestion « Biblioteca » (`/biblioteca`, 12 onglets) | [`spec-ecran-biblioteca.md`](./spec-ecran-biblioteca.md) | v1.0 (18/06/2026) | ✅ En prod (chantier-cadre clos) — **carte d'orientation** vers les specs par domaine |
 
 ### 🚪 Onboarding et compte lecteur
 
@@ -64,6 +65,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Notification de prorrogação granulaire | [`spec-notify-prorrogacao-granulaire.md`](./spec-notify-prorrogacao-granulaire.md) | v0.1 (29/05/2026) | 🟡 Cadrage, lié `#NOTIFY-Painel-acts` |
 | Multi-appartenance lectrice (plusieurs biblios) | [`spec-multi-appartenance-lecteur.md`](./archive/spec-multi-appartenance-lecteur.md) | v0.3 (02/06/2026) | ✅ Implémenté en prod (P1-P5) — archivé 2026-06-10. Absorbe `spec-migration-compte` |
 | Identité lecteur·rice locale (n° / nom par biblio) | [`spec-identite-lecteur-locale.md`](./spec-identite-lecteur-locale.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (CARD-LOCAL §27, Lots 0/2) — doctrine consolidée a posteriori |
+| Ma bibliothèque (vitrine + messagerie lecteur·rice ↔ biblio) | [`spec-ma-bibliotheque-lecteur.md`](./spec-ma-bibliotheque-lecteur.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (MYLIB §25) — doctrine consolidée a posteriori |
 
 ### 📱 Mode terrain / mobile *(nouveau famille)*
 

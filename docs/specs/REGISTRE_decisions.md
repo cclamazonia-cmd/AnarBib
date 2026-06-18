@@ -283,7 +283,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
-## 19. Chantier-cadre Biblioteca — `BIBLIO` *(trace : `journal/chantiers/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md`)*
+## 19. Chantier-cadre Biblioteca — `BIBLIO` *(spec : `spec-ecran-biblioteca` v1.0 — carte d'ensemble ; trace : `journal/chantiers/CHANTIER_audit_biblioteca_parite_doctrinale_2026-05-21.md`)*
 
 | ID | Décision | Statut |
 |---|---|---|
@@ -415,7 +415,7 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
-## 25. Ma bibliothèque (vitrine lecteur·rice) — `MYLIB` *(trace : CHANTIER_carte_ma_bibliotheque_lecteur)*
+## 25. Ma bibliothèque (vitrine lecteur·rice) — `MYLIB` *(spec : `spec-ma-bibliotheque-lecteur` v1.0 ; trace : CHANTIER_carte_ma_bibliotheque_lecteur)*
 
 | ID | Décision | Statut |
 |---|---|---|
@@ -662,3 +662,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 18/06/2026 (suite, P2 « specs ») — **2 specs OPAC promues v0.1 cadrage → v1.0 référence** (statuts « 🟠 partiel » du 16/06 périmés ; état réel vérifié baseline + `CatalogPage`/`BookPage`/`AuthorPage`). **`spec-catalogue-decouverte`** : OPAC7 (`catalog_facets_v1`), OPAC8 (`subjects`/`book_subjects`/`search_subjects`/`subject_tree_v1` + arbre câblé), OPAC9 (`user_wishlist`), OPAC10 (parcours A–Z + nouveautés) **livrés** ; seul **OPAC11 RSS différé** (anti-tracking). **`spec-notice-autorite-enrichie`** : notice (citations BibTeX/RIS, ISBD, `similar_books`) + autorité (`similar_authors`, `author_subjects_v1`, `variant_forms`, VIAF/ISNI/Wikidata) **livrés**. §18 OPAC déjà à jour. **Dette « code livré sans spec écrite » : soldée** (option 3). Restent en *vrai* cadrage forward (arbitrages Xavier) : cartographie-réseau, onboarding-biblioteca, cycle-vie-peb.*
 
 *MàJ 18/06/2026 (suite, P2 « specs » — option 2 : features livrées SANS spec de référence) — **§30 `THES` : spec formalisée.** `spec-thesaurus-matiere.md` v1.0 (consolidation a posteriori du chantier thésaurus v1→v3 livré 15-16/06, qui n'avait qu'une trace de cadrage). Couvre : modèle `subjects` (status proposto/ativo/depreciado, label/alt/hidden_i18n, notation, parent_id), gouvernance THES-1 (édition = coord catalogage ; ouverture contributeur·rices = AG), relations THES-2 (`subject_relations` skos:related, `fn_subject_add/remove_relation` + `subject_related_v1`), navigation THES-3 (`subject_tree_v1`, compte public anti-fuite via `catalog_list_anon_v1`), export THES-URI (`thesaurus_export_v1` + `skosExport.js`, **URI publique stable `app.anarbib.org/thesaurus/<slug>` à honorer**), mapping SKOS. Inscrit INDEX. Faits vérifiés baseline + front. **Option 2 restants** : §25 MYLIB, §19 BIBLIO (à arbitrer : spec dédiée ou REGISTRE+trace suffisent).*
+
+*MàJ 18/06/2026 (suite, P2 « specs » — option 2 close ; choix Xavier : tout écrire comme base de travail pour les futur·es dev) — **§25 `MYLIB`** : `spec-ma-bibliotheque-lecteur.md` v1.0 (vitrine contact opt-in membre `library_public_contact` — cousine anon = PUBLIB même table ; messagerie bidirectionnelle `reader_library_messages` direction reader/library, `send_message_to_reader` mail-only + anti-spam, logo data-driven ; MYLIB-O1 chat in-app reporté). **§19 `BIBLIO`** : `spec-ecran-biblioteca.md` v1.0 = **carte d'orientation** de l'écran `/biblioteca` (12 onglets → renvoi vers la spec de chaque domaine ; clôture BIBLIO-CLOSE/9/10), pas un foyer doctrinal de plus. Inscrits INDEX. **Option 2 close** : plus aucune feature livrée sans au moins une carte de doctrine. Reste P2 hors-specs : responsive mobile (sessions Phase A/B/C). Forward (arbitrages) : cartographie-réseau, onboarding-biblioteca, cycle-vie-peb.*
