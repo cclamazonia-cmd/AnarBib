@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { supabase } from '@/lib/supabase';
+import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -83,6 +83,10 @@ export default function RedePage() {
   const [reqFilter, setReqFilter] = useState('');
   const [selectedReq, setSelectedReq] = useState(null);
   const [reviewNote, setReviewNote] = useState('');
+  // ONBO-Q13 : transfert du mandat de coordination d'une constitution en cours.
+  const [transferPid, setTransferPid] = useState('');
+  const [transferReason, setTransferReason] = useState('');
+  const [transferring, setTransferring] = useState(false);
   // E.4.a : allMembers, newAdminEmail et l'agregation distincte staff/reader
   // au niveau reseau ont ete supprimes. AdminsPanel charge maintenant ses
   // propres donnees via api.network_administrators_public_v1. Les stats
@@ -184,14 +188,56 @@ export default function RedePage() {
   // ── Actions ─────────────────────────────────────────────
   async function updateRequestStatus(reqId, newStatus) {
     try {
-      await supabase.from('library_requests').update({
-        request_status: newStatus, review_notes: reviewNote || null,
-        reviewed_at: new Date().toISOString(), reviewed_by_user_id: user?.id,
-      }).eq('id', reqId);
+      if (newStatus === 'aprovada') {
+        // L'approbation DOIT passer par le RPC api.fn_approve_library_request :
+        // il PROVISIONNE la biblio pré-active + crée library_constitution_progress
+        // + pose solicitante_state='coordenador_em_constituicao' (la clé qui route
+        // la personne vers /atelier). Un simple UPDATE du statut sauterait tout ce
+        // provisioning → l'onboarding ne démarrerait jamais (ONBO-Q2).
+        // On pose d'abord la note d'examen (statut inchangé → pas de notif), puis le
+        // RPC bascule le statut (une seule notif « approved » via le trigger).
+        if (reviewNote) {
+          await supabase.from('library_requests').update({ review_notes: reviewNote }).eq('id', reqId);
+        }
+        const { error } = await apiRpc('fn_approve_library_request', { p_request_id: reqId });
+        if (error) throw new Error(error.message || 'approve failed');
+      } else {
+        await supabase.from('library_requests').update({
+          request_status: newStatus, review_notes: reviewNote || null,
+          reviewed_at: new Date().toISOString(), reviewed_by_user_id: user?.id,
+        }).eq('id', reqId);
+      }
       setMsg({ text: t({id:'common.dataSaved'}), kind: 'ok' });
       setSelectedReq(null); setReviewNote('');
       await loadAll();
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
+  }
+
+  // ONBO-Q13 — transfert du mandat de coordination (constitution en cours).
+  // Résout le public_id (U…) de la nouvelle personne via resolve_login_email
+  // (schéma public → supabase.rpc), puis appelle le RPC api gardé admin réseau.
+  async function transferMandate(reqId) {
+    const pid = (transferPid || '').trim();
+    if (!pid) { setMsg({ text: t({id:'rede.transfer.needPid'}), kind: 'error' }); return; }
+    if (!confirm(t({id:'rede.transfer.confirm'}))) return;
+    setTransferring(true);
+    try {
+      const { data, error: rErr } = await supabase.rpc('resolve_login_email', { p_identifier: pid });
+      if (rErr) throw rErr;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (!row?.user_id) { setMsg({ text: t({id:'rede.transfer.notFound'}, { pid }), kind: 'error' }); setTransferring(false); return; }
+      const { error: tErr } = await apiRpc('fn_constitution_transfer_mandate', {
+        p_request_id: reqId,
+        p_new_coordenador_user_id: row.user_id,
+        p_reason: transferReason || null,
+      });
+      if (tErr) throw new Error(tErr.message || 'transfer failed');
+      setMsg({ text: t({id:'rede.transfer.done'}), kind: 'ok' });
+      setTransferPid(''); setTransferReason(''); setSelectedReq(null);
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' });
+    } finally { setTransferring(false); }
   }
 
   // E.4.a : suppression de changeUserRole / addAdmin / removeAdmin.
@@ -362,6 +408,19 @@ export default function RedePage() {
                     <button className="cat-btn primary" onClick={()=>updateRequestStatus(selectedReq.id,'aprovada')}>{t({ id: 'rede.requests.approve' })}</button>
                     <button className="cat-btn ghost" style={{ color:'#f87171' }} onClick={()=>updateRequestStatus(selectedReq.id,'recusada')}>{t({ id: 'rede.requests.refuse' })}</button>
                   </div>
+
+                  {/* ONBO-Q13 — transfert du mandat de coordination (demande approuvée, en constitution) */}
+                  {selectedReq.request_status === 'aprovada' && (
+                    <div style={{ marginTop:14, paddingTop:12, borderTop:'1px solid rgba(255,255,255,.08)' }}>
+                      <h5 style={{ margin:'0 0 4px' }}>{t({ id: 'rede.transfer.title' })}</h5>
+                      <p style={{ fontSize:'.8rem', color:'var(--brand-muted)', margin:'0 0 8px' }}>{t({ id: 'rede.transfer.hint' })}</p>
+                      <label style={ls}>{t({ id: 'rede.transfer.pidLabel' })}</label>
+                      <input value={transferPid} onChange={e=>setTransferPid(e.target.value)} style={{...fs, marginBottom:8}} placeholder={t({ id: 'rede.transfer.pidPlaceholder' })} />
+                      <label style={ls}>{t({ id: 'rede.transfer.reasonLabel' })}</label>
+                      <input value={transferReason} onChange={e=>setTransferReason(e.target.value)} style={{...fs, marginBottom:8}} />
+                      <button className="cat-btn secondary" disabled={transferring} onClick={()=>transferMandate(selectedReq.id)}>{t({ id: 'rede.transfer.button' })}</button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
