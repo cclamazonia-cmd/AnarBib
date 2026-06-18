@@ -95,8 +95,8 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Page catalogue — couche découverte (facettes, sujets, favoris, parcours) | [`spec-catalogue-decouverte.md`](./spec-catalogue-decouverte.md) | v0.1 (01/06/2026) | 🟡 Cadrage — cluster #OPAC7–11 |
-| Notice & autorités enrichies (BookPage / AuthorPage) | [`spec-notice-autorite-enrichie.md`](./spec-notice-autorite-enrichie.md) | v0.1 (01/06/2026) | 🟡 Cadrage — #OPAC1–6 / #AUT1–4 |
+| Page catalogue — couche découverte (facettes, sujets, favoris, parcours) | [`spec-catalogue-decouverte.md`](./spec-catalogue-decouverte.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (OPAC7-10) — référence consolidée a posteriori ; OPAC11 RSS 🟡 différé |
+| Notice & autorités enrichies (BookPage / AuthorPage) | [`spec-notice-autorite-enrichie.md`](./spec-notice-autorite-enrichie.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (#OPAC1-6 / #AUT1-4) — référence consolidée a posteriori |
 | Annuaire & fiches publiques des bibliothèques | [`spec-fiche-publique-bibliotheque.md`](./spec-fiche-publique-bibliotheque.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (PUBLIB §31) — doctrine consolidée a posteriori |
 
 > Couche **lecteur** (affichage / découverte), **en aval** du chantier Catalogação : consomme le filtre `visibility` (exemplaires #2), les capas (module capas #3) et la couche autorité (sources & autorités #4). Lignes rouges : anti-tracking (aucun appel tiers révélant une consultation) + autonomie (cloisonnement des compteurs). Annonce une spec dédiée `spec-atelier-autorites`.

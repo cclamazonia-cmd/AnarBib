@@ -1,13 +1,13 @@
 ---
 Genre : référence
-Statut : 🟠 partiel — MAJ 16/06/2026, page AuthorPage enrichie (couche autorité fn_authority_*) en prod ; fiche notice BookPage à confirmer. Cf. INVENTAIRE Resync 16/06.
+Statut : ✅ implémentée en prod (notice BookPage #OPAC1-6 + autorité AuthorPage #AUT1/2/4) — référence consolidée a posteriori (18/06). Face contribution des autorités = spec-atelier-autorites.
 Décisions : incarne OPAC-W1, OPAC-SIM1, OPAC-PRIV1, OPAC-COM1, OPAC-MARC1, OPAC-AUTH1, OPAC-X1, OPAC-UI1, OPAC-ATL1, OPAC-AGG1 ; cite DOC-I18N-1, DOC-PERIM-1, CAT-D6
 Supersédé par : —
 ---
 
 # Spec — Notice et autorités enrichies
 
-> **Statut** : v0.1 du 01/06/2026 — **🟠 partiellement implémenté** (MAJ 16/06 : `AuthorPage` enrichie en prod ; `BookPage` à confirmer ; la face Atelier autorités est portée par `spec-atelier-autorites`, paquet 1 livré). Issue du même atelier RebAL que la spec catalogue, étendue à la page d'autorité (`AuthorPage.jsx`) et articulée avec le chantier **Atelier autorités** (annonce d'intention sur la vitrine `anarbib.org`).
+> **Statut** : v1.0 — **✅ implémentée en prod** (consolidé a posteriori le 18/06 ; vérifié `BookPage`/`AuthorPage`). **Notice** (`BookPage`) : #OPAC1 citations + export **BibTeX/RIS**, toggle **ISBD**, #OPAC4 documents similaires (`api.similar_books`), #OPAC6 sections. **Autorité** (`AuthorPage`) : #AUT1 réseau d'auteur·rices (`api.similar_authors`), #AUT2 nuage de sujets (`api.author_subjects_v1`), **formes du nom** (`authors.variant_forms`), bio multilingue, identifiants **VIAF/ISNI/Wikidata**. La **face contribution** des autorités (Atelier) est portée par `spec-atelier-autorites` (paquet 1 livré). Issue du même atelier RebAL que la spec catalogue, étendue à la page d'autorité (`AuthorPage.jsx`).
 > **Périmètre** : la **fiche de notice** d'un livre (`BookPage.jsx`) et la **fiche d'autorité** d'un·e contributeur·rice (`AuthorPage.jsx`). Volet amont : la **face contribution** des autorités (Atelier), cadrée ici au niveau orientation, à détailler dans une spec dédiée le moment venu.
 > **Spec sœur** : `spec-catalogue-decouverte.md v0.1` (couche liste/découverte). Les deux spécifient des surfaces distinctes — liste *vs* notice/autorité — mais partagent une brique commune : l'agrégation de sujets en chips cliquables (#OPAC8 liste ↔ §4.2 autorité).
 > **Specs liées** : `spec-administrateur-reseau-v0.4.md` (modèle de gouvernance réseau dont l'Atelier s'inspire *en s'en distinguant* : consentement sans vote), chantier criar-conta sans biblio (compte réseau non rattaché, base du compte contributeur·rice).
