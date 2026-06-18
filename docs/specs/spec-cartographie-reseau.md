@@ -1,15 +1,15 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée (brouillon — 12 arbitrages à trancher)
-Décisions : incarne MAP-A..MAP-L (ouverts) ; cite DOC-I18N-1, DOC-RPC-3, DOC-PERIM-1
+Statut : 🟢 cadrée — 12 arbitrages MAP-A..MAP-L tranchés (18/06/2026) ; reste à IMPLÉMENTER (chantier post-Bologna)
+Décisions : incarne MAP-A..MAP-L (tranchés 18/06, REGISTRE §34) ; cite PUBLIB-OPTIN-1/GEO-1/O1 (§31), INV-5, DOC-I18N-1, DOC-RPC-3, DOC-PERIM-1
 Supersédé par : —
 ---
 
 # Spec — Cartographie du réseau AnarBib
 
-**Version :** 0.1 (squelette d'arbitrages)
-**Date :** 27/05/2026
-**Statut :** brouillon — arbitrages à trancher
+**Version :** 1.0 (arbitrages tranchés)
+**Date :** 27/05/2026 (cadrage) · 18/06/2026 (arbitrages tranchés par Xavier)
+**Statut :** cadrée — décisions `MAP-A..MAP-L` actées (cf. §0.4 + récap §6 + REGISTRE §34) ; **reste à implémenter** — chantier **post-Bologna** (fin 2026 / début 2027)
 **Auteur·ices :** Xavier (collectif AnarBib)
 **Précédents :** carte uMap externe `coletivos-libertarios-com-biblioteca-do-mundo` (121 lieux, 24 pays, mai 2026) ; fichier de données `anarbib_bibliotheques_libertaires.geojson` ; document `AnarBib_recensement_bibliotheques_libertaires.docx`
 
@@ -43,6 +43,24 @@ Cette spec définit l'architecture cible d'une cartographie pleinement intégré
 
 Cette définition a une conséquence directe sur la cartographie : **la base AnarBib est la source de vérité du statut de membre**, la carte n'en est qu'une vue. Cette spec doit garantir que les deux ne peuvent pas diverger.
 
+### 0.4 Décisions actées (18/06/2026) — `MAP-A..MAP-L`
+
+Arbitrages tranchés par Xavier ; les détails restent dans les sections d'origine, le **foyer normatif** est le REGISTRE §34 `MAP`. **Surcouche déterminante : alignement sur la doctrine PUBLIB (§31), écrite le 18/06 — postérieure au brouillon (27/05).** La cartographie porte des données sensibles (~184 collectifs, dont des non-membres « cibles » n'ayant rien demandé) → le **consentement prime**.
+
+- **MAP-A — données** : table dédiée `cartography_entries` (A2 ; `library_id` nullable pour les non-membres ; passer à A3/héritage si le réseau grossit beaucoup).
+- **MAP-B — i18n** : hybride (B4) — structurants (catégorie/statut) traduits applicativement ; **notes dans la langue du collectif** + `notes_locale`.
+- **MAP-C — carte publique** : route publique **dans le SPA** (C1), cohérente avec `/bibliotecas` (PUBLIB) — pas de 2ᵉ code ni d'i18n dupliqué *(révise le C2 du brouillon, antérieur à PUBLIB)*.
+- **MAP-D — édition** : **D1** (autonomie du collectif) sur ses champs identitaires (nom, notes, langues, contacts, `statut_public`) ; **D3** (validation coordination) sur les champs structurants partagés (GPS, catégorie).
+- **MAP-E — confidentialité & consentement (aligné PUBLIB §31)** ⚠️ : `statut_public` **défaut FALSE** (opt-in explicite) ; **accès concentrique** — niveau 1 public = nom/ville/pays/catégorie (**pin de ville**) ; niveau 2 (adresse exacte, email, tel) = **opt-in séparé**. **Aucun import en masse `statut_public=true`** (corrige la Phase 1 du brouillon, §4.2). **Non-membres (« cibles »)** : pin de ville **sans contact** au plus, tant qu'aucun consentement (idéalement via auto-déclaration, MAP-J).
+- **MAP-F — géocodage & fond de carte** : OSM + **Nominatim self-hosted** ; **anti-tracking (INV-5)** — jamais de service tiers fuitant une consultation (cohérent PUBLIB-O1).
+- **MAP-G — non-membres** : affichés, avec **filtre clair** « réseau AnarBib » (membres + partenaires) vs « paysage libertaire mondial ».
+- **MAP-H — icône réseau** : membres distingués (logo AnarBib), conservé.
+- **MAP-I — statut PEB sur la carte interne** : oui à terme, **dépendance #114 à formaliser** → différé.
+- **MAP-J — auto-déclaration** : parcours public « ajouter ma biblio » envisagé (cohérent projet ouvert), **modération à cadrer** → différé.
+- **MAP-K — moteur cartographique** : **Leaflet** (libre, mature, simple).
+- **MAP-L — uMap actuelle** : **L1** — conservée en **archive figée** (trace de la phase recensement).
+- **Calendrier** : **post-Bologna** — l'uMap suffit pour FICEDL (09/2026) ; la carte intégrée est un chantier fin 2026 / début 2027.
+
 ---
 
 ## 1. Modèle de données
@@ -72,7 +90,7 @@ Cette définition a une conséquence directe sur la cartographie : **la base Ana
 
 **Recommandation** : **A3** est techniquement le plus propre, **A2** est le plus simple à implémenter. Le choix dépend du nombre de membres prévus à court terme. Tant que le réseau compte moins de ~20 membres, A2 suffit ; au-delà, A3 devient pertinent.
 
-**À trancher** : _____________________________
+**Tranché (18/06)** — décision consolidée en §0.4 et au récapitulatif §6 (REGISTRE §34 `MAP`).
 
 ### 1.2 Arbitrage B — Modèle i18n des contenus cartographiques
 
@@ -104,7 +122,7 @@ Cette définition a une conséquence directe sur la cartographie : **la base Ana
 
 **Recommandation** : **B4** est conceptuellement le plus juste pour le projet (il assume la nature plurilingue de fait du mouvement libertaire international). **B2** est techniquement le plus simple si on accepte une dépendance forte à la traduction automatique pour les ajouts futurs (DeepL ou équivalent en assistance, validation humaine). **B3** est sur-ingéniering tant que le réseau n'est pas plus large.
 
-**À trancher** : _____________________________
+**Tranché (18/06)** — décision consolidée en §0.4 et au récapitulatif §6 (REGISTRE §34 `MAP`).
 
 ### 1.3 Schéma proposé (sous réserve d'arbitrage A et B)
 
@@ -200,7 +218,7 @@ CREATE POLICY cartography_member_read ON cartography_entries FOR SELECT
 
 **Recommandation** : **C2** si la carte publique est un objet de communication majeur (présentation à Bologna, partage sur réseaux). **C1** si elle reste un complément.
 
-**À trancher** : _____________________________
+**Tranché (18/06)** — décision consolidée en §0.4 et au récapitulatif §6 (REGISTRE §34 `MAP`).
 
 ### 2.2 Onglet interne AnarBib
 
@@ -228,7 +246,7 @@ CREATE POLICY cartography_member_read ON cartography_entries FOR SELECT
 
 **Recommandation** : **L1** est le plus respectueux du travail accompli et n'a aucun coût. La carte uMap reste une trace de cette phase, à mentionner dans les comm' rétrospectivement.
 
-**À trancher** : _____________________________
+**Tranché (18/06)** — décision consolidée en §0.4 et au récapitulatif §6 (REGISTRE §34 `MAP`).
 
 ---
 
@@ -256,7 +274,7 @@ CREATE POLICY cartography_member_read ON cartography_entries FOR SELECT
 
 **Recommandation** : **D1** pour les champs identitaires du collectif (nom, notes, statut_public, langues du fonds, site, email) ; **D3** pour les champs structurants partagés (coordonnées GPS, catégorie) qui touchent à la cohérence de la carte. À discuter.
 
-**À trancher** : _____________________________
+**Tranché (18/06)** — décision consolidée en §0.4 et au récapitulatif §6 (REGISTRE §34 `MAP`).
 
 ### 3.2 RPC nécessaires (doctrine RPC v3)
 
@@ -291,7 +309,7 @@ Le fichier `anarbib_bibliotheques_libertaires.geojson` (121 fiches, 24 pays) con
 
 **Phase 1** — création du schéma et import initial :
 - Migration SQL pour créer `cartography_entries`
-- Script d'import des 121 fiches depuis le GeoJSON (avec `statut_public = true` par défaut, sauf décision contraire)
+- Script d'import des fiches depuis le GeoJSON **avec `statut_public = FALSE`** (MAP-E : opt-in, **jamais** de publication en masse de contacts non consentis) ; les non-membres restent au plus un **pin de ville sans contact** tant qu'aucun consentement
 - Aucune fiche n'est marquée `library_id` à ce stade (sauf la BLMF qui correspond à une bibliothèque membre existante)
 
 **Phase 2** — réconciliation avec les bibliothèques membres :
@@ -316,7 +334,7 @@ Le fichier `anarbib_bibliotheques_libertaires.geojson` (121 fiches, 24 pays) con
 
 **Recommandation** : **ne pas viser Bologna pour la carte intégrée**. La carte uMap est suffisante pour la présentation FICEDL. La cartographie intégrée est un chantier post-Bologna, à inscrire dans la séquence longue (Biblioteca → Importações → Catalogação). Une fenêtre raisonnable pour la phase 1 (schéma + import) serait fin 2026 / début 2027.
 
-**À trancher** : _____________________________
+**Tranché (18/06)** — décision consolidée en §0.4 et au récapitulatif §6 (REGISTRE §34 `MAP`).
 
 ---
 
@@ -336,14 +354,21 @@ Liste des points qui méritent réflexion mais qui ne bloquent pas la première 
 
 ## 6. Récapitulatif des arbitrages à trancher
 
-| Réf. | Sujet                          | Options    | Recommandation | Décision |
-|------|--------------------------------|------------|----------------|----------|
-| A    | Localisation des données       | A1/A2/A3   | A2 court terme, A3 si croissance | _____ |
-| B    | Modèle i18n des contenus       | B1/B2/B3/B4 | B4             | _____ |
-| C    | Hébergement carte publique     | C1/C2/C3   | C2             | _____ |
-| D    | Validation des modifications   | D1/D2/D3   | D1 + D3 hybride | _____ |
-| L    | Sort de la carte uMap actuelle | L1/L2/L3   | L1             | _____ |
-| —    | Calendrier (Bologna ou post-)  | —          | Post-Bologna   | _____ |
+| Réf. | Sujet | Décision (18/06/2026) |
+|------|-------|------------------------|
+| **MAP-A** | Localisation des données | **A2** — table dédiée `cartography_entries` (A3/héritage si forte croissance) |
+| **MAP-B** | i18n des contenus | **B4** — hybride : structurants applicatifs ; notes en langue du collectif + `notes_locale` |
+| **MAP-C** | Hébergement carte publique | **C1** — route publique dans le SPA (cohérent PUBLIB ; révise le C2 du brouillon) |
+| **MAP-D** | Validation des éditions | **D1** identitaires (autonomie) + **D3** structurants GPS/catégorie (coord) |
+| **MAP-E** | ⚠️ Confidentialité & consentement | **opt-in `statut_public=FALSE`** + accès concentrique PUBLIB ; non-membres = pin ville **sans contact** ; **aucun import public en masse** |
+| **MAP-F** | Géocodage & fond de carte | **OSM + Nominatim self-hosted**, anti-tracking (INV-5) |
+| **MAP-G** | Non-membres sur la carte | **affichés + filtre clair** réseau AnarBib vs paysage libertaire |
+| **MAP-H** | Icône réseau AnarBib | **conservée** (membres distingués) |
+| **MAP-I** | Statut PEB (carte interne) | **oui à terme** — dépendance #114 → différé |
+| **MAP-J** | Auto-déclaration nouvelle biblio | **envisagée** — modération à cadrer → différé |
+| **MAP-K** | Moteur cartographique | **Leaflet** |
+| **MAP-L** | Sort de l'uMap actuelle | **L1** — archive figée |
+| **Calendrier** | Bologna ou post- | **post-Bologna** — uMap suffit pour FICEDL ; carte intégrée fin 2026/2027 |
 
 ---
 
@@ -358,4 +383,4 @@ Liste des points qui méritent réflexion mais qui ne bloquent pas la première 
 
 ---
 
-**Fin v0.1 — squelette d'arbitrages.**
+**Fin v1.0 — arbitrages `MAP-A..MAP-L` tranchés (18/06/2026). Reste à implémenter (chantier post-Bologna).** Foyer normatif : REGISTRE §34 `MAP`.

@@ -597,6 +597,30 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
+## 34. Cartographie du réseau — `MAP` *(spec : `spec-cartographie-reseau` v1.0 — arbitrages tranchés ; reste à implémenter, post-Bologna)*
+
+> Carte du réseau (publique + onglet interne SIGB), **source de vérité Supabase** (la carte n'est qu'une vue ; le membre = présence en base, acté 27/05). **Données sensibles** (~184 collectifs, dont des non-membres « cibles » non consentants ; le calque uMap les double en pt-BR/fr) → **le consentement prime**, alignement **PUBLIB §31**. Arbitrages `MAP-A..MAP-L` tranchés par Xavier le 18/06 ; **implémentation = chantier post-Bologna** (fin 2026 / début 2027). Registre > spec > trace.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **MAP-A** | Données = table dédiée `cartography_entries` (A2 ; `library_id` nullable pour non-membres ; A3/héritage si forte croissance). | ✅ tranché (à implémenter) |
+| **MAP-B** | i18n hybride (B4) : structurants traduits applicativement ; notes en langue du collectif + `notes_locale`. | ✅ tranché |
+| **MAP-C** | Carte publique = route **dans le SPA** (C1), cohérente `/bibliotecas` (PUBLIB) ; révise le C2 du brouillon. | ✅ tranché |
+| **MAP-D** | Édition : **D1** (autonomie) sur les champs identitaires du collectif ; **D3** (validation coord) sur les structurants GPS/catégorie. | ✅ tranché |
+| **MAP-E** | ⚠️ **Confidentialité & consentement (aligné PUBLIB)** : `statut_public` **défaut FALSE** (opt-in) ; accès concentrique (N1 nom/ville/pays/catégorie public ; N2 adresse/email/tel opt-in séparé) ; **aucun import public en masse** ; non-membres = pin de ville **sans contact** tant qu'aucun consentement. | ✅ tranché (doctrine) |
+| **MAP-F** | Géocodage & fond = OSM + **Nominatim self-hosted** ; anti-tracking INV-5 (jamais de tiers fuitant). | ✅ tranché |
+| **MAP-G** | Non-membres affichés + **filtre clair** réseau AnarBib vs paysage libertaire. | ✅ tranché |
+| **MAP-H** | Icône réseau (logo AnarBib) conservée pour distinguer les membres. | ✅ tranché |
+| **MAP-I** | Statut PEB sur la carte interne : oui à terme, **dépendance #114** à formaliser. | 🟡 différé |
+| **MAP-J** | Auto-déclaration « ajouter ma biblio » : envisagée, **modération à cadrer**. | 🟡 différé |
+| **MAP-K** | Moteur cartographique = **Leaflet**. | ✅ tranché |
+| **MAP-L** | uMap actuelle conservée en **archive figée** (L1). | ✅ tranché |
+| **MAP-CAL** | Calendrier : **post-Bologna** (uMap suffit pour FICEDL 09/2026 ; carte intégrée fin 2026/2027). | ✅ tranché |
+
+> Foyer : REGISTRE §34. Spec `spec-cartographie-reseau` v1.0 (arbitrages tranchés ; **implémentation à venir**). Surcouche déterminante : **PUBLIB §31** (opt-in / concentrique / anti-tracking) — la spec datait du 27/05, antérieure à PUBLIB. Écritures via RPC (doctrine v3). Registre > spec > trace.
+
+---
+
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
@@ -664,3 +688,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 18/06/2026 (suite, P2 « specs » — option 2 : features livrées SANS spec de référence) — **§30 `THES` : spec formalisée.** `spec-thesaurus-matiere.md` v1.0 (consolidation a posteriori du chantier thésaurus v1→v3 livré 15-16/06, qui n'avait qu'une trace de cadrage). Couvre : modèle `subjects` (status proposto/ativo/depreciado, label/alt/hidden_i18n, notation, parent_id), gouvernance THES-1 (édition = coord catalogage ; ouverture contributeur·rices = AG), relations THES-2 (`subject_relations` skos:related, `fn_subject_add/remove_relation` + `subject_related_v1`), navigation THES-3 (`subject_tree_v1`, compte public anti-fuite via `catalog_list_anon_v1`), export THES-URI (`thesaurus_export_v1` + `skosExport.js`, **URI publique stable `app.anarbib.org/thesaurus/<slug>` à honorer**), mapping SKOS. Inscrit INDEX. Faits vérifiés baseline + front. **Option 2 restants** : §25 MYLIB, §19 BIBLIO (à arbitrer : spec dédiée ou REGISTRE+trace suffisent).*
 
 *MàJ 18/06/2026 (suite, P2 « specs » — option 2 close ; choix Xavier : tout écrire comme base de travail pour les futur·es dev) — **§25 `MYLIB`** : `spec-ma-bibliotheque-lecteur.md` v1.0 (vitrine contact opt-in membre `library_public_contact` — cousine anon = PUBLIB même table ; messagerie bidirectionnelle `reader_library_messages` direction reader/library, `send_message_to_reader` mail-only + anti-spam, logo data-driven ; MYLIB-O1 chat in-app reporté). **§19 `BIBLIO`** : `spec-ecran-biblioteca.md` v1.0 = **carte d'orientation** de l'écran `/biblioteca` (12 onglets → renvoi vers la spec de chaque domaine ; clôture BIBLIO-CLOSE/9/10), pas un foyer doctrinal de plus. Inscrits INDEX. **Option 2 close** : plus aucune feature livrée sans au moins une carte de doctrine. Reste P2 hors-specs : responsive mobile (sessions Phase A/B/C). Forward (arbitrages) : cartographie-réseau, onboarding-biblioteca, cycle-vie-peb.*
+
+*MàJ 18/06/2026 (session « Audit 360 ») — **§34 `MAP` inscrit : cartographie-réseau, 12 arbitrages tranchés.** `spec-cartographie-reseau` promue v0.1 brouillon → v1.0 (arbitrages actés ; **implémentation post-Bologna**). Décisions `MAP-A..MAP-L` : table dédiée (A2), i18n hybride (B4), carte dans le SPA (C1), édition D1+D3, géocodage Nominatim self-hosted anti-tracking (F), Leaflet (K), uMap archivée (L1), calendrier post-Bologna. **Surcouche critique `MAP-E`** (apport 18/06) : la spec datait du 27/05, AVANT PUBLIB → alignée sur PUBLIB §31 (opt-in `statut_public` **défaut FALSE**, accès concentrique, **pas d'import public en masse** des ~184 collectifs dont les non-membres non consentants). Inscrit INDEX. ⚠️ Données sensibles : cf. mémoire cartographie-umap. **Forward restants** : onboarding-biblioteca (Q3), cycle-vie-peb.*

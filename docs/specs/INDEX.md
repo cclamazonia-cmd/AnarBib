@@ -109,7 +109,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
 | Migration mail Brevo → Resend | [`spec-migration-mail-resend.md`](./archive/spec-migration-mail-resend.md) | v0.4 (01/06/2026) | ✅ #110 clos — Brevo entièrement retiré (R.6+R.7) — archivé 2026-06-10 |
-| Cartographie du réseau AnarBib | [`spec-cartographie-reseau.md`](./spec-cartographie-reseau.md) | v0.1 (27/05/2026) | 🟡 Brouillon, 12 arbitrages à trancher, lié `#RESEAU-FED` |
+| Cartographie du réseau AnarBib | [`spec-cartographie-reseau.md`](./spec-cartographie-reseau.md) | v1.0 (18/06/2026) | 🟢 Arbitrages `MAP-A..MAP-L` tranchés (REGISTRE §34) — **reste à implémenter** (post-Bologna) ; aligné PUBLIB (confidentialité) |
 
 ### 🔵 Specs doctrinales de chantier ponctuel — référence historique
 
