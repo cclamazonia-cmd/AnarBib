@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { supabase } from '@/lib/supabase';
+import { apiQuery } from '@/lib/supabase';
 import './NetworkMap.css';
 
-// Annuaire géographique des collectifs (uMap → GeoJSON). Leaflet + markercluster
-// VENDORISÉS (public/vendor/leaflet/, chargés à la volée) — pas de dépendance npm.
-// Marqueurs colorés par catégorie, popups locale-aware (FR/PT). La donnée est
-// servie par l'edge function `network-map` (auth requise, bucket PRIVÉ) — jamais
-// par une URL publique, pour limiter l'export (verrouillage demandé). Payload déjà
-// minimisé à la source (sans email/tél/adresse).
+// Annuaire géographique du réseau (page Fédération → onglet Annuaire). Leaflet +
+// markercluster VENDORISÉS (public/vendor/leaflet/, chargés à la volée) — pas de
+// dépendance npm. Source = table public.cartography_entries (source unique de
+// vérité, MAP-A) via la vue api.cartography_network_v1 (SECDEF, N1 uniquement :
+// jamais email/tél/adresse — MAP-E). Marqueurs colorés par catégorie, popups
+// dans la locale réelle de l'usager·ère (10 locales).
 
 const CATEGORIES = [
   { key: 'biblioteca', color: '#C8102E' },
@@ -18,6 +18,7 @@ const CATEGORIES = [
   { key: 'livraria', color: '#117A65' },
   { key: 'misto', color: '#2C2C2C' },
 ];
+const COLOR = Object.fromEntries(CATEGORIES.map((c) => [c.key, c.color]));
 
 // Locales servies par le GeoJSON de l'annuaire (i18n par collectif). Les 10
 // locales de l'app y figurent ; `pt-BR` est servi par `pt`. Repli sur `fr`.
@@ -89,17 +90,18 @@ export default function NetworkMapTab() {
   const [query, setQuery] = useState('');
 
   function popupHtml(p) {
-    const i = (p.i18n[lang] && p.i18n[lang].name) ? p.i18n[lang] : (p.i18n.fr.name ? p.i18n.fr : p.i18n.pt);
+    const i = (p.i18n[lang] && p.i18n[lang].name) ? p.i18n[lang] : ((p.i18n.fr && p.i18n.fr.name) ? p.i18n.fr : (p.i18n.pt || {}));
     const loc = [i.city, i.country].filter(Boolean).join(', ');
     const site = p.site
       ? `<a href="${esc(p.site)}" target="_blank" rel="noopener noreferrer">${esc(p.site.replace(/^https?:\/\//, ''))}</a>`
       : '';
     const badge = p.anarbib ? `<span class="ab-map-badge">${esc(t({ id: 'federacao.carte.member' }))}</span>` : '';
+    // typeLabel = libellé localisé de la catégorie (cohérent avec la légende).
+    const typeLabel = p.category ? t({ id: `federacao.carte.cat.${p.category}` }) : '';
     return `<div class="ab-map-popup">
       <div class="ab-map-pop-title"><span class="ab-map-dot" style="background:${esc(p.color)}"></span>${esc(i.name)}${badge}</div>
-      ${i.typeLabel ? `<div class="ab-map-pop-type">${esc(i.typeLabel)}</div>` : ''}
+      ${typeLabel ? `<div class="ab-map-pop-type">${esc(typeLabel)}</div>` : ''}
       ${loc ? `<div class="ab-map-pop-loc">${esc(loc)}</div>` : ''}
-      ${i.address ? `<div class="ab-map-pop-addr">${esc(i.address)}</div>` : ''}
       ${p.reseau ? `<div class="ab-map-pop-net">${esc(t({ id: 'federacao.carte.network' }))} : ${esc(p.reseau)}</div>` : ''}
       ${site ? `<div class="ab-map-pop-site">${site}</div>` : ''}
       ${i.notes ? `<div class="ab-map-pop-notes">${esc(i.notes)}</div>` : ''}
@@ -138,20 +140,32 @@ export default function NetworkMapTab() {
         const memberLayer = L.layerGroup().addTo(map);
         mapRef.current = map; clusterRef.current = cluster; memberLayerRef.current = memberLayer;
 
-        const { data: gj, error: gErr } = await supabase.functions.invoke('network-map');
-        if (gErr || !gj || !gj.features) throw new Error('network-map ' + (gErr?.message || 'no data'));
+        const { data: rows, error: qErr } = await apiQuery('cartography_network_v1');
+        if (qErr || !Array.isArray(rows)) throw new Error('cartography_network_v1 ' + (qErr?.message || 'no data'));
         if (cancelled) return;
 
-        markersRef.current = gj.features.map((f) => {
-          const p = f.properties; const [lon, lat] = f.geometry.coordinates;
-          const marker = L.marker([lat, lon], { icon: dropIcon(L, p.color, p.anarbib) });
+        markersRef.current = rows.map((row) => {
+          const category = row.categorie;
+          const anarbib = row.statut_anarbib === 'membre';
+          // Normalisation ligne-table → forme attendue par popupHtml.
+          const i18n = {};
+          for (const lc of MAP_LOCALES) {
+            i18n[lc] = {
+              name: (row.name_i18n || {})[lc] || '',
+              city: (row.city_i18n || {})[lc] || '',
+              country: (row.country_i18n || {})[lc] || '',
+              notes: (row.notes_i18n || {})[lc] || '',
+            };
+          }
+          const p = { color: COLOR[category] || '#2C2C2C', category, anarbib, reseau: row.reseau, site: row.site_url, i18n };
+          const marker = L.marker([Number(row.lat), Number(row.lon)], { icon: dropIcon(L, p.color, anarbib) });
           marker.bindPopup(popupHtml(p), { maxWidth: 300 });
           // Texte de recherche : nom/ville/pays dans TOUTES les locales, pour
           // retrouver un collectif quelle que soit la langue saisie.
-          const text = Object.values(p.i18n || {})
+          const text = Object.values(i18n)
             .flatMap((x) => [x.name, x.city, x.country])
             .filter(Boolean).join(' ').toLowerCase();
-          return { marker, props: p, cat: p.category, text, member: !!p.anarbib };
+          return { marker, props: p, cat: category, text, member: anarbib };
         });
         setTotal(markersRef.current.length);
         applyFilters();
