@@ -574,6 +574,114 @@ function buildAdminEmail(eventType, row, reviewerName) {
     ]
   };
 }
+// ============================================================================
+// #111 Lot 2b — échange humain : messages + invitations (« proposer um diálogo »)
+// L'enqueue ne transmet que {request_id, event_type} : on récupère le message /
+// l'invitation le·la plus récent·e de la demande (volume faible, workflow dormant
+// jusqu'à Bologne). Rendu pt-BR, cohérent avec le reste de l'EF (non localisée).
+// ============================================================================
+async function fetchLatestMessage(requestId) {
+  const { data, error } = await supabaseAdmin.from("library_request_messages").select("*").eq("request_id", requestId).order("created_at", { ascending: false }).limit(1).maybeSingle();
+  if (error) throw new Error(`message_fetch_failed: ${error.message}`);
+  return data || null;
+}
+async function fetchLatestInvitation(requestId) {
+  const { data, error } = await supabaseAdmin.from("library_request_invitations").select("*").eq("request_id", requestId).order("created_at", { ascending: false }).limit(1).maybeSingle();
+  if (error) throw new Error(`invitation_fetch_failed: ${error.message}`);
+  return data || null;
+}
+function summarize(requestId, eventType, results) {
+  const sentCount = results.filter((x)=>x.ok === true).length;
+  const skippedCount = results.filter((x)=>x.skipped === true).length;
+  const failedCount = results.filter((x)=>x.ok === false && !x.skipped).length;
+  return { ok: failedCount === 0, request_id: requestId, event_type: eventType, sent_count: sentCount, skipped_count: skippedCount, failed_count: failedCount, results };
+}
+function buildMessageEmail(row, msg, toSolicitante) {
+  const details = [{ label: "Mensagem", value: msg.content }, { label: "Biblioteca", value: row.library_name }];
+  if (toSolicitante) {
+    const greeting = firstNameOnly(row.contact_name) ? `Olá, ${firstNameOnly(row.contact_name)}!` : "Olá!";
+    return {
+      subject: `[${BRAND_NAME}] Nova mensagem da coordenação`,
+      title: "Mensagem da coordenação da rede",
+      greeting,
+      introHtml: `<p style="margin:0 0 10px;">A coordenação da rede AnarBib enviou uma mensagem sobre a solicitação da biblioteca <b>${esc(row.library_name)}</b>.</p><p style="margin:0;">Podes responder na tua área « Minha solicitação » em ${esc(BRAND_NAME)}.</p>`,
+      details
+    };
+  }
+  return {
+    subject: `[${BRAND_NAME}] Nova mensagem de uma biblioteca solicitante`,
+    title: "Mensagem de uma biblioteca solicitante",
+    introHtml: `<p style="margin:0 0 10px;">A biblioteca <b>${esc(row.library_name)}</b> respondeu na sua solicitação institucional.</p><p style="margin:0;">Consulta o painel de rede para dar seguimento.</p>`,
+    details
+  };
+}
+function buildInvitationEmail(row, inv, notifySolicitante, isResponse) {
+  const details = [{ label: "Assunto", value: inv.subject }];
+  if (inv.proposed_at_text) details.push({ label: "Momento proposto", value: inv.proposed_at_text });
+  details.push({ label: "Biblioteca", value: row.library_name });
+  const greeting = firstNameOnly(row.contact_name) ? `Olá, ${firstNameOnly(row.contact_name)}!` : "Olá!";
+  if (!isResponse) {
+    if (notifySolicitante) {
+      return {
+        subject: `[${BRAND_NAME}] Convite para uma conversa`,
+        title: "Convite para um diálogo",
+        greeting,
+        introHtml: `<p style="margin:0 0 10px;">A coordenação da rede propõe uma conversa sobre a solicitação da biblioteca <b>${esc(row.library_name)}</b>.</p><p style="margin:0;">Podes aceitar ou recusar o convite na tua área « Minha solicitação ».</p>`,
+        details
+      };
+    }
+    return {
+      subject: `[${BRAND_NAME}] Pedido de conversa de uma solicitante`,
+      title: "Pedido de diálogo",
+      introHtml: `<p style="margin:0;">A biblioteca <b>${esc(row.library_name)}</b> pede uma conversa com a coordenação da rede.</p>`,
+      details
+    };
+  }
+  const verb = inv.status === "accepted" ? "aceitou" : "recusou";
+  if (notifySolicitante) {
+    return {
+      subject: `[${BRAND_NAME}] Resposta ao teu convite`,
+      title: "Resposta a um convite",
+      greeting,
+      introHtml: `<p style="margin:0;">A coordenação ${verb} o convite para conversar sobre a solicitação da biblioteca <b>${esc(row.library_name)}</b>.</p>`,
+      details
+    };
+  }
+  return {
+    subject: `[${BRAND_NAME}] Resposta a um convite`,
+    title: "Resposta a um convite",
+    introHtml: `<p style="margin:0;">A biblioteca <b>${esc(row.library_name)}</b> ${verb} o convite proposto.</p>`,
+    details
+  };
+}
+async function handleMessageNotify(row) {
+  const msg = await fetchLatestMessage(row.id);
+  if (!msg) return { ok: true, skipped: "no_message", request_id: row.id, event_type: "library_request_message" };
+  const toSolicitante = msg.direction === "admin_to_solicitante";
+  const targets = toSolicitante ? applicantTargets(row) : [adminTarget()].filter(Boolean);
+  const email = buildMessageEmail(row, msg, toSolicitante);
+  const rendered = renderEmail(email);
+  const results = [];
+  for (const target of targets){
+    results.push(await safeSendEmail("message", target, email.subject, rendered.html, rendered.text));
+  }
+  return summarize(row.id, "library_request_message", results);
+}
+async function handleInvitationNotify(row) {
+  const inv = await fetchLatestInvitation(row.id);
+  if (!inv) return { ok: true, skipped: "no_invitation", request_id: row.id, event_type: "library_request_invitation" };
+  const isResponse = inv.status === "accepted" || inv.status === "declined";
+  // proposition → notifie l'autre côté ; réponse → notifie l'initiateur·rice.
+  const notifySolicitante = isResponse ? (inv.initiator_side === "solicitante") : (inv.initiator_side === "admin");
+  const targets = notifySolicitante ? applicantTargets(row) : [adminTarget()].filter(Boolean);
+  const email = buildInvitationEmail(row, inv, notifySolicitante, isResponse);
+  const rendered = renderEmail(email);
+  const results = [];
+  for (const target of targets){
+    results.push(await safeSendEmail("invitation", target, email.subject, rendered.html, rendered.text));
+  }
+  return summarize(row.id, "library_request_invitation", results);
+}
 async function handleNotify(payload) {
   const requestId = String(payload?.request_id || "").trim();
   const eventType = String(payload?.event_type || "").trim();
@@ -588,7 +696,9 @@ async function handleNotify(payload) {
     "library_request_in_analysis",
     "library_request_more_info",
     "library_request_approved",
-    "library_request_refused"
+    "library_request_refused",
+    "library_request_message",
+    "library_request_invitation"
   ];
   if (!allowedEvents.includes(eventType)) {
     return {
@@ -606,6 +716,9 @@ async function handleNotify(payload) {
       event_type: eventType
     };
   }
+  // #111 Lot 2b — messages / invitations : routage et rendu propres.
+  if (eventType === "library_request_message") return await handleMessageNotify(row);
+  if (eventType === "library_request_invitation") return await handleInvitationNotify(row);
   const reviewer = await fetchProfile(row.reviewed_by_user_id).catch(()=>null);
   const reviewerName = reviewer ? fullName(reviewer.first_name, reviewer.last_name) || reviewer.public_id || reviewer.email || null : null;
   const applicantTargetsList = applicantTargets(row);
