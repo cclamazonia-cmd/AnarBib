@@ -1,6 +1,6 @@
 # Spécification — Cycle de vie du prêt interbibliothèques (`#ILL-lifecycle`)
 
-**Statut** : 🔵 **implémentée en prod** *(MAJ 16/06/2026, vérif prod : 13 `fn_peb_*` + cron, tables `interlibrary_loans_v2`/items/events/transitions, vues UI `interlibrary_loans_painel_ui`/`_reports_ui`/`peb_history_v1`, frontend `PebHistorySection`)*. Référence du chantier #ILL-lifecycle. Cf. INVENTAIRE « Resync 16/06 ».
+**Statut** : 🔵 **implémentée en prod** *(MAJ 16/06/2026, vérif prod : 13 `fn_peb_*` + cron, tables `interlibrary_loans_v2`/items/events/transitions, vues UI `interlibrary_loans_painel_ui`/`_reports_ui`/`peb_history_v1`, frontend `PebHistorySection`)*. Référence du chantier **#ILL-lifecycle ET #ILL-overdue** (détection auto du retard par cron, §7) — **les deux livrés en prod**. Cf. INVENTAIRE « Resync 16/06 ».
 **Chantier** : `#ILL-lifecycle` (backlog v14)
 **Date de cadrage** : 23/05/2026
 **Pré-requis** : aucun. Ce chantier est autonome.
@@ -215,17 +215,18 @@ La table repart vierge pour tester le cycle de vie complet sur des PEB neufs.
 
 ---
 
-## 7. Item de suite à créer — `#ILL-overdue`
+## 7. Item de suite — `#ILL-overdue` — ✅ LIVRÉ EN PROD
 
-À inscrire au backlog v15.
+**Calcul automatique du retard d'un PEB → IMPLÉMENTÉ.** L'arbitrage (job cron vs
+calcul dérivé à l'affichage) a été tranché en faveur du **cron** :
+`public.fn_cron_peb_detect_overdue()` (SECURITY DEFINER, `service_role`) + job
+**`anarbib-peb-detect-overdue-daily`** (`40 3 * * *` UTC, actif). **Bidirectionnel** :
+- *aller* — un PEB `emprestado` dont la `due_date` est échue bascule en `atrasado` ;
+- *retour* — un PEB `atrasado` dont la `due_date` repasse dans le futur (ou passe à
+  NULL, prolongation) ressort automatiquement du retard.
 
-**`#ILL-overdue`** — calcul automatique du retard d'un PEB. Aujourd'hui le
-statut `atrasado` n'est posé par rien (il ne deviendra, après `#ILL-lifecycle`,
-qu'une transition manuelle licite). Or un PEB `emprestado` dont la `due_date`
-est dépassée *est* en retard, que quelqu'un l'ait marqué ou non. À cadrer : un
-job cron qui passe les PEB `emprestado` échus à `atrasado` ? un calcul dérivé à
-l'affichage sans toucher `status_global` ? Arbitrage à faire au lancement de
-l'item. Score indicatif : moyen.
+*(Cadrage d'origine — « à créer, arbitrage cron vs dérivé » — résolu ; conservé en
+trace dans l'historique git.)*
 
 ---
 

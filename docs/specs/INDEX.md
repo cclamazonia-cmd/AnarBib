@@ -53,7 +53,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Emprunts | [`spec-flux-emprunts.md`](./spec-flux-emprunts.md) | v1.1 (31/05/2026) | 🟢 Référence — partiellement en prod, doctrines R7-R11 propagées |
 | Workflow de réservation | [`spec-workflow-reservation.md`](./spec-workflow-reservation.md) | v3 sémantique (08/05/2026) | 🟢 Référence — en prod depuis paquet 5b |
 | Renouvellement granulaire par item | [`spec-renouvellement-granulaire.md`](./spec-renouvellement-granulaire.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (phases 1-5) — référence consolidée a posteriori |
-| Cycle de vie du PEB | [`spec-cycle-vie-peb.md`](./spec-cycle-vie-peb.md) | v1 (23/05/2026) | 🟡 Spec autonome, chantier #ILL-lifecycle à venir |
+| Cycle de vie du PEB | [`spec-cycle-vie-peb.md`](./spec-cycle-vie-peb.md) | v1 (23/05/2026) | ✅ Implémenté en prod (**#ILL-lifecycle + #ILL-overdue**) — machine à états verrouillée (`trg_peb_validate_status_transition`) + propagation jalons + cron retard |
 | Cotisation (contribution d'adhésion) | [`spec-cotisation.md`](./spec-cotisation.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod — doctrine consolidée a posteriori (consolide NOTIF-PA, MULTI-F.1, §6.1, cron #25, tests #33) |
 
 ### 👤 Compte lecteur — méga-item #CL *(nouveau famille)*
