@@ -63,6 +63,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Maîtrise lectrice de la rétention de l'historique | [`spec-historico-retencao-lectrice.md`](./spec-historico-retencao-lectrice.md) | v1.0 (31/05/2026) | 🟠 En cours — #CL.8 : backend + C.3/C.4 en prod, C.5/C.6 en attente de déploiement |
 | Notification de prorrogação granulaire | [`spec-notify-prorrogacao-granulaire.md`](./spec-notify-prorrogacao-granulaire.md) | v0.1 (29/05/2026) | 🟡 Cadrage, lié `#NOTIFY-Painel-acts` |
 | Multi-appartenance lectrice (plusieurs biblios) | [`spec-multi-appartenance-lecteur.md`](./archive/spec-multi-appartenance-lecteur.md) | v0.3 (02/06/2026) | ✅ Implémenté en prod (P1-P5) — archivé 2026-06-10. Absorbe `spec-migration-compte` |
+| Identité lecteur·rice locale (n° / nom par biblio) | [`spec-identite-lecteur-locale.md`](./spec-identite-lecteur-locale.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (CARD-LOCAL §27, Lots 0/2) — doctrine consolidée a posteriori |
 
 ### 📱 Mode terrain / mobile *(nouveau famille)*
 
