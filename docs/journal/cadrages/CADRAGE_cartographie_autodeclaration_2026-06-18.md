@@ -1,7 +1,7 @@
 # Cadrage — Auto-déclaration « ajouter ma bibliothèque » sur la carte (MAP-J)
 
 **Date :** 2026-06-18
-**Statut :** 🟡 cadrage — décisions à trancher (coordination / AG), avant implémentation
+**Statut :** 🟢 décisions tranchées (J-A…J-I) le 18/06/2026 par Xavier — prêt à implémenter (paquet CARTO-7)
 **Auteur·ices :** AnarBib (session « Carte réseau 10 locales »)
 **Réfs :** spec `spec-cartographie-reseau` v1.0 §5.7 + MAP-J ; REGISTRE §34 ; doctrine
 PUBLIB §31 (opt-in / accès concentrique) ; MAP-E (consentement) ; modèles existants
@@ -52,6 +52,13 @@ le laisse explicitement à cadrer car il ouvre des questions de **modération** 
 | **J-G** | Géolocalisation | (a) le soumetteur **pose un point** sur une mini-carte (clic) ; (b) il saisit juste ville/pays, la coordo place le point | **(a)+(b)** : pin approximatif par le soumetteur, **affiné par la coordo** via le picker GPS déjà livré (CARTO-6). **Pas de géocodage** (Nominatim non requis) |
 | **J-H** | Notification coordo | file `*_notification_outbox` → `notify-event` → `fede@anarbib.org` (modèle Gazette/Lettre) | idem |
 | **J-I** | Champs collectés | nom, ville, pays, catégorie, langue(s) du fonds, site (option), contact (option, privé), notes ; + position (pin) | minimal ; pas d'obligation de contact |
+
+> **✅ Décisions actées (18/06/2026, Xavier) — toutes les recommandations retenues :**
+> J-A anonyme + Turnstile · J-B sa propre biblio uniquement · J-C table de staging
+> dédiée · J-D fiche « cible » non publique (jamais public d'office) · J-E coordination
+> réseau (`network_administrators`) uniquement · J-F Turnstile + rate-limit · J-G pin
+> posé par le soumetteur, affiné par la coordo (pas de Nominatim) · J-H notification
+> e-mail → `fede@anarbib.org` · J-I jeu de champs minimal, contact optionnel.
 
 ---
 
@@ -139,8 +146,11 @@ CREATE TABLE public.cartography_submissions (
 MAP-J est **réalisable sans nouvelle infrastructure** (pas de Nominatim, tout le socle
 existe). Le cœur est une **table de staging + une Edge Function publique anti-abus + un
 écran de modération coordination**, le tout aligné sur le **consentement** (auto-déclaration,
-jamais public d'office). Reste à **trancher J-A…J-I** (notamment J-B : tiers ou non) avant
-d'implémenter.
+jamais public d'office). Arbitrages **J-A…J-I tranchés le 18/06** (toutes les recommandations
+retenues — cf. encadré §2).
 
-**Prochaine étape** : valider les arbitrages, puis paquet d'implémentation `CARTO-7`
-(staging + EF `submit-cartography-entry` + RPC modération + écran coordination + form public).
+**Prochaine étape** : implémenter le paquet `CARTO-7` (staging `cartography_submissions` +
+EF publique `submit-cartography-entry` [Turnstile + rate-limit] + RPC modération SECDEF
+gardées `fn_caller_is_network_admin` + écran coordination + formulaire public `/cartografia/ajouter`
+avec pin clic). Les questions ouvertes §5 (suggestion de tiers, anti-doublon, rétention) restent
+à instruire en cours de route ou en AG.
