@@ -340,9 +340,12 @@ export async function handleMembershipValidationRequested(payload) {
 // Émise par le cron public.fn_cron_notify_membership_expiry via
 //   fn_dispatch_notify_event('cotisation_expiring', 1,
 //     {membership_id, user_id, library_id, threshold_days, valid_until}).
-// threshold_days = 7 (rappel J-7) ou 0 (jour J). E-mail au membre seul
-// (DOC-NOTIF-1), même garde que le reçu de paiement (cotisation_payment_mail_-
-// enabled, défaut ON). Le bandeau /conta (days_until_expiry) fait l'in-app (§4.4).
+// threshold_days = 7 (rappel J-7) ou 0 (jour J). BICANAL au membre (COTIS-4/5,
+// amendé 18/06 : le gate de circulation étant dur et sans grâce, le rappel est
+// e-mail + notification in-app) ; le bandeau /conta (days_until_expiry) reste
+// l'état permanent. La notif in-app part TOUJOURS (protection du membre) ;
+// l'e-mail, lui, est gardé par la politique biblio (cotisation_payment_mail_-
+// enabled, défaut ON).
 // ============================================================================
 export async function handleCotisationExpiring(payload) {
   const membershipId = String(payload?.membership_id || "").trim();
@@ -362,16 +365,6 @@ export async function handleCotisationExpiring(payload) {
     return { user_result: skippedEmailResult("user_mail", "membership_not_active") };
   }
 
-  // Politique biblio (réutilise le drapeau cotisation, défaut ON).
-  const { data: pol } = await supabaseAdmin
-    .from("library_notification_policies")
-    .select("cotisation_payment_mail_enabled")
-    .eq("library_id", m.library_id)
-    .maybeSingle();
-  if (pol && pol.cotisation_payment_mail_enabled === false) {
-    return { user_result: skippedEmailResult("user_mail", "cotisation_mail_disabled") };
-  }
-
   const { data: profile, error: e2 } = await supabaseAdmin
     .from("profiles")
     .select("id,email,first_name,last_name,preferred_language")
@@ -382,10 +375,6 @@ export async function handleCotisationExpiring(payload) {
 
   const ctx = await resolveLibraryNotificationContext(String(m.library_id || "").trim() || null);
   const bt = subjectTag(ctx);
-  const user = userTargetFromProfile(profile);
-  if (!user?.email) {
-    return { user_result: skippedEmailResult("user_mail", "no_recipient_email") };
-  }
   const locale = String(profile?.preferred_language || "").trim() || null;
   const libName = String(ctx?.library_name || ctx?.library_short_name || "").trim() || "—";
   const dateStr = formatDateLocale(validUntil, locale) || formatDateBR(validUntil) || validUntil;
@@ -393,6 +382,45 @@ export async function handleCotisationExpiring(payload) {
   const base = threshold === 0 ? "cotisation.expiring_today" : "cotisation.expiring";
   const tit = tMail(locale, `${base}.subject`);
   const intro = tMail(locale, `${base}.intro`, { library: libName, date: dateStr });
+
+  // (in-app) Réplique in-app B3 du rappel d'expiration — émise EN PREMIER et
+  // TOUJOURS (protection du membre, décision 18/06). COTIS-5 : le gate de
+  // circulation étant DUR et sans période de grâce, la notif in-app part à
+  // J-7/J-0 MÊME SI la biblio a désactivé l'e-mail de cotisation (le drapeau
+  // cotisation_payment_mail_enabled ne gouverne QUE l'e-mail). Catégorie 'alerta'
+  // (libellée dans les 10 locales), titre/corps pré-rendus dans la langue du
+  // membre (patron réplique restriction/gel). Best-effort : un échec n'invalide
+  // pas le reste. Le bandeau /conta reste l'état permanent.
+  let inapp_result = null;
+  try {
+    const { error: eIn } = await supabaseAdmin.from("user_notifications").insert({
+      user_id: m.user_id,
+      library_id: m.library_id || null,
+      category: "alerta",
+      title: tit,
+      body: intro
+    });
+    inapp_result = eIn ? { ok: false, error: eIn.message } : { ok: true };
+  } catch (eIn) {
+    inapp_result = { ok: false, error: String(eIn?.message || eIn) };
+  }
+
+  // E-mail : gardé par la politique biblio (cotisation_payment_mail_enabled,
+  // défaut ON). Contrairement à la notif in-app ci-dessus, l'e-mail peut être
+  // coupé par la biblio.
+  const { data: pol } = await supabaseAdmin
+    .from("library_notification_policies")
+    .select("cotisation_payment_mail_enabled")
+    .eq("library_id", m.library_id)
+    .maybeSingle();
+  if (pol && pol.cotisation_payment_mail_enabled === false) {
+    return { inapp_result, user_result: skippedEmailResult("user_mail", "cotisation_mail_disabled") };
+  }
+
+  const user = userTargetFromProfile(profile);
+  if (!user?.email) {
+    return { inapp_result, user_result: skippedEmailResult("user_mail", "no_recipient_email") };
+  }
 
   const { html, text } = renderEmail({
     locale,
@@ -411,5 +439,5 @@ export async function handleCotisationExpiring(payload) {
   });
   const sub = applyBrandingText(`${tit} — ${bt}`, ctx);
   const user_result = await safeSendEmail(user, sub, html, text, "user_mail", ctx);
-  return { user_result };
+  return { user_result, inapp_result };
 }

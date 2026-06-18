@@ -53,6 +53,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Workflow de réservation | [`spec-workflow-reservation.md`](./spec-workflow-reservation.md) | v3 sémantique (08/05/2026) | 🟢 Référence — en prod depuis paquet 5b |
 | Renouvellement granulaire par item | [`spec-renouvellement-granulaire.md`](./spec-renouvellement-granulaire.md) | v0.1 (29/05/2026) | 🟡 Cadrage initial, lié #PAINEL E.3/EA-07 |
 | Cycle de vie du PEB | [`spec-cycle-vie-peb.md`](./spec-cycle-vie-peb.md) | v1 (23/05/2026) | 🟡 Spec autonome, chantier #ILL-lifecycle à venir |
+| Cotisation (contribution d'adhésion) | [`spec-cotisation.md`](./spec-cotisation.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod — doctrine consolidée a posteriori (consolide NOTIF-PA, MULTI-F.1, §6.1, cron #25, tests #33) |
 
 ### 👤 Compte lecteur — méga-item #CL *(nouveau famille)*
 

@@ -576,6 +576,27 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 ---
 
+## 33. Cotisation — `COTIS` *(spec-cotisation v1.0)*
+
+> **Consolidation a posteriori (18/06)** : la doctrine de la cotisation était implémentée et déployée (modèle 19/05, gate MULTI 08/06, NOTIF-PA 08/06, §6.1 + cron #25 + tests #33 du 17/06) mais **non écrite**. `spec-cotisation.md` la met par écrit ; `COTIS-1…10` consolident des décisions déjà actées (NOTIF-PA*, MULTI-F.1) sans rien décider de neuf, sauf les points marqués 🟡. Registre > spec.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **COTIS-1** | **Strictement par appartenance, jamais agrégée** : une cotisation = un couple (lectrice, biblio) ; aucun transfert de privilège entre biblios. | ✅ en prod (= MULTI-C.1–C.4) |
+| **COTIS-2** | **Souveraineté biblio** : `libraries.membership_enabled` (défaut OFF → emprunt libre), règles propres, reçu e-mail `cotisation_payment_mail_enabled` (défaut ON). | ✅ en prod (= NOTIF-PA2) |
+| **COTIS-3** | **Paiement manuel, anti-plateforme** : enregistré par le staff (espèces/virement/**en nature**/**exemption**…), **aucun renouvellement automatique**, aucune dépendance à un prestataire continu. | ✅ en prod |
+| **COTIS-4** | **Reçu de paiement = e-mail seul** ; **rappel d'expiration = BICANAL (e-mail + notif in-app, catégorie `alerta`)** ; bandeau `/conta` (`days_until_expiry`) = état permanent. | ✅ en prod (amendé **18/06** : in-app ajouté au rappel d'expiration) |
+| **COTIS-5** | **Gate de circulation DUR, sans période de grâce** : cotisation requise non à jour → refus création **et** renouvellement ; blocage dès `valid_until < aujourd'hui` ; unique adoucissement = rappel **bicanal** J-7/J-0 en amont. | ✅ en prod (= MULTI-F.1 cond. 4 ; verrou §6.1) |
+| **COTIS-6** | **Gestion des règles = `coordenador`** (pas `librarian`). | ✅ en prod (= spec-gouvernance-roles) |
+| **COTIS-7** | **Pas de paiement en ligne self-service** : l'enregistrement est un acte staff constatant un paiement reçu hors-ligne. | ✅ état actuel |
+| **COTIS-8** | **Rappels d'expiration auto-limités** : seuils **J-7 et J-0** (e-mail + in-app), seulement pour biblios `membership_enabled` **avec règle requise active**, anti-doublon `(adhésion, période, seuil)`. | ✅ en prod (#25 ; in-app ajouté 18/06) |
+| **COTIS-9** | **Paiement self-service en ligne** : non implémenté ; à n'ouvrir qu'avec un prestataire éthique/militant + décision d'AG réseau. | 🟡 ouvert |
+| **COTIS-10** | **Seuils de rappel limités à 2** (J-7/J-0) pour ne pas harceler ; élargir = ajouter des seuils dans `fn_cron_notify_membership_expiry` + clés i18n. | ✅ acté (volontaire) |
+
+> Foyer : REGISTRE §33. Spec `docs/specs/spec-cotisation.md` (v1.0, consolidation). Articulation : §6 **NOTIF** (PA0–PA4, reçu + politique biblio), §20 **MULTI** (F.1 gate de circulation, C.1–C.4 par-biblio, Z23 `fn_my_*_status`), §5 **EMP** (gate dur en création/renouvellement). Objets : `library_membership_rules`, `membership_payments`, `membership_expiry_notifications`, `fn_compute_membership_validity`/`fn_record_membership_payment`/`fn_is_loan_blocked_by_dues`/`fn_membership_can_engage_circulation`/`fn_cron_notify_membership_expiry`. Registre > spec.
+
+---
+
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
 
 *MàJ 04/06/2026 — Track A (refonte fiche catalogação) : `DOC-JSX-1` + `CAT-E1…E7`. Prompt de reprise Claude Code : `PROMPT_reprise_catalogacao_CODE.md`.*
@@ -629,3 +650,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 17/06/2026 — **Lettre v2 : corps multilingue riche (fusion du handoff Cowork).** Un numéro peut désormais porter un **corps markdown par locale** (`lettre_issue_locales` + vues `api.lettre(_locales)_public_v1` + RPC `fn_lettre_set_locale`) : l'e-mail rend le corps de la locale du destinataire (marked + sanitize, **repli sur le digest** intro+items si absent), le numéro **envoyé est lisible in-app** (onglet « Lettre », react-markdown), et le panneau staff `/rede` édite le corps **langue par langue**. La migration `letters` de Cowork (modèle *pull* séparé, conflictuel avec mon `lettre_issues` *push*) **écartée** ; son **contenu** (lettre N°01 FICEDL Bologna, 10 locales) récupéré en **seed** (à charger en `draft`, `Downloads/seed-lettre-01-anarbib.sql`). Migration `20260616221227`. Bug `apiRpc` du toggle corrigé en amont (cf. mémoire). Reste à Xavier : charger le seed → remplir les sections « À COMPLÉTER APRÈS BOLOGNE » → envoyer post-FICEDL (septembre).*
 
 *MàJ 17/06/2026 (session « Fédération — Assemblée du réseau ») — **§32 `AG` inscrit** + chantier **Assemblée du réseau livré v0.1→P3**. Objet AG + dépôt ODJ sans gardien (v0.1), rôle `assembleia_facilitators` sur **volontariat + rotativité** (P2b/P2c), **notifications P3 EN PROD** (migration `20260617004735` ; émission `network.assembleia.{convocada,agenda_published,item_proposed}` via `fn_network_notify_event` **voie outbox/jsonb** — même patron que §29 ; handler EF `domain/assembleia.ts` routé avant `network.*` ; mail-strings **10 locales** ; **vérifié MCP** : migration appliquée, 3 RPC émettent, `notify-event` redéployée). **Convocation = chaque coordenador·e fédéré·e (anti-rétention, AG-9)**, canal obligatoire. Suites différées : **P3b** (rappels J-15/J-1 pg_cron + inclusion bibliothécaires) et **v0.2** (date/quorum 60-50/vote/PV). Décisions `AG-1..10` + `AG-O1`. Reflété au backlog **v33 §0ter/§2.7** (amendement de la v33 « Catalogue » par cette session).*
+
+*MàJ 18/06/2026 (session « Audit 360 — remise à niveau P0/P1 ») — **§33 `COTIS` inscrit** : `spec-cotisation.md` v1.0 **consolide a posteriori** la doctrine de la cotisation (déjà en prod) — `COTIS-1…10`, dont 1 seul point 🟡 ouvert (paiement self-service en ligne, COTIS-9). Aucune décision neuve : consolidation de NOTIF-PA*/MULTI-F.1 + écriture des comportements implémentés (calcul de validité `period_type × period_anchor`, gate dur sans grâce, rappels J-7/J-0 #25, e-mail seul + bandeau `/conta`). Tests `paquet_cotisation_tests.sql` exécutés en CI (workflow `Tests SQL`, commit `0f5ff9d2`). Inscrit à l'INDEX (section circulation). Faits vérifiés dans le baseline. **Amendement même jour (Xavier) — COTIS-4/5** : le rappel d'expiration **J-7/J-0** devient **bicanal** (e-mail **+ notif in-app** `user_notifications` catégorie `alerta`, patron réplique B3) ; **protection du membre** : la notif in-app part **toujours**, seul l'e-mail reste gardé par la politique biblio ; EF `handleCotisationExpiring` modifiée (sans migration ni changement front, réutilise les chaînes `cotisation.expiring(_today)` 10 locales) → à déployer.*
