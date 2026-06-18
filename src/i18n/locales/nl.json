@@ -5151,6 +5151,7 @@
   "bibliotecas.subtitle": "De anarchistische bibliotheken die het AnarBib-netwerk vormen.",
   "bibliotecas.empty": "Nog geen openbare bibliotheek.",
   "bibliotecas.noticesCount": "{count} titels",
+  "bibliotecas.occupiedTerritory": "Door de Staat bezet gebied -",
   "bibliotecas.status.online": "Online catalogus",
   "bibliotecas.status.building": "In opbouw",
   "bibliotecas.viewCatalog": "Bekijk de catalogus",
@@ -5260,5 +5261,9 @@
   "federacao.carte.statut.partenaire": "Partner",
   "federacao.carte.statut.cible": "Doelwit",
   "cartografia.nav": "Netwerkkaart",
-  "federacao.carte.edit.position": "Locatie (klik of sleep de markering)"
+  "federacao.carte.edit.position": "Locatie (klik of sleep de markering)",
+  "systemNote.consultaReceived": "Aanvraag voor raadpleging ter plaatse ontvangen.",
+  "systemNote.reservaReceived": "Reservering ontvangen.",
+  "systemNote.cancelRequestedByReader": "Annulering aangevraagd vanuit het lezersaccount.",
+  "systemNote.cancelledByLibrary": "Annulering uitgevoerd door de bibliotheek."
 }

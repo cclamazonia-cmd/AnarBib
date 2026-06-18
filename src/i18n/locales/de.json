@@ -5151,6 +5151,7 @@
   "bibliotecas.subtitle": "Die anarchistischen Bibliotheken des AnarBib-Netzwerks.",
   "bibliotecas.empty": "Noch keine öffentliche Bibliothek.",
   "bibliotecas.noticesCount": "{count} Titel",
+  "bibliotecas.occupiedTerritory": "Vom Staat besetztes Gebiet -",
   "bibliotecas.status.online": "Online-Katalog",
   "bibliotecas.status.building": "Im Aufbau",
   "bibliotecas.viewCatalog": "Katalog durchsuchen",
@@ -5260,5 +5261,9 @@
   "federacao.carte.statut.partenaire": "Partner",
   "federacao.carte.statut.cible": "Ziel",
   "cartografia.nav": "Netzwerkkarte",
-  "federacao.carte.edit.position": "Position (klicken oder Markierung ziehen)"
+  "federacao.carte.edit.position": "Position (klicken oder Markierung ziehen)",
+  "systemNote.consultaReceived": "Einsichtnahme-Anfrage eingegangen.",
+  "systemNote.reservaReceived": "Vormerkung eingegangen.",
+  "systemNote.cancelRequestedByReader": "Stornierung aus dem Leserkonto angefordert.",
+  "systemNote.cancelledByLibrary": "Stornierung durch die Bibliothek."
 }

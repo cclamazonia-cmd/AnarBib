@@ -5151,6 +5151,7 @@
   "bibliotecas.subtitle": "Les biblioteques anarquistes que formen la xarxa AnarBib.",
   "bibliotecas.empty": "Cap biblioteca pública de moment.",
   "bibliotecas.noticesCount": "{count} registres",
+  "bibliotecas.occupiedTerritory": "Territori ocupat per l'Estat -",
   "bibliotecas.status.online": "Catàleg en línia",
   "bibliotecas.status.building": "En construcció",
   "bibliotecas.viewCatalog": "Veure el catàleg",
@@ -5260,5 +5261,9 @@
   "federacao.carte.statut.partenaire": "Soci",
   "federacao.carte.statut.cible": "Objectiu",
   "cartografia.nav": "Mapa de la xarxa",
-  "federacao.carte.edit.position": "Posició (fes clic o arrossega el marcador)"
+  "federacao.carte.edit.position": "Posició (fes clic o arrossega el marcador)",
+  "systemNote.consultaReceived": "Sol·licitud de consulta rebuda.",
+  "systemNote.reservaReceived": "Reserva rebuda.",
+  "systemNote.cancelRequestedByReader": "Cancel·lació sol·licitada des del compte de lector-a-e.",
+  "systemNote.cancelledByLibrary": "Cancel·lació efectuada per la biblioteca."
 }

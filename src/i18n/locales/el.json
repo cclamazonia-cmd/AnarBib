@@ -5151,6 +5151,7 @@
   "bibliotecas.subtitle": "Οι αναρχικές βιβλιοθήκες που απαρτίζουν το δίκτυο AnarBib.",
   "bibliotecas.empty": "Καμία δημόσια βιβλιοθήκη ακόμη.",
   "bibliotecas.noticesCount": "{count} εγγραφές",
+  "bibliotecas.occupiedTerritory": "Έδαφος κατεχόμενο από το Κράτος -",
   "bibliotecas.status.online": "Διαδικτυακός κατάλογος",
   "bibliotecas.status.building": "Υπό κατασκευή",
   "bibliotecas.viewCatalog": "Περιήγηση στον κατάλογο",
@@ -5260,5 +5261,9 @@
   "federacao.carte.statut.partenaire": "Εταίρος",
   "federacao.carte.statut.cible": "Στόχος",
   "cartografia.nav": "Χάρτης δικτύου",
-  "federacao.carte.edit.position": "Θέση (κάντε κλικ ή σύρετε τον δείκτη)"
+  "federacao.carte.edit.position": "Θέση (κάντε κλικ ή σύρετε τον δείκτη)",
+  "systemNote.consultaReceived": "Το αίτημα επιτόπιας μελέτης ελήφθη.",
+  "systemNote.reservaReceived": "Η κράτηση ελήφθη.",
+  "systemNote.cancelRequestedByReader": "Ακύρωση που ζητήθηκε από λογαριασμό αναγνώστη/στριας.",
+  "systemNote.cancelledByLibrary": "Ακύρωση που πραγματοποιήθηκε από τη βιβλιοθήκη."
 }

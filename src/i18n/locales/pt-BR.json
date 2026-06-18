@@ -5151,6 +5151,7 @@
   "bibliotecas.subtitle": "As bibliotecas anarquistas que compõem a rede AnarBib.",
   "bibliotecas.empty": "Nenhuma biblioteca pública por enquanto.",
   "bibliotecas.noticesCount": "{count} registros",
+  "bibliotecas.occupiedTerritory": "Território ocupado pelo Estado -",
   "bibliotecas.status.online": "Catálogo on-line",
   "bibliotecas.status.building": "Em construção",
   "bibliotecas.viewCatalog": "Ver o catálogo",
@@ -5260,5 +5261,9 @@
   "federacao.carte.statut.partenaire": "Parceiro",
   "federacao.carte.statut.cible": "Alvo",
   "cartografia.nav": "Mapa da rede",
-  "federacao.carte.edit.position": "Posição (clique ou arraste o marcador)"
+  "federacao.carte.edit.position": "Posição (clique ou arraste o marcador)",
+  "systemNote.consultaReceived": "Pedido de consulta local recebido.",
+  "systemNote.reservaReceived": "Reserva recebida.",
+  "systemNote.cancelRequestedByReader": "Cancelamento solicitado pela conta do(a-e) leitor(a-e).",
+  "systemNote.cancelledByLibrary": "Cancelamento efetuado pela biblioteca."
 }

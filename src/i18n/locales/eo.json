@@ -5151,6 +5151,7 @@
   "bibliotecas.subtitle": "La anarkiismaj bibliotekoj kiuj formas la reton AnarBib.",
   "bibliotecas.empty": "Ankoraŭ neniu publika biblioteko.",
   "bibliotecas.noticesCount": "{count} registroj",
+  "bibliotecas.occupiedTerritory": "Teritorio okupata de la Ŝtato -",
   "bibliotecas.status.online": "Reta katalogo",
   "bibliotecas.status.building": "En konstruado",
   "bibliotecas.viewCatalog": "Foliumi la katalogon",
@@ -5260,5 +5261,9 @@
   "federacao.carte.statut.partenaire": "Partnero",
   "federacao.carte.statut.cible": "Celo",
   "cartografia.nav": "Reto-mapo",
-  "federacao.carte.edit.position": "Pozicio (alklaku aŭ trenu la markilon)"
+  "federacao.carte.edit.position": "Pozicio (alklaku aŭ trenu la markilon)",
+  "systemNote.consultaReceived": "Konsultpeto ricevita.",
+  "systemNote.reservaReceived": "Rezervo ricevita.",
+  "systemNote.cancelRequestedByReader": "Nuligo petita el la konto de legant-in-o.",
+  "systemNote.cancelledByLibrary": "Nuligo farita de la biblioteko."
 }
