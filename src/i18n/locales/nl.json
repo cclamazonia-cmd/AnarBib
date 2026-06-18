@@ -5207,5 +5207,10 @@
   "reader.epub.noteClose": "Sluiten",
   "account.renew.no_active_membership": "Je lidmaatschap bij deze bibliotheek is niet meer actief. Activeer het opnieuw voordat je verlengt.",
   "account.renew.restricted": "Je account is beperkt bij deze bibliotheek. Neem contact op met het team voordat je verlengt.",
-  "notfound.message": "Pagina niet gevonden."
+  "notfound.message": "Pagina niet gevonden.",
+  "federacao.carte.scope.reseau": "AnarBib-netwerk",
+  "federacao.carte.scope.paysage": "Libertair landschap",
+  "federacao.carte.empty": "Geen enkel collectief komt overeen met de filters.",
+  "cartografia.title": "Kaart van het netwerk",
+  "cartografia.intro": "Anarchistische bibliotheken, archieven en documentatiecentra wereldwijd."
 }

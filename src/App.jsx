@@ -25,6 +25,7 @@ const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibli
 const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
 const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
 const BibliotecaPublicaPage = lazy(() => import('@/pages/public/BibliotecaPublicaPage'));
+const CartografiaPage = lazy(() => import('@/pages/public/CartografiaPage'));
 const ImportacoesPage = lazy(() => import('@/pages/importacoes/ImportacoesPage'));
 const ImportWizard = lazy(() => import('@/pages/importacoes/ImportWizard'));
 const BibliotecaPage = lazy(() => import('@/pages/biblioteca/BibliotecaPage'));
@@ -123,6 +124,8 @@ export default function App() {
                   {/* Annuaire & fiche publics des bibliothèques (chantier PUBLIB, REGISTRE §31) */}
                   <Route path="/bibliotecas" element={<BibliotecasPage />} />
                   <Route path="/bibliotecas/:slug" element={<BibliotecaPublicaPage />} />
+                  {/* Carte publique du réseau (MAP-C, REGISTRE §34) */}
+                  <Route path="/cartografia" element={<CartografiaPage />} />
 
                   {/* ── Pages authentifiées ────────── */}
                   <Route path="/conta" element={<ProtectedRoute><ContaRouter /></ProtectedRoute>} />

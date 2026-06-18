@@ -5207,5 +5207,10 @@
   "reader.epub.noteClose": "Κλείσιμο",
   "account.renew.no_active_membership": "Η ιδιότητα μέλους σου σε αυτή τη βιβλιοθήκη δεν είναι πλέον ενεργή. Ενεργοποίησέ την ξανά πριν την ανανέωση.",
   "account.renew.restricted": "Ο λογαριασμός σου έχει περιορισμό σε αυτή τη βιβλιοθήκη. Επικοινώνησε με την ομάδα πριν την ανανέωση.",
-  "notfound.message": "Η σελίδα δεν βρέθηκε."
+  "notfound.message": "Η σελίδα δεν βρέθηκε.",
+  "federacao.carte.scope.reseau": "Δίκτυο AnarBib",
+  "federacao.carte.scope.paysage": "Ελευθεριακό τοπίο",
+  "federacao.carte.empty": "Κανένα συλλογικό δεν αντιστοιχεί στα φίλτρα.",
+  "cartografia.title": "Χάρτης του δικτύου",
+  "cartografia.intro": "Αναρχικές βιβλιοθήκες, αρχεία και κέντρα τεκμηρίωσης σε όλο τον κόσμο."
 }

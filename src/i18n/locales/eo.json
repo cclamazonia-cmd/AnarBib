@@ -5207,5 +5207,10 @@
   "reader.epub.noteClose": "Fermi",
   "account.renew.no_active_membership": "Via aliĝo al ĉi tiu biblioteko ne plu estas aktiva. Reaktivigu ĝin antaŭ ol renovigi.",
   "account.renew.restricted": "Via konto estas limigita en ĉi tiu biblioteko. Kontaktu la teamon antaŭ ol renovigi.",
-  "notfound.message": "Paĝo ne trovita."
+  "notfound.message": "Paĝo ne trovita.",
+  "federacao.carte.scope.reseau": "Reto AnarBib",
+  "federacao.carte.scope.paysage": "Liberecana pejzaĝo",
+  "federacao.carte.empty": "Neniu kolektivo kongruas kun la filtriloj.",
+  "cartografia.title": "Mapo de la reto",
+  "cartografia.intro": "Anarkiismaj bibliotekoj, arkivoj kaj dokumentcentroj tra la mondo."
 }

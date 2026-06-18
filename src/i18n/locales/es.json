@@ -5207,5 +5207,10 @@
   "reader.epub.noteClose": "Cerrar",
   "account.renew.no_active_membership": "Tu membresía en esta biblioteca ya no está activa. Reactivala antes de renovar.",
   "account.renew.restricted": "Tu cuenta está restringida en esta biblioteca. Contactá al equipo antes de renovar.",
-  "notfound.message": "Página no encontrada."
+  "notfound.message": "Página no encontrada.",
+  "federacao.carte.scope.reseau": "Red AnarBib",
+  "federacao.carte.scope.paysage": "Paisaje libertario",
+  "federacao.carte.empty": "Ningún colectivo coincide con los filtros.",
+  "cartografia.title": "Cartografía de la red",
+  "cartografia.intro": "Bibliotecas, archivos y centros de documentación anarquistas por el mundo."
 }

@@ -5207,5 +5207,10 @@
   "reader.epub.noteClose": "Schließen",
   "account.renew.no_active_membership": "Deine Mitgliedschaft in dieser Bibliothek ist nicht mehr aktiv. Reaktiviere sie vor der Verlängerung.",
   "account.renew.restricted": "Dein Konto ist in dieser Bibliothek eingeschränkt. Wende dich an das Team vor der Verlängerung.",
-  "notfound.message": "Seite nicht gefunden."
+  "notfound.message": "Seite nicht gefunden.",
+  "federacao.carte.scope.reseau": "AnarBib-Netzwerk",
+  "federacao.carte.scope.paysage": "Libertäre Landschaft",
+  "federacao.carte.empty": "Kein Kollektiv entspricht den Filtern.",
+  "cartografia.title": "Netzwerkkarte",
+  "cartografia.intro": "Anarchistische Bibliotheken, Archive und Dokumentationszentren weltweit."
 }
