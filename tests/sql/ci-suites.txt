@@ -13,3 +13,4 @@
 # (le RAISE sert au rollback des fixtures ; le runner parse le message.)
 tests/sql/paquet_cotisation_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
+tests/sql/onbo_q13_transfer_mandate_tests.sql
