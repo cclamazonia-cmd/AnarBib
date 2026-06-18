@@ -51,7 +51,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Consultations sur place | [`spec-flux-consultations-v2.2.md`](./spec-flux-consultations-v2.2.md) | v2.2 (20/05/2026) | 🟢 Référence — entièrement en prod, doctrines R1-R11 internalisées |
 | Emprunts | [`spec-flux-emprunts.md`](./spec-flux-emprunts.md) | v1.1 (31/05/2026) | 🟢 Référence — partiellement en prod, doctrines R7-R11 propagées |
 | Workflow de réservation | [`spec-workflow-reservation.md`](./spec-workflow-reservation.md) | v3 sémantique (08/05/2026) | 🟢 Référence — en prod depuis paquet 5b |
-| Renouvellement granulaire par item | [`spec-renouvellement-granulaire.md`](./spec-renouvellement-granulaire.md) | v0.1 (29/05/2026) | 🟡 Cadrage initial, lié #PAINEL E.3/EA-07 |
+| Renouvellement granulaire par item | [`spec-renouvellement-granulaire.md`](./spec-renouvellement-granulaire.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod (phases 1-5) — référence consolidée a posteriori |
 | Cycle de vie du PEB | [`spec-cycle-vie-peb.md`](./spec-cycle-vie-peb.md) | v1 (23/05/2026) | 🟡 Spec autonome, chantier #ILL-lifecycle à venir |
 | Cotisation (contribution d'adhésion) | [`spec-cotisation.md`](./spec-cotisation.md) | v1.0 (18/06/2026) | ✅ Implémentée en prod — doctrine consolidée a posteriori (consolide NOTIF-PA, MULTI-F.1, §6.1, cron #25, tests #33) |
 

@@ -1,16 +1,18 @@
 ---
 Genre : référence
-Statut : 🟡 cadrée (#PAINEL E.3/EA-07)
+Statut : ✅ implémentée en prod (phases 1-5) — référence consolidée a posteriori (18/06)
 Décisions : incarne RENOV-1, RENOV-2, RENOV-3 ; cite NPRO-D1/D4, DOC-I18N-1
 Supersédé par : —
 ---
 
 # Spec — Renouvellement granulaire par item
 
-**Statut** : v0.1 — cadrage initial
-**Date** : 29/05/2026
+**Statut** : v1.0 — référence (chantier **livré en prod** ; consolidé a posteriori le 18/06).
+**Date** : 29/05/2026 (cadrage) · 18/06/2026 (consolidation).
 **Origine** : chantier #PAINEL E.3/EA-07 (fusion onglets Empréstimos). En testant la fusion, constat que le bouton « Prolonger » agit sur l'emprunt entier, sans possibilité de prolonger un item précis d'un emprunt groupé.
 **Périmètre** : backend (modèle + fonctions de circulation), parcours lecteur (AccountPage), Painel (TabEmprestimos).
+
+> ✅ **LIVRÉ EN PROD — les 5 phases ci-dessous sont implémentées** (vérifié dans le baseline). Compteur par item `emprestimo_itens_v2.renewals_used` (source de vérité ; header `emprestimos_v2.renewals_used` conservé = MAX des items, garde-fou transitoire) ; cœur `public.fn_v2_extend_core(p_emprestimo_id, p_line_nos[], p_require_self_only)` + `fn_v2_extend_emprestimo_item_once` / `fn_v2_extend_emprestimo_once` ; wrappers `api.extend_loan_item_as_library` (staff) / `public.fn_renew_my_loan_item` (lecteur) + leurs variantes « emprunt entier » ; vues `api.my_loans_renewal_status_v1` / `api.staff_loans_renewal_status_v1` ; UI lecteur (AccountPage) + Painel. **Tests** : `tests/sql/paquet_renouvellement_granulaire_tests.sql` (9/9), exécutés en CI (workflow `Tests SQL`). Les points ouverts du §9 sont **clôturés** (voir §9). Le texte des phases est conservé comme **trace de conception**. ⚠️ Le verrou §6.1 (revérification de l'appartenance au renouvellement) s'appuie sur `fn_v2_extend_core` → `fn_membership_can_engage_circulation` (cf. `spec-cotisation` COTIS-5).
 
 ---
 
@@ -140,8 +142,8 @@ Cohérent avec l'esprit « signalement par catégorie » adopté pour les retour
 - **Doctrine migration.** Fichier dans `supabase/migrations/` avec timestamp futur, push, application par Woodpecker. Jamais d'`apply_migration` via MCP ni de SQL collé en éditeur avant push.
 - **Triggers.** `trg_emprestimo_sync_extended_once` et `trg_notify_emprestimo_prorrogacao` doivent rester cohérents : une prolongation par item doit-elle notifier ? Probablement oui, mais à arbitrer en phase 2.
 
-## 9. Points ouverts à trancher en cours de chantier
+## 9. Points ouverts — clôturés (état livré)
 
-- Le header `renewals_used` est-il déprécié à terme ou conservé comme cache permanent ? (Décision repoussée après phase 2, selon ce que révèle l'adaptation des vues.)
+- **Header `renewals_used` (RENOV-1) — clôturé : conservé comme cache transitoire.** Le header `emprestimos_v2.renewals_used` est **maintenu = MAX des items ouverts** (commentaire SQL en prod) ; la source de vérité du quota est le compteur **par item** `emprestimo_itens_v2.renewals_used`. Retrait éventuel du header = phase ultérieure, une fois tous les consommateurs migrés.
 - ~~La notification de prolongation doit-elle distinguer « prolongation d'un item » de « prolongation de l'emprunt » ?~~ **Résolu** par le chantier #NOTIFY-prorrogacao (clos 30/05) : émission **par item** depuis `fn_v2_extend_core`, trigger header `trg_notify_emprestimo_prorrogacao` **retiré**, texte « par exemplaire » × 8 locales. Cf. `spec-notify-prorrogacao-granulaire` D1/D4/D5 (registre `NPRO`).
-- Le bouton « tout renouveler » du lecteur : disparaît-il au profit du seul renouvellement par item, ou cohabite-t-il ? (Décision 2 dit cohabitation ; à confirmer à l'usage.)
+- **Bouton « tout renouveler » (RENOV-3) — clôturé : cohabitation livrée.** Le lecteur·rice garde « tout renouveler » **et** le renouvellement par item (Décision 2).

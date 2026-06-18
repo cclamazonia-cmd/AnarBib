@@ -143,13 +143,13 @@ R7–R11 **propagés depuis consultas** par symétrie (✅ 31/05). R8 ne s'appli
 
 > 🆕 **Livré 10/06/2026** (session MULTI P5). Validation par-appartenance, en présentiel, par le staff (canal humain premier, RES-D9) — c'est le filtre anti-infiltration (vraie personne ? camarade ?). Écran staff **unitaire** livré avec MULTI (onglet `Validações`, RPC `list_pending_validations` + `api.validate_membership`). Puis **C1** « valider en lot » + **C3** notification staff « compte en attente » (`request_membership` → event `membership_validation_requested` → e-mail biblio, CTA /painel ; pendant staff du `validation_confirmed` côté lectrice) + **C4** compteur (badge onglet + card « Inscrições pendentes » dans *Trabalho do dia*). **C2 sans code** : appartenances coordenador créées `active` par promotion d'équipe, jamais `pending` (confiance par rôle déjà acquise). Migrations `20260608154320` (validate), `20260609225414` (notif lectrice P4b), `20260610014812` (notif staff C3). Confiance **non transitive** (MULTI-γ.1) préservée : chaque biblio valide la sienne, pas d'autorité centrale.
 
-## 10. Renouvellement granulaire — `RENOV` *(spec-renouvellement-granulaire v0.1)*
+## 10. Renouvellement granulaire — `RENOV` *(spec-renouvellement-granulaire v1.0 — livré en prod)*
 
 | ID | Point | Statut |
 |---|---|---|
-| RENOV-1 | `renewals_used` déprécié ou cache permanent ? | 🟡 (repoussé après phase 2) |
+| RENOV-1 | `renewals_used` (header) déprécié ou cache ? | ✅ **clôturé (livré)** : header `emprestimos_v2.renewals_used` conservé = MAX des items (cache transitoire) ; vérité = compteur par item `emprestimo_itens_v2.renewals_used` |
 | RENOV-2 | Notif prolongation distingue item vs emprunt ? | ✅ **résolu** (NPRO-D1/D4 ; spec alignée 02/06) — DRIFT-3 corrigé |
-| RENOV-3 | Bouton « tout renouveler » cohabite avec le par-item | ✅ (Décision 2, à confirmer à l'usage) |
+| RENOV-3 | Bouton « tout renouveler » cohabite avec le par-item | ✅ **livré** (Décision 2, cohabitation) |
 
 ## 11. Notify-prorrogação — `NPRO` *(spec-notify-prorrogacao-granulaire v0.1 ; chantier clos 30/05)*
 
@@ -656,3 +656,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 18/06/2026 (suite, P2 « specs ») — **§31 `PUBLIB` : spec formalisée.** `spec-fiche-publique-bibliotheque.md` v1.0 rédigée (consolidation a posteriori du chantier livré 17/06) : modèle d'accès concentrique (`visibility_level`), opt-in à 2 niveaux par section (défaut OFF), 4 vues `api.*` security_invoker triple-gardées (`is_public ∧ is_active ∧ public`), RPC `fn_set_library_*_public` coordenador, carte = lien OSM sortant (INV-5, pas d'embed). Inscrite à l'INDEX. Faits vérifiés baseline. Hygiène P2 close même jour : **404 i18n** (`notfound.message` ×10, commit `b72dd76d`, run #299 vert).*
 
 *MàJ 18/06/2026 (suite, P2 « specs ») — **§27 `CARD-LOCAL` : spec formalisée.** `spec-identite-lecteur-locale.md` v1.0 (consolidation a posteriori — le chantier était **livré** Lots 0/2 les 11-12/06, malgré la note « spec avant code » désormais corrigée). Couvre : modèle par biblio (`reader_identity_model`/`reader_validation_mode` + CHECK), unicité conditionnelle par trigger (numérique unique / `name` libre / exclut removed+terminated), `set_local_reader_identity` (acte staff, indépendant du gate), recherche `fn_painel_find_profile_by_lookup`, hint dérivé `get_last_assigned_reader_identity` (pas de cache anti-fuite), roster `get_reader_roster` (coordenador, PDF), notif `reader_identity_assigned` (handler EF, 10 locales), boussole de canal. Inscrite à l'INDEX. Faits vérifiés baseline.*
+
+*MàJ 18/06/2026 (suite, P2 « specs » — option 3 : promouvoir les cadrages périmés sur du code livré) — **`spec-renouvellement-granulaire` promue v0.1 cadrage → v1.0 référence.** Le chantier était **livré** (5 phases vérifiées baseline : compteur par item `emprestimo_itens_v2.renewals_used`, `fn_v2_extend_core`, `fn_v2_extend_emprestimo_item_once`, wrappers `extend_loan_item_as_library`/`fn_renew_my_loan_item`, vues `*_renewal_status_v1`, UI lecteur+Painel ; tests `paquet_renouvellement_granulaire_tests.sql` en CI). §10 RENOV : **RENOV-1 clôturé** (header conservé = MAX-cache transitoire ; vérité = par item) + **RENOV-3 livré** (cohabitation). Restent en cadrage *vraiment* en amont (arbitrages à trancher, hors consolidation) : `spec-cartographie-reseau` (12 arbitrages, aucun objet DB), `spec-onboarding-biblioteca` (volets Q3), `spec-cycle-vie-peb`.*
