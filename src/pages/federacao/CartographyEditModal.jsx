@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { apiRpc } from '@/lib/supabase';
 
@@ -24,6 +24,8 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
   const [form, setForm] = useState(null);
   const [err, setErr] = useState('');
   const [saving, setSaving] = useState(false);
+  const pickerDivRef = useRef(null);
+  const pickerMapRef = useRef(null);
 
   useEffect(() => {
     let cancel = false;
@@ -47,10 +49,30 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
         contact_public: !!r.contact_public,
         categorie: r.categorie,
         statut_anarbib: r.statut_anarbib,
+        lat: Number(r.lat), lon: Number(r.lon),
       });
     })();
     return () => { cancel = true; };
   }, [entryId, lang, t]);
+
+  // Mini-carte de positionnement (coordination, MAP-F partiel) : marqueur
+  // déplaçable + clic pour repositionner. Pas de géocodage adresse→GPS (Nominatim
+  // self-hosted = infra à venir) ; ici saisie des coordonnées par clic/glisser.
+  useEffect(() => {
+    if (!row || !row.can_admin || !window.L || !pickerDivRef.current || pickerMapRef.current) return;
+    const L = window.L;
+    const lat0 = Number(row.lat) || 0;
+    const lon0 = Number(row.lon) || 0;
+    const map = L.map(pickerDivRef.current, { worldCopyJump: true, attributionControl: false }).setView([lat0, lon0], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+    const marker = L.marker([lat0, lon0], { draggable: true }).addTo(map);
+    const apply = (ll) => setForm((f) => ({ ...f, lat: Number(ll.lat.toFixed(5)), lon: Number(ll.lng.toFixed(5)) }));
+    marker.on('dragend', () => apply(marker.getLatLng()));
+    map.on('click', (e) => { marker.setLatLng(e.latlng); apply(e.latlng); });
+    pickerMapRef.current = map;
+    setTimeout(() => { try { map.invalidateSize(); } catch { /* ignore */ } }, 150);
+    return () => { try { map.remove(); } catch { /* ignore */ } pickerMapRef.current = null; };
+  }, [row]);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -72,6 +94,10 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
     if (row.can_admin) {
       payload.categorie = form.categorie;
       payload.statut_anarbib = form.statut_anarbib;
+      if (Number.isFinite(form.lat) && Number.isFinite(form.lon)) {
+        payload.lat = form.lat;
+        payload.lon = form.lon;
+      }
     }
     const fn = row.can_admin ? 'fn_cartography_update_admin' : 'fn_cartography_update_self';
     const { error } = await apiRpc(fn, { p_entry_id: entryId, p_payload: payload });
@@ -170,6 +196,11 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
                 <select style={input} value={form.statut_anarbib} onChange={(e) => set('statut_anarbib', e.target.value)}>
                   {STATUTS.map((s) => <option key={s} value={s}>{t({ id: `federacao.carte.statut.${s}` })}</option>)}
                 </select>
+                <label style={label}>{t({ id: 'federacao.carte.edit.position' })}</label>
+                <div ref={pickerDivRef} style={{ height: 200, borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,.14)' }} />
+                <div style={{ fontSize: '.72rem', color: 'var(--brand-muted)', marginTop: 4 }}>
+                  {Number(form.lat).toFixed(5)}, {Number(form.lon).toFixed(5)}
+                </div>
               </div>
             )}
 

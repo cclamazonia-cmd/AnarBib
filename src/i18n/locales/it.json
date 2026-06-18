@@ -5237,5 +5237,6 @@
   "federacao.carte.statut.membre": "Membro",
   "federacao.carte.statut.partenaire": "Partner",
   "federacao.carte.statut.cible": "Obiettivo",
-  "cartografia.nav": "Mappa della rete"
+  "cartografia.nav": "Mappa della rete",
+  "federacao.carte.edit.position": "Posizione (clicca o trascina il segnaposto)"
 }

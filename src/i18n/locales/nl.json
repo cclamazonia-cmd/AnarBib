@@ -5237,5 +5237,6 @@
   "federacao.carte.statut.membre": "Lid",
   "federacao.carte.statut.partenaire": "Partner",
   "federacao.carte.statut.cible": "Doelwit",
-  "cartografia.nav": "Netwerkkaart"
+  "cartografia.nav": "Netwerkkaart",
+  "federacao.carte.edit.position": "Locatie (klik of sleep de markering)"
 }

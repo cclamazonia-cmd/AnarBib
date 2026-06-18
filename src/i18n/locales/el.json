@@ -5237,5 +5237,6 @@
   "federacao.carte.statut.membre": "Μέλος",
   "federacao.carte.statut.partenaire": "Εταίρος",
   "federacao.carte.statut.cible": "Στόχος",
-  "cartografia.nav": "Χάρτης δικτύου"
+  "cartografia.nav": "Χάρτης δικτύου",
+  "federacao.carte.edit.position": "Θέση (κάντε κλικ ή σύρετε τον δείκτη)"
 }
