@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Nuovo insieme",
   "biblioteca.policySets.noRegulationDoc": "Senza collegamento",
   "biblioteca.policySets.putInUse": "Mettere in uso",
+  "biblioteca.policySets.renewalEqualsInitial": "Il rinnovo riprende la durata iniziale del prestito",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Se selezionato, rinnovare aggiunge la durata iniziale (in base al numero di opere prese in prestito), non la durata di rinnovo delle regole.",
   "biblioteca.policySets.rulesOf": "Regole di « {label} »",
   "biblioteca.policySets.rulesTitle": "Regole di circolazione",
   "biblioteca.policySets.saveSet": "Salvare l'insieme",

@@ -51,6 +51,7 @@ function emptySetForm() {
     effective_from: '',
     effective_until: '',
     scope_note: '',
+    renewal_equals_initial: false,
     max_concurrent_loans: '',
     max_concurrent_reservations: '',
     max_concurrent_consultations: '',
@@ -66,6 +67,7 @@ function setRowToForm(row) {
     effective_from: row.effective_from || '',
     effective_until: row.effective_until || '',
     scope_note: row.scope_note || '',
+    renewal_equals_initial: !!row.renewal_equals_initial,
     max_concurrent_loans: numToStr(row.max_concurrent_loans),
     max_concurrent_reservations: numToStr(row.max_concurrent_reservations),
     max_concurrent_consultations: numToStr(row.max_concurrent_consultations),
@@ -173,6 +175,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
         effective_from: setForm.effective_from || null,
         effective_until: setForm.effective_until || null,
         scope_note: setForm.scope_note.trim() || null,
+        renewal_equals_initial: !!setForm.renewal_equals_initial,
       };
       if (setForm.id) payload.id = setForm.id;
 
@@ -445,6 +448,18 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
               <label style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.fieldScopeNote' })}</label>
               <input type="text" style={styles.input} value={setForm.scope_note}
                 onChange={e => setField('scope_note', e.target.value)} />
+            </div>
+
+            {/* ── Renouvellement = durée initiale (option C) ─────────────── */}
+            <div style={{ gridColumn: '1 / -1' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <input type="checkbox" checked={!!setForm.renewal_equals_initial}
+                  onChange={e => setField('renewal_equals_initial', e.target.checked)} />
+                <span style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.renewalEqualsInitial' })}</span>
+              </label>
+              <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginTop: 4 }}>
+                {t({ id: 'biblioteca.policySets.renewalEqualsInitialHint' })}
+              </div>
             </div>
 
             {/* ── Plafonds de circulation simultanée (MULTI-F.1 cond.5) ──── */}

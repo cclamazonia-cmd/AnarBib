@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Nova aro",
   "biblioteca.policySets.noRegulationDoc": "Sen ligo",
   "biblioteca.policySets.putInUse": "Meti en uzon",
+  "biblioteca.policySets.renewalEqualsInitial": "La renovigo reprenas la komencan daŭron de la prunto",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Se markita, renovigi aldonas la komencan daŭron (laŭ la nombro de pruntitaj verkoj), ne la renovigan daŭron de la reguloj.",
   "biblioteca.policySets.rulesOf": "Reguloj de «{label}»",
   "biblioteca.policySets.rulesTitle": "Cirkulad-reguloj",
   "biblioteca.policySets.saveSet": "Konservi la aron",

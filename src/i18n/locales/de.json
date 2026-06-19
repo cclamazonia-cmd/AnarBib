@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Neuer Satz",
   "biblioteca.policySets.noRegulationDoc": "Ohne Verknüpfung",
   "biblioteca.policySets.putInUse": "In Gebrauch nehmen",
+  "biblioteca.policySets.renewalEqualsInitial": "Verlängerung übernimmt die ursprüngliche Leihdauer",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Wenn aktiviert, verlängert eine Verlängerung um die ursprüngliche Dauer (je nach Anzahl der ausgeliehenen Werke), nicht um die Verlängerungsdauer der Regeln.",
   "biblioteca.policySets.rulesOf": "Regeln von „{label}“",
   "biblioteca.policySets.rulesTitle": "Ausleihregeln",
   "biblioteca.policySets.saveSet": "Satz speichern",

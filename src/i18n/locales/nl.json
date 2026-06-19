@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Nieuwe set",
   "biblioteca.policySets.noRegulationDoc": "Geen koppeling",
   "biblioteca.policySets.putInUse": "In gebruik nemen",
+  "biblioteca.policySets.renewalEqualsInitial": "Verlenging neemt de oorspronkelijke uitleentermijn over",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Indien aangevinkt voegt verlengen de oorspronkelijke termijn toe (op basis van het aantal geleende werken), niet de verlengingstermijn uit de regels.",
   "biblioteca.policySets.rulesOf": "Regels van \"{label}\"",
   "biblioteca.policySets.rulesTitle": "Circulatieregels",
   "biblioteca.policySets.saveSet": "Set opslaan",

@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Novo conjunto",
   "biblioteca.policySets.noRegulationDoc": "Sem vínculo",
   "biblioteca.policySets.putInUse": "Pôr em uso",
+  "biblioteca.policySets.renewalEqualsInitial": "A renovação repete a duração inicial do empréstimo",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Quando marcado, renovar adiciona a duração inicial (conforme o número de obras emprestadas), e não a duração de renovação das regras.",
   "biblioteca.policySets.rulesOf": "Regras de « {label} »",
   "biblioteca.policySets.rulesTitle": "Regras de circulação",
   "biblioteca.policySets.saveSet": "Salvar conjunto",

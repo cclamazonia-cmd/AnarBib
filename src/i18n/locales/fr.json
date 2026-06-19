@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Nouveau jeu",
   "biblioteca.policySets.noRegulationDoc": "Sans rattachement",
   "biblioteca.policySets.putInUse": "Mettre en usage",
+  "biblioteca.policySets.renewalEqualsInitial": "Le renouvellement reprend la durée initiale du prêt",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Quand c’est coché, renouveler ajoute la durée initiale (selon le nombre d’ouvrages empruntés), pas la durée « renouvellement » des règles.",
   "biblioteca.policySets.rulesOf": "Règles de « {label} »",
   "biblioteca.policySets.rulesTitle": "Règles de circulation",
   "biblioteca.policySets.saveSet": "Enregistrer le jeu",

@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Νέο σύνολο",
   "biblioteca.policySets.noRegulationDoc": "Χωρίς σύνδεσμο",
   "biblioteca.policySets.putInUse": "Θέση σε χρήση",
+  "biblioteca.policySets.renewalEqualsInitial": "Η ανανέωση επαναλαμβάνει την αρχική διάρκεια του δανεισμού",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Όταν είναι επιλεγμένο, η ανανέωση προσθέτει την αρχική διάρκεια (ανάλογα με τον αριθμό των δανεισμένων έργων), όχι τη διάρκεια ανανέωσης των κανόνων.",
   "biblioteca.policySets.rulesOf": "Κανόνες του \"{label}\"",
   "biblioteca.policySets.rulesTitle": "Κανόνες κυκλοφορίας",
   "biblioteca.policySets.saveSet": "Αποθήκευση συνόλου",

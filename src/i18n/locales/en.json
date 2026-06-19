@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "New set",
   "biblioteca.policySets.noRegulationDoc": "No link",
   "biblioteca.policySets.putInUse": "Put in use",
+  "biblioteca.policySets.renewalEqualsInitial": "Renewal reuses the loan's initial duration",
+  "biblioteca.policySets.renewalEqualsInitialHint": "When checked, renewing adds the initial duration (matching the number of borrowed items), not the rules' renewal duration.",
   "biblioteca.policySets.rulesOf": "Rules of \"{label}\"",
   "biblioteca.policySets.rulesTitle": "Circulation rules",
   "biblioteca.policySets.saveSet": "Save set",

@@ -1055,6 +1055,8 @@
   "biblioteca.policySets.newTitle": "Joc nou",
   "biblioteca.policySets.noRegulationDoc": "Sense vinculació",
   "biblioteca.policySets.putInUse": "Posar en ús",
+  "biblioteca.policySets.renewalEqualsInitial": "La renovació repeteix la durada inicial del préstec",
+  "biblioteca.policySets.renewalEqualsInitialHint": "Quan està marcat, renovar afegeix la durada inicial (segons el nombre d'obres en préstec), no la durada de renovació de les regles.",
   "biblioteca.policySets.rulesOf": "Regles de «{label}»",
   "biblioteca.policySets.rulesTitle": "Regles de circulació",
   "biblioteca.policySets.saveSet": "Desar el joc",
