@@ -20,7 +20,7 @@ DECLARE
   v_t2 uuid := 'b0000000-0000-4000-8000-000000000002';
   v_t3 uuid := 'b0000000-0000-4000-8000-000000000003';
   v_coord_pub text; v_lib2_pub text; v_t1_pub text; v_t2_pub text; v_t3_pub text;
-  v_json jsonb; v_inv uuid; v_rec record;
+  v_json jsonb; v_inv uuid; v_rec record; v_n int;
 BEGIN
   SELECT user_id INTO v_coord FROM public.user_library_memberships
     WHERE library_id=c_blmf AND role='coordenador' AND status='active' LIMIT 1;
@@ -160,6 +160,22 @@ BEGIN
   v_t:='T10 coordenador_seul -> ready immédiat (required=1)';
   IF (v_json->>'status')='ready' AND (v_json->>'required_ratifications')='1'
     THEN v_passed:=v_passed+1; ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' got '||coalesce(v_json::text,'NULL')); END IF;
+
+  -- ── RPC de liste (lot 3.0) ── (T10 a laissé une invitation 'ready' pour t3)
+  PERFORM set_config('request.jwt.claims', json_build_object('sub',v_coord,'role','authenticated')::text, true);
+  SELECT count(*) INTO v_n FROM public.fn_team_list_invitations(c_blmf);
+  v_t:='T11 list_invitations (staff) -> au moins 1 ligne';
+  IF v_n >= 1 THEN v_passed:=v_passed+1; ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' got '||v_n); END IF;
+
+  PERFORM set_config('request.jwt.claims', json_build_object('sub',v_t3,'role','authenticated')::text, true);
+  SELECT count(*) INTO v_n FROM public.fn_team_list_invitations(c_blmf);
+  v_t:='T12 list_invitations (non-staff) -> 0 ligne';
+  IF v_n = 0 THEN v_passed:=v_passed+1; ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' got '||v_n); END IF;
+
+  PERFORM set_config('request.jwt.claims', json_build_object('sub',v_t3,'role','authenticated')::text, true);
+  SELECT count(*) INTO v_n FROM public.fn_team_my_invitations();
+  v_t:='T13 my_invitations (invité·e) -> au moins 1 ligne';
+  IF v_n >= 1 THEN v_passed:=v_passed+1; ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' got '||v_n); END IF;
 
   IF v_failed=0 THEN
     RAISE EXCEPTION 'INVITATION-EQUIPE OK : %/% tests passés', v_passed, (v_passed+v_failed);
