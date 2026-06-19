@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Dit document heeft exemplaren in een of meer bibliotheken. Verwijder eerst de exemplaren.",
   "error.catalog.discard.bookHasLoans": "Dit document heeft een uitleengeschiedenis en kan niet worden verwijderd.",
   "error.catalog.discard.authorLinked": "Deze autoriteit is nog gekoppeld aan een of meer documenten. Ontkoppel deze eerst.",
-  "error.catalog.discard.exemplarInCirculation": "Dit exemplaar heeft een circulatiegeschiedenis (raadpleging, uitlening of interbibliothecair leenverkeer) en kan niet worden verwijderd."
+  "error.catalog.discard.exemplarInCirculation": "Dit exemplaar heeft een circulatiegeschiedenis (raadpleging, uitlening of interbibliothecair leenverkeer) en kan niet worden verwijderd.",
+  "catalogacao.catalog.merge": "Samenvoegen…",
+  "catalogacao.catalog.mergeTitle": "„{name}” samenvoegen",
+  "catalogacao.catalog.mergeHelp": "Kies de autoriteit die je behoudt: „{name}” wordt eraan gekoppeld (werken, bijdragen, aliassen) en daarna verwijderd. Deze actie is onomkeerbaar.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Zoek de te behouden autoriteit…",
+  "catalogacao.catalog.mergeDone": "„{dup}” samengevoegd met „{canonical}”.",
+  "catalogacao.catalog.mergeNoResults": "Geen overeenkomende autoriteit."
 }

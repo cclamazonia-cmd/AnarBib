@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Este documento tiene ejemplares en una o varias bibliotecas. Descártalos primero.",
   "error.catalog.discard.bookHasLoans": "Este documento tiene historial de préstamo y no se puede eliminar.",
   "error.catalog.discard.authorLinked": "Esta autoridad sigue vinculada a uno o varios documentos. Desvincúlala primero.",
-  "error.catalog.discard.exemplarInCirculation": "Este ejemplar tiene historial de circulación (consulta, préstamo o préstamo interbibliotecario) y no se puede eliminar."
+  "error.catalog.discard.exemplarInCirculation": "Este ejemplar tiene historial de circulación (consulta, préstamo o préstamo interbibliotecario) y no se puede eliminar.",
+  "catalogacao.catalog.merge": "Fusionar…",
+  "catalogacao.catalog.mergeTitle": "Fusionar «{name}»",
+  "catalogacao.catalog.mergeHelp": "Elige la autoridad que se conserva: «{name}» se vinculará a ella (obras, contribuciones, alias) y luego se eliminará. Acción irreversible.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Buscar la autoridad que se conserva…",
+  "catalogacao.catalog.mergeDone": "«{dup}» fusionada en «{canonical}».",
+  "catalogacao.catalog.mergeNoResults": "Ninguna autoridad coincidente."
 }

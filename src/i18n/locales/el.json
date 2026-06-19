@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Αυτό το τεκμήριο έχει αντίτυπα σε μία ή περισσότερες βιβλιοθήκες. Απορρίψτε πρώτα τα αντίτυπα.",
   "error.catalog.discard.bookHasLoans": "Αυτό το τεκμήριο έχει ιστορικό δανεισμού και δεν μπορεί να διαγραφεί.",
   "error.catalog.discard.authorLinked": "Αυτή η καθιερωμένη εγγραφή συνδέεται ακόμη με ένα ή περισσότερα τεκμήρια. Αποσυνδέστε την πρώτα.",
-  "error.catalog.discard.exemplarInCirculation": "Αυτό το αντίτυπο έχει ιστορικό κυκλοφορίας (ανάγνωση, δανεισμός ή διαδανεισμός) και δεν μπορεί να διαγραφεί."
+  "error.catalog.discard.exemplarInCirculation": "Αυτό το αντίτυπο έχει ιστορικό κυκλοφορίας (ανάγνωση, δανεισμός ή διαδανεισμός) και δεν μπορεί να διαγραφεί.",
+  "catalogacao.catalog.merge": "Συγχώνευση…",
+  "catalogacao.catalog.mergeTitle": "Συγχώνευση «{name}»",
+  "catalogacao.catalog.mergeHelp": "Επιλέξτε την καθιερωμένη εγγραφή που θα διατηρηθεί: το «{name}» θα συνδεθεί με αυτήν (έργα, συνεισφορές, ψευδώνυμα) και έπειτα θα διαγραφεί. Μη αναστρέψιμη ενέργεια.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Αναζήτηση της εγγραφής που θα διατηρηθεί…",
+  "catalogacao.catalog.mergeDone": "Το «{dup}» συγχωνεύτηκε στο «{canonical}».",
+  "catalogacao.catalog.mergeNoResults": "Καμία αντίστοιχη καθιερωμένη εγγραφή."
 }

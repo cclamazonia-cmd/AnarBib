@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import Modal from '@/components/ui/Modal';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -34,10 +35,25 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   const PAGE_SIZE = 50;
   const fetchNonce = useRef(0);
 
+  // ── Fusion d'autorités (surface merge_author depuis le catalogue) ─
+  const [mergeSrc, setMergeSrc] = useState(null);   // ligne auteur à fusionner (= doublon, sera supprimée)
+  const [mergeQuery, setMergeQuery] = useState('');
+  const [mergeDQuery, setMergeDQuery] = useState('');
+  const [mergeSuggested, setMergeSuggested] = useState([]);
+  const [mergeResults, setMergeResults] = useState([]);
+  const [mergeLoading, setMergeLoading] = useState(false);
+  const [mergeBusy, setMergeBusy] = useState(false);
+  const [mergeErr, setMergeErr] = useState('');
+
   useEffect(() => {
     const id = setTimeout(() => setDSearch(search), 300);
     return () => clearTimeout(id);
   }, [search]);
+
+  useEffect(() => {
+    const id = setTimeout(() => setMergeDQuery(mergeQuery), 300);
+    return () => clearTimeout(id);
+  }, [mergeQuery]);
 
   // ── Load counts (allSettled: resilient si une requête timeout) ─
   useEffect(() => {
@@ -154,7 +170,86 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
     }
   }
 
+  // ── Fusion d'autorités : surface merge_author depuis le catalogue ──
+  // La fiche ouverte (mergeSrc) est le DOUBLON : elle sera rattachée à la cible
+  // choisie (canonique survivante) puis supprimée. Backend : merge_author.
+  const openMerge = useCallback(async (author) => {
+    setMergeSrc(author);
+    setMergeQuery(''); setMergeDQuery('');
+    setMergeResults([]); setMergeErr(''); setMergeSuggested([]); setMergeLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('suggest_author_duplicates', { p_author_id: Number(author.id) });
+      if (error) throw error;
+      setMergeSuggested((data || []).map(d => ({
+        id: d.author_id, preferred_name: d.preferred_name, sort_name: d.sort_name, linked_books: d.linked_books,
+      })));
+    } catch (err) {
+      setMergeErr(localizeError(err, t));
+    } finally {
+      setMergeLoading(false);
+    }
+  }, [t]);
+
+  function closeMerge() {
+    setMergeSrc(null); setMergeQuery(''); setMergeDQuery('');
+    setMergeSuggested([]); setMergeResults([]); setMergeErr('');
+  }
+
+  // Recherche libre de la cible à conserver (hors la fiche source).
+  useEffect(() => {
+    if (!mergeSrc) return;
+    const q = mergeDQuery.trim();
+    if (q.length < 2) { setMergeResults([]); return; }
+    let alive = true;
+    (async () => {
+      try {
+        const { data, error } = await supabase.rpc('search_authors_by_name', { p_query: q, p_limit: 8 });
+        if (error) throw error;
+        if (alive) setMergeResults((data || []).filter(a => a.id !== mergeSrc.id));
+      } catch (err) {
+        if (alive) setMergeErr(localizeError(err, t));
+      }
+    })();
+    return () => { alive = false; };
+  }, [mergeDQuery, mergeSrc, t]);
+
+  async function doMerge(target) {
+    if (!mergeSrc || !target || target.id === mergeSrc.id) return;
+    const dup = mergeSrc.preferred_name, canonical = target.preferred_name;
+    if (!confirm(t({ id: 'catalogacao.dedup.confirm' }, { dup, canonical }))) return;
+    setMergeBusy(true); setMergeErr('');
+    try {
+      const { error } = await supabase.rpc('merge_author', {
+        p_canonical_id: Number(target.id), p_duplicate_id: Number(mergeSrc.id),
+      });
+      if (error) throw error;
+      closeMerge();
+      setMsg({ text: t({ id: 'catalogacao.catalog.mergeDone' }, { dup, canonical }), kind: 'ok' });
+      loadItems();
+      onChanged?.();
+    } catch (err) {
+      setMergeErr(localizeError(err, t));
+    } finally {
+      setMergeBusy(false);
+    }
+  }
+
   // ── Render ──────────────────────────────────────────────
+  const renderMergeCand = (c, keyPrefix) => (
+    <div key={`${keyPrefix}-${c.id}`} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderTop: '1px solid rgba(255,255,255,.06)' }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: '.88rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.preferred_name}</div>
+        <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #999)' }}>
+          {c.sort_name || '—'}{typeof c.linked_books === 'number' ? ` · ${t({ id: 'catalogacao.dedup.books' }, { count: c.linked_books })}` : ''}
+        </div>
+      </div>
+      <button type="button" className="ab-button ab-button--sm" disabled={mergeBusy}
+        onClick={() => doMerge(c)} style={{ flexShrink: 0 }}>
+        {t({ id: 'catalogacao.dedup.merge' })}
+      </button>
+    </div>
+  );
+
   const viewTabs = [
     { id: 'book', label: t({ id: 'catalogacao.catalog.documentsTab' }, { count: total.books }) },
     { id: 'author', label: t({ id: 'catalogacao.catalog.authoritiesTab' }, { count: total.authors }) },
@@ -262,6 +357,12 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
                 onClick={() => retakeItem(it._type, it.id)}>
                 {t({ id: 'catalogacao.catalog.retake' })}
               </button>
+              {it._type === 'author' && (
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                  onClick={() => openMerge(it)}>
+                  {t({ id: 'catalogacao.catalog.merge' })}
+                </button>
+              )}
               <button type="button" className="ab-button ab-button--danger ab-button--sm"
                 onClick={() => discardItem(it._type, it.id, it._type === 'book' ? it.titulo : it._type === 'author' ? it.preferred_name : it.tombo || it.bib_ref)}>
                 {t({ id: 'catalogacao.catalog.discard' })}
@@ -279,6 +380,43 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
         <button type="button" className="ab-button ab-button--secondary ab-button--sm"
           disabled={items.length < PAGE_SIZE} onClick={() => setPage(p => p + 1)}>{t({ id: 'catalogacao.catalog.nextPage' })}</button>
       </div>
+
+      {/* ── Fusion d'autorités ───────────────────────── */}
+      {mergeSrc && (
+        <Modal isOpen onClose={closeMerge} title={t({ id: 'catalogacao.catalog.mergeTitle' }, { name: mergeSrc.preferred_name })}>
+          <p style={{ fontSize: '.85rem', color: 'var(--brand-muted, #bbb)', marginTop: 0 }}>
+            {t({ id: 'catalogacao.catalog.mergeHelp' }, { name: mergeSrc.preferred_name })}
+          </p>
+          {mergeErr && <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: '.85rem', marginBottom: 10, background: 'rgba(220,38,38,.12)', color: '#f87171' }}>{mergeErr}</div>}
+
+          {/* Doublons probables (suggest_author_duplicates) */}
+          <div style={{ fontSize: '.78rem', fontWeight: 700, color: 'var(--brand-muted, #bbb)', margin: '4px 0' }}>
+            {t({ id: 'catalogacao.dedup.title' })}
+          </div>
+          {mergeLoading && <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)' }}>{t({ id: 'catalogacao.dedup.finding' })}</div>}
+          {!mergeLoading && mergeSuggested.length === 0 && (
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)' }}>{t({ id: 'catalogacao.dedup.none' })}</div>
+          )}
+          {mergeSuggested.map(c => renderMergeCand(c, 's'))}
+
+          {/* Recherche libre de la cible à conserver */}
+          <div style={{ marginTop: 16 }}>
+            <input type="text" value={mergeQuery} onChange={e => setMergeQuery(e.target.value)}
+              placeholder={t({ id: 'catalogacao.catalog.mergeSearchPlaceholder' })}
+              style={{ width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.9rem' }} />
+          </div>
+          {mergeDQuery.trim().length >= 2 && mergeResults.length === 0 && (
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', marginTop: 8 }}>{t({ id: 'catalogacao.catalog.mergeNoResults' })}</div>
+          )}
+          {mergeResults.map(c => renderMergeCand(c, 'r'))}
+
+          <div className="ab-modal__actions" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 18 }}>
+            <button type="button" className="ab-button ab-button--secondary" onClick={closeMerge} disabled={mergeBusy}>
+              {t({ id: 'common.close' })}
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

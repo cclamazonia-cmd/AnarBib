@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Ce document possède des exemplaires dans une ou plusieurs bibliothèques. Mettez-les d'abord au rebut.",
   "error.catalog.discard.bookHasLoans": "Ce document a un historique d'emprunt et ne peut pas être supprimé.",
   "error.catalog.discard.authorLinked": "Cette autorité est encore liée à un ou plusieurs documents. Détachez-la d'abord.",
-  "error.catalog.discard.exemplarInCirculation": "Cet exemplaire a un historique de circulation (consultation, emprunt ou prêt entre bibliothèques) et ne peut pas être supprimé."
+  "error.catalog.discard.exemplarInCirculation": "Cet exemplaire a un historique de circulation (consultation, emprunt ou prêt entre bibliothèques) et ne peut pas être supprimé.",
+  "catalogacao.catalog.merge": "Fusionner…",
+  "catalogacao.catalog.mergeTitle": "Fusionner « {name} »",
+  "catalogacao.catalog.mergeHelp": "Choisissez l'autorité à conserver : « {name} » y sera rattachée (œuvres, contributions, alias) puis supprimée. Action irréversible.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Chercher l'autorité à conserver…",
+  "catalogacao.catalog.mergeDone": "« {dup} » fusionnée dans « {canonical} ».",
+  "catalogacao.catalog.mergeNoResults": "Aucune autorité correspondante."
 }

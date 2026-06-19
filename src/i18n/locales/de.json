@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Dieses Dokument hat Exemplare in einer oder mehreren Bibliotheken. Verwirf zuerst die Exemplare.",
   "error.catalog.discard.bookHasLoans": "Dieses Dokument hat eine Ausleihhistorie und kann nicht gelöscht werden.",
   "error.catalog.discard.authorLinked": "Diese Normdatei ist noch mit einem oder mehreren Dokumenten verknüpft. Löse zuerst die Verknüpfung.",
-  "error.catalog.discard.exemplarInCirculation": "Dieses Exemplar hat eine Zirkulationshistorie (Einsicht, Ausleihe oder Fernleihe) und kann nicht gelöscht werden."
+  "error.catalog.discard.exemplarInCirculation": "Dieses Exemplar hat eine Zirkulationshistorie (Einsicht, Ausleihe oder Fernleihe) und kann nicht gelöscht werden.",
+  "catalogacao.catalog.merge": "Zusammenführen…",
+  "catalogacao.catalog.mergeTitle": "„{name}“ zusammenführen",
+  "catalogacao.catalog.mergeHelp": "Wähle die zu behaltende Normdatei: „{name}“ wird ihr zugeordnet (Werke, Beiträge, Aliasse) und dann gelöscht. Diese Aktion ist unwiderruflich.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Zu behaltende Normdatei suchen…",
+  "catalogacao.catalog.mergeDone": "„{dup}“ in „{canonical}“ zusammengeführt.",
+  "catalogacao.catalog.mergeNoResults": "Keine passende Normdatei."
 }

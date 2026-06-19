@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Aquest document té exemplars en una o més biblioteques. Descarta'ls primer.",
   "error.catalog.discard.bookHasLoans": "Aquest document té historial de préstec i no es pot eliminar.",
   "error.catalog.discard.authorLinked": "Aquesta autoritat encara està vinculada a un o més documents. Desvincula-la primer.",
-  "error.catalog.discard.exemplarInCirculation": "Aquest exemplar té historial de circulació (consulta, préstec o préstec interbibliotecari) i no es pot eliminar."
+  "error.catalog.discard.exemplarInCirculation": "Aquest exemplar té historial de circulació (consulta, préstec o préstec interbibliotecari) i no es pot eliminar.",
+  "catalogacao.catalog.merge": "Fusiona…",
+  "catalogacao.catalog.mergeTitle": "Fusiona «{name}»",
+  "catalogacao.catalog.mergeHelp": "Tria l'autoritat que es conserva: «{name}» s'hi vincularà (obres, contribucions, àlies) i després s'eliminarà. Acció irreversible.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Cerca l'autoritat que es conserva…",
+  "catalogacao.catalog.mergeDone": "«{dup}» fusionada en «{canonical}».",
+  "catalogacao.catalog.mergeNoResults": "Cap autoritat coincident."
 }

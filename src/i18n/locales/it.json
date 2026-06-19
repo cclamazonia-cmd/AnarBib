@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Questo documento ha copie in una o più biblioteche. Scarta prima le copie.",
   "error.catalog.discard.bookHasLoans": "Questo documento ha uno storico di prestito e non può essere eliminato.",
   "error.catalog.discard.authorLinked": "Questa autorità è ancora collegata a uno o più documenti. Scollegala prima.",
-  "error.catalog.discard.exemplarInCirculation": "Questa copia ha uno storico di circolazione (consultazione, prestito o prestito interbibliotecario) e non può essere eliminata."
+  "error.catalog.discard.exemplarInCirculation": "Questa copia ha uno storico di circolazione (consultazione, prestito o prestito interbibliotecario) e non può essere eliminata.",
+  "catalogacao.catalog.merge": "Unisci…",
+  "catalogacao.catalog.mergeTitle": "Unisci «{name}»",
+  "catalogacao.catalog.mergeHelp": "Scegli l'autorità da conservare: «{name}» sarà collegata a essa (opere, contributi, alias) e poi eliminata. Azione irreversibile.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Cerca l'autorità da conservare…",
+  "catalogacao.catalog.mergeDone": "«{dup}» unita in «{canonical}».",
+  "catalogacao.catalog.mergeNoResults": "Nessuna autorità corrispondente."
 }

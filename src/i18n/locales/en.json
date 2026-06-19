@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "This document has copies in one or more libraries. Discard those first.",
   "error.catalog.discard.bookHasLoans": "This document has loan history and cannot be deleted.",
   "error.catalog.discard.authorLinked": "This authority is still linked to one or more documents. Unlink it first.",
-  "error.catalog.discard.exemplarInCirculation": "This copy has circulation history (consultation, loan or interlibrary loan) and cannot be deleted."
+  "error.catalog.discard.exemplarInCirculation": "This copy has circulation history (consultation, loan or interlibrary loan) and cannot be deleted.",
+  "catalogacao.catalog.merge": "Merge…",
+  "catalogacao.catalog.mergeTitle": "Merge “{name}”",
+  "catalogacao.catalog.mergeHelp": "Choose the authority to keep: “{name}” will be attached to it (works, contributions, aliases) and then deleted. This action is irreversible.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Search the authority to keep…",
+  "catalogacao.catalog.mergeDone": "“{dup}” merged into “{canonical}”.",
+  "catalogacao.catalog.mergeNoResults": "No matching authority."
 }

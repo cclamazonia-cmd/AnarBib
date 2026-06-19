@@ -5373,5 +5373,11 @@
   "error.catalog.discard.bookHasHoldings": "Este documento possui exemplares em uma ou mais bibliotecas. Descarte os exemplares primeiro.",
   "error.catalog.discard.bookHasLoans": "Este documento tem histórico de empréstimo e não pode ser apagado.",
   "error.catalog.discard.authorLinked": "Esta autoridade está vinculada a um ou mais documentos. Desvincule-a primeiro.",
-  "error.catalog.discard.exemplarInCirculation": "Este exemplar tem histórico de circulação (consulta, empréstimo ou empréstimo entre bibliotecas) e não pode ser apagado."
+  "error.catalog.discard.exemplarInCirculation": "Este exemplar tem histórico de circulação (consulta, empréstimo ou empréstimo entre bibliotecas) e não pode ser apagado.",
+  "catalogacao.catalog.merge": "Mesclar…",
+  "catalogacao.catalog.mergeTitle": "Mesclar « {name} »",
+  "catalogacao.catalog.mergeHelp": "Escolha a autoridade a manter: « {name} » será vinculada a ela (obras, contribuições, apelidos) e depois removida. Ação irreversível.",
+  "catalogacao.catalog.mergeSearchPlaceholder": "Buscar a autoridade a manter…",
+  "catalogacao.catalog.mergeDone": "« {dup} » mesclada em « {canonical} ».",
+  "catalogacao.catalog.mergeNoResults": "Nenhuma autoridade correspondente."
 }
