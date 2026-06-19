@@ -141,10 +141,14 @@ docker logs anarbib-cloudflared 2>&1 | grep -oE 'https://[a-z0-9-]+\.trycloudfla
 supabase secrets set NOMINATIM_URL=<url> --project-ref uflwmikiyjfnikiphtcp
 ```
 ⚠️ **URL éphémère** : un quick tunnel change d'URL à chaque redémarrage de cloudflared (ou
-de la machine). Si `anarbib-cloudflared` redémarre, récupérer la nouvelle URL (commande
-ci-dessus) et **re-poser le secret**. (URL stable = named tunnel, qui exige un compte
-Cloudflare + un domaine ; inutile pour un bridge temporaire.) L'URL n'est PAS committée
-(semi-secrète) : elle ne vit que dans les logs cloudflared + le secret Supabase.
+de la machine). Après un (re)démarrage, **un seul geste** rétablit le géocodage :
+```bash
+bash scripts/nominatim/refresh-tunnel-secret.sh
+```
+(le script recrée le tunnel au besoin, lit l'URL courante et repose le secret `NOMINATIM_URL`).
+URL stable sans ce geste = named tunnel (compte Cloudflare + domaine) ; inutile pour un bridge
+temporaire. L'URL n'est PAS committée (semi-secrète) : elle ne vit que dans les logs
+cloudflared + le secret Supabase.
 
 ### DÉMONTAGE quand le VPS camarades prend le relais
 Quand Nominatim tournera sur le VPS (co-localisé avec Supabase self-hosted, ou joignable en
