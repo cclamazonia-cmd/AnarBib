@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Rechazar",
   "account.invitations.acceptSuccess": "Ahora formas parte del equipo.",
   "account.invitations.declineSuccess": "Invitación rechazada.",
-  "account.invitations.error": "Ocurrió un error."
+  "account.invitations.error": "Ocurrió un error.",
+  "error.catalog.discard.unauthenticated": "Inicio de sesión requerido.",
+  "error.catalog.discard.forbidden": "No tienes permiso para esta acción.",
+  "error.catalog.discard.notFound": "Ficha no encontrada (quizá ya se eliminó).",
+  "error.catalog.discard.bookHasHoldings": "Este documento tiene ejemplares en una o varias bibliotecas. Descártalos primero.",
+  "error.catalog.discard.bookHasLoans": "Este documento tiene historial de préstamo y no se puede eliminar.",
+  "error.catalog.discard.authorLinked": "Esta autoridad sigue vinculada a uno o varios documentos. Desvincúlala primero.",
+  "error.catalog.discard.exemplarInCirculation": "Este ejemplar tiene historial de circulación (consulta, préstamo o préstamo interbibliotecario) y no se puede eliminar."
 }

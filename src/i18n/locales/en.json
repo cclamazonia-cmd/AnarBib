@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Decline",
   "account.invitations.acceptSuccess": "You are now part of the team.",
   "account.invitations.declineSuccess": "Invitation declined.",
-  "account.invitations.error": "An error occurred."
+  "account.invitations.error": "An error occurred.",
+  "error.catalog.discard.unauthenticated": "Sign-in required.",
+  "error.catalog.discard.forbidden": "You don't have permission for this action.",
+  "error.catalog.discard.notFound": "Record not found (it may already have been deleted).",
+  "error.catalog.discard.bookHasHoldings": "This document has copies in one or more libraries. Discard those first.",
+  "error.catalog.discard.bookHasLoans": "This document has loan history and cannot be deleted.",
+  "error.catalog.discard.authorLinked": "This authority is still linked to one or more documents. Unlink it first.",
+  "error.catalog.discard.exemplarInCirculation": "This copy has circulation history (consultation, loan or interlibrary loan) and cannot be deleted."
 }

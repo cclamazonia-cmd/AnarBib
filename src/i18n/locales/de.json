@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Ablehnen",
   "account.invitations.acceptSuccess": "Du bist jetzt Teil des Teams.",
   "account.invitations.declineSuccess": "Einladung abgelehnt.",
-  "account.invitations.error": "Ein Fehler ist aufgetreten."
+  "account.invitations.error": "Ein Fehler ist aufgetreten.",
+  "error.catalog.discard.unauthenticated": "Anmeldung erforderlich.",
+  "error.catalog.discard.forbidden": "Du hast keine Berechtigung für diese Aktion.",
+  "error.catalog.discard.notFound": "Eintrag nicht gefunden (vielleicht schon gelöscht).",
+  "error.catalog.discard.bookHasHoldings": "Dieses Dokument hat Exemplare in einer oder mehreren Bibliotheken. Verwirf zuerst die Exemplare.",
+  "error.catalog.discard.bookHasLoans": "Dieses Dokument hat eine Ausleihhistorie und kann nicht gelöscht werden.",
+  "error.catalog.discard.authorLinked": "Diese Normdatei ist noch mit einem oder mehreren Dokumenten verknüpft. Löse zuerst die Verknüpfung.",
+  "error.catalog.discard.exemplarInCirculation": "Dieses Exemplar hat eine Zirkulationshistorie (Einsicht, Ausleihe oder Fernleihe) und kann nicht gelöscht werden."
 }

@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Weigeren",
   "account.invitations.acceptSuccess": "Je maakt nu deel uit van het team.",
   "account.invitations.declineSuccess": "Uitnodiging geweigerd.",
-  "account.invitations.error": "Er is een fout opgetreden."
+  "account.invitations.error": "Er is een fout opgetreden.",
+  "error.catalog.discard.unauthenticated": "Inloggen vereist.",
+  "error.catalog.discard.forbidden": "Je hebt geen rechten voor deze actie.",
+  "error.catalog.discard.notFound": "Record niet gevonden (mogelijk al verwijderd).",
+  "error.catalog.discard.bookHasHoldings": "Dit document heeft exemplaren in een of meer bibliotheken. Verwijder eerst de exemplaren.",
+  "error.catalog.discard.bookHasLoans": "Dit document heeft een uitleengeschiedenis en kan niet worden verwijderd.",
+  "error.catalog.discard.authorLinked": "Deze autoriteit is nog gekoppeld aan een of meer documenten. Ontkoppel deze eerst.",
+  "error.catalog.discard.exemplarInCirculation": "Dit exemplaar heeft een circulatiegeschiedenis (raadpleging, uitlening of interbibliothecair leenverkeer) en kan niet worden verwijderd."
 }

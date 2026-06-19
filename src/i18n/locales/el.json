@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Απόρριψη",
   "account.invitations.acceptSuccess": "Είστε πλέον μέλος της ομάδας.",
   "account.invitations.declineSuccess": "Η πρόσκληση απορρίφθηκε.",
-  "account.invitations.error": "Παρουσιάστηκε σφάλμα."
+  "account.invitations.error": "Παρουσιάστηκε σφάλμα.",
+  "error.catalog.discard.unauthenticated": "Απαιτείται σύνδεση.",
+  "error.catalog.discard.forbidden": "Δεν έχετε δικαίωμα για αυτήν την ενέργεια.",
+  "error.catalog.discard.notFound": "Η εγγραφή δεν βρέθηκε (ίσως έχει ήδη διαγραφεί).",
+  "error.catalog.discard.bookHasHoldings": "Αυτό το τεκμήριο έχει αντίτυπα σε μία ή περισσότερες βιβλιοθήκες. Απορρίψτε πρώτα τα αντίτυπα.",
+  "error.catalog.discard.bookHasLoans": "Αυτό το τεκμήριο έχει ιστορικό δανεισμού και δεν μπορεί να διαγραφεί.",
+  "error.catalog.discard.authorLinked": "Αυτή η καθιερωμένη εγγραφή συνδέεται ακόμη με ένα ή περισσότερα τεκμήρια. Αποσυνδέστε την πρώτα.",
+  "error.catalog.discard.exemplarInCirculation": "Αυτό το αντίτυπο έχει ιστορικό κυκλοφορίας (ανάγνωση, δανεισμός ή διαδανεισμός) και δεν μπορεί να διαγραφεί."
 }

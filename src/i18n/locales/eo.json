@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Rifuzi",
   "account.invitations.acceptSuccess": "Vi nun estas parto de la teamo.",
   "account.invitations.declineSuccess": "Invito rifuzita.",
-  "account.invitations.error": "Okazis eraro."
+  "account.invitations.error": "Okazis eraro.",
+  "error.catalog.discard.unauthenticated": "Ensaluto bezonata.",
+  "error.catalog.discard.forbidden": "Vi ne havas permeson por ĉi tiu ago.",
+  "error.catalog.discard.notFound": "Skedo ne trovita (eble jam forigita).",
+  "error.catalog.discard.bookHasHoldings": "Ĉi tiu dokumento havas ekzemplerojn en unu aŭ pluraj bibliotekoj. Unue forigu la ekzemplerojn.",
+  "error.catalog.discard.bookHasLoans": "Ĉi tiu dokumento havas pruntan historion kaj ne povas esti forigita.",
+  "error.catalog.discard.authorLinked": "Ĉi tiu aŭtoritato ankoraŭ estas ligita al unu aŭ pluraj dokumentoj. Unue malligu ĝin.",
+  "error.catalog.discard.exemplarInCirculation": "Ĉi tiu ekzemplero havas cirkuladan historion (konsulto, prunto aŭ interbiblioteka prunto) kaj ne povas esti forigita."
 }

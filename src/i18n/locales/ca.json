@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Rebutjar",
   "account.invitations.acceptSuccess": "Ara formes part de l'equip.",
   "account.invitations.declineSuccess": "Invitació rebutjada.",
-  "account.invitations.error": "S'ha produït un error."
+  "account.invitations.error": "S'ha produït un error.",
+  "error.catalog.discard.unauthenticated": "Cal iniciar la sessió.",
+  "error.catalog.discard.forbidden": "No tens permís per a aquesta acció.",
+  "error.catalog.discard.notFound": "Fitxa no trobada (potser ja s'ha eliminat).",
+  "error.catalog.discard.bookHasHoldings": "Aquest document té exemplars en una o més biblioteques. Descarta'ls primer.",
+  "error.catalog.discard.bookHasLoans": "Aquest document té historial de préstec i no es pot eliminar.",
+  "error.catalog.discard.authorLinked": "Aquesta autoritat encara està vinculada a un o més documents. Desvincula-la primer.",
+  "error.catalog.discard.exemplarInCirculation": "Aquest exemplar té historial de circulació (consulta, préstec o préstec interbibliotecari) i no es pot eliminar."
 }

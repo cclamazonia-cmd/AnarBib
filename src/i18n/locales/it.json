@@ -5366,5 +5366,12 @@
   "account.invitations.decline": "Rifiutare",
   "account.invitations.acceptSuccess": "Ora fai parte della squadra.",
   "account.invitations.declineSuccess": "Invito rifiutato.",
-  "account.invitations.error": "Si è verificato un errore."
+  "account.invitations.error": "Si è verificato un errore.",
+  "error.catalog.discard.unauthenticated": "Autenticazione richiesta.",
+  "error.catalog.discard.forbidden": "Non hai i permessi per questa azione.",
+  "error.catalog.discard.notFound": "Scheda non trovata (forse è già stata eliminata).",
+  "error.catalog.discard.bookHasHoldings": "Questo documento ha copie in una o più biblioteche. Scarta prima le copie.",
+  "error.catalog.discard.bookHasLoans": "Questo documento ha uno storico di prestito e non può essere eliminato.",
+  "error.catalog.discard.authorLinked": "Questa autorità è ancora collegata a uno o più documenti. Scollegala prima.",
+  "error.catalog.discard.exemplarInCirculation": "Questa copia ha uno storico di circolazione (consultazione, prestito o prestito interbibliotecario) e non può essere eliminata."
 }
