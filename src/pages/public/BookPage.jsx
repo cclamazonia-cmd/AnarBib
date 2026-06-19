@@ -98,7 +98,7 @@ function buildIsbdZones(b, t) {
 export default function BookPage() {
   const { id } = useParams();
   const { user } = useAuth();
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   const { librarySlug, libraryName: sessionLibName } = useLibrary();
   const navigate = useNavigate();
   const isAuth = !!user;
@@ -457,9 +457,26 @@ export default function BookPage() {
               </div>
             )}
 
-            {/* #OPAC6 — Sujets cliquables (point d'entrée de découverte) */}
-            {book.assuntos && (() => {
-              const subs = String(book.assuntos).split(/\s*[|;]\s*/).map(s => s.trim()).filter(Boolean);
+            {/* #OPAC6 — Sujets cliquables. Priorité au THÉSAURUS (book_subjects,
+                subjects_json, sujets ativo), repli sur l'ancien champ libre assuntos.
+                Le thésaurus pointe vers la découverte structurée (/catalogo?subject=slug). */}
+            {(() => {
+              const loc = (li) => (li && typeof li === 'object'
+                && (li[locale] || li[(locale || '').split('-')[0]] || li['pt-BR'] || Object.values(li)[0])) || '';
+              const thes = Array.isArray(book.subjects_json) ? book.subjects_json : [];
+              if (thes.length > 0) {
+                return (
+                  <div className="ab-livro-subjects">
+                    <span className="ab-livro-subjects__label">{t({ id: 'book.meta.subjects' })} :</span>
+                    {thes.map((s) => (
+                      <Link key={s.subject_id} to={`/catalogo?subject=${encodeURIComponent(s.slug)}`} className="ab-livro-subject-chip">
+                        {loc(s.label_i18n) || s.slug}
+                      </Link>
+                    ))}
+                  </div>
+                );
+              }
+              const subs = String(book.assuntos || '').split(/\s*[|;]\s*/).map(s => s.trim()).filter(Boolean);
               if (!subs.length) return null;
               return (
                 <div className="ab-livro-subjects">
