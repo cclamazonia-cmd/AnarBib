@@ -37,6 +37,10 @@ export default function TabBiblios() {
   const [selectedLib, setSelectedLib] = useState('');
   const [joining, setJoining] = useState(false);
   const [joinMsg, setJoinMsg] = useState(null); // { kind: 'ok' | 'err', text }
+  // Lot 3 — invitations à rejoindre une équipe (accueil d'équipe)
+  const [invitations, setInvitations] = useState([]);
+  const [invMsg, setInvMsg] = useState(null);
+  const [invBusy, setInvBusy] = useState(false);
 
   const load = useCallback(async () => {
     let memberships = [];
@@ -58,7 +62,36 @@ export default function TabBiblios() {
         .order('name');
       setJoinable((libs || []).filter((l) => !memberIds.has(l.id)));
     } catch { setJoinable([]); }
+
+    // Invitations à rejoindre une équipe (RPC publique fn_team_my_invitations).
+    try {
+      const { data: inv } = await supabase.rpc('fn_team_my_invitations');
+      setInvitations(Array.isArray(inv) ? inv : []);
+    } catch { setInvitations([]); }
   }, []);
+
+  const handleInvitation = useCallback(async (id, kind) => {
+    if (invBusy) return;
+    setInvBusy(true);
+    setInvMsg(null);
+    try {
+      const fn = kind === 'accept' ? 'fn_team_accept_invitation' : 'fn_team_decline_invitation';
+      const { data, error } = await supabase.rpc(fn, { p_invitation_id: id });
+      if (error) throw error;
+      const row = (data && typeof data === 'object') ? data : null;
+      if (row && row.ok === false) {
+        setInvMsg({ kind: 'err', text: row.message || t({ id: 'account.invitations.error' }) });
+      } else {
+        setInvMsg({ kind: 'ok', text: t({ id: kind === 'accept'
+          ? 'account.invitations.acceptSuccess' : 'account.invitations.declineSuccess' }) });
+        await load();
+      }
+    } catch (e) {
+      setInvMsg({ kind: 'err', text: localizeError(e, t, 'account.invitations.error') });
+    } finally {
+      setInvBusy(false);
+    }
+  }, [invBusy, load, t]);
 
   useEffect(() => {
     let cancelled = false;
@@ -97,6 +130,50 @@ export default function TabBiblios() {
 
   return (
     <div>
+      {/* ── Invitations à rejoindre une équipe (lot 3 — accueil d'équipe) ── */}
+      {invitations.length > 0 && (
+        <div style={{ marginBottom: 24, padding: '14px 16px', borderRadius: 10, border: '1px solid var(--brand-panel-border, rgba(255,255,255,.14))', background: 'var(--brand-panel-bg, rgba(255,255,255,.03))' }}>
+          <h3 className="ab-conta-section-title" style={{ fontSize: '1rem', marginTop: 0 }}>
+            {t({ id: 'account.invitations.heading' })}
+          </h3>
+          <div className="ab-conta-items">
+            {invitations.map((inv) => {
+              const ready = inv.status === 'ready';
+              return (
+                <div key={inv.id} className="ab-conta-item" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                  <div className="ab-conta-item__main" style={{ flex: 1, minWidth: 200 }}>
+                    <span className="ab-conta-item__title">{inv.library_name}</span>
+                    <span className="ab-conta-item__meta">
+                      {inv.proposed_by_name
+                        ? t({ id: 'account.invitations.proposedBy' }, { name: inv.proposed_by_name })
+                        : t({ id: 'account.invitations.asLibrarian' })}
+                    </span>
+                    <span className="ab-conta-item__meta" style={{ marginTop: 4, color: ready ? '#4ade80' : '#fbbf24' }}>
+                      {ready ? t({ id: 'account.invitations.ready' }) : t({ id: 'account.invitations.pending' })}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                    {ready && (
+                      <button type="button" className="ab-button ab-button--secondary" disabled={invBusy} onClick={() => handleInvitation(inv.id, 'accept')}>
+                        {t({ id: 'account.invitations.accept' })}
+                      </button>
+                    )}
+                    <button type="button" className="ab-button ab-button--mini" disabled={invBusy} onClick={() => handleInvitation(inv.id, 'decline')}>
+                      {t({ id: 'account.invitations.decline' })}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {invMsg && (
+            <p style={{ marginTop: 10, fontSize: '.85rem', color: invMsg.kind === 'ok' ? '#4ade80' : '#f87171' }}>
+              {invMsg.text}
+            </p>
+          )}
+        </div>
+      )}
+
       <h2 className="ab-conta-section-title">{t({ id: 'account.biblios.title' })}</h2>
       <p className="ab-conta-hint">{t({ id: 'account.tab.libraries.hint' })}</p>
 

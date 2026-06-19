@@ -42,9 +42,12 @@ import {
   roleSortOrder,
   statusBadgeKind,
   availableTeamActions,
+  isLibrarian,
 } from '@/lib/roles';
+import { useTeamMutations } from '@/lib/teamMutations';
 import TeamActionsMenu from './TeamActionsMenu';
 import TeamActionModal from './TeamActionModal';
+import TeamInviteModal from './TeamInviteModal';
 
 // Note : la liste des rôles staff filtrés (librarian/coord/admin) est
 // désormais gérée côté DB par fn_team_list_memberships.
@@ -115,6 +118,50 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
   }, [scope, libraryId]);
 
   useEffect(() => { loadMemberships(); }, [loadMemberships]);
+
+  // ── Invitations en attente (lot 3 — accueil d'équipe) ──
+  // Visible/actionnable uniquement en scope library, pour le staff (la RPC
+  // de liste est gardée côté DB : 0 ligne si l'appelant·e n'est pas staff).
+  const inviteMutations = useTeamMutations();
+  const [invitations, setInvitations] = useState([]);
+  const [showInvite, setShowInvite] = useState(false);
+  const canInvite = scope === 'library' && Boolean(libraryId) && isLibrarian(observerRole);
+
+  const loadInvitations = useCallback(async () => {
+    if (scope !== 'library' || !libraryId) { setInvitations([]); return; }
+    try {
+      const { data, error: qErr } = await supabase.rpc('fn_team_list_invitations', {
+        p_library_id: libraryId,
+      });
+      if (qErr) throw qErr;
+      setInvitations(data || []);
+    } catch (err) {
+      console.warn('TeamPanel loadInvitations:', err);
+      setInvitations([]);
+    }
+  }, [scope, libraryId]);
+
+  useEffect(() => { loadInvitations(); }, [loadInvitations]);
+
+  const handleEndorse = useCallback(async (invId) => {
+    const r = await inviteMutations.ratifyInvitation(invId);
+    if (r.success) {
+      setToast({ text: t({ id: 'team.invitations.endorseSuccess' }), kind: 'ok' });
+      loadInvitations();
+    } else {
+      setToast({ text: localizeError({ code: r.error, message: r.message }, t), kind: 'err' });
+    }
+  }, [inviteMutations, t, loadInvitations]);
+
+  const handleRevoke = useCallback(async (invId) => {
+    const r = await inviteMutations.revokeInvitation(invId, null);
+    if (r.success) {
+      setToast({ text: t({ id: 'team.invitations.revokeSuccess' }), kind: 'ok' });
+      loadInvitations();
+    } else {
+      setToast({ text: localizeError({ code: r.error, message: r.message }, t), kind: 'err' });
+    }
+  }, [inviteMutations, t, loadInvitations]);
 
   // Auto-dismiss du toast après 4s
   useEffect(() => {
@@ -221,6 +268,15 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
         </div>
       )}
 
+      {/* ── Bouton « accueillir dans l'équipe » (lot 3) ──── */}
+      {canInvite && (
+        <div className="ab-team-invite-bar" style={{ marginBottom: 12, textAlign: 'right' }}>
+          <button type="button" className="cat-btn primary" onClick={() => setShowInvite(true)}>
+            {t({ id: 'team.invite.button' })}
+          </button>
+        </div>
+      )}
+
       {/* ── Compteurs par rôle ───────────────────────────── */}
       <div className="ab-team-counts">
         <CountCard label={t({ id: 'roles.librarian' })} count={counts.byRole.librarian} />
@@ -321,6 +377,55 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
         </div>
       )}
 
+      {/* ── Invitations en attente (lot 3 — accueil d'équipe) ── */}
+      {scope === 'library' && invitations.length > 0 && (
+        <div className="ab-team-invitations" style={{ marginTop: 20 }}>
+          <h3 style={{ fontSize: '.95rem', margin: '0 0 8px' }}>
+            {t({ id: 'team.invitations.heading' })}
+          </h3>
+          {invitations.map((inv, i) => (
+            <div key={inv.id} className="ab-team-row" style={rowStyle(i)}>
+              <div className="ab-team-row__main">
+                <div className="ab-team-row__name">
+                  {inv.invited_name || inv.invited_public_id}
+                  <span className="ab-team-self-tag"> · {inv.invited_public_id}</span>
+                </div>
+                <div className="ab-team-row__meta">
+                  {inv.proposed_by_name && (
+                    <span>{t({ id: 'team.invitations.proposedBy' }, { name: inv.proposed_by_name })}</span>
+                  )}
+                  <span>{' · '}{t({ id: 'team.invitations.endorsements' }, {
+                    count: inv.ratifications_count, required: inv.required_ratifications,
+                  })}</span>
+                </div>
+                <div className="ab-team-row__note">
+                  {inv.status === 'ready'
+                    ? t({ id: 'team.invitations.ready' })
+                    : (!inv.has_coordenador
+                        ? t({ id: 'team.invitations.needsCoordenador' })
+                        : t({ id: 'team.invitations.needsMore' }))}
+                </div>
+              </div>
+              <div className="ab-team-row__badges" style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                {inv.status === 'pending_ratification' && !inv.caller_has_ratified && (
+                  <button type="button" className="cat-btn primary" onClick={() => handleEndorse(inv.id)}>
+                    {t({ id: 'team.invitations.endorse' })}
+                  </button>
+                )}
+                {inv.caller_has_ratified && (
+                  <span className="cat-pill ok" style={{ fontSize: '.7rem' }}>
+                    {t({ id: 'team.invitations.endorsed' })}
+                  </span>
+                )}
+                <button type="button" className="cat-btn ghost" onClick={() => handleRevoke(inv.id)}>
+                  {t({ id: 'team.invitations.revoke' })}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* ── Modale d'action ───────────────────────────── */}
       {pendingAction && (
         <TeamActionModal
@@ -331,6 +436,19 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
           action={pendingAction.action}
           membership={pendingAction.membership}
           currentUserId={user?.id}
+        />
+      )}
+
+      {/* ── Modale « accueillir dans l'équipe » (lot 3) ── */}
+      {showInvite && (
+        <TeamInviteModal
+          isOpen={true}
+          onClose={() => setShowInvite(false)}
+          onSuccess={() => {
+            setToast({ text: t({ id: 'team.invite.success' }), kind: 'ok' });
+            loadInvitations();
+          }}
+          libraryId={libraryId}
         />
       )}
     </div>

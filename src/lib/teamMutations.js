@@ -136,6 +136,47 @@ export function useTeamMutations() {
     [callRpc]
   );
 
+  // ─── Lot 3 : accueil dans l'équipe (invitations) ──────────────────────
+  // Cooptation collégiale (voie médiane : librarian propose, ≥1 coordenador
+  // requis pour aboutir). RPC en schéma public (SECURITY DEFINER).
+  const proposeInvitation = useCallback(
+    (libraryId, invitedPublicId, role = 'librarian') => callRpc('fn_team_propose_invitation', {
+      p_library_id: libraryId,
+      p_invited_public_id: invitedPublicId,
+      p_role: role,
+    }),
+    [callRpc]
+  );
+
+  const ratifyInvitation = useCallback(
+    (invitationId) => callRpc('fn_team_ratify_invitation', {
+      p_invitation_id: invitationId,
+    }),
+    [callRpc]
+  );
+
+  const acceptInvitation = useCallback(
+    (invitationId) => callRpc('fn_team_accept_invitation', {
+      p_invitation_id: invitationId,
+    }),
+    [callRpc]
+  );
+
+  const declineInvitation = useCallback(
+    (invitationId) => callRpc('fn_team_decline_invitation', {
+      p_invitation_id: invitationId,
+    }),
+    [callRpc]
+  );
+
+  const revokeInvitation = useCallback(
+    (invitationId, reason = null) => callRpc('fn_team_revoke_invitation', {
+      p_invitation_id: invitationId,
+      p_reason: reason,
+    }),
+    [callRpc]
+  );
+
   return {
     loading,
     // Phase B1
@@ -147,5 +188,11 @@ export function useTeamMutations() {
     // Phase B2
     requestRemoveMember,
     cancelRemoveMember,
+    // Lot 3 : invitations
+    proposeInvitation,
+    ratifyInvitation,
+    acceptInvitation,
+    declineInvitation,
+    revokeInvitation,
   };
 }
