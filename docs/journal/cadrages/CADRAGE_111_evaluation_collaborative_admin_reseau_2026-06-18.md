@@ -165,6 +165,22 @@ CREATE TABLE public.library_request_invitations (  -- « proposer un échange »
 
 > Lot 2 = le lot qui touche EF + mail → le plus lourd à vérifier. Prévoir un passage `advisor` après DDL et un test `mail-i18n-test`.
 
+> ⚠️ **CORRECTION (réalité de l'EF, constatée en codant Lot 2b)** : `notify-library-request`
+> **n'est PAS localisée** — elle rend TOUS ses e-mails en **pt-BR en dur**, sans lire
+> `profiles.preferred_language`, et envoie côté coordination à **une seule boîte
+> `ADMIN_EMAIL`** (pas de fan-out par admin). Conséquence : un·e destinataire
+> non-lusophone (solicitante OU futur·e co-admin) reçoit du **pt-BR**. Donc **pas de
+> mail-strings ×10** pour #111 : les 2 nouveaux handlers (`library_request_message`,
+> `library_request_invitation`) sont en pt-BR, cohérents avec les 5 existants.
+>
+> 🔭 **FOLLOW-UP distinct à trancher AVANT Bologne** — « localiser les e-mails
+> onboarding » : (1) détecter `preferred_language` du·de la destinataire (la donnée
+> existe) ; (2) chaînes par locale pour les **7 types** d'e-mails onboarding (charte
+> inclusive, `it` jamais `camerata`, test `mail-i18n-test`) ; (3) **fan-out par admin
+> actif** au lieu d'`ADMIN_EMAIL` unique (cf. le fan-out déjà fait pour la cooptation
+> via `fn_network_notify_event`). Chantier propre à l'EF, plus large que #111 — ne pas
+> le noyer dans #111.
+
 ---
 
 ## 5. LOT 3 — Interfaces + digest (frontend + cron)
