@@ -98,7 +98,12 @@ adresse→GPS) **fonctionne sur l'hôte**. Conteneur de test retiré après vali
 docker rm -f anarbib-nominatim-smoke
 ```
 
-## 7. Câblage AnarBib (à faire — spec §7)
+## 7. Câblage AnarBib (proxy + bouton LIVRÉS le 19/06, commit 45f7dfbc)
+
+> ✅ Fait : (1) l'EF `supabase/functions/geocode` (proxy serveur, secret `NOMINATIM_URL`,
+> rate-limit, anti-fuite) et (2) le bouton « Localiser depuis l'adresse » de la **modale
+> d'édition** (repli pin manuel). Reste : le bouton dans le **formulaire public anonyme**
+> (à garder avec Turnstile). Description d'origine ci-dessous.
 
 1. **Proxy Edge Function `geocode`** : reçoit une adresse, interroge
    `http://<host>:8089/search` **côté serveur** (URL = secret vault `NOMINATIM_URL`),
@@ -115,3 +120,46 @@ docker rm -f anarbib-nominatim-smoke
   (acceptable vu l'usage occasionnel). Sinon, retirer FREEZE et brancher les replication updates.
 - Le conteneur `restart: unless-stopped` redémarre avec la machine. Données dans les volumes
   `nominatim-data` / `nominatim-flatnode`.
+
+## 9. Tunnel cloudflared (bridge temporaire) — montage & démontage
+
+⚠️ L'Edge Function `geocode` tourne sur le **cloud Supabase** ; le Nominatim est en
+**local** (conteneur sur la WSL2). Le cloud ne peut pas joindre `localhost` → on l'expose
+via un **tunnel cloudflared** (quick tunnel, gratuit, sans compte), **le temps que le VPS
+camarades prenne le relais** (cf. mémo migration Supabase→VPS).
+
+### Monté le 19/06 (état actuel)
+```bash
+# cloudflared branché sur le réseau Docker de Nominatim, vise le conteneur (évite le loopback)
+NET=$(docker network ls --format '{{.Name}}' | grep -i nominatim | head -1)
+docker run -d --name anarbib-cloudflared --restart unless-stopped \
+  --network "$NET" cloudflare/cloudflared:latest \
+  tunnel --no-autoupdate --url http://anarbib-nominatim:8080
+# récupérer l'URL https://<random>.trycloudflare.com :
+docker logs anarbib-cloudflared 2>&1 | grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' | head -1
+# la poser comme secret de l'Edge Function :
+supabase secrets set NOMINATIM_URL=<url> --project-ref uflwmikiyjfnikiphtcp
+```
+⚠️ **URL éphémère** : un quick tunnel change d'URL à chaque redémarrage de cloudflared (ou
+de la machine). Si `anarbib-cloudflared` redémarre, récupérer la nouvelle URL (commande
+ci-dessus) et **re-poser le secret**. (URL stable = named tunnel, qui exige un compte
+Cloudflare + un domaine ; inutile pour un bridge temporaire.) L'URL n'est PAS committée
+(semi-secrète) : elle ne vit que dans les logs cloudflared + le secret Supabase.
+
+### DÉMONTAGE quand le VPS camarades prend le relais
+Quand Nominatim tournera sur le VPS (co-localisé avec Supabase self-hosted, ou joignable en
+réseau interne), le tunnel n'a plus lieu d'être :
+```bash
+# 1) Re-pointer le secret vers le Nominatim du VPS (URL interne/privée du VPS)
+supabase secrets set NOMINATIM_URL=http://<nominatim-interne-VPS>:8080 --project-ref <ref>
+#    Cas Supabase AUSSI self-hosted sur le VPS : l'EF joint Nominatim sur le même réseau
+#    Docker → NOMINATIM_URL=http://nominatim:8080, plus de tunnel ni d'URL publique.
+# 2) Arrêter et supprimer le tunnel
+docker rm -f anarbib-cloudflared
+# 3) (option) déplacer/arrêter le Nominatim local s'il migre sur le VPS
+#    docker compose -f scripts/nominatim/docker-compose.yml down       # garde les volumes
+#    docker compose -f scripts/nominatim/docker-compose.yml down -v    # supprime AUSSI les données
+# 4) Vérifier : un géocodage depuis la modale d'édition doit toujours répondre.
+```
+**Aucun code applicatif ne change** au passage VPS : seule la valeur du secret
+`NOMINATIM_URL` bascule (+ on retire le conteneur cloudflared).
