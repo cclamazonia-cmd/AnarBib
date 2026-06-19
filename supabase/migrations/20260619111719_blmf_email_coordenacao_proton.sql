@@ -32,8 +32,12 @@ DECLARE
   v_new text := 'blmf.belem@proton.me';
 BEGIN
   SELECT id INTO v_lib FROM public.libraries WHERE slug = 'blmf';
+  -- Tolerant : sur une base sans la BLMF (reconstruction de schema en CI
+  -- sql-tests, ou toute instance neuve), la migration est un no-op au lieu
+  -- d'echouer. En prod la BLMF existe -> les UPDATE s'appliquent.
   IF v_lib IS NULL THEN
-    RAISE EXCEPTION 'BLMF introuvable (slug=blmf)';
+    RAISE NOTICE 'BLMF (slug=blmf) absente -- migration sans effet';
+    RETURN;
   END IF;
 
   -- 1. Identite d'envoi + reply-to technique
@@ -85,6 +89,10 @@ DECLARE
   v_old text := 'cclamazonia@gmail.com';
 BEGIN
   SELECT id INTO v_lib FROM public.libraries WHERE slug = 'blmf';
+  IF v_lib IS NULL THEN
+    RAISE NOTICE 'BLMF absente -- verification ignoree';
+    RETURN;
+  END IF;
 
   SELECT
       (SELECT count(*) FROM public.library_commons
