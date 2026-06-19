@@ -28,6 +28,56 @@ const V = new Set<string>(["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "n
 
 const S: Record<string, Record<SupportedMailLocale, string>> = {
 
+  // ── Accueil dans l'équipe : invitation (lot 4) ────────────────────────────
+  "team.invitation_proposed.sub": {
+    "pt-BR": "Um convite a endossar — {libraryName}",
+    fr: "Une invitation à endosser — {libraryName}",
+    es: "Una invitación para respaldar — {libraryName}",
+    en: "An invitation to endorse — {libraryName}",
+    it: "Un invito da avallare — {libraryName}",
+    de: "Eine Einladung zum Befürworten — {libraryName}",
+    ca: "Una invitació per avalar — {libraryName}",
+    eo: "Invito por aprobi — {libraryName}",
+    nl: "Een uitnodiging om te steunen — {libraryName}",
+    el: "Μια πρόσκληση προς υποστήριξη — {libraryName}"
+  },
+  "team.invitation_proposed.intro": {
+    "pt-BR": "{actorName} propõe acolher {targetName} na equipe de {libraryName}. Seu endosso (coordenação) é necessário para finalizar o acolhimento. Acesse o painel da equipe para endossar.",
+    fr: "{actorName} propose d'accueillir {targetName} dans l'équipe de {libraryName}. Votre endossement (coordination) est nécessaire pour finaliser l'accueil. Rendez-vous dans le panneau de l'équipe pour endosser.",
+    es: "{actorName} propone acoger a {targetName} en el equipo de {libraryName}. Tu respaldo (coordinación) es necesario para finalizar el acogimiento. Entra al panel del equipo para respaldar.",
+    en: "{actorName} proposes to welcome {targetName} to the team of {libraryName}. Your endorsement (coordination) is needed to finalize it. Go to the team panel to endorse.",
+    it: "{actorName} propone di accogliere {targetName} nella squadra di {libraryName}. Il tuo avallo (coordinamento) è necessario per finalizzare l'accoglienza. Vai al pannello della squadra per avallare.",
+    de: "{actorName} schlägt vor, {targetName} ins Team von {libraryName} aufzunehmen. Deine Befürwortung (Koordination) ist nötig, um es abzuschließen. Geh zum Team-Panel, um zu befürworten.",
+    ca: "{actorName} proposa acollir {targetName} a l'equip de {libraryName}. El teu aval (coordinació) és necessari per finalitzar l'acolliment. Vés al tauler de l'equip per avalar.",
+    eo: "{actorName} proponas akcepti {targetName} en la teamon de {libraryName}. Via aprobo (kunordigo) necesas por finpretigi. Iru al la teama panelo por aprobi.",
+    nl: "{actorName} stelt voor om {targetName} in het team van {libraryName} op te nemen. Jouw steun (coördinatie) is nodig om dit af te ronden. Ga naar het teampaneel om te steunen.",
+    el: "{actorName} προτείνει την ένταξη του ατόμου {targetName} στην ομάδα της {libraryName}. Η υποστήριξή σας (συντονισμός) χρειάζεται για την ολοκλήρωση. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε."
+  },
+  "team.invitation_ready.sub": {
+    "pt-BR": "Convite para integrar a equipe de {libraryName}",
+    fr: "Invitation à rejoindre l'équipe de {libraryName}",
+    es: "Invitación para integrar el equipo de {libraryName}",
+    en: "Invitation to join the team of {libraryName}",
+    it: "Invito a entrare nella squadra di {libraryName}",
+    de: "Einladung, dem Team von {libraryName} beizutreten",
+    ca: "Invitació per formar part de l'equip de {libraryName}",
+    eo: "Invito aliĝi al la teamo de {libraryName}",
+    nl: "Uitnodiging om bij het team van {libraryName} te komen",
+    el: "Πρόσκληση για ένταξη στην ομάδα της {libraryName}"
+  },
+  "team.invitation_ready.intro": {
+    "pt-BR": "Seu convite para integrar a equipe de {libraryName} está pronto. Acesse sua conta (Minhas bibliotecas) para aceitar ou recusar.",
+    fr: "Votre invitation à rejoindre l'équipe de {libraryName} est prête. Rendez-vous dans votre compte (Mes bibliothèques) pour l'accepter ou la décliner.",
+    es: "Tu invitación para integrar el equipo de {libraryName} está lista. Entra a tu cuenta (Mis bibliotecas) para aceptarla o rechazarla.",
+    en: "Your invitation to join the team of {libraryName} is ready. Go to your account (My libraries) to accept or decline it.",
+    it: "Il tuo invito a entrare nella squadra di {libraryName} è pronto. Vai al tuo account (Le mie biblioteche) per accettarlo o rifiutarlo.",
+    de: "Deine Einladung, dem Team von {libraryName} beizutreten, ist bereit. Geh zu deinem Konto (Meine Bibliotheken), um sie anzunehmen oder abzulehnen.",
+    ca: "La teva invitació per formar part de l'equip de {libraryName} està a punt. Vés al teu compte (Les meves biblioteques) per acceptar-la o rebutjar-la.",
+    eo: "Via invito aliĝi al la teamo de {libraryName} estas preta. Iru al via konto (Miaj bibliotekoj) por akcepti aŭ rifuzi ĝin.",
+    nl: "Je uitnodiging om bij het team van {libraryName} te komen is klaar. Ga naar je account (Mijn bibliotheken) om die te aanvaarden of te weigeren.",
+    el: "Η πρόσκλησή σας για ένταξη στην ομάδα της {libraryName} είναι έτοιμη. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να την αποδεχτείτε ή να την απορρίψετε."
+  },
+
   // ── Actus réseau : digest hebdomadaire (EF notify-rede-digest) ────────────
   "rede.digest.subject": {
     "pt-BR": "{brand} · Novidades da rede",

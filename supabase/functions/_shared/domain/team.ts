@@ -146,6 +146,10 @@ export async function handleTeamEvent(recordId) {
       result = await handleInactiveWarning(event, payload, library, targetUserId, ctx, bt);
     } else if (event === "team.inactive_completed") {
       result = await handleInactiveCompleted(payload, library, targetUserId, ctx, bt);
+    } else if (event === "team.invitation_proposed") {
+      result = await handleInvitationProposed(payload, library, targetUserId, actor, ctx, bt);
+    } else if (event === "team.invitation_ready") {
+      result = await handleInvitationReady(payload, library, targetUserId, ctx, bt);
     } else if (event.startsWith("team.library_profile.")) {
       return await handleLibraryProfileEvent(row.id);
     } else {
@@ -997,4 +1001,46 @@ async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) 
     user_result: userResult,
     admin_result: adminResult
   };
+}
+// team.invitation_proposed (lot 4 — accueil d'équipe)
+// Destinataires : les coordenador·rices actif·ves de la biblio (à endosser ;
+// voie médiane : ≥1 endossement coordination est requis pour finaliser l'accueil).
+async function handleInvitationProposed(payload, library, targetUserId, actor, ctx, bt) {
+  const libraryId = String(payload.library_id || "").trim();
+  const invited = await loadProfile(targetUserId);
+  const libraryName = library?.name || library?.short_name || "";
+  const targetName = displayName(invited);
+  const actorName = displayName(actor);
+  const { data: coords } = await supabaseAdmin.from("user_library_memberships").select("user_id").eq("library_id", libraryId).eq("role", "coordenador").eq("status", "active");
+  const coordIds = Array.from(new Set((coords || []).map((m)=>m.user_id)));
+  if (coordIds.length === 0) return { recipients_count: 0, reason: "no_coordenador" };
+  const { data: profiles } = await supabaseAdmin.from("profiles").select("id,email,first_name,last_name,preferred_language").in("id", coordIds);
+  const recipients = profiles || [];
+  const results = [];
+  for (const recipient of recipients){
+    const locale = recipient.preferred_language || null;
+    const userTarget = userTargetFromProfile(recipient);
+    const sub = `${tMail(locale, "team.invitation_proposed.sub", { libraryName })} — ${bt}`;
+    const tit = tMail(locale, "team.invitation_proposed.sub", { libraryName });
+    const introHtml = `<p>${tMail(locale, "team.invitation_proposed.intro", { actorName, targetName, libraryName })}</p>`;
+    const { html, text } = renderEmail({ locale, preheader: tit, title: tit, greeting: greeting(locale, recipient.first_name || undefined), introHtml, details: [], footerHtml: footerPadrao(ctx, locale), context: ctx });
+    const r = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
+    results.push(r);
+  }
+  return { user_results: results, recipients_count: recipients.length };
+}
+// team.invitation_ready (lot 4 — accueil d'équipe)
+// Destinataire : la personne invitée (à accepter dans son compte, onglet Mes biblios).
+async function handleInvitationReady(payload, library, targetUserId, ctx, bt) {
+  const target = await loadProfile(targetUserId);
+  if (!target) throw new Error(`profile ${targetUserId} not found`);
+  const locale = target.preferred_language || null;
+  const userTarget = userTargetFromProfile(target);
+  const libraryName = library?.name || library?.short_name || "";
+  const sub = `${tMail(locale, "team.invitation_ready.sub", { libraryName })} — ${bt}`;
+  const tit = tMail(locale, "team.invitation_ready.sub", { libraryName });
+  const introHtml = `<p>${tMail(locale, "team.invitation_ready.intro", { libraryName })}</p>`;
+  const { html, text } = renderEmail({ locale, preheader: tit, title: tit, greeting: greeting(locale, target.first_name || undefined), introHtml, details: [], footerHtml: footerPadrao(ctx, locale), context: ctx });
+  const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
+  return { user_result: userResult };
 }
