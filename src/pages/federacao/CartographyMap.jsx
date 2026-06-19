@@ -105,7 +105,7 @@ export default function CartographyMap({ viewName }) {
     const badge = p.anarbib ? `<span class="ab-map-badge">${esc(t({ id: 'federacao.carte.member' }))}</span>` : '';
     const typeLabel = p.category ? t({ id: `federacao.carte.cat.${p.category}` }) : '';
     const editBtn = p.canEdit
-      ? `<button type="button" class="ab-map-edit-btn" data-entry-id="${esc(p.id)}" style="margin-top:8px;padding:4px 11px;border-radius:6px;border:1px solid rgba(0,0,0,.18);background:#2563eb;color:#fff;font-size:.8rem;cursor:pointer;">${esc(t({ id: 'federacao.carte.edit' }))}</button>`
+      ? `<button type="button" class="ab-map-edit-btn" data-entry-id="${esc(p.id)}" style="margin-top:8px;padding:4px 11px;border-radius:6px;border:1px solid rgba(0,0,0,.18);background:rgb(var(--brand-accent-rgb));color:#fff;font-size:.8rem;cursor:pointer;">${esc(t({ id: 'federacao.carte.edit' }))}</button>`
       : '';
     const pebLine = p.peb ? `<div class="ab-map-pop-net">✔ ${esc(t({ id: 'biblioteca.stabPartners.right.peb' }))}</div>` : '';
     return `<div class="ab-map-popup">
