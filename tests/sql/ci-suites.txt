@@ -19,3 +19,4 @@ tests/sql/onbo_111_lot2a_messages_tests.sql
 tests/sql/onbo_111_lot3c_digest_tests.sql
 tests/sql/paquet_emprestimos_tests.sql
 tests/sql/paquet_reservas_tests.sql
+tests/sql/invitation_equipe_tests.sql
