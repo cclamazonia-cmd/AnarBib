@@ -5333,5 +5333,7 @@
   "cartografia.mod.reject": "Refuser",
   "cartografia.mod.rejectReason": "Motif du refus (facultatif) :",
   "cartografia.mod.done": "Fait.",
-  "cartografia.mod.error": "Action impossible (réservé à la coordination)."
+  "cartografia.mod.error": "Action impossible (réservé à la coordination).",
+  "federacao.carte.edit.geocode": "Localiser depuis l'adresse",
+  "federacao.carte.edit.geocodeFail": "Adresse introuvable — placez le point manuellement."
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { apiRpc } from '@/lib/supabase';
+import { apiRpc, supabase } from '@/lib/supabase';
 
 // Modale d'édition d'une fiche cartographique (Phase 3, MAP-D). Ouverte depuis la
 // carte interne (clic « Éditer » sur un marqueur éditable). Pré-remplie via
@@ -24,8 +24,11 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
   const [form, setForm] = useState(null);
   const [err, setErr] = useState('');
   const [saving, setSaving] = useState(false);
+  const [geoBusy, setGeoBusy] = useState(false);
+  const [geoMsg, setGeoMsg] = useState('');
   const pickerDivRef = useRef(null);
   const pickerMapRef = useRef(null);
+  const pickerMarkerRef = useRef(null);
 
   useEffect(() => {
     let cancel = false;
@@ -70,8 +73,9 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
     marker.on('dragend', () => apply(marker.getLatLng()));
     map.on('click', (e) => { marker.setLatLng(e.latlng); apply(e.latlng); });
     pickerMapRef.current = map;
+    pickerMarkerRef.current = marker;
     setTimeout(() => { try { map.invalidateSize(); } catch { /* ignore */ } }, 150);
-    return () => { try { map.remove(); } catch { /* ignore */ } pickerMapRef.current = null; };
+    return () => { try { map.remove(); } catch { /* ignore */ } pickerMapRef.current = null; pickerMarkerRef.current = null; };
   }, [row]);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
@@ -104,6 +108,26 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
     setSaving(false);
     if (error) { setErr(t({ id: 'federacao.carte.edit.error' })); return; }
     onSaved();
+  }
+
+  // Géocodage adresse→GPS via le proxy serveur (EF geocode → Nominatim self-hosted).
+  // Repli silencieux sur le pin manuel si indisponible (MAP-F / spec §7).
+  async function geocodeFromAddress() {
+    const q = [form.adresse, form.city, form.country].filter(Boolean).join(', ');
+    if (q.trim().length < 3) return;
+    setGeoBusy(true); setGeoMsg('');
+    const { data, error } = await supabase.functions.invoke('geocode', { body: { q } });
+    setGeoBusy(false);
+    const lat = Number(data?.lat), lon = Number(data?.lon);
+    if (error || !data?.found || !Number.isFinite(lat) || !Number.isFinite(lon)) {
+      setGeoMsg(t({ id: 'federacao.carte.edit.geocodeFail' })); return;
+    }
+    const rlat = Number(lat.toFixed(5)), rlon = Number(lon.toFixed(5));
+    setForm((f) => ({ ...f, lat: rlat, lon: rlon }));
+    if (pickerMarkerRef.current && pickerMapRef.current) {
+      pickerMarkerRef.current.setLatLng([rlat, rlon]);
+      pickerMapRef.current.setView([rlat, rlon], 13);
+    }
   }
 
   const overlay = {
@@ -197,6 +221,11 @@ export default function CartographyEditModal({ entryId, onClose, onSaved }) {
                   {STATUTS.map((s) => <option key={s} value={s}>{t({ id: `federacao.carte.statut.${s}` })}</option>)}
                 </select>
                 <label style={label}>{t({ id: 'federacao.carte.edit.position' })}</label>
+                <button type="button" onClick={geocodeFromAddress} disabled={geoBusy}
+                  style={{ ...input, width: 'auto', cursor: 'pointer', background: 'rgba(255,255,255,.06)', fontSize: '.8rem', padding: '6px 12px', marginBottom: 6 }}>
+                  {geoBusy ? '…' : t({ id: 'federacao.carte.edit.geocode' })}
+                </button>
+                {geoMsg && <div style={{ fontSize: '.72rem', color: '#fca5a5', marginBottom: 4 }}>{geoMsg}</div>}
                 <div ref={pickerDivRef} style={{ height: 200, borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(255,255,255,.14)' }} />
                 <div style={{ fontSize: '.72rem', color: 'var(--brand-muted)', marginTop: 4 }}>
                   {Number(form.lat).toFixed(5)}, {Number(form.lon).toFixed(5)}

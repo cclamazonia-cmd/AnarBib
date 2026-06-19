@@ -5333,5 +5333,7 @@
   "cartografia.mod.reject": "Rebutja",
   "cartografia.mod.rejectReason": "Motiu del rebuig (opcional):",
   "cartografia.mod.done": "Fet.",
-  "cartografia.mod.error": "Acció no permesa (només coordinació)."
+  "cartografia.mod.error": "Acció no permesa (només coordinació).",
+  "federacao.carte.edit.geocode": "Localitza des de l'adreça",
+  "federacao.carte.edit.geocodeFail": "Adreça no trobada — col·loca el punt manualment."
 }

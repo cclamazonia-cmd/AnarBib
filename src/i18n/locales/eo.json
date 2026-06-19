@@ -5333,5 +5333,7 @@
   "cartografia.mod.reject": "Malakcepti",
   "cartografia.mod.rejectReason": "Kialo de malakcepto (nedeviga):",
   "cartografia.mod.done": "Farite.",
-  "cartografia.mod.error": "Ago malpermesita (nur kunordigo)."
+  "cartografia.mod.error": "Ago malpermesita (nur kunordigo).",
+  "federacao.carte.edit.geocode": "Lokalizi laŭ adreso",
+  "federacao.carte.edit.geocodeFail": "Adreso netrovita — metu la punkton permane."
 }

@@ -5333,5 +5333,7 @@
   "cartografia.mod.reject": "Afwijzen",
   "cartografia.mod.rejectReason": "Reden voor afwijzing (optioneel):",
   "cartografia.mod.done": "Klaar.",
-  "cartografia.mod.error": "Actie niet toegestaan (alleen coördinatie)."
+  "cartografia.mod.error": "Actie niet toegestaan (alleen coördinatie).",
+  "federacao.carte.edit.geocode": "Lokaliseren via adres",
+  "federacao.carte.edit.geocodeFail": "Adres niet gevonden — plaats het punt handmatig."
 }

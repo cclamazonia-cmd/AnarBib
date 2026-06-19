@@ -5333,5 +5333,7 @@
   "cartografia.mod.reject": "Rifiuta",
   "cartografia.mod.rejectReason": "Motivo del rifiuto (facoltativo):",
   "cartografia.mod.done": "Fatto.",
-  "cartografia.mod.error": "Azione non consentita (riservato al coordinamento)."
+  "cartografia.mod.error": "Azione non consentita (riservato al coordinamento).",
+  "federacao.carte.edit.geocode": "Localizza dall'indirizzo",
+  "federacao.carte.edit.geocodeFail": "Indirizzo non trovato — posiziona il punto manualmente."
 }
