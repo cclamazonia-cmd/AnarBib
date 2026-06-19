@@ -5,6 +5,7 @@ import { applyScrollRestoreIfAny } from './i18n';
 import { reloadOnceForStaleChunk } from './lib/chunkReload';
 import './styles/fonts.css';
 import './styles/theme-base.css';
+import './styles/breakpoints.css';
 import './styles/catalog.css';
 
 // Chunk lazy introuvable (onglet ouvert avant un déploiement → ancien hash en

@@ -1,0 +1,26 @@
+/* =========================================================================
+   breakpoints.css — échelle canonique de points de rupture (M12 · audit responsive)
+   -------------------------------------------------------------------------
+   SOURCE UNIQUE des points de rupture d'AnarBib. Importé globalement (main.jsx).
+
+   ⚠️ CSS n'autorise PAS var() dans une `@media (...)`. Ces tokens servent donc :
+     - le JS (matchMedia, lecture via getComputedStyle),
+     - les styles inline et les container queries (où var() fonctionne).
+   Dans une `@media`, on RÉUTILISE la valeur en px — la référence est ICI.
+   Toute NOUVELLE media query DOIT s'aligner sur l'un de ces trois paliers.
+
+   Échelle canonique (app desktop-first → on raisonne en max-width) :
+     --bp-sm : 640px   → mobile   (palier dominant, ~18 usages)
+     --bp-md : 768px   → tablette
+     --bp-lg : 1100px  → large / filtres catalogue
+
+   Valeurs héritées hors échelle, à rapatrier au fil des retouches SANS changer
+   le comportement (pas dans ce commit) : 520/560/600/720/800/820/880 ≈ sm|md,
+   1680 ≈ lg+. Les petits paliers d'éléments (280/400px : cartes, widgets) ne
+   sont PAS des points de rupture de page et restent locaux.
+   ========================================================================= */
+:root {
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1100px;
+}
