@@ -17,6 +17,8 @@ import { getCountryMetadata } from '@/components/forms/countryData';
 import { parseAddressText, formatAddressText } from '@/lib/addressFormat';
 import { formatSchedule } from '@/lib/scheduleFormat';
 import { localizeError } from '@/lib/localizeError';
+import { isPasswordPolicyOk } from '@/lib/passwordPolicy';
+import { decodeSystemNote } from '@/lib/systemNotes';
 import DataExportButton from '@/components/account/DataExportButton';
 import MyLibraryContactCard from '@/components/account/MyLibraryContactCard';
 import MinhaSolicitacaoPanel from '@/components/account/MinhaSolicitacaoPanel';
@@ -582,8 +584,8 @@ export default function AccountPage() {
     e.preventDefault();
     setPwdMsg('');
     setPwdMsgIsError(false);
-    if (!pwdNew || pwdNew.length < 8) {
-      setPwdMsg(t({ id: 'account.changePassword.error.tooShort', defaultMessage: 'A nova senha deve ter pelo menos 8 caracteres.' }));
+    if (!isPasswordPolicyOk(pwdNew)) {
+      setPwdMsg(t({ id: 'auth.passwordPolicy' }));
       setPwdMsgIsError(true);
       return;
     }
@@ -724,13 +726,13 @@ export default function AccountPage() {
         ({ error } = await supabase.schema('api').rpc('create_consulta_local', {
           p_user_id: user.id,
           p_holding_ids: holdingIds,
-          p_notes: t({ id: 'account.reserve.noteConsult' }),
+          p_notes: '@@note:account.reserve.noteConsult', // Route B : code système (décodé à l'affichage)
         }));
       } else {
         ({ error } = await supabase.rpc('fn_v2_create_reserva_by_holdings', {
           p_user_id: user.id,
           p_holding_ids: holdingIds,
-          p_notes: t({ id: 'account.reserve.noteLoan' }),
+          p_notes: '@@note:account.reserve.noteLoan', // Route B : code système (décodé à l'affichage)
         }));
       }
       if (error) throw error;
@@ -1718,7 +1720,7 @@ export default function AccountPage() {
                           </p>
                           {c.workflow_note && (
                             <p style={{ margin: '4px 0 0', fontStyle: 'italic', color: 'var(--brand-muted)' }}>
-                              {t({ id: 'account.consultations.scheduleProposed.noteLabel' })} : {c.workflow_note}
+                              {t({ id: 'account.consultations.scheduleProposed.noteLabel' })} : {decodeSystemNote(c.workflow_note, t)}
                             </p>
                           )}
                         </div>

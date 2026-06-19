@@ -1,4 +1,5 @@
 import { TabHeader } from '../_shared';
+import { decodeSystemNote } from '@/lib/systemNotes';
 // ═══════════════════════════════════════════════════════════
 // TabHistorico — onglet « Historique » (chantier E.1 / OT-4)
 // ───────────────────────────────────────────────────────────
@@ -114,7 +115,7 @@ export default function TabHistorico({
                                 {r.closed_at ? new Date(r.closed_at).toLocaleDateString() : '—'}
                               </td>
                               <td data-label={t({ id: 'panel.history.col.motif' })} className="cell-motif">
-                                {r.workflow_note || '—'}
+                                {decodeSystemNote(r.workflow_note, t) || '—'}
                               </td>
                             </tr>
                           ))}
@@ -166,7 +167,7 @@ export default function TabHistorico({
                         </thead>
                         <tbody>
                           {historyData.consultas.map((c, i) => {
-                            const motif = c.schedule_reply_note || c.workflow_note;
+                            const motif = decodeSystemNote(c.schedule_reply_note || c.workflow_note, t);
                             return (
                               <tr key={`hc-${c.consulta_item_id || c.consulta_id + '-' + c.line_no || i}`}>
                                 <td data-label={t({ id: 'panel.history.col.title' })}>

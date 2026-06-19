@@ -16,6 +16,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { apiQuery } from '@/lib/supabase';
 import { resolveLibraryLogo } from '@/lib/theme';
+import { getCountryName } from '@/lib/countries';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 function initials(name) {
@@ -98,7 +99,9 @@ export default function BibliotecaPublicaPage() {
     fontFamily: 'var(--brand-font-body)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--brand-muted)',
   };
   const linkStyle = { color: '#93c5fd', textDecoration: 'none' };
-  const place = lib ? [lib.city, lib.state, lib.country].filter(Boolean).join(' · ') : '';
+  // Cadrage politique : l'État « occupe » le territoire (mention i18n devant le pays).
+  const countryLabel = lib?.country ? `${t({ id: 'bibliotecas.occupiedTerritory' })} ${getCountryName(lib.country, locale)}` : null;
+  const place = lib ? [lib.city, lib.state, countryLabel].filter(Boolean).join(' · ') : '';
 
   return (
     <PageShell>

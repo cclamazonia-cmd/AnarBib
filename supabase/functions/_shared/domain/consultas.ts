@@ -80,6 +80,7 @@ import {
 } from "../shared/events.ts";
 import { getPayloadValue, normalizeLineNos } from "../shared/payload.ts";
 import { tMail, greeting, label, formatDateLocale } from "../i18n/mail-strings.ts";
+import { decodeSystemNote } from "../i18n/systemNotes.ts";
 
 // =============================================================================
 // URLs CTA (calque reserva - hard-coded en attendant un refactor APP_BASE_URL
@@ -334,8 +335,8 @@ export async function handleConsultaV2LifecycleEvent(
   // dans les 2 mails (lecteur et staff) si workflowNote presente.
   // Utilise label cle 'note' (sera ajoutee a mail-strings.ts en paquet 141.2.C
   // si pas encore presente). En attendant : fallback texte 'Note'.
-  const noteDetailReader = workflowNote ? [{ label: label(locale, "note") || "Note", value: workflowNote }] : [];
-  const noteDetailStaff = workflowNote ? [{ label: label(libLocale, "note") || "Note", value: workflowNote }] : [];
+  const noteDetailReader = workflowNote ? [{ label: label(locale, "note") || "Note", value: decodeSystemNote(workflowNote, locale) }] : [];
+  const noteDetailStaff = workflowNote ? [{ label: label(libLocale, "note") || "Note", value: decodeSystemNote(workflowNote, libLocale) }] : [];
 
   // ---- Mail lecteur ----
   let ur;
@@ -546,8 +547,8 @@ export async function handleConsultaV2WorkflowEvent(
   // Paquet 141.2.C : ligne 'Observacao' a injecter dans details (lecteur ET staff)
   // si effectiveNote presente. Resout B3 (motif refus lecteur via schedule_reply_note)
   // et autres cas (motif annulation, note staff lors de proposition) cote workflow event.
-  const noteDetailReaderWf = effectiveNote ? [{ label: label(locale, "note") || "Note", value: effectiveNote }] : [];
-  const noteDetailStaffWf = effectiveNote ? [{ label: label(libLocale, "note") || "Note", value: effectiveNote }] : [];
+  const noteDetailReaderWf = effectiveNote ? [{ label: label(locale, "note") || "Note", value: decodeSystemNote(effectiveNote, locale) }] : [];
+  const noteDetailStaffWf = effectiveNote ? [{ label: label(libLocale, "note") || "Note", value: decodeSystemNote(effectiveNote, libLocale) }] : [];
 
   // ---- Mail lecteur ----
   let ur;

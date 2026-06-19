@@ -1,0 +1,40 @@
+# =============================================================================
+# Nominatim self-hosted — géocodage adresse→GPS pour la cartographie (MAP-F).
+# =============================================================================
+# Auteur : AnarBib · Session : Carte réseau 10 locales
+# Runbook : docs/journal/operations/SETUP_nominatim_geocoding_2026-06-18.md
+#
+# Géocodeur OSM auto-hébergé (anti-tracking INV-5 : aucune requête vers un tiers).
+# Importe un extrait OSM puis sert l'API sur le port local 8089. Le front N'APPELLE
+# JAMAIS ce service directement : un proxy Edge Function serveur s'interpose (à venir).
+#
+# Usage :
+#   PBF_URL=<extrait geofabrik> docker compose -f scripts/nominatim/docker-compose.yml up -d
+#   (puis suivre l'import : docker logs -f anarbib-nominatim)
+#
+# IMPORT_STYLE=address : ne charge que les adresses/lieux (pas les POIs) → import
+# plus léger/rapide, suffisant pour géocoder des adresses de collectifs.
+# =============================================================================
+services:
+  nominatim:
+    image: mediagis/nominatim:4.4
+    container_name: anarbib-nominatim
+    restart: unless-stopped
+    environment:
+      # Extrait OSM à importer. Par défaut : Europe (gros des collectifs).
+      # Surchargé par la variable d'environnement PBF_URL si définie.
+      PBF_URL: ${PBF_URL:-https://download.geofabrik.de/europe-latest.osm.pbf}
+      IMPORT_STYLE: address
+      NOMINATIM_PASSWORD: ${NOMINATIM_PASSWORD:-changeme-local-only}
+      # Active le flatnode (recommandé pour les gros imports, économise la RAM).
+      FREEZE: "true"   # libère les tables d'import après coup (gain disque ; pas de MAJ incrémentale)
+    volumes:
+      - nominatim-data:/var/lib/postgresql/16/main
+      - nominatim-flatnode:/nominatim/flatnode
+    ports:
+      - "127.0.0.1:8089:8080"   # exposé EN LOCAL uniquement (jamais public)
+    shm_size: 1g
+
+volumes:
+  nominatim-data:
+  nominatim-flatnode:

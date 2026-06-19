@@ -3,6 +3,24 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
+import { decodeSystemNote } from '@/lib/systemNotes';
+
+/**
+ * Décode récursivement toute note système « @@note:<clé> » présente dans
+ * l'export (data.json + CSV), dans la locale d'affichage. No-op sur le texte
+ * libre (jamais préfixé) → seules les sentinelles système sont traduites, le
+ * reste de la structure reste intact. Cf. src/lib/systemNotes.js (Route B).
+ */
+function decodeDeep(value, t) {
+  if (typeof value === 'string') return decodeSystemNote(value, t);
+  if (Array.isArray(value)) return value.map(v => decodeDeep(v, t));
+  if (value && typeof value === 'object') {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) out[k] = decodeDeep(v, t);
+    return out;
+  }
+  return value;
+}
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -309,44 +327,48 @@ export default function DataExportButton() {
       if (error) throw error;
       if (!data) throw new Error('No data returned');
 
+      // Route B : décoder les sentinelles « @@note:<clé> » dans toute la
+      // structure (data.json + CSV) → aucun code brut dans l'export RGPD.
+      const exportData = decodeDeep(data, t);
+
       // 2. Construire le zip (jszip chargé à la demande — hors du bundle initial)
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
 
       // README explicatif
-      zip.file('README.txt', buildReadme(data, locale));
+      zip.file('README.txt', buildReadme(exportData, locale));
 
       // JSON complet
-      zip.file('data.json', JSON.stringify(data, null, 2));
+      zip.file('data.json', JSON.stringify(exportData, null, 2));
 
       // Dossier csv/
       const csvFolder = zip.folder('csv');
 
       // Profil — un seul objet, on le met en tableau d'un élément
-      if (data.profile) {
-        csvFolder.file('profile.csv', arrayToCsv([data.profile]));
+      if (exportData.profile) {
+        csvFolder.file('profile.csv', arrayToCsv([exportData.profile]));
       }
 
       // Memberships
-      csvFolder.file('memberships.csv', arrayToCsv(flattenMembershipsForCsv(data.memberships)));
+      csvFolder.file('memberships.csv', arrayToCsv(flattenMembershipsForCsv(exportData.memberships)));
 
       // Paiements
-      csvFolder.file('membership_payments.csv', arrayToCsv(data.membership_payments || []));
+      csvFolder.file('membership_payments.csv', arrayToCsv(exportData.membership_payments || []));
 
       // Emprunts (avec items aplatis)
-      csvFolder.file('loans.csv', arrayToCsv(flattenLoansForCsv(data.loans)));
+      csvFolder.file('loans.csv', arrayToCsv(flattenLoansForCsv(exportData.loans)));
 
       // Réservations (avec lignes aplaties)
-      csvFolder.file('reservations.csv', arrayToCsv(flattenReservationsForCsv(data.reservations)));
+      csvFolder.file('reservations.csv', arrayToCsv(flattenReservationsForCsv(exportData.reservations)));
 
       // Consultations (avec lignes aplaties)
-      csvFolder.file('consultations.csv', arrayToCsv(flattenConsultationsForCsv(data.consultations)));
+      csvFolder.file('consultations.csv', arrayToCsv(flattenConsultationsForCsv(exportData.consultations)));
 
       // Notifications
-      csvFolder.file('notifications.csv', arrayToCsv(data.notifications || []));
+      csvFolder.file('notifications.csv', arrayToCsv(exportData.notifications || []));
 
       // Wishlist
-      csvFolder.file('wishlist.csv', arrayToCsv(data.wishlist || []));
+      csvFolder.file('wishlist.csv', arrayToCsv(exportData.wishlist || []));
 
       // 3. Générer et déclencher le download
       const blob = await zip.generateAsync({

@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { apiQuery } from '@/lib/supabase';
 import { resolveLibraryLogo } from '@/lib/theme';
+import { getCountryName } from '@/lib/countries';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 function initials(name) {
@@ -21,12 +22,17 @@ function initials(name) {
   return name.trim().split(/\s+/).slice(0, 2).map((w) => w[0] || '').join('').toUpperCase() || '?';
 }
 
-function placeLine(lib) {
-  return [lib.city, lib.country].filter(Boolean).join(' · ');
+function placeLine(lib, t, locale) {
+  // Cadrage politique : l'État « occupe » le territoire (mention i18n devant le pays).
+  // Nom de pays localisé via i18n-iso-countries (tolère le texte legacy « Brasil »).
+  const country = lib.country
+    ? `${t({ id: 'bibliotecas.occupiedTerritory' })} ${getCountryName(lib.country, locale)}`
+    : null;
+  return [lib.city, country].filter(Boolean).join(' · ');
 }
 
 export default function BibliotecasPage() {
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.bibliotecas' }));
 
   const [libs, setLibs] = useState(null); // null = chargement
@@ -97,8 +103,8 @@ export default function BibliotecasPage() {
                     <Link to={`/bibliotecas/${lib.slug}`} style={{ color: '#f4f4f4', textDecoration: 'none', fontWeight: 700, fontSize: '1.02rem', wordBreak: 'break-word' }}>
                       {lib.name}
                     </Link>
-                    {placeLine(lib) && (
-                      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginTop: 2 }}>{placeLine(lib)}</div>
+                    {placeLine(lib, t, locale) && (
+                      <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', marginTop: 2 }}>{placeLine(lib, t, locale)}</div>
                     )}
                   </div>
                 </div>

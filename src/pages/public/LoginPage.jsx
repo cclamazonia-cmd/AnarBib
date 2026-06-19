@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { isPasswordPolicyOk } from '@/lib/passwordPolicy';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
@@ -314,8 +315,8 @@ export default function LoginPage() {
 
   async function handleReset(e) {
     e.preventDefault();
-    if (newPw.length < 6) {
-      setResetMsg({ text: t({ id: 'auth.resetMin6' }), kind: 'error' });
+    if (!isPasswordPolicyOk(newPw)) {
+      setResetMsg({ text: t({ id: 'auth.passwordPolicy' }), kind: 'error' });
       return;
     }
     if (newPw !== newPw2) {
@@ -380,8 +381,8 @@ export default function LoginPage() {
   // frontend. Cf. discussion paquet 25.3 : option A choisie.
   async function handleForceChange(e) {
     e.preventDefault();
-    if (newPw.length < 6) {
-      setForceChangeMsg({ text: t({ id: 'auth.resetMin6' }), kind: 'error' });
+    if (!isPasswordPolicyOk(newPw)) {
+      setForceChangeMsg({ text: t({ id: 'auth.passwordPolicy' }), kind: 'error' });
       return;
     }
     if (newPw !== newPw2) {
