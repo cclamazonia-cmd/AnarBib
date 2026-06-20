@@ -37,13 +37,14 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
   const [picks, setPicks] = useState({});     // `${i}:${col}` → true (reprendre la valeur du candidat i)
   const [merging, setMerging] = useState(false);
   const [mergeErr, setMergeErr] = useState('');
+  const [refreshNonce, setRefreshNonce] = useState(0);
 
   useEffect(() => {
     let alive = true;
     (async () => {
       setLoading(true); setErr('');
       try {
-        const sel = 'titulo,subtitulo,autor,isbn,ano,editora,cdd,colecao,idioma,tipo_material';
+        const sel = 'titulo,subtitulo,autor,isbn,ano,editora,cdd,colecao,idioma,tipo_material,published_book_id';
         const [srcRes, candRes] = await Promise.all([
           supabase.from('book_drafts').select(sel).eq('id', draftId).maybeSingle(),
           supabase.schema('api').rpc('suggest_draft_duplicates', { p_draft_id: draftId }),
@@ -56,7 +57,7 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
       finally { if (alive) setLoading(false); }
     })();
     return () => { alive = false; };
-  }, [draftId, t]);
+  }, [draftId, t, refreshNonce]);
 
   // Sens du merge (asymétrique) :
   //   • candidat publié (A) : c'est la FICHE (candidat) qui survit → elle adopte la
@@ -92,6 +93,24 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
       if (error) throw error;
       onMerged?.();
       onClose();
+    } catch (e) {
+      setMergeErr(localizeError(e, t));
+    } finally {
+      setMerging(false);
+    }
+  }
+
+  // « Pas un doublon » : valable pour un candidat PUBLIÉ quand le brouillon-source
+  // est rattaché à un livre (published_book_id). Masque la paire book↔book.
+  async function markNotDuplicate(cand) {
+    if (cand.source !== 'book' || !src?.published_book_id) return;
+    setMerging(true); setMergeErr('');
+    try {
+      const { error } = await supabase.rpc('mark_books_not_duplicate', {
+        p_a: Number(src.published_book_id), p_b: Number(cand.candidate_id),
+      });
+      if (error) throw error;
+      setRefreshNonce((n) => n + 1); // re-fetch : la paire écartée disparaît
     } catch (e) {
       setMergeErr(localizeError(e, t));
     } finally {
@@ -161,6 +180,13 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                             onClick={() => doMerge(c, i)} style={{ alignSelf: 'flex-start', fontSize: '.66rem', padding: '3px 8px' }}>
                             {t({ id: c.source === 'book' ? 'catalogacao.dup.mergeInto' : 'catalogacao.dup.mergeDrafts' })}
                           </button>
+                          {c.source === 'book' && src?.published_book_id && (
+                            <button type="button" className="ab-button ab-button--secondary ab-button--sm" disabled={merging}
+                              onClick={() => markNotDuplicate(c)} title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}
+                              style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}>
+                              {t({ id: 'catalogacao.dedup.notDuplicate' })}
+                            </button>
+                          )}
                           {c.source === 'draft' && onEditItem && (
                             <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}
                               onClick={() => { onClose(); onEditItem('book', c.candidate_id); }}>
