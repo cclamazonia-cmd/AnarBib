@@ -5406,5 +5406,6 @@
   "catalogacao.work.suggest": "Edities voorstellen",
   "catalogacao.work.noSuggestions": "Geen edities om te groeperen.",
   "catalogacao.work.group": "Groeperen",
-  "catalogacao.work.alreadyInWork": "al in een werk"
+  "catalogacao.work.alreadyInWork": "al in een werk",
+  "catalog.collapseEditions": "Edities groeperen"
 }

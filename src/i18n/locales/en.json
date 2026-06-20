@@ -5406,5 +5406,6 @@
   "catalogacao.work.suggest": "Suggest editions",
   "catalogacao.work.noSuggestions": "No editions to group.",
   "catalogacao.work.group": "Group",
-  "catalogacao.work.alreadyInWork": "already in a work"
+  "catalogacao.work.alreadyInWork": "already in a work",
+  "catalog.collapseEditions": "Group editions"
 }

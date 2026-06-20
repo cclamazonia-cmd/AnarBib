@@ -5406,5 +5406,6 @@
   "catalogacao.work.suggest": "Ausgaben vorschlagen",
   "catalogacao.work.noSuggestions": "Keine Ausgaben zum Gruppieren.",
   "catalogacao.work.group": "Gruppieren",
-  "catalogacao.work.alreadyInWork": "bereits in einem Werk"
+  "catalogacao.work.alreadyInWork": "bereits in einem Werk",
+  "catalog.collapseEditions": "Ausgaben gruppieren"
 }

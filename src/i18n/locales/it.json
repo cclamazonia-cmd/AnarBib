@@ -5406,5 +5406,6 @@
   "catalogacao.work.suggest": "Suggerisci edizioni",
   "catalogacao.work.noSuggestions": "Nessuna edizione da raggruppare.",
   "catalogacao.work.group": "Raggruppa",
-  "catalogacao.work.alreadyInWork": "già in un'opera"
+  "catalogacao.work.alreadyInWork": "già in un'opera",
+  "catalog.collapseEditions": "Raggruppa edizioni"
 }

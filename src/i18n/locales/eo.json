@@ -5406,5 +5406,6 @@
   "catalogacao.work.suggest": "Sugesti eldonojn",
   "catalogacao.work.noSuggestions": "Neniu eldono por grupigi.",
   "catalogacao.work.group": "Grupigi",
-  "catalogacao.work.alreadyInWork": "jam en verko"
+  "catalogacao.work.alreadyInWork": "jam en verko",
+  "catalog.collapseEditions": "Grupigi eldonojn"
 }

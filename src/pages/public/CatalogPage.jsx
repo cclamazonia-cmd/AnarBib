@@ -236,6 +236,8 @@ export default function CatalogPage() {
   const [libMenuOpen, setLibMenuOpen] = useState(false);
   const libMenuRef = useRef(null);
   const [sortValue, setSortValue] = useState(filterState.sortValue || '__relevance__');
+  // P4 v2 Lot C — repli des éditions par œuvre (côté client, sur les résultats chargés ; OFF par défaut)
+  const [collapseEditions, setCollapseEditions] = useState(false);
   const [compact, setCompact] = useState(filterState.compact || false);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [exploreOpen, setExploreOpen] = useState(true); // bloc « Explorer » escamotable
@@ -480,6 +482,27 @@ export default function CatalogPage() {
   }, [viewName, selectCols, sortValue, dSearch, dAuthor, authorIdFilter, alphaFilter, subjectFilter, dPublisher, dYear, libraryFilter, libraryShortNames, availabilityFilter, isAuth, dIsbn, dLanguage, dCdd, dSubjects, materialFilter, dCollection, dPlace]);
 
   useEffect(() => { fetchBooks(0); }, [fetchBooks]);
+
+  // Repli des éditions (Lot C) : regroupe les notices chargées par work_id (une
+  // ligne représentante + nb d'éditions chargées). Les notices sans œuvre restent
+  // individuelles. La page Œuvre (/obra/:id) reste la référence du jeu complet.
+  const displayBooks = useMemo(() => {
+    if (!collapseEditions) return books;
+    const byWork = new Map();
+    const out = [];
+    for (const b of books) {
+      if (b.work_id) {
+        const rep = byWork.get(b.work_id);
+        if (rep) { rep._editionCount += 1; continue; }
+        const fresh = { ...b, _editionCount: 1 };
+        byWork.set(b.work_id, fresh);
+        out.push(fresh);
+      } else {
+        out.push(b);
+      }
+    }
+    return out;
+  }, [collapseEditions, books]);
 
   // #OPAC7 — compteurs de facettes via api.catalog_facets_v1 (un appel JSONB).
   // Recalcule à chaque évolution des filtres (sémantique « expand » côté RPC).
@@ -1079,6 +1102,15 @@ export default function CatalogPage() {
           {t({ id: 'catalog.browse.newest' })}
         </button>
         <span className="ab-browse-modes__sep" aria-hidden="true">·</span>
+        <button
+          type="button"
+          className={`ab-button ab-button--mini ${collapseEditions ? 'ab-button--active' : ''}`}
+          aria-pressed={collapseEditions}
+          onClick={() => setCollapseEditions(v => !v)}
+        >
+          {t({ id: 'catalog.collapseEditions' })}
+        </button>
+        <span className="ab-browse-modes__sep" aria-hidden="true">·</span>
         <span className="ab-browse-modes__alpha-label">{t({ id: 'catalog.browse.alpha' })}</span>
         <div className="ab-browse-alpha">
           {ALPHABET.map(letter => (
@@ -1274,7 +1306,7 @@ export default function CatalogPage() {
                 </tr>
               </thead>
               <tbody>
-                {books.map((book, idx) => {
+                {displayBooks.map((book, idx) => {
                   const status = getStatusInfo(book, isAuth, t);
                   const icon = TIPO_ICONS[book.tipo_material] || '';
                   const libsRaw = parseLibraryNames(book);
@@ -1298,6 +1330,11 @@ export default function CatalogPage() {
                               {book.subtitulo && <span className="ab-subtitulo"> — {book.subtitulo}</span>}
                             </Link>
                             {book.has_online_reading && <span className="ab-online-badge">{t({ id: 'catalog.actions.readOnline' })}</span>}
+                            {book._editionCount > 1 && (
+                              <Link to={`/obra/${book.work_id}`} className="ab-online-badge">
+                                {t({ id: 'work.page.editions' }, { count: book._editionCount })} · {t({ id: 'book.work.view' })}
+                              </Link>
+                            )}
                           </span>
                         </div>
                       </td>
