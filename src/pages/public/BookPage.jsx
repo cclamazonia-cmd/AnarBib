@@ -123,6 +123,7 @@ export default function BookPage() {
   // #OPAC4 : documents similaires (par contenu)
   const [similar, setSimilar] = useState([]);
   const [otherEditions, setOtherEditions] = useState([]); // P4 : autres éditions de l'œuvre
+  const [workId, setWorkId] = useState(null); // P4 v2 : œuvre du livre courant (lien page œuvre)
 
   // ── Chargement ───────────────────────────────────────────
   // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
@@ -169,6 +170,11 @@ export default function BookPage() {
           try {
             const ed = await supabase.schema('api').rpc('book_other_editions', { p_book_id: bookId });
             if (Array.isArray(ed.data)) setOtherEditions(ed.data);
+          } catch { /* non-bloquant */ }
+          // P4 v2 — œuvre du livre courant (pour le lien « voir l'œuvre »)
+          try {
+            const wb = await supabase.from('books').select('work_id').eq('id', bookId).maybeSingle();
+            if (wb?.data?.work_id) setWorkId(wb.data.work_id);
           } catch { /* non-bloquant */ }
         }
 
@@ -593,6 +599,11 @@ export default function BookPage() {
       {otherEditions.length > 0 && (
         <details className="ab-livro-similar" open>
           <summary className="ab-livro-similar__summary">{t({ id: 'book.otherEditions.title' })}</summary>
+          {workId && (
+            <div style={{ margin: '4px 0 8px' }}>
+              <Link to={`/obra/${workId}`} style={{ fontSize: '.82rem' }}>{t({ id: 'book.work.view' })}</Link>
+            </div>
+          )}
           <div className="ab-livro-similar__grid">
             {otherEditions.map(s => (
               <Link key={s.book_id} to={`/livro/${s.book_id}`} className="ab-livro-similar__card">

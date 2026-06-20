@@ -5397,5 +5397,10 @@
   "catalogacao.dedup.sameWorkHint": "Raggruppa come edizioni della stessa opera (non un duplicato).",
   "error.catalog.work.notFound": "Documento o opera inesistente.",
   "error.catalog.work.needTwo": "Seleziona almeno due documenti.",
-  "book.otherEditions.title": "Altre edizioni di quest'opera"
+  "book.otherEditions.title": "Altre edizioni di quest'opera",
+  "work.page.title": "Opera",
+  "work.page.notFound": "Opera non trovata.",
+  "work.page.editions": "{count} edizione/i",
+  "work.page.editionsHeading": "Edizioni",
+  "book.work.view": "Vedi l'opera"
 }

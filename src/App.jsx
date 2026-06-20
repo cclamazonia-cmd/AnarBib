@@ -15,6 +15,7 @@ import { Spinner } from '@/components/ui';
 const CatalogPage = lazy(() => import('@/pages/public/CatalogPage'));
 const BookPage = lazy(() => import('@/pages/public/BookPage'));
 const AuthorPage = lazy(() => import('@/pages/public/AuthorPage'));
+const WorkPage = lazy(() => import('@/pages/public/WorkPage'));
 const ReaderPage = lazy(() => import('@/pages/public/ReaderPage'));
 const ContaRouter = lazy(() => import('@/pages/account/ContaRouter'));
 const PanelPage = lazy(() => import('@/pages/painel/PanelPage'));
@@ -118,6 +119,7 @@ export default function App() {
                   <Route path="/catalogo/:slug" element={<CatalogPage />} />
                   <Route path="/livro/:id" element={<BookPage />} />
                   <Route path="/autor/:id" element={<AuthorPage />} />
+                  <Route path="/obra/:id" element={<WorkPage />} />
                   <Route path="/entrar" element={<Navigate to="/login" replace />} />
                   <Route path="/ler/:id" element={<ReaderPage />} />
                   <Route path="/ler-recurso" element={<ReaderPage />} />

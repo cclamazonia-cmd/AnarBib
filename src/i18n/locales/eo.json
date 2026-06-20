@@ -5397,5 +5397,10 @@
   "catalogacao.dedup.sameWorkHint": "Grupigi kiel eldonojn de la sama verko (ne duplikato).",
   "error.catalog.work.notFound": "Dokumento aŭ verko ne trovita.",
   "error.catalog.work.needTwo": "Elektu almenaŭ du dokumentojn.",
-  "book.otherEditions.title": "Aliaj eldonoj de ĉi tiu verko"
+  "book.otherEditions.title": "Aliaj eldonoj de ĉi tiu verko",
+  "work.page.title": "Verko",
+  "work.page.notFound": "Verko ne trovita.",
+  "work.page.editions": "{count} eldono(j)",
+  "work.page.editionsHeading": "Eldonoj",
+  "book.work.view": "Vidi la verkon"
 }

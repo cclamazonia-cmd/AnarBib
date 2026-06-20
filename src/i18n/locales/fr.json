@@ -5397,5 +5397,10 @@
   "catalogacao.dedup.sameWorkHint": "Regrouper comme éditions de la même œuvre (pas un doublon).",
   "error.catalog.work.notFound": "Document ou œuvre introuvable.",
   "error.catalog.work.needTwo": "Sélectionnez au moins deux documents.",
-  "book.otherEditions.title": "Autres éditions de cette œuvre"
+  "book.otherEditions.title": "Autres éditions de cette œuvre",
+  "work.page.title": "Œuvre",
+  "work.page.notFound": "Œuvre introuvable.",
+  "work.page.editions": "{count} édition(s)",
+  "work.page.editionsHeading": "Éditions",
+  "book.work.view": "Voir l'œuvre"
 }

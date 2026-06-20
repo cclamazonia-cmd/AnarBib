@@ -5397,5 +5397,10 @@
   "catalogacao.dedup.sameWorkHint": "Agrupa com a edicions de la mateixa obra (no és un duplicat).",
   "error.catalog.work.notFound": "Document o obra inexistent.",
   "error.catalog.work.needTwo": "Selecciona almenys dos documents.",
-  "book.otherEditions.title": "Altres edicions d'aquesta obra"
+  "book.otherEditions.title": "Altres edicions d'aquesta obra",
+  "work.page.title": "Obra",
+  "work.page.notFound": "Obra no trobada.",
+  "work.page.editions": "{count} edició(ns)",
+  "work.page.editionsHeading": "Edicions",
+  "book.work.view": "Mostra l'obra"
 }
