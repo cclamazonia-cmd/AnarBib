@@ -118,6 +118,24 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
     }
   }
 
+  // « Même œuvre » : regroupe le livre publié du brouillon-source et le candidat
+  // publié comme éditions d'une même œuvre (non destructif). Cf. P4.
+  async function groupAsEditions(cand) {
+    if (cand.source !== 'book' || !src?.published_book_id) return;
+    setMerging(true); setMergeErr('');
+    try {
+      const { error } = await supabase.rpc('group_books_as_editions', {
+        p_book_ids: [Number(src.published_book_id), Number(cand.candidate_id)],
+      });
+      if (error) throw error;
+      setRefreshNonce((n) => n + 1);
+    } catch (e) {
+      setMergeErr(localizeError(e, t));
+    } finally {
+      setMerging(false);
+    }
+  }
+
   const th = { padding: '8px 10px', textAlign: 'left', fontSize: '.72rem', fontWeight: 700, borderBottom: '1px solid rgba(255,255,255,.12)', verticalAlign: 'bottom' };
   const td = { padding: '6px 10px', fontSize: '.8rem', borderBottom: '1px solid rgba(255,255,255,.05)', verticalAlign: 'top' };
   const lblTd = { ...td, fontWeight: 600, color: 'var(--brand-muted, #bbb)', whiteSpace: 'nowrap' };
@@ -185,6 +203,13 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                               onClick={() => markNotDuplicate(c)} title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}
                               style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}>
                               {t({ id: 'catalogacao.dedup.notDuplicate' })}
+                            </button>
+                          )}
+                          {c.source === 'book' && src?.published_book_id && (
+                            <button type="button" className="ab-button ab-button--secondary ab-button--sm" disabled={merging}
+                              onClick={() => groupAsEditions(c)} title={t({ id: 'catalogacao.dedup.sameWorkHint' })}
+                              style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}>
+                              {t({ id: 'catalogacao.dedup.sameWork' })}
                             </button>
                           )}
                           {c.source === 'draft' && onEditItem && (

@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Segna come edizioni distinte: questa coppia non sarà più suggerita.",
   "catalogacao.dedup.markedNotDuplicate": "Segnato come edizioni distinte.",
   "catalogacao.ui.coverRemove": "Rimuovi copertina",
-  "catalogacao.ui.coverRemoved": "Copertina rimossa."
+  "catalogacao.ui.coverRemoved": "Copertina rimossa.",
+  "catalogacao.work.title": "Opera",
+  "catalogacao.work.none": "Nessuna opera collegata",
+  "catalogacao.work.editions": "{count} edizione/i",
+  "catalogacao.work.create": "Crea l'opera",
+  "catalogacao.work.detach": "Scollega",
+  "catalogacao.work.created": "Opera creata.",
+  "catalogacao.work.detached": "Scollegato dall'opera.",
+  "catalogacao.work.grouped": "Raggruppato come edizioni della stessa opera.",
+  "catalogacao.dedup.sameWork": "Stessa opera",
+  "catalogacao.dedup.sameWorkHint": "Raggruppa come edizioni della stessa opera (non un duplicato).",
+  "error.catalog.work.notFound": "Documento o opera inesistente.",
+  "error.catalog.work.needTwo": "Seleziona almeno due documenti."
 }

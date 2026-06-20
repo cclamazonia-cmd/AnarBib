@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Marca com a edicions diferents: aquest parell deixarà de suggerir-se.",
   "catalogacao.dedup.markedNotDuplicate": "Marcat com a edicions diferents.",
   "catalogacao.ui.coverRemove": "Elimina la coberta",
-  "catalogacao.ui.coverRemoved": "Coberta eliminada."
+  "catalogacao.ui.coverRemoved": "Coberta eliminada.",
+  "catalogacao.work.title": "Obra",
+  "catalogacao.work.none": "Cap obra vinculada",
+  "catalogacao.work.editions": "{count} edició(ns)",
+  "catalogacao.work.create": "Crea l'obra",
+  "catalogacao.work.detach": "Desvincula",
+  "catalogacao.work.created": "Obra creada.",
+  "catalogacao.work.detached": "Desvinculat de l'obra.",
+  "catalogacao.work.grouped": "Agrupat com a edicions de la mateixa obra.",
+  "catalogacao.dedup.sameWork": "Mateixa obra",
+  "catalogacao.dedup.sameWorkHint": "Agrupa com a edicions de la mateixa obra (no és un duplicat).",
+  "error.catalog.work.notFound": "Document o obra inexistent.",
+  "error.catalog.work.needTwo": "Selecciona almenys dos documents."
 }

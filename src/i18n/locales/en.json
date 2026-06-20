@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Mark as distinct editions: this pair will no longer be suggested.",
   "catalogacao.dedup.markedNotDuplicate": "Marked as distinct editions.",
   "catalogacao.ui.coverRemove": "Remove cover",
-  "catalogacao.ui.coverRemoved": "Cover removed."
+  "catalogacao.ui.coverRemoved": "Cover removed.",
+  "catalogacao.work.title": "Work",
+  "catalogacao.work.none": "No work linked",
+  "catalogacao.work.editions": "{count} edition(s)",
+  "catalogacao.work.create": "Create work",
+  "catalogacao.work.detach": "Detach",
+  "catalogacao.work.created": "Work created.",
+  "catalogacao.work.detached": "Detached from work.",
+  "catalogacao.work.grouped": "Grouped as editions of the same work.",
+  "catalogacao.dedup.sameWork": "Same work",
+  "catalogacao.dedup.sameWorkHint": "Group as editions of the same work (not a duplicate).",
+  "error.catalog.work.notFound": "Document or work not found.",
+  "error.catalog.work.needTwo": "Select at least two documents."
 }

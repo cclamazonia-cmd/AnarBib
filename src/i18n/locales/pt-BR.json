@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Marcar como edições distintas: este par deixa de ser sugerido.",
   "catalogacao.dedup.markedNotDuplicate": "Marcado como edições distintas.",
   "catalogacao.ui.coverRemove": "Remover capa",
-  "catalogacao.ui.coverRemoved": "Capa removida."
+  "catalogacao.ui.coverRemoved": "Capa removida.",
+  "catalogacao.work.title": "Obra",
+  "catalogacao.work.none": "Nenhuma obra vinculada",
+  "catalogacao.work.editions": "{count} edição(ões)",
+  "catalogacao.work.create": "Criar a obra",
+  "catalogacao.work.detach": "Desvincular",
+  "catalogacao.work.created": "Obra criada.",
+  "catalogacao.work.detached": "Desvinculado da obra.",
+  "catalogacao.work.grouped": "Agrupado como edições da mesma obra.",
+  "catalogacao.dedup.sameWork": "Mesma obra",
+  "catalogacao.dedup.sameWorkHint": "Agrupar como edições da mesma obra (não é duplicata).",
+  "error.catalog.work.notFound": "Documento ou obra inexistente.",
+  "error.catalog.work.needTwo": "Selecione ao menos dois documentos."
 }

@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Marki kiel apartajn eldonojn: ĉi tiu paro ne plu estos sugestita.",
   "catalogacao.dedup.markedNotDuplicate": "Markita kiel apartaj eldonoj.",
   "catalogacao.ui.coverRemove": "Forigi kovrilon",
-  "catalogacao.ui.coverRemoved": "Kovrilo forigita."
+  "catalogacao.ui.coverRemoved": "Kovrilo forigita.",
+  "catalogacao.work.title": "Verko",
+  "catalogacao.work.none": "Neniu verko ligita",
+  "catalogacao.work.editions": "{count} eldono(j)",
+  "catalogacao.work.create": "Krei la verkon",
+  "catalogacao.work.detach": "Malligi",
+  "catalogacao.work.created": "Verko kreita.",
+  "catalogacao.work.detached": "Malligita de la verko.",
+  "catalogacao.work.grouped": "Grupigita kiel eldonoj de la sama verko.",
+  "catalogacao.dedup.sameWork": "Sama verko",
+  "catalogacao.dedup.sameWorkHint": "Grupigi kiel eldonojn de la sama verko (ne duplikato).",
+  "error.catalog.work.notFound": "Dokumento aŭ verko ne trovita.",
+  "error.catalog.work.needTwo": "Elektu almenaŭ du dokumentojn."
 }

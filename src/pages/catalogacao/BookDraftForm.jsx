@@ -299,6 +299,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [bookDupMatches, setBookDupMatches] = useState(null); // null = pas cherche
   const [bookDupLoading, setBookDupLoading] = useState(false);
   const [bookDupBusy, setBookDupBusy] = useState(null); // book_id en cours de fusion
+  // Œuvre rattachée (P4) : { id, uniform_title, count } | null
+  const [work, setWork] = useState(null);
+  const [workBusy, setWorkBusy] = useState(false);
+  const [workNonce, setWorkNonce] = useState(0);
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
 
@@ -400,6 +404,27 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setCoverCandidates([]);
     setCoverFile(null);
   }, [editingId]);
+
+  // ── Œuvre rattachée (P4) : charge l'œuvre du livre publié + nb d'éditions ──
+  useEffect(() => {
+    const bid = form.published_book_id;
+    if (!bid) { setWork(null); return; }
+    let alive = true;
+    (async () => {
+      try {
+        const { data: bk } = await supabase.from('books').select('work_id').eq('id', Number(bid)).maybeSingle();
+        if (!alive) return;
+        if (!bk?.work_id) { setWork(null); return; }
+        const [{ data: w }, headRes] = await Promise.all([
+          supabase.from('works').select('id, uniform_title').eq('id', bk.work_id).maybeSingle(),
+          supabase.from('books').select('id', { count: 'exact', head: true }).eq('work_id', bk.work_id),
+        ]);
+        if (!alive) return;
+        setWork(w ? { id: w.id, uniform_title: w.uniform_title, count: headRes.count || 0 } : null);
+      } catch { if (alive) setWork(null); }
+    })();
+    return () => { alive = false; };
+  }, [form.published_book_id, workNonce]);
 
   // ── Pré-remplissage OCR (piste B, P3b) ─────────────────────
   // Quand le composant est monté depuis le dépôt OCR (et non en édition d'un
@@ -1213,6 +1238,46 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       if (error) throw error;
       setMsg({ text: t({ id: 'catalogacao.dedup.markedNotDuplicate' }), kind: 'ok' });
       await findBookDuplicates(); // rafraîchir : la paire écartée disparaît
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setBookDupBusy(null); }
+  }
+
+  // P4 : œuvre — créer depuis la notice, détacher, regrouper des éditions.
+  async function createWork() {
+    const bid = f('published_book_id'); if (!bid) return;
+    setWorkBusy(true);
+    try {
+      const { error } = await supabase.rpc('create_work_from_book', { p_book_id: Number(bid) });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.work.created' }), kind: 'ok' });
+      setWorkNonce(n => n + 1);
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setWorkBusy(false); }
+  }
+  async function detachWork() {
+    const bid = f('published_book_id'); if (!bid) return;
+    setWorkBusy(true);
+    try {
+      const { error } = await supabase.rpc('detach_book_from_work', { p_book_id: Number(bid) });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.work.detached' }), kind: 'ok' });
+      setWorkNonce(n => n + 1);
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setWorkBusy(false); }
+  }
+  // Regroupe la notice courante + un autre document comme éditions d'une même œuvre.
+  async function groupAsEditions(otherBookId) {
+    const bid = f('published_book_id'); if (!bid) return;
+    setBookDupBusy(otherBookId);
+    try {
+      const { error } = await supabase.rpc('group_books_as_editions', { p_book_ids: [Number(bid), Number(otherBookId)] });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.work.grouped' }), kind: 'ok' });
+      setWorkNonce(n => n + 1);
+      await findBookDuplicates(); // l'édition regroupée quitte les doublons
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setBookDupBusy(null); }
@@ -2530,6 +2595,30 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             />
           </div>
 
+          {/* ── Œuvre (P4) ───────────────────────────────── */}
+          {f('published_book_id') && (
+            <div className="ab-span3" style={{ gridColumn: 'span 3', marginBottom: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.work.title' })}</span>
+                {work ? (
+                  <>
+                    <span style={{ fontSize: '.82rem' }}>{work.uniform_title} · {t({ id: 'catalogacao.work.editions' }, { count: work.count })}</span>
+                    <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={detachWork} disabled={workBusy}>
+                      {t({ id: 'catalogacao.work.detach' })}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)' }}>{t({ id: 'catalogacao.work.none' })}</span>
+                    <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={createWork} disabled={workBusy}>
+                      {t({ id: 'catalogacao.work.create' })}
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* ── Doublons possibles (documents, lecture seule P2a) ─────── */}
           {f('published_book_id') && (
             <div className="ab-span3" style={{ gridColumn: 'span 3' }}>
@@ -2555,6 +2644,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       <span className={`cat-pill ${d.match_kind === 'isbn' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                         {d.match_kind === 'isbn' ? 'ISBN' : t({ id: 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
                       </span>
+                      <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                        onClick={() => groupAsEditions(d.book_id)} disabled={bookDupBusy != null}
+                        title={t({ id: 'catalogacao.dedup.sameWorkHint' })}>
+                        {t({ id: 'catalogacao.dedup.sameWork' })}
+                      </button>
                       <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                         onClick={() => markBooksNotDuplicate(d.book_id)} disabled={bookDupBusy != null}
                         title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}>

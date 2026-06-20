@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Als unterschiedliche Ausgaben markieren: dieses Paar wird nicht mehr vorgeschlagen.",
   "catalogacao.dedup.markedNotDuplicate": "Als unterschiedliche Ausgaben markiert.",
   "catalogacao.ui.coverRemove": "Cover entfernen",
-  "catalogacao.ui.coverRemoved": "Cover entfernt."
+  "catalogacao.ui.coverRemoved": "Cover entfernt.",
+  "catalogacao.work.title": "Werk",
+  "catalogacao.work.none": "Kein Werk verknüpft",
+  "catalogacao.work.editions": "{count} Ausgabe(n)",
+  "catalogacao.work.create": "Werk anlegen",
+  "catalogacao.work.detach": "Lösen",
+  "catalogacao.work.created": "Werk angelegt.",
+  "catalogacao.work.detached": "Vom Werk gelöst.",
+  "catalogacao.work.grouped": "Als Ausgaben desselben Werks gruppiert.",
+  "catalogacao.dedup.sameWork": "Selbes Werk",
+  "catalogacao.dedup.sameWorkHint": "Als Ausgaben desselben Werks gruppieren (kein Duplikat).",
+  "error.catalog.work.notFound": "Dokument oder Werk nicht gefunden.",
+  "error.catalog.work.needTwo": "Wähle mindestens zwei Dokumente."
 }

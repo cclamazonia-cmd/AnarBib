@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Marquer comme éditions distinctes : cette paire ne sera plus proposée.",
   "catalogacao.dedup.markedNotDuplicate": "Marqué comme éditions distinctes.",
   "catalogacao.ui.coverRemove": "Retirer la couverture",
-  "catalogacao.ui.coverRemoved": "Couverture retirée."
+  "catalogacao.ui.coverRemoved": "Couverture retirée.",
+  "catalogacao.work.title": "Œuvre",
+  "catalogacao.work.none": "Aucune œuvre rattachée",
+  "catalogacao.work.editions": "{count} édition(s)",
+  "catalogacao.work.create": "Créer l'œuvre",
+  "catalogacao.work.detach": "Détacher",
+  "catalogacao.work.created": "Œuvre créée.",
+  "catalogacao.work.detached": "Détaché de l'œuvre.",
+  "catalogacao.work.grouped": "Regroupé comme éditions de la même œuvre.",
+  "catalogacao.dedup.sameWork": "Même œuvre",
+  "catalogacao.dedup.sameWorkHint": "Regrouper comme éditions de la même œuvre (pas un doublon).",
+  "error.catalog.work.notFound": "Document ou œuvre introuvable.",
+  "error.catalog.work.needTwo": "Sélectionnez au moins deux documents."
 }

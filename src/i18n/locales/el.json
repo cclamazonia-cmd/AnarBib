@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Σήμανση ως διαφορετικές εκδόσεις: αυτό το ζεύγος δεν θα προτείνεται πλέον.",
   "catalogacao.dedup.markedNotDuplicate": "Σημειώθηκε ως διαφορετικές εκδόσεις.",
   "catalogacao.ui.coverRemove": "Αφαίρεση εξωφύλλου",
-  "catalogacao.ui.coverRemoved": "Το εξώφυλλο αφαιρέθηκε."
+  "catalogacao.ui.coverRemoved": "Το εξώφυλλο αφαιρέθηκε.",
+  "catalogacao.work.title": "Έργο",
+  "catalogacao.work.none": "Δεν έχει συνδεθεί έργο",
+  "catalogacao.work.editions": "{count} εκδόσεις",
+  "catalogacao.work.create": "Δημιουργία έργου",
+  "catalogacao.work.detach": "Αποσύνδεση",
+  "catalogacao.work.created": "Το έργο δημιουργήθηκε.",
+  "catalogacao.work.detached": "Αποσυνδέθηκε από το έργο.",
+  "catalogacao.work.grouped": "Ομαδοποιήθηκε ως εκδόσεις του ίδιου έργου.",
+  "catalogacao.dedup.sameWork": "Ίδιο έργο",
+  "catalogacao.dedup.sameWorkHint": "Ομαδοποίηση ως εκδόσεις του ίδιου έργου (όχι διπλότυπο).",
+  "error.catalog.work.notFound": "Το τεκμήριο ή το έργο δεν βρέθηκε.",
+  "error.catalog.work.needTwo": "Επιλέξτε τουλάχιστον δύο τεκμήρια."
 }

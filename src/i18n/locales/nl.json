@@ -5384,5 +5384,17 @@
   "catalogacao.dedup.notDuplicateHint": "Markeer als verschillende edities: dit paar wordt niet meer voorgesteld.",
   "catalogacao.dedup.markedNotDuplicate": "Gemarkeerd als verschillende edities.",
   "catalogacao.ui.coverRemove": "Omslag verwijderen",
-  "catalogacao.ui.coverRemoved": "Omslag verwijderd."
+  "catalogacao.ui.coverRemoved": "Omslag verwijderd.",
+  "catalogacao.work.title": "Werk",
+  "catalogacao.work.none": "Geen werk gekoppeld",
+  "catalogacao.work.editions": "{count} editie(s)",
+  "catalogacao.work.create": "Werk aanmaken",
+  "catalogacao.work.detach": "Loskoppelen",
+  "catalogacao.work.created": "Werk aangemaakt.",
+  "catalogacao.work.detached": "Losgekoppeld van werk.",
+  "catalogacao.work.grouped": "Gegroepeerd als edities van hetzelfde werk.",
+  "catalogacao.dedup.sameWork": "Zelfde werk",
+  "catalogacao.dedup.sameWorkHint": "Groeperen als edities van hetzelfde werk (geen duplicaat).",
+  "error.catalog.work.notFound": "Document of werk niet gevonden.",
+  "error.catalog.work.needTwo": "Selecteer minstens twee documenten."
 }
