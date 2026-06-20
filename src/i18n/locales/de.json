@@ -5408,5 +5408,6 @@
   "catalogacao.work.group": "Gruppieren",
   "catalogacao.work.alreadyInWork": "bereits in einem Werk",
   "catalog.collapseEditions": "Ausgaben gruppieren",
-  "work.page.langUnspecified": "Sprache nicht angegeben"
+  "work.page.langUnspecified": "Sprache nicht angegeben",
+  "work.page.translatedBy": "Übersetzt von"
 }

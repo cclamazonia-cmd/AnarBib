@@ -80,6 +80,14 @@ export default function WorkPage() {
                 {exp.lang || t({ id: 'work.page.langUnspecified' })}
               </h3>
             )}
+            {Array.isArray(exp.translators) && exp.translators.length > 0 && (
+              <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 8px' }}>
+                {t({ id: 'work.page.translatedBy' })}{' '}
+                {exp.translators.map((tr, i) => (
+                  <span key={tr.author_id}>{i > 0 ? ', ' : ''}<Link to={`/autor/${tr.author_id}`}>{tr.name}</Link></span>
+                ))}
+              </div>
+            )}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
               {(exp.editions || []).map(renderEdition)}
             </div>

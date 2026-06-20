@@ -5408,5 +5408,6 @@
   "catalogacao.work.group": "Groeperen",
   "catalogacao.work.alreadyInWork": "al in een werk",
   "catalog.collapseEditions": "Edities groeperen",
-  "work.page.langUnspecified": "Taal niet opgegeven"
+  "work.page.langUnspecified": "Taal niet opgegeven",
+  "work.page.translatedBy": "Vertaald door"
 }

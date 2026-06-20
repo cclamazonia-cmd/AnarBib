@@ -5408,5 +5408,6 @@
   "catalogacao.work.group": "Agrupar",
   "catalogacao.work.alreadyInWork": "ya en una obra",
   "catalog.collapseEditions": "Agrupar ediciones",
-  "work.page.langUnspecified": "Idioma no especificado"
+  "work.page.langUnspecified": "Idioma no especificado",
+  "work.page.translatedBy": "Traducción de"
 }

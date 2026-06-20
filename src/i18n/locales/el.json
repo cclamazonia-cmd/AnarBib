@@ -5408,5 +5408,6 @@
   "catalogacao.work.group": "Ομαδοποίηση",
   "catalogacao.work.alreadyInWork": "ήδη σε έργο",
   "catalog.collapseEditions": "Ομαδοποίηση εκδόσεων",
-  "work.page.langUnspecified": "Μη καθορισμένη γλώσσα"
+  "work.page.langUnspecified": "Μη καθορισμένη γλώσσα",
+  "work.page.translatedBy": "Μετάφραση:"
 }

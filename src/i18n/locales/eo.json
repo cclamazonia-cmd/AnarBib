@@ -5408,5 +5408,6 @@
   "catalogacao.work.group": "Grupigi",
   "catalogacao.work.alreadyInWork": "jam en verko",
   "catalog.collapseEditions": "Grupigi eldonojn",
-  "work.page.langUnspecified": "Lingvo nespecifita"
+  "work.page.langUnspecified": "Lingvo nespecifita",
+  "work.page.translatedBy": "Tradukita de"
 }
