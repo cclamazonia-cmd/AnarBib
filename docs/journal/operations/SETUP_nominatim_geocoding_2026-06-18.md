@@ -1,10 +1,30 @@
 # Runbook — Nominatim self-hosted (géocodage carte, MAP-F)
 
 **Date :** 2026-06-18
-**Statut :** 🟡 travaux préliminaires — toolchain validée (smoke test), import réel à décider
+**Statut :** 🔴 self-host **maison ABANDONNÉ** (19/06) — géocodage auto **déféré au VPS camarades** (encadré ci-dessous). Toolchain + proxy livrés et conservés ; pin manuel actif.
 **Auteur·ices :** AnarBib (session « Carte réseau 10 locales »)
 **Réfs :** `spec-cartographie-reseau` §7 (MAP-F) ; REGISTRE §34 ; INV-5 (anti-tracking) ;
 `scripts/nominatim/docker-compose.yml`. Voisin : `SETUP_runner_wsl2_2026-06-11.md`.
+
+> 🔴 **MISE À JOUR 19/06/2026 — self-host maison ABANDONNÉ, géocodage auto DÉFÉRÉ AU VPS.**
+> Le WSL2 maison ne voit que **15 Go** (sur 32 physiques, cap `.wslconfig`) et **ne tient pas
+> l'indexation Nominatim**. Europe entière (~23 Go PBF) = parsing ~20-30 h → stoppé. Même un
+> extrait ciblé **Italie+France+Espagne+Allemagne** (~11 Go, fusion `osmium` dans un conteneur
+> Debian éphémère) passe le parsing mais **s'effondre à l'indexation des rangs** (rang 26
+> « rues » ETA **~12 h à lui seul** + rangs 27-30 → ~12-24 h), tout en étranglant le runner CI
+> local. **Décision (Xavier, 19/06) : couper les frais.** Tout démonté : conteneurs
+> `anarbib-nominatim` + `anarbib-cloudflared`, volumes `nominatim_nominatim-{data,flatnode}`,
+> dossier `/home/accattone/nominatim-pbf`, réseau `nominatim_default` ; secret **`NOMINATIM_URL`
+> dé-défini** (`supabase secrets unset`).
+>
+> **Rien de cassé** : les 184 fiches carto ont **déjà leurs coordonnées** → le géocodage auto
+> n'est qu'un **confort additif** (cf. §7). L'EF `geocode` + le bouton « Localiser depuis
+> l'adresse » restent **en prod**, dégradés proprement en « non configuré » → **pin manuel**.
+>
+> **Reprise = sur le VPS des camarades** (vrai matériel → Europe + Amériques, voire planet) :
+> y monter Nominatim, puis `supabase secrets set NOMINATIM_URL=<url-vps>` (cf. §9) — le bouton
+> se réactive seul, en couverture mondiale. ⚠️ Le **tunnel cloudflared maison et son script
+> `refresh-tunnel-secret.sh` deviennent sans objet** (le pont local n'existe plus).
 
 ---
 
