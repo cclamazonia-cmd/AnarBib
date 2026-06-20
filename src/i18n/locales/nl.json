@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "al in een werk",
   "catalog.collapseEditions": "Edities groeperen",
   "work.page.langUnspecified": "Taal niet opgegeven",
-  "work.page.translatedBy": "Vertaald door"
+  "work.page.translatedBy": "Vertaald door",
+  "catalogacao.wizard.step.oeuvres.title": "Werken & duplicaten (Geavanceerd)",
+  "catalogacao.wizard.step.oeuvres.body": "Op de fiche van een document (niveau Geavanceerd of Volledig) heb je hulpmiddelen om duplicaten te vermijden en edities te koppelen:\n\n• «Duplicaten» / «Samenvoegen…»: herkent twee fiches van hetzelfde document en voegt ze samen zonder iets te verliezen.\n• «Geen duplicaat»: verwerpt een vals alarm (twee verschillende edities van een klassieker zijn geen duplicaat).\n• «Zelfde werk» / «Edities voorstellen»: groepeert de edities van één tekst — ze verschijnen dan samen op de werkpagina, per taal.\n• «Omslag verwijderen»: wist een onjuiste omslagafbeelding.",
+  "catalogacao.wizard.step.oeuvres.tip": "Deze hulpmiddelen verschijnen alleen op de niveaus Geavanceerd en Volledig: gebruik de schakelaar eenvoudig/geavanceerd/volledig boven aan de fiche. In de modus Eenvoudig blijft de fiche overzichtelijk om snel te werken."
 }

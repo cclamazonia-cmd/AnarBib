@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "bereits in einem Werk",
   "catalog.collapseEditions": "Ausgaben gruppieren",
   "work.page.langUnspecified": "Sprache nicht angegeben",
-  "work.page.translatedBy": "Übersetzt von"
+  "work.page.translatedBy": "Übersetzt von",
+  "catalogacao.wizard.step.oeuvres.title": "Werke & Dubletten (Erweitert)",
+  "catalogacao.wizard.step.oeuvres.body": "In der Dokumentkarte (Stufe Erweitert oder Vollständig) stehen dir Werkzeuge zur Verfügung, um Dubletten zu vermeiden und Ausgaben zu verknüpfen:\n\n• „Dubletten“ / „Zusammenführen…“: erkennt zwei Karten desselben Dokuments und führt sie zusammen, ohne etwas zu verlieren.\n• „Keine Dublette“: verwirft einen Fehlalarm (zwei verschiedene Ausgaben eines Klassikers sind keine Dublette).\n• „Gleiches Werk“ / „Ausgaben vorschlagen“: gruppiert die Ausgaben eines Textes — sie erscheinen dann zusammen auf der Werkseite, nach Sprache.\n• „Cover entfernen“: löscht ein falsches Coverbild.",
+  "catalogacao.wizard.step.oeuvres.tip": "Diese Werkzeuge erscheinen nur in den Stufen Erweitert und Vollständig: Nutze den Schalter einfach/erweitert/vollständig oben in der Karte. Im Modus Einfach bleibt die Karte schlank, um schnell zu sein."
 }

@@ -13,11 +13,12 @@ const WIZARD_SEEN_KEY = 'catalogacao_wizard_seen';
 const STEP_TAB_MAP = [
   null,            // 0: welcome
   'booksPanel',    // 1: documento
-  'authorsPanel',  // 2: autoria
-  'indexPanel',    // 3: indexação
-  'labelsPanel',   // 4: etiquetas
-  'queuePanel',    // 5: fila/lotes/catálogo
-  null,            // 6: tips
+  'booksPanel',    // 2: œuvres & doublons (palier Avancé)
+  'authorsPanel',  // 3: autoria
+  'indexPanel',    // 4: indexação
+  'labelsPanel',   // 5: etiquetas
+  'queuePanel',    // 6: fila/lotes/catálogo
+  null,            // 7: tips
 ];
 
 export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
@@ -36,6 +37,12 @@ export default function CatalogacaoWizard({ onClose, onSwitchTab }) {
       titleKey: 'catalogacao.wizard.step.documento.title',
       bodyKey:  'catalogacao.wizard.step.documento.body',
       tipKey:   'catalogacao.wizard.step.documento.tip',
+    },
+    {
+      icon: '🧩',
+      titleKey: 'catalogacao.wizard.step.oeuvres.title',
+      bodyKey:  'catalogacao.wizard.step.oeuvres.body',
+      tipKey:   'catalogacao.wizard.step.oeuvres.tip',
     },
     {
       icon: '✍️',

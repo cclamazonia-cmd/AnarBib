@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "déjà dans une œuvre",
   "catalog.collapseEditions": "Regrouper les éditions",
   "work.page.langUnspecified": "Langue non précisée",
-  "work.page.translatedBy": "Traduit par"
+  "work.page.translatedBy": "Traduit par",
+  "catalogacao.wizard.step.oeuvres.title": "Œuvres & doublons (Avancé)",
+  "catalogacao.wizard.step.oeuvres.body": "Sous la fiche d'un document (palier Avancé ou Complet), tu disposes d'outils pour éviter les doublons et relier les éditions :\n\n• « Doublons » / « Fusionner… » : repère deux fiches du même document et fusionne-les sans rien perdre.\n• « Pas un doublon » : écarte une fausse alerte (deux éditions distinctes d'un classique ne sont pas un doublon).\n• « Même œuvre » / « Suggérer des éditions » : regroupe les éditions d'un même texte — elles s'affichent ensemble sur la page de l'œuvre, par langue.\n• « Retirer la couverture » : efface une image de couverture erronée.",
+  "catalogacao.wizard.step.oeuvres.tip": "Ces outils n'apparaissent qu'aux paliers Avancé et Complet : utilise la bascule simple/avancé/complet en haut de la fiche. En Simple, la fiche reste épurée pour aller vite."
 }

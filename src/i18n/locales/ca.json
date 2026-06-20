@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "ja en una obra",
   "catalog.collapseEditions": "Agrupa edicions",
   "work.page.langUnspecified": "Idioma no especificat",
-  "work.page.translatedBy": "Traducció de"
+  "work.page.translatedBy": "Traducció de",
+  "catalogacao.wizard.step.oeuvres.title": "Obres i duplicats (Avançat)",
+  "catalogacao.wizard.step.oeuvres.body": "A la fitxa d'un document (nivell Avançat o Complet), tens eines per evitar duplicats i vincular edicions:\n\n• «Duplicats» / «Fusiona…»: detecta dues fitxes del mateix document i les fusiona sense perdre res.\n• «No és un duplicat»: descarta una falsa alarma (dues edicions diferents d'un clàssic no són un duplicat).\n• «Mateixa obra» / «Suggereix edicions»: agrupa les edicions d'un mateix text — apareixen juntes a la pàgina de l'obra, per llengua.\n• «Treu la coberta»: esborra una imatge de coberta incorrecta.",
+  "catalogacao.wizard.step.oeuvres.tip": "Aquestes eines només apareixen als nivells Avançat i Complet: fes servir el selector simple/avançat/complet a la part superior de la fitxa. En mode Simple, la fitxa es manté neta per anar de pressa."
 }

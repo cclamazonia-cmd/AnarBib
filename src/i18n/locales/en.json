@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "already in a work",
   "catalog.collapseEditions": "Group editions",
   "work.page.langUnspecified": "Unspecified language",
-  "work.page.translatedBy": "Translated by"
+  "work.page.translatedBy": "Translated by",
+  "catalogacao.wizard.step.oeuvres.title": "Works & duplicates (Advanced)",
+  "catalogacao.wizard.step.oeuvres.body": "On a document record (Advanced or Complete tier), you have tools to avoid duplicates and link editions:\n\n• “Duplicates” / “Merge…”: spot two records of the same document and merge them without losing anything.\n• “Not a duplicate”: dismiss a false alert (two distinct editions of a classic are not a duplicate).\n• “Same work” / “Suggest editions”: group the editions of one text — they then appear together on the work page, by language.\n• “Remove cover”: clear an incorrect cover image.",
+  "catalogacao.wizard.step.oeuvres.tip": "These tools appear only at the Advanced and Complete tiers: use the simple/advanced/complete switch at the top of the record. In Simple mode, the record stays lean for speed."
 }

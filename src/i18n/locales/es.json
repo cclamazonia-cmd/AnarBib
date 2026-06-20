@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "ya en una obra",
   "catalog.collapseEditions": "Agrupar ediciones",
   "work.page.langUnspecified": "Idioma no especificado",
-  "work.page.translatedBy": "Traducción de"
+  "work.page.translatedBy": "Traducción de",
+  "catalogacao.wizard.step.oeuvres.title": "Obras y duplicados (Avanzado)",
+  "catalogacao.wizard.step.oeuvres.body": "En la ficha de un documento (nivel Avanzado o Completo), tenés herramientas para evitar duplicados y vincular ediciones:\n\n• «Duplicados» / «Fusionar…»: detecta dos fichas del mismo documento y las fusiona sin perder nada.\n• «No es un duplicado»: descarta una falsa alarma (dos ediciones distintas de un clásico no son un duplicado).\n• «Misma obra» / «Sugerir ediciones»: agrupa las ediciones de un mismo texto — aparecen juntas en la página de la obra, por idioma.\n• «Quitar la portada»: borra una imagen de portada incorrecta.",
+  "catalogacao.wizard.step.oeuvres.tip": "Estas herramientas solo aparecen en los niveles Avanzado y Completo: usá el selector simple/avanzado/completo en la parte superior de la ficha. En modo Simple, la ficha queda despejada para ir más rápido."
 }

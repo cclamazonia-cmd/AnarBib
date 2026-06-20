@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "già in un'opera",
   "catalog.collapseEditions": "Raggruppa edizioni",
   "work.page.langUnspecified": "Lingua non specificata",
-  "work.page.translatedBy": "Tradotto da"
+  "work.page.translatedBy": "Tradotto da",
+  "catalogacao.wizard.step.oeuvres.title": "Opere e duplicati (Avanzato)",
+  "catalogacao.wizard.step.oeuvres.body": "Nella scheda di un documento (livello Avanzato o Completo), hai strumenti per evitare i duplicati e collegare le edizioni:\n\n• «Duplicati» / «Unisci…»: individua due schede dello stesso documento e le unisce senza perdere nulla.\n• «Non è un duplicato»: scarta un falso allarme (due edizioni distinte di un classico non sono un duplicato).\n• «Stessa opera» / «Suggerisci edizioni»: raggruppa le edizioni di uno stesso testo — appaiono insieme nella pagina dell'opera, per lingua.\n• «Rimuovi la copertina»: cancella un'immagine di copertina errata.",
+  "catalogacao.wizard.step.oeuvres.tip": "Questi strumenti compaiono solo ai livelli Avanzato e Completo: usa il selettore semplice/avanzato/completo in cima alla scheda. In modalità Semplice, la scheda resta essenziale per andare veloci."
 }

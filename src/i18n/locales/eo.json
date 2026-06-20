@@ -5409,5 +5409,8 @@
   "catalogacao.work.alreadyInWork": "jam en verko",
   "catalog.collapseEditions": "Grupigi eldonojn",
   "work.page.langUnspecified": "Lingvo nespecifita",
-  "work.page.translatedBy": "Tradukita de"
+  "work.page.translatedBy": "Tradukita de",
+  "catalogacao.wizard.step.oeuvres.title": "Verkoj kaj duoblaĵoj (Altnivela)",
+  "catalogacao.wizard.step.oeuvres.body": "En la dokumenta slipo (nivelo Altnivela aŭ Kompleta), vi havas ilojn por eviti duoblaĵojn kaj ligi eldonojn:\n\n• «Duoblaĵoj» / «Kunfandi…»: trovas du slipojn de la sama dokumento kaj kunfandas ilin sen perdi ion ajn.\n• «Ne duoblaĵo»: forĵetas falsan alarmon (du malsamaj eldonoj de klasikaĵo ne estas duoblaĵo).\n• «Sama verko» / «Sugesti eldonojn»: grupigas la eldonojn de unu teksto — ili tiam aperas kune sur la verkopaĝo, laŭ lingvo.\n• «Forigi la kovrilon»: forviŝas malĝustan kovrilbildon.",
+  "catalogacao.wizard.step.oeuvres.tip": "Tiuj iloj aperas nur ĉe la niveloj Altnivela kaj Kompleta: uzu la ŝaltilon simpla/altnivela/kompleta supre de la slipo. En la simpla reĝimo, la slipo restas maldensa por rapidi."
 }
