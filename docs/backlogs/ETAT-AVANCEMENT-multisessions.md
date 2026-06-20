@@ -94,6 +94,33 @@ Bloc livré et **déployé en prod** (`main` `ae7e25d8` ; DB appliquée via MCP 
 
 — *Session: File éditoriale — tri & supports AV*
 
+## ✅ Session « Doublons d'autorité & i18n erreurs catalogue » (19-20/06) — livré
+
+Bloc livré et **déployé en prod** (`feat/catalog-audit-fixes`). **Avancée de fond** : le catalogue
+passe d'une liste plate de documents isolés (doublonnage **passif** des œuvres) à un **modèle
+bibliographique FRBR-léger** Œuvre → Expression → Manifestation → Exemplaire. Synthèse complète :
+[`../journal/chantiers/CHANTIER_modele_oeuvre_editions_2026-06-20.md`](../journal/chantiers/CHANTIER_modele_oeuvre_editions_2026-06-20.md).
+
+- **Autorités** : `merge_author` surfacé (bouton « Fusionner… » dans `CatalogPanel`) ; réconciliation
+  `book_authors`↔`book_contributors` (1243 liens, migr. `20260619210445`) ; hints d'erreur catalogue
+  localisés (`error.catalog.discard.*`, migr. `20260619160150`). LUZ + 11 grappes fusionnées.
+- **Dédoublonnage conscient de l'édition** (migr. `20260620083749`) : `suggest_*` excluent les ISBN
+  distincts + table `book_not_duplicate` + « Pas un doublon » + « Retirer la couverture ».
+- **Modèle Œuvre v1** : table `works` + `books.work_id` + backfill 153 œuvres/344 notices (migr.
+  `…090724`) ; RPC de regroupement non destructives (`…091752`) ; « Autres éditions » sur BookPage
+  (`…100926`) ; bloc Œuvre + « Même œuvre »/« Pas un doublon » **gatés palier ≥ Avancé**.
+- **Modèle Œuvre v2** : page publique `/obra/:id` (`WorkPage` + `work_public_detail`, `…102802`) ;
+  `suggest_editions_for_book` (`…103632`) ; `work_id` aux vues catalogue sans rebuild MV (`…105747`) ;
+  bascule « Regrouper les éditions » au catalogue (repli **client**, OFF par défaut, zéro risque OPAC).
+- **Couche Expression v3** : `work_expressions` (langue) + `books.expression_id` dérivé par trigger
+  (`…113134`, 198 expressions/345 notices) ; page Œuvre **groupée par langue** ; **traducteur·rice par
+  expression** dérivé des contributeurs (`…114434`, pas de colonne fantôme).
+- **Guide** : étape `CatalogacaoWizard` « Œuvres & doublons », **palier Avancé signalé**.
+- **Reste ouvert (volontaire)** : repli catalogue **serveur strict** — *uniquement si* le repli client
+  montre ses limites. i18n 10 locales à parité (CI verte), migrations validées en `begin…rollback`.
+
+— *Session: Doublons d'autorité & i18n erreurs catalogue*
+
 ## Morceaux non résolus (survey sessions, bruit filtré)
 
 ### ✅ « À pérenniser » — RÉSOLU (faux positif, élucidé 11/06)
