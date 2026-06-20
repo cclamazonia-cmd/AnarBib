@@ -5402,5 +5402,9 @@
   "work.page.notFound": "Verko ne trovita.",
   "work.page.editions": "{count} eldono(j)",
   "work.page.editionsHeading": "Eldonoj",
-  "book.work.view": "Vidi la verkon"
+  "book.work.view": "Vidi la verkon",
+  "catalogacao.work.suggest": "Sugesti eldonojn",
+  "catalogacao.work.noSuggestions": "Neniu eldono por grupigi.",
+  "catalogacao.work.group": "Grupigi",
+  "catalogacao.work.alreadyInWork": "jam en verko"
 }

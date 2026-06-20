@@ -5402,5 +5402,9 @@
   "work.page.notFound": "Work not found.",
   "work.page.editions": "{count} edition(s)",
   "work.page.editionsHeading": "Editions",
-  "book.work.view": "View work"
+  "book.work.view": "View work",
+  "catalogacao.work.suggest": "Suggest editions",
+  "catalogacao.work.noSuggestions": "No editions to group.",
+  "catalogacao.work.group": "Group",
+  "catalogacao.work.alreadyInWork": "already in a work"
 }

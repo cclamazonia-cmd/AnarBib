@@ -5402,5 +5402,9 @@
   "work.page.notFound": "Werk niet gevonden.",
   "work.page.editions": "{count} editie(s)",
   "work.page.editionsHeading": "Edities",
-  "book.work.view": "Werk bekijken"
+  "book.work.view": "Werk bekijken",
+  "catalogacao.work.suggest": "Edities voorstellen",
+  "catalogacao.work.noSuggestions": "Geen edities om te groeperen.",
+  "catalogacao.work.group": "Groeperen",
+  "catalogacao.work.alreadyInWork": "al in een werk"
 }

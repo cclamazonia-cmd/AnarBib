@@ -303,6 +303,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [work, setWork] = useState(null);
   const [workBusy, setWorkBusy] = useState(false);
   const [workNonce, setWorkNonce] = useState(0);
+  // P4 v2 : suggestions d'éditions à regrouper (même auteur·rice + titre proche)
+  const [editionSugg, setEditionSugg] = useState(null); // null = pas cherché
+  const [editionSuggLoading, setEditionSuggLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
 
@@ -1268,6 +1271,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setWorkBusy(false); }
   }
+  // P4 v2 : suggérer des éditions à regrouper (même auteur·rice + titre proche).
+  async function findEditionSuggestions() {
+    const bid = f('published_book_id'); if (!bid) return;
+    setEditionSuggLoading(true);
+    try {
+      const { data, error } = await supabase.rpc('suggest_editions_for_book', { p_book_id: Number(bid) });
+      if (error) throw error;
+      setEditionSugg(data || []);
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setEditionSuggLoading(false); }
+  }
+
   // Regroupe la notice courante + un autre document comme éditions d'une même œuvre.
   async function groupAsEditions(otherBookId) {
     const bid = f('published_book_id'); if (!bid) return;
@@ -2615,7 +2631,31 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     </button>
                   </>
                 )}
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                  onClick={findEditionSuggestions} disabled={editionSuggLoading || workBusy}>
+                  {editionSuggLoading ? t({ id: 'catalogacao.dedup.finding' }) : t({ id: 'catalogacao.work.suggest' })}
+                </button>
               </div>
+              {editionSugg !== null && editionSugg.length === 0 && (
+                <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)', marginTop: 6 }}>{t({ id: 'catalogacao.work.noSuggestions' })}</div>
+              )}
+              {editionSugg !== null && editionSugg.length > 0 && (
+                <div style={{ marginTop: 6, border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, overflow: 'hidden' }}>
+                  {editionSugg.map(s => (
+                    <div key={s.book_id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderBottom: '1px solid rgba(255,255,255,.04)' }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '.82rem' }}>{s.titulo}{s.ano ? ` (${s.ano})` : ''}</div>
+                        <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #aaa)' }}>{[s.editora, s.work_id ? t({ id: 'catalogacao.work.alreadyInWork' }) : null].filter(Boolean).join(' · ')}</div>
+                      </div>
+                      <span style={{ fontSize: '.6rem', color: 'var(--brand-muted, #aaa)' }}>{Math.round((Number(s.score) || 0) * 100)}%</span>
+                      <button type="button" className="ab-button ab-button--sm" disabled={bookDupBusy != null}
+                        onClick={async () => { await groupAsEditions(s.book_id); findEditionSuggestions(); }}>
+                        {bookDupBusy === s.book_id ? '…' : t({ id: 'catalogacao.work.group' })}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

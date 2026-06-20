@@ -5402,5 +5402,9 @@
   "work.page.notFound": "Το έργο δεν βρέθηκε.",
   "work.page.editions": "{count} εκδόσεις",
   "work.page.editionsHeading": "Εκδόσεις",
-  "book.work.view": "Προβολή έργου"
+  "book.work.view": "Προβολή έργου",
+  "catalogacao.work.suggest": "Πρόταση εκδόσεων",
+  "catalogacao.work.noSuggestions": "Καμία έκδοση προς ομαδοποίηση.",
+  "catalogacao.work.group": "Ομαδοποίηση",
+  "catalogacao.work.alreadyInWork": "ήδη σε έργο"
 }

@@ -5402,5 +5402,9 @@
   "work.page.notFound": "Opera non trovata.",
   "work.page.editions": "{count} edizione/i",
   "work.page.editionsHeading": "Edizioni",
-  "book.work.view": "Vedi l'opera"
+  "book.work.view": "Vedi l'opera",
+  "catalogacao.work.suggest": "Suggerisci edizioni",
+  "catalogacao.work.noSuggestions": "Nessuna edizione da raggruppare.",
+  "catalogacao.work.group": "Raggruppa",
+  "catalogacao.work.alreadyInWork": "già in un'opera"
 }
