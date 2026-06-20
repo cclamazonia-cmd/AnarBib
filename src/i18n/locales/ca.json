@@ -5407,5 +5407,6 @@
   "catalogacao.work.noSuggestions": "Cap edició per agrupar.",
   "catalogacao.work.group": "Agrupa",
   "catalogacao.work.alreadyInWork": "ja en una obra",
-  "catalog.collapseEditions": "Agrupa edicions"
+  "catalog.collapseEditions": "Agrupa edicions",
+  "work.page.langUnspecified": "Idioma no especificat"
 }

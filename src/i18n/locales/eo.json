@@ -5407,5 +5407,6 @@
   "catalogacao.work.noSuggestions": "Neniu eldono por grupigi.",
   "catalogacao.work.group": "Grupigi",
   "catalogacao.work.alreadyInWork": "jam en verko",
-  "catalog.collapseEditions": "Grupigi eldonojn"
+  "catalog.collapseEditions": "Grupigi eldonojn",
+  "work.page.langUnspecified": "Lingvo nespecifita"
 }

@@ -39,7 +39,26 @@ export default function WorkPage() {
   }
 
   const editions = Array.isArray(work.editions) ? work.editions : [];
+  // Expressions FRBR (v3) : groupes par langue. Repli sur un groupe unique si absent.
+  const expressions = Array.isArray(work.expressions) && work.expressions.length
+    ? work.expressions
+    : [{ lang: '', editions }];
+  const multiLang = expressions.length > 1;
   const subtitle = [work.author_name, t({ id: 'work.page.editions' }, { count: editions.length })].filter(Boolean).join(' · ');
+
+  const renderEdition = (e) => (
+    <Link key={e.book_id} to={`/livro/${e.book_id}`}
+      style={{ display: 'flex', gap: 10, padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,.08)', background: 'rgba(0,0,0,.15)', textDecoration: 'none', color: 'inherit' }}>
+      {e.cover_object_path
+        ? <img src={`${COVER_BASE}${e.cover_object_path}`} alt="" loading="lazy" style={{ width: 48, height: 68, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }} />
+        : <div style={{ width: 48, height: 68, borderRadius: 4, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,.06)', fontSize: '1.2rem' }}>{(e.titulo || '?')[0]}</div>}
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: '.86rem', fontWeight: 600 }}>{e.titulo}</div>
+        <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }}>{[e.ano, e.editora].filter(Boolean).join(' · ')}</div>
+        {!multiLang && e.idioma && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{e.idioma}</div>}
+      </div>
+    </Link>
+  );
 
   return (
     <PageShell>
@@ -54,21 +73,18 @@ export default function WorkPage() {
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '16px 12px' }}>
         <h2 style={{ fontSize: '1rem', margin: '0 0 12px' }}>{t({ id: 'work.page.editionsHeading' })}</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
-          {editions.map(e => (
-            <Link key={e.book_id} to={`/livro/${e.book_id}`}
-              style={{ display: 'flex', gap: 10, padding: 10, borderRadius: 10, border: '1px solid rgba(255,255,255,.08)', background: 'rgba(0,0,0,.15)', textDecoration: 'none', color: 'inherit' }}>
-              {e.cover_object_path
-                ? <img src={`${COVER_BASE}${e.cover_object_path}`} alt="" loading="lazy" style={{ width: 48, height: 68, objectFit: 'cover', borderRadius: 4, flexShrink: 0 }} />
-                : <div style={{ width: 48, height: 68, borderRadius: 4, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,.06)', fontSize: '1.2rem' }}>{(e.titulo || '?')[0]}</div>}
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: '.86rem', fontWeight: 600 }}>{e.titulo}</div>
-                <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }}>{[e.ano, e.editora].filter(Boolean).join(' · ')}</div>
-                {e.idioma && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{e.idioma}</div>}
-              </div>
-            </Link>
-          ))}
-        </div>
+        {expressions.map(exp => (
+          <div key={exp.lang} style={{ marginBottom: 18 }}>
+            {multiLang && (
+              <h3 style={{ fontSize: '.85rem', color: 'var(--brand-muted, #bbb)', margin: '0 0 8px', textTransform: 'capitalize' }}>
+                {exp.lang || t({ id: 'work.page.langUnspecified' })}
+              </h3>
+            )}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
+              {(exp.editions || []).map(renderEdition)}
+            </div>
+          </div>
+        ))}
       </div>
 
       <Footer />
