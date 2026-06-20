@@ -4,34 +4,35 @@
 > **Tout ce qui suit a été vérifié dans le dépôt.** Les rares incertitudes
 > résiduelles sont marquées « À CONFIRMER ».
 
-## 🐧 RÈGLE D'OR ABSOLUE — TOUTES les sessions travaillent EXCLUSIVEMENT sous WSL2
+## 🐧 RÈGLE D'OR — UN SEUL dépôt canonique (WSL), accessible des deux OS
 
-> **Lancer Claude TOUJOURS depuis WSL : `cd ~/anarbib && claude`. JAMAIS depuis Windows.**
-> Cette règle prime sur toutes les autres. Apprise à la dure (incident du 12/06/2026).
+> **Dépôt canonique UNIQUE = WSL : `/home/accattone/anarbib` (`~/anarbib`).**
+> Depuis le **2026-06-20**, ce **même** dépôt est aussi accessible côté Windows à
+> **`C:\AnarBib`**, qui est un **lien symbolique** (`mklink /D`) vers
+> `\\wsl.localhost\Ubuntu-26.04\home\accattone\anarbib` — **PAS un second clone**.
+> Mêmes fichiers, même `.git`, même working tree. Éditer via `C:\AnarBib` = éditer
+> le dépôt WSL (vérifié dans les deux sens le 2026-06-20). Il n'y a donc **rien à
+> synchroniser et aucune divergence possible** : c'est la garantie recherchée.
 
-- **Clone canonique UNIQUE = WSL** : `/home/accattone/anarbib` (`~/anarbib`).
-  Lui seul fait tourner `npm run dev` (localhost:5173) et pousse vers Codeberg.
-- **Le clone Windows (`C:\Users\accat\Claude's AnarBib\...`) a été SUPPRIMÉ**
-  (100 % redondant, 0 commit unique). **Ne jamais le recréer.** Toute session
-  lancée côté Windows recrée ce clone fantôme et désynchronise tout le dépôt.
-- **Pourquoi (incident du 12/06/2026)** : une session lancée côté Windows (outils
-  cloués sur `C:\...`) pendant que le dev server et les autres sessions vivaient
-  dans WSL → **deux clones désynchronisés, edits invisibles, prod en avance sur
-  le local**. Cause racine de toute la pagaille de la journée.
-- **Pourquoi techniquement (correctif factuel 12/06/2026)** : une session lancée
-  côté Windows pointe son CWD sur un chemin Windows et risque de **recréer un
-  clone fantôme désynchronisé**. *(Note : l'ancienne version affirmait ici que
-  Read/Edit/Write « ne peuvent PAS atteindre WSL via UNC `\\wsl.localhost\...` →
-  accès refusé » ; c'est **faux** sur ce poste — WSL2 Ubuntu-26.04, Win11 build
-  26200 — où Read + Write + Edit via UNC fonctionnent en lecture/écriture
-  (fichier créé avec owner `accattone`, fins de ligne LF). Ce n'est donc plus un
-  blocage technique, mais la règle reste sur ses fondements valides : un seul
-  clone canonique dans WSL, CWD propre, outils ergonomiques.)*
-- **Si tu lis ceci depuis une session Windows** : ne recrée **jamais** de clone
-  côté Windows. Tu peux dépanner en éditant le clone canonique WSL via UNC
-  (`\\wsl.localhost\Ubuntu-26.04\home\accattone\anarbib`) et en lançant git/npm
-  via `wsl.exe -d Ubuntu-26.04 -- bash -lc '...'`, mais l'ergonomie (CWD propre,
-  outils natifs) reste meilleure en lançant `cd ~/anarbib && claude` depuis WSL.
+- **Tu PEUX désormais travailler des deux côtés** : `cd ~/anarbib && claude` sous
+  WSL **ou** ouvrir `C:\AnarBib` côté Windows (Claude Desktop, outils Windows).
+  Les deux pointent sur l'unique dépôt — aucun edit n'est perdu ni invisible.
+- **Ce qui reste INTERDIT (cause racine de l'incident du 12/06/2026)** : créer un
+  **second clone INDÉPENDANT** sur le disque Windows — un vrai `git clone` vers un
+  chemin NTFS local avec son **propre `.git`** (ex. l'ancien
+  `C:\Users\accat\Claude's AnarBib\anarbib-app`, supprimé). DEUX `.git` distincts
+  = clones qui divergent, edits invisibles, prod en avance sur le local. Un
+  **lien** vers le dépôt WSL n'est PAS un clone : il est sûr. Ne JAMAIS
+  transformer `C:\AnarBib` en clone réel, ni recréer l'ancien clone Windows.
+- **Performance / mécanique** : `C:\AnarBib` vit sur le système de fichiers WSL
+  (9P) ; pour les opérations git/npm lourdes, préférer les lancer **dans WSL**
+  (`cd ~/anarbib`) ou via `wsl.exe -d Ubuntu-26.04 -u accattone -- bash -lc '...'`.
+  C'est le même dépôt quoi qu'il arrive — question d'ergonomie/vitesse, plus de
+  sécurité. `npm run dev` (localhost:5173) et les push Codeberg se lancent de WSL.
+- **Pré-requis** : WSL doit tourner pour que `C:\AnarBib` se résolve (c'est le cas
+  en permanence — le runner CI forgejo y tourne en service systemd). Si le lien
+  apparaît vide/cassé, c'est que la distro Ubuntu-26.04 est arrêtée : la relancer
+  (`wsl -d Ubuntu-26.04`), surtout **ne pas** recréer le lien ni cloner sous Windows.
 
 ## Présentation
 
