@@ -5396,5 +5396,6 @@
   "catalogacao.dedup.sameWork": "Zelfde werk",
   "catalogacao.dedup.sameWorkHint": "Groeperen als edities van hetzelfde werk (geen duplicaat).",
   "error.catalog.work.notFound": "Document of werk niet gevonden.",
-  "error.catalog.work.needTwo": "Selecteer minstens twee documenten."
+  "error.catalog.work.needTwo": "Selecteer minstens twee documenten.",
+  "book.otherEditions.title": "Andere edities van dit werk"
 }

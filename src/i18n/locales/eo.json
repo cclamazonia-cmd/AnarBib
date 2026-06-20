@@ -5396,5 +5396,6 @@
   "catalogacao.dedup.sameWork": "Sama verko",
   "catalogacao.dedup.sameWorkHint": "Grupigi kiel eldonojn de la sama verko (ne duplikato).",
   "error.catalog.work.notFound": "Dokumento aŭ verko ne trovita.",
-  "error.catalog.work.needTwo": "Elektu almenaŭ du dokumentojn."
+  "error.catalog.work.needTwo": "Elektu almenaŭ du dokumentojn.",
+  "book.otherEditions.title": "Aliaj eldonoj de ĉi tiu verko"
 }

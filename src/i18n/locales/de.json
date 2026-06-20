@@ -5396,5 +5396,6 @@
   "catalogacao.dedup.sameWork": "Selbes Werk",
   "catalogacao.dedup.sameWorkHint": "Als Ausgaben desselben Werks gruppieren (kein Duplikat).",
   "error.catalog.work.notFound": "Dokument oder Werk nicht gefunden.",
-  "error.catalog.work.needTwo": "Wähle mindestens zwei Dokumente."
+  "error.catalog.work.needTwo": "Wähle mindestens zwei Dokumente.",
+  "book.otherEditions.title": "Weitere Ausgaben dieses Werks"
 }

@@ -122,6 +122,7 @@ export default function BookPage() {
   const [toast, setToast] = useState('');
   // #OPAC4 : documents similaires (par contenu)
   const [similar, setSimilar] = useState([]);
+  const [otherEditions, setOtherEditions] = useState([]); // P4 : autres éditions de l'œuvre
 
   // ── Chargement ───────────────────────────────────────────
   // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
@@ -163,6 +164,11 @@ export default function BookPage() {
           try {
             const sim = await supabase.schema('api').rpc('similar_books', { p_book_id: bookId });
             if (Array.isArray(sim.data)) setSimilar(sim.data);
+          } catch { /* non-bloquant */ }
+          // P4 — autres éditions de la même œuvre
+          try {
+            const ed = await supabase.schema('api').rpc('book_other_editions', { p_book_id: bookId });
+            if (Array.isArray(ed.data)) setOtherEditions(ed.data);
           } catch { /* non-bloquant */ }
         }
 
@@ -582,6 +588,27 @@ export default function BookPage() {
           </div>
         </div>
       </div>
+
+      {/* P4 — Autres éditions de la même œuvre */}
+      {otherEditions.length > 0 && (
+        <details className="ab-livro-similar" open>
+          <summary className="ab-livro-similar__summary">{t({ id: 'book.otherEditions.title' })}</summary>
+          <div className="ab-livro-similar__grid">
+            {otherEditions.map(s => (
+              <Link key={s.book_id} to={`/livro/${s.book_id}`} className="ab-livro-similar__card">
+                {s.cover_object_path
+                  ? <img className="ab-livro-similar__cover" src={`${COVER_BASE}${s.cover_object_path}`} alt="" loading="lazy" />
+                  : <div className="ab-livro-similar__cover ab-livro-similar__cover--ph"><span>{(s.titulo || '?')[0]}</span></div>}
+                <div className="ab-livro-similar__info">
+                  <div className="ab-livro-similar__t">{s.titulo}</div>
+                  {s.author_label && <div className="ab-livro-similar__a">{s.author_label}</div>}
+                  <div className="ab-livro-similar__m">{[s.ano, s.editora].filter(Boolean).join(' · ')}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </details>
+      )}
 
       {/* #OPAC4 — Documents similaires (par contenu) */}
       {similar.length > 0 && (

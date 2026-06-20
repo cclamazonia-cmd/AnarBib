@@ -5396,5 +5396,6 @@
   "catalogacao.dedup.sameWork": "Ίδιο έργο",
   "catalogacao.dedup.sameWorkHint": "Ομαδοποίηση ως εκδόσεις του ίδιου έργου (όχι διπλότυπο).",
   "error.catalog.work.notFound": "Το τεκμήριο ή το έργο δεν βρέθηκε.",
-  "error.catalog.work.needTwo": "Επιλέξτε τουλάχιστον δύο τεκμήρια."
+  "error.catalog.work.needTwo": "Επιλέξτε τουλάχιστον δύο τεκμήρια.",
+  "book.otherEditions.title": "Άλλες εκδόσεις αυτού του έργου"
 }

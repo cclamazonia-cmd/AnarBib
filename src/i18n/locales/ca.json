@@ -5396,5 +5396,6 @@
   "catalogacao.dedup.sameWork": "Mateixa obra",
   "catalogacao.dedup.sameWorkHint": "Agrupa com a edicions de la mateixa obra (no és un duplicat).",
   "error.catalog.work.notFound": "Document o obra inexistent.",
-  "error.catalog.work.needTwo": "Selecciona almenys dos documents."
+  "error.catalog.work.needTwo": "Selecciona almenys dos documents.",
+  "book.otherEditions.title": "Altres edicions d'aquesta obra"
 }

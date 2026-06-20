@@ -5396,5 +5396,6 @@
   "catalogacao.dedup.sameWork": "Mesma obra",
   "catalogacao.dedup.sameWorkHint": "Agrupar como edições da mesma obra (não é duplicata).",
   "error.catalog.work.notFound": "Documento ou obra inexistente.",
-  "error.catalog.work.needTwo": "Selecione ao menos dois documentos."
+  "error.catalog.work.needTwo": "Selecione ao menos dois documentos.",
+  "book.otherEditions.title": "Outras edições desta obra"
 }

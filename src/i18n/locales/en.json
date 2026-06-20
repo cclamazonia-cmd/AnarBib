@@ -5396,5 +5396,6 @@
   "catalogacao.dedup.sameWork": "Same work",
   "catalogacao.dedup.sameWorkHint": "Group as editions of the same work (not a duplicate).",
   "error.catalog.work.notFound": "Document or work not found.",
-  "error.catalog.work.needTwo": "Select at least two documents."
+  "error.catalog.work.needTwo": "Select at least two documents.",
+  "book.otherEditions.title": "Other editions of this work"
 }
