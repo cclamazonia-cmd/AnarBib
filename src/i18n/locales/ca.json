@@ -1685,7 +1685,7 @@
   "catalog.stats.librarians": "Bibliotecaris-àries-es",
   "catalog.stats.loans": "Préstecs",
   "catalog.stats.loansOpen": "Préstecs oberts",
-  "catalog.stats.localAvailable": "Exemplars disponibles en aquesta biblioteca: {count}",
+  "catalog.stats.localAvailable": "Títols disponibles en aquesta biblioteca: {count}",
   "catalog.stats.noFilters": "Cap filtre actiu",
   "catalog.stats.readers": "Lectors-es-es",
   "catalog.stats.reservationsActive": "Reserves actives",

@@ -1685,7 +1685,7 @@
   "catalog.stats.librarians": "Βιβλιοθηκάριοι",
   "catalog.stats.loans": "Δανεισμοί",
   "catalog.stats.loansOpen": "Ανοιχτοί δανεισμοί",
-  "catalog.stats.localAvailable": "Διαθέσιμα αντίτυπα σε αυτή τη βιβλιοθήκη: {count}",
+  "catalog.stats.localAvailable": "Διαθέσιμοι τίτλοι σε αυτή τη βιβλιοθήκη: {count}",
   "catalog.stats.noFilters": "Κανένα ενεργό φίλτρο",
   "catalog.stats.readers": "Αναγνώστες/στριες",
   "catalog.stats.reservationsActive": "Ενεργές κρατήσεις",

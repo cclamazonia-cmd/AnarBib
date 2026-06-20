@@ -1685,7 +1685,7 @@
   "catalog.stats.librarians": "Bibliothecarissen",
   "catalog.stats.loans": "Uitleningen",
   "catalog.stats.loansOpen": "Lopende uitleningen",
-  "catalog.stats.localAvailable": "Beschikbare exemplaren in deze bibliotheek: {count}",
+  "catalog.stats.localAvailable": "Beschikbare titels in deze bibliotheek: {count}",
   "catalog.stats.noFilters": "Geen filters actief",
   "catalog.stats.readers": "Lezers",
   "catalog.stats.reservationsActive": "Actieve reserveringen",

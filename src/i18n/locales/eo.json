@@ -1685,7 +1685,7 @@
   "catalog.stats.librarians": "Bibliotekist-in-oj",
   "catalog.stats.loans": "Pruntoj",
   "catalog.stats.loansOpen": "Malfermaj pruntoj",
-  "catalog.stats.localAvailable": "Disponeblaj ekzempleroj en ĉi tiu biblioteko: {count}",
+  "catalog.stats.localAvailable": "Disponeblaj titoloj en ĉi tiu biblioteko: {count}",
   "catalog.stats.noFilters": "Neniu aktiva filtrilo",
   "catalog.stats.readers": "Legant-in-oj",
   "catalog.stats.reservationsActive": "Aktivaj rezervoj",

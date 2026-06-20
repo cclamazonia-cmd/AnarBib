@@ -1685,7 +1685,7 @@
   "catalog.stats.librarians": "Bibliotecari",
   "catalog.stats.loans": "Prestiti",
   "catalog.stats.loansOpen": "Prestiti aperti",
-  "catalog.stats.localAvailable": "Esemplari disponibili in questa biblioteca: {count}",
+  "catalog.stats.localAvailable": "Titoli disponibili in questa biblioteca: {count}",
   "catalog.stats.noFilters": "Nessun filtro attivo",
   "catalog.stats.readers": "Lettori",
   "catalog.stats.reservationsActive": "Prenotazioni attive",

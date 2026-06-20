@@ -1685,7 +1685,7 @@
   "catalog.stats.librarians": "Librarians",
   "catalog.stats.loans": "Loans",
   "catalog.stats.loansOpen": "Open loans",
-  "catalog.stats.localAvailable": "Available copies at this library: {count}",
+  "catalog.stats.localAvailable": "Available titles at this library: {count}",
   "catalog.stats.noFilters": "No filters active",
   "catalog.stats.readers": "Readers",
   "catalog.stats.reservationsActive": "Active reservations",
