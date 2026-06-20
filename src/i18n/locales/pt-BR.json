@@ -5379,5 +5379,10 @@
   "catalogacao.catalog.mergeHelp": "Escolha a autoridade a manter: « {name} » será vinculada a ela (obras, contribuições, apelidos) e depois removida. Ação irreversível.",
   "catalogacao.catalog.mergeSearchPlaceholder": "Buscar a autoridade a manter…",
   "catalogacao.catalog.mergeDone": "« {dup} » mesclada em « {canonical} ».",
-  "catalogacao.catalog.mergeNoResults": "Nenhuma autoridade correspondente."
+  "catalogacao.catalog.mergeNoResults": "Nenhuma autoridade correspondente.",
+  "catalogacao.dedup.notDuplicate": "Não é duplicata",
+  "catalogacao.dedup.notDuplicateHint": "Marcar como edições distintas: este par deixa de ser sugerido.",
+  "catalogacao.dedup.markedNotDuplicate": "Marcado como edições distintas.",
+  "catalogacao.ui.coverRemove": "Remover capa",
+  "catalogacao.ui.coverRemoved": "Capa removida."
 }

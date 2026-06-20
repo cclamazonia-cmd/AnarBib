@@ -5379,5 +5379,10 @@
   "catalogacao.catalog.mergeHelp": "Elektu la konservotan aŭtoritaton: « {name} » estos ligita al ĝi (verkoj, kontribuoj, kromnomoj) kaj poste forigita. Ĉi tiu ago estas neinversigebla.",
   "catalogacao.catalog.mergeSearchPlaceholder": "Serĉi la konservotan aŭtoritaton…",
   "catalogacao.catalog.mergeDone": "« {dup} » kunfandita en « {canonical} ».",
-  "catalogacao.catalog.mergeNoResults": "Neniu kongrua aŭtoritato."
+  "catalogacao.catalog.mergeNoResults": "Neniu kongrua aŭtoritato.",
+  "catalogacao.dedup.notDuplicate": "Ne estas duplikato",
+  "catalogacao.dedup.notDuplicateHint": "Marki kiel apartajn eldonojn: ĉi tiu paro ne plu estos sugestita.",
+  "catalogacao.dedup.markedNotDuplicate": "Markita kiel apartaj eldonoj.",
+  "catalogacao.ui.coverRemove": "Forigi kovrilon",
+  "catalogacao.ui.coverRemoved": "Kovrilo forigita."
 }

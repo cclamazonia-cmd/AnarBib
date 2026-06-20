@@ -5379,5 +5379,10 @@
   "catalogacao.catalog.mergeHelp": "Kies de autoriteit die je behoudt: „{name}” wordt eraan gekoppeld (werken, bijdragen, aliassen) en daarna verwijderd. Deze actie is onomkeerbaar.",
   "catalogacao.catalog.mergeSearchPlaceholder": "Zoek de te behouden autoriteit…",
   "catalogacao.catalog.mergeDone": "„{dup}” samengevoegd met „{canonical}”.",
-  "catalogacao.catalog.mergeNoResults": "Geen overeenkomende autoriteit."
+  "catalogacao.catalog.mergeNoResults": "Geen overeenkomende autoriteit.",
+  "catalogacao.dedup.notDuplicate": "Geen duplicaat",
+  "catalogacao.dedup.notDuplicateHint": "Markeer als verschillende edities: dit paar wordt niet meer voorgesteld.",
+  "catalogacao.dedup.markedNotDuplicate": "Gemarkeerd als verschillende edities.",
+  "catalogacao.ui.coverRemove": "Omslag verwijderen",
+  "catalogacao.ui.coverRemoved": "Omslag verwijderd."
 }

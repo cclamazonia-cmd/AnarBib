@@ -5379,5 +5379,10 @@
   "catalogacao.catalog.mergeHelp": "Wähle die zu behaltende Normdatei: „{name}“ wird ihr zugeordnet (Werke, Beiträge, Aliasse) und dann gelöscht. Diese Aktion ist unwiderruflich.",
   "catalogacao.catalog.mergeSearchPlaceholder": "Zu behaltende Normdatei suchen…",
   "catalogacao.catalog.mergeDone": "„{dup}“ in „{canonical}“ zusammengeführt.",
-  "catalogacao.catalog.mergeNoResults": "Keine passende Normdatei."
+  "catalogacao.catalog.mergeNoResults": "Keine passende Normdatei.",
+  "catalogacao.dedup.notDuplicate": "Kein Duplikat",
+  "catalogacao.dedup.notDuplicateHint": "Als unterschiedliche Ausgaben markieren: dieses Paar wird nicht mehr vorgeschlagen.",
+  "catalogacao.dedup.markedNotDuplicate": "Als unterschiedliche Ausgaben markiert.",
+  "catalogacao.ui.coverRemove": "Cover entfernen",
+  "catalogacao.ui.coverRemoved": "Cover entfernt."
 }

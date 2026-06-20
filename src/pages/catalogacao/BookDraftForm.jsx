@@ -392,6 +392,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     return () => { cancelled = true; };
   }, [editingId]);
 
+  // ── P3 : réinitialiser l'état transitoire de couverture au changement de fiche ──
+  // (sinon les vignettes/preview d'une édition « bavent » sur l'édition suivante du
+  //  même titre, la recherche de cover étant par titre).
+  useEffect(() => {
+    setCoverPreviewUrl('');
+    setCoverCandidates([]);
+    setCoverFile(null);
+  }, [editingId]);
+
   // ── Pré-remplissage OCR (piste B, P3b) ─────────────────────
   // Quand le composant est monté depuis le dépôt OCR (et non en édition d'un
   // brouillon existant), on amorce le formulaire avec les champs heuristiques
@@ -1191,6 +1200,41 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setBookDupBusy(null); }
+  }
+
+  // P1b : marquer une paire « ce n'est pas un doublon » (éditions distinctes) →
+  // la paire est masquée définitivement des suggestions (table book_not_duplicate).
+  async function markBooksNotDuplicate(dupId) {
+    const canonicalId = f('published_book_id');
+    if (!canonicalId) return;
+    setBookDupBusy(dupId);
+    try {
+      const { error } = await supabase.rpc('mark_books_not_duplicate', { p_a: Number(canonicalId), p_b: Number(dupId) });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.dedup.markedNotDuplicate' }), kind: 'ok' });
+      await findBookDuplicates(); // rafraîchir : la paire écartée disparaît
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setBookDupBusy(null); }
+  }
+
+  // P2 : retirer la couverture (efface les champs + supprime l'objet Storage).
+  // Par notice : ne touche jamais la cover d'une autre édition (chemin par bib_ref/id).
+  async function removeCover() {
+    const path = f('cover_object_path');
+    try {
+      if (path) await supabase.storage.from('covers').remove([path]);
+      set('cover_object_path', '');
+      set('cover_source', '');
+      set('cover_license', '');
+      setCoverPreviewUrl('');
+      setCoverFile(null);
+      setCoverCandidates([]);
+      if (draftState === 'saved' || draftState === 'ready') setDraftState('dirty');
+      setMsg({ text: t({ id: 'catalogacao.ui.coverRemoved' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'catalogacao.ui.coverUploadError' }, { message: localizeError(err, t) }), kind: 'error' });
+    }
   }
 
   // Sauvegarde les contributeurs (delete all + re-insert)
@@ -2172,6 +2216,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               {t({id:'catalogacao.ui.chooseCover'})}
               <input type="file" accept="image/*" onChange={handleCoverFileChange} style={{ display: 'none' }} />
             </label>
+            {(f('cover_object_path') || coverPreviewUrl) && (
+              <button type="button" className="ab-button ab-button--danger ab-button--mini" style={{ width: '100%', marginTop: 4 }}
+                onClick={removeCover} disabled={coverUploading}>
+                {t({id:'catalogacao.ui.coverRemove'})}
+              </button>
+            )}
             {coverFile && (
               <button type="button" className="ab-button ab-button--mini" style={{ width: '100%', marginTop: 4 }}
                 onClick={uploadCover} disabled={coverUploading || !(f('bib_ref') || f('id'))}>
@@ -2505,6 +2555,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       <span className={`cat-pill ${d.match_kind === 'isbn' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                         {d.match_kind === 'isbn' ? 'ISBN' : t({ id: 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
                       </span>
+                      <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                        onClick={() => markBooksNotDuplicate(d.book_id)} disabled={bookDupBusy != null}
+                        title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}>
+                        {t({ id: 'catalogacao.dedup.notDuplicate' })}
+                      </button>
                       <button type="button" className="ab-button ab-button--danger ab-button--sm"
                         onClick={() => mergeBookDuplicateIntoCurrent(d.book_id, d.titulo)} disabled={bookDupBusy != null}>
                         {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}

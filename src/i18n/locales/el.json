@@ -5379,5 +5379,10 @@
   "catalogacao.catalog.mergeHelp": "Επιλέξτε την καθιερωμένη εγγραφή που θα διατηρηθεί: το «{name}» θα συνδεθεί με αυτήν (έργα, συνεισφορές, ψευδώνυμα) και έπειτα θα διαγραφεί. Μη αναστρέψιμη ενέργεια.",
   "catalogacao.catalog.mergeSearchPlaceholder": "Αναζήτηση της εγγραφής που θα διατηρηθεί…",
   "catalogacao.catalog.mergeDone": "Το «{dup}» συγχωνεύτηκε στο «{canonical}».",
-  "catalogacao.catalog.mergeNoResults": "Καμία αντίστοιχη καθιερωμένη εγγραφή."
+  "catalogacao.catalog.mergeNoResults": "Καμία αντίστοιχη καθιερωμένη εγγραφή.",
+  "catalogacao.dedup.notDuplicate": "Δεν είναι διπλότυπο",
+  "catalogacao.dedup.notDuplicateHint": "Σήμανση ως διαφορετικές εκδόσεις: αυτό το ζεύγος δεν θα προτείνεται πλέον.",
+  "catalogacao.dedup.markedNotDuplicate": "Σημειώθηκε ως διαφορετικές εκδόσεις.",
+  "catalogacao.ui.coverRemove": "Αφαίρεση εξωφύλλου",
+  "catalogacao.ui.coverRemoved": "Το εξώφυλλο αφαιρέθηκε."
 }

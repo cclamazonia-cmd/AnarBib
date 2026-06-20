@@ -5379,5 +5379,10 @@
   "catalogacao.catalog.mergeHelp": "Choose the authority to keep: “{name}” will be attached to it (works, contributions, aliases) and then deleted. This action is irreversible.",
   "catalogacao.catalog.mergeSearchPlaceholder": "Search the authority to keep…",
   "catalogacao.catalog.mergeDone": "“{dup}” merged into “{canonical}”.",
-  "catalogacao.catalog.mergeNoResults": "No matching authority."
+  "catalogacao.catalog.mergeNoResults": "No matching authority.",
+  "catalogacao.dedup.notDuplicate": "Not a duplicate",
+  "catalogacao.dedup.notDuplicateHint": "Mark as distinct editions: this pair will no longer be suggested.",
+  "catalogacao.dedup.markedNotDuplicate": "Marked as distinct editions.",
+  "catalogacao.ui.coverRemove": "Remove cover",
+  "catalogacao.ui.coverRemoved": "Cover removed."
 }
