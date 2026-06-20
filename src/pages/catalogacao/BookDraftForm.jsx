@@ -2595,8 +2595,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             />
           </div>
 
-          {/* ── Œuvre (P4) ───────────────────────────────── */}
-          {f('published_book_id') && (
+          {/* ── Œuvre (P4) — palier avancé/complet ───────── */}
+          {catalogTier >= 2 && f('published_book_id') && (
             <div className="ab-span3" style={{ gridColumn: 'span 3', marginBottom: 6 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                 <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.work.title' })}</span>
@@ -2619,8 +2619,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             </div>
           )}
 
-          {/* ── Doublons possibles (documents, lecture seule P2a) ─────── */}
-          {f('published_book_id') && (
+          {/* ── Doublons possibles (documents, lecture seule P2a) — palier avancé/complet ─────── */}
+          {catalogTier >= 2 && f('published_book_id') && (
             <div className="ab-span3" style={{ gridColumn: 'span 3' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
                 <span style={{ fontWeight: 600, fontSize: '.88rem' }}>{t({ id: 'catalogacao.dedup.title' })}</span>
