@@ -60,7 +60,14 @@ FROM canon
 GROUP BY book_id;
 
 -- 2) Rafraichir les MV catalogue (publique + reseau) -> propage l'affichage.
-SELECT public.refresh_mv_books_catalog_list_v1();
+--    NB : refresh NON CONCURRENT volontaire. La reconstruction du schema a neuf
+--    (workflow sql-tests, db reset) cree les MV NON peuplees, et
+--    REFRESH ... CONCURRENTLY est interdit sur une MV non peuplee. Le refresh non
+--    concurrent fonctionne dans les deux cas (peuple si vide, recalcule sinon).
+--    En prod, le refresh ONLINE concurrent reste assure par
+--    request_catalog_refresh() / refresh_mv_books_catalog_list_v1() (bouton + cron).
+REFRESH MATERIALIZED VIEW public.mv_books_catalog_list_v1;
+REFRESH MATERIALIZED VIEW public.mv_books_catalog_list_network_v1;
 
 -- 3) Recharger le cache de schema PostgREST (vue publique modifiee).
 NOTIFY pgrst, 'reload schema';
