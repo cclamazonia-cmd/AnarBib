@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} επιστράφηκαν",
   "panel.loan.loanId": "Δανεισμός #{id}",
   "panel.loan.noValidRefs": "Καμία έγκυρη αναφορά στη συλλογή.",
-  "panel.loan.notePh": "Εσωτερική σημείωση (προαιρετική)",
+  "panel.loan.notePh": "Λόγος ακύρωσης / σημείωση (προαιρετικό)",
   "panel.loan.openLoans": "Ανοιχτοί δανεισμοί: {count} ({items, plural, one {# τεκμήριο εκτός} other {# τεκμήρια εκτός}}, {overdue, plural, =0 {0 εκπρόθεσμα} one {# εκπρόθεσμο} other {# εκπρόθεσμα}})",
   "panel.loan.preview.confirm": "Προεπισκόπηση: {count, plural, one {# τεκμήριο} other {# τεκμήρια}} για {name}, επιστροφή έως {dueDate} (κανόνας: {rule}). Κάνε κλικ στο Επιβεβαίωση για επικύρωση.",
   "panel.loan.preview.notAllowed": "Αυτή η ενέργεια δεν επιτρέπεται από τον τρέχοντα κανόνα: {rule}.",

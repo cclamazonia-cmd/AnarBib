@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} devueltos",
   "panel.loan.loanId": "Préstamo #{id}",
   "panel.loan.noValidRefs": "Ninguna referencia válida en el fondo.",
-  "panel.loan.notePh": "Nota interna (opcional)",
+  "panel.loan.notePh": "Motivo de cancelación / nota (opcional)",
   "panel.loan.openLoans": "Préstamos abiertos: {count} ({items, plural, one {# documento fuera} other {# documentos fuera}}, {overdue, plural, =0 {0 atrasados} one {# atrasado} other {# atrasados}})",
   "panel.loan.preview.confirm": "Vista previa: {count, plural, one {# documento} other {# documentos}} para {name}, devolución prevista el {dueDate} (regla: {rule}). Haz clic en Confirmar para validar.",
   "panel.loan.preview.notAllowed": "Esta operación no está permitida por la regla actual: {rule}.",

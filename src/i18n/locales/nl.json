@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} teruggegeven",
   "panel.loan.loanId": "Uitlening #{id}",
   "panel.loan.noValidRefs": "Geen geldige referentie in de collectie.",
-  "panel.loan.notePh": "Interne notitie (optioneel)",
+  "panel.loan.notePh": "Reden van annulering / notitie (optioneel)",
   "panel.loan.openLoans": "Lopende uitleningen: {count} ({items, plural, one {# item uit} other {# items uit}}, {overdue, plural, =0 {0 te laat} one {# te laat} other {# te laat}})",
   "panel.loan.preview.confirm": "Voorbeeld: {count, plural, one {# document} other {# documenten}} voor {name}, in te leveren op {dueDate} (regel: {rule}). Klik op Bevestigen om te valideren.",
   "panel.loan.preview.notAllowed": "Deze handeling is niet toegestaan door de huidige regel: {rule}.",

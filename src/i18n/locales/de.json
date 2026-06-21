@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} zurückgegeben",
   "panel.loan.loanId": "Ausleihe #{id}",
   "panel.loan.noValidRefs": "Keine gültige Referenz im Bestand.",
-  "panel.loan.notePh": "Nota interna (opcional)",
+  "panel.loan.notePh": "Stornierungsgrund / Notiz (optional)",
   "panel.loan.openLoans": "Offene Ausleihen: {count} ({items, plural, one {# Exemplar draußen} other {# Exemplare draußen}}, {overdue, plural, =0 {0 überfällig} one {# überfällig} other {# überfällig}})",
   "panel.loan.preview.confirm": "Vorschau: {count, plural, one {# Dokument} other {# Dokumente}} für {name}, Rückgabe vorgesehen am {dueDate} (Regel: {rule}). Klicke auf Bestätigen zum Validieren.",
   "panel.loan.preview.notAllowed": "Dieser Vorgang ist nach der aktuellen Regel nicht zulässig: {rule}.",

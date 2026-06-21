@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} rendus",
   "panel.loan.loanId": "Emprunt #{id}",
   "panel.loan.noValidRefs": "Aucune référence valide dans le fonds.",
-  "panel.loan.notePh": "Note interne (facultatif)",
+  "panel.loan.notePh": "Motif d'annulation / note (facultatif)",
   "panel.loan.openLoans": "Emprunts ouverts : {count} ({items, plural, one {# item dehors} other {# items dehors}}, {overdue, plural, =0 {0 en retard} one {# en retard} other {# en retard}})",
   "panel.loan.preview.confirm": "Aperçu : {count, plural, one {# document} other {# documents}} pour {name}, retour prévu le {dueDate} (règle : {rule}). Clique sur Confirmer pour valider.",
   "panel.loan.preview.notAllowed": "Cette opération n'est pas autorisée par la règle actuelle : {rule}.",

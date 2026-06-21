@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} retornats",
   "panel.loan.loanId": "Préstec #{id}",
   "panel.loan.noValidRefs": "Cap referència vàlida al fons.",
-  "panel.loan.notePh": "Nota interna (facultatiu)",
+  "panel.loan.notePh": "Motiu de cancel·lació / nota (facultatiu)",
   "panel.loan.openLoans": "Préstecs oberts: {count} ({items, plural, one {# ítem fora} other {# ítems fora}}, {overdue, plural, =0 {0 endarrerits} one {# endarrerit} other {# endarrerits}})",
   "panel.loan.preview.confirm": "Previsualització: {count, plural, one {# document} other {# documents}} per a {name}, devolució prevista el {dueDate} (regla: {rule}). Feu clic a Confirmar per validar.",
   "panel.loan.preview.notAllowed": "Aquesta operació no està autoritzada per la regla actual: {rule}.",

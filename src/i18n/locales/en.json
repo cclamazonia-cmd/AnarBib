@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} returned",
   "panel.loan.loanId": "Loan #{id}",
   "panel.loan.noValidRefs": "No valid reference in the holdings.",
-  "panel.loan.notePh": "Internal note (optional)",
+  "panel.loan.notePh": "Cancellation reason / note (optional)",
   "panel.loan.openLoans": "Open loans: {count} ({items, plural, one {# item out} other {# items out}}, {overdue, plural, =0 {0 overdue} one {# overdue} other {# overdue}})",
   "panel.loan.preview.confirm": "Preview: {count, plural, one {# document} other {# documents}} for {name}, due back on {dueDate} (rule: {rule}). Click Confirm to validate.",
   "panel.loan.preview.notAllowed": "This operation is not allowed by the current rule: {rule}.",

@@ -3822,7 +3822,7 @@
   "panel.loan.itemsReturned": "{returned}/{total} redonitaj",
   "panel.loan.loanId": "Prunto #{id}",
   "panel.loan.noValidRefs": "Neniu valida referenco en la fonduso.",
-  "panel.loan.notePh": "Interna noto (nedeviga)",
+  "panel.loan.notePh": "Kialo de nuligo / noto (nedeviga)",
   "panel.loan.openLoans": "Malfermaj pruntoj: {count} ({items, plural, one {# ero ekstere} other {# eroj ekstere}}, {overdue, plural, =0 {0 malfruitaj} one {# malfruita} other {# malfruitaj}})",
   "panel.loan.preview.confirm": "Antaŭrigardo: {count, plural, one {# dokumento} other {# dokumentoj}} por {name}, redono planita la {dueDate} (regulo: {rule}). Alklaku Konfirmi por validigi.",
   "panel.loan.preview.notAllowed": "Ĉi tiu operacio ne estas autorizita de la nuna regulo: {rule}.",
