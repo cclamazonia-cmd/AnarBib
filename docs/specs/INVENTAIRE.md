@@ -1,6 +1,6 @@
 # 📋 INVENTAIRE du corpus de specs — AnarBib
 
-**Dernière mise à jour** : 16 juin 2026 — **`spec-flux-partage-numerique` vérifiée implémentée & déployée en prod** (lots ILL-I1..I5, 13/06 ; tables `ill_*` + 7 `fn_ill_*` + EF + frontend + i18n ×10 contrôlés) → statut ⚠️→🟢 corrigé (le ⚠️ « UX à auditer » du 10/06 était antérieur à l'implémentation ; cf. bullet « Specs annoncées »). **+ resync prod élargi** (lecture seule MCP `execute_sql` + repo) : PEB, Importações, partenariat, rétention lectrice, OAI, catalogue-découverte (OPAC7/9), atelier-autorités vérifiés **en prod** — cf. bloc « ✅ Resync 16/06 » ci-dessous. Précédemment : 10 juin 2026 — **resync prod** : 9 specs implémentées archivées + PARTNER/PEB/Importações reclassés « livrés » (cf. note ⚠️ ci-dessous + v30/audit). Précédemment : 5 juin 2026 (session soir) — **Track A catalogação complet** + **capas P1/P2/P3** ; **3 specs nouvelles** ajoutées à la carte (`spec-autorites-notes-bio-multilingues` v0.2, `spec-liaison-autorites-oeuvres` v0.2, `spec-doublons-detection-fusion` v0.1) ; liaison autorités↔œuvres, fusion de doublons (autorités+documents), flux contributeurs brouillon→publié livrés (registre `CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1`) ; `spec-exemplaires-circulation` **constatée livrée en prod** — précédemment : 4 juin 2026 (nuit) — carte-lecteur **phase γ complète** (UI staff `ResolveCardBox` livrée, **gatée `libraries.reader_cards_enabled`** ; hotfix Woodpecker vert) ; **`CADRAGE_importacoes_module_2026-06-04` ouvert** (chantier-cadre Importações, ajouté à la carte des dépendances ; registre §`IMP` ; défère `ACQ-Q4` + `FED-5`) ; `DOC-I18N-1` réaligné **9 locales** (`nl`) — précédemment : 4 juin 2026 (soir) — **`spec-outils-federalistes` v0.1 créée** ; **FED-O4/O5/O6 tranchés** (registre §`FED` : terme `círculo` ; adhésion opt-out + anti-blackball ; mutualisation axe distinct) — précédemment : 4 juin 2026 (cadrage `CADRAGE_modele_acces_concentrique_2026-06-04` ajouté à la carte des dépendances ; modèle d'accès concentrique → registre §`FED`) — précédemment : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** [audit dump schéma 03/06] → `spec-granularite-item` en 🔵 ; ouverture Phase 1 exemplares) — précédemment : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
+**Dernière mise à jour** : 21 juin 2026 — **`spec-fonds-sonores` v0.1 ajoutée au corpus** (🟡 cadrée) : modèle d'import/catalogage des **œuvres audio** pour les fonds sonores (entités MusicBrainz Work/Recording/Track + MBID + empreinte Chromaprint — **modèle réutilisé, pas les données**) ; carte des dépendances + entrée détaillée ci-dessous ; registre §35 `AUDIO`. Précédemment : 16 juin 2026 — **`spec-flux-partage-numerique` vérifiée implémentée & déployée en prod** (lots ILL-I1..I5, 13/06 ; tables `ill_*` + 7 `fn_ill_*` + EF + frontend + i18n ×10 contrôlés) → statut ⚠️→🟢 corrigé (le ⚠️ « UX à auditer » du 10/06 était antérieur à l'implémentation ; cf. bullet « Specs annoncées »). **+ resync prod élargi** (lecture seule MCP `execute_sql` + repo) : PEB, Importações, partenariat, rétention lectrice, OAI, catalogue-découverte (OPAC7/9), atelier-autorités vérifiés **en prod** — cf. bloc « ✅ Resync 16/06 » ci-dessous. Précédemment : 10 juin 2026 — **resync prod** : 9 specs implémentées archivées + PARTNER/PEB/Importações reclassés « livrés » (cf. note ⚠️ ci-dessous + v30/audit). Précédemment : 5 juin 2026 (session soir) — **Track A catalogação complet** + **capas P1/P2/P3** ; **3 specs nouvelles** ajoutées à la carte (`spec-autorites-notes-bio-multilingues` v0.2, `spec-liaison-autorites-oeuvres` v0.2, `spec-doublons-detection-fusion` v0.1) ; liaison autorités↔œuvres, fusion de doublons (autorités+documents), flux contributeurs brouillon→publié livrés (registre `CAT-E7…E9, CAT-C5, CAT-G1/G2, CAT-H1, CAT-I1`) ; `spec-exemplaires-circulation` **constatée livrée en prod** — précédemment : 4 juin 2026 (nuit) — carte-lecteur **phase γ complète** (UI staff `ResolveCardBox` livrée, **gatée `libraries.reader_cards_enabled`** ; hotfix Woodpecker vert) ; **`CADRAGE_importacoes_module_2026-06-04` ouvert** (chantier-cadre Importações, ajouté à la carte des dépendances ; registre §`IMP` ; défère `ACQ-Q4` + `FED-5`) ; `DOC-I18N-1` réaligné **9 locales** (`nl`) — précédemment : 4 juin 2026 (soir) — **`spec-outils-federalistes` v0.1 créée** ; **FED-O4/O5/O6 tranchés** (registre §`FED` : terme `círculo` ; adhésion opt-out + anti-blackball ; mutualisation axe distinct) — précédemment : 4 juin 2026 (cadrage `CADRAGE_modele_acces_concentrique_2026-06-04` ajouté à la carte des dépendances ; modèle d'accès concentrique → registre §`FED`) — précédemment : 3 juin 2026 (`#MODEL-item-grain` **constaté livré en prod** [audit dump schéma 03/06] → `spec-granularite-item` en 🔵 ; ouverture Phase 1 exemplares) — précédemment : 2 juin 2026 (trilogie doctrinale figée/charpentée : `spec-partenariat-biblios` v0.3 + `spec-flux-partage-numerique` v0.2, registre enrichi `PARTNER-D7..D9` + section `ILL` ; clôture doc cluster découverte : en-têtes normalisés posés sur les 2 specs OPAC, section `OPAC` ouverte au registre, favoris requalifié serveur OPAC-W1 ; charpente `spec-multi-appartenance-lecteur` v0.3 ajoutée à la carte des dépendances ; renvoi du cadrage corrigé) — précédemment : 1er juin 2026 (réinjection du chantier catalogue : **6 specs** — 4 catalogage + 2 découverte lecteur — carte de dépendances + ordre de mise en œuvre) — précédemment : 31 mai 2026 (audit du corpus, groupe A)
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document décrit **chaque spec active** du corpus AnarBib avec son statut d'implémentation, ses dépendances entrantes et sortantes, sa date de dernière mise à jour, et les chantiers liés. Pour la navigation rapide par domaine, voir [`INDEX.md`](./INDEX.md).
@@ -179,6 +179,13 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
   ├──→ spec-administrateur-reseau-v0.4 (gouvernance dont l'Atelier s'inspire — consentement sans vote)
   ├──→ spec-module-capas (capa affichée sur la notice, en aval)
   └──→ spec-catalogue-decouverte (brique commune : chips sujets #OPAC8 ↔ §4.2)
+
+spec-fonds-sonores v0.1 (modèle d'import/catalogage audio — sous-couche granularité opt-in)
+  ├──→ spec-granularite-item (#MODEL-item-grain — doctrine d'ordre de migration nullable→backfill→NOT NULL)
+  ├──→ spec-sources-externes-autorites (couche autorité VIAF/ISNI/Wikidata + MBID = identifiant externe D6 ; pattern « une EF par concern »)
+  ├──→ spec-ressources-numeriques (book_digital_resources = fichier audio + metadata jsonb = empreinte)
+  ├──→ spec-acquisition-provenance (traçabilité de source à l'import — en aval)
+  └──→ spec-oai-provider-gouvernance (exposition MBID pour l'interop fédérée — en aval)
 ```
 
 ---
@@ -609,6 +616,34 @@ spec-notice-autorite-enrichie v0.1 (notice BookPage + autorité AuthorPage, #OPA
 
 **Chantiers liés** :
 - `#MODEL-item-grain` — ✅ **livré en prod** (constaté 03/06 ; cœur + `#ILL-availability`). Réalignement couche référence : backlog → section E, registre §7 `ITEM-Q2/Q5` livrés.
+
+---
+
+### 📐 `spec-fonds-sonores.md` *(nouveau v0.1 21/06)*
+
+**Domaine** : Modèle d'import et de catalogage des œuvres audio — fonds d'archives sonores (`#AUDIO-fonds`)
+**Version actuelle** : v0.1 (21 juin 2026 — cadrage initial)
+**Statut** : 🟡 Cadrée — arbitrages **proposés** `FS-D1…FS-D8` (registre §35), questions ouvertes `FS-Q1…Q5`. Non implémentée.
+
+**Périmètre** :
+- Greffe du **modèle d'entités MusicBrainz** (Work / Recording / Release / Track / Artist / Label / Place / Event / Series + MBID) sur les primitives existantes, pour la **granularité intra-document** et la séparation **œuvre / enregistrement** que le modèle `books` à plat ne sait pas exprimer.
+- **Réutilisation du modèle, pas des données** (couverture MusicBrainz ≈ nulle pour l'audio militant) : MBID comme identifiant externe (aligné autorité), **empreinte Chromaprint** côté client (wasm, patron `tesseract.js`/`zxing`) stockée dans `book_digital_resources.metadata`, AcoustID en enrichissement optionnel (candidat, jamais écrit en aveugle).
+- Sous-couche **opt-in** (`audio_recordings` → `audio_tracks` → `audio_contributors`) ; **chemin à plat conservé** (`tipo_material='audio'` + `audio_*`), aucune migration forcée de l'existant.
+- Phasage P0 (MBID + empreinte, sans bouleversement) → P1 (sous-couche) → P2 (AcoustID) → P3 (UI) → P4 (i18n) → P5 (OAI).
+
+**Dépendances entrantes** :
+- `spec-granularite-item` (doctrine d'ordre de migration nullable→backfill→`NOT NULL`)
+- `spec-sources-externes-autorites` v0.2 (couche autorité VIAF/ISNI/Wikidata, MBID = identifiant externe D6, pattern « une EF par concern »)
+- `spec-ressources-numeriques` (`book_digital_resources`)
+- `docs/schema/baseline_schema_2026-06-11.sql`
+
+**Dépendances sortantes** :
+- `spec-acquisition-provenance` (traçabilité de source à l'import)
+- `spec-oai-provider-gouvernance` (exposition MBID)
+- `spec-thesaurus-matiere` (indexation matière des œuvres sonores)
+
+**Chantiers liés** :
+- `#AUDIO-fonds` — non démarré. P0 (migration `external_ids`/MBID + champ empreinte) prototypé à la suite du cadrage.
 
 ---
 
