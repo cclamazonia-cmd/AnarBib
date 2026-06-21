@@ -177,6 +177,7 @@ create table public.audio_tracks (
 
 - **`exemplares`** = support physique (cassette, bande), inchangé ; le lien support↔édition existe déjà (`exemplares → book_holdings → books`). **Q3 se dissout** : la captation EST l'édition `books`, pas une entité séparée.
 - **Maille d'écoute** (`escuta_online` via `book_digital_resources`) : au niveau **édition** en V1, la granularité segment restant d'abord **descriptive** (Q4). Un « lire à partir du segment n » exploiterait `audio_tracks.start_offset` côté lecteur, sans circulation distincte.
+- **Visibilité (FS-D9)** : en P1, `audio_tracks`/`audio_track_contributors` sont **staff-only** (lecture `librarian`/`coordenador`, écriture via RPC `api.audio_track_*` SECURITY DEFINER). L'exposition OPAC **anon-safe** (filtrée via `catalog_list_anon_v1`, comme `work_public_detail`) est **reportée en P3** — on ne fuite pas les titres de segments d'éditions non publiques.
 
 ---
 
@@ -235,6 +236,7 @@ Le socle « audio à plat » (`tipo_material='audio'` + colonnes `audio_*`) **re
 | **FS-D6** | **MBID** comme identifiant externe, aligné sur la convention autorité (viaf/isni/wikidata) — au niveau autorité **et** recording/track. |
 | **FS-D7** | Empreinte **Chromaprint calculée côté client (wasm)**, stockée en **colonnes dédiées** de `book_digital_resources` (`chromaprint_fp`/`acoustid_id`/`fingerprint_duration_ms`, P0) ; **AcoustID** via EF dédiée `audio_fingerprint_lookup`. |
 | **FS-D8** | **Chemin à plat conservé** pour les holdings simples ; **aucune migration forcée** de l'existant. |
+| **FS-D9** | **Visibilité P1 = staff-only** (`audio_tracks`/`audio_track_contributors`) ; OPAC public-safe (via `catalog_list_anon_v1`) reporté en **P3**. Réf des types = lecture publique. *(✅ livré P1, migration `20260621180651`)* |
 
 ---
 
@@ -253,7 +255,7 @@ Le socle « audio à plat » (`tipo_material='audio'` + colonnes `audio_*`) **re
 Découpage en paquets, du moins risqué au plus structurant (même esprit que `spec-sources-externes-autorites` §10) :
 
 1. **P0 — Quick win, schéma minimal.** (a) MBID dans `authors.external_ids` ; (b) calcul Chromaprint côté client à l'upload + stockage en **colonnes** `book_digital_resources` (`chromaprint_fp`/`acoustid_id`/`fingerprint_duration_ms`) + **dédoublonnage interne**. **Prototypé** (migration `20260621162441`). **N'attend pas le reste.**
-2. **P1 — Sous-couche granularité.** Tables **`audio_tracks`** + **`audio_track_contributors`** (la captation reste une édition `books`), FK vers `works`/`authors`, vocabulaires `catalog_ref_*`. Réservée au cas multi-segments.
+2. **P1 — Sous-couche granularité.** ✅ **Livré** (migration `20260621180651`, validé BEGIN/ROLLBACK) : `catalog_ref_audio_recording_types` (+seed), `audio_tracks` (`work_id→works`, `digital_resource_id`, `recording_type→réf`), `audio_track_contributors` (`authors` + rôle texte libre), **4 RPC** `api.audio_track_*` (staff), vue `v_audio_tracklist`. Visibilité **staff-only** (OPAC public-safe → P3). Cadrage `CADRAGE_fonds_sonores_P1_2026-06-21`.
 3. **P2 — Enrichissement AcoustID.** EF `audio_fingerprint_lookup` (candidat MBID, repli silencieux, jamais bloquant — cf. robustesse EF du dépôt).
 4. **P3 — UI Catalogação.** Onglet de saisie des recordings/segments/rôles ; lecteur de tracklist côté fiche publique.
 5. **P4 — i18n** (10 locales, charte v2).
