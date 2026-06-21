@@ -256,7 +256,7 @@ Découpage en paquets, du moins risqué au plus structurant (même esprit que `s
 
 1. **P0 — Quick win, schéma minimal.** (a) MBID dans `authors.external_ids` ; (b) calcul Chromaprint côté client à l'upload + stockage en **colonnes** `book_digital_resources` (`chromaprint_fp`/`acoustid_id`/`fingerprint_duration_ms`) + **dédoublonnage interne**. **Prototypé** (migration `20260621162441`). **N'attend pas le reste.**
 2. **P1 — Sous-couche granularité.** ✅ **Livré** (migration `20260621180651`, validé BEGIN/ROLLBACK) : `catalog_ref_audio_recording_types` (+seed), `audio_tracks` (`work_id→works`, `digital_resource_id`, `recording_type→réf`), `audio_track_contributors` (`authors` + rôle texte libre), **4 RPC** `api.audio_track_*` (staff), vue `v_audio_tracklist`. Visibilité **staff-only** (OPAC public-safe → P3). Cadrage `CADRAGE_fonds_sonores_P1_2026-06-21`.
-3. **P2 — Enrichissement AcoustID.** EF `audio_fingerprint_lookup` (candidat MBID, repli silencieux, jamais bloquant — cf. robustesse EF du dépôt).
+3. **P2 — Enrichissement AcoustID.** ✅ **Livré** : EF `audio_fingerprint_lookup` (POST `{fingerprint, duration}` → candidats recordings MusicBrainz `{acoustid, score, recording_mbid, title, artists, musicbrainz_url}` ; `verify_jwt=true`, timeout 8 s, dégradé propre si pas de clé, **jamais bloquant** — FS-D1). ⚠️ **Requiert le secret `ACOUSTID_API_KEY`** (clé d'application AcoustID) côté Supabase, sinon lookup désactivé proprement.
 4. **P3 — UI Catalogação.** Onglet de saisie des recordings/segments/rôles ; lecteur de tracklist côté fiche publique.
 5. **P4 — i18n** (10 locales, charte v2).
 6. **P5 — Interop.** Exposition MBID via `spec-oai-provider-gouvernance`.
