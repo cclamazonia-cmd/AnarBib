@@ -584,7 +584,7 @@
   "auth.create.acceptRulesRequired": "Necesas akcepti la regularon de la biblioteko.",
   "auth.create.back": "Reen",
   "auth.create.checkConsent": "Necesas akcepti ricevi komunikaĵojn per retpoŝto.",
-  "auth.create.consentEmail": "Mi akceptas ricevi komunikaĵojn per retpoŝto (pruntavizoj, novaĵoj de la biblioteko).",
+  "auth.create.consentEmail": "Mi konsentas ricevi retpoŝtajn sciigojn (cirkuladaj avizoj kaj mesaĝoj de la biblioteko). Sen marki, vi ricevas sciigojn nur en la aplikaĵo.",
   "auth.create.consentEmailContributor": "I agree to receive email communications from the AnarBib network (optional).",
   "auth.create.email": "Retpoŝto",
   "auth.create.emailAlreadyRegistered": "Ĉi tiu retpoŝto jam estas registrita. Ensalutu al via konto.",

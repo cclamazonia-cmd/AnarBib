@@ -168,7 +168,8 @@ export default function CriarContaPage() {
       setMsg({ text: t({id:'address.phone.invalid'}), kind: 'error' });
       return;
     }
-    if (!form.consent && form.library_slug !== '__contributor__') { setMsg({ text: t({id:'auth.create.checkConsent'}), kind: 'error' }); return; }
+    // (a) Consentement e-mail = FACULTATIF : interrupteur de canal (notifs in-app
+    // toujours envoyées, e-mail seulement si coché), pas une garde bloquante.
     if (currentLib?.has_regimento && !form.acceptRules) { setMsg({ text: t({id:'auth.create.acceptRulesRequired'}), kind: 'error' }); return; }
 
     setLoading(true); setMsg({ text: '', kind: '' }); setPublicId('');
@@ -582,7 +583,7 @@ export default function CriarContaPage() {
 
           {/* Consentement email */}
           <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 16, fontSize: '.85rem', cursor: 'pointer' }}>
-            <input type="checkbox" checked={form.consent} onChange={e => set('consent', e.target.checked)} required={form.library_slug !== '__contributor__'} style={{ marginTop: 3 }} />
+            <input type="checkbox" checked={form.consent} onChange={e => set('consent', e.target.checked)} style={{ marginTop: 3 }} />
             <span>{t({id: form.library_slug === '__contributor__' ? 'auth.create.consentEmailContributor' : 'auth.create.consentEmail'})}</span>
           </label>
 

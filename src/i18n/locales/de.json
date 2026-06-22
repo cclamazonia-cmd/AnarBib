@@ -584,7 +584,7 @@
   "auth.create.acceptRulesRequired": "Die Bibliotheksordnung muss akzeptiert werden.",
   "auth.create.back": "Zurück",
   "auth.create.checkConsent": "Du musst dem Erhalt von E-Mail-Mitteilungen zustimmen.",
-  "auth.create.consentEmail": "Ich willige in den Erhalt von E-Mail-Mitteilungen ein (Ausleihhinweise, Bibliotheksneuigkeiten).",
+  "auth.create.consentEmail": "Ich möchte E-Mail-Benachrichtigungen erhalten (Ausleih-Hinweise und Nachrichten der Bibliothek). Ohne Häkchen erhältst du Benachrichtigungen nur in der App.",
   "auth.create.consentEmailContributor": "I agree to receive email communications from the AnarBib network (optional).",
   "auth.create.email": "E-Mail",
   "auth.create.emailAlreadyRegistered": "Diese E-Mail ist bereits registriert. Melde dich in deinem Konto an.",

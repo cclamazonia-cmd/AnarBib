@@ -584,7 +584,7 @@
   "auth.create.acceptRulesRequired": "Je moet het bibliotheekreglement aanvaarden.",
   "auth.create.back": "Terug",
   "auth.create.checkConsent": "Je moet ermee instemmen om communicatie per e-mail te ontvangen.",
-  "auth.create.consentEmail": "Ik stem ermee in om communicatie per e-mail te ontvangen (uitleenberichten, bibliotheeknieuws).",
+  "auth.create.consentEmail": "Ik wil e-mailmeldingen ontvangen (circulatieberichten en berichten van de bibliotheek). Zonder vinkje ontvang je meldingen alleen in de app.",
   "auth.create.consentEmailContributor": "I agree to receive email communications from the AnarBib network (optional).",
   "auth.create.email": "E-mail",
   "auth.create.emailAlreadyRegistered": "Dit e-mailadres is al geregistreerd. Meld je aan bij je account.",

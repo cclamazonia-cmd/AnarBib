@@ -584,7 +584,7 @@
   "auth.create.acceptRulesRequired": "Cal acceptar el reglament de la biblioteca.",
   "auth.create.back": "Tornar",
   "auth.create.checkConsent": "Cal acceptar de rebre comunicacions per correu electrònic.",
-  "auth.create.consentEmail": "Accepto de rebre comunicacions per correu electrònic (avisos de préstec, actualitat de la biblioteca).",
+  "auth.create.consentEmail": "Accepto rebre notificacions per correu (avisos de circulació i missatges de la biblioteca). Sense marcar, només reps notificacions a l'aplicació.",
   "auth.create.consentEmailContributor": "I agree to receive email communications from the AnarBib network (optional).",
   "auth.create.email": "Correu electrònic",
   "auth.create.emailAlreadyRegistered": "Aquest correu electrònic ja està registrat. Inicia la sessió al teu compte.",

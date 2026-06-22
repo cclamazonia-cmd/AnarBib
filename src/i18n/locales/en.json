@@ -584,7 +584,7 @@
   "auth.create.acceptRulesRequired": "You must accept the library rules.",
   "auth.create.back": "Back",
   "auth.create.checkConsent": "You must agree to receive email communications.",
-  "auth.create.consentEmail": "I agree to receive communications by email (loan notices, library news).",
+  "auth.create.consentEmail": "I agree to receive email notifications (circulation notices and library messages). If unchecked, you'll only get notifications in the app.",
   "auth.create.consentEmailContributor": "I agree to receive email communications from the AnarBib network (optional).",
   "auth.create.email": "Email",
   "auth.create.emailAlreadyRegistered": "This email is already registered. Sign in to your account.",

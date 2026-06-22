@@ -584,7 +584,7 @@
   "auth.create.acceptRulesRequired": "È necessario accettare il regolamento della biblioteca.",
   "auth.create.back": "Indietro",
   "auth.create.checkConsent": "È necessario accettare di ricevere comunicazioni per email.",
-  "auth.create.consentEmail": "Accetto di ricevere comunicazioni per email (avvisi di prestito, novità della biblioteca).",
+  "auth.create.consentEmail": "Accetto di ricevere notifiche via e-mail (avvisi di circolazione e messaggi della biblioteca). Senza spuntare, ricevi solo notifiche nell'app.",
   "auth.create.consentEmailContributor": "I agree to receive email communications from the AnarBib network (optional).",
   "auth.create.email": "Email",
   "auth.create.emailAlreadyRegistered": "Questa email è già registrata. Accedi al tuo account.",

@@ -584,7 +584,7 @@
   "auth.create.acceptRulesRequired": "Πρέπει να αποδεχτείς τον κανονισμό της βιβλιοθήκης.",
   "auth.create.back": "Πίσω",
   "auth.create.checkConsent": "Πρέπει να συμφωνήσεις να λαμβάνεις ενημερώσεις μέσω email.",
-  "auth.create.consentEmail": "Συμφωνώ να λαμβάνω ενημερώσεις μέσω email (ειδοποιήσεις δανεισμού, νέα της βιβλιοθήκης).",
+  "auth.create.consentEmail": "Δέχομαι να λαμβάνω ειδοποιήσεις μέσω e-mail (ειδοποιήσεις δανεισμού και μηνύματα της βιβλιοθήκης). Χωρίς επιλογή, λαμβάνεις ειδοποιήσεις μόνο στην εφαρμογή.",
   "auth.create.consentEmailContributor": "I agree to receive email communications from the AnarBib network (optional).",
   "auth.create.email": "Email",
   "auth.create.emailAlreadyRegistered": "Αυτό το email είναι ήδη καταχωρισμένο. Συνδέσου στον λογαριασμό σου.",
