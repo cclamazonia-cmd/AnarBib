@@ -22,8 +22,18 @@ function LocalIdentityEditor({ t, userId, libraryId, initialValue }) {
   const [value, setValue] = useState(initialValue || '');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+  // Suite 7bis : prochain n° séquentiel suggéré (préfixe + incrément), en placeholder.
+  const [suggestion, setSuggestion] = useState(null);
   // Re-synchronise quand on change de lectrice (ou de valeur initiale).
   useEffect(() => { setValue(initialValue || ''); setMsg(''); }, [initialValue, userId]);
+  useEffect(() => {
+    let alive = true;
+    if (!libraryId) { setSuggestion(null); return; }
+    supabase.schema('api').rpc('suggest_next_reader_number', { p_library_id: libraryId })
+      .then(({ data }) => { if (alive) setSuggestion(typeof data === 'string' && data.trim() ? data.trim() : null); })
+      .catch(() => { if (alive) setSuggestion(null); });
+    return () => { alive = false; };
+  }, [libraryId]);
 
   async function save() {
     setBusy(true); setMsg('');
@@ -44,7 +54,7 @@ function LocalIdentityEditor({ t, userId, libraryId, initialValue }) {
       <label>{t({ id: 'panel.reader.localIdentity' })}</label>
       <input type="text" className="ab-painel-input" value={value}
         onChange={e => setValue(e.target.value)}
-        placeholder={t({ id: 'panel.reader.identity.placeholder' })}
+        placeholder={suggestion || t({ id: 'panel.reader.identity.placeholder' })}
         onKeyDown={e => { if (e.key === 'Enter' && !busy) save(); }} />
       <Button onClick={save} disabled={busy}>{busy ? t({ id: 'common.saving' }) : t({ id: 'common.save' })}</Button>
       {msg && <span className="ab-painel-msg">{msg}</span>}
@@ -107,6 +117,12 @@ export default function TabLeitor({
     return () => { cancelled = true; };
   }, [readerId, libraryId]);
 
+  // Suite 7 : un·e candidat·e en attente de validation (sur la biblio courante) n'est
+  // PAS géré·e ici — affichage lecture seule + renvoi vers la validation. Sa place
+  // est l'onglet de validation (valider ou refuser), pas la gestion de membre.
+  const isPendingReader =
+    readerMatchInfo?.membershipStatus === 'pending_validation' && !readerMatchInfo?.isFallback;
+
   return (
     <div>
       <h2 className="ab-painel-h2">{t({id:'panel.reader.manage'})}</h2>
@@ -124,7 +140,15 @@ export default function TabLeitor({
           {t({id:'panel.reader.foundInOtherLibrary'}, {library: readerMatchInfo.matchedLibraryName})}
         </p>
       )}
-      {readerProfile && (
+      {/* Suite 7 : candidat·e en attente — carte lecture seule, pas de gestion. */}
+      {readerProfile && isPendingReader && (
+        <div className="ab-painel-reader-card">
+          <h3>{readerProfile.first_name} {readerProfile.last_name}</h3>
+          <p className="ab-painel-freeze-warn">{t({ id: 'panel.reader.pendingNotice' })}</p>
+          <p>{t({ id: 'panel.reader.email' })}: {readerProfile.email}</p>
+        </div>
+      )}
+      {readerProfile && !isPendingReader && (
         <div className="ab-painel-reader-card">
           <h3>{readerProfile.first_name} {readerProfile.last_name}</h3>
           {/* CARD-LOCAL-2 : édition de l'identité pour la biblio courante (si la

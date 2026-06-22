@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Inscripció pendent de validació presencial. Per validar o rebutjar, fes servir la pestanya de validació d'inscripcions.",
   "panel.validations.rejectButton": "Rebutja",
   "panel.validations.rejectConfirm": "Rebutjar la inscripció de {name}? La persona no rebrà cap avís i es podrà tornar a inscriure.",
   "panel.validations.rejectSuccess": "Inscripció rebutjada.",

@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Registration awaiting in-person validation. To validate or refuse, use the registration validation tab.",
   "panel.validations.rejectButton": "Refuse",
   "panel.validations.rejectConfirm": "Refuse {name}'s registration? They won't be notified and can register again later.",
   "panel.validations.rejectSuccess": "Registration refused.",

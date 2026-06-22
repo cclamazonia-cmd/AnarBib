@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Η εγγραφή εκκρεμεί διά ζώσης επικύρωση. Για επικύρωση ή απόρριψη, χρησιμοποίησε την καρτέλα επικύρωσης εγγραφών.",
   "panel.validations.rejectButton": "Απόρριψη",
   "panel.validations.rejectConfirm": "Απόρριψη της εγγραφής του/της {name}; Το άτομο δεν θα ειδοποιηθεί και θα μπορεί να εγγραφεί ξανά αργότερα.",
   "panel.validations.rejectSuccess": "Η εγγραφή απορρίφθηκε.",

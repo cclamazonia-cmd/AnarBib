@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Iscrizione in attesa di convalida di persona. Per convalidare o rifiutare, usa la scheda di convalida delle iscrizioni.",
   "panel.validations.rejectButton": "Rifiuta",
   "panel.validations.rejectConfirm": "Rifiutare l'iscrizione di {name}? La persona non verrà avvisata e potrà iscriversi di nuovo.",
   "panel.validations.rejectSuccess": "Iscrizione rifiutata.",

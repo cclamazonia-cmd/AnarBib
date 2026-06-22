@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Inscrição aguardando validação presencial. Para validar ou recusar, use a aba de validação de inscrições.",
   "panel.validations.rejectButton": "Recusar",
   "panel.validations.rejectConfirm": "Recusar a inscrição de {name}? A pessoa não será notificada e poderá se inscrever novamente.",
   "panel.validations.rejectSuccess": "Inscrição recusada.",

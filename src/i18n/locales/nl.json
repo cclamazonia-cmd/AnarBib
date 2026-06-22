@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Inschrijving wacht op validatie ter plaatse. Gebruik het tabblad voor inschrijvingsvalidatie om te valideren of weigeren.",
   "panel.validations.rejectButton": "Weigeren",
   "panel.validations.rejectConfirm": "Inschrijving van {name} weigeren? De persoon wordt niet op de hoogte gebracht en kan zich later opnieuw inschrijven.",
   "panel.validations.rejectSuccess": "Inschrijving geweigerd.",

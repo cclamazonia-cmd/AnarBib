@@ -1312,6 +1312,7 @@ export default function PanelPage() {
         matchedLibraryId: res.matched_library_id || null,
         matchedLibraryName: res.matched_library_name || null,
         localIdentity: res.local_identity || null,
+        membershipStatus: res.membership_status || null, // Suite 7
         isFallback: !!res.is_fallback,
       } : null);
       setReaderMsg('');

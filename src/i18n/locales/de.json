@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Anmeldung wartet auf persönliche Bestätigung. Zum Bestätigen oder Ablehnen den Tab zur Anmeldungsbestätigung verwenden.",
   "panel.validations.rejectButton": "Ablehnen",
   "panel.validations.rejectConfirm": "Anmeldung von {name} ablehnen? Die Person wird nicht benachrichtigt und kann sich später erneut anmelden.",
   "panel.validations.rejectSuccess": "Anmeldung abgelehnt.",

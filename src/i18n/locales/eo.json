@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Aliĝo atendas ĉeestan validigon. Por validigi aŭ rifuzi, uzu la langeton pri validigo de aliĝoj.",
   "panel.validations.rejectButton": "Rifuzi",
   "panel.validations.rejectConfirm": "Ĉu rifuzi la aliĝon de {name}? La persono ne estos sciigita kaj povos realiĝi poste.",
   "panel.validations.rejectSuccess": "Aliĝo rifuzita.",

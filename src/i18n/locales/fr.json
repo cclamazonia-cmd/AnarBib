@@ -1,4 +1,5 @@
 {
+  "panel.reader.pendingNotice": "Inscription en attente de validation présentielle. Pour valider ou refuser, utilise l'onglet de validation des inscriptions.",
   "panel.validations.rejectButton": "Refuser",
   "panel.validations.rejectConfirm": "Refuser l'inscription de {name} ? La personne ne sera pas notifiée et pourra se réinscrire.",
   "panel.validations.rejectSuccess": "Inscription refusée.",
