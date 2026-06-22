@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Impronta applicata.",
   "catalogacao.audio.fp.noResource": "Nessun file audio collegato a questa scheda — candidati mostrati solo a titolo indicativo.",
   "catalogacao.audio.fp.resource": "File",
-  "catalogacao.audio.fp.score": "Punteggio"
+  "catalogacao.audio.fp.score": "Punteggio",
+  "catalogacao.audio.fp.target": "Allega a",
+  "catalogacao.audio.fp.noTarget": "Nessun segmento né file audio a cui allegare — candidati solo a titolo indicativo."
 }

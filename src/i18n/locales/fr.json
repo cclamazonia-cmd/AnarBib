@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Empreinte appliquée.",
   "catalogacao.audio.fp.noResource": "Aucun fichier audio rattaché à cette notice — candidats affichés à titre indicatif.",
   "catalogacao.audio.fp.resource": "Fichier",
-  "catalogacao.audio.fp.score": "Score"
+  "catalogacao.audio.fp.score": "Score",
+  "catalogacao.audio.fp.target": "Attacher à",
+  "catalogacao.audio.fp.noTarget": "Aucun segment ni fichier audio où l'attacher — candidats à titre indicatif."
 }

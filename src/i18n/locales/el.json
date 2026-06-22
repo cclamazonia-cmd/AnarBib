@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Το αποτύπωμα εφαρμόστηκε.",
   "catalogacao.audio.fp.noResource": "Κανένα ηχητικό αρχείο δεν συνδέεται με αυτή την εγγραφή — οι υποψήφιοι εμφανίζονται μόνο ως αναφορά.",
   "catalogacao.audio.fp.resource": "Αρχείο",
-  "catalogacao.audio.fp.score": "Βαθμολογία"
+  "catalogacao.audio.fp.score": "Βαθμολογία",
+  "catalogacao.audio.fp.target": "Επισύναψη σε",
+  "catalogacao.audio.fp.noTarget": "Κανένα τμήμα ή ηχητικό αρχείο για επισύναψη — υποψήφιοι μόνο ως αναφορά."
 }

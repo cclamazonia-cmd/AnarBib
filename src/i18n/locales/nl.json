@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Vingerafdruk toegepast.",
   "catalogacao.audio.fp.noResource": "Geen audiobestand aan deze titel gekoppeld — kandidaten alleen ter referentie getoond.",
   "catalogacao.audio.fp.resource": "Bestand",
-  "catalogacao.audio.fp.score": "Score"
+  "catalogacao.audio.fp.score": "Score",
+  "catalogacao.audio.fp.target": "Koppelen aan",
+  "catalogacao.audio.fp.noTarget": "Geen segment of audiobestand om aan te koppelen — kandidaten alleen ter referentie."
 }

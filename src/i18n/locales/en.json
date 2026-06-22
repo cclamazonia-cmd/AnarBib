@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Fingerprint applied.",
   "catalogacao.audio.fp.noResource": "No audio file is attached to this notice — candidates shown for reference only.",
   "catalogacao.audio.fp.resource": "File",
-  "catalogacao.audio.fp.score": "Score"
+  "catalogacao.audio.fp.score": "Score",
+  "catalogacao.audio.fp.target": "Attach to",
+  "catalogacao.audio.fp.noTarget": "No segment or audio file to attach to — candidates for reference only."
 }

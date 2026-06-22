@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Fingerabdruck angewendet.",
   "catalogacao.audio.fp.noResource": "Keine Audiodatei mit diesem Eintrag verknüpft — Kandidaten nur zur Referenz angezeigt.",
   "catalogacao.audio.fp.resource": "Datei",
-  "catalogacao.audio.fp.score": "Punktzahl"
+  "catalogacao.audio.fp.score": "Punktzahl",
+  "catalogacao.audio.fp.target": "Anhängen an",
+  "catalogacao.audio.fp.noTarget": "Kein Segment und keine Audiodatei zum Anhängen — Kandidaten nur zur Referenz."
 }

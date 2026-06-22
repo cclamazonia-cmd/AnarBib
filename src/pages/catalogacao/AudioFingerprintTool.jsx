@@ -3,19 +3,20 @@
 // L'empreinte est calculée CÔTE CLIENT (wasm @unimusic/chromaprint, lazy-load) à
 // partir d'un fichier audio choisi par le staff ; on interroge l'EF audio_fingerprint_lookup
 // (AcoustID) ; les candidats MusicBrainz sont des CANDIDATS (FS-D1, jamais écrits en
-// aveugle). « Appliquer » persiste l'empreinte + l'AcoustID choisi sur la ressource
-// numérique audio (api.audio_resource_set_fingerprint). spec-fonds-sonores §6, P3c.
-// Session : Fonds sonores
+// aveugle). « Appliquer » pose le résultat sur une CIBLE :
+//   - un SEGMENT (audio_tracks.external_ids ← MBID d'enregistrement) — P3c(A) ;
+//   - une RESSOURCE numérique audio (chromaprint_fp/acoustid_id) — grain fichier.
+// spec-fonds-sonores §6, P3c. Session : Fonds sonores
 
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 
-export default function AudioFingerprintTool({ bookId, onMsg }) {
+export default function AudioFingerprintTool({ bookId, onMsg, tracks }) {
   const { formatMessage: t } = useIntl();
   const [resources, setResources] = useState([]);
-  const [resourceId, setResourceId] = useState('');
+  const [targetKey, setTargetKey] = useState(''); // 'res:<id>' | 'track:<id>'
   const [busy, setBusy] = useState(null); // 'fp' | 'lookup' | 'apply' | null
   const [fp, setFp] = useState(null);     // { fingerprint, duration }
   const [candidates, setCandidates] = useState([]);
@@ -27,15 +28,24 @@ export default function AudioFingerprintTool({ bookId, onMsg }) {
     (async () => {
       if (!bookId) return;
       const { data } = await supabase.from('book_digital_resources')
-        .select('id, label, mime_type, acoustid_id')
+        .select('id, label, mime_type')
         .eq('book_id', Number(bookId)).in('resource_type', ['audio', 'video']).order('id');
-      if (!alive) return;
-      const rows = data || [];
-      setResources(rows);
-      if (rows.length === 1) setResourceId(String(rows[0].id));
+      if (alive) setResources(data || []);
     })();
     return () => { alive = false; };
   }, [bookId]);
+
+  // Cibles possibles : ressources audio + segments.
+  const targets = [
+    ...resources.map(r => ({ key: `res:${r.id}`, label: `📄 ${r.label || '#' + r.id}` })),
+    ...(tracks || []).map(tr => ({ key: `track:${tr.track_id}`, label: `▸ ${tr.position}. ${tr.title || t({ id: 'catalogacao.audio.seg.untitled' })}` })),
+  ];
+
+  // Auto-sélection si une seule cible.
+  useEffect(() => {
+    if (!targetKey && targets.length === 1) setTargetKey(targets[0].key);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resources, tracks]);
 
   async function runFingerprint(file) {
     if (!file) return;
@@ -47,7 +57,6 @@ export default function AudioFingerprintTool({ bookId, onMsg }) {
       const { computeChromaprint } = await import('@/lib/chromaprintFingerprint');
       const { fingerprint, duration } = await computeChromaprint(buf);
       setFp({ fingerprint, duration });
-      // Lookup AcoustID via l'EF.
       setBusy('lookup');
       const { data, error } = await supabase.functions.invoke('audio_fingerprint_lookup', {
         body: { fingerprint, duration },
@@ -63,22 +72,35 @@ export default function AudioFingerprintTool({ bookId, onMsg }) {
     } finally { setBusy(null); }
   }
 
-  async function applyFingerprint(candidate) {
-    if (!resourceId) { notify(t({ id: 'catalogacao.audio.fp.noResource' }), 'error'); return; }
+  async function applyCandidate(candidate) {
+    if (!targetKey) { notify(t({ id: 'catalogacao.audio.fp.noTarget' }), 'error'); return; }
+    const sep = targetKey.indexOf(':');
+    const kind = targetKey.slice(0, sep);
+    const id = Number(targetKey.slice(sep + 1));
     setBusy('apply');
     try {
-      await apiRpc('audio_resource_set_fingerprint', {
-        p_resource_id: Number(resourceId),
-        p_chromaprint: fp?.fingerprint || null,
-        p_duration_ms: fp ? Math.round(fp.duration * 1000) : null,
-        p_acoustid: candidate.acoustid || null,
-      });
+      if (kind === 'track') {
+        if (!candidate.recording_mbid && !candidate.acoustid) { notify(t({ id: 'catalogacao.audio.fp.empty' }), 'error'); return; }
+        await apiRpc('audio_track_set_recording_mbid', {
+          p_track_id: id,
+          p_recording_mbid: candidate.recording_mbid || null,
+          p_acoustid: candidate.acoustid || null,
+        });
+      } else {
+        await apiRpc('audio_resource_set_fingerprint', {
+          p_resource_id: id,
+          p_chromaprint: fp?.fingerprint || null,
+          p_duration_ms: fp ? Math.round(fp.duration * 1000) : null,
+          p_acoustid: candidate.acoustid || null,
+        });
+      }
       notify(t({ id: 'catalogacao.audio.fp.applied' }), 'ok');
     } catch (e) {
       notify(t({ id: 'common.errorPrefix' }, { message: localizeError(e, t) }), 'error');
     } finally { setBusy(null); }
   }
 
+  const inputStyle = { padding: '4px 6px', fontSize: '.8rem', borderRadius: 6, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.25)', color: 'inherit' };
   const labelStyle = { fontSize: '.7rem', color: 'var(--brand-muted, #aaa)', display: 'block', marginBottom: 2 };
   const busyLabel = busy === 'fp' ? t({ id: 'catalogacao.audio.fp.computing' })
     : busy === 'lookup' ? t({ id: 'catalogacao.audio.fp.looking' }) : null;
@@ -92,27 +114,26 @@ export default function AudioFingerprintTool({ bookId, onMsg }) {
         {t({ id: 'catalogacao.audio.fp.intro' })}
       </p>
 
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
         <label className="ab-button ab-button--sm" style={{ cursor: busy ? 'default' : 'pointer' }}>
           {t({ id: 'catalogacao.audio.fp.chooseFile' })}
           <input type="file" accept="audio/*,video/*" disabled={!!busy} style={{ display: 'none' }}
             onChange={e => runFingerprint(e.target.files?.[0])} />
         </label>
         {busyLabel && <span style={{ fontSize: '.76rem', color: 'var(--brand-muted, #aaa)' }}>{busyLabel}</span>}
-        {resources.length > 1 && (
+        {targets.length > 0 && (
           <span>
-            <label style={labelStyle}>{t({ id: 'catalogacao.audio.fp.resource' })}</label>
-            <select value={resourceId} onChange={e => setResourceId(e.target.value)}
-              style={{ padding: '4px 6px', fontSize: '.8rem', borderRadius: 6, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.25)', color: 'inherit' }}>
+            <label style={labelStyle}>{t({ id: 'catalogacao.audio.fp.target' })}</label>
+            <select value={targetKey} onChange={e => setTargetKey(e.target.value)} style={inputStyle}>
               <option value="">—</option>
-              {resources.map(r => <option key={r.id} value={r.id}>{r.label || `#${r.id}`} ({r.mime_type})</option>)}
+              {targets.map(tg => <option key={tg.key} value={tg.key}>{tg.label}</option>)}
             </select>
           </span>
         )}
       </div>
 
-      {resources.length === 0 && fp && (
-        <div style={{ fontSize: '.72rem', color: '#fbbf24', marginTop: 6 }}>{t({ id: 'catalogacao.audio.fp.noResource' })}</div>
+      {targets.length === 0 && fp && (
+        <div style={{ fontSize: '.72rem', color: '#fbbf24', marginTop: 6 }}>{t({ id: 'catalogacao.audio.fp.noTarget' })}</div>
       )}
 
       {candidates.length > 0 && (
@@ -126,8 +147,8 @@ export default function AudioFingerprintTool({ bookId, onMsg }) {
                   {c.musicbrainz_url && <> · <a href={c.musicbrainz_url} target="_blank" rel="noreferrer">MusicBrainz</a></>}
                 </div>
               </div>
-              <button type="button" className="ab-button ab-button--mini" disabled={!!busy || !resourceId}
-                onClick={() => applyFingerprint(c)} title={!resourceId ? t({ id: 'catalogacao.audio.fp.noResource' }) : ''}>
+              <button type="button" className="ab-button ab-button--mini" disabled={!!busy || !targetKey}
+                onClick={() => applyCandidate(c)} title={!targetKey ? t({ id: 'catalogacao.audio.fp.noTarget' }) : ''}>
                 {t({ id: 'catalogacao.audio.fp.apply' })}
               </button>
             </li>

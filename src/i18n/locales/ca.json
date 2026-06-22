@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Empremta aplicada.",
   "catalogacao.audio.fp.noResource": "Cap fitxer d'àudio vinculat a aquesta fitxa — candidats mostrats només a títol indicatiu.",
   "catalogacao.audio.fp.resource": "Fitxer",
-  "catalogacao.audio.fp.score": "Puntuació"
+  "catalogacao.audio.fp.score": "Puntuació",
+  "catalogacao.audio.fp.target": "Adjunta a",
+  "catalogacao.audio.fp.noTarget": "Cap segment ni fitxer d'àudio on adjuntar — candidats només a títol indicatiu."
 }

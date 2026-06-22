@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Huella aplicada.",
   "catalogacao.audio.fp.noResource": "Ningún archivo de audio vinculado a esta ficha — candidatos mostrados solo como referencia.",
   "catalogacao.audio.fp.resource": "Archivo",
-  "catalogacao.audio.fp.score": "Puntuación"
+  "catalogacao.audio.fp.score": "Puntuación",
+  "catalogacao.audio.fp.target": "Adjuntar a",
+  "catalogacao.audio.fp.noTarget": "Ningún segmento ni archivo de audio donde adjuntar — candidatos solo como referencia."
 }

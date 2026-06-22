@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Fingrospuro aplikita.",
   "catalogacao.audio.fp.noResource": "Neniu sondosiero ligita al ĉi tiu registro — kandidatoj montrataj nur por referenco.",
   "catalogacao.audio.fp.resource": "Dosiero",
-  "catalogacao.audio.fp.score": "Poentaro"
+  "catalogacao.audio.fp.score": "Poentaro",
+  "catalogacao.audio.fp.target": "Aldoni al",
+  "catalogacao.audio.fp.noTarget": "Neniu segmento nek sondosiero por aldoni — kandidatoj nur por referenco."
 }

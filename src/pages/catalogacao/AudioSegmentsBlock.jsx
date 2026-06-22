@@ -168,7 +168,7 @@ export default function AudioSegmentsBlock({ bookId, onMsg }) {
         {t({ id: 'catalogacao.audio.seg.intro' })}
       </p>
 
-      <AudioFingerprintTool bookId={bookId} onMsg={onMsg} />
+      <AudioFingerprintTool bookId={bookId} onMsg={onMsg} tracks={tracks} />
 
       {/* Liste des segments */}
       {loading ? (

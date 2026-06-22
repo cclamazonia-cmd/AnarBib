@@ -5465,5 +5465,7 @@
   "catalogacao.audio.fp.applied": "Impressão aplicada.",
   "catalogacao.audio.fp.noResource": "Nenhum arquivo de áudio vinculado a esta ficha — candidatos exibidos apenas para referência.",
   "catalogacao.audio.fp.resource": "Arquivo",
-  "catalogacao.audio.fp.score": "Pontuação"
+  "catalogacao.audio.fp.score": "Pontuação",
+  "catalogacao.audio.fp.target": "Anexar a",
+  "catalogacao.audio.fp.noTarget": "Nenhum segmento nem arquivo de áudio onde anexar — candidatos apenas para referência."
 }
