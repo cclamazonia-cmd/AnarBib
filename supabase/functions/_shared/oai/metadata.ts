@@ -35,6 +35,12 @@ function subjectList(r: any): string[] {
   return list.map((x: any) => s(x).trim()).filter(Boolean);
 }
 
+// MBID MusicBrainz associés à la notice (artistes + enregistrements) — P5 #AUDIO-fonds.
+function mbList(r: any): { type: string; mbid: string; url: string }[] {
+  const list = Array.isArray(r?.musicbrainz) ? r.musicbrainz : [];
+  return list.filter((m: any) => m && s(m.url).trim());
+}
+
 // ── MARCXML (MARC21 slim, per-record OAI) ───────────────────────────────────
 function cf(tag: string, value: unknown): string {
   const v = s(value).trim();
@@ -55,6 +61,7 @@ export function marcxmlRecord(r: any): string {
   f.push(cf('001', s(r.bibRef) || s(r.id)));
   f.push(df('020', ' ', ' ', [['a', r.isbn]]));
   f.push(df('022', ' ', ' ', [['a', r.issn]]));
+  for (const mb of mbList(r)) f.push(df('024', '7', ' ', [['a', mb.mbid], ['2', 'musicbrainz']]));
   f.push(df('041', '0', ' ', [['a', r.language]]));
   f.push(df('082', '0', '4', [['a', r.cdd]]));
   if (names[0]) f.push(df('100', '1', ' ', [['a', names[0]]]));
@@ -89,6 +96,7 @@ export function oaiDcRecord(r: any): string {
   if (s(r.isbn).trim()) lines.push(el('identifier', `ISBN:${s(r.isbn).trim()}`));
   if (s(r.issn).trim()) lines.push(el('identifier', `ISSN:${s(r.issn).trim()}`));
   if (s(r.bibRef).trim()) lines.push(el('identifier', r.bibRef));
+  for (const mb of mbList(r)) lines.push(el('relation', mb.url));
   lines.push(el('description', r.notes));
   const body = lines.filter(Boolean).join('\n');
   return `<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" ` +
