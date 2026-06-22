@@ -36,6 +36,7 @@ function subjectList(r: any): string[] {
 }
 
 // MBID MusicBrainz associés à la notice (artistes + enregistrements) — P5 #AUDIO-fonds.
+// Source : fn_oai_harvestable_records, champ « musicbrainz » (migration 20260622120319).
 function mbList(r: any): { type: string; mbid: string; url: string }[] {
   const list = Array.isArray(r?.musicbrainz) ? r.musicbrainz : [];
   return list.filter((m: any) => m && s(m.url).trim());
