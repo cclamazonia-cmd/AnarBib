@@ -124,6 +124,7 @@ export default function BookPage() {
   const [similar, setSimilar] = useState([]);
   const [otherEditions, setOtherEditions] = useState([]); // P4 : autres éditions de l'œuvre
   const [workId, setWorkId] = useState(null); // P4 v2 : œuvre du livre courant (lien page œuvre)
+  const [audioTracks, setAudioTracks] = useState([]); // P3d : tracklist publique (#AUDIO-fonds)
 
   // ── Chargement ───────────────────────────────────────────
   // FIX 2026-05-01 (bug "reload au focus") : la dépendance était [id, user]
@@ -175,6 +176,12 @@ export default function BookPage() {
           try {
             const wb = await supabase.from('books').select('work_id').eq('id', bookId).maybeSingle();
             if (wb?.data?.work_id) setWorkId(wb.data.work_id);
+          } catch { /* non-bloquant */ }
+          // P3d — tracklist publique des segments audio (#AUDIO-fonds). RPC public-safe :
+          // renvoie [] si la notice n'est pas publique ou n'a pas de segments → appel non gardé.
+          try {
+            const at = await supabase.schema('api').rpc('audio_tracklist_public', { p_book_id: bookId });
+            if (Array.isArray(at.data) && at.data.length) setAudioTracks(at.data);
           } catch { /* non-bloquant */ }
         }
 
@@ -594,6 +601,38 @@ export default function BookPage() {
           </div>
         </div>
       </div>
+
+      {/* P3d — Segments sonores (tracklist publique, #AUDIO-fonds) */}
+      {audioTracks.length > 0 && (
+        <details className="ab-livro-similar" open>
+          <summary className="ab-livro-similar__summary">{t({ id: 'catalogacao.audio.seg.title' })}</summary>
+          <ol style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+            {audioTracks.map(tr => (
+              <li key={tr.track_id} style={{ padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
+                <div>
+                  <span style={{ fontWeight: 700, marginRight: 6 }}>{tr.position}.</span>
+                  <span>{tr.title || t({ id: 'catalogacao.audio.seg.untitled' })}</span>
+                  {tr.work_id && tr.work_title && (
+                    <> · <Link to={`/obra/${tr.work_id}`} style={{ fontSize: '.82rem' }}>{tr.work_title}</Link></>
+                  )}
+                </div>
+                {(tr.start_offset || tr.duration || tr.place_text || tr.recording_date || tr.recording_date_approx) && (
+                  <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }}>
+                    {[tr.start_offset, tr.duration, tr.place_text, tr.recording_date || tr.recording_date_approx].filter(Boolean).join(' · ')}
+                  </div>
+                )}
+                {(tr.contributors || []).length > 0 && (
+                  <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }}>
+                    {tr.contributors.map((c, i) => (
+                      <span key={i}>{i > 0 ? ', ' : ''}{c.name} <em style={{ fontStyle: 'normal', opacity: .7 }}>({t({ id: `catalogacao.role.${c.role}` })})</em></span>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ol>
+        </details>
+      )}
 
       {/* P4 — Autres éditions de la même œuvre */}
       {otherEditions.length > 0 && (
