@@ -101,6 +101,13 @@ jobs:
           git init -b pages
           git config user.email "ci@anarbib.codeberg.page"
           git config user.name "AnarBib CI"
+          # dist/ est lourd (pdfjs/tesseract/wasm/polices vendorés). Un POST plus
+          # gros que http.postBuffer (~1 Mo par défaut) part en chunked et ne peut
+          # PAS être rembobiné → "unable to rewind rpc post data" sur le retry après
+          # une coupure Codeberg (504, vécu le 22/06). On bufferise tout le payload
+          # (500 Mo) pour que la boucle `until` ci-dessous survive réellement aux
+          # 504 transitoires (sinon les retries 2/3 échouent systématiquement).
+          git config http.postBuffer 524288000
           git add -A
           git commit -m "Deploy from main@${GITHUB_SHA:0:8}"
           git remote add origin "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
