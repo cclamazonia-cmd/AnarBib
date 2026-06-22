@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Segment opgeslagen.",
   "catalogacao.audio.seg.deleted": "Segment verwijderd.",
   "catalogacao.audio.seg.deleteConfirm": "Dit segment verwijderen?",
-  "catalogacao.audio.seg.nameRequired": "Een naam is verplicht."
+  "catalogacao.audio.seg.nameRequired": "Een naam is verplicht.",
+  "error.audio.forbidden": "Actie niet toegestaan.",
+  "error.audio.bookNotAudio": "Deze titel is geen audio- of audiovisuele editie.",
+  "error.audio.workNotFound": "Werk niet gevonden.",
+  "error.audio.recordingTypeInvalid": "Ongeldig opnametype.",
+  "error.audio.resourceNotInBook": "Dit bestand hoort niet bij deze titel.",
+  "error.audio.trackNotFound": "Segment niet gevonden.",
+  "error.audio.authorNotFound": "Autoriteit niet gevonden.",
+  "error.audio.nameRequired": "Een naam is verplicht.",
+  "error.audio.resourceNotFound": "Digitale bron niet gevonden.",
+  "error.audio.acoustidNotConfigured": "AcoustID-zoekopdracht is niet geconfigureerd.",
+  "error.audio.fingerprintRequired": "Een vingerafdruk en de duur zijn vereist."
 }

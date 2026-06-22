@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Segment desat.",
   "catalogacao.audio.seg.deleted": "Segment eliminat.",
   "catalogacao.audio.seg.deleteConfirm": "Voleu eliminar aquest segment?",
-  "catalogacao.audio.seg.nameRequired": "El nom és obligatori."
+  "catalogacao.audio.seg.nameRequired": "El nom és obligatori.",
+  "error.audio.forbidden": "Acció no autoritzada.",
+  "error.audio.bookNotAudio": "Aquesta fitxa no és una edició d'àudio o audiovisual.",
+  "error.audio.workNotFound": "Obra no trobada.",
+  "error.audio.recordingTypeInvalid": "Tipus d'enregistrament no vàlid.",
+  "error.audio.resourceNotInBook": "Aquest fitxer no pertany a aquesta fitxa.",
+  "error.audio.trackNotFound": "Segment no trobat.",
+  "error.audio.authorNotFound": "Autoritat no trobada.",
+  "error.audio.nameRequired": "El nom és obligatori.",
+  "error.audio.resourceNotFound": "Recurs digital no trobat.",
+  "error.audio.acoustidNotConfigured": "La cerca AcoustID no està configurada.",
+  "error.audio.fingerprintRequired": "Calen una empremta i la seva durada."
 }

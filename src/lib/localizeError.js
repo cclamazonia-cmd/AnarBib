@@ -272,6 +272,18 @@ export function localizeError(err, t, actionFallbackKey) {
     if (translated) return translated;
   }
 
+  // Cas 1b : code i18n 'error.*' posé directement en err.message (RAISE EXCEPTION
+  // 'error.foo.bar' SANS HINT — convention #AUDIO-fonds et EF audio). On tente la
+  // clé telle quelle ; si absente, on poursuit la résolution normale.
+  {
+    const msgRaw = (typeof err === 'object' && typeof err.message === 'string') ? err.message.trim()
+      : (typeof err === 'string' ? err.trim() : '');
+    if (msgRaw.startsWith('error.') && !/\s/.test(msgRaw)) {
+      const translated = tryTranslate(t, msgRaw);
+      if (translated) return translated;
+    }
+  }
+
   // Cas 2 : code court dans err.message (convention EA-05)
   const code = extractApiCode(err);
   if (code) {

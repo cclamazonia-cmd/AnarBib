@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Segmento salvato.",
   "catalogacao.audio.seg.deleted": "Segmento eliminato.",
   "catalogacao.audio.seg.deleteConfirm": "Eliminare questo segmento?",
-  "catalogacao.audio.seg.nameRequired": "Il nome è obbligatorio."
+  "catalogacao.audio.seg.nameRequired": "Il nome è obbligatorio.",
+  "error.audio.forbidden": "Azione non consentita.",
+  "error.audio.bookNotAudio": "Questa scheda non è un'edizione audio o audiovisiva.",
+  "error.audio.workNotFound": "Opera non trovata.",
+  "error.audio.recordingTypeInvalid": "Tipo di registrazione non valido.",
+  "error.audio.resourceNotInBook": "Questo file non appartiene a questa scheda.",
+  "error.audio.trackNotFound": "Segmento non trovato.",
+  "error.audio.authorNotFound": "Autorità non trovata.",
+  "error.audio.nameRequired": "Il nome è obbligatorio.",
+  "error.audio.resourceNotFound": "Risorsa digitale non trovata.",
+  "error.audio.acoustidNotConfigured": "La ricerca AcoustID non è configurata.",
+  "error.audio.fingerprintRequired": "Sono richiesti un'impronta e la sua durata."
 }

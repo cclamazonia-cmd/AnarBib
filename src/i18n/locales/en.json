@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Segment saved.",
   "catalogacao.audio.seg.deleted": "Segment deleted.",
   "catalogacao.audio.seg.deleteConfirm": "Delete this segment?",
-  "catalogacao.audio.seg.nameRequired": "A name is required."
+  "catalogacao.audio.seg.nameRequired": "A name is required.",
+  "error.audio.forbidden": "Action not permitted.",
+  "error.audio.bookNotAudio": "This notice is not an audio or audiovisual edition.",
+  "error.audio.workNotFound": "Work not found.",
+  "error.audio.recordingTypeInvalid": "Invalid recording type.",
+  "error.audio.resourceNotInBook": "This file does not belong to this notice.",
+  "error.audio.trackNotFound": "Segment not found.",
+  "error.audio.authorNotFound": "Authority not found.",
+  "error.audio.nameRequired": "A name is required.",
+  "error.audio.resourceNotFound": "Digital resource not found.",
+  "error.audio.acoustidNotConfigured": "AcoustID lookup is not configured.",
+  "error.audio.fingerprintRequired": "A fingerprint and its duration are required."
 }

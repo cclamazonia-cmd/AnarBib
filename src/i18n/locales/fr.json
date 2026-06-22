@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Segment enregistré.",
   "catalogacao.audio.seg.deleted": "Segment supprimé.",
   "catalogacao.audio.seg.deleteConfirm": "Supprimer ce segment ?",
-  "catalogacao.audio.seg.nameRequired": "Le nom est obligatoire."
+  "catalogacao.audio.seg.nameRequired": "Le nom est obligatoire.",
+  "error.audio.forbidden": "Action non autorisée.",
+  "error.audio.bookNotAudio": "Cette notice n'est pas une édition audio ou audiovisuelle.",
+  "error.audio.workNotFound": "Œuvre introuvable.",
+  "error.audio.recordingTypeInvalid": "Type de captation invalide.",
+  "error.audio.resourceNotInBook": "Ce fichier n'appartient pas à cette notice.",
+  "error.audio.trackNotFound": "Segment introuvable.",
+  "error.audio.authorNotFound": "Autorité introuvable.",
+  "error.audio.nameRequired": "Le nom est obligatoire.",
+  "error.audio.resourceNotFound": "Ressource numérique introuvable.",
+  "error.audio.acoustidNotConfigured": "La recherche AcoustID n'est pas configurée.",
+  "error.audio.fingerprintRequired": "Une empreinte et sa durée sont requises."
 }

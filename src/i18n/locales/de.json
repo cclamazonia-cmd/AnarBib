@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Segment gespeichert.",
   "catalogacao.audio.seg.deleted": "Segment gelöscht.",
   "catalogacao.audio.seg.deleteConfirm": "Dieses Segment löschen?",
-  "catalogacao.audio.seg.nameRequired": "Ein Name ist erforderlich."
+  "catalogacao.audio.seg.nameRequired": "Ein Name ist erforderlich.",
+  "error.audio.forbidden": "Aktion nicht erlaubt.",
+  "error.audio.bookNotAudio": "Dieser Eintrag ist keine Audio- oder audiovisuelle Ausgabe.",
+  "error.audio.workNotFound": "Werk nicht gefunden.",
+  "error.audio.recordingTypeInvalid": "Ungültige Aufnahmeart.",
+  "error.audio.resourceNotInBook": "Diese Datei gehört nicht zu diesem Eintrag.",
+  "error.audio.trackNotFound": "Segment nicht gefunden.",
+  "error.audio.authorNotFound": "Autorität nicht gefunden.",
+  "error.audio.nameRequired": "Ein Name ist erforderlich.",
+  "error.audio.resourceNotFound": "Digitale Ressource nicht gefunden.",
+  "error.audio.acoustidNotConfigured": "Die AcoustID-Suche ist nicht konfiguriert.",
+  "error.audio.fingerprintRequired": "Ein Fingerabdruck und seine Dauer sind erforderlich."
 }

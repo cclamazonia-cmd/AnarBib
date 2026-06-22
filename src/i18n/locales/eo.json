@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Segmento konservita.",
   "catalogacao.audio.seg.deleted": "Segmento forigita.",
   "catalogacao.audio.seg.deleteConfirm": "Ĉu forigi ĉi tiun segmenton?",
-  "catalogacao.audio.seg.nameRequired": "Nomo estas deviga."
+  "catalogacao.audio.seg.nameRequired": "Nomo estas deviga.",
+  "error.audio.forbidden": "Ago ne permesata.",
+  "error.audio.bookNotAudio": "Ĉi tiu registro ne estas sona aŭ aŭdvida eldono.",
+  "error.audio.workNotFound": "Verko ne trovita.",
+  "error.audio.recordingTypeInvalid": "Nevalida tipo de registrado.",
+  "error.audio.resourceNotInBook": "Ĉi tiu dosiero ne apartenas al ĉi tiu registro.",
+  "error.audio.trackNotFound": "Segmento ne trovita.",
+  "error.audio.authorNotFound": "Aŭtoritato ne trovita.",
+  "error.audio.nameRequired": "Nomo estas deviga.",
+  "error.audio.resourceNotFound": "Cifereca rimedo ne trovita.",
+  "error.audio.acoustidNotConfigured": "La serĉo AcoustID ne estas agordita.",
+  "error.audio.fingerprintRequired": "Fingrospuro kaj ĝia daŭro estas postulataj."
 }

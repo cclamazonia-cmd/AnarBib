@@ -5443,5 +5443,16 @@
   "catalogacao.audio.seg.saved": "Το τμήμα αποθηκεύτηκε.",
   "catalogacao.audio.seg.deleted": "Το τμήμα διαγράφηκε.",
   "catalogacao.audio.seg.deleteConfirm": "Διαγραφή αυτού του τμήματος;",
-  "catalogacao.audio.seg.nameRequired": "Το όνομα είναι υποχρεωτικό."
+  "catalogacao.audio.seg.nameRequired": "Το όνομα είναι υποχρεωτικό.",
+  "error.audio.forbidden": "Μη επιτρεπτή ενέργεια.",
+  "error.audio.bookNotAudio": "Αυτή η εγγραφή δεν είναι ηχητική ή οπτικοακουστική έκδοση.",
+  "error.audio.workNotFound": "Το έργο δεν βρέθηκε.",
+  "error.audio.recordingTypeInvalid": "Μη έγκυρος τύπος ηχογράφησης.",
+  "error.audio.resourceNotInBook": "Αυτό το αρχείο δεν ανήκει σε αυτή την εγγραφή.",
+  "error.audio.trackNotFound": "Το τμήμα δεν βρέθηκε.",
+  "error.audio.authorNotFound": "Δεν βρέθηκε η οντότητα.",
+  "error.audio.nameRequired": "Το όνομα είναι υποχρεωτικό.",
+  "error.audio.resourceNotFound": "Ο ψηφιακός πόρος δεν βρέθηκε.",
+  "error.audio.acoustidNotConfigured": "Η αναζήτηση AcoustID δεν έχει ρυθμιστεί.",
+  "error.audio.fingerprintRequired": "Απαιτούνται αποτύπωμα και η διάρκειά του."
 }
