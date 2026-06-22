@@ -282,6 +282,22 @@ camerata/camerati ») fait échouer le build si le terme apparaît.
 - Déploiement functions **et** migrations : **automatique par Forgejo Actions**
   (job `backend`) au push sur `main` (`supabase functions deploy` / `supabase db
   push --linked --include-all`).
+  > 🛑 **RÈGLE DURE — migration appliquée HORS dépôt ⇒ committer le fichier
+  > AUSSITÔT.** Une migration posée via le **MCP Supabase** (`apply_migration`) ou
+  > le **SQL Editor** s'enregistre dans `supabase_migrations.schema_migrations` de
+  > la base liée **sans** créer de fichier dans `supabase/migrations/`. Or `db push
+  > --linked --include-all` exige un fichier local pour **CHAQUE** version
+  > enregistrée côté distant : fichier manquant ⇒ job `backend` **ROUGE pour toutes
+  > les sessions** (« Remote migration versions not found »). Procédure obligatoire
+  > juste après un `apply_migration` : créer `supabase/migrations/<version>_<nom>.sql`
+  > (version = celle inscrite dans `schema_migrations`, **SQL exact** appliqué,
+  > format `_TEMPLATE.sql`), `git add` **ce seul fichier** → commit → `git fetch` →
+  > push (sérialisé, attendre le vert). La version déjà appliquée est **sautée** par
+  > `db push` (rien n'est ré-exécuté) ; le fichier sert l'historique et la
+  > reconstruction de schéma à neuf. **Ne jamais** masquer le drift via `migration
+  > repair --status reverted` si l'objet existe réellement en prod. *(Incident du
+  > 22/06/2026 : `20260622102806_signup_list_requires_accepts_public_signup` posée
+  > par MCP sans fichier → pipeline `backend` rouge pour tout le monde.)*
 - Tests SQL d'acceptation : `tests/sql/*.sql` (lancés manuellement). Présents :
   `paquet19_loan_wrappers_tests`, `paquet24_consulta_helpers_tests`,
   `paquet25_consulta_wrappers_tests`,
