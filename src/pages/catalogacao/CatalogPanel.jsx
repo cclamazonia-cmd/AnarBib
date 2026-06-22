@@ -152,14 +152,29 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   }
 
   async function discardItem(type, id, label) {
+    // Document : descarte EN CASCADE (exemplaires + holdings de MA biblio, puis le
+    // document s'il n'est plus détenu ailleurs). Avertissement explicite.
+    if (type === 'book') {
+      if (!confirm(t({ id: 'catalogacao.catalog.discardBookCascadeConfirm' }, { label }))) return;
+      try {
+        const { data, error } = await supabase.rpc('discard_book_cascade', { p_book_id: id });
+        if (error) throw error;
+        if (data?.book_deleted) {
+          setMsg({ text: t({ id: 'catalogacao.catalog.discardDone' }, { label }), kind: 'ok' });
+        } else {
+          setMsg({ text: t({ id: 'catalogacao.catalog.discardBookKept' }, { label }), kind: 'ok' });
+        }
+        loadItems();
+        onChanged?.();
+      } catch (err) {
+        setMsg({ text: t({ id: 'catalogacao.catalog.discardError' }, { message: localizeError(err, t) }), kind: 'error' });
+      }
+      return;
+    }
     if (!confirm(t({ id: 'catalogacao.catalog.discardConfirm' }, { label }))) return;
     try {
-      const rpc = type === 'book' ? 'discard_book'
-        : type === 'author' ? 'discard_author'
-        : 'discard_exemplar';
-      const param = type === 'book' ? { p_book_id: id }
-        : type === 'author' ? { p_author_id: id }
-        : { p_exemplar_id: id };
+      const rpc = type === 'author' ? 'discard_author' : 'discard_exemplar';
+      const param = type === 'author' ? { p_author_id: id } : { p_exemplar_id: id };
       const { error } = await supabase.rpc(rpc, param);
       if (error) throw error;
       setMsg({ text: t({ id: 'catalogacao.catalog.discardDone' }, { label }), kind: 'ok' });

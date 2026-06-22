@@ -5467,5 +5467,7 @@
   "catalogacao.audio.fp.resource": "File",
   "catalogacao.audio.fp.score": "Punteggio",
   "catalogacao.audio.fp.target": "Allega a",
-  "catalogacao.audio.fp.noTarget": "Nessun segmento né file audio a cui allegare — candidati solo a titolo indicativo."
+  "catalogacao.audio.fp.noTarget": "Nessun segmento né file audio a cui allegare — candidati solo a titolo indicativo.",
+  "catalogacao.catalog.discardBookCascadeConfirm": "Eliminare «{label}» eliminerà anche le copie associate nella tua biblioteca. Continuare?",
+  "catalogacao.catalog.discardBookKept": "Copie rimosse dalla tua biblioteca. Il documento resta nel catalogo (posseduto da un'altra biblioteca)."
 }

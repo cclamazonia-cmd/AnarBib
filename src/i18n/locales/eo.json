@@ -5467,5 +5467,7 @@
   "catalogacao.audio.fp.resource": "Dosiero",
   "catalogacao.audio.fp.score": "Poentaro",
   "catalogacao.audio.fp.target": "Aldoni al",
-  "catalogacao.audio.fp.noTarget": "Neniu segmento nek sondosiero por aldoni — kandidatoj nur por referenco."
+  "catalogacao.audio.fp.noTarget": "Neniu segmento nek sondosiero por aldoni — kandidatoj nur por referenco.",
+  "catalogacao.catalog.discardBookCascadeConfirm": "Forigi «{label}» ankaŭ forigos la rilatajn ekzemplerojn en via biblioteko. Ĉu daŭrigi?",
+  "catalogacao.catalog.discardBookKept": "Ekzempleroj forigitaj el via biblioteko. La dokumento restas en la katalogo (tenata de alia biblioteko)."
 }

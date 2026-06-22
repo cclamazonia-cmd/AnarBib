@@ -5467,5 +5467,7 @@
   "catalogacao.audio.fp.resource": "Arquivo",
   "catalogacao.audio.fp.score": "Pontuação",
   "catalogacao.audio.fp.target": "Anexar a",
-  "catalogacao.audio.fp.noTarget": "Nenhum segmento nem arquivo de áudio onde anexar — candidatos apenas para referência."
+  "catalogacao.audio.fp.noTarget": "Nenhum segmento nem arquivo de áudio onde anexar — candidatos apenas para referência.",
+  "catalogacao.catalog.discardBookCascadeConfirm": "Descartar “{label}” também excluirá os exemplares associados na sua biblioteca. Continuar?",
+  "catalogacao.catalog.discardBookKept": "Exemplares removidos da sua biblioteca. O documento permanece no catálogo (mantido por outra biblioteca)."
 }

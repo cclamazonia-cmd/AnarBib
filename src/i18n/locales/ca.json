@@ -5467,5 +5467,7 @@
   "catalogacao.audio.fp.resource": "Fitxer",
   "catalogacao.audio.fp.score": "Puntuació",
   "catalogacao.audio.fp.target": "Adjunta a",
-  "catalogacao.audio.fp.noTarget": "Cap segment ni fitxer d'àudio on adjuntar — candidats només a títol indicatiu."
+  "catalogacao.audio.fp.noTarget": "Cap segment ni fitxer d'àudio on adjuntar — candidats només a títol indicatiu.",
+  "catalogacao.catalog.discardBookCascadeConfirm": "Descartar «{label}» també eliminarà els exemplars associats a la teva biblioteca. Voleu continuar?",
+  "catalogacao.catalog.discardBookKept": "Exemplars retirats de la teva biblioteca. El document es manté al catàleg (en possessió d'una altra biblioteca)."
 }
