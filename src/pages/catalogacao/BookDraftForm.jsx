@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
+import AudioSegmentsBlock from './AudioSegmentsBlock';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
@@ -2656,6 +2657,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* ── Segments sonores (P3b — #AUDIO-fonds) — notice audio/audiovisuelle publiée ─────── */}
+          {f('published_book_id') && (isAudio || isAudiovisual) && (
+            <div className="ab-span3" style={{ gridColumn: 'span 3' }}>
+              <AudioSegmentsBlock bookId={f('published_book_id')} onMsg={(text, kind) => setMsg({ text, kind })} />
             </div>
           )}
 
