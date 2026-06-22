@@ -147,9 +147,18 @@ export function StageFilterBar({ counts, current, onSelect, labels, allLabel, un
 // ───────────────────────────────────────────────────────────
 // Partagée entre le Hero/résumé et l'onglet trabalho-do-dia.
 // ═══════════════════════════════════════════════════════════
-export function SummaryCard({ label, count, variant = 'default' }) {
+export function SummaryCard({ label, count, variant = 'default', onClick }) {
+  // Suite 8 : cliquable (→ onglet d'action) si onClick fourni. Accessible clavier.
+  const clickable = typeof onClick === 'function';
   return (
-    <div className={`ab-painel-summary ab-painel-summary--${variant}`}>
+    <div
+      className={`ab-painel-summary ab-painel-summary--${variant}${clickable ? ' ab-painel-summary--clickable' : ''}`}
+      onClick={onClick || undefined}
+      role={clickable ? 'button' : undefined}
+      tabIndex={clickable ? 0 : undefined}
+      onKeyDown={clickable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+      style={clickable ? { cursor: 'pointer' } : undefined}
+    >
       <span className="ab-painel-summary__count">{count}</span>
       <span className="ab-painel-summary__label">{label}</span>
     </div>

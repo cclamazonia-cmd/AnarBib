@@ -181,10 +181,10 @@ export default function TabTrabalhoDoDia({
       <div className="ab-painel-summary-grid">
         <SummaryCard label={t({id:'panel.summary.today'})} count={hoje.length} variant="warn" />
         <SummaryCard label={t({id:'panel.summary.attention'})} count={atencao.length} variant="bad" />
-        <SummaryCard label={t({ id: 'panel.summary.pendingReservations' })} count={activeRes.filter(r => r.workflow_stage_effective === 'solicitada').length} variant="warn" />
-        <SummaryCard label={t({ id: 'panel.summary.overdueLoans' })} count={overdueLoans.length} variant="bad" />
-        <SummaryCard label={t({ id: 'panel.summary.pendingConsultations' })} count={consultations.filter(c => c.workflow_stage_effective === 'solicitada').length} variant="warn" />
-        {isLibrarian && <SummaryCard label={t({ id: 'panel.summary.pendingValidations' })} count={pendingValidCount} variant="warn" />}
+        <SummaryCard label={t({ id: 'panel.summary.pendingReservations' })} count={activeRes.filter(r => r.workflow_stage_effective === 'solicitada').length} variant="warn" onClick={() => setTab('reservas')} />
+        <SummaryCard label={t({ id: 'panel.summary.overdueLoans' })} count={overdueLoans.length} variant="bad" onClick={() => setTab('emprestimos')} />
+        <SummaryCard label={t({ id: 'panel.summary.pendingConsultations' })} count={consultations.filter(c => c.workflow_stage_effective === 'solicitada').length} variant="warn" onClick={() => setTab('consultas-locais')} />
+        {isLibrarian && <SummaryCard label={t({ id: 'panel.summary.pendingValidations' })} count={pendingValidCount} variant="warn" onClick={() => setTab('validacoes')} />}
         <SummaryCard label={t({ id: 'panel.summary.internalTasks' })} count={internalTasks.length} variant={internalTasks.some(t => t.priority === 'alta') ? 'bad' : 'warn'} />
         <SummaryCard label={t({ id: 'panel.summary.readerMessages' })} count={activeMsgs.length} variant="warn" />
       </div>
