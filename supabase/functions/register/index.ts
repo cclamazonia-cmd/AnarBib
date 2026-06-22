@@ -765,21 +765,44 @@ serve(async (req)=>{
           error: "READER_PENDING_NO_LIBRARY_ROW"
         }, 500);
       }
-      const { error: membershipError } = await admin.from("user_library_memberships").upsert({
+      // Statut initial selon le mode de validation de la biblio.
+      // 'none' → actif tout de suite ; 'presential'/'remote' → en attente d'un
+      // geste du staff (validation présentielle ou vérification d'usage à distance).
+      const initialReaderStatus =
+        libraryRow.reader_validation_mode === "none" ? "active" : "pending_validation";
+      const { data: membershipRow, error: membershipError } = await admin.from("user_library_memberships").upsert({
         user_id: userId,
         library_id: libraryRow.id,
         role: "reader",
-        status: "active",
+        status: initialReaderStatus,
         is_primary: true
       }, {
         onConflict: "user_id,library_id,role"
-      });
+      }).select("id").maybeSingle();
       if (membershipError) {
         console.error("register: membership upsert failed", membershipError);
         await cleanupAuthUser(admin, userId, "MEMBERSHIP_UPSERT_FAILED");
         return json({
           error: "MEMBERSHIP_UPSERT_FAILED"
         }, 500);
+      }
+      // Prévenir le staff qu'une validation attend — même canal/payload que
+      // api.request_membership. Best-effort : ne jamais faire échouer
+      // l'inscription si le dispatch lève (la notif est secondaire).
+      if (initialReaderStatus === "pending_validation") {
+        try {
+          await admin.rpc("fn_dispatch_notify_event", {
+            p_event: "membership_validation_requested",
+            p_record_id: 1,
+            p_extra: {
+              user_id: userId,
+              library_id: libraryRow.id,
+              membership_id: membershipRow?.id ?? null
+            }
+          });
+        } catch (e) {
+          console.warn("register: validation_requested dispatch failed (non bloquant):", String(e?.message || e));
+        }
       }
       signupIntentMetadata = {
         library_id: libraryRow.id,
