@@ -124,6 +124,16 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
 > auto-hébergé traite **un job à la fois** — donc deux runs ne s'exécutent pas en
 > parallèle. Mais la discipline `git fetch`-avant-push + horodatage exact reste
 > requise : ces filets n'empêchent pas une collision d'horodatage de migration.)*
+>
+> 🤝 **RÈGLE — worktree PARTAGÉ entre sessions.** Plusieurs sessions Claude
+> travaillent sur le **même** worktree : l'index et l'historique local sont
+> communs. Avant tout `commit`/`push` : (1) `git log --oneline -3` + `git status`
+> pour voir ce qui est déjà commité / en cours et de **qui** ; (2) `git add`
+> **uniquement ses fichiers nommés** — **jamais** `git add -A`/`.` (sinon on emporte
+> ou on clobbere le WIP non commité d'une autre session) ; (3) garder en tête qu'un
+> `push` publie aussi les **commits non poussés des autres sessions** (ancêtres) —
+> le signaler le cas échéant. *(22/06/2026 : un commit signup a embarqué le commit
+> audio non poussé d'une autre session — sans casse ici, mais involontaire.)*
 
 **Remotes** (`git remote -v`) — **état réel vérifié le 12/06/2026** :
 
