@@ -1,4 +1,8 @@
 {
+  "panel.validations.rejectButton": "Rechazar",
+  "panel.validations.rejectConfirm": "¿Rechazar la inscripción de {name}? La persona no será notificada y podrá inscribirse de nuevo.",
+  "panel.validations.rejectSuccess": "Inscripción rechazada.",
+  "panel.validations.rejectError": "No se pudo rechazar la inscripción.",
   "account.pending.title": "Inscripción pendiente de validación",
   "account.pending.body": "Tu inscripción en la biblioteca {library} se registró correctamente. Todavía debe validarla el equipo de la biblioteca antes de que puedas reservar o consultar obras.",
   "account.pending.contact": "La biblioteca se pondrá en contacto contigo para finalizar la inscripción.",

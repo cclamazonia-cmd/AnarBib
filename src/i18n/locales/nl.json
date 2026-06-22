@@ -1,4 +1,8 @@
 {
+  "panel.validations.rejectButton": "Weigeren",
+  "panel.validations.rejectConfirm": "Inschrijving van {name} weigeren? De persoon wordt niet op de hoogte gebracht en kan zich later opnieuw inschrijven.",
+  "panel.validations.rejectSuccess": "Inschrijving geweigerd.",
+  "panel.validations.rejectError": "Kon de inschrijving niet weigeren.",
   "account.pending.title": "Inschrijving wacht op validatie",
   "account.pending.body": "Je inschrijving bij {library} is geregistreerd. Ze moet nog door het bibliotheekteam gevalideerd worden voordat je kunt reserveren of raadplegen.",
   "account.pending.contact": "De bibliotheek neemt contact met je op om je inschrijving af te ronden.",

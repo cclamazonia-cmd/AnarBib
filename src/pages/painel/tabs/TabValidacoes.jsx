@@ -83,6 +83,31 @@ export default function TabValidacoes({ libraryId }) {
     }
   }, [busyId, drafts, load, notifySuccess, notifyError, t]);
 
+  // Suite 6 — refuser une inscription en attente. Silencieux (aucune notif), statut
+  // 'removed' (re-candidature possible), raison = le champ « Nota » (note interne staff).
+  const reject = useCallback(async (m) => {
+    if (busyId) return;
+    const name = [m.first_name, m.last_name].filter(Boolean).join(' ').trim() || m.email || '';
+    if (!window.confirm(t({ id: 'panel.validations.rejectConfirm' }, { name }))) return;
+    setBusyId(m.membership_id);
+    const draft = drafts[m.membership_id] || {};
+    try {
+      const { data, error } = await supabase.schema('api').rpc('reject_membership', {
+        p_membership_id: m.membership_id,
+        p_note: (draft.note || '').trim() || null,
+      });
+      if (error) throw error;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (row && row.ok === false) throw new Error(row.message || 'reject_failed');
+      notifySuccess(t({ id: 'panel.validations.rejectSuccess' }));
+      await load();
+    } catch (e) {
+      notifyError(localizeError(e, t, 'panel.validations.rejectError'), e);
+    } finally {
+      setBusyId(null);
+    }
+  }, [busyId, drafts, load, notifySuccess, notifyError, t]);
+
   // VALID-C1 — valider en lot toutes les demandes en attente (sans numéro local ;
   // les numéros restent assignables individuellement). Confirmation explicite.
   const validateAll = useCallback(async () => {
@@ -174,6 +199,15 @@ export default function TabValidacoes({ libraryId }) {
                   <Button onClick={() => validate(m)} disabled={busy}>
                     {busy ? t({ id: 'common.loading' }) : t({ id: 'panel.validations.validateButton' })}
                   </Button>
+                  <button
+                    type="button"
+                    className="ab-button ab-button--secondary"
+                    onClick={() => reject(m)}
+                    disabled={busy}
+                    title={t({ id: 'panel.validations.rejectButton' })}
+                  >
+                    {t({ id: 'panel.validations.rejectButton' })}
+                  </button>
                 </div>
               </div>
             );

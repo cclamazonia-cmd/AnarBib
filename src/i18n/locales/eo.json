@@ -1,4 +1,8 @@
 {
+  "panel.validations.rejectButton": "Rifuzi",
+  "panel.validations.rejectConfirm": "Ĉu rifuzi la aliĝon de {name}? La persono ne estos sciigita kaj povos realiĝi poste.",
+  "panel.validations.rejectSuccess": "Aliĝo rifuzita.",
+  "panel.validations.rejectError": "Ne eblis rifuzi la aliĝon.",
   "account.pending.title": "Aliĝo atendas validigon",
   "account.pending.body": "Via aliĝo ĉe {library} estas registrita. Ĝi ankoraŭ devas esti validigita de la bibliotekteamo antaŭ ol vi povos rezervi aŭ konsulti verkojn.",
   "account.pending.contact": "La biblioteko kontaktos vin por finpretigi vian aliĝon.",

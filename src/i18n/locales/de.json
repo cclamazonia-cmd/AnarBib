@@ -1,4 +1,8 @@
 {
+  "panel.validations.rejectButton": "Ablehnen",
+  "panel.validations.rejectConfirm": "Anmeldung von {name} ablehnen? Die Person wird nicht benachrichtigt und kann sich später erneut anmelden.",
+  "panel.validations.rejectSuccess": "Anmeldung abgelehnt.",
+  "panel.validations.rejectError": "Anmeldung konnte nicht abgelehnt werden.",
   "account.pending.title": "Anmeldung wartet auf Bestätigung",
   "account.pending.body": "Deine Anmeldung bei {library} wurde gespeichert. Sie muss noch vom Bibliotheksteam bestätigt werden, bevor du Vormerkungen oder Einsichtnahmen vornehmen kannst.",
   "account.pending.contact": "Die Bibliothek wird sich mit dir in Verbindung setzen, um deine Anmeldung abzuschließen.",

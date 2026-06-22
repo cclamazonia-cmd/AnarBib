@@ -1,4 +1,8 @@
 {
+  "panel.validations.rejectButton": "Refuse",
+  "panel.validations.rejectConfirm": "Refuse {name}'s registration? They won't be notified and can register again later.",
+  "panel.validations.rejectSuccess": "Registration refused.",
+  "panel.validations.rejectError": "Could not refuse the registration.",
   "account.pending.title": "Registration awaiting validation",
   "account.pending.body": "Your registration at {library} has been recorded. It still needs to be validated by the library team before you can place holds or consultation requests.",
   "account.pending.contact": "The library will get in touch with you to complete your registration.",

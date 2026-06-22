@@ -1,4 +1,8 @@
 {
+  "panel.validations.rejectButton": "Rebutja",
+  "panel.validations.rejectConfirm": "Rebutjar la inscripció de {name}? La persona no rebrà cap avís i es podrà tornar a inscriure.",
+  "panel.validations.rejectSuccess": "Inscripció rebutjada.",
+  "panel.validations.rejectError": "No s’ha pogut rebutjar la inscripció.",
   "account.pending.title": "Inscripció pendent de validació",
   "account.pending.body": "La teva inscripció a {library} s’ha registrat. Encara l’ha de validar l’equip de la biblioteca abans que puguis reservar o consultar obres.",
   "account.pending.contact": "La biblioteca es posarà en contacte amb tu per finalitzar la inscripció.",

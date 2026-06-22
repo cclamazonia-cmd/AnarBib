@@ -1,4 +1,8 @@
 {
+  "panel.validations.rejectButton": "Rifiuta",
+  "panel.validations.rejectConfirm": "Rifiutare l'iscrizione di {name}? La persona non verrà avvisata e potrà iscriversi di nuovo.",
+  "panel.validations.rejectSuccess": "Iscrizione rifiutata.",
+  "panel.validations.rejectError": "Impossibile rifiutare l'iscrizione.",
   "account.pending.title": "Iscrizione in attesa di convalida",
   "account.pending.body": "La tua iscrizione presso {library} è stata registrata. Deve ancora essere convalidata dal gruppo della biblioteca prima che tu possa prenotare o consultare opere.",
   "account.pending.contact": "La biblioteca ti contatterà per finalizzare l’iscrizione.",
