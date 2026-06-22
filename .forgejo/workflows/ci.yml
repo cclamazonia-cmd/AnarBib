@@ -79,15 +79,12 @@ jobs:
           test -d dist || (echo "✗ dist/ introuvable" && exit 1)
           echo "✓ build OK"
 
-      - name: Deploy Pages (branche `pages`, commit orphelin)
+      - name: Deploy Pages (branche `pages`, push DELTA)
         if: github.event_name == 'push'
-        # NON BLOQUANT : un 504 Codeberg persistant sur Pages (après les 3 retries
-        # ci-dessous) ne doit PAS faire échouer le job `app` et donc priver le job
-        # `backend` (needs: app) du déploiement des migrations/EF. Le gate qualité
-        # reste assuré par lint/test/build (steps bloquants au-dessus).
-        # timeout-minutes : backstop DUR. continue-on-error ignore les échecs, PAS les
-        # hangs : un push Pages qui ne répond jamais (Codeberg muet) faisait tourner
-        # l'étape à l'infini → `app` jamais fini → `backend` (migrations/EF) jamais lancé.
+        # NON BLOQUANT : un échec Pages (après les 3 retries) ne doit PAS faire
+        # échouer le job `app` et priver `backend` (needs: app) du déploiement
+        # migrations/EF. Le gate qualité reste lint/test/build (bloquants au-dessus).
+        # timeout-minutes : backstop DUR contre un hang (Codeberg muet).
         continue-on-error: true
         timeout-minutes: 10
         env:
@@ -95,36 +92,49 @@ jobs:
           CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
           CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN }}
         run: |
-          cd dist
+          # Déploiement DELTA. Avant : commit ORPHELIN poussant TOUT dist/ à chaque
+          # fois → pack géant (les assets vendorés pdfjs/tesseract/wasm sont l'essentiel
+          # du poids) → Codeberg renvoyait HTTP 504 ET corrompait le pack
+          # ("remote: pack has bad object: inflate returned -3"), même avec postBuffer.
+          # Désormais on REPART de la branche pages existante et on ne pousse QUE le
+          # delta (les assets lourds, inchangés, ne repartent jamais) → pack petit,
+          # push fiable. + HTTP/1.1 (évite la corruption de pack en HTTP/2).
+          REPO="https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
+          git config --global http.postBuffer 524288000
+          git config --global http.version HTTP/1.1
+          git config --global user.email "ci@anarbib.codeberg.page"
+          git config --global user.name "AnarBib CI"
+
+          # État actuel de la branche pages (shallow) ; sinon init (1er déploiement).
+          if git clone --depth=1 --branch pages "$REPO" pages-out 2>/dev/null; then
+            # Vider l'ancien contenu (sauf .git) pour refléter aussi les suppressions.
+            find pages-out -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          else
+            mkdir -p pages-out
+            git -C pages-out init -b pages
+            git -C pages-out remote add origin "$REPO"
+          fi
+
+          cp -a dist/. pages-out/
+          cd pages-out
           echo "$CUSTOM_DOMAIN" > .domains
           cp index.html 404.html   # fallback SPA pour le routing client
-          git init -b pages
-          git config user.email "ci@anarbib.codeberg.page"
-          git config user.name "AnarBib CI"
-          # dist/ est lourd (pdfjs/tesseract/wasm/polices vendorés). Un POST plus
-          # gros que http.postBuffer (~1 Mo par défaut) part en chunked et ne peut
-          # PAS être rembobiné → "unable to rewind rpc post data" sur le retry après
-          # une coupure Codeberg (504, vécu le 22/06). On bufferise tout le payload
-          # (500 Mo) pour que la boucle `until` ci-dessous survive réellement aux
-          # 504 transitoires (sinon les retries 2/3 échouent systématiquement).
-          git config http.postBuffer 524288000
           git add -A
+          if git diff --cached --quiet; then
+            echo "✓ Pages déjà à jour (aucun changement)"; exit 0
+          fi
           git commit -m "Deploy from main@${GITHUB_SHA:0:8}"
-          git remote add origin "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
-          # Push lourd (tout le dist/ en commit orphelin) → Codeberg renvoie parfois
-          # un HTTP 504 transitoire. Retry 3× au lieu de faire échouer le job.
-          # `timeout 150` : un push qui HANG (Codeberg ne répond pas) est tué à 150s et
-          # retourne en échec → la boucle `until` retente. Sans ça, `until` ne se
-          # relançait QUE sur échec, jamais sur hang (d'où les runs bloqués 20 min+).
-          # 3 tentatives × 150s + sleeps ≈ 8 min, sous le backstop timeout-minutes: 10.
+
+          # `timeout 150` tue un push qui HANG (Codeberg muet) → la boucle retente.
+          # Le delta est petit → 150s largement suffisant ; 3×150s + sleeps < backstop.
           n=0
-          until timeout 150 git push --force origin pages; do
+          until timeout 150 git push origin pages; do
             n=$((n+1))
-            if [ "$n" -ge 3 ]; then echo "✗ push Pages KO/hang après 3 tentatives"; exit 1; fi
-            echo "↻ push Pages KO (tentative $n/3 — Codeberg 504/hang ?) — nouvelle tentative dans 10s…"
+            if [ "$n" -ge 3 ]; then echo "✗ push Pages KO après 3 tentatives"; exit 1; fi
+            echo "↻ push Pages KO (tentative $n/3 — Codeberg ?) — nouvelle tentative dans 10s…"
             sleep 10
           done
-          echo "✓ Pages déployé"
+          echo "✓ Pages déployé (delta)"
 
   # ──────────────────── Job 2 : backend (Supabase) — sur push ────────────────
   # needs: app → ne déploie QUE si lint/test/build ont réussi (gate préservé).
