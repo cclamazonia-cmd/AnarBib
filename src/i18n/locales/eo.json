@@ -1,4 +1,10 @@
 {
+  "account.pending.title": "Aliĝo atendas validigon",
+  "account.pending.body": "Via aliĝo ĉe {library} estas registrita. Ĝi ankoraŭ devas esti validigita de la bibliotekteamo antaŭ ol vi povos rezervi aŭ konsulti verkojn.",
+  "account.pending.contact": "La biblioteko kontaktos vin por finpretigi vian aliĝon.",
+  "account.pending.browseCatalog": "Esplori la publikan katalogon",
+  "account.pending.logout": "Elsaluti",
+  "error.membership.not_active": "Via aliĝo ĉe ĉi tiu biblioteko ankoraŭ devas esti validigita antaŭ ol rezervi aŭ konsulti.",
   "account.address.countryOther.placeholder": "Ekz.: Germanio, Turkio, Japanio…",
   "account.address.line1.placeholder": "Strato, numero",
   "account.address.postal.placeholder": "Ekz.: 59000",

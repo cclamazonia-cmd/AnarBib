@@ -1,4 +1,10 @@
 {
+  "account.pending.title": "Inscripció pendent de validació",
+  "account.pending.body": "La teva inscripció a {library} s’ha registrat. Encara l’ha de validar l’equip de la biblioteca abans que puguis reservar o consultar obres.",
+  "account.pending.contact": "La biblioteca es posarà en contacte amb tu per finalitzar la inscripció.",
+  "account.pending.browseCatalog": "Explorar el catàleg públic",
+  "account.pending.logout": "Surt",
+  "error.membership.not_active": "La teva inscripció a aquesta biblioteca encara s’ha de validar abans de reservar o consultar.",
   "account.address.countryOther.placeholder": "Ex.: Alemanya, Turquia, Japó…",
   "account.address.line1.placeholder": "Carrer, número",
   "account.address.postal.placeholder": "Ex.: 08001",

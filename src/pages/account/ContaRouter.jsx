@@ -10,6 +10,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
+import PendingValidationScreen from './PendingValidationScreen';
 
 const AccountPage = lazy(() => import('./AccountPage'));
 const ContributorAccountPage = lazy(() => import('./ContributorAccountPage'));
@@ -18,6 +19,12 @@ export default function ContaRouter() {
   const { user } = useAuth();
   const { libraries, libraryLoading } = useLibrary();
   const [nc, setNc] = useState(undefined); // undefined = en cours, null = pas contributeur·rice
+  // Appartenances tous statuts confondus. LibraryContext ne charge QUE les
+  // memberships 'active' → un compte encore en attente de validation y apparaît
+  // sans aucune biblio. On lit le statut complet (fn_my_memberships_status) pour
+  // lui présenter l'écran d'attente plutôt qu'un espace compte vide.
+  // undefined = en cours, [] = résolu.
+  const [memberships, setMemberships] = useState(undefined);
 
   useEffect(() => {
     if (!user) { setNc(null); return; }
@@ -30,9 +37,31 @@ export default function ContaRouter() {
     return () => { alive = false; };
   }, [user]);
 
-  // Tant que les appartenances biblio ou la ligne contributeur ne sont pas
-  // résolues, on n'affiche rien (évite un flash de la mauvaise conta).
-  if (libraryLoading || nc === undefined) return null;
+  useEffect(() => {
+    if (!user) { setMemberships(null); return; }
+    let alive = true;
+    supabase.schema('api').rpc('fn_my_memberships_status')
+      .then(({ data }) => { if (alive) setMemberships(Array.isArray(data) ? data : []); })
+      .catch(() => { if (alive) setMemberships([]); });
+    return () => { alive = false; };
+  }, [user]);
+
+  // Tant que les appartenances biblio, la ligne contributeur ou le statut
+  // d'appartenance ne sont pas résolus, on n'affiche rien (évite un flash de
+  // la mauvaise conta).
+  if (libraryLoading || nc === undefined || memberships === undefined) return null;
+
+  // Compte sans AUCUNE appartenance active mais avec une appartenance en attente
+  // → écran d'attente bloquant. Un compte qui a au moins une biblio active n'est
+  // jamais bloqué (cf. spec validation : on gate sur l'appartenance primaire, qui
+  // pour un·e nouveau·elle inscrit·e est précisément la seule, en attente).
+  const hasActive = (memberships || []).some((m) => m.status === 'active');
+  const pending = hasActive
+    ? null
+    : (memberships || []).find((m) => m.status === 'pending_validation');
+  if (pending) {
+    return <PendingValidationScreen membership={pending} />;
+  }
 
   const isContributorOnly = nc?.status === 'active' && (!libraries || libraries.length === 0);
 

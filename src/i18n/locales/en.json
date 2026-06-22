@@ -1,4 +1,10 @@
 {
+  "account.pending.title": "Registration awaiting validation",
+  "account.pending.body": "Your registration at {library} has been recorded. It still needs to be validated by the library team before you can place holds or consultation requests.",
+  "account.pending.contact": "The library will get in touch with you to complete your registration.",
+  "account.pending.browseCatalog": "Browse the public catalog",
+  "account.pending.logout": "Sign out",
+  "error.membership.not_active": "Your registration at this library still needs to be validated before you can reserve or consult.",
   "account.address.countryOther.placeholder": "E.g.: Germany, Turkey, Japan…",
   "account.address.line1.placeholder": "Street, number",
   "account.address.postal.placeholder": "E.g.: 59000",

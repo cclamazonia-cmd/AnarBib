@@ -1,4 +1,10 @@
 {
+  "account.pending.title": "Iscrizione in attesa di convalida",
+  "account.pending.body": "La tua iscrizione presso {library} è stata registrata. Deve ancora essere convalidata dal gruppo della biblioteca prima che tu possa prenotare o consultare opere.",
+  "account.pending.contact": "La biblioteca ti contatterà per finalizzare l’iscrizione.",
+  "account.pending.browseCatalog": "Esplora il catalogo pubblico",
+  "account.pending.logout": "Esci",
+  "error.membership.not_active": "La tua iscrizione presso questa biblioteca deve ancora essere convalidata prima di poter prenotare o consultare.",
   "account.address.countryOther.placeholder": "Es.: Germania, Turchia, Giappone…",
   "account.address.line1.placeholder": "Via, numero",
   "account.address.postal.placeholder": "Es.: 59000",

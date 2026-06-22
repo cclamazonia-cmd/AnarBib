@@ -1,4 +1,10 @@
 {
+  "account.pending.title": "Inschrijving wacht op validatie",
+  "account.pending.body": "Je inschrijving bij {library} is geregistreerd. Ze moet nog door het bibliotheekteam gevalideerd worden voordat je kunt reserveren of raadplegen.",
+  "account.pending.contact": "De bibliotheek neemt contact met je op om je inschrijving af te ronden.",
+  "account.pending.browseCatalog": "Blader door de openbare catalogus",
+  "account.pending.logout": "Afmelden",
+  "error.membership.not_active": "Je inschrijving bij deze bibliotheek moet nog gevalideerd worden voordat je kunt reserveren of raadplegen.",
   "account.address.countryOther.placeholder": "Bijv.: Duitsland, Turkije, Japan…",
   "account.address.line1.placeholder": "Straat, nummer",
   "account.address.postal.placeholder": "Bijv.: 1011 AB",

@@ -1,4 +1,10 @@
 {
+  "account.pending.title": "Inscription en attente de validation",
+  "account.pending.body": "Ton inscription à la bibliothèque {library} a bien été enregistrée. Elle doit encore être validée par l’équipe de la bibliothèque avant que tu puisses réserver ou consulter des ouvrages.",
+  "account.pending.contact": "La bibliothèque prendra contact avec toi pour finaliser ton inscription.",
+  "account.pending.browseCatalog": "Parcourir le catalogue public",
+  "account.pending.logout": "Se déconnecter",
+  "error.membership.not_active": "Ton inscription à cette bibliothèque doit encore être validée avant de réserver ou consulter.",
   "account.address.countryOther.placeholder": "Ex. : Allemagne, Turquie, Japon…",
   "account.address.line1.placeholder": "Rue, numéro",
   "account.address.postal.placeholder": "Ex. : 59000",

@@ -1,4 +1,10 @@
 {
+  "account.pending.title": "Anmeldung wartet auf Bestätigung",
+  "account.pending.body": "Deine Anmeldung bei {library} wurde gespeichert. Sie muss noch vom Bibliotheksteam bestätigt werden, bevor du Vormerkungen oder Einsichtnahmen vornehmen kannst.",
+  "account.pending.contact": "Die Bibliothek wird sich mit dir in Verbindung setzen, um deine Anmeldung abzuschließen.",
+  "account.pending.browseCatalog": "Öffentlichen Katalog durchsuchen",
+  "account.pending.logout": "Abmelden",
+  "error.membership.not_active": "Deine Anmeldung bei dieser Bibliothek muss noch bestätigt werden, bevor du vormerken oder einsehen kannst.",
   "account.address.countryOther.placeholder": "z.B.: Türkei, Japan, Brasilien…",
   "account.address.line1.placeholder": "Straße, Nummer",
   "account.address.postal.placeholder": "z.B.: 59000",
