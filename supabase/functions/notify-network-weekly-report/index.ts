@@ -366,6 +366,17 @@ serve(async (req)=>{
       em_circulacao: pebInCirculation.length
     };
 
+    // ─── Inscrições e saídas de leitores na rede — chantier #reader-churn ───
+    // Source : reader_membership_events (migration 20260622182246). Agrégat par
+    // bibliothèque des inscriptions effectives (event_type='inscricao') et des
+    // départs (event_type='saida') de la semaine.
+    const readerEvents = await fetchAllRows((from, to)=>sb.from("reader_membership_events")
+      .select("library_id,event_type")
+      .in("event_type", ["inscricao", "saida"])
+      .in("library_id", libraryIds)
+      .gte("changed_at", startISO).lt("changed_at", endExclusiveISO)
+      .range(from, to));
+
     const summaryByLibrary = new Map();
     for (const library of libraries){
       const libraryId = String(library.id);
@@ -385,7 +396,9 @@ serve(async (req)=>{
         emprestimos_criados: 0,
         renovacoes: 0,
         devolucoes: 0,
-        atrasos_ativos: 0
+        atrasos_ativos: 0,
+        inscricoes_leitores: 0,
+        saidas_leitores: 0
       });
     }
     for (const row of reservations){
@@ -423,6 +436,13 @@ serve(async (req)=>{
       if (!libraryId || !summaryByLibrary.has(libraryId)) continue;
       summaryByLibrary.get(libraryId).atrasos_ativos += 1;
     }
+    for (const row of readerEvents){
+      const libraryId = String(row.library_id || "").trim();
+      if (!libraryId || !summaryByLibrary.has(libraryId)) continue;
+      const entry = summaryByLibrary.get(libraryId);
+      if (row.event_type === "inscricao") entry.inscricoes_leitores += 1;
+      else if (row.event_type === "saida") entry.saidas_leitores += 1;
+    }
     const librarySummaries = Array.from(summaryByLibrary.values()).sort((a, b)=>a.library_name.localeCompare(b.library_name, "pt-BR", {
         sensitivity: "base"
       }));
@@ -438,6 +458,8 @@ serve(async (req)=>{
       acc.renovacoes += row.renovacoes;
       acc.devolucoes += row.devolucoes;
       acc.atrasos_ativos += row.atrasos_ativos;
+      acc.inscricoes_leitores += row.inscricoes_leitores;
+      acc.saidas_leitores += row.saidas_leitores;
       return acc;
     }, {
       bibliotecas: 0,
@@ -450,7 +472,9 @@ serve(async (req)=>{
       emprestimos_criados: 0,
       renovacoes: 0,
       devolucoes: 0,
-      atrasos_ativos: 0
+      atrasos_ativos: 0,
+      inscricoes_leitores: 0,
+      saidas_leitores: 0
     });
     const summaryHtml = `
       <div style="line-height:1.5;color:#f2f2f2;">
@@ -473,6 +497,14 @@ serve(async (req)=>{
           <tr>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Canais locais desativados</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.canais_desativados)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Novas inscrições de leitores</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.inscricoes_leitores)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Saídas de leitores</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.saidas_leitores)}</b></td>
           </tr>
           <tr>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Reservas criadas</b></td>
@@ -517,6 +549,8 @@ serve(async (req)=>{
         row.library_short_name,
         row.weekly_report_email || "—",
         row.channel_active ? row.delivery_mode : `${row.delivery_mode} (desativado)`,
+        countOr0(row.inscricoes_leitores),
+        countOr0(row.saidas_leitores),
         countOr0(row.reservas),
         countOr0(row.consultas),
         countOr0(row.trocas),
@@ -560,6 +594,8 @@ serve(async (req)=>{
           "Biblioteca",
           "Caixa local",
           "Canal",
+          "Inscrições",
+          "Saídas",
           "Reservas",
           "Consultas",
           "Trocas",

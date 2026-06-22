@@ -685,6 +685,62 @@ serve(async (req) => {
       ];
     });
 
+    // ─── Inscrições e saídas de leitores na semana — chantier #reader-churn ─
+    // Source : reader_membership_events (journal immutable alimenté par trigger,
+    // migration 20260622182246). On lit les inscriptions effectives
+    // (event_type='inscricao' : pending_validation/criação → active) et les
+    // départs (event_type='saida' : passage à un statut terminal, hors promotion
+    // staff). Les solicitações pendentes (demandes encore en attente de
+    // validation) sont comptées à part via user_library_memberships.created_at.
+    const { count: inscricoesCount, error: inscricoesCountErr } = await sb.from("reader_membership_events")
+      .select("id", { count: "exact", head: true })
+      .eq("library_id", libraryId).eq("event_type", "inscricao")
+      .gte("changed_at", startISO).lt("changed_at", endExclusiveISO);
+    if (inscricoesCountErr) throw new Error(`Reader inscriptions count failed: ${inscricoesCountErr.message}`);
+    const { data: inscricoesRaw, error: inscricoesErr } = await sb.from("reader_membership_events")
+      .select("user_id,changed_at").eq("library_id", libraryId).eq("event_type", "inscricao")
+      .gte("changed_at", startISO).lt("changed_at", endExclusiveISO)
+      .order("changed_at", { ascending: false }).limit(50);
+    if (inscricoesErr) throw new Error(`Reader inscriptions query failed: ${inscricoesErr.message}`);
+    const inscricoes = inscricoesRaw || [];
+
+    const { count: saidasCount, error: saidasCountErr } = await sb.from("reader_membership_events")
+      .select("id", { count: "exact", head: true })
+      .eq("library_id", libraryId).eq("event_type", "saida")
+      .gte("changed_at", startISO).lt("changed_at", endExclusiveISO);
+    if (saidasCountErr) throw new Error(`Reader departures count failed: ${saidasCountErr.message}`);
+    const { data: saidasRaw, error: saidasErr } = await sb.from("reader_membership_events")
+      .select("user_id,changed_at,new_status").eq("library_id", libraryId).eq("event_type", "saida")
+      .gte("changed_at", startISO).lt("changed_at", endExclusiveISO)
+      .order("changed_at", { ascending: false }).limit(50);
+    if (saidasErr) throw new Error(`Reader departures query failed: ${saidasErr.message}`);
+    const saidas = saidasRaw || [];
+
+    const { count: solicitacoesPendentesCount, error: solicitacoesPendentesErr } = await sb.from("user_library_memberships")
+      .select("id", { count: "exact", head: true })
+      .eq("library_id", libraryId).eq("role", "reader").eq("status", "pending_validation")
+      .gte("created_at", startISO).lt("created_at", endExclusiveISO);
+    if (solicitacoesPendentesErr) throw new Error(`Reader pending requests count failed: ${solicitacoesPendentesErr.message}`);
+
+    const churnProfiles = await fetchProfiles(sb, [
+      ...inscricoes.map((e) => String(e.user_id || "")),
+      ...saidas.map((e) => String(e.user_id || ""))
+    ].filter(Boolean));
+    const saidaStatusLabels: Record<string, string> = {
+      removed: "Removido(a/e)",
+      inactive: "Inativo(a/e)",
+      terminated: "Encerrado(a/e)",
+      left_with_pending_circulation: "Saída com circulação pendente"
+    };
+    const inscricoesRows = inscricoes.map((e) => {
+      const p = churnProfiles.get(String(e.user_id || ""));
+      return [isoDateOnly(e.changed_at), fullName(p) || firstNameOnly(p) || "—", String(p?.email || "—")];
+    });
+    const saidasRows = saidas.map((e) => {
+      const p = churnProfiles.get(String(e.user_id || ""));
+      return [isoDateOnly(e.changed_at), fullName(p) || firstNameOnly(p) || "—", String(p?.email || "—"), saidaStatusLabels[String(e.new_status || "")] || String(e.new_status || "—")];
+    });
+
     // ─── Composition du mail ───────────────────────────────────────────────
     const subject = `${routing.subjectTag} · Relatório semanal (${formatBR(weekStart)} → ${formatBR(weekEnd)})`;
     const title = `Relatório semanal — ${routing.brandName}`;
@@ -694,6 +750,18 @@ serve(async (req) => {
         <p style="margin:0 0 10px 0;"><b>Período:</b> ${esc(formatBR(weekStart))} → ${esc(formatBR(weekEnd))} (${esc(tz)})</p>
         <table role="presentation" cellspacing="0" cellpadding="0"
                style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.14);width:100%;max-width:640px;">
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Novas inscrições de leitores</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(inscricoesCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Saídas de leitores</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(saidasCount)}</b></td>
+          </tr>
+          <tr>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Solicitações pendentes recebidas</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(solicitacoesPendentesCount)}</b></td>
+          </tr>
           <tr>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Reservas criadas</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(reservasCount)}</b></td>
@@ -763,6 +831,8 @@ serve(async (req) => {
       preheader: `${routing.brandName} · relatório semanal`,
       summaryHtml,
       tablesHtml: [
+        renderTable("Novas inscrições de leitores (semana, últimas 50)", ["Data", "Leitor(a/e)", "Email"], inscricoesRows),
+        renderTable("Saídas de leitores (semana, últimas 50)", ["Data", "Leitor(a/e)", "Email", "Estado de saída"], saidasRows),
         renderTable("Reservas criadas (últimas 50)", ["ID", "Data", "Livro", "Email", "Leitor(a/e)"], reservasRows),
         renderTable("Consultas registradas (últimas 50)", ["ID", "Data", "Email", "Leitor(a/e)"], consultasRows),
         renderTable("Empréstimos criados (últimos 50)", ["ID", "Criado em", "Vencimento", "Livro(s)", "Leitor(a/e)"], loansCreatedRows),
@@ -797,6 +867,9 @@ serve(async (req) => {
       recipient_email: routing.recipientEmail,
       subject,
       summary: {
+        novas_inscricoes_leitores: inscricoesCount ?? 0,
+        saidas_leitores: saidasCount ?? 0,
+        solicitacoes_pendentes: solicitacoesPendentesCount ?? 0,
         reservas: reservasCount ?? 0,
         consultas: consultasCount ?? 0,
         emprestimos_criados: loansCreatedCount ?? 0,
