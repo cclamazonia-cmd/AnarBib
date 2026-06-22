@@ -127,13 +127,19 @@ bibliothèques anarchistes**. Frontend React 19 + Vite, backend Supabase
 >
 > 🤝 **RÈGLE — worktree PARTAGÉ entre sessions.** Plusieurs sessions Claude
 > travaillent sur le **même** worktree : l'index et l'historique local sont
-> communs. Avant tout `commit`/`push` : (1) `git log --oneline -3` + `git status`
-> pour voir ce qui est déjà commité / en cours et de **qui** ; (2) `git add`
-> **uniquement ses fichiers nommés** — **jamais** `git add -A`/`.` (sinon on emporte
-> ou on clobbere le WIP non commité d'une autre session) ; (3) garder en tête qu'un
-> `push` publie aussi les **commits non poussés des autres sessions** (ancêtres) —
-> le signaler le cas échéant. *(22/06/2026 : un commit signup a embarqué le commit
-> audio non poussé d'une autre session — sans casse ici, mais involontaire.)*
+> communs. Réflexes avant tout `commit`/`push` : (1) `git log --oneline -3` +
+> `git status` d'abord — un commit d'une autre session peut être **en avance non
+> poussé** sur le `main` partagé ; (2) `git add <fichiers nommés>` uniquement —
+> **jamais** `git add -A`/`.` (sinon on embarque le WIP d'une autre session dans
+> son propre commit) ; (3) un `commit`/`push` emporte **tous** les commits déjà
+> faits sur `main`, même ceux d'une autre session ; un WIP **non commité**, lui,
+> survit (n'est pas poussé) mais peut entrer en collision sur `.git/index.lock` →
+> **attendre + réessayer, ne jamais supprimer le lock à l'aveugle** (corromprait
+> l'opération Git en cours de l'autre session) ; (4) `git fetch` avant de pousser,
+> et ne pas pousser tant que le run Forgejo précédent n'est pas vert (cf. RÈGLE D'OR
+> ci-dessus). *(22/06/2026 : un commit signup a embarqué le commit audio non poussé
+> d'une autre session ; contention `.git/index.lock` constatée sur commits
+> simultanés.)*
 
 **Remotes** (`git remote -v`) — **état réel vérifié le 12/06/2026** :
 
