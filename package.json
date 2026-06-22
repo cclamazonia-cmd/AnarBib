@@ -15,6 +15,7 @@
   "dependencies": {
     "@marsidev/react-turnstile": "^1.5.2",
     "@supabase/supabase-js": "^2.49.0",
+    "@unimusic/chromaprint": "^0.1.4",
     "@zxing/browser": "^0.2.0",
     "epubjs": "^0.3.93",
     "i18n-iso-countries": "^7.14.0",

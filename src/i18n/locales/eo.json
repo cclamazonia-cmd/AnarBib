@@ -5454,5 +5454,16 @@
   "error.audio.nameRequired": "Nomo estas deviga.",
   "error.audio.resourceNotFound": "Cifereca rimedo ne trovita.",
   "error.audio.acoustidNotConfigured": "La serĉo AcoustID ne estas agordita.",
-  "error.audio.fingerprintRequired": "Fingrospuro kaj ĝia daŭro estas postulataj."
+  "error.audio.fingerprintRequired": "Fingrospuro kaj ĝia daŭro estas postulataj.",
+  "catalogacao.audio.fp.title": "Son-fingrospuro (AcoustID)",
+  "catalogacao.audio.fp.intro": "Elektu la sondosieron por identigi ĝin per AcoustID kaj ligi registraĵon de MusicBrainz.",
+  "catalogacao.audio.fp.chooseFile": "Elekti sondosieron…",
+  "catalogacao.audio.fp.computing": "Kalkulado de la fingrospuro…",
+  "catalogacao.audio.fp.looking": "Serĉado en AcoustID…",
+  "catalogacao.audio.fp.empty": "Neniu kongruo en AcoustID.",
+  "catalogacao.audio.fp.apply": "Apliki",
+  "catalogacao.audio.fp.applied": "Fingrospuro aplikita.",
+  "catalogacao.audio.fp.noResource": "Neniu sondosiero ligita al ĉi tiu registro — kandidatoj montrataj nur por referenco.",
+  "catalogacao.audio.fp.resource": "Dosiero",
+  "catalogacao.audio.fp.score": "Poentaro"
 }

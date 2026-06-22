@@ -5454,5 +5454,16 @@
   "error.audio.nameRequired": "Een naam is verplicht.",
   "error.audio.resourceNotFound": "Digitale bron niet gevonden.",
   "error.audio.acoustidNotConfigured": "AcoustID-zoekopdracht is niet geconfigureerd.",
-  "error.audio.fingerprintRequired": "Een vingerafdruk en de duur zijn vereist."
+  "error.audio.fingerprintRequired": "Een vingerafdruk en de duur zijn vereist.",
+  "catalogacao.audio.fp.title": "Audio-vingerafdruk (AcoustID)",
+  "catalogacao.audio.fp.intro": "Kies het audiobestand om het via AcoustID te identificeren en een MusicBrainz-opname te koppelen.",
+  "catalogacao.audio.fp.chooseFile": "Een audiobestand kiezen…",
+  "catalogacao.audio.fp.computing": "Vingerafdruk berekenen…",
+  "catalogacao.audio.fp.looking": "Zoeken in AcoustID…",
+  "catalogacao.audio.fp.empty": "Geen AcoustID-overeenkomst.",
+  "catalogacao.audio.fp.apply": "Toepassen",
+  "catalogacao.audio.fp.applied": "Vingerafdruk toegepast.",
+  "catalogacao.audio.fp.noResource": "Geen audiobestand aan deze titel gekoppeld — kandidaten alleen ter referentie getoond.",
+  "catalogacao.audio.fp.resource": "Bestand",
+  "catalogacao.audio.fp.score": "Score"
 }

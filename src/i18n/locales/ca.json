@@ -5454,5 +5454,16 @@
   "error.audio.nameRequired": "El nom és obligatori.",
   "error.audio.resourceNotFound": "Recurs digital no trobat.",
   "error.audio.acoustidNotConfigured": "La cerca AcoustID no està configurada.",
-  "error.audio.fingerprintRequired": "Calen una empremta i la seva durada."
+  "error.audio.fingerprintRequired": "Calen una empremta i la seva durada.",
+  "catalogacao.audio.fp.title": "Empremta d'àudio (AcoustID)",
+  "catalogacao.audio.fp.intro": "Tria el fitxer d'àudio per identificar-lo amb AcoustID i vincular una gravació de MusicBrainz.",
+  "catalogacao.audio.fp.chooseFile": "Triar un fitxer d'àudio…",
+  "catalogacao.audio.fp.computing": "Calculant l'empremta…",
+  "catalogacao.audio.fp.looking": "Cercant a AcoustID…",
+  "catalogacao.audio.fp.empty": "Cap coincidència a AcoustID.",
+  "catalogacao.audio.fp.apply": "Aplica",
+  "catalogacao.audio.fp.applied": "Empremta aplicada.",
+  "catalogacao.audio.fp.noResource": "Cap fitxer d'àudio vinculat a aquesta fitxa — candidats mostrats només a títol indicatiu.",
+  "catalogacao.audio.fp.resource": "Fitxer",
+  "catalogacao.audio.fp.score": "Puntuació"
 }

@@ -5454,5 +5454,16 @@
   "error.audio.nameRequired": "Το όνομα είναι υποχρεωτικό.",
   "error.audio.resourceNotFound": "Ο ψηφιακός πόρος δεν βρέθηκε.",
   "error.audio.acoustidNotConfigured": "Η αναζήτηση AcoustID δεν έχει ρυθμιστεί.",
-  "error.audio.fingerprintRequired": "Απαιτούνται αποτύπωμα και η διάρκειά του."
+  "error.audio.fingerprintRequired": "Απαιτούνται αποτύπωμα και η διάρκειά του.",
+  "catalogacao.audio.fp.title": "Ηχητικό αποτύπωμα (AcoustID)",
+  "catalogacao.audio.fp.intro": "Επίλεξε το ηχητικό αρχείο για να το ταυτοποιήσεις μέσω AcoustID και να συνδέσεις μια ηχογράφηση του MusicBrainz.",
+  "catalogacao.audio.fp.chooseFile": "Επιλογή ηχητικού αρχείου…",
+  "catalogacao.audio.fp.computing": "Υπολογισμός αποτυπώματος…",
+  "catalogacao.audio.fp.looking": "Αναζήτηση στο AcoustID…",
+  "catalogacao.audio.fp.empty": "Καμία αντιστοιχία στο AcoustID.",
+  "catalogacao.audio.fp.apply": "Εφαρμογή",
+  "catalogacao.audio.fp.applied": "Το αποτύπωμα εφαρμόστηκε.",
+  "catalogacao.audio.fp.noResource": "Κανένα ηχητικό αρχείο δεν συνδέεται με αυτή την εγγραφή — οι υποψήφιοι εμφανίζονται μόνο ως αναφορά.",
+  "catalogacao.audio.fp.resource": "Αρχείο",
+  "catalogacao.audio.fp.score": "Βαθμολογία"
 }

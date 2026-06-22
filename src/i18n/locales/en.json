@@ -5454,5 +5454,16 @@
   "error.audio.nameRequired": "A name is required.",
   "error.audio.resourceNotFound": "Digital resource not found.",
   "error.audio.acoustidNotConfigured": "AcoustID lookup is not configured.",
-  "error.audio.fingerprintRequired": "A fingerprint and its duration are required."
+  "error.audio.fingerprintRequired": "A fingerprint and its duration are required.",
+  "catalogacao.audio.fp.title": "Audio fingerprint (AcoustID)",
+  "catalogacao.audio.fp.intro": "Pick the audio file to identify it via AcoustID and link a MusicBrainz recording.",
+  "catalogacao.audio.fp.chooseFile": "Choose an audio file…",
+  "catalogacao.audio.fp.computing": "Computing fingerprint…",
+  "catalogacao.audio.fp.looking": "Searching AcoustID…",
+  "catalogacao.audio.fp.empty": "No AcoustID match.",
+  "catalogacao.audio.fp.apply": "Apply",
+  "catalogacao.audio.fp.applied": "Fingerprint applied.",
+  "catalogacao.audio.fp.noResource": "No audio file is attached to this notice — candidates shown for reference only.",
+  "catalogacao.audio.fp.resource": "File",
+  "catalogacao.audio.fp.score": "Score"
 }

@@ -31,7 +31,7 @@ export default defineConfig({
   optimizeDeps: {
     // Empêche Vite de pré-bundler ces imports — ils doivent rester
     // chargés depuis /vendor/pdfjs/ à l'exécution
-    exclude: ['pdfjs-dist'],
+    exclude: ['pdfjs-dist', '@unimusic/chromaprint'],
   },
 
   // ── Serveur de dev ────────────────────────────────────────

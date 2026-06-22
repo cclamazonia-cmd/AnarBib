@@ -10,6 +10,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase, apiRpc } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import AudioFingerprintTool from './AudioFingerprintTool';
 
 // Rôles au grain segment — labels réutilisés de catalogacao.role.* (déjà i18nisés ×10).
 const SEG_ROLE_KEYS = ['locutor', 'interprete', 'narrador', 'compositor', 'autor', 'tradutor', 'produtor', 'organizacao', 'outro'];
@@ -166,6 +167,8 @@ export default function AudioSegmentsBlock({ bookId, onMsg }) {
       <p style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)', margin: '0 0 10px' }}>
         {t({ id: 'catalogacao.audio.seg.intro' })}
       </p>
+
+      <AudioFingerprintTool bookId={bookId} onMsg={onMsg} />
 
       {/* Liste des segments */}
       {loading ? (

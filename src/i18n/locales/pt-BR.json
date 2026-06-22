@@ -5454,5 +5454,16 @@
   "error.audio.nameRequired": "O nome é obrigatório.",
   "error.audio.resourceNotFound": "Recurso digital não encontrado.",
   "error.audio.acoustidNotConfigured": "A busca AcoustID não está configurada.",
-  "error.audio.fingerprintRequired": "São necessárias uma impressão digital e sua duração."
+  "error.audio.fingerprintRequired": "São necessárias uma impressão digital e sua duração.",
+  "catalogacao.audio.fp.title": "Impressão digital de áudio (AcoustID)",
+  "catalogacao.audio.fp.intro": "Escolha o arquivo de áudio para identificá-lo via AcoustID e vincular uma gravação do MusicBrainz.",
+  "catalogacao.audio.fp.chooseFile": "Escolher um arquivo de áudio…",
+  "catalogacao.audio.fp.computing": "Calculando a impressão…",
+  "catalogacao.audio.fp.looking": "Buscando no AcoustID…",
+  "catalogacao.audio.fp.empty": "Nenhuma correspondência no AcoustID.",
+  "catalogacao.audio.fp.apply": "Aplicar",
+  "catalogacao.audio.fp.applied": "Impressão aplicada.",
+  "catalogacao.audio.fp.noResource": "Nenhum arquivo de áudio vinculado a esta ficha — candidatos exibidos apenas para referência.",
+  "catalogacao.audio.fp.resource": "Arquivo",
+  "catalogacao.audio.fp.score": "Pontuação"
 }

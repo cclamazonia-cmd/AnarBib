@@ -5454,5 +5454,16 @@
   "error.audio.nameRequired": "El nombre es obligatorio.",
   "error.audio.resourceNotFound": "Recurso digital no encontrado.",
   "error.audio.acoustidNotConfigured": "La búsqueda AcoustID no está configurada.",
-  "error.audio.fingerprintRequired": "Se requiere una huella y su duración."
+  "error.audio.fingerprintRequired": "Se requiere una huella y su duración.",
+  "catalogacao.audio.fp.title": "Huella de audio (AcoustID)",
+  "catalogacao.audio.fp.intro": "Elige el archivo de audio para identificarlo mediante AcoustID y vincular una grabación de MusicBrainz.",
+  "catalogacao.audio.fp.chooseFile": "Elegir un archivo de audio…",
+  "catalogacao.audio.fp.computing": "Calculando la huella…",
+  "catalogacao.audio.fp.looking": "Buscando en AcoustID…",
+  "catalogacao.audio.fp.empty": "Sin coincidencias en AcoustID.",
+  "catalogacao.audio.fp.apply": "Aplicar",
+  "catalogacao.audio.fp.applied": "Huella aplicada.",
+  "catalogacao.audio.fp.noResource": "Ningún archivo de audio vinculado a esta ficha — candidatos mostrados solo como referencia.",
+  "catalogacao.audio.fp.resource": "Archivo",
+  "catalogacao.audio.fp.score": "Puntuación"
 }
