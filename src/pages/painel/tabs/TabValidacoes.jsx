@@ -25,6 +25,9 @@ export default function TabValidacoes({ libraryId }) {
   const [drafts, setDrafts] = useState({}); // membership_id -> { number, note }
   const [busyId, setBusyId] = useState(null);
   const [bulkBusy, setBulkBusy] = useState(false); // VALID-C1 : validation en lot
+  // Suite 4 : prochain n° de lecteur·rice suggéré (préfixe + incrément), montré en
+  // placeholder du champ numéro. Recalculé à chaque load (donc après validation).
+  const [suggestedNumber, setSuggestedNumber] = useState(null);
 
   const load = useCallback(async () => {
     setRows(null);
@@ -37,6 +40,19 @@ export default function TabValidacoes({ libraryId }) {
     } catch (e) {
       notifyError(localizeError(e, t, 'panel.validations.loadError'), e);
       setRows([]);
+    }
+    // Suite 4 : suggestion du prochain n° local (best-effort, ne bloque jamais la
+    // liste). Seulement quand une biblio précise est ciblée. Tolère l'absence de la
+    // RPC (404 le temps que PostgREST recharge le schéma) → simplement pas de suggestion.
+    if (libraryId) {
+      try {
+        const { data: sug } = await supabase
+          .schema('api')
+          .rpc('suggest_next_reader_number', { p_library_id: libraryId });
+        setSuggestedNumber(typeof sug === 'string' && sug.trim() ? sug.trim() : null);
+      } catch { setSuggestedNumber(null); }
+    } else {
+      setSuggestedNumber(null);
     }
   }, [libraryId, notifyError, t]);
 
@@ -138,7 +154,7 @@ export default function TabValidacoes({ libraryId }) {
                       type="text"
                       value={draft.number || ''}
                       disabled={busy}
-                      placeholder={t({ id: 'panel.validations.readerNumberPlaceholder' })}
+                      placeholder={suggestedNumber || t({ id: 'panel.validations.readerNumberPlaceholder' })}
                       onChange={(e) => patchDraft(m.membership_id, { number: e.target.value })}
                       style={{ minWidth: 130 }}
                     />
