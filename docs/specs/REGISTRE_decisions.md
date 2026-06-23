@@ -113,6 +113,7 @@ R7–R11 **propagés depuis consultas** par symétrie (✅ 31/05). R8 ne s'appli
 | ITEM-Q3 | Migration des 30 lignes : résolution auto (mono-exemplaire) + signalement des holdings ambigus | ✅ |
 | ITEM-Q4 | `book_holdings` **conservé** (`item_id` fort + `holding_id` confort, patron `emprestimo_itens_v2`) | ✅ |
 | ITEM-Q5 | Périmètre = cœur (colonne+FK+migration+RPC consulta) ; suites = frontend + resserrement `#ILL-availability` | ✅ |
+| ITEM-Q6 | `emprestimo_itens_v2.item_id` **NOT NULL** : enforce d'ITEM-Q4 (`item_id` fort). Drift signalé par l'audit externe 2026-06-23 (colonne nullable, mais 0 ligne NULL en prod sur 73) → resserré. `holding_id` reste « confort » ; emprunt holding-level écarté (1 ligne = 1 exemplaire précis, école A comme ITEM-Q1). | ✅ (2026-06-23) |
 
 ---
 
