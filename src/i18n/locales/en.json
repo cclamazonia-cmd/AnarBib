@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Registration not validated",
+  "account.refused.retry.body": "Your registration at {library} was not validated. You can submit a second request for the team to review again.",
+  "account.refused.retry.button": "Submit a new request",
+  "account.refused.retry.error": "Could not submit the request.",
+  "account.refused.final.title": "Registration refused",
+  "account.refused.final.body": "Your registration at {library} was definitively refused by the library team.",
   "panel.reader.pendingNotice": "Registration awaiting in-person validation. To validate or refuse, use the registration validation tab.",
   "panel.validations.rejectButton": "Refuse",
   "panel.validations.rejectConfirm": "Refuse {name}'s registration? They won't be notified and can register again later.",

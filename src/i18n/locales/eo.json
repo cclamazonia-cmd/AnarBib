@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Aliĝo ne validigita",
+  "account.refused.retry.body": "Via aliĝo ĉe {library} ne estis validigita. Vi povas sendi duan peton por ke la teamo reekzamenu ĝin.",
+  "account.refused.retry.button": "Sendi novan peton",
+  "account.refused.retry.error": "Ne eblis sendi la peton.",
+  "account.refused.final.title": "Aliĝo rifuzita",
+  "account.refused.final.body": "Via aliĝo ĉe {library} estis definitive rifuzita de la bibliotekteamo.",
   "panel.reader.pendingNotice": "Aliĝo atendas ĉeestan validigon. Por validigi aŭ rifuzi, uzu la langeton pri validigo de aliĝoj.",
   "panel.validations.rejectButton": "Rifuzi",
   "panel.validations.rejectConfirm": "Ĉu rifuzi la aliĝon de {name}? La persono ne estos sciigita kaj povos realiĝi poste.",

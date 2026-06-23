@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Η εγγραφή δεν επικυρώθηκε",
+  "account.refused.retry.body": "Η εγγραφή σου στη {library} δεν επικυρώθηκε. Μπορείς να υποβάλεις ένα δεύτερο αίτημα για να το επανεξετάσει η ομάδα.",
+  "account.refused.retry.button": "Υποβολή νέου αιτήματος",
+  "account.refused.retry.error": "Δεν ήταν δυνατή η υποβολή του αιτήματος.",
+  "account.refused.final.title": "Η εγγραφή απορρίφθηκε",
+  "account.refused.final.body": "Η εγγραφή σου στη {library} απορρίφθηκε οριστικά από την ομάδα της βιβλιοθήκης.",
   "panel.reader.pendingNotice": "Η εγγραφή εκκρεμεί διά ζώσης επικύρωση. Για επικύρωση ή απόρριψη, χρησιμοποίησε την καρτέλα επικύρωσης εγγραφών.",
   "panel.validations.rejectButton": "Απόρριψη",
   "panel.validations.rejectConfirm": "Απόρριψη της εγγραφής του/της {name}; Το άτομο δεν θα ειδοποιηθεί και θα μπορεί να εγγραφεί ξανά αργότερα.",

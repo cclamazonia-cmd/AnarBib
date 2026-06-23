@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Inscrição não validada",
+  "account.refused.retry.body": "Sua inscrição em {library} não foi validada. Você pode enviar um segundo pedido para que seja reexaminado pela equipe.",
+  "account.refused.retry.button": "Enviar novo pedido",
+  "account.refused.retry.error": "Não foi possível enviar o pedido.",
+  "account.refused.final.title": "Inscrição recusada",
+  "account.refused.final.body": "Sua inscrição em {library} foi recusada definitivamente pela equipe da biblioteca.",
   "panel.reader.pendingNotice": "Inscrição aguardando validação presencial. Para validar ou recusar, use a aba de validação de inscrições.",
   "panel.validations.rejectButton": "Recusar",
   "panel.validations.rejectConfirm": "Recusar a inscrição de {name}? A pessoa não será notificada e poderá se inscrever novamente.",

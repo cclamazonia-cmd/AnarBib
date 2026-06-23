@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Inscription non validée",
+  "account.refused.retry.body": "Ton inscription à {library} n'a pas été validée. Tu peux soumettre une seconde demande pour qu'elle soit réexaminée par l'équipe.",
+  "account.refused.retry.button": "Soumettre une nouvelle demande",
+  "account.refused.retry.error": "Impossible de soumettre la demande.",
+  "account.refused.final.title": "Inscription refusée",
+  "account.refused.final.body": "Ton inscription à {library} a été définitivement refusée par l'équipe de la bibliothèque.",
   "panel.reader.pendingNotice": "Inscription en attente de validation présentielle. Pour valider ou refuser, utilise l'onglet de validation des inscriptions.",
   "panel.validations.rejectButton": "Refuser",
   "panel.validations.rejectConfirm": "Refuser l'inscription de {name} ? La personne ne sera pas notifiée et pourra se réinscrire.",

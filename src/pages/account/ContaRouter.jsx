@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import PendingValidationScreen from './PendingValidationScreen';
+import RefusedValidationScreen from './RefusedValidationScreen';
 
 const AccountPage = lazy(() => import('./AccountPage'));
 const ContributorAccountPage = lazy(() => import('./ContributorAccountPage'));
@@ -56,11 +57,15 @@ export default function ContaRouter() {
   // jamais bloqué (cf. spec validation : on gate sur l'appartenance primaire, qui
   // pour un·e nouveau·elle inscrit·e est précisément la seule, en attente).
   const hasActive = (memberships || []).some((m) => m.status === 'active');
-  const pending = hasActive
+  const gating = hasActive
     ? null
-    : (memberships || []).find((m) => m.status === 'pending_validation');
-  if (pending) {
-    return <PendingValidationScreen membership={pending} />;
+    : (memberships || []).find((m) => m.status === 'pending_validation' || m.status === 'refused');
+  if (gating?.status === 'pending_validation') {
+    return <PendingValidationScreen membership={gating} />;
+  }
+  if (gating?.status === 'refused') {
+    // refusal_count >= 2 → refus définitif (pas de réexamen).
+    return <RefusedValidationScreen membership={gating} isFinal={(gating.validation_refusal_count ?? 0) >= 2} />;
   }
 
   const isContributorOnly = nc?.status === 'active' && (!libraries || libraries.length === 0);

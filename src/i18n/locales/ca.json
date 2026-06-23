@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Inscripció no validada",
+  "account.refused.retry.body": "La teva inscripció a {library} no s'ha validat. Pots enviar una segona sol·licitud perquè l'equip la torni a examinar.",
+  "account.refused.retry.button": "Envia una nova sol·licitud",
+  "account.refused.retry.error": "No s'ha pogut enviar la sol·licitud.",
+  "account.refused.final.title": "Inscripció rebutjada",
+  "account.refused.final.body": "La teva inscripció a {library} ha estat rebutjada definitivament per l'equip de la biblioteca.",
   "panel.reader.pendingNotice": "Inscripció pendent de validació presencial. Per validar o rebutjar, fes servir la pestanya de validació d'inscripcions.",
   "panel.validations.rejectButton": "Rebutja",
   "panel.validations.rejectConfirm": "Rebutjar la inscripció de {name}? La persona no rebrà cap avís i es podrà tornar a inscriure.",

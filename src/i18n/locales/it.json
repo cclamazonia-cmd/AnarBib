@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Iscrizione non convalidata",
+  "account.refused.retry.body": "La tua iscrizione presso {library} non è stata convalidata. Puoi inviare una seconda richiesta affinché il gruppo la riesamini.",
+  "account.refused.retry.button": "Invia una nuova richiesta",
+  "account.refused.retry.error": "Impossibile inviare la richiesta.",
+  "account.refused.final.title": "Iscrizione rifiutata",
+  "account.refused.final.body": "La tua iscrizione presso {library} è stata rifiutata definitivamente dal gruppo della biblioteca.",
   "panel.reader.pendingNotice": "Iscrizione in attesa di convalida di persona. Per convalidare o rifiutare, usa la scheda di convalida delle iscrizioni.",
   "panel.validations.rejectButton": "Rifiuta",
   "panel.validations.rejectConfirm": "Rifiutare l'iscrizione di {name}? La persona non verrà avvisata e potrà iscriversi di nuovo.",

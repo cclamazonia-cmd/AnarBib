@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Anmeldung nicht bestätigt",
+  "account.refused.retry.body": "Deine Anmeldung bei {library} wurde nicht bestätigt. Du kannst eine zweite Anfrage stellen, damit das Team sie erneut prüft.",
+  "account.refused.retry.button": "Neue Anfrage stellen",
+  "account.refused.retry.error": "Anfrage konnte nicht gesendet werden.",
+  "account.refused.final.title": "Anmeldung abgelehnt",
+  "account.refused.final.body": "Deine Anmeldung bei {library} wurde vom Bibliotheksteam endgültig abgelehnt.",
   "panel.reader.pendingNotice": "Anmeldung wartet auf persönliche Bestätigung. Zum Bestätigen oder Ablehnen den Tab zur Anmeldungsbestätigung verwenden.",
   "panel.validations.rejectButton": "Ablehnen",
   "panel.validations.rejectConfirm": "Anmeldung von {name} ablehnen? Die Person wird nicht benachrichtigt und kann sich später erneut anmelden.",

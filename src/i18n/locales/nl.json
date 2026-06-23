@@ -1,4 +1,10 @@
 {
+  "account.refused.retry.title": "Inschrijving niet gevalideerd",
+  "account.refused.retry.body": "Je inschrijving bij {library} is niet gevalideerd. Je kunt een tweede verzoek indienen zodat het team het opnieuw beoordeelt.",
+  "account.refused.retry.button": "Een nieuw verzoek indienen",
+  "account.refused.retry.error": "Kon het verzoek niet indienen.",
+  "account.refused.final.title": "Inschrijving geweigerd",
+  "account.refused.final.body": "Je inschrijving bij {library} is definitief geweigerd door het bibliotheekteam.",
   "panel.reader.pendingNotice": "Inschrijving wacht op validatie ter plaatse. Gebruik het tabblad voor inschrijvingsvalidatie om te valideren of weigeren.",
   "panel.validations.rejectButton": "Weigeren",
   "panel.validations.rejectConfirm": "Inschrijving van {name} weigeren? De persoon wordt niet op de hoogte gebracht en kan zich later opnieuw inschrijven.",
