@@ -5486,5 +5486,10 @@
   "catalogacao.audio.fp.target": "Anhängen an",
   "catalogacao.audio.fp.noTarget": "Kein Segment und keine Audiodatei zum Anhängen — Kandidaten nur zur Referenz.",
   "catalogacao.catalog.discardBookCascadeConfirm": "„{label}“ zu verwerfen löscht auch die zugehörigen Exemplare in deiner Bibliothek. Fortfahren?",
-  "catalogacao.catalog.discardBookKept": "Exemplare aus deiner Bibliothek entfernt. Der Eintrag bleibt im Katalog (von einer anderen Bibliothek gehalten)."
+  "catalogacao.catalog.discardBookKept": "Exemplare aus deiner Bibliothek entfernt. Der Eintrag bleibt im Katalog (von einer anderen Bibliothek gehalten).",
+  "notifications.bell": "Benachrichtigungen",
+  "notifications.title": "Benachrichtigungen",
+  "notifications.empty": "Keine Benachrichtigungen",
+  "notifications.markAllRead": "Alle als gelesen markieren",
+  "notifications.loadError": "Benachrichtigungen konnten nicht geladen werden"
 }

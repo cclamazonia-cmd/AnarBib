@@ -5486,5 +5486,10 @@
   "catalogacao.audio.fp.target": "Attacher à",
   "catalogacao.audio.fp.noTarget": "Aucun segment ni fichier audio où l'attacher — candidats à titre indicatif.",
   "catalogacao.catalog.discardBookCascadeConfirm": "Supprimer « {label} » supprimera aussi les exemplaires associés dans ta bibliothèque. Continuer ?",
-  "catalogacao.catalog.discardBookKept": "Exemplaires retirés de ta bibliothèque. Le document reste au catalogue (détenu par une autre bibliothèque)."
+  "catalogacao.catalog.discardBookKept": "Exemplaires retirés de ta bibliothèque. Le document reste au catalogue (détenu par une autre bibliothèque).",
+  "notifications.bell": "Notifications",
+  "notifications.title": "Notifications",
+  "notifications.empty": "Aucune notification",
+  "notifications.markAllRead": "Tout marquer comme lu",
+  "notifications.loadError": "Impossible de charger les notifications"
 }

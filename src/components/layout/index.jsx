@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useAuth } from '@/contexts/AuthContext';
+import NotificationBell from '@/components/notifications/NotificationBell';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { supabase } from '@/lib/supabase';
 import { resolveLibraryLogo } from '@/lib/theme';
@@ -87,6 +88,8 @@ export function Topbar() {
           />
         )}
       </Link>
+
+      {user && <NotificationBell />}
 
       <button
         type="button"

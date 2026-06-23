@@ -5486,5 +5486,10 @@
   "catalogacao.audio.fp.target": "Koppelen aan",
   "catalogacao.audio.fp.noTarget": "Geen segment of audiobestand om aan te koppelen — kandidaten alleen ter referentie.",
   "catalogacao.catalog.discardBookCascadeConfirm": "“{label}” verwijderen wist ook de bijbehorende exemplaren in jouw bibliotheek. Doorgaan?",
-  "catalogacao.catalog.discardBookKept": "Exemplaren uit jouw bibliotheek verwijderd. Het document blijft in de catalogus (in bezit van een andere bibliotheek)."
+  "catalogacao.catalog.discardBookKept": "Exemplaren uit jouw bibliotheek verwijderd. Het document blijft in de catalogus (in bezit van een andere bibliotheek).",
+  "notifications.bell": "Meldingen",
+  "notifications.title": "Meldingen",
+  "notifications.empty": "Geen meldingen",
+  "notifications.markAllRead": "Alles als gelezen markeren",
+  "notifications.loadError": "Kon meldingen niet laden"
 }

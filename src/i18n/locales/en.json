@@ -5486,5 +5486,10 @@
   "catalogacao.audio.fp.target": "Attach to",
   "catalogacao.audio.fp.noTarget": "No segment or audio file to attach to — candidates for reference only.",
   "catalogacao.catalog.discardBookCascadeConfirm": "Deleting “{label}” will also delete the exemplars associated with it in your library. Continue?",
-  "catalogacao.catalog.discardBookKept": "Exemplars removed from your library. The document stays in the catalogue (held by another library)."
+  "catalogacao.catalog.discardBookKept": "Exemplars removed from your library. The document stays in the catalogue (held by another library).",
+  "notifications.bell": "Notifications",
+  "notifications.title": "Notifications",
+  "notifications.empty": "No notifications",
+  "notifications.markAllRead": "Mark all as read",
+  "notifications.loadError": "Couldn't load notifications"
 }

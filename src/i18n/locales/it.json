@@ -5486,5 +5486,10 @@
   "catalogacao.audio.fp.target": "Allega a",
   "catalogacao.audio.fp.noTarget": "Nessun segmento né file audio a cui allegare — candidati solo a titolo indicativo.",
   "catalogacao.catalog.discardBookCascadeConfirm": "Eliminare «{label}» eliminerà anche le copie associate nella tua biblioteca. Continuare?",
-  "catalogacao.catalog.discardBookKept": "Copie rimosse dalla tua biblioteca. Il documento resta nel catalogo (posseduto da un'altra biblioteca)."
+  "catalogacao.catalog.discardBookKept": "Copie rimosse dalla tua biblioteca. Il documento resta nel catalogo (posseduto da un'altra biblioteca).",
+  "notifications.bell": "Notifiche",
+  "notifications.title": "Notifiche",
+  "notifications.empty": "Nessuna notifica",
+  "notifications.markAllRead": "Segna tutte come lette",
+  "notifications.loadError": "Impossibile caricare le notifiche"
 }

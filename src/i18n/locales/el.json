@@ -5486,5 +5486,10 @@
   "catalogacao.audio.fp.target": "Επισύναψη σε",
   "catalogacao.audio.fp.noTarget": "Κανένα τμήμα ή ηχητικό αρχείο για επισύναψη — υποψήφιοι μόνο ως αναφορά.",
   "catalogacao.catalog.discardBookCascadeConfirm": "Η απόρριψη του «{label}» θα διαγράψει και τα σχετικά αντίτυπα στη βιβλιοθήκη σου. Συνέχεια;",
-  "catalogacao.catalog.discardBookKept": "Τα αντίτυπα αφαιρέθηκαν από τη βιβλιοθήκη σου. Το έγγραφο παραμένει στον κατάλογο (ανήκει σε άλλη βιβλιοθήκη)."
+  "catalogacao.catalog.discardBookKept": "Τα αντίτυπα αφαιρέθηκαν από τη βιβλιοθήκη σου. Το έγγραφο παραμένει στον κατάλογο (ανήκει σε άλλη βιβλιοθήκη).",
+  "notifications.bell": "Ειδοποιήσεις",
+  "notifications.title": "Ειδοποιήσεις",
+  "notifications.empty": "Καμία ειδοποίηση",
+  "notifications.markAllRead": "Επισήμανση όλων ως αναγνωσμένων",
+  "notifications.loadError": "Δεν ήταν δυνατή η φόρτωση των ειδοποιήσεων"
 }
