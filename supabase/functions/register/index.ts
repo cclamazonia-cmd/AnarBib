@@ -749,6 +749,10 @@ serve(async (req)=>{
     // sont écrits juste après cette section, une fois claim_id connu.
     let libraryRequestClaimUrl = "";
     let signupIntentMetadata: Record<string, unknown> = {};
+    // b2 : drapeau pour supprimer l'e-mail interne biblio « Novo cadastro » quand
+    // une notif « à valider » prend le relais (lecteur en attente de validation) —
+    // un seul message à la coordination au lieu de deux.
+    let suppressLibraryInternalEmail = false;
     if (signupIntent === "reader_pending") {
       // ── Cas 1 : lectrice d'une biblio déjà sur AnarBib ──────────────────
       // libraryRow a normalement été validé en amont (lookup libraries +
@@ -770,6 +774,10 @@ serve(async (req)=>{
       // geste du staff (validation présentielle ou vérification d'usage à distance).
       const initialReaderStatus =
         libraryRow.reader_validation_mode === "none" ? "active" : "pending_validation";
+      // b2 : pour un lecteur en attente, la notif « à valider » (dispatchée plus bas)
+      // porte déjà l'info + l'action → on supprime l'e-mail interne « Novo cadastro »
+      // qui ferait doublon.
+      suppressLibraryInternalEmail = initialReaderStatus === "pending_validation";
       const { data: membershipRow, error: membershipError } = await admin.from("user_library_memberships").upsert({
         user_id: userId,
         library_id: libraryRow.id,
@@ -1076,7 +1084,7 @@ serve(async (req)=>{
       status: null,
       responseText: "NO_LIBRARY_RECIPIENT"
     };
-    if (effectiveLibraryInternalRecipients.length) {
+    if (effectiveLibraryInternalRecipients.length && !suppressLibraryInternalEmail) {
       librarySendResult = await sendEmail({
         logLabel: "library internal email",
         payload: {

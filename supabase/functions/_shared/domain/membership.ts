@@ -312,6 +312,11 @@ export async function handleMembershipValidationRequested(payload) {
   const bt = subjectTag(ctx);
   const libLoc = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
   const applicant = adminDisplayName(fullName(profile), profile?.email);
+  // b2 : inclure l'e-mail dans la ligne lecteur — cette notif remplace désormais
+  // l'e-mail interne « Novo cadastro » pour les biblios à validation présentielle.
+  const applicantLine = (profile?.email && fullName(profile))
+    ? `${fullName(profile)} (${profile.email})`
+    : applicant;
 
   const tit = tMail(libLoc, "membership_validation_requested.subject");
   const { html, text } = renderEmail({
@@ -319,7 +324,7 @@ export async function handleMembershipValidationRequested(payload) {
     preheader: tit,
     title: tit,
     introHtml: `<p>${tMail(libLoc, "membership_validation_requested.intro")}</p>`,
-    details: [{ label: label(libLoc, "reader"), value: applicant }],
+    details: [{ label: label(libLoc, "reader"), value: applicantLine }],
     actionBox: {
       kind: "action",
       title: tMail(libLoc, "membership_validation_requested.actionTitle"),
