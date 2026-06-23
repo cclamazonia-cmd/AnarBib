@@ -226,6 +226,27 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
       });
   }, [memberships, roleFilter, statusFilter, libraryFilter, searchText]);
 
+  // Regroupement par personne : une même personne peut cumuler plusieurs
+  // adhésions (rôles différents — p.ex. bibliothécaire PUIS coordenador — ou
+  // plusieurs biblios). On affiche alors un bloc par personne avec une
+  // sous-ligne par adhésion, pour rendre lisible l'historique des rôles.
+  // L'ordre des personnes suit `filtered` (déjà trié rôle desc puis nom) via la
+  // 1re occurrence ; les sous-lignes gardent ce même ordre (rôle haut en tête).
+  const groupedByPerson = useMemo(() => {
+    const order = [];
+    const byUser = new Map();
+    for (const m of filtered) {
+      let g = byUser.get(m.user_id);
+      if (!g) {
+        g = { userId: m.user_id, profile: m.profiles || {}, isCurrentUser: m.user_id === user?.id, memberships: [] };
+        byUser.set(m.user_id, g);
+        order.push(g);
+      }
+      g.memberships.push(m);
+    }
+    return order;
+  }, [filtered, user?.id]);
+
   // ── Handlers d'action ─────────────────────────────────
   const handleActionSelected = useCallback((membership, actionDescriptor) => {
     setPendingAction({ membership, action: actionDescriptor });
@@ -360,13 +381,12 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
 
       {!loading && filtered.length > 0 && (
         <div className="ab-team-list">
-          {filtered.map((m, i) => (
-            <TeamMembershipRow
-              key={m.id}
-              membership={m}
+          {groupedByPerson.map((g, i) => (
+            <TeamPersonGroup
+              key={g.userId}
+              group={g}
               index={i}
               showLibrary={scope === 'network'}
-              isCurrentUser={m.user_id === user?.id}
               observerRole={observerRole}
               observerUserId={user?.id}
               scope={scope}
@@ -479,9 +499,75 @@ function CountCard({ label, count, kind = 'default' }) {
   );
 }
 
+function TeamPersonGroup({
+  group,
+  index,
+  showLibrary,
+  observerRole,
+  observerUserId,
+  scope,
+  onActionSelected,
+}) {
+  const { formatMessage: t } = useIntl();
+  const p = group.profile || {};
+
+  // Une seule adhésion → ligne classique (aucune régression visuelle pour
+  // l'immense majorité des membres, qui n'ont qu'un rôle).
+  if (group.memberships.length === 1) {
+    return (
+      <TeamMembershipRow
+        membership={group.memberships[0]}
+        index={index}
+        showLibrary={showLibrary}
+        isCurrentUser={group.isCurrentUser}
+        observerRole={observerRole}
+        observerUserId={observerUserId}
+        scope={scope}
+        onActionSelected={onActionSelected}
+      />
+    );
+  }
+
+  // Plusieurs adhésions → nom + e-mail une seule fois, puis une sous-ligne par
+  // rôle (p.ex. bibliothécaire RETIRÉ·E puis coordenador ACTIF·VE) pour rendre
+  // lisible l'historique des casquettes. La sous-ligne « removed » est grisée
+  // (opacity via .ab-team-row[data-status="removed"]).
+  const groupName = fullName(p) || p.email || t({ id: 'team.unnamedMember' });
+  return (
+    <div className="ab-team-person" style={personStyle(index)}>
+      <div className="ab-team-row__name">
+        {groupName}
+        {group.isCurrentUser && (
+          <span className="ab-team-self-tag">({t({ id: 'team.selfTag' })})</span>
+        )}
+      </div>
+      {p.email && <div className="ab-team-row__meta">{p.email}</div>}
+      <div
+        className="ab-team-person__roles"
+        style={{ marginTop: 8, marginLeft: 4, paddingLeft: 12, borderLeft: '2px solid rgba(255,255,255,.10)', display: 'flex', flexDirection: 'column', gap: 10 }}
+      >
+        {group.memberships.map((sm) => (
+          <TeamMembershipRow
+            key={sm.id}
+            membership={sm}
+            subRow
+            showLibrary={showLibrary}
+            isCurrentUser={group.isCurrentUser}
+            observerRole={observerRole}
+            observerUserId={observerUserId}
+            scope={scope}
+            onActionSelected={onActionSelected}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function TeamMembershipRow({
   membership: m,
   index,
+  subRow = false,
   showLibrary,
   isCurrentUser,
   observerRole,
@@ -515,26 +601,29 @@ function TeamMembershipRow({
     scope,
   }), [observerRole, observerUserId, m.role, m.user_id, eff, scope]);
 
+  // En sous-ligne, le nom + l'e-mail sont déjà affichés au niveau du groupe ;
+  // on ne répète ici que biblio · date d'adhésion.
+  const metaParts = [];
+  if (!subRow && p.email) metaParts.push(p.email);
+  if (showLibrary && m.libraries) metaParts.push(m.libraries.short_name || m.libraries.name);
+  if (memberSince) metaParts.push(t({ id: 'team.memberSince' }, { date: memberSince }));
+
   return (
-    <div className="ab-team-row" data-status={eff} style={rowStyle(index)}>
+    <div className="ab-team-row" data-status={eff} style={subRow ? subRowStyle() : rowStyle(index)}>
       <div className="ab-team-row__main">
-        <div className="ab-team-row__name">
-          {name}
-          {isCurrentUser && (
-            <span className="ab-team-self-tag">
-              ({t({ id: 'team.selfTag' })})
-            </span>
-          )}
-        </div>
-        <div className="ab-team-row__meta">
-          {p.email && <span>{p.email}</span>}
-          {showLibrary && m.libraries && (
-            <span>{' · '}{m.libraries.short_name || m.libraries.name}</span>
-          )}
-          {memberSince && (
-            <span>{' · '}{t({ id: 'team.memberSince' }, { date: memberSince })}</span>
-          )}
-        </div>
+        {!subRow && (
+          <div className="ab-team-row__name">
+            {name}
+            {isCurrentUser && (
+              <span className="ab-team-self-tag">
+                ({t({ id: 'team.selfTag' })})
+              </span>
+            )}
+          </div>
+        )}
+        {metaParts.length > 0 && (
+          <div className="ab-team-row__meta">{metaParts.join(' · ')}</div>
+        )}
         {/* Notes contextuelles selon status */}
         {eff === 'suspended' && m.restricted_reason && (
           <div className="ab-team-row__note ab-team-row__note--warn">
@@ -596,6 +685,27 @@ function rowStyle(i) {
     padding: '12px 14px',
     background: i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent',
     borderBottom: '1px solid rgba(255,255,255,.04)',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 12,
+  };
+}
+
+// Bloc « personne » (regroupement multi-rôles) : même fond alterné/bordure que
+// rowStyle mais sans flex (le nom/e-mail s'empilent au-dessus des sous-lignes).
+function personStyle(i) {
+  return {
+    padding: '12px 14px',
+    background: i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent',
+    borderBottom: '1px solid rgba(255,255,255,.04)',
+  };
+}
+
+// Sous-ligne (une adhésion d'une personne multi-rôles) : juste le layout flex
+// main/badges ; le fond/la bordure viennent du bloc personne englobant.
+function subRowStyle() {
+  return {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
