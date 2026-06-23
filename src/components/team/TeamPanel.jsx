@@ -281,11 +281,10 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
       <div className="ab-team-counts">
         <CountCard label={t({ id: 'roles.librarian' })} count={counts.byRole.librarian} />
         <CountCard label={t({ id: 'roles.coordenador' })} count={counts.byRole.coordenador} />
-        {/* administrador n'est pas un rôle d'adhésion locale : compteur réservé
-            à la portée réseau (doctrine Admin réseau, page = périmètre). */}
-        {scope === 'network' && (
-          <CountCard label={t({ id: 'roles.administrador' })} count={counts.byRole.administrador} />
-        )}
+        {/* Compteur « administrador » retiré de la vue Membres : les admins réseau
+            ne sont pas des adhésions locales (jamais dans user_library_memberships),
+            il affichait donc toujours 0 ici. Ils sont comptés et gérés dans l'onglet
+            voisin « Administradores » (AdminsPanel). */}
         {counts.byStatus.suspended > 0 && (
           <CountCard
             label={t({ id: 'team.status.suspended' })}
