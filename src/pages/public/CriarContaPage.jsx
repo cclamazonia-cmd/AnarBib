@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { useNavigate, Link } from 'react-router-dom';
@@ -11,9 +11,11 @@ import CountrySelect from '@/components/forms/CountrySelect';
 import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput, { isValidPhoneNumber } from '@/components/forms/PhoneInput';
 import { hasStatesList, getCountryMetadata, getStateName } from '@/components/forms/countryData';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 const ANARBIB_LOGO = 'https://cclamazonia.noblogs.org/files/2026/03/AnarBib_logo.png';
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 // Galerie publique des bibliothèques, hébergée sur le site de présentation
 // anarbib.org (et non dans l'app). Le site a un dossier par langue ; on
@@ -59,6 +61,11 @@ export default function CriarContaPage() {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [loading, setLoading] = useState(false);
   const [publicId, setPublicId] = useState('');
+  // Turnstile (anti-bot) — token Cloudflare passe a l'EF register. Env-gated :
+  // si VITE_TURNSTILE_SITE_KEY est absent, le widget n'est pas rendu et l'EF
+  // ignore la verification (TURNSTILE_SECRET_KEY non defini cote serveur).
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileRef = useRef(null);
   // Wizard CARD-LOCAL-CANAL — étapes : 1 biblio · 2 toi · 3 adresse+accords · 4 confirmation.
   const [step, setStep] = useState(1);
   const scrollTop = () => { try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { /* noop */ } };
@@ -171,6 +178,11 @@ export default function CriarContaPage() {
     // (a) Consentement e-mail = FACULTATIF : interrupteur de canal (notifs in-app
     // toujours envoyées, e-mail seulement si coché), pas une garde bloquante.
     if (currentLib?.has_regimento && !form.acceptRules) { setMsg({ text: t({id:'auth.create.acceptRulesRequired'}), kind: 'error' }); return; }
+    // Verification client : si le widget anti-bot est actif, attendre son token.
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setMsg({ text: t({id:'auth.captchaRequired'}), kind: 'error' });
+      return;
+    }
 
     setLoading(true); setMsg({ text: '', kind: '' }); setPublicId('');
     try {
@@ -227,6 +239,7 @@ export default function CriarContaPage() {
         // valide la valeur contre la liste des 6 locales supportées et fait fallback
         // sur pt-BR si la valeur n'est pas reconnue.
         locale: detectLocale(),
+        turnstile_token: turnstileToken,
       }});
       if (error) {
         // supabase-js v2 : pour un non-2xx, error.context est l'objet Response
@@ -254,6 +267,8 @@ export default function CriarContaPage() {
           userMsg = t({id:'auth.create.errorProfileFailed'});
         } else if (code === 'MISSING_ENV') {
           userMsg = t({id:'auth.create.errorServerConfig'});
+        } else if (code === 'CAPTCHA_FAILED') {
+          userMsg = t({id:'auth.captchaRequired'});
         } else if (code) {
           // Code inconnu mais present : afficher un message generique + le code
           // pour que l'usager puisse le transmettre au support.
@@ -287,6 +302,9 @@ export default function CriarContaPage() {
       setMsg({ text: t({id:'auth.networkError'}), kind: 'error' });
     } finally {
       setLoading(false);
+      // Token Turnstile a usage unique : reinitialisation dans tous les cas.
+      turnstileRef.current?.reset();
+      setTurnstileToken('');
     }
   }
 
@@ -599,6 +617,19 @@ export default function CriarContaPage() {
             <textarea value={form.motivation} onChange={e => set('motivation', e.target.value)} maxLength={1000} rows={4} style={{ ...fs, resize: 'vertical', minHeight: 90, fontFamily: 'inherit' }} />
             <div style={hs}>{t({id:'auth.create.motivationHint'})}</div>
           </div>
+
+          {/* Widget anti-bot Cloudflare Turnstile (rendu seulement si configure). */}
+          {TURNSTILE_SITE_KEY && (
+            <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={TURNSTILE_SITE_KEY}
+                onSuccess={(token) => setTurnstileToken(token)}
+                onError={() => setTurnstileToken('')}
+                onExpire={() => setTurnstileToken('')}
+              />
+            </div>
+          )}
 
           {/* Boutons d'action — étape 3 (submit du formulaire) */}
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between' }}>

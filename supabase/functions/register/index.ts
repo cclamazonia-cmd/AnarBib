@@ -56,6 +56,43 @@ function json(body, status = 200) {
     }
   });
 }
+// ── Anti-bot Cloudflare Turnstile (env-gated) ───────────────────────────────
+// Tant que TURNSTILE_SECRET_KEY n'est pas defini en prod, la verification est
+// ignoree (return true) : aucune regression sur l'inscription avant la config.
+// Une fois le secret pose, un token Turnstile valide devient requis. Calque sur
+// supabase/functions/login (verifyTurnstile) et submit-cartography-entry.
+function getClientIP(req: Request): string {
+  return (
+    req.headers.get("cf-connecting-ip") ??
+    req.headers.get("x-real-ip") ??
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown"
+  );
+}
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
+  if (!secret) {
+    console.warn("register: TURNSTILE_SECRET_KEY non defini — verification anti-bot ignoree");
+    return true;
+  }
+  if (!token) return false;
+  const formData = new FormData();
+  formData.append("secret", secret);
+  formData.append("response", token);
+  if (ip && ip !== "unknown") formData.append("remoteip", ip);
+  try {
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      { method: "POST", body: formData },
+    );
+    const data = await res.json();
+    if (!data.success) console.warn("register: Turnstile echec:", data["error-codes"]);
+    return Boolean(data.success);
+  } catch (err) {
+    console.error("register: Turnstile fetch error:", err);
+    return false;
+  }
+}
 function generateTempPassword(length = 14) {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
   return Array.from({
@@ -443,6 +480,8 @@ serve(async (req)=>{
   }
   try {
     const body = await req.json();
+    const turnstileToken = String(body?.turnstile_token || "");
+    const clientIp = getClientIP(req);
     const email = normalizeEmail(body?.email);
     const firstName = String(body?.first_name || "").trim();
     const lastName = String(body?.last_name || "").trim();
@@ -546,6 +585,11 @@ serve(async (req)=>{
       return json({
         error: "MISSING_REQUIRED_FIELDS"
       }, 400);
+    }
+    // Anti-bot : verification Turnstile (env-gated, cf. verifyTurnstile). Placee
+    // tot, avant toute creation de compte / ecriture DB.
+    if (!(await verifyTurnstile(turnstileToken, clientIp))) {
+      return json({ error: "CAPTCHA_FAILED" }, 403);
     }
     // CONSENT : seul acceptRules (règlement de la biblio) est requis, et seulement
     // pour reader_pending (qui rejoint une biblio avec règlement). Le consentement
