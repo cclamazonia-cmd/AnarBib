@@ -335,6 +335,69 @@ export async function handleMembershipValidationRequested(payload) {
 }
 
 // ============================================================================
+// Refonte du refus — notification STAFF « inscription refusée ».
+// ----------------------------------------------------------------------------
+// Émis par api.reject_membership via fn_dispatch_notify_event(
+//   'membership_refused', 1, {user_id, library_id, membership_id, refusal_count,
+//   is_final, note}). Prévient la coordination (suivi, évite les décisions
+//   incohérentes par manque de visibilité). Le/la candidat·e n'est PAS
+//   notifié·e (refus silencieux, décision Xavier).
+// ============================================================================
+export async function handleMembershipRefused(payload) {
+  const membershipId = String(payload?.membership_id || "").trim();
+  if (!membershipId) throw new Error("membership_id manquant.");
+  const isFinal = payload?.is_final === true;
+  const note = String(payload?.note || "").trim();
+
+  const { data: m, error: e1 } = await supabaseAdmin
+    .from("user_library_memberships")
+    .select("id,user_id,library_id,status")
+    .eq("id", membershipId)
+    .maybeSingle();
+  if (e1) throw e1;
+  if (!m) throw new Error("Associação não encontrada.");
+  // Garde : ne notifier que si toujours refusée (l'état peut avoir changé entre
+  // dispatch et traitement — ex. réexamen immédiat).
+  if (m.status !== "refused") {
+    return { admin_result: skippedEmailResult("admin_copy", "membership_not_refused") };
+  }
+
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("id,email,first_name,last_name")
+    .eq("id", m.user_id)
+    .maybeSingle();
+
+  const ctx = await resolveLibraryNotificationContext(String(m.library_id || "").trim() || null);
+  const bt = subjectTag(ctx);
+  const libLoc = String(ctx?.default_locale || "pt-BR").trim() || "pt-BR";
+  const applicant = adminDisplayName(fullName(profile), profile?.email);
+
+  const tit = tMail(libLoc, "membership_refused.subject");
+  const det = [
+    { label: label(libLoc, "reader"), value: applicant },
+    {
+      label: tMail(libLoc, "membership_refused.statusLabel"),
+      value: tMail(libLoc, isFinal ? "membership_refused.final" : "membership_refused.retry")
+    }
+  ];
+  if (note) det.push({ label: tMail(libLoc, "membership_refused.reasonLabel"), value: note });
+
+  const { html, text } = renderEmail({
+    locale: libLoc,
+    preheader: tit,
+    title: tit,
+    introHtml: `<p>${tMail(libLoc, "membership_refused.intro")}</p>`,
+    details: det,
+    footerHtml: footerPadrao(ctx, libLoc),
+    context: ctx
+  });
+  const sub = applyBrandingText(`[${bt}] ${tit}`, ctx);
+  const admin_result = await safeSendEmail(adminTarget(ctx), sub, html, text, "admin_copy", ctx);
+  return { admin_result };
+}
+
+// ============================================================================
 // #25 — notification d'expiration de cotisation (cotisation_expiring).
 // ----------------------------------------------------------------------------
 // Émise par le cron public.fn_cron_notify_membership_expiry via

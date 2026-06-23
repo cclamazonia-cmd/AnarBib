@@ -2285,6 +2285,80 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
   },
 
   // ===== Profile notices (prof.*) ===========================================
+  // Refonte du refus — alerte STAFF (coordination) qu'une inscription a été
+  // refusée (suivi ; le candidat·e n'est PAS notifié·e).
+  "membership_refused.subject": {
+    "pt-BR": "Inscrição recusada",
+    fr: "Inscription refusée",
+    es: "Inscripción rechazada",
+    en: "Registration refused",
+    it: "Iscrizione rifiutata",
+    de: "Anmeldung abgelehnt",
+    ca: "Inscripció rebutjada",
+    eo: "Aliĝo rifuzita",
+    nl: "Inschrijving geweigerd",
+    el: "Η εγγραφή απορρίφθηκε"
+  },
+  "membership_refused.intro": {
+    "pt-BR": "Uma solicitação de inscrição em validação foi recusada pela equipe. Para registro e acompanhamento:",
+    fr: "Une demande d'inscription en attente a été refusée par l'équipe. Pour mémoire et suivi :",
+    es: "Una solicitud de inscripción pendiente fue rechazada por el equipo. Para registro y seguimiento:",
+    en: "A pending registration request was refused by the team. For the record and follow-up:",
+    it: "Una richiesta di iscrizione in attesa è stata rifiutata dal gruppo. Per memoria e monitoraggio:",
+    de: "Eine ausstehende Anmeldeanfrage wurde vom Team abgelehnt. Zur Kenntnis und Nachverfolgung:",
+    ca: "Una sol·licitud d'inscripció pendent ha estat rebutjada per l'equip. Per a registre i seguiment:",
+    eo: "Atendanta aliĝpeto estis rifuzita de la teamo. Por registro kaj sekvado:",
+    nl: "Een openstaand aanmeldverzoek is door het team geweigerd. Ter kennisname en opvolging:",
+    el: "Ένα εκκρεμές αίτημα εγγραφής απορρίφθηκε από την ομάδα. Για αρχείο και παρακολούθηση:"
+  },
+  "membership_refused.statusLabel": {
+    "pt-BR": "Situação",
+    fr: "Statut",
+    es: "Situación",
+    en: "Status",
+    it: "Stato",
+    de: "Status",
+    ca: "Estat",
+    eo: "Stato",
+    nl: "Status",
+    el: "Κατάσταση"
+  },
+  "membership_refused.retry": {
+    "pt-BR": "Primeira recusa — a pessoa pode enviar um segundo pedido (reexame).",
+    fr: "Premier refus — la personne peut soumettre une 2e demande (réexamen).",
+    es: "Primer rechazo — la persona puede enviar una segunda solicitud (reexamen).",
+    en: "First refusal — the person can submit a second request (review).",
+    it: "Primo rifiuto — la persona può inviare una seconda richiesta (riesame).",
+    de: "Erste Ablehnung — die Person kann eine zweite Anfrage stellen (erneute Prüfung).",
+    ca: "Primera negativa — la persona pot enviar una segona sol·licitud (reexamen).",
+    eo: "Unua rifuzo — la persono povas sendi duan peton (reekzameno).",
+    nl: "Eerste weigering — de persoon kan een tweede verzoek indienen (herbeoordeling).",
+    el: "Πρώτη απόρριψη — το άτομο μπορεί να υποβάλει δεύτερο αίτημα (επανεξέταση)."
+  },
+  "membership_refused.final": {
+    "pt-BR": "Recusa definitiva — não é possível um novo pedido.",
+    fr: "Refus définitif — aucune nouvelle demande possible.",
+    es: "Rechazo definitivo — no es posible una nueva solicitud.",
+    en: "Definitive refusal — no further request possible.",
+    it: "Rifiuto definitivo — nessuna nuova richiesta possibile.",
+    de: "Endgültige Ablehnung — keine weitere Anfrage möglich.",
+    ca: "Negativa definitiva — no és possible cap nova sol·licitud.",
+    eo: "Definitiva rifuzo — neniu nova peto eblas.",
+    nl: "Definitieve weigering — geen nieuw verzoek mogelijk.",
+    el: "Οριστική απόρριψη — δεν είναι δυνατό νέο αίτημα."
+  },
+  "membership_refused.reasonLabel": {
+    "pt-BR": "Motivo",
+    fr: "Raison",
+    es: "Motivo",
+    en: "Reason",
+    it: "Motivo",
+    de: "Grund",
+    ca: "Motiu",
+    eo: "Kialo",
+    nl: "Reden",
+    el: "Λόγος"
+  },
   "membership_validation_requested.subject": {
     "pt-BR": "Nova solicitação de inscrição",
     fr: "Nouvelle demande d'inscription",

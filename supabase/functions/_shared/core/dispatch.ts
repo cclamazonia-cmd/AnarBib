@@ -6,7 +6,7 @@ import { handleTeamEvent } from "../domain/team.ts";
 import { handleNetworkEvent } from "../domain/network.ts";
 import { handleReaderMessageEvent, handleLibraryMessageEvent } from "../domain/reader-message.ts";
 import { handleRgpdPurgeWarning } from "../domain/rgpd.ts";
-import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested, handleReaderIdentityAssigned, handleCotisationExpiring } from "../domain/membership.ts";
+import { handleCotisationPayment, handleValidationConfirmed, handleMembershipValidationRequested, handleMembershipRefused, handleReaderIdentityAssigned, handleCotisationExpiring } from "../domain/membership.ts";
 import { handleMembershipRestriction } from "../domain/membership-restriction.ts";
 import { handlePartnershipLifecycle, handleTransparenceEnabled, handleConfigExpanded } from "../domain/partnership.ts";
 import { handleAuthorityEvent } from "../domain/authority.ts";
@@ -55,6 +55,8 @@ export async function dispatchNotifyEvent(event, recordId, payload) {
   // VALID-C3 : nouvelle demande d'inscription -> alerte la biblio (CTA /painel)
   // qu'un compte attend validation. Payload-based, lit la membership par uuid.
   if (event === "membership_validation_requested") return await handleMembershipValidationRequested(payload);
+  // Refonte du refus : inscription refusée -> alerte la coordination (suivi).
+  if (event === "membership_refused") return await handleMembershipRefused(payload);
   // #NOTIFY-Painel-acts famille 2 : restriction locale + gel global (et levées).
   // Mail membre obligatoire + copie staff (profile_restriction_enabled). Payload-based.
   if ([
