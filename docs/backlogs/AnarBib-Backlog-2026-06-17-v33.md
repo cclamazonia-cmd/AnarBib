@@ -218,7 +218,7 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 ---
 
 ## 4. Réserves — ce que la base ne prouve pas
-- Clôtures **⚠️ backend seul** (#IMPORT, PARTNER, PEB/ILL-digital) : surface backend tourne, **UX/terrain non audité** — report v32.
+- Clôtures #IMPORT / PARTNER / PEB / ILL-digital : **requalifiées « à éprouver en usage »** (2026-06-23, suite audit externe). Les **écrans existent** (`ImportWizard`, `LibraryPartnershipsSection`/`StabilizedPartnershipsSection`, `PebHistorySection`, `LibraryDigitalSharesSection`) — le reste-à-faire n'est **pas l'UI** mais la **validation terrain par un·e non-spécialiste**. Mini-protocole : `../journal/audits/PROTOCOLE_validation_terrain_backend-seul_2026-06-23.md`.
 - **(1b)** : requête de classement validée read-only, mais **enrobage RPC + grants + perfs + chemin session = à éprouver sur branche** avant déploiement (touche la chaîne de visibilité du catalogue → risque de fuite réseau/BTL si mal câblé).
 - Items marqués **↩︎ report v32** : **non re-vérifiés** cette session — la session a porté sur la **longue traîne OPAC** et ses dépendances (fiche livre/auteur, indexation, traductions, enrichissement).
 
