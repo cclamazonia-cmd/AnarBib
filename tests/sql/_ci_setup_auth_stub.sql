@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS auth.users (
   confirmed_at           timestamptz,
   banned_until           timestamptz,
   deleted_at             timestamptz,
+  is_sso_user            boolean NOT NULL DEFAULT false,
   is_anonymous           boolean NOT NULL DEFAULT false
 );
 
