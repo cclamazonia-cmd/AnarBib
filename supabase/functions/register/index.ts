@@ -547,13 +547,13 @@ serve(async (req)=>{
         error: "MISSING_REQUIRED_FIELDS"
       }, 400);
     }
-    // CONSENT : acceptation des règles requise sauf pour les cas sans biblio
-    // à rejoindre (collective_candidate et reader_orphan ne rejoignent pas
-    // une biblio existante). Pendant exact de l'ancien !signupWithoutLibrary.
-    // Consentement e-mail : requis pour tous SAUF le compte contributeur (réseau,
-    // ne vient pas emprunter) — il peut s'inscrire sans cocher. acceptRules : requis
-    // seulement pour reader_pending (rejoint une biblio avec règlement).
-    if ((signupIntent !== "contributor" && !consentEmail) || (signupIntent === "reader_pending" && !acceptRules)) {
+    // CONSENT : seul acceptRules (règlement de la biblio) est requis, et seulement
+    // pour reader_pending (qui rejoint une biblio avec règlement). Le consentement
+    // e-mail (consentEmail) est désormais FACULTATIF (Suite a) : c'est un
+    // interrupteur de CANAL (notifications in-app toujours créées, e-mail seulement
+    // si coché), pas une garde bloquante — le forcer invalidait sa nature de
+    // consentement libre (RGPD).
+    if (signupIntent === "reader_pending" && !acceptRules) {
       return json({
         error: "CONSENT_REQUIRED"
       }, 400);
