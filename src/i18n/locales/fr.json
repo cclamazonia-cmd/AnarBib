@@ -5493,5 +5493,7 @@
   "notifications.markAllRead": "Tout marquer comme lu",
   "notifications.loadError": "Impossible de charger les notifications",
   "notif.welcome.title": "Bienvenue dans le réseau AnarBib !",
-  "notif.welcome.body": "Ton compte est créé. Pour commencer : explore le catalogue, fais ta première réservation ou consultation, et complète ton profil dans « Mon compte »."
+  "notif.welcome.body": "Ton compte est créé. Pour commencer : explore le catalogue, fais ta première réservation ou consultation, et complète ton profil dans « Mon compte ».",
+  "systemNote.noShowAuto": "Retrait non effectué dans le délai (no-show automatique).",
+  "panel.apiError.pickup_scheduled_for_in_past": "La date de retrait doit être dans le futur."
 }

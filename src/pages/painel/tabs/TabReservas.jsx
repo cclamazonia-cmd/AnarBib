@@ -43,6 +43,10 @@ export default function TabReservas({
   cancelWithReason,
   submitCounterProposal,
 }) {
+  // Empêche de planifier un retrait dans le passé (sinon no-show instantané) :
+  // datetime-local attend "YYYY-MM-DDTHH:MM" en heure LOCALE.
+  const minPickup = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 16);
   return (
     <div>
       <TabHeader title={t({ id: 'panel.tab.reservations' })} onRefresh={loadData} />
@@ -52,7 +56,7 @@ export default function TabReservas({
       </div>
       <div className="ab-painel-res-workflow">
         <input type="text" value={resNote} onChange={e => setResNote(e.target.value)} placeholder={t({id:"panel.loan.notePh"})} className="ab-painel-input" />
-        <input type="datetime-local" value={resSchedule} onChange={e => setResSchedule(e.target.value)} className="ab-painel-input" />
+        <input type="datetime-local" min={minPickup} value={resSchedule} onChange={e => setResSchedule(e.target.value)} className="ab-painel-input" />
         {/* PATCH 07/05/2026 : grisage des transitions illégales depuis le(s) stage(s) sélectionné(s).
             - Calcul de l'intersection des transitions valides pour toutes les lignes sélectionnées
             - Si sélection vide : toutes options actives (mode exploratoire)

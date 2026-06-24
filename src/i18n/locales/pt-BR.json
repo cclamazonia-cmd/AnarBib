@@ -5493,5 +5493,7 @@
   "notifications.markAllRead": "Marcar todas como lidas",
   "notifications.loadError": "Não foi possível carregar as notificações",
   "notif.welcome.title": "Boas-vindas à rede AnarBib!",
-  "notif.welcome.body": "A tua conta foi criada. Para começar: explora o catálogo, faz a tua primeira reserva ou consulta, e completa o teu perfil em «Minha conta»."
+  "notif.welcome.body": "A tua conta foi criada. Para começar: explora o catálogo, faz a tua primeira reserva ou consulta, e completa o teu perfil em «Minha conta».",
+  "systemNote.noShowAuto": "Retirada não realizada no prazo (no-show automático).",
+  "panel.apiError.pickup_scheduled_for_in_past": "A data de retirada deve estar no futuro."
 }

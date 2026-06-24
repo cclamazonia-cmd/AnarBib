@@ -5493,5 +5493,7 @@
   "notifications.markAllRead": "Mark all as read",
   "notifications.loadError": "Couldn't load notifications",
   "notif.welcome.title": "Welcome to the AnarBib network!",
-  "notif.welcome.body": "Your account is set up. To get started: explore the catalogue, make your first reservation or consultation, and complete your profile in “My account”."
+  "notif.welcome.body": "Your account is set up. To get started: explore the catalogue, make your first reservation or consultation, and complete your profile in “My account”.",
+  "systemNote.noShowAuto": "Pickup not completed within the deadline (automatic no-show).",
+  "panel.apiError.pickup_scheduled_for_in_past": "The pickup date must be in the future."
 }

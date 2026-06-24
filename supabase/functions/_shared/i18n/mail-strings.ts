@@ -7492,6 +7492,18 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "Annulering uitgevoerd door de bibliotheek.",
     el: "Ακύρωση που πραγματοποιήθηκε από τη βιβλιοθήκη."
   },
+  "systemNote.noShowAuto": {
+    "pt-BR": "Retirada não realizada no prazo (no-show automático).",
+    fr: "Retrait non effectué dans le délai (no-show automatique).",
+    es: "Retiro no realizado en el plazo (no-show automático).",
+    en: "Pickup not completed within the deadline (automatic no-show).",
+    it: "Ritiro non effettuato entro il termine (no-show automatico).",
+    de: "Abholung nicht fristgerecht erfolgt (automatischer No-Show).",
+    ca: "Recollida no realitzada dins el termini (no-show automàtic).",
+    eo: "Repreno ne plenumita ĝustatempe (aŭtomata neapero).",
+    nl: "Ophaling niet binnen de termijn voltooid (automatische no-show).",
+    el: "Η παραλαβή δεν ολοκληρώθηκε εντός της προθεσμίας (αυτόματο no-show)."
+  },
 };
 
 const D: SupportedMailLocale = "pt-BR";

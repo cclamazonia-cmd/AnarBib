@@ -5493,5 +5493,7 @@
   "notifications.markAllRead": "Marki ĉion kiel legitan",
   "notifications.loadError": "Ne eblis ŝargi la sciigojn",
   "notif.welcome.title": "Bonvenon al la reto AnarBib!",
-  "notif.welcome.body": "Via konto estas kreita. Por komenci: esploru la katalogon, faru vian unuan rezervon aŭ konsulton, kaj kompletigu vian profilon en «Mia konto»."
+  "notif.welcome.body": "Via konto estas kreita. Por komenci: esploru la katalogon, faru vian unuan rezervon aŭ konsulton, kaj kompletigu vian profilon en «Mia konto».",
+  "systemNote.noShowAuto": "Repreno ne plenumita ĝustatempe (aŭtomata neapero).",
+  "panel.apiError.pickup_scheduled_for_in_past": "La dato de repreno devas esti estonta."
 }
