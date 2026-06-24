@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Πρότεινε αυτόν τον χρόνο",
   "panel.consultation.schedule.submitting": "Προγραμματισμός...",
   "panel.consultation.schedule.subtitle": "Για",
-  "panel.consultation.schedule.timezoneHint": "Ζώνη ώρας: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Ζώνη ώρας της βιβλιοθήκης: {tz}",
   "panel.consultation.schedule.title": "Πρότεινε έναν χρόνο",
   "panel.consultations.active": "Ενεργές μελέτες: {count}",
   "panel.consultations.empty": "Καμία μελέτη σε εξέλιξη αυτή τη στιγμή.",

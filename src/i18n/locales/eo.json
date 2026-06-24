@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Proponi ĉi tiun tempfendon",
   "panel.consultation.schedule.submitting": "Proponado...",
   "panel.consultation.schedule.subtitle": "Por",
-  "panel.consultation.schedule.timezoneHint": "Uzata horzono: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Horzono de la biblioteko: {tz}",
   "panel.consultation.schedule.title": "Proponi tempfendon",
   "panel.consultations.active": "Aktivaj konsultoj: {count}",
   "panel.consultations.empty": "Neniu konsulto nuntempe en kurso.",

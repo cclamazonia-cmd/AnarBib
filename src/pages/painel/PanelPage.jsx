@@ -376,6 +376,24 @@ export default function PanelPage() {
   const [scheduleForm, setScheduleForm] = useState({ date: '', startsAt: '', endsAt: '', note: '' });
   const [scheduling, setScheduling] = useState(false);
   const [scheduleError, setScheduleError] = useState('');
+  // Fuseau horaire de la bibliothèque : la planification de consultation se fait
+  // en heure-biblio (cohérent avec la validation backend fn_validate_consulta_
+  // schedule_window). Chargé une fois depuis library_service_state pour l'afficher
+  // dans le hint du modal. Cf. migration 20260624161959.
+  const [consultationTz, setConsultationTz] = useState(null);
+  useEffect(() => {
+    if (!libraryId) { setConsultationTz(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('library_service_state')
+        .select('consultation_timezone')
+        .eq('library_id', libraryId)
+        .maybeSingle();
+      if (!cancelled) setConsultationTz(data?.consultation_timezone || null);
+    })();
+    return () => { cancelled = true; };
+  }, [libraryId]);
 
   // PATCH 08/05/2026 paquet 3B : state pour le formulaire accordion de
   // contre-proposition staff. Un seul form ouvert à la fois (la ligne
@@ -1055,7 +1073,7 @@ export default function PanelPage() {
 
   // Paquet 27.A.3 (5.A) : migration vers wrapper api.advance_consulta (SECURITY INVOKER).
   // scheduleParams optionnel : { startsAt, endsAt, timezone } pour stage 'consulta_agendada'.
-  async function setConsultaWorkflow(consultaId, lineNo, stage, note, scheduleParams) {
+  async function setConsultaWorkflow(consultaId, lineNo, stage, note, scheduleParams, opts = {}) {
     try {
       const params = {
         p_consulta_id: consultaId,
@@ -1071,7 +1089,13 @@ export default function PanelPage() {
       const { error } = await supabase.schema('api').rpc('advance_consulta', params);
       if (error) throw error;
       loadConsultas();
-    } catch (e) { notifyError(localizeError(e, t, 'panel.error.consultaWorkflow'), e); }
+    } catch (e) {
+      // opts.rethrow : laisse l'appelant (modal de planification) afficher inline
+      // le message précis du backend (fenêtre, durée, heures pleines, capacité…)
+      // au lieu d'un toast générique.
+      if (opts.rethrow) throw e;
+      notifyError(localizeError(e, t, 'panel.error.consultaWorkflow'), e);
+    }
   }
 
   // Paquet 27.A.4 (5.B) : modal de proposition de creneau pour consulta agendada.
@@ -1178,9 +1202,15 @@ export default function PanelPage() {
         scheduleTarget.line_no,
         'consulta_agendada',
         note || null,
-        { startsAt: startsIso, endsAt: endsIso, timezone: tz }
+        { startsAt: startsIso, endsAt: endsIso, timezone: tz },
+        { rethrow: true }
       );
       setScheduleTarget(null);
+    } catch (e) {
+      // Surface le message précis du backend (hors fenêtre, durée 1–4h, heures
+      // pleines/demies, capacité…) au lieu du toast générique. localizeError sans
+      // fallback : les messages délibérés (P0001) passent, le jargon est masqué.
+      setScheduleError(localizeError(e, t));
     } finally {
       setScheduling(false);
     }
@@ -2142,7 +2172,7 @@ export default function PanelPage() {
               </span>
             </label>
             <p style={{ fontSize: '.75rem', color: 'var(--brand-muted)', marginTop: 4 }}>
-              {t({ id: 'panel.consultation.schedule.timezoneHint' }, { tz: Intl.DateTimeFormat().resolvedOptions().timeZone })}
+              {t({ id: 'panel.consultation.schedule.timezoneHint' }, { tz: consultationTz || 'America/Belem' })}
             </p>
             {scheduleError && (
               <p style={{ color: 'var(--brand-danger, #c62828)', fontSize: '.9rem', margin: 0 }}>{scheduleError}</p>

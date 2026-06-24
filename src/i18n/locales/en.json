@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Propose this slot",
   "panel.consultation.schedule.submitting": "Scheduling...",
   "panel.consultation.schedule.subtitle": "For",
-  "panel.consultation.schedule.timezoneHint": "Timezone used: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Library timezone: {tz}",
   "panel.consultation.schedule.title": "Propose a time slot",
   "panel.consultations.active": "Active consultations: {count}",
   "panel.consultations.empty": "No consultations in progress at the moment.",

@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Diesen Termin vorschlagen",
   "panel.consultation.schedule.submitting": "Wird vorgeschlagen...",
   "panel.consultation.schedule.subtitle": "Für",
-  "panel.consultation.schedule.timezoneHint": "Verwendete Zeitzone: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Zeitzone der Bibliothek: {tz}",
   "panel.consultation.schedule.title": "Termin vorschlagen",
   "panel.consultations.active": "Aktive Einsichtnahmen: {count}",
   "panel.consultations.empty": "Derzeit keine laufenden Einsichtnahmen.",

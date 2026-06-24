@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Proposar aquesta franja",
   "panel.consultation.schedule.submitting": "Proposant...",
   "panel.consultation.schedule.subtitle": "Per a",
-  "panel.consultation.schedule.timezoneHint": "Fus horari utilitzat: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Fus horari de la biblioteca: {tz}",
   "panel.consultation.schedule.title": "Proposar una franja",
   "panel.consultations.active": "Consultes actives: {count}",
   "panel.consultations.empty": "Cap consulta en curs de moment.",

@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Proponer este horario",
   "panel.consultation.schedule.submitting": "Proponiendo...",
   "panel.consultation.schedule.subtitle": "Para",
-  "panel.consultation.schedule.timezoneHint": "Zona horaria utilizada: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Zona horaria de la biblioteca: {tz}",
   "panel.consultation.schedule.title": "Proponer un horario",
   "panel.consultations.active": "Consultas activas: {count}",
   "panel.consultations.empty": "Ninguna consulta en curso por el momento.",

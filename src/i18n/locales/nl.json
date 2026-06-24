@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Dit tijdslot voorstellen",
   "panel.consultation.schedule.submitting": "Inplannen…",
   "panel.consultation.schedule.subtitle": "Voor",
-  "panel.consultation.schedule.timezoneHint": "Gebruikte tijdzone: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Tijdzone van de bibliotheek: {tz}",
   "panel.consultation.schedule.title": "Een tijdslot voorstellen",
   "panel.consultations.active": "Actieve raadplegingen: {count}",
   "panel.consultations.empty": "Op dit moment geen lopende raadplegingen.",

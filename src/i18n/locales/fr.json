@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Proposer ce créneau",
   "panel.consultation.schedule.submitting": "Proposition en cours...",
   "panel.consultation.schedule.subtitle": "Pour",
-  "panel.consultation.schedule.timezoneHint": "Fuseau horaire utilisé : {tz}",
+  "panel.consultation.schedule.timezoneHint": "Fuseau horaire de la bibliothèque : {tz}",
   "panel.consultation.schedule.title": "Proposer un créneau",
   "panel.consultations.active": "Consultations actives : {count}",
   "panel.consultations.empty": "Aucune consultation en cours pour le moment.",

@@ -3778,7 +3778,7 @@
   "panel.consultation.schedule.submitButton": "Propor este horário",
   "panel.consultation.schedule.submitting": "Agendando...",
   "panel.consultation.schedule.subtitle": "Para",
-  "panel.consultation.schedule.timezoneHint": "Fuso horário utilizado: {tz}",
+  "panel.consultation.schedule.timezoneHint": "Fuso horário da biblioteca: {tz}",
   "panel.consultation.schedule.title": "Agendar consulta",
   "panel.consultations.active": "Consultas ativas: {count}",
   "panel.consultations.empty": "Nenhuma consulta em curso no momento.",
