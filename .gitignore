@@ -75,3 +75,8 @@ public/vendor/tesseract/lang/
 # Seul le .example (sans secret) est versionné.
 scripts/backup/*.env
 *.pass
+
+# Dossier de passation inter-sessions (briefs, notes, copies de travail) — local,
+# non versionné. Évite que les captures « modifs en cours » du worktree partagé
+# le ré-empaquettent à chaque fois (cf. coordination 24/06).
+_handoff/
