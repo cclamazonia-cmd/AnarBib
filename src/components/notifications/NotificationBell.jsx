@@ -50,6 +50,12 @@ export default function NotificationBell() {
     if (route) { setOpen(false); navigate(route); }
   }
 
+  // Les notifs récentes stockent une CLÉ i18n (ex. « notif.reserva.prontaParaRetirada.title »)
+  // à traduire au rendu ; les anciennes/ponctuelles stockent du texte littéral. On ne traduit
+  // que si ça ressemble à une clé (mot.mot, sans espace) — sinon on rend le littéral tel quel.
+  // Même règle que l'onglet « Avisos » d'AccountPage (tNotifText).
+  const tNotifText = (s) => (s && /^[\w.]+$/.test(s) && s.includes('.')) ? t({ id: s, defaultMessage: s }) : s;
+
   const badge = unreadCount > 9 ? '9+' : String(unreadCount);
 
   return (
@@ -147,7 +153,7 @@ export default function NotificationBell() {
                     >
                       {n.title && (
                         <div style={{ fontSize: '.86rem', fontWeight: n.is_read ? 500 : 700, marginBottom: 2 }}>
-                          {n.title}
+                          {tNotifText(n.title)}
                         </div>
                       )}
                       {n.body && (
@@ -156,7 +162,7 @@ export default function NotificationBell() {
                           display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
                           overflow: 'hidden',
                         }}>
-                          {n.body}
+                          {tNotifText(n.body)}
                         </div>
                       )}
                       <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)', marginTop: 4 }}>
