@@ -627,6 +627,7 @@ export default function CriarContaPage() {
                 onSuccess={(token) => setTurnstileToken(token)}
                 onError={() => setTurnstileToken('')}
                 onExpire={() => setTurnstileToken('')}
+                options={{ theme: 'dark' }}
               />
             </div>
           )}
