@@ -19,7 +19,7 @@ The application is in production and used by the Biblioteca Libertária Maxwell 
 
 ## Sommaire / Table of contents
 
-- État au 15 juin 2026 / State as of 15 June 2026
+- État au 24 juin 2026 / State as of 24 June 2026
 - Démarrage rapide / Quick start
 - Architecture
 - Configuration
@@ -38,39 +38,65 @@ The application is in production and used by the Biblioteca Libertária Maxwell 
 
 ---
 
-## État au 15 juin 2026 / State as of 15 June 2026
+## État au 24 juin 2026 / State as of 24 June 2026
 
-### État au 15 juin 2026 (FR)
+### État au 24 juin 2026 (FR)
 
-Chantiers structurants livrés ou consolidés (mai–juin 2026) :
+Chantiers livrés depuis la mi-juin 2026 (15 → 24 juin) — vérifiés sur le backend de production :
+
+- **Modèle Œuvre / Éditions / Expressions (FRBR-léger)** — Regroupement des éditions d'une même œuvre, suggestion d'éditions liées, vue publique d'œuvre et traducteurs par expression (migrations `works_model_lot1..4`, `works_v2_lotA..C`, `works_v3_expressions`, `works_v3_translators_per_expression`).
+- **Support des médias audio** — Empreinte acoustique (`audio_fingerprint_lookup`, type AcoustID + `recording_mbid` MusicBrainz), sous-couche pistes/segments, exposition du MBID dans OAI (migrations `audio_p0..p5`).
+- **Cartographie réseau livrée** — Schéma + RPC + soumissions publiques + géocodage (`submit-cartography-entry`, `geocode`), édition et flag PEB sur la carte des collectifs (l'onglet Annuaire n'est plus seulement verrouillé).
+- **Gazette fédérée & lettre d'information** — Contributions (`submit-gazette-contribution`), build mensuel (`gazette-monthly-build`), abonnement/désabonnement (`lettre-confirm`, `lettre-unsubscribe`), digest réseau (`notify-rede-digest`).
+- **Échange de fonds inter-bibliothèques** — Export/réception de *bundles* de fonds, dépôt direct, rattachement et révocation d'assets reçus, GC des dépôts (`export-fonds-bundle`, `receive-fonds-bundle`, `deposit-fonds-direct`, `attach-received-asset`, `revoke-digital-asset`, `gc-deposits`).
+- **Fournisseur OAI-PMH** — `oai-pmh-provider` + notification d'ouverture (`notify-oai-opening`) : le catalogue est moissonnable.
+- **Cycle de vie des adhésions lecteur** — Workflow d'adhésion (en attente, refus « two-strike », réactivation), application de l'adhésion active à la circulation, suggestion de numéro de lecteur, inscription publique optionnelle par bibliothèque (`reader_membership_lifecycle_log`, `enforce_active_membership_circulation`, `refusal_two_strike`, `signup_list_requires_*`).
+- **Conformité RGPD** — Anonymisation du compte à la suppression (`fn_delete_my_account`).
+- **Invitations d'équipe & onboarding** — Flux d'invitation du staff biblio (`invitation_equipe` + RPC + notification), évaluation collaborative d'onboarding.
+- **Réconciliation catalogue / disponibilité** — Filet cron nocturne de réconciliation des compteurs de disponibilité (`holdings_availability_reconcile_cron`).
+- **Backend porté à 41 Edge Functions** (contre 18 à la mi-juin) et **57 fichiers de migration** SQL (baseline + incréments), appliqués jusqu'au **23/06/2026** ; suite de tests Vitest verte (87 tests).
+
+Chantiers structurants consolidés (mai–juin 2026) :
 
 - **Migration CI/CD Woodpecker → Forgejo Actions (11/06/2026)** — Woodpecker hébergé étant devenu instable (~22 % d'uptime), la CI est passée aux **Forgejo Actions** natives de Codeberg (`.forgejo/workflows/ci.yml`), sur un **runner auto-hébergé** (`anarbib-local`, service systemd sur le WSL2 du mainteneur). Deux jobs séquentiels : `app` (install → lint bloquant → test bloquant → build Vite → déploiement Codeberg Pages) puis `backend` (`needs: app` → déploiement des Edge Functions → `supabase db push`). Le fichier `.woodpecker.yml` a été retiré.
-- **Consolidation des remotes git sur Codeberg (12/06/2026)** — Fin du dual-push GitHub. `origin` **et** `codeberg` pointent désormais tous deux sur `codeberg.org/anarbib/anarbib`. Le miroir GitHub `cclamazonia-cmd/AnarBib` n'est plus alimenté par git et reste en retard tant que l'auth GitHub (PAT/SSH) n'est pas rétablie — **sans impact** sur prod/CI/déploiement.
+- **Consolidation des remotes git sur Codeberg (12/06/2026)** — Fin du dual-push GitHub. `origin` **et** `codeberg` pointent désormais tous deux sur `codeberg.org/AnarBib/anarbib`. Le miroir GitHub `cclamazonia-cmd/AnarBib` n'est plus alimenté par git et reste en retard tant que l'auth GitHub (PAT/SSH) n'est pas rétablie — **sans impact** sur prod/CI/déploiement.
 - **Socle PWA installable — MOBILE Paquet 0** — `manifest.webmanifest`, service worker (`public/sw.js`), jeu d'icônes (favicon, apple-touch-icon, icônes 192/512), métadonnées iOS/Android dans `index.html`. L'application est désormais installable sur l'écran d'accueil.
-- **Outils fédéralistes (federacao)** — Mise en avant sur l'accueil des onglets **Communs** (6 documents / 4 catégories), **Entraide** (v1) et **Annuaire** (carte des collectifs, verrouillée). Spec : `docs/specs/spec-outils-federalistes.md` v0.2.
-- **Internationalisation portée à 10 locales en parité stricte** — `pt-BR` (référence) + `fr, es, en, it, de, ca, eo, nl, el`, toutes câblées et chargées en lazy, **3286 clés à parité exacte gardées par la CI**. Charte de langage inclusif **v2** (2026-06-05) couvrant les 10 locales (la v1 est dépréciée).
-- **Backend largement étendu** — **18 Edge Functions** (catalogage/métadonnées, lookups ISBN, notifications lecteur/biblio/réseau, PEB / partage numérique, import de catalogues partenaires, lecture PDF/assets, login, register…) et **193 migrations** SQL versionnées.
-- **Réorganisation de la documentation** — `docs/decisions/` renommé en `docs/journal/` (sous-dossiers typés), `notes-audit/` déplacé sous `docs/notes-audit/`. Nouveaux corpus : `docs/governance/` (guide de gouvernance traduit en 10 langues), `docs/cartographie/`, `docs/schema/` (snapshot baseline), `docs/db/`.
+- **Outils fédéralistes (federacao)** — Mise en avant sur l'accueil des onglets **Communs**, **Entraide** et **Annuaire** (carte des collectifs, désormais alimentée par la cartographie). Spec : `docs/specs/spec-outils-federalistes.md` v0.2.
+- **Internationalisation à 10 locales en parité stricte** — `pt-BR` (référence) + `fr, es, en, it, de, ca, eo, nl, el`, toutes câblées et chargées en lazy, parité de clés gardée par la CI. Charte de langage inclusif **v2** (2026-06-05) couvrant les 10 locales (la v1 est dépréciée).
+- **Réorganisation de la documentation** — `docs/decisions/` renommé en `docs/journal/` (sous-dossiers typés), `notes-audit/` déplacé sous `docs/notes-audit/`. Corpus : `docs/governance/` (guide de gouvernance traduit en 10 langues), `docs/cartographie/`, `docs/schema/` (snapshot baseline), `docs/db/`.
 
 Chantiers de fond hérités (toujours en production) : Admin réseau (cooptation/retrait collectif à l'unanimité), Profils d'adoption (4 axes politiques orthogonaux : `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), workflow des consultations sur place. Leurs specs ont été révisées (voir Articulation des specs).
 
-Le détail des chantiers en cours, des dettes et des priorités vit dans le backlog courant (`docs/backlogs/AnarBib-Backlog-2026-06-12-v32.md`) et le `REGISTRE_decisions.md` des specs.
+Le détail des chantiers en cours, des dettes et des priorités vit dans le backlog courant (`docs/backlogs/`, voir `INDEX.md` pour la version courante) et le `REGISTRE_decisions.md` des specs.
 
-### State as of 15 June 2026 (EN)
+### State as of 24 June 2026 (EN)
 
-Structural work delivered or consolidated (May–June 2026):
+Work delivered since mid-June 2026 (15 → 24 June) — verified against the production backend:
+
+- **Work / Editions / Expressions model (light FRBR)** — Grouping editions of a single work, suggesting related editions, public work view and per-expression translators (migrations `works_model_lot1..4`, `works_v2_lotA..C`, `works_v3_expressions`, `works_v3_translators_per_expression`).
+- **Audio media support** — Acoustic fingerprinting (`audio_fingerprint_lookup`, AcoustID + MusicBrainz `recording_mbid`), tracks/segments sublayer, MBID exposed in OAI (migrations `audio_p0..p5`).
+- **Network cartography delivered** — Schema + RPC + public submissions + geocoding (`submit-cartography-entry`, `geocode`), editing and ILL flag on the collectives map (the Directory tab is no longer merely locked).
+- **Federated gazette & newsletter** — Contributions (`submit-gazette-contribution`), monthly build (`gazette-monthly-build`), subscribe/unsubscribe (`lettre-confirm`, `lettre-unsubscribe`), network digest (`notify-rede-digest`).
+- **Inter-library fonds exchange** — Export/receive fonds bundles, direct deposit, attach and revoke received assets, deposit GC (`export-fonds-bundle`, `receive-fonds-bundle`, `deposit-fonds-direct`, `attach-received-asset`, `revoke-digital-asset`, `gc-deposits`).
+- **OAI-PMH provider** — `oai-pmh-provider` + opening notification (`notify-oai-opening`): the catalogue is harvestable.
+- **Reader membership lifecycle** — Membership workflow (pending, "two-strike" refusal, reactivation), active-membership enforcement on circulation, next-reader-number suggestion, optional per-library public signup (`reader_membership_lifecycle_log`, `enforce_active_membership_circulation`, `refusal_two_strike`, `signup_list_requires_*`).
+- **GDPR compliance** — Account anonymization on deletion (`fn_delete_my_account`).
+- **Team invitations & onboarding** — Library-staff invitation flow (`invitation_equipe` + RPC + notification), collaborative onboarding evaluation.
+- **Catalogue / availability reconciliation** — Nightly cron net reconciling availability counters (`holdings_availability_reconcile_cron`).
+- **Backend grown to 41 Edge Functions** (up from 18 in mid-June) and **57 migration files** (baseline + increments) applied through **2026-06-23**; Vitest suite green (87 tests).
+
+Structural work consolidated (May–June 2026):
 
 - **CI/CD migration Woodpecker → Forgejo Actions (11/06/2026)** — Hosted Woodpecker having become unstable (~22% uptime), CI moved to Codeberg-native **Forgejo Actions** (`.forgejo/workflows/ci.yml`) on a **self-hosted runner** (`anarbib-local`, a systemd service on the maintainer's WSL2). Two sequential jobs: `app` (install → blocking lint → blocking test → Vite build → Codeberg Pages deploy) then `backend` (`needs: app` → Edge Functions deploy → `supabase db push`). The `.woodpecker.yml` file was removed.
-- **Git remotes consolidated on Codeberg (12/06/2026)** — End of GitHub dual-push. `origin` **and** `codeberg` now both point to `codeberg.org/anarbib/anarbib`. The GitHub mirror `cclamazonia-cmd/AnarBib` is no longer fed by git and stays behind until GitHub auth (PAT/SSH) is restored — **no impact** on prod/CI/deployment.
+- **Git remotes consolidated on Codeberg (12/06/2026)** — End of GitHub dual-push. `origin` **and** `codeberg` now both point to `codeberg.org/AnarBib/anarbib`. The GitHub mirror `cclamazonia-cmd/AnarBib` is no longer fed by git and stays behind until GitHub auth (PAT/SSH) is restored — **no impact** on prod/CI/deployment.
 - **Installable PWA foundation — MOBILE Package 0** — `manifest.webmanifest`, service worker (`public/sw.js`), icon set (favicon, apple-touch-icon, 192/512 icons), iOS/Android metadata in `index.html`. The app is now installable to the home screen.
-- **Federalist tools (federacao)** — Homepage now surfaces the **Commons** tab (6 documents / 4 categories), **Mutual aid** (v1) and **Directory** (map of collectives, locked). Spec: `docs/specs/spec-outils-federalistes.md` v0.2.
-- **Internationalization brought to 10 locales at strict parity** — `pt-BR` (reference) + `fr, es, en, it, de, ca, eo, nl, el`, all wired and lazy-loaded, **3286 keys at exact parity enforced by CI**. Inclusive language charter **v2** (2026-06-05) covering all 10 locales (v1 deprecated).
-- **Substantially extended backend** — **18 Edge Functions** (cataloguing/metadata, ISBN lookups, reader/library/network notifications, ILL / digital sharing, partner-catalog imports, PDF/asset reads, login, register…) and **193 versioned SQL migrations**.
-- **Documentation reorganized** — `docs/decisions/` renamed to `docs/journal/` (typed subfolders), `notes-audit/` moved under `docs/notes-audit/`. New corpora: `docs/governance/` (governance guide translated into 10 languages), `docs/cartographie/`, `docs/schema/` (baseline snapshot), `docs/db/`.
+- **Federalist tools (federacao)** — Homepage surfaces the **Commons**, **Mutual aid** and **Directory** tabs (collectives map, now fed by the cartography). Spec: `docs/specs/spec-outils-federalistes.md` v0.2.
+- **Internationalization at 10 locales at strict parity** — `pt-BR` (reference) + `fr, es, en, it, de, ca, eo, nl, el`, all wired and lazy-loaded, key parity enforced by CI. Inclusive language charter **v2** (2026-06-05) covering all 10 locales (v1 deprecated).
+- **Documentation reorganized** — `docs/decisions/` renamed to `docs/journal/` (typed subfolders), `notes-audit/` moved under `docs/notes-audit/`. Corpora: `docs/governance/` (governance guide translated into 10 languages), `docs/cartographie/`, `docs/schema/` (baseline snapshot), `docs/db/`.
 
 Inherited core work (still in production): Network admin (unanimous co-optation/collective removal), Adoption profiles (4 orthogonal political axes: `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), on-site consultation workflow. Their specs have been revised (see Spec articulation).
 
-The detail of work in progress, debts and priorities lives in the current backlog (`docs/backlogs/AnarBib-Backlog-2026-06-12-v32.md`) and the specs' `REGISTRE_decisions.md`.
+The detail of work in progress, debts and priorities lives in the current backlog (`docs/backlogs/`, see `INDEX.md` for the current version) and the specs' `REGISTRE_decisions.md`.
 
 ---
 
@@ -187,15 +213,20 @@ anarbib/
 │   └── main.jsx            # Point d'entrée
 │
 ├── supabase/
-│   ├── migrations/         # ~193 migrations SQL versionnées (YYYYMMDDHHMMSS_*.sql) + _TEMPLATE.sql
-│   └── functions/          # 18 Edge Functions Deno (hors _shared/)
+│   ├── migrations/         # 57 fichiers (baseline 20260510 + migrations incrémentales jusqu'au 23/06/2026, _TEMPLATE.sql inclus)
+│   └── functions/          # 41 Edge Functions Deno (hors _shared/)
 │       ├── notify-event/   # Routeur d'événements + handlers de domaine (team.*, network.*, consultas.*…)
 │       │   └── _shared/    # domain/, mail/ (layout.ts : renderEmail + actionBox), i18n/ (mail-strings.ts)
-│       ├── register/ login/ # Inscription/auth
-│       ├── bn_isbn_lookup/ catalog_metadata_lookup/ fetch-url-metadata/  # Catalogage/métadonnées
-│       ├── notify-*/        # Notifications lecteur, biblio, réseau, PEB, rapports hebdo
-│       ├── probe-partner-catalog/ process-partner-catalog-import/         # Catalogues partenaires
-│       ├── read-pdf/ read-digital-asset/                                   # Lecture PDF / assets numériques
+│       ├── register/ login/ request-password-reset/  # Inscription / auth / reset mot de passe
+│       ├── bn_isbn_lookup/ catalog_metadata_lookup/ fetch-url-metadata/ cover_lookup/  # Catalogage / métadonnées / couvertures
+│       ├── authority_lookup/ author_portrait_lookup/ audio_fingerprint_lookup/  # Autorités, portraits d'auteurs, empreinte audio
+│       ├── notify-*/        # Notifications lecteur, biblio, réseau, PEB, rapports hebdo, digest réseau
+│       ├── probe-partner-catalog/ process-partner-catalog-import/ export-catalog-lote/  # Catalogues partenaires + export
+│       ├── export-fonds-bundle/ receive-fonds-bundle/ deposit-fonds-direct/ attach-received-asset/ gc-deposits/  # Échange de fonds inter-biblio
+│       ├── oai-pmh-provider/ notify-oai-opening/  # Fournisseur OAI-PMH
+│       ├── submit-cartography-entry/ geocode/  # Cartographie réseau + géocodage
+│       ├── submit-gazette-contribution/ gazette-monthly-build/ lettre-confirm/ lettre-unsubscribe/  # Gazette fédérée + lettre d'info
+│       ├── read-pdf/ read-digital-asset/ read-ill-shared-asset/ revoke-digital-asset/  # Lecture PDF / assets / PEB
 │       └── mail-i18n-test/  # Outil de test i18n des mails
 │
 ├── tests/
@@ -224,8 +255,8 @@ anarbib/
 The codebase mirrors the structure above. Key directories:
 
 - `src/` — React 19 + Vite 6 frontend (react-router-dom 7, react-intl 7) with React Context for auth and library state, react-intl for i18n across 10 locales, themed UI components.
-- `supabase/migrations/` — ~193 versioned SQL migrations applied automatically by the Forgejo `backend` job on push to `main`.
-- `supabase/functions/` — 18 Deno Edge Functions (transactional mail via `notify-event`, ISBN/metadata lookups, partner-catalog import, PDF/asset reads, login/register, etc.). `_shared/` is a shared module excluded from deployment.
+- `supabase/migrations/` — 57 versioned migration files (baseline `20260510000000_baseline_live` + increments, latest applied 2026-06-23) applied automatically by the Forgejo `backend` job on push to `main`.
+- `supabase/functions/` — 41 Deno Edge Functions (transactional mail via `notify-event`; ISBN / metadata / cover / authority / audio-fingerprint lookups; partner-catalog import & export; inter-library fonds exchange; OAI-PMH provider; network cartography + geocoding; federated gazette + newsletter; PDF/asset reads; login / register / password-reset; etc.). `_shared/` is a shared module excluded from deployment.
 - `docs/` — Specifications (in French), decision journal (`journal/`), versioned backlogs, governance guide, inclusive-language charter (`notes-audit/`), legal documents.
 - `.forgejo/workflows/ci.yml` — Forgejo Actions CI/CD (replaces the former `.woodpecker.yml`).
 - `.githooks/pre-commit.ps1` — Doctrinal SQL guardrail (activate with `git config core.hooksPath .githooks`).
@@ -418,7 +449,7 @@ supabase.auth.onAuthStateChange((event, session) => {
 
 ### Internationalisation (FR)
 
-L'application est entièrement multilingue : `src/i18n/locales/` contient **10 fichiers** — `pt-BR` (référence, importée statiquement et fallback) + `fr, es, en, it, de, ca, eo, nl, el` (chargées en lazy via `import()`). Les 10 sont câblées dans `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) et **maintenues en parité de clés** (3286 clés, gardée par la CI). Les Edge Functions de notification mail utilisent le même système via `_shared/i18n/mail-strings.ts`.
+L'application est entièrement multilingue : `src/i18n/locales/` contient **10 fichiers** — `pt-BR` (référence, importée statiquement et fallback) + `fr, es, en, it, de, ca, eo, nl, el` (chargées en lazy via `import()`). Les 10 sont câblées dans `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) et **maintenues en parité stricte de clés** (5493 clés, gardée par la CI). Les Edge Functions de notification mail utilisent le même système via `_shared/i18n/mail-strings.ts`.
 
 **Charte de langage inclusif** — La **source unique** des conventions est `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md` (v2, 2026-06-05, couvre les 10 locales). **La v1 est dépréciée** (conservée pour historique). Le fichier `src/i18n/README-i18n-section.md` est **obsolète** (6 locales, ~1393 clés) : ne plus s'y référer.
 
@@ -461,7 +492,7 @@ Texte à traduire : [...]
 
 ### Internationalization (EN)
 
-The application is fully multilingual: `src/i18n/locales/` contains **10 files** — `pt-BR` (reference, statically imported and fallback) + `fr, es, en, it, de, ca, eo, nl, el` (lazy-loaded via `import()`). All 10 are wired in `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) and **kept at key parity** (3286 keys, enforced by CI). Mail notification Edge Functions use the same system via `_shared/i18n/mail-strings.ts`.
+The application is fully multilingual: `src/i18n/locales/` contains **10 files** — `pt-BR` (reference, statically imported and fallback) + `fr, es, en, it, de, ca, eo, nl, el` (lazy-loaded via `import()`). All 10 are wired in `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) and **kept at strict key parity** (5493 keys, enforced by CI). Mail notification Edge Functions use the same system via `_shared/i18n/mail-strings.ts`.
 
 **Inclusive language charter** — The **single source** of conventions is `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md` (v2, 2026-06-05, covering all 10 locales). **v1 is deprecated** (kept for history). The file `src/i18n/README-i18n-section.md` is **obsolete** (6 locales, ~1393 keys): do not rely on it.
 
@@ -636,7 +667,7 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 
 ### Backlog et historique (FR)
 
-**Backlog actuel** — `docs/backlogs/AnarBib-Backlog-2026-06-12-v32.md`. Convention de scoring = importance politique (1-10) + urgence technique (1-10). `docs/backlogs/INDEX.md` pointe la version courante ; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` suit l'avancement multi-sessions.
+**Backlog actuel** — version courante **v33** (`docs/backlogs/`, voir `INDEX.md` qui pointe le fichier exact). Convention de scoring = importance politique (1-10) + urgence technique (1-10). `docs/backlogs/INDEX.md` pointe la version courante ; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` suit l'avancement multi-sessions.
 
 > 📦 **RÈGLE — archiver l'obsolète.** Une seule version courante à la racine de `docs/backlogs/`. Toute nouvelle version rend la précédente obsolète → la déplacer aussitôt dans `docs/backlogs/archive/` (`git mv`) et tenir `INDEX.md` à jour. Quand on solde une spec ou modifie un module ayant des conséquences sur le backlog, on émet **aussitôt** une nouvelle version datée annotant les items touchés (✅ / partiel + renvoi au commit) — pas de livraison silencieuse.
 
@@ -644,7 +675,7 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 
 ### Backlog and history (EN)
 
-**Current backlog** — `docs/backlogs/AnarBib-Backlog-2026-06-12-v32.md`. Scoring = political importance (1-10) + technical urgency (1-10). `docs/backlogs/INDEX.md` points to the current version; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` tracks multi-session progress.
+**Current backlog** — current version **v33** (`docs/backlogs/`, see `INDEX.md` which points to the exact file). Scoring = political importance (1-10) + technical urgency (1-10). `docs/backlogs/INDEX.md` points to the current version; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` tracks multi-session progress.
 
 > 📦 **RULE — archive the obsolete.** Only one current version at the root of `docs/backlogs/`. Every new version makes the previous one obsolete → move it to `docs/backlogs/archive/` (`git mv`) and keep `INDEX.md` up to date. When closing a spec or changing a module with backlog consequences, immediately issue a new dated version annotating the affected items (✅ / partial + commit reference) — no silent delivery.
 
@@ -721,4 +752,4 @@ The project is carried by a small collective but welcomes occasional or regular 
 
 ---
 
-Dernière mise à jour / Last updated : 15 juin 2026 / 15 June 2026 — migration CI Woodpecker → Forgejo Actions, consolidation des remotes sur Codeberg, socle PWA, outils fédéralistes (Communs/Entraide/Annuaire), 10 locales en parité + charte v2, réorganisation `docs/` (journal, notes-audit), backend étendu (18 Edge Functions, 193 migrations), backlog v32. / CI migration Woodpecker → Forgejo Actions, remotes consolidated on Codeberg, PWA foundation, federalist tools, 10-locale parity + charter v2, `docs/` reorganization, extended backend, backlog v32.
+Dernière mise à jour / Last updated : 24 juin 2026 / 24 June 2026 — modèle Œuvre/Éditions (FRBR-léger), support des médias audio, cartographie réseau + géocodage, gazette fédérée + lettre d'info, échange de fonds inter-bibliothèques, fournisseur OAI-PMH, cycle de vie des adhésions lecteur, conformité RGPD ; backend porté à 41 Edge Functions, migrations appliquées jusqu'au 23/06/2026. / Work/Editions model (light FRBR), audio media support, network cartography + geocoding, federated gazette + newsletter, inter-library fonds exchange, OAI-PMH provider, reader membership lifecycle, GDPR compliance; backend now 41 Edge Functions, migrations applied through 2026-06-23.
