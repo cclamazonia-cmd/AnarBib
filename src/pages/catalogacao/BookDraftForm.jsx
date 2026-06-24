@@ -232,7 +232,7 @@ const EMPTY_FORM = {
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, prefillRecord = null, prefillFile = null }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const { isNetworkAdmin, libraryId } = useLibrary();
@@ -325,15 +325,21 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
   // ── Exemplaires liés (card "para informação", anti-orphelin) ──
   const [linkedExemplars, setLinkedExemplars] = useState([]); // [{ library_id, library_name, count }]
+  // Exemplaires DÉTENUS PAR LA BIBLIOTHÈQUE ACTIVE pour ce document : liste
+  // individuelle, en lecture seule, chaque ligne cliquable pour ouvrir l'éditeur
+  // d'exemplaire (cf. prop onEditExemplar → retake + bascule onglet Indexação).
+  const [myExemplars, setMyExemplars] = useState([]); // [{ id, tombo, shelf_location }]
   useEffect(() => {
     const pubId = form.published_book_id;
-    if (!pubId) { setLinkedExemplars([]); return; }
+    if (!pubId) { setLinkedExemplars([]); setMyExemplars([]); return; }
     let cancelled = false;
     (async () => {
       const { data: holdings } = await supabase.from('book_holdings').select('id, library_id').eq('book_id', Number(pubId));
       if (cancelled) return;
-      if (!holdings || holdings.length === 0) { setLinkedExemplars([]); return; }
-      const { data: exs } = await supabase.from('exemplares').select('id, library_id').in('holding_id', holdings.map(h => h.id));
+      if (!holdings || holdings.length === 0) { setLinkedExemplars([]); setMyExemplars([]); return; }
+      const { data: exs } = await supabase.from('exemplares')
+        .select('id, library_id, tombo, shelf_location')
+        .in('holding_id', holdings.map(h => h.id));
       if (cancelled) return;
       const byLib = {};
       for (const e of (exs || [])) byLib[e.library_id] = (byLib[e.library_id] || 0) + 1;
@@ -342,9 +348,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         return l?.short_name || l?.name || lid;
       };
       setLinkedExemplars(Object.entries(byLib).map(([lid, count]) => ({ library_id: lid, count, library_name: lname(lid) })));
+      // Exemplaires de la bibliothèque active, triés par tombo (ordre naturel).
+      const mine = (exs || [])
+        .filter(e => e.library_id === libraryId)
+        .map(e => ({ id: e.id, tombo: e.tombo || '', shelf_location: e.shelf_location || '' }))
+        .sort((a, b) => a.tombo.localeCompare(b.tombo, undefined, { numeric: true, sensitivity: 'base' }));
+      setMyExemplars(mine);
     })();
     return () => { cancelled = true; };
-  }, [form.published_book_id, catalogLibraries]);
+  }, [form.published_book_id, catalogLibraries, libraryId]);
 
   // ── Lookup state ───────────────────────────────────────
   const [lookupLoading, setLookupLoading] = useState(false);
@@ -2123,14 +2135,32 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           </div>
           {!form.published_book_id
             ? <div style={emptyStyle}>{t({ id: 'catalogacao.infocard.exemplarUnsaved' })}</div>
-            : linkedExemplars.length === 0
+            : (myExemplars.length === 0 && linkedExemplars.length === 0)
               ? <div style={emptyStyle}>{t({ id: 'catalogacao.infocard.noExemplar' })}</div>
-              : linkedExemplars.map((r, i) => (
-                  <div key={i} style={lineStyle}>
-                    <span>{r.library_name}</span>
-                    <span className="cat-pill ok" style={pillStyle}>{t({ id: 'catalogacao.infocard.exemplarCount' }, { n: r.count })}</span>
-                  </div>
-                ))}
+              : <>
+                  {/* Exemplaires de la bibliothèque active : lignes cliquables → éditeur */}
+                  {myExemplars.map((ex) => {
+                    const open = (e) => { e.stopPropagation(); onEditExemplar?.(ex.id); };
+                    return (
+                      <div key={ex.id} role="button" tabIndex={0}
+                        className="cat-exemplar-row"
+                        style={{ ...lineStyle, cursor: 'pointer' }}
+                        onClick={open}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }}
+                        title={ex.shelf_location || undefined}>
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ex.tombo || '—'}</span>
+                        <span style={{ ...pillStyle, color: 'var(--brand-color-primary,#c0392b)', fontWeight: 700 }} aria-hidden="true">→</span>
+                      </div>
+                    );
+                  })}
+                  {/* Autres bibliothèques détentrices : agrégat informatif, non éditable */}
+                  {linkedExemplars.filter(r => r.library_id !== libraryId).map((r, i) => (
+                    <div key={`agg-${i}`} style={lineStyle}>
+                      <span>{r.library_name}</span>
+                      <span className="cat-pill ok" style={pillStyle}>{t({ id: 'catalogacao.infocard.exemplarCount' }, { n: r.count })}</span>
+                    </div>
+                  ))}
+                </>}
           <div style={ctaStyle}>{t({ id: 'catalogacao.infocard.goExemplar' })} →</div>
         </div>
       </div>

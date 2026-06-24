@@ -28,6 +28,18 @@
   margin-bottom: 14px;
 }
 
+/* Lignes d'exemplaire cliquables dans la card « Exemplares » de la fiche document
+   (BookDraftForm) : survol/focus pour signaler l'accès à l'éditeur d'exemplaire. */
+.cat-exemplar-row {
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.cat-exemplar-row:hover,
+.cat-exemplar-row:focus-visible {
+  background: rgba(255, 255, 255, 0.07);
+  outline: none;
+}
+
 .cat-mode-switch {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }

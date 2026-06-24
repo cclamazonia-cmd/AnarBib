@@ -174,6 +174,23 @@ export default function CatalogacaoPage() {
     switchTab(tabByKind[kind] || 'booksPanel');
   }
 
+  // Ouvre un exemplaire PUBLIÉ dans l'éditeur d'exemplaires (depuis la fiche
+  // document). Le modèle de l'app édite des brouillons : on « retake » l'exemplaire
+  // (création d'un brouillon d'édition) puis on bascule sur l'éditeur. Le RPC n'est
+  // PAS idempotent → on confirme, comme CatalogPanel, pour éviter les doublons.
+  async function editPublishedExemplar(exemplarId) {
+    if (exemplarId == null) return;
+    const typeLabel = t({ id: 'catalogacao.type.exemplar' }).toLowerCase();
+    if (!confirm(t({ id: 'catalogacao.catalog.retakeConfirm' }, { type: typeLabel }))) return;
+    try {
+      const { data, error } = await supabase.rpc('create_exemplar_draft_from_exemplar', { p_exemplar_id: Number(exemplarId) });
+      if (error) throw error;
+      if (data) openForEdit('exemplar', data);
+    } catch (err) {
+      alert(localizeError(err, t));
+    }
+  }
+
   function switchTab(tabId) {
     if (!TABS.some(t => t.id === tabId)) return;
     setActiveTab(tabId);
@@ -344,7 +361,7 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.documento'})}</h3>
             </div>
-            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} />
+            <BookDraftForm batches={batches} mode={mode} onSaved={refreshAll} onOpenBook={openBook} onAttachToBook={attachToBook} editingId={editTarget?.kind === 'book' ? editTarget.id : null} onConsumed={() => setEditTarget(null)} onNavigateTab={switchTab} onEditExemplar={editPublishedExemplar} />
           </div>
 
           {/* 2. Autoria */}
