@@ -5491,5 +5491,7 @@
   "notifications.title": "Meldingen",
   "notifications.empty": "Geen meldingen",
   "notifications.markAllRead": "Alles als gelezen markeren",
-  "notifications.loadError": "Kon meldingen niet laden"
+  "notifications.loadError": "Kon meldingen niet laden",
+  "notif.welcome.title": "Welkom bij het AnarBib-netwerk!",
+  "notif.welcome.body": "Je account is aangemaakt. Om te beginnen: verken de catalogus, maak je eerste reservering of raadpleging, en vul je profiel aan bij «Mijn account»."
 }

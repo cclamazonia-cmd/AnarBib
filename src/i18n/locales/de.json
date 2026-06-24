@@ -5491,5 +5491,7 @@
   "notifications.title": "Benachrichtigungen",
   "notifications.empty": "Keine Benachrichtigungen",
   "notifications.markAllRead": "Alle als gelesen markieren",
-  "notifications.loadError": "Benachrichtigungen konnten nicht geladen werden"
+  "notifications.loadError": "Benachrichtigungen konnten nicht geladen werden",
+  "notif.welcome.title": "Willkommen im AnarBib-Netzwerk!",
+  "notif.welcome.body": "Dein Konto wurde erstellt. Für den Anfang: erkunde den Katalog, mach deine erste Reservierung oder Einsichtnahme, und vervollständige dein Profil unter «Mein Konto»."
 }

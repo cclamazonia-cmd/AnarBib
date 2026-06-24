@@ -950,6 +950,26 @@ serve(async (req)=>{
         signupIntentUpdateError
       });
     }
+    // ── Notif in-app de bienvenue (cloche + onglet Avisos) ─────────────────
+    // Pour les lecteur·rices (reader_pending / reader_orphan). Stocke des CLÉS
+    // i18n resolues dans la langue de l'usager·ere au rendu (cf. tNotifText front).
+    // Best-effort : ne jamais faire echouer l'inscription la-dessus.
+    if (signupIntent === "reader_pending" || signupIntent === "reader_orphan") {
+      try {
+        const { error: welcomeNotifError } = await admin.from("user_notifications").insert({
+          user_id: userId,
+          library_id: signupIntent === "reader_pending" ? (libraryRow?.id ?? null) : null,
+          category: "sistema",
+          title: "notif.welcome.title",
+          body: "notif.welcome.body"
+        });
+        if (welcomeNotifError) {
+          console.warn("register: welcome in-app notif failed (non bloquant):", welcomeNotifError.message);
+        }
+      } catch (e) {
+        console.warn("register: welcome in-app notif crashed (non bloquant):", String(e?.message || e));
+      }
+    }
     // ── Paquet 2 — le mail de bienvenue selon le cas ───────────────────────
     // mailIsWithoutLibrary pilote le registre i18n du mail (titre, intro, logo)
     // et la logique de routage interne :

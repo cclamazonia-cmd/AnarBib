@@ -5491,5 +5491,7 @@
   "notifications.title": "Notifications",
   "notifications.empty": "No notifications",
   "notifications.markAllRead": "Mark all as read",
-  "notifications.loadError": "Couldn't load notifications"
+  "notifications.loadError": "Couldn't load notifications",
+  "notif.welcome.title": "Welcome to the AnarBib network!",
+  "notif.welcome.body": "Your account is set up. To get started: explore the catalogue, make your first reservation or consultation, and complete your profile in “My account”."
 }

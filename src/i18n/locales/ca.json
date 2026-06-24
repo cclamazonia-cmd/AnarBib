@@ -5491,5 +5491,7 @@
   "notifications.title": "Notificacions",
   "notifications.empty": "Cap notificació",
   "notifications.markAllRead": "Marca-ho tot com a llegit",
-  "notifications.loadError": "No s'han pogut carregar les notificacions"
+  "notifications.loadError": "No s'han pogut carregar les notificacions",
+  "notif.welcome.title": "Et donem la benvinguda a la xarxa AnarBib!",
+  "notif.welcome.body": "El teu compte s'ha creat. Per començar: explora el catàleg, fes la teva primera reserva o consulta, i completa el teu perfil a «El meu compte»."
 }

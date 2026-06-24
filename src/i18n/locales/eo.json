@@ -5491,5 +5491,7 @@
   "notifications.title": "Sciigoj",
   "notifications.empty": "Neniu sciigo",
   "notifications.markAllRead": "Marki ĉion kiel legitan",
-  "notifications.loadError": "Ne eblis ŝargi la sciigojn"
+  "notifications.loadError": "Ne eblis ŝargi la sciigojn",
+  "notif.welcome.title": "Bonvenon al la reto AnarBib!",
+  "notif.welcome.body": "Via konto estas kreita. Por komenci: esploru la katalogon, faru vian unuan rezervon aŭ konsulton, kaj kompletigu vian profilon en «Mia konto»."
 }

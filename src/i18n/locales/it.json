@@ -5491,5 +5491,7 @@
   "notifications.title": "Notifiche",
   "notifications.empty": "Nessuna notifica",
   "notifications.markAllRead": "Segna tutte come lette",
-  "notifications.loadError": "Impossibile caricare le notifiche"
+  "notifications.loadError": "Impossibile caricare le notifiche",
+  "notif.welcome.title": "Ti diamo il benvenuto nella rete AnarBib!",
+  "notif.welcome.body": "Il tuo account è stato creato. Per iniziare: esplora il catalogo, fai la tua prima prenotazione o consultazione, e completa il tuo profilo in «Il mio account»."
 }
