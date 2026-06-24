@@ -37,7 +37,7 @@ function makeComparator(sortBy, sortDir) {
   };
 }
 
-export default function QueuePanel({ batches, onEditItem, onChanged }) {
+export default function QueuePanel({ batches, onEditItem, onChanged, isActive = false }) {
   // ── Filters ─────────────────────────────────────────────
   const { formatMessage: t, formatDate } = useIntl();
   const [typeFilter, setTypeFilter] = useState('');
@@ -150,6 +150,16 @@ export default function QueuePanel({ batches, onEditItem, onChanged }) {
   }, [typeFilter, statusFilter, actionFilter, batchFilter, dSearch, page, sortBy, sortDir, t]);
 
   useEffect(() => { loadQueue(); }, [loadQueue]);
+
+  // Rafraîchit la file à chaque (ré)activation de l'onglet « Fila ». Le panneau est
+  // monté en permanence (masqué en CSS) et une publication / un rejet effectués
+  // depuis l'éditeur (BookDraftForm / ExemplarDraftForm) ne le notifient pas ; sans
+  // ce rechargement, un brouillon déjà publié (passé en status='published', donc
+  // hors de la file active) resterait affiché jusqu'au prochain changement de filtre
+  // ou rechargement de page. Cf. motif isActive de LabelSheetPrinter.
+  useEffect(() => {
+    if (isActive) loadQueue();
+  }, [isActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Load trash ──────────────────────────────────────────
   const loadTrash = useCallback(async () => {
