@@ -124,6 +124,11 @@ export function Topbar() {
           {t({ id: 'cartografia.nav' })}
         </Link>
 
+        {/* Thésaurus partagé FICEDL (cache anti-fork, P3a) — visible de tout le monde */}
+        <Link to="/thesaurus-ficedl" className={isActive('/thesaurus-ficedl') ? 'active' : ''}>
+          {t({ id: 'nav.thesaurus' })}
+        </Link>
+
         {user && canSeeAccount(role) && (
           <Link to="/conta" className={isActive('/conta') ? 'active' : ''}>
             {t({ id: 'nav.account' })}

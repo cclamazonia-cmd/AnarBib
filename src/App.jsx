@@ -25,6 +25,8 @@ const LoginPage = lazy(() => import('@/pages/public/LoginPage'));
 const SolicitarBibliotecaPage = lazy(() => import('@/pages/public/SolicitarBibliotecaPage'));
 const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'));
 const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
+const FicedlThesaurusPage = lazy(() => import('@/pages/public/FicedlThesaurusPage'));
+const FicedlTermPage = lazy(() => import('@/pages/public/FicedlTermPage'));
 const BibliotecaPublicaPage = lazy(() => import('@/pages/public/BibliotecaPublicaPage'));
 const CartografiaPage = lazy(() => import('@/pages/public/CartografiaPage'));
 const CartografiaAjouterPage = lazy(() => import('@/pages/public/CartografiaAjouterPage'));
@@ -128,6 +130,9 @@ export default function App() {
                   {/* Annuaire & fiche publics des bibliothèques (chantier PUBLIB, REGISTRE §31) */}
                   <Route path="/bibliotecas" element={<BibliotecasPage />} />
                   <Route path="/bibliotecas/:slug" element={<BibliotecaPublicaPage />} />
+                  {/* Thésaurus partagé FICEDL : navigation publique du cache (anti-fork, P3a) */}
+                  <Route path="/thesaurus-ficedl" element={<FicedlThesaurusPage />} />
+                  <Route path="/thesaurus-ficedl/:motId" element={<FicedlTermPage />} />
                   {/* Carte publique du réseau (MAP-C, REGISTRE §34) */}
                   <Route path="/cartografia" element={<CartografiaPage />} />
                   {/* Auto-déclaration publique « ajouter ma biblio » (MAP-J) */}
