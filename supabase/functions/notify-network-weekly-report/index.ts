@@ -88,6 +88,20 @@ function normalizeLibraryContext(input) {
     channel_active: typeof row.channel_active === "boolean" ? row.channel_active : null
   };
 }
+// Libellés humains du canal de notification (delivery_mode) — évite d'exposer les
+// valeurs techniques (platform_shared, etc.) dans le rapport destiné à la coordination.
+// Enum source : library_mail_channels.delivery_mode.
+const DELIVERY_MODE_LABELS_PT = {
+  platform_shared: "Plataforma (compartilhado)",
+  platform_shared_local_reply: "Plataforma (resposta local)",
+  library_own_transport: "Transporte próprio da biblioteca",
+  disabled: "Desativado"
+};
+function deliveryModeLabel(mode) {
+  const m = String(mode || "").trim();
+  if (!m) return "Plataforma (padrão)";
+  return DELIVERY_MODE_LABELS_PT[m] || m.replace(/_/g, " ");
+}
 async function fetchAllRows(build) {
   const rows = [];
   let from = 0;
@@ -483,7 +497,7 @@ serve(async (req)=>{
         <table role="presentation" cellspacing="0" cellpadding="0"
                style="border-collapse:collapse;border:1px solid rgba(255,255,255,0.14);width:100%;max-width:720px;">
           <tr>
-            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Bibliotecas ativas incluídas</b></td>
+            <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);"><b>Bibliotecas ativas na rede</b></td>
             <td style="padding:10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:right;"><b>${countOr0(totals.bibliotecas)}</b></td>
           </tr>
           <tr>
@@ -548,7 +562,7 @@ serve(async (req)=>{
     const perLibraryRows = librarySummaries.map((row)=>[
         row.library_short_name,
         row.weekly_report_email || "—",
-        row.channel_active ? row.delivery_mode : `${row.delivery_mode} (desativado)`,
+        row.channel_active ? deliveryModeLabel(row.delivery_mode) : `${deliveryModeLabel(row.delivery_mode)} (desativado)`,
         countOr0(row.inscricoes_leitores),
         countOr0(row.saidas_leitores),
         countOr0(row.reservas),
@@ -561,9 +575,9 @@ serve(async (req)=>{
       ]);
     const attentionRows = librarySummaries.filter((row)=>!row.weekly_report_email || !row.channel_active).map((row)=>[
         row.library_short_name,
-        row.weekly_report_email || "sem weekly_report_email",
-        row.admin_notification_email || "sem admin_notification_email",
-        row.channel_active ? row.delivery_mode : "canal desativado"
+        row.weekly_report_email || "sem e-mail de relatório semanal",
+        row.admin_notification_email || "sem e-mail de notificação",
+        row.channel_active ? deliveryModeLabel(row.delivery_mode) : "Canal desativado"
       ]);
 
     // ─── Lignes du tableau des échanges PEB (#ILL-reports étape 2) ──────────
@@ -606,8 +620,8 @@ serve(async (req)=>{
         ], perLibraryRows),
         renderTable("Pontos de atenção de configuração", [
           "Biblioteca",
-          "weekly_report_email",
-          "admin_notification_email",
+          "E-mail de relatório semanal",
+          "E-mail de notificação (admin)",
           "Estado"
         ], attentionRows),
         renderTable("Intercâmbios interbibliotecas da rede (PEB criados na semana)", [
