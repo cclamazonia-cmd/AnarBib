@@ -115,6 +115,38 @@ function compactTitleList(values) {
   return `${clean[0]} (+${clean.length - 1})`;
 }
 
+// Libellés humains des statuts de PEB (interlibrary_loans_v2.status_global) et des
+// partages numériques (ill_digital_shares.flux_state) — évite d'exposer les valeurs
+// techniques (snake_case / tokens) dans le rapport destiné à la bibliothèque.
+const PEB_STATUS_LABELS_PT = {
+  preparacao: "Em preparação",
+  aguardando_saida: "Aguardando saída",
+  emprestado: "Emprestado",
+  parcialmente_devolvido: "Parcialmente devolvido",
+  em_devolucao: "Em devolução",
+  devolvido: "Devolvido",
+  cancelado: "Cancelado",
+  atrasado: "Atrasado"
+};
+function pebStatusLabel(status) {
+  const s = String(status || "").trim();
+  if (!s) return "—";
+  return PEB_STATUS_LABELS_PT[s] || s.replace(/_/g, " ");
+}
+const ILL_FLUX_STATE_LABELS_PT = {
+  demande: "Pedido",
+  accepte: "Aceito",
+  refuse: "Recusado",
+  indisponible: "Indisponível",
+  numerisation: "Digitalização",
+  transmis: "Transmitido",
+  cloture: "Encerrado"
+};
+function illFluxStateLabel(state) {
+  const s = String(state || "").trim();
+  if (!s) return "—";
+  return ILL_FLUX_STATE_LABELS_PT[s] || s.replace(/_/g, " ");
+}
 function renderTable(title, cols, rows) {
   const header = cols.map((c) => `<th style="text-align:left;padding:8px;border-bottom:1px solid rgba(255,255,255,0.14);font-size:13px;background:rgba(255,255,255,0.06);">${esc(c)}</th>`).join("");
   const body = rows.map((r) => `
@@ -590,7 +622,7 @@ serve(async (req) => {
         String(p.request_id || p.id || "—"),
         isLender ? "Emprestadora" : "Tomadora",
         pebLibNames.get(String(partnerId)) || "—",
-        String(p.status_global || "—"),
+        pebStatusLabel(p.status_global),
         String(pebItemCountByLoan.get(String(p.id)) || 0)
       ];
     });
@@ -681,7 +713,7 @@ serve(async (req) => {
         String(s.books?.titulo || "—"),
         isSource ? "Fornecedora" : "Solicitante",
         String(partner?.short_name || partner?.name || "—"),
-        String(s.flux_state || "—")
+        illFluxStateLabel(s.flux_state)
       ];
     });
 

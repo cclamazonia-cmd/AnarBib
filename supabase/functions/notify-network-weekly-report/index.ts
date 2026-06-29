@@ -102,6 +102,22 @@ function deliveryModeLabel(mode) {
   if (!m) return "Plataforma (padrão)";
   return DELIVERY_MODE_LABELS_PT[m] || m.replace(/_/g, " ");
 }
+// Libellés humains des statuts de PEB (interlibrary_loans_v2.status_global).
+const PEB_STATUS_LABELS_PT = {
+  preparacao: "Em preparação",
+  aguardando_saida: "Aguardando saída",
+  emprestado: "Emprestado",
+  parcialmente_devolvido: "Parcialmente devolvido",
+  em_devolucao: "Em devolução",
+  devolvido: "Devolvido",
+  cancelado: "Cancelado",
+  atrasado: "Atrasado"
+};
+function pebStatusLabel(status) {
+  const s = String(status || "").trim();
+  if (!s) return "—";
+  return PEB_STATUS_LABELS_PT[s] || s.replace(/_/g, " ");
+}
 async function fetchAllRows(build) {
   const rows = [];
   let from = 0;
@@ -591,7 +607,7 @@ serve(async (req)=>{
     const pebExchangeRows = pebCreated.map((p)=>[
         pebLibLabel(p.lender_library_id),
         pebLibLabel(p.borrower_library_id),
-        String(p.status_global || "—"),
+        pebStatusLabel(p.status_global),
         String(pebItemCountByLoan.get(String(p.id)) || 0),
         String(p.created_at || "").slice(0, 10) || "—"
       ]);
