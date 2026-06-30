@@ -26,6 +26,7 @@ import Modal from '@/components/ui/Modal';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import LibraryContextBanner from '@/components/LibraryContextBanner';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
+import ReaderTutorialsCard from '@/components/account/ReaderTutorialsCard';
 import './AccountPage.css';
 
 // #REFACTOR 08/06 : carte-lecteur extraite en chunk LAZY -> sort qrcode + jspdf
@@ -1218,6 +1219,8 @@ export default function AccountPage() {
 
       {/* MULTI P5b — bandeau de contexte « biblio courante » (≥2 appartenances) */}
       <LibraryContextBanner />
+
+      <ReaderTutorialsCard />
 
       {/* Tabs */}
       <div className="ab-conta-card">
