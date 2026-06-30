@@ -747,3 +747,29 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 *MàJ 21/06/2026 (suite) — **P1 livré (schéma).** Migration `20260621180651_audio_p1_tracks_segments_sublayer.sql` validée BEGIN/ROLLBACK (zéro persistance) : `catalog_ref_audio_recording_types` (+seed 6), `audio_tracks` (segment ; `work_id→works`, `digital_resource_id→book_digital_resources`, `recording_type→réf`, `external_ids`), `audio_track_contributors` (`authors` + `name` repli + rôle **texte libre** pt-BR), **4 RPC** `api.audio_track_*` (staff, SECURITY DEFINER), vue `v_audio_tracklist` (security_invoker). **FS-D3/D5 ✅ livrés** ; **FS-D9** (visibilité staff-only, OPAC public-safe → P3). Rôles audio alignés sur la convention `book_contributors` (locutor/interprete/compositor/letrista/tecnico_som/entrevistador/entrevistado). Cadrage `CADRAGE_fonds_sonores_P1_2026-06-21`. Reste : **P2** (EF AcoustID), **P3** (UI Catalogação + OPAC anon-safe), **P4** (i18n 10 locales), **P5** (OAI). À pousser.*
 
 *MàJ 21/06/2026 (suite) — **§5 re-ancré sur `works`** (lecture des lots `works_model_lot1..4`/`works_v2`/`works_v3`). Mapping MB re-câblé : **Work→`public.works`**, **Recording→édition `books`** (`tipo_material='audio'`, `work_id`/`expression_id`), **Track→nouvelle `audio_tracks`** (`work_id→works`). **FS-D3 simplifié** (plus de `audio_recordings` : la captation EST une édition). **FS-D5 révisé** : crédits grain édition **dérivés** vers l'œuvre (patron traducteur·rices `works_v3` — « la source de vérité reste le lien contributeur↔autorité »), crédits grain segment = nouvelle `audio_track_contributors`. Bilan : **2 tables nouvelles** au lieu de 3. **FS-Q1 résolu** (œuvre = `works`), **FS-Q3 dissous** (captation = édition `books`). Spec §5 réécrit (5.1–5.5). Non commité.*
+
+## §BG2 — Sauvegarde hors-fournisseur (#BG2)
+
+*Foyer trace : `CADRAGE_BG2_partition_sauvegardes_2026-06-30` (🔵). Stratégie « découplage par sensibilité ». Inspection schéma prod 30/06/2026.*
+
+| ID | Décision | Statut |
+|---|---|---|
+| BG2-1 | Sauvegarde en **deux flux** (court / long) à rétentions distinctes, pas une copie unique. | ✅ |
+| BG2-2 | **Flux court = 7 j** (`restic --keep-daily 7`), aligné sur la rétention Supabase Pro standard (PITR `DISABLED`, vérifié 30/06). Tient l'engagement §8.1 à la lettre. | ✅ |
+| BG2-3 | Critère de partition = **donnée personnelle effaçable vs acte de gouvernance collectif** (et non « lectrice vs staff »). | ✅ |
+| BG2-4 | Le **staff** a le même régime que la lectrice pour ses **données personnelles** (un rôle est une fonction déléguée, pas un statut). | ✅ |
+| BG2-5 | **Actes de gouvernance → flux long, immuables**, acteur·rice **pseudonymisé·e à l'effacement** (cf. BG2-14). | ✅ |
+| BG2-6 | **Contributeur·rices externes** (tiers sans compte : `cartography_submissions`, `gazette_submissions`) → flux court. | ✅ |
+| BG2-7 | **Coordonnées institutionnelles** de bibliothèque → flux long (en notant l'email de bénévole possible). | ✅ |
+| BG2-8 | Tables-filles suivent le parent ; métadonnées Storage suivent leur bucket ; le **Storage n'est pas couvert par Supabase** → son flux est la seule sauvegarde. | ✅ |
+| BG2-9 | **Hygiène** : schéma `backup_2026_05_07` (copie figée en prod) à purger — chantier distinct. | ✅ |
+| BG2-10 | **Tables mixtes** (`membership_validation_log`, `reader_membership_events`, `library_membership_audit`) → flux long, **pseudonymisation bilatérale** (acteur staff ET sujet lectrice). | ✅ |
+| BG2-11 | **Entraide** (`entraide_help_*`) → flux court (expression personnelle, pas acte de gouvernance). | ✅ |
+| BG2-12 | `cartography_entries` → flux long (lieux + drapeau `contact_public` ; coordonnée institutionnelle). Distinct de `cartography_submissions` (court, BG2-6). | ✅ |
+| BG2-13 | Schéma `ingest` → flux long (machinerie d'import catalogue, non-PII-lectrice). `partner_catalog_staging_rows` exclu possible si purgé. | ✅ |
+| BG2-14 | **Effacement** : pseudonymisation par jeton aléatoire stable sans table de correspondance (irréversible) + `erasure_log` minimal (`user_id` + `erased_at`) rejoué à la restauration (re-DELETE court / re-pseudonymisation long). | ✅ |
+
+**Correction de corpus induite (BG2-2) :** `spec-historico-retencao-lectrice` §8.1 — remplacer « ~30 jours » par « 7 jours (rétention Pro) ».
+
+**Dépendances aval :** `spec-sauvegarde` (à créer ; portera l'inventaire de partition détaillé) · chantier purge `backup_2026_05_07` · bascule mot de passe → clé SSH sur `bricolage.herbesfolles.org`.
+
