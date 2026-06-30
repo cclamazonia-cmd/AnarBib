@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Total retido (em custódia)",
   "deposit.report.refundedTotal": "Total devolvido",
   "deposit.report.retainedTotal": "Total retido (perda/dano)",
-  "deposit.report.empty": "Nenhum dado."
+  "deposit.report.empty": "Nenhum dado.",
+  "deposit.config.capPerReader": "Teto por leitor(a)",
+  "deposit.config.capPerReaderHint": "Cumulação máx. das cauções retidas de uma pessoa (vazio = ilimitado).",
+  "deposit.config.maxPerRule": "Valor máx. por regra",
+  "deposit.config.maxPerRuleHint": "Limita o valor que uma regra pode fixar (vazio = ilimitado).",
+  "deposit.config.noLimit": "Ilimitado",
+  "deposit.config.msg.limitsSaved": "Tetos salvos.",
+  "panel.apiError.deposit_cap_reached": "Teto de caução atingido para este(a) leitor(a) — coleta recusada (o empréstimo pode ser feito sem caução).",
+  "panel.apiError.deposit_rule_exceeds_max": "O valor da regra excede o teto por regra da biblioteca."
 }

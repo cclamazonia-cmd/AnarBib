@@ -28,19 +28,56 @@ function downloadBlob(filename, content, mime) {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+// Tableau stylé maison (sans dépendance jspdf-autotable) : en-tête sombre,
+// lignes zébrées, texte ajusté à la colonne, sauts de page avec en-tête répété.
+function drawTable(doc, headers, rows) {
+  const marginX = 14;
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const usableW = pageW - marginX * 2;
+  // 1re colonne (membre) plus large.
+  const weights = headers.map((_, i) => (i === 0 ? 2.2 : 1));
+  const wsum = weights.reduce((a, b) => a + b, 0);
+  const colW = weights.map(w => (w / wsum) * usableW);
+  const rowH = 7;
+  let y = 28;
+
+  const fit = (txt, w) => {
+    let s = String(txt == null ? '' : txt);
+    if (doc.getTextWidth(s) <= w - 3) return s;
+    while (s.length > 1 && doc.getTextWidth(s + '…') > w - 3) s = s.slice(0, -1);
+    return s + '…';
+  };
+  const header = () => {
+    doc.setFillColor(45, 45, 45);
+    doc.rect(marginX, y, usableW, rowH, 'F');
+    doc.setTextColor(255); doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5);
+    let x = marginX;
+    headers.forEach((h, i) => { doc.text(fit(h, colW[i]), x + 1.6, y + 4.8); x += colW[i]; });
+    y += rowH;
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(35); doc.setFontSize(8);
+  };
+
+  header();
+  rows.forEach((r, ri) => {
+    if (y + rowH > pageH - 12) { doc.addPage(); y = 16; header(); }
+    if (ri % 2 === 0) { doc.setFillColor(244, 244, 244); doc.rect(marginX, y, usableW, rowH, 'F'); }
+    let x = marginX;
+    r.forEach((c, ci) => { doc.text(fit(c, colW[ci]), x + 1.6, y + 4.8); x += colW[ci]; });
+    y += rowH;
+  });
+  doc.setDrawColor(210); doc.setLineWidth(0.2);
+  doc.rect(marginX, 28, usableW, y - 28);
+}
+
 async function downloadPDF(filename, title, headers, rows) {
   const { jsPDF } = await import('jspdf');
   const doc = new jsPDF();
-  doc.setFontSize(13); doc.text(title, 14, 16);
-  doc.setFontSize(8);
-  let y = 26;
-  doc.text(headers.join('  |  '), 14, y); y += 4;
-  doc.setDrawColor(170); doc.line(14, y, 196, y); y += 5;
-  rows.forEach(r => {
-    if (y > 285) { doc.addPage(); y = 16; }
-    doc.text(r.map(c => (c == null ? '' : String(c))).join('  |  ').slice(0, 115), 14, y);
-    y += 5;
-  });
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(20);
+  doc.text(title, 14, 16);
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(120);
+  doc.text(new Date().toLocaleDateString(), 14, 22);
+  drawTable(doc, headers, rows);
   doc.save(filename);
 }
 

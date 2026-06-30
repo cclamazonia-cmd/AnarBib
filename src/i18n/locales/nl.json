@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Totaal aangehouden (in beheer)",
   "deposit.report.refundedTotal": "Totaal terugbetaald",
   "deposit.report.retainedTotal": "Totaal ingehouden",
-  "deposit.report.empty": "Geen gegevens."
+  "deposit.report.empty": "Geen gegevens.",
+  "deposit.config.capPerReader": "Maximum per lezer",
+  "deposit.config.capPerReaderHint": "Max. totaal van aangehouden waarborgen van een persoon (leeg = onbeperkt).",
+  "deposit.config.maxPerRule": "Max. bedrag per regel",
+  "deposit.config.maxPerRuleHint": "Beperkt het bedrag dat een regel kan instellen (leeg = onbeperkt).",
+  "deposit.config.noLimit": "Onbeperkt",
+  "deposit.config.msg.limitsSaved": "Limieten opgeslagen.",
+  "panel.apiError.deposit_cap_reached": "Waarborglimiet bereikt voor deze lezer — inning geweigerd (de uitlening kan zonder waarborg).",
+  "panel.apiError.deposit_rule_exceeds_max": "Het regelbedrag overschrijdt de limiet per regel van de bibliotheek."
 }

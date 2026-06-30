@@ -1178,6 +1178,23 @@ export default function BibliotecaPage() {
     finally { setSaving(false); }
   }
 
+  // Plafonds dépôt (anti-barrière) : champs vides = NULL = illimité.
+  async function saveDepositLimit(field, rawValue) {
+    const value = rawValue === '' || rawValue == null ? null : Number(rawValue);
+    if (value != null && (Number.isNaN(value) || value < 0)) {
+      setMsg({ text: t({ id: 'deposit.config.msg.amountRequired' }), kind: 'error' });
+      return;
+    }
+    setSaving(true);
+    try {
+      const { error } = await supabase.from('libraries').update({ [field]: value }).eq('id', libraryId);
+      if (error) throw error;
+      setLib(prev => prev ? { ...prev, [field]: value } : prev);
+      setMsg({ text: t({ id: 'deposit.config.msg.limitsSaved' }), kind: 'ok' });
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
+    finally { setSaving(false); }
+  }
+
   function startEditDepositRule(rule) {
     setEditingDepositRule({ ...rule });
     setMsg({ text: '', kind: '' });
@@ -1891,6 +1908,32 @@ export default function BibliotecaPage() {
 
             {/* Règles de dépôt : visibles seulement si le système est activé */}
             {lib?.deposit_enabled && (<>
+              {/* Plafonds anti-barrière (vide = illimité) */}
+              <div style={{ display:'flex', gap:18, flexWrap:'wrap', marginBottom:14 }}>
+                <label style={{ fontSize:'.82rem', display:'flex', flexDirection:'column', fontWeight:600 }}>
+                  {t({ id: 'deposit.config.capPerReader' })}
+                  <input
+                    type="number" step="0.01" min="0"
+                    defaultValue={lib?.deposit_cap_per_reader ?? ''}
+                    placeholder={t({ id: 'deposit.config.noLimit' })}
+                    onBlur={e => saveDepositLimit('deposit_cap_per_reader', e.target.value)}
+                    style={{ ...fs, width:150, marginTop:3 }}
+                  />
+                  <span style={{ fontSize:'.72rem', fontWeight:400, color:'var(--brand-muted)', maxWidth:230 }}>{t({ id: 'deposit.config.capPerReaderHint' })}</span>
+                </label>
+                <label style={{ fontSize:'.82rem', display:'flex', flexDirection:'column', fontWeight:600 }}>
+                  {t({ id: 'deposit.config.maxPerRule' })}
+                  <input
+                    type="number" step="0.01" min="0"
+                    defaultValue={lib?.deposit_max_per_rule ?? ''}
+                    placeholder={t({ id: 'deposit.config.noLimit' })}
+                    onBlur={e => saveDepositLimit('deposit_max_per_rule', e.target.value)}
+                    style={{ ...fs, width:150, marginTop:3 }}
+                  />
+                  <span style={{ fontSize:'.72rem', fontWeight:400, color:'var(--brand-muted)', maxWidth:230 }}>{t({ id: 'deposit.config.maxPerRuleHint' })}</span>
+                </label>
+              </div>
+
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
                 <strong style={{ fontSize:'.9rem' }}>{t({ id: 'deposit.config.rules.title' })}</strong>
                 {!editingDepositRule && (

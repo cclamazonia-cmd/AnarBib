@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Total retingut (en custòdia)",
   "deposit.report.refundedTotal": "Total retornat",
   "deposit.report.retainedTotal": "Total retingut",
-  "deposit.report.empty": "Cap dada."
+  "deposit.report.empty": "Cap dada.",
+  "deposit.config.capPerReader": "Límit per lector·a",
+  "deposit.config.capPerReaderHint": "Acumulació màx. dels dipòsits retinguts d'una persona (buit = sense límit).",
+  "deposit.config.maxPerRule": "Import màx. per regla",
+  "deposit.config.maxPerRuleHint": "Limita l'import que una regla pot fixar (buit = sense límit).",
+  "deposit.config.noLimit": "Sense límit",
+  "deposit.config.msg.limitsSaved": "Límits desats.",
+  "panel.apiError.deposit_cap_reached": "Límit de dipòsit assolit per a aquest·a lector·a — cobrament rebutjat (el préstec es pot fer sense dipòsit).",
+  "panel.apiError.deposit_rule_exceeds_max": "L'import de la regla supera el límit per regla de la biblioteca."
 }

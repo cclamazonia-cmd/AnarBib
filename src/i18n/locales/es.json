@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Total retenido (en custodia)",
   "deposit.report.refundedTotal": "Total devuelto",
   "deposit.report.retainedTotal": "Total retenido",
-  "deposit.report.empty": "Sin datos."
+  "deposit.report.empty": "Sin datos.",
+  "deposit.config.capPerReader": "Tope por lector(a)",
+  "deposit.config.capPerReaderHint": "Acumulación máx. de los depósitos retenidos de una persona (vacío = sin límite).",
+  "deposit.config.maxPerRule": "Importe máx. por regla",
+  "deposit.config.maxPerRuleHint": "Limita el importe que una regla puede fijar (vacío = sin límite).",
+  "deposit.config.noLimit": "Sin límite",
+  "deposit.config.msg.limitsSaved": "Topes guardados.",
+  "panel.apiError.deposit_cap_reached": "Tope de depósito alcanzado para este(a) lector(a) — cobro rechazado (el préstamo puede hacerse sin depósito).",
+  "panel.apiError.deposit_rule_exceeds_max": "El importe de la regla supera el tope por regla de la biblioteca."
 }

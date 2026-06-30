@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Total détenu (en fiducie)",
   "deposit.report.refundedTotal": "Total remboursé",
   "deposit.report.retainedTotal": "Total retenu",
-  "deposit.report.empty": "Aucune donnée."
+  "deposit.report.empty": "Aucune donnée.",
+  "deposit.config.capPerReader": "Plafond par lecteur·rice",
+  "deposit.config.capPerReaderHint": "Cumul max des dépôts détenus d'une personne (vide = illimité).",
+  "deposit.config.maxPerRule": "Montant max par règle",
+  "deposit.config.maxPerRuleHint": "Borne le montant qu'une règle peut fixer (vide = illimité).",
+  "deposit.config.noLimit": "Illimité",
+  "deposit.config.msg.limitsSaved": "Plafonds enregistrés.",
+  "panel.apiError.deposit_cap_reached": "Plafond de dépôt atteint pour ce·tte lecteur·rice — collecte refusée (le prêt peut se faire sans dépôt).",
+  "panel.apiError.deposit_rule_exceeds_max": "Le montant de la règle dépasse le plafond par règle de la bibliothèque."
 }

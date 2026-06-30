@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Einbehalten gesamt (treuhänderisch)",
   "deposit.report.refundedTotal": "Erstattet gesamt",
   "deposit.report.retainedTotal": "Behalten gesamt",
-  "deposit.report.empty": "Keine Daten."
+  "deposit.report.empty": "Keine Daten.",
+  "deposit.config.capPerReader": "Obergrenze pro Leser·in",
+  "deposit.config.capPerReaderHint": "Max. Summe der einbehaltenen Kautionen einer Person (leer = unbegrenzt).",
+  "deposit.config.maxPerRule": "Höchstbetrag pro Regel",
+  "deposit.config.maxPerRuleHint": "Begrenzt den Betrag, den eine Regel festlegen kann (leer = unbegrenzt).",
+  "deposit.config.noLimit": "Unbegrenzt",
+  "deposit.config.msg.limitsSaved": "Obergrenzen gespeichert.",
+  "panel.apiError.deposit_cap_reached": "Kautionsobergrenze für diese·n Leser·in erreicht — Einnahme abgelehnt (die Ausleihe ist ohne Kaution möglich).",
+  "panel.apiError.deposit_rule_exceeds_max": "Der Regelbetrag überschreitet die Obergrenze pro Regel der Bibliothek."
 }

@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Sumo tenata (en fido)",
   "deposit.report.refundedTotal": "Sumo redonita",
   "deposit.report.retainedTotal": "Sumo retenita",
-  "deposit.report.empty": "Neniuj datumoj."
+  "deposit.report.empty": "Neniuj datumoj.",
+  "deposit.config.capPerReader": "Plafono po leganto",
+  "deposit.config.capPerReaderHint": "Maks. sumo de tenataj deponoj de persono (malplena = senlima).",
+  "deposit.config.maxPerRule": "Maks. sumo po regulo",
+  "deposit.config.maxPerRuleHint": "Limigas la sumon kiun regulo povas fiksi (malplena = senlima).",
+  "deposit.config.noLimit": "Senlima",
+  "deposit.config.msg.limitsSaved": "Plafonoj konservitaj.",
+  "panel.apiError.deposit_cap_reached": "Depona plafono atingita por ĉi tiu leganto — kolekto rifuzita (la prunto eblas sen depono).",
+  "panel.apiError.deposit_rule_exceeds_max": "La sumo de la regulo superas la plafonon po regulo de la biblioteko."
 }

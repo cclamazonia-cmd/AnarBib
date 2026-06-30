@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Total held (in trust)",
   "deposit.report.refundedTotal": "Total refunded",
   "deposit.report.retainedTotal": "Total withheld",
-  "deposit.report.empty": "No data."
+  "deposit.report.empty": "No data.",
+  "deposit.config.capPerReader": "Cap per reader",
+  "deposit.config.capPerReaderHint": "Max total of a person's held deposits (empty = no limit).",
+  "deposit.config.maxPerRule": "Max amount per rule",
+  "deposit.config.maxPerRuleHint": "Caps the amount a rule can set (empty = no limit).",
+  "deposit.config.noLimit": "No limit",
+  "deposit.config.msg.limitsSaved": "Limits saved.",
+  "panel.apiError.deposit_cap_reached": "Deposit cap reached for this reader — collection refused (the loan can proceed without a deposit).",
+  "panel.apiError.deposit_rule_exceeds_max": "The rule amount exceeds the library's per-rule cap."
 }

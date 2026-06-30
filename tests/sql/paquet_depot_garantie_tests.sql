@@ -127,8 +127,8 @@ BEGIN
   -- SECTIONS 2–6 : nécessitent staff + emprunts seedés
   -- =====================================================================
   IF NOT (v_has_staff AND v_has_loan) THEN
-    v_skipped := v_skipped + 18;
-    v_skips := v_skips || text '2.xx–6.xx : pas de staff coordenador BLMF ou seed emprunts indisponible';
+    v_skipped := v_skipped + 20;
+    v_skips := v_skips || text '2.xx–7.xx : pas de staff coordenador BLMF ou seed emprunts indisponible';
   ELSE
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_staff, 'role', 'authenticated')::text, true);
 
@@ -288,6 +288,40 @@ BEGIN
       VALUES (v_subject, c_blmf, v_loan_a, 5, 'rembourse', NULL);
       v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : aurait dû lever (CHECK)');
     EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
+
+    -- ── SECTION 7 : plafonds anti-barrière ───────────────────────────
+    v_t := '7.01 règle au-delà du max par règle -> deposit_rule_exceeds_max';
+    BEGIN
+      UPDATE public.libraries SET deposit_max_per_rule = 5 WHERE id = c_blmf;
+      BEGIN
+        INSERT INTO public.library_deposit_rules (library_id, scope, amount, currency, is_active, name)
+        VALUES (c_blmf, 'per_loan', 10, 'EUR', true, '__TEST_DEPOT_MAX__');
+        v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : aurait dû lever');
+      EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
+      UPDATE public.libraries SET deposit_max_per_rule = NULL WHERE id = c_blmf;
+    EXCEPTION WHEN OTHERS THEN
+      UPDATE public.libraries SET deposit_max_per_rule = NULL WHERE id = c_blmf;
+      v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' (setup) : ' || SQLERRM);
+    END;
+
+    v_t := '7.02 cumul des dépôts détenus > plafond -> deposit_cap_reached';
+    BEGIN
+      PERFORM set_config('request.jwt.claims', json_build_object('sub', v_staff, 'role', 'authenticated')::text, true);
+      UPDATE public.libraries SET deposit_cap_per_reader = 5 WHERE id = c_blmf;
+      -- 1re collecte (3 €) : sous le plafond (cumul détenu du subject = 0).
+      PERFORM * FROM public.fn_record_deposit(v_loan_a, NULL, NULL, 3, 'cash'::public.membership_payment_method, NULL);
+      -- 2e collecte (3 €) : cumul 6 > plafond 5 -> doit lever.
+      BEGIN
+        PERFORM * FROM public.fn_record_deposit(v_loan_c, NULL, NULL, 3, 'cash'::public.membership_payment_method, NULL);
+        v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : aurait dû lever');
+      EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
+      UPDATE public.libraries SET deposit_cap_per_reader = NULL WHERE id = c_blmf;
+      PERFORM set_config('request.jwt.claims', '', true);
+    EXCEPTION WHEN OTHERS THEN
+      UPDATE public.libraries SET deposit_cap_per_reader = NULL WHERE id = c_blmf;
+      PERFORM set_config('request.jwt.claims', '', true);
+      v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' (setup) : ' || SQLERRM);
+    END;
   END IF;
 
   PERFORM set_config('request.jwt.claims', '', true);

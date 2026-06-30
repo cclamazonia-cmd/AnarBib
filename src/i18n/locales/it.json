@@ -5613,5 +5613,13 @@
   "deposit.report.heldTotal": "Totale trattenuto (in custodia)",
   "deposit.report.refundedTotal": "Totale rimborsato",
   "deposit.report.retainedTotal": "Totale trattenuto",
-  "deposit.report.empty": "Nessun dato."
+  "deposit.report.empty": "Nessun dato.",
+  "deposit.config.capPerReader": "Tetto per lettore",
+  "deposit.config.capPerReaderHint": "Cumulo max delle cauzioni trattenute di una persona (vuoto = illimitato).",
+  "deposit.config.maxPerRule": "Importo max per regola",
+  "deposit.config.maxPerRuleHint": "Limita l'importo che una regola può fissare (vuoto = illimitato).",
+  "deposit.config.noLimit": "Illimitato",
+  "deposit.config.msg.limitsSaved": "Tetti salvati.",
+  "panel.apiError.deposit_cap_reached": "Tetto di cauzione raggiunto per questo lettore — riscossione rifiutata (il prestito può avvenire senza cauzione).",
+  "panel.apiError.deposit_rule_exceeds_max": "L'importo della regola supera il tetto per regola della biblioteca."
 }
