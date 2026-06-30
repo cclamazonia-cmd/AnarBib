@@ -37,6 +37,19 @@ const UA =
   "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 const CONTACT = "x.vanwelden@gmail.com";
 const LANGS = ["fr", "ca", "de", "el", "en", "eo", "es", "it", "nl", "pt"];
+
+// ---------------------------------------------------------------------------
+// POLITIQUE ANTI-FORK DE L'IMPORT
+// Le thésaurus FICEDL reste la SOURCE DE VÉRITÉ : AnarBib le consulte, ne le
+// modifie jamais. À l'import on s'autorise UNIQUEMENT à *ranger* la donnée —
+// re-router une balise de langue manifestement erronée vers la bonne case,
+// SANS changer un seul caractère du libellé — et à *journaliser* ce geste.
+// On ne RÉ-ÉCRIT jamais un libellé (faute d'orthographe, mot tronqué, valeur
+// abîmée) : ça resterait tel quel, affiché en l'état, et signalé en amont pour
+// correction À LA SOURCE. Déplacer une donnée ≠ forker ; ré-écrire = forker.
+// Le journal des normalisations ci-dessous EST la liste à remonter au/à la
+// mainteneur·euse du thésaurus.
+const KNOWN_TAG_FIXES = { il: "it", ne: "nl" };
 const CONCURRENCY = 2;
 const DELAY_MS = 350;
 
@@ -116,70 +129,153 @@ async function pool(items, n, worker) {
 }
 
 // --- parsing d'une fiche descripteur ---------------------------------------
-const TERMINATOR_RE =
-  /(?:Voir sur|Voir :|~\s*:|Liste commune|Liste géographie|Liste matière|Mots-clés|Notices|Quelques|date de parution|autre entrée|Articles trouvés|Se connecter|site catalogues)/;
+// Terminateurs de NAVIGATION = fin de la zone descripteur. ⚠️ NE PAS y inclure
+// « ~: » : sur les fiches précoordonnées (surtout géo), FICEDL rend le fil
+// d'ariane comme une SÉQUENCE de blocs de traduction séparés par « ~: » — un par
+// niveau (ex. « [fr]France…[pt]França ~: [fr]histoire…[pt]história ~: 1789-1848 »).
+// « ~: » est donc un séparateur de NIVEAUX, pas une fin de zone.
+const REGION_END_RE =
+  /(?:Voir sur|Voir :|Liste commune|Liste géographie|Liste matière|Mots-clés|Notices|Quelques|date de parution|autre entrée|Articles trouvés|Se connecter|site catalogues)/;
 
-// Isole le bloc de traduction du descripteur en évitant le menu « Langues du
+// Isole la zone descripteur (tous niveaux) en évitant le menu « Langues du
 // site » (dont la valeur [fr] est le mot « français »).
-function findBlock(text) {
+function findRegion(text) {
   const re = /\[fr\]\s*([^[]*)/g;
   let m;
   while ((m = re.exec(text))) {
     const v = m[1].trim();
     if (!v || v.toLowerCase() === "français") continue;
     const start = m.index;
-    // Fin du bloc = le plus proche parmi : terminateur de navigation, un SECOND
-    // [fr] (= le bloc re-rendu en double par SPIP sur certaines fiches), 800 car.
-    const t = text.slice(start).search(TERMINATOR_RE);
-    const next = text.slice(start + 4).search(/\[fr\]/);
-    const rel = [800];
-    if (t >= 0) rel.push(t);
-    if (next >= 0) rel.push(next + 4);
-    const end = Math.min(start + Math.min(...rel), text.length);
-    return text.slice(start, end);
+    const t = text.slice(start).search(REGION_END_RE);
+    return text.slice(start, Math.min(start + (t >= 0 ? t : 1500), text.length));
   }
   return null;
 }
 
+// Titre canonique de la fiche = H1 (chemin précoordonné COMPLET et propre, ex.
+// « France : histoire : 1789-1848 »). C'est la source de vérité du libellé FR et
+// de la hiérarchie pour les fiches multi-niveaux (le bloc de traduction, lui, ne
+// porte souvent qu'UN niveau à la fois). On nettoie le « * » de fin et les espaces.
+function getH1(raw) {
+  const m = raw.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  if (!m) return "";
+  return decode(stripTags(m[1])).replace(/\s+/g, " ").replace(/\s*\*\s*$/, "").trim();
+}
+
+// Isole le TERME d'un niveau : coupe au 1er séparateur de niveau (« ~: », « : »,
+// flèche « —> » / « --> ») et retire un séparateur résiduel en fin. Sur une fiche
+// multi-niveaux, chaque bloc ne porte qu'un terme simple (sans « : » interne).
+const cutTerm = (v) =>
+  (v || "").split(/\s*~:\s*|\s+:\s+|\s*—>\s*|\s*--?>\s*/)[0].replace(/\s*~?\s*:\s*$/, "").trim();
+
+// Parse un bloc de traduction « [xx]valeur… » → { map des langues }. Re-route les
+// balises typo CONNUES (ex. [ne]→nl) sans changer la valeur, journalise dans rec.
+function parseBlock(b, rec) {
+  const map = {};
+  const seen = new Set();
+  for (const x of b.matchAll(/\[([a-z]{2})\]\s*([^[]*)/g)) {
+    const lg = x[1];
+    const val = x[2];
+    if (!LANGS.includes(lg)) {
+      const fix = KNOWN_TAG_FIXES[lg];
+      if (fix && !seen.has(fix)) {
+        seen.add(fix);
+        map[fix] = val;
+        rec.normalizations.push({ type: "tag", from: lg, to: fix, value: cutTerm(val) });
+        rec.flags.push(`tag_fixed:${lg}→${fix}`);
+      } else {
+        rec.flags.push(`bad_lang_tag:${lg}→${val.trim()}`);
+      }
+      continue;
+    }
+    if (seen.has(lg)) {
+      rec.flags.push(`${map[lg] !== val ? "dup_lang_conflict" : "dup_lang"}:${lg}`);
+      continue;
+    }
+    seen.add(lg);
+    map[lg] = val;
+  }
+  return map;
+}
+
 function parseDescriptor(id, raw) {
   const text = decode(stripTags(raw)).replace(/\s+/g, " ").trim();
-  const rec = { id, labels: {}, hierarchy: null, depth: null, catalog_links: [], flags: [] };
+  const rec = { id, labels: {}, hierarchy: null, depth: null, catalog_links: [], normalizations: [], flags: [] };
 
-  const region = findBlock(text);
+  const region = findRegion(text);
   if (!region) {
     rec.flags.push("no_translation_block");
     return rec;
   }
 
-  // Scan tolérant : récupère chaque balise [xx]valeur, et signale les balises
-  // inconnues (ex. [il] pour [it]), les doublons et les langues manquantes —
-  // exactement les coquilles structurelles qu'un parseur rigide laisse filer.
-  const tags = [...region.matchAll(/\[([a-z]{2})\]\s*([^[]*)/g)].map((x) => [x[1], x[2].trim()]);
-  const seenLang = new Set();
-  for (const [lg, val] of tags) {
-    if (!LANGS.includes(lg)) {
-      rec.flags.push(`bad_lang_tag:${lg}→${val}`);
-      continue;
-    }
-    if (seenLang.has(lg)) {
-      rec.flags.push(`dup_lang:${lg}`);
-      continue;
-    }
-    seenLang.add(lg);
-    rec.labels[lg] = val;
+  // Un niveau traduit = un bloc commençant par [fr] (le séparateur de niveau de la
+  // source est INCONSTANT : tantôt « ~: », tantôt « : » — on segmente donc sur [fr]).
+  const blocks = region.split(/(?=\[fr\])/).map((s) => s.trim()).filter(Boolean)
+    .map((b) => parseBlock(b, rec));
+  if (!blocks.length) {
+    rec.flags.push("no_translation_block");
+    return rec;
   }
-  for (const lg of LANGS) if (!seenLang.has(lg)) rec.flags.push(`missing_lang:${lg}`);
+  const h1 = getH1(raw);
 
-  // grec : séparer écriture native / romanisation (« άμεση δράση = ámesi̱ drási̱ »)
-  if (rec.labels.el && rec.labels.el.includes("=")) {
-    const [native, ...rom] = rec.labels.el.split(/\s*=\s*/);
-    rec.labels.el = native.trim();
-    rec.labels.el_roman = rom.join("=").trim();
+  if (blocks.length === 1) {
+    // Sujet / descripteur simple : un seul bloc, libellé précoordonné INTACT
+    // (« économie : agriculture » — le « : » est interne, pas un niveau distinct).
+    for (const lg of LANGS) {
+      if (blocks[0][lg] == null) continue;
+      const v = blocks[0][lg].replace(/\s*~?\s*:\s*$/, "").trim();
+      if (v) rec.labels[lg] = v;
+    }
+    // grec : natif / romanisation
+    if (rec.labels.el && rec.labels.el.includes("=")) {
+      const [native, ...rom] = rec.labels.el.split(/\s*=\s*/);
+      rec.labels.el = native.trim();
+      rec.labels.el_roman = rom.join("=").trim();
+    }
+  } else {
+    // Géo multi-niveaux : FR + hiérarchie depuis le H1 (chemin complet, propre,
+    // DISTINCTIF → lève les faux doublons). Autres langues = jointure des niveaux
+    // traduits ; les feuilles non traduites (dates) reprennent le texte du H1.
+    const frLevels = (h1 || blocks.map((b) => cutTerm(b.fr || "")).join(" : "))
+      .split(/\s*:\s*/).map((s) => s.trim()).filter(Boolean);
+    rec.labels.fr = frLevels.join(" : ");
+    for (const lg of LANGS) {
+      if (lg === "fr") continue;
+      const parts = [];
+      for (let i = 0; i < frLevels.length; i++) {
+        if (i < blocks.length && blocks[i][lg] != null) parts.push(cutTerm(blocks[i][lg]));
+        else if (i < blocks.length && blocks[i].fr != null) { parts.push(cutTerm(blocks[i].fr)); rec.flags.push(`missing_lang_level:${lg}`); }
+        else parts.push(frLevels[i]); // feuille (date) non traduite : texte neutre du H1
+      }
+      const joined = parts.filter(Boolean).join(" : ");
+      if (joined) rec.labels[lg] = joined;
+    }
+    // grec : natif / romanisation par niveau + feuilles du H1
+    const elN = [];
+    const elR = [];
+    let anyRoman = false;
+    for (let i = 0; i < frLevels.length; i++) {
+      const el = i < blocks.length ? blocks[i].el : null;
+      if (el == null) { elN.push(frLevels[i]); elR.push(frLevels[i]); continue; }
+      if (el.includes("=")) {
+        const [native, rom] = el.split(/\s*=\s*/);
+        elN.push(cutTerm(native));
+        elR.push(cutTerm(rom || native));
+        anyRoman = true;
+      } else {
+        elN.push(cutTerm(el));
+        elR.push(cutTerm(el));
+      }
+    }
+    if (elN.filter(Boolean).length) {
+      rec.labels.el = elN.filter(Boolean).join(" : ");
+      if (anyRoman) rec.labels.el_roman = elR.filter(Boolean).join(" : ");
+    }
   }
+  for (const lg of LANGS) if (rec.labels[lg] == null) rec.flags.push(`missing_lang:${lg}`);
 
-  // hiérarchie depuis le libellé FR (précoordination par « : »)
-  const fr = rec.labels.fr || "";
-  const levels = fr.split(/\s*:\s*/).map((s) => s.trim()).filter(Boolean);
+  // hiérarchie depuis le libellé FR COMPLET (précoordination par « : »)
+  const levels = (rec.labels.fr || "").split(/\s*:\s*/).map((s) => s.trim()).filter(Boolean);
   rec.hierarchy = levels;
   rec.depth = levels.length;
 
@@ -341,7 +437,7 @@ for (const { f } of flat)
     const lg = f.split(":")[1];
     missingByLang[lg] = (missingByLang[lg] || 0) + 1;
   }
-const STRUCT_RE = /^(bad_lang_tag|dup_lang|missing_lang):/;
+const STRUCT_RE = /^(bad_lang_tag|dup_lang|dup_lang_conflict|missing_lang):/;
 const structural = ok
   .filter((r) => r.flags.some((f) => STRUCT_RE.test(f)))
   .map((r) => ({
@@ -351,6 +447,11 @@ const structural = ok
     fr: r.labels.fr,
     issues: r.flags.filter((f) => STRUCT_RE.test(f)),
   }));
+
+// Journal des normalisations appliquées à l'import (= à signaler à la source).
+const normalized = ok.flatMap((r) =>
+  r.normalizations.map((n) => ({ id: r.id, url: r.url, fr: r.labels.fr, ...n }))
+);
 
 const mostFlagged = [...ok]
   .filter((r) => r.flags.length)
@@ -418,6 +519,13 @@ md += "## Grec\n\n";
 md += `- Sans écriture grecque : ${elNoGreek.length}${elNoGreek.length ? " (" + elNoGreek.slice(0, 20).map((r) => r.id).join(", ") + ")" : ""}\n`;
 md += `- Sans romanisation : ${elNoRoman.length}\n\n`;
 
+md += "## Normalisations appliquées à l'import (à signaler À LA SOURCE)\n\n";
+md += "_Politique anti-fork : on **range** la donnée (re-route une balise erronée vers la bonne langue, libellé **inchangé**), jamais on ne ré-écrit. Ces points doivent être corrigés à la source par le/la mainteneur·euse — AnarBib ne fait que les contourner en lecture._\n\n";
+if (!normalized.length) md += "_aucune_\n\n";
+for (const n of normalized)
+  md += `- [${n.id}](${n.url}) « ${n.fr} » — balise \`[${n.from}]\` → \`[${n.to}]\` (valeur « ${n.value} » remise dans la bonne langue, non modifiée)\n`;
+md += "\n";
+
 md += "## Coquilles structurelles (balises de langue)\n\n";
 md += "_Fiches récupérées par le parseur tolérant : balise mal orthographiée (ex. `[il]`→`[it]`), dupliquée, ou langue absente._\n\n";
 md += `Langues manquantes (balise absente) : ${LANGS.map((l) => `${l}:${missingByLang[l] || 0}`).join("  ")}\n\n`;
@@ -448,7 +556,9 @@ console.log(`  pt fuite d'anglais     : ${englishLeaks.filter((x) => x.lang === 
 console.log(`\nAllemand non capitalisé : ${deNoCaps.length}`);
 console.log(`Fuites d'anglais (toutes langues) : ${englishLeaks.length}`);
 console.log(`Grec sans script grec : ${elNoGreek.length} | sans romanisation : ${elNoRoman.length}`);
-console.log(`\nCoquilles structurelles (balise manquante/dupliquée/erronée) : ${structural.length} fiches`);
+console.log(`\nNormalisations de balise appliquées (langue récupérée, libellé inchangé) : ${normalized.length}`);
+for (const n of normalized) console.log(`  ${n.id}: [${n.from}]→[${n.to}]  « ${n.value} »`);
+console.log(`\nCoquilles structurelles restantes (à corriger à la source) : ${structural.length} fiches`);
 console.log("  langues manquantes : " + LANGS.map((l) => `${l}:${missingByLang[l] || 0}`).join("  "));
 console.log("\nÉcrits :");
 console.log("  " + jsonPath);
