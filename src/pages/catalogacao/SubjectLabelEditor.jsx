@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { pickLabel } from '@/lib/i18nLabel';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SubjectLabelEditor — thésaurus v2 étape H-1 : éditeur de libellés multilingue.
@@ -33,6 +34,9 @@ export default function SubjectLabelEditor() {
   const [related, setRelated] = useState([]);      // sujets reliés « voir aussi » (v3-A)
   const [relQuery, setRelQuery] = useState('');
   const [relResults, setRelResults] = useState([]);
+  const [ficedl, setFicedl] = useState([]);        // descripteurs FICEDL alignés (P3b)
+  const [ficQuery, setFicQuery] = useState('');
+  const [ficResults, setFicResults] = useState([]);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
 
@@ -41,6 +45,13 @@ export default function SubjectLabelEditor() {
       const { data } = await supabase.schema('api').rpc('subject_related_v1', { p_subject_id: subjectId });
       setRelated(Array.isArray(data) ? data : []);
     } catch { setRelated([]); }
+  }
+
+  async function loadFicedl(subjectId) {
+    try {
+      const { data } = await supabase.schema('api').rpc('subject_ficedl_links_v1', { p_subject_id: subjectId });
+      setFicedl(Array.isArray(data) ? data : []);
+    } catch { setFicedl([]); }
   }
 
   useEffect(() => {
@@ -68,7 +79,44 @@ export default function SubjectLabelEditor() {
     }
     setSubj(data); setPref(p); setAlt(a); setHidden(h); setNotation(data.notation || '');
     setRelQuery(''); setRelResults([]); await loadRelated(data.id);
+    setFicQuery(''); setFicResults([]); await loadFicedl(data.id);
     setResults([]); setQuery('');
+    setBusy(false);
+  }
+
+  // Recherche d'un descripteur FICEDL à aligner (facette « sujets », hors déjà liés).
+  useEffect(() => {
+    const q = ficQuery.trim();
+    if (q.length < 2 || !subj) { setFicResults([]); return; }
+    const h = setTimeout(async () => {
+      try {
+        const short = (locale || '').split('-')[0];
+        const { data } = await supabase
+          .from('ficedl_thesaurus_terms')
+          .select('mot_id, labels')
+          .contains('facet', ['sujets'])
+          .or(`labels->>fr.ilike.%${q}%,labels->>${short}.ilike.%${q}%`)
+          .limit(8);
+        const linked = new Set(ficedl.map((f) => f.mot_id));
+        setFicResults((Array.isArray(data) ? data : []).filter((r) => !linked.has(r.mot_id)));
+      } catch { setFicResults([]); }
+    }, 300);
+    return () => clearTimeout(h);
+  }, [ficQuery, subj, ficedl, locale]);
+
+  async function addFicedl(motId) {
+    setBusy(true); setMsg(null);
+    const { error } = await supabase.schema('api').rpc('fn_subject_add_ficedl_match', { p_subject_id: subj.id, p_mot_id: motId });
+    if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
+    else { setFicQuery(''); setFicResults([]); await loadFicedl(subj.id); }
+    setBusy(false);
+  }
+
+  async function removeFicedl(motId) {
+    setBusy(true); setMsg(null);
+    const { error } = await supabase.schema('api').rpc('fn_subject_remove_ficedl_match', { p_subject_id: subj.id, p_mot_id: motId });
+    if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
+    else await loadFicedl(subj.id);
     setBusy(false);
   }
 
@@ -195,6 +243,31 @@ export default function SubjectLabelEditor() {
                 {relResults.map((r) => (
                   <button key={r.id} type="button" style={resultBtn} disabled={busy} onClick={() => addRelation(r.id)}>
                     + {lbl(r.label_i18n, locale)} {r.status === 'proposto' && <span style={{ opacity: .6 }}>· {t({ id: 'catalogacao.subjects.proposed' })}</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Alignement sur le thésaurus partagé FICEDL (P3b) */}
+          <div style={{ marginTop: 16 }}>
+            <div style={{ fontSize: '.8rem', color: 'var(--brand-muted, #aaa)', marginBottom: 6 }}>{t({ id: 'catalogacao.subjectGov.ficedlTitle' })}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+              {ficedl.length === 0 && <span style={{ fontSize: '.78rem', color: 'var(--brand-muted, #777)' }}>{t({ id: 'catalogacao.subjectGov.ficedlNone' })}</span>}
+              {ficedl.map((f) => (
+                <span key={f.mot_id} style={relChip}>
+                  {pickLabel(f.labels, locale, 'fr')}
+                  <button type="button" disabled={busy} onClick={() => removeFicedl(f.mot_id)} style={relChipX} aria-label="✕">✕</button>
+                </span>
+              ))}
+            </div>
+            <input className="ab-input" type="search" value={ficQuery} onChange={(e) => setFicQuery(e.target.value)}
+              placeholder={t({ id: 'catalogacao.subjectGov.ficedlAdd' })} style={{ maxWidth: 380 }} />
+            {ficResults.length > 0 && (
+              <div style={resultsBox}>
+                {ficResults.map((r) => (
+                  <button key={r.mot_id} type="button" style={resultBtn} disabled={busy} onClick={() => addFicedl(r.mot_id)}>
+                    + {pickLabel(r.labels, locale, 'fr')} <span style={{ opacity: .6 }}>· {r.mot_id}</span>
                   </button>
                 ))}
               </div>

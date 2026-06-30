@@ -27,6 +27,7 @@ const PrivacyPolicyPage = lazy(() => import('@/pages/public/PrivacyPolicyPage'))
 const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
 const FicedlThesaurusPage = lazy(() => import('@/pages/public/FicedlThesaurusPage'));
 const FicedlTermPage = lazy(() => import('@/pages/public/FicedlTermPage'));
+const SubjectPage = lazy(() => import('@/pages/public/SubjectPage'));
 const BibliotecaPublicaPage = lazy(() => import('@/pages/public/BibliotecaPublicaPage'));
 const CartografiaPage = lazy(() => import('@/pages/public/CartografiaPage'));
 const CartografiaAjouterPage = lazy(() => import('@/pages/public/CartografiaAjouterPage'));
@@ -133,6 +134,8 @@ export default function App() {
                   {/* Thésaurus partagé FICEDL : navigation publique du cache (anti-fork, P3a) */}
                   <Route path="/thesaurus-ficedl" element={<FicedlThesaurusPage />} />
                   <Route path="/thesaurus-ficedl/:motId" element={<FicedlTermPage />} />
+                  {/* Fiche publique d'un sujet AnarBib (URI stable THES-URI, P3b) */}
+                  <Route path="/thesaurus/:slug" element={<SubjectPage />} />
                   {/* Carte publique du réseau (MAP-C, REGISTRE §34) */}
                   <Route path="/cartografia" element={<CartografiaPage />} />
                   {/* Auto-déclaration publique « ajouter ma biblio » (MAP-J) */}

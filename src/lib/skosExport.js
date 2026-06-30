@@ -47,6 +47,11 @@ export function toTurtle(data, base = THESAURUS_BASE) {
     if (c.scope_note) P.push(`   skos:scopeNote "${esc(c.scope_note)}"@pt-BR`);
     if (c.parent_slug) P.push(`   skos:broader <${encodeURIComponent(c.parent_slug)}>`);
     for (const rel of (relMap[c.slug] || [])) P.push(`   skos:related <${encodeURIComponent(rel)}>`);
+    // Alignement thésaurus partagé FICEDL : URI externe absolue, écrite telle quelle.
+    for (const fm of (c.ficedl || [])) {
+      if (!fm.uri) continue;
+      P.push(`   ${fm.match === 'close' ? 'skos:closeMatch' : 'skos:exactMatch'} <${fm.uri}>`);
+    }
     if (c.deprecated) P.push('   owl:deprecated true');
     L.push(`<${encodeURIComponent(c.slug)}>`);
     L.push(P.join(' ;\n') + ' .');
@@ -77,6 +82,12 @@ export function toJsonLd(data, base = THESAURUS_BASE) {
     if (c.scope_note) node['skos:scopeNote'] = { '@language': 'pt-BR', '@value': c.scope_note };
     if (c.parent_slug) node['skos:broader'] = { '@id': iri(base, c.parent_slug) };
     const rels = relMap[c.slug] || []; if (rels.length) node['skos:related'] = rels.map((r) => ({ '@id': iri(base, r) }));
+    // Alignement FICEDL : URI externe absolue (pas d'iri()/encodage).
+    const fic = c.ficedl || [];
+    const exact = fic.filter((f) => f.uri && f.match !== 'close').map((f) => ({ '@id': f.uri }));
+    const close = fic.filter((f) => f.uri && f.match === 'close').map((f) => ({ '@id': f.uri }));
+    if (exact.length) node['skos:exactMatch'] = exact;
+    if (close.length) node['skos:closeMatch'] = close;
     if (c.deprecated) node['owl:deprecated'] = true;
     return node;
   });
