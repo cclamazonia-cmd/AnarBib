@@ -302,7 +302,7 @@ export async function handleConsultaV2LifecycleEvent(
       // garanti par api.advance_consulta, propage via workflow_note et
       // affiche dans details du mail staff via noteDetailStaff.
       readerKey = "con.cancelStaff";
-      staffKey = "con.cancelStaff";
+      staffKey = "con.cancelStaffAdmin";
     } else {
       // Discriminant absent du payload (cas degrade) -> mail aux deux cotes
       // par securite, avec la cle generique "reservation annulee".

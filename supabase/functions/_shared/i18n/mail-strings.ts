@@ -5324,6 +5324,18 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     nl: "De bibliotheek heeft je aanvraag voor raadpleging geannuleerd",
     el: "Η βιβλιοθήκη ακύρωσε το αίτημα μελέτης σου"
   },
+  "con.cancelStaffAdmin": {
+    "pt-BR": "A biblioteca cancelou um pedido de consulta local",
+    fr: "La bibliothèque a annulé une demande de consultation",
+    es: "La biblioteca canceló un pedido de consulta local",
+    en: "The library cancelled a consultation request",
+    it: "La biblioteca ha annullato una richiesta di consultazione",
+    de: "Die Bibliothek hat eine Anfrage für Einsichtnahme storniert",
+    ca: "La biblioteca ha cancel·lat una sol·licitud de consulta in situ",
+    eo: "La biblioteko nuligis peton de surloka konsulto",
+    nl: "De bibliotheek heeft een aanvraag voor raadpleging geannuleerd",
+    el: "Η βιβλιοθήκη ακύρωσε ένα αίτημα μελέτης"
+  },
   "con.expired": {
     "pt-BR": "Pedido de consulta local expirado",
     fr: "Demande de consultation expirée",
