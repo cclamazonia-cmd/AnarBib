@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Μόνιμη (ανά αναγνώστη)",
   "deposit.panel.standingTitle": "Μόνιμη εγγύηση",
   "panel.apiError.standing_deposit_already_held": "Αυτό το άτομο έχει ήδη μόνιμη εγγύηση σε αυτή τη βιβλιοθήκη.",
-  "panel.apiError.standing_deposit_has_open_loans": "Η επιστροφή δεν είναι δυνατή: υπάρχουν ακόμη ενεργοί δανεισμοί. Επιστρέψτε τη μόνιμη εγγύηση μόλις επιστραφούν όλα."
+  "panel.apiError.standing_deposit_has_open_loans": "Η επιστροφή δεν είναι δυνατή: υπάρχουν ακόμη ενεργοί δανεισμοί. Επιστρέψτε τη μόνιμη εγγύηση μόλις επιστραφούν όλα.",
+  "federacao.assembleias.firstPoints.q9": "Θεματικό λεξιλόγιο: ως πού να στηριχτούμε στον κοινό θησαυρό FICEDL; (προς απόφαση με τη FICEDL)"
 }

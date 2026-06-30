@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Doorlopend (per lezer)",
   "deposit.panel.standingTitle": "Doorlopende waarborg",
   "panel.apiError.standing_deposit_already_held": "Deze persoon heeft al een doorlopende waarborg bij deze bibliotheek.",
-  "panel.apiError.standing_deposit_has_open_loans": "Terugbetaling niet mogelijk: er lopen nog uitleningen. Betaal de doorlopende waarborg terug zodra alles is ingeleverd."
+  "panel.apiError.standing_deposit_has_open_loans": "Terugbetaling niet mogelijk: er lopen nog uitleningen. Betaal de doorlopende waarborg terug zodra alles is ingeleverd.",
+  "federacao.assembleias.firstPoints.q9": "Onderwerpsvocabulaire: hoever leunen op de gedeelde FICEDL-thesaurus? (te beslissen met FICEDL)"
 }

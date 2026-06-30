@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Dauerhaft (pro Leser·in)",
   "deposit.panel.standingTitle": "Dauerhafte Kaution",
   "panel.apiError.standing_deposit_already_held": "Diese Person hat bereits eine dauerhafte Kaution in dieser Bibliothek.",
-  "panel.apiError.standing_deposit_has_open_loans": "Erstattung nicht möglich: es bestehen noch Ausleihen. Erstatte die dauerhafte Kaution, sobald alles zurückgegeben ist."
+  "panel.apiError.standing_deposit_has_open_loans": "Erstattung nicht möglich: es bestehen noch Ausleihen. Erstatte die dauerhafte Kaution, sobald alles zurückgegeben ist.",
+  "federacao.assembleias.firstPoints.q9": "Sachvokabular: wie weit sollen wir uns auf den gemeinsamen FICEDL-Thesaurus stützen? (mit FICEDL zu entscheiden)"
 }

@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Rotatori (per lector·a)",
   "deposit.panel.standingTitle": "Dipòsit de garantia rotatori",
   "panel.apiError.standing_deposit_already_held": "Aquesta persona ja té un dipòsit rotatori en aquesta biblioteca.",
-  "panel.apiError.standing_deposit_has_open_loans": "Reemborsament impossible: encara hi ha préstecs en curs. Retorna el dipòsit rotatori quan tot estigui tornat."
+  "panel.apiError.standing_deposit_has_open_loans": "Reemborsament impossible: encara hi ha préstecs en curs. Retorna el dipòsit rotatori quan tot estigui tornat.",
+  "federacao.assembleias.firstPoints.q9": "Vocabulari de matèria: fins on recolzar-se en el tesaurus compartit FICEDL? (a decidir amb la FICEDL)"
 }

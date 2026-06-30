@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Standing (per reader)",
   "deposit.panel.standingTitle": "Standing deposit",
   "panel.apiError.standing_deposit_already_held": "This person already has a standing deposit at this library.",
-  "panel.apiError.standing_deposit_has_open_loans": "Refund not possible: loans are still outstanding. Refund the standing deposit once everything is returned."
+  "panel.apiError.standing_deposit_has_open_loans": "Refund not possible: loans are still outstanding. Refund the standing deposit once everything is returned.",
+  "federacao.assembleias.firstPoints.q9": "Subject vocabulary: how far to rely on the shared FICEDL thesaurus? (to be decided with FICEDL)"
 }

@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Rotatorio (por lector(a))",
   "deposit.panel.standingTitle": "Depósito de garantía rotatorio",
   "panel.apiError.standing_deposit_already_held": "Esta persona ya tiene un depósito rotatorio en esta biblioteca.",
-  "panel.apiError.standing_deposit_has_open_loans": "Devolución imposible: aún hay préstamos en curso. Devuelve el depósito rotatorio cuando todo esté devuelto."
+  "panel.apiError.standing_deposit_has_open_loans": "Devolución imposible: aún hay préstamos en curso. Devuelve el depósito rotatorio cuando todo esté devuelto.",
+  "federacao.assembleias.firstPoints.q9": "Vocabulario de materias: ¿hasta dónde apoyarse en el tesauro compartido FICEDL? (a decidir con la FICEDL)"
 }

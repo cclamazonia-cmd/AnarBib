@@ -407,6 +407,7 @@ export default function AssembleiasTab() {
           <li>{t({ id: 'federacao.assembleias.firstPoints.q6' })}</li>
           <li>{t({ id: 'federacao.assembleias.firstPoints.q7' })}</li>
           <li>{t({ id: 'federacao.assembleias.firstPoints.q8' })}</li>
+          <li>{t({ id: 'federacao.assembleias.firstPoints.q9' })}</li>
         </ul>
       </div>
     </div>

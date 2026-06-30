@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Tournant (par lecteur·rice)",
   "deposit.panel.standingTitle": "Dépôt de garantie tournant",
   "panel.apiError.standing_deposit_already_held": "Cette personne a déjà un dépôt tournant en cours dans cette bibliothèque.",
-  "panel.apiError.standing_deposit_has_open_loans": "Remboursement impossible : des emprunts sont encore en cours. Rembourse le dépôt tournant une fois tout rendu."
+  "panel.apiError.standing_deposit_has_open_loans": "Remboursement impossible : des emprunts sont encore en cours. Rembourse le dépôt tournant une fois tout rendu.",
+  "federacao.assembleias.firstPoints.q9": "Vocabulaire matière : jusqu'où s'appuyer sur le thésaurus partagé FICEDL ? (à trancher avec la FICEDL)"
 }

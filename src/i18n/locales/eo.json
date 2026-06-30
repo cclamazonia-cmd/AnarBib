@@ -5625,5 +5625,6 @@
   "deposit.scope.standing": "Daŭra (po leganto)",
   "deposit.panel.standingTitle": "Daŭra garantia depono",
   "panel.apiError.standing_deposit_already_held": "Ĉi tiu persono jam havas daŭran deponon en ĉi tiu biblioteko.",
-  "panel.apiError.standing_deposit_has_open_loans": "Repago neebla: ankoraŭ estas pruntoj en kurso. Redonu la daŭran deponon kiam ĉio estas reprenita."
+  "panel.apiError.standing_deposit_has_open_loans": "Repago neebla: ankoraŭ estas pruntoj en kurso. Redonu la daŭran deponon kiam ĉio estas reprenita.",
+  "federacao.assembleias.firstPoints.q9": "Tema-vortaro: ĝis kie apogi sin sur la komuna tezaŭro FICEDL? (decidota kun FICEDL)"
 }
