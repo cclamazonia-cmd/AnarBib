@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Unbegrenzt",
   "deposit.config.msg.limitsSaved": "Obergrenzen gespeichert.",
   "panel.apiError.deposit_cap_reached": "Kautionsobergrenze für diese·n Leser·in erreicht — Einnahme abgelehnt (die Ausleihe ist ohne Kaution möglich).",
-  "panel.apiError.deposit_rule_exceeds_max": "Der Regelbetrag überschreitet die Obergrenze pro Regel der Bibliothek."
+  "panel.apiError.deposit_rule_exceeds_max": "Der Regelbetrag überschreitet die Obergrenze pro Regel der Bibliothek.",
+  "deposit.scope.standing": "Dauerhaft (pro Leser·in)",
+  "deposit.panel.standingTitle": "Dauerhafte Kaution",
+  "panel.apiError.standing_deposit_already_held": "Diese Person hat bereits eine dauerhafte Kaution in dieser Bibliothek.",
+  "panel.apiError.standing_deposit_has_open_loans": "Erstattung nicht möglich: es bestehen noch Ausleihen. Erstatte die dauerhafte Kaution, sobald alles zurückgegeben ist."
 }

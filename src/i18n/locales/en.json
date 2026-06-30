@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "No limit",
   "deposit.config.msg.limitsSaved": "Limits saved.",
   "panel.apiError.deposit_cap_reached": "Deposit cap reached for this reader — collection refused (the loan can proceed without a deposit).",
-  "panel.apiError.deposit_rule_exceeds_max": "The rule amount exceeds the library's per-rule cap."
+  "panel.apiError.deposit_rule_exceeds_max": "The rule amount exceeds the library's per-rule cap.",
+  "deposit.scope.standing": "Standing (per reader)",
+  "deposit.panel.standingTitle": "Standing deposit",
+  "panel.apiError.standing_deposit_already_held": "This person already has a standing deposit at this library.",
+  "panel.apiError.standing_deposit_has_open_loans": "Refund not possible: loans are still outstanding. Refund the standing deposit once everything is returned."
 }

@@ -7,15 +7,19 @@ import { useToast } from '@/contexts/ToastContext';
 
 // ════════════════════════════════════════════════════════════════════
 // LoanDepositPanel — encart « dépôt de garantie » attaché à un emprunt
-// (DEPOT-5, soft-gate). Autonome : se gate lui-même sur deposit_enabled
-// de la biblio de session → rend null si OFF (zéro impact pour les biblios
-// sans dépôt). Affiche/permet : collecte à l'emprunt, remboursement total
-// et rétention (perte/dégât) au retour. Les actions passent par les
-// fonctions SECURITY DEFINER fn_record/refund/retain_deposit (public).
+// (DEPOT-5, soft-gate). Autonome : se gate sur deposit_enabled → null si OFF.
+// Deux modes selon le scope de la règle active de la biblio :
+//   - per_loan / per_item : un dépôt par emprunt (fn_record_deposit,
+//     fn_deposit_status_for_loan).
+//   - standing : un dépôt TOURNANT unique par lecteur·rice, couvrant tous les
+//     emprunts (fn_record_standing_deposit, fn_standing_deposit_for_loan) ;
+//     remboursable seulement quand plus aucun emprunt n'est en cours (la garde
+//     est côté SQL ; l'erreur standing_deposit_has_open_loans est localisée).
+// Actions communes : collecte, remboursement total, rétention (perte/dégât),
+// via les fonctions SECURITY DEFINER fn_record/refund/retain_deposit.
 // ════════════════════════════════════════════════════════════════════
 
-// Cache de config par biblio (Promise) — évite une requête config par
-// emprunt affiché. Rafraîchi au rechargement de page.
+// Cache de config par biblio (Promise) — évite une requête config par emprunt.
 const _configCache = new Map();
 function loadDepositConfig(libraryId) {
   if (_configCache.has(libraryId)) return _configCache.get(libraryId);
@@ -46,8 +50,11 @@ export default function LoanDepositPanel({ emprestimoId }) {
   const [method, setMethod] = useState('cash');
   const [amount, setAmount] = useState('');
 
-  async function loadDeposits() {
-    const { data, error } = await supabase.rpc('fn_deposit_status_for_loan', { p_emprestimo_id: emprestimoId });
+  const standingMode = config?.rules?.[0]?.scope === 'standing';
+
+  async function loadDeposits(standing) {
+    const fn = standing ? 'fn_standing_deposit_for_loan' : 'fn_deposit_status_for_loan';
+    const { data, error } = await supabase.rpc(fn, { p_emprestimo_id: emprestimoId });
     if (!error) setDeposits(data || []);
   }
 
@@ -60,7 +67,7 @@ export default function LoanDepositPanel({ emprestimoId }) {
       setConfig(cfg);
       if (cfg.enabled) {
         setAmount(cfg.rules[0]?.amount ?? '');
-        await loadDeposits();
+        await loadDeposits(cfg.rules?.[0]?.scope === 'standing');
       }
       if (!cancelled) setLoading(false);
     })();
@@ -73,11 +80,15 @@ export default function LoanDepositPanel({ emprestimoId }) {
   const rule = config.rules[0] || null;
   const held = deposits.find(d => d.status === 'detenu');
   const settled = deposits.filter(d => d.status !== 'detenu');
+  const title = standingMode ? t({ id: 'deposit.panel.standingTitle' }) : t({ id: 'deposit.panel.title' });
 
   async function collect() {
     setBusy(true); setMsg('');
     try {
-      const { error } = await supabase.rpc('fn_record_deposit', {
+      // Mêmes paramètres nommés pour les deux fonctions (fn_record_deposit
+      // ignore p_emprestimo_item_id par défaut ; le tournant n'en a pas).
+      const fn = standingMode ? 'fn_record_standing_deposit' : 'fn_record_deposit';
+      const { error } = await supabase.rpc(fn, {
         p_emprestimo_id: emprestimoId,
         p_rule_id: rule?.id ?? null,
         p_amount: method === 'exemption' ? 0 : (amount === '' ? null : Number(amount)),
@@ -86,7 +97,7 @@ export default function LoanDepositPanel({ emprestimoId }) {
       });
       if (error) throw error;
       setMsg(t({ id: 'deposit.panel.msg.collected' }));
-      await loadDeposits();
+      await loadDeposits(standingMode);
     } catch (e) { notifyError(localizeError(e, t, 'deposit.panel.title'), e); }
     finally { setBusy(false); }
   }
@@ -102,7 +113,7 @@ export default function LoanDepositPanel({ emprestimoId }) {
       });
       if (error) throw error;
       setMsg(t({ id: 'deposit.panel.msg.refunded' }));
-      await loadDeposits();
+      await loadDeposits(standingMode);
     } catch (e) { notifyError(localizeError(e, t, 'deposit.panel.title'), e); }
     finally { setBusy(false); }
   }
@@ -120,14 +131,14 @@ export default function LoanDepositPanel({ emprestimoId }) {
       });
       if (error) throw error;
       setMsg(t({ id: 'deposit.panel.msg.retained' }));
-      await loadDeposits();
+      await loadDeposits(standingMode);
     } catch (e) { notifyError(localizeError(e, t, 'deposit.panel.title'), e); }
     finally { setBusy(false); }
   }
 
   return (
     <div style={{ margin: '4px 14px 10px', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,196,0,.06)', border: '1px solid rgba(255,196,0,.18)', fontSize: '.85rem' }}>
-      <strong style={{ fontSize: '.82rem' }}>{t({ id: 'deposit.panel.title' })}</strong>
+      <strong style={{ fontSize: '.82rem' }}>{title}</strong>
 
       {held ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6, flexWrap: 'wrap' }}>

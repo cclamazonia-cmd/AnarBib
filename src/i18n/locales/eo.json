@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Senlima",
   "deposit.config.msg.limitsSaved": "Plafonoj konservitaj.",
   "panel.apiError.deposit_cap_reached": "Depona plafono atingita por ĉi tiu leganto — kolekto rifuzita (la prunto eblas sen depono).",
-  "panel.apiError.deposit_rule_exceeds_max": "La sumo de la regulo superas la plafonon po regulo de la biblioteko."
+  "panel.apiError.deposit_rule_exceeds_max": "La sumo de la regulo superas la plafonon po regulo de la biblioteko.",
+  "deposit.scope.standing": "Daŭra (po leganto)",
+  "deposit.panel.standingTitle": "Daŭra garantia depono",
+  "panel.apiError.standing_deposit_already_held": "Ĉi tiu persono jam havas daŭran deponon en ĉi tiu biblioteko.",
+  "panel.apiError.standing_deposit_has_open_loans": "Repago neebla: ankoraŭ estas pruntoj en kurso. Redonu la daŭran deponon kiam ĉio estas reprenita."
 }

@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Ilimitado",
   "deposit.config.msg.limitsSaved": "Tetos salvos.",
   "panel.apiError.deposit_cap_reached": "Teto de caução atingido para este(a) leitor(a) — coleta recusada (o empréstimo pode ser feito sem caução).",
-  "panel.apiError.deposit_rule_exceeds_max": "O valor da regra excede o teto por regra da biblioteca."
+  "panel.apiError.deposit_rule_exceeds_max": "O valor da regra excede o teto por regra da biblioteca.",
+  "deposit.scope.standing": "Rotativo (por leitor(a))",
+  "deposit.panel.standingTitle": "Caução rotativa",
+  "panel.apiError.standing_deposit_already_held": "Esta pessoa já tem uma caução rotativa nesta biblioteca.",
+  "panel.apiError.standing_deposit_has_open_loans": "Devolução impossível: ainda há empréstimos em curso. Devolva a caução rotativa após todas as devoluções."
 }

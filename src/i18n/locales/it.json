@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Illimitato",
   "deposit.config.msg.limitsSaved": "Tetti salvati.",
   "panel.apiError.deposit_cap_reached": "Tetto di cauzione raggiunto per questo lettore — riscossione rifiutata (il prestito può avvenire senza cauzione).",
-  "panel.apiError.deposit_rule_exceeds_max": "L'importo della regola supera il tetto per regola della biblioteca."
+  "panel.apiError.deposit_rule_exceeds_max": "L'importo della regola supera il tetto per regola della biblioteca.",
+  "deposit.scope.standing": "Permanente (per lettore)",
+  "deposit.panel.standingTitle": "Cauzione permanente",
+  "panel.apiError.standing_deposit_already_held": "Questa persona ha già una cauzione permanente in questa biblioteca.",
+  "panel.apiError.standing_deposit_has_open_loans": "Rimborso impossibile: ci sono ancora prestiti in corso. Rimborsa la cauzione permanente a riconsegna completata."
 }

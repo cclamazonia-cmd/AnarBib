@@ -1236,7 +1236,7 @@ export default function BibliotecaPage() {
         library_id: libraryId,
         name: r.name.trim(),
         description: r.description?.trim() || null,
-        scope: r.scope === 'per_item' ? 'per_item' : 'per_loan',
+        scope: ['per_item', 'per_loan', 'standing'].includes(r.scope) ? r.scope : 'per_loan',
         amount: Number(r.amount) || 0,
         currency: (r.currency || 'EUR').toUpperCase(),
         refundable: r.refundable !== false,
@@ -1981,6 +1981,7 @@ export default function BibliotecaPage() {
                       >
                         <option value="per_loan">{t({ id: 'deposit.scope.per_loan' })}</option>
                         <option value="per_item">{t({ id: 'deposit.scope.per_item' })}</option>
+                        <option value="standing">{t({ id: 'deposit.scope.standing' })}</option>
                       </select>
                     </div>
                     <div className="cat-field">

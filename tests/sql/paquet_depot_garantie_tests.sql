@@ -127,8 +127,8 @@ BEGIN
   -- SECTIONS 2–6 : nécessitent staff + emprunts seedés
   -- =====================================================================
   IF NOT (v_has_staff AND v_has_loan) THEN
-    v_skipped := v_skipped + 20;
-    v_skips := v_skips || text '2.xx–7.xx : pas de staff coordenador BLMF ou seed emprunts indisponible';
+    v_skipped := v_skipped + 24;
+    v_skips := v_skips || text '2.xx–8.xx : pas de staff coordenador BLMF ou seed emprunts indisponible';
   ELSE
     PERFORM set_config('request.jwt.claims', json_build_object('sub', v_staff, 'role', 'authenticated')::text, true);
 
@@ -322,6 +322,42 @@ BEGIN
       PERFORM set_config('request.jwt.claims', '', true);
       v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' (setup) : ' || SQLERRM);
     END;
+
+    -- ── SECTION 8 : dépôt tournant (standing) ────────────────────────
+    PERFORM set_config('request.jwt.claims', json_build_object('sub', v_staff, 'role', 'authenticated')::text, true);
+
+    v_t := '8.01 collecte tournant -> detenu, emprestimo_id NULL';
+    BEGIN
+      SELECT * INTO v_rec FROM public.fn_record_standing_deposit(v_loan_a, NULL, 5, 'cash'::public.membership_payment_method, NULL);
+      v_dep_id := v_rec.deposit_id;
+      IF v_rec.ok IS TRUE AND v_rec.status = 'detenu'
+         AND (SELECT emprestimo_id FROM public.loan_deposits WHERE id = v_dep_id) IS NULL THEN
+        v_passed := v_passed + 1;
+      ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' ok=' || coalesce(v_rec.ok::text,'?') || ' st=' || coalesce(v_rec.status::text,'?')); END IF;
+    EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+    v_t := '8.02 second dépôt tournant -> standing_deposit_already_held';
+    BEGIN
+      PERFORM * FROM public.fn_record_standing_deposit(v_loan_b, NULL, 5, 'cash'::public.membership_payment_method, NULL);
+      v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : aurait dû lever');
+    EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
+
+    v_t := '8.03 remboursement tournant avec emprunts en cours -> standing_deposit_has_open_loans';
+    BEGIN
+      PERFORM * FROM public.fn_refund_deposit(v_dep_id, 'cash'::public.membership_payment_method, NULL, NULL);
+      v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : aurait dû lever');
+    EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
+
+    v_t := '8.04 remboursement tournant après clôture des emprunts -> rembourse';
+    BEGIN
+      UPDATE public.emprestimos_v2 SET status_global = 'encerrado'
+        WHERE user_id = v_subject AND library_id = c_blmf;
+      SELECT * INTO v_rec FROM public.fn_refund_deposit(v_dep_id, 'cash'::public.membership_payment_method, NULL, NULL);
+      IF v_rec.ok IS TRUE AND v_rec.status = 'rembourse' THEN v_passed := v_passed + 1;
+      ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' st=' || coalesce(v_rec.status::text,'?')); END IF;
+    EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_t || ' : ' || SQLERRM); END;
+
+    PERFORM set_config('request.jwt.claims', '', true);
   END IF;
 
   PERFORM set_config('request.jwt.claims', '', true);

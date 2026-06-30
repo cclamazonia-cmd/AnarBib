@@ -602,6 +602,42 @@ const KEYS = {
     nl: 'Het regelbedrag overschrijdt de limiet per regel van de bibliotheek.',
     el: 'Το ποσό του κανόνα υπερβαίνει το όριο ανά κανόνα της βιβλιοθήκης.',
   },
+
+  // ── Surface 6 — dépôt tournant (scope standing) ──
+  'deposit.scope.standing': {
+    'pt-BR': 'Rotativo (por leitor(a))', fr: 'Tournant (par lecteur·rice)', es: 'Rotatorio (por lector(a))',
+    en: 'Standing (per reader)', it: 'Permanente (per lettore)', de: 'Dauerhaft (pro Leser·in)',
+    ca: 'Rotatori (per lector·a)', eo: 'Daŭra (po leganto)', nl: 'Doorlopend (per lezer)', el: 'Μόνιμη (ανά αναγνώστη)',
+  },
+  'deposit.panel.standingTitle': {
+    'pt-BR': 'Caução rotativa', fr: 'Dépôt de garantie tournant', es: 'Depósito de garantía rotatorio',
+    en: 'Standing deposit', it: 'Cauzione permanente', de: 'Dauerhafte Kaution',
+    ca: 'Dipòsit de garantia rotatori', eo: 'Daŭra garantia depono', nl: 'Doorlopende waarborg', el: 'Μόνιμη εγγύηση',
+  },
+  'panel.apiError.standing_deposit_already_held': {
+    'pt-BR': 'Esta pessoa já tem uma caução rotativa nesta biblioteca.',
+    fr: 'Cette personne a déjà un dépôt tournant en cours dans cette bibliothèque.',
+    es: 'Esta persona ya tiene un depósito rotatorio en esta biblioteca.',
+    en: 'This person already has a standing deposit at this library.',
+    it: 'Questa persona ha già una cauzione permanente in questa biblioteca.',
+    de: 'Diese Person hat bereits eine dauerhafte Kaution in dieser Bibliothek.',
+    ca: 'Aquesta persona ja té un dipòsit rotatori en aquesta biblioteca.',
+    eo: 'Ĉi tiu persono jam havas daŭran deponon en ĉi tiu biblioteko.',
+    nl: 'Deze persoon heeft al een doorlopende waarborg bij deze bibliotheek.',
+    el: 'Αυτό το άτομο έχει ήδη μόνιμη εγγύηση σε αυτή τη βιβλιοθήκη.',
+  },
+  'panel.apiError.standing_deposit_has_open_loans': {
+    'pt-BR': 'Devolução impossível: ainda há empréstimos em curso. Devolva a caução rotativa após todas as devoluções.',
+    fr: 'Remboursement impossible : des emprunts sont encore en cours. Rembourse le dépôt tournant une fois tout rendu.',
+    es: 'Devolución imposible: aún hay préstamos en curso. Devuelve el depósito rotatorio cuando todo esté devuelto.',
+    en: 'Refund not possible: loans are still outstanding. Refund the standing deposit once everything is returned.',
+    it: 'Rimborso impossibile: ci sono ancora prestiti in corso. Rimborsa la cauzione permanente a riconsegna completata.',
+    de: 'Erstattung nicht möglich: es bestehen noch Ausleihen. Erstatte die dauerhafte Kaution, sobald alles zurückgegeben ist.',
+    ca: 'Reemborsament impossible: encara hi ha préstecs en curs. Retorna el dipòsit rotatori quan tot estigui tornat.',
+    eo: 'Repago neebla: ankoraŭ estas pruntoj en kurso. Redonu la daŭran deponon kiam ĉio estas reprenita.',
+    nl: 'Terugbetaling niet mogelijk: er lopen nog uitleningen. Betaal de doorlopende waarborg terug zodra alles is ingeleverd.',
+    el: 'Η επιστροφή δεν είναι δυνατή: υπάρχουν ακόμη ενεργοί δανεισμοί. Επιστρέψτε τη μόνιμη εγγύηση μόλις επιστραφούν όλα.',
+  },
 };
 
 const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];

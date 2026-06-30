@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Sin límite",
   "deposit.config.msg.limitsSaved": "Topes guardados.",
   "panel.apiError.deposit_cap_reached": "Tope de depósito alcanzado para este(a) lector(a) — cobro rechazado (el préstamo puede hacerse sin depósito).",
-  "panel.apiError.deposit_rule_exceeds_max": "El importe de la regla supera el tope por regla de la biblioteca."
+  "panel.apiError.deposit_rule_exceeds_max": "El importe de la regla supera el tope por regla de la biblioteca.",
+  "deposit.scope.standing": "Rotatorio (por lector(a))",
+  "deposit.panel.standingTitle": "Depósito de garantía rotatorio",
+  "panel.apiError.standing_deposit_already_held": "Esta persona ya tiene un depósito rotatorio en esta biblioteca.",
+  "panel.apiError.standing_deposit_has_open_loans": "Devolución imposible: aún hay préstamos en curso. Devuelve el depósito rotatorio cuando todo esté devuelto."
 }

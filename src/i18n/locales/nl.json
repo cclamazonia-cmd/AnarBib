@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Onbeperkt",
   "deposit.config.msg.limitsSaved": "Limieten opgeslagen.",
   "panel.apiError.deposit_cap_reached": "Waarborglimiet bereikt voor deze lezer — inning geweigerd (de uitlening kan zonder waarborg).",
-  "panel.apiError.deposit_rule_exceeds_max": "Het regelbedrag overschrijdt de limiet per regel van de bibliotheek."
+  "panel.apiError.deposit_rule_exceeds_max": "Het regelbedrag overschrijdt de limiet per regel van de bibliotheek.",
+  "deposit.scope.standing": "Doorlopend (per lezer)",
+  "deposit.panel.standingTitle": "Doorlopende waarborg",
+  "panel.apiError.standing_deposit_already_held": "Deze persoon heeft al een doorlopende waarborg bij deze bibliotheek.",
+  "panel.apiError.standing_deposit_has_open_loans": "Terugbetaling niet mogelijk: er lopen nog uitleningen. Betaal de doorlopende waarborg terug zodra alles is ingeleverd."
 }

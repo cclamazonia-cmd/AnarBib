@@ -133,10 +133,10 @@ collecté (detenu) ──[retour de l'ouvrage]──▶ remboursé (rembourse)
 
 ## 11. Points ouverts (à trancher en collectif)
 
-- **Encaissement/remboursement A2A automatique** (webhook) — COTIS-9b, opt-in, AG si réseau.
+- **Encaissement A2A automatique** (webhook) — **ÉCARTÉ (30/06/2026).** La plupart des collectifs veulent rester **hors circuits bancaires**, et l'auto-encaissement grignote la doctrine « la confiance circule en présentiel » (DEPOT-3). Non rouvert par défaut ; uniquement sur demande explicite d'une biblio + décision d'AG.
 - **XLSX** (dépendance SheetJS) vs **CSV** — trancher si une biblio le réclame vraiment.
 - **Plafond** de dépôt par biblio / par lecteur·rice ? (limiter la barrière).
-- **Dépôt unique « tournant »** par lecteur·rice (un seul dépôt couvrant tous ses emprunts) vs par emprunt/item — le `scope=per_loan` s'en rapproche ; à confirmer.
+- **Dépôt « tournant »** par lecteur·rice — **RETENU & implémenté (30/06/2026).** Un dépôt unique par couple (lecteur·rice, biblio), couvrant tous les emprunts successifs : nouveau `scope='standing'` ; stocké dans `loan_deposits` avec `emprestimo_id` NULL (lié à la personne, pas à un emprunt) ; collecté une fois, **remboursable seulement quand plus aucun emprunt n'est en cours** (`fn_record_standing_deposit`, `fn_standing_deposit_for_loan`). Rapports / `/conta` / plafond par lecteur·rice réutilisés tels quels (regroupent déjà par personne).
 - **Sort du dépôt à la suppression de compte RGPD** (`fn_delete_my_account`) : un dépôt `detenu` doit être **réglé/remboursé** avant, ou tracé/anonymisé comme le reste.
 - **Articulation PEB / partage numérique** (dépôt inter-biblio ?) — **hors périmètre v1**.
 

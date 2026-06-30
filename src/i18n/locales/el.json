@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Χωρίς όριο",
   "deposit.config.msg.limitsSaved": "Τα όρια αποθηκεύτηκαν.",
   "panel.apiError.deposit_cap_reached": "Επιτεύχθηκε το όριο εγγύησης για αυτόν τον αναγνώστη — η είσπραξη απορρίφθηκε (ο δανεισμός μπορεί να γίνει χωρίς εγγύηση).",
-  "panel.apiError.deposit_rule_exceeds_max": "Το ποσό του κανόνα υπερβαίνει το όριο ανά κανόνα της βιβλιοθήκης."
+  "panel.apiError.deposit_rule_exceeds_max": "Το ποσό του κανόνα υπερβαίνει το όριο ανά κανόνα της βιβλιοθήκης.",
+  "deposit.scope.standing": "Μόνιμη (ανά αναγνώστη)",
+  "deposit.panel.standingTitle": "Μόνιμη εγγύηση",
+  "panel.apiError.standing_deposit_already_held": "Αυτό το άτομο έχει ήδη μόνιμη εγγύηση σε αυτή τη βιβλιοθήκη.",
+  "panel.apiError.standing_deposit_has_open_loans": "Η επιστροφή δεν είναι δυνατή: υπάρχουν ακόμη ενεργοί δανεισμοί. Επιστρέψτε τη μόνιμη εγγύηση μόλις επιστραφούν όλα."
 }

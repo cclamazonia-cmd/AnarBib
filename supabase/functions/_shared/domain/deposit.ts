@@ -77,11 +77,10 @@ export async function handleDepositCollected(payload) {
   const methodStr = tMail(locale, `cot.method.${String(dep.collected_method || "other")}`);
 
   const tit = tMail(locale, "deposit.collected.subject");
-  const det = [
-    { label: tMail(locale, "deposit.amountLabel"), value: amountStr },
-    { label: tMail(locale, "deposit.loanLabel"), value: `#${dep.emprestimo_id}` },
-    { label: tMail(locale, "deposit.methodLabel"), value: methodStr }
-  ];
+  const det = [{ label: tMail(locale, "deposit.amountLabel"), value: amountStr }];
+  // Dépôt tournant : emprestimo_id NULL -> pas de ligne « emprunt ».
+  if (dep.emprestimo_id) det.push({ label: tMail(locale, "deposit.loanLabel"), value: `#${dep.emprestimo_id}` });
+  det.push({ label: tMail(locale, "deposit.methodLabel"), value: methodStr });
   const { html, text } = renderEmail({
     locale,
     preheader: tit,
@@ -114,7 +113,7 @@ export async function handleDepositRefunded(payload) {
     det.push({ label: tMail(locale, "deposit.amountLabel"), value: `${dep.amount} ${curr}`.trim() });
   }
   det.push({ label: tMail(locale, "deposit.refundedLabel"), value: refundedStr });
-  det.push({ label: tMail(locale, "deposit.loanLabel"), value: `#${dep.emprestimo_id}` });
+  if (dep.emprestimo_id) det.push({ label: tMail(locale, "deposit.loanLabel"), value: `#${dep.emprestimo_id}` });
   det.push({ label: tMail(locale, "deposit.methodLabel"), value: methodStr });
 
   const tit = tMail(locale, `${base}.subject`);

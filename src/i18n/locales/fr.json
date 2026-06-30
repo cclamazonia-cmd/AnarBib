@@ -5621,5 +5621,9 @@
   "deposit.config.noLimit": "Illimité",
   "deposit.config.msg.limitsSaved": "Plafonds enregistrés.",
   "panel.apiError.deposit_cap_reached": "Plafond de dépôt atteint pour ce·tte lecteur·rice — collecte refusée (le prêt peut se faire sans dépôt).",
-  "panel.apiError.deposit_rule_exceeds_max": "Le montant de la règle dépasse le plafond par règle de la bibliothèque."
+  "panel.apiError.deposit_rule_exceeds_max": "Le montant de la règle dépasse le plafond par règle de la bibliothèque.",
+  "deposit.scope.standing": "Tournant (par lecteur·rice)",
+  "deposit.panel.standingTitle": "Dépôt de garantie tournant",
+  "panel.apiError.standing_deposit_already_held": "Cette personne a déjà un dépôt tournant en cours dans cette bibliothèque.",
+  "panel.apiError.standing_deposit_has_open_loans": "Remboursement impossible : des emprunts sont encore en cours. Rembourse le dépôt tournant une fois tout rendu."
 }
