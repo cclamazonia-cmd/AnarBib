@@ -29,7 +29,7 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 | Document | Rôle | Statut |
 |---|---|---|
 | [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.1 du 02/06/2026 — 🟢 référence normative |
-| [`guide-gouvernance-anarbib.md`](./guide-gouvernance-anarbib.md) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau. | v1.0 du 11/05/2026 — 🟢 référence |
+| [`governance/guide-gouvernance-fr.md`](./governance/) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau (foyer FR ; 9 traductions dans `governance/`). | v1.0 du 11/05/2026 — 🟢 référence |
 | [`GLB/AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. | v17 du 29/05/2026 — 🟢 référence (livre blanc vivant) |
 | [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.0 (avril 2026) — 🟢 stable |
 | [`multiformat-viewers.md`](./multiformat-viewers.md) | Doc technique du viewer multi-format (PDF en prod, audio/vidéo/image disponibles côté code). | 08/05/2026 — 🟢 stable |
@@ -45,7 +45,6 @@ docs/
 ├── INDEX.md                          ← vous êtes ici
 ├── manual.md                         Manuel d'utilisation
 ├── multiformat-viewers.md            Doc technique viewer multi-format
-├── guide-gouvernance-anarbib.md      Guide de gouvernance
 │
 ├── specs/                            Spécifications techniques et fonctionnelles
 │   ├── INDEX.md                      → navigation par domaine
@@ -154,7 +153,7 @@ DPA en 6 langues, registre des traitements, procédure de réponse aux incidents
 
 ### `governance/` — Guide de gouvernance traduit
 
-Le guide de gouvernance d'AnarBib en **10 langues** (`ca, de, el, en, eo, es, fr, it, nl, pt-BR`), en `.md` + `.docx`. Pendant traduit du `guide-gouvernance-anarbib.md` racine. Documentation stable.
+Le guide de gouvernance d'AnarBib en **10 langues** (`ca, de, el, en, eo, es, fr, it, nl, pt-BR`), en `.md` + `.docx`. **Foyer canonique : `guide-gouvernance-fr.md`** (les autres langues en sont les traductions). Documentation stable.
 
 ---
 
@@ -170,7 +169,7 @@ Le guide de gouvernance d'AnarBib en **10 langues** (`ca, de, el, en, eo, es, fr
 
 **« Je découvre le projet »** → le **Grand Livre Blanc v17** (`GLB/`) puis [`manual.md`](./manual.md).
 
-**« Je veux comprendre la gouvernance du projet »** → [`guide-gouvernance-anarbib.md`](./guide-gouvernance-anarbib.md) (vue d'ensemble) puis `specs/spec-gouvernance-roles.md` et `specs/spec-administrateur-reseau-v0.4.md` (détails techniques).
+**« Je veux comprendre la gouvernance du projet »** → [`governance/guide-gouvernance-fr.md`](./governance/guide-gouvernance-fr.md) (vue d'ensemble) puis `specs/spec-gouvernance-roles.md` et `specs/spec-administrateur-reseau-v0.4.md` (détails techniques).
 
 **« Je veux comprendre comment créer un objet backend proprement »** → REGISTRE entrée `DOC-OBJ-2`, qui pointe vers `journal/chantiers/CHANTIER_doctrine_creation_objets_securises_2026-05-12.md` pour la trace détaillée.
 
