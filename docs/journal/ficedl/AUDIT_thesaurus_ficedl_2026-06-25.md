@@ -24,13 +24,14 @@ Source : https://thesaurus.ficedl.info (SPIP). Récupération par scraping HTML 
 | Type | Occurrences |
 |---|---|
 | eq_fr | 313 |
-| missing_lang | 5 |
 | el_no_roman | 4 |
 | de_no_caps | 3 |
 | pt_old_ortho | 3 |
-| bad_lang_tag | 2 |
-| dup_lang | 2 |
+| missing_lang | 3 |
+| tag_fixed | 2 |
 | english_leak | 1 |
+| dup_lang | 1 |
+| dup_lang_conflict | 1 |
 | el_no_greek | 1 |
 
 ## Langues non traduites (libellé = français), segmenté par facette
@@ -131,17 +132,22 @@ Graphies pt à revoir :
 - Sans écriture grecque : 1 (mot444)
 - Sans romanisation : 4
 
+## Normalisations appliquées à l'import (à signaler À LA SOURCE)
+
+_Politique anti-fork : on **range** la donnée (re-route une balise erronée vers la bonne langue, libellé **inchangé**), jamais on ne ré-écrit. Ces points doivent être corrigés à la source par le/la mainteneur·euse — AnarBib ne fait que les contourner en lecture._
+
+- [mot24](https://thesaurus.ficedl.info/spip.php?mot24) « art : courants : surréalisme » — balise `[ne]` → `[nl]` (valeur « kunst: kunststromingen: surrealisme » remise dans la bonne langue, non modifiée)
+- [mot75](https://thesaurus.ficedl.info/spip.php?mot75) « désobéissance civile » — balise `[il]` → `[it]` (valeur « disobbedienza civile » remise dans la bonne langue, non modifiée)
+
 ## Coquilles structurelles (balises de langue)
 
 _Fiches récupérées par le parseur tolérant : balise mal orthographiée (ex. `[il]`→`[it]`), dupliquée, ou langue absente._
 
-Langues manquantes (balise absente) : fr:0  ca:2  de:0  el:1  en:0  eo:0  es:0  it:1  nl:1  pt:0
+Langues manquantes (balise absente) : fr:0  ca:2  de:0  el:1  en:0  eo:0  es:0  it:0  nl:0  pt:0
 
-- [mot24](https://thesaurus.ficedl.info/spip.php?mot24) (sujets) « art : courants : surréalisme » — bad_lang_tag:ne→kunst: kunststromingen: surrealisme · missing_lang:nl
-- [mot75](https://thesaurus.ficedl.info/spip.php?mot75) (sujets) « désobéissance civile » — bad_lang_tag:il→disobbedienza civile · missing_lang:it
 - [mot120](https://thesaurus.ficedl.info/spip.php?mot120) (sujets) « fédéralisme » — dup_lang:de
 - [mot174](https://thesaurus.ficedl.info/spip.php?mot174) (sujets) « littérature : Mémoires » — missing_lang:ca
-- [mot177](https://thesaurus.ficedl.info/spip.php?mot177) (sujets) « littérature : poésie » — dup_lang:eo · missing_lang:ca
+- [mot177](https://thesaurus.ficedl.info/spip.php?mot177) (sujets) « littérature : poésie » — dup_lang_conflict:eo · missing_lang:ca
 - [mot651](https://thesaurus.ficedl.info/spip.php?mot651) (geo) « Tchéquie (République tchèque) » — missing_lang:el
 
 ## 25 fiches les plus problématiques

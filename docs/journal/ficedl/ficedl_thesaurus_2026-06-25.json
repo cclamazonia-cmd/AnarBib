@@ -52,6 +52,7 @@
         "href": "https://ml.ficedl.info/mot3.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -108,6 +109,7 @@
         "href": "https://ml.ficedl.info/mot4.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -167,6 +169,7 @@
         "href": "https://ml.ficedl.info/mot5.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -226,6 +229,7 @@
         "href": "https://ml.ficedl.info/mot6.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -289,6 +293,7 @@
         "href": "https://ml.ficedl.info/mot7.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -348,6 +353,7 @@
         "href": "https://ml.ficedl.info/mot8.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -409,6 +415,7 @@
         "href": "https://ml.ficedl.info/mot93.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:en",
@@ -468,6 +475,7 @@
         "href": "https://ml.ficedl.info/mot9.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "de_no_caps:anthropologie und ehtnologie"
     ],
@@ -529,6 +537,7 @@
         "href": "https://ml.ficedl.info/mot10.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -591,6 +600,7 @@
         "href": "https://ml.ficedl.info/mot11.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -653,6 +663,7 @@
         "href": "https://ml.ficedl.info/mot12.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -712,6 +723,7 @@
         "href": "https://ml.ficedl.info/mot13.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -771,6 +783,7 @@
         "href": "https://ml.ficedl.info/mot14.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -830,6 +843,7 @@
         "href": "https://ml.ficedl.info/mot81.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -890,6 +904,7 @@
         "href": "https://ml.ficedl.info/mot15.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -950,6 +965,7 @@
         "href": "https://ml.ficedl.info/mot20.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1010,6 +1026,7 @@
         "href": "https://ml.ficedl.info/mot95.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1027,6 +1044,7 @@
       "eo": "arto: arta fluo: supperrealismo",
       "es": "arte: movimientos artísticos: surrealismo",
       "it": "arte: movimenti artistici: surrealismo",
+      "nl": "kunst: kunststromingen: surrealisme",
       "pt": "arte: movimentos de arte: surrealismo",
       "el_roman": "téchni̱ : rév̱mata : sourealismós"
     },
@@ -1070,9 +1088,16 @@
         "href": "https://ml.ficedl.info/mot16.html"
       }
     ],
+    "normalizations": [
+      {
+        "type": "tag",
+        "from": "ne",
+        "to": "nl",
+        "value": "kunst: kunststromingen: surrealisme"
+      }
+    ],
     "flags": [
-      "bad_lang_tag:ne→kunst: kunststromingen: surrealisme",
-      "missing_lang:nl"
+      "tag_fixed:ne→nl"
     ],
     "facet": [
       "sujets"
@@ -1133,6 +1158,7 @@
         "href": "https://ml.ficedl.info/mot17.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1193,6 +1219,7 @@
         "href": "https://ml.ficedl.info/mot18.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1253,6 +1280,7 @@
         "href": "https://ml.ficedl.info/mot19.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1313,6 +1341,7 @@
         "href": "https://ml.ficedl.info/mot21.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1373,6 +1402,7 @@
         "href": "https://ml.ficedl.info/mot96.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1433,6 +1463,7 @@
         "href": "https://ml.ficedl.info/mot22.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1485,6 +1516,7 @@
         "href": "https://ml.ficedl.info/mot287.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1545,6 +1577,7 @@
         "href": "https://ml.ficedl.info/mot419.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1604,6 +1637,7 @@
         "href": "https://ml.ficedl.info/mot23.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1659,6 +1693,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1326"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:nl"
@@ -1721,6 +1756,7 @@
         "href": "https://ml.ficedl.info/mot25.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1780,6 +1816,7 @@
         "href": "https://ml.ficedl.info/mot48.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -1839,6 +1876,7 @@
         "href": "https://ml.ficedl.info/mot98.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de"
     ],
@@ -1892,6 +1930,7 @@
         "href": "https://ml.ficedl.info/mot99.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:nl"
@@ -1954,6 +1993,7 @@
         "href": "https://ml.ficedl.info/mot100.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -2015,6 +2055,7 @@
         "href": "https://ml.ficedl.info/mot66.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "english_leak:pt:capitalismo e anti capitalism"
     ],
@@ -2076,6 +2117,7 @@
         "href": "https://ml.ficedl.info/mot89.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2123,6 +2165,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot647"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -2184,6 +2227,7 @@
         "href": "https://ml.ficedl.info/mot43.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -2245,6 +2289,7 @@
         "href": "https://ml.ficedl.info/mot103.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -2306,6 +2351,7 @@
         "href": "https://ml.ficedl.info/mot104.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2349,6 +2395,7 @@
         "href": "https://ml.ficedl.info/mot105.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "pt_old_ortho:aspecto"
     ],
@@ -2407,6 +2454,7 @@
         "href": "https://ml.ficedl.info/mot106.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2467,6 +2515,7 @@
         "href": "https://ml.ficedl.info/mot246.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2519,6 +2568,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot2893"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2578,6 +2628,7 @@
         "href": "https://ml.ficedl.info/mot107.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -2638,6 +2689,7 @@
         "href": "https://ml.ficedl.info/mot109.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "el_no_roman"
     ],
@@ -2699,6 +2751,7 @@
         "href": "https://ml.ficedl.info/mot110.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2758,6 +2811,7 @@
         "href": "https://ml.ficedl.info/mot111.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -2819,6 +2873,7 @@
         "href": "https://ml.ficedl.info/mot69.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2878,6 +2933,7 @@
         "href": "https://ml.ficedl.info/mot112.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2937,6 +2993,7 @@
         "href": "https://ml.ficedl.info/mot113.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -2980,6 +3037,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4504"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -3041,6 +3099,7 @@
         "href": "https://ml.ficedl.info/mot115.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3100,6 +3159,7 @@
         "href": "https://ml.ficedl.info/mot116.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3159,6 +3219,7 @@
         "href": "https://ml.ficedl.info/mot117.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -3220,6 +3281,7 @@
         "href": "https://ml.ficedl.info/mot118.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3279,6 +3341,7 @@
         "href": "https://ml.ficedl.info/mot119.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3334,6 +3397,7 @@
         "href": "https://ml.ficedl.info/mot120.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3350,6 +3414,7 @@
       "en": "civil disobedience",
       "eo": "malobeo civi",
       "es": "desobedencia cívica",
+      "it": "disobbedienza civile",
       "nl": "burgerlijke ongehoorzaamheid",
       "pt": "desobediência civil",
       "el_roman": "politikí̱ anypakoí̱"
@@ -3384,9 +3449,16 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot687"
       }
     ],
+    "normalizations": [
+      {
+        "type": "tag",
+        "from": "il",
+        "to": "it",
+        "value": "disobbedienza civile"
+      }
+    ],
     "flags": [
-      "bad_lang_tag:il→disobbedienza civile",
-      "missing_lang:it"
+      "tag_fixed:il→it"
     ],
     "facet": [
       "sujets"
@@ -3442,6 +3514,7 @@
         "href": "https://ml.ficedl.info/mot123.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3505,6 +3578,7 @@
         "href": "https://ml.ficedl.info/mot124.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3560,6 +3634,7 @@
         "href": "https://ml.ficedl.info/mot125.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3619,6 +3694,7 @@
         "href": "https://ml.ficedl.info/mot126.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en",
       "eq_fr:nl"
@@ -3681,6 +3757,7 @@
         "href": "https://ml.ficedl.info/mot127.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3744,6 +3821,7 @@
         "href": "https://ml.ficedl.info/mot128.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3803,6 +3881,7 @@
         "href": "https://ml.ficedl.info/mot130.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3866,6 +3945,7 @@
         "href": "https://ml.ficedl.info/mot133.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3925,6 +4005,7 @@
         "href": "https://ml.ficedl.info/mot134.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -3977,6 +4058,7 @@
         "href": "https://ml.ficedl.info/mot136.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4037,6 +4119,7 @@
         "href": "https://ml.ficedl.info/mot64.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4081,6 +4164,7 @@
         "href": "https://ml.ficedl.info/mot137.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4125,6 +4209,7 @@
         "href": "https://ml.ficedl.info/mot139.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4185,6 +4270,7 @@
         "href": "https://ml.ficedl.info/mot178.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4241,6 +4327,7 @@
         "href": "https://ml.ficedl.info/mot143.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4285,6 +4372,7 @@
         "href": "https://ml.ficedl.info/mot142.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4337,6 +4425,7 @@
         "href": "https://ml.ficedl.info/mot145.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4396,6 +4485,7 @@
         "href": "https://ml.ficedl.info/mot60.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4455,6 +4545,7 @@
         "href": "https://ml.ficedl.info/mot42.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4510,6 +4601,7 @@
         "href": "https://ml.ficedl.info/mot63.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4565,6 +4657,7 @@
         "href": "https://ml.ficedl.info/mot88.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4624,6 +4717,7 @@
         "href": "https://ml.ficedl.info/mot146.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4683,6 +4777,7 @@
         "href": "https://ml.ficedl.info/mot147.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4738,6 +4833,7 @@
         "href": "https://ml.ficedl.info/mot148.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4785,6 +4881,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot546"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4844,6 +4941,7 @@
         "href": "https://ml.ficedl.info/mot152.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4903,6 +5001,7 @@
         "href": "https://ml.ficedl.info/mot153.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -4962,6 +5061,7 @@
         "href": "https://ml.ficedl.info/mot154.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "de_no_caps:studenten"
     ],
@@ -5023,6 +5123,7 @@
         "href": "https://ml.ficedl.info/mot155.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5082,6 +5183,7 @@
         "href": "https://ml.ficedl.info/mot85.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5141,6 +5243,7 @@
         "href": "https://ml.ficedl.info/mot156.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5204,6 +5307,7 @@
         "href": "https://ml.ficedl.info/mot157.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5263,6 +5367,7 @@
         "href": "https://ml.ficedl.info/mot158.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "dup_lang:de"
     ],
@@ -5320,6 +5425,7 @@
         "href": "https://ml.ficedl.info/mot159.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5379,6 +5485,7 @@
         "href": "https://ml.ficedl.info/mot160.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5442,6 +5549,7 @@
         "href": "https://ml.ficedl.info/mot67.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5501,6 +5609,7 @@
         "href": "https://ml.ficedl.info/mot161.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5544,6 +5653,7 @@
         "href": "https://ml.ficedl.info/mot162.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5595,6 +5705,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1175"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5654,6 +5765,7 @@
         "href": "https://ml.ficedl.info/mot165.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5713,6 +5825,7 @@
         "href": "https://ml.ficedl.info/mot57.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5773,6 +5886,7 @@
         "href": "https://ml.ficedl.info/mot358.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5824,6 +5938,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1234"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -5883,6 +5998,7 @@
         "href": "https://ml.ficedl.info/mot168.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "pt_old_ortho:aspecto"
     ],
@@ -5928,6 +6044,7 @@
         "href": "https://ml.ficedl.info/mot959.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -5976,6 +6093,7 @@
         "href": "https://ml.ficedl.info/mot468.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "el_no_roman"
@@ -6022,6 +6140,7 @@
         "href": "https://ml.ficedl.info/mot574.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -6071,6 +6190,7 @@
         "href": "https://ml.ficedl.info/mot602.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -6124,6 +6244,7 @@
         "href": "https://ml.ficedl.info/mot392.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -6167,6 +6288,7 @@
         "href": "https://ml.ficedl.info/mot741.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -6216,6 +6338,7 @@
         "href": "https://ml.ficedl.info/mot699.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -6265,6 +6388,7 @@
         "href": "https://ml.ficedl.info/mot737.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -6326,6 +6450,7 @@
         "href": "https://ml.ficedl.info/mot75.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6364,6 +6489,7 @@
         "href": "https://ml.ficedl.info/mot505.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "el_no_roman"
     ],
@@ -6417,6 +6543,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1972"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6468,6 +6595,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4520"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6523,6 +6651,7 @@
         "href": "https://ml.ficedl.info/mot173.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6574,6 +6703,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot3061"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6625,6 +6755,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot885"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6684,6 +6815,7 @@
         "href": "https://ml.ficedl.info/mot176.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6743,6 +6875,7 @@
         "href": "https://ml.ficedl.info/mot177.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -6805,6 +6938,7 @@
         "href": "https://ml.ficedl.info/mot179.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6864,6 +6998,7 @@
         "href": "https://ml.ficedl.info/mot180.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6923,6 +7058,7 @@
         "href": "https://ml.ficedl.info/mot181.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -6982,6 +7118,7 @@
         "href": "https://ml.ficedl.info/mot182.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -7043,6 +7180,7 @@
         "href": "https://ml.ficedl.info/mot183.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7102,6 +7240,7 @@
         "href": "https://ml.ficedl.info/mot184.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -7161,6 +7300,7 @@
         "href": "https://ml.ficedl.info/mot90.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -7222,6 +7362,7 @@
         "href": "https://ml.ficedl.info/mot186.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7281,6 +7422,7 @@
         "href": "https://ml.ficedl.info/mot83.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7340,6 +7482,7 @@
         "href": "https://ml.ficedl.info/mot65.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7399,6 +7542,7 @@
         "href": "https://ml.ficedl.info/mot187.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7458,6 +7602,7 @@
         "href": "https://ml.ficedl.info/mot188.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7510,6 +7655,7 @@
         "href": "https://ml.ficedl.info/mot189.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7570,6 +7716,7 @@
         "href": "https://ml.ficedl.info/mot190.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7626,6 +7773,7 @@
         "href": "https://ml.ficedl.info/mot396.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7682,6 +7830,7 @@
         "href": "https://ml.ficedl.info/mot788.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7738,6 +7887,7 @@
         "href": "https://ml.ficedl.info/mot191.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7790,6 +7940,7 @@
         "href": "https://ml.ficedl.info/mot192.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7846,6 +7997,7 @@
         "href": "https://ml.ficedl.info/mot193.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -7901,6 +8053,7 @@
         "href": "https://ml.ficedl.info/mot194.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "missing_lang:ca"
     ],
@@ -7955,6 +8108,7 @@
         "href": "https://ml.ficedl.info/mot195.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8003,6 +8157,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4527"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8062,8 +8217,9 @@
         "href": "https://ml.ficedl.info/mot197.html"
       }
     ],
+    "normalizations": [],
     "flags": [
-      "dup_lang:eo",
+      "dup_lang_conflict:eo",
       "missing_lang:ca"
     ],
     "facet": [
@@ -8117,6 +8273,7 @@
         "href": "https://ml.ficedl.info/mot198.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8169,6 +8326,7 @@
         "href": "https://ml.ficedl.info/mot199.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8229,6 +8387,7 @@
         "href": "https://ml.ficedl.info/mot200.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8273,6 +8432,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot743"
       }
     ],
+    "normalizations": [],
     "flags": [
       "pt_old_ortho:cç"
     ],
@@ -8327,6 +8487,7 @@
         "href": "https://ml.ficedl.info/mot202.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8383,6 +8544,7 @@
         "href": "https://ml.ficedl.info/mot478.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8442,6 +8604,7 @@
         "href": "https://ml.ficedl.info/mot53.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8501,6 +8664,7 @@
         "href": "https://ml.ficedl.info/mot204.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8560,6 +8724,7 @@
         "href": "https://ml.ficedl.info/mot205.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8619,6 +8784,7 @@
         "href": "https://ml.ficedl.info/mot58.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8678,6 +8844,7 @@
         "href": "https://ml.ficedl.info/mot206.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8737,6 +8904,7 @@
         "href": "https://ml.ficedl.info/mot59.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8796,6 +8964,7 @@
         "href": "https://ml.ficedl.info/mot207.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8859,6 +9028,7 @@
         "href": "https://ml.ficedl.info/mot50.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -8921,6 +9091,7 @@
         "href": "https://ml.ficedl.info/mot208.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -8980,6 +9151,7 @@
         "href": "https://ml.ficedl.info/mot71.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9039,6 +9211,7 @@
         "href": "https://ml.ficedl.info/mot210.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -9100,6 +9273,7 @@
         "href": "https://ml.ficedl.info/mot74.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9168,6 +9342,7 @@
         "href": "https://ml.ficedl.info/mot355.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9228,6 +9403,7 @@
         "href": "https://ml.ficedl.info/mot628.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9287,6 +9463,7 @@
         "href": "https://ml.ficedl.info/mot213.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9346,6 +9523,7 @@
         "href": "https://ml.ficedl.info/mot214.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9405,6 +9583,7 @@
         "href": "https://ml.ficedl.info/mot527.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9464,6 +9643,7 @@
         "href": "https://ml.ficedl.info/mot215.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -9517,6 +9697,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot85"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -9570,6 +9751,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot372"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -9619,6 +9801,7 @@
         "href": "https://ml.ficedl.info/mot749.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9674,6 +9857,7 @@
         "href": "https://ml.ficedl.info/mot218.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -9736,6 +9920,7 @@
         "href": "https://ml.ficedl.info/mot219.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9799,6 +9984,7 @@
         "href": "https://ml.ficedl.info/mot221.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -9862,6 +10048,7 @@
         "href": "https://ml.ficedl.info/mot222.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de"
     ],
@@ -9923,6 +10110,7 @@
         "href": "https://ml.ficedl.info/mot225.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -9985,6 +10173,7 @@
         "href": "https://ml.ficedl.info/mot226.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10044,6 +10233,7 @@
         "href": "https://ml.ficedl.info/mot227.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10103,6 +10293,7 @@
         "href": "https://ml.ficedl.info/mot228.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10162,6 +10353,7 @@
         "href": "https://ml.ficedl.info/mot229.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -10223,6 +10415,7 @@
         "href": "https://ml.ficedl.info/mot230.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10282,6 +10475,7 @@
         "href": "https://ml.ficedl.info/mot231.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de"
     ],
@@ -10343,6 +10537,7 @@
         "href": "https://ml.ficedl.info/mot232.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10398,6 +10593,7 @@
         "href": "https://ml.ficedl.info/mot233.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -10459,6 +10655,7 @@
         "href": "https://ml.ficedl.info/mot234.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10514,6 +10711,7 @@
         "href": "https://ml.ficedl.info/mot87.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10573,6 +10771,7 @@
         "href": "https://ml.ficedl.info/mot211.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets",
@@ -10633,6 +10832,7 @@
         "href": "https://ml.ficedl.info/mot235.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10680,6 +10880,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4537"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10739,6 +10940,7 @@
         "href": "https://ml.ficedl.info/mot237.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10798,6 +11000,7 @@
         "href": "https://ml.ficedl.info/mot2.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de"
     ],
@@ -10860,6 +11063,7 @@
         "href": "https://ml.ficedl.info/mot395.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -10919,6 +11123,7 @@
         "href": "https://ml.ficedl.info/mot56.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -10980,6 +11185,7 @@
         "href": "https://ml.ficedl.info/mot82.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11039,6 +11245,7 @@
         "href": "https://ml.ficedl.info/mot62.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11098,6 +11305,7 @@
         "href": "https://ml.ficedl.info/mot77.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11157,6 +11365,7 @@
         "href": "https://ml.ficedl.info/mot238.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11216,6 +11425,7 @@
         "href": "https://ml.ficedl.info/mot242.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -11280,6 +11490,7 @@
         "href": "https://ml.ficedl.info/mot243.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11339,6 +11550,7 @@
         "href": "https://ml.ficedl.info/mot244.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:nl"
@@ -11401,6 +11613,7 @@
         "href": "https://ml.ficedl.info/mot245.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:nl"
@@ -11463,6 +11676,7 @@
         "href": "https://ml.ficedl.info/mot247.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11522,6 +11736,7 @@
         "href": "https://ml.ficedl.info/mot248.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11585,6 +11800,7 @@
         "href": "https://ml.ficedl.info/mot249.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11644,6 +11860,7 @@
         "href": "https://ml.ficedl.info/mot76.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11703,6 +11920,7 @@
         "href": "https://ml.ficedl.info/mot250.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11762,6 +11980,7 @@
         "href": "https://ml.ficedl.info/mot251.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11821,6 +12040,7 @@
         "href": "https://ml.ficedl.info/mot252.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -11876,6 +12096,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot635"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11935,6 +12156,7 @@
         "href": "https://ml.ficedl.info/mot61.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -11998,6 +12220,7 @@
         "href": "https://ml.ficedl.info/mot254.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -12055,6 +12278,7 @@
         "href": "https://ml.ficedl.info/mot292.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -12118,6 +12342,7 @@
         "href": "https://ml.ficedl.info/mot68.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -12173,6 +12398,7 @@
         "href": "https://ml.ficedl.info/mot258.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -12232,6 +12458,7 @@
         "href": "https://ml.ficedl.info/mot259.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -12294,6 +12521,7 @@
         "href": "https://ml.ficedl.info/mot260.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -12359,6 +12587,7 @@
         "href": "https://ml.ficedl.info/mot261.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -12418,6 +12647,7 @@
         "href": "https://ml.ficedl.info/mot262.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -12477,6 +12707,7 @@
         "href": "https://ml.ficedl.info/mot263.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -12537,6 +12768,7 @@
         "href": "https://ml.ficedl.info/mot282.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -12598,6 +12830,7 @@
         "href": "https://ml.ficedl.info/mot267.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -12660,6 +12893,7 @@
         "href": "https://ml.ficedl.info/mot265.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "de_no_caps:anarchosyndikalismus"
     ],
@@ -12721,6 +12955,7 @@
         "href": "https://ml.ficedl.info/mot266.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:nl"
@@ -12783,6 +13018,7 @@
         "href": "https://ml.ficedl.info/mot78.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -12845,6 +13081,7 @@
         "href": "https://ml.ficedl.info/mot269.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -12900,6 +13137,7 @@
         "href": "https://ml.ficedl.info/mot270.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -12961,6 +13199,7 @@
         "href": "https://ml.ficedl.info/mot272.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -13020,6 +13259,7 @@
         "href": "https://ml.ficedl.info/mot274.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:nl"
@@ -13082,6 +13322,7 @@
         "href": "https://ml.ficedl.info/mot52.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -13143,6 +13384,7 @@
         "href": "https://ml.ficedl.info/mot275.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:nl"
@@ -13197,6 +13439,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4547"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -13256,6 +13499,7 @@
         "href": "https://ml.ficedl.info/mot277.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -13315,6 +13559,7 @@
         "href": "https://ml.ficedl.info/mot278.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -13377,6 +13622,7 @@
         "href": "https://ml.ficedl.info/mot994.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -13437,6 +13683,7 @@
         "href": "https://ml.ficedl.info/mot995.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -13497,6 +13744,7 @@
         "href": "https://ml.ficedl.info/mot996.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -13552,6 +13800,7 @@
         "href": "https://ml.ficedl.info/mot566.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -13612,6 +13861,7 @@
         "href": "https://ml.ficedl.info/mot605.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13651,6 +13901,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot2784"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13706,6 +13957,7 @@
         "href": "https://ml.ficedl.info/mot840.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13769,6 +14021,7 @@
         "href": "https://ml.ficedl.info/mot44.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13828,6 +14081,7 @@
         "href": "https://ml.ficedl.info/mot390.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13859,6 +14113,7 @@
         "href": "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=15"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13890,6 +14145,7 @@
         "href": "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=16"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13921,6 +14177,7 @@
         "href": "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=17"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13956,6 +14213,7 @@
         "href": "https://cartoliste.ficedl.info/mot4191.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -13991,6 +14249,7 @@
         "href": "https://placard.ficedl.info/mot5856.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14030,6 +14289,7 @@
         "href": "https://cartoliste.ficedl.info/mot4193.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14065,6 +14325,7 @@
         "href": "https://cartoliste.ficedl.info/mot4194.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14104,6 +14365,7 @@
         "href": "https://cartoliste.ficedl.info/mot4195.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14147,6 +14409,7 @@
         "href": "https://cartoliste.ficedl.info/mot4197.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14186,6 +14449,7 @@
         "href": "https://placard.ficedl.info/mot5862.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14221,6 +14485,7 @@
         "href": "https://placard.ficedl.info/mot5860.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14252,6 +14517,7 @@
         "href": "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=24"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14311,6 +14577,7 @@
         "href": "https://ml.ficedl.info/mot407.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14366,6 +14633,7 @@
         "href": "https://ml.ficedl.info/mot314.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14401,6 +14669,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot363"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -14446,6 +14715,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot3897"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en",
       "eq_fr:it",
@@ -14498,6 +14768,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot3091"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14553,6 +14824,7 @@
         "href": "https://ml.ficedl.info/mot689.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14596,6 +14868,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot442"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14655,6 +14928,7 @@
         "href": "https://ml.ficedl.info/mot357.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14694,6 +14968,7 @@
         "href": "https://placard.ficedl.info/mot6351.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14725,6 +15000,7 @@
         "href": "https://placard.ficedl.info/mot5257.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14780,6 +15056,7 @@
         "href": "https://ml.ficedl.info/mot315.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -14841,6 +15118,7 @@
         "href": "https://ml.ficedl.info/mot371.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -14896,6 +15174,7 @@
         "href": "https://ml.ficedl.info/mot504.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:en",
@@ -14958,6 +15237,7 @@
         "href": "https://ml.ficedl.info/mot767.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15017,6 +15297,7 @@
         "href": "https://ml.ficedl.info/mot331.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15064,6 +15345,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot486"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15107,6 +15389,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot576"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15150,6 +15433,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot575"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15193,6 +15477,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot574"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15244,6 +15529,7 @@
         "href": "https://ml.ficedl.info/mot51.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15287,6 +15573,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot535"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15330,6 +15617,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot573"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15389,6 +15677,7 @@
         "href": "https://ml.ficedl.info/mot288.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15448,6 +15737,7 @@
         "href": "https://ml.ficedl.info/mot290.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15491,6 +15781,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot572"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15534,6 +15825,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot121"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -15577,6 +15869,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot571"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15622,6 +15915,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot431"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15667,6 +15961,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot570"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15708,6 +16003,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot569"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15761,6 +16057,7 @@
         "href": "https://ml.ficedl.info/mot391.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15806,6 +16103,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot568"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15851,6 +16149,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot567"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15896,6 +16195,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot566"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15941,6 +16241,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot565"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -15994,6 +16295,7 @@
         "href": "https://ml.ficedl.info/mot742.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -16043,6 +16345,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot414"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -16096,6 +16399,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot399"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -16153,6 +16457,7 @@
         "href": "https://ml.ficedl.info/mot883.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -16198,6 +16503,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot562"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -16259,6 +16565,7 @@
         "href": "https://ml.ficedl.info/mot299.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16318,6 +16625,7 @@
         "href": "https://ml.ficedl.info/mot344.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16369,6 +16677,7 @@
         "href": "https://ml.ficedl.info/mot791.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -16418,6 +16727,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot141"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16473,6 +16783,7 @@
         "href": "https://ml.ficedl.info/mot316.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:es",
@@ -16528,6 +16839,7 @@
         "href": "https://ml.ficedl.info/mot885.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16591,6 +16903,7 @@
         "href": "https://ml.ficedl.info/mot374.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -16652,6 +16965,7 @@
         "href": "https://ml.ficedl.info/mot388.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16707,6 +17021,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot455"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16754,6 +17069,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot423"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16797,6 +17113,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot552"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16840,6 +17157,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot553"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16883,6 +17201,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot554"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16926,6 +17245,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot555"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -16969,6 +17289,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot556"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17012,6 +17333,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot557"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17051,6 +17373,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot558"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17094,6 +17417,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot559"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17137,6 +17461,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot560"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17168,6 +17493,7 @@
         "href": "https://placard.ficedl.info/mot129.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17223,6 +17549,7 @@
         "href": "https://ml.ficedl.info/mot861.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17266,6 +17593,7 @@
         "href": "https://ml.ficedl.info/mot700.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17317,6 +17645,7 @@
         "href": "https://ml.ficedl.info/mot403.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -17377,6 +17706,7 @@
         "href": "https://ml.ficedl.info/mot421.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17436,6 +17766,7 @@
         "href": "https://ml.ficedl.info/mot45.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17495,6 +17826,7 @@
         "href": "https://ml.ficedl.info/mot300.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17526,6 +17858,7 @@
         "href": "https://placard.ficedl.info/mot136.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17557,6 +17890,7 @@
         "href": "https://placard.ficedl.info/mot6250.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17604,6 +17938,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot2787"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -17642,6 +17977,7 @@
         "href": "https://placard.ficedl.info/mot4928.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17701,6 +18037,7 @@
         "href": "https://ml.ficedl.info/mot378.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -17750,6 +18087,7 @@
         "href": "https://ml.ficedl.info/mot387.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17805,6 +18143,7 @@
         "href": "https://ml.ficedl.info/mot756.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17840,6 +18179,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot548"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17887,6 +18227,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot3847"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -17948,6 +18289,7 @@
         "href": "https://ml.ficedl.info/mot792.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -17987,6 +18329,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1295"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18046,6 +18389,7 @@
         "href": "https://ml.ficedl.info/mot967.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -18088,6 +18432,7 @@
         "href": "https://placard.ficedl.info/mot5851.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -18146,6 +18491,7 @@
         "href": "https://ml.ficedl.info/mot575.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18189,6 +18535,7 @@
         "href": "https://ml.ficedl.info/mot428.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18252,6 +18599,7 @@
         "href": "https://ml.ficedl.info/mot298.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18295,6 +18643,7 @@
         "href": "https://ml.ficedl.info/mot361.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18346,6 +18695,7 @@
         "href": "https://ml.ficedl.info/mot690.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18385,6 +18735,7 @@
         "href": "https://placard.ficedl.info/mot5940.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18416,6 +18767,7 @@
         "href": "https://placard.ficedl.info/mot5661.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18475,6 +18827,7 @@
         "href": "https://ml.ficedl.info/mot84.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18514,6 +18867,7 @@
         "href": "https://cartoliste.ficedl.info/mot4168.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18553,6 +18907,7 @@
         "href": "https://cartoliste.ficedl.info/mot4169.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18584,6 +18939,7 @@
         "href": "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=537"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18615,6 +18971,7 @@
         "href": "https://www.cira.ch/catalogue/index.php?lvl=categ_see&id=538"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18646,6 +19003,7 @@
         "href": "https://placard.ficedl.info/mot5353.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18697,6 +19055,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1319"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18752,6 +19111,7 @@
         "href": "https://ml.ficedl.info/mot46.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18811,6 +19171,7 @@
         "href": "https://ml.ficedl.info/mot404.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18870,6 +19231,7 @@
         "href": "https://ml.ficedl.info/mot301.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en"
@@ -18920,6 +19282,7 @@
         "href": "https://ml.ficedl.info/mot291.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -18975,6 +19338,7 @@
         "href": "https://ml.ficedl.info/mot710.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -19036,6 +19400,7 @@
         "href": "https://ml.ficedl.info/mot490.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -19098,6 +19463,7 @@
         "href": "https://ml.ficedl.info/mot489.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19157,6 +19523,7 @@
         "href": "https://ml.ficedl.info/mot466.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -19214,6 +19581,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1906"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19269,6 +19637,7 @@
         "href": "https://ml.ficedl.info/mot313.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19316,6 +19685,7 @@
         "href": "https://ml.ficedl.info/mot795.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19363,6 +19733,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot391"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19402,6 +19773,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot500"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -19453,6 +19825,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1291"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:en"
@@ -19507,6 +19880,7 @@
         "href": "https://ml.ficedl.info/mot432.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19546,6 +19920,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot2819"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19589,6 +19964,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot873"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19640,6 +20016,7 @@
         "href": "https://ml.ficedl.info/mot348.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19683,6 +20060,7 @@
         "href": "https://cartoliste.ficedl.info/mot4228.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19742,6 +20120,7 @@
         "href": "https://ml.ficedl.info/mot293.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19805,6 +20184,7 @@
         "href": "https://ml.ficedl.info/mot486.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19868,6 +20248,7 @@
         "href": "https://ml.ficedl.info/mot519.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -19927,6 +20308,7 @@
         "href": "https://ml.ficedl.info/mot449.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en",
       "eq_fr:nl"
@@ -19981,6 +20363,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1205"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20016,6 +20399,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7246"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20067,6 +20451,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4293"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -20124,6 +20509,7 @@
         "href": "https://ml.ficedl.info/mot930.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20179,6 +20565,7 @@
         "href": "https://ml.ficedl.info/mot735.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20238,6 +20625,7 @@
         "href": "https://ml.ficedl.info/mot318.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20281,6 +20669,7 @@
         "href": "https://cartoliste.ficedl.info/mot4306.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20336,6 +20725,7 @@
         "href": "https://ml.ficedl.info/mot850.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20391,6 +20781,7 @@
         "href": "https://ml.ficedl.info/mot329.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20430,6 +20821,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot409"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:nl"
@@ -20468,6 +20860,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7200"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20503,6 +20896,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7202"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -20554,6 +20948,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1136"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -20595,6 +20990,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot955"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20650,6 +21046,7 @@
         "href": "https://ml.ficedl.info/mot475.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20685,6 +21082,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7218"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20744,6 +21142,7 @@
         "href": "https://ml.ficedl.info/mot879.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20795,6 +21194,7 @@
         "href": "https://ml.ficedl.info/mot360.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -20842,6 +21242,7 @@
         "href": "https://ml.ficedl.info/mot780.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -20893,6 +21294,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1035"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:en",
@@ -20935,6 +21337,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot3289"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:el",
@@ -20986,6 +21389,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1235"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21021,6 +21425,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7269"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21072,6 +21477,7 @@
         "href": "https://ml.ficedl.info/mot307.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21107,6 +21513,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7301"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21142,6 +21549,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7321"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -21184,6 +21592,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7322"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -21254,6 +21663,7 @@
         "href": "https://ml.ficedl.info/mot441.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21309,6 +21719,7 @@
         "href": "https://ml.ficedl.info/mot540.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de"
     ],
@@ -21346,6 +21757,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7339"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -21392,6 +21804,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1239"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:en",
@@ -21433,6 +21846,7 @@
         "href": "https://placard.ficedl.info/mot6587.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21472,6 +21886,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot716"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21511,6 +21926,7 @@
         "href": "https://placard.ficedl.info/mot6589.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21566,6 +21982,7 @@
         "href": "https://ml.ficedl.info/mot539.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21621,6 +22038,7 @@
         "href": "https://ml.ficedl.info/mot554.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -21682,6 +22100,7 @@
         "href": "https://ml.ficedl.info/mot521.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21721,6 +22140,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot441"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21776,6 +22196,7 @@
         "href": "https://ml.ficedl.info/mot583.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -21836,6 +22257,7 @@
         "href": "https://ml.ficedl.info/mot797.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -21883,6 +22305,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4058"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21926,6 +22349,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot2789"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -21965,6 +22389,7 @@
         "href": "https://placard.ficedl.info/mot6599.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22004,6 +22429,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot451"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:en"
     ],
@@ -22049,6 +22475,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot296"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22092,6 +22519,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1294"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:en",
@@ -22136,6 +22564,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot2030"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22187,6 +22616,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot457"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22238,6 +22668,7 @@
         "href": "https://ml.ficedl.info/mot470.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:pt"
     ],
@@ -22291,6 +22722,7 @@
         "href": "https://ml.ficedl.info/mot312.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22330,6 +22762,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot2412"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22373,6 +22806,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot533"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22412,6 +22846,7 @@
         "href": "https://placard.ficedl.info/mot6609.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -22455,6 +22890,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot103"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -22496,6 +22932,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7467"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -22537,6 +22974,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7477"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22592,6 +23030,7 @@
         "href": "https://ml.ficedl.info/mot852.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22635,6 +23074,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1012"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22674,6 +23114,7 @@
         "href": "https://placard.ficedl.info/mot6618.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22725,6 +23166,7 @@
         "href": "https://ml.ficedl.info/mot968.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -22775,6 +23217,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot547"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22822,6 +23265,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot403"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22881,6 +23325,7 @@
         "href": "https://ml.ficedl.info/mot429.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22920,6 +23365,7 @@
         "href": "https://placard.ficedl.info/mot6622.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -22971,6 +23417,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot525"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23018,6 +23465,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot558"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23061,6 +23509,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot545"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23096,6 +23545,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot546"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23151,6 +23601,7 @@
         "href": "https://ml.ficedl.info/mot280.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:es",
@@ -23211,6 +23662,7 @@
         "href": "https://ml.ficedl.info/mot279.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:es",
@@ -23263,6 +23715,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot3973"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23310,6 +23763,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot3921"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:es",
@@ -23362,6 +23816,7 @@
         "href": "https://ml.ficedl.info/mot340.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23413,6 +23868,7 @@
         "href": "https://ml.ficedl.info/mot582.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23464,6 +23920,7 @@
         "href": "https://ml.ficedl.info/mot595.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23503,6 +23960,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1445"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -23562,6 +24020,7 @@
         "href": "https://placard.ficedl.info/mot6636.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23597,6 +24056,7 @@
         "href": "https://bibliotheque.cira-marseille.info/opac_css/index.php?lvl=categ_see&id=7566"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23648,6 +24108,7 @@
         "href": "https://ml.ficedl.info/mot359.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -23695,6 +24156,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot541"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca",
       "eq_fr:de",
@@ -23746,6 +24208,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot538"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de",
       "eq_fr:en",
@@ -23803,6 +24266,7 @@
         "href": "https://ml.ficedl.info/mot806.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23842,6 +24306,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot537"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -23889,6 +24354,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot497"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -23938,6 +24404,7 @@
         "href": "https://lille.cybertaria.org/biblio/spip.php?mot498"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:ca"
     ],
@@ -23979,6 +24446,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1600"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -24022,6 +24490,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot4521"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -24073,6 +24542,7 @@
         "href": "https://archives.cira-marseille.info/raforum/spip.php?mot1420"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:de"
     ],
@@ -24118,6 +24588,7 @@
         "href": "https://placard.ficedl.info/mot6580.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "sujets"
@@ -24173,6 +24644,7 @@
         "href": "https://ml.ficedl.info/mot774.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -24224,6 +24696,7 @@
         "href": "https://ml.ficedl.info/mot989.html"
       }
     ],
+    "normalizations": [],
     "flags": [],
     "facet": [
       "geo"
@@ -24236,6 +24709,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24250,6 +24724,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24264,6 +24739,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24278,6 +24754,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24292,6 +24769,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24306,6 +24784,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24320,6 +24799,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24334,6 +24814,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24348,6 +24829,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24362,6 +24844,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24376,6 +24859,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24390,6 +24874,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24404,6 +24889,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24418,6 +24904,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24432,6 +24919,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24446,6 +24934,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24460,6 +24949,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24474,6 +24964,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24488,6 +24979,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24502,6 +24994,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24516,6 +25009,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24530,6 +25024,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24544,6 +25039,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24558,6 +25054,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24572,6 +25069,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24586,6 +25084,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24600,6 +25099,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24614,6 +25114,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24628,6 +25129,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24642,6 +25144,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24656,6 +25159,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24670,6 +25174,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24684,6 +25189,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24698,6 +25204,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24712,6 +25219,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24726,6 +25234,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24740,6 +25249,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24754,6 +25264,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24768,6 +25279,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24782,6 +25294,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24796,6 +25309,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24810,6 +25324,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24824,6 +25339,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24838,6 +25354,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24852,6 +25369,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24866,6 +25384,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24880,6 +25399,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24894,6 +25414,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24908,6 +25429,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24922,6 +25444,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24936,6 +25459,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24950,6 +25474,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24964,6 +25489,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24978,6 +25504,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -24992,6 +25519,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25006,6 +25534,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25020,6 +25549,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25034,6 +25564,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25048,6 +25579,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25062,6 +25594,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25076,6 +25609,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25090,6 +25624,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25104,6 +25639,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25118,6 +25654,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25132,6 +25669,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25146,6 +25684,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25160,6 +25699,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25174,6 +25714,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25188,6 +25729,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25202,6 +25744,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25216,6 +25759,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25230,6 +25774,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25244,6 +25789,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25258,6 +25804,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25272,6 +25819,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25286,6 +25834,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25300,6 +25849,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25314,6 +25864,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25328,6 +25879,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25342,6 +25894,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25356,6 +25909,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25370,6 +25924,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25384,6 +25939,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25398,6 +25954,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25412,6 +25969,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25426,6 +25984,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25440,6 +25999,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25454,6 +26014,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25468,6 +26029,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25482,6 +26044,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25496,6 +26059,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25510,6 +26074,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25524,6 +26089,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25538,6 +26104,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25552,6 +26119,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25566,6 +26134,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25580,6 +26149,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25594,6 +26164,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25608,6 +26179,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25622,6 +26194,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25636,6 +26209,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25650,6 +26224,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25664,6 +26239,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25678,6 +26254,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25692,6 +26269,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25706,6 +26284,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25720,6 +26299,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25734,6 +26314,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25748,6 +26329,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25762,6 +26344,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25776,6 +26359,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25790,6 +26374,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25804,6 +26389,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25818,6 +26404,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25832,6 +26419,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25846,6 +26434,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25860,6 +26449,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25874,6 +26464,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25888,6 +26479,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25902,6 +26494,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25916,6 +26509,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25930,6 +26524,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25944,6 +26539,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25958,6 +26554,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25972,6 +26569,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -25986,6 +26584,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26000,6 +26599,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26014,6 +26614,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26028,6 +26629,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26042,6 +26644,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26056,6 +26659,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26070,6 +26674,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26084,6 +26689,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26098,6 +26704,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26112,6 +26719,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26157,6 +26765,7 @@
         "href": "https://ml.ficedl.info/mot537.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "eq_fr:nl"
     ],
@@ -26208,6 +26817,7 @@
         "href": "https://ml.ficedl.info/mot740.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "missing_lang:el"
     ],
@@ -26222,6 +26832,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26236,6 +26847,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26250,6 +26862,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26264,6 +26877,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26278,6 +26892,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26292,6 +26907,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26306,6 +26922,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26320,6 +26937,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26334,6 +26952,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26348,6 +26967,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26362,6 +26982,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26376,6 +26997,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26390,6 +27012,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26404,6 +27027,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26418,6 +27042,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26432,6 +27057,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26446,6 +27072,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26460,6 +27087,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26474,6 +27102,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26506,6 +27135,7 @@
         "href": "https://placard.ficedl.info/mot11328.html"
       }
     ],
+    "normalizations": [],
     "flags": [
       "el_no_roman"
     ],
@@ -26520,6 +27150,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26534,6 +27165,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26548,6 +27180,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
@@ -26562,6 +27195,7 @@
     "hierarchy": null,
     "depth": null,
     "catalog_links": [],
+    "normalizations": [],
     "flags": [
       "no_translation_block"
     ],
