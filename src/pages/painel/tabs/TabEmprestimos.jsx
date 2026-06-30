@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
 import { fmtD, TabHeader } from '../_shared';
+import LoanDepositPanel from '@/components/deposit/LoanDepositPanel';
 
 // ═══════════════════════════════════════════════════════════
 // TabEmprestimos — onglet « Emprunts » fusionné
@@ -186,6 +187,7 @@ export default function TabEmprestimos({
                   )}
                 </div>
               </div>
+              <LoanDepositPanel emprestimoId={g.emprestimo_id} />
               {isExpanded && (
                 <div className="ab-painel-lote__items">
                   {g.items.map(l => (

@@ -12,6 +12,7 @@
 #   RAISE EXCEPTION '<NOM> ECHEC : …'                 -> échec
 # (le RAISE sert au rollback des fixtures ; le runner parse le message.)
 tests/sql/paquet_cotisation_tests.sql
+tests/sql/paquet_depot_garantie_tests.sql
 tests/sql/paquet_renouvellement_granulaire_tests.sql
 tests/sql/onbo_q13_transfer_mandate_tests.sql
 tests/sql/onbo_111_lot1_eval_tests.sql

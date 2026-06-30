@@ -2045,8 +2045,9 @@ export default function PanelPage() {
                       min="0"
                       value={paymentDraft.amount_paid}
                       onChange={e => setPaymentDraft(p => ({ ...p, amount_paid: e.target.value }))}
+                      disabled={paymentDraft.payment_method === 'exemption'}
                       className="ab-painel-input"
-                      style={{ marginTop: 4 }}
+                      style={{ marginTop: 4, opacity: paymentDraft.payment_method === 'exemption' ? 0.5 : 1 }}
                     />
                   </label>
 
@@ -2054,7 +2055,7 @@ export default function PanelPage() {
                     {t({ id: 'membership.payment.method' })}
                     <select
                       value={paymentDraft.payment_method}
-                      onChange={e => setPaymentDraft(p => ({ ...p, payment_method: e.target.value }))}
+                      onChange={e => { const m = e.target.value; setPaymentDraft(p => ({ ...p, payment_method: m, amount_paid: m === 'exemption' ? 0 : p.amount_paid })); }}
                       className="ab-painel-input"
                       style={{ marginTop: 4 }}
                     >

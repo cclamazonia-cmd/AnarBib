@@ -28,6 +28,7 @@ import StabilizedPartnershipsSection from '@/components/library/StabilizedPartne
 import ExternalDepositPartnerSection from '@/components/library/ExternalDepositPartnerSection';
 import PebHistorySection from '@/components/library/PebHistorySection';
 import LibraryDigitalSharesSection from '@/components/library/LibraryDigitalSharesSection';
+import FinanceReportsSection from '@/components/biblioteca/FinanceReportsSection';
 import '@/components/team/TeamPanel.css';
 import '../catalogacao/CatalogacaoPage.css';
 import UserHeroBadge from '@/components/UserHeroBadge';
@@ -184,6 +185,9 @@ export default function BibliotecaPage() {
   // Cotisation (membership)
   const [membershipRules, setMembershipRules] = useState([]);
   const [editingMembershipRule, setEditingMembershipRule] = useState(null); // null = aucun, 'new' = nouveau, ou {id,...} pour édition
+  // Dépôt de garantie (DEPOT-1/6) — opt-in par biblio, calque des cotisations.
+  const [depositRules, setDepositRules] = useState([]);
+  const [editingDepositRule, setEditingDepositRule] = useState(null);
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'normal', owner: '' });
   // Chantier #TASKS etape 6 (24/05/2026) : sous-onglets de l'onglet « Tarefas
   // internas ». Paquet 1 ne remplit que 'lista' (vue par echeance + drapeau
@@ -260,6 +264,11 @@ export default function BibliotecaPage() {
       setRegDocs(regR.data || []); setDocGov(dgR.data);
       setMailChannel(mcR.data); setNotifPolicy(npR.data);
       setMembershipRules(mrR.data || []);
+      // Règles de dépôt de garantie (DEPOT-6) — co-chargées avec les cotisations.
+      const { data: drData } = await supabase.from('library_deposit_rules')
+        .select('*').eq('library_id', libraryId)
+        .order('display_order', { ascending: true }).order('created_at', { ascending: true });
+      setDepositRules(drData || []);
       // allLibraries : selects PEB + onglets documents/exchanges + rapport.
       const { data: allLibs } = await supabase.from('libraries').select('id, slug, name, short_name, network_mode, circulation_mode, is_active').order('name');
       setAllLibraries(allLibs || []);
@@ -1156,6 +1165,109 @@ export default function BibliotecaPage() {
     finally { setSaving(false); }
   }
 
+  // ── Dépôt de garantie (deposit) — DEPOT-1/6 ──────────
+  async function toggleDepositEnabled(next) {
+    setSaving(true);
+    setMsg({ text: '', kind: '' });
+    try {
+      const { error } = await supabase.from('libraries').update({ deposit_enabled: next }).eq('id', libraryId);
+      if (error) throw error;
+      setLib(prev => prev ? { ...prev, deposit_enabled: next } : prev);
+      setMsg({ text: t({ id: next ? 'deposit.config.msg.enabledOn' : 'deposit.config.msg.enabledOff' }), kind: 'ok' });
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
+    finally { setSaving(false); }
+  }
+
+  function startEditDepositRule(rule) {
+    setEditingDepositRule({ ...rule });
+    setMsg({ text: '', kind: '' });
+  }
+
+  function startNewDepositRule() {
+    setEditingDepositRule({
+      id: 'new',
+      name: '',
+      description: '',
+      scope: 'per_loan',
+      amount: 0,
+      currency: 'EUR',
+      refundable: true,
+      is_active: true,
+      display_order: depositRules.length * 10,
+    });
+    setMsg({ text: '', kind: '' });
+  }
+
+  function cancelDepositRule() {
+    setEditingDepositRule(null);
+  }
+
+  async function saveDepositRule() {
+    if (!editingDepositRule) return;
+    const r = editingDepositRule;
+    if (!r.name?.trim()) {
+      setMsg({ text: t({ id: 'deposit.config.rule.namePlaceholder' }), kind: 'error' });
+      return;
+    }
+    if (Number(r.amount) < 0) {
+      setMsg({ text: t({ id: 'deposit.config.msg.amountRequired' }), kind: 'error' });
+      return;
+    }
+    setSaving(true);
+    try {
+      const payload = {
+        library_id: libraryId,
+        name: r.name.trim(),
+        description: r.description?.trim() || null,
+        scope: r.scope === 'per_item' ? 'per_item' : 'per_loan',
+        amount: Number(r.amount) || 0,
+        currency: (r.currency || 'EUR').toUpperCase(),
+        refundable: r.refundable !== false,
+        is_active: !!r.is_active,
+        display_order: r.display_order ?? 0,
+      };
+      if (r.id === 'new') {
+        const { data, error } = await supabase.from('library_deposit_rules').insert(payload).select().single();
+        if (error) throw error;
+        setDepositRules(prev => [...prev, data]);
+        setMsg({ text: t({ id: 'deposit.config.msg.created' }), kind: 'ok' });
+      } else {
+        const { data, error } = await supabase.from('library_deposit_rules').update(payload).eq('id', r.id).select().single();
+        if (error) throw error;
+        setDepositRules(prev => prev.map(x => x.id === r.id ? data : x));
+        setMsg({ text: t({ id: 'deposit.config.msg.saved' }), kind: 'ok' });
+      }
+      setEditingDepositRule(null);
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
+    finally { setSaving(false); }
+  }
+
+  async function toggleDepositRuleActive(rule) {
+    const willDeactivate = rule.is_active;
+    if (willDeactivate && !confirm(t({ id: 'deposit.config.action.deactivateConfirm' }))) return;
+    setSaving(true);
+    try {
+      const { data, error } = await supabase.from('library_deposit_rules')
+        .update({ is_active: !rule.is_active }).eq('id', rule.id).select().single();
+      if (error) throw error;
+      setDepositRules(prev => prev.map(x => x.id === rule.id ? data : x));
+      setMsg({ text: t({ id: willDeactivate ? 'deposit.config.msg.deactivated' : 'deposit.config.msg.reactivated' }), kind: 'ok' });
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
+    finally { setSaving(false); }
+  }
+
+  async function deleteDepositRule(rule) {
+    if (!confirm(t({ id: 'deposit.config.action.deleteConfirm' }, { name: rule.name }))) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase.from('library_deposit_rules').delete().eq('id', rule.id);
+      if (error) throw error;
+      setDepositRules(prev => prev.filter(x => x.id !== rule.id));
+      setMsg({ text: t({ id: 'deposit.config.msg.deleted' }), kind: 'ok' });
+    } catch (e) { setMsg({ text: localizeError(e, t), kind: 'error' }); }
+    finally { setSaving(false); }
+  }
+
   // Chantier #TASKS etape 6 paquet 1 (24/05/2026) : regroupement des taches
   // par echeance pour la vue « Lista ». Quatre seaux : en retard, aujourd'hui,
   // a venir, sans echeance. Les taches terminees (concluida) ou annulees
@@ -1750,6 +1862,167 @@ export default function BibliotecaPage() {
               </div>
             )}
           </div>
+
+          {/* ─── Dépôt de garantie (DEPOT-1/6) ──────────────
+              Opt-in strict par biblio : OFF par défaut → rien n'apparaît
+              au comptoir / dans /conta / dans les rapports. */}
+          <div style={bx}>
+            <h4 style={{ margin:'0 0 6px' }}>{t({ id: 'deposit.config.title' })}</h4>
+            <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', marginBottom:12 }}>{t({ id: 'deposit.config.hint' })}</div>
+
+            {/* Interrupteur maître */}
+            <div style={{ display:'flex', alignItems:'center', gap:10, padding:'10px 12px', borderRadius:8, background:'rgba(0,0,0,.15)', marginBottom:12 }}>
+              <input
+                type="checkbox"
+                id="deposit_enabled_toggle"
+                checked={!!lib?.deposit_enabled}
+                onChange={e => toggleDepositEnabled(e.target.checked)}
+                disabled={saving}
+              />
+              <label htmlFor="deposit_enabled_toggle" style={{ flex:1, cursor:'pointer' }}>
+                <div style={{ fontWeight:600, fontSize:'.9rem' }}>{t({ id: 'deposit.config.enabled' })}</div>
+                <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
+                  {lib?.deposit_enabled
+                    ? t({ id: 'deposit.config.enabledHint' })
+                    : t({ id: 'deposit.config.disabledHint' })}
+                </div>
+              </label>
+            </div>
+
+            {/* Règles de dépôt : visibles seulement si le système est activé */}
+            {lib?.deposit_enabled && (<>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
+                <strong style={{ fontSize:'.9rem' }}>{t({ id: 'deposit.config.rules.title' })}</strong>
+                {!editingDepositRule && (
+                  <button className="cat-btn secondary" onClick={startNewDepositRule} style={{ fontSize:'.82rem', padding:'5px 12px' }}>
+                    + {t({ id: 'deposit.config.rules.add' })}
+                  </button>
+                )}
+              </div>
+
+              {depositRules.length === 0 && !editingDepositRule && (
+                <div style={{ fontSize:'.85rem', color:'var(--brand-muted)', padding:'10px 0' }}>
+                  {t({ id: 'deposit.config.rules.empty' })}
+                </div>
+              )}
+
+              {editingDepositRule && (
+                <div style={{ ...bx, background:'rgba(0,120,255,.06)', borderColor:'rgba(0,120,255,.25)', marginBottom:12 }}>
+                  <div className="cat-book-grid" style={{ gap:8 }}>
+                    <div className="cat-field" style={{ gridColumn:'span 3' }}>
+                      <label style={ls}>{t({ id: 'deposit.config.rule.name' })} *</label>
+                      <input
+                        type="text"
+                        value={editingDepositRule.name || ''}
+                        placeholder={t({ id: 'deposit.config.rule.namePlaceholder' })}
+                        onChange={e => setEditingDepositRule(p => ({ ...p, name: e.target.value }))}
+                        style={fs}
+                      />
+                    </div>
+                    <div className="cat-field" style={{ gridColumn:'span 3' }}>
+                      <label style={ls}>{t({ id: 'deposit.config.rule.description' })}</label>
+                      <input
+                        type="text"
+                        value={editingDepositRule.description || ''}
+                        placeholder={t({ id: 'deposit.config.rule.descriptionPlaceholder' })}
+                        onChange={e => setEditingDepositRule(p => ({ ...p, description: e.target.value }))}
+                        style={fs}
+                      />
+                    </div>
+                    <div className="cat-field" style={{ gridColumn:'span 2' }}>
+                      <label style={ls}>{t({ id: 'deposit.config.rule.scope' })}</label>
+                      <select
+                        value={editingDepositRule.scope || 'per_loan'}
+                        onChange={e => setEditingDepositRule(p => ({ ...p, scope: e.target.value }))}
+                        style={fs}
+                      >
+                        <option value="per_loan">{t({ id: 'deposit.scope.per_loan' })}</option>
+                        <option value="per_item">{t({ id: 'deposit.scope.per_item' })}</option>
+                      </select>
+                    </div>
+                    <div className="cat-field">
+                      <label style={ls}>{t({ id: 'deposit.config.rule.amount' })} *</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={editingDepositRule.amount ?? 0}
+                        onChange={e => setEditingDepositRule(p => ({ ...p, amount: e.target.value }))}
+                        style={fs}
+                      />
+                    </div>
+                    <div className="cat-field">
+                      <label style={ls}>{t({ id: 'deposit.config.rule.currency' })}</label>
+                      <input
+                        type="text"
+                        maxLength={3}
+                        value={editingDepositRule.currency || 'EUR'}
+                        onChange={e => setEditingDepositRule(p => ({ ...p, currency: e.target.value.toUpperCase() }))}
+                        style={fs}
+                      />
+                    </div>
+                    <div className="cat-field" style={{ gridColumn:'span 3' }}>
+                      <label style={{ ...ls, display:'flex', gap:6, alignItems:'center', cursor:'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={editingDepositRule.is_active !== false}
+                          onChange={e => setEditingDepositRule(p => ({ ...p, is_active: e.target.checked }))}
+                        />
+                        {t({ id: 'deposit.config.rule.isActive' })}
+                      </label>
+                    </div>
+                    <div className="cat-field" style={{ gridColumn:'span 3', display:'flex', gap:8, marginTop:6 }}>
+                      <button className="cat-btn primary" onClick={saveDepositRule} disabled={saving} style={{ fontSize:'.85rem' }}>
+                        {t({ id: 'deposit.config.action.save' })}
+                      </button>
+                      <button className="cat-btn secondary" onClick={cancelDepositRule} style={{ fontSize:'.85rem' }}>
+                        {t({ id: 'deposit.config.action.cancel' })}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {depositRules.length > 0 && (
+                <div style={lw}>
+                  {depositRules.map((r, i) => (
+                    <div key={r.id} style={{ padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', opacity: r.is_active ? 1 : 0.55 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 }}>
+                        <div style={{ flex:1 }}>
+                          <div style={{ fontSize:'.9rem', fontWeight:600, display:'flex', alignItems:'center', gap:6 }}>
+                            {r.name}
+                            {!r.is_active && <span className="cat-pill" style={{ fontSize:'.65rem', padding:'1px 6px', background:'rgba(255,255,255,.1)' }}>{t({ id: 'biblioteca.rules.inactive' })}</span>}
+                          </div>
+                          <div style={{ fontSize:'.82rem', color:'var(--brand-muted)', marginTop:2 }}>
+                            {t({ id: 'deposit.rule.amount' }, { amount: r.amount, currency: r.currency })}
+                            {' · '}{t({ id: `deposit.scope.${r.scope}` })}
+                          </div>
+                          {r.description && (
+                            <div style={{ fontSize:'.78rem', color:'var(--brand-muted)', marginTop:3, fontStyle:'italic' }}>
+                              {r.description}
+                            </div>
+                          )}
+                        </div>
+                        {!editingDepositRule && (
+                          <div style={{ display:'flex', gap:6 }}>
+                            <button className="cat-btn secondary" onClick={() => startEditDepositRule(r)} style={{ fontSize:'.78rem', padding:'4px 10px' }}>
+                              {t({ id: 'deposit.config.action.edit' })}
+                            </button>
+                            <button className="cat-btn ghost" onClick={() => toggleDepositRuleActive(r)} style={{ fontSize:'.78rem', padding:'4px 10px', color: r.is_active ? '#f87171' : '#86efac' }}>
+                              {t({ id: r.is_active ? 'deposit.config.action.deactivate' : 'deposit.config.action.reactivate' })}
+                            </button>
+                            <button className="cat-btn ghost" onClick={() => deleteDepositRule(r)} style={{ fontSize:'.78rem', padding:'4px 10px', color:'#dc2626', borderColor:'rgba(220,38,38,.4)' }}>
+                              {t({ id: 'deposit.config.action.delete' })}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>)}
+          </div>
         </div>)}
 
         {/* ═══ 4. Documentos e relações externas ═══════ */}
@@ -2139,6 +2412,15 @@ export default function BibliotecaPage() {
               <span style={{ fontSize:'.82rem', color:'var(--brand-muted)', alignSelf:'center' }}>{t({ id: 'biblioteca.tasks.recipient' })} {mailChannel?.weekly_report_email || t({ id: 'common.notConfigured' })}</span>
             </div>
           </div>
+
+          {/* Suivi financier exportable (cotisations + dépôts de garantie, DEPOT-9).
+              Chaque sous-section ne s'affiche que si le système est actif. */}
+          <FinanceReportsSection
+            libraryId={libraryId}
+            membershipEnabled={!!lib?.membership_enabled}
+            depositEnabled={!!lib?.deposit_enabled}
+            members={members}
+          />
         </div>)}
 
         {/* ═══ 9. Tarefas internas ════════════════════ */}
