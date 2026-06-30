@@ -188,7 +188,13 @@ export default function AuthorPage() {
     .find(v => v && v !== displayName) || '';
   const intro = buildHeroIntro(author, books.length, t, locale);
   const hasPhoto = !!author.photo_object_path;
-  const sourceLabel = [author.source_kind, author.source_label].filter(Boolean).join(' · ');
+  // Provenance « fonte » : on masque les origines INTERNES (seed/backfill du
+  // catalogue, sans source externe) — jargon technique inutile au public. La
+  // donnée reste en base (provenance utile en coulisses / Catalogação). 30/06/2026.
+  const INTERNAL_SOURCE_KINDS = ['catalog_backfill', 'catalog_seed', 'catalog_seed_manual'];
+  const sourceLabel = (INTERNAL_SOURCE_KINDS.includes(author.source_kind) && !author.source_url)
+    ? ''
+    : [author.source_kind, author.source_label].filter(Boolean).join(' · ');
   const meta = author.structured_meta || {};
   // #AUT — formes du nom (variant_forms) hors nom retenu, dédupliquées.
   const variantNames = collectVariantForms(author.variant_forms, locale, [displayName, author.preferred_name, author.sort_name, secondaryName]);
