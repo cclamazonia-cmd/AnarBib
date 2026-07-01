@@ -334,3 +334,30 @@ journalctl --user -u anarbib-backup-court.service -f
 systemctl --user daemon-reload
 systemctl --user list-timers 'anarbib-*' --all   # verifier les echeances
 ```
+
+### 7.5 — Limite connue de la détection (angle mort « jamais démarré »)
+
+La détection d'échec (drapeaux `.last-failure` pour les backups, `.last-failure-runner`
+pour la CI, cf. §7.1) repose sur `OnFailure=` systemd : un drapeau se pose quand un
+service **démarre puis échoue**. Elle a un **angle mort assumé** : le cas où le service
+**ne démarre jamais** — PC éteint toute la période, WSL non amorcé au login, Docker
+Desktop absent au boot, timer jamais déclenché. Dans ce cas **aucun drapeau ne se pose** :
+il n'y a pas d'erreur à signaler, seulement un *silence*. Le dispositif détecte les
+**erreurs**, pas les **silences**.
+
+**Pourquoi c'est structurel.** Détecter « ça n'a jamais tourné » exige un observateur
+**externe** au système observé : quand le PC est éteint, tout observateur *interne* l'est
+aussi et ne peut pas alerter. C'est le même angle mort pour les backups (noté BG2-AUTO-4,
+« dead man's switch niveau 3 reporté ») et pour le runner CI (même nature).
+
+**Parade actuelle (manuelle).** En attendant un mécanisme externe, vérifier
+**périodiquement à la main** que les sauvegardes tournent, via §7.1 (`list-timers` +
+derniers snapshots restic). Un `restic snapshots` dont le dernier tir remonte à plus
+d'une période = alerte, même sans drapeau.
+
+**Piste (quand pertinent).** Un *dead man's switch* externe — service tiers type
+healthchecks.io, ou un cron sur le futur **VPS EU** — qui reçoit un ping à chaque tir
+réussi et alerte par mail si le ping manque. Converge naturellement avec la migration
+VPS (où le VPS-pull remplacera les timers WSL, cf. BG2-AUTO-1) : l'observateur externe
+naîtra avec l'hébergement distant. Non prioritaire tant que le PC sert de poste de
+travail quotidien (donc allumé souvent).
