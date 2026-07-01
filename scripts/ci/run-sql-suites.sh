@@ -42,12 +42,14 @@ ADMIN_DB="${PGADMIN_DB:-postgres}"   # base d'admin (pour CREATE DATABASE)
 TEST_DB="anarbib_test"
 
 AUTHSTUB="tests/sql/_ci_setup_auth_stub.sql"
+VAULTSTUB="tests/sql/_ci_setup_vault_stub.sql"
 SEED="supabase/seed.sql"
 MANIFEST="${SQL_SUITES_MANIFEST:-tests/sql/ci-suites.txt}"
 
 fail() { echo "ÉCHEC : $*" >&2; exit 1; }
 command -v psql >/dev/null 2>&1 || fail "psql introuvable (installer postgresql-client)"
 [ -f "$AUTHSTUB" ] || fail "stub auth absent : $AUTHSTUB"
+[ -f "$VAULTSTUB" ] || fail "stub vault absent : $VAULTSTUB"
 [ -f "$SEED" ]     || fail "seed absent : $SEED"
 [ -f "$MANIFEST" ] || fail "manifeste absent : $MANIFEST"
 
@@ -76,6 +78,7 @@ echo "::group::reconstruction du schéma"
 PADMIN -v ON_ERROR_STOP=1 -q -c "DROP DATABASE IF EXISTS $TEST_DB;" >/dev/null || fail "DROP DATABASE"
 PADMIN -v ON_ERROR_STOP=1 -q -c "CREATE DATABASE $TEST_DB TEMPLATE template0;" >/dev/null || fail "CREATE DATABASE"
 apply authstub "$AUTHSTUB"; echo "stub auth appliqué"
+apply vaultstub "$VAULTSTUB"; echo "stub vault appliqué"
 # Toutes les migrations dans l'ordre lexicographique (baseline d'abord, puis
 # forward). [0-9]* ignore _TEMPLATE.sql et tout fichier hors convention.
 shopt -s nullglob
