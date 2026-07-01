@@ -177,6 +177,8 @@ La profondeur disponible dépend de la rétention : **long/storage** remontent j
 
 ## 5. Pièges connus (leçons de terrain)
 
+- **`trap RETURN` ≠ `trap EXIT` sous `set -e`.** Un `trap … RETURN` local **ne se déclenche pas** quand `set -e` fait sortir le script sur l'échec d'une commande (ex. `restic` qui n'atteint pas le serveur). Conséquence corrigée le 01/07 : un dump PII en clair pouvait survivre dans `$WORK`. Le nettoyage critique passe désormais par un `trap cleanup_work EXIT` **global** sur `$WORK/*.sql` (cf. REGISTRE BG2-AUTO-5). Ne jamais confier l'effacement d'un dump PII à un `trap RETURN` local.
+
 - **Ordre impératif** : `auth` → long → court. Le long pose la structure `public` dont dépendent les tables PII du court.
 - **Postgres nu** : sans le squelette `auth` (types ENUM) + les 4 rôles, les `CREATE TABLE` échouent. Sur une instance Supabase, ils existent déjà.
 - **Erreurs à la restauration** : les `relation/type does not exist` (dépendances inter-flux) et `role does not exist` (rôles Supabase sur Postgres nu) sont **normales**. Le juge de vérité, ce sont les **comptages** (§3.4), pas le compte d'erreurs.
@@ -205,3 +207,50 @@ restic snapshots ; restic check
 ```
 
 *Fin du runbook. Pour la doctrine de partition : REGISTRE §BG2. Pour l'outil : `~/anarbib-ops/anarbib-bg2.sh`.*
+
+## 7. Exploitation courante (sauvegardes automatiques)
+
+*Les trois flux sont planifiés par **timers systemd user** sous WSL2 (cf. REGISTRE §BG2 suite, BG2-AUTO-1..5). Cette section décrit l'exploitation courante, pas la restauration.*
+
+**Rappel de couverture.** Les timers ne tirent que **PC allumé et instance WSL up**. Une tâche planifiée Windows (`AnarBib-WSL-Boot`, déclencheur *à l'ouverture de session*) démarre l'instance au login ; le `linger` la maintient. PC éteint plusieurs jours = pas de tir sur l'intervalle ; `Persistent=true` rattrape **un** tir par timer au réveil.
+
+### 7.1 — Vérifier l'état des sauvegardes automatiques
+
+```bash
+# Prochaines echeances + derniers tirs des trois timers
+systemctl --user list-timers 'anarbib-*' --all
+
+# Un backup a-t-il echoue ? (le drapeau n'existe que si oui)
+cat ~/anarbib-ops/.last-failure 2>/dev/null || echo 'aucun echec signale'
+
+# Journal detaille d'un flux (court / long / storage)
+journalctl --user -u anarbib-backup-court.service -n 40 --no-pager
+```
+
+L'alerte jaune `[AnarBib] Un backup a ECHOUE` à l'ouverture du terminal (via `.bashrc`) signale un drapeau présent. Le drapeau **s'efface tout seul** au prochain tir réussi.
+
+### 7.2 — Déclencher un tir manuel (hors planning)
+
+```bash
+# Lancer immediatement un flux (le timer reste inchange)
+systemctl --user start anarbib-backup-court.service
+
+# Suivre en direct
+journalctl --user -u anarbib-backup-court.service -f
+```
+
+Équivaut à `~/anarbib-ops/anarbib-bg2.sh backup court`, mais passe par systemd (donc `OnFailure` + drapeau actifs).
+
+### 7.3 — Où sont les pièces
+
+- **Units** : `~/.config/systemd/user/anarbib-backup-{court,long,storage}.{service,timer}` + `anarbib-backup-failure@.service`.
+- **Script de notif** : `~/anarbib-ops/anarbib-notify-failure.sh`.
+- **Clé automate** : `~/.ssh/id_ed25519_bg2` (sans passphrase), routée par `~/.ssh/config` vers Herbes Folles.
+- **Tâche Windows d'amorçage** : `schtasks /Query /TN AnarBib-WSL-Boot` (côté PowerShell).
+
+### 7.4 — Après modification d'une unit
+
+```bash
+systemctl --user daemon-reload
+systemctl --user list-timers 'anarbib-*' --all   # verifier les echeances
+```
