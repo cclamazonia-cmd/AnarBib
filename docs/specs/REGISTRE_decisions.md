@@ -773,3 +773,5 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 **Dépendances aval :** `spec-sauvegarde` (à créer ; portera l'inventaire de partition détaillé) · chantier purge `backup_2026_05_07` · bascule mot de passe → clé SSH sur `bricolage.herbesfolles.org`.
 
+**MàJ 01/07/2026 — implémentation + 3 tables découvertes.** Le filet du premier dump réel a révélé 3 tables absentes de l'inventaire de cadrage : `loan_deposits` (dépôt de garantie : `user_id`/`amount`/`refunded_amount` = **PII financière lectrice → flux court** ; denylist portée à 30) ; `library_deposit_rules` (barèmes par bibliothèque, non-PII → **long**) ; `subject_ficedl_links` (liens thésaurus, non-PII → **long**). Présumé-long = 142 tables. Les **trois flux** — long (7/4/6), court (7 j), storage (7/4/6 ; 16 buckets, ~430 Mo) — sont implémentés, chiffrés hors-site (Herbes Folles), et **testés restaurables** en séquence `auth → long → court` (30/06–01/07). Bascule mot de passe → clé SSH : **faite**. Procédure : `journal/operations/RUNBOOK_restauration_BG2_2026-07-01`. Outil (hors repo) : `~/anarbib-ops/anarbib-bg2.sh`.
+
