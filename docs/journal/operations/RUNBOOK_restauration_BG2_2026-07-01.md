@@ -99,6 +99,86 @@ psql "$CIBLE" -v ON_ERROR_STOP=0 < "$COURT"   # ajoute les PII + les comptes par
 
 `ON_ERROR_STOP=0` est **voulu** : des erreurs de contraintes croisées apparaissent (tables du court pointant entre elles, FK inter-flux). Elles sont **attendues** et n'empêchent pas le chargement des données — cf. §3.4 pour le contrôle.
 
+### 3.2-bis — Rejouer les effacements (pseudonymisation BG2-14)
+
+**Pourquoi.** Un dump long *antérieur* à un effacement contient encore le vrai
+`user_id` des personnes qui ont depuis exercé leur droit à l'effacement. Le
+rejouer tel quel (§3.2) **ressuscite** ces identités dans les tables de
+gouvernance `network_*`. Il faut les re-pseudonymiser d'après `erasure_log`
+(restauré avec le dump long) — sinon violation RGPD.
+
+**Prérequis — réinjecter le sel Vault.** Le rejeu recalcule les jetons ; il lui
+faut le **même sel** que celui ayant servi à `erasure_log`. Réinjecter
+`pseudonym_salt` sur la CIBLE depuis la gestion de secrets hors-ligne
+(Dashlane + clé USB) :
+```bash
+# Le sel s'affiche une fois pour etre injecte ; ne PAS le laisser dans l'historique.
+export HISTIGNORE='*SALT*:*create_secret*'
+read -rs -p "Sel pseudonym_salt (colle depuis Dashlane) : " SALT; echo
+psql "$CIBLE" -v salt="$SALT" <<'SQL'
+SELECT vault.create_secret(:'salt', 'pseudonym_salt', 'Sel HMAC BG2-14 (reinjecte restauration)');
+SQL
+unset SALT
+```
+⚠️ Si le sel réinjecté **diffère** de l'original, les jetons recalculés ne
+correspondront pas à `erasure_log` : le rejeu ne purgera rien (silencieusement).
+D'où l'importance vitale de la conservation exacte du sel. Vérifier après coup
+(§ vérification) que le rejeu a bien touché des lignes si `erasure_log` est non vide.
+
+**Le rejeu.** Pour chaque colonne d'acteur des `network_*`, remplacer par le
+jeton tout `user_id` dont le jeton recalculé figure dans `erasure_log`. Le jeton
+étant déterministe, une passe par colonne suffit (pas de boucle par personne) :
+```bash
+psql "$CIBLE" <<'SQL'
+DO $rejeu$
+DECLARE
+  v_total int := 0; v_n int;
+  -- (table, colonne) des 19 colonnes d'acteur BG2-14
+  c record;
+BEGIN
+  FOR c IN
+    SELECT * FROM (VALUES
+      ('network_admin_collective_removal_proposals','proposed_user_id'),
+      ('network_admin_collective_removal_proposals','proposed_by'),
+      ('network_admin_collective_removal_proposals','cancelled_by'),
+      ('network_admin_collective_removal_votes','voter_user_id'),
+      ('network_admin_cross_library_actions_log','actor_user_id'),
+      ('network_administrator_audit','user_id'),
+      ('network_administrator_audit','actor_user_id'),
+      ('network_administrator_audit','target_user_id'),
+      ('network_administrator_cooptation_proposals','proposed_user_id'),
+      ('network_administrator_cooptation_proposals','proposed_by'),
+      ('network_administrator_cooptation_votes','voter_user_id'),
+      ('network_administrators','user_id'),
+      ('network_contributors','user_id'),
+      ('network_contributors','sponsored_by'),
+      ('network_reviewers','user_id'),
+      ('network_reviewers','added_by_user_id'),
+      ('network_staff','user_id'),
+      ('network_staff','added_by_user_id'),
+      ('network_staff','updated_by_user_id')
+    ) AS t(tbl, col)
+  LOOP
+    EXECUTE format(
+      'UPDATE public.%I SET %I = public.fn_pseudonymize_token(%I) '
+      'WHERE %I IS NOT NULL '
+      'AND public.fn_pseudonymize_token(%I) IN (SELECT pseudonym_token FROM public.erasure_log)',
+      c.tbl, c.col, c.col, c.col, c.col);
+    GET DIAGNOSTICS v_n = ROW_COUNT; v_total := v_total + v_n;
+  END LOOP;
+  -- display_name : re-pseudonymiser les contributeurs deja pseudonymises
+  UPDATE public.network_contributors
+     SET display_name = user_id::text
+   WHERE user_id IN (SELECT pseudonym_token FROM public.erasure_log);
+  RAISE NOTICE 'Rejeu BG2-14 : % ligne(s) re-pseudonymisee(s).', v_total;
+END $rejeu$;
+SQL
+```
+
+**Vérification.** Aucun `user_id` effacé ne doit subsister en clair. Contrôle :
+si `erasure_log` est non vide mais le rejeu a touché 0 ligne, suspecter un sel
+incorrect. Sinon, le long restauré est conforme et on peut poursuivre (§3.3).
+
 ### 3.3 — Restaurer le Storage
 
 ```bash
