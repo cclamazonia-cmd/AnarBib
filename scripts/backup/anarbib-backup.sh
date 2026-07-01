@@ -12,7 +12,7 @@
 # vient du fichier de config (voir anarbib-backup.env.example).
 #
 # Usage :   ./anarbib-backup.sh /chemin/vers/anarbib-backup.env
-# Restauration : voir docs/journal/operations/RUNBOOK_sauvegardes_restauration_BG2_*.md
+# Restauration : voir docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md
 # ============================================================================
 set -euo pipefail
 
