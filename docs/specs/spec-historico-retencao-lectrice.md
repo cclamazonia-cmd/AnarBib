@@ -599,11 +599,13 @@ Plusieurs canaux techniques peuvent retarder la disparition complète :
 - **Read replicas** : si configurés, ils peuvent garder la donnée jusqu'à
   leur synchronisation suivante.
 
-**Conséquence honnête** : pendant une fenêtre d'environ 30 jours après
+**Conséquence honnête** : pendant une fenêtre d'environ 7 jours après
 suppression par la lectrice, une réquisition technique extraordinaire
 (requête à Supabase et/ou son hébergeur AWS, sous CLOUD Act ou autre
 contrainte légale équivalente) pourrait théoriquement reconstituer la
-donnée. Au-delà de cette fenêtre, et sauf incident d'hébergement
+donnée. Cette fenêtre de 7 jours correspond à la rétention des
+sauvegardes quotidiennes de Supabase sur notre plan (Pro), le
+Point-in-Time Recovery (PITR) étant désactivé sur ce projet. Au-delà de cette fenêtre, et sauf incident d'hébergement
 exceptionnel, la donnée est effectivement perdue.
 
 **Engagement de la CCLA** :
