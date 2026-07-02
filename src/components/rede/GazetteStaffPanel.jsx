@@ -50,7 +50,7 @@ export default function GazetteStaffPanel() {
     try {
       const [s, i] = await Promise.all([
         supabase.from('gazette_submissions')
-          .select('id,rubric,locale,title,body,link,event_date,contributor_name,contributor_collective,status,created_at')
+          .select('id,rubric,locale,title,body,title_i18n,body_i18n,i18n_status,link,event_date,contributor_name,contributor_collective,status,created_at')
           .order('created_at', { ascending: false }),
         supabase.from('gazette_issues')
           .select('id,number,slug,masthead_title,cover_date,status,published_at,published_broadcast_at')
@@ -179,9 +179,10 @@ export default function GazetteStaffPanel() {
                     <span className="cat-pill" style={{ fontSize: '.68rem' }}>{t({ id: `federacao.gazeta.rubric.${s.rubric}` })}</span>
                     {s.locale && <span className="cat-pill" style={{ fontSize: '.68rem' }}>{s.locale}</span>}
                     <span className={`cat-pill ${subStatusPill(s.status)}`} style={{ fontSize: '.68rem' }}>{t({ id: `rede.gazeta.status.${s.status}` })}</span>
+                    {s.i18n_status && <span className={`cat-pill ${s.i18n_status === 'done' ? 'ok' : s.i18n_status === 'error' ? 'danger' : 'warn'}`} style={{ fontSize: '.68rem' }}>{t({ id: `rede.gazeta.i18nStatus.${s.i18n_status}` })}</span>}
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: '.98rem' }}>{s.title}</div>
-                  <div style={{ fontSize: '.86rem', color: 'var(--brand-muted)', margin: '4px 0', whiteSpace: 'pre-wrap' }}>{s.body}</div>
+                  <div style={{ fontWeight: 700, fontSize: '.98rem' }}>{(s.title_i18n && s.title_i18n[locale]) || s.title}</div>
+                  <div style={{ fontSize: '.86rem', color: 'var(--brand-muted)', margin: '4px 0', whiteSpace: 'pre-wrap' }}>{(s.body_i18n && s.body_i18n[locale]) || s.body}</div>
                   <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>
                     {[s.contributor_name, s.contributor_collective].filter(Boolean).join(' · ') || '—'}
                     {s.event_date ? ` · ${fmtDate(s.event_date)}` : ''} · {fmtDate(s.created_at)}

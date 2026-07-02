@@ -15,7 +15,7 @@ const LOCALES = ["pt-BR","fr","es","en","it","de","el","ca","eo","nl"];
 const RUBRICS = ["une","reseau","luttes","international","cultures","agenda","autre"];
 
 const CORS = {
-  "Access-Control-Allow-Origin": "https://app.anarbib.org", // origine prod (Codeberg Pages + domaine custom)
+  "Access-Control-Allow-Origin": "https://app.anarbib.org", // origine front (GitHub Pages, domaine app)
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };

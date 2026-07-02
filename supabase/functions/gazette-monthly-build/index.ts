@@ -167,30 +167,43 @@ async function stepTranslate(number: number) {
   return { translated: target, next };
 }
 
-// Page « Réseau » assemblée depuis les contributions acceptées (rubric='reseau').
+// Page « Réseau » assemblée depuis les contributions acceptées (rubric='reseau'),
+// LOCALISÉE par locale grâce aux traductions title_i18n / body_i18n des brèves.
 async function stepAssembleReseau(number: number) {
+  const F: Record<string, { sec: string; intro: string; cta: string; ctp: string }> = {
+    "fr":   { sec:"Vie du réseau",      intro:"Cette page appartient aux membres d'AnarBib — collectifs, bibliothèques, distros et individus.", cta:"▸ Proposez vos brèves",          ctp:"Cette page est la vôtre. Transmettez vos nouvelles via l'application." },
+    "pt-BR":{ sec:"Vida da rede",       intro:"Esta página pertence aos membros da AnarBib — coletivos, bibliotecas, distros e indivíduos.",   cta:"▸ Envie suas notas",            ctp:"Esta página é sua. Envie suas notícias pelo aplicativo." },
+    "es":   { sec:"Vida de la red",     intro:"Esta página pertenece a las y los miembros de AnarBib — colectivos, bibliotecas, distros e individuos.", cta:"▸ Proponed vuestras breves", ctp:"Esta página es la vuestra. Transmitid vuestras noticias a través de la aplicación." },
+    "en":   { sec:"Network life",       intro:"This page belongs to AnarBib's members — collectives, libraries, distros and individuals.",  cta:"▸ Submit your bulletins",       ctp:"This page is yours. Send your news via the app." },
+    "it":   { sec:"Vita della rete",    intro:"Questa pagina appartiene ai membri di AnarBib — collettivi, biblioteche, distro e individui.",  cta:"▸ Proponete le vostre brevi",   ctp:"Questa pagina è la vostra. Trasmettete le vostre notizie tramite l'applicazione." },
+    "de":   { sec:"Leben des Netzwerks",intro:"Diese Seite gehört den Mitgliedern von AnarBib — Kollektiven, Bibliotheken, Distros und Einzelpersonen.", cta:"▸ Schlagt eure Kurzmeldungen vor", ctp:"Diese Seite ist die eure. Übermittelt eure Nachrichten über die Anwendung." },
+    "el":   { sec:"Ζωή του δικτύου",     intro:"Αυτή η σελίδα ανήκει στα μέλη της AnarBib — συλλογικότητες, βιβλιοθήκες, ντίστρο και άτομα.", cta:"▸ Προτείνετε τα σύντομα νέα σας", ctp:"Αυτή η σελίδα είναι δική σας. Μεταδώστε τα νέα σας μέσω της εφαρμογής." },
+    "ca":   { sec:"Vida de la xarxa",   intro:"Aquesta pàgina pertany als membres d'AnarBib — col·lectius, biblioteques, distros i individus.", cta:"▸ Proposeu les vostres breus",  ctp:"Aquesta pàgina és la vostra. Transmeteu les vostres notícies via l'aplicació." },
+    "eo":   { sec:"Vivo de la reto",    intro:"Ĉi tiu paĝo apartenas al la membroj de AnarBib — kolektivoj, bibliotekoj, distroj kaj individuoj.", cta:"▸ Proponu viajn novaĵetojn",   ctp:"Ĉi tiu paĝo estas la via. Transdonu viajn novaĵojn per la aplikaĵo." },
+    "nl":   { sec:"Leven van het netwerk", intro:"Deze pagina behoort toe aan de leden van AnarBib — collectieven, bibliotheken, distro's en individuen.", cta:"▸ Dien jullie korte berichten in", ctp:"Deze pagina is de jouwe. Bezorg ons jullie nieuws via de applicatie." },
+  };
   const { data: subs } = await sb.from("gazette_submissions")
-    .select("title,body,link,locale").eq("rubric", "reseau")
-    .in("status", ["accepted"]).order("created_at", { ascending: true });
-  const blocks = (subs ?? []).map((s) => ({
-    type: "art", h: s.title, p: [s.body], src: s.link ?? undefined,
-  }));
-  blocks.push({
-    type: "callout", h: "▸ Proposez vos brèves",
-    p: ["Cette page appartient aux membres. Envoyez vos nouvelles via l'application ; elles paraîtront ici."],
-  } as any);
-  const reseauPage = { sec: "Vie du réseau", intro:
-    "Cette page appartient aux membres d'AnarBib — collectifs, bibliothèques, distros et individus.", blocks };
-  // Insère la page Réseau en position 2 dans chaque locale présente (texte FR ; traduction fine en relecture).
+    .select("title,body,link,title_i18n,body_i18n").eq("rubric", "reseau")
+    .eq("status", "accepted").order("created_at", { ascending: true });
   const id = await issueId(number);
   const { data: rows } = await sb.from("gazette_issue_locales").select("locale,content").eq("issue_id", id);
   for (const r of rows ?? []) {
+    const loc = r.locale as string;
+    const f = F[loc] ?? F["fr"];
+    const blocks: any[] = (subs ?? []).map((s: any) => ({
+      type: "art",
+      h: (s.title_i18n && s.title_i18n[loc]) || s.title,
+      p: [(s.body_i18n && s.body_i18n[loc]) || s.body],
+      src: s.link ?? undefined,
+    }));
+    blocks.push({ type: "callout", h: f.cta, p: [f.ctp] });
+    const reseauPage = { sec: f.sec, intro: f.intro, blocks };
     const pages = r.content as any[];
     const withReseau = [pages[0], reseauPage, ...pages.slice(1)];
-    await sb.from("gazette_issue_locales").update({ content: withReseau }).eq("issue_id", id).eq("locale", r.locale);
+    await sb.from("gazette_issue_locales").update({ content: withReseau }).eq("issue_id", id).eq("locale", loc);
   }
   await sb.from("gazette_build_jobs").update({ status: "finalizing" }).eq("issue_number", number);
-  return { reseau_blocks: blocks.length };
+  return { reseau_localised: (rows ?? []).length };
 }
 
 async function stepFinalize(number: number) {
