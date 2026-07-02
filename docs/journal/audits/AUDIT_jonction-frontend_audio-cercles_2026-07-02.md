@@ -16,6 +16,8 @@ Les deux « périmètres à compléter » du GLB v16 sont, comme en mai (méga-i
 |---|---|---|---|
 | 6 — Catalogage sonore | « à compléter » | **Jonction tenue** (7/7 RPC `api.audio_*` câblées) | Acter *tenue* |
 | 6 — Cercles de lecture | « à confirmer » | **Jonction tenue** (8 fonctions `fn_circle_*` câblées) | Acter *tenue* |
+| 6 — Profils d'adoption | « Tenue (≈90 %) » | **Câblé complet** (4 axes réels + propose/vote/cancel + exécution cron) | Escompte d'usage, pas de câblage |
+| 6 — PEB + partage numérique | « Tenue (≈90 %) » | **Câblé complet** (workflow PEB + cycle ILL + accès gouverné) | idem ; manque une suite de test CI |
 | 8.2 — 151 FK sans index | chantier dur ouvert | Réel | **136 index créés, déployés, vérifiés** |
 
 ---
@@ -60,6 +62,20 @@ Deux points doctrinaux :
 2. **Fenêtre** : fait *maintenant*, couches civiques quasi vides → `CREATE INDEX` simple, instantané et transactionnel (pas de `CONCURRENTLY`), **avant** l'activation tierce CIRA Marseille (arbitrage GLB ch.11 : instrumenter d'abord pour mesurer proprement l'activation).
 
 ---
+
+## Axe complémentaire — les deux lignes « Tenue (≈90 %) » du chapitre 6
+
+Même méthode appliquée aux deux chantiers que le GLB escompte à ≈90 %. Constat : **aucun manque de câblage** ; le 10 % est un escompte d'usage (flux inter-biblios non encore éprouvés entre deux vraies bibliothèques) — et, côté vérifiable, l'**absence d'un test de cycle de vie automatisé** pour PEB et le partage numérique.
+
+**Profils d'adoption** — 4 axes réels (`catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), profils-types A→D + custom (`src/components/LibraryProfileWizard.jsx`). Cycle **propose → vote → cancel** dans `src/components/TransitionsPanel.jsx` (l.141/186/214), exécution par cron actif `anarbib_execute_profile_proposals`. Couvert par un test SQL existant (`tests/sql/paquetA_profils_tests.sql`, hors allowlist CI car il suppose des données live).
+
+**PEB** — le GLB ne cite que `PebHistorySection` (historique + désarchivage) ; le workflow actif complet est dans `src/pages/biblioteca/BibliotecaPage.jsx` : `fn_peb_search_exemplares`, `create_loan_with_items`, `update_status`, `update_item_status`, `delete/archive_loan`, `authorized`. Retards par cron actif.
+
+**Partage numérique** — cycle intégral `fn_ill_request → respond → start_digitization → transmit (plafond) → view → acknowledge → close` (`src/components/library/LibraryDigitalSharesSection.jsx`). Accès **gouverné** : `view()` → Edge Function `read-ill-shared-asset` → `fn_ill_signed_url` (re-validation à chaque appel).
+
+**i18n** : parité parfaite (10 locales) — digishare 50 clés, PEB 104, profils 193, zéro manquante.
+
+**Ce qui manque pour un « Tenue » sec** : non du code, mais (a) de l'usage réel — PEB et partage numérique sont par nature inter-bibliothèques, câblés mais jamais éprouvés en aller-retour entre deux biblios à la BLMF (une seule active) ; (b) le corrélat vérifiable : profils a un test de cycle de vie, **PEB et ILL n'en ont aucun** dans `ci-suites.txt`. Action : ajouter une suite de cycle de vie PEB+ILL à la CI (fixtures dynamiques deux biblios + partenariat, ROLLBACK, seed-compatible), puis éprouver le tout par l'onboarding CIRA Marseille (ordre d'exécution #6).
 
 ## Recommandations pour la révision du GLB
 
