@@ -46,11 +46,21 @@ begin
 end;
 $fn$;
 
--- 3) pg_cron (extension déjà active sur le projet)
--- Démarrage mensuel : 15 du mois à 06:00 UTC
-select cron.schedule('anarbib-gazette-monthly-start', '0 6 15 * *', $$select public.fn_gazette_build_call('start')$$);
--- Avance par étapes toutes les 5 minutes (no-op si aucun job en cours)
-select cron.schedule('anarbib-gazette-reconcile-tick', '*/5 * * * *', $$select public.fn_gazette_build_call('tick')$$);
+-- 3) pg_cron (extension active en prod/staging ; ABSENTE du sql-tests CI qui
+--    reconstruit le schema sans cron -> garde-fou doctrine : cron.schedule dans
+--    un bloc qui degrade en WARNING si le schema cron est indisponible.
+--    Idempotent par nom (cron.schedule upsert).
+DO $cron$
+BEGIN
+  -- Démarrage mensuel : 15 du mois à 06:00 UTC
+  PERFORM cron.schedule('anarbib-gazette-monthly-start', '0 6 15 * *', $$select public.fn_gazette_build_call('start')$$);
+  -- Avance par étapes toutes les 5 minutes (no-op si aucun job en cours)
+  PERFORM cron.schedule('anarbib-gazette-reconcile-tick', '*/5 * * * *', $$select public.fn_gazette_build_call('tick')$$);
+  RAISE NOTICE 'Jobs cron gazette (start + tick) crees/MAJ.';
+EXCEPTION WHEN OTHERS THEN
+  RAISE WARNING 'Jobs cron gazette (start/tick) NON crees (cron indisponible ici ?) : %. A creer/verifier en prod.', SQLERRM;
+END;
+$cron$;
 
 -- Pour retirer :
 -- select cron.unschedule('anarbib-gazette-monthly-start');

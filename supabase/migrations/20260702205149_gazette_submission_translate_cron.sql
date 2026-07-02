@@ -22,8 +22,16 @@ begin
 end;
 $fn$;
 
-select cron.schedule('anarbib-gazette-translate-submissions', '*/10 * * * *',
-  $$select public.fn_gazette_translate_call()$$);
+-- pg_cron absent du sql-tests CI (reconstruction sans cron) -> garde-fou doctrine.
+DO $cron$
+BEGIN
+  PERFORM cron.schedule('anarbib-gazette-translate-submissions', '*/10 * * * *',
+    $$select public.fn_gazette_translate_call()$$);
+  RAISE NOTICE 'Job cron gazette translate cree/MAJ.';
+EXCEPTION WHEN OTHERS THEN
+  RAISE WARNING 'Job cron gazette translate NON cree (cron indisponible ici ?) : %. A creer/verifier en prod.', SQLERRM;
+END;
+$cron$;
 
 -- Pour retirer :
 -- select cron.unschedule('anarbib-gazette-translate-submissions');
