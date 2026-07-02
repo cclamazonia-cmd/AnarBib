@@ -136,6 +136,23 @@ DECLARE
   -- (table, colonne) des 19 colonnes d'acteur BG2-14
   c record;
 BEGIN
+  -- CORRECTIF FK/PK (20260702) : materialiser d'abord les comptes pseudonymes.
+  -- Sans cela, remplacer user_id par un jeton non materialise viole les FK des
+  -- network_* (17 -> auth.users, 2 -> profiles) et les 6 PK. Meme correctif que
+  -- fn_delete_my_account (migration 20260702081711). Autonome (auth.users +
+  -- profiles explicites), idempotent (ON CONFLICT DO NOTHING), aucune PII.
+  INSERT INTO auth.users (id, email, role, aud, raw_app_meta_data, raw_user_meta_data)
+  SELECT e.pseudonym_token,
+         e.pseudonym_token::text || '@pseudonimizado.anarbib.local',
+         'authenticated', 'authenticated',
+         '{"provider":"pseudonymized","providers":["pseudonymized"]}'::jsonb,
+         '{"first_name":"Membro","last_name":"pseudonimizado"}'::jsonb
+    FROM public.erasure_log e
+  ON CONFLICT (id) DO NOTHING;
+  INSERT INTO profiles (id)
+  SELECT e.pseudonym_token FROM public.erasure_log e
+  ON CONFLICT (id) DO NOTHING;
+
   FOR c IN
     SELECT * FROM (VALUES
       ('network_admin_collective_removal_proposals','proposed_user_id'),
