@@ -17,7 +17,7 @@ Les deux « périmètres à compléter » du GLB v16 sont, comme en mai (méga-i
 | 6 — Catalogage sonore | « à compléter » | **Jonction tenue** (7/7 RPC `api.audio_*` câblées) | Acter *tenue* |
 | 6 — Cercles de lecture | « à confirmer » | **Jonction tenue** (8 fonctions `fn_circle_*` câblées) | Acter *tenue* |
 | 6 — Profils d'adoption | « Tenue (≈90 %) » | **Câblé complet** (4 axes réels + propose/vote/cancel + exécution cron) | Escompte d'usage, pas de câblage |
-| 6 — PEB + partage numérique | « Tenue (≈90 %) » | **Câblé complet** (workflow PEB + cycle ILL + accès gouverné) | idem ; manque une suite de test CI |
+| 6 — PEB + partage numérique | « Tenue (≈90 %) » | **Câblé complet** (workflow PEB + cycle ILL + accès gouverné) | idem ; **suite de test CI ajoutee, 16/16 vert** |
 | 8.2 — 151 FK sans index | chantier dur ouvert | Réel | **136 index créés, déployés, vérifiés** |
 
 ---
@@ -75,7 +75,7 @@ Même méthode appliquée aux deux chantiers que le GLB escompte à ≈90 %. Con
 
 **i18n** : parité parfaite (10 locales) — digishare 50 clés, PEB 104, profils 193, zéro manquante.
 
-**Ce qui manque pour un « Tenue » sec** : non du code, mais (a) de l'usage réel — PEB et partage numérique sont par nature inter-bibliothèques, câblés mais jamais éprouvés en aller-retour entre deux biblios à la BLMF (une seule active) ; (b) le corrélat vérifiable : profils a un test de cycle de vie, **PEB et ILL n'en ont aucun** dans `ci-suites.txt`. Action : ajouter une suite de cycle de vie PEB+ILL à la CI (fixtures dynamiques deux biblios + partenariat, ROLLBACK, seed-compatible), puis éprouver le tout par l'onboarding CIRA Marseille (ordre d'exécution #6).
+**Ce qui manque pour un « Tenue » sec** : non du code, mais (a) de l'usage réel — PEB et partage numérique sont par nature inter-bibliothèques, câblés mais jamais éprouvés en aller-retour entre deux biblios à la BLMF (une seule active) ; (b) le corrélat vérifiable : profils a un test de cycle de vie, **PEB et ILL n'en ont aucun** dans `ci-suites.txt`. Action : ajouter une suite de cycle de vie PEB+ILL à la CI (fixtures dynamiques deux biblios + partenariat, ROLLBACK, seed-compatible), puis éprouver le tout par l'onboarding CIRA Marseille (ordre d'exécution #6). **Fait le 2 juillet** : suite `tests/sql/paquet_peb_ill_lifecycle_tests.sql` (16 assertions PEB + ILL), verte contre la base CI reconstruite et en CI reelle (`sql-tests.yml`, commit `57385a34`). Reste l'epreuve par usage reel (CIRA Marseille). Un trou de repro decouvert au passage — `interlibrary_loan_status_transitions` peuplee en prod mais par aucune migration — est suivi separement.
 
 ## Recommandations pour la révision du GLB
 
