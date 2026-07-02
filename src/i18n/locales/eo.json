@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "La aktivigo estas rezervita al la kataloga kunordigo (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proponita la {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indeksi laŭ temo",
+  "federacao.communs.doc.thesaurusFicedl.title": "La FICEDL-tezaŭro",
+  "federacao.communs.doc.thesaurusFicedl.desc": "La komuna tem-vortprovizo de la federacio: kio ĝi estas, kiel AnarBib konektiĝas al ĝi, kaj kiel uzi ĝin.",
   "federacao.communs.doc.indexarAssunto.desc": "Elekti temon el la tezaŭro, proponi terminon, liberaj ŝlosilvortoj — la metio de la tema indeksado.",
   "catalogacao.subjectGov.editTitle": "Redakti la etikedojn de temo",
   "catalogacao.subjectGov.editHint": "Serĉu temon, poste kompletigu aŭ korektu la etikedojn laŭ lingvo. Sinonimoj kaj variantoj: apartigitaj per komoj.",

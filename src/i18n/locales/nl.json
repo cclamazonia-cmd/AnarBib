@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "Activering is voorbehouden aan de catalogiseringscoördinatie (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Voorgesteld op {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexeren op onderwerp",
+  "federacao.communs.doc.thesaurusFicedl.title": "De FICEDL-thesaurus",
+  "federacao.communs.doc.thesaurusFicedl.desc": "Het gedeelde onderwerpsvocabulaire van de federatie: wat het is, hoe AnarBib erop aansluit en hoe je het gebruikt.",
   "federacao.communs.doc.indexarAssunto.desc": "Een onderwerp uit de thesaurus kiezen, een term voorstellen, vrije trefwoorden — het ambacht van onderwerpsindexering.",
   "catalogacao.subjectGov.editTitle": "Labels van een onderwerp bewerken",
   "catalogacao.subjectGov.editHint": "Zoek een onderwerp, vul daarna de labels per taal aan of corrigeer ze. Synoniemen en varianten: door komma’s gescheiden.",

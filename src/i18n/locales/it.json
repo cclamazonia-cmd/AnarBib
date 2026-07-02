@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "L’attivazione è riservata al coordinamento di catalogazione (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposto il {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indicizzare per soggetto",
+  "federacao.communs.doc.thesaurusFicedl.title": "Il thesaurus della FICEDL",
+  "federacao.communs.doc.thesaurusFicedl.desc": "Il vocabolario per soggetti comune della federazione: cos'è, come AnarBib vi si collega e come usarlo.",
   "federacao.communs.doc.indexarAssunto.desc": "Scegliere un soggetto del tesauro, proporre un termine, parole chiave libere — l’artigianato dell’indicizzazione per soggetto.",
   "catalogacao.subjectGov.editTitle": "Modificare le etichette di un soggetto",
   "catalogacao.subjectGov.editHint": "Cerca un soggetto, poi completa o correggi le etichette per lingua. Sinonimi e varianti: separati da virgole.",

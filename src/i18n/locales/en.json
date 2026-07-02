@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "Activation is reserved for the cataloging coordination (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposed on {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexing by subject",
+  "federacao.communs.doc.thesaurusFicedl.title": "The FICEDL thesaurus",
+  "federacao.communs.doc.thesaurusFicedl.desc": "The federation's shared subject vocabulary: what it is, how AnarBib connects to it, and how to use it.",
   "federacao.communs.doc.indexarAssunto.desc": "Choosing a thesaurus subject, proposing a term, free keywords — the craft of subject indexing.",
   "catalogacao.subjectGov.editTitle": "Edit a subject’s labels",
   "catalogacao.subjectGov.editHint": "Search a subject, then fill or fix the labels per language. Synonyms and variants: comma-separated.",

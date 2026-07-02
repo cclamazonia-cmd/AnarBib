@@ -16,7 +16,7 @@
 Im Katalogisierungsformular gibt es **zwei** Sachfelder nebeneinander —
 und das hat einen Grund:
 
-1. **Assuntos (Normdaten-Matéria)** — der **kontrollierte Thesaurus**. Du suchst
+1. **Schlagwörter (Normdaten)** — der **kontrollierte Thesaurus**. Du suchst
    einen vorhandenen Begriff und fügst ihn hinzu; er wird im gesamten Netzwerk
    geteilt und ist mehrsprachig. Er speist die Facetten und die Themennavigation
    im öffentlichen Katalog.
@@ -31,7 +31,7 @@ und das hat einen Grund:
 
 ## Wie man einen Begriff wählt
 
-- **Suche, bevor du erstellst.** Beginne im Feld « Assuntos » zu tippen: Der
+- **Suche, bevor du erstellst.** Beginne im Feld « Schlagwörter » zu tippen: Der
   Thesaurus schlägt vorhandene Begriffe mit Hierarchie vor (« Anarcocomunismo ·
   Anarquismo »). Vorhandenes zu verwenden vermeidet Dubletten.
 - **Angemessene Granularität.** Weder zu weit (« Politik »), noch zu eng

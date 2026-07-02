@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "L’activació està reservada a la coordinació de catalogació (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposat el {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexar per matèria",
+  "federacao.communs.doc.thesaurusFicedl.title": "El tesaurus de la FICEDL",
+  "federacao.communs.doc.thesaurusFicedl.desc": "El vocabulari de matèries comú de la federació: què és, com AnarBib s'hi connecta i com utilitzar-lo.",
   "federacao.communs.doc.indexarAssunto.desc": "Triar una matèria del tesaurus, proposar un terme, paraules clau lliures — l’ofici de la indexació per matèria.",
   "catalogacao.subjectGov.editTitle": "Editar les etiquetes d’una matèria",
   "catalogacao.subjectGov.editHint": "Cerca una matèria, després completa o corregeix les etiquetes per llengua. Sinònims i variants: separats per comes.",

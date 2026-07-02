@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "A ativação é reservada à coordenação de catalogação (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Proposto em {date}",
   "federacao.communs.doc.indexarAssunto.title": "Indexar por assunto",
+  "federacao.communs.doc.thesaurusFicedl.title": "O tesauro da FICEDL",
+  "federacao.communs.doc.thesaurusFicedl.desc": "O vocabulário de assuntos comum da federação: o que é, como o AnarBib se conecta a ele e como usá-lo.",
   "federacao.communs.doc.indexarAssunto.desc": "Escolher um assunto do tesauro, propor um termo, palavras-chave livres — o artesanato da indexação por assunto.",
   "catalogacao.subjectGov.editTitle": "Editar os rótulos de um assunto",
   "catalogacao.subjectGov.editHint": "Busca um assunto, depois completa ou corrige os rótulos por língua. Sinônimos e variantes: separados por vírgulas.",

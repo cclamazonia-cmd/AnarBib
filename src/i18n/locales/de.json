@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "Die Freischaltung ist der Katalogisierungskoordination vorbehalten (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Vorgeschlagen am {date}",
   "federacao.communs.doc.indexarAssunto.title": "Nach Sachthema erschließen",
+  "federacao.communs.doc.thesaurusFicedl.title": "Der FICEDL-Thesaurus",
+  "federacao.communs.doc.thesaurusFicedl.desc": "Das gemeinsame Sacherschließungs-Vokabular der Föderation: was er ist, wie AnarBib ihn anbindet und wie man ihn nutzt.",
   "federacao.communs.doc.indexarAssunto.desc": "Ein Sachthema aus dem Thesaurus wählen, einen Begriff vorschlagen, freie Schlagwörter — das Handwerk der Sacherschließung.",
   "catalogacao.subjectGov.editTitle": "Bezeichnungen eines Sachthemas bearbeiten",
   "catalogacao.subjectGov.editHint": "Suche ein Sachthema, dann ergänze oder korrigiere die Bezeichnungen je Sprache. Synonyme und Varianten: durch Kommas getrennt.",

@@ -100,6 +100,18 @@ import giIt   from '../../../docs/guides/guide-indexar-assunto-it.md?raw';
 import giNl   from '../../../docs/guides/guide-indexar-assunto-nl.md?raw';
 import giPtBR from '../../../docs/guides/guide-indexar-assunto-pt-BR.md?raw';
 
+// ── Guide « Le thésaurus FICEDL » — 10 locales ──────────────────────────────
+import gtfCa   from '../../../docs/guides/guide-thesaurus-ficedl-ca.md?raw';
+import gtfDe   from '../../../docs/guides/guide-thesaurus-ficedl-de.md?raw';
+import gtfEl   from '../../../docs/guides/guide-thesaurus-ficedl-el.md?raw';
+import gtfEn   from '../../../docs/guides/guide-thesaurus-ficedl-en.md?raw';
+import gtfEo   from '../../../docs/guides/guide-thesaurus-ficedl-eo.md?raw';
+import gtfEs   from '../../../docs/guides/guide-thesaurus-ficedl-es.md?raw';
+import gtfFr   from '../../../docs/guides/guide-thesaurus-ficedl-fr.md?raw';
+import gtfIt   from '../../../docs/guides/guide-thesaurus-ficedl-it.md?raw';
+import gtfNl   from '../../../docs/guides/guide-thesaurus-ficedl-nl.md?raw';
+import gtfPtBR from '../../../docs/guides/guide-thesaurus-ficedl-pt-BR.md?raw';
+
 // ── Guide de gouvernance — 10 locales (déjà existant) ───────────────────────
 import gouvCa   from '../../../docs/governance/guide-gouvernance-ca.md?raw';
 import gouvDe   from '../../../docs/governance/guide-gouvernance-de.md?raw';
@@ -145,6 +157,11 @@ const GOUVERNANCE_BY_LOCALE = {
 const GUIDE_INDEXAR_BY_LOCALE = {
   ca: giCa, de: giDe, el: giEl, en: giEn, eo: giEo,
   es: giEs, fr: giFr, it: giIt, nl: giNl, 'pt-BR': giPtBR,
+};
+
+const THESAURUS_FICEDL_BY_LOCALE = {
+  ca: gtfCa, de: gtfDe, el: gtfEl, en: gtfEn, eo: gtfEo,
+  es: gtfEs, fr: gtfFr, it: gtfIt, nl: gtfNl, 'pt-BR': gtfPtBR,
 };
 
 const GUIDE_SCAN_BY_LOCALE = {
@@ -200,6 +217,15 @@ export const COMMUNS_DOCS = [
     titleKey: 'federacao.communs.doc.indexarAssunto.title',
     descKey: 'federacao.communs.doc.indexarAssunto.desc',
     byLocale: GUIDE_INDEXAR_BY_LOCALE,
+  },
+  {
+    // Le vocabulaire matière commun (thésaurus FICEDL) : ce qu'il est, à quelles
+    // conditions AnarBib s'y branche, comment s'en servir. 10 locales (source fr
+    // validée + 9 traductions par communauté de langue). Adossé au guide-indexar.
+    id: 'thesaurus-ficedl', cat: 'vademecums',
+    titleKey: 'federacao.communs.doc.thesaurusFicedl.title',
+    descKey: 'federacao.communs.doc.thesaurusFicedl.desc',
+    byLocale: THESAURUS_FICEDL_BY_LOCALE,
   },
   {
     id: 'cadrage-entraide', cat: 'cadrages',

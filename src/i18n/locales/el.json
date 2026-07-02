@@ -5089,6 +5089,8 @@
   "catalogacao.subjectGov.coordOnly": "Η ενεργοποίηση προορίζεται για τον συντονισμό καταλογογράφησης (coordenador / administrador).",
   "catalogacao.subjectGov.proposedAt": "Προτάθηκε στις {date}",
   "federacao.communs.doc.indexarAssunto.title": "Ευρετηρίαση κατά θέμα",
+  "federacao.communs.doc.thesaurusFicedl.title": "Ο θησαυρός της FICEDL",
+  "federacao.communs.doc.thesaurusFicedl.desc": "Το κοινό λεξιλόγιο θεμάτων της ομοσπονδίας: τι είναι, πώς συνδέεται το AnarBib και πώς να το χρησιμοποιείτε.",
   "federacao.communs.doc.indexarAssunto.desc": "Επιλογή θέματος από τον θησαυρό, πρόταση όρου, ελεύθερες λέξεις-κλειδιά — η τέχνη της θεματικής ευρετηρίασης.",
   "catalogacao.subjectGov.editTitle": "Επεξεργασία ετικετών ενός θέματος",
   "catalogacao.subjectGov.editHint": "Αναζήτησε ένα θέμα, μετά συμπλήρωσε ή διόρθωσε τις ετικέτες ανά γλώσσα. Συνώνυμα και παραλλαγές: χωρισμένα με κόμματα.",
