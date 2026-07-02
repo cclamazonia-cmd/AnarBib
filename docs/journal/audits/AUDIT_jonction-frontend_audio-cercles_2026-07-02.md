@@ -30,14 +30,14 @@ Backend mûr (migrations `20260621162441` → `20260622120319`), exposé en sch�
 
 Les **7** RPC `api.audio_*` publiées sont appelées. Le GLB a conclu « à compléter » sur l'absence de *dossier* `audio/` — mais les fichiers vivent dans `catalogacao/` (l'audio est du catalogage, pas un domaine séparé).
 
-Réserve mineure (non bloquante) : léger écart de comptage i18n `audio` (16 vs 17 selon la locale) — vraisemblablement une **valeur** traduite, pas une **clé** manquante (la CI impose la parité des clés). À confirmer d'un coup d'œil si on y touche.
+i18n `audio` : **parite confirmee** -- 96 cles audio identiques dans les 10 locales, zero manquante. L'ecart de comptage brut (16 vs 17) venait des **valeurs** : el (grec) et eo (esperanto) traduisent le mot et ne contiennent aucune valeur latine "audio". Rien a faire.
 
 ## Axe 2 — Cercles de lecture : jonction tenue
 
 Backend déployé et vérifié dès le 12/06 (migrations `20260612075752` FED-1 + `20260612131910`), documenté dans `docs/journal/HANDOFF-circulos-frontend-2026-06-12.md` (le frontend y était « le reste »). Ce reste est **fait** : `src/pages/federacao/FederacaoPage.jsx` contient un `CirculosTab` complet.
 
 - Toutes les fonctions `api.fn_circle_*` sont câblées : `create`, `request_join`, `leave`, `object`, `set_dormancy`, `member_count`, `message`.
-- `fn_circle_resolve_due` (résolution anti-blackball des adhésions échues) est **appelée paresseusement au chargement** (l.94) — la résolution fonctionne sans planificateur, exactement comme le prévoit le commentaire de la fonction (« appelée au chargement de la page et/ou par planificateur »). *Note : aucun `cron.schedule` ne la double ; l'appel lazy suffit tant que la page est visitée. Si l'usage devenait rare, un cron serait un filet utile — non urgent.*
+- `fn_circle_resolve_due` (résolution anti-blackball des adhésions échues) est **appelée paresseusement au chargement** (l.94) — l'appel lazy résout déjà à chaque visite, exactement comme le prévoit le commentaire de la fonction (« appelée au chargement de la page et/ou par planificateur »). **Filet confirme (ceinture + bretelles)** : l'appel lazy est double par un cron pg_cron **actif** `anarbib-circle-resolve-due-daily` (`30 3 * * *`), present dans le baseline `20260510000000` (jobid 29 en prod, verifie le 2 juillet) et fratrie des crons `authority-resolve-due` / `oai-resolve-expired-votes` -- la resolution tient meme si la page n'est jamais visitee.
 - i18n `circulos` = **48 clés dans les 10 locales** (parité parfaite).
 - `FederacaoPage.jsx` l.42 : `circulos` est explicitement dans le `Set` WIRED. L'onglet est en `STAFF_ONLY_TABS` — **décision produit** (la face fédération est ouverte aux membres rattachés, cf. handoff §0), pas un manque.
 
