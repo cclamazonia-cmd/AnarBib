@@ -226,8 +226,17 @@ async function upsertLocale(number: number, locale: string, content: unknown, ts
   const masthead = locale === "fr"
     ? { left: "Réseau libre — autogéré", mid: `Brouillon · n°${number}`, right: "Diffusion libre" }
     : { left: "", mid: `Brouillon · n°${number}`, right: "" };
+  // Le modèle renvoie parfois {"content":[…]} (ou {"pages":[…]}) au lieu du tableau
+  // nu de pages attendu par TOUS les consommateurs (GazetteTab public, aperçu
+  // GazetteStaffPanel, et stepAssembleReseau qui fait content.slice()). On dé-emballe
+  // pour toujours stocker content = tableau de pages.
+  const co = content as Record<string, unknown> | null;
+  const pages = Array.isArray(content) ? content
+    : (co && Array.isArray(co.content)) ? co.content
+    : (co && Array.isArray(co.pages)) ? co.pages
+    : content;
   await sb.from("gazette_issue_locales").upsert(
-    { issue_id: id, locale, tagline: "La gazette du réseau", masthead, content,
+    { issue_id: id, locale, tagline: "La gazette du réseau", masthead, content: pages,
       translation_status: tstatus, source_locale: src },
     { onConflict: "issue_id,locale" },
   );
