@@ -1,6 +1,19 @@
 # CADRAGE — Performance du matching d'import (à traiter à froid)
 
-> Statut : **CADRAGE** (analyse + plan, pas d'implémentation). Date : 2026-06-11.
+> **CLÔTURE 2026-07-03 — ✅ A+B+C livrés & vérifiés, band-aid borné.**
+> Vérifié en prod : les 3 fonctions de normalisation ciblées sont `IMMUTABLE` (A) ;
+> `fn_match_partner_catalog_row` ne contient plus aucun `to_jsonb(b)->>` et son md5
+> vaut `0d2625ad117dc22affd34908015dd605` = la réécriture neutre attendue (B) ; les
+> **6 index d'expression** existent sur `books`/`book_drafts` (C). `EXPLAIN ANALYZE`
+> confirme l'**Index Scan** (`idx_books_isbn_norm`, `idx_books_tit_aut_norm`) en
+> **~0,08 ms** (vs seq scan O(2673)). Le band-aid `statement_timeout=0` a été
+> **remplacé par une borne 120s** (migration `20260703182035`) : plus sûr, ~40× de
+> marge sur un import de 2500 lignes. **Reste optionnel** : volet D (chunking) si des
+> imports de dizaines de milliers de lignes deviennent un besoin réel ; et une
+> validation « grandeur nature » sur un vrai `.ris` ~2500 (non rejouable en session
+> outillée ici — la preuve Index Scan + arithmétique tient lieu de garantie).
+>
+> Statut d'origine : **CADRAGE** (analyse + plan, pas d'implémentation). Date : 2026-06-11.
 > Session : Unification partenaire ↔ source d'import. Décision : Xavier (à froid).
 > Déclencheur : le test d'import des 301 fiches CIRA a fait **timeout sur le
 > matching** (10 s). Band-aid posé (cf. §4), vrai fix ci-dessous.
