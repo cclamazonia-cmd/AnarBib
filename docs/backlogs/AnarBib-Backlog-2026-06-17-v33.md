@@ -163,6 +163,14 @@ Le v32 listait ces items « ouverts ». **Vérifié ce 16/06 — la plupart sont
 ### 2.2 — Cotisations  ↩︎ (report v32)
 - **#25** cron expiration (7j/1j/J) ouvert, **#33** test blocage, **#36** CIRA Marseille, **#22** COALESCE trivial.
 
+> **Qualification 2026-07-03 (vérifiée prod + repo).**
+> - **#25 ✅ FAIT** — cron `anarbib-membership-expiry-daily` **actif**, exécute `public.fn_cron_notify_membership_expiry()` qui porte les paliers **7 / 1 / 0 jours** ; dédup via `membership_expiry_notifications`. *(La note v32 « pas de cron expiration » est périmée.)*
+> - **#33 ✅ FAIT** — suite `tests/sql/paquet_cotisation_tests.sql` (blocage `fn_is_loan_blocked_by_dues`, verdict `no_active_membership`, gate `fn_enforce_membership_circulation_gate` + codes `error.membership.{not_active,restricted,dues}`) **présente et en CI** (`ci-suites.txt`). Enforcement en base via la migration `enforce_active_membership_circulation`.
+> - **#36 🟡 OUVERT — non technique.** Le moteur est prouvé sur BLMF (seule biblio avec une `library_membership_rule`). « Activer les cotisations CIRA Marseille » = **insérer une règle + décision de gouvernance locale** (le CIRA facture-t-il des cotisations, à quel tarif ? — centre de recherche, régime associatif/dons possible). **Attend une décision du CIRA**, pas du code.
+> - **#22** COALESCE trivial — cleanup 1 ligne, à repérer via son pointeur v32.
+>
+> → **#COTISATIONS : moteur + cron + tests LIVRÉS ; seul reste la config/décision CIRA (#36).**
+
 ### 2.3 — Sécurité / Bologne  ↩︎ (report v32, **à re-sonder**)
 - **#BG4** advisors (non re-sondés ici), **#BG2** sauvegardes, **#BG3** journalisation, **STR-2..5**, **#4**, **#119**, **#79** RBAC catalogage. Squash migrations (non urgent).
 
