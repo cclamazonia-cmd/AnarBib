@@ -88,21 +88,32 @@ dépendance S3 externe. La sauvegarde du Storage (#BG2) copie ces fichiers physi
 
 ## 3. Ce qui reste explicitement OUVERT (dépend des camarades)
 
-Depuis la réouverture D2/D3/D6 (03/07), trois inconnues dépendent de HF, toutes dans
-les questions du §4 :
-1. **Le VPS peut-il faire tourner la pile A ?** (RAM — Q1, décisif A vs B).
-2. **HF fait-il du mail réputé qu'on peut relayer ?** (Q8, décide D2).
-3. **HF peut-il servir le front statique ?** (Q7, quasi acquis, confirme D3).
-Le socle technique (D1 stratégie A, D4 auth, D5 storage) reste tranché.
+Depuis la réouverture D2/D3/D6 (03/07) **et la relecture du fil HF (29-30/06)** :
+1. **HF propose-t-il de l'hébergement Docker tout court ?** — l'accès actuel n'est
+   qu'un **espace de sauvegarde SFTP chroot, sans shell** (BG2). Faire tourner la pile
+   A demande une **VM/conteneur avec shell + Docker + RAM** = un service *différent*
+   non encore confirmé. **C'est le vrai make-or-break, AVANT la RAM.** Si HF ne fait
+   pas ça → **VPS ailleurs**, HF reste backup (+ mail). (Q1 du message.)
+2. **HF est mail-capable** (webmail + SMTP `mail.herbesfolles.org` vus dans le fil) →
+   reste à valider l'envoi *depuis `@anarbib.org`* + la délivrabilité (Q5 message, D2).
+3. **HF peut-il servir le front statique ?** (quasi acquis via leur Caddy, confirme D3).
+Acquis côté HF : **clé SSH backup déjà transmise** (`…anarbib-backup`) ; **don déjà
+évoqué**. Socle technique (D1 stratégie A, D4 auth, D5 storage) reste tranché.
+
+> ⚠️ **Sécurité** : des mots de passe SFTP ont circulé **en clair** dans le fil mail
+> (29/06). À **retirer/rotater** une fois l'auth par clé + désactivation du mot de
+> passe confirmées côté serveur (déjà demandé à HF).
 
 ## 4. Questions chiffrées à envoyer à Herbes Folles
 
 Formulées pour des réponses **oui/non/valeur**, avec le besoin réel en regard.
 
-- **Q1 — RAM.** La pile Supabase self-hosted (Postgres + GoTrue + PostgREST +
-  Storage + Kong + Realtime + Edge Runtime + Studio + imgproxy + meta) demande
-  **≥ 4 Go de RAM réalistes, 8 Go confortables**. Combien de RAM le VPS peut-il
-  allouer durablement à AnarBib ? *(C'est LE point qui décide A vs B.)*
+- **Q1 — Hébergement Docker + RAM (décisif, avant tout).** Au-delà de l'espace de
+  sauvegarde SFTP actuel, HF fournit-il un endroit où **faire tourner une pile Docker**
+  (VM/conteneur avec **shell + Docker/Compose**) ? Si oui, la pile Supabase
+  self-hosted (≈ 10 conteneurs) demande **≥ 4 Go de RAM, 8 Go confortables** — combien
+  peut-on allouer durablement ? *(Non → VPS ailleurs, HF reste backup/mail. Oui + RAM
+  suffisante → stratégie A confirmée.)*
 - **Q2 — Docker.** Docker + Docker Compose sont-ils disponibles / autorisés sur la
   machine ?
 - **Q3 — Postgres 17.** Peut-on faire tourner **Postgres majeure 17** (via l'image
@@ -111,19 +122,21 @@ Formulées pour des réponses **oui/non/valeur**, avec le besoin réel en regard
 - **Q4 — Disque.** Les données sont petites (**base ~102 Mo + Storage ~430 Mo**),
   mais **les images Docker + les volumes + la marge de sauvegardes** pèsent
   plusieurs Go. Peut-on compter sur **≥ 20 Go** dédiés ?
-- **Q5 — Accès.** Accès **SSH par clé** (pas mot de passe) : identifiant, port,
-  ajout de notre clé publique ? *(Même modèle que la clé BG2 déjà en place.)*
+- **Q5 — Accès. ✅ RÉGLÉ pour le backup** (clé `…anarbib-backup` transmise le 30/06,
+  auth par clé + désactivation du mot de passe demandées). Pour l'*hébergement*, un
+  **accès shell** est nécessaire (couvert par Q1). ⚠️ Retirer/rotater les mots de
+  passe SFTP passés en clair dans le fil, une fois la clé confirmée.
 - **Q6 — Exploitation durable.** **Qui**, côté structure, lance/surveille la pile
   et **teste la restauration chaque mois** ? *(Le mémo §7 est net : le facteur
   limitant est là, pas dans le disque.)* → adossé à la contribution ~50 €/mois (D6).
 - **Q7 — Frontend statique (D3).** Peut-on **servir un site statique** (build
   React/Vite, quelques Mo) depuis votre reverse-proxy, avec un domaine + TLS pour
   `app.anarbib.org` ? *(Remplacerait Codeberg Pages, jugé instable.)*
-- **Q8 — E-mail (D2).** Faites-vous tourner un **serveur mail / relais SMTP** qu'on
-  pourrait utiliser pour envoyer les mails d'AnarBib (depuis `@anarbib.org`) ? Si
-  oui, quelle **réputation d'envoi** (IP déjà chaude, PTR/reverse-DNS, SPF/DKIM/DMARC
-  gérables) ? *(Si non : on ne vous demande pas de monter un SMTP à froid — on
-  prendra un transactionnel européen. La délivrabilité prime.)*
+- **Q8 — E-mail (D2). HF est mail-capable** (webmail + SMTP `mail.herbesfolles.org`
+  vus dans le fil). Reste à valider : peut-on **envoyer depuis `@anarbib.org` via leur
+  serveur** (compte/relais authentifié), et quelle **réputation d'envoi** (IP chaude,
+  PTR/reverse-DNS, SPF/DKIM/DMARC) pour ne pas spammer ? *(Insuffisant → transactionnel
+  européen — Scaleway TEM / Infomaniak — ou Autistici. La délivrabilité prime.)*
 
 ## 5. Séquence une fois le VPS confirmé (rappel, non exécutable ici)
 
