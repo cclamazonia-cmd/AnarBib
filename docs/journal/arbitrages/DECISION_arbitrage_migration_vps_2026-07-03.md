@@ -39,18 +39,35 @@ sur la partie la plus fragile.
 **Condition de bascule vers B** : uniquement si le VPS ne peut pas faire tourner la
 pile Docker Supabase (RAM insuffisante, cf. §4-Q3) **ou** refus politique de Docker.
 
-### D2 — E-mails : **rester sur Resend**. ✅ Décidé.
-La migration Brevo → Resend est faite (R.6, 05/06), la délivrabilité est résolue.
-Garder Resend évite tout le fardeau SMTP interne (SPF/DKIM/DMARC gérés côté Resend,
-pas de PTR/réputation IP à tenir). **Rien à changer côté mail** lors de la bascule.
-**Condition de bascule vers SMTP interne** : seulement si une raison politique
-explicite l'exige (souveraineté mail). À défaut, non.
+### D2 — E-mails. 🔄 **ROUVERT le 2026-07-03** (était : « rester sur Resend »).
+Motifs de réouverture : (1) **coût** — Resend gratuit plafonne à **100 mails/jour**,
+qu'on dépassera vite ; (2) **souveraineté** — Resend est **états-unien**. On veut donc
+sortir de Resend. **MAIS** le facteur décisif est la **délivrabilité** :
+l'e-mail transactionnel (surtout les **réinitialisations de mot de passe**) doit
+arriver, pas finir en spam. Un SMTP sur **IP fraîche** = mauvaise réputation, rejets
+Gmail/Outlook, besoin PTR + SPF/DKIM/DMARC + warm-up + surveillance blocklists.
+→ **Question à trancher AVEC Herbes Folles** (cf. §4-Q8) : *font-ils déjà tourner un
+serveur mail réputé qu'on pourrait relayer ?*
+- **Si oui** → mail chez HF (souveraineté + délivrabilité). Préféré.
+- **Si non** → **ne pas** leur faire monter un SMTP à froid ; repli sur un
+  **transactionnel européen** (Scaleway TEM — FR ; Infomaniak — CH), voire
+  Autistici (déjà utilisé pour la visio) si pertinent. Resend gardé seulement en
+  transition/dernier recours.
 
-### D3 — Frontend : **rester sur Codeberg Pages**. ✅ Décidé.
-Statique, déjà en place, réduit la surface du VPS (pas de reverse-proxy front à
-maintenir). Il se contente de pointer vers la nouvelle API. Seuls `VITE_SUPABASE_URL`
-et `VITE_SUPABASE_ANON_KEY` changent, puis rebuild + redéploiement Pages.
-**Condition de bascule vers hébergement VPS** : aucune prévue au lancement.
+### D3 — Frontend. 🔄 **ROUVERT le 2026-07-03** — penche vers **Herbes Folles**.
+(était : « rester sur Codeberg Pages ».) Motif : **Codeberg s'est révélé instable**
+sur la durée. Le front est un **build statique** (quelques Mo) → le servir depuis le
+reverse-proxy du VPS (Caddy/Traefik, déjà nécessaire pour l'API) est **quasi gratuit
+en ressources et sans risque** (rien à voir avec l'e-mail). Ça supprime la dépendance
+Codeberg et consolide tout au même endroit. → **Recommandé : héberger le front chez
+HF** ; seul ajout = un domaine + TLS pour `app.anarbib.org` (qu'on a de toute façon
+pour l'API). Question posée à HF (§4-Q7).
+
+### D6 — Partenariat financé (~50 €/mois). 🆕 **Piste ouverte le 2026-07-03**.
+Proposer une **contribution mensuelle (~50 €)** à Herbes Folles pour héberger
+l'ensemble. Ça soutient le collectif **et** ça renforce directement la réponse à la
+préoccupation Q6 (**qui maintient/teste la restauration dans la durée ?**) : un
+hébergement rémunéré est plus soutenable qu'un bénévolat pur.
 
 ### D4 — Auth / JWT : **migrer `auth.users` fidèlement + ROTATER le secret JWT**. ✅ Décidé.
 - Les **hash de mots de passe** vivent dans `auth.users` → on migre ce schéma tel
@@ -71,9 +88,12 @@ dépendance S3 externe. La sauvegarde du Storage (#BG2) copie ces fichiers physi
 
 ## 3. Ce qui reste explicitement OUVERT (dépend des camarades)
 
-Une seule inconnue structurante : **le VPS peut-il faire tourner la pile A ?**
-Tout le reste (D1–D5) est tranché. La réponse tient dans les 6 questions chiffrées
-du §4, prêtes à envoyer.
+Depuis la réouverture D2/D3/D6 (03/07), trois inconnues dépendent de HF, toutes dans
+les questions du §4 :
+1. **Le VPS peut-il faire tourner la pile A ?** (RAM — Q1, décisif A vs B).
+2. **HF fait-il du mail réputé qu'on peut relayer ?** (Q8, décide D2).
+3. **HF peut-il servir le front statique ?** (Q7, quasi acquis, confirme D3).
+Le socle technique (D1 stratégie A, D4 auth, D5 storage) reste tranché.
 
 ## 4. Questions chiffrées à envoyer à Herbes Folles
 
@@ -95,7 +115,15 @@ Formulées pour des réponses **oui/non/valeur**, avec le besoin réel en regard
   ajout de notre clé publique ? *(Même modèle que la clé BG2 déjà en place.)*
 - **Q6 — Exploitation durable.** **Qui**, côté structure, lance/surveille la pile
   et **teste la restauration chaque mois** ? *(Le mémo §7 est net : le facteur
-  limitant est là, pas dans le disque.)*
+  limitant est là, pas dans le disque.)* → adossé à la contribution ~50 €/mois (D6).
+- **Q7 — Frontend statique (D3).** Peut-on **servir un site statique** (build
+  React/Vite, quelques Mo) depuis votre reverse-proxy, avec un domaine + TLS pour
+  `app.anarbib.org` ? *(Remplacerait Codeberg Pages, jugé instable.)*
+- **Q8 — E-mail (D2).** Faites-vous tourner un **serveur mail / relais SMTP** qu'on
+  pourrait utiliser pour envoyer les mails d'AnarBib (depuis `@anarbib.org`) ? Si
+  oui, quelle **réputation d'envoi** (IP déjà chaude, PTR/reverse-DNS, SPF/DKIM/DMARC
+  gérables) ? *(Si non : on ne vous demande pas de monter un SMTP à froid — on
+  prendra un transactionnel européen. La délivrabilité prime.)*
 
 ## 5. Séquence une fois le VPS confirmé (rappel, non exécutable ici)
 
