@@ -64,6 +64,36 @@ L'accès se fait exclusivement via des fonctions `SECURITY DEFINER` (RPC `api.*`
 le front ne les attaque jamais en direct. L'« implicite » de l'advisor est désormais
 explicite et tracé.
 
+## MàJ 2026-07-03 — matérialisation d'un deny explicite sur le sous-ensemble PII
+
+Décision de rendre le deny **matériel** (objet `POLICY`) sur les **15 tables
+PII / secret / données personnelles** du lot, sans changer le comportement.
+Migration `20260703125440_rls_explicit_deny_pii_tables.sql`.
+
+- **Ce qui change** : chaque table porte désormais une policy
+  `deny_direct_access_secdef_only` **RESTRICTIVE** `FOR ALL TO anon, authenticated
+  USING (false) WITH CHECK (false)`, plus un `REVOKE ALL … FROM anon, authenticated`.
+- **Ce qui NE change pas** : `service_role` (BYPASSRLS) et les fonctions
+  `SECURITY DEFINER` (exécutées comme owner) contournent la RLS → tous les chemins
+  d'accès réels (RPC `api.*` / `fn_*`, Edge Functions) sont intacts. `anon` /
+  `authenticated` restent en deny-all, exactement comme avant.
+- **Pourquoi** : (1) à l'épreuve d'un futur ajout accidentel de policy permissive
+  (le RESTRICTIVE `USING(false)` bloque quoi qu'il arrive) ; (2) fait taire
+  l'advisor `0008_rls_enabled_no_policy` sur ces tables sensibles (le bruit résiduel
+  ne subsiste que sur les tables non-PII : staging import, ingest partenaire,
+  theming, `author_name_aliases`).
+
+Tables concernées (15) : `auth_rate_limits`, `authority_proposal_notification_outbox`,
+`cartography_entries`, `cartography_submission_notification_outbox`,
+`cartography_submissions`, `gazette_submission_notification_outbox`,
+`interlibrary_loan_notification_events`, `lettre_consent_tokens`,
+`lettre_notification_outbox`, `library_email_identity`, `library_request_claims`,
+`library_request_notification_events`, `loan_midpoint_message_log`,
+`membership_expiry_notifications`, `user_history_retention_preferences`.
+
+Les tables Scénario C **non-PII** restent volontairement sans policy (deny-all
+implicite + `REVOKE` + `COMMENT`), conformément à la règle de garde ci-dessous.
+
 ### Règle de garde (pour les prochaines tables)
 
 Toute nouvelle table `public` doit, à sa migration, **soit** porter au moins une
