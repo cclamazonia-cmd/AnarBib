@@ -507,6 +507,31 @@ export default function BibliotecaPage() {
     finally { setSaving(false); }
   }
 
+  // ── Retrait d'un règlement périmé ────────────────────────
+  // Archivage réversible par défaut ; suppression dure réservée aux brouillons
+  // jamais publiés (côté RPC). Jamais le règlement actif ni un doc référencé.
+  async function removeRegimento(doc) {
+    const isDraft = doc.publication_status === 'draft_only' && !doc.is_active;
+    const label = doc.version_label || String(doc.id);
+    const confirmMsg = isDraft
+      ? t({ id: 'biblioteca.regulation.removeConfirmDelete' }, { label })
+      : t({ id: 'biblioteca.regulation.removeConfirmArchive' }, { label });
+    if (!window.confirm(confirmMsg)) return;
+    setSaving(true); setMsg({ text: '', kind: '' });
+    try {
+      const { data, error } = await supabase.rpc('remove_library_regulation_document', { p_document_id: doc.id });
+      if (error) throw error;
+      if (data?.action === 'deleted' && Array.isArray(data.storage_paths) && data.storage_paths.length) {
+        // Suppression best-effort du PDF (le fichier peut déjà être absent).
+        try { await supabase.storage.from(data.storage_bucket || 'library-regimentos-public').remove(data.storage_paths); } catch { /* no-op */ }
+      }
+      setMsg({ text: t({ id: data?.action === 'deleted' ? 'biblioteca.regulation.deleted' : 'biblioteca.regulation.archived' }), kind: 'ok' });
+      await loadAll();
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setSaving(false); }
+  }
+
   // ── Create task ─────────────────────────────────────────
   async function createTask() {
     if (!newTask.title.trim()) { setMsg({ text: t({ id: 'biblioteca.tasks.titleRequired' }), kind: 'error' }); return; }
@@ -1628,8 +1653,8 @@ export default function BibliotecaPage() {
           <RegimeStateBox libraryId={libraryId} regulationDocs={regDocs} />
           <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.regulation.docs' })}</h4>
-            {regDocs.map(doc => (
-              <div key={doc.id} style={{ padding:'8px 10px', borderRadius:6, background:'rgba(0,0,0,.15)', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            {regDocs.filter(doc => !doc.archived_at).map(doc => (
+              <div key={doc.id} style={{ padding:'8px 10px', borderRadius:6, background:'rgba(0,0,0,.15)', marginBottom:6, display:'flex', justifyContent:'space-between', alignItems:'center', gap:8 }}>
                 <div>
                   <div style={{ fontSize:'.9rem', fontWeight:600 }}>{doc.version_label||t({ id: 'biblioteca.regulation.versionFallback' }, { id: doc.id })}</div>
                   <div style={{ fontSize:'.82rem', color:'var(--brand-muted)' }}>
@@ -1639,7 +1664,17 @@ export default function BibliotecaPage() {
                     {doc.is_active && <> · <span className="cat-pill ok" style={{ fontSize:'.65rem' }}>{t({ id: 'common.active' })}</span></>}
                   </div>
                 </div>
-                {doc.storage_path_public && <a href={`${PROJECT_URL}/storage/v1/object/public/${doc.storage_bucket||'library-regimentos-public'}/${doc.storage_path_public}`} target="_blank" rel="noopener" className="cat-btn secondary" style={{ fontSize:'.82rem', padding:'5px 12px' }}>{t({ id: 'biblioteca.regulation.openPdf' })}</a>}
+                <div style={{ display:'flex', gap:8, alignItems:'center', flexShrink:0 }}>
+                  {doc.storage_path_public && <a href={`${PROJECT_URL}/storage/v1/object/public/${doc.storage_bucket||'library-regimentos-public'}/${doc.storage_path_public}`} target="_blank" rel="noopener" className="cat-btn secondary" style={{ fontSize:'.82rem', padding:'5px 12px' }}>{t({ id: 'biblioteca.regulation.openPdf' })}</a>}
+                  {isCoord && !doc.is_active && (
+                    <button type="button" className="cat-btn secondary" disabled={saving}
+                      onClick={() => removeRegimento(doc)}
+                      title={t({ id: 'biblioteca.regulation.removeHint' })}
+                      style={{ fontSize:'.82rem', padding:'5px 12px', color:'var(--danger, #e06666)' }}>
+                      {t({ id: 'biblioteca.regulation.remove' })}
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
             <div style={{ marginTop:12, display:'flex', gap:8, alignItems:'center', flexWrap:'wrap' }}>

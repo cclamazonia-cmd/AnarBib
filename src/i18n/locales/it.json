@@ -5631,5 +5631,11 @@
   "deposit.panel.standingTitle": "Cauzione permanente",
   "panel.apiError.standing_deposit_already_held": "Questa persona ha già una cauzione permanente in questa biblioteca.",
   "panel.apiError.standing_deposit_has_open_loans": "Rimborso impossibile: ci sono ancora prestiti in corso. Rimborsa la cauzione permanente a riconsegna completata.",
-  "federacao.assembleias.firstPoints.q9": "Vocabolario per soggetto: fino a che punto appoggiarsi al thesaurus condiviso FICEDL? (da decidere con la FICEDL)"
+  "federacao.assembleias.firstPoints.q9": "Vocabolario per soggetto: fino a che punto appoggiarsi al thesaurus condiviso FICEDL? (da decidere con la FICEDL)",
+  "biblioteca.regulation.remove": "Rimuovi",
+  "biblioteca.regulation.removeHint": "Rimuovi questo regolamento dall'elenco (archiviazione reversibile; il regolamento attivo non può essere rimosso)",
+  "biblioteca.regulation.removeConfirmArchive": "Archiviare «{label}»? Verrà rimosso dall’elenco ma conservato in archivio (reversibile).",
+  "biblioteca.regulation.removeConfirmDelete": "Eliminare definitivamente la bozza «{label}»? Questa azione è irreversibile.",
+  "biblioteca.regulation.archived": "Regolamento archiviato.",
+  "biblioteca.regulation.deleted": "Bozza eliminata."
 }

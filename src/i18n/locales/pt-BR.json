@@ -5631,5 +5631,11 @@
   "deposit.panel.standingTitle": "Caução rotativa",
   "panel.apiError.standing_deposit_already_held": "Esta pessoa já tem uma caução rotativa nesta biblioteca.",
   "panel.apiError.standing_deposit_has_open_loans": "Devolução impossível: ainda há empréstimos em curso. Devolva a caução rotativa após todas as devoluções.",
-  "federacao.assembleias.firstPoints.q9": "Vocabulário matéria: até onde apoiar-se no tesauro partilhado FICEDL? (a decidir com a FICEDL)"
+  "federacao.assembleias.firstPoints.q9": "Vocabulário matéria: até onde apoiar-se no tesauro partilhado FICEDL? (a decidir com a FICEDL)",
+  "biblioteca.regulation.remove": "Remover",
+  "biblioteca.regulation.removeHint": "Remover este regimento da lista (arquivamento reversível; o regimento ativo não pode ser removido)",
+  "biblioteca.regulation.removeConfirmArchive": "Arquivar «{label}»? Será removido da lista, mas mantido no registro (reversível).",
+  "biblioteca.regulation.removeConfirmDelete": "Excluir definitivamente o rascunho «{label}»? Esta ação é irreversível.",
+  "biblioteca.regulation.archived": "Regimento arquivado.",
+  "biblioteca.regulation.deleted": "Rascunho excluído."
 }

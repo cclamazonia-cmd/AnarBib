@@ -5631,5 +5631,11 @@
   "deposit.panel.standingTitle": "Dipòsit de garantia rotatori",
   "panel.apiError.standing_deposit_already_held": "Aquesta persona ja té un dipòsit rotatori en aquesta biblioteca.",
   "panel.apiError.standing_deposit_has_open_loans": "Reemborsament impossible: encara hi ha préstecs en curs. Retorna el dipòsit rotatori quan tot estigui tornat.",
-  "federacao.assembleias.firstPoints.q9": "Vocabulari de matèria: fins on recolzar-se en el tesaurus compartit FICEDL? (a decidir amb la FICEDL)"
+  "federacao.assembleias.firstPoints.q9": "Vocabulari de matèria: fins on recolzar-se en el tesaurus compartit FICEDL? (a decidir amb la FICEDL)",
+  "biblioteca.regulation.remove": "Retira",
+  "biblioteca.regulation.removeHint": "Retira aquest reglament de la llista (arxivament reversible; el reglament actiu no es pot retirar)",
+  "biblioteca.regulation.removeConfirmArchive": "Voleu arxivar «{label}»? Es retirarà de la llista però es conservarà (reversible).",
+  "biblioteca.regulation.removeConfirmDelete": "Voleu suprimir definitivament l'esborrany «{label}»? Aquesta acció és irreversible.",
+  "biblioteca.regulation.archived": "Reglament arxivat.",
+  "biblioteca.regulation.deleted": "Esborrany suprimit."
 }

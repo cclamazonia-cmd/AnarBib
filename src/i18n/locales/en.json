@@ -5631,5 +5631,11 @@
   "deposit.panel.standingTitle": "Standing deposit",
   "panel.apiError.standing_deposit_already_held": "This person already has a standing deposit at this library.",
   "panel.apiError.standing_deposit_has_open_loans": "Refund not possible: loans are still outstanding. Refund the standing deposit once everything is returned.",
-  "federacao.assembleias.firstPoints.q9": "Subject vocabulary: how far to rely on the shared FICEDL thesaurus? (to be decided with FICEDL)"
+  "federacao.assembleias.firstPoints.q9": "Subject vocabulary: how far to rely on the shared FICEDL thesaurus? (to be decided with FICEDL)",
+  "biblioteca.regulation.remove": "Remove",
+  "biblioteca.regulation.removeHint": "Remove this regulation from the list (reversible archiving; the active regulation cannot be removed)",
+  "biblioteca.regulation.removeConfirmArchive": "Archive “{label}”? It will be removed from the list but kept on record (reversible).",
+  "biblioteca.regulation.removeConfirmDelete": "Permanently delete the draft “{label}”? This action cannot be undone.",
+  "biblioteca.regulation.archived": "Regulation archived.",
+  "biblioteca.regulation.deleted": "Draft deleted."
 }

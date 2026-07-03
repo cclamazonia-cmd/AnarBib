@@ -5631,5 +5631,11 @@
   "deposit.panel.standingTitle": "Doorlopende waarborg",
   "panel.apiError.standing_deposit_already_held": "Deze persoon heeft al een doorlopende waarborg bij deze bibliotheek.",
   "panel.apiError.standing_deposit_has_open_loans": "Terugbetaling niet mogelijk: er lopen nog uitleningen. Betaal de doorlopende waarborg terug zodra alles is ingeleverd.",
-  "federacao.assembleias.firstPoints.q9": "Onderwerpsvocabulaire: hoever leunen op de gedeelde FICEDL-thesaurus? (te beslissen met FICEDL)"
+  "federacao.assembleias.firstPoints.q9": "Onderwerpsvocabulaire: hoever leunen op de gedeelde FICEDL-thesaurus? (te beslissen met FICEDL)",
+  "biblioteca.regulation.remove": "Verwijderen",
+  "biblioteca.regulation.removeHint": "Dit reglement uit de lijst verwijderen (omkeerbare archivering; het actieve reglement kan niet worden verwijderd)",
+  "biblioteca.regulation.removeConfirmArchive": "„{label}” archiveren? Het wordt uit de lijst verwijderd maar bewaard (omkeerbaar).",
+  "biblioteca.regulation.removeConfirmDelete": "Het concept „{label}” definitief verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+  "biblioteca.regulation.archived": "Reglement gearchiveerd.",
+  "biblioteca.regulation.deleted": "Concept verwijderd."
 }

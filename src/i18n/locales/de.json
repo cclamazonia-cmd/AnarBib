@@ -5631,5 +5631,11 @@
   "deposit.panel.standingTitle": "Dauerhafte Kaution",
   "panel.apiError.standing_deposit_already_held": "Diese Person hat bereits eine dauerhafte Kaution in dieser Bibliothek.",
   "panel.apiError.standing_deposit_has_open_loans": "Erstattung nicht möglich: es bestehen noch Ausleihen. Erstatte die dauerhafte Kaution, sobald alles zurückgegeben ist.",
-  "federacao.assembleias.firstPoints.q9": "Sachvokabular: wie weit sollen wir uns auf den gemeinsamen FICEDL-Thesaurus stützen? (mit FICEDL zu entscheiden)"
+  "federacao.assembleias.firstPoints.q9": "Sachvokabular: wie weit sollen wir uns auf den gemeinsamen FICEDL-Thesaurus stützen? (mit FICEDL zu entscheiden)",
+  "biblioteca.regulation.remove": "Entfernen",
+  "biblioteca.regulation.removeHint": "Diese Ordnung aus der Liste entfernen (umkehrbare Archivierung; die aktive Ordnung kann nicht entfernt werden)",
+  "biblioteca.regulation.removeConfirmArchive": "„{label}“ archivieren? Sie wird aus der Liste entfernt, aber aufbewahrt (umkehrbar).",
+  "biblioteca.regulation.removeConfirmDelete": "Den Entwurf „{label}“ endgültig löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "biblioteca.regulation.archived": "Ordnung archiviert.",
+  "biblioteca.regulation.deleted": "Entwurf gelöscht."
 }

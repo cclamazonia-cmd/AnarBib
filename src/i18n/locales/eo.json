@@ -5631,5 +5631,11 @@
   "deposit.panel.standingTitle": "Daŭra garantia depono",
   "panel.apiError.standing_deposit_already_held": "Ĉi tiu persono jam havas daŭran deponon en ĉi tiu biblioteko.",
   "panel.apiError.standing_deposit_has_open_loans": "Repago neebla: ankoraŭ estas pruntoj en kurso. Redonu la daŭran deponon kiam ĉio estas reprenita.",
-  "federacao.assembleias.firstPoints.q9": "Tema-vortaro: ĝis kie apogi sin sur la komuna tezaŭro FICEDL? (decidota kun FICEDL)"
+  "federacao.assembleias.firstPoints.q9": "Tema-vortaro: ĝis kie apogi sin sur la komuna tezaŭro FICEDL? (decidota kun FICEDL)",
+  "biblioteca.regulation.remove": "Forigi",
+  "biblioteca.regulation.removeHint": "Ĉi tiun regularon forigi el la listo (renversebla arĥivado; la aktiva regularo ne forigeblas)",
+  "biblioteca.regulation.removeConfirmArchive": "Ĉu arĥivi «{label}»? Ĝi estos forigita el la listo sed konservita (renversebla).",
+  "biblioteca.regulation.removeConfirmDelete": "Ĉu definitive forigi la malneton «{label}»? Ĉi tiu ago ne malfareblas.",
+  "biblioteca.regulation.archived": "Regularo arĥivita.",
+  "biblioteca.regulation.deleted": "Malneto forigita."
 }
