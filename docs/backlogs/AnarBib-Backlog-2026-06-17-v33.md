@@ -42,6 +42,15 @@
 
 ## 0. Livrables de cette session (16-17/06) — sandbox `~/anarbib-traine`, à intégrer
 
+> **✅ CLÔTURE 2026-07-03 — les 5 livrables sont TOUS intégrés en prod (`main`).**
+> Vérifié : commit **`cd5c7d967`** (« recherche multi-mots + formes du nom auteur +
+> i18n/enrichissement sujets ») porte (1a), (2), **i18n-sujets** (47/47 sujets ×10
+> locales en base) et **enrich-AUT** (25 auteur·rices `variant_forms`) ; bonus
+> `042acd0e0` (phrases entre guillemets). **(1b)** est superseded par la RPC live
+> `api.catalog_search_ids_v1` (accents + pertinence + chemins anon ET connecté) —
+> voir le bandeau du fichier `docs/drafts/opac_catalog_search_accent_rank_DRAFT.sql`.
+> Cette section §0 est donc **historique** ; plus rien « à intégrer ».
+>
 > Écrits **hors du worktree main** (session parallèle active : `~/anarbib` à
 > `e154072c`, `~/anarbib-p2`). Testés ; **horodatages de migration à re-vérifier
 > `> max` canonique au push** (le canonique a déjà dépassé `…210916`).

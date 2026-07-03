@@ -1,3 +1,14 @@
+-- ============================================================================
+-- ⛔ SUPERSEDED / PÉRIMÉ — 2026-07-03. NE PAS DÉPLOYER, NE PAS S'EN INSPIRER.
+--   Ce brouillon (1b) est intégralement remplacé par la RPC EN PROD
+--   `api.catalog_search_ids_v1(text)`, qui fait déjà tout ce qui suit :
+--   insensibilité aux accents (extensions.unaccent), classement par PERTINENCE
+--   (extensions.similarity + ORDER BY rank DESC), split multi-mots, ET les DEUX
+--   chemins — anon (api.catalog_list_anon_v1) et connecté (api.catalog_list_session_v1).
+--   Le « chemin session à écrire » que ce brouillon annonçait est donc FAIT.
+--   Conservé pour trace historique uniquement. Cf. clôture #4, session 2026-07-03.
+-- ============================================================================
+--
 -- 20260616212140_opac_catalog_search_accent_rank_DRAFT.sql
 -- OPAC / recherche — classement par PERTINENCE + insensibilité aux ACCENTS (1b).
 --

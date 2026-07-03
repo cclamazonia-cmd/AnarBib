@@ -1,5 +1,12 @@
 # NOTE — Premier tir réel des sauvegardes automatiques (#BG2-AUTO)
 
+> ✅ **CLÔTURE 2026-07-03 — #BG2 validé opérationnellement** (premier tir réel +
+> restore-test concluants, confirmé en session dédiée « BG2-14 FK/PK correctif »).
+> Cette note était la checklist *avant* premier tir ; elle prévoyait sa propre
+> suppression/archivage « une fois les 5 points validés » (cf. §Après validation).
+> Conservée ici pour trace ; le REGISTRE §BG2 fait foi sur l'état courant.
+
+
 *Créée le 01/07/2026. À exécuter le jour où Herbes Folles a (a) ajouté la clé
 automate `id_ed25519_bg2` aux clés autorisées du compte `anarbib` et (b) désactivé
 l'authentification par mot de passe. Tant que ces deux conditions ne sont pas
