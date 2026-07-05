@@ -646,6 +646,19 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 
 > Licences : Chromaprint **LGPL-2.1** compatible AGPL ; modèle/schéma MB = inspiration ; données core MB **CC0** ; ⚠️ données supplémentaires MB **CC-BY-NC-SA** (clause NC) = **non utilisées** (FS-D1) — à réévaluer si l'enrichissement dépassait le seul MBID.
 
+
+## 17. Confidentialité — `PRIV` *(PrivacyPolicyPage.jsx in-app + site vitrine généré)*
+
+**DEC-PRIVACY-SOCLE** — ✅ acté 05/07/2026. **Source unique** du socle de confidentialité : les clés `privacy.*` des locales de l'app (`src/i18n/locales/`). La page in-app `/privacidade` (`src/pages/public/PrivacyPolicyPage.jsx`) les rend dynamiquement (+ sections de rétention par bibliothèque). Les pages publiques `anarbib.org/<lang>/<slug>/` sont **générées** depuis ces mêmes locales par `build-privacy-pages.cjs` (repo site), qui extrait le chrome des pages existantes et injecte les textes propres à la vitrine (`privacy-vitrine-strings.json`).
+
+**PRIV-1 (invariant)** — toute modification du socle passe par les **locales de l'app**, jamais par le HTML généré à la main. Après modif du contenu, relancer `build-privacy-pages.cjs` pour resynchroniser la vitrine.
+
+**PRIV-2 — sous-traitants (art. 28 RGPD)** reflétés dans `privacy.s6.subprocessor.*` + clause Turnstile vitrine : Supabase (sa-east-1), Resend (US, domaine `notifications.anarbib.org` en eu-west-1), Codeberg (DE), **Cloudflare Turnstile** (page de connexion uniquement — unique exception assumée à l'auto-hébergement). ⚠️ `docs/legal/registre-traitements.md` à aligner (ajout Turnstile + bascule Brevo→Resend).
+
+**PRIV-3 — registre de langue** : page privacy en registre **formel** là où la langue le distingue (usted/Sie/lei/vós/vous en es/de/it/ca/fr) ; el/nl/pt/en/eo suivent leur corps. **Slugs** : fr/confidentialite · pt/privacidade · es/privacidad · it/privacy · en/privacy · de/datenschutz · ca/privadesa · eo/privateco · nl/privacy · el/aporrito.
+
+**Dette ouverte** : doublon `s4`/`retention` dans la page in-app (deux sections « durée de conservation » qui se recouvrent) — refonte à faire, non urgente.
+
 ---
 
 *Fin du seed v0.1. Décisions transverses recensées : 12. Drifts ouverts : voir le rapport d'audit joint.*
