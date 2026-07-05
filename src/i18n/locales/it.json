@@ -4238,8 +4238,6 @@
   "privacy.s2.title": "Quali dati raccoglie AnarBib",
   "privacy.s3.body": "I dati vengono raccolti unicamente per consentire il funzionamento della biblioteca: gestire il suo account, registrare prestiti e prenotazioni, e comunicare con lei riguardo a queste operazioni (disponibilità di un libro prenotato, promemoria di restituzione, ecc.). Nessun altro uso ne viene fatto. In particolare: nessun marketing, nessuna analisi comportamentale, nessuna profilazione.",
   "privacy.s3.title": "Perché questi dati vengono raccolti",
-  "privacy.s4.body": "I suoi dati di account vengono conservati finché il suo account è attivo. Può eliminare il suo account in qualsiasi momento dalla pagina «Il mio account», cosa che cancella definitivamente i suoi dati personali. Lo storico dei prestiti conclusi viene eliminato automaticamente dopo il termine di conservazione applicabile.",
-  "privacy.s4.title": "Per quanto tempo i dati vengono conservati",
   "privacy.s5.body": "Lei ha diritti legali sui suoi dati personali, garantiti dal GDPR europeo e dalla LGPD brasiliana:",
   "privacy.s5.exercise": "La maggior parte di questi diritti può essere esercitata direttamente nell'applicazione. Per consultare, modificare o eliminare i suoi dati, vada su",
   "privacy.s5.linkAccount": "la sua pagina «Il mio account»",

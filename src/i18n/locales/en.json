@@ -4238,8 +4238,6 @@
   "privacy.s2.title": "What data AnarBib collects",
   "privacy.s3.body": "Data is collected solely to enable the library to function: managing your account, recording loans and reservations, and communicating with you about those operations (availability of a reserved book, return reminders, etc.). No other use is made of it. In particular: no marketing, no behavioral analysis, no profiling.",
   "privacy.s3.title": "Why this data is collected",
-  "privacy.s4.body": "Your account data is retained as long as your account is active. You can delete your account at any time from the «My account» page, which permanently erases your personal data. The history of completed loans is deleted automatically after the applicable retention period.",
-  "privacy.s4.title": "How long data is retained",
   "privacy.s5.body": "You have legal rights over your personal data, guaranteed by European GDPR and Brazilian LGPD:",
   "privacy.s5.exercise": "Most of these rights can be exercised directly in the application. To view, modify or delete your data, go to",
   "privacy.s5.linkAccount": "your \"My account\" page",

@@ -144,11 +144,6 @@ export default function PrivacyPolicyPage() {
           <p style={pStyle}>{t({ id: 'privacy.s3.body' })}</p>
         </section>
 
-        <section style={sectionStyle}>
-          <h2 style={h2Style}>{t({ id: 'privacy.s4.title' })}</h2>
-          <p style={pStyle}>{t({ id: 'privacy.s4.body' })}</p>
-        </section>
-
         {/* ── Durée de conservation (rétention RGPD) ──────────────────── */}
         <section style={sectionStyle}>
           <h2 style={h2Style}>{t({ id: 'privacy.retention.title' })}</h2>
