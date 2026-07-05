@@ -23,6 +23,7 @@ import LibraryPublicContactSection from '@/components/library/LibraryPublicConta
 import LocaleSelector from '@/components/library/LocaleSelector';
 import TeamPanel from '@/components/team/TeamPanel';
 import LeitoresPanel from '@/components/biblioteca/LeitoresPanel';
+import EventosPanel from '@/components/biblioteca/EventosPanel';
 import LibraryPartnershipsSection from '@/components/library/LibraryPartnershipsSection';
 import StabilizedPartnershipsSection from '@/components/library/StabilizedPartnershipsSection';
 import ExternalDepositPartnerSection from '@/components/library/ExternalDepositPartnerSection';
@@ -107,6 +108,7 @@ export default function BibliotecaPage() {
     { id: 'transicoes', label: t({ id: 'biblioteca.tab.transitions' }), coordOnly: true, governance_only: true },
     { id: 'team', label: t({ id: 'biblioteca.tab.team' }) },
     { id: 'leitores', label: t({ id: 'biblioteca.tab.leitores' }) },
+    { id: 'eventos', label: t({ id: 'biblioteca.tab.events' }), coordOnly: true },
     { id: 'exchanges', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
     { id: 'ill', label: t({ id: 'biblioteca.tab.ill' }) },
     { id: 'reports', label: t({ id: 'biblioteca.tab.reports' }) },
@@ -2165,6 +2167,14 @@ export default function BibliotecaPage() {
             fn_team_promote_to_librarian (déclenche l'event militant). */}
         {tab==='leitores' && (
           <LeitoresPanel libraryId={libraryId} />
+        )}
+
+        {/* ═══ 5ter. Événements ════════════════════════ */}
+        {/* Événements organisés par la biblio (lectures publiques, débats…),
+            présentés côté lecteur dans /conta. Réservé au coordinateur
+            (coordOnly). Ajouté 2026-07-05. */}
+        {tab==='eventos' && (
+          <EventosPanel libraryId={libraryId} />
         )}
 
         {/* ═══ 6. Trocas interbibliotecas ══════════════ */}

@@ -38,6 +38,8 @@ const ReaderCardSection = lazy(() => import('@/components/account/ReaderCardSect
 const ReservationCard = lazy(() => import('@/components/account/ReservationCard'));
 // MULTI P5a : onglet « mes biblios » (statut par appartenance) en chunk lazy.
 const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
+// Onglet « Événements » (agenda des biblios de la lectrice) en chunk lazy.
+const TabEventos = lazy(() => import('@/pages/account/TabEventos'));
 import MyPartnershipsConsentSection from '@/components/account/MyPartnershipsConsentSection';
 
 // ── ContaTabHeader (chantier #CL — recommandation B, refresh par onglet, 31/05/2026) ───
@@ -1062,6 +1064,7 @@ export default function AccountPage() {
     { key: 'avisos', label: `${t({ id: 'account.tab.notifications' })}${unreadCount > 0 ? ` (${unreadCount})` : ''}`, hint: t({ id: 'account.tab.notifications.hint' }) },
     { key: 'desejos', label: `${t({ id: 'account.tab.wishlist' })} (${wishlist.length})`, hint: t({ id: 'account.tab.wishlist.hint' }) },
     { key: 'biblios', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
+    { key: 'eventos', label: t({ id: 'account.tab.events' }), hint: t({ id: 'account.tab.events.hint' }) },
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
@@ -2305,6 +2308,13 @@ export default function AccountPage() {
               <TabBiblios />
               {/* §21 PARTNER P6b : consentement de la lectrice à la transparence */}
               <MyPartnershipsConsentSection />
+            </Suspense>
+          )}
+
+          {/* ═══ ÉVÉNEMENTS (agenda des biblios de la lectrice) ═══ */}
+          {activeTab === 'eventos' && (
+            <Suspense fallback={<p className="ab-conta-hint">{t({ id: 'common.loading' })}</p>}>
+              <TabEventos />
             </Suspense>
           )}
         </div>
