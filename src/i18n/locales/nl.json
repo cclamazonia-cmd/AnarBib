@@ -5683,5 +5683,6 @@
   "account.events.type.rencontre": "Ontmoeting",
   "account.events.type.projection": "Filmvertoning",
   "account.events.type.autre": "Overig",
-  "notif.libraryEvent.created.title": "Nieuw evenement in de bibliotheek"
+  "notif.libraryEvent.created.title": "Nieuw evenement in de bibliotheek",
+  "account.notifPrefs.disableLibraryEvents": "Mij niet op de hoogte brengen van nieuwe bibliotheekevenementen"
 }

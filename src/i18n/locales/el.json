@@ -5683,5 +5683,6 @@
   "account.events.type.rencontre": "Συνάντηση",
   "account.events.type.projection": "Προβολή",
   "account.events.type.autre": "Άλλο",
-  "notif.libraryEvent.created.title": "Νέα εκδήλωση στη βιβλιοθήκη"
+  "notif.libraryEvent.created.title": "Νέα εκδήλωση στη βιβλιοθήκη",
+  "account.notifPrefs.disableLibraryEvents": "Να μην ειδοποιούμαι για νέες εκδηλώσεις της βιβλιοθήκης"
 }

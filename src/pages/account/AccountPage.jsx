@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef, lazy, Suspense } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery, apiRpc } from '@/lib/supabase';
@@ -109,12 +109,21 @@ export default function AccountPage() {
   const { formatMessage: t, locale } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.account' }));
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [deleting, setDeleting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState('');
   const [regimentoUrl, setRegimentoUrl] = useState(null);
   const [accountStatus, setAccountStatus] = useState(null);
 
-  const [activeTab, setActiveTab] = useState('perfil');
+  const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') || 'perfil');
+  // Deep-link : ?tab=<clé> (ex. clic sur un avis « nouvel événement » -> eventos).
+  // Ne se déclenche qu'au changement du paramètre, donc n'écrase pas un clic manuel
+  // ultérieur (searchParams inchangé => effet non rejoué). Le garde-fou availability
+  // ci-dessous ramène à 'perfil' si l'onglet visé est indisponible.
+  useEffect(() => {
+    const wanted = searchParams.get('tab');
+    if (wanted) setActiveTab(wanted);
+  }, [searchParams]);
   // Paquet E.4.6 (20/05/2026) : garde-fou bascule auto si onglet actif devient
   // indisponible (changement de biblio ou transition profil pendant session).
   // Re-direct vers 'perfil' qui est toujours disponible. Place ICI pour que
@@ -155,7 +164,7 @@ export default function AccountPage() {
   // #CL.7 (31/05/2026) — Préférences de notification lectrice.
   // Position 1 (souveraineté biblio + réduction lectrice) ; cf. spec-notifications-lecteur.md.
   // Chargées via fn_get_my_notification_preferences au montage, sauvées via fn_set_my_notification_preferences.
-  const [notifPrefs, setNotifPrefs] = useState({ disable_reserva_pronta: false, disable_consulta_pronta: false, disable_rede_news: false });
+  const [notifPrefs, setNotifPrefs] = useState({ disable_reserva_pronta: false, disable_consulta_pronta: false, disable_rede_news: false, disable_library_events: false });
   const [notifPrefsSaving, setNotifPrefsSaving] = useState(false);
   const [notifPrefsMsg, setNotifPrefsMsg] = useState('');
   // Lettre de la fédération — abonnement opt-in (Lot 2, REGISTRE §29 GAZ-5). Double opt-in.
@@ -292,6 +301,7 @@ export default function AccountPage() {
           disable_reserva_pronta: !!prefsData[0].disable_reserva_pronta,
           disable_consulta_pronta: !!prefsData[0].disable_consulta_pronta,
           disable_rede_news: !!prefsData[0].disable_rede_news,
+          disable_library_events: !!prefsData[0].disable_library_events,
         });
       }
       // Lettre de la fédération — état d'abonnement (opt-in, Lot 2)
@@ -1564,6 +1574,15 @@ export default function AccountPage() {
                     />
                     <span>{t({ id: 'account.notifPrefs.disableRedeNews' })}</span>
                   </label>
+                  {/* Événements de bibliothèque (avis « nouvel événement ») */}
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={notifPrefs.disable_library_events}
+                      onChange={(e) => setNotifPrefs(p => ({ ...p, disable_library_events: e.target.checked }))}
+                    />
+                    <span>{t({ id: 'account.notifPrefs.disableLibraryEvents' })}</span>
+                  </label>
                 </div>
 
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -1577,6 +1596,7 @@ export default function AccountPage() {
                           p_disable_reserva_pronta: notifPrefs.disable_reserva_pronta,
                           p_disable_consulta_pronta: notifPrefs.disable_consulta_pronta,
                           p_disable_rede_news: notifPrefs.disable_rede_news,
+                          p_disable_library_events: notifPrefs.disable_library_events,
                         });
                         if (error) throw error;
                         setNotifPrefsMsg(t({ id: 'account.notifPrefs.saved' }));

@@ -5683,5 +5683,6 @@
   "account.events.type.rencontre": "Rencontre",
   "account.events.type.projection": "Projection",
   "account.events.type.autre": "Autre",
-  "notif.libraryEvent.created.title": "Nouvel événement à la bibliothèque"
+  "notif.libraryEvent.created.title": "Nouvel événement à la bibliothèque",
+  "account.notifPrefs.disableLibraryEvents": "Ne plus m'avertir des nouveaux événements de la bibliothèque"
 }

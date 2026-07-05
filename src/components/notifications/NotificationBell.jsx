@@ -13,7 +13,7 @@ function resolveRoute(n) {
     case 'reserva':
       return '/conta';
     case 'library_event':
-      return '/conta';
+      return '/conta?tab=eventos';
     default:
       return null;
   }
