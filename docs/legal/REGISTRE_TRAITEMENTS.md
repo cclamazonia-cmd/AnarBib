@@ -157,6 +157,7 @@ Toute lecteur·rice peut, à tout moment, exercer les droits suivants :
 - **Cloisonnement par RLS** : Row Level Security PostgreSQL sur toutes les tables contenant des données personnelles (cf. annexe technique B). Vérifié et durci en mai 2026 (cf. RLS security overhaul, 02/05/2026).
 - **Cloisonnement anonyme/authentifié** : les données personnelles ne sont jamais exposées aux requêtes anonymes (matérialisé par les vues `mv_books_catalog_list_v1` *vs* `mv_books_catalog_list_network_v1`).
 - **Sauvegardes** : assurées par Supabase (Point-in-Time Recovery sur l'offre payante). Conservation des sauvegardes : selon politique Supabase.
+- **Protection anti-bot (Cloudflare Turnstile)** : un défi Turnstile est actif sur les pages de **connexion** et d'**inscription**, pour bloquer les attaques automatisées (bourrage d'identifiants, création de comptes en masse). Turnstile fonctionne sans cookie tiers persistant ni pistage publicitaire, ne se charge que sur ces deux pages et ne suit pas la navigation. C'est la seule dépendance Cloudflare **directe** d'AnarBib (Cloudflare intervient par ailleurs comme sous-processeur du CDN de Supabase, cf. §5.2). Le transfert vers les États-Unis qui en résulte est documenté en §6.3.
 
 ### 4.2 Mesures organisationnelles
 
@@ -171,7 +172,6 @@ Toute lecteur·rice peut, à tout moment, exercer les droits suivants :
 Ce registre est honnête sur ce qui reste à faire (feuille de route 2026) :
 
 - Rate limiting sur l'Edge Function de login (en cours).
-- Turnstile / CAPTCHA anti-bot sur l'inscription (en cours).
 - Job de rétention automatique des emprunts terminés (Phase 4 RGPD).
 - Politique de confidentialité multilingue par bibliothèque (Phase 2 RGPD).
 
@@ -187,6 +187,7 @@ Ce registre est honnête sur ce qui reste à faire (feuille de route 2026) :
 | **Codeberg e.V.** | Hébergement du frontend (Codeberg Pages) | Allemagne (UE) | DPA implicite via les CGU | Association allemande à but non lucratif, alignée sur le RGPD par construction. |
 | **Resend** (Plus Five Five, Inc.) | Envoi des mails transactionnels | États-Unis (San Francisco, CA) — voir section 6 | **Oui** — DPA Resend (mise à jour du 31 décembre 2025), accepté à l'ouverture du compte. Intègre les CCT 2021/914 module 2 controller-to-processor. | Société états-unienne. Conforme RGPD ; certifiée **EU-U.S. Data Privacy Framework** auprès du Département du Commerce des États-Unis. Conforme **SOC 2 Type II**. Suivi des ouvertures désactivé (cf. §2.4 et §4.2). DPA accessible sur resend.com/legal/dpa. |
 | **GitHub Inc.** | Miroir secondaire du dépôt (sans données personnelles) | États-Unis | Sans objet | Le miroir GitHub ne contient **aucune** donnée personnelle de lecteur·rice — uniquement le code source public. Pas de transfert RGPD-significatif. |
+| **Cloudflare Inc.** | Protection anti-bot (Turnstile) sur les pages de connexion et d'inscription | États-Unis — voir section 6 | DPA Cloudflare (version en vigueur publiée sur `cloudflare.com/cloudflare-customer-dpa/`), **incorporé par référence** au Self-Serve Subscription Agreement — pas de signature distincte ; date d'effet = acceptation des CGU à l'ouverture du compte Cloudflare (*à préciser : JJ/MM/AAAA*). Intègre les CCT 2021/914 module 2. | Défi anti-bot à ces deux seuls points d'entrée. Cloudflare Inc. est certifiée **EU-U.S. Data Privacy Framework**. Turnstile n'utilise pas de cookie tiers persistant ni de pistage publicitaire. À distinguer du rôle de Cloudflare comme sous-processeur *de Supabase* (§5.2). |
 
 ### 5.2 Sous-processeurs ultérieurs significatifs (chaîne Supabase)
 
@@ -218,7 +219,7 @@ Cette adhésion suppose la signature d'un **DPA entre la bibliothèque et Xavier
 
 ## 6. Transferts hors Union européenne (art. 44–49 RGPD)
 
-L'architecture d'AnarBib implique **deux transferts de données personnelles hors de l'Union européenne**, vers deux sous-traitants distincts. Chacun est documenté ci-dessous avec sa base juridique. Aucun de ces deux pays de destination ne bénéficie, à la date de ce registre, d'une décision d'adéquation générale de la Commission européenne au sens de l'article 45 RGPD ; les deux transferts reposent donc sur les garanties appropriées prévues par l'article 46.
+L'architecture d'AnarBib implique **trois transferts de données personnelles hors de l'Union européenne**, vers trois sous-traitants distincts. Chacun est documenté ci-dessous avec sa base juridique. Aucun des pays de destination (Brésil, États-Unis) ne bénéficie, à la date de ce registre, d'une décision d'adéquation générale de la Commission européenne au sens de l'article 45 RGPD ; les deux transferts reposent donc sur les garanties appropriées prévues par l'article 46.
 
 ### 6.1 — Transfert vers le Brésil (hébergement de la base de données — Supabase)
 
@@ -244,15 +245,26 @@ Depuis la migration du service de mail (mai 2026), les notifications transaction
 - En cas de résiliation du compte, Resend supprime les données dans un délai de 90 jours.
 - Le DPA Resend prévoit que, en cas de demande d'accès émanant d'une autorité publique, Resend s'efforce de rediriger l'autorité vers le responsable de traitement et notifie ce dernier, sauf interdiction légale.
 
-### 6.3 — Sous-processeurs ultérieurs aux États-Unis (chaîne Supabase)
+### 6.3 — Transfert vers les États-Unis (protection anti-bot — Cloudflare Turnstile)
+
+Les pages de connexion et d'inscription chargent le défi anti-bot **Cloudflare Turnstile** (Cloudflare Inc., États-Unis). À cette occasion, le navigateur de la personne transmet à Cloudflare son adresse IP et des signaux techniques nécessaires à la détection de comportements automatisés ; **aucune donnée de compte n'est transmise**. Turnstile n'installe pas de cookie tiers persistant à des fins publicitaires.
+
+**Base juridique du transfert** : Clauses Contractuelles Types **2021/914**, **module 2 controller-to-processor**, intégrées au DPA Cloudflare ; Cloudflare Inc. est par ailleurs **certifiée EU-U.S. Data Privacy Framework** auprès du Département du Commerce des États-Unis.
+
+**Garanties complémentaires** :
+- Le déclenchement est limité aux deux points d'entrée (connexion, inscription) ; aucune activation sur le reste du parcours.
+- Aucune donnée sensible ni donnée de catalogue n'est transmise.
+- Cette dépendance est la seule exception assumée à la doctrine d'auto-hébergement d'AnarBib.
+
+### 6.4 — Sous-processeurs ultérieurs aux États-Unis (chaîne Supabase)
 
 Indépendamment des deux transferts ci-dessus, certains sous-processeurs ultérieurs de Supabase sont établis aux États-Unis (cf. §5.2 : Sentry, et OpenAI si les fonctionnalités IA étaient activées — elles ne le sont pas). Leur exposition aux données personnelles d'AnarBib est limitée par configuration et fait l'objet d'une vérification périodique.
 
-### 6.4 — Évolution prévue
+### 6.5 — Évolution prévue
 
 Une migration de l'hébergement de la base de données vers une région européenne (`eu-west-1` ou `eu-central-1`) est **à l'étude**. La décision sera arbitrée avant l'élargissement du réseau au-delà de la bibliothèque pilote et de BLMF. Une telle migration supprimerait le transfert décrit en §6.1, mais pas celui décrit en §6.2 (le stockage des métadonnées d'envoi par Resend reste aux États-Unis quelle que soit la région d'envoi choisie).
 
-> **Pour les bibliothèques adhérentes** : si vous opérez votre propre instance Supabase, mentionnez ici **votre** région d'hébergement. Si elle est en UE, adaptez la section 6.1 en conséquence. Si vous utilisez l'instance hébergée par Xavier, les sections 6.1 à 6.3 s'appliquent telles quelles.
+> **Pour les bibliothèques adhérentes** : si vous opérez votre propre instance Supabase, mentionnez ici **votre** région d'hébergement. Si elle est en UE, adaptez la section 6.1 en conséquence. Si vous utilisez l'instance hébergée par Xavier, les sections 6.1 à 6.4 s'appliquent telles quelles.
 
 ---
 
@@ -286,6 +298,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 | Hébergement DB | Supabase, région `sa-east-1` (São Paulo, Brésil) — AWS sous-jacent — transitoire |
 | Hébergement frontend | Codeberg Pages (primaire) + GitHub Pages (miroir secondaire) |
 | Mail transactionnel | Resend (Plus Five Five, Inc.), États-Unis — transfert encadré CCT 2021/914 module 2 + EU-U.S. Data Privacy Framework |
+| Protection anti-bot | Cloudflare Turnstile (Cloudflare Inc.), États-Unis — pages de connexion et d'inscription — transfert encadré CCT 2021/914 module 2 + EU-U.S. Data Privacy Framework |
 | DPO | Non désigné (non requis par l'art. 37 RGPD) |
 | Bibliothèques opérées | Bibliothèque pilote (CCLA-portée, BLMF) |
 | DPA Supabase | Signé le 4 mai 2026 (réf. TFXNN-HUMKJ-3WKP8-MZMYW) |
@@ -328,6 +341,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 |---|---|---|
 | 2026-05-04 | Xavier VAN WELDEN | Création initiale du registre. Intégration des informations du DPA Supabase signé le 4 mai 2026 (réf. TFXNN-HUMKJ-3WKP8-MZMYW). |
 | 2026-06-05 | Xavier VAN WELDEN | Migration du sous-traitant mail : Brevo (UE) remplacé par Resend (Plus Five Five, Inc., États-Unis). Mise à jour des §2.4, §4.1, §5.1 et de l'annexe A. Ajout en §4.2 d'une note sur le choix d'un prestataire mail sans suivi des ouvertures. Réécriture de la §6 : documentation de deux transferts hors-UE distincts (Brésil/Supabase et États-Unis/Resend), le second encadré par les CCT 2021/914 module 2 et la certification EU-U.S. Data Privacy Framework de Resend. |
+| 2026-07-05 | Xavier VAN WELDEN | Intégration de Cloudflare Turnstile comme sous-traitant direct : protection anti-bot désormais **active** sur les pages de connexion et d'inscription (auparavant listée en §4.3 « en cours »). Passée en §4.1 (mesure active), ajoutée en §5.1 (sous-traitant direct, États-Unis), nouveau §6.3 (transfert US, CCT 2021/914 module 2 + EU-U.S. DPF), renumérotation des §6.4/6.5, mise à jour de l'annexe A. |
 
 ---
 
