@@ -4238,7 +4238,7 @@
   "privacy.s2.title": "Quais dados o AnarBib coleta",
   "privacy.s3.body": "Os dados são coletados unicamente para permitir o funcionamento da biblioteca: gerenciar a sua conta, registrar os empréstimos e reservas, e comunicar com você sobre essas operações (disponibilidade de um livro reservado, lembrete de devolução, etc.). Nenhum outro uso é feito. Especialmente: nenhum marketing, nenhuma análise de comportamento, nenhuma criação de perfil.",
   "privacy.s3.title": "Por que estes dados são coletados",
-  "privacy.s4.body": "Os seus dados de conta são conservados enquanto a sua conta estiver ativa. Você pode excluir a sua conta a qualquer momento na página \"Minha conta\", o que apaga os seus dados pessoais permanentemente. O histórico de empréstimos é conservado para fins operacionais (estatísticas anônimas da biblioteca, gestão de retornos).",
+  "privacy.s4.body": "Os seus dados de conta são conservados enquanto a sua conta estiver ativa. Você pode excluir a sua conta a qualquer momento na página «Minha conta», o que apaga os seus dados pessoais permanentemente. O histórico de empréstimos finalizados é apagado automaticamente após o prazo de conservação aplicável.",
   "privacy.s4.title": "Por quanto tempo os dados são conservados",
   "privacy.s5.body": "Você tem direitos legais sobre os seus dados pessoais, garantidos pelo RGPD europeu e pela LGPD brasileira:",
   "privacy.s5.exercise": "Você pode exercer a maior parte destes direitos diretamente no aplicativo. Para acessar os seus dados, modificá-los ou excluí-los, vá para",

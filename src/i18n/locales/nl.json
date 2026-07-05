@@ -4238,7 +4238,7 @@
   "privacy.s2.title": "Welke gegevens AnarBib verzamelt",
   "privacy.s3.body": "Gegevens worden uitsluitend verzameld om de bibliotheek te laten functioneren: je account beheren, uitleningen en reserveringen registreren, en met je communiceren over die handelingen (beschikbaarheid van een gereserveerd boek, herinneringen voor teruggave, enz.). Er wordt geen ander gebruik van gemaakt. In het bijzonder: geen marketing, geen gedragsanalyse, geen profilering.",
   "privacy.s3.title": "Waarom deze gegevens worden verzameld",
-  "privacy.s4.body": "Je accountgegevens worden bewaard zolang je account actief is. Je kunt je account op elk moment verwijderen via de pagina \"Mijn account\", wat je persoonsgegevens definitief wist. De uitleengeschiedenis wordt bewaard voor operationele doeleinden (anonieme bibliotheekstatistieken, beheer van teruggaven).",
+  "privacy.s4.body": "Je accountgegevens worden bewaard zolang je account actief is. Je kunt je account op elk moment verwijderen via de pagina «Mijn account», wat je persoonsgegevens definitief wist. De geschiedenis van afgeronde uitleningen wordt automatisch verwijderd na de geldende bewaartermijn.",
   "privacy.s4.title": "Hoe lang gegevens worden bewaard",
   "privacy.s5.body": "Je hebt wettelijke rechten over je persoonsgegevens, gewaarborgd door de Europese AVG en de Braziliaanse LGPD:",
   "privacy.s5.exercise": "De meeste van deze rechten kun je rechtstreeks in de applicatie uitoefenen. Om je gegevens te bekijken, te wijzigen of te verwijderen, ga je naar",

@@ -4238,7 +4238,7 @@
   "privacy.s2.title": "Kiujn datumojn AnarBib kolektas",
   "privacy.s3.body": "La datumoj estas kolektataj nur por ebligi la funkciadon de la biblioteko: administri vian konton, registri la pruntojn kaj rezervojn, kaj komuniki kun vi pri ĉi tiuj operacioj (disponebleco de rezervita libro, redonmemorigo, ktp.). Neniu alia uzo estas farata. Aparte: neniu merkatado, neniu kondut-analizo, neniu profilado.",
   "privacy.s3.title": "Kial ĉi tiuj datumoj estas kolektataj",
-  "privacy.s4.body": "Viaj kontodatumoj estas konservataj dum via konto estas aktiva. Vi povas forigi vian konton iam ajn el la paĝo «Mia konto», kio definitive forviŝas viajn personajn datumojn. La historio de la pruntoj estas konservata por operaciaj celoj (anonimaj statistikoj de la biblioteko, administrado de la redonoj).",
+  "privacy.s4.body": "Viaj kontodatumoj estas konservataj dum via konto estas aktiva. Vi povas forigi vian konton iam ajn el la paĝo «Mia konto», kio definitive forviŝas viajn personajn datumojn. La historio de la finitaj pruntoj estas aŭtomate forigata post la aplikebla konservoperiodo.",
   "privacy.s4.title": "Kiom longe la datumoj estas konservataj",
   "privacy.s5.body": "Vi havas laŭleĝajn rajtojn pri viaj personaj datumoj, garantiitajn de la eŭropa RGPD kaj la brazila LGPD:",
   "privacy.s5.exercise": "La plejmulto el ĉi tiuj rajtoj estas rekte plenumeblaj en la aplikaĵo. Por konsulti, modifi aŭ forigi viajn datumojn, iru al",

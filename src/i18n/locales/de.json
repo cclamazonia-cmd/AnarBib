@@ -4238,7 +4238,7 @@
   "privacy.s2.title": "Welche Daten AnarBib sammelt",
   "privacy.s3.body": "Die Daten werden ausschließlich gesammelt, um den Betrieb der Bibliothek zu ermöglichen: Ihr Konto verwalten, Ausleihen und Reservierungen erfassen und mit Ihnen zu diesen Vorgängen kommunizieren (Verfügbarkeit eines reservierten Buches, Rückgabeerinnerungen usw.). Keine andere Verwendung erfolgt. Insbesondere: kein Marketing, keine Verhaltensanalyse, kein Profiling.",
   "privacy.s3.title": "Warum diese Daten gesammelt werden",
-  "privacy.s4.body": "Ihre Kontodaten werden aufbewahrt, solange Ihr Konto aktiv ist. Sie können Ihr Konto jederzeit auf der Seite „Mein Konto“ löschen, wodurch Ihre persönlichen Daten dauerhaft gelöscht werden. Die Ausleihhistorie wird zu betrieblichen Zwecken aufbewahrt (anonyme Bibliotheksstatistiken, Rückgabemanagement).",
+  "privacy.s4.body": "Ihre Kontodaten werden aufbewahrt, solange Ihr Konto aktiv ist. Sie können Ihr Konto jederzeit auf der Seite „Mein Konto“ löschen, wodurch Ihre persönlichen Daten dauerhaft gelöscht werden. Der Verlauf abgeschlossener Ausleihen wird nach Ablauf der geltenden Aufbewahrungsfrist automatisch gelöscht.",
   "privacy.s4.title": "Wie lange Daten aufbewahrt werden",
   "privacy.s5.body": "Sie haben gesetzliche Rechte an Ihren persönlichen Daten, die durch die europäische DSGVO und das brasilianische LGPD garantiert sind:",
   "privacy.s5.exercise": "Die meisten dieser Rechte können direkt in der Anwendung ausgeübt werden. Um Ihre Daten einzusehen, zu ändern oder zu löschen, gehen Sie auf",
