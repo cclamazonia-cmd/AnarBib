@@ -127,12 +127,12 @@ export default function PrivacyPolicyPage() {
             <li>{t({ id: 'privacy.s2.item.loans' })}</li>
             <li>{t({ id: 'privacy.s2.item.lang' })}</li>
             <li>{t({ id: 'privacy.s2.item.libraries' })}</li>
+            <li>{t({ id: 'privacy.s2.item.phone' })}</li>
+            <li>{t({ id: 'privacy.s2.item.address' })}</li>
           </ul>
           <p style={pStyle}>{t({ id: 'privacy.s2.notCollected' })}</p>
           <ul style={ulStyle}>
             <li>{t({ id: 'privacy.s2.notItem.birth' })}</li>
-            <li>{t({ id: 'privacy.s2.notItem.address' })}</li>
-            <li>{t({ id: 'privacy.s2.notItem.phone' })}</li>
             <li>{t({ id: 'privacy.s2.notItem.profession' })}</li>
             <li>{t({ id: 'privacy.s2.notItem.tracking' })}</li>
             <li>{t({ id: 'privacy.s2.notItem.analytics' })}</li>
@@ -195,7 +195,7 @@ export default function PrivacyPolicyPage() {
           <p style={pStyle}>{t({ id: 'privacy.s6.body' })}</p>
           <ul style={ulStyle}>
             <li>{t({ id: 'privacy.s6.subprocessor.supabase' })}</li>
-            <li>{t({ id: 'privacy.s6.subprocessor.brevo' })}</li>
+            <li>{t({ id: 'privacy.s6.subprocessor.resend' })}</li>
             <li>{t({ id: 'privacy.s6.subprocessor.codeberg' })}</li>
           </ul>
           <p style={pStyle}>{t({ id: 'privacy.s6.transfer' })}</p>
@@ -214,6 +214,12 @@ export default function PrivacyPolicyPage() {
             </a>
             .
           </p>
+        </section>
+
+        {/* ── Vídeos tutoriais (embed kolektiva.media, click-to-load + p2p=0) ── */}
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>{t({ id: 'privacy.video.title' })}</h2>
+          <p style={pStyle}>{t({ id: 'privacy.video.body' })}</p>
         </section>
 
         <section style={sectionStyle}>

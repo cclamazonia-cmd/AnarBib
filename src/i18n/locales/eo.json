@@ -4231,10 +4231,8 @@
   "privacy.s2.item.password": "Via pasvorto, konservata nur en ĉifrita formo (hash bcrypt) — neniam klare, eĉ la bibliotekist-in-oj ne povas vidi ĝin",
   "privacy.s2.item.username": "Via publika identigilo (uzantnomo kiun vi elektas)",
   "privacy.s2.notCollected": "La jenajn datumojn AnarBib NE kolektas:",
-  "privacy.s2.notItem.address": "Poŝta adreso",
   "privacy.s2.notItem.analytics": "Iloj de kondut-analizo (Google Analytics, Meta-pikseloj, ktp.)",
   "privacy.s2.notItem.birth": "Naskiĝdato",
-  "privacy.s2.notItem.phone": "Telefonnumero",
   "privacy.s2.notItem.profession": "Profesio, genro, nacieco, origino",
   "privacy.s2.notItem.tracking": "Spurkuketoj de triaj partioj",
   "privacy.s2.title": "Kiujn datumojn AnarBib kolektas",
@@ -4257,7 +4255,7 @@
   "privacy.s6.dpa": "Por la bibliotekoj kiuj aliĝas al la reto AnarBib, Interkonsento pri Datumtraktado (DPA) detaligas la kontraktajn respondecojn inter ĉiu aliĝinta biblioteko kaj AnarBib, konforme al la artikolo 28 de la RGPD kaj la artikolo 39 de la LGPD.",
   "privacy.s6.dpa.link": "Konsulti la DPA-modelon",
   "privacy.s6.noResale": "AnarBib neniam vendas, ludonas nek kunhavigas viajn datumojn por komercaj celoj. Neniam.",
-  "privacy.s6.subprocessor.brevo": "Brevo SAS — sendado de la sciig-retpoŝtoj (redonmemorigoj, rezervkonfirmoj, ktp.). Serviloj en la Eŭropa Unio. DPA integrita en la ĝeneralaj kondiĉoj de Brevo.",
+  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delavaro, Usono) — sendado de la transakciaj sciigaj retmesaĝoj. Usona firmao; la domajno notifications.anarbib.org estas gastigata en Irlando (eu-west-1, EU). Transdono kovrita de la normaj kontraktaj klaŭzoj de la Eŭropa Komisiono (2021/914, modulo 2). Spurado de malfermo kaj de klako malŝaltita. Norma DPA de Resend aplikebla.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — gastigado de la reta interfaco (frontfino). Serviloj en Germanio (EU). Germana neprofitcela asocio.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — datumbazo kaj aŭtentigo. Serviloj situantaj en San-Paŭlo (Brazilo). Interkonsento pri datumtraktado (DPA) subskribita la 4-an de majo 2026, kun la tipaj kontraktaj klaŭzoj de la Eŭropa Komisiono (decido 2021/914).",
   "privacy.s6.title": "Kun kiu viaj datumoj estas kunhavigataj",
@@ -5637,5 +5635,11 @@
   "biblioteca.regulation.removeConfirmArchive": "Ĉu arĥivi «{label}»? Ĝi estos forigita el la listo sed konservita (renversebla).",
   "biblioteca.regulation.removeConfirmDelete": "Ĉu definitive forigi la malneton «{label}»? Ĉi tiu ago ne malfareblas.",
   "biblioteca.regulation.archived": "Regularo arĥivita.",
-  "biblioteca.regulation.deleted": "Malneto forigita."
+  "biblioteca.regulation.deleted": "Malneto forigita.",
+  "privacy.video.title": "Video-lerniloj",
+  "privacy.video.body": "Kelkaj video-lerniloj estas gastigataj ĉe kolektiva.media, milita PeerTube-nodo. Pro respekto al via privateco, tiuj videoj ne ŝargiĝas aŭtomate: dum vi ne klakas «Ŝargi la videon», nenio estas sendata al kolektiva.media. Ekde tiu klako, kolektiva.media ricevas vian IP-adreson — kiel ĉiu retejo kiun vi vizitas — por liveri al vi la videon. Ni malŝaltis la P2P-kunhavigon en tiuj videoj, por ke via IP ne estu malkaŝita al aliaj spektantoj nek al triaj serviloj.",
+  "account.tutorials.loadButton": "Ŝargi la videon",
+  "account.tutorials.loadNotice": "Ŝargata de kolektiva.media nur post via klako. Antaŭe nenio estas sendata.",
+  "privacy.s2.item.phone": "Via telefonnumero, nur se vi elektas indiki ĝin (nedeviga)",
+  "privacy.s2.item.address": "Via poŝta adreso, nur se vi elektas indiki ĝin (nedeviga)"
 }

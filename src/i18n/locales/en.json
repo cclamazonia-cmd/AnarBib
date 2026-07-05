@@ -4231,10 +4231,8 @@
   "privacy.s2.item.password": "Your password, stored only in encrypted form (bcrypt hash) — never in plaintext, not even librarians can see it",
   "privacy.s2.item.username": "Your public identifier (login of your choice)",
   "privacy.s2.notCollected": "The following data is NOT collected by AnarBib:",
-  "privacy.s2.notItem.address": "Postal address",
   "privacy.s2.notItem.analytics": "Behavioral analytics tools (Google Analytics, Meta pixels, etc.)",
   "privacy.s2.notItem.birth": "Date of birth",
-  "privacy.s2.notItem.phone": "Phone number",
   "privacy.s2.notItem.profession": "Profession, gender, nationality, origin",
   "privacy.s2.notItem.tracking": "Third-party tracking cookies",
   "privacy.s2.title": "What data AnarBib collects",
@@ -4257,7 +4255,7 @@
   "privacy.s6.dpa": "For libraries that join the AnarBib network, a Data Processing Agreement (DPA) details the contractual responsibilities between each adhering library and AnarBib in compliance with Article 28 of the GDPR and Article 39 of the LGPD.",
   "privacy.s6.dpa.link": "View the DPA template",
   "privacy.s6.noResale": "AnarBib never sells, rents, or shares your data for commercial purposes. Never.",
-  "privacy.s6.subprocessor.brevo": "Brevo SAS — sending of notification emails (return reminders, reservation confirmations, etc.). Servers in the European Union. DPA integrated into Brevo's terms of service.",
+  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delaware, United States) — sending of transactional notification e-mails. US company; the notifications.anarbib.org domain is hosted in Ireland (eu-west-1, EU). Transfer covered by the European Commission's standard contractual clauses (2021/914, module 2). Open and click tracking disabled. Standard Resend DPA applicable.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — hosting of the web interface (frontend). Servers in Germany (EU). German non-profit association.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — database and authentication. Servers located in São Paulo (Brazil). Data Processing Agreement (DPA) signed on May 4, 2026, with the European Commission's Standard Contractual Clauses (decision 2021/914).",
   "privacy.s6.title": "Who your data is shared with",
@@ -5637,5 +5635,11 @@
   "biblioteca.regulation.removeConfirmArchive": "Archive “{label}”? It will be removed from the list but kept on record (reversible).",
   "biblioteca.regulation.removeConfirmDelete": "Permanently delete the draft “{label}”? This action cannot be undone.",
   "biblioteca.regulation.archived": "Regulation archived.",
-  "biblioteca.regulation.deleted": "Draft deleted."
+  "biblioteca.regulation.deleted": "Draft deleted.",
+  "privacy.video.title": "Tutorial videos",
+  "privacy.video.body": "Some video tutorials are hosted on kolektiva.media, a militant PeerTube instance. Out of respect for your privacy, these videos are not loaded automatically: nothing is sent to kolektiva.media until you click «Load the video». From that click on, kolektiva.media receives your IP address — like any site you visit — in order to deliver the video to you. We have disabled P2P sharing on these videos, so that your IP is not exposed to other viewers or to third-party servers.",
+  "account.tutorials.loadButton": "Load the video",
+  "account.tutorials.loadNotice": "Loaded from kolektiva.media only after you click. Nothing is sent before then.",
+  "privacy.s2.item.phone": "Your phone number, only if you choose to provide it (optional)",
+  "privacy.s2.item.address": "Your postal address, only if you choose to provide it (optional)"
 }

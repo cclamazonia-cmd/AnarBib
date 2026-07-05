@@ -4231,10 +4231,8 @@
   "privacy.s2.item.password": "Ihr Passwort, ausschließlich in verschlüsselter Form gespeichert (bcrypt-Hash) — niemals im Klartext, nicht einmal Bibliothekar*innen können es einsehen",
   "privacy.s2.item.username": "Ihre öffentliche Kennung (Benutzername Ihrer Wahl)",
   "privacy.s2.notCollected": "Folgende Daten werden von AnarBib NICHT gesammelt:",
-  "privacy.s2.notItem.address": "Postanschrift",
   "privacy.s2.notItem.analytics": "Verhaltensanalyse-Tools (Google Analytics, Meta-Pixel usw.)",
   "privacy.s2.notItem.birth": "Geburtsdatum",
-  "privacy.s2.notItem.phone": "Telefonnummer",
   "privacy.s2.notItem.profession": "Beruf, Geschlecht, Nationalität, Herkunft",
   "privacy.s2.notItem.tracking": "Tracking-Cookies von Drittanbietern",
   "privacy.s2.title": "Welche Daten AnarBib sammelt",
@@ -4257,7 +4255,7 @@
   "privacy.s6.dpa": "Für die Bibliotheken, die dem AnarBib-Netzwerk beitreten, beschreibt ein Auftragsverarbeitungsvertrag (DPA) die vertraglichen Verantwortlichkeiten zwischen jeder beitretenden Bibliothek und AnarBib in Übereinstimmung mit Artikel 28 der DSGVO und Artikel 39 der LGPD.",
   "privacy.s6.dpa.link": "DPA-Vorlage einsehen",
   "privacy.s6.noResale": "AnarBib verkauft, vermietet oder teilt Ihre Daten niemals zu kommerziellen Zwecken. Niemals.",
-  "privacy.s6.subprocessor.brevo": "Brevo SAS — Versand der Benachrichtigungs-E-Mails (Rückgabeerinnerungen, Reservierungsbestätigungen usw.). Server in der Europäischen Union. DPA in die AGB von Brevo integriert.",
+  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delaware, USA) — Versand der transaktionalen Benachrichtigungs-E-Mails. US-Unternehmen; die Domain notifications.anarbib.org wird in Irland (eu-west-1, EU) gehostet. Übermittlung abgesichert durch die Standardvertragsklauseln der Europäischen Kommission (2021/914, Modul 2). Öffnungs- und Klick-Tracking deaktiviert. Standard-DPA von Resend anwendbar.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — Hosting der Web-Oberfläche (Frontend). Server in Deutschland (EU). Deutscher gemeinnütziger Verein.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — Datenbank und Authentifizierung. Server in São Paulo (Brasilien). Auftragsverarbeitungsvertrag (DPA) unterzeichnet am 4. Mai 2026, mit den Standardvertragsklauseln der Europäischen Kommission (Beschluss 2021/914).",
   "privacy.s6.title": "Mit wem Ihre Daten geteilt werden",
@@ -5637,5 +5635,11 @@
   "biblioteca.regulation.removeConfirmArchive": "„{label}“ archivieren? Sie wird aus der Liste entfernt, aber aufbewahrt (umkehrbar).",
   "biblioteca.regulation.removeConfirmDelete": "Den Entwurf „{label}“ endgültig löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
   "biblioteca.regulation.archived": "Ordnung archiviert.",
-  "biblioteca.regulation.deleted": "Entwurf gelöscht."
+  "biblioteca.regulation.deleted": "Entwurf gelöscht.",
+  "privacy.video.title": "Video-Tutorials",
+  "privacy.video.body": "Einige Video-Tutorials werden auf kolektiva.media gehostet, einer aktivistischen PeerTube-Instanz. Zum Schutz deiner Privatsphäre werden diese Videos nicht automatisch geladen: Solange du nicht auf «Video laden» klickst, wird nichts an kolektiva.media gesendet. Ab diesem Klick erhält kolektiva.media deine IP-Adresse – wie jede Website, die du besuchst –, um dir das Video auszuliefern. Wir haben das P2P-Teilen bei diesen Videos deaktiviert, damit deine IP nicht anderen Zuschauer*innen oder Drittservern preisgegeben wird.",
+  "account.tutorials.loadButton": "Video laden",
+  "account.tutorials.loadNotice": "Wird erst nach deinem Klick von kolektiva.media geladen. Vorher wird nichts gesendet.",
+  "privacy.s2.item.phone": "Deine Telefonnummer, nur wenn du sie angeben möchtest (optional)",
+  "privacy.s2.item.address": "Deine Postanschrift, nur wenn du sie angeben möchtest (optional)"
 }

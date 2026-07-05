@@ -4237,10 +4237,8 @@
   "privacy.s2.item.password": "Votre mot de passe, stocké uniquement sous forme chiffrée (hash bcrypt) — jamais en clair, même les bibliothécaires ne peuvent pas le voir",
   "privacy.s2.item.username": "Votre identifiant public (login que vous choisissez)",
   "privacy.s2.notCollected": "Les données suivantes NE sont PAS collectées par AnarBib :",
-  "privacy.s2.notItem.address": "Adresse postale",
   "privacy.s2.notItem.analytics": "Outils d'analyse comportementale (Google Analytics, pixels Meta, etc.)",
   "privacy.s2.notItem.birth": "Date de naissance",
-  "privacy.s2.notItem.phone": "Numéro de téléphone",
   "privacy.s2.notItem.profession": "Profession, genre, nationalité, origine",
   "privacy.s2.notItem.tracking": "Cookies de pistage tiers",
   "privacy.s2.title": "Quelles données AnarBib collecte",
@@ -4263,7 +4261,7 @@
   "privacy.s6.dpa": "Pour les bibliothèques qui adhèrent au réseau AnarBib, un Accord de Traitement de Données (DPA) détaille les responsabilités contractuelles entre chaque bibliothèque adhérente et AnarBib en conformité avec l'article 28 du RGPD et l'article 39 de la LGPD.",
   "privacy.s6.dpa.link": "Consulter le modèle de DPA",
   "privacy.s6.noResale": "AnarBib ne vend, ne loue, ne partage jamais vos données à des fins commerciales. Jamais.",
-  "privacy.s6.subprocessor.brevo": "Brevo SAS — envoi des emails de notification (rappels de retour, confirmations de réservation, etc.). Serveurs en Union européenne. DPA intégré aux conditions générales de Brevo.",
+  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delaware, États-Unis) — envoi des e-mails de notification transactionnels (rappels de retour, confirmations de réservation, etc.). Société américaine ; le domaine notifications.anarbib.org est hébergé en Irlande (eu-west-1, UE). Transfert encadré par les clauses contractuelles types de la Commission européenne (2021/914, module 2). Suivi d'ouverture et de clic désactivé. DPA standard de Resend applicable.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — hébergement de l'interface web (frontend). Serveurs en Allemagne (UE). Association allemande à but non lucratif.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — base de données et authentification. Serveurs situés à São Paulo (Brésil). Accord de traitement de données (DPA) signé le 4 mai 2026, avec les clauses contractuelles types de la Commission européenne (décision 2021/914).",
   "privacy.s6.title": "Avec qui vos données sont partagées",
@@ -5637,5 +5635,11 @@
   "deposit.panel.standingTitle": "Dépôt de garantie tournant",
   "panel.apiError.standing_deposit_already_held": "Cette personne a déjà un dépôt tournant en cours dans cette bibliothèque.",
   "panel.apiError.standing_deposit_has_open_loans": "Remboursement impossible : des emprunts sont encore en cours. Rembourse le dépôt tournant une fois tout rendu.",
-  "federacao.assembleias.firstPoints.q9": "Vocabulaire matière : jusqu'où s'appuyer sur le thésaurus partagé FICEDL ? (à trancher avec la FICEDL)"
+  "federacao.assembleias.firstPoints.q9": "Vocabulaire matière : jusqu'où s'appuyer sur le thésaurus partagé FICEDL ? (à trancher avec la FICEDL)",
+  "privacy.video.title": "Vidéos tutorielles",
+  "privacy.video.body": "Certains tutoriels vidéo sont hébergés sur kolektiva.media, une instance PeerTube militante. Par respect pour votre vie privée, ces vidéos ne se chargent pas automatiquement : rien n'est envoyé à kolektiva.media tant que vous ne cliquez pas sur «Charger la vidéo». À partir de ce clic, kolektiva.media reçoit votre adresse IP — comme tout site que vous visitez — pour vous livrer la vidéo. Nous avons désactivé le partage P2P sur ces vidéos, pour que votre IP ne soit pas exposée aux autres spectateur·rices ni à des serveurs tiers.",
+  "account.tutorials.loadButton": "Charger la vidéo",
+  "account.tutorials.loadNotice": "Chargé depuis kolektiva.media seulement après ton clic. Rien n'est envoyé avant.",
+  "privacy.s2.item.phone": "Votre numéro de téléphone, uniquement si vous choisissez de le renseigner (facultatif)",
+  "privacy.s2.item.address": "Votre adresse postale, uniquement si vous choisissez de la renseigner (facultatif)"
 }

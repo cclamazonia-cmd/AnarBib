@@ -4231,10 +4231,8 @@
   "privacy.s2.item.password": "Je wachtwoord, alleen opgeslagen in versleutelde vorm (bcrypt-hash) — nooit in leesbare tekst, zelfs bibliothecarissen kunnen het niet zien",
   "privacy.s2.item.username": "Je openbare identificatie (login naar keuze)",
   "privacy.s2.notCollected": "De volgende gegevens worden NIET door AnarBib verzameld:",
-  "privacy.s2.notItem.address": "Postadres",
   "privacy.s2.notItem.analytics": "Gedragsanalysetools (Google Analytics, Meta-pixels, enz.)",
   "privacy.s2.notItem.birth": "Geboortedatum",
-  "privacy.s2.notItem.phone": "Telefoonnummer",
   "privacy.s2.notItem.profession": "Beroep, gender, nationaliteit, afkomst",
   "privacy.s2.notItem.tracking": "Trackingcookies van derden",
   "privacy.s2.title": "Welke gegevens AnarBib verzamelt",
@@ -4257,7 +4255,7 @@
   "privacy.s6.dpa": "Voor bibliotheken die zich bij het AnarBib-netwerk aansluiten, beschrijft een verwerkersovereenkomst (DPA) de contractuele verantwoordelijkheden tussen elke aangesloten bibliotheek en AnarBib, in overeenstemming met artikel 28 van de AVG en artikel 39 van de LGPD.",
   "privacy.s6.dpa.link": "Het model van verwerkersovereenkomst bekijken",
   "privacy.s6.noResale": "AnarBib verkoopt, verhuurt of deelt je gegevens nooit voor commerciële doeleinden. Nooit.",
-  "privacy.s6.subprocessor.brevo": "Brevo SAS — verzending van meldingsmails (herinneringen voor teruggave, reserveringsbevestigingen, enz.). Servers in de Europese Unie. Verwerkersovereenkomst opgenomen in de servicevoorwaarden van Brevo.",
+  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delaware, Verenigde Staten) — verzending van de transactionele notificatie-e-mails. Amerikaans bedrijf; het domein notifications.anarbib.org wordt gehost in Ierland (eu-west-1, EU). Doorgifte gedekt door de modelcontractbepalingen van de Europese Commissie (2021/914, module 2). Open- en kliktracering uitgeschakeld. Standaard-DPA van Resend van toepassing.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — hosting van de webinterface (frontend). Servers in Duitsland (EU). Duitse vereniging zonder winstoogmerk.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — database en authenticatie. Servers gevestigd in São Paulo (Brazilië). Verwerkersovereenkomst (DPA) ondertekend op 4 mei 2026, met de modelcontractbepalingen van de Europese Commissie (besluit 2021/914).",
   "privacy.s6.title": "Met wie je gegevens worden gedeeld",
@@ -5637,5 +5635,11 @@
   "biblioteca.regulation.removeConfirmArchive": "„{label}” archiveren? Het wordt uit de lijst verwijderd maar bewaard (omkeerbaar).",
   "biblioteca.regulation.removeConfirmDelete": "Het concept „{label}” definitief verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
   "biblioteca.regulation.archived": "Reglement gearchiveerd.",
-  "biblioteca.regulation.deleted": "Concept verwijderd."
+  "biblioteca.regulation.deleted": "Concept verwijderd.",
+  "privacy.video.title": "Videotutorials",
+  "privacy.video.body": "Sommige videotutorials worden gehost op kolektiva.media, een activistische PeerTube-instantie. Uit respect voor je privacy worden deze video's niet automatisch geladen: zolang je niet op «Video laden» klikt, wordt er niets naar kolektiva.media gestuurd. Vanaf die klik ontvangt kolektiva.media je IP-adres — zoals elke website die je bezoekt — om je de video te leveren. We hebben het P2P-delen bij deze video's uitgeschakeld, zodat je IP niet wordt blootgesteld aan andere kijkers of aan servers van derden.",
+  "account.tutorials.loadButton": "Video laden",
+  "account.tutorials.loadNotice": "Wordt pas na je klik geladen vanaf kolektiva.media. Daarvoor wordt niets verstuurd.",
+  "privacy.s2.item.phone": "Je telefoonnummer, alleen als je het wilt opgeven (optioneel)",
+  "privacy.s2.item.address": "Je postadres, alleen als je het wilt opgeven (optioneel)"
 }

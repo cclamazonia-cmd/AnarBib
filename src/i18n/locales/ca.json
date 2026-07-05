@@ -4231,10 +4231,8 @@
   "privacy.s2.item.password": "La vostra contrasenya, desada únicament en forma xifrada (hash bcrypt) — mai en clar, ni tan sols els-les-les bibliotecaris-àries-es la poden veure",
   "privacy.s2.item.username": "El vostre identificador públic (nom d'usuari que trieu)",
   "privacy.s2.notCollected": "Les dades següents NO les recull AnarBib:",
-  "privacy.s2.notItem.address": "Adreça postal",
   "privacy.s2.notItem.analytics": "Eines d'anàlisi del comportament (Google Analytics, píxels de Meta, etc.)",
   "privacy.s2.notItem.birth": "Data de naixement",
-  "privacy.s2.notItem.phone": "Número de telèfon",
   "privacy.s2.notItem.profession": "Professió, gènere, nacionalitat, origen",
   "privacy.s2.notItem.tracking": "Galetes de rastreig de tercers",
   "privacy.s2.title": "Quines dades recull AnarBib",
@@ -4257,7 +4255,7 @@
   "privacy.s6.dpa": "Per a les biblioteques que s'adhereixen a la xarxa AnarBib, un Acord de Tractament de Dades (DPA) detalla les responsabilitats contractuals entre cada biblioteca adherida i AnarBib, de conformitat amb l'article 28 del RGPD i l'article 39 de la LGPD.",
   "privacy.s6.dpa.link": "Consultar el model de DPA",
   "privacy.s6.noResale": "AnarBib no ven, no lloga ni comparteix mai les vostres dades amb finalitats comercials. Mai.",
-  "privacy.s6.subprocessor.brevo": "Brevo SAS — enviament dels correus electrònics de notificació (recordatoris de devolució, confirmacions de reserva, etc.). Servidors a la Unió Europea. DPA integrat a les condicions generals de Brevo.",
+  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delaware, Estats Units) — enviament dels correus de notificació transaccionals. Empresa estatunidenca; el domini notifications.anarbib.org està allotjat a Irlanda (eu-west-1, UE). Transferència emparada per les clàusules contractuals tipus de la Comissió Europea (2021/914, mòdul 2). Seguiment d'obertura i de clic desactivat. DPA estàndard de Resend aplicable.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — allotjament de la interfície web (frontend). Servidors a Alemanya (UE). Associació alemanya sense ànim de lucre.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — base de dades i autenticació. Servidors situats a São Paulo (Brasil). Acord de tractament de dades (DPA) signat el 4 de maig de 2026, amb les clàusules contractuals tipus de la Comissió Europea (decisió 2021/914).",
   "privacy.s6.title": "Amb qui es comparteixen les vostres dades",
@@ -5637,5 +5635,11 @@
   "biblioteca.regulation.removeConfirmArchive": "Voleu arxivar «{label}»? Es retirarà de la llista però es conservarà (reversible).",
   "biblioteca.regulation.removeConfirmDelete": "Voleu suprimir definitivament l'esborrany «{label}»? Aquesta acció és irreversible.",
   "biblioteca.regulation.archived": "Reglament arxivat.",
-  "biblioteca.regulation.deleted": "Esborrany suprimit."
+  "biblioteca.regulation.deleted": "Esborrany suprimit.",
+  "privacy.video.title": "Vídeos tutorials",
+  "privacy.video.body": "Alguns tutorials en vídeo estan allotjats a kolektiva.media, una instància PeerTube militant. Per respecte a la teva privadesa, aquests vídeos no es carreguen automàticament: mentre no facis clic a «Carrega el vídeo», no s'envia res a kolektiva.media. A partir d'aquest clic, kolektiva.media rep la teva adreça IP —com qualsevol lloc que visites— per lliurar-te el vídeo. Hem desactivat la compartició P2P en aquests vídeos, perquè la teva IP no quedi exposada a altres espectadores ni a servidors de tercers.",
+  "account.tutorials.loadButton": "Carrega el vídeo",
+  "account.tutorials.loadNotice": "Es carrega des de kolektiva.media només després del teu clic. Abans no s'envia res.",
+  "privacy.s2.item.phone": "El teu número de telèfon, només si decideixes indicar-lo (opcional)",
+  "privacy.s2.item.address": "La teva adreça postal, només si decideixes indicar-la (opcional)"
 }
