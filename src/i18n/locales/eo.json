@@ -5682,5 +5682,6 @@
   "account.events.type.atelier": "Laborgrupo",
   "account.events.type.rencontre": "Renkontiĝo",
   "account.events.type.projection": "Projekcio",
-  "account.events.type.autre": "Alia"
+  "account.events.type.autre": "Alia",
+  "notif.libraryEvent.created.title": "Nova evento en la biblioteko"
 }

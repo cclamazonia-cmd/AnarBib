@@ -5682,5 +5682,6 @@
   "account.events.type.atelier": "Workshop",
   "account.events.type.rencontre": "Begegnung",
   "account.events.type.projection": "Filmvorführung",
-  "account.events.type.autre": "Sonstiges"
+  "account.events.type.autre": "Sonstiges",
+  "notif.libraryEvent.created.title": "Neue Veranstaltung in der Bibliothek"
 }

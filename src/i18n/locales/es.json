@@ -5682,5 +5682,6 @@
   "account.events.type.atelier": "Taller",
   "account.events.type.rencontre": "Encuentro",
   "account.events.type.projection": "Proyección",
-  "account.events.type.autre": "Otro"
+  "account.events.type.autre": "Otro",
+  "notif.libraryEvent.created.title": "Nuevo evento en la biblioteca"
 }

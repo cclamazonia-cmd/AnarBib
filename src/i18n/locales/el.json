@@ -5682,5 +5682,6 @@
   "account.events.type.atelier": "Εργαστήριο",
   "account.events.type.rencontre": "Συνάντηση",
   "account.events.type.projection": "Προβολή",
-  "account.events.type.autre": "Άλλο"
+  "account.events.type.autre": "Άλλο",
+  "notif.libraryEvent.created.title": "Νέα εκδήλωση στη βιβλιοθήκη"
 }

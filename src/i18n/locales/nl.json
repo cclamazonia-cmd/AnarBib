@@ -5682,5 +5682,6 @@
   "account.events.type.atelier": "Workshop",
   "account.events.type.rencontre": "Ontmoeting",
   "account.events.type.projection": "Filmvertoning",
-  "account.events.type.autre": "Overig"
+  "account.events.type.autre": "Overig",
+  "notif.libraryEvent.created.title": "Nieuw evenement in de bibliotheek"
 }

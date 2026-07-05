@@ -12,6 +12,8 @@ function resolveRoute(n) {
   switch (n.link_type) {
     case 'reserva':
       return '/conta';
+    case 'library_event':
+      return '/conta';
     default:
       return null;
   }
