@@ -4252,7 +4252,7 @@
   "privacy.s6.dpa": "Por la bibliotekoj kiuj aliĝas al la reto AnarBib, Interkonsento pri Datumtraktado (DPA) detaligas la kontraktajn respondecojn inter ĉiu aliĝinta biblioteko kaj AnarBib, konforme al la artikolo 28 de la RGPD kaj la artikolo 39 de la LGPD.",
   "privacy.s6.dpa.link": "Konsulti la DPA-modelon",
   "privacy.s6.noResale": "AnarBib neniam vendas, ludonas nek kunhavigas viajn datumojn por komercaj celoj. Neniam.",
-  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delavaro, Usono) — sendado de la transakciaj sciigaj retmesaĝoj. Usona firmao; la domajno notifications.anarbib.org estas gastigata en Irlando (eu-west-1, EU). Transdono kovrita de la normaj kontraktaj klaŭzoj de la Eŭropa Komisiono (2021/914, modulo 2). Spurado de malfermo kaj de klako malŝaltita. Norma DPA de Resend aplikebla.",
+  "privacy.s6.subprocessor.resend": "Resend (Plus Five Five, Inc.), San-Francisko, Usono — sendado de la transakciaj sciigaj retmesaĝoj. Usona firmao; la sendaj metadatumoj estas konservataj en Usono. Transdono kovrita de la normaj kontraktaj klaŭzoj de la Eŭropa Komisiono (2021/914, modulo 2) kaj de la atestado EU-U.S. Data Privacy Framework de Resend. Spurado de malfermo kaj de klako malŝaltita.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — gastigado de la reta interfaco (frontfino). Serviloj en Germanio (EU). Germana neprofitcela asocio.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — datumbazo kaj aŭtentigo. Serviloj situantaj en San-Paŭlo (Brazilo). Interkonsento pri datumtraktado (DPA) subskribita la 4-an de majo 2026, kun la tipaj kontraktaj klaŭzoj de la Eŭropa Komisiono (decido 2021/914).",
   "privacy.s6.title": "Kun kiu viaj datumoj estas kunhavigataj",

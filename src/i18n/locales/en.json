@@ -4252,7 +4252,7 @@
   "privacy.s6.dpa": "For libraries that join the AnarBib network, a Data Processing Agreement (DPA) details the contractual responsibilities between each adhering library and AnarBib in compliance with Article 28 of the GDPR and Article 39 of the LGPD.",
   "privacy.s6.dpa.link": "View the DPA template",
   "privacy.s6.noResale": "AnarBib never sells, rents, or shares your data for commercial purposes. Never.",
-  "privacy.s6.subprocessor.resend": "Resend, Inc. (Delaware, United States) — sending of transactional notification e-mails. US company; the notifications.anarbib.org domain is hosted in Ireland (eu-west-1, EU). Transfer covered by the European Commission's standard contractual clauses (2021/914, module 2). Open and click tracking disabled. Standard Resend DPA applicable.",
+  "privacy.s6.subprocessor.resend": "Resend (Plus Five Five, Inc.), San Francisco, United States — sending of transactional notification e-mails. US company; sending metadata is stored in the United States. Transfer covered by the European Commission's standard contractual clauses (2021/914, module 2) and by Resend's EU-U.S. Data Privacy Framework certification. Open and click tracking disabled.",
   "privacy.s6.subprocessor.codeberg": "Codeberg e.V. — hosting of the web interface (frontend). Servers in Germany (EU). German non-profit association.",
   "privacy.s6.subprocessor.supabase": "Supabase Inc. — database and authentication. Servers located in São Paulo (Brazil). Data Processing Agreement (DPA) signed on May 4, 2026, with the European Commission's Standard Contractual Clauses (decision 2021/914).",
   "privacy.s6.title": "Who your data is shared with",
