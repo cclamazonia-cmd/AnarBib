@@ -11,15 +11,15 @@ Miroir GitHub (gelé, non synchronisé) / GitHub mirror (frozen, not synced) : h
 Application en production / Production app : https://app.anarbib.org
 Site vitrine / Project website : https://anarbib.org
 
-L'application est en production et utilisée par la Biblioteca Libertária Maxwell Ferreira (BLMF, Belém do Pará, Brésil). Le réseau fédéré est en cours de construction (outils fédéralistes : Communs, Entraide, Annuaire des collectifs). D'autres bibliothèques (Biblioteca Terra Livre, CIRA Marseille, Maloca Libertária) ont été sondées pour rejoindre le réseau.
+L'application est en production et utilisée par la Biblioteca Libertária Maxwell Ferreira (BLMF, Belém do Pará, Brésil). Le réseau fédéré est en cours de construction (outils fédéralistes : Communs, Entraide, Annuaire des collectifs, Assemblées, Gazette + Lettre). D'autres bibliothèques (Biblioteca Terra Livre, CIRA Marseille, Maloca Libertária / Biblioteca Emma Goldman) sont présentes en phase de test ou de partenariat.
 
-The application is in production and used by the Biblioteca Libertária Maxwell Ferreira (BLMF, Belém do Pará, Brazil). The federated network is under construction (federalist tools: Commons, Mutual aid, Directory of collectives). Other libraries (Biblioteca Terra Livre, CIRA Marseille, Maloca Libertária) have been approached to join the network.
+The application is in production and used by the Biblioteca Libertária Maxwell Ferreira (BLMF, Belém do Pará, Brazil). The federated network is under construction (federalist tools: Commons, Mutual aid, Directory of collectives, Assemblies, Gazette + Newsletter). Other libraries (Biblioteca Terra Livre, CIRA Marseille, Maloca Libertária / Biblioteca Emma Goldman) are present in a test or partnership phase.
 
 ---
 
 ## Sommaire / Table of contents
 
-- État au 24 juin 2026 / State as of 24 June 2026
+- État au 7 juillet 2026 / State as of 7 July 2026
 - Démarrage rapide / Quick start
 - Architecture
 - Configuration
@@ -38,63 +38,61 @@ The application is in production and used by the Biblioteca Libertária Maxwell 
 
 ---
 
-## État au 24 juin 2026 / State as of 24 June 2026
+## État au 7 juillet 2026 / State as of 7 July 2026
 
-### État au 24 juin 2026 (FR)
+### État au 7 juillet 2026 (FR)
 
-Chantiers livrés depuis la mi-juin 2026 (15 → 24 juin) — vérifiés sur le backend de production :
+Chantiers livrés depuis fin juin 2026 (24 juin → 7 juillet) — vérifiés sur le backend de production et le repo :
 
-- **Modèle Œuvre / Éditions / Expressions (FRBR-léger)** — Regroupement des éditions d'une même œuvre, suggestion d'éditions liées, vue publique d'œuvre et traducteurs par expression (migrations `works_model_lot1..4`, `works_v2_lotA..C`, `works_v3_expressions`, `works_v3_translators_per_expression`).
-- **Support des médias audio** — Empreinte acoustique (`audio_fingerprint_lookup`, type AcoustID + `recording_mbid` MusicBrainz), sous-couche pistes/segments, exposition du MBID dans OAI (migrations `audio_p0..p5`).
-- **Cartographie réseau livrée** — Schéma + RPC + soumissions publiques + géocodage (`submit-cartography-entry`, `geocode`), édition et flag PEB sur la carte des collectifs (l'onglet Annuaire n'est plus seulement verrouillé).
-- **Gazette fédérée & lettre d'information** — Contributions (`submit-gazette-contribution`), build mensuel (`gazette-monthly-build`), abonnement/désabonnement (`lettre-confirm`, `lettre-unsubscribe`), digest réseau (`notify-rede-digest`).
-- **Échange de fonds inter-bibliothèques** — Export/réception de *bundles* de fonds, dépôt direct, rattachement et révocation d'assets reçus, GC des dépôts (`export-fonds-bundle`, `receive-fonds-bundle`, `deposit-fonds-direct`, `attach-received-asset`, `revoke-digital-asset`, `gc-deposits`).
-- **Fournisseur OAI-PMH** — `oai-pmh-provider` + notification d'ouverture (`notify-oai-opening`) : le catalogue est moissonnable.
-- **Cycle de vie des adhésions lecteur** — Workflow d'adhésion (en attente, refus « two-strike », réactivation), application de l'adhésion active à la circulation, suggestion de numéro de lecteur, inscription publique optionnelle par bibliothèque (`reader_membership_lifecycle_log`, `enforce_active_membership_circulation`, `refusal_two_strike`, `signup_list_requires_*`).
-- **Conformité RGPD** — Anonymisation du compte à la suppression (`fn_delete_my_account`).
-- **Invitations d'équipe & onboarding** — Flux d'invitation du staff biblio (`invitation_equipe` + RPC + notification), évaluation collaborative d'onboarding.
-- **Réconciliation catalogue / disponibilité** — Filet cron nocturne de réconciliation des compteurs de disponibilité (`holdings_availability_reconcile_cron`).
-- **Backend porté à 41 Edge Functions** (contre 18 à la mi-juin) et **57 fichiers de migration** SQL (baseline + incréments), appliqués jusqu'au **23/06/2026** ; suite de tests Vitest verte (87 tests).
+- **Événements de bibliothèque** — Nouvel onglet Événements dans l'espace bibliothèque (lectures publiques, débats, ateliers), présentés en lecture au compte lecteur, avis in-app « nouvel événement à la bibliothèque », **opt-out par lecteur**, **publication différée** et **deep-link** vers l'avis (table `library_events`, migrations `library_events`, `notify_library_event_created`, `library_events_notif_prefs_and_deferred`, handler dans `notify-event`).
+- **Dépôt de garantie** — Registre des cautions remboursables par bibliothèque : AnarBib **trace sans séquestrer** les fonds (zéro donnée bancaire) — `library_deposit_rules` (règles gérées par le coordenador), `loan_deposits` (Paquet DEPOT-GARANTIE Phase 1, 30/06).
+- **Cotisations lecteur** — Règles de cotisation par bibliothèque + historique des paiements, état d'adhésion dérivé (`library_membership_rules`, `membership_payments`, vue `v_active_memberships`).
+- **Thésaurus matière FICEDL** — Cache ré-aspirable du thésaurus partagé FICEDL (**anti-fork** : libellés jamais réécrits) + alignement SKOS des sujets AnarBib (`ficedl_thesaurus_terms`, `subject_ficedl_links`, scripts `ficedl_thesaurus_scrape.mjs` / `ficedl_thesaurus_sync.mjs`).
+- **Automatisation de la Gazette** — Build mensuel et **traduction automatique des contributions** (`translate-gazette-submission`) désormais pilotés par des tâches **pg_cron actives**.
+- **Registre RGPD & politique de confidentialité unifiée** — Source unique app + site vitrine, sous-traitants à jour (Cloudflare Turnstile, DPA Cloudflare v6.4), auto-suppression des prêts clos après rétention, pseudonymisation BG2-14 (`erasure_log`).
+- **Consolidation des performances RLS** — Fusion des policies permissives multiples par table/rôle (migrations `perf_consolidate_permissive_policies_*`, 04/07).
+- **Backend** : **42 Edge Functions** Deno et **90 migrations** SQL (baseline + incréments) appliquées jusqu'au **2026-07-05** ; base de **174 tables**, **~552 fonctions/routines**, **31 tâches pg_cron** actives ; suite Vitest verte (**87 tests**, 4 fichiers).
 
-Chantiers structurants consolidés (mai–juin 2026) :
+Chantiers structurants consolidés (mai–juin 2026, toujours en place) :
 
-- **Migration CI/CD Woodpecker → Forgejo Actions (11/06/2026)** — Woodpecker hébergé étant devenu instable (~22 % d'uptime), la CI est passée aux **Forgejo Actions** natives de Codeberg (`.forgejo/workflows/ci.yml`), sur un **runner auto-hébergé** (`anarbib-local`, service systemd sur le WSL2 du mainteneur). Deux jobs séquentiels : `app` (install → lint bloquant → test bloquant → build Vite → déploiement Codeberg Pages) puis `backend` (`needs: app` → déploiement des Edge Functions → `supabase db push`). Le fichier `.woodpecker.yml` a été retiré.
-- **Consolidation des remotes git sur Codeberg (12/06/2026)** — Fin du dual-push GitHub. `origin` **et** `codeberg` pointent désormais tous deux sur `codeberg.org/AnarBib/anarbib`. Le miroir GitHub `cclamazonia-cmd/AnarBib` n'est plus alimenté par git et reste en retard tant que l'auth GitHub (PAT/SSH) n'est pas rétablie — **sans impact** sur prod/CI/déploiement.
-- **Socle PWA installable — MOBILE Paquet 0** — `manifest.webmanifest`, service worker (`public/sw.js`), jeu d'icônes (favicon, apple-touch-icon, icônes 192/512), métadonnées iOS/Android dans `index.html`. L'application est désormais installable sur l'écran d'accueil.
-- **Outils fédéralistes (federacao)** — Mise en avant sur l'accueil des onglets **Communs**, **Entraide** et **Annuaire** (carte des collectifs, désormais alimentée par la cartographie). Spec : `docs/specs/spec-outils-federalistes.md` v0.2.
+- **Migration CI/CD Woodpecker → Forgejo Actions (11/06/2026)** — Woodpecker hébergé étant devenu instable (~22 % d'uptime), la CI est passée aux **Forgejo Actions** natives de Codeberg (`.forgejo/workflows/ci.yml`), sur un **runner auto-hébergé** (`anarbib-local`, service systemd sur le WSL2 du mainteneur). Deux jobs séquentiels : `app` (install → lint bloquant → test bloquant → build Vite → déploiement Codeberg Pages) puis `backend` (`needs: app` → déploiement des Edge Functions → `supabase db push`). Un second workflow `.forgejo/workflows/sql-tests.yml` reconstruit le schéma et lance les tests SQL. Le fichier `.woodpecker.yml` a été retiré.
+- **Consolidation des remotes git sur Codeberg (12/06/2026)** — Fin du dual-push GitHub. `origin` **et** `codeberg` pointent désormais tous deux sur `codeberg.org/anarbib/anarbib`. Le miroir GitHub `cclamazonia-cmd/AnarBib` n'est plus alimenté par git et reste en retard tant que l'auth GitHub (PAT/SSH) n'est pas rétablie — **sans impact** sur prod/CI/déploiement.
+- **Socle PWA installable — MOBILE Paquet 0** — `manifest.webmanifest`, service worker (`public/sw.js`), jeu d'icônes (favicon, apple-touch-icon, icônes 192/512), métadonnées iOS/Android dans `index.html`. L'application est installable sur l'écran d'accueil.
+- **Outils fédéralistes (federacao)** — Onglets **Communs**, **Entraide**, **Annuaire** (carte des collectifs alimentée par la cartographie), **Assemblées** du réseau, **Gazette** + **Lettre de la fédération**. Spec : `docs/specs/spec-outils-federalistes.md`.
 - **Internationalisation à 10 locales en parité stricte** — `pt-BR` (référence) + `fr, es, en, it, de, ca, eo, nl, el`, toutes câblées et chargées en lazy, parité de clés gardée par la CI. Charte de langage inclusif **v2** (2026-06-05) couvrant les 10 locales (la v1 est dépréciée).
-- **Réorganisation de la documentation** — `docs/decisions/` renommé en `docs/journal/` (sous-dossiers typés), `notes-audit/` déplacé sous `docs/notes-audit/`. Corpus : `docs/governance/` (guide de gouvernance traduit en 10 langues), `docs/cartographie/`, `docs/schema/` (snapshot baseline), `docs/db/`.
+- **Réorganisation de la documentation** — `docs/decisions/` renommé en `docs/journal/` (sous-dossiers typés), `notes-audit/` déplacé sous `docs/notes-audit/`. Corpus : `docs/governance/` (guide de gouvernance traduit en 10 langues), `docs/guides/`, `docs/cartographie/`, `docs/schema/` (snapshot baseline), `docs/db/`, manuels et guides de cotation traduits en 10 locales.
 
-Chantiers de fond hérités (toujours en production) : Admin réseau (cooptation/retrait collectif à l'unanimité), Profils d'adoption (4 axes politiques orthogonaux : `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), workflow des consultations sur place. Leurs specs ont été révisées (voir Articulation des specs).
+Chantiers de fond hérités (toujours en production) : Admin réseau (cooptation/retrait collectif à l'unanimité), Profils d'adoption (4 axes politiques orthogonaux : `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), workflow des consultations sur place, catalogue de découverte (longue traîne OPAC), autorités enrichies, PEB / partage numérique, fonds sonores, lecteur ePub et OCR.
+
+**Passage au codage à la main (07/07/2026)** — `CLAUDE.md` et le dossier `.claude/` (commandes + skills des agents) ont été **retirés du suivi git** ; conservés uniquement en local et ignorés via `.gitignore`. Ils ne font plus partie du dépôt.
 
 Le détail des chantiers en cours, des dettes et des priorités vit dans le backlog courant (`docs/backlogs/`, voir `INDEX.md` pour la version courante) et le `REGISTRE_decisions.md` des specs.
 
-### State as of 24 June 2026 (EN)
+### State as of 7 July 2026 (EN)
 
-Work delivered since mid-June 2026 (15 → 24 June) — verified against the production backend:
+Work delivered since late June 2026 (24 June → 7 July) — verified against the production backend and the repo:
 
-- **Work / Editions / Expressions model (light FRBR)** — Grouping editions of a single work, suggesting related editions, public work view and per-expression translators (migrations `works_model_lot1..4`, `works_v2_lotA..C`, `works_v3_expressions`, `works_v3_translators_per_expression`).
-- **Audio media support** — Acoustic fingerprinting (`audio_fingerprint_lookup`, AcoustID + MusicBrainz `recording_mbid`), tracks/segments sublayer, MBID exposed in OAI (migrations `audio_p0..p5`).
-- **Network cartography delivered** — Schema + RPC + public submissions + geocoding (`submit-cartography-entry`, `geocode`), editing and ILL flag on the collectives map (the Directory tab is no longer merely locked).
-- **Federated gazette & newsletter** — Contributions (`submit-gazette-contribution`), monthly build (`gazette-monthly-build`), subscribe/unsubscribe (`lettre-confirm`, `lettre-unsubscribe`), network digest (`notify-rede-digest`).
-- **Inter-library fonds exchange** — Export/receive fonds bundles, direct deposit, attach and revoke received assets, deposit GC (`export-fonds-bundle`, `receive-fonds-bundle`, `deposit-fonds-direct`, `attach-received-asset`, `revoke-digital-asset`, `gc-deposits`).
-- **OAI-PMH provider** — `oai-pmh-provider` + opening notification (`notify-oai-opening`): the catalogue is harvestable.
-- **Reader membership lifecycle** — Membership workflow (pending, "two-strike" refusal, reactivation), active-membership enforcement on circulation, next-reader-number suggestion, optional per-library public signup (`reader_membership_lifecycle_log`, `enforce_active_membership_circulation`, `refusal_two_strike`, `signup_list_requires_*`).
-- **GDPR compliance** — Account anonymization on deletion (`fn_delete_my_account`).
-- **Team invitations & onboarding** — Library-staff invitation flow (`invitation_equipe` + RPC + notification), collaborative onboarding evaluation.
-- **Catalogue / availability reconciliation** — Nightly cron net reconciling availability counters (`holdings_availability_reconcile_cron`).
-- **Backend grown to 41 Edge Functions** (up from 18 in mid-June) and **57 migration files** (baseline + increments) applied through **2026-06-23**; Vitest suite green (87 tests).
+- **Library events** — New Events tab in the library space (public readings, debates, workshops), surfaced read-only on the reader account, in-app "new library event" notice, **per-reader opt-out**, **deferred publication** and **deep-link** to the notice (`library_events` table, migrations `library_events`, `notify_library_event_created`, `library_events_notif_prefs_and_deferred`, handler in `notify-event`).
+- **Loan deposits (guarantee)** — Refundable-deposit registry per library: AnarBib **tracks without escrowing** funds (zero banking data) — `library_deposit_rules` (coordenador-managed rules), `loan_deposits` (DEPOT-GARANTIE package, Phase 1, 30/06).
+- **Reader membership dues** — Per-library dues rules + payment history, derived membership state (`library_membership_rules`, `membership_payments`, `v_active_memberships` view).
+- **FICEDL subject thesaurus** — Re-scrapable cache of the shared FICEDL thesaurus (**anti-fork**: labels never rewritten) + SKOS alignment of AnarBib subjects (`ficedl_thesaurus_terms`, `subject_ficedl_links`, scripts `ficedl_thesaurus_scrape.mjs` / `ficedl_thesaurus_sync.mjs`).
+- **Gazette automation** — Monthly build and **automatic translation of contributions** (`translate-gazette-submission`) now driven by **active pg_cron jobs**.
+- **GDPR register & unified privacy policy** — Single source for app + project website, subprocessors up to date (Cloudflare Turnstile, Cloudflare DPA v6.4), auto-deletion of closed loans after retention, BG2-14 pseudonymization (`erasure_log`).
+- **RLS performance consolidation** — Merging of multiple permissive policies per table/role (`perf_consolidate_permissive_policies_*` migrations, 04/07).
+- **Backend**: **42 Deno Edge Functions** and **90 SQL migrations** (baseline + increments) applied through **2026-07-05**; database of **174 tables**, **~552 functions/routines**, **31 active pg_cron jobs**; Vitest suite green (**87 tests**, 4 files).
 
-Structural work consolidated (May–June 2026):
+Structural work consolidated (May–June 2026, still in place):
 
-- **CI/CD migration Woodpecker → Forgejo Actions (11/06/2026)** — Hosted Woodpecker having become unstable (~22% uptime), CI moved to Codeberg-native **Forgejo Actions** (`.forgejo/workflows/ci.yml`) on a **self-hosted runner** (`anarbib-local`, a systemd service on the maintainer's WSL2). Two sequential jobs: `app` (install → blocking lint → blocking test → Vite build → Codeberg Pages deploy) then `backend` (`needs: app` → Edge Functions deploy → `supabase db push`). The `.woodpecker.yml` file was removed.
-- **Git remotes consolidated on Codeberg (12/06/2026)** — End of GitHub dual-push. `origin` **and** `codeberg` now both point to `codeberg.org/AnarBib/anarbib`. The GitHub mirror `cclamazonia-cmd/AnarBib` is no longer fed by git and stays behind until GitHub auth (PAT/SSH) is restored — **no impact** on prod/CI/deployment.
-- **Installable PWA foundation — MOBILE Package 0** — `manifest.webmanifest`, service worker (`public/sw.js`), icon set (favicon, apple-touch-icon, 192/512 icons), iOS/Android metadata in `index.html`. The app is now installable to the home screen.
-- **Federalist tools (federacao)** — Homepage surfaces the **Commons**, **Mutual aid** and **Directory** tabs (collectives map, now fed by the cartography). Spec: `docs/specs/spec-outils-federalistes.md` v0.2.
+- **CI/CD migration Woodpecker → Forgejo Actions (11/06/2026)** — Hosted Woodpecker having become unstable (~22% uptime), CI moved to Codeberg-native **Forgejo Actions** (`.forgejo/workflows/ci.yml`) on a **self-hosted runner** (`anarbib-local`, a systemd service on the maintainer's WSL2). Two sequential jobs: `app` (install → blocking lint → blocking test → Vite build → Codeberg Pages deploy) then `backend` (`needs: app` → Edge Functions deploy → `supabase db push`). A second workflow `.forgejo/workflows/sql-tests.yml` rebuilds the schema and runs the SQL tests. The `.woodpecker.yml` file was removed.
+- **Git remotes consolidated on Codeberg (12/06/2026)** — End of GitHub dual-push. `origin` **and** `codeberg` now both point to `codeberg.org/anarbib/anarbib`. The GitHub mirror `cclamazonia-cmd/AnarBib` is no longer fed by git and stays behind until GitHub auth (PAT/SSH) is restored — **no impact** on prod/CI/deployment.
+- **Installable PWA foundation — MOBILE Package 0** — `manifest.webmanifest`, service worker (`public/sw.js`), icon set (favicon, apple-touch-icon, 192/512 icons), iOS/Android metadata in `index.html`. The app is installable to the home screen.
+- **Federalist tools (federacao)** — **Commons**, **Mutual aid**, **Directory** (collectives map fed by the cartography), network **Assemblies**, **Gazette** + **Federation newsletter** tabs. Spec: `docs/specs/spec-outils-federalistes.md`.
 - **Internationalization at 10 locales at strict parity** — `pt-BR` (reference) + `fr, es, en, it, de, ca, eo, nl, el`, all wired and lazy-loaded, key parity enforced by CI. Inclusive language charter **v2** (2026-06-05) covering all 10 locales (v1 deprecated).
-- **Documentation reorganized** — `docs/decisions/` renamed to `docs/journal/` (typed subfolders), `notes-audit/` moved under `docs/notes-audit/`. Corpora: `docs/governance/` (governance guide translated into 10 languages), `docs/cartographie/`, `docs/schema/` (baseline snapshot), `docs/db/`.
+- **Documentation reorganized** — `docs/decisions/` renamed to `docs/journal/` (typed subfolders), `notes-audit/` moved under `docs/notes-audit/`. Corpora: `docs/governance/` (governance guide translated into 10 languages), `docs/guides/`, `docs/cartographie/`, `docs/schema/` (baseline snapshot), `docs/db/`, manuals and classification guides translated into 10 locales.
 
-Inherited core work (still in production): Network admin (unanimous co-optation/collective removal), Adoption profiles (4 orthogonal political axes: `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), on-site consultation workflow. Their specs have been revised (see Spec articulation).
+Inherited core work (still in production): Network admin (unanimous co-optation/collective removal), Adoption profiles (4 orthogonal political axes: `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), on-site consultation workflow, discovery catalogue (OPAC long tail), enriched authorities, ILL / digital sharing, audio fonds, ePub reader and OCR.
+
+**Move to hand coding (07/07/2026)** — `CLAUDE.md` and the `.claude/` directory (agent commands + skills) were **removed from git tracking**; kept locally only and ignored via `.gitignore`. They are no longer part of the repository.
 
 The detail of work in progress, debts and priorities lives in the current backlog (`docs/backlogs/`, see `INDEX.md` for the current version) and the specs' `REGISTRE_decisions.md`.
 
@@ -162,31 +160,38 @@ npm run build
 
 ```
 anarbib/
-├── .claude/                # Commandes et skills pour Claude Code
 ├── .forgejo/
 │   └── workflows/
-│       └── ci.yml          # CI/CD Forgejo Actions (jobs app + backend)
+│       ├── ci.yml            # CI/CD Forgejo Actions (jobs app + backend)
+│       └── sql-tests.yml     # Reconstruction du schéma + tests SQL
 ├── .githooks/
-│   └── pre-commit.ps1      # Garde-fou doctrine SQL (REVOKE, SECURITY DEFINER, RLS, security_invoker)
+│   └── pre-commit.ps1        # Garde-fou doctrine SQL (REVOKE, SECURITY DEFINER, RLS, security_invoker)
 ├── public/
-│   ├── manifest.webmanifest # Manifest PWA
-│   ├── sw.js                # Service worker
-│   ├── img/                 # Icônes (favicon, apple-touch, 192/512, og-image)
-│   ├── fonts/               # Polices auto-hébergées (Fira Sans, Bitter…)
-│   ├── vendor/              # Assets tiers
+│   ├── manifest.webmanifest  # Manifest PWA
+│   ├── sw.js                 # Service worker
+│   ├── img/                  # Icônes (favicon, apple-touch, 192/512, og-image)
+│   ├── fonts/                # Polices auto-hébergées (Fira Sans, Bitter…)
+│   ├── vendor/               # Assets tiers (dont tesseract/ pour l'OCR)
 │   ├── 404.html / CNAME / .domains  # Routage SPA + custom domain Codeberg Pages
 │   └── favicon.ico
-├── scripts/                 # apply-patch.ps1, cleanup-specs-corpus.sh, cleanup-docs-corpus.sh…
+├── scripts/                  # apply-patch.ps1, i18n-add-*.cjs, patch-*.cjs, merge-*.cjs,
+│                             #   ficedl_thesaurus_*.mjs, build-network-map-geojson.cjs, backup/, ci/, nominatim/…
 ├── src/
 │   ├── components/
-│   │   ├── layout/         # PageShell, Topbar, Hero, Footer, ProtectedRoute, Skeleton
-│   │   ├── ui/             # Button, Input, Card, Sheet, Pill, StatusBadge, SortHeader, NetworkAdminBadge
-│   │   └── forms/          # CountrySelect, PhoneInput, StateSelect, countryData
+│   │   ├── layout/          # PageShell, Topbar, Hero, Footer, ProtectedRoute, Skeleton
+│   │   ├── ui/              # Button, Input, Card, Sheet, Pill, StatusBadge, SortHeader…
+│   │   ├── forms/           # CountrySelect, PhoneInput, StateSelect, countryData
+│   │   ├── viewers/ ocr/    # Visionneuses multiformat (PDF/ePub) + OCR Tesseract
+│   │   ├── notifications/   # Cloche de notifications in-app
+│   │   ├── deposit/ team/ reservation/ library/ account/ rede/ atelier/ privacy/  # UI par domaine
+│   │   ├── ErrorBoundary.jsx UnifiedSearchCombobox.jsx IdleTimerGuard.jsx …        # Composants transverses
+│   │   └── LibraryProfileWizard.jsx / UserHeroBadge.jsx / LocaleSwitcher.jsx …
 │   ├── contexts/
-│   │   ├── AuthContext.jsx     # État d'authentification Supabase
-│   │   └── LibraryContext.jsx  # Bibliothèque active, memberships, rôle effectif, isNetworkAdmin
-│   ├── hooks/
-│   │   └── useSort.js          # Tri par colonnes
+│   │   ├── AuthContext.jsx      # État d'authentification Supabase
+│   │   ├── LibraryContext.jsx   # Bibliothèque active, memberships, rôle effectif, isNetworkAdmin
+│   │   └── ToastContext.jsx     # Notifications éphémères (toasts)
+│   ├── hooks/                  # useNotifications, useIdleTimer, useEffectiveScope,
+│   │                          #   useBookAvailability, useAccountAvailability, usePanelAvailability
 │   ├── i18n/
 │   │   ├── index.js            # SUPPORTED_LOCALES + LOADERS (pt-BR statique, 9 autres en lazy)
 │   │   └── locales/            # 10 fichiers : ca, de, el, en, eo, es, fr, it, nl, pt-BR (.json)
@@ -194,71 +199,81 @@ anarbib/
 │   │   ├── supabase.js         # Client Supabase
 │   │   ├── theme.js            # Chargement dynamique de thème
 │   │   ├── countries.js        # Helper noms de pays (i18n-iso-countries)
-│   │   ├── scheduleFormat.js   # Helper formatSchedule pour créneaux consultas
-│   │   └── roles.js            # Hiérarchie ROLE_RANK + STAFF_ROLES + effectiveRole
+│   │   ├── roles.js            # Hiérarchie ROLE_RANK + STAFF_ROLES + effectiveRole
+│   │   ├── scheduleFormat.js / addressFormat.js / citations.js / i18nLabel.js / localizeError.js
+│   │   ├── reportPdf.js / regimentoPdf.js / skosExport.js   # Exports PDF / SKOS
+│   │   ├── chromaprintFingerprint.js                        # Empreinte audio (AcoustID)
+│   │   ├── passwordPolicy.js / systemNotes.js / teamMutations.js / staffStorage.js / catalogFilters.js
+│   │   └── reader/             # Helpers de l'espace lecteur
 │   ├── pages/
 │   │   ├── public/         # Catalogue, fiche livre, fiche auteur, login, signup, accueil fédéraliste
-│   │   ├── account/        # Espace lecteur (réservations, prêts, consultas, profil)
+│   │   ├── account/        # Espace lecteur (réservations, prêts, consultas, événements, profil)
 │   │   ├── painel/         # Tableau de bord bibliothécaire
-│   │   ├── biblioteca/     # Configuration bibliothèque (règlement, équipe, stats)
-│   │   ├── catalogacao/    # Catalogage (livres, auteurs, exemplaires, autorités, drafts)
+│   │   ├── biblioteca/     # Configuration bibliothèque (règlement, équipe, stats, événements, horaires)
+│   │   ├── catalogacao/    # Catalogage (livres, auteurs, exemplaires, autorités, drafts, sujets/FICEDL)
 │   │   ├── importacoes/    # Import/export de catalogues partenaires
-│   │   └── rede/           # Dashboard réseau inter-bibliothèques + AdminsPanel
+│   │   ├── atelier/        # Atelier des autorités (propositions inter-biblios)
+│   │   ├── federacao/      # Outils fédéralistes (Communs, Entraide, Annuaire, Assemblées, Gazette, Lettre)
+│   │   ├── rede/           # Dashboard réseau inter-bibliothèques + AdminsPanel
+│   │   └── dev/            # Pages de développement / diagnostic
 │   ├── styles/
 │   │   ├── theme-base.css  # Variables CSS de marque
 │   │   ├── fonts.css       # Déclarations @font-face (polices auto-hébergées)
+│   │   ├── breakpoints.css # Points de rupture responsive
 │   │   └── catalog.css     # Grille du catalogue
-│   ├── tests/              # Tests Vitest (dont i18n.test.js, parité des 10 locales)
+│   ├── tests/              # Tests Vitest (i18n.test.js parité 10 locales, catalogFilters, criar-conta-i18n)
 │   ├── App.jsx             # Router + Providers
 │   └── main.jsx            # Point d'entrée
 │
 ├── supabase/
-│   ├── migrations/         # 57 fichiers (baseline 20260510 + migrations incrémentales jusqu'au 23/06/2026, _TEMPLATE.sql inclus)
-│   └── functions/          # 41 Edge Functions Deno (hors _shared/)
-│       ├── notify-event/   # Routeur d'événements + handlers de domaine (team.*, network.*, consultas.*…)
+│   ├── migrations/         # 90 fichiers (baseline 20260510 + incréments jusqu'au 2026-07-05, _TEMPLATE.sql inclus)
+│   └── functions/          # 42 Edge Functions Deno (hors _shared/)
+│       ├── notify-event/   # Routeur d'événements + handlers de domaine (team.*, network.*, consultas.*, library-event…)
 │       │   └── _shared/    # domain/, mail/ (layout.ts : renderEmail + actionBox), i18n/ (mail-strings.ts)
 │       ├── register/ login/ request-password-reset/  # Inscription / auth / reset mot de passe
 │       ├── bn_isbn_lookup/ catalog_metadata_lookup/ fetch-url-metadata/ cover_lookup/  # Catalogage / métadonnées / couvertures
 │       ├── authority_lookup/ author_portrait_lookup/ audio_fingerprint_lookup/  # Autorités, portraits d'auteurs, empreinte audio
-│       ├── notify-*/        # Notifications lecteur, biblio, réseau, PEB, rapports hebdo, digest réseau
+│       ├── notify-*/        # Notifications lecteur, biblio, réseau, PEB, tâches internes, rapports hebdo, digest réseau
 │       ├── probe-partner-catalog/ process-partner-catalog-import/ export-catalog-lote/  # Catalogues partenaires + export
 │       ├── export-fonds-bundle/ receive-fonds-bundle/ deposit-fonds-direct/ attach-received-asset/ gc-deposits/  # Échange de fonds inter-biblio
 │       ├── oai-pmh-provider/ notify-oai-opening/  # Fournisseur OAI-PMH
 │       ├── submit-cartography-entry/ geocode/  # Cartographie réseau + géocodage
-│       ├── submit-gazette-contribution/ gazette-monthly-build/ lettre-confirm/ lettre-unsubscribe/  # Gazette fédérée + lettre d'info
+│       ├── submit-gazette-contribution/ translate-gazette-submission/ gazette-monthly-build/ lettre-confirm/ lettre-unsubscribe/  # Gazette + lettre d'info
 │       ├── read-pdf/ read-digital-asset/ read-ill-shared-asset/ revoke-digital-asset/  # Lecture PDF / assets / PEB
 │       └── mail-i18n-test/  # Outil de test i18n des mails
 │
 ├── tests/
-│   └── sql/                # Tests SQL d'acceptation (paquet19, 24, 25, 26, A, A1…)
+│   └── sql/                # Tests SQL d'acceptation (paquets consultas, emprunts, réservations, PEB, cotisation, dépôt, onboarding…)
 │
 ├── docs/
 │   ├── specs/              # Specs de chantiers + INDEX.md, INVENTAIRE.md, REGISTRE_decisions.md
 │   ├── journal/            # Journal de décisions (ex-decisions/, sous-dossiers typés)
 │   ├── backlogs/           # Backlogs versionnés + archive/ + INDEX.md + ETAT-AVANCEMENT-multisessions.md
-│   ├── governance/         # Guide de gouvernance (traduit en 10 langues)
-│   ├── cartographie/ db/ schema/ GLB/   # Corpus complémentaires (schéma baseline, cartographie réseau…)
+│   ├── governance/ guides/ # Guide de gouvernance + guides (traduits en 10 langues)
+│   ├── cartographie/ db/ schema/ GLB/ drafts/   # Corpus complémentaires (schéma baseline, cartographie réseau…)
 │   ├── notes-audit/        # Charte de langage inclusif (v2) + audits i18n
+│   ├── manual-*.md / cotation-et-cdd-*.md        # Manuel utilisateur + guide de cotation (10 locales)
 │   └── legal/              # Documents juridiques (RGPD, licence CC-BY-SA)
 │
-├── .gitignore             # Ignore .bak.*, create-*.cjs, fix-*.cjs (scripts one-shot)
+├── .gitignore             # Ignore .claude/, CLAUDE.md, scripts one-shot (create-*.cjs, fix-*.cjs), secrets (*.pass, *.env)…
 ├── package.json / package-lock.json
 ├── eslint.config.js / vite.config.js / vitest.config.js
 ├── restart.sh             # Purge cache Vite + relance dev
-├── CLAUDE.md              # Guide de travail des agents (état vérifié du dépôt)
 ├── LICENSE / LICENSE-docs # AGPL-3.0 (code) / CC-BY-SA-4.0 (docs)
 └── README.md             # Ce fichier
 ```
+
+> ℹ️ `CLAUDE.md` et le dossier `.claude/` existent en local chez le mainteneur mais **ne sont plus versionnés** (voir État au 7 juillet 2026).
 
 ### Architecture (EN)
 
 The codebase mirrors the structure above. Key directories:
 
-- `src/` — React 19 + Vite 6 frontend (react-router-dom 7, react-intl 7) with React Context for auth and library state, react-intl for i18n across 10 locales, themed UI components.
-- `supabase/migrations/` — 57 versioned migration files (baseline `20260510000000_baseline_live` + increments, latest applied 2026-06-23) applied automatically by the Forgejo `backend` job on push to `main`.
-- `supabase/functions/` — 41 Deno Edge Functions (transactional mail via `notify-event`; ISBN / metadata / cover / authority / audio-fingerprint lookups; partner-catalog import & export; inter-library fonds exchange; OAI-PMH provider; network cartography + geocoding; federated gazette + newsletter; PDF/asset reads; login / register / password-reset; etc.). `_shared/` is a shared module excluded from deployment.
-- `docs/` — Specifications (in French), decision journal (`journal/`), versioned backlogs, governance guide, inclusive-language charter (`notes-audit/`), legal documents.
-- `.forgejo/workflows/ci.yml` — Forgejo Actions CI/CD (replaces the former `.woodpecker.yml`).
+- `src/` — React 19 + Vite 6 frontend (react-router-dom 7, react-intl 7) with React Context for auth, library state and toasts, react-intl for i18n across 10 locales, themed UI components, multiformat viewers (PDF/ePub) and Tesseract OCR.
+- `supabase/migrations/` — 90 versioned migration files (baseline `20260510000000_baseline_live` + increments, latest applied 2026-07-05) applied automatically by the Forgejo `backend` job on push to `main`.
+- `supabase/functions/` — 42 Deno Edge Functions (transactional mail via `notify-event`; ISBN / metadata / cover / authority / audio-fingerprint lookups; partner-catalog import & export; inter-library fonds exchange; OAI-PMH provider; network cartography + geocoding; federated gazette + newsletter + auto-translation; PDF/asset reads; login / register / password-reset; etc.). `_shared/` is a shared module excluded from deployment.
+- `docs/` — Specifications (in French), decision journal (`journal/`), versioned backlogs, governance guide, guides and manuals (10 locales), inclusive-language charter (`notes-audit/`), legal documents.
+- `.forgejo/workflows/` — Forgejo Actions CI/CD: `ci.yml` (app + backend) and `sql-tests.yml` (schema rebuild + SQL tests). Replaces the former `.woodpecker.yml`.
 - `.githooks/pre-commit.ps1` — Doctrinal SQL guardrail (activate with `git config core.hooksPath .githooks`).
 
 ---
@@ -306,6 +321,8 @@ Deux jobs séquentiels (le découpage est imposé par la limite ~5 min/job des r
 - **`app`** : install → **lint bloquant** → **test bloquant** → build Vite → déploiement Codeberg Pages (branche `pages`, commit orphelin force-push).
 - **`backend`** (`needs: app`) : déploiement des Edge Functions → `supabase db push --linked --include-all`. Utilise la **CLI Supabase v2.98.1**.
 
+Un second workflow (`.forgejo/workflows/sql-tests.yml`) reconstruit le schéma public et déroule les tests SQL d'acceptation (sans `pg_cron` : tout `cron.schedule` d'une migration doit être dans un bloc `DO`/`EXCEPTION` sinon la CI casse).
+
 Garde-fous Forgejo : `concurrency: cicd-main` (`cancel-in-progress: false`) **sérialise** les runs sur `main`, et le runner traite **un job à la fois** — deux runs ne s'exécutent jamais en parallèle.
 
 > ⚠️ **Migration depuis Woodpecker (11/06/2026)** : Woodpecker hébergé étant devenu instable (~22 % d'uptime), la CI est passée à Forgejo Actions. Le fichier `.woodpecker.yml` a été retiré.
@@ -348,6 +365,8 @@ Two sequential jobs (the split is imposed by the ~5 min/job runner limit):
 
 - **`app`**: install → **blocking lint** → **blocking test** → Vite build → Codeberg Pages deploy (`pages` branch, orphan commit force-push).
 - **`backend`** (`needs: app`): Edge Functions deploy → `supabase db push --linked --include-all`. Uses **Supabase CLI v2.98.1**.
+
+A second workflow (`.forgejo/workflows/sql-tests.yml`) rebuilds the public schema and runs the SQL acceptance tests (without `pg_cron`: any `cron.schedule` in a migration must sit inside a `DO`/`EXCEPTION` block or CI breaks).
 
 Forgejo guardrails: `concurrency: cicd-main` (`cancel-in-progress: false`) **serializes** runs on `main`, and the runner processes **one job at a time** — two runs never run in parallel.
 
@@ -401,7 +420,9 @@ Ces doctrines ont émergé des chantiers récents et s'appliquent à tout nouvea
 
 **Mails militants : qui notifier ?** — Principe directeur : notifier celui qui n'a pas initié l'action, pas celui qui agit.
 
-**Contrat `actionBox` (`renderEmail`)** — Le paramètre `actionBox` de `renderEmail` (`_shared/mail/layout.ts`) attend `{ kind: 'action' | 'info', title, ctaUrl, ctaLabel }` — **PAS** `{ kind, label, url }`. Mauvais contrat → bug runtime `Cannot read properties of undefined (reading 'replace')`. Toujours lire `layout.ts` avant de consommer `actionBox`.
+**Contrat `actionBox` (`renderEmail`)** — Le paramètre `actionBox` de `renderEmail` (`_shared/mail/layout.ts`) attend `{ kind: 'action' | 'info', title, ctaUrl, ctaLabel }` — **PAS** `{ kind, label, url }`. Mauvais contrat → bug runtime `Cannot read properties of undefined (reading 'replace')`. Toujours lire `layout.ts` avant de consumer `actionBox`.
+
+**Compte auth créé en SQL direct** — Créer un utilisateur directement dans `auth.users` (hors API GoTrue) exige de mettre **toutes les colonnes de tokens à chaîne vide `''`, jamais `NULL`** (`confirmation_token`, `recovery_token`, `email_change`, `email_change_token_new/current`, `phone_change`, `phone_change_token`, `reauthentication_token`). Sinon `signInWithPassword` renvoie `500: Database error querying schema` que la fonction `login` traduit en « Email ou mot de passe incorrect » — symptôme trompeur alors que le hash bcrypt est valide.
 
 **UTF-8 sur Windows PowerShell** — Écriture : `Get-Content -Raw` lit en CP1252 et corrompt l'UTF-8 ; méthode sûre `[System.IO.File]::ReadAllText($path, [System.Text.UTF8Encoding]::new($false))` ou scripts Node `.cjs`. Lecture : `Get-Content` peut afficher des mojibakes alors que le fichier est valide ; toujours vérifier avec `ReadAllText` UTF-8 explicite avant de croire à un bug.
 
@@ -431,6 +452,8 @@ These doctrines emerged from recent work and apply to all new code. They are rec
 
 **`actionBox` contract (`renderEmail`)** — The `actionBox` parameter of `renderEmail` (`_shared/mail/layout.ts`) expects `{ kind: 'action' | 'info', title, ctaUrl, ctaLabel }` — **NOT** `{ kind, label, url }`. Wrong contract → runtime bug `Cannot read properties of undefined (reading 'replace')`. Always read `layout.ts` before consuming `actionBox`.
 
+**Auth account created via raw SQL** — Creating a user directly in `auth.users` (bypassing the GoTrue API) requires setting **all token columns to empty string `''`, never `NULL`** (`confirmation_token`, `recovery_token`, `email_change`, `email_change_token_new/current`, `phone_change`, `phone_change_token`, `reauthentication_token`). Otherwise `signInWithPassword` returns `500: Database error querying schema`, which the `login` function turns into "wrong email or password" — a misleading symptom even though the bcrypt hash is valid.
+
 **UTF-8 on Windows PowerShell** — Writing: `Get-Content -Raw` reads in CP1252 and corrupts UTF-8; safe method `[System.IO.File]::ReadAllText($path, [System.Text.UTF8Encoding]::new($false))` or Node `.cjs` scripts. Reading: `Get-Content` can display mojibakes while the file is actually valid; always verify with explicit `ReadAllText` UTF-8 before assuming a bug.
 
 **Supabase `onAuthStateChange`** — NEVER use `async`/`await` inside the `supabase.auth.onAuthStateChange` callback: any Supabase API call there causes a deadlock. Required workaround:
@@ -449,9 +472,9 @@ supabase.auth.onAuthStateChange((event, session) => {
 
 ### Internationalisation (FR)
 
-L'application est entièrement multilingue : `src/i18n/locales/` contient **10 fichiers** — `pt-BR` (référence, importée statiquement et fallback) + `fr, es, en, it, de, ca, eo, nl, el` (chargées en lazy via `import()`). Les 10 sont câblées dans `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) et **maintenues en parité stricte de clés** (5493 clés, gardée par la CI). Les Edge Functions de notification mail utilisent le même système via `_shared/i18n/mail-strings.ts`.
+L'application est entièrement multilingue : `src/i18n/locales/` contient **10 fichiers** — `pt-BR` (référence, importée statiquement et fallback) + `fr, es, en, it, de, ca, eo, nl, el` (chargées en lazy via `import()`). Les 10 sont câblées dans `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) et **maintenues en parité stricte de clés** (~5685 clés, gardée par la CI). Les Edge Functions de notification mail utilisent le même système via `_shared/i18n/mail-strings.ts`.
 
-**Charte de langage inclusif** — La **source unique** des conventions est `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md` (v2, 2026-06-05, couvre les 10 locales). **La v1 est dépréciée** (conservée pour historique). Le fichier `src/i18n/README-i18n-section.md` est **obsolète** (6 locales, ~1393 clés) : ne plus s'y référer.
+**Charte de langage inclusif** — La **source unique** des conventions est `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md` (v2, 2026-06-05, couvre les 10 locales). **La v1 est dépréciée** (conservée pour historique).
 
 > 🔴 **Terme proscrit, testé en CI** : ne JAMAIS employer `camerata`/`camerati` (italien, connotation fasciste). Utiliser `compagn*`. Le test « Italian must never contain camerata/camerati » de `i18n.test.js` fait échouer le build si le terme apparaît.
 
@@ -492,9 +515,9 @@ Texte à traduire : [...]
 
 ### Internationalization (EN)
 
-The application is fully multilingual: `src/i18n/locales/` contains **10 files** — `pt-BR` (reference, statically imported and fallback) + `fr, es, en, it, de, ca, eo, nl, el` (lazy-loaded via `import()`). All 10 are wired in `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) and **kept at strict key parity** (5493 keys, enforced by CI). Mail notification Edge Functions use the same system via `_shared/i18n/mail-strings.ts`.
+The application is fully multilingual: `src/i18n/locales/` contains **10 files** — `pt-BR` (reference, statically imported and fallback) + `fr, es, en, it, de, ca, eo, nl, el` (lazy-loaded via `import()`). All 10 are wired in `src/i18n/index.js` (`SUPPORTED_LOCALES` + `LOADERS`) and **kept at strict key parity** (~5685 keys, enforced by CI). Mail notification Edge Functions use the same system via `_shared/i18n/mail-strings.ts`.
 
-**Inclusive language charter** — The **single source** of conventions is `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md` (v2, 2026-06-05, covering all 10 locales). **v1 is deprecated** (kept for history). The file `src/i18n/README-i18n-section.md` is **obsolete** (6 locales, ~1393 keys): do not rely on it.
+**Inclusive language charter** — The **single source** of conventions is `docs/notes-audit/anarbib-charte-langage-inclusif-v2.md` (v2, 2026-06-05, covering all 10 locales). **v1 is deprecated** (kept for history).
 
 > 🔴 **Banned term, tested in CI**: NEVER use `camerata`/`camerati` (Italian, fascist-coded). Use `compagn*`. The "Italian must never contain camerata/camerati" test in `i18n.test.js` fails the build if the term appears.
 
@@ -517,13 +540,13 @@ npm test     # vitest run
 npx vitest   # mode watch
 ```
 
-Couverture : i18n (cohérence, charte, couverture code ↔ locales, parité des 10 locales, garde anti-`camerata`), helpers, composants critiques. Le test i18n est **bloquant en CI**. Pas encore de tests end-to-end automatisés (au backlog).
+Couverture : i18n (cohérence, charte, couverture code ↔ locales, parité des 10 locales, garde anti-`camerata`), helpers (`catalogFilters`), inscription (`criar-conta-i18n`). Suite verte : **87 tests** (4 fichiers). Le test i18n est **bloquant en CI**. Pas encore de tests end-to-end automatisés (au backlog).
 
-**Tests SQL** — Les tests SQL d'acceptation sont dans `tests/sql/` et lancés manuellement depuis le SQL Editor Supabase. Architecture : un seul bloc `DO $$` avec accumulateurs, qui raise une EXCEPTION finale avec le bilan (`BILAN OK : N/N tests passes`).
+**Tests SQL** — Les tests SQL d'acceptation sont dans `tests/sql/`, lancés soit par le workflow `sql-tests.yml`, soit manuellement depuis le SQL Editor Supabase. Architecture : un seul bloc `DO $$` avec accumulateurs, qui raise une EXCEPTION finale avec le bilan (`BILAN OK : N/N tests passes`).
 
-Lancement : ouvrir `https://supabase.com/dashboard/project/uflwmikiyjfnikiphtcp/sql/new`, coller le contenu du fichier, cliquer Run. Voir `tests/sql/README.md` pour les fixtures (UUIDs des comptes test) et conventions.
+Lancement manuel : ouvrir `https://supabase.com/dashboard/project/uflwmikiyjfnikiphtcp/sql/new`, coller le contenu du fichier, cliquer Run. Voir `tests/sql/README.md` pour les fixtures (UUIDs des comptes test) et `tests/sql/ci-suites.txt` pour la liste jouée en CI.
 
-Actuellement disponibles : `paquet19_loan_wrappers_tests.sql`, `paquet24_consulta_helpers_tests.sql`, `paquet25_consulta_wrappers_tests.sql`, `paquet26_consulta_notification_triggers_tests.sql`, `paquetA_profils_tests.sql`, `paquetA1_cancel_note_required_tests.sql`, `cleanup-frt-2026-05-15.sql`.
+Actuellement disponibles (extrait) : `paquet19_loan_wrappers_tests.sql`, `paquet24/25/26_consulta_*_tests.sql`, `paquetA_profils_tests.sql`, `paquetA1_cancel_note_required_tests.sql`, `paquet_emprestimos_tests.sql`, `paquet_reservas_tests.sql`, `paquet_renouvellement_granulaire_tests.sql`, `paquet_peb_ill_lifecycle_tests.sql`, `paquet_cotisation_tests.sql`, `paquet_depot_garantie_tests.sql`, `invitation_equipe_tests.sql`, `onbo_111_lot1/lot2a/lot3c_*_tests.sql`, `onbo_q13_transfer_mandate_tests.sql`.
 
 **QA manuelle** — Plans de test manuels structurés à dérouler en prod pour identifier les bugs concrets et planifier des chantiers de hardening (voir `docs/journal/`).
 
@@ -552,13 +575,13 @@ npm test     # vitest run
 npx vitest   # watch mode
 ```
 
-Coverage: i18n (consistency, charter, code ↔ locales coverage, 10-locale parity, anti-`camerata` guard), helpers, critical components. The i18n test is **blocking in CI**. No automated end-to-end tests yet (in backlog).
+Coverage: i18n (consistency, charter, code ↔ locales coverage, 10-locale parity, anti-`camerata` guard), helpers (`catalogFilters`), signup (`criar-conta-i18n`). Green suite: **87 tests** (4 files). The i18n test is **blocking in CI**. No automated end-to-end tests yet (in backlog).
 
-**SQL tests** — SQL acceptance tests live in `tests/sql/` and are run manually from the Supabase SQL Editor. Architecture: a single `DO $$` block with accumulators, raising a final EXCEPTION with the summary (`BILAN OK: N/N tests passed`).
+**SQL tests** — SQL acceptance tests live in `tests/sql/`, run either by the `sql-tests.yml` workflow or manually from the Supabase SQL Editor. Architecture: a single `DO $$` block with accumulators, raising a final EXCEPTION with the summary (`BILAN OK: N/N tests passed`).
 
-Running: open `https://supabase.com/dashboard/project/uflwmikiyjfnikiphtcp/sql/new`, paste the file content, click Run. See `tests/sql/README.md` for fixtures (test account UUIDs) and conventions.
+Manual run: open `https://supabase.com/dashboard/project/uflwmikiyjfnikiphtcp/sql/new`, paste the file content, click Run. See `tests/sql/README.md` for fixtures (test account UUIDs) and `tests/sql/ci-suites.txt` for the CI-run list.
 
-Currently available: `paquet19_loan_wrappers_tests.sql`, `paquet24_consulta_helpers_tests.sql`, `paquet25_consulta_wrappers_tests.sql`, `paquet26_consulta_notification_triggers_tests.sql`, `paquetA_profils_tests.sql`, `paquetA1_cancel_note_required_tests.sql`, `cleanup-frt-2026-05-15.sql`.
+Currently available (excerpt): `paquet19_loan_wrappers_tests.sql`, `paquet24/25/26_consulta_*_tests.sql`, `paquetA_profils_tests.sql`, `paquetA1_cancel_note_required_tests.sql`, `paquet_emprestimos_tests.sql`, `paquet_reservas_tests.sql`, `paquet_renouvellement_granulaire_tests.sql`, `paquet_peb_ill_lifecycle_tests.sql`, `paquet_cotisation_tests.sql`, `paquet_depot_garantie_tests.sql`, `invitation_equipe_tests.sql`, `onbo_111_*` and `onbo_q13_transfer_mandate_tests.sql`.
 
 **Manual QA** — Structured manual test plans to run in production to find concrete bugs and plan hardening work (see `docs/journal/`).
 
@@ -618,9 +641,9 @@ Country names are dynamically localized via `i18n-iso-countries` rather than sto
 
 ### Outillage de développement (FR)
 
-> 🐧 **RÈGLE D'OR — toutes les sessions travaillent EXCLUSIVEMENT sous WSL2.** Clone canonique unique : `~/anarbib` (WSL2). Lui seul fait tourner `npm run dev` (localhost:5173) et pousse vers Codeberg. **Le clone Windows a été supprimé — ne jamais le recréer** : une session lancée côté Windows recrée un clone fantôme désynchronisé (cause racine de l'incident du 12/06/2026). Lancer Claude depuis WSL : `cd ~/anarbib && claude`.
+> 🐧 **RÈGLE D'OR — toutes les sessions travaillent EXCLUSIVEMENT sous WSL2.** Clone canonique unique : `~/anarbib` (WSL2). Lui seul fait tourner `npm run dev` (localhost:5173) et pousse vers Codeberg. **Le clone Windows a été supprimé — ne jamais le recréer** : une session lancée côté Windows recrée un clone fantôme désynchronisé (cause racine de l'incident du 12/06/2026).
 
-**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Dépendances notables : `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf` (génération PDF), `jszip`, `qrcode`, `@marsidev/react-turnstile` (captcha Cloudflare Turnstile), `react-markdown`, `react-phone-number-input`. Dev : ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
+**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Dépendances notables : `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf` (génération PDF), `jszip`, `qrcode`, `@marsidev/react-turnstile` (captcha Cloudflare Turnstile), `react-markdown`, `react-phone-number-input`, `epubjs` (lecteur ePub), `tesseract.js` (OCR), `@zxing/browser` + `jsqr` (scan code-barres/QR), `@unimusic/chromaprint` (empreinte audio AcoustID). Dev : ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
 
 **Supabase CLI** — Version utilisée par la CI : **v2.98.1**. Installation locale via gestionnaire de paquets. Commandes courantes :
 
@@ -637,9 +660,9 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 - Workflow propre : fichier dans `supabase/migrations/` avec horodatage **UTC exact** → push → laisser Forgejo Actions appliquer.
 - Si bug : `git mv` au timestamp réel ou `migration repair --status applied` (non-destructif).
 
-**Scripts du dépôt** — `scripts/apply-patch.ps1` (applique un patch frontend complet : copie `.jsx` + merge de clés locale UTF-8 sans BOM + build + commit + push + `npm run deploy`) ; `scripts/cleanup-specs-corpus.sh` / `cleanup-docs-corpus.sh` (nettoyage de corpus) ; `restart.sh` (purge cache Vite + relance dev). ⚠️ `apply-patch.ps1` fait `npm run deploy` en plus du push → doublon possible avec le déploiement Pages de Forgejo.
+**Scripts du dépôt** — `scripts/apply-patch.ps1` (applique un patch frontend complet : copie `.jsx` + merge de clés locale UTF-8 sans BOM + build + commit + push + `npm run deploy`) ; nombreux scripts d'ajout de clés i18n (`i18n-add-*.cjs`, `merge-imp-*.cjs`) et de patch (`patch-*.cjs`) ; `scripts/ficedl_thesaurus_scrape.mjs` / `ficedl_thesaurus_sync.mjs` (cache FICEDL) ; `scripts/build-network-map-geojson.cjs` (carte réseau) ; `scripts/backup/` (BG2), `scripts/ci/`, `scripts/nominatim/` ; `cleanup-specs-corpus.sh` / `cleanup-docs-corpus.sh` ; `restart.sh` (purge cache Vite + relance dev). ⚠️ `apply-patch.ps1` fait `npm run deploy` en plus du push → doublon possible avec le déploiement Pages de Forgejo.
 
-**Scripts one-shot** — Les sessions de dev génèrent souvent des `.cjs` éphémères pour patcher des migrations ; ils sont ignorés par git (`create-*.cjs`, `fix-*.cjs`). À supprimer manuellement après usage.
+**Scripts one-shot** — Les sessions génèrent souvent des `.cjs` éphémères pour patcher des migrations ; ceux nommés `create-*.cjs` / `fix-*.cjs` sont ignorés par git. À supprimer manuellement après usage.
 
 **Signature de session** — Plusieurs sessions travaillent en parallèle : chaque commit porte un trailer `Session: <nom>` (en plus de `Co-Authored-By`), et les fichiers à en-tête (migrations SQL, scripts) portent une ligne `Session : <nom>`. Cela permet `git log --grep='Session: …'` et `git blame` pour remonter à la session d'origine.
 
@@ -647,15 +670,15 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 
 ### Development tooling (EN)
 
-> 🐧 **GOLDEN RULE — all sessions work EXCLUSIVELY under WSL2.** Single canonical clone: `~/anarbib` (WSL2). It alone runs `npm run dev` (localhost:5173) and pushes to Codeberg. **The Windows clone was deleted — never recreate it**: a Windows-side session recreates a desynchronized phantom clone (root cause of the 12/06/2026 incident). Launch Claude from WSL: `cd ~/anarbib && claude`.
+> 🐧 **GOLDEN RULE — all sessions work EXCLUSIVELY under WSL2.** Single canonical clone: `~/anarbib` (WSL2). It alone runs `npm run dev` (localhost:5173) and pushes to Codeberg. **The Windows clone was deleted — never recreate it**: a Windows-side session recreates a desynchronized phantom clone (root cause of the 12/06/2026 incident).
 
-**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Notable deps: `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf`, `jszip`, `qrcode`, `@marsidev/react-turnstile` (Cloudflare Turnstile), `react-markdown`, `react-phone-number-input`. Dev: ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
+**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Notable deps: `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf`, `jszip`, `qrcode`, `@marsidev/react-turnstile` (Cloudflare Turnstile), `react-markdown`, `react-phone-number-input`, `epubjs` (ePub reader), `tesseract.js` (OCR), `@zxing/browser` + `jsqr` (barcode/QR scanning), `@unimusic/chromaprint` (AcoustID audio fingerprint). Dev: ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
 
 **Supabase CLI** — Version used by CI: **v2.98.1**. Common commands: `supabase db push --linked`, `supabase functions download <name>`, `supabase functions deploy <name> --no-verify-jwt`.
 
 **Migration workflow** ⚠️ Critical conventions (learned from incidents): do not paste SQL into the SQL Editor before push (`relation already exists` risk); do not use `apply_migration` via the Supabase MCP (timestamp = call moment, mismatch → broken pipeline); clean workflow = file in `supabase/migrations/` with **exact UTC** timestamp → push → let Forgejo Actions apply; if buggy, `git mv` to the real timestamp or `migration repair --status applied` (non-destructive).
 
-**Repo scripts** — `scripts/apply-patch.ps1` (full frontend patch in one command), `scripts/cleanup-*.sh` (corpus cleanup), `restart.sh` (Vite cache purge + dev restart). ⚠️ `apply-patch.ps1` also runs `npm run deploy` → possible duplicate with Forgejo's Pages deploy.
+**Repo scripts** — `scripts/apply-patch.ps1` (full frontend patch in one command), many i18n key-adding scripts (`i18n-add-*.cjs`, `merge-imp-*.cjs`) and patch scripts (`patch-*.cjs`), `ficedl_thesaurus_*.mjs` (FICEDL cache), `build-network-map-geojson.cjs`, `scripts/backup/` (BG2), `scripts/ci/`, `scripts/nominatim/`, `cleanup-*.sh` (corpus cleanup), `restart.sh` (Vite cache purge + dev restart). ⚠️ `apply-patch.ps1` also runs `npm run deploy` → possible duplicate with Forgejo's Pages deploy.
 
 **Session signature** — Multiple sessions work in parallel: each commit carries a `Session: <name>` trailer (plus `Co-Authored-By`), and header files (SQL migrations, scripts) carry a `Session: <name>` line — enabling `git log --grep` / `git blame` to trace the originating session.
 
@@ -667,7 +690,7 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 
 ### Backlog et historique (FR)
 
-**Backlog actuel** — version courante **v33** (`docs/backlogs/`, voir `INDEX.md` qui pointe le fichier exact). Convention de scoring = importance politique (1-10) + urgence technique (1-10). `docs/backlogs/INDEX.md` pointe la version courante ; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` suit l'avancement multi-sessions.
+**Backlog actuel** — version courante **v33** (`docs/backlogs/AnarBib-Backlog-2026-06-17-v33.md`, voir `INDEX.md`). Convention de scoring = importance politique (1-10) + urgence technique (1-10). `docs/backlogs/INDEX.md` pointe la version courante ; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` et `docs/backlogs/ETAT-lancement-consolide-2026-07-03.md` suivent l'avancement multi-sessions et l'état de lancement consolidé.
 
 > 📦 **RÈGLE — archiver l'obsolète.** Une seule version courante à la racine de `docs/backlogs/`. Toute nouvelle version rend la précédente obsolète → la déplacer aussitôt dans `docs/backlogs/archive/` (`git mv`) et tenir `INDEX.md` à jour. Quand on solde une spec ou modifie un module ayant des conséquences sur le backlog, on émet **aussitôt** une nouvelle version datée annotant les items touchés (✅ / partiel + renvoi au commit) — pas de livraison silencieuse.
 
@@ -675,7 +698,7 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 
 ### Backlog and history (EN)
 
-**Current backlog** — current version **v33** (`docs/backlogs/`, see `INDEX.md` which points to the exact file). Scoring = political importance (1-10) + technical urgency (1-10). `docs/backlogs/INDEX.md` points to the current version; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` tracks multi-session progress.
+**Current backlog** — current version **v33** (`docs/backlogs/AnarBib-Backlog-2026-06-17-v33.md`, see `INDEX.md`). Scoring = political importance (1-10) + technical urgency (1-10). `docs/backlogs/INDEX.md` points to the current version; `docs/backlogs/ETAT-AVANCEMENT-multisessions.md` and `docs/backlogs/ETAT-lancement-consolide-2026-07-03.md` track multi-session progress and the consolidated launch state.
 
 > 📦 **RULE — archive the obsolete.** Only one current version at the root of `docs/backlogs/`. Every new version makes the previous one obsolete → move it to `docs/backlogs/archive/` (`git mv`) and keep `INDEX.md` up to date. When closing a spec or changing a module with backlog consequences, immediately issue a new dated version annotating the affected items (✅ / partial + commit reference) — no silent delivery.
 
@@ -687,25 +710,25 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 
 ### Articulation des specs (FR)
 
-Les specs vivent dans `docs/specs/`, avec `INDEX.md` (hiérarchie de référence), `INVENTAIRE.md` (état prod vérifié) et `REGISTRE_decisions.md`. Principales specs structurantes (versions courantes) :
+Les specs vivent dans `docs/specs/`, avec `INDEX.md` (hiérarchie de référence), `INVENTAIRE.md` (état prod vérifié) et `REGISTRE_decisions.md`. Principales specs structurantes :
 
 - `spec-administrateur-reseau-v0.4.md` — Admin réseau (implémenté en prod).
 - `spec-profils-bibliotheque-v0_7.md` — Profils d'adoption (4 axes politiques).
 - `spec-flux-consultations-v2.2.md` — Consultations sur place (intègre doctrines #141 + R8).
 - `spec-onboarding-biblioteca-v2.0.md` — Onboarding bibliothèque.
 - `spec-onboarding-criar-conta.md` — Onboarding lectrice (3 cas à l'inscription).
-- `spec-outils-federalistes.md` v0.2 — Outils fédéralistes (Communs, Entraide, Annuaire, cartographie, gouvernance des autorités).
+- `spec-outils-federalistes.md` — Outils fédéralistes (Communs, Entraide, Annuaire, Assemblées, Gazette, Lettre).
 - `spec-gouvernance-roles.md` — Gouvernance & rôles.
 
-Chantiers complémentaires couverts par des specs dédiées : autorités (atelier-autorites, notice-autorite-enrichie, autorites-notes-bio-multilingues, sources-externes-autorites), PEB / partage numérique (cycle-vie-peb, flux-partage-numerique, partenariat-biblios), flux d'emprunts/réservations/renouvellements (flux-emprunts, workflow-reservation(-v2-negotiation), renouvellement-granulaire, notify-prorrogacao-granulaire), catalogue de découverte, cartographie réseau, acquisition/provenance, OAI provider, granularité d'item, refactor v3 sémantique.
+Chantiers complémentaires couverts par des specs dédiées : autorités (`spec-atelier-autorites`, `spec-notice-autorite-enrichie`, `spec-autorites-notes-bio-multilingues`, `spec-sources-externes-autorites`), PEB / partage numérique (`spec-cycle-vie-peb`, `spec-flux-partage-numerique`, `spec-partenariat-biblios`), flux d'emprunts/réservations/renouvellements (`spec-flux-emprunts`, `spec-workflow-reservation`(`-v2-negotiation`), `spec-renouvellement-granulaire`, `spec-notify-prorrogacao-granulaire`), catalogue de découverte, cartographie réseau, acquisition/provenance, OAI provider, granularité d'item, fonds sonores, thésaurus matière FICEDL (`spec-thesaurus-matiere`), cotisation (`spec-cotisation`), dépôt de garantie (`spec-depot-garantie`), assemblées (`spec-assembleias`), Gazette + Lettre (`spec-gazeta-lettre-federation`), notifications lecteur, fiche publique de bibliothèque, pseudonymisation BG2-14, refactor v3 sémantique.
 
 > En cas de contradiction, se référer à `docs/specs/INDEX.md` (hiérarchie de référence). Les chantiers à venir commencent par mettre à jour les specs périmées avant d'attaquer le code.
 
 ### Spec articulation (EN)
 
-Specs live in `docs/specs/`, with `INDEX.md` (reference hierarchy), `INVENTAIRE.md` (verified prod state) and `REGISTRE_decisions.md`. Main structuring specs (current versions): `spec-administrateur-reseau-v0.4.md`, `spec-profils-bibliotheque-v0_7.md`, `spec-flux-consultations-v2.2.md`, `spec-onboarding-biblioteca-v2.0.md`, `spec-onboarding-criar-conta.md`, `spec-outils-federalistes.md` v0.2, `spec-gouvernance-roles.md`.
+Specs live in `docs/specs/`, with `INDEX.md` (reference hierarchy), `INVENTAIRE.md` (verified prod state) and `REGISTRE_decisions.md`. Main structuring specs: `spec-administrateur-reseau-v0.4.md`, `spec-profils-bibliotheque-v0_7.md`, `spec-flux-consultations-v2.2.md`, `spec-onboarding-biblioteca-v2.0.md`, `spec-onboarding-criar-conta.md`, `spec-outils-federalistes.md`, `spec-gouvernance-roles.md`.
 
-Additional work is covered by dedicated specs: authority records, ILL / digital sharing, loan/reservation/renewal flows, discovery catalogue, network cartography, acquisition/provenance, OAI provider, item granularity, semantic v3 refactor. In case of contradiction, refer to `docs/specs/INDEX.md`. Upcoming work starts by updating obsolete specs before tackling code.
+Additional work is covered by dedicated specs: authority records, ILL / digital sharing, loan/reservation/renewal flows, discovery catalogue, network cartography, acquisition/provenance, OAI provider, item granularity, audio fonds, FICEDL subject thesaurus, membership dues, loan deposits, network assemblies, Gazette + newsletter, reader notifications, public library page, BG2-14 pseudonymization, semantic v3 refactor. In case of contradiction, refer to `docs/specs/INDEX.md`. Upcoming work starts by updating obsolete specs before tackling code.
 
 ---
 
@@ -752,4 +775,4 @@ The project is carried by a small collective but welcomes occasional or regular 
 
 ---
 
-Dernière mise à jour / Last updated : 24 juin 2026 / 24 June 2026 — modèle Œuvre/Éditions (FRBR-léger), support des médias audio, cartographie réseau + géocodage, gazette fédérée + lettre d'info, échange de fonds inter-bibliothèques, fournisseur OAI-PMH, cycle de vie des adhésions lecteur, conformité RGPD ; backend porté à 41 Edge Functions, migrations appliquées jusqu'au 23/06/2026. / Work/Editions model (light FRBR), audio media support, network cartography + geocoding, federated gazette + newsletter, inter-library fonds exchange, OAI-PMH provider, reader membership lifecycle, GDPR compliance; backend now 41 Edge Functions, migrations applied through 2026-06-23.
+Dernière mise à jour / Last updated : 7 juillet 2026 / 7 July 2026 — événements de bibliothèque (opt-out, publication différée, deep-link), dépôt de garantie, cotisations lecteur, thésaurus matière FICEDL, automatisation de la Gazette (+ traduction auto des contributions), registre RGPD & politique de confidentialité unifiée, consolidation des performances RLS ; backend à 42 Edge Functions et 90 migrations appliquées jusqu'au 2026-07-05 (base : 174 tables, ~552 routines, 31 crons) ; `CLAUDE.md` et `.claude/` retirés du suivi git (codage à la main). / Library events (opt-out, deferred publication, deep-link), loan deposits, reader dues, FICEDL subject thesaurus, Gazette automation (+ auto-translation of contributions), GDPR register & unified privacy policy, RLS performance consolidation; backend at 42 Edge Functions and 90 migrations applied through 2026-07-05 (db: 174 tables, ~552 routines, 31 crons); `CLAUDE.md` and `.claude/` removed from git tracking (hand coding).
