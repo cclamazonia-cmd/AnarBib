@@ -221,11 +221,34 @@ async function issueId(number: number): Promise<string> {
   const { data } = await sb.from("gazette_issues").select("id").eq("number", number).single();
   return data!.id;
 }
+
+// Bandeau localisé et NEUTRE (jamais le mot "brouillon" dans le contenu : l'état
+// brouillon est porté uniquement par gazette_issues.status, affiché en badge côté
+// panel network_staff). Même style que le n°01 (taglines + préfixe numérique par locale).
+const MASTHEAD_I18N: Record<string, { left: string; right: string; numPrefix: string }> = {
+  "fr":    { left: "Réseau libre — autogéré",              right: "Diffusion libre ✳ Copiez-Partagez",         numPrefix: "N°" },
+  "pt-BR": { left: "Rede livre — autogerida",               right: "Difusão livre ✳ Copie-Compartilhe",         numPrefix: "N.º " },
+  "es":    { left: "Red libre — autogestionada",            right: "Difusión libre ✳ Copia-Comparte",           numPrefix: "N.º " },
+  "en":    { left: "Free network — self-managed",           right: "Free distribution ✳ Copy-Share",            numPrefix: "No. " },
+  "it":    { left: "Rete libera — autogestita",              right: "Diffusione libera ✳ Copiate-Condividete",   numPrefix: "N. " },
+  "de":    { left: "Freies Netzwerk — selbstverwaltet",      right: "Freie Verbreitung ✳ Kopiert-Teilt",         numPrefix: "Nr. " },
+  "el":    { left: "Ελεύθερο δίκτυο — αυτοδιαχειριζόμενο",   right: "Ελεύθερη διάδοση ✳ Αντιγράψτε-Μοιραστείτε",  numPrefix: "Αρ. " },
+  "ca":    { left: "Xarxa lliure — autogestionada",          right: "Difusió lliure ✳ Copieu-Compartiu",         numPrefix: "Núm. " },
+  "eo":    { left: "Libera reto — memmastrumata",            right: "Libera disvastigo ✳ Kopiu-Kunhavigu",       numPrefix: "N-ro " },
+  "nl":    { left: "Vrij netwerk — zelfbeheerd",             right: "Vrije verspreiding ✳ Kopieer-Deel",         numPrefix: "Nr. " },
+};
+function buildMasthead(locale: string, number: number, coverDate: string) {
+  const m = MASTHEAD_I18N[locale] ?? MASTHEAD_I18N["fr"];
+  const monthYear = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" })
+    .format(new Date(`${coverDate}T00:00:00Z`));
+  const mid = `${m.numPrefix}${String(number).padStart(2, "0")} · ${monthYear.charAt(0).toUpperCase()}${monthYear.slice(1)}`;
+  return { left: m.left, right: m.right, mid };
+}
+
 async function upsertLocale(number: number, locale: string, content: unknown, tstatus: string, src: string | null) {
-  const id = await issueId(number);
-  const masthead = locale === "fr"
-    ? { left: "Réseau libre — autogéré", mid: `Brouillon · n°${number}`, right: "Diffusion libre" }
-    : { left: "", mid: `Brouillon · n°${number}`, right: "" };
+  const { data: issue } = await sb.from("gazette_issues").select("id,cover_date").eq("number", number).single();
+  const id = issue!.id as string;
+  const masthead = buildMasthead(locale, number, issue!.cover_date as string);
   // Le modèle renvoie parfois {"content":[…]} (ou {"pages":[…]}) au lieu du tableau
   // nu de pages attendu par TOUS les consommateurs (GazetteTab public, aperçu
   // GazetteStaffPanel, et stepAssembleReseau qui fait content.slice()). On dé-emballe
