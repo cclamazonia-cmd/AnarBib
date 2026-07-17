@@ -5685,5 +5685,9 @@
   "account.events.type.autre": "Other",
   "notif.libraryEvent.created.title": "New event at the library",
   "account.notifPrefs.disableLibraryEvents": "Don’t notify me about new library events",
-  "catalogacao.msg.bookPublishedNext": "“{title}” published. New blank record ready for the next document."
+  "catalogacao.msg.bookPublishedNext": "“{title}” published. New blank record ready for the next document.",
+  "catalogacao.postPublish.title": "“{title}” published",
+  "catalogacao.postPublish.body": "Add a copy of this document to the catalogue?",
+  "catalogacao.postPublish.addExemplar": "Add a copy",
+  "catalogacao.postPublish.openBook": "View record"
 }

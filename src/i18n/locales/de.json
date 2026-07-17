@@ -5685,5 +5685,9 @@
   "account.events.type.autre": "Sonstiges",
   "notif.libraryEvent.created.title": "Neue Veranstaltung in der Bibliothek",
   "account.notifPrefs.disableLibraryEvents": "Nicht über neue Veranstaltungen der Bibliothek benachrichtigen",
-  "catalogacao.msg.bookPublishedNext": "„{title}“ veröffentlicht. Neue leere Karte bereit für das nächste Dokument."
+  "catalogacao.msg.bookPublishedNext": "„{title}“ veröffentlicht. Neue leere Karte bereit für das nächste Dokument.",
+  "catalogacao.postPublish.title": "„{title}“ veröffentlicht",
+  "catalogacao.postPublish.body": "Ein Exemplar dieses Dokuments zum Katalog hinzufügen?",
+  "catalogacao.postPublish.addExemplar": "Exemplar hinzufügen",
+  "catalogacao.postPublish.openBook": "Datensatz ansehen"
 }

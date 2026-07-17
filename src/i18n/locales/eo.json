@@ -5685,5 +5685,9 @@
   "account.events.type.autre": "Alia",
   "notif.libraryEvent.created.title": "Nova evento en la biblioteko",
   "account.notifPrefs.disableLibraryEvents": "Ne sciigi min pri novaj eventoj de la biblioteko",
-  "catalogacao.msg.bookPublishedNext": "« {title} » publikigita. Nova karto preta por alia dokumento."
+  "catalogacao.msg.bookPublishedNext": "« {title} » publikigita. Nova karto preta por alia dokumento.",
+  "catalogacao.postPublish.title": "« {title} » publikigita",
+  "catalogacao.postPublish.body": "Ĉu aldoni ekzempleron de ĉi tiu dokumento al la katalogo?",
+  "catalogacao.postPublish.addExemplar": "Aldoni ekzempleron",
+  "catalogacao.postPublish.openBook": "Vidi la karton"
 }

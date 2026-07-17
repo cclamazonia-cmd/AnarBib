@@ -5685,5 +5685,9 @@
   "account.events.type.autre": "Autre",
   "notif.libraryEvent.created.title": "Nouvel événement à la bibliothèque",
   "account.notifPrefs.disableLibraryEvents": "Ne plus m'avertir des nouveaux événements de la bibliothèque",
-  "catalogacao.msg.bookPublishedNext": "« {title} » publié. Nouvelle fiche prête pour un autre document."
+  "catalogacao.msg.bookPublishedNext": "« {title} » publié. Nouvelle fiche prête pour un autre document.",
+  "catalogacao.postPublish.title": "« {title} » publié",
+  "catalogacao.postPublish.body": "Ajouter un exemplaire de ce document au catalogue ?",
+  "catalogacao.postPublish.addExemplar": "Ajouter un exemplaire",
+  "catalogacao.postPublish.openBook": "Voir la fiche"
 }

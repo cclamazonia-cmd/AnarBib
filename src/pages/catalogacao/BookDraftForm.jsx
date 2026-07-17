@@ -294,6 +294,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     }
   }, []);
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
+  const [lastPublished, setLastPublished] = useState(null); // { bookId, title } | null — raccourci post-publication (ajouter un exemplaire au document publié)
   const [isbnDupHint, setIsbnDupHint] = useState(null); // { bookId, titulo, bibRef, libraries } | null — live ISBN check
   const [pubSuggestions, setPubSuggestions] = useState([]); // publisher typeahead results
   // Doublons de documents (detection + fusion, P2a/P2b)
@@ -603,6 +604,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setDigitalResources([]);
     setDigitalForm(null);
     setBnResult(null);
+    setLastPublished(null);
   }
 
   // ── Derived state ──────────────────────────────────────
@@ -1945,11 +1947,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     try {
       // Mark as ready first
       await supabase.from('book_drafts').update({ status: 'ready' }).eq('id', Number(draftId));
-      const { error } = await supabase.rpc('publish_book_draft', { p_draft_id: Number(draftId) });
+      const { data: newBookId, error } = await supabase.rpc('publish_book_draft', { p_draft_id: Number(draftId) });
       if (error) throw error;
 
-      // Try linking contributors to authors
-      const publishedId = f('published_book_id');
+      // Try linking contributors to authors (publish_book_draft renvoie l'id du livre créé)
+      const publishedId = newBookId || f('published_book_id');
       if (publishedId) {
         try {
           await supabase.rpc('link_book_contributors_to_authors', { p_book_id: Number(publishedId) });
@@ -1966,6 +1968,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       setDupBanner(null);
       setIsbnDupHint(null);
       setWork(null);
+      // Raccourci post-publication : ajouter un exemplaire au document publié
+      // (survit à la fiche vierge ; resetForm() ci-dessus l'a d'abord remis à null).
+      setLastPublished(publishedId ? { bookId: publishedId, title: publishedTitle } : null);
       showMsg(t({ id: 'catalogacao.msg.bookPublishedNext' }, { title: publishedTitle }), 'ok');
     } catch (err) {
       const raw = typeof err?.message === 'string' ? err.message : '';
@@ -2282,6 +2287,34 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       {msg.text && (
         <div ref={msgRef} className={`cat-message show ${msg.kind}`} style={{ marginBottom: 14 }}>{msg.text}</div>
       )}
+      {/* ── Raccourci post-publication : ajouter un exemplaire au document publié ──
+          Survit à la fiche vierge : la personne peut enchaîner un nouveau brouillon
+          OU cliquer pour indexer un exemplaire du document qui vient d'être publié. */}
+      {lastPublished && (
+        <div style={{ marginBottom: 14, padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(74,222,128,.35)', background: 'rgba(74,222,128,.07)', display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ flex: 1, minWidth: 200, fontSize: '.85rem' }}>
+            <b>{t({ id: 'catalogacao.postPublish.title' }, { title: lastPublished.title })}</b>
+            <div style={{ color: 'var(--brand-muted, #aaa)', marginTop: 2 }}>{t({ id: 'catalogacao.postPublish.body' })}</div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {onAttachToBook && (
+              <button type="button" className="ab-button ab-button--mini ab-button--secondary"
+                onClick={() => { onAttachToBook(lastPublished.bookId); setLastPublished(null); }}>
+                {t({ id: 'catalogacao.postPublish.addExemplar' })}
+              </button>
+            )}
+            {onOpenBook && (
+              <button type="button" className="ab-button ab-button--mini"
+                onClick={() => onOpenBook(lastPublished.bookId)}>
+                {t({ id: 'catalogacao.postPublish.openBook' })}
+              </button>
+            )}
+            <button type="button" className="ab-button ab-button--mini" aria-label={t({ id: 'common.close' })}
+              onClick={() => setLastPublished(null)}>×</button>
+          </div>
+        </div>
+      )}
+
       {/* ── Bandeau doublon (Lot 6 anchor — logique dans CAT-B5) ── */}
       <div className={`ab-dup${dupBanner ? ' show' : ''}`}>
         <span className="ab-pill ab-pill--warn">{t({ id: 'catalogacao.duplicate.badge' })}</span>

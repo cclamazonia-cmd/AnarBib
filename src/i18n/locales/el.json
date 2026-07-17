@@ -5685,5 +5685,9 @@
   "account.events.type.autre": "Άλλο",
   "notif.libraryEvent.created.title": "Νέα εκδήλωση στη βιβλιοθήκη",
   "account.notifPrefs.disableLibraryEvents": "Να μην ειδοποιούμαι για νέες εκδηλώσεις της βιβλιοθήκης",
-  "catalogacao.msg.bookPublishedNext": "«{title}» δημοσιεύτηκε. Νέα κενή καρτέλα έτοιμη για το επόμενο έγγραφο."
+  "catalogacao.msg.bookPublishedNext": "«{title}» δημοσιεύτηκε. Νέα κενή καρτέλα έτοιμη για το επόμενο έγγραφο.",
+  "catalogacao.postPublish.title": "«{title}» δημοσιεύτηκε",
+  "catalogacao.postPublish.body": "Προσθήκη αντιτύπου αυτού του εγγράφου στον κατάλογο;",
+  "catalogacao.postPublish.addExemplar": "Προσθήκη αντιτύπου",
+  "catalogacao.postPublish.openBook": "Προβολή καρτέλας"
 }

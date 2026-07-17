@@ -5685,5 +5685,9 @@
   "account.events.type.autre": "Overig",
   "notif.libraryEvent.created.title": "Nieuw evenement in de bibliotheek",
   "account.notifPrefs.disableLibraryEvents": "Mij niet op de hoogte brengen van nieuwe bibliotheekevenementen",
-  "catalogacao.msg.bookPublishedNext": "„{title}“ gepubliceerd. Nieuwe lege fiche klaar voor het volgende document."
+  "catalogacao.msg.bookPublishedNext": "„{title}“ gepubliceerd. Nieuwe lege fiche klaar voor het volgende document.",
+  "catalogacao.postPublish.title": "„{title}“ gepubliceerd",
+  "catalogacao.postPublish.body": "Een exemplaar van dit document aan de catalogus toevoegen?",
+  "catalogacao.postPublish.addExemplar": "Exemplaar toevoegen",
+  "catalogacao.postPublish.openBook": "Record bekijken"
 }
