@@ -5684,5 +5684,6 @@
   "account.events.type.projection": "Screening",
   "account.events.type.autre": "Other",
   "notif.libraryEvent.created.title": "New event at the library",
-  "account.notifPrefs.disableLibraryEvents": "Don’t notify me about new library events"
+  "account.notifPrefs.disableLibraryEvents": "Don’t notify me about new library events",
+  "catalogacao.msg.bookPublishedNext": "“{title}” published. New blank record ready for the next document."
 }

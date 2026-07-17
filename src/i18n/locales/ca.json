@@ -5684,5 +5684,6 @@
   "account.events.type.projection": "Projecció",
   "account.events.type.autre": "Altre",
   "notif.libraryEvent.created.title": "Nou esdeveniment a la biblioteca",
-  "account.notifPrefs.disableLibraryEvents": "No avisar-me dels nous esdeveniments de la biblioteca"
+  "account.notifPrefs.disableLibraryEvents": "No avisar-me dels nous esdeveniments de la biblioteca",
+  "catalogacao.msg.bookPublishedNext": "« {title} » publicat. Nova fitxa a punt per a un altre document."
 }

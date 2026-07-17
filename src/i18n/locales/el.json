@@ -5684,5 +5684,6 @@
   "account.events.type.projection": "Προβολή",
   "account.events.type.autre": "Άλλο",
   "notif.libraryEvent.created.title": "Νέα εκδήλωση στη βιβλιοθήκη",
-  "account.notifPrefs.disableLibraryEvents": "Να μην ειδοποιούμαι για νέες εκδηλώσεις της βιβλιοθήκης"
+  "account.notifPrefs.disableLibraryEvents": "Να μην ειδοποιούμαι για νέες εκδηλώσεις της βιβλιοθήκης",
+  "catalogacao.msg.bookPublishedNext": "«{title}» δημοσιεύτηκε. Νέα κενή καρτέλα έτοιμη για το επόμενο έγγραφο."
 }

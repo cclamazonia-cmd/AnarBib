@@ -5684,5 +5684,6 @@
   "account.events.type.projection": "Proiezione",
   "account.events.type.autre": "Altro",
   "notif.libraryEvent.created.title": "Nuovo evento in biblioteca",
-  "account.notifPrefs.disableLibraryEvents": "Non avvisarmi dei nuovi eventi della biblioteca"
+  "account.notifPrefs.disableLibraryEvents": "Non avvisarmi dei nuovi eventi della biblioteca",
+  "catalogacao.msg.bookPublishedNext": "« {title} » pubblicato. Nuova scheda pronta per un altro documento."
 }

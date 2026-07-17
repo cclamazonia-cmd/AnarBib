@@ -5684,5 +5684,6 @@
   "account.events.type.projection": "Filmvertoning",
   "account.events.type.autre": "Overig",
   "notif.libraryEvent.created.title": "Nieuw evenement in de bibliotheek",
-  "account.notifPrefs.disableLibraryEvents": "Mij niet op de hoogte brengen van nieuwe bibliotheekevenementen"
+  "account.notifPrefs.disableLibraryEvents": "Mij niet op de hoogte brengen van nieuwe bibliotheekevenementen",
+  "catalogacao.msg.bookPublishedNext": "„{title}“ gepubliceerd. Nieuwe lege fiche klaar voor het volgende document."
 }

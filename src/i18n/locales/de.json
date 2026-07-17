@@ -5684,5 +5684,6 @@
   "account.events.type.projection": "Filmvorführung",
   "account.events.type.autre": "Sonstiges",
   "notif.libraryEvent.created.title": "Neue Veranstaltung in der Bibliothek",
-  "account.notifPrefs.disableLibraryEvents": "Nicht über neue Veranstaltungen der Bibliothek benachrichtigen"
+  "account.notifPrefs.disableLibraryEvents": "Nicht über neue Veranstaltungen der Bibliothek benachrichtigen",
+  "catalogacao.msg.bookPublishedNext": "„{title}“ veröffentlicht. Neue leere Karte bereit für das nächste Dokument."
 }

@@ -1956,9 +1956,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         } catch {}
       }
 
-      setDraftState('published');
-      showMsg(t({ id: 'catalogacao.msg.bookPublished' }), 'ok');
+      // UX catalogage en série (2026-07) : après publication, on repart aussitôt
+      // sur une fiche vierge pour enchaîner un nouveau brouillon. On capture le
+      // titre AVANT reset, puis on ré-affiche le message APRÈS (resetForm l'efface).
+      const publishedTitle = f('titulo');
       onSaved?.();
+      resetForm();
+      setCoverCandidates([]);
+      setDupBanner(null);
+      setIsbnDupHint(null);
+      setWork(null);
+      showMsg(t({ id: 'catalogacao.msg.bookPublishedNext' }, { title: publishedTitle }), 'ok');
     } catch (err) {
       const raw = typeof err?.message === 'string' ? err.message : '';
       const code = raw.split(':', 1)[0].trim();
