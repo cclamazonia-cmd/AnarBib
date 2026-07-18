@@ -62,7 +62,13 @@ export function LocaleSwitcher({ variant = 'header' }) {
   const className = `ab-locale-switcher ab-locale-switcher--${variant}`;
 
   return (
-    <div className={className}>
+    // #fix-android (18/07) : le tiroir mobile (.ab-topbar__nav) ferme le menu
+    // au clic via bubbling (onClick sur le conteneur parent) pour les liens
+    // de nav. Sans stopPropagation, ce clic remonte aussi depuis le <select>
+    // ici, qui passe alors en display:none (tiroir ferme) dans le meme tick
+    // que le tap -> le picker natif Android n'a plus d'ancrage et ne s'ouvre
+    // jamais (bouton visuellement mort).
+    <div className={className} onClick={(e) => e.stopPropagation()}>
       <label
         htmlFor={`ab-locale-select-${variant}`}
         className="ab-locale-switcher__label"
