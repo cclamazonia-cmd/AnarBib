@@ -508,8 +508,8 @@
 .ab-painel-counter-form-row > td { padding: 12px 16px; background: rgba(251,191,36,.08); border-top: 2px solid rgba(251,191,36,.4); }
 .ab-painel-counter-form { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
 .ab-painel-counter-form label { font-size: .82rem; color: var(--brand-muted); }
-.ab-painel-counter-field { display: flex; flex-direction: column; gap: 4px; min-width: 200px; }
-.ab-painel-counter-field--wide { flex: 1; min-width: 240px; }
+.ab-painel-counter-field { display: flex; flex-direction: column; gap: 4px; min-width: min(200px, 100%); }
+.ab-painel-counter-field--wide { flex: 1; min-width: min(240px, 100%); }
 .ab-painel-counter-actions { display: flex; gap: 6px; }
 
 /* TabTrabalhoDoDia — tâches internes (E.4/OT-2) */
@@ -564,7 +564,7 @@
 .ab-painel-pay-list > .ab-painel-pay-row:nth-child(odd) { background: rgba(0,0,0,.08); }
 .ab-painel-pay-list > .ab-painel-pay-row:last-child { border-bottom: none; }
 .ab-painel-pay-row__inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
-.ab-painel-pay-row__main { flex: 1; min-width: 200px; }
+.ab-painel-pay-row__main { flex: 1; min-width: min(200px, 100%); }
 .ab-painel-pay-amount { font-size: .9rem; font-weight: 600; }
 .ab-painel-pay-method { font-weight: 400; color: var(--brand-muted); margin-left: 8px; }
 .ab-painel-pay-meta { font-size: .82rem; color: var(--brand-muted); margin-top: 2px; }
@@ -582,7 +582,7 @@
 .ab-painel-memb-list { border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); }
 .ab-painel-memb-row { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .ab-painel-memb-list > .ab-painel-memb-row:nth-child(odd) { background: rgba(0,0,0,.08); }
-.ab-painel-memb-row__main { flex: 1; min-width: 220px; }
+.ab-painel-memb-row__main { flex: 1; min-width: min(220px, 100%); }
 .ab-painel-memb-name { font-size: .9rem; font-weight: 600; }
 .ab-painel-memb-pubid { font-weight: 400; color: var(--brand-muted); margin-left: 6px; }
 .ab-painel-memb-meta { font-size: .8rem; color: var(--brand-muted); margin-top: 2px; }

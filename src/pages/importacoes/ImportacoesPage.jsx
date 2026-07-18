@@ -1776,7 +1776,7 @@ export default function ImportacoesPage() {
                           <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(127,127,127,0.2)' }}>
                             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                               <input className="ab-input" value={bookQuery} onChange={(e) => setBookQuery(e.target.value)}
-                                placeholder={t({ id: 'importacoes.export.attach.searchPh' })} style={{ flex: 1, minWidth: 160 }} />
+                                placeholder={t({ id: 'importacoes.export.attach.searchPh' })} style={{ flex: 1, minWidth: 'min(160px, 100%)' }} />
                               <button className="cat-btn secondary" type="button" onClick={searchBooks} disabled={bookSearching || !bookQuery.trim()}>
                                 {bookSearching ? t({ id: 'importacoes.export.attach.searching' }) : t({ id: 'importacoes.export.attach.search' })}
                               </button>

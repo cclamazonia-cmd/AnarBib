@@ -55,7 +55,7 @@
   background:rgba(126,224,168,.05); padding:18px 20px;
   display:flex; gap:18px; align-items:center; flex-wrap:wrap;
 }
-.ab-pon-human .ab-pon-ht{ flex:1; min-width:220px; }
+.ab-pon-human .ab-pon-ht{ flex:1; min-width:min(220px, 100%); }
 .ab-pon-tag{ font-size:.64rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--pon-ok); }
 .ab-pon-human h3{ font-weight:700; font-size:1.1rem; margin:6px 0 4px; }
 .ab-pon-human p{ font-size:.85rem; color:var(--pon-muted); margin:0; }

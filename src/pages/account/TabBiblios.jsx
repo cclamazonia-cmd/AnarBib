@@ -183,7 +183,7 @@ export default function TabBiblios() {
         <div className="ab-conta-items">
           {rows.map((m) => (
             <div key={m.library_id} className="ab-conta-item" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <div className="ab-conta-item__main" style={{ flex: 1, minWidth: 180 }}>
+              <div className="ab-conta-item__main" style={{ flex: 1, minWidth: 'min(180px, 100%)' }}>
                 <span className="ab-conta-item__title">
                   {m.library_name}
                   {m.is_primary && (

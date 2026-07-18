@@ -196,7 +196,7 @@ export default function ExchangeRequestsList({ libraryId, allLibraries = [], t }
         </select>
         <input type="text" value={filterSearch} onChange={e => setFilterSearch(e.target.value)}
           placeholder={t({ id: 'biblioteca.exchanges.req.searchPlaceholder' })}
-          style={{ ...fieldStyle, flex:1, minWidth:160 }} />
+          style={{ ...fieldStyle, flex:1, minWidth:'min(160px, 100%)' }} />
       </div>
 
       {/* Liste */}

@@ -37,7 +37,7 @@
   color: var(--brand-muted, #d4cec3);
   opacity: .85;
   flex: 1;
-  min-width: 220px;
+  min-width: min(220px, 100%);
 }
 .imp-sentido__hint code {
   font-family: ui-monospace, monospace;
@@ -159,7 +159,7 @@
 }
 .imp-stat {
   flex: 1;
-  min-width: 140px;
+  min-width: min(140px, 100%);
   padding: 13px 15px;
   border: 1px solid var(--brand-panel-border, rgba(255,255,255,.14));
   border-radius: var(--brand-radius-sm, 14px);

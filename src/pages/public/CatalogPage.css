@@ -361,7 +361,7 @@
 
 .ab-regimento-banner__text {
   flex: 1;
-  min-width: 200px;
+  min-width: min(200px, 100%);
   font-size: 0.82rem;
   color: var(--brand-muted, #ccc);
   line-height: 1.4;

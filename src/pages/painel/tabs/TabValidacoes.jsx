@@ -181,7 +181,7 @@ export default function TabValidacoes({ libraryId }) {
                       disabled={busy}
                       placeholder={suggestedNumber || t({ id: 'panel.validations.readerNumberPlaceholder' })}
                       onChange={(e) => patchDraft(m.membership_id, { number: e.target.value })}
-                      style={{ minWidth: 130 }}
+                      style={{ minWidth: 'min(130px, 100%)' }}
                     />
                   </label>
                   <label style={{ display: 'flex', flexDirection: 'column', gap: 2, fontSize: '.72rem' }}>
@@ -193,7 +193,7 @@ export default function TabValidacoes({ libraryId }) {
                       disabled={busy}
                       placeholder={t({ id: 'panel.validations.notePlaceholder' })}
                       onChange={(e) => patchDraft(m.membership_id, { note: e.target.value })}
-                      style={{ minWidth: 150 }}
+                      style={{ minWidth: 'min(150px, 100%)' }}
                     />
                   </label>
                   <Button onClick={() => validate(m)} disabled={busy}>

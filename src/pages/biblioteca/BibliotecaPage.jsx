@@ -1466,7 +1466,7 @@ export default function BibliotecaPage() {
               <div style={{ display:'flex', flexDirection:'column', gap:10, marginBottom:12 }}>
                 {openingHours.slots.map((s,i) => (
                   <div key={i} style={{ display:'flex', flexWrap:'wrap', gap:8, alignItems:'flex-end', padding:'10px 12px', background:'rgba(0,0,0,.12)', borderRadius:8, border:'1px solid rgba(255,255,255,.06)' }}>
-                    <div style={{ minWidth:130 }}>
+                    <div style={{ minWidth:'min(130px, 100%)' }}>
                       <select value={s.day||1} onChange={e=>updateSlot(i,'day',Number(e.target.value))} style={fs}>
                         {[1,2,3,4,5,6,7].map(d => <option key={d} value={d}>{dayName(d)}</option>)}
                       </select>
@@ -1479,7 +1479,7 @@ export default function BibliotecaPage() {
                       <label style={{...ls,fontSize:'.72rem',marginBottom:2}}>{t({ id: 'biblioteca.openingHours.end' })}</label>
                       <input type="time" value={s.end||''} onChange={e=>updateSlot(i,'end',e.target.value)} style={fs} />
                     </div>
-                    <div style={{ flex:'1 1 160px', minWidth:140 }}>
+                    <div style={{ flex:'1 1 160px', minWidth:'min(140px, 100%)' }}>
                       <input type="text" value={s.label||''} onChange={e=>updateSlot(i,'label',e.target.value)} style={fs} placeholder={t({ id: 'biblioteca.openingHours.labelPlaceholder' })} maxLength={80} />
                     </div>
                     <button type="button" onClick={()=>removeSlot(i)} style={{ padding:'10px 12px', borderRadius:8, border:'1px solid rgba(255,255,255,.12)', background:'rgba(0,0,0,.3)', color:'#f4f4f4', cursor:'pointer', lineHeight:1 }} aria-label={t({ id: 'common.remove' })}>×</button>

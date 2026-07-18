@@ -78,12 +78,12 @@
 
 .ab-team-search {
   flex: 1 1 240px;
-  min-width: 180px;
+  min-width: min(180px, 100%);
 }
 
 .ab-team-select {
   flex: 0 0 auto;
-  min-width: 140px;
+  min-width: min(140px, 100%);
 }
 
 .ab-team-search:focus,

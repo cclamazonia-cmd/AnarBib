@@ -204,7 +204,7 @@ export default function EventosPanel({ libraryId }) {
           </label>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 160 }}>
+            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 'min(160px, 100%)' }}>
               <span style={{ fontSize: '.82rem' }}>{t({ id: 'biblioteca.events.form.type' })}</span>
               <select className="ab-input" value={form.event_type}
                 onChange={(e) => setForm((f) => ({ ...f, event_type: e.target.value }))}>

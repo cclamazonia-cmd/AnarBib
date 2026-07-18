@@ -209,7 +209,7 @@ export default function AudioSegmentsBlock({ bookId, onMsg }) {
                   ))}
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <input style={{ ...inputStyle, flex: 1, minWidth: 140 }} placeholder={t({ id: 'catalogacao.audio.seg.contribName' })}
+                  <input style={{ ...inputStyle, flex: 1, minWidth: 'min(140px, 100%)' }} placeholder={t({ id: 'catalogacao.audio.seg.contribName' })}
                     value={contribDraft[tr.track_id]?.name || ''} onChange={e => setContrib(tr.track_id, 'name', e.target.value)} />
                   <select style={{ ...inputStyle, width: 'auto' }} value={contribDraft[tr.track_id]?.role || 'locutor'} onChange={e => setContrib(tr.track_id, 'role', e.target.value)}>
                     {SEG_ROLE_KEYS.map(rk => <option key={rk} value={rk}>{t({ id: `catalogacao.role.${rk}` })}</option>)}

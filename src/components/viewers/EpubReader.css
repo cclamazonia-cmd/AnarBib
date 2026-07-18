@@ -83,7 +83,7 @@
   border-bottom: 1px solid var(--e-border);
 }
 .ab-epub-status__loc { opacity: 0.6; }
-.ab-epub-range { flex: 1; min-width: 120px; accent-color: #0b57d0; }
+.ab-epub-range { flex: 1; min-width: min(120px, 100%); accent-color: #0b57d0; }
 
 /* ── Corps : sommaire + scène ── */
 .ab-epub-body { flex: 1; min-height: 0; display: flex; }
