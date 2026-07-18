@@ -446,7 +446,7 @@ export default function TransitionsPanel({ libraryId, role }) {
             <div key={h.id} style={{ ...card, padding: '10px 14px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12,
                             alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                <div style={{ flex: 1, minWidth: 220 }}>
+                <div style={{ flex: 1, minWidth: 'min(220px, 100%)' }}>
                   <div style={{ fontSize: '.88rem', fontWeight: 600, marginBottom: 3 }}>
                     {t({ id: `wizard.profile.axis.${h.axis}.title` })}
                     {' : '}

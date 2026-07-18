@@ -141,7 +141,7 @@ export default function TabBiblios() {
               const ready = inv.status === 'ready';
               return (
                 <div key={inv.id} className="ab-conta-item" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-                  <div className="ab-conta-item__main" style={{ flex: 1, minWidth: 200 }}>
+                  <div className="ab-conta-item__main" style={{ flex: 1, minWidth: 'min(200px, 100%)' }}>
                     <span className="ab-conta-item__title">{inv.library_name}</span>
                     <span className="ab-conta-item__meta">
                       {inv.proposed_by_name
@@ -234,7 +234,7 @@ export default function TabBiblios() {
               value={selectedLib}
               onChange={(e) => { setSelectedLib(e.target.value); setJoinMsg(null); }}
               disabled={joining}
-              style={{ flex: 1, minWidth: 200 }}
+              style={{ flex: 1, minWidth: 'min(200px, 100%)' }}
             >
               <option value="">{t({ id: 'account.biblios.joinPlaceholder' })}</option>
               {joinable.map((l) => (

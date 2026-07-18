@@ -298,7 +298,7 @@ export default function ImportWizard() {
           ) : (
             <>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <input className="ab-input" value={isbn} onChange={(e) => setIsbn(e.target.value)} placeholder={t({ id: 'importacoes.wizard.source.isbnLabel' })} disabled={busy} style={{ minWidth: 200 }} />
+                <input className="ab-input" value={isbn} onChange={(e) => setIsbn(e.target.value)} placeholder={t({ id: 'importacoes.wizard.source.isbnLabel' })} disabled={busy} style={{ minWidth: 'min(200px, 100%)' }} />
                 <button className="cat-btn primary" type="button" onClick={handleSearch} disabled={busy || !isbn.trim()}>
                   {t({ id: 'importacoes.wizard.source.search' })}
                 </button>

@@ -211,7 +211,7 @@ export default function EventosPanel({ libraryId }) {
                 {EVENT_TYPES.map((k) => <option key={k} value={k}>{typeLabel(k)}</option>)}
               </select>
             </label>
-            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 200 }}>
+            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 'min(200px, 100%)' }}>
               <span style={{ fontSize: '.82rem' }}>{t({ id: 'biblioteca.events.form.location' })}</span>
               <input className="ab-input" type="text" value={form.location} maxLength={300}
                 placeholder={t({ id: 'biblioteca.events.form.locationPlaceholder' })}
@@ -220,12 +220,12 @@ export default function EventosPanel({ libraryId }) {
           </div>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 200 }}>
+            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 'min(200px, 100%)' }}>
               <span style={{ fontSize: '.82rem' }}>{t({ id: 'biblioteca.events.form.startsAt' })}</span>
               <input className="ab-input" type="datetime-local" value={form.starts_at}
                 onChange={(e) => setForm((f) => ({ ...f, starts_at: e.target.value }))} />
             </label>
-            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 200 }}>
+            <label style={{ display: 'grid', gap: 4, flex: 1, minWidth: 'min(200px, 100%)' }}>
               <span style={{ fontSize: '.82rem' }}>{t({ id: 'biblioteca.events.form.endsAt' })}</span>
               <input className="ab-input" type="datetime-local" value={form.ends_at}
                 onChange={(e) => setForm((f) => ({ ...f, ends_at: e.target.value }))} />
@@ -275,7 +275,7 @@ export default function EventosPanel({ libraryId }) {
             const past = new Date(ev.starts_at).getTime() < Date.now();
             return (
               <div key={ev.id} className="ab-conta-item" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-start', opacity: ev.is_cancelled ? 0.6 : 1 }}>
-                <div style={{ flex: 1, minWidth: 220 }}>
+                <div style={{ flex: 1, minWidth: 'min(220px, 100%)' }}>
                   <span className="ab-conta-item__title" style={{ textDecoration: ev.is_cancelled ? 'line-through' : 'none' }}>
                     {ev.title}
                   </span>

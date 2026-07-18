@@ -63,7 +63,7 @@ export default function TabEventos() {
             const sameDayEnd = end && end.toDateString() === start.toDateString();
             return (
               <div key={ev.id} className="ab-conta-item" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                <div style={{ flex: 1, minWidth: 220 }}>
+                <div style={{ flex: 1, minWidth: 'min(220px, 100%)' }}>
                   <span className="ab-conta-item__title">{ev.title}</span>
                   <span className="ab-conta-item__meta" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
                     <span style={{ padding: '1px 8px', borderRadius: 999, background: 'rgba(255,255,255,.08)', fontSize: '.72rem' }}>

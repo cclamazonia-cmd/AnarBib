@@ -174,7 +174,7 @@ export default function GazetteStaffPanel() {
           {filteredSubs.map((s) => (
             <div key={s.id} style={box}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-                <div style={{ flex: 1, minWidth: 220 }}>
+                <div style={{ flex: 1, minWidth: 'min(220px, 100%)' }}>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 4 }}>
                     <span className="cat-pill" style={{ fontSize: '.68rem' }}>{t({ id: `federacao.gazeta.rubric.${s.rubric}` })}</span>
                     {s.locale && <span className="cat-pill" style={{ fontSize: '.68rem' }}>{s.locale}</span>}

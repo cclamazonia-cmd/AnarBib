@@ -1223,7 +1223,7 @@ export default function AccountPage() {
         {regimentoUrl && (
           <div style={{ marginTop: 12, padding: '12px 16px', borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📄</span>
-            <div style={{ flex: 1, minWidth: 200 }}>
+            <div style={{ flex: 1, minWidth: 'min(200px, 100%)' }}>
               <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.4 }}>
                 {t({ id: 'account.regimento.hint' })}
               </div>

@@ -352,7 +352,7 @@ ${pages.join('\n')}
       {/* ── Controls ── */}
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
         <input
-          type="search" className="ab-input" style={{ flex: 1, minWidth: 200, padding: '6px 10px', fontSize: '.85rem' }}
+          type="search" className="ab-input" style={{ flex: 1, minWidth: 'min(200px, 100%)', padding: '6px 10px', fontSize: '.85rem' }}
           placeholder={t({ id: 'labels.searchPlaceholder' })}
           value={search} onChange={e => setSearch(e.target.value)}
         />
