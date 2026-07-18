@@ -84,6 +84,16 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
       return (slug && q.includes(slug)) || (sn && q.includes(sn)) || (nm && q.includes(nm)) || (nm && nm.includes(q) && q.length >= 3);
     }) : null;
     if (!lib) { setLastTombo(null); return; }
+    // #fix-attrib (17/07) — la biblio identifiee ici servait deja a suggerer le
+    // prochain tombo, mais n'etait jamais ecrite dans target_library_id : un
+    // exemplaire d'une autre biblio du reseau retombait alors, en publication,
+    // sur la biblio primaire du catalogueur (cf. AnarBib #cross-lib-mismatch).
+    setForm(prev => {
+      if (prev.target_library_id === lib.id) return prev;
+      const next = { ...prev, target_library_id: lib.id };
+      if (prev.target_holding_id) next.target_holding_id = ''; // holding d'une autre biblio, invalide desormais
+      return next;
+    });
     let cancelled = false;
     (async () => {
       const { data } = await supabase.from('exemplares')
