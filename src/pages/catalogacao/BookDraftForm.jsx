@@ -2260,13 +2260,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
             <select value={reassignSource} onChange={e => setReassignSource(e.target.value)}
-              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 220 }}>
+              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 'min(220px, 100%)' }}>
               <option value="">{t({ id: bookLibraries.length > 1 ? 'catalogacao.reassign.sourcePick' : 'catalogacao.reassign.sourceAll' })}</option>
               {bookLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
             <span aria-hidden="true" style={{ fontSize: '.9rem', color: 'var(--brand-muted,#aaa)' }}>→</span>
             <select value={reassignTarget} onChange={e => setReassignTarget(e.target.value)}
-              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 220 }}>
+              style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 'min(220px, 100%)' }}>
               <option value="">{t({ id: 'catalogacao.reassign.placeholder' })}</option>
               {catalogLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
@@ -2292,7 +2292,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           OU cliquer pour indexer un exemplaire du document qui vient d'être publié. */}
       {lastPublished && (
         <div style={{ marginBottom: 14, padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(74,222,128,.35)', background: 'rgba(74,222,128,.07)', display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ flex: 1, minWidth: 200, fontSize: '.85rem' }}>
+          <div style={{ flex: 1, minWidth: 'min(200px, 100%)', fontSize: '.85rem' }}>
             <b>{t({ id: 'catalogacao.postPublish.title' }, { title: lastPublished.title })}</b>
             <div style={{ color: 'var(--brand-muted, #aaa)', marginTop: 2 }}>{t({ id: 'catalogacao.postPublish.body' })}</div>
           </div>
@@ -2388,7 +2388,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           </div>
 
           {/* ── Lookup panel (next to cover) ──────────── */}
-          <div style={{ flex: 1, minWidth: 280 }}>
+          {/* #fix-mobile (18/07) : minWidth fixe = plancher absolu qui ignore
+              flexWrap sur les petits Android (320-360px) -> debordement.
+              min() garde le plancher tant qu'il y a la place, jamais au-dela. */}
+          <div style={{ flex: 1, minWidth: 'min(280px, 100%)' }}>
             {/* Cover candidate gallery (capas P2) */}
             {coverCandidates.length > 0 && (
               <div style={{ marginBottom: 10, padding: 10, borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.08)' }}>

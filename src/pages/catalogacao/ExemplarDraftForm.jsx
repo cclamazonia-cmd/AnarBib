@@ -616,7 +616,11 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             </div>
 
             {/* ── Label fields ─────────────────────── */}
-            <div style={{ flex: 1, minWidth: 280 }}>
+            {/* #fix-mobile (18/07) : minWidth fixe en px = plancher absolu qui ignore
+                flexWrap sur les petits Android (320-360px) -> debordement. min()
+                laisse le plancher jouer des qu'il y a la place, sans jamais depasser
+                le conteneur. */}
+            <div style={{ flex: 1, minWidth: 'min(280px, 100%)' }}>
               <div className="cat-book-grid">
                 <div className="cat-field" style={{ gridColumn: 'span 2' }}>
                   <label style={ls}>{t({ id: 'catalogacao.exemplar.labelAuthor' })}</label>
