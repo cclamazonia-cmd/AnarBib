@@ -113,6 +113,10 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   }, [loc.library, libOptions]);
   const [label, setLabel] = useState({ title: '', author: '', cdd: '', note: '' });
   const [parentBook, setParentBook] = useState(null); // resolved book from bib_ref
+  // #fix-ux (18/07) — distingue "pas encore verifie" de "verifie et introuvable" :
+  // sans ca, le message d'erreur apparaissait des la 1re frappe (parentBook est
+  // nul tant qu'aucune recherche n'a tourne), avant meme la sortie du champ.
+  const [bibRefChecked, setBibRefChecked] = useState(false);
   const [draftState, setDraftState] = useState('new');
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
@@ -181,6 +185,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     setLoc({ library: '', sector: '', shelfUnit: '', shelfLevel: '', note: '' });
     setLabel({ title: '', author: '', cdd: '', note: '' });
     setParentBook(null);
+    setBibRefChecked(false);
     setDraftState('new');
     setMsg({ text: '', kind: '' });
   }
@@ -201,8 +206,8 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     setDraftState(r.status === 'ready' ? 'ready' : r.status === 'published' ? 'published' : r.id ? 'saved' : 'new');
     setMsg({ text: '', kind: '' });
     // Resolve parent book
-    if (r.target_bib_ref) resolveParentBook(r.target_bib_ref);
-    else setParentBook(null);
+    if (r.target_bib_ref) { setBibRefChecked(false); resolveParentBook(r.target_bib_ref); }
+    else { setParentBook(null); setBibRefChecked(false); }
   }
 
   // #UX-CAT (10/06) — auto-tombo (pré-remplissage du champ Tombo au chargement)
@@ -211,12 +216,13 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
   // ── Resolve parent book from bib_ref ────────────────────
   async function resolveParentBook(bibRef) {
-    if (!bibRef?.trim()) { setParentBook(null); return; }
+    if (!bibRef?.trim()) { setParentBook(null); setBibRefChecked(false); return; }
     try {
       const { data } = await supabase.from('books')
         .select('id, titulo, subtitulo, autor, cdd, editora, ano, bib_ref, loanable, circulation_default')
         .eq('bib_ref', bibRef.trim()).limit(1).single();
       setParentBook(data || null);
+      setBibRefChecked(true);
       if (data) {
         // P1.6-a : pré-remplit la circulation de l'exemplaire depuis le padrão de la ficha.
         // §5.6 : on utilise circulation_default (3 valeurs) quand présent ; repli sur le
@@ -235,10 +241,11 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
           note: prev.note,
         }));
       }
-    } catch { setParentBook(null); }
+    } catch { setParentBook(null); setBibRefChecked(true); }
   }
 
   function handleBibRefBlur() { resolveParentBook(f('target_bib_ref')); }
+  function handleBibRefChange(v) { set('target_bib_ref', v); setBibRefChecked(false); }
 
   // ── Computed label preview ──────────────────────────────
   const labelAuthor = label.author || parentBook?.autor || '';
@@ -411,7 +418,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
           <div className="cat-book-grid">
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.bibRefLabel' })}</label>
-              <input type="text" value={f('target_bib_ref')} onChange={e => set('target_bib_ref', e.target.value)}
+              <input type="text" value={f('target_bib_ref')} onChange={e => handleBibRefChange(e.target.value)}
                 onBlur={handleBibRefBlur} placeholder="0000123" style={fs} />
               <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>
                 {t({ id: 'catalogacao.exemplar.bibRefHint' })}
@@ -437,7 +444,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
               </div>
             </div>
           )}
-          {f('target_bib_ref') && !parentBook && (
+          {f('target_bib_ref') && !parentBook && bibRefChecked && (
             <div style={{ marginTop: 8, fontSize: '.78rem', color: '#fbbf24' }}>
               {t({ id: 'catalogacao.exemplar.noBookFound' })}
             </div>
