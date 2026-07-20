@@ -1270,7 +1270,7 @@ export default function ImportacoesPage() {
                 <div style={{ maxHeight: 260, overflowY: 'auto', border: '1px solid rgba(255,255,255,.06)', borderRadius: 8 }}>
                   {runs.filter(r => showArchived || !r.archived_at).slice(0, 20).map(r => (
                     <div key={r.id} onClick={() => { setSelectedRunId(r.id); loadRunRows(r.id); }}
-                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: selectedRunId === r.id ? 'rgba(29,78,216,.12)' : 'transparent', opacity: r.archived_at ? 0.5 : 1 }}>
+                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 6, padding: '8px 10px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,.04)', background: selectedRunId === r.id ? 'rgba(29,78,216,.12)' : 'transparent', opacity: r.archived_at ? 0.5 : 1 }}>
                       <div>
                         <span style={{ fontWeight: 600, fontSize: '.88rem' }}>#{r.id}</span>
                         <span style={{ color: 'var(--brand-muted)', fontSize: '.82rem', marginLeft: 8 }}>{r.source_name || r.original_filename || '—'}</span>
@@ -1635,7 +1635,7 @@ export default function ImportacoesPage() {
                     </div>
                     <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
                       {pubResources.map((res) => (
-                        <li key={res.resource_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 6, marginBottom: 4, background: 'rgba(127,127,127,0.08)' }}>
+                        <li key={res.resource_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap', padding: '8px 10px', borderRadius: 6, marginBottom: 4, background: 'rgba(127,127,127,0.08)' }}>
                           <span style={{ minWidth: 0, fontSize: '.85rem', display: 'flex', alignItems: 'center', gap: 8 }}>
                             <input type="checkbox" checked={selectedPub.has(res.resource_id)} onChange={() => togglePub(res.resource_id)} disabled={bulkPromoting} />
                             <span><b>{res.book_title || '—'}</b>{res.label ? ` · ${res.label}` : ''}{res.is_primary && <Pill variant="ok">★</Pill>}</span>
@@ -1748,7 +1748,7 @@ export default function ImportacoesPage() {
                   <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
                     {recvAssets.map((a) => (
                       <li key={a.received_asset_id} style={{ padding: '8px 10px', borderRadius: 6, marginBottom: 6, background: 'rgba(127,127,127,0.08)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                           <span style={{ minWidth: 0, fontSize: '.85rem' }}>
                             <b>{a.title || '—'}</b>{a.source_name ? ` · ${a.source_name}` : ''}{a.asset_kind ? ` · ${a.asset_kind}` : ''}
                           </span>
@@ -1784,7 +1784,7 @@ export default function ImportacoesPage() {
                             {bookResults.length > 0 && (
                               <ul style={{ listStyle: 'none', padding: 0, margin: '8px 0 0' }}>
                                 {bookResults.map((b) => (
-                                  <li key={b.book_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, padding: '6px 8px' }}>
+                                  <li key={b.book_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap', padding: '6px 8px' }}>
                                     <span style={{ fontSize: '.82rem' }}>{b.title || '—'}{b.isbn ? ` · ${b.isbn}` : ''}</span>
                                     <button className="cat-btn primary" type="button" onClick={() => handleAttach(a, b)} disabled={attaching}>
                                       {attaching ? t({ id: 'importacoes.export.attach.attaching' }) : t({ id: 'importacoes.export.attach.attachHere' })}
@@ -1820,7 +1820,7 @@ export default function ImportacoesPage() {
                   <ul style={{ listStyle: 'none', padding: 0, margin: '10px 0 0' }}>
                     {verifiedAssets.map((a) => (
                       <li key={a.asset_id} style={{ padding: '8px 10px', borderRadius: 6, marginBottom: 6, background: 'rgba(127,127,127,0.08)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                           <span style={{ minWidth: 0, fontSize: '.85rem' }}>
                             <b>{a.book_title || '—'}</b>
                             {a.asset_kind ? ` · ${a.asset_kind}` : ''}

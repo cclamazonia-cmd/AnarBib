@@ -44,7 +44,7 @@ export default function PebHistorySection({ libraryId, allLibraries = [], onChan
   const lr = (i) => ({ padding: '10px 12px',
     background: i % 2 === 0 ? 'rgba(0,0,0,.08)' : 'transparent',
     borderBottom: '1px solid rgba(255,255,255,.04)',
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 });
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' });
   const muted = { fontSize: '.82rem', color: 'var(--brand-muted)' };
 
   // ── chargement ────────────────────────────────────────────────────────────
@@ -109,7 +109,7 @@ export default function PebHistorySection({ libraryId, allLibraries = [], onChan
   // ── rendu ─────────────────────────────────────────────────────────────────
   return (
     <div style={bx}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <h4 style={{ margin: 0 }}>{t({ id: 'biblioteca.pebHistory.title' })}</h4>
         <button
           className="cat-btn ghost"

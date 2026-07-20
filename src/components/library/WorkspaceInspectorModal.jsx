@@ -146,7 +146,7 @@ export default function WorkspaceInspectorModal({ libraryId, open, onClose }) {
       >
         {/* En-tete */}
         <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap',
           padding: '0.85rem 1.1rem', borderBottom: '1px solid rgba(255,255,255,.1)',
         }}>
           <div style={{ fontSize: '.95rem', fontWeight: 600 }}>

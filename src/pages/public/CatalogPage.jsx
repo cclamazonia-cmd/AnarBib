@@ -952,7 +952,7 @@ export default function CatalogPage() {
             <label className="ab-field__label">{t({ id: 'catalog.filters.libraryLabel' })}</label>
             <div style={{ position: 'relative' }} ref={libMenuRef}>
               <button type="button" className="ab-select" aria-expanded={libMenuOpen}
-                style={{ textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: 6 }}
+                style={{ textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', gap: 6, flexWrap: 'wrap' }}
                 onClick={() => setLibMenuOpen(o => !o)}>
                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {libraryFilter.length === 0

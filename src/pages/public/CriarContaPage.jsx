@@ -507,7 +507,7 @@ export default function CriarContaPage() {
             <div style={hs}>{t({id:'auth.create.orgHint'})}</div>
           </div>
           )}
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginTop: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
             <Button variant="secondary" type="button" onClick={goBack}>{t({id:'auth.create.wizard.back'})}</Button>
             <Button variant="primary" type="button" onClick={goNext}>{t({id:'auth.create.wizard.next'})}</Button>
           </div>

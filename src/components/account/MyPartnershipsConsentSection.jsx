@@ -57,7 +57,7 @@ export default function MyPartnershipsConsentSection() {
   if (loading || rows.length === 0) return null;
 
   const rowStyle = {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10,
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap',
     padding: '10px 12px', borderRadius: 8, marginBottom: 6,
     background: 'rgba(0,0,0,.08)', border: '1px solid rgba(255,255,255,.06)',
   };

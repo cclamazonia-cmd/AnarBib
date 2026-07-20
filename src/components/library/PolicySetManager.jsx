@@ -304,7 +304,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
       display: 'flex', alignItems: 'center', gap: 6,
     },
     setRow: (isSelected, isActive) => ({
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap',
       gap: 8, padding: '10px 12px', borderRadius: 8, marginBottom: 6,
       background: 'rgba(0,0,0,.15)',
       border: isSelected
@@ -394,7 +394,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
       {/* ── Formulaire d'édition d'un jeu ───────────────────────────────── */}
       {canEdit && (
         <div style={styles.card}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 6 }}>
             <div style={styles.cardTitle}>
               {setForm.id
                 ? t({ id: 'biblioteca.policySets.editTitle' })
@@ -533,7 +533,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
                 onDelete={() => deleteRule(r.id)}
               />
             ) : (
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, flexWrap: 'wrap' }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '.9rem', fontWeight: 600 }}>
                     {translateSeed(r, 'rule_label', 'rule.label') || r.rule_label
@@ -643,7 +643,7 @@ function RuleEditor({ rule, styles, t, saving, onField, onSave, onCancel, onDele
         <input type="text" style={styles.input} value={rule.public_note || ''}
           onChange={e => onField('public_note', e.target.value)} />
       </div>
-      <div className="cat-field" style={{ gridColumn: 'span 3', display: 'flex', gap: 8, justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="cat-field" style={{ gridColumn: 'span 3', display: 'flex', gap: 8, justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="cat-btn primary" onClick={onSave} disabled={saving}
             style={{ fontSize: '.85rem' }}>

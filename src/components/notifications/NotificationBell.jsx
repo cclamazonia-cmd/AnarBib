@@ -109,7 +109,7 @@ export default function NotificationBell() {
           }}
         >
           <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap',
             gap: 8, padding: '12px 14px', borderBottom: '1px solid rgba(255,255,255,.08)',
             position: 'sticky', top: 0, background: 'var(--brand-surface, #161616)',
           }}>

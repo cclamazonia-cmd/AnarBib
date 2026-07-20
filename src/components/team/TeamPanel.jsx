@@ -689,6 +689,7 @@ function rowStyle(i) {
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     gap: 12,
+    flexWrap: 'wrap',
   };
 }
 
@@ -710,6 +711,7 @@ function subRowStyle() {
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     gap: 12,
+    flexWrap: 'wrap',
   };
 }
 

@@ -260,7 +260,7 @@ export default function LibraryVisualAssetsSection({ libraryId, librarySlug, lib
                 background: 'rgba(0,0,0,.25)',
                 border: `1px solid ${exists ? 'rgba(74,222,128,.2)' : (slot.optional ? 'rgba(255,255,255,.08)' : 'rgba(248,113,113,.2)')}`,
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
                   <strong style={{ fontSize: '.85rem', fontFamily: 'monospace' }}>{slot.key}</strong>
                   {slot.optional && (
                     <span style={{ fontSize: '.7rem', color: 'var(--brand-muted)' }}>

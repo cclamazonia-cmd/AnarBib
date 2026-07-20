@@ -514,13 +514,13 @@
 
 /* TabTrabalhoDoDia — tâches internes (E.4/OT-2) */
 .ab-painel-itask-box { margin-top: 20px; padding: 16px; border-radius: 10px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
-.ab-painel-itask-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.ab-painel-itask-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 .ab-painel-itask-head .ab-painel-h3 { margin: 0; }
 .ab-painel-itask-manage { font-size: .85rem; color: var(--brand-muted); }
 .ab-painel-itask-empty { font-size: .88rem; color: var(--brand-muted); margin: 0; }
 .ab-painel-itask-empty a { color: var(--brand-text); }
 .ab-painel-itask-list { border: 1px solid rgba(255,255,255,.06); border-radius: 8px; overflow: hidden; }
-.ab-painel-itask-row { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ab-painel-itask-row { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.04); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .ab-painel-itask-list > .ab-painel-itask-row:nth-child(odd) { background: rgba(0,0,0,.08); }
 .ab-painel-itask-cell { flex: 1; }
 .ab-painel-itask-title { font-size: .9rem; font-weight: 600; }
@@ -609,7 +609,7 @@
 /* PanelPage — modale paiement (E.4/OT-2) */
 .ab-painel-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; }
 .ab-painel-modal { background: var(--brand-bg, #1a1a1a); border-radius: 12px; padding: 20px; max-width: 500px; width: 100%; border: 1px solid rgba(255,255,255,.1); max-height: 90vh; overflow: auto; }
-.ab-painel-modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.ab-painel-modal-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .ab-painel-modal-title { margin: 0; font-size: 1.05rem; font-weight: 700; }
 .ab-painel-modal-close { background: none; border: none; color: var(--brand-muted); font-size: 1.4rem; cursor: pointer; padding: 0; line-height: 1; }
 .ab-painel-modal-sub { font-size: .88rem; color: var(--brand-muted); margin-bottom: 12px; }
@@ -672,7 +672,7 @@
 .ab-recolement-resume { width: 100%; }
 .ab-recolement-sessions { list-style: none; padding: 0; margin: 6px 0 0; display: flex; flex-direction: column; gap: 6px; }
 .ab-recolement-sessions li {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
   font-size: .85rem; padding: 6px 10px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
 }
 .ab-recolement-scan { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }

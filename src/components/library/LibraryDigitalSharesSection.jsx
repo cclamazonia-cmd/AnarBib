@@ -298,7 +298,7 @@ export default function LibraryDigitalSharesSection({ libraryId, canEdit = true 
         {/* Visionneuse (reçu, mode ponctuel) */}
         {viewing && viewing.share.id === s.id && (
           <div style={{ marginTop: 8, padding: 10, borderRadius: 8, background: 'rgba(0,0,0,.25)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
               <span style={{ ...muted, fontWeight: 600 }}>{viewing.title}</span>
               <button className="cat-tab-btn" style={{ fontSize: '.72rem' }} onClick={() => setViewing(null)}>{t({ id: 'digishare.viewer.close' })}</button>
             </div>
@@ -367,7 +367,7 @@ export default function LibraryDigitalSharesSection({ libraryId, canEdit = true 
               {reqResults.length > 0 && (
                 <div style={{ ...lw, marginBottom: 8, maxHeight: 180, overflowY: 'auto' }}>
                   {reqResults.map((r, i) => (
-                    <div key={r.book_id} style={{ ...lr(i), display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, cursor: 'pointer', background: reqBook?.book_id === r.book_id ? 'rgba(29,78,216,.18)' : lr(i).background }}
+                    <div key={r.book_id} style={{ ...lr(i), display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap', cursor: 'pointer', background: reqBook?.book_id === r.book_id ? 'rgba(29,78,216,.18)' : lr(i).background }}
                       onClick={() => setReqBook(r)}>
                       <span style={{ fontSize: '.85rem' }}>{r.titulo || `#${r.book_id}`}{r.bib_ref ? ` (${r.bib_ref})` : ''}</span>
                       {reqBook?.book_id === r.book_id && <span className="cat-pill ok" style={{ fontSize: '.6rem' }}>{t({ id: 'digishare.req.pick' })}</span>}

@@ -93,7 +93,7 @@ export default function LibraryProfileBanner({ profileTemplateChosen, role }) {
       color: '#93c5fd',
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between',
-                    alignItems: 'flex-start', gap: 12 }}>
+                    alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 700, fontSize: '.95rem', marginBottom: 6 }}>
             ℹ {t({ id: 'banner.profile.title' },

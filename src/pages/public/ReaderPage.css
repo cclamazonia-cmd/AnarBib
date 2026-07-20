@@ -125,7 +125,7 @@
   box-shadow: var(--brand-shadow); overflow: hidden;
 }
 .ab-reader-sheet__head {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
   padding: 12px 18px;
   background-color: rgba(18,18,18,.86);
   background-image: var(--brand-sheet-head-overlay);

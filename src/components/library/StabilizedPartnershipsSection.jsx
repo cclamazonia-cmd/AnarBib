@@ -124,7 +124,7 @@ export default function StabilizedPartnershipsSection({ libraryId, canEdit, allL
           <div style={subTitle}>{t({ id: 'biblioteca.stabPartners.incomingTitle' })}</div>
           <div style={lw}>
             {incoming.map((r, i) => (
-              <div key={r.partnership_id} style={{ ...lr(i), display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+              <div key={r.partnership_id} style={{ ...lr(i), display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '.9rem', fontWeight: 600 }}>{r.partner_name}</span>
                 {canEdit && (
                   <span style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
@@ -148,7 +148,7 @@ export default function StabilizedPartnershipsSection({ libraryId, canEdit, allL
           <div style={subTitle}>{t({ id: 'biblioteca.stabPartners.outgoingTitle' })}</div>
           <div style={lw}>
             {outgoing.map((r, i) => (
-              <div key={r.partnership_id} style={{ ...lr(i), display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+              <div key={r.partnership_id} style={{ ...lr(i), display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '.9rem', fontWeight: 600 }}>{r.partner_name}</span>
                 <span className="cat-pill" style={{ fontSize: '.66rem' }}>{t({ id: 'biblioteca.stabPartners.pending' })}</span>
               </div>
@@ -166,7 +166,7 @@ export default function StabilizedPartnershipsSection({ libraryId, canEdit, allL
               const rights = r.rights || [];
               return (
                 <div key={r.partnership_id} style={lr(i)}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '.9rem', fontWeight: 600 }}>{r.partner_name}</span>
                     {canEdit && (
                       <button className="cat-tab-btn" style={{ fontSize: '.74rem', flexShrink: 0 }} disabled={busy}

@@ -227,6 +227,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .ab-sheet__hint { font-size: .82rem; color: var(--brand-muted); margin-left: 8px; display: block; }

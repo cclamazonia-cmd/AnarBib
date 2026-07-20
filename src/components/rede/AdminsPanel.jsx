@@ -332,6 +332,7 @@ function AdminRow({ admin: a, index, isCurrentUser, locale, onProposeRemovalClic
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         gap: 12,
+        flexWrap: 'wrap',
       }}
     >
       <div className="ab-team-row__main">
@@ -419,7 +420,7 @@ function ProposalRow({ proposal: p, index, locale, onVoteClick }) {
       }}
     >
       {/* En-tete : identite + statut */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
         <div>
           <div className="ab-team-row__name" style={{ fontWeight: 600 }}>
             {targetName}
@@ -552,7 +553,7 @@ function RemovalProposalRow({ proposal: p, index, locale, onVoteClick, onCancelC
       }}
     >
       {/* En-tete : identite + statut */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
         <div>
           <div className="ab-team-row__name" style={{ fontWeight: 600 }}>
             {targetName}

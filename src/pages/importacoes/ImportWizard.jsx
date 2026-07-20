@@ -466,7 +466,7 @@ export default function ImportWizard() {
         {step === 3 && renderPreview()}
         {step === 4 && renderPromote()}
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 22 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 22, flexWrap: 'wrap', gap: 8 }}>
           <button className="cat-btn secondary" type="button" disabled={step === 1 || busy} onClick={() => setStep((s) => Math.max(1, s - 1))}>
             {t({ id: 'importacoes.wizard.back' })}
           </button>

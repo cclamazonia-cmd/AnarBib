@@ -181,7 +181,7 @@ export default function LibraryProfileWizard({ value, onChange, disabled = false
           </div>
         ))}
 
-        <div style={{ marginTop: 14, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ marginTop: 14, display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
           <button type="button" onClick={() => setInternalStep(stepNumber - 1)}
                   disabled={disabled}
                   style={{ padding: '8px 14px', borderRadius: 6, border: '1px solid rgba(255,255,255,.15)',
@@ -220,7 +220,7 @@ export default function LibraryProfileWizard({ value, onChange, disabled = false
         {['catalog_mode', 'circulation_mode', 'network_mode', 'governance_mode'].map((axis, idx) => (
           <div key={axis}
                style={{ padding: '10px 12px', borderRadius: 6, marginBottom: 8,
-                        background: 'rgba(255,255,255,.04)', display: 'flex',
+                        background: 'rgba(255,255,255,.04)', display: 'flex', flexWrap: 'wrap',
                         justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: '.75rem', color: 'var(--brand-muted)', fontWeight: 600 }}>

@@ -76,6 +76,7 @@ function ContaTabHeader({ title, onRefresh, actions }) {
       alignItems: 'center',
       marginBottom: 10,
       gap: 8,
+      flexWrap: 'wrap',
     }}>
       <h2 className="ab-conta-section-title" style={{ margin: 0 }}>{title}</h2>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
@@ -2228,7 +2229,7 @@ export default function AccountPage() {
                       opacity: n.is_read ? 0.6 : 1,
                     }}>
                       <div className="ab-conta-item__main" style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
                           <span className="ab-conta-item__title" style={{ cursor: 'default' }}>{tNotifText(n.title)}</span>
                           {!n.is_read && <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#60a5fa', flexShrink: 0 }} />}
                         </div>

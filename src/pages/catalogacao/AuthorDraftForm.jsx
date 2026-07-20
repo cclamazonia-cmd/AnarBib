@@ -654,7 +654,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
         <div style={{ marginBottom: 16, maxHeight: 200, overflowY: 'auto', border: '1px solid rgba(255,255,255,.06)', borderRadius: 8 }}>
           {drafts.map((d, i) => (
             <div key={d.id} style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8,
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap',
               padding: '6px 10px', cursor: 'pointer',
               background: String(d.id) === f('id') ? 'rgba(29,78,216,.12)' : i % 2 === 0 ? 'rgba(0,0,0,.1)' : 'transparent',
               borderBottom: '1px solid rgba(255,255,255,.04)',
