@@ -122,6 +122,12 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   const [publishing, setPublishing] = useState(false);
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [acqModes, setAcqModes] = useState([]);
+  // #cross-lib-reassign (19/07) — action dediee, separee du champ texte libre
+  // « Biblioteca », pour reattribuer explicitement un exemplaire DEJA PUBLIE a
+  // une autre biblioteca du reseau (avec confirmation), plutot que de compter
+  // sur la reconnaissance floue du champ de localisation.
+  const [reassignTarget, setReassignTarget] = useState('');
+  const [reassigning, setReassigning] = useState(false);
 
   function f(k) { return form[k] || ''; }
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); if (['saved','ready'].includes(draftState)) setDraftState('dirty'); }
@@ -188,6 +194,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     setBibRefChecked(false);
     setDraftState('new');
     setMsg({ text: '', kind: '' });
+    setReassignTarget('');
   }
 
   function fillFromRecord(r) {
@@ -205,6 +212,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     setLabel({ title: r.label_title_override || '', author: r.label_author_override || '', cdd: r.label_cdd_override || '', note: r.label_note || '' });
     setDraftState(r.status === 'ready' ? 'ready' : r.status === 'published' ? 'published' : r.id ? 'saved' : 'new');
     setMsg({ text: '', kind: '' });
+    setReassignTarget('');
     // Resolve parent book
     if (r.target_bib_ref) { setBibRefChecked(false); resolveParentBook(r.target_bib_ref); }
     else { setParentBook(null); setBibRefChecked(false); }
@@ -329,6 +337,43 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
     finally { setPublishing(false); }
   }
 
+  // ── Reassign to another library (already-published copy only) ──
+  // #cross-lib-reassign (19/07) : deleste target_holding_id et tombo (le
+  // serveur regenere le tombo via fn_next_tombo pour la biblioteca de
+  // destino, comme a la creation) puis republie immediatement — c'est une
+  // action decisive, pas un brouillon qui traine.
+  async function handleReassignLibrary() {
+    const currentLibId = f('target_library_id');
+    if (!f('id') || !reassignTarget || reassignTarget === currentLibId) return;
+    const lib = libOptions.find(l => l.id === reassignTarget);
+    if (!lib) return;
+    const fromLib = libOptions.find(l => l.id === currentLibId);
+    const fromLabel = fromLib ? (fromLib.short_name || fromLib.name) : '—';
+    const toLabel = lib.short_name || lib.name;
+    if (!confirm(t({ id: 'catalogacao.exemplar.reassignConfirm' }, { tombo: f('tombo') || '—', from: fromLabel, to: toLabel }))) return;
+
+    setReassigning(true); setMsg({ text: '', kind: '' });
+    try {
+      const { error: saveErr } = await supabase.from('exemplar_drafts')
+        .update({ target_library_id: lib.id, target_holding_id: null, tombo: null, updated_by: user?.id || null })
+        .eq('id', Number(f('id')));
+      if (saveErr) throw saveErr;
+      const { error: pubErr } = await supabase.rpc('publish_exemplar_draft', { p_draft_id: Number(f('id')) });
+      if (pubErr) throw pubErr;
+
+      const { data: fresh } = await supabase.from('exemplar_drafts').select('*').eq('id', Number(f('id'))).single();
+      if (fresh) fillFromRecord(fresh);
+      setReassignTarget('');
+      await loadDrafts();
+      onChanged?.();
+      setMsg({ text: t({ id: 'catalogacao.exemplar.reassignSuccess' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally {
+      setReassigning(false);
+    }
+  }
+
   // ── UI constants ────────────────────────────────────────
   const fs = { width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' };
   const ls = { display: 'block', fontSize: '.78rem', fontWeight: 600, marginBottom: 2, color: 'var(--brand-muted, #bbb)' };
@@ -381,7 +426,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         <div style={{ marginBottom: 16, maxHeight: 180, overflowY: 'auto', border: '1px solid rgba(255,255,255,.06)', borderRadius: 8 }}>
           {drafts.map((d, i) => (
             <div key={d.id} style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8,
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap',
               padding: '6px 10px', cursor: 'pointer',
               background: String(d.id) === f('id') ? 'rgba(29,78,216,.12)' : i % 2 === 0 ? 'rgba(0,0,0,.1)' : 'transparent',
               borderBottom: '1px solid rgba(255,255,255,.04)',
@@ -510,6 +555,42 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         </div>
 
         {/* ═══════════════════════════════════════════════ */}
+        {/* Reattribuer a outra biblioteca (exemplar ja publicado apenas) */}
+        {/* ═══════════════════════════════════════════════ */}
+        {f('published_exemplar_id') && (
+          <div style={{ padding: 14, borderRadius: 10, background: 'rgba(180,83,9,.06)', border: '1px solid rgba(180,83,9,.2)', marginBottom: 14 }}>
+            <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 6 }}>{t({ id: 'catalogacao.exemplar.reassignStep' })}</div>
+            <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginBottom: 8 }}>
+              {t({ id: 'catalogacao.exemplar.reassignHint' })}
+            </div>
+            <div className="cat-book-grid">
+              <div className="cat-field">
+                <label style={ls}>{t({ id: 'catalogacao.exemplar.reassignCurrentLibrary' })}</label>
+                <input type="text" value={(() => {
+                  const lib = libOptions.find(l => l.id === f('target_library_id'));
+                  return lib ? `${lib.short_name || lib.name}${lib.city ? ' - ' + lib.city : ''}` : '—';
+                })()} disabled style={{ ...fs, opacity: .7 }} />
+              </div>
+              <div className="cat-field">
+                <label style={ls}>{t({ id: 'catalogacao.exemplar.reassignNewLibrary' })}</label>
+                <select value={reassignTarget} onChange={e => setReassignTarget(e.target.value)} style={fs}>
+                  <option value="">—</option>
+                  {libOptions.filter(l => l.id !== f('target_library_id')).map(l => (
+                    <option key={l.id} value={l.id}>{`${l.short_name || l.name}${l.city ? ' - ' + l.city : ''}`}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="cat-field" style={{ display: 'flex', alignItems: 'flex-end' }}>
+                <button type="button" className="ab-button ab-button--sm" style={{ background: 'rgba(180,83,9,.75)' }}
+                  disabled={!reassignTarget || reassigning} onClick={handleReassignLibrary}>
+                  {reassigning ? t({ id: 'catalogacao.saving' }) : t({ id: 'catalogacao.exemplar.reassignButton' })}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════ */}
         {/* STEP 3: Circulation policy & visibility (P1.6-a) */}
         {/* ═══════════════════════════════════════════════ */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 14 }}>
@@ -583,7 +664,7 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
         {/* STEP 4: Label — the tag on the spine            */}
         {/* ═══════════════════════════════════════════════ */}
         <div style={{ padding: 14, borderRadius: 10, background: 'rgba(21,128,61,.04)', border: '1px solid rgba(21,128,61,.15)', marginBottom: 14 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
             <div style={{ fontSize: '.82rem', fontWeight: 700 }}>{t({ id: 'catalogacao.exemplar.labelStep' })}</div>
             <span className={`cat-pill ${lPill.c}`} style={{ fontSize: '.65rem' }}>{lPill.l}</span>
           </div>
