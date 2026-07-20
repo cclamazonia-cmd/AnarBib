@@ -155,7 +155,7 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
           border: '1px solid rgba(255,255,255,.12)', borderRadius: 12, boxShadow: '0 12px 40px rgba(0,0,0,.5)',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,.08)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap', padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,.08)' }}>
           <div style={{ minWidth: 0 }}>
             <h3 style={{ margin: 0, fontSize: '1rem' }}>{t({ id: 'catalogacao.dup.title' })}</h3>
             <div style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

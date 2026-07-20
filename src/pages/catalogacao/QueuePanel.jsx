@@ -540,7 +540,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       {/*  TRASH                                          */}
       {/* ═══════════════════════════════════════════════ */}
       <div style={{ padding: 14, borderRadius: 10, background: 'rgba(220,38,38,.04)', border: '1px solid rgba(220,38,38,.12)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 6 }}>
           <div>
             <h4 style={{ margin: '0 0 4px', fontSize: '.9rem' }}>{t({ id: 'catalogacao.queue.trashTitle' })}</h4>
             <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)' }}>

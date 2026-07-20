@@ -156,7 +156,7 @@ export default function AudioSegmentsBlock({ bookId, onMsg }) {
 
   return (
     <section className="ab-audio-seg" style={{ marginTop: 18, padding: 14, borderRadius: 10, border: '1px solid rgba(255,255,255,.1)', background: 'rgba(0,0,0,.12)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
         <strong style={{ fontSize: '.92rem' }}>{t({ id: 'catalogacao.audio.seg.title' })}</strong>
         {!draft && (
           <button type="button" className="ab-button ab-button--sm" onClick={openNew} disabled={busy}>
@@ -179,7 +179,7 @@ export default function AudioSegmentsBlock({ bookId, onMsg }) {
         <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
           {tracks.map(tr => (
             <li key={tr.track_id} style={{ padding: 10, borderRadius: 8, background: 'rgba(0,0,0,.2)', border: '1px solid rgba(255,255,255,.07)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
                 <div style={{ minWidth: 0 }}>
                   <span style={{ fontWeight: 700, marginRight: 6 }}>{tr.position}.</span>
                   <span>{tr.title || t({ id: 'catalogacao.audio.seg.untitled' })}</span>

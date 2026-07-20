@@ -2106,10 +2106,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // Cards "para informação" : auteur lié + exemplaires par biblio (anti-orphelin).
   function renderInfoCards() {
     const cardStyle = { marginTop: 12, border: '1px solid rgba(255,255,255,.12)', borderRadius: 8, padding: '10px 12px', cursor: 'pointer', background: 'rgba(0,0,0,.18)' };
-    const headStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 };
+    const headStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 6 };
     const titleStyle = { fontWeight: 700, fontSize: '.82rem' };
     const tagStyle = { fontSize: '.6rem', textTransform: 'uppercase', letterSpacing: '.04em', color: 'var(--brand-muted,#9aa)', border: '1px solid rgba(255,255,255,.15)', borderRadius: 4, padding: '1px 5px' };
-    const lineStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, fontSize: '.8rem', padding: '2px 0' };
+    const lineStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, fontSize: '.8rem', padding: '2px 0', flexWrap: 'wrap' };
     const ctaStyle = { marginTop: 6, fontSize: '.74rem', color: 'var(--brand-color-primary,#c0392b)', fontWeight: 600 };
     const emptyStyle = { fontSize: '.78rem', color: 'var(--brand-muted,#888)', fontStyle: 'italic' };
     const pillStyle = { flexShrink: 0, fontSize: '.6rem' };
@@ -2503,7 +2503,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             {/* BN Brasil results */}
             {bnResult?.results?.length > 0 && (
               <div style={{ marginTop: 10 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
                   <span style={{ fontSize: '.78rem', fontWeight: 600 }}>{t({ id: 'catalogacao.ui.bnResultsTitle' }, { total: bnResult.total })}</span>
                   <button type="button" className="ab-button ab-button--ghost ab-button--sm"
                     onClick={clearBnResult}>{t({ id: 'catalogacao.ui.clearBn' })}</button>
@@ -2563,7 +2563,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             return (
               <div style={{ gridColumn: 'span 1' }}>
                 <div style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)', fontSize: '.78rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                  {/* #fix-android (19/07) : meme cause que le panneau "Arquitetura
+                      documental" (commit 57ea0a30d) -- flexWrap manquant sur cette
+                      ligne titre+badge, confirme en overflow reel sur Android. */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, flexWrap: 'wrap', gap: 6 }}>
                     <strong style={{ fontSize: '.82rem' }}>{t({ id: `catalogacao.guide.${mt}.title` })}</strong>
                     <span className={`cat-pill ${mode === 'simple' ? 'info' : 'ok'}`} style={{ fontSize: '.62rem' }}>
                       {mode === 'simple' ? t({ id: 'catalogacao.modeSimple' }) : t({ id: 'catalogacao.modeComplete' })}
@@ -2599,7 +2602,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
           {/* ── Autores e outras responsabilidades ────── */}
           <div style={{ gridColumn: 'span 3' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 6 }}>
               <label style={{ fontSize: '.75rem', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.ui.contributors'})}</label>
               <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm"
@@ -2793,7 +2796,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             <div className="cat-pub-suggestions" style={{ margin: '-6px 0 8px 0', border: '1px solid var(--brand-panel-border, rgba(255,255,255,.18))', borderRadius: 6, background: 'var(--brand-panel-bg-strong, rgba(10,10,10,.94))', color: 'var(--brand-text, #f5f2ea)', maxHeight: 180, overflowY: 'auto', fontSize: '.78rem' }}>
               {pubSuggestions.map(pub => (
                 <div key={pub.id} onClick={() => selectPublisher(pub)}
-                  style={{ padding: '4px 10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--brand-panel-border, rgba(255,255,255,.1))' }}
+                  style={{ padding: '4px 10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 6, borderBottom: '1px solid var(--brand-panel-border, rgba(255,255,255,.1))' }}
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,.08)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                   <span style={{ fontWeight: 500 }}>{pub.name}</span>
@@ -2848,7 +2851,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                   background: 'rgba(255,255,255,.03)',
                   border: '1px solid var(--brand-panel-border, rgba(255,255,255,.08))',
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 6 }}>
                     <h4 style={{ margin: 0, fontSize: '.85rem' }}>{t({id:'catalogacao.ui.labelPreview'})}</h4>
                     <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)' }}>
                       {t({id:'catalogacao.ui.labelPreviewHint'})}
@@ -2902,7 +2905,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           {/* ═══ Recursos digitais vinculados ═════════ */}
           {f('id') && (
             <div className="cat-material-section" style={{ gridColumn: 'span 3' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 6 }}>
                 <h4 style={{ margin: 0 }}>{t({ id: 'catalogacao.digital.sectionTitle' })}</h4>
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={startNewDigitalResource}>
@@ -2915,7 +2918,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                 <div style={{ marginBottom: 12 }}>
                   {digitalResources.map(res => (
                     <div key={res.id} style={{
-                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8,
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap',
                       padding: '8px 10px', borderRadius: 6, marginBottom: 4,
                       background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)',
                     }}>
@@ -3076,9 +3079,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
 
         {/* ═══ Painel de revisão da ficha ═════════════ */}
         <div className="cat-material-section" style={{ marginTop: 18 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 6 }}>
             <h4 style={{ margin: 0 }}>{t({id:'catalogacao.ui.reviewTitle'})}</h4>
-            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
               <span className={`cat-pill ${isbdEnabled ? 'ok' : 'warn'}`}>
                 {isbdEnabled ? t({id:'catalogacao.ui.isbdReady'}) : t({id:'catalogacao.ui.isbdNotReady'})}
               </span>

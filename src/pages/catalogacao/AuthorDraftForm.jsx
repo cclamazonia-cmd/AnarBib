@@ -924,7 +924,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                     const reviewed = existing?.status === 'reviewed' && !isDirty;
                     return (
                       <div key={lang} style={{ padding: '8px 10px', borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.06)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, gap: 6 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, gap: 6, flexWrap: 'wrap' }}>
                           <span style={{ fontWeight: 700, fontSize: '.82rem' }}>{lang}</span>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                             {isDirty ? (

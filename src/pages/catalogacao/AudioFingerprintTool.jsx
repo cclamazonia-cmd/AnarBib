@@ -139,7 +139,7 @@ export default function AudioFingerprintTool({ bookId, onMsg, tracks }) {
       {candidates.length > 0 && (
         <ul style={{ listStyle: 'none', margin: '10px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
           {candidates.map((c, i) => (
-            <li key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center', padding: 8, borderRadius: 8, background: 'rgba(0,0,0,.2)', border: '1px solid rgba(255,255,255,.07)' }}>
+            <li key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center', flexWrap: 'wrap', padding: 8, borderRadius: 8, background: 'rgba(0,0,0,.2)', border: '1px solid rgba(255,255,255,.07)' }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: '.84rem' }}>{c.title || c.recording_mbid || c.acoustid}</div>
                 <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)' }}>
