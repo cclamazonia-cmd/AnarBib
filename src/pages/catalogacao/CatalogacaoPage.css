@@ -257,7 +257,7 @@
 
 .ab-group { padding: 18px 0; border-top: 1px solid rgba(255,255,255,.07); }
 .ab-group:first-child { border-top: 0; padding-top: 6px; }
-.ab-group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.ab-group-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
 .ab-group-head h3 {
   font-family: var(--brand-font-heading, serif); font-weight: 700; font-size: 1.06rem;
   color: var(--brand-text, #f5f2ea); margin: 0;
