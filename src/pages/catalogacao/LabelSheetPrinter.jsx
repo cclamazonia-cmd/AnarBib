@@ -4,16 +4,12 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { Button, Pill, Spinner } from '@/components/ui';
+import { LABEL_FORMATS, CUSTOM_FORMAT_ID, DEFAULT_FORMAT_ID, BLANK_CUSTOM_FORMAT, PAGE_SIZES, labelsPerPage, pageSizeOf } from './labelFormats';
 
 // ═══════════════════════════════════════════════════════════
 // LabelSheetPrinter — Impression d'étiquettes de cote
-// Format A4 portrait, 7 lignes × 3 colonnes = 21 étiquettes/page
-// Compatible feuilles d'étiquettes standard (type Avery L7160 / 63,5 × 38,1mm)
+// Grille et cotes de la planche paramétrables — voir labelFormats.js
 // ═══════════════════════════════════════════════════════════
-
-const LABELS_PER_ROW = 3;
-const ROWS_PER_PAGE = 7;
-const LABELS_PER_PAGE = LABELS_PER_ROW * ROWS_PER_PAGE; // 21
 
 // ── Champs optionnels des étiquettes (persistés en localStorage) ──
 const FIELD_STORAGE_KEY = 'labels_visible_fields';
@@ -21,6 +17,20 @@ const DEFAULT_FIELDS = { author: true, title: true, tombo: true, note: true };
 function loadFieldPrefs() {
   try { const s = localStorage.getItem(FIELD_STORAGE_KEY); return s ? { ...DEFAULT_FIELDS, ...JSON.parse(s) } : { ...DEFAULT_FIELDS }; }
   catch { return { ...DEFAULT_FIELDS }; }
+}
+
+// ── Format de planche (persisté en localStorage) ──
+const FORMAT_STORAGE_KEY = 'labels_format_id';
+const CUSTOM_FORMAT_STORAGE_KEY = 'labels_custom_format';
+function loadFormatId() {
+  try { return localStorage.getItem(FORMAT_STORAGE_KEY) || DEFAULT_FORMAT_ID; }
+  catch { return DEFAULT_FORMAT_ID; }
+}
+function loadCustomFormat() {
+  try {
+    const s = localStorage.getItem(CUSTOM_FORMAT_STORAGE_KEY);
+    return s ? JSON.parse(s) : { ...BLANK_CUSTOM_FORMAT };
+  } catch { return { ...BLANK_CUSTOM_FORMAT }; }
 }
 
 export default function LabelSheetPrinter({ onChanged, isActive = true }) {
@@ -39,6 +49,9 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
   const [printing, setPrinting] = useState(false);
   const [visibleFields, setVisibleFields] = useState(loadFieldPrefs);
   const [fieldsOpen, setFieldsOpen] = useState(false);
+  const [formatId, setFormatId] = useState(loadFormatId);
+  const [customFormat, setCustomFormat] = useState(loadCustomFormat);
+  const [formatOpen, setFormatOpen] = useState(false);
   // ── Inline editing state ──
   // editing = { exemplarId, field, value } or null
   const [editing, setEditing] = useState(null);
@@ -48,6 +61,35 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
     setVisibleFields(prev => {
       const next = { ...prev, [key]: !prev[key] };
       try { localStorage.setItem(FIELD_STORAGE_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }
+
+  // ── Format de planche (préréglages + "Personalizado") ──
+  const preset = LABEL_FORMATS.find(f => f.id === formatId);
+  const activeFormat = formatId === CUSTOM_FORMAT_ID ? customFormat : (preset || LABEL_FORMATS[0]);
+
+  function selectFormat(id) {
+    setFormatId(id);
+    try { localStorage.setItem(FORMAT_STORAGE_KEY, id); } catch {}
+    // En passant en "Personalizado", on pré-remplit avec le format actif au
+    // moment du switch — plus pratique que de repartir d'un formulaire vide.
+    if (id === CUSTOM_FORMAT_ID) {
+      setCustomFormat(prev => {
+        const seed = preset ? preset : prev;
+        const next = { page: seed.page, cell: { ...seed.cell }, cols: seed.cols, rows: seed.rows, margin: { ...seed.margin }, gap: { ...seed.gap } };
+        try { localStorage.setItem(CUSTOM_FORMAT_STORAGE_KEY, JSON.stringify(next)); } catch {}
+        return next;
+      });
+    }
+  }
+
+  function setCustomField(path, value) {
+    setCustomFormat(prev => {
+      const next = { ...prev, cell: { ...prev.cell }, margin: { ...prev.margin }, gap: { ...prev.gap } };
+      const [group, key] = path.split('.');
+      if (key) next[group][key] = value; else next[group] = value;
+      try { localStorage.setItem(CUSTOM_FORMAT_STORAGE_KEY, JSON.stringify(next)); } catch {}
       return next;
     });
   }
@@ -255,7 +297,7 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
       const note   = vf.note   ? esc((l.label_note || '').substring(0, 25)) : '';
       const qr = qrById[l.exemplar_id];
       const qrCell = qr ? `<div class="label-qr"><img src="${qr}" alt="QR" /></div>` : '';
-      return `<td class="label">
+      return `<div class="label">
         <div class="label-inner">
           <div class="label-text">
             <div class="label-cdd">${cdd}</div>
@@ -267,39 +309,46 @@ export default function LabelSheetPrinter({ onChanged, isActive = true }) {
           </div>
           ${qrCell}
         </div>
-      </td>`;
+      </div>`;
     });
 
-    // Pad to fill the last row
-    while (labelCells.length % LABELS_PER_ROW !== 0) {
-      labelCells.push('<td class="label label--empty"></td>');
+    // ── Grille dynamique selon le format choisi ──
+    // CSS Grid (et non un <table>) : `gap` ne s'applique qu'ENTRE les
+    // cellules, jamais avant la première ni après la dernière — ce qui
+    // correspond exactement à la façon dont les fabricants publient marge de
+    // page et espacement entre étiquettes comme deux valeurs distinctes.
+    const format = activeFormat;
+    const perPage = labelsPerPage(format);
+    const page = pageSizeOf(format);
+
+    while (labelCells.length % format.cols !== 0) {
+      labelCells.push('<div class="label label--empty"></div>');
     }
 
-    // Build rows
-    const rows = [];
-    for (let i = 0; i < labelCells.length; i += LABELS_PER_ROW) {
-      rows.push(`<tr>${labelCells.slice(i, i + LABELS_PER_ROW).join('')}</tr>`);
-    }
-
-    // Build pages
     const pages = [];
-    for (let i = 0; i < rows.length; i += ROWS_PER_PAGE) {
-      pages.push(`<table class="sheet">${rows.slice(i, i + ROWS_PER_PAGE).join('')}</table>`);
+    for (let i = 0; i < labelCells.length; i += perPage) {
+      pages.push(`<div class="sheet">${labelCells.slice(i, i + perPage).join('')}</div>`);
     }
 
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <title>AnarBib — ${t({ id: 'labels.printTitle' })} — ${selectedLabels.length} ${t({ id: 'labels.labels' })}</title>
 <style>
-  @page { size: A4 portrait; margin: 10mm 7mm; }
+  @page { size: ${page.width}mm ${page.height}mm; margin: ${format.margin.top}mm ${format.margin.right}mm ${format.margin.bottom}mm ${format.margin.left}mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Liberation Sans', 'Helvetica Neue', Arial, sans-serif; }
-  .sheet { width: 100%; border-collapse: collapse; page-break-after: always; }
+  .sheet {
+    display: grid;
+    grid-template-columns: repeat(${format.cols}, ${format.cell.width}mm);
+    grid-template-rows: repeat(${format.rows}, ${format.cell.height}mm);
+    column-gap: ${format.gap.h}mm;
+    row-gap: ${format.gap.v}mm;
+    page-break-after: always;
+  }
   .sheet:last-child { page-break-after: avoid; }
   .label {
-    width: 63.5mm; height: 38.1mm;
     border: 0.3pt dashed #ccc;
+    border-radius: ${format.cell.radius}mm;
     padding: 2mm 3mm;
-    vertical-align: top;
     overflow: hidden;
   }
   .label--empty { border-color: transparent; }
@@ -326,6 +375,9 @@ ${pages.join('\n')}
   }
 
   if (loading) return <Spinner />;
+
+  const numLabelStyle = { display: 'block', fontSize: '.72rem', color: 'var(--brand-muted)', marginBottom: 2 };
+  const numFieldStyle = { width: '100%', padding: '5px 8px', fontSize: '.8rem' };
 
   return (
     <div style={{ marginTop: 16 }}>
@@ -409,13 +461,87 @@ ${pages.join('\n')}
         )}
       </div>
 
+      {/* ── Formato da planha ── */}
+      <div style={{ marginBottom: 10 }}>
+        <button
+          type="button"
+          onClick={() => setFormatOpen(o => !o)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--brand-muted)', fontSize: '.82rem', fontWeight: 600, padding: '4px 0', display: 'flex', alignItems: 'center', gap: 6 }}
+        >
+          <span style={{ transition: 'transform .2s', transform: formatOpen ? 'rotate(90deg)' : 'rotate(0)' }}>▶</span>
+          {t({ id: 'labels.format.sectionTitle' })}
+        </button>
+        {formatOpen && (
+          <div style={{ padding: '8px 12px', marginTop: 4, borderRadius: 8, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)' }}>
+            <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginBottom: 8 }}>{t({ id: 'labels.format.sectionHint' })}</div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <label style={{ fontSize: '.82rem', fontWeight: 600 }}>{t({ id: 'labels.format.select' })}</label>
+              <select className="ab-select" style={{ padding: '6px 10px', fontSize: '.85rem' }} value={formatId} onChange={e => selectFormat(e.target.value)}>
+                {LABEL_FORMATS.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                <option value={CUSTOM_FORMAT_ID}>{t({ id: 'labels.format.custom' })}</option>
+              </select>
+              {preset && !preset.verified && (
+                <span style={{ fontSize: '.72rem', color: '#fbbf24' }}>⚠ {t({ id: 'labels.format.unverifiedHint' })}</span>
+              )}
+            </div>
+
+            {formatId === CUSTOM_FORMAT_ID && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 8, marginTop: 10 }}>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.pageSize' })}</label>
+                  <select className="ab-select" style={numFieldStyle} value={customFormat.page} onChange={e => setCustomField('page', e.target.value)}>
+                    {Object.entries(PAGE_SIZES).map(([id, ps]) => <option key={id} value={id}>{ps.label}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.cellWidth' })}</label>
+                  <input type="number" className="ab-input" min="1" step="0.1" style={numFieldStyle} value={customFormat.cell.width} onChange={e => setCustomField('cell.width', Number(e.target.value))} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.cellHeight' })}</label>
+                  <input type="number" className="ab-input" min="1" step="0.1" style={numFieldStyle} value={customFormat.cell.height} onChange={e => setCustomField('cell.height', Number(e.target.value))} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.cellRadius' })}</label>
+                  <input type="number" className="ab-input" min="0" step="0.1" style={numFieldStyle} value={customFormat.cell.radius} onChange={e => setCustomField('cell.radius', Number(e.target.value))} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.cols' })}</label>
+                  <input type="number" className="ab-input" min="1" step="1" style={numFieldStyle} value={customFormat.cols} onChange={e => setCustomField('cols', Number(e.target.value))} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.rows' })}</label>
+                  <input type="number" className="ab-input" min="1" step="1" style={numFieldStyle} value={customFormat.rows} onChange={e => setCustomField('rows', Number(e.target.value))} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.marginV' })}</label>
+                  <input type="number" className="ab-input" min="0" step="0.1" style={numFieldStyle} value={customFormat.margin.top} onChange={e => { const v = Number(e.target.value); setCustomField('margin.top', v); setCustomField('margin.bottom', v); }} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.marginH' })}</label>
+                  <input type="number" className="ab-input" min="0" step="0.1" style={numFieldStyle} value={customFormat.margin.left} onChange={e => { const v = Number(e.target.value); setCustomField('margin.left', v); setCustomField('margin.right', v); }} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.gapH' })}</label>
+                  <input type="number" className="ab-input" min="0" step="0.1" style={numFieldStyle} value={customFormat.gap.h} onChange={e => setCustomField('gap.h', Number(e.target.value))} />
+                </div>
+                <div>
+                  <label style={numLabelStyle}>{t({ id: 'labels.format.gapV' })}</label>
+                  <input type="number" className="ab-input" min="0" step="0.1" style={numFieldStyle} value={customFormat.gap.v} onChange={e => setCustomField('gap.v', Number(e.target.value))} />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
       {/* ── Stats ── */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
         <Pill>{t({ id: 'labels.total' }, { count: labels.length })}</Pill>
         <Pill>{t({ id: 'labels.filtered' }, { count: filtered.length })}</Pill>
         <Pill variant={selected.size > 0 ? 'warn' : 'default'}>{t({ id: 'labels.selected' }, { count: selected.size })}</Pill>
         {selected.size > 0 && (
-          <Pill>{t({ id: 'labels.pages' }, { count: Math.ceil(selected.size / LABELS_PER_PAGE) })}</Pill>
+          <Pill>{t({ id: 'labels.pages' }, { count: Math.ceil(selected.size / labelsPerPage(activeFormat)) })}</Pill>
         )}
       </div>
 
