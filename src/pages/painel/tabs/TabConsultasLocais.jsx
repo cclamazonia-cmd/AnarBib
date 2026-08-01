@@ -13,6 +13,7 @@ import { decodeSystemNote } from '@/lib/systemNotes';
 // ═══════════════════════════════════════════════════════════
 export default function TabConsultasLocais({
   t,
+  consultationTz,   // #tz : fuseau de reference de la biblio (affichage des creneaux)
   sortCon,
   conStageCounts,
   conStageFilter,
@@ -70,7 +71,7 @@ export default function TabConsultasLocais({
                 <td data-label={t({ id: 'panel.loan.scheduling' })}>
                   {c.consultation_starts_at ? (
                     <>
-                      <div>{formatSchedule(c)}</div>
+                      <div>{formatSchedule(c, consultationTz)}</div>
                       {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'confirmado_leitor' && (
                         <span className="ab-painel-reply ab-painel-reply--confirmed">
                           ✓ {t({ id: 'panel.consultation.replyStatus.confirmed' })}
@@ -94,7 +95,7 @@ export default function TabConsultasLocais({
                         </span>
                       )}
                     </>
-                  ) : fmtD(c.consultation_scheduled_for)}
+                  ) : fmtD(c.consultation_scheduled_for, consultationTz)}
                 </td>
                 <td className="ab-painel-actions-cell">
                   {c.workflow_stage_effective === 'solicitada' && (

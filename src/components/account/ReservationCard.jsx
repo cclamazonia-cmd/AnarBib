@@ -16,14 +16,18 @@ import NegotiationStateBadge from '@/components/reservation/NegotiationStateBadg
 // viewerRole="reader" /> (paquet 3B) rend l'état de négociation visuellement.
 // ═══════════════════════════════════════════════════════════
 
-function fmtDate(d) {
+// #tz (01/08) : l'heure de retrait est affichee dans le fuseau de la biblio
+// concernee (prop timeZone, IANA), pas celui du navigateur -> lecteur et painel
+// voient la meme heure. Repli America/Belem. La locale reste pt-BR (format).
+function fmtDate(d, timeZone) {
   if (!d) return '';
-  try { return new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }); }
+  try { return new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short', timeZone: timeZone || 'America/Belem' }); }
   catch { return String(d); }
 }
 
 export default function ReservationCard({
   r,
+  timeZone,          // #tz : fuseau de la biblio de CETTE reservation (par library_id)
   libTag,            // #CL.10 : tag biblio d'origine (multi-biblio), rendu par AccountPage
   sameTitleSignal,   // #CL.10 : signal « même titre dans 2 biblios »
   onCancel,
@@ -115,15 +119,15 @@ export default function ReservationCard({
         {r.pickup_scheduled_for && inNegotiationStage && (
           <span className="ab-conta-item__detail">
             {bibliotaProposed
-              ? t({ id: 'reservation.pickup.proposedByLibrary' }, { date: fmtDate(r.pickup_scheduled_for) })
+              ? t({ id: 'reservation.pickup.proposedByLibrary' }, { date: fmtDate(r.pickup_scheduled_for, timeZone) })
               : leitorAlreadyProposed
-                ? t({ id: 'reservation.pickup.proposedByYou' }, { date: fmtDate(r.pickup_scheduled_for) })
-                : t({ id: 'reservation.pickup.scheduled' }, { date: fmtDate(r.pickup_scheduled_for) })}
+                ? t({ id: 'reservation.pickup.proposedByYou' }, { date: fmtDate(r.pickup_scheduled_for, timeZone) })
+                : t({ id: 'reservation.pickup.scheduled' }, { date: fmtDate(r.pickup_scheduled_for, timeZone) })}
           </span>
         )}
         {r.pickup_scheduled_for && !inNegotiationStage && (
           <span className="ab-conta-item__detail">
-            {t({ id: 'reservation.pickup.scheduled' }, { date: fmtDate(r.pickup_scheduled_for) })}
+            {t({ id: 'reservation.pickup.scheduled' }, { date: fmtDate(r.pickup_scheduled_for, timeZone) })}
           </span>
         )}
 

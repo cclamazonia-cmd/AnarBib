@@ -15,6 +15,7 @@ import { fmtD, UserDisplay, SortHeader, StageFilterBar, TabHeader } from '../_sh
 // ═══════════════════════════════════════════════════════════
 export default function TabReservas({
   t,
+  consultationTz,   // #tz : fuseau de reference de la biblio (heure de retrait / validite)
   // état & dérivés
   reservations,
   activeRes,
@@ -171,8 +172,8 @@ export default function TabReservas({
                     <td data-label={t({id:'panel.table.ref'})}>{r.bib_ref}</td>
                     <td data-label={t({id:'panel.table.label'})}>{r.rotulo || '—'}</td>
                     <td data-label={t({id:'panel.table.step'})}><span className="ab-painel-stage" data-stage={r.workflow_stage_effective}>{WORKFLOW_LABELS[r.workflow_stage_effective] || WORKFLOW_LABELS[r.item_status] || t({ id: 'panel.stage.unknown' })}</span></td>
-                    <td data-label={t({id:'panel.table.pickup'})}>{fmtD(r.pickup_scheduled_for)}</td>
-                    <td data-label={t({id:'panel.table.validity'})}>{fmtD(r.expires_at)}</td>
+                    <td data-label={t({id:'panel.table.pickup'})}>{fmtD(r.pickup_scheduled_for, consultationTz)}</td>
+                    <td data-label={t({id:'panel.table.validity'})}>{fmtD(r.expires_at, consultationTz)}</td>
                     {/* Colonne Negociação : badge d'état */}
                     <td data-label={t({id:'panel.table.negotiation'})}>
                       <NegotiationStateBadge

@@ -148,6 +148,11 @@ export default function AccountPage() {
   // #CL.10 (MULTI) — map library_id -> biblio (nom/slug), résolue côté client
   // pour tagguer chaque ligne de circulation par sa biblio d'origine.
   const [libMap, setLibMap] = useState({});
+  // #tz (01/08) : { library_id -> fuseau IANA } via fn_library_timezones (SECURITY
+  // DEFINER : la table library_service_state est staff-only en RLS). Sert a afficher
+  // creneaux de consultation + heures de retrait dans le fuseau de CHAQUE biblio
+  // (une resa peut viser une autre biblio que celle de session), pas du navigateur.
+  const [tzMap, setTzMap] = useState({});
   const [history, setHistory] = useState([]);
   const [loanHistory, setLoanHistory] = useState([]);
   // #CL.8 — rétention historique lectrice (masquage persistant + suppression)
@@ -405,6 +410,20 @@ export default function AccountPage() {
     })();
     return () => { cancelled = true; };
   }, [loans, reservations]);
+
+  // #tz (01/08) : charge une fois la table library_id -> fuseau (peu de biblios).
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.rpc('fn_library_timezones');
+      if (!cancelled && Array.isArray(data)) {
+        const m = {};
+        for (const row of data) if (row.library_id) m[row.library_id] = row.consultation_timezone;
+        setTzMap(m);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   // ── #CL.8 — masquage / restauration / suppression de l'historique ───────────
   // Le masquage est persistant (fn_hide_history_item), réversible (fn_unhide),
@@ -1747,6 +1766,7 @@ export default function AccountPage() {
                     <ReservationCard
                       key={i}
                       r={r}
+                      timeZone={tzMap[r.library_id]}
                       libTag={renderLibTag(r.library_id)}
                       sameTitleSignal={renderSameTitleSignal(r.titulo)}
                       onCancel={cancelReservation}
@@ -1777,7 +1797,7 @@ export default function AccountPage() {
                           <Link to={`/livro/${c.book_id}`} className="ab-conta-item__title">{c.titulo || c.bib_ref || ''}</Link>
                           <span className="ab-conta-item__meta">ref: {c.bib_ref || ''}</span>
                           <p style={{ margin: '8px 0 0', fontWeight: 600 }}>
-                            {t({ id: 'account.consultations.scheduleProposed.dateLabel' })} : {formatSchedule(c)}
+                            {t({ id: 'account.consultations.scheduleProposed.dateLabel' })} : {formatSchedule(c, tzMap[c.library_id])}
                           </p>
                           {c.workflow_note && (
                             <p style={{ margin: '4px 0 0', fontStyle: 'italic', color: 'var(--brand-muted)' }}>
@@ -1811,7 +1831,7 @@ export default function AccountPage() {
                         <span className="ab-conta-item__meta">ref: {c.bib_ref || '—'} · {c.workflow_stage || c.status || '—'}</span>
                         {c.workflow_stage_effective === 'consulta_agendada' && c.schedule_reply_status === 'confirmado_leitor' && (
                           <p style={{ margin: '4px 0 0', color: '#15803d', fontWeight: 600 }}>
-                            ✓ {t({ id: 'account.consultations.scheduleConfirmed.badge' }, { date: formatSchedule(c) })}
+                            ✓ {t({ id: 'account.consultations.scheduleConfirmed.badge' }, { date: formatSchedule(c, tzMap[c.library_id]) })}
                           </p>
                         )}
                       </div>

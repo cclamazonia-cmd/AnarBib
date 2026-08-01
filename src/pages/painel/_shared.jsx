@@ -11,7 +11,10 @@ import { useToast } from '@/contexts/ToastContext';
 // rigoureusement identique à l'original (iso-comportement).
 // ═══════════════════════════════════════════════════════════
 
-export function fmtD(d) { if (!d) return '—'; try { return new Date(d).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' }); } catch { return d; } }
+// timeZone optionnel (IANA) : quand fourni, l'heure est affichee dans le fuseau
+// de la biblio (ex. horaires de resa/consultation) au lieu du fuseau navigateur.
+// Omis pour les autres usages (echeances de pret, dates d'audit) -> inchange.
+export function fmtD(d, timeZone) { if (!d) return '—'; try { return new Date(d).toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short', ...(timeZone ? { timeZone } : {}) }); } catch { return d; } }
 
 // ═══════════════════════════════════════════════════════════
 // UserDisplay — composant interne (paquet 5f)

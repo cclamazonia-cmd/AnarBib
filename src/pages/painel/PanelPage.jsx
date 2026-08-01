@@ -394,6 +394,10 @@ export default function PanelPage() {
     })();
     return () => { cancelled = true; };
   }, [libraryId]);
+  // #tz (01/08) : fuseau d'affichage des horaires de resa/consultation cote painel,
+  // avec repli America/Belem tant que consultationTz n'est pas charge (evite un
+  // affichage transitoire en fuseau navigateur). Passe aux onglets + tableau de bord.
+  const displayTz = consultationTz || 'America/Belem';
 
   // PATCH 08/05/2026 paquet 3B : state pour le formulaire accordion de
   // contre-proposition staff. Un seul form ouvert à la fois (la ligne
@@ -1231,13 +1235,13 @@ export default function PanelPage() {
       // c'est un retrait prévu aujourd'hui → tâche prioritaire bucket 'hoje'.
       // re-retirada_agendada conservé en filet pour résas historiques fossiles.
       if (['retirada_agendada', 're-retirada_agendada'].includes(stage) && pickupDay === today) {
-        tasks.push({ priority: 'alta', bucket: 'hoje', kind: t({id:'panel.task.scheduledToday'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: t({id:'panel.task.detail.pickup'}) + ': ' + fmtD(r.pickup_scheduled_for), actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'alta', bucket: 'hoje', kind: t({id:'panel.task.scheduledToday'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: t({id:'panel.task.detail.pickup'}) + ': ' + fmtD(r.pickup_scheduled_for, displayTz), actionType: 'reserva', reserva_id: r.reserva_id });
       }
       if (stage === 'solicitada') {
         tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.newReservation'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.ref'})}: ${r.bib_ref} · ${t({id:'panel.task.detail.created'})}: ${fmtD(r.reserva_created_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
       }
       if (stage === 'pronta_para_retirada') {
-        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.readyForPickup'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.validity'})}: ${fmtD(r.expires_at)}`, actionType: 'reserva', reserva_id: r.reserva_id });
+        tasks.push({ priority: 'media', bucket: 'atencao', kind: t({id:'panel.task.readyForPickup'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: `${t({id:'panel.task.detail.validity'})}: ${fmtD(r.expires_at, displayTz)}`, actionType: 'reserva', reserva_id: r.reserva_id });
       }
       if (String(r.pickup_reply_status || '') === 'recusado_leitor') {
         tasks.push({ priority: 'alta', bucket: 'atencao', kind: t({id:'panel.task.readerRefused'}), label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`, detail: r.pickup_reply_note || t({id:'panel.task.detail.reschedule'}), actionType: 'reserva', reserva_id: r.reserva_id });
@@ -1256,7 +1260,7 @@ export default function PanelPage() {
           bucket: 'atencao',
           kind: t({id:'panel.task.readerCounterProposed'}),
           label: `${r.user_name || r.user_email || r.user_public_id || '?'} · ${r.titulo}`,
-          detail: t({id:'panel.task.detail.proposedSlot'}) + ': ' + fmtD(r.pickup_scheduled_for)
+          detail: t({id:'panel.task.detail.proposedSlot'}) + ': ' + fmtD(r.pickup_scheduled_for, displayTz)
                   + ' · ' + t({id:'panel.task.detail.iteration'}, { count: iter, max: 3 }),
           actionType: 'reserva',
           reserva_id: r.reserva_id,
@@ -1861,6 +1865,7 @@ export default function PanelPage() {
           {tab === 'reservas' && (
             <TabReservas
               t={t}
+              consultationTz={displayTz}
               reservations={reservations}
               activeRes={activeRes}
               sortRes={sortRes}
@@ -1898,6 +1903,7 @@ export default function PanelPage() {
           {tab === 'consultas-locais' && (
             <TabConsultasLocais
               t={t}
+              consultationTz={displayTz}
               sortCon={sortCon}
               conStageCounts={conStageCounts}
               conStageFilter={conStageFilter}
