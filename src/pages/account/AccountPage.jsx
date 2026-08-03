@@ -182,6 +182,11 @@ export default function AccountPage() {
   const [retentionSaving, setRetentionSaving] = useState(false);
   const [retentionMsg, setRetentionMsg] = useState('');
   const [wishlist, setWishlist] = useState([]);
+  // #notes-lecture (Lot 2) — mes notes de lecture (toutes œuvres confondues).
+  const [myReadingNotes, setMyReadingNotes] = useState([]);
+  const [editNoteId, setEditNoteId] = useState(null);
+  const [editNoteBody, setEditNoteBody] = useState('');
+  const [noteMsg, setNoteMsg] = useState({ text: '', kind: '' });
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
   const [msgIsError, setMsgIsError] = useState(false);
@@ -300,6 +305,11 @@ export default function AccountPage() {
       setNotifications(notifData || []);
       const { data: wishData } = await supabase.from('user_wishlist').select('*, books:book_id(id, titulo, autor, bib_ref, editora, ano)').eq('user_id', user.id).order('created_at', { ascending: false });
       setWishlist(wishData || []);
+      // #notes-lecture (Lot 2) — mes notes de lecture (compteur dans l'onglet).
+      const { data: rnData } = await supabase.from('book_reading_notes')
+        .select('id, work_id, body, language, status, edited, created_at, works:work_id(id, uniform_title)')
+        .eq('author_user_id', user.id).order('created_at', { ascending: false });
+      setMyReadingNotes(rnData || []);
       // #CL.7 — préférences de notification (affichées dans l'onglet perfil -> noyau)
       const { data: prefsData } = await supabase.rpc('fn_get_my_notification_preferences');
       if (Array.isArray(prefsData) && prefsData.length > 0) {
@@ -1093,6 +1103,7 @@ export default function AccountPage() {
     { key: 'historico', label: t({ id: 'account.tab.history' }), hint: t({ id: 'account.tab.history.hint' }) },
     { key: 'avisos', label: `${t({ id: 'account.tab.notifications' })}${unreadCount > 0 ? ` (${unreadCount})` : ''}`, hint: t({ id: 'account.tab.notifications.hint' }) },
     { key: 'desejos', label: `${t({ id: 'account.tab.wishlist' })} (${wishlist.length})`, hint: t({ id: 'account.tab.wishlist.hint' }) },
+    { key: 'notas', label: `${t({ id: 'account.tab.readingNotes' })} (${myReadingNotes.length})`, hint: t({ id: 'account.tab.readingNotes.hint' }) },
     { key: 'biblios', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
     { key: 'eventos', label: t({ id: 'account.tab.events' }), hint: t({ id: 'account.tab.events.hint' }) },
   ];
@@ -1122,6 +1133,34 @@ export default function AccountPage() {
     return s;
   })();
   const isCrossLibTitle = (titulo) => crossLibTitles.has(String(titulo || '').trim().toLowerCase());
+  // #notes-lecture (Lot 2) — édition / suppression de mes notes depuis le compte.
+  async function saveReadingNote(id) {
+    const body = editNoteBody.trim();
+    if (!body) return;
+    setSaving(true); setNoteMsg({ text: '', kind: '' });
+    try {
+      const { error } = await supabase.from('book_reading_notes').update({ body }).eq('id', id);
+      if (error) throw error;
+      setEditNoteId(null); setEditNoteBody('');
+      setMyReadingNotes(prev => prev.map(n => n.id === id ? { ...n, body, edited: true } : n));
+      setNoteMsg({ text: t({ id: 'readingNotes.msg.updated' }), kind: 'ok' });
+    } catch (err) {
+      setNoteMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setSaving(false); }
+  }
+  async function deleteReadingNote(id) {
+    if (!window.confirm(t({ id: 'readingNotes.confirm.delete' }))) return;
+    setSaving(true); setNoteMsg({ text: '', kind: '' });
+    try {
+      const { error } = await supabase.from('book_reading_notes').delete().eq('id', id);
+      if (error) throw error;
+      setMyReadingNotes(prev => prev.filter(n => n.id !== id));
+      setNoteMsg({ text: t({ id: 'readingNotes.msg.deleted' }), kind: 'ok' });
+    } catch (err) {
+      setNoteMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setSaving(false); }
+  }
+
   const renderLibTag = (libraryId) => {
     if (!multiLib || !libraryId) return null;
     const lib = libMap[libraryId];
@@ -2338,6 +2377,62 @@ export default function AccountPage() {
                       </div>
                     );
                   })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ═══ MES NOTES DE LECTURE (Lot 2) ═══ */}
+          {activeTab === 'notas' && (
+            <div>
+              <h2 className="ab-conta-section-title">{t({ id: 'account.readingNotes.title' })}</h2>
+              <p className="ab-conta-hint">{t({ id: 'account.readingNotes.hint' })}</p>
+              {noteMsg.text && (
+                <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: '.85rem', marginBottom: 12,
+                  background: noteMsg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)',
+                  color: noteMsg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{noteMsg.text}</div>
+              )}
+              {myReadingNotes.length === 0 ? (
+                <p className="ab-conta-empty">{t({ id: 'account.readingNotes.empty' })}</p>
+              ) : (
+                <div className="ab-conta-items">
+                  {myReadingNotes.map(n => (
+                    <div key={n.id} className="ab-conta-item" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 6 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+                        <Link to={`/obra/${n.work_id}`} className="ab-conta-item__title">
+                          {n.works?.uniform_title || t({ id: 'account.readingNotes.workFallback' })}
+                        </Link>
+                        <span className="ab-conta-item__meta" style={{ fontSize: '.72rem' }}>
+                          {(() => { try { return new Date(n.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }); } catch { return ''; } })()}
+                          {n.edited ? ` · ${t({ id: 'readingNotes.edited' })}` : ''}
+                          {n.status === 'hidden' ? ` · ${t({ id: 'account.readingNotes.hidden' })}` : ''}
+                        </span>
+                      </div>
+                      {editNoteId === n.id ? (
+                        <div>
+                          <textarea value={editNoteBody} maxLength={4000}
+                            onChange={e => setEditNoteBody(e.target.value)}
+                            style={{ width: '100%', minHeight: 90, padding: '8px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.88rem', fontFamily: 'inherit', resize: 'vertical' }} />
+                          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                            <button type="button" className="ab-button ab-button--sm" disabled={saving || !editNoteBody.trim()}
+                              onClick={() => saveReadingNote(n.id)}>{saving ? t({ id: 'common.saving' }) : t({ id: 'common.save' })}</button>
+                            <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                              onClick={() => { setEditNoteId(null); setEditNoteBody(''); }}>{t({ id: 'common.cancel' })}</button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div style={{ fontSize: '.88rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>{n.body}</div>
+                          <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+                            <button type="button" className="ab-button ab-button--secondary ab-button--mini"
+                              onClick={() => { setEditNoteId(n.id); setEditNoteBody(n.body); }}>{t({ id: 'common.edit' })}</button>
+                            <button type="button" className="ab-button ab-button--danger ab-button--mini"
+                              onClick={() => deleteReadingNote(n.id)} disabled={saving}>{t({ id: 'common.delete' })}</button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

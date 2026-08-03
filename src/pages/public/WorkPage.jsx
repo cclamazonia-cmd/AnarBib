@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Spinner, EmptyState } from '@/components/ui';
+import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
 
@@ -94,6 +95,9 @@ export default function WorkPage() {
           </div>
         ))}
       </div>
+
+      {/* Notes de lecture partagées (Lot 2) — rattachées à l'œuvre (id d'URL). */}
+      <ReadingNotesSection workId={Number(id)} />
 
       <Footer />
     </PageShell>
