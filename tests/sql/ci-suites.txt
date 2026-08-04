@@ -23,3 +23,4 @@ tests/sql/paquet_reservas_tests.sql
 tests/sql/invitation_equipe_tests.sql
 tests/sql/paquet_peb_ill_lifecycle_tests.sql
 tests/sql/reading_notes_rls_tests.sql
+tests/sql/reading_notes_lot5_work_per_book_tests.sql

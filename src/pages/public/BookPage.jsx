@@ -10,6 +10,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './BookPage.css';
 import { citeAuthorString, citeAuthorList, buildCitations, buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
+import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
 const STORAGE_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/';
@@ -680,6 +681,10 @@ export default function BookPage() {
           </div>
         </details>
       )}
+
+      {/* Notes de lecture (Lot 5) — rattachées à l'œuvre du livre ; toujours
+          présente depuis que chaque livre a une œuvre (trigger fn_books_ensure_work). */}
+      {workId && <ReadingNotesSection workId={workId} />}
 
       <Footer />
     </PageShell>
