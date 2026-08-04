@@ -5737,5 +5737,22 @@
   "account.readingNotes.hint": "Les notes de lecture que vous avez partagees, toutes oeuvres confondues.",
   "account.readingNotes.empty": "Vous n'avez pas encore ecrit de note de lecture.",
   "account.readingNotes.workFallback": "Œuvre",
-  "account.readingNotes.hidden": "masquee"
+  "account.readingNotes.hidden": "masquee",
+  "biblioteca.tab.readingNotes": "Notes de lecture",
+  "biblioteca.identity.readingNotes": "Activer les notes de lecture",
+  "biblioteca.identity.readingNotes.hint": "Permet aux lecteur·rices valide·es de votre biblioteque de publier des notes de lecture sur les oeuvres, visibles dans le reseau. Vous en assurez la moderation.",
+  "biblioteca.readingNotes.modTitle": "Moderation des notes de lecture",
+  "biblioteca.readingNotes.modIntro": "Notes signalees et notes masquees de votre bibliotheque. La moderation est a posteriori : les notes sont publiees directement, vous pouvez les masquer.",
+  "biblioteca.readingNotes.reportsPending": "Signalements en attente",
+  "biblioteca.readingNotes.noReports": "Aucun signalement en attente.",
+  "biblioteca.readingNotes.reportReason": "Motif :",
+  "biblioteca.readingNotes.hideNote": "Masquer la note",
+  "biblioteca.readingNotes.ignoreReport": "Ignorer le signalement",
+  "biblioteca.readingNotes.unhide": "Retablir",
+  "biblioteca.readingNotes.hiddenNotes": "Notes masquees",
+  "biblioteca.readingNotes.noHidden": "Aucune note masquee.",
+  "biblioteca.readingNotes.noteHidden": "Note masquee.",
+  "biblioteca.readingNotes.noteRestored": "Note retablie.",
+  "biblioteca.readingNotes.reportResolved": "Signalement traite.",
+  "biblioteca.readingNotes.viewWork": "Voir l'oeuvre"
 }

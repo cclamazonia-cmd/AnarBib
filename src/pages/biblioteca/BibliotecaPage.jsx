@@ -10,6 +10,7 @@ import LibraryProfileBanner from '@/components/LibraryProfileBanner';
 import TransitionsPanel from '@/components/TransitionsPanel';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import RetentionPolicySection from '@/components/library/RetentionPolicySection';
+import ReadingNotesModeration from '@/components/biblioteca/ReadingNotesModeration';
 import LibraryVisualAssetsSection from '@/components/library/LibraryVisualAssetsSection';
 import DocumentGovernanceSection from '@/components/library/DocumentGovernanceSection';
 import PolicySetManager from '@/components/library/PolicySetManager';
@@ -112,6 +113,7 @@ export default function BibliotecaPage() {
     { id: 'exchanges', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
     { id: 'ill', label: t({ id: 'biblioteca.tab.ill' }) },
     { id: 'reports', label: t({ id: 'biblioteca.tab.reports' }) },
+    { id: 'notas', label: t({ id: 'biblioteca.tab.readingNotes' }) },
     { id: 'tasks', label: t({ id: 'biblioteca.tab.tasks' }) },
   ];
   // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
@@ -442,7 +444,7 @@ export default function BibliotecaPage() {
       // sélecteur ajouté dans la grille identité (champ après country).
       await supabase.from('libraries').update({ name:lib.name, short_name:lib.short_name, city:lib.city, state:lib.state, country:lib.country, default_locale:lib.default_locale||'pt-BR', reader_cards_enabled:lib.reader_cards_enabled===true, reader_identity_model:lib.reader_identity_model||'free_number', reader_validation_mode:lib.reader_validation_mode||'presential', accepts_public_signup:lib.accepts_public_signup===true }).eq('id', libraryId);
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email, postal_address:commons.postal_address }).eq('library_id', libraryId);
-      if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message }).eq('library_id', libraryId);
+      if (serviceState) await supabase.from('library_service_state').update({ service_mode:serviceState.service_mode, allows_new_loans:serviceState.allows_new_loans, allows_new_reservations:serviceState.allows_new_reservations, public_message:serviceState.public_message, reading_notes_enabled:serviceState.reading_notes_enabled }).eq('library_id', libraryId);
       setMsg({ text: t({ id: 'biblioteca.msg.saved' }), kind: 'ok' });
     } catch (err) { setMsg({ text: t({id:'common.errorPrefix'},{message:localizeError(err, t)}), kind: 'error' }); }
     finally { setSaving(false); }
@@ -1452,6 +1454,7 @@ export default function BibliotecaPage() {
               <div className="cat-field"><label style={ls}>{t({ id: 'biblioteca.identity.serviceMode' })}</label><select value={serviceState.service_mode||''} onChange={e=>setSS('service_mode',e.target.value)} style={fs}>{SERVICE_MODES.map(m=><option key={m.value} value={m.value}>{m.label}</option>)}</select></div>
               <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_loans||false} onChange={e=>setSS('allows_new_loans',e.target.checked)} /> {t({id:'biblioteca.identity.allowsLoans'})}</label></div>
               <div className="cat-field"><label style={{...ls,display:'flex',gap:8,alignItems:'center'}}><input type="checkbox" checked={serviceState.allows_new_reservations||false} onChange={e=>setSS('allows_new_reservations',e.target.checked)} /> {t({id:'biblioteca.identity.allowsReservations'})}</label></div>
+              <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={{...ls,display:'flex',gap:8,alignItems:'flex-start'}}><input type="checkbox" checked={serviceState.reading_notes_enabled||false} onChange={e=>setSS('reading_notes_enabled',e.target.checked)} style={{marginTop:3}} /> <span><span>{t({id:'biblioteca.identity.readingNotes'})}</span><br/><span style={{fontSize:'.8rem',color:'var(--brand-muted)',fontWeight:400}}>{t({id:'biblioteca.identity.readingNotes.hint'})}</span></span></label></div>
               <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={{...ls,display:'flex',gap:8,alignItems:'flex-start'}}><input type="checkbox" checked={lib.reader_cards_enabled||false} onChange={e=>setL('reader_cards_enabled',e.target.checked)} style={{marginTop:3}} /> <span><span>{t({id:'biblioteca.identity.readerCards'})}</span><br/><span style={{fontSize:'.8rem',color:'var(--brand-muted)',fontWeight:400}}>{t({id:'biblioteca.identity.readerCards.hint'})}</span></span></label></div>
               <div className="cat-field" style={{ gridColumn:'span 3' }}><label style={ls}>{t({ id: 'biblioteca.identity.publicMessage' })}</label><textarea value={serviceState.public_message||''} onChange={e=>setSS('public_message',e.target.value)} rows={2} style={{...fs,resize:'vertical'}} placeholder={t({id:'biblioteca.identity.publicMessagePlaceholder'})} /></div>
             </div>
@@ -2511,6 +2514,9 @@ export default function BibliotecaPage() {
             members={members}
           />
         </div>)}
+
+        {/* ═══ Notes de lecture — modération (Lot 3) ═══ */}
+        {tab==='notas' && <ReadingNotesModeration libraryId={libraryId} />}
 
         {/* ═══ 9. Tarefas internas ════════════════════ */}
         {/* Chantier #TASKS etape 6 (24/05/2026) : onglet refondu en trois

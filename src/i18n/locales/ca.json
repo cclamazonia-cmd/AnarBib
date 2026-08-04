@@ -5737,5 +5737,22 @@
   "account.readingNotes.hint": "As notas de leitura que voce compartilhou, de todas as obras.",
   "account.readingNotes.empty": "Voce ainda nao escreveu nenhuma nota de leitura.",
   "account.readingNotes.workFallback": "Obra",
-  "account.readingNotes.hidden": "oculta"
+  "account.readingNotes.hidden": "oculta",
+  "biblioteca.tab.readingNotes": "Notas de leitura",
+  "biblioteca.identity.readingNotes": "Ativar as notas de leitura",
+  "biblioteca.identity.readingNotes.hint": "Permite que leitoras e leitores validados da sua biblioteca publiquem notas de leitura sobre as obras, visiveis na rede. A moderacao fica com voce.",
+  "biblioteca.readingNotes.modTitle": "Moderacao das notas de leitura",
+  "biblioteca.readingNotes.modIntro": "Notas denunciadas e notas ocultas da sua biblioteca. A moderacao e a posteriori: as notas sao publicadas diretamente, voce pode oculta-las.",
+  "biblioteca.readingNotes.reportsPending": "Denuncias pendentes",
+  "biblioteca.readingNotes.noReports": "Nenhuma denuncia pendente.",
+  "biblioteca.readingNotes.reportReason": "Motivo:",
+  "biblioteca.readingNotes.hideNote": "Ocultar a nota",
+  "biblioteca.readingNotes.ignoreReport": "Ignorar a denuncia",
+  "biblioteca.readingNotes.unhide": "Restaurar",
+  "biblioteca.readingNotes.hiddenNotes": "Notas ocultas",
+  "biblioteca.readingNotes.noHidden": "Nenhuma nota oculta.",
+  "biblioteca.readingNotes.noteHidden": "Nota ocultada.",
+  "biblioteca.readingNotes.noteRestored": "Nota restaurada.",
+  "biblioteca.readingNotes.reportResolved": "Denuncia tratada.",
+  "biblioteca.readingNotes.viewWork": "Ver a obra"
 }
