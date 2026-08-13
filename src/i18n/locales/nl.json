@@ -2428,6 +2428,8 @@
   "catalogacao.ph.university": "Naam van de universiteit",
   "catalogacao.presave.isbnExists": "ISBN al aanwezig in de catalogus: {detail}.\n\nToch doorgaan met opslaan?",
   "catalogacao.presave.titleAuthorExists": "Titel + auteurschap al aanwezig in de catalogus: {detail}.\n\nToch doorgaan met opslaan?",
+  "catalogacao.presave.dupModalTitle": "Mogelijk duplicaat",
+  "catalogacao.presave.saveAnyway": "Toch opslaan",
   "catalogacao.preview.draftStatus": "Concept · niet gepubliceerd",
   "catalogacao.preview.essentials": "essentiële {n}/3",
   "catalogacao.preview.explain": "Zo verschijnt de fiche in de catalogus. Wordt bijgewerkt terwijl je typt.",

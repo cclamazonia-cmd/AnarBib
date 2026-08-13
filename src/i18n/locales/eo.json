@@ -2428,6 +2428,8 @@
   "catalogacao.ph.university": "Nomo de la universitato",
   "catalogacao.presave.isbnExists": "ISBN jam ekzistas en la katalogo: {detail}.\n\nChu dauri konservi?",
   "catalogacao.presave.titleAuthorExists": "Titolo + aŭtoreco jam ekzistas en la katalogo: {detail}.\n\nChu dauri konservi?",
+  "catalogacao.presave.dupModalTitle": "Ebla duplikato",
+  "catalogacao.presave.saveAnyway": "Konservi tamen",
   "catalogacao.preview.draftStatus": "Malneto · ne publikigita",
   "catalogacao.preview.essentials": "esencaj {n}/3",
   "catalogacao.preview.explain": "Jen kiel la skedo aperos en la katalogo. Ĝisdatiĝas dum vi tajpas.",

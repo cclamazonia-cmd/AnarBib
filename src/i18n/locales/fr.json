@@ -2434,6 +2434,8 @@
   "catalogacao.ph.university": "Nom de l'université",
   "catalogacao.presave.isbnExists": "ISBN deja present au catalogue : {detail}.\n\nContinuer la sauvegarde ?",
   "catalogacao.presave.titleAuthorExists": "Titre + auteur·rice deja presents au catalogue : {detail}.\n\nContinuer la sauvegarde ?",
+  "catalogacao.presave.dupModalTitle": "Doublon possible",
+  "catalogacao.presave.saveAnyway": "Enregistrer quand même",
   "catalogacao.preview.draftStatus": "Brouillon · non publié",
   "catalogacao.preview.essentials": "essentiels {n}/3",
   "catalogacao.preview.explain": "Voici comment la fiche apparaîtra au catalogue. Mise à jour en temps réel.",

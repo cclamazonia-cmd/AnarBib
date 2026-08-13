@@ -2428,6 +2428,8 @@
   "catalogacao.ph.university": "Nome dell'università",
   "catalogacao.presave.isbnExists": "ISBN gia presente nel catalogo: {detail}.\n\nContinuare a salvare comunque?",
   "catalogacao.presave.titleAuthorExists": "Titolo + autore/trice gia presenti nel catalogo: {detail}.\n\nContinuare a salvare comunque?",
+  "catalogacao.presave.dupModalTitle": "Possibile duplicato",
+  "catalogacao.presave.saveAnyway": "Salva comunque",
   "catalogacao.preview.draftStatus": "Bozza · non pubblicata",
   "catalogacao.preview.essentials": "essenziali {n}/3",
   "catalogacao.preview.explain": "Ecco come apparirà la scheda nel catalogo. Si aggiorna mentre digiti.",

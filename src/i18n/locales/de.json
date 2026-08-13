@@ -2428,6 +2428,8 @@
   "catalogacao.ph.university": "Name der Universität",
   "catalogacao.presave.isbnExists": "ISBN bereits im Katalog vorhanden: {detail}.\n\nTrotzdem speichern?",
   "catalogacao.presave.titleAuthorExists": "Titel + Autor*in bereits im Katalog vorhanden: {detail}.\n\nTrotzdem speichern?",
+  "catalogacao.presave.dupModalTitle": "Möglicher Doppeleintrag",
+  "catalogacao.presave.saveAnyway": "Trotzdem speichern",
   "catalogacao.preview.draftStatus": "Entwurf · nicht veröffentlicht",
   "catalogacao.preview.essentials": "Pflichtfelder {n}/3",
   "catalogacao.preview.explain": "So erscheint der Eintrag im Katalog. Aktualisiert sich beim Tippen.",

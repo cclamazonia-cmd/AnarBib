@@ -2428,6 +2428,8 @@
   "catalogacao.ph.university": "University name",
   "catalogacao.presave.isbnExists": "ISBN already exists in catalog: {detail}.\n\nContinue saving anyway?",
   "catalogacao.presave.titleAuthorExists": "Title + authorship already exist in catalog: {detail}.\n\nContinue saving anyway?",
+  "catalogacao.presave.dupModalTitle": "Possible duplicate",
+  "catalogacao.presave.saveAnyway": "Save anyway",
   "catalogacao.preview.draftStatus": "Draft · not published",
   "catalogacao.preview.essentials": "essentials {n}/3",
   "catalogacao.preview.explain": "This is how the record will appear in the catalog. Updates as you type.",

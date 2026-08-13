@@ -9,6 +9,7 @@ import { localizeError } from '@/lib/localizeError';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
+import Modal from '@/components/ui/Modal';
 
 // ── Material type values (labels resolved via t() inside component) ──
 const MATERIAL_TYPE_KEYS = ['livro','periodico','tract','cartaz','audio','audiovisual','recurso_digital','dossie','tese','artigo','relatorio','zine'];
@@ -294,6 +295,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     }
   }, []);
   const [dupBanner, setDupBanner] = useState(null); // { bookId } | null — doublon ISBN détecté au publish
+  const [dupModal, setDupModal] = useState(null); // { kind, detail, bookId } | null — modale d'avertissement doublon AVANT sauvegarde du brouillon
   const [lastPublished, setLastPublished] = useState(null); // { bookId, title } | null — raccourci post-publication (ajouter un exemplaire au document publié)
   const [isbnDupHint, setIsbnDupHint] = useState(null); // { bookId, titulo, bibRef, libraries } | null — live ISBN check
   const [pubSuggestions, setPubSuggestions] = useState([]); // publisher typeahead results
@@ -1499,13 +1501,18 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // Duplicate detection (ISBN + title/author)
   // ═══════════════════════════════════════════════════════
 
-  async function checkDuplicateBeforeSave() {
+  // Détecte un doublon probable AVANT la sauvegarde du brouillon.
+  // Ne montre aucune UI : retourne { kind: 'isbn'|'titleAuthor', detail, bookId }
+  // si un doublon est trouvé (l'appelant ouvre alors la modale d'avertissement),
+  // sinon null. Remplace l'ancien confirm() natif — peu visible pour un·e
+  // catalogueur·euse débutant·e — par une vraie modale centrée.
+  async function detectDuplicate() {
     const isbn = (f('isbn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
     const title = f('titulo').trim();
     const author = f('autor').trim();
     const publishedId = f('published_book_id');
 
-    if (!isbn && !title) return false; // nothing to check
+    if (!isbn && !title) return null; // nothing to check
 
     try {
       // 1. Check by ISBN (cross-library: no library_id filter)
@@ -1517,8 +1524,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         const dup = (data || []).find(b => !publishedId || String(b.id) !== String(publishedId));
         if (dup) {
           const detail = [dup.titulo || '', dup.bib_ref ? `ref. ${dup.bib_ref}` : '', dup.libraries?.name || ''].filter(Boolean).join(' · ');
-          const confirmed = confirm(t({ id: 'catalogacao.presave.isbnExists' }, { detail }));
-          return !confirmed; // true = abort
+          return { kind: 'isbn', detail, bookId: dup.id };
         }
       }
 
@@ -1537,8 +1543,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           );
           if (match) {
             const detail = [match.titulo || '', match.ano ? `(${match.ano})` : '', match.bib_ref ? `ref. ${match.bib_ref}` : '', match.libraries?.name || ''].filter(Boolean).join(' · ');
-            const confirmed = confirm(t({ id: 'catalogacao.presave.titleAuthorExists' }, { detail }));
-            return !confirmed;
+            return { kind: 'titleAuthor', detail, bookId: match.id };
           }
         }
       }
@@ -1546,7 +1551,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       console.warn('Duplicate check error:', err);
     }
 
-    return false; // no duplicate or check failed → proceed
+    return null; // no duplicate or check failed → proceed
   }
 
   // ═══════════════════════════════════════════════════════
@@ -1749,16 +1754,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const pill = statePills[draftState] || statePills.new;
 
   // ── Save draft ─────────────────────────────────────────
-  async function handleSave(e) {
+  async function handleSave(e, { skipDupCheck = false } = {}) {
     e?.preventDefault();
     if (!f('titulo').trim()) { setMsg({ text: t({id:'catalogacao.msg.enterTitle'}), kind: 'error' }); return; }
 
-    // Duplicate check (only for new drafts, not updates of existing published books)
-    if (!f('published_book_id')) {
-      const abort = await checkDuplicateBeforeSave();
-      if (abort) return;
+    // Avertissement doublon (nouveaux brouillons uniquement, pas les mises à jour
+    // d'une fiche déjà publiée). On ouvre une modale centrée et on interrompt la
+    // sauvegarde ; « Enregistrer quand même » rappelle handleSave avec skipDupCheck.
+    if (!skipDupCheck && !f('published_book_id')) {
+      const dup = await detectDuplicate();
+      if (dup) { setDupModal(dup); return; }
     }
 
+    setDupModal(null);
     setSaving(true);
     setMsg({ text: '', kind: '' });
 
@@ -2338,6 +2346,45 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           </div>
         </div>
       </div>
+
+      {/* ── Modale d'avertissement doublon AVANT sauvegarde du brouillon ──
+          Remplace le confirm() natif : plus visible pour un·e catalogueur·euse
+          débutant·e. Bouton par défaut = revenir corriger ; « Enregistrer quand
+          même » force la sauvegarde. */}
+      <Modal
+        isOpen={!!dupModal}
+        onClose={() => setDupModal(null)}
+        title={t({ id: 'catalogacao.presave.dupModalTitle' })}
+        size="small"
+      >
+        <p style={{ whiteSpace: 'pre-line', margin: '0 0 1rem' }}>
+          {t(
+            { id: dupModal?.kind === 'isbn' ? 'catalogacao.presave.isbnExists' : 'catalogacao.presave.titleAuthorExists' },
+            { detail: dupModal?.detail || '' }
+          )}
+        </p>
+        <div className="ab-modal__actions">
+          {dupModal?.bookId && onOpenBook && (
+            <button
+              type="button"
+              className="ab-button ab-button--ghost"
+              onClick={() => { const id = dupModal.bookId; setDupModal(null); onOpenBook(id); }}
+            >
+              {t({ id: 'catalogacao.duplicate.openExisting' })}
+            </button>
+          )}
+          <button type="button" className="ab-button ab-button--secondary" onClick={() => setDupModal(null)}>
+            {t({ id: 'common.cancel' })}
+          </button>
+          <button
+            type="button"
+            className="ab-button ab-button--primary"
+            onClick={() => handleSave(null, { skipDupCheck: true })}
+          >
+            {t({ id: 'catalogacao.presave.saveAnyway' })}
+          </button>
+        </div>
+      </Modal>
 
       {/* Form + aperçu live (maquette v3, TRA-v3). La surface .ab-sheet est portée
           par le conteneur d'onglet .cat-panel (§7.3, toute la page) ; l'aperçu reste
