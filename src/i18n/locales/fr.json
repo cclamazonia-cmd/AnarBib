@@ -2433,6 +2433,7 @@
   "catalogacao.ph.tractCampaign": "Grève générale, campagne antifasciste…",
   "catalogacao.ph.university": "Nom de l'université",
   "catalogacao.presave.isbnExists": "ISBN deja present au catalogue : {detail}.\n\nContinuer la sauvegarde ?",
+  "catalogacao.presave.approxExists": "Un document très semblable existe déjà au catalogue : {detail}.\n\nEnregistrer quand même ?",
   "catalogacao.presave.titleAuthorExists": "Titre + auteur·rice deja presents au catalogue : {detail}.\n\nContinuer la sauvegarde ?",
   "catalogacao.presave.dupModalTitle": "Doublon possible",
   "catalogacao.presave.saveAnyway": "Enregistrer quand même",

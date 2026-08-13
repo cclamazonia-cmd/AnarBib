@@ -2427,6 +2427,7 @@
   "catalogacao.ph.tractCampaign": "Greve geral, campanha antifascista…",
   "catalogacao.ph.university": "Name der Universität",
   "catalogacao.presave.isbnExists": "ISBN bereits im Katalog vorhanden: {detail}.\n\nTrotzdem speichern?",
+  "catalogacao.presave.approxExists": "Ein sehr ähnlicher Eintrag ist bereits im Katalog vorhanden: {detail}.\n\nTrotzdem speichern?",
   "catalogacao.presave.titleAuthorExists": "Titel + Autor*in bereits im Katalog vorhanden: {detail}.\n\nTrotzdem speichern?",
   "catalogacao.presave.dupModalTitle": "Möglicher Doppeleintrag",
   "catalogacao.presave.saveAnyway": "Trotzdem speichern",

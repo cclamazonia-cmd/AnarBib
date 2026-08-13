@@ -2427,6 +2427,7 @@
   "catalogacao.ph.tractCampaign": "Γενική απεργία, αντιφασιστική εκστρατεία…",
   "catalogacao.ph.university": "Όνομα πανεπιστημίου",
   "catalogacao.presave.isbnExists": "ISBN already exists in catalog: {detail}.\n\nContinue saving anyway?",
+  "catalogacao.presave.approxExists": "Υπάρχει ήδη μια πολύ παρόμοια εγγραφή στον κατάλογο: {detail}.\n\nΑποθήκευση ούτως ή άλλως;",
   "catalogacao.presave.titleAuthorExists": "Title + authorship already exist in catalog: {detail}.\n\nContinue saving anyway?",
   "catalogacao.presave.dupModalTitle": "Πιθανό διπλότυπο",
   "catalogacao.presave.saveAnyway": "Αποθήκευση ούτως ή άλλως",

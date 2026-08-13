@@ -2427,6 +2427,7 @@
   "catalogacao.ph.tractCampaign": "Vaga general, campanya antifeixista…",
   "catalogacao.ph.university": "Nom de la universitat",
   "catalogacao.presave.isbnExists": "ISBN ja existent al cataleg: {detail}.\n\nVoleu continuar desant de totes maneres?",
+  "catalogacao.presave.approxExists": "Ja existeix un document molt semblant al catàleg: {detail}.\n\nDesar igualment?",
   "catalogacao.presave.titleAuthorExists": "Titol + autoria ja existents al cataleg: {detail}.\n\nVoleu continuar desant de totes maneres?",
   "catalogacao.presave.dupModalTitle": "Possible duplicat",
   "catalogacao.presave.saveAnyway": "Desa igualment",

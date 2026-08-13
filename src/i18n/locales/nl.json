@@ -2427,6 +2427,7 @@
   "catalogacao.ph.tractCampaign": "Algemene staking, antifascistische campagne…",
   "catalogacao.ph.university": "Naam van de universiteit",
   "catalogacao.presave.isbnExists": "ISBN al aanwezig in de catalogus: {detail}.\n\nToch doorgaan met opslaan?",
+  "catalogacao.presave.approxExists": "Er bestaat al een zeer vergelijkbaar item in de catalogus: {detail}.\n\nToch opslaan?",
   "catalogacao.presave.titleAuthorExists": "Titel + auteurschap al aanwezig in de catalogus: {detail}.\n\nToch doorgaan met opslaan?",
   "catalogacao.presave.dupModalTitle": "Mogelijk duplicaat",
   "catalogacao.presave.saveAnyway": "Toch opslaan",

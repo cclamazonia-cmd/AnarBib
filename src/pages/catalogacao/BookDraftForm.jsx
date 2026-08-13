@@ -1502,56 +1502,49 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // ═══════════════════════════════════════════════════════
 
   // Détecte un doublon probable AVANT la sauvegarde du brouillon.
-  // Ne montre aucune UI : retourne { kind: 'isbn'|'titleAuthor', detail, bookId }
-  // si un doublon est trouvé (l'appelant ouvre alors la modale d'avertissement),
-  // sinon null. Remplace l'ancien confirm() natif — peu visible pour un·e
-  // catalogueur·euse débutant·e — par une vraie modale centrée.
+  // Ne montre aucune UI : retourne { kind: 'isbn'|'approx', detail, bookId, score }
+  // pour le meilleur candidat, sinon null (l'appelant ouvre la modale).
+  //
+  // Délègue à la RPC public.suggest_duplicates_for_fields (pg_trgm) : ISBN exact
+  // + titre/auteur trigramme (tolère les variantes de titre), inter-bibliothèques.
+  // Fonctionne aussi en ÉDITION d'une fiche publiée : p_exclude_book_id retire la
+  // fiche elle-même et les paires déjà arbitrées « pas un doublon ».
+  // Fail-open : toute erreur (RPC absente le temps du déploiement, réseau…) ->
+  // null, on ne bloque jamais la sauvegarde.
   async function detectDuplicate() {
     const isbn = (f('isbn') || '').replace(/[^0-9Xx]/g, '').toUpperCase();
     const title = f('titulo').trim();
     const author = f('autor').trim();
-    const publishedId = f('published_book_id');
+    const excludeId = f('published_book_id') ? Number(f('published_book_id')) : null;
 
-    if (!isbn && !title) return null; // nothing to check
+    if (!isbn && !title) return null; // rien a verifier
 
     try {
-      // 1. Check by ISBN (cross-library: no library_id filter)
-      if (isbn) {
-        const { data } = await supabase.from('books')
-          .select('id, titulo, autor, bib_ref, owner_library_id, libraries:owner_library_id(name)')
-          .ilike('isbn', `%${isbn}%`)
-          .limit(3);
-        const dup = (data || []).find(b => !publishedId || String(b.id) !== String(publishedId));
-        if (dup) {
-          const detail = [dup.titulo || '', dup.bib_ref ? `ref. ${dup.bib_ref}` : '', dup.libraries?.name || ''].filter(Boolean).join(' · ');
-          return { kind: 'isbn', detail, bookId: dup.id };
-        }
-      }
-
-      // 2. Check by title + author
-      if (title && author) {
-        const normalize = (v) => (v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-        const { data } = await supabase.from('books')
-          .select('id, titulo, autor, ano, bib_ref, owner_library_id, libraries:owner_library_id(name)')
-          .ilike('titulo', `%${title.slice(0, 40)}%`)
-          .limit(10);
-        if (data?.length) {
-          const match = data.find(b =>
-            (!publishedId || String(b.id) !== publishedId) &&
-            normalize(b.titulo) === normalize(title) &&
-            normalize(b.autor || '') === normalize(author)
-          );
-          if (match) {
-            const detail = [match.titulo || '', match.ano ? `(${match.ano})` : '', match.bib_ref ? `ref. ${match.bib_ref}` : '', match.libraries?.name || ''].filter(Boolean).join(' · ');
-            return { kind: 'titleAuthor', detail, bookId: match.id };
-          }
-        }
-      }
+      const { data, error } = await supabase.rpc('suggest_duplicates_for_fields', {
+        p_title: title || null,
+        p_author: author || null,
+        p_isbn: isbn || null,
+        p_exclude_book_id: excludeId,
+      });
+      if (error) throw error;
+      const top = (data || [])[0];
+      if (!top) return null;
+      const detail = [
+        top.titulo || '',
+        top.ano ? `(${top.ano})` : '',
+        top.bib_ref ? `ref. ${top.bib_ref}` : '',
+        top.library_name || '',
+      ].filter(Boolean).join(' · ');
+      return {
+        kind: top.match_kind === 'isbn' ? 'isbn' : 'approx',
+        detail,
+        bookId: top.book_id,
+        score: top.score,
+      };
     } catch (err) {
       console.warn('Duplicate check error:', err);
+      return null; // fail-open
     }
-
-    return null; // no duplicate or check failed → proceed
   }
 
   // ═══════════════════════════════════════════════════════
@@ -1758,10 +1751,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     e?.preventDefault();
     if (!f('titulo').trim()) { setMsg({ text: t({id:'catalogacao.msg.enterTitle'}), kind: 'error' }); return; }
 
-    // Avertissement doublon (nouveaux brouillons uniquement, pas les mises à jour
-    // d'une fiche déjà publiée). On ouvre une modale centrée et on interrompt la
+    // Avertissement doublon — nouveaux brouillons ET mises à jour de fiches déjà
+    // publiées (detectDuplicate exclut la fiche courante + les paires arbitrées
+    // « pas un doublon »). On ouvre une modale centrée et on interrompt la
     // sauvegarde ; « Enregistrer quand même » rappelle handleSave avec skipDupCheck.
-    if (!skipDupCheck && !f('published_book_id')) {
+    if (!skipDupCheck) {
       const dup = await detectDuplicate();
       if (dup) { setDupModal(dup); return; }
     }
@@ -2359,7 +2353,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       >
         <p style={{ whiteSpace: 'pre-line', margin: '0 0 1rem' }}>
           {t(
-            { id: dupModal?.kind === 'isbn' ? 'catalogacao.presave.isbnExists' : 'catalogacao.presave.titleAuthorExists' },
+            { id: dupModal?.kind === 'isbn' ? 'catalogacao.presave.isbnExists' : 'catalogacao.presave.approxExists' },
             { detail: dupModal?.detail || '' }
           )}
         </p>
