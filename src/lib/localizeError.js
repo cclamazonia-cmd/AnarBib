@@ -68,6 +68,7 @@ const CONSTRAINT_I18N_MAP = {
   books_bib_ref_unique:           'error.publish.bib_ref_duplicate_constraint',
   exemplares_circulation_policy_check: 'error.publish.circulation_policy_invalid',
   exemplares_visibility_check:    'error.publish.visibility_invalid',
+  exemplares_unique_tombo:        'error.publish.tombo_duplicate',
 };
 
 /**

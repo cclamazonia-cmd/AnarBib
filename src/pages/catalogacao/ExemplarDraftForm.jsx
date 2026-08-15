@@ -117,6 +117,10 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
   // sans ca, le message d'erreur apparaissait des la 1re frappe (parentBook est
   // nul tant qu'aucune recherche n'a tourne), avant meme la sortie du champ.
   const [bibRefChecked, setBibRefChecked] = useState(false);
+  // Recherche du document parent par TITRE (pas seulement par bib_ref).
+  const [titleQuery, setTitleQuery] = useState('');
+  const [titleResults, setTitleResults] = useState([]);
+  const [titleSearching, setTitleSearching] = useState(false);
   const [draftState, setDraftState] = useState('new');
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
@@ -254,6 +258,36 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
 
   function handleBibRefBlur() { resolveParentBook(f('target_bib_ref')); }
   function handleBibRefChange(v) { set('target_bib_ref', v); setBibRefChecked(false); }
+
+  // ── Recherche du document parent par TITRE (débounce 350ms) ──
+  // Ne propose que des documents PUBLIÉS (donc porteurs d'un bib_ref), seuls
+  // rattachables comme parent d'un exemplaire. Un clic remplit le bib_ref et
+  // résout la fiche (comme une saisie manuelle).
+  useEffect(() => {
+    const q = titleQuery.trim();
+    if (q.length < 3) { setTitleResults([]); setTitleSearching(false); return; }
+    let cancelled = false;
+    setTitleSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await supabase.from('books')
+          .select('id, titulo, autor, ano, bib_ref')
+          .not('bib_ref', 'is', null)
+          .ilike('titulo', `%${q}%`)
+          .order('titulo').limit(8);
+        if (!cancelled) setTitleResults(data || []);
+      } catch { if (!cancelled) setTitleResults([]); }
+      finally { if (!cancelled) setTitleSearching(false); }
+    }, 350);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [titleQuery]);
+
+  function selectParentByTitle(book) {
+    set('target_bib_ref', book.bib_ref);
+    setTitleQuery('');
+    setTitleResults([]);
+    resolveParentBook(book.bib_ref);
+  }
 
   // ── Computed label preview ──────────────────────────────
   const labelAuthor = label.author || parentBook?.autor || '';
@@ -461,6 +495,30 @@ export default function ExemplarDraftForm({ mode, batches, prefillBibRef, editin
             {t({ id: 'catalogacao.exemplar.originStepDesc' })}
           </div>
           <div className="cat-book-grid">
+            <div className="cat-field" style={{ gridColumn: 'span 3', position: 'relative' }}>
+              <label style={ls}>{t({ id: 'catalogacao.exemplar.findByTitle' })}</label>
+              <input type="text" value={titleQuery} onChange={e => setTitleQuery(e.target.value)}
+                placeholder={t({ id: 'catalogacao.exemplar.findByTitlePlaceholder' })} style={fs} />
+              {titleQuery.trim().length >= 3 && (
+                <div style={{ position: 'absolute', zIndex: 20, top: '100%', left: 0, right: 0, background: 'var(--brand-surface, #1b1b1b)', border: '1px solid rgba(255,255,255,.12)', borderRadius: 6, marginTop: 2, maxHeight: 240, overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,.4)' }}>
+                  {titleSearching && (
+                    <div style={{ padding: '8px 12px', fontSize: '.74rem', color: 'var(--brand-muted,#999)' }}>{t({ id: 'common.searching' })}</div>
+                  )}
+                  {!titleSearching && titleResults.length === 0 && (
+                    <div style={{ padding: '8px 12px', fontSize: '.74rem', color: 'var(--brand-muted,#999)' }}>{t({ id: 'catalogacao.exemplar.findByTitleNone' })}</div>
+                  )}
+                  {titleResults.map(bk => (
+                    <button type="button" key={bk.id} onClick={() => selectParentByTitle(bk)}
+                      style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', borderBottom: '1px solid rgba(255,255,255,.06)', cursor: 'pointer', color: 'inherit' }}>
+                      <div style={{ fontSize: '.78rem', fontWeight: 700 }}>{bk.titulo}</div>
+                      <div style={{ fontSize: '.7rem', color: 'var(--brand-muted,#aaa)' }}>
+                        {[bk.autor, bk.ano].filter(Boolean).join(' · ')}{bk.bib_ref ? ` · ref. ${bk.bib_ref}` : ''}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className="cat-field" style={{ gridColumn: 'span 2' }}>
               <label style={ls}>{t({ id: 'catalogacao.exemplar.bibRefLabel' })}</label>
               <input type="text" value={f('target_bib_ref')} onChange={e => handleBibRefChange(e.target.value)}
