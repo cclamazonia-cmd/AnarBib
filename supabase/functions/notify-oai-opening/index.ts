@@ -132,7 +132,7 @@ async function votedLibraryIds(requestId: string, onlyPending = false): Promise<
 
 Deno.serve((req) => serveJsonWebhook(
   req,
-  { secretEnv: WEBHOOK_SECRET, allowDashboardBearerForManualTest: true },
+  { secretEnv: WEBHOOK_SECRET },
   async (payload: any) => {
     const event = String(payload?.event || '').trim();
     const requestId = String(payload?.request_id || '').trim();

@@ -15,18 +15,38 @@ export async function parseJsonPayload(req) {
     manualTest
   };
 }
+// AUTHENTIFICATION — secret webhook uniquement, aucun repli.
+//
+// Durci le 2026-08-17. Les deux replis historiques ont été retirés :
+//
+//   1. `bearerOk` : `ok` était vrai dès qu'un en-tête Authorization contenait
+//      un Bearer *bien formé*, sans jamais en vérifier la signature ni le rôle.
+//      Or les notifieurs sont déclarés `verify_jwt = false` (cf. config.toml) :
+//      la passerelle ne valide rien non plus. N'importe qui pouvait donc
+//      déclencher notify-event / notify-digital-share / notify-oai-opening avec
+//      `Authorization: Bearer aaaa`, sans connaître le secret.
+//   2. `dashboardTestOk` : même faiblesse, simplement conditionnée à
+//      `manual_test: true` dans le corps — un drapeau que l'appelant contrôle.
+//      Vérifié : `manual_test` ne servait QU'À l'autorisation (il n'altère
+//      aucun comportement, il est juste recopié dans la réponse), donc le
+//      retirer ne casse aucun usage légitime.
+//
+// Appelants vérifiés avant durcissement : tous les dispatchers SQL
+// (fn_gazette_outbox_dispatch_trigger, fn_team_outbox_dispatch_trigger,
+// fn_lettre_outbox_dispatch_trigger, fn_internal_dispatch_ill_notification,
+// fn_internal_dispatch_oai_notification…) lisent le secret dans le vault et
+// l'envoient en `x-webhook-secret` — aucun n'envoie d'en-tête Authorization.
+//
+// `manualTest` reste dans la signature pour ne pas toucher aux appelants, mais
+// n'a plus d'effet sur l'autorisation. Modèle de référence : notify-security-notice.
 export function authorizeWebhook(req, manualTest, options = {}) {
   const expectedSecret = String(options.secretEnv || "").trim();
   const gotSecret = String(req.headers.get("x-webhook-secret") || "").trim();
-  const authz = String(req.headers.get("authorization") || "").trim();
   const webhookOk = !!expectedSecret && !!gotSecret && gotSecret === expectedSecret;
-  const bearerOk = /^Bearer\s+[A-Za-z0-9\-_.]+/.test(authz);
-  const dashboardTestOk = !!options.allowDashboardBearerForManualTest && manualTest && bearerOk;
   return {
-    ok: webhookOk || bearerOk || dashboardTestOk,
+    ok: webhookOk,
     webhookOk,
-    dashboardTestOk,
-    bearerOk
+    dashboardTestOk: false
   };
 }
 export async function serveJsonWebhook(req, options, handler) {

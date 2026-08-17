@@ -15,16 +15,18 @@ export async function parseJsonPayload(req) {
     manualTest
   };
 }
+// Copie vendue (bundle notify-internal-task) du helper partagé. Durcie le
+// 2026-08-17 comme _shared/core/webhook.ts : le repli « Bearer bien formé +
+// manual_test » est retiré (verify_jwt = false ⇒ le Bearer n'est validé par
+// personne, et `manual_test` est un drapeau fourni par l'appelant).
 export function authorizeWebhook(req, manualTest, options = {}) {
   const expectedSecret = String(options.secretEnv || "").trim();
   const gotSecret = String(req.headers.get("x-task-invite-secret") || req.headers.get("x-webhook-secret") || "").trim();
-  const authz = String(req.headers.get("authorization") || "").trim();
-  const webhookOk = !!expectedSecret && !!gotSecret && gotSecret == expectedSecret;
-  const dashboardTestOk = !!options.allowDashboardBearerForManualTest && manualTest && /^Bearer\s+/i.test(authz);
+  const webhookOk = !!expectedSecret && !!gotSecret && gotSecret === expectedSecret;
   return {
-    ok: webhookOk || dashboardTestOk,
+    ok: webhookOk,
     webhookOk,
-    dashboardTestOk
+    dashboardTestOk: false
   };
 }
 export async function serveJsonWebhook(req, options, handler) {

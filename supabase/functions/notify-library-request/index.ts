@@ -89,15 +89,18 @@ async function parsePayload(req) {
     manualTest
   };
 }
+// Durci le 2026-08-17 : le repli « manual_test + Bearer bien formé » est
+// retiré. verify_jwt = false sur cette fonction, donc le Bearer n'était validé
+// par personne et `manual_test` est fourni par l'appelant : un simple
+// {"manual_test":true} + Authorization: Bearer aaaa suffisait à passer.
+// Seul le secret webhook autorise désormais l'appel.
 function authorizeWebhook(req, manualTest) {
   const gotSecret = String(req.headers.get("x-webhook-secret") || "").trim();
-  const authz = String(req.headers.get("authorization") || "").trim();
-  const webhookOk = !!gotSecret && gotSecret === WEBHOOK_SECRET;
-  const dashboardTestOk = manualTest && /^Bearer\s+/i.test(authz);
+  const webhookOk = !!WEBHOOK_SECRET && !!gotSecret && gotSecret === WEBHOOK_SECRET;
   return {
-    ok: webhookOk || dashboardTestOk,
+    ok: webhookOk,
     webhookOk,
-    dashboardTestOk
+    dashboardTestOk: false
   };
 }
 async function fetchRequest(requestId) {

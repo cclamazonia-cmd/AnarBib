@@ -21,8 +21,7 @@ async function handleNotifyEvent(req) {
   }
   const { payload, manualTest } = await parseJsonPayload(req);
   const auth = authorizeWebhook(req, manualTest, {
-    secretEnv: WEBHOOK_SECRET,
-    allowDashboardBearerForManualTest: true
+    secretEnv: WEBHOOK_SECRET
   });
   if (!auth.ok) {
     return jsonResponse(401, {

@@ -320,10 +320,10 @@ async function handleNotifyIll(req: Request): Promise<Response> {
   const { payload, manualTest } = await parseJsonPayload(req);
   const auth = authorizeWebhook(req, manualTest, {
     secretEnv: WEBHOOK_SECRET,
-    allowDashboardBearerForManualTest: true,
   });
-  // Auth durcie : on exige le secret webhook. Le simple Bearer ne suffit pas
-  // pour ce flux machine-à-machine (sauf test manuel depuis le dashboard).
+  // Auth durcie : on exige le secret webhook. Aucun repli — ni Bearer simple,
+  // ni « test manuel » : verify_jwt = false, donc le Bearer n'est validé par
+  // personne (durcissement du 2026-08-17, cf. _shared/core/webhook.ts).
   if (!auth.webhookOk && !auth.dashboardTestOk) {
     return jsonResponse(401, { ok: false, error: "Unauthorized" });
   }

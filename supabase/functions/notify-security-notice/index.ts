@@ -9,12 +9,14 @@
 // mais volontairement GÉNÉRIQUE : les textes et la cible sont passés dans la
 // requête, pour pouvoir resservir lors d'un prochain avis.
 //
-// AUTHENTIFICATION — stricte, volontairement différente des autres notifieurs.
-// On n'utilise PAS `authorizeWebhook` du module partagé : ce helper accepte
-// `webhookOk || bearerOk`, donc n'importe quel Bearer bien formé suffit. Ici on
-// exige que l'en-tête x-webhook-secret corresponde au secret stocké dans le
-// Vault, vérifié côté base par fn_check_security_notice_secret() (qui ne
-// renvoie jamais le secret). Aucun repli.
+// AUTHENTIFICATION — stricte. On n'utilise PAS `authorizeWebhook` du module
+// partagé : ici le secret n'est pas lu depuis une variable d'env Edge, mais
+// vérifié côté base par fn_check_security_notice_secret() (qui ne renvoie
+// jamais le secret). Aucun repli.
+//
+// (Historique : ce helper partagé acceptait `webhookOk || bearerOk`, donc
+// n'importe quel Bearer bien formé suffisait — d'où le choix initial de ne pas
+// s'en servir. Il a été durci le 2026-08-17 et n'accepte plus que le secret.)
 //
 // Appel type (depuis SQL, le secret ne quitte jamais la base) :
 //   select net.http_post(

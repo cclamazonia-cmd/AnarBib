@@ -101,7 +101,7 @@ async function libStaffRecipients(id: string | null): Promise<{ email: string; n
 
 Deno.serve((req) => serveJsonWebhook(
   req,
-  { secretEnv: WEBHOOK_SECRET, allowDashboardBearerForManualTest: true },
+  { secretEnv: WEBHOOK_SECRET },
   async (payload: any) => {
     const event = String(payload?.event || '').trim();
     const shareId = String(payload?.share_id || '').trim();
