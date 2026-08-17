@@ -127,6 +127,12 @@ Deno.serve((req) =>
     const fin = String(payload?.week_end || '').trim();
     if (!debut || !fin) return { ok: false, error: 'bad_payload' };
 
+    // `dry_run` : calcule et compose tout, mais n'envoie RIEN. Permet d'éprouver
+    // le rendu sur des données réelles sans écrire à de vraies personnes.
+    // Défaut FALSE : le dispatcher SQL ne pose pas le drapeau et doit livrer.
+    // (Attention, l'inverse de notify-security-notice, déclenchée à la main.)
+    const dryRun = payload?.dry_run === true;
+
     // Fenêtre inclusive : [week_start 00:00, week_end 23:59:59].
     const borneFin = `${fin}T23:59:59.999Z`;
 
@@ -187,6 +193,18 @@ Deno.serve((req) =>
         context: NETWORK_CTX,
         locale,
       });
+      if (dryRun) {
+        envois.push({
+          email: cible.email,
+          cadrage: cle,
+          locale,
+          ok: true,
+          simule: true,
+          sujet,
+          taille_html: html.length,
+        });
+        return;
+      }
       const r = await safeSendEmail(cible, sujet, html, text, 'cross_library_digest', NETWORK_CTX);
       envois.push({ email: cible.email, cadrage: cle, locale, ok: !!r?.ok, erreur: r?.error ?? r?.reason });
     }
