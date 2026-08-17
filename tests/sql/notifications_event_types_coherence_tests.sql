@@ -64,6 +64,10 @@ BEGIN
       FROM pg_proc p
       JOIN pg_namespace np ON np.oid = p.pronamespace
       WHERE np.nspname = 'public'
+        -- prokind = 'f' : pg_get_functiondef() lève « "x" is an aggregate
+        -- function » si on le lui passe un agrégat, ce qui faisait planter la
+        -- suite avant tout bilan. On ne veut de toute façon que des fonctions.
+        AND p.prokind = 'f'
         AND pg_get_functiondef(p.oid) LIKE '%' || r.tbl || '%'
       ORDER BY p.proname
     LOOP
