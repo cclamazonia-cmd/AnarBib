@@ -248,7 +248,7 @@ function renderBlock(b, ui) {
 }
 
 // Construit le document HTML autonome (journal 6 pages) injecté dans l'iframe srcdoc.
-function buildDocHTML(data, ui, locale) {
+function buildDocHTML(data, ui, locale, number) {
   const m = data.masthead || {};
   const pages = Array.isArray(data.content) ? data.content : [];
   const n = pages.length;
@@ -268,7 +268,11 @@ function buildDocHTML(data, ui, locale) {
     const foot = `AnarBib · ${S(ui.page)} ${idx + 1}/${n} · ${S(m.mid)}`;
     return `<section class="page" data-foot="${foot}">${inner}</section>`;
   }).join('');
+  // <title> = nom de fichier proposé par l'impression PDF du navigateur.
+  // Sans lui, le navigateur retombe sur le titre d'onglet (« Federação — AnarBib »).
+  const docTitle = number != null ? `Rizoma n°${String(number).padStart(2, '0')}` : 'Rizoma';
   return `<!DOCTYPE html><html lang="${S(locale)}"><head><meta charset="utf-8">`
+    + `<title>${S(docTitle)}</title>`
     + `<meta name="viewport" content="width=device-width, initial-scale=1">`
     + `<style>${GZ_CSS}</style></head>`
     + `<body><div class="sheet">${body}</div></body></html>`;
@@ -376,7 +380,7 @@ export default function GazetteTab() {
         className="ab-gz-frame"
         title={t({ id: 'federacao.tab.gazeta' })}
         sandbox="allow-same-origin allow-modals"
-        srcDoc={buildDocHTML(data, ui, loc)}
+        srcDoc={buildDocHTML(data, ui, loc, state.number)}
         onLoad={measure}
         style={{ height: frameH }}
       />
