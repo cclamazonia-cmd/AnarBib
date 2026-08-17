@@ -225,17 +225,19 @@ async function issueId(number: number): Promise<string> {
 // Bandeau localisé et NEUTRE (jamais le mot "brouillon" dans le contenu : l'état
 // brouillon est porté uniquement par gazette_issues.status, affiché en badge côté
 // panel network_staff). Même style que le n°01 (taglines + préfixe numérique par locale).
-const MASTHEAD_I18N: Record<string, { left: string; right: string; numPrefix: string }> = {
-  "fr":    { left: "Réseau libre — autogéré",              right: "Diffusion libre ✳ Copiez-Partagez",         numPrefix: "N°" },
-  "pt-BR": { left: "Rede livre — autogerida",               right: "Difusão livre ✳ Copie-Compartilhe",         numPrefix: "N.º " },
-  "es":    { left: "Red libre — autogestionada",            right: "Difusión libre ✳ Copia-Comparte",           numPrefix: "N.º " },
-  "en":    { left: "Free network — self-managed",           right: "Free distribution ✳ Copy-Share",            numPrefix: "No. " },
-  "it":    { left: "Rete libera — autogestita",              right: "Diffusione libera ✳ Copiate-Condividete",   numPrefix: "N. " },
-  "de":    { left: "Freies Netzwerk — selbstverwaltet",      right: "Freie Verbreitung ✳ Kopiert-Teilt",         numPrefix: "Nr. " },
-  "el":    { left: "Ελεύθερο δίκτυο — αυτοδιαχειριζόμενο",   right: "Ελεύθερη διάδοση ✳ Αντιγράψτε-Μοιραστείτε",  numPrefix: "Αρ. " },
-  "ca":    { left: "Xarxa lliure — autogestionada",          right: "Difusió lliure ✳ Copieu-Compartiu",         numPrefix: "Núm. " },
-  "eo":    { left: "Libera reto — memmastrumata",            right: "Libera disvastigo ✳ Kopiu-Kunhavigu",       numPrefix: "N-ro " },
-  "nl":    { left: "Vrij netwerk — zelfbeheerd",             right: "Vrije verspreiding ✳ Kopieer-Deel",         numPrefix: "Nr. " },
+// `tagline` = sous-titre localisé de la gazette (bug #tagline-fr-2026-08 : il était
+// codé « La gazette du réseau » en dur pour toutes les locales dans upsertLocale).
+const MASTHEAD_I18N: Record<string, { left: string; right: string; numPrefix: string; tagline: string }> = {
+  "fr":    { left: "Réseau libre — autogéré",              right: "Diffusion libre ✳ Copiez-Partagez",         numPrefix: "N°",     tagline: "La gazette du réseau" },
+  "pt-BR": { left: "Rede livre — autogerida",               right: "Difusão livre ✳ Copie-Compartilhe",         numPrefix: "N.º ",   tagline: "A gazeta da rede" },
+  "es":    { left: "Red libre — autogestionada",            right: "Difusión libre ✳ Copia-Comparte",           numPrefix: "N.º ",   tagline: "La gaceta de la red" },
+  "en":    { left: "Free network — self-managed",           right: "Free distribution ✳ Copy-Share",            numPrefix: "No. ",   tagline: "The network gazette" },
+  "it":    { left: "Rete libera — autogestita",              right: "Diffusione libera ✳ Copiate-Condividete",   numPrefix: "N. ",    tagline: "La gazzetta della rete" },
+  "de":    { left: "Freies Netzwerk — selbstverwaltet",      right: "Freie Verbreitung ✳ Kopiert-Teilt",         numPrefix: "Nr. ",   tagline: "Die Gazette des Netzwerks" },
+  "el":    { left: "Ελεύθερο δίκτυο — αυτοδιαχειριζόμενο",   right: "Ελεύθερη διάδοση ✳ Αντιγράψτε-Μοιραστείτε",  numPrefix: "Αρ. ",   tagline: "Η εφημερίδα του δικτύου" },
+  "ca":    { left: "Xarxa lliure — autogestionada",          right: "Difusió lliure ✳ Copieu-Compartiu",         numPrefix: "Núm. ",  tagline: "La gaseta de la xarxa" },
+  "eo":    { left: "Libera reto — memmastrumata",            right: "Libera disvastigo ✳ Kopiu-Kunhavigu",       numPrefix: "N-ro ",  tagline: "La gazeto de la reto" },
+  "nl":    { left: "Vrij netwerk — zelfbeheerd",             right: "Vrije verspreiding ✳ Kopieer-Deel",         numPrefix: "Nr. ",   tagline: "De gazette van het netwerk" },
 };
 function buildMasthead(locale: string, number: number, coverDate: string) {
   const m = MASTHEAD_I18N[locale] ?? MASTHEAD_I18N["fr"];
@@ -258,8 +260,9 @@ async function upsertLocale(number: number, locale: string, content: unknown, ts
     : (co && Array.isArray(co.content)) ? co.content
     : (co && Array.isArray(co.pages)) ? co.pages
     : content;
+  const tagline = (MASTHEAD_I18N[locale] ?? MASTHEAD_I18N["fr"]).tagline;
   await sb.from("gazette_issue_locales").upsert(
-    { issue_id: id, locale, tagline: "La gazette du réseau", masthead, content: pages,
+    { issue_id: id, locale, tagline, masthead, content: pages,
       translation_status: tstatus, source_locale: src },
     { onConflict: "issue_id,locale" },
   );
