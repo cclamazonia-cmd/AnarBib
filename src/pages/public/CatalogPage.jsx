@@ -1089,44 +1089,46 @@ export default function CatalogPage() {
           {t({ id: 'catalog.section.explore' })} <span className="ab-collapse-chevron">{exploreOpen ? '▾' : '▸'}</span>
         </button>
       </div>
-      {exploreOpen && (<>
-      {/* ══ #OPAC10 — Autres modes de découverte ═════════════ */}
-      <section className="ab-browse-modes">
-        <span className="ab-browse-modes__label">{t({ id: 'catalog.browse.label' })} :</span>
-        <button
-          type="button"
-          className={`ab-button ab-button--mini ${sortValue === 'created_at.desc' ? 'ab-button--active' : ''}`}
-          aria-pressed={sortValue === 'created_at.desc'}
-          onClick={() => setSortValue(sortValue === 'created_at.desc' ? '__relevance__' : 'created_at.desc')}
-        >
-          {t({ id: 'catalog.browse.newest' })}
-        </button>
-        <span className="ab-browse-modes__sep" aria-hidden="true">·</span>
-        <button
-          type="button"
-          className={`ab-button ab-button--mini ${collapseEditions ? 'ab-button--active' : ''}`}
-          aria-pressed={collapseEditions}
-          onClick={() => setCollapseEditions(v => !v)}
-        >
-          {t({ id: 'catalog.collapseEditions' })}
-        </button>
-        <span className="ab-browse-modes__sep" aria-hidden="true">·</span>
-        <span className="ab-browse-modes__alpha-label">{t({ id: 'catalog.browse.alpha' })}</span>
-        <div className="ab-browse-alpha">
-          {ALPHABET.map(letter => (
-            <button
-              key={letter}
-              type="button"
-              className={`ab-alpha-btn ${alphaFilter === letter ? 'is-active' : ''}`}
-              onClick={() => {
-                const next = alphaFilter === letter ? '' : letter;
-                setAlphaFilter(next);
-                if (next) { setAuthorFilter(''); setAuthorIdFilter(''); }
-              }}
-            >
-              {letter}
-            </button>
-          ))}
+      {exploreOpen && (<div className="ab-explore-panel">
+      {/* ══ #OPAC10 — Parcourir : modes + alphabet ═══════════ */}
+      <section className="ab-explore-sec">
+        <span className="ab-facets__title">{t({ id: 'catalog.browse.label' })}</span>
+        <div className="ab-chip-row">
+          <button
+            type="button"
+            className={`ab-facet-chip ${sortValue === 'created_at.desc' ? 'is-active' : ''}`}
+            aria-pressed={sortValue === 'created_at.desc'}
+            onClick={() => setSortValue(sortValue === 'created_at.desc' ? '__relevance__' : 'created_at.desc')}
+          >
+            {t({ id: 'catalog.browse.newest' })}
+          </button>
+          <button
+            type="button"
+            className={`ab-facet-chip ${collapseEditions ? 'is-active' : ''}`}
+            aria-pressed={collapseEditions}
+            onClick={() => setCollapseEditions(v => !v)}
+          >
+            {t({ id: 'catalog.collapseEditions' })}
+          </button>
+        </div>
+        <div className="ab-explore-sub">
+          <span className="ab-explore-sub__label">{t({ id: 'catalog.browse.alpha' })}</span>
+          <div className="ab-browse-alpha">
+            {ALPHABET.map(letter => (
+              <button
+                key={letter}
+                type="button"
+                className={`ab-alpha-btn ${alphaFilter === letter ? 'is-active' : ''}`}
+                onClick={() => {
+                  const next = alphaFilter === letter ? '' : letter;
+                  setAlphaFilter(next);
+                  if (next) { setAuthorFilter(''); setAuthorIdFilter(''); }
+                }}
+              >
+                {letter}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -1159,23 +1161,21 @@ export default function CatalogPage() {
           </li>
         );
         return (
-          <section className="ab-subject-tree">
-            <div className="ab-subject-tree__head">
-              <span className="ab-facets__title">{t({ id: 'catalog.tree.title' })}</span>
-              <span className="ab-tree__export">
-                {t({ id: 'catalog.tree.export' })}
-                <button type="button" className="ab-mini-action" onClick={() => downloadThesaurus('ttl')}>SKOS/Turtle</button>
-                <button type="button" className="ab-mini-action" onClick={() => downloadThesaurus('jsonld')}>JSON-LD</button>
-              </span>
-            </div>
+          <section className="ab-explore-sec ab-subject-tree">
+            <span className="ab-facets__title">{t({ id: 'catalog.tree.title' })}</span>
             <ul className="ab-tree">{roots.map(node => SubjectNode(node, false))}</ul>
+            <div className="ab-tree__export">
+              {t({ id: 'catalog.tree.export' })}
+              <button type="button" className="ab-mini-action" onClick={() => downloadThesaurus('ttl')}>SKOS/Turtle</button>
+              <button type="button" className="ab-mini-action" onClick={() => downloadThesaurus('jsonld')}>JSON-LD</button>
+            </div>
           </section>
         );
       })()}
 
       {/* ══ #OPAC7 — Facettes de découverte (CDD / auteur·rice / décennie) ══ */}
       {facets && ((facets.cdd?.length || 0) + (facets.author?.length || 0) + (facets.decade?.length || 0) + (facets.subjects?.length || 0) > 0) && (
-        <section className="ab-facets">
+        <section className="ab-explore-sec ab-facets">
           <span className="ab-facets__title">{t({ id: 'catalog.facets.title' })}</span>
           {facets.cdd?.length > 0 && (
             <div className="ab-facet-group">
@@ -1242,7 +1242,7 @@ export default function CatalogPage() {
           )}
         </section>
       )}
-      </>)}
+      </div>)}
 
       {/* ══ STATS PILLS ═══════════════════════════════════════ */}
       <div className="ab-stats">

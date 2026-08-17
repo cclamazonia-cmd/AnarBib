@@ -85,10 +85,10 @@
   letter-spacing: .03em; color: var(--brand-muted);
 }
 /* v3-C — arbre des sujets */
-.ab-subject-tree { margin: 12px 0; }
+.ab-subject-tree { margin: 0; }
 .ab-subject-tree__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
 .ab-subject-tree__head .ab-facets__title { margin-bottom: 0; }
-.ab-tree__export { display: inline-flex; align-items: center; gap: 6px; font-size: .74rem; color: var(--brand-muted); }
+.ab-tree__export { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; font-size: .72rem; color: var(--brand-muted); opacity: .8; }
 .ab-tree { list-style: none; margin: 0; padding: 0; }
 .ab-tree--child { margin-left: 18px; padding-left: 6px; border-left: 1px solid var(--brand-panel-border, rgba(255,255,255,.12)); }
 /* Racine de l'arbre en multi-colonnes : autant de colonnes que la largeur le
@@ -576,12 +576,13 @@
 
 /* ── #OPAC7 — Panneau de facettes de découverte ─────────── */
 
+/* Nichée dans .ab-explore-panel : plus de bordure/fond propres (portés par
+   le panneau) — c'est une simple sous-section. */
 .ab-facets {
-  margin: 4px 0 14px;
-  padding: 12px 14px;
-  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
-  border-radius: 10px;
-  background: var(--brand-panel-bg, rgba(18, 18, 18, 0.82));
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
 }
 
 .ab-facets__title {
@@ -690,3 +691,38 @@
 }
 
 .ab-explore-toggle { margin: 6px 0 2px; }
+
+/* ── Panneau « Explorer » unifié (restructuration 2026-08) ─────────────
+   Un seul conteneur encadré ; sous-sections séparées par un filet léger,
+   toutes coiffées du même titre (.ab-facets__title) et utilisant les mêmes
+   chips (.ab-facet-chip) → grammaire visuelle cohérente. */
+.ab-explore-panel {
+  margin: 6px 0 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.14));
+  border-radius: 10px;
+  background: var(--brand-panel-bg, rgba(18, 18, 18, 0.82));
+  display: flex;
+  flex-direction: column;
+}
+.ab-explore-sec + .ab-explore-sec {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--brand-panel-border, rgba(255, 255, 255, 0.10));
+}
+.ab-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.ab-explore-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 10px;
+}
+.ab-explore-sub__label {
+  flex: 0 0 auto;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--brand-muted);
+}
