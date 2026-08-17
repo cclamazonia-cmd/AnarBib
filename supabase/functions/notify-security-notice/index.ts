@@ -173,11 +173,16 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // 2. Message personnalisé.
+    // 2. Message personnalisé. Le placeholder est accepté dans les différentes
+    // langues du réseau, pour ne pas imposer un jeton français dans un texte
+    // portugais (ou l'inverse).
     const numero = dryRun && regenerate ? '(nouveau numéro)' : String(publicId ?? '');
-    const subject = String(msg.subject || '').replace(/\{NOUVEAU_NUMERO\}/g, numero);
-    const title = String(msg.title || msg.subject || '').replace(/\{NOUVEAU_NUMERO\}/g, numero);
-    const body = String(msg.body || '').replace(/\{NOUVEAU_NUMERO\}/g, numero);
+    const fill = (s: unknown) =>
+      String(s ?? '').replace(/\{(NOUVEAU_NUMERO|NOVO_NUMERO|NUEVO_NUMERO|NEW_NUMBER|PUBLIC_ID)\}/g, numero);
+
+    const subject = fill(msg.subject);
+    const title = fill(msg.title || msg.subject);
+    const body = fill(msg.body);
 
     if (dryRun) {
       entry.status = 'simule';
