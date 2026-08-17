@@ -478,6 +478,28 @@ serve(async (req)=>{
         error: "invalid_event_type"
       });
     }
+    // Mode simulation. Défaut FALSE, volontairement : les dispatchers SQL
+    // (fn_enqueue_document_permission_request_notification) n'envoient pas ce
+    // drapeau et doivent continuer à livrer normalement. C'est l'inverse de
+    // notify-security-notice, où dry_run vaut true par défaut parce que cette
+    // fonction-là est déclenchée à la main.
+    //
+    // Pourquoi ce mode : ce flux est reste MORT depuis l'origine (le secret
+    // WEBHOOK_SECRET_NOTIFY_DOCUMENT_PERMISSION_REQUEST n'existait pas dans le
+    // Vault, cf. migration 20260817125212), et il n'a qu'une seule demande en
+    // base, ancienne et deja acceptee. Impossible de l'eprouver de bout en bout
+    // sans ecrire a de vraies bibliotheques du reseau a propos d'une demande
+    // classee. dry_run resout ca durablement : tout est resolu et rendu
+    // (destinataires, sujets, gabarits), rien n'est livre.
+    const dryRun = payload?.dry_run === true;
+    const send = (target, subject, html, text, label)=>dryRun ? Promise.resolve({
+        ok: true,
+        simulated: true,
+        label,
+        to: target?.email ?? null,
+        subject
+      }) : safeSendEmail(target, subject, html, text, label);
+
     const row = await fetchRequest(requestId);
     if (!row) return jsonResponse(404, {
       ok: false,
@@ -517,11 +539,11 @@ serve(async (req)=>{
         details,
         footerHtml: footerHtml()
       });
-      sends.push(safeSendEmail(contactTarget(targetContact), outgoing.subject, toTarget.html, toTarget.text, "target_library"));
-      sends.push(safeSendEmail(contactTarget(requesterContact), requesterAck.subject, toRequester.html, toRequester.text, "requester_copy"));
+      sends.push(send(contactTarget(targetContact), outgoing.subject, toTarget.html, toTarget.text, "target_library"));
+      sends.push(send(contactTarget(requesterContact), requesterAck.subject, toRequester.html, toRequester.text, "requester_copy"));
       const admin = adminTarget();
       if (admin) {
-        sends.push(safeSendEmail(admin, outgoing.subject, toTarget.html, toTarget.text, "network_admin_copy"));
+        sends.push(send(admin, outgoing.subject, toTarget.html, toTarget.text, "network_admin_copy"));
       }
     }
     if (eventType === "document_permission_request_accepted" || eventType === "document_permission_request_refused") {
@@ -543,12 +565,13 @@ serve(async (req)=>{
         details,
         footerHtml: footerHtml()
       });
-      sends.push(safeSendEmail(contactTarget(requesterContact), decision.subject, toRequester.html, toRequester.text, "requester_library"));
-      sends.push(safeSendEmail(contactTarget(targetContact), decision.subject, toTarget.html, toTarget.text, "target_copy"));
+      sends.push(send(contactTarget(requesterContact), decision.subject, toRequester.html, toRequester.text, "requester_library"));
+      sends.push(send(contactTarget(targetContact), decision.subject, toTarget.html, toTarget.text, "target_copy"));
     }
     const results = await Promise.all(sends);
     return jsonResponse(200, {
       ok: true,
+      dry_run: dryRun,
       request_id: requestId,
       event_type: eventType,
       requester_library: firstFilled(requester?.short_name, requester?.name, row.requester_library_id),
