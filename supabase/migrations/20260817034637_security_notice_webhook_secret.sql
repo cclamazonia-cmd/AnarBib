@@ -11,6 +11,12 @@
 -- appeler les notifieurs existants. On ne le reutilise pas ici. Ce point est
 -- a traiter separement pour les autres fonctions.
 
+-- Garde-fou CI. Le job sql-tests reconstruit le schema dans une base FRAICHE
+-- qui n'herite pas des extensions : le Vault reel n'existe pas. Le stub
+-- tests/sql/_ci_setup_vault_stub.sql ne pose que vault.decrypted_secrets, ni
+-- vault.secrets ni vault.create_secret(). Sans ce bloc, la migration echoue en
+-- CI avec « relation vault.secrets does not exist » (42P01). Meme convention
+-- que les blocs DO/EXCEPTION autour de cron.schedule.
 do $$
 begin
   if not exists (select 1 from vault.secrets where name = 'WEBHOOK_SECRET_NOTIFY_SECURITY_NOTICE') then
@@ -20,6 +26,9 @@ begin
       'Secret d''appel de l''Edge Function notify-security-notice (avis de securite aux membres).'
     );
   end if;
+exception
+  when undefined_table or undefined_function or invalid_schema_name then
+    raise notice 'Vault indisponible (CI) : creation du secret ignoree. fn_check_security_notice_secret renverra false.';
 end $$;
 
 -- Comparaison du secret fourni avec celui du Vault. Ne renvoie jamais la valeur.
