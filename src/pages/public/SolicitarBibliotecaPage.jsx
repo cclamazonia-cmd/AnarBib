@@ -306,10 +306,14 @@ export default function SolicitarBibliotecaPage() {
 
       if (error) throw error;
 
-      // Try to send notification
-      try {
-        await supabase.functions.invoke('notify-library-request', { body: { request_id: data.id, event: 'new_request' } });
-      } catch {}
+      // La notification e-mail est déclenchée côté base, pas ici : le trigger
+      // trg_library_requests_notify sur library_requests appelle
+      // fn_enqueue_library_request_notification, qui poste vers l'Edge Function
+      // notify-library-request avec l'en-tête x-webhook-secret lu dans le vault.
+      // L'appel frontend qui existait ici était doublement mort (17/08/2026) :
+      // supabase.functions.invoke n'envoie que l'Authorization Bearer, jamais le
+      // secret webhook -> 401 ; et il postait `event` au lieu de `event_type`.
+      // Il était avalé par un catch vide. Ne pas le réintroduire.
 
       setSubmitted(true);
       setSummaryData(data);
