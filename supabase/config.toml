@@ -147,3 +147,9 @@ verify_jwt = false
 # vérifié côté base (fn_check_security_notice_secret), sans repli sur un Bearer.
 [functions.notify-security-notice]
 verify_jwt = false
+
+# Supervision : sonde de disponibilité appelée par le cron anarbib-health-probe
+# via net.http_post, donc sans JWT. Authentification = secret Vault
+# WEBHOOK_SECRET_HEALTH_PROBE, vérifié côté base (fn_check_health_probe_secret).
+[functions.health-probe]
+verify_jwt = false

@@ -24,3 +24,6 @@ tests/sql/invitation_equipe_tests.sql
 tests/sql/paquet_peb_ill_lifecycle_tests.sql
 tests/sql/reading_notes_rls_tests.sql
 tests/sql/reading_notes_lot5_work_per_book_tests.sql
+# Cohérence structurelle allowlist fn_enqueue_* ↔ CHECK des *_notification_events.
+# Purement catalogue système : ni fixture, ni donnée, ni Vault.
+tests/sql/notifications_event_types_coherence_tests.sql
