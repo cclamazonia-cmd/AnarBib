@@ -119,20 +119,52 @@ Deno.serve(async (req: Request) => {
   // ─── Destinataires ───────────────────────────────────────────
   // Personnes ayant une adhésion ACTIVE dans au moins une des bibliothèques
   // visées. Une personne rattachée à plusieurs biblios n'est comptée qu'une fois.
-  const { data: rows, error: qErr } = await supabaseAdmin
+  //
+  // Trois requêtes simples plutôt qu'une jointure imbriquée : PostgREST refuse
+  // d'embarquer `profiles` depuis `user_library_memberships`, qui possède
+  // plusieurs colonnes pointant vers les profils (user_id, restricted_by,
+  // physically_validated_by_user_id, pending_removal_requested_by) — l'embed
+  // est ambigu. Désambiguïser par le nom de contrainte marcherait mais casserait
+  // au moindre renommage.
+  const { data: libs, error: libErr } = await supabaseAdmin
+    .from('libraries')
+    .select('id')
+    .in('slug', librarySlugs);
+  if (libErr) {
+    console.error('[notify-security-notice] bibliotheques:', libErr.message);
+    return jsonResponse(500, { ok: false, error: libErr.message });
+  }
+  const libIds = (libs ?? []).map((l: any) => l.id);
+  if (!libIds.length) {
+    return jsonResponse(400, { ok: false, error: 'aucune bibliotheque pour ces slugs' });
+  }
+
+  const { data: mems, error: memErr } = await supabaseAdmin
     .from('user_library_memberships')
-    .select('user_id, libraries!inner(slug), profiles!inner(id, email, first_name, last_name, public_id, preferred_language)')
+    .select('user_id')
     .eq('status', 'active')
-    .in('libraries.slug', librarySlugs);
+    .in('library_id', libIds);
+  if (memErr) {
+    console.error('[notify-security-notice] adhesions:', memErr.message);
+    return jsonResponse(500, { ok: false, error: memErr.message });
+  }
+  const userIds = [...new Set((mems ?? []).map((m: any) => m.user_id).filter(Boolean))];
+  if (!userIds.length) {
+    return jsonResponse(200, { ok: true, dry_run: dryRun, destinataires: 0, details: [] });
+  }
+
+  const { data: rows, error: qErr } = await supabaseAdmin
+    .from('profiles')
+    .select('id, email, first_name, last_name, public_id, preferred_language')
+    .in('id', userIds);
 
   if (qErr) {
-    console.error('[notify-security-notice] requete destinataires:', qErr.message);
+    console.error('[notify-security-notice] profils:', qErr.message);
     return jsonResponse(500, { ok: false, error: qErr.message });
   }
 
   const byUser = new Map<string, any>();
-  for (const r of rows ?? []) {
-    const p = (r as any).profiles;
+  for (const p of (rows ?? []) as any[]) {
     if (p?.id && !byUser.has(p.id)) byUser.set(p.id, p);
   }
 
