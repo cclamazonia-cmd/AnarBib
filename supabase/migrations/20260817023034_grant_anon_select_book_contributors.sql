@@ -1,0 +1,21 @@
+-- Aligne `anon` sur `authenticated` pour public.book_contributors : droit de TABLE
+-- uniquement, la RLS reste inchangée.
+--
+-- Contexte. Suite du correctif 20260817022328. Une fois le blocage sur
+-- user_has_library_staff_role levé, la lecture anonyme de v_book_detail_public_v2
+-- échouait encore en 42501 « permission denied for table book_contributors ».
+-- La table est traversée via v_book_authors_canonical (author_display / author_chips).
+--
+-- Pourquoi c'est sans effet sur la confidentialité. La seule politique RLS de la
+-- table (book_contributors_catalogacao_librarian_all) vise le rôle `authenticated`
+-- et exige can_access_catalogacao. Aucune politique ne couvre `anon` : la RLS étant
+-- active, anon obtient donc ZÉRO ligne. Le grant ne rend rien de nouveau visible ;
+-- il change seulement l'issue de la requête, qui renvoie zéro ligne au lieu de
+-- faire échouer toute la fiche livre. C'est déjà le comportement d'un lecteur
+-- connecté non-catalogueur, qui a le grant et ne voit lui non plus aucune ligne.
+--
+-- Contenu : bibliographique (book_id, author_id, position, name, role), aucune
+-- donnée personnelle de lecteur. L'affichage public des contributeurs passe par
+-- le RPC dédié get_book_contributors_public, pas par cette table.
+
+grant select on public.book_contributors to anon;
