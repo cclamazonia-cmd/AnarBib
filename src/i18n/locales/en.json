@@ -4468,6 +4468,7 @@
   "rede.gazeta.i18nStatus.done": "Translated",
   "rede.gazeta.i18nStatus.error": "Translation error",
   "rede.gazeta.status.published": "Published",
+  "rede.gazeta.tagline": "The network gazette",
   "rede.gazeta.status.rejected": "Rejected",
   "rede.libraries.panoramaTitle": "Libraries overview ({count})",
   "rede.libraries.title": "Library overview",

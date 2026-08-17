@@ -217,7 +217,7 @@ export default function GazetteStaffPanel() {
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '1rem' }}>
-                    N°{String(iss.number).padStart(2, '0')} — {iss.masthead_title || iss.slug}
+                    N°{String(iss.number).padStart(2, '0')} — {((iss.masthead_title || '').split(' — ')[0] || iss.slug)} — {t({ id: 'rede.gazeta.tagline' })}
                     <span className={`cat-pill ${iss.status === 'published' ? 'ok' : 'warn'}`} style={{ fontSize: '.66rem', marginLeft: 8 }}>
                       {t({ id: `rede.gazeta.status.${iss.status}` })}
                     </span>

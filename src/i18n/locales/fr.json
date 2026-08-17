@@ -4475,6 +4475,7 @@
   "rede.gazeta.i18nStatus.done": "Traduit",
   "rede.gazeta.i18nStatus.error": "Erreur de traduction",
   "rede.gazeta.status.published": "Publiée",
+  "rede.gazeta.tagline": "La gazette du réseau",
   "rede.gazeta.status.rejected": "Rejetée",
   "rede.libraries.panoramaTitle": "Panorama des bibliothèques ({count})",
   "rede.libraries.title": "Panorama des bibliothèques",

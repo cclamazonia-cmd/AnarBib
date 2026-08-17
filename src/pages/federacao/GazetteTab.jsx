@@ -29,26 +29,30 @@ const LOCALE_NAMES = {
 
 // Chaînes UI propres à la gazette (libellés de rendu + bandeau de repli), traduites
 // pour les 10 locales — reprises de la maquette. Indépendantes du contenu éditorial.
+// `tagline` = sous-titre constant de la gazette (même sens à chaque numéro).
+// Servi ici comme constante i18n plutôt que depuis gazette_issue_locales.tagline,
+// dont la valeur peut être restée en français si l'automatisation a raté la
+// traduction (cf. N°03). Le nom « Rizoma » reste codé en dur (nom propre).
 const UI = {
-  'pt-BR': { lang: 'Idioma', pdf: 'Baixar PDF', page: 'Página', sources: 'Fontes',
+  'pt-BR': { lang: 'Idioma', pdf: 'Baixar PDF', page: 'Página', sources: 'Fontes', tagline: 'A gazeta da rede',
     pending: 'Tradução da comunidade em andamento — exibindo o conteúdo em francês.' },
-  fr: { lang: 'Langue', pdf: 'Télécharger le PDF', page: 'Page', sources: 'Sources',
+  fr: { lang: 'Langue', pdf: 'Télécharger le PDF', page: 'Page', sources: 'Sources', tagline: 'La gazette du réseau',
     pending: '' },
-  es: { lang: 'Idioma', pdf: 'Descargar PDF', page: 'Página', sources: 'Fuentes',
+  es: { lang: 'Idioma', pdf: 'Descargar PDF', page: 'Página', sources: 'Fuentes', tagline: 'La gaceta de la red',
     pending: 'Traducción comunitaria en curso — mostrando el contenido en francés.' },
-  en: { lang: 'Language', pdf: 'Download PDF', page: 'Page', sources: 'Sources',
+  en: { lang: 'Language', pdf: 'Download PDF', page: 'Page', sources: 'Sources', tagline: 'The network gazette',
     pending: 'Community translation in progress — showing the French content.' },
-  it: { lang: 'Lingua', pdf: 'Scarica PDF', page: 'Pagina', sources: 'Fonti',
+  it: { lang: 'Lingua', pdf: 'Scarica PDF', page: 'Pagina', sources: 'Fonti', tagline: 'La gazzetta della rete',
     pending: 'Traduzione della comunità in corso — viene mostrato il contenuto in francese.' },
-  de: { lang: 'Sprache', pdf: 'PDF herunterladen', page: 'Seite', sources: 'Quellen',
+  de: { lang: 'Sprache', pdf: 'PDF herunterladen', page: 'Seite', sources: 'Quellen', tagline: 'Die Gazette des Netzwerks',
     pending: 'Community-Übersetzung in Arbeit — angezeigt wird der französische Inhalt.' },
-  el: { lang: 'Γλώσσα', pdf: 'Λήψη PDF', page: 'Σελίδα', sources: 'Πηγές',
+  el: { lang: 'Γλώσσα', pdf: 'Λήψη PDF', page: 'Σελίδα', sources: 'Πηγές', tagline: 'Η εφημερίδα του δικτύου',
     pending: 'Μετάφραση από την κοινότητα σε εξέλιξη — εμφανίζεται το γαλλικό περιεχόμενο.' },
-  ca: { lang: 'Idioma', pdf: 'Baixa el PDF', page: 'Pàgina', sources: 'Fonts',
+  ca: { lang: 'Idioma', pdf: 'Baixa el PDF', page: 'Pàgina', sources: 'Fonts', tagline: 'La gaseta de la xarxa',
     pending: 'Traducció comunitària en curs — es mostra el contingut en francès.' },
-  eo: { lang: 'Lingvo', pdf: 'Elŝuti PDF', page: 'Paĝo', sources: 'Fontoj',
+  eo: { lang: 'Lingvo', pdf: 'Elŝuti PDF', page: 'Paĝo', sources: 'Fontoj', tagline: 'La gazeto de la reto',
     pending: 'Komunuma traduko daŭras — montrante la francan enhavon.' },
-  nl: { lang: 'Taal', pdf: 'PDF downloaden', page: 'Pagina', sources: 'Bronnen',
+  nl: { lang: 'Taal', pdf: 'PDF downloaden', page: 'Pagina', sources: 'Bronnen', tagline: 'De gazette van het netwerk',
     pending: 'Vertaling door de gemeenschap in uitvoering — de Franse inhoud wordt getoond.' },
 };
 
@@ -254,7 +258,7 @@ function buildDocHTML(data, ui, locale) {
       inner += `<div class="masthead">
         <div class="topline"><span>${S(m.left)}</span><span class="mid">${S(m.mid)}</span><span>${S(m.right)}</span></div>
         <div class="lockup">${EMBLEM}
-          <div class="wordmark">Rizo<b>ma</b><span class="tag">${S(data.tagline)}</span></div>
+          <div class="wordmark">Rizo<b>ma</b><span class="tag">${S(ui.tagline || data.tagline)}</span></div>
         </div></div>`;
     }
     inner += `<div class="kicker"><div class="sec"><span class="n">${String(idx + 1).padStart(2, '0')}</span>${S(pg.sec)}</div>
