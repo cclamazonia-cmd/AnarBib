@@ -231,13 +231,15 @@ Deno.serve(async (req: Request) => {
 
   try {
     const body = await req.json();
-    const email = String(body?.email || "").trim().toLowerCase();
+    // `email` peut être une adresse OU un numéro de lecteur (public_id) : la
+    // résolution se fait ici, plus côté client (cf. bloc « résolution » plus bas).
+    const identifier = String(body?.email || "").trim();
     const password = String(body?.password || "");
     const turnstileToken = String(body?.turnstile_token || "");
     const ip = getClientIP(req);
 
     // Validation basique des inputs
-    if (!email || !password) {
+    if (!identifier || !password) {
       return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 400);
     }
     if (!turnstileToken) {
@@ -250,20 +252,44 @@ Deno.serve(async (req: Request) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     );
 
-    // ─── Vérification rate limit AVANT toute autre opération ───
-    const [ipBlocked, emailBlocked] = await Promise.all([
-      isRateLimited(supabase, "ip", ip),
-      isRateLimited(supabase, "email", email),
-    ]);
-
-    if (ipBlocked || emailBlocked) {
+    // ─── Rate limit par IP, avant toute autre opération ────────
+    if (await isRateLimited(supabase, "ip", ip)) {
       return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
     }
 
     // ─── Vérification Turnstile ────────────────────────────────
+    // Placée AVANT la résolution de l'identifiant : sans cela, la traduction
+    // « numéro de lecteur -> e-mail » redeviendrait un service gratuit et
+    // énumérable, ce qui est exactement la fuite fermée le 2026-08-17.
     const captchaOk = await verifyTurnstile(turnstileToken, ip);
     if (!captchaOk) {
       return jsonResponse({ error: CAPTCHA_ERROR }, 400);
+    }
+
+    // ─── Résolution numéro de lecteur -> e-mail ────────────────
+    // resolve_login_email est SECURITY DEFINER et n'est plus exécutable par
+    // anon : seul le service_role y accède, donc uniquement par ici.
+    let email = identifier.toLowerCase();
+    if (!identifier.includes("@")) {
+      const { data: resolved } = await supabase.rpc("resolve_login_email", {
+        p_identifier: identifier,
+      });
+      const found = Array.isArray(resolved) ? resolved[0]?.email : null;
+      if (!found) {
+        // Identifiant inconnu : même réponse et même comptage qu'un mot de passe
+        // faux, pour ne pas révéler l'existence d'un numéro de lecteur.
+        await Promise.all([
+          recordFailure(supabase, "ip", ip, RATE_LIMIT_IP),
+          recordFailure(supabase, "email", email, RATE_LIMIT_EMAIL),
+        ]);
+        return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 401);
+      }
+      email = String(found).trim().toLowerCase();
+    }
+
+    // ─── Rate limit par e-mail (après résolution) ──────────────
+    if (await isRateLimited(supabase, "email", email)) {
+      return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
     }
 
     // ─── Tentative de login ────────────────────────────────────

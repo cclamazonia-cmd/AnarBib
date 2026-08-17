@@ -211,18 +211,17 @@ export default function LoginPage() {
     setLoginLoading(true);
     setLoginMsg({ text: '', kind: '' });
     try {
-      let email = loginId.trim();
-      if (!email.includes('@')) {
-        try {
-          const { data } = await supabase.rpc('resolve_login_email', { p_identifier: email });
-          const r = Array.isArray(data) ? data[0]?.email : data?.email;
-          if (r) email = r;
-        } catch {}
-      }
+      // On envoie l'identifiant tel quel : adresse e-mail OU numéro de lecteur.
+      // La traduction « numéro -> e-mail » se fait dans l'Edge Function, après
+      // le captcha. Elle était faite ici auparavant, via un RPC ouvert à anon :
+      // n'importe qui pouvait ainsi obtenir l'e-mail d'un membre à partir de son
+      // numéro, et les numéros s'énumèrent. Fuite fermée le 2026-08-17.
+      const email = loginId.trim();
 
       // Appel à l'Edge Function login (vs signInWithPassword direct).
       // L'Edge Function applique : vérif Turnstile + rate limit IP/email
-      // + signInWithPassword serveur, puis renvoie la session.
+      // + résolution de l'identifiant + signInWithPassword serveur,
+      // puis renvoie la session.
       const { data, error: invokeError } = await supabase.functions.invoke('login', {
         body: { email, password, turnstile_token: turnstileToken },
       });
