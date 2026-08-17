@@ -157,7 +157,24 @@ Deno.serve(async (req: Request) => {
     .limit(1)
     .maybeSingle();
 
-  const resultats = await Promise.all(sondes(unLivre?.id ?? null).map(mesurer));
+  const charge = await req.json().catch(() => ({}));
+
+  let resultats = await Promise.all(sondes(unLivre?.id ?? null).map(mesurer));
+
+  // `force_fail` : force le tour en échec, pour ÉPROUVER LA CHAÎNE D'ALERTE.
+  // Une alarme jamais déclenchée n'est pas une alarme : sans ça, on ne découvre
+  // qu'un e-mail se perd (adresse périmée, refus du fournisseur, secret tourné)
+  // que le jour où ça compte. À lancer deux fois de suite pour ouvrir un
+  // incident, puis une fois sans le drapeau pour le refermer.
+  // Protégé par le secret webhook comme le reste : vérifié plus haut.
+  if (charge?.force_fail === true) {
+    resultats = resultats.map((r) => ({
+      ...r,
+      ok: false,
+      error: 'TEST force_fail — échec simulé, le service va bien',
+    }));
+  }
+
   await supabaseAdmin.from('service_health_probes').insert(resultats);
 
   const tourOk = resultats.every((r) => r.ok);
@@ -196,9 +213,15 @@ Deno.serve(async (req: Request) => {
       .insert({ reason: raison || 'degradation' })
       .select('id')
       .single();
+    const estUnTest = charge?.force_fail === true;
     const n = await alerter(
-      'AnarBib — le service public est dégradé',
-      'Le service public est dégradé',
+      estUnTest
+        ? '[TEST] AnarBib — vérification de la chaîne d’alerte'
+        : 'AnarBib — le service public est dégradé',
+      estUnTest ? 'Ceci est un test de la chaîne d’alerte' : 'Le service public est dégradé',
+      (estUnTest
+        ? `<p style="margin:0 0 10px"><strong>Message de test.</strong> Le service fonctionne normalement ; cet envoi sert uniquement à vérifier que les alertes arrivent bien. Aucune action n'est requise.</p>`
+        : '') +
       `<p style="margin:0 0 10px">La sonde automatique a relevé <strong>deux tours consécutifs en échec</strong> sur les points d'entrée publics.</p>
        <p style="margin:0 0 10px">Détail du dernier tour :</p>
        <ul style="margin:0 0 10px;padding-left:18px">${resultats
