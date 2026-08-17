@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "snapshot": "node scripts/build-catalogue-snapshot.mjs",
+    "prebuild": "node scripts/build-catalogue-snapshot.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",

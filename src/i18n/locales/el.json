@@ -5775,5 +5775,6 @@
   "biblioteca.readingNotes.noteHidden": "Η σημείωση αποκρύφθηκε.",
   "biblioteca.readingNotes.noteRestored": "Η σημείωση αποκαταστάθηκε.",
   "biblioteca.readingNotes.reportResolved": "Η αναφορά διεκπεραιώθηκε.",
-  "biblioteca.readingNotes.viewWork": "Προβολή του έργου"
+  "biblioteca.readingNotes.viewWork": "Προβολή του έργου",
+  "catalog.degraded.notice": "Υποβαθμισμένη λειτουργία: η υπηρεσία δεν απάντησε. Εμφανίζεται αντίγραφο του καταλόγου της {date}. Η αναζήτηση λειτουργεί, αλλά η διαθεσιμότητα μπορεί να μην είναι ενημερωμένη και δεν είναι δυνατή η κράτηση."
 }

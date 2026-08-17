@@ -85,3 +85,8 @@ _handoff/
 # Conservés uniquement en local, hors suivi git — retirés du dépôt le 2026-07-07.
 /CLAUDE.md
 /.claude/
+
+# Instantané du catalogue pour le mode dégradé : régénéré à chaque build
+# (npm run prebuild). Pas versionné pour éviter un fichier de ~300 ko qui
+# changerait à chaque déploiement.
+public/catalogue-snapshot.json

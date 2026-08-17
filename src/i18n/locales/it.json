@@ -5775,5 +5775,6 @@
   "biblioteca.readingNotes.noteHidden": "Nota nascosta.",
   "biblioteca.readingNotes.noteRestored": "Nota ripristinata.",
   "biblioteca.readingNotes.reportResolved": "Segnalazione elaborata.",
-  "biblioteca.readingNotes.viewWork": "Vedi l'opera"
+  "biblioteca.readingNotes.viewWork": "Vedi l'opera",
+  "catalog.degraded.notice": "Modalità degradata: il servizio non ha risposto. Mostriamo una copia del catalogo del {date}. La ricerca funziona, ma la disponibilità può essere superata e non è possibile prenotare."
 }

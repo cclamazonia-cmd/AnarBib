@@ -5775,5 +5775,6 @@
   "biblioteca.readingNotes.noteHidden": "Noto kaŝita.",
   "biblioteca.readingNotes.noteRestored": "Noto restarigita.",
   "biblioteca.readingNotes.reportResolved": "Signalo traktita.",
-  "biblioteca.readingNotes.viewWork": "Vidi la verkon"
+  "biblioteca.readingNotes.viewWork": "Vidi la verkon",
+  "catalog.degraded.notice": "Difektita reĝimo: la servo ne respondis. Ni montras kopion de la katalogo de {date}. La serĉo funkcias, sed la disponebleco povas esti malaktuala kaj rezervi ne eblas."
 }

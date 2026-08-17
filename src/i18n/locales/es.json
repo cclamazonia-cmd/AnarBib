@@ -5775,5 +5775,6 @@
   "biblioteca.readingNotes.noteHidden": "Nota oculta.",
   "biblioteca.readingNotes.noteRestored": "Nota restablecida.",
   "biblioteca.readingNotes.reportResolved": "Reporte procesado.",
-  "biblioteca.readingNotes.viewWork": "Ver la obra"
+  "biblioteca.readingNotes.viewWork": "Ver la obra",
+  "catalog.degraded.notice": "Modo degradado: el servicio no respondió. Mostramos una copia del catálogo del {date}. La búsqueda funciona, pero la disponibilidad puede estar desactualizada y no se puede reservar."
 }

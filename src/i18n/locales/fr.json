@@ -5776,5 +5776,6 @@
   "biblioteca.readingNotes.noteHidden": "Note masquee.",
   "biblioteca.readingNotes.noteRestored": "Note retablie.",
   "biblioteca.readingNotes.reportResolved": "Signalement traite.",
-  "biblioteca.readingNotes.viewWork": "Voir l'oeuvre"
+  "biblioteca.readingNotes.viewWork": "Voir l'oeuvre",
+  "catalog.degraded.notice": "Mode dégradé : le service n’a pas répondu. Voici une copie du catalogue datée du {date}. La recherche fonctionne, mais la disponibilité peut être périmée et la réservation est impossible."
 }

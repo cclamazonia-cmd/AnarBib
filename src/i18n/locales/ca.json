@@ -5775,5 +5775,6 @@
   "biblioteca.readingNotes.noteHidden": "Nota amagada.",
   "biblioteca.readingNotes.noteRestored": "Nota restablerta.",
   "biblioteca.readingNotes.reportResolved": "Denúncia processada.",
-  "biblioteca.readingNotes.viewWork": "Veure l'obra"
+  "biblioteca.readingNotes.viewWork": "Veure l'obra",
+  "catalog.degraded.notice": "Mode degradat: el servei no ha respost. Mostrem una còpia del catàleg del {date}. La cerca funciona, però la disponibilitat pot estar desactualitzada i no es pot reservar."
 }

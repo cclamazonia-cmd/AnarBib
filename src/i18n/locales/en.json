@@ -5775,5 +5775,6 @@
   "biblioteca.readingNotes.noteHidden": "Note hidden.",
   "biblioteca.readingNotes.noteRestored": "Note restored.",
   "biblioteca.readingNotes.reportResolved": "Report handled.",
-  "biblioteca.readingNotes.viewWork": "View the work"
+  "biblioteca.readingNotes.viewWork": "View the work",
+  "catalog.degraded.notice": "Degraded mode: the service did not respond. Showing a copy of the catalogue from {date}. Search works, but availability may be out of date and reserving is unavailable."
 }

@@ -5775,5 +5775,6 @@
   "biblioteca.readingNotes.noteHidden": "Notiz verborgen.",
   "biblioteca.readingNotes.noteRestored": "Notiz wiederhergestellt.",
   "biblioteca.readingNotes.reportResolved": "Meldung bearbeitet.",
-  "biblioteca.readingNotes.viewWork": "Werk ansehen"
+  "biblioteca.readingNotes.viewWork": "Werk ansehen",
+  "catalog.degraded.notice": "Eingeschränkter Modus: Der Dienst hat nicht geantwortet. Angezeigt wird eine Kopie des Katalogs vom {date}. Die Suche funktioniert, aber die Verfügbarkeit kann veraltet sein und Vormerkungen sind nicht möglich."
 }

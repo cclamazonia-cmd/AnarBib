@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
+import { catalogueDeSecours } from '@/lib/catalogueFallback';
 import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -218,6 +219,9 @@ export default function CatalogPage() {
   const [hasMore, setHasMore] = useState(false);
   const [totalFetched, setTotalFetched] = useState(0);
   const [totalCount, setTotalCount] = useState(null);
+  // Non nul = la liste affichée vient de l'instantané statique, l'API n'ayant
+  // pas répondu. Contient la date de production de cet instantané.
+  const [degradedSince, setDegradedSince] = useState(null);
 
   // Charger les filtres sauvegardés au montage uniquement (lazy initializer)
   const [filterState] = useState(() => loadSavedFilters() || {});
@@ -398,6 +402,9 @@ export default function CatalogPage() {
   // Fetch
   const fetchBooks = useCallback(async (offset = 0, append = false) => {
     if (offset === 0) setLoading(true); else setLoadingMore(true);
+    // Remis à zéro ici plutôt que sur chaque chemin de succès : si l'API répond,
+    // le mode dégradé n'est simplement jamais réactivé plus bas.
+    if (!append) setDegradedSince(null);
     try {
       // (1b) Recherche INSENSIBLE AUX ACCENTS + classée par pertinence via le RPC
       // api.catalog_search_ids_v1 (branche anon/session selon la visibilité de
@@ -473,7 +480,30 @@ export default function CatalogPage() {
         // Phase B.7 : totalCount via Content-Range (cohérent avec la grille, respecte la visibility).
         if (serverTotal != null) setTotalCount(serverTotal);
       }
-    } catch (err) { console.error('Catalog fetch error:', err); if (!append) setBooks([]); }
+    } catch (err) {
+      console.error('Catalog fetch error:', err);
+      // Mode dégradé : l'API n'a pas répondu. Le front est statique (Codeberg
+      // Pages) et embarque un instantané du catalogue produit au build, donc on
+      // peut continuer à chercher et consulter, sur des données pouvant dater
+      // du dernier déploiement. Uniquement au premier chargement : en
+      // pagination (append), on laisse la liste en l'état plutôt que de la
+      // mélanger avec une autre source.
+      if (!append) {
+        let servi = false;
+        try {
+          const secours = await catalogueDeSecours(dSearch);
+          if (secours) {
+            setBooks(secours.livres.slice(0, PAGE_SIZE));
+            setTotalCount(secours.total);
+            setTotalFetched(Math.min(PAGE_SIZE, secours.livres.length));
+            setHasMore(false);
+            setDegradedSince(secours.genereLe);
+            servi = true;
+          }
+        } catch { /* pas d'instantané : on retombe sur la liste vide */ }
+        if (!servi) setBooks([]);
+      }
+    }
     finally { setLoading(false); setLoadingMore(false); }
     // libraryShortNames (et pas seulement libraryFilter) DOIT être une dep : sur un
     // lien profond /catalogo/:slug, libraryFilter est posé au montage AVANT le chargement
@@ -1256,6 +1286,18 @@ export default function CatalogPage() {
         </Pill>
         <Pill>{t({ id: 'catalog.stats.sort' }, { label: sortLabel(sortValue, SORT_OPTIONS) })}</Pill>
       </div>
+
+      {/* Mode dégradé : l'API n'a pas répondu, la liste vient de l'instantané
+          embarqué au build. On le dit clairement plutôt que d'afficher des
+          données périmées comme si de rien n'était. */}
+      {degradedSince && (
+        <div className="ab-catalog-degraded" role="status" aria-live="polite">
+          {t(
+            { id: 'catalog.degraded.notice' },
+            { date: new Date(degradedSince).toLocaleString() },
+          )}
+        </div>
+      )}
 
       {/* ══ TABLE ═════════════════════════════════════════════ */}
       {loading ? (
