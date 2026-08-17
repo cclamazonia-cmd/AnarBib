@@ -153,3 +153,9 @@ verify_jwt = false
 # WEBHOOK_SECRET_HEALTH_PROBE, vérifié côté base (fn_check_health_probe_secret).
 [functions.health-probe]
 verify_jwt = false
+
+# Récapitulatif hebdomadaire des actions inter-bibliothèques (transparence des
+# pouvoirs d'administration réseau). Appelée par le cron
+# anarbib-notify-cross-library-digest-weekly via net.http_post, donc sans JWT.
+[functions.notify-cross-library-digest]
+verify_jwt = false
