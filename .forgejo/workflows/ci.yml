@@ -180,8 +180,15 @@ jobs:
             # doit plus abattre tout le job (set -e) — fonctions suivantes + étape
             # `db push` comprises. Vécu 16/06 (502 sur notify-interlibrary-loan a bloqué
             # le déploiement de register + l'application d'une migration). 3 essais / 8s.
+            # `timeout 180` : la boucle de retry ci-dessous ne peut RIEN contre un
+            # deploiement qui HANG — la commande ne rend jamais la main, donc le
+            # `until` ne se re-evalue jamais et le job reste bloque jusqu'a ce que
+            # le runner le tue. Vecu le 17/08 (run #605) : hang sur
+            # notify-network-weekly-report, job mort apres 1 h 06, 18 fonctions non
+            # deployees. Un deploiement prend 1 a 3 s en pratique -> 180 s est une
+            # marge enorme. Meme motif que le `timeout 150` du push Pages ci-dessus.
             n=0
-            until supabase functions deploy "$fn_name" --project-ref "$SUPABASE_PROJECT_REF"; do
+            until timeout 180 supabase functions deploy "$fn_name" --project-ref "$SUPABASE_PROJECT_REF"; do
               n=$((n+1))
               if [ "$n" -ge 3 ]; then echo "✗ deploy $fn_name échoué après 3 tentatives"; exit 1; fi
               echo "↻ deploy $fn_name KO (tentative $n/3 — 502 transitoire ?) — retry 8s…"

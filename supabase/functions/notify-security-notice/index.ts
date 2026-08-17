@@ -25,7 +25,17 @@
 //     headers := jsonb_build_object(
 //       'content-type','application/json',
 //       'x-webhook-secret', (select decrypted_secret from vault.decrypted_secrets
-//                            where name='WEBHOOK_SECRET_NOTIFY_SECURITY_NOTICE')));
+//                            where name='WEBHOOK_SECRET_NOTIFY_SECURITY_NOTICE')),
+//     timeout_milliseconds := 120000);
+//
+// ⚠ TOUJOURS passer `timeout_milliseconds` sur un envoi reel. Le defaut de pg_net
+// est de 5 s, largement insuffisant : ~13 destinataires prennent plus longtemps
+// (generation + update + appel Resend, en serie). Le client abandonne alors que
+// la fonction, elle, CONTINUE et va au bout — on se retrouve sans reponse alors
+// que les e-mails sont partis. Vecu le 17/08. En cas de doute apres un timeout :
+// NE PAS relancer (risque de double envoi), verifier d'abord le format des
+// public_id dans `profiles` et les lignes « [security_notice] sent to » dans
+// les logs de fonction.
 
 import { supabaseAdmin } from '../_shared/core/env.ts';
 import { renderEmail, footerPadrao } from '../_shared/mail/layout.ts';
