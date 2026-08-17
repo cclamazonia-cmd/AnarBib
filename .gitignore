@@ -90,3 +90,8 @@ _handoff/
 # (npm run prebuild). Pas versionné pour éviter un fichier de ~300 ko qui
 # changerait à chaque déploiement.
 public/catalogue-snapshot.json
+
+# Pile auto-hebergee (secrets) — ajoute le 2026-08-17
+deploy/.env
+deploy/functions.env
+deploy/genkeys.mjs
