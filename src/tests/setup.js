@@ -13,7 +13,6 @@ vi.mock('@/lib/supabase', () => ({
     auth: { getSession: () => ({ data: { session: null } }) },
   },
   apiQuery: () => Promise.resolve({ data: [], error: null }),
-  notifyEvent: () => Promise.resolve(),
 }));
 
 // Mock Auth context

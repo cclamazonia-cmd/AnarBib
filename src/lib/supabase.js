@@ -33,31 +33,22 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   },
 });
 
-/**
- * Déclenche une notification mail via l'edge function notify-event.
- *
- * Appelée après chaque action de circulation réussie (réservation, workflow, emprunt, devolução).
- * Le edge function gère : quel mail envoyer, à qui (lecteur, bibliothèque, réseau),
- * et respecte les politiques de notification de chaque bibliothèque.
- *
- * @param {string} event - Type d'événement (ex: 'reserva_v2_criada', 'emprestimo_v2_criado', etc.)
- * @param {number} recordId - ID de la réservation ou de l'emprunt
- * @param {object} extra - Données supplémentaires optionnelles (line_nos, workflow_stage, etc.)
- */
-export async function notifyEvent(event, recordId, extra = {}) {
-  try {
-    const { data, error } = await supabase.functions.invoke('notify-event', {
-      body: { event, record_id: recordId, ...extra },
-    });
-    if (error) console.warn(`notifyEvent(${event}, ${recordId}) error:`, error);
-    else console.log(`notifyEvent(${event}, ${recordId}) ok:`, data);
-    return { data, error };
-  } catch (err) {
-    // Ne pas bloquer l'UX si la notification échoue
-    console.warn(`notifyEvent(${event}, ${recordId}) failed silently:`, err);
-    return { data: null, error: err };
-  }
-}
+// PAS de helper notifyEvent ici — et il ne faut pas le réintroduire.
+//
+// Les notifications de circulation partent de la BASE, pas du navigateur : les
+// triggers sur reservas/emprestimos alimentent les outbox, dont les dispatchers
+// (fn_dispatch_notify_event, fn_*_outbox_dispatch_trigger…) appellent
+// notify-event en lisant le secret dans le Vault et en l'envoyant en
+// x-webhook-secret. C'est le sens du « notifyEvent manuel supprimé, le trigger
+// DB s'en charge » qu'on lit dans PanelPage/AccountPage depuis le paquet 9
+// (10/05/2026).
+//
+// L'ancien helper appelait notify-event via supabase.functions.invoke, qui
+// n'envoie QUE l'Authorization du navigateur, jamais le secret webhook. Il ne
+// marchait que grâce au repli « Bearer bien formé » de authorizeWebhook —
+// repli qui rendait les notifieurs appelables par n'importe qui et qui a été
+// supprimé le 2026-08-17 (commit 406bf9bfe). Depuis, un tel appel se prend un
+// 401 : le helper était donc du code mort doublé d'un piège, retiré ici.
 
 /**
  * Requête REST directe vers une vue du schéma "api".
