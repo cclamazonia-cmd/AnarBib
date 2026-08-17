@@ -190,6 +190,8 @@ function buildShelfLabel({ author = '', title = '', cdd = '' } = {}) {
 // ── Formulário vazio ───────────────────────────────────────
 const EMPTY_FORM = {
   id: '', published_book_id: '', batch_id: '', action: 'create', bib_ref: '',
+  // Œuvre parente (nouvelle édition d'une œuvre existante) + exemplaires initiaux
+  work_id: '', initial_copies: '1', initial_copies_library_id: '',
   tipo_material: 'livro', titulo: '', subtitulo: '', autor: '',
   edicao: '', editora: '', publisher_id: '', colecao: '', local_publicacao: '', ano: '',
   isbn: '', issn: '',
@@ -310,6 +312,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   // P4 v2 : suggestions d'éditions à regrouper (même auteur·rice + titre proche)
   const [editionSugg, setEditionSugg] = useState(null); // null = pas cherché
   const [editionSuggLoading, setEditionSuggLoading] = useState(false);
+  // Pop-up de création : œuvre nouvelle vs nouvelle édition d'une œuvre existante
+  const [creationChoice, setCreationChoice] = useState(null); // null (non choisi) | 'work' | 'edition'
+  const [linkedWorkLabel, setLinkedWorkLabel] = useState(''); // titre de l'œuvre rattachée (affichage)
+  const [editionQuery, setEditionQuery] = useState('');
+  const [editionResults, setEditionResults] = useState([]);
+  const [editionSearching, setEditionSearching] = useState(false);
   const [saving, setSaving] = useState(false);
   const [draftState, setDraftState] = useState('new'); // new | saved | dirty | ready | published
 
@@ -607,6 +615,44 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setDigitalForm(null);
     setBnResult(null);
     setLastPublished(null);
+    // Nouvelle fiche vierge → on re-pose la question œuvre/édition.
+    setCreationChoice(null);
+    setLinkedWorkLabel('');
+    setEditionQuery('');
+    setEditionResults([]);
+  }
+
+  // ── Recherche d'une œuvre existante via ses éditions publiées (débounce 350ms) ──
+  // Pour « nouvelle édition d'une œuvre déjà au catalogue » : on cherche parmi les
+  // fiches publiées ; sélectionner une fiche rattache le brouillon à SON work_id.
+  useEffect(() => {
+    const q = editionQuery.trim();
+    if (q.length < 3) { setEditionResults([]); setEditionSearching(false); return; }
+    let cancelled = false;
+    setEditionSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await supabase.from('books')
+          .select('id, work_id, titulo, autor, ano, edicao, editora, bib_ref')
+          .not('work_id', 'is', null)
+          .ilike('titulo', `%${q}%`)
+          .order('titulo').limit(8);
+        if (!cancelled) setEditionResults(data || []);
+      } catch { if (!cancelled) setEditionResults([]); }
+      finally { if (!cancelled) setEditionSearching(false); }
+    }, 350);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [editionQuery]);
+
+  // Rattache le brouillon à l'œuvre de la fiche choisie + pré-remplit l'identité
+  // partagée (titre/auteur), en laissant les champs propres à l'édition vides.
+  function selectEditionAsWork(bk) {
+    set('work_id', bk.work_id ? String(bk.work_id) : '');
+    setForm(prev => ({ ...prev, titulo: prev.titulo || bk.titulo || '', autor: prev.autor || bk.autor || '' }));
+    setLinkedWorkLabel(bk.titulo || '');
+    setCreationChoice('edition');
+    setEditionQuery('');
+    setEditionResults([]);
   }
 
   // ── Derived state ──────────────────────────────────────
@@ -1776,6 +1822,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         batch_id: f('batch_id') ? Number(f('batch_id')) : null,
         action: f('published_book_id') ? 'update' : 'create',
         status: 'draft',
+        // Œuvre parente (nouvelle édition) + exemplaires initiaux à la publication.
+        // initial_copies_library_id n'est honoré côté serveur que pour un·e admin réseau.
+        work_id: f('work_id') ? Number(f('work_id')) : null,
+        initial_copies: Math.max(1, Math.min(50, parseInt(f('initial_copies'), 10) || 1)),
+        initial_copies_library_id: (isNetworkAdmin && f('initial_copies_library_id')) ? f('initial_copies_library_id') : null,
         bib_ref: f('bib_ref') || null,
         titulo: f('titulo').trim(),
         subtitulo: f('subtitulo') || null,
@@ -1947,8 +1998,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     setDupBanner(null);
 
     try {
-      // Mark as ready first
-      await supabase.from('book_drafts').update({ status: 'ready' }).eq('id', Number(draftId));
+      // Mark as ready first + fige les paramètres œuvre/exemplaires les plus récents
+      // (indépendamment d'une éventuelle sauvegarde antérieure). initial_copies_library_id
+      // n'est de toute façon honoré côté serveur que pour un·e admin réseau.
+      await supabase.from('book_drafts').update({
+        status: 'ready',
+        work_id: f('work_id') ? Number(f('work_id')) : null,
+        initial_copies: Math.max(1, Math.min(50, parseInt(f('initial_copies'), 10) || 1)),
+        initial_copies_library_id: (isNetworkAdmin && f('initial_copies_library_id')) ? f('initial_copies_library_id') : null,
+      }).eq('id', Number(draftId));
       const { data: newBookId, error } = await supabase.rpc('publish_book_draft', { p_draft_id: Number(draftId) });
       if (error) throw error;
 
@@ -2385,6 +2443,54 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           un sheet distinct (carte « catalogue »). */}
       <div className="ab-work">
       <form onSubmit={handleSave}>
+
+        {/* ── Pop-up création : œuvre nouvelle vs nouvelle édition d'une œuvre existante ── */}
+        <Modal
+          isOpen={creationChoice === null && !f('id') && !f('published_book_id') && !editingId && !prefillRecord}
+          onClose={() => setCreationChoice('work')}
+          title={t({ id: 'catalogacao.create.title' })}
+          size="medium"
+        >
+          <p style={{ margin: '0 0 12px', fontSize: '.9rem' }}>{t({ id: 'catalogacao.create.question' })}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <button type="button" className="ab-button" style={{ textAlign: 'left', display: 'block' }}
+              onClick={() => { set('work_id', ''); setLinkedWorkLabel(''); setCreationChoice('work'); }}>
+              <div style={{ fontWeight: 700 }}>{t({ id: 'catalogacao.create.newWork' })}</div>
+              <div style={{ fontSize: '.72rem', opacity: .85 }}>{t({ id: 'catalogacao.create.newWorkDesc' })}</div>
+            </button>
+            <div style={{ padding: 10, borderRadius: 8, border: '1px solid rgba(255,255,255,.12)' }}>
+              <div style={{ fontWeight: 700, fontSize: '.85rem' }}>{t({ id: 'catalogacao.create.newEdition' })}</div>
+              <div style={{ fontSize: '.72rem', opacity: .85, marginBottom: 6 }}>{t({ id: 'catalogacao.create.newEditionDesc' })}</div>
+              <input type="text" value={editionQuery} onChange={e => setEditionQuery(e.target.value)}
+                placeholder={t({ id: 'catalogacao.create.searchEdition' })}
+                style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
+              {editionQuery.trim().length >= 3 && (
+                <div style={{ marginTop: 4, maxHeight: 220, overflowY: 'auto', border: '1px solid rgba(255,255,255,.1)', borderRadius: 6 }}>
+                  {editionSearching && <div style={{ padding: '8px 12px', fontSize: '.74rem', color: 'var(--brand-muted,#999)' }}>{t({ id: 'common.searching' })}</div>}
+                  {!editionSearching && editionResults.length === 0 && <div style={{ padding: '8px 12px', fontSize: '.74rem', color: 'var(--brand-muted,#999)' }}>{t({ id: 'catalogacao.create.noEditionFound' })}</div>}
+                  {editionResults.map(bk => (
+                    <button type="button" key={bk.id} onClick={() => selectEditionAsWork(bk)}
+                      style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', background: 'none', border: 'none', borderBottom: '1px solid rgba(255,255,255,.06)', cursor: 'pointer', color: 'inherit' }}>
+                      <div style={{ fontSize: '.8rem', fontWeight: 700 }}>{bk.titulo}{bk.ano ? ` (${bk.ano})` : ''}</div>
+                      <div style={{ fontSize: '.7rem', color: 'var(--brand-muted,#aaa)' }}>{[bk.autor, bk.edicao, bk.editora, bk.bib_ref ? `ref. ${bk.bib_ref}` : ''].filter(Boolean).join(' · ')}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </Modal>
+
+        {/* Bandeau : fiche rattachée à une œuvre existante */}
+        {f('work_id') && !f('published_book_id') && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 12, padding: '8px 12px', borderRadius: 8, background: 'rgba(16,185,129,.08)', border: '1px solid rgba(16,185,129,.25)' }}>
+            <span style={{ fontSize: '.8rem' }}>{t({ id: 'catalogacao.create.linkedWork' }, { title: linkedWorkLabel || `#${f('work_id')}` })}</span>
+            <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+              onClick={() => { set('work_id', ''); setLinkedWorkLabel(''); }}>
+              {t({ id: 'catalogacao.work.detach' })}
+            </button>
+          </div>
+        )}
 
         {/* ── Cover anchor (Lot 6 — logique lookup dans CAT-C3/C4) ── */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 18, flexWrap: 'wrap', alignItems: 'flex-start' }}>
@@ -3279,6 +3385,32 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             </div>
           )}
         </div>
+
+        {/* ── Exemplaires initiaux (fiche non encore publiée) ─── */}
+        {!f('published_book_id') && (
+          <div style={{ marginTop: 16, padding: 12, borderRadius: 10, background: 'rgba(29,78,216,.06)', border: '1px solid rgba(29,78,216,.15)' }}>
+            <div style={{ fontSize: '.82rem', fontWeight: 700, marginBottom: 8 }}>{t({ id: 'catalogacao.publish.copiesTitle' })}</div>
+            <div className="cat-book-grid">
+              <div className="cat-field">
+                <label>{t({ id: 'catalogacao.publish.copiesLabel' })}</label>
+                <input type="number" min="1" max="50" value={f('initial_copies')}
+                  onChange={e => set('initial_copies', e.target.value)}
+                  style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
+                <div style={{ fontSize: '.7rem', color: 'var(--brand-muted,#888)', marginTop: 2 }}>{t({ id: 'catalogacao.publish.copiesHint' })}</div>
+              </div>
+              {isNetworkAdmin && (
+                <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+                  <label>{t({ id: 'catalogacao.publish.copiesLibrary' })}</label>
+                  <select value={f('initial_copies_library_id')} onChange={e => set('initial_copies_library_id', e.target.value)}
+                    style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}>
+                    <option value="">{t({ id: 'catalogacao.publish.copiesLibraryDefault' })}</option>
+                    {catalogLibraries.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                  </select>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* ── Action buttons ─────────────────────────── */}
         <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
