@@ -141,3 +141,9 @@ verify_jwt = false
 # autorisation re-validée par fn_ill_signed_url ; URL signée TTL court (mode ponctuel).
 [functions.read-ill-shared-asset]
 verify_jwt = false
+
+# Avis de sécurité aux membres. Appelée depuis SQL via net.http_post, sans JWT :
+# l'authentification est le secret Vault WEBHOOK_SECRET_NOTIFY_SECURITY_NOTICE,
+# vérifié côté base (fn_check_security_notice_secret), sans repli sur un Bearer.
+[functions.notify-security-notice]
+verify_jwt = false
