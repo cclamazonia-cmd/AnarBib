@@ -64,7 +64,11 @@ Chantiers structurants consolidés (mai–juin 2026, toujours en place) :
 
 Chantiers de fond hérités (toujours en production) : Admin réseau (cooptation/retrait collectif à l'unanimité), Profils d'adoption (4 axes politiques orthogonaux : `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), workflow des consultations sur place, catalogue de découverte (longue traîne OPAC), autorités enrichies, PEB / partage numérique, fonds sonores, lecteur ePub et OCR.
 
-**Passage au codage à la main (07/07/2026)** — `CLAUDE.md` et le dossier `.claude/` (commandes + skills des agents) ont été **retirés du suivi git** ; conservés uniquement en local et ignorés via `.gitignore`. Ils ne font plus partie du dépôt.
+**Usage de l'IA — état et trajectoire (mise à jour 17/08/2026)** — Ce dépôt est développé avec l'assistance d'un LLM, et nous préférons l'écrire que le laisser deviner. Le 07/07/2026, `CLAUDE.md` et le dossier `.claude/` (commandes + skills des agents) ont été **retirés du suivi git** ; ils restent en local, ignorés via `.gitignore`. Cette décision a sorti l'outillage du dépôt — elle n'a pas mis fin à l'assistance, et la formulation initiale (« passage au codage à la main ») était trompeuse sur ce point.
+
+AnarBib est né d'un besoin réel du milieu et d'un mainteneur unique dont les compétences techniques étaient proches de zéro il y a quelques mois. L'assistance a permis à l'outil d'exister ; elle crée en retour une dépendance que nous cherchons à réduire **au plus vite**, par trois moyens : documenter le fonctionnement plutôt que le code (`docs/`), réduire la surface technique du projet (voir Déploiement), et ouvrir le développement à d'autres mains. Le but explicite est que ce paragraphe devienne caduc.
+
+**LLM en production** — deux Edge Functions appellent une API de LLM : `gazette-monthly-build` et `translate-gazette-submission`, pour la construction et la traduction de la gazette du réseau. Ni le catalogue, ni la circulation, ni les données des lectrices n'en dépendent.
 
 Le détail des chantiers en cours, des dettes et des priorités vit dans le backlog courant (`docs/backlogs/`, voir `INDEX.md` pour la version courante) et le `REGISTRE_decisions.md` des specs.
 
@@ -92,7 +96,11 @@ Structural work consolidated (May–June 2026, still in place):
 
 Inherited core work (still in production): Network admin (unanimous co-optation/collective removal), Adoption profiles (4 orthogonal political axes: `catalog_mode`, `circulation_mode`, `network_mode`, `governance_mode`), on-site consultation workflow, discovery catalogue (OPAC long tail), enriched authorities, ILL / digital sharing, audio fonds, ePub reader and OCR.
 
-**Move to hand coding (07/07/2026)** — `CLAUDE.md` and the `.claude/` directory (agent commands + skills) were **removed from git tracking**; kept locally only and ignored via `.gitignore`. They are no longer part of the repository.
+**AI usage — state and direction (updated 17/08/2026)** — This repository is developed with LLM assistance, and we would rather write it down than leave it to be guessed. On 07/07/2026, `CLAUDE.md` and the `.claude/` directory (agent commands + skills) were **removed from git tracking**; they remain local, ignored via `.gitignore`. That decision took the tooling out of the repository — it did not end the assistance, and the original wording ("move to hand coding") was misleading on that point.
+
+AnarBib grew out of a real need in the movement and a single maintainer whose technical skills were close to zero a few months ago. The assistance is what allowed the tool to exist; in return it creates a dependency we intend to reduce **as fast as we can**, by three means: documenting how the thing works rather than the code (`docs/`), shrinking the project's technical surface (see Deployment), and opening development to other hands. The explicit goal is for this paragraph to become obsolete.
+
+**LLM in production** — two Edge Functions call an LLM API: `gazette-monthly-build` and `translate-gazette-submission`, for building and translating the network gazette. Neither the catalogue, nor circulation, nor reader data depends on it.
 
 The detail of work in progress, debts and priorities lives in the current backlog (`docs/backlogs/`, see `INDEX.md` for the current version) and the specs' `REGISTRE_decisions.md`.
 
@@ -314,11 +322,11 @@ Keys (`anon`, `service_role`) live in `.env`/`.env.local`, **never** in code. Th
 
 ### Déploiement (FR)
 
-Le déploiement est automatisé via **Forgejo Actions** sur Codeberg (`.forgejo/workflows/ci.yml`), déclenché sur `push`/`workflow_dispatch` de `main`. Le workflow tourne sur un **runner auto-hébergé** (`anarbib-local`, `forgejo-runner` en service systemd sur le WSL2 du mainteneur) : il ne tourne donc que lorsque la machine est allumée ; hors ligne, les runs **attendent**. Bypass CI : `[CI SKIP]` / `[skip ci]` dans le message de commit.
+Le déploiement est automatisé via **Forgejo Actions** sur Codeberg (`.forgejo/workflows/ci.yml`), déclenché sur `push`/`workflow_dispatch` de `main`. Le workflow tourne sur un **runner auto-hébergé** (`anarbib-local`, `forgejo-runner` en service systemd sur le WSL2 du mainteneur) : il ne tourne donc que lorsque la machine est allumée ; hors ligne, les runs **attendent**. Bypass CI : `[skip ci]` ou `[ci skip]` dans le message de commit (**minuscules uniquement** — Forgejo n'honore pas `[CI SKIP]`).
 
 Deux jobs séquentiels (le découpage est imposé par la limite ~5 min/job des runners) :
 
-- **`app`** : install → **lint bloquant** → **test bloquant** → build Vite → déploiement Codeberg Pages (branche `pages`, commit orphelin force-push).
+- **`app`** : install → **lint bloquant** → **test bloquant** → build Vite → déploiement Codeberg Pages (branche `pages`, **push delta** en HTTP/1.1 avec 3 tentatives ; l'ancien commit orphelin poussait tout `dist/` et corrompait le pack côté Codeberg). Étape **non bloquante** : elle peut échouer sans faire échouer le run.
 - **`backend`** (`needs: app`) : déploiement des Edge Functions → `supabase db push --linked --include-all`. Utilise la **CLI Supabase v2.98.1**.
 
 Un second workflow (`.forgejo/workflows/sql-tests.yml`) reconstruit le schéma public et déroule les tests SQL d'acceptation (sans `pg_cron` : tout `cron.schedule` d'une migration doit être dans un bloc `DO`/`EXCEPTION` sinon la CI casse).
@@ -359,11 +367,11 @@ supabase functions deploy register --no-verify-jwt
 
 ### Deployment (EN)
 
-Deployment is automated through **Forgejo Actions** on Codeberg (`.forgejo/workflows/ci.yml`), triggered on `push`/`workflow_dispatch` of `main`, running on a **self-hosted runner** (`anarbib-local`, `forgejo-runner` systemd service on the maintainer's WSL2): it only runs while that machine is on; offline, runs **wait**. CI bypass: `[CI SKIP]` / `[skip ci]` in the commit message.
+Deployment is automated through **Forgejo Actions** on Codeberg (`.forgejo/workflows/ci.yml`), triggered on `push`/`workflow_dispatch` of `main`, running on a **self-hosted runner** (`anarbib-local`, `forgejo-runner` systemd service on the maintainer's WSL2): it only runs while that machine is on; offline, runs **wait**. CI bypass: `[skip ci]` or `[ci skip]` in the commit message (**lowercase only** — Forgejo does not honour `[CI SKIP]`).
 
 Two sequential jobs (the split is imposed by the ~5 min/job runner limit):
 
-- **`app`**: install → **blocking lint** → **blocking test** → Vite build → Codeberg Pages deploy (`pages` branch, orphan commit force-push).
+- **`app`**: install → **blocking lint** → **blocking test** → Vite build → Codeberg Pages deploy (`pages` branch, **delta push** over HTTP/1.1 with 3 retries; the former orphan commit pushed the whole of `dist/` and corrupted the pack on Codeberg's side). **Non-blocking** step: it can fail without failing the run.
 - **`backend`** (`needs: app`): Edge Functions deploy → `supabase db push --linked --include-all`. Uses **Supabase CLI v2.98.1**.
 
 A second workflow (`.forgejo/workflows/sql-tests.yml`) rebuilds the public schema and runs the SQL acceptance tests (without `pg_cron`: any `cron.schedule` in a migration must sit inside a `DO`/`EXCEPTION` block or CI breaks).
