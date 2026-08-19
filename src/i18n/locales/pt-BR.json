@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Verificação anti-robô em andamento…",
   "altcha.ok": "Verificação concluída.",
   "altcha.erreur": "A verificação não funcionou.",
-  "altcha.reessayer": "Tentar de novo"
+  "altcha.reessayer": "Tentar de novo",
+  "catalogacao.dedup.scanTabInternal": "Para fundir",
+  "catalogacao.dedup.scanTabCross": "Para mutualizar",
+  "catalogacao.dedup.scanHelpInternal": "Dois registros pertencentes a mesma biblioteca: e uma duplicata real, a fusao e oferecida.",
+  "catalogacao.dedup.scanHelpCross": "A mesma obra catalogada separadamente por bibliotecas diferentes. Fundi-las equivaleria a mutualizar o registro, o que envolve outra biblioteca: prefira « Mesma obra ».",
+  "catalogacao.dedup.scanKindIsbn": "ISBN idêntico",
+  "catalogacao.dedup.scanKindApprox": "Título próximo",
+  "catalogacao.dedup.scanOpen": "Abrir"
 }

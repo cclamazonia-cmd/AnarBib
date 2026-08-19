@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Kontrolo kontraŭ robotoj daŭras…",
   "altcha.ok": "Kontrolo finiĝis.",
   "altcha.erreur": "La kontrolo ne sukcesis.",
-  "altcha.reessayer": "Reprovi"
+  "altcha.reessayer": "Reprovi",
+  "catalogacao.dedup.scanTabInternal": "Kunfandendaj",
+  "catalogacao.dedup.scanTabCross": "Kunhavigendaj",
+  "catalogacao.dedup.scanHelpInternal": "Du registroj posedataj de la sama biblioteko: temas pri vera duplikato, kunfando estas proponata.",
+  "catalogacao.dedup.scanHelpCross": "La sama verko katalogita aparte de malsamaj bibliotekoj. Kunfandi ilin signifus kunhavigi la registron, kio implikas alian bibliotekon: preferu « Sama verko ».",
+  "catalogacao.dedup.scanKindIsbn": "Identa ISBN",
+  "catalogacao.dedup.scanKindApprox": "Simila titolo",
+  "catalogacao.dedup.scanOpen": "Malfermi"
 }

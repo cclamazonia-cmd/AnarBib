@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Vérification anti-robot en cours…",
   "altcha.ok": "Vérification terminée.",
   "altcha.erreur": "La vérification n’a pas abouti.",
-  "altcha.reessayer": "Réessayer"
+  "altcha.reessayer": "Réessayer",
+  "catalogacao.dedup.scanTabInternal": "À fusionner",
+  "catalogacao.dedup.scanTabCross": "À mutualiser",
+  "catalogacao.dedup.scanHelpInternal": "Deux notices détenues par la ou les mêmes bibliothèques : c’est un vrai doublon, la fusion est proposée.",
+  "catalogacao.dedup.scanHelpCross": "La même œuvre cataloguée séparément par des bibliothèques différentes. Les fusionner reviendrait à mutualiser la notice, ce qui engage une autre bibliothèque : préférez « Même œuvre ».",
+  "catalogacao.dedup.scanKindIsbn": "ISBN identique",
+  "catalogacao.dedup.scanKindApprox": "Titre proche",
+  "catalogacao.dedup.scanOpen": "Ouvrir"
 }

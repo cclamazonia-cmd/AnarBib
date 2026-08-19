@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Verifica anti-bot in corso…",
   "altcha.ok": "Verifica completata.",
   "altcha.erreur": "La verifica non è riuscita.",
-  "altcha.reessayer": "Riprova"
+  "altcha.reessayer": "Riprova",
+  "catalogacao.dedup.scanTabInternal": "Da unire",
+  "catalogacao.dedup.scanTabCross": "Da mutualizzare",
+  "catalogacao.dedup.scanHelpInternal": "Due schede possedute dalla stessa biblioteca: è un vero duplicato, la fusione è proposta.",
+  "catalogacao.dedup.scanHelpCross": "La stessa opera catalogata separatamente da biblioteche diverse. Unirle equivarrebbe a mutualizzare la scheda, il che coinvolge un’altra biblioteca: meglio « Stessa opera ».",
+  "catalogacao.dedup.scanKindIsbn": "ISBN identico",
+  "catalogacao.dedup.scanKindApprox": "Titolo simile",
+  "catalogacao.dedup.scanOpen": "Apri"
 }

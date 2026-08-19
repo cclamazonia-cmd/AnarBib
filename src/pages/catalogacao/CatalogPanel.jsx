@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import Modal from '@/components/ui/Modal';
+import CatalogDuplicatesModal from './CatalogDuplicatesModal';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -17,6 +18,7 @@ const MATERIAL_KEYS = {
 export default function CatalogPanel({ onEdit, requestedView, requestNonce, onChanged }) {
   const { formatMessage: t } = useIntl();
   const [view, setView] = useState('book'); // book | author | exemplar
+  const [dedupOpen, setDedupOpen] = useState(false);
 
   // Sous-vue pilotee depuis les compteurs de CatalogacaoPage (nonce -> re-applique meme vue)
   useEffect(() => {
@@ -285,6 +287,13 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
           style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap', flexShrink: 0, opacity: refreshing ? 0.7 : 1, cursor: refreshing ? 'progress' : 'pointer' }}>
           {refreshing ? t({ id: 'catalogacao.catalog.refreshing' }) : t({ id: 'catalogacao.catalog.refresh' })}
         </button>
+        {/* Dedoublonnage global du catalogue publie. La detection par notice
+            existe deja pendant le catalogage ; ceci en est le pendant sur
+            l'existant deja publie. */}
+        <button type="button" className="ab-button ab-button--secondary" onClick={() => setDedupOpen(true)}
+          style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap', flexShrink: 0 }}>
+          {t({ id: 'catalogacao.dedup.find' })}
+        </button>
       </div>
 
       {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
@@ -432,6 +441,12 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
           </div>
         </Modal>
       )}
+
+      <CatalogDuplicatesModal
+        isOpen={dedupOpen}
+        onClose={() => setDedupOpen(false)}
+        onChanged={() => { loadItems(); onChanged?.(); }}
+      />
     </div>
   );
 }

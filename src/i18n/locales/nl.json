@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Anti-botcontrole bezig…",
   "altcha.ok": "Controle voltooid.",
   "altcha.erreur": "De controle is niet gelukt.",
-  "altcha.reessayer": "Opnieuw proberen"
+  "altcha.reessayer": "Opnieuw proberen",
+  "catalogacao.dedup.scanTabInternal": "Samen te voegen",
+  "catalogacao.dedup.scanTabCross": "Te delen",
+  "catalogacao.dedup.scanHelpInternal": "Twee beschrijvingen in bezit van dezelfde bibliotheek: dit is een echte dubbele, samenvoegen wordt aangeboden.",
+  "catalogacao.dedup.scanHelpCross": "Hetzelfde werk apart gecatalogiseerd door verschillende bibliotheken. Samenvoegen zou de beschrijving delen, wat een andere bibliotheek betreft: kies liever « Zelfde werk ».",
+  "catalogacao.dedup.scanKindIsbn": "Identieke ISBN",
+  "catalogacao.dedup.scanKindApprox": "Vergelijkbare titel",
+  "catalogacao.dedup.scanOpen": "Openen"
 }

@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Verificació antirobot en curs…",
   "altcha.ok": "Verificació completada.",
   "altcha.erreur": "La verificació no s’ha completat.",
-  "altcha.reessayer": "Torna-ho a provar"
+  "altcha.reessayer": "Torna-ho a provar",
+  "catalogacao.dedup.scanTabInternal": "Per fusionar",
+  "catalogacao.dedup.scanTabCross": "Per mutualitzar",
+  "catalogacao.dedup.scanHelpInternal": "Dos registres en poder de la mateixa biblioteca: és un duplicat real, s’ofereix la fusió.",
+  "catalogacao.dedup.scanHelpCross": "La mateixa obra catalogada per separat per biblioteques diferents. Fusionar-les equivaldria a mutualitzar el registre, cosa que compromet una altra biblioteca: és preferible « Mateixa obra ».",
+  "catalogacao.dedup.scanKindIsbn": "ISBN idèntic",
+  "catalogacao.dedup.scanKindApprox": "Títol semblant",
+  "catalogacao.dedup.scanOpen": "Obre"
 }

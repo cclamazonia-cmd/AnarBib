@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Anti-bot check under way…",
   "altcha.ok": "Check complete.",
   "altcha.erreur": "The check did not go through.",
-  "altcha.reessayer": "Try again"
+  "altcha.reessayer": "Try again",
+  "catalogacao.dedup.scanTabInternal": "To merge",
+  "catalogacao.dedup.scanTabCross": "To share",
+  "catalogacao.dedup.scanHelpInternal": "Two records held by the same library or libraries: this is a genuine duplicate, merging is offered.",
+  "catalogacao.dedup.scanHelpCross": "The same work catalogued separately by different libraries. Merging them would pool the record, which commits another library: prefer « Same work ».",
+  "catalogacao.dedup.scanKindIsbn": "Identical ISBN",
+  "catalogacao.dedup.scanKindApprox": "Similar title",
+  "catalogacao.dedup.scanOpen": "Open"
 }

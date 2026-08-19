@@ -5781,5 +5781,12 @@
   "altcha.calcul": "Anti-Bot-Prüfung läuft…",
   "altcha.ok": "Prüfung abgeschlossen.",
   "altcha.erreur": "Die Prüfung ist fehlgeschlagen.",
-  "altcha.reessayer": "Erneut versuchen"
+  "altcha.reessayer": "Erneut versuchen",
+  "catalogacao.dedup.scanTabInternal": "Zusammenzuführen",
+  "catalogacao.dedup.scanTabCross": "Zu bündeln",
+  "catalogacao.dedup.scanHelpInternal": "Zwei Datensätze derselben Bibliothek: eine echte Dublette, das Zusammenführen wird angeboten.",
+  "catalogacao.dedup.scanHelpCross": "Dasselbe Werk, von verschiedenen Bibliotheken getrennt katalogisiert. Ein Zusammenführen würde den Datensatz bündeln und damit eine andere Bibliothek einbeziehen: besser « Selbes Werk ».",
+  "catalogacao.dedup.scanKindIsbn": "Identische ISBN",
+  "catalogacao.dedup.scanKindApprox": "Ähnlicher Titel",
+  "catalogacao.dedup.scanOpen": "Öffnen"
 }
