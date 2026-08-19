@@ -149,8 +149,22 @@ export default function CatalogacaoPage() {
 
   // P1.6-b.2 : pré-ciblage de l'attache depuis le bandeau doublon (BookDraftForm).
   const [attachTarget, setAttachTarget] = useState('');
+  // Ouverture de la fiche existante depuis le bandeau / la modale « doublon ».
+  //
+  // PAS de 'noopener' ici, et c'est délibéré. Les sessions STAFF vivent dans
+  // sessionStorage (cf. src/lib/staffStorage.js, backlog #76) ; or un onglet
+  // ouvert avec 'noopener' est un contexte de navigation NEUF, qui n'hérite pas
+  // de la copie du sessionStorage de l'onglet source. La session staff ne
+  // suivait donc pas : le nouvel onglet s'ouvrait en ANONYME et la fiche
+  // n'apparaissait pas (constaté le 19/08/2026 sur une fiche BTL, dont la
+  // bibliothèque est en visibility_level = 'network', donc invisible hors
+  // session).
+  //
+  // La cible est interne et de même origine : 'noopener' n'y apporte aucune
+  // protection, le tabnabbing ne concernant que les cibles externes. Il reste
+  // en place sur les liens sortants (BN, WorldCat, ISSN, Jitsi).
   function openBook(bookId) {
-    if (bookId) window.open(`/livro/${bookId}`, '_blank', 'noopener');
+    if (bookId) window.open(`/livro/${bookId}`, '_blank');
   }
   async function attachToBook(bookId) {
     if (!bookId) return;
