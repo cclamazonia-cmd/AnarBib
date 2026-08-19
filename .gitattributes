@@ -1,0 +1,44 @@
+# =============================================================================
+# Fins de ligne — cree le 2026-08-19
+# =============================================================================
+# Git stocke toujours du LF dans le depot. C'est le CHECKOUT sous Windows qui
+# reconvertit en CRLF (core.autocrlf=true), et c'est la que ca casse : les
+# fichiers ci-dessous ne sont pas lus par Windows, ils sont montes tels quels
+# dans des conteneurs Linux.
+#
+# Un script shell en CRLF donne :
+#     /usr/bin/env: 'bash\r': No such file or directory
+# et la pile ne demarre pas. Le symptome ne designe pas la cause, comme
+# d'habitude.
+#
+# Consequence pratique : sans ce fichier, un clone frais du depot sous Windows
+# produit une pile deploy/ qui ne demarre pas — alors que c'est precisement la
+# reconstruction depuis le depot qu'on affirme savoir faire.
+#
+# Le probleme ne s'etait jamais manifeste parce que les scripts existants
+# avaient ete ecrits en LF et n'etaient jamais passes par un aller-retour git.
+# =============================================================================
+
+# --- Tout ce qui est execute par Linux --------------------------------------
+*.sh                    text eol=lf
+.githooks/pre-commit    text eol=lf
+
+# --- Pile auto-hebergee : monte dans des conteneurs -------------------------
+deploy/Caddyfile        text eol=lf
+deploy/compose.yml      text eol=lf
+deploy/genkeys.mjs      text eol=lf
+deploy/*.example        text eol=lf
+
+# --- Binaires : jamais de conversion ----------------------------------------
+*.docx                  binary
+*.pdf                   binary
+*.woff2                 binary
+*.wasm                  binary
+*.png                   binary
+*.jpg                   binary
+
+# NOTE — non traite volontairement : *.sql.
+# Les 124 migrations sont deja dans le depot ; leur imposer eol=lf maintenant
+# renormaliserait l'ensemble et produirait un diff enorme sans necessite
+# immediate (psql tolere CRLF). A reprendre a froid, hors periode de travail
+# sur le SQL.

@@ -1,0 +1,94 @@
+# =============================================================================
+# AnarBib — routage de la passerelle API (remplace Kong)
+# =============================================================================
+# Reproduit à l'identique les chemins de l'API Supabase hébergée, pour que le
+# frontend n'ait AUCUNE modification à subir : seule la variable de build
+# VITE_SUPABASE_URL bascule de https://<ref>.supabase.co vers https://<ce
+# domaine>. Toutes les URLs du code (`/rest/v1/…`, `/auth/v1/…`,
+# `/storage/v1/…`, `/functions/v1/…`) continuent de fonctionner telles quelles.
+#
+# ADRESSE DU SITE : elle vient de la variable {$API_DOMAIN} du .env.
+#   - production      → API_DOMAIN=api.anarbib.org   (Caddy obtient un
+#                       certificat Let's Encrypt tout seul ; prérequis : un
+#                       enregistrement A vers l'IP de la VM)
+#   - répétition      → API_DOMAIN=http://localhost  (le préfixe `http://`
+#                       désactive le HTTPS automatique — aucune tentative de
+#                       certificat, ce qui échouerait pour `localhost`)
+# =============================================================================
+
+# DEUX adresses de site, et les deux sont nécessaires :
+#   {$API_DOMAIN}  → l'accès public (navigateur des lectrices)
+#   http://caddy   → les appels INTERNES entre conteneurs. Les Edge Functions
+#                    reçoivent SUPABASE_URL=http://caddy et s'en servent pour
+#                    joindre PostgREST et GoTrue (ex. : `login` traduit un
+#                    numéro de lecteur en e-mail via resolve_login_email).
+#                    Sans cette seconde adresse, la requête interne ne
+#                    correspond à aucun site, la fonction attend puis se fait
+#                    tuer pour dépassement de durée — et l'usager voit un
+#                    « identifiants incorrects » trompeur.
+#                    Constaté le 18/08/2026.
+{$API_DOMAIN}, http://caddy {
+
+	encode zstd gzip
+
+	# --- En-têtes de sécurité ------------------------------------------------
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options    "nosniff"
+		X-Frame-Options           "DENY"
+		Referrer-Policy           "no-referrer"
+		-Server
+	}
+
+	# --- Auth (GoTrue) -------------------------------------------------------
+	handle_path /auth/v1/* {
+		reverse_proxy auth:9999
+	}
+
+	# --- API REST + RPC (PostgREST) -----------------------------------------
+	handle_path /rest/v1/* {
+		reverse_proxy rest:3000
+	}
+
+	# --- Storage -------------------------------------------------------------
+	handle_path /storage/v1/* {
+		request_body {
+			max_size 60MB      # aligner sur STORAGE_FILE_SIZE_LIMIT
+		}
+		reverse_proxy storage:5000
+	}
+
+	# --- Edge Functions ------------------------------------------------------
+	handle_path /functions/v1/* {
+		reverse_proxy functions:9000
+	}
+
+	# --- Limitation de débit : NON ACTIVÉE ------------------------------------
+	# L'endpoint /functions/v1/oai-pmh-provider est public et destiné à être
+	# moissonné par des agrégateurs externes : c'est le seul service qui reçoit
+	# du trafic non sollicité, donc le seul candidat à une limitation.
+	#
+	# ⚠️ La directive `rate_limit` N'EXISTE PAS dans le cœur de Caddy : elle
+	# vient du greffon caddy-ratelimit, absent de l'image `caddy:2`. L'inclure
+	# fait échouer le chargement de la configuration au démarrage
+	# (« unrecognized directive: rate_limit ») — constaté le 17/08/2026.
+	#
+	# Pour l'activer le jour où ce sera nécessaire, deux voies :
+	#   1. construire une image Caddy avec xcaddy et le greffon, ou
+	#   2. limiter en amont (pare-feu, ou côté hébergeur).
+	# En attendant, le moissonnage n'est pas limité — à surveiller, pas à
+	# corriger par anticipation.
+
+	# --- Le reste : rien. Pas de page d'accueil, pas de listing. -------------
+	handle {
+		respond "AnarBib API" 404
+	}
+
+	log {
+		output file /data/access.log {
+			roll_size 10MB
+			roll_keep 5
+		}
+		format json
+	}
+}

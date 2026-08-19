@@ -1,0 +1,213 @@
+# =============================================================================
+# AnarBib — pile auto-hébergée réduite
+# =============================================================================
+# 6 services au lieu des ~12 du docker-compose officiel Supabase.
+# Supprimés volontairement : realtime, imgproxy, studio, analytics (logflare),
+# vector, meta, kong, supavisor. Justification : voir AUDIT_pile_minimale.
+#
+# ATTENTION AUX TAGS : les valeurs ci-dessous viennent du fichier .env, qui
+# doit être rempli à partir des versions officielles (cf. README, §« Épingler »).
+# Aucune image en `latest` : c'est la règle qui rend la reconstruction
+# reproductible.
+# =============================================================================
+
+name: anarbib
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # Postgres — PAS une image postgres vanilla.
+  # Le code utilise `vault.` (58 fois) et `cron.` (36 fois) : ces extensions
+  # sont fournies par l'image Supabase, pas par Postgres standard.
+  # ---------------------------------------------------------------------------
+  db:
+    image: supabase/postgres:${POSTGRES_TAG}
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: postgres
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXP: ${JWT_EXPIRY}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      # Migrations montées en lecture seule, mais VOLONTAIREMENT PAS dans
+      # /docker-entrypoint-initdb.d : ce dossier n'exécute que les fichiers
+      # posés à sa racine, jamais un sous-dossier, et il n'agit qu'au tout
+      # premier démarrage. Avec 120 fichiers dont l'ordre compte, on veut un
+      # rejeu explicite, arrêté à la première erreur (cf. RÉPÉTITION, étape 6).
+      - ../supabase/migrations:/migrations:ro
+      # Pose les mots de passe des rôles de service (authenticator,
+      # supabase_auth_admin, supabase_storage_admin…). L'image Supabase crée
+      # ces rôles mais SANS mot de passe : sans ce script, rest/auth/storage
+      # échouent en boucle (SQLSTATE 28P01).
+      #
+      # ⚠️ ON MONTE LE FICHIER, JAMAIS LE DOSSIER.
+      # Monter un dossier sur /docker-entrypoint-initdb.d OCCULTE les scripts
+      # d'initialisation propres à l'image Supabase, qui vivent exactement là :
+      # la base démarre alors sans AUCUN rôle — pas même `postgres` — tout en
+      # se déclarant « healthy ». Constaté le 18/08/2026.
+      # Le préfixe 99 garantit l'exécution APRÈS les scripts de l'image.
+      - ./init-db/01-roles.sh:/docker-entrypoint-initdb.d/99-roles.sh:ro
+      # Scripts d'exploitation lancés à la main (rejeu des migrations, etc.).
+      # Volontairement HORS de initdb.d : on veut les déclencher et en voir la
+      # sortie, pas qu'ils s'exécutent en silence au premier démarrage.
+      - ./scripts:/scripts:ro
+      # Sauvegardes de production, en lecture seule. Dossier ignoré par git —
+      # il contient des données personnelles en clair.
+      - ./dumps:/dumps:ro
+    healthcheck:
+      # Ne PAS se contenter de pg_isready : il répond « prêt » sur une base
+      # dépourvue de tout rôle (cf. incident du 18/08/2026). On vérifie donc
+      # aussi qu'un rôle de service existe réellement.
+      test: ["CMD-SHELL", "pg_isready -h localhost -U supabase_admin -d postgres && psql -U supabase_admin -d postgres -tAc \"select 1 from pg_roles where rolname='authenticator'\" | grep -q 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Pas de port publié : rien n'entre dans la base depuis l'extérieur.
+    expose:
+      - "5432"
+
+  # ---------------------------------------------------------------------------
+  # PostgREST — toutes les RPC `api.*` du front passent par ici.
+  # ---------------------------------------------------------------------------
+  rest:
+    image: postgrest/postgrest:${POSTGREST_TAG}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@db:5432/postgres
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS}
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
+    expose:
+      - "3000"
+
+  # ---------------------------------------------------------------------------
+  # GoTrue — e-mail/mot de passe uniquement.
+  # Aucun provider OAuth, aucun magic link, aucun SMS (audit du front).
+  # MAILER_AUTOCONFIRM=true : les liens sont générés par `admin.generateLink`
+  # côté Edge Function et envoyés par Resend → GoTrue n'a pas besoin de SMTP.
+  # ⚠️ À CONFIRMER avant bascule (cf. README, §« Points à vérifier »).
+  # ---------------------------------------------------------------------------
+  auth:
+    image: supabase/gotrue:${GOTRUE_TAG}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: "9999"
+      API_EXTERNAL_URL: ${API_EXTERNAL_URL}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@db:5432/postgres
+      GOTRUE_SITE_URL: ${SITE_URL}
+      GOTRUE_URI_ALLOW_LIST: ${URI_ALLOW_LIST}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_EXP: ${JWT_EXPIRY}
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+      GOTRUE_SMS_AUTOCONFIRM: "true"
+    expose:
+      - "9999"
+
+  # ---------------------------------------------------------------------------
+  # Storage — 4 buckets : covers, authors, library-regimentos-public,
+  # anarbib-media-public. Backend fichier (pas de S3), URLs signées utilisées.
+  # imgproxy volontairement absent : aucune transformation d'image demandée.
+  # ---------------------------------------------------------------------------
+  storage:
+    image: supabase/storage-api:${STORAGE_TAG}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      rest:
+        condition: service_started
+    environment:
+      ANON_KEY: ${ANON_KEY}
+      SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@db:5432/postgres
+      POSTGREST_URL: http://rest:3000
+      FILE_SIZE_LIMIT: ${STORAGE_FILE_SIZE_LIMIT}
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: anarbib
+      REGION: local
+      GLOBAL_S3_BUCKET: anarbib
+      ENABLE_IMAGE_TRANSFORMATION: "false"
+    volumes:
+      - storage-data:/var/lib/storage
+    expose:
+      - "5000"
+
+  # ---------------------------------------------------------------------------
+  # Edge runtime — les 44 Edge Functions.
+  # ⚠️ NÉCESSITE un routeur `main` : hors plateforme Supabase, edge-runtime ne
+  # découvre pas les fonctions tout seul et n'applique pas le `verify_jwt` de
+  # config.toml. Voir README §« Le routeur main » — c'est le principal poste
+  # de travail restant.
+  # ---------------------------------------------------------------------------
+  functions:
+    image: supabase/edge-runtime:${EDGE_RUNTIME_TAG}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./functions.env       # tous les secrets des EF (cf. .env.example du dépôt)
+    environment:
+      SUPABASE_URL: http://caddy
+      SUPABASE_ANON_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      SUPABASE_DB_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/postgres
+      SUPABASE_JWT_SECRET: ${JWT_SECRET}
+      ALLOWED_ORIGIN: ${SITE_URL}
+      VERIFY_JWT: "false"     # la vérification est faite par le routeur main
+    volumes:
+      - ../supabase/functions:/home/deno/functions:ro
+      # config.toml doit être lisible par le routeur : c'est LUI qui porte la
+      # politique verify_jwt. Sans ce montage, le routeur refuse de démarrer.
+      - ../supabase/config.toml:/home/deno/config.toml:ro
+    command: ["start", "--main-service", "/home/deno/functions/main"]
+    expose:
+      - "9000"
+
+  # ---------------------------------------------------------------------------
+  # Caddy — TLS automatique + routage. Remplace Kong.
+  # Reproduit les chemins Supabase pour que le front n'ait RIEN à changer :
+  # seule VITE_SUPABASE_URL bascule vers le nouveau domaine.
+  # ---------------------------------------------------------------------------
+  caddy:
+    image: caddy:${CADDY_TAG}
+    restart: unless-stopped
+    depends_on:
+      - rest
+      - auth
+      - storage
+      - functions
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      API_DOMAIN: ${API_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  db-data:
+  storage-data:
+  caddy-data:
+  caddy-config:

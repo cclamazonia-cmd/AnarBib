@@ -1,0 +1,2 @@
+Ce dossier contient des sauvegardes de production.
+DONNEES PERSONNELLES : ne pas partager, ne pas commiter, effacer apres usage.

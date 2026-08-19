@@ -91,7 +91,22 @@ _handoff/
 # changerait à chaque déploiement.
 public/catalogue-snapshot.json
 
-# Pile auto-hebergee (secrets) — ajoute le 2026-08-17
+# Pile auto-hebergee (secrets) — ajoute le 2026-08-17, corrige le 2026-08-18.
+# Seuls les fichiers REMPLIS sont ignores ; les modeles .example sont versionnes,
+# faute de quoi le dossier deploy/ n'est pas utilisable depuis un clone frais.
 deploy/.env
 deploy/functions.env
-deploy/genkeys.mjs
+# NOTE 2026-08-18 : genkeys.mjs etait ignore par erreur. Il ne contient AUCUN
+# secret — il en genere, et les ecrit dans .env sans jamais les afficher. Sans
+# lui, on ne peut pas reconstruire l'installation depuis le depot, ce qui est
+# exactement ce qu'on affirme savoir faire. Il est donc versionne.
+
+# Sauvegardes de production : DONNEES PERSONNELLES EN CLAIR.
+# Ne doivent jamais approcher le depot. Ajoute le 2026-08-18.
+# On ignore le CONTENU du dossier, pas le dossier : son LISEZ-MOI est versionne
+# pour que l'avertissement existe dans un clone frais, et pour que le dossier
+# attendu par scripts/restore.sh soit present.
+deploy/dumps/*
+!deploy/dumps/LISEZ-MOI.txt
+*.dump
+*.sql.gz
