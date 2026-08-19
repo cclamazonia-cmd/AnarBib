@@ -197,9 +197,13 @@ Deno.serve(async (req: Request) => {
   const tours = [...parTour.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1)).map((e) => e[1]);
   const deuxMauvais = tours.length >= 2 && tours[0] === false && tours[1] === false;
 
+  // `kind` (migration 20260820100000) : sans ce filtre, un tour vert du service
+  // public refermerait un incident de SAUVEGARDE et enverrait un « service
+  // rétabli » qui ne voudrait rien dire. Les deux familles sont disjointes.
   const { data: incidentOuvert } = await supabaseAdmin
     .from('service_health_incidents')
     .select('id, opened_at, reason')
+    .eq('kind', 'service')
     .is('closed_at', null)
     .order('opened_at', { ascending: false })
     .limit(1)
@@ -210,7 +214,7 @@ Deno.serve(async (req: Request) => {
   if (!tourOk && deuxMauvais && !incidentOuvert) {
     const { data: inc } = await supabaseAdmin
       .from('service_health_incidents')
-      .insert({ reason: raison || 'degradation' })
+      .insert({ kind: 'service', reason: raison || 'degradation' })
       .select('id')
       .single();
     const estUnTest = charge?.force_fail === true;
@@ -254,6 +258,77 @@ Deno.serve(async (req: Request) => {
     action = `incident clos, ${n} destinataire(s) prévenu(s)`;
   }
 
+  // ─── Témoin de vie des sauvegardes (#BG2-16) ──────────────────────────────
+  // Les trois timers restic tournent sur un poste de travail : ils ne tirent que
+  // machine allumée. La chaîne `OnFailure=` de systemd détecte les ERREURS, pas
+  // les SILENCES — c'est l'angle mort nommé au §7.5 du runbook de restauration.
+  // On le comble ici : le poste PRODUIT les sauvegardes, Supabase CONSTATE leur
+  // absence. L'observateur est ailleurs que l'observé.
+  //
+  // Un seul tour suffit à alerter, contrairement aux sondes réseau ci-dessus :
+  // un silence de 36 heures n'est pas un hoquet.
+  let actionBackup = 'rien';
+  let backupOk: boolean | null = null;
+  const { data: bk } = await supabaseAdmin.rpc('fn_backup_heartbeat_status');
+  if (bk && typeof bk === 'object') {
+    backupOk = (bk as any).ok === true;
+    const flux = ((bk as any).flux ?? []) as any[];
+    const muets = flux.filter((f) => f.muet);
+
+    const { data: incBackup } = await supabaseAdmin
+      .from('service_health_incidents')
+      .select('id, opened_at, reason')
+      .eq('kind', 'backup')
+      .is('closed_at', null)
+      .order('opened_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (!backupOk && !incBackup) {
+      const raisonBk =
+        muets.map((f) => `${f.flow} muet depuis ${f.age_heures ?? '?'} h`).join(' ; ') ||
+        'sauvegardes muettes';
+      const { data: inc } = await supabaseAdmin
+        .from('service_health_incidents')
+        .insert({ kind: 'backup', reason: raisonBk })
+        .select('id')
+        .single();
+      const n = await alerter(
+        'AnarBib — les sauvegardes ne donnent plus signe de vie',
+        'Les sauvegardes sont muettes',
+        `<p style="margin:0 0 10px">Un ou plusieurs flux de sauvegarde n'ont pas signalé de tir réussi dans le délai attendu. <strong>Ça ne veut pas dire qu'ils ont échoué : ça veut dire qu'ils n'ont rien dit.</strong> La cause la plus probable est un poste de travail resté éteint, ou une instance WSL qui n'a pas démarré.</p>
+         <p style="margin:0 0 10px">État des trois flux :</p>
+         <ul style="margin:0 0 10px;padding-left:18px">${flux
+           .map(
+             (f) =>
+               `<li>${esc(f.flow)} — ${f.muet ? '<strong>MUET</strong>' : 'ok'} — dernier signal il y a ${esc(
+                 String(f.age_heures ?? '?'),
+               )} h (seuil ${esc(String(f.seuil_heures ?? '?'))} h)</li>`,
+           )
+           .join('')}</ul>
+         <p style="margin:0">Un e-mail de rétablissement suivra dès qu'un tir réussi sera signalé.</p>`,
+      );
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ notified_at: new Date().toISOString() })
+        .eq('id', inc?.id);
+      actionBackup = `incident sauvegardes ouvert, ${n} destinataire(s) alerté(s)`;
+    } else if (backupOk && incBackup) {
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ closed_at: new Date().toISOString() })
+        .eq('id', incBackup.id);
+      const depuis = new Date(incBackup.opened_at).toLocaleString('fr-FR');
+      const n = await alerter(
+        'AnarBib — les sauvegardes ont repris',
+        'Sauvegardes rétablies',
+        `<p style="margin:0 0 10px">Les trois flux ont de nouveau signalé un tir réussi. L'incident ouvert le ${esc(depuis)} est clos.</p>
+         <p style="margin:0">Cause relevée à l'ouverture : ${esc(incBackup.reason)}</p>`,
+      );
+      actionBackup = `incident sauvegardes clos, ${n} destinataire(s) prévenu(s)`;
+    }
+  }
+
   // Purge de l'historique (evite une table qui grossit sans fin).
   const limite = new Date(Date.now() - RETENTION_JOURS * 86400_000).toISOString();
   await supabaseAdmin.from('service_health_probes').delete().lt('checked_at', limite);
@@ -263,5 +338,7 @@ Deno.serve(async (req: Request) => {
     tour_ok: tourOk,
     action,
     resultats,
+    sauvegardes_ok: backupOk,
+    action_sauvegardes: actionBackup,
   });
 });
