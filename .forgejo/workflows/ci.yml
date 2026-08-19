@@ -136,6 +136,31 @@ jobs:
           done
           echo "✓ Pages déployé (delta)"
 
+      # ─────────── ESSAI git-pages sur test.anarbib.org (2026-08-20) ───────────
+      # Étape 0 de la migration vers le nouveau moteur Codeberg. Les deux pas de
+      # déploiement coexistent VOLONTAIREMENT le temps de l'essai :
+      #   - celui du dessus continue de servir app.anarbib.org (production) ;
+      #   - celui-ci alimente test.anarbib.org, qu'on compare côte à côte.
+      #
+      # Différence de fond avec l'ancien moteur : git-pages ne va plus CHERCHER
+      # la branche `pages` tout seul. C'est cette action qui téléverse dist/ et
+      # le lui signale. La branche `pages` deviendra inutile après la bascule.
+      #
+      # `server:` est requis au premier déploiement sur un domaine personnalisé
+      # (il évite la dépendance circulaire certificat ↔ site). Inoffensif ensuite.
+      #
+      # ⚠️ `token` : la doc Codeberg écrit ${{ forge.token }}, le README de
+      # l'action écrit ${{ forgejo.token }}. Si celui-ci échoue, essayer l'autre.
+      - name: Deploy Pages — ESSAI git-pages (test.anarbib.org)
+        continue-on-error: true
+        timeout-minutes: 10
+        uses: https://codeberg.org/git-pages/action@v2
+        with:
+          site: https://test.anarbib.org/
+          server: codeberg.page
+          token: ${{ forge.token }}
+          source: dist/
+
   # ──────────────────── Job 2 : backend (Supabase) — sur push ────────────────
   # needs: app → ne déploie QUE si lint/test/build ont réussi (gate préservé).
   # Pas de npm install ici (CLI Supabase autonome) → job court, bien sous 5 min.

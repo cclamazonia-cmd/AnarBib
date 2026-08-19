@@ -1,0 +1,13 @@
+# Repli SPA — Codeberg « Git Pages ».
+# Toute route inconnue sert index.html avec un statut 200 (réécriture, pas
+# redirection : l'URL ne change pas). C'est ce que réclame react-router-dom en
+# mode history.
+#
+# Aujourd'hui, sous l'ancien moteur, ce rôle est tenu par un 404.html qui est une
+# copie d'index.html : le contenu est bon mais le statut HTTP est 404. Ça marche
+# pour l'usager, c'est mauvais pour le référencement, les tests et le service
+# worker.
+#
+# Ce fichier est inerte tant que le site est servi par l'ancien moteur : il y est
+# simplement distribué comme un fichier statique parmi d'autres.
+/*  /index.html  200
