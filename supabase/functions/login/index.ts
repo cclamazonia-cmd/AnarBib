@@ -267,8 +267,15 @@ Deno.serve(async (req: Request) => {
     }
 
     // ─── Résolution numéro de lecteur -> e-mail ────────────────
-    // resolve_login_email est SECURITY DEFINER et n'est plus exécutable par
-    // anon : seul le service_role y accède, donc uniquement par ici.
+    // resolve_login_email est SECURITY DEFINER et n'est exécutable ni par anon
+    // (révoqué le 2026-08-17) ni par authenticated (révoqué le 2026-08-19,
+    // migration 20260819020000) : seul le service_role y accède, donc
+    // uniquement par ici. La traduction « numéro de lecteur -> e-mail » n'est
+    // donc atteignable par aucun compte.
+    //
+    // ⚠️ Ce commentaire a affirmé pendant deux jours un état qui n'était pas
+    // vrai : `authenticated` avait toujours EXECUTE. Vérifier avant d'écrire
+    // qu'une porte est fermée.
     let email = identifier.toLowerCase();
     if (!identifier.includes("@")) {
       const { data: resolved } = await supabase.rpc("resolve_login_email", {

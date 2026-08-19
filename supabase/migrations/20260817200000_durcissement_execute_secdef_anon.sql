@@ -114,7 +114,10 @@ commit;
 -- =============================================================================
 -- CONTRÔLE APRÈS DÉPLOIEMENT
 -- =============================================================================
--- Doit renvoyer 48 - 15 = 33 lignes (les 15 révoquées pour `anon` ci-dessus
+-- Doit renvoyer 48 - 16 = 32 lignes (les 16 révoquées pour `anon` ci-dessus
+-- Corrigé le 2026-08-19 : ce bloc annonçait 15 révocations et 33 lignes
+-- restantes ; il y en a 16, donc 32. Vérifié en production.
+-- (Au 2026-08-20, après les lots 2 et 3, le compte réel est descendu à 29.)
 -- disparaissent de la liste) :
 --
 --   select n.nspname, p.proname
