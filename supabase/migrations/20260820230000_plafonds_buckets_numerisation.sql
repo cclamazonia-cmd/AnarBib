@@ -22,78 +22,110 @@
 -- page) qui decide du poids reel d'un ouvrage. Si ce profil autorise la
 -- couleur sur des ouvrages entiers, les 300 Mo des PDF se rediscutent.
 --
--- PORTEE. Aucune table creee, aucune fonction, aucune policy touchee : cette
--- migration ne fait que renseigner deux colonnes de storage.buckets.
--- bg2-known-tables.txt n'a donc pas a bouger.
+-- -----------------------------------------------------------------------------
+-- POURQUOI TOUT EST DANS UN BLOC GARDE
+-- -----------------------------------------------------------------------------
+-- Le schema `storage` n'est pas cree par les migrations : c'est le service
+-- Storage qui le construit a son initialisation. Il manque donc dans DEUX
+-- situations ou ce fichier est pourtant rejoue :
+--
+--   1. le harnais sql-tests, qui reconstruit le schema depuis zero sur une
+--      image nue — il pose un stub `auth` et un stub `vault`, pas de `storage` ;
+--   2. une pile auto-hebergee reconstruite depuis le depot, ou les migrations
+--      s'appliquent AVANT que le conteneur storage ait demarre (cf. l'ordre
+--      impose par deploy/bootstrap.sh : la base seule d'abord).
+--
+-- D'ou la garde : sans `storage.buckets`, le fichier ne fait rien et le dit.
+-- Il n'echoue pas — un test qui casse sur une table absente ne prouve rien.
+--
+-- ⚠️ COROLLAIRE, et il compte : sur une pile reconstruite, cette migration
+-- passe donc SANS poser les plafonds. C'est `deploy/bootstrap.sh` qui rejoue
+-- ce meme fichier apres le demarrage des services, quand le schema existe.
+-- Le fichier est idempotent : le rejouer ne coute rien.
+--
+-- (Constate le 20/08/2026 : premiere migration du projet a toucher `storage`,
+-- donc premiere a rencontrer ce trou du harnais. Poser un stub `storage` a
+-- cote des stubs `auth` et `vault` serait la correction de fond — au backlog.)
+--
+-- PORTEE. Aucune table creee, aucune fonction, aucune policy touchee : deux
+-- colonnes de storage.buckets renseignees. bg2-known-tables.txt ne bouge pas.
 --
 -- LIMITE ASSUMEE. allowed_mime_types se fie au type declare par le client au
 -- depot. Ce n'est pas une inspection du contenu. Contre un versement
 -- malveillant, ce sont les policies qui protegent ; ici on borne l'accident.
 --
--- A CONFIRMER AVANT DEPOT : les buckets anarbib-media-* n'acceptent que de
--- l'audio dans cette version. Si de la video y est attendue, decommenter les
--- types video plus bas — sinon les depots seront refuses.
+-- Les buckets anarbib-media-* n'acceptent que de l'audio. Si de la video y est
+-- attendue, ajouter les types video ci-dessous, sinon les depots seront refuses.
 -- =============================================================================
 
 begin;
 
--- -----------------------------------------------------------------------------
--- 1. Documents PDF — 300 Mo
--- -----------------------------------------------------------------------------
--- Un ouvrage numerise en bitonal tient dans quelques dizaines de Mo. 300 Mo
--- laisse passer un scan en gris genereux et arrete un versement aberrant.
-update storage.buckets
-   set file_size_limit   = 314572800,
-       allowed_mime_types = array['application/pdf']
- where id in ('anarbib-pdf-public', 'pdf-restrito');
-
--- -----------------------------------------------------------------------------
--- 2. Livres numeriques EPUB — 50 Mo
--- -----------------------------------------------------------------------------
-update storage.buckets
-   set file_size_limit   = 52428800,
-       allowed_mime_types = array['application/epub+zip']
- where id in ('anarbib-epub-public', 'anarbib-epub-restricted');
-
--- -----------------------------------------------------------------------------
--- 3. Media sonores — 500 Mo
--- -----------------------------------------------------------------------------
--- Un enregistrement long en FLAC depasse facilement 300 Mo, d'ou le plafond
--- plus haut que celui des PDF.
-update storage.buckets
-   set file_size_limit   = 524288000,
-       allowed_mime_types = array[
-         'audio/mpeg',
-         'audio/ogg',
-         'audio/flac',
-         'audio/wav'
-         -- , 'video/mp4', 'video/webm'   -- decommenter si de la video est attendue
-       ]
- where id in ('anarbib-media-public', 'anarbib-media-restricted');
-
--- -----------------------------------------------------------------------------
--- 4. Couvertures et portraits — 10 Mo
--- -----------------------------------------------------------------------------
-update storage.buckets
-   set file_size_limit   = 10485760,
-       allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp']
- where id in ('covers', 'authors');
-
--- -----------------------------------------------------------------------------
--- 5. Verification — rollback automatique si un bucket vise reste sans plafond
--- -----------------------------------------------------------------------------
 do $$
 declare
   v_manquants text;
+  v_absents   text;
   v_attendus  text[] := array[
     'anarbib-pdf-public', 'pdf-restrito',
     'anarbib-epub-public', 'anarbib-epub-restricted',
     'anarbib-media-public', 'anarbib-media-restricted',
     'covers', 'authors'
   ];
-  v_absents   text;
 begin
-  -- 5.1 Tous les buckets vises existent-ils encore ?
+
+  -- ---------------------------------------------------------------------------
+  -- 0. Garde : sans le schema storage, on ne fait rien, et on le dit.
+  -- ---------------------------------------------------------------------------
+  if to_regclass('storage.buckets') is null then
+    raise notice
+      'storage.buckets absent : plafonds NON appliques. Attendu sur le harnais de test et sur une pile reconstruite avant le demarrage du service Storage. deploy/bootstrap.sh rejoue ce fichier au bon moment.';
+    return;
+  end if;
+
+  -- ---------------------------------------------------------------------------
+  -- 1. Documents PDF — 300 Mo
+  -- ---------------------------------------------------------------------------
+  -- Un ouvrage numerise en bitonal tient dans quelques dizaines de Mo. 300 Mo
+  -- laisse passer un scan en gris genereux et arrete un versement aberrant.
+  update storage.buckets
+     set file_size_limit    = 314572800,
+         allowed_mime_types = array['application/pdf']
+   where id in ('anarbib-pdf-public', 'pdf-restrito');
+
+  -- ---------------------------------------------------------------------------
+  -- 2. Livres numeriques EPUB — 50 Mo
+  -- ---------------------------------------------------------------------------
+  update storage.buckets
+     set file_size_limit    = 52428800,
+         allowed_mime_types = array['application/epub+zip']
+   where id in ('anarbib-epub-public', 'anarbib-epub-restricted');
+
+  -- ---------------------------------------------------------------------------
+  -- 3. Media sonores — 500 Mo
+  -- ---------------------------------------------------------------------------
+  -- Un enregistrement long en FLAC depasse facilement 300 Mo, d'ou le plafond
+  -- plus haut que celui des PDF.
+  update storage.buckets
+     set file_size_limit    = 524288000,
+         allowed_mime_types = array[
+           'audio/mpeg',
+           'audio/ogg',
+           'audio/flac',
+           'audio/wav'
+           -- , 'video/mp4', 'video/webm'  -- decommenter si de la video est attendue
+         ]
+   where id in ('anarbib-media-public', 'anarbib-media-restricted');
+
+  -- ---------------------------------------------------------------------------
+  -- 4. Couvertures et portraits — 10 Mo
+  -- ---------------------------------------------------------------------------
+  update storage.buckets
+     set file_size_limit    = 10485760,
+         allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp']
+   where id in ('covers', 'authors');
+
+  -- ---------------------------------------------------------------------------
+  -- 5. Verification — rollback automatique si un bucket vise reste sans plafond
+  -- ---------------------------------------------------------------------------
   select string_agg(a, ', ')
     into v_absents
     from unnest(v_attendus) a
@@ -105,7 +137,6 @@ begin
       v_absents;
   end if;
 
-  -- 5.2 Chacun porte-t-il bien un plafond ET une liste blanche ?
   select string_agg(b.id, ', ')
     into v_manquants
     from storage.buckets b
@@ -119,6 +150,7 @@ begin
   end if;
 
   raise notice 'Plafonds poses sur % buckets.', array_length(v_attendus, 1);
+
 end $$;
 
 commit;

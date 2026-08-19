@@ -28,7 +28,8 @@
 #
 # CE QUE CE SCRIPT NE FAIT PAS, et qui reste à faire à la main :
 #   * les fichiers physiques des buckets Storage (~430 Mo) — ils ne sont ni
-#     dans le dump ni dans le dépôt : rsync depuis la sauvegarde `storage` ;
+#     dans le dump ni dans le dépôt : rsync depuis la sauvegarde `storage`.
+#     (Les PLAFONDS des buckets, eux, sont posés — étape 7.) ;
 #   * les secrets autres que le sel de pseudonymisation (clés d'API, secrets de
 #     webhook) — ils vont dans deploy/functions.env ;
 #   * le DNS et les certificats.
@@ -64,7 +65,7 @@ sql()   { docker compose exec -T db psql -U supabase_admin -d postgres -tAc "$1"
 # -----------------------------------------------------------------------------
 # 1. La base seule, et rien d'autre
 # -----------------------------------------------------------------------------
-etape "1/6 · Démarrage de la base"
+etape "1/7 · Démarrage de la base"
 docker compose up -d --wait db
 echo "✓ Base prête (le healthcheck vérifie que le rôle authenticator existe)."
 
@@ -73,7 +74,7 @@ echo "✓ Base prête (le healthcheck vérifie que le rôle authenticator existe
 # -----------------------------------------------------------------------------
 # Sur un volume vierge, le script s'exécute seul via /docker-entrypoint-initdb.d.
 # Sur un volume déjà initialisé, il faut le rejouer — il est idempotent.
-etape "2/6 · Mots de passe des rôles de service"
+etape "2/7 · Mots de passe des rôles de service"
 docker compose exec -T db sh /docker-entrypoint-initdb.d/99-roles.sh
 
 # -----------------------------------------------------------------------------
@@ -83,7 +84,7 @@ docker compose exec -T db sh /docker-entrypoint-initdb.d/99-roles.sh
 # et surtout, restaurer plus tard avec un sel DIFFÉRENT ne produit aucune erreur
 # visible : ça rend incohérents tous les jetons produits auparavant. Corruption
 # silencieuse de données personnelles. On vérifie donc avant, pas pendant.
-etape "3/6 · Vérification du sel de pseudonymisation"
+etape "3/7 · Vérification du sel de pseudonymisation"
 if sql "select 1 from pg_namespace where nspname = 'vault'" | grep -q 1; then
   if [ "$(sql "select count(*) from vault.decrypted_secrets where name = 'pseudonym_salt'")" = "1" ]; then
     echo "✓ pseudonym_salt présent au Vault."
@@ -112,26 +113,43 @@ fi
 # 4. Le schéma et les données
 # -----------------------------------------------------------------------------
 if [ "$MODE" = "depot" ]; then
-  etape "4/6 · Rejeu des migrations depuis le dépôt"
+  etape "4/7 · Rejeu des migrations depuis le dépôt"
   docker compose exec -T db sh /scripts/run-migrations.sh
 else
-  etape "4/6 · Restauration d'une sauvegarde"
+  etape "4/7 · Restauration d'une sauvegarde"
   docker compose exec -T db sh /scripts/restore.sh
 fi
 
 # -----------------------------------------------------------------------------
 # 5. Les vues matérialisées
 # -----------------------------------------------------------------------------
-etape "5/6 · Rafraîchissement des vues matérialisées"
+etape "5/7 · Rafraîchissement des vues matérialisées"
 docker compose exec -T db sh /scripts/refresh-matviews.sh
 
 # -----------------------------------------------------------------------------
 # 6. Les autres services — APRÈS, jamais avant
 # -----------------------------------------------------------------------------
-etape "6/6 · Démarrage des services applicatifs"
+etape "6/7 · Démarrage des services applicatifs"
 # shellcheck disable=SC2086
 docker compose up -d --wait $SERVICES_APPLICATIFS
 echo "✓ Six conteneurs en service."
+
+# -----------------------------------------------------------------------------
+# 7. Plafonds des buckets — APRÈS l'initialisation du service Storage
+# -----------------------------------------------------------------------------
+# Le schéma `storage` n'est pas créé par les migrations : c'est le service
+# Storage qui le construit à son démarrage. À l'étape 4, il n'existait donc pas
+# encore, et la migration des plafonds s'est délibérément abstenue plutôt que
+# d'échouer. C'est ici qu'elle prend effet — le fichier est idempotent, et
+# porte lui-même sa vérification.
+etape "7/7 · Plafonds des buckets"
+PLAFONDS=$(docker compose exec -T db sh -c 'ls /migrations/*_plafonds_buckets_numerisation.sql 2>/dev/null | head -1' | tr -d '\r')
+if [ -n "$PLAFONDS" ]; then
+  docker compose exec -T db psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "$PLAFONDS"
+  echo "✓ Plafonds et types autorisés posés sur les buckets."
+else
+  echo "⚠ Migration des plafonds introuvable dans /migrations — buckets sans borne."
+fi
 
 # -----------------------------------------------------------------------------
 # Vérification
