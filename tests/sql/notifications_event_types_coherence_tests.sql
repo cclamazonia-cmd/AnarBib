@@ -59,17 +59,31 @@ BEGIN
     ELSE v_failed := v_failed + 1; v_failures := v_failures || v_t; CONTINUE; END IF;
 
     -- Fonctions qui écrivent dans cette table d'events.
+    -- ⚠️ CORRECTIF 2026-08-20. Le filtre prokind DOIT être évalué AVANT
+    -- pg_get_functiondef(), qui lève « "x" is an aggregate function » dès
+    -- qu'on lui passe un agrégat ou une fonction de fenêtrage.
+    --
+    -- La version précédente posait les deux conditions dans le même WHERE, en
+    -- supposant qu'elles seraient évaluées dans l'ordre écrit. **Une clause
+    -- WHERE ne garantit aucun ordre d'évaluation** : le planificateur est libre
+    -- d'appeler pg_get_functiondef() d'abord, et c'est ce qu'il faisait sur la
+    -- base fraîche de la CI. Résultat : la suite plantait avant tout bilan,
+    -- et sql-tests est resté rouge du 17 au 20/08 sans rien bloquer.
+    --
+    -- `AS MATERIALIZED` est la seule construction qui impose une barrière : la
+    -- CTE est calculée entièrement avant que le prédicat externe s'applique.
     FOR f IN
-      SELECT p.oid, p.proname
-      FROM pg_proc p
-      JOIN pg_namespace np ON np.oid = p.pronamespace
-      WHERE np.nspname = 'public'
-        -- prokind = 'f' : pg_get_functiondef() lève « "x" is an aggregate
-        -- function » si on le lui passe un agrégat, ce qui faisait planter la
-        -- suite avant tout bilan. On ne veut de toute façon que des fonctions.
-        AND p.prokind = 'f'
-        AND pg_get_functiondef(p.oid) LIKE '%' || r.tbl || '%'
-      ORDER BY p.proname
+      WITH candidates AS MATERIALIZED (
+        SELECT p.oid, p.proname
+        FROM pg_proc p
+        JOIN pg_namespace np ON np.oid = p.pronamespace
+        WHERE np.nspname = 'public'
+          AND p.prokind = 'f'
+      )
+      SELECT c.oid, c.proname
+      FROM candidates c
+      WHERE pg_get_functiondef(c.oid) LIKE '%' || r.tbl || '%'
+      ORDER BY c.proname
     LOOP
       -- Littéraux préfixés par le nom métier de la table (ex. 'library_request_…').
       -- On écarte le nom de la table lui-même, qui porte le même préfixe.
