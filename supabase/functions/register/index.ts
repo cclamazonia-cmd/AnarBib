@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { verifierSolution } from '../_shared/altcha.ts';
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { tMail, label } from "../_shared/i18n/mail-strings.ts";
 import { inlineLogosInHtml } from "../_shared/mail/inline-images.ts";
@@ -56,43 +57,14 @@ function json(body, status = 200) {
     }
   });
 }
-// ── Anti-bot Cloudflare Turnstile (env-gated) ───────────────────────────────
-// Tant que TURNSTILE_SECRET_KEY n'est pas defini en prod, la verification est
-// ignoree (return true) : aucune regression sur l'inscription avant la config.
-// Une fois le secret pose, un token Turnstile valide devient requis. Calque sur
-// supabase/functions/login (verifyTurnstile) et submit-cartography-entry.
-function getClientIP(req: Request): string {
-  return (
-    req.headers.get("cf-connecting-ip") ??
-    req.headers.get("x-real-ip") ??
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    "unknown"
-  );
-}
-async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
-  if (!secret) {
-    console.warn("register: TURNSTILE_SECRET_KEY non defini — verification anti-bot ignoree");
-    return true;
-  }
-  if (!token) return false;
-  const formData = new FormData();
-  formData.append("secret", secret);
-  formData.append("response", token);
-  if (ip && ip !== "unknown") formData.append("remoteip", ip);
-  try {
-    const res = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      { method: "POST", body: formData },
-    );
-    const data = await res.json();
-    if (!data.success) console.warn("register: Turnstile echec:", data["error-codes"]);
-    return Boolean(data.success);
-  } catch (err) {
-    console.error("register: Turnstile fetch error:", err);
-    return false;
-  }
-}
+// ── Anti-robots : preuve de travail Altcha, auto-hebergee ───────────────────
+// Remplace Cloudflare Turnstile depuis le 2026-08-20. Aucun appel sortant : le
+// defi est emis et verifie ici meme, cf. _shared/altcha.ts.
+// Le controle est en DEUX temps, et le second n'est pas optionnel :
+//   1. verifierSolution() : la signature et la solution sont-elles justes ?
+//   2. fn_consume_altcha_challenge() : ce defi a-t-il deja servi ?
+// Sans (2), une solution valide se rejoue jusqu'a expiration et la preuve de
+// travail ne coute plus rien. Cf. DECISION_anti_robots_2026-08-20 (AR-3, AR-4).
 function generateTempPassword(length = 14) {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
   return Array.from({
@@ -480,8 +452,7 @@ serve(async (req)=>{
   }
   try {
     const body = await req.json();
-    const turnstileToken = String(body?.turnstile_token || "");
-    const clientIp = getClientIP(req);
+    const altchaCharge = String(body?.altcha_payload || "");
     const email = normalizeEmail(body?.email);
     const firstName = String(body?.first_name || "").trim();
     const lastName = String(body?.last_name || "").trim();
@@ -586,11 +557,15 @@ serve(async (req)=>{
         error: "MISSING_REQUIRED_FIELDS"
       }, 400);
     }
-    // Anti-bot : verification Turnstile (env-gated, cf. verifyTurnstile). Placee
-    // tot, avant toute creation de compte / ecriture DB.
-    if (!(await verifyTurnstile(turnstileToken, clientIp))) {
+    // Anti-robots, placee tot : avant toute creation de compte ou ecriture DB.
+    const preuve = await verifierSolution(altchaCharge);
+    if (!preuve.ok) {
+      console.warn("register: preuve de travail refusee —", preuve.motif);
       return json({ error: "CAPTCHA_FAILED" }, 403);
     }
+    // La consommation du defi (anti-rejeu) a lieu plus bas, des que le client
+    // `admin` existe — voir « anti-rejeu » apres createClient. Elle DOIT rester
+    // avant toute ecriture en base.
     // CONSENT : seul acceptRules (règlement de la biblio) est requis, et seulement
     // pour reader_pending (qui rejoint une biblio avec règlement). Le consentement
     // e-mail (consentEmail) est désormais FACULTATIF (Suite a) : c'est un
@@ -641,6 +616,28 @@ serve(async (req)=>{
         autoRefreshToken: false
       }
     });
+
+    // ── Anti-rejeu du defi (AR-4) ──────────────────────────────────────
+    // ⚠️ Le rejeu se ferme ICI, pas dans verifierSolution(). Une solution
+    // valide reste valide jusqu'a expiration du defi : sans cette consommation,
+    // un attaquant en resout une et la rejoue a volonte.
+    const { data: defiNeuf, error: errDefi } = await admin.rpc(
+      "fn_consume_altcha_challenge",
+      {
+        p_challenge: preuve.challenge,
+        p_expires_at: preuve.expiresAt?.toISOString(),
+        p_purpose: "register",
+      },
+    );
+    if (errDefi) {
+      console.error("register: consommation du defi impossible", errDefi);
+      return json({ error: "CAPTCHA_FAILED" }, 403);
+    }
+    if (defiNeuf !== true) {
+      console.warn("register: defi deja consomme (rejeu)");
+      return json({ error: "CAPTCHA_FAILED" }, 403);
+    }
+
     let libraryMeta = null;
     let libraryRow = null;
     const effectiveLibrarySlug = signupIntent === "reader_pending" ? librarySlug : "";

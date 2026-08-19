@@ -44,7 +44,7 @@
   "account.pending.contact": "A biblioteca entrará em contato com você para finalizar a inscrição.",
   "account.pending.browseCatalog": "Explorar o catálogo público",
   "account.pending.logout": "Sair",
-  "error.membership.not_active": "Sua inscrição nesta biblioteca ainda precisa ser validada antes de reservar ou consultar.",
+  "error.membership.not_active": "Você não tem uma associação ativa com esta biblioteca.",
   "account.address.countryOther.placeholder": "Ex.: Alemanha, Turquia, Japão…",
   "account.address.line1.placeholder": "Rua, número",
   "account.address.postal.placeholder": "Ex.: 59000",
@@ -2866,7 +2866,6 @@
   "error.membership.dues": "Sua cotização nesta biblioteca não está em dia.",
   "error.membership.library_unavailable": "Biblioteca indisponível.",
   "error.membership.no_public_signup": "Esta biblioteca não aceita inscrições públicas no momento.",
-  "error.membership.not_active": "Você não tem uma associação ativa com esta biblioteca.",
   "error.membership.not_pending": "Esta associação não está pendente de validação.",
   "error.membership.restricted": "Seu acesso a esta biblioteca está restrito.",
   "error.merge.book_not_found": "Ficha publicada não encontrada.",
@@ -5777,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Nota restaurada.",
   "biblioteca.readingNotes.reportResolved": "Denuncia tratada.",
   "biblioteca.readingNotes.viewWork": "Ver a obra",
-  "catalog.degraded.notice": "Modo degradado: o serviço não respondeu. Exibindo uma cópia do catálogo de {date}. A busca funciona, mas a disponibilidade pode estar desatualizada e não é possível reservar."
+  "catalog.degraded.notice": "Modo degradado: o serviço não respondeu. Exibindo uma cópia do catálogo de {date}. A busca funciona, mas a disponibilidade pode estar desatualizada e não é possível reservar.",
+  "altcha.attente": "Preparando a verificação anti-robô…",
+  "altcha.calcul": "Verificação anti-robô em andamento…",
+  "altcha.ok": "Verificação concluída.",
+  "altcha.erreur": "A verificação não funcionou.",
+  "altcha.reessayer": "Tentar de novo"
 }

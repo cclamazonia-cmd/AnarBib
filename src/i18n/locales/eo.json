@@ -5776,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Noto restarigita.",
   "biblioteca.readingNotes.reportResolved": "Signalo traktita.",
   "biblioteca.readingNotes.viewWork": "Vidi la verkon",
-  "catalog.degraded.notice": "Difektita reĝimo: la servo ne respondis. Ni montras kopion de la katalogo de {date}. La serĉo funkcias, sed la disponebleco povas esti malaktuala kaj rezervi ne eblas."
+  "catalog.degraded.notice": "Difektita reĝimo: la servo ne respondis. Ni montras kopion de la katalogo de {date}. La serĉo funkcias, sed la disponebleco povas esti malaktuala kaj rezervi ne eblas.",
+  "altcha.attente": "Preparado de la kontrolo kontraŭ robotoj…",
+  "altcha.calcul": "Kontrolo kontraŭ robotoj daŭras…",
+  "altcha.ok": "Kontrolo finiĝis.",
+  "altcha.erreur": "La kontrolo ne sukcesis.",
+  "altcha.reessayer": "Reprovi"
 }

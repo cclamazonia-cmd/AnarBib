@@ -5776,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Notiz wiederhergestellt.",
   "biblioteca.readingNotes.reportResolved": "Meldung bearbeitet.",
   "biblioteca.readingNotes.viewWork": "Werk ansehen",
-  "catalog.degraded.notice": "Eingeschränkter Modus: Der Dienst hat nicht geantwortet. Angezeigt wird eine Kopie des Katalogs vom {date}. Die Suche funktioniert, aber die Verfügbarkeit kann veraltet sein und Vormerkungen sind nicht möglich."
+  "catalog.degraded.notice": "Eingeschränkter Modus: Der Dienst hat nicht geantwortet. Angezeigt wird eine Kopie des Katalogs vom {date}. Die Suche funktioniert, aber die Verfügbarkeit kann veraltet sein und Vormerkungen sind nicht möglich.",
+  "altcha.attente": "Anti-Bot-Prüfung wird vorbereitet…",
+  "altcha.calcul": "Anti-Bot-Prüfung läuft…",
+  "altcha.ok": "Prüfung abgeschlossen.",
+  "altcha.erreur": "Die Prüfung ist fehlgeschlagen.",
+  "altcha.reessayer": "Erneut versuchen"
 }

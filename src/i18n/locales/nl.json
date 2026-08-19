@@ -5776,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Notitie hersteld.",
   "biblioteca.readingNotes.reportResolved": "Melding afgehandeld.",
   "biblioteca.readingNotes.viewWork": "Werk bekijken",
-  "catalog.degraded.notice": "Beperkte modus: de dienst reageerde niet. Dit is een kopie van de catalogus van {date}. Zoeken werkt, maar de beschikbaarheid kan verouderd zijn en reserveren is niet mogelijk."
+  "catalog.degraded.notice": "Beperkte modus: de dienst reageerde niet. Dit is een kopie van de catalogus van {date}. Zoeken werkt, maar de beschikbaarheid kan verouderd zijn en reserveren is niet mogelijk.",
+  "altcha.attente": "Anti-botcontrole wordt voorbereid…",
+  "altcha.calcul": "Anti-botcontrole bezig…",
+  "altcha.ok": "Controle voltooid.",
+  "altcha.erreur": "De controle is niet gelukt.",
+  "altcha.reessayer": "Opnieuw proberen"
 }

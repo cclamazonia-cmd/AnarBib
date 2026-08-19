@@ -5776,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Note restored.",
   "biblioteca.readingNotes.reportResolved": "Report handled.",
   "biblioteca.readingNotes.viewWork": "View the work",
-  "catalog.degraded.notice": "Degraded mode: the service did not respond. Showing a copy of the catalogue from {date}. Search works, but availability may be out of date and reserving is unavailable."
+  "catalog.degraded.notice": "Degraded mode: the service did not respond. Showing a copy of the catalogue from {date}. Search works, but availability may be out of date and reserving is unavailable.",
+  "altcha.attente": "Preparing the anti-bot check…",
+  "altcha.calcul": "Anti-bot check under way…",
+  "altcha.ok": "Check complete.",
+  "altcha.erreur": "The check did not go through.",
+  "altcha.reessayer": "Try again"
 }
