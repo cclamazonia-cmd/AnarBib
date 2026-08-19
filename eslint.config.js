@@ -7,7 +7,12 @@ export default [
   js.configs.recommended,
 
   {
-    files: ['**/*.{js,jsx}'],
+    // 19/08/2026 : `mjs` ajoute. Sans lui, deploy/genkeys.mjs ne recevait
+    // AUCUNE globale (il tombait dans js.configs.recommended nu) et sortait
+    // 21 erreurs no-undef sur process/console/Buffer — alors que
+    // globals.node est bien charge ci-dessous. Le lint etant BLOQUANT en CI,
+    // ca aurait empeche tout deploiement, migrations comprises.
+    files: ['**/*.{js,jsx,mjs}'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',

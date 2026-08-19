@@ -223,21 +223,24 @@ export default function RedePage() {
   }
 
   // ONBO-Q13 — transfert du mandat de coordination (constitution en cours).
-  // Résout le public_id (U…) de la nouvelle personne via resolve_login_email
-  // (schéma public → supabase.rpc), puis appelle le RPC api gardé admin réseau.
+  // Résout le public_id (U…) en UUID via fn_network_resolve_public_id, gardée
+  // admin réseau, puis appelle le RPC api gardé admin réseau.
+  // 19/08/2026 : remplace resolve_login_email, qui renvoyait aussi l'adresse
+  // e-mail et était exécutable par n'importe quel compte connecté — un oracle
+  // « numéro de lecteur -> e-mail ». Ici on n'a jamais eu besoin que de l'UUID.
   async function transferMandate(reqId) {
     const pid = (transferPid || '').trim();
     if (!pid) { setMsg({ text: t({id:'rede.transfer.needPid'}), kind: 'error' }); return; }
     if (!confirm(t({id:'rede.transfer.confirm'}))) return;
     setTransferring(true);
     try {
-      const { data, error: rErr } = await supabase.rpc('resolve_login_email', { p_identifier: pid });
+      const { data, error: rErr } = await supabase.rpc('fn_network_resolve_public_id', { p_identifier: pid });
       if (rErr) throw rErr;
-      const row = Array.isArray(data) ? data[0] : data;
-      if (!row?.user_id) { setMsg({ text: t({id:'rede.transfer.notFound'}, { pid }), kind: 'error' }); setTransferring(false); return; }
+      const newUserId = Array.isArray(data) ? data[0] : data;
+      if (!newUserId) { setMsg({ text: t({id:'rede.transfer.notFound'}, { pid }), kind: 'error' }); setTransferring(false); return; }
       const { error: tErr } = await apiRpc('fn_constitution_transfer_mandate', {
         p_request_id: reqId,
-        p_new_coordenador_user_id: row.user_id,
+        p_new_coordenador_user_id: newUserId,
         p_reason: transferReason || null,
       });
       if (tErr) throw new Error(tErr.message || 'transfer failed');
