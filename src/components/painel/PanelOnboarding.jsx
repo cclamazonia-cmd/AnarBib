@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import './PanelOnboarding.css';
+import { lockBodyScroll, unlockBodyScroll } from '@/lib/bodyScrollLock';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PanelOnboarding — prise en main du Painel (ONBO-Q4)
@@ -160,13 +161,15 @@ export default function PanelOnboarding({ availability, circulationMode, library
   // Reposition sur resize/scroll pendant la visite + blocage du scroll de page.
   useEffect(() => {
     if (!tourActive) return;
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    // Verrou a compteur (lib/bodyScrollLock) : la visite guidee peut se
+    // superposer a une modale, et la sauvegarde/restauration locale laissait
+    // alors le body bloque selon l'ordre de fermeture.
+    lockBodyScroll();
     const onMove = () => reposition();
     window.addEventListener('resize', onMove);
     window.addEventListener('scroll', onMove, true);
     return () => {
-      document.body.style.overflow = prevOverflow;
+      unlockBodyScroll();
       window.removeEventListener('resize', onMove);
       window.removeEventListener('scroll', onMove, true);
     };

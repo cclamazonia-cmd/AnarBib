@@ -25,6 +25,7 @@
 
 import { useEffect, useRef } from 'react';
 import './Modal.css';
+import { lockBodyScroll, unlockBodyScroll } from '@/lib/bodyScrollLock';
 
 export default function Modal({
   isOpen,
@@ -49,14 +50,21 @@ export default function Modal({
     };
 
     window.addEventListener('keydown', handleKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      window.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = prevOverflow;
-    };
+    return () => window.removeEventListener('keydown', handleKey);
   }, [isOpen, onClose]);
+
+  // ── Blocage du défilement de page ────────────────────
+  // Effet SÉPARÉ, et dépendant du seul `isOpen` : `onClose` est presque
+  // toujours une lambda inline chez les appelants, donc d'identité nouvelle à
+  // chaque rendu — le verrou serait relâché puis reposé en boucle.
+  // Le compteur partagé (lib/bodyScrollLock) gère le chevauchement de
+  // plusieurs modales, cas où la sauvegarde/restauration locale laissait le
+  // body bloqué pour de bon.
+  useEffect(() => {
+    if (!isOpen) return;
+    lockBodyScroll();
+    return unlockBodyScroll;
+  }, [isOpen]);
 
   // ── Focus initial sur la modale ─────────────────────
   useEffect(() => {
