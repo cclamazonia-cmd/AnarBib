@@ -24,6 +24,10 @@ import './layout.css';
 // @/lib/theme — source partagée avec la carte lecteur (plus de logique
 // dupliquée ici, item 2 ; plus de map codé en dur, TR-6.2b).
 
+// Pages d'authentification : depuis elles, le bouton « Connexion » ne doit pas
+// se passer un `next` pointant sur lui-meme (boucle).
+const AUTH_PATHS = new Set(['/login', '/cadastro', '/criar-conta']);
+
 // ── Page shell ─────────────────────────────────────────────
 
 export function PageShell({ children }) {
@@ -195,7 +199,16 @@ export function Topbar() {
           </button>
         ) : (
           <>
-            <Link to="/cadastro">
+            {/* `next` : sans lui, LoginPage retombe sur son defaut /conta, et on
+                perd la page consultee. Cas vecu le 19/08/2026 : depuis une fiche
+                /livro/:id ouverte sans session, se connecter renvoyait sur « Mon
+                compte » — jamais sur la fiche. LoginPage valide `next` et refuse
+                les URL externes (getSafeNextUrl), donc pas d'open redirect.
+                On n'ajoute rien depuis les pages d'authentification elles-memes,
+                pour ne pas boucler. */}
+            <Link to={AUTH_PATHS.has(location.pathname)
+              ? '/cadastro'
+              : `/cadastro?next=${encodeURIComponent(location.pathname + location.search)}`}>
               <Button variant="mini">{t({ id: 'nav.login' })}</Button>
             </Link>
             <Link to="/criar-conta" style={{ fontSize: '.78rem', color: 'var(--brand-muted, #aaa)' }}>
