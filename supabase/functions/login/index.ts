@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 //
 // Authentification avec :
-//   - Vérification Cloudflare Turnstile (anti-bot)
+//   - Plancher de durée constant sur les échecs (anti-oracle temporel)
 //   - Rate limit combiné : par IP (anti-bruteforce) + par email (anti-énumération)
 //   - Messages d'erreur génériques (anti-énumération)
 //
@@ -16,7 +16,6 @@
 //   - SUPABASE_URL              (auto)
 //   - SUPABASE_SERVICE_ROLE_KEY (auto)
 //   - SUPABASE_ANON_KEY         (auto)
-//   - TURNSTILE_SECRET_KEY      (à ajouter)
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -37,7 +36,6 @@ const RATE_LIMIT_EMAIL = {
 
 const GENERIC_LOGIN_ERROR = "Email ou mot de passe incorrect.";
 const RATE_LIMITED_ERROR  = "Trop de tentatives. Réessayez dans une heure.";
-const CAPTCHA_ERROR       = "Vérification anti-bot échouée. Rechargez la page et réessayez.";
 const SERVER_ERROR        = "Erreur serveur. Réessayez dans un instant.";
 
 // ─── CORS ──────────────────────────────────────────────────
@@ -66,36 +64,6 @@ function jsonResponse(body: unknown, status = 200) {
     status,
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
-}
-
-// ─── Vérification Turnstile ────────────────────────────────
-
-async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
-  if (!secret) {
-    console.error("TURNSTILE_SECRET_KEY non défini");
-    return false;
-  }
-
-  const formData = new FormData();
-  formData.append("secret", secret);
-  formData.append("response", token);
-  if (ip !== "unknown") formData.append("remoteip", ip);
-
-  try {
-    const res = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      { method: "POST", body: formData },
-    );
-    const data = await res.json();
-    if (!data.success) {
-      console.warn("Turnstile vérification échouée:", data["error-codes"]);
-    }
-    return Boolean(data.success);
-  } catch (err) {
-    console.error("Turnstile fetch error:", err);
-    return false;
-  }
 }
 
 // ─── Rate limit ────────────────────────────────────────────
@@ -217,9 +185,34 @@ async function clearFailures(
     .or(`and(kind.eq.ip,key.eq.${ip}),and(kind.eq.email,key.eq.${email})`);
 }
 
+// ─── Plancher de durée (AR-1, 2026-08-20) ──────────────────
+// Sans lui, `login` est un oracle temporel : un numéro de lecteur INCONNU
+// renvoie tout de suite (deux recordFailure), tandis qu'un numéro CONNU avec un
+// mot de passe faux paie en plus une requête isRateLimited et un aller-retour
+// HTTP vers GoTrue. L'écart se mesure, et l'information qu'on croyait avoir
+// supprimée du corps de la réponse ressort par sa durée.
+// Cf. OWASP Authentication Cheat Sheet, « Authentication responses ».
+//
+// On égalise donc TOUS les échecs sur une durée fixe. Préféré à un appel
+// factice parce que ça reste vrai quand les deux chemins évolueront — un appel
+// factice, lui, se désynchronise en silence.
+//
+// ⚠️ LIMITE ASSUMÉE : un plancher n'égalise que JUSQU'AU plancher. Si la charge
+// pousse le chemin « compte connu » au-delà de 500 ms, l'écart réapparaît. Le
+// seuil doit donc rester nettement au-dessus de la durée observée (~100-300 ms
+// mesurés le 17/08 sur les appels REST). À revoir si les journaux montrent des
+// connexions qui frôlent le plancher.
+const PLANCHER_ECHEC_MS = 500;
+
+async function plancher(t0: number): Promise<void> {
+  const reste = PLANCHER_ECHEC_MS - (Date.now() - t0);
+  if (reste > 0) await new Promise((r) => setTimeout(r, reste));
+}
+
 // ─── Handler principal ─────────────────────────────────────
 
 Deno.serve(async (req: Request) => {
+  const t0 = Date.now();
   // CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -235,15 +228,12 @@ Deno.serve(async (req: Request) => {
     // résolution se fait ici, plus côté client (cf. bloc « résolution » plus bas).
     const identifier = String(body?.email || "").trim();
     const password = String(body?.password || "");
-    const turnstileToken = String(body?.turnstile_token || "");
     const ip = getClientIP(req);
 
     // Validation basique des inputs
     if (!identifier || !password) {
+      await plancher(t0);
       return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 400);
-    }
-    if (!turnstileToken) {
-      return jsonResponse({ error: CAPTCHA_ERROR }, 400);
     }
 
     // Client Supabase avec service_role (contourne RLS pour auth_rate_limits)
@@ -257,14 +247,28 @@ Deno.serve(async (req: Request) => {
       return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
     }
 
-    // ─── Vérification Turnstile ────────────────────────────────
-    // Placée AVANT la résolution de l'identifiant : sans cela, la traduction
-    // « numéro de lecteur -> e-mail » redeviendrait un service gratuit et
-    // énumérable, ce qui est exactement la fuite fermée le 2026-08-17.
-    const captchaOk = await verifyTurnstile(turnstileToken, ip);
-    if (!captchaOk) {
-      return jsonResponse({ error: CAPTCHA_ERROR }, 400);
-    }
+    // ─── Pas d'anti-robots ici, et c'est délibéré (AR-2, 2026-08-20) ──
+    // Turnstile était placé avant la résolution de l'identifiant, au motif que
+    // sans lui la traduction « numéro de lecteur -> e-mail » redeviendrait un
+    // service gratuit et énumérable. Ce motif ne tient plus :
+    //
+    //   * l'oracle a été SUPPRIMÉ, pas seulement gardé — resolve_login_email
+    //     n'est exécutable ni par anon ni par authenticated, le client n'envoie
+    //     qu'un identifiant, et un numéro inconnu renvoie le même
+    //     GENERIC_LOGIN_ERROR avec les mêmes compteurs qu'un mot de passe faux ;
+    //   * la fuite qui restait était TEMPORELLE, et c'est le plancher ci-dessus
+    //     qui la ferme — un captcha n'y pouvait rien ;
+    //   * une preuve de travail ne protège pas de l'énumération : énumérer
+    //     10 000 numéros coûte ~17 s et 0,0004 € à un attaquant, contre 5 s par
+    //     connexion à une lectrice sur téléphone. La taxe est symétrique, les
+    //     parties ne le sont pas.
+    //
+    // Et le coût était réel : toute personne dont le navigateur n'atteint pas
+    // Cloudflare — bloqueur, VPN, Tor, réseau filtrant — ne pouvait PAS se
+    // connecter, sans pouvoir le signaler depuis l'application.
+    //
+    // Ce qui borne un attaquant ici, c'est le rate limit : 10 échecs par IP,
+    // 5 par compte. Cf. docs/journal/arbitrages/DECISION_anti_robots_2026-08-20.
 
     // ─── Résolution numéro de lecteur -> e-mail ────────────────
     // resolve_login_email est SECURITY DEFINER et n'est exécutable ni par anon
@@ -289,6 +293,7 @@ Deno.serve(async (req: Request) => {
           recordFailure(supabase, "ip", ip, RATE_LIMIT_IP),
           recordFailure(supabase, "email", email, RATE_LIMIT_EMAIL),
         ]);
+        await plancher(t0);
         return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 401);
       }
       email = String(found).trim().toLowerCase();
@@ -296,6 +301,7 @@ Deno.serve(async (req: Request) => {
 
     // ─── Rate limit par e-mail (après résolution) ──────────────
     if (await isRateLimited(supabase, "email", email)) {
+      await plancher(t0);
       return jsonResponse({ error: RATE_LIMITED_ERROR }, 429);
     }
 
@@ -309,6 +315,7 @@ Deno.serve(async (req: Request) => {
         recordFailure(supabase, "ip", ip, RATE_LIMIT_IP),
         recordFailure(supabase, "email", email, RATE_LIMIT_EMAIL),
       ]);
+      await plancher(t0);
       return jsonResponse({ error: GENERIC_LOGIN_ERROR }, 401);
     }
 

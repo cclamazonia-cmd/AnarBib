@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
-import { Turnstile } from '@marsidev/react-turnstile';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { isPasswordPolicyOk } from '@/lib/passwordPolicy';
@@ -11,7 +10,6 @@ import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button, Spinner } from '@/components/ui';
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 // Paquet 25.6 — destination apres login / force-change.
 // Lit ?next=<url> depuis la query string et n'accepte QUE des URLs internes
@@ -81,13 +79,6 @@ export default function LoginPage() {
   // le message et le loading pour ne pas interférer avec le flow recovery.
   const [forceChangeMsg, setForceChangeMsg] = useState({ text: '', kind: '' });
   const [forceChangeLoading, setForceChangeLoading] = useState(false);
-  // ── Turnstile (anti-bot) ────────────────────────────────────
-  // Token retourné par le widget Cloudflare Turnstile, à passer à l'Edge
-  // Function login pour vérification serveur. Token usage unique : on reset
-  // le widget après chaque tentative échouée.
-  const [turnstileToken, setTurnstileToken] = useState('');
-  const turnstileRef = useRef(null);
-
   // ── Sas connexion (fix "entre-deux") ────────────────────────
   // Quand l'usager est deja authentifie (login frais OU session zombie) et
   // qu'on est encore dans la vue 'login', une redirection est imminente : le
@@ -104,8 +95,8 @@ export default function LoginPage() {
   //     profil/biblio avant navigate.
   //  2. `loginLoading` : soumission du formulaire EN VOL (appel EF `login`).
   //     Des le clic sur Entrar, on bascule sur le spinner — sinon le formulaire
-  //     resterait visible pendant tout l'aller-retour reseau (~800ms : Turnstile
-  //     + rate-limit + signInWithPassword), ce que l'usager percevait comme un
+  //     resterait visible pendant tout l'aller-retour reseau (~500ms : plancher
+  //     anti-oracle + rate-limit + signInWithPassword), ce que l'usager percevait comme un
   //     formulaire qui "traine" avant la bascule. En cas d'ECHEC (mauvais mdp),
   //     loginLoading repasse a false -> le formulaire revient avec le message
   //     d'erreur (chemin minoritaire, acceptable).
@@ -194,14 +185,6 @@ export default function LoginPage() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    // Vérification client : le token Turnstile doit être présent.
-    // Sécurité : la vraie vérification se fait côté Edge Function (le client
-    // peut être manipulé), c'est juste un garde-fou UX.
-    if (!turnstileToken) {
-      setLoginMsg({ text: t({ id: 'auth.captchaRequired' }), kind: 'error' });
-      return;
-    }
-
     // Flag local : si setSession a reussi, on NE clear PAS loginLoading dans
     // le finally (le bouton reste en spinner jusqu'a ce que le useEffect prenne
     // la decision de bascule, garantissant que l'usager ne re-clique pas
@@ -219,16 +202,13 @@ export default function LoginPage() {
       const email = loginId.trim();
 
       // Appel à l'Edge Function login (vs signInWithPassword direct).
-      // L'Edge Function applique : vérif Turnstile + rate limit IP/email
-      // + résolution de l'identifiant + signInWithPassword serveur,
-      // puis renvoie la session.
+      // L'Edge Function applique : rate limit IP/email + résolution de
+      // l'identifiant + signInWithPassword serveur, puis renvoie la session.
+      // Plus d'anti-robots ici depuis le 2026-08-20 (AR-2) : il ne protégeait
+      // plus rien et excluait toute personne n'atteignant pas Cloudflare.
       const { data, error: invokeError } = await supabase.functions.invoke('login', {
-        body: { email, password, turnstile_token: turnstileToken },
+        body: { email, password },
       });
-
-      // Reset du widget Turnstile dans tous les cas (token usage unique)
-      turnstileRef.current?.reset();
-      setTurnstileToken('');
 
       // Erreur réseau ou erreur côté Edge Function (status 4xx/5xx)
       if (invokeError) {
@@ -553,22 +533,6 @@ export default function LoginPage() {
                   autoComplete="current-password"
                   required
                 />
-                {/* Widget Cloudflare Turnstile (anti-bot).
-                    Toujours visible, mode managed (Cloudflare décide quand
-                    interagir). Token usage unique : reset après chaque
-                    tentative échouée dans handleLogin. */}
-                {TURNSTILE_SITE_KEY && (
-                  <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0' }}>
-                    <Turnstile
-                      ref={turnstileRef}
-                      siteKey={TURNSTILE_SITE_KEY}
-                      onSuccess={(token) => setTurnstileToken(token)}
-                      onError={() => setTurnstileToken('')}
-                      onExpire={() => setTurnstileToken('')}
-                      options={{ theme: 'dark' }}
-                    />
-                  </div>
-                )}
                 <div style={{ display: 'flex', gap: 8 }}>
                   <Button variant="primary" type="submit" loading={loginLoading}>
                     {loginLoading ? t({ id: 'auth.loggingIn' }) : t({ id: 'auth.login' })}
