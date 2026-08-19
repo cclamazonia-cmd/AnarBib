@@ -5776,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Nota ripristinata.",
   "biblioteca.readingNotes.reportResolved": "Segnalazione elaborata.",
   "biblioteca.readingNotes.viewWork": "Vedi l'opera",
-  "catalog.degraded.notice": "Modalità degradata: il servizio non ha risposto. Mostriamo una copia del catalogo del {date}. La ricerca funziona, ma la disponibilità può essere superata e non è possibile prenotare."
+  "catalog.degraded.notice": "Modalità degradata: il servizio non ha risposto. Mostriamo una copia del catalogo del {date}. La ricerca funziona, ma la disponibilità può essere superata e non è possibile prenotare.",
+  "altcha.attente": "Preparazione della verifica anti-bot…",
+  "altcha.calcul": "Verifica anti-bot in corso…",
+  "altcha.ok": "Verifica completata.",
+  "altcha.erreur": "La verifica non è riuscita.",
+  "altcha.reessayer": "Riprova"
 }

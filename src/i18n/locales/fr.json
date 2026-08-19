@@ -44,7 +44,7 @@
   "account.pending.contact": "La bibliothèque prendra contact avec toi pour finaliser ton inscription.",
   "account.pending.browseCatalog": "Parcourir le catalogue public",
   "account.pending.logout": "Se déconnecter",
-  "error.membership.not_active": "Ton inscription à cette bibliothèque doit encore être validée avant de réserver ou consulter.",
+  "error.membership.not_active": "Tu n'as pas d'appartenance active à cette bibliothèque.",
   "account.address.countryOther.placeholder": "Ex. : Allemagne, Turquie, Japon…",
   "account.address.line1.placeholder": "Rue, numéro",
   "account.address.postal.placeholder": "Ex. : 59000",
@@ -2872,7 +2872,6 @@
   "error.membership.dues": "Ta cotisation à cette bibliothèque n'est pas à jour.",
   "error.membership.library_unavailable": "Bibliothèque indisponible.",
   "error.membership.no_public_signup": "Cette bibliothèque n'accepte pas les inscriptions en ligne pour le moment.",
-  "error.membership.not_active": "Tu n'as pas d'appartenance active à cette bibliothèque.",
   "error.membership.not_pending": "Cette appartenance n'est pas en attente de validation.",
   "error.membership.restricted": "Ton accès à cette bibliothèque est restreint.",
   "error.merge.book_not_found": "Fiche publiée introuvable.",
@@ -5777,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Note retablie.",
   "biblioteca.readingNotes.reportResolved": "Signalement traite.",
   "biblioteca.readingNotes.viewWork": "Voir l'oeuvre",
-  "catalog.degraded.notice": "Mode dégradé : le service n’a pas répondu. Voici une copie du catalogue datée du {date}. La recherche fonctionne, mais la disponibilité peut être périmée et la réservation est impossible."
+  "catalog.degraded.notice": "Mode dégradé : le service n’a pas répondu. Voici une copie du catalogue datée du {date}. La recherche fonctionne, mais la disponibilité peut être périmée et la réservation est impossible.",
+  "altcha.attente": "Préparation de la vérification anti-robot…",
+  "altcha.calcul": "Vérification anti-robot en cours…",
+  "altcha.ok": "Vérification terminée.",
+  "altcha.erreur": "La vérification n’a pas abouti.",
+  "altcha.reessayer": "Réessayer"
 }

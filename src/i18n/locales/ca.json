@@ -5776,5 +5776,10 @@
   "biblioteca.readingNotes.noteRestored": "Nota restablerta.",
   "biblioteca.readingNotes.reportResolved": "Denúncia processada.",
   "biblioteca.readingNotes.viewWork": "Veure l'obra",
-  "catalog.degraded.notice": "Mode degradat: el servei no ha respost. Mostrem una còpia del catàleg del {date}. La cerca funciona, però la disponibilitat pot estar desactualitzada i no es pot reservar."
+  "catalog.degraded.notice": "Mode degradat: el servei no ha respost. Mostrem una còpia del catàleg del {date}. La cerca funciona, però la disponibilitat pot estar desactualitzada i no es pot reservar.",
+  "altcha.attente": "S’està preparant la verificació antirobot…",
+  "altcha.calcul": "Verificació antirobot en curs…",
+  "altcha.ok": "Verificació completada.",
+  "altcha.erreur": "La verificació no s’ha completat.",
+  "altcha.reessayer": "Torna-ho a provar"
 }

@@ -159,3 +159,10 @@ verify_jwt = false
 # anarbib-notify-cross-library-digest-weekly via net.http_post, donc sans JWT.
 [functions.notify-cross-library-digest]
 verify_jwt = false
+
+# Émet un défi de preuve de travail anti-robots. Appelée AVANT toute session,
+# depuis la page d'inscription et la cartographie : publique par construction.
+# N'expose rien — un défi est un aléa signé, le connaître ne donne aucun
+# pouvoir. Cf. DECISION_anti_robots_2026-08-20 (AR-3).
+[functions.altcha-challenge]
+verify_jwt = false
