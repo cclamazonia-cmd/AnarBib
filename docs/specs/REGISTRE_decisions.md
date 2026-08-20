@@ -832,3 +832,67 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 > **Trois causes distinctes pour un seul symptôme apparent.** « Le champ sort du cadre » recouvre : (1) la **piste de grille** sans garde — le conteneur est trop large (`MOB-1`) ; (2) la **taille minimale automatique** du champ dans une rangée flex — il refuse de rétrécir (`MOB-2`) ; (3) un **voisin `white-space: nowrap`** qui ne cède rien et écrase la colonne d'à côté (cartes d'entrée de la Fédération : colonne titre tombée à 15-67 px dans une rangée de 257 px). **Les distinguer avant de corriger** — les confondre a coûté deux itérations le 20/08.
 
 *MàJ 20/08/2026 — section créée. Le chantier responsive sort des « restes hors-specs » (mention du 18/06, désormais périmée). 11 des 14 manques du cadrage sont traités ; `MOB-Q1..Q3` portent ce qui reste. Vérification : 11 routes staff + les 9 onglets du Painel mesurés **en production** à 354 px, plus les pages publiques à 320 px. Commits `6e1b4436b`, `6450a4c3d`, `155d9681e` ; mise à jour du cadrage `b75150421`.*
+
+---
+
+## 37. Conventions catalographiques — `CONV` *(spec : `spec-conventions-catalographiques` v0.1 ; constat : `journal/audits/AUDIT_conventions_catalographiques_2026-08-20.md`)*
+
+> **Deux ans de catalogage sans convention d'écriture.** L'audit du 20/08 sur staging (1 300 autorités, 2 674 notices) ne trouve pas un défaut mais des **régimes contradictoires** hérités d'imports successifs, chacun cohérent avec lui-même : deux formes concurrentes de `preferred_name` (inversée `SILVEIRA, Ênio` / directe), des points d'accès pris sur une **particule** (`DE BEAUVOIR, Simone`) ou sur un **suffixe de filiation** (`FILHO, Fábio Luz` — soit une autorité « Monsieur Fils »), des doubles patronymes hispaniques **scindés** (`MAGÓN, Ricardo Flores` au lieu de `Flores Magón`), 216 titres à mots-outils capitalisés, et des référentiels `idioma`/`country` non normalisés (11 valeurs pour 8 langues, 47 valeurs de pays dont 12 en clair).
+>
+> **Ce que la section tranche** n'est pas « quelle norme adopter » — c'est **où vit quoi**. Le désordre observé ne vient pas d'une ignorance des règles bibliothéconomiques : il vient d'avoir logé le point d'accès, la forme d'affichage et la forme d'export **dans la même colonne**, à des moments différents, par des mains différentes. D'où `DOC-CONV-1` (§0), dont cette section est la déclinaison catalographique.
+>
+> **Ligne rouge** : aucune de ces règles ne s'applique en masse à la place d'un œil humain. Ce qui est mécanisable (artefacts d'import, référentiels) est traité par migration ; ce qui relève du **jugement documentaire** (est-ce un nom propre ? un double patronyme ou un prénom composé ?) part en table de revue, vide de tout verdict.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **CONV-1** | **Point d'accès en casse naturelle.** `sort_name` s'écrit `Kropotkine, Pierre`, jamais `KROPOTKINE, Pierre`. Les capitales sont un **rendu** (norme ABNT à l'export, emphase à l'affichage), calculé à la volée — jamais la donnée stockée. Deux normes coexistent légitimement : ABNT capitalise le patronyme en référence bibliographique, les règles de catalogage ne le font pas. Confondre les deux est ce qui a produit le régime mixte actuel. | ✅ acté 20/08 |
+| **CONV-2** | **`sort_name` fait foi, `preferred_name` en dérive** — jamais l'inverse. Le point d'accès est la vérité ; la forme d'affichage se calcule depuis lui (inversion de la virgule). Corollaire opérationnel : **tout tri d'autorités se fait sur `sort_name`**, y compris dans les écrans staff — trier sur `preferred_name` revient à classer par prénom. | ✅ acté 20/08 |
+| **CONV-3** | **La casse d'un titre est pilotée par la langue du titre**, pas par une règle universelle. L'allemand capitalise ses substantifs : c'est son **orthographe**, pas un artefact d'import. La normalisation n'abaisse que les **mots-outils de la langue**, en position non-initiale, en préservant le premier mot, les mots après ponctuation forte et les sigles. Elle **retire un artefact**, elle ne « recasse » pas le titre. | ✅ acté 20/08 |
+| **CONV-4** | **L'article non-classant est porté par `books.title_nonfiling`** (nombre de caractères initiaux ignorés au tri, à la manière de l'indicateur 2 de la zone MARC 245). **Le titre n'est jamais mutilé** pour les besoins du classement : ni article rejeté en fin (`Trabalhadores, Os` — vestige de la fiche cartonnée), ni article supprimé. Prérequis du parcours alphabétique `#OPAC10`. | ✅ acté 20/08 |
+| **CONV-5** | **Dates = deux entiers + un qualificatif** (`exact` · `circa` · `uncertain` · `unknown` · `living`), plutôt qu'EDTF. Le modèle à deux entiers nus ne savait pas dire « encore vivant·e » — il le confondait avec « date inconnue ». Ajout de `activity_period` (« ativo 1900-1910 ») quand naissance et mort sont inconnues, et de `dates_note` (source, désaccord entre sources) : réparation historiographique, cf. `INV-4`. La projection vers EDTF reste **sans perte** si bascule ultérieure (`CONV-O4`). | ✅ acté 20/08 |
+| **CONV-6** | **`authors.name_lang` (BCP-47) pilote la règle d'entrée**, et il est **distinct de `country`** : c'est la langue du **nom** qui décide où couper, pas le pays de naissance — un·e Argentin·e peut porter un nom italien (Luis Di Filippo). La particule se conserve en italien moderne et en afrikaans (`De Amicis`, `Van der Walt`), se rejette en portugais et en français (`Sousa, Manuel Joaquim de`). Sans `name_lang`, la règle n'est pas calculable. | 🟡 **à confirmer** — colonne créée nullable et sans contrainte validée : la créer n'engage rien, l'utiliser oui (`CONV-O1`) |
+| **CONV-7** | **Référentiels normalisés : `books.idioma` en BCP-47, `authors.country` en ISO 3166-1 α-2.** **Prérequis dur** de toutes les autres passes — `CONV-3` et `CONV-4` sont pilotées par la langue, `CONV-6` par l'aire linguistique. Les NULL **restent NULL** : on ne devine pas une langue. Corollaire tenu pour acquis : le référentiel ne vaut que si **tous les chemins d'écriture** l'appliquent (formulaire, brouillons, import OCR) — normaliser le stock sans fermer les portes fait re-dériver la base en quelques semaines. | ✅ acté 20/08 |
+| **CONV-O1** | Faut-il un `name_lang` distinct de `country` (`CONV-6`) ? Recommandé : oui. Coût : une colonne + un moissonnage. | 🟡 ouvert |
+| **CONV-O2** | Conventions **collectivités** (congrès, organisations, périodiques) : à confirmer avec `D7` (`spec-notice-autorite-enrichie`). La spec propose, elle ne tranche pas. | 🟡 ouvert |
+| **CONV-O3** | Le champ libre `books.autor` doit-il être déprécié maintenant ou au chantier **Atelier autorités** ? `INV-4` le prescrit ; l'audit §E montre qu'il porte les mêmes défauts, en pire. | 🟡 ouvert |
+| **CONV-O4** | Bascule **EDTF** : critère de déclenchement à définir (`CONV-5` la garde possible sans la faire). | 🟡 ouvert |
+
+> **Ce qui n'est pas automatisable — et ne doit pas être « fini ».** Trois tables de revue sont créées dans `conv_backup`, **vides de tout verdict**, avec le SQL d'application laissé en commentaire et une garde anti-écrasement :
+> — `titres_a_revoir_20260820` (~216 propositions de casse) : la fonction retire l'artefact d'import, **elle ne décide pas** si un mot est un nom propre ;
+> — `autorites_casse_a_revoir_20260820` : `initcap()` casse `Van der Walt`, `McKay`, `D'Amico`, `Ramón y Cajal` — c'est un **point de départ**, pas une vérité ;
+> — `autorites_patronyme_a_revoir_20260820` (22 doubles patronymes) : **3 faux positifs connus** sur 22, soit 14 % — aucune heuristique ne distingue « Juan Carlos Mechoso » (prénom composé) de « Juan Gómez Casas » (double patronyme).
+>
+> Ces tables sont le **plan de travail de l'Atelier autorités**, pas un reste à liquider. Aucun script ne doit passer `valide = true` en masse.
+
+> **Contrôle permanent, jamais blocage.** La vue de contrôle qualité (`CONV`, spec §7.1) *signale* le drift et ne l'empêche jamais : une notice mal formée reste enregistrable. C'est un indicateur de santé documentaire, pas un reproche — et sa lecture est **réservée au staff** (l'exposer plus largement reconstituerait l'annuaire des autorités).
+
+*MàJ 20/08/2026 — section créée, `DOC-CONV-1` inscrit en §0. **Numérotation** : le cadrage visait « §17 », créneau déjà occupé par `IMP` depuis le 05/06 — application de `#HYG-REG-1` (foyer souverain : on ne renumérote pas le normatif inscrit, les sections nouvelles prennent les numéros suivants), d'où **§37**. **État d'implémentation : rien n'est appliqué en base.** Six migrations sont écrites (`00` filet de sécurité → `05` vue de contrôle) et relues ; la relecture a relevé deux défauts bloquants (gardes de vérification incompatibles avec la reconstruction à vide du job `sql-tests` ; vue de contrôle ouverte à `authenticated`) et neuf points d'attention, consignés dans `INVENTAIRE.md` sous l'entrée de la spec. `CONV-7` forme un **paquet indissociable** avec sa mise à niveau frontend : la base et l'écran doivent changer dans le même push, sans quoi le filtre de langue de l'OPAC rend zéro résultat.*
+---
+
+## 38. Supervision & chaîne d'alerte — `OPS` *(trace : commits des 17-20/08/2026 ; pas de spec dédiée)*
+
+> Livré les 17-20/08/2026 sans carte de doctrine — cette section répare l'oubli, conformément
+> à la règle « plus aucune feature livrée sans au moins une carte ». Déclencheur : le **test de
+> charge du 17/08**, qui a montré que le risque réel n'est pas la panne franche mais la
+> **dégradation** (lenteurs, 500 sous charge) — invisible tant que personne ne regarde.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **OPS-1** | **Une sonde interroge les points d'entrée publics comme le ferait un visiteur anonyme**, toutes les 5 minutes (EF `health-probe`, cron `anarbib-health-probe`), et enregistre code HTTP + latence dans `service_health_probes`. On mesure ce que voit le public, pas la santé interne de la base. | ✅ acté 17/08 |
+| **OPS-2** | **Deux tours consécutifs mauvais avant d'ouvrir un incident** — un tour isolé est un hoquet réseau, pas une panne. Ouverture → e-mail ; retour à la normale → e-mail de rétablissement ; le tout tracé dans `service_health_incidents`. | ✅ acté 17/08 |
+| **OPS-3** | **Limite assumée, écrite dans le code** : la sonde vit *dans* Supabase ; une panne **totale** de Supabase l'emporte avec le service. Elle couvre la **dégradation**, pas la disparition. Le dead man's switch externe (niveau 3) reste reporté — même arbitrage que `BG2-AUTO-4`, et il convergera avec la migration VPS. | ✅ acté (limite reconnue) |
+| **OPS-4** | Authentification de la sonde par **`x-webhook-secret`, sans repli Bearer**, vérifié côté base (`fn_check_health_probe_secret`) — même convention stricte que `notify-security-notice`. Rappel : quand `verify_jwt = false`, un Bearer bien formé ne prouve rien. | ✅ acté 17/08 |
+| **OPS-5** | **Les sauvegardes ont leur propre témoin de vie** (`backup_heartbeats`, surveillé depuis la base) : le palier 2 distingue un **tir interrompu** d'un silence, ce qu'un simple « dernière sauvegarde le X » ne sait pas faire. Complète `BG2-AUTO-4` (détection de niveau 2 côté systemd). | ✅ acté 19-20/08 |
+| **OPS-6** | **La forge ouvre une issue quand un workflow échoue** — l'échec de CI ne dépend plus de quelqu'un qui regarde passer les runs. | ✅ acté 19/08 |
+| **OPS-7** | La sonde **signale les bibliothèques actives sans courriel de contact** : une bibliothèque injoignable est un incident d'exploitation, pas un détail de fiche. | ✅ acté 17/08 |
+
+## 39. Identité visuelle — `IDENT` *(trace : commits des 19/08/2026)*
+
+> Même situation qu'`OPS` : livré sans carte. Le logo 2026 remplace la marque provisoire.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **IDENT-1** | **Le logo est un dessin humain**, décliné en jeu complet d'assets (`anarbib-logo.svg`, favicons 32, `icon-192`, `icon-512`, `icon-512-maskable`, `apple-touch-icon`, `og-image`). Pas de génération automatique de la marque. | ✅ acté 19/08 |
+| **IDENT-2** | **L'icône d'application porte l'emblème seul, jamais le badge complet** : réduit à 192 ou 512 px, un badge avec texte devient illisible. La règle vaut pour toute nouvelle déclinaison. | ✅ acté 19/08 |
+| **IDENT-3** | **Aucun asset de marque servi depuis un site tiers.** Un logo était encore *hotlinké* depuis un WordPress externe : retiré. Corollaire d'auto-hébergement, au même titre que le retrait de Turnstile (`PRIV-2`). Les assets du thème par défaut portent un **nom versionné** (cache-busting). | ✅ acté 19/08 |
+| **IDENT-4** | **Le bandeau est pilotable par bibliothèque** (`data-brand-logo`) : `libraries.theme_slug` (défaut `default`) désigne un jeu d'assets dans le Storage. Une bibliothèque du réseau reste chez elle visuellement sans que l'app embarque sa marque. | ✅ acté 19/08 |
