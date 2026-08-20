@@ -15,6 +15,8 @@ import LabelSheetPrinter from './LabelSheetPrinter';
 import QueuePanel from './QueuePanel';
 import CatalogPanel from './CatalogPanel';
 import SubjectGovernancePanel from './SubjectGovernancePanel';
+import DedupAssistantPanel from './DedupAssistantPanel';
+import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
@@ -29,7 +31,11 @@ const TAB_KEY  = 'catalogacaoActiveTab';
 
 export default function CatalogacaoPage() {
   const { user } = useAuth();
-  const { config } = useLibrary();
+  const { config, effectiveRole } = useLibrary();
+  // L'assistant de dedoublonnage n'a de sens que pour qui peut arbitrer :
+  // ses trois temps se terminent par une fusion. Ailleurs il n'offrirait
+  // que des impasses.
+  const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.cataloging' }));
 
@@ -44,6 +50,9 @@ export default function CatalogacaoPage() {
     { id: 'batchesPanel',   label: t({ id: 'catalogacao.tab.lotes' }) },
     { id: 'catalogPanel',   label: t({ id: 'catalogacao.tab.catalogo' }) },
     { id: 'materiaPanel',   label: t({ id: 'catalogacao.tab.materia' }), separator: true },
+    ...(arbitreDoublons
+      ? [{ id: 'dedupPanel', label: t({ id: 'catalogacao.tab.dedup' }) }]
+      : []),
   ];
 
   // ── Mode simple / completo ─────────────────────────────
@@ -425,6 +434,15 @@ export default function CatalogacaoPage() {
           <div className={`cat-panel${activeTab === 'materiaPanel' ? ' active' : ''}`}>
             <SubjectGovernancePanel />
           </div>
+
+          {/* 8. Assistant de dedoublonnage en trois temps (coordination).
+              `isActive` est indispensable : tous les panneaux restent montes,
+              et le balayage coute ~4 s — on ne le lance qu'a l'ouverture. */}
+          {arbitreDoublons && (
+            <div className={`cat-panel${activeTab === 'dedupPanel' ? ' active' : ''}`}>
+              <DedupAssistantPanel isActive={activeTab === 'dedupPanel'} onChanged={refreshAll} />
+            </div>
+          )}
       </div>
       <Footer />
     </PageShell>
