@@ -153,7 +153,12 @@ function guessTitle(text) {
   return best;
 }
 
-const langToIdioma = (lang) => ({ por: 'pt', fra: 'fr', spa: 'es', eng: 'en', ita: 'it', deu: 'de', nld: 'nl', cat: 'ca' }[lang] || '');
+// CONV-7 : le referentiel de `books.idioma` est BCP-47, et le portugais y a
+// UNE seule valeur, 'pt-BR' (DOC-I18N-1 + selecteur de Catalogacao). L'ancien
+// 'pt' passait la contrainte CHECK sans etre propose par le formulaire : la
+// fiche importee affichait le placeholder et fabriquait une expression FRBR
+// distincte de 'pt-br'. Derive silencieuse — corrigee ici.
+const langToIdioma = (lang) => ({ por: 'pt-BR', fra: 'fr', spa: 'es', eng: 'en', ita: 'it', deu: 'de', nld: 'nl', cat: 'ca' }[lang] || '');
 
 /**
  * Extrait un jeu de champs pré-remplis depuis le texte (OCR ou natif).

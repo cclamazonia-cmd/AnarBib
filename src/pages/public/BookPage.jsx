@@ -10,6 +10,7 @@ import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Button, Pill, Spinner, EmptyState } from '@/components/ui';
 import './BookPage.css';
 import { citeAuthorString, citeAuthorList, buildCitations, buildBibtex, buildRis, triggerDownload } from '@/lib/citations';
+import { languageLabel } from '@/lib/languages';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
 
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
@@ -458,7 +459,7 @@ export default function BookPage() {
                   <MetaPill label={t({ id: 'book.meta.edition' })} value={book.edicao} />
                   <MetaPill label={t({ id: 'book.meta.isbn' })} value={book.isbn} />
                   <MetaPill label={t({ id: 'book.meta.issn' })} value={book.issn} />
-                  <MetaPill label={t({ id: 'book.meta.language' })} value={book.idioma} />
+                  <MetaPill label={t({ id: 'book.meta.language' })} value={languageLabel(book.idioma, t)} />
                   <MetaPill label={t({ id: 'book.meta.pages' })} value={book.paginas} />
                   <MetaPill label={t({ id: 'book.meta.type' })} value={tipoLabel} />
                   <MetaPill label={t({ id: 'book.meta.collection' })} value={book.colecao} />

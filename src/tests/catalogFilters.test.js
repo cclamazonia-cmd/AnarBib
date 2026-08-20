@@ -77,3 +77,21 @@ describe('buildServerFilters — recherche multi-mots', () => {
     expect(f.and).toBe(`(${orGroup('apoio')},${orGroup('mútuo')})`);
   });
 });
+
+describe('buildServerFilters — filtre de langue (CONV-7)', () => {
+  it('un code BCP-47 → égalité stricte, pas ilike', () => {
+    expect(buildServerFilters({ ...base, languageFilter: 'fr' }).idioma).toBe('eq.fr');
+    expect(buildServerFilters({ ...base, languageFilter: 'pt-BR' }).idioma).toBe('eq.pt-BR');
+  });
+
+  it('une saisie libre héritée reste tolérée en ilike', () => {
+    // Favori d'avant la normalisation, ou URL forgée à la main : le résidu
+    // hors table de correspondance doit rester atteignable.
+    expect(buildServerFilters({ ...base, languageFilter: 'Português' }).idioma)
+      .toBe('ilike.%Português%');
+  });
+
+  it('vide → aucune clause', () => {
+    expect(buildServerFilters({ ...base, languageFilter: '   ' }).idioma).toBeUndefined();
+  });
+});

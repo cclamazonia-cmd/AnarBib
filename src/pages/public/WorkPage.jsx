@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
 import { Spinner, EmptyState } from '@/components/ui';
 import ReadingNotesSection from '@/components/reading/ReadingNotesSection';
+import { languageLabel } from '@/lib/languages';
 
 const COVER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/object/public/covers/';
 
@@ -56,7 +57,7 @@ export default function WorkPage() {
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: '.86rem', fontWeight: 600 }}>{e.titulo}</div>
         <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #aaa)' }}>{[e.ano, e.editora].filter(Boolean).join(' · ')}</div>
-        {!multiLang && e.idioma && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{e.idioma}</div>}
+        {!multiLang && e.idioma && <div style={{ fontSize: '.68rem', color: 'var(--brand-muted, #888)', marginTop: 2 }}>{languageLabel(e.idioma, t)}</div>}
       </div>
     </Link>
   );
@@ -78,7 +79,7 @@ export default function WorkPage() {
           <div key={exp.lang} style={{ marginBottom: 18 }}>
             {multiLang && (
               <h3 style={{ fontSize: '.85rem', color: 'var(--brand-muted, #bbb)', margin: '0 0 8px', textTransform: 'capitalize' }}>
-                {exp.lang || t({ id: 'work.page.langUnspecified' })}
+                {languageLabel(exp.lang, t) || t({ id: 'work.page.langUnspecified' })}
               </h3>
             )}
             {Array.isArray(exp.translators) && exp.translators.length > 0 && (
@@ -89,7 +90,7 @@ export default function WorkPage() {
                 ))}
               </div>
             )}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(200px, 100%), 1fr))', gap: 14 }}>
               {(exp.editions || []).map(renderEdition)}
             </div>
           </div>

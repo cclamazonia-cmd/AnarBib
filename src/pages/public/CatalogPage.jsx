@@ -15,6 +15,7 @@ import UnifiedSearchCombobox from '@/components/UnifiedSearchCombobox';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import './CatalogPage.css';
+import { languageOptions } from '@/lib/languages';
 
 const PAGE_SIZE = 100;
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''); // #OPAC10 parcours A–Z
@@ -321,6 +322,8 @@ export default function CatalogPage() {
   const [libraryOptions, setLibraryOptions] = useState([{ value:'__all__', label: t({ id: 'catalog.avail.all' }) }]);
 
   // i18n-aware options
+  const LANGUAGE_OPTIONS = useMemo(() => languageOptions(t), [t]);
+
   const SORT_OPTIONS = useMemo(() => [
     { value: '__relevance__', label: t({ id: 'catalog.sort.relevance' }) },
     { value: 'bib_ref.asc', label: t({ id: 'catalog.sort.ref' }) },
@@ -1035,8 +1038,15 @@ export default function CatalogPage() {
             </div>
             <div className="ab-field">
               <label className="ab-field__label">{t({ id: 'catalog.filters.language' })}</label>
-              <input className="ab-input" type="search" placeholder={t({ id: 'catalog.filters.languagePh' })}
-                value={languageFilter} onChange={e => setLanguageFilter(e.target.value)} />
+              {/* CONV-7 : depuis la normalisation, `idioma` porte un code BCP-47.
+                  Un champ texte libre n'y repond plus — taper « Portugues » rendait
+                  zero resultat. Le selecteur envoie le code, l'ecran montre le
+                  libelle localise (DOC-CONV-1 : une verite, plusieurs rendus). */}
+              <select className="ab-input" value={languageFilter}
+                onChange={e => setLanguageFilter(e.target.value)}>
+                <option value="">{t({ id: 'catalog.filters.languagePh' })}</option>
+                {LANGUAGE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
             </div>
             <div className="ab-field">
               <label className="ab-field__label">{t({ id: 'catalog.filters.cdd' })}</label>

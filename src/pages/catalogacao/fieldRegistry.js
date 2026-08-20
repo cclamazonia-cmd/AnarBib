@@ -57,6 +57,8 @@
  *  10 locales (3412 clés, parité gardée par CI).
  * ────────────────────────────────────────────────────────────────────────── */
 
+import { LANGUAGE_CODES } from '@/lib/languages';
+
 // ── Paliers ────────────────────────────────────────────────────────────────
 export const TIERS = { simple: 1, advanced: 2, complete: 3 };
 
@@ -94,12 +96,10 @@ const CDD_MAT = ['livro', 'periodico', 'tract', 'cartaz', 'dossie', 'tese', 'art
 // jusqu'à ré-sélection explicite.
 // 36 langues triees par code ISO — endonymes dans language.XX (i18n).
 // Les 10 locales AnarBib + 26 langues courantes en bibliotheque/tradition anarchiste.
-const IDIOMA_CODES = [
-  'ar','bg','ca','cs','da','de','el','en','eo','es',
-  'eu','fa','fi','fr','gl','he','hi','hr','hu','id',
-  'it','ja','ko','nb','nl','oc','pl','pt-BR','ro','ru',
-  'sk','sr','sv','tr','uk','zh',
-];
+// Liste deplacee dans @/lib/languages (CONV-7, REGISTRE §37) : elle sert
+// desormais AUSSI a l'affichage (BookPage/WorkPage) et au filtre de l'OPAC.
+// Une seule copie — deux listes divergentes, c'est le drift garanti.
+const IDIOMA_CODES = LANGUAGE_CODES;
 const IDIOMA_OPTS = [
   { value: '', label: 'catalogacao.ph.language' },
   ...IDIOMA_CODES.map(c => ({ value: c, label: `language.${c}` })),

@@ -69,7 +69,14 @@ export function buildServerFilters({ search, authorFilter, authorIdFilter, alpha
 
   // Filtres avancés (colonnes distinctes : aucune collision de clé possible).
   if (isbnFilter.trim()) f['isbn'] = `ilike.%${isbnFilter.trim().replace(/[-\s]/g, '')}%`;
-  if (languageFilter.trim()) f['idioma'] = `ilike.%${languageFilter.trim()}%`;
+  // CONV-7 : `idioma` porte un code BCP-47. Le selecteur envoie un code ->
+  // egalite stricte. On garde le `ilike` pour une saisie libre (URL forgee a
+  // la main, favori d'avant la normalisation) : le residu hors table de
+  // correspondance reste ainsi atteignable.
+  if (languageFilter.trim()) {
+    const lang = languageFilter.trim();
+    f['idioma'] = /^[a-z]{2}(-[A-Z]{2})?$/.test(lang) ? `eq.${lang}` : `ilike.%${lang}%`;
+  }
   if (cddFilter.trim()) f['cdd'] = `ilike.${cddFilter.trim()}%`;
   if (subjectsFilter.trim()) f['assuntos'] = `ilike.%${subjectsFilter.trim()}%`;
   if (materialFilter && materialFilter !== '__all__') f['tipo_material'] = `eq.${materialFilter}`;

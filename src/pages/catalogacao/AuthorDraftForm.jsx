@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import PortraitCropper from '@/components/catalogacao/PortraitCropper';
+import CountrySelect from '@/components/forms/CountrySelect';
 
 // ── Authority types ───────────────────────────────────────
 const AUTHORITY_TYPE_KEYS = {
@@ -844,7 +845,15 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
             inp('birth_year', t({ id: meta.authorityType === 'collective' ? 'catalogacao.author.foundingYear' : 'catalogacao.author.birthYear' }), { type: 'number' })}
           {(meta.authorityType === 'person' || meta.authorityType === 'collective') &&
             inp('death_year', t({ id: meta.authorityType === 'collective' ? 'catalogacao.author.dissolutionYear' : 'catalogacao.author.deathYear' }), { type: 'number' })}
-          {inp('country', t({ id: 'catalogacao.author.country' }), { placeholder: 'Brasil' })}
+          {/* CONV-7 : `authors.country` est un code ISO 3166-1 alpha-2, pas un libelle.
+              Le champ texte libre (placeholder « Brasil ») reinjectait le regime
+              herite a chaque fiche : normaliser le stock sans fermer la porte de
+              saisie ne tient pas quelques semaines. */}
+          <div className="cat-field">
+            <label style={ls}>{t({ id: 'catalogacao.author.country' })}</label>
+            <CountrySelect value={f('country')} onChange={v => set('country', v)}
+              ariaLabel={t({ id: 'catalogacao.author.country' })} style={fs} />
+          </div>
 
           {/* ── Source + identifiers ──────────────────── */}
           <div className="cat-field">
