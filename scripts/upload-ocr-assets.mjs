@@ -38,7 +38,9 @@ function readEnvLocal() {
   const p = resolve(ROOT, '.env.local');
   if (!existsSync(p)) return {};
   const out = {};
-  for (const line of readFileSync(p, 'utf8').split('\n')) {
+  // Split sur /\r?\n/ : en CRLF, le \r final ferait echouer /^([A-Z_]+)=(.*)$/
+  // ('.' ne matche pas \r) et toutes les cles passeraient pour absentes.
+  for (const line of readFileSync(p, 'utf8').split(/\r?\n/)) {
     const m = line.match(/^([A-Z_]+)=(.*)$/);
     if (m) out[m[1]] = m[2].trim();
   }
