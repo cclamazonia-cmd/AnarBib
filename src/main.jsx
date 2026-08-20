@@ -7,6 +7,9 @@ import './styles/fonts.css';
 import './styles/theme-base.css';
 import './styles/breakpoints.css';
 import './styles/catalog.css';
+// Filet anti-débordement mobile — chargé en dernier pour passer devant les CSS
+// de composants (cf. en-tête de mobile.css).
+import './styles/mobile.css';
 
 // Chunk lazy introuvable (onglet ouvert avant un déploiement → ancien hash en
 // 404) : Vite émet 'vite:preloadError'. On recharge une fois pour récupérer le

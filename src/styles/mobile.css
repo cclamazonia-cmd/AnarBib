@@ -1,0 +1,98 @@
+/* =========================================================================
+   mobile.css — filet mobile pour les CHAMPS DE SAISIE (≤ --bp-sm)
+   débordement hors du cadre + zoom automatique d'iOS
+   -------------------------------------------------------------------------
+   Chantier mobile/responsive — Phase A (cf. docs/journal/cadrages/
+   CADRAGE_mobile_responsive_2026-06-16.md). Importé EN DERNIER par main.jsx.
+
+   POURQUOI un filet global plutôt que N correctifs inline
+   -------------------------------------------------------
+   Les correctifs précédents (flexWrap manquant, minWidth fixe en px) ont été
+   posés rangée par rangée, et le même symptôme revient à chaque nouvel écran :
+   l'app compte ~500 champs en JSX inline, dont ~45 rangées `display:'flex'`
+   sans repli. La cause n'est pas une rangée fautive, c'est une règle par
+   défaut de CSS :
+
+     un <input>/<select>/<textarea> placé dans une rangée flex ou une grille
+     a une TAILLE MINIMALE AUTOMATIQUE fondée sur son contenu (≈ 20 caractères
+     pour un champ texte). Il REFUSE donc de rétrécir sous ~170 px, et pousse
+     la rangée hors de son cadre — d'autant plus tôt que la police système du
+     téléphone est agrandie (Android « taille d'affichage »).
+
+   Mesuré dans le navigateur, cadre de 296 px (≈ un panneau sur écran 320 px),
+   rangée « contributeur » du catalogage (radio + champ texte + select 130 px) :
+   contenu 350 px pour un cadre de 296 px → 54 px de débordement. Avec les
+   règles ci-dessous : 296 px, plus de débordement.
+
+   CE QUE FAIT LE FILET
+   --------------------
+   1. `min-width: 0` neutralise cette taille minimale automatique : le champ
+      accepte enfin de rétrécir. `max-width: 100%` plafonne en plus les champs
+      à largeur figée (`width: 150px`…) à la largeur de leur cadre.
+   2. `flex-wrap: wrap` sur toute rangée flex qui porte un champ : quand la
+      ligne ne tient pas, le champ passe à la ligne au lieu d'être écrasé.
+      Sans effet quand le contenu tient déjà (même raisonnement que les
+      commits de juillet 2026) ; sans effet non plus sur une grille CSS, où
+      c'est `min-width: 0` qui fait le travail.
+   3. `font-size: 16px` sur les champs : parade au zoom d'iOS (ci-dessous).
+
+   L'AUTRE FAÇON DE SORTIR DU CADRE : LE ZOOM D'iOS
+   ------------------------------------------------
+   Safari iOS (et donc tout navigateur sur iPhone/iPad) ZOOME la page dès qu'on
+   met le focus dans un champ dont la police fait moins de 16 px, et n'en
+   ressort pas : la mise en page déborde alors du cadre visible tant qu'on n'a
+   pas dézoomé à la main. `ui.css` posait déjà la parade, mais seulement pour
+   `.ab-input/.ab-select/.ab-textarea`, soit 81 champs sur ~500 : les ~420
+   autres, stylés en JSX inline entre .72rem et .95rem, zoomaient toujours.
+   D'où la 3e déclaration, qui généralise la parade à TOUS les champs.
+
+   PORTÉE VOLONTAIREMENT ÉTROITE
+   -----------------------------
+   - Mobile seul (≤ 640 px = --bp-sm) : le desktop reste strictement inchangé.
+   - Cases à cocher, boutons radio, curseurs et sélecteurs de couleur exclus :
+     leur largeur intrinsèque est leur taille utile (et `.ab-epub-range` pose
+     déjà son propre `min-width`).
+   - Aucun `!important` : un correctif local plus précis garde le dernier mot.
+     Le préfixe `body` sert seulement à passer devant les règles de classe des
+     CSS de composants, et à couvrir les modales rendues en portail hors #root.
+   ========================================================================= */
+
+@media (max-width: 640px) {
+
+  /* 1 — le champ peut rétrécir et ne dépasse jamais son cadre. */
+  body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  body select,
+  body textarea {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* 2 — la rangée qui porte un champ se replie au lieu de déborder.
+     `:has()` est disponible sur Chrome/WebKit ≥ 2022 ; les navigateurs plus
+     anciens ignorent simplement cette règle et gardent la protection n° 1.
+
+     `:not([style*="column"])` : le repli n'a de sens que sur une rangée. Sur
+     un conteneur `flexDirection:'column'` À HAUTEUR CONTRAINTE (lecteurs
+     PDF/EPUB/audio en plein écran), `flex-wrap` ferait basculer le contenu en
+     COLONNES au lieu de défiler — d'où la garde. Elle couvre le style inline,
+     qui est la forme employée partout dans l'app pour les colonnes. */
+  body :is(div, label, form, fieldset, li, td, p):not([style*="column"]):has(> :is(
+      input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+      select,
+      textarea)) {
+    flex-wrap: wrap;
+  }
+
+  /* 3 — ≥ 16 px : plus de zoom automatique d'iOS au focus (cf. en-tête).
+     LE SEUL `!important` DU FICHIER, et il est structurel : les ~420 champs
+     concernés portent leur `fontSize` en STYLE INLINE (`style={{...}}`), qu'une
+     feuille de style ne peut pas surcharger autrement. C'est d'ailleurs pour
+     cela que la règle de `ui.css` ne pouvait couvrir que les classes `.ab-*`.
+     Portée : la taille de police, des seuls champs, sous 640 px — aucune règle
+     légitime ne demande un champ à moins de 16 px sur mobile. */
+  body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  body select,
+  body textarea {
+    font-size: 16px !important;
+  }
+}

@@ -2780,13 +2780,15 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             </div>
             {contributors.map((c, i) => (
               <div key={i} style={{ marginBottom: 5 }}>
-                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
                   <input type="radio" name="primary_contributor" checked={c.is_primary}
                     onChange={() => togglePrimary(i)} title={t({ id: 'catalogacao.contributor.primaryTitle' })}
                     style={{ flexShrink: 0 }} />
                   <input type="text" value={c.name} placeholder={t({ id: 'catalogacao.contributor.namePlaceholder' })}
                     onChange={e => updateContributor(i, 'name', e.target.value)}
-                    style={{ flex: 1, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.82rem' }}
+                    /* 1 1 160px : sur mobile le nom prend la ligne entière et le rôle
+                       passe dessous, au lieu d'être écrasé à ~115 px (cf. mobile.css). */
+                    style={{ flex: '1 1 160px', padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.82rem' }}
                   />
                   <select value={c.role} onChange={e => updateContributor(i, 'role', e.target.value)}
                     style={{ width: 130, padding: '6px 8px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.78rem' }}
