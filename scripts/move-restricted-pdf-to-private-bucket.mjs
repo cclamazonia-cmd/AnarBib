@@ -24,6 +24,13 @@
  *   SUPABASE_SERVICE_ROLE_KEY=eyJ... node scripts/move-restricted-pdf-to-private-bucket.mjs --dry-run
  *   SUPABASE_SERVICE_ROLE_KEY=eyJ... node scripts/move-restricted-pdf-to-private-bucket.mjs
  *
+ * SOUS WINDOWS / POWERSHELL, ne tape PAS les lignes ci-dessus : la syntaxe
+ * `VAR=valeur commande` est propre a bash, et la cle finirait en clair dans
+ * l'historique PowerShell. Utilise l'enrobage, qui la demande a une invite
+ * masquee et l'efface ensuite :
+ *
+ *   .\scripts\with-service-role.ps1 scripts\move-restricted-pdf-to-private-bucket.mjs --dry-run
+ *
  * Options :
  *   --dry-run   n'ecrit rien, montre ce qui serait deplace
  *   --keep      copie mais NE SUPPRIME PAS l'original (verification manuelle)
