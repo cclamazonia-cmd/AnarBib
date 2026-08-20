@@ -1,8 +1,20 @@
 # Message à Herbes Folles — correctif de chiffres
 
-> **Brouillon. NE PAS ENVOYER tant que la RAM n'est pas mesurée** (§5.2 du plan
-> de marche : `docker stats --no-stream` sur les six conteneurs, pendant une
-> répétition). Le message n'a d'intérêt que s'il apporte le chiffre manquant.
+> **PRÊT À ENVOYER** (20/08, 19 h 20). La RAM est mesurée : **360 Mo au repos**
+> pour les six conteneurs (`storage` 196, `db` 70, `rest` 53, `functions` 22,
+> `caddy` 11, `auth` 8). La consigne de relecture est levée — 360 Mo est très
+> loin des 4 Go au-delà desquels il ne fallait pas envoyer.
+>
+> ⚠️ **Le chiffre de disque a été RETIRÉ du message, délibérément.** Le brouillon
+> annonçait « 20 Go pour démarrer, jusqu'à 50 sur trois à cinq ans ». Or la
+> décision « troisième voie » du 20/08 — numérisation intégrale des ouvrages sous
+> droits *détenus*, lisible par les seuls membres de la bibliothèque détentrice —
+> périme ce chiffrage, et le dit elle-même : *« Cette voie change le
+> dimensionnement du §8 […] plusieurs dizaines de Go, non deux. À rechiffrer
+> avant l'appel Herbes Folles. »* Envoyer 20/50 Go aurait été refaire exactement
+> l'erreur qu'on corrige : donner un chiffre qu'on sait déjà faux. Le message dit
+> donc que le volume est en cours de rechiffrage, et promet un taux et une pente
+> pour l'appel — ce que le §5.3 demande de toute façon.
 >
 > **Pourquoi ce message existe.** Le mail de dimensionnement
 > ([`MESSAGE_herbesfolles_dimensionnement_vps_2026-07-03`](MESSAGE_herbesfolles_dimensionnement_vps_2026-07-03.md))
@@ -27,14 +39,24 @@
 |---|---|---|
 | « ≈ 10 conteneurs » | **6** | trop lourd |
 | « base ~100 Mo », « ~530 Mo au total » | **20 Mo** de base, ~430 Mo de fichiers | trop lourd |
-| « RAM ~4 Go minimum, 8 Go confortable » | **⟨à mesurer⟩** | probablement trop lourd |
-| « ~20 Go dédiés » | 20 Go au départ, **~50 Go à 3–5 ans** | **trop léger** |
+| « RAM ~4 Go minimum, 8 Go confortable » | **360 Mo au repos** pour les six | trop lourd d'un facteur ~11 |
+| « ~20 Go dédiés » | **en cours de rechiffrage** — voir ci-dessous | trop léger, ampleur inconnue |
 
-La dernière ligne est la seule qui aille vers le haut, et c'est elle qui doit
-être dite le plus clairement : la numérisation est la cause, elle est décidée et
-chiffrée (profil de numérisation du 20/08, pente ~3 Go/an par personne qui
-scanne). Annoncer un chiffre unique sans pente est précisément ce que le plan de
-marche range dans les choses à ne pas faire.
+**Sur la RAM.** 360 Mo est une mesure **au repos** : aucun trafic, Postgres n'a
+pas gonflé ses caches. C'est un plancher, pas une taille de VM — et le message le
+dit, plutôt que de laisser croire à une mesure qu'on n'a pas faite. Ce qu'il
+affirme est exactement ce qu'on sait : l'ordre de grandeur n'est pas celui
+annoncé, et une machine à 8 Go est inutile.
+
+**Sur le disque, on ne donne plus de chiffre.** Le brouillon annonçait 20 Go puis
+50 sur trois à cinq ans. La décision « troisième voie » du 20/08 périme ce
+chiffrage — les ouvrages sous droits *détenus* deviennent numérisables en
+intégral, là où le calcul ne leur accordait qu'une couverture — et la décision le
+signale elle-même comme **à rechiffrer avant l'appel**. Donner 20/50 Go
+aujourd'hui reviendrait à répéter l'erreur qu'on corrige. Le message annonce donc
+le sens (ça grandira, lentement, borné par la vitesse humaine) et promet un taux
+et une pente pour l'appel — ce que le §5.3 réclame de toute façon, et qui vaut
+mieux qu'un nombre unique déjà vieilli.
 
 ---
 
@@ -46,21 +68,25 @@ marche range dans les choses à ne pas faire.
 > faut.
 >
 > Une précision avant que vous vous décidiez : depuis le mail que je vous ai
-> envoyé, j'ai mesuré au lieu d'estimer, et **c'est plus léger que ce que je vous
-> ai annoncé**. Pas dix conteneurs mais **six**, et une base de **20 Mo** et non
-> 100. Côté mémoire, la pile tourne avec **⟨RAM_MESURÉE⟩ Go** — là où je vous
-> demandais 4 Go minimum et 8 Go confortables. Si ça change quelque chose à ce
-> que vous pouvez proposer, ou à ce que ça coûte, autant que vous le sachiez
-> maintenant.
+> envoyé, j'ai mesuré au lieu d'estimer, et **la machine demandée est plus petite
+> que ce que je vous ai annoncé**. Pas dix conteneurs mais **six**, et une base
+> de **20 Mo** et non 100.
 >
-> En revanche, une correction dans l'autre sens, et je préfère vous la dire tout
-> de suite plutôt que de revenir vous voir dans deux ans : **le disque va
-> grandir**. On a arrêté un profil de numérisation, et les bibliothèques du
-> réseau vont numériser leur domaine public. Ça donne **20 Go pour démarrer et
-> jusqu'à ~50 Go sur trois à cinq ans**, à raison d'environ 3 Go par an et par
-> personne qui numérise. Ce n'est pas un pic, c'est une pente lente et bornée par
-> la vitesse humaine — mais elle existe, et je ne veux pas vous vendre 20 Go pour
-> en redemander plus tard.
+> Côté mémoire, les six conteneurs tiennent dans **360 Mo au repos** — là où je
+> vous demandais 4 Go minimum et 8 Go confortables. Je précise **au repos** :
+> personne ne consultait le catalogue pendant la mesure, et je n'ai pas encore
+> mesuré sous charge. Ce n'est donc pas un chiffre sur lequel dimensionner, c'est
+> un plancher. Mais l'ordre de grandeur est clair, et il n'est pas celui que je
+> vous ai donné : si vous aviez commencé à chercher une machine à 8 Go, ce n'est
+> pas la peine.
+>
+> Sur le disque, je préfère ne pas vous donner de chiffre aujourd'hui plutôt que
+> de vous en donner un faux. Nous venons d'arrêter une règle de numérisation, et
+> elle élargit le volume par rapport à ce que le premier mail annonçait : nous
+> sommes en train de le rechiffrer. Ce que je peux dire dès maintenant, c'est que
+> **ça grandira** — lentement, borné par la vitesse à laquelle des humains
+> numérisent, pas par la taille des fonds. Je vous apporterai un taux et une
+> pente à l'appel, pas un nombre unique qui aurait vieilli entre-temps.
 >
 > À bientôt,
 
