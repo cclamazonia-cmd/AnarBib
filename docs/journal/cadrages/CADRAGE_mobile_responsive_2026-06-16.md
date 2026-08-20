@@ -181,6 +181,15 @@ poignée d'edits ciblés** :
 
 ## 8. Mise à jour — 20/08/2026 — le diagnostic repris en mesure réelle
 
+> 🧷 **Ce qui fait foi est au registre.** Les doctrines issues de ce chantier ont
+> gradué au [`REGISTRE_decisions.md`](../../specs/REGISTRE_decisions.md) **§ 36 `MOBILE`**
+> (`MOB-1` garde `minmax(0, Nfr)` · `MOB-2` filet `src/styles/mobile.css` · `MOB-3`
+> échelle de points de rupture · `MOB-4` tiroir · `MOB-5` 16 px / 44 px · `MOB-6` tables en
+> cartes · `MOB-7` safe-area · `MOB-8` patches ciblés · `MOB-9` mesure plutôt que lecture ;
+> points ouverts `MOB-Q1..Q3`). Les décisions ouvertes du § 6 (`D1`, `D2`, `D4`, `D5`) y
+> sont tranchées. Ce document reste de la **trace** : on cite les ID du registre, on ne
+> reformule pas la doctrine ici.
+
 > Rédigé par la session « Débordements mobile — champs de saisie », après un
 > signalement répété : *« des champs de saisie qui sortent des cadres de travail
 > définis »*. Le § 0 prévenait que le diagnostic de juin reposait sur un **audit
