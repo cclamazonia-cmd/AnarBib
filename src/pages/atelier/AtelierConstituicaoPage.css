@@ -18,8 +18,8 @@
 .ab-atl-deadline.is-done{ background:rgba(126,224,168,.08); border-color:rgba(126,224,168,.35); color:var(--color-ok,#7ee0a8); }
 
 /* Layout deux colonnes */
-.ab-atl-grid{ display:grid; grid-template-columns:330px 1fr; gap:26px; align-items:start; }
-@media (max-width:880px){ .ab-atl-grid{ grid-template-columns:1fr; } }
+.ab-atl-grid{ display:grid; grid-template-columns:330px minmax(0, 1fr); gap:26px; align-items:start; }
+@media (max-width:880px){ .ab-atl-grid{ grid-template-columns:minmax(0, 1fr); } }
 .ab-atl-anchor{ position:sticky; top:18px; display:flex; flex-direction:column; gap:16px; }
 @media (max-width:880px){ .ab-atl-anchor{ position:static; } }
 
@@ -59,8 +59,8 @@
 .ab-atl-locked{ font-size:.82rem; color:var(--brand-muted,#9a93a6); font-style:italic; margin:0 2px; }
 
 /* Cartes volets */
-.ab-atl-cards{ display:grid; grid-template-columns:1fr 1fr; gap:13px; }
-@media (max-width:560px){ .ab-atl-cards{ grid-template-columns:1fr; } }
+.ab-atl-cards{ display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:13px; }
+@media (max-width:560px){ .ab-atl-cards{ grid-template-columns:minmax(0, 1fr); } }
 .ab-atl-card{
   position:relative; border:1px solid var(--brand-panel-border,rgba(255,255,255,.1)); border-radius:14px;
   background:rgba(255,255,255,.035); padding:15px 15px 40px; cursor:pointer; overflow:hidden;

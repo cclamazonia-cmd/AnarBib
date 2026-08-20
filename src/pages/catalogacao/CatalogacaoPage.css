@@ -182,7 +182,7 @@
 
 .cat-book-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px 18px;
 }
 
@@ -334,7 +334,7 @@
 }
 
 @media (max-width: 720px) {
-  .cat-book-grid { grid-template-columns: 1fr; }
+  .cat-book-grid { grid-template-columns: minmax(0, 1fr); }
   .cat-book-grid [style*="grid-column: span"] { grid-column: span 1 !important; }
 }
 
@@ -384,7 +384,14 @@
 .ab-warnline { font-size: .74rem; color: var(--color-warn, #fbbf24); margin-top: 3px; }
 
 @media (max-width: 1040px) {
-  .ab-work { grid-template-columns: 1fr; }
+  /* minmax(0, 1fr) et non 1fr : une piste `1fr` a un minimum AUTO, donc la
+     largeur min-content de son contenu. Le formulaire (grille dense, champs de
+     saisie) forçait ainsi la piste à ~378 px dans un panneau de 272 px, et TOUS
+     les champs sortaient du cadre sur téléphone — mesuré en production le
+     20/08/2026 à 354 px de large. La règle bureau ci-dessus avait déjà la garde ;
+     c'est l'écrasement mobile qui la perdait. Même garde sur toutes les pistes
+     `fr` de l'app (cf. src/styles/mobile.css pour le filet côté champs). */
+  .ab-work { grid-template-columns: minmax(0, 1fr); }
   .ab-preview { position: static; }
 }
 

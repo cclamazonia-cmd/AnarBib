@@ -102,8 +102,8 @@
 .ab-painel-item__meta { font-size: .82rem; color: var(--brand-muted); display: block; margin-top: 2px; }
 
 /* Ações grid */
-.ab-painel-acoes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 800px) { .ab-painel-acoes-grid { grid-template-columns: 1fr; } }
+.ab-painel-acoes-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 800px) { .ab-painel-acoes-grid { grid-template-columns: minmax(0, 1fr); } }
 .ab-painel-acoes-card {
   display: flex; flex-direction: column; gap: 10px;
   padding: 16px; border: 1px solid rgba(255,255,255,.08);
@@ -538,7 +538,7 @@
 .ab-painel-edit-profile label { font-size: .82rem; }
 .ab-painel-field--span2 { grid-column: span 2; }
 .ab-painel-edit-summary { cursor: pointer; font-weight: 600; font-size: .9rem; }
-.ab-painel-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ab-painel-field-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
 .ab-painel-field-grid--mt { margin-top: 8px; }
 .ab-painel-addr-title { margin: 12px 0 6px; font-size: .88rem; font-weight: 600; }
 .ab-painel-addr-raw { font-size: .82rem; color: var(--brand-muted, #aaa); margin: 6px 0; white-space: pre-line; }

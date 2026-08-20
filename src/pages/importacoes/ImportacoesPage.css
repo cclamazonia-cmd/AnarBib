@@ -386,7 +386,7 @@
 
 .imp-row3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -433,7 +433,7 @@
 /* ── Responsive ──────────────────────────────────────────── */
 
 @media (max-width: 760px) {
-  .imp-row3 { grid-template-columns: 1fr; }
+  .imp-row3 { grid-template-columns: minmax(0, 1fr); }
   .imp-queue .imp-hide-sm { display: none; }
 
   /* M5 (chantier mobile Phase A) — tables larges : scroll horizontal

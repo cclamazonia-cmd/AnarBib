@@ -62,7 +62,7 @@
   background: var(--brand-panel-bg-strong); color: var(--brand-text); font-size: .92rem;
 }
 .ab-conta-form input:focus, .ab-conta-form select:focus { border-color: var(--brand-color-primary); outline: none; }
-.ab-conta-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ab-conta-grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 .ab-conta-grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
 .ab-conta-hr { border: none; border-top: 1px solid rgba(255,255,255,.10); margin: 14px 0; }
 .ab-conta-form h3 { margin: 0 0 8px; font-size: 1rem; }
@@ -109,7 +109,7 @@
 
 @media (max-width: 640px) {
   .ab-conta-tabs { flex-direction: column; }
-  .ab-conta-grid2 { grid-template-columns: 1fr; }
+  .ab-conta-grid2 { grid-template-columns: minmax(0, 1fr); }
   .ab-conta-reserve-form { flex-direction: column; }
   .ab-conta-reserve-form .ab-input { max-width: none; width: 100%; }
 }
