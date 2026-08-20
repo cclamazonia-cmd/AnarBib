@@ -414,7 +414,7 @@ export default function RedePage() {
                     {lib.allows_new_reservations && <span className="cat-pill ok" style={{ fontSize:'.68rem' }}>{t({ id: 'rede.allowsReservations' })}</span>}
                     {!lib.allows_new_loans && <span className="cat-pill danger" style={{ fontSize:'.68rem' }}>{t({ id: 'rede.noLoans' })}</span>}
                   </div>
-                  <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:4, marginBottom:8 }}>
+                  <div style={{ display:'grid', gridTemplateColumns: 'repeat(4,minmax(0, 1fr))', gap:4, marginBottom:8 }}>
                     {statCell(lib.readers, t({id:'rede.stats.readers'}))}
                     {statCell(lib.staff, t({id:'rede.stats.staff'}))}
                     {statCell(lib.exemplars, t({id:'rede.stats.exemplars'}))}
@@ -440,7 +440,7 @@ export default function RedePage() {
             </select>
           </div>
 
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
+          <div style={{ display:'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap:16 }}>
             <div style={lw}>
               {filteredReqs.length===0 && <div style={{ padding:16, fontSize:'.88rem', color:'var(--brand-muted)' }}>{t({id:'common.empty'})}</div>}
               {filteredReqs.map((r,i) => (
@@ -552,11 +552,11 @@ export default function RedePage() {
         {tab==='libraries' && (<div>
           <h3 style={{ marginBottom:12 }}>{t({ id: 'rede.libraries.panoramaTitle' }, { count: libCards.length })}</h3>
           <div style={lw}>
-            <div style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'8px 12px', fontSize:'.75rem', fontWeight:700, color:'var(--brand-muted)', borderBottom:'1px solid rgba(255,255,255,.08)' }}>
+            <div style={{ display:'grid', gridTemplateColumns: 'minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .8fr)', gap:0, padding:'8px 12px', fontSize:'.75rem', fontWeight:700, color:'var(--brand-muted)', borderBottom:'1px solid rgba(255,255,255,.08)' }}>
               <div>{t({ id: 'nav.library' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.th.service' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.readers' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.staff' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.stats.exemplars' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOpenShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.loansOverdueShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'rede.overview.reservationsActiveShort' })}</div><div style={{ textAlign:'center' }}>{t({ id: 'common.actions' })}</div>
             </div>
             {libCards.map((lib,i) => (
-              <div key={lib.id} style={{ display:'grid', gridTemplateColumns:'2.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr .8fr', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
+              <div key={lib.id} style={{ display:'grid', gridTemplateColumns: 'minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, .8fr)', gap:0, padding:'10px 12px', background:i%2===0?'rgba(0,0,0,.08)':'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
                 <div>
                   <div style={{ fontSize:'.9rem', fontWeight:600 }}>{lib.name} <span className={`cat-pill ${lib.is_active?'ok':'warn'}`} style={{ fontSize:'.6rem' }}>{lib.is_active?t({ id: 'rede.libraryActive' }):t({ id: 'rede.libraryInactive' })}</span></div>
                   <div style={{ fontSize:'.78rem', color:'var(--brand-muted)' }}>{lib.slug} · {lib.city||'—'} · {lib.contact_email||'—'}</div>

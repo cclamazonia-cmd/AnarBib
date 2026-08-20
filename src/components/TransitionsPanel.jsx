@@ -272,7 +272,7 @@ export default function TransitionsPanel({ libraryId, role }) {
           {t({ id: 'transitions.propose.hint' })}
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
           <div>
             <label style={ls}>{t({ id: 'transitions.field.axis' })}</label>
             <select value={proposeAxis} onChange={e => { setProposeAxis(e.target.value); setProposeValue(''); }}

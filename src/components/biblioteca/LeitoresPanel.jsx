@@ -191,7 +191,7 @@ export default function LeitoresPanel({ libraryId }) {
         </div>
       ) : (
         <div style={lw}>
-          <div style={{ display:'grid', gridTemplateColumns:'2fr 2.5fr 1fr 1.2fr', gap:0, padding:'8px 12px', fontSize:'.75rem', fontWeight:700, color:'var(--brand-muted)', borderBottom:'1px solid rgba(255,255,255,.08)' }}>
+          <div style={{ display:'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1.2fr)', gap:0, padding:'8px 12px', fontSize:'.75rem', fontWeight:700, color:'var(--brand-muted)', borderBottom:'1px solid rgba(255,255,255,.08)' }}>
             <div>{t({ id: 'biblioteca.leitores.name' })}</div>
             <div>{t({ id: 'biblioteca.leitores.email' })}</div>
             <div style={{ textAlign:'center' }}>{t({ id: 'biblioteca.leitores.since' })}</div>
@@ -202,7 +202,7 @@ export default function LeitoresPanel({ libraryId }) {
             const fullName = `${p.first_name||''} ${p.last_name||''}`.trim() || '—';
             const isBusy = busyUserId === r.user_id;
             return (
-              <div key={r.user_id} style={{ display:'grid', gridTemplateColumns:'2fr 2.5fr 1fr 1.2fr', gap:0, padding:'10px 12px', background: i%2===0 ? 'rgba(0,0,0,.08)' : 'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
+              <div key={r.user_id} style={{ display:'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 2.5fr) minmax(0, 1fr) minmax(0, 1.2fr)', gap:0, padding:'10px 12px', background: i%2===0 ? 'rgba(0,0,0,.08)' : 'transparent', borderBottom:'1px solid rgba(255,255,255,.04)', alignItems:'center' }}>
                 <div style={{ fontSize:'.9rem', fontWeight:600 }}>{fullName}</div>
                 <div style={{ fontSize:'.85rem', color:'var(--brand-muted)' }}>{p.email || '—'}</div>
                 <div style={{ textAlign:'center', fontSize:'.82rem', color:'var(--brand-muted)' }}>

@@ -108,7 +108,7 @@ export default function FicedlTermPage() {
 
               {/* Les 10 langues du vocabulaire partagé */}
               <div style={sectionTitle}>{t({ id: 'ficedl.term.allLanguages' })}</div>
-              <dl style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 14px', margin: 0, fontSize: '.92rem' }}>
+              <dl style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr)', gap: '4px 14px', margin: 0, fontSize: '.92rem' }}>
                 {LANGS.filter((code) => term.labels && term.labels[code]).map((code) => (
                   <div key={code} style={{ display: 'contents' }}>
                     <dt style={{ color: 'var(--brand-muted)', textTransform: 'capitalize' }}>{langName(code, locale)}</dt>

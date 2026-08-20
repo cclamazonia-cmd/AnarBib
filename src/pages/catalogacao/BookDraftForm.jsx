@@ -2996,8 +2996,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                             {t({ id: 'catalogacao.dedup.notDuplicate' })}
                           </button>
                           <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                            onClick={() => mergeBookDuplicateIntoCurrent(d.book_id, d.titulo)} disabled={bookDupBusy != null}>
-                            {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
+                            onClick={() => mergeBookDuplicateIntoCurrent(d.book_id, d.titulo)} disabled={bookDupBusy != null}
+                            title={t({ id: 'catalogacao.dedup.deleteThisRecordHint' })}>
+                            {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.deleteThisRecord' })}
                           </button>
                         </>
                       ) : (

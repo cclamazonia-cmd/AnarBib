@@ -463,7 +463,7 @@ export default function CriarContaPage() {
           {/* ═══ Étape 2 — Toi ═══ */}
           {step === 2 && (<>
           {/* Nom + Prénom */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 16 }}>
             <div>
               <label style={ls}>{t({id:'auth.create.firstName'})} {req}</label>
               <input type="text" value={form.first_name} onChange={e => set('first_name', e.target.value)} required style={fs} autoComplete="given-name" />
@@ -544,7 +544,7 @@ export default function CriarContaPage() {
           </div>
 
           {/* Numéro / Code postal / Quartier (le label "bairro/quartier" reste utile en BR/FR/ES) */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
             <div>
               <label style={ls}>{t({id:'address.unit'})}</label>
               <input type="text" value={form.unit} onChange={e => set('unit', e.target.value)} style={fs} />

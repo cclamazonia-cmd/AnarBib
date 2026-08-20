@@ -104,7 +104,7 @@ export default function ExternalDepositPartnerSection({ libraryId, canEdit }) {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 10 }}>
         <div style={{ gridColumn: 'span 2' }}>
           <label style={label}>{t({ id: 'biblioteca.extPartner.name' })}</label>
           <input style={input} value={name} onChange={onNameChange}

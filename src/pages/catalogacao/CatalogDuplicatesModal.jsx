@@ -325,8 +325,9 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
                       {[cote(r, 'a'), cote(r, 'b')].map((c) => renderCote(c,
                         arbitre && r.fusion_possible ? (
                           <button type="button" className="ab-button ab-button--mini" disabled={busy}
-                            onClick={() => fusionner(r, c.id)}>
-                            {t({ id: 'catalogacao.dedup.merge' })}
+                            onClick={() => fusionner(r, c.id)}
+                            title={t({ id: 'catalogacao.dedup.keepThisHint' })}>
+                            {t({ id: 'catalogacao.dedup.keepThis' })}
                           </button>
                         ) : null
                       ))}

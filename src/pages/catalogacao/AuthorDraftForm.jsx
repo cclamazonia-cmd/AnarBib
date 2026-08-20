@@ -923,7 +923,7 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                 <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: '.88rem', marginBottom: 6 }}>
                   {t({id:'catalogacao.bio.translations'})} {bioTranslations.length > 0 && `(${bioTranslations.map(bt => bt.lang).join(', ')})`}
                 </summary>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 8, marginTop: 8 }}>
                   {ALLOWED_BIO_LANGS.map(lang => {
                     const existing = bioTranslations.find(bt => bt.lang === lang);
                     const isDirty = bioDirty.has(lang);
@@ -1054,8 +1054,9 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                       </span>
                       {arbitreDoublons && (
                         <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                          onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}>
-                          {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
+                          onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}
+                          title={t({ id: 'catalogacao.dedup.deleteThisAuthorityHint' })}>
+                          {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.deleteThisAuthority' })}
                         </button>
                       )}
                     </div>

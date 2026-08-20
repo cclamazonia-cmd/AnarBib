@@ -267,9 +267,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
           {c.sort_name || '—'}{typeof c.linked_books === 'number' ? ` · ${t({ id: 'catalogacao.dedup.books' }, { count: c.linked_books })}` : ''}
         </div>
       </div>
+      {/* Le bouton est sur la CIBLE a conserver : « X y sera rattachee puis
+          supprimee » est deja dit en tete de modale, d'ou pas d'infobulle. */}
       <button type="button" className="ab-button ab-button--sm" disabled={mergeBusy}
         onClick={() => doMerge(c)} style={{ flexShrink: 0 }}>
-        {t({ id: 'catalogacao.dedup.merge' })}
+        {t({ id: 'catalogacao.dedup.keepThis' })}
       </button>
     </div>
   );

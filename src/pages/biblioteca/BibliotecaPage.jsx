@@ -1592,7 +1592,7 @@ export default function BibliotecaPage() {
           <LibraryPublicContactSection libraryId={libraryId} canEdit={isCoord} />
           {notifPolicy && <div style={bx}>
             <h4 style={{ margin:'0 0 10px' }}>{t({ id: 'biblioteca.comms.notifTypes' })}</h4>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:6 }}>
+            <div style={{ display:'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap:6 }}>
               {NOTIFICATION_FLAG_KEYS.map(k => (
                 <label key={k} style={{ display:'flex', gap:8, alignItems:'center', fontSize:'.88rem', cursor:'pointer', padding:'4px 0' }}>
                   <input type="checkbox" checked={notifPolicy[k+'_enabled']||false} onChange={e=>setNP(k+'_enabled',e.target.checked)} />

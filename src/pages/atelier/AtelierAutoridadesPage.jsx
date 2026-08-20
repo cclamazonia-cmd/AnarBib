@@ -195,7 +195,7 @@ export default function AtelierAutoridadesPage() {
                 <option value="subject">{t({ id: 'atelier.kind.subject', defaultMessage: 'Matéria (subject)' })}</option>
               </select>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 10, marginBottom: 10, alignItems: 'end' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px minmax(0, 1fr)', gap: 10, marginBottom: 10, alignItems: 'end' }}>
               <div>
                 <label style={ls}>{t({ id: 'atelier.form.duplicate', defaultMessage: 'ID da duplicata (a remover)' })}</label>
                 <input type="number" value={form.targetId} onChange={e => setForm(f => ({ ...f, targetId: e.target.value }))} style={fs} />
@@ -216,7 +216,7 @@ export default function AtelierAutoridadesPage() {
             </>)}
 
             {form.kind === 'traduction' && (<>
-            <div style={{ display: 'grid', gridTemplateColumns: '88px 1fr 104px', gap: 10, marginBottom: 10, alignItems: 'end' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '88px minmax(0, 1fr) 104px', gap: 10, marginBottom: 10, alignItems: 'end' }}>
               <div>
                 <label style={ls}>{t({ id: 'atelier.form.authorId', defaultMessage: 'ID da autoridade (pessoa)' })}</label>
                 <input type="number" value={form.targetId} onChange={e => setForm(f => ({ ...f, targetId: e.target.value }))} style={fs} />

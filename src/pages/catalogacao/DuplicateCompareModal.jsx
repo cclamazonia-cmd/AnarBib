@@ -90,10 +90,13 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
     for (const [col] of FIELDS) {
       if (picks[`${i}:${col}`] && canTake(cand, col)) fields[col] = otherVal(cand, col);
     }
-    if (!window.confirm(t({ id: 'catalogacao.dup.mergeConfirm' }))) return;
+    const isBook = cand.source === 'book';
+    // merge_draft_into_book absorbe le brouillon OUVERT ; merge_book_drafts
+    // (survivant = ouvert) tue le CANDIDAT. Un message unique mentirait une
+    // fois sur deux.
+    if (!window.confirm(t({ id: isBook ? 'catalogacao.dup.mergeConfirm' : 'catalogacao.dup.absorbConfirm' }))) return;
     setMerging(true); setMergeErr('');
     try {
-      const isBook = cand.source === 'book';
       const fn = isBook ? 'merge_draft_into_book' : 'merge_book_drafts';
       const params = isBook
         ? { p_draft_id: draftId, p_book_id: cand.candidate_id, p_fields: fields }
@@ -221,8 +224,9 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                             <span style={{ fontSize: '.66rem', color: 'var(--brand-muted, #aaa)' }}>{Math.round((Number(c.score) || 0) * 100)}%</span>
                           </span>
                           <button type="button" className="ab-button ab-button--sm" disabled={merging}
-                            onClick={() => doMerge(c, i)} style={{ alignSelf: 'flex-start', fontSize: '.66rem', padding: '3px 8px' }}>
-                            {t({ id: c.source === 'book' ? 'catalogacao.dup.mergeInto' : 'catalogacao.dup.mergeDrafts' })}
+                            onClick={() => doMerge(c, i)} style={{ alignSelf: 'flex-start', fontSize: '.66rem', padding: '3px 8px' }}
+                            title={c.source === 'book' ? undefined : t({ id: 'catalogacao.dup.absorbDraftHint' })}>
+                            {t({ id: c.source === 'book' ? 'catalogacao.dup.mergeInto' : 'catalogacao.dup.absorbDraft' })}
                           </button>
                           {c.source === 'book' && src?.published_book_id && (
                             arbitreDoublons ? (

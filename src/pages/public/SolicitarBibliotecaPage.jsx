@@ -481,16 +481,16 @@ export default function SolicitarBibliotecaPage() {
             <p style={hs}>{req} {t({ id: 'solicitar.requiredFieldHint' })}</p>
 
             <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: '16px 0 10px', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'solicitar.section.library' })}</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
               <div><label style={ls}>{t({ id: 'solicitar.field.libraryName' })} {req}</label><input type="text" value={form.libraryName} onChange={e => set('libraryName', e.target.value)} required style={fs} /></div>
               <div><label style={ls}>{t({ id: 'solicitar.field.libraryShortName' })}</label><input type="text" value={form.libraryShortName} onChange={e => set('libraryShortName', e.target.value)} style={fs} /></div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
               <div><label style={ls}>{t({ id: 'solicitar.field.city' })} {req}</label><input type="text" value={form.city} onChange={e => set('city', e.target.value)} required style={fs} /></div>
               <div><label style={ls}>{t({ id: 'solicitar.field.state' })}</label><input type="text" value={form.state} onChange={e => set('state', e.target.value)} style={fs} /></div>
               <div><label style={ls}>{t({ id: 'solicitar.field.country' })} {req}</label><input type="text" value={form.country} onChange={e => set('country', e.target.value)} required style={fs} /></div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
               <div><label style={ls}>{t({ id: 'solicitar.field.libraryEmail' })} {req}</label><input type="email" value={form.libraryEmail} onChange={e => set('libraryEmail', e.target.value)} required style={fs} /></div>
               <div><label style={ls}>{t({ id: 'solicitar.field.libraryPhone' })}</label><input type="text" value={form.libraryPhone} onChange={e => set('libraryPhone', e.target.value)} style={fs} /></div>
             </div>
@@ -503,11 +503,11 @@ export default function SolicitarBibliotecaPage() {
             </div>
 
             <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: '16px 0 10px', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'solicitar.section.contact' })}</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
               <div><label style={ls}>{t({ id: 'solicitar.field.contactName' })} {req}</label><input type="text" value={form.contactName} onChange={e => set('contactName', e.target.value)} required style={fs} /></div>
               <div><label style={ls}>{t({ id: 'solicitar.field.contactRole' })}</label><input type="text" value={form.contactRole} onChange={e => set('contactRole', e.target.value)} style={fs} /></div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
               <div>
                 <label style={ls}>{t({ id: 'solicitar.field.contactEmail' })} {req}</label>
                 {/* Paquet 25.9 : en mode claim valide, le contactEmail est verrouille
@@ -541,7 +541,7 @@ export default function SolicitarBibliotecaPage() {
 
             <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: '16px 0 10px', fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>{t({ id: 'solicitar.section.presentation' })}</h2>
             <div style={{ marginBottom: 12 }}><label style={ls}>{t({ id: 'solicitar.field.summary' })} {req}</label><textarea value={form.summary} onChange={e => set('summary', e.target.value)} required style={{ ...fs, resize: 'vertical', minHeight: 80 }} /></div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12, marginBottom: 12 }}>
               <div><label style={ls}>{t({ id: 'solicitar.field.publicProfile' })}</label><input type="text" value={form.publicProfile} onChange={e => set('publicProfile', e.target.value)} style={fs} /></div>
               <div><label style={ls}>{t({ id: 'solicitar.field.collectionProfile' })}</label><input type="text" value={form.collectionProfile} onChange={e => set('collectionProfile', e.target.value)} style={fs} /></div>
             </div>

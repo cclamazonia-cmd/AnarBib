@@ -247,7 +247,7 @@ export default function DocumentGovernanceSection({ libraryId, canEdit }) {
             onChange={e => setField('require_available_now', e.target.checked)} />
           {t({ id: 'biblioteca.documents.governance.requireAvailableNow' })}
         </label>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 12 }}>
           <div>
             <label style={styles.fieldLabel}>
               {t({ id: 'biblioteca.documents.governance.minTotalCopies' })}

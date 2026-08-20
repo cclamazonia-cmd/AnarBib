@@ -405,7 +405,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
               {t({ id: 'biblioteca.policySets.newSet' })}
             </button>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 10 }}>
             <div style={{ gridColumn: '1 / -1' }}>
               <label style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.fieldLabel' })}</label>
               <input type="text" style={styles.input} value={setForm.label}
@@ -470,7 +470,7 @@ export default function PolicySetManager({ libraryId, canEdit, regulationDocs = 
               <div style={{ fontSize: '.78rem', color: 'var(--brand-muted)', marginBottom: 8 }}>
                 {t({ id: 'biblioteca.policySets.limitsHint' })}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)', gap: 10 }}>
                 <div>
                   <label style={styles.fieldLabel}>{t({ id: 'biblioteca.policySets.maxConcurrentLoans' })}</label>
                   <input type="number" min="0" style={styles.input} value={setForm.max_concurrent_loans}
