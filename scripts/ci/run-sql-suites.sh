@@ -46,6 +46,9 @@ VAULTSTUB="tests/sql/_ci_setup_vault_stub.sql"
 STORAGESTUB="tests/sql/_ci_setup_storage_stub.sql"
 SEED="supabase/seed.sql"
 MANIFEST="${SQL_SUITES_MANIFEST:-tests/sql/ci-suites.txt}"
+# Classement des tables pour la sauvegarde #BG2 (cf. filet plus bas). Source de
+# vérité : ce fichier. ~/anarbib-ops/bg2-known-tables.txt est un lien vers lui.
+KNOWN="deploy/bg2-known-tables.txt"
 
 fail() { echo "ÉCHEC : $*" >&2; exit 1; }
 command -v psql >/dev/null 2>&1 || fail "psql introuvable (installer postgresql-client)"
@@ -96,6 +99,40 @@ done < /tmp/migs.sorted
 echo "${n} migration(s) appliquée(s) (baseline + forward)"
 apply seed "$SEED"; echo "seed appliqué"
 echo "::endgroup::"
+
+# ---- filet BG2 : toute table de `public` doit être classée ----------------
+# PLAN_DE_MARCHE règle 6 : une table créée dans `public` BLOQUE la sauvegarde
+# suivante tant qu'elle n'est pas classée — anarbib-bg2.sh y appelle `die`, il
+# ne se contente pas d'avertir. Jusqu'ici la règle n'était qu'une discipline :
+# le fichier de classement vivait hors dépôt (~/anarbib-ops/), donc RIEN ne
+# l'appliquait. Vécu le 19/08/2026 : `altcha_consumed_challenges` est arrivée
+# non classée et TOUTES les sauvegardes échouaient depuis, sans que personne le
+# voie ; seule l'alarme de silence l'aurait dit, ~36 h plus tard.
+# Le fichier est désormais dans le dépôt et ~/anarbib-ops/ pointe dessus par un
+# lien symbolique : une seule copie, et la forge échoue sur LE commit fautif.
+echo "::group::filet BG2 (classement des tables pour la sauvegarde)"
+[ -f "$KNOWN" ] || fail "classement des tables absent : $KNOWN"
+PT -At -c "select c.relname from pg_class c
+             join pg_namespace n on n.oid = c.relnamespace
+            where n.nspname = 'public' and c.relkind = 'r'" \
+  | grep -v '^$' | LC_ALL=C sort -u > /tmp/bg2-real.txt
+grep -vE '^[[:space:]]*(#|$)' "$KNOWN" | LC_ALL=C sort -u > /tmp/bg2-known.txt
+non_classees="$(comm -23 /tmp/bg2-real.txt /tmp/bg2-known.txt)"
+# Sens NON bloquant : une table classée mais absente du schéma reconstruit
+# n'empêche aucune sauvegarde (le filet de anarbib-bg2.sh ne teste pas ce sens
+# sur KNOWN, seulement sur la denylist). Simple signalement.
+orphelines="$(comm -13 /tmp/bg2-real.txt /tmp/bg2-known.txt)"
+[ -z "$orphelines" ] || { echo "::warning::classées mais absentes du schéma reconstruit :"
+  printf '%s\n' "$orphelines" | sed 's/^/    - /'; }
+echo "::endgroup::"
+if [ -n "$non_classees" ]; then
+  echo "::error::tables NON CLASSÉES pour la sauvegarde :"
+  printf '%s\n' "$non_classees" | sed 's/^/    - /'
+  echo "  → ajoute-les à $KNOWN. Si elles portent des données personnelles,"
+  echo "    ajoute-les AUSSI à bg2-denylist.txt (côté ~/anarbib-ops/)."
+  fail "filet BG2 : classe les nouvelles tables avant de fusionner."
+fi
+echo "filet BG2 OK : $(wc -l < /tmp/bg2-real.txt) tables, toutes classées"
 
 # ---- exécution des suites (allowlist du manifeste) ------------------------
 rc=0; ran=0

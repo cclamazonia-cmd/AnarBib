@@ -148,3 +148,35 @@ remet l'ancienne valeur et on redéploie le front.
 
 Le chiffre à rapporter à hfo est celui de l'étape 8 — pas celui d'un compose qui
 démarre, mais celui d'une connexion réussie depuis un front reconstruit.
+
+---
+
+## `bg2-known-tables.txt` — le classement des tables pour la sauvegarde
+
+Liste plate et triée de **toutes** les tables de `public`. C'est le « filet » de
+la chaîne de sauvegarde #BG2 : `anarbib-bg2.sh` compare les tables réellement
+présentes en base à cette liste et **s'arrête** (`die`, pas un avertissement) dès
+qu'il en trouve une qu'il ne sait pas classer. Une table oubliée ici, et plus
+aucune sauvegarde ne part.
+
+**Ce fichier est la source de vérité.** `~/anarbib-ops/bg2-known-tables.txt` est
+un lien symbolique vers lui : il n'existe qu'une copie, elle ne peut pas
+diverger.
+
+Deux autres listes complètent le classement et vivent, elles, dans
+`~/anarbib-ops/` — elles nomment des données personnelles, ce dépôt est public :
+
+| Fichier | Ce qu'il désigne |
+|---|---|
+| `bg2-denylist.txt` | données personnelles effaçables : exclues du flux long, incluses au court (rétention 7 j) |
+| `bg2-exclude-long.txt` | données transitoires sans valeur de restauration : ni long, ni court |
+
+Une table listée dans l'une des deux **reste** dans `bg2-known-tables.txt` : la
+première dit *où* sauvegarder, la seconde dit seulement que la table est connue.
+
+**Ajouter une table ici fait partie de la migration qui la crée.** Le job
+`sql-tests` reconstruit le schéma depuis les migrations et compare : une table
+non classée rend le run rouge, sur le commit fautif. Avant ce garde-fou
+(19/08/2026), la règle n'était qu'une discipline — `altcha_consumed_challenges`
+est arrivée non classée et toutes les sauvegardes ont échoué en silence, sans
+autre filet que l'alarme de silence, 36 h plus tard.

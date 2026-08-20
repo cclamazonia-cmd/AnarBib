@@ -30,6 +30,11 @@ on:
       - 'tests/sql/**'
       - 'scripts/ci/run-sql-suites.sh'
       - '.forgejo/workflows/sql-tests.yml'
+      # Classement des tables pour la sauvegarde #BG2 : le job le compare au
+      # schéma reconstruit (filet, cf. run-sql-suites.sh). Le déclencheur
+      # `supabase/migrations/**` couvre déjà le cas « une migration crée une
+      # table » ; celui-ci couvre le cas inverse — on corrige le classement.
+      - 'deploy/bg2-known-tables.txt'
   workflow_dispatch: {}
 
 # Groupe DISTINCT de cicd-main : on ne veut pas qu'un run sql-tests et un run
