@@ -152,9 +152,35 @@ continue de fonctionner tel quel.
 **Contrôle après déploiement** : statut identique à avant — mêmes hôtes, mêmes
 seuils, `ok: true`, une seule signature, toutes les lignes en `'ok'`.
 
-Le palier 2 — apprendre à la sonde « dernière ligne `started` et vieille de
-quelques heures → tir interrompu » — reste à faire, et le script ne signalera son
-départ qu'à ce moment-là.
+### Palier 2 appliqué — la sonde reconnaît un tir interrompu
+
+Migration `20260820165002_temoin_tir_interrompu`. La règle : un témoin de
+**départ** plus récent que le dernier témoin d'**arrivée**, et vieux de plus
+d'une heure → le tir est mort en route.
+
+**Le seuil d'une heure est mesuré, pas choisi.** Les trois unités portent
+`TimeoutStartSec=1800` — systemd tue lui-même un tir au-delà de 30 minutes — et
+les durées réelles du flux `court` sont de 5 à 7 minutes (6 min 40 le 17/08,
+5 min 37 le 18/08, 5 min 08 le 19/08). Une heure laisse le double de la borne
+systemd, ce qui absorbe le seul faux positif imaginable : une machine mise en
+veille quelques minutes pendant le tir.
+
+**Détection ramenée de ~37 h à ~1 h**, et sans faux positif du type « machine
+éteinte » : un témoin `started` *prouve* qu'un tir a commencé.
+
+Côté sonde, **rien à redéployer** pour que l'incident s'ouvre : `health-probe`
+filtre déjà sur `muet`, qui devient vrai dans les deux cas. Un champ `raison`
+est ajouté pour que le courriel cesse de dire « muet depuis 1.2 h » quand le
+seuil de silence est de 36 h ; la sonde l'utilisera à sa prochaine mise à jour
+et retombe sinon sur son libellé actuel.
+
+Contrôle après application : statut inchangé, `ok: true`, `interrompu: false`
+partout — neutre tant que le script n'envoie pas de témoin de départ.
+
+**Reste à faire** : modifier `anarbib-bg2.sh` pour qu'il signale son départ, et
+pour qu'il transmette le vrai `snapshot_id`. Différé volontairement — modifier
+le script de sauvegarde quelques minutes avant qu'il ne s'exécute serait
+exactement la mauvaise idée.
 
 #### Au passage, la règle 11 du plan de marche est incomplète
 
