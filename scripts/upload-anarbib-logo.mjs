@@ -23,6 +23,11 @@
  *   --dry-run    n'ecrit rien, liste ce qui serait pousse
  *   --no-backup  saute la sauvegarde locale de l'existant (deconseille)
  *
+ * Chaque fichier part sous DEUX noms : versionne (logo-v2.svg, cache un an, ce
+ * que le manifeste reference) et nu (logo.svg, alias stable pour les URLs en
+ * dur, cache une heure). Le script repointe aussi themes/default/manifest.json.
+ * Pour publier un nouveau dessin : incrementer ASSET_VERSION, puis relancer.
+ *
  * Idempotent (upsert) : relancable sans dommage.
  */
 
@@ -55,9 +60,45 @@ if (!SERVICE_ROLE && !DRY) {
   process.exit(1);
 }
 
-// Ce qui est remplace. On NE touche PAS a bg.webp (fond de page), aux polices
-// ni a manifest.json : le manifeste pointe deja sur logo.svg et favicon.png,
-// qui sont remplaces en place.
+// ── Noms versionnes ─────────────────────────────────────────────────────
+// Convention deja en place cote BLMF (logo-v2.png, favicon-v3.png) : le nom
+// du fichier porte sa generation. C'est la seule parade fiable au cache.
+//
+// Sans ca, remplacer un asset EN PLACE laisse l'ancienne copie vivre jusqu'a
+// une heure (cacheControl: 3600) chez chaque visiteur et dans le CDN — d'ou le
+// bricolage historique du `?v=<timestamp>` colle a la main. Avec un nom neuf,
+// l'URL change : il n'y a plus rien a invalider, et l'ancienne generation reste
+// accessible (retour arriere immediat en repointant le manifeste).
+//
+// POUR CHANGER LE LOGO : incrementer ASSET_VERSION, puis relancer le script. Il
+// pousse sous les nouveaux noms ET repointe le manifeste dessus. Ne JAMAIS
+// re-pousser une version deja publiee avec des octets differents : ca reintroduit
+// exactement le probleme que le versionnement supprime.
+//
+// CHAQUE FICHIER EST POUSSE DEUX FOIS, et c'est deliberé :
+//   - sous son nom VERSIONNE (logo-v2.svg), cacheable un an puisque ce nom ne
+//     designera jamais d'autres octets. C'est ce que le manifeste reference,
+//     donc ce que l'app sert : plus jamais de logo perime ;
+//   - sous son nom NU (logo.svg), alias stable pour les consommateurs qui ne
+//     lisent pas le manifeste et pointent une URL en dur. Le seul aujourd'hui
+//     est supabase/functions/register/index.ts, qui inline logo-anarbib.png en
+//     data URI dans les mails. Ne pousser QUE des noms versionnes le figerait
+//     sur l'ancien dessin, en silence — le genre de panne qu'on ne voit qu'en
+//     recevant un mail six mois plus tard. L'alias garde le cache d'une heure,
+//     sans consequence : le mail telecharge et inline l'image a l'envoi.
+//
+// v1 = generation implicite, celle d'avant l'introduction des noms versionnes.
+const ASSET_VERSION = 'v2';
+
+/** 'logo.svg' + 'v2' -> 'logo-v2.svg' */
+function versioned(name) {
+  const dot = name.lastIndexOf('.');
+  return `${name.slice(0, dot)}-${ASSET_VERSION}${name.slice(dot)}`;
+}
+
+// Ce qui est pousse. On NE touche PAS a bg.webp (fond de page) ni aux polices.
+// `manifest.json`, lui, est desormais mis a jour : avec des noms versionnes il
+// DOIT l'etre, sinon il continuerait de pointer sur la generation precedente.
 const FILES = [
   { local: 'anarbib-logo.svg',    remote: 'logo.svg',             type: 'image/svg+xml' },
   { local: 'logo-anarbib.png',    remote: 'logo-anarbib.png',     type: 'image/png' },
@@ -69,6 +110,9 @@ const FILES = [
   { local: 'og-image.png',        remote: 'og-image.png',         type: 'image/png' },
 ];
 
+// Cles du manifeste a repointer, et le fichier (nom nu) qui les alimente.
+const MANIFEST_ASSETS = { logo: 'logo.svg', favicon: 'favicon.png' };
+
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE || 'dry', {
   auth: { persistSession: false, autoRefreshToken: false },
 });
@@ -76,8 +120,21 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE || 'dry', {
 console.log(`▶ Logo AnarBib → ${BUCKET}/${PREFIX}/  (${SUPABASE_URL})${DRY ? '  [DRY-RUN]' : ''}`);
 
 // ── Sauvegarde de l'existant ────────────────────────────────────────────
+// On sauve les noms NUS (ceux qui sont ecrases) et le manifeste (reecrit en
+// place). Les noms versionnes, eux, n'ecrasent rien par construction : ils
+// n'ont pas besoin d'etre sauves, et l'ancienne generation reste en ligne.
 if (!NO_BACKUP && !DRY) {
   mkdirSync(BACKUP, { recursive: true });
+  {
+    const url = supabase.storage.from(BUCKET).getPublicUrl(`${PREFIX}/manifest.json`).data.publicUrl;
+    const r = await fetch(`${url}?t=${Date.now()}`, { cache: 'no-store' });
+    if (r.ok) {
+      writeFileSync(resolve(BACKUP, 'manifest.json'), Buffer.from(await r.arrayBuffer()));
+      console.log('  ↓ sauvegarde manifest.json  (a reposer tel quel pour revenir en arriere)');
+    } else {
+      console.log(`  · manifeste illisible (${r.status}) : rien a sauver`);
+    }
+  }
   for (const f of FILES) {
     const url = supabase.storage.from(BUCKET).getPublicUrl(`${PREFIX}/${f.remote}`).data.publicUrl;
     const r = await fetch(url);
@@ -98,26 +155,82 @@ for (const f of FILES) {
     continue;
   }
   const body = readFileSync(localPath);
-  const remotePath = `${PREFIX}/${f.remote}`;
-  if (DRY) {
-    console.log(`  ~ ${remotePath} ← public/img/${f.local} (${(body.length / 1024).toFixed(1)} Ko)`);
-    ok += 1;
-    continue;
+  const ko = (body.length / 1024).toFixed(1);
+
+  // Deux depots par fichier — cf. le commentaire d'ASSET_VERSION.
+  const cibles = [
+    // Nom versionne : ce nom ne designera jamais d'autres octets, donc un an de
+    // cache (immutable de fait). C'est ce que le manifeste reference.
+    { path: `${PREFIX}/${versioned(f.remote)}`, cache: '31536000' },
+    // Alias nu : ecrase a chaque generation, donc cache court.
+    { path: `${PREFIX}/${f.remote}`, cache: '3600' },
+  ];
+
+  for (const cible of cibles) {
+    if (DRY) {
+      console.log(`  ~ ${cible.path} ← public/img/${f.local} (${ko} Ko, cache ${cible.cache}s)`);
+      ok += 1;
+      continue;
+    }
+    const { error } = await supabase.storage.from(BUCKET).upload(cible.path, body, {
+      contentType: f.type,
+      upsert: true,
+      cacheControl: cible.cache,
+    });
+    if (error) { console.error(`  ✗ ${cible.path} : ${error.message}`); fail += 1; }
+    else { console.log(`  ✓ ${cible.path} (${ko} Ko, cache ${cible.cache}s)`); ok += 1; }
   }
-  const { error } = await supabase.storage.from(BUCKET).upload(remotePath, body, {
-    contentType: f.type,
-    upsert: true,
-    cacheControl: '3600', // 1 h : le logo bouge rarement, mais on veut pouvoir corriger vite
-  });
-  if (error) { console.error(`  ✗ ${remotePath} : ${error.message}`); fail += 1; }
-  else { console.log(`  ✓ ${remotePath} (${(body.length / 1024).toFixed(1)} Ko)`); ok += 1; }
+}
+
+// ── Repointage du manifeste ─────────────────────────────────────────────
+// Etape indissociable de la precedente : les assets viennent d'arriver sous des
+// noms neufs, personne ne les sert tant que le manifeste designe les anciens.
+// On ne le reecrit donc QUE si les depots ont tous reussi.
+if (fail === 0) {
+  const remotePath = `${PREFIX}/manifest.json`;
+  const url = supabase.storage.from(BUCKET).getPublicUrl(remotePath).data.publicUrl;
+  const r = await fetch(`${url}?t=${Date.now()}`, { cache: 'no-store' });
+  if (!r.ok) {
+    console.error(`\n  ✗ manifeste illisible (${r.status}) : assets pousses mais NON references.`);
+    fail += 1;
+  } else {
+    const manifest = await r.json();
+    manifest.assets = manifest.assets || {};
+    console.log('\n▶ Manifeste :');
+    for (const [cle, nomNu] of Object.entries(MANIFEST_ASSETS)) {
+      const neuf = supabase.storage.from(BUCKET)
+        .getPublicUrl(`${PREFIX}/${versioned(nomNu)}`).data.publicUrl;
+      const avant = manifest.assets[cle];
+      manifest.assets[cle] = neuf;
+      console.log(`  ${avant === neuf ? '=' : '~'} assets.${cle}`);
+      if (avant !== neuf) console.log(`      ${avant || '(absent)'}\n   -> ${neuf}`);
+    }
+    if (DRY) {
+      console.log('  [DRY-RUN] manifeste non reecrit.');
+    } else {
+      const { error } = await supabase.storage.from(BUCKET).upload(
+        remotePath,
+        Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, 'utf8'),
+        {
+          contentType: 'application/json',
+          upsert: true,
+          // JAMAIS de cache sur le manifeste : c'est lui qui porte l'indirection.
+          // S'il est mis en cache une heure, le versionnement des assets ne sert
+          // a rien — les navigateurs continueraient de lire l'ancien pointage.
+          cacheControl: 'no-cache',
+        },
+      );
+      if (error) { console.error(`  ✗ manifest.json : ${error.message}`); fail += 1; }
+      else { console.log('  ✓ manifest.json repointe'); }
+    }
+  }
 }
 
 const base = supabase.storage.from(BUCKET).getPublicUrl(PREFIX).data.publicUrl;
 console.log(`\n${ok} pousses, ${fail} echecs.`);
 console.log(`Base publique : ${base}`);
 if (!DRY) {
-  console.log('Verifie :  curl -sI "' + base + '/logo.svg"');
-  console.log('Le CDN garde l\'ancienne copie jusqu\'a 1 h : ajoute ?v=' + Date.now() + ' pour forcer.');
+  console.log(`Verifie :  curl -sI "${base}/${versioned('logo.svg')}"`);
+  console.log('Plus de ?v= a coller : le nom porte la generation, l\'URL change avec elle.');
 }
 process.exit(fail ? 1 : 0);
