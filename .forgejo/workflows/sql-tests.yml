@@ -74,3 +74,62 @@ jobs:
           PGHOST: db
           PGPASSWORD: postgres
         run: bash scripts/ci/run-sql-suites.sh
+
+  # ── Alerte : la forge doit DIRE qu'un workflow a echoue ─────────────────
+  #
+  # PLAN_DE_MARCHE §8. `sql-tests` est reste rouge du 17 au 20/08 sans que
+  # personne le voie : un run rouge dans une liste ne se remarque pas. Une
+  # issue, si — le depot est suivi, donc Forgejo envoie un courriel. C'est le
+  # meme angle mort que les sauvegardes, et il n'etait pas couvert.
+  #
+  # AUCUN SECRET A CREER : Forgejo Actions injecte automatiquement GITEA_TOKEN,
+  # limite a ce depot. Rien a poser dans l'interface de la forge.
+  #
+  # ANTI-DOUBLON : on n'ouvre rien si une issue ouverte porte deja le marqueur,
+  # sinon chaque push rouge en creerait une. Refermer l'issue vaut acquittement ;
+  # si le rouge revient ensuite, une nouvelle sera ouverte.
+  #
+  # `continue-on-error` : une alerte cassee ne doit jamais masquer l'echec reel
+  # qu'elle signale.
+  alerte:
+    needs: sql-tests
+    if: failure()
+    runs-on: anarbib-local
+    container:
+      image: node:20
+    continue-on-error: true
+    steps:
+      - name: Ouvrir une issue si le rouge n'est pas deja signale
+        env:
+          FORGE_TOKEN: ${{ secrets.GITEA_TOKEN }}
+        run: |
+          set -u
+          if [ -z "${FORGE_TOKEN:-}" ]; then
+            echo "GITEA_TOKEN absent : alerte impossible (verifier que les Actions ont le droit d'ecrire les tickets)."
+            exit 0
+          fi
+          API="${GITHUB_SERVER_URL}/api/v1/repos/${GITHUB_REPOSITORY}"
+          MARQUEUR="[CI rouge] sql-tests"
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
+          OUVERTES=$(curl -sS -H "Authorization: token ${FORGE_TOKEN}"             "${API}/issues?state=open&limit=50" || echo '')
+          if printf '%s' "$OUVERTES" | grep -qF "$MARQUEUR"; then
+            echo "Une issue ouverte porte deja le marqueur : pas de doublon."
+            exit 0
+          fi
+
+          CORPS="Le workflow **sql-tests** a echoue sur \`${GITHUB_REF_NAME}\`.
+
+          - Commit : ${GITHUB_SHA}
+          - Run : ${RUN_URL}
+
+          Cette issue est ouverte automatiquement parce qu'un run rouge passe
+          inapercu (vecu du 17 au 20/08/2026). **La refermer vaut acquittement** :
+          tant qu'elle reste ouverte, aucune nouvelle ne sera creee."
+
+          # Echappement JSON par node : l'image node:20 le garantit, pas python3.
+          node -e 'const fs=require("fs");fs.writeFileSync("/tmp/issue.json",JSON.stringify({title:process.argv[1],body:process.argv[2]}))'             "$MARQUEUR" "$CORPS"
+
+          CODE=$(curl -sS -o /tmp/reponse.json -w '%{http_code}' -X POST             -H "Authorization: token ${FORGE_TOKEN}"             -H "Content-Type: application/json"             --data @/tmp/issue.json "${API}/issues" || echo 000)
+          echo "Creation de l'issue : HTTP ${CODE}"
+          [ "$CODE" = "201" ] || head -c 400 /tmp/reponse.json
