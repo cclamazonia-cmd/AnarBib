@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Sorbi ĉi tiun malneton",
   "catalogacao.dup.absorbDraftHint": "La markitaj kampoj estas transprenitaj en la malfermitan malneton; ĉi tiu malneto iras al la rubujo.",
   "catalogacao.dup.absorbConfirm": "La markitaj kampoj estas transprenitaj en la malfermitan malneton. Ĉi tiu malneto iras al la rubujo. Ĉu daŭrigi ?",
-  "catalogacao.digital.rights.hint": "Tiu ĉi kampo priskribas la rajtojn, ne tion kio estas disponigata. « Sub kopirajto » = nur la kovrilo, krom se la biblioteko posedas la fizikan ekzempleron: tiam la plena teksto eblas, rezervita al ĝiaj membroj. Pravigu tiun kazon sube."
+  "catalogacao.digital.rights.hint": "Tiu ĉi kampo priskribas la rajtojn, ne tion kio estas disponigata. « Sub kopirajto » = nur la kovrilo, krom se la biblioteko posedas la fizikan ekzempleron: tiam la plena teksto eblas, rezervita al ĝiaj membroj. Pravigu tiun kazon sube.",
+  "federacao.communs.doc.noteAgSamizdats.title": "Decidota — kion AnarBib cirkuligas?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Noto submetita al la ĝenerala asembleo, ne adoptita. Ĉu biblioteko posedanta la paperan libron rajtas disponigi ĝian plenan ciferecigon nur al siaj membroj? La faktoj, kiu portas la respondecon, la kosto kaj kvar opcioj."
 }

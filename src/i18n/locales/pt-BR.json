@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Absorver este rascunho",
   "catalogacao.dup.absorbDraftHint": "Os campos marcados são aproveitados no rascunho aberto; este rascunho vai para a lixeira.",
   "catalogacao.dup.absorbConfirm": "Os campos marcados são aproveitados no rascunho aberto. Este rascunho vai para a lixeira. Continuar?",
-  "catalogacao.digital.rights.hint": "Este campo descreve os direitos, não o que é difundido. « Sob direitos » = apenas a capa, salvo se a biblioteca possuir o exemplar físico: a íntegra torna-se possível, reservada aos seus membros. Justifique esse caso abaixo."
+  "catalogacao.digital.rights.hint": "Este campo descreve os direitos, não o que é difundido. « Sob direitos » = apenas a capa, salvo se a biblioteca possuir o exemplar físico: a íntegra torna-se possível, reservada aos seus membros. Justifique esse caso abaixo.",
+  "federacao.communs.doc.noteAgSamizdats.title": "A decidir — o que AnarBib faz circular?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Nota submetida à assembleia geral, não adotada. Uma biblioteca que possui o livro em papel pode difundir a digitalização integral apenas aos seus membros? A situação de fato, quem responde por ela, o custo e quatro opções."
 }

@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Diesen Entwurf aufnehmen",
   "catalogacao.dup.absorbDraftHint": "Die angehakten Felder werden in den geöffneten Entwurf übernommen; dieser Entwurf wandert in den Papierkorb.",
   "catalogacao.dup.absorbConfirm": "Die angehakten Felder werden in den geöffneten Entwurf übernommen. Dieser Entwurf wandert in den Papierkorb. Fortfahren?",
-  "catalogacao.digital.rights.hint": "Dieses Feld beschreibt die Rechte, nicht das Angebot. „Urheberrechtlich geschützt“ = nur das Cover, außer die Bibliothek besitzt das physische Exemplar: dann ist die Volldigitalisierung möglich, beschränkt auf ihre Mitglieder. Diesen Fall unten begründen."
+  "catalogacao.digital.rights.hint": "Dieses Feld beschreibt die Rechte, nicht das Angebot. „Urheberrechtlich geschützt“ = nur das Cover, außer die Bibliothek besitzt das physische Exemplar: dann ist die Volldigitalisierung möglich, beschränkt auf ihre Mitglieder. Diesen Fall unten begründen.",
+  "federacao.communs.doc.noteAgSamizdats.title": "Zu entscheiden — was verbreitet AnarBib?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Der Generalversammlung vorgelegte Notiz, nicht beschlossen. Darf eine Bibliothek, die das gedruckte Buch besitzt, dessen vollständige Digitalisierung nur ihren Mitgliedern zugänglich machen? Sachlage, Verantwortung, Kosten und vier Optionen."
 }

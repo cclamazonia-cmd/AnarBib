@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Absorbir aquest esborrany",
   "catalogacao.dup.absorbDraftHint": "Els camps marcats es recuperen a l’esborrany obert; aquest esborrany va a la paperera.",
   "catalogacao.dup.absorbConfirm": "Els camps marcats es recuperen a l’esborrany obert. Aquest esborrany va a la paperera. Continuar?",
-  "catalogacao.digital.rights.hint": "Aquest camp descriu els drets, no allò que es difon. «Sota drets» = només la coberta, tret que la biblioteca posseeixi l’exemplar físic: aleshores la íntegra és possible, reservada als seus membres. Justifiqueu aquest cas a sota."
+  "catalogacao.digital.rights.hint": "Aquest camp descriu els drets, no allò que es difon. «Sota drets» = només la coberta, tret que la biblioteca posseeixi l’exemplar físic: aleshores la íntegra és possible, reservada als seus membres. Justifiqueu aquest cas a sota.",
+  "federacao.communs.doc.noteAgSamizdats.title": "Per decidir — què fa circular AnarBib?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Nota sotmesa a l’assemblea general, no adoptada. Pot una biblioteca que posseeix el llibre en paper difondre’n la digitalització íntegra només als seus membres? La situació, qui n’assumeix la responsabilitat, el cost i quatre opcions."
 }

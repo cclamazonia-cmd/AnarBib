@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Absorber este borrador",
   "catalogacao.dup.absorbDraftHint": "Los campos marcados se recuperan en el borrador abierto; este borrador va a la papelera.",
   "catalogacao.dup.absorbConfirm": "Los campos marcados se recuperan en el borrador abierto. Este borrador va a la papelera. ¿Continuar?",
-  "catalogacao.digital.rights.hint": "Este campo describe los derechos, no lo que se difunde. «Bajo derechos» = solo la cubierta, salvo si la biblioteca posee el ejemplar físico: la íntegra es entonces posible, reservada a sus miembros. Justifique ese caso abajo."
+  "catalogacao.digital.rights.hint": "Este campo describe los derechos, no lo que se difunde. «Bajo derechos» = solo la cubierta, salvo si la biblioteca posee el ejemplar físico: la íntegra es entonces posible, reservada a sus miembros. Justifique ese caso abajo.",
+  "federacao.communs.doc.noteAgSamizdats.title": "Por decidir — ¿qué hace circular AnarBib?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Nota sometida a la asamblea general, no adoptada. ¿Puede una biblioteca que posee el libro en papel difundir su digitalización íntegra solo a sus miembros? La situación, quién asume la responsabilidad, el coste y cuatro opciones."
 }

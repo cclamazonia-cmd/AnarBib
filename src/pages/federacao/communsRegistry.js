@@ -75,6 +75,7 @@ import cdEs   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2
 import cdIt   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-it.md?raw';
 import cdNl   from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-nl.md?raw';
 import cdPtBR from '../../../docs/journal/cadrages/CADRAGE_entraide_catalogage_2026-06-15-pt-BR.md?raw';
+import agSamFr from '../../../docs/journal/arbitrages/NOTE_AG_samizdats_2026-08-20.md?raw';
 
 // ── Guide scan — 10 locales (co-écriture par communauté de langue, via Cowork) ─
 import gsCa   from '../../../docs/guides/guide-scan-qr-ca.md?raw';
@@ -180,6 +181,12 @@ const GUIDE_SCAN_BY_LOCALE = {
 // Deux locales seulement, à dessein — les huit autres retombent sur fr.
 const GUIDE_NUMERISATION_BY_LOCALE = { fr: gnuFr, 'pt-BR': gnuPtBR };
 
+// Une seule locale, à dessein : c'est un texte de délibération, appelé à être
+// REMPLACÉ par la décision une fois l'AG passée. Le traduire en dix langues
+// avant qu'il soit tranché serait traduire un brouillon. Les neuf autres
+// locales retombent sur le fr (cf. resolveDocMd).
+const NOTE_AG_SAMIZDATS_BY_LOCALE = { fr: agSamFr };
+
 export const COMMUNS_CATS = ['chartes', 'guides', 'vademecums', 'cadrages'];
 
 export const COMMUNS_DOCS = [
@@ -252,6 +259,17 @@ export const COMMUNS_DOCS = [
     titleKey: 'federacao.communs.doc.cadrageEntraide.title',
     descKey: 'federacao.communs.doc.cadrageEntraide.desc',
     byLocale: CADRAGE_BY_LOCALE,
+  },
+  {
+    // NON ADOPTÉ — c'est une question posée à l'assemblée, pas un texte du
+    // réseau. Rangé en `cadrages` faute de catégorie « délibérations », et le
+    // titre porte « À décider » pour qu'aucune lecture rapide ne le prenne pour
+    // acquis. À REMPLACER par la décision adoptée une fois l'AG passée : c'est
+    // ce remplacement qui en fera un document « vivant » au sens des Communs.
+    id: 'note-ag-samizdats', cat: 'cadrages',
+    titleKey: 'federacao.communs.doc.noteAgSamizdats.title',
+    descKey: 'federacao.communs.doc.noteAgSamizdats.desc',
+    byLocale: NOTE_AG_SAMIZDATS_BY_LOCALE,
   },
 ];
 

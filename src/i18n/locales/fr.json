@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Absorber ce brouillon",
   "catalogacao.dup.absorbDraftHint": "Les champs cochés sont repris dans le brouillon ouvert ; ce brouillon-ci part à la corbeille.",
   "catalogacao.dup.absorbConfirm": "Les champs cochés sont repris dans le brouillon ouvert. Ce brouillon-ci part à la corbeille. Continuer ?",
-  "catalogacao.digital.rights.hint": "Ce champ décrit les droits, pas ce qui est diffusé. « Sous droits » = couverture seule, sauf si la bibliothèque détient l’exemplaire physique : l’intégrale est alors possible, réservée à ses membres. Motivez ce cas ci-dessous."
+  "catalogacao.digital.rights.hint": "Ce champ décrit les droits, pas ce qui est diffusé. « Sous droits » = couverture seule, sauf si la bibliothèque détient l’exemplaire physique : l’intégrale est alors possible, réservée à ses membres. Motivez ce cas ci-dessous.",
+  "federacao.communs.doc.noteAgSamizdats.title": "À décider — que fait circuler AnarBib ?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Note soumise à l’assemblée générale, non adoptée. Une bibliothèque qui possède un livre papier peut-elle en diffuser la numérisation intégrale à ses seuls membres ? L’état de fait, qui porte la responsabilité, ce que ça coûte, et quatre options."
 }

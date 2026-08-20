@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Absorb this draft",
   "catalogacao.dup.absorbDraftHint": "The ticked fields are carried into the open draft; this draft goes to the bin.",
   "catalogacao.dup.absorbConfirm": "The ticked fields are carried into the open draft. This draft goes to the bin. Continue?",
-  "catalogacao.digital.rights.hint": "This field describes the rights, not what is served. “Under copyright” = cover only, unless the library holds the physical copy: the full text is then possible, restricted to its members. Justify that case below."
+  "catalogacao.digital.rights.hint": "This field describes the rights, not what is served. “Under copyright” = cover only, unless the library holds the physical copy: the full text is then possible, restricted to its members. Justify that case below.",
+  "federacao.communs.doc.noteAgSamizdats.title": "To be decided — what does AnarBib circulate?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Note submitted to the general assembly, not adopted. May a library that owns the printed book serve its full digitisation to its own members only? The facts, who bears responsibility, the cost, and four options."
 }

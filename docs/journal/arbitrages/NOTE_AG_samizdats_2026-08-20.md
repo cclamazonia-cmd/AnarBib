@@ -6,9 +6,9 @@
 > La coordination l'a validée le 20/08 et elle est techniquement appliquée.
 > **L'AG est invitée à la ratifier, l'encadrer ou la refuser.**
 >
-> Rédigé le 2026-08-20. Contexte technique et chiffrage :
-> [`DECISION_profil_numerisation_2026-08-20`](DECISION_profil_numerisation_2026-08-20.md)
-> §1 et §8.
+> Rédigé le 2026-08-20. Le détail technique et le chiffrage vivent dans la
+> décision « Profil de numérisation du réseau AnarBib » du 20/08, §1 et §8 —
+> demandez-la à la coordination si vous voulez la lire.
 
 ## 1. L'état de fait
 

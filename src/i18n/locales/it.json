@@ -5832,5 +5832,7 @@
   "catalogacao.dup.absorbDraft": "Assorbire questa bozza",
   "catalogacao.dup.absorbDraftHint": "I campi spuntati sono ripresi nella bozza aperta; questa bozza va nel cestino.",
   "catalogacao.dup.absorbConfirm": "I campi spuntati sono ripresi nella bozza aperta. Questa bozza va nel cestino. Continuare?",
-  "catalogacao.digital.rights.hint": "Questo campo descrive i diritti, non ciò che viene diffuso. « Sotto diritti » = solo la copertina, salvo se la biblioteca possiede la copia fisica: l’integrale diventa possibile, riservata ai suoi membri. Motivare questo caso qui sotto."
+  "catalogacao.digital.rights.hint": "Questo campo descrive i diritti, non ciò che viene diffuso. « Sotto diritti » = solo la copertina, salvo se la biblioteca possiede la copia fisica: l’integrale diventa possibile, riservata ai suoi membri. Motivare questo caso qui sotto.",
+  "federacao.communs.doc.noteAgSamizdats.title": "Da decidere — che cosa fa circolare AnarBib?",
+  "federacao.communs.doc.noteAgSamizdats.desc": "Nota sottoposta all’assemblea generale, non adottata. Una biblioteca che possiede il libro cartaceo può diffonderne la digitalizzazione integrale ai soli suoi membri? Lo stato di fatto, chi ne risponde, il costo e quattro opzioni."
 }
