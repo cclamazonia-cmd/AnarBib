@@ -2,16 +2,17 @@
 //
 // Edge Function PUBLIQUE (verify_jwt = false) — auto-déclaration « ajouter ma biblio »
 // sur la carte du réseau (MAP-J, paquet CARTO-7).
-// Honeypot → Turnstile → rate-limit (public.auth_rate_limits) → INSERT
+// Honeypot → Altcha (preuve de travail) → rate-limit (public.auth_rate_limits) → INSERT
 // public.cartography_submissions (status='pending'). Le trigger
 // tg_cartography_submission_enqueue enfile alors un event dans
 // public.cartography_submission_notification_outbox (→ notify-event → fede@anarbib.org).
 // Rien n'apparaît publiquement : la coordination modère, et l'opt-in reste requis (MAP-E).
 //
 // Déploiement : supabase functions deploy submit-cartography-entry --no-verify-jwt
-// Secrets : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (par défaut), TURNSTILE_SECRET_KEY.
+// Secrets : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (par défaut), ALTCHA_HMAC_SECRET.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { verifierSolution, type ResultatVerification } from "../_shared/altcha.ts";
 
 // Locales de la donnée carto (clé i18n par collectif) : `pt` (pas `pt-BR`).
 const LOCALES = ["fr", "pt", "it", "es", "en", "de", "ca", "eo", "nl", "el"];
@@ -31,23 +32,6 @@ function json(body: unknown, status = 200) {
 async function sha256Hex(s: string) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
-async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
-  if (!secret) { console.warn("TURNSTILE_SECRET_KEY non défini — vérification ignorée"); return true; }
-  if (!token) return false;
-  try {
-    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ secret, response: token, remoteip: ip }),
-    });
-    const d = await r.json();
-    return !!d.success;
-  } catch (e) {
-    console.error("turnstile verify error", e);
-    return false;
-  }
 }
 
 Deno.serve(async (req) => {
@@ -74,7 +58,35 @@ Deno.serve(async (req) => {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const ipHash = await sha256Hex(ip);
 
-  if (!(await verifyTurnstile(p.turnstile_token ? String(p.turnstile_token) : "", ip))) {
+  // ── Anti-robots : preuve de travail Altcha, auto-hébergée (AR-3) ──────────
+  // Remplace Cloudflare Turnstile depuis le 2026-08-20. Aucun appel sortant.
+  // Contrôle en DEUX temps, le second n'est pas optionnel :
+  //   1. verifierSolution()          : signature et solution justes ?
+  //   2. fn_consume_altcha_challenge : ce défi a-t-il déjà servi ? (AR-4)
+  // Sans (2), une solution valide se rejoue jusqu'à expiration : la preuve de
+  // travail ne coûte plus rien.
+  //
+  // ÉCHOUE FERMÉ, contrairement à l'ancien verifyTurnstile qui renvoyait true
+  // quand le secret manquait — une variable d'environnement oubliée désactivait
+  // silencieusement la protection.
+  let preuve: ResultatVerification;
+  try {
+    preuve = await verifierSolution(String(p.altcha_payload ?? ""));
+  } catch (e) {
+    console.error("carto: Altcha indisponible —", (e as Error)?.message ?? e);
+    return json({ error: "captcha_failed" }, 403);
+  }
+  if (!preuve.ok) {
+    console.warn("carto: preuve de travail refusée —", preuve.motif);
+    return json({ error: "captcha_failed" }, 403);
+  }
+  const { data: defiNeuf, error: errDefi } = await sb.rpc("fn_consume_altcha_challenge", {
+    p_challenge: preuve.challenge,
+    p_expires_at: preuve.expiresAt?.toISOString(),
+    p_purpose: "cartography",
+  });
+  if (errDefi || defiNeuf !== true) {
+    console.warn("carto: défi rejoué ou consommation impossible", errDefi ?? "");
     return json({ error: "captcha_failed" }, 403);
   }
 

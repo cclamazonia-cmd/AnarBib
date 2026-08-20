@@ -2,21 +2,20 @@
 // CartografiaAjouterPage.jsx — Auto-déclaration publique « ajouter ma biblio » (MAP-J).
 // =============================================================================
 // Route /cartografia/ajouter (anon). On ne déclare que SA propre bibliothèque
-// (J-B). Soumission → Edge Function publique submit-cartography-entry (Turnstile +
+// (J-B). Soumission → Edge Function publique submit-cartography-entry (Altcha +
 // honeypot + rate-limit) → staging cartography_submissions (pending). Rien n'est
 // public : la coordination modère, puis opt-in requis (MAP-E). Paquet CARTO-7.
 // =============================================================================
 
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Turnstile } from '@marsidev/react-turnstile';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { callEdgeFunction } from '@/lib/supabase';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
+import AltchaWidget from '@/components/ui/AltchaWidget';
 
 const CATS = ['biblioteca', 'arquivo', 'centro_doc', 'ateneu', 'livraria', 'misto'];
 const MAP_LOCALES = ['fr', 'pt', 'it', 'es', 'en', 'de', 'ca', 'eo', 'nl', 'el'];
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 function mapLang(locale) {
   const b = (locale || '').toLowerCase().startsWith('pt') ? 'pt' : (locale || '').slice(0, 2).toLowerCase();
   return MAP_LOCALES.includes(b) ? b : 'fr';
@@ -44,7 +43,12 @@ export default function CartografiaAjouterPage() {
     lat: null, lon: null, website: '',
   });
   const set = (k, v) => setF((p) => ({ ...p, [k]: v }));
-  const [token, setToken] = useState('');
+  // Anti-robots : preuve de travail Altcha, auto-hebergee, aucun appel sortant.
+  // Cf. docs/journal/arbitrages/DECISION_anti_robots_2026-08-20.md (AR-3).
+  // `altchaReset` s'incremente apres chaque tentative : une solution ne vaut
+  // qu'une fois, l'anti-rejeu cote serveur refuserait la seconde (AR-4).
+  const [altchaCharge, setAltchaCharge] = useState(null);
+  const [altchaReset, setAltchaReset] = useState(0);
   const [state, setState] = useState('idle'); // idle | sending | done | error
   const [errMsg, setErrMsg] = useState('');
 
@@ -78,16 +82,23 @@ export default function CartografiaAjouterPage() {
   async function submit(e) {
     e.preventDefault();
     if (f.name.trim().length < 2) { setErrMsg(t({ id: 'cartografia.add.error' })); setState('error'); return; }
+    // Garde-fou d'interface : la vraie verification est cote serveur, ici on
+    // evite seulement d'envoyer un formulaire qui sera refuse.
+    if (!altchaCharge) { setErrMsg(t({ id: 'cartografia.add.error' })); setState('error'); return; }
     setState('sending'); setErrMsg('');
     const res = await callEdgeFunction('submit-cartography-entry', {
       name: f.name, city: f.city, country: f.country, categorie: f.categorie,
       langue_fonds: f.langue_fonds, site_url: f.site_url, email: f.email, tel: f.tel,
       adresse: f.adresse, notes: f.notes, submitter_note: f.submitter_note,
       notes_locale: lang, lat: f.lat, lon: f.lon,
-      turnstile_token: token, website: f.website,
+      altcha_payload: altchaCharge, website: f.website,
     });
     if (res.ok) { setState('done'); }
     else { setErrMsg(t({ id: 'cartografia.add.error' })); setState('error'); }
+    // Une solution ne vaut qu'une fois (AR-4) : on en redemande une neuve dans
+    // tous les cas, succes compris.
+    setAltchaCharge(null);
+    setAltchaReset((n) => n + 1);
   }
 
   const panel = {
@@ -174,11 +185,9 @@ export default function CartografiaAjouterPage() {
                 <div style={{ fontSize: '.72rem', color: 'var(--brand-muted)', marginTop: 4 }}>{f.lat}, {f.lon}</div>
               )}
 
-              {TURNSTILE_SITE_KEY && (
-                <div style={{ marginTop: 16 }}>
-                  <Turnstile siteKey={TURNSTILE_SITE_KEY} onSuccess={setToken} options={{ theme: 'dark' }} />
-                </div>
-              )}
+              <div style={{ marginTop: 16 }}>
+                <AltchaWidget onSolved={setAltchaCharge} resetKey={altchaReset} />
+              </div>
 
               {state === 'error' && <p style={{ color: '#fca5a5', fontSize: '.85rem', marginTop: 12 }}>{errMsg}</p>}
 

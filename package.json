@@ -15,7 +15,6 @@
     "deploy:github-mirror": "vite build && gh-pages -d dist"
   },
   "dependencies": {
-    "@marsidev/react-turnstile": "^1.5.2",
     "@supabase/supabase-js": "^2.49.0",
     "@unimusic/chromaprint": "^0.1.4",
     "@zxing/browser": "^0.2.0",
