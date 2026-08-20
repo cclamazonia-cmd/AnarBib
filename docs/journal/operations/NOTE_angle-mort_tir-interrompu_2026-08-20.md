@@ -134,7 +134,7 @@ de marche est donc faite.
 
 ### Palier 1 appliqué — la colonne `phase`
 
-Migration `20260820235500_temoin_phase_depart`. Elle pose la colonne
+Migration `20260820163045_temoin_phase_depart`. Elle pose la colonne
 (`'started'` / `'ok'`, défaut `'ok'`), ouvre `fn_record_backup_heartbeat` à un
 quatrième paramètre, et **immunise la sonde** : `fn_backup_heartbeat_status` ne
 compte plus que les témoins `'ok'`.
@@ -155,6 +155,29 @@ seuils, `ok: true`, une seule signature, toutes les lignes en `'ok'`.
 Le palier 2 — apprendre à la sonde « dernière ligne `started` et vieille de
 quelques heures → tir interrompu » — reste à faire, et le script ne signalera son
 départ qu'à ce moment-là.
+
+#### Au passage, la règle 11 du plan de marche est incomplète
+
+Elle dit qu'une migration appliquée par le MCP doit être poussée avant ou avec
+son application, et que **« le remède est de pousser le fichier ; le run suivant
+repasse au vert seul »**. Ce n'est pas suffisant, et le CI l'a montré aussitôt.
+
+**Le MCP attribue sa PROPRE version** — l'horodatage du moment où il applique,
+ici `20260820163045` (16 h 30 min 45 s UTC). Le fichier avait été nommé
+`20260820235500_…` d'après la simple numérotation du dossier. Pousser ce
+fichier-là ne répare donc rien : le distant réclame `20260820163045`, que le
+dépôt ne contient toujours pas, et `supabase db push` échoue **à chaque run**,
+indéfiniment. Ce n'est plus une course transitoire, c'est un orphelin permanent.
+
+**Le remède exact** : nommer le fichier avec la version que le MCP a attribuée.
+On la lit dans `supabase_migrations.schema_migrations`, ou dans le message
+d'erreur lui-même — c'est le numéro que le CLI propose de « réparer », et qu'il
+ne faut surtout pas réparer.
+
+La bonne pratique existait déjà dans le dépôt : la migration
+`20260820145716_catalog_duplicates_tri_par_niveau_de_preuve.sql`, appliquée par
+le MCP le même jour, porte exactement son numéro d'application. Il n'y avait
+qu'à regarder.
 
 ### Horaire de tir déplacé en Europe/Paris
 
