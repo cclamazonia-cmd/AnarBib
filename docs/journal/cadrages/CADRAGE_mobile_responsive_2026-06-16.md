@@ -3,7 +3,10 @@
 > **Date** : 2026-06-16
 > **Auteur** : Claude (assistant·e)
 > **Session** : Chantier mobile / responsive — cadrage *(nom provisoire, à confirmer par la coordination)*
-> **Statut** : Cadrage ouvert — diagnostic posé, **rien n'est encore implémenté**.
+> **Statut** : Cadrage **en grande partie réalisé** — voir la mise à jour du
+> **20/08/2026** en fin de document (§ 8 : état des 14 manques, cause absente du
+> diagnostic initial, ce qui reste ouvert). *(Le statut d'origine — « diagnostic
+> posé, rien n'est encore implémenté » — vaut pour la rédaction du 16/06.)*
 > **Préséance** : ce document **cadre** un chantier (liste de manques + plan). Ce qui
 > fait **doctrine** reste dans [`../specs/REGISTRE_decisions.md`](../specs/REGISTRE_decisions.md).
 > Toute décision d'architecture (tokens de breakpoint, menu mobile, go/no-go PWA)
@@ -174,3 +177,141 @@ poignée d'edits ciblés** :
 - Doctrine : [`../specs/REGISTRE_decisions.md`](../specs/REGISTRE_decisions.md)
 - Spec carte-lecteur (mobile / terrain) : [`../specs/spec-carte-lecteur-v0_2.md`](../specs/spec-carte-lecteur-v0_2.md)
 - Cadrage OPAC (écran le plus mobile) : [`CADRAGE_OPAC_chantier_2026-06-07.md`](CADRAGE_OPAC_chantier_2026-06-07.md)
+---
+
+## 8. Mise à jour — 20/08/2026 — le diagnostic repris en mesure réelle
+
+> Rédigé par la session « Débordements mobile — champs de saisie », après un
+> signalement répété : *« des champs de saisie qui sortent des cadres de travail
+> définis »*. Le § 0 prévenait que le diagnostic de juin reposait sur un **audit
+> de code statique**. Il a été repris **en mesure**, d'abord au navigateur à
+> 320 px sur les pages publiques, puis — c'est ce qui a tout débloqué — **sur la
+> page de production elle-même**, session staff ouverte par la coordination et
+> rendu forcé à 360 px via une iframe de même origine.
+
+### 8.1 La cause qui manquait au diagnostic de juin
+
+Les quatre passes d'audit de juin ont bien vu les barres d'action sans repli
+(M1, M2), les modales trop larges (M3), les grilles inline (M4). Elles ont
+**manqué la cause principale**, qui n'est ni un composant ni une page mais une
+règle par défaut de CSS :
+
+> une piste de grille `1fr` vaut `minmax(auto, 1fr)` : son **minimum** est la
+> largeur *min-content* de son contenu. Un formulaire dense refuse de descendre
+> sous ~378 px, la piste l'y suit, et **la grille sort de son conteneur en
+> emportant tous les champs**.
+
+Mesuré sur `/catalogacao` en production, fenêtre de 354 px :
+
+| | avant | après |
+|---|---|---|
+| `document` | 419 px (fenêtre 354) | **339 px** |
+| `.cat-panel.active` largeur / contenu | 302 / 392 | **287 / 285** |
+| `.ab-work` largeur / piste | 272 / **378** | **257 / 257** |
+| débordements dans le panneau | 2 | **0** |
+
+Le détail qui rend l'affaire instructive : la règle **bureau** portait déjà la
+garde (`grid-template-columns: minmax(0, 1fr) 340px`) — c'est **l'écrasement
+mobile** qui la perdait (`grid-template-columns: 1fr`). Un correctif responsive
+avait donc introduit le défaut responsive.
+
+**Doctrine qui en découle** : *toute piste `fr`, dans toute grille, s'écrit
+`minmax(0, Nfr)`*. La garde a été posée sur les **24 déclarations** concernées
+(8 fichiers CSS). Elle ne couvre pas les **24 grilles inline en JSX** (12
+fichiers) qui posent encore des pistes `fr` nues — voir § 8.5.
+
+Trois causes distinctes produisent donc le **même** symptôme apparent, et il faut
+les distinguer avant de corriger :
+
+1. la **piste de grille** sans garde (ci-dessus) — le conteneur est trop large ;
+2. la **taille minimale automatique** d'un champ dans une rangée flex — le champ
+   refuse de rétrécir (traité globalement par `src/styles/mobile.css`) ;
+3. un **voisin `white-space: nowrap`** qui ne cède rien et écrase la colonne d'à
+   côté — cas des cartes d'entrée de la Fédération, où la colonne titre tombait à
+   15-67 px dans une rangée de 257 px, pastille « Novo » dehors.
+
+### 8.2 État des 14 manques
+
+| # | Statut | Où |
+|---|---|---|
+| M1 | ✅ traité | `Modal.css:99`, `TeamPanel.css:478` (`flex-wrap`) |
+| M2 | ✅ traité | balayage inline de juillet (commits `7cad74b8e`, `2811bddeb` — 30 occurrences, 19 fichiers) |
+| M3 | ✅ traité | `.ab-modal { width: 100% }` + `max-width` + `padding: 20px` de l'overlay |
+| M4 | ✅ traité | `BookDraftForm.jsx` : grilles inline passées en `repeat(auto-fit, minmax(min(100%, 240px), 1fr))` |
+| M5 | ✅ traité | `ImportacoesPage.css:443` — `.imp-map`, `.imp-queue` en scroll encapsulé ≤ 760 px |
+| M6 | ✅ traité | tiroir hamburger — `layout/index.jsx:51`, `layout.css:94` (Phase B) |
+| M7 | 🟠 partiel | Réservations et Consultations portent `.ab-painel-table--cards` ; Empréstimos n'a plus de table (vue par item) ; Validações / Inventário à confirmer |
+| M8 | ✅ traité | OPAC en cartes ≤ 768 px — `CatalogPage.css:485` (Phase B) |
+| M9 | ✅ traité | `ui.css` — `min-height: 44px` sous 640 px |
+| M10 | ✅ traité | `src/styles/mobile.css` — 16 px sur **tous** les champs (voir § 8.3 pour le `!important`) |
+| M11 | ✅ traité | `viewport-fit=cover` (`index.html:5`) + `env(safe-area-inset-*)` (`layout.css:10,16`, `ui.css:282…`) |
+| M12 | 🟠 partiel | `src/styles/breakpoints.css` posé ; **23 des 43** media queries sur l'échelle canonique (640/768/1100), 20 valeurs héritées |
+| M13 | ✅ (déjà) | socle PWA livré le 15/06 |
+| M14 | 🟡 atténué | les pistes `fr` du squelette sont gardées ; les colonnes fixes `80px` / `60px` subsistent |
+
+### 8.3 Ce qui a été livré le 20/08/2026
+
+- **`6e1b4436b`** — `src/styles/mobile.css`, filet global sous 640 px :
+  `min-width: 0` + `max-width: 100%` sur les champs (ils peuvent enfin rétrécir et
+  ne dépassent jamais leur cadre), `flex-wrap: wrap` sur les rangées qui en
+  portent un, et `font-size: 16px` (M10). **Le `!important` de cette dernière
+  règle est structurel** : ~420 des ~500 champs portent leur `fontSize` en **style
+  inline**, qu'une feuille de style ne surcharge pas autrement — c'est précisément
+  pourquoi la règle de `ui.css` ne pouvait couvrir que les 81 champs en `.ab-*`.
+- **`6450a4c3d`** — la garde `minmax(0, Nfr)` sur les 24 déclarations CSS (§ 8.1),
+  et les sous-onglets de révision du formulaire livre passés en `overflow-x: auto`.
+- **`155d9681e`** — cartes d'entrée de la Fédération repliées sous 640 px (cause n° 3).
+
+### 8.4 Balayage de vérification (production, fenêtre de 354 px)
+
+| Écran | Résultat |
+|---|---|
+| Painel — les 9 onglets (Trabalho do dia, Ações, Reservas, Consultas, Empréstimos, Gerir leitor·e, Histórico, Validações, Inventário) | ✅ |
+| Biblioteca · Importações (+ `/novo`) · Rede · Conta · Atelier · Atelier-autoridades · Cartografia moderação | ✅ |
+| Catalogação | ✅ après correctif (419 → 339 px de document) |
+| Federação | ❌ puis ✅ après `155d9681e` |
+
+Pages publiques, à 320 px : `/`, `/catalogo`, `/livro/:id`, `/autor/:id`,
+`/login`, `/criar-conta`, `/solicitar-biblioteca`, `/cartografia/ajouter`,
+`/bibliotecas`, `/thesaurus-ficedl` — aucun débordement de champ. Deux
+débordements résiduels (liens dans `.ab-cat-title__text` sur `/catalogo`, `<li>`
+sur `/thesaurus-ficedl`) sont **antérieurs** et sans rapport avec les champs.
+
+### 8.5 Ce qui reste ouvert
+
+- **M7** — confirmer Validações et Inventário, et trancher pour de bon le sort des
+  tables staff restantes (décision **D2**, qui s'est tranchée *de fait* en faveur
+  des cartes).
+- **M12** — 20 media queries encore sur des valeurs héritées
+  (520/540/560/600/720/760/800/820/880/900/1040). À rapatrier au fil des
+  retouches, sans changement de comportement.
+- **M14** — colonnes fixes du squelette de chargement.
+- **Nouveau — les grilles inline en JSX** : 24 déclarations `gridTemplateColumns`
+  dans 12 fichiers posent encore des pistes `fr` nues (`'1fr 1fr'`,
+  `'repeat(3,1fr)'`, `'2fr 2.5fr 1fr 1.2fr'`…). La garde du § 8.1 ne porte que sur
+  le CSS. Elles n'ont pas débordé aux mesures, le filet `mobile.css` les protégeant
+  côté champ, mais elles restent la même famille de défaut.
+- **D1** (menu mobile) et **D3** (PWA) sont tranchées ; **D5** (patches ciblés
+  plutôt que refonte mobile-first) se confirme : trois campagnes de patches ont
+  suffi, sans refonte.
+
+### 8.6 Leçon de méthode
+
+Deux correctifs successifs ont été posés **au bon niveau conceptuel mais au
+mauvais étage du DOM**, faute de mesure sur l'écran réel — exactement le risque
+que le § 0 annonçait. Ce qui a débloqué : ouvrir la **vraie page**, à la **vraie
+largeur**, et remonter la **chaîne d'ancêtres** en comparant `width` et
+`scrollWidth` jusqu'à trouver l'étage où l'excédent naît, puis isoler le coupable
+en masquant les enfants un par un.
+
+Recette, pour la prochaine fois :
+
+1. les écrans staff exigent une session — la faire ouvrir **par la coordination**
+   dans son navigateur, ne jamais saisir de mot de passe à sa place ;
+2. redimensionner la fenêtre ne suffit pas si elle est maximisée : injecter une
+   **iframe de 360 px sur la même origine**, qui hérite de la session et déclenche
+   les media queries mobiles ;
+3. les panneaux du catalogage sont **tous montés** et masqués en CSS : sans
+   cliquer l'onglet, l'élément mesure 0 ;
+4. les sessions **staff** vivent en `sessionStorage` (`src/lib/staffStorage.js`,
+   Paquet 23b) : elles meurent avec l'onglet.
