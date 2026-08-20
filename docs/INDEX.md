@@ -69,7 +69,7 @@ docs/
 ├── backlogs/                         Backlog technique (Markdown depuis le 10/06) + états d'avancement
 │   ├── INDEX.md                      → version courante + historique
 │   ├── AnarBib-Backlog-2026-06-17-v33.md          ← version courante
-│   ├── ETAT-AVANCEMENT-multisessions.md           ← ★ avancement par chantier (figé au 20/06)
+│   ├── ETAT-AVANCEMENT-multisessions.md           ← ★ avancement par chantier (repris le 20/08)
 │   ├── ETAT-lancement-consolide-2026-07-03.md     ← boussole « avant lancement public »
 │   └── archive/                      → anciennes versions (v8→v32, .docx et .md)
 │
@@ -139,7 +139,7 @@ Versions successives. Seule la dernière est vivante, les autres sont historique
 
 **Version courante** : `AnarBib-Backlog-2026-06-17-v33.md` (Markdown ; v29 et antérieurs `.docx` archivés). Le backlog a eu un rythme d'incrémentation rapide (v8 → v33 en un mois), puis s'est stabilisé — depuis juillet, l'avancement se lit ailleurs :
 
-- [`backlogs/ETAT-AVANCEMENT-multisessions.md`](./backlogs/ETAT-AVANCEMENT-multisessions.md) — consolidation par chantier de toutes les sessions. ⚠️ **figé au 20/06/2026**.
+- [`backlogs/ETAT-AVANCEMENT-multisessions.md`](./backlogs/ETAT-AVANCEMENT-multisessions.md) — consolidation par chantier de toutes les sessions. **Repris le 20/08/2026** : tableau de bord des 26 chantiers, statuts vérifiés en production (tables, crons, edge functions) et non déduits du seul `git log`.
 - [`backlogs/ETAT-lancement-consolide-2026-07-03.md`](./backlogs/ETAT-lancement-consolide-2026-07-03.md) — boussole « que reste-t-il avant le lancement public ? », vérifiée en prod le 03/07 ; remplace sur ce point le portrait du v33.
 
 > ⚠️ **Doublon à connaître.** `ETAT-AVANCEMENT-multisessions.md` existe **en deux exemplaires** : celui de `backlogs/` (vivant, dernière modification le 20/06) et une copie figée au 10/06 dans `journal/sessions/`, laissée par un déplacement que les sessions suivantes n'ont pas suivi. **C'est celui de `backlogs/` qui fait référence** ; la copie du journal porte un tampon de supersession et reste comme trace.

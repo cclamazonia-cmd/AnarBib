@@ -6,8 +6,8 @@
 > vie jusqu'au 20/06, pendant que cette copie restait figée au 10/06.
 >
 > **Ce qui fait référence** : [`../../backlogs/ETAT-AVANCEMENT-multisessions.md`](../../backlogs/ETAT-AVANCEMENT-multisessions.md)
-> (lui-même ⚠️ figé au 20/06/2026 — l'avancement à jour se lit au
-> [REGISTRE](../../specs/REGISTRE_decisions.md), tenu section par section).
+> (repris le 20/08/2026 : tableau de bord par chantier, statuts vérifiés en production).
+> Le [REGISTRE](../../specs/REGISTRE_decisions.md) reste la source normative.
 >
 > Conformément à la convention du corpus, le fichier supersédé est **tamponné, pas
 > supprimé** : il reste ici comme trace de l'état au 10/06. *(Constat et tampon posés

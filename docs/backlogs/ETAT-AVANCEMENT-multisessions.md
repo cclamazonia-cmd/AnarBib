@@ -1,4 +1,11 @@
-# État d'avancement — backlog consolidé multi-sessions · 2026-06-11
+# État d'avancement — backlog consolidé multi-sessions · **repris le 2026-08-20**
+
+> 📍 **Lecture rapide** : le [tableau de bord par chantier](#tableau-de-bord-par-chantier)
+> en fin de document consolide les deux mois qui manquaient (20/06 → 20/08). Ce qui suit
+> immédiatement est la trace d'origine, reconstituée le 11/06 et tenue jusqu'au 20/06 —
+> conservée telle quelle.
+
+## Trace d'origine (11/06 → 20/06)
 
 > **Reconstitué le 11/06/2026** (le doc précédemment référencé en mémoire avait disparu).
 > **Source** : croisement des transcrits des 12 sessions archivées (05→10/06) + audit de
@@ -189,3 +196,103 @@ résolue, #CL.10 fait, EA-12 confirmé gelé, baseline snapshot livré — ne re
 cosmétique optionnel.*
 *Maintenir ce fichier quand on livre/clôt un chantier. En cas de doute sur un statut :
 revérifier dans le code, pas se fier à cette trace seule.*
+---
+
+# 🔄 Reprise du 20/08/2026 — deux mois consolidés (20/06 → 20/08)
+
+> **Pourquoi.** Ce fichier était figé au **20/06**. Entre-temps : **293 commits**, dont
+> **119 migrations**, et une bascule complète du centre de gravité du projet — de
+> l'applicatif vers l'infrastructure, puis vers la sécurité.
+>
+> **Méthode.** Reconstruit à partir de trois sources croisées, jamais de mémoire :
+> (1) les sections du [REGISTRE](../specs/REGISTRE_decisions.md), tenues à jour section
+> par section — c'est la source normative ; (2) le `git log` par scope ; (3) des
+> **vérifications de lecture en production** (MCP Supabase, lectures seules) pour tout
+> statut qui ne se déduisait pas du code. Les vérifications faites sont **nommées** dans
+> chaque ligne : quand rien n'est nommé, c'est que la preuve est le commit.
+>
+> **Ce que ce document n'est pas.** Une garantie. La consigne de 2026-06-11 tient
+> toujours : *en cas de doute sur un statut, revérifier dans le code, pas se fier à cette
+> trace seule.*
+
+## Tableau de bord par chantier
+
+Légende : ✅ livré & déployé · 🟢 livré, reliquat mineur · 🟠 en cours · 🟡 cadré, non implémenté · ⬜ décidé, non commencé
+
+| Chantier | Statut | Preuve retenue | REGISTRE |
+|---|---|---|---|
+| **Œuvre / Éditions** (FRBR-léger) | ✅ | tables `works`, `work_expressions` **vérifiées en prod** ; pages `/obra/:id` | §12 `CAT` |
+| **Thésaurus matière** v1→v3 | ✅ | `subject_relations` **vérifiée en prod** ; export SKOS public (Turtle/JSON-LD) | §30 `THES` |
+| **Thésaurus FICEDL** (vocabulaire partagé) | ✅ | `subject_ficedl_links` **vérifiée en prod** ; pages-sujets publiques (P3a/P3b, 25-30/06) ; vadémécum 10 locales (02/07) | §30 · `journal/ficedl/` |
+| **Fonds sonores** (#AUDIO) P0→P5 | ✅ | `audio_tracks` **vérifiée en prod** ; EF `audio_fingerprint_lookup` **déployée** ; OAI-PMH `oai_dc`+`marcxml` (22/06) | §35 `AUDIO` |
+| **Assemblée du réseau** (AG) | 🟢 | `assembleias` **vérifiée en prod** ; P3 notifications livré | §32 `AG` — reste P3b (rappels J-15/J-1) et v0.2 (quorum, vote) |
+| **Dépôt de garantie** | ✅ | `loan_deposits` **vérifiée en prod** ; dépôt tournant, plafonds anti-barrière, rapport PDF (30/06) | `spec-depot-garantie` |
+| **Validation d'inscription — refonte du refus** | ✅ | modèle à 2 passages, écrans de refus, mail `membership_refused`, journal `reader_membership_events` **vérifié en prod** (22-23/06) | §9 `VALID` |
+| **Notifications in-app** (cloche) | ✅ | MVP au-dessus de `user_notifications` (23/06) | §6 `NOTIF` |
+| **Événements de bibliothèque** | ✅ | `library_events` **vérifiée en prod** ; avis in-app, opt-out lecteur, deep-link (05/07) | — |
+| **#BG2 — sauvegarde hors-fournisseur** | ✅ | 3 flux restic chiffrés hors-site ; pseudonymisation `BG2-14` ; `backup_heartbeats` **vérifiée en prod** ; garde-fou CI « table non classée » (20/08) | `§BG2` + `§BG2 (suite)` |
+| **Supervision du service public** | ✅ | `service_health_probes` / `service_health_incidents` **vérifiées en prod** ; cron `anarbib-health-probe` **actif, toutes les 5 min** (vérifié) ; EF `health-probe` déployée | — *(pas encore de carte au REGISTRE)* |
+| **Gazette Rizoma — automatisation** | ✅ | 3 crons **actifs vérifiés** : `anarbib-gazette-monthly-start` (15 du mois 06:00), `-reconcile-tick` (5 min), `-translate-submissions` (10 min) | §29 `GAZ` |
+| **Lettre de la fédération** | ✅ | opt-in `/conta` + case au signup, compose/envoi staff, numéros | §29 `GAZ` |
+| **Récapitulatifs inter-bibliothèques** | ✅ | EF `notify-network-weekly-report` + `notify-cross-library-digest` déployées ; crons **actifs vérifiés** (lundi 08:15 / 08:30) ; mode simulation (17/08) | §6 `NOTIF` |
+| **Notes de lecture** | ✅ | `book_reading_notes` + `book_reading_note_reports` (modération) **vérifiées en prod** ; Lots 1→5 des 02 au 04/08 | `CADRAGE_notes_de_lecture` (01/08) |
+| **Sécurité — Altcha & oracles** | ✅ | EF `altcha-challenge` déployée ; Turnstile retiré partout (login, inscription, cartographie) ; oracles d'appartenance et « n° lecteur → e-mail » fermés (18-19/08) | `PRIV-2` (aligné 20/08) |
+| **Identité visuelle** | ✅ | nouveau logo (dessin humain) + déclinaison ; bandeau pilotable par bibliothèque ; assets versionnés (19/08) | — |
+| **Numérisation** | 🟢 | chaîne arrêtée (ScanTailor Advanced + img2pdf), captures effacées après validation, fiche pratique (19-20/08) | `DECISION_profil_numerisation` |
+| **Catalogage — doublons** | ✅ | détection floue `pg_trgm` + modale d'avertissement (13/08) ; `book_not_duplicate` **vérifiée en prod** ; dédoublonnage global du catalogue publié (19/08) ; tri par niveau de preuve (20/08) | §12 `CAT` |
+| **Catalogage — œuvre vs édition + N exemplaires** | ✅ | choix à la création, N exemplaires par bibliothèque à la publication (16/08) | §12 `CAT` |
+| **Droits (`rights_status`)** | ✅ | vocabulaire contrôlé + justification écrite + liste fermée au catalogage (19/08) | — |
+| **Lecture restreinte** | ✅ | réservée aux membres de la bibliothèque détentrice (20/08) ; URL source d'un document restreint cessée d'être exposée | §22 `ILL` |
+| **Chantier mobile / responsive** | 🟢 | Phases A/B/C livrées ; doctrine graduée le 20/08 | **§36 `MOBILE`** — reste `MOB-Q1..Q3` |
+| **Migration hors Supabase (VPS)** | 🟠 | arbitrage rendu (03/07), shortlist + runbook + plan serveur (04/07), pile auto-hébergée éprouvée en répétition (18/08), essai `test.anarbib.org` (19/08) | `DECISION_arbitrage_migration_vps` — **chemin critique opérationnel, pas technique** |
+| **Perf matching import** | ✅ *(corrige ce fichier)* | volets A+B+C confirmés le 03/07 ; band-aid `statement_timeout=0` remplacé par une borne 120 s — migration `20260703182035_bound_partner_matching_statement_timeout.sql` **présente au dépôt** | cf. `ETAT-lancement-consolide-2026-07-03` |
+| **Squash des migrations** | ⬜ | toujours non fait — 146 migrations, dont 119 depuis le 20/06 ; le risque structurel décrit en tête de ce fichier **reste entier** | — |
+
+## Ce qui a changé de nature, mois par mois
+
+**Fin juin — la vague la plus dense.** Le catalogue passe au modèle bibliographique
+(Œuvre → Expression → Manifestation → Exemplaire), le thésaurus atteint v3 puis rencontre
+le vocabulaire FICEDL, les fonds sonores traversent P0→P5 en quatre jours, le dépôt de
+garantie et la refonte du refus d'inscription arrivent. C'est le dernier mois « applicatif ».
+
+**Juillet — bascule vers l'infrastructure.** 78 commits seulement, mais structurants :
+#BG2 occupe le mois (partition par sensibilité, trois flux, automatisation systemd,
+pseudonymisation à l'effacement), et la sortie de Supabase est instruite (arbitrage,
+shortlist VPS, runbook de migration, plan serveur Dell). Le 03/07,
+`ETAT-lancement-consolide` pose le verdict : **AnarBib est fonctionnellement prêt, le
+chemin critique est désormais opérationnel et humain**.
+
+**Août — sécurité, identité, finitions.** Altcha auto-hébergé remplace Turnstile et fait
+tomber la dernière dépendance externe ; plusieurs oracles sont fermés ; la supervision du
+service public apparaît ; le réseau reçoit son logo et son bandeau par bibliothèque ; les
+notes de lecture sont livrées en cinq lots ; le catalogue gagne un dédoublonnage global et
+un mode dégradé.
+
+## Corrections apportées à ce fichier
+
+- **Perf matching import** : la section « Morceaux non résolus » le disait *toujours
+  ouvert (band-aid `statement_timeout=0` seul)*. **Résolu le 03/07** — volets A+B+C
+  confirmés, borne 120 s en migration. Ligne à considérer comme close.
+- **Source vivante** : ce fichier existe en deux exemplaires ; **celui-ci** (dans
+  `backlogs/`) fait référence. La copie de `journal/sessions/`, figée au 10/06, porte un
+  tampon de supersession depuis le 20/08.
+
+## Ce que je n'ai pas tranché
+
+- **Trois crons inactifs en production** (`active = false`, vérifié le 20/08) :
+  `anarbib-collective-removal-execute-daily`, `anarbib-cooptation-reminders-daily`,
+  `anarbib-request-eval-digest`. Désactivation volontaire ou oubli ? Je ne peux pas le
+  déduire du code — **à trancher par la coordination**. Les trois touchent à de la
+  gouvernance (retrait collectif, rappels de cooptation, digest d'évaluation).
+- **Supervision et identité visuelle** n'ont **pas de carte au REGISTRE**, alors que la
+  règle du 18/06 dit « plus aucune feature livrée sans au moins une carte de doctrine ».
+  Deux graduations à faire, sur le modèle de `§36 MOBILE`.
+- **Le statut fin des chantiers non touchés depuis juin** (cotisations, #MM, i18n
+  rollout, suites AG v0.2) n'a pas été re-vérifié en prod : le tableau ci-dessus ne les
+  mentionne que là où une preuve existait.
+
+---
+*Reprise du 20/08/2026, session « Débordements mobile — champs de saisie ». Vérifications
+en prod : existence de 13 tables, liste des 32 tâches `cron.job` (29 actives), liste des
+47 edge functions déployées, présence des migrations citées. Le REGISTRE reste la source
+normative ; ce fichier reste de la trace.*
