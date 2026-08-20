@@ -1993,6 +1993,7 @@
   "catalogacao.digital.typeLink": "Lien externe",
   "catalogacao.digital.typePdf": "PDF restreint",
   "catalogacao.digital.unsupportedType": "Type de fichier non pris en charge (PDF, image, audio ou vidéo).",
+  "catalogacao.digital.bucketScopeMismatch": "Le seau de stockage ({actual}) ne correspond pas à la portée d'accès choisie, qui exige {expected}. Reverse le fichier après avoir fixé la portée — la restriction est portée par le seau, pas par le libellé.",
   "catalogacao.digital.update": "Mettre à jour la ressource",
   "catalogacao.digital.uploadFile": "Téléverser un fichier",
   "catalogacao.digital.uploadHint": "PDF, image, audio ou vidéo — part directement sur AnarBib (pas besoin du bucket).",

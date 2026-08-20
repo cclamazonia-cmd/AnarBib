@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Link externo",
   "catalogacao.digital.typePdf": "PDF restrito",
   "catalogacao.digital.unsupportedType": "Tipo de arquivo não suportado (use PDF, imagem, áudio ou vídeo).",
+  "catalogacao.digital.bucketScopeMismatch": "O balde de armazenamento ({actual}) não corresponde ao escopo de acesso escolhido, que exige {expected}. Reenvie o arquivo depois de definir o escopo — a restrição é garantida pelo balde, não pelo rótulo.",
   "catalogacao.digital.update": "Atualizar recurso",
   "catalogacao.digital.uploadFile": "Enviar um arquivo",
   "catalogacao.digital.uploadHint": "PDF, imagem, áudio ou vídeo — vai direto para o AnarBib (sem mexer no bucket).",

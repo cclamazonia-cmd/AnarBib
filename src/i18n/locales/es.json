@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Enlace externo",
   "catalogacao.digital.typePdf": "PDF restringido",
   "catalogacao.digital.unsupportedType": "Tipo de archivo no admitido (PDF, imagen, audio o video).",
+  "catalogacao.digital.bucketScopeMismatch": "El bucket de almacenamiento ({actual}) no corresponde al alcance de acceso elegido, que exige {expected}. Volvé a subir el archivo tras fijar el alcance: la restricción la garantiza el bucket, no la etiqueta.",
   "catalogacao.digital.update": "Actualizar recurso",
   "catalogacao.digital.uploadFile": "Subir un archivo",
   "catalogacao.digital.uploadHint": "PDF, imagen, audio o video — va directo a AnarBib (sin tocar el bucket).",

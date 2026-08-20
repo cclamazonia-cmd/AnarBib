@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Link esterno",
   "catalogacao.digital.typePdf": "PDF riservato",
   "catalogacao.digital.unsupportedType": "Tipo di file non supportato (PDF, immagine, audio o video).",
+  "catalogacao.digital.bucketScopeMismatch": "Il bucket di archiviazione ({actual}) non corrisponde all'ambito di accesso scelto, che richiede {expected}. Ricarica il file dopo aver fissato l'ambito: la restrizione è garantita dal bucket, non dall'etichetta.",
   "catalogacao.digital.update": "Aggiorna risorsa",
   "catalogacao.digital.uploadFile": "Carica un file",
   "catalogacao.digital.uploadHint": "PDF, immagine, audio o video — va dritto su AnarBib (senza toccare il bucket).",

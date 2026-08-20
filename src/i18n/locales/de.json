@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Externer Link",
   "catalogacao.digital.typePdf": "Eingeschränktes PDF",
   "catalogacao.digital.unsupportedType": "Dateityp nicht unterstützt (PDF, Bild, Audio oder Video).",
+  "catalogacao.digital.bucketScopeMismatch": "Der Speicher-Bucket ({actual}) passt nicht zum gewählten Zugriffsbereich, der {expected} verlangt. Lade die Datei erneut hoch, nachdem du den Bereich festgelegt hast — die Beschränkung trägt der Bucket, nicht die Bezeichnung.",
   "catalogacao.digital.update": "Ressource aktualisieren",
   "catalogacao.digital.uploadFile": "Datei hochladen",
   "catalogacao.digital.uploadHint": "PDF, Bild, Audio oder Video — geht direkt zu AnarBib (kein Bucket nötig).",

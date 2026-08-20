@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Ekstera ligilo",
   "catalogacao.digital.typePdf": "Limigita PDF",
   "catalogacao.digital.unsupportedType": "Dosiertipo ne subtenata (PDF, bildo, sono aŭ video).",
+  "catalogacao.digital.bucketScopeMismatch": "La konserva sitelo ({actual}) ne kongruas kun la elektita alira amplekso, kiu postulas {expected}. Realŝutu la dosieron post difini la amplekson — la limigo estas garantiata de la sitelo, ne de la etikedo.",
   "catalogacao.digital.update": "Ĝisdatigi rimedon",
   "catalogacao.digital.uploadFile": "Alŝuti dosieron",
   "catalogacao.digital.uploadHint": "PDF, bildo, sono aŭ video — iras rekte al AnarBib (sen tuŝi la sitelon).",

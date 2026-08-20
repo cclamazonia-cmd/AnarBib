@@ -215,13 +215,24 @@ export default function BookPage() {
             try {
               const rpc2 = await supabase.rpc('fn_book_restricted_pdf_state_for_current_user', { p_bib_ref: bookData.bib_ref });
               const r2 = Array.isArray(rpc2.data) ? rpc2.data?.[0] : rpc2.data;
-              if (r2?.has_access) {
+              // CORRECTIF 21/08/2026 : on lisait `has_access`, `bucket_name` et
+              // `object_path` — trois champs que cette fonction n'a JAMAIS
+              // renvoyes. `r2.has_access` valait donc toujours undefined et la
+              // branche restreinte ne se declenchait pour AUCUN livre : aucun
+              // PDF restreint n'etait proposé à la lecture nulle part.
+              //
+              // `can_show_read_button` porte toute la regle cote base (compte
+              // actif ET membre d'une bibliotheque detentrice, ressource active,
+              // fichier present) : on ne la rejoue pas ici. Et on passe par
+              // `asset_id`, donc par l'edge function read-digital-asset, qui
+              // re-verifie l'autorisation et signe l'URL — le seau et le chemin
+              // ne descendent plus au navigateur.
+              if (r2?.can_show_read_button && r2?.asset_id) {
                 setDigitalAccess({
                   hasPublicAccess: false,
                   hasRestrictedAccess: true,
-                  canReadNow: r2.has_access,
-                  bucket: r2.bucket_name,
-                  path: r2.object_path,
+                  canReadNow: true,
+                  assetId: r2.asset_id,
                 });
               }
             } catch {}

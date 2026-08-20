@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Externe link",
   "catalogacao.digital.typePdf": "Beperkte PDF",
   "catalogacao.digital.unsupportedType": "Bestandstype niet ondersteund (PDF, afbeelding, audio of video).",
+  "catalogacao.digital.bucketScopeMismatch": "De opslagbucket ({actual}) komt niet overeen met het gekozen toegangsbereik, dat {expected} vereist. Upload het bestand opnieuw nadat je het bereik hebt ingesteld — de beperking wordt door de bucket afgedwongen, niet door het label.",
   "catalogacao.digital.update": "Bron bijwerken",
   "catalogacao.digital.uploadFile": "Een bestand uploaden",
   "catalogacao.digital.uploadHint": "PDF, afbeelding, audio of video — gaat direct naar AnarBib (geen bucket nodig).",

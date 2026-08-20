@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "External link",
   "catalogacao.digital.typePdf": "Restricted PDF",
   "catalogacao.digital.unsupportedType": "Unsupported file type (PDF, image, audio or video).",
+  "catalogacao.digital.bucketScopeMismatch": "The storage bucket ({actual}) does not match the chosen access scope, which requires {expected}. Re-upload the file after setting the scope — the restriction is enforced by the bucket, not by the label.",
   "catalogacao.digital.update": "Update resource",
   "catalogacao.digital.uploadFile": "Upload a file",
   "catalogacao.digital.uploadHint": "PDF, image, audio or video — goes straight to AnarBib (no bucket handling).",

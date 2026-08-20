@@ -1706,6 +1706,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         notes: digitalForm.notes || null,
       };
 
+      // GARDE-FOU : le seau doit correspondre à la portée d'accès. Sans lui,
+      // une fiche peut déclarer « restreint » tout en pointant un fichier
+      // public — ou pointer un seau où le fichier n'a jamais été versé. Les
+      // deux sont arrivés sur le livre 1434. Mieux vaut refuser d'enregistrer
+      // que produire une fiche qui ment sur la protection du document.
+      const seauAttendu = DIGITAL_BUCKET_FOR(payload.mime_type, payload.access_scope);
+      if (payload.storage_bucket && seauAttendu && payload.storage_bucket !== seauAttendu) {
+        throw new Error(t(
+          { id: 'catalogacao.digital.bucketScopeMismatch' },
+          { expected: seauAttendu, actual: payload.storage_bucket },
+        ));
+      }
+
       if (digitalForm.id) {
         const { error } = await supabase.from('book_draft_digital_resources')
           .update(payload).eq('id', Number(digitalForm.id));
@@ -1726,13 +1739,22 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     }
   }
 
-  const DIGITAL_BUCKET_BY_MIME = (mime) => {
-    if (mime === 'application/pdf') return 'anarbib-pdf-public';
-    if (/^(image|audio|video)\//.test(mime || '')) return 'anarbib-media-public';
+  // CORRECTIF 21/08/2026 — LA RESTRICTION EST PORTÉE PAR LE SEAU, PAS PAR LE
+  // LIBELLÉ. Le seau était choisi d'après le seul type MIME, donc TOUJOURS le
+  // seau public pour un PDF, quelle que soit la portée d'accès demandée.
+  // Vécu sur le livre 1434 : la fiche déclarait « restreint » et `pdf-restrito`
+  // (champ corrigé à la main), le fichier était resté dans `anarbib-pdf-public`.
+  // Double conséquence : lecture en ligne impossible — le fichier n'est pas là
+  // où la fiche le cherche — ET PDF téléchargeable par quiconque connaît l'URL,
+  // alors qu'il est catalogué restreint.
+  const DIGITAL_BUCKET_FOR = (mime, scope) => {
+    const restreint = scope === 'conta_ativa';
+    if (mime === 'application/pdf') return restreint ? 'pdf-restrito' : 'anarbib-pdf-public';
+    if (/^(image|audio|video)\//.test(mime || '')) return restreint ? 'anarbib-media-restricted' : 'anarbib-media-public';
     return null;
   };
-  const DIGITAL_RTYPE_BY_MIME = (mime) => {
-    if (mime === 'application/pdf') return 'pdf_publico';
+  const DIGITAL_RTYPE_BY_MIME = (mime, scope) => {
+    if (mime === 'application/pdf') return scope === 'conta_ativa' ? 'pdf_restrito' : 'pdf_publico';
     if ((mime || '').startsWith('image/')) return 'image';
     if ((mime || '').startsWith('audio/')) return 'audio';
     if ((mime || '').startsWith('video/')) return 'video';
@@ -1746,7 +1768,12 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     if (!draftId) { setMsg({ text: t({ id: 'catalogacao.msg.saveBeforeDigital' }), kind: 'error' }); return; }
     if (!file) return;
     const mime = file.type || '';
-    const bucket = DIGITAL_BUCKET_BY_MIME(mime);
+    // La portée d'accès choisie AVANT le téléversement décide du seau. Si elle
+    // change ensuite, le garde-fou de l'enregistrement refuse la fiche et
+    // demande de reverser le fichier — c'est le seul moyen sûr : déplacer un
+    // objet entre seaux depuis le navigateur n'est pas possible.
+    const scope = (digitalForm && digitalForm.access_scope) || 'publico';
+    const bucket = DIGITAL_BUCKET_FOR(mime, scope);
     if (!bucket) { setMsg({ text: t({ id: 'catalogacao.digital.unsupportedType' }), kind: 'error' }); return; }
     if (file.size > 100 * 1024 * 1024) { setMsg({ text: t({ id: 'catalogacao.digital.fileTooLarge' }), kind: 'error' }); return; }
     setDigitalUploading(true);
@@ -1760,7 +1787,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         storage_bucket: bucket,
         storage_path: path,
         mime_type: mime,
-        resource_type: DIGITAL_RTYPE_BY_MIME(mime),
+        resource_type: DIGITAL_RTYPE_BY_MIME(mime, scope),
         label: (prev && prev.label) || file.name,
       }));
       setMsg({ text: t({ id: 'catalogacao.digital.uploaded' }), kind: 'ok' });

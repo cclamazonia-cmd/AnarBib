@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Εξωτερικός σύνδεσμος",
   "catalogacao.digital.typePdf": "Περιορισμένο PDF",
   "catalogacao.digital.unsupportedType": "Μη υποστηριζόμενος τύπος αρχείου (PDF, εικόνα, ήχος ή βίντεο).",
+  "catalogacao.digital.bucketScopeMismatch": "Ο κάδος αποθήκευσης ({actual}) δεν αντιστοιχεί στο επιλεγμένο εύρος πρόσβασης, που απαιτεί {expected}. Ανεβάστε ξανά το αρχείο αφού ορίσετε το εύρος — ο περιορισμός επιβάλλεται από τον κάδο, όχι από την ετικέτα.",
   "catalogacao.digital.update": "Ενημέρωση πόρου",
   "catalogacao.digital.uploadFile": "Μεταφόρτωση αρχείου",
   "catalogacao.digital.uploadHint": "PDF, εικόνα, ήχος ή βίντεο — πάει απευθείας στο AnarBib (χωρίς bucket).",

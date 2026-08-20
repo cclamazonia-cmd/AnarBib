@@ -1987,6 +1987,7 @@
   "catalogacao.digital.typeLink": "Enllaç extern",
   "catalogacao.digital.typePdf": "PDF restringit",
   "catalogacao.digital.unsupportedType": "Tipus de fitxer no admès (PDF, imatge, àudio o vídeo).",
+  "catalogacao.digital.bucketScopeMismatch": "El bucket d'emmagatzematge ({actual}) no correspon a l'abast d'accés triat, que exigeix {expected}. Torna a pujar el fitxer després de fixar l'abast: la restricció la garanteix el bucket, no l'etiqueta.",
   "catalogacao.digital.update": "Actualitza el recurs",
   "catalogacao.digital.uploadFile": "Puja un fitxer",
   "catalogacao.digital.uploadHint": "PDF, imatge, àudio o vídeo — va directe a AnarBib (sense tocar el bucket).",
