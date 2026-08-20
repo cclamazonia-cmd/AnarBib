@@ -91,7 +91,19 @@ function applyColors(colors) {
   }
 }
 
-function applyBrandAssets(assets) {
+// Instantané des <link rel="icon"> déclarés par index.html, pris AVANT toute
+// réécriture. Sert à restaurer les icônes AnarBib quand on revient au thème
+// `default` (déconnexion, sortie d'une bibliothèque) : sans lui, l'icône de la
+// dernière bibliothèque visitée resterait collée dans l'onglet.
+const BASE_ICON_LINKS = typeof document === 'undefined'
+  ? []
+  : [...document.querySelectorAll("link[rel='icon']")].map((el) => ({
+      el,
+      href: el.getAttribute('href'),
+      sizes: el.getAttribute('sizes'),
+    }));
+
+function applyBrandAssets(assets, themeSlug) {
   if (!assets) return;
   const bg = assets.backgroundPage || assets.background || assets.bgImage || '';
   // PATCH 02/05/2026 : on n'utilise plus l'image de fond pour les briques.
@@ -121,6 +133,23 @@ function applyBrandAssets(assets) {
     // icone, il affichait toujours AnarBib et le favicon par bibliotheque ne
     // s'appliquait jamais dans l'onglet. On pointe toutes les tailles vers le
     // favicon du theme (256px, downscale propre par le navigateur).
+    // PATCH 19/08/2026 : le theme `default` ne reecrit plus rien. Son favicon
+    // EST celui d'index.html — meme dessin, mais servi par notre propre origine
+    // et renouvele a chaque deploiement. Le detour par la copie Supabase
+    // n'apportait aucune difference visuelle et coutait cher : URL jamais
+    // versionnee, `max-age=3600`, autre domaine. Resultat observe, l'icone
+    // attendue s'affichait puis etait SUPPLANTEE par l'ancienne, que le
+    // navigateur ressortait de son cache HTTP pendant une heure apres chaque
+    // changement de logo. On restaure donc l'instantane d'index.html.
+    // Les themes de BIBLIOTHEQUE, eux, doivent toujours supplanter AnarBib.
+    if (themeSlug === 'default') {
+      BASE_ICON_LINKS.forEach(({ el, href, sizes }) => {
+        if (href) el.setAttribute('href', href);
+        if (sizes) el.setAttribute('sizes', sizes);
+      });
+      return;
+    }
+
     const iconLinks = document.querySelectorAll("link[rel='icon']");
     if (iconLinks.length === 0) {
       const link = document.createElement('link');
@@ -128,7 +157,14 @@ function applyBrandAssets(assets) {
       link.href = assets.favicon;
       document.head.appendChild(link);
     } else {
-      iconLinks.forEach((l) => { l.href = assets.favicon; });
+      iconLinks.forEach((l) => {
+        l.href = assets.favicon;
+        // Un favicon de theme fait 256 px. Laisser le `sizes="512x512"` herite
+        // d'index.html ferait MENTIR la declaration : le navigateur choisit son
+        // icone d'apres ce chiffre, puis recoit une image d'une autre taille.
+        // On retire l'attribut, il se fie alors a l'image elle-meme.
+        l.removeAttribute('sizes');
+      });
     }
   }
 }
@@ -142,7 +178,7 @@ function applyLayout(layout) {
 }
 
 async function applyManifest(manifest) {
-  applyBrandAssets(manifest.assets);
+  applyBrandAssets(manifest.assets, manifest.__resolvedSlug);
   applyColors(manifest.colors);
   applyLayout(manifest.layout);
   // PATCH 02/05/2026 : on ne charge plus les polices heading/accent depuis le manifest.
