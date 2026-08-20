@@ -25,26 +25,14 @@ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
+import { readEnvLocal } from './lib/env-local.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = resolve(ROOT, 'docs/legal/library-privacy');
 const BUCKET = 'library-privacy-public';
 const ONLY_SLUG = process.argv[2] || null;
 
-function readEnvLocal() {
-  const p = resolve(ROOT, '.env.local');
-  if (!existsSync(p)) return {};
-  const out = {};
-  // split sur \r?\n : .env.local peut être en CRLF (édité côté Windows),
-  // sinon le \r résiduel fait échouer la regex et masque les variables.
-  for (const line of readFileSync(p, 'utf8').split(/\r?\n/)) {
-    const m = line.match(/^([A-Z0-9_]+)=(.*)$/);
-    if (m) out[m[1]] = m[2].trim();
-  }
-  return out;
-}
-
-const envLocal = readEnvLocal();
+const envLocal = readEnvLocal(ROOT);
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || envLocal.VITE_SUPABASE_URL;
 const SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
 

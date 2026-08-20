@@ -27,6 +27,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
+import { readEnvLocal } from './lib/env-local.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = resolve(ROOT, 'public/vendor/tesseract');
@@ -34,20 +35,7 @@ const BUCKET = 'anarbib-media-public';
 const PREFIX = 'ocr';
 
 // ── Resolution de la config ────────────────────────────────────────────
-function readEnvLocal() {
-  const p = resolve(ROOT, '.env.local');
-  if (!existsSync(p)) return {};
-  const out = {};
-  // Split sur /\r?\n/ : en CRLF, le \r final ferait echouer /^([A-Z_]+)=(.*)$/
-  // ('.' ne matche pas \r) et toutes les cles passeraient pour absentes.
-  for (const line of readFileSync(p, 'utf8').split(/\r?\n/)) {
-    const m = line.match(/^([A-Z_]+)=(.*)$/);
-    if (m) out[m[1]] = m[2].trim();
-  }
-  return out;
-}
-
-const envLocal = readEnvLocal();
+const envLocal = readEnvLocal(ROOT);
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || envLocal.VITE_SUPABASE_URL;
 const SERVICE_ROLE = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SERVICE_ROLE_KEY;
 
