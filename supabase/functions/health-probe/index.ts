@@ -344,7 +344,26 @@ Deno.serve(async (req: Request) => {
       const n = await alerter(
         'AnarBib — les sauvegardes ont repris',
         'Sauvegardes rétablies',
-        `<p style="margin:0 0 10px">Les trois flux ont de nouveau signalé un tir réussi. L'incident ouvert le ${esc(depuis)} est clos.</p>
+        // NE PAS écrire « les trois flux ont de nouveau signalé un tir réussi » :
+        // c'était faux le 20/08, où seul `court` avait tiré — `long` et `storage`
+        // restaient tenus par des lignes d'amorçage vieilles de 29 h. Un message
+        // de rétablissement ne doit pas affirmer plus que ce qu'il sait. On dit
+        // donc ce qui est vrai (plus aucun flux en défaut) et on montre l'état
+        // réel des trois, amorçage compris.
+        `<p style="margin:0 0 10px">Plus aucun flux n'est en défaut. L'incident ouvert le ${esc(depuis)} est clos.</p>
+         <p style="margin:0 0 10px">État des trois flux :</p>
+         <ul style="margin:0 0 10px;padding-left:18px">${flux
+           .map(
+             (f) =>
+               `<li>${esc(f.flow)} — dernier signal il y a ${esc(
+                 String(f.age_heures ?? '?'),
+               )} h${
+                 f.temoin_amorcage
+                   ? ' — <strong>ligne d’amorçage, aucun tir réel signalé à ce jour</strong>'
+                   : ''
+               }</li>`,
+           )
+           .join('')}</ul>
          <p style="margin:0">Cause relevée à l'ouverture : ${esc(incBackup.reason)}</p>`,
       );
       actionBackup = `incident sauvegardes clos, ${n} destinataire(s) prévenu(s)`;
