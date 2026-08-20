@@ -108,6 +108,34 @@ for (const r of rows) {
     const s = await existe(b, r.storage_path);
     if (s.ok) { sourceBucket = b; break; }
   }
+
+  // Cas « bon seau, mauvais chemin » : le fichier a ete verse a la main dans le
+  // seau prive, mais hors de la convention `books/<id>/<horodatage>_<nom>`.
+  // Vecu le 20/08/2026 sur le livre 1434. On le remet dans la convention, dans
+  // le MEME seau — un deplacement interne, pas une copie entre seaux.
+  let traiteSurPlace = false;
+  if (!sourceBucket) {
+    const { data: candidats } = await supabase.storage.from(r.storage_bucket).list('', { limit: 1000 });
+    const dossiers = (candidats || []).filter((o) => o.id === null).map((o) => o.name);
+    for (const d of dossiers) {
+      const { data: fichiers } = await supabase.storage.from(r.storage_bucket).list(d, { limit: 1000 });
+      const pdf = (fichiers || []).find((f) => f.name.toLowerCase().endsWith('.pdf'));
+      if (!pdf) continue;
+      const actuel = `${d}/${pdf.name}`;
+      if (actuel === r.storage_path) continue;
+      console.log(`  ↺ #${r.id} (livre ${r.book_id}) : chemin hors convention dans ${r.storage_bucket}`);
+      console.log(`      trouve  : ${actuel}`);
+      console.log(`      attendu : ${r.storage_path}`);
+      traiteSurPlace = true;
+      if (DRY) { deplaces += 1; break; }
+      const mv = await supabase.storage.from(r.storage_bucket).move(actuel, r.storage_path);
+      if (mv.error) { console.error(`      ✗ deplacement : ${mv.error.message}`); echecs += 1; }
+      else { console.log('      ✓ remis dans la convention'); deplaces += 1; }
+      break;
+    }
+  }
+  if (traiteSurPlace) continue;
+
   if (!sourceBucket) {
     console.error(`  ✗ #${r.id} (livre ${r.book_id}) INTROUVABLE : ni dans ${r.storage_bucket}, ni dans les seaux publics.`);
     console.error(`      chemin : ${r.storage_path}`);
