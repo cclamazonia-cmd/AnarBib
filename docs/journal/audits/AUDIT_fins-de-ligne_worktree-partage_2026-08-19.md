@@ -1,7 +1,7 @@
 # AUDIT — Fins de ligne et worktree partagé Windows / WSL
 
 **Date** : 19 août 2026
-**Statut** : 🔎 **DIAGNOSTIC — aucune correction appliquée**
+**Statut** : ✅ **CLÔTURÉ** — diagnostic puis correction appliquée le jour même (§10)
 **Périmètre** : le worktree unique `C:\AnarBib` ↔ `/home/accattone/anarbib`, attaqué par deux Git différents
 **Déclencheur** : deux Git donnaient deux `git status` disjoints sur le même dossier, le même jour
 
@@ -160,7 +160,9 @@ Le README l'annonce pourtant comme actif (« Le hook `.githooks/pre-commit.ps1` 
 * text=auto eol=lf
 ```
 
-Les attributs **priment sur `core.autocrlf`**. Les deux Git s'alignent alors quelle que soit leur configuration locale, y compris sur un clone frais chez quelqu'un d'autre. Coût côté dépôt : nul, les blobs sont déjà en LF. C'est la seule mesure qui survive à une réinstallation de Git ou à l'arrivée d'un nouveau poste.
+Les attributs **priment sur `core.autocrlf`**. Les deux Git s'alignent alors quelle que soit leur configuration locale, y compris sur un clone frais chez quelqu'un d'autre. C'est la seule mesure qui survive à une réinstallation de Git ou à l'arrivée d'un nouveau poste.
+
+> **Correction (§10)** — « coût nul, les blobs sont déjà en LF » était inexact. Deux fichiers du dépôt portent bien du CRLF dans leur blob et auraient été réécrits. Voir §10.2.
 
 **R2 — Normaliser le worktree, une fois.** Depuis WSL, après avoir revérifié que `git diff --ignore-cr-at-eol --stat` est bien vide :
 
@@ -183,3 +185,48 @@ Restaure les 52 fichiers en LF. Aucun contenu réel n'est perdu — c'est prouv�
 **Rien n'a été modifié.** Aucun fichier normalisé, aucune configuration touchée, aucune règle ajoutée. Le `.gitattributes` était en cours d'édition par une autre session au moment de l'audit, et arbitrer la politique de fins de ligne d'un dépôt partagé n'est pas une décision à prendre sous les pieds de quelqu'un.
 
 Les commits de la session du 19 août (`9a4d372b5`, `bcff4f10c`, `53abc5e7d`, `6f95dd8ef`, `95ca2aaeb`) ont été vérifiés : **zéro ligne CRLF** dans les six fichiers concernés sur `origin/main`.
+
+*Cette section décrit l'état au moment du diagnostic. La correction a été appliquée ensuite, sur décision explicite — voir §10.*
+
+---
+
+## 10. Suite donnée — correction appliquée le 19 août 2026
+
+### 10.1 Ce qui a été fait
+
+1. **Worktree normalisé.** Les 52 fichiers restaurés en LF, après revérification que `git diff --ignore-cr-at-eol --stat` était bien vide et que l'index était vide. `.env.example` et `public/_redirects` sont repassés en LF — les deux seuls nuisibles de la liste.
+2. **Règle de base ajoutée** au `.gitattributes` : `* text=auto eol=lf`, en tête, les règles spécifiques la surchargeant ensuite.
+3. **Règles binaires complétées** : `*.svg`, `*.webp`, `*.ico`, `*.woff`, `*.gz`, `*.traineddata`.
+
+### 10.2 Ce que la mesure a démenti
+
+R1 annonçait un coût nul au motif que tous les blobs étaient déjà en LF. **C'était faux.** Un `git add --renormalize .` a révélé deux fichiers dont le blob contient réellement du CRLF :
+
+| Fichier | Diff qu'aurait produit la renormalisation |
+|---|---|
+| `public/vendor/leaflet/leaflet.css` | 1 322 lignes |
+| `supabase/migrations/20260510000000_baseline_live.sql` | 21 236 lignes |
+
+Les deux sont exemptés par `-text` (aucune conversion, dans aucun sens — les deux Git s'accordent donc quand même, ce qui est l'objectif) :
+
+- **leaflet.css** est du tiers vendorisé : on garde les octets amont ;
+- **la baseline** est un dump historique déjà appliqué en production. Réécrire 21 000 lignes d'un fichier de migration pour une règle cosmétique n'est pas un risque à prendre en passant. À trancher à froid si le sujet revient.
+
+Au passage, cela corrige la note de l'ancien `.gitattributes`, qui écartait `*.sql` par crainte de renormaliser « les 124 migrations » : la crainte portait en réalité sur **un seul** fichier. Toutes les autres migrations étaient déjà en LF dans le dépôt.
+
+### 10.3 Vérification
+
+Les deux Git résolvent désormais les mêmes attributs et écriraient le **même blob** pour le même fichier sur disque :
+
+```
+blob dans HEAD (README.md) : 2a52671cfd1a0fbf385f0410ca2bc3fd130bb8a8
+blob que Windows écrirait  : 2a52671cfd1a0fbf385f0410ca2bc3fd130bb8a8
+blob que WSL écrirait      : 2a52671cfd1a0fbf385f0410ca2bc3fd130bb8a8
+```
+
+Et les deux exemptions tiennent des deux côtés : `leaflet.css` et la baseline sont inchangés par un passage à l'index, depuis Windows comme depuis WSL. Après correction, `git add --renormalize .` ne stage plus que le `.gitattributes` lui-même.
+
+### 10.4 Ce qui reste ouvert
+
+- **§7.1, le mode fantôme** — non traité. Il ne vient pas des fins de ligne mais de l'incapacité de Git for Windows à lire le bit exécutable à travers `\\wsl.localhost`. Pas de correctif propre : `core.fileMode=false` aveuglerait aussi le côté WSL. La parade reste de committer depuis WSL et de ne jamais stager un changement de mode vu depuis Windows.
+- **§7.2, le hook jamais câblé** — non traité, hors périmètre. Décision à prendre : le câbler, ou cesser de le présenter comme actif dans le README.

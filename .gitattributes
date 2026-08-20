@@ -17,7 +17,31 @@
 #
 # Le probleme ne s'etait jamais manifeste parce que les scripts existants
 # avaient ete ecrits en LF et n'etaient jamais passes par un aller-retour git.
+#
+# MISE A JOUR 19/08/2026 — la liste blanche ne suffisait pas.
+# Elle a sanctuarise la pile de deploiement et laisse le reste du depot a
+# core.autocrlf. Resultat mesure le jour meme : 52 fichiers reecrits en CRLF
+# sur le disque par un checkout Windows, invisibles pour le git Windows (qui
+# reconvertit a la volee) et vus comme entierement modifies par le git WSL.
+# Les deux vues etaient disjointes ; aucune des deux ne suffisait a voir le
+# probleme. Et ce n'etait pas theorique : .env.example est passe en CRLF, le
+# .env.local copie depuis lui aussi, et c'est ce qui a casse readEnvLocal()
+# dans scripts/upload-ocr-assets.mjs.
+#
+# D'ou la regle de base ci-dessous. Les attributs PRIMENT sur core.autocrlf :
+# les deux git s'alignent quelle que soit leur configuration locale, y compris
+# sur un clone frais chez quelqu'un d'autre. C'est la seule mesure qui survive
+# a une reinstallation de git ou a l'arrivee d'un nouveau poste.
+#
+# Audit complet : docs/journal/audits/AUDIT_fins-de-ligne_worktree-partage_2026-08-19.md
 # =============================================================================
+
+# --- Regle de base : LF partout ---------------------------------------------
+# `text=auto` laisse git detecter les binaires (heuristique sur les octets
+# nuls) ; les regles explicites plus bas les couvrent en ceinture-bretelles.
+# Les regles suivantes gagnent en cas de conflit : la DERNIERE qui matche
+# l'emporte, d'ou l'ordre de ce fichier.
+*                       text=auto eol=lf
 
 # --- Tout ce qui est execute par Linux --------------------------------------
 *.sh                    text eol=lf
@@ -36,9 +60,37 @@ deploy/*.example        text eol=lf
 *.wasm                  binary
 *.png                   binary
 *.jpg                   binary
+# Ajoutes le 19/08/2026 : absents de la premiere liste, donc traites comme du
+# texte. C'est ainsi que public/img/anarbib-logo.svg s'est retrouve en bascule
+# CRLF. Le SVG est bien du texte, mais on n'a aucune raison de le convertir.
+*.svg                   binary
+*.webp                  binary
+*.ico                   binary
+*.woff                  binary
+*.gz                    binary
+*.traineddata           binary
 
-# NOTE — non traite volontairement : *.sql.
-# Les 124 migrations sont deja dans le depot ; leur imposer eol=lf maintenant
-# renormaliserait l'ensemble et produirait un diff enorme sans necessite
-# immediate (psql tolere CRLF). A reprendre a froid, hors periode de travail
-# sur le SQL.
+# --- Deux fichiers qu'on laisse tels quels ----------------------------------
+# `-text` = aucune conversion, dans aucun sens. Les octets du depot sont ceux
+# du disque, donc les deux git s'accordent : c'est l'objectif, pas une entorse.
+#
+# Ils sont les SEULS du depot dont le blob contient du CRLF (mesure du
+# 19/08/2026 via `git add --renormalize .`). Sans exemption, la regle de base
+# les reecrirait integralement : 1 322 lignes et 21 236 lignes de diff.
+public/vendor/leaflet/leaflet.css                   -text
+supabase/migrations/20260510000000_baseline_live.sql -text
+
+# NOTE 19/08/2026 — *.sql est desormais couvert par la regle de base.
+# La version precedente de ce fichier l'ecartait volontairement, de crainte
+# qu'imposer eol=lf renormalise « les 124 migrations » et produise un diff
+# enorme. Mesure faite : la crainte etait fondee sur UN fichier, pas 124. Le
+# CRLF n'existait que sur le disque pour toutes les migrations sauf la
+# baseline, deja en CRLF+LF melanges dans le depot. Elle est exemptee
+# ci-dessus : c'est un dump historique deja applique en prod, et le suivi des
+# migrations cote Supabase n'est pas un endroit ou l'on reecrit 21 000 lignes
+# pour une regle cosmetique. A trancher a froid si le sujet revient.
+#
+# leaflet.css est du tiers vendorise : on garde les octets amont.
+#
+# Pour reverifier qu'il ne reste rien a renormaliser :
+#     git add --renormalize . && git diff --cached --stat && git reset
