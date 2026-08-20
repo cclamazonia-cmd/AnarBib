@@ -1,6 +1,6 @@
 # AUDIT — Fins de ligne et worktree partagé Windows / WSL
 
-**Date** : 19 août 2026
+**Date** : 20 août 2026
 **Statut** : ✅ **CLÔTURÉ** — diagnostic puis correction appliquée le jour même (§10)
 **Périmètre** : le worktree unique `C:\AnarBib` ↔ `/home/accattone/anarbib`, attaqué par deux Git différents
 **Déclencheur** : deux Git donnaient deux `git status` disjoints sur le même dossier, le même jour
@@ -184,13 +184,13 @@ Restaure les 52 fichiers en LF. Aucun contenu réel n'est perdu — c'est prouv�
 
 **Rien n'a été modifié.** Aucun fichier normalisé, aucune configuration touchée, aucune règle ajoutée. Le `.gitattributes` était en cours d'édition par une autre session au moment de l'audit, et arbitrer la politique de fins de ligne d'un dépôt partagé n'est pas une décision à prendre sous les pieds de quelqu'un.
 
-Les commits de la session du 19 août (`9a4d372b5`, `bcff4f10c`, `53abc5e7d`, `6f95dd8ef`, `95ca2aaeb`) ont été vérifiés : **zéro ligne CRLF** dans les six fichiers concernés sur `origin/main`.
+Les commits de la session du 20 août (`9a4d372b5`, `bcff4f10c`, `53abc5e7d`, `6f95dd8ef`, `95ca2aaeb`) ont été vérifiés : **zéro ligne CRLF** dans les six fichiers concernés sur `origin/main`.
 
 *Cette section décrit l'état au moment du diagnostic. La correction a été appliquée ensuite, sur décision explicite — voir §10.*
 
 ---
 
-## 10. Suite donnée — correction appliquée le 19 août 2026
+## 10. Suite donnée — correction appliquée le 20 août 2026
 
 ### 10.1 Ce qui a été fait
 

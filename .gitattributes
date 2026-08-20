@@ -18,7 +18,7 @@
 # Le probleme ne s'etait jamais manifeste parce que les scripts existants
 # avaient ete ecrits en LF et n'etaient jamais passes par un aller-retour git.
 #
-# MISE A JOUR 19/08/2026 — la liste blanche ne suffisait pas.
+# MISE A JOUR 20/08/2026 — la liste blanche ne suffisait pas.
 # Elle a sanctuarise la pile de deploiement et laisse le reste du depot a
 # core.autocrlf. Resultat mesure le jour meme : 52 fichiers reecrits en CRLF
 # sur le disque par un checkout Windows, invisibles pour le git Windows (qui
@@ -33,7 +33,7 @@
 # sur un clone frais chez quelqu'un d'autre. C'est la seule mesure qui survive
 # a une reinstallation de git ou a l'arrivee d'un nouveau poste.
 #
-# Audit complet : docs/journal/audits/AUDIT_fins-de-ligne_worktree-partage_2026-08-19.md
+# Audit complet : docs/journal/audits/AUDIT_fins-de-ligne_worktree-partage_2026-08-20.md
 # =============================================================================
 
 # --- Regle de base : LF partout ---------------------------------------------
@@ -60,7 +60,7 @@ deploy/*.example        text eol=lf
 *.wasm                  binary
 *.png                   binary
 *.jpg                   binary
-# Ajoutes le 19/08/2026 : absents de la premiere liste, donc traites comme du
+# Ajoutes le 20/08/2026 : absents de la premiere liste, donc traites comme du
 # texte. C'est ainsi que public/img/anarbib-logo.svg s'est retrouve en bascule
 # CRLF. Le SVG est bien du texte, mais on n'a aucune raison de le convertir.
 *.svg                   binary
@@ -75,12 +75,12 @@ deploy/*.example        text eol=lf
 # du disque, donc les deux git s'accordent : c'est l'objectif, pas une entorse.
 #
 # Ils sont les SEULS du depot dont le blob contient du CRLF (mesure du
-# 19/08/2026 via `git add --renormalize .`). Sans exemption, la regle de base
+# 20/08/2026 via `git add --renormalize .`). Sans exemption, la regle de base
 # les reecrirait integralement : 1 322 lignes et 21 236 lignes de diff.
 public/vendor/leaflet/leaflet.css                   -text
 supabase/migrations/20260510000000_baseline_live.sql -text
 
-# NOTE 19/08/2026 — *.sql est desormais couvert par la regle de base.
+# NOTE 20/08/2026 — *.sql est desormais couvert par la regle de base.
 # La version precedente de ce fichier l'ecartait volontairement, de crainte
 # qu'imposer eol=lf renormalise « les 124 migrations » et produise un diff
 # enorme. Mesure faite : la crainte etait fondee sur UN fichier, pas 124. Le
