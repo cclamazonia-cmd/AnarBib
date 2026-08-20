@@ -31,13 +31,13 @@ BEGIN;
 CREATE TEMP TABLE t_fixture ON COMMIT DROP AS
 WITH usr_coord AS (
   INSERT INTO auth.users (id, instance_id, aud, role, email, created_at, updated_at)
-  VALUES ('22222222-2222-2222-2222-222222222222',
+  VALUES (gen_random_uuid(),
           '00000000-0000-0000-0000-000000000000',
           'authenticated', 'authenticated', 'p4-coord@example.invalid', now(), now())
   RETURNING id
 ), usr_biblio AS (
   INSERT INTO auth.users (id, instance_id, aud, role, email, created_at, updated_at)
-  VALUES ('33333333-3333-3333-3333-333333333333',
+  VALUES (gen_random_uuid(),
           '00000000-0000-0000-0000-000000000000',
           'authenticated', 'authenticated', 'p4-biblio@example.invalid', now(), now())
   RETURNING id
@@ -212,7 +212,7 @@ BEGIN
   END IF;
   RAISE NOTICE 'TEST 6 OK — fusion exécutée de bout en bout et journalisée.';
 
-  RAISE NOTICE '✅ DOUBLONS P4 : 8/8 tests verts.';
+  RAISE NOTICE 'DOUBLONS-P4 OK : 8/8 tests passés';
 END $$;
 
 ROLLBACK;

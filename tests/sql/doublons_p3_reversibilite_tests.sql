@@ -30,7 +30,7 @@ CREATE TEMP TABLE t_fixture ON COMMIT DROP AS
 WITH usr AS (
   -- profiles.id référence auth.users : il faut donc le compte d'abord.
   INSERT INTO auth.users (id, instance_id, aud, role, email, created_at, updated_at)
-  VALUES ('11111111-1111-1111-1111-111111111111',
+  VALUES (gen_random_uuid(),
           '00000000-0000-0000-0000-000000000000',
           'authenticated', 'authenticated', 'doublons-p3@example.invalid', now(), now())
   RETURNING id
@@ -158,7 +158,7 @@ BEGIN
     RAISE NOTICE 'TEST 6 OK — compte non staff refusé (42501).';
   END;
 
-  RAISE NOTICE '✅ DOUBLONS P3 : 7/7 tests verts.';
+  RAISE NOTICE 'DOUBLONS-P3 OK : 7/7 tests passés';
 END $$;
 
 ROLLBACK;
