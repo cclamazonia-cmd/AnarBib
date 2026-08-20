@@ -39,7 +39,7 @@ export function PageShell({ children }) {
 export function Topbar() {
   const { formatMessage: t } = useIntl();
   const { user, signOut } = useAuth();
-  const { libraryName, libraryId, role, isNetworkAdmin, brandLogoUrl } = useLibrary();
+  const { libraryName, libraryId, role, isNetworkAdmin } = useLibrary();
   const location = useLocation();
 
   const isActive = (path) => location.pathname.startsWith(path);
@@ -74,38 +74,34 @@ export function Topbar() {
   // Referme le tiroir à chaque navigation.
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
-  // Le bandeau ne montre JAMAIS deux fois la même bibliothèque. Quand le thème
-  // de la biblio a pris le slot de marque (resolveBrandLogo remplace le logo
-  // AnarBib par `assets.logo` du manifeste), afficher en plus le logo tiré de
-  // library_commons donne deux fois le même emblème. Vécu le 20/08 sur BLMF :
-  // le manifeste déclare `themes/blmf/logo-v2.png` et library_commons
-  // `themes/blmf/logo-blmf-v2.png` — deux fichiers distincts, le même dessin,
-  // donc comparer les URL ne suffit pas. On teste la STRUCTURE : le slot de
-  // marque est-il piloté par un thème de biblio, ou porte-t-il AnarBib ?
-  const brandIsLibrary = Boolean(brandLogoUrl) && brandLogoUrl !== DEFAULT_BRAND_LOGO;
 
   return (
     <nav className="ab-topbar">
       <Link to="/" className="ab-topbar__brand">
-        {/* Logo auto-heberge (19/08/2026). Il etait hotlinke sur un WordPress
+        {/* Deux emplacements, deux echelles : le RESEAU, puis la BIBLIOTHEQUE
+            de session. C'est le sens du bandeau et il ne change pas.
+
+            Logo auto-heberge (19/08/2026) : il etait hotlinke sur un WordPress
             externe (cclamazonia.noblogs.org), ce qui exposait l'IP de chaque
             visiteur a un tiers et faisait dependre le bandeau d'un site que
             nous ne maitrisons pas. Le fichier vit desormais dans public/img/.
-            Depuis, il est pilotable par bibliotheque : un theme de biblio qui
-            declare `assets.logo` remplace ce logo (cf. resolveBrandLogo). Le
-            theme `default` garde le fichier local. En cas d'URL de theme
-            cassee, onError ramene le logo AnarBib plutot qu'un bandeau vide. */}
+
+            Le 20/08, un essai a rendu ce premier emplacement pilotable par
+            thema de bibliotheque. Deux raisons de l'avoir retire :
+              1. il faisait DOUBLON — le logo de la biblio est deja le second
+                 emplacement, tire de library_commons. Sur BLMF, le bandeau
+                 affichait deux fois le meme embleme, par deux fichiers
+                 distincts (themes/blmf/logo-v2.png au manifeste,
+                 themes/blmf/logo-blmf-v2.png dans library_commons) ;
+              2. il effacait AnarBib de sa propre application : sur une biblio
+                 a thema, le reseau disparaissait du bandeau. */}
         <img
-          src={brandLogoUrl || DEFAULT_BRAND_LOGO}
+          src={DEFAULT_BRAND_LOGO}
           alt="AnarBib"
           className="ab-topbar__logo"
           data-brand-logo
-          onError={(e) => {
-            if (e.currentTarget.src.endsWith(DEFAULT_BRAND_LOGO)) return;
-            e.currentTarget.src = DEFAULT_BRAND_LOGO;
-          }}
         />
-        {!brandIsLibrary && logoSrc && !logoError && (
+        {logoSrc && !logoError && (
           <img
             src={logoSrc}
             alt={libraryName}

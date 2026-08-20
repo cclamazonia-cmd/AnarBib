@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from './AuthContext';
-import { useTheme, resolveBrandLogo } from '@/lib/theme';
+import { useTheme } from '@/lib/theme';
 
 const STORAGE_KEY = 'anarbib.libraryContext';
 
@@ -103,7 +103,7 @@ export function LibraryProvider({ children }) {
   // qu'un slug non-default est connu (cache session/URL) OU que la resolution est
   // finie, on fetch le theme effectif UNE seule fois (fini le default-puis-reel).
   const [themeResolved, setThemeResolved] = useState(false);
-  const { settledSlug: themeSettledSlug, manifest: themeManifest } = useTheme(
+  const { settledSlug: themeSettledSlug } = useTheme(
     ctx.themeSlug,
     themeResolved || ctx.themeSlug !== 'default',
   );
@@ -303,10 +303,8 @@ export function LibraryProvider({ children }) {
       // #LOGIN-FIX H1 : themeReady synchrone au rendu (settled === demandé)
       libraryLoading,
       themeReady: themeSettledSlug === ctx.themeSlug,
-      // Logo du bandeau, pilote par le manifeste du theme applique (Topbar).
-      brandLogoUrl: resolveBrandLogo(themeManifest),
     }),
-    [ctx, setLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess, libraryLoading, themeSettledSlug, themeManifest]
+    [ctx, setLibrary, libraries, isNetworkAdmin, effectiveRole, hasStaffAccess, libraryLoading, themeSettledSlug]
   );
 
   return (

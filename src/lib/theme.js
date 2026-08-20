@@ -33,25 +33,14 @@ export function resolveLibraryLogo(commons) {
 // Fichier servi par notre propre origine, versionne par le deploiement.
 export const DEFAULT_BRAND_LOGO = '/img/logo-anarbib.png';
 
-// Rend le bandeau pilotable par bibliotheque : un theme de biblio qui declare
-// `assets.logo` dans son manifeste remplace le logo AnarBib du bandeau.
-//
-// Le theme `default`, lui, garde le fichier local — meme raison que pour les
-// icones d'onglet (cf. applyBrandAssets, PATCH 19/08/2026) : la copie Supabase
-// est le MEME dessin, mais servie depuis une autre origine et sous une URL non
-// versionnee. Aucun gain visuel, et un risque de logo perime sorti du cache.
-//
-// On se fie a `__resolvedSlug` (theme REELLEMENT applique) et non au slug
-// demande : quand le manifeste d'une biblio est introuvable, useTheme retombe
-// sur le manifeste `default` tout en gardant le slug demande. Lire le slug
-// demande ferait alors chercher un `assets.logo` de biblio dans un manifeste
-// AnarBib — et retomber sur le fichier local par accident plutot que par regle.
-export function resolveBrandLogo(manifest) {
-  const slug = manifest?.__resolvedSlug || 'default';
-  if (slug === 'default') return DEFAULT_BRAND_LOGO;
-  const logo = typeof manifest?.assets?.logo === 'string' ? manifest.assets.logo.trim() : '';
-  return /^https?:\/\//i.test(logo) ? logo : DEFAULT_BRAND_LOGO;
-}
+// Le bandeau porte TOUJOURS ce logo : il dit le reseau, et le logo de la
+// bibliotheque de session occupe le second emplacement (resolveLibraryLogo
+// ci-dessus). Un `resolveBrandLogo` a existe le 20/08, qui rendait ce premier
+// emplacement pilotable par le manifeste d'un thema de biblio ; il a ete retire
+// le jour meme : il faisait doublon avec le second emplacement (deux fichiers
+// distincts, le meme embleme, affiche deux fois sur BLMF) et effacait AnarBib
+// de sa propre application. Un thema de bibliotheque habille l'application —
+// couleurs, fond, favicon — il ne remplace pas la marque du reseau.
 
 function setCssVar(name, value) {
   if (value == null || value === '') return;
