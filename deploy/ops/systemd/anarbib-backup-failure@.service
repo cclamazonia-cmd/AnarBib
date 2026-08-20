@@ -1,0 +1,7 @@
+[Unit]
+Description=AnarBib #BG2 — notification d'echec pour %i
+
+[Service]
+Type=oneshot
+Environment=HOME=%h
+ExecStart=%h/anarbib-ops/anarbib-notify-failure.sh %i

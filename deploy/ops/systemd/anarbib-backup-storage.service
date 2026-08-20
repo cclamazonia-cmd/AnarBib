@@ -1,0 +1,12 @@
+[Unit]
+Description=AnarBib #BG2 — sauvegarde flux storage (16 buckets, retention 7/4/6)
+Documentation=file:%h/anarbib/docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md
+OnFailure=anarbib-backup-failure@%n.service
+
+[Service]
+Type=oneshot
+Environment=PATH=/usr/bin:/bin
+Environment=HOME=%h
+TimeoutStartSec=1800
+ExecStartPre=-/bin/rm -f %h/anarbib-ops/.last-failure
+ExecStart=%h/anarbib-ops/anarbib-bg2.sh backup storage

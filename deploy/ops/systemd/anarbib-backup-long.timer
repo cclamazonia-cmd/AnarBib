@@ -1,0 +1,20 @@
+[Unit]
+Description=AnarBib #BG2 — declencheur flux long (hebdomadaire dimanche 20:00 Europe/Paris)
+
+[Timer]
+# Horaire exprime en Europe/Paris, PAS dans le fuseau de la machine.
+# L'heure de tir suit la personne qui exploite la chaine (Dunkerque), pas le
+# fuseau du portable, qui change en voyage. systemd applique le fuseau nomme
+# et gere donc l'heure d'ete et l'heure d'hiver tout seul : rien a rebasculer
+# deux fois par an.
+#
+# 19:00 plutot que 02:00 : le tir de 02:00 ne tombait jamais quand la machine
+# etait eveillee. Persistent=true le rattrapait au reveil, donc au pire moment
+# — c'est ainsi que le tir du 20/08 est mort en plein repack, tue par le
+# demontage de session. Cf. NOTE_angle-mort_tir-interrompu_2026-08-20.
+OnCalendar=Sun *-*-* 20:00:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target
