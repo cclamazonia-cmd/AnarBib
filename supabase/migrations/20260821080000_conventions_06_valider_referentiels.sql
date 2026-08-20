@@ -3,6 +3,35 @@
 -- Foyer : REGISTRE §37 `CONV` · CONV-7
 --
 -- ---------------------------------------------------------------------
+-- HORODATAGE. Ce fichier a d'abord porte `20260821060000` — creneau deja
+-- pris, dans le meme quart d'heure, par
+-- `20260821060000_incidents_types_sondes_structurelles.sql`. Comme
+-- `supabase_migrations.schema_migrations.version` est CLE PRIMAIRE, une
+-- seule des deux pouvait etre enregistree : celle-ci n'a jamais tourne.
+-- Renumerotee en `20260821080000` (DOC-DEPLOY-1 : horodatage UTC,
+-- VERIFIER AVANT DE CHOISIR — y compris quand plusieurs sessions
+-- ecrivent dans le meme depot le meme jour).
+--
+-- A RETENIR : le rejeu local du job `sql-tests` ne detecte PAS cette
+-- classe de collision. Il applique les fichiers directement par `psql`,
+-- sans jamais ecrire dans `supabase_migrations.schema_migrations` — les
+-- deux homonymes y passaient donc tranquillement. Seul `supabase db push`
+-- fait respecter la cle primaire. Le controle a faire avant de choisir un
+-- horodatage est un `ls supabase/migrations | tail` FRAIS, pas un rejeu.
+--
+-- ---------------------------------------------------------------------
+-- CE QUI A DEJA ETE FAIT AILLEURS. La migration
+-- `20260821041500_conventions_01b_residus_pays` a corrige les DEUX lignes
+-- de `public.authors` qui bloquaient (Türkiye -> TR, Nederland -> NL),
+-- avec le meme diagnostic que celui pose ci-dessous. Elle s'arrete la,
+-- volontairement. Restent deux choses, qui sont l'objet de ce fichier :
+--   * les BROUILLONS d'autorite, encore hors referentiel (3 lignes) ;
+--   * la VALIDATION des deux contraintes, qui seule met fin a l'ambiguite.
+-- L'`update` sur `public.authors` ci-dessous est donc devenu un filet
+-- sans effet — on le garde, il ne coute rien et il rattraperait une ligne
+-- arrivee entre-temps.
+--
+-- ---------------------------------------------------------------------
 -- POURQUOI CE FICHIER EXISTE — la leçon du 20/08, 22:04 UTC
 --
 -- La migration 01 a pose ses deux CHECK en `NOT VALID`, avec ce
