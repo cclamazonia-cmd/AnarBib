@@ -123,6 +123,28 @@ Deno.serve(async (req)=>{
       accessUrl = sourceUrl;
       accessMode = "external_url";
     }
+    // ── Provenance : ne jamais exposer l'URL source d'un document RESTREINT
+    //    servi depuis le stockage. ──────────────────────────────────────────
+    // `source_url` a deux roles distincts dans cette fonction :
+    //   * pour une ressource purement EXTERNE, c'est le chemin de lecture
+    //     (accessMode = 'external_url') — il doit rester expose ;
+    //   * pour une ressource servie depuis le STOCKAGE, l'acces passe par une
+    //     URL signee a duree limitee, et source_url n'est plus que de la
+    //     provenance.
+    //
+    // Dans ce second cas, si la ressource n'est pas publique, renvoyer
+    // source_url revient a livrer une copie permanente et non revocable du
+    // document — souvent un lien de telechargement direct (MEGA, Drive…) avec
+    // sa cle. Cela defait exactement ce que la restriction protege : le PDF
+    // servi est filigrane au nom du lecteur, l'original ne l'est pas.
+    // Constate le 2026-08-20 sur la ressource 61 (bucket pdf-restrito) : la
+    // page lecteur affichait le nom de la source mais pointait vers le fichier.
+    //
+    // Le masquage est fait ICI, cote serveur, et non dans l'interface : masquer
+    // a l'ecran laisserait le lien dans la reponse de l'API.
+    const estPublic = String(row.access_scope || "") === "publico";
+    const provenanceExposable = accessMode !== "storage_signed" || estPublic;
+
     return json({
       ok: true,
       asset: {
@@ -134,7 +156,7 @@ Deno.serve(async (req)=>{
         mime_type: row.mime_type,
         language_code: row.language_code,
         source_name: row.source_name,
-        source_url: row.source_url,
+        source_url: provenanceExposable ? row.source_url : null,
         attribution_text: row.attribution_text,
         rights_status: row.rights_status,
         label: row.label,
