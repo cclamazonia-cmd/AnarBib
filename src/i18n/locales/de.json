@@ -5799,5 +5799,7 @@
   "catalogacao.dedup.scanKindApprox": "Ähnlicher Titel",
   "catalogacao.dedup.scanOpen": "Öffnen",
   "catalogacao.dedup.scanKindTitleYearPublisher": "Titel, Jahr und Verlag identisch",
-  "catalogacao.dedup.scanKindTitleYear": "Titel und Jahr identisch"
+  "catalogacao.dedup.scanKindTitleYear": "Titel und Jahr identisch",
+  "federacao.communs.doc.guideNumerisation.title": "Ein Werk digitalisieren",
+  "federacao.communs.doc.guideNumerisation.desc": "Drei Einstellungen, fünf Kontrollen und was aus den Scans wird — was am Scanner entschieden wird."
 }

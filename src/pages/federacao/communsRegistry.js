@@ -112,6 +112,14 @@ import gtfIt   from '../../../docs/guides/guide-thesaurus-ficedl-it.md?raw';
 import gtfNl   from '../../../docs/guides/guide-thesaurus-ficedl-nl.md?raw';
 import gtfPtBR from '../../../docs/guides/guide-thesaurus-ficedl-pt-BR.md?raw';
 
+// ── Fiche « Numériser un ouvrage » — fr + pt-BR ─────────────────────────────
+// Volontairement PAS traduite dans les dix langues : le corps du réseau qui
+// numérise est lusophone, et la doctrine des communs veut que chaque version
+// soit écrite par sa communauté de langue, pas déversée par traduction. Les
+// huit locales absentes retombent sur le fr (cf. resolveDocMd).
+import gnuFr   from '../../../docs/guides/guide-digitalizar-fr.md?raw';
+import gnuPtBR from '../../../docs/guides/guide-digitalizar-pt-BR.md?raw';
+
 // ── Guide de gouvernance — 10 locales (déjà existant) ───────────────────────
 import gouvCa   from '../../../docs/governance/guide-gouvernance-ca.md?raw';
 import gouvDe   from '../../../docs/governance/guide-gouvernance-de.md?raw';
@@ -169,6 +177,9 @@ const GUIDE_SCAN_BY_LOCALE = {
   es: gsEs, fr: gsFr, it: gsIt, nl: gsNl, 'pt-BR': gsPtBR,
 };
 
+// Deux locales seulement, à dessein — les huit autres retombent sur fr.
+const GUIDE_NUMERISATION_BY_LOCALE = { fr: gnuFr, 'pt-BR': gnuPtBR };
+
 export const COMMUNS_CATS = ['chartes', 'guides', 'vademecums', 'cadrages'];
 
 export const COMMUNS_DOCS = [
@@ -217,6 +228,15 @@ export const COMMUNS_DOCS = [
     titleKey: 'federacao.communs.doc.indexarAssunto.title',
     descKey: 'federacao.communs.doc.indexarAssunto.desc',
     byLocale: GUIDE_INDEXAR_BY_LOCALE,
+  },
+  {
+    // Ce qui se décide DEVANT le scanner : trois réglages, cinq contrôles, le
+    // sort des captures. Le pourquoi est dans DECISION_profil_numerisation ;
+    // cette fiche-ci est faite pour être lue debout, pas en réunion.
+    id: 'guide-numerisation', cat: 'vademecums',
+    titleKey: 'federacao.communs.doc.guideNumerisation.title',
+    descKey: 'federacao.communs.doc.guideNumerisation.desc',
+    byLocale: GUIDE_NUMERISATION_BY_LOCALE,
   },
   {
     // Le vocabulaire matière commun (thésaurus FICEDL) : ce qu'il est, à quelles

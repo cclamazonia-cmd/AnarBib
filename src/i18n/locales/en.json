@@ -5799,5 +5799,7 @@
   "catalogacao.dedup.scanKindApprox": "Similar title",
   "catalogacao.dedup.scanOpen": "Open",
   "catalogacao.dedup.scanKindTitleYearPublisher": "Same title, year and publisher",
-  "catalogacao.dedup.scanKindTitleYear": "Same title and year"
+  "catalogacao.dedup.scanKindTitleYear": "Same title and year",
+  "federacao.communs.doc.guideNumerisation.title": "Digitising a book",
+  "federacao.communs.doc.guideNumerisation.desc": "Three settings, five checks and what becomes of the captures — what gets decided at the scanner."
 }

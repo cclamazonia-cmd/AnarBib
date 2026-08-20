@@ -5799,5 +5799,7 @@
   "catalogacao.dedup.scanKindApprox": "Παρόμοιος τίτλος",
   "catalogacao.dedup.scanOpen": "Άνοιγμα",
   "catalogacao.dedup.scanKindTitleYearPublisher": "Ίδιος τίτλος, έτος και εκδότης",
-  "catalogacao.dedup.scanKindTitleYear": "Ίδιος τίτλος και έτος"
+  "catalogacao.dedup.scanKindTitleYear": "Ίδιος τίτλος και έτος",
+  "federacao.communs.doc.guideNumerisation.title": "Ψηφιοποίηση ενός έργου",
+  "federacao.communs.doc.guideNumerisation.desc": "Τρεις ρυθμίσεις, πέντε έλεγχοι και η τύχη των λήψεων — ό,τι αποφασίζεται μπροστά στον σαρωτή."
 }

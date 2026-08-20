@@ -5799,5 +5799,7 @@
   "catalogacao.dedup.scanKindApprox": "Vergelijkbare titel",
   "catalogacao.dedup.scanOpen": "Openen",
   "catalogacao.dedup.scanKindTitleYearPublisher": "Zelfde titel, jaar en uitgever",
-  "catalogacao.dedup.scanKindTitleYear": "Zelfde titel en jaar"
+  "catalogacao.dedup.scanKindTitleYear": "Zelfde titel en jaar",
+  "federacao.communs.doc.guideNumerisation.title": "Een werk digitaliseren",
+  "federacao.communs.doc.guideNumerisation.desc": "Drie instellingen, vijf controles en het lot van de scans — wat je aan de scanner beslist."
 }

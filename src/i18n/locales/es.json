@@ -5799,5 +5799,7 @@
   "catalogacao.dedup.scanKindApprox": "Título parecido",
   "catalogacao.dedup.scanOpen": "Abrir",
   "catalogacao.dedup.scanKindTitleYearPublisher": "Título, año y editorial idénticos",
-  "catalogacao.dedup.scanKindTitleYear": "Título y año idénticos"
+  "catalogacao.dedup.scanKindTitleYear": "Título y año idénticos",
+  "federacao.communs.doc.guideNumerisation.title": "Digitalizar una obra",
+  "federacao.communs.doc.guideNumerisation.desc": "Tres ajustes, cinco comprobaciones y el destino de las capturas — lo que se decide frente al escáner."
 }

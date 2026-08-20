@@ -5799,5 +5799,7 @@
   "catalogacao.dedup.scanKindApprox": "Simila titolo",
   "catalogacao.dedup.scanOpen": "Malfermi",
   "catalogacao.dedup.scanKindTitleYearPublisher": "Sama titolo, jaro kaj eldonejo",
-  "catalogacao.dedup.scanKindTitleYear": "Sama titolo kaj jaro"
+  "catalogacao.dedup.scanKindTitleYear": "Sama titolo kaj jaro",
+  "federacao.communs.doc.guideNumerisation.title": "Ciferecigi verkon",
+  "federacao.communs.doc.guideNumerisation.desc": "Tri agordoj, kvin kontroloj kaj la sorto de la kaptaĵoj — kio decidiĝas antaŭ la skanilo."
 }

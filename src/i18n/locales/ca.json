@@ -5799,5 +5799,7 @@
   "catalogacao.dedup.scanKindApprox": "Títol semblant",
   "catalogacao.dedup.scanOpen": "Obre",
   "catalogacao.dedup.scanKindTitleYearPublisher": "Títol, any i editorial idèntics",
-  "catalogacao.dedup.scanKindTitleYear": "Títol i any idèntics"
+  "catalogacao.dedup.scanKindTitleYear": "Títol i any idèntics",
+  "federacao.communs.doc.guideNumerisation.title": "Digitalitzar una obra",
+  "federacao.communs.doc.guideNumerisation.desc": "Tres ajustos, cinc comprovacions i el destí de les captures — el que es decideix davant l'escàner."
 }

@@ -186,14 +186,22 @@ trois à cinq ans.**
 
 ## 9. Ce qui reste à décider
 
-- [ ] **Figer le vocabulaire de `rights_status`** et migrer les dix-huit
-      ressources existantes. À faire avant la première campagne, pas après.
+- [x] **Figer le vocabulaire de `rights_status`** et migrer les ressources
+      existantes. ✅ Fait le 20/08 — migration `20260820235000`, liste fermée à
+      quatre valeurs, colonne de justification, liste fermée au formulaire.
+      Vérifié en production : **44 lignes** normalisées sur les deux tables
+      (18 + 26 — il y en avait plus que les dix-huit annoncées, les brouillons
+      comptent aussi), marqueur « a verificar » posé sur les **28** ambiguës.
 - [ ] **Choisir l'outil de dérivation** (capture gris → PDF bitonal mixte).
       Piste : ScanTailor + `img2pdf`, ou une chaîne `unpaper` / ImageMagick.
       À éprouver sur dix ouvrages avant d'équiper qui que ce soit.
-- [ ] **Écrire la fiche pratique d'une page** pour les personnes qui scannent :
-      les trois réglages, les cinq contrôles, et rien d'autre. Ce document-ci
-      est pour décider ; la fiche sera pour faire.
+- [x] **Écrire la fiche pratique d'une page** pour les personnes qui scannent.
+      ✅ Fait le 20/08 — `docs/guides/guide-digitalizar-fr.md` et `-pt-BR.md`,
+      exposée dans les Communs de l'app (carte « Numériser un ouvrage »), les
+      huit autres langues retombant sur le fr. La chaîne de dérivation y est
+      laissée **en réservé** tant que l'outil n'est pas choisi : la fiche
+      renvoie à la bibliothèque plutôt que de recommander une commande que
+      personne n'a éprouvée.
 - [ ] **Trancher le sort des captures** : archivage hors ligne systématique, ou
       effacement après validation ? La question appartient à chaque
       bibliothèque, mais la réponse doit être écrite quelque part.
