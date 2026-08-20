@@ -127,3 +127,62 @@ que si la machine est éveillée, c'est-à-dire précisément ce qui a manqué l
 passeront muets le **28/08 à 14:53 UTC** si aucun témoin réel n'arrive d'ici là.
 Le statut les marque désormais `temoin_amorcage: true` — la moitié du §7.1 du plan
 de marche est donc faite.
+
+---
+
+## Suite donnée, le 20/08
+
+### Palier 1 appliqué — la colonne `phase`
+
+Migration `20260820235500_temoin_phase_depart`. Elle pose la colonne
+(`'started'` / `'ok'`, défaut `'ok'`), ouvre `fn_record_backup_heartbeat` à un
+quatrième paramètre, et **immunise la sonde** : `fn_backup_heartbeat_status` ne
+compte plus que les témoins `'ok'`.
+
+Cette immunisation n'est pas cosmétique. Sans elle, le jour où le script
+enverrait un témoin de départ, le statut y verrait un témoin frais et
+**masquerait le silence** — l'alarme serait devenue moins bonne qu'avant. C'est
+ce qui rend le palier 2 sûr.
+
+L'ancienne signature à trois arguments est **supprimée** plutôt que laissée à
+cohabiter : deux surcharges dont l'une porte un paramètre par défaut rendent
+l'appel à trois arguments ambigu. Le script, qui appelle à trois arguments,
+continue de fonctionner tel quel.
+
+**Contrôle après déploiement** : statut identique à avant — mêmes hôtes, mêmes
+seuils, `ok: true`, une seule signature, toutes les lignes en `'ok'`.
+
+Le palier 2 — apprendre à la sonde « dernière ligne `started` et vieille de
+quelques heures → tir interrompu » — reste à faire, et le script ne signalera son
+départ qu'à ce moment-là.
+
+### Horaire de tir déplacé en Europe/Paris
+
+Les trois minuteries tiraient à 2 h, dimanche 3 h et 4 h — heure machine, donc en
+pleine nuit quelle que soit la latitude. Elles ne tombaient jamais sur une machine
+éveillée ; `Persistent=true` les rattrapait au réveil, **au pire moment**. C'est
+exactement ainsi que le tir du 20/08 est mort.
+
+| Flux | Avant | Après |
+|---|---|---|
+| `court` | `*-*-* 02:00:00` | `*-*-* 19:00:00 Europe/Paris` |
+| `long` | `Sun *-*-* 03:00:00` | `Sun *-*-* 20:00:00 Europe/Paris` |
+| `storage` | `Sun *-*-* 04:00:00` | `Sun *-*-* 21:00:00 Europe/Paris` |
+
+**Le fuseau est nommé, à dessein.** L'heure de tir suit la personne qui exploite
+la chaîne — Dunkerque jusqu'en décembre 2027 — et non le fuseau du portable, qui
+change en voyage. La machine était en `America/Cayenne` au moment du changement,
+où 19 h Paris tombe à 14 h. systemd applique le fuseau nommé et gère donc l'heure
+d'été et l'heure d'hiver seul : **rien à rebasculer deux fois par an.**
+
+Unités sauvegardées en `*.timer.bak-20260820`, `daemon-reload` fait,
+`systemd-analyze verify` silencieux.
+
+### Une lacune repérée au passage
+
+Les unités systemd (`~/.config/systemd/user/anarbib-backup-*.{service,timer}`)
+**ne sont dans aucun dépôt**. Le script `anarbib-bg2.sh` et ses listes vivent dans
+`~/anarbib-ops/`, hors dépôt lui aussi. La chaîne de sauvegarde n'est donc pas
+reconstructible depuis Git — même angle mort que `deploy/genkeys.mjs` le 19/08,
+et sur la brique dont dépend tout le reste. À traiter, hors périmètre de cette
+note.
