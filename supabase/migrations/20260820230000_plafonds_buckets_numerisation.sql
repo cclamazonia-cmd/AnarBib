@@ -82,12 +82,24 @@ begin
   end if;
 
   -- ---------------------------------------------------------------------------
-  -- 1. Documents PDF — 300 Mo
+  -- 1. Documents PDF — 500 Mo
   -- ---------------------------------------------------------------------------
-  -- Un ouvrage numerise en bitonal tient dans quelques dizaines de Mo. 300 Mo
-  -- laisse passer un scan en gris genereux et arrete un versement aberrant.
+  -- Un ouvrage numerise en bitonal tient dans quelques dizaines de Mo.
+  --
+  -- RELEVE DE 300 A 500 Mo LE 2026-08-20 (voir migration 20260820012512).
+  -- Le profil de numerisation chiffre une page illustree a 200 ko - 1 Mo : un
+  -- volume de 300 pages entierement illustre — recueil d'affiches, presse
+  -- illustree, ce qu'une bibliotheque libertaire numerise en priorite — pese 60
+  -- a 300 Mo et arrivait PILE au plafond. Un versement legitime pouvait etre
+  -- refuse. Le plafond existe pour arreter un versement de 4 Go par megarde, pas
+  -- pour arbitrer un recueil de 350 Mo ; on l'aligne sur celui des media.
+  --
+  -- La valeur est corrigee ICI et pas seulement dans 012512 : cette migration
+  -- porte un numero AVANCE A LA MAIN, donc elle s'execute APRES 012512 au rejeu.
+  -- Sans cet alignement, une reconstruction depuis le depot reposerait 300 Mo et
+  -- defairait le correctif en silence.
   update storage.buckets
-     set file_size_limit    = 314572800,
+     set file_size_limit    = 524288000,
          allowed_mime_types = array['application/pdf']
    where id in ('anarbib-pdf-public', 'pdf-restrito');
 

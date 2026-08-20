@@ -118,21 +118,62 @@ as $$
            ('long',    interval '9 days'),
            ('storage', interval '9 days')
   ),
+  -- AMENDE LE 2026-08-20 (voir migration 20260820012343). Cette version-ci est
+  -- la definitive : la migration 012343 porte le meme correctif mais s'execute
+  -- AVANT ce fichier au rejeu (numerotation a l'heure reelle contre numerotation
+  -- avancee a la main). Sans cet alignement, une reconstruction depuis le depot
+  -- restaurerait ici l'ancienne version et defairait le correctif en silence.
+  --
+  -- Le silence se calcule sur le dernier temoin REEL : une ligne d'amorcage
+  -- (host = 'amorcage-migration') cesse de compter des qu'un vrai tir a signale
+  -- pour ce flux. `temoin_amorcage` rend visible un flux tenu en vert par un
+  -- semis, sans basculer `ok` — sinon on declencherait une alerte fausse sur des
+  -- flux qui fonctionnent mais n'ont pas encore parle.
+  reel as (
+    select s.flow,
+           (select b.reported_at from public.backup_heartbeats b
+             where b.flow = s.flow and coalesce(b.host,'') <> 'amorcage-migration'
+             order by b.reported_at desc limit 1) as vu_le,
+           (select b.host from public.backup_heartbeats b
+             where b.flow = s.flow and coalesce(b.host,'') <> 'amorcage-migration'
+             order by b.reported_at desc limit 1) as host,
+           (select b.snapshot_id from public.backup_heartbeats b
+             where b.flow = s.flow and coalesce(b.host,'') <> 'amorcage-migration'
+             order by b.reported_at desc limit 1) as snapshot_id
+      from seuils s
+  ),
+  tous as (
+    select s.flow,
+           (select b.reported_at from public.backup_heartbeats b
+             where b.flow = s.flow order by b.reported_at desc limit 1) as vu_le,
+           (select b.host from public.backup_heartbeats b
+             where b.flow = s.flow order by b.reported_at desc limit 1) as host,
+           (select b.snapshot_id from public.backup_heartbeats b
+             where b.flow = s.flow order by b.reported_at desc limit 1) as snapshot_id
+      from seuils s
+  ),
   dernier as (
     select s.flow, s.seuil,
-           (select max(b.reported_at) from public.backup_heartbeats b
-             where b.flow = s.flow) as vu_le
+           coalesce(r.vu_le, t.vu_le)             as vu_le,
+           coalesce(r.host,  t.host)              as host,
+           coalesce(r.snapshot_id, t.snapshot_id) as snapshot_id,
+           (r.vu_le is null)                      as temoin_amorcage
       from seuils s
+      join reel r on r.flow = s.flow
+      join tous t on t.flow = s.flow
   )
   select jsonb_build_object(
     'ok', not exists (select 1 from dernier d
                        where d.vu_le is null or now() - d.vu_le > d.seuil),
     'flux', coalesce(jsonb_agg(jsonb_build_object(
-              'flow',        d.flow,
-              'vu_le',       d.vu_le,
-              'age_heures',  round(extract(epoch from (now() - d.vu_le)) / 3600.0, 1),
-              'seuil_heures', round(extract(epoch from d.seuil) / 3600.0, 1),
-              'muet',        (d.vu_le is null or now() - d.vu_le > d.seuil)
+              'flow',            d.flow,
+              'vu_le',           d.vu_le,
+              'host',            d.host,
+              'age_heures',      round(extract(epoch from (now() - d.vu_le)) / 3600.0, 1),
+              'seuil_heures',    round(extract(epoch from d.seuil) / 3600.0, 1),
+              'muet',            (d.vu_le is null or now() - d.vu_le > d.seuil),
+              'temoin_amorcage', d.temoin_amorcage,
+              'snapshot_id',     d.snapshot_id
             ) order by d.flow), '[]'::jsonb)
   )
   from dernier d;
