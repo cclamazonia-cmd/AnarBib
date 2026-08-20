@@ -194,6 +194,7 @@ export default function PrivacyPolicyPage() {
             <li>{t({ id: 'privacy.s6.subprocessor.codeberg' })}</li>
           </ul>
           <p style={pStyle}>{t({ id: 'privacy.s6.transfer' })}</p>
+          <p style={pStyle}>{t({ id: 'privacy.s6.maptiles' })}</p>
           <p style={pStyle}>
             <strong>{t({ id: 'privacy.s6.noResale' })}</strong>
           </p>
@@ -226,6 +227,7 @@ export default function PrivacyPolicyPage() {
             <li>{t({ id: 'privacy.s7.measure.rls' })}</li>
             <li>{t({ id: 'privacy.s7.measure.minimization' })}</li>
             <li>{t({ id: 'privacy.s7.measure.audit' })}</li>
+            <li>{t({ id: 'privacy.s7.measure.antibot' })}</li>
           </ul>
           <p style={pStyle}>{t({ id: 'privacy.s7.honest' })}</p>
         </section>
