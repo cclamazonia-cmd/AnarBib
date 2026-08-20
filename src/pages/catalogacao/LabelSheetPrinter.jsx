@@ -486,7 +486,7 @@ ${pages.join('\n')}
             </div>
 
             {formatId === CUSTOM_FORMAT_ID && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 8, marginTop: 10 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(110px, 100%), 1fr))', gap: 8, marginTop: 10 }}>
                 <div>
                   <label style={numLabelStyle}>{t({ id: 'labels.format.pageSize' })}</label>
                   <select className="ab-select" style={numFieldStyle} value={customFormat.page} onChange={e => setCustomField('page', e.target.value)}>

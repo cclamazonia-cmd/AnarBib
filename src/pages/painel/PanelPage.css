@@ -82,7 +82,7 @@
 }
 
 /* Summary cards grid */
-.ab-painel-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.ab-painel-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr)); gap: 12px; margin-bottom: 16px; }
 .ab-painel-summary {
   padding: 16px; border-radius: var(--brand-radius-sm);
   border: 1px solid rgba(255,255,255,.08); background: rgba(12,12,12,.4);
@@ -600,7 +600,7 @@
 .ab-painel-skel-chips--mt { margin-top: 8px; }
 .ab-painel-skel-panel { padding: 24px; }
 .ab-painel-skel-tabs { display: flex; gap: 12px; padding: 16px 0; justify-content: center; flex-wrap: wrap; }
-.ab-painel-skel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; padding: 0 0 16px; }
+.ab-painel-skel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(170px, 100%), 1fr)); gap: 12px; padding: 0 0 16px; }
 .ab-painel-skel-card { padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,.08); background: rgba(12,12,12,.4); text-align: center; }
 .ab-painel-restricted { max-width: 600px; margin: 0 auto; text-align: center; padding: 60px 24px; }
 .ab-painel-restricted h1 { font-size: 1.4rem; font-weight: 800; }

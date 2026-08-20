@@ -121,7 +121,7 @@ export default function FicedlThesaurusPage() {
                     : t({ id: 'ficedl.empty' })}
                 </p>
               ) : (
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 8 }}>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(240px, 100%), 1fr))', gap: 8 }}>
                   {list.map((tm) => (
                     <li key={tm.mot_id}>
                       <Link

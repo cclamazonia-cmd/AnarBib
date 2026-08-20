@@ -85,7 +85,7 @@ export default function AtelierVolet4Catalogacao({ libraryId, canEdit }) {
         <label style={{ display: 'block', marginBottom: 8, fontSize: '.84rem', color: 'var(--brand-text,#f4f1ee)' }}>
           {t({ id: 'atelier.volet4.mandatoryFields' })}
         </label>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '6px 14px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(140px, 100%), 1fr))', gap: '6px 14px' }}>
           {MANDATORY.map(f => (
             <label key={f} style={{ display: 'flex', gap: 7, alignItems: 'center', fontSize: '.82rem' }}>
               <input type="checkbox" checked={selected.has(f)} disabled={dis} onChange={() => toggleField(f)} />

@@ -1714,7 +1714,7 @@ export default function PanelPage() {
           <Skeleton w={150} h={42} style={{ borderRadius: 8 }} />
         </div>
         {/* Stats cards en skeleton (Synthèse opérationnelle) */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12, padding: '0 0 16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(170px, 100%), 1fr))', gap: 12, padding: '0 0 16px' }}>
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div key={i} style={{ padding: 16, borderRadius: 8, border: '1px solid rgba(255,255,255,.08)', background: 'rgba(12,12,12,.4)', textAlign: 'center' }}>
               <Skeleton w={40} h={32} style={{ margin: '0 auto 8px' }} />

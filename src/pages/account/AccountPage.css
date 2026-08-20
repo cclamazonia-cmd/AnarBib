@@ -63,7 +63,7 @@
 }
 .ab-conta-form input:focus, .ab-conta-form select:focus { border-color: var(--brand-color-primary); outline: none; }
 .ab-conta-grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
-.ab-conta-grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.ab-conta-grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr)); gap: 12px; }
 .ab-conta-hr { border: none; border-top: 1px solid rgba(255,255,255,.10); margin: 14px 0; }
 .ab-conta-form h3 { margin: 0 0 8px; font-size: 1rem; }
 .ab-conta-form-actions { display: flex; gap: 12px; align-items: center; margin-top: 8px; }

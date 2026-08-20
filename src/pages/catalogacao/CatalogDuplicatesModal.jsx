@@ -321,7 +321,7 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
                       </span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: 10 }}>
                       {[cote(r, 'a'), cote(r, 'b')].map((c) => renderCote(c,
                         arbitre && r.fusion_possible ? (
                           <button type="button" className="ab-button ab-button--mini" disabled={busy}
@@ -402,7 +402,7 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
                 const busy = busyPair === key(s);
                 return carte(key(s), busy, (
                   <>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: 10 }}>
                       {[cote(s, 'a'), cote(s, 'b')].map((c) => renderCote(c))}
                     </div>
 
@@ -447,7 +447,7 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
                 const busy = busyPair === key(e);
                 return carte(key(e), busy, (
                   <>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: 10 }}>
                       {[cote(e, 'a'), cote(e, 'b')].map((c) => renderCote(c))}
                     </div>
 

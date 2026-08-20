@@ -90,7 +90,7 @@ export default function BibliotecasPage() {
         ) : libs.length === 0 ? (
           <p style={{ color: 'var(--brand-muted)', fontStyle: 'italic' }}>{t({ id: 'bibliotecas.empty' })}</p>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))', gap: 16 }}>
             {libs.map((lib) => (
               <div key={lib.id} style={card}>
                 <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>

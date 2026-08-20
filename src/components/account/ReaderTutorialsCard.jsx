@@ -115,7 +115,7 @@ export default function ReaderTutorialsCard() {
       {open && (
         <>
           <p className="ab-conta-hint" style={{ margin: '8px 0 16px' }}>{t({ id: 'account.tutorials.hint' })}</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: 16 }}>
             {TUTORIALS.map((tut) => (
               <TutorialVideo
                 key={tut.id}

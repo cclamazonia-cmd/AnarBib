@@ -249,7 +249,7 @@ export default function LibraryVisualAssetsSection({ libraryId, librarySlug, lib
       {loading && <p style={{ fontSize: '.85rem', color: 'var(--brand-muted)' }}>{t({ id: 'common.loading' })}</p>}
 
       {!loading && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(220px, 100%), 1fr))', gap: 12 }}>
           {SLOTS.map(slot => {
             const exists = !!present[slot.key];
             const isSaving = !!saving[slot.key];

@@ -392,7 +392,7 @@ export default function RedePage() {
             </div>
           )}
 
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(320px, 1fr))', gap:14 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(min(320px, 100%), 1fr))', gap:14 }}>
             {libCards.map(lib => {
               const logoUrl = lib.logo_file_key ? `${PROJECT_URL}/storage/v1/object/public/library-ui-assets/${lib.logo_file_key.includes('/')?lib.logo_file_key:`themes/${lib.logo_file_key}/logo-${lib.logo_file_key}.png`}` : null;
               const hasAlerts = lib.loansOpen > 0 || lib.resActive > 0 || lib.service_mode !== 'funcionamento_normal';
