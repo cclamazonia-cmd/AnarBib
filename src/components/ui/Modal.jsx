@@ -25,6 +25,7 @@
 
 import { useEffect, useRef } from 'react';
 import './Modal.css';
+import { createPortal } from 'react-dom';
 import { lockBodyScroll, unlockBodyScroll } from '@/lib/bodyScrollLock';
 
 export default function Modal({
@@ -85,7 +86,26 @@ export default function Modal({
     }
   };
 
-  return (
+  // Rendu dans un PORTAIL vers <body>, et non a l'emplacement de l'appelant.
+  //
+  // Pourquoi : une modale rendue en place herite du sort de ses ancetres. Sur
+  // la page de catalogage, les 11 panneaux d'onglets restent MONTES en
+  // permanence et ne sont masques que par du CSS (.cat-panel { display:none }).
+  // Une modale ouverte dans un panneau inactif etait donc INVISIBLE et
+  // impossible a fermer — tout en gardant le verrou de defilement du body :
+  // plus d'ascenseur sur toute la page, sans rien a l'ecran (19/08/2026).
+  // Meme famille de pieges avec un ancetre en overflow:hidden ou creant un
+  // contexte d'empilement, qui rognait ou masquait la modale.
+  //
+  // Avec le portail, une modale ouverte est TOUJOURS visible et fermable. Sans
+  // risque de regression visuelle : le voile est deja en position:fixed
+  // (Modal.css) et les variables de theme sont posees sur :root par
+  // lib/theme.js — donc parfaitement heritees depuis <body>.
+  //
+  // NB React : le portail ne deplace que le DOM. La propagation des evenements
+  // et le contexte React continuent de suivre l'arbre des composants, donc les
+  // gestionnaires et les contextes des appelants fonctionnent inchanges.
+  const overlay = (
     <div
       className="ab-modal-overlay"
       onClick={handleOverlayClick}
@@ -117,4 +137,6 @@ export default function Modal({
       </div>
     </div>
   );
+
+  return typeof document === 'undefined' ? overlay : createPortal(overlay, document.body);
 }
