@@ -216,3 +216,17 @@
   position:relative; padding-left:18px; font-size:.9rem; line-height:1.55; color:var(--brand-text,#f5f2ea);
 }
 .ab-fed-rules li::before{ content:"—"; position:absolute; left:0; color:var(--brand-link,#7fb0e0); }
+
+
+/* ── Mobile (≤ --bp-sm) ───────────────────────────────────────────────────── */
+/* Les cartes d'entrée de la Fédération (annuaire, boletim, gazeta, Comuns,
+   apoio mútuo, assembleias) alignent sur une seule ligne : icône, colonne
+   titre+description, et lien d'action. Ce lien porte `white-space: nowrap` et
+   ne cède donc rien : mesuré en production le 20/08/2026 à 354 px, il prenait
+   102 à 152 px d'une rangée de 257 px et écrasait la colonne titre à 15-67 px,
+   au point que la pastille « Novo » sortait de son cadre (jusqu'à +34 px).
+   On replie la rangée : le lien passe sous le titre, qui retrouve ~181 px. */
+@media (max-width: 640px) {
+  .ab-fed-inicio-annuaire { flex-wrap: wrap; }
+  .ab-fed-inicio-annuaire-txt { flex: 1 1 min(180px, 100%); }
+}
