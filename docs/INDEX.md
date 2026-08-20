@@ -1,6 +1,6 @@
 # 📚 INDEX général de la documentation — AnarBib
 
-**Dernière mise à jour** : 10 juin 2026 (réorganisation de `decisions/` → `journal/` en sous-dossiers stricts par type ; ajout de `governance/` à l'index et de l'état d'avancement multi-sessions ; rafraîchissement des versions/comptes). *Refonte structurelle initiale : 3 juin 2026 — préséance documentaire, introduction du REGISTRE.*
+**Dernière mise à jour** : 20 août 2026 — rafraîchissement après deux mois de retard : cinq dossiers absents de l'arborescence (`guides/`, `notes-audit/`, `schema/`, `drafts/`, `archive/`) et les traductions racine ajoutés, comptes réels, version courante du backlog corrigée (v30 → v33), source vivante de l'avancement re-pointée. *Précédemment : 10 juin 2026 (réorganisation de `decisions/` → `journal/` en sous-dossiers stricts par type). Refonte structurelle initiale : 3 juin 2026 — préséance documentaire, introduction du REGISTRE.*
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document est la **porte d'entrée de toute la documentation** d'AnarBib. Il décrit la règle de préséance qui gouverne le corpus, oriente vers les documents transverses de référence, et présente l'organisation du dossier `docs/` avec ses index spécialisés.
@@ -18,7 +18,7 @@ En cas de doute ou de conflit apparent entre deux documents : **lire le REGISTRE
 
 Cette règle a été formalisée par l'**audit de cohérence du corpus du 02/06/2026** (`journal/audits/AUDIT_coherence_corpus_2026-06-02.md`), qui a constaté que les drifts détectés relèvent quasi tous d'une même pathologie : un fait transverse (locales, doctrine de déploiement…) recopié dans chaque spec au lieu d'être cité depuis un foyer unique. Le REGISTRE est ce foyer.
 
-**Conséquence pour la lecture** : un nouveau venu lit le REGISTRE (~317 lignes, condensé) avant tout autre document — il y trouve les doctrines transverses et les arbitrages structurants.
+**Conséquence pour la lecture** : un nouveau venu lit le REGISTRE (~835 lignes au 20/08/2026, condensé) avant tout autre document — il y trouve les doctrines transverses et les arbitrages structurants. Il a plus que doublé depuis juin : 36 sections de domaine, plus `§BG2` (sauvegardes).
 
 ---
 
@@ -43,7 +43,8 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 ```
 docs/
 ├── INDEX.md                          ← vous êtes ici
-├── manual.md                         Manuel d'utilisation
+├── manual.md + manual-{ca,de,el,en,eo,es,it,nl,pt-BR}.md      Manuel d'utilisation (10 langues)
+├── cotation-et-cdd.md + cotation-et-cdd-{9 langues}.md        Guide cotation / CDD (10 langues)
 ├── multiformat-viewers.md            Doc technique viewer multi-format
 │
 ├── specs/                            Spécifications techniques et fonctionnelles
@@ -56,33 +57,29 @@ docs/
 │   ├── INDEX.md                      → index chronologique + thématique
 │   ├── cadrages/                     → CADRAGE_* (cadrage de chantier/spec)
 │   ├── chantiers/                    → CHANTIER_* (documentation de chantier)
-│   ├── sessions/                     → SESSION_* + BILAN_* + ETAT-AVANCEMENT-multisessions (★ consolidation git-trackée)
+│   ├── sessions/                     → SESSION_* + BILAN_* + ETAT-* (⚠️ la copie d'ETAT-AVANCEMENT y est supersédée, cf. backlogs/)
 │   ├── audits/                       → AUDIT_* / AUDITORIA_* / QA_*
 │   ├── arbitrages/                   → DECISION_* / DECISOES_* / AMENDEMENT_* / CLOTURE_* / RIFLEXION_*
 │   ├── bugs/                         → BUG_*
 │   ├── operations/                   → CLEANUP_ / DEPLOIEMENT_ / REDEPLOY_ / REFACTOR_ / SETUP_
 │   ├── references/                   → cles_ / ref_ / INVENTAIRE_addendum / PROMPT_reprise
+│   ├── ficedl/                       → thésaurus FICEDL : audits + données de référence
 │   └── archive/                      → prompts de reprise obsolètes, doublons
 │
-├── backlogs/                         Backlog technique (versions .docx)
+├── backlogs/                         Backlog technique (Markdown depuis le 10/06) + états d'avancement
 │   ├── INDEX.md                      → version courante + historique
-│   └── archive/                      → anciennes versions
+│   ├── AnarBib-Backlog-2026-06-17-v33.md          ← version courante
+│   ├── ETAT-AVANCEMENT-multisessions.md           ← ★ avancement par chantier (figé au 20/06)
+│   ├── ETAT-lancement-consolide-2026-07-03.md     ← boussole « avant lancement public »
+│   └── archive/                      → anciennes versions (v8→v32, .docx et .md)
 │
 ├── GLB/                              Grand Livre Blanc (livre blanc vivant)
 │   ├── AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx
 │   └── archive/                      → v15, v16…
 │
-├── cartographie/                     Carte publique du réseau (uMap)
-│   ├── GUIDE_carte_publique_explorar.md
-│   ├── AnarBib_recensement_bibliotheques_libertaires.docx
-│   ├── AnarBib_gabarit_infobulle_uMap.md
-│   ├── carte-publique.umap / .geojson
-│   ├── carte-reseau.umap / .geojson
-│   ├── classification_carte.csv
-│   ├── anarbib_bibliotheques_libertaires.csv / .geojson
-│   ├── anarbib_i18n_types.json
-│   ├── anarbib_tri_carte_lieux.xlsx
-│   └── generate_layers.py
+├── cartographie/                     Carte du réseau (uMap) — ⚠️ contenu très majoritairement NON VERSIONNÉ
+│   ├── AnarBib_recensement_bibliotheques_libertaires.docx   ← seul fichier suivi par git
+│   └── (local, ignoré par .gitignore) carte-publique/carte-reseau .umap/.geojson, etc.
 │
 ├── db/                               Dumps Supabase (hors git — README uniquement)
 │   └── README.md                     → convention de dump (les *.sql ne sont pas suivis)
@@ -90,11 +87,26 @@ docs/
 ├── governance/                       Guide de gouvernance traduit (10 langues, .md + .docx)
 │   └── guide-gouvernance-{ca,de,el,en,eo,es,fr,it,nl,pt-BR}.{md,docx}
 │
-└── legal/                            Documentation réglementaire (RGPD/LGPD)
-    ├── README.md
-    ├── INCIDENT_RESPONSE.md
-    ├── REGISTRE_TRAITEMENTS.md
-    └── dpa-{de,en,es,fr,it,pt-BR}.md
+├── legal/                            Documentation réglementaire (RGPD/LGPD)
+│   ├── README.md
+│   ├── INCIDENT_RESPONSE.md
+│   ├── REGISTRE_TRAITEMENTS.md       → registre art. 30 (aligné 20/08/2026)
+│   └── dpa-{de,en,es,fr,it,pt-BR}.md
+│
+├── guides/                           Vadémécums pratiques du commun, servis dans l'app (10 langues chacun)
+│   └── guide-{digitalizar,indexar-assunto,scan-qr,thesaurus-ficedl}-{lang}.md
+│
+├── notes-audit/                      Chartes et audits de langue (langage inclusif v1/v2, charte relationnelle, audit i18n)
+│
+├── schema/                           Schéma de référence de la base
+│   ├── README.md
+│   └── baseline_schema_2026-06-11.sql   → socle rejouable (cf. risque « migrations incrémentales »)
+│
+├── drafts/                           Brouillons techniques non promus (SQL en attente d'arbitrage)
+│
+└── archive/                          Documents supersédés conservés
+    ├── livre-blanc-v0.1.md           → supersédé par le GLB v17
+    └── db-migrations-legacy-pre-woodpecker/   → 44 migrations d'avant la CI
 ```
 
 ---
@@ -103,9 +115,9 @@ docs/
 
 ### `specs/` — Spécifications et REGISTRE
 
-Le cœur documentaire technique. **~36 specs vivantes** (`spec-*.md`), organisées par domaine. Contient également le **REGISTRE des décisions** (`REGISTRE_decisions.md`), foyer unique du corpus.
+Le cœur documentaire technique. **41 specs vivantes** (`spec-*.md`) au 20/08/2026, organisées par domaine. Contient également le **REGISTRE des décisions** (`REGISTRE_decisions.md`), foyer unique du corpus, ainsi que `CHARTE_corpus.md`, `INVENTAIRE.md`, et les dossiers `maquettes/`, `captures/`, `archive/`.
 
-➡️ [`specs/INDEX.md`](./specs/INDEX.md) — navigation par domaine, à jour au 3 juin 2026
+➡️ [`specs/INDEX.md`](./specs/INDEX.md) — navigation par domaine, à jour au 20 août 2026
 ➡️ [`specs/INVENTAIRE.md`](./specs/INVENTAIRE.md) — description détaillée et carte des dépendances
 ➡️ [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) — **★ foyer normatif** : doctrines transverses (DOC-*), arbitrages par domaine (RES-*, PROF-*, ILL-*, NOTIF-*…), points ouverts et drifts détectés.
 
@@ -113,7 +125,7 @@ Le cœur documentaire technique. **~36 specs vivantes** (`spec-*.md`), organisé
 
 ### `journal/` — Mémoire chronologique (trace non-normative) *(ex-`decisions/`)*
 
-L'historique vivant du projet. **~91 fichiers** réorganisés le **10/06/2026** en **sous-dossiers stricts par type de document** (le dossier était auparavant un dépôt plat « `decisions/` » devenu illisible) : `cadrages/`, `chantiers/`, `sessions/`, `audits/`, `arbitrages/`, `bugs/`, `operations/`, `references/`, `archive/`. Ce dossier est de la **trace** : il documente *comment* on est arrivés aux décisions, pas ce qui *fait foi* — pour cela, voir le REGISTRE. (Le nom `journal/` reflète mieux ce contenu chronologique que l'ancien `decisions/` : les vraies décisions vivent au REGISTRE.)
+L'historique vivant du projet. **176 fichiers** (162 hors `archive/`) réorganisés le **10/06/2026** en **sous-dossiers stricts par type de document** (le dossier était auparavant un dépôt plat « `decisions/` » devenu illisible) : `cadrages/`, `chantiers/`, `sessions/`, `audits/`, `arbitrages/`, `bugs/`, `operations/`, `references/`, **`ficedl/`** *(ajouté depuis)*, `archive/`. Ce dossier est de la **trace** : il documente *comment* on est arrivés aux décisions, pas ce qui *fait foi* — pour cela, voir le REGISTRE. (Le nom `journal/` reflète mieux ce contenu chronologique que l'ancien `decisions/` : les vraies décisions vivent au REGISTRE.)
 
 ➡️ [`journal/INDEX.md`](./journal/INDEX.md) — index chronologique et thématique, avec sélection des documents doctrinaux centraux.
 
@@ -125,7 +137,12 @@ Versions successives. Seule la dernière est vivante, les autres sont historique
 
 ➡️ [`backlogs/INDEX.md`](./backlogs/INDEX.md) — version courante + historique
 
-**Version courante** : `AnarBib-Backlog-2026-06-10-v30.md` (Markdown — réécriture critique sur base prod vérifiée ; v29 et antérieurs `.docx` archivés). Le backlog a un rythme d'incrémentation rapide (v8 → v30 en trois semaines). Depuis le 10/06, la **source vivante** est [`journal/sessions/ETAT-AVANCEMENT-multisessions.md`](./journal/sessions/ETAT-AVANCEMENT-multisessions.md) (markdown git-tracké, consolidation de toutes les sessions) ; les backlogs versionnés en sont des snapshots datés.
+**Version courante** : `AnarBib-Backlog-2026-06-17-v33.md` (Markdown ; v29 et antérieurs `.docx` archivés). Le backlog a eu un rythme d'incrémentation rapide (v8 → v33 en un mois), puis s'est stabilisé — depuis juillet, l'avancement se lit ailleurs :
+
+- [`backlogs/ETAT-AVANCEMENT-multisessions.md`](./backlogs/ETAT-AVANCEMENT-multisessions.md) — consolidation par chantier de toutes les sessions. ⚠️ **figé au 20/06/2026**.
+- [`backlogs/ETAT-lancement-consolide-2026-07-03.md`](./backlogs/ETAT-lancement-consolide-2026-07-03.md) — boussole « que reste-t-il avant le lancement public ? », vérifiée en prod le 03/07 ; remplace sur ce point le portrait du v33.
+
+> ⚠️ **Doublon à connaître.** `ETAT-AVANCEMENT-multisessions.md` existe **en deux exemplaires** : celui de `backlogs/` (vivant, dernière modification le 20/06) et une copie figée au 10/06 dans `journal/sessions/`, laissée par un déplacement que les sessions suivantes n'ont pas suivi. **C'est celui de `backlogs/` qui fait référence** ; la copie du journal porte un tampon de supersession et reste comme trace.
 
 ### `GLB/` — Grand Livre Blanc
 
@@ -133,11 +150,13 @@ Le livre blanc vivant d'AnarBib — état politique et technique, trajectoire, d
 
 **Version courante** : `AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx`. Les versions antérieures (v15, v16…) sont dans `GLB/archive/`.
 
-### `cartographie/` — Carte publique du réseau
+### `cartographie/` — Carte du réseau
 
-L'écosystème de la carte publique des bibliothèques libertaires sur uMap : recensement, gabarit d'infobulle, fichiers uMap et GeoJSON pour les deux cartes (publique + réseau), classification, script de génération des couches.
+L'écosystème de la carte des bibliothèques libertaires sur uMap : recensement, fichiers uMap et GeoJSON, classification.
 
-**Document d'entrée** : [`cartographie/GUIDE_carte_publique_explorar.md`](./cartographie/GUIDE_carte_publique_explorar.md).
+> ⚠️ **Ce dossier est presque entièrement hors git, et c'est délibéré.** `.gitignore` exclut `docs/cartographie/*` et ne réintègre que `AnarBib_recensement_bibliotheques_libertaires.docx` : les données cartographiques ne sont **pas publiables tant que les collectifs n'ont pas validé leur apparition** (cf. `arbitrages/DEFINITION_MEMBRE_2026-05-27.md`). Les autres fichiers vivent dans la copie de travail de la coordination.
+>
+> *Corrigé le 20/08/2026 : cet INDEX décrivait ici onze fichiers et pointait vers un `GUIDE_carte_publique_explorar.md` — aucun n'est présent dans le dépôt.* La doctrine de la carte se lit au REGISTRE **§ 34 `MAP`** ; la spec est [`specs/spec-cartographie-reseau.md`](./specs/spec-cartographie-reseau.md).
 
 ### `db/` — Dumps Supabase
 
@@ -173,7 +192,7 @@ Le guide de gouvernance d'AnarBib en **10 langues** (`ca, de, el, en, eo, es, fr
 
 **« Je veux comprendre comment créer un objet backend proprement »** → REGISTRE entrée `DOC-OBJ-2`, qui pointe vers `journal/chantiers/CHANTIER_doctrine_creation_objets_securises_2026-05-12.md` pour la trace détaillée.
 
-**« Où en est la carte publique ? »** → [`cartographie/GUIDE_carte_publique_explorar.md`](./cartographie/GUIDE_carte_publique_explorar.md).
+**« Où en est la carte du réseau ? »** → [`specs/spec-cartographie-reseau.md`](./specs/spec-cartographie-reseau.md) et le REGISTRE **§ 34 `MAP`** (arbitrages tranchés, implémentation post-Bologne). Les données elles-mêmes ne sont pas dans le dépôt (voir ci-dessus).
 
 ---
 
@@ -194,6 +213,14 @@ Depuis le 10/06/2026, le **préfixe détermine le sous-dossier** (rangement stri
 | `CLEANUP_*`, `DEPLOIEMENT_*`, `REDEPLOY_*`, `REFACTOR_*`, `SETUP_*` | `operations/` | opérations infra/maintenance ponctuelles |
 | `cles_*`, `ref_*`, `INVENTAIRE_addendum`, `PROMPT_reprise_*` | `references/` | données de référence, mémentos de reprise |
 | `Prompt-Reprise-*` obsolètes, doublons | `archive/` | trace remplacée (⚠️ jamais supprimée) |
+| `PLAN_*` | `chantiers/` | plan de travail détaillé (séquencement, jalons) |
+| `MEMO_*` | `cadrages/` | mémo de cadrage, plus court qu'un `CADRAGE_` |
+| `MATRICE_*`, `PROTOCOLE_*` | `audits/` | grille d'audit systématique · protocole de validation à dérouler |
+| `RUNBOOK_*`, `BASELINE_*`, `SHORTLIST_*`, `MESSAGE_*`, `FICHE_*`, `HEBERGEURS_*` | `operations/` | procédure opérationnelle · référence technique · options comparées · correspondance avec des tiers |
+| `ETAT-*` | `sessions/` | photographie d'avancement (multi-sessions ou d'un chantier) |
+| *(données FICEDL)* | `ficedl/` | thésaurus FICEDL — audits et données de référence |
+
+> Onze préfixes ajoutés le 20/08/2026, constatés dans le dossier. Deux restent **ambigus** : `NOTE_*` (en `arbitrages/` et `operations/`) et `AUDIT_*` (en `audits/`, `operations/` et `ficedl/`) — ranger selon l'objet, doctrine ou infra.
 
 > Un nouveau document de trace va dans le sous-dossier de son type. En cas de doute, `references/` ou `chantiers/`.
 
@@ -231,6 +258,7 @@ Cet INDEX et les index spécialisés sont mis à jour :
 - à chaque nettoyage du corpus.
 
 **Audits récents :**
+- **20 août 2026** — rafraîchissement des index après deux mois de retard (cet INDEX + `journal/INDEX.md`). Deux dérives trouvées au passage et corrigées : le **registre des traitements** (art. 30 RGPD) listait encore Cloudflare Turnstile comme sous-traitant et un transfert US, alors que l'anti-bot est passé à **Altcha auto-hébergé** les 19-20/08 ; et le doublon `ETAT-AVANCEMENT-multisessions.md` signalé ci-dessus. Doctrine mobile graduée au REGISTRE **§ 36 `MOBILE`**.
 - **2 juin 2026** — audit de cohérence du corpus (`journal/audits/AUDIT_coherence_corpus_2026-06-02.md`) → naissance du REGISTRE et formalisation de la préséance documentaire.
 - **20 mai 2026** — nettoyage complet : réécriture des specs, archivage des versions périmées, création des index spécialisés.
 

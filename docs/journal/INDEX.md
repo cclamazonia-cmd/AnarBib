@@ -1,9 +1,11 @@
 # 📂 INDEX du dossier `journal/` — AnarBib *(ex-`decisions/`)*
 
-**Dernière mise à jour** : 10 juin 2026 (réorganisation en **sous-dossiers stricts par type** — `cadrages/`, `chantiers/`, `sessions/`, `audits/`, `arbitrages/`, `bugs/`, `operations/`, `references/`, `archive/` ; renommage `decisions/` → `journal/`). Index initial : 3 juin.
+**Dernière mise à jour** : 20 août 2026 — rafraîchissement après deux mois de retard : comptes réels, sous-dossier `ficedl/` ajouté, table des préfixes complétée (11 préfixes apparus depuis), repères chronologiques prolongés de la mi-juin à août. *Précédemment : 10 juin 2026 (réorganisation en **sous-dossiers stricts par type** ; renommage `decisions/` → `journal/`). Index initial : 3 juin.*
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
-Ce dossier est la **mémoire chronologique vivante** du projet AnarBib : sessions de travail, ouvertures et clôtures de chantiers, bilans, audits, bugs résolus, réflexions doctrinales, décisions de coordination de bibliothèques. **~91 fichiers**, rangés par type dans des sous-dossiers (table préfixe → sous-dossier dans [`../INDEX.md`](../INDEX.md) § « Nommage et rangement dans `journal/` »).
+Ce dossier est la **mémoire chronologique vivante** du projet AnarBib : sessions de travail, ouvertures et clôtures de chantiers, bilans, audits, bugs résolus, réflexions doctrinales, décisions de coordination de bibliothèques. **176 fichiers** (162 hors `archive/`), rangés par type dans des sous-dossiers (table préfixe → sous-dossier dans [`../INDEX.md`](../INDEX.md) § « Nommage et rangement dans `journal/` »).
+
+**Répartition au 20/08/2026** : `cadrages/` 50 · `chantiers/` 30 · `operations/` 22 · `arbitrages/` 18 · `audits/` 16 · `sessions/` 16 · `archive/` 7 · `references/` 5 · **`ficedl/` 4** *(nouveau — thésaurus FICEDL : audits + données de référence)* · `bugs/` 2. Deux fichiers `HANDOFF-*` (12/06) sont restés **à la racine** du dossier, hors du rangement strict : à classer en `references/` ou `sessions/`.
 
 ---
 
@@ -43,7 +45,7 @@ Les autres fichiers (sessions, bilans, ouvertures/clôtures de chantiers ponctue
 
 ## 🏷️ Navigation par convention de nommage
 
-Les 79 fichiers suivent un système de préfixes qui dit immédiatement *de quoi il s'agit* :
+Les fichiers suivent un système de préfixes qui dit immédiatement *de quoi il s'agit*. Onze préfixes sont apparus depuis la table de juin — surtout dans `operations/`, à mesure que le projet s'est doté d'une couche infrastructure (sauvegardes, VPS, hébergeurs) :
 
 | Préfixe | Nature |
 |---|---|
@@ -64,6 +66,18 @@ Les 79 fichiers suivent un système de préfixes qui dit immédiatement *de quoi
 | `cadrages/CADRAGE_*`, `operations/DEPLOIEMENT_*`, `operations/REDEPLOY_*`, `operations/REFACTOR_*`, `operations/SETUP_*` | Documents techniques ponctuels, autoexplicatifs. |
 | `NOTE_*` | Note brève sur un point précis. |
 | `chantiers/Dossier_ouverture_chantier_*` | Dossier d'ouverture d'un chantier — équivalent francisé de `cadrages/CADRAGE_`. |
+| `chantiers/PLAN_*` | Plan de travail détaillé d'un chantier (séquencement, jalons). |
+| `cadrages/MEMO_*` | Mémo de cadrage — plus court qu'un CADRAGE, sur un point circonscrit. |
+| `audits/MATRICE_*` | Matrice d'audit (grille systématique, ex. RLS deny-all). |
+| `audits/PROTOCOLE_*` | Protocole de validation à exécuter (ex. validation terrain backend-seul). |
+| `operations/RUNBOOK_*` | Procédure opérationnelle à dérouler en situation (restauration, migration). |
+| `operations/BASELINE_*` | Établissement d'une référence technique (schéma, état de départ). |
+| `operations/SHORTLIST_*` | Sélection comparée d'options (ex. hébergeurs VPS). |
+| `operations/MESSAGE_*`, `operations/FICHE_*`, `operations/HEBERGEURS_*` | Correspondance et fiches à destination de tiers (hébergeurs, partenaires). |
+| `ficedl/*` | Thésaurus FICEDL — audits et données de référence du vocabulaire d'indexation. |
+| `sessions/ETAT-*` | Photographie d'avancement (multi-sessions, ou d'un chantier donné). |
+
+> ⚠️ Deux préfixes sont **ambigus** dans l'état actuel : `NOTE_*` existe en `arbitrages/` *et* en `operations/`, et `AUDIT_*` en `audits/`, `operations/` *et* `ficedl/`. Ranger selon l'objet (doctrine → `arbitrages/`, infra → `operations/`), sans y voir une règle stricte.
 
 ---
 
@@ -86,6 +100,18 @@ Plutôt qu'un index ligne à ligne des ~91 fichiers, voici les **grands moments*
 **Ouverture des chantiers de modèle.** `chantiers/CHANTIER_MODEL-item-grain_ouverture_2026-06-03.md` puis `arbitrages/CLOTURE_MODEL-item-grain_2026-06-03.md` (constat de livraison via audit du dump schéma). `chantiers/CHANTIER_exemplares-phase1_ouverture_2026-06-03.md`.
 
 **Préparation du chantier OPAC (07/06).** `cadrages/CADRAGE_OPAC_chantier_2026-06-07.md` confronte les deux specs OPAC (`../specs/spec-catalogue-decouverte.md`, `../specs/spec-notice-autorite-enrichie.md`) au code réel (frontend lu + backend sondé sur le projet Supabase) et prépare le chantier de découverte : écart par paquet (#OPAC1–11, #AUT1–4), clé de voûte (RPC d'agrégation des facettes/sujets `api.catalog_facets_v1`), décisions à porter au REGISTRE. Trace, 🟡 cadrée — ne fait pas foi.
+
+**Seconde quinzaine (15 au 30/06) — la vague la plus dense du projet.** ~380 commits. Le **modèle Œuvre/Éditions** (FRBR-léger) est cadré puis construit (`cadrages/CADRAGE_modele_oeuvre_editions_*`, `CADRAGE_oeuvre_v2*` du 20/06, `chantiers/CHANTIER_modele_oeuvre_editions_*`) — il devient l'ancre du catalogage. Le **thésaurus matière** passe v1 → v3 (gouvernance par consentement, notation CDD, synonymes, « voir aussi », export SKOS public, parcours par sujet), puis rencontre le **vocabulaire FICEDL** (`ficedl/`, `cadrages/CADRAGE_ficedl_vocabulaire_indexation_*` du 30/06). Livrés dans la même vague : **assembleias** (v0.1 → P3 notifications), **Lettre de la fédération** et **gazette Rizoma**, **entraide par cercles** (+ visio Jitsi embarquée), **récolement** par scan, **annuaire et fiches publiques** (#PUBLIB), les **horaires/permanences** de bibliothèque, et les **phases B/C du chantier mobile** (tiroir hamburger, tables en cartes, safe-area). Cadrages ouverts sans implémentation immédiate : `CADRAGE_mobile_responsive` (16/06), `CADRAGE_ocr_import_navigateur` (17/06), `CADRAGE_fonds_sonores_P1` (21/06), `CADRAGE_recolement`, `CADRAGE_fusion_autorites`, `CADRAGE_accueil_equipe` (19/06).
+
+### Juillet 2026
+
+**Le chantier bascule de l'applicatif vers l'infrastructure.** ~78 commits, mais structurants. **#BG2 — sauvegarde hors-fournisseur** occupe le mois : partition par sensibilité (`cadrages/CADRAGE_BG2_partition_sauvegardes_2026-06-30`), trois flux restic chiffrés hors-site, automatisation par timers systemd, puis **pseudonymisation à l'effacement** (`BG2-14`) — avec `operations/RUNBOOK_restauration_BG2_2026-07-01` comme procédure de référence et `operations/NOTE_premier-tir_BG2-AUTO_2026-07-01` comme trace du premier tir réel. En parallèle, la **migration hors Supabase** est instruite : `arbitrages/DECISION_arbitrage_migration_vps_2026-07-03`, `operations/SHORTLIST_vps_calcul_2026-07-04`, `operations/RUNBOOK_migration_vps_2026-07-04`, `chantiers/PLAN_serveur-dell-latitude_2026-07-04`, et la correspondance avec les hébergeurs pressentis (`operations/MESSAGE_*`). Côté corpus, `backlogs/ETAT-lancement-consolide-2026-07-03.md` remplace le portrait périmé du backlog v33 pour la question « que reste-t-il avant le lancement public ? ».
+
+### Août 2026
+
+**Sécurité, identité, et finitions.** ~115 commits. **Retrait de Cloudflare Turnstile** au profit d'**Altcha auto-hébergé** (18-20/08) : calcul par le navigateur, vérification par nos Edge Functions, anti-rejeu — la dernière exception à la doctrine d'auto-hébergement tombe, et avec elle un transfert hors-UE (registre des traitements aligné le 20/08). Même semaine : fermeture de plusieurs **oracles** (appartenance des lectrices, « numéro de lecteur → e-mail »), **nouveau logo** (dessin humain) et sa déclinaison complète, **profil de numérisation** arrêté (`arbitrages/DECISION_profil_numerisation_2026-08-20`, chaîne ScanTailor Advanced + img2pdf, captures effacées après validation), **dédoublonnage global** du catalogue publié, **récapitulatif hebdomadaire** inter-bibliothèques, **mode dégradé** de l'OPAC si l'API tombe. Ouvert le 01/08 : `cadrages/CADRAGE_notes_de_lecture` (livré Lots 1-5). Le 20/08 également, le **chantier mobile** est repris à la mesure et sa doctrine gradue au REGISTRE § 36 (`cadrages/CADRAGE_mobile_responsive_2026-06-16.md` § 8).
+
+> **Lacune assumée de cet index.** Les repères ci-dessus sont reconstruits depuis les noms de fichiers du dossier et le `git log` ; ils nomment les mouvements, pas chaque document. Pour l'état d'avancement par chantier, voir [`../backlogs/ETAT-AVANCEMENT-multisessions.md`](../backlogs/ETAT-AVANCEMENT-multisessions.md) (⚠️ figé au 20/06) et surtout le [REGISTRE](../specs/REGISTRE_decisions.md), tenu à jour section par section.
 
 ### Décisions de coordination des bibliothèques
 

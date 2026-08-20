@@ -1,3 +1,20 @@
+> ⛔ **SUPERSÉDÉ — copie figée au 10/06/2026, conservée comme trace.**
+>
+> Ce fichier est un **doublon**. Le déplacement du 10/06 (`46338eaa9`) a amené
+> `ETAT-AVANCEMENT-multisessions.md` ici, mais les sessions suivantes ont continué
+> d'écrire dans l'exemplaire resté à son ancienne place — lequel a donc poursuivi sa
+> vie jusqu'au 20/06, pendant que cette copie restait figée au 10/06.
+>
+> **Ce qui fait référence** : [`../../backlogs/ETAT-AVANCEMENT-multisessions.md`](../../backlogs/ETAT-AVANCEMENT-multisessions.md)
+> (lui-même ⚠️ figé au 20/06/2026 — l'avancement à jour se lit au
+> [REGISTRE](../../specs/REGISTRE_decisions.md), tenu section par section).
+>
+> Conformément à la convention du corpus, le fichier supersédé est **tamponné, pas
+> supprimé** : il reste ici comme trace de l'état au 10/06. *(Constat et tampon posés
+> le 20/08/2026, session « Débordements mobile — champs de saisie ».)*
+
+---
+
 # AnarBib — État d'avancement multi-sessions
 
 > **But.** Consolider en un seul endroit git-tracké les acquis de **toutes les
