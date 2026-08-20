@@ -57,9 +57,16 @@ O PDF enviado não é a captura: ele é **derivado** dela, página a página —
 em bitonal, ilustrações em cinza ou colorido. Uma obra de 200 páginas
 majoritariamente textual fica então com 8 a 15 MB.
 
-> **A cadeia de derivação ainda não está definida.** Ela será testada em dez
-> obras antes de ser recomendada. Enquanto isso, pergunte à sua biblioteca qual
-> ferramenta ela usa — e não envie as capturas brutas.
+> **A cadeia escolhida: ScanTailor Advanced, depois `img2pdf`.** O primeiro
+> endireita, recorta e separa o texto das ilustrações, página a página; o
+> segundo junta o resultado num PDF sem recodificar.
+>
+> Pegue mesmo o **Advanced**: «ScanTailor» também designa uma versão
+> abandonada, que não tem o modo misto de que a gente precisa aqui.
+>
+> **Os ajustes exatos entrarão nesta ficha** quando a cadeia tiver sido testada
+> em dez obras. Até lá, pergunte à sua biblioteca — e, em todo caso, nunca envie
+> as capturas brutas.
 
 Dois campos para não errar no envio:
 

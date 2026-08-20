@@ -57,9 +57,16 @@ Le PDF versé n'est pas la capture : il en est **dérivé**, page à page — te
 bitonal, illustrations en gris ou en couleur. Un ouvrage de 200 pages
 majoritairement textuel pèse alors 8 à 15 Mo.
 
-> **La chaîne de dérivation n'est pas encore arrêtée.** Elle sera éprouvée sur
-> dix ouvrages avant d'être recommandée. En attendant, demande à ta bibliothèque
-> quel outil elle utilise — et ne verse pas les captures brutes.
+> **La chaîne retenue : ScanTailor Advanced, puis `img2pdf`.** Le premier
+> redresse, rogne et sépare le texte des illustrations, page par page ; le
+> second assemble le résultat en PDF sans le ré-encoder.
+>
+> Prends bien **Advanced** : « ScanTailor » désigne aussi une version
+> abandonnée, qui n'a pas le mode mixte dont on a besoin ici.
+>
+> **Les réglages précis arriveront dans cette fiche** une fois la chaîne
+> éprouvée sur dix ouvrages. D'ici là, demande à ta bibliothèque — et dans tous
+> les cas, ne verse jamais les captures brutes.
 
 Deux champs à ne pas rater au versement :
 

@@ -192,9 +192,41 @@ trois à cinq ans.**
       Vérifié en production : **44 lignes** normalisées sur les deux tables
       (18 + 26 — il y en avait plus que les dix-huit annoncées, les brouillons
       comptent aussi), marqueur « a verificar » posé sur les **28** ambiguës.
-- [ ] **Choisir l'outil de dérivation** (capture gris → PDF bitonal mixte).
-      Piste : ScanTailor + `img2pdf`, ou une chaîne `unpaper` / ImageMagick.
-      À éprouver sur dix ouvrages avant d'équiper qui que ce soit.
+- [x] **Choisir l'outil de dérivation** (capture gris → PDF bitonal mixte).
+      ✅ Tranché le 20/08 : **ScanTailor Advanced**, puis **`img2pdf`**.
+
+      *Le nom du fork compte.* « ScanTailor » désigne trois logiciels :
+      l'original, abandonné ; **Advanced**, le fork vivant, seul à porter le
+      mode de sortie **mixte** (texte bitonal et illustrations en gris dans la
+      même page) ; et *Universal*, un autre fork. C'est *Advanced* qui est
+      retenu — écrire « ScanTailor » tout court garantit que quelqu'un
+      installera l'abandonné.
+
+      *Pourquoi cette chaîne.* ScanTailor Advanced couvre la géométrie et la
+      segmentation avec une interface graphique montrable à une personne
+      bénévole ; `img2pdf` assemble ses sorties **sans les ré-encoder**, donc
+      sans perte ajoutée. `unpaper` et ImageMagick ne segmentent pas — il
+      faudrait écrire soi-même la logique texte/illustration.
+
+      *Ce qui est écarté, et pourquoi.* **OCRmyPDF** serait le candidat
+      naturel, mais il refait l'OCR que §5 confie déjà au navigateur : doublon
+      de traitement, et sortie du modèle « rien ne quitte le poste ».
+
+      ⚠️ *Une contrainte de compression, pas de confort.* **Le mode « lossy »
+      de JBIG2 est à proscrire.** Il compresse en repérant des glyphes
+      semblables et en n'en gardant qu'un exemplaire — et il lui arrive de
+      confondre deux caractères et de les **remplacer** l'un par l'autre. C'est
+      le défaut qui a fait scandale sur des photocopieurs Xerox en 2013, des
+      chiffres changeant silencieusement dans des documents scannés. Sur un
+      fonds militant où les dates et les noms font la valeur du document, un
+      fichier qui ment sans prévenir est pire qu'un fichier lourd.
+      **CCITT G4, ou JBIG2 générique sans appariement de symboles.**
+      (Le lecteur d'AnarBib sait décoder le JBIG2 : `public/vendor/pdfjs/web/wasm/jbig2.wasm`.)
+
+      **Reste l'épreuve sur dix ouvrages** — elle ne remet plus le choix en
+      cause, elle fixe les réglages et vérifie le seul point non acquis : que
+      la sortie mixte, assemblée, tienne les 8 à 15 Mo du §3 sans abîmer le
+      texte. C'est de ce chiffre que dépend tout le dimensionnement du §8.
 - [x] **Écrire la fiche pratique d'une page** pour les personnes qui scannent.
       ✅ Fait le 20/08 — `docs/guides/guide-digitalizar-fr.md` et `-pt-BR.md`,
       exposée dans les Communs de l'app (carte « Numériser un ouvrage »), les
