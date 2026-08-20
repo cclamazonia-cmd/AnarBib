@@ -19,15 +19,55 @@ ce qui est livré.**
 
 ## 1. Ce qu'on numérise, et ce qu'on ne numérise pas
 
-| Statut de l'ouvrage | Ce qui est versé |
-|---|---|
-| **Domaine public** | Numérisation intégrale, accès public |
-| **Droits cédés par l'auteur·rice** | Numérisation intégrale, accès selon la cession |
-| **Sous droits** | **La couverture seule**, rien d'autre |
+| Statut de l'ouvrage | Ce qui est versé | Qui y accède |
+|---|---|---|
+| **Domaine public** | Numérisation intégrale | Tout le monde, sans compte |
+| **Droits cédés par l'auteur·rice** | Numérisation intégrale | Selon les termes de la cession |
+| **Sous droits, ouvrage détenu** | Numérisation intégrale | **La bibliothèque détentrice, elle seule** |
+| **Sous droits, non détenu** | **La couverture seule** | — |
 
 Sur ~9000 ouvrages du réseau, on estime **10 à 25 %** dans le domaine public.
-Le reste ne reçoit qu'une couverture — quelques centaines de kilo-octets par
-notice, soit ~2 Go pour la totalité du fonds.
+
+### La troisième voie : le numérique suit le physique
+
+> **Validé par la coordination le 2026-08-20. À porter en assemblée générale :
+> c'est une orientation de réseau, pas un réglage de catalogage.**
+
+Le tableau n'offrait qu'un binaire — public, ou couverture seule — et laissait
+sans nom la pratique réelle du réseau. La règle retenue la nomme :
+
+**Une bibliothèque qui possède l'exemplaire papier peut en verser la
+numérisation intégrale, lisible par ses seuls membres actifs.** Le fichier ne
+circule pas au-delà du cercle qui pouvait déjà emprunter le livre : le
+numérique ne fait qu'y suivre le physique, sans élargir l'audience d'un
+exemplaire.
+
+*Ce n'est pas « accès aux inscrits ».* Un compte actif ailleurs dans le réseau
+ne donne rien. La condition est l'appartenance à une bibliothèque **détentrice**
+(`book_holdings`), en plus du compte actif.
+
+*Ce que ça engage.* La responsabilité reste entièrement celle de la bibliothèque
+qui verse : c'est elle qui répond de son fonds, et qui écrit dans
+`rights_justification` pourquoi elle estime pouvoir le faire. Le réseau fournit
+l'outil et la borne technique ; il ne se substitue pas à la décision de chaque
+bibliothèque, ni ne la couvre.
+
+*État technique.* Appliqué depuis la migration `20260821000000`, sur le chemin
+de lecture de **toutes** les ressources restreintes. Le formulaire de catalogage
+propose le choix sous le libellé « Bibliothèque détentrice (restreint) » dans
+les dix langues. La valeur stockée reste `conta_ativa` — nom hérité de
+l'ancienne règle, conservé faute de valoir la migration d'une contrainte CHECK
+et de dix locales pour une seule ressource ; à renommer quand le vocabulaire des
+`access_scope` sera repris.
+
+⚠️ **Cette voie change le dimensionnement du §8.** Le chiffrage « ~2 Go pour
+la totalité du fonds » supposait que les 75 à 90 % d'ouvrages sous droits ne
+reçoivent qu'une couverture. S'ils deviennent numérisables en intégral dès lors
+qu'ils sont détenus, la même masse passée à 8-15 Mo l'ouvrage représente
+**plusieurs dizaines de Go**, non deux. La borne réelle n'est donc plus
+juridique mais matérielle : ce que le réseau peut héberger et sauvegarder.
+**À rechiffrer avant l'appel Herbes Folles**, sans quoi le §8 annonce un volume
+que cette décision périme.
 
 ### Le vocabulaire des droits doit être contrôlé — dès maintenant
 
@@ -267,3 +307,21 @@ trois à cinq ans.**
       avec ses deux conséquences (les cinq contrôles deviennent la dernière
       chance ; on renonce à re-dériver plus tard) et le cas particulier de
       l'ouvrage rare, dont la capture se garde.
+
+- [ ] **Rechiffrer le §8 sous la troisième voie.** Le volume annoncé suppose
+      « couverture seule » pour tout ce qui est sous droits. La décision du
+      20/08 lève cette borne pour les ouvrages détenus : le §8 annonce donc un
+      chiffre périmé, et c'est lui qui sert à l'appel Herbes Folles.
+- [ ] **Poser le garde-fou « restreint sans détenteur ».** La lisibilité d'une
+      ressource restreinte dépend maintenant de `book_holdings`. Retirer le
+      dernier exemplaire d'un livre rend donc son PDF **illisible par tout le
+      monde**, silencieusement — ni erreur, ni alerte, ni trace : la ressource
+      reste `active`, elle ne s'ouvre simplement plus pour personne. Aucun
+      contrôle n'existe aujourd'hui. À traiter comme les autres pannes muettes
+      du réseau : le rendre **observable** plutôt que l'interdire, une
+      bibliothèque pouvant légitimement retirer un exemplaire abîmé sans
+      vouloir fermer l'accès numérique.
+- [ ] **Porter la troisième voie en assemblée générale.** Validée par la
+      coordination, appliquée techniquement, mais non ratifiée collectivement.
+      C'est la question des samizdats : ce que le réseau assume de faire
+      circuler, et sous quelle responsabilité.
