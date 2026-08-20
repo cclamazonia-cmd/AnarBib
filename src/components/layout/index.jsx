@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import NotificationBell from '@/components/notifications/NotificationBell';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { supabase } from '@/lib/supabase';
-import { resolveLibraryLogo } from '@/lib/theme';
+import { resolveLibraryLogo, DEFAULT_BRAND_LOGO } from '@/lib/theme';
 import {
   canSeeAccount,
   canSeePainel,
@@ -39,7 +39,7 @@ export function PageShell({ children }) {
 export function Topbar() {
   const { formatMessage: t } = useIntl();
   const { user, signOut } = useAuth();
-  const { libraryName, libraryId, role, isNetworkAdmin } = useLibrary();
+  const { libraryName, libraryId, role, isNetworkAdmin, brandLogoUrl } = useLibrary();
   const location = useLocation();
 
   const isActive = (path) => location.pathname.startsWith(path);
@@ -80,12 +80,20 @@ export function Topbar() {
         {/* Logo auto-heberge (19/08/2026). Il etait hotlinke sur un WordPress
             externe (cclamazonia.noblogs.org), ce qui exposait l'IP de chaque
             visiteur a un tiers et faisait dependre le bandeau d'un site que
-            nous ne maitrisons pas. Le fichier vit desormais dans public/img/. */}
+            nous ne maitrisons pas. Le fichier vit desormais dans public/img/.
+            Depuis, il est pilotable par bibliotheque : un theme de biblio qui
+            declare `assets.logo` remplace ce logo (cf. resolveBrandLogo). Le
+            theme `default` garde le fichier local. En cas d'URL de theme
+            cassee, onError ramene le logo AnarBib plutot qu'un bandeau vide. */}
         <img
-          src="/img/logo-anarbib.png"
+          src={brandLogoUrl || DEFAULT_BRAND_LOGO}
           alt="AnarBib"
           className="ab-topbar__logo"
           data-brand-logo
+          onError={(e) => {
+            if (e.currentTarget.src.endsWith(DEFAULT_BRAND_LOGO)) return;
+            e.currentTarget.src = DEFAULT_BRAND_LOGO;
+          }}
         />
         {logoSrc && !logoError && (
           <img
