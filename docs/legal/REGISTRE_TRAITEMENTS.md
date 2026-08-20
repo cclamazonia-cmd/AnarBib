@@ -38,7 +38,7 @@ Ce registre se compose de **deux couches** :
 | **Contact pour les questions de données personnelles** | contato@anarbib.org |
 | **Autorité de contrôle compétente** | Commission Nationale de l'Informatique et des Libertés (CNIL), 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France — www.cnil.fr |
 | **Délégué à la protection des données (DPO)** | Non désigné. La désignation n'est pas obligatoire au sens de l'art. 37 RGPD (AnarBib n'est ni autorité publique, ni traitement à grande échelle de données sensibles, ni profilage systématique). |
-| **Date de dernière mise à jour du registre** | 5 juin 2026 |
+| **Date de dernière mise à jour du registre** | 20 août 2026 *(précédente : 5 juin 2026 — mise à jour motivée par le retrait du sous-traitant Cloudflare, §§ 4.1, 5.1 et 6.3)* |
 
 > **Note politique.** AnarBib n'a pas vocation à exiger une personnalité juridique formelle des bibliothèques adhérentes. Un collectif informel reste néanmoins responsable de traitement au sens RGPD dès lors qu'il opère un système de gestion de comptes lecteur·rices. La désignation d'au moins une personne contact est donc obligatoire, même sans structure formelle.
 
@@ -157,7 +157,8 @@ Toute lecteur·rice peut, à tout moment, exercer les droits suivants :
 - **Cloisonnement par RLS** : Row Level Security PostgreSQL sur toutes les tables contenant des données personnelles (cf. annexe technique B). Vérifié et durci en mai 2026 (cf. RLS security overhaul, 02/05/2026).
 - **Cloisonnement anonyme/authentifié** : les données personnelles ne sont jamais exposées aux requêtes anonymes (matérialisé par les vues `mv_books_catalog_list_v1` *vs* `mv_books_catalog_list_network_v1`).
 - **Sauvegardes** : assurées par Supabase (Point-in-Time Recovery sur l'offre payante). Conservation des sauvegardes : selon politique Supabase.
-- **Protection anti-bot (Cloudflare Turnstile)** : un défi Turnstile est actif sur les pages de **connexion** et d'**inscription**, pour bloquer les attaques automatisées (bourrage d'identifiants, création de comptes en masse). Turnstile fonctionne sans cookie tiers persistant ni pistage publicitaire, ne se charge que sur ces deux pages et ne suit pas la navigation. C'est la seule dépendance Cloudflare **directe** d'AnarBib (Cloudflare intervient par ailleurs comme sous-processeur du CDN de Supabase, cf. §5.2). Le transfert vers les États-Unis qui en résulte est documenté en §6.3.
+- **Protection anti-bot (Altcha, auto-hébergé)** — *depuis les 19-20/08/2026* : un défi **Altcha** protège les pages de **connexion**, d'**inscription** et le formulaire public de **cartographie** (bourrage d'identifiants, création de comptes en masse, soumissions automatisées). Le calcul est fait **par le navigateur** de la personne et vérifié par nos propres Edge Functions (avec anti-rejeu) : **aucun appel sortant, aucun tiers, aucune adresse IP transmise à qui que ce soit**, pas de cookie. S'y ajoutent un **plancher anti-oracle temporel** sur la connexion et la fermeture des oracles d'appartenance et « numéro de lecteur → e-mail » (18-19/08/2026).
+  > ⛔ **Remplace Cloudflare Turnstile**, actif jusqu'au 20/08/2026 sur connexion et inscription. Avec ce retrait, AnarBib n'a **plus aucune dépendance Cloudflare directe** (Cloudflare demeure sous-processeur du CDN de Supabase, cf. §5.2) et le transfert vers les États-Unis correspondant **n'existe plus** (cf. §6.3). C'était la dernière exception à la doctrine d'auto-hébergement.
 
 ### 4.2 Mesures organisationnelles
 
@@ -187,7 +188,7 @@ Ce registre est honnête sur ce qui reste à faire (feuille de route 2026) :
 | **Codeberg e.V.** | Hébergement du frontend (Codeberg Pages) | Allemagne (UE) | DPA implicite via les CGU | Association allemande à but non lucratif, alignée sur le RGPD par construction. |
 | **Resend** (Plus Five Five, Inc.) | Envoi des mails transactionnels | États-Unis (San Francisco, CA) — voir section 6 | **Oui** — DPA Resend (mise à jour du 31 décembre 2025), accepté à l'ouverture du compte. Intègre les CCT 2021/914 module 2 controller-to-processor. | Société états-unienne. Conforme RGPD ; certifiée **EU-U.S. Data Privacy Framework** auprès du Département du Commerce des États-Unis. Conforme **SOC 2 Type II**. Suivi des ouvertures désactivé (cf. §2.4 et §4.2). DPA accessible sur resend.com/legal/dpa. |
 | **GitHub Inc.** | Miroir secondaire du dépôt (sans données personnelles) | États-Unis | Sans objet | Le miroir GitHub ne contient **aucune** donnée personnelle de lecteur·rice — uniquement le code source public. Pas de transfert RGPD-significatif. |
-| **Cloudflare Inc.** | Protection anti-bot (Turnstile) sur les pages de connexion et d'inscription | États-Unis — voir section 6 | DPA Cloudflare **v6.4 du 3 avril 2026** (`cloudflare.com/cloudflare-customer-dpa/`), **incorporé par référence** au Self-Serve Subscription Agreement — pas de signature distincte ; effectif dès l'acceptation des CGU à l'ouverture du compte Cloudflare. Intègre les CCT 2021/914 module 2 (EU SCCs). | Défi anti-bot à ces deux seuls points d'entrée. Cloudflare Inc. est certifiée **EU-U.S. Data Privacy Framework**. Turnstile n'utilise pas de cookie tiers persistant ni de pistage publicitaire. À distinguer du rôle de Cloudflare comme sous-processeur *de Supabase* (§5.2). |
+| ~~**Cloudflare Inc.**~~ — ⛔ **sous-traitant retiré le 20/08/2026** | Protection anti-bot (Turnstile) sur les pages de connexion et d'inscription, **jusqu'au 20/08/2026** | États-Unis | DPA Cloudflare **v6.4 du 3 avril 2026** (`cloudflare.com/cloudflare-customer-dpa/`), **incorporé par référence** au Self-Serve Subscription Agreement ; CCT 2021/914 module 2. | **Ligne conservée pour la traçabilité** (art. 30 : le registre doit rendre compte des traitements passés). Turnstile a été **remplacé par Altcha auto-hébergé** (§4.1) : plus aucun appel sortant, donc plus de sous-traitance ni de transfert. À distinguer du rôle de Cloudflare comme sous-processeur *de Supabase* (§5.2), qui **subsiste**. |
 
 ### 5.2 Sous-processeurs ultérieurs significatifs (chaîne Supabase)
 
@@ -245,16 +246,13 @@ Depuis la migration du service de mail (mai 2026), les notifications transaction
 - En cas de résiliation du compte, Resend supprime les données dans un délai de 90 jours.
 - Le DPA Resend prévoit que, en cas de demande d'accès émanant d'une autorité publique, Resend s'efforce de rediriger l'autorité vers le responsable de traitement et notifie ce dernier, sauf interdiction légale.
 
-### 6.3 — Transfert vers les États-Unis (protection anti-bot — Cloudflare Turnstile)
+### 6.3 — *(clos)* Transfert vers les États-Unis (protection anti-bot) — **supprimé le 20/08/2026**
 
-Les pages de connexion et d'inscription chargent le défi anti-bot **Cloudflare Turnstile** (Cloudflare Inc., États-Unis). À cette occasion, le navigateur de la personne transmet à Cloudflare son adresse IP et des signaux techniques nécessaires à la détection de comportements automatisés ; **aucune donnée de compte n'est transmise**. Turnstile n'installe pas de cookie tiers persistant à des fins publicitaires.
+**Ce transfert n'a plus lieu.** Depuis le 20/08/2026, la protection anti-bot est assurée par **Altcha auto-hébergé** (§4.1) : le défi est calculé par le navigateur et vérifié par les Edge Functions d'AnarBib, **sans aucun appel sortant**. Aucune adresse IP ni signal technique n'est plus transmis à un tiers à ce titre.
 
-**Base juridique du transfert** : Clauses Contractuelles Types **2021/914**, **module 2 controller-to-processor**, intégrées au DPA Cloudflare ; Cloudflare Inc. est par ailleurs **certifiée EU-U.S. Data Privacy Framework** auprès du Département du Commerce des États-Unis.
+*Pour mémoire (traitement passé, art. 30).* Jusqu'à cette date, les pages de connexion et d'inscription chargeaient **Cloudflare Turnstile** (Cloudflare Inc., États-Unis) : le navigateur transmettait à Cloudflare son adresse IP et des signaux techniques de détection ; aucune donnée de compte n'était transmise, et aucun cookie tiers persistant n'était installé. Base juridique du transfert alors en vigueur : CCT **2021/914** module 2, intégrées au DPA Cloudflare, Cloudflare Inc. étant par ailleurs certifiée **EU-U.S. Data Privacy Framework**.
 
-**Garanties complémentaires** :
-- Le déclenchement est limité aux deux points d'entrée (connexion, inscription) ; aucune activation sur le reste du parcours.
-- Aucune donnée sensible ni donnée de catalogue n'est transmise.
-- Cette dépendance est la seule exception assumée à la doctrine d'auto-hébergement d'AnarBib.
+> Cette dépendance était présentée comme « la seule exception assumée à la doctrine d'auto-hébergement d'AnarBib ». Elle est levée : **il n'y a plus d'exception**.
 
 ### 6.4 — Sous-processeurs ultérieurs aux États-Unis (chaîne Supabase)
 
@@ -298,7 +296,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 | Hébergement DB | Supabase, région `sa-east-1` (São Paulo, Brésil) — AWS sous-jacent — transitoire |
 | Hébergement frontend | Codeberg Pages (primaire) + GitHub Pages (miroir secondaire) |
 | Mail transactionnel | Resend (Plus Five Five, Inc.), États-Unis — transfert encadré CCT 2021/914 module 2 + EU-U.S. Data Privacy Framework |
-| Protection anti-bot | Cloudflare Turnstile (Cloudflare Inc.), États-Unis — pages de connexion et d'inscription — transfert encadré CCT 2021/914 module 2 + EU-U.S. Data Privacy Framework |
+| Protection anti-bot | **Altcha, auto-hébergé** (depuis le 20/08/2026) — connexion, inscription et cartographie — calcul par le navigateur, vérification par nos Edge Functions, **aucun tiers, aucun transfert** *(auparavant : Cloudflare Turnstile, États-Unis — retiré)* |
 | DPO | Non désigné (non requis par l'art. 37 RGPD) |
 | Bibliothèques opérées | Bibliothèque pilote (CCLA-portée, BLMF) |
 | DPA Supabase | Signé le 4 mai 2026 (réf. TFXNN-HUMKJ-3WKP8-MZMYW) |
@@ -342,6 +340,7 @@ Une réclamation peut toujours être déposée auprès de l'autorité du pays de
 | 2026-05-04 | Xavier VAN WELDEN | Création initiale du registre. Intégration des informations du DPA Supabase signé le 4 mai 2026 (réf. TFXNN-HUMKJ-3WKP8-MZMYW). |
 | 2026-06-05 | Xavier VAN WELDEN | Migration du sous-traitant mail : Brevo (UE) remplacé par Resend (Plus Five Five, Inc., États-Unis). Mise à jour des §2.4, §4.1, §5.1 et de l'annexe A. Ajout en §4.2 d'une note sur le choix d'un prestataire mail sans suivi des ouvertures. Réécriture de la §6 : documentation de deux transferts hors-UE distincts (Brésil/Supabase et États-Unis/Resend), le second encadré par les CCT 2021/914 module 2 et la certification EU-U.S. Data Privacy Framework de Resend. |
 | 2026-07-05 | Xavier VAN WELDEN | Intégration de Cloudflare Turnstile comme sous-traitant direct : protection anti-bot désormais **active** sur les pages de connexion et d'inscription (auparavant listée en §4.3 « en cours »). Passée en §4.1 (mesure active), ajoutée en §5.1 (sous-traitant direct, États-Unis), nouveau §6.3 (transfert US, CCT 2021/914 module 2 + EU-U.S. DPF), renumérotation des §6.4/6.5, mise à jour de l'annexe A. |
+| 2026-08-20 | Claude (assistant·e), session « Débordements mobile — champs de saisie » | **Retrait du sous-traitant Cloudflare.** La protection anti-bot est passée à **Altcha auto-hébergé** les 19-20/08/2026 (calcul navigateur + vérification par les Edge Functions, anti-rejeu ; étendue au formulaire public de cartographie) ; le code ne fait plus aucun appel à Cloudflare. Mise à jour des §4.1 (mesure active), §5.1 (ligne Cloudflare **barrée et datée**, conservée pour la traçabilité) et §6.3 (transfert US **clos**, texte historique conservé), plus l'annexe A. Conséquence : **plus aucune dépendance Cloudflare directe** — Cloudflare subsiste uniquement comme sous-processeur du CDN de Supabase (§5.2). Écart constaté puis corrigé : les locales de l'app (source unique de la politique de confidentialité, cf. `PRIV-1`) étaient déjà à jour, ce registre était resté en arrière. |
 
 ---
 
