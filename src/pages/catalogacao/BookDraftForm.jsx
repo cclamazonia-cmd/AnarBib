@@ -3257,6 +3257,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         <option value="licenca_livre">{t({ id: 'catalogacao.digital.rights.licenca_livre' })}</option>
                         <option value="sob_direitos">{t({ id: 'catalogacao.digital.rights.sob_direitos' })}</option>
                       </select>
+                      <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #aaa)', marginTop: 6 }}>{t({ id: 'catalogacao.digital.rights.hint' })}</div>
                     </div>
                     <div className="cat-field" style={{ gridColumn: 'span 2' }}>
                       <label>{t({ id: 'catalogacao.digital.rightsJustification' })}</label>

@@ -1971,7 +1971,7 @@
   "catalogacao.digital.rights.dominio_publico": "Δημόσιος τομέας",
   "catalogacao.digital.rights.cessao_autoral": "Εκχώρηση δικαιωμάτων (γραπτή άδεια)",
   "catalogacao.digital.rights.licenca_livre": "Ελεύθερη άδεια (CC, copyleft…)",
-  "catalogacao.digital.rights.sob_direitos": "Υπό δικαιώματα — μόνο το εξώφυλλο",
+  "catalogacao.digital.rights.sob_direitos": "Υπό δικαιώματα",
   "catalogacao.digital.rightsJustification": "Τεκμηρίωση δικαιωμάτων",
   "catalogacao.digital.rightsJustification.ph": "Ο συγγραφέας πέθανε το 1936· ή σύνδεσμος προς την εκχώρηση",
   "catalogacao.digital.rightsStatus": "Κατάσταση δικαιωμάτων",
@@ -5831,5 +5831,6 @@
   "catalogacao.dedup.deleteThisAuthorityHint": "Τα έργα, οι συνεισφορές και τα ψευδώνυμά της μεταφέρονται στην ανοιχτή καθιερωμένη εγγραφή· έπειτα εξαφανίζεται. Μη αναστρέψιμο.",
   "catalogacao.dup.absorbDraft": "Απορρόφηση αυτού του προσχεδίου",
   "catalogacao.dup.absorbDraftHint": "Τα επιλεγμένα πεδία μεταφέρονται στο ανοιχτό προσχέδιο· αυτό το προσχέδιο πάει στον κάδο.",
-  "catalogacao.dup.absorbConfirm": "Τα επιλεγμένα πεδία μεταφέρονται στο ανοιχτό προσχέδιο. Αυτό το προσχέδιο πάει στον κάδο. Συνέχεια;"
+  "catalogacao.dup.absorbConfirm": "Τα επιλεγμένα πεδία μεταφέρονται στο ανοιχτό προσχέδιο. Αυτό το προσχέδιο πάει στον κάδο. Συνέχεια;",
+  "catalogacao.digital.rights.hint": "Το πεδίο περιγράφει τα δικαιώματα, όχι το τι διατίθεται. «Υπό δικαιώματα» = μόνο το εξώφυλλο, εκτός αν η βιβλιοθήκη κατέχει το φυσικό αντίτυπο: τότε είναι δυνατό το πλήρες κείμενο, μόνο για τα μέλη της. Αιτιολογήστε παρακάτω."
 }

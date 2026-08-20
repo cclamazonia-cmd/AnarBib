@@ -1971,7 +1971,7 @@
   "catalogacao.digital.rights.dominio_publico": "Dominio público",
   "catalogacao.digital.rights.cessao_autoral": "Cesión de derechos (autorización escrita)",
   "catalogacao.digital.rights.licenca_livre": "Licencia libre (CC, copyleft…)",
-  "catalogacao.digital.rights.sob_direitos": "Bajo derechos — solo la cubierta",
+  "catalogacao.digital.rights.sob_direitos": "Bajo derechos",
   "catalogacao.digital.rightsJustification": "Justificación de los derechos",
   "catalogacao.digital.rightsJustification.ph": "Muerte del autor en 1936; o enlace a la cesión",
   "catalogacao.digital.rightsStatus": "Estado de los derechos",
@@ -5831,5 +5831,6 @@
   "catalogacao.dedup.deleteThisAuthorityHint": "Sus obras, contribuciones y alias pasan a la autoridad abierta; después desaparece. Irreversible.",
   "catalogacao.dup.absorbDraft": "Absorber este borrador",
   "catalogacao.dup.absorbDraftHint": "Los campos marcados se recuperan en el borrador abierto; este borrador va a la papelera.",
-  "catalogacao.dup.absorbConfirm": "Los campos marcados se recuperan en el borrador abierto. Este borrador va a la papelera. ¿Continuar?"
+  "catalogacao.dup.absorbConfirm": "Los campos marcados se recuperan en el borrador abierto. Este borrador va a la papelera. ¿Continuar?",
+  "catalogacao.digital.rights.hint": "Este campo describe los derechos, no lo que se difunde. «Bajo derechos» = solo la cubierta, salvo si la biblioteca posee el ejemplar físico: la íntegra es entonces posible, reservada a sus miembros. Justifique ese caso abajo."
 }

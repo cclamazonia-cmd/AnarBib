@@ -1977,7 +1977,7 @@
   "catalogacao.digital.rights.dominio_publico": "Domaine public",
   "catalogacao.digital.rights.cessao_autoral": "Cession de droits (autorisation écrite)",
   "catalogacao.digital.rights.licenca_livre": "Licence libre (CC, copyleft…)",
-  "catalogacao.digital.rights.sob_direitos": "Sous droits — couverture seule",
+  "catalogacao.digital.rights.sob_direitos": "Sous droits",
   "catalogacao.digital.rightsJustification": "Justification des droits",
   "catalogacao.digital.rightsJustification.ph": "Mort de l'auteur en 1936 ; ou lien vers la cession",
   "catalogacao.digital.rightsStatus": "Statut des droits",
@@ -5831,5 +5831,6 @@
   "catalogacao.dedup.deleteThisAuthorityHint": "Ses œuvres, contributions et alias passent sur l’autorité ouverte ; elle disparaît ensuite. Irréversible.",
   "catalogacao.dup.absorbDraft": "Absorber ce brouillon",
   "catalogacao.dup.absorbDraftHint": "Les champs cochés sont repris dans le brouillon ouvert ; ce brouillon-ci part à la corbeille.",
-  "catalogacao.dup.absorbConfirm": "Les champs cochés sont repris dans le brouillon ouvert. Ce brouillon-ci part à la corbeille. Continuer ?"
+  "catalogacao.dup.absorbConfirm": "Les champs cochés sont repris dans le brouillon ouvert. Ce brouillon-ci part à la corbeille. Continuer ?",
+  "catalogacao.digital.rights.hint": "Ce champ décrit les droits, pas ce qui est diffusé. « Sous droits » = couverture seule, sauf si la bibliothèque détient l’exemplaire physique : l’intégrale est alors possible, réservée à ses membres. Motivez ce cas ci-dessous."
 }

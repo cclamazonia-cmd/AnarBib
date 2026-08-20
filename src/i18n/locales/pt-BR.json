@@ -1971,7 +1971,7 @@
   "catalogacao.digital.rights.dominio_publico": "Domínio público",
   "catalogacao.digital.rights.cessao_autoral": "Cessão autoral (autorização escrita)",
   "catalogacao.digital.rights.licenca_livre": "Licença livre (CC, copyleft…)",
-  "catalogacao.digital.rights.sob_direitos": "Sob direitos — apenas a capa",
+  "catalogacao.digital.rights.sob_direitos": "Sob direitos",
   "catalogacao.digital.rightsJustification": "Justificativa dos direitos",
   "catalogacao.digital.rightsJustification.ph": "Morte do autor em 1936; ou link para a cessão",
   "catalogacao.digital.rightsStatus": "Status dos direitos",
@@ -5831,5 +5831,6 @@
   "catalogacao.dedup.deleteThisAuthorityHint": "As obras, contribuições e apelidos passam para a autoridade aberta; ela então desaparece. Irreversível.",
   "catalogacao.dup.absorbDraft": "Absorver este rascunho",
   "catalogacao.dup.absorbDraftHint": "Os campos marcados são aproveitados no rascunho aberto; este rascunho vai para a lixeira.",
-  "catalogacao.dup.absorbConfirm": "Os campos marcados são aproveitados no rascunho aberto. Este rascunho vai para a lixeira. Continuar?"
+  "catalogacao.dup.absorbConfirm": "Os campos marcados são aproveitados no rascunho aberto. Este rascunho vai para a lixeira. Continuar?",
+  "catalogacao.digital.rights.hint": "Este campo descreve os direitos, não o que é difundido. « Sob direitos » = apenas a capa, salvo se a biblioteca possuir o exemplar físico: a íntegra torna-se possível, reservada aos seus membros. Justifique esse caso abaixo."
 }

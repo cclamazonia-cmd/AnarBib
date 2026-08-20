@@ -1971,7 +1971,7 @@
   "catalogacao.digital.rights.dominio_publico": "Publiek domein",
   "catalogacao.digital.rights.cessao_autoral": "Rechtenoverdracht (schriftelijke toestemming)",
   "catalogacao.digital.rights.licenca_livre": "Vrije licentie (CC, copyleft…)",
-  "catalogacao.digital.rights.sob_direitos": "Auteursrechtelijk beschermd — alleen het omslag",
+  "catalogacao.digital.rights.sob_direitos": "Auteursrechtelijk beschermd",
   "catalogacao.digital.rightsJustification": "Onderbouwing van de rechten",
   "catalogacao.digital.rightsJustification.ph": "Auteur overleden in 1936; of link naar de overdracht",
   "catalogacao.digital.rightsStatus": "Rechtenstatus",
@@ -5831,5 +5831,6 @@
   "catalogacao.dedup.deleteThisAuthorityHint": "De werken, bijdragen en aliassen gaan naar de geopende autoriteit; daarna verdwijnt ze. Onomkeerbaar.",
   "catalogacao.dup.absorbDraft": "Dit concept opnemen",
   "catalogacao.dup.absorbDraftHint": "De aangevinkte velden worden overgenomen in het geopende concept; dit concept gaat naar de prullenbak.",
-  "catalogacao.dup.absorbConfirm": "De aangevinkte velden worden overgenomen in het geopende concept. Dit concept gaat naar de prullenbak. Doorgaan?"
+  "catalogacao.dup.absorbConfirm": "De aangevinkte velden worden overgenomen in het geopende concept. Dit concept gaat naar de prullenbak. Doorgaan?",
+  "catalogacao.digital.rights.hint": "Dit veld beschrijft de rechten, niet wat wordt aangeboden. „Auteursrechtelijk beschermd” = alleen het omslag, tenzij de bibliotheek het fysieke exemplaar bezit: dan is het volledige werk mogelijk, beperkt tot haar leden. Motiveer dat geval hieronder."
 }

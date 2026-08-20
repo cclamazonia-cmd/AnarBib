@@ -1971,7 +1971,7 @@
   "catalogacao.digital.rights.dominio_publico": "Pubblico dominio",
   "catalogacao.digital.rights.cessao_autoral": "Cessione dei diritti (autorizzazione scritta)",
   "catalogacao.digital.rights.licenca_livre": "Licenza libera (CC, copyleft…)",
-  "catalogacao.digital.rights.sob_direitos": "Sotto diritti — solo la copertina",
+  "catalogacao.digital.rights.sob_direitos": "Sotto diritti",
   "catalogacao.digital.rightsJustification": "Giustificazione dei diritti",
   "catalogacao.digital.rightsJustification.ph": "Morte dell'autore nel 1936; o link alla cessione",
   "catalogacao.digital.rightsStatus": "Stato dei diritti",
@@ -5831,5 +5831,6 @@
   "catalogacao.dedup.deleteThisAuthorityHint": "Le sue opere, i contributi e gli alias passano all’autorità aperta; poi scompare. Irreversibile.",
   "catalogacao.dup.absorbDraft": "Assorbire questa bozza",
   "catalogacao.dup.absorbDraftHint": "I campi spuntati sono ripresi nella bozza aperta; questa bozza va nel cestino.",
-  "catalogacao.dup.absorbConfirm": "I campi spuntati sono ripresi nella bozza aperta. Questa bozza va nel cestino. Continuare?"
+  "catalogacao.dup.absorbConfirm": "I campi spuntati sono ripresi nella bozza aperta. Questa bozza va nel cestino. Continuare?",
+  "catalogacao.digital.rights.hint": "Questo campo descrive i diritti, non ciò che viene diffuso. « Sotto diritti » = solo la copertina, salvo se la biblioteca possiede la copia fisica: l’integrale diventa possibile, riservata ai suoi membri. Motivare questo caso qui sotto."
 }

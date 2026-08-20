@@ -1971,7 +1971,7 @@
   "catalogacao.digital.rights.dominio_publico": "Public domain",
   "catalogacao.digital.rights.cessao_autoral": "Rights assigned (written permission)",
   "catalogacao.digital.rights.licenca_livre": "Free licence (CC, copyleft…)",
-  "catalogacao.digital.rights.sob_direitos": "Under copyright — cover only",
+  "catalogacao.digital.rights.sob_direitos": "Under copyright",
   "catalogacao.digital.rightsJustification": "Rights justification",
   "catalogacao.digital.rightsJustification.ph": "Author died in 1936; or link to the assignment",
   "catalogacao.digital.rightsStatus": "Rights status",
@@ -5831,5 +5831,6 @@
   "catalogacao.dedup.deleteThisAuthorityHint": "Its works, contributions and aliases move to the open authority; it then disappears. Cannot be undone.",
   "catalogacao.dup.absorbDraft": "Absorb this draft",
   "catalogacao.dup.absorbDraftHint": "The ticked fields are carried into the open draft; this draft goes to the bin.",
-  "catalogacao.dup.absorbConfirm": "The ticked fields are carried into the open draft. This draft goes to the bin. Continue?"
+  "catalogacao.dup.absorbConfirm": "The ticked fields are carried into the open draft. This draft goes to the bin. Continue?",
+  "catalogacao.digital.rights.hint": "This field describes the rights, not what is served. “Under copyright” = cover only, unless the library holds the physical copy: the full text is then possible, restricted to its members. Justify that case below."
 }
