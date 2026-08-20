@@ -95,7 +95,11 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       } else if (view === 'author') {
         let q = supabase.from('authors')
           .select('id, preferred_name, sort_name, birth_year, death_year, country, viaf_id, updated_at')
-          .order('preferred_name', { ascending: true }).range(from, to);
+          // CONV-2 : sort_name fait foi. Trier la liste sur preferred_name
+          // revenait a classer par PRENOM des que la forme d'affichage passait
+          // en ordre direct (« SILVEIRA, Enio » -> « Enio Silveira ») — et c'est
+          // sur cet ecran que se depouillent les tables de revue du chantier.
+          .order('sort_name', { ascending: true, nullsFirst: false }).range(from, to);
         if (dSearch.trim()) q = q.or(`preferred_name.ilike.%${dSearch.trim()}%,sort_name.ilike.%${dSearch.trim()}%`);
         ({ data } = await q);
       } else {
