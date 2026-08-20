@@ -35,3 +35,7 @@ tests/sql/doublons_p3_reversibilite_tests.sql
 # Arbitrage destructeur reserve a la coordination + signalements (paquet DOUBLONS P4).
 # Inclut une fusion reellement executee : le corps de merge_book y est recopie.
 tests/sql/doublons_p4_arbitrage_coordination_tests.sql
+
+# Apercu de fusion en lecture seule avant destruction (paquet DOUBLONS P6).
+# Verifie le tri entre metadonnees perdues, divergentes et silencieuses.
+tests/sql/doublons_p6_apercu_fusion_tests.sql
