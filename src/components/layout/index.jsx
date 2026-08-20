@@ -74,6 +74,16 @@ export function Topbar() {
   // Referme le tiroir à chaque navigation.
   useEffect(() => { setMenuOpen(false); }, [location.pathname]);
 
+  // Le bandeau ne montre JAMAIS deux fois la même bibliothèque. Quand le thème
+  // de la biblio a pris le slot de marque (resolveBrandLogo remplace le logo
+  // AnarBib par `assets.logo` du manifeste), afficher en plus le logo tiré de
+  // library_commons donne deux fois le même emblème. Vécu le 20/08 sur BLMF :
+  // le manifeste déclare `themes/blmf/logo-v2.png` et library_commons
+  // `themes/blmf/logo-blmf-v2.png` — deux fichiers distincts, le même dessin,
+  // donc comparer les URL ne suffit pas. On teste la STRUCTURE : le slot de
+  // marque est-il piloté par un thème de biblio, ou porte-t-il AnarBib ?
+  const brandIsLibrary = Boolean(brandLogoUrl) && brandLogoUrl !== DEFAULT_BRAND_LOGO;
+
   return (
     <nav className="ab-topbar">
       <Link to="/" className="ab-topbar__brand">
@@ -95,7 +105,7 @@ export function Topbar() {
             e.currentTarget.src = DEFAULT_BRAND_LOGO;
           }}
         />
-        {logoSrc && !logoError && (
+        {!brandIsLibrary && logoSrc && !logoError && (
           <img
             src={logoSrc}
             alt={libraryName}
