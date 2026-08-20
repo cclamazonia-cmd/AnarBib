@@ -5797,5 +5797,7 @@
   "catalogacao.dedup.scanHelpCross": "A mesma obra catalogada separadamente por bibliotecas diferentes. Fundi-las equivaleria a mutualizar o registro, o que envolve outra biblioteca: prefira « Mesma obra ».",
   "catalogacao.dedup.scanKindIsbn": "ISBN idêntico",
   "catalogacao.dedup.scanKindApprox": "Título próximo",
-  "catalogacao.dedup.scanOpen": "Abrir"
+  "catalogacao.dedup.scanOpen": "Abrir",
+  "catalogacao.dedup.scanKindTitleYearPublisher": "Título, ano e editora idênticos",
+  "catalogacao.dedup.scanKindTitleYear": "Título e ano idênticos"
 }

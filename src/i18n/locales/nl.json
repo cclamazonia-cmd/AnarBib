@@ -5797,5 +5797,7 @@
   "catalogacao.dedup.scanHelpCross": "Hetzelfde werk apart gecatalogiseerd door verschillende bibliotheken. Samenvoegen zou de beschrijving delen, wat een andere bibliotheek betreft: kies liever « Zelfde werk ».",
   "catalogacao.dedup.scanKindIsbn": "Identieke ISBN",
   "catalogacao.dedup.scanKindApprox": "Vergelijkbare titel",
-  "catalogacao.dedup.scanOpen": "Openen"
+  "catalogacao.dedup.scanOpen": "Openen",
+  "catalogacao.dedup.scanKindTitleYearPublisher": "Zelfde titel, jaar en uitgever",
+  "catalogacao.dedup.scanKindTitleYear": "Zelfde titel en jaar"
 }

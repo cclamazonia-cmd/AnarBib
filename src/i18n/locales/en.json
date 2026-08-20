@@ -5797,5 +5797,7 @@
   "catalogacao.dedup.scanHelpCross": "The same work catalogued separately by different libraries. Merging them would pool the record, which commits another library: prefer « Same work ».",
   "catalogacao.dedup.scanKindIsbn": "Identical ISBN",
   "catalogacao.dedup.scanKindApprox": "Similar title",
-  "catalogacao.dedup.scanOpen": "Open"
+  "catalogacao.dedup.scanOpen": "Open",
+  "catalogacao.dedup.scanKindTitleYearPublisher": "Same title, year and publisher",
+  "catalogacao.dedup.scanKindTitleYear": "Same title and year"
 }

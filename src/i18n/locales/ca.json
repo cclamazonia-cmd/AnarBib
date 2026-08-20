@@ -5797,5 +5797,7 @@
   "catalogacao.dedup.scanHelpCross": "La mateixa obra catalogada per separat per biblioteques diferents. Fusionar-les equivaldria a mutualitzar el registre, cosa que compromet una altra biblioteca: és preferible « Mateixa obra ».",
   "catalogacao.dedup.scanKindIsbn": "ISBN idèntic",
   "catalogacao.dedup.scanKindApprox": "Títol semblant",
-  "catalogacao.dedup.scanOpen": "Obre"
+  "catalogacao.dedup.scanOpen": "Obre",
+  "catalogacao.dedup.scanKindTitleYearPublisher": "Títol, any i editorial idèntics",
+  "catalogacao.dedup.scanKindTitleYear": "Títol i any idèntics"
 }

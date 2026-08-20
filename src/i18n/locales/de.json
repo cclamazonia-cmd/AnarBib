@@ -5797,5 +5797,7 @@
   "catalogacao.dedup.scanHelpCross": "Dasselbe Werk, von verschiedenen Bibliotheken getrennt katalogisiert. Ein Zusammenführen würde den Datensatz bündeln und damit eine andere Bibliothek einbeziehen: besser « Selbes Werk ».",
   "catalogacao.dedup.scanKindIsbn": "Identische ISBN",
   "catalogacao.dedup.scanKindApprox": "Ähnlicher Titel",
-  "catalogacao.dedup.scanOpen": "Öffnen"
+  "catalogacao.dedup.scanOpen": "Öffnen",
+  "catalogacao.dedup.scanKindTitleYearPublisher": "Titel, Jahr und Verlag identisch",
+  "catalogacao.dedup.scanKindTitleYear": "Titel und Jahr identisch"
 }

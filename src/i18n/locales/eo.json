@@ -5797,5 +5797,7 @@
   "catalogacao.dedup.scanHelpCross": "La sama verko katalogita aparte de malsamaj bibliotekoj. Kunfandi ilin signifus kunhavigi la registron, kio implikas alian bibliotekon: preferu « Sama verko ».",
   "catalogacao.dedup.scanKindIsbn": "Identa ISBN",
   "catalogacao.dedup.scanKindApprox": "Simila titolo",
-  "catalogacao.dedup.scanOpen": "Malfermi"
+  "catalogacao.dedup.scanOpen": "Malfermi",
+  "catalogacao.dedup.scanKindTitleYearPublisher": "Sama titolo, jaro kaj eldonejo",
+  "catalogacao.dedup.scanKindTitleYear": "Sama titolo kaj jaro"
 }

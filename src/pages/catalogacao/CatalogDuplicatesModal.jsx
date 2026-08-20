@@ -34,6 +34,17 @@ import { localizeError } from '@/lib/localizeError';
  * L'appel coûte ~4 s sur 2 700 notices (index GIN trigrammes). On charge donc
  * TOUT une fois, puis on filtre en mémoire : un seul temps d'attente.
  */
+// Libelle de la pastille selon le NIVEAU DE PREUVE renvoye par la RPC.
+// L'ordre d'affichage vient du serveur (order by rang_preuve) : la similarite de
+// titre seule est un mauvais signal — c'est la coincidence titre + annee +
+// editeur qui distingue un vrai doublon de deux editions differentes.
+const NIVEAU_CLE = {
+  isbn:                'catalogacao.dedup.scanKindIsbn',
+  titre_annee_editeur: 'catalogacao.dedup.scanKindTitleYearPublisher',
+  titre_annee:         'catalogacao.dedup.scanKindTitleYear',
+  titre_seul:          'catalogacao.dedup.scanKindApprox',
+};
+
 export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
   const { formatMessage: t } = useIntl();
   const [loading, setLoading] = useState(false);
@@ -144,8 +155,8 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
                   opacity: busy ? 0.5 : 1,
                 }}>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8, flexWrap: 'wrap' }}>
-                    <span className={`ab-pill ${r.match_kind === 'isbn' ? 'ab-pill--warn' : ''}`}>
-                      {t({ id: r.match_kind === 'isbn' ? 'catalogacao.dedup.scanKindIsbn' : 'catalogacao.dedup.scanKindApprox' })}
+                    <span className={`ab-pill ${(r.rang_preuve ?? 4) <= 2 ? 'ab-pill--warn' : ''}`}>
+                      {t({ id: NIVEAU_CLE[r.niveau_preuve] || 'catalogacao.dedup.scanKindApprox' })}
                     </span>
                     <span style={{ fontSize: '.8rem', color: 'var(--brand-muted, #999)' }}>
                       {Math.round((r.score || 0) * 100)}%

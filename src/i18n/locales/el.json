@@ -5797,5 +5797,7 @@
   "catalogacao.dedup.scanHelpCross": "Το ίδιο έργο καταλογογραφημένο χωριστά από διαφορετικές βιβλιοθήκες. Η συγχώνευση θα σήμαινε κοινή χρήση της εγγραφής: προτιμήστε « Ίδιο έργο ».",
   "catalogacao.dedup.scanKindIsbn": "Ταυτόσημο ISBN",
   "catalogacao.dedup.scanKindApprox": "Παρόμοιος τίτλος",
-  "catalogacao.dedup.scanOpen": "Άνοιγμα"
+  "catalogacao.dedup.scanOpen": "Άνοιγμα",
+  "catalogacao.dedup.scanKindTitleYearPublisher": "Ίδιος τίτλος, έτος και εκδότης",
+  "catalogacao.dedup.scanKindTitleYear": "Ίδιος τίτλος και έτος"
 }
