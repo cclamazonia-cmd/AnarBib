@@ -370,6 +370,136 @@ Deno.serve(async (req: Request) => {
     }
   }
 
+  // ─── Sondes STRUCTURELLES (cohérence interne) ────────────────────────
+  // Deux fonctions de contrôle existaient depuis le 17/08 et le 21/08 sans que
+  // RIEN ne les lise — ni cron, ni edge function, ni écran. Elles répondaient
+  // dans le vide. C'est la panne muette qu'elles étaient censées prévenir,
+  // reproduite sur elles-mêmes.
+  //
+  // Différence de nature avec les sondes ci-dessus : celles-ci n'observent pas
+  // un service extérieur mais la cohérence de la base. Elles sont donc
+  // DÉTERMINISTES — pas de hoquet réseau possible, un seul tour suffit à
+  // alerter, comme pour le témoin de sauvegarde.
+  //
+  // Chaque sonde porte son propre `kind` : un incident de notifications ne doit
+  // pas être tenu ouvert par un défaut de ressources numériques. Ces valeurs
+  // sont contraintes côté base (migration 20260821060000) : en ajouter une ici
+  // sans élargir la CHECK ferait échouer l'insertion en silence, donc partir une
+  // alerte à CHAQUE tour.
+  const sondesStructurelles: {
+    kind: string;
+    rpc: string;
+    sujetOuvert: string;
+    titreOuvert: string;
+    quoi: string;
+  }[] = [
+    {
+      kind: 'notifications',
+      rpc: 'fn_healthcheck_notifications',
+      sujetOuvert: 'AnarBib — un flux de notifications est cassé',
+      titreOuvert: 'Notifications : incohérence détectée',
+      quoi: 'les notifications',
+    },
+    {
+      kind: 'ressources_numeriques',
+      rpc: 'fn_healthcheck_digital_resources',
+      sujetOuvert: 'AnarBib — une ressource numérique est devenue illisible',
+      titreOuvert: 'Ressources numériques : incohérence détectée',
+      quoi: 'les ressources numériques',
+    },
+  ];
+
+  const actionsStructurelles: Record<string, string> = {};
+  const etatsStructurels: Record<string, boolean | null> = {};
+
+  for (const sonde of sondesStructurelles) {
+    let action = 'rien';
+    let etat: boolean | null = null;
+
+    // Une sonde qui ne répond pas (fonction absente, droits manquants) ne doit
+    // ni alerter ni clore : on ne sait rien, on le dit, et on passe.
+    const { data: bilan, error: errSonde } = await supabaseAdmin.rpc(sonde.rpc);
+    if (errSonde || !bilan || typeof bilan !== 'object') {
+      actionsStructurelles[sonde.kind] = errSonde
+        ? `sonde injoignable : ${errSonde.message}`
+        : 'sonde sans réponse exploitable';
+      etatsStructurels[sonde.kind] = null;
+      continue;
+    }
+
+    etat = (bilan as any).ok === true;
+
+    const { data: inc } = await supabaseAdmin
+      .from('service_health_incidents')
+      .select('id, opened_at, reason')
+      .eq('kind', sonde.kind)
+      .is('closed_at', null)
+      .order('opened_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (!etat && !inc) {
+      // Le détail exact vit dans le JSON de la sonde et évolue avec elle. On ne
+      // le recopie pas ici : on nomme les rubriques non vides, et on joint le
+      // bilan brut. Un message d'alerte qui paraphrase sa source finit toujours
+      // par mentir quand la source change.
+      const rubriques = Object.entries(bilan as Record<string, unknown>)
+        .filter(([k, v]) => k !== 'ok' && k !== 'genere_le' && Array.isArray(v) && v.length > 0)
+        .map(([k, v]) => `${k} (${(v as unknown[]).length})`);
+      const raison = rubriques.join(' ; ') || 'bilan non ok, sans rubrique renseignée';
+
+      const { data: cree, error: errInsert } = await supabaseAdmin
+        .from('service_health_incidents')
+        .insert({ kind: sonde.kind, reason: raison })
+        .select('id')
+        .single();
+
+      // Contrairement au bloc `backup` ci-dessus, on VERIFIE l'insertion. Si elle
+      // échoue (CHECK trop étroite, par exemple), n'alerter surtout pas : sans
+      // incident enregistré la condition resterait vraie et le courriel repartirait
+      // toutes les cinq minutes.
+      if (errInsert || !cree) {
+        actionsStructurelles[sonde.kind] =
+          `incident NON enregistré (${errInsert?.message ?? 'raison inconnue'}) — alerte retenue`;
+        etatsStructurels[sonde.kind] = etat;
+        continue;
+      }
+
+      const n = await alerter(
+        sonde.sujetOuvert,
+        sonde.titreOuvert,
+        `<p style="margin:0 0 10px">Le contrôle automatique de ${esc(sonde.quoi)} signale une incohérence. <strong>Ce n'est pas une panne de service :</strong> le site répond normalement. C'est un état interne qui ne fait pas ce qu'il annonce, et qui ne se verrait autrement pas.</p>
+         <p style="margin:0 0 10px">Rubriques concernées : ${esc(raison)}</p>
+         <p style="margin:0 0 10px">Bilan complet de la sonde :</p>
+         <pre style="margin:0 0 10px;padding:10px;background:#f4f4f4;border-radius:4px;white-space:pre-wrap;font-size:12px">${esc(
+           JSON.stringify(bilan, null, 2),
+         )}</pre>
+         <p style="margin:0">Un e-mail de rétablissement suivra dès que la sonde repassera au vert.</p>`,
+      );
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ notified_at: new Date().toISOString() })
+        .eq('id', cree.id);
+      action = `incident ${sonde.kind} ouvert, ${n} destinataire(s) alerté(s)`;
+    } else if (etat && inc) {
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ closed_at: new Date().toISOString() })
+        .eq('id', inc.id);
+      const depuis = new Date(inc.opened_at).toLocaleString('fr-FR');
+      const n = await alerter(
+        `AnarBib — ${sonde.quoi} : incohérence résolue`,
+        'Cohérence rétablie',
+        `<p style="margin:0 0 10px">Le contrôle automatique de ${esc(sonde.quoi)} est repassé au vert. L'incident ouvert le ${esc(depuis)} est clos.</p>
+         <p style="margin:0">Cause relevée à l'ouverture : ${esc(inc.reason)}</p>`,
+      );
+      action = `incident ${sonde.kind} clos, ${n} destinataire(s) prévenu(s)`;
+    }
+
+    actionsStructurelles[sonde.kind] = action;
+    etatsStructurels[sonde.kind] = etat;
+  }
+
   // Purge de l'historique (evite une table qui grossit sans fin).
   const limite = new Date(Date.now() - RETENTION_JOURS * 86400_000).toISOString();
   await supabaseAdmin.from('service_health_probes').delete().lt('checked_at', limite);
@@ -381,5 +511,7 @@ Deno.serve(async (req: Request) => {
     resultats,
     sauvegardes_ok: backupOk,
     action_sauvegardes: actionBackup,
+    sondes_structurelles: etatsStructurels,
+    actions_structurelles: actionsStructurelles,
   });
 });
