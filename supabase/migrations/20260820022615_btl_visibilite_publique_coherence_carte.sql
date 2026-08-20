@@ -1,0 +1,48 @@
+-- BTL redevient publique : alignement avec ce que la carte annonce deja.
+--
+-- INCOHERENCE CONSTATEE (2026-08-20). Un visiteur anonyme voyait la Biblioteca
+-- Terra Livre presentee comme MEMBRE du reseau sur la carte publique, mais
+-- introuvable dans la page Bibliotheques et absente des propositions
+-- d'inscription. Trois surfaces, trois sources distinctes :
+--
+--   * carte          -> api.cartography_public_v1  (opt-in du collectif,
+--                       statut_anarbib = 'membre')
+--   * bibliotheques  -> api.public_libraries       (visibility_level='public')
+--   * inscription    -> v_libraries_for_signup     (is_active ET
+--                       accepts_public_signup ET visibility_level='public')
+--
+-- BTL etait la SEULE des trois membres (avec BLMF et MLEG) a porter
+-- visibility_level = 'network'. Ce reglage datait du moment ou on la croyait
+-- sortante du reseau ; elle se reengage depuis le 17/08 (un·e de ses principaux
+-- bibliothecaires a demande un compte).
+--
+-- POURQUOI 'public' PLUTOT QUE DE MASQUER LA CARTE. Sa qualite de membre est
+-- DEJA publique, et par un opt-in du collectif lui-meme. La masquer ailleurs ne
+-- protege donc rien : ca rend seulement le site incoherent pour qui la voit
+-- membre sur la carte et introuvable dans l'annuaire. L'inverse — retirer son
+-- statut de membre sur la carte — reviendrait a delister publiquement un membre
+-- qui revient.
+--
+-- CE QUE CELA CHANGE : catalogue BTL visible aux visiteurs anonymes (il ne
+-- l'etait qu'aux comptes), contacts et horaires publics, presence dans
+-- Bibliotheques et dans la liste d'inscription (accepts_public_signup vaut deja
+-- true). Le catalogue public passe par la vue materialisee
+-- mv_books_catalog_list_v1, rafraichie par cron toutes les 15 min : l'effet n'y
+-- est donc pas instantane.
+--
+-- CE QUE CELA NE CHANGE PAS : l'exposition OAI.
+-- fn_oai_library_is_harvest_eligible accepte visibility_level IN
+-- ('public','network') — BTL etait donc deja moissonnable. C'etait la
+-- consequence la plus lourde a redouter, elle est nulle.
+--
+-- A SAVOIR POUR LA SUITE : `visibility_level` et `accepts_public_signup` sont
+-- DEUX reglages independants. « Visible mais fermee a l'inscription » s'obtient
+-- par visibility_level='public' + accepts_public_signup=false. Ce n'est pas le
+-- tout-ou-rien qu'on supposait.
+--
+-- Guarde et idempotent : sans la ligne (base de test, seed partiel), l'update
+-- ne touche rien.
+update public.libraries
+   set visibility_level = 'public'
+ where short_name = 'BTL'
+   and visibility_level is distinct from 'public';
