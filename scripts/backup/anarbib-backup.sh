@@ -1,5 +1,28 @@
 #!/usr/bin/env bash
 # ============================================================================
+# ⚠️  CE N'EST PAS LE SCRIPT QUI SAUVEGARDE AUJOURD'HUI.  (note du 20/08/2026)
+# ============================================================================
+# Ce fichier date du 17/06/2026 et décrit un modèle « pull » : un cron SUR LE
+# VPS qui vient tirer les données. Ce modèle n'a jamais été mis en service —
+# il n'y a pas de VPS.
+#
+# Ce qui tourne réellement est un modèle « push », depuis le poste de travail :
+#
+#     ~/anarbib-ops/anarbib-bg2.sh          (363 lignes, trois flux restic)
+#     ~/.config/systemd/user/anarbib-backup-{court,long,storage}.{service,timer}
+#
+# C'est lui que citent `deploy/README.md`, `RUNBOOK_restauration_BG2_2026-07-01`,
+# `REGISTRE_decisions.md` et deux specs. Le présent fichier, lui, n'est plus
+# référencé que par un runbook ARCHIVÉ (`operations/archive/`).
+#
+# Pourquoi ce bandeau plutôt qu'une suppression : le modèle « pull » redeviendra
+# pertinent le jour de la bascule sur un hôte, et le script est un point de
+# départ. Mais tant qu'il reste seul dans le dépôt à porter le nom
+# « sauvegarde », il fait croire que les sauvegardes tournent sur un VPS, en
+# mode pull, sans le poste de travail. Les trois affirmations sont fausses.
+# ============================================================================
+
+# ============================================================================
 # AnarBib — sauvegarde hors fournisseur (#BG2)
 # ----------------------------------------------------------------------------
 # Sauvegarde chiffrée et dédupliquée (restic) de :
