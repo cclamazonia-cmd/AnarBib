@@ -212,37 +212,48 @@ Deno.serve(async (req: Request) => {
   let action = 'rien';
 
   if (!tourOk && deuxMauvais && !incidentOuvert) {
-    const { data: inc } = await supabaseAdmin
+    const { data: inc, error: errIncService } = await supabaseAdmin
       .from('service_health_incidents')
       .insert({ kind: 'service', reason: raison || 'degradation' })
       .select('id')
       .single();
-    const estUnTest = charge?.force_fail === true;
-    const n = await alerter(
-      estUnTest
-        ? '[TEST] AnarBib — vérification de la chaîne d’alerte'
-        : 'AnarBib — le service public est dégradé',
-      estUnTest ? 'Ceci est un test de la chaîne d’alerte' : 'Le service public est dégradé',
-      (estUnTest
-        ? `<p style="margin:0 0 10px"><strong>Message de test.</strong> Le service fonctionne normalement ; cet envoi sert uniquement à vérifier que les alertes arrivent bien. Aucune action n'est requise.</p>`
-        : '') +
-      `<p style="margin:0 0 10px">La sonde automatique a relevé <strong>deux tours consécutifs en échec</strong> sur les points d'entrée publics.</p>
-       <p style="margin:0 0 10px">Détail du dernier tour :</p>
-       <ul style="margin:0 0 10px;padding-left:18px">${resultats
-         .map(
-           (r) =>
-             `<li>${esc(r.endpoint)} — ${r.ok ? 'ok' : '<strong>KO</strong>'} — ${esc(String(r.latency_ms))} ms${
-               r.error ? ` — ${esc(r.error)}` : ''
-             }</li>`,
-         )
-         .join('')}</ul>
-       <p style="margin:0">Un e-mail de rétablissement suivra dès que la sonde repassera au vert.</p>`,
-    );
-    await supabaseAdmin
-      .from('service_health_incidents')
-      .update({ notified_at: new Date().toISOString() })
-      .eq('id', inc?.id);
-    action = `incident ouvert, ${n} destinataire(s) alerté(s)`;
+    // Ne PAS alerter si l'incident n'a pas pu etre enregistre. Sans trace en
+    // base, la condition d'ouverture redeviendrait vraie au tour suivant et le
+    // courriel repartirait A CHAQUE TOUR — le mecanisme cense n'alerter qu'une
+    // fois par incident se retourne alors en boucle. Un systeme d'alerte qui
+    // peut inonder detruit sa propre credibilite : on filtre l'expediteur, et
+    // le jour ou l'alerte compte, personne ne la voit.
+    if (errIncService || !inc) {
+      action =
+        `incident service NON enregistre (${errIncService?.message ?? 'raison inconnue'}) — alerte retenue`;
+    } else {
+      const estUnTest = charge?.force_fail === true;
+      const n = await alerter(
+        estUnTest
+          ? '[TEST] AnarBib — vérification de la chaîne d’alerte'
+          : 'AnarBib — le service public est dégradé',
+        estUnTest ? 'Ceci est un test de la chaîne d’alerte' : 'Le service public est dégradé',
+        (estUnTest
+          ? `<p style="margin:0 0 10px"><strong>Message de test.</strong> Le service fonctionne normalement ; cet envoi sert uniquement à vérifier que les alertes arrivent bien. Aucune action n'est requise.</p>`
+          : '') +
+        `<p style="margin:0 0 10px">La sonde automatique a relevé <strong>deux tours consécutifs en échec</strong> sur les points d'entrée publics.</p>
+         <p style="margin:0 0 10px">Détail du dernier tour :</p>
+         <ul style="margin:0 0 10px;padding-left:18px">${resultats
+           .map(
+             (r) =>
+               `<li>${esc(r.endpoint)} — ${r.ok ? 'ok' : '<strong>KO</strong>'} — ${esc(String(r.latency_ms))} ms${
+                 r.error ? ` — ${esc(r.error)}` : ''
+               }</li>`,
+           )
+           .join('')}</ul>
+         <p style="margin:0">Un e-mail de rétablissement suivra dès que la sonde repassera au vert.</p>`,
+      );
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ notified_at: new Date().toISOString() })
+        .eq('id', inc.id);
+      action = `incident ouvert, ${n} destinataire(s) alerté(s)`;
+    }
   } else if (tourOk && incidentOuvert) {
     await supabaseAdmin
       .from('service_health_incidents')
@@ -293,48 +304,59 @@ Deno.serve(async (req: Request) => {
         muets.map((f) => f.raison ?? `${f.flow} muet depuis ${f.age_heures ?? '?'} h`).join(' ; ') ||
         'sauvegardes muettes';
       const interrompus = muets.filter((f) => f.interrompu);
-      const { data: inc } = await supabaseAdmin
+      const { data: inc, error: errIncBackup } = await supabaseAdmin
         .from('service_health_incidents')
         .insert({ kind: 'backup', reason: raisonBk })
         .select('id')
         .single();
-      const n = await alerter(
-        interrompus.length
-          ? 'AnarBib — une sauvegarde a commencé et ne s’est jamais terminée'
-          : 'AnarBib — les sauvegardes ne donnent plus signe de vie',
-        interrompus.length ? 'Un tir s’est arrêté en route' : 'Les sauvegardes sont muettes',
-        `<p style="margin:0 0 10px">${
+      // Ne PAS alerter si l'incident n'a pas pu etre enregistre. Sans trace en
+      // base, la condition d'ouverture redeviendrait vraie au tour suivant et le
+      // courriel repartirait A CHAQUE TOUR — le mecanisme cense n'alerter qu'une
+      // fois par incident se retourne alors en boucle. Un systeme d'alerte qui
+      // peut inonder detruit sa propre credibilite : on filtre l'expediteur, et
+      // le jour ou l'alerte compte, personne ne la voit.
+      if (errIncBackup || !inc) {
+        actionBackup =
+          `incident sauvegardes NON enregistre (${errIncBackup?.message ?? 'raison inconnue'}) — alerte retenue`;
+      } else {
+        const n = await alerter(
           interrompus.length
-            ? `<strong>Un tir a commencé et ne s'est jamais terminé.</strong> Ce n'est pas un silence : le script a démarré, signalé son départ, puis s'est arrêté en chemin — machine mise en veille, WSL éteint, ou processus tué. Le verrou laissé chez l'hébergeur sera nettoyé tout seul au prochain tir (<code>unlock_stale</code>).`
-            : `Un ou plusieurs flux de sauvegarde n'ont pas signalé de tir réussi dans le délai attendu. <strong>Ça ne veut pas dire qu'ils ont échoué : ça veut dire qu'ils n'ont rien dit.</strong> La cause la plus probable est un poste de travail resté éteint, ou une instance WSL qui n'a pas démarré.`
-        }</p>
-         <p style="margin:0 0 10px">État des trois flux :</p>
-         <ul style="margin:0 0 10px;padding-left:18px">${flux
-           .map(
-             (f) =>
-               `<li>${esc(f.flow)} — ${
-                 f.muet
-                   ? `<strong>${f.interrompu ? 'TIR INTERROMPU' : 'MUET'}</strong>`
-                   : 'ok'
-               } — ${
-                 // `age_heures` est l'âge du dernier témoin d'ARRIVÉE : l'afficher
-                 // pour un tir interrompu donnerait le mauvais nombre. La `raison`
-                 // porte déjà la durée depuis le DÉPART.
-                 f.interrompu
-                   ? esc(String(f.raison ?? 'tir commencé, jamais terminé'))
-                   : `dernier signal il y a ${esc(String(f.age_heures ?? '?'))} h (seuil ${esc(
-                       String(f.seuil_heures ?? '?'),
-                     )} h)`
-               }</li>`,
-           )
-           .join('')}</ul>
-         <p style="margin:0">Un e-mail de rétablissement suivra dès qu'un tir réussi sera signalé.</p>`,
-      );
-      await supabaseAdmin
-        .from('service_health_incidents')
-        .update({ notified_at: new Date().toISOString() })
-        .eq('id', inc?.id);
-      actionBackup = `incident sauvegardes ouvert, ${n} destinataire(s) alerté(s)`;
+            ? 'AnarBib — une sauvegarde a commencé et ne s’est jamais terminée'
+            : 'AnarBib — les sauvegardes ne donnent plus signe de vie',
+          interrompus.length ? 'Un tir s’est arrêté en route' : 'Les sauvegardes sont muettes',
+          `<p style="margin:0 0 10px">${
+            interrompus.length
+              ? `<strong>Un tir a commencé et ne s'est jamais terminé.</strong> Ce n'est pas un silence : le script a démarré, signalé son départ, puis s'est arrêté en chemin — machine mise en veille, WSL éteint, ou processus tué. Le verrou laissé chez l'hébergeur sera nettoyé tout seul au prochain tir (<code>unlock_stale</code>).`
+              : `Un ou plusieurs flux de sauvegarde n'ont pas signalé de tir réussi dans le délai attendu. <strong>Ça ne veut pas dire qu'ils ont échoué : ça veut dire qu'ils n'ont rien dit.</strong> La cause la plus probable est un poste de travail resté éteint, ou une instance WSL qui n'a pas démarré.`
+          }</p>
+           <p style="margin:0 0 10px">État des trois flux :</p>
+           <ul style="margin:0 0 10px;padding-left:18px">${flux
+             .map(
+               (f) =>
+                 `<li>${esc(f.flow)} — ${
+                   f.muet
+                     ? `<strong>${f.interrompu ? 'TIR INTERROMPU' : 'MUET'}</strong>`
+                     : 'ok'
+                 } — ${
+                   // `age_heures` est l'âge du dernier témoin d'ARRIVÉE : l'afficher
+                   // pour un tir interrompu donnerait le mauvais nombre. La `raison`
+                   // porte déjà la durée depuis le DÉPART.
+                   f.interrompu
+                     ? esc(String(f.raison ?? 'tir commencé, jamais terminé'))
+                     : `dernier signal il y a ${esc(String(f.age_heures ?? '?'))} h (seuil ${esc(
+                         String(f.seuil_heures ?? '?'),
+                       )} h)`
+                 }</li>`,
+             )
+             .join('')}</ul>
+           <p style="margin:0">Un e-mail de rétablissement suivra dès qu'un tir réussi sera signalé.</p>`,
+        );
+        await supabaseAdmin
+          .from('service_health_incidents')
+          .update({ notified_at: new Date().toISOString() })
+          .eq('id', inc.id);
+        actionBackup = `incident sauvegardes ouvert, ${n} destinataire(s) alerté(s)`;
+      }
     } else if (backupOk && incBackup) {
       await supabaseAdmin
         .from('service_health_incidents')
