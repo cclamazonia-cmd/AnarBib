@@ -2,6 +2,8 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
+import { useLibrary } from '@/contexts/LibraryContext';
+import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 
 // Champs cruciaux comparés (colonne nom → clé i18n EXISTANTE, zéro nouvelle clé).
 // Les noms de colonne correspondent aux retours de api.suggest_draft_duplicates
@@ -29,7 +31,14 @@ const norm = (v) => (v == null ? '' : String(v).trim().toLowerCase());
  *   • candidat brouillon → api.merge_book_drafts (enrichit ce brouillon, écarte le doublon).
  */
 export default function DuplicateCompareModal({ draftId, draftLabel, onClose, onEditItem, onMerged }) {
+  // Paquet DOUBLONS P4 (21/08/2026) : « Pas un doublon » écarte la paire pour tout
+  // le réseau et n'est plus ouvert qu'à la coordination. Sans ce garde-fou, le
+  // bouton resterait visible ici et échouerait en 42501 sous les doigts d'une
+  // bibliothécaire. Fusionner des BROUILLONS, en revanche, reste ouvert : le
+  // brouillon en double part à la corbeille, c'est réversible.
   const { formatMessage: t } = useIntl();
+  const { effectiveRole } = useLibrary();
+  const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const [src, setSrc] = useState(null);
   const [cands, setCands] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -118,6 +127,23 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
     }
   }
 
+  // Ce qui remplace « Pas un doublon » pour le reste du staff : transmettre le
+  // constat sans rien trancher. La coordination décidera depuis son balayage.
+  async function reportPair(cand) {
+    if (cand.source !== 'book' || !src?.published_book_id) return;
+    setMerging(true); setMergeErr('');
+    try {
+      const { error } = await supabase.rpc('report_duplicate_pair', {
+        p_a: Number(src.published_book_id), p_b: Number(cand.candidate_id), p_note: null,
+      });
+      if (error) throw error;
+    } catch (e) {
+      setMergeErr(localizeError(e, t));
+    } finally {
+      setMerging(false);
+    }
+  }
+
   // « Même œuvre » : regroupe le livre publié du brouillon-source et le candidat
   // publié comme éditions d'une même œuvre (non destructif). Cf. P4.
   async function groupAsEditions(cand) {
@@ -199,11 +225,19 @@ export default function DuplicateCompareModal({ draftId, draftLabel, onClose, on
                             {t({ id: c.source === 'book' ? 'catalogacao.dup.mergeInto' : 'catalogacao.dup.mergeDrafts' })}
                           </button>
                           {c.source === 'book' && src?.published_book_id && (
-                            <button type="button" className="ab-button ab-button--secondary ab-button--sm" disabled={merging}
-                              onClick={() => markNotDuplicate(c)} title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}
-                              style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}>
-                              {t({ id: 'catalogacao.dedup.notDuplicate' })}
-                            </button>
+                            arbitreDoublons ? (
+                              <button type="button" className="ab-button ab-button--secondary ab-button--sm" disabled={merging}
+                                onClick={() => markNotDuplicate(c)} title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}
+                                style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}>
+                                {t({ id: 'catalogacao.dedup.notDuplicate' })}
+                              </button>
+                            ) : (
+                              <button type="button" className="ab-button ab-button--secondary ab-button--sm" disabled={merging}
+                                onClick={() => reportPair(c)} title={t({ id: 'catalogacao.dedup.reportHint' })}
+                                style={{ alignSelf: 'flex-start', fontSize: '.62rem', padding: '1px 6px' }}>
+                                {t({ id: 'catalogacao.dedup.report' })}
+                              </button>
+                            )
                           )}
                           {c.source === 'book' && src?.published_book_id && (
                             <button type="button" className="ab-button ab-button--secondary ab-button--sm" disabled={merging}

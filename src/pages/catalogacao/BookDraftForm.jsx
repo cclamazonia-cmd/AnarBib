@@ -6,6 +6,7 @@ import AudioSegmentsBlock from './AudioSegmentsBlock';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
+import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
@@ -238,7 +239,10 @@ const EMPTY_FORM = {
 export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null, panelActive = true }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
-  const { isNetworkAdmin, libraryId } = useLibrary();
+  const { isNetworkAdmin, libraryId, effectiveRole } = useLibrary();
+  // Paquet DOUBLONS P4 (21/08/2026) : fusionner et ecarter sont reserves a la
+  // coordination. Le poste de catalogage garde « Meme oeuvre » et le signalement.
+  const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
 
   // Attribution réseau (admin réseau) : notice + exemplaires → bibliothèque cible
   const [catalogLibraries, setCatalogLibraries] = useState([]);
@@ -1304,6 +1308,24 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       if (error) throw error;
       setMsg({ text: t({ id: 'catalogacao.dedup.markedNotDuplicate' }), kind: 'ok' });
       await findBookDuplicates(); // rafraîchir : la paire écartée disparaît
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setBookDupBusy(null); }
+  }
+
+  // DOUBLONS P4 : signaler la paire à la coordination. C'est ce qui remplace,
+  // au poste de catalogage, les boutons qui détruisaient. Rien n'est modifié au
+  // catalogue ; la personne qui a le livre en main transmet ce qu'elle a vu.
+  async function reportDuplicatePair(dupId) {
+    const canonicalId = f('published_book_id');
+    if (!canonicalId) return;
+    setBookDupBusy(dupId);
+    try {
+      const { error } = await supabase.rpc('report_duplicate_pair', {
+        p_a: Number(canonicalId), p_b: Number(dupId), p_note: null,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.dedup.reported' }), kind: 'ok' });
     } catch (err) {
       setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
     } finally { setBookDupBusy(null); }
@@ -2966,15 +2988,25 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         title={t({ id: 'catalogacao.dedup.sameWorkHint' })}>
                         {t({ id: 'catalogacao.dedup.sameWork' })}
                       </button>
-                      <button type="button" className="ab-button ab-button--secondary ab-button--sm"
-                        onClick={() => markBooksNotDuplicate(d.book_id)} disabled={bookDupBusy != null}
-                        title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}>
-                        {t({ id: 'catalogacao.dedup.notDuplicate' })}
-                      </button>
-                      <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                        onClick={() => mergeBookDuplicateIntoCurrent(d.book_id, d.titulo)} disabled={bookDupBusy != null}>
-                        {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
-                      </button>
+                      {arbitreDoublons ? (
+                        <>
+                          <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                            onClick={() => markBooksNotDuplicate(d.book_id)} disabled={bookDupBusy != null}
+                            title={t({ id: 'catalogacao.dedup.notDuplicateHint' })}>
+                            {t({ id: 'catalogacao.dedup.notDuplicate' })}
+                          </button>
+                          <button type="button" className="ab-button ab-button--danger ab-button--sm"
+                            onClick={() => mergeBookDuplicateIntoCurrent(d.book_id, d.titulo)} disabled={bookDupBusy != null}>
+                            {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
+                          </button>
+                        </>
+                      ) : (
+                        <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                          onClick={() => reportDuplicatePair(d.book_id)} disabled={bookDupBusy != null}
+                          title={t({ id: 'catalogacao.dedup.reportHint' })}>
+                          {bookDupBusy === d.book_id ? '…' : t({ id: 'catalogacao.dedup.report' })}
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>

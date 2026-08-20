@@ -4,6 +4,8 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import Modal from '@/components/ui/Modal';
 import CatalogDuplicatesModal from './CatalogDuplicatesModal';
+import { useLibrary } from '@/contexts/LibraryContext';
+import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const MATERIAL_KEYS = {
@@ -17,6 +19,11 @@ const MATERIAL_KEYS = {
 
 export default function CatalogPanel({ onEdit, requestedView, requestNonce, onChanged }) {
   const { formatMessage: t } = useIntl();
+  // Paquet DOUBLONS P4 (21/08/2026) : la fusion d'autorités est réservée à la
+  // coordination. La liste des doublons probables, elle, reste visible : savoir
+  // qu'il y a un doublon n'a jamais rien cassé.
+  const { effectiveRole } = useLibrary();
+  const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const [view, setView] = useState('book'); // book | author | exemplar
   const [dedupOpen, setDedupOpen] = useState(false);
 
@@ -381,7 +388,7 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
                 onClick={() => retakeItem(it._type, it.id)}>
                 {t({ id: 'catalogacao.catalog.retake' })}
               </button>
-              {it._type === 'author' && (
+              {it._type === 'author' && arbitreDoublons && (
                 <button type="button" className="ab-button ab-button--secondary ab-button--sm"
                   onClick={() => openMerge(it)}>
                   {t({ id: 'catalogacao.catalog.merge' })}

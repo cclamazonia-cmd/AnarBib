@@ -27,3 +27,11 @@ tests/sql/reading_notes_lot5_work_per_book_tests.sql
 # Cohérence structurelle allowlist fn_enqueue_* ↔ CHECK des *_notification_events.
 # Purement catalogue système : ni fixture, ni donnée, ni Vault.
 tests/sql/notifications_event_types_coherence_tests.sql
+
+# Reversibilite de l ecart « pas un doublon » (paquet DOUBLONS P3).
+# Fixture autonome : ne depend d aucune donnee de demonstration.
+tests/sql/doublons_p3_reversibilite_tests.sql
+
+# Arbitrage destructeur reserve a la coordination + signalements (paquet DOUBLONS P4).
+# Inclut une fusion reellement executee : le corps de merge_book y est recopie.
+tests/sql/doublons_p4_arbitrage_coordination_tests.sql

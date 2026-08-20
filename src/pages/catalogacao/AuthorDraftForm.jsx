@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLibrary } from '@/contexts/LibraryContext';
+import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import PortraitCropper from '@/components/catalogacao/PortraitCropper';
 
 // ── Authority types ───────────────────────────────────────
@@ -69,6 +71,11 @@ function buildSortName(preferredName, authorityType) {
 
 export default function AuthorDraftForm({ mode, batches, editingId = null, onConsumed, onChanged }) {
   const { formatMessage: t, locale } = useIntl();
+  // Paquet DOUBLONS P4 (21/08/2026) : la fusion d'autorités est réservée à la
+  // coordination. La liste des doublons probables, elle, reste visible : savoir
+  // qu'il y a un doublon n'a jamais rien cassé.
+  const { effectiveRole } = useLibrary();
+  const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const { user } = useAuth();
   const [drafts, setDrafts] = useState([]);
   const [draftsLoading, setDraftsLoading] = useState(false);
@@ -1045,10 +1052,12 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                       <span className={`cat-pill ${d.match_kind === 'exact' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                         {t({ id: d.match_kind === 'exact' ? 'catalogacao.link.exact' : 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
                       </span>
-                      <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                        onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}>
-                        {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
-                      </button>
+                      {arbitreDoublons && (
+                        <button type="button" className="ab-button ab-button--danger ab-button--sm"
+                          onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}>
+                          {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.merge' })}
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
