@@ -104,10 +104,17 @@ précisément pour ça qu'on la garde jusqu'à validation.
 **Ils ne montent jamais sur le serveur.** Ils restent chez toi ou à la
 bibliothèque, sur un disque externe, le temps de valider la livraison.
 
-Ensuite, **chaque bibliothèque tranche** : archivage hors ligne, ou effacement
-après validation. Les deux sont légitimes ; les garder coûte de la place, chez
-elle et à sa charge. Demande à la tienne ce qu'elle a décidé — et si personne ne
-l'a décidé, c'est le moment de poser la question.
+**Ensuite, on les efface.** C'est la règle du réseau : pas d'archivage
+systématique des captures.
+
+> **Ce que ça change pour toi.** Tant que la capture existe, une livraison
+> ratée se refait en dix minutes. Une fois effacée, il faut ressortir l'ouvrage
+> du rayon et le re-numériser page à page. **Les cinq contrôles ci-dessus sont
+> donc ta dernière chance — fais-les avant d'effacer, pas après.**
+
+**Une exception, à toi de la reconnaître** : un ouvrage rare, fragile ou unique,
+qu'on ne pourrait pas re-numériser sans risque pour l'objet. Là, garde la
+capture. La règle vise le tout-venant, pas l'irremplaçable.
 
 ---
 

@@ -106,12 +106,40 @@ C'est la question qui décide du coût réel.
   le dimensionnement de l'hébergement.
 - **Les images de capture** (les gris à 300 dpi) **ne montent pas sur le
   serveur.** Elles restent chez la bibliothèque, sur un disque externe, le temps
-  de valider la livraison — puis au choix : archivées hors ligne, ou effacées.
+  de valider la livraison — **puis elles sont effacées.**
 
 Les conserver en ligne multiplierait le coût par six sans bénéfice pour qui
 consulte. Une bibliothèque qui tient à garder ses fichiers de capture le fait
 chez elle, à sa charge : c'est un choix légitime, mais qui n'engage pas
 l'hébergement du réseau.
+
+### La règle : effacement après validation (arbitrée le 20/08)
+
+Entre l'archivage hors ligne systématique et l'effacement, le réseau tranche
+pour **l'effacement après validation**. Un disque d'archives que personne
+n'inventorie, ne vérifie et ne restaure jamais n'est pas une sauvegarde : c'est
+un placard, avec le coût et la fausse sécurité en prime.
+
+**Deux conséquences, à assumer plutôt qu'à redécouvrir :**
+
+1. **Les cinq contrôles du §7 deviennent la dernière chance.** Tant que la
+   capture existe, une livraison ratée se refait en dix minutes. Une fois
+   effacée, elle se refait en ressortant l'ouvrage du rayon et en le
+   re-numérisant page à page. Le contrôle n'est plus une formalité de fin : il
+   est le moment où l'on décide, et il vient **avant** l'effacement.
+
+2. **On renonce à re-dériver plus tard.** Si dans trois ans un meilleur outil
+   apparaît, ou si le profil change, on ne pourra pas régénérer de meilleurs
+   PDF depuis les captures : il faudra re-scanner. C'est le prix de la règle,
+   et il est accepté en connaissance de cause — le corpus visé est de l'ordre
+   du millier d'ouvrages, pas du million, et la valeur est dans le fait que le
+   document soit *en ligne et cherchable*, pas dans la perfection de son
+   seuillage.
+
+**Cas particulier à ne pas confondre.** Un ouvrage rare, fragile ou unique dont
+la re-numérisation serait difficile ou risquée pour l'objet : là, la capture se
+garde. La règle vise le tout-venant, pas l'irremplaçable — et c'est à la
+bibliothèque de reconnaître ce cas, il ne s'automatise pas.
 
 ---
 
@@ -234,6 +262,8 @@ trois à cinq ans.**
       laissée **en réservé** tant que l'outil n'est pas choisi : la fiche
       renvoie à la bibliothèque plutôt que de recommander une commande que
       personne n'a éprouvée.
-- [ ] **Trancher le sort des captures** : archivage hors ligne systématique, ou
-      effacement après validation ? La question appartient à chaque
-      bibliothèque, mais la réponse doit être écrite quelque part.
+- [x] **Trancher le sort des captures.** ✅ Arbitré le 20/08 :
+      **effacement après validation**, comme règle de réseau. Rédigé au §4,
+      avec ses deux conséquences (les cinq contrôles deviennent la dernière
+      chance ; on renonce à re-dériver plus tard) et le cas particulier de
+      l'ouvrage rare, dont la capture se garde.

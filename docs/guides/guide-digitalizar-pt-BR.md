@@ -104,10 +104,18 @@ que a gente guarda ela.
 **Eles nunca sobem para o servidor.** Ficam com você ou na biblioteca, num disco
 externo, o tempo de validar a entrega.
 
-Depois, **cada biblioteca decide**: arquivamento off-line, ou apagar após a
-validação. As duas coisas são legítimas; guardar custa espaço, na casa dela e às
-custas dela. Pergunte à sua o que foi decidido — e se ninguém decidiu, é a hora
-de levantar a questão.
+**Depois, a gente apaga.** É a regra da rede: sem arquivamento sistemático das
+capturas.
+
+> **O que isso muda para você.** Enquanto a captura existe, uma entrega
+> malfeita se refaz em dez minutos. Depois de apagada, é preciso tirar a obra da
+> estante e digitalizar tudo de novo, página por página. **As cinco
+> conferências acima são, portanto, a sua última chance — faça antes de apagar,
+> não depois.**
+
+**Uma exceção, que cabe a você reconhecer**: uma obra rara, frágil ou única, que
+não daria para redigitalizar sem risco para o objeto. Nesse caso, guarde a
+captura. A regra vale para o comum, não para o insubstituível.
 
 ---
 
