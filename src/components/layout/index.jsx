@@ -77,8 +77,12 @@ export function Topbar() {
   return (
     <nav className="ab-topbar">
       <Link to="/" className="ab-topbar__brand">
+        {/* Logo auto-heberge (19/08/2026). Il etait hotlinke sur un WordPress
+            externe (cclamazonia.noblogs.org), ce qui exposait l'IP de chaque
+            visiteur a un tiers et faisait dependre le bandeau d'un site que
+            nous ne maitrisons pas. Le fichier vit desormais dans public/img/. */}
         <img
-          src="https://cclamazonia.noblogs.org/files/2026/03/AnarBib_logo.png"
+          src="/img/logo-anarbib.png"
           alt="AnarBib"
           className="ab-topbar__logo"
           data-brand-logo

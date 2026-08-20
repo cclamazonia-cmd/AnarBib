@@ -13,7 +13,8 @@ import PhoneInput, { isValidPhoneNumber } from '@/components/forms/PhoneInput';
 import { hasStatesList, getCountryMetadata, getStateName } from '@/components/forms/countryData';
 import AltchaWidget from '@/components/ui/AltchaWidget';
 
-const ANARBIB_LOGO = 'https://cclamazonia.noblogs.org/files/2026/03/AnarBib_logo.png';
+// Logo auto-heberge (19/08/2026), auparavant hotlinke sur un WordPress externe.
+const ANARBIB_LOGO = '/img/logo-anarbib.png';
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
 
 // Galerie publique des bibliothèques, hébergée sur le site de présentation
@@ -233,7 +234,11 @@ export default function CriarContaPage() {
         orphan_library_name_mentioned: signupIntent === 'reader_orphan'
           ? form.orphan_library_name.trim()
           : '',
-        anarbib_logo_url: ANARBIB_LOGO,
+        // `anarbib_logo_url` retire le 19/08/2026 : register/index.ts ne lit PAS
+        // ce champ (il impose MAIL_BRAND.anarbibLogoUrl, l'URL Storage qu'il
+        // inline en data URI). Le champ etait donc mort, et depuis que
+        // ANARBIB_LOGO est un chemin relatif il serait en plus inexploitable
+        // dans un mail. Le logo des mails se change dans themes/default/.
         preferred_login_identifier: 'public_id',
         // Locale du navigateur (paquet 25.4) : permet au mail de bienvenue d'arriver
         // dans la langue actuellement affichée à l'usager. Backend register/index.ts

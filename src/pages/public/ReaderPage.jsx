@@ -533,7 +533,7 @@ export default function ReaderPage() {
       <nav className="ab-reader-nav">
         <div className="ab-reader-nav__left">
           <Link to="/" className="ab-reader-nav__logo">
-            <img src="https://cclamazonia.noblogs.org/files/2026/03/AnarBib_logo.png" alt="AnarBib" />
+            <img src="/img/logo-anarbib.png" alt="AnarBib" />
           </Link>
           <div className="ab-reader-nav__title">
             <span className="ab-reader-nav__heading">{t({id:'reader.brand'})}</span>
