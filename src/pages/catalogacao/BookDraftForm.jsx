@@ -235,7 +235,7 @@ const EMPTY_FORM = {
 // BookDraftForm
 // ═══════════════════════════════════════════════════════════
 
-export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null }) {
+export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, onOpenBook, onAttachToBook, editingId = null, onConsumed, onNavigateTab, onEditExemplar, prefillRecord = null, prefillFile = null, panelActive = true }) {
   const { formatMessage: t } = useIntl();
   const { user } = useAuth();
   const { isNetworkAdmin, libraryId } = useLibrary();
@@ -2403,8 +2403,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
           Remplace le confirm() natif : plus visible pour un·e catalogueur·euse
           débutant·e. Bouton par défaut = revenir corriger ; « Enregistrer quand
           même » force la sauvegarde. */}
+      {/* Meme garde `panelActive` que la modale de creation ci-dessous : si on
+          change d'onglet alors que cet avertissement est ouvert, il devient
+          invisible (panneau en display:none) tout en gardant le verrou de
+          defilement. Le fermer ici relache le verrou ; l'etat dupModal est
+          conserve, l'avertissement reapparait au retour sur l'onglet. */}
       <Modal
-        isOpen={!!dupModal}
+        isOpen={panelActive && !!dupModal}
         onClose={() => setDupModal(null)}
         title={t({ id: 'catalogacao.presave.dupModalTitle' })}
         size="small"
@@ -2445,8 +2450,17 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       <form onSubmit={handleSave}>
 
         {/* ── Pop-up création : œuvre nouvelle vs nouvelle édition d'une œuvre existante ── */}
+        {/* `panelActive` est INDISPENSABLE ici. Les 11 panneaux d'onglets de la
+            page de catalogage restent MONTES en permanence : seul le CSS les
+            masque (.cat-panel { display: none }). Sans ce garde, cette modale
+            s'ouvrait des l'arrivee sur la page — sur un brouillon vierge,
+            creationChoice vaut null — et restait ouverte quel que soit l'onglet
+            consulte. Son voile etant a l'interieur d'un panneau en display:none,
+            elle etait INVISIBLE et impossible a fermer, tout en gardant le
+            verrou de defilement du body : plus d'ascenseur sur toute la page,
+            sans aucune modale a l'ecran. Constate le 19/08/2026. */}
         <Modal
-          isOpen={creationChoice === null && !f('id') && !f('published_book_id') && !editingId && !prefillRecord}
+          isOpen={panelActive && creationChoice === null && !f('id') && !f('published_book_id') && !editingId && !prefillRecord}
           onClose={() => setCreationChoice('work')}
           title={t({ id: 'catalogacao.create.title' })}
           size="medium"
