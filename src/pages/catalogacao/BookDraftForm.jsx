@@ -1623,7 +1623,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
     id: '', resource_type: 'pdf_publico', usage_type: 'leitura_online',
     access_scope: 'publico', storage_bucket: '', storage_path: '',
     mime_type: 'application/pdf', language_code: '', source_name: '',
-    source_url: '', attribution_text: '', rights_status: '',
+    source_url: '', attribution_text: '', rights_status: '', rights_justification: '',
     is_primary: false, bibliographic_match_validated: false,
     label: '', notes: '',
   };
@@ -1661,6 +1661,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       source_url: resource.source_url || '',
       attribution_text: resource.attribution_text || '',
       rights_status: resource.rights_status || '',
+      rights_justification: resource.rights_justification || '',
       is_primary: !!resource.is_primary,
       bibliographic_match_validated: !!resource.bibliographic_match_validated,
       label: resource.label || '',
@@ -1698,6 +1699,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         source_url: digitalForm.source_url || null,
         attribution_text: digitalForm.attribution_text || null,
         rights_status: digitalForm.rights_status || null,
+        rights_justification: digitalForm.rights_justification || null,
         is_primary: digitalForm.is_primary,
         bibliographic_match_validated: digitalForm.bibliographic_match_validated,
         label: digitalForm.label || digitalForm.source_name || 'Recurso digital',
@@ -3185,8 +3187,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     </div>
                     <div className="cat-field">
                       <label>{t({ id: 'catalogacao.digital.rightsStatus' })}</label>
-                      <input type="text" value={digitalForm.rights_status} onChange={e => setDf('rights_status', e.target.value)}
-                        placeholder={t({ id: 'catalogacao.digital.rightsStatus.ph' })} style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
+                      <select value={digitalForm.rights_status || ''} onChange={e => setDf('rights_status', e.target.value)}
+                        style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }}>
+                        <option value="">{t({ id: 'catalogacao.digital.rights.unset' })}</option>
+                        <option value="dominio_publico">{t({ id: 'catalogacao.digital.rights.dominio_publico' })}</option>
+                        <option value="cessao_autoral">{t({ id: 'catalogacao.digital.rights.cessao_autoral' })}</option>
+                        <option value="licenca_livre">{t({ id: 'catalogacao.digital.rights.licenca_livre' })}</option>
+                        <option value="sob_direitos">{t({ id: 'catalogacao.digital.rights.sob_direitos' })}</option>
+                      </select>
+                    </div>
+                    <div className="cat-field" style={{ gridColumn: 'span 2' }}>
+                      <label>{t({ id: 'catalogacao.digital.rightsJustification' })}</label>
+                      <input type="text" value={digitalForm.rights_justification || ''} onChange={e => setDf('rights_justification', e.target.value)}
+                        placeholder={t({ id: 'catalogacao.digital.rightsJustification.ph' })} style={{ width: '100%', padding: '7px 10px', borderRadius: 6, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem' }} />
                     </div>
                     <div className="cat-field">
                       <label>{t({ id: 'catalogacao.form.language' })}</label>
@@ -3214,8 +3227,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                       </label>
                       <label style={{ display: 'flex', gap: 5, alignItems: 'center', fontSize: '.82rem', cursor: 'pointer' }}>
                         <input type="checkbox"
-                          checked={digitalForm.rights_status === 'livre_de_direitos' && digitalForm.access_scope === 'publico'}
-                          onChange={e => { if (e.target.checked) { setDf('rights_status', 'livre_de_direitos'); setDf('access_scope', 'publico'); } else { setDf('rights_status', ''); } }} />
+                          checked={digitalForm.rights_status === 'dominio_publico' && digitalForm.access_scope === 'publico'}
+                          onChange={e => { if (e.target.checked) { setDf('rights_status', 'dominio_publico'); setDf('access_scope', 'publico'); } else { setDf('rights_status', ''); } }} />
                         {t({ id: 'catalogacao.digital.freeRights' })}
                       </label>
                     </div>
