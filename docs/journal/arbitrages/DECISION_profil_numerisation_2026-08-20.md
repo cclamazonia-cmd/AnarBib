@@ -235,20 +235,50 @@ précisément pour ça qu'on la garde jusqu'à validation.
 
 ## 8. Ce que ça pèse, et ce qu'on a annoncé
 
+> **Rechiffré le 2026-08-20 sous la troisième voie du §1.** Le calcul
+> précédent supposait que seul le domaine public recevait une intégrale. Ce
+> n'est plus le cas. Conclusion en une ligne : **le chiffre annoncé à Herbes
+> Folles tient, c'est le plafond qui disparaît.**
+
 | Poste | Volume |
 |---|---|
-| Numérisation du domaine public (900 à 2250 ouvrages) | **11 à 27 Go** |
-| Couvertures de tout le reste du fonds | ~2 Go |
+| Fonds éligible à l'intégrale (~9000 ouvrages, **tous détenus**) | **72 à 135 Go** |
 | Base et fichiers actuels | 450 Mo |
-| **Plafond, marge comprise** | **~30 Go** |
+| **Plafond à terme** | **~75 à 135 Go** |
 
-**La pente** : elle est bornée par la vitesse de numérisation humaine, pas par
-la taille des fonds. Une personne assidue traite un ouvrage par jour ouvré, soit
-**~3 Go par an**. Trois bibliothèques équipées, une dizaine de Go par an. Trois
-à cinq ans pour atteindre le plafond.
+**Pourquoi le plafond est multiplié par quatre.** Mesure du 2026-08-20 sur le
+catalogue réel : **2 674 ouvrages catalogués, dont 2 674 détenus par une
+bibliothèque — zéro orphelin.** BTL 2187, MLEG 269, BLMF 248, CIRA Marseille
+pas encore versée. « Sous droits, non détenu » est donc une catégorie **vide**
+en pratique : l'éligibilité à la numérisation intégrale passe du seul domaine
+public (10 à 25 %) à la totalité du fonds. Ce n'est plus le droit qui borne le
+volume, c'est le disque.
+
+**La pente, elle, ne change pas.** Elle est bornée par la vitesse de
+numérisation humaine, pas par le nombre d'ouvrages éligibles. Une personne
+assidue traite un ouvrage par jour ouvré — ~250 par an, soit **2 à 4 Go par
+an**. Trois bibliothèques équipées : une dizaine de Go par an. Le
+dimensionnement à trois-cinq ans est donc **inchangé**, parce qu'il n'a jamais
+dépendu de l'éligibilité.
+
+⚠️ **Ce qui disparaît, c'est le palier.** Avant, la croissance s'arrêtait
+d'elle-même : le domaine public épuisé, il ne restait que des couvertures. Le
+plafond de ~30 Go était un point d'arrivée. Désormais il n'y en a plus dans
+l'horizon considéré — à une dizaine de Go par an, cinq ans mènent à ~50 Go,
+soit **moins de la moitié du plafond**. L'hébergement doit donc être choisi
+pour pouvoir *continuer à croître* après cinq ans, non pour atteindre un
+maximum connu. C'est un critère de choix, pas un chiffre à annoncer.
+
+**Un second goulot, en amont.** Le catalogue lui-même n'est rempli qu'au tiers
+(2 674 sur ~9000 estimés). Ce qui n'est pas catalogué ne peut pas être
+numérisé : la saisie borne la numérisation avant que le scanner ne borne quoi
+que ce soit.
 
 Annoncé à Herbes Folles le 20/08 : **20 Go pour démarrer, jusqu'à 50 Go sur
-trois à cinq ans.**
+trois à cinq ans.** ✅ **Ce chiffre reste juste** — il décrit une trajectoire
+contrainte par la main-d'œuvre, que la troisième voie ne modifie pas. Il ne
+faut donc rien retirer de ce qui a été dit ; il faut seulement ne plus le
+présenter comme un *plafond*.
 
 ---
 
@@ -308,10 +338,14 @@ trois à cinq ans.**
       chance ; on renonce à re-dériver plus tard) et le cas particulier de
       l'ouvrage rare, dont la capture se garde.
 
-- [ ] **Rechiffrer le §8 sous la troisième voie.** Le volume annoncé suppose
-      « couverture seule » pour tout ce qui est sous droits. La décision du
-      20/08 lève cette borne pour les ouvrages détenus : le §8 annonce donc un
-      chiffre périmé, et c'est lui qui sert à l'appel Herbes Folles.
+- [x] **Rechiffrer le §8 sous la troisième voie.** ✅ Fait le 20/08.
+      Résultat contraire à la crainte initiale : **le chiffre annoncé à Herbes
+      Folles n'est pas périmé.** Il décrit une trajectoire bornée par la vitesse
+      de numérisation humaine, que la troisième voie ne touche pas. Ce qui
+      change est le *plafond* (de ~30 Go à ~75-135 Go) et, surtout, sa
+      disparition comme point d'arrivée : l'hébergement doit être choisi pour
+      croître au-delà de cinq ans, pas pour atteindre un maximum. Mesure à
+      l'appui : 2 674 ouvrages catalogués, **tous détenus**, zéro orphelin.
 - [ ] **Poser le garde-fou « restreint sans détenteur ».** La lisibilité d'une
       ressource restreinte dépend maintenant de `book_holdings`. Retirer le
       dernier exemplaire d'un livre rend donc son PDF **illisible par tout le
