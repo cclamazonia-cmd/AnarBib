@@ -3,7 +3,9 @@
 **Date** : 2026-08-20
 **Auteur** : Xavier (session avec Claude)
 **Session** : Dédoublonnage & arbitrage
-**Commits** : `99d107e5d` (P3), `127a5801c` (P4), + P5 vocabulaire — **non poussés** au moment de l'écriture
+**Commits** : `99d107e5d` (P3) et `127a5801c` (P4), poussés et appliqués ; `75401486a` (P5
+vocabulaire) et `8060189f6` (ce journal), poussés ; `b61831b85` et `bea790d02` (lot 3),
+**non poussés** au moment de l'écriture
 **Migrations** : `20260821020001_pas_un_doublon_reversible.sql`, `20260821020002_arbitrage_doublons_reserve_coordination.sql`
 **Suites CI** : `tests/sql/doublons_p3_reversibilite_tests.sql` (7), `tests/sql/doublons_p4_arbitrage_coordination_tests.sql` (8)
 
@@ -69,6 +71,33 @@ ouvert, `merge_book_drafts(survivant = ouvert)` tue le candidat. Une confirmatio
 unique servait les deux : elle mentait une fois sur deux. Deux messages
 désormais.
 
+### Paquet P6 — l'aperçu de fusion, puis l'assistant (lot 3)
+
+`preview_merge_book` répond en lecture seule à la question que la confirmation
+ne posait pas : *qu'est-ce qu'on perd ?* Elle sépare la **perte sèche** (le
+doublon porte une valeur, la canonique n'a rien — l'information n'existera plus
+nulle part) de la simple **divergence** (les deux portent une valeur, celle du
+doublon disparaît). La comparaison est générique : `books` porte plus de cent
+colonnes et en gagne à chaque type de matériel, une énumération figée serait
+fausse au premier ajout — et fausse en silence.
+
+L'assistant (`DedupAssistantPanel`, onglet « Doublons » réservé à la
+coordination) pose une question à la fois. Le temps 2 montre année, éditeur et
+ISBN côte à côte et en gros : c'est là que sort la quasi-totalité des paires,
+sur « Même œuvre », sans rien détruire. Le temps 3 affiche l'aperçu et exige de
+saisir la référence de la fiche supprimée — la lire oblige à regarder *laquelle
+des deux meurt*.
+
+Trois contraintes tenues : panneau et jamais modale ; chargement paresseux via
+`isActive` (sinon les ~4 s du balayage seraient payées par toute personne qui
+catalogue) ; éditeur et ISBN lus dans `books` plutôt que d'élargir la signature
+de `suggest_catalog_duplicates`, dont le balayage global dépend.
+
+**Panneau vérifié en navigateur par la coordination le 20/08/2026.** Le message
+du commit `bea790d02`, écrit avant cette vérification, porte encore la mention
+« non vérifié » : c'est ce journal qui fait foi. L'historique n'a pas été
+réécrit — d'autres sessions avaient déjà commité par-dessus.
+
 ## Doctrine établie
 
 > **Découper par verbe, pas par personne.** *Signaler* (tout le staff, coût
@@ -122,12 +151,11 @@ désormais.
 
 ## Reste à faire
 
-- **Lot 3** — assistant en trois temps (œuvre → document → exemplaires), en
-  **onglet** de `CatalogacaoPage`, jamais en modale. Réutiliser
-  `suggest_catalog_duplicates` tel quel : un scoring réimplémenté ferait diverger
-  les deux vues. Pièce manquante à créer : un **aperçu de fusion** en lecture
-  seule, disant ce qui sera détruit et quels exemplaires migrent — l'interface ne
-  montre aujourd'hui jamais ce que la fusion fait aux exemplaires ni aux tombos.
+- **Le balayage global et l'assistant coexistent.** Le premier reste la vue
+  d'ensemble (signalements, paires écartées) ; le second est le chemin de
+  décision. À surveiller : si l'usage montre que personne n'ouvre plus le
+  balayage pour arbitrer, ses boutons destructeurs pourront être retirés au
+  profit du seul assistant.
 - **Autorités** : pas d'équivalent « Signaler » (pas de file pour les autorités).
   Pour un non-arbitre, la liste des doublons probables reste visible sans bouton.
 
