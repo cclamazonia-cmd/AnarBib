@@ -5884,5 +5884,12 @@
   "atelier.revue.lot.titres": "Hoofdlettergebruik van de titels",
   "atelier.revue.lot.titres.hint": "CONV-3 · de functie verwijdert een artefact, ze beslist niet",
   "atelier.revue.entity.book": "boek",
-  "atelier.revue.entity.author": "autoriteit"
+  "atelier.revue.entity.author": "autoriteit",
+  "atelier.revue.filter.label": "Tonen",
+  "atelier.revue.filter.pending": "Te bekijken",
+  "atelier.revue.filter.decided": "Besloten, nog niet toegepast",
+  "atelier.revue.filter.all": "Alle",
+  "atelier.revue.stale": "Het record is sinds dit voorstel gewijzigd — wat onder „Huidig” staat, bestaat niet meer. Aanvaarden zou een eerdere correctie ongedaan maken: verwerp deze regel.",
+  "catalogacao.revue.title": "Controlelijst — titels",
+  "catalogacao.revue.intro": "Elke regel is een voorstel voor titelschrijfwijze, nooit een reeds genomen besluit. Het hulpmiddel verwijdert een importartefact; het weet niet of een woord een eigennaam is. Hier wordt niets in de catalogus geschreven: de oordelen worden later toegepast, via een migratie."
 }

@@ -5884,5 +5884,12 @@
   "atelier.revue.lot.titres": "Title case",
   "atelier.revue.lot.titres.hint": "CONV-3 · the function removes an artefact, it does not decide",
   "atelier.revue.entity.book": "book",
-  "atelier.revue.entity.author": "authority"
+  "atelier.revue.entity.author": "authority",
+  "atelier.revue.filter.label": "Show",
+  "atelier.revue.filter.pending": "To review",
+  "atelier.revue.filter.decided": "Decided, not yet applied",
+  "atelier.revue.filter.all": "All",
+  "atelier.revue.stale": "The record has changed since this proposal — what appears under “Current” no longer exists. Accepting would undo an earlier correction: discard this line.",
+  "catalogacao.revue.title": "Review queue — titles",
+  "catalogacao.revue.intro": "Each line is a proposed title casing, never a decision already made. The tool removes an import artefact; it does not know whether a word is a proper noun. Nothing is written to the catalogue here: verdicts are applied later, by migration."
 }

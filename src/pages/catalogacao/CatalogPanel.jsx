@@ -1,5 +1,6 @@
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import ConvRevuePanel from '@/components/atelier/ConvRevuePanel';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -321,11 +322,12 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
           style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap', flexShrink: 0 }}>
           {t({ id: 'catalogacao.dedup.find' })}
         </button>
-        {/* File de verification des conventions (REGISTRE §37). L'ecran vit dans
-            /atelier-autoridades, mais le SEUL lien qui y menait etait sur la conta
-            « contributeur·rice pur·e » — un compte SANS bibliotheque, donc jamais
-            staff, donc a qui les RPC repondent « acesso reservado à equipe ».
-            Personne de ceux qui doivent l'utiliser ne pouvait l'atteindre. */}
+        {/* Les lots d'AUTORITES restent a l'Atelier — c'est la que se decide ce
+            qui engage le corpus partage du reseau. Le lien y mene, parce que le
+            SEUL qui existait etait sur la conta « contributeur·rice pur·e » : un
+            compte SANS bibliotheque, donc jamais staff, donc a qui les RPC
+            repondent « acesso reservado à equipe ». Personne de ceux qui doivent
+            l'utiliser ne pouvait l'atteindre. */}
         <Link to="/atelier-autoridades" style={{ textDecoration: 'none', flexShrink: 0 }}>
           <button type="button" className="ab-button ab-button--secondary"
             style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap' }}>
@@ -335,6 +337,18 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       </div>
 
       {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
+
+      {/* File de verification des TITRES (CONV-O5, tranche le 21/08). Un titre
+          appartient a la bibliotheque qui l'a catalogue ; il n'engage pas le
+          corpus partage du reseau et ne releve pas du consentement collectif.
+          Sa place est donc ici, aupres des notices, et non a l'Atelier des
+          autorites — dont le texte annonce « le corpus partage d'autorites ». */}
+      {view === 'book' && (
+        <ConvRevuePanel
+          lots={['titre_casse']}
+          titleKey="catalogacao.revue.title"
+          introKey="catalogacao.revue.intro" />
+      )}
 
       {/* ── Sub-tabs ─────────────────────────────────── */}
       <div style={{ display: 'flex', gap: 0, borderBottom: '2px solid rgba(255,255,255,.08)', marginBottom: 14 }}>

@@ -5884,5 +5884,12 @@
   "atelier.revue.lot.titres": "Caixa dos títulos",
   "atelier.revue.lot.titres.hint": "CONV-3 · a função retira um artefato, não decide",
   "atelier.revue.entity.book": "livro",
-  "atelier.revue.entity.author": "autoridade"
+  "atelier.revue.entity.author": "autoridade",
+  "atelier.revue.filter.label": "Mostrar",
+  "atelier.revue.filter.pending": "A revisar",
+  "atelier.revue.filter.decided": "Decididas, ainda não aplicadas",
+  "atelier.revue.filter.all": "Todas",
+  "atelier.revue.stale": "A ficha mudou desde esta proposta — o que está em « Atual » já não existe. Aceitar desfaria uma correção anterior : descarte esta linha.",
+  "catalogacao.revue.title": "Fila de verificação — títulos",
+  "catalogacao.revue.intro": "Cada linha é uma proposta de caixa de título, nunca uma decisão tomada. A ferramenta retira um artefato de importação ; ela não sabe se uma palavra é um nome próprio. Nada é escrito no catálogo aqui : os veredictos são aplicados depois, por migração."
 }

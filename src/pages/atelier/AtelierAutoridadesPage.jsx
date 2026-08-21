@@ -328,8 +328,15 @@ export default function AtelierAutoridadesPage() {
         {/* File de verification des conventions catalographiques (REGISTRE §37).
             Meme atelier, autre nature de travail : la file ci-dessus recueille
             des PROPOSITIONS d'autorites soumises au consentement ; celle-ci
-            recueille des VERDICTS sur des propositions faites par un outil. */}
-        <ConvRevuePanel />
+            recueille des VERDICTS sur des propositions faites par un outil.
+            N'affiche que les lots d'AUTORITES : le lot des titres porte sur des
+            oeuvres et vit desormais dans Catalogacao (CONV-O5, tranche le
+            21/08). Une page dont le texte annonce « le corpus partage
+            d'autorites » ne peut pas heberger la correction des notices. */}
+        <ConvRevuePanel
+          lots={['autorite_patronyme', 'autorite_casse']}
+          titleKey="atelier.revue.title"
+          introKey="atelier.revue.intro" />
 
         <div style={{ marginTop: 20 }}>
           <Button variant="secondary" onClick={() => navigate(-1)}>{t({ id: 'common.back', defaultMessage: 'Voltar' })}</Button>

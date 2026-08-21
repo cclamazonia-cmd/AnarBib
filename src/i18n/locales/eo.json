@@ -5884,5 +5884,12 @@
   "atelier.revue.lot.titres": "Uskleco de la titoloj",
   "atelier.revue.lot.titres.hint": "CONV-3 · la funkcio forigas artefakton, ĝi ne decidas",
   "atelier.revue.entity.book": "libro",
-  "atelier.revue.entity.author": "aŭtoritato"
+  "atelier.revue.entity.author": "aŭtoritato",
+  "atelier.revue.filter.label": "Montri",
+  "atelier.revue.filter.pending": "Kontrolendaj",
+  "atelier.revue.filter.decided": "Deciditaj, ankoraŭ ne aplikitaj",
+  "atelier.revue.filter.all": "Ĉiuj",
+  "atelier.revue.stale": "La slipo ŝanĝiĝis post ĉi tiu propono — kio aperas sub « Nuna » ne plu ekzistas. Akcepti malfarus antaŭan korekton : forĵetu ĉi tiun linion.",
+  "catalogacao.revue.title": "Kontrola vico — titoloj",
+  "catalogacao.revue.intro": "Ĉiu linio estas propono pri uskleco de titolo, neniam jam farita decido. La ilo forigas importan artefakton ; ĝi ne scias ĉu vorto estas propra nomo. Ĉi tie nenio estas skribata en la katalogon : la verdiktoj estas aplikataj poste, per migrado."
 }

@@ -5884,5 +5884,12 @@
   "atelier.revue.lot.titres": "Schreibweise der Titel",
   "atelier.revue.lot.titres.hint": "CONV-3 · die Funktion entfernt ein Artefakt, sie entscheidet nicht",
   "atelier.revue.entity.book": "Buch",
-  "atelier.revue.entity.author": "Normdatensatz"
+  "atelier.revue.entity.author": "Normdatensatz",
+  "atelier.revue.filter.label": "Anzeigen",
+  "atelier.revue.filter.pending": "Zu prüfen",
+  "atelier.revue.filter.decided": "Entschieden, noch nicht angewendet",
+  "atelier.revue.filter.all": "Alle",
+  "atelier.revue.stale": "Der Datensatz hat sich seit diesem Vorschlag geändert — was unter „Aktuell“ steht, gibt es nicht mehr. Annehmen würde eine frühere Korrektur rückgängig machen: diese Zeile verwerfen.",
+  "catalogacao.revue.title": "Prüfliste — Titel",
+  "catalogacao.revue.intro": "Jede Zeile ist ein Vorschlag zur Titelschreibweise, nie eine bereits getroffene Entscheidung. Das Werkzeug entfernt ein Import-Artefakt; es weiß nicht, ob ein Wort ein Eigenname ist. Hier wird nichts in den Katalog geschrieben: Urteile werden später per Migration angewendet."
 }

@@ -28,10 +28,20 @@ import { Button } from '@/components/ui';
 // appels `t({ id })`, donc une chaine litterale y echappe — c'est exactement
 // ainsi que ces trois cartes sont restees en portugais dans une interface en
 // francais, en production, sans que rien ne le signale.
-const LOTS = [
-  { id: 'autorite_patronyme', k: 'patronyme' },
-  { id: 'autorite_casse',     k: 'casse' },
-  { id: 'titre_casse',        k: 'titres' },
+const CLE_DE_LOT = {
+  autorite_patronyme: 'patronyme',
+  autorite_casse:     'casse',
+  titre_casse:        'titres',
+};
+
+// Filtres de decision. « Tranches, non appliques » n'est pas un confort : sans
+// lui, une ligne cesse d'exister pour l'ecran des qu'on la tranche, meme si
+// elle n'a jamais ete ecrite en base — c'est ainsi que l'autorite 10079 est
+// devenue inatteignable apres un verdict pose par erreur (CONV-O6).
+const FILTRES = [
+  { v: 'a_revoir', k: 'pending' },
+  { v: '__decide__', k: 'decided' },
+  { v: '__tous__', k: 'all' },
 ];
 
 const ls = { display: 'block', fontSize: '.74rem', color: 'var(--brand-muted, #999)', marginBottom: 4 };
@@ -40,11 +50,17 @@ const box = {
   padding: 12, marginBottom: 10, background: 'rgba(0,0,0,.15)',
 };
 
-export default function ConvRevuePanel() {
+/**
+ * @param {string[]} lots   identifiants de lot a montrer, dans l'ordre
+ * @param {string}   titleKey  cle i18n du titre de section
+ * @param {string}   introKey  cle i18n du paragraphe d'introduction
+ */
+export default function ConvRevuePanel({ lots, titleKey, introKey }) {
   const { formatMessage: t } = useIntl();
 
   const [resume, setResume] = useState([]);
-  const [lot, setLot] = useState('autorite_patronyme');
+  const [lot, setLot] = useState(lots[0]);
+  const [filtre, setFiltre] = useState('a_revoir');
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
@@ -55,16 +71,25 @@ export default function ConvRevuePanel() {
     setLoading(true);
     const [r1, r2] = await Promise.all([
       supabase.schema('api').rpc('conv_revue_resume'),
-      supabase.schema('api').rpc('conv_revue_list', { p_lot: lot, p_decision: 'a_revoir', p_max: 50 }),
+      // `p_decision: null` = toutes les decisions. « Tranches non appliques »
+      // se filtre cote client, faute d'un parametre dedie cote RPC.
+      supabase.schema('api').rpc('conv_revue_list', {
+        p_lot: lot,
+        p_decision: filtre === 'a_revoir' ? 'a_revoir' : null,
+        p_max: 200,
+      }),
     ]);
     if (r1.error || r2.error) {
       setMsg({ text: localizeError(t, r1.error || r2.error), kind: 'err' });
     } else {
       setResume(r1.data || []);
-      setRows(r2.data || []);
+      const brut = r2.data || [];
+      setRows(filtre === '__decide__'
+        ? brut.filter(r => r.decision !== 'a_revoir' && !r.applique_le)
+        : brut);
     }
     setLoading(false);
-  }, [lot, t]);
+  }, [lot, filtre, t]);
 
   useEffect(() => { charger(); }, [charger]);
 
@@ -77,7 +102,9 @@ export default function ConvRevuePanel() {
     setBusyId(null);
     if (error) { setMsg({ text: localizeError(t, error), kind: 'err' }); return; }
     // La ligne quitte la file « à revoir » : on la retire sans recharger la page.
-    setRows(rs => rs.filter(r => r.id !== id));
+    // Sous les autres filtres elle a vocation a rester visible — on recharge.
+    if (filtre === 'a_revoir') setRows(rs => rs.filter(r => r.id !== id));
+    else charger();
     setResume(rs => rs.map(r => r.lot === lot ? { ...r, a_revoir: Number(r.a_revoir) - 1 } : r));
     setEditing(null);
   }
@@ -87,30 +114,30 @@ export default function ConvRevuePanel() {
   return (
     <section style={{ marginTop: 28 }}>
       <h2 style={{ fontSize: '1rem', margin: '0 0 4px' }}>
-        {t({ id: 'atelier.revue.title', defaultMessage: 'Fila de verificação — convenções' })}
+        {t({ id: titleKey })}
       </h2>
       <p style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)', margin: '0 0 12px', maxWidth: 720 }}>
-        {t({ id: 'atelier.revue.intro', defaultMessage:
-          'Cada linha é uma PROPOSTA, nunca uma decisão tomada. A ferramenta retira um artefato de importação ; ela não sabe se uma palavra é um nome próprio. Nada é escrito no catálogo aqui : os veredictos são aplicados depois, por migração.' })}
+        {t({ id: introKey })}
       </p>
 
       {/* Lots. minmax(0, …) sur chaque piste — MOB-1. */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: 8, marginBottom: 14 }}>
-        {LOTS.map(L => {
-          const c = compteurs[L.id] || {};
-          const actif = lot === L.id;
+        {lots.map(id => {
+          const k = CLE_DE_LOT[id];
+          const c = compteurs[id] || {};
+          const actif = lot === id;
           return (
-            <button key={L.id} type="button" onClick={() => setLot(L.id)}
+            <button key={id} type="button" onClick={() => setLot(id)}
               style={{
                 textAlign: 'left', cursor: 'pointer', padding: '10px 12px', borderRadius: 10,
                 border: actif ? '1px solid var(--brand-accent, #60a5fa)' : '1px solid rgba(255,255,255,.10)',
                 background: actif ? 'rgba(96,165,250,.10)' : 'rgba(0,0,0,.15)', color: 'inherit',
               }}>
               <div style={{ fontSize: '.86rem', fontWeight: 600 }}>
-                {t({ id: `atelier.revue.lot.${L.k}` })}
+                {t({ id: `atelier.revue.lot.${k}` })}
               </div>
               <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginTop: 2 }}>
-                {t({ id: `atelier.revue.lot.${L.k}.hint` })}
+                {t({ id: `atelier.revue.lot.${k}.hint` })}
               </div>
               <div style={{ fontSize: '.78rem', marginTop: 6 }}>
                 <strong>{c.a_revoir ?? 0}</strong>{' '}
@@ -124,6 +151,23 @@ export default function ConvRevuePanel() {
             </button>
           );
         })}
+      </div>
+
+      {/* Filtre de decision. Sans « tranches, non appliques », une ligne
+          disparait de l'ecran des qu'on la tranche — meme si elle n'a jamais
+          ete ecrite en base. C'est ce qui a rendu l'autorite 10079
+          inatteignable apres un verdict pose par erreur (CONV-O6). */}
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: '.74rem', color: 'var(--brand-muted, #999)' }}>
+          {t({ id: 'atelier.revue.filter.label' })}
+        </span>
+        <select value={filtre} onChange={e => setFiltre(e.target.value)}
+          style={{ fontSize: 16, minWidth: 0, maxWidth: '100%', padding: '6px 10px', borderRadius: 8,
+                   border: '1px solid rgba(255,255,255,.16)', background: 'rgba(0,0,0,.30)', color: 'inherit' }}>
+          {FILTRES.map(f => (
+            <option key={f.v} value={f.v}>{t({ id: `atelier.revue.filter.${f.k}` })}</option>
+          ))}
+        </select>
       </div>
 
       {msg.text && (
@@ -145,7 +189,14 @@ export default function ConvRevuePanel() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: 10 }}>
             <div style={{ minWidth: 0 }}>
               <span style={ls}>{t({ id: 'atelier.revue.before', defaultMessage: 'Atual' })}</span>
-              <div style={{ fontSize: '.9rem', wordBreak: 'break-word' }}>{r.avant}</div>
+              {/* CONV-O6 : `avant` est un instantane. Quand il ne decrit plus
+                  l'entite, on montre ce qui EST, et on le dit. */}
+              <div style={{ fontSize: '.9rem', wordBreak: 'break-word',
+                            textDecoration: r.perime ? 'line-through' : 'none',
+                            opacity: r.perime ? 0.55 : 1 }}>{r.avant}</div>
+              {r.perime && (
+                <div style={{ fontSize: '.9rem', wordBreak: 'break-word', marginTop: 4 }}>{r.actuel}</div>
+              )}
             </div>
             <div style={{ minWidth: 0 }}>
               <span style={ls}>{t({ id: 'atelier.revue.after', defaultMessage: 'Proposta' })}</span>
@@ -157,6 +208,11 @@ export default function ConvRevuePanel() {
             </div>
           </div>
 
+          {r.perime && (
+            <div style={{ fontSize: '.74rem', color: '#f87171', marginTop: 8 }}>
+              ⚠ {t({ id: 'atelier.revue.stale' })}
+            </div>
+          )}
           {r.note && (
             <div style={{ fontSize: '.74rem', color: '#fbbf24', marginTop: 8 }}>⚠ {r.note}</div>
           )}
@@ -187,7 +243,9 @@ export default function ConvRevuePanel() {
             </div>
           ) : (
             <div style={{ display: 'flex', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
-              <Button variant="primary" disabled={busyId === r.id || !r.apres_propose}
+              {/* Une proposition batie sur un instantane perime ne peut pas etre
+                  acceptee : l'appliquer deferait le travail d'un autre lot. */}
+              <Button variant="primary" disabled={busyId === r.id || !r.apres_propose || r.perime}
                 onClick={() => decider(r.id, 'valide')}>
                 {t({ id: 'atelier.revue.accept', defaultMessage: 'Aceitar a proposta' })}
               </Button>

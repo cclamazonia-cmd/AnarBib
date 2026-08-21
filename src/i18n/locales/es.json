@@ -5884,5 +5884,12 @@
   "atelier.revue.lot.titres": "Mayúsculas de los títulos",
   "atelier.revue.lot.titres.hint": "CONV-3 · la función retira un artefacto, no decide",
   "atelier.revue.entity.book": "libro",
-  "atelier.revue.entity.author": "autoridad"
+  "atelier.revue.entity.author": "autoridad",
+  "atelier.revue.filter.label": "Mostrar",
+  "atelier.revue.filter.pending": "Por revisar",
+  "atelier.revue.filter.decided": "Decididas, aún no aplicadas",
+  "atelier.revue.filter.all": "Todas",
+  "atelier.revue.stale": "La ficha cambió desde esta propuesta — lo que figura en « Actual » ya no existe. Aceptar deshría una corrección anterior : descarta esta línea.",
+  "catalogacao.revue.title": "Cola de verificación — títulos",
+  "catalogacao.revue.intro": "Cada línea es una propuesta de mayúsculas de título, nunca una decisión tomada. La herramienta retira un artefacto de importación ; no sabe si una palabra es un nombre propio. Aquí no se escribe nada en el catálogo : los veredictos se aplican después, por migración."
 }

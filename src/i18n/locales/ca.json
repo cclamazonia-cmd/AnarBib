@@ -5884,5 +5884,12 @@
   "atelier.revue.lot.titres": "Majúscules dels títols",
   "atelier.revue.lot.titres.hint": "CONV-3 · la funció retira un artefacte, no decideix",
   "atelier.revue.entity.book": "llibre",
-  "atelier.revue.entity.author": "autoritat"
+  "atelier.revue.entity.author": "autoritat",
+  "atelier.revue.filter.label": "Mostrar",
+  "atelier.revue.filter.pending": "Per revisar",
+  "atelier.revue.filter.decided": "Decidides, encara no aplicades",
+  "atelier.revue.filter.all": "Totes",
+  "atelier.revue.stale": "La fitxa ha canviat des d'aquesta proposta — el que figura a « Actual » ja no existeix. Acceptar desfaria una correcció anterior : descarta aquesta línia.",
+  "catalogacao.revue.title": "Cua de verificació — títols",
+  "catalogacao.revue.intro": "Cada línia és una proposta de majúscules de títol, mai una decisió ja presa. L'eina retira un artefacte d'importació ; no sap si una paraula és un nom propi. Aquí no s'escriu res al catàleg : els veredictes s'apliquen després, per migració."
 }
