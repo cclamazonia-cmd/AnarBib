@@ -1,27 +1,36 @@
 #!/usr/bin/env bash
 # ============================================================================
-# ⚠️  CE N'EST PAS LE SCRIPT QUI SAUVEGARDE AUJOURD'HUI.  (note du 20/08/2026)
+# ⚠️  HORS SERVICE. CE SCRIPT NE SAUVEGARDE RIEN, ET N'A JAMAIS SAUVEGARDÉ.
 # ============================================================================
+# Archivé ici le 21/08/2026. Il vivait jusque-là sous `scripts/backup/`, où son
+# nom laissait croire qu'il était la chaîne de sauvegarde du projet.
+#
 # Ce fichier date du 17/06/2026 et décrit un modèle « pull » : un cron SUR LE
 # VPS qui vient tirer les données. Ce modèle n'a jamais été mis en service —
 # il n'y a pas de VPS.
 #
-# Ce qui tourne réellement est un modèle « push », depuis le poste de travail :
+# CE QUI SAUVEGARDE RÉELLEMENT est un modèle « push », depuis le poste de
+# travail, et sa source de vérité est dans le dépôt :
 #
-#     ~/anarbib-ops/anarbib-bg2.sh          (363 lignes, trois flux restic)
-#     ~/.config/systemd/user/anarbib-backup-{court,long,storage}.{service,timer}
+#     deploy/ops/anarbib-bg2.sh              (les trois flux restic)
+#     deploy/ops/systemd/anarbib-backup-{court,long,storage}.{service,timer}
+#     deploy/ops/README.md                   (la chaîne, de bout en bout)
 #
-# C'est lui que citent `deploy/README.md`, `RUNBOOK_restauration_BG2_2026-07-01`,
-# `REGISTRE_decisions.md` et deux specs. Le présent fichier, lui, n'est plus
-# référencé que par un runbook ARCHIVÉ (`operations/archive/`).
+# Le poste de travail n'en a que des liens symboliques (`~/anarbib-ops/`,
+# `~/.config/systemd/user/`). Pour restaurer, le seul document qui vaille est
+# `docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md`.
 #
-# Pourquoi ce bandeau plutôt qu'une suppression : le modèle « pull » redeviendra
-# pertinent le jour de la bascule sur un hôte, et le script est un point de
-# départ. Mais tant qu'il reste seul dans le dépôt à porter le nom
-# « sauvegarde », il fait croire que les sauvegardes tournent sur un VPS, en
-# mode pull, sans le poste de travail. Les trois affirmations sont fausses.
+# Pourquoi conservé plutôt que supprimé : le modèle « pull » redeviendra
+# pertinent le jour d'une bascule sur un hôte, et ce script est un point de
+# départ. Il est donc gardé — mais dans les archives, sous un nom qui dit son
+# état, et non plus dans un dossier `scripts/` où on le prendrait pour vivant.
+# C'est en reprise après sinistre qu'on lit ces fichiers-là : le moment où l'on
+# a le moins de temps pour se demander lequel des deux est le bon.
+#
+# Le runbook voisin, `RUNBOOK_sauvegardes_restauration_BG2_2026-06-17.md`, est
+# lui aussi une archive datée du même cadrage : il décrit ce script-ci, pas la
+# chaîne en service. Il est laissé tel quel, exprès.
 # ============================================================================
-
 # ============================================================================
 # AnarBib — sauvegarde hors fournisseur (#BG2)
 # ----------------------------------------------------------------------------
@@ -32,16 +41,16 @@
 #
 # Conçu pour tourner en cron SUR LE VPS (modèle « pull ») : il fonctionne même
 # quand le poste de Xavier est éteint. Aucun secret n'est codé en dur : tout
-# vient du fichier de config (voir anarbib-backup.env.example).
+# vient du fichier de config (voir le .env.example voisin, meme prefixe).
 #
-# Usage :   ./anarbib-backup.sh /chemin/vers/anarbib-backup.env
-# Restauration : voir docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md
+# Usage (jamais mis en service) :  ./<ce-fichier> /chemin/vers/un.env
+# Restauration REELLE : docs/journal/operations/RUNBOOK_restauration_BG2_2026-07-01.md
 # ============================================================================
 set -euo pipefail
 
 CONF="${1:-}"
 if [[ -z "$CONF" || ! -f "$CONF" ]]; then
-  echo "ERREUR : fournir le fichier de config en argument (cf. anarbib-backup.env.example)." >&2
+  echo "ERREUR : fournir le fichier de config en argument (cf. le .env.example voisin)." >&2
   exit 2
 fi
 # shellcheck disable=SC1090
