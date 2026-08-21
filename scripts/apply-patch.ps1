@@ -326,24 +326,24 @@ Write-Ok "Push done"
 Write-Host ""
 
 # ----------------------------------------------------------------------------
-# STEP 8 -- Deploy GitHub Pages
+# STEP 8 -- Publication : plus rien a faire ici (bascule git-pages, 21/08/2026)
 # ----------------------------------------------------------------------------
+# Ce pas appelait `npm run deploy`, APRES avoir deja pousse sur main -- donc en
+# doublon de la CI, qui publie sur le meme push. C'etait le doublon note au plan
+# de marche (§8, "Resoudre le doublon apply-patch.ps1 <-> CI").
+#
+# La bascule du 21/08 le rend en plus INOPERANT : `npm run deploy` poussait sur
+# la branche `pages`, que le nouveau moteur git-pages ne lit plus. Il aurait
+# reussi sans rien publier -- une panne muette de plus.
+#
+# La publication est desormais faite par .forgejo/workflows/ci.yml, etape
+# "Deploy Pages (git-pages)", declenchee par le push fait au pas 7.
 if (-not $SkipDeploy) {
-    Write-Step "Deploy GitHub Pages (npm run deploy)"
-
-    $deployOutput = npm run deploy 2>&1
-    $deployExitCode = $LASTEXITCODE
-
-    if ($deployExitCode -ne 0) {
-        Write-Host ""
-        Write-Host $deployOutput
-        Write-Err "npm run deploy failed. The commit is already pushed to main."
-        Write-Info "You can run 'npm run deploy' manually."
-        exit 1
-    }
-    Write-Ok "Deploy done"
+    Write-Step "Publication"
+    Write-Ok "Rien a faire : la CI publie sur le push (git-pages)."
+    Write-Info "Suivre le run sur Codeberg ; la mise en ligne suit de quelques minutes."
 } else {
-    Write-Warn "Deploy skipped (-SkipDeploy option)"
+    Write-Warn "Note : -SkipDeploy n'a plus d'objet, la CI publie de toute facon."
 }
 
 Write-Host ""
