@@ -238,9 +238,32 @@ trigramme attrape. Un décompte par nom exact sous-estime le problème.
 - **Backlog** : la version courante (`v33`, 17/06) a deux mois ; une autre
   session mène le rattrapage documentaire. Le v34 annotant `#152` et les items
   catalogage/doublons relève de ce rattrapage, pas de cette session.
-- **Denylist PII** : `catalog_duplicate_reports` est classée dans
-  `deploy/bg2-known-tables.txt` (flux long, par analogie avec
-  `book_not_duplicate`). Si les notes de signalement sont jugées sensibles,
-  l'entrée en denylist se pose sur la machine d'ops, hors dépôt.
-- **Push** : les deux commits ne sont pas poussés. Un push sur `main` déclenche
-  `supabase db push --linked --include-all` — c'est un déploiement en production.
+- ~~**Denylist PII**~~ — **tranché le 21/08 : on ne change rien.** Les trois
+  tables créées par ce chantier — `catalog_duplicate_reports`,
+  `authority_duplicate_reports` et `author_not_duplicate` — restent en **flux
+  long** dans `deploy/bg2-known-tables.txt`, comme `book_not_duplicate` dont
+  elles reprennent la forme.
+
+  **Le raisonnement, pour qui voudra le rouvrir.** Aucune ne porte
+  d'identifiant direct : `created_by`, `reported_by` et `closed_by` sont des
+  uuid, et les noms vivent dans `profiles`, qui est elle-même en flux court. Un
+  uuid extrait d'une sauvegarde longue ne se résout donc pas sans la courte.
+  À l'inverse, sept jours de rétention détruiraient précisément ce que le
+  chantier a construit : la trace d'arbitrage est ce qui rend une mauvaise
+  décision rattrapable, et `DEDUP-2` en fait une exigence.
+
+  **Le doute résiduel est nommé** : les champs `note` et `reason` sont du texte
+  libre, où quelqu'un peut écrire une phrase parlant d'une personne. Si ce
+  risque devient concret — une note nominative constatée —, la bascule se pose
+  sur la machine d'ops, hors dépôt, et elle coûte une ligne.
+- ~~**Push**~~ — **fait.** Les onze commits du chantier sont poussés et
+  déployés ; toutes les migrations sont appliquées et tous les pipelines verts.
+  L'avertissement d'origine (« un push sur `main` est un déploiement ») reste
+  vrai et a gouverné chaque envoi : sérialisation, attente du vert entre deux
+  push touchant la base, et vérification de la signature de chaque commit avant
+  de pousser.
+
+  **Reste ouvert, et à l'observation** : le retrait des boutons destructeurs du
+  balayage global des documents, approuvé sur le principe le 21/08. Il appelle
+  encore `merge_book` en direct, sans aperçu ni reprise, et ne satisfait donc
+  pas `DOC-DESTR-2`. C'est le *moment* qui se décide à l'usage, pas le principe.
