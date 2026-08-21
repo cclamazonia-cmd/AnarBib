@@ -28,7 +28,8 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 |---|---|
 | `anarbib-bg2.sh` | Les trois flux restic (`court`, `long`, `storage`), le filet de classement des tables, le dump du Vault, l'auto-réparation des verrous |
 | `anarbib-notify-failure.sh` | Appelé par `OnFailure=` quand un flux échoue |
-| `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : trois flux + l'unité de notification |
+| `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les trois dépôts restic et signale les flux en retard (lecture seule) |
+| `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : trois flux, l'unité de notification, le contrôle de fraîcheur |
 
 ## Ce qu'il ne contient pas, et pourquoi
 
@@ -67,8 +68,82 @@ systemctl --user daemon-reload
 systemctl --user enable --now anarbib-backup-{court,long,storage}.timer
 ```
 
+Puis le contrôle de fraîcheur (même convention : une seule copie, dans le dépôt) :
+
+```sh
+ln -sf "$PWD/deploy/ops/anarbib-bg2-fraicheur.sh" ~/anarbib-ops/anarbib-bg2-fraicheur.sh
+ln -sf "$PWD/deploy/ops/systemd/anarbib-fraicheur.service" ~/.config/systemd/user/
+ln -sf "$PWD/deploy/ops/systemd/anarbib-fraicheur.timer"   ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now anarbib-fraicheur.timer
+```
+
+… et le bloc `~/.bashrc` ci-dessus, sans lequel le drapeau ne s'affiche nulle part.
+
 Restent à fournir à la main, et ce n'est pas un oubli : les deux listes PII, la
 passphrase restic, et `~/.pgpass`.
+
+## Le contrôle de fraîcheur
+
+Trois gardes veillaient déjà sur la chaîne, et le 16/08 les trois se sont tues
+en même temps. Le tir `storage` a été tué au bout de 20 s par l'extinction de la
+machine ; `OnFailure=` n'a pas pu partir — systemd refuse d'enfiler un job de
+notification pendant un arrêt — et le flux est resté **onze jours** sans
+sauvegarder sans que personne le sache.
+
+Chaque garde a le même angle mort, à sa façon :
+
+| Garde | Ce qu'elle voit | Ce qu'elle ne voit pas |
+|---|---|---|
+| `OnFailure=` | les erreurs | les silences — et elle se tait quand la cause est l'arrêt |
+| Témoin de vie (BG2-16) | qu'un tir a abouti | rien du tout si le poste est éteint : il n'émet pas |
+| `fn_backup_heartbeat_status()` | très bien le silence | mais depuis la base, et elle ne parle à personne assis devant la machine |
+
+`anarbib-bg2-fraicheur.sh` regarde depuis le quatrième point de vue : **le poste,
+au réveil**. Il ouvre les trois dépôts restic, lit la date du dernier snapshot de
+chaque flux et la compare à l'intervalle attendu.
+
+Il lit **les dépôts**, pas la table des témoins — que la sonde surveille déjà. Un
+témoin dit « le script a cru réussir » ; un snapshot dit « la donnée est là ».
+Deux affirmations différentes : mieux vaut deux témoins indépendants qu'un seul
+consulté depuis deux endroits.
+
+Trois issues, et les confondre serait refaire le bug :
+
+- **flux en retard** → drapeau `~/anarbib-ops/.fraicheur-alerte`, sortie `1` ;
+- **dépôt injoignable** → aucun verdict, et surtout **aucune affirmation de
+  fraîcheur** : on n'a pas pu regarder, on ne dit pas que tout va bien ;
+- **aveuglement prolongé** → au-delà de 72 h sans avoir pu lire un dépôt,
+  l'impossibilité de vérifier devient elle-même l'alerte, sortie `3`.
+
+Les seuils (36 h · 9 j · 9 j) sont **alignés sur `fn_backup_heartbeat_status()`**.
+Si tu changes ici, change là-bas : deux gardes qui jugeraient différemment
+feraient perdre du temps à se demander laquelle a raison.
+
+> ⚠️ **Piège restic, vérifié le 21/08/2026.** `restic snapshots --latest 1` rend
+> *n* snapshots **par groupe** `(host, paths)`. Le dépôt `long` en a trois groupes
+> depuis que le dump du Vault s'est ajouté au chemin (BG2-15) : `--latest 1` y
+> rend donc **trois** lignes, dont la première date du 30/06. Un `head -1` dessus
+> fait dire au contrôle que le flux a 51 jours de retard, tous les jours — le
+> genre d'alerte permanente qu'on apprend à ignorer en une semaine. Le script lit
+> toutes les dates et prend le maximum. `snapshot_id_de()` dans `anarbib-bg2.sh`
+> portait le même défaut ; corrigé.
+
+### Comment l'alerte devient visible
+
+Le drapeau ne sert à rien si personne ne le lit. C'est `~/.bashrc` qui l'affiche,
+à chaque ouverture de terminal, à côté du bloc qui surveille déjà `.last-failure` :
+
+```sh
+# --- ANARBIB_FRAICHEUR_FLAG_CHECK : alerte si une sauvegarde a pris du retard ---
+if [ -f "$HOME/anarbib-ops/.fraicheur-alerte" ]; then
+  printf '\033[1;33m[AnarBib] Sauvegarde EN RETARD :\033[0m %s\n' \
+    "$(head -1 "$HOME/anarbib-ops/.fraicheur-alerte")"
+  printf '  Details : cat ~/anarbib-ops/.fraicheur-alerte\n'
+fi
+```
+
+`~/.bashrc` n'est pas versionné : sur une machine neuve, ce bloc est à recopier.
 
 ## Les horaires
 
