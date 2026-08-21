@@ -401,3 +401,40 @@ encore de *taper* « fr, pt, es, en… » des heures après que le champ soit de
 un sélecteur. Rien ne détecte ce genre de survivance — ni le build, ni les tests
 de parité i18n, qui vérifient que les 10 locales ont les mêmes clés, jamais que
 la clé dit encore la vérité. À voir s'il existe d'autres `*Ph` orphelins.
+
+---
+
+## 9. Point ouvert — ce que la recette elle-même ouvre
+
+**HYG-Q3 — le worktree partagé n'a plus de porteur.** La recette du §5 supprime
+le push élargi, et c'est son objet. Mais elle supprime du même coup un mécanisme
+*accidentel* qui rendait service : jusqu'ici, un commit oublié sur le `main` du
+worktree partagé finissait par partir avec le push de quelqu'un d'autre. C'était
+le bug ; c'était aussi la voie de sortie.
+
+Une fois que chaque session pousse `HEAD:main` depuis sa branche, **plus rien
+n'emporte ce qui reste sur le `main` partagé**. Un commit posé là par une session
+qui bascule ensuite dans son worktree n'a plus de porteur du tout.
+
+Constaté le 21/08 vers 03:45 : quatre commits `#BG2` (contrôle de fraîcheur des
+sauvegardes) attendaient sur le `main` partagé pendant que leur session
+travaillait dans `anarbib-wt-a7592c54`. Une autre session, sollicitée pour
+« pousser tout ce qui reste », a refusé de les emporter — à raison, c'est le
+travail d'autrui — et leur propriétaire les a poussés lui-même quelques minutes
+plus tard. **Rien n'a été perdu, mais la fenêtre a existé**, et elle serait
+restée ouverte indéfiniment si cette session n'était pas repassée par là.
+
+Ajout proposé à la recette, à côté du `worktree remove` :
+
+```bash
+# en fin de session — le main partage ne doit rien garder de moi
+git -C ~/anarbib fetch origin
+git -C ~/anarbib log --oneline origin/main..main
+```
+
+Une sortie non vide veut dire qu'un commit attend sans porteur : soit on le
+pousse (s'il est de soi), soit on prévient la session qui l'a posé. Le coût est
+de deux commandes ; ce qu'il évite, c'est du travail terminé, testé, et jamais
+livré — la panne la plus silencieuse de toutes.
+
+*(Constat annexe de la session « Dédoublonnage & arbitrage », 21/08/2026.)*
