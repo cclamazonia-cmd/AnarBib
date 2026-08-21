@@ -22,7 +22,22 @@ const STATUS = {
   refused:           { color: '#f87171', label: 'Recusada' },
   withdrawn:         { color: '#a3a3a3', label: 'Retirada' },
 };
-const KIND = { creation: 'Criação', edition: 'Edição', fusion: 'Fusão', traduction: 'Tradução' };
+// Les libellés de `kind` passaient par un objet de chaînes en dur, en
+// portugais. Le test de couverture i18n ne voit que les appels `t({ id })` :
+// une chaîne littérale y échappe, et c'est exactement ainsi que des cartes
+// sont restées en portugais dans une interface en français, en production,
+// sans que rien ne le signale. On ne garde ici que la LISTE des valeurs ;
+// le libellé se demande à `t()` au moment de l'affichage.
+const KINDS = ['creation', 'edition', 'fusion', 'traduction', 'scission'];
+
+// Une part de scission, vide. Deux au minimum : scinder en une seule part
+// n'est pas une scission, et la base le refuse aussi (CONV-O8).
+const PART_VIDE = { preferred_name: '', sort_name: '', authority_type: 'person' };
+const FORM_VIDE = {
+  kind: 'fusion', targetKind: 'author', targetId: '', mergeIntoId: '',
+  dupName: '', canName: '', authorName: '', lang: 'pt-BR', biography: '',
+  parts: [{ ...PART_VIDE }, { ...PART_VIDE }], rationale: '',
+};
 
 export default function AtelierAutoridadesPage() {
   const navigate = useNavigate();
@@ -36,7 +51,7 @@ export default function AtelierAutoridadesPage() {
   const [busyId, setBusyId] = useState(null);
 
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ kind: 'fusion', targetKind: 'author', targetId: '', mergeIntoId: '', dupName: '', canName: '', authorName: '', lang: 'pt-BR', biography: '', rationale: '' });
+  const [form, setForm] = useState({ ...FORM_VIDE, parts: [{ ...PART_VIDE }, { ...PART_VIDE }] });
   const [submitting, setSubmitting] = useState(false);
 
   const [myLibs, setMyLibs] = useState([]);
@@ -70,6 +85,25 @@ export default function AtelierAutoridadesPage() {
     return () => { cancelled = true; };
   }, [user]);
 
+  // `localizeError` traduit un `hint` seulement s'il commence par « error. » ;
+  // les hints de l'Atelier commencent par « atelier. », donc ils tombent sur
+  // le second chemin — le code court porté par le message, traduit en
+  // `panel.apiError.<code>`. Ce chemin fonctionne, mais il DÉCOUPE le message
+  // au premier « : » et perd ce qui suit. Or c'est précisément là que la base
+  // nomme la fiche en conflit, qui est toute l'utilité du refus. On rattache
+  // donc ce détail à la traduction plutôt que de le laisser tomber.
+  function messageDErreur(error) {
+    const texte = localizeError(error, t);
+    const brut = typeof error?.message === 'string' ? error.message : '';
+    const i = brut.indexOf(':');
+    const detail = i >= 0 ? brut.slice(i + 1).trim() : '';
+    return detail && !texte.includes(detail) ? `${texte} — ${detail}` : texte;
+  }
+
+  function majPart(i, champ, valeur) {
+    setForm(f => ({ ...f, parts: f.parts.map((p, k) => (k === i ? { ...p, [champ]: valeur } : p)) }));
+  }
+
   async function propose(e) {
     e.preventDefault();
     setMsg({ text: '', kind: '' });
@@ -89,6 +123,28 @@ export default function AtelierAutoridadesPage() {
         setMsg({ text: t({ id: 'atelier.form.error.bio', defaultMessage: 'Escreva a biografia traduzida.' }), kind: 'error' }); return;
       }
       args = { p_kind: 'traduction', p_target_kind: 'author', p_target_id: aid, p_merge_into_id: null, p_payload: { lang: form.lang, biography: form.biography.trim(), author_name: form.authorName.trim() }, p_rationale: `« ${form.authorName.trim()} » (#${aid}, ${form.lang}). ${form.rationale.trim()}` };
+    } else if (form.kind === 'scission') {
+      const aid = parseInt(form.targetId, 10);
+      if (!Number.isInteger(aid)) {
+        setMsg({ text: t({ id: 'atelier.form.error.authorId' }), kind: 'error' }); return;
+      }
+      // On nettoie AVANT de compter : deux lignes laissées vides par
+      // inadvertance ne doivent pas passer pour deux parts.
+      const parts = form.parts
+        .map(p => ({
+          preferred_name: p.preferred_name.trim(),
+          sort_name: p.sort_name.trim(),
+          authority_type: p.authority_type || 'person',
+        }))
+        .filter(p => p.preferred_name || p.sort_name);
+      if (parts.length < 2 || parts.some(p => !p.preferred_name || !p.sort_name)) {
+        setMsg({ text: t({ id: 'atelier.form.error.scissionParts' }), kind: 'error' }); return;
+      }
+      args = {
+        p_kind: 'scission', p_target_kind: 'author', p_target_id: aid,
+        p_merge_into_id: null, p_payload: { parts },
+        p_rationale: `#${aid} → ${parts.map(p => `« ${p.sort_name} »`).join(' + ')}. ${form.rationale.trim()}`,
+      };
     } else {
       const dup = parseInt(form.targetId, 10);
       const can = parseInt(form.mergeIntoId, 10);
@@ -103,9 +159,9 @@ export default function AtelierAutoridadesPage() {
     setSubmitting(true);
     const { error } = await supabase.schema('api').rpc('fn_authority_propose', args);
     setSubmitting(false);
-    if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); return; }
+    if (error) { setMsg({ text: messageDErreur(error), kind: 'error' }); return; }
     setMsg({ text: t({ id: 'atelier.form.success', defaultMessage: 'Proposta registrada. A discussão fica aberta até o prazo.' }), kind: 'ok' });
-    setForm({ kind: 'fusion', targetKind: 'author', targetId: '', mergeIntoId: '', dupName: '', canName: '', authorName: '', lang: 'pt-BR', biography: '', rationale: '' });
+    setForm({ ...FORM_VIDE, parts: [{ ...PART_VIDE }, { ...PART_VIDE }] });
     setShowForm(false);
     load();
   }
@@ -196,9 +252,61 @@ export default function AtelierAutoridadesPage() {
               <label style={ls}>{t({ id: 'atelier.form.kind', defaultMessage: 'Tipo de proposta' })}</label>
               <select value={form.kind} onChange={e => setForm(f => ({ ...f, kind: e.target.value }))} style={fs}>
                 <option value="fusion">{t({ id: 'atelier.kindProp.fusion', defaultMessage: 'Fusão de duplicata' })}</option>
+                <option value="scission">{t({ id: 'atelier.kindProp.scission' })}</option>
                 <option value="traduction">{t({ id: 'atelier.kindProp.traduction', defaultMessage: 'Tradução de biografia (pessoa)' })}</option>
               </select>
             </div>
+
+            {form.kind === 'scission' && (<>
+            <p style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)', margin: '0 0 10px', maxWidth: 640 }}>
+              {t({ id: 'atelier.form.scission.hint' })}
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '90px minmax(0, 1fr)', gap: 10, marginBottom: 10, alignItems: 'end' }}>
+              <div>
+                <label style={ls}>{t({ id: 'atelier.form.scission.targetId' })}</label>
+                <input type="number" value={form.targetId} onChange={e => setForm(f => ({ ...f, targetId: e.target.value }))} style={fs} />
+              </div>
+              <div>
+                <label style={ls}>{t({ id: 'atelier.form.scission.targetName' })}</label>
+                <input type="text" value={form.authorName} onChange={e => setForm(f => ({ ...f, authorName: e.target.value }))} style={fs} />
+              </div>
+            </div>
+
+            <label style={ls}>{t({ id: 'atelier.form.scission.parts' })}</label>
+            {form.parts.map((p, i) => (
+              // minmax(0, …) sur chaque piste — sans quoi le minimum `auto`
+              // d'une piste `1fr` fait déborder la grille sur mobile (MOB-1).
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) 120px 32px', gap: 8, marginBottom: 8, alignItems: 'end' }}>
+                <div>
+                  <label style={{ ...ls, fontSize: '.7rem' }}>{t({ id: 'atelier.form.scission.partPreferred' })}</label>
+                  <input type="text" value={p.preferred_name} onChange={e => majPart(i, 'preferred_name', e.target.value)} style={fs} />
+                </div>
+                <div>
+                  <label style={{ ...ls, fontSize: '.7rem' }}>{t({ id: 'atelier.form.scission.partSort' })}</label>
+                  <input type="text" value={p.sort_name} onChange={e => majPart(i, 'sort_name', e.target.value)} style={fs} />
+                </div>
+                <div>
+                  <label style={{ ...ls, fontSize: '.7rem' }}>{t({ id: 'atelier.form.scission.partType' })}</label>
+                  <select value={p.authority_type} onChange={e => majPart(i, 'authority_type', e.target.value)} style={fs}>
+                    <option value="person">{t({ id: 'atelier.type.person' })}</option>
+                    <option value="collective">{t({ id: 'atelier.type.collective' })}</option>
+                    <option value="congress">{t({ id: 'atelier.type.congress' })}</option>
+                  </select>
+                </div>
+                {/* On ne descend jamais sous deux parts : la base refuserait, et
+                    proposer un bouton qui mène à un refus est un piège. */}
+                <button type="button" aria-label={t({ id: 'atelier.form.scission.removePart' })}
+                  disabled={form.parts.length <= 2}
+                  onClick={() => setForm(f => ({ ...f, parts: f.parts.filter((_, k) => k !== i) }))}
+                  style={{ ...fs, cursor: form.parts.length <= 2 ? 'not-allowed' : 'pointer', opacity: form.parts.length <= 2 ? .35 : 1, textAlign: 'center', padding: '8px 0' }}>×</button>
+              </div>
+            ))}
+            <div style={{ marginBottom: 10 }}>
+              <Button variant="ghost" type="button" onClick={() => setForm(f => ({ ...f, parts: [...f.parts, { ...PART_VIDE }] }))}>
+                {t({ id: 'atelier.form.scission.addPart' })}
+              </Button>
+            </div>
+            </>)}
 
             {form.kind === 'fusion' && (<>
             <div style={{ marginBottom: 10 }}>
@@ -272,7 +380,7 @@ export default function AtelierAutoridadesPage() {
               <div key={r.id} style={card}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'baseline' }}>
                   <div style={{ fontSize: '.92rem', fontWeight: 700 }}>
-                    {KIND[r.kind] || r.kind}
+                    {KINDS.includes(r.kind) ? t({ id: `atelier.kindLabel.${r.kind}` }) : r.kind}
                     {r.target_label ? ` · ${r.target_label}` : ''}
                     {r.merge_into_label ? ` → ${r.merge_into_label}` : ''}
                   </div>
