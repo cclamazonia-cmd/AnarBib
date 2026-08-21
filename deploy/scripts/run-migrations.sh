@@ -45,6 +45,40 @@ if [ "$total" = "0" ]; then
   exit 1
 fi
 
+# --- Garde-fou : ce script rejoue TOUT depuis la baseline ---------------------
+# Il n'a aucune notion de « déjà appliqué ». Sur une base déjà peuplée il meurt
+# donc à la première migration, avec un message qui nomme un type Postgres et
+# pas le problème :
+#
+#     ERROR: type "membership_payment_method" already exists
+#
+# Vécu à la première exécution réelle de bootstrap.sh, le 20/08/2026. On perd
+# du temps à chercher un défaut de migration là où il n'y a qu'un volume non
+# vierge — et on le perd au pire moment, puisque ce script sert précisément à
+# reconstruire après un sinistre.
+#
+# `--depart` reste la porte de sortie pour une reprise volontaire en cours de
+# liste : dans ce cas on sait ce qu'on fait, et le garde-fou s'efface.
+if [ "$DEPART" -le 1 ]; then
+  deja=$(psql -U "$SU" -d postgres -tAc \
+    "select count(*) from pg_class c
+       join pg_namespace n on n.oid = c.relnamespace
+      where n.nspname = 'public' and c.relkind = 'r'" 2>/dev/null || echo 0)
+  if [ "${deja:-0}" -gt 0 ]; then
+    echo "✗ La base n'est PAS vierge : $deja table(s) dans public."
+    echo ""
+    echo "  Ce script rejoue les migrations DEPUIS LA BASELINE ; il ne sait pas"
+    echo "  reprendre une base déjà construite, et échouerait à la première."
+    echo ""
+    echo "  Pour reconstruire vraiment de zéro (⚠️ EFFACE TOUT) :"
+    echo "      docker compose down -v && ./bootstrap.sh --depuis-le-depot"
+    echo ""
+    echo "  Pour reprendre volontairement en cours de liste (argument positionnel) :"
+    echo "      $0 <numero-de-la-premiere-migration>"
+    exit 1
+  fi
+fi
+
 echo "Connexion : $SU"
 echo "Migrations présentes : $total"
 [ "$DEPART" -gt 1 ] && echo "Reprise à partir de la n° $DEPART (les précédentes sont supposées déjà appliquées)"
