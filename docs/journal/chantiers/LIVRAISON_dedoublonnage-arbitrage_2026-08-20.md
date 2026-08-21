@@ -192,8 +192,37 @@ réelle, la cacher reviendrait à la passer sous silence.
 - **`DEDUP-5` à reformuler.** La carte dit « une confirmation dit ce qu'elle
   détruit » ; depuis P7 elle devrait dire « … et permet de ne pas le détruire ».
   Idem pour `DOC-DESTR-2` en §0.
-- **Autorités** : pas d'équivalent « Signaler » (pas de file pour les autorités).
-  Pour un non-arbitre, la liste des doublons probables reste visible sans bouton.
+### Le côté autorités reste en retard de trois crans (vérifié le 21/08)
+
+Le signalement livré au paquet P8 comble le manque le plus criant, mais l'état
+des lieux mesuré en base montre que les autorités n'ont pas reçu ce que les
+documents ont reçu. Huit fonctions de dédoublonnage côté documents, quatre côté
+autorités.
+
+- **Aucun balayage global.** `suggest_author_duplicates` travaille autorité par
+  autorité ; il n'existe pas d'équivalent de `suggest_catalog_duplicates`. La
+  coordination ne peut donc PAS voir l'état des doublons d'autorités — il
+  faudrait ouvrir les 1 300 fiches une par une. Conséquence directe : le
+  signalement est aujourd'hui le **seul** chemin par lequel un doublon
+  d'autorité parvient à la coordination. C'est beaucoup reposer sur un geste
+  volontaire.
+- **`merge_author` n'a ni aperçu ni reprise de champs.** Elle garde les
+  métadonnées de la seule survivante, comme `merge_book` avant les paquets
+  P6/P7. Ce qui est en jeu, mesuré sur les 1 300 autorités : **574 portent des
+  dates**, 578 un pays, **75 une biographie**, 28 un identifiant VIAF ou ISNI.
+  Fusionner une autorité riche dans une autorité pauvre les détruit sans que
+  rien ne l'annonce — exactement le défaut corrigé côté documents.
+- **Pas d'arbitrage « pas un doublon ».** Clore un signalement l'acquitte, mais
+  la paire réapparaîtra dans la détection : il n'existe pas d'`author_not_duplicate`.
+
+Ordre de traitement suggéré si on y revient : l'aperçu et la reprise d'abord
+(c'est ce qui détruit), le balayage global ensuite (c'est ce qui rend le
+problème visible), l'arbitrage en dernier (c'est ce qui évite de revoir).
+
+Note de mesure : seules **2** paires d'autorités partagent un nom strictement
+identique après normalisation. Le gisement réel est donc dans les formes
+approchantes — FERRUA/FERROA, GUYAU M./GUYAU J.M. — que seule la similarité
+trigramme attrape. Un décompte par nom exact sous-estime le problème.
 
 ## Arbitrages en attente (coordination)
 
