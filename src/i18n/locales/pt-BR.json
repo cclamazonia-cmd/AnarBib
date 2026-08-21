@@ -5888,10 +5888,12 @@
   "atelier.revue.filter.label": "Mostrar",
   "atelier.revue.filter.pending": "A revisar",
   "atelier.revue.filter.decided": "Decididas, ainda não aplicadas",
-  "atelier.revue.filter.all": "Todas",
   "atelier.revue.stale": "A ficha mudou desde esta proposta — o que está em « Atual » já não existe. Aceitar desfaria uma correção anterior : descarte esta linha.",
   "catalogacao.revue.title": "Fila de verificação — títulos",
   "catalogacao.revue.intro": "Cada linha é uma proposta de caixa de título, nunca uma decisão tomada. A ferramenta retira um artefato de importação ; ela não sabe se uma palavra é um nome próprio. Nada é escrito no catálogo aqui : os veredictos são aplicados depois, por migração.",
   "atelier.revue.apply": "Aplicar ao catálogo ({n})",
-  "atelier.revue.applyDone": "{n} linha(s) aplicada(s) · {r} recusada(s) pela guarda"
+  "atelier.revue.applyDone": "{n} linha(s) aplicada(s) · {r} recusada(s) pela guarda",
+  "atelier.revue.filter.settled": "Resolvidas",
+  "atelier.revue.state.applied": "Aplicada ao catálogo",
+  "atelier.revue.state.discarded": "Descartada — nada foi alterado"
 }

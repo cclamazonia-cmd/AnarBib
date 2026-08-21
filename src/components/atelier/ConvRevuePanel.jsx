@@ -34,15 +34,27 @@ const CLE_DE_LOT = {
   titre_casse:        'titres',
 };
 
-// Filtres de decision. « Tranches, non appliques » n'est pas un confort : sans
-// lui, une ligne cesse d'exister pour l'ecran des qu'on la tranche, meme si
-// elle n'a jamais ete ecrite en base — c'est ainsi que l'autorite 10079 est
-// devenue inatteignable apres un verdict pose par erreur (CONV-O6).
+// Les trois vues forment une PARTITION : chaque ligne est dans exactement une
+// d'entre elles, jamais dans deux, et leur union est le tout. C'est ce qui
+// permet au travail fini de sortir des vues de travail sans que rien ne
+// devienne inatteignable — un « toutes » qui cacherait des lignes serait un
+// nom qui ment, et une ligne tranchee qui disparait sans recours est
+// exactement ce qui a rendu l'autorite 10079 introuvable (CONV-O6).
+//
+//   a revoir    : aucune decision posee
+//   en attente  : decidee (valide|corrige), pas encore ecrite au catalogue
+//   reglees     : ecrite au catalogue, OU ecartee — dans les deux cas, fini
 const FILTRES = [
-  { v: 'a_revoir', k: 'pending' },
-  { v: '__decide__', k: 'decided' },
-  { v: '__tous__', k: 'all' },
+  { v: 'a_revoir',    k: 'pending' },
+  { v: '__attente__', k: 'decided' },
+  { v: '__regle__',   k: 'settled' },
 ];
+
+const APPARTIENT = {
+  a_revoir:    r => r.decision === 'a_revoir',
+  __attente__: r => (r.decision === 'valide' || r.decision === 'corrige') && !r.applique_le,
+  __regle__:   r => Boolean(r.applique_le) || r.decision === 'ecarte',
+};
 
 const ls = { display: 'block', fontSize: '.74rem', color: 'var(--brand-muted, #999)', marginBottom: 4 };
 const box = {
@@ -103,14 +115,9 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
     } else {
       setResume(r1.data || []);
       const brut = r2.data || [];
-      // « Ecarte » est un etat TERMINAL : la ligne est reglee, rien ne
-      // l'appliquera jamais. La compter parmi les « tranchees, pas encore
-      // appliquees » la faisait rester a l'ecran apres qu'on l'ait ecartee —
-      // on croyait que le clic n'avait pas pris. Seules `valide` et `corrige`
-      // attendent quelque chose.
-      setRows(filtre === '__decide__'
-        ? brut.filter(r => (r.decision === 'valide' || r.decision === 'corrige') && !r.applique_le)
-        : brut);
+      // Une seule regle d'appartenance, celle de la partition. « Ecarte » est
+      // un etat TERMINAL : la ligne est reglee, rien ne l'appliquera jamais.
+      setRows(brut.filter(APPARTIENT[filtre] || (() => true)));
     }
     setLoading(false);
   }, [lot, filtre, ouvert, t]);
@@ -272,6 +279,13 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
           {r.note && (
             <div style={{ fontSize: '.74rem', color: '#fbbf24', marginTop: 8 }}>⚠ {r.note}</div>
           )}
+          {filtre === '__regle__' && (
+            <div style={{ fontSize: '.74rem', color: '#4ade80', marginTop: 8 }}>
+              {r.applique_le
+                ? t({ id: 'atelier.revue.state.applied' })
+                : t({ id: 'atelier.revue.state.discarded' })}
+            </div>
+          )}
           <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #777)', marginTop: 6 }}>
             {r.entity_kind === 'book'
               ? t({ id: 'atelier.revue.entity.book' })
@@ -279,7 +293,7 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
             {r.contexte ? ` · ${r.contexte}` : ''}
           </div>
 
-          {editing?.id === r.id ? (
+          {filtre === '__regle__' ? null : editing?.id === r.id ? (
             <div style={{ marginTop: 10 }}>
               <label style={ls}>{t({ id: 'atelier.revue.ownValue', defaultMessage: 'Valor correto' })}</label>
               <input type="text" value={editing.valeur} autoFocus
