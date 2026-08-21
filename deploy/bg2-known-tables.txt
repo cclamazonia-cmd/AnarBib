@@ -47,6 +47,7 @@ catalog_ref_review_statuses
 catalog_ref_source_formats
 catalog_ref_source_partners
 catalog_ref_source_systems
+catalog_review_queue
 circle_join_objections
 circle_join_requests
 circle_memberships
