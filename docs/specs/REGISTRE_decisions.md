@@ -1,6 +1,6 @@
 # 🧷 REGISTRE DES DÉCISIONS — AnarBib
 
-- **Version :** 0.2 (20/08/2026 — `DOC-CONV-1` en §0 + §37 `CONV` ; seed d'audit du corpus complet — 02/06/2026)
+- **Version :** 0.2 (21/08/2026 — §40 `DEDUP` ; 20/08/2026 — `DOC-CONV-1` en §0 + §37 `CONV` ; seed d'audit du corpus complet — 02/06/2026)
 - **Rôle :** **foyer unique** des choix (arbitrages) et des doctrines transverses. On **cite l'ID** ici, on ne reformule jamais ailleurs.
 - **Préséance (rappel) :** en cas de conflit, ce registre + la spec courante + le backlog font foi ; CADRAGE / CHANTIER / SESSION = trace non-normative.
 - **Comment lire un statut :** ✅ acté · 🟡 ouvert (à trancher) · 🔵 supersédé/historique · ⚠️ drift détecté (voir `AUDIT_coherence_corpus_2026-06-02.md`).
@@ -899,3 +899,28 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **IDENT-2** | **L'icône d'application porte l'emblème seul, jamais le badge complet** : réduit à 192 ou 512 px, un badge avec texte devient illisible. La règle vaut pour toute nouvelle déclinaison. | ✅ acté 19/08 |
 | **IDENT-3** | **Aucun asset de marque servi depuis un site tiers.** Un logo était encore *hotlinké* depuis un WordPress externe : retiré. Corollaire d'auto-hébergement, au même titre que le retrait de Turnstile (`PRIV-2`). Les assets du thème par défaut portent un **nom versionné** (cache-busting). | ✅ acté 19/08 |
 | **IDENT-4** | **Le bandeau est pilotable par bibliothèque** (`data-brand-logo`) : `libraries.theme_slug` (défaut `default`) désigne un jeu d'assets dans le Storage. Une bibliothèque du réseau reste chez elle visuellement sans que l'app embarque sa marque. | ✅ acté 19/08 |
+
+## 40. Dédoublonnage du catalogue — `DEDUP` *(trace : `journal/chantiers/LIVRAISON_dedoublonnage-arbitrage_2026-08-20.md` ; suites `tests/sql/doublons_p3|p4|p6_*.sql`)*
+
+> Neuf mécanismes de détrompage cohabitaient dans le catalogage, sur quatre niveaux, et trois
+> détruisaient des données sans retour arrière — offerts au profil le moins formé, sous la même
+> apparence que des actions inoffensives posées juste à côté. Le relevé du 20/08 chiffre le
+> déséquilibre : sur **266 paires détectées, 254** appellent « Même œuvre » et non la fusion.
+> On exposait un bouton destructeur sur une liste dont 95 % des lignes ne demandent aucune
+> destruction. Quatre lots livrés les 20-21/08 ; cette carte fixe ce qui doit en rester vrai.
+>
+> **Reste ouvert** : pas d'équivalent « Signaler » pour les autorités (pas de file dédiée) ;
+> et la coexistence du balayage global avec l'assistant — si ce dernier s'installe dans les
+> usages, les boutons destructeurs du balayage pourront être retirés. À trancher à l'observation.
+
+| ID | Décision | Statut |
+|---|---|---|
+| **DEDUP-1** | **Découper par verbe, pas par personne.** *Signaler* et *rapprocher* (« Même œuvre », réversible via `detach_book_from_work`) restent à tout le staff ; *arbitrer de façon destructrice* — fusionner une notice, fusionner une autorité, écarter une paire — revient à la coordination seule. Le catalogueur a le livre en main : on lui retire le pouvoir de détruire, pas sa connaissance du terrain. `fn_is_dedup_arbiter()` est la **définition unique**, et un bloc `DO` refuse la migration si l'une des quatre fonctions destructrices ne l'appelle pas. | ✅ acté 21/08 |
+| **DEDUP-2** | **Écarter et rétablir se relèvent ENSEMBLE.** Il ne doit jamais exister d'état où l'on peut écarter une paire sans pouvoir la rétablir. Tout arbitrage est **attribué et motivé** (`created_by`, `created_at`, `reason`) : une décision relisible est une décision contestable. Écarter retire la paire de **toutes** les détections du réseau — c'est un geste de portée fédérale, pas un rangement local. | ✅ acté 21/08 |
+| **DEDUP-3** | **On ne restreint que l'irréversible.** La fusion de **brouillons** (`merge_book_drafts`, `merge_draft_into_book`) reste ouverte au staff : le brouillon en double part à la corbeille, c'est réversible, et c'est le travail quotidien de la file. La restreindre coûterait beaucoup sans rien protéger. Les détections et la lecture des arbitrages restent elles aussi au niveau staff — lire n'a jamais rien cassé. | ✅ acté 21/08 |
+| **DEDUP-4** | **Nommer par la conséquence, pas par l'opération.** « Fusionner » ne dit pas qu'une fiche disparaît, ni laquelle. Un libellé nomme ce qui sera perdu, son infobulle dit où part le reste. **Un verbe, une portée, jamais deux** : une clé i18n ne peut pas servir deux orientations opposées — `catalogacao.dedup.merge` voulait dire « garder celle-ci » dans le balayage et « supprimer celle-là » dans la fiche. Supprimée. | ✅ acté 20/08 |
+| **DEDUP-5** | **Une confirmation destructive dit ce qu'elle détruit.** `preview_merge_book` (lecture seule, `STABLE`) sépare la **perte sèche** — le doublon porte une valeur, la canonique n'a rien, l'information n'existera plus nulle part — de la simple **divergence**. La comparaison des colonnes est **générique** : `books` en porte plus de cent et en gagne à chaque type de matériel ; une énumération figée serait fausse au premier ajout, et fausse **en silence**. La confirmation exige de saisir la référence de la fiche supprimée. | ✅ acté 20/08 |
+| **DEDUP-6** | **Une seule vérité de détection.** `suggest_catalog_duplicates` applique exactement les règles de `suggest_book_duplicates` ; aucun écran ne réimplémente de calcul de similarité. Deux vues qui se contredisent sont pires qu'une seule imparfaite. Corollaire : un besoin propre à un écran (l'éditeur et l'ISBN du temps 2) se sert dans `books`, il n'élargit pas la signature d'une RPC dont d'autres dépendent. | ✅ acté 21/08 |
+| **DEDUP-7** | **Le niveau de preuve informe la décision, il ne la prend pas.** Aucune fusion automatique, **même en tête de liste** : dans la bande la plus sûre, deux paires sur cinq n'étaient pas des doublons mais deux éditions (MORYON 2008 Terramar contre MORIYON 1985 Cincel), et MLEG-0016/0017 sont deux **volumes**. Le tri se fait sur la coïncidence titre + année + éditeur, jamais sur la similarité de titre seule — mauvais signal, 135 paires sous 0,75 pleines de faux positifs. | ✅ acté 20/08 |
+| **DEDUP-8** | **Pas de fusion inter-bibliothèques sans mandat.** Une même œuvre cataloguée séparément par deux bibliothèques ne se fusionne pas : cela revient à **mutualiser**, ce qui engage un collectif dont on n'est pas membre. `fusion_possible` est calculé côté base pour que l'interface ne puisse pas se tromper, et `merge_book` exige d'être coordination d'une des bibliothèques détentrices — ou administration réseau **active**. | ✅ acté 21/08 |
+| **DEDUP-9** | **Les écrans du catalogage n'ouvrent pas de fenêtre modale.** Tous les panneaux restent montés et ne sont masqués qu'en CSS : une modale ouverte depuis un panneau inactif devient invisible et bloque le défilement. Motifs, notes et confirmations se saisissent **en ligne**. Corollaire mesuré : un panneau permanent ne déclenche son chargement qu'à l'ouverture de l'onglet (`isActive`), sinon les ~4 s du balayage seraient payées par toute personne qui catalogue. | ✅ acté 21/08 |
