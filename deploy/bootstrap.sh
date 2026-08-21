@@ -276,7 +276,8 @@ SANS_POLICY_VUES=$(sql "select n.nspname || '.' || c.relname from pg_class c
                          where n.nspname in ('public','ingest') and c.relkind = 'r'
                            and c.relrowsecurity = true
                            and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
-                         order by 1" | tr -d '')
+                         order by 1" | tr -d '
+')
 
 EN_TROP=$(comm -13 <(echo "$SANS_POLICY_ATTENDUES" | sort) <(echo "$SANS_POLICY_VUES" | sort))
 MANQUANTES=$(comm -23 <(echo "$SANS_POLICY_ATTENDUES" | sort) <(echo "$SANS_POLICY_VUES" | sort))
@@ -320,6 +321,78 @@ echo "  Migrations GoTrue de cette instance : $AUTH_MIG  (production au 20/08 : 
 if [ "$AUTH_MIG" != "?" ] && [ "$AUTH_MIG" -lt 77 ] 2>/dev/null; then
   echo "  ⚠ Image GoTrue en retard sur la production. Monter GOTRUE_TAG dans"
   echo "    deploy/.env avant toute bascule : image ≥ production, jamais l'inverse."
+fi
+
+# f) La chaîne HTTP répond — et le catalogue n'est pas vide sur une base pleine.
+#
+# Les contrôles (a) à (e) interrogent Postgres. Ils ne disent RIEN de la chaîne
+# que les lectrices empruntent : Caddy → PostgREST → policies RLS. Or c'est
+# exactement là que se produit le sinistre que ce script existe pour éviter —
+# « PostgREST lit le schéma UNE FOIS, à son démarrage » : démarré avant la
+# restauration, il sert un catalogue VIDE sur une base PLEINE, et pas un seul
+# des contrôles SQL ne s'en aperçoit. Le script se terminait donc en renvoyant
+# l'opérateur à un contrôle « à l'œil ». On le fait faire à la machine.
+#
+# DEUX CLÉS, ET C'EST VOULU. Les trois codes 200 sont demandés avec la clé
+# ANONYME : ils prouvent que le chemin public — Caddy, puis chaque service —
+# répond bien à une visiteuse. Mais l'assertion « le catalogue n'est pas vide »
+# se fait avec la clé de SERVICE, qui passe outre la RLS. Sans quoi le contrôle
+# se retournerait contre une instance dont les bibliothèques sont toutes
+# privées : anon n'en verrait aucune, légitimement, et le script hurlerait à la
+# panne. Ce qu'on teste ici n'est pas le droit de lire, c'est que PostgREST voit
+# les données — le cache de schéma, et rien d'autre.
+#
+# L'assertion est de plus à SENS UNIQUE : si la base contient des bibliothèques,
+# l'API doit en rendre au moins une. On ne compare pas les deux nombres.
+BASE_HTTP=""
+for essai in "https://localhost" "http://localhost"; do
+  if curl -sk -o /dev/null --max-time 5 "$essai/auth/v1/health" 2>/dev/null; then
+    BASE_HTTP="$essai"; break
+  fi
+done
+
+if [ -z "$BASE_HTTP" ]; then
+  echo "⚠ Chaîne HTTP injoignable depuis cet hôte (ni https:// ni http://localhost)."
+  echo "  Ce n'est pas forcément une panne : Caddy peut n'écouter que sur le"
+  echo "  domaine réel. À vérifier alors à la main, c'est le seul contrôle qui"
+  echo "  teste la chaîne entière."
+else
+  ANON=$(grep -E '^ANON_KEY=' .env | cut -d= -f2- | tr -d '\r' | tr -d '"')
+  SERVICE=$(grep -E '^SERVICE_ROLE_KEY=' .env | cut -d= -f2- | tr -d '\r' | tr -d '"')
+  code_de() {
+    curl -sk -o /dev/null --max-time 10 -w '%{http_code}' \
+      -H "apikey: $ANON" -H "Authorization: Bearer $ANON" "$BASE_HTTP/$1"
+  }
+  HTTP_OK=1
+  for point in "auth/v1/health" "storage/v1/bucket" "rest/v1/libraries?select=id&limit=1"; do
+    c=$(code_de "$point")
+    if [ "$c" = "200" ]; then
+      echo "✓ $BASE_HTTP/${point%%\?*} → 200"
+    else
+      echo "✗ $BASE_HTTP/${point%%\?*} → $c"
+      HTTP_OK=0; ECHEC=1
+    fi
+  done
+
+  # Le contrôle qui compte vraiment.
+  BIB_SQL=$(sql "select count(*) from public.libraries")
+  if [ "$HTTP_OK" = "1" ] && [ "${BIB_SQL:-0}" -gt 0 ] 2>/dev/null; then
+    RENDU=$(curl -sk --max-time 10 -H "apikey: $SERVICE" -H "Authorization: Bearer $SERVICE" \
+              "$BASE_HTTP/rest/v1/libraries?select=id&limit=1" | grep -c '"id"' || true)
+    if [ "${RENDU:-0}" -gt 0 ]; then
+      echo "✓ L'API rend des bibliothèques sur une base qui en contient $BIB_SQL."
+    else
+      echo "✗ La base contient $BIB_SQL bibliothèque(s) et l'API n'en rend AUCUNE,"
+      echo "  alors même qu'on interroge avec la clé de service (la RLS est donc"
+      echo "  hors de cause)."
+      echo "  C'est la panne que ce script existe pour éviter : PostgREST a lu le"
+      echo "  schéma avant que les données soient là. Le redémarrer suffit :"
+      echo "      docker compose restart rest"
+      ECHEC=1
+    fi
+  elif [ "${BIB_SQL:-0}" = "0" ]; then
+    echo "· Base sans bibliothèque : le contrôle « catalogue non vide » n'a pas d'objet."
+  fi
 fi
 
 echo
