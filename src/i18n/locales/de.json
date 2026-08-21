@@ -5876,5 +5876,13 @@
   "atelier.revue.accept": "Vorschlag annehmen",
   "atelier.revue.reject": "Verwerfen — so lassen",
   "atelier.revue.own": "Selbst korrigieren",
-  "catalogacao.catalog.reviewQueue": "Prüfliste"
+  "catalogacao.catalog.reviewQueue": "Prüfliste",
+  "atelier.revue.lot.patronyme": "Doppelter Nachname",
+  "atelier.revue.lot.patronyme.hint": "CONV-1 · 3 bekannte Fehltreffer von 22",
+  "atelier.revue.lot.casse": "Schreibweise des Ansetzungspunkts",
+  "atelier.revue.lot.casse.hint": "CONV-1 · initcap() irrt bei Apostrophen und Partikeln",
+  "atelier.revue.lot.titres": "Schreibweise der Titel",
+  "atelier.revue.lot.titres.hint": "CONV-3 · die Funktion entfernt ein Artefakt, sie entscheidet nicht",
+  "atelier.revue.entity.book": "Buch",
+  "atelier.revue.entity.author": "Normdatensatz"
 }

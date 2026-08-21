@@ -5876,5 +5876,13 @@
   "atelier.revue.accept": "Aceptar la propuesta",
   "atelier.revue.reject": "Descartar — dejar como está",
   "atelier.revue.own": "Corregir a mano",
-  "catalogacao.catalog.reviewQueue": "Cola de verificación"
+  "catalogacao.catalog.reviewQueue": "Cola de verificación",
+  "atelier.revue.lot.patronyme": "Doble apellido",
+  "atelier.revue.lot.patronyme.hint": "CONV-1 · 3 falsos positivos conocidos de 22",
+  "atelier.revue.lot.casse": "Mayúsculas del punto de acceso",
+  "atelier.revue.lot.casse.hint": "CONV-1 · initcap() se equivoca en apóstrofes y partículas",
+  "atelier.revue.lot.titres": "Mayúsculas de los títulos",
+  "atelier.revue.lot.titres.hint": "CONV-3 · la función retira un artefacto, no decide",
+  "atelier.revue.entity.book": "libro",
+  "atelier.revue.entity.author": "autoridad"
 }

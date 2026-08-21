@@ -24,10 +24,14 @@ import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { Button } from '@/components/ui';
 
+// Libelles PAR CLE, jamais en dur : le test de couverture i18n ne voit que les
+// appels `t({ id })`, donc une chaine litterale y echappe — c'est exactement
+// ainsi que ces trois cartes sont restees en portugais dans une interface en
+// francais, en production, sans que rien ne le signale.
 const LOTS = [
-  { id: 'autorite_patronyme', label: 'Duplo sobrenome', hint: 'CONV-1 · 3 falsos positivos conhecidos em 22' },
-  { id: 'autorite_casse',     label: 'Caixa do ponto de acesso', hint: 'CONV-1 · initcap() erra nas apóstrofes e partículas' },
-  { id: 'titre_casse',        label: 'Caixa dos títulos', hint: 'CONV-3 · a função retira um artefato, não decide' },
+  { id: 'autorite_patronyme', k: 'patronyme' },
+  { id: 'autorite_casse',     k: 'casse' },
+  { id: 'titre_casse',        k: 'titres' },
 ];
 
 const ls = { display: 'block', fontSize: '.74rem', color: 'var(--brand-muted, #999)', marginBottom: 4 };
@@ -102,8 +106,12 @@ export default function ConvRevuePanel() {
                 border: actif ? '1px solid var(--brand-accent, #60a5fa)' : '1px solid rgba(255,255,255,.10)',
                 background: actif ? 'rgba(96,165,250,.10)' : 'rgba(0,0,0,.15)', color: 'inherit',
               }}>
-              <div style={{ fontSize: '.86rem', fontWeight: 600 }}>{L.label}</div>
-              <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginTop: 2 }}>{L.hint}</div>
+              <div style={{ fontSize: '.86rem', fontWeight: 600 }}>
+                {t({ id: `atelier.revue.lot.${L.k}` })}
+              </div>
+              <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', marginTop: 2 }}>
+                {t({ id: `atelier.revue.lot.${L.k}.hint` })}
+              </div>
               <div style={{ fontSize: '.78rem', marginTop: 6 }}>
                 <strong>{c.a_revoir ?? 0}</strong>{' '}
                 {t({ id: 'atelier.revue.pending', defaultMessage: 'a revisar' })}
@@ -153,7 +161,9 @@ export default function ConvRevuePanel() {
             <div style={{ fontSize: '.74rem', color: '#fbbf24', marginTop: 8 }}>⚠ {r.note}</div>
           )}
           <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #777)', marginTop: 6 }}>
-            {r.entity_kind === 'book' ? 'livro' : 'autoridade'} #{r.entity_id}
+            {r.entity_kind === 'book'
+              ? t({ id: 'atelier.revue.entity.book' })
+              : t({ id: 'atelier.revue.entity.author' })} #{r.entity_id}
             {r.contexte ? ` · ${r.contexte}` : ''}
           </div>
 

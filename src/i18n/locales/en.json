@@ -5876,5 +5876,13 @@
   "atelier.revue.accept": "Accept the proposal",
   "atelier.revue.reject": "Discard — leave as is",
   "atelier.revue.own": "Correct it myself",
-  "catalogacao.catalog.reviewQueue": "Review queue"
+  "catalogacao.catalog.reviewQueue": "Review queue",
+  "atelier.revue.lot.patronyme": "Double surname",
+  "atelier.revue.lot.patronyme.hint": "CONV-1 · 3 known false positives out of 22",
+  "atelier.revue.lot.casse": "Access point case",
+  "atelier.revue.lot.casse.hint": "CONV-1 · initcap() gets apostrophes and particles wrong",
+  "atelier.revue.lot.titres": "Title case",
+  "atelier.revue.lot.titres.hint": "CONV-3 · the function removes an artefact, it does not decide",
+  "atelier.revue.entity.book": "book",
+  "atelier.revue.entity.author": "authority"
 }

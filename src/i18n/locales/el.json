@@ -5876,5 +5876,13 @@
   "atelier.revue.accept": "Αποδοχή της πρότασης",
   "atelier.revue.reject": "Απόρριψη — να μείνει ως έχει",
   "atelier.revue.own": "Διόρθωση με το χέρι",
-  "catalogacao.catalog.reviewQueue": "Ουρά επαλήθευσης"
+  "catalogacao.catalog.reviewQueue": "Ουρά επαλήθευσης",
+  "atelier.revue.lot.patronyme": "Διπλό επώνυμο",
+  "atelier.revue.lot.patronyme.hint": "CONV-1 · 3 γνωστά ψευδώς θετικά από τα 22",
+  "atelier.revue.lot.casse": "Πεζά-κεφαλαία του σημείου πρόσβασης",
+  "atelier.revue.lot.casse.hint": "CONV-1 · η initcap() σφάλλει στις αποστρόφους και τα μόρια",
+  "atelier.revue.lot.titres": "Πεζά-κεφαλαία των τίτλων",
+  "atelier.revue.lot.titres.hint": "CONV-3 · η συνάρτηση αφαιρεί ένα τεχνούργημα, δεν αποφασίζει",
+  "atelier.revue.entity.book": "βιβλίο",
+  "atelier.revue.entity.author": "καθιερωμένος όρος"
 }

@@ -5876,5 +5876,13 @@
   "atelier.revue.accept": "Acceptar la proposta",
   "atelier.revue.reject": "Descartar — deixar-ho tal com és",
   "atelier.revue.own": "Corregir a mà",
-  "catalogacao.catalog.reviewQueue": "Cua de verificació"
+  "catalogacao.catalog.reviewQueue": "Cua de verificació",
+  "atelier.revue.lot.patronyme": "Doble cognom",
+  "atelier.revue.lot.patronyme.hint": "CONV-1 · 3 falsos positius coneguts de 22",
+  "atelier.revue.lot.casse": "Majúscules del punt d'accés",
+  "atelier.revue.lot.casse.hint": "CONV-1 · initcap() s'equivoca amb apòstrofs i partícules",
+  "atelier.revue.lot.titres": "Majúscules dels títols",
+  "atelier.revue.lot.titres.hint": "CONV-3 · la funció retira un artefacte, no decideix",
+  "atelier.revue.entity.book": "llibre",
+  "atelier.revue.entity.author": "autoritat"
 }

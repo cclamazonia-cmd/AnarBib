@@ -5876,5 +5876,13 @@
   "atelier.revue.accept": "Het voorstel aanvaarden",
   "atelier.revue.reject": "Verwerpen — laten zoals het is",
   "atelier.revue.own": "Zelf corrigeren",
-  "catalogacao.catalog.reviewQueue": "Controlelijst"
+  "catalogacao.catalog.reviewQueue": "Controlelijst",
+  "atelier.revue.lot.patronyme": "Dubbele achternaam",
+  "atelier.revue.lot.patronyme.hint": "CONV-1 · 3 bekende valse positieven van de 22",
+  "atelier.revue.lot.casse": "Hoofdlettergebruik van het toegangspunt",
+  "atelier.revue.lot.casse.hint": "CONV-1 · initcap() vergist zich bij apostroffen en partikels",
+  "atelier.revue.lot.titres": "Hoofdlettergebruik van de titels",
+  "atelier.revue.lot.titres.hint": "CONV-3 · de functie verwijdert een artefact, ze beslist niet",
+  "atelier.revue.entity.book": "boek",
+  "atelier.revue.entity.author": "autoriteit"
 }

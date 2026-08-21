@@ -5876,5 +5876,13 @@
   "atelier.revue.accept": "Akcepti la proponon",
   "atelier.revue.reject": "Forĵeti — lasi kiel estas",
   "atelier.revue.own": "Korekti permane",
-  "catalogacao.catalog.reviewQueue": "Kontrola vico"
+  "catalogacao.catalog.reviewQueue": "Kontrola vico",
+  "atelier.revue.lot.patronyme": "Duobla familia nomo",
+  "atelier.revue.lot.patronyme.hint": "CONV-1 · 3 konataj falsaj pozitivoj el 22",
+  "atelier.revue.lot.casse": "Uskleco de la enira punkto",
+  "atelier.revue.lot.casse.hint": "CONV-1 · initcap() eraras pri apostrofoj kaj partikloj",
+  "atelier.revue.lot.titres": "Uskleco de la titoloj",
+  "atelier.revue.lot.titres.hint": "CONV-3 · la funkcio forigas artefakton, ĝi ne decidas",
+  "atelier.revue.entity.book": "libro",
+  "atelier.revue.entity.author": "aŭtoritato"
 }
