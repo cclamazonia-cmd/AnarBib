@@ -8,6 +8,7 @@ auth_rate_limits
 author_drafts
 author_name_aliases
 author_translations
+authority_duplicate_reports
 authority_proposal_notification_outbox
 authority_proposal_objections
 authority_proposals

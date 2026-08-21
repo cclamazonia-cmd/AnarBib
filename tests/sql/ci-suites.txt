@@ -43,3 +43,7 @@ tests/sql/doublons_p6_apercu_fusion_tests.sql
 # Reprise de champs avant fusion : ce qui allait etre perdu peut etre garde
 # (paquet DOUBLONS P7). Verifie surtout qu un champ refuse LEVE une erreur.
 tests/sql/doublons_p7_reprise_champs_tests.sql
+
+# Signalement de doublons d autorites (paquet DOUBLONS P8) : ce qu on rend au
+# staff en echange de merge_author. Le test 1 garde l OUVERTURE du geste.
+tests/sql/doublons_p8_signalement_autorites_tests.sql
