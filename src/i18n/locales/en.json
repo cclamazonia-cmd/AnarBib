@@ -5883,6 +5883,8 @@
   "atelier.revue.lot.casse.hint": "CONV-1 · initcap() gets apostrophes and particles wrong",
   "atelier.revue.lot.titres": "Title case",
   "atelier.revue.lot.titres.hint": "CONV-3 · the function removes an artefact, it does not decide",
+  "atelier.revue.lot.collectivite": "Inverted corporate bodies",
+  "atelier.revue.lot.collectivite.hint": "CONV-O7 · a collective name has no inverted form",
   "atelier.revue.entity.book": "book",
   "atelier.revue.entity.author": "authority",
   "atelier.revue.filter.label": "Show",

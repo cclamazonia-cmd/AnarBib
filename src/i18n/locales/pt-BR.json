@@ -5883,6 +5883,8 @@
   "atelier.revue.lot.casse.hint": "CONV-1 · initcap() erra nas apóstrofes e partículas",
   "atelier.revue.lot.titres": "Caixa dos títulos",
   "atelier.revue.lot.titres.hint": "CONV-3 · a função retira um artefato, não decide",
+  "atelier.revue.lot.collectivite": "Coletividades invertidas",
+  "atelier.revue.lot.collectivite.hint": "CONV-O7 · um nome de coletivo não tem forma invertida",
   "atelier.revue.entity.book": "livro",
   "atelier.revue.entity.author": "autoridade",
   "atelier.revue.filter.label": "Mostrar",

@@ -5883,6 +5883,8 @@
   "atelier.revue.lot.casse.hint": "CONV-1 · initcap() s'equivoca amb apòstrofs i partícules",
   "atelier.revue.lot.titres": "Majúscules dels títols",
   "atelier.revue.lot.titres.hint": "CONV-3 · la funció retira un artefacte, no decideix",
+  "atelier.revue.lot.collectivite": "Col·lectivitats invertides",
+  "atelier.revue.lot.collectivite.hint": "CONV-O7 · un nom de col·lectiu no té forma invertida",
   "atelier.revue.entity.book": "llibre",
   "atelier.revue.entity.author": "autoritat",
   "atelier.revue.filter.label": "Mostrar",

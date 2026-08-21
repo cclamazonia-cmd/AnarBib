@@ -59,3 +59,8 @@ tests/sql/doublons_p10_balayage_autorites_tests.sql
 # Arbitrage « pas un doublon » pour les autorites (paquet DOUBLONS P11).
 # Garde surtout que les DEUX detections excluent les memes paires (DEDUP-6).
 tests/sql/doublons_p11_arbitrage_autorites_tests.sql
+
+# Type d autorite et collectivites inversees (CONV-O7). Garde surtout que le
+# verdict humain ne soit pas defait par une reouverture de brouillon (test 6)
+# ni ecrase quand la fiche a bouge depuis la proposition (test 5).
+tests/sql/conv_o7_collectivites_tests.sql

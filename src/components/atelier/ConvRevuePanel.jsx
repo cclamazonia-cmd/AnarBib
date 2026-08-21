@@ -29,9 +29,10 @@ import { Button } from '@/components/ui';
 // ainsi que ces trois cartes sont restees en portugais dans une interface en
 // francais, en production, sans que rien ne le signale.
 const CLE_DE_LOT = {
-  autorite_patronyme: 'patronyme',
-  autorite_casse:     'casse',
-  titre_casse:        'titres',
+  autorite_patronyme:    'patronyme',
+  autorite_casse:        'casse',
+  autorite_collectivite: 'collectivite',
+  titre_casse:           'titres',
 };
 
 // Les trois vues forment une PARTITION : chaque ligne est dans exactement une

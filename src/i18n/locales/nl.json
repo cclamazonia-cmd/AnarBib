@@ -5883,6 +5883,8 @@
   "atelier.revue.lot.casse.hint": "CONV-1 · initcap() vergist zich bij apostroffen en partikels",
   "atelier.revue.lot.titres": "Hoofdlettergebruik van de titels",
   "atelier.revue.lot.titres.hint": "CONV-3 · de functie verwijdert een artefact, ze beslist niet",
+  "atelier.revue.lot.collectivite": "Omgekeerde collectieven",
+  "atelier.revue.lot.collectivite.hint": "CONV-O7 · een collectiefnaam heeft geen omgekeerde vorm",
   "atelier.revue.entity.book": "boek",
   "atelier.revue.entity.author": "autoriteit",
   "atelier.revue.filter.label": "Tonen",

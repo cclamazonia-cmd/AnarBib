@@ -5883,6 +5883,8 @@
   "atelier.revue.lot.casse.hint": "CONV-1 · initcap() irrt bei Apostrophen und Partikeln",
   "atelier.revue.lot.titres": "Schreibweise der Titel",
   "atelier.revue.lot.titres.hint": "CONV-3 · die Funktion entfernt ein Artefakt, sie entscheidet nicht",
+  "atelier.revue.lot.collectivite": "Invertierte Körperschaften",
+  "atelier.revue.lot.collectivite.hint": "CONV-O7 · ein Körperschaftsname hat keine invertierte Form",
   "atelier.revue.entity.book": "Buch",
   "atelier.revue.entity.author": "Normdatensatz",
   "atelier.revue.filter.label": "Anzeigen",

@@ -5883,6 +5883,8 @@
   "atelier.revue.lot.casse.hint": "CONV-1 · initcap() eraras pri apostrofoj kaj partikloj",
   "atelier.revue.lot.titres": "Uskleco de la titoloj",
   "atelier.revue.lot.titres.hint": "CONV-3 · la funkcio forigas artefakton, ĝi ne decidas",
+  "atelier.revue.lot.collectivite": "Inversigitaj kolektivoj",
+  "atelier.revue.lot.collectivite.hint": "CONV-O7 · nomo de kolektivo ne havas inversan formon",
   "atelier.revue.entity.book": "libro",
   "atelier.revue.entity.author": "aŭtoritato",
   "atelier.revue.filter.label": "Montri",
