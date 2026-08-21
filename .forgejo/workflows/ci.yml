@@ -78,84 +78,56 @@ jobs:
           test -d dist || (echo "✗ dist/ introuvable" && exit 1)
           echo "✓ build OK"
 
-      - name: Deploy Pages (branche `pages`, push DELTA)
-        if: github.event_name == 'push'
-        # NON BLOQUANT : un échec Pages (après les 3 retries) ne doit PAS faire
-        # échouer le job `app` et priver `backend` (needs: app) du déploiement
-        # migrations/EF. Le gate qualité reste lint/test/build (bloquants au-dessus).
-        # timeout-minutes : backstop DUR contre un hang (Codeberg muet).
-        continue-on-error: true
-        timeout-minutes: 10
-        env:
-          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
-          CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
-          CUSTOM_DOMAIN: ${{ secrets.CUSTOM_DOMAIN }}
-        run: |
-          # Déploiement DELTA. Avant : commit ORPHELIN poussant TOUT dist/ à chaque
-          # fois → pack géant (les assets vendorés pdfjs/tesseract/wasm sont l'essentiel
-          # du poids) → Codeberg renvoyait HTTP 504 ET corrompait le pack
-          # ("remote: pack has bad object: inflate returned -3"), même avec postBuffer.
-          # Désormais on REPART de la branche pages existante et on ne pousse QUE le
-          # delta (les assets lourds, inchangés, ne repartent jamais) → pack petit,
-          # push fiable. + HTTP/1.1 (évite la corruption de pack en HTTP/2).
-          REPO="https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/AnarBib/anarbib.git"
-          git config --global http.postBuffer 524288000
-          git config --global http.version HTTP/1.1
-          git config --global user.email "ci@anarbib.codeberg.page"
-          git config --global user.name "AnarBib CI"
-
-          # État actuel de la branche pages (shallow) ; sinon init (1er déploiement).
-          if git clone --depth=1 --branch pages "$REPO" pages-out 2>/dev/null; then
-            # Vider l'ancien contenu (sauf .git) pour refléter aussi les suppressions.
-            find pages-out -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-          else
-            mkdir -p pages-out
-            git -C pages-out init -b pages
-            git -C pages-out remote add origin "$REPO"
-          fi
-
-          cp -a dist/. pages-out/
-          cd pages-out
-          echo "$CUSTOM_DOMAIN" > .domains
-          cp index.html 404.html   # fallback SPA pour le routing client
-          git add -A
-          if git diff --cached --quiet; then
-            echo "✓ Pages déjà à jour (aucun changement)"; exit 0
-          fi
-          git commit -m "Deploy from main@${GITHUB_SHA:0:8}"
-
-          # `timeout 150` tue un push qui HANG (Codeberg muet) → la boucle retente.
-          # Le delta est petit → 150s largement suffisant ; 3×150s + sleeps < backstop.
-          n=0
-          until timeout 150 git push origin pages; do
-            n=$((n+1))
-            if [ "$n" -ge 3 ]; then echo "✗ push Pages KO après 3 tentatives"; exit 1; fi
-            echo "↻ push Pages KO (tentative $n/3 — Codeberg ?) — nouvelle tentative dans 10s…"
-            sleep 10
-          done
-          echo "✓ Pages déployé (delta)"
-
-      # ─────────── ESSAI git-pages sur test.anarbib.org (2026-08-20) ───────────
-      # Étape 0 de la migration vers le nouveau moteur Codeberg. Les deux pas de
-      # déploiement coexistent VOLONTAIREMENT le temps de l'essai :
-      #   - celui du dessus continue de servir app.anarbib.org (production) ;
-      #   - celui-ci alimente test.anarbib.org, qu'on compare côte à côte.
+      # ─────────── BASCULE git-pages sur app.anarbib.org (21/08/2026) ───────────
+      # Remplace la poussée d'un delta sur la branche `pages` (ancien moteur v2).
+      # Étape 3 de PLAN_migration_git_pages_2026-08-19, après l'essai concluant du
+      # 20/08 sur test.anarbib.org (étape 0) et la pose des TXT d'autorisation sur
+      # app.anarbib.org (étape 1, vérifiés sur deux résolveurs le 21/08).
       #
-      # Différence de fond avec l'ancien moteur : git-pages ne va plus CHERCHER
-      # la branche `pages` tout seul. C'est cette action qui téléverse dist/ et
-      # le lui signale. La branche `pages` deviendra inutile après la bascule.
+      # DIFFÉRENCE DE FOND : git-pages ne va plus CHERCHER la branche `pages` tout
+      # seul. C'est cette action qui téléverse dist/ et le lui signale. La branche
+      # `pages`, `public/.domains` et les secrets CODEBERG_TOKEN / CODEBERG_USER /
+      # CUSTOM_DOMAIN n'ont donc plus d'objet ICI — nettoyage à l'étape 5, une fois
+      # la bascule constatée, et seulement après avoir vérifié que `npm run deploy`
+      # ne s'en sert pas.
+      #
+      # Les quarante lignes de contournement disparaissent avec l'ancienne étape :
+      # clone shallow, delta, postBuffer, HTTP/1.1, trois tentatives, copie
+      # d'index.html en 404.html. Elles compensaient les 504 et les paquets
+      # corrompus de la poussée git ; il n'y a plus de poussée git.
+      #
+      # Le repli SPA est maintenant tenu par `public/_redirects` (`/* /index.html
+      # 200`), déjà au dépôt. Gain net : une route profonde inconnue répond 200 au
+      # lieu de 404-avec-le-bon-contenu — meilleur pour le référencement, les tests
+      # et le service worker.
+      #
+      # ⚠️ `if: push` AJOUTÉ À LA BASCULE. L'étape d'essai n'en avait pas : sur
+      # test.anarbib.org c'était sans conséquence, sur la production une simple
+      # pull request aurait déployé.
+      #
+      # NON BLOQUANT (continue-on-error) : un échec Codeberg ne doit pas priver
+      # `backend` (needs: app) du déploiement des migrations et des fonctions. En
+      # cas d'échec le site continue de servir son contenu actuel — il cesse
+      # seulement d'être mis à jour.
       #
       # `server:` est requis au premier déploiement sur un domaine personnalisé
       # (il évite la dépendance circulaire certificat ↔ site). Inoffensif ensuite.
       #
       # ⚠️ `token` : la doc Codeberg écrit ${{ forge.token }}, le README de
       # l'action écrit ${{ forgejo.token }}. Si celui-ci échoue, essayer l'autre.
-      - name: Deploy Pages — ESSAI git-pages (test.anarbib.org)
+      # C'est le seul point du plan laissé au tâtonnement.
+      #
+      # ⚠️ CONTRÔLE : ne PAS vérifier la bascule par /.git-pages/manifest.json.
+      # Le repli SPA intercepte ce chemin et renvoie index.html en 200, sous
+      # l'ancien moteur comme sous le nouveau — un vert qui ne prouve rien. La
+      # seule preuve est qu'une modification de contenu apparaisse en ligne.
+      - name: Deploy Pages (git-pages)
+        if: github.event_name == 'push'
         continue-on-error: true
         timeout-minutes: 10
         uses: https://codeberg.org/git-pages/action@v2
         with:
-          site: https://test.anarbib.org/
+          site: https://app.anarbib.org/
           server: codeberg.page
           token: ${{ forge.token }}
           source: dist/
