@@ -5891,5 +5891,7 @@
   "atelier.revue.filter.all": "Toutes",
   "atelier.revue.stale": "La fiche a changé depuis cette proposition — ce qui figure en « Actuel » n'existe plus. Accepter déferait une correction antérieure : écarte cette ligne.",
   "catalogacao.revue.title": "File de vérification — titres",
-  "catalogacao.revue.intro": "Chaque ligne est une proposition de casse de titre, jamais une décision prise. L'outil retire un artefact d'import ; il ne sait pas si un mot est un nom propre. Rien n'est écrit dans le catalogue ici : les verdicts sont appliqués ensuite, par migration."
+  "catalogacao.revue.intro": "Chaque ligne est une proposition de casse de titre, jamais une décision prise. L'outil retire un artefact d'import ; il ne sait pas si un mot est un nom propre. Rien n'est écrit dans le catalogue ici : les verdicts sont appliqués ensuite, par migration.",
+  "atelier.revue.apply": "Appliquer au catalogue ({n})",
+  "atelier.revue.applyDone": "{n} ligne(s) appliquée(s) · {r} refusée(s) par la garde"
 }

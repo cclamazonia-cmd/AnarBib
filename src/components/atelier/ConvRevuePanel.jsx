@@ -55,8 +55,13 @@ const box = {
  * @param {string}   titleKey  cle i18n du titre de section
  * @param {string}   introKey  cle i18n du paragraphe d'introduction
  */
-export default function ConvRevuePanel({ lots, titleKey, introKey }) {
+export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible = false }) {
   const { formatMessage: t } = useIntl();
+
+  // Replie par defaut quand la file s'insere dans une page qui a deja son
+  // contenu : 211 propositions poussaient le catalogue de Catalogacao si bas
+  // qu'on ne l'atteignait plus qu'au prix d'un tres long defilement.
+  const [ouvert, setOuvert] = useState(!collapsible);
 
   const [resume, setResume] = useState([]);
   const [lot, setLot] = useState(lots[0]);
@@ -67,7 +72,21 @@ export default function ConvRevuePanel({ lots, titleKey, introKey }) {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [editing, setEditing] = useState(null);   // { id, valeur }
 
+  // Le RESUME se charge toujours, meme replie : c'est lui qui alimente le
+  // compteur de l'en-tete, et un compteur a zero ferait croire qu'il n'y a
+  // rien derriere la fleche. Il ne coute qu'un group by.
+  const chargerResume = useCallback(async () => {
+    const { data, error } = await supabase.schema('api').rpc('conv_revue_resume');
+    if (error) setMsg({ text: localizeError(t, error), kind: 'err' });
+    else setResume(data || []);
+  }, [t]);
+
+  useEffect(() => { chargerResume(); }, [chargerResume]);
+
+  // Les LIGNES, elles, ne se chargent que si on les regarde : jusqu'a 200
+  // propositions par lot, ce n'est pas ce qu'on demande a une page repliee.
   const charger = useCallback(async () => {
+    if (!ouvert) return;
     setLoading(true);
     const [r1, r2] = await Promise.all([
       supabase.schema('api').rpc('conv_revue_resume'),
@@ -84,12 +103,17 @@ export default function ConvRevuePanel({ lots, titleKey, introKey }) {
     } else {
       setResume(r1.data || []);
       const brut = r2.data || [];
+      // « Ecarte » est un etat TERMINAL : la ligne est reglee, rien ne
+      // l'appliquera jamais. La compter parmi les « tranchees, pas encore
+      // appliquees » la faisait rester a l'ecran apres qu'on l'ait ecartee —
+      // on croyait que le clic n'avait pas pris. Seules `valide` et `corrige`
+      // attendent quelque chose.
       setRows(filtre === '__decide__'
-        ? brut.filter(r => r.decision !== 'a_revoir' && !r.applique_le)
+        ? brut.filter(r => (r.decision === 'valide' || r.decision === 'corrige') && !r.applique_le)
         : brut);
     }
     setLoading(false);
-  }, [lot, filtre, t]);
+  }, [lot, filtre, ouvert, t]);
 
   useEffect(() => { charger(); }, [charger]);
 
@@ -109,7 +133,28 @@ export default function ConvRevuePanel({ lots, titleKey, introKey }) {
     setEditing(null);
   }
 
+  async function appliquer() {
+    setBusyId('__apply__');
+    setMsg({ text: '', kind: '' });
+    const { data, error } = await supabase.schema('api').rpc('conv_revue_appliquer', { p_lot: lot });
+    setBusyId(null);
+    if (error) { setMsg({ text: localizeError(t, error), kind: 'err' }); return; }
+    const r = (data && data[0]) || {};
+    setMsg({
+      text: t({ id: 'atelier.revue.applyDone' },
+               { n: Number(r.applique ?? 0), r: Number(r.refuse ?? 0) }),
+      kind: 'ok',
+    });
+    charger();
+  }
+
   const compteurs = Object.fromEntries(resume.map(r => [r.lot, r]));
+  const cLot = compteurs[lot] || {};
+  // Ce qui attend une ECRITURE : les verdicts poses moins ceux deja ecrits.
+  // « Ecarte » n'y figure pas — il ne sera jamais applique.
+  const enAttente = Math.max(
+    0,
+    Number(cLot.valide ?? 0) + Number(cLot.corrige ?? 0) - Number(cLot.applique ?? 0));
 
   return (
     <section style={{ marginTop: 28 }}>
@@ -168,6 +213,17 @@ export default function ConvRevuePanel({ lots, titleKey, introKey }) {
             <option key={f.v} value={f.v}>{t({ id: `atelier.revue.filter.${f.k}` })}</option>
           ))}
         </select>
+
+        {/* Appliquer au catalogue. Ecriture de donnees par le staff, comme une
+            fusion d'autorites — pas une migration (cf. migration 14). Les
+            gardes vivent cote SQL : une fiche modifiee depuis l'instantane
+            n'est pas ecrasee, et la RPC dit combien elle a refuse. */}
+        {enAttente > 0 && (
+          <Button variant="primary" disabled={busyId === '__apply__'}
+            onClick={appliquer}>
+            {t({ id: 'atelier.revue.apply' }, { n: enAttente })}
+          </Button>
+        )}
       </div>
 
       {msg.text && (

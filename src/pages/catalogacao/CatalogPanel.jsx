@@ -347,7 +347,8 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
         <ConvRevuePanel
           lots={['titre_casse']}
           titleKey="catalogacao.revue.title"
-          introKey="catalogacao.revue.intro" />
+          introKey="catalogacao.revue.intro"
+          collapsible />
       )}
 
       {/* ── Sub-tabs ─────────────────────────────────── */}
