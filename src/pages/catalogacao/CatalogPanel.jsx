@@ -1,4 +1,5 @@
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
@@ -18,13 +19,18 @@ const MATERIAL_KEYS = {
 };
 
 export default function CatalogPanel({ onEdit, requestedView, requestNonce, onChanged }) {
-  const { formatMessage: t } = useIntl();
+  const { formatMessage: t, formatDate } = useIntl();
   // Paquet DOUBLONS P4 (21/08/2026) : la fusion d'autorités est réservée à la
   // coordination. La liste des doublons probables, elle, reste visible : savoir
   // qu'il y a un doublon n'a jamais rien cassé.
   const { effectiveRole } = useLibrary();
   const arbitreDoublons = canArbitrateDuplicates(effectiveRole);
   const [view, setView] = useState('book'); // book | author | exemplar
+  // Signalements d'autorites venus du poste de catalogage (paquet DOUBLONS P8).
+  // Charges seulement quand la vue Autorites est ouverte : c'est la seule ou
+  // ils veulent dire quelque chose.
+  const [signalements, setSignalements] = useState([]);
+  const [signalBusy, setSignalBusy] = useState(null);
   const [dedupOpen, setDedupOpen] = useState(false);
 
   // Sous-vue pilotee depuis les compteurs de CatalogacaoPage (nonce -> re-applique meme vue)
@@ -122,6 +128,14 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   }, [view, dSearch, page, t]);
 
   useEffect(() => { loadItems(); }, [loadItems]);
+
+  const loadSignalements = useCallback(async () => {
+    if (view !== 'author') { setSignalements([]); return; }
+    const { data, error } = await supabase.rpc('list_authority_reports', { p_max: 200 });
+    if (!error) setSignalements(data || []);
+  }, [view]);
+
+  useEffect(() => { loadSignalements(); }, [loadSignalements]);
 
   // Reset page when view/search changes
   useEffect(() => { setPage(0); }, [view, dSearch]);
@@ -307,6 +321,17 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
           style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap', flexShrink: 0 }}>
           {t({ id: 'catalogacao.dedup.find' })}
         </button>
+        {/* File de verification des conventions (REGISTRE §37). L'ecran vit dans
+            /atelier-autoridades, mais le SEUL lien qui y menait etait sur la conta
+            « contributeur·rice pur·e » — un compte SANS bibliotheque, donc jamais
+            staff, donc a qui les RPC repondent « acesso reservado à equipe ».
+            Personne de ceux qui doivent l'utiliser ne pouvait l'atteindre. */}
+        <Link to="/atelier-autoridades" style={{ textDecoration: 'none', flexShrink: 0 }}>
+          <button type="button" className="ab-button ab-button--secondary"
+            style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap' }}>
+            {t({ id: 'catalogacao.catalog.reviewQueue', defaultMessage: 'Fila de verificação' })}
+          </button>
+        </Link>
       </div>
 
       {msg.text && <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: '.9rem', marginBottom: 14, background: msg.kind === 'ok' ? 'rgba(21,128,61,.12)' : 'rgba(220,38,38,.12)', color: msg.kind === 'ok' ? '#4ade80' : '#f87171' }}>{msg.text}</div>}
@@ -330,6 +355,69 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
           placeholder={view === 'book' ? t({ id: 'catalogacao.catalog.searchBook' }) : view === 'author' ? t({ id: 'catalogacao.catalog.searchAuthor' }) : t({ id: 'catalogacao.catalog.searchExemplar' })}
           style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.92rem' }} />
       </div>
+
+      {/* ── Signalements d'autorites (coordination) ───── */}
+      {/* Place au-dessus de la liste : une file qu'il faut aller chercher est une
+          file qu'on oublie. Les deux cotes sont montres avec leur nombre d'oeuvres,
+          parce que c'est ce qui aide a decider laquelle des deux garder. */}
+      {view === 'author' && arbitreDoublons && signalements.length > 0 && (
+        <div style={{ border: '1px solid rgba(234,179,8,.3)', borderRadius: 8, padding: 12, marginBottom: 14 }}>
+          <div style={{ fontWeight: 600, fontSize: '.88rem', marginBottom: 8 }}>
+            {t({ id: 'catalogacao.dedup.scanTabReported' })} ({signalements.length})
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {signalements.map((sig) => {
+              const cle = `${sig.author_id_a}:${sig.author_id_b}`;
+              const busy = signalBusy === cle;
+              return (
+                <div key={cle} style={{
+                  border: '1px solid rgba(255,255,255,.1)', borderRadius: 8, padding: 10,
+                  opacity: busy ? 0.5 : 1,
+                }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+                    {[['a', sig.author_id_a, sig.nom_a, sig.tri_a, sig.oeuvres_a],
+                      ['b', sig.author_id_b, sig.nom_b, sig.tri_b, sig.oeuvres_b]].map(([cote, id, nom, tri, n]) => (
+                      <div key={cote} style={{ fontSize: '.85rem' }}>
+                        <div style={{ fontWeight: 600 }}>{nom}</div>
+                        <div style={{ color: 'var(--brand-muted, #999)', fontSize: '.78rem' }}>
+                          {tri || '—'} · {t({ id: 'catalogacao.dedup.books' }, { count: n })}
+                        </div>
+                        <button type="button" className="ab-button ab-button--mini ab-button--secondary"
+                          style={{ marginTop: 6 }} disabled={busy}
+                          onClick={() => openMerge({ id, preferred_name: nom, sort_name: tri })}
+                          title={t({ id: 'catalogacao.dedup.deleteThisAuthorityHint' })}>
+                          {t({ id: 'catalogacao.dedup.deleteThisAuthority' })}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 8, fontSize: '.78rem', color: 'var(--brand-muted, #888)' }}>
+                    {t({ id: 'catalogacao.dedup.reportedBy' }, {
+                      who: sig.reported_by_name || t({ id: 'catalogacao.dedup.discardedByUnknown' }),
+                      when: sig.created_at ? formatDate(sig.created_at, { dateStyle: 'medium' }) : '—',
+                    })}
+                    {sig.note ? ` — « ${sig.note} »` : ''}
+                  </div>
+                  <button type="button" className="ab-button ab-button--mini ab-button--secondary"
+                    style={{ marginTop: 8 }} disabled={busy}
+                    title={t({ id: 'catalogacao.dedup.dismissHint' })}
+                    onClick={async () => {
+                      setSignalBusy(cle);
+                      const { error } = await supabase.rpc('close_authority_report', {
+                        p_a: sig.author_id_a, p_b: sig.author_id_b,
+                      });
+                      if (error) setMsg({ text: localizeError(error, t), kind: 'error' });
+                      else setSignalements((prev) => prev.filter((x) => `${x.author_id_a}:${x.author_id_b}` !== cle));
+                      setSignalBusy(null);
+                    }}>
+                    {busy ? '…' : t({ id: 'catalogacao.dedup.dismiss' })}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* ── Items table ──────────────────────────────── */}
       <div style={{ border: '1px solid rgba(255,255,255,.06)', borderRadius: 8, maxHeight: 500, overflowY: 'auto', marginBottom: 14 }}>
