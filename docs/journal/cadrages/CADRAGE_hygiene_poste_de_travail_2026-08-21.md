@@ -291,13 +291,52 @@ pourquoi. Ce cadrage ne propose pas d'y toucher.
 
 ---
 
-## 7. Point ouvert
+## 7. `HYG-Q1` — tranché le 21/08 : `anarbib-staging` est mort
 
-**HYG-Q1 — que devient `anarbib-staging` ?** 84 Mo hors git, contenant un
-`anarbib-app`, un `supabase`, un `src`, des `functions.env` et un
-`secrets-list.json`, avec des fichiers datés d'avant-hier. C'est la seule copie
-dont on ne peut pas dire aujourd'hui si elle sert encore à quelque chose — et
-son nom suggère qu'elle a été, ou est encore, un chemin de déploiement vers
-l'instance de staging. **À ne pas toucher avant d'avoir répondu à cette
-question.** Si elle est vivante, elle mérite d'entrer dans le dépôt sous forme
-de scripts versionnés ; si elle est morte, elle emporte des secrets avec elle.
+La question était : ce dossier de 84 Mo, hors git, aux fichiers datés
+d'avant-hier, est-il encore un chemin de déploiement vers l'instance de
+staging ? Trois vérifications, toutes négatives.
+
+**Rien ne l'appelle.** Aucun script (`.ps1`, `.sh`, `.cmd`, `.mjs`, `.cjs`),
+aucune tâche planifiée Windows, aucun `crontab` WSL ne référence le chemin. Les
+seules occurrences de la chaîne « anarbib-staging » sur la machine désignent
+`anarbib-staging-rede`, le **nom du projet Supabase** — pas le dossier.
+
+**Presque rien n'y est récent.** Sur l'ensemble du dossier, **trois** fichiers
+seulement sont postérieurs au 1ᵉʳ mai ; tout le reste date d'avril 2026. Le
+`19/08` que portait le dossier était son propre horodatage, pas celui de son
+contenu.
+
+**Et ces trois-là ne contiennent rien d'unique.**
+
+| fichier | verdict |
+|---|---|
+| `git-pages/_redirects` | **identique** à `public/_redirects` du dépôt |
+| `git-pages/ci-git-pages-step.yml` | brouillon d'une étape **déjà intégrée** à `.forgejo/workflows/ci.yml` (lignes 138-158, 20/08) |
+| `anarbib-bg2-patche.sh` | 363 lignes contre 411 au dépôt ; ses 8 lignes de code propres sont une version **antérieure** du témoin de vie (`fn_record_backup_heartbeat` à 3 arguments, contre 4 au dépôt) |
+
+Le `diff -r` complet relève 38 entrées présentes seulement côté staging. Deux
+semblaient prometteuses et ne le sont pas : `catalog_metadata_lookup` **existe**
+au dépôt, dans une arborescence plus récente ; `ResourcePage.jsx` date du
+14 avril et n'a pas de suite. Le reste est du bundle (`anarbib_lookup_v2_bundle`,
+`anarbib-functions`), des variantes `_staging` d'Edge Functions, un `sql/`
+d'avril, et le répertoire `{public,src` — l'accolade de shell non développée.
+
+**Conclusion** : le dossier est superseded en entier. Il reste néanmoins la
+**seule chose du poste qui contienne des secrets hors coffre** (`functions.env`,
+`secrets-list.json`, `supabase/functions/catalog_metadata_lookup/.env.local`).
+L'étape 2 du plan (§4) s'y applique donc en priorité, et l'étape 3 peut suivre
+immédiatement après — sans le délai d'archivage de deux semaines, puisque la
+question « est-ce que ça sert encore ? » est répondue.
+
+---
+
+## 8. Point ouvert
+
+**HYG-Q2 — le placeholder n'était que le premier.** La correction du filtre de
+langue (21/08) a montré qu'une chaîne d'interface peut survivre au composant
+pour lequel elle avait été écrite : `catalog.filters.languagePh` proposait
+encore de *taper* « fr, pt, es, en… » des heures après que le champ soit devenu
+un sélecteur. Rien ne détecte ce genre de survivance — ni le build, ni les tests
+de parité i18n, qui vérifient que les 10 locales ont les mêmes clés, jamais que
+la clé dit encore la vérité. À voir s'il existe d'autres `*Ph` orphelins.
