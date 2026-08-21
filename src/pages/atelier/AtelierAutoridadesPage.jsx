@@ -147,7 +147,19 @@ export default function AtelierAutoridadesPage() {
 
   return (
     <PageShell><Topbar />
-      <div style={{ maxWidth: 760, margin: '0 auto', padding: '24px 16px' }}>
+      {/* Le contenu se pose sur une SURFACE, jamais directement sur l'image de
+          fond du thème : sur une fresque, du texte sans fond n'a aucun rapport
+          de contraste garanti — il change selon l'endroit où l'on a scrollé.
+          Mêmes tokens que SubjectPage et les autres pages publiques. */}
+      <div style={{
+        maxWidth: 860, margin: '24px auto', padding: '24px 24px 32px',
+        backgroundColor: 'var(--brand-panel-bg)',
+        backgroundImage: 'var(--brand-panel-overlay-solid), var(--brand-panel-bg-image)',
+        backgroundPosition: 'center', backgroundSize: 'cover',
+        border: '1px solid var(--brand-panel-border)',
+        borderRadius: 'calc(var(--brand-radius) + 2px)',
+        boxShadow: 'var(--brand-shadow)',
+      }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4, fontFamily: 'var(--brand-font-body)', textTransform: 'none' }}>
           {t({ id: 'atelier.page.title', defaultMessage: 'Oficina de autoridades' })}
         </h1>
