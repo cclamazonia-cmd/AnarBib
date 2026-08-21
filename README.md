@@ -51,7 +51,7 @@ Chantiers livrés depuis fin juin 2026 (24 juin → 7 juillet) — vérifiés su
 - **Automatisation de la Gazette** — Build mensuel et **traduction automatique des contributions** (`translate-gazette-submission`) désormais pilotés par des tâches **pg_cron actives**.
 - **Registre RGPD & politique de confidentialité unifiée** — Source unique app + site vitrine, sous-traitants à jour (anti-bot **Altcha auto-hébergé** depuis le 20/08/2026 — plus aucune dépendance Cloudflare directe), auto-suppression des prêts clos après rétention, pseudonymisation BG2-14 (`erasure_log`).
 - **Consolidation des performances RLS** — Fusion des policies permissives multiples par table/rôle (migrations `perf_consolidate_permissive_policies_*`, 04/07).
-- **Backend** : **42 Edge Functions** Deno et **90 migrations** SQL (baseline + incréments) appliquées jusqu'au **2026-07-05** ; base de **174 tables**, **~552 fonctions/routines**, **31 tâches pg_cron** actives ; suite Vitest verte (**87 tests**, 4 fichiers).
+- **Backend** : **46 Edge Functions** Deno et **172 migrations** SQL (baseline + incréments) appliquées jusqu'au **2026-08-21** ; base de **184 tables**, **767 fonctions/routines** (594 dans `public`, 173 dans `api`), **31 tâches pg_cron** actives sur 32 ; suite Vitest verte (**90 tests**, 4 fichiers). *(Chiffres mesurés le 21/08/2026 — voir la note de méthode en pied de page.)*
 
 Chantiers structurants consolidés (mai–juin 2026, toujours en place) :
 
@@ -83,7 +83,7 @@ Work delivered since late June 2026 (24 June → 7 July) — verified against th
 - **Gazette automation** — Monthly build and **automatic translation of contributions** (`translate-gazette-submission`) now driven by **active pg_cron jobs**.
 - **GDPR register & unified privacy policy** — Single source for app + project website, subprocessors up to date (**self-hosted Altcha** anti-bot since 2026-08-20 — no direct Cloudflare dependency left), auto-deletion of closed loans after retention, BG2-14 pseudonymization (`erasure_log`).
 - **RLS performance consolidation** — Merging of multiple permissive policies per table/role (`perf_consolidate_permissive_policies_*` migrations, 04/07).
-- **Backend**: **42 Deno Edge Functions** and **90 SQL migrations** (baseline + increments) applied through **2026-07-05**; database of **174 tables**, **~552 functions/routines**, **31 active pg_cron jobs**; Vitest suite green (**87 tests**, 4 files).
+- **Backend**: **46 Deno Edge Functions** and **172 SQL migrations** (baseline + increments) applied through **2026-08-21**; database of **184 tables**, **767 functions/routines** (594 in `public`, 173 in `api`), **31 active pg_cron jobs** out of 32; Vitest suite green (**90 tests**, 4 files). *(Measured on 2026-08-21 — see the method note in the footer.)*
 
 Structural work consolidated (May–June 2026, still in place):
 
@@ -234,8 +234,8 @@ anarbib/
 │   └── main.jsx            # Point d'entrée
 │
 ├── supabase/
-│   ├── migrations/         # 90 fichiers (baseline 20260510 + incréments jusqu'au 2026-07-05, _TEMPLATE.sql inclus)
-│   └── functions/          # 42 Edge Functions Deno (hors _shared/)
+│   ├── migrations/         # 173 fichiers (baseline 20260510 + incréments jusqu'au 2026-08-21, _TEMPLATE.sql inclus)
+│   └── functions/          # 46 Edge Functions Deno (hors _shared/ et main/)
 │       ├── notify-event/   # Routeur d'événements + handlers de domaine (team.*, network.*, consultas.*, library-event…)
 │       │   └── _shared/    # domain/, mail/ (layout.ts : renderEmail + actionBox), i18n/ (mail-strings.ts)
 │       ├── register/ login/ request-password-reset/  # Inscription / auth / reset mot de passe
@@ -278,8 +278,8 @@ anarbib/
 The codebase mirrors the structure above. Key directories:
 
 - `src/` — React 19 + Vite 6 frontend (react-router-dom 7, react-intl 7) with React Context for auth, library state and toasts, react-intl for i18n across 10 locales, themed UI components, multiformat viewers (PDF/ePub) and Tesseract OCR.
-- `supabase/migrations/` — 90 versioned migration files (baseline `20260510000000_baseline_live` + increments, latest applied 2026-07-05) applied automatically by the Forgejo `backend` job on push to `main`.
-- `supabase/functions/` — 42 Deno Edge Functions (transactional mail via `notify-event`; ISBN / metadata / cover / authority / audio-fingerprint lookups; partner-catalog import & export; inter-library fonds exchange; OAI-PMH provider; network cartography + geocoding; federated gazette + newsletter + auto-translation; PDF/asset reads; login / register / password-reset; etc.). `_shared/` is a shared module excluded from deployment.
+- `supabase/migrations/` — 172 versioned migration files (baseline `20260510000000_baseline_live` + increments, latest applied 2026-08-21) applied automatically by the Forgejo `backend` job on push to `main`.
+- `supabase/functions/` — 46 Deno Edge Functions (transactional mail via `notify-event`; ISBN / metadata / cover / authority / audio-fingerprint lookups; partner-catalog import & export; inter-library fonds exchange; OAI-PMH provider; network cartography + geocoding; federated gazette + newsletter + auto-translation; PDF/asset reads; login / register / password-reset; etc.). `_shared/` is a shared module excluded from deployment.
 - `docs/` — Specifications (in French), decision journal (`journal/`), versioned backlogs, governance guide, guides and manuals (10 locales), inclusive-language charter (`notes-audit/`), legal documents.
 - `.forgejo/workflows/` — Forgejo Actions CI/CD: `ci.yml` (app + backend) and `sql-tests.yml` (schema rebuild + SQL tests). Replaces the former `.woodpecker.yml`.
 - `.githooks/pre-commit.ps1` — Doctrinal SQL guardrail (activate with `git config core.hooksPath .githooks`).
@@ -548,7 +548,7 @@ npm test     # vitest run
 npx vitest   # mode watch
 ```
 
-Couverture : i18n (cohérence, charte, couverture code ↔ locales, parité des 10 locales, garde anti-`camerata`), helpers (`catalogFilters`), inscription (`criar-conta-i18n`). Suite verte : **87 tests** (4 fichiers). Le test i18n est **bloquant en CI**. Pas encore de tests end-to-end automatisés (au backlog).
+Couverture : i18n (cohérence, charte, couverture code ↔ locales, parité des 10 locales, garde anti-`camerata`), helpers (`catalogFilters`), inscription (`criar-conta-i18n`). Suite verte : **90 tests** (4 fichiers), mesurée le 21/08/2026. Le test i18n est **bloquant en CI**. Pas encore de tests end-to-end automatisés (au backlog).
 
 **Tests SQL** — Les tests SQL d'acceptation sont dans `tests/sql/`, lancés soit par le workflow `sql-tests.yml`, soit manuellement depuis le SQL Editor Supabase. Architecture : un seul bloc `DO $$` avec accumulateurs, qui raise une EXCEPTION finale avec le bilan (`BILAN OK : N/N tests passes`).
 
@@ -583,7 +583,7 @@ npm test     # vitest run
 npx vitest   # watch mode
 ```
 
-Coverage: i18n (consistency, charter, code ↔ locales coverage, 10-locale parity, anti-`camerata` guard), helpers (`catalogFilters`), signup (`criar-conta-i18n`). Green suite: **87 tests** (4 files). The i18n test is **blocking in CI**. No automated end-to-end tests yet (in backlog).
+Coverage: i18n (consistency, charter, code ↔ locales coverage, 10-locale parity, anti-`camerata` guard), helpers (`catalogFilters`), signup (`criar-conta-i18n`). Green suite: **90 tests** (4 files), measured 2026-08-21. The i18n test is **blocking in CI**. No automated end-to-end tests yet (in backlog).
 
 **SQL tests** — SQL acceptance tests live in `tests/sql/`, run either by the `sql-tests.yml` workflow or manually from the Supabase SQL Editor. Architecture: a single `DO $$` block with accumulators, raising a final EXCEPTION with the summary (`BILAN OK: N/N tests passed`).
 
@@ -783,4 +783,6 @@ The project is carried by a small collective but welcomes occasional or regular 
 
 ---
 
-Dernière mise à jour / Last updated : 7 juillet 2026 / 7 July 2026 — événements de bibliothèque (opt-out, publication différée, deep-link), dépôt de garantie, cotisations lecteur, thésaurus matière FICEDL, automatisation de la Gazette (+ traduction auto des contributions), registre RGPD & politique de confidentialité unifiée, consolidation des performances RLS ; backend à 42 Edge Functions et 90 migrations appliquées jusqu'au 2026-07-05 (base : 174 tables, ~552 routines, 31 crons) ; `CLAUDE.md` et `.claude/` retirés du suivi git (codage à la main). / Library events (opt-out, deferred publication, deep-link), loan deposits, reader dues, FICEDL subject thesaurus, Gazette automation (+ auto-translation of contributions), GDPR register & unified privacy policy, RLS performance consolidation; backend at 42 Edge Functions and 90 migrations applied through 2026-07-05 (db: 174 tables, ~552 routines, 31 crons); `CLAUDE.md` and `.claude/` removed from git tracking (hand coding).
+Dernière mise à jour / Last updated : **21 août 2026 / 21 August 2026** — anti-bot **Altcha auto-hébergé** en remplacement de Cloudflare Turnstile (dernière dépendance hors auto-hébergement, et dernier transfert hors-UE) ; audit complet des fonctions `SECURITY DEFINER` des schémas `public` et `api`, **six failles réelles fermées** ; chaîne de sauvegarde #BG2 versée au dépôt, secrets du Vault sauvegardés, **observateur externe** et alarme de tir interrompu éprouvés dans les deux sens ; pile auto-hébergée `deploy/` et `bootstrap.sh` — la reconstruction depuis le dépôt seul passe de bout en bout ; bascule de `app.anarbib.org` vers **Codeberg Git Pages** ; profil de numérisation arrêté et plafonds de taille posés sur les seaux Storage ; nouveau logo, notes de lecture, dédoublonnage du catalogue, récapitulatif hebdomadaire inter-bibliothèques. Backend à **46 Edge Functions** et **172 migrations** appliquées jusqu'au 2026-08-21 (base : **184 tables**, **767 routines**, **31 crons actifs sur 32**) ; suite Vitest verte (**90 tests**). Sur l'usage de l'IA, voir la section dédiée plus haut — `CLAUDE.md` et `.claude/` restent hors du suivi git depuis le 07/07/2026, ce qui a retiré l'outillage du dépôt sans mettre fin à l'assistance. / Self-hosted **Altcha** anti-bot replacing Cloudflare Turnstile (the last non-self-hosted dependency, and the last non-EU transfer); full audit of `SECURITY DEFINER` functions in both `public` and `api`, **six real vulnerabilities closed**; #BG2 backup chain committed to the repository, Vault secrets backed up, **external observer** and interrupted-run alarm both proven in both directions; self-hosted `deploy/` stack and `bootstrap.sh` — rebuilding from the repository alone now passes end to end; `app.anarbib.org` migrated to **Codeberg Git Pages**; digitisation profile settled and size caps set on Storage buckets; new logo, reading notes, catalogue deduplication, weekly cross-library digest. Backend at **46 Edge Functions** and **172 migrations** applied through 2026-08-21 (db: **184 tables**, **767 routines**, **31 active crons out of 32**); Vitest suite green (**90 tests**). On AI usage, see the dedicated section above — `CLAUDE.md` and `.claude/` have been outside git tracking since 2026-07-07, which removed the tooling from the repository without ending the assistance.
+
+> **Note de méthode / Method note.** Les chiffres ci-dessus portent leur date de mesure, et c'est délibéré : ce dépôt bouge plus vite que ses relevés. Entre le 20 et le 21 août 2026, trois documents internes donnaient 138, 161 et 173 migrations — tous justes le jour où ils ont été écrits. Un chiffre sans date vieillit sans le dire. / The figures above carry their measurement date, deliberately: this repository moves faster than the documents that describe it. Between 20 and 21 August 2026, three internal documents gave 138, 161 and 173 migrations — each correct on the day it was written. An undated figure ages silently.
