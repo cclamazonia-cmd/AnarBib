@@ -318,7 +318,7 @@ backup_long() {
   # rend la retention independante et des chemins et de l'hote : elle survivra
   # aussi au jour ou ces flux tireront depuis un VPS et non depuis cette machine.
   restic forget --tag flux-long --group-by tags \
-    --keep-daily 7 --keep-weekly 4 --keep-monthly 6 --prune
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 6 --no-prune
   heartbeat long ok "$(snapshot_id_de flux-long)"
   info "Flux long termine."
 }
@@ -343,7 +343,7 @@ backup_court() {
 
   unlock_stale
   restic backup "$dump" --tag flux-court --tag bg2
-  restic forget --tag flux-court --group-by tags --keep-daily 7 --prune
+  restic forget --tag flux-court --group-by tags --keep-daily 7 --no-prune
   heartbeat court ok "$(snapshot_id_de flux-court)"
   info "Flux court termine. (dump clair — comptes — efface)"
 }
@@ -369,7 +369,7 @@ backup_storage() {
   unlock_stale
   restic backup "$STORAGE_WORK" --tag flux-storage --tag bg2
   restic forget --tag flux-storage --group-by tags \
-    --keep-daily 7 --keep-weekly 4 --keep-monthly 6 --prune
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 6 --no-prune
   heartbeat storage ok "$(snapshot_id_de flux-storage)"
   info "Flux storage termine. (miroir local conserve, chmod 700)"
 }
@@ -423,6 +423,42 @@ SQL
   info "Nettoyage du bac a sable"
 }
 
+# --------------------------- PRUNE MENSUEL -----------------------------
+# BG2-17 (21/08/2026) : le prune sort du tir de sauvegarde.
+#
+# POURQUOI. `restic forget --prune` faisait porter au tir de sauvegarde le cout
+# du prune, qui ne tombe que lorsque la retention retire un instantane. La duree
+# devenait donc BIMODALE. Mesure sur le flux storage : 11 min 18 s sans prune
+# (09/08), 22 min 56 s avec (20/08), pour une borne systemd de 30 min. Sept
+# minutes de marge, et pas un document numerise n'est encore verse.
+#
+# CE QUE LA CORRECTION NE TOUCHE PAS, ET POURQUOI. Ni TimeoutStartSec, ni le
+# seuil d'alarme d'une heure. Ces deux nombres sont couples : le seuil vaut le
+# DOUBLE du timeout, si bien qu'un tir legitime ne peut jamais l'atteindre —
+# systemd le tue avant — et c'est ce qui rend le faux positif impossible. Les
+# relever aurait exige de les relever ensemble. Sortir le prune evite ce noeud.
+#
+# `forget` RESTE dans chaque flux : il ne touche que des metadonnees, il est
+# quasi instantane, et la politique de retention continue donc de s'appliquer a
+# chaque tir. Seule la RECUPERATION d'espace est differee. Consequence assumee :
+# jusqu'a un mois de donnees non reclamees dans les trois depots. La
+# deduplication restic rend le surcout modeste, mais il n'est pas nul.
+#
+# CE PRUNE N'ECRIT AUCUN TEMOIN DE VIE. Ce n'est pas une sauvegarde ; l'alarme
+# de silence ne doit pas le compter comme telle, sous peine de tenir un flux
+# pour vivant alors que seul son menage a tourne.
+prune_repos() {
+  preflight
+  local repo
+  for repo in anarbib-long anarbib-court anarbib-storage; do
+    export RESTIC_REPOSITORY="$RESTIC_BASE/$repo"
+    info "Prune de $repo..."
+    unlock_stale
+    restic prune || die "prune echoue sur $repo"
+  done
+  info "=== Prune des trois depots termine. ==="
+}
+
 # ------------------------------ MAIN -----------------------------------
 case "${1:-}" in
   check)        preflight; filet; info "Tout est pret (prerequis + filet)." ;;
@@ -434,6 +470,7 @@ case "${1:-}" in
       all)     backup_long; backup_court; backup_storage; info "=== Les trois flux sont sauvegardes. ===" ;;
       *) echo "Usage: $0 backup {long|court|storage|all}" >&2; exit 2 ;;
     esac ;;
+  prune)        prune_repos ;;
   restore-test) cmd_restore_test ;;
-  *) echo "Usage: $0 {check | backup long|court|storage|all | restore-test}" >&2; exit 2 ;;
+  *) echo "Usage: $0 {check | backup long|court|storage|all | prune | restore-test}" >&2; exit 2 ;;
 esac

@@ -1,0 +1,23 @@
+[Unit]
+Description=AnarBib #BG2 — declencheur du prune mensuel (1er du mois, 22:30 Europe/Paris)
+
+[Timer]
+# Meme convention que les autres minuteurs : horaire exprime en Europe/Paris,
+# pas dans le fuseau de la machine.
+#
+# 22:30 le 1er, a l'ecart de tous les autres tirs : court tire quotidiennement
+# a 19:00, long le dimanche a 20:00, storage le dimanche a 21:00 (~23 min, donc
+# fini vers 21:25). Le prune prend un verrou EXCLUSIF sur le depot : un tir de
+# sauvegarde qui le croiserait echouerait sur le verrou.
+OnCalendar=*-*-01 22:30:00 Europe/Paris
+# Persistent=true, contrairement a la reserve notee sur le flux storage. Le
+# rattrapage au reveil y etait dangereux parce qu'un tir de SAUVEGARDE tue en
+# plein repack, c'est une sauvegarde perdue. Un prune tue ne coute rien : il est
+# idempotent, reprenable, et ne laisse qu'un verrou que `unlock_stale` leve au
+# passage suivant. Si l'experience contredit ce raisonnement, c'est cette ligne
+# qu'il faut passer a false — le prune saute alors un mois, sans consequence.
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
