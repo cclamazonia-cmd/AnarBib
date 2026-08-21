@@ -149,10 +149,38 @@ heartbeat() {
 #
 # `jq` n'est pas installe sur ce poste : on lit le JSON au grep, ce qui suffit
 # pour un champ plat. Non bloquant : sans identifiant, le temoin part quand meme.
+# ON N'UTILISE PAS `--latest 1`. Piege verifie le 21/08/2026 : restic groupe les
+# snapshots par (host, paths) et `--latest n` rend n snapshots PAR GROUPE. Le
+# depot `long` en a trois groupes depuis que anarbib-vault.sql s'est ajoute au
+# chemin (BG2-15, 19/08) : `--latest 1 --tag flux-long` y rendait TROIS lignes,
+# dont la premiere datait du 30/06. Le `head -1` d'origine transmettait donc au
+# temoin l'identifiant d'un snapshot vieux de sept semaines, en le presentant
+# comme celui du tir qui venait de finir — un mensonge tranquille, et lisible
+# seulement le jour de la restauration.
+#
+# On lit toutes les paires (time, short_id) et on garde celle dont la date est la
+# plus grande. Comparaison sur l'epoch, pas sur la chaine ISO : les snapshots
+# d'avant juillet portent un decalage +02:00 et les recents -03:00, un tri
+# lexical les melangerait.
 snapshot_id_de() {
-  local tag="$1"
-  restic snapshots --latest 1 --tag "$tag" --json 2>/dev/null \
-    | grep -o '"short_id":"[^"]*"' | head -1 | cut -d'"' -f4
+  local tag="$1" json="" ligne="" ts="" best=0 id="" cur_iso=""
+  json="$(restic snapshots --tag "$tag" --json 2>/dev/null)" || return 0
+  while IFS= read -r ligne; do
+    case "$ligne" in
+      '"time":'*)
+        cur_iso="$(printf '%s' "$ligne" | cut -d'"' -f4)"
+        ;;
+      '"short_id":'*)
+        [ -n "$cur_iso" ] || continue
+        ts="$(date -d "$cur_iso" +%s 2>/dev/null)" || continue
+        if [ "$ts" -gt "$best" ]; then
+          best="$ts"; id="$(printf '%s' "$ligne" | cut -d'"' -f4)"
+        fi
+        ;;
+    esac
+  done <<< "$(printf '%s' "$json" | grep -o '"time":"[^"]*"\|"short_id":"[^"]*"')"
+  printf '%s' "$id"
+  return 0
 }
 
 ensure_agent() {
