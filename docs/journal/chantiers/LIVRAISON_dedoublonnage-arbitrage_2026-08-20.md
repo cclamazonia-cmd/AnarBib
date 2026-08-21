@@ -163,11 +163,13 @@ réécrit — d'autres sessions avaient déjà commité par-dessus.
 
 - ~~**REGISTRE**~~ — **fait le 21/08** : la doctrine est portée en **§40 `DEDUP`**
   (9 cartes). Le créneau §37 étant finalement revenu à `CONV`, puis §38 `OPS` et
-  §39 `IDENT`, le premier libre était §40. **Reste à arbitrer** : `DEDUP-4`
-  (nommer par la conséquence) et `DEDUP-5` (une confirmation dit ce qu'elle
-  détruit) ne concernent pas que les doublons — ils valent pour toute action
-  destructrice de l'interface. Leur graduation en doctrine transverse (§0, foyer
-  unique cité partout) est une décision de coordination, pas de session.
+  §39 `IDENT`, le premier libre était §40. Les deux cartes qui dépassaient le
+  sujet ont **gradué en doctrine transverse** le 21/08, sur décision de la
+  coordination : `DOC-DESTR-1` (nommer par la conséquence) et `DOC-DESTR-2` (une
+  confirmation dit ce qu'elle détruit) vivent désormais en **§0**, le foyer que
+  tout le corpus cite ; `DEDUP-4` et `DEDUP-5` n'en sont plus que les
+  déclinaisons. Elles valent pour toute action destructrice de l'interface —
+  supprimer un lecteur, une bibliothèque, un prêt — pas seulement les doublons.
 - **Backlog** : la version courante (`v33`, 17/06) a deux mois ; une autre
   session mène le rattrapage documentaire. Le v34 annotant `#152` et les items
   catalogage/doublons relève de ce rattrapage, pas de cette session.
