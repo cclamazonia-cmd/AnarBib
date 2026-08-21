@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} riga/righe applicata/e · {r} rifiutata/e dalla guardia",
   "atelier.revue.filter.settled": "Risolte",
   "atelier.revue.state.applied": "Applicata al catalogo",
-  "atelier.revue.state.discarded": "Scartata — nulla è stato modificato"
+  "atelier.revue.state.discarded": "Scartata — nulla è stato modificato",
+  "catalogacao.header.refreshDone": "Contatori aggiornati · catalogo pubblico rigenerato.",
+  "catalogacao.header.refreshHint": "Aggiorna i contatori di questa pagina E rigenera il catalogo che vedono le lettrici."
 }

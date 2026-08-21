@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} Zeile(n) angewendet · {r} von der Sicherung abgelehnt",
   "atelier.revue.filter.settled": "Erledigt",
   "atelier.revue.state.applied": "Auf den Katalog angewendet",
-  "atelier.revue.state.discarded": "Verworfen — nichts wurde geändert"
+  "atelier.revue.state.discarded": "Verworfen — nichts wurde geändert",
+  "catalogacao.header.refreshDone": "Zähler aktualisiert · öffentlicher Katalog neu erzeugt.",
+  "catalogacao.header.refreshHint": "Aktualisiert die Zähler dieser Seite UND erzeugt den Katalog neu, den die Leserinnen sehen."
 }

@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} línea(s) aplicada(s) · {r} rechazada(s) por la guarda",
   "atelier.revue.filter.settled": "Resueltas",
   "atelier.revue.state.applied": "Aplicada al catálogo",
-  "atelier.revue.state.discarded": "Descartada — no se modificó nada"
+  "atelier.revue.state.discarded": "Descartada — no se modificó nada",
+  "catalogacao.header.refreshDone": "Contadores actualizados · catálogo público regenerado.",
+  "catalogacao.header.refreshHint": "Actualiza los contadores de esta página Y regenera el catálogo que ven las lectoras."
 }

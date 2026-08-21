@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} regel(s) toegepast · {r} geweigerd door de beveiliging",
   "atelier.revue.filter.settled": "Afgehandeld",
   "atelier.revue.state.applied": "Toegepast op de catalogus",
-  "atelier.revue.state.discarded": "Verworpen — er is niets gewijzigd"
+  "atelier.revue.state.discarded": "Verworpen — er is niets gewijzigd",
+  "catalogacao.header.refreshDone": "Tellers bijgewerkt · publieke catalogus opnieuw opgebouwd.",
+  "catalogacao.header.refreshHint": "Werkt de tellers van deze pagina bij ÉN bouwt de catalogus die lezers zien opnieuw op."
 }

@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} ligne(s) appliquée(s) · {r} refusée(s) par la garde",
   "atelier.revue.filter.settled": "Réglées",
   "atelier.revue.state.applied": "Appliquée au catalogue",
-  "atelier.revue.state.discarded": "Écartée — rien n’a été modifié"
+  "atelier.revue.state.discarded": "Écartée — rien n’a été modifié",
+  "catalogacao.header.refreshDone": "Compteurs à jour · catalogue public régénéré.",
+  "catalogacao.header.refreshHint": "Met à jour les compteurs de cette page ET régénère le catalogue que voient les lectrices."
 }

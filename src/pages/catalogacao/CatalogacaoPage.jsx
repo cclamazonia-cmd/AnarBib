@@ -131,8 +131,45 @@ export default function CatalogacaoPage() {
     setLoading(false);
   }, [loadStats, loadBatches]);
 
-  // Initial load — ProtectedRoute guarantees user is logged in
+  // Initial load — ProtectedRoute guarantees user is logged in.
+  // NE PAS y mettre `majTout` : `refreshAll` tourne a CHAQUE ouverture de la
+  // page, et regenerer le catalogue public a chaque visite serait absurde.
   useEffect(() => { refreshAll(); }, [refreshAll]);
+
+  // Le bouton d'en-tete fait DEUX choses de portees differentes, et c'est
+  // voulu : `refreshAll` ne change que ce que voit la personne connectee ;
+  // `request_catalog_refresh` regenere ce que voient les LECTRICES. L'action
+  // utile etait auparavant enfermee dans l'onglet « Catalogue(s) publie(s) »,
+  // donc invisible depuis les autres onglets — alors que le bouton bien place
+  // ne faisait presque rien. On les fusionne, et le retour nomme les deux
+  // effets : un bouton qui republie sans le dire serait un nom de plus qui
+  // ment.
+  //
+  // Cote SQL, l'operation est sure : REFRESH ... CONCURRENTLY (les lectrices
+  // ne sont jamais bloquees) sous verrou consultatif non bloquant, qui rend
+  // « busy » plutot que d'empiler les rafraichissements.
+  const [majMsg, setMajMsg] = useState(null);
+
+  const majTout = useCallback(async () => {
+    setLoading(true);
+    setMajMsg(null);
+    try {
+      const { data, error } = await supabase.rpc('request_catalog_refresh');
+      if (error) throw error;
+      await refreshAll();
+      setMajMsg({
+        text: data === 'busy'
+          ? t({ id: 'catalogacao.catalog.refreshBusy' })
+          : t({ id: 'catalogacao.header.refreshDone' }),
+        kind: 'ok',
+      });
+    } catch (err) {
+      setMajMsg({
+        text: t({ id: 'catalogacao.catalog.refreshError' }, { message: localizeError(err, t) }),
+        kind: 'error',
+      });
+    } finally { setLoading(false); }
+  }, [refreshAll, t]);
 
   // ═══════════════════════════════════════════════════════
   // Mode toggle
@@ -255,7 +292,8 @@ export default function CatalogacaoPage() {
         <UserHeroBadge />
         <HeroDocumentationActions
           extraActions={<>
-            <button className="ab-button ab-button--secondary" onClick={refreshAll} disabled={loading}>
+            <button className="ab-button ab-button--secondary" onClick={majTout} disabled={loading}
+              title={t({ id: 'catalogacao.header.refreshHint' })}>
               {loading ? t({ id: 'common.loading' }) : t({ id: 'common.update' })}
             </button>
             <button className="ab-button ab-button--secondary" onClick={() => setWizardOpen(true)} style={{ gap: 6 }}>
@@ -263,6 +301,12 @@ export default function CatalogacaoPage() {
             </button>
           </>}
         />
+        {majMsg && (
+          <div style={{ marginTop: 8, fontSize: '.82rem', maxWidth: 640,
+                        color: majMsg.kind === 'error' ? '#f87171' : '#4ade80' }}>
+            {majMsg.text}
+          </div>
+        )}
       </Hero>
 
       {/* ── Wizard de découverte ── */}

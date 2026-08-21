@@ -47,7 +47,6 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   const [total, setTotal] = useState({ books: 0, authors: 0, exemplars: 0 });
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [page, setPage] = useState(0);
-  const [refreshing, setRefreshing] = useState(false);
   const PAGE_SIZE = 50;
   const fetchNonce = useRef(0);
 
@@ -142,18 +141,6 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
   useEffect(() => { setPage(0); }, [view, dSearch]);
 
   // ── Rafraichir le catalogue public a la demande ─────────
-  async function refreshCatalog() {
-    setRefreshing(true); setMsg({ text: '', kind: '' });
-    try {
-      const { data, error } = await supabase.rpc('request_catalog_refresh');
-      if (error) throw error;
-      setMsg(data === 'busy'
-        ? { text: t({ id: 'catalogacao.catalog.refreshBusy' }), kind: 'ok' }
-        : { text: t({ id: 'catalogacao.catalog.refreshDone' }), kind: 'ok' });
-    } catch (err) {
-      setMsg({ text: t({ id: 'catalogacao.catalog.refreshError' }, { message: localizeError(err, t) }), kind: 'error' });
-    } finally { setRefreshing(false); }
-  }
 
   // ── Retake: create draft from published ─────────────────
   async function retakeItem(type, id) {
@@ -310,11 +297,12 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
             {t({ id: 'catalogacao.catalog.description' })}
           </div>
         </div>
-        <button type="button" className="ab-button ab-button--secondary" onClick={refreshCatalog} disabled={refreshing}
-          title={t({ id: 'catalogacao.catalog.refreshTooltip' })}
-          style={{ fontSize: '.82rem', padding: '8px 14px', whiteSpace: 'nowrap', flexShrink: 0, opacity: refreshing ? 0.7 : 1, cursor: refreshing ? 'progress' : 'pointer' }}>
-          {refreshing ? t({ id: 'catalogacao.catalog.refreshing' }) : t({ id: 'catalogacao.catalog.refresh' })}
-        </button>
+        {/* « Actualiser le catalogue public » a demenage dans l'en-tete de la
+            page (21/08). Il faisait la chose la plus utile de cet ecran, mais
+            il fallait entrer dans CET onglet pour le voir — alors que le
+            bouton « Mettre a jour » de l'en-tete, visible depuis tous les
+            onglets, ne rechargeait que des compteurs. Les deux sont fusionnes
+            la-haut ; le garder ici serait un doublon. */}
         {/* Dedoublonnage global du catalogue publie. La detection par notice
             existe deja pendant le catalogage ; ceci en est le pendant sur
             l'existant deja publie. */}

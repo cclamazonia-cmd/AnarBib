@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} linio(j) aplikita(j) · {r} rifuzita(j) de la gardilo",
   "atelier.revue.filter.settled": "Solvitaj",
   "atelier.revue.state.applied": "Aplikita al la katalogo",
-  "atelier.revue.state.discarded": "Forĵetita — nenio estis ŝanĝita"
+  "atelier.revue.state.discarded": "Forĵetita — nenio estis ŝanĝita",
+  "catalogacao.header.refreshDone": "Nombriloj ĝisdatigitaj · publika katalogo regenerita.",
+  "catalogacao.header.refreshHint": "Ĝisdatigas la nombrilojn de ĉi tiu paĝo KAJ regeneras la katalogon kiun vidas la legantinoj."
 }

@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} γραμμή/ές εφαρμόστηκαν · {r} απορρίφθηκαν από τη δικλείδα",
   "atelier.revue.filter.settled": "Διευθετημένες",
   "atelier.revue.state.applied": "Εφαρμόστηκε στον κατάλογο",
-  "atelier.revue.state.discarded": "Απορρίφθηκε — τίποτα δεν άλλαξε"
+  "atelier.revue.state.discarded": "Απορρίφθηκε — τίποτα δεν άλλαξε",
+  "catalogacao.header.refreshDone": "Οι μετρητές ενημερώθηκαν · ο δημόσιος κατάλογος αναδημιουργήθηκε.",
+  "catalogacao.header.refreshHint": "Ενημερώνει τους μετρητές αυτής της σελίδας ΚΑΙ αναδημιουργεί τον κατάλογο που βλέπουν οι αναγνώστριες."
 }

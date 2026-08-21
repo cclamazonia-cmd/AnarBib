@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} línia/línies aplicada/es · {r} rebutjada/es per la guarda",
   "atelier.revue.filter.settled": "Resoltes",
   "atelier.revue.state.applied": "Aplicada al catàleg",
-  "atelier.revue.state.discarded": "Descartada — no s’ha modificat res"
+  "atelier.revue.state.discarded": "Descartada — no s’ha modificat res",
+  "catalogacao.header.refreshDone": "Comptadors actualitzats · catàleg públic regenerat.",
+  "catalogacao.header.refreshHint": "Actualitza els comptadors d’aquesta pàgina I regenera el catàleg que veuen les lectores."
 }

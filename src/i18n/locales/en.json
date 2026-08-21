@@ -5895,5 +5895,7 @@
   "atelier.revue.applyDone": "{n} line(s) applied · {r} refused by the guard",
   "atelier.revue.filter.settled": "Settled",
   "atelier.revue.state.applied": "Applied to the catalogue",
-  "atelier.revue.state.discarded": "Discarded — nothing was changed"
+  "atelier.revue.state.discarded": "Discarded — nothing was changed",
+  "catalogacao.header.refreshDone": "Counters updated · public catalogue regenerated.",
+  "catalogacao.header.refreshHint": "Updates this page’s counters AND regenerates the catalogue readers see."
 }
