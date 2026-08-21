@@ -1,0 +1,13 @@
+[Unit]
+Description=AnarBib — rafraichissement du miroir froid anarbib-mirror.git
+Documentation=file:%h/anarbib/deploy/ops/anarbib-mirror-refresh.sh
+OnFailure=anarbib-backup-failure@%n.service
+
+[Service]
+Type=oneshot
+Environment=PATH=/usr/bin:/bin
+Environment=HOME=%h
+# Le miroir vit sur le disque Windows, monte via /mnt/c : un fetch y est plus
+# lent que sur le systeme de fichiers natif. 20 min laissent large.
+TimeoutStartSec=1200
+ExecStart=%h/anarbib/deploy/ops/anarbib-mirror-refresh.sh

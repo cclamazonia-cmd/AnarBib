@@ -1,0 +1,19 @@
+[Unit]
+Description=AnarBib — declencheur du miroir froid (quotidien, 18:00 Europe/Paris)
+
+[Timer]
+# Meme convention que les minuteurs #BG2 : horaire en Europe/Paris.
+#
+# 18:00, soit AVANT le flux court de 19:00 : si les deux se croisaient, ce
+# serait sans consequence (ils ne partagent aucune ressource), mais garder les
+# tirs separes rend les journaux lisibles quand quelque chose casse.
+#
+# Quotidien plutot qu'hebdomadaire : ce n'est qu'un fetch incremental de
+# quelques secondes, et la valeur d'une copie froide se mesure a ce qu'elle
+# perdrait si l'amont disparaissait maintenant.
+OnCalendar=*-*-* 18:00:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target
