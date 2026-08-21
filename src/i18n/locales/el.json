@@ -5885,6 +5885,8 @@
   "atelier.revue.lot.titres.hint": "CONV-3 · η συνάρτηση αφαιρεί ένα τεχνούργημα, δεν αποφασίζει",
   "atelier.revue.lot.collectivite": "Ανεστραμμένα συλλογικά όργανα",
   "atelier.revue.lot.collectivite.hint": "CONV-O7 · ένα συλλογικό όνομα δεν έχει ανεστραμμένη μορφή",
+  "atelier.revue.retained": "Η διόρθωσή σας",
+  "atelier.revue.toolProposed": "Πρόταση του εργαλείου:",
   "atelier.kindLabel.creation": "Δημιουργία",
   "atelier.kindLabel.edition": "Επεξεργασία",
   "atelier.kindLabel.fusion": "Συγχώνευση",

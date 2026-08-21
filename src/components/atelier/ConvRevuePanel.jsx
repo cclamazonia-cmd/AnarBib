@@ -90,7 +90,7 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
   // rien derriere la fleche. Il ne coute qu'un group by.
   const chargerResume = useCallback(async () => {
     const { data, error } = await supabase.schema('api').rpc('conv_revue_resume');
-    if (error) setMsg({ text: localizeError(t, error), kind: 'err' });
+    if (error) setMsg({ text: localizeError(error, t), kind: 'err' });
     else setResume(data || []);
   }, [t]);
 
@@ -112,7 +112,7 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
       }),
     ]);
     if (r1.error || r2.error) {
-      setMsg({ text: localizeError(t, r1.error || r2.error), kind: 'err' });
+      setMsg({ text: localizeError(r1.error || r2.error, t), kind: 'err' });
     } else {
       setResume(r1.data || []);
       const brut = r2.data || [];
@@ -126,19 +126,28 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
   useEffect(() => { charger(); }, [charger]);
 
   async function decider(id, decision, valeur) {
+    // Une ligne DEJA tranchee qu'on re-tranche (corriger apres avoir accepte,
+    // par exemple) ne quitte pas la file « a revoir » : elle n'y etait plus.
+    // Decrementer quand meme donnait un compteur qui ment — « 185 a relire »
+    // alors que 185 lignes attendent bien un premier regard.
+    const etait_a_revoir = rows.find(r => r.id === id)?.decision === 'a_revoir';
     setBusyId(id);
     setMsg({ text: '', kind: '' });
     const { error } = await supabase.schema('api').rpc('conv_revue_decide', {
       p_id: id, p_decision: decision, p_valeur: valeur ?? null, p_note: null,
     });
     setBusyId(null);
-    if (error) { setMsg({ text: localizeError(t, error), kind: 'err' }); return; }
+    if (error) { setMsg({ text: localizeError(error, t), kind: 'err' }); return; }
+    setEditing(null);
     // La ligne quitte la file « à revoir » : on la retire sans recharger la page.
-    // Sous les autres filtres elle a vocation a rester visible — on recharge.
+    // Sous les autres filtres elle a vocation a rester visible — on recharge,
+    // sans quoi une correction saisie a la main resterait affichee avec
+    // l'ancienne valeur et passerait pour avalee.
     if (filtre === 'a_revoir') setRows(rs => rs.filter(r => r.id !== id));
     else charger();
-    setResume(rs => rs.map(r => r.lot === lot ? { ...r, a_revoir: Number(r.a_revoir) - 1 } : r));
-    setEditing(null);
+    if (etait_a_revoir) {
+      setResume(rs => rs.map(r => r.lot === lot ? { ...r, a_revoir: Number(r.a_revoir) - 1 } : r));
+    }
   }
 
   async function appliquer() {
@@ -146,7 +155,7 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
     setMsg({ text: '', kind: '' });
     const { data, error } = await supabase.schema('api').rpc('conv_revue_appliquer', { p_lot: lot });
     setBusyId(null);
-    if (error) { setMsg({ text: localizeError(t, error), kind: 'err' }); return; }
+    if (error) { setMsg({ text: localizeError(error, t), kind: 'err' }); return; }
     const r = (data && data[0]) || {};
     setMsg({
       text: t({ id: 'atelier.revue.applyDone' },
@@ -282,13 +291,32 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
                 <div style={{ fontSize: '.9rem', wordBreak: 'break-word', marginTop: 4 }}>{r.actuel}</div>
               )}
             </div>
+            {/* Quand une correction a ete saisie a la main, c'est ELLE qui sera
+                ecrite au catalogue — `fn_conv_cible` prend `valeur_retenue`
+                avant `apres_propose`. Montrer quand meme la proposition de
+                l'outil donnait un ecran qui contredit ce que fait le bouton :
+                on tape un accent, la ligne se recharge sans l'accent, et la
+                correction a l'air avalee alors qu'elle est bien enregistree.
+                On montre donc la valeur retenue, et la proposition d'origine
+                dessous, en retrait — la comparaison reste lisible. */}
             <div style={{ minWidth: 0 }}>
-              <span style={ls}>{t({ id: 'atelier.revue.after', defaultMessage: 'Proposta' })}</span>
+              <span style={ls}>
+                {r.valeur_retenue
+                  ? t({ id: 'atelier.revue.retained' })
+                  : t({ id: 'atelier.revue.after', defaultMessage: 'Proposta' })}
+              </span>
               <div style={{ fontSize: '.9rem', wordBreak: 'break-word', color: '#4ade80' }}>
-                {r.apres_propose || <em style={{ color: 'var(--brand-muted, #999)' }}>
-                  {t({ id: 'atelier.revue.noProposal', defaultMessage: 'nenhuma proposta' })}
-                </em>}
+                {r.valeur_retenue || r.apres_propose || (
+                  <em style={{ color: 'var(--brand-muted, #999)' }}>
+                    {t({ id: 'atelier.revue.noProposal', defaultMessage: 'nenhuma proposta' })}
+                  </em>
+                )}
               </div>
+              {r.valeur_retenue && r.apres_propose && r.valeur_retenue !== r.apres_propose && (
+                <div style={{ fontSize: '.74rem', color: 'var(--brand-muted, #999)', marginTop: 4, wordBreak: 'break-word' }}>
+                  {t({ id: 'atelier.revue.toolProposed' })} {r.apres_propose}
+                </div>
+              )}
             </div>
           </div>
 
@@ -345,7 +373,7 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
                 {t({ id: 'atelier.revue.reject', defaultMessage: 'Descartar — deixar como está' })}
               </Button>
               <Button variant="secondary" disabled={busyId === r.id}
-                onClick={() => setEditing({ id: r.id, valeur: r.apres_propose || r.avant })}>
+                onClick={() => setEditing({ id: r.id, valeur: r.valeur_retenue || r.apres_propose || r.avant })}>
                 {t({ id: 'atelier.revue.own', defaultMessage: 'Corrigir manualmente' })}
               </Button>
             </div>

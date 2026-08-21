@@ -5885,6 +5885,8 @@
   "atelier.revue.lot.titres.hint": "CONV-3 · de functie verwijdert een artefact, ze beslist niet",
   "atelier.revue.lot.collectivite": "Omgekeerde collectieven",
   "atelier.revue.lot.collectivite.hint": "CONV-O7 · een collectiefnaam heeft geen omgekeerde vorm",
+  "atelier.revue.retained": "Uw correctie",
+  "atelier.revue.toolProposed": "Voorstel van het gereedschap:",
   "atelier.kindLabel.creation": "Aanmaak",
   "atelier.kindLabel.edition": "Bewerking",
   "atelier.kindLabel.fusion": "Samenvoeging",

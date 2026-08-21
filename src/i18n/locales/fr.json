@@ -5885,6 +5885,8 @@
   "atelier.revue.lot.titres.hint": "CONV-3 · la fonction retire un artefact, elle ne décide pas",
   "atelier.revue.lot.collectivite": "Collectivités inversées",
   "atelier.revue.lot.collectivite.hint": "CONV-O7 · un nom de collectif n'a pas de forme inversée",
+  "atelier.revue.retained": "Votre correction",
+  "atelier.revue.toolProposed": "Proposition de l’outil :",
   "atelier.kindLabel.creation": "Création",
   "atelier.kindLabel.edition": "Édition",
   "atelier.kindLabel.fusion": "Fusion",

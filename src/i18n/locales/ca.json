@@ -5885,6 +5885,8 @@
   "atelier.revue.lot.titres.hint": "CONV-3 · la funció retira un artefacte, no decideix",
   "atelier.revue.lot.collectivite": "Col·lectivitats invertides",
   "atelier.revue.lot.collectivite.hint": "CONV-O7 · un nom de col·lectiu no té forma invertida",
+  "atelier.revue.retained": "La vostra correcció",
+  "atelier.revue.toolProposed": "Proposta de l’eina:",
   "atelier.kindLabel.creation": "Creació",
   "atelier.kindLabel.edition": "Edició",
   "atelier.kindLabel.fusion": "Fusió",

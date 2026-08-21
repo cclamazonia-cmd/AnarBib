@@ -5885,6 +5885,8 @@
   "atelier.revue.lot.titres.hint": "CONV-3 · la funkcio forigas artefakton, ĝi ne decidas",
   "atelier.revue.lot.collectivite": "Inversigitaj kolektivoj",
   "atelier.revue.lot.collectivite.hint": "CONV-O7 · nomo de kolektivo ne havas inversan formon",
+  "atelier.revue.retained": "Via korekto",
+  "atelier.revue.toolProposed": "Propono de la ilo:",
   "atelier.kindLabel.creation": "Kreo",
   "atelier.kindLabel.edition": "Redakto",
   "atelier.kindLabel.fusion": "Kunfando",

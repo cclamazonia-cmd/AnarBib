@@ -5885,6 +5885,8 @@
   "atelier.revue.lot.titres.hint": "CONV-3 · die Funktion entfernt ein Artefakt, sie entscheidet nicht",
   "atelier.revue.lot.collectivite": "Invertierte Körperschaften",
   "atelier.revue.lot.collectivite.hint": "CONV-O7 · ein Körperschaftsname hat keine invertierte Form",
+  "atelier.revue.retained": "Ihre Korrektur",
+  "atelier.revue.toolProposed": "Vorschlag des Werkzeugs:",
   "atelier.kindLabel.creation": "Anlage",
   "atelier.kindLabel.edition": "Bearbeitung",
   "atelier.kindLabel.fusion": "Zusammenführung",
