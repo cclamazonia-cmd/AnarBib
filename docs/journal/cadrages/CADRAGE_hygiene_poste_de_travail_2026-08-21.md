@@ -153,6 +153,25 @@ elle passe inaperçue parce qu'on croit avoir été précis. La règle utile n'e
 « pas de `-A` », c'est : **le `git add` énumère exactement les fichiers que le
 message décrit**, et on relit `git show --stat` avant de pousser, pas après.
 
+**H-3 ter — nommer le fichier ne suffit pas : il faut qu'il soit propre.**
+Troisième occurrence dans la même journée, et la règle précédente n'a pas tenu.
+`git add -- src/pages/catalogacao/CatalogPanel.jsx` ne désigne qu'**un seul
+fichier nommé** — et a quand même publié une fonctionnalité entière d'une autre
+session (signalements d'autorités, ~80 lignes appelant une RPC
+`list_authority_reports` **qui n'existe pas encore en base**). Le fichier
+lui-même était sale. La règle utile est donc : **avant de stager, lire
+`git diff <fichier>` et vérifier qu'il ne contient que ses propres lignes.**
+
+> **Et il faut le dire : la discipline a échoué trois fois en une journée.**
+> Trois formulations successives de la même règle — pas de `-A`, puis nommer les
+> fichiers, puis vérifier qu'ils sont propres — chacune écrite juste après
+> l'incident que la précédente n'avait pas empêché. C'est le signe que le
+> problème n'est pas la règle mais la **topographie** : deux sessions qui
+> écrivent dans le même arbre de travail produiront cet incident quelle que soit
+> l'attention qu'on y met. C'est l'argument empirique pour **H-3**, et il vaut
+> mieux que n'importe quel raisonnement : un worktree par session, ou une seule
+> session qui écrit à la fois.
+
 **H-3 — Une session à la fois par worktree, ou un worktree par session.** Le
 partage de `~/anarbib` entre sessions concurrentes a produit l'incident 2. Deux
 issues : sérialiser (une seule session écrit à la fois), ou donner à chaque
