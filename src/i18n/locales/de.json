@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "Zu entscheiden — was verbreitet AnarBib?",
   "federacao.communs.doc.noteAgSamizdats.desc": "Der Generalversammlung vorgelegte Notiz, nicht beschlossen. Darf eine Bibliothek, die das gedruckte Buch besitzt, dessen vollständige Digitalisierung nur ihren Mitgliedern zugänglich machen? Sachlage, Verantwortung, Kosten und vier Optionen.",
   "catalogacao.dedupAssist.keepChecked": "Angehakt wandert der Wert zum behaltenen Datensatz. Nicht angehakt verschwindet er mit dem gelöschten.",
-  "catalogacao.dedupAssist.notTransferable": "nicht übertragbar"
+  "catalogacao.dedupAssist.notTransferable": "nicht übertragbar",
+  "atelier.revue.title": "Prüfliste",
+  "atelier.revue.intro": "Jede Zeile ist ein Vorschlag, nie eine bereits getroffene Entscheidung. Das Werkzeug entfernt ein Import-Artefakt; es weiß nicht, ob ein Wort ein Eigenname ist. Hier wird nichts in den Katalog geschrieben: Urteile werden später per Migration angewendet.",
+  "atelier.revue.pending": "zu prüfen",
+  "atelier.revue.applied": "angewendet",
+  "atelier.revue.loading": "Wird geladen…",
+  "atelier.revue.empty": "Nichts zu prüfen in diesem Los.",
+  "atelier.revue.before": "Aktuell",
+  "atelier.revue.after": "Vorschlag",
+  "atelier.revue.noProposal": "kein Vorschlag",
+  "atelier.revue.ownValue": "Richtiger Wert",
+  "atelier.revue.saveOwn": "Diese Korrektur speichern",
+  "atelier.revue.cancel": "Abbrechen",
+  "atelier.revue.accept": "Vorschlag annehmen",
+  "atelier.revue.reject": "Verwerfen — so lassen",
+  "atelier.revue.own": "Selbst korrigieren",
+  "catalogacao.catalog.reviewQueue": "Prüfliste"
 }

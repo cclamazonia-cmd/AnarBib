@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "A decidir — o que AnarBib faz circular?",
   "federacao.communs.doc.noteAgSamizdats.desc": "Nota submetida à assembleia geral, não adotada. Uma biblioteca que possui o livro em papel pode difundir a digitalização integral apenas aos seus membros? A situação de fato, quem responde por ela, o custo e quatro opções.",
   "catalogacao.dedupAssist.keepChecked": "Marcado, o valor passa para a ficha mantida. Desmarcado, some junto com a ficha excluída.",
-  "catalogacao.dedupAssist.notTransferable": "não transferível"
+  "catalogacao.dedupAssist.notTransferable": "não transferível",
+  "atelier.revue.title": "Fila de verificação",
+  "atelier.revue.intro": "Cada linha é uma proposta, nunca uma decisão tomada. A ferramenta retira um artefato de importação; ela não sabe se uma palavra é um nome próprio. Nada é escrito no catálogo aqui: os veredictos são aplicados depois, por migração.",
+  "atelier.revue.pending": "a revisar",
+  "atelier.revue.applied": "aplicadas",
+  "atelier.revue.loading": "Carregando…",
+  "atelier.revue.empty": "Nada a revisar neste lote.",
+  "atelier.revue.before": "Atual",
+  "atelier.revue.after": "Proposta",
+  "atelier.revue.noProposal": "nenhuma proposta",
+  "atelier.revue.ownValue": "Valor correto",
+  "atelier.revue.saveOwn": "Registrar esta correção",
+  "atelier.revue.cancel": "Cancelar",
+  "atelier.revue.accept": "Aceitar a proposta",
+  "atelier.revue.reject": "Descartar — deixar como está",
+  "atelier.revue.own": "Corrigir manualmente",
+  "catalogacao.catalog.reviewQueue": "Fila de verificação"
 }

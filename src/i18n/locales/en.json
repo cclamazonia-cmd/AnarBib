@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "To be decided — what does AnarBib circulate?",
   "federacao.communs.doc.noteAgSamizdats.desc": "Note submitted to the general assembly, not adopted. May a library that owns the printed book serve its full digitisation to its own members only? The facts, who bears responsibility, the cost, and four options.",
   "catalogacao.dedupAssist.keepChecked": "Ticked, the value moves to the kept record. Unticked, it goes with the deleted one.",
-  "catalogacao.dedupAssist.notTransferable": "cannot be carried over"
+  "catalogacao.dedupAssist.notTransferable": "cannot be carried over",
+  "atelier.revue.title": "Review queue",
+  "atelier.revue.intro": "Each line is a proposal, never a decision already made. The tool removes an import artefact; it does not know whether a word is a proper noun. Nothing is written to the catalogue here: verdicts are applied later, by migration.",
+  "atelier.revue.pending": "to review",
+  "atelier.revue.applied": "applied",
+  "atelier.revue.loading": "Loading…",
+  "atelier.revue.empty": "Nothing to review in this batch.",
+  "atelier.revue.before": "Current",
+  "atelier.revue.after": "Proposal",
+  "atelier.revue.noProposal": "no proposal",
+  "atelier.revue.ownValue": "Correct value",
+  "atelier.revue.saveOwn": "Save this correction",
+  "atelier.revue.cancel": "Cancel",
+  "atelier.revue.accept": "Accept the proposal",
+  "atelier.revue.reject": "Discard — leave as is",
+  "atelier.revue.own": "Correct it myself",
+  "catalogacao.catalog.reviewQueue": "Review queue"
 }

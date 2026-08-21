@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "Da decidere — che cosa fa circolare AnarBib?",
   "federacao.communs.doc.noteAgSamizdats.desc": "Nota sottoposta all’assemblea generale, non adottata. Una biblioteca che possiede il libro cartaceo può diffonderne la digitalizzazione integrale ai soli suoi membri? Lo stato di fatto, chi ne risponde, il costo e quattro opzioni.",
   "catalogacao.dedupAssist.keepChecked": "Spuntato, il valore passa alla scheda conservata. Non spuntato, sparisce con quella eliminata.",
-  "catalogacao.dedupAssist.notTransferable": "non riportabile"
+  "catalogacao.dedupAssist.notTransferable": "non riportabile",
+  "atelier.revue.title": "Coda di verifica",
+  "atelier.revue.intro": "Ogni riga è una proposta, mai una decisione già presa. Lo strumento rimuove un artefatto d'importazione; non sa se una parola è un nome proprio. Qui non si scrive nulla nel catalogo: i verdetti si applicano dopo, per migrazione.",
+  "atelier.revue.pending": "da rivedere",
+  "atelier.revue.applied": "applicate",
+  "atelier.revue.loading": "Caricamento…",
+  "atelier.revue.empty": "Niente da rivedere in questo lotto.",
+  "atelier.revue.before": "Attuale",
+  "atelier.revue.after": "Proposta",
+  "atelier.revue.noProposal": "nessuna proposta",
+  "atelier.revue.ownValue": "Valore corretto",
+  "atelier.revue.saveOwn": "Registrare questa correzione",
+  "atelier.revue.cancel": "Annulla",
+  "atelier.revue.accept": "Accettare la proposta",
+  "atelier.revue.reject": "Scartare — lasciare com’è",
+  "atelier.revue.own": "Correggere a mano",
+  "catalogacao.catalog.reviewQueue": "Coda di verifica"
 }

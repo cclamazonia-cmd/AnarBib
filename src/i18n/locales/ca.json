@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "Per decidir — què fa circular AnarBib?",
   "federacao.communs.doc.noteAgSamizdats.desc": "Nota sotmesa a l’assemblea general, no adoptada. Pot una biblioteca que posseeix el llibre en paper difondre’n la digitalització íntegra només als seus membres? La situació, qui n’assumeix la responsabilitat, el cost i quatre opcions.",
   "catalogacao.dedupAssist.keepChecked": "Marcat, el valor passa a la fitxa conservada. Sense marcar, desapareix amb la fitxa eliminada.",
-  "catalogacao.dedupAssist.notTransferable": "no transferible"
+  "catalogacao.dedupAssist.notTransferable": "no transferible",
+  "atelier.revue.title": "Cua de verificació",
+  "atelier.revue.intro": "Cada línia és una proposta, mai una decisió ja presa. L'eina retira un artefacte d'importació; no sap si una paraula és un nom propi. Aquí no s'escriu res al catàleg: els veredictes s'apliquen després, per migració.",
+  "atelier.revue.pending": "per revisar",
+  "atelier.revue.applied": "aplicades",
+  "atelier.revue.loading": "Carregant…",
+  "atelier.revue.empty": "Res a revisar en aquest lot.",
+  "atelier.revue.before": "Actual",
+  "atelier.revue.after": "Proposta",
+  "atelier.revue.noProposal": "cap proposta",
+  "atelier.revue.ownValue": "Valor correcte",
+  "atelier.revue.saveOwn": "Desar aquesta correcció",
+  "atelier.revue.cancel": "Cancel·la",
+  "atelier.revue.accept": "Acceptar la proposta",
+  "atelier.revue.reject": "Descartar — deixar-ho tal com és",
+  "atelier.revue.own": "Corregir a mà",
+  "catalogacao.catalog.reviewQueue": "Cua de verificació"
 }

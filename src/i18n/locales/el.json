@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "Προς απόφαση — τι διακινεί το AnarBib;",
   "federacao.communs.doc.noteAgSamizdats.desc": "Σημείωμα προς τη γενική συνέλευση, μη εγκεκριμένο. Μπορεί μια βιβλιοθήκη που κατέχει το έντυπο βιβλίο να διαθέτει την πλήρη ψηφιοποίησή του μόνο στα μέλη της; Τα πραγματικά περιστατικά, η ευθύνη, το κόστος και τέσσερις επιλογές.",
   "catalogacao.dedupAssist.keepChecked": "Επιλεγμένο, η τιμή περνά στην εγγραφή που διατηρείται. Χωρίς επιλογή, χάνεται μαζί με τη διαγραφόμενη.",
-  "catalogacao.dedupAssist.notTransferable": "μη μεταφέρσιμο"
+  "catalogacao.dedupAssist.notTransferable": "μη μεταφέρσιμο",
+  "atelier.revue.title": "Ουρά επαλήθευσης",
+  "atelier.revue.intro": "Κάθε γραμμή είναι μια πρόταση, ποτέ μια ήδη ειλημμένη απόφαση. Το εργαλείο αφαιρεί ένα τεχνούργημα εισαγωγής· δεν γνωρίζει αν μια λέξη είναι κύριο όνομα. Εδώ δεν γράφεται τίποτα στον κατάλογο: οι ετυμηγορίες εφαρμόζονται αργότερα, με μετάπτωση.",
+  "atelier.revue.pending": "προς έλεγχο",
+  "atelier.revue.applied": "εφαρμοσμένες",
+  "atelier.revue.loading": "Φόρτωση…",
+  "atelier.revue.empty": "Τίποτα προς έλεγχο σε αυτή την παρτίδα.",
+  "atelier.revue.before": "Τρέχον",
+  "atelier.revue.after": "Πρόταση",
+  "atelier.revue.noProposal": "καμία πρόταση",
+  "atelier.revue.ownValue": "Σωστή τιμή",
+  "atelier.revue.saveOwn": "Αποθήκευση αυτής της διόρθωσης",
+  "atelier.revue.cancel": "Ακύρωση",
+  "atelier.revue.accept": "Αποδοχή της πρότασης",
+  "atelier.revue.reject": "Απόρριψη — να μείνει ως έχει",
+  "atelier.revue.own": "Διόρθωση με το χέρι",
+  "catalogacao.catalog.reviewQueue": "Ουρά επαλήθευσης"
 }

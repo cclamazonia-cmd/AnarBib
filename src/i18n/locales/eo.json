@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "Decidota — kion AnarBib cirkuligas?",
   "federacao.communs.doc.noteAgSamizdats.desc": "Noto submetita al la ĝenerala asembleo, ne adoptita. Ĉu biblioteko posedanta la paperan libron rajtas disponigi ĝian plenan ciferecigon nur al siaj membroj? La faktoj, kiu portas la respondecon, la kosto kaj kvar opcioj.",
   "catalogacao.dedupAssist.keepChecked": "Markita, la valoro transiras al la konservata skedo. Nemarkita, ĝi malaperas kun la forigata.",
-  "catalogacao.dedupAssist.notTransferable": "netransigebla"
+  "catalogacao.dedupAssist.notTransferable": "netransigebla",
+  "atelier.revue.title": "Kontrola vico",
+  "atelier.revue.intro": "Ĉiu linio estas propono, neniam jam farita decido. La ilo forigas importan artefakton; ĝi ne scias ĉu vorto estas propra nomo. Ĉi tie nenio estas skribata en la katalogon: la verdiktoj estas aplikataj poste, per migrado.",
+  "atelier.revue.pending": "kontrolendaj",
+  "atelier.revue.applied": "aplikitaj",
+  "atelier.revue.loading": "Ŝargado…",
+  "atelier.revue.empty": "Nenio kontrolenda en ĉi tiu aro.",
+  "atelier.revue.before": "Nuna",
+  "atelier.revue.after": "Propono",
+  "atelier.revue.noProposal": "neniu propono",
+  "atelier.revue.ownValue": "Ĝusta valoro",
+  "atelier.revue.saveOwn": "Registri ĉi tiun korekton",
+  "atelier.revue.cancel": "Nuligi",
+  "atelier.revue.accept": "Akcepti la proponon",
+  "atelier.revue.reject": "Forĵeti — lasi kiel estas",
+  "atelier.revue.own": "Korekti permane",
+  "catalogacao.catalog.reviewQueue": "Kontrola vico"
 }

@@ -12,9 +12,11 @@
 // des VERDICTS ; l'application aux données reste une migration (DOC-DEPLOY-1).
 // Décider et écrire sont deux gestes, et la colonne `applique_le` les sépare.
 //
-// i18n : `defaultMessage` inline en pt-BR, comme le reste de la page (cf.
-// en-tête d'AtelierAutoridadesPage) — l'extraction 10 locales est différée
-// pour toute la page, pas seulement pour ce panneau.
+// i18n : les 16 clés sont extraites dans les 10 locales. Le `defaultMessage`
+// reste comme filet, pas comme dispense : un test de CI (« i18n coverage :
+// code ↔ locales ») exige que toute clé STATIQUE citée par le code existe
+// dans pt-BR et dans les neuf autres. L'en-tête de la page annonce encore une
+// extraction différée — c'était vrai pour elle, ça ne l'est plus pour ici.
 
 import { useState, useEffect, useCallback } from 'react';
 import { useIntl } from 'react-intl';
@@ -185,7 +187,7 @@ export default function ConvRevuePanel() {
               </Button>
               <Button variant="secondary" disabled={busyId === r.id}
                 onClick={() => setEditing({ id: r.id, valeur: r.apres_propose || r.avant })}>
-                {t({ id: 'atelier.revue.own', defaultMessage: 'Corrigir eu mesma' })}
+                {t({ id: 'atelier.revue.own', defaultMessage: 'Corrigir manualmente' })}
               </Button>
             </div>
           )}

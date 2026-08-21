@@ -5860,5 +5860,21 @@
   "federacao.communs.doc.noteAgSamizdats.title": "Nog te beslissen — wat verspreidt AnarBib?",
   "federacao.communs.doc.noteAgSamizdats.desc": "Nota voorgelegd aan de algemene vergadering, niet aangenomen. Mag een bibliotheek die het gedrukte boek bezit de volledige digitalisering ervan uitsluitend aan haar eigen leden aanbieden? De feiten, de verantwoordelijkheid, de kosten en vier opties.",
   "catalogacao.dedupAssist.keepChecked": "Aangevinkt gaat de waarde naar het behouden record. Niet aangevinkt verdwijnt ze met het verwijderde.",
-  "catalogacao.dedupAssist.notTransferable": "niet overdraagbaar"
+  "catalogacao.dedupAssist.notTransferable": "niet overdraagbaar",
+  "atelier.revue.title": "Controlelijst",
+  "atelier.revue.intro": "Elke regel is een voorstel, nooit een reeds genomen besluit. Het hulpmiddel verwijdert een importartefact; het weet niet of een woord een eigennaam is. Hier wordt niets in de catalogus geschreven: de oordelen worden later toegepast, via een migratie.",
+  "atelier.revue.pending": "te bekijken",
+  "atelier.revue.applied": "toegepast",
+  "atelier.revue.loading": "Laden…",
+  "atelier.revue.empty": "Niets te bekijken in deze partij.",
+  "atelier.revue.before": "Huidig",
+  "atelier.revue.after": "Voorstel",
+  "atelier.revue.noProposal": "geen voorstel",
+  "atelier.revue.ownValue": "Juiste waarde",
+  "atelier.revue.saveOwn": "Deze correctie opslaan",
+  "atelier.revue.cancel": "Annuleren",
+  "atelier.revue.accept": "Het voorstel aanvaarden",
+  "atelier.revue.reject": "Verwerpen — laten zoals het is",
+  "atelier.revue.own": "Zelf corrigeren",
+  "catalogacao.catalog.reviewQueue": "Controlelijst"
 }
