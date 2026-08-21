@@ -98,6 +98,31 @@ du commit `bea790d02`, écrit avant cette vérification, porte encore la mention
 « non vérifié » : c'est ce journal qui fait foi. L'historique n'a pas été
 réécrit — d'autres sessions avaient déjà commité par-dessus.
 
+### Paquet P7 — reprendre ce qui allait être perdu
+
+L'aperçu disait ce qu'on détruisait ; il ne permettait pas de l'éviter. Or le
+catalogage savait déjà faire ça — **du mauvais côté** : `merge_book_drafts` et
+`merge_draft_into_book` prennent un `p_fields` qui enrichit le survivant, donc
+le chemin *réversible* récupérait les données et le chemin *irréversible* non.
+
+`merge_book_with_fields` reprend les champs nommés sur la canonique, puis
+**délègue** à `merge_book`, laissée intacte — son corps a déjà été recopié une
+fois ce jour-là, le recopier encore pour un paramètre l'aurait abîmé sans qu'on
+s'en aperçoive. Le bloc `DO` refuse la migration si la délégation disparaît.
+
+Trois garde-fous : `p_fields` prend des **noms** de colonnes et jamais des
+valeurs (la valeur ne peut venir que de la notice supprimée, sinon la fonction
+devient un point d'écriture générique) ; la reprise passe par un `UPDATE` pour
+que les triggers se rejouent ; et la liste des champs interdits est une
+**denylist** vivant dans `fn_dedup_non_transferable_fields()`, consultée par la
+base *et* par l'écran — deux listes auraient divergé, et l'interface aurait
+proposé une case que le serveur refuse.
+
+Au temps 3, chaque champ que la fiche supprimée est seule à porter reçoit une
+case **cochée par défaut** : perdre une information demande désormais un geste
+délibéré. Un champ non reprenable est affiché grisé, pas masqué — sa perte est
+réelle, la cacher reviendrait à la passer sous silence.
+
 ## Doctrine établie
 
 > **Découper par verbe, pas par personne.** *Signaler* (tout le staff, coût
@@ -144,6 +169,12 @@ réécrit — d'autres sessions avaient déjà commité par-dessus.
   30/06). Les essais ont tourné en transaction annulée, en rejouant d'abord les
   migrations prérequises. `sql-tests.yml` **ne bloque pas** le `db push` de
   `ci.yml` : une suite rouge n'empêchera pas la migration d'atteindre la prod.
+- **Sur ce worktree partagé, commiter c'est publier — et un fichier modifié
+  appartient à qui commite en premier.** `git commit -- <chemins>` protège de
+  valider l'index d'autrui ; rien ne protège l'inverse. Quatre fois dans les
+  deux sens le 20-21/08. Conséquence pratique : « je commite mais je ne pousse
+  pas » n'est pas un état stable, et le raisonnement doit vivre dans les
+  **en-têtes de fichier**, pas seulement dans les messages de commit.
 - **Modale interdite dans le catalogage.** Les panneaux restent tous montés et ne
   sont masqués qu'en CSS ; une modale ouverte depuis un panneau inactif devient
   invisible et bloque le défilement. Motifs et notes se saisissent **en ligne**
@@ -156,6 +187,11 @@ réécrit — d'autres sessions avaient déjà commité par-dessus.
   décision. À surveiller : si l'usage montre que personne n'ouvre plus le
   balayage pour arbitrer, ses boutons destructeurs pourront être retirés au
   profit du seul assistant.
+- **Revérifier le temps 3.** La coordination a validé le panneau *avant* les
+  cases à cocher ; ce bloc a changé depuis. Les temps 1 et 2 sont intacts.
+- **`DEDUP-5` à reformuler.** La carte dit « une confirmation dit ce qu'elle
+  détruit » ; depuis P7 elle devrait dire « … et permet de ne pas le détruire ».
+  Idem pour `DOC-DESTR-2` en §0.
 - **Autorités** : pas d'équivalent « Signaler » (pas de file pour les autorités).
   Pour un non-arbitre, la liste des doublons probables reste visible sans bouton.
 
