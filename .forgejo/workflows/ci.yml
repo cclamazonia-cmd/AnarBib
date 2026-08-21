@@ -195,6 +195,39 @@ jobs:
         run: |
           supabase link --project-ref "$SUPABASE_PROJECT_REF"
           set -e
+          # ── Le push touche-t-il seulement une fonction ? ────────────────
+          # Les 47 fonctions sont redeployees une par une (~5 min), meme quand le
+          # push ne contient que des migrations ou de la doc. Vecu le 21/08 (run
+          # 8829551) : trois migrations SQL poussees, 47 fonctions redeployees
+          # pour rien. Le runner traite un job a la fois, donc ces minutes sont
+          # aussi de la file d'attente pour les autres sessions.
+          #
+          # On ne saute QUE le cas « zero fichier modifie sous supabase/functions ».
+          # Le raffinement « seulement les fonctions modifiees » est un piege :
+          # _shared/ est importe par presque toutes, et un ensemble affecte mal
+          # calcule deploierait une fonction avec un module partage perime — bug
+          # invisible au deploiement, visible des semaines plus tard.
+          #
+          # `fetch-depth: 1` ne donne pas le parent : on va chercher le SHA d'avant.
+          # S'il est introuvable (branche neuve, force-push, historique tronque),
+          # on NE saute PAS : mieux vaut cinq minutes perdues qu'une fonction non
+          # deployee. Le defaut, en cas de doute, est le comportement actuel.
+          AVANT="${{ github.event.before }}"
+          DEPLOYER_TOUT=1
+          if [ -n "$AVANT" ] && [ "$AVANT" != "0000000000000000000000000000000000000000" ]; then
+            git fetch --no-tags --depth=50 origin "$AVANT" >/dev/null 2>&1 || true
+            if git rev-parse --verify -q "${AVANT}^{commit}" >/dev/null; then
+              if [ -z "$(git diff --name-only "$AVANT" "$GITHUB_SHA" -- supabase/functions/)" ]; then
+                DEPLOYER_TOUT=0
+              fi
+            fi
+          fi
+          if [ "$DEPLOYER_TOUT" = "0" ]; then
+            echo "→ aucune fonction Edge modifiée dans ce push — étape sautée"
+            echo "✓ Edge Functions inchangées"
+            exit 0
+          fi
+
           for fn_dir in supabase/functions/*/; do
             fn_name=$(basename "$fn_dir")
             [ "$fn_name" = "_shared" ] && { echo "→ skip _shared (module partagé)"; continue; }
