@@ -23,6 +23,30 @@ services:
   db:
     image: supabase/postgres:${POSTGRES_TAG}
     restart: unless-stopped
+    mem_limit: 1536m
+    # BG2-18 (21/08/2026) : Postgres est borné explicitement.
+    # Sans ces valeurs il prend les défauts de l'image, qui ne connaissent pas la
+    # taille de la VM. Le but n'est pas d'économiser mais de RENDRE LE CHIFFRE
+    # ANNONÇABLE : on dimensionne l'hôte sur un plafond choisi, pas sur une
+    # consommation observée un jour donné.
+    # shared_buffers 512M + effective_cache_size 1536M visent une VM de 4 Go.
+    # work_mem est volontairement bas (8M) : il est alloué PAR NŒUD DE TRI, donc
+    # une requête complexe peut en prendre plusieurs fois — c'est le réglage qui
+    # fait exploser Postgres quand on le monte « pour aller plus vite ».
+    command:
+      - postgres
+      - -D
+      - /etc/postgresql
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - effective_cache_size=1536MB
+      - -c
+      - work_mem=8MB
+      - -c
+      - maintenance_work_mem=128MB
+      - -c
+      - max_connections=100
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: postgres
@@ -73,6 +97,7 @@ services:
   rest:
     image: postgrest/postgrest:${POSTGREST_TAG}
     restart: unless-stopped
+    mem_limit: 384m
     depends_on:
       db:
         condition: service_healthy
@@ -97,6 +122,7 @@ services:
   auth:
     image: supabase/gotrue:${GOTRUE_TAG}
     restart: unless-stopped
+    mem_limit: 192m
     depends_on:
       db:
         condition: service_healthy
@@ -128,6 +154,7 @@ services:
   storage:
     image: supabase/storage-api:${STORAGE_TAG}
     restart: unless-stopped
+    mem_limit: 768m
     depends_on:
       db:
         condition: service_healthy
@@ -161,6 +188,7 @@ services:
   functions:
     image: supabase/edge-runtime:${EDGE_RUNTIME_TAG}
     restart: unless-stopped
+    mem_limit: 512m
     depends_on:
       db:
         condition: service_healthy
@@ -191,6 +219,7 @@ services:
   caddy:
     image: caddy:${CADDY_TAG}
     restart: unless-stopped
+    mem_limit: 128m
     depends_on:
       - rest
       - auth
