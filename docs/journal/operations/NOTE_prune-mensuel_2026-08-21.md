@@ -207,8 +207,18 @@ qui la lèvera.
 
 ### 5.4 Les captures de numérisation ne tiendront pas sur le VPS
 
-Élément pour le point ouvert « trancher le sort des captures » du profil de
-numérisation. Ordre de grandeur, à confirmer sur les dix ouvrages d'essai :
+> **Correction du 21/08.** Cette section a d'abord été écrite comme un élément
+> pour « le point ouvert *trancher le sort des captures* ». **Ce point n'est pas
+> ouvert** : il est arbitré depuis le 20/08 dans
+> `docs/journal/arbitrages/DECISION_profil_numerisation_2026-08-20.md` §9 —
+> **effacement après validation**, avec le cas particulier de l'ouvrage rare
+> dont la capture se garde. Le calcul ci-dessous ne décide donc rien ; il
+> **corrobore** une décision déjà prise, ce qui n'est pas sans valeur mais
+> n'est pas ce qui était annoncé. C'est exactement l'erreur que le §14 du plan
+> de marche décrit : une conclusion tirée avant d'avoir lu la source qui
+> l'infirmait — et ici la source était citée par le plan lui-même.
+
+Ordre de grandeur, à confirmer sur les dix ouvrages d'essai :
 
 Une page A5 en gris à 300 ppp fait ~4,4 Mpx, soit ~0,5 Mo en JPEG de qualité
 correcte. Un ouvrage de 300 pages : **150 à 600 Mo de captures**, quand le PDF
@@ -224,13 +234,16 @@ support hors ligne, ou effacer ». Les captures ne peuvent vivre sur le VPS dans
 aucun scénario. Ce qui valide au passage la demande faite à Herbes Folles :
 elle est dimensionnée sur les seuls PDF dérivés, et elle est juste.
 
-L'arbitrage qui reste est irréductible : **une capture effacée ne se refait
-qu'en reprenant le livre en main.** Si le profil de dérivation évolue, ou si un
-bitonal s'avère illisible sur des gravures, sans capture il faut rescanner.
-Trois options se tiennent — effacement après validation, archivage hors ligne
-systématique (~700 Go à terme, sur disques externes), ou archivage sélectif des
-seuls ouvrages à gravures, affiches et couvertures, qui divise le volume par
-cinq à dix.
+Le coût de la règle retenue est celui que la décision assume explicitement :
+**une capture effacée ne se refait qu'en reprenant le livre en main.** Si le
+profil de dérivation évolue, ou si un bitonal s'avère illisible sur des gravures,
+il faut rescanner. C'est pourquoi les cinq contrôles de validation deviennent la
+dernière chance, et pourquoi l'ouvrage rare fait exception.
+
+Ce que le calcul ci-dessus ajoute à la décision, et qui n'y figurait pas : il
+montre que l'alternative écartée — l'archivage hors ligne systématique —
+n'aurait de toute façon **jamais pu passer par le VPS**. La demande faite à
+Herbes Folles est donc juste, parce qu'elle porte sur les seuls PDF dérivés.
 
 ---
 
