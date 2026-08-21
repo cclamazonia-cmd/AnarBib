@@ -1670,7 +1670,7 @@
   "catalog.filters.isbn": "ISBN",
   "catalog.filters.isbnPh": "978-…",
   "catalog.filters.language": "Language",
-  "catalog.filters.languagePh": "en, fr, es, pt…",
+  "catalog.filters.languagePh": "All languages",
   "catalog.filters.library": "Library",
   "catalog.filters.libraryLabel": "AnarBib libraries",
   "catalog.filters.libraryNSelected": "{n} selected",

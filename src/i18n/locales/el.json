@@ -1670,7 +1670,7 @@
   "catalog.filters.isbn": "ISBN",
   "catalog.filters.isbnPh": "978-…",
   "catalog.filters.language": "Γλώσσα",
-  "catalog.filters.languagePh": "el, en, fr, es…",
+  "catalog.filters.languagePh": "Όλες οι γλώσσες",
   "catalog.filters.library": "Βιβλιοθήκη",
   "catalog.filters.libraryLabel": "Βιβλιοθήκες AnarBib",
   "catalog.filters.libraryNSelected": "{n} επιλεγμένες",

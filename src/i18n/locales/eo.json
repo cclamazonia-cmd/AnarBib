@@ -1670,7 +1670,7 @@
   "catalog.filters.isbn": "ISBN",
   "catalog.filters.isbnPh": "978-…",
   "catalog.filters.language": "Lingvo",
-  "catalog.filters.languagePh": "eo, pt, es, en…",
+  "catalog.filters.languagePh": "Ĉiuj lingvoj",
   "catalog.filters.library": "Biblioteko",
   "catalog.filters.libraryLabel": "Bibliotekoj AnarBib",
   "catalog.filters.libraryNSelected": "{n} elektitaj",

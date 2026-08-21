@@ -1676,7 +1676,7 @@
   "catalog.filters.isbn": "ISBN",
   "catalog.filters.isbnPh": "978-…",
   "catalog.filters.language": "Langue",
-  "catalog.filters.languagePh": "fr, pt, es, en…",
+  "catalog.filters.languagePh": "Toutes les langues",
   "catalog.filters.library": "Bibliothèque",
   "catalog.filters.libraryLabel": "Bibliothèques AnarBib",
   "catalog.filters.libraryNSelected": "{n} sélectionnées",
