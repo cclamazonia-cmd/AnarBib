@@ -49,7 +49,7 @@ Chantiers livrés depuis fin juin 2026 (24 juin → 7 juillet) — vérifiés su
 - **Cotisations lecteur** — Règles de cotisation par bibliothèque + historique des paiements, état d'adhésion dérivé (`library_membership_rules`, `membership_payments`, vue `v_active_memberships`).
 - **Thésaurus matière FICEDL** — Cache ré-aspirable du thésaurus partagé FICEDL (**anti-fork** : libellés jamais réécrits) + alignement SKOS des sujets AnarBib (`ficedl_thesaurus_terms`, `subject_ficedl_links`, scripts `ficedl_thesaurus_scrape.mjs` / `ficedl_thesaurus_sync.mjs`).
 - **Automatisation de la Gazette** — Build mensuel et **traduction automatique des contributions** (`translate-gazette-submission`) désormais pilotés par des tâches **pg_cron actives**.
-- **Registre RGPD & politique de confidentialité unifiée** — Source unique app + site vitrine, sous-traitants à jour (Cloudflare Turnstile, DPA Cloudflare v6.4), auto-suppression des prêts clos après rétention, pseudonymisation BG2-14 (`erasure_log`).
+- **Registre RGPD & politique de confidentialité unifiée** — Source unique app + site vitrine, sous-traitants à jour (anti-bot **Altcha auto-hébergé** depuis le 20/08/2026 — plus aucune dépendance Cloudflare directe), auto-suppression des prêts clos après rétention, pseudonymisation BG2-14 (`erasure_log`).
 - **Consolidation des performances RLS** — Fusion des policies permissives multiples par table/rôle (migrations `perf_consolidate_permissive_policies_*`, 04/07).
 - **Backend** : **42 Edge Functions** Deno et **90 migrations** SQL (baseline + incréments) appliquées jusqu'au **2026-07-05** ; base de **174 tables**, **~552 fonctions/routines**, **31 tâches pg_cron** actives ; suite Vitest verte (**87 tests**, 4 fichiers).
 
@@ -81,7 +81,7 @@ Work delivered since late June 2026 (24 June → 7 July) — verified against th
 - **Reader membership dues** — Per-library dues rules + payment history, derived membership state (`library_membership_rules`, `membership_payments`, `v_active_memberships` view).
 - **FICEDL subject thesaurus** — Re-scrapable cache of the shared FICEDL thesaurus (**anti-fork**: labels never rewritten) + SKOS alignment of AnarBib subjects (`ficedl_thesaurus_terms`, `subject_ficedl_links`, scripts `ficedl_thesaurus_scrape.mjs` / `ficedl_thesaurus_sync.mjs`).
 - **Gazette automation** — Monthly build and **automatic translation of contributions** (`translate-gazette-submission`) now driven by **active pg_cron jobs**.
-- **GDPR register & unified privacy policy** — Single source for app + project website, subprocessors up to date (Cloudflare Turnstile, Cloudflare DPA v6.4), auto-deletion of closed loans after retention, BG2-14 pseudonymization (`erasure_log`).
+- **GDPR register & unified privacy policy** — Single source for app + project website, subprocessors up to date (**self-hosted Altcha** anti-bot since 2026-08-20 — no direct Cloudflare dependency left), auto-deletion of closed loans after retention, BG2-14 pseudonymization (`erasure_log`).
 - **RLS performance consolidation** — Merging of multiple permissive policies per table/role (`perf_consolidate_permissive_policies_*` migrations, 04/07).
 - **Backend**: **42 Deno Edge Functions** and **90 SQL migrations** (baseline + increments) applied through **2026-07-05**; database of **174 tables**, **~552 functions/routines**, **31 active pg_cron jobs**; Vitest suite green (**87 tests**, 4 files).
 
@@ -651,7 +651,7 @@ Country names are dynamically localized via `i18n-iso-countries` rather than sto
 
 > 🐧 **RÈGLE D'OR — toutes les sessions travaillent EXCLUSIVEMENT sous WSL2.** Clone canonique unique : `~/anarbib` (WSL2). Lui seul fait tourner `npm run dev` (localhost:5173) et pousse vers Codeberg. **Le clone Windows a été supprimé — ne jamais le recréer** : une session lancée côté Windows recrée un clone fantôme désynchronisé (cause racine de l'incident du 12/06/2026).
 
-**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Dépendances notables : `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf` (génération PDF), `jszip`, `qrcode`, `@marsidev/react-turnstile` (captcha Cloudflare Turnstile), `react-markdown`, `react-phone-number-input`, `epubjs` (lecteur ePub), `tesseract.js` (OCR), `@zxing/browser` + `jsqr` (scan code-barres/QR), `@unimusic/chromaprint` (empreinte audio AcoustID). Dev : ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
+**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Dépendances notables : `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf` (génération PDF), `jszip`, `qrcode`, `react-markdown`, `react-phone-number-input`, `epubjs` (lecteur ePub), `tesseract.js` (OCR), `@zxing/browser` + `jsqr` (scan code-barres/QR), `@unimusic/chromaprint` (empreinte audio AcoustID). Dev : ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
 
 **Supabase CLI** — Version utilisée par la CI : **v2.98.1**. Installation locale via gestionnaire de paquets. Commandes courantes :
 
@@ -680,7 +680,7 @@ supabase functions deploy <name> --no-verify-jwt # déploie une Edge Function
 
 > 🐧 **GOLDEN RULE — all sessions work EXCLUSIVELY under WSL2.** Single canonical clone: `~/anarbib` (WSL2). It alone runs `npm run dev` (localhost:5173) and pushes to Codeberg. **The Windows clone was deleted — never recreate it**: a Windows-side session recreates a desynchronized phantom clone (root cause of the 12/06/2026 incident).
 
-**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Notable deps: `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf`, `jszip`, `qrcode`, `@marsidev/react-turnstile` (Cloudflare Turnstile), `react-markdown`, `react-phone-number-input`, `epubjs` (ePub reader), `tesseract.js` (OCR), `@zxing/browser` + `jsqr` (barcode/QR scanning), `@unimusic/chromaprint` (AcoustID audio fingerprint). Dev: ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
+**Stack** — React 19, react-dom 19, react-router-dom 7, react-intl 7, Vite 6. Notable deps: `@supabase/supabase-js ^2.49`, `i18n-iso-countries`, `jspdf`, `jszip`, `qrcode`, `react-markdown`, `react-phone-number-input`, `epubjs` (ePub reader), `tesseract.js` (OCR), `@zxing/browser` + `jsqr` (barcode/QR scanning), `@unimusic/chromaprint` (AcoustID audio fingerprint). Dev: ESLint 9 (flat config), Vitest 4, jsdom, `@testing-library/react`, `gh-pages`.
 
 **Supabase CLI** — Version used by CI: **v2.98.1**. Common commands: `supabase db push --linked`, `supabase functions download <name>`, `supabase functions deploy <name> --no-verify-jwt`.
 

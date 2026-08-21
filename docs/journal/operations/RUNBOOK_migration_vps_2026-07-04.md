@@ -60,13 +60,13 @@ Restaurer un dump récent sur l'hôte, puis tester : login, une recherche catalo
 
 ## Phase 6 — Edge Functions + secrets
 6.1 Redéployer les **43 EF** sur l'hôte (runtime Deno de la pile).
-6.2 **Re-saisir tous les secrets** depuis [`.env.example`](../../../.env.example) : `RESEND_API_KEY`, `WEBHOOK_SECRET_NOTIFY_*`, `ANTHROPIC_API_KEY`, `GAZETTE_CRON_SECRET`, `TURNSTILE_SECRET_KEY`, `ACOUSTID_API_KEY`, `NOMINATIM_URL`, `SENDER_*`/`ADMIN_*`, `APP_BASE_URL`, + les `SUPABASE_URL`/`ANON_KEY`/`SERVICE_ROLE_KEY` **neufs** de l'hôte.
+6.2 **Re-saisir tous les secrets** depuis [`.env.example`](../../../.env.example) : `RESEND_API_KEY`, `WEBHOOK_SECRET_NOTIFY_*`, `ANTHROPIC_API_KEY`, `GAZETTE_CRON_SECRET`, `ALTCHA_HMAC_SECRET`, `ACOUSTID_API_KEY`, `NOMINATIM_URL`, `SENDER_*`/`ADMIN_*`, `APP_BASE_URL`, + les `SUPABASE_URL`/`ANON_KEY`/`SERVICE_ROLE_KEY` **neufs** de l'hôte.
 
 ## Phase 7 — pg_cron (réactiver + corriger les URLs)
 Les ~30 jobs `cron.job` **appellent les EF par HTTP** (`pg_net`). Après bascule, l'adresse des fonctions change → **réécrire les URLs** dans les jobs (sinon rapports/relances échouent en silence, piège §5.4). Vérifier que `pg_cron` + `pg_net` sont actifs et que les jobs sont `active=true`.
 
 ## Phase 8 — Repointer le frontend
-8.1 Nouvelles valeurs de build : `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` (**clés neuves** de l'hôte). Les `VITE_TURNSTILE_SITE_KEY` / `VITE_JITSI_DOMAIN` inchangés.
+8.1 Nouvelles valeurs de build : `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` (**clés neuves** de l'hôte). `VITE_JITSI_DOMAIN` inchangé. ⚠️ **Plus de `VITE_TURNSTILE_SITE_KEY`** : l'anti-bot est Altcha auto-hébergé depuis le 20/08/2026 (AR-2/AR-3), il n'a pas de clé de site — seul `ALTCHA_HMAC_SECRET` est à poser, côté serveur.
 8.2 `rebuild` + redéploiement (Codeberg Pages pour l'instant, D3).
 
 ## Phase 9 — DNS (en dernier, réversible)

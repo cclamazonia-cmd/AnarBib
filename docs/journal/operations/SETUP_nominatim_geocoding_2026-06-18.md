@@ -123,7 +123,7 @@ docker rm -f anarbib-nominatim-smoke
 > ✅ Fait : (1) l'EF `supabase/functions/geocode` (proxy serveur, secret `NOMINATIM_URL`,
 > rate-limit, anti-fuite) et (2) le bouton « Localiser depuis l'adresse » de la **modale
 > d'édition** (repli pin manuel). Reste : le bouton dans le **formulaire public anonyme**
-> (à garder avec Turnstile). Description d'origine ci-dessous.
+> (à garder avec **Altcha** — Turnstile retiré le 20/08/2026). Description d'origine ci-dessous.
 
 1. **Proxy Edge Function `geocode`** : reçoit une adresse, interroge
    `http://<host>:8089/search` **côté serveur** (URL = secret vault `NOMINATIM_URL`),
