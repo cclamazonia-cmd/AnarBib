@@ -15,11 +15,21 @@
 #   * PostgREST lit le schéma UNE FOIS, à son démarrage : démarré avant la
 #     restauration, il sert un catalogue vide sur une base pleine.
 #
-# D'où : base seule → rôles → schéma+données → vues → et SEULEMENT ENSUITE les
-# autres services.
+# À quoi s'ajoute, constaté le 21/08/2026 à la première reconstruction vraiment
+# partie de zéro, un quatrième enchaînement — de sens INVERSE aux trois autres :
+#
+#   * `auth` n'est pas un consommateur du schéma, c'en est un PRODUCTEUR. Une
+#     centaine de migrations appellent `auth.uid()` ou `auth.jwt()`, et ces
+#     fonctions-là, aucune migration ne les crée : c'est GoTrue qui les pose au
+#     démarrage. Démarré à l'étape des « autres services », il arrivait après
+#     les migrations qui en dépendent, et le rejeu depuis le dépôt mourait sur
+#     une base vierge — le seul cas où ce script sert vraiment.
+#
+# D'où : base seule → rôles → GoTrue → schéma+données → vues → et SEULEMENT
+# ENSUITE les services qui LISENT le schéma.
 #
 # USAGE
-#   ./bootstrap.sh --depuis-le-depot         # rejeu des migrations (128)
+#   ./bootstrap.sh --depuis-le-depot         # rejeu des migrations (158)
 #   ./bootstrap.sh --depuis-une-sauvegarde   # restauration d'un dump
 #   ./bootstrap.sh --depuis-le-depot --sans-verification
 #
@@ -46,7 +56,7 @@ for arg in "$@"; do
     --depuis-le-depot)       MODE="depot" ;;
     --depuis-une-sauvegarde) MODE="sauvegarde" ;;
     --sans-verification)     VERIFIER=0 ;;
-    -h|--help)               sed -n '2,36p' "$0"; exit 0 ;;
+    -h|--help)               sed -n '2,46p' "$0"; exit 0 ;;
     *) echo "✗ Option inconnue : $arg" >&2; exit 2 ;;
   esac
 done
@@ -65,7 +75,7 @@ sql()   { docker compose exec -T db psql -U supabase_admin -d postgres -tAc "$1"
 # -----------------------------------------------------------------------------
 # 1. La base seule, et rien d'autre
 # -----------------------------------------------------------------------------
-etape "1/7 · Démarrage de la base"
+etape "1/8 · Démarrage de la base"
 docker compose up -d --wait db
 echo "✓ Base prête (le healthcheck vérifie que le rôle authenticator existe)."
 
@@ -74,7 +84,7 @@ echo "✓ Base prête (le healthcheck vérifie que le rôle authenticator existe
 # -----------------------------------------------------------------------------
 # Sur un volume vierge, le script s'exécute seul via /docker-entrypoint-initdb.d.
 # Sur un volume déjà initialisé, il faut le rejouer — il est idempotent.
-etape "2/7 · Mots de passe des rôles de service"
+etape "2/8 · Mots de passe des rôles de service"
 docker compose exec -T db sh /docker-entrypoint-initdb.d/99-roles.sh
 
 # -----------------------------------------------------------------------------
@@ -84,7 +94,7 @@ docker compose exec -T db sh /docker-entrypoint-initdb.d/99-roles.sh
 # et surtout, restaurer plus tard avec un sel DIFFÉRENT ne produit aucune erreur
 # visible : ça rend incohérents tous les jetons produits auparavant. Corruption
 # silencieuse de données personnelles. On vérifie donc avant, pas pendant.
-etape "3/7 · Vérification du sel de pseudonymisation"
+etape "3/8 · Vérification du sel de pseudonymisation"
 if sql "select 1 from pg_namespace where nspname = 'vault'" | grep -q 1; then
   if [ "$(sql "select count(*) from vault.decrypted_secrets where name = 'pseudonym_salt'")" = "1" ]; then
     echo "✓ pseudonym_salt présent au Vault."
@@ -110,39 +120,87 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# 4. Le schéma et les données
+# 4. Le schéma d'authentification — AVANT les migrations, jamais après
+# -----------------------------------------------------------------------------
+# Voir l'en-tête : `auth` produit le schéma dont les migrations ont besoin. Il
+# doit donc tourner ici, seul, et on attend qu'il ait FINI — le conteneur est
+# « up » bien avant d'avoir posé quoi que ce soit.
+#
+# Ce qu'on attend n'est pas un délai mais un fait : les quatre fonctions que les
+# migrations appellent. C'est le seul témoin honnête ; compter les tables du
+# schéma `auth` ne vaut rien, elles apparaissent au fil des migrations de GoTrue
+# et le compte franchit n'importe quel seuil bien avant la fin.
+#
+# Et l'attente est bornée, avec le journal en cas d'échec : sans mot de passe
+# valide, GoTrue ne plante pas — il redémarre en boucle toutes les 60 secondes
+# en écrivant `password authentication failed` dans un journal que personne ne
+# lit. On attendrait indéfiniment devant une erreur déjà écrite.
+etape "4/8 · Schéma d'authentification (GoTrue)"
+docker compose up -d auth
+
+HELPERS="uid jwt role email"
+LIMITE=180
+attendu=0
+debut_auth=$(date +%s)
+while [ $(( $(date +%s) - debut_auth )) -lt "$LIMITE" ]; do
+  presentes=$(sql "select count(distinct p.proname) from pg_proc p
+                     join pg_namespace n on n.oid = p.pronamespace
+                    where n.nspname = 'auth'
+                      and p.proname in ('uid','jwt','role','email')" 2>/dev/null || echo 0)
+  if [ "${presentes:-0}" = "4" ]; then attendu=1; break; fi
+  sleep 3
+done
+
+if [ "$attendu" = "1" ]; then
+  echo "✓ auth.uid(), auth.jwt(), auth.role(), auth.email() en place"        "(en $(( $(date +%s) - debut_auth )) s)."
+else
+  echo "✗ GoTrue n'a pas posé les quatre fonctions en ${LIMITE} s." >&2
+  echo "  Fonctions présentes : ${presentes:-0}/4 sur $HELPERS" >&2
+  echo "" >&2
+  echo "  Dernières lignes du journal de GoTrue — la cause y est presque" >&2
+  echo "  toujours écrite en clair :" >&2
+  docker compose logs --tail=15 auth 2>&1 | sed 's/^/    /' >&2
+  echo "" >&2
+  echo "  Cause la plus fréquente : « password authentication failed for user" >&2
+  echo "  supabase_auth_admin ». L'étape 2 n'a alors pas pris — la rejouer :" >&2
+  echo "      docker compose exec -T db sh /docker-entrypoint-initdb.d/99-roles.sh" >&2
+  exit 1
+fi
+
+# -----------------------------------------------------------------------------
+# 5. Le schéma et les données
 # -----------------------------------------------------------------------------
 if [ "$MODE" = "depot" ]; then
-  etape "4/7 · Rejeu des migrations depuis le dépôt"
+  etape "5/8 · Rejeu des migrations depuis le dépôt"
   docker compose exec -T db sh /scripts/run-migrations.sh
 else
-  etape "4/7 · Restauration d'une sauvegarde"
+  etape "5/8 · Restauration d'une sauvegarde"
   docker compose exec -T db sh /scripts/restore.sh
 fi
 
 # -----------------------------------------------------------------------------
-# 5. Les vues matérialisées
+# 6. Les vues matérialisées
 # -----------------------------------------------------------------------------
-etape "5/7 · Rafraîchissement des vues matérialisées"
+etape "6/8 · Rafraîchissement des vues matérialisées"
 docker compose exec -T db sh /scripts/refresh-matviews.sh
 
 # -----------------------------------------------------------------------------
-# 6. Les autres services — APRÈS, jamais avant
+# 7. Les autres services — APRÈS, jamais avant
 # -----------------------------------------------------------------------------
-etape "6/7 · Démarrage des services applicatifs"
+etape "7/8 · Démarrage des services applicatifs"
 # shellcheck disable=SC2086
 docker compose up -d --wait $SERVICES_APPLICATIFS
 echo "✓ Six conteneurs en service."
 
 # -----------------------------------------------------------------------------
-# 7. Plafonds des buckets — APRÈS l'initialisation du service Storage
+# 8. Plafonds des buckets — APRÈS l'initialisation du service Storage
 # -----------------------------------------------------------------------------
 # Le schéma `storage` n'est pas créé par les migrations : c'est le service
 # Storage qui le construit à son démarrage. À l'étape 4, il n'existait donc pas
 # encore, et la migration des plafonds s'est délibérément abstenue plutôt que
 # d'échouer. C'est ici qu'elle prend effet — le fichier est idempotent, et
 # porte lui-même sa vérification.
-etape "7/7 · Plafonds des buckets"
+etape "8/8 · Plafonds des buckets"
 PLAFONDS=$(docker compose exec -T db sh -c 'ls /migrations/*_plafonds_buckets_numerisation.sql 2>/dev/null | head -1' | tr -d '\r')
 if [ -n "$PLAFONDS" ]; then
   docker compose exec -T db psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "$PLAFONDS"
@@ -181,27 +239,60 @@ fi
 # avec la RLS active et zéro policy passait donc le contrôle en étant
 # inaccessible à tout rôle sauf service_role.
 #
-# Le chiffre attendu n'est pas zéro : douze tables d'import et de transit sont
-# légitimement fermées par défaut, plus author_name_aliases et library_themes,
-# lues par des fonctions SECURITY DEFINER. Ce qui compte est que le nombre ne
-# BOUGE pas. S'il augmente, une policy a été perdue en chemin.
-SANS_POLICY_ATTENDU=14
-SANS_POLICY=$(sql "select count(*) from pg_class c
-                     join pg_namespace n on n.oid = c.relnamespace
-                    where n.nspname in ('public','ingest') and c.relkind = 'r'
-                      and c.relrowsecurity = true
-                      and not exists (select 1 from pg_policy p where p.polrelid = c.oid)")
-if [ "$SANS_POLICY" = "$SANS_POLICY_ATTENDU" ]; then
-  echo "✓ $SANS_POLICY tables avec RLS et sans policy — conforme à l'attendu."
+# La liste attendue n'est pas vide et n'a pas à l'être : ces tables sont
+# légitimement fermées — tables d'import et de transit, plus author_name_aliases
+# et library_themes, lues par des fonctions SECURITY DEFINER. Ce qui compte
+# n'est pas leur nombre, c'est que la liste ne BOUGE pas.
+#
+# ⚠️ C'est une LISTE et non un compte, et c'est délibéré. Le contrôle a d'abord
+# été écrit « attendu : 14 ». Le 21/08/2026 il est passé au rouge à 15 — sans
+# dire laquelle, ni si c'était une table neuve ou une policy perdue. Les deux
+# hypothèses ont la même tête vue d'un compteur, et elles n'ont pas du tout la
+# même gravité. (C'était altcha_consumed_challenges, créée la veille par la
+# migration anti-rejeu ALTCHA.) Un contrôle qui signale sans nommer fait perdre
+# exactement le temps qu'on n'a pas au moment où il se déclenche.
+#
+# Quand ce contrôle rougit : comparer d'abord avec la PRODUCTION, qui est la
+# référence. Si la production a la même liste, c'est ici qu'il faut ajouter la
+# ligne. Sinon, une policy a été perdue en chemin.
+SANS_POLICY_ATTENDUES="ingest.import_profiles
+ingest.partner_catalog_received_assets
+public.altcha_consumed_challenges
+public.author_name_aliases
+public.catalog_partner_capabilities
+public.catalog_partner_probe_runs
+public.import_blmf_books_rows
+public.import_blmf_exemplares_rows
+public.import_terra_livre_zotero_staging
+public.interlibrary_loan_events
+public.library_theme_configs
+public.library_themes
+public.partner_source_holdings
+public.partner_source_items
+public.partner_source_records"
+
+SANS_POLICY_VUES=$(sql "select n.nspname || '.' || c.relname from pg_class c
+                          join pg_namespace n on n.oid = c.relnamespace
+                         where n.nspname in ('public','ingest') and c.relkind = 'r'
+                           and c.relrowsecurity = true
+                           and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
+                         order by 1" | tr -d '')
+
+EN_TROP=$(comm -13 <(echo "$SANS_POLICY_ATTENDUES" | sort) <(echo "$SANS_POLICY_VUES" | sort))
+MANQUANTES=$(comm -23 <(echo "$SANS_POLICY_ATTENDUES" | sort) <(echo "$SANS_POLICY_VUES" | sort))
+
+if [ -z "$EN_TROP" ] && [ -z "$MANQUANTES" ]; then
+  echo "✓ Tables avec RLS et sans policy : conformes à la liste attendue"        "($(echo "$SANS_POLICY_ATTENDUES" | grep -c .))."
 else
-  echo "✗ $SANS_POLICY tables avec RLS et sans policy, attendu $SANS_POLICY_ATTENDU."
-  echo "  Les lister avant de conclure — une policy perdue ne se voit pas autrement :"
-  sql "select n.nspname || '.' || c.relname from pg_class c
-         join pg_namespace n on n.oid = c.relnamespace
-        where n.nspname in ('public','ingest') and c.relkind = 'r'
-          and c.relrowsecurity = true
-          and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
-        order by 1" | sed 's/^/    /'
+  if [ -n "$EN_TROP" ]; then
+    echo "✗ Table(s) fermée(s) EN TROP — policy perdue, ou table neuve à inscrire :"
+    echo "$EN_TROP" | sed 's/^/    + /'
+  fi
+  if [ -n "$MANQUANTES" ]; then
+    echo "✗ Table(s) attendue(s) fermée(s) qui ne le sont plus — ou disparues :"
+    echo "$MANQUANTES" | sed 's/^/    - /'
+  fi
+  echo "  Comparer avec la production avant de conclure."
   ECHEC=1
 fi
 
