@@ -196,7 +196,17 @@ tient si le travail en parallèle doit continuer.
 > # en fin de session
 > git -C ~/anarbib worktree remove ~/anarbib-wt-<id>
 > git -C ~/anarbib branch -d claude/<id>
+>
+> # et surtout : le main partage ne doit rien garder de moi (HYG-Q3)
+> git -C ~/anarbib fetch origin
+> git -C ~/anarbib log --oneline origin/main..main   # doit etre vide
 > ```
+>
+> **La derniere commande n'est pas une precaution de confort.** Une sortie non
+> vide signale un commit sans porteur : personne ne l'emportera, puisque chacun
+> pousse desormais depuis sa branche. Soit on le pousse s'il est de soi, soit on
+> previent la session qui l'a pose. Ce qu'elle evite, c'est du travail termine,
+> teste et jamais livre.
 >
 > **Pourquoi `push origin HEAD:main` et pas `push origin main`.** C'est ce qui
 > règle le *second* incident de la journée, distinct du premier : une branche
@@ -406,7 +416,8 @@ la clé dit encore la vérité. À voir s'il existe d'autres `*Ph` orphelins.
 
 ## 9. Point ouvert — ce que la recette elle-même ouvre
 
-**HYG-Q3 — le worktree partagé n'a plus de porteur.** La recette du §5 supprime
+**HYG-Q3 — le worktree partagé n'a plus de porteur.** *(Tranché le 21/08 : le
+contrôle est intégré à la recette du §5.)* La recette du §5 supprime
 le push élargi, et c'est son objet. Mais elle supprime du même coup un mécanisme
 *accidentel* qui rendait service : jusqu'ici, un commit oublié sur le `main` du
 worktree partagé finissait par partir avec le push de quelqu'un d'autre. C'était
