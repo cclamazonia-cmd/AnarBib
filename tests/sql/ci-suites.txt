@@ -47,3 +47,11 @@ tests/sql/doublons_p7_reprise_champs_tests.sql
 # Signalement de doublons d autorites (paquet DOUBLONS P8) : ce qu on rend au
 # staff en echange de merge_author. Le test 1 garde l OUVERTURE du geste.
 tests/sql/doublons_p8_signalement_autorites_tests.sql
+
+# Apercu et reprise de champs pour les AUTORITES (paquet DOUBLONS P9) : ce que
+# merge_author detruisait en silence — 574 autorites portent des dates.
+tests/sql/doublons_p9_apercu_reprise_autorites_tests.sql
+
+# Balayage global des autorites (paquet DOUBLONS P10). Garde surtout la
+# coherence avec la detection par autorite (DEDUP-6) et le piege des dates NULL.
+tests/sql/doublons_p10_balayage_autorites_tests.sql
