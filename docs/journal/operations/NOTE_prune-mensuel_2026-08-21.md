@@ -105,6 +105,46 @@ trois dépôts ont bien été traités — la sortie porte une ligne `Prune de �
 dépôt, puis `=== Prune des trois dépôts terminé. ===`. Un prune qui échoue sur
 un dépôt tue le script (`die`), donc l'absence de la ligne finale est le signal.
 
+### Premier tir manuel — 21/08/2026
+
+Lancé à la main juste après la livraison, pour éprouver le chemin neuf avant que
+le calendrier ne s'en charge. Les trois dépôts traités, sortie 0, ligne finale
+présente.
+
+| Dépôt | Restant après prune | Récupéré | Parcours des paquets |
+|---|---|---|---|
+| `anarbib-long` | 94 blobs / 19,0 Mio | 0 | non relevé (voir ci-dessous) |
+| `anarbib-court` | 42 blobs / 309 Kio | 0 | 3 min 57 (6 paquets) |
+| `anarbib-storage` | 3 787 blobs / 404 Mio | 0 | 4 min 01 (28 paquets) |
+
+La durée du premier dépôt manque parce que la commande avait été tuyautée dans
+`tail -40` : le début de la sortie a été coupé. Défaut d'observation, pas du
+dispositif — mais il vaut d'être noté, parce qu'il aurait aussi bien pu masquer
+une erreur au lieu d'un chiffre. **Ne pas tronquer la sortie d'un tir qu'on
+lance pour l'éprouver.**
+
+Rien à récupérer, et c'est normal : le tir du 20/08 avait déjà pruné `storage`,
+les deux autres étaient propres. Ce tir valide donc le **chemin**, pas le gain.
+
+**Mais les durées disent autre chose, et c'est la vraie trouvaille.**
+`anarbib-court` pèse 309 Kio et son prune a pris 3 min 57 ; `anarbib-storage`
+pèse 404 Mio — mille trois cents fois plus — et a pris 4 min 01. Six paquets et
+vingt-huit paquets coûtent le même temps. **Le prune n'est pas borné par le
+volume, il est borné par les allers-retours réseau vers Herbes Folles.**
+
+Deux conséquences pratiques. D'abord, les ~6 minutes que le prune ajoutait au
+tir de sauvegarde étaient essentiellement de la latence, pas du calcul : les
+sortir était le bon geste, et le gain restera stable quelle que soit la taille
+des dépôts. Ensuite, le tir complet a duré **une douzaine de minutes** — mesuré,
+fin à 09:46:23 pour un lancement vers 09:34 — soit trois dépôts à ~4 minutes
+chacun, **sans rien avoir à récupérer**. C'est donc un plancher, pas un pic : la
+fenêtre de 90 minutes est largement dimensionnée et le restera longtemps, y
+compris après la numérisation.
+
+Corollaire pour plus tard : si l'espace devient contraint et qu'on veut pruner
+plus souvent, le coût marginal d'un tir supplémentaire est connu et modeste.
+C'est la fréquence qui se règle, pas la durée.
+
 ---
 
 ## 5 · Quatre constats du même jour
