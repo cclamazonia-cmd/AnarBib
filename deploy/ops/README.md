@@ -11,6 +11,13 @@ dans `~/anarbib-ops/` et `~/.config/systemd/user/`. Le dépôt, lui, contenait
 *pull* depuis un VPS qui n'a jamais existé. Un lecteur de bonne foi en concluait
 que les sauvegardes tournaient sur un serveur, sans le poste de travail. Faux.
 
+Ce script est parti aux archives le 21/08/2026 : plus rien ne l'appelait, et son
+nom sous `scripts/` le faisait passer pour vivant. Il est désormais dans
+[`operations/archive/`](../../docs/journal/operations/archive/anarbib-backup_modele-pull_HORS-SERVICE_2026-06-17.sh),
+sous un nom qui dit son état, gardé comme point de départ le jour d'une bascule
+sur un hôte. **Il n'y a donc plus qu'un seul script de sauvegarde dans ce dépôt :
+celui d'à côté.**
+
 C'est le même angle mort que `deploy/genkeys.mjs` le 19/08, et que les six
 versions d'images épinglées le 20/08 : **ce qui n'est pas dans le dépôt n'existe
 qu'une fois.** Ici, sur la brique dont dépend tout le reste.
