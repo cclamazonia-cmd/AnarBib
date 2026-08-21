@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Button } from '@/components/ui';
+import ConvRevuePanel from '@/components/atelier/ConvRevuePanel';
 
 // Atelier autorités — paquet 2, lot A : la file de propositions (vue 1re page).
 // Lecture via api.fn_authority_list ; actions via fn_authority_propose / apply /
@@ -311,6 +312,12 @@ export default function AtelierAutoridadesPage() {
             );
           })
         )}
+
+        {/* File de verification des conventions catalographiques (REGISTRE §37).
+            Meme atelier, autre nature de travail : la file ci-dessus recueille
+            des PROPOSITIONS d'autorites soumises au consentement ; celle-ci
+            recueille des VERDICTS sur des propositions faites par un outil. */}
+        <ConvRevuePanel />
 
         <div style={{ marginTop: 20 }}>
           <Button variant="secondary" onClick={() => navigate(-1)}>{t({ id: 'common.back', defaultMessage: 'Voltar' })}</Button>
