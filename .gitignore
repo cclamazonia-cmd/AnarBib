@@ -72,8 +72,10 @@ public/vendor/tesseract/lang/
 ~$*
 
 # Config de sauvegarde REMPLIE (#BG2) : secrets DB/restic — jamais committer.
-# Seul le .example (sans secret) est versionné.
-scripts/backup/*.env
+# Seul le .example (sans secret) est versionné. Le modèle « pull » du 17/06 est
+# hors service et archivé sous docs/journal/operations/archive/ ; le garde-fou
+# le suit, au cas où quelqu'un le remplirait un jour pour une bascule sur hôte.
+docs/journal/operations/archive/*.env
 *.pass
 
 # Dossier de passation inter-sessions (briefs, notes, copies de travail) — local,
