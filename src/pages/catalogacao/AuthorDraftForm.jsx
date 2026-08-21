@@ -562,6 +562,24 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
     } finally { setDupBusy(null); }
   }
 
+  // DOUBLONS P8 : ce qu'on rend au staff en echange de merge_author, qui lui a
+  // ete retire au paquet P4. Sans ce bouton, une bibliothecaire voyait la liste
+  // des doublons probables et n'avait aucun moyen de transmettre ce qu'elle sait.
+  async function reportAuthorityPair(dupId) {
+    const courant = f('published_author_id');
+    if (!courant) return;
+    setDupBusy(dupId);
+    try {
+      const { error } = await supabase.rpc('report_authority_pair', {
+        p_a: Number(courant), p_b: Number(dupId), p_note: null,
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.dedup.reported' }), kind: 'ok' });
+    } catch (err) {
+      setMsg({ text: t({ id: 'common.errorPrefix' }, { message: localizeError(err, t) }), kind: 'error' });
+    } finally { setDupBusy(null); }
+  }
+
   // ── State pill ──────────────────────────────────────────
   const pills = {
     new: { label: t({ id: 'catalogacao.ui.newDraft' }), cls: 'info' },
@@ -1061,11 +1079,17 @@ export default function AuthorDraftForm({ mode, batches, editingId = null, onCon
                       <span className={`cat-pill ${d.match_kind === 'exact' ? 'ok' : 'warn'}`} style={{ fontSize: '.6rem' }}>
                         {t({ id: d.match_kind === 'exact' ? 'catalogacao.link.exact' : 'catalogacao.link.approx' })} {Math.round(d.score * 100)}%
                       </span>
-                      {arbitreDoublons && (
+                      {arbitreDoublons ? (
                         <button type="button" className="ab-button ab-button--danger ab-button--sm"
                           onClick={() => mergeDuplicateIntoCurrent(d.author_id, d.preferred_name)} disabled={dupBusy != null}
                           title={t({ id: 'catalogacao.dedup.deleteThisAuthorityHint' })}>
                           {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.deleteThisAuthority' })}
+                        </button>
+                      ) : (
+                        <button type="button" className="ab-button ab-button--secondary ab-button--sm"
+                          onClick={() => reportAuthorityPair(d.author_id)} disabled={dupBusy != null}
+                          title={t({ id: 'catalogacao.dedup.reportHint' })}>
+                          {dupBusy === d.author_id ? '…' : t({ id: 'catalogacao.dedup.report' })}
                         </button>
                       )}
                     </div>
