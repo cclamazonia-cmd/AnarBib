@@ -23,7 +23,13 @@
 set -uo pipefail
 
 MIRROR="${ANARBIB_MIRROR:-/mnt/c/Users/accat/Codeberg/anarbib-mirror.git}"
-REFS="main pages"
+# `pages` a ete RETIREE de cette liste le 21/08/2026, en meme temps que la
+# branche elle-meme (bascule git-pages, etape 5). Sans ca, le controle
+# ci-dessous aurait vu la reference disparaitre en amont, conclu a une
+# reecriture d'historique, et fait echouer le tir CHAQUE JOUR : une alarme
+# qui crie au loup finit par n'etre plus lue, et c'est ainsi qu'on rate la
+# vraie. Une suppression VOULUE doit sortir de la liste des surveillees.
+REFS="main"
 
 die()  { echo "ERREUR: $*" >&2; exit 1; }
 info() { echo ">>> $*"; }
