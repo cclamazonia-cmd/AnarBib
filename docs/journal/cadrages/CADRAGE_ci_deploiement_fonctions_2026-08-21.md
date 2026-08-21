@@ -99,7 +99,55 @@ le cas sur GitHub Actions ; le repli couvre l'inverse ; seule la première
 exécution le dira. Le bloc est écrit pour que se tromper coûte cinq minutes,
 jamais un déploiement manquant.
 
-## 6. Point ouvert
+## 6. Constat annexe — un job rouge pour cause de réseau ressemble à un bug applicatif
+
+*(Session « conventions catalographiques », 21/08/2026 — ajouté ici parce que
+c'est du déploiement, pas de l'hygiène de poste.)*
+
+**Ce qui s'est passé.** Run `8841974`, job `app`, mort à `13:54:52` :
+
+```
+npm error code ECONNRESET
+npm error network aborted
+⚙️ [runner]: exitcode '1': failure
+skipping post step for 'Deploy Pages — ESSAI git-pages'; main step was skipped
+```
+
+`npm ci` a perdu sa connexion au registre après 37 secondes. Lint, tests et
+build n'ont jamais été atteints ; le déploiement Pages a été sauté. Rien dans le
+dépôt n'était en cause — rejeu sur un checkout propre de `origin/main` la
+minute suivante : `npm ci` rc=0, lint rc=0, 90 tests verts, build rc=0.
+
+**Pourquoi ça trompe.** `ci.yml` et le job des migrations sont indépendants :
+les migrations `13` et `14` se sont appliquées normalement pendant que le
+frontend restait sur le build précédent. **La base avance, l'écran non.** Le
+symptôme observé — une liste bloquée sur « Chargement… » dans un écran neuf —
+ressemble trait pour trait à un bug qu'on vient d'introduire. On cherche donc
+dans le code, et il n'y a rien à y trouver.
+
+**Le contrôle, en une commande.** Avant de chercher un bug dans le front,
+vérifier que le front déployé EST celui du dépôt. Le nom haché du bundle suffit :
+
+```js
+// dans la console de la page servie
+fetch('/index.html', { cache: 'no-store' }).then(r => r.text())
+  .then(h => console.log(h.match(/assets\/(index-[\w.-]+\.js)/)[1]));
+```
+
+à comparer avec `grep -o 'assets/index-[^"]*\.js' dist/index.html` après un
+build local sur le même commit. Deux valeurs différentes = le déployé est
+ancien, et tout ce qu'on observe à l'écran parle du passé.
+
+**Ce que ça suggère.** `npm ci` va chercher 595 paquets sur le réseau à chaque
+run. Un `ECONNRESET` chez le registre suffit à bloquer tout déploiement
+frontend, alors que `package-lock.json` n'a pas bougé. Un cache npm sur le
+runner rendrait cette classe de panne indolore — même famille d'économie que
+celle proposée au § 2 pour les fonctions Edge : ne pas refaire ce qui n'a pas
+changé.
+
+---
+
+## 7. Point ouvert
 
 Le `WARNING: Docker is not running`, répété à chaque fonction, est du bruit
 inoffensif — la CLI l'utiliserait pour empaqueter en local, elle téléverse à la
