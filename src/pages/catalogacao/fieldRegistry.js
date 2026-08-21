@@ -91,9 +91,11 @@ const EDITORA_MAT = ['livro', 'periodico', 'zine', 'cartaz', 'tract', 'dossie'];
 const CDD_MAT = ['livro', 'periodico', 'tract', 'cartaz', 'dossie', 'tese', 'artigo', 'relatorio', 'zine'];
 
 // Langues du catalogue — les 10 locales AnarBib (noms natifs, clés i18n existantes).
-// L'option vide (placeholder) permet la compatibilité avec les fiches existantes
-// qui stockent du texte libre dans `idioma` : elles affichent le placeholder
-// jusqu'à ré-sélection explicite.
+// L'option vide disait « — » jusqu'au 21/08. Elle justifiait un texte muet par
+// la compatibilite avec les fiches a `idioma` en texte libre, qui l'affichaient
+// jusqu'a re-selection explicite. CONV-7 a supprime ce cas : le residu hors
+// referentiel est a zero, la contrainte est validee. L'option vide ne veut plus
+// dire qu'une chose — « non renseigne » — et elle le dit (HYG-Q2).
 // 36 langues triees par code ISO — endonymes dans language.XX (i18n).
 // Les 10 locales AnarBib + 26 langues courantes en bibliotheque/tradition anarchiste.
 // Liste deplacee dans @/lib/languages (CONV-7, REGISTRE §37) : elle sert

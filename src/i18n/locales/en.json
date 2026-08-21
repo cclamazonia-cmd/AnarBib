@@ -2415,7 +2415,7 @@
   "catalogacao.ph.emitterOrg": "Sindicato, frente, coletivo…",
   "catalogacao.ph.fileNote": "PDF, EPUB, página web…",
   "catalogacao.ph.internalNotes": "Internal notes…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "Not specified",
   "catalogacao.ph.notPrepared": "Not prepared yet.",
   "catalogacao.ph.notes": "Additional notes",
   "catalogacao.ph.notesHint": "Pseudonyms, political context, consulted sources, etc.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "No — two editions of the same work",
   "catalogacao.dedupAssist.step3Title": "What the merge destroys",
   "catalogacao.dedupAssist.keepWhich": "Which record do you keep?",
-  "catalogacao.dedupAssist.lost": "Gone for good",
+  "catalogacao.dedupAssist.lost": "What only the deleted record carries",
   "catalogacao.dedupAssist.nothingLost": "No metadata specific to the deleted record.",
-  "catalogacao.dedupAssist.diverging": "Replaced by the kept record’s value",
+  "catalogacao.dedupAssist.diverging": "What both carry, differently",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {No copies moved} one {1 copy moved} other {# copies moved}}",
   "catalogacao.dedupAssist.circulation": "Also following the record: {emprestimos} loan(s), {reservas} reservation(s), {consultas} consultation(s), {numeriques} digital resource(s).",
   "catalogacao.dedupAssist.confirmPrompt": "To confirm, type the reference of the record being deleted ({ref}):",
   "catalogacao.dedupAssist.doMerge": "Delete this record and merge",
   "catalogacao.dedupAssist.back": "Back",
   "federacao.communs.doc.noteAgSamizdats.title": "To be decided — what does AnarBib circulate?",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Note submitted to the general assembly, not adopted. May a library that owns the printed book serve its full digitisation to its own members only? The facts, who bears responsibility, the cost, and four options."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Note submitted to the general assembly, not adopted. May a library that owns the printed book serve its full digitisation to its own members only? The facts, who bears responsibility, the cost, and four options.",
+  "catalogacao.dedupAssist.keepChecked": "Ticked, the value moves to the kept record. Unticked, it goes with the deleted one.",
+  "catalogacao.dedupAssist.notTransferable": "cannot be carried over"
 }

@@ -2415,7 +2415,7 @@
   "catalogacao.ph.emitterOrg": "Sindicato, frente, coletivo…",
   "catalogacao.ph.fileNote": "PDF, EPUB, página web…",
   "catalogacao.ph.internalNotes": "Interne Anmerkungen…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "Nicht angegeben",
   "catalogacao.ph.notPrepared": "Noch nicht vorbereitet.",
   "catalogacao.ph.notes": "Zusätzliche Anmerkungen",
   "catalogacao.ph.notesHint": "Pseudonyme, politischer Kontext, konsultierte Quellen usw.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "Nein — zwei Ausgaben desselben Werks",
   "catalogacao.dedupAssist.step3Title": "Was die Zusammenführung zerstört",
   "catalogacao.dedupAssist.keepWhich": "Welcher Datensatz bleibt?",
-  "catalogacao.dedupAssist.lost": "Verschwindet endgültig",
+  "catalogacao.dedupAssist.lost": "Was nur der gelöschte Datensatz trägt",
   "catalogacao.dedupAssist.nothingLost": "Keine Metadaten, die nur zum gelöschten Datensatz gehören.",
-  "catalogacao.dedupAssist.diverging": "Durch den Wert des behaltenen Datensatzes ersetzt",
+  "catalogacao.dedupAssist.diverging": "Was beide tragen, unterschiedlich",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {Kein Exemplar verschoben} one {1 Exemplar verschoben} other {# Exemplare verschoben}}",
   "catalogacao.dedupAssist.circulation": "Dem Datensatz folgen außerdem: {emprestimos} Ausleihe(n), {reservas} Vormerkung(en), {consultas} Einsichtnahme(n), {numeriques} digitale Ressource(n).",
   "catalogacao.dedupAssist.confirmPrompt": "Zur Bestätigung die Signatur des gelöschten Datensatzes eingeben ({ref}):",
   "catalogacao.dedupAssist.doMerge": "Diesen Datensatz löschen und zusammenführen",
   "catalogacao.dedupAssist.back": "Zurück",
   "federacao.communs.doc.noteAgSamizdats.title": "Zu entscheiden — was verbreitet AnarBib?",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Der Generalversammlung vorgelegte Notiz, nicht beschlossen. Darf eine Bibliothek, die das gedruckte Buch besitzt, dessen vollständige Digitalisierung nur ihren Mitgliedern zugänglich machen? Sachlage, Verantwortung, Kosten und vier Optionen."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Der Generalversammlung vorgelegte Notiz, nicht beschlossen. Darf eine Bibliothek, die das gedruckte Buch besitzt, dessen vollständige Digitalisierung nur ihren Mitgliedern zugänglich machen? Sachlage, Verantwortung, Kosten und vier Optionen.",
+  "catalogacao.dedupAssist.keepChecked": "Angehakt wandert der Wert zum behaltenen Datensatz. Nicht angehakt verschwindet er mit dem gelöschten.",
+  "catalogacao.dedupAssist.notTransferable": "nicht übertragbar"
 }

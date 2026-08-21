@@ -2415,7 +2415,7 @@
   "catalogacao.ph.emitterOrg": "Sindikato, fronto, kolektivo…",
   "catalogacao.ph.fileNote": "PDF, EPUB, retpaĝo…",
   "catalogacao.ph.internalNotes": "Internaj notoj…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "Ne indikita",
   "catalogacao.ph.notPrepared": "Ankoraŭ ne preparita.",
   "catalogacao.ph.notes": "Komplementaj observoj",
   "catalogacao.ph.notesHint": "Kaŝnomoj, politika kunteksto, konsultitaj fontoj, ktp.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "Ne — du eldonoj de la sama verko",
   "catalogacao.dedupAssist.step3Title": "Kion la kunfando detruas",
   "catalogacao.dedupAssist.keepWhich": "Kiu skedo konserviĝas ?",
-  "catalogacao.dedupAssist.lost": "Malaperas definitive",
+  "catalogacao.dedupAssist.lost": "Kion nur la forigata skedo portas",
   "catalogacao.dedupAssist.nothingLost": "Neniu metadatumo propra al la forigita skedo.",
-  "catalogacao.dedupAssist.diverging": "Anstataŭigita per la valoro de la konservita skedo",
+  "catalogacao.dedupAssist.diverging": "Kion ambaŭ portas, malsame",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {Neniu ekzemplero movita} one {1 ekzemplero movita} other {# ekzempleroj movitaj}}",
   "catalogacao.dedupAssist.circulation": "Ankaŭ sekvas la skedon : {emprestimos} prunto(j), {reservas} rezervo(j), {consultas} surloka konsulto(j), {numeriques} cifereca(j) rimedo(j).",
   "catalogacao.dedupAssist.confirmPrompt": "Por konfirmi, tajpu la referencon de la forigata skedo ({ref}) :",
   "catalogacao.dedupAssist.doMerge": "Forigi ĉi tiun skedon kaj kunfandi",
   "catalogacao.dedupAssist.back": "Reveni",
   "federacao.communs.doc.noteAgSamizdats.title": "Decidota — kion AnarBib cirkuligas?",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Noto submetita al la ĝenerala asembleo, ne adoptita. Ĉu biblioteko posedanta la paperan libron rajtas disponigi ĝian plenan ciferecigon nur al siaj membroj? La faktoj, kiu portas la respondecon, la kosto kaj kvar opcioj."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Noto submetita al la ĝenerala asembleo, ne adoptita. Ĉu biblioteko posedanta la paperan libron rajtas disponigi ĝian plenan ciferecigon nur al siaj membroj? La faktoj, kiu portas la respondecon, la kosto kaj kvar opcioj.",
+  "catalogacao.dedupAssist.keepChecked": "Markita, la valoro transiras al la konservata skedo. Nemarkita, ĝi malaperas kun la forigata.",
+  "catalogacao.dedupAssist.notTransferable": "netransigebla"
 }

@@ -2415,7 +2415,7 @@
   "catalogacao.ph.emitterOrg": "Σωματείο, μέτωπο, συλλογικότητα…",
   "catalogacao.ph.fileNote": "PDF, EPUB, ιστοσελίδα…",
   "catalogacao.ph.internalNotes": "Εσωτερικές σημειώσεις…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "Δεν προσδιορίζεται",
   "catalogacao.ph.notPrepared": "Δεν έχει προετοιμαστεί ακόμη.",
   "catalogacao.ph.notes": "Πρόσθετες σημειώσεις",
   "catalogacao.ph.notesHint": "Ψευδώνυμα, πολιτικό πλαίσιο, πηγές που συμβουλεύτηκες, κ.λπ.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "Όχι — δύο εκδόσεις του ίδιου έργου",
   "catalogacao.dedupAssist.step3Title": "Τι καταστρέφει η συγχώνευση",
   "catalogacao.dedupAssist.keepWhich": "Ποια εγγραφή διατηρείται;",
-  "catalogacao.dedupAssist.lost": "Χάνεται οριστικά",
+  "catalogacao.dedupAssist.lost": "Ό,τι φέρει μόνο η εγγραφή που διαγράφεται",
   "catalogacao.dedupAssist.nothingLost": "Κανένα μεταδεδομένο αποκλειστικό της διαγραφόμενης εγγραφής.",
-  "catalogacao.dedupAssist.diverging": "Αντικαθίσταται από την τιμή της εγγραφής που διατηρείται",
+  "catalogacao.dedupAssist.diverging": "Ό,τι φέρουν και οι δύο, διαφορετικά",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {Κανένα αντίτυπο δεν μετακινείται} one {1 αντίτυπο μετακινείται} other {# αντίτυπα μετακινούνται}}",
   "catalogacao.dedupAssist.circulation": "Ακολουθούν επίσης την εγγραφή: {emprestimos} δανεισμός/οί, {reservas} κράτηση/εις, {consultas} επιτόπια χρήση/εις, {numeriques} ψηφιακός/οί πόρος/οι.",
   "catalogacao.dedupAssist.confirmPrompt": "Για επιβεβαίωση, πληκτρολογήστε τον κωδικό της διαγραφόμενης εγγραφής ({ref}):",
   "catalogacao.dedupAssist.doMerge": "Διαγραφή αυτής της εγγραφής και συγχώνευση",
   "catalogacao.dedupAssist.back": "Επιστροφή",
   "federacao.communs.doc.noteAgSamizdats.title": "Προς απόφαση — τι διακινεί το AnarBib;",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Σημείωμα προς τη γενική συνέλευση, μη εγκεκριμένο. Μπορεί μια βιβλιοθήκη που κατέχει το έντυπο βιβλίο να διαθέτει την πλήρη ψηφιοποίησή του μόνο στα μέλη της; Τα πραγματικά περιστατικά, η ευθύνη, το κόστος και τέσσερις επιλογές."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Σημείωμα προς τη γενική συνέλευση, μη εγκεκριμένο. Μπορεί μια βιβλιοθήκη που κατέχει το έντυπο βιβλίο να διαθέτει την πλήρη ψηφιοποίησή του μόνο στα μέλη της; Τα πραγματικά περιστατικά, η ευθύνη, το κόστος και τέσσερις επιλογές.",
+  "catalogacao.dedupAssist.keepChecked": "Επιλεγμένο, η τιμή περνά στην εγγραφή που διατηρείται. Χωρίς επιλογή, χάνεται μαζί με τη διαγραφόμενη.",
+  "catalogacao.dedupAssist.notTransferable": "μη μεταφέρσιμο"
 }

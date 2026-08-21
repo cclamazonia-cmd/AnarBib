@@ -2421,7 +2421,7 @@
   "catalogacao.ph.emitterOrg": "Syndicat, front, collectif…",
   "catalogacao.ph.fileNote": "PDF, EPUB, page web…",
   "catalogacao.ph.internalNotes": "Observations internes…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "Non indiqué",
   "catalogacao.ph.notPrepared": "Pas encore préparée.",
   "catalogacao.ph.notes": "Observations complémentaires",
   "catalogacao.ph.notesHint": "Pseudonymes, contexte politique, sources consultées, etc.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "Non — deux éditions de la même œuvre",
   "catalogacao.dedupAssist.step3Title": "Ce que la fusion détruit",
   "catalogacao.dedupAssist.keepWhich": "Quelle fiche garder ?",
-  "catalogacao.dedupAssist.lost": "Disparaît définitivement",
+  "catalogacao.dedupAssist.lost": "Ce que la fiche supprimée est seule à porter",
   "catalogacao.dedupAssist.nothingLost": "Aucune métadonnée propre à la fiche supprimée.",
-  "catalogacao.dedupAssist.diverging": "Remplacé par la valeur de la fiche conservée",
+  "catalogacao.dedupAssist.diverging": "Ce que les deux portent, différemment",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {Aucun exemplaire déplacé} one {1 exemplaire déplacé} other {# exemplaires déplacés}}",
   "catalogacao.dedupAssist.circulation": "Suivent aussi la fiche : {emprestimos} prêt(s), {reservas} réservation(s), {consultas} consultation(s), {numeriques} ressource(s) numérique(s).",
   "catalogacao.dedupAssist.confirmPrompt": "Pour confirmer, saisissez la référence de la fiche supprimée ({ref}) :",
   "catalogacao.dedupAssist.doMerge": "Supprimer cette fiche et fusionner",
   "catalogacao.dedupAssist.back": "Revenir",
   "federacao.communs.doc.noteAgSamizdats.title": "À décider — que fait circuler AnarBib ?",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Note soumise à l’assemblée générale, non adoptée. Une bibliothèque qui possède un livre papier peut-elle en diffuser la numérisation intégrale à ses seuls membres ? L’état de fait, qui porte la responsabilité, ce que ça coûte, et quatre options."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Note soumise à l’assemblée générale, non adoptée. Une bibliothèque qui possède un livre papier peut-elle en diffuser la numérisation intégrale à ses seuls membres ? L’état de fait, qui porte la responsabilité, ce que ça coûte, et quatre options.",
+  "catalogacao.dedupAssist.keepChecked": "Coché, la valeur passe sur la fiche conservée. Décoché, elle disparaît avec la fiche supprimée.",
+  "catalogacao.dedupAssist.notTransferable": "non reprenable"
 }

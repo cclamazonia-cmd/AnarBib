@@ -2415,7 +2415,7 @@
   "catalogacao.ph.emitterOrg": "Vakbond, front, collectief…",
   "catalogacao.ph.fileNote": "PDF, EPUB, webpagina…",
   "catalogacao.ph.internalNotes": "Interne opmerkingen…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "Niet opgegeven",
   "catalogacao.ph.notPrepared": "Nog niet voorbereid.",
   "catalogacao.ph.notes": "Aanvullende notities",
   "catalogacao.ph.notesHint": "Pseudoniemen, politieke context, geraadpleegde bronnen, enz.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "Nee — twee edities van hetzelfde werk",
   "catalogacao.dedupAssist.step3Title": "Wat het samenvoegen vernietigt",
   "catalogacao.dedupAssist.keepWhich": "Welk record blijft behouden?",
-  "catalogacao.dedupAssist.lost": "Verdwijnt definitief",
+  "catalogacao.dedupAssist.lost": "Wat alleen het verwijderde record bevat",
   "catalogacao.dedupAssist.nothingLost": "Geen metadata die alleen bij het verwijderde record hoort.",
-  "catalogacao.dedupAssist.diverging": "Vervangen door de waarde van het behouden record",
+  "catalogacao.dedupAssist.diverging": "Wat beide bevatten, verschillend",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {Geen exemplaren verplaatst} one {1 exemplaar verplaatst} other {# exemplaren verplaatst}}",
   "catalogacao.dedupAssist.circulation": "Volgen ook het record: {emprestimos} uitlening(en), {reservas} reservering(en), {consultas} raadpleging(en), {numeriques} digitale bron(nen).",
   "catalogacao.dedupAssist.confirmPrompt": "Typ ter bevestiging de referentie van het verwijderde record ({ref}):",
   "catalogacao.dedupAssist.doMerge": "Dit record verwijderen en samenvoegen",
   "catalogacao.dedupAssist.back": "Terug",
   "federacao.communs.doc.noteAgSamizdats.title": "Nog te beslissen — wat verspreidt AnarBib?",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Nota voorgelegd aan de algemene vergadering, niet aangenomen. Mag een bibliotheek die het gedrukte boek bezit de volledige digitalisering ervan uitsluitend aan haar eigen leden aanbieden? De feiten, de verantwoordelijkheid, de kosten en vier opties."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Nota voorgelegd aan de algemene vergadering, niet aangenomen. Mag een bibliotheek die het gedrukte boek bezit de volledige digitalisering ervan uitsluitend aan haar eigen leden aanbieden? De feiten, de verantwoordelijkheid, de kosten en vier opties.",
+  "catalogacao.dedupAssist.keepChecked": "Aangevinkt gaat de waarde naar het behouden record. Niet aangevinkt verdwijnt ze met het verwijderde.",
+  "catalogacao.dedupAssist.notTransferable": "niet overdraagbaar"
 }

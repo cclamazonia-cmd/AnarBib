@@ -2415,7 +2415,7 @@
   "catalogacao.ph.emitterOrg": "Sindicat, front, col·lectiu…",
   "catalogacao.ph.fileNote": "PDF, EPUB, pàgina web…",
   "catalogacao.ph.internalNotes": "Observacions internes…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "No indicat",
   "catalogacao.ph.notPrepared": "Encara no preparada.",
   "catalogacao.ph.notes": "Observacions complementàries",
   "catalogacao.ph.notesHint": "Pseudònims, context polític, fonts consultades, etc.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "No — dues edicions de la mateixa obra",
   "catalogacao.dedupAssist.step3Title": "Allò que la fusió destrueix",
   "catalogacao.dedupAssist.keepWhich": "Quina fitxa es conserva?",
-  "catalogacao.dedupAssist.lost": "Desapareix definitivament",
+  "catalogacao.dedupAssist.lost": "Allò que només porta la fitxa eliminada",
   "catalogacao.dedupAssist.nothingLost": "Cap metadada pròpia de la fitxa eliminada.",
-  "catalogacao.dedupAssist.diverging": "Substituït pel valor de la fitxa conservada",
+  "catalogacao.dedupAssist.diverging": "Allò que totes dues porten, de manera diferent",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {Cap exemplar desplaçat} one {1 exemplar desplaçat} other {# exemplars desplaçats}}",
   "catalogacao.dedupAssist.circulation": "També segueixen la fitxa: {emprestimos} préstec(s), {reservas} reserva(es), {consultas} consulta(es), {numeriques} recurs(os) digital(s).",
   "catalogacao.dedupAssist.confirmPrompt": "Per confirmar, escriu la referència de la fitxa eliminada ({ref}):",
   "catalogacao.dedupAssist.doMerge": "Eliminar aquesta fitxa i fusionar",
   "catalogacao.dedupAssist.back": "Tornar",
   "federacao.communs.doc.noteAgSamizdats.title": "Per decidir — què fa circular AnarBib?",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Nota sotmesa a l’assemblea general, no adoptada. Pot una biblioteca que posseeix el llibre en paper difondre’n la digitalització íntegra només als seus membres? La situació, qui n’assumeix la responsabilitat, el cost i quatre opcions."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Nota sotmesa a l’assemblea general, no adoptada. Pot una biblioteca que posseeix el llibre en paper difondre’n la digitalització íntegra només als seus membres? La situació, qui n’assumeix la responsabilitat, el cost i quatre opcions.",
+  "catalogacao.dedupAssist.keepChecked": "Marcat, el valor passa a la fitxa conservada. Sense marcar, desapareix amb la fitxa eliminada.",
+  "catalogacao.dedupAssist.notTransferable": "no transferible"
 }

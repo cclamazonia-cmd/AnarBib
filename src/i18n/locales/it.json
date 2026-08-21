@@ -2415,7 +2415,7 @@
   "catalogacao.ph.emitterOrg": "Sindicato, frente, coletivo…",
   "catalogacao.ph.fileNote": "PDF, EPUB, página web…",
   "catalogacao.ph.internalNotes": "Osservazioni interne…",
-  "catalogacao.ph.language": "—",
+  "catalogacao.ph.language": "Non indicato",
   "catalogacao.ph.notPrepared": "Non ancora preparata.",
   "catalogacao.ph.notes": "Osservazioni complementari",
   "catalogacao.ph.notesHint": "Pseudonimi, contesto politico, fonti consultate, ecc.",
@@ -5849,14 +5849,16 @@
   "catalogacao.dedupAssist.step2No": "No — due edizioni della stessa opera",
   "catalogacao.dedupAssist.step3Title": "Ciò che l’unione distrugge",
   "catalogacao.dedupAssist.keepWhich": "Quale scheda si tiene?",
-  "catalogacao.dedupAssist.lost": "Scompare definitivamente",
+  "catalogacao.dedupAssist.lost": "Ciò che solo la scheda eliminata porta",
   "catalogacao.dedupAssist.nothingLost": "Nessun metadato proprio della scheda eliminata.",
-  "catalogacao.dedupAssist.diverging": "Sostituito dal valore della scheda conservata",
+  "catalogacao.dedupAssist.diverging": "Ciò che entrambe portano, in modo diverso",
   "catalogacao.dedupAssist.copiesMove": "{count, plural, =0 {Nessuna copia spostata} one {1 copia spostata} other {# copie spostate}}",
   "catalogacao.dedupAssist.circulation": "Seguono anche la scheda: {emprestimos} prestito/i, {reservas} prenotazione/i, {consultas} consultazione/i, {numeriques} risorsa/e digitale/i.",
   "catalogacao.dedupAssist.confirmPrompt": "Per confermare, digita il riferimento della scheda eliminata ({ref}):",
   "catalogacao.dedupAssist.doMerge": "Eliminare questa scheda e unire",
   "catalogacao.dedupAssist.back": "Indietro",
   "federacao.communs.doc.noteAgSamizdats.title": "Da decidere — che cosa fa circolare AnarBib?",
-  "federacao.communs.doc.noteAgSamizdats.desc": "Nota sottoposta all’assemblea generale, non adottata. Una biblioteca che possiede il libro cartaceo può diffonderne la digitalizzazione integrale ai soli suoi membri? Lo stato di fatto, chi ne risponde, il costo e quattro opzioni."
+  "federacao.communs.doc.noteAgSamizdats.desc": "Nota sottoposta all’assemblea generale, non adottata. Una biblioteca che possiede il libro cartaceo può diffonderne la digitalizzazione integrale ai soli suoi membri? Lo stato di fatto, chi ne risponde, il costo e quattro opzioni.",
+  "catalogacao.dedupAssist.keepChecked": "Spuntato, il valore passa alla scheda conservata. Non spuntato, sparisce con quella eliminata.",
+  "catalogacao.dedupAssist.notTransferable": "non riportabile"
 }
