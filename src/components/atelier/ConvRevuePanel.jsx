@@ -156,6 +156,7 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
   }
 
   const compteurs = Object.fromEntries(resume.map(r => [r.lot, r]));
+  const totalARevoir = lots.reduce((n, id) => n + Number(compteurs[id]?.a_revoir ?? 0), 0);
   const cLot = compteurs[lot] || {};
   // Ce qui attend une ECRITURE : les verdicts poses moins ceux deja ecrits.
   // « Ecarte » n'y figure pas — il ne sera jamais applique.
@@ -165,10 +166,29 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
 
   return (
     <section style={{ marginTop: 28 }}>
-      <h2 style={{ fontSize: '1rem', margin: '0 0 4px' }}>
-        {t({ id: titleKey })}
-      </h2>
-      <p style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)', margin: '0 0 12px', maxWidth: 720 }}>
+      {collapsible ? (
+        <button type="button" onClick={() => setOuvert(o => !o)} aria-expanded={ouvert}
+          style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left',
+                   background: 'none', border: 'none', color: 'inherit', cursor: 'pointer',
+                   padding: '6px 0', fontSize: '1rem', fontWeight: 600 }}>
+          <span aria-hidden="true" style={{ display: 'inline-block', transition: 'transform .15s',
+                transform: ouvert ? 'rotate(90deg)' : 'none' }}>▸</span>
+          <span style={{ minWidth: 0 }}>{t({ id: titleKey })}</span>
+          {/* Le compte reste visible replie : sans lui, on ne saurait pas
+              qu'il y a du travail derriere la fleche. */}
+          <span style={{ fontSize: '.78rem', fontWeight: 400, color: 'var(--brand-muted, #999)' }}>
+            {totalARevoir} {t({ id: 'atelier.revue.pending' })}
+          </span>
+        </button>
+      ) : (
+        <h2 style={{ fontSize: '1rem', margin: '0 0 4px' }}>
+          {t({ id: titleKey })}
+        </h2>
+      )}
+
+      {ouvert && (
+      <>
+      <p style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)', margin: '8px 0 12px', maxWidth: 720 }}>
         {t({ id: introKey })}
       </p>
 
@@ -331,6 +351,8 @@ export default function ConvRevuePanel({ lots, titleKey, introKey, collapsible =
           )}
         </div>
       ))}
+      </>
+      )}
     </section>
   );
 }

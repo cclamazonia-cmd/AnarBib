@@ -125,18 +125,37 @@ symptôme observé — une liste bloquée sur « Chargement… » dans un écran
 ressemble trait pour trait à un bug qu'on vient d'introduire. On cherche donc
 dans le code, et il n'y a rien à y trouver.
 
-**Le contrôle, en une commande.** Avant de chercher un bug dans le front,
-vérifier que le front déployé EST celui du dépôt. Le nom haché du bundle suffit :
+**Le contrôle — et la version fausse, écrite d'abord.** Le premier réflexe est
+de comparer le nom haché du bundle servi à celui d'un build local. **Ça ne
+marche pas**, constaté en l'essayant : le `prebuild` régénère
+`catalogue-snapshot.json` depuis les données à chaque exécution, donc deux
+builds du MÊME commit n'ont déjà pas le même hash. La comparaison rend un faux
+positif à tous les coups. Une méthode de diagnostic fausse est pire que pas de
+méthode : on lui fait confiance.
+
+Ce qui marche : **chercher dans le chunk servi une empreinte du code qu'on veut
+vérifier** — un identifiant introduit par le commit en question. Le panneau
+vivant dans un chunk chargé à la demande, il faut descendre de deux niveaux :
 
 ```js
 // dans la console de la page servie
-fetch('/index.html', { cache: 'no-store' }).then(r => r.text())
-  .then(h => console.log(h.match(/assets\/(index-[\w.-]+\.js)/)[1]));
+const html = await (await fetch('/index.html', {cache:'no-store'})).text();
+const entree = [...new Set([...html.matchAll(/assets\/([\w.-]+\.js)/g)].map(m=>m[1]))];
+const tous = new Set(entree);
+for (const n of entree) {                       // les chunks paresseux ne sont
+  const t = await (await fetch('/assets/'+n)).text();   // pas dans index.html :
+  for (const m of t.matchAll(/["'`]\.?\/?assets\/([\w.-]+\.js)["'`]/g)) tous.add(m[1]);
+}
+// puis fetch chaque chunk pertinent et tester la présence du marqueur
 ```
 
-à comparer avec `grep -o 'assets/index-[^"]*\.js' dist/index.html` après un
-build local sur le même commit. Deux valeurs différentes = le déployé est
-ancien, et tout ce qu'on observe à l'écran parle du passé.
+**Le même contrôle vaut AVANT de pousser**, et c'est là qu'il aurait servi le
+plus : `grep -l "<marqueur>" dist/assets/*.js` après le build local. Lint, tests
+et build ne prouvent que la validité du code — jamais que la fonctionnalité
+est dedans. Vécu le 21/08 : un correctif d'interface était écrit dans un script
+jamais exécuté ; le composant compilait, les 90 tests passaient, et la moitié
+manquante rendait l'écran inutilisable. Le `grep` sur le bundle l'aurait dit en
+une seconde.
 
 **Ce que ça suggère.** `npm ci` va chercher 595 paquets sur le réseau à chaque
 run. Un `ECONNRESET` chez le registre suffit à bloquer tout déploiement
