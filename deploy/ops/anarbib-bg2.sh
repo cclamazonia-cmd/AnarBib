@@ -318,7 +318,7 @@ backup_long() {
   # rend la retention independante et des chemins et de l'hote : elle survivra
   # aussi au jour ou ces flux tireront depuis un VPS et non depuis cette machine.
   restic forget --tag flux-long --group-by tags \
-    --keep-daily 7 --keep-weekly 4 --keep-monthly 6 --no-prune
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 6
   heartbeat long ok "$(snapshot_id_de flux-long)"
   info "Flux long termine."
 }
@@ -343,7 +343,7 @@ backup_court() {
 
   unlock_stale
   restic backup "$dump" --tag flux-court --tag bg2
-  restic forget --tag flux-court --group-by tags --keep-daily 7 --no-prune
+  restic forget --tag flux-court --group-by tags --keep-daily 7
   heartbeat court ok "$(snapshot_id_de flux-court)"
   info "Flux court termine. (dump clair — comptes — efface)"
 }
@@ -369,7 +369,7 @@ backup_storage() {
   unlock_stale
   restic backup "$STORAGE_WORK" --tag flux-storage --tag bg2
   restic forget --tag flux-storage --group-by tags \
-    --keep-daily 7 --keep-weekly 4 --keep-monthly 6 --no-prune
+    --keep-daily 7 --keep-weekly 4 --keep-monthly 6
   heartbeat storage ok "$(snapshot_id_de flux-storage)"
   info "Flux storage termine. (miroir local conserve, chmod 700)"
 }
@@ -425,6 +425,17 @@ SQL
 
 # --------------------------- PRUNE MENSUEL -----------------------------
 # BG2-17 (21/08/2026) : le prune sort du tir de sauvegarde.
+#
+# NE PAS RAJOUTER `--no-prune` AUX `restic forget` CI-DESSUS. Le drapeau a existe,
+# il n'existe plus : depuis restic 0.17 le `forget` ne prune QUE si on lui passe
+# `--prune`, et `--no-prune` est devenu une option inconnue. La version installee
+# ici est 0.18.1. Un `forget` nu fait donc exactement ce que BG2-17 veut.
+#
+# Vecu le 21/08/2026, tir de 15:48 : le drapeau a fait sortir restic en erreur
+# APRES l'enregistrement du snapshot. Consequences en cascade — la retention n'a
+# pas ete appliquee, le temoin d'arrivee n'est jamais parti (le script mourait
+# avant), et la sonde a signale un « tir interrompu » pour un tir dont la donnee
+# etait pourtant bien sauvegardee. Les trois flux portaient le drapeau.
 #
 # POURQUOI. `restic forget --prune` faisait porter au tir de sauvegarde le cout
 # du prune, qui ne tombe que lorsque la retention retire un instantane. La duree
