@@ -64,3 +64,9 @@ tests/sql/doublons_p11_arbitrage_autorites_tests.sql
 # verdict humain ne soit pas defait par une reouverture de brouillon (test 6)
 # ni ecrase quand la fiche a bouge depuis la proposition (test 5).
 tests/sql/conv_o7_collectivites_tests.sql
+
+# Scission d autorite (CONV-O8). Garde surtout la cle primaire de book_authors
+# quand la fiche composee figure deux fois sur le meme livre (test 6) et la
+# copie du nom dans book_contributors (test 8), qui est le plus discret des
+# echecs : autorite scindee, livre affichant encore le nom compose.
+tests/sql/conv_o8_scission_tests.sql
