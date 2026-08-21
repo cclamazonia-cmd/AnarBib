@@ -66,8 +66,19 @@ reçoivent qu'une couverture. S'ils deviennent numérisables en intégral dès l
 qu'ils sont détenus, la même masse passée à 8-15 Mo l'ouvrage représente
 **plusieurs dizaines de Go**, non deux. La borne réelle n'est donc plus
 juridique mais matérielle : ce que le réseau peut héberger et sauvegarder.
-**À rechiffrer avant l'appel Herbes Folles**, sans quoi le §8 annonce un volume
-que cette décision périme.
+
+✅ **Rechiffré le 20/08 — voir le §8**, et la conclusion n'est pas celle que cet
+avertissement laissait craindre : **c'est le plafond qui change, pas la pente**.
+Le chiffre annoncé à Herbes Folles (20 Go au départ, ~50 Go à trois-cinq ans)
+**reste juste**, parce qu'il décrit une trajectoire bornée par la main-d'œuvre,
+que l'élargissement du périmètre ne modifie pas. Il ne faut donc rien retirer de
+ce qui leur a été dit — seulement cesser de présenter les 50 Go comme un point
+d'arrivée.
+
+⚠️ *Cet avertissement a réclamé un rechiffrage pendant plusieurs heures après
+qu'il avait eu lieu, et il a fait retirer d'un brouillon un chiffre encore
+valide. Un « à faire » qui survit à son exécution est une source de faux :
+quand un §8 est refait, c'est le §1 qui doit être refermé dans la foulée.*
 
 ### Le vocabulaire des droits doit être contrôlé — dès maintenant
 

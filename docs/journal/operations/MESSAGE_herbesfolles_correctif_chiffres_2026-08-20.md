@@ -5,16 +5,20 @@
 > `caddy` 11, `auth` 8). La consigne de relecture est levée — 360 Mo est très
 > loin des 4 Go au-delà desquels il ne fallait pas envoyer.
 >
-> ⚠️ **Le chiffre de disque a été RETIRÉ du message, délibérément.** Le brouillon
-> annonçait « 20 Go pour démarrer, jusqu'à 50 sur trois à cinq ans ». Or la
-> décision « troisième voie » du 20/08 — numérisation intégrale des ouvrages sous
-> droits *détenus*, lisible par les seuls membres de la bibliothèque détentrice —
-> périme ce chiffrage, et le dit elle-même : *« Cette voie change le
-> dimensionnement du §8 […] plusieurs dizaines de Go, non deux. À rechiffrer
-> avant l'appel Herbes Folles. »* Envoyer 20/50 Go aurait été refaire exactement
-> l'erreur qu'on corrige : donner un chiffre qu'on sait déjà faux. Le message dit
-> donc que le volume est en cours de rechiffrage, et promet un taux et une pente
-> pour l'appel — ce que le §5.3 demande de toute façon.
+> **Le chiffre de disque est CONSERVÉ** — après un aller-retour qu'il vaut mieux
+> raconter. Je l'avais d'abord retiré, croyant le brouillon périmé par la
+> décision « troisième voie » du 20/08, dont le §1 réclamait un rechiffrage
+> « avant l'appel Herbes Folles ». **Le rechiffrage avait déjà eu lieu**, au §8
+> du même document, et sa conclusion est l'inverse : *« Ce chiffre reste juste
+> […] il ne faut donc rien retirer de ce qui a été dit ; il faut seulement ne
+> plus le présenter comme un plafond. »* J'avais lu l'avertissement sans vérifier
+> s'il avait été levé — le §1 le réclamait encore alors que le §8 l'avait fait.
+>
+> Ce que le rechiffrage établit : le fonds éligible passe à **72–135 Go** (2 674
+> ouvrages catalogués, **tous détenus**, zéro orphelin — « sous droits non
+> détenu » est une catégorie vide en pratique), mais **la pente est inchangée**,
+> bornée par la main-d'œuvre et non par l'éligibilité. Les 20 Go / 50 Go tiennent
+> donc comme *trajectoire* ; ce qui disparaît, c'est le palier.
 >
 > **Pourquoi ce message existe.** Le mail de dimensionnement
 > ([`MESSAGE_herbesfolles_dimensionnement_vps_2026-07-03`](MESSAGE_herbesfolles_dimensionnement_vps_2026-07-03.md))
@@ -40,7 +44,7 @@
 | « ≈ 10 conteneurs » | **6** | trop lourd |
 | « base ~100 Mo », « ~530 Mo au total » | **20 Mo** de base, ~430 Mo de fichiers | trop lourd |
 | « RAM ~4 Go minimum, 8 Go confortable » | **360 Mo au repos** pour les six | trop lourd d'un facteur ~11 |
-| « ~20 Go dédiés » | **en cours de rechiffrage** — voir ci-dessous | trop léger, ampleur inconnue |
+| « ~20 Go dédiés » | **juste** — 20 Go au départ, ~50 à 3–5 ans (rechiffré §8) | exact, mais ce n'est plus un plafond |
 
 **Sur la RAM.** 360 Mo est une mesure **au repos** : aucun trafic, Postgres n'a
 pas gonflé ses caches. C'est un plancher, pas une taille de VM — et le message le
@@ -48,15 +52,23 @@ dit, plutôt que de laisser croire à une mesure qu'on n'a pas faite. Ce qu'il
 affirme est exactement ce qu'on sait : l'ordre de grandeur n'est pas celui
 annoncé, et une machine à 8 Go est inutile.
 
-**Sur le disque, on ne donne plus de chiffre.** Le brouillon annonçait 20 Go puis
-50 sur trois à cinq ans. La décision « troisième voie » du 20/08 périme ce
-chiffrage — les ouvrages sous droits *détenus* deviennent numérisables en
-intégral, là où le calcul ne leur accordait qu'une couverture — et la décision le
-signale elle-même comme **à rechiffrer avant l'appel**. Donner 20/50 Go
-aujourd'hui reviendrait à répéter l'erreur qu'on corrige. Le message annonce donc
-le sens (ça grandira, lentement, borné par la vitesse humaine) et promet un taux
-et une pente pour l'appel — ce que le §5.3 réclame de toute façon, et qui vaut
-mieux qu'un nombre unique déjà vieilli.
+**Sur le disque, le chiffre tient — et le message le confirme au lieu de le
+retirer.** Le rechiffrage du §8 est fait : le fonds éligible explose (72–135 Go,
+tous les ouvrages étant détenus), mais la pente ne bouge pas, parce qu'elle est
+bornée par le nombre de personnes qui numérisent, pas par le nombre de livres
+numérisables. Une personne assidue produit 2 à 4 Go/an ; trois bibliothèques
+équipées, une dizaine. Et **aucun scanner n'est encore en service** : la pente
+n'a pas commencé.
+
+Ce que le message ajoute, et qui les concerne : les 50 Go ne sont plus un point
+d'arrivée. Avant, la croissance s'arrêtait le domaine public épuisé. Désormais
+elle continue. Ce n'est pas un volume à annoncer, c'est un **critère de choix**
+— mieux vaut un hébergement qui puisse croître doucement après cinq ans qu'un
+hébergement calibré sur un maximum.
+
+Le §5.3 demande « un taux et une pente plutôt qu'un chiffre unique » : c'est
+exactement ce que le message donne maintenant, et le chiffre unique y reste
+comme repère, pas comme promesse.
 
 ---
 
@@ -80,13 +92,22 @@ mieux qu'un nombre unique déjà vieilli.
 > vous ai donné : si vous aviez commencé à chercher une machine à 8 Go, ce n'est
 > pas la peine.
 >
-> Sur le disque, je préfère ne pas vous donner de chiffre aujourd'hui plutôt que
-> de vous en donner un faux. Nous venons d'arrêter une règle de numérisation, et
-> elle élargit le volume par rapport à ce que le premier mail annonçait : nous
-> sommes en train de le rechiffrer. Ce que je peux dire dès maintenant, c'est que
-> **ça grandira** — lentement, borné par la vitesse à laquelle des humains
-> numérisent, pas par la taille des fonds. Je vous apporterai un taux et une
-> pente à l'appel, pas un nombre unique qui aurait vieilli entre-temps.
+> Sur le disque en revanche, **le chiffre que je vous ai donné tient** : 20 Go
+> pour démarrer, une cinquantaine à trois-cinq ans. Je le confirme après l'avoir
+> refait, parce qu'une décision prise cette semaine a élargi ce que nous nous
+> autorisons à numériser — et je voulais m'assurer que ça ne vous engageait pas
+> au-delà de ce qui vous avait été dit. Ça ne change pas la trajectoire : ce qui
+> borne le remplissage, ce n'est pas le nombre de livres, c'est le nombre de
+> personnes qui scannent. Une personne assidue produit **2 à 4 Go par an** ;
+> trois bibliothèques équipées, une dizaine de Go par an. C'est une pente lente,
+> et à ce jour **aucun scanner n'est encore en service** : elle n'a pas commencé.
+>
+> Une seule nuance, et elle vous concerne plus que nous : ces 50 Go ne sont plus
+> un point d'arrivée. Avant, la croissance s'arrêtait d'elle-même une fois le
+> domaine public épuisé. Maintenant elle continue tant que quelqu'un numérise.
+> Rien à absorber dans l'immédiat, donc — mais si vous nous hébergez, autant
+> choisir quelque chose qui puisse **continuer à grandir doucement** après cinq
+> ans, plutôt que quelque chose de calibré sur un maximum.
 >
 > À bientôt,
 
