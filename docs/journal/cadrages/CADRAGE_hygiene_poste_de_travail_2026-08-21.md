@@ -178,6 +178,38 @@ issues : sérialiser (une seule session écrit à la fois), ou donner à chaque
 session son `git worktree` sur une branche à elle. La seconde est la seule qui
 tient si le travail en parallèle doit continuer.
 
+> **La recette, appliquée le 21/08.** Un worktree par session, et le push qui va
+> avec — c'est le second geste qui compte, et il manquait à la formulation
+> d'origine.
+>
+> ```bash
+> # une fois par session
+> git -C ~/anarbib fetch origin
+> git -C ~/anarbib worktree add -b claude/<id> ~/anarbib-wt-<id> origin/main
+> cd ~/anarbib-wt-<id> && npm ci        # un worktree n'hérite pas de node_modules
+>
+> # pour livrer : rejouer la chaîne de la CI, puis pousser SES commits seuls
+> npm run lint && npm test && npm run build
+> git fetch origin && git rebase origin/main
+> git push origin HEAD:main
+>
+> # en fin de session
+> git -C ~/anarbib worktree remove ~/anarbib-wt-<id>
+> git -C ~/anarbib branch -d claude/<id>
+> ```
+>
+> **Pourquoi `push origin HEAD:main` et pas `push origin main`.** C'est ce qui
+> règle le *second* incident de la journée, distinct du premier : une branche
+> personnelle ne contient que ses propres commits, donc le push ne peut pas
+> emporter le travail commité-mais-non-poussé d'une autre session — ce qui est
+> arrivé quatre fois le 20/08, dont une fois avec deux migrations parties en
+> déploiement sans que personne l'ait décidé. Et la branche déployant sur `main`,
+> on ne perd pas le déclenchement du pipeline.
+>
+> **Ce que ça coûte** : `npm ci` à l'ouverture (~20 s) et deux commandes à la
+> fermeture. **Ce que ça supprime** : l'index partagé, la fenêtre entre écriture
+> et commit, et le push élargi. Soit les quatre incidents du 20/08 d'un coup.
+
 **H-4 — Les secrets ne sont pas des fichiers .txt.** Un gestionnaire de mots de
 passe, ou le Vault Supabase déjà en place pour les 21 secrets applicatifs. Un
 fichier nommé « Divers secrets.txt » dans un profil OneDrive n'est pas un
