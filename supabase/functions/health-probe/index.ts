@@ -286,93 +286,142 @@ Deno.serve(async (req: Request) => {
     const flux = ((bk as any).flux ?? []) as any[];
     const muets = flux.filter((f) => f.muet);
 
-    const { data: incBackup } = await supabaseAdmin
+    // ─── Un incident par FLUX, et non un seul pour les trois ─────────────
+    // Jusqu'au 21/08, la condition d'ouverture était « aucun incident backup
+    // ouvert ». Un second flux qui tombait pendant qu'un premier était déjà en
+    // défaut ne déclenchait donc RIEN, et le courriel déjà parti ne le
+    // mentionnerait jamais : l'anti-répétition, censé éviter deux fois la même
+    // alerte, supprimait aussi les alertes DIFFÉRENTES. Chaque flux porte
+    // désormais son propre incident, identifié par `subject`, et l'unicité est
+    // tenue par la base — index unique partiel, migration 20260821120000.
+    const { data: incidentsBackup } = await supabaseAdmin
       .from('service_health_incidents')
-      .select('id, opened_at, reason')
+      .select('id, subject, opened_at, reason')
       .eq('kind', 'backup')
-      .is('closed_at', null)
-      .order('opened_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .is('closed_at', null);
 
-    if (!backupOk && !incBackup) {
-      // `raison` vient de fn_backup_heartbeat_status (migration 20260820165002) :
-      // elle distingue un SILENCE d'un TIR INTERROMPU, que le seul `age_heures`
-      // ne permet pas de raconter — « muet depuis 1.2 h » avec un seuil de 36 h
-      // est incompréhensible. Repli sur l'ancien libellé si le champ manque.
-      const raisonBk =
-        muets.map((f) => f.raison ?? `${f.flow} muet depuis ${f.age_heures ?? '?'} h`).join(' ; ') ||
-        'sauvegardes muettes';
-      const interrompus = muets.filter((f) => f.interrompu);
-      const { data: inc, error: errIncBackup } = await supabaseAdmin
+    const dejaOuverts = new Set((incidentsBackup ?? []).map((i) => i.subject ?? ''));
+    const enDefaut = new Set(muets.map((f) => f.flow as string));
+
+    const aOuvrir = muets.filter((f) => !dejaOuverts.has(f.flow));
+    const aFermer = (incidentsBackup ?? []).filter(
+      (i) => i.subject && !enDefaut.has(i.subject),
+    );
+
+    const raisonDe = (f: any) =>
+      f.raison ?? `${f.flow} muet depuis ${f.age_heures ?? '?'} h`;
+
+    // Un incident par flux, mais UN SEUL courriel par tour. Le cas le plus
+    // fréquent est aussi le plus bénin — poste éteint, les trois flux muets
+    // ensemble — et trois courriels pour une seule cause useraient exactement
+    // la crédibilité que ce dispositif existe pour protéger. On tient donc la
+    // comptabilité flux par flux, et on ne prend la parole qu'une fois.
+    //
+    // Les insertions sont faites UNE PAR UNE, et non en lot : en lot, un seul
+    // doublon — c'est-à-dire un tour concurrent ayant déjà ouvert ce flux —
+    // ferait échouer l'enregistrement des autres, et retiendrait leur alerte
+    // avec. Le flux dont l'incident n'a pas pu être écrit est laissé de côté :
+    // il sera repris au tour suivant.
+    const ouvertsCeTour: { flux: any; id: number }[] = [];
+    const refuses: string[] = [];
+    for (const f of aOuvrir) {
+      const { data: inc, error } = await supabaseAdmin
         .from('service_health_incidents')
-        .insert({ kind: 'backup', reason: raisonBk })
+        .insert({ kind: 'backup', subject: f.flow, reason: raisonDe(f) })
         .select('id')
         .single();
-      // Ne PAS alerter si l'incident n'a pas pu etre enregistre. Sans trace en
-      // base, la condition d'ouverture redeviendrait vraie au tour suivant et le
-      // courriel repartirait A CHAQUE TOUR — le mecanisme cense n'alerter qu'une
-      // fois par incident se retourne alors en boucle. Un systeme d'alerte qui
-      // peut inonder detruit sa propre credibilite : on filtre l'expediteur, et
-      // le jour ou l'alerte compte, personne ne la voit.
-      if (errIncBackup || !inc) {
-        actionBackup =
-          `incident sauvegardes NON enregistre (${errIncBackup?.message ?? 'raison inconnue'}) — alerte retenue`;
-      } else {
-        const n = await alerter(
+      // Ne PAS alerter sur un flux dont l'incident n'a pas été enregistré :
+      // sans trace en base, la condition d'ouverture redeviendrait vraie au
+      // tour suivant et le courriel repartirait toutes les cinq minutes.
+      if (error || !inc) refuses.push(`${f.flow} (${error?.message ?? 'raison inconnue'})`);
+      else ouvertsCeTour.push({ flux: f, id: inc.id });
+    }
+
+    if (ouvertsCeTour.length) {
+      const nouveaux = ouvertsCeTour.map((o) => o.flux);
+      const interrompus = nouveaux.filter((f) => f.interrompu);
+      const n = await alerter(
+        interrompus.length
+          ? 'AnarBib — une sauvegarde a commencé et ne s’est jamais terminée'
+          : 'AnarBib — les sauvegardes ne donnent plus signe de vie',
+        interrompus.length ? 'Un tir s’est arrêté en route' : 'Les sauvegardes sont muettes',
+        `<p style="margin:0 0 10px">${
           interrompus.length
-            ? 'AnarBib — une sauvegarde a commencé et ne s’est jamais terminée'
-            : 'AnarBib — les sauvegardes ne donnent plus signe de vie',
-          interrompus.length ? 'Un tir s’est arrêté en route' : 'Les sauvegardes sont muettes',
-          `<p style="margin:0 0 10px">${
-            interrompus.length
-              ? `<strong>Un tir a commencé et ne s'est jamais terminé.</strong> Ce n'est pas un silence : le script a démarré, signalé son départ, puis s'est arrêté en chemin — machine mise en veille, WSL éteint, ou processus tué. Le verrou laissé chez l'hébergeur sera nettoyé tout seul au prochain tir (<code>unlock_stale</code>).`
-              : `Un ou plusieurs flux de sauvegarde n'ont pas signalé de tir réussi dans le délai attendu. <strong>Ça ne veut pas dire qu'ils ont échoué : ça veut dire qu'ils n'ont rien dit.</strong> La cause la plus probable est un poste de travail resté éteint, ou une instance WSL qui n'a pas démarré.`
-          }</p>
-           <p style="margin:0 0 10px">État des trois flux :</p>
-           <ul style="margin:0 0 10px;padding-left:18px">${flux
-             .map(
-               (f) =>
-                 `<li>${esc(f.flow)} — ${
-                   f.muet
-                     ? `<strong>${f.interrompu ? 'TIR INTERROMPU' : 'MUET'}</strong>`
-                     : 'ok'
-                 } — ${
-                   // `age_heures` est l'âge du dernier témoin d'ARRIVÉE : l'afficher
-                   // pour un tir interrompu donnerait le mauvais nombre. La `raison`
-                   // porte déjà la durée depuis le DÉPART.
-                   f.interrompu
-                     ? esc(String(f.raison ?? 'tir commencé, jamais terminé'))
-                     : `dernier signal il y a ${esc(String(f.age_heures ?? '?'))} h (seuil ${esc(
-                         String(f.seuil_heures ?? '?'),
-                       )} h)`
-                 }</li>`,
-             )
-             .join('')}</ul>
-           <p style="margin:0">Un e-mail de rétablissement suivra dès qu'un tir réussi sera signalé.</p>`,
+            ? `<strong>Un tir a commencé et ne s'est jamais terminé.</strong> Ce n'est pas un silence : le script a démarré, signalé son départ, puis s'est arrêté en chemin — machine mise en veille, WSL éteint, ou processus tué. Le verrou laissé chez l'hébergeur sera nettoyé tout seul au prochain tir (<code>unlock_stale</code>).`
+            : `Un ou plusieurs flux de sauvegarde n'ont pas signalé de tir réussi dans le délai attendu. <strong>Ça ne veut pas dire qu'ils ont échoué : ça veut dire qu'ils n'ont rien dit.</strong> La cause la plus probable est un poste de travail resté éteint, ou une instance WSL qui n'a pas démarré.`
+        }</p>
+         <p style="margin:0 0 10px">Nouveaux flux en défaut à ce tour : <strong>${esc(
+           nouveaux.map((f: any) => f.flow).join(', '),
+         )}</strong>.${
+          dejaOuverts.size
+            ? ` Un incident était déjà ouvert pour : ${esc(
+                [...dejaOuverts].filter(Boolean).join(', '),
+              )}.`
+            : ''
+        }</p>
+         <p style="margin:0 0 10px">État des trois flux :</p>
+         <ul style="margin:0 0 10px;padding-left:18px">${flux
+           .map(
+             (f) =>
+               `<li>${esc(f.flow)} — ${
+                 f.muet ? `<strong>${f.interrompu ? 'TIR INTERROMPU' : 'MUET'}</strong>` : 'ok'
+               } — ${
+                 // `age_heures` est l'âge du dernier témoin d'ARRIVÉE : l'afficher
+                 // pour un tir interrompu donnerait le mauvais nombre. La `raison`
+                 // porte déjà la durée depuis le DÉPART.
+                 f.interrompu
+                   ? esc(String(f.raison ?? 'tir commencé, jamais terminé'))
+                   : `dernier signal il y a ${esc(String(f.age_heures ?? '?'))} h (seuil ${esc(
+                       String(f.seuil_heures ?? '?'),
+                     )} h)`
+               }</li>`,
+           )
+           .join('')}</ul>
+         <p style="margin:0">Un e-mail de rétablissement suivra dès que ces flux auront signalé un tir réussi. Chaque flux se ferme séparément.</p>`,
+      );
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ notified_at: new Date().toISOString() })
+        .in(
+          'id',
+          ouvertsCeTour.map((o) => o.id),
         );
-        await supabaseAdmin
-          .from('service_health_incidents')
-          .update({ notified_at: new Date().toISOString() })
-          .eq('id', inc.id);
-        actionBackup = `incident sauvegardes ouvert, ${n} destinataire(s) alerté(s)`;
-      }
-    } else if (backupOk && incBackup) {
+      actionBackup = `${ouvertsCeTour.length} incident(s) sauvegardes ouvert(s) [${nouveaux
+        .map((f: any) => f.flow)
+        .join(', ')}], ${n} destinataire(s) alerté(s)`;
+    }
+
+    // Fermeture : flux par flux également. Un flux revenu se ferme même si un
+    // autre reste en défaut — c'est tout l'intérêt de la découpe, et c'est ce
+    // que l'incident unique interdisait.
+    if (aFermer.length) {
       await supabaseAdmin
         .from('service_health_incidents')
         .update({ closed_at: new Date().toISOString() })
-        .eq('id', incBackup.id);
-      const depuis = new Date(incBackup.opened_at).toLocaleString('fr-FR');
+        .in(
+          'id',
+          aFermer.map((i) => i.id),
+        );
+      const revenus = aFermer.map((i) => i.subject as string);
+      const restants = [...enDefaut];
       const n = await alerter(
-        'AnarBib — les sauvegardes ont repris',
-        'Sauvegardes rétablies',
+        restants.length
+          ? 'AnarBib — une sauvegarde a repris, une autre reste en défaut'
+          : 'AnarBib — les sauvegardes ont repris',
+        restants.length ? 'Rétablissement partiel' : 'Sauvegardes rétablies',
         // NE PAS écrire « les trois flux ont de nouveau signalé un tir réussi » :
         // c'était faux le 20/08, où seul `court` avait tiré — `long` et `storage`
         // restaient tenus par des lignes d'amorçage vieilles de 29 h. Un message
-        // de rétablissement ne doit pas affirmer plus que ce qu'il sait. On dit
-        // donc ce qui est vrai (plus aucun flux en défaut) et on montre l'état
-        // réel des trois, amorçage compris.
-        `<p style="margin:0 0 10px">Plus aucun flux n'est en défaut. L'incident ouvert le ${esc(depuis)} est clos.</p>
+        // de rétablissement ne doit pas affirmer plus que ce qu'il sait.
+        `<p style="margin:0 0 10px">Tir réussi de nouveau signalé par : <strong>${esc(
+          revenus.join(', '),
+        )}</strong>. ${
+          restants.length
+            ? `<strong>Attention :</strong> ${esc(
+                restants.join(', '),
+              )} reste en défaut — son incident demeure ouvert.`
+            : `Plus aucun flux n'est en défaut.`
+        }</p>
          <p style="margin:0 0 10px">État des trois flux :</p>
          <ul style="margin:0 0 10px;padding-left:18px">${flux
            .map(
@@ -386,9 +435,19 @@ Deno.serve(async (req: Request) => {
                }</li>`,
            )
            .join('')}</ul>
-         <p style="margin:0">Cause relevée à l'ouverture : ${esc(incBackup.reason)}</p>`,
+         <p style="margin:0">Causes relevées à l'ouverture : ${esc(
+           aFermer.map((i) => i.reason).join(' ; '),
+         )}</p>`,
       );
-      actionBackup = `incident sauvegardes clos, ${n} destinataire(s) prévenu(s)`;
+      actionBackup = `${actionBackup === 'rien' ? '' : actionBackup + ' ; '}${
+        aFermer.length
+      } incident(s) clos [${revenus.join(', ')}], ${n} destinataire(s) prévenu(s)`;
+    }
+
+    if (refuses.length) {
+      actionBackup = `${
+        actionBackup === 'rien' ? '' : actionBackup + ' ; '
+      }incident NON enregistré pour ${refuses.join(', ')} — alerte retenue`;
     }
   }
 

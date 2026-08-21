@@ -143,6 +143,16 @@ pour *lire* et pour les éditeurs, mais aucune commande de build ne part de
 Windows. C'est déjà la règle de fait ; elle n'est simplement écrite nulle part,
 et elle a été enfreinte aujourd'hui même.
 
+**H-3 bis — On stage des FICHIERS NOMMÉS, jamais un répertoire.** Corollaire
+appris à mes dépens le 21/08, deuxième occurrence du même incident. Un
+`git add -- src/i18n/locales` a emporté, dans un commit qui ne parlait que d'une
+clé, **quatre clés d'une autre session** en cours d'écriture — 40 chaînes sur
+10 locales, poussées sous un message qui ne les mentionne pas. `git add -A` est
+la faute évidente ; `git add <répertoire>` est la même faute en plus discret, et
+elle passe inaperçue parce qu'on croit avoir été précis. La règle utile n'est pas
+« pas de `-A` », c'est : **le `git add` énumère exactement les fichiers que le
+message décrit**, et on relit `git show --stat` avant de pousser, pas après.
+
 **H-3 — Une session à la fois par worktree, ou un worktree par session.** Le
 partage de `~/anarbib` entre sessions concurrentes a produit l'incident 2. Deux
 issues : sérialiser (une seule session écrit à la fois), ou donner à chaque

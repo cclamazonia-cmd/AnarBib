@@ -42,6 +42,10 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
   const arbitre = canArbitrateDuplicates(effectiveRole);
 
   const [charge, setCharge] = useState(false);   // le balayage a-t-il deja tourne ?
+  // Champs qu'une fusion ne peut pas reprendre. On les demande a la BASE plutot
+  // que de recopier la liste ici : une case proposee que le serveur refuse
+  // serait un bouton qui echoue sous les doigts.
+  const [interdits, setInterdits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
   const [err, setErr] = useState('');
@@ -64,6 +68,15 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
   useEffect(() => {
     if (isActive && !charge && !loading) charger();
   }, [isActive, charge, loading, charger]);
+
+  useEffect(() => {
+    if (!isActive || interdits.length) return;
+    let vivant = true;
+    supabase.rpc('fn_dedup_non_transferable_fields').then(({ data }) => {
+      if (vivant && Array.isArray(data)) setInterdits(data);
+    });
+    return () => { vivant = false; };
+  }, [isActive, interdits.length]);
 
   // Temps 0 — le tri. « À décider » = ISBN, ou titre + année (+ éditeur) : une
   // douzaine de paires examinables. « À rapprocher » = titre seul, la bande
@@ -119,20 +132,33 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
     setEx((p) => ({ ...p, etape: 2, details }));
   }
 
+  // Cochees par defaut : les pertes seches, et elles seules. Les divergences
+  // laissent gagner la fiche conservee sauf decision explicite — comme le fait
+  // deja la modale de comparaison des brouillons.
+  const reprisesParDefaut = (apercu) =>
+    (apercu?.metadonnees_perdues || [])
+      .map((m) => m.champ)
+      .filter((c) => !interdits.includes(c));
+
   async function allerAuTemps3(r, survivant) {
     const apercu = await chargerApercu(r, survivant);
-    if (apercu) setEx({ r, etape: 3, survivant, apercu, saisie: '' });
+    if (apercu) setEx({ r, etape: 3, survivant, apercu, saisie: '',
+      reprises: reprisesParDefaut(apercu) });
   }
 
   async function changerSurvivant(survivant) {
+    // Le survivant change : ce qui est perdu change aussi, la selection repart.
     const apercu = await chargerApercu(ex.r, survivant);
-    if (apercu) setEx((p) => ({ ...p, survivant, apercu, saisie: '' }));
+    if (apercu) setEx((p) => ({ ...p, survivant, apercu, saisie: '',
+      reprises: reprisesParDefaut(apercu) }));
   }
 
-  const fusionner = (r, survivant) => appeler(() => supabase.rpc('merge_book', {
-    p_canonical_id: survivant,
-    p_duplicate_id: survivant === r.book_id_a ? r.book_id_b : r.book_id_a,
-  }), r);
+  const fusionner = (r, survivant, reprises) => appeler(() =>
+    supabase.rpc('merge_book_with_fields', {
+      p_canonical_id: survivant,
+      p_duplicate_id: survivant === r.book_id_a ? r.book_id_b : r.book_id_a,
+      p_fields: reprises || [],
+    }), r);
 
   // ── Rendu ────────────────────────────────────────────────────────────────
   const cote = (r, p) => ({
@@ -324,7 +350,14 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
                       onSurvivant={changerSurvivant}
                       onRetour={() => setEx((p) => ({ ...p, etape: 2 }))}
                       onSaisie={(v) => setEx((p) => ({ ...p, saisie: v }))}
-                      onFusion={() => fusionner(r, ex.survivant)}
+                      interdits={interdits}
+                      onReprise={(champ) => setEx((p) => ({
+                        ...p,
+                        reprises: (p.reprises || []).includes(champ)
+                          ? (p.reprises || []).filter((c) => c !== champ)
+                          : [...(p.reprises || []), champ],
+                      }))}
+                      onFusion={() => fusionner(r, ex.survivant, ex.reprises)}
                     />
                   )}
                 </div>
@@ -342,7 +375,7 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
 // La confirmation exige de saisir la référence de la fiche qui disparaît —
 // taper le titre serait pénible, cliquer serait trop peu : la référence est
 // courte, et la lire oblige à regarder LAQUELLE des deux meurt.
-function ApercuFusion({ ex, r, busy, t, onSurvivant, onRetour, onSaisie, onFusion }) {
+function ApercuFusion({ ex, r, busy, t, interdits, onSurvivant, onRetour, onSaisie, onReprise, onFusion }) {
   const ap = ex.apercu;
   const perdues = ap.metadonnees_perdues || [];
   const divergentes = ap.metadonnees_divergentes || [];
@@ -350,11 +383,33 @@ function ApercuFusion({ ex, r, busy, t, onSurvivant, onRetour, onSaisie, onFusio
   const refSupprimee = ap.doublon?.ref || String(ap.doublon?.id || '');
   const peutFusionner = (ex.saisie || '').trim() === refSupprimee && !busy;
 
-  const ligne = (cle, valeur) => (
-    <div key={cle} style={{ fontSize: '.82rem', padding: '3px 0' }}>
-      <span style={{ color: 'var(--brand-muted, #999)' }}>{cle}</span> — {valeur}
-    </div>
-  );
+  const reprises = ex.reprises || [];
+
+  // Une ligne = un champ, et une case qui decide de son sort. Un champ que la
+  // base refuse de reprendre est montre GRISE plutot que masque : sa perte est
+  // reelle, la cacher reviendrait a la passer sous silence.
+  const ligne = (champ, valeur) => {
+    const refuse = (interdits || []).includes(champ);
+    const coche = reprises.includes(champ);
+    return (
+      <label key={champ} style={{
+        display: 'flex', gap: 8, alignItems: 'baseline', fontSize: '.82rem',
+        padding: '3px 0', cursor: refuse || busy ? 'default' : 'pointer',
+        opacity: refuse ? 0.55 : 1,
+      }}>
+        <input type="checkbox" checked={coche} disabled={refuse || busy}
+          onChange={() => onReprise(champ)} style={{ flexShrink: 0 }} />
+        <span>
+          <span style={{ color: 'var(--brand-muted, #999)' }}>{champ}</span> — {valeur}
+          {refuse && (
+            <em style={{ color: 'var(--brand-muted, #888)', fontSize: '.75rem' }}>
+              {' '}({t({ id: 'catalogacao.dedupAssist.notTransferable' })})
+            </em>
+          )}
+        </span>
+      </label>
+    );
+  };
 
   return (
     <div>
@@ -386,7 +441,14 @@ function ApercuFusion({ ex, r, busy, t, onSurvivant, onRetour, onSaisie, onFusio
           ? <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #999)' }}>
               {t({ id: 'catalogacao.dedupAssist.nothingLost' })}
             </div>
-          : perdues.map((m) => ligne(m.champ, String(m.valeur)))}
+          : (
+            <>
+              <div style={{ fontSize: '.76rem', color: 'var(--brand-muted, #999)', marginBottom: 6 }}>
+                {t({ id: 'catalogacao.dedupAssist.keepChecked' })}
+              </div>
+              {perdues.map((m) => ligne(m.champ, String(m.valeur)))}
+            </>
+          )}
       </div>
 
       {divergentes.length > 0 && (
