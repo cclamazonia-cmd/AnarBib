@@ -1,0 +1,26 @@
+[Unit]
+Description=AnarBib #BG2 — controle de fraicheur des trois flux (lecture seule)
+Documentation=file:%h/anarbib/deploy/ops/README.md
+# PAS de OnFailure= ici, volontairement.
+#
+# Ce service SORT EN ERREUR quand il trouve un flux en retard : c'est son
+# travail, pas une panne. Le brancher sur anarbib-backup-failure@ ecrirait dans
+# .last-failure « un backup a ECHOUE », ce qui serait faux — aucun backup n'a
+# echoue, c'est un backup qui n'a pas eu lieu. Deux choses differentes, deux
+# drapeaux differents : le script pose lui-meme .fraicheur-alerte, que ~/.bashrc
+# affiche a l'ouverture du terminal.
+#
+# Et surtout : ce service est precisement la garde qui existe parce que
+# OnFailure= ne part pas quand la machine s'eteint. Le faire dependre du meme
+# mecanisme le ferait heriter du defaut qu'il corrige.
+
+[Service]
+Type=oneshot
+Environment=PATH=/usr/bin:/bin
+Environment=HOME=%h
+TimeoutStartSec=600
+ExecStart=%h/anarbib-ops/anarbib-bg2-fraicheur.sh
+# 1 = un flux en retard · 3 = aveugle depuis trop longtemps. Dans les deux cas le
+# drapeau est pose et le journal porte le detail ; on ne veut pas en plus une
+# unite "failed" a nettoyer a la main avant le prochain tir.
+SuccessExitStatus=1 3

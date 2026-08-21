@@ -1,0 +1,23 @@
+[Unit]
+Description=AnarBib #BG2 — declencheur du controle de fraicheur (au reveil + quotidien)
+
+[Timer]
+# DEUX declencheurs, pour deux silences differents.
+#
+# OnStartupSec : 3 minutes apres le demarrage de la session utilisateur. C'est
+# LE cas qui a coute onze jours au flux storage — la machine etait eteinte, donc
+# ni erreur, ni temoin, ni personne pour s'en apercevoir. Au rallumage, la
+# question « qu'est-ce qui n'a pas tourne pendant mon absence ? » se pose enfin,
+# et il faut qu'elle se pose toute seule. Trois minutes : le temps que le reseau
+# soit la, sans faire attendre quelqu'un qui ouvre un terminal tout de suite.
+OnStartupSec=3min
+# OnCalendar : pour l'autre silence, celui d'une machine allumee en continu ou
+# un flux se tait sans rien casser. 12:30 Europe/Paris — meme convention de
+# fuseau que les tirs (cf. les timers de sauvegarde), et une heure ou quelqu'un
+# est generalement devant l'ecran pour lire le drapeau le jour meme.
+OnCalendar=*-*-* 12:30:00 Europe/Paris
+Persistent=true
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target
