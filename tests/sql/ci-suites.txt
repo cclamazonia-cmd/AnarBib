@@ -55,3 +55,7 @@ tests/sql/doublons_p9_apercu_reprise_autorites_tests.sql
 # Balayage global des autorites (paquet DOUBLONS P10). Garde surtout la
 # coherence avec la detection par autorite (DEDUP-6) et le piege des dates NULL.
 tests/sql/doublons_p10_balayage_autorites_tests.sql
+
+# Arbitrage « pas un doublon » pour les autorites (paquet DOUBLONS P11).
+# Garde surtout que les DEUX detections excluent les memes paires (DEDUP-6).
+tests/sql/doublons_p11_arbitrage_autorites_tests.sql
