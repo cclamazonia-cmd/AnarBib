@@ -22,6 +22,8 @@
 // IMPORTANT : produit un BROUILLON (issue.status='draft'). La publication reste manuelle
 // (network_staff, après relecture). La page « Réseau » n'est PAS générée depuis les sources :
 // elle est assemblée à partir des contributions acceptées (gazette_submissions.status='accepted').
+// Corollaire : l'étape 'start' REFUSE un numéro qui n'est plus un brouillon (cf. stepStart).
+// Le pipeline se rejoue étape par étape sur un brouillon, jamais sur un numéro paru.
 //
 // Déploiement : supabase functions deploy gazette-monthly-build --no-verify-jwt
 // Secrets requis : SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (défaut), ANTHROPIC_API_KEY.
@@ -270,12 +272,34 @@ async function composerDeterministe(sources: Record<string, unknown>, avecFlux: 
 async function stepStart() {
   const { number, slug, cover_date } = issueForToday();
 
+  const { data: dejaLa } = await sb.from("gazette_issues")
+    .select("status,build_mode").eq("number", number).maybeSingle();
+
+  // Un numéro DÉJÀ PARU ne se refabrique pas. L'upsert plus bas réécrit
+  // status='draft' sans condition : relancé sur un numéro en ligne, il le
+  // DÉPUBLIE en silence — la vue publique api.gazette_locales_public_v1 ne
+  // sert que les i.status='published' — puis curate/translate en écrasent le
+  // contenu. Le cron du 15 calcule un numéro neuf chaque mois, donc le cas ne
+  // vient que d'une relance à la main ou d'un rattrapage après un build raté
+  // dans le même mois — soit exactement les moments où on appellera 'start'.
+  // On refuse AVANT le moindre écrit : ni gazette_issues, ni gazette_build_jobs
+  // (qui redémarrerait le pipeline), ni les horodatages de gazette_sources.
+  // 'archived' est refusé au même titre que 'published' : ce numéro-là a paru,
+  // le rejouer en écraserait le contenu. Sur un brouillon (ou un numéro qui
+  // n'existe pas encore), rien ne change : l'étape reste idempotente.
+  const etatActuel = dejaLa?.status as string | undefined;
+  if (etatActuel && etatActuel !== "draft") {
+    throw new Error(
+      `gazette n°${number} : refus de (re)fabriquer, le numéro est en ` +
+      `status='${etatActuel}' et non 'draft'. Rien n'a été touché. Pour le ` +
+      `refaire, repasser d'abord le numéro en brouillon à la main.`,
+    );
+  }
+
   // Le mode de fabrication se REPORTE d'un numéro à l'autre : un mandat du réseau
   // n'a pas à être resaisi chaque mois. On respecte celui déjà posé sur ce numéro
   // (le staff a pu le changer sur le brouillon), sinon on reprend celui du numéro
   // précédent, sinon 'assisted' — l'état d'avant cette bascule.
-  const { data: dejaLa } = await sb.from("gazette_issues")
-    .select("build_mode").eq("number", number).maybeSingle();
   let build_mode = dejaLa?.build_mode as string | undefined;
   if (!build_mode) {
     const { data: precedent } = await sb.from("gazette_issues")
