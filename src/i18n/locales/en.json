@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Provenance updated.",
   "rede.gazeta.transStatus.original": "Source version",
   "rede.gazeta.transStatus.machine": "Machine translation",
-  "rede.gazeta.transStatus.human_reviewed": "Reviewed"
+  "rede.gazeta.transStatus.human_reviewed": "Reviewed",
+  "rede.gazeta.sources": "Sources",
+  "rede.gazeta.sources.hint": "The feeds read each month, and the section their excerpts land in. This choice is the only editorial call the press-review mode makes — and it is made here, by hand.",
+  "rede.gazeta.sources.name": "Name",
+  "rede.gazeta.sources.feed": "Feed (URL)",
+  "rede.gazeta.sources.locale": "Language",
+  "rede.gazeta.sources.active": "Active",
+  "rede.gazeta.sources.removeConfirm": "Remove “{name}” from the source registry?",
+  "rede.gazeta.sources.never": "no article received",
+  "rede.gazeta.modeLabel": "Production",
+  "rede.gazeta.mode.assisted": "Assisted by a language model",
+  "rede.gazeta.mode.revue": "Press review",
+  "rede.gazeta.mode.manual": "Written by members"
 }

@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Deveno ĝisdatigita.",
   "rede.gazeta.transStatus.original": "Origina versio",
   "rede.gazeta.transStatus.machine": "Aŭtomata traduko",
-  "rede.gazeta.transStatus.human_reviewed": "Kontrolita"
+  "rede.gazeta.transStatus.human_reviewed": "Kontrolita",
+  "rede.gazeta.sources": "Fontoj",
+  "rede.gazeta.sources.hint": "La fluoj traserĉataj ĉiumonate, kaj la rubriko kien iras iliaj represoj. Tiu elekto estas la sola redakcia juĝo de la reĝimo « gazetrevuo » — kaj ĝi fariĝas ĉi tie, permane.",
+  "rede.gazeta.sources.name": "Nomo",
+  "rede.gazeta.sources.feed": "Fluo (URL)",
+  "rede.gazeta.sources.locale": "Lingvo",
+  "rede.gazeta.sources.active": "Aktiva",
+  "rede.gazeta.sources.removeConfirm": "Forigi « {name} » el la registro de fontoj?",
+  "rede.gazeta.sources.never": "neniu artikolo ricevita",
+  "rede.gazeta.modeLabel": "Farado",
+  "rede.gazeta.mode.assisted": "Helpata de lingva modelo",
+  "rede.gazeta.mode.revue": "Gazetrevuo",
+  "rede.gazeta.mode.manual": "Verkita de membroj"
 }

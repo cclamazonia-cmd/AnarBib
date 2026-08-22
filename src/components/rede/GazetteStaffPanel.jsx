@@ -11,12 +11,22 @@ import { useAuth } from '@/contexts/AuthContext';
 // la lecture des brouillons + l'écriture). Deux sections :
 //   • Contributions : triage des gazette_submissions (accepter / rejeter).
 //   • Numéros : liste (brouillons inclus), aperçu de relecture des 10 locales,
-//     et publication (draft → published). PAS d'auto-publication ailleurs.
+//     mode de fabrication d'un brouillon, et publication (draft → published).
+//     PAS d'auto-publication ailleurs.
+//   • Sources : le registre des flux dépouillés, et la rubrique où atterrissent
+//     leurs reprises. C'est l'écran qui rend vrai l'article 2 de la charte —
+//     jusqu'ici gazette_sources ne se modifiait que par SQL direct.
 // La diffusion à tout le staff (bouton « Diffuser ») viendra à l'Étape C.
 // ═══════════════════════════════════════════════════════════════════════════
 
 const GZ_LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'el', 'ca', 'eo', 'nl'];
 const SUB_STATUSES = ['new', 'accepted', 'rejected', 'published'];
+// Rubriques où un flux peut déverser ses reprises. L'agenda n'y est pas : il ne
+// vient jamais de la presse, seulement de contributions datées.
+const SOURCE_RUBRICS = ['luttes', 'international', 'cultures'];
+const SOURCE_LOCALES = [...GZ_LOCALES, 'mul'];
+const BUILD_MODES = ['assisted', 'revue', 'manual'];
+const NEW_SOURCE = { name: '', feed_url: '', rubric: 'luttes', locale: 'mul' };
 
 function blockText(b) {
   // Extrait le texte lisible d'un bloc de contenu (pour la relecture).
@@ -45,22 +55,29 @@ export default function GazetteStaffPanel() {
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [preview, setPreview] = useState(null); // { issue, byLocale, loc }
   const [reviewLabel, setReviewLabel] = useState(''); // collectif relecteur saisi
+  const [sources, setSources] = useState([]);
+  const [draft, setDraft] = useState(NEW_SOURCE); // formulaire d'ajout de source
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [s, i] = await Promise.all([
+      const [s, i, src] = await Promise.all([
         supabase.from('gazette_submissions')
           .select('id,rubric,locale,title,body,title_i18n,body_i18n,i18n_status,link,event_date,contributor_name,contributor_collective,status,created_at')
           .order('created_at', { ascending: false }),
         supabase.from('gazette_issues')
-          .select('id,number,slug,masthead_title,cover_date,status,published_at,published_broadcast_at')
+          .select('id,number,slug,masthead_title,cover_date,status,published_at,published_broadcast_at,build_mode')
           .order('number', { ascending: false }),
+        supabase.from('gazette_sources')
+          .select('id,name,feed_url,rubric,locale,scope,active,last_status,last_item_at,last_error')
+          .order('rubric').order('name'),
       ]);
       if (s.error) throw s.error;
       if (i.error) throw i.error;
+      if (src.error) throw src.error;
       setSubs(s.data || []);
       setIssues(i.data || []);
+      setSources(src.data || []);
     } catch (e) {
       setMsg({ text: localizeError(e, t), kind: 'error' });
     } finally {
@@ -166,6 +183,69 @@ export default function GazetteStaffPanel() {
     }
   }
 
+  // Registre des sources — un seul arbitrage éditorial y est posé : la rubrique.
+  async function saveSource(id, patch) {
+    setBusy('src:' + id);
+    try {
+      const { error } = await supabase.from('gazette_sources').update(patch).eq('id', id);
+      if (error) throw error;
+      setSources((rows) => rows.map((r) => (r.id === id ? { ...r, ...patch } : r)));
+      setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function addSource() {
+    const row = { ...draft, name: draft.name.trim(), feed_url: draft.feed_url.trim() };
+    if (!row.name || !row.feed_url) return;
+    setBusy('src:new');
+    try {
+      const { error } = await supabase.from('gazette_sources').insert(row);
+      if (error) throw error;
+      setDraft(NEW_SOURCE);
+      await load();
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function removeSource(row) {
+    if (!window.confirm(t({ id: 'rede.gazeta.sources.removeConfirm' }, { name: row.name }))) return;
+    setBusy('src:' + row.id);
+    try {
+      const { error } = await supabase.from('gazette_sources').delete().eq('id', row.id);
+      if (error) throw error;
+      setSources((rows) => rows.filter((r) => r.id !== row.id));
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  // Le mode ne se change que sur un BROUILLON : après composition, le colophon
+  // du numéro déclare déjà comment il a été fait — le changer le ferait mentir.
+  // Le mode se reporte ensuite de numéro en numéro (cf. stepStart).
+  async function setIssueMode(issue, mode) {
+    setBusy('mode:' + issue.id);
+    try {
+      const { error } = await supabase.from('gazette_issues')
+        .update({ build_mode: mode }).eq('id', issue.id);
+      if (error) throw error;
+      setIssues((rows) => rows.map((r) => (r.id === issue.id ? { ...r, build_mode: mode } : r)));
+      setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
   const fmtDate = (d) => (d ? new Date(d).toLocaleDateString(locale) : '—');
   const subStatusPill = (s) => (s === 'accepted' ? 'ok' : s === 'rejected' ? 'danger' : s === 'published' ? 'info' : 'warn');
   const filteredSubs = subFilter ? subs.filter((s) => s.status === subFilter) : subs;
@@ -180,6 +260,9 @@ export default function GazetteStaffPanel() {
         </button>
         <button className={`cat-tab-btn${section === 'issues' ? ' active' : ''}`} onClick={() => setSection('issues')}>
           {t({ id: 'rede.gazeta.issues' })}
+        </button>
+        <button className={`cat-tab-btn${section === 'sources' ? ' active' : ''}`} onClick={() => setSection('sources')}>
+          {t({ id: 'rede.gazeta.sources' })} ({sources.filter((r) => r.active).length})
         </button>
         <span style={{ flex: 1 }} />
         <button className="cat-btn secondary" onClick={load} disabled={loading}>
@@ -258,6 +341,23 @@ export default function GazetteStaffPanel() {
                   <div style={{ fontSize: '.8rem', color: 'var(--brand-muted)' }}>
                     {fmtDate(iss.cover_date)}{iss.published_at ? ` · ${t({ id: 'rede.gazeta.publishedAt' }, { date: fmtDate(iss.published_at) })}` : ''}
                   </div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>{t({ id: 'rede.gazeta.modeLabel' })}</span>
+                    {iss.status === 'draft' ? (
+                      <select
+                        value={iss.build_mode || 'assisted'}
+                        disabled={busy === 'mode:' + iss.id}
+                        onChange={(e) => setIssueMode(iss, e.target.value)}
+                        style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.82rem' }}
+                      >
+                        {BUILD_MODES.map((m) => <option key={m} value={m}>{t({ id: `rede.gazeta.mode.${m}` })}</option>)}
+                      </select>
+                    ) : (
+                      <span className="cat-pill" style={{ fontSize: '.66rem' }}>
+                        {t({ id: `rede.gazeta.mode.${iss.build_mode || 'assisted'}` })}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   <button className="cat-btn secondary" disabled={busy === 'prev:' + iss.id} onClick={() => openPreview(iss)}>
@@ -279,6 +379,93 @@ export default function GazetteStaffPanel() {
                     </span>
                   )}
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ─── Sources : le registre des flux dépouillés ─── */}
+      {section === 'sources' && (
+        <div>
+          <h3 style={{ marginBottom: 6 }}>{t({ id: 'rede.gazeta.sources' })} ({sources.length})</h3>
+          <p style={{ fontSize: '.84rem', color: 'var(--brand-muted)', marginTop: 0, marginBottom: 12 }}>
+            {t({ id: 'rede.gazeta.sources.hint' })}
+          </p>
+
+          <div style={{ ...box, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            <div style={{ flex: '2 1 200px' }}>
+              <label htmlFor="gz-src-name" style={{ display: 'block', fontSize: '.76rem', color: 'var(--brand-muted)', marginBottom: 3 }}>
+                {t({ id: 'rede.gazeta.sources.name' })}
+              </label>
+              <input id="gz-src-name" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                style={{ width: '100%', padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.86rem' }} />
+            </div>
+            <div style={{ flex: '3 1 260px' }}>
+              <label htmlFor="gz-src-feed" style={{ display: 'block', fontSize: '.76rem', color: 'var(--brand-muted)', marginBottom: 3 }}>
+                {t({ id: 'rede.gazeta.sources.feed' })}
+              </label>
+              <input id="gz-src-feed" type="url" value={draft.feed_url} onChange={(e) => setDraft({ ...draft, feed_url: e.target.value })}
+                style={{ width: '100%', padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.86rem' }} />
+            </div>
+            <div>
+              <label htmlFor="gz-src-rubric" style={{ display: 'block', fontSize: '.76rem', color: 'var(--brand-muted)', marginBottom: 3 }}>
+                {t({ id: 'federacao.gazeta.contribute.rubric' })}
+              </label>
+              <select id="gz-src-rubric" value={draft.rubric} onChange={(e) => setDraft({ ...draft, rubric: e.target.value })}
+                style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.86rem' }}>
+                {SOURCE_RUBRICS.map((r) => <option key={r} value={r}>{t({ id: `federacao.gazeta.rubric.${r}` })}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="gz-src-locale" style={{ display: 'block', fontSize: '.76rem', color: 'var(--brand-muted)', marginBottom: 3 }}>
+                {t({ id: 'rede.gazeta.sources.locale' })}
+              </label>
+              <select id="gz-src-locale" value={draft.locale} onChange={(e) => setDraft({ ...draft, locale: e.target.value })}
+                style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.86rem' }}>
+                {SOURCE_LOCALES.map((l) => <option key={l} value={l}>{l}</option>)}
+              </select>
+            </div>
+            <button className="cat-btn primary" disabled={busy === 'src:new' || !draft.name.trim() || !draft.feed_url.trim()} onClick={addSource}>
+              {t({ id: 'common.add' })}
+            </button>
+          </div>
+
+          {sources.length === 0 && <div style={{ ...box, color: 'var(--brand-muted)' }}>{t({ id: 'common.empty' })}</div>}
+          {sources.map((r) => (
+            <div key={r.id} style={{ ...box, opacity: r.active ? 1 : 0.55 }}>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1 1 240px', minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: '.95rem' }}>{r.name}</div>
+                  <div style={{ fontSize: '.76rem', color: 'var(--brand-muted)', overflowWrap: 'anywhere' }}>
+                    {r.feed_url}{r.scope ? ` · ${r.scope}` : ''}
+                  </div>
+                  <div style={{ fontSize: '.76rem', color: 'var(--brand-muted)', marginTop: 3 }}>
+                    <span className={`cat-pill ${r.last_status === 'ok' ? 'ok' : r.last_status === 'error' ? 'danger' : 'warn'}`} style={{ fontSize: '.62rem' }}>
+                      {r.last_status || '—'}
+                    </span>
+                    {' '}
+                    {r.last_item_at ? fmtDate(r.last_item_at) : t({ id: 'rede.gazeta.sources.never' })}
+                    {r.last_error ? ` · ${String(r.last_error).slice(0, 90)}` : ''}
+                  </div>
+                </div>
+                <select
+                  value={r.rubric || 'luttes'}
+                  disabled={busy === 'src:' + r.id}
+                  onChange={(e) => saveSource(r.id, { rubric: e.target.value })}
+                  style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.84rem' }}
+                >
+                  {SOURCE_RUBRICS.map((k) => <option key={k} value={k}>{t({ id: `federacao.gazeta.rubric.${k}` })}</option>)}
+                </select>
+                <span className="cat-pill" style={{ fontSize: '.66rem' }}>{r.locale}</span>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '.8rem', color: 'var(--brand-muted)' }}>
+                  <input type="checkbox" checked={!!r.active} disabled={busy === 'src:' + r.id}
+                    onChange={(e) => saveSource(r.id, { active: e.target.checked })} />
+                  {t({ id: 'rede.gazeta.sources.active' })}
+                </label>
+                <button className="cat-btn ghost" style={{ color: '#f87171' }} disabled={busy === 'src:' + r.id} onClick={() => removeSource(r)}>
+                  {t({ id: 'common.delete' })}
+                </button>
               </div>
             </div>
           ))}

@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Provenance mise à jour.",
   "rede.gazeta.transStatus.original": "Version d'origine",
   "rede.gazeta.transStatus.machine": "Traduction automatique",
-  "rede.gazeta.transStatus.human_reviewed": "Relue"
+  "rede.gazeta.transStatus.human_reviewed": "Relue",
+  "rede.gazeta.sources": "Sources",
+  "rede.gazeta.sources.hint": "Les flux dépouillés chaque mois, et la rubrique où atterrissent leurs reprises. Ce choix est le seul arbitrage éditorial du mode « revue de presse » — il se fait ici, à la main.",
+  "rede.gazeta.sources.name": "Nom",
+  "rede.gazeta.sources.feed": "Flux (URL)",
+  "rede.gazeta.sources.locale": "Langue",
+  "rede.gazeta.sources.active": "Active",
+  "rede.gazeta.sources.removeConfirm": "Retirer « {name} » du registre des sources ?",
+  "rede.gazeta.sources.never": "aucun article reçu",
+  "rede.gazeta.modeLabel": "Fabrication",
+  "rede.gazeta.mode.assisted": "Assistée par un modèle",
+  "rede.gazeta.mode.revue": "Revue de presse",
+  "rede.gazeta.mode.manual": "Rédigée par des membres"
 }

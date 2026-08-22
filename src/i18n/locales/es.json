@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Procedencia actualizada.",
   "rede.gazeta.transStatus.original": "Versión de origen",
   "rede.gazeta.transStatus.machine": "Traducción automática",
-  "rede.gazeta.transStatus.human_reviewed": "Revisada"
+  "rede.gazeta.transStatus.human_reviewed": "Revisada",
+  "rede.gazeta.sources": "Fuentes",
+  "rede.gazeta.sources.hint": "Los flujos revisados cada mes, y la sección donde caen sus reproducciones. Esta elección es el único arbitrio editorial del modo « revista de prensa » — se hace aquí, a mano.",
+  "rede.gazeta.sources.name": "Nombre",
+  "rede.gazeta.sources.feed": "Flujo (URL)",
+  "rede.gazeta.sources.locale": "Idioma",
+  "rede.gazeta.sources.active": "Activa",
+  "rede.gazeta.sources.removeConfirm": "¿Retirar « {name} » del registro de fuentes?",
+  "rede.gazeta.sources.never": "ningún artículo recibido",
+  "rede.gazeta.modeLabel": "Fabricación",
+  "rede.gazeta.mode.assisted": "Asistida por un modelo",
+  "rede.gazeta.mode.revue": "Revista de prensa",
+  "rede.gazeta.mode.manual": "Redactada por miembros"
 }

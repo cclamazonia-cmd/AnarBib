@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Procedència actualitzada.",
   "rede.gazeta.transStatus.original": "Versió d'origen",
   "rede.gazeta.transStatus.machine": "Traducció automàtica",
-  "rede.gazeta.transStatus.human_reviewed": "Revisada"
+  "rede.gazeta.transStatus.human_reviewed": "Revisada",
+  "rede.gazeta.sources": "Fonts",
+  "rede.gazeta.sources.hint": "Els fluxos despullats cada mes, i la secció on cauen les seves represes. Aquesta tria és l'únic arbitratge editorial del mode « revista de premsa » — i es fa aquí, a mà.",
+  "rede.gazeta.sources.name": "Nom",
+  "rede.gazeta.sources.feed": "Flux (URL)",
+  "rede.gazeta.sources.locale": "Llengua",
+  "rede.gazeta.sources.active": "Activa",
+  "rede.gazeta.sources.removeConfirm": "Retirar « {name} » del registre de fonts?",
+  "rede.gazeta.sources.never": "cap article rebut",
+  "rede.gazeta.modeLabel": "Fabricació",
+  "rede.gazeta.mode.assisted": "Assistida per un model",
+  "rede.gazeta.mode.revue": "Revista de premsa",
+  "rede.gazeta.mode.manual": "Redactada per membres"
 }

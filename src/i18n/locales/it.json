@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Provenienza aggiornata.",
   "rede.gazeta.transStatus.original": "Versione d'origine",
   "rede.gazeta.transStatus.machine": "Traduzione automatica",
-  "rede.gazeta.transStatus.human_reviewed": "Riletta"
+  "rede.gazeta.transStatus.human_reviewed": "Riletta",
+  "rede.gazeta.sources": "Fonti",
+  "rede.gazeta.sources.hint": "I flussi spogliati ogni mese, e la rubrica in cui finiscono le loro riprese. Questa scelta è l'unico arbitrio editoriale della modalità « rassegna stampa » — e si fa qui, a mano.",
+  "rede.gazeta.sources.name": "Nome",
+  "rede.gazeta.sources.feed": "Flusso (URL)",
+  "rede.gazeta.sources.locale": "Lingua",
+  "rede.gazeta.sources.active": "Attiva",
+  "rede.gazeta.sources.removeConfirm": "Togliere « {name} » dal registro delle fonti?",
+  "rede.gazeta.sources.never": "nessun articolo ricevuto",
+  "rede.gazeta.modeLabel": "Fabbricazione",
+  "rede.gazeta.mode.assisted": "Assistita da un modello",
+  "rede.gazeta.mode.revue": "Rassegna stampa",
+  "rede.gazeta.mode.manual": "Redatta da membri"
 }

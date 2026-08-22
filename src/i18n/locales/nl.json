@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Herkomst bijgewerkt.",
   "rede.gazeta.transStatus.original": "Bronversie",
   "rede.gazeta.transStatus.machine": "Automatische vertaling",
-  "rede.gazeta.transStatus.human_reviewed": "Nagelezen"
+  "rede.gazeta.transStatus.human_reviewed": "Nagelezen",
+  "rede.gazeta.sources": "Bronnen",
+  "rede.gazeta.sources.hint": "De feeds die elke maand worden doorgenomen, en de rubriek waarin hun overnames terechtkomen. Die keuze is het enige redactionele oordeel van de modus « persoverzicht » — en ze wordt hier met de hand gemaakt.",
+  "rede.gazeta.sources.name": "Naam",
+  "rede.gazeta.sources.feed": "Feed (URL)",
+  "rede.gazeta.sources.locale": "Taal",
+  "rede.gazeta.sources.active": "Actief",
+  "rede.gazeta.sources.removeConfirm": "« {name} » uit het bronnenregister verwijderen?",
+  "rede.gazeta.sources.never": "geen artikel ontvangen",
+  "rede.gazeta.modeLabel": "Vervaardiging",
+  "rede.gazeta.mode.assisted": "Met hulp van een taalmodel",
+  "rede.gazeta.mode.revue": "Persoverzicht",
+  "rede.gazeta.mode.manual": "Geschreven door leden"
 }

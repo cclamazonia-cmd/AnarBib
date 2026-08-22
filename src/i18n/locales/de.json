@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Herkunft aktualisiert.",
   "rede.gazeta.transStatus.original": "Ursprungsfassung",
   "rede.gazeta.transStatus.machine": "Maschinelle Übersetzung",
-  "rede.gazeta.transStatus.human_reviewed": "Gegengelesen"
+  "rede.gazeta.transStatus.human_reviewed": "Gegengelesen",
+  "rede.gazeta.sources": "Quellen",
+  "rede.gazeta.sources.hint": "Die Feeds, die jeden Monat ausgewertet werden, und die Rubrik, in der ihre Übernahmen landen. Diese Wahl ist die einzige redaktionelle Entscheidung im Modus „Presseschau“ — und sie wird hier getroffen, von Hand.",
+  "rede.gazeta.sources.name": "Name",
+  "rede.gazeta.sources.feed": "Feed (URL)",
+  "rede.gazeta.sources.locale": "Sprache",
+  "rede.gazeta.sources.active": "Aktiv",
+  "rede.gazeta.sources.removeConfirm": "„{name}“ aus dem Quellenregister entfernen?",
+  "rede.gazeta.sources.never": "kein Artikel eingegangen",
+  "rede.gazeta.modeLabel": "Herstellung",
+  "rede.gazeta.mode.assisted": "Von einem Sprachmodell unterstützt",
+  "rede.gazeta.mode.revue": "Presseschau",
+  "rede.gazeta.mode.manual": "Von Mitgliedern verfasst"
 }

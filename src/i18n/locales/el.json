@@ -5937,5 +5937,17 @@
   "rede.gazeta.review.saved": "Η προέλευση ενημερώθηκε.",
   "rede.gazeta.transStatus.original": "Αρχική εκδοχή",
   "rede.gazeta.transStatus.machine": "Αυτόματη μετάφραση",
-  "rede.gazeta.transStatus.human_reviewed": "Επιμελημένη"
+  "rede.gazeta.transStatus.human_reviewed": "Επιμελημένη",
+  "rede.gazeta.sources": "Πηγές",
+  "rede.gazeta.sources.hint": "Οι ροές που αποδελτιώνονται κάθε μήνα, και η στήλη όπου καταλήγουν οι αναδημοσιεύσεις τους. Αυτή η επιλογή είναι η μόνη συντακτική κρίση της λειτουργίας «επισκόπηση τύπου» — και γίνεται εδώ, με το χέρι.",
+  "rede.gazeta.sources.name": "Όνομα",
+  "rede.gazeta.sources.feed": "Ροή (URL)",
+  "rede.gazeta.sources.locale": "Γλώσσα",
+  "rede.gazeta.sources.active": "Ενεργή",
+  "rede.gazeta.sources.removeConfirm": "Αφαίρεση της «{name}» από το μητρώο πηγών;",
+  "rede.gazeta.sources.never": "κανένα άρθρο",
+  "rede.gazeta.modeLabel": "Κατασκευή",
+  "rede.gazeta.mode.assisted": "Με τη βοήθεια γλωσσικού μοντέλου",
+  "rede.gazeta.mode.revue": "Επισκόπηση τύπου",
+  "rede.gazeta.mode.manual": "Γραμμένη από μέλη"
 }
