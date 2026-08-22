@@ -62,21 +62,87 @@ function issueForToday() {
   return { number, slug: `n${String(number).padStart(2, "0")}-${ym}`, cover_date: `${ym}-15` };
 }
 
+// Deux dialectes coexistent dans le monde des flux et il faut lire les deux :
+//   RSS  — <item>,  <link>l'url en texte</link>, <pubDate>, <description>
+//   Atom — <entry>, <link href="l'url"/>,        <published>/<updated>, <summary>
+// Le parseur d'origine ne connaissait que RSS et rendait zéro item, SANS ERREUR,
+// sur un flux Atom : CrimethInc. figurait au registre depuis le début et n'a
+// jamais alimenté un seul numéro. La table le disait (last_status='empty'),
+// personne ne le lisait — d'où aussi l'écran « Sources » qui l'affiche.
 async function fetchFeedItems(feedUrl: string, limit = 12) {
   const res = await fetch(feedUrl, { headers: { "User-Agent": "AnarBib-Gazette/1.0" } });
   const xml = await res.text();
   const items: { title: string; link: string; date?: string; summary?: string }[] = [];
-  for (const m of xml.matchAll(/<item[\s\S]*?<\/item>/g)) {
-    const block = m[0];
-    const pick = (tag: string) => {
-      const r = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`).exec(block);
-      return r ? r[1].replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]+>/g, "").trim() : undefined;
-    };
-    const title = pick("title"); const link = pick("link");
-    if (title && link) items.push({ title, link, date: pick("pubDate"), summary: pick("description")?.slice(0, 400) });
+
+  const texte = (block: string, tag: string) => {
+    const r = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`).exec(block);
+    return r ? nettoyer(r[1].replace(/<!\[CDATA\[|\]\]>/g, "")) : undefined;
+  };
+  // En Atom l'url est dans un attribut, et plusieurs <link> cohabitent : celui
+  // rel="alternate" pointe l'article, les autres pointent le flux lui-même.
+  const lienAtom = (block: string) => {
+    const m = /<link[^>]*rel=["']alternate["'][^>]*href=["']([^"']+)["']/.exec(block)
+      ?? /<link[^>]*href=["']([^"']+)["']/.exec(block);
+    return m?.[1];
+  };
+
+  const blocsRss = [...xml.matchAll(/<item[\s\S]*?<\/item>/g)].map((m) => m[0]);
+  const estAtom = blocsRss.length === 0;
+  const blocs = estAtom
+    ? [...xml.matchAll(/<entry[\s\S]*?<\/entry>/g)].map((m) => m[0])
+    : blocsRss;
+
+  for (const block of blocs) {
+    const title = texte(block, "title");
+    const link = estAtom ? lienAtom(block) : texte(block, "link");
+    if (!title || !link) continue;
+    const date = estAtom
+      ? (texte(block, "published") ?? texte(block, "updated"))
+      : texte(block, "pubDate");
+    const summary = estAtom
+      ? (texte(block, "summary") ?? texte(block, "content"))
+      : texte(block, "description");
+    // Beaucoup de flux (Drupal en tete) repetent le titre au debut du chapo,
+    // suivi de la signature et de la date. Sur la page ca fait un doublon idiot
+    // juste sous le titre : on retire ce prefixe quand il est la.
+    let chapoNet = summary ?? "";
+    if (chapoNet.startsWith(title)) chapoNet = chapoNet.slice(title.length).replace(/^[s-–—:,.]+/, "");
+    items.push({ title, link, date, summary: chapoNet.slice(0, 400) || undefined });
     if (items.length >= limit) break;
   }
   return items;
+}
+
+// EN MODE ASSISTÉ CE DÉFAUT NE SE VOYAIT PAS : le modèle réécrivait tout, donc
+// les scories du flux disparaissaient dans la reformulation. En revue de presse
+// le texte de la source va DROIT sur la page — et les flux en sont plein :
+//   • entités doublement encodées (&amp;lt;span property="schema:name"&amp;gt;),
+//     que retirer les balises ne touche pas puisqu'il n'y a plus de balise ;
+//   • apostrophes typographiques en numérique (&#8217;) ;
+//   • balises de mise en forme dans le chapô (<i>22/08/2026 2:11 μμ.</i>).
+// D'où : décoder, retirer les balises, recommencer tant que ça change.
+const ENTITES: Record<string, string> = {
+  amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", shy: "",
+  hellip: "…", mdash: "—", ndash: "–", laquo: "«", raquo: "»", eacute: "é",
+  egrave: "è", agrave: "à", ccedil: "ç", rsquo: "’", lsquo: "‘",
+  ldquo: "“", rdquo: "”", bull: "•", middot: "·", euro: "€", deg: "°",
+};
+
+function decoderEntites(s: string): string {
+  return s
+    .replace(/&#x([0-9a-fA-F]+);/g, (_m, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_m, d) => String.fromCodePoint(parseInt(d, 10)))
+    .replace(/&([a-zA-Z]+);/g, (m, n) => (n.toLowerCase() in ENTITES ? ENTITES[n.toLowerCase()] : m));
+}
+
+function nettoyer(brut: string): string {
+  let t = String(brut ?? "");
+  for (let i = 0; i < 4; i++) {
+    const avant = t;
+    t = decoderEntites(t).replace(/<[^>]+>/g, " ");
+    if (t === avant) break;
+  }
+  return t.replace(/\s+/g, " ").trim();
 }
 
 async function claude(system: string, user: string): Promise<string> {
@@ -127,6 +193,55 @@ const RUBRIQUES = [
   { key: "cultures", sec: "Cultures & idées" },
 ];
 const PAR_RUBRIQUE = 4; // reprises par page, les plus récentes
+// Sans plafond par source, le flux le plus prolifique rafle la page : à la
+// répétition du 22/08, Anarchist News fournissait 4 brèves sur 4 en
+// International et Umanità Nova 4 sur 4 en Cultures. Une page de reprises qui
+// ne cite qu'un seul journal n'est pas une revue de presse, c'est un miroir.
+const PAR_SOURCE = 2;
+// Certains flux ne donnent pas de vrai chapô : Anarchist News renvoie un teaser
+// Drupal qui, titre retiré, se réduit à « thecollective Sat, 08/22/2026 - 17:23 ».
+// Imprimer ça sous le titre est pire que ne rien imprimer. En dessous de ce
+// seuil on garde la brève — titre, source, lien — mais sans corps : une reprise
+// d'une ligne reste une reprise honnête.
+const CHAPO_MINIMUM = 40;
+
+// Au-dessus du seuil, il reste un cas : le teaser qui se termine par une date
+// et une heure et ne contient aucune ponctuation de phrase. Ce n'est pas un
+// chapô, c'est une signature horodatée — « anonymous (not verified) Sat,
+// 08/22/2026 - 09:29 » fait 48 signes et n'apprend rien. En revanche
+// « 22/08/2026 2:11 μμ. σε μετάφραση… » est bien de la prose : la date y est
+// en tête et non en fin, et il y a des phrases.
+const SIGNATURE_HORODATEE = /\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}.*\d{1,2}:\d{2}\s*$/;
+
+function chapoUtile(brut?: string): string | null {
+  const t = String(brut ?? "").trim();
+  if (t.length < CHAPO_MINIMUM) return null;
+  if (SIGNATURE_HORODATEE.test(t) && !/[.!?…]/.test(t.replace(/[0-9]/g, ""))) return null;
+  return t;
+}
+// Un site dormant garde un flux valide : It's Going Down répond 200 avec 40
+// articles, dont le plus récent date d'octobre 2025. Sans fenêtre de fraîcheur,
+// ces items-là remonteraient dans une rubrique peu fournie et la gazette
+// annoncerait comme nouvelles des choses vieilles de dix mois. On ne coupe QUE
+// sur une date lisible et franchement dépassée : un item sans date reste (il
+// tombe en fin de tri, le plafond s'en charge).
+const FRAICHEUR_JOURS = 92;
+
+function estFrais(dateBrute?: string): boolean {
+  const t = dateBrute ? Date.parse(dateBrute) : NaN;
+  if (Number.isNaN(t)) return true;
+  return Date.now() - t <= FRAICHEUR_JOURS * 86400000;
+}
+
+// Même filtre pour les deux voies : le modèle non plus n'a pas à digérer des
+// nouvelles périmées comme si elles étaient du mois.
+function filtrerFraicheur(sources: Record<string, unknown>): Record<string, unknown> {
+  const net: Record<string, unknown> = {};
+  for (const [nom, liste] of Object.entries(sources ?? {})) {
+    net[nom] = ((liste ?? []) as Record<string, string>[]).filter((it) => estFrais(it?.date));
+  }
+  return net;
+}
 
 async function buildMode(number: number): Promise<string> {
   const { data } = await sb.from("gazette_issues").select("build_mode").eq("number", number).single();
@@ -188,7 +303,7 @@ async function composerDeterministe(sources: Record<string, unknown>, avecFlux: 
   const vus = new Set<string>();
   const reprises: Record<string, unknown>[] = [];
   if (avecFlux) {
-    for (const [nom, liste] of Object.entries(sources ?? {})) {
+    for (const [nom, liste] of Object.entries(filtrerFraicheur(sources))) {
       for (const it of (liste ?? []) as Record<string, string>[]) {
         if (!it?.title || !it?.link || vus.has(it.link)) continue;
         vus.add(it.link);
@@ -211,9 +326,13 @@ async function composerDeterministe(sources: Record<string, unknown>, avecFlux: 
     consumed.push(c.id);
     return { type: "art", h: c.title, p: paragraphes(c.body), ...(c.link ? { src: c.link } : {}) };
   };
-  const blocReprise = (r: Record<string, unknown>) => ({
-    type: "art", h: r.titre, p: [chapo(r.chapo as string)], src: `${r.source} — ${r.lien}`,
-  });
+  const blocReprise = (r: Record<string, unknown>) => {
+    const utile = chapoUtile(r.chapo as string);
+    return {
+      type: "art", h: r.titre, p: utile ? [chapo(utile)] : [],
+      src: `${r.source} — ${r.lien}`,
+    };
+  };
 
   // La Une : l'édito humain, le sommaire (inséré après coup), puis la reprise
   // la plus récente du mois — règle déterministe, aucune main sur la balance.
@@ -223,11 +342,13 @@ async function composerDeterministe(sources: Record<string, unknown>, avecFlux: 
   const blocsUne: unknown[] = [];
   const edito = await editoDuNumero();
   if (edito) { blocsUne.push(edito.bloc); consumed.push(edito.id); }
-  const une = avecFlux ? reprises.shift() : undefined;
+  const iUne = avecFlux ? reprises.findIndex((r) => chapoUtile(r.chapo as string)) : -1;
+  const une = iUne >= 0 ? reprises.splice(iUne, 1)[0] : undefined;
   if (une) {
     blocsUne.push({
       type: "lead", label: "À la une", h: une.titre,
-      p: [chapo(une.chapo as string, 620)], src: `${une.source} — ${une.lien}`,
+      p: [chapo(chapoUtile(une.chapo as string) as string, 620)],
+      src: `${une.source} — ${une.lien}`,
     });
   }
   const pages: Record<string, unknown>[] = [{ sec: "La Une", blocks: blocsUne }];
@@ -235,9 +356,22 @@ async function composerDeterministe(sources: Record<string, unknown>, avecFlux: 
   // Les contributions de membres passent AVANT les reprises : ce sont des textes
   // du réseau, pas des extraits de presse.
   for (const r of RUBRIQUES) {
+    // Deux plafonds : PAR_SOURCE par journal, PAR_RUBRIQUE pour la page. Les
+    // reprises étant déjà triées du plus récent au plus ancien, on garde les
+    // plus fraîches de chaque source avant de compléter.
+    const parSource = new Map<string, number>();
+    const retenues: Record<string, unknown>[] = [];
+    for (const x of reprises.filter((y) => y.rubrique === r.key)) {
+      const nom = x.source as string;
+      const n = parSource.get(nom) ?? 0;
+      if (n >= PAR_SOURCE) continue;
+      parSource.set(nom, n + 1);
+      retenues.push(x);
+      if (retenues.length >= PAR_RUBRIQUE) break;
+    }
     const blocs = [
       ...(contribs ?? []).filter((c: Record<string, string>) => c.rubric === r.key).map(blocContrib),
-      ...reprises.filter((x) => x.rubrique === r.key).slice(0, PAR_RUBRIQUE).map(blocReprise),
+      ...retenues.map(blocReprise),
     ];
     if (blocs.length) pages.push({ sec: r.sec, blocks: blocs });
   }
@@ -361,7 +495,7 @@ async function stepCurate(number: number) {
     `registre militant mais sobre, des digests fidèles (sans inventer) à partir d'extraits de flux. ` +
     `Tu produis UNIQUEMENT un JSON valide (le tableau "content"). ${SCHEMA_DOC}`;
   const user = `Voici les articles récents (sélectionne les ~12-14 plus pertinents, répartis dans les rubriques) :\n` +
-    JSON.stringify(job!.sources).slice(0, 24000) +
+    JSON.stringify(filtrerFraicheur((job?.sources ?? {}) as Record<string, unknown>)).slice(0, 24000) +
     `\n\nRends le tableau "content" (5 pages : Une, Luttes, International, Cultures, Agenda). Pas de page Réseau.`;
   const pages = parseJsonBlock(await claude(system, user));
   // Même en mode assisté, l'éditorial reste humain : le gabarit interdit au
