@@ -136,9 +136,10 @@ export default function GazetteStaffPanel() {
   }
 
   // Provenance d'une langue — ce que le colophon public imprimera.
-  // « Retirer la relecture » repose sur 'machine' et non 'original' : le pipeline
-  // n'écrit jamais 'original' (upsertLocale pose toujours 'machine'), donc revenir
-  // à 'machine' dit la vérité dans tous les cas produits par la chaîne.
+  // « Retirer la relecture » ne peut pas rebasculer sur 'machine' en aveugle : le
+  // n°01 a été écrit à la main en fr ET en pt-BR, et ces deux lignes portent
+  // 'original'. Règle honnête : pas de langue source enregistrée = ce n'est pas
+  // une traduction, donc retour à 'original' et non à 'machine'.
   async function setProvenance(loc, reviewed) {
     if (!preview) return;
     const label = reviewLabel.trim();
@@ -147,7 +148,11 @@ export default function GazetteStaffPanel() {
     try {
       const patch = reviewed
         ? { translation_status: 'human_reviewed', reviewed_by_label: label, reviewed_at: new Date().toISOString() }
-        : { translation_status: 'machine', reviewed_by_label: null, reviewed_at: null };
+        : {
+          translation_status: preview.byLocale[loc]?.source_locale ? 'machine' : 'original',
+          reviewed_by_label: null,
+          reviewed_at: null,
+        };
       const { error } = await supabase.from('gazette_issue_locales')
         .update(patch).eq('issue_id', preview.issue.id).eq('locale', loc);
       if (error) throw error;
