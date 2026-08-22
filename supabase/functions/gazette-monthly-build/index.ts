@@ -6,6 +6,19 @@
 // "reconcile-gazette-dispatch" (*/5 min) rappelle l'EF jusqu'à status='ready'.
 //
 // Étapes : start → curate (FR) → translate (1 locale/appel) → assemble_reseau → finalize.
+//
+// TROIS MODES DE FABRICATION, portés par gazette_issues.build_mode et déclarés
+// tels quels dans le colophon public de chaque numéro :
+//   • 'assisted' : les brèves sont rédigées par un modèle à partir des flux ;
+//   • 'revue'    : REPRISE de presse déterministe — titre et chapô tels que la
+//                  source les a publiés, sans réécriture, rangés par la rubrique
+//                  que le staff a donnée au flux. Aucun appel à un modèle ;
+//   • 'manual'   : rien que ce que des membres ont écrit (contributions).
+// Les modes 'revue' et 'manual' passent par composerDeterministe().
+//
+// L'ÉDITORIAL N'EST JAMAIS ÉCRIT PAR LA MACHINE, quel que soit le mode (article 1
+// de la charte technique) : il vient d'une contribution rubric='une' acceptée par
+// le staff. S'il n'y en a pas, le numéro sort sans édito et le staff est prévenu.
 // IMPORTANT : produit un BROUILLON (issue.status='draft'). La publication reste manuelle
 // (network_staff, après relecture). La page « Réseau » n'est PAS générée depuis les sources :
 // elle est assemblée à partir des contributions acceptées (gazette_submissions.status='accepted').
@@ -92,19 +105,187 @@ function parseJsonBlock(s: string) {
 // Schéma de blocs attendu (identique au gabarit front / au n°01).
 const SCHEMA_DOC = `
 Le "content" est un tableau de pages. Pages attendues, dans l'ordre :
-1) {"sec":"La Une","blocks":[{type:"edito",label,h,byline,p[]},{type:"toc",title,items:[["1","…"],…]},{type:"lead",label,h,p[],src}]}
+1) {"sec":"La Une","blocks":[{type:"toc",title,items:[["1","…"],…]},{type:"lead",label,h,p[],src}]}
 3) {"sec":"Luttes & mouvements","blocks":[{type:"art",h,p[],src}, …]}
 4) {"sec":"International","blocks":[{type:"art",h,p[],src}, …]}
 5) {"sec":"Cultures & idées","blocks":[{type:"art",h,p[],src}, …]}
 6) {"sec":"Agenda & entraide","blocks":[{type:"agenda",h,items:[["date — lieu","desc"],…]},{type:"support",h,items:[["label ","desc"],…]},{type:"colophon",p}]}
 NE PAS produire la page 2 "Vie du réseau" : elle est assemblée séparément depuis les contributions.
+NE PAS produire de bloc "edito" : l'éditorial est écrit par des membres du réseau et inséré à part.
 HTML minimal autorisé dans les textes : <b>…</b>. Toujours renseigner "src" (source) sur les brèves.`;
+
+// ---------- composition sans modèle ----------
+// Tout ce qui suit ne fait qu'assembler des textes déjà écrits par des humains :
+// les mots que les sources ont elles-mêmes publiés, et ceux que les collectifs
+// ont envoyés. Rien n'y est rédigé.
+
+const RUBRIQUES = [
+  { key: "luttes", sec: "Luttes & mouvements" },
+  { key: "international", sec: "International" },
+  { key: "cultures", sec: "Cultures & idées" },
+];
+const PAR_RUBRIQUE = 4; // reprises par page, les plus récentes
+
+async function buildMode(number: number): Promise<string> {
+  const { data } = await sb.from("gazette_issues").select("build_mode").eq("number", number).single();
+  return (data?.build_mode as string) ?? "assisted";
+}
+
+function horodatage(d?: string): number {
+  const t = d ? Date.parse(d) : NaN;
+  return Number.isNaN(t) ? 0 : t;
+}
+
+// On reprend les mots de la source, donc on ne les coupe pas au milieu : on
+// s'arrête à la fin de phrase la plus proche, sinon au dernier mot entier.
+function chapo(texte: string, max = 340): string {
+  const t = String(texte ?? "").replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const bout = t.slice(0, max);
+  const fin = Math.max(bout.lastIndexOf(". "), bout.lastIndexOf("! "), bout.lastIndexOf("? "));
+  if (fin > max * 0.5) return bout.slice(0, fin + 1).trim();
+  const esp = bout.lastIndexOf(" ");
+  return (esp > 0 ? bout.slice(0, esp) : bout).trim() + "…";
+}
+
+function paragraphes(corps: string): string[] {
+  return String(corps ?? "").split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean);
+}
+
+// L'éditorial vient du réseau, jamais de la machine : la contribution rubric='une'
+// acceptée la plus récente. La signature est celle du collectif qui l'a envoyée.
+async function editoDuNumero(): Promise<{ id: string; bloc: unknown } | null> {
+  const { data } = await sb.from("gazette_submissions")
+    .select("id,title,body,contributor_name,contributor_collective")
+    .eq("rubric", "une").eq("status", "accepted")
+    .order("created_at", { ascending: false }).limit(1);
+  const s = data?.[0] as Record<string, string> | undefined;
+  if (!s) return null;
+  return {
+    id: s.id,
+    bloc: {
+      type: "edito", label: "Éditorial", h: s.title,
+      byline: s.contributor_collective || s.contributor_name || "L'équipe d'AnarBib",
+      p: paragraphes(s.body),
+    },
+  };
+}
+
+// Compose les 5 pages du corps (la page « Vie du réseau » est insérée plus tard).
+// avecFlux=false → mode 'manual' : on ne garde que les contributions.
+async function composerDeterministe(sources: Record<string, unknown>, avecFlux: boolean) {
+  const consumed: string[] = [];
+
+  // La rubrique d'un flux est le SEUL arbitrage éditorial du mode déterministe,
+  // et il a été fait à la main, une fois, dans l'écran « Sources ».
+  const { data: srcRows } = await sb.from("gazette_sources").select("name,rubric").eq("active", true);
+  const rubriqueDe = new Map<string, string>(
+    (srcRows ?? []).map((r: Record<string, string>) => [r.name, r.rubric || "luttes"]),
+  );
+
+  const vus = new Set<string>();
+  const reprises: Record<string, unknown>[] = [];
+  if (avecFlux) {
+    for (const [nom, liste] of Object.entries(sources ?? {})) {
+      for (const it of (liste ?? []) as Record<string, string>[]) {
+        if (!it?.title || !it?.link || vus.has(it.link)) continue;
+        vus.add(it.link);
+        reprises.push({
+          titre: it.title, lien: it.link, chapo: it.summary ?? "",
+          date: horodatage(it.date), source: nom,
+          rubrique: rubriqueDe.get(nom) ?? "luttes",
+        });
+      }
+    }
+    reprises.sort((a, b) => (b.date as number) - (a.date as number));
+  }
+
+  const { data: contribs } = await sb.from("gazette_submissions")
+    .select("id,rubric,title,body,link")
+    .in("rubric", RUBRIQUES.map((r) => r.key))
+    .eq("status", "accepted").order("created_at");
+
+  const blocContrib = (c: Record<string, string>) => {
+    consumed.push(c.id);
+    return { type: "art", h: c.title, p: paragraphes(c.body), ...(c.link ? { src: c.link } : {}) };
+  };
+  const blocReprise = (r: Record<string, unknown>) => ({
+    type: "art", h: r.titre, p: [chapo(r.chapo as string)], src: `${r.source} — ${r.lien}`,
+  });
+
+  // La Une : l'édito humain, le sommaire (inséré après coup), puis la reprise
+  // la plus récente du mois — règle déterministe, aucune main sur la balance.
+  // Conséquence assumée : la rubrique qui fournit la Une la perd de sa page, et
+  // sa page saute si c'était sa seule reprise. Le sujet n'est pas perdu, il est
+  // en meilleure place ; le sommaire est calculé sur les pages réellement là.
+  const blocsUne: unknown[] = [];
+  const edito = await editoDuNumero();
+  if (edito) { blocsUne.push(edito.bloc); consumed.push(edito.id); }
+  const une = avecFlux ? reprises.shift() : undefined;
+  if (une) {
+    blocsUne.push({
+      type: "lead", label: "À la une", h: une.titre,
+      p: [chapo(une.chapo as string, 620)], src: `${une.source} — ${une.lien}`,
+    });
+  }
+  const pages: Record<string, unknown>[] = [{ sec: "La Une", blocks: blocsUne }];
+
+  // Les contributions de membres passent AVANT les reprises : ce sont des textes
+  // du réseau, pas des extraits de presse.
+  for (const r of RUBRIQUES) {
+    const blocs = [
+      ...(contribs ?? []).filter((c: Record<string, string>) => c.rubric === r.key).map(blocContrib),
+      ...reprises.filter((x) => x.rubrique === r.key).slice(0, PAR_RUBRIQUE).map(blocReprise),
+    ];
+    if (blocs.length) pages.push({ sec: r.sec, blocks: blocs });
+  }
+
+  // L'agenda ne vient jamais des flux : uniquement des contributions datées.
+  const { data: agenda } = await sb.from("gazette_submissions")
+    .select("id,title,body,event_date").eq("rubric", "agenda").eq("status", "accepted")
+    .order("event_date", { ascending: true });
+  if (agenda?.length) {
+    pages.push({
+      sec: "Agenda & entraide",
+      blocks: [{
+        type: "agenda", h: "Agenda",
+        items: (agenda as Record<string, string>[]).map((a) => {
+          consumed.push(a.id);
+          return [a.event_date ? `${a.event_date} — ${a.title}` : a.title, a.body ?? ""];
+        }),
+      }],
+    });
+  }
+
+  // Sommaire : « Vie du réseau » y figure en 2 alors qu'elle sera insérée plus
+  // tard par stepAssembleReseau — d'où le décalage de deux crans ensuite.
+  const sommaire: string[][] = [["1", "La Une"], ["2", "Vie du réseau"]];
+  pages.slice(1).forEach((pg, i) => sommaire.push([String(i + 3), pg.sec as string]));
+  blocsUne.splice(edito ? 1 : 0, 0, { type: "toc", title: "Au sommaire", items: sommaire });
+
+  return { pages, consumed };
+}
 
 // ---------- étapes ----------
 async function stepStart() {
   const { number, slug, cover_date } = issueForToday();
+
+  // Le mode de fabrication se REPORTE d'un numéro à l'autre : un mandat du réseau
+  // n'a pas à être resaisi chaque mois. On respecte celui déjà posé sur ce numéro
+  // (le staff a pu le changer sur le brouillon), sinon on reprend celui du numéro
+  // précédent, sinon 'assisted' — l'état d'avant cette bascule.
+  const { data: dejaLa } = await sb.from("gazette_issues")
+    .select("build_mode").eq("number", number).maybeSingle();
+  let build_mode = dejaLa?.build_mode as string | undefined;
+  if (!build_mode) {
+    const { data: precedent } = await sb.from("gazette_issues")
+      .select("build_mode").lt("number", number)
+      .order("number", { ascending: false }).limit(1).maybeSingle();
+    build_mode = (precedent?.build_mode as string) ?? "assisted";
+  }
+
   await sb.from("gazette_issues").upsert(
-    { number, slug, masthead_title: "Rizoma — la gazette du réseau AnarBib", cover_date, status: "draft" },
+    { number, slug, masthead_title: "Rizoma — la gazette du réseau AnarBib", cover_date, status: "draft", build_mode },
     { onConflict: "number" },
   );
   const sources: Record<string, unknown> = {};
@@ -130,11 +311,27 @@ async function stepStart() {
     { issue_number: number, status: "curating", sources, step_error: null },
     { onConflict: "issue_number" },
   );
-  return { number, status: "curating" };
+  return { number, status: "curating", build_mode };
 }
 
 async function stepCurate(number: number) {
   const { data: job } = await sb.from("gazette_build_jobs").select("sources").eq("issue_number", number).single();
+  const mode = await buildMode(number);
+
+  // Modes déterministes : on n'ouvre même pas la connexion au modèle.
+  // translation_status='original' — ce français-là n'est pas une traduction, et
+  // il n'a pas été écrit par une machine.
+  if (mode === "revue" || mode === "manual") {
+    const { pages, consumed } = await composerDeterministe(
+      (job?.sources ?? {}) as Record<string, unknown>, mode === "revue",
+    );
+    await upsertLocale(number, "fr", pages, "original", null);
+    await sb.from("gazette_build_jobs")
+      .update({ status: "translating", cursor_locale: TRANSLATE_TARGETS[0], consumed_ids: consumed })
+      .eq("issue_number", number);
+    return { status: "translating", next: TRANSLATE_TARGETS[0], mode, pages: pages.length };
+  }
+
   const system =
     `Tu es l'équipe éditoriale d'AnarBib, gazette de bibliothèques anarchistes. Tu rédiges en FRANÇAIS, ` +
     `registre militant mais sobre, des digests fidèles (sans inventer) à partir d'extraits de flux. ` +
@@ -143,10 +340,19 @@ async function stepCurate(number: number) {
     JSON.stringify(job!.sources).slice(0, 24000) +
     `\n\nRends le tableau "content" (5 pages : Une, Luttes, International, Cultures, Agenda). Pas de page Réseau.`;
   const pages = parseJsonBlock(await claude(system, user));
+  // Même en mode assisté, l'éditorial reste humain : le gabarit interdit au
+  // modèle d'en produire un, et on insère ici celui du réseau s'il existe.
+  const consumed: string[] = [];
+  const edito = await editoDuNumero();
+  if (edito && Array.isArray(pages?.[0]?.blocks)) {
+    pages[0].blocks.unshift(edito.bloc);
+    consumed.push(edito.id);
+  }
   await upsertLocale(number, "fr", pages, "machine", null);
-  await sb.from("gazette_build_jobs").update({ status: "translating", cursor_locale: TRANSLATE_TARGETS[0] })
+  await sb.from("gazette_build_jobs")
+    .update({ status: "translating", cursor_locale: TRANSLATE_TARGETS[0], consumed_ids: consumed })
     .eq("issue_number", number);
-  return { status: "translating", next: TRANSLATE_TARGETS[0] };
+  return { status: "translating", next: TRANSLATE_TARGETS[0], mode };
 }
 
 async function stepTranslate(number: number) {
@@ -183,7 +389,7 @@ async function stepAssembleReseau(number: number) {
     "nl":   { sec:"Leven van het netwerk", intro:"Deze pagina behoort toe aan de leden van AnarBib — collectieven, bibliotheken, distro's en individuen.", cta:"▸ Dien jullie korte berichten in", ctp:"Deze pagina is de jouwe. Bezorg ons jullie nieuws via de applicatie." },
   };
   const { data: subs } = await sb.from("gazette_submissions")
-    .select("title,body,link,title_i18n,body_i18n").eq("rubric", "reseau")
+    .select("id,title,body,link,title_i18n,body_i18n").eq("rubric", "reseau")
     .eq("status", "accepted").order("created_at", { ascending: true });
   const id = await issueId(number);
   const { data: rows } = await sb.from("gazette_issue_locales").select("locale,content").eq("issue_id", id);
@@ -202,19 +408,49 @@ async function stepAssembleReseau(number: number) {
     const withReseau = [pages[0], reseauPage, ...pages.slice(1)];
     await sb.from("gazette_issue_locales").update({ content: withReseau }).eq("issue_id", id).eq("locale", loc);
   }
-  await sb.from("gazette_build_jobs").update({ status: "finalizing" }).eq("issue_number", number);
-  return { reseau_localised: (rows ?? []).length };
+  // Les brèves reprises rejoignent le registre du numéro : stepFinalize les
+  // sortira du vivier pour qu'elles ne reviennent pas le mois prochain.
+  const { data: jobRow } = await sb.from("gazette_build_jobs")
+    .select("consumed_ids").eq("issue_number", number).single();
+  const dejaVues = Array.isArray(jobRow?.consumed_ids) ? (jobRow!.consumed_ids as string[]) : [];
+  const consumed = [...new Set([...dejaVues, ...(subs ?? []).map((s: { id: string }) => s.id)])];
+  await sb.from("gazette_build_jobs")
+    .update({ status: "finalizing", consumed_ids: consumed }).eq("issue_number", number);
+  return { reseau_localised: (rows ?? []).length, contributions: consumed.length };
 }
 
 async function stepFinalize(number: number) {
+  const { data: job } = await sb.from("gazette_build_jobs")
+    .select("consumed_ids").eq("issue_number", number).single();
+  const ids = Array.isArray(job?.consumed_ids) ? (job!.consumed_ids as string[]) : [];
+  // Sans ce passage à 'published', une brève acceptée reviendrait à l'identique
+  // dans tous les numéros suivants — le vivier n'était jamais vidé.
+  if (ids.length) {
+    await sb.from("gazette_submissions").update({ status: "published" }).in("id", ids);
+  }
+
+  // Le staff doit savoir s'il manque un éditorial : la machine n'en écrira pas.
+  const { data: fr } = await sb.from("gazette_issue_locales")
+    .select("content").eq("issue_id", await issueId(number)).eq("locale", "fr").single();
+  const pages = (fr?.content ?? []) as { blocks?: { type?: string }[] }[];
+  const aEdito = Array.isArray(pages)
+    && (pages[0]?.blocks ?? []).some((b) => b?.type === "edito");
+
   // Notifie network_staff qu'un brouillon est prêt à relire (NE publie pas).
   await sb.from("gazette_submission_notification_outbox").insert({
     event: "gazette.draft.ready_for_review",
-    payload: { issue_number: number, to_role: "network_staff",
-      message: `Brouillon de la Gazette n°${number} prêt à relire et publier.` },
+    payload: {
+      issue_number: number, to_role: "network_staff",
+      mode: await buildMode(number), contributions_reprises: ids.length, edito: aEdito,
+      message: aEdito
+        ? `Brouillon de la Gazette n°${number} prêt à relire et publier.`
+        : `Brouillon de la Gazette n°${number} prêt à relire — SANS ÉDITORIAL : `
+          + `aucune contribution « Une » acceptée. L'éditorial ne peut pas être `
+          + `écrit par la machine ; envoyez-en un avant de publier.`,
+    },
   });
   await sb.from("gazette_build_jobs").update({ status: "ready" }).eq("issue_number", number);
-  return { status: "ready" };
+  return { status: "ready", edito: aEdito, contributions_reprises: ids.length };
 }
 
 async function issueId(number: number): Promise<string> {
