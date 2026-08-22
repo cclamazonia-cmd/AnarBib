@@ -113,22 +113,57 @@ import gtfIt   from '../../../docs/guides/guide-thesaurus-ficedl-it.md?raw';
 import gtfNl   from '../../../docs/guides/guide-thesaurus-ficedl-nl.md?raw';
 import gtfPtBR from '../../../docs/guides/guide-thesaurus-ficedl-pt-BR.md?raw';
 
-// ── Fiche « Numériser un ouvrage » — fr + pt-BR ─────────────────────────────
-// Volontairement PAS traduite dans les dix langues : le corps du réseau qui
-// numérise est lusophone, et la doctrine des communs veut que chaque version
-// soit écrite par sa communauté de langue, pas déversée par traduction. Les
-// huit locales absentes retombent sur le fr (cf. resolveDocMd).
+// ── Fiche « Numériser un ouvrage » — 10 locales ─────────────────────────────
+// DOCTRINE CORRIGÉE le 22/08. La version précédente de ce commentaire disait
+// que ce guide n'était VOLONTAIREMENT pas traduit : chaque version devait être
+// ÉCRITE par sa communauté de langue, jamais déversée par traduction. La règle
+// avait l'air rigoureuse ; en pratique elle laissait huit communautés sans
+// rien, en attendant que quelqu'un s'empare d'un texte français ou portugais
+// et le traduise. Ce quelqu'un peut ne jamais venir, et le réseau grandit
+// pendant ce temps.
+//
+// Le sens de la règle a donc été inversé : on traduit tout de suite, on
+// annonce que c'est une traduction, et on invite à la corriger. Une traduction
+// imparfaite qui existe peut être reprise par la communauté ; une traduction
+// absente ne peut rien être. Chaque fichier traduit porte cette invitation en
+// tête, pour que personne ne prenne la version reçue pour une version validée.
+import gnuCa   from '../../../docs/guides/guide-digitalizar-ca.md?raw';
+import gnuDe   from '../../../docs/guides/guide-digitalizar-de.md?raw';
+import gnuEl   from '../../../docs/guides/guide-digitalizar-el.md?raw';
+import gnuEn   from '../../../docs/guides/guide-digitalizar-en.md?raw';
+import gnuEo   from '../../../docs/guides/guide-digitalizar-eo.md?raw';
+import gnuEs   from '../../../docs/guides/guide-digitalizar-es.md?raw';
 import gnuFr   from '../../../docs/guides/guide-digitalizar-fr.md?raw';
+import gnuIt   from '../../../docs/guides/guide-digitalizar-it.md?raw';
+import gnuNl   from '../../../docs/guides/guide-digitalizar-nl.md?raw';
 import gnuPtBR from '../../../docs/guides/guide-digitalizar-pt-BR.md?raw';
 
-// ── Conventions catalographiques — fr + pt-BR ───────────────────────────────
+// ── Conventions catalographiques — 10 locales ───────────────────────────────
 // Même parti que le guide de numérisation ci-dessus, et pour la même raison :
-// la doctrine des communs veut que chaque version soit ÉCRITE par sa
-// communauté de langue, pas déversée par traduction automatique. Un guide qui
-// dit où couper une particule en néerlandais ne peut pas être traduit de
-// confiance par quelqu'un qui ne parle pas néerlandais — l'erreur y serait
-// invisible et ferait autorité. Les huit locales absentes retombent sur le fr.
+// mieux vaut un texte traduit qu'on corrige qu'un texte absent qu'on attend.
+//
+// L'objection que je faisais hier — « un guide qui dit où couper une particule
+// en néerlandais ne peut pas être traduit de confiance par quelqu'un qui ne
+// parle pas néerlandais, l'erreur y serait invisible et ferait autorité » —
+// n'était pas fausse, elle était mal pesée. Elle compare une traduction
+// imparfaite à une traduction juste, alors que l'alternative réelle était
+// RIEN. Et rien ne fait pas moins autorité : ça laisse chacun cataloguer selon
+// son intuition, ce qui est précisément ce que le chantier CONV a passé deux
+// jours à réparer.
+//
+// Ce que l'objection justifie vraiment, c'est l'AVERTISSEMENT en tête de
+// chaque version traduite, pas son absence. Les sections propres à une langue
+// (particule néerlandaise, cognom català, Adelspartikel allemand) y sont
+// signalées comme des exemples à vérifier plutôt que comme des règles arrêtées.
+import gccCa   from '../../../docs/guides/guide-conventions-catalografia-ca.md?raw';
+import gccDe   from '../../../docs/guides/guide-conventions-catalografia-de.md?raw';
+import gccEl   from '../../../docs/guides/guide-conventions-catalografia-el.md?raw';
+import gccEn   from '../../../docs/guides/guide-conventions-catalografia-en.md?raw';
+import gccEo   from '../../../docs/guides/guide-conventions-catalografia-eo.md?raw';
+import gccEs   from '../../../docs/guides/guide-conventions-catalografia-es.md?raw';
 import gccFr   from '../../../docs/guides/guide-conventions-catalografia-fr.md?raw';
+import gccIt   from '../../../docs/guides/guide-conventions-catalografia-it.md?raw';
+import gccNl   from '../../../docs/guides/guide-conventions-catalografia-nl.md?raw';
 import gccPtBR from '../../../docs/guides/guide-conventions-catalografia-pt-BR.md?raw';
 
 // ── Guide de gouvernance — 10 locales (déjà existant) ───────────────────────
@@ -188,10 +223,15 @@ const GUIDE_SCAN_BY_LOCALE = {
   es: gsEs, fr: gsFr, it: gsIt, nl: gsNl, 'pt-BR': gsPtBR,
 };
 
-// Deux locales seulement, à dessein — les huit autres retombent sur fr.
-const GUIDE_NUMERISATION_BY_LOCALE = { fr: gnuFr, 'pt-BR': gnuPtBR };
+const GUIDE_NUMERISATION_BY_LOCALE = {
+  ca: gnuCa, de: gnuDe, el: gnuEl, en: gnuEn, eo: gnuEo,
+  es: gnuEs, fr: gnuFr, it: gnuIt, nl: gnuNl, 'pt-BR': gnuPtBR,
+};
 
-const GUIDE_CONVENTIONS_BY_LOCALE = { fr: gccFr, 'pt-BR': gccPtBR };
+const GUIDE_CONVENTIONS_BY_LOCALE = {
+  ca: gccCa, de: gccDe, el: gccEl, en: gccEn, eo: gccEo,
+  es: gccEs, fr: gccFr, it: gccIt, nl: gccNl, 'pt-BR': gccPtBR,
+};
 
 // Une seule locale, à dessein : c'est un texte de délibération, appelé à être
 // REMPLACÉ par la décision une fois l'AG passée. Le traduire en dix langues

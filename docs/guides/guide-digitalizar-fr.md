@@ -125,6 +125,7 @@ jusqu'à ce que le PDF soit validé. Le reste s'apprend en le faisant.
 
 ---
 
-*Document du commun AnarBib. Les versions dans d'autres langues se construisent
-en parallèle par les communautés de chaque langue, pas par traduction
-descendante.*
+*Document du commun AnarBib. Les versions dans les autres langues sont
+traduites depuis celle-ci pour qu'elles existent tout de suite, et corrigées
+ensuite par les communautés de chaque langue. Une traduction imparfaite qui
+existe peut être reprise ; une traduction absente ne peut rien être.*
