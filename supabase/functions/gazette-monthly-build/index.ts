@@ -427,9 +427,25 @@ async function stepAssembleReseau(number: number) {
       src: s.link ?? undefined,
     }));
     blocks.push({ type: "callout", h: f.cta, p: [f.ctp] });
-    const reseauPage = { sec: f.sec, intro: f.intro, blocks };
-    const pages = r.content as any[];
-    const withReseau = [pages[0], reseauPage, ...pages.slice(1)];
+    const reseauPage = { kind: "reseau", sec: f.sec, intro: f.intro, blocks };
+    const pages = (r.content as any[]) ?? [];
+
+    // L'étape SE REJOUE, et pas seulement à la main : la boucle fait un update
+    // par locale (10) et ne passe le job en 'finalizing' qu'à la fin. Si un seul
+    // update échoue au milieu, le job reste en 'assembling' — le catch du routeur
+    // ne marque 'failed' que si issue_number était dans le corps de requête, ce
+    // que le tick n'envoie jamais — et le tick suivant rejoue l'étape 5 minutes
+    // plus tard. Sans ce filtre, chaque passage AJOUTAIT une page « Vie du
+    // réseau » de plus aux locales déjà traitées. On retire donc celle qui est
+    // déjà là avant d'insérer : par le marqueur kind='reseau' pour les pages
+    // posées à partir d'ici, et par le libellé localisé de la rubrique
+    // (F[loc].sec — le seul nom que cette page ait jamais porté) pour les
+    // numéros assemblés avant ce correctif. Les pages du corps ne portent aucun
+    // de ces deux noms : elles traversent le filtre intactes.
+    const sansReseau = pages.filter((p: any) => p?.kind !== "reseau" && p?.sec !== f.sec);
+    const withReseau = sansReseau.length
+      ? [sansReseau[0], reseauPage, ...sansReseau.slice(1)]
+      : [reseauPage];
     await sb.from("gazette_issue_locales").update({ content: withReseau }).eq("issue_id", id).eq("locale", loc);
   }
   // Les brèves reprises rejoignent le registre du numéro : stepFinalize les
@@ -546,6 +562,32 @@ Deno.serve(async (req) => {
       s = ({ curating: "curate", translating: "translate", assembling: "assemble_reseau",
              finalizing: "finalize" } as Record<string, string>)[job.status] ?? "noop";
     }
+    // Aucune étape ne refabrique un numéro qui n'est plus un brouillon. C'est le
+    // pendant du refus de stepStart (qui, lui, calcule son numéro tout seul et se
+    // garde en interne) : ici on protège le CONTENU d'un numéro paru contre un
+    // curate/translate/assemble lancé à la main pour rattraper un build, ou
+    // contre un tick qui avancerait un job resté ouvert pendant que le staff
+    // publiait le numéro.
+    // L'arrêt doit être PROPRE, pas une exception : levée sur un appel du tick,
+    // une erreur ne marquerait rien (le catch ci-dessous ne connaît que
+    // l'issue_number du corps de requête, absent d'un tick) et le cron rejouerait
+    // l'étape en échec toutes les 5 minutes, indéfiniment. On sort donc le job de
+    // la file — 'failed' et 'ready' sont ses deux états terminaux, et 'failed'
+    // dit la vérité — avec un step_error lisible par le panel staff.
+    if (n && s !== "start" && s !== "noop") {
+      const { data: issue } = await sb.from("gazette_issues")
+        .select("status").eq("number", n).maybeSingle();
+      const etat = issue?.status as string | undefined;
+      if (etat && etat !== "draft") {
+        const raison = `numéro n°${n} en status='${etat}' : fabrication arrêtée avant ` +
+          `l'étape '${s}', le contenu publié n'a pas été touché. Pour refaire ce ` +
+          `numéro, le repasser en brouillon à la main d'abord.`;
+        await sb.from("gazette_build_jobs")
+          .update({ status: "failed", step_error: raison }).eq("issue_number", n);
+        return Response.json({ ok: false, stopped: true, step: s, reason: raison }, { status: 409 });
+      }
+    }
+
     let out;
     if (s === "start") out = await stepStart();
     else if (s === "curate") out = await stepCurate(n);
