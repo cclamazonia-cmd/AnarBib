@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Titel und Jahr identisch",
   "federacao.communs.doc.guideNumerisation.title": "Ein Werk digitalisieren",
   "federacao.communs.doc.guideNumerisation.desc": "Drei Einstellungen, fünf Kontrollen und was aus den Scans wird — was am Scanner entschieden wird.",
+  "federacao.communs.doc.guideConventions.title": "Einen Namen schreiben, einen Titel schreiben",
+  "federacao.communs.doc.guideConventions.desc": "Groß- und Kleinschreibung, Namenspartikel, Körperschaften, Sprachen und Daten — was beim Katalogisieren entschieden wird.",
   "catalogacao.dedup.scanTabDiscarded": "Ausgeschlossen",
   "catalogacao.dedup.discardedHelp": "Paare, die als „keine Dubletten“ markiert wurden. Sie erscheinen in keiner Erkennung des Netzwerks mehr. Ein wiederhergestelltes Paar wird wieder erkannt, ohne dass die Datensätze verändert werden.",
   "catalogacao.dedup.discardedNone": "Keine ausgeschlossenen Paare.",

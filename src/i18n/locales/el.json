@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Ίδιος τίτλος και έτος",
   "federacao.communs.doc.guideNumerisation.title": "Ψηφιοποίηση ενός έργου",
   "federacao.communs.doc.guideNumerisation.desc": "Τρεις ρυθμίσεις, πέντε έλεγχοι και η τύχη των λήψεων — ό,τι αποφασίζεται μπροστά στον σαρωτή.",
+  "federacao.communs.doc.guideConventions.title": "Γράφοντας ένα όνομα, γράφοντας έναν τίτλο",
+  "federacao.communs.doc.guideConventions.desc": "Πεζά-κεφαλαία, μόρια, συλλογικά όργανα, γλώσσες και ημερομηνίες — όσα κρίνονται κατά την καταλογογράφηση.",
   "catalogacao.dedup.scanTabDiscarded": "Εξαιρεμένα",
   "catalogacao.dedup.discardedHelp": "Ζεύγη που έχουν σημανθεί ως «μη διπλότυπα». Δεν εμφανίζονται πλέον σε καμία ανίχνευση του δικτύου. Η επαναφορά ενός ζεύγους το καθιστά ξανά ανιχνεύσιμο, χωρίς να τροποποιούνται οι εγγραφές.",
   "catalogacao.dedup.discardedNone": "Κανένα εξαιρεμένο ζεύγος.",

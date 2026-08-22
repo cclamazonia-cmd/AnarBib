@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Titre et année identiques",
   "federacao.communs.doc.guideNumerisation.title": "Numériser un ouvrage",
   "federacao.communs.doc.guideNumerisation.desc": "Trois réglages, cinq contrôles et le sort des captures — ce qui se décide devant le scanner.",
+  "federacao.communs.doc.guideConventions.title": "Écrire un nom, écrire un titre",
+  "federacao.communs.doc.guideConventions.desc": "Casse, particules, collectivités, langues et dates — ce qui se décide au moment de saisir.",
   "catalogacao.dedup.scanTabDiscarded": "Écartées",
   "catalogacao.dedup.discardedHelp": "Paires qu’on a déclarées « pas des doublons ». Elles n’apparaissent plus dans aucune détection du réseau. Rétablir une paire la rend à nouveau détectable, sans modifier les documents.",
   "catalogacao.dedup.discardedNone": "Aucune paire écartée.",

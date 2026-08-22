@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Zelfde titel en jaar",
   "federacao.communs.doc.guideNumerisation.title": "Een werk digitaliseren",
   "federacao.communs.doc.guideNumerisation.desc": "Drie instellingen, vijf controles en het lot van de scans — wat je aan de scanner beslist.",
+  "federacao.communs.doc.guideConventions.title": "Een naam schrijven, een titel schrijven",
+  "federacao.communs.doc.guideConventions.desc": "Hoofdletters, tussenvoegsels, collectieven, talen en datums — wat je bij het catalogiseren beslist.",
   "catalogacao.dedup.scanTabDiscarded": "Terzijde gelegd",
   "catalogacao.dedup.discardedHelp": "Paren die zijn gemarkeerd als ‘geen dubbels’. Ze verschijnen niet meer in enige detectie binnen het netwerk. Een paar herstellen maakt het weer vindbaar, zonder de records te wijzigen.",
   "catalogacao.dedup.discardedNone": "Geen terzijde gelegde paren.",

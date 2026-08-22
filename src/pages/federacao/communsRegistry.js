@@ -121,6 +121,16 @@ import gtfPtBR from '../../../docs/guides/guide-thesaurus-ficedl-pt-BR.md?raw';
 import gnuFr   from '../../../docs/guides/guide-digitalizar-fr.md?raw';
 import gnuPtBR from '../../../docs/guides/guide-digitalizar-pt-BR.md?raw';
 
+// ── Conventions catalographiques — fr + pt-BR ───────────────────────────────
+// Même parti que le guide de numérisation ci-dessus, et pour la même raison :
+// la doctrine des communs veut que chaque version soit ÉCRITE par sa
+// communauté de langue, pas déversée par traduction automatique. Un guide qui
+// dit où couper une particule en néerlandais ne peut pas être traduit de
+// confiance par quelqu'un qui ne parle pas néerlandais — l'erreur y serait
+// invisible et ferait autorité. Les huit locales absentes retombent sur le fr.
+import gccFr   from '../../../docs/guides/guide-conventions-catalografia-fr.md?raw';
+import gccPtBR from '../../../docs/guides/guide-conventions-catalografia-pt-BR.md?raw';
+
 // ── Guide de gouvernance — 10 locales (déjà existant) ───────────────────────
 import gouvCa   from '../../../docs/governance/guide-gouvernance-ca.md?raw';
 import gouvDe   from '../../../docs/governance/guide-gouvernance-de.md?raw';
@@ -180,6 +190,8 @@ const GUIDE_SCAN_BY_LOCALE = {
 
 // Deux locales seulement, à dessein — les huit autres retombent sur fr.
 const GUIDE_NUMERISATION_BY_LOCALE = { fr: gnuFr, 'pt-BR': gnuPtBR };
+
+const GUIDE_CONVENTIONS_BY_LOCALE = { fr: gccFr, 'pt-BR': gccPtBR };
 
 // Une seule locale, à dessein : c'est un texte de délibération, appelé à être
 // REMPLACÉ par la décision une fois l'AG passée. Le traduire en dix langues
@@ -244,6 +256,17 @@ export const COMMUNS_DOCS = [
     titleKey: 'federacao.communs.doc.guideNumerisation.title',
     descKey: 'federacao.communs.doc.guideNumerisation.desc',
     byLocale: GUIDE_NUMERISATION_BY_LOCALE,
+  },
+  {
+    // Comment s'écrit un nom, comment s'écrit un titre. Écrit APRÈS le chantier
+    // CONV du 20-21/08, et à cause de lui : les 294 corrections de ce chantier
+    // n'étaient pas des fautes d'inattention, c'étaient des règles que personne
+    // n'avait écrites au point de besoin. Un vademecum qui vit dans l'app évite
+    // la faute ; le registre des décisions, lui, ne se lit qu'après.
+    id: 'guide-conventions', cat: 'vademecums',
+    titleKey: 'federacao.communs.doc.guideConventions.title',
+    descKey: 'federacao.communs.doc.guideConventions.desc',
+    byLocale: GUIDE_CONVENTIONS_BY_LOCALE,
   },
   {
     // Le vocabulaire matière commun (thésaurus FICEDL) : ce qu'il est, à quelles

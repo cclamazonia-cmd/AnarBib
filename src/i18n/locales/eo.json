@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Sama titolo kaj jaro",
   "federacao.communs.doc.guideNumerisation.title": "Ciferecigi verkon",
   "federacao.communs.doc.guideNumerisation.desc": "Tri agordoj, kvin kontroloj kaj la sorto de la kaptaĵoj — kio decidiĝas antaŭ la skanilo.",
+  "federacao.communs.doc.guideConventions.title": "Skribi nomon, skribi titolon",
+  "federacao.communs.doc.guideConventions.desc": "Uskleco, partikloj, kolektivoj, lingvoj kaj datoj — kio decidiĝas dum katalogado.",
   "catalogacao.dedup.scanTabDiscarded": "Flankenmetitaj",
   "catalogacao.dedup.discardedHelp": "Paroj markitaj kiel « ne duoblaĵoj ». Ili ne plu aperas en iu ajn detekto de la reto. Restarigi paron refaras ĝin detektebla, sen modifi la dokumentojn.",
   "catalogacao.dedup.discardedNone": "Neniu flankenmetita paro.",

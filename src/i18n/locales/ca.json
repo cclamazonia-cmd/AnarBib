@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Títol i any idèntics",
   "federacao.communs.doc.guideNumerisation.title": "Digitalitzar una obra",
   "federacao.communs.doc.guideNumerisation.desc": "Tres ajustos, cinc comprovacions i el destí de les captures — el que es decideix davant l'escàner.",
+  "federacao.communs.doc.guideConventions.title": "Escriure un nom, escriure un títol",
+  "federacao.communs.doc.guideConventions.desc": "Majúscules, partícules, col·lectivitats, llengües i dates — el que es decideix en catalogar.",
   "catalogacao.dedup.scanTabDiscarded": "Descartades",
   "catalogacao.dedup.discardedHelp": "Parells marcats com a «no són duplicats». Ja no apareixen en cap detecció de la xarxa. Restaurar un parell el torna a fer detectable, sense modificar els documents.",
   "catalogacao.dedup.discardedNone": "Cap parell descartat.",

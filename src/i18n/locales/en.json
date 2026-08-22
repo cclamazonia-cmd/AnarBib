@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Same title and year",
   "federacao.communs.doc.guideNumerisation.title": "Digitising a book",
   "federacao.communs.doc.guideNumerisation.desc": "Three settings, five checks and what becomes of the captures — what gets decided at the scanner.",
+  "federacao.communs.doc.guideConventions.title": "Writing a name, writing a title",
+  "federacao.communs.doc.guideConventions.desc": "Case, particles, corporate bodies, languages and dates — what gets decided as you catalogue.",
   "catalogacao.dedup.scanTabDiscarded": "Set aside",
   "catalogacao.dedup.discardedHelp": "Pairs marked “not duplicates”. They no longer appear in any detection across the network. Restoring a pair makes it detectable again, without changing the records.",
   "catalogacao.dedup.discardedNone": "No pairs set aside.",

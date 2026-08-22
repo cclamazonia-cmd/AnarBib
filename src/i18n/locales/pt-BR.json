@@ -5801,6 +5801,8 @@
   "catalogacao.dedup.scanKindTitleYear": "Título e ano idênticos",
   "federacao.communs.doc.guideNumerisation.title": "Digitalizar uma obra",
   "federacao.communs.doc.guideNumerisation.desc": "Três ajustes, cinco conferências e o destino das capturas — o que se decide na frente do scanner.",
+  "federacao.communs.doc.guideConventions.title": "Escrever um nome, escrever um título",
+  "federacao.communs.doc.guideConventions.desc": "Caixa, partículas, coletividades, idiomas e datas — o que se decide na hora de catalogar.",
   "catalogacao.dedup.scanTabDiscarded": "Descartadas",
   "catalogacao.dedup.discardedHelp": "Pares marcados como «não são duplicatas». Deixam de aparecer em qualquer detecção da rede. Restaurar um par volta a torná-lo detectável, sem alterar os documentos.",
   "catalogacao.dedup.discardedNone": "Nenhum par descartado.",
