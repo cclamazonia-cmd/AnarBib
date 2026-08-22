@@ -44,6 +44,7 @@ export default function GazetteStaffPanel() {
   const [busy, setBusy] = useState(null);
   const [msg, setMsg] = useState({ text: '', kind: '' });
   const [preview, setPreview] = useState(null); // { issue, byLocale, loc }
+  const [reviewLabel, setReviewLabel] = useState(''); // collectif relecteur saisi
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -120,12 +121,39 @@ export default function GazetteStaffPanel() {
     setBusy('prev:' + issue.id);
     try {
       const { data, error } = await supabase.from('gazette_issue_locales')
-        .select('locale,tagline,masthead,content,translation_status')
+        .select('locale,tagline,masthead,content,translation_status,source_locale,reviewed_by_label,reviewed_at')
         .eq('issue_id', issue.id);
       if (error) throw error;
       const byLocale = Object.fromEntries((data || []).map((r) => [r.locale, r]));
       const loc = GZ_LOCALES.find((l) => byLocale[l]) || null;
+      setReviewLabel((loc && byLocale[loc]?.reviewed_by_label) || '');
       setPreview({ issue, byLocale, loc });
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  // Provenance d'une langue — ce que le colophon public imprimera.
+  // « Retirer la relecture » repose sur 'machine' et non 'original' : le pipeline
+  // n'écrit jamais 'original' (upsertLocale pose toujours 'machine'), donc revenir
+  // à 'machine' dit la vérité dans tous les cas produits par la chaîne.
+  async function setProvenance(loc, reviewed) {
+    if (!preview) return;
+    const label = reviewLabel.trim();
+    if (reviewed && !label) return;
+    setBusy('rev:' + loc);
+    try {
+      const patch = reviewed
+        ? { translation_status: 'human_reviewed', reviewed_by_label: label, reviewed_at: new Date().toISOString() }
+        : { translation_status: 'machine', reviewed_by_label: null, reviewed_at: null };
+      const { error } = await supabase.from('gazette_issue_locales')
+        .update(patch).eq('issue_id', preview.issue.id).eq('locale', loc);
+      if (error) throw error;
+      setPreview((pv) => ({ ...pv, byLocale: { ...pv.byLocale, [loc]: { ...pv.byLocale[loc], ...patch } } }));
+      if (!reviewed) setReviewLabel('');
+      setMsg({ text: t({ id: 'rede.gazeta.review.saved' }), kind: 'ok' });
     } catch (e) {
       setMsg({ text: localizeError(e, t), kind: 'error' });
     } finally {
@@ -262,9 +290,19 @@ export default function GazetteStaffPanel() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
               <h3 style={{ margin: 0 }}>{t({ id: 'rede.gazeta.previewTitle' }, { number: preview.issue.number })}</h3>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <select value={preview.loc || ''} onChange={(e) => setPreview((p) => ({ ...p, loc: e.target.value }))} style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4' }}>
+                <select
+                  value={preview.loc || ''}
+                  onChange={(e) => {
+                    const nl = e.target.value;
+                    setReviewLabel(preview.byLocale[nl]?.reviewed_by_label || '');
+                    setPreview((p) => ({ ...p, loc: nl }));
+                  }}
+                  style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4' }}
+                >
                   {GZ_LOCALES.filter((l) => preview.byLocale[l]).map((l) => (
-                    <option key={l} value={l}>{l}{preview.byLocale[l]?.translation_status === 'machine' ? ' · machine' : ''}</option>
+                    <option key={l} value={l}>
+                      {l} · {t({ id: `rede.gazeta.transStatus.${preview.byLocale[l]?.translation_status || 'machine'}` })}
+                    </option>
                   ))}
                 </select>
                 <button className="cat-btn ghost" onClick={() => setPreview(null)}>{t({ id: 'common.close' })}</button>
@@ -277,7 +315,43 @@ export default function GazetteStaffPanel() {
               return (
                 <div style={{ maxHeight: '70vh', overflow: 'auto' }}>
                   <div style={{ color: 'var(--brand-muted)', fontSize: '.85rem', marginBottom: 10 }}>
-                    {row.tagline} · {row.masthead?.mid || ''} · <span className="cat-pill" style={{ fontSize: '.62rem' }}>{row.translation_status || 'machine'}</span>
+                    {row.tagline} · {row.masthead?.mid || ''}
+                  </div>
+                  {/* Provenance : ce que le colophon public imprimera pour cette langue. */}
+                  <div style={{ ...box, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <span className={`cat-pill ${row.translation_status === 'human_reviewed' ? 'ok' : 'warn'}`} style={{ fontSize: '.66rem' }}>
+                      {t({ id: `rede.gazeta.transStatus.${row.translation_status || 'machine'}` })}
+                    </span>
+                    {row.reviewed_at && (
+                      <span style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>{fmtDate(row.reviewed_at)}</span>
+                    )}
+                    <span style={{ flex: 1 }} />
+                    <label htmlFor="gz-review-by" style={{ fontSize: '.78rem', color: 'var(--brand-muted)' }}>
+                      {t({ id: 'rede.gazeta.review.by' })}
+                    </label>
+                    <input
+                      id="gz-review-by"
+                      value={reviewLabel}
+                      onChange={(e) => setReviewLabel(e.target.value)}
+                      placeholder={t({ id: 'rede.gazeta.review.placeholder' })}
+                      style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid rgba(255,255,255,.12)', background: 'rgba(0,0,0,.3)', color: '#f4f4f4', fontSize: '.85rem', minWidth: 180 }}
+                    />
+                    <button
+                      className="cat-btn primary"
+                      disabled={busy === 'rev:' + preview.loc || !reviewLabel.trim()}
+                      onClick={() => setProvenance(preview.loc, true)}
+                    >
+                      {t({ id: 'rede.gazeta.review.mark' })}
+                    </button>
+                    {row.translation_status === 'human_reviewed' && (
+                      <button
+                        className="cat-btn ghost"
+                        disabled={busy === 'rev:' + preview.loc}
+                        onClick={() => setProvenance(preview.loc, false)}
+                      >
+                        {t({ id: 'rede.gazeta.review.undo' })}
+                      </button>
+                    )}
                   </div>
                   {pages.map((pg, pi) => (
                     <div key={pi} style={{ marginBottom: 14, paddingBottom: 10, borderBottom: '1px solid rgba(255,255,255,.07)' }}>

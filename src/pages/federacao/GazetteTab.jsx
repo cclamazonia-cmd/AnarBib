@@ -189,6 +189,14 @@ const GZ_CSS = `
     font-family:var(--sans);font-size:.74rem;line-height:1.5;color:#3a322c}
   .colophon b{color:var(--ink)}
 
+  /* Colophon de provenance : calcule par l'app, jamais redige par le modele. */
+  .provenance{border-top:1px solid var(--ink);margin-top:.9rem;padding-top:.5rem;
+    font-family:var(--sans);font-size:.68rem;line-height:1.45;color:#3a322c;
+    break-inside:avoid;page-break-inside:avoid}
+  .provenance .t{display:block;text-transform:uppercase;letter-spacing:.06em;
+    font-size:.62rem;font-weight:700;color:var(--ink);margin-bottom:.25rem}
+  .provenance p{margin:.16rem 0 0}
+
   /* ---------- Print ---------- */
   @media print{
     @page{size:A4 portrait;margin:13mm}
@@ -202,6 +210,171 @@ const GZ_CSS = `
     h2.lead{font-size:2rem}
   }
 `;
+
+// ═══ Colophon de provenance ════════════════════════════════════════════════
+// Engagement de la charte technique de la gazette : chaque numéro imprime, dans
+// CHAQUE langue, comment il a été fabriqué. Ces phrases sont donc calculées par
+// l'application à partir de trois faits stockés en base — build_mode du numéro,
+// translation_status et reviewed_by_label de la langue — et JAMAIS rédigées par
+// le modèle. Un bloc « colophon » venu du contenu peut manquer ou mentir ; ce
+// bloc-ci ne le peut pas.
+// {src} = nom de la langue source (endonyme, cf. LOCALE_NAMES) ; {who} = collectif relecteur.
+const PROV = {
+  fr: {
+    t: 'Comment ce numéro a été fait',
+    build: {
+      assisted: "Brèves rédigées avec l'assistance d'un modèle de langage, à partir de flux publics choisis par des membres du réseau.",
+      revue: 'Revue de presse : titres et chapôs repris tels que les sources les ont publiés, sans réécriture, à partir de flux choisis par des membres du réseau.',
+      manual: 'Brèves rédigées par des membres du réseau, sans assistance machine.',
+    },
+    original: "Version d'origine : les autres langues sont traduites depuis celle-ci.",
+    machine: 'Traduction automatique depuis {src}, non relue.',
+    reviewed: 'Traduction depuis {src}, relue par {who}.',
+    human: "Page « Vie du réseau » composée des contributions envoyées par les collectifs. Aucun numéro n'est publié sans décision humaine.",
+  },
+  'pt-BR': {
+    t: 'Como este número foi feito',
+    build: {
+      assisted: 'Notas redigidas com a assistência de um modelo de linguagem, a partir de fontes públicas escolhidas por membros da rede.',
+      revue: 'Revista de imprensa: títulos e resumos retomados tal como as fontes os publicaram, sem reescrita, a partir de fontes escolhidas por membros da rede.',
+      manual: 'Notas redigidas por membros da rede, sem assistência de máquina.',
+    },
+    original: 'Versão de origem: as outras línguas são traduzidas a partir desta.',
+    machine: 'Tradução automática a partir de {src}, não revisada.',
+    reviewed: 'Tradução a partir de {src}, revisada por {who}.',
+    human: 'Página « Vida da rede » composta pelas contribuições enviadas pelos coletivos. Nenhum número é publicado sem decisão humana.',
+  },
+  es: {
+    t: 'Cómo se hizo este número',
+    build: {
+      assisted: 'Notas redactadas con la asistencia de un modelo de lenguaje, a partir de fuentes públicas elegidas por miembros de la red.',
+      revue: 'Revista de prensa: titulares y entradillas retomados tal como los publicaron las fuentes, sin reescritura, a partir de fuentes elegidas por miembros de la red.',
+      manual: 'Notas redactadas por miembros de la red, sin asistencia de máquina.',
+    },
+    original: 'Versión de origen: las demás lenguas se traducen a partir de esta.',
+    machine: 'Traducción automática desde {src}, sin revisar.',
+    reviewed: 'Traducción desde {src}, revisada por {who}.',
+    human: 'Página « Vida de la red » compuesta por las contribuciones enviadas por los colectivos. Ningún número se publica sin decisión humana.',
+  },
+  en: {
+    t: 'How this issue was made',
+    build: {
+      assisted: 'Bulletins written with the assistance of a language model, from public feeds chosen by members of the network.',
+      revue: 'Press review: headlines and standfirsts reproduced as the sources published them, without rewriting, from feeds chosen by members of the network.',
+      manual: 'Bulletins written by members of the network, without machine assistance.',
+    },
+    original: 'Source version: the other languages are translated from this one.',
+    machine: 'Machine translation from {src}, unreviewed.',
+    reviewed: 'Translation from {src}, reviewed by {who}.',
+    human: 'The “Network life” page is made of contributions sent in by collectives. No issue is published without a human decision.',
+  },
+  it: {
+    t: 'Come è stato fatto questo numero',
+    build: {
+      assisted: "Brevi redatte con l'assistenza di un modello linguistico, a partire da fonti pubbliche scelte da membri della rete.",
+      revue: 'Rassegna stampa: titoli e occhielli ripresi così come le fonti li hanno pubblicati, senza riscrittura, a partire da fonti scelte da membri della rete.',
+      manual: 'Brevi redatte da membri della rete, senza assistenza automatica.',
+    },
+    original: "Versione d'origine: le altre lingue sono tradotte a partire da questa.",
+    machine: 'Traduzione automatica da {src}, non riletta.',
+    reviewed: 'Traduzione da {src}, riletta da {who}.',
+    human: 'La pagina « Vita della rete » è composta dai contributi inviati dai collettivi. Nessun numero viene pubblicato senza una decisione umana.',
+  },
+  de: {
+    t: 'Wie diese Ausgabe entstanden ist',
+    build: {
+      assisted: 'Kurzmeldungen mit Unterstützung eines Sprachmodells verfasst, aus öffentlichen Quellen, die von Mitgliedern des Netzwerks ausgewählt wurden.',
+      revue: 'Presseschau: Überschriften und Vorspänne so übernommen, wie die Quellen sie veröffentlicht haben, ohne Umschreibung, aus von Mitgliedern ausgewählten Quellen.',
+      manual: 'Kurzmeldungen von Mitgliedern des Netzwerks verfasst, ohne maschinelle Unterstützung.',
+    },
+    original: 'Ursprungsfassung: die anderen Sprachen werden aus dieser übersetzt.',
+    machine: 'Maschinelle Übersetzung aus {src}, nicht gegengelesen.',
+    reviewed: 'Übersetzung aus {src}, gegengelesen von {who}.',
+    human: 'Die Seite „Leben des Netzwerks“ besteht aus Beiträgen, die von Kollektiven eingesandt wurden. Keine Ausgabe wird ohne menschliche Entscheidung veröffentlicht.',
+  },
+  el: {
+    t: 'Πώς φτιάχτηκε αυτό το τεύχος',
+    build: {
+      assisted: 'Σύντομα κείμενα γραμμένα με τη βοήθεια ενός γλωσσικού μοντέλου, από δημόσιες πηγές που επέλεξαν μέλη του δικτύου.',
+      revue: 'Επισκόπηση τύπου: τίτλοι και εισαγωγές όπως τα δημοσίευσαν οι πηγές, χωρίς αναδιατύπωση, από πηγές που επέλεξαν μέλη του δικτύου.',
+      manual: 'Σύντομα κείμενα γραμμένα από μέλη του δικτύου, χωρίς βοήθεια μηχανής.',
+    },
+    original: 'Αρχική εκδοχή: οι άλλες γλώσσες μεταφράζονται από αυτήν.',
+    machine: 'Αυτόματη μετάφραση από {src}, χωρίς επιμέλεια.',
+    reviewed: 'Μετάφραση από {src}, με επιμέλεια από {who}.',
+    human: 'Η σελίδα «Ζωή του δικτύου» αποτελείται από συνεισφορές που έστειλαν συλλογικότητες. Κανένα τεύχος δεν δημοσιεύεται χωρίς ανθρώπινη απόφαση.',
+  },
+  ca: {
+    t: "Com s'ha fet aquest número",
+    build: {
+      assisted: "Breus redactades amb l'assistència d'un model de llenguatge, a partir de fonts públiques triades per membres de la xarxa.",
+      revue: 'Revista de premsa: titulars i entradetes represos tal com els han publicat les fonts, sense reescriptura, a partir de fonts triades per membres de la xarxa.',
+      manual: 'Breus redactades per membres de la xarxa, sense assistència de màquina.',
+    },
+    original: "Versió d'origen: les altres llengües es tradueixen a partir d'aquesta.",
+    machine: 'Traducció automàtica des de {src}, sense revisar.',
+    reviewed: 'Traducció des de {src}, revisada per {who}.',
+    human: 'La pàgina « Vida de la xarxa » es compon de les contribucions enviades pels col·lectius. Cap número no es publica sense decisió humana.',
+  },
+  eo: {
+    t: 'Kiel ĉi tiu numero estis farita',
+    build: {
+      assisted: 'Novaĵetoj redaktitaj kun helpo de lingva modelo, el publikaj fluoj elektitaj de membroj de la reto.',
+      revue: 'Gazetrevuo: titoloj kaj resumoj reprenitaj tiaj, kiajn la fontoj publikigis, sen reverkado, el fluoj elektitaj de membroj de la reto.',
+      manual: 'Novaĵetoj redaktitaj de membroj de la reto, sen maŝina helpo.',
+    },
+    original: 'Origina versio: la aliaj lingvoj estas tradukitaj el ĉi tiu.',
+    machine: 'Aŭtomata traduko el {src}, ne kontrolita.',
+    reviewed: 'Traduko el {src}, kontrolita de {who}.',
+    human: 'La paĝo « Vivo de la reto » konsistas el kontribuoj senditaj de kolektivoj. Neniu numero estas publikigita sen homa decido.',
+  },
+  nl: {
+    t: 'Hoe dit nummer is gemaakt',
+    build: {
+      assisted: 'Korte berichten geschreven met hulp van een taalmodel, op basis van openbare feeds gekozen door leden van het netwerk.',
+      revue: "Persoverzicht: titels en intro's overgenomen zoals de bronnen ze publiceerden, zonder herschrijving, uit feeds gekozen door leden van het netwerk.",
+      manual: 'Korte berichten geschreven door leden van het netwerk, zonder machinale hulp.',
+    },
+    original: 'Bronversie: de andere talen worden hieruit vertaald.',
+    machine: 'Automatische vertaling uit {src}, niet nagelezen.',
+    reviewed: 'Vertaling uit {src}, nagelezen door {who}.',
+    human: 'De pagina « Leven van het netwerk » bestaat uit bijdragen die door collectieven zijn ingestuurd. Geen enkel nummer wordt gepubliceerd zonder menselijk besluit.',
+  },
+};
+
+// Rend le colophon de provenance de la langue affichée. Tout est échappé par S()
+// — reviewed_by_label est saisi par le staff, donc traité comme du contenu.
+// Nom de la langue source DANS la langue de lecture (« aus dem Französischen »,
+// pas « aus Français »). Repli sur l'endonyme si Intl.DisplayNames manque.
+function langName(src, locale) {
+  if (!src) return '';
+  try {
+    return new Intl.DisplayNames([locale], { type: 'language' }).of(src) || LOCALE_NAMES[src] || src;
+  } catch {
+    return LOCALE_NAMES[src] || src;
+  }
+}
+
+function provenanceHTML(data, locale) {
+  const pv = PROV[locale] || PROV.fr;
+  const status = data.translation_status || 'machine';
+  const src = data.source_locale;
+  const who = (data.reviewed_by_label || '').trim();
+  const lines = [pv.build[data.build_mode] || pv.build.assisted];
+  if (status === 'human_reviewed' && who) {
+    lines.push(pv.reviewed
+      .replace('{src}', langName(src || 'fr', locale))
+      .replace('{who}', who));
+  } else if (src) {
+    lines.push(pv.machine.replace('{src}', langName(src, locale)));
+  } else {
+    lines.push(pv.original);
+  }
+  lines.push(pv.human);
+  return `<div class="provenance"><span class="t">${S(pv.t)}</span>`
+    + lines.map((l) => `<p>${S(l)}</p>`).join('')
+    + `</div>`;
+}
 
 // Sanitisation whitelist : tout échapper, puis ré-autoriser une poignée de balises
 // inline simples SANS attribut (le contenu maîtrisé n'utilise que <b>). Toute balise
@@ -248,6 +421,13 @@ function renderBlock(b, ui) {
 }
 
 // Construit le document HTML autonome (journal 6 pages) injecté dans l'iframe srcdoc.
+// Nom du document journal — sert de <title> à l'iframe ET de nom de fichier proposé
+// à l'impression PDF (cf. printPdf). Nom propre « Rizoma » non traduit, numéro non
+// paddé : « Rizoma - n°3 ».
+function gazetteDocTitle(number) {
+  return number != null ? `Rizoma - n°${number}` : 'Rizoma';
+}
+
 function buildDocHTML(data, ui, locale, number) {
   const m = data.masthead || {};
   const pages = Array.isArray(data.content) ? data.content : [];
@@ -265,12 +445,13 @@ function buildDocHTML(data, ui, locale, number) {
       <div class="pg">${S(ui.page)} ${idx + 1} / ${n}</div></div>`;
     if (pg.intro) inner += `<p class="src" style="font-size:.78rem;font-style:italic;margin-bottom:.6rem">${S(pg.intro)}</p>`;
     inner += `<div class="cols">${(pg.blocks || []).map((b) => renderBlock(b, ui)).join('')}</div>`;
+    // Provenance en pied de derniere page : presente quoi qu'ait produit le
+    // pipeline, y compris si le bloc « colophon » du contenu manque.
+    if (idx === n - 1) inner += provenanceHTML(data, locale);
     const foot = `AnarBib · ${S(ui.page)} ${idx + 1}/${n} · ${S(m.mid)}`;
     return `<section class="page" data-foot="${foot}">${inner}</section>`;
   }).join('');
-  // <title> = nom de fichier proposé par l'impression PDF du navigateur.
-  // Sans lui, le navigateur retombe sur le titre d'onglet (« Federação — AnarBib »).
-  const docTitle = number != null ? `Rizoma n°${String(number).padStart(2, '0')}` : 'Rizoma';
+  const docTitle = gazetteDocTitle(number);
   return `<!DOCTYPE html><html lang="${S(locale)}"><head><meta charset="utf-8">`
     + `<title>${S(docTitle)}</title>`
     + `<meta name="viewport" content="width=device-width, initial-scale=1">`
@@ -294,7 +475,7 @@ export default function GazetteTab() {
     const number = iss.data?.[0]?.number;
     if (number == null) { setState({ status: 'empty', number: null, byLocale: {} }); return; }
     const locs = await apiQuery('gazette_locales_public_v1', {
-      select: 'locale,tagline,masthead,content,translation_status,pdf_object_path',
+      select: 'locale,tagline,masthead,content,translation_status,pdf_object_path,source_locale,reviewed_by_label,reviewed_at,build_mode',
       filters: { issue_number: `eq.${number}` },
     });
     if (locs.error) { setState({ status: 'error', number: null, byLocale: {} }); return; }
@@ -314,9 +495,31 @@ export default function GazetteTab() {
     return () => window.removeEventListener('resize', measure);
   }, [measure]);
 
+  // Nom du PDF : les navigateurs proposent le titre du document de PREMIER niveau,
+  // pas celui de l'iframe imprimée — d'où « Federação — AnarBib » (posé par
+  // useDocumentTitle sur la page Fédération) malgré le <title> correct de l'iframe.
+  // On prête donc son nom à l'onglet le temps de l'impression, puis on le rend.
   const printPdf = () => {
     const win = frameRef.current?.contentWindow;
-    if (win) { win.focus(); win.print(); }
+    if (!win) return;
+    const previousTitle = document.title;
+    let restored = false;
+    const restore = () => {
+      if (restored) return;
+      restored = true;
+      document.title = previousTitle;
+    };
+    // afterprint : navigateurs où print() rend la main avant la fermeture de l'aperçu.
+    window.addEventListener('afterprint', restore, { once: true });
+    document.title = gazetteDocTitle(state.number);
+    try {
+      win.focus();
+      win.print();
+    } finally {
+      // print() bloquant (Chrome, Firefox, Safari) : on est ici après l'aperçu.
+      // Sinon le nom de fichier a déjà été figé à son ouverture — restaurer est sûr.
+      restore();
+    }
   };
 
   if (state.status === 'loading') {

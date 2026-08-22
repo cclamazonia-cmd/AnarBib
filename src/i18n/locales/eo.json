@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Aplikita al la katalogo",
   "atelier.revue.state.discarded": "Forĵetita — nenio estis ŝanĝita",
   "catalogacao.header.refreshDone": "Nombriloj ĝisdatigitaj · publika katalogo regenerita.",
-  "catalogacao.header.refreshHint": "Ĝisdatigas la nombrilojn de ĉi tiu paĝo KAJ regeneras la katalogon kiun vidas la legantinoj."
+  "catalogacao.header.refreshHint": "Ĝisdatigas la nombrilojn de ĉi tiu paĝo KAJ regeneras la katalogon kiun vidas la legantinoj.",
+  "rede.gazeta.review.by": "Kontrolita de (kolektivo)",
+  "rede.gazeta.review.placeholder": "ekz. BLMF — neniam nomo de persono",
+  "rede.gazeta.review.mark": "Marki kiel kontrolitan",
+  "rede.gazeta.review.undo": "Forigi la kontrolon",
+  "rede.gazeta.review.saved": "Deveno ĝisdatigita.",
+  "rede.gazeta.transStatus.original": "Origina versio",
+  "rede.gazeta.transStatus.machine": "Aŭtomata traduko",
+  "rede.gazeta.transStatus.human_reviewed": "Kontrolita"
 }

@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Εφαρμόστηκε στον κατάλογο",
   "atelier.revue.state.discarded": "Απορρίφθηκε — τίποτα δεν άλλαξε",
   "catalogacao.header.refreshDone": "Οι μετρητές ενημερώθηκαν · ο δημόσιος κατάλογος αναδημιουργήθηκε.",
-  "catalogacao.header.refreshHint": "Ενημερώνει τους μετρητές αυτής της σελίδας ΚΑΙ αναδημιουργεί τον κατάλογο που βλέπουν οι αναγνώστριες."
+  "catalogacao.header.refreshHint": "Ενημερώνει τους μετρητές αυτής της σελίδας ΚΑΙ αναδημιουργεί τον κατάλογο που βλέπουν οι αναγνώστριες.",
+  "rede.gazeta.review.by": "Επιμέλεια από (συλλογικότητα)",
+  "rede.gazeta.review.placeholder": "π.χ. BLMF — ποτέ όνομα προσώπου",
+  "rede.gazeta.review.mark": "Σήμανση ως επιμελημένη",
+  "rede.gazeta.review.undo": "Αφαίρεση επιμέλειας",
+  "rede.gazeta.review.saved": "Η προέλευση ενημερώθηκε.",
+  "rede.gazeta.transStatus.original": "Αρχική εκδοχή",
+  "rede.gazeta.transStatus.machine": "Αυτόματη μετάφραση",
+  "rede.gazeta.transStatus.human_reviewed": "Επιμελημένη"
 }

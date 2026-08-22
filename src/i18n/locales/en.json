@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Applied to the catalogue",
   "atelier.revue.state.discarded": "Discarded — nothing was changed",
   "catalogacao.header.refreshDone": "Counters updated · public catalogue regenerated.",
-  "catalogacao.header.refreshHint": "Updates this page’s counters AND regenerates the catalogue readers see."
+  "catalogacao.header.refreshHint": "Updates this page’s counters AND regenerates the catalogue readers see.",
+  "rede.gazeta.review.by": "Reviewed by (collective)",
+  "rede.gazeta.review.placeholder": "e.g. BLMF — never a person's name",
+  "rede.gazeta.review.mark": "Mark as reviewed",
+  "rede.gazeta.review.undo": "Remove review",
+  "rede.gazeta.review.saved": "Provenance updated.",
+  "rede.gazeta.transStatus.original": "Source version",
+  "rede.gazeta.transStatus.machine": "Machine translation",
+  "rede.gazeta.transStatus.human_reviewed": "Reviewed"
 }

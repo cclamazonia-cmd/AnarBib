@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Appliquée au catalogue",
   "atelier.revue.state.discarded": "Écartée — rien n’a été modifié",
   "catalogacao.header.refreshDone": "Compteurs à jour · catalogue public régénéré.",
-  "catalogacao.header.refreshHint": "Met à jour les compteurs de cette page ET régénère le catalogue que voient les lectrices."
+  "catalogacao.header.refreshHint": "Met à jour les compteurs de cette page ET régénère le catalogue que voient les lectrices.",
+  "rede.gazeta.review.by": "Relue par (collectif)",
+  "rede.gazeta.review.placeholder": "ex. BLMF — jamais un nom de personne",
+  "rede.gazeta.review.mark": "Marquer relue",
+  "rede.gazeta.review.undo": "Retirer la relecture",
+  "rede.gazeta.review.saved": "Provenance mise à jour.",
+  "rede.gazeta.transStatus.original": "Version d'origine",
+  "rede.gazeta.transStatus.machine": "Traduction automatique",
+  "rede.gazeta.transStatus.human_reviewed": "Relue"
 }

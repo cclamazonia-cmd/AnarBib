@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Auf den Katalog angewendet",
   "atelier.revue.state.discarded": "Verworfen — nichts wurde geändert",
   "catalogacao.header.refreshDone": "Zähler aktualisiert · öffentlicher Katalog neu erzeugt.",
-  "catalogacao.header.refreshHint": "Aktualisiert die Zähler dieser Seite UND erzeugt den Katalog neu, den die Leserinnen sehen."
+  "catalogacao.header.refreshHint": "Aktualisiert die Zähler dieser Seite UND erzeugt den Katalog neu, den die Leserinnen sehen.",
+  "rede.gazeta.review.by": "Gegengelesen von (Kollektiv)",
+  "rede.gazeta.review.placeholder": "z. B. BLMF — niemals ein Personenname",
+  "rede.gazeta.review.mark": "Als gegengelesen markieren",
+  "rede.gazeta.review.undo": "Gegenlesen zurücknehmen",
+  "rede.gazeta.review.saved": "Herkunft aktualisiert.",
+  "rede.gazeta.transStatus.original": "Ursprungsfassung",
+  "rede.gazeta.transStatus.machine": "Maschinelle Übersetzung",
+  "rede.gazeta.transStatus.human_reviewed": "Gegengelesen"
 }

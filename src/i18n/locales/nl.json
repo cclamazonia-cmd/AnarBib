@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Toegepast op de catalogus",
   "atelier.revue.state.discarded": "Verworpen — er is niets gewijzigd",
   "catalogacao.header.refreshDone": "Tellers bijgewerkt · publieke catalogus opnieuw opgebouwd.",
-  "catalogacao.header.refreshHint": "Werkt de tellers van deze pagina bij ÉN bouwt de catalogus die lezers zien opnieuw op."
+  "catalogacao.header.refreshHint": "Werkt de tellers van deze pagina bij ÉN bouwt de catalogus die lezers zien opnieuw op.",
+  "rede.gazeta.review.by": "Nagelezen door (collectief)",
+  "rede.gazeta.review.placeholder": "bijv. BLMF — nooit een persoonsnaam",
+  "rede.gazeta.review.mark": "Markeer als nagelezen",
+  "rede.gazeta.review.undo": "Nalezing verwijderen",
+  "rede.gazeta.review.saved": "Herkomst bijgewerkt.",
+  "rede.gazeta.transStatus.original": "Bronversie",
+  "rede.gazeta.transStatus.machine": "Automatische vertaling",
+  "rede.gazeta.transStatus.human_reviewed": "Nagelezen"
 }

@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Aplicada al catàleg",
   "atelier.revue.state.discarded": "Descartada — no s’ha modificat res",
   "catalogacao.header.refreshDone": "Comptadors actualitzats · catàleg públic regenerat.",
-  "catalogacao.header.refreshHint": "Actualitza els comptadors d’aquesta pàgina I regenera el catàleg que veuen les lectores."
+  "catalogacao.header.refreshHint": "Actualitza els comptadors d’aquesta pàgina I regenera el catàleg que veuen les lectores.",
+  "rede.gazeta.review.by": "Revisada per (col·lectiu)",
+  "rede.gazeta.review.placeholder": "p. ex. BLMF — mai un nom de persona",
+  "rede.gazeta.review.mark": "Marca com a revisada",
+  "rede.gazeta.review.undo": "Retira la revisió",
+  "rede.gazeta.review.saved": "Procedència actualitzada.",
+  "rede.gazeta.transStatus.original": "Versió d'origen",
+  "rede.gazeta.transStatus.machine": "Traducció automàtica",
+  "rede.gazeta.transStatus.human_reviewed": "Revisada"
 }

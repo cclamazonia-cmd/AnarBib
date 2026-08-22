@@ -5929,5 +5929,13 @@
   "atelier.revue.state.applied": "Aplicada ao catálogo",
   "atelier.revue.state.discarded": "Descartada — nada foi alterado",
   "catalogacao.header.refreshDone": "Contadores atualizados · catálogo público regenerado.",
-  "catalogacao.header.refreshHint": "Atualiza os contadores desta página E regenera o catálogo visto pelas leitoras."
+  "catalogacao.header.refreshHint": "Atualiza os contadores desta página E regenera o catálogo visto pelas leitoras.",
+  "rede.gazeta.review.by": "Revisada por (coletivo)",
+  "rede.gazeta.review.placeholder": "ex. BLMF — nunca um nome de pessoa",
+  "rede.gazeta.review.mark": "Marcar como revisada",
+  "rede.gazeta.review.undo": "Retirar a revisão",
+  "rede.gazeta.review.saved": "Proveniência atualizada.",
+  "rede.gazeta.transStatus.original": "Versão de origem",
+  "rede.gazeta.transStatus.machine": "Tradução automática",
+  "rede.gazeta.transStatus.human_reviewed": "Revisada"
 }
