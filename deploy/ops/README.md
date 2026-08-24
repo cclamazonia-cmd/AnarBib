@@ -28,6 +28,8 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 |---|---|
 | `anarbib-bg2.sh` | Les trois flux restic (`court`, `long`, `storage`), le filet de classement des tables, le dump du Vault, l'auto-réparation des verrous |
 | `anarbib-notify-failure.sh` | Appelé par `OnFailure=` quand un flux échoue |
+| `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les dépôts restic et les marqueurs de tir, pose `.fraicheur-alerte` |
+| `forgejo-runner-notify-failure.sh` | Le message d'échec du runner Forgejo (hors chaîne de sauvegarde, même doctrine) |
 | `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les trois dépôts restic et signale les flux en retard (lecture seule) |
 | `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : trois flux, l'unité de notification, le contrôle de fraîcheur |
 
@@ -144,6 +146,48 @@ fi
 ```
 
 `~/.bashrc` n'est pas versionné : sur une machine neuve, ce bloc est à recopier.
+
+## Les trois gardes, et ce que chacune ne voit pas
+
+Aucune ne suffit seule. Elles ne sont pas redondantes : elles regardent depuis
+trois endroits différents, et chacune est aveugle là où une autre voit.
+
+| Garde | Voit | Ne voit pas |
+|---|---|---|
+| `OnFailure=` | un flux qui **sort en erreur** | les silences ; et **elle se tait quand la cause est l'arrêt** de la machine — systemd refuse d'enfiler un job de notification pendant un arrêt |
+| `fn_backup_heartbeat_status()` (en base) | le **silence** et les tirs interrompus, depuis un point qui survit à l'extinction du poste | rien de ce qui se passe si la base est injoignable ; et elle ne parle à personne assis devant la machine |
+| `anarbib-bg2-fraicheur.sh` (ce dossier) | l'état **réel des dépôts restic** et les tirs morts, au réveil de la session | rien tant que la session n'est pas ouverte |
+
+Deux pannes vécues expliquent cette forme, et valent mieux qu'un principe :
+
+- **16/08** — le tir `storage` est tué par l'extinction. `OnFailure=` ne part
+  pas. Onze jours sans sauvegarde du Storage, découverts le 20/08.
+- **24/08** — le rattrapage `long` est tué 19 s après son départ. La donnée,
+  elle, était **fraîche** (instantané de deux jours) : le contrôle de fraîcheur
+  disait « tout va bien » et disait vrai. C'est le *tir* qui était mort.
+
+D'où les **marqueurs `.en-cours-<flux>`** : posés au départ dans `heartbeat()`,
+retirés à l'arrivée. Leur seule vertu est de survivre à ce que le témoin ne
+survit pas — un fichier reste sur le disque quand le processus est tué. Le
+contrôle de fraîcheur les relit et traite le tir interrompu comme une panne
+**distincte du retard**, parce qu'elle frappe des flux frais.
+
+> ⚠️ **Un rattrapage `Persistent=true` tué ne se rejoue pas.** Son jeton est
+> consommé : le flux attend sa prochaine échéance normale. C'est pourquoi le
+> drapeau nomme la commande de relance au lieu de compter sur le minuteur.
+
+### Poser l'alerte du runner Forgejo (sudo, une fois par machine)
+
+Les unités du runner vivent sous `/etc/systemd/system/`. Le script, lui, est ici.
+
+```sh
+sudo ln -sf "$PWD/deploy/ops/systemd/forgejo-runner-failure.service" \
+            /etc/systemd/system/forgejo-runner-failure.service
+sudo systemctl daemon-reload
+```
+
+`forgejo-runner.service` et son drop-in restent à verser au dépôt — même angle
+mort, pas encore refermé.
 
 ## Les horaires
 
