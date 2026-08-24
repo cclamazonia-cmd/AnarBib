@@ -1,0 +1,11 @@
+[Unit]
+Description=AnarBib — notification d'echec du runner Forgejo
+Documentation=file:/home/accattone/anarbib/deploy/ops/README.md
+
+[Service]
+Type=oneshot
+# La logique est dans un SCRIPT, pas ici. Un `ExecStart=/bin/sh -c '... %Y ...'`
+# se fait manger ses `%` par systemd avant que le shell ne les voie : c'est ce
+# qui rendait l'horodatage du drapeau illisible jusqu'au 24/08/2026. Le script
+# porte l'explication complete.
+ExecStart=/home/accattone/anarbib/deploy/ops/forgejo-runner-notify-failure.sh forgejo-runner.service
