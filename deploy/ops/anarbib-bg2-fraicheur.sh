@@ -71,6 +71,13 @@ SEUIL_court=36
 SEUIL_long=216
 SEUIL_storage=216
 
+# Age au-dela duquel un marqueur « tir en cours » signale un tir MORT et non un
+# tir qui travaille. Aligne sur la regle `interrompu` de la sonde en base (60 min),
+# pour la meme raison que les seuils ci-dessus : deux gardes qui jugeraient
+# differemment feraient perdre du temps a se demander laquelle a raison.
+# Marge confortable — le plus long des trois flux, storage, tient en ~23 min.
+SEUIL_INTERROMPU_MIN="${SEUIL_INTERROMPU_MIN:-60}"
+
 # Au-dela de ce delai sans avoir pu LIRE les depots, l'aveuglement devient une
 # alerte a part entiere. Trois jours : assez pour absorber un voyage ou une
 # coupure, trop peu pour qu'un depot mort passe une semaine inapercu.
@@ -119,6 +126,7 @@ date_dernier_snapshot() {
 
 maintenant=$(date +%s)
 retard=()      # flux en retard, avec leur age
+interrompus=() # flux dont un tir est parti sans revenir
 aveugle=()     # flux qu'on n'a pas pu lire
 lecture_ok=0   # au moins un depot lu -> on a bien vu quelque chose
 
@@ -161,6 +169,51 @@ for flux in "${FLUX[@]}"; do
 done
 
 [ "$lecture_ok" = 1 ] && echo "$maintenant" > "$VU"
+
+# --- TIRS INTERROMPUS -------------------------------------------------------
+# Un marqueur `.en-cours-<flux>` que rien n'est venu retirer = un tir parti et
+# jamais revenu. C'est une panne DISTINCTE du retard, et elle peut frapper un
+# flux parfaitement frais : le 24/08, `long` a ete tue en plein pg_dump avec un
+# instantane vieux de deux jours seulement. Le controle disait « frais », et
+# c'etait vrai — la donnee etait la. Mais le tir, lui, etait mort, et personne
+# sur ce poste ne pouvait le dire.
+#
+# Consequence qu'on ne veut plus subir : un rattrapage `Persistent=true` tue ne
+# se represente PAS. Son jeton est consomme. `long` serait reste muet jusqu'au
+# dimanche suivant.
+interrompus=()
+for f in "${FLUX[@]}"; do
+  m="$OPS_DIR/.en-cours-$f"
+  [ -f "$m" ] || continue
+  debut="$(cut -d' ' -f1 "$m" 2>/dev/null || echo 0)"
+  case "$debut" in ''|*[!0-9]*) debut=0 ;; esac
+  [ "$debut" -gt 0 ] || continue
+  min=$(( (maintenant - debut) / 60 ))
+  if [ "$min" -gt "$SEUIL_INTERROMPU_MIN" ]; then
+    interrompus+=("$f (parti il y a $((min / 60)) h $((min % 60)) min, jamais revenu)")
+    printf '    !!  %-8s TIR INTERROMPU — parti il y a %s min, jamais revenu\n' "$f" "$min"
+  else
+    printf '    ..  %-8s tir en cours depuis %s min (sous le seuil de %s min)\n' \
+      "$f" "$min" "$SEUIL_INTERROMPU_MIN"
+  fi
+done
+
+if [ ${#interrompus[@]} -gt 0 ]; then
+  {
+    echo "TIR INTERROMPU $(date -u +%Y-%m-%dT%H:%M:%SZ) : ${interrompus[*]}"
+    echo "--- ce que cela veut dire ---"
+    echo "Un tir a demarre et n'est jamais revenu : processus tue, session WSL"
+    echo "demontee, ou machine eteinte en cours de route. La DONNEE peut etre"
+    echo "encore fraiche — ce n'est pas un retard, c'est un tir mort."
+    echo "ATTENTION : un rattrapage tue ne se rejoue pas tout seul."
+    for i in "${interrompus[@]}"; do
+      echo "  Relancer : systemctl --user start anarbib-backup-${i%% *}.service"
+    done
+  } > "$FLAG"
+  info "TIR(S) INTERROMPU(S) : ${interrompus[*]}"
+  info "Drapeau pose ($FLAG) — il s'affichera a l'ouverture du terminal."
+  exit 1
+fi
 
 # --- Aveuglement prolonge : on n'a rien pu lire depuis trop longtemps --------
 aveugle_depuis_h=0

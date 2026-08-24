@@ -124,6 +124,30 @@ unlock_stale() {
 # sonde ouvre un incident au bout d'une heure, sans attendre les 36 h de silence.
 heartbeat() {
   local flux="$1" phase="${2:-ok}" snap="${3:-}"
+
+  # --- MARQUEUR LOCAL « TIR EN COURS » (24/08/2026) ----------------------
+  # Pose au depart, retire a l'arrivee. Sa raison d'etre est de SURVIVRE a ce
+  # que le temoin ne survit pas : quand le processus est tue (session WSL
+  # demontee, machine eteinte), le temoin d'arrivee ne part jamais et aucun
+  # `OnFailure=` ne peut le dire — systemd refuse d'enfiler un job de
+  # notification pendant un arret. Le fichier, lui, reste sur le disque.
+  #
+  # C'est ce que le controle de fraicheur relit au reveil. Il ne remplace pas
+  # la sonde en base, qui voit la meme chose de son cote ; il la double la ou
+  # elle ne peut rien : sur un poste hors ligne, ou face a un tir interrompu
+  # dont la DONNEE reste fraiche — cas vecu le 24/08, ou `long` a ete tue en
+  # plein pg_dump alors que son dernier instantane datait de deux jours. La
+  # fraicheur seule disait « tout va bien », et disait vrai.
+  #
+  # Ecrit AVANT l'appel psql, et hors de sa reussite : le marqueur ne depend
+  # pas du reseau, sinon il heriterait de la fragilite qu'il compense.
+  local marqueur="$OPS_DIR/.en-cours-$flux"
+  if [ "$phase" = 'started' ]; then
+    printf '%s %s\n' "$(date +%s)" "$$" > "$marqueur" 2>/dev/null || true
+  else
+    rm -f "$marqueur" 2>/dev/null || true
+  fi
+
   local snap_sql='null'
   [ -n "$snap" ] && snap_sql="'$snap'"
   if psql "$PGCONN" -v ON_ERROR_STOP=1 -q -c \
