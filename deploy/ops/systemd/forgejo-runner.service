@@ -1,0 +1,23 @@
+[Unit]
+Description=Forgejo Actions runner (AnarBib anarbib-local)
+After=network-online.target
+Wants=network-online.target
+# Sous Docker Desktop + WSL, pas de docker.service systemd : le socket est injecte
+# par le pont Docker Desktop de facon asynchrone. L'attente se fait en ExecStartPre.
+# Bornage anti-boucle : apres 5 echecs en 5 min, systemd abandonne (failed) au lieu
+# de marteler indefiniment (ex. Docker Desktop eteint). Fini la boucle a ~593.
+StartLimitIntervalSec=300
+StartLimitBurst=5
+OnFailure=forgejo-runner-failure.service
+
+[Service]
+Type=simple
+User=accattone
+WorkingDirectory=/home/accattone
+ExecStartPre=/home/accattone/anarbib-ops/wait-for-docker.sh 120
+ExecStart=/usr/local/bin/forgejo-runner daemon
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

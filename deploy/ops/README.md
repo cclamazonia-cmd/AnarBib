@@ -30,6 +30,8 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 | `anarbib-notify-failure.sh` | Appelé par `OnFailure=` quand un flux échoue |
 | `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les dépôts restic et les marqueurs de tir, pose `.fraicheur-alerte` |
 | `forgejo-runner-notify-failure.sh` | Le message d'échec du runner Forgejo (hors chaîne de sauvegarde, même doctrine) |
+| `wait-for-docker.sh` | Attend le socket Docker (pont Docker Desktop ↔ WSL), appelé en `ExecStartPre` du runner |
+| `systemd/forgejo-runner.service` · `systemd/forgejo-runner.service.d/` | Le runner Forgejo et son drop-in |
 | `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les trois dépôts restic et signale les flux en retard (lecture seule) |
 | `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : trois flux, l'unité de notification, le contrôle de fraîcheur |
 
@@ -42,8 +44,10 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 - **`fix-filet.sh`** — son propre en-tête porte la consigne « à garder HORS du
   repo ». Respectée.
 - **La passphrase restic** — dans `~/.config/restic-anarbib.pass`, jamais ici.
-- **`wait-for-docker.sh`** — appartient à la chaîne du runner Forgejo, pas aux
-  sauvegardes. Reste à verser, hors périmètre.
+- ~~**`wait-for-docker.sh`**~~ — versé le 25/08/2026 avec le reste de la chaîne
+  du runner. Il appartient au runner Forgejo et non aux sauvegardes, mais il
+  n'existait qu'en un exemplaire sur un poste : c'est le critère qui tranche
+  ici, pas le périmètre fonctionnel.
 
 ## Le lien symbolique, et le sens du lien
 
@@ -180,14 +184,25 @@ contrôle de fraîcheur les relit et traite le tir interrompu comme une panne
 
 Les unités du runner vivent sous `/etc/systemd/system/`. Le script, lui, est ici.
 
+Toute la chaîne du runner est au dépôt depuis le 25/08/2026 : l'unité, son
+drop-in, le script d'attente de Docker et le script d'alerte. Ce qui tourne sous
+`/etc/systemd/system/` doit donc devenir des liens, comme pour les sauvegardes.
+
 ```sh
 sudo ln -sf "$PWD/deploy/ops/systemd/forgejo-runner-failure.service" \
             /etc/systemd/system/forgejo-runner-failure.service
+sudo ln -sf "$PWD/deploy/ops/systemd/forgejo-runner.service" \
+            /etc/systemd/system/forgejo-runner.service
+sudo mkdir -p /etc/systemd/system/forgejo-runner.service.d
+sudo ln -sf "$PWD/deploy/ops/systemd/forgejo-runner.service.d/clear-stale-flag.conf" \
+            /etc/systemd/system/forgejo-runner.service.d/clear-stale-flag.conf
+ln -sf "$PWD/deploy/ops/wait-for-docker.sh" ~/anarbib-ops/wait-for-docker.sh
 sudo systemctl daemon-reload
 ```
 
-`forgejo-runner.service` et son drop-in restent à verser au dépôt — même angle
-mort, pas encore refermé.
+> Tant que ces liens ne sont pas posés, la machine tourne encore sur les copies
+> de juillet — dont celle qui écrit un horodatage illisible. Le dépôt a le
+> correctif, la machine ne l'a pas.
 
 ## Les horaires
 
