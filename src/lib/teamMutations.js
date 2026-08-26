@@ -9,7 +9,7 @@
 // l'UI, la DB rejette.
 //
 // Phase B1 :
-//   - promoteToLibrarian, promoteToCoordenador
+//   - promoteToLibrarian, proposeCoordenadorPromotion
 //   - selfDemote (non-admin)
 //   - suspendMember, unsuspendMember
 //
@@ -79,10 +79,16 @@ export function useTeamMutations() {
     [callRpc]
   );
 
-  const promoteToCoordenador = useCallback(
-    (userId, libraryId) => callRpc('fn_team_promote_to_coordenador', {
-      p_user_id: userId,
+  // Depuis la migration 20260826120000 (collégialité), la promotion à
+  // coordenador n'est plus un geste unilatéral : elle passe par le workflow
+  // d'invitation (proposition → ratification → acceptation par l'intéressé·e).
+  // fn_team_promote_to_coordenador existe encore mais lève désormais
+  // `collegiality_required` — ne plus l'appeler.
+  const proposeCoordenadorPromotion = useCallback(
+    (invitedPublicId, libraryId) => callRpc('fn_team_propose_invitation', {
       p_library_id: libraryId,
+      p_invited_public_id: invitedPublicId,
+      p_role: 'coordenador',
     }),
     [callRpc]
   );
@@ -181,7 +187,7 @@ export function useTeamMutations() {
     loading,
     // Phase B1
     promoteToLibrarian,
-    promoteToCoordenador,
+    proposeCoordenadorPromotion,
     selfDemote,
     suspendMember,
     unsuspendMember,

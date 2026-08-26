@@ -19,7 +19,7 @@
 //
 // Phase A : lecture seule.
 // Phase B1 (cette version) : actions de gestion via les 5 RPCs fn_team_* :
-//   - promote_to_librarian, promote_to_coordenador
+//   - promote_to_librarian, propose_coordenador
 //   - self_demote
 //   - suspend, unsuspend
 //
@@ -409,6 +409,15 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
                 <div className="ab-team-row__name">
                   {inv.invited_name || formatPublicId(inv.invited_public_id)}
                   <span className="ab-team-self-tag"> · {formatPublicId(inv.invited_public_id)}</span>
+                  {/* Le rôle proposé n'est plus toujours librarian : depuis la
+                      migration 20260826120000, une promotion à coordenador
+                      emprunte le même circuit. Il faut donc l'afficher. */}
+                  <span className="ab-team-self-tag">
+                    {' · '}
+                    {t({ id: inv.role_proposed === 'coordenador'
+                      ? 'team.invitations.role.coordenador'
+                      : 'team.invitations.role.librarian' })}
+                  </span>
                 </div>
                 <div className="ab-team-row__meta">
                   {inv.proposed_by_name && (

@@ -143,6 +143,14 @@ export default function TabBiblios() {
                 <div key={inv.id} className="ab-conta-item" style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
                   <div className="ab-conta-item__main" style={{ flex: 1, minWidth: 'min(200px, 100%)' }}>
                     <span className="ab-conta-item__title">{inv.library_name}</span>
+                    {/* Depuis la migration 20260826120000, une invitation peut
+                        porter sur la coordination et plus seulement sur l'accueil
+                        dans l'équipe : il faut dire de quoi il s'agit. */}
+                    <span className="ab-conta-item__meta">
+                      {t({ id: inv.role_proposed === 'coordenador'
+                        ? 'team.invitations.role.coordenador'
+                        : 'team.invitations.role.librarian' })}
+                    </span>
                     <span className="ab-conta-item__meta">
                       {inv.proposed_by_name
                         ? t({ id: 'account.invitations.proposedBy' }, { name: inv.proposed_by_name })

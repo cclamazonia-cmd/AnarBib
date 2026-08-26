@@ -6,7 +6,7 @@
 // Paramétrée par le type d'action + la cible. Appelle la mutation appropriée
 // du hook useTeamMutations et notifie le parent du résultat.
 //
-// Phase B1 actions : promote_to_librarian, promote_to_coordenador,
+// Phase B1 actions : promote_to_librarian, propose_coordenador,
 //                    self_demote, suspend, unsuspend
 // Phase B2 actions : request_remove, cancel_remove
 //
@@ -84,9 +84,15 @@ export default function TeamActionModal({
       case 'promote_to_librarian':
         result = await mutations.promoteToLibrarian(membership.user_id, membership.library_id);
         break;
-      case 'promote_to_coordenador':
-        result = await mutations.promoteToCoordenador(membership.user_id, membership.library_id);
+      case 'propose_coordenador': {
+        const publicId = membership.profiles?.public_id;
+        if (!publicId) {
+          setErrorMsg(t({ id: 'team.modal.error.missingPublicId' }));
+          return;
+        }
+        result = await mutations.proposeCoordenadorPromotion(publicId, membership.library_id);
         break;
+      }
       case 'self_demote':
         result = await mutations.selfDemote(membership.library_id, 'librarian');
         break;
@@ -237,11 +243,11 @@ function buildConfig(actionType, t) {
         kind: 'positive',
         buttonKind: 'primary',
       };
-    case 'promote_to_coordenador':
+    case 'propose_coordenador':
       return {
-        title: t({ id: 'team.modal.title.promoteToCoordenador' }),
-        description: t({ id: 'team.modal.description.promoteToCoordenador' }),
-        confirmLabel: t({ id: 'team.modal.confirm.promote' }),
+        title: t({ id: 'team.modal.title.proposeCoordenador' }),
+        description: t({ id: 'team.modal.description.proposeCoordenador' }),
+        confirmLabel: t({ id: 'team.modal.confirm.propose' }),
         kind: 'positive',
         buttonKind: 'primary',
       };

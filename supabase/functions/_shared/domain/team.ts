@@ -1002,11 +1002,18 @@ async function handleInactiveCompleted(payload, library, targetUserId, ctx, bt) 
     admin_result: adminResult
   };
 }
-// team.invitation_proposed (lot 4 — accueil d'équipe)
+// team.invitation_proposed (lot 4 — accueil d'équipe ; élargi à la promotion
+// coordenador par la migration 20260826120000)
 // Destinataires : les coordenador·rices actif·ves de la biblio (à endosser ;
-// voie médiane : ≥1 endossement coordination est requis pour finaliser l'accueil).
+// voie médiane : ≥1 endossement coordination est requis pour finaliser).
+// Le payload porte role_proposed : 'librarian' (accueil) ou 'coordenador'
+// (passage à la coordination). Les textes diffèrent — accueillir quelqu'un et
+// lui confier la coordination ne sont pas le même acte.
 async function handleInvitationProposed(payload, library, targetUserId, actor, ctx, bt) {
   const libraryId = String(payload.library_id || "").trim();
+  const isCoord = String(payload.role_proposed || "librarian") === "coordenador";
+  const subKey = isCoord ? "team.invitation_coord_proposed.sub" : "team.invitation_proposed.sub";
+  const introKey = isCoord ? "team.invitation_coord_proposed.intro" : "team.invitation_proposed.intro";
   const invited = await loadProfile(targetUserId);
   const libraryName = library?.name || library?.short_name || "";
   const targetName = displayName(invited);
@@ -1020,26 +1027,30 @@ async function handleInvitationProposed(payload, library, targetUserId, actor, c
   for (const recipient of recipients){
     const locale = recipient.preferred_language || null;
     const userTarget = userTargetFromProfile(recipient);
-    const sub = `${tMail(locale, "team.invitation_proposed.sub", { libraryName })} — ${bt}`;
-    const tit = tMail(locale, "team.invitation_proposed.sub", { libraryName });
-    const introHtml = `<p>${tMail(locale, "team.invitation_proposed.intro", { actorName, targetName, libraryName })}</p>`;
+    const sub = `${tMail(locale, subKey, { libraryName })} — ${bt}`;
+    const tit = tMail(locale, subKey, { libraryName });
+    const introHtml = `<p>${tMail(locale, introKey, { actorName, targetName, libraryName })}</p>`;
     const { html, text } = renderEmail({ locale, preheader: tit, title: tit, greeting: greeting(locale, recipient.first_name || undefined), introHtml, details: [], footerHtml: footerPadrao(ctx, locale), context: ctx });
     const r = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
     results.push(r);
   }
   return { user_results: results, recipients_count: recipients.length };
 }
-// team.invitation_ready (lot 4 — accueil d'équipe)
-// Destinataire : la personne invitée (à accepter dans son compte, onglet Mes biblios).
+// team.invitation_ready (lot 4 — accueil d'équipe ; élargi à la promotion
+// coordenador par la migration 20260826120000)
+// Destinataire : la personne concernée (à accepter dans son compte, onglet Mes biblios).
 async function handleInvitationReady(payload, library, targetUserId, ctx, bt) {
   const target = await loadProfile(targetUserId);
   if (!target) throw new Error(`profile ${targetUserId} not found`);
   const locale = target.preferred_language || null;
   const userTarget = userTargetFromProfile(target);
   const libraryName = library?.name || library?.short_name || "";
-  const sub = `${tMail(locale, "team.invitation_ready.sub", { libraryName })} — ${bt}`;
-  const tit = tMail(locale, "team.invitation_ready.sub", { libraryName });
-  const introHtml = `<p>${tMail(locale, "team.invitation_ready.intro", { libraryName })}</p>`;
+  const isCoord = String(payload.role_proposed || "librarian") === "coordenador";
+  const subKey = isCoord ? "team.invitation_coord_ready.sub" : "team.invitation_ready.sub";
+  const introKey = isCoord ? "team.invitation_coord_ready.intro" : "team.invitation_ready.intro";
+  const sub = `${tMail(locale, subKey, { libraryName })} — ${bt}`;
+  const tit = tMail(locale, subKey, { libraryName });
+  const introHtml = `<p>${tMail(locale, introKey, { libraryName })}</p>`;
   const { html, text } = renderEmail({ locale, preheader: tit, title: tit, greeting: greeting(locale, target.first_name || undefined), introHtml, details: [], footerHtml: footerPadrao(ctx, locale), context: ctx });
   const userResult = await safeSendEmail(userTarget, applyBrandingText(sub, ctx), html, text, "user_mail", ctx);
   return { user_result: userResult };

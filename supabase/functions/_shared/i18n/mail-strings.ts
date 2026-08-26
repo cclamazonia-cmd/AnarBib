@@ -78,6 +78,59 @@ const S: Record<string, Record<SupportedMailLocale, string>> = {
     el: "Η πρόσκλησή σας για ένταξη στην ομάδα της {libraryName} είναι έτοιμη. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να την αποδεχτείτε ή να την απορρίψετε."
   },
 
+  // ── Passage à la coordination : proposition collégiale ────────────────────
+  // Migration 20260826120000 : la promotion à coordenador emprunte le circuit
+  // des invitations. Textes distincts de l'accueil — la personne est déjà dans
+  // l'équipe, ce qu'on lui propose c'est une charge, pas une entrée.
+  "team.invitation_coord_proposed.sub": {
+    "pt-BR": "Uma passagem à coordenação a endossar — {libraryName}",
+    fr: "Un passage à la coordination à endosser — {libraryName}",
+    es: "Un paso a la coordinación para respaldar — {libraryName}",
+    en: "A step into coordination to endorse — {libraryName}",
+    it: "Un passaggio al coordinamento da avallare — {libraryName}",
+    de: "Ein Wechsel in die Koordination zum Befürworten — {libraryName}",
+    ca: "Un pas a la coordinació per avalar — {libraryName}",
+    eo: "Transiro al la kunordigo por aprobi — {libraryName}",
+    nl: "Een overstap naar de coördinatie om te steunen — {libraryName}",
+    el: "Μια μετάβαση στον συντονισμό προς υποστήριξη — {libraryName}"
+  },
+  "team.invitation_coord_proposed.intro": {
+    "pt-BR": "{actorName} propõe que {targetName} passe à coordenação de {libraryName}. Seu endosso é necessário: a coordenação não se dá sozinha. Acesse o painel da equipe para endossar ou deixar correr.",
+    fr: "{actorName} propose que {targetName} passe à la coordination de {libraryName}. Votre endossement est nécessaire : la coordination ne se donne pas seul·e. Rendez-vous dans le panneau de l'équipe pour endosser, ou laisser filer.",
+    es: "{actorName} propone que {targetName} pase a la coordinación de {libraryName}. Tu respaldo es necesario: la coordinación no se da en solitario. Entra al panel del equipo para respaldar o dejar pasar.",
+    en: "{actorName} proposes that {targetName} step into the coordination of {libraryName}. Your endorsement is needed: coordination is not handed out alone. Go to the team panel to endorse, or let it lapse.",
+    it: "{actorName} propone che {targetName} passi al coordinamento di {libraryName}. Il tuo avallo è necessario: il coordinamento non si dà da sol*. Vai al pannello della squadra per avallare, o lascia scadere.",
+    de: "{actorName} schlägt vor, dass {targetName} in die Koordination von {libraryName} wechselt. Deine Befürwortung ist nötig: Koordination vergibt man nicht allein. Geh zum Team-Panel, um zu befürworten — oder lass es verfallen.",
+    ca: "{actorName} proposa que {targetName} passi a la coordinació de {libraryName}. El teu aval és necessari: la coordinació no es dona en solitari. Vés al tauler de l'equip per avalar, o deixa-ho caducar.",
+    eo: "{actorName} proponas ke {targetName} transiru al la kunordigo de {libraryName}. Via aprobo necesas: kunordigo ne donacigas sole. Iru al la teama panelo por aprobi, aŭ lasu ĝin senvalidiĝi.",
+    nl: "{actorName} stelt voor dat {targetName} overstapt naar de coördinatie van {libraryName}. Jouw steun is nodig: coördinatie geef je niet alleen door. Ga naar het teampaneel om te steunen, of laat het vervallen.",
+    el: "{actorName} προτείνει το άτομο {targetName} να περάσει στον συντονισμό της {libraryName}. Η υποστήριξή σας χρειάζεται: ο συντονισμός δεν δίνεται μόνος. Μεταβείτε στον πίνακα της ομάδας για να υποστηρίξετε ή να το αφήσετε να λήξει."
+  },
+  "team.invitation_coord_ready.sub": {
+    "pt-BR": "A equipe propõe que você entre na coordenação de {libraryName}",
+    fr: "L'équipe vous propose d'entrer dans la coordination de {libraryName}",
+    es: "El equipe te propone entrar en la coordinación de {libraryName}",
+    en: "The team proposes that you join the coordination of {libraryName}",
+    it: "La squadra ti propone di entrare nel coordinamento di {libraryName}",
+    de: "Das Team schlägt dir vor, in die Koordination von {libraryName} einzutreten",
+    ca: "L'equip et proposa entrar a la coordinació de {libraryName}",
+    eo: "La teamo proponas ke vi eniru la kunordigon de {libraryName}",
+    nl: "Het team stelt voor dat je toetreedt tot de coördinatie van {libraryName}",
+    el: "Η ομάδα σάς προτείνει να μπείτε στον συντονισμό της {libraryName}"
+  },
+  "team.invitation_coord_ready.intro": {
+    "pt-BR": "A proposta foi endossada: falta só a sua palavra. Coordenar {libraryName} dá acesso aos parâmetros da biblioteca, à gestão da equipe e às decisões de organização — é uma carga, e ela se aceita. Recusar não custa nada, e passar a mão continua sendo um direito depois. Acesse sua conta (Minhas bibliotecas) para responder.",
+    fr: "La proposition a été endossée : il ne manque que votre mot. Coordonner {libraryName} donne accès aux paramètres de la bibliothèque, à la gestion de l'équipe et aux décisions d'organisation — c'est une charge, et elle s'accepte. Refuser ne coûte rien, et passer la main restera un droit ensuite. Rendez-vous dans votre compte (Mes bibliothèques) pour répondre.",
+    es: "La propuesta fue respaldada: solo falta tu palabra. Coordinar {libraryName} da acceso a los parámetros de la biblioteca, a la gestión del equipe y a las decisiones de organización — es una carga, y se acepta. Rechazar no cuesta nada, y pasar la posta seguirá siendo un derecho después. Entra a tu cuenta (Mis bibliotecas) para responder.",
+    en: "The proposal has been endorsed: only your word is missing. Coordinating {libraryName} gives access to the library's settings, to team management and to organisational decisions — it is a burden, and it is accepted, not imposed. Declining costs nothing, and stepping back will remain a right afterwards. Go to your account (My libraries) to answer.",
+    it: "La proposta è stata avallata: manca solo la tua parola. Coordinare {libraryName} dà accesso ai parametri della biblioteca, alla gestione della squadra e alle decisioni organizzative — è un carico, e si accetta. Rifiutare non costa nulla, e passare la mano resterà un diritto in seguito. Vai al tuo account (Le mie biblioteche) per rispondere.",
+    de: "Der Vorschlag wurde befürwortet: es fehlt nur noch dein Wort. Die Koordination von {libraryName} gibt Zugriff auf die Bibliotheksparameter, die Teamverwaltung und organisatorische Entscheidungen — das ist eine Last, und sie wird angenommen, nicht auferlegt. Ablehnen kostet nichts, und abzugeben bleibt danach ein Recht. Geh zu deinem Konto (Meine Bibliotheken), um zu antworten.",
+    ca: "La proposta ha estat avalada: només falta la teva paraula. Coordinar {libraryName} dona accés als paràmetres de la biblioteca, a la gestió de l'equip i a les decisions d'organització — és una càrrega, i s'accepta. Rebutjar no costa res, i passar el relleu continuarà sent un dret després. Vés al teu compte (Les meves biblioteques) per respondre.",
+    eo: "La propono estis aprobita: mankas nur via vorto. Kunordigi {libraryName} donas aliron al la agordoj de la biblioteko, al la administrado de la teamo kaj al organizaj decidoj — tio estas ŝarĝo, kaj ĝi akceptiĝas. Rifuzi kostas nenion, kaj transdoni restos rajto poste. Iru al via konto (Miaj bibliotekoj) por respondi.",
+    nl: "Het voorstel is gesteund: alleen jouw woord ontbreekt nog. De coördinatie van {libraryName} geeft toegang tot de instellingen van de bibliotheek, tot teambeheer en tot organisatorische beslissingen — het is een last, en die aanvaard je. Weigeren kost niets, en het later doorgeven blijft een recht. Ga naar je account (Mijn bibliotheken) om te antwoorden.",
+    el: "Η πρόταση υποστηρίχθηκε: λείπει μόνο ο δικός σας λόγος. Ο συντονισμός της {libraryName} δίνει πρόσβαση στις ρυθμίσεις της βιβλιοθήκης, στη διαχείριση της ομάδας και στις οργανωτικές αποφάσεις — είναι βάρος, και το αποδέχεται κανείς. Η άρνηση δεν κοστίζει τίποτα, και η παράδοση της σκυτάλης θα παραμείνει δικαίωμα αργότερα. Μεταβείτε στον λογαριασμό σας (Οι βιβλιοθήκες μου) για να απαντήσετε."
+  },
+
   // ── Actus réseau : digest hebdomadaire (EF notify-rede-digest) ────────────
   "rede.digest.subject": {
     "pt-BR": "{brand} · Novidades da rede",

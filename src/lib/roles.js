@@ -91,7 +91,7 @@ export function statusBadgeKind(status) {
 
 // ── Permissions row-level pour les actions de gouvernance ───
 //
-// Phase B1 : promote_to_librarian, promote_to_coordenador, self_demote,
+// Phase B1 : promote_to_librarian, propose_coordenador, self_demote,
 //            suspend, unsuspend
 // Phase B2 : ajout de
 //            - request_remove          (sur staff actif)
@@ -176,9 +176,11 @@ export function availableTeamActions(ctx) {
         requiresReason: false,
       });
     } else if (targetRole === 'librarian') {
+      // Collégialité (migration 20260826120000) : ce n'est plus une promotion
+      // immédiate mais une proposition soumise à ratification puis acceptation.
       actions.push({
-        action: 'promote_to_coordenador',
-        label: 'team.action.promoteToCoordenador',
+        action: 'propose_coordenador',
+        label: 'team.action.proposeCoordenador',
         kind: 'primary',
         requiresReason: false,
       });
