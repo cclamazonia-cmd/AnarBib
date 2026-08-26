@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.4 — 2026-08-26 (T2 passe à la cooptation collégiale)
+**Version** : 1.4.1 — 2026-08-26 (T2 collégiale ; garde de proposition corrigée)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -12,6 +12,7 @@
 - **v1.3 (2026-05-24)** : amendement TM-A (issu de l'audit #153 des contenus de mails). Le seuil d'inactivité J-7 (`team.inactive_warning_7d`) notifie désormais la coordination en copie, et non plus la seule personne concernée ; si la personne inactive est le·la dernier·e coordenador·a, la copie est escaladée aux administrateur·rices du réseau (même mécanisme que §6.1). Cet amendement entérine le comportement déjà en production dans `team.ts` plutôt que de l'aligner sur l'ancienne règle. Sections amendées : §5.10, §8.2 ; traçage Annexe Q7. Le seuil J-30 reste inchangé (personne uniquement).
 
 - **v1.4 (2026-08-26)** : **T2 (`librarian` → `coordenador`) cesse d'être unilatérale.** La promotion reposait sur la seule autorisation `user_can_manage_library()` : un·e coordenador·a pouvait en faire un·e autre, seul·e et sans le consentement de l'intéressé·e — ce qui contredisait P2 (cooptation pour **les deux** rôles staff) et P3 (une charge s'accepte, elle ne s'impose pas). Elle emprunte désormais le circuit d'invitation déjà en place : proposition → ratification par une autre personne du staff → acceptation par la personne concernée. `fn_team_promote_to_coordenador` est conservée mais lève `collegiality_required` : un échec bruyant vaut mieux qu'un succès qui ne promeut plus rien. Sections amendées : §5.1, §5.3, §6.1, §6.5, §7.3, §8.2, §8.3, §11.2, §12.3, §15. §14 **entièrement refait** — l'état des lots datait du 15/05/2026 et annonçait « à faire » des objets déjà livrés au 10/05. Implémentation : migrations `20260826120000` et `20260826130000`, front `feat(team)` du 26/08. Registre : `GOUV-1` à `GOUV-6`.
+- **v1.4.1 (2026-08-26, même jour)** : correction d'une **erreur de la v1.4 elle-même**. La v1.4 annonçait, en §5.3, §6.1 et §6.5, qu'un·e administrateur·rice réseau pouvait *proposer* un passage à la coordination. C'était l'intention de la migration, pas son code : `fn_team_propose_invitation` s'ouvre sur `user_can_manage_library_notifications`, qui exige un membership **local** et ne connaît pas les admins réseau. La bascule de T2 sur ce circuit avait donc **supprimé** un droit dont disposait l'ancienne `fn_team_promote_to_coordenador` — et rendu impossible le rattrapage d'une biblio sans coordenador (§6.1). Rétabli par la migration `20260826160000`, pour le seul `p_role = 'coordenador'` : l'accueil garde la garde qu'il a toujours eue. Registre : `GOUV-7`.
 
 ---
 
@@ -325,9 +326,20 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 **Qui** : trois personnes distinctes interviennent, et aucune ne peut en tenir deux à la fois.
 
-1. **Qui propose** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve
-   (`user_can_manage_library` — proposer la coordination reste un acte de coordination). Nul ne
-   peut se proposer soi-même.
+1. **Qui propose** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau
+   actif·ve. Nul ne peut se proposer soi-même. La RPC applique **deux gardes successives**, et
+   c'est leur combinaison qui donne cette règle :
+   - *garde 1* — `user_can_manage_library_notifications` : un membership **local** actif
+     (`librarian` ou `coordenador`), **ou** — depuis la migration `20260826160000`, et pour ce
+     seul rôle proposé — un·e admin réseau actif·ve ;
+   - *garde 2* — `user_can_manage_library` (donc `user_can_engage_library`) : coordenador local
+     **ou** admin réseau. Proposer la coordination reste un acte de coordination.
+
+   Conséquence à ne pas manquer : un·e `librarian` local·e franchit la garde 1 mais **échoue à la
+   garde 2**. Iel peut accueillir quelqu'un dans l'équipe, pas proposer une coordination.
+   Symétriquement, un·e admin réseau ne peut pas *accueillir* (`p_role = 'librarian'` reste
+   réservé au staff local — on ne fait pas entrer quelqu'un dans une équipe dont on n'est pas
+   membre) mais peut *proposer une coordination*, ce qui est la condition du rattrapage §6.1.
 2. **Qui ratifie** : un·e autre membre du staff actif de la biblio. La personne qui propose
    compte pour un endossement, enregistré d'office. La **voie médiane** s'applique : au moins un
    endossement doit venir de la coordination.
@@ -527,7 +539,7 @@ signe que cette complexité ne devait pas exister.
 
 1. **Avertissement** : la RPC vérifie qu'on est dans ce cas et **autorise** l'opération mais retourne un avertissement structuré (`{warning: 'last_coordinator_leaving'}`).
 2. **Sortie effective** : la biblio se retrouve avec 0 coordenador·a. Les librarians peuvent continuer à fonctionner sur leurs prérogatives (gestion emprunts, validation inscriptions, etc.) mais aucune modification de l'identité publique ou de la configuration n'est possible.
-3. **Escalade automatique** : un mail est envoyé aux **administrateurs du réseau AnarBib** (table `network_administrators` `status='active'`), indiquant que la biblio X est en mode « sans coord ». Iels peuvent intervenir pour aider le collectif à désigner un·e nouveau·elle coordenador·a — *(v1.4)* en **proposant** la promotion via `fn_team_propose_invitation` (rôle `coordenador`), la proposition restant soumise à ratification puis acceptation (cf. §5.3) : le droit transverse permet de proposer, plus de promouvoir seul·e — ou aider à fermer proprement la biblio.
+3. **Escalade automatique** : un mail est envoyé aux **administrateurs du réseau AnarBib** (table `network_administrators` `status='active'`), indiquant que la biblio X est en mode « sans coord ». Iels peuvent intervenir pour aider le collectif à désigner un·e nouveau·elle coordenador·a — *(v1.4)* en **proposant** la promotion via `fn_team_propose_invitation` (rôle `coordenador`), la proposition restant soumise à ratification puis acceptation (cf. §5.3) : le droit transverse permet de proposer, plus de promouvoir seul·e — ou aider à fermer proprement la biblio. ⚠️ *(v1.4.1)* Ce rattrapage **dépend de la migration `20260826160000`** : entre le 26/08 au matin et elle, la garde 1 de la RPC bloquait les admins réseau, et une biblio sans coordenador ne pouvait plus en retrouver — les librarians locaux échouant, eux, à la garde 2.
 
 **Note politique** : ce comportement respecte la souveraineté du collectif (le SIGB ne bloque pas la décision) tout en évitant le chaos silencieux (escalade explicite). Notez que la branche « last admin lockdown » qui bloquait techniquement la sortie en v1.0 a été supprimée au paquet F.3 (13/05/2026).
 
@@ -549,7 +561,7 @@ La RPC `fn_team_promote_to_administrador` qui existait en v1.0 a été **dépré
 - La biblio reste « active » techniquement (sa visibility, ses livres, sont accessibles selon RLS)
 - Mais aucune action de gestion locale ne peut plus être faite par le staff local
 - Mail urgent aux administrateurs du réseau AnarBib
-- Les administrateurs réseau peuvent intervenir directement via leur droit transverse pour : (a) *(v1.4)* **proposer** une membership `coordenador` via `fn_team_propose_invitation` (rôle `coordenador`) après validation politique du collectif local — la proposition doit ensuite être ratifiée puis acceptée (§5.3), ou (b) accompagner la fermeture de la biblio (procédure hors-spec)
+- Les administrateurs réseau peuvent intervenir directement via leur droit transverse pour : (a) *(v1.4, garde rétablie en v1.4.1 par `20260826160000`)* **proposer** une membership `coordenador` via `fn_team_propose_invitation` (rôle `coordenador`) après validation politique du collectif local — la proposition doit ensuite être ratifiée puis acceptée (§5.3), ou (b) accompagner la fermeture de la biblio (procédure hors-spec)
 
 **Différence avec v1.0** : la v1.0 mentionnait « modification SQL directe » par un admin AnarBib. Depuis le paquet D admin réseau, cette action passe par la RPC normale, simplement appelée par un·e admin réseau (autorisée par les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library`). Plus de bypass SQL, tracé dans `network_admin_cross_library_actions_log`.
 
@@ -1001,7 +1013,7 @@ Toutes les RPCs respectent les règles suivantes :
 |---|---|---|---|
 | `fn_team_promote_to_librarian` | `(p_user_id uuid, p_library_id uuid)` | `user_can_engage_library` | ✅ Existante |
 | `fn_team_promote_to_coordenador` | `(p_user_id uuid, p_library_id uuid)` | — | ⛔ **Neutralisée v1.4 (26/08/2026)** — lève `collegiality_required`, cf. §5.3 |
-| `fn_team_propose_invitation` | `(p_library_id uuid, p_invited_public_id text, p_role text DEFAULT 'librarian')` | staff actif ; `user_can_manage_library` en plus si `p_role='coordenador'` | ✅ Élargie au rôle `coordenador` en v1.4 |
+| `fn_team_propose_invitation` | `(p_library_id uuid, p_invited_public_id text, p_role text DEFAULT 'librarian')` | staff **local** actif (`user_can_manage_library_notifications`), **ou** admin réseau si `p_role='coordenador'` (v1.4.1) ; **plus** `user_can_manage_library` si `p_role='coordenador'` | ✅ Élargie au rôle `coordenador` en v1.4, garde corrigée en v1.4.1 |
 | `fn_team_ratify_invitation` | `(p_invitation_id uuid)` | staff actif de la biblio | ✅ Existante |
 | `fn_team_accept_invitation` | `(p_invitation_id uuid)` | la personne invitée | ✅ Étendue au rôle `coordenador` en v1.4 |
 | `fn_team_expire_invitations` | `()` | `service_role` (cron) | ✅ Créée en v1.4 |
