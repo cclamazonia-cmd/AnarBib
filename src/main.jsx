@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { applyScrollRestoreIfAny } from './i18n';
+import { applyStoredPrefs } from './lib/a11y';
 import { reloadOnceForStaleChunk } from './lib/chunkReload';
 import './styles/fonts.css';
 import './styles/theme-base.css';
@@ -25,6 +26,13 @@ window.addEventListener('vite:preloadError', () => {
 // Restaure la position de scroll si on revient d'un changement de langue
 // (consommé une seule fois grâce à sessionStorage).
 applyScrollRestoreIfAny();
+
+// Réglages d'accessibilité (taille du texte, contraste, animations…) appliqués
+// AVANT le premier rendu de React : sinon la page s'affiche une fraction de
+// seconde en réglages normaux avant de sauter à ceux du lecteur — exactement le
+// clignotement que ces réglages servent à éviter. Le panneau qui les pilote est
+// monté dans App.jsx (AccessibilityWidget) ; le modèle vit dans lib/a11y.js.
+applyStoredPrefs();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

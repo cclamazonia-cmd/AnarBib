@@ -5949,5 +5949,20 @@
   "rede.gazeta.modeLabel": "Fabricació",
   "rede.gazeta.mode.assisted": "Assistida per un model",
   "rede.gazeta.mode.revue": "Revista de premsa",
-  "rede.gazeta.mode.manual": "Redactada per membres"
+  "rede.gazeta.mode.manual": "Redactada per membres",
+  "a11y.open": "Obre les opcions d'accessibilitat",
+  "a11y.title": "Accessibilitat",
+  "a11y.close": "Tanca",
+  "a11y.textSize": "Mida del text",
+  "a11y.textSmaller": "Redueix la mida del text",
+  "a11y.textLarger": "Augmenta la mida del text",
+  "a11y.contrast": "Contrast alt",
+  "a11y.readableFont": "Tipografia més llegible",
+  "a11y.spacing": "Espaiat augmentat",
+  "a11y.underlineLinks": "Subratlla els enllaços",
+  "a11y.bigCursor": "Cursor gran",
+  "a11y.reduceMotion": "Desactiva les animacions",
+  "a11y.strongFocus": "Focus de teclat reforçat",
+  "a11y.reset": "Restableix",
+  "a11y.hint": "Aquesta configuració es queda en aquest dispositiu."
 }

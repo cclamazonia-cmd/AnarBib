@@ -1,0 +1,480 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   AnarBib — AccessibilityWidget.css
+   Deux choses dans ce fichier, dans cet ordre :
+     A. LES EFFETS — ce que font réellement les réglages, déclenché par les
+        attributs `data-a11y-*` posés sur <html> par lib/a11y.js ;
+     B. L'INTERFACE — le bouton flottant et le panneau qui les pilotent.
+
+   Pourquoi des attributs sur <html> plutôt que des styles écrits en JS :
+   les règles restent lisibles dans l'inspecteur, elles s'appliquent AVANT le
+   premier rendu de React (main.jsx pose l'attribut hors de React), et rien
+   n'a besoin d'être rebranché page par page.
+
+   ⚠️ LE `!important` SUR LES VARIABLES `--brand-*` N'EST PAS DÉCORATIF.
+   Le ThemeLoader (lib/theme.js) pose les couleurs de marque en style INLINE
+   sur <html> : `document.documentElement.style.setProperty('--brand-text', …)`.
+   Un style inline bat toute règle de feuille — SAUF une déclaration
+   `!important`. Sans lui, le contraste élevé n'aurait aucun effet sur les
+   quatre bibliothèques qui ont un thème (BLMF, BTL, MLEG, CIRA Marseille),
+   c'est-à-dire là où on en aurait le plus besoin.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ╔═══════════════════════════════════════════════════════════════════════╗
+   ║ A. LES EFFETS                                                         ║
+   ╚═══════════════════════════════════════════════════════════════════════╝ */
+
+/* ── A.1 · Taille du texte ───────────────────────────────────────────────
+   Une seule règle suffit parce que l'app dimensionne son texte en `rem`
+   (≈ 1 950 déclarations `rem` contre 15 en `px`, mesuré le 26/08/2026) :
+   agir sur la racine met TOUT à l'échelle, sans toucher une seule page.
+
+   La valeur est un POURCENTAGE, pas des pixels : 100 % = la taille choisie
+   dans le navigateur. Quelqu'un qui a déjà réglé son navigateur sur 20 px
+   garde ses 20 px comme point de départ, et 130 % part de là. Coder `16px`
+   ici écraserait ce réglage système — l'inverse du but recherché.
+
+   Limite connue : mobile.css force `font-size: 16px !important` sur les
+   champs de saisie sous 640 px (parade au zoom automatique d'iOS). Le texte
+   des FORMULAIRES ne suit donc pas l'échelle sur téléphone ; tout le reste
+   si. C'était déjà le cas avant ce panneau, et le zoom natif du navigateur
+   reste disponible pour ce cas-là. */
+html {
+  font-size: var(--a11y-text-scale, 100%);
+}
+
+/* ── A.2 · Contraste élevé ───────────────────────────────────────────────
+   Registre volontairement brutal — noir, blanc, jaune — qui est la
+   convention des modes contrastés (Windows HCM, forced-colors) : on aplatit
+   les dégradés, les fonds photographiques et les transparences, qui sont
+   précisément ce qui fait chuter le rapport de contraste. Le rouge AnarBib
+   ne disparaît pas, il redevient signalétique. */
+html[data-a11y-contrast="on"] {
+  --brand-bg-image: none !important;
+  --brand-bg-overlay: #000000 !important;
+  --brand-panel-bg-image: none !important;
+  --brand-panel-overlay-soft: none !important;
+  --brand-panel-overlay-strong: none !important;
+  --brand-panel-overlay-solid: none !important;
+  --brand-sheet-head-overlay: none !important;
+  --brand-hero-overlay: none !important;
+
+  --brand-panel-bg: #000000 !important;
+  --brand-panel-bg-strong: #000000 !important;
+  --brand-panel-bg-soft: #000000 !important;
+  --brand-panel-border: #ffffff !important;
+  --brand-panel-border-strong: #ffffff !important;
+
+  --brand-text: #ffffff !important;
+  --brand-muted: #ffffff !important;
+  --brand-link: #ffe600 !important;
+  --brand-button-text: #ffffff !important;
+
+  /* Sémantique : mêmes rôles, versions saturées qui tiennent sur du noir. */
+  --color-ok: #6bff8f !important;
+  --color-warn: #ffd400 !important;
+  --color-bad: #ff8f8f !important;
+
+  --brand-shadow: none !important;
+  --brand-shadow-strong: none !important;
+}
+
+html[data-a11y-contrast="on"] body { background-color: #000 !important; }
+html[data-a11y-contrast="on"] body::before { display: none !important; }
+html[data-a11y-contrast="on"] body::after { background: #000 !important; }
+
+/* theme-base.css force `background-color: #0d0708 !important` sur toutes les
+   briques (patch du 02/05/2026). Il faut donc le battre explicitement : même
+   `!important`, mais un sélecteur plus spécifique. */
+html[data-a11y-contrast="on"] :is(
+  .ab-card, .ab-sheet, .ab-sheet__head, .ab-field, .ab-livro-card,
+  .ab-livro-pill, .ab-autor-card, .ab-conta-card, .ab-painel-card,
+  .ab-reader-sheet, .ab-recurso-card, .ab-recurso-viewer-shell, .ab-hero
+) {
+  background-color: #000 !important;
+  background-image: none !important;
+  border-color: #fff !important;
+}
+
+/* Les boutons perdent leur dégradé : un aplat noir cerné de blanc, la bordure
+   portant à elle seule l'affordance. */
+html[data-a11y-contrast="on"] :is(.ab-button, .ab-button--secondary, .ab-scroll-button) {
+  background: #000 !important;
+  background-image: none !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+html[data-a11y-contrast="on"] :is(.ab-button, .ab-button--secondary, .ab-scroll-button):hover {
+  border-color: #ffe600 !important;
+  color: #ffe600 !important;
+}
+
+html[data-a11y-contrast="on"] :is(input, select, textarea) {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+/* ── A.3 · Police plus lisible ───────────────────────────────────────────
+   Familles cherchées dans CET ordre : les deux premières sont des polices
+   pensées pour la dyslexie / la basse vision, que certaines personnes ont
+   installées sur leur machine ; les suivantes sont partout et suffisent déjà
+   (fûts ouverts, large chasse, hauteur d'x généreuse).
+
+   Choix assumé : AUCUN fichier de police n'est ajouté au dépôt ni chargé
+   depuis le réseau. L'app auto-héberge ses polices depuis mai 2026
+   précisément pour ne dépendre d'aucun tiers, et embarquer OpenDyslexic
+   coûterait ~150 ko à tout le monde pour un réglage que peu activent. Si on
+   veut la police embarquée plus tard, il suffit d'un @font-face dans
+   fonts.css et de la citer en tête de cette liste — rien d'autre à changer. */
+html[data-a11y-font="readable"] {
+  --brand-font-body: 'Atkinson Hyperlegible', 'OpenDyslexic', 'Verdana', 'Tahoma', 'Trebuchet MS', sans-serif !important;
+  --brand-font-heading: 'Atkinson Hyperlegible', 'OpenDyslexic', 'Verdana', 'Tahoma', 'Trebuchet MS', sans-serif !important;
+}
+html[data-a11y-font="readable"] body,
+html[data-a11y-font="readable"] :is(h1, h2, h3, h4, h5, h6, button, input, select, textarea) {
+  font-family: var(--brand-font-body) !important;
+}
+
+/* ── A.4 · Espacement du texte ───────────────────────────────────────────
+   Valeurs exactes du critère WCAG 2.1 · 1.4.12 « Espacement du texte » :
+   interligne 1,5× la taille de police, interlettrage 0,12×, espace-mot 0,16×,
+   et 2× entre paragraphes. On vise un peu au-delà sur l'interligne (1,75).
+
+   Portée limitée aux éléments qui PORTENT du texte suivi. Passer par `*`
+   écraserait la hauteur de ligne des boutons, des pastilles et des rangées
+   à hauteur contrainte (liseuse, lecteur audio) : le texte y déborderait de
+   son cadre, ce qui remplacerait une gêne par une autre. */
+html[data-a11y-spacing="on"] :is(p, li, dd, dt, td, th, blockquote, figcaption,
+  h1, h2, h3, h4, h5, h6, .ab-card p, .ab-sheet p) {
+  line-height: 1.75 !important;
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.16em !important;
+}
+html[data-a11y-spacing="on"] p {
+  margin-block: 2em !important;
+}
+
+/* ── A.5 · Souligner les liens ───────────────────────────────────────────
+   Un lien qui ne se distingue que par sa couleur est invisible pour qui ne
+   perçoit pas cette couleur (WCAG 1.4.1). D'où le soulignement — mais des
+   seuls liens EN TEXTE.
+
+   Ce qui est un lien dans le HTML mais un BOUTON ou une PASTILLE à l'écran
+   est exclu : ces éléments portent déjà un cadre, donc ils ne reposent pas
+   sur la seule couleur, et les souligner ajouterait du bruit sans rien
+   distinguer. L'exclusion se fait par MOTIF de nom de classe plutôt que par
+   liste nominative : l'app compte au moins six familles de liens-boutons
+   (ab-button, ab-hero-doc-btn, ab-hcc-cta, ab-regimento-banner__cta, cat-btn,
+   ab-*-chip) et une liste nominative serait périmée au prochain composant.
+   Un nom de classe contenant btn/button/cta/chip/pill dit déjà l'intention. */
+html[data-a11y-links="underlined"] a:not([class*="btn"]):not([class*="button"]):not([class*="cta"]):not([class*="chip"]):not([class*="pill"]):not(.ab-topbar__brand) {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 0.2em !important;
+}
+
+/* ── A.6 · Grand curseur ─────────────────────────────────────────────────
+   Curseurs dessinés en SVG et embarqués en data-URI : aucun fichier, aucune
+   requête réseau, et un tracé noir autour du blanc pour rester visible aussi
+   bien sur les fonds sombres de l'app que sur une page de contraste élevé.
+   48 px de côté (le double du curseur système habituel) ; les navigateurs
+   plafonnent à 128 px, on reste largement dessous.
+
+   `!important` obligatoire : `.ab-button { cursor: pointer }` et consorts sont
+   plus spécifiques que ce sélecteur universel. Les deux dernières règles sont
+   plus spécifiques que la première : l'ordre de cascade fait le travail. */
+html[data-a11y-cursor="big"] body,
+html[data-a11y-cursor="big"] body * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M4 1.5 L4 20 L9 15.2 L12 21.8 L15 20.4 L12.1 14.1 L19 14 Z' fill='%23ffffff' stroke='%23000000' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E") 8 3, auto !important;
+}
+html[data-a11y-cursor="big"] body :is(a, button, summary, label, [role="button"],
+  select, input[type="checkbox"], input[type="radio"], input[type="submit"]) {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M9 12V4.2a1.6 1.6 0 0 1 3.2 0V10h.6V6.2a1.6 1.6 0 0 1 3.2 0V11h.6V8.4a1.6 1.6 0 0 1 3.2 0V16c0 3.6-2.4 6.2-6 6.2h-1.4c-3 0-5-2-5.4-4.6L5.4 13.6a1.5 1.5 0 0 1 2.4-1.6Z' fill='%23ffffff' stroke='%23000000' stroke-width='1.2' stroke-linejoin='round'/%3E%3C/svg%3E") 20 6, pointer !important;
+}
+/* Les champs de saisie gardent un curseur de texte : c'est lui qui dit où on
+   va écrire, et une flèche géante à sa place ferait perdre le point d'insertion. */
+html[data-a11y-cursor="big"] body :is(input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), textarea) {
+  cursor: text !important;
+}
+
+/* ── A.7 · Couper les animations ─────────────────────────────────────────
+   Même recette que le média `prefers-reduced-motion` déjà présent dans
+   ui.css, mais déclenchée à la main : toutes les personnes sujettes au
+   vertige vestibulaire n'ont pas réglé leur système, et l'app ne peut pas
+   le deviner. Durée quasi nulle plutôt que `none` : les animations qui ont
+   une fin (`animationend`) se terminent quand même, donc rien ne reste figé
+   à mi-parcours. */
+html[data-a11y-motion="off"] *,
+html[data-a11y-motion="off"] *::before,
+html[data-a11y-motion="off"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-delay: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0.001ms !important;
+}
+html[data-a11y-motion="off"],
+html[data-a11y-motion="off"] body {
+  scroll-behavior: auto !important;
+}
+
+/* ── A.8 · Repère de focus renforcé ──────────────────────────────────────
+   Pour qui navigue au clavier, le liseré de focus par défaut du navigateur
+   se perd sur les fonds sombres de l'app. Double anneau jaune/noir : il
+   reste visible quel que soit ce qu'il y a dessous.
+
+   `:focus-visible` et non `:focus` : le repère apparaît à la tabulation, pas
+   après un clic à la souris (où il ne servirait qu'à faire du bruit). */
+html[data-a11y-focus="strong"] :is(a, button, input, select, textarea,
+  summary, [tabindex]):focus-visible {
+  outline: 3px solid #ffe600 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.85) !important;
+  border-radius: 3px;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════╗
+   ║ B. L'INTERFACE                                                        ║
+   ╚═══════════════════════════════════════════════════════════════════════╝ */
+
+/* Bas-GAUCHE, en miroir des boutons de défilement qui occupent déjà le
+   bas-droite (ui.css, z-index 9990). Même plan que ces boutons : au-dessus du
+   contenu et des modales (z-index 1000), sous le toast (9999) — un message
+   d'erreur doit rester lisible même panneau ouvert. */
+.ab-a11y {
+  position: fixed;
+  left: max(20px, env(safe-area-inset-left));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 9990;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ab-a11y-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--brand-panel-border-strong);
+  border-radius: var(--brand-radius-pill);
+  background: linear-gradient(135deg, rgba(var(--brand-action-rgb), 0.92), var(--brand-color-primary));
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--brand-shadow-strong);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+.ab-a11y-fab:hover { transform: translateY(-1px); border-color: #fff; }
+
+/* ── Panneau ─────────────────────────────────────────────────────────────
+   `max-height` + défilement interne : à 150 % de taille de texte, la liste
+   des réglages dépasse la hauteur d'un téléphone — c'est justement le
+   panneau qui doit rester atteignable dans ce cas.
+   `min(320px, calc(100vw - 40px))` : jamais plus large que l'écran, ce qui
+   règle d'avance le débordement horizontal sur mobile. */
+.ab-a11y-panel {
+  width: min(320px, calc(100vw - 40px));
+  max-height: min(72vh, 620px);
+  overflow-y: auto;
+  border: 1px solid var(--brand-panel-border-strong);
+  border-radius: var(--brand-radius);
+  background: var(--brand-panel-bg-strong);
+  background-color: #0d0708;
+  box-shadow: var(--brand-shadow-strong);
+  animation: ab-a11y-panel-in 0.18s ease-out;
+}
+.ab-a11y-panel:focus { outline: none; }
+.ab-a11y-panel:focus-visible { outline: 2px solid rgba(var(--brand-action-rgb), 0.8); outline-offset: -2px; }
+
+@keyframes ab-a11y-panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ab-a11y-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid var(--brand-panel-border);
+}
+.ab-a11y-panel__icon { font-size: 1.25rem; line-height: 1; }
+.ab-a11y-panel__title {
+  flex: 1 1 auto;
+  min-width: 0; /* cf. mobile.css : sans lui, un titre long pousse la croix dehors */
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--brand-text);
+}
+.ab-a11y-close {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--brand-panel-border);
+  border-radius: var(--brand-radius-sm);
+  background: transparent;
+  color: var(--brand-muted);
+  cursor: pointer;
+}
+.ab-a11y-close:hover { border-color: rgba(var(--brand-action-rgb), 0.65); color: #fff; }
+
+.ab-a11y-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+}
+
+/* ── Taille du texte ─────────────────────────────────────────────────── */
+.ab-a11y-section { display: flex; flex-direction: column; gap: 8px; padding: 4px 2px 10px; }
+.ab-a11y-section__label { font-size: 0.82rem; color: var(--brand-muted); }
+
+.ab-a11y-size {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto; /* minmax(0,…) : doctrine mobile.css */
+  align-items: center;
+  gap: 8px;
+}
+.ab-a11y-size__step {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 42px; /* cible tactile : 42 px, comme .ab-button */
+  padding: 6px 10px;
+  border: 1px solid var(--brand-panel-border-strong);
+  border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-soft);
+  color: var(--brand-text);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ab-a11y-size__step:hover:not(:disabled) { border-color: rgba(var(--brand-action-rgb), 0.65); }
+.ab-a11y-size__step:disabled { opacity: 0.4; cursor: default; }
+.ab-a11y-size__sign { font-size: 0.8em; }
+.ab-a11y-size__value {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--brand-text);
+}
+
+/* ── Bascules ────────────────────────────────────────────────────────── */
+.ab-a11y-toggle {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 22px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--brand-panel-border);
+  border-radius: var(--brand-radius-sm);
+  background: var(--brand-panel-bg-soft);
+  color: var(--brand-text);
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease;
+}
+.ab-a11y-toggle:hover { border-color: rgba(var(--brand-action-rgb), 0.65); }
+.ab-a11y-toggle__icon { font-size: 1.05rem; line-height: 1; text-align: center; }
+.ab-a11y-toggle__label { min-width: 0; }
+
+/* La pastille dit l'état par sa FORME (vide / cochée), pas seulement par sa
+   couleur : un panneau d'accessibilité ne peut pas s'appuyer sur la seule
+   couleur pour distinguer activé d'éteint (WCAG 1.4.1). */
+.ab-a11y-toggle__mark {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--brand-panel-border-strong);
+  border-radius: 6px;
+}
+.ab-a11y-toggle[aria-pressed="true"] {
+  border-color: rgba(var(--brand-action-rgb), 0.85);
+  background: rgba(var(--brand-action-rgb), 0.14);
+}
+.ab-a11y-toggle[aria-pressed="true"] .ab-a11y-toggle__mark {
+  border-color: #fff;
+  background: var(--brand-color-primary);
+  /* Le ✓ est dessiné en CSS : pas de glyphe à charger, et il reste net à
+     n'importe quelle taille de texte. */
+  background-image: linear-gradient(45deg, transparent 42%, #fff 42%, #fff 56%, transparent 56%),
+                    linear-gradient(-45deg, transparent 58%, #fff 58%, #fff 72%, transparent 72%);
+  background-size: 60% 60%, 60% 60%;
+  background-position: 22% 62%, 52% 44%;
+  background-repeat: no-repeat;
+}
+
+/* ── Réinitialiser & mention ─────────────────────────────────────────── */
+.ab-a11y-reset {
+  margin-top: 6px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid var(--brand-panel-border-strong);
+  border-radius: var(--brand-radius-sm);
+  background: transparent;
+  color: var(--brand-muted);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+.ab-a11y-reset:hover { border-color: rgba(var(--brand-action-rgb), 0.65); color: #fff; }
+
+.ab-a11y-hint {
+  margin: 4px 2px 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--brand-muted);
+  opacity: 0.85;
+}
+
+/* ── Écrans étroits ──────────────────────────────────────────────────── */
+@media (max-width: 540px) {
+  .ab-a11y {
+    left: max(12px, env(safe-area-inset-left));
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  .ab-a11y-fab { width: 44px; height: 44px; font-size: 1.35rem; }
+}
+
+/* Le panneau lui-même doit rester lisible en contraste élevé — il serait
+   fâcheux que le réglage rende son propre panneau illisible. */
+html[data-a11y-contrast="on"] .ab-a11y-panel {
+  background: #000 !important;
+  background-color: #000 !important;
+  border-color: #fff !important;
+}
+html[data-a11y-contrast="on"] :is(.ab-a11y-toggle, .ab-a11y-size__step, .ab-a11y-reset, .ab-a11y-close) {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+}
+html[data-a11y-contrast="on"] .ab-a11y-toggle[aria-pressed="true"] { border-color: #ffe600 !important; }
+html[data-a11y-contrast="on"] .ab-a11y-toggle[aria-pressed="true"] .ab-a11y-toggle__mark {
+  background-color: #ffe600 !important;
+  border-color: #ffe600 !important;
+}
+html[data-a11y-contrast="on"] .ab-a11y-fab {
+  background: #000 !important;
+  background-image: none !important;
+  border-color: #fff !important;
+}
+
+/* Respecte la préférence système, comme le reste de l'app (ui.css). */
+@media (prefers-reduced-motion: reduce) {
+  .ab-a11y-panel { animation: none; }
+  .ab-a11y-fab { transition: none; }
+  .ab-a11y-fab:hover { transform: none; }
+}
+
+/* Le panneau est un outil d'écran : il n'a rien à faire sur une impression. */
+@media print {
+  .ab-a11y { display: none !important; }
+}

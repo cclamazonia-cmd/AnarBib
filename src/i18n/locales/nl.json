@@ -5949,5 +5949,20 @@
   "rede.gazeta.modeLabel": "Vervaardiging",
   "rede.gazeta.mode.assisted": "Met hulp van een taalmodel",
   "rede.gazeta.mode.revue": "Persoverzicht",
-  "rede.gazeta.mode.manual": "Geschreven door leden"
+  "rede.gazeta.mode.manual": "Geschreven door leden",
+  "a11y.open": "Toegankelijkheidsopties openen",
+  "a11y.title": "Toegankelijkheid",
+  "a11y.close": "Sluiten",
+  "a11y.textSize": "Tekstgrootte",
+  "a11y.textSmaller": "Tekst verkleinen",
+  "a11y.textLarger": "Tekst vergroten",
+  "a11y.contrast": "Hoog contrast",
+  "a11y.readableFont": "Beter leesbaar lettertype",
+  "a11y.spacing": "Ruimere tekstafstand",
+  "a11y.underlineLinks": "Links onderstrepen",
+  "a11y.bigCursor": "Grote cursor",
+  "a11y.reduceMotion": "Animaties uitschakelen",
+  "a11y.strongFocus": "Versterkte focusmarkering",
+  "a11y.reset": "Herstellen",
+  "a11y.hint": "Deze instellingen blijven op dit apparaat."
 }

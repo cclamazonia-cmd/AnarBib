@@ -5949,5 +5949,20 @@
   "rede.gazeta.modeLabel": "Herstellung",
   "rede.gazeta.mode.assisted": "Von einem Sprachmodell unterstützt",
   "rede.gazeta.mode.revue": "Presseschau",
-  "rede.gazeta.mode.manual": "Von Mitgliedern verfasst"
+  "rede.gazeta.mode.manual": "Von Mitgliedern verfasst",
+  "a11y.open": "Barrierefreiheits-Optionen öffnen",
+  "a11y.title": "Barrierefreiheit",
+  "a11y.close": "Schließen",
+  "a11y.textSize": "Textgröße",
+  "a11y.textSmaller": "Text verkleinern",
+  "a11y.textLarger": "Text vergrößern",
+  "a11y.contrast": "Hoher Kontrast",
+  "a11y.readableFont": "Besser lesbare Schrift",
+  "a11y.spacing": "Größerer Textabstand",
+  "a11y.underlineLinks": "Links unterstreichen",
+  "a11y.bigCursor": "Großer Mauszeiger",
+  "a11y.reduceMotion": "Animationen ausschalten",
+  "a11y.strongFocus": "Verstärkte Fokusanzeige",
+  "a11y.reset": "Zurücksetzen",
+  "a11y.hint": "Diese Einstellungen bleiben auf diesem Gerät."
 }

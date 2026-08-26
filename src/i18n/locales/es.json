@@ -5949,5 +5949,20 @@
   "rede.gazeta.modeLabel": "Fabricación",
   "rede.gazeta.mode.assisted": "Asistida por un modelo",
   "rede.gazeta.mode.revue": "Revista de prensa",
-  "rede.gazeta.mode.manual": "Redactada por miembros"
+  "rede.gazeta.mode.manual": "Redactada por miembros",
+  "a11y.open": "Abrir las opciones de accesibilidad",
+  "a11y.title": "Accesibilidad",
+  "a11y.close": "Cerrar",
+  "a11y.textSize": "Tamaño del texto",
+  "a11y.textSmaller": "Reducir el tamaño del texto",
+  "a11y.textLarger": "Aumentar el tamaño del texto",
+  "a11y.contrast": "Contraste alto",
+  "a11y.readableFont": "Tipografía más legible",
+  "a11y.spacing": "Espaciado aumentado",
+  "a11y.underlineLinks": "Subrayar los enlaces",
+  "a11y.bigCursor": "Cursor grande",
+  "a11y.reduceMotion": "Desactivar las animaciones",
+  "a11y.strongFocus": "Foco de teclado reforzado",
+  "a11y.reset": "Restablecer",
+  "a11y.hint": "Estos ajustes se quedan en este dispositivo."
 }

@@ -5949,5 +5949,20 @@
   "rede.gazeta.modeLabel": "Farado",
   "rede.gazeta.mode.assisted": "Helpata de lingva modelo",
   "rede.gazeta.mode.revue": "Gazetrevuo",
-  "rede.gazeta.mode.manual": "Verkita de membroj"
+  "rede.gazeta.mode.manual": "Verkita de membroj",
+  "a11y.open": "Malfermi la agordojn de alirebleco",
+  "a11y.title": "Alirebleco",
+  "a11y.close": "Fermi",
+  "a11y.textSize": "Grando de la teksto",
+  "a11y.textSmaller": "Malgrandigi la tekston",
+  "a11y.textLarger": "Grandigi la tekston",
+  "a11y.contrast": "Alta kontrasto",
+  "a11y.readableFont": "Pli legebla tiparo",
+  "a11y.spacing": "Pligrandigita interspaco",
+  "a11y.underlineLinks": "Substreki la ligilojn",
+  "a11y.bigCursor": "Granda kursoro",
+  "a11y.reduceMotion": "Malŝalti la animaciojn",
+  "a11y.strongFocus": "Plifortigita fokusa markilo",
+  "a11y.reset": "Reagordi",
+  "a11y.hint": "Ĉi tiuj agordoj restas en ĉi tiu aparato."
 }

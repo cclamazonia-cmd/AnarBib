@@ -8,6 +8,7 @@ import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE, isSupporte
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
 import ScrollButtons from '@/components/ScrollButtons';
+import AccessibilityWidget from '@/components/AccessibilityWidget';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Spinner } from '@/components/ui';
 
@@ -208,6 +209,7 @@ export default function App() {
               </Suspense>
               </ErrorBoundary>
               <ScrollButtons />
+              <AccessibilityWidget />
             </ToastProvider>
             </IdleTimerGuard>
           </LibraryProvider>
