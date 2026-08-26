@@ -7,6 +7,7 @@ import { localizeError } from '@/lib/localizeError';
 import { buildServerFilters } from '@/lib/catalogFilters';
 import { catalogueDeSecours } from '@/lib/catalogueFallback';
 import { toTurtle, toJsonLd, downloadText } from '@/lib/skosExport';
+import { coverThumbUrl, coverUrl } from '@/lib/coverThumbs';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Hero, Footer } from '@/components/layout';
@@ -68,13 +69,19 @@ const TIPO_ICONS = {
   dossie:'📁', outro:'📎',
 };
 
-// Miniatures de couverture : endpoint de transformation d'image de Supabase
-// Storage → vraies vignettes (~7 Ko en width=64 vs ~155 Ko la pleine résolution).
-const COVER_RENDER_BASE = 'https://uflwmikiyjfnikiphtcp.supabase.co/storage/v1/render/image/public/covers/';
-function coverThumb(path) {
-  // height + resize=contain REQUIS : avec width seul, l'endpoint render ne
-  // rescale pas la hauteur → bande déformée. Box 64×96 (ratio couverture).
-  return path ? `${COVER_RENDER_BASE}${path}?width=64&height=96&resize=contain&quality=70` : null;
+// Miniatures de couverture : dérivés pré-générés servis en `object/public`.
+// On n'appelle plus `render/image` — voir l'en-tête de src/lib/coverThumbs.js
+// (imgproxy est exclu de la pile auto-hébergée, et la transformation est
+// facturée à l'image d'origine distincte par mois).
+//
+// Repli : une capa déposée avant la reprise, ou dont le dérivé a échoué, n'a
+// pas de vignette. Plutôt qu'une image cassée — ce que faisait cette grille,
+// seul <img> du dépôt sans onError — on retombe sur l'original, puis on masque.
+function handleThumbError(e, path) {
+  const img = e.currentTarget;
+  if (img.dataset.abFallback) { img.style.display = 'none'; return; }
+  img.dataset.abFallback = '1';
+  img.src = coverUrl(path);
 }
 
 // ── Helpers ────────────────────────────────────────────────
@@ -1373,7 +1380,7 @@ export default function CatalogPage() {
                         <div className="ab-cat-title">
                           <Link to={`/livro/${book.book_id}`} className="ab-cat-thumb" tabIndex={-1} aria-hidden="true">
                             {book.cover_object_path
-                              ? <img src={coverThumb(book.cover_object_path)} alt="" loading="lazy" decoding="async" width="30" height="42" />
+                              ? <img src={coverThumbUrl(book.cover_object_path)} alt="" loading="lazy" decoding="async" width="30" height="42" onError={(e) => handleThumbError(e, book.cover_object_path)} />
                               : <span className="ab-cat-thumb__ph">{icon || '📖'}</span>}
                           </Link>
                           <span className="ab-cat-title__text">

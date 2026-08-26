@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { localizeError } from '@/lib/localizeError';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
+import { writeCoverThumb, removeCoverThumb } from '@/lib/coverThumbs';
 import { visibleGroups, tierFromMode } from './fieldRegistry.js';
 import { renderMaterialSection, renderRegistryField } from './CatalogFieldRenderer.jsx';
 import CardScanner from '@/pages/painel/tabs/CardScanner';
@@ -996,6 +997,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         .from('covers')
         .upload(storagePath, coverFile, { upsert: true });
       if (error) throw error;
+      // Dérivé pour la grille du catalogue, produit depuis le fichier déjà en
+      // mémoire (pas de retéléchargement). Best-effort : voir coverThumbs.js.
+      await writeCoverThumb(storagePath, coverFile);
       set('cover_object_path', storagePath);
       setCoverFile(null);
       return storagePath;
@@ -1056,6 +1060,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       });
       if (error && !data) throw error;
       if (!data?.ok) throw new Error(data?.error || 'store failed');
+      // L'EF a récupéré l'image côté serveur (anti-tracking, spec §4.3) : le
+      // navigateur n'a pas les octets. On les relit par l'API Storage — jamais
+      // depuis la source tierce, et jamais par l'URL publique (cf. coverThumbs).
+      await writeCoverThumb(data.storagePath);
       set('cover_object_path', data.storagePath);
       set('cover_source', data.source || candidate.source || '');
       set('cover_license', data.license || candidate.license || '');
@@ -1131,6 +1139,8 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       const storagePath = `books/${stableKey}/front.jpg`;
       const { error: upErr } = await supabase.storage.from('covers').upload(storagePath, blob, { upsert: true, contentType: 'image/jpeg' });
       if (upErr) throw upErr;
+      // Le canvas de la page 1 est encore là : on en tire le dérivé directement.
+      await writeCoverThumb(storagePath, canvas);
 
       set('cover_object_path', storagePath);
       set('cover_source', 'pdf_page1');
@@ -1389,7 +1399,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   async function removeCover() {
     const path = f('cover_object_path');
     try {
-      if (path) await supabase.storage.from('covers').remove([path]);
+      if (path) {
+        await supabase.storage.from('covers').remove([path]);
+        await removeCoverThumb(path);
+      }
       set('cover_object_path', '');
       set('cover_source', '');
       set('cover_license', '');
