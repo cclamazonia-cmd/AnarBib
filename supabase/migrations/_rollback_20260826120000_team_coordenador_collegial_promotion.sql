@@ -49,7 +49,10 @@ ALTER TABLE public.library_team_invitations
 CREATE OR REPLACE FUNCTION public.fn_team_propose_invitation(
   p_library_id uuid,
   p_invited_public_id text,
-  p_role text
+  -- Même contrainte qu'à l'aller (42P13) : le DEFAULT de 20260820210000 est
+  -- reconduit tel quel, sans quoi ce rollback échouerait au moment précis
+  -- où on en aurait besoin.
+  p_role text DEFAULT 'librarian'::text
 ) RETURNS jsonb
 LANGUAGE plpgsql
 SECURITY DEFINER

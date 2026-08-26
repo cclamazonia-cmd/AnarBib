@@ -45,7 +45,11 @@ ALTER TABLE public.library_team_invitations
 CREATE OR REPLACE FUNCTION public.fn_team_propose_invitation(
   p_library_id uuid,
   p_invited_public_id text,
-  p_role text
+  -- Le DEFAULT vient de 20260820210000 et doit être reconduit à l'identique :
+  -- CREATE OR REPLACE sait AJOUTER une valeur par défaut, jamais en RETIRER
+  -- (42P13, « cannot remove parameter defaults from existing function »).
+  -- L'omettre a fait échouer cette migration en production le 26/08/2026.
+  p_role text DEFAULT 'librarian'::text
 ) RETURNS jsonb
 LANGUAGE plpgsql
 SECURITY DEFINER
