@@ -12,7 +12,7 @@
 - **v1.3 (2026-05-24)** : amendement TM-A (issu de l'audit #153 des contenus de mails). Le seuil d'inactivité J-7 (`team.inactive_warning_7d`) notifie désormais la coordination en copie, et non plus la seule personne concernée ; si la personne inactive est le·la dernier·e coordenador·a, la copie est escaladée aux administrateur·rices du réseau (même mécanisme que §6.1). Cet amendement entérine le comportement déjà en production dans `team.ts` plutôt que de l'aligner sur l'ancienne règle. Sections amendées : §5.10, §8.2 ; traçage Annexe Q7. Le seuil J-30 reste inchangé (personne uniquement).
 
 - **v1.4 (2026-08-26)** : **T2 (`librarian` → `coordenador`) cesse d'être unilatérale.** La promotion reposait sur la seule autorisation `user_can_manage_library()` : un·e coordenador·a pouvait en faire un·e autre, seul·e et sans le consentement de l'intéressé·e — ce qui contredisait P2 (cooptation pour **les deux** rôles staff) et P3 (une charge s'accepte, elle ne s'impose pas). Elle emprunte désormais le circuit d'invitation déjà en place : proposition → ratification par une autre personne du staff → acceptation par la personne concernée. `fn_team_promote_to_coordenador` est conservée mais lève `collegiality_required` : un échec bruyant vaut mieux qu'un succès qui ne promeut plus rien. Sections amendées : §5.1, §5.3, §6.1, §6.5, §7.3, §8.2, §8.3, §11.2, §12.3, §15. §14 **entièrement refait** — l'état des lots datait du 15/05/2026 et annonçait « à faire » des objets déjà livrés au 10/05. Implémentation : migrations `20260826120000` et `20260826130000`, front `feat(team)` du 26/08. Registre : `GOUV-1` à `GOUV-6`.
-- **v1.4.1 (2026-08-26, même jour)** : correction d'une **erreur de la v1.4 elle-même**. La v1.4 annonçait, en §5.3, §6.1 et §6.5, qu'un·e administrateur·rice réseau pouvait *proposer* un passage à la coordination. C'était l'intention de la migration, pas son code : `fn_team_propose_invitation` s'ouvre sur `user_can_manage_library_notifications`, qui exige un membership **local** et ne connaît pas les admins réseau. La bascule de T2 sur ce circuit avait donc **supprimé** un droit dont disposait l'ancienne `fn_team_promote_to_coordenador` — et rendu impossible le rattrapage d'une biblio sans coordenador (§6.1). Rétabli par la migration `20260826160000`, pour le seul `p_role = 'coordenador'` : l'accueil garde la garde qu'il a toujours eue. Registre : `GOUV-7`.
+- **v1.4.1 (2026-08-26, même jour)** : correction d'une **erreur de la v1.4 elle-même**. La v1.4 annonçait, en §5.3, §6.1 et §6.5, qu'un·e administrateur·rice réseau pouvait *proposer* un passage à la coordination. C'était l'intention de la migration, pas son code : `fn_team_propose_invitation` s'ouvre sur `user_can_manage_library_notifications`, qui exige un membership **local** et ne connaît pas les admins réseau. La bascule de T2 sur ce circuit avait donc **supprimé** un droit dont disposait l'ancienne `fn_team_promote_to_coordenador` — et rendu impossible le rattrapage d'une biblio sans coordenador (§6.1). Rétabli par la migration `20260826160000`, pour le seul `p_role = 'coordenador'` : l'accueil garde la garde qu'il a toujours eue. Complété le même jour par `20260826180000` : `fn_team_list_invitations` était restée fermée aux admins réseau, qui obtenaient donc le message de succès de leur proposition puis **une liste vide** — proposer sans pouvoir relire est une action à l'aveugle. Registre : `GOUV-7`, `GOUV-10`.
 
 ---
 
@@ -334,6 +334,12 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
      seul rôle proposé — un·e admin réseau actif·ve ;
    - *garde 2* — `user_can_manage_library` (donc `user_can_engage_library`) : coordenador local
      **ou** admin réseau. Proposer la coordination reste un acte de coordination.
+
+   Ce que chacun·e **voit** ensuite ne se déduit pas de ce qu'iel peut faire, et les deux ont dû
+   être alignés séparément : `fn_team_list_invitations` filtre sur la même garde locale. Depuis
+   `20260826180000`, un·e admin réseau y voit les propositions de **coordination** — celles qu'iel
+   peut déposer — et rien d'autre ; les invitations d'accueil restent invisibles à qui ne peut pas
+   les proposer.
 
    Conséquence à ne pas manquer : un·e `librarian` local·e franchit la garde 1 mais **échoue à la
    garde 2**. Iel peut accueillir quelqu'un dans l'équipe, pas proposer une coordination.
@@ -1017,6 +1023,7 @@ Toutes les RPCs respectent les règles suivantes :
 | `fn_team_ratify_invitation` | `(p_invitation_id uuid)` | staff actif de la biblio | ✅ Existante |
 | `fn_team_accept_invitation` | `(p_invitation_id uuid)` | la personne invitée | ✅ Étendue au rôle `coordenador` en v1.4 |
 | `fn_team_expire_invitations` | `()` | `service_role` (cron) | ✅ Créée en v1.4 |
+| `fn_team_list_invitations` | `(p_library_id uuid)` | staff **local** actif ; **ou** admin réseau, mais alors sur les seules lignes `role_proposed = 'coordenador'` (filtre au niveau LIGNE, `20260826180000`) | ✅ `role_proposed` exposé en v1.4, visibilité élargie en v1.4.1 |
 | ~~`fn_team_promote_to_administrador`~~ | ~~obsolète~~ | — | ❌ **Supprimée au paquet F (13/05/2026)** |
 | `fn_team_self_demote` | `(p_library_id uuid, p_target_role text)` | staff actif (auto) | ✅ Existante, branche « last admin lockdown » supprimée au paquet F.3 |
 | `fn_team_request_remove_member` | `(p_user_id uuid, p_library_id uuid, p_role text, p_reason text)` | `user_can_engage_library` + refus si cible admin réseau | ✅ Existante, refacto C |
