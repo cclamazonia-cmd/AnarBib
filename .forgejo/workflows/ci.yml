@@ -25,8 +25,23 @@ on:
   push:
     branches: [main]
     # Bypass robuste des pushes 100 % documentaires (indépendant de la casse :
-    # Forgejo n'a pas honoré « [CI SKIP] » majuscule). Un push MIXTE docs+code
-    # déclenche quand même (paths-ignore ne saute que si TOUS les fichiers matchent).
+    # Forgejo n'a pas honoré « [CI SKIP] » majuscule).
+    #
+    # ⚠️ DÉMENTI PAR L'EXPÉRIENCE (26/08/2026). Ce commentaire affirmait qu'« un push
+    # MIXTE docs+code déclenche quand même, paths-ignore ne saute que si TOUS les
+    # fichiers matchent » — la sémantique GitHub Actions. Forgejo ne se comporte pas
+    # ainsi ici : le push f5e6fb39 contenait DEUX commits — une migration SQL
+    # (20260826160000, non couverte par paths-ignore) puis un commit 100 % docs —
+    # et ce workflow n'a PAS tourné. Seul sql-tests.yml, qui filtre en `paths:`
+    # positif, s'est déclenché. La migration est donc restée au dépôt sans être
+    # appliquée, sans qu'aucun rouge ne le signale : le déploiement n'a pas échoué,
+    # il n'a pas eu lieu.
+    #
+    # RÈGLE PRATIQUE, jusqu'à ce que le mécanisme exact soit établi : ne jamais
+    # mélanger doc et code dans un même push. Pousser le code SEUL (il déclenche
+    # à coup sûr, quelle que soit la sémantique retenue), puis la doc à part.
+    # Et après tout push censé appliquer une migration, VÉRIFIER en base
+    # (supabase_migrations.schema_migrations) plutôt que de conclure du vert d'un job.
     paths-ignore:
       - 'docs/**'
       - '**/*.md'
