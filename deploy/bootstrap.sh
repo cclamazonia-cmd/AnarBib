@@ -25,8 +25,18 @@
 #     les migrations qui en dépendent, et le rejeu depuis le dépôt mourait sur
 #     une base vierge — le seul cas où ce script sert vraiment.
 #
-# D'où : base seule → rôles → GoTrue → schéma+données → vues → et SEULEMENT
-# ENSUITE les services qui LISENT le schéma.
+# Et un CINQUIÈME, de même sens, constaté le 26/08/2026 à la première
+# restauration réelle d'un dump :
+#
+#   * `storage` est lui aussi un PRODUCTEUR de schéma, pas un consommateur.
+#     Un dump Supabase contient les lignes de `storage.buckets` (seize en
+#     production) ; démarré à l'étape des « autres services », Storage
+#     arrivait APRÈS la restauration, et le chargement des données mourait
+#     sur « relation "storage.buckets" does not exist ». Autrement dit :
+#     ce mode ne pouvait restaurer AUCUN dump réel.
+#
+# D'où : base seule → rôles → GoTrue ET Storage → schéma+données → vues →
+# et SEULEMENT ENSUITE les services qui LISENT le schéma.
 #
 # USAGE
 #   ./bootstrap.sh --depuis-le-depot         # rejeu de toutes les migrations
@@ -52,7 +62,9 @@ MODE=""
 VERIFIER=1
 SEL_JETABLE=0
 ECHEC_PLAFONDS=0
-SERVICES_APPLICATIFS="rest auth storage functions caddy"
+# `auth` et `storage` n'y sont PAS : tous deux PRODUISENT du schema et
+# demarrent plus tot (etape 4). Ici ne restent que les services qui LISENT.
+SERVICES_APPLICATIFS="rest functions caddy"
 
 for arg in "$@"; do
   case "$arg" in
@@ -167,8 +179,8 @@ fi
 # valide, GoTrue ne plante pas — il redémarre en boucle toutes les 60 secondes
 # en écrivant `password authentication failed` dans un journal que personne ne
 # lit. On attendrait indéfiniment devant une erreur déjà écrite.
-etape "4/8 · Schéma d'authentification (GoTrue)"
-docker compose up -d auth
+etape "4/8 · Schémas produits par les services (GoTrue, Storage)"
+docker compose up -d auth storage
 
 HELPERS="uid jwt role email"
 LIMITE=180
@@ -185,6 +197,27 @@ done
 
 if [ "$attendu" = "1" ]; then
   echo "✓ auth.uid(), auth.jwt(), auth.role(), auth.email() en place"        "(en $(( $(date +%s) - debut_auth )) s)."
+
+  # Storage, même raisonnement, même forme : on attend un FAIT (sa table existe),
+  # pas un délai. Sans cette attente, la restauration de l'étape 5 meurt sur
+  # « relation "storage.buckets" does not exist » — et elle meurt sur un dump
+  # RÉEL uniquement, donc jamais pendant les répétitions à vide.
+  debut_st4=$(date +%s)
+  storage_pret4=0
+  while [ $(( $(date +%s) - debut_st4 )) -lt 120 ]; do
+    if [ "$(sql "select to_regclass('storage.buckets') is not null" 2>/dev/null)" = "t" ]; then
+      storage_pret4=1; break
+    fi
+    sleep 3
+  done
+  if [ "$storage_pret4" = "1" ]; then
+    echo "✓ storage.buckets en place (en $(( $(date +%s) - debut_st4 )) s)."
+  else
+    echo "✗ Storage n'a pas construit son schéma en 120 s." >&2
+    docker compose logs --tail=15 storage 2>&1 | sed 's/^/    /' >&2
+    echo "  La restauration d'un dump contenant des buckets échouerait ici." >&2
+    exit 1
+  fi
 else
   echo "✗ GoTrue n'a pas posé les quatre fonctions en ${LIMITE} s." >&2
   echo "  Fonctions présentes : ${presentes:-0}/4 sur $HELPERS" >&2
