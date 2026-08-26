@@ -264,6 +264,46 @@ Ce n'est **pas** un `restic copy` : celui-ci recrée des instantanés avec de
 nouveaux identifiants, et la copie cesserait d'être comparable à l'original. Ici
 c'est une réplique fichier à fichier — mêmes identifiants, même lignée.
 
+### La troisième copie, sur le poste
+
+Le script laisse derrière lui ce qu'il a téléchargé et vérifié, dans
+`~/restic-miroir/<date>/`. **Ce n'est pas un cache : c'est une troisième
+copie**, et elle est gardée à ce titre.
+
+| | où | joignable |
+|---|---|---|
+| originale | Herbes Folles, SFTP | par le réseau |
+| hors ligne | `F:\anarbib-backups\restic-<date>` | disque débranché |
+| locale | `~/restic-miroir/<date>/` | sur le poste |
+
+Elle porte un `LISEZ-MOI.txt` à sa racine qui dit tout cela sur place — parce
+que le premier tirage du 01/07 n'était consigné nulle part, et que c'est
+exactement l'angle mort qu'on ne veut pas recreuser. Le dossier est en `700` :
+il contient des données personnelles, chiffrées par restic. **Sans la
+passphrase, ce n'est qu'un bloc d'octets** — c'est ce qui rend sa présence sur
+le poste acceptable. La passphrase n'y est pas et ne doit jamais y être.
+
+La revalider ne demande aucun téléchargement :
+
+```bash
+cd ~/restic-miroir/<date>
+sha256sum -c SHA256SUMS.txt          # fichier par fichier
+sha256sum -c EMPREINTE-GLOBALE.txt   # somme d'ensemble
+```
+
+**Épreuve du 26/08/2026**, première exécution du script : les trois dépôts
+passent `check --read-data` (7, 9 et 8 instantanés) ; l'empreinte globale de la
+copie locale est identique à celle du disque ; `sha256sum -c` sur le disque rend
+118 fichiers sur 118 sans échec ; et `pseudonym_salt` a été réellement extrait
+de cette copie — 21 secrets du Vault présents. La chaîne est donc vérifiée de
+bout en bout, pas seulement produite.
+
+⚠️ **Défaut connu, à corriger.** Le contrôle de place libre s'exécute *avant* le
+`mkdir -p` qui crée le dossier de destination : à la première exécution, `df`
+échoue sur un chemin inexistant et le script avertit « moins de 2 Go libres »
+alors qu'il y en avait 949. Sans gravité, mais c'est une alarme fausse par
+construction — donc une alarme qu'on apprend à ignorer.
+
 ### La copie froide du dépôt Git, à côté
 
 Même disque, même logique, trois commandes — le dépôt Git n'a pas besoin d'un
