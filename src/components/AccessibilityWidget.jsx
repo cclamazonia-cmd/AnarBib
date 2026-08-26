@@ -29,6 +29,46 @@ import './AccessibilityWidget.css';
    ce qu'il y a derrière, et vérifier l'effet du réglage en direct.
    ════════════════════════════════════════════════════════════════════════ */
 
+// ── Icône d'accès universel ─────────────────────────────────────────────
+// La figure aux bras écartés dans un cercle, PAS le pictogramme au fauteuil
+// roulant. Trois raisons, dans cet ordre d'importance :
+//
+// 1. Le fauteuil serait faux ici. Les huit réglages de ce panneau servent la
+//    basse vision, la dyslexie, le daltonisme, les troubles vestibulaires et
+//    la navigation au clavier ; aucun n'aide quelqu'un DU FAIT qu'il utilise
+//    un fauteuil. L'icône dirait donc à tous les autres publics — c'est-à-dire
+//    à tout le public réel de ce panneau — que ce bouton n'est pas pour eux.
+// 2. C'est la critique que portent les luttes handi contre ce pictogramme :
+//    il ramène le handicap au fauteuil et efface ce qui ne se voit pas.
+// 3. `♿` (U+267F) est à présentation emoji par défaut : Windows le rend en
+//    pastille bleue en couleur, quel que soit le `color` du CSS. Un tracé SVG
+//    en `currentColor` prend la couleur de marque et rend pareil partout.
+//
+// La figure d'accès universel est elle-même une convention répandue (Apple,
+// Android, GNOME) : on ne perd donc pas la reconnaissance immédiate.
+function AccessIcon({ size }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="12" cy="12" r="10.4" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="6.6" r="1.75" fill="currentColor" />
+      <path
+        d="M4.9 10.1h14.2M12 9.7v3.7l-3.3 6.1M12 13.4l3.3 6.1"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 // ── Une bascule du panneau ──────────────────────────────────────────────
 // `aria-pressed` (et non une case à cocher) : c'est un bouton qui reste
 // enfoncé, ce que les lecteurs d'écran annoncent « activé / désactivé ».
@@ -144,7 +184,7 @@ export default function AccessibilityWidget() {
           tabIndex={-1}
         >
           <div className="ab-a11y-panel__head">
-            <span className="ab-a11y-panel__icon" aria-hidden="true">♿</span>
+            <span className="ab-a11y-panel__icon" aria-hidden="true"><AccessIcon size={20} /></span>
             <h2 id="ab-a11y-title" className="ab-a11y-panel__title">
               {t({ id: 'a11y.title' })}
             </h2>
@@ -257,7 +297,7 @@ export default function AccessibilityWidget() {
         title={t({ id: 'a11y.open' })}
         aria-label={t({ id: 'a11y.open' })}
       >
-        <span aria-hidden="true">♿</span>
+        <AccessIcon size={26} />
       </button>
     </div>
   );

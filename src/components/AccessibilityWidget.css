@@ -263,12 +263,15 @@ html[data-a11y-focus="strong"] :is(a, button, input, select, textarea,
   border-radius: var(--brand-radius-pill);
   background: linear-gradient(135deg, rgba(var(--brand-action-rgb), 0.92), var(--brand-color-primary));
   color: #fff;
-  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
   box-shadow: var(--brand-shadow-strong);
   transition: transform 0.18s ease, border-color 0.18s ease;
 }
+/* `display: block` : sans lui, le SVG est traité comme du texte en ligne et
+   pose sa ligne de base sous le tracé — l'icône se retrouve décentrée vers le
+   haut dans le bouton rond. */
+.ab-a11y-fab svg { display: block; }
 .ab-a11y-fab:hover { transform: translateY(-1px); border-color: #fff; }
 
 /* ── Panneau ─────────────────────────────────────────────────────────────
@@ -303,7 +306,9 @@ html[data-a11y-focus="strong"] :is(a, button, input, select, textarea,
   padding: 14px 14px 10px;
   border-bottom: 1px solid var(--brand-panel-border);
 }
-.ab-a11y-panel__icon { font-size: 1.25rem; line-height: 1; }
+/* Icône d'accès universel (tracé SVG en currentColor, cf. AccessIcon dans le
+   .jsx) : elle prend donc la couleur du texte, y compris en contraste élevé. */
+.ab-a11y-panel__icon { display: inline-flex; color: var(--brand-text); }
 .ab-a11y-panel__title {
   flex: 1 1 auto;
   min-width: 0; /* cf. mobile.css : sans lui, un titre long pousse la croix dehors */
