@@ -97,6 +97,62 @@ function parseLibraryNames(book) {
   } catch { return book.biblioteca || book.library_name || ''; }
 }
 
+// Nombre de bibliotheques nommees dans une ligne du catalogue. Au-dela, un
+// compteur depliable : un ouvrage detenu par 25 biblios ferait sinon exploser la
+// ligne (et la carte mobile, ou la cellule s'empile sous son libelle).
+// Les exports (CSV, impression) restent complets : ils passent par
+// parseLibraryNames() directement.
+const MAX_VISIBLE_LIBS = 3;
+
+function libraryNameList(book) {
+  const raw = parseLibraryNames(book);
+  return raw ? raw.split(', ').filter(Boolean) : [];
+}
+
+// L'ordre decide de l'utilite de la troncature : on remonte d'abord les biblios
+// cochees dans le filtre, puis celle de la lectrice. Sans ca, un resultat filtre
+// sur MLEG pourrait n'afficher que trois autres biblios, et la ligne sortirait
+// sans que rien n'explique pourquoi.
+function orderLibraryNames(names, priority) {
+  if (names.length <= MAX_VISIBLE_LIBS || !priority.size) return names;
+  const first = [];
+  const rest = [];
+  for (const nm of names) (priority.has(nm.toLowerCase()) ? first : rest).push(nm);
+  return [...first, ...rest];
+}
+
+// Le compteur est un bouton, pas une infobulle : le catalogue se lit aussi au
+// doigt, et un survol n'existe pas sur mobile.
+function LibraryCell({ names, t }) {
+  const [expanded, setExpanded] = useState(false);
+  if (!names.length) return '\u2014';
+  const hidden = names.length - MAX_VISIBLE_LIBS;
+  if (hidden <= 0) return names.join(', ');
+  if (expanded) {
+    return (
+      <>
+        {names.join(', ')}{' '}
+        <button type="button" className="ab-libs-more" onClick={() => setExpanded(false)}>
+          {t({ id: 'catalog.libraries.less' })}
+        </button>
+      </>
+    );
+  }
+  return (
+    <>
+      {names.slice(0, MAX_VISIBLE_LIBS).join(', ')}{' '}
+      <button
+        type="button"
+        className="ab-libs-more"
+        onClick={() => setExpanded(true)}
+        aria-label={t({ id: 'catalog.libraries.moreAria' }, { count: hidden })}
+      >
+        {t({ id: 'catalog.libraries.more' }, { count: hidden })}
+      </button>
+    </>
+  );
+}
+
 function getStatusInfo(book, isAuth, t) {
   // Doctrine A1/A2/A3 (tableau BLMF) : pour un anon, l'affichage reste public et
   // non personnalise. Ne PAS exposer la distinction pret/consultation (loanable)
@@ -401,6 +457,15 @@ export default function CatalogPage() {
     () => libraryFilter.map(slug => libraryOptions.find(o => o.value === slug)?.short_name).filter(Boolean),
     [libraryFilter, libraryOptions]
   );
+  // Biblios a remonter en tete de la cellule Bibliotheque(s) (cf. orderLibraryNames).
+  // libraryName vient du contexte et vaut deja short_name || name, soit la meme
+  // forme que holding_library_names_json (COALESCE(short_name, name, slug) en base).
+  const libPriority = useMemo(() => {
+    const set = new Set();
+    for (const nm of libraryShortNames) if (nm) set.add(nm.toLowerCase());
+    if (libraryName) set.add(libraryName.toLowerCase());
+    return set;
+  }, [libraryShortNames, libraryName]);
   // Fermeture du menu biblios au clic dehors (listener, PAS d'overlay → ne casse pas le scroll)
   useEffect(() => {
     if (!libMenuOpen) return;
@@ -1368,10 +1433,8 @@ export default function CatalogPage() {
                 {displayBooks.map((book, idx) => {
                   const status = getStatusInfo(book, isAuth, t);
                   const icon = TIPO_ICONS[book.tipo_material] || '';
-                  const libsRaw = parseLibraryNames(book);
-                  const libs = libsRaw
-                    ? libsRaw.split(', ').map(nm => cityByLib[nm] ? `${nm} (${cityByLib[nm]})` : nm).join(', ')
-                    : '';
+                  const libNames = orderLibraryNames(libraryNameList(book), libPriority)
+                    .map(nm => (cityByLib[nm] ? `${nm} (${cityByLib[nm]})` : nm));
                   return (
                     <tr key={`${book.book_id}-${book.library_slug}-${idx}`}>
                       <td data-label={t({ id: 'catalog.table.ref' })}><Link to={`/livro/${book.book_id}`}>{book.bib_ref || '—'}</Link></td>
@@ -1405,7 +1468,9 @@ export default function CatalogPage() {
                           {book.publisher_display}
                         </>) : '—'}
                       </td>
-                      <td data-label={t({ id: 'catalog.table.libraries' })}>{libs || '—'}</td>
+                      <td data-label={t({ id: 'catalog.table.libraries' })}>
+                        <LibraryCell names={libNames} t={t} />
+                      </td>
                       <td data-label={t({ id: 'catalog.table.availability' })}><span className={`ab-status-dot ab-status-dot--${status.cls}`}>{status.label}</span></td>
                       {isAuth && (
                         <td className="ab-table__actions-cell">
