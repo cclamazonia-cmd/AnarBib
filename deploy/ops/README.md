@@ -32,7 +32,8 @@ qu'une fois.** Ici, sur la brique dont dépend tout le reste.
 | `forgejo-runner-notify-failure.sh` | Le message d'échec du runner Forgejo (hors chaîne de sauvegarde, même doctrine) |
 | `wait-for-docker.sh` | Attend le socket Docker (pont Docker Desktop ↔ WSL), appelé en `ExecStartPre` du runner |
 | `systemd/forgejo-runner.service` · `systemd/forgejo-runner.service.d/` | Le runner Forgejo et son drop-in |
-| `anarbib-bg2-fraicheur.sh` | Le contrôle de fraîcheur : lit les trois dépôts restic et signale les flux en retard (lecture seule) |
+| `anarbib-copie-froide.sh` | La réplique hors ligne des trois dépôts restic sur un disque qu'on débranche, et sa vérification intégrale (lecture seule côté distant) |
+| `anarbib-mirror-refresh.sh` | Le rafraîchissement du miroir Git `anarbib-mirror.git`, avec le garde-fou anti-réécriture d'historique |
 | `systemd/*.service` · `systemd/*.timer` | Les unités utilisateur : trois flux, l'unité de notification, le contrôle de fraîcheur |
 
 ## Ce qu'il ne contient pas, et pourquoi
@@ -215,6 +216,71 @@ tombaient donc jamais sur une machine éveillée, et `Persistent=true` les
 rattrapait au réveil, au pire moment. C'est ainsi que le tir du 20/08 est mort en
 plein repack. Voir
 [`NOTE_angle-mort_tir-interrompu_2026-08-20`](../../docs/journal/operations/NOTE_angle-mort_tir-interrompu_2026-08-20.md).
+
+## La copie froide sur disque débranchable
+
+Les trois dépôts restic vivent chez Herbes Folles, en SFTP. C'est déjà une copie
+hors du poste — mais **une seule, chez un tiers, joignable par le réseau**. Le
+jour où le compte ferme, où une manœuvre efface un dépôt, ou simplement où le
+réseau n'est plus là, il n'y a plus rien. D'où une seconde copie, sur un disque
+qu'on débranche.
+
+Elle était faite à la main, quand on y pensait : le premier tirage date du
+01/07/2026 et **n'a jamais été consigné nulle part** — ni ici, ni dans le
+runbook. C'est le même angle mort que `genkeys.mjs` le 19/08 et que la chaîne de
+sauvegarde elle-même le 20/08 : *ce qui n'est pas dans le dépôt n'existe qu'une
+fois.* Corrigé le 26/08 par [`anarbib-copie-froide.sh`](anarbib-copie-froide.sh).
+
+```bash
+deploy/ops/anarbib-copie-froide.sh          # télécharge, vérifie, prépare
+deploy/ops/anarbib-copie-froide.sh --vers /mnt/f/anarbib-backups   # si le disque est monté
+```
+
+**Pourquoi le script ne peut pas écrire directement sur le disque.** Trois
+contraintes se combinent, aucune contournable sans privilèges :
+
+1. **Le serveur n'autorise que SFTP**, pas de shell — toute commande distante
+   répond « This service allows sftp connections only ». `rsync` par-dessus SSH
+   est donc impossible, il lui faut un shell à l'autre bout. C'est la même
+   raison qui impose `sftp:` à `anarbib-bg2.sh`.
+2. **Ni `sshfs` ni `rclone`** sur le poste : on ne peut pas monter le distant
+   pour le traiter comme un dossier.
+3. **Le disque externe n'est pas monté dans WSL.** WSL ne monte que les volumes
+   présents à son démarrage ; un disque branché après coup n'apparaît pas, et
+   `mount -t drvfs` demande un `sudo` que l'automate n'a pas.
+
+D'où la séquence : téléchargement SFTP **dans WSL** — le seul endroit où se
+trouve la passphrase, donc le seul où la vérification est possible — puis
+recopie vers le disque depuis Windows. Le script imprime les deux commandes.
+
+**La vérification est le cœur, pas le téléchargement.** `restic check
+--read-data` lit et **déchiffre chaque paquet**. Un `check` simple ne contrôle
+que le catalogue : il déclarerait saine une copie dont les données sont
+illisibles. Et la revalidation des empreintes après copie n'est pas
+optionnelle — c'est elle qui prouve que ce qui est sur le disque est bien ce qui
+a passé la vérification.
+
+Ce n'est **pas** un `restic copy` : celui-ci recrée des instantanés avec de
+nouveaux identifiants, et la copie cesserait d'être comparable à l'original. Ici
+c'est une réplique fichier à fichier — mêmes identifiants, même lignée.
+
+### La copie froide du dépôt Git, à côté
+
+Même disque, même logique, trois commandes — le dépôt Git n'a pas besoin d'un
+script pour ça :
+
+```bash
+git bundle create anarbib-<date>.bundle --all     # tout l'historique, toutes les refs
+git bundle verify anarbib-<date>.bundle
+tar czf anarbib-worktree-<date>.tar.gz \
+    --exclude=./node_modules --exclude=./dist --exclude=./.git \
+    --exclude=./deploy/.env --exclude=./deploy/functions.env -C <dépôt> .
+```
+
+Les deux `--exclude` sur `deploy/*.env` ne sont pas un détail : ces fichiers
+portent les secrets de la pile auto-hébergée, et ils ont **une seule adresse**,
+`Archives\SECRETS-EN-CLAIR`. Une sauvegarde du dépôt qui les emporterait en
+ferait une seconde, sur un disque qui circule.
 
 ## Pour restaurer
 
