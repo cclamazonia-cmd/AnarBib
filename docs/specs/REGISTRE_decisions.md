@@ -1,6 +1,6 @@
 # 🧷 REGISTRE DES DÉCISIONS — AnarBib
 
-- **Version :** 0.2 (21/08/2026 — `DOC-DESTR-1/2` en §0 + §40 `DEDUP`, `DOC-DESTR-2`/`DEDUP-5` complétés par la reprise de champs ; 20/08/2026 — `DOC-CONV-1` en §0 + §37 `CONV` ; seed d'audit du corpus complet — 02/06/2026)
+- **Version :** 0.3 (26/08/2026 — §41 `GOUV` : la promotion à `coordenador` devient collégiale, `GOUV-1` à `GOUV-6` ; `GOUV-6` complète `DOC-OBJ-2` sur les valeurs par défaut de paramètre) ; 0.2 (21/08/2026 — `DOC-DESTR-1/2` en §0 + §40 `DEDUP`, `DOC-DESTR-2`/`DEDUP-5` complétés par la reprise de champs ; 20/08/2026 — `DOC-CONV-1` en §0 + §37 `CONV` ; seed d'audit du corpus complet — 02/06/2026)
 - **Rôle :** **foyer unique** des choix (arbitrages) et des doctrines transverses. On **cite l'ID** ici, on ne reformule jamais ailleurs.
 - **Préséance (rappel) :** en cas de conflit, ce registre + la spec courante + le backlog font foi ; CADRAGE / CHANTIER / SESSION = trace non-normative.
 - **Comment lire un statut :** ✅ acté · 🟡 ouvert (à trancher) · 🔵 supersédé/historique · ⚠️ drift détecté (voir `AUDIT_coherence_corpus_2026-06-02.md`).
@@ -930,3 +930,28 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 | **DEDUP-7** | **Le niveau de preuve informe la décision, il ne la prend pas.** Aucune fusion automatique, **même en tête de liste** : dans la bande la plus sûre, deux paires sur cinq n'étaient pas des doublons mais deux éditions (MORYON 2008 Terramar contre MORIYON 1985 Cincel), et MLEG-0016/0017 sont deux **volumes**. Le tri se fait sur la coïncidence titre + année + éditeur, jamais sur la similarité de titre seule — mauvais signal, 135 paires sous 0,75 pleines de faux positifs. | ✅ acté 20/08 |
 | **DEDUP-8** | **Pas de fusion inter-bibliothèques sans mandat.** Une même œuvre cataloguée séparément par deux bibliothèques ne se fusionne pas : cela revient à **mutualiser**, ce qui engage un collectif dont on n'est pas membre. `fusion_possible` est calculé côté base pour que l'interface ne puisse pas se tromper, et `merge_book` exige d'être coordination d'une des bibliothèques détentrices — ou administration réseau **active**. | ✅ acté 21/08 |
 | **DEDUP-9** | **Les écrans du catalogage n'ouvrent pas de fenêtre modale.** Tous les panneaux restent montés et ne sont masqués qu'en CSS : une modale ouverte depuis un panneau inactif devient invisible et bloque le défilement. Motifs, notes et confirmations se saisissent **en ligne**. Corollaire mesuré : un panneau permanent ne déclenche son chargement qu'à l'ouverture de l'onglet (`isActive`), sinon les ~4 s du balayage seraient payées par toute personne qui catalogue. | ✅ acté 21/08 |
+
+
+---
+
+## 41. Gouvernance des rôles locaux — `GOUV` *(spec : `spec-gouvernance-roles` v1.4 ; trace : migrations `20260826120000` / `20260826130000` du 26/08/2026)*
+
+> La spec porte les principes P1–P8 depuis mai 2026. Ce qui se joue le 26/08 n'est pas un ajout
+> de fonctionnalité : c'est le constat qu'un principe **déjà acté** n'était pas appliqué à un
+> endroit, et sa mise en conformité. P2 prescrit la cooptation pour les rôles staff — au
+> pluriel. Une seule des deux transitions la pratiquait.
+
+| ID | Décision | Statut | Foyer |
+|---|---|---|---|
+| **GOUV-1** | **La promotion à `coordenador` est collégiale, comme celle à `librarian`.** T2 passait par la seule autorisation `user_can_manage_library()` : un·e coordenador·a en faisait un·e autre, seul·e et sans le consentement de l'intéressé·e. Deux principes déjà actés y échappaient : **P2** (cooptation pour les deux rôles staff) et **P3** (une charge s'accepte — si passer la main est un droit, la recevoir ne peut pas être un fait accompli). Désormais : proposition → ratification par une autre personne du staff → acceptation par la personne concernée. | ✅ acté 26/08 | spec §5.3 |
+| **GOUV-2** | **Réutiliser le circuit d'invitation plutôt que d'en monter un second.** `library_team_invitations` portait déjà proposition, endossements, voie médiane, quorum et péremption — pour l'accueil. Élargir son `role_proposed` à `coordenador` coûte une contrainte `CHECK` ; bâtir un appareil parallèle aurait dupliqué la règle de quorum, donc garanti qu'elle divergerait. Le circuit ne connaît qu'**un** vocabulaire de cooptation, quel que soit le rôle proposé. | ✅ acté 26/08 | spec §5.3 ; migration `20260826120000` §1-4 |
+| **GOUV-3** | **Le quorum exclut la personne visée du décompte.** Sur une promotion, la cible est elle-même staff : l'inclure rendrait le quorum de 2 inatteignable dans une équipe de deux — elle accepte, elle ne ratifie pas. Conséquence assumée : dans une petite équipe, la proposition passe directement à `ready`, sans second geste visible. Ce n'est pas un contournement, c'est la règle de quorum inchangée. | ✅ acté 26/08 | spec §5.3 |
+| **GOUV-4** | **Une porte condamnée doit dire pourquoi.** `fn_team_promote_to_coordenador` est conservée — signature, droits, appelants — mais lève `collegiality_required` (`0A000`) avec, en `HINT`, le chemin à trois temps. La supprimer aurait rendu une erreur muette de PostgREST à ses appelants ; la laisser promouvoir aurait maintenu la faille. Un échec bruyant qui instruit vaut mieux qu'un succès qui ne promeut plus rien, et mieux qu'un 404. | ✅ acté 26/08 | spec §5.3, §11.2 |
+| **GOUV-5** | **Un `expires_at` sans balayage est un champ décoratif.** La colonne était renseignée depuis juin 2026 sans qu'aucune tâche ne la fasse respecter : les invitations restaient indéfiniment `pending_ratification`. Sans conséquence tant que le circuit n'avait jamais servi (zéro ligne au 26/08) ; inacceptable dès que T2 en dépend — une proposition de coordination qui ne se referme jamais laisse ouverte une question à laquelle personne n'a répondu. Cron `anarbib-team-invitations-expire`, 03 h 20 UTC. **Corollaire général : poser une échéance sans poser ce qui la fait tomber, c'est écrire une règle qu'on n'applique pas.** | ✅ acté 26/08 | spec §12.3 |
+| **GOUV-6** | ⚠️ **`CREATE OR REPLACE` ne retire pas une valeur par défaut de paramètre** (`42P13`). Redéclarer `fn_team_propose_invitation` sans le `DEFAULT 'librarian'` de `20260820210000` a fait échouer le déploiement du 26/08 en production. Le banc d'essai local ne pouvait pas le voir : son schéma bouchonné déclarait la fonction *d'après la signature voulue*, pas d'après la vraie. **Toute migration qui remplace une fonction existante se valide contre le schéma reconstruit** (`scripts/ci/run-sql-suites.sh`, qui rejoue les vraies migrations), jamais contre un bouchon. Complète `DOC-OBJ-2` (« changement de signature → DROP + CREATE ») : ajouter un défaut est permis, en retirer un ne l'est pas. | ✅ acté 26/08 | `20260826120000` §2 ; `DOC-OBJ-2` |
+
+**Reste ouvert** : le circuit n'a été exercé de bout en bout ni sur une biblio réelle ni en
+conditions d'usage — la répétition sur `blmf-teste` reste à faire. Et P2 n'a pas été soumis à
+l'assemblée sous cette forme : cette mise en conformité applique un principe déjà voté, elle ne
+l'amende pas. Si l'assemblée juge que la coordination doit pouvoir se transmettre autrement, c'est
+P2 qu'il faudra amender, pas ce circuit.

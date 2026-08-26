@@ -1,6 +1,6 @@
 # Spécification : Gouvernance des rôles dans AnarBib
 
-**Version** : 1.3 — 2026-05-24 (notification coordination au seuil J-7)
+**Version** : 1.4 — 2026-08-26 (T2 passe à la cooptation collégiale)
 **Statut** : Spec validée politiquement, **partiellement implémentée en production** (cf. §14)
 **Contexte** : Roadmap Bologna sept 2026
 **Auteur·ices** : Xavier (cadrage politique) + Claude (rédaction)
@@ -10,6 +10,8 @@
 - **v1.1 (2026-05-15)** : refonte cohérence après la livraison complète du chantier admin réseau (paquets A-F + #114, 11-14/05/2026). Le rôle `administrador` **local** a été supprimé du schéma `user_library_memberships.role` (CHECK constraint rétréci au paquet F), remplacé par la table `network_administrators` (cf. spec admin réseau v0.3.1). Cette spec gouvernance perd donc tout ce qui concernait l'administrador local. Ajout du périmètre d'activation : cette spec décrit le mode `governance_mode = 'full_governance'` de la spec profils v0.3 ; les profils plus simples (`informal`, `staff_roles`) en activent des sous-ensembles. Implémentation reflétée dans §14.
 - **v1.2 (2026-05-20)** : doctrine « **rôle exclusif** » actée et implémentée en production. Une personne ne peut avoir qu'**un seul rôle actif** par bibliothèque ; une promotion ferme le membership de rang inférieur (`status='removed'`), une rétrogradation réactive celui du cran en dessous. La v1.1 recommandait le multi-membership (cumul de lignes actives) « pour préserver l'historique » : cet argument ne tient pas — l'historique est intégralement porté par l'audit log et par les lignes `removed`, sans cumul de lignes `active`. Le multi-membership n'apportait que de l'ambiguïté (toute requête `WHERE role=...` devait se demander laquelle fait foi). Sections amendées : §5.3, §6.5, §10.3 ; précisions §5.6 et §12.1. Voir Annexe E (changelog) et Annexe D (décision cadrée). Implémentation : hotfix promotion librarian (20/05) + migration doctrine rôle exclusif promote_coordenador/cron (20/05).
 - **v1.3 (2026-05-24)** : amendement TM-A (issu de l'audit #153 des contenus de mails). Le seuil d'inactivité J-7 (`team.inactive_warning_7d`) notifie désormais la coordination en copie, et non plus la seule personne concernée ; si la personne inactive est le·la dernier·e coordenador·a, la copie est escaladée aux administrateur·rices du réseau (même mécanisme que §6.1). Cet amendement entérine le comportement déjà en production dans `team.ts` plutôt que de l'aligner sur l'ancienne règle. Sections amendées : §5.10, §8.2 ; traçage Annexe Q7. Le seuil J-30 reste inchangé (personne uniquement).
+
+- **v1.4 (2026-08-26)** : **T2 (`librarian` → `coordenador`) cesse d'être unilatérale.** La promotion reposait sur la seule autorisation `user_can_manage_library()` : un·e coordenador·a pouvait en faire un·e autre, seul·e et sans le consentement de l'intéressé·e — ce qui contredisait P2 (cooptation pour **les deux** rôles staff) et P3 (une charge s'accepte, elle ne s'impose pas). Elle emprunte désormais le circuit d'invitation déjà en place : proposition → ratification par une autre personne du staff → acceptation par la personne concernée. `fn_team_promote_to_coordenador` est conservée mais lève `collegiality_required` : un échec bruyant vaut mieux qu'un succès qui ne promeut plus rien. Sections amendées : §5.1, §5.3, §6.1, §6.5, §7.3, §8.2, §8.3, §11.2, §12.3, §15. §14 **entièrement refait** — l'état des lots datait du 15/05/2026 et annonçait « à faire » des objets déjà livrés au 10/05. Implémentation : migrations `20260826120000` et `20260826130000`, front `feat(team)` du 26/08. Registre : `GOUV-1` à `GOUV-6`.
 
 ---
 
@@ -279,7 +281,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 | # | Transition | Qui peut le faire | Mécanisme |
 |---|---|---|---|
 | T1 | `reader` → `librarian` | Coordenador local **OU** admin réseau actif | Cooptation (P2) |
-| T2 | `librarian` → `coordenador` | Coordenador local **OU** admin réseau actif | Cooptation (P2) |
+| T2 | `librarian` → `coordenador` | **Trois personnes distinctes** *(v1.4)* : qui propose (coordenador local **OU** admin réseau actif), qui ratifie (autre membre du staff), qui accepte (l'intéressé·e) | Cooptation collégiale (P2), via le circuit d'invitation |
 | T3 | `coordenador` → `librarian` | Soi-même + autres coordenadores locaux | Auto-rétro ou retrait collégial |
 | T4 | `librarian` → `reader` (volontaire) | Soi-même | Auto-rétro (P3) |
 | T5 | `librarian` → `reader` (par le collectif) | Coordenador local **OU** admin réseau (avec carence 7j) | `pending_removal` |
@@ -311,24 +313,90 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 **RPC** : `fn_team_promote_to_librarian(p_user_id uuid, p_library_id uuid)`
 
-### 5.3. Détail de T2 — `librarian` → `coordenador` (cooptation)
+### 5.3. Détail de T2 — `librarian` → `coordenador` (cooptation collégiale) *(refondu v1.4)*
 
-**Qui** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve, avec autorisation `user_can_engage_library` sur la biblio cible.
+> **Ce qui change en v1.4.** Jusqu'au 26/08/2026, T2 était un geste **unilatéral** : une seule
+> personne, autorisée par `user_can_manage_library()`, en promouvait une autre, sur-le-champ et
+> sans lui demander son avis. C'était le seul endroit du modèle où un rôle staff s'obtenait sans
+> cooptation — P2 la prescrit pourtant pour **les deux** rôles — et le seul où une charge
+> s'imposait sans consentement, alors que P3 fait de son abandon un droit. La transition emprunte
+> désormais le circuit d'invitation existant (`library_team_invitations`), plutôt qu'un second
+> appareil monté en parallèle.
 
-**Précondition** :
-- La personne cible a une membership `librarian` `active` dans cette biblio
-- La personne cible n'a pas déjà une membership `coordenador` `active` dans cette biblio
+**Qui** : trois personnes distinctes interviennent, et aucune ne peut en tenir deux à la fois.
 
-**Effet** *(actualisé v1.2 — doctrine rôle exclusif)* :
-- Création d'une ligne `coordenador` `active` (ou réactivation si une ligne `coordenador` existait en `removed`/`inactive`)
-- **Fermeture du membership `librarian`** de la même biblio : la ligne `librarian` passe à `status='removed'`. Les rôles sont exclusifs au sein d'une biblio — devenir `coordenador` clôt le rôle `librarian`, dont les capacités sont de toute façon englobées par `coordenador` (cf. §3.3). Une entrée d'audit `removal_completed` sur le rôle `librarian` trace la fermeture.
-- Mail à la personne + à tous les coordenadores
-- Audit log (entrée `promoted_to_coordenador`)
-- Si admin réseau cross-library : log dans `network_admin_cross_library_actions_log` + mail immédiat staff local
+1. **Qui propose** : un·e coordenador·a local·e **OU** un·e administrateur·rice réseau actif·ve
+   (`user_can_manage_library` — proposer la coordination reste un acte de coordination). Nul ne
+   peut se proposer soi-même.
+2. **Qui ratifie** : un·e autre membre du staff actif de la biblio. La personne qui propose
+   compte pour un endossement, enregistré d'office. La **voie médiane** s'applique : au moins un
+   endossement doit venir de la coordination.
+3. **Qui accepte** : la personne concernée, et elle seule.
 
-**RPC** : `fn_team_promote_to_coordenador(p_user_id uuid, p_library_id uuid)`
+**Quorum** *(règle existante du circuit d'invitation, conservée telle quelle)* :
 
-**Note d'implémentation** *(actualisée v1.2)* : la contrainte UNIQUE `(user_id, library_id, role)` est conservée — elle reste utile pour porter l'historique (une même personne peut avoir une ligne `librarian` en `removed` *et* une ligne `coordenador` en `active`, ce qui retrace son parcours). Mais la **doctrine « rôle exclusif »** impose qu'au plus **une seule ligne soit en `status='active'`** par couple `(user_id, library_id)`. Une promotion ferme systématiquement le rôle de rang inférieur ; une rétrogradation (T3, T5, cron) réactive le rôle du cran en dessous. L'historique est ainsi intégralement préservé par les lignes non-actives (`removed`, `inactive`) et par l'audit log, sans jamais cumuler deux lignes `active`. La v1.1 recommandait le multi-membership actif (« filtrer à l'affichage le rôle de plus haut niveau ») : cette recommandation est **abandonnée** — masquer en permanence une complexité à l'affichage est le signe que cette complexité ne devait pas exister.
+| Situation | Endossements requis |
+|---|---|
+| `team_admission_mode = 'coordenador_seul'` | 1 |
+| moins de 2 membres du staff **hors personne visée** | 1 |
+| sinon | 2 |
+
+La personne visée est **exclue du décompte** : elle est déjà staff, et l'inclure rendrait le
+quorum inatteignable dans une équipe de deux — elle accepte, elle ne ratifie pas. Corollaire
+pratique, à connaître avant de s'étonner : dans une petite équipe, la proposition peut passer
+directement à `ready` sans qu'un second geste soit visible. Ce n'est pas un contournement du
+principe, c'est le quorum tel qu'il a toujours été défini.
+
+**Préconditions** :
+
+- La personne cible a une membership `librarian` `active` dans cette biblio — on ne saute pas de
+  `reader` à `coordenador` (précondition héritée de l'ancienne RPC).
+- Elle n'a pas déjà une membership `coordenador` `active` dans cette biblio.
+- Aucune invitation vivante (`pending_ratification` / `ready`) ne la concerne déjà sur cette biblio.
+
+**Effet de la proposition** : **aucun changement de rôle.** Une ligne `library_team_invitations`
+est créée avec `role_proposed = 'coordenador'`, `status = 'pending_ratification'` et
+`expires_at = now() + 30 jours`. L'acte de coordination est tracé **à ce moment** dans
+`network_admin_cross_library_actions_log` si l'acteur·rice est transverse (`stage: 'proposed'`),
+et non à l'acceptation — celle-ci est le fait de la personne visée, pas un acte de gouvernance.
+Event `team.invitation_proposed`, ou `team.invitation_ready` si le quorum est déjà atteint, avec
+`role_proposed` au payload.
+
+**Effet de l'acceptation** *(inchangé depuis la v1.2 — doctrine rôle exclusif)* :
+
+- Création (ou réactivation) d'une ligne `coordenador` `active`
+- **Fermeture du membership `librarian`** : passage à `status='removed'`, avec une entrée d'audit
+  `removal_completed` sur le rôle `librarian`
+- Audit log : entrée `promoted_to_coordenador`, `metadata.via = 'team_invitation_accepted'`, avec
+  `invitation_id`, `proposed_by` et `required_ratifications` — la trace dit désormais *par quel
+  chemin* la promotion est passée, pas seulement qu'elle a eu lieu
+- Event `team.promoted_to_coordenador` — personne + coordenadores
+
+**Péremption** : une proposition non aboutie expire au bout de 30 jours, balayée par le cron
+`anarbib-team-invitations-expire` (cf. §12.3). Ne rien faire est donc une réponse : la proposition
+se referme d'elle-même, sans que personne ait à la refuser explicitement — ce qui, dans un
+collectif, coûte souvent plus cher que de laisser filer.
+
+**RPCs** : `fn_team_propose_invitation(p_library_id uuid, p_invited_public_id text, p_role text
+DEFAULT 'librarian')` → `fn_team_ratify_invitation(p_invitation_id uuid)` →
+`fn_team_accept_invitation(p_invitation_id uuid)`, ou `fn_team_decline_invitation`.
+
+⚠️ **`fn_team_promote_to_coordenador` ne promeut plus.** Elle est conservée — signature, droits,
+références — mais lève `collegiality_required` (`ERRCODE 0A000`) en désignant explicitement le
+chemin collégial. La supprimer aurait cassé ses appelants sur une erreur muette de PostgREST ;
+une fonction qui répond « pas comme ça, mais comme ceci » les instruit.
+
+**Note d'implémentation** *(v1.2, conservée)* : la contrainte UNIQUE `(user_id, library_id, role)`
+est conservée — elle reste utile pour porter l'historique (une même personne peut avoir une ligne
+`librarian` en `removed` *et* une ligne `coordenador` en `active`, ce qui retrace son parcours).
+Mais la **doctrine « rôle exclusif »** impose qu'au plus **une seule ligne soit en
+`status='active'`** par couple `(user_id, library_id)`. Une promotion ferme systématiquement le
+rôle de rang inférieur ; une rétrogradation (T3, T5, cron) réactive le rôle du cran en dessous.
+L'historique est ainsi intégralement préservé par les lignes non-actives (`removed`, `inactive`)
+et par l'audit log, sans jamais cumuler deux lignes `active`. La v1.1 recommandait le
+multi-membership actif (« filtrer à l'affichage le rôle de plus haut niveau ») : cette
+recommandation est **abandonnée** — masquer en permanence une complexité à l'affichage est le
+signe que cette complexité ne devait pas exister.
 
 ### 5.4. Détail de T3 — `coordenador` → `librarian`
 
@@ -459,7 +527,7 @@ Membership fermée. La personne **n'est plus dans l'équipe**.
 
 1. **Avertissement** : la RPC vérifie qu'on est dans ce cas et **autorise** l'opération mais retourne un avertissement structuré (`{warning: 'last_coordinator_leaving'}`).
 2. **Sortie effective** : la biblio se retrouve avec 0 coordenador·a. Les librarians peuvent continuer à fonctionner sur leurs prérogatives (gestion emprunts, validation inscriptions, etc.) mais aucune modification de l'identité publique ou de la configuration n'est possible.
-3. **Escalade automatique** : un mail est envoyé aux **administrateurs du réseau AnarBib** (table `network_administrators` `status='active'`), indiquant que la biblio X est en mode « sans coord ». Iels peuvent intervenir pour aider le collectif à désigner un·e nouveau·elle coordenador·a (via leur droit transverse de promotion `fn_team_promote_to_coordenador`), ou aider à fermer proprement la biblio.
+3. **Escalade automatique** : un mail est envoyé aux **administrateurs du réseau AnarBib** (table `network_administrators` `status='active'`), indiquant que la biblio X est en mode « sans coord ». Iels peuvent intervenir pour aider le collectif à désigner un·e nouveau·elle coordenador·a — *(v1.4)* en **proposant** la promotion via `fn_team_propose_invitation` (rôle `coordenador`), la proposition restant soumise à ratification puis acceptation (cf. §5.3) : le droit transverse permet de proposer, plus de promouvoir seul·e — ou aider à fermer proprement la biblio.
 
 **Note politique** : ce comportement respecte la souveraineté du collectif (le SIGB ne bloque pas la décision) tout en évitant le chaos silencieux (escalade explicite). Notez que la branche « last admin lockdown » qui bloquait techniquement la sortie en v1.0 a été supprimée au paquet F.3 (13/05/2026).
 
@@ -481,7 +549,7 @@ La RPC `fn_team_promote_to_administrador` qui existait en v1.0 a été **dépré
 - La biblio reste « active » techniquement (sa visibility, ses livres, sont accessibles selon RLS)
 - Mais aucune action de gestion locale ne peut plus être faite par le staff local
 - Mail urgent aux administrateurs du réseau AnarBib
-- Les administrateurs réseau peuvent intervenir directement via leur droit transverse pour : (a) créer une membership `coordenador` via `fn_team_promote_to_coordenador` après validation politique du collectif local, ou (b) accompagner la fermeture de la biblio (procédure hors-spec)
+- Les administrateurs réseau peuvent intervenir directement via leur droit transverse pour : (a) *(v1.4)* **proposer** une membership `coordenador` via `fn_team_propose_invitation` (rôle `coordenador`) après validation politique du collectif local — la proposition doit ensuite être ratifiée puis acceptée (§5.3), ou (b) accompagner la fermeture de la biblio (procédure hors-spec)
 
 **Différence avec v1.0** : la v1.0 mentionnait « modification SQL directe » par un admin AnarBib. Depuis le paquet D admin réseau, cette action passe par la RPC normale, simplement appelée par un·e admin réseau (autorisée par les helpers `user_can_act_as_staff_on_library` et `user_can_engage_library`). Plus de bypass SQL, tracé dans `network_admin_cross_library_actions_log`.
 
@@ -582,7 +650,7 @@ Chaque action génère **une entrée** dans `library_membership_audit` :
 | Code | Description | RPC source |
 |---|---|---|
 | `promoted_to_librarian` | T1 | `fn_team_promote_to_librarian` |
-| `promoted_to_coordenador` | T2 | `fn_team_promote_to_coordenador` |
+| `promoted_to_coordenador` | T2 | `fn_team_accept_invitation` *(v1.4 ; auparavant `fn_team_promote_to_coordenador`)* |
 | `self_demoted` | T3 (auto-rétro coord) ou T4 (auto-rétro librarian) | `fn_team_self_demote` |
 | `removal_requested` | T5 (déclenchement carence) | `fn_team_request_remove_member` |
 | `removal_cancelled` | T8 (annulation) | `fn_team_cancel_remove_member` |
@@ -650,6 +718,8 @@ Les events suivent le préfixe `team.*` (cohérent avec `loan.*`, `res.*`, `wf.*
 | `team.removal_requested` | T5 | personne + coordenadores |
 | `team.removal_cancelled` | T8 | personne + coordenadores |
 | `team.removal_completed` | T5 (J+7) | personne + coordenadores |
+| `team.invitation_proposed` *(T2 depuis v1.4)* | T1/T2 — proposition déposée | coordenadores de la biblio, à endosser |
+| `team.invitation_ready` *(T2 depuis v1.4)* | T1/T2 — quorum atteint | la personne concernée, à accepter |
 | `team.suspended` | T6 | personne + coordenadores |
 | `team.unsuspended` | T7 | personne + coordenadores |
 | `team.inactive_warning_30d` | T9 (J-30) | personne uniquement |
@@ -675,7 +745,7 @@ team.promoted_to_coordenador.intro
 ...
 ```
 
-Soit environ **40-60 clés × 6 locales = 240 à 360 chaînes**.
+Soit environ **40-60 clés × 10 locales = 400 à 600 chaînes** *(corrigé v1.4 — le « 6 » est une trace périmée, cf. `DOC-I18N-1` du registre : pt-BR, fr, es, it, de, en, ca, eo, nl, el)*. Les mails du passage à la coordination ont leurs propres clés, distinctes de celles de l'accueil : `team.invitation_coord_proposed.*` et `team.invitation_coord_ready.*` — accueillir quelqu'un et lui confier la coordination ne sont pas le même acte, et les deux textes ne doivent pas se ressembler.
 
 ### 8.4. Gabarit type
 
@@ -930,7 +1000,11 @@ Toutes les RPCs respectent les règles suivantes :
 | RPC | Signature | Autorisation requise | Statut |
 |---|---|---|---|
 | `fn_team_promote_to_librarian` | `(p_user_id uuid, p_library_id uuid)` | `user_can_engage_library` | ✅ Existante |
-| `fn_team_promote_to_coordenador` | `(p_user_id uuid, p_library_id uuid)` | `user_can_engage_library` | ✅ Existante |
+| `fn_team_promote_to_coordenador` | `(p_user_id uuid, p_library_id uuid)` | — | ⛔ **Neutralisée v1.4 (26/08/2026)** — lève `collegiality_required`, cf. §5.3 |
+| `fn_team_propose_invitation` | `(p_library_id uuid, p_invited_public_id text, p_role text DEFAULT 'librarian')` | staff actif ; `user_can_manage_library` en plus si `p_role='coordenador'` | ✅ Élargie au rôle `coordenador` en v1.4 |
+| `fn_team_ratify_invitation` | `(p_invitation_id uuid)` | staff actif de la biblio | ✅ Existante |
+| `fn_team_accept_invitation` | `(p_invitation_id uuid)` | la personne invitée | ✅ Étendue au rôle `coordenador` en v1.4 |
+| `fn_team_expire_invitations` | `()` | `service_role` (cron) | ✅ Créée en v1.4 |
 | ~~`fn_team_promote_to_administrador`~~ | ~~obsolète~~ | — | ❌ **Supprimée au paquet F (13/05/2026)** |
 | `fn_team_self_demote` | `(p_library_id uuid, p_target_role text)` | staff actif (auto) | ✅ Existante, branche « last admin lockdown » supprimée au paquet F.3 |
 | `fn_team_request_remove_member` | `(p_user_id uuid, p_library_id uuid, p_role text, p_reason text)` | `user_can_engage_library` + refus si cible admin réseau | ✅ Existante, refacto C |
@@ -1073,7 +1147,25 @@ Pour chaque membership en `status='pending_removal'` dont `pending_removal_until
 
 **Garde-fou** : si `last_sign_in_at` est NULL (compte jamais utilisé), le critère ne s'applique pas (sinon, on virerait des comptes tout neufs en attente de validation). À adapter selon l'audit du champ.
 
-### 12.3. Programmation et monitoring
+### 12.3. `fn_team_expire_invitations` *(nouveau v1.4)*
+
+**Fréquence** : quotidienne, 03 h 20 UTC (`anarbib-team-invitations-expire`).
+
+**Action** : passe à `status='expired'` toute invitation d'équipe encore en
+`pending_ratification` ou `ready` dont `expires_at` est dépassé, en horodatant `resolved_at` et
+en suffixant `resolution_note`. Retourne le nombre de lignes touchées.
+
+**Lacune qu'elle comble** : `expires_at` était renseigné depuis l'origine du circuit
+(19/06/2026), mais **aucune tâche ne le faisait respecter** — les invitations restaient
+indéfiniment `pending_ratification`. Tant que le circuit ne servait qu'à l'accueil et n'avait
+jamais tourné (zéro ligne en base au 26/08/2026), la lacune était sans effet. Elle cesse de
+l'être dès lors que T2 en dépend : une proposition de coordination qui ne se referme jamais
+laisse ouverte, indéfiniment, une question à laquelle personne n'a répondu.
+
+**Droits** : `REVOKE EXECUTE` sur `PUBLIC`, `anon`, `authenticated` ; `GRANT` au seul
+`service_role`.
+
+### 12.4. Programmation et monitoring
 
 Les crons sont déclarés dans `pg_cron` et leurs exécutions tracées dans `cron.job_run_details`. À monitorer :
 
@@ -1095,59 +1187,47 @@ L'administration du réseau AnarBib (cooptation à l'unanimité, retrait collect
 
 ---
 
-## 14. Plan d'implémentation *(actualisé v1.1 — état des lots)*
+## 14. Plan d'implémentation *(refait v1.4 — état réel constaté)*
 
-### 14.1. Découpage en lots et statut
+> ⚠️ **Ce qui suit remplace intégralement l'état des lots daté du 15/05/2026.** Celui-ci annonçait
+> « ⏸️ à faire » un ensemble d'objets qui étaient **déjà en production au moment où il a été
+> écrit** : la table `library_membership_audit`, les colonnes de carence `pending_removal_until` /
+> `pending_removal_requested_by`, l'index `idx_ulm_pending_removal_until`,
+> `fn_team_cancel_remove_member`, `fn_team_unsuspend_member` et `fn_team_notify_event` figurent
+> tous dans le dump de référence `20260510000000_baseline_live.sql` — antérieur de **cinq jours**
+> à cette liste. Une liste de tâches qui décrit le passé est plus nuisible qu'une liste absente :
+> elle fait re-cadrer, re-chiffrer et parfois ré-implémenter ce qui tourne déjà, et elle
+> décrédibilise les lignes qui, elles, étaient exactes.
 
-L'implémentation s'est faite en lots progressifs. Au 15/05/2026, voici l'état :
+### 14.1. État réel au 26/08/2026
 
-#### Lot 1 — Infrastructure DB ✅ **Partiellement livré**
+| Lot | Objet | État | Constaté sur |
+|---|---|---|---|
+| 1 | Infrastructure DB — audit, colonnes de carence, index | ✅ **en production** | `20260510000000_baseline_live.sql` |
+| 2 | RPCs cooptation T1 / T2 | ✅ **en production** ; T2 refondu le 26/08 (cf. §5.3) | baseline + `20260826120000` |
+| 3 | RPCs retraits T3–T8 | ✅ **en production**, `fn_team_cancel_remove_member` et `fn_team_unsuspend_member` comprises — que la v1.1 disait « à vérifier / à implémenter si absente » | baseline |
+| 4 | Crons | ✅ **en production** : `anarbib-team-pending-removal-complete` (horaire) et `anarbib-team-inactive-cleanup` (04 h 00), rejoints le 26/08 par `anarbib-team-invitations-expire` (03 h 20) | lecture de `cron.job`, 26/08/2026 |
+| 5 | Notifications mail `team.*` | ✅ **en production** : `supabase/functions/_shared/domain/team.ts` chargé par `notify-event`, chaînes dans `_shared/i18n/mail-strings.ts`, **10 locales** | dépôt |
+| 6 | UI onglet équipe | ✅ **en production** : `TeamPanel.jsx`, `TeamActionModal.jsx`, `src/lib/roles.js`, historique d'équipe | dépôt |
+| 7 | Workflow d'invitation | ✅ **en production** depuis le 19/06/2026 — et c'est lui qui porte désormais T2 | `20260619125325`, `20260619135226`, `20260619143201` |
 
-- ✅ Migration : élargissement du CHECK constraint sur `status` (paquet 23 du 11/05/2026, élargi à `removed` pour cohérence admin réseau)
-- ✅ Migration : rétrécissement du CHECK constraint sur `role` (paquet F admin réseau du 13/05/2026)
-- ⏸️ Migration : ajout des colonnes `pending_removal_until`, `pending_removal_requested_by` — **à faire**
-- ⏸️ Migration : création de `library_membership_audit` — **à faire**
-- ⏸️ Migration : création de l'index `idx_ulm_pending_removal_until` — **à faire**
+**Autrement dit : les sept lots sont livrés.** Ce qui restait à faire au titre de cette spec, au
+26/08/2026, ce n'était aucune des lignes ci-dessus : c'était la mise en conformité de T2 avec P2,
+objet de la v1.4.
 
-#### Lot 2 — RPCs cooptation (T1, T2) ✅ **Largement livré**
+Une remarque qui vaut au-delà de ce §14 : le circuit d'invitation était livré depuis deux mois et
+n'avait **jamais servi** — zéro ligne dans `library_team_invitations` au 26/08/2026. « Livré » et
+« éprouvé » sont deux états distincts, et cette table ne dit que le premier. C'est aussi pourquoi
+la lacune de péremption (§12.3) a pu rester invisible si longtemps.
 
-- ✅ `fn_team_promote_to_librarian` : existante, refactorée au paquet C admin réseau sur `user_can_engage_library`
-- ✅ `fn_team_promote_to_coordenador` : existante, refactorée au paquet C admin réseau
-- ⏸️ Helper `fn_team_notify_event` : pattern doctrinal D.6bis admin réseau adopté côté réseau, à appliquer côté team (refacto mineur, INSERT outbox)
-- ⏸️ Tests d'acceptation : à compléter
+### 14.2. Ce que cette révision n'a pas vérifié
 
-#### Lot 3 — RPCs retraits (T3-T8) ✅ **Partiellement livré, branche last admin lockdown supprimée**
+Deux affirmations héritées de la v1.1 ne sont **pas** contrôlées ici et sont laissées telles
+quelles : l'articulation avec le **paquet F de la spec profils d'adoption** (§14.3 ci-dessous) et
+l'état des tests d'acceptation du lot 2. Les marquer comme non vérifiées vaut mieux que de les
+recopier comme si elles l'étaient — c'est exactement le mécanisme qui a produit le §14 précédent.
 
-- ✅ `fn_team_self_demote` : existante, branche A « last admin lockdown » + phrase rituelle supprimée au paquet F.3 admin réseau
-- ✅ `fn_team_request_remove_member` : existante, refactorée au paquet C + refus si cible admin réseau (paquet F.3)
-- ⏸️ `fn_team_cancel_remove_member` : à vérifier / à implémenter si absente
-- ✅ `fn_team_suspend_member` : existante, refactorée au paquet F.3
-- ⏸️ `fn_team_unsuspend_member` : à vérifier / à implémenter si absente
-
-#### Lot 4 — Crons ⏸️ **À implémenter**
-
-- ⏸️ `cron_team_pending_removal_complete` (hourly) : pas encore créé
-- ⏸️ `cron_team_inactive_cleanup` (daily) : pas encore créé
-
-#### Lot 5 — Notifications mail ⏸️ **À implémenter**
-
-- ⏸️ Clés i18n `team.*` × 6 locales (~240-360 chaînes) — déjà partiellement en place pour les events admin réseau, à élargir aux events team
-- ⏸️ Handler `notify-event/handlers/team.ts` : à créer (ou étendre le handler `internal-task` existant)
-- ⏸️ Tests d'envoi
-
-#### Lot 6 — UI : enrichissement onglet `team` ⏸️ **À implémenter**
-
-- ⏸️ Nouvelles clés i18n UI × 6 locales (~240 chaînes)
-- ⏸️ Composants : boutons d'action, modales de confirmation
-- ⏸️ Sections : « Suspensions et préavis en cours », « Historique de l'équipe »
-- ⏸️ Intégration de `<NetworkAdminBadge>` (composant existant, paquet E.3 admin réseau) sur les lignes des admins réseau
-- ⏸️ Tests : parcours complet pour coordenador, parcours lecture seule pour librarian
-
-#### Lot 7 — Workflow d'invitation ⏸️ **À cadrer**
-
-Cf. spec future `spec-invitation-equipe.md` (renommée potentiellement `spec-onboarding-biblioteca.md` v1.1).
-
-### 14.2. Articulation avec la spec profils d'adoption v0.3
+### 14.3. Articulation avec la spec profils d'adoption v0.3
 
 Le déploiement complet de cette spec gouvernance dépend du **paquet F de la spec profils** qui activera le `governance_mode` par biblio. Tant que ce paquet n'est pas livré, toutes les biblios fonctionnent implicitement en mode `full_governance`.
 
@@ -1156,11 +1236,11 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 2. Cette spec gouvernance Lots 1-6 (mécanismes complets en `full_governance`)
 3. Spec profils paquet F (activation conditionnelle des mécanismes selon `governance_mode`)
 
-### 14.3. Points d'attention transverses
+### 14.4. Points d'attention transverses
 
 - **i18n** : respect des conventions militantes (cf. mémoire). Toutes les locales en une fois, jamais de fallback temporaire.
 - **Tests** : prévoir des tests d'intégration sur scénarios complets (cf. §15 cas d'usage).
-- **Migrations** : versionnées avec date dans `supabase/migrations/YYYYMMDDHHMMSS_*.sql`, idempotentes (DROP IF EXISTS / CREATE OR REPLACE), commitées sur le repo. Pipeline Woodpecker auto-applique.
+- **Migrations** : versionnées avec date dans `supabase/migrations/YYYYMMDDHHMMSS_*.sql`, idempotentes (DROP IF EXISTS / CREATE OR REPLACE), commitées sur le repo. Le `git push` sur `main` déclenche **Forgejo Actions** (`.forgejo/workflows/ci.yml`), qui déploie les edge functions puis applique les migrations — *migré de Woodpecker le 11/06/2026, cf. `DOC-DEPLOY-1` du registre*.
 - **Rollback** : chaque migration doit avoir un script de rollback testé.
 
 ---
@@ -1227,7 +1307,7 @@ Le déploiement complet de cette spec gouvernance dépend du **paquet F de la sp
 > 4. Le SIGB détecte que la BLMF n'a plus de coordenador·a actif·ve → mail aux **administrateurs réseau actifs** (table `network_administrators` `status='active'`)
 > 5. La BLMF continue à fonctionner en mode dégradé (les librarians peuvent gérer les emprunts, etc., mais pas la config)
 > 6. Hors-logiciel, l'équipe d'admin réseau prend contact avec le collectif BLMF pour aider à désigner un·e nouveau·elle coord
-> 7. Quand le collectif a décidé, un·e admin réseau exécute la promotion via la RPC normale `fn_team_promote_to_coordenador` (autorisée par le droit transverse). L'action est tracée dans `network_admin_cross_library_actions_log` (action critique : promotion staff) + mail immédiat aux librarians de BLMF.
+> 7. Quand le collectif a décidé, un·e admin réseau **propose** la promotion via `fn_team_propose_invitation` (rôle `coordenador`, autorisé par le droit transverse) ; elle est ensuite ratifiée par un·e membre du staff de BLMF, puis acceptée par la personne visée *(v1.4)*. L'action est tracée dans `network_admin_cross_library_actions_log` (action critique : promotion staff) + mail immédiat aux librarians de BLMF.
 
 **Différence avec v1.0** : en v1.0, le scénario mentionnait une « modification SQL directe » par Xavier (admin AnarBib). Depuis le paquet F admin réseau, l'admin réseau passe par la RPC normale, avec autorisation transparente et trace automatique. Plus de bypass SQL, plus de phrase rituelle bloquante.
 
