@@ -2624,8 +2624,13 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
               <div style={{ marginBottom: 10, padding: 10, borderRadius: 8, background: 'rgba(0,0,0,.15)', border: '1px solid rgba(255,255,255,.08)' }}>
                 <div style={{ fontSize: '.75rem', fontWeight: 700, marginBottom: 6 }}>{t({id:'catalogacao.ui.coverGalleryTitle'})}</div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {/* `label` = ce que la source dit avoir trouvé (titre, auteur·rices,
+                      année). Sur une correspondance par titre, elle est FLOUE : Open
+                      Library propose volontiers un autre ouvrage du même auteur. C'est
+                      ce libellé qui permet de l'écarter avant de le retenir — une capa
+                      fausse est pire qu'une capa absente. */}
                   {coverCandidates.map((c, i) => (
-                    <button key={i} type="button" title={`${c.source}${c.license ? ` · ${c.license}` : ''}`}
+                    <button key={i} type="button" title={[c.label, c.source, c.license].filter(Boolean).join(' · ')}
                       onClick={() => selectCoverCandidate(c)} disabled={!!coverStoring}
                       style={{ padding: 0, border: '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
                       {/* Aperçu rapatrié par l'EF (data: URI), jamais l'URL du
@@ -2637,7 +2642,11 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                         ? <img src={c.thumbnailData} alt={c.source} style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: '6px 6px 0 0', display: 'block' }} />
                         : <div aria-hidden="true" style={{ width: '100%', height: 96, borderRadius: '6px 6px 0 0', background: 'rgba(255,255,255,.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', opacity: .35 }}>📖</div>}
                       <div style={{ fontSize: '.58rem', color: 'var(--brand-muted, #aaa)', padding: '2px 3px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {coverStoring === c.fullUrl ? t({id:'catalogacao.ui.coverUploading'}) : c.source}
+                        {/* Le titre trouvé plutôt que la source : depuis le retrait de
+                            Google, la source est presque toujours la même, alors que
+                            savoir QUEL ouvrage a été apparié est ce qui permet de
+                            trancher. Le libellé complet reste dans l'infobulle. */}
+                        {coverStoring === c.fullUrl ? t({id:'catalogacao.ui.coverUploading'}) : (c.label || c.source)}
                       </div>
                     </button>
                   ))}

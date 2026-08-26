@@ -10,17 +10,22 @@
 //  frontend affiche les vignettes et l'usager·e selectionne (le telechargement
 //  vers le bucket `covers` se fait cote frontend a la selection).
 //
-//  SOURCES (P2)
-//  ------------
-//    - openlibrary : Open Library Books API (par ISBN)            [CAT-C1]
-//    - googlebooks : Google Books API (par ISBN ou titre)
-//    - og_image    : og:image via reutilisation de fetch-url-metadata [CAT-C4]
-//  DIFFERE (P3) : page 1 d'un PDF (rasterisation serveur)         [CAT-C2]
+//  SOURCES
+//  -------
+//    - openlibrary        : Open Library Books API, par ISBN       [CAT-C1]
+//    - openlibrary_search : Open Library Search API, titre+auteur  (26/08/2026)
+//    - og_image           : og:image via fetch-url-metadata        [CAT-C4]
+//  RETIREE (26/08/2026) : Google Books. Exclue par la spec §4.2, et mesuree
+//  inoperante — HTTP 429 sur 50 requetes sur 50, sans cle d'API. Voir le
+//  commentaire de fromOpenLibrarySearch().
+//  DIFFERE (P3) : page 1 d'un PDF (rasterisation serveur)          [CAT-C2]
 //
 //  CONTRAT
 //  -------
 //    POST { isbn?, title?, author?, url?, maxRecords? }
-//    -> { ok, total, candidates: [{ thumbnailUrl, fullUrl, source, license }],
+//    -> { ok, total,
+//         candidates: [{ thumbnailUrl, thumbnailData, fullUrl, source,
+//                        license, label? }],
 //         sources: [{ id, label, count, ok, error? }] }
 //
 //  verify_jwt : true (appel frontend authentifie ; posture alignee sur
@@ -56,7 +61,11 @@ const TIMEOUT_MS = (() => {
   const v = Number(envGet('COVER_LOOKUP_TIMEOUT_MS'));
   return Number.isFinite(v) && v >= 1000 && v <= 30000 ? v : 9000;
 })();
-const USER_AGENT = envGet('COVER_LOOKUP_USER_AGENT') || 'AnarBib cover lookup/1.0';
+// Open Library demande un User-Agent qui identifie l'appelant et permette de
+// le joindre. Ce sont des communs tenus par une association : se nommer est le
+// minimum, et c'est aussi ce qui evite d'etre bloque en masse un jour.
+const USER_AGENT = envGet('COVER_LOOKUP_USER_AGENT')
+  || 'AnarBib/1.0 (bibliotheques libertaires federees; https://codeberg.org/anarbib/anarbib)';
 
 function normalizeIsbn(raw: string): string {
   return String(raw || '').replace(/[^0-9Xx]/g, '').toUpperCase();
@@ -84,6 +93,12 @@ interface Candidate {
   license: string | null;
   /** Apercu rapatrie cote serveur, en data: URI. Voir rapatrierApercus(). */
   thumbnailData?: string | null;
+  /**
+   * Ce que la source dit avoir trouve : titre, auteur·rices, annee. Sert a la
+   * personne qui catalogue pour ecarter une correspondance floue avant de la
+   * retenir. Absent quand la correspondance est exacte (ISBN) et sans ambiguite.
+   */
+  label?: string;
 }
 
 // ── Apercus rapatries cote serveur [anti-tracking] ─────────────────────────
@@ -139,8 +154,11 @@ async function rapatrierApercus(candidates: Candidate[]): Promise<void> {
   }));
 }
 
-// ── Source 1 : Open Library (par ISBN) ─────────────────────────────────────
-async function fromOpenLibrary(isbn: string): Promise<Candidate[]> {
+// ── Source 1a : Open Library par ISBN ──────────────────────────────────────
+// Correspondance exacte : un ISBN designe une edition. C'est la voie sure,
+// mais elle ne couvre que 268 notices sur les 2 432 sans capa (mesure du
+// 26/08/2026) — le fonds est surtout de la petite edition sans ISBN.
+async function fromOpenLibraryIsbn(isbn: string): Promise<Candidate[]> {
   if (!isbn) return [];
   const url = `https://openlibrary.org/api/books?bibkeys=ISBN:${encodeURIComponent(isbn)}&format=json&jscmd=data`;
   const res = await fetchWithTimeout(url, { headers: { Accept: 'application/json' } });
@@ -153,29 +171,54 @@ async function fromOpenLibrary(isbn: string): Promise<Candidate[]> {
   const thumb = cover.medium || cover.small || cover.large;
   if (!full) return [];
   // Couvertures Open Library : licence non garantie -> null (a verifier humain).
-  return [{ thumbnailUrl: thumb, fullUrl: full, source: 'openlibrary', license: null }];
+  return [{
+    thumbnailUrl: thumb, fullUrl: full, source: 'openlibrary', license: null,
+    label: entry?.title ? String(entry.title) : undefined,
+  }];
 }
 
-// ── Source 2 : Google Books (par ISBN ou titre) ────────────────────────────
-async function fromGoogleBooks(isbn: string, title: string, author: string): Promise<Candidate[]> {
-  let q = '';
-  if (isbn) q = `isbn:${isbn}`;
-  else if (title) q = [title, author].filter(Boolean).join(' ');
-  if (!q) return [];
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=5`;
+// ── Source 1b : Open Library par titre + auteur ────────────────────────────
+//
+// POURQUOI CETTE VOIE EXISTE MAINTENANT. Jusqu'au 26/08/2026, Open Library
+// n'etait interrogee que par ISBN, et c'est GOOGLE BOOKS qui portait les
+// recherches par titre — c'est-a-dire 89 % du gisement. Deux problemes :
+//   - spec-module-capas §4.2 exclut Google explicitement (« pistage,
+//     conditions d'usage ») ;
+//   - mesure du 26/08 sur 50 notices tirees dans tout le fonds : l'API Google
+//     Books a repondu HTTP 429 aux 50 requetes. Sans cle d'API elle plafonne
+//     immediatement, donc la voie titre+auteur ne fonctionnait deja plus.
+// La recherche Open Library, elle, a rendu une candidate au titre ressemblant
+// sur 16 % de l'echantillon. Ce n'est pas enorme — le fonds libertaire
+// bresilien et hispanophone est mal couvert par les catalogues mondiaux —
+// mais c'est la difference entre un bouton qui repond parfois et un bouton
+// qui ne repond jamais. Google a donc ete retire : il ne rendait rien de
+// mesurable, il etait bride, et la spec l'excluait.
+//
+// ATTENTION : correspondance FLOUE. Contrairement a l'ISBN, rien ne garantit
+// que le resultat soit le bon ouvrage. D'ou le `label` (titre et annee tels
+// que trouves), affiche a la selection : une capa fausse est pire qu'une capa
+// absente, c'est une affirmation erronee sur le livre.
+async function fromOpenLibrarySearch(title: string, author: string): Promise<Candidate[]> {
+  if (!title) return [];
+  const q = encodeURIComponent([title, author].filter(Boolean).join(' '));
+  const url = `https://openlibrary.org/search.json?q=${q}`
+    + '&fields=title,author_name,first_publish_year,cover_i&limit=5';
   const res = await fetchWithTimeout(url, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   const out: Candidate[] = [];
-  for (const item of data?.items || []) {
-    const links = item?.volumeInfo?.imageLinks;
-    if (!links) continue;
-    const full = links.large || links.medium || links.thumbnail || links.smallThumbnail;
-    const thumb = links.thumbnail || links.smallThumbnail || full;
-    if (!full) continue;
-    // Forcer https (Google renvoie parfois http) et retirer le bord boucle.
-    const norm = (u: string) => u.replace(/^http:/, 'https:');
-    out.push({ thumbnailUrl: norm(thumb), fullUrl: norm(full), source: 'googlebooks', license: null });
+  for (const doc of data?.docs || []) {
+    const id = doc?.cover_i;
+    if (!id) continue;
+    const auteurs = Array.isArray(doc?.author_name) ? doc.author_name.slice(0, 2).join(', ') : '';
+    const annee = doc?.first_publish_year ? ` (${doc.first_publish_year})` : '';
+    out.push({
+      thumbnailUrl: `https://covers.openlibrary.org/b/id/${id}-M.jpg`,
+      fullUrl: `https://covers.openlibrary.org/b/id/${id}-L.jpg`,
+      source: 'openlibrary',
+      license: null,
+      label: [doc?.title, auteurs].filter(Boolean).join(' · ') + annee,
+    });
   }
   return out;
 }
@@ -295,9 +338,14 @@ async function handleSearch(body: Record<string, unknown>, authHeader: string) {
     throw new Error('Provide at least isbn, title, or url.');
   }
 
+  const openlibrary = envBool('COVER_LOOKUP_ENABLE_OPENLIBRARY', true);
   const settled = await Promise.all([
-    runSource('openlibrary', 'Open Library', envBool('COVER_LOOKUP_ENABLE_OPENLIBRARY', true), () => fromOpenLibrary(isbn)),
-    runSource('googlebooks', 'Google Books', envBool('COVER_LOOKUP_ENABLE_GOOGLEBOOKS', true), () => fromGoogleBooks(isbn, title, author)),
+    // L'ISBN d'abord : correspondance exacte, donc en tete de galerie.
+    runSource('openlibrary', 'Open Library (ISBN)', openlibrary, () => fromOpenLibraryIsbn(isbn)),
+    // Puis la recherche floue, seulement a defaut d'ISBN : quand l'ISBN
+    // repond, inutile d'ajouter des a-peu-pres derriere une certitude.
+    runSource('openlibrary_search', 'Open Library (titre)', openlibrary && !isbn,
+      () => fromOpenLibrarySearch(title, author)),
     runSource('og_image', 'og:image', envBool('COVER_LOOKUP_ENABLE_OGIMAGE', true), () => fromOgImage(url, authHeader)),
   ]);
 
