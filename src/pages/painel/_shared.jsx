@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import { supabase } from '@/lib/supabase';
 import { localizeError } from '@/lib/localizeError';
 import { useToast } from '@/contexts/ToastContext';
+import { formatPublicId } from '@/lib/publicId';
 
 // ═══════════════════════════════════════════════════════════
 // Helpers et composants partagés du Painel (chantier E.1 / OT-4)
@@ -21,7 +22,7 @@ export function fmtD(d, timeZone) { if (!d) return '—'; try { return new Date(
 // ───────────────────────────────────────────────────────────
 // Affiche un·e lecteur·rice dans une cellule de tableau ou un item de
 // liste : nom complet sur la ligne principale, code public_id (ex:
-// U0000030) en sous-titre discret en dessous.
+// 7b3f 0c9a 2e5d 1840 6c1f) en sous-titre discret en dessous.
 //
 // Cascade de fallback pour la ligne principale :
 //   user_name → user_email → fragment d'UUID (8 premiers chars)
@@ -39,7 +40,7 @@ export function UserDisplay({ name, email, publicId, userId, fallback = '—' })
   return (
     <div className="ab-painel-user-display">
       <span>{main}</span>
-      {showSub && <span className="ab-painel-user-display__sub">{publicId}</span>}
+      {showSub && <span className="ab-painel-user-display__sub">{formatPublicId(publicId)}</span>}
     </div>
   );
 }

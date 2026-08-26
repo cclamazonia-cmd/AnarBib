@@ -41,6 +41,7 @@ const TabBiblios = lazy(() => import('@/pages/account/TabBiblios'));
 // Onglet « Événements » (agenda des biblios de la lectrice) en chunk lazy.
 const TabEventos = lazy(() => import('@/pages/account/TabEventos'));
 import MyPartnershipsConsentSection from '@/components/account/MyPartnershipsConsentSection';
+import { formatPublicId } from '@/lib/publicId';
 
 // ── ContaTabHeader (chantier #CL — recommandation B, refresh par onglet, 31/05/2026) ───
 // Header standard pour les onglets de la page Conta qui méritent un bouton refresh.
@@ -1071,7 +1072,7 @@ export default function AccountPage() {
   const chips = {
     user: profile ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || user.email : '—',
     library: libraryName || '—',
-    publicId: profile?.public_id || '—',
+    publicId: formatPublicId(profile?.public_id) || '—',
     created: profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : '—',
     reservas: reservations.length,
     consultas: consultations.filter(c => c.status === 'ativa').length,

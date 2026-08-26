@@ -1,5 +1,6 @@
 import { Button, Pill, EmptyState } from '@/components/ui';
 import { fmtD, TabHeader } from '../_shared';
+import { formatPublicId } from '@/lib/publicId';
 
 // ═══════════════════════════════════════════════════════════
 // TabContribuicoes — onglet « Contribuições / Cotisations » (E.1 / OT-4)
@@ -75,7 +76,7 @@ export default function TabContribuicoes({
                   <div className="ab-painel-memb-row__main">
                     <div className="ab-painel-memb-name">
                       {m.display_name}
-                      {m.public_id && <span className="ab-painel-memb-pubid">· {m.public_id}</span>}
+                      {m.public_id && <span className="ab-painel-memb-pubid">· {formatPublicId(m.public_id)}</span>}
                       {m.is_restricted && <Pill variant="danger" style={{ marginLeft: 6, fontSize: '.65rem' }}>⛔</Pill>}
                     </div>
                     <div className="ab-painel-memb-meta">

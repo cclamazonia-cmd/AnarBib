@@ -12,6 +12,7 @@ import StateSelect from '@/components/forms/StateSelect';
 import PhoneInput, { isValidPhoneNumber } from '@/components/forms/PhoneInput';
 import { hasStatesList, getCountryMetadata, getStateName } from '@/components/forms/countryData';
 import AltchaWidget from '@/components/ui/AltchaWidget';
+import { formatPublicId } from '@/lib/publicId';
 
 // Logo auto-heberge (19/08/2026), auparavant hotlinke sur un WordPress externe.
 const ANARBIB_LOGO = '/img/logo-anarbib.png';
@@ -645,7 +646,7 @@ export default function CriarContaPage() {
             {publicId && <div style={{ padding: 16, borderRadius: 10, background: 'rgba(21,128,61,.12)', border: '1px solid rgba(21,128,61,.3)', marginBottom: 16, textAlign: 'center' }}>
               <strong>{t({id:'auth.create.yourPublicId'})}</strong>
               <div style={{ fontSize: '.82rem', color: 'var(--brand-muted)', margin: '6px 0' }}>{t({id:'auth.create.publicIdHint'})}</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '.05em', color: '#4ade80' }}>{publicId}</div>
+              <div style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '.05em', color: '#4ade80' }}>{formatPublicId(publicId)}</div>
             </div>}
 
             {/* Rappel de connexion (login : e-mail OU ID public + mdp provisoire) */}

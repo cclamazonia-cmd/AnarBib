@@ -19,6 +19,7 @@ import { useIntl } from 'react-intl';
 import Modal from '@/components/ui/Modal';
 import { useTeamMutations } from '@/lib/teamMutations';
 import { localizeError } from '@/lib/localizeError';
+import { normalizePublicId } from '@/lib/publicId';
 
 export default function TeamInviteModal({ isOpen, onClose, onSuccess, libraryId }) {
   const { formatMessage: t } = useIntl();
@@ -40,7 +41,9 @@ export default function TeamInviteModal({ isOpen, onClose, onSuccess, libraryId 
       setErrorMsg(t({ id: 'team.invite.error.emptyPublicId' }));
       return;
     }
-    const result = await mutations.proposeInvitation(libraryId, publicId.trim(), 'librarian');
+    // normalizePublicId : l'identifiant est affiche par groupes de quatre sur la
+    // fiche et la carte — recolle avant l'envoi (cf. src/lib/publicId.js).
+    const result = await mutations.proposeInvitation(libraryId, normalizePublicId(publicId), 'librarian');
     if (result.success) {
       onSuccess?.(result);
       onClose();

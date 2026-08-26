@@ -16,6 +16,7 @@ import GazetteStaffPanel from '@/components/rede/GazetteStaffPanel';
 import LettreStaffPanel from '@/components/rede/LettreStaffPanel';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
+import { normalizePublicId } from '@/lib/publicId';
 import '../catalogacao/CatalogacaoPage.css';
 
 const PROJECT_URL = 'https://uflwmikiyjfnikiphtcp.supabase.co';
@@ -223,13 +224,13 @@ export default function RedePage() {
   }
 
   // ONBO-Q13 — transfert du mandat de coordination (constitution en cours).
-  // Résout le public_id (U…) en UUID via fn_network_resolve_public_id, gardée
+  // Résout le public_id en UUID via fn_network_resolve_public_id, gardée
   // admin réseau, puis appelle le RPC api gardé admin réseau.
   // 19/08/2026 : remplace resolve_login_email, qui renvoyait aussi l'adresse
   // e-mail et était exécutable par n'importe quel compte connecté — un oracle
   // « numéro de lecteur -> e-mail ». Ici on n'a jamais eu besoin que de l'UUID.
   async function transferMandate(reqId) {
-    const pid = (transferPid || '').trim();
+    const pid = normalizePublicId(transferPid);
     if (!pid) { setMsg({ text: t({id:'rede.transfer.needPid'}), kind: 'error' }); return; }
     if (!confirm(t({id:'rede.transfer.confirm'}))) return;
     setTransferring(true);

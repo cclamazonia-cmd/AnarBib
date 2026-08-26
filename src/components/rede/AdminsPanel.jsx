@@ -29,6 +29,7 @@ import VoteCooptationModal from './VoteCooptationModal';
 import ProposeCollectiveRemovalModal from './ProposeCollectiveRemovalModal';
 import VoteCollectiveRemovalModal from './VoteCollectiveRemovalModal';
 import CancelCollectiveRemovalModal from './CancelCollectiveRemovalModal';
+import { formatPublicId } from '@/lib/publicId';
 
 export default function AdminsPanel() {
   const { user } = useAuth();
@@ -346,7 +347,7 @@ function AdminRow({ admin: a, index, isCurrentUser, locale, onProposeRemovalClic
         </div>
         <div className="ab-team-row__meta">
           {a.email && <span>{a.email}</span>}
-          {a.public_id && <span>{' · '}{a.public_id}</span>}
+          {a.public_id && <span>{' · '}{formatPublicId(a.public_id)}</span>}
           {cooptedDate && (
             <span>{' · '}{t({ id: 'team.memberSince' }, { date: cooptedDate })}</span>
           )}

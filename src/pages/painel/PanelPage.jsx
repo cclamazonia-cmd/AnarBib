@@ -17,6 +17,7 @@ import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import PanelOnboarding from '@/components/painel/PanelOnboarding';
 import { fmtD, useSort } from './_shared';
+import { normalizePublicId } from '@/lib/publicId';
 import TabTrabalhoDoDia from './tabs/TabTrabalhoDoDia';
 // #115 : code-split - les onglets de detail sont charges a la demande (lazy).
 const TabEmprestimos     = lazy(() => import('./tabs/TabEmprestimos'));
@@ -786,7 +787,7 @@ export default function PanelPage() {
       // (fn_painel_search_reader), qui accepte aussi l'identité locale (n°
       // lecteur·rice) en plus de l'UUID / ID public / e-mail, scopée à la biblio
       // courante avec repli « toutes mes biblios ». Renvoie { profile, … }.
-      const lookupRes = await supabase.rpc('fn_painel_search_reader', { p_lookup: borrowerLookup.trim(), p_library_id: libraryId });
+      const lookupRes = await supabase.rpc('fn_painel_search_reader', { p_lookup: normalizePublicId(borrowerLookup), p_library_id: libraryId });
       if (lookupRes.error) throw lookupRes.error;
       const lookupData = Array.isArray(lookupRes.data) ? lookupRes.data[0] : lookupRes.data;
       const borrower = lookupData?.profile || null;
@@ -1335,7 +1336,7 @@ export default function PanelPage() {
     try {
       // CARD-LOCAL-1 : recherche par UUID / e-mail / identité locale, scopée à la
       // biblio courante avec repli « toutes mes biblios » (biblio d'origine signalée).
-      const { data, error } = await supabase.rpc('fn_painel_search_reader', { p_lookup: readerLookup.trim(), p_library_id: libraryId });
+      const { data, error } = await supabase.rpc('fn_painel_search_reader', { p_lookup: normalizePublicId(readerLookup), p_library_id: libraryId });
       if (error) throw error;
       const res = Array.isArray(data) ? data[0] : data;
       const p = res?.profile || null;

@@ -11,6 +11,7 @@ import { localizeError } from '@/lib/localizeError';
 import { fmtD } from '../_shared';
 import WriteToReaderBox from './WriteToReaderBox';
 import ResolveCardBox from './ResolveCardBox';
+import { formatPublicId } from '@/lib/publicId';
 
 // ───────────────────────────────────────────────────────────
 // CARD-LOCAL-2 (N2) — éditeur de l'identité locale (acte staff).
@@ -159,7 +160,7 @@ export default function TabLeitor({
           ) : (readerMatchInfo?.localIdentity && (
             <p className="ab-painel-reader-identity">{t({id:'panel.reader.localIdentity'})}: <strong>{readerMatchInfo.localIdentity}</strong></p>
           ))}
-          <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {readerProfile.public_id} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'} · {t({id:'panel.reader.org'})}: {readerProfile.affiliation_org || '—'}</p>
+          <p>{t({id:'panel.reader.email'})}: {readerProfile.email} · {t({id:'panel.reader.id'})}: {formatPublicId(readerProfile.public_id)} · {t({id:'panel.reader.gender'})}: {readerProfile.gender ? t({id:`gender.${readerProfile.gender}`, defaultMessage: t({ id: 'panel.stage.unknown' })}) : '—'} · {t({id:'panel.reader.org'})}: {readerProfile.affiliation_org || '—'}</p>
           <p>{t({id:'panel.reader.registered'})}: {fmtD(readerProfile.created_at)} · {t({id:'panel.reader.restricted'})}: {readerProfile.is_restricted ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})} · {t({id:'panel.reader.passwordPending'})}: {readerProfile.must_change_password ? t({id:'panel.reader.yes'}) : t({id:'panel.reader.no'})}</p>
 
           {/* EA-10 : indicateur visuel du gel GLOBAL (detail dans le bloc dedie plus bas) */}

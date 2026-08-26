@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { Card, Input, Button, Spinner } from '@/components/ui';
+import { normalizePublicId } from '@/lib/publicId';
 
 
 // Paquet 25.6 — destination apres login / force-change.
@@ -199,7 +200,9 @@ export default function LoginPage() {
       // le captcha. Elle était faite ici auparavant, via un RPC ouvert à anon :
       // n'importe qui pouvait ainsi obtenir l'e-mail d'un membre à partir de son
       // numéro, et les numéros s'énumèrent. Fuite fermée le 2026-08-17.
-      const email = loginId.trim();
+      // normalizePublicId recolle un numero de lecteur copie depuis l'ecran
+      // (affiche par groupes de quatre) ; une adresse e-mail ressort inchangee.
+      const email = normalizePublicId(loginId);
 
       // Appel à l'Edge Function login (vs signInWithPassword direct).
       // L'Edge Function applique : rate limit IP/email + résolution de

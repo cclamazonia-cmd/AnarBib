@@ -48,6 +48,7 @@ import { useTeamMutations } from '@/lib/teamMutations';
 import TeamActionsMenu from './TeamActionsMenu';
 import TeamActionModal from './TeamActionModal';
 import TeamInviteModal from './TeamInviteModal';
+import { formatPublicId } from '@/lib/publicId';
 
 // Note : la liste des rôles staff filtrés (librarian/coord/admin) est
 // désormais gérée côté DB par fn_team_list_memberships.
@@ -406,8 +407,8 @@ export default function TeamPanel({ scope = 'library', libraryId = null }) {
             <div key={inv.id} className="ab-team-row" style={rowStyle(i)}>
               <div className="ab-team-row__main">
                 <div className="ab-team-row__name">
-                  {inv.invited_name || inv.invited_public_id}
-                  <span className="ab-team-self-tag"> · {inv.invited_public_id}</span>
+                  {inv.invited_name || formatPublicId(inv.invited_public_id)}
+                  <span className="ab-team-self-tag"> · {formatPublicId(inv.invited_public_id)}</span>
                 </div>
                 <div className="ab-team-row__meta">
                   {inv.proposed_by_name && (

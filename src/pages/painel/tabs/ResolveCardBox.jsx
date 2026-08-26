@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import { supabase } from '@/lib/supabase';
 import CardScanner from './CardScanner';
+import { formatPublicId } from '@/lib/publicId';
 
 // ═══════════════════════════════════════════════════════════
 // ResolveCardBox — résolution staff d'une carte-lecteur
@@ -100,8 +101,8 @@ export default function ResolveCardBox({ t, libraryId, onResolved }) {
       {errMsg && <p className="ab-painel-msg">{errMsg}</p>}
       {result && (
         <div className="ab-painel-reader-card">
-          <h3>{result.display_name || result.public_id}</h3>
-          <p>{t({ id: 'panel.reader.id' })}: {result.public_id}</p>
+          <h3>{result.display_name || formatPublicId(result.public_id)}</h3>
+          <p>{t({ id: 'panel.reader.id' })}: {formatPublicId(result.public_id)}</p>
           {result.is_restricted && (
             <div className="ab-painel-frozen-badge">
               <span className="ab-painel-frozen-badge__text">{t({ id: 'card.resolve.result.restricted' })}</span>
