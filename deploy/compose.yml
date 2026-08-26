@@ -16,7 +16,14 @@
 # reproductible.
 # =============================================================================
 
-name: anarbib
+# ⚠️ NE PAS renommer en « anarbib ». Ce nom est déjà celui du projet Compose de
+# la pile de DÉVELOPPEMENT lancée par le CLI Supabase, qui le tire de
+# `supabase/config.toml` (`project_id = "anarbib"`). Les deux piles se
+# retrouvaient alors dans le même projet Docker : le `docker compose down -v`
+# recommandé en tête de bootstrap.sh pour « repartir de zéro » démontait la
+# pile de dev de la personne qui l'exécutait, sans le dire.
+# Constaté le 26/08/2026, avant d'avoir fait de dégât.
+name: anarbib-selfhost
 
 services:
 

@@ -29,7 +29,8 @@
 # ENSUITE les services qui LISENT le schéma.
 #
 # USAGE
-#   ./bootstrap.sh --depuis-le-depot         # rejeu des migrations (158)
+#   ./bootstrap.sh --depuis-le-depot         # rejeu de toutes les migrations
+#   ./bootstrap.sh --depuis-le-depot --sel-jetable   # installation NEUVE, sans Vault
 #   ./bootstrap.sh --depuis-une-sauvegarde   # restauration d'un dump
 #   ./bootstrap.sh --depuis-le-depot --sans-verification
 #
@@ -49,6 +50,8 @@ set -euo pipefail
 
 MODE=""
 VERIFIER=1
+SEL_JETABLE=0
+ECHEC_PLAFONDS=0
 SERVICES_APPLICATIFS="rest auth storage functions caddy"
 
 for arg in "$@"; do
@@ -56,6 +59,7 @@ for arg in "$@"; do
     --depuis-le-depot)       MODE="depot" ;;
     --depuis-une-sauvegarde) MODE="sauvegarde" ;;
     --sans-verification)     VERIFIER=0 ;;
+    --sel-jetable)           SEL_JETABLE=1 ;;
     -h|--help)               sed -n '2,46p' "$0"; exit 0 ;;
     *) echo "✗ Option inconnue : $arg" >&2; exit 2 ;;
   esac
@@ -63,6 +67,17 @@ done
 
 if [ -z "$MODE" ]; then
   echo "✗ Choisir un mode : --depuis-le-depot ou --depuis-une-sauvegarde" >&2
+  exit 2
+fi
+
+# --sel-jetable et --depuis-une-sauvegarde ne peuvent PAS aller ensemble : c'est
+# exactement la combinaison qui produit la corruption silencieuse décrite plus
+# bas (des jetons anciens relus avec un sel neuf). On refuse ici, pas plus tard.
+if [ "$SEL_JETABLE" = "1" ] && [ "$MODE" = "sauvegarde" ]; then
+  echo "✗ --sel-jetable est INTERDIT avec --depuis-une-sauvegarde." >&2
+  echo "  Restaurer des données avec un sel neuf rend incohérents tous les" >&2
+  echo "  jetons déjà produits, sans lever la moindre erreur. Récupérer le" >&2
+  echo "  vrai sel depuis le flux BG2 « long »." >&2
   exit 2
 fi
 
@@ -98,6 +113,19 @@ etape "3/8 · Vérification du sel de pseudonymisation"
 if sql "select 1 from pg_namespace where nspname = 'vault'" | grep -q 1; then
   if [ "$(sql "select count(*) from vault.decrypted_secrets where name = 'pseudonym_salt'")" = "1" ]; then
     echo "✓ pseudonym_salt présent au Vault."
+  elif [ "$SEL_JETABLE" = "1" ]; then
+    # Installation NEUVE (ou répétition) : aucune donnée antérieure n'existe,
+    # donc aucun jeton à rendre incohérent. C'est le SEUL cas où fabriquer un
+    # sel est légitime — d'où le drapeau explicite, et le refus plus haut de
+    # le combiner avec une restauration.
+    sql "select vault.create_secret(encode(gen_random_bytes(32), 'hex'),
+                                    'pseudonym_salt',
+                                    'Sel genere par bootstrap --sel-jetable')" >/dev/null
+    echo "⚠ Sel de pseudonymisation GÉNÉRÉ (--sel-jetable)."
+    echo "  Légitime sur une installation neuve. Ce sel N'EST PAS celui de la"
+    echo "  production : ne jamais restaurer de dump de production dans cette"
+    echo "  instance — les jetons déjà produits deviendraient incohérents en"
+    echo "  silence. Le sauvegarder dès maintenant s'il doit durer."
   else
     cat >&2 <<'AIDE'
 ✗ pseudonym_salt ABSENT du Vault.
@@ -110,6 +138,10 @@ if sql "select 1 from pg_namespace where nspname = 'vault'" | grep -q 1; then
 
   Puis relancer ce script. Ne PAS continuer sans : un sel différent ne
   provoque aucune erreur, seulement une corruption qui ne se signale pas.
+
+  S'il s'agit d'une installation NEUVE, sans données à restaurer, alors
+  aucun jeton n'existe encore et le sel peut être fabriqué ici :
+      ./bootstrap.sh --depuis-le-depot --sel-jetable
 AIDE
     exit 1
   fi
@@ -192,6 +224,33 @@ etape "7/8 · Démarrage des services applicatifs"
 docker compose up -d --wait $SERVICES_APPLICATIFS
 echo "✓ Six conteneurs en service."
 
+# `--wait` ne prouve pas ce qu'on croit. Il n'attend une SONDE que là où il y
+# en a une, et une seule est déclarée dans compose.yml : celle de `db`. Pour
+# les cinq autres, il rend la main dès que le conteneur est « running » —
+# c'est-à-dire avant que Storage ait construit son schéma.
+#
+# Constaté à la première exécution complète, le 26/08/2026 : l'étape 8 trouvait
+# `storage.buckets` absent et s'abstenait, tandis que le contrôle HTTP prenait
+# un 502 sur un service parfaitement sain — simplement pas encore là.
+#
+# On attend donc un FAIT, comme à l'étape 4 pour GoTrue : le schéma existe.
+etape "7 bis · Attente de Storage (schéma construit)"
+LIMITE_ST=120
+debut_st=$(date +%s)
+storage_pret=0
+while [ $(( $(date +%s) - debut_st )) -lt "$LIMITE_ST" ]; do
+  if [ "$(sql "select to_regclass('storage.buckets') is not null" 2>/dev/null)" = "t" ]; then
+    storage_pret=1; break
+  fi
+  sleep 2
+done
+if [ "$storage_pret" = "1" ]; then
+  echo "✓ Schéma storage en place (en $(( $(date +%s) - debut_st )) s)."
+else
+  echo "⚠ Storage n'a pas construit son schéma en ${LIMITE_ST} s."
+  docker compose logs --tail=10 storage 2>&1 | sed 's/^/    /'
+fi
+
 # -----------------------------------------------------------------------------
 # 8. Plafonds des buckets — APRÈS l'initialisation du service Storage
 # -----------------------------------------------------------------------------
@@ -202,11 +261,32 @@ echo "✓ Six conteneurs en service."
 # porte lui-même sa vérification.
 etape "8/8 · Plafonds des buckets"
 PLAFONDS=$(docker compose exec -T db sh -c 'ls /migrations/*_plafonds_buckets_numerisation.sql 2>/dev/null | head -1' | tr -d '\r')
-if [ -n "$PLAFONDS" ]; then
-  docker compose exec -T db psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "$PLAFONDS"
-  echo "✓ Plafonds et types autorisés posés sur les buckets."
-else
+# ⚠️ Cette étape annonçait « ✓ Plafonds posés » SANS RIEN VÉRIFIER. Le 26/08,
+# la migration écrivait « storage.buckets absent : plafonds NON appliqués » et
+# le script répondait « ✓ » deux lignes plus bas. Un faux vert sur la seule
+# étape qui borne la taille des fichiers téléversés.
+#
+# Et le corriger sans regarder les buckets en aurait fabriqué un autre : la
+# migration LÈVE UNE EXCEPTION si un bucket attendu manque. Une fois Storage
+# réellement prêt (étape 7 bis), `storage.buckets` existe mais est VIDE en mode
+# dépôt — la rejouer telle quelle tuerait le script. Aucune migration ne crée
+# les buckets : elles ne font que les modifier. Ils arrivent avec le dump.
+if [ -z "$PLAFONDS" ]; then
   echo "⚠ Migration des plafonds introuvable dans /migrations — buckets sans borne."
+elif [ "$(sql "select to_regclass('storage.buckets') is not null")" != "t" ]; then
+  echo "✗ storage.buckets absent : plafonds NON posés."
+  echo "  Le service Storage n'a pas construit son schéma (voir étape 7 bis)."
+  ECHEC_PLAFONDS=1
+elif [ "$(sql "select count(*) from storage.buckets")" = "0" ]; then
+  echo "· Aucun bucket dans cette instance — rien à borner."
+  echo "  Attendu en mode --depuis-le-depot : AUCUNE migration ne CRÉE de bucket,"
+  echo "  elles ne font que les modifier. Les buckets arrivent avec le dump"
+  echo "  (--depuis-une-sauvegarde) ; leurs fichiers se rsyncent depuis la"
+  echo "  sauvegarde « storage »."
+else
+  docker compose exec -T db psql -U supabase_admin -d postgres -v ON_ERROR_STOP=1 -f "$PLAFONDS"
+  SANS_BORNE=$(sql "select count(*) from storage.buckets where file_size_limit is null")
+  echo "✓ Plafonds posés. Buckets encore sans plafond : $SANS_BORNE"
 fi
 
 # -----------------------------------------------------------------------------
@@ -219,6 +299,11 @@ fi
 
 etape "Vérification"
 ECHEC=0
+
+# Les plafonds de buckets sont un contrôle à part entière : sans eux, rien ne
+# borne la taille des fichiers téléversés. Le bilan doit en tenir compte, sinon
+# l'étape 8 peut échouer sans que le script se termine en rouge.
+if [ "$ECHEC_PLAFONDS" = "1" ]; then ECHEC=1; fi
 
 # a) Aucune table publique sans RLS.
 SANS_RLS=$(sql "select count(*) from pg_class c
@@ -255,6 +340,14 @@ fi
 # Quand ce contrôle rougit : comparer d'abord avec la PRODUCTION, qui est la
 # référence. Si la production a la même liste, c'est ici qu'il faut ajouter la
 # ligne. Sinon, une policy a été perdue en chemin.
+#
+# ⚠️ CE CONTRÔLE N'A JAMAIS FONCTIONNÉ jusqu'au 26/08/2026, et il rougissait
+# TOUJOURS. Le `tr` ci-dessous retirait un saut de ligne littéral au lieu d'un
+# retour chariot : les quinze noms étaient collés en une seule chaîne, que
+# `comm` comparait à une liste de quinze lignes. Résultat : les quinze
+# apparaissaient à la fois « en trop » (concaténées) et « manquantes ».
+# Un contrôle rouge par construction s'apprend vite à ignorer — c'est-à-dire
+# qu'il ne contrôle plus rien.
 SANS_POLICY_ATTENDUES="ingest.import_profiles
 ingest.partner_catalog_received_assets
 public.altcha_consumed_challenges
@@ -276,8 +369,7 @@ SANS_POLICY_VUES=$(sql "select n.nspname || '.' || c.relname from pg_class c
                          where n.nspname in ('public','ingest') and c.relkind = 'r'
                            and c.relrowsecurity = true
                            and not exists (select 1 from pg_policy p where p.polrelid = c.oid)
-                         order by 1" | tr -d '
-')
+                         order by 1" | tr -d '\r')
 
 EN_TROP=$(comm -13 <(echo "$SANS_POLICY_ATTENDUES" | sort) <(echo "$SANS_POLICY_VUES" | sort))
 MANQUANTES=$(comm -23 <(echo "$SANS_POLICY_ATTENDUES" | sort) <(echo "$SANS_POLICY_VUES" | sort))
@@ -315,7 +407,15 @@ fi
 #
 # L'image épinglée construit elle-même le schéma d'authentification. Si elle est
 # en RETARD sur la production, un dump auth de production ne se restaure pas
-# proprement. Mesuré le 20/08 : production 77, image v2.189.0 → 69.
+# proprement. Mesuré au banc le 26/08/2026, une base vierge par palier :
+#   v2.189.0 → 76 lignes, dernière 20260302000000
+#   v2.190.0 → 76 lignes, dernière 20260302000000
+#   v2.191.0 → 76 lignes, dernière 20260302000000
+#   v2.192.0 → 77 lignes, dernière 20260625000000  ← la production exactement
+# Le « 69 » qui figurait ici était faux : c'était un nombre de FICHIERS
+# embarqués dans l'image, comparé à un nombre de LIGNES en base. Le bon test
+# n'est pas un décompte, c'est « l'image contient-elle la dernière version que
+# la production déclare ? ».
 AUTH_MIG=$(sql "select count(*) from auth.schema_migrations" 2>/dev/null || echo "?")
 echo "  Migrations GoTrue de cette instance : $AUTH_MIG  (production au 20/08 : 77)"
 if [ "$AUTH_MIG" != "?" ] && [ "$AUTH_MIG" -lt 77 ] 2>/dev/null; then
