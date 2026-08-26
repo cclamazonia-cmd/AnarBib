@@ -48,9 +48,18 @@
 # Pour repartir vraiment de zéro : docker compose down -v  (⚠️ efface tout).
 #
 # CE QUE CE SCRIPT NE FAIT PAS, et qui reste à faire à la main :
-#   * les fichiers physiques des buckets Storage (~430 Mo) — ils ne sont ni
-#     dans le dump ni dans le dépôt : rsync depuis la sauvegarde `storage`.
-#     (Les PLAFONDS des buckets, eux, sont posés — étape 7.) ;
+#   * les fichiers physiques des buckets Storage (~450 Mo) — ils ne sont ni
+#     dans le dump ni dans le dépôt. ⚠️ CETTE LIGNE DISAIT « rsync depuis la
+#     sauvegarde storage ». C'ÉTAIT FAUX, mesuré le 26/08/2026 : les deux
+#     dispositions n'ont rien à voir. La sauvegarde pose `<bucket>/<nom>` ;
+#     le service attend `<s3>/<tenant>/<bucket>/<nom>/<version>`, où le NOM
+#     DE L'OBJET EST UN DOSSIER et le fichier porte l'UUID de version. Un
+#     rsync rendrait 404 sur une base pourtant complète — un catalogue sans
+#     une seule couverture, et rien pour le signaler.
+#     Le lien entre les deux est `storage.objects.version`, qui vit dans la
+#     BASE : les fichiers se remettent donc APRÈS elle, jamais avant.
+#         deploy/ops/anarbib-storage-restore.py --source <sauvegarde>
+#     (Les PLAFONDS des buckets, eux, sont posés — étape 8.) ;
 #   * les secrets autres que le sel de pseudonymisation (clés d'API, secrets de
 #     webhook) — ils vont dans deploy/functions.env ;
 #   * le DNS et les certificats.
