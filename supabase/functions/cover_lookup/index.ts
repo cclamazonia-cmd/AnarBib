@@ -82,6 +82,61 @@ interface Candidate {
   fullUrl: string;
   source: string;
   license: string | null;
+  /** Apercu rapatrie cote serveur, en data: URI. Voir rapatrierApercus(). */
+  thumbnailData?: string | null;
+}
+
+// ── Apercus rapatries cote serveur [anti-tracking] ─────────────────────────
+//
+// La galerie de candidates affichait `<img src={candidate.thumbnailUrl}>`,
+// c'est-a-dire l'URL brute d'Open Library ou de Google Books : le navigateur
+// qui catalogue contactait donc DIRECTEMENT le tiers, a chaque recherche et
+// pour chaque vignette proposee. Seule l'image finalement RETENUE passait par
+// le serveur (handleStore).
+//
+// C'est exactement ce que la spec exclut — spec-module-capas §4.3 : « Fetch
+// cote serveur : l'EF telecharge les vignettes ; le navigateur (staff comme
+// lecteur) ne contacte jamais directement Open Library/Wikimedia. » L'ecart
+// portait sur l'ecran de catalogage, donc sur des bibliothecaires et non sur
+// des lectrices — mais la doctrine ne fait pas cette distinction, et tout
+// ecran de validation en lot le multiplierait par le nombre de propositions
+// affichees.
+//
+// On rapatrie donc aussi les apercus, renvoyes en data: URI. `thumbnailUrl`
+// reste dans la charge utile (elle sert au dedoublonnage et au diagnostic)
+// mais ne doit JAMAIS finir dans un attribut `src`.
+const APERCU_MAX_OCTETS = 120_000;      // par image
+const APERCU_BUDGET_TOTAL = 1_200_000;  // pour l'ensemble d'une reponse
+
+function enBase64(octets: Uint8Array): string {
+  // Par morceaux : `String.fromCharCode(...tableau)` sature la pile au-dela
+  // de quelques dizaines de milliers d'elements.
+  let binaire = '';
+  const PAS = 8192;
+  for (let i = 0; i < octets.length; i += PAS) {
+    binaire += String.fromCharCode(...octets.subarray(i, i + PAS));
+  }
+  return btoa(binaire);
+}
+
+async function rapatrierApercus(candidates: Candidate[]): Promise<void> {
+  let budget = APERCU_BUDGET_TOTAL;
+  await Promise.all(candidates.map(async (c) => {
+    try {
+      const res = await fetchWithTimeout(c.thumbnailUrl, { headers: { Accept: 'image/*' } });
+      if (!res.ok) return;
+      const type = (res.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+      if (!type.startsWith('image/')) return;
+      const octets = new Uint8Array(await res.arrayBuffer());
+      if (!octets.byteLength || octets.byteLength > APERCU_MAX_OCTETS) return;
+      if (octets.byteLength > budget) return;
+      budget -= octets.byteLength;
+      c.thumbnailData = `data:${type};base64,${enBase64(octets)}`;
+    } catch {
+      // Un apercu manquant n'est pas une erreur de recherche : la galerie
+      // affiche un cadre vide et la candidate reste selectionnable.
+    }
+  }));
 }
 
 // ── Source 1 : Open Library (par ISBN) ─────────────────────────────────────
@@ -257,10 +312,15 @@ async function handleSearch(body: Record<string, unknown>, authHeader: string) {
     }
   }
 
+  // Seules les candidates effectivement renvoyees sont rapatriees : inutile de
+  // telecharger des apercus que personne ne verra.
+  const retenues = candidates.slice(0, maxRecords);
+  await rapatrierApercus(retenues);
+
   return {
     ok: true,
-    total: Math.min(candidates.length, maxRecords),
-    candidates: candidates.slice(0, maxRecords),
+    total: retenues.length,
+    candidates: retenues,
     sources: settled.map((s) => s.summary),
   };
 }

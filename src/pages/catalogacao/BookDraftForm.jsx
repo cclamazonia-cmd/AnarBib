@@ -386,7 +386,9 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   const [coverUploading, setCoverUploading] = useState(false);
   // ── Cover lookup state (capas P2) ──────────────────────
   const [coverLookupLoading, setCoverLookupLoading] = useState(false);
-  const [coverCandidates, setCoverCandidates] = useState([]); // {thumbnailUrl, fullUrl, source, license}
+  // {thumbnailUrl, thumbnailData, fullUrl, source, license}
+  // thumbnailData = l'aperçu rapatrié côté serveur, seul à finir dans un `src`.
+  const [coverCandidates, setCoverCandidates] = useState([]);
   const [coverStoring, setCoverStoring] = useState(''); // fullUrl en cours d'enregistrement
   const [coverPdfBusy, setCoverPdfBusy] = useState(false); // generation capa depuis page 1 PDF
 
@@ -2626,7 +2628,14 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
                     <button key={i} type="button" title={`${c.source}${c.license ? ` · ${c.license}` : ''}`}
                       onClick={() => selectCoverCandidate(c)} disabled={!!coverStoring}
                       style={{ padding: 0, border: '1px solid rgba(255,255,255,.15)', borderRadius: 6, background: 'rgba(0,0,0,.3)', cursor: coverStoring ? 'default' : 'pointer', width: 72, opacity: coverStoring && coverStoring !== c.fullUrl ? 0.4 : 1 }}>
-                      <img src={c.thumbnailUrl} alt={c.source} style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: '6px 6px 0 0', display: 'block' }} />
+                      {/* Aperçu rapatrié par l'EF (data: URI), jamais l'URL du
+                          tiers : afficher `c.thumbnailUrl` ferait contacter
+                          Open Library ou Google par le navigateur qui catalogue,
+                          ce que la spec capas exclut (§4.3). Sans aperçu, cadre
+                          vide — la candidate reste sélectionnable. */}
+                      {c.thumbnailData
+                        ? <img src={c.thumbnailData} alt={c.source} style={{ width: '100%', height: 96, objectFit: 'cover', borderRadius: '6px 6px 0 0', display: 'block' }} />
+                        : <div aria-hidden="true" style={{ width: '100%', height: 96, borderRadius: '6px 6px 0 0', background: 'rgba(255,255,255,.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', opacity: .35 }}>📖</div>}
                       <div style={{ fontSize: '.58rem', color: 'var(--brand-muted, #aaa)', padding: '2px 3px', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {coverStoring === c.fullUrl ? t({id:'catalogacao.ui.coverUploading'}) : c.source}
                       </div>
