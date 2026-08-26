@@ -4,7 +4,7 @@ import { IntlProvider, useIntl } from 'react-intl';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LibraryProvider } from '@/contexts/LibraryContext';
 import { ToastProvider } from '@/contexts/ToastContext';
-import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE, isSupported } from '@/i18n';
+import { detectLocale, loadMessages, defaultMessages, DEFAULT_LOCALE, isSupported, applyDocumentLanguage } from '@/i18n';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import IdleTimerGuard from '@/components/IdleTimerGuard';
 import ScrollButtons from '@/components/ScrollButtons';
@@ -87,6 +87,15 @@ export default function App() {
     window.addEventListener('anarbib:locale-change', onLocaleChange);
     return () => window.removeEventListener('anarbib:locale-change', onLocaleChange);
   }, []);
+
+  // L'attribut `lang` de <html> suit la locale affichée : c'est lui qui dit aux
+  // lecteurs d'écran quelle voix et quelles règles de prononciation employer
+  // (WCAG 3.1.1). Placé ici plutôt que dans le gestionnaire d'événement, il
+  // couvre TOUTES les origines du changement — sélecteur de langue, alignement
+  // sur le profil au login — puisque toutes aboutissent à ce state.
+  useEffect(() => {
+    applyDocumentLanguage(locale);
+  }, [locale]);
 
   useEffect(() => {
     // pt-BR embarqué (synchrone) ; les autres locales chargées à la volée.

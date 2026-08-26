@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { applyScrollRestoreIfAny } from './i18n';
+import { applyScrollRestoreIfAny, applyDocumentLanguage, detectLocale } from './i18n';
 import { applyStoredPrefs } from './lib/a11y';
 import { reloadOnceForStaleChunk } from './lib/chunkReload';
 import './styles/fonts.css';
@@ -33,6 +33,11 @@ applyScrollRestoreIfAny();
 // clignotement que ces réglages servent à éviter. Le panneau qui les pilote est
 // monté dans App.jsx (AccessibilityWidget) ; le modèle vit dans lib/a11y.js.
 applyStoredPrefs();
+
+// Langue du document, posée avant le premier rendu pour la même raison : un
+// lecteur d'écran qui lit la page dès son arrivée doit déjà l'entendre dans la
+// bonne langue. App.jsx la reposera à chaque changement de locale.
+applyDocumentLanguage(detectLocale());
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

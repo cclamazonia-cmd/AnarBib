@@ -108,6 +108,37 @@ export function detectLocale() {
   return DEFAULT_LOCALE;
 }
 
+// ── Langue du document ─────────────────────────────────────
+//
+// `index.html` code `<html lang="pt-BR">` en dur, et rien ne le corrigeait :
+// une interface affichée en français, en néerlandais ou en grec restait
+// annoncée comme du portugais du Brésil. Ce n'est pas cosmétique — les
+// lecteurs d'écran choisissent la VOIX et les règles de prononciation d'après
+// cet attribut, si bien qu'une page française leur était lue avec une voix
+// brésilienne, donc inintelligible. C'est le critère WCAG 3.1.1 « Langue de
+// la page », et il touchait 9 des 10 locales.
+//
+// Appelé à deux moments, et les deux comptent :
+//   - main.jsx, AVANT le premier rendu, pour que la toute première lecture
+//     de la page soit déjà dans la bonne langue ;
+//   - App.jsx, à chaque changement de `locale`, ce qui couvre aussi bien le
+//     sélecteur de langue que l'alignement sur le profil au login
+//     (syncLocaleFromProfile), les deux passant par ce state.
+//
+// Les codes de SUPPORTED_LOCALES sont déjà des étiquettes BCP 47 valides
+// ('pt-BR', 'fr', 'el'…) : ils vont tels quels dans l'attribut.
+export function applyDocumentLanguage(locale) {
+  const lang = isSupported(locale) ? locale : DEFAULT_LOCALE;
+  try {
+    if (document.documentElement.lang !== lang) {
+      document.documentElement.lang = lang;
+    }
+  } catch {
+    // ignore (pas de DOM)
+  }
+  return lang;
+}
+
 // ── Restauration de la position scroll (vestigial) ─────────
 //
 // #LOGIN-FIX H2 : le changement de langue ne recharge plus la page (swap live
