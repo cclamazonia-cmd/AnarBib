@@ -175,77 +175,30 @@ jobs:
           chmod +x /usr/local/bin/supabase
           supabase --version
 
+      # ─────────────────── DÉCOUPLAGE DE LA FORGE (26/08/2026) ───────────────────
+      # Ces deux étapes portaient TOUT le déploiement : la boucle sur les
+      # fonctions, ses garde-fous, ses retries, le `db push`. Une suspension de
+      # Codeberg — ou simplement un runner hors ligne — emportait donc la capacité
+      # à déployer, et il fallait rejouer les commandes de mémoire, au pire moment.
+      #
+      # La logique vit maintenant dans `scripts/ci/deployer-backend.sh`, rejouable
+      # à la main sur n'importe quelle machine. Elle n'est PAS dupliquée ici : ce
+      # fichier ne fait plus que l'appeler avec les secrets de la forge. Changer
+      # de forge devient un changement d'adresse.
+      #
+      # ⚠️ Le garde-fou qui exclut `main` (routeur de la pile auto-hébergée, qui
+      # planterait sur Supabase hébergé) a suivi dans le script. Il ne doit
+      # disparaître d'aucun des deux endroits.
+      #
+      # Deux appels et non un seul, pour garder deux étapes distinctes dans le
+      # journal de la forge : on voit du premier coup d'œil laquelle a rougi.
       - name: Deploy Edge Functions (Supabase CLI)
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
         run: |
-          supabase link --project-ref "$SUPABASE_PROJECT_REF"
-          set -e
-          # ── Le push touche-t-il seulement une fonction ? ────────────────
-          # Les 47 fonctions sont redeployees une par une (~5 min), meme quand le
-          # push ne contient que des migrations ou de la doc. Vecu le 21/08 (run
-          # 8829551) : trois migrations SQL poussees, 47 fonctions redeployees
-          # pour rien. Le runner traite un job a la fois, donc ces minutes sont
-          # aussi de la file d'attente pour les autres sessions.
-          #
-          # On ne saute QUE le cas « zero fichier modifie sous supabase/functions ».
-          # Le raffinement « seulement les fonctions modifiees » est un piege :
-          # _shared/ est importe par presque toutes, et un ensemble affecte mal
-          # calcule deploierait une fonction avec un module partage perime — bug
-          # invisible au deploiement, visible des semaines plus tard.
-          #
-          # `fetch-depth: 1` ne donne pas le parent : on va chercher le SHA d'avant.
-          # S'il est introuvable (branche neuve, force-push, historique tronque),
-          # on NE saute PAS : mieux vaut cinq minutes perdues qu'une fonction non
-          # deployee. Le defaut, en cas de doute, est le comportement actuel.
-          AVANT="${{ github.event.before }}"
-          DEPLOYER_TOUT=1
-          if [ -n "$AVANT" ] && [ "$AVANT" != "0000000000000000000000000000000000000000" ]; then
-            git fetch --no-tags --depth=50 origin "$AVANT" >/dev/null 2>&1 || true
-            if git rev-parse --verify -q "${AVANT}^{commit}" >/dev/null; then
-              if [ -z "$(git diff --name-only "$AVANT" "$GITHUB_SHA" -- supabase/functions/)" ]; then
-                DEPLOYER_TOUT=0
-              fi
-            fi
-          fi
-          if [ "$DEPLOYER_TOUT" = "0" ]; then
-            echo "→ aucune fonction Edge modifiée dans ce push — étape sautée"
-            echo "✓ Edge Functions inchangées"
-            exit 0
-          fi
-
-          for fn_dir in supabase/functions/*/; do
-            fn_name=$(basename "$fn_dir")
-            [ "$fn_name" = "_shared" ] && { echo "→ skip _shared (module partagé)"; continue; }
-            # `main` est le routeur de la pile AUTO-HEBERGEE (point d'entree de
-            # edge-runtime, cf. deploy/). Il n'a aucun sens sur Supabase heberge,
-            # ou chaque fonction porte deja sa propre URL : deploye la, il lirait
-            # un supabase/config.toml absent et planterait au demarrage.
-            # Ajoute le 2026-08-19, quand main/ est entre dans le depot.
-            [ "$fn_name" = "main" ] && { echo "→ skip main (routeur auto-heberge)"; continue; }
-            [ -f "${fn_dir}index.ts" ] || { echo "→ skip $fn_name (pas d'index.ts)"; continue; }
-            echo "→ deploy $fn_name"
-            # Retry par fonction : un 502 transitoire de Supabase sur UNE fonction ne
-            # doit plus abattre tout le job (set -e) — fonctions suivantes + étape
-            # `db push` comprises. Vécu 16/06 (502 sur notify-interlibrary-loan a bloqué
-            # le déploiement de register + l'application d'une migration). 3 essais / 8s.
-            # `timeout 180` : la boucle de retry ci-dessous ne peut RIEN contre un
-            # deploiement qui HANG — la commande ne rend jamais la main, donc le
-            # `until` ne se re-evalue jamais et le job reste bloque jusqu'a ce que
-            # le runner le tue. Vecu le 17/08 (run #605) : hang sur
-            # notify-network-weekly-report, job mort apres 1 h 06, 18 fonctions non
-            # deployees. Un deploiement prend 1 a 3 s en pratique -> 180 s est une
-            # marge enorme. Meme motif que le `timeout 150` du push Pages ci-dessus.
-            n=0
-            until timeout 180 supabase functions deploy "$fn_name" --project-ref "$SUPABASE_PROJECT_REF"; do
-              n=$((n+1))
-              if [ "$n" -ge 3 ]; then echo "✗ deploy $fn_name échoué après 3 tentatives"; exit 1; fi
-              echo "↻ deploy $fn_name KO (tentative $n/3 — 502 transitoire ?) — retry 8s…"
-              sleep 8
-            done
-          done
-          echo "✓ Edge Functions déployées"
+          chmod +x scripts/ci/deployer-backend.sh
+          ./scripts/ci/deployer-backend.sh --fonctions --depuis "${{ github.event.before }}"
 
       - name: Deploy Migrations SQL (supabase db push)
         env:
@@ -253,12 +206,7 @@ jobs:
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
-          if [ ! -d supabase/migrations ] || [ -z "$(ls -A supabase/migrations 2>/dev/null)" ]; then
-            echo "→ aucune migration, rien à déployer"; exit 0
-          fi
-          supabase link --project-ref "$SUPABASE_PROJECT_REF"
-          supabase db push --linked --include-all
-          echo "✓ migrations synchronisées"
+          ./scripts/ci/deployer-backend.sh --migrations
 
   # ── Alerte : la forge doit DIRE qu'un workflow a echoue ─────────────────
   #
