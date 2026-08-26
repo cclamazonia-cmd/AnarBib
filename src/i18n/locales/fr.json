@@ -5456,7 +5456,6 @@
   "team.invitations.revokeSuccess": "Invitation révoquée.",
   "account.invitations.heading": "Invitations à rejoindre une équipe",
   "account.invitations.proposedBy": "proposée par {name}",
-  "account.invitations.asLibrarian": "Invitation à rejoindre l'équipe",
   "account.invitations.ready": "prête : vous pouvez accepter",
   "account.invitations.pending": "en attente d'endossement par l'équipe",
   "account.invitations.accept": "Accepter",

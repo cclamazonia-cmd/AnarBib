@@ -5450,7 +5450,6 @@
   "team.invitations.revokeSuccess": "Invito nuligita.",
   "account.invitations.heading": "Invitoj aliĝi al teamo",
   "account.invitations.proposedBy": "proponita de {name}",
-  "account.invitations.asLibrarian": "Invito aliĝi al la teamo",
   "account.invitations.ready": "preta: vi povas akcepti",
   "account.invitations.pending": "atendas aprobon de la teamo",
   "account.invitations.accept": "Akcepti",

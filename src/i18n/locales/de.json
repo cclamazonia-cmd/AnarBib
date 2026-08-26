@@ -5450,7 +5450,6 @@
   "team.invitations.revokeSuccess": "Einladung widerrufen.",
   "account.invitations.heading": "Einladungen, einem Team beizutreten",
   "account.invitations.proposedBy": "vorgeschlagen von {name}",
-  "account.invitations.asLibrarian": "Einladung, dem Team beizutreten",
   "account.invitations.ready": "bereit: du kannst annehmen",
   "account.invitations.pending": "wartet auf die Befürwortung des Teams",
   "account.invitations.accept": "Annehmen",

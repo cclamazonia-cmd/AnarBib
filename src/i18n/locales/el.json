@@ -5450,7 +5450,6 @@
   "team.invitations.revokeSuccess": "Η πρόσκληση ανακλήθηκε.",
   "account.invitations.heading": "Προσκλήσεις για ένταξη σε ομάδα",
   "account.invitations.proposedBy": "προτάθηκε από {name}",
-  "account.invitations.asLibrarian": "Πρόσκληση για ένταξη στην ομάδα",
   "account.invitations.ready": "έτοιμη: μπορείτε να αποδεχτείτε",
   "account.invitations.pending": "αναμονή υποστήριξης από την ομάδα",
   "account.invitations.accept": "Αποδοχή",

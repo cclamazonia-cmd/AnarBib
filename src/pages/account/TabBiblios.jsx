@@ -151,11 +151,11 @@ export default function TabBiblios() {
                         ? 'team.invitations.role.coordenador'
                         : 'team.invitations.role.librarian' })}
                     </span>
-                    <span className="ab-conta-item__meta">
-                      {inv.proposed_by_name
-                        ? t({ id: 'account.invitations.proposedBy' }, { name: inv.proposed_by_name })
-                        : t({ id: 'account.invitations.asLibrarian' })}
-                    </span>
+                    {inv.proposed_by_name && (
+                      <span className="ab-conta-item__meta">
+                        {t({ id: 'account.invitations.proposedBy' }, { name: inv.proposed_by_name })}
+                      </span>
+                    )}
                     <span className="ab-conta-item__meta" style={{ marginTop: 4, color: ready ? '#4ade80' : '#fbbf24' }}>
                       {ready ? t({ id: 'account.invitations.ready' }) : t({ id: 'account.invitations.pending' })}
                     </span>

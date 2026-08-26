@@ -5450,7 +5450,6 @@
   "team.invitations.revokeSuccess": "Uitnodiging ingetrokken.",
   "account.invitations.heading": "Uitnodigingen om bij een team te komen",
   "account.invitations.proposedBy": "voorgesteld door {name}",
-  "account.invitations.asLibrarian": "Uitnodiging om bij het team te komen",
   "account.invitations.ready": "klaar: je kunt aanvaarden",
   "account.invitations.pending": "wacht op steun van het team",
   "account.invitations.accept": "Aanvaarden",

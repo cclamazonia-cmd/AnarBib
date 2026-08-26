@@ -5450,7 +5450,6 @@
   "team.invitations.revokeSuccess": "Invitació revocada.",
   "account.invitations.heading": "Invitacions per formar part d'un equip",
   "account.invitations.proposedBy": "proposada per {name}",
-  "account.invitations.asLibrarian": "Invitació per formar part de l'equip",
   "account.invitations.ready": "a punt: pots acceptar",
   "account.invitations.pending": "esperant l'aval de l'equip",
   "account.invitations.accept": "Acceptar",

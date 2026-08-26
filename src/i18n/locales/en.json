@@ -5450,7 +5450,6 @@
   "team.invitations.revokeSuccess": "Invitation revoked.",
   "account.invitations.heading": "Invitations to join a team",
   "account.invitations.proposedBy": "proposed by {name}",
-  "account.invitations.asLibrarian": "Invitation to join the team",
   "account.invitations.ready": "ready: you can accept",
   "account.invitations.pending": "awaiting endorsement by the team",
   "account.invitations.accept": "Accept",
