@@ -178,7 +178,88 @@ GoTrue.
 **Cinq minutes qui épargnent une VM montée pour rien**, comme le plan
 l'espérait.
 
-## 6 · Suite
+## 6 · Deuxième passe : `--depuis-une-sauvegarde`
+
+Faite le même jour, **sans aucune donnée de production**. Méthode : reconstruire
+depuis le dépôt, semer un jeu factice choisi pour réveiller les pièges, dumper
+*cette* base avec le vrai `supabase db dump`, tout démonter, restaurer.
+
+Le semis visait précisément les chausse-trapes : deux `subjects` en **cycle
+mutuel** (aucun ordre d'insertion ne les satisfait — `pg_dump` a bien émis son
+avertissement « circular foreign-key constraints »), les huit buckets qu'attend
+la migration des plafonds, deux bibliothèques, trois notices, et un compte créé
+par l'API GoTrue.
+
+### Le défaut trouvé : Storage aussi PRODUIT du schéma
+
+La restauration est morte net :
+
+```
+2/3  Données (clés étrangères suspendues le temps du chargement)…
+     ÉCHEC
+ERROR:  relation "storage.buckets" does not exist
+LINE 1: INSERT INTO "storage"."buckets" ("id", "name", "owner", "cre...
+```
+
+Un dump Supabase contient les lignes de `storage.buckets` — **seize en
+production**. Or Storage démarrait à l'étape 7, *après* la restauration de
+l'étape 5. Conséquence, et elle est sans nuance : **ce mode ne pouvait restaurer
+aucun dump réel.** Le défaut serait apparu le jour de la bascule, pas avant.
+
+C'est exactement le cinquième exemplaire du défaut que l'en-tête du script
+énumère déjà quatre fois, et de même sens que celui de GoTrue : `storage` n'est
+pas un consommateur du schéma, c'en est un **producteur**. La doctrine du script
+devient donc :
+
+> base seule → rôles → **GoTrue ET Storage** → schéma+données → vues → et
+> seulement ensuite les services qui LISENT le schéma.
+
+Corrigé à l'étape 4, qui démarre les deux et attend un **fait** pour chacun
+(les quatre fonctions `auth.*`, puis `storage.buckets`), jamais un délai.
+
+### Pourquoi les répétitions précédentes ne l'avaient pas vu
+
+Parce qu'elles restauraient sans buckets, ou reconstruisaient depuis le dépôt —
+où `storage.buckets` reste vide. **Le défaut n'existe que sur un dump qui
+contient des données de Storage**, c'est-à-dire sur le seul cas qui compte.
+
+### Résultat après correction
+
+| Contrôle | Source | Restaurée |
+|---|---|---|
+| bibliothèques | 2 | **2** |
+| notices | 3 | **3** |
+| subjects (dont en cycle) | 2 (2) | **2 (2)** |
+| buckets | 8 | **8** |
+| comptes `auth.users` | 2 | **2** |
+
+Et les contrôles qui n'avaient jamais eu d'objet jusqu'ici :
+
+- **`✓ L'API rend des bibliothèques sur une base qui en contient 2.`** — c'est le
+  contrôle qui attrape le sinistre « PostgREST a lu le schéma avant les
+  données ». Il s'exerce pour la première fois.
+- **Vues matérialisées** : revenues **vides** du dump, comme documenté, puis
+  rafraîchies par l'étape 3 de `restore.sh`. Le piège est réel et la parade tient.
+- **Plafonds posés sur 8 buckets, 0 sans plafond** — l'étape 8 fait enfin un
+  vrai travail.
+- **Clés étrangères réarmées** : une insertion volontairement invalide est
+  refusée après coup. `session_replication_role` est bien revenu à `origin`.
+- **Le compte restauré se connecte** par l'Edge Function `login` (HTTP 200,
+  jeton émis). Preuve de bout en bout : il a survécu au dump *et* à la
+  restauration, et la chaîne applicative le reconnaît.
+
+Séquence complète : premier passage arrêté sur le sel (code 1, comme voulu),
+injection du sel, second passage **vert de bout en bout, code 0**, restauration
+en 12 secondes.
+
+### Ce que cette passe ne prouve toujours pas
+
+Le volume. Trois notices ne sont pas 2 677, et deux comptes ne sont pas la
+population réelle : rien ici ne dit combien de temps prend un dump de
+production, ni s'il tient dans les bornes. Les fichiers des buckets (~430 Mo)
+n'ont pas davantage été déplacés — seules leurs **lignes** ont voyagé.
+
+## 7 · Suite
 
 1. Rejouer en `--depuis-une-sauvegarde` sur un dump réel : c'est la passe qui
    éprouve (d), le contrôle « catalogue non vide », et l'ordre PostgREST.
