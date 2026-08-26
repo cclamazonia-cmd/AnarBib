@@ -1,8 +1,9 @@
 # AnarBib — pile auto-hébergée : mode d'emploi
 
 Trois fichiers : `compose.yml`, `Caddyfile`, `.env` (depuis `.env.example`).
-Six services au lieu des douze du compose officiel Supabase. Justification de
-chaque suppression : voir `AUDIT_pile_minimale_2026-08-17`.
+**Six conteneurs** : cinq briques reprises du compose officiel Supabase (qui en
+déclare treize) et Caddy substitué à Kong. Justification service par service :
+[`AUDIT_pile_minimale_2026-08-26`](../docs/journal/audits/AUDIT_pile_minimale_2026-08-26.md).
 
 **Ce document décrit un état à atteindre, pas un état atteint.** Rien de tout
 ceci n'a encore tourné : c'est la matière de la répétition sur machine jetable.
@@ -125,7 +126,7 @@ remet l'ancienne valeur et on redéploie le front.
 | Service | Raison |
 |---|---|
 | `realtime` | aucun usage dans le front — pas un `.channel(`, pas un `postgres_changes` |
-| `imgproxy` | aucune transformation d'image demandée à Storage |
+| `imgproxy` | aucune transformation d'image demandée à Storage — **vrai depuis le 26/08 seulement** : la grille du catalogue en demandait depuis le 17/06, voir l'audit |
 | `studio` | administration par migrations ; jamais en production |
 | `analytics` / `vector` | logs dans journald |
 | `meta` | outil de Studio |

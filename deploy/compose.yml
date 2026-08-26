@@ -1,9 +1,14 @@
 # =============================================================================
 # AnarBib — pile auto-hébergée réduite
 # =============================================================================
-# 6 services au lieu des ~12 du docker-compose officiel Supabase.
-# Supprimés volontairement : realtime, imgproxy, studio, analytics (logflare),
-# vector, meta, kong, supavisor. Justification : voir AUDIT_pile_minimale.
+# SIX conteneurs. Le compose officiel Supabase en declare TREIZE : on en garde
+# cinq — db, rest, auth, storage, functions — on en retire huit, et on ajoute
+# Caddy a la place de Kong. (Cet en-tete disait « 6 au lieu de ~12 » : l'addition
+# ne tombait juste dans aucun sens, corrige le 26/08/2026.)
+# Retires volontairement : realtime, imgproxy, studio, analytics (logflare),
+# vector, meta, kong, supavisor. Justification service par service, avec la
+# preuve pour chacun :
+# docs/journal/audits/AUDIT_pile_minimale_2026-08-26.md
 #
 # ATTENTION AUX TAGS : les valeurs ci-dessous viennent du fichier .env, qui
 # doit être rempli à partir des versions officielles (cf. README, §« Épingler »).
