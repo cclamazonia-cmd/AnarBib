@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Promocii aŭ malrekomendi titolon apartenas al la kunordigo de katalogado.",
   "error.serial.holdings.forbidden": "Nur la kunordigo DE ĈI TIU biblioteko povas deklari la staton de la kolekto.",
   "error.serial.holdings.completeness": "Nevalida nivelo de kompleteco.",
-  "error.serial.notFound": "Periodaĵo ne trovita."
+  "error.serial.notFound": "Periodaĵo ne trovita.",
+  "catalogacao.serial.detachFailed": "Ne eblis malligi la titolon."
 }

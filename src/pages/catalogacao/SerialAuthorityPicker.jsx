@@ -41,7 +41,7 @@ function subtitle(r, t) {
   return bits.join(' · ');
 }
 
-export default function SerialAuthorityPicker({ value, onChange, disabled }) {
+export default function SerialAuthorityPicker({ value, onChange, disabled, publishedBookId }) {
   const { formatMessage: t } = useIntl();
   const [current, setCurrent] = useState(null); // { id, slug, uniform_title, status, ... }
   const [query, setQuery] = useState('');
@@ -86,10 +86,27 @@ export default function SerialAuthorityPicker({ value, onChange, disabled }) {
     setQuery(''); setResults([]); setError(null);
   }
 
-  function detach() {
+  // Détacher est un geste EXPLICITE depuis le paquet P7b (27/08/2026).
+  // publish_book_draft écrit désormais `coalesce(v_draft.serial_id, serial_id)`
+  // — un brouillon vide ne peut plus effacer un rattachement, ce qui a réparé
+  // une perte silencieuse mais rend ce bouton muet sur une notice DÉJÀ
+  // publiée : vider le formulaire n'y suffirait plus. On appelle donc la RPC
+  // de détachement, qui existe pour ça. Un bouton qui ne fait rien de visible
+  // est le défaut qu'on vient de corriger ; on ne le réintroduit pas ici.
+  async function detach() {
     setCurrent(null);
     lastLoaded.current = null;
     onChange('');
+    if (!publishedBookId) return;   // brouillon jamais publié : rien à détacher
+    setBusy(true); setError(null);
+    try {
+      const { error: e } = await supabase.schema('api')
+        .rpc('fn_serial_detach_issue', { p_book_id: Number(publishedBookId) });
+      if (e) throw e;
+    } catch (err) {
+      console.error('detachSerial', err);
+      setError(t({ id: 'catalogacao.serial.detachFailed' }));
+    } finally { setBusy(false); }
   }
 
   async function createSerial() {

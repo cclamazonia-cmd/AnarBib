@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Promoting or deprecating a title is up to the cataloguing coordination.",
   "error.serial.holdings.forbidden": "Only THIS library’s coordination can state its holdings.",
   "error.serial.holdings.completeness": "Invalid completeness level.",
-  "error.serial.notFound": "Serial not found."
+  "error.serial.notFound": "Serial not found.",
+  "catalogacao.serial.detachFailed": "The title could not be unlinked."
 }

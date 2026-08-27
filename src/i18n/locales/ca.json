@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Promoure o depreciar un títol correspon a la coordinació de catalogació.",
   "error.serial.holdings.forbidden": "Només la coordinació D’AQUESTA biblioteca pot declarar l’estat de la col·lecció.",
   "error.serial.holdings.completeness": "Nivell de completesa no vàlid.",
-  "error.serial.notFound": "Revista no trobada."
+  "error.serial.notFound": "Revista no trobada.",
+  "catalogacao.serial.detachFailed": "No s’ha pogut desvincular el títol."
 }

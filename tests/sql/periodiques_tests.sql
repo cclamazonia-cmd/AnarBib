@@ -78,8 +78,10 @@ BEGIN
 
   -- ── G4 · la clé de désignation ─────────────────────────────────────
   v_t := 'T5 issue_key calculée à l''insertion du fascicule';
-  INSERT INTO public.books (titulo, tipo_material, numero, data_edicao, ano, serial_id)
-  VALUES ('Le Libertaire, n° 12', 'periodico', 'n° 12', 'Maio de 1997', '1997', v_rev)
+  -- bib_ref renseignée : T31/T32 reprennent cette notice en brouillon, et
+  -- publish_book_draft l'exige (bib_ref_obrigatoria).
+  INSERT INTO public.books (titulo, bib_ref, tipo_material, numero, data_edicao, ano, serial_id)
+  VALUES ('Le Libertaire, n° 12', 'TEST-PERIO-LIB-12', 'periodico', 'n° 12', 'Maio de 1997', '1997', v_rev)
     RETURNING id, work_id, issue_key INTO v_fasc, v_work_f, v_key;
   IF v_key = '12|maio de 1997|1997' THEN v_passed:=v_passed+1;
     ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' key='||coalesce(v_key,'∅')); END IF;
@@ -337,6 +339,32 @@ BEGIN
   END;
   IF v_ok THEN v_passed:=v_passed+1;
     ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : accepté'); END IF;
+
+  -- ── P7b · la reprise ne doit pas perdre la revue ───────────────────
+  -- LE TROU DE T29. T29 republiait un brouillon qui PORTAIT un serial_id : le
+  -- seul cas testé était celui qui marchait. Le défaut vécu le 27/08 était
+  -- l'autre : un brouillon issu d'une reprise (create_book_draft_from_book,
+  -- antérieure à la colonne) arrivait à NULL, et la republication effaçait le
+  -- rattachement en silence. Les deux tests ci-dessous couvrent ce cas-là.
+  DECLARE v_rep bigint; v_ser2 bigint; v_dser bigint;
+  BEGIN
+    v_t := 'T31 P7b : reprendre une notice publiée emporte son titre de revue';
+    -- Le fascicule v_fasc est rattaché à v_can (cf. bloc P5).
+    v_rep := public.create_book_draft_from_book(v_fasc, NULL);
+    SELECT serial_id INTO v_dser FROM public.book_drafts WHERE id = v_rep;
+    IF v_dser = v_can THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' brouillon serial='||coalesce(v_dser::text,'∅')); END IF;
+
+    v_t := 'T32 P7b : republier un brouillon SANS titre n''efface pas celui de la notice';
+    -- On force le cas historique : brouillon à NULL sur une notice rattachée.
+    UPDATE public.book_drafts SET serial_id = NULL WHERE id = v_rep;
+    PERFORM public.publish_book_draft(v_rep);
+    SELECT serial_id INTO v_ser2 FROM public.books WHERE id = v_fasc;
+    IF v_ser2 = v_can THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' notice serial='||coalesce(v_ser2::text,'∅')||' (effacé)'); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    v_failed:=v_failed+2; v_failures:=v_failures||('T31/T32 : '||SQLERRM);
+  END;
 
   -- ── Bilan (le RAISE annule toutes les fixtures) ────────────────────
   IF v_failed = 0 THEN

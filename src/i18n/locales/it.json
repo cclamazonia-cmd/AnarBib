@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Promuovere o deprecare un titolo spetta al coordinamento di catalogazione.",
   "error.serial.holdings.forbidden": "Solo il coordinamento DI QUESTA biblioteca può dichiarare la consistenza.",
   "error.serial.holdings.completeness": "Livello di completezza non valido.",
-  "error.serial.notFound": "Periodico non trovato."
+  "error.serial.notFound": "Periodico non trovato.",
+  "catalogacao.serial.detachFailed": "Non è stato possibile scollegare il titolo."
 }

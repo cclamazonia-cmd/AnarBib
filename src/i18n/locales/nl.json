@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Een titel bevestigen of afvoeren is aan de catalogiseringscoördinatie.",
   "error.serial.holdings.forbidden": "Alleen de coördinatie VAN DEZE bibliotheek kan haar bezit aangeven.",
   "error.serial.holdings.completeness": "Ongeldige volledigheidsgraad.",
-  "error.serial.notFound": "Tijdschrift niet gevonden."
+  "error.serial.notFound": "Tijdschrift niet gevonden.",
+  "catalogacao.serial.detachFailed": "De titel kon niet worden ontkoppeld."
 }

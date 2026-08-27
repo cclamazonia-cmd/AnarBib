@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Η προαγωγή ή απόσυρση τίτλου ανήκει στον συντονισμό καταλογογράφησης.",
   "error.serial.holdings.forbidden": "Μόνο ο συντονισμός ΑΥΤΗΣ της βιβλιοθήκης μπορεί να δηλώσει την κατάσταση συλλογής.",
   "error.serial.holdings.completeness": "Μη έγκυρο επίπεδο πληρότητας.",
-  "error.serial.notFound": "Το περιοδικό δεν βρέθηκε."
+  "error.serial.notFound": "Το περιοδικό δεν βρέθηκε.",
+  "catalogacao.serial.detachFailed": "Δεν ήταν δυνατή η αποσύνδεση του τίτλου."
 }

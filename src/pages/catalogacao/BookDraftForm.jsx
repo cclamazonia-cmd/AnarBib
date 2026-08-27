@@ -2242,6 +2242,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       <SerialAuthorityPicker
         value={f('serial_id')}
         onChange={(v) => set('serial_id', v)}
+        publishedBookId={f('published_book_id')}
       />
     ),
   };

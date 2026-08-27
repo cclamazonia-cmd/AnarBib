@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Promover ou depreciar um título cabe à coordenação de catalogação.",
   "error.serial.holdings.forbidden": "Só a coordenação DESTA biblioteca pode declarar o estado da coleção.",
   "error.serial.holdings.completeness": "Nível de completude inválido.",
-  "error.serial.notFound": "Periódico não encontrado."
+  "error.serial.notFound": "Periódico não encontrado.",
+  "catalogacao.serial.detachFailed": "Não foi possível desvincular o título."
 }

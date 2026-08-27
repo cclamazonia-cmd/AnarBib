@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Einen Titel zu bestätigen oder zurückzuziehen ist Sache der Katalogisierungs-Koordination.",
   "error.serial.holdings.forbidden": "Nur die Koordination DIESER Bibliothek kann deren Bestand angeben.",
   "error.serial.holdings.completeness": "Ungültige Vollständigkeitsstufe.",
-  "error.serial.notFound": "Zeitschrift nicht gefunden."
+  "error.serial.notFound": "Zeitschrift nicht gefunden.",
+  "catalogacao.serial.detachFailed": "Der Titel konnte nicht gelöst werden."
 }

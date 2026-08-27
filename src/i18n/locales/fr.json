@@ -6040,5 +6040,6 @@
   "error.serial.status.forbidden": "Promouvoir ou déprécier un titre revient à la coordination catalogage.",
   "error.serial.holdings.forbidden": "Seule la coordination DE CETTE bibliothèque peut déclarer l’état de collection.",
   "error.serial.holdings.completeness": "Niveau de complétude invalide.",
-  "error.serial.notFound": "Revue introuvable."
+  "error.serial.notFound": "Revue introuvable.",
+  "catalogacao.serial.detachFailed": "Le titre n’a pas pu être détaché."
 }
