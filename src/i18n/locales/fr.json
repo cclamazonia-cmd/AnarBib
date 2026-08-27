@@ -6155,5 +6155,7 @@
   "rede.invitations.mentions.prefill": "Reprendre ce nom dans l'invitation",
   "rede.gazeta.prepareNext": "Préparer le n°{number}",
   "rede.gazeta.prepareNextHint": "La chaîne compose le 15 de chaque mois. Préparer le numéro à l'avance permet de choisir son mode de fabrication avant qu'elle ne s'en saisisse ; le brouillon reste invisible du public.",
-  "rede.gazeta.prepareNextConfirm": "Créer le brouillon du n°{number} ? Il restera invisible du public jusqu’à publication."
+  "rede.gazeta.prepareNextConfirm": "Créer le brouillon du n°{number} ? Il restera invisible du public jusqu’à publication.",
+  "rede.gazeta.notComposed": "Pas encore composé",
+  "rede.gazeta.notComposedHint": "Ce numéro n'a pas encore été composé : la chaîne s'en saisira le 15. D'ici là, seul son mode de fabrication se choisit."
 }

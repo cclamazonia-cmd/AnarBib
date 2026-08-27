@@ -6155,5 +6155,7 @@
   "rede.invitations.mentions.prefill": "Usar este nome no convite",
   "rede.gazeta.prepareNext": "Preparar o n.º {number}",
   "rede.gazeta.prepareNextHint": "A cadeia compõe no dia 15 de cada mês. Preparar o número com antecedência permite escolher seu modo de fabricação antes que ela o assuma; o rascunho continua invisível ao público.",
-  "rede.gazeta.prepareNextConfirm": "Criar o rascunho do n.º {number}? Ele ficará invisível ao público até a publicação."
+  "rede.gazeta.prepareNextConfirm": "Criar o rascunho do n.º {number}? Ele ficará invisível ao público até a publicação.",
+  "rede.gazeta.notComposed": "Ainda não composto",
+  "rede.gazeta.notComposedHint": "Este número ainda não foi composto: a cadeia o assumirá no dia 15. Até lá, só o seu modo de fabricação pode ser escolhido."
 }

@@ -6155,5 +6155,7 @@
   "rede.invitations.mentions.prefill": "Uzi ĉi tiun nomon en la invito",
   "rede.gazeta.prepareNext": "Prepari la n-ron {number}",
   "rede.gazeta.prepareNextHint": "La ĉeno komponas la 15-an de ĉiu monato. Prepari la numeron anticipe permesas elekti ĝian farmanieron antaŭ ol la ĉeno transprenas ĝin; la malneto restas nevidebla al la publiko.",
-  "rede.gazeta.prepareNextConfirm": "Krei la malneton de la n-ro {number}? Ĝi restos nevidebla al la publiko ĝis publikigo."
+  "rede.gazeta.prepareNextConfirm": "Krei la malneton de la n-ro {number}? Ĝi restos nevidebla al la publiko ĝis publikigo.",
+  "rede.gazeta.notComposed": "Ankoraŭ ne kompostita",
+  "rede.gazeta.notComposedHint": "Ĉi tiu numero ankoraŭ ne estas kompostita: la ĉeno transprenos ĝin la 15-an. Ĝis tiam nur ĝia farmaniero elekteblas."
 }

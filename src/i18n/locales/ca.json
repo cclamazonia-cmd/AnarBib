@@ -6155,5 +6155,7 @@
   "rede.invitations.mentions.prefill": "Fer servir aquest nom a la invitació",
   "rede.gazeta.prepareNext": "Preparar el núm. {number}",
   "rede.gazeta.prepareNextHint": "La cadena compon el 15 de cada mes. Preparar el número per endavant permet triar-ne el mode de fabricació abans que se’n faci càrrec; l’esborrany continua invisible per al públic.",
-  "rede.gazeta.prepareNextConfirm": "Crear l’esborrany del núm. {number}? Restarà invisible per al públic fins a la publicació."
+  "rede.gazeta.prepareNextConfirm": "Crear l’esborrany del núm. {number}? Restarà invisible per al públic fins a la publicació.",
+  "rede.gazeta.notComposed": "Encara sense compondre",
+  "rede.gazeta.notComposedHint": "Aquest número encara no s’ha compost: la cadena se’n farà càrrec el dia 15. Fins llavors només se’n pot triar el mode de fabricació."
 }

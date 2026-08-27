@@ -75,12 +75,16 @@ export default function GazetteStaffPanel() {
   const [preview, setPreview] = useState(null); // { issue, byLocale, loc }
   const [reviewLabel, setReviewLabel] = useState(''); // collectif relecteur saisi
   const [sources, setSources] = useState([]);
+  // Nombre de langues DÉJÀ COMPOSÉES par numéro. Un numéro préparé à l'avance
+  // n'en a aucune tant que la chaîne ne s'en est pas saisie le 15 : il ne doit
+  // ni se publier ni prétendre à une relecture.
+  const [langues, setLangues] = useState({});
   const [draft, setDraft] = useState(NEW_SOURCE); // formulaire d'ajout de source
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [s, i, src] = await Promise.all([
+      const [s, i, src, lg] = await Promise.all([
         supabase.from('gazette_submissions')
           .select('id,rubric,locale,title,body,title_i18n,body_i18n,i18n_status,link,event_date,contributor_name,contributor_collective,status,created_at')
           .order('created_at', { ascending: false }),
@@ -90,13 +94,19 @@ export default function GazetteStaffPanel() {
         supabase.from('gazette_sources')
           .select('id,name,feed_url,rubric,locale,scope,active,last_status,last_item_at,last_error')
           .order('rubric').order('name'),
+        supabase.from('gazette_issue_locales').select('issue_id'),
       ]);
       if (s.error) throw s.error;
       if (i.error) throw i.error;
       if (src.error) throw src.error;
+      if (lg.error) throw lg.error;
       setSubs(s.data || []);
       setIssues(i.data || []);
       setSources(src.data || []);
+      setLangues((lg.data || []).reduce((acc, r) => {
+        acc[r.issue_id] = (acc[r.issue_id] || 0) + 1;
+        return acc;
+      }, {}));
     } catch (e) {
       setMsg({ text: localizeError(e, t), kind: 'error' });
     } finally {
@@ -420,7 +430,16 @@ export default function GazetteStaffPanel() {
                   <button className="cat-btn secondary" disabled={busy === 'prev:' + iss.id} onClick={() => openPreview(iss)}>
                     {t({ id: 'rede.gazeta.preview' })}
                   </button>
-                  {iss.status !== 'published' && (
+                  {/* PUBLIER UN NUMÉRO SANS CONTENU VIDERAIT LA GAZETTE EN LIGNE :
+                      la page publique sert le numéro publié le plus récent, et
+                      celui-ci n'aurait aucune langue. On l'interdit plutôt que de
+                      compter sur la vigilance. */}
+                  {iss.status !== 'published' && (langues[iss.id] || 0) === 0 && (
+                    <span className="cat-pill warn" style={{ fontSize: '.66rem', alignSelf: 'center' }}>
+                      {t({ id: 'rede.gazeta.notComposed' })}
+                    </span>
+                  )}
+                  {iss.status !== 'published' && (langues[iss.id] || 0) > 0 && (
                     <button className="cat-btn primary" disabled={busy === 'pub:' + iss.id} onClick={() => publishIssue(iss)}>
                       {t({ id: 'rede.gazeta.publish' })}
                     </button>
@@ -539,6 +558,7 @@ export default function GazetteStaffPanel() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
               <h3 style={{ margin: 0 }}>{t({ id: 'rede.gazeta.previewTitle' }, { number: preview.issue.number })}</h3>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {Object.keys(preview.byLocale).length > 0 && (
                 <select
                   value={preview.loc || ''}
                   onChange={(e) => {
@@ -554,12 +574,22 @@ export default function GazetteStaffPanel() {
                     </option>
                   ))}
                 </select>
+                )}
                 <button className="cat-btn ghost" onClick={() => setPreview(null)}>{t({ id: 'common.close' })}</button>
               </div>
             </div>
             {(() => {
               const row = preview.loc ? preview.byLocale[preview.loc] : null;
-              if (!row) return <p style={{ color: 'var(--brand-muted)' }}>{t({ id: 'rede.gazeta.previewEmpty' })}</p>;
+              // Deux vides très différents : le numéro pas encore composé (aucune
+              // langue du tout) et la langue manquante sur un numéro composé.
+              if (!row) {
+                const jamaisCompose = Object.keys(preview.byLocale).length === 0;
+                return (
+                  <p style={{ color: 'var(--brand-muted)' }}>
+                    {t({ id: jamaisCompose ? 'rede.gazeta.notComposedHint' : 'rede.gazeta.previewEmpty' })}
+                  </p>
+                );
+              }
               const pages = Array.isArray(row.content) ? row.content : [];
               return (
                 <div style={{ maxHeight: '70vh', overflow: 'auto' }}>

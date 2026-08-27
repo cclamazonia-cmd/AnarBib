@@ -6155,5 +6155,7 @@
   "rede.invitations.mentions.prefill": "Diesen Namen in der Einladung verwenden",
   "rede.gazeta.prepareNext": "Nr. {number} vorbereiten",
   "rede.gazeta.prepareNextHint": "Die Kette setzt am 15. jedes Monats. Die Ausgabe im Voraus vorzubereiten erlaubt, ihre Herstellungsweise zu wählen, bevor die Kette sie übernimmt; der Entwurf bleibt für die Öffentlichkeit unsichtbar.",
-  "rede.gazeta.prepareNextConfirm": "Entwurf für Nr. {number} anlegen? Er bleibt bis zur Veröffentlichung unsichtbar."
+  "rede.gazeta.prepareNextConfirm": "Entwurf für Nr. {number} anlegen? Er bleibt bis zur Veröffentlichung unsichtbar.",
+  "rede.gazeta.notComposed": "Noch nicht gesetzt",
+  "rede.gazeta.notComposedHint": "Diese Ausgabe wurde noch nicht gesetzt: die Kette übernimmt sie am 15. Bis dahin lässt sich nur ihre Herstellungsweise wählen."
 }
