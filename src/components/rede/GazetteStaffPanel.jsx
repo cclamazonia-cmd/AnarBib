@@ -28,6 +28,25 @@ const SOURCE_LOCALES = [...GZ_LOCALES, 'mul'];
 const BUILD_MODES = ['assisted', 'revue', 'manual'];
 const NEW_SOURCE = { name: '', feed_url: '', rubric: 'luttes', locale: 'mul' };
 
+// MIROIR de issueForToday() dans supabase/functions/gazette-monthly-build.
+// Le n°01 est celui de juin 2026, et la chaîne compose le 15 de chaque mois à
+// 06:00 UTC. Si les deux formules divergeaient, le brouillon préparé ici serait
+// orphelin et la chaîne en créerait un autre à côté : les garder identiques.
+const GZ_BASE_ANNEE = 2026;
+const GZ_BASE_MOIS = 5; // juin, en base 0
+
+function prochainNumero(maintenant = new Date()) {
+  const d = new Date(Date.UTC(maintenant.getUTCFullYear(), maintenant.getUTCMonth(), 1));
+  // Le 15 avant la composition, c'est encore le numéro de ce mois-ci ; passé le
+  // 15, le prochain rendez-vous est le mois suivant.
+  if (maintenant.getUTCDate() > 15) d.setUTCMonth(d.getUTCMonth() + 1);
+  const y = d.getUTCFullYear();
+  const m = d.getUTCMonth();
+  const number = (y - GZ_BASE_ANNEE) * 12 + (m - GZ_BASE_MOIS) + 1;
+  const ym = y + '-' + String(m + 1).padStart(2, '0');
+  return { number, slug: 'n' + String(number).padStart(2, '0') + '-' + ym, cover_date: ym + '-15' };
+}
+
 function blockText(b) {
   // Extrait le texte lisible d'un bloc de contenu (pour la relecture).
   const parts = [];
@@ -228,6 +247,34 @@ export default function GazetteStaffPanel() {
     }
   }
 
+  // Créer le brouillon du prochain numéro À L'AVANCE. Sans ça, le numéro
+  // n'existe qu'à partir de 06:00 UTC le 15, et le tick de réconciliation le
+  // compose cinq minutes plus tard : le sélecteur de mode ci-dessous n'était
+  // utilisable que dans cette fenêtre de cinq minutes, à 8 h à Paris et 3 h à
+  // Belém. Préparé à l'avance, le mode se choisit quand on veut — stepStart
+  // respecte celui qui est déjà posé sur le numéro.
+  async function preparerProchain() {
+    const prochain = prochainNumero();
+    if (!window.confirm(t({ id: 'rede.gazeta.prepareNextConfirm' }, { number: prochain.number }))) return;
+    setBusy('prep');
+    try {
+      const { error } = await supabase.from('gazette_issues').insert({
+        ...prochain,
+        masthead_title: 'Rizoma — la gazette du réseau AnarBib',
+        status: 'draft',
+        // Même règle de report que la chaîne : on reprend le mode du dernier numéro.
+        build_mode: issues[0]?.build_mode || 'assisted',
+      });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'common.dataSaved' }), kind: 'ok' });
+      await load();
+    } catch (e) {
+      setMsg({ text: localizeError(e, t), kind: 'error' });
+    } finally {
+      setBusy(null);
+    }
+  }
+
   // Le mode ne se change que sur un BROUILLON : après composition, le colophon
   // du numéro déclare déjà comment il a été fait — le changer le ferait mentir.
   // Le mode se reporte ensuite de numéro en numéro (cf. stepStart).
@@ -326,7 +373,17 @@ export default function GazetteStaffPanel() {
       {/* ─── Numéros & publication ─── */}
       {section === 'issues' && (
         <div>
-          <h3 style={{ marginBottom: 12 }}>{t({ id: 'rede.gazeta.issues' })} ({issues.length})</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
+            <h3 style={{ margin: 0 }}>{t({ id: 'rede.gazeta.issues' })} ({issues.length})</h3>
+            {!issues.some((i) => i.number === prochainNumero().number) && (
+              <button className="cat-btn secondary" disabled={busy === 'prep'} onClick={preparerProchain}>
+                {t({ id: 'rede.gazeta.prepareNext' }, { number: prochainNumero().number })}
+              </button>
+            )}
+          </div>
+          <p style={{ fontSize: '.84rem', color: 'var(--brand-muted)', marginTop: 0, marginBottom: 12 }}>
+            {t({ id: 'rede.gazeta.prepareNextHint' })}
+          </p>
           {issues.length === 0 && <div style={{ ...box, color: 'var(--brand-muted)' }}>{t({ id: 'common.empty' })}</div>}
           {issues.map((iss) => (
             <div key={iss.id} style={box}>

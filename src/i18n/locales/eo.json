@@ -6152,5 +6152,8 @@
   "rede.invitations.mentions.last": "Lasta mencio:",
   "rede.invitations.mentions.reachable": "Kiu akceptis esti citita:",
   "rede.invitations.mentions.anonymous": "Neniu akceptis esti citita: skribu rekte al la biblioteko.",
-  "rede.invitations.mentions.prefill": "Uzi ĉi tiun nomon en la invito"
+  "rede.invitations.mentions.prefill": "Uzi ĉi tiun nomon en la invito",
+  "rede.gazeta.prepareNext": "Prepari la n-ron {number}",
+  "rede.gazeta.prepareNextHint": "La ĉeno komponas la 15-an de ĉiu monato. Prepari la numeron anticipe permesas elekti ĝian farmanieron antaŭ ol la ĉeno transprenas ĝin; la malneto restas nevidebla al la publiko.",
+  "rede.gazeta.prepareNextConfirm": "Krei la malneton de la n-ro {number}? Ĝi restos nevidebla al la publiko ĝis publikigo."
 }

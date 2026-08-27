@@ -6152,5 +6152,8 @@
   "rede.invitations.mentions.last": "Last mention:",
   "rede.invitations.mentions.reachable": "Who agreed to be named:",
   "rede.invitations.mentions.anonymous": "Nobody agreed to be named: write to the library directly.",
-  "rede.invitations.mentions.prefill": "Use this name in the invitation"
+  "rede.invitations.mentions.prefill": "Use this name in the invitation",
+  "rede.gazeta.prepareNext": "Prepare no. {number}",
+  "rede.gazeta.prepareNextHint": "The pipeline composes on the 15th of each month. Preparing the issue in advance lets you choose how it will be made before the pipeline takes it over; the draft stays invisible to the public.",
+  "rede.gazeta.prepareNextConfirm": "Create the draft for no. {number}? It stays invisible to the public until published."
 }

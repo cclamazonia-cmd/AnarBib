@@ -6152,5 +6152,8 @@
   "rede.invitations.mentions.last": "Τελευταία αναφορά:",
   "rede.invitations.mentions.reachable": "Ποιοι δέχτηκαν να αναφερθούν:",
   "rede.invitations.mentions.anonymous": "Κανείς δεν δέχτηκε να αναφερθεί: γράψε απευθείας στη βιβλιοθήκη.",
-  "rede.invitations.mentions.prefill": "Χρήση αυτού του ονόματος στην πρόσκληση"
+  "rede.invitations.mentions.prefill": "Χρήση αυτού του ονόματος στην πρόσκληση",
+  "rede.gazeta.prepareNext": "Προετοιμασία του αρ. {number}",
+  "rede.gazeta.prepareNextHint": "Η αλυσίδα συνθέτει στις 15 κάθε μήνα. Η εκ των προτέρων προετοιμασία του τεύχους επιτρέπει να επιλεγεί ο τρόπος κατασκευής του πριν το αναλάβει· το προσχέδιο παραμένει αόρατο στο κοινό.",
+  "rede.gazeta.prepareNextConfirm": "Δημιουργία προσχεδίου για το αρ. {number}; Θα παραμείνει αόρατο στο κοινό μέχρι τη δημοσίευση."
 }

@@ -6152,5 +6152,8 @@
   "rede.invitations.mentions.last": "Laatste vermelding:",
   "rede.invitations.mentions.reachable": "Wie ermee instemde genoemd te worden:",
   "rede.invitations.mentions.anonymous": "Niemand stemde ermee in genoemd te worden: schrijf de bibliotheek rechtstreeks.",
-  "rede.invitations.mentions.prefill": "Deze naam in de uitnodiging gebruiken"
+  "rede.invitations.mentions.prefill": "Deze naam in de uitnodiging gebruiken",
+  "rede.gazeta.prepareNext": "Nr. {number} voorbereiden",
+  "rede.gazeta.prepareNextHint": "De keten stelt het nummer op de 15e van elke maand samen. Het nummer vooraf voorbereiden laat toe de wijze van vervaardiging te kiezen voordat de keten het overneemt; het concept blijft onzichtbaar voor het publiek.",
+  "rede.gazeta.prepareNextConfirm": "Het concept van nr. {number} aanmaken? Het blijft onzichtbaar voor het publiek tot publicatie."
 }

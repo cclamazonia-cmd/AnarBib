@@ -6152,5 +6152,8 @@
   "rede.invitations.mentions.last": "Darrera menció:",
   "rede.invitations.mentions.reachable": "Qui ha acceptat ser citada:",
   "rede.invitations.mentions.anonymous": "Ningú no ha acceptat ser citada: escriu directament a la biblioteca.",
-  "rede.invitations.mentions.prefill": "Fer servir aquest nom a la invitació"
+  "rede.invitations.mentions.prefill": "Fer servir aquest nom a la invitació",
+  "rede.gazeta.prepareNext": "Preparar el núm. {number}",
+  "rede.gazeta.prepareNextHint": "La cadena compon el 15 de cada mes. Preparar el número per endavant permet triar-ne el mode de fabricació abans que se’n faci càrrec; l’esborrany continua invisible per al públic.",
+  "rede.gazeta.prepareNextConfirm": "Crear l’esborrany del núm. {number}? Restarà invisible per al públic fins a la publicació."
 }

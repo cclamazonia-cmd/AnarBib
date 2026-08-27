@@ -6152,5 +6152,8 @@
   "rede.invitations.mentions.last": "Ultima menzione:",
   "rede.invitations.mentions.reachable": "Chi ha accettato di essere citat*:",
   "rede.invitations.mentions.anonymous": "Nessun* ha accettato di essere citat*: scrivi direttamente alla biblioteca.",
-  "rede.invitations.mentions.prefill": "Usare questo nome nell'invito"
+  "rede.invitations.mentions.prefill": "Usare questo nome nell'invito",
+  "rede.gazeta.prepareNext": "Preparare il n. {number}",
+  "rede.gazeta.prepareNextHint": "La catena compone il 15 di ogni mese. Preparare il numero in anticipo permette di sceglierne la modalità di fabbricazione prima che se ne impadronisca; la bozza resta invisibile al pubblico.",
+  "rede.gazeta.prepareNextConfirm": "Creare la bozza del n. {number}? Resterà invisibile al pubblico fino alla pubblicazione."
 }
