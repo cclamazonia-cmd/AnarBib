@@ -1,7 +1,10 @@
 // ═══════════════════════════════════════════════════════════
 // AnarBib — Paquet 8 criar-conta — couverture i18n du chantier
 // Vérifie que les clés produites par le chantier criar-conta
-// (Paquets 5 et 7) sont complètes et traduites dans les 8 locales.
+// (Paquets 5 et 7) sont complètes et traduites dans les 10 locales.
+// nl et el ajoutées le 27/08/2026 : elles manquaient, et c'est en
+// néerlandais que trois libellés contributor sont restés en anglais
+// jusqu'en production sans qu'aucun test ne bronche.
 //
 // Note : les clés welcome.*.orphan du Paquet 6 vivent dans
 // _shared/i18n/mail-strings.ts (les mails), pas dans les locales
@@ -17,8 +20,10 @@ import it_ from '@/i18n/locales/it.json';
 import es from '@/i18n/locales/es.json';
 import ca from '@/i18n/locales/ca.json';
 import eo from '@/i18n/locales/eo.json';
+import nl from '@/i18n/locales/nl.json';
+import el from '@/i18n/locales/el.json';
 
-const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es, ca, eo };
+const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es, ca, eo, nl, el };
 const OTHER_LANGS = Object.keys(LOCALES).filter(l => l !== 'pt-BR');
 
 // Préfixes des clés produites par le chantier criar-conta.
@@ -37,6 +42,9 @@ const VISIBLE_KEYS = [
   'auth.create.submit',
   'auth.create.intent.optionOrphan',
   'auth.create.intent.optionNewLibrary',
+  'auth.create.intent.newLibrary.libNameLabel',
+  'auth.create.intent.newLibrary.libNameRequired',
+  'auth.create.wizard.confirm.goRequestForm',
   'account.declared.title',
   'account.declared.deleteBtn',
   'privacy.declared.title',

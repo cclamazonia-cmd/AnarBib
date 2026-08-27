@@ -13,6 +13,7 @@ import PhoneInput, { isValidPhoneNumber } from '@/components/forms/PhoneInput';
 import { hasStatesList, getCountryMetadata, getStateName } from '@/components/forms/countryData';
 import AltchaWidget from '@/components/ui/AltchaWidget';
 import { formatPublicId } from '@/lib/publicId';
+import { deriveSignupIntent, isSignupSentinel } from '@/lib/signupIntent';
 
 // Logo auto-heberge (19/08/2026), auparavant hotlinke sur un WordPress externe.
 const ANARBIB_LOGO = '/img/logo-anarbib.png';
@@ -51,6 +52,12 @@ export default function CriarContaPage() {
     // Nom de bibliothèque mentionné par une lectrice orpheline (cas
     // __orphan__). Optionnel, plafonné à 200 car. Vide pour les autres cas.
     orphan_library_name: '',
+    // Nom de la bibliothèque représentée (cas __new_library__). OBLIGATOIRE,
+    // contrairement au champ orphelin ci-dessus : il part dans
+    // profiles.affiliation_org puis se reporte dans le formulaire de demande.
+    // Sans lui, la coordination reçoit une candidature anonyme et la personne
+    // ressaisit le nom une seconde fois — les deux choses que ce cas évite.
+    collective_library_name: '',
     // phone est désormais au format E.164 ('+5511999999999')
     phone: '',
     gender: '', org: '', motivation: '', addr1: '', addr2: '', unit: '', cep: '', bairro: '',
@@ -76,6 +83,9 @@ export default function CriarContaPage() {
     setMsg({ text: '', kind: '' });
     if (step === 1 && !form.library_slug) {
       setMsg({ text: t({id:'auth.create.selectLibraryRequired'}), kind: 'error' }); return;
+    }
+    if (step === 1 && form.library_slug === '__new_library__' && !form.collective_library_name.trim()) {
+      setMsg({ text: t({id:'auth.create.intent.newLibrary.libNameRequired'}), kind: 'error' }); return;
     }
     if (step === 2) {
       if (!form.first_name.trim() || !form.last_name.trim() || !form.email.trim() || !form.phone.trim()) {
@@ -117,13 +127,16 @@ export default function CriarContaPage() {
 
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); }
   function handleLibChange(slug) {
-    // Paquet 4 — 3 cas explicites (spec criar-conta v0.3 §3.1) :
-    //  - un vrai slug      → reader_pending (lectrice d'une biblio du réseau)
-    //  - '__orphan__'      → reader_orphan (biblio pas encore sur AnarBib)
-    //  - '__new_library__' → collective_candidate (ouvrir une nouvelle biblio)
+    // 4 cas explicites ; la table de correspondance vit dans @/lib/signupIntent
+    // (extraite le 27/08/2026 pour être testable) :
+    //  - un vrai slug        → reader_pending (lectrice d'une biblio du réseau)
+    //  - '__orphan__'        → reader_orphan (biblio pas encore sur AnarBib)
+    //  - '__new_library__'   → collective_candidate (représente une biblio qui
+    //                          demande à entrer — qu'elle existe déjà ou non)
+    //  - '__contributor__'   → contributor (compte réseau, atelier autorités)
     // La sentinelle est mémorisée dans library_slug et le formulaire continue
     // normalement ; le signup_intent est dérivé à la soumission.
-    if (slug === '__orphan__' || slug === '__new_library__' || slug === '__contributor__') {
+    if (isSignupSentinel(slug)) {
       set('library_slug', slug);
       set('acceptRules', true); // pas de regimento de biblio à accepter
       setCurrentLib(null);
@@ -132,14 +145,6 @@ export default function CriarContaPage() {
     set('library_slug', slug);
     set('acceptRules', false);
     setCurrentLib(libraries.find(l => l.slug === slug) || null);
-  }
-  // Paquet 4 — dérive le signup_intent envoyé à l'EF register depuis la
-  // valeur du select. Trois cas, miroir de handleLibChange.
-  function deriveSignupIntent(slug) {
-    if (slug === '__orphan__') return 'reader_orphan';
-    if (slug === '__new_library__') return 'collective_candidate';
-    if (slug === '__contributor__') return 'contributor';
-    return 'reader_pending';
   }
   function libLogo(lib) {
     if (!lib?.slug) return null;
@@ -170,6 +175,12 @@ export default function CriarContaPage() {
     // doit choisir un des 3 cas (biblio du réseau, orpheline, ou nouvelle).
     if (!form.library_slug) {
       setMsg({ text: t({id:'auth.create.selectLibraryRequired'}), kind: 'error' });
+      return;
+    }
+    // Doublon volontaire de la garde d'étape 1 : goNext peut être court-circuité
+    // (retour arrière puis submit), et affiliation_org doit être non vide sur ce cas.
+    if (form.library_slug === '__new_library__' && !form.collective_library_name.trim()) {
+      setMsg({ text: t({id:'auth.create.intent.newLibrary.libNameRequired'}), kind: 'error' });
       return;
     }
     // Validation E.164 du numéro de téléphone
@@ -211,7 +222,13 @@ export default function CriarContaPage() {
         last_name: form.last_name.trim(),
         phone: form.phone.trim(), // au format E.164
         gender: form.gender,
-        affiliation_org: form.org.trim(),
+        // Pour un compte candidat, le nom de la biblio représentée EST
+        // l'affiliation : c'est cette colonne que /conta et le backstage
+        // montrent, et celle qui pré-remplit le formulaire de demande.
+        // form.org n'est saisi que dans le cas contributeur — jamais les deux.
+        affiliation_org: signupIntent === 'collective_candidate'
+          ? form.collective_library_name.trim()
+          : form.org.trim(),
         signup_motivation: form.motivation.trim(),
         address_1: form.addr1.trim(),
         address_2: form.addr2.trim(),       // Complément (sans préfixe)
@@ -243,7 +260,7 @@ export default function CriarContaPage() {
         preferred_login_identifier: 'public_id',
         // Locale du navigateur (paquet 25.4) : permet au mail de bienvenue d'arriver
         // dans la langue actuellement affichée à l'usager. Backend register/index.ts
-        // valide la valeur contre la liste des 6 locales supportées et fait fallback
+        // valide la valeur contre la liste des 10 locales supportées et fait fallback
         // sur pt-BR si la valeur n'est pas reconnue.
         locale: detectLocale(),
         altcha_payload: altchaCharge,
@@ -409,15 +426,30 @@ export default function CriarContaPage() {
           </div>
         )}
 
-        {/* Paquet 4 — Cas « candidate à l'ouverture d'une nouvelle biblio ». */}
+        {/* Cas « je représente une bibliothèque qui veut entrer » (intent
+            collective_candidate). Requalifié le 27/08/2026 : le libellé disait
+            « ouvrir une nouvelle bibliothèque », ce qui parlait à qui part de
+            rien et laissait dehors les bibliothèques déjà constituées qui
+            demandent à entrer — le cas réel (Anarchief.org, SOLIDAIRES).
+            Le nom est ici OBLIGATOIRE (cf. garde dans goNext + handleSubmit). */}
         {form.library_slug === '__new_library__' && (
           <div style={{ padding: 14, borderRadius: 10, background: 'rgba(180,83,9,.08)', border: '1px solid rgba(180,83,9,.25)', marginBottom: 16 }}>
             <strong style={{ fontSize: '.92rem', display: 'block', marginBottom: 6 }}>
               {t({id:'auth.create.intent.newLibrary.title'})}
             </strong>
-            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6, marginBottom: 10 }}>
               {t({id:'auth.create.intent.newLibrary.body'})}
             </div>
+            <label style={ls}>{t({id:'auth.create.intent.newLibrary.libNameLabel'})} {req}</label>
+            <input
+              type="text"
+              value={form.collective_library_name}
+              onChange={e => set('collective_library_name', e.target.value)}
+              maxLength={200}
+              required
+              style={fs}
+            />
+            <div style={hs}>{t({id:'auth.create.intent.newLibrary.libNameHint'})}</div>
           </div>
         )}
 
@@ -668,10 +700,29 @@ export default function CriarContaPage() {
               </div>
             )}
 
+            {/* Cas candidat : on dépose la personne sur le formulaire de demande,
+                pas sur /conta. Le passage par /login?next= n'est pas contournable —
+                register ne connecte pas le compte (must_change_password=true) et ne
+                renvoie pas le jeton de claim, qui reste dans le mail (il y prouve la
+                possession de l'adresse). D'où le rappel d'identifiants ci-dessus,
+                qu'une redirection automatique ferait disparaître de l'écran avec le
+                mot de passe provisoire. */}
+            {form.library_slug === '__new_library__' && (
+              <div style={{ padding: 14, borderRadius: 10, background: 'rgba(180,83,9,.08)', border: '1px solid rgba(180,83,9,.25)', marginBottom: 16, fontSize: '.85rem', color: 'var(--brand-muted, #ccc)', lineHeight: 1.6 }}>
+                {t({id:'auth.create.wizard.confirm.requestFormHint'})}
+              </div>
+            )}
+
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <Link to="/login" style={{ textDecoration: 'none' }}>
-                <Button variant="primary">{t({id:'auth.create.wizard.confirm.goLogin'})}</Button>
-              </Link>
+              {form.library_slug === '__new_library__' ? (
+                <Link to={`/login?next=${encodeURIComponent('/solicitar-biblioteca')}`} style={{ textDecoration: 'none' }}>
+                  <Button variant="primary">{t({id:'auth.create.wizard.confirm.goRequestForm'})}</Button>
+                </Link>
+              ) : (
+                <Link to="/login" style={{ textDecoration: 'none' }}>
+                  <Button variant="primary">{t({id:'auth.create.wizard.confirm.goLogin'})}</Button>
+                </Link>
+              )}
             </div>
           </div>
         )}

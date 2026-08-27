@@ -32,6 +32,12 @@ const PROFILE_COLUMNS = [
   // biblio passe l'atelier de constitution). Lu par ProtectedRoute/LoginPage pour
   // rediriger la coordinatrice vers /atelier.
   'solicitante_state',
+  // Organisation d'appartenance déclarée à l'inscription. Pour un compte
+  // candidat (signup_intent='collective_candidate') c'est le nom de la
+  // bibliothèque représentée : SolicitarBibliotecaPage s'en sert pour
+  // pré-remplir libraryName, ce qui évite la double saisie promise à
+  // l'inscription. RLS : ligne propre au compte, rien de nouveau exposé.
+  'affiliation_org',
 ].join(', ');
 
 export function AuthProvider({ children }) {

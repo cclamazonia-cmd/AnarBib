@@ -20,12 +20,18 @@ import it_ from '@/i18n/locales/it.json';
 import es from '@/i18n/locales/es.json';
 import ca from '@/i18n/locales/ca.json';
 import eo from '@/i18n/locales/eo.json';
+import nl from '@/i18n/locales/nl.json';
+import el from '@/i18n/locales/el.json';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const SRC_DIR = join(__dirname, 'src');
 
-const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es, ca, eo };
+// nl et el ajoutés le 27/08/2026. Elles manquaient ici alors qu'elles sont
+// servies par l'app depuis SUPPORTED_LOCALES : une clé citée par le code et
+// oubliée dans nl.json passait donc la CI, et ne se voyait à l'écran que si
+// quelqu'un naviguait en néerlandais — la langue d'Anarchief, justement.
+const LOCALES = { 'pt-BR': ptBR, fr, en, de, it: it_, es, ca, eo, nl, el };
 const PT_KEYS = Object.keys(ptBR);
 
 // ─────────────────────────────────────────────────────────────
@@ -122,8 +128,18 @@ describe('i18n locale files', () => {
     if (lang === 'pt-BR') continue;
 
     describe(`${lang} locale`, () => {
+      // La tolérance de 50 clés est retirée (27/08/2026) : elle laissait passer
+      // 50 oublis par locale sans un mot, et le test suivant ne rattrapait rien
+      // puisqu'il regardait le sens inverse (clés en trop) et se contentait d'un
+      // console.warn. Les 10 locales sont à parité complète aujourd'hui : cette
+      // garde n'a donc rien à rattraper, elle empêche seulement d'y retomber.
       it('should have the same number of keys or more than pt-BR', () => {
-        expect(Object.keys(data).length).toBeGreaterThanOrEqual(PT_KEYS.length - 50);
+        expect(Object.keys(data).length).toBeGreaterThanOrEqual(PT_KEYS.length);
+      });
+
+      it('should define every pt-BR key', () => {
+        const missing = PT_KEYS.filter(k => !(k in data));
+        expect(missing, `${lang}: ${missing.length} clés absentes — ${missing.slice(0, 8).join(', ')}`).toEqual([]);
       });
 
       it('should not have keys missing from pt-BR', () => {

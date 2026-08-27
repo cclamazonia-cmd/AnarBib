@@ -120,6 +120,14 @@ export default function SolicitarBibliotecaPage() {
           next.contactName = fullName;
         }
       }
+      // Nom de la biblio : déclaré à l'inscription par la voie « je représente
+      // une bibliothèque » et rangé dans profiles.affiliation_org. On ne le
+      // pose que si le champ est encore vide — il reste librement modifiable,
+      // c'est ici que le nom officiel se fixe, pas au moment du compte.
+      if (profile?.affiliation_org && !prev.libraryName) {
+        const declared = String(profile.affiliation_org).trim();
+        if (declared) next.libraryName = declared;
+      }
       return next;
     });
   }, [user, profile]); // eslint-disable-line react-hooks/exhaustive-deps

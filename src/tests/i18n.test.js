@@ -34,8 +34,14 @@ describe('i18n locale files', () => {
     if (lang === 'pt-BR') continue;
 
     describe(`${lang} locale`, () => {
+      // Tolérance de 50 retirée le 27/08/2026 — cf. i18n.test.js (racine).
       it('should have the same number of keys or more than pt-BR', () => {
-        expect(Object.keys(data).length).toBeGreaterThanOrEqual(PT_KEYS.length - 50);
+        expect(Object.keys(data).length).toBeGreaterThanOrEqual(PT_KEYS.length);
+      });
+
+      it('should define every pt-BR key', () => {
+        const missing = PT_KEYS.filter(k => !(k in data));
+        expect(missing, `${lang}: ${missing.length} clés absentes — ${missing.slice(0, 8).join(', ')}`).toEqual([]);
       });
 
       it('should not have keys missing from pt-BR', () => {

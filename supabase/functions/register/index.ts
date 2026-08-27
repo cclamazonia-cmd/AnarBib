@@ -548,8 +548,17 @@ serve(async (req)=>{
     const preferredLoginIdentifier = String(body?.preferred_login_identifier || "public_id").trim();
     // Locale du destinataire pour le mail de bienvenue.
     // Le frontend (CriarContaPage) passe `locale: detectLocale()` dans le body.
-    // Validation : doit être l'une des 6 locales supportées, sinon fallback pt-BR.
-    const SUPPORTED_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo"];
+    // Validation : doit être l'une des locales servies par l'app, sinon pt-BR.
+    //
+    // nl et el ajoutés le 27/08/2026. Ils manquaient à cette liste alors que
+    // mail-strings.ts les traduit intégralement : une inscription faite en
+    // néerlandais recevait donc son mail de bienvenue en portugais, en silence,
+    // parce que le repli est ici et non dans les traductions. C'est la langue
+    // d'Anarchief.org, dont la demande d'adhésion est arrivée le 22/08.
+    //
+    // La liste doit rester alignée sur SUPPORTED_LOCALES de src/i18n/index.js
+    // et sur le type SupportedMailLocale de _shared/i18n/mail-strings.ts.
+    const SUPPORTED_LOCALES = ["pt-BR", "fr", "es", "en", "it", "de", "ca", "eo", "nl", "el"];
     const requestedLocale = String(body?.locale || "").trim();
     const userLocale = SUPPORTED_LOCALES.includes(requestedLocale) ? requestedLocale : "pt-BR";
     if (!email || !firstName || !lastName || !phone) {
