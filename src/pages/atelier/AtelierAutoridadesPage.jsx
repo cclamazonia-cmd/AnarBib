@@ -314,6 +314,11 @@ export default function AtelierAutoridadesPage() {
               <select value={form.targetKind} onChange={e => setForm(f => ({ ...f, targetKind: e.target.value }))} style={fs}>
                 <option value="author">{t({ id: 'atelier.kind.author', defaultMessage: 'Pessoa / coletividade (author)' })}</option>
                 <option value="subject">{t({ id: 'atelier.kind.subject', defaultMessage: 'Matéria (subject)' })}</option>
+                {/* #périodiques P5 : fn_authority_propose / apply / list acceptent
+                    'serial' depuis le 27/08/2026. Il ne manquait que l'option —
+                    sans elle, la fusion de deux titres de revue n'avait aucune
+                    voie délibérative, alors que c'est celle que la spec impose. */}
+                <option value="serial">{t({ id: 'atelier.kind.serial', defaultMessage: 'Periódico (serial)' })}</option>
               </select>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '90px minmax(0, 1fr)', gap: 10, marginBottom: 10, alignItems: 'end' }}>

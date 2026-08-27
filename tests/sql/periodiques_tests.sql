@@ -27,7 +27,7 @@ DECLARE
   v_rev bigint; v_rev2 bigint; v_can bigint; v_dup bigint; v_voisin bigint;
   v_a bigint; v_b bigint; v_c bigint; v_mono bigint;
   v_work_a bigint; v_work_b bigint; v_work_c bigint; v_work_m bigint; v_work_f bigint;
-  v_fasc bigint;
+  v_fasc bigint; v_mono_periodico bigint; v_work_lib bigint;
   v_slug text; v_status text; v_key text; v_stmt text; v_txt text;
   v_num int; v_pub boolean; v_hidden jsonb; v_reciproque bigint;
   v_ok boolean; v_vu int;
@@ -307,6 +307,11 @@ BEGIN
     v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||SQLERRM);
   END;
 
+  -- Un fascicule NON rattaché, pour éprouver attach/detach (T35).
+  INSERT INTO public.books (titulo, bib_ref, tipo_material, ano, numero)
+  VALUES ('Fascicule libre', 'TEST-PERIO-LIBRE', 'periodico', '1900', '1')
+    RETURNING id, work_id INTO v_mono_periodico, v_work_lib;
+
   -- ── P7a · du brouillon à la notice publiée ─────────────────────────
   -- Le sélecteur de titre écrit sur le BROUILLON ; si la publication ne
   -- recopiait pas le lien, le catalogage entier serait sans effet.
@@ -364,6 +369,45 @@ BEGIN
       ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' notice serial='||coalesce(v_ser2::text,'∅')||' (effacé)'); END IF;
   EXCEPTION WHEN OTHERS THEN
     v_failed:=v_failed+2; v_failures:=v_failures||('T31/T32 : '||SQLERRM);
+  END;
+
+  -- ── Interface : la FORME des appels ────────────────────────────────
+  -- Ces trois tests ne mesurent pas une règle métier mais un CONTRAT : que
+  -- chaque RPC accepte exactement les arguments que le composant lui envoie.
+  -- C'est la classe de défaut la plus probable sur du code d'interface qu'on
+  -- ne peut pas cliquer en CI — un paramètre renommé d'un côté donne un 404
+  -- PostgREST muet de l'autre, sans rien casser de visible ici.
+  DECLARE v_prop2 uuid; v_lbl text; v_row public.serials;
+  BEGIN
+    v_t := 'T33 fn_serial_update accepte le payload exact de la fiche (nulls + alt_i18n)';
+    v_row := api.fn_serial_update(v_can, jsonb_build_object(
+      'uniform_title', 'Le Combat syndicaliste',
+      'is_continuing', true, 'scope_note', NULL,
+      'alt_i18n', jsonb_build_object('fr', jsonb_build_array('Le Combat')),
+      'sort_title', NULL, 'issn', '1676-0000', 'issn_l', NULL,
+      'emitter_org', 'CNT-AIT', 'place_publication', 'Paris',
+      'country_code', 'FR', 'language', 'fr', 'periodicidade', 'Mensuel',
+      'start_year', '1896', 'end_year', NULL));
+    IF v_row.emitter_org = 'CNT-AIT' AND (v_row.alt_i18n -> 'fr') @> to_jsonb('Le Combat'::text)
+      THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : payload mal appliqué'); END IF;
+
+    v_t := 'T34 une proposition de FUSION de revue est acceptée et nommée dans l''Atelier';
+    v_prop2 := api.fn_authority_propose('fusion', 'serial', v_voisin, v_can,
+                 jsonb_build_object('duplicate_name','Revue voisine','canonical_name','Le Combat syndicaliste'),
+                 'témoin de suite');
+    SELECT target_label INTO v_lbl FROM api.fn_authority_list() WHERE id = v_prop2;
+    IF v_lbl = 'Revue voisine' THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' label='||coalesce(v_lbl,'∅')); END IF;
+
+    v_t := 'T35 attach/detach acceptent les noms de paramètres du panneau';
+    PERFORM api.fn_serial_attach_issue(v_mono_periodico, v_can);
+    IF (SELECT serial_id FROM public.books WHERE id = v_mono_periodico) = v_can
+      THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : rattachement absent'); END IF;
+    PERFORM api.fn_serial_detach_issue(v_mono_periodico);
+  EXCEPTION WHEN OTHERS THEN
+    v_failed:=v_failed+3; v_failures:=v_failures||('T33/T34/T35 : '||SQLERRM);
   END;
 
   -- ── Bilan (le RAISE annule toutes les fixtures) ────────────────────
