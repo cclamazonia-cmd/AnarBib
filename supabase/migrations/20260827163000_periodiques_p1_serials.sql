@@ -62,10 +62,22 @@
 -- puis a échoué au dernier geste, l'enregistrement de la version :
 --   ERROR: duplicate key value violates unique constraint "schema_migrations_pkey"
 --   Key (version)=(20260827120000) already exists.
--- La migration étant transactionnelle, TOUT a été annulé : public.serials n'a
--- jamais existé, les sept paquets suivants n'ont pas tourné, et la base est
--- restée intacte. Un échec propre, donc — rien à réparer, seulement à
--- renuméroter.
+--
+-- ⚠️ ET LE DDL N'A **PAS** ÉTÉ ANNULÉ. C'est le point qui compte, et je l'ai
+-- d'abord cru l'inverse. Ce fichier porte son propre `BEGIN;` / `COMMIT;` :
+-- au moment où le CLI tente d'écrire la ligne de version, la transaction du
+-- fichier est DÉJÀ validée. Constaté sur staging entre les deux runs :
+-- public.serials, books.serial_id, books.issue_key et les quatre triggers
+-- existaient bel et bien, **sans aucune ligne dans schema_migrations**. Les
+-- sept paquets suivants, eux, n'ont pas tourné.
+--
+-- Une collision d'horodatage laisse donc la base dans un état à moitié
+-- migré et NON enregistré. Si le rattrapage a été un simple renumérotage,
+-- c'est uniquement parce que ce paquet est écrit intégralement en
+-- `CREATE TABLE IF NOT EXISTS` / `ADD COLUMN IF NOT EXISTS` /
+-- `DROP TRIGGER IF EXISTS` + `CREATE TRIGGER` : rejoué sous le nouveau
+-- numéro, il a été un quasi no-op et s'est enregistré normalement. Un paquet
+-- écrit sans ces gardes aurait exigé une réparation manuelle.
 --
 -- POURQUOI LA CHAÎNE LOCALE NE POUVAIT PAS L'ATTRAPER : le runner sql-tests
 -- applique les FICHIERS par ordre lexicographique et ne tient aucun registre de
