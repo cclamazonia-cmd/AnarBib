@@ -305,6 +305,39 @@ BEGIN
     v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : '||SQLERRM);
   END;
 
+  -- ── P7a · du brouillon à la notice publiée ─────────────────────────
+  -- Le sélecteur de titre écrit sur le BROUILLON ; si la publication ne
+  -- recopiait pas le lien, le catalogage entier serait sans effet.
+  DECLARE v_draft bigint; v_pub bigint; v_ser bigint;
+  BEGIN
+    v_t := 'T28 P7a : la publication recopie le titre de revue du brouillon';
+    INSERT INTO public.book_drafts (titulo, bib_ref, tipo_material, ano, numero, serial_id, created_by)
+    VALUES ('Le Combat syndicaliste, n° 7', 'TEST-PERIO-001', 'periodico', '1937', '7', v_can, v_staff)
+    RETURNING id INTO v_draft;
+    v_pub := public.publish_book_draft(v_draft);
+    SELECT serial_id INTO v_ser FROM public.books WHERE id = v_pub;
+    IF v_ser = v_can THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' serial='||coalesce(v_ser::text,'∅')); END IF;
+
+    v_t := 'T29 P7a : republier une fiche ne lui fait pas PERDRE son titre (branche UPDATE)';
+    PERFORM public.publish_book_draft(v_draft);
+    SELECT serial_id INTO v_ser FROM public.books WHERE id = v_pub;
+    IF v_ser = v_can THEN v_passed:=v_passed+1;
+      ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' serial='||coalesce(v_ser::text,'∅')); END IF;
+  EXCEPTION WHEN OTHERS THEN
+    v_failed:=v_failed+2; v_failures:=v_failures||('T28/T29 : '||SQLERRM);
+  END;
+
+  v_t := 'T30 P7a : la garde G3 tombe dès la SAISIE du brouillon, pas à la publication';
+  v_ok := false;
+  BEGIN
+    INSERT INTO public.book_drafts (titulo, bib_ref, tipo_material, serial_id, created_by)
+    VALUES ('Monographie témoin brouillon', 'TEST-PERIO-002', 'livro', v_can, v_staff);
+  EXCEPTION WHEN OTHERS THEN v_ok := true;
+  END;
+  IF v_ok THEN v_passed:=v_passed+1;
+    ELSE v_failed:=v_failed+1; v_failures:=v_failures||(v_t||' : accepté'); END IF;
+
   -- ── Bilan (le RAISE annule toutes les fixtures) ────────────────────
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'PERIODIQUES OK : %/% tests passés', v_passed, (v_passed+v_failed);
