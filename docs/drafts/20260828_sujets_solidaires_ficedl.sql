@@ -242,9 +242,36 @@ INSERT INTO public.subject_ficedl_links (subject_id, mot_id, match_type)
 SELECT s.id, 'mot172', 'close' FROM public.subjects s WHERE s.slug = 'solidaires-romans-nouvelles-essais'
 ON CONFLICT (subject_id, mot_id) DO NOTHING;   -- littérature : essais
 
+-- ---------------------------------------------------------------------------
+-- AJOUT DU 27/08/2026 : les trois rubriques historiques, qui avaient ete
+-- omises du lot initial.
+--
+-- Elles avaient ete decrites comme « non alignables tant que la facette dates
+-- n'est pas aspiree ». C'etait faux, et verifie comme tel : la base contient
+-- 462 termes dont AUCUN sans libelle francais, et les trois termes utiles
+-- existaient depuis le debut. Ils vivent dans la facette `geo` (l'histoire d'un
+-- pays), pas dans une facette de dates. Il n'y avait donc aucun obstacle
+-- technique : juste un oubli.
+--
+-- (Les 158 descripteurs manquants du chantier « scraper » sont un autre
+-- ensemble : ils sont ABSENTS de la base — 620 au thesaurus, 462 ici — et non
+-- presents-sans-libelle. Ils ne concernent pas ces trois lignes.)
+INSERT INTO public.subject_ficedl_links (subject_id, mot_id, match_type)
+SELECT s.id, 'mot338', 'exact' FROM public.subjects s WHERE s.slug = 'solidaires-la-commune-1871'
+ON CONFLICT (subject_id, mot_id) DO NOTHING;   -- France : histoire : 1871 (La Commune)
+INSERT INTO public.subject_ficedl_links (subject_id, mot_id, match_type)
+SELECT s.id, 'mot346', 'close' FROM public.subjects s WHERE s.slug = 'solidaires-mai-1968-annees-68'
+ON CONFLICT (subject_id, mot_id) DO NOTHING;   -- France : histoire : 1968
+INSERT INTO public.subject_ficedl_links (subject_id, mot_id, match_type)
+SELECT s.id, 'mot335', 'close' FROM public.subjects s WHERE s.slug = 'solidaires-revolution-1789-revolution-juin-1848'
+ON CONFLICT (subject_id, mot_id) DO NOTHING;   -- France : histoire : 1789-1848
+
 COMMIT;
 
 -- Controle :
 --   SELECT count(*) FROM public.subjects WHERE slug LIKE 'solidaires-%';             -- attendu 35
 --   SELECT count(*) FROM public.subject_ficedl_links l
---     JOIN public.subjects s ON s.id=l.subject_id WHERE s.slug LIKE 'solidaires-%';  -- attendu 44
+--     JOIN public.subjects s ON s.id=l.subject_id WHERE s.slug LIKE 'solidaires-%';  -- attendu 47
+--
+-- Seule « Divers » reste sans alignement, et c'est definitif : une rubrique
+-- fourre-tout n'a pas d'equivalent dans un thesaurus, et ne doit pas en avoir.
