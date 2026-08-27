@@ -69,9 +69,52 @@ function issueForToday() {
 // sur un flux Atom : CrimethInc. figurait au registre depuis le début et n'a
 // jamais alimenté un seul numéro. La table le disait (last_status='empty'),
 // personne ne le lisait — d'où aussi l'écran « Sources » qui l'affiche.
+// Un raté passager coûte une source pour tout le mois : le build ne passe
+// qu'une fois. Mesuré le 27/08 sur infolibertaire.net, dont l'origine derrière
+// Cloudflare répond 525 par intermittence puis 200 quelques minutes plus tard.
+// On réessaie donc UNE fois, après une pause, et SEULEMENT sur une panne
+// passagère : erreur réseau, délai dépassé, ou 5xx. Un 403 ou un 404 ne se
+// répare pas en quelques secondes, et insister serait impoli envers un site
+// tenu par des camarades — c'est aussi comme ça qu'on se fait limiter.
+async function recupererFlux(feedUrl: string, essais = 2): Promise<string> {
+  let dernier: Error | null = null;
+  for (let n = 1; n <= essais; n++) {
+    try {
+      // On dit qui on est, on dit ce qu'on attend, et on n'attend pas
+      // indéfiniment : sans délai maximal, un flux qui pend bloque l'étape.
+      const res = await fetch(feedUrl, {
+        redirect: "follow",
+        signal: AbortSignal.timeout(20000),
+        headers: {
+          "User-Agent": "AnarBib-Gazette/1.0",
+          "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+        },
+      });
+      if (res.ok) return await res.text();
+      dernier = new Error(`HTTP ${res.status} sur ${feedUrl}`);
+      // Seuls les 5xx valent un second essai.
+      if (res.status < 500 || n === essais) throw dernier;
+    } catch (e) {
+      const err = e instanceof Error ? e : new Error(String(e));
+      // Erreur réseau ou délai dépassé : passager, on retente.
+      if (dernier !== err) dernier = err;
+      if (n === essais) throw dernier;
+      if (/HTTP [1-4]\d\d /.test(dernier.message)) throw dernier;
+    }
+    await new Promise((r) => setTimeout(r, 4000));
+  }
+  throw dernier ?? new Error(`échec sur ${feedUrl}`);
+}
+
 async function fetchFeedItems(feedUrl: string, limit = 12) {
-  const res = await fetch(feedUrl, { headers: { "User-Agent": "AnarBib-Gazette/1.0" } });
-  const xml = await res.text();
+  // UN FLUX EN PANNE N'EST PAS UN FLUX VIDE. Sans ce contrôle, une page d'erreur
+  // — Cloudflare répond 525 ou 403 en HTML — passait pour une réponse valide :
+  // le parseur n'y trouvait aucun <item> et la source était enregistrée
+  // last_status='empty', donc indiscernable d'un flux réellement sans article.
+  // C'est ce qui a masqué l'absence d'Info Libertaire au numéro du 15/08 : rien
+  // n'a été signalé, le numéro est juste sorti plus maigre. Désormais l'écran
+  // « Sources » affiche « error » et le code HTTP.
+  const xml = await recupererFlux(feedUrl);
   const items: { title: string; link: string; date?: string; summary?: string }[] = [];
 
   const texte = (block: string, tag: string) => {
@@ -85,6 +128,12 @@ async function fetchFeedItems(feedUrl: string, limit = 12) {
       ?? /<link[^>]*href=["']([^"']+)["']/.exec(block);
     return m?.[1];
   };
+
+  // Même en 200, ce qu'on reçoit n'est pas toujours un flux : page de défi
+  // anti-robot, portail captif, page d'accueil servie à la place. On le dit.
+  if (!/<rss[\s>]|<feed[\s>]|<item[\s>]|<entry[\s>]/i.test(xml.slice(0, 4000))) {
+    throw new Error(`réponse non conforme à un flux (${xml.length} octets) sur ${feedUrl}`);
+  }
 
   const blocsRss = [...xml.matchAll(/<item[\s\S]*?<\/item>/g)].map((m) => m[0]);
   const estAtom = blocsRss.length === 0;
@@ -446,24 +495,39 @@ async function stepStart() {
     { number, slug, masthead_title: "Rizoma — la gazette du réseau AnarBib", cover_date, status: "draft", build_mode },
     { onConflict: "number" },
   );
+  // EN PARALLÈLE, et pas l'un après l'autre. Un flux qui pend coûtait jusqu'ici
+  // son délai à tous les suivants ; avec le réessai, douze sources en panne
+  // auraient pu dépasser le temps d'exécution alloué à la fonction et faire
+  // échouer l'étape entière. En parallèle, la collecte dure le temps du flux le
+  // plus lent, pas la somme des douze. Les sites sont distincts : on ne charge
+  // aucun serveur en particulier.
   const sources: Record<string, unknown> = {};
-  for (const s of await loadSources()) {
+  const resultats = await Promise.all((await loadSources()).map(async (s) => {
     try {
       const items = await fetchFeedItems(s.feed);
-      sources[s.name] = items;
       const newest = items.map((i) => i.date).filter(Boolean)
         .map((d) => new Date(d as string).getTime()).sort((a, b) => b - a)[0];
-      if (s.id) await sb.from("gazette_sources").update({
-        last_fetched_at: new Date().toISOString(),
-        last_item_at: newest ? new Date(newest).toISOString() : null,
-        last_status: items.length ? "ok" : "empty", last_error: null,
-      }).eq("id", s.id);
+      return {
+        s, items,
+        maj: {
+          last_fetched_at: new Date().toISOString(),
+          last_item_at: newest ? new Date(newest).toISOString() : null,
+          last_status: items.length ? "ok" : "empty", last_error: null,
+        },
+      };
     } catch (e) {
-      sources[s.name] = [];
-      if (s.id) await sb.from("gazette_sources").update({
-        last_fetched_at: new Date().toISOString(), last_status: "error", last_error: String(e).slice(0, 500),
-      }).eq("id", s.id);
+      return {
+        s, items: [] as unknown[],
+        maj: {
+          last_fetched_at: new Date().toISOString(),
+          last_status: "error", last_error: String(e).slice(0, 500),
+        },
+      };
     }
+  }));
+  for (const r of resultats) {
+    sources[r.s.name] = r.items;
+    if (r.s.id) await sb.from("gazette_sources").update(r.maj).eq("id", r.s.id);
   }
   await sb.from("gazette_build_jobs").upsert(
     { issue_number: number, status: "curating", sources, step_error: null },
