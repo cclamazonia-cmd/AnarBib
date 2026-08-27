@@ -206,6 +206,13 @@ function parseDescriptor(id, raw) {
   // « dates » qui n'ont aucun bloc de traduction. On le relève AVANT les retours
   // précoces : sans ça, 158 descripteurs (un quart du thésaurus) sortaient réduits à
   // leur identifiant, et n'étaient alignables sur rien.
+  //
+  // Il est rangé dans `title_fr`, distinct de `labels`, parce qu'ici on ASPIRE : on
+  // note ce que la page dit, sans décider ce qu'on en fera. C'est le sync qui tranche
+  // (ficedl_thesaurus_sync.mjs) : il replie `title_fr` dans `labels.fr` UNIQUEMENT
+  // quand la fiche n'a aucun bloc de traduction, et laisse le drapeau
+  // `no_translation_block` porter la distinction. Sur une fiche traduite, le H1 peut
+  // être une forme précoordonnée différente du bloc : ne jamais l'écraser.
   const h1 = getH1(raw);
   if (h1) rec.title_fr = h1;
 

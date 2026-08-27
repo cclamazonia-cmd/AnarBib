@@ -13,8 +13,17 @@
  * aucune normalisation, aucune charte inclusive appliquée. Le re-routage des balises
  * de langue erronées (déjà fait à l'aspiration) est conservé dans `import_normalizations`.
  *
- * Sélection : seules les fiches AVEC bloc `labels` sont seedées (sujets + geo). Les
- * fiches facette "dates" n'ont pas de traduction → exclues.
+ * Sélection : toute fiche qui porte un NOM est seedée. Deux cas :
+ *   — fiche traduite (sujets, geo) : le bloc `labels` fournit les 10 langues ;
+ *   — fiche SANS bloc de traduction (facette "dates", 158 fiches) : son H1 est
+ *     son libellé canonique, en français, et devient `labels.fr`.
+ *
+ * Ce second cas n'est PAS un fork : sur le SPIP FICEDL, le français est la langue
+ * source, jamais une traduction. Écrire le H1 dans `labels.fr` dit donc la vérité —
+ * « nous connaissons son nom français » — et rien de plus. La distinction réelle,
+ * « cette fiche n'a aucun bloc de traduction », reste portée par le drapeau
+ * `no_translation_block` que l'aspiration pose déjà dans `import_flags`. C'est le
+ * mécanisme prévu pour ça, il existe, et il survit à l'upsert.
  *
  * Re-sync (P4) : ré-exécuter ce script après un nouveau harvest met simplement à jour
  * les lignes (upsert sur mot_id). Les termes disparus de la source NE sont PAS supprimés
@@ -66,12 +75,29 @@ function resolveJsonPath() {
   return resolve(JOURNAL_DIR, candidates[candidates.length - 1]);
 }
 
+/**
+ * Vrai si la fiche porte un nom exploitable — donc seedable.
+ * Soit un bloc `labels` non vide, soit, à défaut, le H1 relevé à l'aspiration.
+ */
+export function isSyncable(rec) {
+  if (!rec) return false;
+  if (rec.labels && Object.keys(rec.labels).length > 0) return true;
+  return typeof rec.title_fr === 'string' && rec.title_fr.trim() !== '';
+}
+
 // ── Mapping JSON → ligne de table (anti-fork : aucune réécriture) ───────
-function toRow(rec, harvestedAt) {
+export function toRow(rec, harvestedAt) {
   const labels = { ...(rec.labels || {}) };
   // el_roman vit DANS labels à l'aspiration → on le sort dans sa colonne dédiée.
   const elRoman = labels.el_roman ?? null;
   delete labels.el_roman;
+  // Fiche sans bloc de traduction : son H1 est son libellé français canonique.
+  // On ne l'écrit QUE si `labels` est vide — sur une fiche traduite, le H1 peut
+  // être une forme précoordonnée différente du bloc, et l'écraser serait un fork.
+  if (Object.keys(labels).length === 0
+      && typeof rec.title_fr === 'string' && rec.title_fr.trim() !== '') {
+    labels.fr = rec.title_fr.trim();
+  }
   return {
     mot_id: rec.id,
     facet: Array.isArray(rec.facet) ? rec.facet : [],
@@ -110,19 +136,21 @@ async function main() {
     process.exit(1);
   }
 
-  // Seuls les descripteurs TRADUITS (avec bloc labels) : exclut la facette "dates".
-  const translated = all.filter((r) => r && r.labels && Object.keys(r.labels).length > 0);
-  const skipped = all.length - translated.length;
+  // Toute fiche qui porte un nom : bloc `labels`, ou H1 à défaut.
+  const syncable = all.filter(isSyncable);
+  const skipped = all.length - syncable.length;
+  const parH1 = syncable.filter((r) => !r.labels || Object.keys(r.labels).length === 0).length;
 
   // harvested_at : horodatage de ce run de sync (approx. de l'aspiration courante).
   const harvestedAt = new Date().toISOString();
-  const rows = translated.map((r) => toRow(r, harvestedAt));
+  const rows = syncable.map((r) => toRow(r, harvestedAt));
 
   console.log(`▶ Sync thésaurus FICEDL → ${TABLE}  (${SUPABASE_URL})`);
   console.log(`  Source        : ${jsonPath}`);
   console.log(`  Total fiches  : ${all.length}`);
-  console.log(`  À seeder      : ${rows.length} (traduites : sujets + geo)`);
-  console.log(`  Exclues       : ${skipped} (facette "dates", sans traduction)`);
+  console.log(`  À seeder      : ${rows.length}`);
+  console.log(`    dont par H1 : ${parH1} (sans bloc de traduction — libellé fr seul)`);
+  console.log(`  Exclues       : ${skipped} (aucun nom exploitable)`);
 
   if (DRY_RUN) {
     console.log('  [DRY RUN] aucun écrit. Aperçu de la première ligne :');
@@ -169,7 +197,14 @@ async function main() {
   console.log(`✓ Terminé : ${upserted} terme(s) upsertés.`);
 }
 
-main().catch((e) => {
-  console.error('✗ Erreur inattendue :', e);
-  process.exit(1);
-});
+// Le module est importé par src/tests/ficedl-thesaurus-sync.test.js : on ne
+// déclenche `main()` que si le script est lancé directement.
+const lanceDirectement =
+  process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (lanceDirectement) {
+  main().catch((e) => {
+    console.error('✗ Erreur inattendue :', e);
+    process.exit(1);
+  });
+}
