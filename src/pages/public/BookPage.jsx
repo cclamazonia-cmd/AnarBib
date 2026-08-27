@@ -125,6 +125,7 @@ export default function BookPage() {
   // #OPAC4 : documents similaires (par contenu)
   const [similar, setSimilar] = useState([]);
   const [otherEditions, setOtherEditions] = useState([]); // P4 : autres éditions de l'œuvre
+  const [serialInfo, setSerialInfo] = useState(null);     // #périodiques P8 : titre de revue + désignation
   const [workId, setWorkId] = useState(null); // P4 v2 : œuvre du livre courant (lien page œuvre)
   const [audioTracks, setAudioTracks] = useState([]); // P3d : tracklist publique (#AUDIO-fonds)
 
@@ -173,6 +174,15 @@ export default function BookPage() {
           try {
             const ed = await supabase.schema('api').rpc('book_other_editions', { p_book_id: bookId });
             if (Array.isArray(ed.data)) setOtherEditions(ed.data);
+          } catch { /* non-bloquant */ }
+          // #périodiques P8 — titre de revue et désignation du fascicule.
+          // catalog_book_detail_public_v2 ne porte ni serial_id ni
+          // numero/fasciculo/data_edicao : sans cet appel, la fiche publique
+          // d'un numéro de revue n'affiche pas son numéro.
+          try {
+            const sr = await supabase.schema('api').rpc('book_serial_v1', { p_book_id: bookId });
+            const row = Array.isArray(sr.data) ? sr.data[0] : sr.data;
+            if (row) setSerialInfo(row);
           } catch { /* non-bloquant */ }
           // P4 v2 — œuvre du livre courant (pour le lien « voir l'œuvre »)
           try {
@@ -448,8 +458,25 @@ export default function BookPage() {
             {/* ── Vue Standard ─────────────────────────────── */}
             {viewMode === 'standard' && (
               <>
+                {/* #périodiques P8 — de quel titre ce numéro est-il un
+                    numéro. Le lien manque quand la revue est encore proposée :
+                    c'est la RLS qui le masque, pas un oubli. */}
+                {serialInfo && serialInfo.serial_slug && (
+                  <p className="ab-livro-desc" style={{ marginBottom: 8 }}>
+                    {t({ id: 'book.serial.partOf' })}{' '}
+                    <Link to={`/periodico/${serialInfo.serial_slug}`}>{serialInfo.serial_title}</Link>
+                  </p>
+                )}
                 <div className="ab-livro-meta-pills">
                   <MetaPill label={t({ id: 'book.meta.ref' })} value={book.bib_ref} always />
+                  {serialInfo && (
+                    <>
+                      <MetaPill label={t({ id: 'book.meta.issue' })} value={serialInfo.numero} />
+                      <MetaPill label={t({ id: 'book.meta.fascicule' })} value={serialInfo.fasciculo} />
+                      <MetaPill label={t({ id: 'book.meta.pubDate' })} value={serialInfo.data_edicao} />
+                      <MetaPill label={t({ id: 'book.meta.frequency' })} value={serialInfo.periodicidade} />
+                    </>
+                  )}
                   {tombosJson && Array.isArray(tombosJson) && tombosJson.length > 0 && (
                     <MetaPill label={t({ id: 'book.meta.tombo' })} value={tombosJson.join(', ')} />
                   )}

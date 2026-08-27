@@ -29,6 +29,7 @@ const BibliotecasPage = lazy(() => import('@/pages/public/BibliotecasPage'));
 const FicedlThesaurusPage = lazy(() => import('@/pages/public/FicedlThesaurusPage'));
 const FicedlTermPage = lazy(() => import('@/pages/public/FicedlTermPage'));
 const SubjectPage = lazy(() => import('@/pages/public/SubjectPage'));
+const SerialPage = lazy(() => import('@/pages/public/SerialPage'));
 const BibliotecaPublicaPage = lazy(() => import('@/pages/public/BibliotecaPublicaPage'));
 const CartografiaPage = lazy(() => import('@/pages/public/CartografiaPage'));
 const CartografiaAjouterPage = lazy(() => import('@/pages/public/CartografiaAjouterPage'));
@@ -146,6 +147,10 @@ export default function App() {
                   <Route path="/thesaurus-ficedl/:motId" element={<FicedlTermPage />} />
                   {/* Fiche publique d'un sujet AnarBib (URI stable THES-URI, P3b) */}
                   <Route path="/thesaurus/:slug" element={<SubjectPage />} />
+                  {/* Fiche publique d'un titre de périodique (spec périodiques §13
+                      TODO 5 : une page à part entière, pas une facette du
+                      catalogue — c'est ce qui rend l'état de collection lisible) */}
+                  <Route path="/periodico/:slug" element={<SerialPage />} />
                   {/* Carte publique du réseau (MAP-C, REGISTRE §34) */}
                   <Route path="/cartografia" element={<CartografiaPage />} />
                   {/* Auto-déclaration publique « ajouter ma biblio » (MAP-J) */}
