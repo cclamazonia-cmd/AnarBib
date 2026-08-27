@@ -15,6 +15,7 @@ import LabelSheetPrinter from './LabelSheetPrinter';
 import QueuePanel from './QueuePanel';
 import CatalogPanel from './CatalogPanel';
 import SubjectGovernancePanel from './SubjectGovernancePanel';
+import SerialGovernancePanel from './SerialGovernancePanel';
 import DedupAssistantPanel from './DedupAssistantPanel';
 import { canArbitrateDuplicates } from '@/lib/dedupRoles';
 import CatalogacaoWizard, { shouldShowWizard } from './CatalogacaoWizard';
@@ -50,6 +51,7 @@ export default function CatalogacaoPage() {
     { id: 'batchesPanel',   label: t({ id: 'catalogacao.tab.lotes' }) },
     { id: 'catalogPanel',   label: t({ id: 'catalogacao.tab.catalogo' }) },
     { id: 'materiaPanel',   label: t({ id: 'catalogacao.tab.materia' }), separator: true },
+    { id: 'periodicosPanel', label: t({ id: 'catalogacao.tab.periodicos' }) },
     ...(arbitreDoublons
       ? [{ id: 'dedupPanel', label: t({ id: 'catalogacao.tab.dedup' }) }]
       : []),
@@ -477,6 +479,16 @@ export default function CatalogacaoPage() {
           {/* 7. Coordenação de matéria (gouvernance thésaurus — étape 2c) */}
           <div className={`cat-panel${activeTab === 'materiaPanel' ? ' active' : ''}`}>
             <SubjectGovernancePanel />
+          </div>
+
+          {/* 7 bis. Coordination des titres de périodiques (#périodiques, 27/08).
+              La LECTURE est ouverte à tout le staff catalogage — voir quels
+              titres existent évite d'en recréer un doublon au catalogage ; les
+              GESTES sont gardés serveur, et le panneau ne montre que ceux que
+              l'appelant peut réellement poser. `isActive` : tous les panneaux
+              restent montés, on ne charge qu'à l'ouverture. */}
+          <div className={`cat-panel${activeTab === 'periodicosPanel' ? ' active' : ''}`}>
+            <SerialGovernancePanel isActive={activeTab === 'periodicosPanel'} />
           </div>
 
           {/* 8. Assistant de dedoublonnage en trois temps (coordination).
