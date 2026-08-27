@@ -224,11 +224,27 @@ La route propre demande donc une colonne dédiée, donc une migration : ce n'est
 plus un chantier de quinze minutes. Le patch reste appliqué dans le worktree,
 non commité : il est nécessaire, il n'est pas suffisant.
 
-**Conséquence sur Solidaires.** Quatre rubriques n'ont aucun alignement FICEDL
-— *Divers* (127 notices), *La Commune 1871* (25), *Mai 1968, années 68* (31),
-*Révolution 1789 - Révolution Juin 1848* (12). Les trois dernières sont bien
-des dates, donc bien tributaires de ce chantier. *Divers* n'a par nature aucun
-équivalent et n'en aura jamais.
+**Conséquence sur Solidaires : aucune — je m'étais trompé.** J'avais écrit que
+trois rubriques historiques (*La Commune 1871*, *Mai 1968*, *Révolution 1789*)
+étaient tributaires de ce chantier. C'est faux, et je l'avais avancé sans le
+vérifier.
+
+Vérification faite le 27/08 au soir : la base compte **462 termes, dont zéro
+sans libellé français**. Les trois termes utiles existaient depuis le début —
+`mot338`, `mot346`, `mot335` — et ils vivent dans la facette **`geo`**
+(l'histoire d'un pays), pas dans une facette de dates. Ces trois rubriques
+n'étaient donc pas bloquées : elles avaient simplement été **oubliées** dans le
+lot d'alignement. Corrigé le soir même, 47 liens désormais.
+
+Ce qui reste vrai du chantier 3 : les 158 descripteurs manquants sont un
+**autre ensemble**, et le compte le confirme — environ 620 termes au thésaurus,
+462 en base, l'écart fait exactement 158. Ils sont **absents** de la base, et
+non présents-sans-libellé comme je l'avais écrit plus haut : le filtre de la
+ligne 114 ne les laisse jamais entrer. Le chantier garde donc sa raison d'être,
+mais il ne débloquait rien pour Solidaires.
+
+Seule *Divers* (127 notices) reste sans alignement, et c'est définitif : une
+rubrique fourre-tout n'a pas d'équivalent dans un thésaurus.
 
 ---
 
