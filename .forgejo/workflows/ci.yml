@@ -192,13 +192,48 @@ jobs:
       #
       # Deux appels et non un seul, pour garder deux étapes distinctes dans le
       # journal de la forge : on voit du premier coup d'œil laquelle a rougi.
+      # ───────── `--marqueur`, ET SURTOUT PLUS `github.event.before` ─────────
+      # (incident du 27/08/2026 — le récit complet est en tête du bloc « Edge
+      # Functions » du script, avec les numéros de run.)
+      #
+      # Cette étape passait `--depuis "${{ github.event.before }}"` : « déploie
+      # si une fonction a changé depuis le push précédent ». Cela suppose que
+      # CHAQUE push obtient son run. Ce n'est pas garanti — deux pushes à deux
+      # minutes d'intervalle, et Forgejo n'a créé aucun run pour le premier,
+      # celui qui touchait `register`. Le run suivant a comparé à un SHA dont le
+      # travail n'avait jamais été fait, n'a vu aucune fonction, et a sauté
+      # l'étape EN VERT. Rien n'a rougi. `register` a dû être déployée à la main.
+      #
+      # `--marqueur` ne demande plus rien à la forge : le script compare l'état
+      # du dépôt au tag `deployed-functions`, qu'il avance lui-même sur origin
+      # après chaque déploiement réussi. Un run manquant ne perd donc plus rien —
+      # il reporte le travail au run suivant, qui voit tout ce qui sépare le
+      # marqueur de la tête. Le même angle mort couvrait les pushes où le
+      # workflow ne se déclenche pas du tout (paths-ignore, 26/08) : il est
+      # refermé par la même clé.
+      #
+      # ⚠️ NE PAS remettre `--depuis "${{ github.event.before }}"` ici. Le script
+      # accepte encore `--depuis` pour le rejeu à la main ; en CI c'est le trou.
+      #
+      # MARQUEUR_TOKEN : le script pousse d'abord le tag avec ce que le checkout
+      # lui a laissé, et ne se rabat sur ce jeton que si cette poussée est
+      # refusée. GITEA_TOKEN est injecté automatiquement par Forgejo Actions et
+      # limité à ce dépôt — rien à créer dans l'interface de la forge. Si le
+      # marqueur ne peut pas être poussé, le job reste VERT (le déploiement, lui,
+      # a eu lieu) mais le journal porte un avertissement en toutes lettres, et
+      # le run suivant redéploiera tout : on perd des minutes, jamais un
+      # déploiement.
+      #
+      # Le tag ne redéclenche aucun workflow : les deux fichiers de .forgejo/
+      # filtrent sur `branches: [main]`, qu'une poussée de tag ne satisfait pas.
       - name: Deploy Edge Functions (Supabase CLI)
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          MARQUEUR_TOKEN: ${{ secrets.GITEA_TOKEN }}
         run: |
           chmod +x scripts/ci/deployer-backend.sh
-          ./scripts/ci/deployer-backend.sh --fonctions --depuis "${{ github.event.before }}"
+          ./scripts/ci/deployer-backend.sh --fonctions --marqueur
 
       - name: Deploy Migrations SQL (supabase db push)
         env:

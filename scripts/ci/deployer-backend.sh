@@ -17,6 +17,9 @@
 #   scripts/ci/deployer-backend.sh                      # fonctions + migrations
 #   scripts/ci/deployer-backend.sh --fonctions          # fonctions seules
 #   scripts/ci/deployer-backend.sh --migrations         # migrations seules
+#   scripts/ci/deployer-backend.sh --marqueur           # compare a ce qui est
+#                                                       # REELLEMENT deploye, et
+#                                                       # avance le marqueur
 #   scripts/ci/deployer-backend.sh --depuis <SHA>       # saute les fonctions si
 #                                                       # aucune n'a change depuis
 #   scripts/ci/deployer-backend.sh --simulation         # n'appelle rien, montre
@@ -26,6 +29,9 @@
 #   SUPABASE_ACCESS_TOKEN   obligatoire (sauf --simulation)
 #   SUPABASE_PROJECT_REF    obligatoire (sauf --simulation)
 #   SUPABASE_DB_PASSWORD    obligatoire pour les migrations
+#   MARQUEUR_NOM            nom du tag marqueur (defaut : deployed-functions)
+#   MARQUEUR_TOKEN          jeton de secours pour POUSSER le marqueur, quand le
+#                           checkout de la forge ne laisse pas de quoi le faire
 #
 # ⚠️ DEPUIS CE POSTE (Windows/WSL), ajouter --use-api. Le bundling Docker par
 # defaut echoue : Docker ne sait pas monter la jonction Windows -> WSL, et rend
@@ -41,6 +47,8 @@ MIGRATIONS=1
 DEPUIS=""
 SIMULATION=0
 USE_API=""
+MARQUEUR=0
+NOM_MARQUEUR="${MARQUEUR_NOM:-deployed-functions}"
 choix_explicite=0
 
 while [ $# -gt 0 ]; do
@@ -48,9 +56,10 @@ while [ $# -gt 0 ]; do
     --fonctions)  [ "$choix_explicite" = "0" ] && { FONCTIONS=0; MIGRATIONS=0; choix_explicite=1; }; FONCTIONS=1 ;;
     --migrations) [ "$choix_explicite" = "0" ] && { FONCTIONS=0; MIGRATIONS=0; choix_explicite=1; }; MIGRATIONS=1 ;;
     --depuis)     DEPUIS="${2:-}"; shift ;;
+    --marqueur)   MARQUEUR=1 ;;
     --simulation) SIMULATION=1 ;;
     --use-api)    USE_API="--use-api" ;;
-    -h|--help)    sed -n '2,38p' "$0"; exit 0 ;;
+    -h|--help)    sed -n '2,41p' "$0"; exit 0 ;;
     *) echo "✗ Option inconnue : $1" >&2; exit 2 ;;
   esac
   shift
@@ -91,6 +100,101 @@ fi
 ECHEC=0
 
 # -----------------------------------------------------------------------------
+# 0. Le marqueur : quel etat est REELLEMENT deploye ?
+# -----------------------------------------------------------------------------
+# Un tag leger `deployed-functions` sur origin porte le dernier commit dont les
+# fonctions ont effectivement ete deployees. C'est la seule reference qui vaille
+# pour decider d'un saut ; le pourquoi est raconte au bloc « Edge Functions ».
+#
+# origin fait autorite, jamais le depot local : on efface le tag local avant de
+# le re-tirer. Sans cela, un marqueur pose ici mais dont la poussee a echoue
+# (pas de reseau, pas de droits) survivrait en local et ferait sauter un
+# deploiement au nom d'un etat qui n'a jamais ete publie.
+
+# Le depot est-il superficiel (checkout `fetch-depth: 1`) ? On ne peut alors pas
+# demander a git une histoire qu'il n'a pas ; et surtout, on ne doit PAS employer
+# `--depth` sur un depot complet, qui le RACCOURCIRAIT — ce serait mutiler le
+# clone de qui rejoue a la main.
+depot_superficiel() {
+  [ "$(git rev-parse --is-shallow-repository 2>/dev/null)" = "true" ]
+}
+
+lire_marqueur() {
+  git tag -d "$NOM_MARQUEUR" >/dev/null 2>&1
+
+  local refspec="+refs/tags/${NOM_MARQUEUR}:refs/tags/${NOM_MARQUEUR}"
+  if depot_superficiel; then
+    # `--deepen=25` d'un seul coup : il ramene le tag ET recule la frontiere de
+    # `main` de 25 commits. Le premier sert a DECIDER (comparaison d'arbres), le
+    # second seulement a RACONTER (enumerer les commits couverts). Mesure du
+    # 27/08 sur ce depot : ~1 Mo, 0,4 s — le journal ne coute rien.
+    git fetch --deepen=25 --force origin "$refspec" \
+      "+refs/heads/main:refs/remotes/origin/main" >/dev/null 2>&1 \
+      || git fetch --deepen=25 --force origin "$refspec" >/dev/null 2>&1 \
+      || git fetch --depth=1 --force origin "$refspec" >/dev/null 2>&1
+  else
+    git fetch --force origin "$refspec" >/dev/null 2>&1
+  fi
+
+  git rev-parse --verify -q "refs/tags/${NOM_MARQUEUR}^{commit}"
+}
+
+avertir_marqueur() {
+  echo ""
+  echo "⚠⚠ MARQUEUR NON MIS A JOUR — $1"
+  echo "   Consequence : le prochain run ignorera ce qui vient d'etre deploye et"
+  echo "   redeploiera TOUTES les fonctions (~5 min). C'est le bon sens de la"
+  echo "   panne : on perd du temps, jamais un deploiement. Mais tant que cet"
+  echo "   avertissement revient, l'optimisation est morte — il faut y aller voir."
+  echo "   Cause habituelle : le checkout de la forge ne donne pas le droit de"
+  echo "   POUSSER. Remede : poser le secret dans MARQUEUR_TOKEN (cf. ci.yml)."
+  echo "   Rattrapage a la main, depuis un clone a jour :"
+  echo "     git tag -f ${NOM_MARQUEUR} <sha-deploye> && git push --force origin refs/tags/${NOM_MARQUEUR}"
+  echo ""
+}
+
+poser_marqueur() {
+  local cible="$1"
+  local court; court=$(git rev-parse --short "$cible" 2>/dev/null || echo "$cible")
+
+  if [ "$(git rev-parse -q --verify "refs/tags/${NOM_MARQUEUR}^{commit}" 2>/dev/null)" = "$(git rev-parse "$cible")" ]; then
+    echo "→ marqueur ${NOM_MARQUEUR} deja sur ${court}"
+    return 0
+  fi
+
+  git tag -f "$NOM_MARQUEUR" "$cible" >/dev/null 2>&1 || {
+    avertir_marqueur "impossible de poser le tag en local"
+    return 1
+  }
+
+  local refspec="refs/tags/${NOM_MARQUEUR}:refs/tags/${NOM_MARQUEUR}"
+  local erreur=""
+  if erreur=$(git push --force origin "$refspec" 2>&1); then
+    echo "✓ marqueur ${NOM_MARQUEUR} avance sur ${court}"
+    return 0
+  fi
+
+  # Second essai avec un jeton explicite. Selon la forge et l'action de checkout,
+  # les identifiants laisses dans .git/config donnent la LECTURE et pas toujours
+  # l'ecriture. L'URL porte le jeton : elle ne doit jamais atteindre le journal.
+  if [ -n "${MARQUEUR_TOKEN:-}" ] && [ -n "${GITHUB_SERVER_URL:-}" ] && [ -n "${GITHUB_REPOSITORY:-}" ]; then
+    local hote="${GITHUB_SERVER_URL#http://}"; hote="${hote#https://}"; hote="${hote%/}"
+    if git push --force \
+         "https://x-access-token:${MARQUEUR_TOKEN}@${hote}/${GITHUB_REPOSITORY}.git" \
+         "$refspec" >/dev/null 2>&1; then
+      echo "✓ marqueur ${NOM_MARQUEUR} avance sur ${court} (via MARQUEUR_TOKEN)"
+      return 0
+    fi
+  fi
+
+  # Le tag local ne doit pas survivre a une poussee ratee : il mentirait au
+  # prochain passage en pretendant qu'un etat non publie est deploye.
+  git tag -d "$NOM_MARQUEUR" >/dev/null 2>&1
+  avertir_marqueur "$(printf '%s' "$erreur" | head -c 300)"
+  return 1
+}
+
+# -----------------------------------------------------------------------------
 # 1. Edge Functions
 # -----------------------------------------------------------------------------
 if [ "$FONCTIONS" = "1" ]; then
@@ -107,24 +211,92 @@ if [ "$FONCTIONS" = "1" ]; then
   # deploierait une fonction avec un module partage perime — bug invisible au
   # deploiement, visible des semaines plus tard.
   #
-  # Si le SHA de depart est introuvable (branche neuve, force-push, historique
-  # tronque), on NE saute PAS : mieux vaut cinq minutes perdues qu'une fonction
-  # non deployee. En cas de doute, le defaut est de tout deployer.
-  DEPLOYER_TOUT=1
-  if [ -n "$DEPUIS" ] && [ "$DEPUIS" != "0000000000000000000000000000000000000000" ]; then
-    git fetch --no-tags --depth=50 origin "$DEPUIS" >/dev/null 2>&1 || true
+  # ⚠️ POURQUOI ON NE COMPARE PLUS A `github.event.before` (incident du
+  # 27/08/2026). Cette optimisation supposait que chaque push obtient son propre
+  # run. Ce n'est pas garanti. Deux pushes a deux minutes d'intervalle :
+  # e316e005 (qui modifiait supabase/functions/register/index.ts) puis 1c3491fd
+  # (une migration seule). Forgejo n'a cree AUCUN run pour e316e005 — la
+  # numerotation saute de 826/827 a 828/829. Le run 828 a donc calcule son diff
+  # « depuis e316e005 », n'y a vu aucune fonction, et a saute l'etape EN VERT.
+  # `register` n'a jamais ete deployee alors que la CI etait entierement verte.
+  # Rattrape a la main. L'echec etait muet et ressemblait exactement a un succes.
+  #
+  # Le meme angle mort avale les pushes ou le workflow ne se declenche pas du
+  # tout (paths-ignore, cf. le commentaire en tete de ci.yml, 26/08).
+  #
+  # LA REPONSE : ne plus comparer a « ce qui precede ce push » — une notion qui
+  # appartient a la forge et qu'elle peut escamoter — mais a CE QUI EST DEPLOYE,
+  # qu'on ecrit soi-meme apres chaque deploiement reussi (--marqueur). Un run
+  # manquant ne cree alors plus de trou : il repousse le travail au run suivant,
+  # qui voit tout ce qui separe le marqueur de la tete.
+  #
+  # La decision compare des ARBRES (`git diff <marqueur> <tete>`), pas des
+  # commits : une histoire reecrite ou tronquee ne peut pas la fausser, au pire
+  # elle empeche d'ENUMERER les commits couverts — ce que le journal dit alors.
+  #
+  # Si le point de comparaison est introuvable (marqueur jamais pose, branche
+  # neuve, force-push, historique tronque), on NE saute PAS : mieux vaut cinq
+  # minutes perdues qu'une fonction non deployee. En cas de doute, tout deployer.
+  ICI=$(git rev-parse --verify -q "${GITHUB_SHA:-HEAD}^{commit}" || git rev-parse HEAD)
+  BASE=""
+  ORIGINE_BASE=""
+
+  if [ "$MARQUEUR" = "1" ]; then
+    [ -n "$DEPUIS" ] && echo "⚠ --depuis $DEPUIS ignore : --marqueur fait autorite (incident du 27/08, ci-dessus)."
+    if BASE=$(lire_marqueur); then
+      ORIGINE_BASE="le marqueur ${NOM_MARQUEUR}"
+    else
+      BASE=""
+      echo "→ marqueur ${NOM_MARQUEUR} absent d'origin : on deploie tout (premiere pose)."
+    fi
+  elif [ -n "$DEPUIS" ] && [ "$DEPUIS" != "0000000000000000000000000000000000000000" ]; then
+    # Conserve pour le rejeu a la main (« redeploie ce qui a bouge depuis X »).
+    # ⚠️ NE PAS remettre `--depuis "${{ github.event.before }}"` dans ci.yml :
+    # c'est exactement le trou du 27/08 decrit ci-dessus.
+    if depot_superficiel; then
+      git fetch --no-tags --depth=50 origin "$DEPUIS" >/dev/null 2>&1 || true
+    else
+      git fetch --no-tags origin "$DEPUIS" >/dev/null 2>&1 || true
+    fi
     if git rev-parse --verify -q "${DEPUIS}^{commit}" >/dev/null; then
-      ICI="${GITHUB_SHA:-HEAD}"
-      if [ -z "$(git diff --name-only "$DEPUIS" "$ICI" -- supabase/functions/)" ]; then
-        DEPLOYER_TOUT=0
-      fi
+      BASE="$DEPUIS"
+      ORIGINE_BASE="le SHA passe par --depuis ($DEPUIS)"
     else
       echo "→ SHA de depart $DEPUIS introuvable : on deploie tout (choix prudent)."
     fi
   fi
 
+  # Le journal doit DIRE ce que le diff couvre. Un trou dans la couverture reste
+  # invisible tant que le journal se contente d'annoncer le resultat : le 27/08,
+  # « aucune fonction Edge modifiee depuis e316e005 » etait litteralement vrai et
+  # completement trompeur. On imprime donc les deux bornes, les commits compris
+  # entre elles, et les fichiers qui ont bouge.
+  DEPLOYER_TOUT=1
+  if [ -n "$BASE" ]; then
+    resume_commit() { git log -1 --format='%h %ad « %s »' --date=short "$1" 2>/dev/null || git rev-parse --short "$1"; }
+    echo "→ reference (${ORIGINE_BASE}) : $(resume_commit "$BASE")"
+    echo "→ tete a deployer : $(resume_commit "$ICI")"
+
+    if git merge-base --is-ancestor "$BASE" "$ICI" 2>/dev/null; then
+      echo "→ commits couverts par ce deploiement : $(git rev-list --count "$BASE..$ICI" 2>/dev/null)"
+      git log --oneline --no-decorate "$BASE..$ICI" 2>/dev/null | sed 's/^/    /'
+    else
+      echo "→ ⚠ la reference n'est pas un ancetre de la tete (historique tronque,"
+      echo "    force-push, ou autre branche) : commits non enumerables. La decision,"
+      echo "    elle, reste juste : elle compare les arbres et non les commits."
+    fi
+
+    MODIFS=$(git diff --name-only "$BASE" "$ICI" -- supabase/functions/ 2>/dev/null)
+    if [ -n "$MODIFS" ]; then
+      echo "→ fichiers modifies sous supabase/functions/ :"
+      printf '%s\n' "$MODIFS" | sed 's/^/    /'
+    else
+      DEPLOYER_TOUT=0
+    fi
+  fi
+
   if [ "$DEPLOYER_TOUT" = "0" ]; then
-    echo "→ aucune fonction Edge modifiee depuis $DEPUIS — etape sautee"
+    echo "→ aucune fonction Edge modifiee depuis $ORIGINE_BASE — etape sautee"
     echo "✓ Edge Functions inchangees"
   else
     n_deployees=0
@@ -174,6 +346,14 @@ if [ "$FONCTIONS" = "1" ]; then
       n_deployees=$((n_deployees + 1))
     done
     echo "✓ Edge Functions deployees ($n_deployees)"
+  fi
+
+  # Le marqueur n'avance QU'APRES un deploiement integralement reussi — ou apres
+  # un saut, qui prouve l'egalite des arbres tout aussi surement. Un echec sort
+  # plus haut par `exit 1` : le marqueur reste ou il est, et le run suivant
+  # reprend le travail non fait. C'est tout le mecanisme.
+  if [ "$MARQUEUR" = "1" ] && [ "$SIMULATION" = "0" ] && [ "$ECHEC" = "0" ]; then
+    poser_marqueur "$ICI"
   fi
 fi
 
