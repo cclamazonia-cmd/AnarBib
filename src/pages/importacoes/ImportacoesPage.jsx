@@ -109,6 +109,14 @@ export default function ImportacoesPage() {
   const [file, setFile] = useState(null);
   const [sourceId, setSourceId] = useState('');
   const [uploading, setUploading] = useState(false);
+  // ── Enregistrer une source de dépôt sans entité partenaire ──────────
+  // Voie volontairement plus pauvre que ExternalDepositPartnerSection : ici
+  // on reçoit le fichier d'un collectif SANS l'admettre comme partenaire du
+  // réseau (décision fédérale, parfois délibérément différée — cf. le fonds
+  // Solidaires du 27/08/2026). Seule fn_import_register_deposit_source fait ça.
+  const [newSourceOpen, setNewSourceOpen] = useState(false);
+  const [newSourceName, setNewSourceName] = useState('');
+  const [registeringSource, setRegisteringSource] = useState(false);
   // ── Adaptateur : overrides Estrutura / Vocabulário ('auto' = laisser l'auto-détection) ──
   const [adapterFormat, setAdapterFormat] = useState('auto');
   const [adapterVocabulary, setAdapterVocabulary] = useState('auto');
@@ -337,6 +345,31 @@ export default function ImportacoesPage() {
     } catch (err) {
       setMsg({ text: localizeError(err, t), kind: 'error' });
     } finally { setUploading(false); }
+  }
+
+  // ── Nouvelle source de dépôt (sans entité catalog_partners) ────────────
+  // La RPC est idempotente : created=false = le nom existait déjà, on
+  // sélectionne la source retrouvée plutôt que d'en signaler l'échec.
+  async function handleRegisterDepositSource() {
+    const name = newSourceName.trim();
+    if (!name) return;
+    setRegisteringSource(true);
+    try {
+      const { data, error } = await supabase.rpc('fn_import_register_deposit_source', {
+        p_partner_name: name,
+      });
+      if (error) throw error;
+      await loadSources();
+      if (data?.source_id) setSourceId(String(data.source_id));
+      setMsg({
+        text: t({ id: data?.created ? 'importacoes.deposit.registered' : 'importacoes.deposit.alreadyExists' }, { name }),
+        kind: 'ok',
+      });
+      setNewSourceName('');
+      setNewSourceOpen(false);
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+    } finally { setRegisteringSource(false); }
   }
 
   // ── Profils d'import (axe Perfil) : liste / création / suppression ──────────
@@ -1147,6 +1180,28 @@ export default function ImportacoesPage() {
                         <option value="">{t({ id: 'importacoes.reception.selectSourcePlaceholder' })}</option>
                         {sources.map(s => <option key={s.id} value={String(s.id)}>{s.partner_name}</option>)}
                       </select>
+                      {!newSourceOpen && (
+                        <button type="button" className="imp-linkbtn" onClick={() => setNewSourceOpen(true)}>
+                          + {t({ id: 'importacoes.deposit.newPartner' })}
+                        </button>
+                      )}
+                      {newSourceOpen && (
+                        <div className="imp-newsource">
+                          <input className="ab-input" value={newSourceName}
+                            onChange={e => setNewSourceName(e.target.value)}
+                            placeholder={t({ id: 'importacoes.deposit.partnerPlaceholder' })}
+                            onKeyDown={e => { if (e.key === 'Enter') handleRegisterDepositSource(); }} />
+                          <button type="button" className="cat-btn secondary imp-newsource__ok"
+                            onClick={handleRegisterDepositSource}
+                            disabled={registeringSource || !newSourceName.trim()}>
+                            {registeringSource ? t({ id: 'common.saving' }) : t({ id: 'common.add' })}
+                          </button>
+                          <button type="button" className="imp-linkbtn"
+                            onClick={() => { setNewSourceOpen(false); setNewSourceName(''); }}>
+                            {t({ id: 'common.cancel' })}
+                          </button>
+                        </div>
+                      )}
                     </div>
                     <div className="ab-field" style={{ gridColumn: 'span 2' }}>
                       <label className="ab-field__label">{t({ id: 'importacoes.arquivo.fileLabel' })}</label>

@@ -464,3 +464,35 @@
 .cat-btn.secondary:hover { background: rgba(255,255,255,.1); }
 .cat-btn.ghost { background: transparent; color: var(--brand-muted, #d4cec3); border-color: transparent; }
 .cat-btn.ghost:hover { color: var(--brand-text, #f5f2ea); background: rgba(255,255,255,.04); }
+
+/* ── Nouvelle source de dépôt (sans entité partenaire) ─────── */
+/* Bouton discret sous le sélecteur de source du mode « arquivo », puis
+   ligne de saisie. Volontairement léger : la voie riche (entité
+   catalog_partners, pays, URL, détection de doublon) reste
+   ExternalDepositPartnerSection, dans l'onglet Relações. Ici on ne fait
+   qu'ouvrir une porte pour recevoir un fichier. */
+.imp-linkbtn {
+  margin-top: 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--brand-muted, #d4cec3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.imp-linkbtn:hover { color: var(--brand-text, #f5f2ea); }
+
+.imp-newsource {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+/* min-width:0 : sans lui le champ garde sa largeur intrinsèque et pousse
+   la ligne hors de l'écran en 360 px (cf. doctrine mobile du dépôt). */
+.imp-newsource .ab-input { flex: 1 1 12rem; min-width: 0; }
+.imp-newsource__ok { flex-shrink: 0; padding: 6px 14px; font-size: .8rem; }

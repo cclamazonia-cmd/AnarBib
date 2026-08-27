@@ -184,6 +184,29 @@ Vérifié dans le schéma, pas supposé :
 
 Aucune ligne ne sera écrite dans `libraries`. L'acte fédéral reste entier.
 
+> **Correction du 28/08/2026 — la fonction citée ci-dessus ne marchait pas.**
+> `fn_import_register_deposit_source` insérait `relation_status = 'active'`, un
+> mot qui n'appartient pas au vocabulaire de la colonne : la contrainte
+> `partner_catalog_sources_relation_status_check` n'admet que `mapeada`,
+> `contatada`, `em_discussao`, `acordo_parcial`, `acordo_tecnico`,
+> `importacao_autorizada`, `mutualizacao_autorizada`. Tout appel atteignant
+> l'INSERT levait donc une violation de contrainte : seule la branche
+> « source déjà existante » pouvait aboutir. La fonction savait retrouver une
+> source, jamais en créer une.
+>
+> C'est pourquoi la source #17 « Bibliothèque Solidaires » a été posée à la main
+> le 27/08 par un INSERT direct. Le défaut était invisible parce qu'aucune
+> interface n'appelait cette RPC — la vérification ci-dessus a lu le schéma,
+> pas un appel réel, et un chemin jamais emprunté n'est pas un chemin qui marche.
+>
+> Réparé par le paquet `20260828100000_source_depot_sans_partenaire` : le statut
+> posé devient `mapeada`, le plus faible du vocabulaire, cohérent avec
+> `catalog_partner_id` NULL. La RPC est désormais appelée par un vrai bouton
+> (« + Nouveau·elle partenaire », mode *arquivo* de la page Importações), donc
+> le chemin est emprunté.
+>
+> Le point à trancher ci-dessous, lui, reste entièrement ouvert.
+
 **Un point à trancher tout de même :** cette fonction rattache la source à la
 bibliothèque de celui qui l'appelle (`v_actor.library_id`). Le lot
 apparaîtra donc dans l'Atelier d'une des quatre bibliothèques membres. C'est
