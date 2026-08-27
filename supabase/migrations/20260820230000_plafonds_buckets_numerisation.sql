@@ -82,6 +82,31 @@ begin
   end if;
 
   -- ---------------------------------------------------------------------------
+  -- 0 bis. Garde : table presente mais AUCUN bucket — installation neuve.
+  -- ---------------------------------------------------------------------------
+  -- Ajoute le 27/08/2026, apres l'echec de bootstrap.sh --depuis-le-depot a la
+  -- migration 139/200.
+  --
+  -- La garde ci-dessus teste la presence de la TABLE, pas celle des LIGNES. Or
+  -- une pile reconstruite depuis le depot demarre avec un schema storage
+  -- complet et zero bucket : aucune migration n'en creait jusqu'au
+  -- 20260828000000. Les huit update ne touchaient donc rien, et le bloc de
+  -- verification levait « Buckets introuvables » sur une installation
+  -- parfaitement saine.
+  --
+  -- Distinction : AUCUN bucket attendu present = installation neuve, il n'y a
+  -- rien a plafonner et c'est normal. QUELQUES-UNS mais pas tous = anomalie
+  -- reelle (renommage, suppression), et la on leve, comme avant.
+  if not exists (
+    select 1 from unnest(v_attendus) a
+     where exists (select 1 from storage.buckets b where b.id = a)
+  ) then
+    raise notice
+      'Aucun bucket attendu present : installation neuve, plafonds NON appliques. Ils seront poses par 20260828000000_storage_buckets_reconstructibles.sql, qui cree les buckets.';
+    return;
+  end if;
+
+  -- ---------------------------------------------------------------------------
   -- 1. Documents PDF — 500 Mo
   -- ---------------------------------------------------------------------------
   -- Un ouvrage numerise en bitonal tient dans quelques dizaines de Mo.
