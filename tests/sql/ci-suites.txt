@@ -108,3 +108,11 @@ tests/sql/mentions_orphelines_tests.sql
 # rapprochement est bien appele, faute de quoi un doublon repartirait en
 # new_record et l assistant le promouvrait tout seul.
 tests/sql/import_candidat_institutionnel_tests.sql
+
+# Le chemin OAI-PMH (paquet chemin-oai-pmh-executable). Les DEUX RPC etaient
+# inexecutables ; la suite les APPELLE avec le JWT d'une admin reseau au lieu
+# de les relire. T4 et T9 confrontent les quatre statuts ecrits a leurs CHECK
+# elles-memes (et non a des listes recopiees) : c'est la forme generale du
+# defaut repare. T11 garde la LIMITE du paquet — le verrou in_progress que
+# seule l'EF du Lot 3b, absente, saurait relacher.
+tests/sql/import_oai_pmh_tests.sql

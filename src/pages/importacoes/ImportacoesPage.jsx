@@ -38,6 +38,13 @@ function formatDate(iso) {
     + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
+// Provenances qui ne sont PAS des bibliotheques companheiras : elles ont
+// leur propre encart et n'ont accorde aucune relation. Les afficher parmi
+// les « Fontes companheiras » leur collerait un badge de relation invente.
+//   institutional_lookup : source creee par fn_import_ingest_candidate
+//   oai_pmh              : entrepot moissonne, encart « oai » dedie
+const NON_COMPANHEIRA_KINDS = ['institutional_lookup', 'oai_pmh'];
+
 export default function ImportacoesPage() {
   useAuth();
   const { role, libraryId, isNetworkAdmin } = useLibrary();
@@ -220,7 +227,12 @@ export default function ImportacoesPage() {
   // Run sélectionné + barrière : on ne montre les lignes que si le traitement
   // (parse + matching) est terminé. Sinon « en cours » ou « échoué ».
   const selectedRun = useMemo(() => runs.find(r => r.id === selectedRunId) || null, [runs, selectedRunId]);
-  const runProcessing = !!selectedRun && ['pending', 'uploaded', 'parsing', 'parsed'].includes(selectedRun.run_status);
+  // Les etats ou il n'y a encore RIEN a montrer. Aligne sur le vocabulaire
+  // reel de partner_catalog_import_runs_run_status_check et sur le decoupage
+  // de api.partner_catalog_import_run_policy_ui (dispatch_pending + processing) :
+  // la liste precedente citait 'pending' et 'parsing', qui n'existent dans
+  // aucun run, et oubliait 'queued' et 'processing', qui existent vraiment.
+  const runProcessing = !!selectedRun && ['uploaded', 'queued', 'processing', 'parsed', 'matching'].includes(selectedRun.run_status);
   const runFailed = !!selectedRun && selectedRun.run_status === 'failed';
 
   // Lignes à traiter (sélectionnables) : non promues ET décision encore en
@@ -1304,7 +1316,7 @@ export default function ImportacoesPage() {
               ligne ne porte — le vrai source_kind est 'institutional_lookup'.
               Le masquage ne marchait donc pas ; ça ne se voyait pas tant que la
               RPC était cassée et qu'aucune source de ce type n'existait. */}
-          {sources.filter(s => s.source_kind !== 'institutional_lookup').length > 0 && (
+          {sources.filter(s => !NON_COMPANHEIRA_KINDS.includes(s.source_kind)).length > 0 && (
             <div className="imp-sheet">
               <div className="imp-sheet__head">
                 <span className="imp-sheet__title">
@@ -1314,7 +1326,7 @@ export default function ImportacoesPage() {
               </div>
               <div className="imp-sheet__body">
                 <div className="imp-partners">
-                  {sources.filter(s => s.source_kind !== 'institutional_lookup').map(s => (
+                  {sources.filter(s => !NON_COMPANHEIRA_KINDS.includes(s.source_kind)).map(s => (
                     <div key={s.id} className="imp-pcard">
                       <div className="imp-pcard__top">
                         <h4>{s.partner_name}</h4>
