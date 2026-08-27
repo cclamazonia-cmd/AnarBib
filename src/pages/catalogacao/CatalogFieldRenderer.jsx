@@ -159,8 +159,16 @@ export function renderRegistryField(id, ctx, tier, material) {
 // Rend une section « matériel » : en-tête avec tag + grille de champs.
 // Utilise les classes .ab-group de la maquette v3.
 // `group.fields` est déjà filtré par palier/matériel (visibleGroups).
+//
+// #périodiques P7 (27/08/2026) — `ctx.sectionExtras[group.id]` permet à une
+// section d'accueillir un composant qui n'est pas un champ du registre (ici le
+// sélecteur de titre de revue, qui est un typeahead sur une autorité). Rendu
+// EN TÊTE de la grille, et c'est voulu : on choisit la revue avant de décrire
+// le numéro. L'inverse ferait saisir un fascicule orphelin avant de savoir de
+// quoi il est le fascicule.
 export function renderMaterialSection(group, ctx) {
   const { t } = ctx;
+  const extra = ctx.sectionExtras ? ctx.sectionExtras[group.id] : null;
   return (
     <section className="ab-group ab-span3" key={group.id}>
       <div className="ab-group-head">
@@ -168,6 +176,7 @@ export function renderMaterialSection(group, ctx) {
         {group.tag && <span className="ab-tag">{t({ id: group.tag })}</span>}
       </div>
       <div className="cat-book-grid">
+        {extra || null}
         {group.fields.map(field => renderField(field, ctx))}
       </div>
     </section>

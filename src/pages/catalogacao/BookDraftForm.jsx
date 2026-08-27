@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl';
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import SubjectAuthorityPicker from './SubjectAuthorityPicker';
+import SerialAuthorityPicker from './SerialAuthorityPicker';
 import AudioSegmentsBlock from './AudioSegmentsBlock';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLibrary } from '@/contexts/LibraryContext';
@@ -198,6 +199,8 @@ const EMPTY_FORM = {
   edicao: '', editora: '', publisher_id: '', colecao: '', local_publicacao: '', ano: '',
   isbn: '', issn: '',
   titulo_periodico: '', volume: '', numero: '', fasciculo: '', data_edicao: '', periodicidade: '',
+  serial_id: '',                    // #périodiques P7 : titre de revue en forme d'autorité
+
   cdd: '', idioma: '', paginas: '', loanable: 'true', circulation_default: 'emprestavel',
   notas: '', subjects: '', cover_object_path: '', marc_json: '',
   // Acquisition bridge
@@ -1904,6 +1907,10 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
         ano: f('ano') || null,
         isbn: f('isbn') || null,
         issn: f('issn') || null,
+        // #périodiques P7 : forcé à NULL hors fascicule/article — c'est aussi
+        // ce qu'exige la garde G3, autant ne pas lui envoyer de quoi lever.
+        serial_id: (materialType === 'periodico' || materialType === 'artigo') && f('serial_id')
+          ? Number(f('serial_id')) : null,
         titulo_periodico: f('titulo_periodico') || null,
         volume: f('volume') || null,
         numero: f('numero') || null,
@@ -2139,6 +2146,7 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
       ano: r.ano || '',
       isbn: r.isbn || '',
       issn: r.issn || '',
+      serial_id: r.serial_id != null ? String(r.serial_id) : '',
       titulo_periodico: r.titulo_periodico || '',
       volume: r.volume || '',
       numero: r.numero || '',
@@ -2225,7 +2233,19 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
   }
 
   // ── Registry-driven context (Lot 2: toutes les entrées passent par le registre) ──
-  const ctx = { f, set, t, networkLibraries };
+  // #périodiques P7 — le sélecteur de titre de revue s'insère en tête de la
+  // section « Periódico ». Il écrit dans le formulaire (serial_id est une
+  // colonne du brouillon), pas en base : un appel direct créerait un second
+  // chemin d'écriture, désaccordé de l'enregistrement automatique.
+  const sectionExtras = {
+    periodico: (
+      <SerialAuthorityPicker
+        value={f('serial_id')}
+        onChange={(v) => set('serial_id', v)}
+      />
+    ),
+  };
+  const ctx = { f, set, t, networkLibraries, sectionExtras };
   const rrf = (id) => renderRegistryField(id, ctx, catalogTier, materialType);
 
   // ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────
