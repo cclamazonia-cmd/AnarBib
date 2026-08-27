@@ -52,6 +52,34 @@
 -- invisible du public, et c'est l'Atelier qui la promeut. Aucune autorité ne
 -- naît validée d'un import.
 --
+-- RENUMÉROTÉ LE 27/08/2026, ET POURQUOI C'EST NOTÉ ICI. Ce paquet et les sept
+-- suivants portaient d'abord les horodatages 20260827120000…140000. Or une
+-- session voisine a poussé, quelques minutes avant, une migration au MÊME
+-- horodatage 20260827120000 (invitation_claims_lot1_schema).
+--
+-- CE QUI S'EST PASSÉ EXACTEMENT (run backend #9006392, 07:38 UTC) : `supabase
+-- db push` n'a pas sauté ce fichier — il a exécuté tout son DDL SANS ERREUR,
+-- puis a échoué au dernier geste, l'enregistrement de la version :
+--   ERROR: duplicate key value violates unique constraint "schema_migrations_pkey"
+--   Key (version)=(20260827120000) already exists.
+-- La migration étant transactionnelle, TOUT a été annulé : public.serials n'a
+-- jamais existé, les sept paquets suivants n'ont pas tourné, et la base est
+-- restée intacte. Un échec propre, donc — rien à réparer, seulement à
+-- renuméroter.
+--
+-- POURQUOI LA CHAÎNE LOCALE NE POUVAIT PAS L'ATTRAPER : le runner sql-tests
+-- applique les FICHIERS par ordre lexicographique et ne tient aucun registre de
+-- versions ; deux fichiers de même horodatage y cohabitent sans se gêner. Seul
+-- `db push` raisonne sur la version. Une collision d'horodatage est donc
+-- invisible en local, par construction.
+--
+-- LA PARADE est en amont, et elle est bon marché : après tout `git fetch`, et
+-- juste avant de nommer un fichier de migration,
+--   ls supabase/migrations/ | grep <la date du jour>
+-- La règle « strictement supérieur au max présent » ne suffit pas quand le max
+-- bouge sous les pieds — ce qu'il fait dès que deux sessions travaillent le
+-- même jour.
+--
 -- CHECKLIST DOCTRINE
 --   [x] Table public : GRANT explicites, ENABLE RLS, policies nommées
 --   [x] Écritures réservées aux RPC SECURITY DEFINER (aucune policy d'écriture)

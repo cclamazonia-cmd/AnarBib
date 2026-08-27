@@ -1,7 +1,7 @@
 -- =====================================================================
 -- AnarBib — Tests d'acceptation : PÉRIODIQUES (paquets P1 à P5)
 -- Date : 2026-08-27 · Réf : docs/specs/spec-periodiques-v0.1.md, §14
---        Migrations 20260827120000 (P1) à 20260827124000 (P5).
+--        Migrations 20260827163000 (P1) à 20260827163700 (P8).
 --
 -- POURQUOI CETTE SUITE EXISTE. Les DO blocks des migrations ne peuvent pas
 -- couvrir ces comportements : le job « sql-tests » applique TOUTES les
