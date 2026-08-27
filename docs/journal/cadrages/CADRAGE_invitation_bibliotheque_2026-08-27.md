@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | **Genre** | Cadrage *forward* — fixe la doctrine et l'état des lieux **avant** tout code. |
-| **Statut** | 🟡 **Lots 1 et 2 livrés** (schéma, puis émettre / révoquer / lister). Restent le mailer et le raccord à l'écran. |
+| **Statut** | 🟡 **Lots 1, 2 et 3a livrés** (schéma · émettre-révoquer-lister · note scindée, nom rendu, purge). Restent le mailer et l'écran. |
 | **Date** | 27 août 2026. |
 | **Origine** | §6 du cadrage « Je représente une bibliothèque » (27/08) : le mécanisme de claim y était noté « à moitié construit ». Vérification faite, le diagnostic était faux mais le manque est réel — voir §3. |
-| **Décisions prises** | **D1** option A, on étend `library_request_claims` (§5) · **D2** seuls les admins réseau peuvent inviter (§8) · **D3** durée de vie 45 jours (§8). Toutes le 27/08. Trois bornes restent ouvertes. |
+| **Décisions prises** | **D1** option A, on étend `library_request_claims` (§5) · **D2** admins réseau seuls · **D3** 45 jours · **A1** le nom de la bibliothèque est montré · **A3** signature institutionnelle · **A4** note scindée en interne / mot d'accompagnement · **B** purge à 45 jours. Toutes le 27/08. **Une borne reste ouverte** : les mentions orphelines. |
 | **Voisins** | `library_request_claims` · `CADRAGE_accueil_equipe_2026-06-19` (cooptation d'équipe) · `CADRAGE_onboarding_atelier_2026-06-02` · `library_request_mandate_transfers` · `lettre_consent_tokens` / `reader_card_tokens` (jetons sans compte). |
 
 > **Note de vocabulaire.** On dit **inviter**, pas *prospecter* ni *démarcher*. La nuance n'est pas cosmétique : un pipeline de prospection produit des listes, des relances et des taux de conversion — exactement la méga-machine que la doctrine écarte. Une invitation est un **geste adressé à quelqu'un**, qui s'éteint tout seul si personne ne la saisit. Le §7 en fait une contrainte de conception, pas un vœu.
@@ -120,6 +120,42 @@ il resterait. L'admin copie donc le lien et l'envoie — par le mailer quand il
 existera, ou par Signal, ou de la main à la main à Bologne. C'est plus artisanal
 qu'un bouton « envoyer », et c'est exactement le §7.
 
+### Lot 3a — note scindée, nom rendu, purge · **livré le 27/08/2026** (migration `20260827200000`)
+
+- **A1** — `fn_get_library_request_claim_context` rend désormais `library_name`
+  (et `claim_origin`, et le mot d'accompagnement). Sans ça, le lien disait
+  « quelqu'un vous a envoyé ceci » là où il doit dire « AnarBib invite la
+  Bibliothèque X ».
+- **A3** — signature **institutionnelle**. La fonction de contexte, ouverte à
+  `anon`, ne rend **rien** sur l'admin émetteur ; `created_by_user_id` reste en
+  base pour l'audit et n'en sort pas. Cohérent avec la doctrine du dépôt, où
+  tout vote porte un `disclose_identity` explicite.
+- **A4** — le champ `note` est **scindé** : `note_interne` (jamais rendue à la
+  personne invitée, visible de la seule liste admin) et `mot_accompagnement`
+  (écrit pour elle, destiné au mail). Un champ unique aurait servi aussi bien à
+  « rencontrée à Bologne » qu'à « méfiants, y aller doucement » ; le jour où un
+  écran l'aurait affiché — parce qu'il était là et ressemblait à un message —
+  la fuite aurait été silencieuse. **La règle ne tient plus à la vigilance de
+  qui code l'écran, elle tient au nom des colonnes.**
+- **B** — purge à 45 jours après expiration ou révocation :
+  `fn_purge_library_request_invitations()`, cron `anarbib-purge-invitations-expirees`
+  (3 h 40, actif). Efface `email_snapshot` et les deux notes ; **la ligne
+  survit** — qui a invité, quand, pour quelle bibliothèque, avec quelle issue,
+  et le motif de révocation. `purged_at` horodate le geste. Ne touche ni aux
+  invitations abouties (leur contact vit légitimement dans `library_requests`)
+  ni aux auto-candidatures.
+  Motif : `library_request_claims` est dans `deploy/bg2-known-tables.txt` mais
+  **pas dans la denylist PII**, donc dans le flux de sauvegarde **long**
+  (rétention 7/4/6). C'était sans conséquence tant que la table ne contenait que
+  des auto-candidatures — leur e-mail duplique celui d'un compte tout juste
+  créé, et `profiles` est dans la denylist. Une invitation, elle, stocke
+  l'adresse d'un **tiers qui n'a rien demandé**.
+- `email_snapshot` devient nullable, avec la même parade qu'au lot 1 :
+  `CHECK (email_snapshot IS NOT NULL OR purged_at IS NOT NULL)`. Une ligne sans
+  e-mail est une ligne purgée, jamais une ligne mal écrite.
+- Garde-fous : `tests/sql/invitation_claims_lot3a_tests.sql` (15 tests). Suite
+  complète rejouée en local : 28 suites vertes.
+
 ### Lots suivants — rien n'est codé
 
 - **`fn_create_library_request_invitation(p_email, p_library_name, p_note)`** — SECDEF, réservée aux `network_administrators` actif·ves. Génère le jeton, n'en stocke que le hash, pose `user_id = NULL`, `created_by_user_id = auth.uid()`, `metadata.source = 'invitation'` + le nom de biblio pressenti. **Rend le jeton en clair une seule fois**, à l'appel — jamais relisible ensuite.
@@ -145,9 +181,9 @@ C'est la contrainte qui doit survivre à toutes les autres.
 - **Collégialité — la borne s'est déplacée.** Toute la gouvernance *réseau* d'AnarBib fonctionne à l'**unanimité avec veto**, jamais à la majorité : cooptation d'un·e admin (un seul `opposed` = rejet immédiat), retrait collectif (unanimité des autres actif·ves, quorum ≥ 2), et évaluation d'une demande d'adhésion — dont le commentaire de `library_request_votes` dit explicitement « unanimité, symétrique aux votes de cooptation ». Le seul `majority` du dépôt est **local à une bibliothèque** (`fn_propose_library_profile_change`, `(staff_actif / 2) + 1`) et c'est une majorité **simple**. Introduire du 67 % ne serait donc pas une réutilisation mais une **nouveauté doctrinale** : on remplacerait un droit de veto — anti-majoritaire par construction, ce qui est le choix politique du réseau — par une règle où une minorité peut être mise en minorité. Ça ne se décide pas dans une migration.
 - ~~**Durée de vie.**~~ **D3, tranchée le 27/08 : 45 jours.** Une bibliothèque sollicitée sans préavis doit avoir le temps d'en parler en assemblée.
 - **Une seule invitation vivante par adresse** — posé par défaut dans le lot 2 (réinviter une adresse sans réponse, c'est le glissement vers la relance qu'écarte le §7 ; révoquer d'abord oblige à dire pourquoi). Révisable si ça se révèle trop raide.
-- **Ce que voit la personne invitée avant de créer un compte.** Le nom de sa bibliothèque, oui. Le nom de qui l'a invitée ? Ça change la nature du geste — signé ou institutionnel.
-- **Trace d'une invitation expirée ou révoquée.** La garder pour l'audit, ou l'effacer au titre de la rétention courte des PII ? Un e-mail de contact d'une bibliothèque qui n'a jamais répondu est une donnée sur un tiers non consentant.
-- **Exposition des mentions orphelines** (§7) : consentement à demander à l'inscription, ou renoncement ?
+- ~~**Ce que voit la personne invitée.**~~ **Tranchée le 27/08 (lot 3a) :** le nom de la bibliothèque **oui** (A1) ; la signature est **institutionnelle**, « la coordination du réseau », jamais nominative (A3) ; la note de l'émetteur est **scindée** pour qu'aucune note interne ne puisse fuir vers elle (A4). L'adresse destinataire, elle, n'était pas une décision : `fn_get_library_request_claim_context` la rendait déjà et est ouverte à `anon` — quiconque détient le lien voit l'adresse. Constaté, assumé.
+- ~~**Trace d'une invitation expirée ou révoquée.**~~ **Tranchée le 27/08 (lot 3a) : purge à 45 jours**, la ligne survit pour l'audit, l'e-mail et les notes disparaissent.
+- **Exposition des mentions orphelines** (§7) — **seule borne encore ouverte.** À savoir avant d'en décider : l'app dit déjà à la lectrice, au moment où elle saisit le nom, que « le nom que tu indiques aide la coordination à connaître les bibliothèques encore hors du réseau », et lui dit dans `/conta` que « cette information n'est lisible que par l'équipe qui administre le réseau » — assortie d'un bouton d'effacement. Le *principe* d'une lecture par la coordination est donc déjà annoncé, et personne ne l'a pourtant jamais implémentée. Ce qui n'est **pas** annoncé, c'est le passage du **savoir** au **contacter**. Trois questions distinctes en découlent : (1) expose-t-on la mention ? (2) si oui, faut-il un consentement explicite au *contact* (une case à l'inscription), la déclaration actuelle ne couvrant que la connaissance ? (3) la liste montre-t-elle **qui** a cité la bibliothèque, ou seulement la bibliothèque ? La (3) est la plus lourde : elle sépare « voici des bibliothèques hors réseau » de « voici qui fréquente quelle bibliothèque hors réseau ». Et quoi qu'on décide, l'implémentation devra être une **vue** et jamais une copie, sinon l'effacement par la lectrice ne se propage pas et sa faculté de retrait devient fictive.
 
 ## 9. Précédents AnarBib mobilisés
 

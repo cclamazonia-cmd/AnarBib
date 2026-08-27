@@ -90,3 +90,8 @@ tests/sql/periodiques_tests.sql
 # (D2 : admins reseau seuls), que le jeton ne se persiste jamais en clair, et
 # que la liste ne fuit ni jeton ni hash.
 tests/sql/invitation_claims_lot2_tests.sql
+
+# Invitation lot 3a : note scindee (interne / mot d accompagnement), nom rendu
+# a la personne invitee, purge a 45 jours. Garde surtout que la note INTERNE ne
+# sorte jamais vers elle, et que la purge n emporte pas ce qu elle ne doit pas.
+tests/sql/invitation_claims_lot3a_tests.sql
