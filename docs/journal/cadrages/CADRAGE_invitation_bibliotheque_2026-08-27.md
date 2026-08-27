@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | **Genre** | Cadrage *forward* — fixe la doctrine et l'état des lieux **avant** tout code. |
-| **Statut** | 🟡 **Lots 1, 2 et 3a livrés** (schéma · émettre-révoquer-lister · note scindée, nom rendu, purge). Restent le mailer et l'écran. |
+| **Statut** | 🟡 **Lots 1, 2, 3a et 3b livrés** (schéma · émettre-révoquer-lister · note scindée, nom rendu, purge · mailer). Reste l'écran de backstage, et le lot C (mentions orphelines). |
 | **Date** | 27 août 2026. |
 | **Origine** | §6 du cadrage « Je représente une bibliothèque » (27/08) : le mécanisme de claim y était noté « à moitié construit ». Vérification faite, le diagnostic était faux mais le manque est réel — voir §3. |
-| **Décisions prises** | **D1** option A, on étend `library_request_claims` (§5) · **D2** admins réseau seuls · **D3** 45 jours · **A1** le nom de la bibliothèque est montré · **A3** signature institutionnelle · **A4** note scindée en interne / mot d'accompagnement · **B** purge à 45 jours. Toutes le 27/08. **Une borne reste ouverte** : les mentions orphelines. |
+| **Décisions prises** | **D1** option A, on étend `library_request_claims` (§5) · **D2** admins réseau seuls · **D3** 45 jours · **A1** le nom de la bibliothèque est montré · **A3** signature institutionnelle · **A4** note scindée en interne / mot d'accompagnement · **B** purge à 45 jours · **C** mentions orphelines exposées avec consentement explicite, forme agrégée par défaut. Toutes le 27/08. **Plus aucune borne ouverte.** |
 | **Voisins** | `library_request_claims` · `CADRAGE_accueil_equipe_2026-06-19` (cooptation d'équipe) · `CADRAGE_onboarding_atelier_2026-06-02` · `library_request_mandate_transfers` · `lettre_consent_tokens` / `reader_card_tokens` (jetons sans compte). |
 
 > **Note de vocabulaire.** On dit **inviter**, pas *prospecter* ni *démarcher*. La nuance n'est pas cosmétique : un pipeline de prospection produit des listes, des relances et des taux de conversion — exactement la méga-machine que la doctrine écarte. Une invitation est un **geste adressé à quelqu'un**, qui s'éteint tout seul si personne ne la saisit. Le §7 en fait une contrainte de conception, pas un vœu.
@@ -156,6 +156,34 @@ qu'un bouton « envoyer », et c'est exactement le §7.
 - Garde-fous : `tests/sql/invitation_claims_lot3a_tests.sql` (15 tests). Suite
   complète rejouée en local : 28 suites vertes.
 
+### Lot 3b — le mailer · **livré le 27/08/2026**
+
+- Edge Function `notify-library-invitation`, plus 12 clés `invitation.*` dans
+  `mail-strings.ts`, **dans les 10 locales**. Texte français validé par la
+  coordination ; registre « vous » de collectif — on écrit à une bibliothèque,
+  pas à une personne.
+- **C'est la fonction qui appelle la RPC, et pas l'inverse.** Si le frontend
+  émettait puis nous passait le jeton, celui-ci transiterait par le navigateur
+  et par une seconde requête. Ici il naît et meurt dans la fonction : il
+  n'existe nulle part ailleurs que dans le mail. Même raison qui interdit de
+  passer par un événement de notification, dont le payload s'écrirait en clair
+  dans `team_notification_outbox`.
+- **La garde d'autorisation est la RPC elle-même**, appelée avec le jeton de
+  l'appelant·e. `verify_jwt = true` ne suffirait pas : la clé anon est aussi un
+  JWT valide. C'est la base qui refuse un compte non admin, pas du code dans la
+  fonction qu'on pourrait oublier.
+- Le lien envoyé est **direct** (`/solicitar-biblioteca?claim=…`), sans passer
+  par `/login` : la personne invitée n'a pas de compte, l'y envoyer la mettrait
+  devant un mur. C'est l'inverse du CTA d'auto-candidature, et c'est voulu.
+- L'appel direct à la RPC reste ouvert et volontaire : un·e admin peut
+  récupérer le lien et l'envoyer par ses propres moyens. §7.
+- Garde-fou : `src/tests/mail-invitation-i18n.test.js` (27 tests) — présence,
+  traduction effective, et **cohérence des paramètres interpolés** entre
+  locales. Un `{libraryName}` oublié dans une seule langue produirait un mail
+  sans le nom de la bibliothèque, invisible tant que personne n'écrit dans
+  cette langue-là. Les chaînes de mail vivent hors de `src/i18n/locales/` : la
+  garde « code ↔ locales » ne les voyait pas, rien ne les surveillait.
+
 ### Lots suivants — rien n'est codé
 
 - **`fn_create_library_request_invitation(p_email, p_library_name, p_note)`** — SECDEF, réservée aux `network_administrators` actif·ves. Génère le jeton, n'en stocke que le hash, pose `user_id = NULL`, `created_by_user_id = auth.uid()`, `metadata.source = 'invitation'` + le nom de biblio pressenti. **Rend le jeton en clair une seule fois**, à l'appel — jamais relisible ensuite.
@@ -183,7 +211,7 @@ C'est la contrainte qui doit survivre à toutes les autres.
 - **Une seule invitation vivante par adresse** — posé par défaut dans le lot 2 (réinviter une adresse sans réponse, c'est le glissement vers la relance qu'écarte le §7 ; révoquer d'abord oblige à dire pourquoi). Révisable si ça se révèle trop raide.
 - ~~**Ce que voit la personne invitée.**~~ **Tranchée le 27/08 (lot 3a) :** le nom de la bibliothèque **oui** (A1) ; la signature est **institutionnelle**, « la coordination du réseau », jamais nominative (A3) ; la note de l'émetteur est **scindée** pour qu'aucune note interne ne puisse fuir vers elle (A4). L'adresse destinataire, elle, n'était pas une décision : `fn_get_library_request_claim_context` la rendait déjà et est ouverte à `anon` — quiconque détient le lien voit l'adresse. Constaté, assumé.
 - ~~**Trace d'une invitation expirée ou révoquée.**~~ **Tranchée le 27/08 (lot 3a) : purge à 45 jours**, la ligne survit pour l'audit, l'e-mail et les notes disparaissent.
-- **Exposition des mentions orphelines** (§7) — **seule borne encore ouverte.** À savoir avant d'en décider : l'app dit déjà à la lectrice, au moment où elle saisit le nom, que « le nom que tu indiques aide la coordination à connaître les bibliothèques encore hors du réseau », et lui dit dans `/conta` que « cette information n'est lisible que par l'équipe qui administre le réseau » — assortie d'un bouton d'effacement. Le *principe* d'une lecture par la coordination est donc déjà annoncé, et personne ne l'a pourtant jamais implémentée. Ce qui n'est **pas** annoncé, c'est le passage du **savoir** au **contacter**. Trois questions distinctes en découlent : (1) expose-t-on la mention ? (2) si oui, faut-il un consentement explicite au *contact* (une case à l'inscription), la déclaration actuelle ne couvrant que la connaissance ? (3) la liste montre-t-elle **qui** a cité la bibliothèque, ou seulement la bibliothèque ? La (3) est la plus lourde : elle sépare « voici des bibliothèques hors réseau » de « voici qui fréquente quelle bibliothèque hors réseau ». Et quoi qu'on décide, l'implémentation devra être une **vue** et jamais une copie, sinon l'effacement par la lectrice ne se propage pas et sa faculté de retrait devient fictive.
+- ~~**Exposition des mentions orphelines**~~ **Tranchée le 27/08 (C) — reste à implémenter.** On expose, **avec consentement explicite**, et sous **forme agrégée par défaut** : la liste montre des bibliothèques hors réseau et leur nombre de mentions, pas qui les a citées. Le lien vers la lectrice n'apparaît que si elle a explicitement consenti — ce qui fait **deux consentements distincts** : l'un pour que la coordination contacte la bibliothèque, l'autre pour passer par elle. Implémentation obligatoirement en **vue**, jamais en copie : sinon l'effacement dans `/conta` ne se propage pas et sa faculté de retrait devient fictive. Ce qui suit est le contexte qui a servi à trancher. L'app dit déjà à la lectrice, au moment où elle saisit le nom, que « le nom que tu indiques aide la coordination à connaître les bibliothèques encore hors du réseau », et lui dit dans `/conta` que « cette information n'est lisible que par l'équipe qui administre le réseau » — assortie d'un bouton d'effacement. Le *principe* d'une lecture par la coordination est donc déjà annoncé, et personne ne l'a pourtant jamais implémentée. Ce qui n'est **pas** annoncé, c'est le passage du **savoir** au **contacter**. D'où le consentement explicite au *contact* : la déclaration actuelle ne couvre que la connaissance. Et d'où la forme agrégée : montrer **qui** a cité une bibliothèque produirait un graphe social — on apprendrait qui fréquente quel lieu militant non affilié, ce que personne n'a déclaré. La lectrice a répondu à « quelle est ta bibliothèque ? », pas à « autorises-tu qu'on sache que tu fréquentes ce lieu ? ». Et la bibliothèque nommée, elle, n'a jamais rien consenti du tout.
 
 ## 9. Précédents AnarBib mobilisés
 
