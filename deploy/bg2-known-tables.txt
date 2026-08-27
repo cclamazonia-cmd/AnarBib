@@ -169,6 +169,7 @@ recolement_sessions
 reserva_item_workflow_v2
 reserva_linhas_v2
 reservas_v2
+serial_holdings
 serials
 service_health_incidents
 service_health_probes
