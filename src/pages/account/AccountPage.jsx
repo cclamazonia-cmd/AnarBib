@@ -1370,6 +1370,21 @@ export default function AccountPage() {
                   <p className="ab-conta-hint" style={{ margin: '0 0 10px' }}>
                     {t({ id: 'account.declared.hint' })}
                   </p>
+                  {/* Decision C — l'encadré annonçait une lecture par la
+                      coordination sans dire qu'elle dépend d'un consentement.
+                      On affiche donc l'état réel des deux cases plutôt qu'une
+                      promesse générale. Le bouton ci-dessous reste le seul
+                      retrait possible : effacer la mention retire tout. */}
+                  <p className="ab-conta-hint" style={{ margin: '0 0 10px' }}>
+                    {t({ id: profile.signup_intent_metadata?.mention_contact_consent
+                      ? 'account.declared.consent.contactYes'
+                      : 'account.declared.consent.contactNo' })}
+                    {' '}
+                    {profile.signup_intent_metadata?.mention_contact_consent && t({
+                      id: profile.signup_intent_metadata?.mention_attribution_consent
+                        ? 'account.declared.consent.attributionYes'
+                        : 'account.declared.consent.attributionNo' })}
+                  </p>
                   <Button
                     type="button"
                     variant="danger"

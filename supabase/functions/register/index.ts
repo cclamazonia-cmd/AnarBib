@@ -539,6 +539,13 @@ serve(async (req)=>{
     const orphanLibraryNameMentioned = String(body?.orphan_library_name_mentioned || "")
       .trim()
       .slice(0, 200);
+    // Decision C (27/08/2026) — deux consentements distincts, et l'absence vaut
+    // REFUS. Le premier autorise la coordination a contacter la bibliotheque
+    // nommee ; le second, a savoir qui l'a nommee. Ils ne sont pas
+    // interchangeables : le premier protege un tiers (la bibliotheque, qui n'a
+    // rien consenti), le second protege la personne qui declare.
+    const orphanContactConsent = body?.orphan_mention_contact_consent === true;
+    const orphanAttributionConsent = body?.orphan_mention_attribution_consent === true;
     const requestedLibraryName = String(body?.library_name || "").trim();
     const requestedLibraryContactEmail = normalizeEmail(body?.library_contact_email);
     const requestedLibraryReplyToEmail = normalizeEmail(body?.library_reply_to_email);
@@ -929,8 +936,15 @@ serve(async (req)=>{
     } else {
       // ── Cas 3 : lectrice orpheline (biblio pas encore sur AnarBib) ──────
       // NI membership, NI claim. Juste le profil (déjà créé) + le tag.
+      // La dependance entre les deux est imposee ICI et pas seulement a
+      // l'ecran : consentir a l'attribution sans consentir au contact n'a aucun
+      // sens, et un appel direct a l'EF ne doit pas pouvoir produire cet etat.
       signupIntentMetadata = orphanLibraryNameMentioned
-        ? { library_name_mentioned: orphanLibraryNameMentioned }
+        ? {
+            library_name_mentioned: orphanLibraryNameMentioned,
+            mention_contact_consent: orphanContactConsent,
+            mention_attribution_consent: orphanContactConsent && orphanAttributionConsent,
+          }
         : {};
     }
     // ── Paquet 2 — écriture des colonnes signup_intent (Paquet 1 DB) ───────

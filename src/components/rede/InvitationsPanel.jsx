@@ -37,6 +37,7 @@ export default function InvitationsPanel() {
   const [form, setForm] = useState(VIDE);
   const [langue, setLangue] = useState(locale || 'pt-BR');
   const [liste, setListe] = useState([]);
+  const [mentions, setMentions] = useState([]);
   const [closes, setCloses] = useState(false);
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(null);
@@ -57,6 +58,24 @@ export default function InvitationsPanel() {
     }
   }, [closes, t]);
   useEffect(() => { charger(); }, [charger]);
+
+  // Décision C — bibliothèques nommées par des lecteur·rices orphelines, et qui
+  // ont consenti à ce que la coordination les contacte. La fonction lit
+  // `profiles` en direct : si quelqu'un efface sa mention dans /conta, elle
+  // disparaît d'ici au prochain chargement, sans rien à synchroniser.
+  const chargerMentions = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.rpc('fn_list_orphan_library_mentions');
+      if (error) throw error;
+      setMentions(data || []);
+    } catch {
+      // Silencieux : c'est une aide au repérage, pas le cœur de l'onglet. La
+      // faire échouer bruyamment masquerait la liste des invitations, qui, elle,
+      // compte.
+      setMentions([]);
+    }
+  }, []);
+  useEffect(() => { chargerMentions(); }, [chargerMentions]);
 
   function set(k, v) { setForm(p => ({ ...p, [k]: v })); }
 
@@ -212,6 +231,46 @@ export default function InvitationsPanel() {
           {t({ id: 'rede.invitations.form.submit' })}
         </Button>
       </form>
+
+      {/* ── Bibliothèques nommées (décision C) ──────────────────────── */}
+      {mentions.length > 0 && (
+        <div style={{ marginBottom: 24, maxWidth: 720 }}>
+          <h3 style={{ marginBottom: 6 }}>{t({ id: 'rede.invitations.mentions.title' })}</h3>
+          <p style={{ ...hs, marginTop: 0, marginBottom: 12 }}>
+            {t({ id: 'rede.invitations.mentions.intro' })}
+          </p>
+          {mentions.map(m => (
+            <div key={m.library_name} style={{ padding: 12, borderRadius: 10, background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.08)', marginBottom: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'baseline' }}>
+                <strong style={{ fontSize: '.95rem' }}>{m.library_name}</strong>
+                <span style={{ fontSize: '.78rem', color: 'var(--brand-muted, #999)' }}>
+                  {t({ id: 'rede.invitations.mentions.count' }, { n: m.mentions })}
+                </span>
+              </div>
+              <div style={{ ...hs, marginTop: 4 }}>
+                {t({ id: 'rede.invitations.mentions.last' })} {dateCourte(m.derniere_mention)}
+              </div>
+              {/* Les personnes ne sont nommées que si elles l'ont accepté ; les
+                  autres restent comptées sans nom. Le dire explicitement évite
+                  de lire une liste vide comme « personne n'a mentionné ». */}
+              <div style={{ ...hs, marginTop: 6 }}>
+                {(m.personnes || []).length > 0
+                  ? <>
+                      <b>{t({ id: 'rede.invitations.mentions.reachable' })}</b>{' '}
+                      {(m.personnes || []).map(x => `${x.prenom || ''} (${x.public_id || '—'})`).join(', ')}
+                    </>
+                  : t({ id: 'rede.invitations.mentions.anonymous' })}
+              </div>
+              <div style={{ marginTop: 10 }}>
+                <Button type="button" variant="secondary"
+                  onClick={() => set('libraryName', m.library_name)}>
+                  {t({ id: 'rede.invitations.mentions.prefill' })}
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* ── Suivre ──────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>

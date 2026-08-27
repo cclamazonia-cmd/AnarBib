@@ -95,3 +95,8 @@ tests/sql/invitation_claims_lot2_tests.sql
 # a la personne invitee, purge a 45 jours. Garde surtout que la note INTERNE ne
 # sorte jamais vers elle, et que la purge n emporte pas ce qu elle ne doit pas.
 tests/sql/invitation_claims_lot3a_tests.sql
+
+# Mentions de biblios hors reseau exposees a la coordination (decision C).
+# Garde surtout que l ABSENCE de consentement vaut refus, et que le rattachement
+# nominatif ne suive pas le consentement au contact.
+tests/sql/mentions_orphelines_tests.sql

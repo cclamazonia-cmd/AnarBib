@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Genre** | Cadrage *forward* — fixe la doctrine et l'état des lieux **avant** tout code. |
-| **Statut** | 🟡 **Lots 1, 2, 3a et 3b livrés** (schéma · émettre-révoquer-lister · note scindée, nom rendu, purge · mailer). Reste l'écran de backstage, et le lot C (mentions orphelines). |
+| **Statut** | 🟢 **Chantier livré.** Schéma · émettre-révoquer-lister · note scindée, nom rendu, purge · mailer · écran de backstage · mentions consenties. Aucune borne ouverte. |
 | **Date** | 27 août 2026. |
 | **Origine** | §6 du cadrage « Je représente une bibliothèque » (27/08) : le mécanisme de claim y était noté « à moitié construit ». Vérification faite, le diagnostic était faux mais le manque est réel — voir §3. |
 | **Décisions prises** | **D1** option A, on étend `library_request_claims` (§5) · **D2** admins réseau seuls · **D3** 45 jours · **A1** le nom de la bibliothèque est montré · **A3** signature institutionnelle · **A4** note scindée en interne / mot d'accompagnement · **B** purge à 45 jours · **C** mentions orphelines exposées avec consentement explicite, forme agrégée par défaut. Toutes le 27/08. **Plus aucune borne ouverte.** |
@@ -183,6 +183,49 @@ qu'un bouton « envoyer », et c'est exactement le §7.
   sans le nom de la bibliothèque, invisible tant que personne n'écrit dans
   cette langue-là. Les chaînes de mail vivent hors de `src/i18n/locales/` : la
   garde « code ↔ locales » ne les voyait pas, rien ne les surveillait.
+
+### Lot 3c — l'écran, et les mentions consenties · **livré le 27/08/2026**
+
+**L'écran** (`InvitationsPanel`, onglet « Invitations » de `/rede`) : émettre,
+révoquer, suivre. L'émission passe par l'Edge Function et non par la RPC — le
+jeton en clair ne doit pas vivre dans le navigateur. Le formulaire sépare
+visuellement le mot d'accompagnement (« VA DANS LE MAIL ») de la note interne
+(« NE SORT JAMAIS d'ici », encadré de couleur distincte, réaffiché sur le même
+fond dans la liste). Deux distinctions que l'interface refuse d'aplatir :
+« invitation créée mais mail non parti » n'est pas « envoyée », et une adresse
+purgée est annoncée comme telle plutôt qu'affichée vide.
+
+**Les mentions (décision C)**, migration `20260827230000` :
+
+- Deux consentements **distincts**, faux par défaut, demandés à l'inscription
+  quand — et seulement quand — un nom de bibliothèque est saisi :
+  `mention_contact_consent` (la coordination peut contacter cette bibliothèque)
+  et `mention_attribution_consent` (elle peut savoir que c'est moi). Le second
+  n'apparaît que si le premier est coché, et **l'EF `register` réimpose la
+  dépendance** : un appel direct ne peut pas produire une attribution sans
+  contact.
+- `fn_list_orphan_library_mentions()` — admins réseau seuls, garde dans le
+  `where`. N'expose une mention **que** si le contact est consenti ; ne la
+  rattache à une personne **que** si l'attribution l'est aussi. Les autres sont
+  comptées sans nom : c'est la forme agrégée par défaut.
+- **Une fonction qui lit, jamais une copie.** Elle interroge `profiles` à chaque
+  appel : effacer sa mention dans `/conta` la fait disparaître immédiatement,
+  sans rien à synchroniser. Une table recopiée aurait rendu la faculté de retrait
+  fictive — c'est la raison pour laquelle il n'y a pas de table ici, et un test
+  l'épingle (T8/T9).
+- `/conta` disait « cette information n'est lisible que par l'équipe qui
+  administre le réseau », ce qui était une promesse inconditionnelle et, jusqu'à
+  aujourd'hui, tenue dans le vide. L'encadré affiche désormais **l'état réel des
+  deux cases**.
+- Garde-fous : `tests/sql/mentions_orphelines_tests.sql` (11 tests) — 29 suites
+  vertes en local. Ce qu'ils gardent et qui ne se voit pas à l'œil : que
+  l'absence de consentement vaut refus, et que l'attribution ne suive pas le
+  contact.
+
+**État au moment de poser tout ça : zéro profil portait une mention.** Aucun
+consentement rétroactif à inventer, aucune donnée ancienne à reclasser — les deux
+drapeaux absents valent refus, donc les comptes antérieurs restent invisibles par
+construction.
 
 ### Lots suivants — rien n'est codé
 

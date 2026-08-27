@@ -52,6 +52,10 @@ export default function CriarContaPage() {
     // Nom de bibliothèque mentionné par une lectrice orpheline (cas
     // __orphan__). Optionnel, plafonné à 200 car. Vide pour les autres cas.
     orphan_library_name: '',
+    // Decision C — les deux consentements liés à la mention ci-dessus. Faux par
+    // défaut : ne rien cocher, c'est refuser, et c'est le cas le plus courant.
+    orphan_contact_consent: false,
+    orphan_attribution_consent: false,
     // Nom de la bibliothèque représentée (cas __new_library__). OBLIGATOIRE,
     // contrairement au champ orphelin ci-dessus : il part dans
     // profiles.affiliation_org puis se reporte dans le formulaire de demande.
@@ -252,6 +256,13 @@ export default function CriarContaPage() {
         orphan_library_name_mentioned: signupIntent === 'reader_orphan'
           ? form.orphan_library_name.trim()
           : '',
+        // Decision C — l'EF re-impose la dépendance entre les deux ; on n'envoie
+        // ici que ce que la personne a effectivement coché.
+        orphan_mention_contact_consent: signupIntent === 'reader_orphan'
+          && !!form.orphan_library_name.trim() && form.orphan_contact_consent,
+        orphan_mention_attribution_consent: signupIntent === 'reader_orphan'
+          && !!form.orphan_library_name.trim() && form.orphan_contact_consent
+          && form.orphan_attribution_consent,
         // `anarbib_logo_url` retire le 19/08/2026 : register/index.ts ne lit PAS
         // ce champ (il impose MAIL_BRAND.anarbibLogoUrl, l'URL Storage qu'il
         // inline en data URI). Le champ etait donc mort, et depuis que
@@ -423,6 +434,46 @@ export default function CriarContaPage() {
               style={fs}
             />
             <div style={hs}>{t({id:'auth.create.intent.orphan.libNameHint'})}</div>
+
+            {/* Decision C — les consentements n'apparaissent que si un nom est
+                saisi : ils portent sur CETTE bibliothèque, les proposer à vide
+                n'aurait pas d'objet. Ne rien cocher vaut refus, et la mention
+                reste alors invisible de la coordination. */}
+            {form.orphan_library_name.trim() && (
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+                <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: '.82rem', lineHeight: 1.5, cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={form.orphan_contact_consent}
+                    onChange={e => {
+                      set('orphan_contact_consent', e.target.checked);
+                      // Retirer le premier retire le second : le garder coché
+                      // laisserait un consentement orphelin, sans effet mais
+                      // trompeur à la relecture.
+                      if (!e.target.checked) set('orphan_attribution_consent', false);
+                    }}
+                    style={{ marginTop: 3 }}
+                  />
+                  <span>{t({id:'auth.create.intent.orphan.contactConsent'})}</span>
+                </label>
+                <div style={{ ...hs, marginLeft: 24 }}>{t({id:'auth.create.intent.orphan.contactConsentHint'})}</div>
+
+                {form.orphan_contact_consent && (
+                  <div style={{ marginTop: 10, marginLeft: 24 }}>
+                    <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: '.82rem', lineHeight: 1.5, cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={form.orphan_attribution_consent}
+                        onChange={e => set('orphan_attribution_consent', e.target.checked)}
+                        style={{ marginTop: 3 }}
+                      />
+                      <span>{t({id:'auth.create.intent.orphan.attributionConsent'})}</span>
+                    </label>
+                    <div style={{ ...hs, marginLeft: 24 }}>{t({id:'auth.create.intent.orphan.attributionConsentHint'})}</div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
