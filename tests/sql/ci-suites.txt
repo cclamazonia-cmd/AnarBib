@@ -70,3 +70,8 @@ tests/sql/conv_o7_collectivites_tests.sql
 # copie du nom dans book_contributors (test 8), qui est le plus discret des
 # echecs : autorite scindee, livre affichant encore le nom compose.
 tests/sql/conv_o8_scission_tests.sql
+
+# Invitation d une bibliotheque, lot 1 : le schema des claims s ouvre a un
+# claim sans compte. Garde surtout que la garantie perdue (user_id NOT NULL) est
+# REMPLACEE et non abandonnee, et que la revocation mord vraiment.
+tests/sql/invitation_claims_lot1_tests.sql

@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | **Genre** | Cadrage *forward* — fixe la doctrine et l'état des lieux **avant** tout code. |
-| **Statut** | 🔵 **Non implémenté.** Aucune ligne écrite pour ce chantier. Les faits techniques du §3 sont vérifiés en base le 27/08/2026. |
+| **Statut** | 🟡 **Lot 1 livré** (schéma), le reste non implémenté. Les faits techniques du §3 sont vérifiés en base le 27/08/2026. |
 | **Date** | 27 août 2026. |
 | **Origine** | §6 du cadrage « Je représente une bibliothèque » (27/08) : le mécanisme de claim y était noté « à moitié construit ». Vérification faite, le diagnostic était faux mais le manque est réel — voir §3. |
-| **Décisions prises** | Aucune. Le §5 pose **la** décision de forme à trancher ; le §8 liste les bornes ouvertes. |
+| **Décisions prises** | **D1 (27/08) — option A : on étend `library_request_claims`.** Cf. §5. Les six bornes du §8 restent ouvertes. |
 | **Voisins** | `library_request_claims` · `CADRAGE_accueil_equipe_2026-06-19` (cooptation d'équipe) · `CADRAGE_onboarding_atelier_2026-06-02` · `library_request_mandate_transfers` · `lettre_consent_tokens` / `reader_card_tokens` (jetons sans compte). |
 
 > **Note de vocabulaire.** On dit **inviter**, pas *prospecter* ni *démarcher*. La nuance n'est pas cosmétique : un pipeline de prospection produit des listes, des relances et des taux de conversion — exactement la méga-machine que la doctrine écarte. Une invitation est un **geste adressé à quelqu'un**, qui s'éteint tout seul si personne ne la saisit. Le §7 en fait une contrainte de conception, pas un vœu.
@@ -69,9 +69,36 @@ Le §6 du cadrage précédent disait le claim « à moitié construit : `user_id
 
 **Recommandation : A**, sauf si la collégialité de l'invitation est jugée nécessaire dès la v1 — auquel cas B évite de la bricoler après coup.
 
+### D1 — Décision prise le 27/08/2026 : **option A**
+
+On étend. Ce que ça tranche par ricochet : **pas de ratification collégiale de l'invitation en v1** — c'était le seul argument qui faisait pencher vers B. La borne « collégialité » du §8 reste ouverte, mais la trancher « oui » plus tard coûtera une table, pas une retouche.
+
+**Un écart assumé sur la forme.** Le §5 disait « une source dans `metadata` ». Le lot 1 pose une **colonne réelle** `claim_origin` (`self_signup` · `invitation`) et non une clé jsonb. Raison : la nullabilité de `user_id` ne devient un cas *nommé* que si une contrainte le dit, et une `CHECK` ne contraint pas proprement une clé jsonb — or c'est exactement le rôle qu'on lui demandait. Une colonne se contraint, s'indexe et se grep. Le défaut `self_signup` préserve la rétro-compatibilité : l'EF `register` insère sans connaître cette colonne et n'a pas à être redéployée.
+
 **Précision utile :** `library_team_invitations.invited_user_id` est lui aussi `NOT NULL REFERENCES profiles(id)`. **Le dépôt n'a donc aucun précédent d'invitation vers quelqu'un sans compte.** Les seuls précédents de jeton-sans-compte sont `lettre_consent_tokens` (double opt-in de la Lettre) et `reader_card_tokens` — c'est de ce côté qu'il faut regarder pour la forme du jeton, pas du côté de l'accueil d'équipe.
 
-## 6. Esquisse technique (si A — rien n'est codé)
+## 6. Esquisse technique (option A)
+
+### Lot 1 — schéma · **livré le 27/08/2026** (migration `20260827120000`)
+
+- `user_id` devient nullable, et la garantie perdue est **remplacée** :
+  `CHECK (user_id IS NOT NULL OR claim_origin = 'invitation')`. Un claim
+  d'auto-candidature porte toujours son compte, exactement comme avant.
+- `claim_origin` (`self_signup` par défaut) + `CHECK` sur les deux valeurs.
+- Révocation : `revoked_at`, `revoked_by_user_id`, `revoked_reason`, avec
+  **motif obligatoire** (doctrine « note obligatoire »).
+- Une invitation est **signée** :
+  `CHECK (claim_origin <> 'invitation' OR created_by_user_id IS NOT NULL)`.
+- **Les deux lectures du claim ignorent désormais un claim révoqué**
+  (`fn_get_library_request_claim_context`, `fn_consume_library_request_claim`).
+  C'est la seule raison pour laquelle ce lot touche à du code déjà en service :
+  un `revoked_at` que personne ne lit donnerait l'illusion d'avoir fermé une
+  porte restée grande ouverte.
+- Garde-fous : `tests/sql/invitation_claims_lot1_tests.sql` (10 tests), inscrit
+  dans `ci-suites.txt`. La suite complète a été rejouée en local sur l'image
+  Postgres de la CI : 25 suites vertes.
+
+### Lots suivants — rien n'est codé
 
 - **`fn_create_library_request_invitation(p_email, p_library_name, p_note)`** — SECDEF, réservée aux `network_administrators` actif·ves. Génère le jeton, n'en stocke que le hash, pose `user_id = NULL`, `created_by_user_id = auth.uid()`, `metadata.source = 'invitation'` + le nom de biblio pressenti. **Rend le jeton en clair une seule fois**, à l'appel — jamais relisible ensuite.
 - **`fn_revoke_library_request_invitation(p_claim_id, p_motif)`** — SECDEF, même réserve. Pose `revoked_at` + motif. La doctrine « note obligatoire » du dépôt s'applique : on dit pourquoi.
