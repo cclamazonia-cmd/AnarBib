@@ -1,0 +1,108 @@
+# CADRAGE — Inviter une bibliothèque
+
+| | |
+|---|---|
+| **Genre** | Cadrage *forward* — fixe la doctrine et l'état des lieux **avant** tout code. |
+| **Statut** | 🔵 **Non implémenté.** Aucune ligne écrite pour ce chantier. Les faits techniques du §3 sont vérifiés en base le 27/08/2026. |
+| **Date** | 27 août 2026. |
+| **Origine** | §6 du cadrage « Je représente une bibliothèque » (27/08) : le mécanisme de claim y était noté « à moitié construit ». Vérification faite, le diagnostic était faux mais le manque est réel — voir §3. |
+| **Décisions prises** | Aucune. Le §5 pose **la** décision de forme à trancher ; le §8 liste les bornes ouvertes. |
+| **Voisins** | `library_request_claims` · `CADRAGE_accueil_equipe_2026-06-19` (cooptation d'équipe) · `CADRAGE_onboarding_atelier_2026-06-02` · `library_request_mandate_transfers` · `lettre_consent_tokens` / `reader_card_tokens` (jetons sans compte). |
+
+> **Note de vocabulaire.** On dit **inviter**, pas *prospecter* ni *démarcher*. La nuance n'est pas cosmétique : un pipeline de prospection produit des listes, des relances et des taux de conversion — exactement la méga-machine que la doctrine écarte. Une invitation est un **geste adressé à quelqu'un**, qui s'éteint tout seul si personne ne la saisit. Le §7 en fait une contrainte de conception, pas un vœu.
+
+---
+
+## 1. Objet
+
+Permettre à la coordination de **tendre un lien** à une bibliothèque repérée, au lieu d'attendre qu'elle frappe à la porte.
+
+Aujourd'hui, la seule entrée est l'auto-candidature : la bibliothèque découvre AnarBib, crée un compte par la voie « je représente une bibliothèque », et remplit le formulaire. Ce chemin fonctionne (et vient d'être requalifié le 27/08 pour parler aux bibliothèques déjà constituées). Il ne couvre pas le cas inverse, qui est pourtant le plus fréquent dans la vie du réseau : **on rencontre une bibliothèque à Bologne, une lectrice en mentionne une, quelqu'un connaît un fonds** — et il n'existe aucun geste pour transformer cette rencontre en une porte ouverte.
+
+## 2. Le retournement : l'initiative change de camp, pas la doctrine
+
+Ce qui change : **qui commence**.
+
+Ce qui ne change **pas**, et ne doit pas :
+
+- **Le compte reste une personne.** `library_requests.submitted_by_user_id` est `NOT NULL`, et c'est délibéré : c'est ce champ qui porte la RLS de la demande, les échanges avec la coordination, puis le mandat de coordenador·a. On n'invite pas une institution, on invite **quelqu'un à porter la demande de son collectif**. Un compte institutionnel casserait « une lectrice, une biblio », compliquerait le transfert de mandat — qui a déjà sa table d'audit `library_request_mandate_transfers` — et laisserait un objet orphelin le jour où la personne s'en va.
+- **L'invitation n'est pas une admission.** Elle ouvre l'accès au formulaire, rien de plus. La demande passe ensuite par le même examen collégial que les autres. Inviter ne promet pas d'accepter, et le texte de l'invitation doit le dire.
+- **Rien n'est définitif, personne ne décide seul·e.** Formule reprise telle quelle du parcours d'inscription.
+
+## 3. Ce qui existe déjà — vérifié en base le 27/08/2026
+
+Le §6 du cadrage précédent disait le claim « à moitié construit : `user_id` y est NOT NULL et aucune RPC ne crée de claim ». La seconde moitié de la phrase est littéralement vraie mais mène à une conclusion fausse : **pour la voie auto-candidature, la chaîne est entière et fonctionne.** C'est l'EF `register` qui insère le claim en `service_role` — pas une RPC, d'où la confusion.
+
+| Brique | État réel |
+|---|---|
+| `library_request_claims` | 11 colonnes. `user_id` **NOT NULL**, `email_snapshot` NOT NULL, `claim_token_hash` NOT NULL, `expires_at` NOT NULL, `used_at` / `used_by_request_id` nullables, `metadata` jsonb, `created_by_user_id` **nullable** |
+| RLS de cette table | Une seule policy, `deny_direct_access_secdef_only` (ALL). **La table n'est atteignable que par fonctions SECURITY DEFINER** — aucun `select` direct, même pour la coordination |
+| `fn_hash_claim_token` | Seul le **hash** du jeton est stocké ; le jeton en clair n'existe que dans le mail |
+| `fn_get_library_request_claim_context(token)` | SECDEF, **accessible à `anon`** — une personne non connectée peut valider un jeton et voir à quel e-mail il est rattaché |
+| `fn_consume_library_request_claim(token, request_id)` | SECDEF, accessible à `anon`, rend la **ligne complète** du claim |
+| `fn_submit_library_request_via_claim(...)` | SECDEF, accessible à `anon`. **Était cassée** (`invalid input syntax for type json`, 22P02, dès la première instruction, même avec un jeton valide) — réparée le 27/08/2026, migration `20260827100000`. Sans cette réparation ce chantier était sans objet |
+| Création d'un claim | **Aucune RPC.** Seule l'EF `register` insère, en `service_role`, avec `metadata.source = 'register_signup_without_library'` et un TTL de 14 jours |
+| Écran | `/solicitar-biblioteca` valide déjà un `?claim=` **sans être connecté**, et possède déjà une branche d'affichage « pas de compte + claim valide » |
+| Mentions de biblios hors réseau | Les comptes `reader_orphan` déposent le nom cité dans `signup_intent_metadata.library_name_mentioned`. **Affiché uniquement à la lectrice elle-même**, dans `/conta`, où elle peut l'effacer |
+
+**Ce qu'il faut retenir :** l'arrivée anonyme sur le formulaire est déjà à moitié construite. Ce qui manque est **en amont** — émettre l'invitation — et **au raccord** — lier le claim à un compte qui n'existe pas encore.
+
+## 4. Ce qui bloque, précisément
+
+1. **`library_request_claims.user_id` est `NOT NULL`.** Un claim d'invitation n'a, par construction, pas d'utilisateur au moment de son émission. C'est le verrou central.
+2. **Aucune RPC ne crée de claim.** Il faut une porte d'entrée réservée, côté coordination.
+3. **Il n'y a pas de révocation.** `expires_at` fait mourir un claim de vieillesse, `used_at` le consomme, mais rien n'annule une invitation partie à la mauvaise adresse.
+4. **Le raccord claim → compte n'existe pas.** Puisque `submitted_by_user_id` est `NOT NULL`, la personne doit avoir un compte au moment où elle soumet. Il faut décider de l'ordre des gestes (§6) et écrire la liaison.
+5. **Pas de mailer.** Une EF d'envoi, plus ses chaînes dans `mail-strings.ts` — **les 10 locales d'emblée**, la traduction n'est pas une étape ultérieure.
+6. **La coordination ne voit rien.** Ni les mentions orphelines (visibles de la seule lectrice), ni les invitations en cours (la table est fermée par RLS). Tout affichage passera par une fonction SECDEF dédiée.
+7. **Les deux origines doivent rester distinguables.** Les claims actuels portent `metadata.source = 'register_signup_without_library'`. Une invitation doit avoir la sienne, sinon l'audit ne pourra plus dire qui est venu de lui-même et qui a été sollicité — ce qui est précisément la distinction politique introduite ici.
+
+## 5. La décision de forme — à trancher avant tout code
+
+**Option A — étendre `library_request_claims`.** `user_id` devient nullable (`NULL` = invitation émise, pas encore réclamée), on ajoute une source dans `metadata` et un `revoked_at`. Une seule table, un seul cycle de vie ; tout le code de lecture et de consommation existant continue de servir, y compris la page qui sait déjà accueillir un porteur de jeton non connecté.
+
+*Coût :* rendre une colonne nullable affaiblit une garantie aujourd'hui gratuite — il faudra une contrainte de remplacement (`user_id IS NOT NULL OR metadata->>'source' = 'invitation'`, ou l'équivalent) pour que la nullabilité reste un cas nommé et non un trou.
+
+**Option B — une table `library_request_invitations` séparée**, calquée sur `library_team_invitations`. Le claim ne serait alors engendré qu'à l'acceptation. Plus lisible si l'on veut un jour une **ratification collégiale de l'invitation** — « on décide ensemble qui on sollicite » — puisque c'est exactement ce que fait déjà `library_team_invitations` avec ses endossements.
+
+*Coût :* deux mécanismes à maintenir, deux cycles de vie, et la duplication du travail de jeton (hash, TTL, consommation) déjà fait.
+
+**Recommandation : A**, sauf si la collégialité de l'invitation est jugée nécessaire dès la v1 — auquel cas B évite de la bricoler après coup.
+
+**Précision utile :** `library_team_invitations.invited_user_id` est lui aussi `NOT NULL REFERENCES profiles(id)`. **Le dépôt n'a donc aucun précédent d'invitation vers quelqu'un sans compte.** Les seuls précédents de jeton-sans-compte sont `lettre_consent_tokens` (double opt-in de la Lettre) et `reader_card_tokens` — c'est de ce côté qu'il faut regarder pour la forme du jeton, pas du côté de l'accueil d'équipe.
+
+## 6. Esquisse technique (si A — rien n'est codé)
+
+- **`fn_create_library_request_invitation(p_email, p_library_name, p_note)`** — SECDEF, réservée aux `network_administrators` actif·ves. Génère le jeton, n'en stocke que le hash, pose `user_id = NULL`, `created_by_user_id = auth.uid()`, `metadata.source = 'invitation'` + le nom de biblio pressenti. **Rend le jeton en clair une seule fois**, à l'appel — jamais relisible ensuite.
+- **`fn_revoke_library_request_invitation(p_claim_id, p_motif)`** — SECDEF, même réserve. Pose `revoked_at` + motif. La doctrine « note obligatoire » du dépôt s'applique : on dit pourquoi.
+- **`fn_list_library_request_invitations()`** — SECDEF, même réserve. La table étant fermée par RLS, c'est la seule façon pour la coordination de voir l'état des invitations. Ne rend **jamais** de jeton.
+- **EF `notify-library-invitation`** — envoi via Resend, sur le modèle des autres mailers, chaînes dans `mail-strings.ts` dans les 10 locales.
+- **Raccord.** La personne invitée arrive sur `/solicitar-biblioteca?claim=X` **sans compte**, voit de quoi il s'agit (branche déjà présente à l'écran), puis crée son compte par la voie `collective_candidate` existante — pré-remplie depuis l'invitation. Le claim se lie alors au compte créé (`user_id` passe de NULL à l'id réel) et la suite est le parcours déjà en place.
+- **Ordre des gestes.** C'est le vrai point de conception : « voir puis s'inscrire puis soumettre » est le seul ordre compatible avec `submitted_by_user_id NOT NULL` sans inventer un compte fantôme. À valider à l'écran avant d'écrire le SQL.
+
+## 7. Le joyau : une invitation s'éteint, elle ne relance pas
+
+C'est la contrainte qui doit survivre à toutes les autres.
+
+**Démarcher, c'est déjà solliciter.** Une invitation non suivie d'effet ne doit produire **aucune relance automatique**. Elle expire, silencieusement. Si la coordination veut réessayer, elle réémet un geste humain — et c'est très bien que ça lui coûte quelque chose.
+
+**Pas de liste de prospects.** `fn_list_library_request_invitations` montre les invitations **émises** — des gestes déjà posés, avec leur auteur·e et leur motif. Elle ne doit pas devenir l'ossature d'un fichier de bibliothèques à conquérir, avec statuts et taux de réponse. La différence entre les deux tient à peu de choses en base et à tout dans l'usage : le cadrage la pose ici pour qu'on puisse s'y opposer plus tard en citant ce paragraphe.
+
+**Et les mentions orphelines ne sont pas un carnet d'adresses.** Le §4.6 note que la coordination ne les voit pas. Avant de les lui exposer, il faut regarder ce qu'on ferait : une lectrice a nommé sa bibliothèque **pour elle-même**, dans son propre formulaire d'inscription, et peut effacer la mention. En faire une liste de cibles, c'est réutiliser une donnée déclarée sur un tiers pour un usage qu'elle n'avait pas. C'est une borne ouverte, pas un acquis (§8).
+
+## 8. Bornes ouvertes
+
+- **Qui peut inviter ?** Les `network_administrators` seulement, ou aussi une coordenador·a d'une biblio membre — un parrainage de proximité, plus proche de la façon dont le réseau grandit réellement ?
+- **Collégialité.** Une invitation engage le réseau. Faut-il une co-signature, sur le modèle de `team_admission_mode` ? Si oui, l'option B du §5 devient préférable.
+- **Durée de vie.** Les 14 jours du claim d'inscription conviennent à quelqu'un qui vient de créer son compte. Pour une bibliothèque qu'on sollicite sans prévenir, c'est probablement trop court — 30 ou 60 jours ? Une invitation qui expire avant d'avoir été lue est une porte qu'on referme au nez.
+- **Ce que voit la personne invitée avant de créer un compte.** Le nom de sa bibliothèque, oui. Le nom de qui l'a invitée ? Ça change la nature du geste — signé ou institutionnel.
+- **Trace d'une invitation expirée ou révoquée.** La garder pour l'audit, ou l'effacer au titre de la rétention courte des PII ? Un e-mail de contact d'une bibliothèque qui n'a jamais répondu est une donnée sur un tiers non consentant.
+- **Exposition des mentions orphelines** (§7) : consentement à demander à l'inscription, ou renoncement ?
+
+## 9. Précédents AnarBib mobilisés
+
+`library_request_claims` + ses trois RPC SECDEF (chaîne éprouvée, réparée le 27/08) · `lettre_consent_tokens` / `reader_card_tokens` (jeton opaque, hash stocké, pas de compte requis) · `library_team_invitations` + `library_team_invitation_ratifications` (`CADRAGE_accueil_equipe_2026-06-19` — modèle de collégialité, **mais exige un compte existant**) · `library_request_mandate_transfers` (le mandat est transférable, donc le compte-personne n'est pas un cul-de-sac) · doctrine « note obligatoire » pour les motifs · doctrine « traduire tout de suite » pour les 10 locales · `CADRAGE_onboarding_atelier_2026-06-02` (la suite du parcours, une fois la demande acceptée).
+
+---
+
+*Cadrage forward produit le 27/08/2026, à la suite du chantier « je représente une bibliothèque ». Les faits du §3 sont vérifiés en base ce jour-là ; la fonctionnalité reste non construite et la décision de forme du §5 n'est pas prise.*
