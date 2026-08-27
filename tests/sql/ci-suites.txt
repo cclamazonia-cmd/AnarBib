@@ -75,3 +75,13 @@ tests/sql/conv_o8_scission_tests.sql
 # claim sans compte. Garde surtout que la garantie perdue (user_id NOT NULL) est
 # REMPLACEE et non abandonnee, et que la revocation mord vraiment.
 tests/sql/invitation_claims_lot1_tests.sql
+
+# Periodiques (paquets P1 a P5). Couvre les « Verifications de cloture » de la
+# spec : les trois gardes de filiation et de materiel, la cle de designation
+# inecrivable, la regle anti-faux-doublons dans les DEUX sens (bruit ecarte,
+# doublon de saisie conserve), l etat de collection declare que le calcul ne
+# doit jamais ecraser, la fusion (G5 : concatenation marquee, formes rejetees,
+# filiation reportee) et la RLS proposto/ativo mesuree en vrai changement de
+# role. Ces tests NE PEUVENT PAS vivre dans les migrations : elles s appliquent
+# avant le seed, donc sans bibliotheque ni membre.
+tests/sql/periodiques_tests.sql
