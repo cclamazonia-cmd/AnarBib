@@ -12,6 +12,36 @@
 
 ---
 
+> ## ⚠️ DÉPASSÉ LE 27/08/2026 — le §2 ci-dessous a été appliqué, puis retiré
+>
+> Le constat du §1 (cinq minutes payées à chaque push) reste juste, et le §3
+> (« pourquoi PAS seulement les fonctions modifiées ») reste la doctrine. Mais
+> le **mécanisme** proposé au §2 — comparer à `github.event.before` — a coûté un
+> déploiement muet le 27/08 et n'est plus en place.
+>
+> Le §5 se demandait si Forgejo renseigne bien `event.before`. Il le renseigne.
+> Ce n'était pas la bonne question. La bonne : *chaque push obtient-il un run ?*
+> Non. Deux pushes à deux minutes d'intervalle — e316e005, qui modifiait
+> `supabase/functions/register/index.ts`, puis 1c3491fd — et aucun run n'a été
+> créé pour le premier (la numérotation saute de 826/827 à 828/829). Le run 828
+> a comparé à un SHA dont le travail n'avait jamais été fait, n'a vu aucune
+> fonction, et a sauté l'étape **en vert**. `register` a été déployée à la main.
+>
+> Le §4 affirmait « aucun comportement en cas de doute » et listait trois replis.
+> Il en manquait un, celui qui a mordu : le cas où le point de comparaison est
+> parfaitement valide mais **désigne un état qui n'a jamais été déployé**. Le
+> repli ne peut rien contre une référence qui ment sans se contredire.
+>
+> Ce qui tient sa place : un marqueur qu'on écrit soi-même — le tag
+> `deployed-functions` sur origin, avancé après chaque déploiement réussi. La
+> borne ne vient plus de la forge. Le récit complet, les garde-fous et les
+> propriétés tenues par les tests sont en tête du bloc « Edge Functions » de
+> [`scripts/ci/deployer-backend.sh`](../../../scripts/ci/deployer-backend.sh) ;
+> le test qui les rejoue est
+> [`src/tests/deployer-backend-marqueur.test.js`](../../../src/tests/deployer-backend-marqueur.test.js).
+
+---
+
 ## 1. Le constat, mesuré
 
 Run `backend` du 21/08 (task `8829551`), déclenché par un push contenant **trois
