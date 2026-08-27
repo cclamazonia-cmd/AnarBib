@@ -21,11 +21,19 @@
 --   T6  garde la branche de MISE A JOUR de register_oai_source, qui n'avait
 --       elle non plus jamais tourne : aucune ligne ne pouvant porter oai_pmh,
 --       son SELECT ne trouvait jamais rien.
---   T9  confronte le run au sens que la vue de politique lui donne
+--   T10 confronte le run au sens que la vue de politique lui donne
 --       elle-meme : un run que rien ne traite ne doit pas s'annoncer revisable.
---   T10 garde le VERROU non relache (Lot 3b absent). Il ne celebre pas un bug :
---       il ecrit noir sur blanc la limite connue du paquet, pour qu'elle ne se
---       decouvre pas en production.
+--   T11 garde le VERROU : deux moissonnages concurrents sur la meme source se
+--       partageraient run et jeton de reprise. Depuis le Lot 3b ce n'est plus
+--       un cul-de-sac mais une vraie garde — l'EF relache le verrou.
+--   T15 a T17 gardent le Lot 3b cote SQL : l'EF est REELLEMENT appelee (journal
+--       de dispatch), un verrou perime est repris au lieu de bloquer la source
+--       a jamais, et la RPC ne s'excuse plus d'une EF absente.
+--
+-- Ce que cette suite NE couvre pas, et ou ca se joue : le comportement de l'EF
+-- elle-meme (lecture de l'enveloppe OAI, reprise par jeton, relachement du
+-- verrou sur CHAQUE sortie) est exerce par src/tests/harvest-oai-pmh.test.js,
+-- qui evalue le VRAI index.ts avec un fetch stube.
 --   Bilan OK : 'IMPORT-OAI OK : N/N'
 -- =====================================================================
 DO $$
@@ -38,6 +46,8 @@ DECLARE
   v_plainlib uuid;
   v_res     jsonb;
   v_res2    jsonb;
+  v_res3    jsonb;
+  v_disp    ingest.partner_catalog_import_dispatch_log%rowtype;
   v_src     ingest.partner_catalog_sources%rowtype;
   v_run     ingest.partner_catalog_import_runs%rowtype;
   v_state   ingest.oai_harvest_state%rowtype;
@@ -256,13 +266,12 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  -- LIMITE CONNUE DU PAQUET, ecrite ici pour qu'elle ne se decouvre pas en
-  -- production : harvest_oai pose un VERROU (in_progress) que seule l'EF du
-  -- Lot 3b — qui n'existe pas — sait relacher. Le moissonnage s'execute donc
-  -- une fois par source, puis est refuse. Ce test garde les DEUX moities : le
-  -- verrou est bien pose, et il mord. Le jour ou le Lot 3b arrive, c'est ce
-  -- test qu'il faudra rouvrir.
-  v_t := 'T11 le verrou in_progress est pose et refuse un second moissonnage (Lot 3b absent)';
+  -- Le verrou, cote garde : deux moissonnages concurrents sur la meme source
+  -- partageraient run et jeton de reprise. Ce test garde les DEUX moities — le
+  -- verrou est pose, et il mord. Ce qui a change au Lot 3b n'est pas ce geste
+  -- mais sa SORTIE : l'EF le relache (src/tests/harvest-oai-pmh.test.js), et un
+  -- verrou perime est repris (T16 plus bas).
+  v_t := 'T11 le verrou in_progress est pose et refuse un second moissonnage FRAIS';
   BEGIN
     SELECT * INTO v_state FROM ingest.oai_harvest_state
      WHERE source_id = (v_res->>'source_id')::bigint;
@@ -324,6 +333,68 @@ BEGIN
        AND grantee IN ('anon', 'PUBLIC');
     IF v_n = 0 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' droit(s) de trop'); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- Lot 3b. Sans cette trace, « le moissonnage est lance » n'engage rien : c'est
+  -- exactement l'etat du Lot 3a, ou la RPC repondait ok en n'appelant personne.
+  -- On regarde donc le journal de dispatch, pas la reponse de la fonction.
+  v_t := 'T15 l''EF harvest-oai-pmh est REELLEMENT appelee (journal de dispatch)';
+  BEGIN
+    SELECT * INTO v_disp FROM ingest.partner_catalog_import_dispatch_log
+     WHERE run_id = (v_res2->>'run_id')::bigint
+     ORDER BY id DESC LIMIT 1;
+    IF v_disp.id IS NOT NULL
+       AND v_disp.dispatch_status = 'sent'
+       AND v_disp.request_id IS NOT NULL
+       AND (v_disp.request_body->>'run_id')::bigint = (v_res2->>'run_id')::bigint THEN
+      v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got statut='
+      ||coalesce(v_disp.dispatch_status,'<aucune ligne>')
+      ||' request_id='||coalesce(v_disp.request_id::text,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- LE test du Lot 3b. Un verrou que personne ne relache est pire que pas de
+  -- verrou : c'est ce qui rendait la source inmoissonnable a jamais. L'EF le
+  -- relache sur tous ses chemins, mais elle peut n'etre JAMAIS atteinte — et
+  -- alors personne n'execute son finally. On vieillit donc le verrou et on
+  -- verifie que la RPC le REPREND au lieu de l'opposer.
+  --
+  -- Le trigger trg_oai_harvest_state_updated reecrit updated_at a CHAQUE update :
+  -- sans le desactiver le temps de la fixture, on ne peut pas vieillir une ligne
+  -- — et le test passerait pour une mauvaise raison (verrou frais refuse, donc
+  -- exception, donc echec... ou pire, verrou vieilli qu'on croit avoir pose).
+  v_t := 'T16 un verrou in_progress perime est REPRIS, pas oppose';
+  BEGIN
+    ALTER TABLE ingest.oai_harvest_state DISABLE TRIGGER trg_oai_harvest_state_updated;
+    UPDATE ingest.oai_harvest_state
+       SET harvest_status = 'in_progress', updated_at = now() - interval '2 hours'
+     WHERE source_id = (v_res->>'source_id')::bigint;
+    ALTER TABLE ingest.oai_harvest_state ENABLE TRIGGER trg_oai_harvest_state_updated;
+
+    v_res3 := public.fn_import_harvest_oai((v_res->>'source_id')::bigint);
+    SELECT * INTO v_state FROM ingest.oai_harvest_state
+     WHERE source_id = (v_res->>'source_id')::bigint;
+    IF coalesce((v_res3->>'ok')::boolean, false)
+       AND coalesce((v_res3->>'reclaimed_stale_lock')::boolean, false)
+       AND v_state.harvest_status = 'in_progress'
+       AND v_state.last_run_id = (v_res3->>'run_id')::bigint THEN
+      v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got '
+      ||coalesce(v_res3::text,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- Le champ 'note' du Lot 3a portait « Edge Function pas encore deployee ».
+  -- L'ecran l'affiche A LA PLACE du message localise « Moissonnage lance » :
+  -- tant qu'il est la, l'interface annonce a la coordination que rien n'existe.
+  v_t := 'T17 la reponse ne s''excuse plus d''une EF absente (plus de champ note)';
+  BEGIN
+    IF v_res3 IS NOT NULL AND NOT (v_res3 ? 'note') AND (v_res3 ? 'dispatch') THEN
+      v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got '
+      ||coalesce(v_res3::text,'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

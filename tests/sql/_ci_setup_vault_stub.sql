@@ -39,3 +39,16 @@ SELECT 'pseudonym_salt', 'CI test stub — NOT a real secret',
 WHERE NOT EXISTS (
   SELECT 1 FROM vault.decrypted_secrets WHERE name = 'pseudonym_salt'
 );
+
+-- ANARBIB_PARTNER_IMPORT_SECRET — lu par les dispatchs pg_net de la famille
+-- « import de catalogue partenaire » (ingest.fn_dispatch_partner_catalog_import
+-- et, depuis le Lot 3b, ingest.fn_dispatch_oai_harvest). Sans lui, toute suite
+-- qui EMPRUNTE un de ces chemins échoue sur « Secret introuvable » — pas sur ce
+-- qu'elle voulait mesurer. Valeur factice et PUBLIQUE : en CI, net.http_post
+-- dépose sa requête dans une file que personne ne vide, aucun appel ne sort.
+INSERT INTO vault.decrypted_secrets (name, description, decrypted_secret)
+SELECT 'ANARBIB_PARTNER_IMPORT_SECRET', 'CI test stub — NOT a real secret',
+       'ci_test_import_secret_not_a_real_secret'
+WHERE NOT EXISTS (
+  SELECT 1 FROM vault.decrypted_secrets WHERE name = 'ANARBIB_PARTNER_IMPORT_SECRET'
+);

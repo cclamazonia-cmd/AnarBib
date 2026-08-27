@@ -120,6 +120,12 @@ verify_jwt = false
 [functions.receive-fonds-bundle]
 verify_jwt = false
 
+# Moissonnage OAI-PMH (Lot 3b) : appelee server-to-server par
+# ingest.fn_dispatch_oai_harvest (pg_net) avec auth interne x-import-secret,
+# sans JWT — meme secret et meme en-tete que ses deux soeurs ci-dessus.
+[functions.harvest-oai-pmh]
+verify_jwt = false
+
 # GC des dépôts attachés (point 2) : appelée par le cron SQL (ingest.fn_cron_gc_deposits)
 # avec auth interne x-import-secret, sans JWT.
 [functions.gc-deposits]
