@@ -9,6 +9,9 @@
 // ENTRANTE — les liens vers le même terme dans les catalogues partenaires
 // (catalog_links : CIRA, Marseille, Placard, CCL…). ANTI-FORK : libellés tels
 // qu'aspirés, lien vers la source FICEDL. P3a.
+//
+// Seule exception à l'anti-fork : le NOM du catalogue partenaire, faux en amont
+// sur trois hôtes — voir @/lib/ficedlPartners.
 // =============================================================================
 
 import { useState, useEffect } from 'react';
@@ -17,6 +20,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { supabase } from '@/lib/supabase';
 import { pickLabel } from '@/lib/i18nLabel';
+import { normalizePartnerLinks } from '@/lib/ficedlPartners';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 // Les 10 langues du thésaurus partagé, dans un ordre stable d'affichage.
@@ -51,6 +55,7 @@ export default function FicedlTermPage() {
   }, [motId]);
 
   const label = term ? pickLabel(term.labels, locale) : '';
+  const partnerLinks = term ? normalizePartnerLinks(term.catalog_links) : [];
   useDocumentTitle(label || t({ id: 'pageTitle.ficedl' }));
 
   const panel = {
@@ -123,14 +128,14 @@ export default function FicedlTermPage() {
               </dl>
 
               {/* Fédération ENTRANTE : ce terme dans les catalogues partenaires */}
-              {Array.isArray(term.catalog_links) && term.catalog_links.length > 0 && (
+              {partnerLinks.length > 0 && (
                 <>
                   <div style={sectionTitle}>{t({ id: 'ficedl.term.partnerCatalogs' })}</div>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {term.catalog_links.map((cl, i) => (
-                      <li key={`${cl.href}-${i}`}>
+                    {partnerLinks.map((cl, i) => (
+                      <li key={`${cl.key}-${i}`}>
                         <a href={cl.href} target="_blank" rel="noopener noreferrer" style={{ ...linkBlue, fontSize: '.9rem' }}>
-                          {cl.name || cl.href}
+                          {cl.displayName}
                         </a>
                       </li>
                     ))}

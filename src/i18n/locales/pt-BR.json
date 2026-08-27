@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# descritor} other {# descritores}}",
   "ficedl.empty": "Nenhum descritor.",
   "ficedl.noResults": "Nenhum resultado para “{query}”.",
-  "ficedl.antiforkNote": "Os termos são exibidos tal como constam no tesauro FICEDL (vocabulário compartilhado, não modificado pelo AnarBib).",
+  "ficedl.antiforkNote": "Os termos são exibidos tal como constam no tesauro FICEDL (vocabulário compartilhado, não modificado pelo AnarBib); os catálogos parceiros são nomeados conforme a instituição que os mantém.",
   "ficedl.backToIndex": "Todos os descritores",
   "ficedl.term.notFound": "Descritor não encontrado.",
   "ficedl.term.hierarchy": "Hierarquia",

@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# descrittore} other {# descrittori}}",
   "ficedl.empty": "Nessun descrittore.",
   "ficedl.noResults": "Nessun risultato per «{query}».",
-  "ficedl.antiforkNote": "Le etichette sono mostrate così come compaiono nel thesaurus FICEDL (vocabolario condiviso, non modificato da AnarBib).",
+  "ficedl.antiforkNote": "Le etichette sono mostrate così come compaiono nel thesaurus FICEDL (vocabolario condiviso, non modificato da AnarBib); i cataloghi partner portano il nome dell'istituzione che li cura.",
   "ficedl.backToIndex": "Tutti i descrittori",
   "ficedl.term.notFound": "Descrittore non trovato.",
   "ficedl.term.hierarchy": "Gerarchia",

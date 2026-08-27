@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# descriptor} other {# descriptoren}}",
   "ficedl.empty": "Geen descriptoren.",
   "ficedl.noResults": "Geen resultaten voor ‘{query}’.",
-  "ficedl.antiforkNote": "De labels worden getoond zoals ze in de FICEDL-thesaurus staan (gedeelde woordenschat, niet gewijzigd door AnarBib).",
+  "ficedl.antiforkNote": "De labels worden getoond zoals ze in de FICEDL-thesaurus staan (gedeelde woordenschat, niet gewijzigd door AnarBib); de partnercatalogi zijn genoemd naar de instelling die ze beheert.",
   "ficedl.backToIndex": "Alle descriptoren",
   "ficedl.term.notFound": "Descriptor niet gevonden.",
   "ficedl.term.hierarchy": "Hiërarchie",

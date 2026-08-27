@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# priskribilo} other {# priskribiloj}}",
   "ficedl.empty": "Neniu priskribilo.",
   "ficedl.noResults": "Neniu rezulto por «{query}».",
-  "ficedl.antiforkNote": "La etikedoj montriĝas kiel ili aperas en la tezaŭro FICEDL (komuna vortaro, ne modifita de AnarBib).",
+  "ficedl.antiforkNote": "La etikedoj montriĝas kiel ili aperas en la tezaŭro FICEDL (komuna vortaro, ne modifita de AnarBib); la partneraj katalogoj estas nomataj laŭ la institucio, kiu ilin tenas.",
   "ficedl.backToIndex": "Ĉiuj priskribiloj",
   "ficedl.term.notFound": "Priskribilo ne trovita.",
   "ficedl.term.hierarchy": "Hierarkio",

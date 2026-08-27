@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# descripteur} other {# descripteurs}}",
   "ficedl.empty": "Aucun descripteur.",
   "ficedl.noResults": "Aucun résultat pour « {query} ».",
-  "ficedl.antiforkNote": "Les libellés sont affichés tels qu'ils figurent sur le thésaurus FICEDL (vocabulaire partagé, non modifié par AnarBib).",
+  "ficedl.antiforkNote": "Les libellés sont affichés tels qu'ils figurent sur le thésaurus FICEDL (vocabulaire partagé, non modifié par AnarBib) ; les catalogues partenaires sont nommés d'après l'institution qui les tient.",
   "ficedl.backToIndex": "Tous les descripteurs",
   "ficedl.term.notFound": "Descripteur introuvable.",
   "ficedl.term.hierarchy": "Hiérarchie",

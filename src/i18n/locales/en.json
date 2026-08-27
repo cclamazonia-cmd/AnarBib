@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# descriptor} other {# descriptors}}",
   "ficedl.empty": "No descriptors.",
   "ficedl.noResults": "No results for “{query}”.",
-  "ficedl.antiforkNote": "Labels are shown as they appear in the FICEDL thesaurus (shared vocabulary, not modified by AnarBib).",
+  "ficedl.antiforkNote": "Labels are shown as they appear in the FICEDL thesaurus (shared vocabulary, not modified by AnarBib); partner catalogues are named after the institution that runs them.",
   "ficedl.backToIndex": "All descriptors",
   "ficedl.term.notFound": "Descriptor not found.",
   "ficedl.term.hierarchy": "Hierarchy",

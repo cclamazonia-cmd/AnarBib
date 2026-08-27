@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# Deskriptor} other {# Deskriptoren}}",
   "ficedl.empty": "Keine Deskriptoren.",
   "ficedl.noResults": "Keine Ergebnisse für „{query}“.",
-  "ficedl.antiforkNote": "Die Bezeichnungen werden so angezeigt, wie sie im FICEDL-Thesaurus stehen (gemeinsames Vokabular, von AnarBib nicht verändert).",
+  "ficedl.antiforkNote": "Die Bezeichnungen werden so angezeigt, wie sie im FICEDL-Thesaurus stehen (gemeinsames Vokabular, von AnarBib nicht verändert); die Partnerkataloge sind nach der Einrichtung benannt, die sie betreibt.",
   "ficedl.backToIndex": "Alle Deskriptoren",
   "ficedl.term.notFound": "Deskriptor nicht gefunden.",
   "ficedl.term.hierarchy": "Hierarchie",

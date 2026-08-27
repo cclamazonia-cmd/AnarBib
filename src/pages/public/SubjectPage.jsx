@@ -17,6 +17,7 @@ import { Link, useParams } from 'react-router-dom';
 import { PageShell, Topbar, Footer } from '@/components/layout';
 import { supabase } from '@/lib/supabase';
 import { pickLabel } from '@/lib/i18nLabel';
+import { normalizePartnerLinks } from '@/lib/ficedlPartners';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 export default function SubjectPage() {
@@ -59,14 +60,11 @@ export default function SubjectPage() {
   const label = subj ? pickLabel(subj.label_i18n, locale, 'pt-BR') : '';
   useDocumentTitle(label || t({ id: 'subject.pageTitle' }));
 
-  // Catalogues partenaires : aplatis les catalog_links de tous les termes FICEDL alignés (dédup par href).
-  const partnerLinks = [];
-  const seen = new Set();
-  for (const f of ficedl) {
-    for (const cl of (Array.isArray(f.catalog_links) ? f.catalog_links : [])) {
-      if (cl && cl.href && !seen.has(cl.href)) { seen.add(cl.href); partnerLinks.push(cl); }
-    }
-  }
+  // Catalogues partenaires : aplatis les catalog_links de tous les termes FICEDL
+  // alignés, puis dédup par CIBLE et nommage par hôte (cf. @/lib/ficedlPartners).
+  const partnerLinks = normalizePartnerLinks(
+    ficedl.flatMap((f) => (Array.isArray(f.catalog_links) ? f.catalog_links : [])),
+  );
   const altList = subj ? ((subj.alt_i18n && (subj.alt_i18n[locale] || subj.alt_i18n[(locale || '').split('-')[0]])) || []) : [];
 
   const panel = {
@@ -174,9 +172,9 @@ export default function SubjectPage() {
                       </div>
                       <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 5 }}>
                         {partnerLinks.map((cl, i) => (
-                          <li key={`${cl.href}-${i}`}>
+                          <li key={`${cl.key}-${i}`}>
                             <a href={cl.href} target="_blank" rel="noopener noreferrer" style={{ ...linkBlue, fontSize: '.9rem' }}>
-                              {cl.name || cl.href}
+                              {cl.displayName}
                             </a>
                           </li>
                         ))}

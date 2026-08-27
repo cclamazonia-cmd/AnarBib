@@ -21,7 +21,7 @@
   "ficedl.count": "{count, plural, one {# descriptor} other {# descriptors}}",
   "ficedl.empty": "Cap descriptor.",
   "ficedl.noResults": "Cap resultat per a «{query}».",
-  "ficedl.antiforkNote": "Els termes es mostren tal com apareixen al tesaurus FICEDL (vocabulari compartit, no modificat per AnarBib).",
+  "ficedl.antiforkNote": "Els termes es mostren tal com apareixen al tesaurus FICEDL (vocabulari compartit, no modificat per AnarBib); els catàlegs associats porten el nom de la institució que els manté.",
   "ficedl.backToIndex": "Tots els descriptors",
   "ficedl.term.notFound": "Descriptor no trobat.",
   "ficedl.term.hierarchy": "Jerarquia",
