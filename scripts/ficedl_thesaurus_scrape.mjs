@@ -202,6 +202,13 @@ function parseDescriptor(id, raw) {
   const text = decode(stripTags(raw)).replace(/\s+/g, " ").trim();
   const rec = { id, labels: {}, hierarchy: null, depth: null, catalog_links: [], normalizations: [], flags: [] };
 
+  // Le H1 porte le libellé canonique de TOUTE fiche, y compris celles de la facette
+  // « dates » qui n'ont aucun bloc de traduction. On le relève AVANT les retours
+  // précoces : sans ça, 158 descripteurs (un quart du thésaurus) sortaient réduits à
+  // leur identifiant, et n'étaient alignables sur rien.
+  const h1 = getH1(raw);
+  if (h1) rec.title_fr = h1;
+
   const region = findRegion(text);
   if (!region) {
     rec.flags.push("no_translation_block");
@@ -216,8 +223,6 @@ function parseDescriptor(id, raw) {
     rec.flags.push("no_translation_block");
     return rec;
   }
-  const h1 = getH1(raw);
-
   if (blocks.length === 1) {
     // Sujet / descripteur simple : un seul bloc, libellé précoordonné INTACT
     // (« économie : agriculture » — le « : » est interne, pas un niveau distinct).
