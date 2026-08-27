@@ -308,8 +308,36 @@ Deno.serve(async (req: Request) => {
       (i) => i.subject && !enDefaut.has(i.subject),
     );
 
+    // ─── La provenance du signal ─────────────────────────────────────────
+    // `host` est exposé par le statut depuis 20260820012343, et n’était rendu
+    // NULLE PART : l’information existait, aucun courriel ne la montrait. Or un
+    // flux vert ne vaut que par ce qui l’a rendu vert — d’où vient le dernier
+    // témoin, et est-ce un tir réel ou une ligne d’amorçage semée par une
+    // migration. C’est la question qu’on se pose en lisant l’alerte, pas trois
+    // requêtes plus tard.
+    //
+    // Deux formes, parce que les deux destinations n’ont pas les mêmes règles :
+    // `provenanceTexte` part en base dans `service_health_incidents.reason`, qui
+    // est du texte nu relu tel quel ; `provenanceHtml` part dans le courriel, où
+    // la donnée s’échappe et où le <strong> est à nous, pas à elle.
+    const provenanceTexte = (f: any) =>
+      f.host
+        ? `dernière source : ${f.host}${
+            f.temoin_amorcage ? ', ligne d’amorçage de migration, pas un tir réel' : ''
+          }`
+        : 'aucun signal reçu';
+
+    const provenanceHtml = (f: any) =>
+      f.host
+        ? `source : ${esc(String(f.host))}${
+            f.temoin_amorcage
+              ? ' <strong>(ligne d’amorçage de migration, pas un tir réel)</strong>'
+              : ''
+          }`
+        : 'source : <em>aucun signal reçu</em>';
+
     const raisonDe = (f: any) =>
-      f.raison ?? `${f.flow} muet depuis ${f.age_heures ?? '?'} h`;
+      `${f.raison ?? `${f.flow} muet depuis ${f.age_heures ?? '?'} h`} (${provenanceTexte(f)})`;
 
     // Un incident par flux, mais UN SEUL courriel par tour. Le cas le plus
     // fréquent est aussi le plus bénin — poste éteint, les trois flux muets
@@ -374,7 +402,7 @@ Deno.serve(async (req: Request) => {
                    : `dernier signal il y a ${esc(String(f.age_heures ?? '?'))} h (seuil ${esc(
                        String(f.seuil_heures ?? '?'),
                      )} h)`
-               }</li>`,
+               } — ${provenanceHtml(f)}</li>`,
            )
            .join('')}</ul>
          <p style="margin:0">Un e-mail de rétablissement suivra dès que ces flux auront signalé un tir réussi. Chaque flux se ferme séparément.</p>`,
@@ -429,9 +457,7 @@ Deno.serve(async (req: Request) => {
                `<li>${esc(f.flow)} — dernier signal il y a ${esc(
                  String(f.age_heures ?? '?'),
                )} h${
-                 f.temoin_amorcage
-                   ? ' — <strong>ligne d’amorçage, aucun tir réel signalé à ce jour</strong>'
-                   : ''
+                 ` — ${provenanceHtml(f)}`
                }</li>`,
            )
            .join('')}</ul>
