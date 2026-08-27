@@ -1298,7 +1298,13 @@ export default function ImportacoesPage() {
           </div>
 
           {/* ── Fontes parceiras (référence : qui autorise l'import) ── */}
-          {sources.filter(s => s.source_kind !== 'institutional').length > 0 && (
+          {/* La source « Recherche institutionnelle », créée automatiquement par
+              fn_import_ingest_candidate, n'est pas une companheira : personne n'a
+              rien accordé. Le filtre visait 'institutional', valeur qu'aucune
+              ligne ne porte — le vrai source_kind est 'institutional_lookup'.
+              Le masquage ne marchait donc pas ; ça ne se voyait pas tant que la
+              RPC était cassée et qu'aucune source de ce type n'existait. */}
+          {sources.filter(s => s.source_kind !== 'institutional_lookup').length > 0 && (
             <div className="imp-sheet">
               <div className="imp-sheet__head">
                 <span className="imp-sheet__title">
@@ -1308,7 +1314,7 @@ export default function ImportacoesPage() {
               </div>
               <div className="imp-sheet__body">
                 <div className="imp-partners">
-                  {sources.filter(s => s.source_kind !== 'institutional').map(s => (
+                  {sources.filter(s => s.source_kind !== 'institutional_lookup').map(s => (
                     <div key={s.id} className="imp-pcard">
                       <div className="imp-pcard__top">
                         <h4>{s.partner_name}</h4>

@@ -100,3 +100,11 @@ tests/sql/invitation_claims_lot3a_tests.sql
 # Garde surtout que l ABSENCE de consentement vaut refus, et que le rattachement
 # nominatif ne suive pas le consentement au contact.
 tests/sql/mentions_orphelines_tests.sql
+
+# Import d un candidat institutionnel (mode Busca). La suite EMPRUNTE le chemin
+# au lieu de le relire : elle appelle la RPC avec le JWT d une coordinatrice.
+# T5 confronte le match_status a la CHECK elle-meme (et non a une liste
+# recopiee) : c est la forme generale du defaut repare. T9 garde que le
+# rapprochement est bien appele, faute de quoi un doublon repartirait en
+# new_record et l assistant le promouvrait tout seul.
+tests/sql/import_candidat_institutionnel_tests.sql
