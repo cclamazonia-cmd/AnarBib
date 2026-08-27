@@ -85,3 +85,8 @@ tests/sql/invitation_claims_lot1_tests.sql
 # role. Ces tests NE PEUVENT PAS vivre dans les migrations : elles s appliquent
 # avant le seed, donc sans bibliotheque ni membre.
 tests/sql/periodiques_tests.sql
+
+# Invitation lot 2 : emettre, revoquer, lister. Garde surtout QUI peut emettre
+# (D2 : admins reseau seuls), que le jeton ne se persiste jamais en clair, et
+# que la liste ne fuit ni jeton ni hash.
+tests/sql/invitation_claims_lot2_tests.sql

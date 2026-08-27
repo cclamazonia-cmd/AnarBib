@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | **Genre** | Cadrage *forward* — fixe la doctrine et l'état des lieux **avant** tout code. |
-| **Statut** | 🟡 **Lot 1 livré** (schéma), le reste non implémenté. Les faits techniques du §3 sont vérifiés en base le 27/08/2026. |
+| **Statut** | 🟡 **Lots 1 et 2 livrés** (schéma, puis émettre / révoquer / lister). Restent le mailer et le raccord à l'écran. |
 | **Date** | 27 août 2026. |
 | **Origine** | §6 du cadrage « Je représente une bibliothèque » (27/08) : le mécanisme de claim y était noté « à moitié construit ». Vérification faite, le diagnostic était faux mais le manque est réel — voir §3. |
-| **Décisions prises** | **D1 (27/08) — option A : on étend `library_request_claims`.** Cf. §5. Les six bornes du §8 restent ouvertes. |
+| **Décisions prises** | **D1** option A, on étend `library_request_claims` (§5) · **D2** seuls les admins réseau peuvent inviter (§8) · **D3** durée de vie 45 jours (§8). Toutes le 27/08. Trois bornes restent ouvertes. |
 | **Voisins** | `library_request_claims` · `CADRAGE_accueil_equipe_2026-06-19` (cooptation d'équipe) · `CADRAGE_onboarding_atelier_2026-06-02` · `library_request_mandate_transfers` · `lettre_consent_tokens` / `reader_card_tokens` (jetons sans compte). |
 
 > **Note de vocabulaire.** On dit **inviter**, pas *prospecter* ni *démarcher*. La nuance n'est pas cosmétique : un pipeline de prospection produit des listes, des relances et des taux de conversion — exactement la méga-machine que la doctrine écarte. Une invitation est un **geste adressé à quelqu'un**, qui s'éteint tout seul si personne ne la saisit. Le §7 en fait une contrainte de conception, pas un vœu.
@@ -98,6 +98,28 @@ On étend. Ce que ça tranche par ricochet : **pas de ratification collégiale d
   dans `ci-suites.txt`. La suite complète a été rejouée en local sur l'image
   Postgres de la CI : 25 suites vertes.
 
+### Lot 2 — émettre, révoquer, lister · **livré le 27/08/2026** (migration `20260827170000`)
+
+- `fn_create_library_request_invitation(email, library_name, note)` — réservée
+  aux admins réseau actif·ves (D2), TTL 45 jours (D3), **rend le jeton en clair
+  une seule fois**. Refuse une seconde invitation vivante pour la même adresse.
+- `fn_revoke_library_request_invitation(claim_id, motif)` — motif obligatoire,
+  ne touche ni aux auto-candidatures ni aux invitations abouties, idempotente.
+- `fn_list_library_request_invitations(inclure_closes)` — ne rend **jamais**
+  jeton ni hash ; garde dans le `where`, donc un appel non autorisé rend zéro
+  ligne. États : `en_attente` · `compte_cree` · `aboutie` · `expiree` · `revoquee`.
+- Droits : `authenticated` uniquement — **surtout pas `anon`**, contrairement aux
+  trois RPC de lecture du claim qui, elles, doivent servir une personne sans compte.
+- Garde-fous : `tests/sql/invitation_claims_lot2_tests.sql` (18 tests). Suite
+  complète rejouée en local sur l'image Postgres de la CI : 27 suites vertes.
+
+**Conséquence assumée de « le jeton ne se persiste jamais en clair » :** l'envoi
+est un geste **séparé**. La RPC ne poste rien. Faire transiter le jeton par un
+événement de notification l'écrirait en clair dans `team_notification_outbox`, où
+il resterait. L'admin copie donc le lien et l'envoie — par le mailer quand il
+existera, ou par Signal, ou de la main à la main à Bologne. C'est plus artisanal
+qu'un bouton « envoyer », et c'est exactement le §7.
+
 ### Lots suivants — rien n'est codé
 
 - **`fn_create_library_request_invitation(p_email, p_library_name, p_note)`** — SECDEF, réservée aux `network_administrators` actif·ves. Génère le jeton, n'en stocke que le hash, pose `user_id = NULL`, `created_by_user_id = auth.uid()`, `metadata.source = 'invitation'` + le nom de biblio pressenti. **Rend le jeton en clair une seule fois**, à l'appel — jamais relisible ensuite.
@@ -119,9 +141,10 @@ C'est la contrainte qui doit survivre à toutes les autres.
 
 ## 8. Bornes ouvertes
 
-- **Qui peut inviter ?** Les `network_administrators` seulement, ou aussi une coordenador·a d'une biblio membre — un parrainage de proximité, plus proche de la façon dont le réseau grandit réellement ?
-- **Collégialité.** Une invitation engage le réseau. Faut-il une co-signature, sur le modèle de `team_admission_mode` ? Si oui, l'option B du §5 devient préférable.
-- **Durée de vie.** Les 14 jours du claim d'inscription conviennent à quelqu'un qui vient de créer son compte. Pour une bibliothèque qu'on sollicite sans prévenir, c'est probablement trop court — 30 ou 60 jours ? Une invitation qui expire avant d'avoir été lue est une porte qu'on referme au nez.
+- ~~**Qui peut inviter ?**~~ **D2, tranchée le 27/08 : les `network_administrators` actif·ves, et personne d'autre.** L'ouverture aux coordenador·as était conditionnée à la réutilisation d'un vote à majorité qualifiée (67 %) supposé « déjà plus ou moins en place ». **Il n'existe pas** — voir la borne suivante, qui est ce que la vérification a appris.
+- **Collégialité — la borne s'est déplacée.** Toute la gouvernance *réseau* d'AnarBib fonctionne à l'**unanimité avec veto**, jamais à la majorité : cooptation d'un·e admin (un seul `opposed` = rejet immédiat), retrait collectif (unanimité des autres actif·ves, quorum ≥ 2), et évaluation d'une demande d'adhésion — dont le commentaire de `library_request_votes` dit explicitement « unanimité, symétrique aux votes de cooptation ». Le seul `majority` du dépôt est **local à une bibliothèque** (`fn_propose_library_profile_change`, `(staff_actif / 2) + 1`) et c'est une majorité **simple**. Introduire du 67 % ne serait donc pas une réutilisation mais une **nouveauté doctrinale** : on remplacerait un droit de veto — anti-majoritaire par construction, ce qui est le choix politique du réseau — par une règle où une minorité peut être mise en minorité. Ça ne se décide pas dans une migration.
+- ~~**Durée de vie.**~~ **D3, tranchée le 27/08 : 45 jours.** Une bibliothèque sollicitée sans préavis doit avoir le temps d'en parler en assemblée.
+- **Une seule invitation vivante par adresse** — posé par défaut dans le lot 2 (réinviter une adresse sans réponse, c'est le glissement vers la relance qu'écarte le §7 ; révoquer d'abord oblige à dire pourquoi). Révisable si ça se révèle trop raide.
 - **Ce que voit la personne invitée avant de créer un compte.** Le nom de sa bibliothèque, oui. Le nom de qui l'a invitée ? Ça change la nature du geste — signé ou institutionnel.
 - **Trace d'une invitation expirée ou révoquée.** La garder pour l'audit, ou l'effacer au titre de la rétention courte des PII ? Un e-mail de contact d'une bibliothèque qui n'a jamais répondu est une donnée sur un tiers non consentant.
 - **Exposition des mentions orphelines** (§7) : consentement à demander à l'inscription, ou renoncement ?
