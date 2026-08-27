@@ -14,6 +14,7 @@ import ReportsPanel from '@/components/rede/ReportsPanel';
 import OaiSourcePanel from '@/components/rede/OaiSourcePanel'; /* OAI-O3 */
 import GazetteStaffPanel from '@/components/rede/GazetteStaffPanel';
 import LettreStaffPanel from '@/components/rede/LettreStaffPanel';
+import InvitationsPanel from '@/components/rede/InvitationsPanel';
 import UserHeroBadge from '@/components/UserHeroBadge';
 import HeroDocumentationActions from '@/components/HeroDocumentationActions';
 import { normalizePublicId } from '@/lib/publicId';
@@ -53,6 +54,7 @@ export default function RedePage() {
   const TABS = useMemo(() => ([
     { id: 'overview', label: t({ id: 'rede.tab.overview' }) },
     { id: 'requests', label: t({ id: 'rede.requests.label' }) },
+    { id: 'invitations', label: t({ id: 'rede.tab.invitations' }) },
     { id: 'libraries', label: t({ id: 'rede.tab.libraries' }) },
     { id: 'members', label: t({ id: 'rede.tab.members' }) },
     { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
@@ -619,6 +621,15 @@ export default function RedePage() {
 
         {tab === 'lettre' && (
           <LettreStaffPanel />
+        )}
+
+        {/* ═══ INVITATIONS — tendre un lien a une bibliotheque ════════ */}
+        {/* Emettre, revoquer, suivre. Cf. CADRAGE_invitation_bibliotheque_
+            2026-08-27. L'emission passe par l'Edge Function
+            notify-library-invitation et non par la RPC : le jeton en clair ne
+            doit jamais vivre dans le navigateur. */}
+        {tab === 'invitations' && (
+          <InvitationsPanel />
         )}
 
         {tab === 'oaisource' && (
