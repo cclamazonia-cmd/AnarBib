@@ -112,3 +112,5 @@ deploy/dumps/*
 !deploy/dumps/LISEZ-MOI.txt
 *.dump
 *.sql.gz
+
+tmp-ficedl/
