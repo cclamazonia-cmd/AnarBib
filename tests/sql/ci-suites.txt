@@ -116,3 +116,11 @@ tests/sql/import_candidat_institutionnel_tests.sql
 # defaut repare. T11 garde la LIMITE du paquet — le verrou in_progress que
 # seule l'EF du Lot 3b, absente, saurait relacher.
 tests/sql/import_oai_pmh_tests.sql
+
+# Doublons INTERNES a un lot d import (paquet doublons-intra-lot). Le
+# rapprochement compare au CATALOGUE, jamais les lignes du lot entre elles :
+# le listing Solidaires portait neuf paires du meme ouvrage, toutes sorties
+# new_record. T2 et T4 sont des tests de NON-ACTION et sont les plus utiles —
+# deux homonymes ne doivent PAS etre signales, et un appariement au catalogue
+# ne doit jamais etre ecrase.
+tests/sql/import_doublons_intra_lot_tests.sql
