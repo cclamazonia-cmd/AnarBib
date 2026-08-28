@@ -518,6 +518,16 @@ export default function CatalogacaoPage() {
 // BatchesPanel — mini componente funcional de gestão de lotes
 // ═══════════════════════════════════════════════════════════
 
+// Libelles des etats d'un lot. La base accepte open | published | closed |
+// cancelled | archived (CHECK catalog_batches_status_check, elargie le
+// 29/08/2026) ; « open » et « archived » ont leur propre section, seuls les
+// autres passent par la pastille.
+const BATCH_STATUS_LABEL_IDS = {
+  published: 'catalogacao.published',
+  closed: 'catalogacao.batch.status.closed',
+  cancelled: 'catalogacao.cancelled',
+};
+
 function BatchesPanel({ batches, onRefresh }) {
   const { formatMessage: t } = useIntl();
   const [creating, setCreating] = useState(false);
@@ -612,6 +622,11 @@ function BatchesPanel({ batches, onRefresh }) {
   const openBatches = batches.filter(b => b.status === 'open');
   const closedBatches = batches.filter(b => b.status !== 'open' && b.status !== 'archived');
   const archivedBatches = batches.filter(b => b.status === 'archived');
+
+  function statusLabel(status) {
+    const id = BATCH_STATUS_LABEL_IDS[status];
+    return id ? t({ id }) : status;
+  }
 
   function formatDate(v) {
     if (!v) return '—';
@@ -710,7 +725,7 @@ function BatchesPanel({ batches, onRefresh }) {
                   <td style={{ padding: '8px' }}>{b.name}</td>
                   <td style={{ padding: '8px' }}>
                     <span className={`cat-pill ${b.status === 'published' ? 'ok' : 'warn'}`}>
-                      {b.status === 'published' ? t({id:'catalogacao.published'}) : b.status}
+                      {statusLabel(b.status)}
                     </span>
                   </td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>

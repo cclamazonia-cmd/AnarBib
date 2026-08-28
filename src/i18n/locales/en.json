@@ -6149,5 +6149,6 @@
   "rede.gazeta.prepareNextConfirm": "Create the draft for no. {number}? It stays invisible to the public until published.",
   "rede.gazeta.notComposed": "Not composed yet",
   "rede.gazeta.notComposedHint": "This issue has not been composed yet: the pipeline will take it over on the 15th. Until then, only its production mode can be chosen.",
-  "error.oai.sourceDisabled": "This source is disabled for importing. Ask a network admin to re-enable it."
+  "error.oai.sourceDisabled": "This source is disabled for importing. Ask a network admin to re-enable it.",
+  "catalogacao.batch.status.closed": "Closed"
 }

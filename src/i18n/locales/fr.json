@@ -6149,5 +6149,6 @@
   "rede.gazeta.prepareNextConfirm": "Créer le brouillon du n°{number} ? Il restera invisible du public jusqu’à publication.",
   "rede.gazeta.notComposed": "Pas encore composé",
   "rede.gazeta.notComposedHint": "Ce numéro n'a pas encore été composé : la chaîne s'en saisira le 15. D'ici là, seul son mode de fabrication se choisit.",
-  "error.oai.sourceDisabled": "Cette source est désactivée pour l’importation. Demande sa réactivation à une admin réseau."
+  "error.oai.sourceDisabled": "Cette source est désactivée pour l’importation. Demande sa réactivation à une admin réseau.",
+  "catalogacao.batch.status.closed": "Clos"
 }

@@ -6149,5 +6149,6 @@
   "rede.gazeta.prepareNextConfirm": "Krei la malneton de la n-ro {number}? Ĝi restos nevidebla al la publiko ĝis publikigo.",
   "rede.gazeta.notComposed": "Ankoraŭ ne kompostita",
   "rede.gazeta.notComposedHint": "Ĉi tiu numero ankoraŭ ne estas kompostita: la ĉeno transprenos ĝin la 15-an. Ĝis tiam nur ĝia farmaniero elekteblas.",
-  "error.oai.sourceDisabled": "Ĉi tiu fonto estas malŝaltita por importado. Petu ĝian reaktivigon al reta administranto."
+  "error.oai.sourceDisabled": "Ĉi tiu fonto estas malŝaltita por importado. Petu ĝian reaktivigon al reta administranto.",
+  "catalogacao.batch.status.closed": "Fermita"
 }

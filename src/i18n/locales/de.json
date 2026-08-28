@@ -6149,5 +6149,6 @@
   "rede.gazeta.prepareNextConfirm": "Entwurf für Nr. {number} anlegen? Er bleibt bis zur Veröffentlichung unsichtbar.",
   "rede.gazeta.notComposed": "Noch nicht gesetzt",
   "rede.gazeta.notComposedHint": "Diese Ausgabe wurde noch nicht gesetzt: die Kette übernimmt sie am 15. Bis dahin lässt sich nur ihre Herstellungsweise wählen.",
-  "error.oai.sourceDisabled": "Diese Quelle ist für den Import deaktiviert. Bitte eine Netzwerk-Admin um die Reaktivierung."
+  "error.oai.sourceDisabled": "Diese Quelle ist für den Import deaktiviert. Bitte eine Netzwerk-Admin um die Reaktivierung.",
+  "catalogacao.batch.status.closed": "Geschlossen"
 }
