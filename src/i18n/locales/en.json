@@ -6151,5 +6151,7 @@
   "rede.gazeta.notComposedHint": "This issue has not been composed yet: the pipeline will take it over on the 15th. Until then, only its production mode can be chosen.",
   "error.oai.sourceDisabled": "This source is disabled for importing. Ask a network admin to re-enable it.",
   "catalogacao.batch.status.closed": "Closed",
-  "catalogacao.batchTrashedWillBeDeleted": "This batch only holds {count} draft(s) in the trash. They will be permanently deleted along with the batch. Continue?"
+  "catalogacao.batchTrashedWillBeDeleted": "This batch only holds {count} draft(s) in the trash. They will be permanently deleted along with the batch. Continue?",
+  "error.import.run_has_drafts": "This import created a cataloguing batch that still holds drafts. Deal with the batch under Cataloguing › Batches, then delete the import.",
+  "catalogacao.queue.trashShowing": "{shown} shown out of {total}"
 }

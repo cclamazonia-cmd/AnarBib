@@ -114,6 +114,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   const [trash, setTrash] = useState([]);
   const [trashLoading, setTrashLoading] = useState(false);
   const [trashSelected, setTrashSelected] = useState(new Set());
+  // Ce que la corbeille contient reellement, distinct de ce que la liste
+  // affiche : sans ce compte, le pop-up de vidage annoncait 259 et la liste
+  // en montrait 100 sans le dire — l'ecart se lit comme une incoherence.
+  const [trashTotal, setTrashTotal] = useState(0);
 
   // ── Load active queue ───────────────────────────────────
   const loadQueue = useCallback(async () => {
@@ -207,6 +211,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: '' }));
       all.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
       setTrash(all);
+      setTrashTotal(await countTrash());
     } catch {} finally { setTrashLoading(false); }
   }, [t]);
 
@@ -589,6 +594,9 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
             <h4 style={{ margin: '0 0 4px', fontSize: '.9rem' }}>{t({ id: 'catalogacao.queue.trashTitle' })}</h4>
             <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)' }}>
               {t({ id: 'catalogacao.queue.trashDescription' })}
+              {trashTotal > trash.length && (
+                <> — {t({ id: 'catalogacao.queue.trashShowing' }, { shown: trash.length, total: trashTotal })}</>
+              )}
             </div>
           </div>
           <div style={{ display: 'flex', gap: 6 }}>

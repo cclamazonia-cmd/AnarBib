@@ -6151,5 +6151,7 @@
   "rede.gazeta.notComposedHint": "Dit nummer is nog niet samengesteld: de keten neemt het op de 15e over. Tot dan kan alleen de wijze van vervaardiging worden gekozen.",
   "error.oai.sourceDisabled": "Deze bron is uitgeschakeld voor import. Vraag een netwerkbeheerder om deze weer in te schakelen.",
   "catalogacao.batch.status.closed": "Gesloten",
-  "catalogacao.batchTrashedWillBeDeleted": "Dit lot bevat alleen nog {count} concept(en) in de prullenbak. Ze worden samen met het lot definitief verwijderd. Doorgaan?"
+  "catalogacao.batchTrashedWillBeDeleted": "Dit lot bevat alleen nog {count} concept(en) in de prullenbak. Ze worden samen met het lot definitief verwijderd. Doorgaan?",
+  "error.import.run_has_drafts": "Deze import heeft een catalogiseringslot aangemaakt dat nog concepten bevat. Behandel het lot onder Catalogisering › Loten en verwijder daarna de import.",
+  "catalogacao.queue.trashShowing": "{shown} van {total} weergegeven"
 }

@@ -6151,5 +6151,7 @@
   "rede.gazeta.notComposedHint": "Ce numéro n'a pas encore été composé : la chaîne s'en saisira le 15. D'ici là, seul son mode de fabrication se choisit.",
   "error.oai.sourceDisabled": "Cette source est désactivée pour l’importation. Demande sa réactivation à une admin réseau.",
   "catalogacao.batch.status.closed": "Clos",
-  "catalogacao.batchTrashedWillBeDeleted": "Ce lot ne retient plus que {count} brouillon(s) à la corbeille. Ils seront supprimés définitivement avec le lot. Continuer ?"
+  "catalogacao.batchTrashedWillBeDeleted": "Ce lot ne retient plus que {count} brouillon(s) à la corbeille. Ils seront supprimés définitivement avec le lot. Continuer ?",
+  "error.import.run_has_drafts": "Cet import a créé un lot de catalogage qui retient encore des brouillons. Traite le lot dans Catalogage › Lots, puis supprime l’import.",
+  "catalogacao.queue.trashShowing": "{shown} affichés sur {total}"
 }

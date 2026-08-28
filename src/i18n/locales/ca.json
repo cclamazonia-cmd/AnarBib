@@ -6151,5 +6151,7 @@
   "rede.gazeta.notComposedHint": "Aquest número encara no s’ha compost: la cadena se’n farà càrrec el dia 15. Fins llavors només se’n pot triar el mode de fabricació.",
   "error.oai.sourceDisabled": "Aquesta font està desactivada per a la importació. Demana’n la reactivació a una administradora de la xarxa.",
   "catalogacao.batch.status.closed": "Tancat",
-  "catalogacao.batchTrashedWillBeDeleted": "Aquest lot només reté {count} esborrany(s) a la paperera. S’eliminaran definitivament juntament amb el lot. Voleu continuar?"
+  "catalogacao.batchTrashedWillBeDeleted": "Aquest lot només reté {count} esborrany(s) a la paperera. S’eliminaran definitivament juntament amb el lot. Voleu continuar?",
+  "error.import.run_has_drafts": "Aquesta importació ha creat un lot de catalogació que encara reté esborranys. Tracta el lot a Catalogació › Lots i després elimina la importació.",
+  "catalogacao.queue.trashShowing": "{shown} mostrats de {total}"
 }

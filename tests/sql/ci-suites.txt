@@ -124,3 +124,11 @@ tests/sql/import_oai_pmh_tests.sql
 # deux homonymes ne doivent PAS etre signales, et un appariement au catalogue
 # ne doit jamais etre ecrase.
 tests/sql/import_doublons_intra_lot_tests.sql
+
+# Supprimer un run d'import ne doit pas abandonner son lot de catalogage. Le
+# run et ses lignes ingest.* partent en CASCADE ; le lot et ses brouillons
+# vivent dans public et restaient derriere — lot 55 (CIRA Marseille), 237
+# brouillons sans plus aucun ecran ou lire leur provenance. T2 est un test de
+# NON-ACTION : le refus ne doit RIEN detruire. T3 tient l'autre moitie de la
+# decision — la corbeille du lot ne bloque pas, sinon on recree l'impasse.
+tests/sql/import_suppression_run_lot_tests.sql

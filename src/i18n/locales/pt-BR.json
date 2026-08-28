@@ -6151,5 +6151,7 @@
   "rede.gazeta.notComposedHint": "Este número ainda não foi composto: a cadeia o assumirá no dia 15. Até lá, só o seu modo de fabricação pode ser escolhido.",
   "error.oai.sourceDisabled": "Esta fonte está desativada para importação. Peça a reativação a uma administradora da rede.",
   "catalogacao.batch.status.closed": "Fechado",
-  "catalogacao.batchTrashedWillBeDeleted": "Este lote só contém mais {count} rascunho(s) na lixeira. Eles serão excluídos definitivamente junto com o lote. Continuar?"
+  "catalogacao.batchTrashedWillBeDeleted": "Este lote só contém mais {count} rascunho(s) na lixeira. Eles serão excluídos definitivamente junto com o lote. Continuar?",
+  "error.import.run_has_drafts": "Esta importação criou um lote de catalogação que ainda retém rascunhos. Trate o lote em Catalogação › Lotes e depois exclua a importação.",
+  "catalogacao.queue.trashShowing": "{shown} exibidos de {total}"
 }

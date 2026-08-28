@@ -6151,5 +6151,7 @@
   "rede.gazeta.notComposedHint": "Questo numero non è ancora stato composto: la catena se ne occuperà il 15. Fino ad allora si può scegliere solo la sua modalità di fabbricazione.",
   "error.oai.sourceDisabled": "Questa fonte è disattivata per l’importazione. Chiedi la riattivazione a un’amministratrice della rete.",
   "catalogacao.batch.status.closed": "Chiuso",
-  "catalogacao.batchTrashedWillBeDeleted": "Questo lotto trattiene solo {count} bozza/e nel cestino. Saranno eliminate definitivamente insieme al lotto. Continuare?"
+  "catalogacao.batchTrashedWillBeDeleted": "Questo lotto trattiene solo {count} bozza/e nel cestino. Saranno eliminate definitivamente insieme al lotto. Continuare?",
+  "error.import.run_has_drafts": "Questa importazione ha creato un lotto di catalogazione che trattiene ancora delle bozze. Tratta il lotto in Catalogazione › Lotti, poi elimina l’importazione.",
+  "catalogacao.queue.trashShowing": "{shown} mostrati su {total}"
 }
