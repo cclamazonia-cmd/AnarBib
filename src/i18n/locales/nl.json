@@ -6165,5 +6165,7 @@
   "error.catalog.restore_no_snapshot": "De momentopname van dit concept is gewist (ouder dan 90 dagen): het spoor blijft, herstellen kan niet meer.",
   "error.catalog.restore_already": "Dit concept bestaat al: het is waarschijnlijk intussen hersteld.",
   "catalogacao.coordOnlyDelete": "Definitief verwijderen: coördinatie",
-  "error.publish.other_library": "Dit concept hoort bij een bibliotheek waar je geen lid van bent. Publiceren is aan die bibliotheek of aan een netwerkbeheerder."
+  "error.publish.other_library": "Dit concept hoort bij een bibliotheek waar je geen lid van bent. Publiceren is aan die bibliotheek of aan een netwerkbeheerder.",
+  "catalogacao.queue.libraryRecorded": "Doelbibliotheek, vastgelegd op het concept.",
+  "catalogacao.queue.libraryInferred": "Doelbibliotheek afgeleid uit het lidmaatschap van wie catalogiseerde: niets bindt dit concept formeel aan die bibliotheek."
 }

@@ -6165,5 +6165,7 @@
   "error.catalog.restore_no_snapshot": "L’instantané de ce brouillon a été purgé (au-delà de 90 jours) : la trace reste, mais il n’est plus rejouable.",
   "error.catalog.restore_already": "Ce brouillon existe déjà : il a probablement été restauré entre-temps.",
   "catalogacao.coordOnlyDelete": "Suppression définitive : coordination",
-  "error.publish.other_library": "Ce brouillon est rattaché à une bibliothèque dont tu n’es pas membre. Sa publication est réservée à cette bibliothèque ou à une admin réseau."
+  "error.publish.other_library": "Ce brouillon est rattaché à une bibliothèque dont tu n’es pas membre. Sa publication est réservée à cette bibliothèque ou à une admin réseau.",
+  "catalogacao.queue.libraryRecorded": "Bibliothèque de destination, enregistrée sur le brouillon.",
+  "catalogacao.queue.libraryInferred": "Bibliothèque de destination déduite de l’adhésion de la personne qui a catalogué : rien ne rattache formellement ce brouillon à cette bibliothèque."
 }

@@ -41,6 +41,32 @@ function chunkIds(ids, size = ID_CHUNK) {
 // Rend le nombre de lignes REELLEMENT traitees : un paquet en echec ne compte
 // pas, la ou le `catch {}` par ligne des boucles d'origine incrementait quand
 // meme et pouvait annoncer « 300 traites » sans que rien ne bouge.
+// Rendre la propriete LISIBLE plutot que la cloisonner : on ne cloisonne pas
+// les rascunhos par bibliotheque (les lots n'en portent pas, 1784 rascunhos sur
+// 2227 non plus, et une autorite est un commun federal), mais on peut au moins
+// dire A QUI appartient le travail qu'on s'apprete a toucher.
+//
+// La destination vient de la vue v_book_draft_destination, qui appelle la MEME
+// fonction que la publication : afficher une destination calculee autrement
+// serait pire que ne rien afficher — on ferait confiance a une information
+// fausse. `enregistree` distingue ce que le rascunho declare de ce qui est
+// seulement deduit de l'adhesion de qui a catalogue.
+async function attacherDestinations(items) {
+  const ids = items.filter(it => it._type === 'book').map(it => it.id);
+  if (!ids.length) return items;
+  try {
+    const { data } = await supabase.from('v_book_draft_destination')
+      .select('draft_id, library_id, enregistree').in('draft_id', ids);
+    const par = new Map((data || []).map(r => [r.draft_id, r]));
+    for (const it of items) {
+      if (it._type !== 'book') continue;
+      const d = par.get(it.id);
+      if (d) { it._libId = d.library_id; it._libEnregistree = d.enregistree; }
+    }
+  } catch { /* l information de propriete est un confort, pas un pre-requis */ }
+  return items;
+}
+
 async function bulkByType(sel, run) {
   const byType = new Map();
   for (const { type, id } of sel) {
@@ -140,6 +166,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // repond 204. Sans cette garde cote ecran, le bouton dirait « supprimes »
   // sans que rien ne bouge — le pire des deux mondes.
   const [isCoord, setIsCoord] = useState(false);
+  const [libs, setLibs] = useState({});
   // Journal des suppressions DEFINITIVES, et leur rejeu. Sans cet ecran, la
   // RPC de restauration serait un chemin que personne n'emprunte — donc un
   // chemin dont on ne saurait pas qu'il est casse.
@@ -192,7 +219,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       // Exemplars
       if (!typeFilter || typeFilter === 'exemplar') {
         let q = supabase.from('exemplar_drafts')
-          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, updated_at, last_opened_at', { count: 'exact' })
+          .select('id, target_bib_ref, tombo, status, label_status, action, batch_id, published_exemplar_id, target_library_id, updated_at, last_opened_at', { count: 'exact' })
           .in('status', statuses);
         if (actionFilter) q = q.eq('action', actionFilter);
         if (batchFilter === 'none') q = q.is('batch_id', null);
@@ -200,11 +227,12 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         if (s) q = q.or(`tombo.ilike.%${s}%,target_bib_ref.ilike.%${s}%`);
         const { data, count } = await q.order(orderCol, orderOpts).range(from, to);
         totalCount += count || 0; maxCount = Math.max(maxCount, count || 0);
-        (data || []).forEach(d => allItems.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: `ref: ${d.target_bib_ref || '—'}` }));
+        (data || []).forEach(d => allItems.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: `ref: ${d.target_bib_ref || '—'}`, _libId: d.target_library_id, _libEnregistree: true }));
       }
 
       // Tri de la fusion des couches de la page courante selon la colonne choisie.
       allItems.sort(makeComparator(sortBy, sortDir));
+      await attacherDestinations(allItems);
       setItems(allItems);
       setTotal(totalCount);
       // Pages basees sur la couche la plus volumineuse (evite des pages vides en "Todas")
@@ -234,9 +262,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
       (bk || []).forEach(d => all.push({ ...d, _type: 'book', _label: d.titulo || t({ id: 'catalogacao.queue.noTitle' }), _sub: d.autor || '' }));
       const { data: au } = await scopeToBatch(supabase.from('author_drafts').select('id, preferred_name, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (au || []).forEach(d => all.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: '' }));
-      const { data: ex } = await scopeToBatch(supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
-      (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: '' }));
+      const { data: ex } = await scopeToBatch(supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, target_library_id, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
+      (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: '', _libId: d.target_library_id, _libEnregistree: true }));
       all.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+      await attacherDestinations(all);
       setTrash(all);
       setTrashTotal(await countTrash());
     } catch {} finally { setTrashLoading(false); }
@@ -260,6 +289,19 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   }, []);
 
   useEffect(() => { loadDeleted(); }, [loadDeleted]);
+
+  useEffect(() => {
+    let vivant = true;
+    supabase.from('libraries').select('id, slug, name')
+      .then(({ data }) => {
+        if (!vivant) return;
+        const m = {};
+        (data || []).forEach(l => { m[l.id] = l.slug || l.name; });
+        setLibs(m);
+      })
+      .catch(() => {});
+    return () => { vivant = false; };
+  }, []);
 
   useEffect(() => {
     let vivant = true;
@@ -459,6 +501,21 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   const ls = { display: 'block', fontSize: '.78rem', fontWeight: 600, marginBottom: 2, color: 'var(--brand-muted, #bbb)' };
 
   // En-tête de colonne cliquable : tri asc/desc avec indicateur (▲/▼ actif, ↕ inactif).
+  // Le nom de la bibliotheque, et surtout si elle est ENREGISTREE ou seulement
+  // deduite : le « ≈ » n'est pas un ornement, il dit que rien ne rattache
+  // formellement ce brouillon a cette bibliotheque.
+  function renderLib(it) {
+    if (!it._libId || !libs[it._libId]) return null;
+    const sure = it._libEnregistree;
+    return (
+      <span
+        title={t({ id: sure ? 'catalogacao.queue.libraryRecorded' : 'catalogacao.queue.libraryInferred' })}
+        style={{ color: 'var(--brand-muted, #888)', fontStyle: sure ? 'normal' : 'italic' }}>
+        {' · '}{sure ? '' : '≈'}{libs[it._libId]}
+      </span>
+    );
+  }
+
   function renderHeaderCell(col, label, cellStyle) {
     const active = sortBy === col;
     return (
@@ -613,7 +670,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
                   {it._label}
                 </div>
                 <div style={{ fontSize: '.7rem', color: 'var(--brand-muted, #888)' }}>
-                  {it._sub}{it.batch_id ? ` · ${t({ id: 'catalogacao.queue.batchPrefix' }, { id: it.batch_id })}` : ''} · {it.action === 'create' ? t({ id: 'catalogacao.queue.actionCreate' }) : it.action === 'update' ? t({ id: 'catalogacao.queue.actionUpdate' }) : it.action}
+                  {it._sub}{it.batch_id ? ` · ${t({ id: 'catalogacao.queue.batchPrefix' }, { id: it.batch_id })}` : ''}{renderLib(it)} · {it.action === 'create' ? t({ id: 'catalogacao.queue.actionCreate' }) : it.action === 'update' ? t({ id: 'catalogacao.queue.actionUpdate' }) : it.action}
                 </div>
               </div>
               <span style={{ width: COLW.status, flexShrink: 0, display: 'flex' }}>
@@ -721,7 +778,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
                     <input type="checkbox" checked={trashSelected.has(key)} onChange={() => toggleTrashSelect(key)} style={{ flexShrink: 0 }} />
                     <span className={`cat-pill ${it._type === 'book' ? 'info' : it._type === 'author' ? 'warn' : 'ok'}`}
                       style={{ fontSize: '.6rem', flexShrink: 0 }}>{t({ id: TYPE_KEYS[it._type] })}</span>
-                    <div style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{it._label}</div>
+                    <div style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{it._label}{renderLib(it)}</div>
                     {isCoord && (
                       <button type="button" className="ab-button ab-button--danger ab-button--sm"
                         onClick={() => deleteTrashItem(it._type, it.id)}>{t({ id: 'catalogacao.queue.deletePermanent' })}</button>

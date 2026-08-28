@@ -6165,5 +6165,7 @@
   "error.catalog.restore_no_snapshot": "L’istantanea di questa bozza è stata eliminata (oltre 90 giorni): la traccia resta, ma non è più ripristinabile.",
   "error.catalog.restore_already": "Questa bozza esiste già: probabilmente è stata ripristinata nel frattempo.",
   "catalogacao.coordOnlyDelete": "Eliminazione definitiva: coordinamento",
-  "error.publish.other_library": "Questa bozza è legata a una biblioteca di cui non fai parte. La pubblicazione spetta a quella biblioteca o a un’amministratrice di rete."
+  "error.publish.other_library": "Questa bozza è legata a una biblioteca di cui non fai parte. La pubblicazione spetta a quella biblioteca o a un’amministratrice di rete.",
+  "catalogacao.queue.libraryRecorded": "Biblioteca di destinazione, registrata sulla bozza.",
+  "catalogacao.queue.libraryInferred": "Biblioteca di destinazione dedotta dall’affiliazione di chi ha catalogato: nulla lega formalmente questa bozza a quella biblioteca."
 }

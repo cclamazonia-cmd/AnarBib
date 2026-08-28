@@ -6165,5 +6165,7 @@
   "error.catalog.restore_no_snapshot": "La instantánea de este borrador fue purgada (más de 90 días): queda el rastro, pero ya no es restaurable.",
   "error.catalog.restore_already": "Este borrador ya existe: probablemente fue restaurado mientras tanto.",
   "catalogacao.coordOnlyDelete": "Eliminación definitiva: coordinación",
-  "error.publish.other_library": "Este borrador está vinculado a una biblioteca de la que no formas parte. Su publicación corresponde a esa biblioteca o a una administradora de la red."
+  "error.publish.other_library": "Este borrador está vinculado a una biblioteca de la que no formas parte. Su publicación corresponde a esa biblioteca o a una administradora de la red.",
+  "catalogacao.queue.libraryRecorded": "Biblioteca de destino, registrada en el borrador.",
+  "catalogacao.queue.libraryInferred": "Biblioteca de destino deducida de la afiliación de quien catalogó: nada vincula formalmente este borrador a esa biblioteca."
 }

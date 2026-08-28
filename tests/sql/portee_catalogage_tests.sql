@@ -39,6 +39,7 @@ DECLARE
   v_lib    uuid;
   v_n      int;
   v_def    text;
+  v_def2   text;
 BEGIN
   -- Le seed de CI ne porte qu'UNE bibliotheque : la suite fabrique la seconde
   -- plutot que d'exiger du seed ce qu'il n'a pas (elle est annulee comme le
@@ -107,14 +108,40 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T5 le tri alphabetique de role a disparu du corps (structurel)';
+  v_t := 'T5 la regle de destination n''existe qu''a UN endroit (structurel)';
+  -- Depuis le 29/08 la regle est EXTRAITE dans fn_book_draft_destination_library,
+  -- que publish_book_draft appelle et que la vue d'affichage lit. Ce test ne
+  -- verifie donc plus « la regle est dans publish » mais « elle est a un seul
+  -- endroit » : le tri alphabetique nulle part, le tri deterministe dans la
+  -- fonction et PAS recopie dans publish. Une seconde copie serait une regle
+  -- qui derive — le motif que ce depot paie en boucle.
   BEGIN
     SELECT pg_get_functiondef(p.oid) INTO v_def
       FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
      WHERE n.nspname = 'public' AND p.proname = 'publish_book_draft';
-    IF v_def NOT LIKE '%order by ulm.role desc%'
-       AND v_def LIKE '%ulm.is_primary desc, ulm.created_at, ulm.library_id%' THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : corps inattendu'); END IF;
+    SELECT pg_get_functiondef(p.oid) INTO v_def2
+      FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+     WHERE n.nspname = 'public' AND p.proname = 'fn_book_draft_destination_library';
+    IF v_def  NOT LIKE '%order by ulm.role desc%'
+       AND v_def2 NOT LIKE '%order by ulm.role desc%'
+       AND v_def  LIKE '%fn_book_draft_destination_library(p_draft_id)%'
+       AND v_def  NOT LIKE '%ulm.is_primary desc, ulm.created_at, ulm.library_id%'
+       AND v_def2 LIKE '%ulm.is_primary desc, ulm.created_at, ulm.library_id%'
+    THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : la regle n''est pas a un seul endroit'); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T5b la vue d''affichage dit la MEME chose que la publication';
+  -- C'est la raison d'etre de l'extraction : si l'ecran et la publication
+  -- pouvaient diverger, afficher la destination serait pire que ne rien
+  -- afficher — on ferait confiance a une information fausse.
+  BEGIN
+    SELECT count(*) INTO v_n
+      FROM public.v_book_draft_destination v
+     WHERE v.library_id IS DISTINCT FROM public.fn_book_draft_destination_library(v.draft_id);
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' divergence(s)'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ═══ B. La suppression definitive ════════════════════════════════

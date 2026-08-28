@@ -147,3 +147,12 @@ tests/sql/catalogage_suppression_tracee_tests.sql
 # designer la bibliotheque de destination. T6 tient le piege du DELETE refuse par
 # RLS : il ne leve pas d'erreur, il supprime zero ligne.
 tests/sql/portee_catalogage_tests.sql
+
+# Les droits herites (TRUNCATE / REFERENCES / TRIGGER a anon et authenticated)
+# ne reviennent pas. Les retirer une fois ne sert a rien : le defaut du schema
+# les redonne a chaque table neuve, et celui pose par supabase_admin n'est pas
+# modifiable depuis une migration. T2 est le plus important et ne parle pas de
+# ces trois droits : il garde a zero la classe REELLEMENT dangereuse, une table
+# ecrivable sans RLS. T3 est un test de non-action — un REVOKE trop large
+# passerait T1 et T2 sans broncher.
+tests/sql/grants_herites_tests.sql

@@ -6165,5 +6165,7 @@
   "error.catalog.restore_no_snapshot": "O instantâneo deste rascunho foi purgado (mais de 90 dias): o registo permanece, mas já não é restaurável.",
   "error.catalog.restore_already": "Este rascunho já existe: provavelmente foi restaurado entretanto.",
   "catalogacao.coordOnlyDelete": "Exclusão definitiva: coordenação",
-  "error.publish.other_library": "Este rascunho está vinculado a uma biblioteca da qual não fazes parte. A publicação cabe a essa biblioteca ou a uma administradora da rede."
+  "error.publish.other_library": "Este rascunho está vinculado a uma biblioteca da qual não fazes parte. A publicação cabe a essa biblioteca ou a uma administradora da rede.",
+  "catalogacao.queue.libraryRecorded": "Biblioteca de destino, registada no rascunho.",
+  "catalogacao.queue.libraryInferred": "Biblioteca de destino deduzida do vínculo de quem catalogou: nada liga formalmente este rascunho a essa biblioteca."
 }
