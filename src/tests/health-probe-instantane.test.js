@@ -21,6 +21,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { transformSync } from 'esbuild';
 
 const SRC = new URL('../../supabase/functions/health-probe/index.ts', import.meta.url);
 const src = readFileSync(SRC, 'utf8');
@@ -58,6 +59,70 @@ describe('health-probe — quand signaler un instantané non attesté', () => {
 
   it('ne signale rien sur un champ nul — l’absence n’est pas une négation', () => {
     expect(predicat(flux({ instantane_atteste: null }))).toBe(false);
+  });
+});
+
+describe('health-probe — à qui part l’alerte', () => {
+  // `destinataires()` ne lisait que `network_administrators`. Le réseau n'ayant
+  // qu'UN administrateur, une alerte de supervision ne tenait qu'à une seule
+  // boîte — et si la table est vide, elle ne partait NULLE PART, en silence.
+  // `HEALTH_ALERT_CC` ajoute une adresse institutionnelle qui survit aux
+  // départs. Les deux fonctions pures sont transpilées depuis le vrai fichier.
+  const debut = src.indexOf('function ccsSupplementaires');
+  const finBloc = src.indexOf('async function destinataires');
+  if (debut < 0 || finBloc < 0) throw new Error('les helpers de destinataires sont introuvables');
+  const { code } = transformSync(src.slice(debut, finBloc), { loader: 'ts', format: 'cjs', target: 'es2022' });
+  const { ccsSupplementaires, fusionnerDestinataires } = (() => {
+    const exports = {};
+    new Function('exports', code + '\nexports.ccsSupplementaires = ccsSupplementaires;\nexports.fusionnerDestinataires = fusionnerDestinataires;')(exports);
+    return exports;
+  })();
+
+  it('une variable vide ne change rien', () => {
+    expect(ccsSupplementaires('')).toEqual([]);
+    const admins = [{ email: 'x@exemple.org', name: 'X' }];
+    expect(fusionnerDestinataires(admins, [])).toEqual(admins);
+  });
+
+  it.each([
+    ['admins@anarbib.org'],
+    [' admins@anarbib.org '],
+    ['admins@anarbib.org,autre@anarbib.org'],
+    ['admins@anarbib.org; autre@anarbib.org'],
+    ['admins@anarbib.org autre@anarbib.org'],
+  ])('accepte la forme %s', (brut) => {
+    const r = ccsSupplementaires(brut);
+    expect(r[0].email).toBe('admins@anarbib.org');
+  });
+
+  it('ignore ce qui n’est pas une adresse', () => {
+    expect(ccsSupplementaires('pas-une-adresse, ni-celle-ci')).toEqual([]);
+  });
+
+  it('ajoute l’adresse institutionnelle aux administrateurs', () => {
+    const r = fusionnerDestinataires(
+      [{ email: 'xavier@exemple.org', name: 'Xavier' }],
+      ccsSupplementaires('admins@anarbib.org'),
+    );
+    expect(r.map((c) => c.email)).toEqual(['xavier@exemple.org', 'admins@anarbib.org']);
+  });
+
+  it('n’envoie pas deux fois à la même adresse, quelle que soit la casse', () => {
+    const r = fusionnerDestinataires(
+      [{ email: 'Admins@AnarBib.org', name: 'Coordination' }],
+      ccsSupplementaires('admins@anarbib.org'),
+    );
+    expect(r).toHaveLength(1);
+  });
+
+  it('alerte quand même si AUCUN administrateur n’est actif', () => {
+    // C'est le cas que l'ancien `if (!ids.length) return []` rendait muet.
+    const r = fusionnerDestinataires([], ccsSupplementaires('admins@anarbib.org'));
+    expect(r.map((c) => c.email)).toEqual(['admins@anarbib.org']);
+  });
+
+  it('le garde-fou du code : plus de sortie prématurée sur table vide', () => {
+    expect(src).not.toContain('if (!ids.length) return [];');
   });
 });
 

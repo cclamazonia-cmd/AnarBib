@@ -106,20 +106,68 @@ async function mesurer(s: Sonde) {
   }
 }
 
+// Destinataires SUPPLÉMENTAIRES des alertes de supervision, hors table des
+// administrateurs. Le réseau n’a longtemps eu qu’UN administrateur : une alerte
+// ne tenait donc qu’à une seule boîte, et à une seule personne joignable. Une
+// adresse institutionnelle survit aux départs, aux absences et aux changements
+// d’adresse — ce que `network_administrators` ne garantit pas.
+//
+// En variable d’environnement et non en dur : le code de production gèle le 8
+// septembre, et une adresse écrite en dur ne serait plus corrigeable après cette
+// date. Vide (défaut) = comportement strictement inchangé.
+//
+// Séparateurs admis : virgule, point-virgule, espace.
+const HEALTH_ALERT_CC = Deno.env.get('HEALTH_ALERT_CC') ?? '';
+
+function ccsSupplementaires(brut: string) {
+  return brut
+    .split(/[,;\s]+/)
+    .map((s) => s.trim())
+    .filter((s) => s.includes('@'))
+    .map((email) => ({ email, name: undefined as string | undefined }));
+}
+
+// Le dédoublonnage est insensible à la casse, et il ne peut PAS voir qu’un alias
+// réexpédie vers une adresse déjà présente : si `admins@` renvoie chez un
+// administrateur, cette personne recevra deux copies. C’est le prix de la
+// redondance, et il se retire en changeant la variable — pas le code.
+function fusionnerDestinataires(
+  admins: { email: string; name?: string }[],
+  extras: { email: string; name?: string }[],
+) {
+  const vus = new Set<string>();
+  const out: { email: string; name?: string }[] = [];
+  for (const c of [...admins, ...extras]) {
+    const cle = (c.email ?? "").trim().toLowerCase();
+    if (!cle || vus.has(cle)) continue;
+    vus.add(cle);
+    out.push(c);
+  }
+  return out;
+}
+
 async function destinataires() {
   const { data } = await supabaseAdmin
     .from('network_administrators')
     .select('user_id')
     .eq('status', 'active');
   const ids = (data ?? []).map((r: any) => r.user_id).filter(Boolean);
-  if (!ids.length) return [];
-  const { data: profs } = await supabaseAdmin
-    .from('profiles')
-    .select('email, first_name')
-    .in('id', ids);
-  return (profs ?? [])
-    .filter((p: any) => p.email)
-    .map((p: any) => ({ email: String(p.email).trim(), name: p.first_name || undefined }));
+
+  // NE PAS sortir ici quand la table est vide. Avant, aucun administrateur actif
+  // voulait dire AUCUNE alerte envoyée, en silence — la panne muette une fois de
+  // plus. L’adresse institutionnelle est précisément le filet de ce cas-là.
+  let admins: { email: string; name?: string }[] = [];
+  if (ids.length) {
+    const { data: profs } = await supabaseAdmin
+      .from('profiles')
+      .select('email, first_name')
+      .in('id', ids);
+    admins = (profs ?? [])
+      .filter((p: any) => p.email)
+      .map((p: any) => ({ email: String(p.email).trim(), name: p.first_name || undefined }));
+  }
+
+  return fusionnerDestinataires(admins, ccsSupplementaires(HEALTH_ALERT_CC));
 }
 
 async function alerter(sujet: string, titre: string, corpsHtml: string) {
