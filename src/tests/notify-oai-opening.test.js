@@ -7,23 +7,29 @@
 // et harvest-oai-pmh.test.js : esbuild transpile EN MÉMOIRE le VRAI index.ts, et
 // on l'évalue avec un `require` détourné. `webhook.ts` et `mail-strings.ts` sont
 // transpilés POUR DE VRAI (le premier porte la garde du secret, le second les
-// 10 locales) ; seuls l'accès base, le rendu HTML et l'envoi sont stubés — c'est
-// l'envoi qui sert de mouchard : on lit qui reçoit quoi, dans quelle langue.
+// 10 locales) ; seuls l'accès base, le rendu HTML et l'envoi sont stubés —
+// `safeSendEmail` sert de mouchard : on lit qui reçoit quoi, dans quelle langue.
 //
-// CE QUI EST GARDÉ ICI : la symétrie ouverture / fermeture.
-// Vécu le 28/08/2026, en refermant une ouverture réelle de BLMF : l'approbation
-// avait envoyé 2 courriels (la coordination demandeuse + le fédéral), la
-// fermeture 1 seul (le fédéral). La coordination apprenait donc que son
-// catalogue s'ouvrait — le courriel d'approbation lui dit même « pense à
-// refermer » — mais jamais qu'il s'était refermé, alors que c'est l'information
-// qui compte le plus pour elle : celle qui dit que le catalogue n'est plus
-// exposé. Rien ne l'a signalé pendant deux mois et demi, parce que rien
-// n'exerçait cette EF.
+// CE QUI EST GARDÉ ICI : à QUI parle la gouvernance OAI.
+// Deux défauts trouvés en refermant une ouverture réelle de BLMF le 28/08/2026.
+//   1. L'approbation envoyait 2 courriels, la fermeture 1 : la coordination
+//      apprenait que son catalogue s'ouvrait — le texte lui dit même « pense à
+//      refermer » — mais jamais qu'il s'était refermé, alors que c'est
+//      l'information qui compte le plus pour elle.
+//   2. Plus profond : l'EF ne consultait AUCUNE adresse de bibliothèque. Elle ne
+//      connaissait que profiles.email et la variable fédérale. BLMF a TROIS
+//      coordinations et une adresse collective renseignée
+//      (library_mail_channels.admin_notification_email) : seule la personne qui
+//      avait cliqué recevait quelque chose, l'adresse collective rien.
 //
-// La règle posée est « la fermeture atteint qui a été prévenu de l'ouverture »,
-// et les deux formes de demande n'ont pas prévenu les mêmes personnes — d'où T3
-// ET T4. Le piège serait de n'en réparer qu'une : c'est exactement ce que le
-// dépôt s'est déjà fait à lui-même sur les vocabulaires d'ingest.
+// La règle est donc double, et c'est elle que les tests énoncent :
+//   décision (approbation/refus) = réponse à une demande
+//        -> demandeur·euse + adresse collective de sa biblio + fédéral
+//   fermeture = fait collectif, pas réponse à une demande
+//        -> adresse(s) collective(s) concernée(s) + fédéral, SANS demandeur·euse
+// Écrire l'adresse collective plutôt que les N coordinations rend la
+// gouvernance indépendante de qui a cliqué et la fait survivre aux changements
+// d'équipe — c'est aussi ce que fait déjà le reste des mailers.
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -48,9 +54,7 @@ const ENV = {
   SUPABASE_SERVICE_ROLE_KEY: 'stub',
 };
 
-// `monde` décrit la base : la demande, les biblios, les profils, les adhésions
-// et les votes. Le harnais rend un faux client supabase qui répond à partir de
-// lui, et enregistre chaque envoi.
+// `monde` décrit la base ; le faux client y répond, et chaque envoi est noté.
 function monterEF(monde) {
   const envois = [];
 
@@ -69,21 +73,17 @@ function monterEF(monde) {
 
   const repondre = (nom, chaine) => {
     if (nom === 'oai_opening_requests') return { data: monde.demande, error: null };
-    if (nom === 'libraries') {
+    if (nom === 'v_library_notification_context') {
       const [, ids] = argOf(chaine, 'in');
-      if (ids) return { data: monde.biblios.filter((l) => ids.includes(l.id)), error: null };
+      return { data: monde.canaux.filter((c) => (ids || []).includes(c.library_id)), error: null };
+    }
+    if (nom === 'libraries') {
       const [, id] = argOf(chaine, 'eq');
       return { data: monde.biblios.find((l) => l.id === id) ?? null, error: null };
     }
     if (nom === 'profiles') {
-      const [, ids] = argOf(chaine, 'in');
-      if (ids) return { data: monde.profils.filter((p) => ids.includes(p.id)), error: null };
       const [, id] = argOf(chaine, 'eq');
       return { data: monde.profils.find((p) => p.id === id) ?? null, error: null };
-    }
-    if (nom === 'user_library_memberships') {
-      const [, libIds] = argOf(chaine, 'in');
-      return { data: monde.adhesions.filter((m) => libIds.includes(m.library_id)), error: null };
     }
     if (nom === 'oai_opening_votes') return { data: monde.votes ?? [], error: null };
     return { data: null, error: null };
@@ -95,16 +95,12 @@ function monterEF(monde) {
   const requireStub = (spec) => {
     if (spec.endsWith('core/webhook.ts')) return evaluer(cjs(WEBHOOK));
     if (spec.endsWith('i18n/mail-strings.ts')) return evaluer(cjs(STRINGS));
-    if (spec.endsWith('core/env.ts')) {
-      return { supabaseAdmin: { from: table }, APP_BASE_URL: 'https://app.test' };
-    }
+    if (spec.endsWith('core/env.ts')) return { supabaseAdmin: { from: table }, APP_BASE_URL: 'https://app.test' };
     if (spec.endsWith('mail/layout.ts')) {
       return { renderEmail: ({ title }) => ({ html: `<p>${title}</p>`, text: title }), footerPadrao: () => '' };
     }
     if (spec.endsWith('transport/email.ts')) {
-      return {
-        safeSendEmail: async (cible, sujet) => { envois.push({ email: cible.email, nom: cible.name, sujet }); },
-      };
+      return { safeSendEmail: async (cible, sujet) => { envois.push({ email: cible.email, nom: cible.name, sujet }); } };
     }
     throw new Error(`import inattendu : ${spec}`);
   };
@@ -132,10 +128,13 @@ function monterEF(monde) {
   };
 }
 
-// ── Un monde de test : BLMF (3 coordinations, dont la demandeuse) ─────────
-const BLMF = '1234825f-0000-0000-0000-000000000001';
-const MLEG = '1234825f-0000-0000-0000-000000000002';
+// ── Un monde de test calqué sur la vraie configuration ───────────────────
+const BLMF = 'lib-blmf';
+const MLEG = 'lib-mleg';
 const COORD = 'user-coord-blmf';
+const PERSO = 'xavier@perso.local';       // profiles.email de la demandeuse
+const COLLECTIF_BLMF = 'blmf@collectif.local';   // admin_notification_email
+const COLLECTIF_MLEG = 'mleg@collectif.local';
 
 const mondeBiblio = (over = {}) => ({
   demande: {
@@ -146,17 +145,10 @@ const mondeBiblio = (over = {}) => ({
     { id: BLMF, name: 'Biblioteca Libertária Maxwell Ferreira', default_locale: 'pt-BR' },
     { id: MLEG, name: 'Maloca Libertária', default_locale: 'pt-BR' },
   ],
-  profils: [
-    { id: COORD, email: 'coord@blmf.local', first_name: 'Coord' },
-    { id: 'user-coord-2', email: 'deux@blmf.local', first_name: 'Deux' },
-    { id: 'user-coord-3', email: 'trois@blmf.local', first_name: 'Trois' },
-    { id: 'user-coord-mleg', email: 'coord@mleg.local', first_name: 'Mleg' },
-  ],
-  adhesions: [
-    { user_id: COORD, library_id: BLMF },
-    { user_id: 'user-coord-2', library_id: BLMF },
-    { user_id: 'user-coord-3', library_id: BLMF },
-    { user_id: 'user-coord-mleg', library_id: MLEG },
+  profils: [{ id: COORD, email: PERSO, first_name: 'Xavier' }],
+  canaux: [
+    { library_id: BLMF, library_name: 'BLMF', admin_notification_email: COLLECTIF_BLMF, channel_active: true, default_locale: 'pt-BR' },
+    { library_id: MLEG, library_name: 'MLEG', admin_notification_email: COLLECTIF_MLEG, channel_active: true, default_locale: 'pt-BR' },
   ],
   votes: [],
   ...over,
@@ -182,52 +174,83 @@ describe("l'EF reste fermée sans x-webhook-secret", () => {
   });
 });
 
-describe("T1 — l'approbation prévient la coordination demandeuse ET le fédéral", () => {
-  it('deux destinataires, dont l’adresse perso de la coordination', async () => {
+describe("T1 — l'approbation : réponse à une demande, donc la personne ET la biblio", () => {
+  it('demandeuse + adresse collective + fédéral', async () => {
     const r = await monterEF(mondeBiblio())({ event: 'oai_open_approved', request_id: 'req-1' });
+    expect(r.adresses).toEqual([COLLECTIF_BLMF, FEDERAL, PERSO].sort());
+    expect(r.corps.sent_count).toBe(3);
+  });
+});
+
+describe('T2 — LE DÉFAUT D’ORIGINE : la fermeture atteint la bibliothèque', () => {
+  it('adresse collective + fédéral, et PAS l’adresse perso de qui avait cliqué', async () => {
+    const r = await monterEF(mondeBiblio())({ event: 'oai_closed', request_id: 'req-1' });
+    expect(r.adresses).toEqual([COLLECTIF_BLMF, FEDERAL].sort());
+    // Une fermeture est un fait collectif : elle ne va pas à la personne qui
+    // avait déposé la demande, peut-être des mois plus tôt.
+    expect(r.adresses).not.toContain(PERSO);
     expect(r.corps.sent_count).toBe(2);
-    expect(r.adresses).toEqual(['coord@blmf.local', FEDERAL]); // triees
   });
 });
 
-describe('T2 — LE DÉFAUT : la fermeture doit prévenir les MÊMES personnes', () => {
-  it('fermeture d’une ouverture de biblio → coordination demandeuse + fédéral', async () => {
-    const appeler = monterEF(mondeBiblio());
-    const ouverture = await appeler({ event: 'oai_open_approved', request_id: 'req-1' });
-    const fermeture = await appeler({ event: 'oai_closed', request_id: 'req-1' });
-    // La formulation du test EST la règle : mêmes destinataires des deux côtés.
-    expect(fermeture.adresses).toEqual(ouverture.adresses);
-    expect(fermeture.corps.sent_count).toBe(2);
-    expect(fermeture.adresses).toContain('coord@blmf.local');
-  });
-});
-
-describe('T3 — la fermeture parle à chacun·e dans la langue de SA biblio', () => {
-  it('le fédéral en fr, la coordination BLMF en pt-BR', async () => {
+describe('T3 — chacun·e dans la langue de SA bibliothèque', () => {
+  it('le fédéral en fr, l’adresse collective BLMF en pt-BR, nom injecté', async () => {
     const r = await monterEF(mondeBiblio())({ event: 'oai_closed', request_id: 'req-1' });
     const federal = r.envois.find((e) => e.email === FEDERAL);
-    const coord = r.envois.find((e) => e.email === 'coord@blmf.local');
-    expect(federal.sujet).toMatch(/^Ouverture OAI refermée/);        // fr
-    expect(coord.sujet).toMatch(/^Abertura OAI fechada/);            // pt-BR
-    // Et le nom de la biblio est bien injecté, pas laissé en {target}.
-    expect(coord.sujet).toContain('Maxwell Ferreira');
+    const collectif = r.envois.find((e) => e.email === COLLECTIF_BLMF);
+    expect(federal.sujet).toMatch(/^Ouverture OAI refermée/);   // fr
+    expect(collectif.sujet).toMatch(/^Abertura OAI fechada/);   // pt-BR
+    expect(collectif.sujet).toContain('Maxwell Ferreira');
   });
 });
 
-describe('T4 — même règle pour une ouverture RÉSEAU, qui n’a pas les mêmes prévenu·es', () => {
-  it('fermeture réseau → fédéral + les coordinations appelées à voter', async () => {
+describe('T4 — réseau : les adresses collectives des biblios appelées à voter', () => {
+  it('proposition, résolution et fermeture visent les mêmes canaux', async () => {
     const appeler = monterEF(mondeReseau());
+    const proposition = await appeler({ event: 'oai_network_proposed', request_id: 'req-2' });
     const resolution = await appeler({ event: 'oai_network_resolved', request_id: 'req-2', outcome: 'open' });
     const fermeture = await appeler({ event: 'oai_closed', request_id: 'req-2' });
+
+    expect(proposition.adresses).toEqual([COLLECTIF_BLMF, COLLECTIF_MLEG].sort());
+    expect(resolution.adresses).toEqual([COLLECTIF_BLMF, COLLECTIF_MLEG, FEDERAL].sort());
+    // Qui a été prévenu de l'ouverture réseau est prévenu de sa fermeture.
     expect(fermeture.adresses).toEqual(resolution.adresses);
-    // Les trois BLMF + celle de MLEG + le fédéral.
-    expect(fermeture.adresses).toContain('coord@mleg.local');
-    expect(fermeture.adresses).toContain(FEDERAL);
-    expect(fermeture.corps.sent_count).toBe(5);
+    // Et jamais une adresse personnelle dans une notification d'institution.
+    expect(fermeture.adresses).not.toContain(PERSO);
   });
 });
 
-describe('T5 — une fermeture réseau ne dit pas le nom d’une biblio', () => {
+describe('T5 — une biblio qui a coupé son canal ne reçoit rien', () => {
+  it('channel_active=false → seul le fédéral, et aucune erreur', async () => {
+    const monde = mondeBiblio();
+    monde.canaux[0].channel_active = false;
+    const r = await monterEF(monde)({ event: 'oai_closed', request_id: 'req-1' });
+    expect(r.adresses).toEqual([FEDERAL]);
+    expect(r.corps.ok).toBe(true);
+  });
+});
+
+describe('T6 — une adresse collective absente ne casse pas la gouvernance', () => {
+  it('admin_notification_email vide → seul le fédéral', async () => {
+    const monde = mondeBiblio();
+    monde.canaux[0].admin_notification_email = '';
+    const r = await monterEF(monde)({ event: 'oai_closed', request_id: 'req-1' });
+    expect(r.adresses).toEqual([FEDERAL]);
+    expect(r.corps.ok).toBe(true);
+  });
+});
+
+describe('T7 — une adresse qui coïncide n’est pas écrite deux fois', () => {
+  it('la demandeuse EST l’adresse collective → un seul envoi pour elle', async () => {
+    const monde = mondeBiblio();
+    monde.canaux[0].admin_notification_email = PERSO;   // petite biblio : même boîte
+    const r = await monterEF(monde)({ event: 'oai_open_approved', request_id: 'req-1' });
+    expect(r.adresses).toEqual([FEDERAL, PERSO].sort());
+    expect(r.corps.sent_count).toBe(2);
+  });
+});
+
+describe('T8 — une fermeture réseau ne dit pas le nom d’une biblio', () => {
   it('library_id nul → le mot « réseau » remplace le nom', async () => {
     const r = await monterEF(mondeReseau())({ event: 'oai_closed', request_id: 'req-2' });
     const federal = r.envois.find((e) => e.email === FEDERAL);
@@ -237,10 +260,9 @@ describe('T5 — une fermeture réseau ne dit pas le nom d’une biblio', () => 
   });
 });
 
-describe('T6 — une demande introuvable n’envoie rien', () => {
+describe('T9 — une demande introuvable n’envoie rien', () => {
   it('pas de courriel sur un request_id inconnu', async () => {
-    const monde = mondeBiblio({ demande: null });
-    const r = await monterEF(monde)({ event: 'oai_closed', request_id: 'inconnu' });
+    const r = await monterEF(mondeBiblio({ demande: null }))({ event: 'oai_closed', request_id: 'inconnu' });
     expect(r.corps.error).toBe('request_not_found');
     expect(r.envois).toEqual([]);
   });
