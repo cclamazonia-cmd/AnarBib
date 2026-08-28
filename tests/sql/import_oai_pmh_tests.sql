@@ -47,6 +47,7 @@ DECLARE
   v_res     jsonb;
   v_res2    jsonb;
   v_res3    jsonb;
+  v_hint    text;
   v_disp    ingest.partner_catalog_import_dispatch_log%rowtype;
   v_src     ingest.partner_catalog_sources%rowtype;
   v_run     ingest.partner_catalog_import_runs%rowtype;
@@ -470,6 +471,63 @@ BEGIN
 
     UPDATE ingest.partner_catalog_sources SET import_enabled = true
      WHERE id = (v_res->>'source_id')::bigint;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- T21 garde que le CRON respecte import_enabled. Celui-ci garde que le BOUTON
+  -- le respecte aussi. L'asymetrie a vecu quelques heures et c'etait le pire des
+  -- deux mondes : decocher une source la sortait du moissonnage automatique mais
+  -- pas du manuel, donc on aurait continue d'ecrire a un partenaire exterieur
+  -- apres lui avoir dit qu'on arretait. Une case a cocher que la moitie du
+  -- logiciel ignore fait croire que la decision a ete prise.
+  --
+  -- On lit le HINT par GET STACKED DIAGNOSTICS et non dans le texte de la
+  -- fonction : c'est le HINT que l'ecran traduit (src/lib/localizeError.js), et
+  -- seul un appel reel prouve qu'il arrive jusqu'a l'appelante.
+  v_t := 'T22 le BOUTON refuse une source import_enabled=false, sans rien ecrire, avec un HINT';
+  BEGIN
+    UPDATE ingest.oai_harvest_state SET harvest_status = 'idle'
+     WHERE source_id = (v_res->>'source_id')::bigint;
+    UPDATE ingest.partner_catalog_sources SET import_enabled = false
+     WHERE id = (v_res->>'source_id')::bigint;
+
+    SELECT count(*) INTO v_n FROM ingest.partner_catalog_import_runs
+     WHERE source_id = (v_res->>'source_id')::bigint;
+
+    BEGIN
+      PERFORM public.fn_import_harvest_oai((v_res->>'source_id')::bigint);
+      v_failed := v_failed+1; v_failures := v_failures||(v_t||' : aucun refus');
+    EXCEPTION WHEN OTHERS THEN
+      GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
+      IF coalesce(v_hint, '') <> 'error.oai.sourceDisabled' THEN
+        v_failed := v_failed+1; v_failures := v_failures||(v_t||' : HINT='
+          ||coalesce(nullif(v_hint,''),'<aucun>')||' err='||SQLERRM);
+      ELSIF (SELECT count(*) FROM ingest.partner_catalog_import_runs
+              WHERE source_id = (v_res->>'source_id')::bigint) <> v_n THEN
+        v_failed := v_failed+1; v_failures := v_failures||(v_t||' : un run a ete cree malgre le refus');
+      ELSIF (SELECT harvest_status FROM ingest.oai_harvest_state
+              WHERE source_id = (v_res->>'source_id')::bigint) <> 'idle' THEN
+        v_failed := v_failed+1; v_failures := v_failures||(v_t||' : un verrou a ete pose malgre le refus');
+      ELSE
+        v_passed := v_passed+1;
+      END IF;
+    END;
+
+    UPDATE ingest.partner_catalog_sources SET import_enabled = true
+     WHERE id = (v_res->>'source_id')::bigint;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- Et la source re-cochee redevient moissonnable : une garde qui ne se leve
+  -- jamais serait un blocage, pas un reglage.
+  v_t := 'T23 la source re-activee redevient moissonnable';
+  BEGIN
+    UPDATE ingest.oai_harvest_state SET harvest_status = 'idle'
+     WHERE source_id = (v_res->>'source_id')::bigint;
+    v_res3 := public.fn_import_harvest_oai((v_res->>'source_id')::bigint);
+    IF coalesce((v_res3->>'ok')::boolean, false) AND (v_res3->>'run_id') IS NOT NULL THEN
+      v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got '||coalesce(v_res3::text,'NULL')); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

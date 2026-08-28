@@ -1241,6 +1241,14 @@ export default function ImportacoesPage() {
                           <div className="imp-flags" style={{ marginBottom: 8 }}>
                             <span className="imp-flagchip imp-flagchip--on">{s.oai_metadata_prefix || 'marcxml'}</span>
                             <span className="imp-flagchip">{t({ id: 'importacoes.oai.lotsPerCycle' }, { n: s.lots_per_cycle || 5 })}</span>
+                            {/* import_enabled decide desormais des DEUX chemins : le cron
+                                hebdomadaire et le bouton ci-dessous. Tant qu'elle n'etait lue
+                                par personne, l'afficher n'aurait rien voulu dire ; maintenant
+                                elle explique pourquoi le bouton est eteint. Meme cle que la
+                                liste des Fontes : le meme mot pour la meme chose. */}
+                            <span className={`imp-flagchip ${s.import_enabled ? 'imp-flagchip--on' : 'imp-flagchip--off'}`}>
+                              {t({ id: 'importacoes.fontes.flag.import' })}
+                            </span>
                             {s.total_records_harvested > 0 && (
                               <span className="imp-flagchip imp-flagchip--on">{t({ id: 'importacoes.oai.totalHarvested' }, { n: s.total_records_harvested })}</span>
                             )}
@@ -1251,9 +1259,15 @@ export default function ImportacoesPage() {
                           {s.last_error && (
                             <p style={{ fontSize: '.8rem', color: 'var(--color-danger)', margin: '0 0 8px' }}>{s.last_error}</p>
                           )}
+                          {/* Une source decochee est refusee par fn_import_harvest_oai
+                              (HINT error.oai.sourceDisabled). L'ecran n'a pas a proposer un
+                              geste que la base rejettera : on eteint le bouton, la pastille
+                              ci-dessus dit pourquoi. La RPC reste l'autorite — ce grisage est
+                              une politesse, pas une garde. */}
                           <button className="cat-btn primary" style={{ fontSize: '.82rem', padding: '5px 14px', minHeight: 0 }}
                             onClick={() => handleHarvestOai(s.id)}
-                            disabled={s.harvest_status === 'in_progress'}>
+                            title={!s.import_enabled ? t({ id: 'error.oai.sourceDisabled' }) : undefined}
+                            disabled={s.harvest_status === 'in_progress' || !s.import_enabled}>
                             {s.harvest_status === 'in_progress' ? t({ id: 'importacoes.oai.harvesting' }) : t({ id: 'importacoes.oai.harvestNow' })}
                           </button>
                         </div>

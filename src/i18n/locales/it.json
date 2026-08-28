@@ -6157,5 +6157,6 @@
   "rede.gazeta.prepareNextHint": "La catena compone il 15 di ogni mese. Preparare il numero in anticipo permette di sceglierne la modalità di fabbricazione prima che se ne impadronisca; la bozza resta invisibile al pubblico.",
   "rede.gazeta.prepareNextConfirm": "Creare la bozza del n. {number}? Resterà invisibile al pubblico fino alla pubblicazione.",
   "rede.gazeta.notComposed": "Non ancora composto",
-  "rede.gazeta.notComposedHint": "Questo numero non è ancora stato composto: la catena se ne occuperà il 15. Fino ad allora si può scegliere solo la sua modalità di fabbricazione."
+  "rede.gazeta.notComposedHint": "Questo numero non è ancora stato composto: la catena se ne occuperà il 15. Fino ad allora si può scegliere solo la sua modalità di fabbricazione.",
+  "error.oai.sourceDisabled": "Questa fonte è disattivata per l’importazione. Chiedi la riattivazione a un’amministratrice della rete."
 }
