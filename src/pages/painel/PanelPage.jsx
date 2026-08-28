@@ -1524,24 +1524,31 @@ export default function PanelPage() {
   // qui consomme circulation_mode et membership_enabled du LibraryContext.
   // Le check role (isCoordOrAdmin) sur 'contribuicoes' reste explicit : c'est un
   // check de role utilisateur orthogonal au profil de la biblio.
+  // Forme des onglets (28/08/2026) : barre de pastilles `.ab-tabbar`
+  // (src/styles/tabbar.css), même refonte que la page « Mon compte ». `icon`
+  // sert de repère visuel, `count` sort le décompte du libellé (pastille rendue
+  // seulement s'il y a quelque chose à compter, `alert` pour ce qui appelle une
+  // action), et `hint` n'est plus affiché sous le libellé — il redisait le
+  // sous-titre du panneau juste en dessous — mais devient l'infobulle et le nom
+  // accessible du bouton.
   const ALL_TABS = [
-    { key: 'trabalho-do-dia', label: t({ id: 'panel.tab.dailyWork' }), hint: t({ id: 'panel.tab.dailyWork.hint' }) },
-    { key: 'acoes', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }) },
-    { key: 'reservas', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
-    { key: 'consultas-locais', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
-    { key: 'emprestimos', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
-    { key: 'leitor', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
-    { key: 'historico', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
+    { key: 'trabalho-do-dia', icon: '🎯', label: t({ id: 'panel.tab.dailyWork' }), hint: t({ id: 'panel.tab.dailyWork.hint' }) },
+    { key: 'acoes', icon: '⚡', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }) },
+    { key: 'reservas', icon: '📌', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
+    { key: 'consultas-locais', icon: '📖', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
+    { key: 'emprestimos', icon: '📚', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
+    { key: 'leitor', icon: '👤', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
+    { key: 'historico', icon: '🕘', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
     ...(isCoordOrAdmin ? [
-      { key: 'contribuicoes', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
+      { key: 'contribuicoes', icon: '🤝', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
     // MULTI P5 (volet staff) : validation des inscriptions (librarian/coordenador).
     ...(isLibrarian ? [
-      { key: 'validacoes', label: `${t({ id: 'panel.tab.validations' })}${pendingValidCount > 0 ? ` (${pendingValidCount})` : ''}`, hint: t({ id: 'panel.tab.validations.hint' }) },
+      { key: 'validacoes', icon: '✅', label: t({ id: 'panel.tab.validations' }), hint: t({ id: 'panel.tab.validations.hint' }), count: pendingValidCount, alert: true },
     ] : []),
     // MOBILE P4 : récolement (inventaire par scan). Staff de terrain uniquement.
     ...(canRecolement ? [
-      { key: 'recolement', label: t({ id: 'panel.tab.recolement' }), hint: t({ id: 'panel.tab.recolement.hint' }) },
+      { key: 'recolement', icon: '🔍', label: t({ id: 'panel.tab.recolement' }), hint: t({ id: 'panel.tab.recolement.hint' }) },
     ] : []),
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
@@ -1797,17 +1804,25 @@ export default function PanelPage() {
       </Hero>
 
       <div className="ab-painel-card">
-        <nav className="ab-painel-tabs" role="tablist">
+        <nav className="ab-tabbar" role="tablist">
           {TABS.map(t => (
             <Fragment key={t.key}>
-              <button className={`ab-painel-tab ${tab === t.key ? 'active' : ''}`}
+              <button className={`ab-tabbar__tab ${tab === t.key ? 'active' : ''}`}
                 data-painel-tab={t.key}
-                onClick={() => setTab(t.key)} role="tab">
+                onClick={() => setTab(t.key)} role="tab" aria-selected={tab === t.key}
+                /* Le hint n'est plus affiché sous le libellé : il devient l'infobulle
+                   et le nom accessible du bouton. */
+                title={t.hint} aria-label={`${t.label} — ${t.hint}`}>
+                <span className="ab-tabbar__icon" aria-hidden="true">{t.icon}</span>
                 {t.label}
-                <span className="ab-painel-tab__hint">{t.hint}</span>
+                {t.count > 0 && (
+                  <span className={`ab-tabbar__badge${t.alert ? ' ab-tabbar__badge--alert' : ''}`}>{t.count}</span>
+                )}
               </button>
-              {/* EA-01 : Trabalho do dia = vue d'ensemble ; le reste = vues de detail */}
-              {t.key === 'trabalho-do-dia' && <span className="ab-painel-tab-divider" aria-hidden="true" />}
+              {/* EA-01 : Trabalho do dia = vue d'ensemble ; le reste = vues de detail.
+                  En barre qui revient à la ligne, un trait vertical n'a plus de sens :
+                  `ab-tabbar__sep` écarte simplement les pastilles suivantes. */}
+              {t.key === 'trabalho-do-dia' && <span className="ab-tabbar__sep" aria-hidden="true" />}
             </Fragment>
           ))}
         </nav>

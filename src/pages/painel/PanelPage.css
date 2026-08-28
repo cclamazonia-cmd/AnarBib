@@ -13,22 +13,12 @@
   box-shadow: var(--brand-shadow); overflow: hidden; margin-bottom: 20px;
 }
 
-/* Tabs */
-/* Paquet 143.1 (17/05/2026) : tabs sur 2 lignes via flex-wrap */
-.ab-painel-tabs {
-  display: flex; flex-wrap: wrap; gap: 0;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-  background: rgba(12,12,12,.5);
-}
-.ab-painel-tab {
-  background: none; border: none; border-bottom: 3px solid transparent;
-  color: var(--brand-muted); padding: 14px 16px; font-size: .88rem;
-  font-weight: 700; cursor: pointer; white-space: nowrap;
-  display: flex; flex-direction: column; gap: 2px; transition: .18s;
-}
-.ab-painel-tab:hover { color: var(--brand-text); }
-.ab-painel-tab.active { color: #fff; border-bottom-color: var(--brand-color-primary); }
-.ab-painel-tab__hint { font-size: .74rem; font-weight: 400; color: var(--brand-muted); }
+/* Tabs — la barre de premier niveau est desormais la barre partagee
+   `.ab-tabbar` (src/styles/tabbar.css) : pastilles compactes sur une seule
+   ligne de texte, qui reviennent a la ligne au lieu de defiler, et grille a
+   deux colonnes sous 640 px. Les anciennes classes `.ab-painel-tab*` (gros
+   boutons a deux lignes, colonne de N boutons sur mobile) sont retirees avec
+   leur balisage. */
 
 .ab-painel-panel { padding: 20px 24px; }
 @media (max-width: 640px) { .ab-painel-panel { padding: 14px; } }
@@ -180,7 +170,8 @@
 .ab-painel-actions-cell { white-space: nowrap; display: flex; gap: 4px; flex-wrap: wrap; }
 
 @media (max-width: 640px) {
-  .ab-painel-tabs { flex-direction: column; }
+  /* (l'ancien `.ab-painel-tabs { flex-direction: column }` est remplace par la
+     grille a 2 colonnes de `.ab-tabbar`, cf. src/styles/tabbar.css) */
   .ab-painel-res-workflow { flex-direction: column; }
   .ab-painel-res-workflow .ab-painel-input { max-width: none; }
 }
@@ -634,24 +625,10 @@
 .ab-painel-field-label { font-size: .85rem; color: var(--brand-muted); }
 .ab-painel-field-hint { font-size: .75rem; color: var(--brand-muted); }
 
-/* ── EA-01 : separation vue d'ensemble / vues de detail ──────────────
-   Trabalho do dia est la porte d'entree (vue d'ensemble) du Painel ;
-   les onglets-objet (Reservas, Consultas, Emprestimos, Leitor...) sont
-   des vues de detail consultees au besoin. Le separateur marque ce statut.
-   Fonctionne en barre horizontale ET en colonne (<=640px). */
-.ab-painel-tab-divider {
-  align-self: stretch;
-  flex: 0 0 auto;
-  width: 1px;
-  background: rgba(255, 255, 255, .14);
-  margin: 8px 4px;
-}
-@media (max-width: 640px) {
-  .ab-painel-tab-divider {
-    width: auto;
-    height: 1px;
-    margin: 4px 14px;
-  }
+/* (l'ancien `.ab-painel-tab-divider`, trait vertical entre « Travail du jour »
+   — la vue d'ensemble — et les onglets de detail, est remplace par
+   `.ab-tabbar__sep` : dans une barre qui revient a la ligne, un trait vertical
+   ne marque plus rien, l'ecart si.) */
 }
 
 /* ── #115 : fallback de chargement des onglets lazy (code-split) ──────
