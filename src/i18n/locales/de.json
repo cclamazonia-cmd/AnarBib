@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "Dieses Los enthält nur noch {count} Entwurf/Entwürfe im Papierkorb. Sie werden zusammen mit dem Los endgültig gelöscht. Fortfahren?",
   "error.import.run_has_drafts": "Dieser Import hat ein Katalogisierungslos erzeugt, das noch Entwürfe enthält. Bearbeite das Los unter Katalogisierung › Lose und lösche dann den Import.",
   "catalogacao.queue.trashShowing": "{shown} von {total} angezeigt",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Papierkorb des Loses „{batch}“ leeren? {count} Entwurf/Entwürfe werden endgültig gelöscht."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Papierkorb des Loses „{batch}“ leeren? {count} Entwurf/Entwürfe werden endgültig gelöscht.",
+  "catalogacao.queue.deletedTitle": "Endgültige Löschungen",
+  "catalogacao.queue.deletedDescription": "Jede Löschung bewahrt 90 Tage lang eine wiederherstellbare Momentaufnahme. Danach bleibt die Spur, die Momentaufnahme nicht.",
+  "catalogacao.queue.deletedEmpty": "Keine endgültige Löschung verzeichnet.",
+  "catalogacao.queue.restoreDeleted": "Wiederherstellen",
+  "catalogacao.queue.restoreDeletedConfirm": "Diesen gelöschten Entwurf wiederherstellen? Er landet wieder im Papierkorb, von dort kannst du ihn zurück in den Entwurf holen.",
+  "catalogacao.queue.restoreDeletedResult": "Entwurf {id} wiederhergestellt.",
+  "error.catalog.restore_not_found": "Dieser Journaleintrag existiert nicht oder ist keine Löschung.",
+  "error.catalog.restore_no_snapshot": "Die Momentaufnahme dieses Entwurfs wurde gelöscht (älter als 90 Tage): die Spur bleibt, wiederherstellbar ist er nicht mehr.",
+  "error.catalog.restore_already": "Dieser Entwurf existiert bereits: er wurde vermutlich zwischenzeitlich wiederhergestellt."
 }

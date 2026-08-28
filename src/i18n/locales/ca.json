@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "Aquest lot només reté {count} esborrany(s) a la paperera. S’eliminaran definitivament juntament amb el lot. Voleu continuar?",
   "error.import.run_has_drafts": "Aquesta importació ha creat un lot de catalogació que encara reté esborranys. Tracta el lot a Catalogació › Lots i després elimina la importació.",
   "catalogacao.queue.trashShowing": "{shown} mostrats de {total}",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Buidar la paperera del lot «{batch}»? {count} esborrany(s) seran eliminats de forma irreversible."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Buidar la paperera del lot «{batch}»? {count} esborrany(s) seran eliminats de forma irreversible.",
+  "catalogacao.queue.deletedTitle": "Eliminacions definitives",
+  "catalogacao.queue.deletedDescription": "Cada eliminació conserva una instantània restaurable durant 90 dies. Després queda el rastre, no la instantània.",
+  "catalogacao.queue.deletedEmpty": "Cap eliminació definitiva registrada.",
+  "catalogacao.queue.restoreDeleted": "Restaura",
+  "catalogacao.queue.restoreDeletedConfirm": "Vols restaurar aquest esborrany eliminat? Tornarà a la paperera, des d’on podràs recuperar-lo com a esborrany.",
+  "catalogacao.queue.restoreDeletedResult": "Esborrany {id} restaurat.",
+  "error.catalog.restore_not_found": "Aquesta entrada del registre no existeix, o no és una eliminació.",
+  "error.catalog.restore_no_snapshot": "La instantània d’aquest esborrany s’ha purgat (més de 90 dies): el rastre queda, però ja no es pot restaurar.",
+  "error.catalog.restore_already": "Aquest esborrany ja existeix: probablement s’ha restaurat mentrestant."
 }

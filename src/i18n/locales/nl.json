@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "Dit lot bevat alleen nog {count} concept(en) in de prullenbak. Ze worden samen met het lot definitief verwijderd. Doorgaan?",
   "error.import.run_has_drafts": "Deze import heeft een catalogiseringslot aangemaakt dat nog concepten bevat. Behandel het lot onder Catalogisering › Loten en verwijder daarna de import.",
   "catalogacao.queue.trashShowing": "{shown} van {total} weergegeven",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Prullenbak van lot “{batch}” legen? {count} concept(en) worden definitief verwijderd."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Prullenbak van lot “{batch}” legen? {count} concept(en) worden definitief verwijderd.",
+  "catalogacao.queue.deletedTitle": "Definitieve verwijderingen",
+  "catalogacao.queue.deletedDescription": "Elke verwijdering bewaart 90 dagen een herstelbare momentopname. Daarna blijft het spoor, de momentopname niet.",
+  "catalogacao.queue.deletedEmpty": "Geen definitieve verwijdering geregistreerd.",
+  "catalogacao.queue.restoreDeleted": "Herstellen",
+  "catalogacao.queue.restoreDeletedConfirm": "Dit verwijderde concept herstellen? Het komt terug in de prullenbak, vanwaar je het weer concept kunt maken.",
+  "catalogacao.queue.restoreDeletedResult": "Concept {id} hersteld.",
+  "error.catalog.restore_not_found": "Deze logregel bestaat niet, of is geen verwijdering.",
+  "error.catalog.restore_no_snapshot": "De momentopname van dit concept is gewist (ouder dan 90 dagen): het spoor blijft, herstellen kan niet meer.",
+  "error.catalog.restore_already": "Dit concept bestaat al: het is waarschijnlijk intussen hersteld."
 }

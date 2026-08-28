@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "Αυτή η παρτίδα κρατά μόνο {count} πρόχειρο(α) στον κάδο. Θα διαγραφούν οριστικά μαζί με την παρτίδα. Συνέχεια;",
   "error.import.run_has_drafts": "Αυτή η εισαγωγή δημιούργησε μια παρτίδα καταλογογράφησης που κρατά ακόμη πρόχειρα. Διαχειρίσου την παρτίδα στο Καταλογογράφηση › Παρτίδες και μετά διάγραψε την εισαγωγή.",
   "catalogacao.queue.trashShowing": "{shown} από {total} εμφανίζονται",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Άδειασμα κάδου της παρτίδας «{batch}»; {count} προσχέδια θα διαγραφούν οριστικά."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Άδειασμα κάδου της παρτίδας «{batch}»; {count} προσχέδια θα διαγραφούν οριστικά.",
+  "catalogacao.queue.deletedTitle": "Οριστικές διαγραφές",
+  "catalogacao.queue.deletedDescription": "Κάθε διαγραφή κρατά ένα επαναφέρσιμο στιγμιότυπο για 90 ημέρες. Μετά μένει το ίχνος, όχι το στιγμιότυπο.",
+  "catalogacao.queue.deletedEmpty": "Καμία οριστική διαγραφή καταγεγραμμένη.",
+  "catalogacao.queue.restoreDeleted": "Επαναφορά",
+  "catalogacao.queue.restoreDeletedConfirm": "Επαναφορά αυτού του διαγραμμένου προχείρου; Θα επιστρέψει στον κάδο, από όπου μπορείς να το ξανακάνεις πρόχειρο.",
+  "catalogacao.queue.restoreDeletedResult": "Το πρόχειρο {id} επαναφέρθηκε.",
+  "error.catalog.restore_not_found": "Αυτή η εγγραφή ημερολογίου δεν υπάρχει, ή δεν είναι διαγραφή.",
+  "error.catalog.restore_no_snapshot": "Το στιγμιότυπο αυτού του προχείρου διαγράφηκε (πάνω από 90 ημέρες): το ίχνος μένει, αλλά δεν επαναφέρεται πια.",
+  "error.catalog.restore_already": "Αυτό το πρόχειρο υπάρχει ήδη: πιθανότατα επαναφέρθηκε στο μεταξύ."
 }

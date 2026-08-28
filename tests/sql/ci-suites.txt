@@ -132,3 +132,11 @@ tests/sql/import_doublons_intra_lot_tests.sql
 # NON-ACTION : le refus ne doit RIEN detruire. T3 tient l'autre moitie de la
 # decision — la corbeille du lot ne bloque pas, sinon on recree l'impasse.
 tests/sql/import_suppression_run_lot_tests.sql
+
+# Une suppression definitive de brouillon se trace et se rejoue (levier 2 de la
+# portee des gestes destructeurs). T2 et T5 sont des tests de NON-ACTION : une
+# mise a la corbeille ne doit PAS remplir le journal de faux positifs, et
+# rejouer deux fois doit etre refuse — sinon un double clic fabrique un doublon
+# a partir de l'instantane. T4 tient la raison d'etre du trigger BEFORE : apres,
+# les enfants en CASCADE n'existent plus.
+tests/sql/catalogage_suppression_tracee_tests.sql

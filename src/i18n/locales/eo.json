@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "Ĉi tiu loto retenas nur {count} malneto(j)n en la rubujo. Ili estos definitive forigitaj kune kun la loto. Ĉu daŭrigi?",
   "error.import.run_has_drafts": "Ĉi tiu importo kreis katalogan loton kiu ankoraŭ retenas malnetojn. Traktu la loton en Katalogado › Lotoj, poste forigu la importon.",
   "catalogacao.queue.trashShowing": "{shown} montritaj el {total}",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Ĉu malplenigi la rubujon de la loto «{batch}»? {count} malneto(j) estos definitive forigita(j)."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Ĉu malplenigi la rubujon de la loto «{batch}»? {count} malneto(j) estos definitive forigita(j).",
+  "catalogacao.queue.deletedTitle": "Definitivaj forigoj",
+  "catalogacao.queue.deletedDescription": "Ĉiu forigo konservas restaŭreblan momentfoton dum 90 tagoj. Poste restas la spuro, ne la momentfoto.",
+  "catalogacao.queue.deletedEmpty": "Neniu definitiva forigo registrita.",
+  "catalogacao.queue.restoreDeleted": "Restaŭri",
+  "catalogacao.queue.restoreDeletedConfirm": "Ĉu restaŭri ĉi tiun forigitan malneton? Ĝi revenos en la rubujon, de kie vi povos remeti ĝin kiel malneton.",
+  "catalogacao.queue.restoreDeletedResult": "Malneto {id} restaŭrita.",
+  "error.catalog.restore_not_found": "Ĉi tiu ĵurnalero ne ekzistas, aŭ ne estas forigo.",
+  "error.catalog.restore_no_snapshot": "La momentfoto de ĉi tiu malneto estis purigita (pli ol 90 tagoj): la spuro restas, sed ĝi ne plu restaŭreblas.",
+  "error.catalog.restore_already": "Ĉi tiu malneto jam ekzistas: ĝi verŝajne estis restaŭrita intertempe."
 }

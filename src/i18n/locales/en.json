@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "This batch only holds {count} draft(s) in the trash. They will be permanently deleted along with the batch. Continue?",
   "error.import.run_has_drafts": "This import created a cataloguing batch that still holds drafts. Deal with the batch under Cataloguing › Batches, then delete the import.",
   "catalogacao.queue.trashShowing": "{shown} shown out of {total}",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Empty the trash for batch “{batch}”? {count} draft(s) will be permanently deleted."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Empty the trash for batch “{batch}”? {count} draft(s) will be permanently deleted.",
+  "catalogacao.queue.deletedTitle": "Permanent deletions",
+  "catalogacao.queue.deletedDescription": "Every deletion keeps a restorable snapshot for 90 days. After that the trace remains, the snapshot does not.",
+  "catalogacao.queue.deletedEmpty": "No permanent deletion recorded.",
+  "catalogacao.queue.restoreDeleted": "Restore",
+  "catalogacao.queue.restoreDeletedConfirm": "Restore this deleted draft? It will come back in the trash, from where you can return it to draft.",
+  "catalogacao.queue.restoreDeletedResult": "Draft {id} restored.",
+  "error.catalog.restore_not_found": "This log entry does not exist, or is not a deletion.",
+  "error.catalog.restore_no_snapshot": "This draft’s snapshot was purged (over 90 days old): the trace remains, but it can no longer be restored.",
+  "error.catalog.restore_already": "This draft already exists: it was probably restored in the meantime."
 }

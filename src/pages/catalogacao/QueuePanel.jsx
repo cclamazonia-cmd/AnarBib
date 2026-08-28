@@ -134,6 +134,11 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // en montrait 100 sans le dire — l'ecart se lit comme une incoherence.
   const [trashTotal, setTrashTotal] = useState(0);
   const [trashBatch, setTrashBatch] = useState('');
+  // Journal des suppressions DEFINITIVES, et leur rejeu. Sans cet ecran, la
+  // RPC de restauration serait un chemin que personne n'emprunte — donc un
+  // chemin dont on ne saurait pas qu'il est casse.
+  const [deleted, setDeleted] = useState([]);
+  const [deletedLoading, setDeletedLoading] = useState(false);
 
   // ── Load active queue ───────────────────────────────────
   const loadQueue = useCallback(async () => {
@@ -232,6 +237,23 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   }, [t, trashBatch]);
 
   useEffect(() => { loadTrash(); }, [loadTrash]);
+
+  // ── Load deletion log ───────────────────────────────────
+  const loadDeleted = useCallback(async () => {
+    setDeletedLoading(true);
+    try {
+      const { data } = await supabase.from('catalog_audit_log')
+        .select('id, occurred_at, entity_type, entity_id, label, details')
+        .eq('action', 'delete')
+        .order('occurred_at', { ascending: false })
+        .limit(50);
+      // Une entree dont l'instantane a ete purge (90 jours) reste une trace,
+      // mais elle n'est plus rejouable : on la montre sans bouton.
+      setDeleted(data || []);
+    } catch { setDeleted([]); } finally { setDeletedLoading(false); }
+  }, []);
+
+  useEffect(() => { loadDeleted(); }, [loadDeleted]);
 
   // ── Selection helpers ───────────────────────────────────
   function toggleSelect(key) { setSelected(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; }); }
@@ -402,6 +424,20 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     setMsg({ text: t({ id: 'catalogacao.queue.emptyTrashResult' }, { count: total - reste }), kind: 'ok' });
     await loadTrash();
     onChanged?.();
+  }
+
+  async function restoreDeleted(auditId) {
+    if (!confirm(t({ id: 'catalogacao.queue.restoreDeletedConfirm' }))) return;
+    try {
+      const { data, error } = await supabase.rpc('fn_restore_deleted_draft', { p_audit_id: auditId });
+      if (error) throw error;
+      setMsg({ text: t({ id: 'catalogacao.queue.restoreDeletedResult' }, { id: data?.draft_id ?? auditId }), kind: 'ok' });
+      await loadTrash(); await loadDeleted(); await loadQueue();
+      onChanged?.();
+    } catch (err) {
+      setMsg({ text: localizeError(err, t), kind: 'error' });
+      await loadDeleted();
+    }
   }
 
   // ── Render ──────────────────────────────────────────────
@@ -680,6 +716,46 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
         <div style={{ fontSize: '.7rem', color: '#ffe0e0', marginTop: 8 }}>
           {t({ id: 'catalogacao.queue.trashWarning' })}
         </div>
+
+        {/* Journal des suppressions definitives — la contrepartie du bouton
+            rouge : ce qu'il a emporte, et de quoi le rejouer. */}
+        <details style={{ marginTop: 12 }}>
+          <summary style={{ cursor: 'pointer', fontSize: '.82rem', color: 'var(--brand-muted, #aaa)' }}>
+            {t({ id: 'catalogacao.queue.deletedTitle' })}{deleted.length ? ` (${deleted.length})` : ''}
+          </summary>
+          <div style={{ fontSize: '.72rem', color: 'var(--brand-muted, #999)', margin: '6px 0 8px' }}>
+            {t({ id: 'catalogacao.queue.deletedDescription' })}
+          </div>
+          {deletedLoading && <div style={{ fontSize: '.8rem', padding: 6 }}>…</div>}
+          {!deletedLoading && deleted.length === 0 && (
+            <div style={{ fontSize: '.82rem', color: 'var(--brand-muted, #888)', padding: 8 }}>
+              {t({ id: 'catalogacao.queue.deletedEmpty' })}
+            </div>
+          )}
+          {deleted.map(it => (
+            <div key={it.id} style={{
+              display: 'flex', alignItems: 'center', gap: 8, padding: '5px 6px',
+              borderBottom: '1px solid rgba(255,255,255,.06)', fontSize: '.8rem',
+            }}>
+              <span className="cat-pill" style={{ flexShrink: 0 }}>{t({ id: TYPE_KEYS[it.entity_type] || 'catalogacao.type.book' })}</span>
+              <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {it.label || `#${it.entity_id}`}
+                {it.details?.batch_id && (
+                  <span style={{ color: 'var(--brand-muted, #888)' }}> · {t({ id: 'catalogacao.queue.batchPrefix' }, { id: it.details.batch_id })}</span>
+                )}
+              </span>
+              <span style={{ color: 'var(--brand-muted, #888)', flexShrink: 0 }}>{formatDate(it.occurred_at)}</span>
+              {it.details?.snapshot ? (
+                <button type="button" className="ab-button ab-button--secondary ab-button--sm" style={{ flexShrink: 0 }}
+                  onClick={() => restoreDeleted(it.id)}>
+                  {t({ id: 'catalogacao.queue.restoreDeleted' })}
+                </button>
+              ) : (
+                <span style={{ color: 'var(--brand-muted, #666)', flexShrink: 0, fontSize: '.72rem' }}>—</span>
+              )}
+            </div>
+          ))}
+        </details>
       </div>
 
       {dupItem && (

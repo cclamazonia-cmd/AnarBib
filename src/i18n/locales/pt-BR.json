@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "Este lote só contém mais {count} rascunho(s) na lixeira. Eles serão excluídos definitivamente junto com o lote. Continuar?",
   "error.import.run_has_drafts": "Esta importação criou um lote de catalogação que ainda retém rascunhos. Trate o lote em Catalogação › Lotes e depois exclua a importação.",
   "catalogacao.queue.trashShowing": "{shown} exibidos de {total}",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Esvaziar a lixeira do lote “{batch}”? {count} rascunho(s) serão apagados de forma irreversível."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Esvaziar a lixeira do lote “{batch}”? {count} rascunho(s) serão apagados de forma irreversível.",
+  "catalogacao.queue.deletedTitle": "Exclusões definitivas",
+  "catalogacao.queue.deletedDescription": "Cada exclusão guarda um instantâneo restaurável por 90 dias. Depois disso, o registo permanece, o instantâneo não.",
+  "catalogacao.queue.deletedEmpty": "Nenhuma exclusão definitiva registada.",
+  "catalogacao.queue.restoreDeleted": "Restaurar",
+  "catalogacao.queue.restoreDeletedConfirm": "Restaurar este rascunho excluído? Ele voltará para a lixeira, de onde podes devolvê-lo a rascunho.",
+  "catalogacao.queue.restoreDeletedResult": "Rascunho {id} restaurado.",
+  "error.catalog.restore_not_found": "Esta entrada de registo não existe, ou não é uma exclusão.",
+  "error.catalog.restore_no_snapshot": "O instantâneo deste rascunho foi purgado (mais de 90 dias): o registo permanece, mas já não é restaurável.",
+  "error.catalog.restore_already": "Este rascunho já existe: provavelmente foi restaurado entretanto."
 }

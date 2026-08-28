@@ -6154,5 +6154,14 @@
   "catalogacao.batchTrashedWillBeDeleted": "Questo lotto trattiene solo {count} bozza/e nel cestino. Saranno eliminate definitivamente insieme al lotto. Continuare?",
   "error.import.run_has_drafts": "Questa importazione ha creato un lotto di catalogazione che trattiene ancora delle bozze. Tratta il lotto in Catalogazione › Lotti, poi elimina l’importazione.",
   "catalogacao.queue.trashShowing": "{shown} mostrati su {total}",
-  "catalogacao.queue.emptyTrashBatchConfirm": "Svuotare il cestino del lotto «{batch}»? {count} bozza/e verranno eliminate in modo irreversibile."
+  "catalogacao.queue.emptyTrashBatchConfirm": "Svuotare il cestino del lotto «{batch}»? {count} bozza/e verranno eliminate in modo irreversibile.",
+  "catalogacao.queue.deletedTitle": "Eliminazioni definitive",
+  "catalogacao.queue.deletedDescription": "Ogni eliminazione conserva un’istantanea ripristinabile per 90 giorni. Dopo resta la traccia, non l’istantanea.",
+  "catalogacao.queue.deletedEmpty": "Nessuna eliminazione definitiva registrata.",
+  "catalogacao.queue.restoreDeleted": "Ripristina",
+  "catalogacao.queue.restoreDeletedConfirm": "Ripristinare questa bozza eliminata? Tornerà nel cestino, da dove potrai rimetterla in bozza.",
+  "catalogacao.queue.restoreDeletedResult": "Bozza {id} ripristinata.",
+  "error.catalog.restore_not_found": "Questa voce di registro non esiste, o non è un’eliminazione.",
+  "error.catalog.restore_no_snapshot": "L’istantanea di questa bozza è stata eliminata (oltre 90 giorni): la traccia resta, ma non è più ripristinabile.",
+  "error.catalog.restore_already": "Questa bozza esiste già: probabilmente è stata ripristinata nel frattempo."
 }
