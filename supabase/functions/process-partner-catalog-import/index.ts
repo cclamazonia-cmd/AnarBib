@@ -34,7 +34,28 @@ function splitSemiStructuredList(value) {
 }
 function splitAuthors(authorValue) {
   if (!authorValue) return [];
-  return authorValue.split(/\s*;\s*|\s+\|\s+|\s+\band\b\s+|\s+\be\b\s+|,\s+(?=[A-ZÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ][^,]{1,})/i).map((s)=>s.trim()).filter(Boolean);
+  // La derniere alternative ne doit couper QUE sur une virgule suivie d’une
+  // MAJUSCULE : c’est ce qui distingue une liste d’auteurs (« Dupont, Martin »)
+  // d’une virgule interne a un seul nom. Or le drapeau /i qui fermait cette
+  // expression rendait la classe [A-ZÁÀ…] insensible a la casse : la garde ne
+  // gardait RIEN, et toute virgule coupait.
+  //
+  // Degats constates sur le lot Solidaires (1674 notices, run 18 du 27/08/2026) :
+  // le collectif « Marches europeennes contre le chomage, la precarite et les
+  // exclusions » scinde en deux fragments dont un commencant par « la », et
+  // « Myrtille, gimenologue » — une apposition — promue au rang de second auteur.
+  //
+  // Le drapeau est donc retire, et les deux conjonctions qui avaient besoin de
+  // l’insensibilite a la casse la portent desormais elles-memes. Mesure avant/apres
+  // sur le meme lot : 5 lignes changent, toutes des reparations ; les 14 decoupages
+  // de co-auteurs legitimes sont conserves a l’identique.
+  //
+  // NE PAS ajouter « et » comme separateur. En francais il joint aussi bien deux
+  // prenoms partageant un nom (« Andre et Dori Prudhomeaux », « Bella et Roger
+  // Belbeoch ») que les mots d’un nom collectif (« Informations et Correspondances
+  // Ouvrieres », « Groupe de recherche et d’information sur la paix »). Sur ce lot,
+  // l’ajouter casserait 8 lignes pour en reparer 2 — mesure faite, pas supposee.
+  return authorValue.split(/\s*;\s*|\s+\|\s+|\s+[aA][nN][dD]\s+|\s+[eE]\s+|,\s+(?=[A-ZÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇ][^,]{1,})/).map((s)=>s.trim()).filter(Boolean);
 }
 function publicationYearText(value) {
   if (!value) return null;
