@@ -2477,7 +2477,7 @@
   "catalogacao.queue.discardResult": "{count} Entwurf/Entwürfe verworfen.",
   "catalogacao.queue.empty": "Keine aktiven Entwürfe in diesem Filter.",
   "catalogacao.queue.emptyTrash": "Papierkorb leeren",
-  "catalogacao.queue.emptyTrashConfirm": "Papierkorb leeren? {count} Entwurf/Entwürfe werden endgültig gelöscht.",
+  "catalogacao.queue.emptyTrashConfirm": "Den GESAMTEN Papierkorb leeren? {count} Entwurf/Entwürfe aus allen Losen und allen Bibliotheken werden endgültig gelöscht. Um nur eines zu treffen, wähle ein Los in der Liste neben der Schaltfläche.",
   "catalogacao.queue.emptyTrashResult": "{count} Entwurf/Entwürfe endgültig gelöscht.",
   "catalogacao.queue.filters": "Filter",
   "catalogacao.queue.layerLabel": "Ebene",
@@ -6153,5 +6153,6 @@
   "catalogacao.batch.status.closed": "Geschlossen",
   "catalogacao.batchTrashedWillBeDeleted": "Dieses Los enthält nur noch {count} Entwurf/Entwürfe im Papierkorb. Sie werden zusammen mit dem Los endgültig gelöscht. Fortfahren?",
   "error.import.run_has_drafts": "Dieser Import hat ein Katalogisierungslos erzeugt, das noch Entwürfe enthält. Bearbeite das Los unter Katalogisierung › Lose und lösche dann den Import.",
-  "catalogacao.queue.trashShowing": "{shown} von {total} angezeigt"
+  "catalogacao.queue.trashShowing": "{shown} von {total} angezeigt",
+  "catalogacao.queue.emptyTrashBatchConfirm": "Papierkorb des Loses „{batch}“ leeren? {count} Entwurf/Entwürfe werden endgültig gelöscht."
 }

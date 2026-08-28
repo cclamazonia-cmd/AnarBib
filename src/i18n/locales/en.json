@@ -2477,7 +2477,7 @@
   "catalogacao.queue.discardResult": "{count} draft(s) discarded.",
   "catalogacao.queue.empty": "No active drafts in this filter.",
   "catalogacao.queue.emptyTrash": "Empty trash",
-  "catalogacao.queue.emptyTrashConfirm": "Empty the trash? {count} draft(s) will be permanently deleted.",
+  "catalogacao.queue.emptyTrashConfirm": "Empty the WHOLE trash? {count} draft(s) from every batch and every library will be permanently deleted. To target just one, pick a batch from the list next to the button.",
   "catalogacao.queue.emptyTrashResult": "{count} draft(s) permanently deleted.",
   "catalogacao.queue.filters": "Filters",
   "catalogacao.queue.layerLabel": "Layer",
@@ -6153,5 +6153,6 @@
   "catalogacao.batch.status.closed": "Closed",
   "catalogacao.batchTrashedWillBeDeleted": "This batch only holds {count} draft(s) in the trash. They will be permanently deleted along with the batch. Continue?",
   "error.import.run_has_drafts": "This import created a cataloguing batch that still holds drafts. Deal with the batch under Cataloguing › Batches, then delete the import.",
-  "catalogacao.queue.trashShowing": "{shown} shown out of {total}"
+  "catalogacao.queue.trashShowing": "{shown} shown out of {total}",
+  "catalogacao.queue.emptyTrashBatchConfirm": "Empty the trash for batch “{batch}”? {count} draft(s) will be permanently deleted."
 }

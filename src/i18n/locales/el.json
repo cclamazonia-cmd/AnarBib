@@ -2477,7 +2477,7 @@
   "catalogacao.queue.discardResult": "{count} προσχέδια απορρίφθηκαν.",
   "catalogacao.queue.empty": "Κανένα ενεργό προσχέδιο σε αυτό το φίλτρο.",
   "catalogacao.queue.emptyTrash": "Άδειασμα κάδου",
-  "catalogacao.queue.emptyTrashConfirm": "Άδειασμα κάδου; {count} προσχέδια θα διαγραφούν οριστικά.",
+  "catalogacao.queue.emptyTrashConfirm": "Άδειασμα ΟΛΟΚΛΗΡΟΥ του κάδου; {count} προσχέδια από όλες τις παρτίδες και όλες τις βιβλιοθήκες θα διαγραφούν οριστικά. Για να στοχεύσεις μία μόνο, διάλεξε παρτίδα από τη λίστα δίπλα στο κουμπί.",
   "catalogacao.queue.emptyTrashResult": "{count} προσχέδια διαγράφηκαν οριστικά.",
   "catalogacao.queue.filters": "Φίλτρα",
   "catalogacao.queue.layerLabel": "Επίπεδο",
@@ -6153,5 +6153,6 @@
   "catalogacao.batch.status.closed": "Κλειστό",
   "catalogacao.batchTrashedWillBeDeleted": "Αυτή η παρτίδα κρατά μόνο {count} πρόχειρο(α) στον κάδο. Θα διαγραφούν οριστικά μαζί με την παρτίδα. Συνέχεια;",
   "error.import.run_has_drafts": "Αυτή η εισαγωγή δημιούργησε μια παρτίδα καταλογογράφησης που κρατά ακόμη πρόχειρα. Διαχειρίσου την παρτίδα στο Καταλογογράφηση › Παρτίδες και μετά διάγραψε την εισαγωγή.",
-  "catalogacao.queue.trashShowing": "{shown} από {total} εμφανίζονται"
+  "catalogacao.queue.trashShowing": "{shown} από {total} εμφανίζονται",
+  "catalogacao.queue.emptyTrashBatchConfirm": "Άδειασμα κάδου της παρτίδας «{batch}»; {count} προσχέδια θα διαγραφούν οριστικά."
 }

@@ -17,6 +17,21 @@ const PAGE_SIZE = 100;
 const TABLE_FOR = { book: 'book_drafts', author: 'author_drafts', exemplar: 'exemplar_drafts' };
 const ID_CHUNK = 200;
 
+// Portee d'un geste de corbeille : '' = toute la corbeille (donc tout le
+// reseau, la corbeille n'etant cloisonnee ni par lot ni par bibliotheque),
+// 'none' = les brouillons sans lot, sinon l'id d'un lot. Meme vocabulaire que
+// le filtre de la file au-dessus, pour que les deux se lisent pareil.
+//
+// Ce qui est repare ici n'est pas un droit mais une PORTEE : « Vider la
+// corbeille » atteignait 259 brouillons de 5 bibliotheques la ou on voulait
+// nettoyer un seul lot (28/08/2026). Le bouton porte desormais exactement sur
+// ce que la liste affiche, et la confirmation nomme cette portee.
+function scopeToBatch(q, batch) {
+  if (batch === 'none') return q.is('batch_id', null);
+  if (batch) return q.eq('batch_id', Number(batch));
+  return q;
+}
+
 function chunkIds(ids, size = ID_CHUNK) {
   const out = [];
   for (let i = 0; i < ids.length; i += size) out.push(ids.slice(i, i + size));
@@ -118,6 +133,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // affiche : sans ce compte, le pop-up de vidage annoncait 259 et la liste
   // en montrait 100 sans le dire — l'ecart se lit comme une incoherence.
   const [trashTotal, setTrashTotal] = useState(0);
+  const [trashBatch, setTrashBatch] = useState('');
 
   // ── Load active queue ───────────────────────────────────
   const loadQueue = useCallback(async () => {
@@ -203,17 +219,17 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     setTrashLoading(true); setTrashSelected(new Set());
     try {
       const all = [];
-      const { data: bk } = await supabase.from('book_drafts').select('id, titulo, autor, status, updated_at').eq('status', 'cancelled').order('updated_at', { ascending: false }).limit(100);
+      const { data: bk } = await scopeToBatch(supabase.from('book_drafts').select('id, titulo, autor, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (bk || []).forEach(d => all.push({ ...d, _type: 'book', _label: d.titulo || t({ id: 'catalogacao.queue.noTitle' }), _sub: d.autor || '' }));
-      const { data: au } = await supabase.from('author_drafts').select('id, preferred_name, status, updated_at').eq('status', 'cancelled').order('updated_at', { ascending: false }).limit(100);
+      const { data: au } = await scopeToBatch(supabase.from('author_drafts').select('id, preferred_name, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (au || []).forEach(d => all.push({ ...d, _type: 'author', _label: d.preferred_name || t({ id: 'catalogacao.queue.noName' }), _sub: '' }));
-      const { data: ex } = await supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, updated_at').eq('status', 'cancelled').order('updated_at', { ascending: false }).limit(100);
+      const { data: ex } = await scopeToBatch(supabase.from('exemplar_drafts').select('id, tombo, target_bib_ref, status, updated_at').eq('status', 'cancelled'), trashBatch).order('updated_at', { ascending: false }).limit(100);
       (ex || []).forEach(d => all.push({ ...d, _type: 'exemplar', _label: d.tombo || d.target_bib_ref || t({ id: 'catalogacao.queue.noTombo' }), _sub: '' }));
       all.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
       setTrash(all);
       setTrashTotal(await countTrash());
     } catch {} finally { setTrashLoading(false); }
-  }, [t]);
+  }, [t, trashBatch]);
 
   useEffect(() => { loadTrash(); }, [loadTrash]);
 
@@ -275,7 +291,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // qu'une tranche, en laissant croire que le reste a resiste.
   async function countTrash() {
     const rs = await Promise.all(Object.values(TABLE_FOR).map(tb =>
-      supabase.from(tb).select('id', { count: 'exact', head: true }).eq('status', 'cancelled')));
+      scopeToBatch(supabase.from(tb).select('id', { count: 'exact', head: true }).eq('status', 'cancelled'), trashBatch)));
     return rs.reduce((s, r) => s + (r.count || 0), 0);
   }
 
@@ -366,10 +382,18 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     // compte de cette tranche, et laissait le reste — ce qui se lit comme un echec.
     const total = await countTrash();
     if (!total) return;
-    if (!confirm(t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: total }))) return;
+    // Une corbeille non filtree porte sur tout le reseau : le dire, plutot que
+    // de poser la meme question anodine dans les deux cas.
+    const lot = trashBatch === 'none'
+      ? t({ id: 'catalogacao.queue.noBatch' })
+      : (batches.find(b => String(b.id) === String(trashBatch))?.name || trashBatch);
+    const question = trashBatch
+      ? t({ id: 'catalogacao.queue.emptyTrashBatchConfirm' }, { count: total, batch: lot })
+      : t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: total });
+    if (!confirm(question)) return;
     setMsg({ text: '', kind: '' });
     for (const table of Object.values(TABLE_FOR)) {
-      const { error } = await supabase.from(table).delete().eq('status', 'cancelled');
+      const { error } = await scopeToBatch(supabase.from(table).delete().eq('status', 'cancelled'), trashBatch);
       if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); break; }
     }
     // Le compte annonce est ce que la base a REELLEMENT perdu, pas ce qu'on
@@ -599,7 +623,16 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
               )}
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+            {/* Le selecteur est colle au bouton rouge : on ne peut pas vider sans
+                avoir la portee sous les yeux. */}
+            <select value={trashBatch} onChange={e => setTrashBatch(e.target.value)}
+              title={t({ id: 'catalogacao.queue.batchLabel' })}
+              style={{ ...fs, width: 'auto', maxWidth: 220, fontSize: '.78rem', padding: '4px 8px' }}>
+              <option value="">{t({ id: 'catalogacao.queue.allBatches' })}</option>
+              <option value="none">{t({ id: 'catalogacao.queue.noBatch' })}</option>
+              {batches.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+            </select>
             <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadTrash} disabled={trashLoading}>
               {trashLoading ? '…' : t({ id: 'catalogacao.queue.refreshShort' })}
             </button>

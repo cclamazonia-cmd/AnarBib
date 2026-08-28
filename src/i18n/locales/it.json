@@ -2477,7 +2477,7 @@
   "catalogacao.queue.discardResult": "{count} bozza/e scartata/e.",
   "catalogacao.queue.empty": "Nessuna bozza attiva in questo filtro.",
   "catalogacao.queue.emptyTrash": "Svuota cestino",
-  "catalogacao.queue.emptyTrashConfirm": "Svuotare il cestino? {count} bozza/e verranno eliminate in modo irreversibile.",
+  "catalogacao.queue.emptyTrashConfirm": "Svuotare TUTTO il cestino? {count} bozza/e di tutti i lotti e di tutte le biblioteche verranno eliminate in modo irreversibile. Per limitarti a uno, scegli un lotto nell’elenco accanto al pulsante.",
   "catalogacao.queue.emptyTrashResult": "{count} bozza/e eliminata/e definitivamente.",
   "catalogacao.queue.filters": "Filtri",
   "catalogacao.queue.layerLabel": "Livello",
@@ -6153,5 +6153,6 @@
   "catalogacao.batch.status.closed": "Chiuso",
   "catalogacao.batchTrashedWillBeDeleted": "Questo lotto trattiene solo {count} bozza/e nel cestino. Saranno eliminate definitivamente insieme al lotto. Continuare?",
   "error.import.run_has_drafts": "Questa importazione ha creato un lotto di catalogazione che trattiene ancora delle bozze. Tratta il lotto in Catalogazione › Lotti, poi elimina l’importazione.",
-  "catalogacao.queue.trashShowing": "{shown} mostrati su {total}"
+  "catalogacao.queue.trashShowing": "{shown} mostrati su {total}",
+  "catalogacao.queue.emptyTrashBatchConfirm": "Svuotare il cestino del lotto «{batch}»? {count} bozza/e verranno eliminate in modo irreversibile."
 }

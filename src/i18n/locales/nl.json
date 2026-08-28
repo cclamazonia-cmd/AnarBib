@@ -2477,7 +2477,7 @@
   "catalogacao.queue.discardResult": "{count} concept(en) verwijderd.",
   "catalogacao.queue.empty": "Geen actieve concepten in dit filter.",
   "catalogacao.queue.emptyTrash": "Prullenbak legen",
-  "catalogacao.queue.emptyTrashConfirm": "Prullenbak legen? {count} concept(en) worden definitief verwijderd.",
+  "catalogacao.queue.emptyTrashConfirm": "De HELE prullenbak legen? {count} concept(en) uit alle loten en alle bibliotheken worden definitief verwijderd. Kies een lot in de lijst naast de knop om er maar één te treffen.",
   "catalogacao.queue.emptyTrashResult": "{count} concept(en) definitief verwijderd.",
   "catalogacao.queue.filters": "Filters",
   "catalogacao.queue.layerLabel": "Laag",
@@ -6153,5 +6153,6 @@
   "catalogacao.batch.status.closed": "Gesloten",
   "catalogacao.batchTrashedWillBeDeleted": "Dit lot bevat alleen nog {count} concept(en) in de prullenbak. Ze worden samen met het lot definitief verwijderd. Doorgaan?",
   "error.import.run_has_drafts": "Deze import heeft een catalogiseringslot aangemaakt dat nog concepten bevat. Behandel het lot onder Catalogisering › Loten en verwijder daarna de import.",
-  "catalogacao.queue.trashShowing": "{shown} van {total} weergegeven"
+  "catalogacao.queue.trashShowing": "{shown} van {total} weergegeven",
+  "catalogacao.queue.emptyTrashBatchConfirm": "Prullenbak van lot “{batch}” legen? {count} concept(en) worden definitief verwijderd."
 }

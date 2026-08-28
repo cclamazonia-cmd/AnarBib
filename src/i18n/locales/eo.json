@@ -2477,7 +2477,7 @@
   "catalogacao.queue.discardResult": "{count} malneto(j) foriĝita(j).",
   "catalogacao.queue.empty": "Neniu aktiva malneto en ĉi tiu filtrilo.",
   "catalogacao.queue.emptyTrash": "Malplenigi la rubujon",
-  "catalogacao.queue.emptyTrashConfirm": "Ĉu malplenigi la rubujon? {count} malneto(j) estos definitive forigita(j).",
+  "catalogacao.queue.emptyTrashConfirm": "Ĉu malplenigi la TUTAN rubujon? {count} malneto(j) el ĉiuj lotoj kaj ĉiuj bibliotekoj estos definitive forigita(j). Por celi nur unu, elektu loton en la listo apud la butono.",
   "catalogacao.queue.emptyTrashResult": "{count} malneto(j) definitive forigita(j).",
   "catalogacao.queue.filters": "Filtriloj",
   "catalogacao.queue.layerLabel": "Tavolo",
@@ -6153,5 +6153,6 @@
   "catalogacao.batch.status.closed": "Fermita",
   "catalogacao.batchTrashedWillBeDeleted": "Ĉi tiu loto retenas nur {count} malneto(j)n en la rubujo. Ili estos definitive forigitaj kune kun la loto. Ĉu daŭrigi?",
   "error.import.run_has_drafts": "Ĉi tiu importo kreis katalogan loton kiu ankoraŭ retenas malnetojn. Traktu la loton en Katalogado › Lotoj, poste forigu la importon.",
-  "catalogacao.queue.trashShowing": "{shown} montritaj el {total}"
+  "catalogacao.queue.trashShowing": "{shown} montritaj el {total}",
+  "catalogacao.queue.emptyTrashBatchConfirm": "Ĉu malplenigi la rubujon de la loto «{batch}»? {count} malneto(j) estos definitive forigita(j)."
 }

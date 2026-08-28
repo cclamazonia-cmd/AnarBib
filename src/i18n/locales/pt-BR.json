@@ -2477,7 +2477,7 @@
   "catalogacao.queue.discardResult": "{count} rascunho(s) descartado(s).",
   "catalogacao.queue.empty": "Nenhum rascunho ativo neste recorte.",
   "catalogacao.queue.emptyTrash": "Esvaziar lixeira",
-  "catalogacao.queue.emptyTrashConfirm": "Esvaziar a lixeira? {count} rascunho(s) serão apagados de forma irreversível.",
+  "catalogacao.queue.emptyTrashConfirm": "Esvaziar TODA a lixeira? {count} rascunho(s) de todos os lotes e de todas as bibliotecas serão apagados de forma irreversível. Para visar apenas um, escolhe um lote na lista ao lado do botão.",
   "catalogacao.queue.emptyTrashResult": "{count} rascunho(s) apagado(s) definitivamente.",
   "catalogacao.queue.filters": "Filtros",
   "catalogacao.queue.layerLabel": "Camada",
@@ -6153,5 +6153,6 @@
   "catalogacao.batch.status.closed": "Fechado",
   "catalogacao.batchTrashedWillBeDeleted": "Este lote só contém mais {count} rascunho(s) na lixeira. Eles serão excluídos definitivamente junto com o lote. Continuar?",
   "error.import.run_has_drafts": "Esta importação criou um lote de catalogação que ainda retém rascunhos. Trate o lote em Catalogação › Lotes e depois exclua a importação.",
-  "catalogacao.queue.trashShowing": "{shown} exibidos de {total}"
+  "catalogacao.queue.trashShowing": "{shown} exibidos de {total}",
+  "catalogacao.queue.emptyTrashBatchConfirm": "Esvaziar a lixeira do lote “{batch}”? {count} rascunho(s) serão apagados de forma irreversível."
 }
