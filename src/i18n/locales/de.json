@@ -6150,5 +6150,6 @@
   "rede.gazeta.notComposed": "Noch nicht gesetzt",
   "rede.gazeta.notComposedHint": "Diese Ausgabe wurde noch nicht gesetzt: die Kette übernimmt sie am 15. Bis dahin lässt sich nur ihre Herstellungsweise wählen.",
   "error.oai.sourceDisabled": "Diese Quelle ist für den Import deaktiviert. Bitte eine Netzwerk-Admin um die Reaktivierung.",
-  "catalogacao.batch.status.closed": "Geschlossen"
+  "catalogacao.batch.status.closed": "Geschlossen",
+  "catalogacao.batchTrashedWillBeDeleted": "Dieses Los enthält nur noch {count} Entwurf/Entwürfe im Papierkorb. Sie werden zusammen mit dem Los endgültig gelöscht. Fortfahren?"
 }

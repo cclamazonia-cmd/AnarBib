@@ -8,6 +8,39 @@ import DuplicateCompareModal from './DuplicateCompareModal';
 const TYPE_KEYS = { book: 'catalogacao.type.book', author: 'catalogacao.type.author', exemplar: 'catalogacao.type.exemplar' };
 const STATUS_KEYS = { draft: 'catalogacao.status.draft', ready: 'catalogacao.status.ready', published: 'catalogacao.status.published', cancelled: 'catalogacao.status.cancelled' };
 const PAGE_SIZE = 100;
+
+// Les gestes de masse passaient UNE requete PAR LIGNE : jeter 300 brouillons,
+// c'etait 300 allers-retours, et la vue ne se reconciliait qu'a la toute fin
+// (d'ou l'impression tenace qu'il faut recharger la page plusieurs fois).
+// PostgREST accepte un filtre `in` sur une liste d'ids : une requete par
+// paquet suffit.
+const TABLE_FOR = { book: 'book_drafts', author: 'author_drafts', exemplar: 'exemplar_drafts' };
+const ID_CHUNK = 200;
+
+function chunkIds(ids, size = ID_CHUNK) {
+  const out = [];
+  for (let i = 0; i < ids.length; i += size) out.push(ids.slice(i, i + size));
+  return out;
+}
+
+// Rend le nombre de lignes REELLEMENT traitees : un paquet en echec ne compte
+// pas, la ou le `catch {}` par ligne des boucles d'origine incrementait quand
+// meme et pouvait annoncer « 300 traites » sans que rien ne bouge.
+async function bulkByType(sel, run) {
+  const byType = new Map();
+  for (const { type, id } of sel) {
+    if (!byType.has(type)) byType.set(type, []);
+    byType.get(type).push(id);
+  }
+  let ok = 0;
+  for (const [type, ids] of byType) {
+    for (const part of chunkIds(ids)) {
+      const { error } = await run(TABLE_FOR[type], part);
+      if (!error) ok += part.length;
+    }
+  }
+  return ok;
+}
 // Colonnes physiques présentes dans les 3 tables brouillon → triables côté serveur.
 const SERVER_SORT_COLS = ['updated_at', 'last_opened_at', 'status'];
 // Largeurs de colonnes partagées entre l'en-tête cliquable et les lignes (alignement).
@@ -230,7 +263,16 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   function getSelectedItems() { return [...selected].map(k => { const [t, id] = k.split(':'); return { type: t, id: Number(id) }; }); }
   function getTrashSelectedItems() { return [...trashSelected].map(k => { const [t, id] = k.split(':'); return { type: t, id: Number(id) }; }); }
 
-  function tableFor(type) { return type === 'book' ? 'book_drafts' : type === 'author' ? 'author_drafts' : 'exemplar_drafts'; }
+  function tableFor(type) { return TABLE_FOR[type]; }
+
+  // Compte reel de la corbeille, toutes tables. La LISTE affichee est plafonnee
+  // a 100 par type : s'appuyer sur elle pour compter ou pour vider ne traite
+  // qu'une tranche, en laissant croire que le reste a resiste.
+  async function countTrash() {
+    const rs = await Promise.all(Object.values(TABLE_FOR).map(tb =>
+      supabase.from(tb).select('id', { count: 'exact', head: true }).eq('status', 'cancelled')));
+    return rs.reduce((s, r) => s + (r.count || 0), 0);
+  }
 
   // ── Batch actions ───────────────────────────────────────
   async function publishSelected() {
@@ -265,13 +307,8 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
     if (!confirm(t({ id: 'catalogacao.queue.discardConfirm' }, { count: sel.length }))) return;
     setMsg({ text: '', kind: '' });
-    let ok = 0;
-    for (const { type, id } of sel) {
-      try {
-        await supabase.from(tableFor(type)).update({ status: 'cancelled' }).eq('id', id);
-        ok++;
-      } catch {}
-    }
+    const ok = await bulkByType(sel, (table, ids) =>
+      supabase.from(table).update({ status: 'cancelled' }).in('id', ids));
     setMsg({ text: t({ id: 'catalogacao.queue.discardResult' }, { count: ok }), kind: 'ok' });
     await loadQueue(); await loadTrash();
     onChanged?.();
@@ -280,34 +317,30 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   async function markSelectedReady() {
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
-    let ok = 0;
-    for (const { type, id } of sel) {
-      try { await supabase.from(tableFor(type)).update({ status: 'ready' }).eq('id', id); ok++; } catch {}
-    }
+    const ok = await bulkByType(sel, (table, ids) =>
+      supabase.from(table).update({ status: 'ready' }).in('id', ids));
     setMsg({ text: t({ id: 'catalogacao.queue.markedReadyResult' }, { count: ok }), kind: 'ok' });
     await loadQueue();
+    onChanged?.();
   }
 
   async function assignBatchToSelected(batchId) {
     if (!batchId) return;
     const sel = getSelectedItems();
     if (!sel.length) { setMsg({ text: t({ id: 'catalogacao.queue.selectAtLeast' }), kind: 'error' }); return; }
-    let ok = 0;
-    for (const { type, id } of sel) {
-      try { await supabase.from(tableFor(type)).update({ batch_id: Number(batchId) }).eq('id', id); ok++; } catch {}
-    }
+    const ok = await bulkByType(sel, (table, ids) =>
+      supabase.from(table).update({ batch_id: Number(batchId) }).in('id', ids));
     setMsg({ text: t({ id: 'catalogacao.queue.batchAssignResult' }, { count: ok }), kind: 'ok' });
     await loadQueue();
+    onChanged?.();
   }
 
   // ── Trash actions ───────────────────────────────────────
   async function restoreTrashSelected() {
     const sel = getTrashSelectedItems();
     if (!sel.length) return;
-    let ok = 0;
-    for (const { type, id } of sel) {
-      try { await supabase.from(tableFor(type)).update({ status: 'draft' }).eq('id', id); ok++; } catch {}
-    }
+    const ok = await bulkByType(sel, (table, ids) =>
+      supabase.from(table).update({ status: 'draft' }).in('id', ids));
     setMsg({ text: t({ id: 'catalogacao.queue.restoreResult' }, { count: ok }), kind: 'ok' });
     await loadQueue(); await loadTrash();
     onChanged?.();
@@ -317,18 +350,29 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
     if (!confirm(t({ id: 'catalogacao.queue.deleteConfirm' }))) return;
     try { await supabase.from(tableFor(type)).delete().eq('id', id); } catch {}
     await loadTrash();
+    // Le decompte de brouillons du lot depend de cette ligne : sans cet appel,
+    // l'onglet « Lots » gardait son ancien compte jusqu'a un rechargement.
+    onChanged?.();
   }
 
   async function emptyTrash() {
-    if (!trash.length) return;
-    if (!confirm(t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: trash.length }))) return;
+    // Le compte vient de la BASE, pas de la liste affichee : celle-ci s'arrete a
+    // 100 par type, donc au-dela le bouton supprimait une tranche, annoncait le
+    // compte de cette tranche, et laissait le reste — ce qui se lit comme un echec.
+    const total = await countTrash();
+    if (!total) return;
+    if (!confirm(t({ id: 'catalogacao.queue.emptyTrashConfirm' }, { count: total }))) return;
     setMsg({ text: '', kind: '' });
-    let ok = 0;
-    for (const it of trash) {
-      try { await supabase.from(tableFor(it._type)).delete().eq('id', it.id); ok++; } catch {}
+    for (const table of Object.values(TABLE_FOR)) {
+      const { error } = await supabase.from(table).delete().eq('status', 'cancelled');
+      if (error) { setMsg({ text: localizeError(error, t), kind: 'error' }); break; }
     }
-    setMsg({ text: t({ id: 'catalogacao.queue.emptyTrashResult' }, { count: ok }), kind: 'ok' });
+    // Le compte annonce est ce que la base a REELLEMENT perdu, pas ce qu'on
+    // croyait lui demander.
+    const reste = await countTrash();
+    setMsg({ text: t({ id: 'catalogacao.queue.emptyTrashResult' }, { count: total - reste }), kind: 'ok' });
     await loadTrash();
+    onChanged?.();
   }
 
   // ── Render ──────────────────────────────────────────────

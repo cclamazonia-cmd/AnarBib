@@ -6150,5 +6150,6 @@
   "rede.gazeta.notComposed": "Ainda não composto",
   "rede.gazeta.notComposedHint": "Este número ainda não foi composto: a cadeia o assumirá no dia 15. Até lá, só o seu modo de fabricação pode ser escolhido.",
   "error.oai.sourceDisabled": "Esta fonte está desativada para importação. Peça a reativação a uma administradora da rede.",
-  "catalogacao.batch.status.closed": "Fechado"
+  "catalogacao.batch.status.closed": "Fechado",
+  "catalogacao.batchTrashedWillBeDeleted": "Este lote só contém mais {count} rascunho(s) na lixeira. Eles serão excluídos definitivamente junto com o lote. Continuar?"
 }

@@ -6150,5 +6150,6 @@
   "rede.gazeta.notComposed": "Ankoraŭ ne kompostita",
   "rede.gazeta.notComposedHint": "Ĉi tiu numero ankoraŭ ne estas kompostita: la ĉeno transprenos ĝin la 15-an. Ĝis tiam nur ĝia farmaniero elekteblas.",
   "error.oai.sourceDisabled": "Ĉi tiu fonto estas malŝaltita por importado. Petu ĝian reaktivigon al reta administranto.",
-  "catalogacao.batch.status.closed": "Fermita"
+  "catalogacao.batch.status.closed": "Fermita",
+  "catalogacao.batchTrashedWillBeDeleted": "Ĉi tiu loto retenas nur {count} malneto(j)n en la rubujo. Ili estos definitive forigitaj kune kun la loto. Ĉu daŭrigi?"
 }

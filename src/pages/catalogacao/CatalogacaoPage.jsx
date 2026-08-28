@@ -528,6 +528,9 @@ const BATCH_STATUS_LABEL_IDS = {
   cancelled: 'catalogacao.cancelled',
 };
 
+// Les trois tables de brouillons rattachables a un lot.
+const BATCH_DRAFT_TABLES = ['book_drafts', 'author_drafts', 'exemplar_drafts'];
+
 function BatchesPanel({ batches, onRefresh }) {
   const { formatMessage: t } = useIntl();
   const [creating, setCreating] = useState(false);
@@ -595,19 +598,43 @@ function BatchesPanel({ batches, onRefresh }) {
     }
   }
 
+  // Un lot ne se supprime que s'il ne retient plus de travail. Un brouillon MIS
+  // A LA CORBEILLE (status='cancelled') n'en est pas : le compter comme bloquant
+  // rendait le lot indestructible, parce que la corbeille de la file editoriale
+  // est globale — elle ne se filtre ni ne se vide lot par lot, et son affichage
+  // est plafonne. Vecu le 28/08/2026 sur le lot CIRA Marseille : 237 brouillons
+  // jetes a la corbeille, 0 actif, et « ce lot contient encore 237 brouillons ».
+  // Ils sont donc supprimes AVEC le lot, apres une confirmation qui les compte.
   async function deleteBatch(id) {
     if (!confirm(t({id:'catalogacao.deleteBatchConfirm'}))) return;
     try {
-      // Check for orphan drafts before deleting
-      const counts = await Promise.all([
-        supabase.from('book_drafts').select('id', { count: 'exact', head: true }).eq('batch_id', id),
-        supabase.from('author_drafts').select('id', { count: 'exact', head: true }).eq('batch_id', id),
-        supabase.from('exemplar_drafts').select('id', { count: 'exact', head: true }).eq('batch_id', id),
+      const countDrafts = (table, trashed) => {
+        const q = supabase.from(table).select('id', { count: 'exact', head: true }).eq('batch_id', id);
+        return trashed ? q.eq('status', 'cancelled') : q.neq('status', 'cancelled');
+      };
+      const [actifs, corbeille] = await Promise.all([
+        Promise.all(BATCH_DRAFT_TABLES.map(tb => countDrafts(tb, false))),
+        Promise.all(BATCH_DRAFT_TABLES.map(tb => countDrafts(tb, true))),
       ]);
-      const total = counts.reduce((s, r) => s + (r.count || 0), 0);
-      if (total > 0) {
-        alert(t({id:'catalogacao.batchHasDrafts'},{count: total}));
+      const sum = rs => rs.reduce((s, r) => s + (r.count || 0), 0);
+
+      const restants = sum(actifs);
+      if (restants > 0) {
+        alert(t({id:'catalogacao.batchHasDrafts'},{count: restants}));
         return;
+      }
+      const jetes = sum(corbeille);
+      if (jetes > 0 && !confirm(t({id:'catalogacao.batchTrashedWillBeDeleted'},{count: jetes}))) return;
+
+      // Une requete par table, pas une par ligne : PostgREST filtre le DELETE
+      // cote serveur, sous exactement les memes policies que la suppression a
+      // l'unite depuis la corbeille.
+      if (jetes > 0) {
+        for (const table of BATCH_DRAFT_TABLES) {
+          const { error } = await supabase.from(table).delete()
+            .eq('batch_id', id).eq('status', 'cancelled');
+          if (error) throw error;
+        }
       }
       const { error } = await supabase.from('catalog_batches')
         .delete()
