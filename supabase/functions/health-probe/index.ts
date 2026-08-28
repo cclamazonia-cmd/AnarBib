@@ -475,6 +475,100 @@ Deno.serve(async (req: Request) => {
         actionBackup === 'rien' ? '' : actionBackup + ' ; '
       }incident NON enregistré pour ${refuses.join(', ')} — alerte retenue`;
     }
+
+    // ─── L'instantané attesté : un vert qui ne dit pas ce qu'il a produit ──
+    // `instantane_atteste` est exposé par le statut depuis 20260826170000, et
+    // n'était lu NULLE PART. Il ne bascule pas `ok`, délibérément : un instantané
+    // non attesté n'est pas une panne de sauvegarde, c'est un angle mort. Les deux
+    // décisions sont justes ; leur combinaison ne l'était pas. Pas d'alarme ET pas
+    // de lecteur, donc un champ mort — et l'angle mort qu'il devait éclairer
+    // restait noir. Cette sonde est le SEUL consommateur du statut dans le dépôt :
+    // il n'y a pas de tableau de bord ailleurs où le champ aurait pu se voir.
+    //
+    // D'où un incident à lui, sous un `kind` DISTINCT (migration 20260828234500).
+    // Sous le genre `backup`, un flux muet et un flux sans instantané se
+    // disputeraient la même ligne — l'unicité des incidents ouverts porte sur
+    // (kind, subject) — et c'est le flux muet qui compte.
+    //
+    // On ne le signale QUE sur un flux qui n'est pas muet. S'il est muet, l'alerte
+    // ci-dessus parle déjà de lui, et deux courriels pour une seule cause usent la
+    // crédibilité des deux.
+    const sansInstantane = flux.filter((f) => !f.muet && f.instantane_atteste === false);
+
+    const { data: incSnap } = await supabaseAdmin
+      .from('service_health_incidents')
+      .select('id, subject')
+      .eq('kind', 'backup_snapshot')
+      .is('closed_at', null);
+
+    const snapDejaOuverts = new Set((incSnap ?? []).map((i) => i.subject ?? ''));
+    const snapEnDefaut = new Set(sansInstantane.map((f) => f.flow as string));
+    const snapAOuvrir = sansInstantane.filter((f) => !snapDejaOuverts.has(f.flow));
+    const snapAFermer = (incSnap ?? []).filter((i) => i.subject && !snapEnDefaut.has(i.subject));
+
+    // Insertions une par une, pour la même raison que plus haut : en lot, un seul
+    // doublon retiendrait l'enregistrement des autres.
+    const snapOuvertsCeTour: number[] = [];
+    for (const f of snapAOuvrir) {
+      const { data: inc, error } = await supabaseAdmin
+        .from('service_health_incidents')
+        .insert({
+          kind: 'backup_snapshot',
+          subject: f.flow,
+          reason: `${f.flow} : tir terminé, mais aucun identifiant d'instantané (${provenanceTexte(f)})`,
+        })
+        .select('id')
+        .single();
+      // Un échec ici n'est pas bloquant : le tour suivant réessaiera. Il survient
+      // notamment si la CHECK sur `kind` n'est pas encore élargie — la CI déploie
+      // les fonctions avant les migrations.
+      if (!error && inc) snapOuvertsCeTour.push(inc.id);
+    }
+
+    if (snapOuvertsCeTour.length) {
+      const n = await alerter(
+        'AnarBib — une sauvegarde réussit sans dire ce qu’elle a produit',
+        'Instantané non attesté',
+        `<p style="margin:0 0 10px"><strong>Ce n'est pas une panne de sauvegarde.</strong> Le ou les flux ci-dessous sont allés au bout et l'ont signalé. Simplement, aucun identifiant d'instantané <code>restic</code> n'accompagne leur témoin : on sait que le script a fini, pas ce qu'il a déposé dans le dépôt.</p>
+         <p style="margin:0 0 10px">La cause habituelle est une relecture du dépôt qui n'a rien rendu au moment du tir — dépôt injoignable, <code>restic snapshots</code> muet. Le témoin part quand même et le flux reste vert : sans cette alerte, l'information se perdrait jusqu'au jour d'une restauration.</p>
+         <ul style="margin:0 0 10px;padding-left:18px">${sansInstantane
+           .map(
+             (f) =>
+               `<li>${esc(f.flow)} — dernier tir il y a ${esc(String(f.age_heures ?? '?'))} h — ${provenanceHtml(f)}</li>`,
+           )
+           .join('')}</ul>
+         <p style="margin:0">À vérifier sur le poste : que <code>restic snapshots</code> répond, et que <code>anarbib-bg2.sh</code> relit bien le dépôt après le tir.</p>`,
+      );
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ notified_at: new Date().toISOString() })
+        .in('id', snapOuvertsCeTour);
+      actionBackup = `${actionBackup === 'rien' ? '' : actionBackup + ' ; '}${
+        snapOuvertsCeTour.length
+      } instantané(s) non attesté(s) [${snapAOuvrir.map((f: any) => f.flow).join(', ')}], ${n} destinataire(s)`;
+    }
+
+    if (snapAFermer.length) {
+      await supabaseAdmin
+        .from('service_health_incidents')
+        .update({ closed_at: new Date().toISOString() })
+        .in(
+          'id',
+          snapAFermer.map((i) => i.id),
+        );
+      const revenus = snapAFermer.map((i) => i.subject as string);
+      const n = await alerter(
+        'AnarBib — les instantanés sont de nouveau attestés',
+        'Instantané de nouveau attesté',
+        `<p style="margin:0 0 10px">Le dépôt <code>restic</code> répond de nouveau à la relecture pour : <strong>${esc(
+          revenus.join(', '),
+        )}</strong>. Leur témoin porte à nouveau un identifiant d'instantané.</p>
+         <p style="margin:0">Rappel de portée : cela prouve qu'un instantané portant cette étiquette était LISTABLE juste après le tir. Cela ne prouve pas qu'il est restaurable — seul le <code>restore-test</code> mensuel le prouve.</p>`,
+      );
+      actionBackup = `${actionBackup === 'rien' ? '' : actionBackup + ' ; '}${
+        snapAFermer.length
+      } instantané(s) de nouveau attesté(s) [${revenus.join(', ')}], ${n} destinataire(s)`;
+    }
   }
 
   // ─── Sondes STRUCTURELLES (cohérence interne) ────────────────────────
