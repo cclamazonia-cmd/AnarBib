@@ -59,8 +59,14 @@ foreach ($file in $stagedSqlFiles) {
     $scan = $scan -replace '(?m)--.*$', ''
 
     # ---- Test 1 : SECURITY DEFINER sans SET search_path -----------------
+    # Le search_path peut etre ecrit sous la forme citee -- SET "search_path" TO
+    # 'public', 'ingest' -- c'est celle que rend pg_get_functiondef, donc celle
+    # que portent tous les corps EXTRAITS du baseline (doctrine du depot : on
+    # n'y retape jamais une fonction). Sans le "? optionnel, ces corps etaient
+    # signales alors que leur search_path est bel et bien epingle. Faux positif
+    # constate le 28/08/2026 sur chemin_oai_pmh_executable et aligner_le_bouton.
     if ($scan -match "(?i)SECURITY\s+DEFINER" -and
-        $scan -notmatch "(?i)SET\s+search_path") {
+        $scan -notmatch '(?i)SET\s+"?search_path"?') {
         $violations += @{
             File   = $file
             Rule   = "SECURITY DEFINER sans SET search_path"
