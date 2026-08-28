@@ -168,6 +168,46 @@ function getH1(raw) {
 const cutTerm = (v) =>
   (v || "").split(/\s*~:\s*|\s+:\s+|\s*—>\s*|\s*--?>\s*/)[0].replace(/\s*~?\s*:\s*$/, "").trim();
 
+// La source pose CERTAINES marques HORS du bloc <multi> : l'asterisque qui
+// signale un mot absent (a l'epoque) de la liste d'origine du CIRA, et la
+// parenthese fermante d'un segment mutualise, du type
+// « 1945-1989 (<multi>[fr]Est … [pt]Leste </multi>) ». Elles portent sur la
+// FICHE, pas sur une langue.
+//
+// Or le bloc range les langues dans un ordre fixe ou « pt » est dernier, et
+// notre lecture par [xx] capture tout jusqu'au crochet suivant : ce qui traine
+// apres </multi> se colle donc au portugais. Sur l'aspiration du 27/08/2026,
+// ca fabriquait 29 faux defauts portugais — 27 asterisques et 2 parentheses
+// orphelines — dont AUCUN n'etait un defaut portugais. Un releve construit
+// la-dessus accuse un traducteur a la place d'un analyseur.
+//
+// D'ou ce detachement, fait avant tout autre traitement, et journalise : la
+// marque est une information sur l'histoire du vocabulaire, pas une scorie.
+function detacherQueueHorsBloc(map, rec) {
+  const langs = Object.keys(map);
+  if (!langs.length) return;
+  const last = langs[langs.length - 1];
+  let v = map[last];
+  for (;;) {
+    const etoile = v.match(/\s*\*\s*$/);
+    if (etoile) {
+      v = v.slice(0, etoile.index);
+      if (!rec.flags.includes("hors_liste_cira")) rec.flags.push("hors_liste_cira");
+      continue;
+    }
+    const paren = v.match(/\s*\)\s*$/);
+    const ouvrantes = (v.match(/\(/g) || []).length;
+    const fermantes = (v.match(/\)/g) || []).length;
+    if (paren && ouvrantes < fermantes) {
+      v = v.slice(0, paren.index);
+      rec.flags.push(`parenthese_hors_bloc:${last}`);
+      continue;
+    }
+    break;
+  }
+  map[last] = v;
+}
+
 // Parse un bloc de traduction « [xx]valeur… » → { map des langues }. Re-route les
 // balises typo CONNUES (ex. [ne]→nl) sans changer la valeur, journalise dans rec.
 function parseBlock(b, rec) {
@@ -195,6 +235,7 @@ function parseBlock(b, rec) {
     seen.add(lg);
     map[lg] = val;
   }
+  detacherQueueHorsBloc(map, rec);
   return map;
 }
 
