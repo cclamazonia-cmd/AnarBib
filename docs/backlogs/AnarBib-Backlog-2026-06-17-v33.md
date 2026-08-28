@@ -1,3 +1,34 @@
+> ## ⚠️ AVERTISSEMENT DE FRAÎCHEUR — relevé du 28 août 2026
+>
+> **Ce document décrit un état du projet vieux de deux mois et demi. Il ne doit
+> plus être lu comme la liste de ce qui reste à faire.**
+>
+> Mesures faites sur le dépôt le 28/08/2026 :
+>
+> | | |
+> |---|---|
+> | migrations postérieures à ce document | **216 sur 221** |
+> | commits depuis le 17/06 | **648** |
+> | entrées déjà marquées « report v32, non re-vérifié » le jour de sa rédaction | **22** |
+>
+> Autrement dit, il connaît cinq des deux cent vingt et une migrations de la
+> base. Ce n'est pas un backlog en retard, c'est une photographie.
+>
+> **Où regarder en attendant.** Le REGISTRE (`specs/REGISTRE_decisions.md`) fait
+> foi, comme toujours. Pour savoir où des bras sont utiles, voir
+> `docs/CHANTIERS_OUVERTS.md`. Pour l'état chiffré du backend, la fin du
+> `README.md` porte ses relevés avec leur date.
+>
+> **Ce qu'il faut en faire.** Une re-vérification complète, pas un
+> rafraîchissement : reprendre chaque entrée contre la base réelle et ne garder
+> que ce qui est encore vrai. C'est un travail de plusieurs heures qui ne peut
+> pas se faire de mémoire, et il attend après le 13 septembre.
+>
+> *Cet avertissement ne modifie rien au contenu ci-dessous, qui reste une trace
+> historique utile. Il dit seulement de ne pas s'y fier pour décider.*
+
+---
+
 # AnarBib — Backlog technique **v33** (mise à jour 2026-06-17)
 
 > **Pourquoi v33.** Reporte le **v32** (12/06). Cette version intègre un **audit
