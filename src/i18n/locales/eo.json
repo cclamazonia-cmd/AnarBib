@@ -6163,5 +6163,7 @@
   "catalogacao.queue.restoreDeletedResult": "Malneto {id} restaŭrita.",
   "error.catalog.restore_not_found": "Ĉi tiu ĵurnalero ne ekzistas, aŭ ne estas forigo.",
   "error.catalog.restore_no_snapshot": "La momentfoto de ĉi tiu malneto estis purigita (pli ol 90 tagoj): la spuro restas, sed ĝi ne plu restaŭreblas.",
-  "error.catalog.restore_already": "Ĉi tiu malneto jam ekzistas: ĝi verŝajne estis restaŭrita intertempe."
+  "error.catalog.restore_already": "Ĉi tiu malneto jam ekzistas: ĝi verŝajne estis restaŭrita intertempe.",
+  "catalogacao.coordOnlyDelete": "Definitiva forigo: kunordigo",
+  "error.publish.other_library": "Ĉi tiu malneto apartenas al biblioteko al kiu vi ne membras. Ĝia publikigo apartenas al tiu biblioteko aŭ al reta administranto."
 }

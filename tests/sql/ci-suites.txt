@@ -140,3 +140,10 @@ tests/sql/import_suppression_run_lot_tests.sql
 # a partir de l'instantane. T4 tient la raison d'etre du trigger BEFORE : apres,
 # les enfants en CASCADE n'existent plus.
 tests/sql/catalogage_suppression_tracee_tests.sql
+
+# Portee des gestes de catalogage : ou atterrit un livre publie, et qui peut
+# supprimer definitivement. T2 est un test de NON-ACTION — une adhesion REVOQUEE
+# et de role "reader" (celle que l'ancien tri alphabetique preferait) ne doit pas
+# designer la bibliotheque de destination. T6 tient le piege du DELETE refuse par
+# RLS : il ne leve pas d'erreur, il supprime zero ligne.
+tests/sql/portee_catalogage_tests.sql

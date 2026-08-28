@@ -6163,5 +6163,7 @@
   "catalogacao.queue.restoreDeletedResult": "Rascunho {id} restaurado.",
   "error.catalog.restore_not_found": "Esta entrada de registo não existe, ou não é uma exclusão.",
   "error.catalog.restore_no_snapshot": "O instantâneo deste rascunho foi purgado (mais de 90 dias): o registo permanece, mas já não é restaurável.",
-  "error.catalog.restore_already": "Este rascunho já existe: provavelmente foi restaurado entretanto."
+  "error.catalog.restore_already": "Este rascunho já existe: provavelmente foi restaurado entretanto.",
+  "catalogacao.coordOnlyDelete": "Exclusão definitiva: coordenação",
+  "error.publish.other_library": "Este rascunho está vinculado a uma biblioteca da qual não fazes parte. A publicação cabe a essa biblioteca ou a uma administradora da rede."
 }

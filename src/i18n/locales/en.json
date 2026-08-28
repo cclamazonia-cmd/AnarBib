@@ -6163,5 +6163,7 @@
   "catalogacao.queue.restoreDeletedResult": "Draft {id} restored.",
   "error.catalog.restore_not_found": "This log entry does not exist, or is not a deletion.",
   "error.catalog.restore_no_snapshot": "This draft’s snapshot was purged (over 90 days old): the trace remains, but it can no longer be restored.",
-  "error.catalog.restore_already": "This draft already exists: it was probably restored in the meantime."
+  "error.catalog.restore_already": "This draft already exists: it was probably restored in the meantime.",
+  "catalogacao.coordOnlyDelete": "Permanent deletion: coordination",
+  "error.publish.other_library": "This draft belongs to a library you are not a member of. Publishing it is up to that library or a network admin."
 }

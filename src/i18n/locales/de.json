@@ -6163,5 +6163,7 @@
   "catalogacao.queue.restoreDeletedResult": "Entwurf {id} wiederhergestellt.",
   "error.catalog.restore_not_found": "Dieser Journaleintrag existiert nicht oder ist keine Löschung.",
   "error.catalog.restore_no_snapshot": "Die Momentaufnahme dieses Entwurfs wurde gelöscht (älter als 90 Tage): die Spur bleibt, wiederherstellbar ist er nicht mehr.",
-  "error.catalog.restore_already": "Dieser Entwurf existiert bereits: er wurde vermutlich zwischenzeitlich wiederhergestellt."
+  "error.catalog.restore_already": "Dieser Entwurf existiert bereits: er wurde vermutlich zwischenzeitlich wiederhergestellt.",
+  "catalogacao.coordOnlyDelete": "Endgültiges Löschen: Koordination",
+  "error.publish.other_library": "Dieser Entwurf gehört zu einer Bibliothek, der du nicht angehörst. Die Veröffentlichung liegt bei dieser Bibliothek oder einer Netzwerk-Admin."
 }

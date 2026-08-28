@@ -6163,5 +6163,7 @@
   "catalogacao.queue.restoreDeletedResult": "Bozza {id} ripristinata.",
   "error.catalog.restore_not_found": "Questa voce di registro non esiste, o non è un’eliminazione.",
   "error.catalog.restore_no_snapshot": "L’istantanea di questa bozza è stata eliminata (oltre 90 giorni): la traccia resta, ma non è più ripristinabile.",
-  "error.catalog.restore_already": "Questa bozza esiste già: probabilmente è stata ripristinata nel frattempo."
+  "error.catalog.restore_already": "Questa bozza esiste già: probabilmente è stata ripristinata nel frattempo.",
+  "catalogacao.coordOnlyDelete": "Eliminazione definitiva: coordinamento",
+  "error.publish.other_library": "Questa bozza è legata a una biblioteca di cui non fai parte. La pubblicazione spetta a quella biblioteca o a un’amministratrice di rete."
 }

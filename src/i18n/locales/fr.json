@@ -6163,5 +6163,7 @@
   "catalogacao.queue.restoreDeletedResult": "Brouillon {id} restauré.",
   "error.catalog.restore_not_found": "Cette entrée de journal est introuvable, ou ce n’est pas une suppression.",
   "error.catalog.restore_no_snapshot": "L’instantané de ce brouillon a été purgé (au-delà de 90 jours) : la trace reste, mais il n’est plus rejouable.",
-  "error.catalog.restore_already": "Ce brouillon existe déjà : il a probablement été restauré entre-temps."
+  "error.catalog.restore_already": "Ce brouillon existe déjà : il a probablement été restauré entre-temps.",
+  "catalogacao.coordOnlyDelete": "Suppression définitive : coordination",
+  "error.publish.other_library": "Ce brouillon est rattaché à une bibliothèque dont tu n’es pas membre. Sa publication est réservée à cette bibliothèque ou à une admin réseau."
 }

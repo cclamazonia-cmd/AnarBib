@@ -134,6 +134,12 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // en montrait 100 sans le dire — l'ecart se lit comme une incoherence.
   const [trashTotal, setTrashTotal] = useState(0);
   const [trashBatch, setTrashBatch] = useState('');
+  // La suppression definitive est reservee a la coordination (policies
+  // restrictives du 29/08, par alignement sur l'ecran d'import). Une policy qui
+  // refuse un DELETE ne leve PAS d'erreur : PostgREST supprime zero ligne et
+  // repond 204. Sans cette garde cote ecran, le bouton dirait « supprimes »
+  // sans que rien ne bouge — le pire des deux mondes.
+  const [isCoord, setIsCoord] = useState(false);
   // Journal des suppressions DEFINITIVES, et leur rejeu. Sans cet ecran, la
   // RPC de restauration serait un chemin que personne n'emprunte — donc un
   // chemin dont on ne saurait pas qu'il est casse.
@@ -254,6 +260,14 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   }, []);
 
   useEffect(() => { loadDeleted(); }, [loadDeleted]);
+
+  useEffect(() => {
+    let vivant = true;
+    supabase.rpc('fn_is_catalog_coordinator')
+      .then(({ data }) => { if (vivant) setIsCoord(data === true); })
+      .catch(() => {});
+    return () => { vivant = false; };
+  }, []);
 
   // ── Selection helpers ───────────────────────────────────
   function toggleSelect(key) { setSelected(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; }); }
@@ -672,10 +686,16 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
             <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadTrash} disabled={trashLoading}>
               {trashLoading ? '…' : t({ id: 'catalogacao.queue.refreshShort' })}
             </button>
-            <button type="button" className="ab-button ab-button--danger ab-button--sm"
-              onClick={emptyTrash} disabled={!trash.length}>
-              {t({ id: 'catalogacao.queue.emptyTrash' })}
-            </button>
+            {isCoord ? (
+              <button type="button" className="ab-button ab-button--danger ab-button--sm"
+                onClick={emptyTrash} disabled={!trash.length}>
+                {t({ id: 'catalogacao.queue.emptyTrash' })}
+              </button>
+            ) : (
+              <span style={{ fontSize: '.72rem', color: 'var(--brand-muted, #888)' }}>
+                {t({ id: 'catalogacao.coordOnlyDelete' })}
+              </span>
+            )}
           </div>
         </div>
 
@@ -702,8 +722,10 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
                     <span className={`cat-pill ${it._type === 'book' ? 'info' : it._type === 'author' ? 'warn' : 'ok'}`}
                       style={{ fontSize: '.6rem', flexShrink: 0 }}>{t({ id: TYPE_KEYS[it._type] })}</span>
                     <div style={{ flex: 1, minWidth: 0, fontSize: '.82rem' }}>{it._label}</div>
-                    <button type="button" className="ab-button ab-button--danger ab-button--sm"
-                      onClick={() => deleteTrashItem(it._type, it.id)}>{t({ id: 'catalogacao.queue.deletePermanent' })}</button>
+                    {isCoord && (
+                      <button type="button" className="ab-button ab-button--danger ab-button--sm"
+                        onClick={() => deleteTrashItem(it._type, it.id)}>{t({ id: 'catalogacao.queue.deletePermanent' })}</button>
+                    )}
                   </div>
                 );
               })}

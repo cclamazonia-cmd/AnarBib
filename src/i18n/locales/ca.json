@@ -6163,5 +6163,7 @@
   "catalogacao.queue.restoreDeletedResult": "Esborrany {id} restaurat.",
   "error.catalog.restore_not_found": "Aquesta entrada del registre no existeix, o no és una eliminació.",
   "error.catalog.restore_no_snapshot": "La instantània d’aquest esborrany s’ha purgat (més de 90 dies): el rastre queda, però ja no es pot restaurar.",
-  "error.catalog.restore_already": "Aquest esborrany ja existeix: probablement s’ha restaurat mentrestant."
+  "error.catalog.restore_already": "Aquest esborrany ja existeix: probablement s’ha restaurat mentrestant.",
+  "catalogacao.coordOnlyDelete": "Eliminació definitiva: coordinació",
+  "error.publish.other_library": "Aquest esborrany està vinculat a una biblioteca de la qual no ets membre. La publicació correspon a aquesta biblioteca o a una administradora de la xarxa."
 }

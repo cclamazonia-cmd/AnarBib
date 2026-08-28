@@ -70,3 +70,16 @@ CREATE OR REPLACE FUNCTION auth.jwt() RETURNS jsonb
   LANGUAGE sql STABLE AS $$
   SELECT coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb, '{}'::jsonb)
 $$;
+
+-- ---------------------------------------------------------------------------
+-- Les GRANT que Supabase pose sur `auth` en production (ajoutes le 29/08/2026).
+-- Sans eux, la fidelite annoncee plus haut ne tient que tant qu'une suite ne
+-- prend pas REELLEMENT le role `authenticated` — seul moyen d'eprouver une
+-- policy RLS pour de vrai. Des qu'elle le fait, le moindre trigger SECURITY
+-- INVOKER appelant auth.uid() echoue sur « permission denied for schema auth ».
+-- C'est un echec du HARNAIS, pas du produit : en production `authenticated` a
+-- bien USAGE sur `auth` (les policies Supabase appellent auth.uid() en invoker).
+-- Trouve en ecrivant tests/sql/portee_catalogage_tests.sql.
+-- ---------------------------------------------------------------------------
+GRANT USAGE ON SCHEMA auth TO authenticated, anon, service_role;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA auth TO authenticated, anon, service_role;

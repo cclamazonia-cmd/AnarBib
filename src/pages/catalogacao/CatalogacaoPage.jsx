@@ -86,6 +86,9 @@ export default function CatalogacaoPage() {
 
   // ── Dados de catálogo ────────────────────────────────────
   const [batches, setBatches] = useState([]);
+  // Cf. QueuePanel : supprimer un lot emporte sa corbeille, meme porte donc,
+  // et un DELETE refuse par RLS ne leve pas d'erreur.
+  const [isCoord, setIsCoord] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editTarget, setEditTarget] = useState(null); // { kind, id } -- handoff catalogo/fila -> editeur (Lot 0)
   // Pilotage de la sous-vue du CatalogPanel depuis les compteurs (nonce pour re-declencher meme vue)
@@ -142,6 +145,14 @@ export default function CatalogacaoPage() {
   // NE PAS y mettre `majTout` : `refreshAll` tourne a CHAQUE ouverture de la
   // page, et regenerer le catalogue public a chaque visite serait absurde.
   useEffect(() => { refreshAll(); }, [refreshAll]);
+
+  useEffect(() => {
+    let vivant = true;
+    supabase.rpc('fn_is_catalog_coordinator')
+      .then(({ data }) => { if (vivant) setIsCoord(data === true); })
+      .catch(() => {});
+    return () => { vivant = false; };
+  }, []);
 
   // Le bouton d'en-tete fait DEUX choses de portees differentes, et c'est
   // voulu : `refreshAll` ne change que ce que voit la personne connectee ;
@@ -476,7 +487,7 @@ export default function CatalogacaoPage() {
             <div className="cat-panel-header">
               <h3>{t({id:'catalogacao.tab.lotes'})}</h3>
             </div>
-            <BatchesPanel batches={batches} onRefresh={refreshAll} />
+            <BatchesPanel batches={batches} onRefresh={refreshAll} isCoord={isCoord} />
           </div>
 
           {/* 6. Catálogo(s) já publicado(s) */}
@@ -531,7 +542,7 @@ const BATCH_STATUS_LABEL_IDS = {
 // Les trois tables de brouillons rattachables a un lot.
 const BATCH_DRAFT_TABLES = ['book_drafts', 'author_drafts', 'exemplar_drafts'];
 
-function BatchesPanel({ batches, onRefresh }) {
+function BatchesPanel({ batches, onRefresh, isCoord }) {
   const { formatMessage: t } = useIntl();
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState('');
@@ -759,8 +770,10 @@ function BatchesPanel({ batches, onRefresh }) {
                   <td style={{ padding: '8px', textAlign: 'right' }}>
                     <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                       onClick={() => archiveBatch(b.id)}>{t({id:'catalogacao.archiveBatch'})}</button>
-                    <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
-                      onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
+                    {isCoord && (
+                      <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
+                        onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -789,8 +802,10 @@ function BatchesPanel({ batches, onRefresh }) {
                   <td style={{ padding: '8px' }}>{b.name}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
-                    <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
-                      onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
+                    {isCoord && (
+                      <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
+                        onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
+                    )}
                   </td>
                 </tr>
               ))}
