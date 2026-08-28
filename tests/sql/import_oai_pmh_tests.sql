@@ -250,8 +250,12 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  -- Un statut valide ne suffit pas : il doit dire la VERITE. Rien ne traite ce
-  -- run (l'EF harvest-oai-pmh n'existe pas). On demande son sens a la vue de
+  -- Un statut valide ne suffit pas : il doit dire la VERITE. Au moment ou la RPC
+  -- rend la main, rien n'a encore traite ce run — l'EF harvest-oai-pmh travaille
+  -- en asynchrone, appelee par pg_net. (Ce commentaire disait « l'EF n'existe
+  -- pas » : vrai au Lot 3a, faux depuis le Lot 3b. Un commentaire perime est
+  -- exactement ce qui a fait vivre les defauts de ce chantier.)
+  -- On demande son sens a la vue de
   -- politique elle-meme plutot qu'a une liste recopiee : elle doit le classer
   -- « a lancer », et surtout PAS l'annoncer revisable — sinon l'ecran ouvrirait
   -- une file de revision vide en pretendant que le moissonnage est fini.
@@ -395,6 +399,77 @@ BEGIN
       v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got '
       ||coalesce(v_res3::text,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- Le cron. L'ecran promet un moissonnage « automatique hebdomadaire » dans les
+  -- 10 locales ; jusqu'au 28/08/2026 aucun cron ne moissonnait, et la promesse
+  -- tenait a un clic. Ces tests gardent les trois garanties qui rendent
+  -- l'automatisme acceptable : il vise les bonnes sources, il ne double pas un
+  -- cycle en cours, et il appelle vraiment l'EF.
+  --
+  -- On repart d'un etat propre : les tests precedents ont laisse la source en
+  -- in_progress (T16 a repris le verrou), ce qui la rendrait invisible au cron.
+  v_t := 'T18 le cron lance un moissonnage sur une source eligible';
+  BEGIN
+    UPDATE ingest.oai_harvest_state SET harvest_status = 'idle', last_error = NULL
+     WHERE source_id = (v_res->>'source_id')::bigint;
+
+    v_res3 := ingest.fn_cron_import_harvest_oai();
+    IF coalesce((v_res3->>'ok')::boolean, false)
+       AND (v_res3->>'lances')::int = 1
+       AND (v_res3->'details'->0->>'source_id')::bigint = (v_res->>'source_id')::bigint THEN
+      v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got '||coalesce(v_res3::text,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- Le run du cron n'est l'oeuvre de PERSONNE : requested_by NULL. Emprunter
+  -- l'identite d'une coordination pour contourner le controle d'acces aurait
+  -- fait porter a quelqu'un un geste qu'il n'a pas pose, un mardi a 4 h.
+  v_t := 'T19 le run du cron ne porte le nom de personne (requested_by NULL)';
+  BEGIN
+    SELECT * INTO v_run FROM ingest.partner_catalog_import_runs
+     WHERE id = (v_res3->'details'->0->>'run_id')::bigint;
+    IF v_run.requested_by IS NULL
+       AND v_run.detected_format = 'oai_pmh'
+       AND v_run.run_status = 'queued'
+       AND coalesce(v_run.storage_path, '') <> '' THEN
+      v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got requested_by='
+      ||coalesce(v_run.requested_by::text,'NULL')||' status='||coalesce(v_run.run_status,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- Le verrou vaut aussi pour la machine : le cron vient de poser in_progress,
+  -- un second passage ne doit rien relancer. Sans ca, deux cycles se
+  -- partageraient le meme jeton de reprise.
+  v_t := 'T20 un second passage du cron ne double pas un cycle en cours';
+  BEGIN
+    v_res3 := ingest.fn_cron_import_harvest_oai();
+    IF (v_res3->>'lances')::int = 0 AND (v_res3->>'ignorees')::int >= 1 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' got '||coalesce(v_res3::text,'NULL')); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  -- import_enabled existait, etait mise a true a l'enregistrement, et n'etait
+  -- LUE PAR PERSONNE. Si le cron l'ignorait aussi, decocher une source
+  -- n'aurait aucun effet — et on moissonnerait un partenaire qui a demande
+  -- qu'on arrete.
+  v_t := 'T21 une source import_enabled=false est ecartee du moissonnage automatique';
+  BEGIN
+    UPDATE ingest.oai_harvest_state SET harvest_status = 'idle'
+     WHERE source_id = (v_res->>'source_id')::bigint;
+    UPDATE ingest.partner_catalog_sources SET import_enabled = false
+     WHERE id = (v_res->>'source_id')::bigint;
+
+    v_res3 := ingest.fn_cron_import_harvest_oai();
+    IF (v_res3->>'lances')::int = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : source desactivee quand meme moissonnee : '
+      ||coalesce(v_res3::text,'NULL')); END IF;
+
+    UPDATE ingest.partner_catalog_sources SET import_enabled = true
+     WHERE id = (v_res->>'source_id')::bigint;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

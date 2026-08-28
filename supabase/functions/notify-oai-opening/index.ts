@@ -11,7 +11,8 @@
 //
 // Expéditeur : OAI_ADMIN_EMAIL / OAI_ADMIN_NAME (adresse fédérale, OVH/Zimbra ;
 // le domaine doit être vérifié dans Resend pour l'envoi). Destinataires :
-//   - ascendant  : adresse fédérale (les admins instruisent) ;
+//   - ascendant  : adresse fédérale (les admins instruisent) + accusé à la
+//     biblio demandeuse, à son adresse collective ;
 //   - décisions  : demandeur·euse + adresse COLLECTIVE de sa biblio + fédéral ;
 //   - descendant : adresse COLLECTIVE des biblios concernées (dans la locale de
 //     leur biblio) ; résolution → fédéral + concernées.
@@ -195,8 +196,16 @@ Deno.serve((req) => serveJsonWebhook(
 
     switch (event) {
       case 'oai_open_requested': {
-        const { name } = await libInfo(r.library_id);
+        const { name, locale } = await libInfo(r.library_id);
         await send(FEDERAL_TARGET, FEDERAL_LOCALE, 'oai.requested.sub', 'oai.requested.intro', { lib: name });
+        // Accuse de reception a la biblio : elle vient de demander l'ouverture de
+        // SON catalogue et n'apprenait rien avant la decision, qui peut tarder.
+        // (Une demande a dormi deux mois et demi en pending_admin sans que
+        // personne, ni cote biblio ni cote federal, ne s'en apercoive.)
+        for (const rc of await libraryNotificationRecipients([r.library_id])) {
+          await send({ email: rc.email, name: rc.name }, rc.locale,
+            'oai.requested.sub', 'oai.requested.intro', { lib: name });
+        }
         break;
       }
       case 'oai_open_approved':

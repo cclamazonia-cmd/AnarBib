@@ -44,6 +44,20 @@ const IMPORT_SECRET_HEADER = 'x-import-secret';
 const IMPORT_SECRET_ENV = 'ANARBIB_PARTNER_IMPORT_SECRET';
 const INSERT_BATCH_SIZE = 250;
 const HTTP_TIMEOUT_MS = 20000;  // par requete ; pg_net coupe le tout a 120 s
+// Pause entre deux lots. Un entrepot OAI-PMH est fait pour etre moissonne, mais
+// enchainer les requetes sans respirer sur le serveur de quelqu'un d'autre n'est
+// pas une facon de se presenter. 1 s ne coute rien a un cycle (5 lots = 5 s de
+// plus) et change tout vu d'en face.
+const INTER_LOT_PAUSE_MS = 1000;
+// Plafond de ce qu'on accepte d'attendre quand l'entrepot nous demande de
+// patienter. Au-dela on rend la main : le jeton de reprise est deja ecrit, le
+// cycle suivant repartira d'ou celui-ci s'arrete.
+const MAX_RETRY_AFTER_MS = 30000;
+// Contact fedéral dans le User-Agent : convention OAI-PMH (notre propre provider
+// publie <adminEmail> pour la meme raison). Une admin d'en face doit pouvoir
+// ecrire a quelqu'un plutot que de bloquer une IP muette.
+const HARVESTER_CONTACT = (Deno.env.get('OAI_ADMIN_EMAIL') || 'fede@anarbib.org').trim();
+const USER_AGENT = `AnarBib-OAI-Harvester/1.0 (+${HARVESTER_CONTACT})`;
 // Garde-fou : un entrepot qui rendrait un jeton sans fin. Cale sous le budget
 // pg_net (20 lots x 20 s = 400 s > 120 s : c est pg_net qui tranchera avant, et
 // le resumptionToken deja ecrit fera repartir le cycle suivant d ou il en est).
@@ -66,15 +80,56 @@ function clean(v: unknown): string | null {
   return t === '' ? null : t;
 }
 
+const dors = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Levee quand l'entrepot demande explicitement qu'on lève le pied. */
+class BackOff extends Error {
+  constructor(public readonly afterMs: number, public readonly status: number) {
+    super(`L'entrepot demande d'attendre (HTTP ${status}, Retry-After ${Math.round(afterMs / 1000)} s).`);
+  }
+}
+
+// Retry-After s'ecrit en secondes OU en date HTTP : les deux formes existent
+// dans la nature, et n'en lire qu'une revient a ne pas la lire.
+function retryAfterMs(header: string | null): number | null {
+  const raw = (header ?? '').trim();
+  if (!raw) return null;
+  if (/^\d+$/.test(raw)) return Number(raw) * 1000;
+  const when = Date.parse(raw);
+  if (Number.isNaN(when)) return null;
+  return Math.max(0, when - Date.now());
+}
+
 async function fetchOai(url: string): Promise<string> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), HTTP_TIMEOUT_MS);
   try {
     const res = await fetch(url, {
       method: 'GET',
-      headers: { 'Accept': 'text/xml, application/xml', 'User-Agent': 'AnarBib-OAI-Harvester/1.0' },
+      headers: { 'Accept': 'text/xml, application/xml', 'User-Agent': USER_AGENT },
       signal: ctrl.signal,
     });
+    // 503 et 429 sont la facon NORMALE dont un serveur OAI-PMH dit « pas
+    // maintenant » — souvent pendant qu'il prepare un gros lot. Les traiter
+    // comme une panne, c'est repasser la semaine suivante taper au meme
+    // endroit ; les honorer, c'est attendre le delai annonce et reessayer une
+    // fois. Au-dela du plafond on abandonne PROPREMENT le cycle : le jeton de
+    // reprise est deja en base, rien n'est perdu.
+    if (res.status === 503 || res.status === 429) {
+      const wait = retryAfterMs(res.headers.get('retry-after'));
+      if (wait !== null && wait <= MAX_RETRY_AFTER_MS) {
+        await dors(wait);
+        const retry = await fetch(url, {
+          method: 'GET',
+          headers: { 'Accept': 'text/xml, application/xml', 'User-Agent': USER_AGENT },
+          signal: ctrl.signal,
+        });
+        const retryText = await retry.text();
+        if (!retry.ok) throw new BackOff(wait, retry.status);
+        return retryText;
+      }
+      throw new BackOff(wait ?? 0, res.status);
+    }
     const text = await res.text();
     // Un entrepot peut repondre 200 avec une <error> OAI (protocole), ou un vrai
     // code HTTP (transport). On ne confond pas les deux : ici c'est le transport.
@@ -149,6 +204,12 @@ Deno.serve(async (req) => {
     if (stError) throw stError;
     if (!state) return json({ error: `Etat de moissonnage introuvable pour source ${sourceId}.` }, 404);
     totalBefore = Number(state.total_records_harvested) || 0;
+    // Le jeton DEJA en base devient la valeur par defaut du resultat. Sans ca, le
+    // finally reposait null sur tout chemin d'erreur : un incident au milieu d'un
+    // cycle EFFACAIT la position de reprise. Les lignes n'etant inserees qu'apres
+    // la boucle, repartir du jeton de DEBUT de cycle est exactement juste — ni
+    // doublon, ni trou. Le chemin de succes l'ecrase par le jeton final.
+    outcome.resumptionToken = clean(state.pending_resumption_token);
 
     const maxLots = Math.min(
       MAX_LOTS_HARD_CAP,
@@ -333,6 +394,7 @@ Deno.serve(async (req) => {
 
       token = env.resumptionToken;
       if (!token || lots >= maxLots) break;
+      await dors(INTER_LOT_PAUSE_MS);
       env = parseOaiEnvelope(await fetchOai(buildOaiUrl(endpoint, { verb: 'ListRecords', resumptionToken: token })));
     }
 
@@ -402,7 +464,11 @@ Deno.serve(async (req) => {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     outcome.settled = true;
-    outcome.harvestStatus = 'error';
+    // Un back-off demande par l'entrepot n'est PAS une panne de notre cote : le
+    // marquer 'error' ferait croire a une source cassee et, pire, ferait perdre
+    // le jeton de reprise. On repose l'etat sur 'paused' — relachable, reprenable
+    // au cycle suivant — en gardant le message pour que ca se lise a l'ecran.
+    outcome.harvestStatus = err instanceof BackOff ? 'paused' : 'error';
     outcome.lastError = message.slice(0, 2000);
     if (runId) {
       try {

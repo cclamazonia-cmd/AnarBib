@@ -89,6 +89,7 @@ const listFormats = (prefixes) => enveloppe('<ListMetadataFormats>' +
 function monterEF(etat, reponses) {
   const ecrits = [];
   const urlsVues = [];
+  const entetesVues = [];
 
   const table = (schema, nom) => {
     const chaine = [];
@@ -130,12 +131,15 @@ function monterEF(etat, reponses) {
   let handler = null;
   const DenoStub = { env: { get: (k) => ENV[k] }, serve: (h) => { handler = h; } };
   let i = 0;
-  const fetchStub = async (url) => {
+  const fetchStub = async (url, options) => {
     urlsVues.push(String(url));
+    entetesVues.push(options?.headers ?? {});
     const r = reponses[Math.min(i, reponses.length - 1)];
     i += 1;
     if (r instanceof Error) throw r;
-    if (typeof r === 'object' && r.status) return new Response(r.body ?? '', { status: r.status });
+    if (typeof r === 'object' && r.status) {
+      return new Response(r.body ?? '', { status: r.status, headers: r.headers ?? {} });
+    }
     return new Response(r, { status: 200 });
   };
   const requireStub = (spec) => {
@@ -160,13 +164,17 @@ function monterEF(etat, reponses) {
   return async function appeler(corps = { run_id: 19 }, { secret = SECRET } = {}) {
     ecrits.length = 0;
     urlsVues.length = 0;
+    entetesVues.length = 0;
     const res = await handler(new Request('http://ef.local/', {
       method: 'POST',
       headers: { 'x-import-secret': secret, 'content-type': 'application/json' },
       body: JSON.stringify(corps),
     }));
     const rendu = await res.json().catch(() => ({}));
-    return { statut: res.status, corps: rendu, ecrits: [...ecrits], urls: [...urlsVues] };
+    return {
+      statut: res.status, corps: rendu, ecrits: [...ecrits],
+      urls: [...urlsVues], entetes: [...entetesVues],
+    };
   };
 }
 
@@ -424,6 +432,63 @@ describe('T12 — un resumptionToken PRÉSENT mais VIDE veut dire « dernier lot
     expect(v.harvest_status).toBe('completed');
     expect(v.pending_resumption_token).toBeNull();
     expect(v.last_harvest_at).toBeTruthy();
+  });
+});
+
+describe('T13 — un 503 avec Retry-After tenable est HONORÉ, pas traité en panne', () => {
+  // 503 et 429 sont la façon normale dont un serveur OAI-PMH dit « pas
+  // maintenant » — souvent pendant qu'il prépare un gros lot. Les traiter comme
+  // une panne, c'est revenir taper au même endroit au cycle suivant.
+  it('attend le délai annoncé puis réessaie, et le cycle aboutit', async () => {
+    const r = await monterEF(etatNeuf(), [
+      { status: 503, body: '', headers: { 'Retry-After': new Date(Date.now() + 5).toUTCString() } },
+      listRecords([recMarc('oai:x:1', 'Un', null, null)]),
+    ])();
+    expect(r.statut).toBe(200);
+    expect(r.corps.inserted_rows).toBe(1);
+    expect(r.urls).toHaveLength(2);          // la requête a bien été rejouée
+    expect(verrou(r.ecrits).harvest_status).toBe('completed');
+  });
+});
+
+describe("T14 — un back-off trop long rend la main SANS crier à la panne", () => {
+  it("harvest_status=paused (pas error) et le jeton de reprise est CONSERVÉ", async () => {
+    const etat = etatNeuf();
+    etat.state.pending_resumption_token = 'tok-en-cours';
+    const r = await monterEF(etat, [
+      { status: 503, body: '', headers: { 'Retry-After': '3600' } },
+    ])();
+
+    const v = verrou(r.ecrits);
+    // 'error' ferait croire à une source cassée et sortirait la biblio du cycle.
+    expect(v.harvest_status).toBe('paused');
+    expect(v.last_error).toMatch(/attendre/);
+    // Le point le plus facile à casser : sans préservation explicite, le finally
+    // reposait null et la position de reprise était perdue à chaque incident.
+    expect(v.pending_resumption_token).toBe('tok-en-cours');
+  });
+});
+
+describe('T15 — le moissonneur se présente avec un contact joignable', () => {
+  it('User-Agent porte l’adresse fédérale (convention OAI-PMH)', async () => {
+    const r = await monterEF(etatNeuf(), [listRecords([])])();
+    const ua = r.entetes[0]['User-Agent'];
+    expect(ua).toMatch(/^AnarBib-OAI-Harvester/);
+    expect(ua).toContain('@');   // une admin d'en face peut écrire à quelqu'un
+  });
+});
+
+describe('T16 — les lots ne s’enchaînent pas sans respirer', () => {
+  it('une pause sépare deux requêtes consécutives', async () => {
+    const debut = Date.now();
+    const r = await monterEF(etatNeuf(), [
+      listRecords([recMarc('oai:x:1', 'Un', null, null)], 'tok-1'),
+      listRecords([recMarc('oai:x:2', 'Deux', null, null)], null),
+    ])();
+    const ecoule = Date.now() - debut;
+    expect(r.corps.lots_harvested).toBe(2);
+    // INTER_LOT_PAUSE_MS vaut 1 s ; on garde une marge pour la lenteur du CI.
+    expect(ecoule).toBeGreaterThanOrEqual(900);
   });
 });
 

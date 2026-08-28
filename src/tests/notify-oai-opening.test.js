@@ -260,6 +260,17 @@ describe('T8 — une fermeture réseau ne dit pas le nom d’une biblio', () => 
   });
 });
 
+describe('T10 — la demande montante revient AUSSI à la biblio demandeuse', () => {
+  it('fédéral + adresse collective : la biblio sait que sa demande est partie', async () => {
+    const r = await monterEF(mondeBiblio())({ event: 'oai_open_requested', request_id: 'req-1' });
+    expect(r.adresses).toEqual([COLLECTIF_BLMF, FEDERAL].sort());
+    // Une demande a dormi deux mois et demi en pending_admin sans que personne
+    // ne s'en aperçoive — ni côté biblio, qui n'avait reçu aucun accusé, ni
+    // côté fédéral. L'accusé est la moitié rattrapable de ce silence.
+    expect(r.corps.sent_count).toBe(2);
+  });
+});
+
 describe('T9 — une demande introuvable n’envoie rien', () => {
   it('pas de courriel sur un request_id inconnu', async () => {
     const r = await monterEF(mondeBiblio({ demande: null }))({ event: 'oai_closed', request_id: 'inconnu' });
