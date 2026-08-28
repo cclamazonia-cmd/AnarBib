@@ -239,17 +239,13 @@ export default function DedupAssistantPanel({ isActive, onChanged }) {
 
       {!loading && charge && (
         <>
-          <div style={{ display: 'flex', borderBottom: '2px solid rgba(255,255,255,.08)', marginBottom: 12, flexWrap: 'wrap' }}>
+          <div className="ab-tabbar ab-tabbar--sub">
             {[['decider', 'catalogacao.dedupAssist.bucketDecide', aDecider.length],
               ['rapprocher', 'catalogacao.dedupAssist.bucketGroup', aRapprocher.length]].map(([id, cle, n]) => (
               <button key={id} type="button" onClick={() => { setBucket(id); setEx(null); }}
-                style={{
-                  padding: '8px 16px', fontSize: '.88rem', fontWeight: 600, background: 'none',
-                  border: 'none', cursor: 'pointer', marginBottom: -2,
-                  borderBottom: `2px solid ${bucket === id ? 'var(--brand-color-primary, #7a0b14)' : 'transparent'}`,
-                  color: bucket === id ? 'var(--brand-text, #f4f4f4)' : 'var(--brand-muted, #aaa)',
-                }}>
-                {t({ id: cle })} ({n})
+                className={`ab-tabbar__tab${bucket === id ? ' active' : ''}`}>
+                {t({ id: cle })}
+                {n > 0 && <span className="ab-tabbar__badge">{n}</span>}
               </button>
             ))}
           </div>

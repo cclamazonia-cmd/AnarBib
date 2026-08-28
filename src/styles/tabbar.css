@@ -119,12 +119,43 @@
 
 .ab-tabbar__tab.active .ab-tabbar__badge--alert { background: rgba(0, 0, 0, .30); }
 
-/* Séparateur de groupe (painel : « Travail du jour » = vue d'ensemble, le reste
-   = vues de détail). En barre qui revient à la ligne, un trait vertical n'a plus
-   de sens : on écarte simplement les pastilles suivantes. */
-.ab-tabbar__sep {
-  flex-basis: 12px;
-  align-self: stretch;
+/* Début de groupe. Trois pages marquaient déjà des ruptures dans leur barre —
+   painel (« Travail du jour » = vue d'ensemble, le reste = vues de détail),
+   catalogação (le flux OCR isolé entre deux ruptures), biblioteca (les échanges
+   inter-bibliothèques) — chacune à sa façon : un trait vertical d'un côté, une
+   marge de 16 px de l'autre. Un trait vertical ne tient pas dans une barre qui
+   revient à la ligne : il se retrouve au hasard d'un retour et ne marque plus
+   rien. Un écart, si. Mécanisme unique : la pastille qui OUVRE le groupe. */
+.ab-tabbar__tab--group { margin-left: 14px; }
+
+/* Contrôle posé au bout de la barre sans être un onglet (biblioteca :
+   « Actualiser »). Poussé à droite sur écran large ; sur mobile il prend la
+   largeur de la grille plutôt qu'une cellule, pour ne pas se faire passer pour
+   un dixième onglet. */
+.ab-tabbar__aside { margin-left: auto; }
+
+/* ── Second niveau : `.ab-tabbar--sub` ────────────────────────────────────
+   Les barres de SOUS-onglets (vues d'un catalogue, seaux de l'assistant
+   doublons, sous-onglets des tâches, revue d'une fiche…) étaient jusqu'ici
+   écrites à la main, une par une, en styles inline — d'où cinq apparences
+   différentes pour la même fonction. Même pastille, en plus petit, sur une
+   surface transparente : le second niveau se lit comme un second niveau, pas
+   comme une deuxième barre principale.
+
+   Règle de hiérarchie : le premier niveau porte une icône, le second n'en porte
+   pas. C'est ce qui distingue les deux d'un coup d'œil quand ils se suivent. */
+.ab-tabbar--sub {
+  gap: 6px;
+  padding: 0 0 12px;
+  background: none;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  margin-bottom: 14px;
+}
+
+.ab-tabbar--sub .ab-tabbar__tab {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: .82rem;
 }
 
 /* ── Mobile (--bp-sm) ──────────────────────────────────────────────────────
@@ -146,7 +177,28 @@
     padding: 10px 12px;
     border-radius: 12px;
     font-size: .84rem;
+    /* Un libellé d'un seul mot plus large que sa colonne (« Administrateur·rices »,
+       20 caractères pour ~147 px) ne se coupe pas aux espaces : sans ceci, il
+       débordait sa pastille et faisait défiler la barre. Mesuré à 360 px. */
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
-  .ab-tabbar__sep { display: none; }
+  /* En grille, une marge de début de groupe décalerait une colonne entière. */
+  .ab-tabbar__tab--group { margin-left: 0; }
+
+  .ab-tabbar__aside { margin-left: 0; grid-column: 1 / -1; }
+
+  /* Les barres de second niveau comptent 2 à 4 entrées courtes : la grille
+     laisserait des cellules vides, le retour à la ligne suffit. */
+  .ab-tabbar--sub {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .ab-tabbar--sub .ab-tabbar__tab {
+    white-space: nowrap;
+    border-radius: var(--brand-radius-pill, 999px);
+    padding: 6px 12px;
+  }
 }

@@ -51,17 +51,19 @@ export default function RedePage() {
     reader: t({id:'roles.reader'}), librarian: t({id:'roles.librarian'}),
     coordenador: t({id:'roles.coordenador'}), administrador: t({id:'roles.administrador'}),
   }), [t]);
+  // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css), commune a
+  // toutes les pages a onglets.
   const TABS = useMemo(() => ([
-    { id: 'overview', label: t({ id: 'rede.tab.overview' }) },
-    { id: 'requests', label: t({ id: 'rede.requests.label' }) },
-    { id: 'invitations', label: t({ id: 'rede.tab.invitations' }) },
-    { id: 'libraries', label: t({ id: 'rede.tab.libraries' }) },
-    { id: 'members', label: t({ id: 'rede.tab.members' }) },
-    { id: 'admins', label: t({ id: 'rede.tab.admins' }) },
-    { id: 'reports', label: t({ id: 'rede.tab.reports' }) },
-    { id: 'gazeta', label: t({ id: 'rede.tab.gazeta' }) },
-    { id: 'lettre', label: t({ id: 'rede.tab.lettre' }) },
-    { id: 'oaisource', label: t({ id: 'rede.tab.oaiSource' }) }, /* OAI-O3 */
+    { id: 'overview', icon: '🌐', label: t({ id: 'rede.tab.overview' }) },
+    { id: 'requests', icon: '📥', label: t({ id: 'rede.requests.label' }) },
+    { id: 'invitations', icon: '💌', label: t({ id: 'rede.tab.invitations' }) },
+    { id: 'libraries', icon: '🏛️', label: t({ id: 'rede.tab.libraries' }) },
+    { id: 'members', icon: '👥', label: t({ id: 'rede.tab.members' }) },
+    { id: 'admins', icon: '🔑', label: t({ id: 'rede.tab.admins' }) },
+    { id: 'reports', icon: '📊', label: t({ id: 'rede.tab.reports' }) },
+    { id: 'gazeta', icon: '📰', label: t({ id: 'rede.tab.gazeta' }) },
+    { id: 'lettre', icon: '✉️', label: t({ id: 'rede.tab.lettre' }) },
+    { id: 'oaisource', icon: '🛰️', label: t({ id: 'rede.tab.oaiSource' }) }, /* OAI-O3 */
   ]), [t]);
   const roleLoaded = role !== null && role !== undefined;
   // E.4.a : garde stricte v0.3. Seuls les admins reseau actifs accedent
@@ -375,9 +377,21 @@ export default function RedePage() {
 
         {msg.text && <div style={{ padding:'10px 14px', borderRadius:8, fontSize:'.9rem', marginBottom:14, background:msg.kind==='ok'?'rgba(21,128,61,.12)':'rgba(220,38,38,.12)', color:msg.kind==='ok'?'#4ade80':'#f87171' }}>{msg.text}</div>}
 
-        <div className="cat-tabs" style={{ marginBottom:18 }}>
-          {TABS.filter(tb => isAdmin || tb.id === 'oaisource').map(t => <button key={t.id} className={`cat-tab-btn${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.label}{t.id==='requests'&&requests.filter(r=>r.request_status==='pendente').length>0?` (${requests.filter(r=>r.request_status==='pendente').length})`:''}</button>)}
-        </div>
+        <nav className="ab-tabbar" role="tablist" style={{ marginBottom:18 }}>
+          {TABS.filter(tb => isAdmin || tb.id === 'oaisource').map(t => {
+            // Le decompte des demandes en attente sort du libelle : pastille
+            // d'alerte, affichee seulement s'il y a quelque chose a traiter.
+            const pendentes = t.id === 'requests' ? requests.filter(r => r.request_status === 'pendente').length : 0;
+            return (
+              <button key={t.id} className={`ab-tabbar__tab${tab===t.id?' active':''}`}
+                onClick={()=>setTab(t.id)} role="tab" aria-selected={tab===t.id}>
+                <span className="ab-tabbar__icon" aria-hidden="true">{t.icon}</span>
+                {t.label}
+                {pendentes > 0 && <span className="ab-tabbar__badge ab-tabbar__badge--alert">{pendentes}</span>}
+              </button>
+            );
+          })}
+        </nav>
 
         {/* Norme visuelle (cf. autres pages) : zone de travail sur surface sombre
             (scrim .cat-panel) pour la lisibilite quel que soit le hero/theme. */}

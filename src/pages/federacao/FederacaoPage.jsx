@@ -200,7 +200,13 @@ export default function FederacaoPage() {
   }
 
   const visibleTabKeys = TAB_KEYS.filter(k => hasStaffAccess || !STAFF_ONLY_TABS.has(k));
-  const TABS = visibleTabKeys.map(k => ({ id: k, label: t({ id: `federacao.tab.${k}` }) }));
+  // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css), commune a
+  // toutes les pages a onglets. Icones par cle d'onglet, hors du map i18n.
+  const TAB_ICONS = {
+    inicio: '🏠', circulos: '🫂', carte: '🗺️', assembleias: '🗣️',
+    gazeta: '📰', carta: '✉️', entreajuda: '🤝', communs: '🌱',
+  };
+  const TABS = visibleTabKeys.map(k => ({ id: k, icon: TAB_ICONS[k], label: t({ id: `federacao.tab.${k}` }) }));
 
   return (
     <PageShell><Topbar />
@@ -209,13 +215,15 @@ export default function FederacaoPage() {
       </Hero>
 
       <div className="catalogacao-wrap" style={{ maxWidth: 980, margin: '0 auto' }}>
-        <div className="cat-tabs" style={{ marginBottom: 18 }}>
+        <nav className="ab-tabbar" role="tablist" style={{ marginBottom: 18 }}>
           {TABS.map(tb => (
-            <button key={tb.id} className={`cat-tab-btn${tab === tb.id ? ' active' : ''}`} onClick={() => setTab(tb.id)}>
+            <button key={tb.id} className={`ab-tabbar__tab${tab === tb.id ? ' active' : ''}`}
+              onClick={() => setTab(tb.id)} role="tab" aria-selected={tab === tb.id}>
+              <span className="ab-tabbar__icon" aria-hidden="true">{tb.icon}</span>
               {tb.label}
             </button>
           ))}
-        </div>
+        </nav>
 
         <div className="cat-panel active">
           {tab === 'circulos' && (

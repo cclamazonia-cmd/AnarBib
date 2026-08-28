@@ -221,14 +221,10 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
     <button
       type="button"
       onClick={() => { setScope(id); setSaisie(null); }}
-      style={{
-        padding: '8px 16px', fontSize: '.88rem', fontWeight: 600, background: 'none',
-        border: 'none', cursor: 'pointer', marginBottom: -2,
-        borderBottom: `2px solid ${scope === id ? 'var(--brand-color-primary, #7a0b14)' : 'transparent'}`,
-        color: scope === id ? 'var(--brand-text, #f4f4f4)' : 'var(--brand-muted, #aaa)',
-      }}
+      className={`ab-tabbar__tab${scope === id ? ' active' : ''}`}
     >
-      {label} ({n})
+      {label}
+      {n > 0 && <span className="ab-tabbar__badge">{n}</span>}
     </button>
   );
 
@@ -285,7 +281,7 @@ export default function CatalogDuplicatesModal({ isOpen, onClose, onChanged }) {
           propre, et leur contenu invisible pour toujours. */}
       {!loading && (
         <>
-          <div style={{ display: 'flex', borderBottom: '2px solid rgba(255,255,255,.08)', marginBottom: 14, flexWrap: 'wrap' }}>
+          <div className="ab-tabbar ab-tabbar--sub">
             {tabBtn('interne', t({ id: 'catalogacao.dedup.scanTabInternal' }), nbInterne)}
             {tabBtn('croise', t({ id: 'catalogacao.dedup.scanTabCross' }), nbCroise)}
             {tabBtn('signales', t({ id: 'catalogacao.dedup.scanTabReported' }), signales.length)}

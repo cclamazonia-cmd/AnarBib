@@ -3388,19 +3388,18 @@ export default function BookDraftForm({ batches = [], mode = 'simple', onSaved, 
             {t({id:'catalogacao.ui.reviewHint'})}
           </div>
 
-          {/* Sub-tabs — overflowX auto : sous 720 px les trois onglets (~348 px)
-              ne tiennent pas dans le panneau ; ils défilent, comme .cat-tabs le
-              fait déjà pour la barre d'onglets principale, au lieu de pousser
-              la page en débordement horizontal. */}
-          <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid rgba(255,255,255,.1)', marginBottom: 12, overflowX: 'auto' }}>
+          {/* Sub-tabs — barre partagee de second niveau (`.ab-tabbar--sub`).
+              Elle REVIENT A LA LIGNE au lieu de defiler : sous 720 px les trois
+              onglets (~348 px) ne tenaient pas dans le panneau et partaient en
+              defilement horizontal, ou personne n'allait les chercher. */}
+          <div className="ab-tabbar ab-tabbar--sub">
             {[
               { id: 'summary', label: t({id:'catalogacao.ui.tabSummary'}) },
               { id: 'public', label: t({id:'catalogacao.ui.tabPublic'}) },
               { id: 'isbd', label: t({id:'catalogacao.ui.tabIsbd'}) },
             ].map(t => (
               <button key={t.id} type="button"
-                className={`cat-tab-btn${reviewTab === t.id ? ' active' : ''}`}
-                style={{ fontSize: '.78rem', padding: '6px 14px' }}
+                className={`ab-tabbar__tab${reviewTab === t.id ? ' active' : ''}`}
                 onClick={() => setReviewTab(t.id)}>
                 {t.label}
               </button>

@@ -340,15 +340,10 @@ export default function CatalogPanel({ onEdit, requestedView, requestNonce, onCh
       )}
 
       {/* ── Sub-tabs ─────────────────────────────────── */}
-      <div style={{ display: 'flex', gap: 0, borderBottom: '2px solid rgba(255,255,255,.08)', marginBottom: 14 }}>
+      <div className="ab-tabbar ab-tabbar--sub">
         {viewTabs.map(vt => (
-          <button key={vt.id} type="button" onClick={() => setView(vt.id)} style={{
-            padding: '10px 18px', fontSize: '.9rem', fontWeight: 600,
-            background: 'none', border: 'none', cursor: 'pointer',
-            borderBottom: `2px solid ${view === vt.id ? 'var(--brand-color-primary, #7a0b14)' : 'transparent'}`,
-            color: view === vt.id ? 'var(--brand-text, #f4f4f4)' : 'var(--brand-muted, #aaa)',
-            marginBottom: -2, transition: 'all .15s',
-          }}>{vt.label}</button>
+          <button key={vt.id} type="button" onClick={() => setView(vt.id)}
+            className={`ab-tabbar__tab${view === vt.id ? ' active' : ''}`}>{vt.label}</button>
         ))}
       </div>
 

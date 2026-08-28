@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, Fragment, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useIntl } from 'react-intl';
 import { useDocumentTitle } from '@/lib/useDocumentTitle';
 import { supabase, apiQuery } from '@/lib/supabase';
@@ -1533,14 +1533,16 @@ export default function PanelPage() {
   // accessible du bouton.
   const ALL_TABS = [
     { key: 'trabalho-do-dia', icon: '🎯', label: t({ id: 'panel.tab.dailyWork' }), hint: t({ id: 'panel.tab.dailyWork.hint' }) },
-    { key: 'acoes', icon: '⚡', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }) },
+    // `group` ouvre le bloc des vues de detail : « Travail du jour » est la vue
+    // d'ensemble, tout ce qui suit est consulte au besoin (EA-01).
+    { key: 'acoes', icon: '⚡', label: t({ id: 'panel.tab.actions' }), hint: t({ id: 'panel.tab.actions.hint' }), group: true },
     { key: 'reservas', icon: '📌', label: t({ id: 'panel.tab.reservations' }), hint: t({ id: 'panel.tab.reservations.hint' }) },
     { key: 'consultas-locais', icon: '📖', label: t({ id: 'panel.tab.consultations' }), hint: t({ id: 'panel.tab.consultations.hint' }) },
     { key: 'emprestimos', icon: '📚', label: t({ id: 'panel.tab.loans' }), hint: t({ id: 'panel.tab.loans.hint' }) },
     { key: 'leitor', icon: '👤', label: t({ id: 'panel.tab.reader' }), hint: t({ id: 'panel.tab.reader.hint' }) },
     { key: 'historico', icon: '🕘', label: t({ id: 'panel.tab.history' }), hint: t({ id: 'panel.tab.history.hint' }) },
     ...(isCoordOrAdmin ? [
-      { key: 'contribuicoes', icon: '🤝', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
+      { key: 'contribuicoes', icon: '🎟️', label: t({ id: 'panel.tab.memberships' }), hint: t({ id: 'panel.tab.memberships.hint' }) },
     ] : []),
     // MULTI P5 (volet staff) : validation des inscriptions (librarian/coordenador).
     ...(isLibrarian ? [
@@ -1806,24 +1808,18 @@ export default function PanelPage() {
       <div className="ab-painel-card">
         <nav className="ab-tabbar" role="tablist">
           {TABS.map(t => (
-            <Fragment key={t.key}>
-              <button className={`ab-tabbar__tab ${tab === t.key ? 'active' : ''}`}
-                data-painel-tab={t.key}
-                onClick={() => setTab(t.key)} role="tab" aria-selected={tab === t.key}
-                /* Le hint n'est plus affiché sous le libellé : il devient l'infobulle
-                   et le nom accessible du bouton. */
-                title={t.hint} aria-label={`${t.label} — ${t.hint}`}>
-                <span className="ab-tabbar__icon" aria-hidden="true">{t.icon}</span>
-                {t.label}
-                {t.count > 0 && (
-                  <span className={`ab-tabbar__badge${t.alert ? ' ab-tabbar__badge--alert' : ''}`}>{t.count}</span>
-                )}
-              </button>
-              {/* EA-01 : Trabalho do dia = vue d'ensemble ; le reste = vues de detail.
-                  En barre qui revient à la ligne, un trait vertical n'a plus de sens :
-                  `ab-tabbar__sep` écarte simplement les pastilles suivantes. */}
-              {t.key === 'trabalho-do-dia' && <span className="ab-tabbar__sep" aria-hidden="true" />}
-            </Fragment>
+            <button key={t.key} className={`ab-tabbar__tab ${t.group ? 'ab-tabbar__tab--group ' : ''}${tab === t.key ? 'active' : ''}`}
+              data-painel-tab={t.key}
+              onClick={() => setTab(t.key)} role="tab" aria-selected={tab === t.key}
+              /* Le hint n'est plus affiché sous le libellé : il devient l'infobulle
+                 et le nom accessible du bouton. */
+              title={t.hint} aria-label={`${t.label} — ${t.hint}`}>
+              <span className="ab-tabbar__icon" aria-hidden="true">{t.icon}</span>
+              {t.label}
+              {t.count > 0 && (
+                <span className={`ab-tabbar__badge${t.alert ? ' ab-tabbar__badge--alert' : ''}`}>{t.count}</span>
+              )}
+            </button>
           ))}
         </nav>
 

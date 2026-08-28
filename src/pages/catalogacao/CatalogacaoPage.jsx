@@ -40,20 +40,25 @@ export default function CatalogacaoPage() {
   const { formatMessage: t } = useIntl();
   useDocumentTitle(t({ id: 'pageTitle.cataloging' }));
 
+  // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css) : meme
+  // forme que « Mon compte », le tableau de bord, la bibliotheque, la federation
+  // et le reseau. `icon` = repere visuel du premier niveau ; `separator` marque
+  // le debut d'un groupe (ancien `.tab-separator`, meme semantique : l'ecart est
+  // AVANT la pastille marquee).
   const TABS = [
-    { id: 'booksPanel',     label: t({ id: 'catalogacao.tab.documento' }) },
-    { id: 'authorsPanel',   label: t({ id: 'catalogacao.tab.autoria' }) },
-    { id: 'indexPanel',     label: t({ id: 'catalogacao.tab.indexacao' }) },
-    { id: 'labelsPanel',    label: t({ id: 'catalogacao.tab.etiquetas' }) },
+    { id: 'booksPanel',     icon: '📄', label: t({ id: 'catalogacao.tab.documento' }) },
+    { id: 'authorsPanel',   icon: '✒️', label: t({ id: 'catalogacao.tab.autoria' }) },
+    { id: 'indexPanel',     icon: '🔖', label: t({ id: 'catalogacao.tab.indexacao' }) },
+    { id: 'labelsPanel',    icon: '🏷️', label: t({ id: 'catalogacao.tab.etiquetas' }) },
     // Flux d'ingestion distinct (depot de scans OCR) — isole entre 2 separateurs.
-    { id: 'ocrPanel',       label: t({ id: 'catalogacao.tab.ocr' }), separator: true },
-    { id: 'queuePanel',     label: t({ id: 'catalogacao.tab.fila' }), separator: true },
-    { id: 'batchesPanel',   label: t({ id: 'catalogacao.tab.lotes' }) },
-    { id: 'catalogPanel',   label: t({ id: 'catalogacao.tab.catalogo' }) },
-    { id: 'materiaPanel',   label: t({ id: 'catalogacao.tab.materia' }), separator: true },
-    { id: 'periodicosPanel', label: t({ id: 'catalogacao.tab.periodicos' }) },
+    { id: 'ocrPanel',       icon: '📷', label: t({ id: 'catalogacao.tab.ocr' }), separator: true },
+    { id: 'queuePanel',     icon: '📥', label: t({ id: 'catalogacao.tab.fila' }), separator: true },
+    { id: 'batchesPanel',   icon: '📦', label: t({ id: 'catalogacao.tab.lotes' }) },
+    { id: 'catalogPanel',   icon: '📇', label: t({ id: 'catalogacao.tab.catalogo' }) },
+    { id: 'materiaPanel',   icon: '🗂️', label: t({ id: 'catalogacao.tab.materia' }), separator: true },
+    { id: 'periodicosPanel', icon: '📰', label: t({ id: 'catalogacao.tab.periodicos' }) },
     ...(arbitreDoublons
-      ? [{ id: 'dedupPanel', label: t({ id: 'catalogacao.tab.dedup' }) }]
+      ? [{ id: 'dedupPanel', icon: '🔁', label: t({ id: 'catalogacao.tab.dedup' }) }]
       : []),
   ];
 
@@ -411,17 +416,20 @@ export default function CatalogacaoPage() {
           </div>
 
           {/* ── Tabs ─────────────────────────────────────── */}
-          <div className="cat-tabs">
+          <nav className="ab-tabbar" role="tablist">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
-                className={`cat-tab-btn${activeTab === tab.id ? ' active' : ''}${tab.separator ? ' tab-separator' : ''}`}
+                className={`ab-tabbar__tab${tab.separator ? ' ab-tabbar__tab--group' : ''}${activeTab === tab.id ? ' active' : ''}`}
                 onClick={() => switchTab(tab.id)}
+                role="tab"
+                aria-selected={activeTab === tab.id}
               >
+                <span className="ab-tabbar__icon" aria-hidden="true">{tab.icon}</span>
                 {tab.label}
               </button>
             ))}
-          </div>
+          </nav>
 
           {/* ── Panels ───────────────────────────────────── */}
 

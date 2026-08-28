@@ -99,22 +99,25 @@ export default function BibliotecaPage() {
     cancelada: t({ id: 'task.status.cancelada' }),
   }), [t]);
 
+  // Barre de pastilles partagee `.ab-tabbar` (src/styles/tabbar.css), commune a
+  // toutes les pages a onglets. `separator` marque le debut d'un groupe (ecart
+  // AVANT la pastille : ici, tout ce qui regarde hors de la biblio).
   const ALL_TABS = [
-    { id: 'identity', label: t({ id: 'biblioteca.tab.identity' }), coordOnly: true },
-    { id: 'comms', label: t({ id: 'biblioteca.tab.comms' }), coordOnly: true },
-    { id: 'regulation', label: t({ id: 'biblioteca.tab.regulation' }), coordOnly: true },
-    { id: 'privacy', label: t({ id: 'biblioteca.tab.privacy' }) },
-    { id: 'documents', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
+    { id: 'identity', icon: '🏛️', label: t({ id: 'biblioteca.tab.identity' }), coordOnly: true },
+    { id: 'comms', icon: '📣', label: t({ id: 'biblioteca.tab.comms' }), coordOnly: true },
+    { id: 'regulation', icon: '📜', label: t({ id: 'biblioteca.tab.regulation' }), coordOnly: true },
+    { id: 'privacy', icon: '🔒', label: t({ id: 'biblioteca.tab.privacy' }) },
+    { id: 'documents', icon: '📄', label: t({ id: 'biblioteca.tab.documents' }), coordOnly: true },
     // Paquet E.5 refactor (20/05/2026) : transitions de profil (gouvernance politique)
-    { id: 'transicoes', label: t({ id: 'biblioteca.tab.transitions' }), coordOnly: true, governance_only: true },
-    { id: 'team', label: t({ id: 'biblioteca.tab.team' }) },
-    { id: 'leitores', label: t({ id: 'biblioteca.tab.leitores' }) },
-    { id: 'eventos', label: t({ id: 'biblioteca.tab.events' }), coordOnly: true },
-    { id: 'exchanges', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
-    { id: 'ill', label: t({ id: 'biblioteca.tab.ill' }) },
-    { id: 'reports', label: t({ id: 'biblioteca.tab.reports' }) },
-    { id: 'notas', label: t({ id: 'biblioteca.tab.readingNotes' }) },
-    { id: 'tasks', label: t({ id: 'biblioteca.tab.tasks' }) },
+    { id: 'transicoes', icon: '🔄', label: t({ id: 'biblioteca.tab.transitions' }), coordOnly: true, governance_only: true },
+    { id: 'team', icon: '👥', label: t({ id: 'biblioteca.tab.team' }) },
+    { id: 'leitores', icon: '👤', label: t({ id: 'biblioteca.tab.leitores' }) },
+    { id: 'eventos', icon: '🗓️', label: t({ id: 'biblioteca.tab.events' }), coordOnly: true },
+    { id: 'exchanges', icon: '🔀', label: t({ id: 'biblioteca.tab.exchanges' }), separator: true },
+    { id: 'ill', icon: '🚚', label: t({ id: 'biblioteca.tab.ill' }) },
+    { id: 'reports', icon: '📊', label: t({ id: 'biblioteca.tab.reports' }) },
+    { id: 'notas', icon: '✍️', label: t({ id: 'biblioteca.tab.readingNotes' }) },
+    { id: 'tasks', icon: '📋', label: t({ id: 'biblioteca.tab.tasks' }) },
   ];
   // FIX BUG #4: rename loop variable to avoid shadowing `t` (formatMessage)
   // Paquet E.5 refactor (20/05/2026) : filtrer aussi par governance_mode
@@ -1404,11 +1407,19 @@ export default function BibliotecaPage() {
 
         {msg.text && <div style={{ padding:'10px 14px', borderRadius:8, fontSize:'.9rem', marginBottom:14, background:msg.kind==='ok'?'rgba(21,128,61,.12)':msg.kind==='info'?'rgba(29,78,216,.1)':'rgba(220,38,38,.12)', color:msg.kind==='ok'?'#4ade80':msg.kind==='info'?'#60a5fa':'#f87171' }}>{msg.text}</div>}
 
-        <div className="cat-tabs" style={{ marginBottom:18 }}>
+        <div className="ab-tabbar" style={{ marginBottom:18 }}>
           {/* FIX BUG #4: rename loop variable to avoid shadowing `t` */}
-          {visibleTabs.map(tb => <button key={tb.id} className={`cat-tab-btn${tab===tb.id?' active':''}${tb.separator?' tab-separator':''}`} onClick={()=>setTab(tb.id)}>{tb.label}</button>)}
-          {/* EA-02 (21/05/2026) : bouton Atualizar global. Recharge loadAll(). */}
-          <button className="cat-btn secondary" onClick={handleRefresh} disabled={refreshState==='busy'} title={t({ id: 'biblioteca.refresh.hint' })} style={{ marginLeft:'auto', fontSize:'.8rem', padding:'4px 10px' }}>{t({ id: refreshState==='busy' ? 'biblioteca.refresh.busy' : refreshState==='done' ? 'biblioteca.refresh.done' : 'biblioteca.refresh.label' })}</button>
+          {visibleTabs.map(tb => (
+            <button key={tb.id} className={`ab-tabbar__tab${tb.separator?' ab-tabbar__tab--group':''}${tab===tb.id?' active':''}`}
+              onClick={()=>setTab(tb.id)} aria-current={tab===tb.id ? 'page' : undefined}>
+              <span className="ab-tabbar__icon" aria-hidden="true">{tb.icon}</span>
+              {tb.label}
+            </button>
+          ))}
+          {/* EA-02 (21/05/2026) : bouton Atualizar global. Recharge loadAll().
+              `ab-tabbar__aside` : ce n'est pas un onglet — pousse a droite sur
+              ecran large, pleine largeur dans la grille mobile. */}
+          <button className="cat-btn secondary ab-tabbar__aside" onClick={handleRefresh} disabled={refreshState==='busy'} title={t({ id: 'biblioteca.refresh.hint' })} style={{ fontSize:'.8rem', padding:'4px 10px' }}>{t({ id: refreshState==='busy' ? 'biblioteca.refresh.busy' : refreshState==='done' ? 'biblioteca.refresh.done' : 'biblioteca.refresh.label' })}</button>
         </div>
 
         <div className="cat-panel active">
@@ -2605,12 +2616,12 @@ export default function BibliotecaPage() {
           <div>
             <h3 style={{ marginBottom:12 }}>{t({ id: 'biblioteca.tasks.title' })}</h3>
 
-            {/* Sous-onglets internes : Lista / Modelos / Catalogo. Reutilise
-                la classe cat-tab-btn pour rester coherent avec la page. */}
-            <div className="cat-tabs" style={{ marginBottom:16 }}>
-              <button className={`cat-tab-btn${tasksSubtab==='lista'?' active':''}`} onClick={()=>setTasksSubtab('lista')}>{t({ id: 'biblioteca.tasks.subtab.list' })}</button>
-              <button className={`cat-tab-btn${tasksSubtab==='modelos'?' active':''}`} onClick={()=>setTasksSubtab('modelos')}>{t({ id: 'biblioteca.tasks.subtab.templates' })}</button>
-              <button className={`cat-tab-btn${tasksSubtab==='catalogo'?' active':''}`} onClick={()=>setTasksSubtab('catalogo')}>{t({ id: 'biblioteca.tasks.subtab.catalog' })}</button>
+            {/* Sous-onglets internes : Lista / Modelos / Catalogo. Barre
+                partagee de second niveau (`.ab-tabbar--sub`), la meme partout. */}
+            <div className="ab-tabbar ab-tabbar--sub" style={{ marginBottom:16 }}>
+              <button className={`ab-tabbar__tab${tasksSubtab==='lista'?' active':''}`} onClick={()=>setTasksSubtab('lista')}>{t({ id: 'biblioteca.tasks.subtab.list' })}</button>
+              <button className={`ab-tabbar__tab${tasksSubtab==='modelos'?' active':''}`} onClick={()=>setTasksSubtab('modelos')}>{t({ id: 'biblioteca.tasks.subtab.templates' })}</button>
+              <button className={`ab-tabbar__tab${tasksSubtab==='catalogo'?' active':''}`} onClick={()=>setTasksSubtab('catalogo')}>{t({ id: 'biblioteca.tasks.subtab.catalog' })}</button>
             </div>
 
             {/* ── Sous-onglet LISTA ── */}

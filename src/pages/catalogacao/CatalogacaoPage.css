@@ -85,10 +85,14 @@
 
 /* ── Tabs ────────────────────────────────────────────────── */
 
-.cat-tabs {
-  display: flex; gap: 0; border-bottom: 2px solid var(--brand-panel-border, rgba(255,255,255,.1));
-  margin-bottom: 0; flex-wrap: wrap;
-}
+/* `.cat-tabs` (le conteneur de la barre d'onglets) a ete retire : toutes les
+   barres d'onglets de l'app passent par `.ab-tabbar` (src/styles/tabbar.css).
+
+   `.cat-tab-btn`, en revanche, RESTE — mais ce n'est plus un style d'onglet :
+   c'est le petit bouton d'action reutilise dans une trentaine d'endroits
+   (partages numeriques, partenariats, panneau gazette). Ne pas le confondre
+   avec un onglet, et ne pas l'aligner sur `.ab-tabbar__tab` : ce sont deux
+   objets differents qui se ressemblaient par accident d'histoire. */
 .cat-tab-btn {
   padding: 10px 18px; font-size: .92rem; font-weight: 600;
   background: none; border: none; border-bottom: 2px solid transparent;
@@ -100,7 +104,6 @@
   color: var(--brand-text, #f5f2ea);
   border-bottom-color: var(--brand-color-primary, #7a0b14);
 }
-.cat-tab-btn.tab-separator { margin-left: 16px; }
 
 /* ── Panels ──────────────────────────────────────────────── */
 
@@ -343,8 +346,9 @@
 @media (max-width: 720px) {
   .catalogacao-wrap { --wrap-pad: 12px; }
   .cat-statusbar { flex-direction: column; gap: 10px; }
-  .cat-tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
-  .cat-tab-btn { flex-shrink: 0; }
+  /* (l'ancien `.cat-tabs { overflow-x: auto }` — les onglets partaient en
+     defilement horizontal sous 640 px — est remplace par la grille a deux
+     colonnes de `.ab-tabbar`, cf. src/styles/tabbar.css) */
 }
 
 /* ── Aperçu live de la fiche (maquette v3, TRA-v3) ──────────── */
