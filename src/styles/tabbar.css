@@ -1,0 +1,152 @@
+/* =========================================================================
+   tabbar.css — barre d'onglets en pastilles (.ab-tabbar), partagée
+   -------------------------------------------------------------------------
+   POURQUOI CE FICHIER (28/08/2026)
+   --------------------------------
+   Les pages « Mon compte » (conta) et « Tableau de bord » (painel) affichaient
+   leurs onglets sous forme de gros boutons à DEUX lignes : le libellé, puis une
+   phrase d'explication (le « hint »). Conséquences mesurées sur la page conta,
+   qui compte 9 onglets :
+
+     - sur écran large, la rangée dépassait le cadre et se terminait en
+       DÉFILEMENT HORIZONTAL : les premiers onglets (dont « Données
+       personnelles ») sortaient du champ, et rien ne signalait qu'il y en
+       avait d'autres à gauche ;
+     - sous 640 px, la règle `flex-direction: column` transformait la barre en
+       une COLONNE DE 9 GROS BOUTONS, soit un écran entier de navigation avant
+       d'atteindre le contenu de l'onglet ouvert.
+
+   La phrase d'explication ne portait par ailleurs aucune information nouvelle :
+   chaque panneau REDIT son titre et son sous-titre en tête (« Historique /
+   Réservations et emprunts passés »), juste sous la barre. Elle doublait donc
+   la hauteur de la barre pour répéter ce qui allait s'afficher deux centimètres
+   plus bas.
+
+   CE QUE FAIT CETTE BARRE
+   -----------------------
+   Une pastille compacte par onglet : icône + libellé + pastille de compteur
+   quand il y a quelque chose à compter. Une seule ligne de texte, donc la barre
+   REVIENT À LA LIGNE (`flex-wrap`) au lieu de défiler — les 9 onglets tiennent
+   en deux rangées sur écran large, et TOUS restent visibles d'un coup d'œil.
+   Sous 640 px, grille à deux colonnes : la navigation tient en 4-5 rangées
+   basses au lieu de 9 hautes.
+
+   Le hint n'est pas perdu : il devient l'infobulle (`title`) et le nom
+   accessible (`aria-label`) du bouton — les clés i18n `*.hint` restent donc
+   utilisées, et la garde i18n code ↔ locales reste verte.
+
+   RÉUTILISATION
+   -------------
+   Classes neutres (`ab-tabbar`), pas de préfixe de page : à réutiliser pour
+   toute barre d'onglets de premier niveau. Ne PAS confondre avec `.cat-tab-btn`
+   (catalogação, biblioteca, federação, rede) qui est déjà sur une seule ligne
+   et sert AUSSI de style de bouton générique ailleurs — la toucher déborderait
+   très au-delà des barres d'onglets.
+   ========================================================================= */
+
+.ab-tabbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, .10);
+  background: rgba(12, 12, 12, .5);
+}
+
+.ab-tabbar__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: var(--brand-radius-pill, 999px);
+  background: rgba(24, 24, 24, .80);
+  color: var(--brand-muted, #d4cec3);
+  font-family: inherit;
+  font-size: .88rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s;
+}
+
+.ab-tabbar__tab:hover {
+  color: var(--brand-text, #f5f2ea);
+  border-color: rgba(255, 255, 255, .28);
+}
+
+.ab-tabbar__tab:focus-visible {
+  outline: 2px solid var(--brand-color-primary, #b32025);
+  outline-offset: 2px;
+}
+
+/* Onglet ouvert : pastille pleine, comme les boutons segmentés du catalogage
+   (ExemplarDraftForm) — l'état actif se lit sans dépendre d'un seul liseré. */
+.ab-tabbar__tab.active {
+  background: var(--brand-color-primary, #b32025);
+  border-color: var(--brand-color-primary, #b32025);
+  color: #fff;
+}
+
+.ab-tabbar__icon {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Compteur (envies, notes, avis non lus). Affiché seulement s'il y a quelque
+   chose à compter — un « (0) » permanent était du bruit dans le libellé. */
+.ab-tabbar__badge {
+  min-width: 1.5em;
+  padding: 1px 6px;
+  border-radius: var(--brand-radius-pill, 999px);
+  background: rgba(255, 255, 255, .14);
+  font-size: .74rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ab-tabbar__tab.active .ab-tabbar__badge { background: rgba(0, 0, 0, .30); }
+
+/* Ce qui appelle une action de la lectrice (avis non lus) plutôt qu'un simple
+   décompte : pastille pleine, lisible même quand l'onglet n'est pas ouvert. */
+.ab-tabbar__badge--alert {
+  background: var(--brand-color-primary, #b32025);
+  color: #fff;
+}
+
+.ab-tabbar__tab.active .ab-tabbar__badge--alert { background: rgba(0, 0, 0, .30); }
+
+/* Séparateur de groupe (painel : « Travail du jour » = vue d'ensemble, le reste
+   = vues de détail). En barre qui revient à la ligne, un trait vertical n'a plus
+   de sens : on écarte simplement les pastilles suivantes. */
+.ab-tabbar__sep {
+  flex-basis: 12px;
+  align-self: stretch;
+}
+
+/* ── Mobile (--bp-sm) ──────────────────────────────────────────────────────
+   Grille à 2 colonnes plutôt qu'une colonne de gros boutons : le libellé peut
+   passer à la ligne dans sa pastille (white-space: normal), aligné à gauche
+   pour rester lisible sur deux lignes. */
+@media (max-width: 640px) {
+  .ab-tabbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .ab-tabbar__tab {
+    justify-content: flex-start;
+    text-align: left;
+    white-space: normal;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: .84rem;
+  }
+
+  .ab-tabbar__sep { display: none; }
+}

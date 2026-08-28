@@ -28,22 +28,12 @@
   margin-bottom: 20px;
 }
 
-/* Tabs */
-.ab-conta-tabs {
-  display: flex; gap: 0; overflow-x: auto;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-  background: rgba(12,12,12,.5);
-}
-.ab-conta-tab {
-  background: none; border: none; border-bottom: 3px solid transparent;
-  color: var(--brand-muted); padding: 14px 18px; font-size: .92rem;
-  font-weight: 700; cursor: pointer; white-space: nowrap;
-  display: flex; flex-direction: column; gap: 2px;
-  transition: color .18s, border-color .18s;
-}
-.ab-conta-tab:hover { color: var(--brand-text); }
-.ab-conta-tab.active { color: #fff; border-bottom-color: var(--brand-color-primary); }
-.ab-conta-tab__hint { font-size: .76rem; font-weight: 400; color: var(--brand-muted); }
+/* Tabs — la barre de premier niveau est désormais la barre partagée
+   `.ab-tabbar` (src/styles/tabbar.css) : pastilles compactes sur une ligne de
+   texte, qui reviennent à la ligne au lieu de défiler. Les anciennes classes
+   `.ab-conta-tab*` (gros boutons à deux lignes, défilement horizontal, colonne
+   de 9 boutons sous 640 px) ont été retirées avec leur balisage.
+   `.ab-conta-tabs` reste utilisée par le squelette de chargement plus bas. */
 
 /* Panel */
 .ab-conta-panel { padding: 20px 24px; }
@@ -108,7 +98,9 @@
 .ab-button--danger:hover { background: rgba(200,30,30,.5) !important; }
 
 @media (max-width: 640px) {
-  .ab-conta-tabs { flex-direction: column; }
+  /* (l'ancien `.ab-conta-tabs { flex-direction: column }` — une colonne de
+     9 gros boutons avant le contenu — est remplacé par la grille à 2 colonnes
+     de `.ab-tabbar`, cf. src/styles/tabbar.css) */
   .ab-conta-grid2 { grid-template-columns: minmax(0, 1fr); }
   .ab-conta-reserve-form { flex-direction: column; }
   .ab-conta-reserve-form .ab-input { max-width: none; width: 100%; }

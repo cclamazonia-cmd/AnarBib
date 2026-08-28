@@ -1097,16 +1097,25 @@ export default function AccountPage() {
 
   // Paquet E.4.2 (20/05/2026) : filtrage des onglets AccountPage par availability
   // selon profil de biblio (1 lecteur·rice = 1 biblio, cf. doctrine ancrage).
+  //
+  // Forme des onglets (28/08/2026) : barre de pastilles `.ab-tabbar`
+  // (src/styles/tabbar.css). Chaque onglet porte
+  //   - `icon`  : repère visuel pour retrouver un onglet sans lire les 9 libellés ;
+  //   - `label` : le libellé seul, SANS « (0) » collé — le décompte est sorti…
+  //   - `count` : …ici, rendu en pastille et seulement s'il y a quelque chose à
+  //               compter (`alert` = ce qui appelle une action, les avis non lus) ;
+  //   - `hint`  : plus affiché sous le libellé (il redit le sous-titre du panneau
+  //               juste en dessous) mais conservé en infobulle + nom accessible.
   const ALL_TABS = [
-    { key: 'perfil', label: t({ id: 'account.tab.profile' }), hint: t({ id: 'account.tab.profile.hint' }) },
-    { key: 'reservar', label: t({ id: 'account.tab.reservations' }), hint: t({ id: 'account.tab.reservations.hint' }) },
-    { key: 'curso', label: t({ id: 'account.tab.loans' }), hint: t({ id: 'account.tab.loans.hint' }) },
-    { key: 'historico', label: t({ id: 'account.tab.history' }), hint: t({ id: 'account.tab.history.hint' }) },
-    { key: 'avisos', label: `${t({ id: 'account.tab.notifications' })}${unreadCount > 0 ? ` (${unreadCount})` : ''}`, hint: t({ id: 'account.tab.notifications.hint' }) },
-    { key: 'desejos', label: `${t({ id: 'account.tab.wishlist' })} (${wishlist.length})`, hint: t({ id: 'account.tab.wishlist.hint' }) },
-    { key: 'notas', label: `${t({ id: 'account.tab.readingNotes' })} (${myReadingNotes.length})`, hint: t({ id: 'account.tab.readingNotes.hint' }) },
-    { key: 'biblios', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
-    { key: 'eventos', label: t({ id: 'account.tab.events' }), hint: t({ id: 'account.tab.events.hint' }) },
+    { key: 'perfil', icon: '👤', label: t({ id: 'account.tab.profile' }), hint: t({ id: 'account.tab.profile.hint' }) },
+    { key: 'reservar', icon: '📌', label: t({ id: 'account.tab.reservations' }), hint: t({ id: 'account.tab.reservations.hint' }) },
+    { key: 'curso', icon: '📚', label: t({ id: 'account.tab.loans' }), hint: t({ id: 'account.tab.loans.hint' }) },
+    { key: 'historico', icon: '🕘', label: t({ id: 'account.tab.history' }), hint: t({ id: 'account.tab.history.hint' }) },
+    { key: 'avisos', icon: '🔔', label: t({ id: 'account.tab.notifications' }), hint: t({ id: 'account.tab.notifications.hint' }), count: unreadCount, alert: true },
+    { key: 'desejos', icon: '⭐', label: t({ id: 'account.tab.wishlist' }), hint: t({ id: 'account.tab.wishlist.hint' }), count: wishlist.length },
+    { key: 'notas', icon: '✍️', label: t({ id: 'account.tab.readingNotes' }), hint: t({ id: 'account.tab.readingNotes.hint' }), count: myReadingNotes.length },
+    { key: 'biblios', icon: '🏛️', label: t({ id: 'account.tab.libraries' }), hint: t({ id: 'account.tab.libraries.hint' }) },
+    { key: 'eventos', icon: '🗓️', label: t({ id: 'account.tab.events' }), hint: t({ id: 'account.tab.events.hint' }) },
   ];
   const TABS = ALL_TABS.filter(t => availability[t.key] !== false);
 
@@ -1302,12 +1311,19 @@ export default function AccountPage() {
 
       {/* Tabs */}
       <div className="ab-conta-card">
-        <nav className="ab-conta-tabs" role="tablist">
+        <nav className="ab-tabbar" role="tablist">
           {TABS.map(tab => (
-            <button key={tab.key} className={`ab-conta-tab ${activeTab === tab.key ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.key)} role="tab" aria-selected={activeTab === tab.key}>
+            <button key={tab.key} className={`ab-tabbar__tab ${activeTab === tab.key ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.key)} role="tab" aria-selected={activeTab === tab.key}
+              /* Le hint n'est plus affiché sous le libellé : il devient l'infobulle
+                 et le nom accessible du bouton, pour que ni la souris ni un
+                 lecteur d'écran ne perdent l'explication. */
+              title={tab.hint} aria-label={`${tab.label} — ${tab.hint}`}>
+              <span className="ab-tabbar__icon" aria-hidden="true">{tab.icon}</span>
               {tab.label}
-              <span className="ab-conta-tab__hint">{tab.hint}</span>
+              {tab.count > 0 && (
+                <span className={`ab-tabbar__badge${tab.alert ? ' ab-tabbar__badge--alert' : ''}`}>{tab.count}</span>
+              )}
             </button>
           ))}
         </nav>

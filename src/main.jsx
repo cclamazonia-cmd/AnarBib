@@ -8,6 +8,7 @@ import './styles/fonts.css';
 import './styles/theme-base.css';
 import './styles/breakpoints.css';
 import './styles/catalog.css';
+import './styles/tabbar.css';
 // Filet anti-débordement mobile — chargé en dernier pour passer devant les CSS
 // de composants (cf. en-tête de mobile.css).
 import './styles/mobile.css';
