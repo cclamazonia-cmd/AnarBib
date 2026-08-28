@@ -14,7 +14,17 @@
 //   - ascendant  : adresse fédérale (les admins instruisent) ;
 //   - décisions  : le·la coordenador demandeur·euse (+ copie fédérale) ;
 //   - descendant : tous·tes les coordenadores des biblios concernées (dans la
-//     locale de leur biblio) ; résolution → fédéral + concerné·es ; fermeture → fédéral.
+//     locale de leur biblio) ; résolution → fédéral + concerné·es.
+//   - fermeture  : LES MÊMES QUE L'OUVERTURE. Jusqu'au 28/08/2026 elle ne
+//     partait qu'au fédéral : la coordination était prévenue que son catalogue
+//     s'ouvrait — et le courriel d'approbation lui dit noir sur blanc « pense à
+//     refermer » — mais jamais qu'il s'était refermé. Or la fermeture est
+//     l'information qui compte le plus pour elle : c'est celle qui dit que le
+//     catalogue n'est plus exposé. La règle est donc symétrique et vaut pour
+//     les deux formes de demande, qui n'ont pas les mêmes destinataires :
+//       kind='library' → demandeur·euse + fédéral  (comme oai_open_approved)
+//       kind='network' → fédéral + coordinations concernées
+//                                            (comme oai_network_resolved)
 
 import { serveJsonWebhook } from '../_shared/core/webhook.ts';
 import { supabaseAdmin, APP_BASE_URL } from '../_shared/core/env.ts';
@@ -184,9 +194,27 @@ Deno.serve((req) => serveJsonWebhook(
         break;
       }
       case 'oai_closed': {
-        const { name } = await libInfo(r.library_id);
+        const { name, locale } = await libInfo(r.library_id);
         const target = name || tMail(FEDERAL_LOCALE, 'oai.networkWord');
         await bump(sendOai(FEDERAL_TARGET, FEDERAL_LOCALE, 'oai.closed.sub', 'oai.closed.intro', { target }));
+        // Qui a été prévenu de l'ouverture est prévenu de la fermeture. Les deux
+        // formes de demande n'ont pas prévenu les mêmes personnes : on rend donc
+        // à chacune SON pendant, plutôt qu'une liste unique qui serait fausse
+        // dans un cas sur deux.
+        if (r.kind === 'network') {
+          // Pendant de oai_network_resolved, qui a écrit aux coordinations des
+          // biblios appelées à voter — dans la locale de leur biblio.
+          const recips = await concernedCoordRecipients(await votedLibraryIds(requestId));
+          for (const rc of recips) {
+            await bump(sendOai({ email: rc.email, name: rc.name }, rc.locale,
+              'oai.closed.sub', 'oai.closed.intro', { target }));
+          }
+        } else {
+          // Pendant de oai_open_approved, qui a écrit à la personne ayant
+          // demandé l'ouverture, dans la locale de SA biblio.
+          await bump(sendOai(await profileTarget(r.requested_by), locale,
+            'oai.closed.sub', 'oai.closed.intro', { target }));
+        }
         break;
       }
       default:
