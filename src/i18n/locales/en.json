@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Destination library inferred from the membership of whoever catalogued it: nothing formally ties this draft to that library.",
   "catalogacao.batch.thDrafts": "Drafts",
   "catalogacao.batch.draftsTrashed": "{count} in the trash",
-  "catalogacao.queue.batchClosed": "closed"
+  "catalogacao.queue.batchClosed": "closed",
+  "catalogacao.batch.draftsInProgress": "{count} in progress",
+  "catalogacao.batch.draftsPublished": "{count} published",
+  "catalogacao.batchPublishedArchiveInstead": "This batch holds {count} record(s) already published to the catalogue: it keeps the memory of that cataloguing session. A published batch is archived — use “Archive”.",
+  "error.batch.has_drafts_in_progress": "This batch still holds work in progress. Deal with it or discard it before deleting the batch.",
+  "error.batch.published_archive_instead": "This batch holds published records: it is archived, not deleted."
 }

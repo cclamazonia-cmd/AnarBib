@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Biblioteca de destinació deduïda de l’afiliació de qui ha catalogat: res no lliga formalment aquest esborrany a aquesta biblioteca.",
   "catalogacao.batch.thDrafts": "Esborranys",
   "catalogacao.batch.draftsTrashed": "{count} a la paperera",
-  "catalogacao.queue.batchClosed": "tancat"
+  "catalogacao.queue.batchClosed": "tancat",
+  "catalogacao.batch.draftsInProgress": "{count} en curs",
+  "catalogacao.batch.draftsPublished": "{count} publicada/es",
+  "catalogacao.batchPublishedArchiveInstead": "Aquest lot té {count} fitxa/es ja publicada/es al catàleg: conserva la memòria d’aquella sessió de catalogació. Un lot publicat s’arxiva — fes servir «Arxiva».",
+  "error.batch.has_drafts_in_progress": "Aquest lot encara reté feina en curs. Tracta-la o descarta-la abans d’eliminar el lot.",
+  "error.batch.published_archive_instead": "Aquest lot té fitxes publicades: s’arxiva, no s’elimina."
 }

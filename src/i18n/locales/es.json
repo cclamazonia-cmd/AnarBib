@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Biblioteca de destino deducida de la afiliación de quien catalogó: nada vincula formalmente este borrador a esa biblioteca.",
   "catalogacao.batch.thDrafts": "Borradores",
   "catalogacao.batch.draftsTrashed": "{count} en la papelera",
-  "catalogacao.queue.batchClosed": "cerrado"
+  "catalogacao.queue.batchClosed": "cerrado",
+  "catalogacao.batch.draftsInProgress": "{count} en curso",
+  "catalogacao.batch.draftsPublished": "{count} publicado(s)",
+  "catalogacao.batchPublishedArchiveInstead": "Este lote tiene {count} ficha(s) ya publicada(s) en el catálogo: guarda la memoria de esa sesión de catalogación. Un lote publicado se archiva — usa «Archivar».",
+  "error.batch.has_drafts_in_progress": "Este lote aún retiene trabajo en curso. Trátalo o descártalo antes de eliminar el lote.",
+  "error.batch.published_archive_instead": "Este lote tiene fichas publicadas: se archiva, no se elimina."
 }

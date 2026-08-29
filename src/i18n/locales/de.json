@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Zielbibliothek aus der Mitgliedschaft der katalogisierenden Person abgeleitet: nichts bindet diesen Entwurf formal an diese Bibliothek.",
   "catalogacao.batch.thDrafts": "Entwürfe",
   "catalogacao.batch.draftsTrashed": "{count} im Papierkorb",
-  "catalogacao.queue.batchClosed": "geschlossen"
+  "catalogacao.queue.batchClosed": "geschlossen",
+  "catalogacao.batch.draftsInProgress": "{count} in Arbeit",
+  "catalogacao.batch.draftsPublished": "{count} veröffentlicht",
+  "catalogacao.batchPublishedArchiveInstead": "Dieses Los enthält {count} bereits im Katalog veröffentlichte Datensätze: es bewahrt die Erinnerung an diese Katalogisierungssitzung. Ein veröffentlichtes Los wird archiviert — nutze „Archivieren“.",
+  "error.batch.has_drafts_in_progress": "Dieses Los enthält noch laufende Arbeit. Bearbeite oder verwirf sie, bevor du das Los löschst.",
+  "error.batch.published_archive_instead": "Dieses Los enthält veröffentlichte Datensätze: es wird archiviert, nicht gelöscht."
 }

@@ -27,34 +27,40 @@
 DO $$
 DECLARE
   v_passed int := 0; v_failed int := 0; v_failures text[] := ARRAY[]::text[]; v_t text;
-  v_lot bigint; v_actifs bigint; v_corbeille bigint; v_n int; v_txt text;
+  v_lot bigint; v_en_cours bigint; v_publies bigint; v_corbeille bigint;
+  v_n int; v_txt text; v_hint text;
 BEGIN
   INSERT INTO public.catalog_batches (name, status)
   VALUES ('Lot de test comptes', 'open') RETURNING id INTO v_lot;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T1 un lot VIDE apparait a 0/0 (non-action : il ne doit pas etre absent)';
+  v_t := 'T1 un lot VIDE apparait a 0/0/0 (non-action : il ne doit pas etre absent)';
   BEGIN
-    SELECT actifs, corbeille INTO v_actifs, v_corbeille
+    SELECT en_cours, publies, corbeille INTO v_en_cours, v_publies, v_corbeille
       FROM public.v_catalog_batch_draft_counts WHERE batch_id = v_lot;
-    IF FOUND AND v_actifs = 0 AND v_corbeille = 0 THEN v_passed := v_passed+1;
+    IF FOUND AND v_en_cours = 0 AND v_publies = 0 AND v_corbeille = 0 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1;
-      v_failures := v_failures||(v_t||' : '||coalesce(v_actifs::text,'ABSENT')||'/'||coalesce(v_corbeille::text,'-'));
+      v_failures := v_failures||(v_t||' : '||coalesce(v_en_cours::text,'ABSENT'));
     END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
-  v_t := 'T2 les comptes agregent les trois tables et separent actifs / corbeille';
+  v_t := 'T2 les comptes separent EN COURS / PUBLIES / CORBEILLE sur les trois tables';
+  -- Le defaut repare le 30/08 : un seul total melangeait les trois, donc un lot
+  -- entierement publie (0 en cours) refusait la suppression en annoncant des
+  -- « brouillons » que la file editoriale, elle, ne montrait pas.
   BEGIN
     INSERT INTO public.book_drafts (titulo, batch_id, status) VALUES ('a', v_lot, 'draft');
     INSERT INTO public.book_drafts (titulo, batch_id, status) VALUES ('b', v_lot, 'ready');
     INSERT INTO public.book_drafts (titulo, batch_id, status) VALUES ('c', v_lot, 'cancelled');
+    INSERT INTO public.book_drafts (titulo, batch_id, status) VALUES ('e', v_lot, 'published');
     INSERT INTO public.author_drafts (preferred_name, batch_id, status) VALUES ('d', v_lot, 'draft');
     INSERT INTO public.exemplar_drafts (target_bib_ref, batch_id, status) VALUES ('X-1', v_lot, 'cancelled');
-    SELECT actifs, corbeille INTO v_actifs, v_corbeille
+    SELECT en_cours, publies, corbeille INTO v_en_cours, v_publies, v_corbeille
       FROM public.v_catalog_batch_draft_counts WHERE batch_id = v_lot;
-    IF v_actifs = 3 AND v_corbeille = 2 THEN v_passed := v_passed+1;
-    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : attendu 3/2, trouve '||v_actifs||'/'||v_corbeille); END IF;
+    IF v_en_cours = 3 AND v_publies = 1 AND v_corbeille = 2 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1;
+      v_failures := v_failures||(v_t||' : attendu 3/1/2, trouve '||v_en_cours||'/'||v_publies||'/'||v_corbeille); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   -- ─────────────────────────────────────────────────────────────────
@@ -106,6 +112,49 @@ BEGIN
                       WHERE option_name = 'security_invoker'), 'false') = 'true';
     IF v_n = 2 THEN v_passed := v_passed+1;
     ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||'/2 en security_invoker'); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T7 du travail EN COURS empeche de supprimer le lot, avec son propre motif';
+  -- Cette regle ne vivait que dans le JavaScript de deleteBatch jusqu'au 30/08 :
+  -- l'API laissait passer. C'est un trigger maintenant, donc ca se teste.
+  BEGIN
+    DELETE FROM public.catalog_batches WHERE id = v_lot;
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : aucun refus');
+  EXCEPTION WHEN OTHERS THEN
+    GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
+    IF v_hint = 'error.batch.has_drafts_in_progress' THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : hint = '||coalesce(v_hint,'NULL')); END IF;
+  END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T8 un lot qui ne porte plus que du PUBLIE renvoie vers l''archivage';
+  -- Decision du 30/08 : un lot publie garde la memoire d'une seance de
+  -- catalogage collectif. On archive, on ne supprime pas — et le motif doit le
+  -- dire, sinon on retombe sur « supprimez les brouillons d'abord », qui n'a
+  -- aucun sens pour des fiches deja au catalogue.
+  -- ATTENTION : les preparatifs sont HORS du bloc garde. Une exception attrapee
+  -- par BEGIN...EXCEPTION annule TOUT ce que le bloc a fait, y compris les DELETE
+  -- qui precedent celui qu'on attend en echec — T9 retrouvait alors les 3
+  -- brouillons en cours que T8 croyait avoir retires.
+  DELETE FROM public.book_drafts WHERE batch_id = v_lot AND status IN ('draft','ready');
+  DELETE FROM public.author_drafts WHERE batch_id = v_lot AND status IN ('draft','ready');
+  BEGIN
+    DELETE FROM public.catalog_batches WHERE id = v_lot;
+    v_failed := v_failed+1; v_failures := v_failures||(v_t||' : aucun refus');
+  EXCEPTION WHEN OTHERS THEN
+    GET STACKED DIAGNOSTICS v_hint = PG_EXCEPTION_HINT;
+    IF v_hint = 'error.batch.published_archive_instead' THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : hint = '||coalesce(v_hint,'NULL')); END IF;
+  END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T9 la CORBEILLE seule ne bloque pas : elle part avec le lot';
+  BEGIN
+    DELETE FROM public.book_drafts WHERE batch_id = v_lot AND status = 'published';
+    DELETE FROM public.catalog_batches WHERE id = v_lot;
+    IF NOT EXISTS (SELECT 1 FROM public.catalog_batches WHERE id = v_lot) THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : le lot est toujours la'); END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
 
   IF v_failed = 0 THEN

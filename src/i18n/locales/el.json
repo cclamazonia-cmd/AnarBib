@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Βιβλιοθήκη προορισμού που συνάγεται από τη συμμετοχή όποιου καταλογογράφησε: τίποτα δεν συνδέει τυπικά αυτό το πρόχειρο με εκείνη τη βιβλιοθήκη.",
   "catalogacao.batch.thDrafts": "Πρόχειρα",
   "catalogacao.batch.draftsTrashed": "{count} στον κάδο",
-  "catalogacao.queue.batchClosed": "κλειστή"
+  "catalogacao.queue.batchClosed": "κλειστή",
+  "catalogacao.batch.draftsInProgress": "{count} σε εξέλιξη",
+  "catalogacao.batch.draftsPublished": "{count} δημοσιευμένα",
+  "catalogacao.batchPublishedArchiveInstead": "Αυτή η παρτίδα έχει {count} ήδη δημοσιευμένη/ες καρτέλα/ες στον κατάλογο: κρατά τη μνήμη εκείνης της συνεδρίας καταλογογράφησης. Μια δημοσιευμένη παρτίδα αρχειοθετείται — χρησιμοποίησε «Αρχειοθέτηση».",
+  "error.batch.has_drafts_in_progress": "Αυτή η παρτίδα κρατά ακόμη εργασία σε εξέλιξη. Διαχειρίσου την ή πέταξέ την πριν διαγράψεις την παρτίδα.",
+  "error.batch.published_archive_instead": "Αυτή η παρτίδα έχει δημοσιευμένες καρτέλες: αρχειοθετείται, δεν διαγράφεται."
 }

@@ -368,7 +368,11 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
   // le lot 58, clos et vide, encombrait le menu alors qu'il n'avait plus un seul
   // brouillon. On ne liste donc que les lots qui retiennent encore quelque chose,
   // et on dit lesquels sont clos — l'onglet « Lots » reste, lui, exhaustif.
-  const lotsFiltrables = batches.filter(b => ((b._actifs ?? 0) + (b._corbeille ?? 0)) > 0);
+  // « Porte encore quelque chose », les fiches publiees comprises : le filtre
+  // « Situation » permet de les afficher, donc retirer ces lots du menu rendrait
+  // cette combinaison inatteignable.
+  const lotsFiltrables = batches.filter(
+    b => ((b._enCours ?? 0) + (b._publies ?? 0) + (b._corbeille ?? 0)) > 0);
 
   function labelLot(b) {
     return b.status === 'open' ? b.name : `${b.name} (${t({ id: 'catalogacao.queue.batchClosed' })})`;

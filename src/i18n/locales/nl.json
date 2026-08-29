@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Doelbibliotheek afgeleid uit het lidmaatschap van wie catalogiseerde: niets bindt dit concept formeel aan die bibliotheek.",
   "catalogacao.batch.thDrafts": "Concepten",
   "catalogacao.batch.draftsTrashed": "{count} in de prullenbak",
-  "catalogacao.queue.batchClosed": "gesloten"
+  "catalogacao.queue.batchClosed": "gesloten",
+  "catalogacao.batch.draftsInProgress": "{count} in bewerking",
+  "catalogacao.batch.draftsPublished": "{count} gepubliceerd",
+  "catalogacao.batchPublishedArchiveInstead": "Dit lot bevat {count} reeds in de catalogus gepubliceerde fiche(s): het bewaart de herinnering aan die catalogiseersessie. Een gepubliceerd lot wordt gearchiveerd — gebruik “Archiveren”.",
+  "error.batch.has_drafts_in_progress": "Dit lot bevat nog werk in bewerking. Behandel het of gooi het weg voordat je het lot verwijdert.",
+  "error.batch.published_archive_instead": "Dit lot bevat gepubliceerde fiches: het wordt gearchiveerd, niet verwijderd."
 }

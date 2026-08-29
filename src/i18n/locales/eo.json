@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Celbiblioteko deduktita el la aliĝo de tiu kiu katalogis: nenio formale ligas ĉi tiun malneton al tiu biblioteko.",
   "catalogacao.batch.thDrafts": "Malnetoj",
   "catalogacao.batch.draftsTrashed": "{count} en la rubujo",
-  "catalogacao.queue.batchClosed": "fermita"
+  "catalogacao.queue.batchClosed": "fermita",
+  "catalogacao.batch.draftsInProgress": "{count} survoje",
+  "catalogacao.batch.draftsPublished": "{count} publikigita(j)",
+  "catalogacao.batchPublishedArchiveInstead": "Ĉi tiu loto portas {count} jam publikigita(j)n slipo(j)n en la katalogo: ĝi konservas la memoron de tiu kataloga kunsido. Publikigita loto arkiviĝas — uzu «Arkivi».",
+  "error.batch.has_drafts_in_progress": "Ĉi tiu loto ankoraŭ retenas laboron survoje. Traktu ĝin aŭ forĵetu ĝin antaŭ ol forigi la loton.",
+  "error.batch.published_archive_instead": "Ĉi tiu loto portas publikigitajn slipojn: ĝi arkiviĝas, ĝi ne foriĝas."
 }

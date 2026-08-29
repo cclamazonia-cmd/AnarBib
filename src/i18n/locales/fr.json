@@ -6170,5 +6170,10 @@
   "catalogacao.queue.libraryInferred": "Bibliothèque de destination déduite de l’adhésion de la personne qui a catalogué : rien ne rattache formellement ce brouillon à cette bibliothèque.",
   "catalogacao.batch.thDrafts": "Brouillons",
   "catalogacao.batch.draftsTrashed": "{count} à la corbeille",
-  "catalogacao.queue.batchClosed": "clos"
+  "catalogacao.queue.batchClosed": "clos",
+  "catalogacao.batch.draftsInProgress": "{count} en cours",
+  "catalogacao.batch.draftsPublished": "{count} publié(s)",
+  "catalogacao.batchPublishedArchiveInstead": "Ce lot porte {count} fiche(s) déjà publiée(s) au catalogue : il garde la mémoire de cette séance de catalogage. Un lot publié s’archive — utilise « Archiver ».",
+  "error.batch.has_drafts_in_progress": "Ce lot retient encore du travail en cours. Traite-le ou mets-le au rebut avant de supprimer le lot.",
+  "error.batch.published_archive_instead": "Ce lot porte des fiches publiées : il s’archive, il ne se supprime pas."
 }

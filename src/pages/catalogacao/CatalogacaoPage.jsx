@@ -131,12 +131,17 @@ export default function CatalogacaoPage() {
       // n'apprend qu'un lot est vide — donc supprimable — qu'en cliquant.
       const [lots, comptes] = await Promise.all([
         supabase.from('catalog_batches').select('*').order('created_at', { ascending: false }),
-        supabase.from('v_catalog_batch_draft_counts').select('batch_id, actifs, corbeille'),
+        supabase.from('v_catalog_batch_draft_counts').select('batch_id, en_cours, publies, corbeille'),
       ]);
       const par = new Map((comptes.data || []).map(c => [c.batch_id, c]));
       const data = (lots.data || []).map(b => {
         const c = par.get(b.id);
-        return { ...b, _actifs: c ? Number(c.actifs) : 0, _corbeille: c ? Number(c.corbeille) : 0 };
+        return {
+          ...b,
+          _enCours: c ? Number(c.en_cours) : 0,
+          _publies: c ? Number(c.publies) : 0,
+          _corbeille: c ? Number(c.corbeille) : 0,
+        };
       });
       setBatches(data || []);
     } catch (err) {
@@ -628,22 +633,26 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
   async function deleteBatch(id) {
     if (!confirm(t({id:'catalogacao.deleteBatchConfirm'}))) return;
     try {
-      const countDrafts = (table, trashed) => {
-        const q = supabase.from(table).select('id', { count: 'exact', head: true }).eq('batch_id', id);
-        return trashed ? q.eq('status', 'cancelled') : q.neq('status', 'cancelled');
-      };
-      const [actifs, corbeille] = await Promise.all([
-        Promise.all(BATCH_DRAFT_TABLES.map(tb => countDrafts(tb, false))),
-        Promise.all(BATCH_DRAFT_TABLES.map(tb => countDrafts(tb, true))),
-      ]);
-      const sum = rs => rs.reduce((s, r) => s + (r.count || 0), 0);
+      // Les comptes viennent de la vue, une seule definition — la meme que celle
+      // du trigger qui refusera en base si on passe outre.
+      const { data: c } = await supabase.from('v_catalog_batch_draft_counts')
+        .select('en_cours, publies, corbeille').eq('batch_id', id).maybeSingle();
+      const enCours = Number(c?.en_cours ?? 0);
+      const publies = Number(c?.publies ?? 0);
+      const jetes = Number(c?.corbeille ?? 0);
 
-      const restants = sum(actifs);
-      if (restants > 0) {
-        alert(t({id:'catalogacao.batchHasDrafts'},{count: restants}));
+      // Du travail vivant : le traiter ou le jeter, pas l'effacer par la bande.
+      if (enCours > 0) {
+        alert(t({id:'catalogacao.batchHasDrafts'},{count: enCours}));
         return;
       }
-      const jetes = sum(corbeille);
+      // Des fiches publiees : le lot est la memoire d'une seance. On archive.
+      // Sans ce message distinct, on lisait « supprimez les brouillons d'abord »
+      // pour des fiches qui sont au catalogue depuis deux semaines.
+      if (publies > 0) {
+        alert(t({id:'catalogacao.batchPublishedArchiveInstead'},{count: publies}));
+        return;
+      }
       if (jetes > 0 && !confirm(t({id:'catalogacao.batchTrashedWillBeDeleted'},{count: jetes}))) return;
 
       // Une requete par table, pas une par ligne : PostgREST filtre le DELETE
@@ -677,26 +686,32 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
 
   // Ce que le lot retient. Un lot a zero est supprimable : le montrer evite
   // d'avoir a cliquer pour lire l'alerte de refus.
+  // TROIS comptes, pas un total. Un seul nombre melangeait le travail en cours,
+  // les fiches deja publiees et la corbeille — et faisait refuser une suppression
+  // en annoncant des « brouillons » que la file editoriale ne montrait pas
+  // (lot Mutirão du 15/08 : 0 en cours, 9 publies, et un refus incomprehensible).
   function renderCounts(b) {
-    const actifs = b._actifs ?? 0;
+    const enCours = b._enCours ?? 0;
+    const publies = b._publies ?? 0;
     const corbeille = b._corbeille ?? 0;
-    if (!actifs && !corbeille) return <span style={{ color: 'var(--brand-muted, #666)' }}>—</span>;
-    return (
-      <>
-        {actifs > 0 && <span>{actifs}</span>}
-        {corbeille > 0 && (
-          <span style={{ color: 'var(--brand-muted, #888)', fontSize: '.78rem' }}>
-            {actifs > 0 ? ' · ' : ''}{t({ id: 'catalogacao.batch.draftsTrashed' }, { count: corbeille })}
-          </span>
-        )}
-      </>
-    );
+    if (!enCours && !publies && !corbeille) return <span style={{ color: 'var(--brand-muted, #666)' }}>—</span>;
+    const secondaire = { color: 'var(--brand-muted, #888)', fontSize: '.78rem' };
+    const parts = [];
+    if (enCours > 0) parts.push(<span key="c">{t({ id: 'catalogacao.batch.draftsInProgress' }, { count: enCours })}</span>);
+    if (publies > 0) parts.push(<span key="p" style={secondaire}>{t({ id: 'catalogacao.batch.draftsPublished' }, { count: publies })}</span>);
+    if (corbeille > 0) parts.push(<span key="t" style={secondaire}>{t({ id: 'catalogacao.batch.draftsTrashed' }, { count: corbeille })}</span>);
+    return parts.map((p, i) => <span key={i}>{i > 0 ? ' · ' : ''}{p}</span>);
   }
 
   // Un lot qui ne retient RIEN n'a pas besoin d'etre ferme avant d'etre
   // supprime : le detour par « Fermer » est ce qui a fait croire, le 29/08,
   // qu'un lot ferme etait un lot supprime.
-  function estVide(b) { return (b._actifs ?? 0) === 0 && (b._corbeille ?? 0) === 0; }
+  //
+  // La CORBEILLE ne compte pas : elle part avec le lot. Les PUBLIES, si — un lot
+  // publie garde la memoire d'une seance de catalogage, il s'archive (decision du
+  // 30/08). Meme regle que le trigger fn_guard_catalog_batch_delete, qui la tient
+  // en base ; ici c'est du confort d'ecran, pas la garantie.
+  function estVide(b) { return (b._enCours ?? 0) === 0 && (b._publies ?? 0) === 0; }
 
   function formatDate(v) {
     if (!v) return '—';
