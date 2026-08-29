@@ -54,6 +54,16 @@ Tests d'acceptation des wrappers `api.*` créés au paquet 19 + helper `fn_check
 > recopiée dans un test.** Une suite qui a besoin d'un acteur le demande au
 > seed ; elle ne le prélève jamais dans la base réelle.
 >
+> Depuis le 29/08/2026 la règle **ne dépend plus de la bonne volonté** : la sixième règle
+> bloquante du hook `pre-commit` refuse, dans `tests/sql/`, tout UUID d'apparence réelle
+> qui ne vient pas du seed (`DOC-FIXT-1` au REGISTRE). La liste blanche est **lue** dans
+> `supabase/seed.sql`, pas recopiée : ajouter un acteur, c'est l'ajouter au seed.
+>
+> *Limite connue et assumée* : le seed contient un identifiant de production, celui de la
+> bibliothèque BLMF, dont dépend la suite cotisation. C'est une bibliothèque, pas une
+> personne, et son identité est publique au catalogue — mais la règle le tolère parce
+> qu'il est au seed, pas parce qu'il serait synthétique.
+>
 > Le rôle `administrador` a disparu de ce tableau avec le même correctif : ce
 > n'est pas un rôle de bibliothèque. Le CHECK de `user_library_memberships`
 > n'admet que `reader`, `librarian` et `coordenador` ; l'administration **du

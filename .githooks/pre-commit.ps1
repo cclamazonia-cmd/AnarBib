@@ -23,10 +23,17 @@
 $ErrorActionPreference = "Stop"
 
 # Recuperer les fichiers .sql modifies ou ajoutes et stages
-$stagedSqlFiles = git diff --cached --name-only --diff-filter=AM | Where-Object { $_ -like "*.sql" }
+$stagedAll     = git diff --cached --name-only --diff-filter=AM
+$stagedSqlFiles = $stagedAll | Where-Object { $_ -like "*.sql" }
 
-if (-not $stagedSqlFiles) {
-    # Pas de fichier SQL stage, rien a verifier
+# Regle 6 : tout ce qui est stage sous tests/sql/, quelle que soit l'extension.
+# Le README y compte autant que les suites : c'est lui qui, jusqu'au 29/08/2026,
+# donnait la table de correspondance entre des prenoms et des identifiants de
+# comptes releves en production.
+$stagedTestFiles = $stagedAll | Where-Object { $_ -replace "\\", "/" -like "tests/sql/*" }
+
+if (-not $stagedSqlFiles -and -not $stagedTestFiles) {
+    # Ni SQL ni fichier de test stage, rien a verifier
     exit 0
 }
 
@@ -135,9 +142,68 @@ foreach ($file in $stagedSqlFiles) {
     }
 }
 
+# =========================================================================
+# ---- Test 6 : identifiants de production dans tests/sql/ ----------------
+# =========================================================================
+# Ajoute le 29/08/2026 (backlog v34, item I14).
+#
+# POURQUOI. Trois suites designaient leurs acteurs par des UUID releves dans
+# la base REELLE le 11/05/2026 -- trois des quatre correspondaient a des
+# comptes existants -- et tests/sql/README.md les presentait comme des
+# personas nommees. Les prenoms etaient fictifs : c'est precisement le piege.
+# Une etiquette inventee sur une ligne reelle eteint la vigilance au lieu de
+# l'appeler. Les suites tournent en BEGIN/ROLLBACK sur une base jetable, donc
+# rien n'est arrive, mais la convention qui rendait cela sur n'etait ecrite
+# nulle part. Cette regle la rend mecanique.
+#
+# COMMENT. La liste blanche n'est pas recopiee ici : elle est LUE dans
+# supabase/seed.sql. Un acteur de test se demande au seed ; s'il n'y est pas,
+# il n'a rien a faire dans une suite. Sont tolerees en plus les valeurs
+# visiblement synthetiques -- celles dont les 32 chiffres hexadecimaux
+# n'utilisent pas plus de 8 caracteres distincts (11111111-..., ccccddaa-...),
+# ce qui laisse chaque suite forger ses propres fixtures dans sa transaction.
+# Un UUID d'apparence aleatoire, lui, ressemble a un identifiant de production
+# et doit se justifier.
+$uuidRe = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'
+
+if ($stagedTestFiles) {
+    $seedUuids = @()
+    if (Test-Path "supabase/seed.sql") {
+        $seedTxt = Get-Content "supabase/seed.sql" -Raw
+        $seedUuids = [regex]::Matches($seedTxt, $uuidRe) | ForEach-Object { $_.Value.ToLower() }
+    }
+
+    foreach ($file in $stagedTestFiles) {
+        $content = git show ":$file" 2>$null
+        if (-not $content) { continue }
+        $txt = $content -join "`n"
+
+        $suspects = [regex]::Matches($txt, $uuidRe) |
+            ForEach-Object { $_.Value.ToLower() } |
+            Sort-Object -Unique |
+            Where-Object {
+                $u = $_
+                if ($seedUuids -contains $u) { return $false }
+                $hex = $u -replace '-', ''
+                # "visiblement synthetique" : peu de caracteres distincts
+                $distincts = ($hex.ToCharArray() | Sort-Object -Unique).Count
+                return ($distincts -gt 8)
+            }
+
+        if ($suspects) {
+            $violations += @{
+                File   = $file
+                Rule   = "UUID d'apparence reelle dans tests/sql : $($suspects -join ', ')"
+                Detail = "Un acteur de test se demande au seed (supabase/seed.sql), il ne se preleve pas en base. Une fixture relevee en production reste une donnee de production. Si cet identifiant est bien synthetique, ajoutez-le au seed ; s'il designe une ligne reelle, ce fichier n'est pas une suite de tests et n'a pas sa place ici."
+                Doc    = "backlog v34 item I14 - tests/sql/README.md"
+            }
+        }
+    }
+}
+
 # Resume
 if ($violations.Count -eq 0) {
-    Write-Host "[OK] Aucune violation doctrinale detectee dans les $($stagedSqlFiles.Count) fichier(s) SQL stage(s)." -ForegroundColor Green
+    Write-Host "[OK] Aucune violation doctrinale detectee ($($stagedSqlFiles.Count) fichier(s) SQL, $($stagedTestFiles.Count) fichier(s) de tests)." -ForegroundColor Green
     Write-Host ""
     exit 0
 }

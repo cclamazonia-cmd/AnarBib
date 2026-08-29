@@ -1,4 +1,19 @@
 -- ============================================================
+-- ARCHIVE. Deplace de `tests/sql/` le 29/08/2026 (backlog v34, item I14).
+--
+-- Ce fichier n'a jamais ete une suite de tests : c'est un script de menage
+-- ponctuel, a passer une fois a la main, et il ne figure pas a
+-- `tests/sql/ci-suites.txt`. Il nomme l'identifiant REEL de la bibliotheque
+-- FRT en production -- ce qui est normal pour un script de maintenance, et
+-- inacceptable au milieu de fixtures de test, ou la meme chaine se lit comme
+-- une donnee inventee.
+--
+-- Le menage a eu lieu : la bibliotheque FRT n'existe plus en base
+-- (verifie le 29/08/2026). Le script est donc epuise ; il est conserve pour
+-- la trace, pas pour etre rejoue.
+-- ============================================================
+
+-- ============================================================
 -- Cleanup biblio FRT (test résiduel d'avril 2026)
 -- À exécuter dans Supabase SQL Editor, manuellement, en une fois
 -- ============================================================
