@@ -2093,7 +2093,7 @@
    "id": "C2",
    "d": "C",
    "p": "P1",
-   "s": "ouvert",
+   "s": "bloque",
    "e": "M",
    "sk": [
     "biblio",
@@ -2104,36 +2104,36 @@
     "pt": "Importar o acervo SOLIDAIRES pela ferramenta de importação, e registrar o que quebra"
    },
    "v": {
-    "fr": "1 685 notices dans `SOLIDAIRES_import_test.csv`. Les en-têtes suivent `spec-catalogacao-fiche-et-paliers` et **n'ont jamais été confrontés à l'importeur**. Engagement pris auprès du collectif, échéance fin août — donc échue.",
-    "pt": "1 685 registros em `SOLIDAIRES_import_test.csv`. Os cabeçalhos seguem `spec-catalogacao-fiche-et-paliers` e **nunca foram confrontados com o importador**. Compromisso assumido com o coletivo, prazo fim de agosto — portanto vencido."
+    "fr": "1 685 notices dans `SOLIDAIRES_import_test.csv`. Les en-têtes suivent `spec-catalogacao-fiche-et-paliers` et **n'ont jamais été confrontés à l'importeur**. **Décision de Xavier, 29/08 : l'import ne se fera que si la candidature de SOLIDAIRES est acceptée par plusieurs administrateur·rices réseau.** L'échéance de fin août tombe donc, et l'ordre des deux chantiers s'inverse par rapport aux notes d'août : l'admission d'abord, l'import ensuite.",
+    "pt": "1 685 registros em `SOLIDAIRES_import_test.csv`. Os cabeçalhos seguem `spec-catalogacao-fiche-et-paliers` e **nunca foram confrontados com o importador**. **Decisão de Xavier, 29/08: a importação só se fará se a candidatura da SOLIDAIRES for aceita por várias pessoas administradoras de rede.** O prazo de fim de agosto cai, portanto, e a ordem dos dois canteiros se inverte em relação às notas de agosto: a admissão primeiro, a importação depois."
    },
    "w": {
     "fr": "Adapter les en-têtes au format réellement attendu (environ une heure), faire passer le fichier **par l'outil d'import du dépôt et non par des `INSERT` à la main**, relire une vingtaine de fiches au hasard, puis faire une démonstration en visio écran partagé.",
     "pt": "Adaptar os cabeçalhos ao formato realmente esperado (cerca de uma hora), passar o arquivo **pela ferramenta de importação do repositório e não por `INSERT` à mão**, revisar umas vinte fichas ao acaso, e depois fazer uma demonstração em videoconferência com tela compartilhada."
    },
    "y": {
-    "fr": "L'objet est autant d'éprouver l'importeur que d'obtenir les notices. **Le livrable le plus utile du chantier est la liste de ce qui casse, de ce qui est mal deviné et de ce qui se perd** — pas les 1 685 fiches.",
-    "pt": "O objetivo é tanto testar o importador quanto obter os registros. **A entrega mais útil do canteiro é a lista do que quebra, do que é mal adivinhado e do que se perde** — não as 1 685 fichas."
+    "fr": "L'objet reste autant d'éprouver l'importeur que d'obtenir les notices : **le livrable le plus utile du chantier est la liste de ce qui casse, de ce qui est mal deviné et de ce qui se perd** — pas les 1 685 fiches. Mais faire entrer un fonds avant que le réseau ait dit oui reviendrait à trancher par le fait ce qu'on dit vouloir trancher à plusieurs. C'est le même raisonnement qui interdisait de créer la fiche bibliothèque ; il s'étend maintenant au lot lui-même.",
+    "pt": "O objetivo continua sendo tanto testar o importador quanto obter os registros: **a entrega mais útil do canteiro é a lista do que quebra, do que é mal adivinhado e do que se perde** — não as 1 685 fichas. Mas fazer entrar um acervo antes de a rede ter dito sim equivaleria a decidir pelo fato o que se diz querer decidir em conjunto. É o mesmo raciocínio que proibia criar a ficha de biblioteca; estende-se agora ao próprio lote."
    },
    "f": {
     "fr": [
-     "Le lot vit en `book_drafts` avec un marqueur de provenance.",
+     "**L'admission a été prononcée à plusieurs (G7) avant que le fichier soit touché.**",
+     "Le lot est passé par l'outil d'import du dépôt, pas par des `INSERT` à la main.",
      "Un compte rendu écrit dit ce qui a cassé, ligne par ligne quand c'est possible.",
      "Vingt fiches tirées au hasard ont été relues.",
-     "**Aucune bibliothèque « SOLIDAIRES » n'a été créée** — ni membre, ni partenaire, ni cible.",
      "**Aucune coquille d'accent de la source n'a été corrigée en silence** : les corrections vivent dans `assunto_local_sugerido`."
     ],
     "pt": [
-     "O lote vive em `book_drafts` com um marcador de proveniência.",
+     "**A admissão foi pronunciada em conjunto (G7) antes de o arquivo ser tocado.**",
+     "O lote passou pela ferramenta de importação do repositório, não por `INSERT` à mão.",
      "Um relatório escrito diz o que quebrou, linha por linha quando possível.",
      "Vinte fichas sorteadas ao acaso foram revisadas.",
-     "**Nenhuma biblioteca «SOLIDAIRES» foi criada** — nem membro, nem parceira, nem alvo.",
      "**Nenhum erro de acento da fonte foi corrigido em silêncio**: as correções vivem em `assunto_local_sugerido`."
     ]
    },
    "dep": {
-    "fr": "L'admission de SOLIDAIRES au réseau est **G7**, bloquée par **A1**. Les deux ne se mélangent pas : on importe un lot, on n'admet pas une composante.",
-    "pt": "A admissão de SOLIDAIRES na rede é **G7**, bloqueada por **A1**. As duas não se misturam: importa-se um lote, não se admite um componente."
+    "fr": "**Bloqué par G7**, lui-même bloqué par **A1**. Rien ne bouge tant que le réseau n'a qu'un seul administrateur.",
+    "pt": "**Bloqueado por G7**, ele mesmo bloqueado por **A1**. Nada se move enquanto a rede tiver um único administrador."
    },
    "r": [
     "REPRISE_claude_code_2026-08-27 chantier 2",
@@ -2595,7 +2595,7 @@
    "id": "D3",
    "d": "D",
    "p": "P2",
-   "s": "ouvert",
+   "s": "bloque",
    "e": "M",
    "sk": [
     "biblio"
@@ -2629,8 +2629,8 @@
     ]
    },
    "dep": {
-    "fr": "Après **C2** et **D1**.",
-    "pt": "Depois de **C2** e **D1**."
+    "fr": "**Bloqué par C2**, donc par **G7** et **A1**. La révision de la spec (**D1**) peut se faire sans attendre.",
+    "pt": "**Bloqueado por C2**, portanto por **G7** e **A1**. A revisão da spec (**D1**) pode ser feita sem esperar."
    },
    "r": [
     "spec-periodiques-v0.1 §10",
@@ -3791,17 +3791,19 @@
     "pt": "Uma vez concluído **A1**, instruir o pedido em conjunto e decidir."
    },
    "y": {
-    "fr": "La contrainte est écrite noir sur blanc au collectif et elle est absolue : **ne pas créer de bibliothèque « SOLIDAIRES » en base**, ni membre, ni partenaire, ni cible. « Créer la fiche reviendrait à inscrire en base une décision qu'on dit ne pas prendre. » Le lot de notices vit en `book_drafts` avec un marqueur de provenance, et rien d'autre.",
-    "pt": "A restrição está escrita preto no branco ao coletivo e é absoluta: **não criar biblioteca «SOLIDAIRES» no banco**, nem membro, nem parceira, nem alvo. «Criar a ficha equivaleria a inscrever no banco uma decisão que se diz não tomar.» O lote de registros vive em `book_drafts` com um marcador de proveniência, e nada mais."
+    "fr": "La contrainte est écrite noir sur blanc au collectif et elle est absolue : **ne pas créer de bibliothèque « SOLIDAIRES » en base** tant que la décision n'est pas prise, ni membre, ni partenaire, ni cible. « Créer la fiche reviendrait à inscrire en base une décision qu'on dit ne pas prendre. » **Et depuis le 29/08 la même règle vaut pour le fonds : l'import des 1 685 notices (C2) ne se fera qu'après l'admission.** Cet item ne décide donc pas seulement d'une adhésion : il débloque un chantier de catalogage entier.",
+    "pt": "A restrição está escrita preto no branco ao coletivo e é absoluta: **não criar biblioteca «SOLIDAIRES» no banco** enquanto a decisão não for tomada, nem membro, nem parceira, nem alvo. «Criar a ficha equivaleria a inscrever no banco uma decisão que se diz não tomar.» **E desde 29/08 a mesma regra vale para o acervo: a importação dos 1 685 registros (C2) só se fará depois da admissão.** Este item não decide portanto apenas uma adesão: desbloqueia um canteiro de catalogação inteiro."
    },
    "f": {
     "fr": [
      "La décision est prise à trois au moins, et tracée dans `network_administrator_audit`.",
-     "Quelle qu'elle soit, elle est communiquée au collectif SOLIDAIRES avec sa raison."
+     "Quelle qu'elle soit, elle est communiquée au collectif SOLIDAIRES avec sa raison.",
+     "Une fois l'admission prononcée, **C2** et **D3** se débloquent dans cet ordre."
     ],
     "pt": [
      "A decisão é tomada por pelo menos três, e rastreada em `network_administrator_audit`.",
-     "Seja qual for, é comunicada ao coletivo SOLIDAIRES com seu motivo."
+     "Seja qual for, é comunicada ao coletivo SOLIDAIRES com seu motivo.",
+     "Uma vez pronunciada a admissão, **C2** e **D3** se desbloqueiam nesta ordem."
     ]
    },
    "dep": {
@@ -5370,22 +5372,22 @@
    "id": "K6",
    "d": "K",
    "p": "P2",
-   "s": "ouvert",
+   "s": "en-cours",
    "e": "S",
    "sk": [
     "collectif"
    ],
    "t": {
-    "fr": "Écrire à May Day Rooms et préparer la rencontre avec leftove.rs",
-    "pt": "Escrever ao May Day Rooms e preparar o encontro com leftove.rs"
+    "fr": "Préparer la rencontre avec leftove.rs et May Day Rooms",
+    "pt": "Preparar o encontro com leftove.rs e May Day Rooms"
    },
    "v": {
-    "fr": "Un brouillon complet est rédigé, en anglais. **L'atelier AnarBib est le matin, l'atelier leftove.rs l'après-midi du 12/09, même salle, même journée.** L'échéance d'envoi — fin août, pour qu'ils aient le temps de regarder AnarBib sans que ce soit urgent — se referme.",
-    "pt": "Um rascunho completo está redigido, em inglês. **A oficina AnarBib é de manhã, a oficina leftove.rs à tarde do dia 12/09, mesma sala, mesmo dia.** O prazo de envio — fim de agosto, para que tenham tempo de olhar o AnarBib sem que seja urgente — está se fechando."
+    "fr": "**Le message est parti** — autour du 19/08, soit trois semaines avant la rencontre, ce qui était exactement la fenêtre visée : assez tôt pour qu'ils regardent AnarBib sans que ce soit urgent. **L'atelier AnarBib est le matin, l'atelier leftove.rs l'après-midi du 12/09, même salle, même journée.** Ce qui reste ouvert, ce sont les réponses et la préparation de la journée.",
+    "pt": "**A mensagem foi enviada** — por volta de 19/08, três semanas antes do encontro, exatamente a janela visada: cedo o bastante para que olhassem o AnarBib sem que fosse urgente. **A oficina AnarBib é de manhã, a oficina leftove.rs à tarde do dia 12/09, mesma sala, mesmo dia.** O que continua aberto são as respostas e a preparação do dia."
    },
    "w": {
-    "fr": "Envoyer, avec trois questions : le vocabulaire de sujets, le profil de numérisation (ils ont 16 000 documents océrisés), et NORLA et la cartographie. Plus une question sur l'auto-hébergement au collectif technique présent.",
-    "pt": "Enviar, com três perguntas: o vocabulário de assuntos, o perfil de digitalização (têm 16 000 documentos ocerizados), e a NORLA e a cartografia. Mais uma pergunta sobre auto-hospedagem ao coletivo técnico presente."
+    "fr": "Relancer si besoin, et préparer les trois questions posées pour qu'elles se discutent sur place : le vocabulaire de sujets, le profil de numérisation (ils ont 16 000 documents océrisés), et NORLA et la cartographie. Plus la question sur l'auto-hébergement au collectif technique présent.",
+    "pt": "Retomar o contato se necessário, e preparar as três perguntas feitas para que sejam discutidas no local: o vocabulário de assuntos, o perfil de digitalização (eles têm 16 000 documentos ocerizados), e a NORLA e a cartografia. Mais a pergunta sobre auto-hospedagem ao coletivo técnico presente."
    },
    "y": {
     "fr": "Deux ateliers le même jour dans la même salle, sur des sujets voisins, sans que les deux équipes se soient parlé, serait un gâchis. Et il y a un point à regarder avant, pas après : **leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict.**",
@@ -5393,17 +5395,17 @@
    },
    "f": {
     "fr": [
-     "Le message est parti.",
-     "Les trois questions ont une réponse, ou une conversation est prévue à Bologne."
+     "Les trois questions ont une réponse, ou un créneau de discussion est calé pour le 12/09.",
+     "**Point à regarder avant la rencontre, pas après** : leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict."
     ],
     "pt": [
-     "A mensagem foi enviada.",
-     "As três perguntas têm resposta, ou uma conversa está prevista em Bolonha."
+     "As três perguntas têm resposta, ou um horário de conversa está marcado para 12/09.",
+     "**Ponto a olhar antes do encontro, não depois**: leftove.rs está sob licença CC BY-NC-SA, e a cláusula não comercial não é uma licença livre em sentido estrito."
     ]
    },
    "dep": {
-    "fr": "Avant le 12/09.",
-    "pt": "Antes de 12/09."
+    "fr": "Le 12/09, dans la journée. Lié à **D4** (matériel éphémère) et **H6** (alignement des vocabulaires).",
+    "pt": "Em 12/09, no mesmo dia. Ligado a **D4** (material efêmero) e **H6** (alinhamento dos vocabulários)."
    },
    "r": [
     "VEILLE_leftovers_maydayrooms_2026-08-19",

@@ -644,7 +644,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | | | | |
 |---|---|---|---|
 | **C1** | Faire entrer les 35 sujets SOLIDAIRES dans les migrations | `P1` | Ouvert |
-| **C2** | Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse | `P1` | Ouvert |
+| **C2** | Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse | `P1` | Bloqué |
 | **C3** | Mener la revue humaine des autorités : patronymes, casse, titres | `P1` | Ouvert |
 | **C4** | Renseigner les pays manquants sur 722 fiches d'autorité | `P2` | Ouvert |
 | **C5** | Trancher le sort du champ libre `books.autor` | `P2` | Décision collective |
@@ -676,23 +676,23 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### C2 — Importer le fonds SOLIDAIRES par l'outil d'import, et consigner ce qui casse
 
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
+`P1` Prioritaire · État : **Bloqué** · Charge : quelques jours · Ce que ça demande : bibliothéconomie, SQL / PostgreSQL
 
-**État vérifié au 29/08.** 1 685 notices dans `SOLIDAIRES_import_test.csv`. Les en-têtes suivent `spec-catalogacao-fiche-et-paliers` et **n'ont jamais été confrontés à l'importeur**. Engagement pris auprès du collectif, échéance fin août — donc échue.
+**État vérifié au 29/08.** 1 685 notices dans `SOLIDAIRES_import_test.csv`. Les en-têtes suivent `spec-catalogacao-fiche-et-paliers` et **n'ont jamais été confrontés à l'importeur**. **Décision de Xavier, 29/08 : l'import ne se fera que si la candidature de SOLIDAIRES est acceptée par plusieurs administrateur·rices réseau.** L'échéance de fin août tombe donc, et l'ordre des deux chantiers s'inverse par rapport aux notes d'août : l'admission d'abord, l'import ensuite.
 
 **Ce que c'est.** Adapter les en-têtes au format réellement attendu (environ une heure), faire passer le fichier **par l'outil d'import du dépôt et non par des `INSERT` à la main**, relire une vingtaine de fiches au hasard, puis faire une démonstration en visio écran partagé.
 
-**Pourquoi ça compte.** L'objet est autant d'éprouver l'importeur que d'obtenir les notices. **Le livrable le plus utile du chantier est la liste de ce qui casse, de ce qui est mal deviné et de ce qui se perd** — pas les 1 685 fiches.
+**Pourquoi ça compte.** L'objet reste autant d'éprouver l'importeur que d'obtenir les notices : **le livrable le plus utile du chantier est la liste de ce qui casse, de ce qui est mal deviné et de ce qui se perd** — pas les 1 685 fiches. Mais faire entrer un fonds avant que le réseau ait dit oui reviendrait à trancher par le fait ce qu'on dit vouloir trancher à plusieurs. C'est le même raisonnement qui interdisait de créer la fiche bibliothèque ; il s'étend maintenant au lot lui-même.
 
 **Ce qui compte comme fini.**
 
-- Le lot vit en `book_drafts` avec un marqueur de provenance.
+- **L'admission a été prononcée à plusieurs (G7) avant que le fichier soit touché.**
+- Le lot est passé par l'outil d'import du dépôt, pas par des `INSERT` à la main.
 - Un compte rendu écrit dit ce qui a cassé, ligne par ligne quand c'est possible.
 - Vingt fiches tirées au hasard ont été relues.
-- **Aucune bibliothèque « SOLIDAIRES » n'a été créée** — ni membre, ni partenaire, ni cible.
 - **Aucune coquille d'accent de la source n'a été corrigée en silence** : les corrections vivent dans `assunto_local_sugerido`.
 
-**Dépendances.** L'admission de SOLIDAIRES au réseau est **G7**, bloquée par **A1**. Les deux ne se mélangent pas : on importe un lot, on n'admet pas une composante.
+**Dépendances.** **Bloqué par G7**, lui-même bloqué par **A1**. Rien ne bouge tant que le réseau n'a qu'un seul administrateur.
 
 *Renvois : `REPRISE_claude_code_2026-08-27 chantier 2` · `CALENDRIER_bologne_2026-08-27`*
 
@@ -862,7 +862,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 |---|---|---|---|
 | **D1** | Réviser la spec des périodiques contre ce qui a été livré | `P1` | À vérifier |
 | **D2** | Trancher les cinq questions restées ouvertes sur les périodiques | `P2` | Décision collective |
-| **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P2` | Ouvert |
+| **D3** | Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES | `P2` | Bloqué |
 | **D4** | Le matériel éphémère : tracts, affiches, autocollants, zines | `P1` | Ouvert |
 | **D5** | Éprouver la chaîne de numérisation sur dix ouvrages avant d'équiper qui que ce soit | `P2` | Ouvert |
 | **D6** | Reprendre ou remplacer le lecteur EPUB | `P3` | Ouvert |
@@ -908,7 +908,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 #### D3 — Rattacher les 91 fascicules et les 87 monographies suspectes de SOLIDAIRES
 
-`P2` Courant · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
+`P2` Courant · État : **Bloqué** · Charge : quelques jours · Ce que ça demande : bibliothéconomie
 
 **État vérifié au 29/08.** Le fichier SOLIDAIRES porte déjà des colonnes `revue` et `numero` : **12 titres à créer, 91 fascicules à lier**. En plus, **87 monographies portent « n° » dans leur titre** et sont marquées par un drapeau `numero_dans_titre` : ce sont des candidates au rattachement.
 
@@ -922,7 +922,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 - Les 87 candidates ont été soumises, et chaque verdict est humain.
 - Le comportement observé sur les quatre notices *Encontros com a Civilização brasileira* confirme la règle anti-faux-doublons : deux paires en sortent, deux y restent.
 
-**Dépendances.** Après **C2** et **D1**.
+**Dépendances.** **Bloqué par C2**, donc par **G7** et **A1**. La révision de la spec (**D1**) peut se faire sans attendre.
 
 *Renvois : `spec-periodiques-v0.1 §10` · `REPRISE_claude_code_2026-08-27`*
 
@@ -1475,12 +1475,13 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 **Ce que c'est.** Une fois **A1** abouti, instruire la demande à plusieurs et trancher.
 
-**Pourquoi ça compte.** La contrainte est écrite noir sur blanc au collectif et elle est absolue : **ne pas créer de bibliothèque « SOLIDAIRES » en base**, ni membre, ni partenaire, ni cible. « Créer la fiche reviendrait à inscrire en base une décision qu'on dit ne pas prendre. » Le lot de notices vit en `book_drafts` avec un marqueur de provenance, et rien d'autre.
+**Pourquoi ça compte.** La contrainte est écrite noir sur blanc au collectif et elle est absolue : **ne pas créer de bibliothèque « SOLIDAIRES » en base** tant que la décision n'est pas prise, ni membre, ni partenaire, ni cible. « Créer la fiche reviendrait à inscrire en base une décision qu'on dit ne pas prendre. » **Et depuis le 29/08 la même règle vaut pour le fonds : l'import des 1 685 notices (C2) ne se fera qu'après l'admission.** Cet item ne décide donc pas seulement d'une adhésion : il débloque un chantier de catalogage entier.
 
 **Ce qui compte comme fini.**
 
 - La décision est prise à trois au moins, et tracée dans `network_administrator_audit`.
 - Quelle qu'elle soit, elle est communiquée au collectif SOLIDAIRES avec sa raison.
+- Une fois l'admission prononcée, **C2** et **D3** se débloquent dans cet ordre.
 
 **Dépendances.** **Bloqué par A1.** Même remarque pour la demande d'adhésion belge en cours d'évaluation.
 
@@ -2125,7 +2126,7 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **K3** | Tenir le registre public des comptes | `P2` | Ouvert |
 | **K4** | Corriger le générateur des pages de vie privée sur la langue déclarée | `P2` | Ouvert |
 | **K5** | Tenir l'intervention de Bologne et en tirer les suites | `P1` | En cours |
-| **K6** | Écrire à May Day Rooms et préparer la rencontre avec leftove.rs | `P2` | Ouvert |
+| **K6** | Préparer la rencontre avec leftove.rs et May Day Rooms | `P2` | En cours |
 | **K7** | Mener la formation des deux coordinations BLMF jusqu'à l'autonomie | `P1` | En cours |
 | **K8** | Finir le texte d'orientation sur les outils de bibliothèques militantes | `P2` | Ouvert |
 
@@ -2229,22 +2230,22 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 *Renvois : `CALENDRIER_bologne_2026-08-27` · `PLAN_intervention_FICEDL_Bologne_2026-09-12`*
 
-#### K6 — Écrire à May Day Rooms et préparer la rencontre avec leftove.rs
+#### K6 — Préparer la rencontre avec leftove.rs et May Day Rooms
 
-`P2` Courant · État : **Ouvert** · Charge : une soirée · Ce que ça demande : délibération collective
+`P2` Courant · État : **En cours** · Charge : une soirée · Ce que ça demande : délibération collective
 
-**État vérifié au 29/08.** Un brouillon complet est rédigé, en anglais. **L'atelier AnarBib est le matin, l'atelier leftove.rs l'après-midi du 12/09, même salle, même journée.** L'échéance d'envoi — fin août, pour qu'ils aient le temps de regarder AnarBib sans que ce soit urgent — se referme.
+**État vérifié au 29/08.** **Le message est parti** — autour du 19/08, soit trois semaines avant la rencontre, ce qui était exactement la fenêtre visée : assez tôt pour qu'ils regardent AnarBib sans que ce soit urgent. **L'atelier AnarBib est le matin, l'atelier leftove.rs l'après-midi du 12/09, même salle, même journée.** Ce qui reste ouvert, ce sont les réponses et la préparation de la journée.
 
-**Ce que c'est.** Envoyer, avec trois questions : le vocabulaire de sujets, le profil de numérisation (ils ont 16 000 documents océrisés), et NORLA et la cartographie. Plus une question sur l'auto-hébergement au collectif technique présent.
+**Ce que c'est.** Relancer si besoin, et préparer les trois questions posées pour qu'elles se discutent sur place : le vocabulaire de sujets, le profil de numérisation (ils ont 16 000 documents océrisés), et NORLA et la cartographie. Plus la question sur l'auto-hébergement au collectif technique présent.
 
 **Pourquoi ça compte.** Deux ateliers le même jour dans la même salle, sur des sujets voisins, sans que les deux équipes se soient parlé, serait un gâchis. Et il y a un point à regarder avant, pas après : **leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict.**
 
 **Ce qui compte comme fini.**
 
-- Le message est parti.
-- Les trois questions ont une réponse, ou une conversation est prévue à Bologne.
+- Les trois questions ont une réponse, ou un créneau de discussion est calé pour le 12/09.
+- **Point à regarder avant la rencontre, pas après** : leftove.rs est sous licence CC BY-NC-SA, et la clause non commerciale n'est pas une licence libre au sens strict.
 
-**Dépendances.** Avant le 12/09.
+**Dépendances.** Le 12/09, dans la journée. Lié à **D4** (matériel éphémère) et **H6** (alignement des vocabulaires).
 
 *Renvois : `VEILLE_leftovers_maydayrooms_2026-08-19` · `CALENDRIER_bologne_2026-08-27`*
 
