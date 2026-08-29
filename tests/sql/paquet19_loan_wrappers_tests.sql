@@ -593,10 +593,10 @@ BEGIN
   RESET ROLE;
 
   IF v_failed = 0 AND v_skipped = 0 THEN
-    RAISE EXCEPTION 'BILAN OK : % / % tests passes. Aucun skip, aucun echec.',
+    RAISE EXCEPTION 'LOAN-WRAPPERS OK : %/% tests passes. Aucun skip, aucun echec.',
       v_passed, (v_passed + v_failed + v_skipped);
   ELSIF v_failed = 0 THEN
-    RAISE EXCEPTION 'BILAN OK : % / % tests passes. % SKIPS : %',
+    RAISE EXCEPTION 'LOAN-WRAPPERS OK : %/% tests passes. % SKIPS : %',
       v_passed, (v_passed + v_failed + v_skipped),
       v_skipped, array_to_string(v_skips, ' || ');
   ELSE

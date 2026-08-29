@@ -20,6 +20,7 @@ DECLARE
   v_blmf_id uuid;
   v_test_user_id uuid;
   v_test_holding_id bigint;
+  v_test_item_id bigint;
   v_consulta_id bigint;
 BEGIN
   -- Recuperer BLMF
@@ -36,6 +37,15 @@ BEGIN
   
   IF v_test_holding_id IS NULL THEN
     RAISE EXCEPTION 'SETUP FAILED : aucun holding disponible sur BLMF pour les tests';
+  END IF;
+
+  SELECT id INTO v_test_item_id
+    FROM public.exemplares
+   WHERE holding_id = v_test_holding_id
+   LIMIT 1;
+
+  IF v_test_item_id IS NULL THEN
+    RAISE EXCEPTION 'SETUP FAILED : aucun exemplaire sur le holding BLMF (etoffer supabase/seed.sql)';
   END IF;
   
   -- Recuperer un user lecteur (le premier reader actif sur BLMF)
@@ -59,11 +69,14 @@ BEGIN
   INSERT INTO public.consulta_linhas_v2 (
     -- `sub_id` retire le 29/08/2026 : c'est une colonne GENERATED ALWAYS
     -- (consulta_id || '.' || line_no). Postgres refuse toute valeur explicite.
-    consulta_id, line_no, book_id, holding_id, 
+    -- `item_id` ajoute le meme jour : NOT NULL depuis le passage au grain item
+    -- (#MODEL-item-grain), FK vers exemplares. La consulta porte l'EXEMPLAIRE
+    -- consulte, pas seulement la notice -- c'est tout l'objet de ce modele.
+    consulta_id, line_no, book_id, holding_id, item_id, 
     bib_ref, titulo_cache, autor_cache, item_status, expires_at
   )
   SELECT 
-    v_consulta_id, 1, bh.book_id, v_test_holding_id,
+    v_consulta_id, 1, bh.book_id, v_test_holding_id, v_test_item_id,
     'TEST-B6', 'Test Title', 'Test Author', 'ativa', now() + interval '30 days'
   FROM public.book_holdings bh
   WHERE bh.id = v_test_holding_id;

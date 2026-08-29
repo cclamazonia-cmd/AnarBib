@@ -303,14 +303,21 @@ BEGIN
 
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'Paquet 26 L2 — % tests ont echoue. Revoir la migration.', v_failed;
-  ELSE
-    RAISE NOTICE 'Paquet 26 L2 — Tous les tests passes. Triggers en place.';
-    RAISE NOTICE '';
-    RAISE NOTICE 'PROCHAINES ETAPES :';
-    RAISE NOTICE '  1. Les triggers vont commencer a emettre des events des qu''une consulta est creee/modifiee';
-    RAISE NOTICE '  2. notify-event recevra les events et retournera 200 ignored (dispatch.ts ne les route pas encore)';
-    RAISE NOTICE '  3. AUCUN MAIL n''est envoye tant que L3 (i18n) + L4 (handler TS) ne sont pas en prod';
-    RAISE NOTICE '  4. Comportement attendu — passer maintenant a L3 + L4';
   END IF;
+
+  RAISE NOTICE 'Paquet 26 L2 — Tous les tests passes. Triggers en place.';
+  RAISE NOTICE '';
+  RAISE NOTICE 'PROCHAINES ETAPES :';
+  RAISE NOTICE '  1. Les triggers vont commencer a emettre des events des qu''une consulta est creee/modifiee';
+  RAISE NOTICE '  2. notify-event recevra les events et retournera 200 ignored (dispatch.ts ne les route pas encore)';
+  RAISE NOTICE '  3. AUCUN MAIL n''est envoye tant que L3 (i18n) + L4 (handler TS) ne sont pas en prod';
+  RAISE NOTICE '  4. Comportement attendu — passer maintenant a L3 + L4';
+
+  -- Bilan de succes a la convention du corpus (« NOM OK : N/N »), ajoute le
+  -- 29/08/2026. Cette suite ne disait son succes qu'en NOTICE : le gate de
+  -- run-sql-suites.sh ne le voyait pas et la comptait rouge alors qu'elle
+  -- passait 16/16. Une suite qui reussit doit le dire dans la forme que la CI
+  -- lit -- et l'EXCEPTION annule la transaction, ce qui est l'effet voulu.
+  RAISE EXCEPTION 'NOTIF-CONSULTA OK : %/% tests passes', v_passed, (v_passed + v_failed);
 END;
 $$;

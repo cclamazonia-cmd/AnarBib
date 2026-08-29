@@ -1,6 +1,6 @@
 # 📚 INDEX général de la documentation — AnarBib
 
-**Dernière mise à jour** : 29 août 2026 — passe d'hygiène du corpus (backlog v34, item J5) : chiffres du REGISTRE remis au réel (968 lignes, 44 sections, v0.4), nombre de locales aligné sur `DOC-I18N-1` (10), comptage des specs corrigé (41 → 42). *Précédemment : rafraîchissement après deux mois de retard : cinq dossiers absents de l'arborescence (`guides/`, `notes-audit/`, `schema/`, `drafts/`, `archive/`) et les traductions racine ajoutés, comptes réels, version courante du backlog corrigée (v30 → v33), source vivante de l'avancement re-pointée. *Précédemment : 10 juin 2026 (réorganisation de `decisions/` → `journal/` en sous-dossiers stricts par type). Refonte structurelle initiale : 3 juin 2026 — préséance documentaire, introduction du REGISTRE.*
+**Dernière mise à jour** : 29 août 2026 — passe d'hygiène du corpus (backlog v34, item J5) : chiffres du REGISTRE remis au réel (970 lignes, 44 sections, v0.5) et deux doctrines citées depuis juin enfin inscrites en §0 (`DOC-COLLECTIVE-1`, `USER-EMAIL-1`), nombre de locales aligné sur `DOC-I18N-1` (10), comptage des specs corrigé (41 → 42). *Précédemment : rafraîchissement après deux mois de retard : cinq dossiers absents de l'arborescence (`guides/`, `notes-audit/`, `schema/`, `drafts/`, `archive/`) et les traductions racine ajoutés, comptes réels, version courante du backlog corrigée (v30 → v33), source vivante de l'avancement re-pointée. *Précédemment : 10 juin 2026 (réorganisation de `decisions/` → `journal/` en sous-dossiers stricts par type). Refonte structurelle initiale : 3 juin 2026 — préséance documentaire, introduction du REGISTRE.*
 **Maintenu par** : Xavier (lead dev) + Claude (assistant·e)
 
 Ce document est la **porte d'entrée de toute la documentation** d'AnarBib. Il décrit la règle de préséance qui gouverne le corpus, oriente vers les documents transverses de référence, et présente l'organisation du dossier `docs/` avec ses index spécialisés.
@@ -18,7 +18,7 @@ En cas de doute ou de conflit apparent entre deux documents : **lire le REGISTRE
 
 Cette règle a été formalisée par l'**audit de cohérence du corpus du 02/06/2026** (`journal/audits/AUDIT_coherence_corpus_2026-06-02.md`), qui a constaté que les drifts détectés relèvent quasi tous d'une même pathologie : un fait transverse (locales, doctrine de déploiement…) recopié dans chaque spec au lieu d'être cité depuis un foyer unique. Le REGISTRE est ce foyer.
 
-**Conséquence pour la lecture** : un nouveau venu lit le REGISTRE (968 lignes au 29/08/2026, condensé) avant tout autre document — il y trouve les doctrines transverses et les arbitrages structurants. Il a plus que doublé depuis juin : 44 titres de section au 29/08/2026, `§BG2` (sauvegardes) comprise.
+**Conséquence pour la lecture** : un nouveau venu lit le REGISTRE (970 lignes au 29/08/2026, condensé) avant tout autre document — il y trouve les doctrines transverses et les arbitrages structurants. Il a plus que doublé depuis juin : 44 titres de section au 29/08/2026, `§BG2` (sauvegardes) comprise.
 
 ---
 
@@ -28,7 +28,7 @@ Documents de rang racine, à consulter en priorité selon le besoin. Ordre : le 
 
 | Document | Rôle | Statut |
 |---|---|---|
-| [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.4 du 29/08/2026 — 🟢 référence normative |
+| [`specs/REGISTRE_decisions.md`](./specs/REGISTRE_decisions.md) | **Foyer unique des décisions et doctrines transverses** du projet. On cite l'ID ici, on ne reformule jamais ailleurs. | v0.5 du 29/08/2026 — 🟢 référence normative |
 | [`governance/guide-gouvernance-fr.md`](./governance/) | Guide de gouvernance à l'usage des coordinateur·rices de biblio et des admins réseau (foyer FR ; 9 traductions dans `governance/`). | v1.0 du 11/05/2026 — 🟢 référence |
 | [`GLB/AnarBib_Grand_Livre_blanc_v17_2026-05-29.docx`](./GLB/) | **Grand Livre Blanc** — le livre blanc vivant d'AnarBib : état politique et technique, trajectoire, doctrine. | v17 du 29/05/2026 — 🟢 référence (livre blanc vivant) |
 | [`manual.md`](./manual.md) | Manuel d'utilisation du réseau de bibliothèques libertaires. | v1.0 (avril 2026) — 🟢 stable |
