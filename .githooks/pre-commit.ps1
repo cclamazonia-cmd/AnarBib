@@ -89,14 +89,19 @@ foreach ($file in $stagedSqlFiles) {
         }
     }
 
-    # ---- Test 3 : CREATE TABLE public.* sans ENABLE ROW LEVEL SECURITY --
-    # On regarde uniquement les CREATE TABLE dans le schema public
-    if ($scan -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?public\.\w+" -and
+    # ---- Test 3 : CREATE TABLE public/ingest sans ENABLE ROW LEVEL SECURITY --
+    # `ingest` ajoute le 29/08/2026 (paquet INGEST-RLS) : huit de ses tables
+    # etaient nees sans RLS, precisement parce que cette regle ne regardait que
+    # `public`. Dans `ingest` la RLS n'attend pas de policy - le schema n'est
+    # expose a personne et les fonctions d'import passent par le proprietaire.
+    # Les tables d'essai des suites de test (prefixe __) sont hors regle : elles
+    # naissent et meurent dans la meme transaction.
+    if ($scan -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(?:public|ingest)\.(?!__)\w+" -and
         $scan -notmatch "(?i)ENABLE\s+ROW\s+LEVEL\s+SECURITY") {
         $violations += @{
             File   = $file
-            Rule   = "CREATE TABLE public sans ENABLE ROW LEVEL SECURITY"
-            Detail = "Toute nouvelle table dans public DOIT activer la RLS et avoir au moins une policy"
+            Rule   = "CREATE TABLE public/ingest sans ENABLE ROW LEVEL SECURITY"
+            Detail = "Toute nouvelle table dans public DOIT activer la RLS et avoir au moins une policy ; dans ingest, la RLS seule suffit"
             Doc    = "Template 2 - Bloc complet"
         }
     }
@@ -117,7 +122,7 @@ foreach ($file in $stagedSqlFiles) {
     # ---- Test 5 : CREATE TABLE public sans GRANT explicite --------------
     # Test a faible bruit : on cherche juste la presence d'au moins UN GRANT
     # sur la table creee
-    if ($scan -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?public\.(\w+)") {
+    if ($scan -match "(?im)CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?public\.(?!__)(\w+)") {
         $tableName = $Matches[1]
         if ($scan -notmatch "(?im)GRANT\s+\w+.*ON\s+(?:TABLE\s+)?public\.$tableName\s+TO") {
             $violations += @{

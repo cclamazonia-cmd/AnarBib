@@ -164,3 +164,14 @@ tests/sql/grants_herites_tests.sql
 # SELECT/INSERT/UPDATE/DELETE sur toute vue neuve, et une vue simple est
 # auto-modifiable, donc un DELETE la traverse jusqu'a la table de base.
 tests/sql/lots_comptes_tests.sql
+
+# `grants_herites_tests.sql` garde `public`, et son T2 dit le bon critere : une
+# table ecrivable sans RLS. Mais il ne regarde que `public`, et c'est par la que
+# `ingest` est passe au travers pendant des mois - huit tables sans RLS, jamais
+# relevees, sur des donnees de bibliotheques tierces. Cette suite est le meme
+# controle, pour le schema qui manquait. T2 est le plus important et ne parle pas
+# de securite : FORCE ROW LEVEL SECURITY couperait les dix-sept fonctions d'import
+# d'un coup, silencieusement, et il a l'air d'un durcissement. T6 garde
+# l'invariant qui rend la RLS sans policy transparente pour l'import : tables et
+# fonctions au meme proprietaire.
+tests/sql/ingest_ferme_tests.sql
