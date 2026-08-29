@@ -4,6 +4,8 @@
 
 Chaque entrée dit ce qu'elle demande et ce qu'elle apporte, pour que chacune et chacun choisisse sans avoir à demander.
 
+*Trois des sept entrées ci-dessous ne demandent aucune compétence technique. Si c'est ce que vous cherchez, [`AIDER.md`](../AIDER.md) les reprend avec les chiffres du jour, en français, portugais et anglais.*
+
 ---
 
 ## 1. Éprouver la reconstruction — *le meilleur premier pas*

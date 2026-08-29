@@ -4,6 +4,8 @@ AnarBib est un SIGB libre (AGPLv3) pour bibliothèques libertaires en réseau. L
 
 *English version below.*
 
+> **Vous ne comptez pas ecrire de code ?** Cette page parle de `git` et de `npm`. Les trois chantiers les plus utiles au projet aujourd'hui n'en demandent pas : ils sont dans [`AIDER.md`](AIDER.md), avec ce qu'ils demandent, ce qu'ils apportent, et ou ils en sont.
+
 ---
 
 ## En un mot
@@ -18,7 +20,7 @@ Si vous ne savez pas par où commencer, `docs/CHANTIERS_OUVERTS.md` propose des 
 
 ### 1. Lire le REGISTRE
 
-`specs/REGISTRE_decisions.md` est le foyer des décisions transverses. Il fait foi, et il prime sur tout le reste. La règle de préséance du corpus est simple :
+`docs/specs/REGISTRE_decisions.md` est le foyer des décisions transverses. Il fait foi, et il prime sur tout le reste. La règle de préséance du corpus est simple :
 
 > **Font foi** : le REGISTRE, puis la spec courante du domaine, puis le backlog courant.
 > **Trace historique, qui n'arbitre pas** : tout ce qui est dans `docs/journal/` — cadrages, chantiers, sessions, bilans, audits.
@@ -76,7 +78,7 @@ Pour reconstruire la pile complète — Postgres, PostgREST, authentification, s
 
 La suite Vitest doit rester verte. Les dix locales sont à **parité stricte de clés**, vérifiée par l'intégration continue : ajouter une clé dans une langue et pas dans les neuf autres fait échouer la construction. C'est voulu.
 
-*Note* : l'intégration continue Woodpecker sur Codeberg a un défaut d'infrastructure connu. Si elle échoue sans rapport avec votre travail, ce n'est probablement pas vous.
+*Note* : l'intégration continue tourne sur **Forgejo Actions**, avec un exécuteur auto-hébergé sur la machine du mainteneur — rien ne se construit tant qu'elle est éteinte. Si un workflow échoue sans rapport avec votre travail, ce n'est probablement pas vous. *(Woodpecker a été remplacé le 11/06/2026.)*
 
 ---
 
@@ -95,6 +97,8 @@ Le code est sous **AGPLv3** (`LICENSE`). La documentation a sa propre licence (`
 
 # Contributing to AnarBib (EN)
 
+> **Not planning to write code?** This page is about `git` and `npm`. The three most useful pieces of work on the project today need neither: see [`AIDER.md`](AIDER.md).
+
 AnarBib is a free-software ILS (AGPLv3) for libertarian libraries working as a network. The canonical repository is on **Codeberg** — `https://codeberg.org/anarbib/anarbib`. The GitHub repository is a mirror; issues and pull requests are handled on Codeberg.
 
 ## In short
@@ -105,7 +109,7 @@ If you don't know where to start, `docs/CHANTIERS_OUVERTS.md` lists entry points
 
 ## Before touching the code
 
-**Read the REGISTER first.** `specs/REGISTRE_decisions.md` holds the cross-cutting decisions and overrides everything else. Precedence: the REGISTER, then the current spec for the domain, then the current backlog. Everything under `docs/journal/` is historical record — valuable, but it does not arbitrate. `docs/INDEX.md` is the entry point to the rest.
+**Read the REGISTER first.** `docs/specs/REGISTRE_decisions.md` holds the cross-cutting decisions and overrides everything else. Precedence: the REGISTER, then the current spec for the domain, then the current backlog. Everything under `docs/journal/` is historical record — valuable, but it does not arbitrate. `docs/INDEX.md` is the entry point to the rest.
 
 Then, depending on what you touch: the inclusive-language charter for i18n (`docs/notes-audit/anarbib-charte-langage-inclusif-v2.md`), the active doctrines in `docs/journal/` for SQL and migrations, the cataloguing guides in `docs/guides/`, and `deploy/README.md` for the self-hosted stack.
 
@@ -121,7 +125,7 @@ Fork on Codeberg, one branch per work item, clear commits prefixed `feat:` `fix:
 
 Deliverables are complete patches tested on a clean clone, or whole files — never "replace line 42 with this". No migration reaches production without explicit validation.
 
-The Vitest suite must stay green. All ten locales are at **strict key parity**, enforced by CI: adding a key in one language and not the other nine fails the build. That is intentional. Note that Woodpecker CI on Codeberg has a known infrastructure fault — a failure unrelated to your work is probably not yours.
+The Vitest suite must stay green. All ten locales are at **strict key parity**, enforced by CI: adding a key in one language and not the other nine fails the build. That is intentional. CI runs on **Forgejo Actions** with a self-hosted runner on the maintainer's machine — nothing builds while that machine is off. A failure unrelated to your work is probably not yours. *(Woodpecker was replaced on 2026-06-11.)*
 
 ## On AI usage
 
