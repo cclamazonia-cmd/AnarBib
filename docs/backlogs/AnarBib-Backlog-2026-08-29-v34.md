@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · 93 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · 92 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -16,7 +16,7 @@
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
     - [A — Soutenabilité collective](#a-soutenabilité-collective) · 4
-    - [B — Base de données, sécurité, RLS](#b-base-de-données-sécurité-rls) · 13
+    - [B — Base de données, sécurité, RLS](#b-base-de-données-sécurité-rls) · 12
     - [C — Catalogage et données documentaires](#c-catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d-périodiques-éphémères-ressources-numériques) · 6
     - [E — Front, OPAC, i18n, accessibilité](#e-front-opac-i18n-accessibilité) · 11
@@ -65,7 +65,7 @@ Relevé du **29 août 2026**. Base de production `uflwmikiyjfnikiphtcp` interrog
 | | | |
 |---|---:|---|
 | Tables `public` | **187** | toutes avec RLS activé, 279 policies sur 174 tables |
-| Tables `ingest` | **10** | **8 sans RLS** — jamais relevé nulle part (item **B1**) |
+| Tables `ingest` | **10** | 8 étaient sans RLS le 29/08 au matin — **les 10 le sont depuis le soir** (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE` |
 | Vues `api` | **68** | 61 SECURITY INVOKER, **7 DEFINER** (item **B3**) |
 | Fonctions applicatives | **847** | dont **664 SECURITY DEFINER** ; aucune sans `search_path` épinglé |
 | Migrations appliquées | **221** | 224 fichiers au dépôt ; 3 horodatées au 30/08 (item **I9**) |
@@ -205,10 +205,10 @@ Voici pourquoi le v33 ne pouvait plus servir. Ces écarts ne sont pas des négli
 
 ### Jamais écrit nulle part
 
-**Le schéma `ingest` n'est pas protégé**
+**Le schéma `ingest` n'avait pas de RLS — mais il n'était pas ouvert pour autant**
 
 - *Ce que dit la documentation* — rien — aucun document du corpus ne mentionne l'état RLS de `ingest`
-- *Ce que dit la base ou le dépôt* — **8 des 10 tables du schéma `ingest` n'ont pas RLS activé**, dont `partner_catalog_staging_rows` (2 172 lignes) et `partner_catalog_row_to_draft` (2 084). Le discours « 0 table sans RLS » est vrai pour `public` et ne l'a jamais été pour l'ensemble de la base. Item **B1**, priorité haute.
+- *Ce que dit la base ou le dépôt* — **8 des 10 tables du schéma `ingest` n'avaient pas RLS activé**, dont `partner_catalog_staging_rows` (2 172 lignes) et `partner_catalog_row_to_draft` (2 084) — des données de bibliothèques tierces. Le discours « 0 table sans RLS » est vrai pour `public` et ne l'a jamais été pour la base entière. **Mais la vérification des droits, faite ensuite, a corrigé le diagnostic** : `anon` et `authenticated` n'ont même pas `USAGE` sur ce schéma, et aucune de ses tables ne leur accorde quoi que ce soit. Rien n'était atteignable. C'est une leçon sur la méthode autant que sur la sécurité : l'absence de RLS ne dit rien à elle seule, il faut lire les droits avec. Soldé le 29/08 (item **B1**) comme second verrou — la fermeture ne tient plus au seul fait qu'aucun GRANT n'a été posé.
 
 **Les 35 sujets Solidaires sont en base, leur migration ne l'est pas**
 
@@ -367,7 +367,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 
 | | | | |
 |---|---|---|---|
-| **B1** | Activer RLS sur les huit tables non protégées du schéma `ingest` | `P1` | Ouvert |
 | **B2** | Trier les 142 fonctions `SECURITY DEFINER` du schéma `api` | `P1` | Ouvert |
 | **B3** | Passer les sept vues `api` restées en SECURITY DEFINER | `P1` | Ouvert |
 | **B4** | Examiner les quatre tables à RLS sans policy qui ne sont pas du transit | `P2` | Ouvert |
@@ -380,27 +379,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **B11** | Comprendre `user_wishlist` : une ligne vivante pour 9 092 insertions | `P2` | À vérifier |
 | **B12** | Élucider les trois actions critiques inter-bibliothèques restées en `skipped` | `P2` | À vérifier |
 | **B13** | Décider du sort des 221 migrations : squash ou pas | `P3` | Ouvert |
-
-#### B1 — Activer RLS sur les huit tables non protégées du schéma `ingest`
-
-`P1` Prioritaire · État : **Ouvert** · Charge : quelques jours · Ce que ça demande : SQL / PostgreSQL
-
-**État vérifié au 29/08.** Vérifié le 29/08 : sur les 10 tables de `ingest`, **8 n'ont pas RLS activé**. Les deux plus grosses sont `partner_catalog_staging_rows` (2 172 lignes) et `partner_catalog_row_to_draft` (2 084 lignes). Aucun document du corpus ne mentionne ce point ; l'affirmation « 0 table sans RLS » ne vaut que pour `public`.
-
-**Ce que c'est.** Activer RLS sur les huit tables, puis pour chacune : soit écrire la policy qui reproduit la garde déjà appliquée en amont par les RPC, soit laisser sans policy si l'accès ne doit passer que par des fonctions `SECURITY DEFINER` — mais en l'écrivant.
-
-**Pourquoi ça compte.** `ingest` porte des données d'import de catalogues partenaires, donc du contenu de tiers. Le hook `pre-commit` interdit depuis mai toute `CREATE TABLE public.*` sans RLS — la règle n'a jamais été étendue à `ingest`, et personne ne s'en est aperçu parce que les audits ne regardaient que `public`.
-
-**Ce qui compte comme fini.**
-
-- Les 10 tables de `ingest` ont RLS activé.
-- Chacune a soit une policy, soit une ligne de commentaire SQL disant pourquoi elle n'en a pas.
-- Le hook `pre-commit` est étendu à `CREATE TABLE ingest.*`.
-- Les tests SQL couvrent au moins la table la plus exposée.
-
-**Dépendances.** Aucune. Se fait sans toucher au front.
-
-*Renvois : `Relevé du 29/08/2026` · `CHANTIER_doctrine_creation_objets_securises_2026-05-12`*
 
 #### B2 — Trier les 142 fonctions `SECURITY DEFINER` du schéma `api`
 
@@ -2318,6 +2296,7 @@ Ces entrées figuraient dans le v33, dans `ETAT-AVANCEMENT-multisessions`, dans 
 | npm ci | Réparation des dépendances locales | Fait le 27/08. `@supabase/auth-js` a retrouvé son point d'entrée. **Ne pas le rejouer sans raison.** |
 | Encart de soutien financier | « À rédiger dans les dix locales » | Publié le 26/08 (`47d23fa`). Liberapay en ligne, premier don reçu le 27/08. Registre public en place depuis le 27/08. |
 | A5 | Configuration git à deux URL de poussée | **Déjà corrigé.** Constaté le 29/08 dans `.git/config` : `origin` ne porte qu'une seule URL de poussée (Codeberg) et GitHub est un remote nommé à part. Le correctif prévu après les quatre incidents du 19/08 a été appliqué. Il n'y a plus d'alias `git publish-app` : on pousse sur les deux remotes explicitement. |
+| B1 | Huit tables du schéma `ingest` sans RLS | **Livré le 29/08** — migration `20260830140000_ingest_ne_depend_plus_d_un_grant`, suite `ingest_ferme_tests.sql` (7 tests) au manifeste, hook `pre-commit` étendu à `ingest`. Vérifié en base après déploiement : 10 tables sous RLS, aucune en FORCE, les 2 172 lignes de staging et les 2 084 liens intacts. **Mais la fiche avait tort sur l'essentiel** : `anon` et `authenticated` n'ont jamais eu `USAGE` sur ce schéma, donc aucune faille n'était ouverte. Le paquet est un second verrou, pas une correction — et la « priorité haute » annoncée reposait sur l'absence de RLS sans avoir regardé les droits. |
 
 ---
 
@@ -2349,4 +2328,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, 2026-08-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 93 items sur 11 domaines. Chaque état a été vérifié le 29/08/2026 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c`. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, 2026-08-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 92 items sur 11 domaines. Chaque état a été vérifié le 29/08/2026 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c`. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

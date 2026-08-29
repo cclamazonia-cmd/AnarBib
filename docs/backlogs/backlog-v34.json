@@ -376,8 +376,8 @@
       },
       "10",
       {
-       "fr": "**8 sans RLS** — jamais relevé nulle part (item **B1**)",
-       "pt": "**8 sem RLS** — nunca levantado em lugar nenhum (item **B1**)"
+       "fr": "8 étaient sans RLS le 29/08 au matin — **les 10 le sont depuis le soir** (item **B1**, soldé). Le schéma n'a jamais été exposé : ni `anon` ni `authenticated` n'y a `USAGE`",
+       "pt": "8 estavam sem RLS na manhã de 29/08 — **as 10 estão desde a noite** (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele"
       }
      ],
      [
@@ -927,16 +927,16 @@
    {
     "sens": "jamais",
     "quoi": {
-     "fr": "Le schéma `ingest` n'est pas protégé",
-     "pt": "O esquema `ingest` não está protegido"
+     "fr": "Le schéma `ingest` n'avait pas de RLS — mais il n'était pas ouvert pour autant",
+     "pt": "O esquema `ingest` não tinha RLS — mas nem por isso estava aberto"
     },
     "dit": {
      "fr": "rien — aucun document du corpus ne mentionne l'état RLS de `ingest`",
      "pt": "nada — nenhum documento do corpus menciona o estado RLS de `ingest`"
     },
     "reel": {
-     "fr": "**8 des 10 tables du schéma `ingest` n'ont pas RLS activé**, dont `partner_catalog_staging_rows` (2 172 lignes) et `partner_catalog_row_to_draft` (2 084). Le discours « 0 table sans RLS » est vrai pour `public` et ne l'a jamais été pour l'ensemble de la base. Item **B1**, priorité haute.",
-     "pt": "**8 das 10 tabelas do esquema `ingest` não têm RLS ativado**, entre elas `partner_catalog_staging_rows` (2 172 linhas) e `partner_catalog_row_to_draft` (2 084). O discurso «0 tabela sem RLS» é verdadeiro para `public` e nunca o foi para o conjunto do banco. Item **B1**, prioridade alta."
+     "fr": "**8 des 10 tables du schéma `ingest` n'avaient pas RLS activé**, dont `partner_catalog_staging_rows` (2 172 lignes) et `partner_catalog_row_to_draft` (2 084) — des données de bibliothèques tierces. Le discours « 0 table sans RLS » est vrai pour `public` et ne l'a jamais été pour la base entière. **Mais la vérification des droits, faite ensuite, a corrigé le diagnostic** : `anon` et `authenticated` n'ont même pas `USAGE` sur ce schéma, et aucune de ses tables ne leur accorde quoi que ce soit. Rien n'était atteignable. C'est une leçon sur la méthode autant que sur la sécurité : l'absence de RLS ne dit rien à elle seule, il faut lire les droits avec. Soldé le 29/08 (item **B1**) comme second verrou — la fermeture ne tient plus au seul fait qu'aucun GRANT n'a été posé.",
+     "pt": "**8 das 10 tabelas do esquema `ingest` não tinham RLS ativado**, entre elas `partner_catalog_staging_rows` (2 172 linhas) e `partner_catalog_row_to_draft` (2 084) — dados de bibliotecas de terceiros. O discurso «0 tabela sem RLS» é verdadeiro para `public` e nunca o foi para o banco inteiro. **Mas a verificação dos direitos, feita em seguida, corrigiu o diagnóstico**: `anon` e `authenticated` não têm sequer `USAGE` nesse esquema, e nenhuma de suas tabelas lhes concede o que quer que seja. Nada era alcançável. É uma lição de método tanto quanto de segurança: a ausência de RLS não diz nada sozinha, é preciso ler os direitos junto. Liquidado em 29/08 (item **B1**) como segundo ferrolho."
     }
    },
    {
@@ -1264,6 +1264,17 @@
      "fr": "**Déjà corrigé.** Constaté le 29/08 dans `.git/config` : `origin` ne porte qu'une seule URL de poussée (Codeberg) et GitHub est un remote nommé à part. Le correctif prévu après les quatre incidents du 19/08 a été appliqué. Il n'y a plus d'alias `git publish-app` : on pousse sur les deux remotes explicitement.",
      "pt": "**Já corrigido.** Constatado em 29/08 em `.git/config`: `origin` traz um único URL de push (Codeberg) e o GitHub é um remote nomeado à parte. A correção prevista após os quatro incidentes de 19/08 foi aplicada. Não há mais alias `git publish-app`: empurra-se explicitamente para os dois remotes."
     }
+   ],
+   [
+    "B1",
+    {
+     "fr": "Huit tables du schéma `ingest` sans RLS",
+     "pt": "Oito tabelas do esquema `ingest` sem RLS"
+    },
+    {
+     "fr": "**Livré le 29/08** — migration `20260830140000_ingest_ne_depend_plus_d_un_grant`, suite `ingest_ferme_tests.sql` (7 tests) au manifeste, hook `pre-commit` étendu à `ingest`. Vérifié en base après déploiement : 10 tables sous RLS, aucune en FORCE, les 2 172 lignes de staging et les 2 084 liens intacts. **Mais la fiche avait tort sur l'essentiel** : `anon` et `authenticated` n'ont jamais eu `USAGE` sur ce schéma, donc aucune faille n'était ouverte. Le paquet est un second verrou, pas une correction — et la « priorité haute » annoncée reposait sur l'absence de RLS sans avoir regardé les droits.",
+     "pt": "**Entregue em 29/08** — migração `20260830140000_ingest_ne_depend_plus_d_un_grant`, suíte `ingest_ferme_tests.sql` (7 testes) no manifesto, hook `pre-commit` estendido a `ingest`. Verificado no banco após a implantação: 10 tabelas sob RLS, nenhuma em FORCE, as 2 172 linhas de staging e os 2 084 vínculos intactos. **Mas a ficha errava no essencial**: `anon` e `authenticated` nunca tiveram `USAGE` nesse esquema, portanto nenhuma falha estava aberta. O pacote é um segundo ferrolho, não uma correção."
+    }
    ]
   ]
  },
@@ -1454,54 +1465,6 @@
    "r": [
     "CONTRIBUTING.md",
     "docs/CHANTIERS_OUVERTS.md"
-   ]
-  },
-  {
-   "id": "B1",
-   "d": "B",
-   "p": "P1",
-   "s": "ouvert",
-   "e": "M",
-   "sk": [
-    "sql"
-   ],
-   "t": {
-    "fr": "Activer RLS sur les huit tables non protégées du schéma `ingest`",
-    "pt": "Ativar RLS nas oito tabelas desprotegidas do esquema `ingest`"
-   },
-   "v": {
-    "fr": "Vérifié le 29/08 : sur les 10 tables de `ingest`, **8 n'ont pas RLS activé**. Les deux plus grosses sont `partner_catalog_staging_rows` (2 172 lignes) et `partner_catalog_row_to_draft` (2 084 lignes). Aucun document du corpus ne mentionne ce point ; l'affirmation « 0 table sans RLS » ne vaut que pour `public`.",
-    "pt": "Verificado em 29/08: das 10 tabelas de `ingest`, **8 não têm RLS ativado**. As duas maiores são `partner_catalog_staging_rows` (2 172 linhas) e `partner_catalog_row_to_draft` (2 084 linhas). Nenhum documento do corpus menciona esse ponto; a afirmação «0 tabela sem RLS» só vale para `public`."
-   },
-   "w": {
-    "fr": "Activer RLS sur les huit tables, puis pour chacune : soit écrire la policy qui reproduit la garde déjà appliquée en amont par les RPC, soit laisser sans policy si l'accès ne doit passer que par des fonctions `SECURITY DEFINER` — mais en l'écrivant.",
-    "pt": "Ativar RLS nas oito tabelas, depois para cada uma: ou escrever a policy que reproduz a guarda já aplicada a montante pelas RPC, ou deixar sem policy se o acesso só deve passar por funções `SECURITY DEFINER` — mas escrevendo isso."
-   },
-   "y": {
-    "fr": "`ingest` porte des données d'import de catalogues partenaires, donc du contenu de tiers. Le hook `pre-commit` interdit depuis mai toute `CREATE TABLE public.*` sans RLS — la règle n'a jamais été étendue à `ingest`, et personne ne s'en est aperçu parce que les audits ne regardaient que `public`.",
-    "pt": "`ingest` carrega dados de importação de catálogos parceiros, portanto conteúdo de terceiros. O hook `pre-commit` proíbe desde maio todo `CREATE TABLE public.*` sem RLS — a regra nunca foi estendida a `ingest`, e ninguém percebeu porque as auditorias só olhavam `public`."
-   },
-   "f": {
-    "fr": [
-     "Les 10 tables de `ingest` ont RLS activé.",
-     "Chacune a soit une policy, soit une ligne de commentaire SQL disant pourquoi elle n'en a pas.",
-     "Le hook `pre-commit` est étendu à `CREATE TABLE ingest.*`.",
-     "Les tests SQL couvrent au moins la table la plus exposée."
-    ],
-    "pt": [
-     "As 10 tabelas de `ingest` têm RLS ativado.",
-     "Cada uma tem ou uma policy, ou uma linha de comentário SQL dizendo por que não tem.",
-     "O hook `pre-commit` é estendido a `CREATE TABLE ingest.*`.",
-     "Os testes SQL cobrem ao menos a tabela mais exposta."
-    ]
-   },
-   "dep": {
-    "fr": "Aucune. Se fait sans toucher au front.",
-    "pt": "Nenhuma. Faz-se sem tocar no front."
-   },
-   "r": [
-    "Relevé du 29/08/2026",
-    "CHANTIER_doctrine_creation_objets_securises_2026-05-12"
    ]
   },
   {

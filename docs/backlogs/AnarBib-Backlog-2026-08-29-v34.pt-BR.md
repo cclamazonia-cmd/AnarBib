@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · 93 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · 92 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -16,7 +16,7 @@
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
     - [A — Sustentabilidade coletiva](#a-sustentabilidade-coletiva) · 4
-    - [B — Banco de dados, segurança, RLS](#b-banco-de-dados-segurança-rls) · 13
+    - [B — Banco de dados, segurança, RLS](#b-banco-de-dados-segurança-rls) · 12
     - [C — Catalogação e dados documentais](#c-catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d-periódicos-efêmeros-recursos-digitais) · 6
     - [E — Front, OPAC, i18n, acessibilidade](#e-front-opac-i18n-acessibilidade) · 11
@@ -65,7 +65,7 @@ Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiph
 | | | |
 |---|---:|---|
 | Tabelas `public` | **187** | todas com RLS ativado, 279 policies em 174 tabelas |
-| Tabelas `ingest` | **10** | **8 sem RLS** — nunca levantado em lugar nenhum (item **B1**) |
+| Tabelas `ingest` | **10** | 8 estavam sem RLS na manhã de 29/08 — **as 10 estão desde a noite** (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
 | Views `api` | **68** | 61 SECURITY INVOKER, **7 DEFINER** (item **B3**) |
 | Funções aplicativas | **847** | das quais **664 SECURITY DEFINER**; nenhuma sem `search_path` fixado |
 | Migrações aplicadas | **221** | 224 arquivos no repositório; 3 datadas em 30/08 (item **I9**) |
@@ -205,10 +205,10 @@ Eis por que o v33 não podia mais servir. Estes desvios não são negligências:
 
 ### Nunca escrito em lugar nenhum
 
-**O esquema `ingest` não está protegido**
+**O esquema `ingest` não tinha RLS — mas nem por isso estava aberto**
 
 - *O que diz a documentação* — nada — nenhum documento do corpus menciona o estado RLS de `ingest`
-- *O que diz o banco ou o repositório* — **8 das 10 tabelas do esquema `ingest` não têm RLS ativado**, entre elas `partner_catalog_staging_rows` (2 172 linhas) e `partner_catalog_row_to_draft` (2 084). O discurso «0 tabela sem RLS» é verdadeiro para `public` e nunca o foi para o conjunto do banco. Item **B1**, prioridade alta.
+- *O que diz o banco ou o repositório* — **8 das 10 tabelas do esquema `ingest` não tinham RLS ativado**, entre elas `partner_catalog_staging_rows` (2 172 linhas) e `partner_catalog_row_to_draft` (2 084) — dados de bibliotecas de terceiros. O discurso «0 tabela sem RLS» é verdadeiro para `public` e nunca o foi para o banco inteiro. **Mas a verificação dos direitos, feita em seguida, corrigiu o diagnóstico**: `anon` e `authenticated` não têm sequer `USAGE` nesse esquema, e nenhuma de suas tabelas lhes concede o que quer que seja. Nada era alcançável. É uma lição de método tanto quanto de segurança: a ausência de RLS não diz nada sozinha, é preciso ler os direitos junto. Liquidado em 29/08 (item **B1**) como segundo ferrolho.
 
 **Os 35 assuntos Solidaires estão no banco, a migração deles não**
 
@@ -367,7 +367,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 | | | | |
 |---|---|---|---|
-| **B1** | Ativar RLS nas oito tabelas desprotegidas do esquema `ingest` | `P1` | Aberto |
 | **B2** | Triar as 142 funções `SECURITY DEFINER` do esquema `api` | `P1` | Aberto |
 | **B3** | Passar as sete views `api` que continuam em SECURITY DEFINER | `P1` | Aberto |
 | **B4** | Examinar as quatro tabelas com RLS sem policy que não são de trânsito | `P2` | Aberto |
@@ -380,27 +379,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **B11** | Compreender `user_wishlist`: uma linha viva para 9 092 inserções | `P2` | A verificar |
 | **B12** | Elucidar as três ações críticas interbibliotecas que ficaram em `skipped` | `P2` | A verificar |
 | **B13** | Decidir o destino das 221 migrações: squash ou não | `P3` | Aberto |
-
-#### B1 — Ativar RLS nas oito tabelas desprotegidas do esquema `ingest`
-
-`P1` Prioritário · Estado : **Aberto** · Carga : alguns dias · O que exige : SQL / PostgreSQL
-
-**Estado verificado em 29/08.** Verificado em 29/08: das 10 tabelas de `ingest`, **8 não têm RLS ativado**. As duas maiores são `partner_catalog_staging_rows` (2 172 linhas) e `partner_catalog_row_to_draft` (2 084 linhas). Nenhum documento do corpus menciona esse ponto; a afirmação «0 tabela sem RLS» só vale para `public`.
-
-**O que é.** Ativar RLS nas oito tabelas, depois para cada uma: ou escrever a policy que reproduz a guarda já aplicada a montante pelas RPC, ou deixar sem policy se o acesso só deve passar por funções `SECURITY DEFINER` — mas escrevendo isso.
-
-**Por que importa.** `ingest` carrega dados de importação de catálogos parceiros, portanto conteúdo de terceiros. O hook `pre-commit` proíbe desde maio todo `CREATE TABLE public.*` sem RLS — a regra nunca foi estendida a `ingest`, e ninguém percebeu porque as auditorias só olhavam `public`.
-
-**O que conta como terminado.**
-
-- As 10 tabelas de `ingest` têm RLS ativado.
-- Cada uma tem ou uma policy, ou uma linha de comentário SQL dizendo por que não tem.
-- O hook `pre-commit` é estendido a `CREATE TABLE ingest.*`.
-- Os testes SQL cobrem ao menos a tabela mais exposta.
-
-**Dependências.** Nenhuma. Faz-se sem tocar no front.
-
-*Remissões : `Relevé du 29/08/2026` · `CHANTIER_doctrine_creation_objets_securises_2026-05-12`*
 
 #### B2 — Triar as 142 funções `SECURITY DEFINER` do esquema `api`
 
@@ -2318,6 +2296,7 @@ Estas entradas constavam no v33, em `ETAT-AVANCEMENT-multisessions`, em `ETAT-la
 | npm ci | Reparo das dependências locais | Feito em 27/08. `@supabase/auth-js` recuperou seu ponto de entrada. **Não reexecutar sem motivo.** |
 | Encarte de apoio financeiro | «A redigir nas dez locales» | Publicado em 26/08 (`47d23fa`). Liberapay no ar, primeira doação recebida em 27/08. Registro público em vigor desde 27/08. |
 | A5 | Configuração git com dois URLs de push | **Já corrigido.** Constatado em 29/08 em `.git/config`: `origin` traz um único URL de push (Codeberg) e o GitHub é um remote nomeado à parte. A correção prevista após os quatro incidentes de 19/08 foi aplicada. Não há mais alias `git publish-app`: empurra-se explicitamente para os dois remotes. |
+| B1 | Oito tabelas do esquema `ingest` sem RLS | **Entregue em 29/08** — migração `20260830140000_ingest_ne_depend_plus_d_un_grant`, suíte `ingest_ferme_tests.sql` (7 testes) no manifesto, hook `pre-commit` estendido a `ingest`. Verificado no banco após a implantação: 10 tabelas sob RLS, nenhuma em FORCE, as 2 172 linhas de staging e os 2 084 vínculos intactos. **Mas a ficha errava no essencial**: `anon` e `authenticated` nunca tiveram `USAGE` nesse esquema, portanto nenhuma falha estava aberta. O pacote é um segundo ferrolho, não uma correção. |
 
 ---
 
@@ -2349,4 +2328,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, 2026-08-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 93 itens em 11 domínios. Cada estado foi verificado em 29/08/2026 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, 2026-08-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 92 itens em 11 domínios. Cada estado foi verificado em 29/08/2026 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
