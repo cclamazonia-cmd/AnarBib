@@ -57,11 +57,13 @@ BEGIN
   
   -- Creer une ligne consulta (item ativa)
   INSERT INTO public.consulta_linhas_v2 (
-    consulta_id, line_no, sub_id, book_id, holding_id, 
+    -- `sub_id` retire le 29/08/2026 : c'est une colonne GENERATED ALWAYS
+    -- (consulta_id || '.' || line_no). Postgres refuse toute valeur explicite.
+    consulta_id, line_no, book_id, holding_id, 
     bib_ref, titulo_cache, autor_cache, item_status, expires_at
   )
   SELECT 
-    v_consulta_id, 1, 'A', bh.book_id, v_test_holding_id,
+    v_consulta_id, 1, bh.book_id, v_test_holding_id,
     'TEST-B6', 'Test Title', 'Test Author', 'ativa', now() + interval '30 days'
   FROM public.book_holdings bh
   WHERE bh.id = v_test_holding_id;

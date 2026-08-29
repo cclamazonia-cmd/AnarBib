@@ -25,6 +25,16 @@
 --   - Compte sans role BLMF : 22222222-2222-2222-2222-222222222222
 -- =====================================================================
 
+-- NOTE sur « emprunt inexistant » (29/08/2026, backlog v34, item I7).
+-- Les wrappers levent un CODE machine -- `loan_not_found` -- et non une phrase
+-- portugaise. Les gardes de 4.02, 5.02 et 8.03 ne cherchaient que
+-- '%nao encontrado%' : le trait de soulignement de `loan_not_found` suffisait a
+-- les faire manquer d'un caractere. Elles exigent desormais le code, EXACTEMENT,
+-- plutot que d'accepter les deux formes -- un « ou bien » dans une garde
+-- d'erreur est precisement ce qui laisse passer une regression. Le code est le
+-- bon contrat : c'est lui que le frontend teste.
+-- Les autres gardes de cette suite n'ont pas ete touchees : elles passaient.
+
 DO $$
 DECLARE
   v_passed int := 0;
@@ -245,7 +255,7 @@ BEGIN
     PERFORM api.return_loan_total(99999999);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
-    IF SQLERRM LIKE '%nao encontrado%' OR SQLERRM LIKE '%not found%' THEN v_passed := v_passed + 1;
+    IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
   END;
 
@@ -352,7 +362,7 @@ BEGIN
     PERFORM api.extend_loan_as_library(99999999);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
-    IF SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
+    IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
   END;
 
@@ -572,7 +582,7 @@ BEGIN
     PERFORM api.mark_loan_return_missed(99999999, ARRAY[1]::integer[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
-    IF SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
+    IF SQLERRM LIKE '%loan_not_found%' THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
   END;
 

@@ -195,14 +195,19 @@ BEGIN
   END;
 
   -- ============================================================
-  -- TEST 8 : Les fns appellent fn_dispatch_circulation_notify_event
+  -- TEST 8 : Les fns appellent fn_dispatch_notify_event
+  -- Corrige le 29/08/2026 (backlog v34, item I7). Ce test cherchait
+  -- `fn_dispatch_circulation_notify_event`, qui n'existe pas en base -- il
+  -- rougissait donc depuis toujours sur un nom, pas sur une dette. Les deux
+  -- fonctions appellent bien le helper canonique : il s'appelle
+  -- `fn_dispatch_notify_event`. Verifie en production le 29/08/2026.
   -- ============================================================
   BEGIN
-    IF v_def_lifecycle ~ 'fn_dispatch_circulation_notify_event'
-       AND v_def_workflow ~ 'fn_dispatch_circulation_notify_event'
+    IF v_def_lifecycle ~ 'fn_dispatch_notify_event'
+       AND v_def_workflow ~ 'fn_dispatch_notify_event'
     THEN
       v_passed := v_passed + 1;
-      RAISE NOTICE 'TEST 8  OK : les 2 fns utilisent le helper canonique fn_dispatch_circulation_notify_event';
+      RAISE NOTICE 'TEST 8  OK : les 2 fns utilisent le helper canonique fn_dispatch_notify_event';
     ELSE
       v_failed := v_failed + 1;
       RAISE WARNING 'TEST 8 FAIL : helper canonique non utilise par toutes les fns';
