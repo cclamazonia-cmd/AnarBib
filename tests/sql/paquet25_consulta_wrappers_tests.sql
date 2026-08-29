@@ -555,12 +555,24 @@ BEGIN
   IF v_failed > 0 THEN
     RAISE EXCEPTION 'BILAN ECHEC : % tests ont echoue', v_failed;
   END IF;
+
+  -- Bilan de succes a la convention du corpus (RAISE EXCEPTION '... OK : N/N').
+  -- Cette suite est anterieure a la CI : ecrite pour le SQL Editor, elle disait
+  -- son succes en NOTICE et se taisait autrement. `run-sql-suites.sh` cherche
+  -- une ligne « OK : N/N » ; ne la trouvant pas, il la classait rouge alors
+  -- qu'elle passait 28/28. Une suite qui reussit doit le DIRE, pas se taire.
+  -- Ajoute le 29/08/2026 (backlog v34, item I7).
+  RAISE EXCEPTION 'CONSULTA-WRAPPERS OK : %/% tests passes (skipped: %)',
+    v_passed, v_passed + v_failed, v_skipped;
 END;
 $$;
 
 ROLLBACK;
 
--- Pour voir le bilan : regarder le panneau "Messages" / "Notices" sous le
--- SQL Editor (parfois cache dans un sous-onglet). Si invisible, le fait
--- que la requete renvoie "ROLLBACK" sans ERROR signifie que tous les tests
+-- En CI, le bilan est la ligne « CONSULTA-WRAPPERS OK : N/N » levee en
+-- EXCEPTION juste au-dessus (elle annule la transaction, c'est le but).
+-- Historique, pour une execution manuelle depuis le SQL Editor : le detail
+-- des tests est dans le panneau "Messages" / "Notices" (parfois cache dans
+-- un sous-onglet). Autrefois, le fait que la requete renvoie "ROLLBACK"
+-- sans ERROR signifiait que tous les tests
 -- passent (zero v_failed).
