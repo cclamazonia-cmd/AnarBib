@@ -6167,5 +6167,8 @@
   "catalogacao.coordOnlyDelete": "Suppression définitive : coordination",
   "error.publish.other_library": "Ce brouillon est rattaché à une bibliothèque dont tu n’es pas membre. Sa publication est réservée à cette bibliothèque ou à une admin réseau.",
   "catalogacao.queue.libraryRecorded": "Bibliothèque de destination, enregistrée sur le brouillon.",
-  "catalogacao.queue.libraryInferred": "Bibliothèque de destination déduite de l’adhésion de la personne qui a catalogué : rien ne rattache formellement ce brouillon à cette bibliothèque."
+  "catalogacao.queue.libraryInferred": "Bibliothèque de destination déduite de l’adhésion de la personne qui a catalogué : rien ne rattache formellement ce brouillon à cette bibliothèque.",
+  "catalogacao.batch.thDrafts": "Brouillons",
+  "catalogacao.batch.draftsTrashed": "{count} à la corbeille",
+  "catalogacao.queue.batchClosed": "clos"
 }

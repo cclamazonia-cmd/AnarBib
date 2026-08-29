@@ -6167,5 +6167,8 @@
   "catalogacao.coordOnlyDelete": "Definitiva forigo: kunordigo",
   "error.publish.other_library": "Ĉi tiu malneto apartenas al biblioteko al kiu vi ne membras. Ĝia publikigo apartenas al tiu biblioteko aŭ al reta administranto.",
   "catalogacao.queue.libraryRecorded": "Celbiblioteko, registrita en la malneto.",
-  "catalogacao.queue.libraryInferred": "Celbiblioteko deduktita el la aliĝo de tiu kiu katalogis: nenio formale ligas ĉi tiun malneton al tiu biblioteko."
+  "catalogacao.queue.libraryInferred": "Celbiblioteko deduktita el la aliĝo de tiu kiu katalogis: nenio formale ligas ĉi tiun malneton al tiu biblioteko.",
+  "catalogacao.batch.thDrafts": "Malnetoj",
+  "catalogacao.batch.draftsTrashed": "{count} en la rubujo",
+  "catalogacao.queue.batchClosed": "fermita"
 }

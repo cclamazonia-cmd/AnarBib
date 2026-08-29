@@ -364,6 +364,16 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
 
   function tableFor(type) { return TABLE_FOR[type]; }
 
+  // Un filtre qui propose un lot VIDE propose un filtre qui ne peut rien rendre :
+  // le lot 58, clos et vide, encombrait le menu alors qu'il n'avait plus un seul
+  // brouillon. On ne liste donc que les lots qui retiennent encore quelque chose,
+  // et on dit lesquels sont clos — l'onglet « Lots » reste, lui, exhaustif.
+  const lotsFiltrables = batches.filter(b => ((b._actifs ?? 0) + (b._corbeille ?? 0)) > 0);
+
+  function labelLot(b) {
+    return b.status === 'open' ? b.name : `${b.name} (${t({ id: 'catalogacao.queue.batchClosed' })})`;
+  }
+
   // Compte reel de la corbeille, toutes tables. La LISTE affichee est plafonnee
   // a 100 par type : s'appuyer sur elle pour compter ou pour vider ne traite
   // qu'une tranche, en laissant croire que le reste a resiste.
@@ -580,7 +590,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
           <select value={batchFilter} onChange={e => { setBatchFilter(e.target.value); setPage(0); }} style={fs}>
             <option value="">{t({ id: 'catalogacao.queue.allBatches' })}</option>
             <option value="none">{t({ id: 'catalogacao.queue.noBatch' })}</option>
-            {batches.map(b => <option key={b.id} value={String(b.id)}>{b.name}</option>)}
+            {lotsFiltrables.map(b => <option key={b.id} value={String(b.id)}>{labelLot(b)}</option>)}
           </select>
         </div>
         <div className="cat-field" style={{ gridColumn: 'span 2' }}>
@@ -738,7 +748,7 @@ export default function QueuePanel({ batches, onEditItem, onChanged, isActive = 
               style={{ ...fs, width: 'auto', maxWidth: 220, fontSize: '.78rem', padding: '4px 8px' }}>
               <option value="">{t({ id: 'catalogacao.queue.allBatches' })}</option>
               <option value="none">{t({ id: 'catalogacao.queue.noBatch' })}</option>
-              {batches.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+              {lotsFiltrables.map(b => <option key={b.id} value={b.id}>{labelLot(b)}</option>)}
             </select>
             <button type="button" className="ab-button ab-button--secondary ab-button--sm" onClick={loadTrash} disabled={trashLoading}>
               {trashLoading ? '…' : t({ id: 'catalogacao.queue.refreshShort' })}

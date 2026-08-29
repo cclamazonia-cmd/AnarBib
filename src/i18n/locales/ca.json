@@ -6167,5 +6167,8 @@
   "catalogacao.coordOnlyDelete": "Eliminació definitiva: coordinació",
   "error.publish.other_library": "Aquest esborrany està vinculat a una biblioteca de la qual no ets membre. La publicació correspon a aquesta biblioteca o a una administradora de la xarxa.",
   "catalogacao.queue.libraryRecorded": "Biblioteca de destinació, registrada a l’esborrany.",
-  "catalogacao.queue.libraryInferred": "Biblioteca de destinació deduïda de l’afiliació de qui ha catalogat: res no lliga formalment aquest esborrany a aquesta biblioteca."
+  "catalogacao.queue.libraryInferred": "Biblioteca de destinació deduïda de l’afiliació de qui ha catalogat: res no lliga formalment aquest esborrany a aquesta biblioteca.",
+  "catalogacao.batch.thDrafts": "Esborranys",
+  "catalogacao.batch.draftsTrashed": "{count} a la paperera",
+  "catalogacao.queue.batchClosed": "tancat"
 }

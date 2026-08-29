@@ -126,9 +126,18 @@ export default function CatalogacaoPage() {
 
   const loadBatches = useCallback(async () => {
     try {
-      const { data } = await supabase.from('catalog_batches')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Les comptes viennent de v_catalog_batch_draft_counts, la meme definition
+      // que celle qu'interroge deleteBatch avant de refuser. Sans eux, on
+      // n'apprend qu'un lot est vide — donc supprimable — qu'en cliquant.
+      const [lots, comptes] = await Promise.all([
+        supabase.from('catalog_batches').select('*').order('created_at', { ascending: false }),
+        supabase.from('v_catalog_batch_draft_counts').select('batch_id, actifs, corbeille'),
+      ]);
+      const par = new Map((comptes.data || []).map(c => [c.batch_id, c]));
+      const data = (lots.data || []).map(b => {
+        const c = par.get(b.id);
+        return { ...b, _actifs: c ? Number(c.actifs) : 0, _corbeille: c ? Number(c.corbeille) : 0 };
+      });
       setBatches(data || []);
     } catch (err) {
       console.warn('loadBatches error:', err);
@@ -666,6 +675,29 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
     return id ? t({ id }) : status;
   }
 
+  // Ce que le lot retient. Un lot a zero est supprimable : le montrer evite
+  // d'avoir a cliquer pour lire l'alerte de refus.
+  function renderCounts(b) {
+    const actifs = b._actifs ?? 0;
+    const corbeille = b._corbeille ?? 0;
+    if (!actifs && !corbeille) return <span style={{ color: 'var(--brand-muted, #666)' }}>—</span>;
+    return (
+      <>
+        {actifs > 0 && <span>{actifs}</span>}
+        {corbeille > 0 && (
+          <span style={{ color: 'var(--brand-muted, #888)', fontSize: '.78rem' }}>
+            {actifs > 0 ? ' · ' : ''}{t({ id: 'catalogacao.batch.draftsTrashed' }, { count: corbeille })}
+          </span>
+        )}
+      </>
+    );
+  }
+
+  // Un lot qui ne retient RIEN n'a pas besoin d'etre ferme avant d'etre
+  // supprime : le detour par « Fermer » est ce qui a fait croire, le 29/08,
+  // qu'un lot ferme etait un lot supprime.
+  function estVide(b) { return (b._actifs ?? 0) === 0 && (b._corbeille ?? 0) === 0; }
+
   function formatDate(v) {
     if (!v) return '—';
     try { return new Date(v).toLocaleDateString(); } catch { return v; }
@@ -720,6 +752,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thName'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thNotes'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
+                <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thDrafts'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
@@ -729,11 +762,16 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                   <td style={{ padding: '8px' }}>{b.name}</td>
                   <td style={{ padding: '8px', color: 'var(--brand-muted, #aaa)' }}>{b.notes || '—'}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
+                  <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
                     <button className="ab-button ab-button--secondary" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                       onClick={() => publishBatch(b.id)}>{t({id:'catalogacao.publishBatch'})}</button>
                     <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px' }}
                       onClick={() => closeBatch(b.id)}>{t({id:'catalogacao.closeBatch'})}</button>
+                    {isCoord && estVide(b) && (
+                      <button className="ab-button ab-button--ghost" style={{ marginLeft: 6, fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}
+                        onClick={() => deleteBatch(b.id)}>{t({id:'catalogacao.deleteBatch'})}</button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -754,6 +792,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thName'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thStatus'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
+                <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thDrafts'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
@@ -767,6 +806,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                     </span>
                   </td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
+                  <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
                     <button className="ab-button ab-button--ghost" style={{ marginRight: 6, fontSize: '.75rem', padding: '4px 10px' }}
                       onClick={() => archiveBatch(b.id)}>{t({id:'catalogacao.archiveBatch'})}</button>
@@ -793,6 +833,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
               <tr style={{ borderBottom: '1px solid rgba(255,255,255,.1)' }}>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thName'})}</th>
                 <th style={{ textAlign: 'left', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thCreatedAt'})}</th>
+                <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batch.thDrafts'})}</th>
                 <th style={{ textAlign: 'right', padding: '6px 8px', color: 'var(--brand-muted, #aaa)' }}>{t({id:'catalogacao.batchActions'})}</th>
               </tr>
             </thead>
@@ -801,6 +842,7 @@ function BatchesPanel({ batches, onRefresh, isCoord }) {
                 <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,.06)', opacity: 0.4 }}>
                   <td style={{ padding: '8px' }}>{b.name}</td>
                   <td style={{ padding: '8px' }}>{formatDate(b.created_at)}</td>
+                  <td style={{ padding: '8px', textAlign: 'right', whiteSpace: 'nowrap' }}>{renderCounts(b)}</td>
                   <td style={{ padding: '8px', textAlign: 'right' }}>
                     {isCoord && (
                       <button className="ab-button ab-button--ghost" style={{ fontSize: '.75rem', padding: '4px 10px', color: '#f87171' }}

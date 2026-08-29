@@ -6167,5 +6167,8 @@
   "catalogacao.coordOnlyDelete": "Endgültiges Löschen: Koordination",
   "error.publish.other_library": "Dieser Entwurf gehört zu einer Bibliothek, der du nicht angehörst. Die Veröffentlichung liegt bei dieser Bibliothek oder einer Netzwerk-Admin.",
   "catalogacao.queue.libraryRecorded": "Zielbibliothek, im Entwurf hinterlegt.",
-  "catalogacao.queue.libraryInferred": "Zielbibliothek aus der Mitgliedschaft der katalogisierenden Person abgeleitet: nichts bindet diesen Entwurf formal an diese Bibliothek."
+  "catalogacao.queue.libraryInferred": "Zielbibliothek aus der Mitgliedschaft der katalogisierenden Person abgeleitet: nichts bindet diesen Entwurf formal an diese Bibliothek.",
+  "catalogacao.batch.thDrafts": "Entwürfe",
+  "catalogacao.batch.draftsTrashed": "{count} im Papierkorb",
+  "catalogacao.queue.batchClosed": "geschlossen"
 }

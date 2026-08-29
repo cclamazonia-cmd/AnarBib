@@ -6167,5 +6167,8 @@
   "catalogacao.coordOnlyDelete": "Exclusão definitiva: coordenação",
   "error.publish.other_library": "Este rascunho está vinculado a uma biblioteca da qual não fazes parte. A publicação cabe a essa biblioteca ou a uma administradora da rede.",
   "catalogacao.queue.libraryRecorded": "Biblioteca de destino, registada no rascunho.",
-  "catalogacao.queue.libraryInferred": "Biblioteca de destino deduzida do vínculo de quem catalogou: nada liga formalmente este rascunho a essa biblioteca."
+  "catalogacao.queue.libraryInferred": "Biblioteca de destino deduzida do vínculo de quem catalogou: nada liga formalmente este rascunho a essa biblioteca.",
+  "catalogacao.batch.thDrafts": "Rascunhos",
+  "catalogacao.batch.draftsTrashed": "{count} na lixeira",
+  "catalogacao.queue.batchClosed": "fechado"
 }

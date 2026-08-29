@@ -6167,5 +6167,8 @@
   "catalogacao.coordOnlyDelete": "Eliminazione definitiva: coordinamento",
   "error.publish.other_library": "Questa bozza è legata a una biblioteca di cui non fai parte. La pubblicazione spetta a quella biblioteca o a un’amministratrice di rete.",
   "catalogacao.queue.libraryRecorded": "Biblioteca di destinazione, registrata sulla bozza.",
-  "catalogacao.queue.libraryInferred": "Biblioteca di destinazione dedotta dall’affiliazione di chi ha catalogato: nulla lega formalmente questa bozza a quella biblioteca."
+  "catalogacao.queue.libraryInferred": "Biblioteca di destinazione dedotta dall’affiliazione di chi ha catalogato: nulla lega formalmente questa bozza a quella biblioteca.",
+  "catalogacao.batch.thDrafts": "Bozze",
+  "catalogacao.batch.draftsTrashed": "{count} nel cestino",
+  "catalogacao.queue.batchClosed": "chiuso"
 }

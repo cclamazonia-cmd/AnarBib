@@ -6167,5 +6167,8 @@
   "catalogacao.coordOnlyDelete": "Permanent deletion: coordination",
   "error.publish.other_library": "This draft belongs to a library you are not a member of. Publishing it is up to that library or a network admin.",
   "catalogacao.queue.libraryRecorded": "Destination library, recorded on the draft.",
-  "catalogacao.queue.libraryInferred": "Destination library inferred from the membership of whoever catalogued it: nothing formally ties this draft to that library."
+  "catalogacao.queue.libraryInferred": "Destination library inferred from the membership of whoever catalogued it: nothing formally ties this draft to that library.",
+  "catalogacao.batch.thDrafts": "Drafts",
+  "catalogacao.batch.draftsTrashed": "{count} in the trash",
+  "catalogacao.queue.batchClosed": "closed"
 }

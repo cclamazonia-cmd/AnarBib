@@ -156,3 +156,11 @@ tests/sql/portee_catalogage_tests.sql
 # ecrivable sans RLS. T3 est un test de non-action — un REVOKE trop large
 # passerait T1 et T2 sans broncher.
 tests/sql/grants_herites_tests.sql
+
+# Ce qu'un lot contient, et les vues qui le disent. T1 est un test de NON-ACTION
+# et porte tout le paquet : un lot VIDE doit apparaitre a 0/0, sinon il est
+# invisible a l'ecran et jamais montre comme supprimable. T4 surveille une derive
+# qui se produit toute seule — le defaut du schema redonne a anon et authenticated
+# SELECT/INSERT/UPDATE/DELETE sur toute vue neuve, et une vue simple est
+# auto-modifiable, donc un DELETE la traverse jusqu'a la table de base.
+tests/sql/lots_comptes_tests.sql
