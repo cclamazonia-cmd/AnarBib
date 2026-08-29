@@ -1253,6 +1253,17 @@
      "fr": "Publié le 26/08 (`47d23fa`). Liberapay en ligne, premier don reçu le 27/08. Registre public en place depuis le 27/08.",
      "pt": "Publicado em 26/08 (`47d23fa`). Liberapay no ar, primeira doação recebida em 27/08. Registro público em vigor desde 27/08."
     }
+   ],
+   [
+    "A5",
+    {
+     "fr": "Configuration git à deux URL de poussée",
+     "pt": "Configuração git com dois URLs de push"
+    },
+    {
+     "fr": "**Déjà corrigé.** Constaté le 29/08 dans `.git/config` : `origin` ne porte qu'une seule URL de poussée (Codeberg) et GitHub est un remote nommé à part. Le correctif prévu après les quatre incidents du 19/08 a été appliqué. Il n'y a plus d'alias `git publish-app` : on pousse sur les deux remotes explicitement.",
+     "pt": "**Já corrigido.** Constatado em 29/08 em `.git/config`: `origin` traz um único URL de push (Codeberg) e o GitHub é um remote nomeado à parte. A correção prevista após os quatro incidentes de 19/08 foi aplicada. Não há mais alias `git publish-app`: empurra-se explicitamente para os dois remotes."
+    }
    ]
   ]
  },
@@ -1443,52 +1454,6 @@
    "r": [
     "CONTRIBUTING.md",
     "docs/CHANTIERS_OUVERTS.md"
-   ]
-  },
-  {
-   "id": "A5",
-   "d": "A",
-   "p": "P1",
-   "s": "ouvert",
-   "e": "S",
-   "sk": [
-    "sysadmin"
-   ],
-   "t": {
-    "fr": "Corriger la configuration git à deux URL de poussée",
-    "pt": "Corrigir a configuração git com dois URLs de push"
-   },
-   "v": {
-    "fr": "Le dépôt local a un `origin` (Codeberg) portant deux URL de poussée, et un `github` séparé. Quatre incidents en une soirée le 19/08, un commit perdu : une poussée partiellement réussie met quand même `origin/main` à jour, et `git pull --rebase --fork-point` supprime alors silencieusement un commit.",
-    "pt": "O repositório local tem um `origin` (Codeberg) com dois URLs de push, e um `github` separado. Quatro incidentes numa noite em 19/08, um commit perdido: um push parcialmente bem-sucedido atualiza `origin/main` mesmo assim, e `git pull --rebase --fork-point` apaga então silenciosamente um commit."
-   },
-   "w": {
-    "fr": "Deux remotes nommés distincts, `main` suivant Codeberg, et l'abandon du double push sur un seul remote. La procédure de réparation actuelle (fetch/rebase/push par URL explicites, `--no-fork-point`, `--force-with-lease=main:<sha>`) devient inutile.",
-    "pt": "Dois remotes nomeados distintos, `main` seguindo o Codeberg, e o abandono do duplo push num só remote. O procedimento de reparo atual (fetch/rebase/push por URLs explícitos, `--no-fork-point`, `--force-with-lease=main:<sha>`) torna-se inútil."
-   },
-   "y": {
-    "fr": "Ce n'est pas une préférence d'outillage : la configuration actuelle a déjà détruit du travail, deux fois, dans une situation où une seule personne pouvait s'en apercevoir.",
-    "pt": "Não é uma preferência de ferramental: a configuração atual já destruiu trabalho, duas vezes, numa situação em que só uma pessoa podia perceber."
-   },
-   "f": {
-    "fr": [
-     "`git remote -v` montre deux remotes à une seule URL de poussée chacun.",
-     "La liste de reprise après clonage de `CLAUDE.md` est mise à jour en conséquence.",
-     "Une poussée qui échoue sur l'un des deux ne laisse plus l'autre dans un état trompeur."
-    ],
-    "pt": [
-     "`git remote -v` mostra dois remotes com um único URL de push cada.",
-     "A lista de retomada após clonagem de `CLAUDE.md` é atualizada em consequência.",
-     "Um push que falha num dos dois não deixa mais o outro num estado enganoso."
-    ]
-   },
-   "dep": {
-    "fr": "Aucune.",
-    "pt": "Nenhuma."
-   },
-   "r": [
-    "VERIF_public_id_et_CI_2026-08-19",
-    "CLAUDE.md, piège connu n°2"
    ]
   },
   {

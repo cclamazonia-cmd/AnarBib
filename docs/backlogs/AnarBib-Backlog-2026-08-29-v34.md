@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · 94 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · 93 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -15,7 +15,7 @@
 - [Le calendrier contraint](#le-calendrier-contraint)
 - [Dix règles payées par un incident](#dix-règles-payées-par-un-incident)
 - [Les chantiers](#les-chantiers)
-    - [A — Soutenabilité collective](#a-soutenabilité-collective) · 5
+    - [A — Soutenabilité collective](#a-soutenabilité-collective) · 4
     - [B — Base de données, sécurité, RLS](#b-base-de-données-sécurité-rls) · 13
     - [C — Catalogage et données documentaires](#c-catalogage-et-données-documentaires) · 10
     - [D — Périodiques, éphémères, ressources numériques](#d-périodiques-éphémères-ressources-numériques) · 6
@@ -278,7 +278,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 | **A2** | Éprouver la reconstruction complète par quelqu'un d'autre que le mainteneur | `P0` | Ouvert |
 | **A3** | Sortir le runner d'intégration continue de la machine du mainteneur | `P0` | Ouvert |
 | **A4** | Écrire une porte d'entrée pour qui veut aider sans savoir coder | `P1` | Ouvert |
-| **A5** | Corriger la configuration git à deux URL de poussée | `P1` | Ouvert |
 
 #### A1 — Obtenir au moins deux autres administrateur·rices réseau
 
@@ -359,26 +358,6 @@ Ces règles ne sont pas des préférences. Chacune a été payée par un inciden
 **Dépendances.** Utile avant Bologne (**K5**) : c'est là que l'appel se fait.
 
 *Renvois : `CONTRIBUTING.md` · `docs/CHANTIERS_OUVERTS.md`*
-
-#### A5 — Corriger la configuration git à deux URL de poussée
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : administration système
-
-**État vérifié au 29/08.** Le dépôt local a un `origin` (Codeberg) portant deux URL de poussée, et un `github` séparé. Quatre incidents en une soirée le 19/08, un commit perdu : une poussée partiellement réussie met quand même `origin/main` à jour, et `git pull --rebase --fork-point` supprime alors silencieusement un commit.
-
-**Ce que c'est.** Deux remotes nommés distincts, `main` suivant Codeberg, et l'abandon du double push sur un seul remote. La procédure de réparation actuelle (fetch/rebase/push par URL explicites, `--no-fork-point`, `--force-with-lease=main:<sha>`) devient inutile.
-
-**Pourquoi ça compte.** Ce n'est pas une préférence d'outillage : la configuration actuelle a déjà détruit du travail, deux fois, dans une situation où une seule personne pouvait s'en apercevoir.
-
-**Ce qui compte comme fini.**
-
-- `git remote -v` montre deux remotes à une seule URL de poussée chacun.
-- La liste de reprise après clonage de `CLAUDE.md` est mise à jour en conséquence.
-- Une poussée qui échoue sur l'un des deux ne laisse plus l'autre dans un état trompeur.
-
-**Dépendances.** Aucune.
-
-*Renvois : `VERIF_public_id_et_CI_2026-08-19` · `CLAUDE.md, piège connu n°2`*
 
 ---
 
@@ -2337,6 +2316,7 @@ Ces entrées figuraient dans le v33, dans `ETAT-AVANCEMENT-multisessions`, dans 
 | #PUBLIB · #FED · #ASSEMBLEIAS · #THES · #GAZ · #MOBILE (socle) | Macro-chantiers du v33 | Livrés et en production. À nuancer d'un point : plusieurs de ces circuits **n'ont jamais été empruntés** — c'est l'item **G1**, qui n'est pas une réouverture mais un constat d'usage. |
 | npm ci | Réparation des dépendances locales | Fait le 27/08. `@supabase/auth-js` a retrouvé son point d'entrée. **Ne pas le rejouer sans raison.** |
 | Encart de soutien financier | « À rédiger dans les dix locales » | Publié le 26/08 (`47d23fa`). Liberapay en ligne, premier don reçu le 27/08. Registre public en place depuis le 27/08. |
+| A5 | Configuration git à deux URL de poussée | **Déjà corrigé.** Constaté le 29/08 dans `.git/config` : `origin` ne porte qu'une seule URL de poussée (Codeberg) et GitHub est un remote nommé à part. Le correctif prévu après les quatre incidents du 19/08 a été appliqué. Il n'y a plus d'alias `git publish-app` : on pousse sur les deux remotes explicitement. |
 
 ---
 
@@ -2368,4 +2348,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, 2026-08-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 94 items sur 11 domaines. Chaque état a été vérifié le 29/08/2026 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c`. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, 2026-08-29. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 93 items sur 11 domaines. Chaque état a été vérifié le 29/08/2026 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c`. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
