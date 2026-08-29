@@ -175,3 +175,28 @@ tests/sql/lots_comptes_tests.sql
 # l'invariant qui rend la RLS sans policy transparente pour l'import : tables et
 # fonctions au meme proprietaire.
 tests/sql/ingest_ferme_tests.sql
+
+# Les six suites ci-dessous etaient presentes au depot et absentes de ce
+# manifeste : elles ne tournaient pas. Ce sont les plus anciennes, et elles
+# couvrent le coeur de la circulation — emprunts, consultations, profils de
+# bibliotheque. Une suite presente mais non executee est pire qu'une suite
+# absente : elle donne l'impression que le domaine est couvert.
+# Reactivees le 29/08/2026 apres verification que les 40 objets qu'elles
+# appellent existent tous encore en base. Cela ne dit pas qu'elles passent :
+# si l'une rougit, c'est l'information qu'on cherchait, et sql-tests n'est pas
+# une barriere de deploiement.
+tests/sql/paquetA_profils_tests.sql
+tests/sql/paquetA1_cancel_note_required_tests.sql
+tests/sql/paquet19_loan_wrappers_tests.sql
+tests/sql/paquet24_consulta_helpers_tests.sql
+tests/sql/paquet25_consulta_wrappers_tests.sql
+tests/sql/paquet26_consulta_notification_triggers_tests.sql
+
+# Le T7 de grants_herites garde le meme invariant sur `public` : aucune vue
+# qui echappe aux policies ne doit etre lisible. Il ne regardait pas `api`,
+# ou sept vues etaient dans ce cas. T2 est le plus important : les deux vues
+# de gouvernance restent volontairement hors policies — en invoker, la
+# jointure sur profiles renverrait NULL a l'admin qui doit decider — et leur
+# visibilite tient a une seule clause dans la vue. Un CREATE OR REPLACE
+# distrait la ferait disparaitre sans bruit.
+tests/sql/vues_api_definer_tests.sql
