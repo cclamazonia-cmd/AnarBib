@@ -1,6 +1,6 @@
 # 🧷 REGISTRE DES DÉCISIONS — AnarBib
 
-- **Version :** 0.3 (26/08/2026 — §41 `GOUV` : `GOUV-1` à `GOUV-10` — la promotion à `coordenador` devient collégiale, plus cinq pièges relevés le jour même : `GOUV-6` (valeurs par défaut de paramètre, complète `DOC-OBJ-2`), `GOUV-7` (droit d'admin réseau perdu en changeant de circuit), `GOUV-8` (mails non coupés sur la biblio de test) `GOUV-9` (push mixte doc+code qui ne déploie rien) et `GOUV-10` (droit d'action ouvert sans la lecture correspondante)) ; 0.2 (21/08/2026 — `DOC-DESTR-1/2` en §0 + §40 `DEDUP`, `DOC-DESTR-2`/`DEDUP-5` complétés par la reprise de champs ; 20/08/2026 — `DOC-CONV-1` en §0 + §37 `CONV` ; seed d'audit du corpus complet — 02/06/2026)
+- **Version :** 0.4 (29/08/2026 — passe d'hygiène, aucun arbitrage nouveau : la section `PRIV` quitte le numéro 17 qu'elle partageait avec `IMP` et devient le §42 ; le §2 `MAP` porte enfin son renvoi vers le §34 qui le supersède depuis le 18/06) ; 0.3 (26/08/2026 — §41 `GOUV` : `GOUV-1` à `GOUV-10` — la promotion à `coordenador` devient collégiale, plus cinq pièges relevés le jour même : `GOUV-6` (valeurs par défaut de paramètre, complète `DOC-OBJ-2`), `GOUV-7` (droit d'admin réseau perdu en changeant de circuit), `GOUV-8` (mails non coupés sur la biblio de test) `GOUV-9` (push mixte doc+code qui ne déploie rien) et `GOUV-10` (droit d'action ouvert sans la lecture correspondante)) ; 0.2 (21/08/2026 — `DOC-DESTR-1/2` en §0 + §40 `DEDUP`, `DOC-DESTR-2`/`DEDUP-5` complétés par la reprise de champs ; 20/08/2026 — `DOC-CONV-1` en §0 + §37 `CONV` ; seed d'audit du corpus complet — 02/06/2026)
 - **Rôle :** **foyer unique** des choix (arbitrages) et des doctrines transverses. On **cite l'ID** ici, on ne reformule jamais ailleurs.
 - **Préséance (rappel) :** en cas de conflit, ce registre + la spec courante + le backlog font foi ; CADRAGE / CHANTIER / SESSION = trace non-normative.
 - **Comment lire un statut :** ✅ acté · 🟡 ouvert (à trancher) · 🔵 supersédé/historique · ⚠️ drift détecté (voir `AUDIT_coherence_corpus_2026-06-02.md`).
@@ -56,7 +56,9 @@ Ce sont les faits recopiés dans presque toutes les specs : c'est là que naisse
 
 ## 2. Cartographie réseau — `MAP` *(spec-cartographie-reseau v0.1)*
 
-⚠️ **Squelette d'arbitrages — TOUT est ouvert** (colonne Décision vide au §6).
+> 🔵 **Supersédée par le [§34](#34-cartographie-du-réseau--map-spec--spec-cartographie-reseau-v10--arbitrages-tranchés--reste-à-implémenter-post-bologna)** *(constaté le 29/08/2026)*. Les lettres `MAP-A` à `MAP-L` y sont **tranchées** depuis le 18/06/2026 ; elles sont ici à l'état de squelette, et sur `MAP-C` les deux sections disent l'inverse l'une de l'autre — le §34 retient C1 (route dans le SPA) là où ce brouillon proposait C2. **C'est le §34 qui fait foi.** Cette section est conservée pour la trace, et ne doit plus être citée.
+
+⚠️ **Squelette d'arbitrages — TOUT est ouvert** (colonne Décision vide au §6). *Historique.*
 
 | ID | Sujet | Reco | Statut |
 |---|---|---|---|
@@ -650,7 +652,9 @@ Doctrines actées : ancrage géographique (§9.9.1) ; **délibération politique
 > Licences : Chromaprint **LGPL-2.1** compatible AGPL ; modèle/schéma MB = inspiration ; données core MB **CC0** ; ⚠️ données supplémentaires MB **CC-BY-NC-SA** (clause NC) = **non utilisées** (FS-D1) — à réévaluer si l'enrichissement dépassait le seul MBID.
 
 
-## 17. Confidentialité — `PRIV` *(PrivacyPolicyPage.jsx in-app + site vitrine généré)*
+## 42. Confidentialité — `PRIV` *(PrivacyPolicyPage.jsx in-app + site vitrine généré)*
+
+> **Renumérotée le 29/08/2026** — cette section portait le numéro **17**, déjà tenu par `IMP` (Importações / Exportações). Deux sections homonymes dans le foyer qui fait foi : la règle `#HYG-REG-1` dit qu'on ne renumérote pas le normatif déjà inscrit et que les sections nouvelles prennent les numéros suivants — `PRIV`, arrivée après le §41, prend donc le 42. Aucun renvoi n'a été cassé : le corpus cite cette section par ses identifiants (`PRIV-1`, `PRIV-2`, `PRIV-3`), jamais par son numéro. Elle reste **physiquement à sa place** dans le fichier, entre le §35 et le §BG2 : l'ordre d'écriture de ce registre n'a jamais suivi la numérotation, et déplacer cent lignes de normatif pour une question de rangement ferait courir plus de risque que le désordre n'en coûte.
 
 **DEC-PRIVACY-SOCLE** — ✅ acté 05/07/2026. **Source unique** du socle de confidentialité : les clés `privacy.*` des locales de l'app (`src/i18n/locales/`). La page in-app `/privacidade` (`src/pages/public/PrivacyPolicyPage.jsx`) les rend dynamiquement (+ sections de rétention par bibliothèque). Les pages publiques `anarbib.org/<lang>/<slug>/` sont **générées** depuis ces mêmes locales par `build-privacy-pages.cjs` (repo site), qui extrait le chrome des pages existantes et injecte les textes propres à la vitrine (`privacy-vitrine-strings.json`).
 

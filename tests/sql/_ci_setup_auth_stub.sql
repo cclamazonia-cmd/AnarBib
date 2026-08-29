@@ -51,19 +51,31 @@ CREATE TABLE IF NOT EXISTS auth.users (
 );
 
 -- Helpers Supabase (définitions de référence, schéma auth).
+-- ---------------------------------------------------------------------------
+-- Absence de JWT (ajoute le 29/08/2026, backlog v34, item I7).
+--
+-- `set_config('request.jwt.claims', NULL, true)` ne met pas NULL : il met la
+-- chaine vide. Les trois helpers ci-dessous castaient `current_setting(...)`
+-- en jsonb AVANT de neutraliser cette chaine vide, donc `''::jsonb` levait
+-- « invalid input syntax for type json » la ou la vraie fonction Supabase
+-- renvoie simplement NULL. Consequence : aucune suite ne testait reellement
+-- le rejet d'un appel anonyme — elle testait un plantage du stub, et son
+-- garde-fou (`SQLERRM LIKE '%uthenticat%'`) ne pouvait pas matcher.
+-- `auth.jwt()` avait deja la bonne forme ; les trois autres l'adoptent.
+-- ---------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid
   LANGUAGE sql STABLE AS $$
-  SELECT nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'sub', '')::uuid
+  SELECT nullif(coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb, '{}'::jsonb) ->> 'sub', '')::uuid
 $$;
 
 CREATE OR REPLACE FUNCTION auth.role() RETURNS text
   LANGUAGE sql STABLE AS $$
-  SELECT coalesce(nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'role', ''), 'anon')
+  SELECT coalesce(nullif(coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb, '{}'::jsonb) ->> 'role', ''), 'anon')
 $$;
 
 CREATE OR REPLACE FUNCTION auth.email() RETURNS text
   LANGUAGE sql STABLE AS $$
-  SELECT nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'email', '')
+  SELECT nullif(coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb, '{}'::jsonb) ->> 'email', '')
 $$;
 
 CREATE OR REPLACE FUNCTION auth.jwt() RETURNS jsonb

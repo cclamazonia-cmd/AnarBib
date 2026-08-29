@@ -31,23 +31,40 @@ BEGIN
 END $$;
 
 -- ============================================================
--- TEST 2 — DEFAULTs maximalistes (profil D) sur BLMF et BTL
+-- TEST 2 — DEFAULTs maximalistes (profil D)
+--
+-- Ce test comptait « 2 » — BLMF et BTL — parce que le seed d'alors creait ces
+-- deux bibliotheques. Le seed a change ; le compte ne disait donc plus rien de
+-- la doctrine, seulement du seed. Ce qu'on veut eprouver, c'est que les quatre
+-- colonnes *_mode ont bien un DEFAULT maximaliste : une bibliotheque creee sans
+-- rien preciser doit atterrir en profil D. On l'exprime donc en negatif, ce qui
+-- vaut quel que soit le nombre de bibliotheques du seed.
+-- Corrige le 29/08/2026 (backlog v34, item I7).
 -- ============================================================
 DO $$
 DECLARE
-  v_count int;
+  v_total int;
+  v_hors  int;
+  v_txt   text;
 BEGIN
-  SELECT count(*) INTO v_count
-    FROM public.libraries
-    WHERE catalog_mode = 'network_published'
-      AND circulation_mode = 'full_sigb'
-      AND network_mode = 'federated'
-      AND governance_mode = 'full_governance';
-  
-  IF v_count <> 2 THEN
-    RAISE EXCEPTION 'TEST 2 FAILED : attendu 2 biblios en profil D, trouve %', v_count;
+  SELECT count(*) INTO v_total FROM public.libraries;
+  IF v_total = 0 THEN
+    RAISE EXCEPTION 'TEST 2 FAILED : aucune bibliotheque en base, le seed n''a pas tourne';
   END IF;
-  RAISE NOTICE 'TEST 2 OK : BLMF et BTL ont le profil D maximaliste';
+
+  SELECT count(*), coalesce(string_agg(slug, ', ' ORDER BY slug), '')
+    INTO v_hors, v_txt
+    FROM public.libraries
+   WHERE NOT (catalog_mode     = 'network_published'
+          AND circulation_mode = 'full_sigb'
+          AND network_mode     = 'federated'
+          AND governance_mode  = 'full_governance');
+
+  IF v_hors <> 0 THEN
+    RAISE EXCEPTION 'TEST 2 FAILED : % biblio(s) hors profil D alors que le seed n''en fixe aucun mode -> %',
+      v_hors, v_txt;
+  END IF;
+  RAISE NOTICE 'TEST 2 OK : les % biblios du seed sont en profil D (DEFAULTs maximalistes)', v_total;
 END $$;
 
 -- ============================================================
@@ -58,7 +75,7 @@ DECLARE
   v_error_caught boolean := false;
   v_blmf_id uuid;
 BEGIN
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   BEGIN
     -- Tentative invalide : catalog_mode=network_published + network_mode=isolated
@@ -84,7 +101,7 @@ DECLARE
   v_error_caught boolean := false;
   v_blmf_id uuid;
 BEGIN
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   BEGIN
     -- Tentative invalide : circulation_mode=full_sigb + governance_mode=informal
@@ -109,7 +126,7 @@ DO $$
 DECLARE
   v_blmf_id uuid;
 BEGIN
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   -- Bascule legale (par exemple, vers profil B)
   UPDATE public.libraries 
@@ -135,7 +152,7 @@ DECLARE
   v_error_caught boolean := false;
   v_blmf_id uuid;
 BEGIN
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   BEGIN
     UPDATE public.libraries 
@@ -178,7 +195,7 @@ DECLARE
   v_blmf_id uuid;
   v_inserted_id uuid;
 BEGIN
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   INSERT INTO public.library_profile_history 
     (library_id, axis, old_value, new_value, motivation)
@@ -256,7 +273,7 @@ DECLARE
   v_net text;
   v_gov text;
 BEGIN
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   v_catalog := public.fn_library_catalog_mode(v_blmf_id);
   v_circ := public.fn_library_circulation_mode(v_blmf_id);
@@ -278,7 +295,7 @@ DO $$
 DECLARE
   v_blmf_id uuid;
 BEGIN
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   IF NOT public.fn_library_has_circulation(v_blmf_id) THEN
     RAISE EXCEPTION 'TEST 12.1 FAILED : fn_library_has_circulation devrait etre TRUE';

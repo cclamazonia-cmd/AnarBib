@@ -23,7 +23,7 @@ DECLARE
   v_consulta_id bigint;
 BEGIN
   -- Recuperer BLMF
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   IF v_blmf_id IS NULL THEN
     RAISE EXCEPTION 'SETUP FAILED : BLMF introuvable';
   END IF;
@@ -99,7 +99,7 @@ DECLARE
   v_error_msg text;
 BEGIN
   SELECT id INTO v_consulta_id FROM test_consulta_id LIMIT 1;
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   
   -- Recuperer un coordenador BLMF pour simuler le caller
   SELECT user_id INTO v_actor_uid
@@ -159,7 +159,7 @@ DECLARE
   v_error_msg text;
 BEGIN
   SELECT id INTO v_consulta_id FROM test_consulta_id LIMIT 1;
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   SELECT user_id INTO v_actor_uid FROM public.user_library_memberships
     WHERE library_id = v_blmf_id AND role = 'coordenador' AND status = 'active' LIMIT 1;
   
@@ -205,7 +205,7 @@ DECLARE
   v_error_msg text;
 BEGIN
   SELECT id INTO v_consulta_id FROM test_consulta_id LIMIT 1;
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   SELECT user_id INTO v_actor_uid FROM public.user_library_memberships
     WHERE library_id = v_blmf_id AND role = 'coordenador' AND status = 'active' LIMIT 1;
   
@@ -252,7 +252,7 @@ DECLARE
   v_final_note text;
 BEGIN
   SELECT id INTO v_consulta_id FROM test_consulta_id LIMIT 1;
-  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf';
+  SELECT id INTO v_blmf_id FROM public.libraries WHERE slug = 'blmf-test';
   SELECT user_id INTO v_actor_uid FROM public.user_library_memberships
     WHERE library_id = v_blmf_id AND role = 'coordenador' AND status = 'active' LIMIT 1;
   
