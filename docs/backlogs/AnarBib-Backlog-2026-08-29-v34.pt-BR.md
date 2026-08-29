@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · 92 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · 91 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -15,7 +15,7 @@
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
-    - [A — Sustentabilidade coletiva](#a-sustentabilidade-coletiva) · 4
+    - [A — Sustentabilidade coletiva](#a-sustentabilidade-coletiva) · 3
     - [B — Banco de dados, segurança, RLS](#b-banco-de-dados-segurança-rls) · 12
     - [C — Catalogação e dados documentais](#c-catalogação-e-dados-documentais) · 10
     - [D — Periódicos, efêmeros, recursos digitais](#d-periódicos-efêmeros-recursos-digitais) · 6
@@ -277,7 +277,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **A1** | Obter pelo menos duas outras pessoas administradoras de rede | `P0` | Decisão coletiva |
 | **A2** | Testar a reconstrução completa por outra pessoa que não o mantenedor | `P0` | Aberto |
 | **A3** | Tirar o runner de integração contínua da máquina do mantenedor | `P0` | Aberto |
-| **A4** | Escrever uma porta de entrada para quem quer ajudar sem saber programar | `P1` | Aberto |
 
 #### A1 — Obter pelo menos duas outras pessoas administradoras de rede
 
@@ -338,26 +337,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Ligado a **I2** (migração auto-hospedada). Pode ser feito antes, na infraestrutura atual.
 
 *Remissões : `CLAUDE.md, piège connu n°1` · `REPRISE_bascule_autohebergee_2026-08-26`*
-
-#### A4 — Escrever uma porta de entrada para quem quer ajudar sem saber programar
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado verificado em 29/08.** `CONTRIBUTING.md` (28/08) se dirige a quem programa: fork, branch, `npm ci`, prefixos de commit. `docs/CHANTIERS_OUVERTS.md` faz melhor e sinaliza três entradas sem competência técnica, mas continua guardado numa pasta `docs/`.
-
-**O que é.** Uma página curta, no topo do repositório e em anarbib.org, dizendo o que se pode fazer pelo AnarBib **sem escrever uma linha de código**: revisar uma língua, indexar assuntos, exercer um papel de administração de rede, testar uma reconstrução, revisar uma convenção. Cada entrada com o que exige e para quem escrever.
-
-**Por que importa.** Os três canteiros mais úteis do projeto hoje — administradores·as de rede, convenções neerlandesa e grega, indexação de assunto — não exigem **nenhuma competência técnica**. Uma porta de entrada que fala de `npm ci` os torna invisíveis.
-
-**O que conta como terminado.**
-
-- Uma página existe, em francês e português no mínimo.
-- É alcançável a partir de anarbib.org e da raiz do repositório.
-- Nomeia um endereço de contato real por entrada.
-
-**Dependências.** Útil antes de Bolonha (**K5**): é lá que o chamado se faz.
-
-*Remissões : `CONTRIBUTING.md` · `docs/CHANTIERS_OUVERTS.md`*
 
 ---
 
@@ -2297,6 +2276,7 @@ Estas entradas constavam no v33, em `ETAT-AVANCEMENT-multisessions`, em `ETAT-la
 | Encarte de apoio financeiro | «A redigir nas dez locales» | Publicado em 26/08 (`47d23fa`). Liberapay no ar, primeira doação recebida em 27/08. Registro público em vigor desde 27/08. |
 | A5 | Configuração git com dois URLs de push | **Já corrigido.** Constatado em 29/08 em `.git/config`: `origin` traz um único URL de push (Codeberg) e o GitHub é um remote nomeado à parte. A correção prevista após os quatro incidentes de 19/08 foi aplicada. Não há mais alias `git publish-app`: empurra-se explicitamente para os dois remotes. |
 | B1 | Oito tabelas do esquema `ingest` sem RLS | **Entregue em 29/08** — migração `20260830140000_ingest_ne_depend_plus_d_un_grant`, suíte `ingest_ferme_tests.sql` (7 testes) no manifesto, hook `pre-commit` estendido a `ingest`. Verificado no banco após a implantação: 10 tabelas sob RLS, nenhuma em FORCE, as 2 172 linhas de staging e os 2 084 vínculos intactos. **Mas a ficha errava no essencial**: `anon` e `authenticated` nunca tiveram `USAGE` nesse esquema, portanto nenhuma falha estava aberta. O pacote é um segundo ferrolho, não uma correção. |
+| A4 | Uma porta de entrada para quem quer ajudar sem programar | **Entregue em 29/08** — `AIDER.md` na raiz, em francês, português e inglês: sete entradas, cada uma com seu identificador de backlog, o que exige, o que traz e **o número do dia**. É o que a página `/colaborar` do site não faz, e com razão: ela é genérica e intemporal. Dois erros de `CONTRIBUTING.md` corrigidos de passagem — remetia a `specs/REGISTRE_decisions.md`, caminho inexistente (o arquivo está em `docs/specs/`), duas vezes, em francês e em inglês; e ainda anunciava o Woodpecker. |
 
 ---
 
@@ -2328,4 +2308,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, 2026-08-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 92 itens em 11 domínios. Cada estado foi verificado em 29/08/2026 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, 2026-08-29. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 91 itens em 11 domínios. Cada estado foi verificado em 29/08/2026 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

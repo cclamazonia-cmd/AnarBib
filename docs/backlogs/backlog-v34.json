@@ -1275,6 +1275,17 @@
      "fr": "**Livré le 29/08** — migration `20260830140000_ingest_ne_depend_plus_d_un_grant`, suite `ingest_ferme_tests.sql` (7 tests) au manifeste, hook `pre-commit` étendu à `ingest`. Vérifié en base après déploiement : 10 tables sous RLS, aucune en FORCE, les 2 172 lignes de staging et les 2 084 liens intacts. **Mais la fiche avait tort sur l'essentiel** : `anon` et `authenticated` n'ont jamais eu `USAGE` sur ce schéma, donc aucune faille n'était ouverte. Le paquet est un second verrou, pas une correction — et la « priorité haute » annoncée reposait sur l'absence de RLS sans avoir regardé les droits.",
      "pt": "**Entregue em 29/08** — migração `20260830140000_ingest_ne_depend_plus_d_un_grant`, suíte `ingest_ferme_tests.sql` (7 testes) no manifesto, hook `pre-commit` estendido a `ingest`. Verificado no banco após a implantação: 10 tabelas sob RLS, nenhuma em FORCE, as 2 172 linhas de staging e os 2 084 vínculos intactos. **Mas a ficha errava no essencial**: `anon` e `authenticated` nunca tiveram `USAGE` nesse esquema, portanto nenhuma falha estava aberta. O pacote é um segundo ferrolho, não uma correção."
     }
+   ],
+   [
+    "A4",
+    {
+     "fr": "Une porte d'entrée pour qui veut aider sans coder",
+     "pt": "Uma porta de entrada para quem quer ajudar sem programar"
+    },
+    {
+     "fr": "**Livré le 29/08** — `AIDER.md` à la racine, en français, portugais et anglais : sept entrées, chacune avec son identifiant de backlog, ce qu'elle demande, ce qu'elle apporte et **le chiffre du jour**. C'est ce que la page `/contribuer` du site ne fait pas, à raison : elle est générique et intemporelle. Deux erreurs de `CONTRIBUTING.md` corrigées au passage — il renvoyait vers `specs/REGISTRE_decisions.md`, chemin inexistant (le fichier est dans `docs/specs/`), deux fois, en français et en anglais ; et il annonçait encore Woodpecker.",
+     "pt": "**Entregue em 29/08** — `AIDER.md` na raiz, em francês, português e inglês: sete entradas, cada uma com seu identificador de backlog, o que exige, o que traz e **o número do dia**. É o que a página `/colaborar` do site não faz, e com razão: ela é genérica e intemporal. Dois erros de `CONTRIBUTING.md` corrigidos de passagem — remetia a `specs/REGISTRE_decisions.md`, caminho inexistente (o arquivo está em `docs/specs/`), duas vezes, em francês e em inglês; e ainda anunciava o Woodpecker."
+    }
    ]
   ]
  },
@@ -1419,52 +1430,6 @@
    "r": [
     "CLAUDE.md, piège connu n°1",
     "REPRISE_bascule_autohebergee_2026-08-26"
-   ]
-  },
-  {
-   "id": "A4",
-   "d": "A",
-   "p": "P1",
-   "s": "ouvert",
-   "e": "S",
-   "sk": [
-    "aucune"
-   ],
-   "t": {
-    "fr": "Écrire une porte d'entrée pour qui veut aider sans savoir coder",
-    "pt": "Escrever uma porta de entrada para quem quer ajudar sem saber programar"
-   },
-   "v": {
-    "fr": "`CONTRIBUTING.md` (28/08) s'adresse à quelqu'un qui code : fork, branche, `npm ci`, préfixes de commit. `docs/CHANTIERS_OUVERTS.md` fait mieux et signale trois entrées sans compétence technique, mais reste rangé dans un dossier `docs/`.",
-    "pt": "`CONTRIBUTING.md` (28/08) se dirige a quem programa: fork, branch, `npm ci`, prefixos de commit. `docs/CHANTIERS_OUVERTS.md` faz melhor e sinaliza três entradas sem competência técnica, mas continua guardado numa pasta `docs/`."
-   },
-   "w": {
-    "fr": "Une page courte, en tête de dépôt et sur anarbib.org, qui dit ce qu'on peut faire pour AnarBib **sans écrire une ligne de code** : relire une langue, indexer des matières, tenir un rôle d'administration réseau, tester une reconstruction, relire une convention. Chaque entrée avec ce qu'elle demande et à qui écrire.",
-    "pt": "Uma página curta, no topo do repositório e em anarbib.org, dizendo o que se pode fazer pelo AnarBib **sem escrever uma linha de código**: revisar uma língua, indexar assuntos, exercer um papel de administração de rede, testar uma reconstrução, revisar uma convenção. Cada entrada com o que exige e para quem escrever."
-   },
-   "y": {
-    "fr": "Les trois chantiers les plus utiles du projet aujourd'hui — administrateur·rices réseau, conventions néerlandaise et grecque, indexation matière — ne demandent **aucune compétence technique**. Une porte d'entrée qui parle de `npm ci` les rend invisibles.",
-    "pt": "Os três canteiros mais úteis do projeto hoje — administradores·as de rede, convenções neerlandesa e grega, indexação de assunto — não exigem **nenhuma competência técnica**. Uma porta de entrada que fala de `npm ci` os torna invisíveis."
-   },
-   "f": {
-    "fr": [
-     "Une page existe, en français et en portugais au minimum.",
-     "Elle est atteignable depuis anarbib.org et depuis la racine du dépôt.",
-     "Elle nomme une adresse de contact réelle par entrée."
-    ],
-    "pt": [
-     "Uma página existe, em francês e português no mínimo.",
-     "É alcançável a partir de anarbib.org e da raiz do repositório.",
-     "Nomeia um endereço de contato real por entrada."
-    ]
-   },
-   "dep": {
-    "fr": "Utile avant Bologne (**K5**) : c'est là que l'appel se fait.",
-    "pt": "Útil antes de Bolonha (**K5**): é lá que o chamado se faz."
-   },
-   "r": [
-    "CONTRIBUTING.md",
-    "docs/CHANTIERS_OUVERTS.md"
    ]
   },
   {
