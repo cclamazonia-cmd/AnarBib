@@ -105,7 +105,7 @@ BEGIN
   -- B.1 not_authenticated quand aucune session
   BEGIN
     PERFORM api.create_consulta_local(
-      '366cdc4e-10e0-44ad-8554-a444bcf9607a'::uuid,
+      '33333333-3333-3333-3333-333333333333'::uuid,
       ARRAY[1]::bigint[], NULL, NULL
     );
     v_failed := v_failed + 1;
@@ -117,15 +117,15 @@ BEGIN
       v_failures := array_append(v_failures, 'B.1 wrong_exception: ' || v_err); END IF;
   END;
 
-  -- B.2 simulee : Livia tente avec p_holding_ids vide
+  -- B.2 simulee : la lectrice A tente avec p_holding_ids vide
   BEGIN
     PERFORM set_config('request.jwt.claim.sub',
-      '366cdc4e-10e0-44ad-8554-a444bcf9607a', true);
+      '33333333-3333-3333-3333-333333333333', true);
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+      '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
 
     PERFORM api.create_consulta_local(
-      '366cdc4e-10e0-44ad-8554-a444bcf9607a'::uuid,
+      '33333333-3333-3333-3333-333333333333'::uuid,
       '{}'::bigint[], NULL, NULL
     );
     v_failed := v_failed + 1;
@@ -146,10 +146,10 @@ BEGIN
   -- B.3 simulee : array de NULL
   BEGIN
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+      '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
 
     PERFORM api.create_consulta_local(
-      '366cdc4e-10e0-44ad-8554-a444bcf9607a'::uuid,
+      '33333333-3333-3333-3333-333333333333'::uuid,
       ARRAY[NULL]::bigint[], NULL, NULL
     );
     v_failed := v_failed + 1;
@@ -214,7 +214,7 @@ BEGIN
   -- C.2 p_line_nos vide
   BEGIN
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+      '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
 
     PERFORM api.advance_consulta(1, '{}'::integer[], 'em_preparacao');
     v_failed := v_failed + 1;
@@ -232,7 +232,7 @@ BEGIN
   -- C.3 p_target_stage NULL
   BEGIN
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+      '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
 
     PERFORM api.advance_consulta(1, ARRAY[1]::integer[], NULL);
     v_failed := v_failed + 1;
@@ -250,7 +250,7 @@ BEGIN
   -- C.4 consulta_id inexistant
   BEGIN
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+      '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
 
     PERFORM api.advance_consulta(99999999, ARRAY[1]::integer[], 'em_preparacao');
     v_failed := v_failed + 1;
@@ -283,7 +283,7 @@ BEGIN
     IF v_existing_stage = 'em_preparacao' THEN
       BEGIN
         PERFORM set_config('request.jwt.claims',
-          '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+          '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
 
         PERFORM api.advance_consulta(
           v_consulta_id_existing,
@@ -306,10 +306,10 @@ BEGIN
       v_failures := array_append(v_failures, format('C.5 SKIPPED (stage est %s, pas em_preparacao)', v_existing_stage));
     END IF;
 
-    -- C.6 lecteur Patricia (sans role) tente d'avancer
+    -- C.6 le compte sans role tente d'avancer
     BEGIN
       PERFORM set_config('request.jwt.claims',
-        '{"sub": "2a42b6bd-d159-4ee0-b66b-28a03062232b", "role": "authenticated"}', true);
+        '{"sub": "22222222-2222-2222-2222-222222222222", "role": "authenticated"}', true);
 
       PERFORM api.advance_consulta(
         v_consulta_id_existing,
@@ -365,7 +365,7 @@ BEGIN
 
   BEGIN
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+      '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
 
     PERFORM api.reply_consulta_schedule(1, ARRAY[1]::integer[], 'sim_quem_sabe');
     v_failed := v_failed + 1;
@@ -382,7 +382,7 @@ BEGIN
 
   BEGIN
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+      '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
 
     PERFORM api.reply_consulta_schedule(99999999, ARRAY[1]::integer[], 'confirmado_leitor');
     v_failed := v_failed + 1;
@@ -457,24 +457,24 @@ BEGIN
       v_failures := array_append(v_failures, 'E.1 wrong_exception: ' || v_err); END IF;
   END;
 
-  -- E.2 Arthur tente d'annuler une consulta de Livia
+  -- E.2 le lecteur B tente d'annuler une consulta de la lectrice A
   SELECT c.id, cw.line_no
     INTO v_consulta_id_existing, v_existing_line_no
   FROM public.consultas_locais_v2 c
   JOIN public.consulta_item_workflow_v2 cw ON cw.consulta_id = c.id
   WHERE c.library_id = '1234825f-a0f9-4fbd-a875-6551c30ea4ca'
-    AND c.user_id = '366cdc4e-10e0-44ad-8554-a444bcf9607a'
+    AND c.user_id = '33333333-3333-3333-3333-333333333333'
     AND cw.workflow_stage NOT IN ('consulta_realizada', 'cancelada_leitor',
                                    'cancelada_biblioteca', 'expirada')
   LIMIT 1;
 
   IF v_consulta_id_existing IS NULL THEN
     v_skipped := v_skipped + 1;
-    v_failures := array_append(v_failures, 'E.2 SKIPPED (pas de consulta de Livia)');
+    v_failures := array_append(v_failures, 'E.2 SKIPPED (pas de consulta de la lectrice A)');
   ELSE
     BEGIN
       PERFORM set_config('request.jwt.claims',
-        '{"sub": "614d887d-4e8d-401d-a208-77c56a1cd5ea", "role": "authenticated"}', true);
+        '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
 
       PERFORM api.cancel_consulta_as_reader(
         v_consulta_id_existing,
@@ -520,7 +520,7 @@ BEGIN
 
   BEGIN
     PERFORM set_config('request.jwt.claims',
-      '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+      '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
 
     PERFORM api.dismiss_consulta_cancelled(99999999, ARRAY[1]::integer[], NULL);
     v_failed := v_failed + 1;

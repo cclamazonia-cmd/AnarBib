@@ -216,8 +216,8 @@ Items v9 dont je n'ai pas les descriptions précises sous la main, à ressortir 
 - **Repo principal** : `C:\Users\accat\Claude's AnarBib\anarbib-app\`
 - **Deploiement** : Codeberg Pages via Woodpecker CI, GitHub = mirror
 - **Mail backend actuel** : Brevo (jusqu'à migration Resend item #110)
-- **Lívia user_id** (test) : `366cdc4e-10e0-44ad-8554-a444bcf9607a`
-- **Xavier user_id** : `d6710372-e5e5-4608-800b-99a26817c677`
+- **Lívia user_id** (test) : `33333333-3333-3333-3333-333333333333`
+- **Xavier user_id** : `11111111-1111-1111-1111-111111111111`
 
 ---
 

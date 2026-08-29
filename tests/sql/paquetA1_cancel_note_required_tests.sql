@@ -290,6 +290,20 @@ END $$;
 -- ============================================================
 -- ROLLBACK : aucune donnee de test persiste
 -- ============================================================
-ROLLBACK;
 
-SELECT '===== Paquet A1 fix B6 : 4/4 tests passent =====' AS result;
+-- ============================================================
+-- BILAN a la convention du corpus.
+-- Jusqu'au 29/08/2026 ce fichier se terminait par un SELECT d'une chaine
+-- CONSTANTE annoncant « 4/4 tests passent » — affichee telle quelle
+-- meme quand un test venait d'echouer. Une suite ne doit pas proclamer son
+-- succes : elle doit le prouver en l'atteignant. Chaque test ci-dessus leve
+-- une EXCEPTION s'il echoue, donc arriver ici EST le succes, et c'est ici que
+-- le bilan se dit -- sous la forme « OK : N/N » que cherche
+-- scripts/ci/run-sql-suites.sh.
+-- Si l'on ajoute un test a cette suite, mettre a jour le compte ci-dessous.
+-- ============================================================
+DO $$ BEGIN
+  RAISE EXCEPTION 'PAQUET-A1 OK : 4/4 tests passes';
+END $$;
+
+ROLLBACK;

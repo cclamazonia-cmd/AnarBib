@@ -80,8 +80,8 @@ Pour tester tous les events, il faut **au moins 3 admins réseau actifs** (quoru
 -- Bypass cooptation : INSERT direct comme admins actifs
 INSERT INTO network_administrators (user_id, status, coopted_at, coopted_by_unanimity_of)
 VALUES 
-  ('366cdc4e-10e0-44ad-8554-a444bcf9607a', 'active', now(), ARRAY['d6710372-e5e5-4608-800b-99a26817c677']::uuid[]),
-  ('2a42b6bd-d159-4ee0-b66b-28a03062232b', 'active', now(), ARRAY['d6710372-e5e5-4608-800b-99a26817c677']::uuid[])
+  ('33333333-3333-3333-3333-333333333333', 'active', now(), ARRAY['11111111-1111-1111-1111-111111111111']::uuid[]),
+  ('22222222-2222-2222-2222-222222222222', 'active', now(), ARRAY['11111111-1111-1111-1111-111111111111']::uuid[])
 ON CONFLICT (user_id) DO UPDATE SET status='active';
 
 -- Verifier
@@ -122,7 +122,7 @@ SELECT user_id, status, coopted_at FROM network_administrators ORDER BY coopted_
 
 ### 2.3 — Scénario 2 : Cooptation menant à `rejected`
 
-**Acteurs** : mêmes, target = Arthur SAMPAIO (`614d887d-4e8d-401d-a208-77c56a1cd5ea`).
+**Acteurs** : mêmes, target = Arthur SAMPAIO (`44444444-4444-4444-4444-444444444444`).
 
 **Étapes** :
 
@@ -221,8 +221,8 @@ Pour ce test, on a besoin d'un 4e admin (target) à retirer. **Setup spécifique
 UPDATE network_administrators
 SET status = 'removed', removed_at = now()
 WHERE user_id IN (
-  '366cdc4e-10e0-44ad-8554-a444bcf9607a',
-  '2a42b6bd-d159-4ee0-b66b-28a03062232b'
+  '33333333-3333-3333-3333-333333333333',
+  '22222222-2222-2222-2222-222222222222'
 );
 
 -- Idem pour tous les targets de test (Rafael, Arthur)
@@ -230,7 +230,7 @@ UPDATE network_administrators
 SET status = 'removed', removed_at = now()
 WHERE user_id IN (
   'a7335128-c741-4f69-b9ff-b48ac92e575a',
-  '614d887d-4e8d-401d-a208-77c56a1cd5ea'
+  '44444444-4444-4444-4444-444444444444'
 );
 
 -- Verifier qu'il ne reste que Xavier actif
@@ -339,7 +339,7 @@ Les profils Rafael LIMA et Arthur SAMPAIO sont de vrais profils de test mais ave
 ```sql
 SELECT id, email FROM profiles WHERE id IN (
   'a7335128-c741-4f69-b9ff-b48ac92e575a',
-  '614d887d-4e8d-401d-a208-77c56a1cd5ea'
+  '44444444-4444-4444-4444-444444444444'
 );
 ```
 Si l'email est un vrai mail externe, soit on change leur email vers `anarbib@proton.me` le temps des tests, soit on prend d'autres targets factices.
@@ -377,11 +377,11 @@ Si l'email est un vrai mail externe, soit on change leur email vers `anarbib@pro
 
 | Personne | UUID | Rôle test |
 |---|---|---|
-| Xavier | `d6710372-e5e5-4608-800b-99a26817c677` | Admin permanent, proposeur |
-| Lívia GUSMÃO VASCONCELOS | `366cdc4e-10e0-44ad-8554-a444bcf9607a` | Admin temporaire votant |
-| Patricia FELLINI | `2a42b6bd-d159-4ee0-b66b-28a03062232b` | Admin temporaire votant |
+| Xavier | `11111111-1111-1111-1111-111111111111` | Admin permanent, proposeur |
+| Lívia GUSMÃO VASCONCELOS | `33333333-3333-3333-3333-333333333333` | Admin temporaire votant |
+| Patricia FELLINI | `22222222-2222-2222-2222-222222222222` | Admin temporaire votant |
 | Rafael LIMA | `a7335128-c741-4f69-b9ff-b48ac92e575a` | Target test (cooptation completed + retrait) |
-| Arthur SAMPAIO | `614d887d-4e8d-401d-a208-77c56a1cd5ea` | Target test (cooptation rejected) |
+| Arthur SAMPAIO | `44444444-4444-4444-4444-444444444444` | Target test (cooptation rejected) |
 
 ---
 

@@ -435,6 +435,20 @@ END $$;
 -- ROLLBACK final : aucun changement persiste
 -- (la transaction echoue grace au RAISE pour forcer le rollback explicite)
 -- ============================================================
-ROLLBACK;
 
-SELECT '===== Paquet A : 15/15 tests passent =====' AS result;
+-- ============================================================
+-- BILAN a la convention du corpus.
+-- Jusqu'au 29/08/2026 ce fichier se terminait par un SELECT d'une chaine
+-- CONSTANTE annoncant « 15/15 tests passent » — affichee telle quelle
+-- meme quand un test venait d'echouer. Une suite ne doit pas proclamer son
+-- succes : elle doit le prouver en l'atteignant. Chaque test ci-dessus leve
+-- une EXCEPTION s'il echoue, donc arriver ici EST le succes, et c'est ici que
+-- le bilan se dit -- sous la forme « OK : N/N » que cherche
+-- scripts/ci/run-sql-suites.sh.
+-- Si l'on ajoute un test a cette suite, mettre a jour le compte ci-dessous.
+-- ============================================================
+DO $$ BEGIN
+  RAISE EXCEPTION 'PAQUET-A OK : 15/15 tests passes';
+END $$;
+
+ROLLBACK;

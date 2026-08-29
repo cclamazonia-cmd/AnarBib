@@ -18,10 +18,10 @@
 --   Section C : invariant emprestimo vs consulta      (~5 tests)
 --
 -- Fixtures BLMF :
---   Xavier (staff coordenador) : d6710372-e5e5-4608-800b-99a26817c677
---   Livia  (lecteur)           : 366cdc4e-10e0-44ad-8554-a444bcf9607a
---   Arthur (lecteur)           : 614d887d-4e8d-401d-a208-77c56a1cd5ea
---   Patricia (sans role BLMF)  : 2a42b6bd-d159-4ee0-b66b-28a03062232b
+--   Coordination de test   : 11111111-1111-1111-1111-111111111111
+--   Lectrice A (lecteur)       : 33333333-3333-3333-3333-333333333333
+--   Lecteur B  (lecteur)       : 44444444-4444-4444-4444-444444444444
+--   Compte sans role           : 22222222-2222-2222-2222-222222222222
 --   BLMF library_id            : 1234825f-a0f9-4fbd-a875-6551c30ea4ca
 -- =====================================================================
 
@@ -242,11 +242,11 @@ BEGIN
       -- SET LOCAL ROLE authenticated necessaire car la fn est DEFINER
       -- mais auth.uid() est lu en debut, donc on simule la session.
       PERFORM set_config('request.jwt.claims',
-        '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a"}', true);
+        '{"sub": "33333333-3333-3333-3333-333333333333"}', true);
       PERFORM set_config('role', 'authenticated', true);
 
       v_result_id := public.fn_v2_create_consulta_local_by_holdings(
-        '366cdc4e-10e0-44ad-8554-a444bcf9607a'::uuid,
+        '33333333-3333-3333-3333-333333333333'::uuid,
         ARRAY[v_holding_id_loan_blocked]::bigint[],
         NULL,
         'TEST C.1 phase 1 invariant - DOIT ECHOUER'
@@ -274,11 +274,11 @@ BEGIN
   IF v_holding_id_reservation_blocked IS NOT NULL THEN
     BEGIN
       PERFORM set_config('request.jwt.claims',
-        '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a"}', true);
+        '{"sub": "33333333-3333-3333-3333-333333333333"}', true);
       PERFORM set_config('role', 'authenticated', true);
 
       v_result_id := public.fn_v2_create_consulta_local_by_holdings(
-        '366cdc4e-10e0-44ad-8554-a444bcf9607a'::uuid,
+        '33333333-3333-3333-3333-333333333333'::uuid,
         ARRAY[v_holding_id_reservation_blocked]::bigint[],
         NULL,
         'TEST C.2 phase 1 invariant - DOIT ECHOUER'
@@ -303,15 +303,15 @@ BEGIN
   END IF;
 
   -- C.3 Creation emprunt rejetee si consulta active sur le holding
-  -- On simule le contexte d'un staff : Xavier coordenador BLMF.
+  -- On simule le contexte d'un staff : la coordination BLMF.
   IF v_holding_id_consulta_blocked IS NOT NULL THEN
     BEGIN
       PERFORM set_config('request.jwt.claims',
-        '{"sub": "d6710372-e5e5-4608-800b-99a26817c677"}', true);
+        '{"sub": "11111111-1111-1111-1111-111111111111"}', true);
       PERFORM set_config('role', 'authenticated', true);
 
       PERFORM ok FROM public.fn_v2_create_emprestimo_by_holdings(
-        '366cdc4e-10e0-44ad-8554-a444bcf9607a'::uuid,
+        '33333333-3333-3333-3333-333333333333'::uuid,
         ARRAY[v_holding_id_consulta_blocked]::bigint[],
         NULL,
         'TEST C.3 phase 1 invariant - DOIT ECHOUER'

@@ -319,14 +319,14 @@ Stratégie de test :
 ```sql
 -- Promouvoir Lívia comme admin réseau temporairement
 INSERT INTO network_administrators (user_id, status, coopted_at)
-VALUES ('366cdc4e-10e0-44ad-8554-a444bcf9607a', 'active', now());
+VALUES ('33333333-3333-3333-3333-333333333333', 'active', now());
 
 -- Maintenant Xavier (proposeur) propose un 3e user (target fictif)
 -- → mail attendu à Lívia (seule autre admin active, hors proposeur)
 
 -- Cleanup après test :
 DELETE FROM network_administrators 
-WHERE user_id = '366cdc4e-10e0-44ad-8554-a444bcf9607a' 
+WHERE user_id = '33333333-3333-3333-3333-333333333333' 
   AND status = 'active';
 ```
 

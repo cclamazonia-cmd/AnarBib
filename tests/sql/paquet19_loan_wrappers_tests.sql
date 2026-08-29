@@ -19,10 +19,10 @@
 --   plantent dans la fn DEFINER avant ecriture.
 --
 -- FIXTURES (UUIDs BLMF, verifies en base le 11/05/2026) :
---   - Xavier (staff BLMF) : d6710372-e5e5-4608-800b-99a26817c677
---   - Livia (lecteur BLMF) : 366cdc4e-10e0-44ad-8554-a444bcf9607a
---   - Arthur (lecteur BLMF) : 614d887d-4e8d-401d-a208-77c56a1cd5ea
---   - Patricia (role null BLMF) : 2a42b6bd-d159-4ee0-b66b-28a03062232b
+--   - Coordination de test (staff BLMF) : 11111111-1111-1111-1111-111111111111
+--   - Lectrice A (lecteur BLMF) : 33333333-3333-3333-3333-333333333333
+--   - Lecteur B (lecteur BLMF) : 44444444-4444-4444-4444-444444444444
+--   - Compte sans role BLMF : 22222222-2222-2222-2222-222222222222
 -- =====================================================================
 
 DO $$
@@ -39,10 +39,10 @@ DECLARE
   v_ctx record;
   v_test_name text;
 
-  c_xavier constant uuid := 'd6710372-e5e5-4608-800b-99a26817c677';
-  c_livia constant uuid := '366cdc4e-10e0-44ad-8554-a444bcf9607a';
-  c_arthur constant uuid := '614d887d-4e8d-401d-a208-77c56a1cd5ea';
-  c_patricia constant uuid := '2a42b6bd-d159-4ee0-b66b-28a03062232b';
+  c_coord constant uuid := '11111111-1111-1111-1111-111111111111';
+  c_leitora_a constant uuid := '33333333-3333-3333-3333-333333333333';
+  c_leitor_b constant uuid := '44444444-4444-4444-4444-444444444444';
+  c_sem_papel constant uuid := '22222222-2222-2222-2222-222222222222';
   c_blmf constant uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';
 BEGIN
 
@@ -174,7 +174,7 @@ BEGIN
   BEGIN
     RESET ROLE;
     PERFORM set_config('request.jwt.claims', NULL, true);
-    PERFORM api.create_loan_at_counter(c_livia, ARRAY[99999999]::bigint[]);
+    PERFORM api.create_loan_at_counter(c_leitora_a, ARRAY[99999999]::bigint[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : appel anon aurait du echouer');
   EXCEPTION WHEN OTHERS THEN
     IF SQLSTATE = '28000' OR SQLERRM LIKE '%uthenticat%' OR SQLERRM LIKE '%obrigat%' THEN v_passed := v_passed + 1;
@@ -184,19 +184,19 @@ BEGIN
   v_test_name := '3.02 create rejette leitor';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
-    PERFORM api.create_loan_at_counter(c_arthur, ARRAY[99999999]::bigint[]);
+    PERFORM set_config('request.jwt.claims', '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
+    PERFORM api.create_loan_at_counter(c_leitor_b, ARRAY[99999999]::bigint[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : leitor ne doit pas creer');
   EXCEPTION WHEN OTHERS THEN
     IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%biblioteca ativa%' THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
   END;
 
-  v_test_name := '3.03 create wrapper passe pour Xavier coordenador';
+  v_test_name := '3.03 create wrapper passe pour la coordination';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
-    PERFORM api.create_loan_at_counter(c_livia, ARRAY[99999999]::bigint[]);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
+    PERFORM api.create_loan_at_counter(c_leitora_a, ARRAY[99999999]::bigint[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : aurait du echouer dans fn DEFINER');
   EXCEPTION WHEN OTHERS THEN
     IF SQLSTATE = '28000' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : auth a echoue : ' || SQLERRM);
@@ -207,20 +207,20 @@ BEGIN
   v_test_name := '3.04 create rejette holdings vide';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
-    PERFORM api.create_loan_at_counter(c_livia, ARRAY[]::bigint[]);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
+    PERFORM api.create_loan_at_counter(c_leitora_a, ARRAY[]::bigint[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : holdings vide doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
     IF SQLSTATE = '28000' OR SQLSTATE = '42501' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : aurait du atteindre fn DEFINER : ' || SQLERRM);
     ELSE v_passed := v_passed + 1; END IF;
   END;
 
-  v_test_name := '3.05 create rejette Patricia (sans role BLMF)';
+  v_test_name := '3.05 create rejette le compte sans role BLMF';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "2a42b6bd-d159-4ee0-b66b-28a03062232b", "role": "authenticated"}', true);
-    PERFORM api.create_loan_at_counter(c_livia, ARRAY[99999999]::bigint[]);
-    v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Patricia ne doit pas creer');
+    PERFORM set_config('request.jwt.claims', '{"sub": "22222222-2222-2222-2222-222222222222", "role": "authenticated"}', true);
+    PERFORM api.create_loan_at_counter(c_leitora_a, ARRAY[99999999]::bigint[]);
+    v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le compte sans role ne doit pas creer');
   EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
 
   -- =====================================================================
@@ -241,7 +241,7 @@ BEGIN
   v_test_name := '4.02 return_total emprunt inexistant';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
     PERFORM api.return_loan_total(99999999);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
@@ -257,9 +257,9 @@ BEGIN
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "614d887d-4e8d-401d-a208-77c56a1cd5ea", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
         PERFORM api.return_loan_total(v_test_emprestimo_id);
-        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Arthur ne doit pas retourner');
+        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas retourner');
       EXCEPTION WHEN OTHERS THEN
         IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
@@ -275,7 +275,7 @@ BEGIN
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
         PERFORM api.return_loan_total(v_test_emprestimo_id);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : encerrado ne doit pas etre retournable');
       EXCEPTION WHEN OTHERS THEN
@@ -299,7 +299,7 @@ BEGIN
   v_test_name := '4.06 return_partial line_nos vide';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
     PERFORM api.return_loan_partial(1, ARRAY[]::integer[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : line_nos vide doit etre rejete');
   EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
@@ -307,7 +307,7 @@ BEGIN
   v_test_name := '4.07 return_partial line_nos NULL';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
     PERFORM api.return_loan_partial(1, NULL);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : line_nos NULL doit etre rejete');
   EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
@@ -320,9 +320,9 @@ BEGIN
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
         PERFORM api.return_loan_partial(v_test_emprestimo_id, ARRAY[1]::integer[]);
-        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Livia ne doit pas retourner');
+        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : la lectrice A ne doit pas retourner');
       EXCEPTION WHEN OTHERS THEN
         IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
@@ -348,7 +348,7 @@ BEGIN
   v_test_name := '5.02 extend emprunt inexistant';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
     PERFORM api.extend_loan_as_library(99999999);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
@@ -364,9 +364,9 @@ BEGIN
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "614d887d-4e8d-401d-a208-77c56a1cd5ea", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
         PERFORM api.extend_loan_as_library(v_test_emprestimo_id);
-        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Arthur ne doit pas prolonger');
+        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas prolonger');
       EXCEPTION WHEN OTHERS THEN
         IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
@@ -392,20 +392,20 @@ BEGIN
   v_test_name := '6.02 renew emprunt inexistant';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
     PERFORM api.renew_my_loan(99999999);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
 
-  v_test_name := '6.03 renew cross-ownership Arthur sur Livia';
+  v_test_name := '6.03 renew cross-ownership lecteur B sur lectrice A';
   BEGIN
-    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_livia LIMIT 1;
+    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
     IF v_livia_loan_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : Livia n''a aucun emprunt');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "614d887d-4e8d-401d-a208-77c56a1cd5ea", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
         PERFORM api.renew_my_loan(v_livia_loan_id);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ECHEC CRITIQUE OWNERSHIP');
       EXCEPTION WHEN OTHERS THEN
@@ -415,16 +415,16 @@ BEGIN
     END IF;
   END;
 
-  v_test_name := '6.04 renew Xavier coordenador sur son emprunt (paquet 19 v2)';
+  v_test_name := '6.04 renew coordination sur son emprunt (paquet 19 v2)';
   BEGIN
     SELECT id INTO v_xavier_loan_id FROM public.emprestimos_v2 
-      WHERE user_id = c_xavier AND status_global IN ('aberto', 'parcialmente_devolvido') LIMIT 1;
+      WHERE user_id = c_coord AND status_global IN ('aberto', 'parcialmente_devolvido') LIMIT 1;
     IF v_xavier_loan_id IS NULL THEN
       v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : Xavier n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
         PERFORM api.renew_my_loan(v_xavier_loan_id);
         v_passed := v_passed + 1;
       EXCEPTION WHEN OTHERS THEN
@@ -435,20 +435,20 @@ BEGIN
     END IF;
   END;
 
-  v_test_name := '6.05 renew Livia leitor sur son emprunt';
+  v_test_name := '6.05 renew lectrice A leitor sur son emprunt';
   BEGIN
     SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 
-      WHERE user_id = c_livia AND status_global IN ('aberto', 'parcialmente_devolvido') LIMIT 1;
+      WHERE user_id = c_leitora_a AND status_global IN ('aberto', 'parcialmente_devolvido') LIMIT 1;
     IF v_livia_loan_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : Livia n''a aucun emprunt ouvert');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "366cdc4e-10e0-44ad-8554-a444bcf9607a", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
         PERFORM api.renew_my_loan(v_livia_loan_id);
         v_passed := v_passed + 1;
       EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE = '28000' OR (SQLSTATE = '42501' AND SQLERRM NOT LIKE '%seus proprios%') THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Livia doit passer : ' || SQLERRM);
+        IF SQLSTATE = '28000' OR (SQLSTATE = '42501' AND SQLERRM NOT LIKE '%seus proprios%') THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : la lectrice A doit passer : ' || SQLERRM);
         ELSE v_passed := v_passed + 1; END IF;
       END;
     END IF;
@@ -472,22 +472,22 @@ BEGIN
   v_test_name := '7.02 schedule line_nos vide';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
     PERFORM api.schedule_loan_return(1, ARRAY[]::integer[], now() + interval '1 day');
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : line_nos vide doit etre rejete');
   EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
 
-  v_test_name := '7.03 schedule Arthur sur Livia';
+  v_test_name := '7.03 schedule lecteur B sur lectrice A';
   BEGIN
-    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_livia LIMIT 1;
+    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
     IF v_livia_loan_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : Livia n''a aucun emprunt');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "614d887d-4e8d-401d-a208-77c56a1cd5ea", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
         PERFORM api.schedule_loan_return(v_livia_loan_id, ARRAY[1]::integer[], now() + interval '1 day');
-        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Arthur ne doit pas planifier sur Livia');
+        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas planifier sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
         IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%nao encontrado%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
@@ -506,17 +506,17 @@ BEGIN
     ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
   END;
 
-  v_test_name := '7.05 clear Arthur sur Livia';
+  v_test_name := '7.05 clear lecteur B sur lectrice A';
   BEGIN
-    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_livia LIMIT 1;
+    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
     IF v_livia_loan_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : Livia n''a aucun emprunt');
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "614d887d-4e8d-401d-a208-77c56a1cd5ea", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
         PERFORM api.clear_loan_return_schedule(v_livia_loan_id, ARRAY[1]::integer[]);
-        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Arthur ne doit pas annuler sur Livia');
+        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas annuler sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
         IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%nao encontrado%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
@@ -527,7 +527,7 @@ BEGIN
   v_test_name := '7.06 clear line_nos NULL';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
     PERFORM api.clear_loan_return_schedule(1, NULL);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : line_nos NULL doit etre rejete');
   EXCEPTION WHEN OTHERS THEN v_passed := v_passed + 1; END;
@@ -555,9 +555,9 @@ BEGIN
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
-        PERFORM set_config('request.jwt.claims', '{"sub": "614d887d-4e8d-401d-a208-77c56a1cd5ea", "role": "authenticated"}', true);
+        PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
         PERFORM api.mark_loan_return_missed(v_test_emprestimo_id, ARRAY[1]::integer[]);
-        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Arthur ne doit pas marker');
+        v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas marker');
       EXCEPTION WHEN OTHERS THEN
         IF SQLSTATE = '42501' OR SQLERRM LIKE '%autorizada%' OR SQLERRM LIKE '%nao encontrado%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
@@ -568,7 +568,7 @@ BEGIN
   v_test_name := '8.03 mark_missed emprunt inexistant';
   BEGIN
     SET LOCAL ROLE authenticated;
-    PERFORM set_config('request.jwt.claims', '{"sub": "d6710372-e5e5-4608-800b-99a26817c677", "role": "authenticated"}', true);
+    PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
     PERFORM api.mark_loan_return_missed(99999999, ARRAY[1]::integer[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : emprunt inexistant doit etre rejete');
   EXCEPTION WHEN OTHERS THEN

@@ -543,7 +543,7 @@ Contenu livré :
    INSERT INTO public.network_administrators 
        (user_id, status, coopted_at, coopted_by_unanimity_of, notes)
    VALUES (
-       'd6710372-e5e5-4608-800b-99a26817c677',  -- Xavier
+       '11111111-1111-1111-1111-111111111111',  -- Xavier
        'active',
        now(),
        ARRAY[]::uuid[],

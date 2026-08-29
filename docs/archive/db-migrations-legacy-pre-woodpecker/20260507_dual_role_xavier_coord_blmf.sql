@@ -59,13 +59,13 @@
 -- ROLLBACK
 -- --------
 -- DELETE FROM public.user_library_memberships
--- WHERE user_id = 'd6710372-e5e5-4608-800b-99a26817c677'
+-- WHERE user_id = '11111111-1111-1111-1111-111111111111'
 --   AND library_id = '1234825f-a0f9-4fbd-a875-6551c30ea4ca'
 --   AND role = 'coordenador'
 --   AND created_at::date = '2026-05-07';
 --
 -- DELETE FROM public.library_membership_audit
--- WHERE target_user_id = 'd6710372-e5e5-4608-800b-99a26817c677'
+-- WHERE target_user_id = '11111111-1111-1111-1111-111111111111'
 --   AND library_id = '1234825f-a0f9-4fbd-a875-6551c30ea4ca'
 --   AND action = 'promoted_to_coordenador'
 --   AND created_at::date = '2026-05-07';
@@ -78,7 +78,7 @@ DO $$
 BEGIN
   IF EXISTS (
     SELECT 1 FROM public.user_library_memberships
-    WHERE user_id = 'd6710372-e5e5-4608-800b-99a26817c677'
+    WHERE user_id = '11111111-1111-1111-1111-111111111111'
       AND library_id = '1234825f-a0f9-4fbd-a875-6551c30ea4ca'
       AND role = 'coordenador'
   ) THEN
@@ -88,7 +88,7 @@ BEGIN
 
   -- Garde-fou supplémentaire pour fork : si user_id ou library_id n'existent
   -- pas dans cette base, on no-op gracieusement au lieu d'échouer.
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id = 'd6710372-e5e5-4608-800b-99a26817c677')
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE id = '11111111-1111-1111-1111-111111111111')
      OR NOT EXISTS (SELECT 1 FROM public.libraries WHERE id = '1234825f-a0f9-4fbd-a875-6551c30ea4ca')
   THEN
     RAISE NOTICE 'User ou library cible introuvable dans cette base — migration ignorée (likely a fork)';
@@ -99,7 +99,7 @@ BEGIN
   INSERT INTO public.user_library_memberships
     (user_id, library_id, role, status)
   VALUES
-    ('d6710372-e5e5-4608-800b-99a26817c677',
+    ('11111111-1111-1111-1111-111111111111',
      '1234825f-a0f9-4fbd-a875-6551c30ea4ca',
      'coordenador',
      'active');
@@ -110,8 +110,8 @@ BEGIN
      status_before, status_after, reason, metadata)
   VALUES
     ('1234825f-a0f9-4fbd-a875-6551c30ea4ca',
-     'd6710372-e5e5-4608-800b-99a26817c677',
-     'd6710372-e5e5-4608-800b-99a26817c677',
+     '11111111-1111-1111-1111-111111111111',
+     '11111111-1111-1111-1111-111111111111',
      'promoted_to_coordenador',
      'coordenador',
      'absent',

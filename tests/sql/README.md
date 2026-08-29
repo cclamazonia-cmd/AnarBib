@@ -36,14 +36,29 @@ Tests d'acceptation des wrappers `api.*` créés au paquet 19 + helper `fn_check
 - Rejet `ownership` : lecteur agit sur emprunt d'autrui
 - Happy path : wrapper passe les contrôles et délègue à la `fn_v2_*`
 
-**Fixtures (UUIDs BLMF, vérifiés le 11/05/2026)** :
+**Fixtures — personas synthétiques fournies par `supabase/seed.sql`** :
 
-| Profil | UUID | Rôle BLMF |
+| Persona | UUID | Rôle BLMF |
 |---|---|---|
-| Xavier (staff) | `d6710372-e5e5-4608-800b-99a26817c677` | `administrador`+`coordenador` |
-| Lívia (lecteur) | `366cdc4e-10e0-44ad-8554-a444bcf9607a` | `reader` |
-| Arthur (lecteur) | `614d887d-4e8d-401d-a208-77c56a1cd5ea` | `reader` |
-| Patricia (sans rôle) | `2a42b6bd-d159-4ee0-b66b-28a03062232b` | `null` |
+| Coordination de test | `11111111-1111-1111-1111-111111111111` | `coordenador` |
+| Lectrice A | `33333333-3333-3333-3333-333333333333` | `reader` |
+| Lecteur B | `44444444-4444-4444-4444-444444444444` | `reader` |
+| Compte sans rôle | `22222222-2222-2222-2222-222222222222` | *(aucun)* |
+
+> **Ces UUID sont synthétiques, et doivent le rester.** Jusqu'au 29/08/2026 ce
+> tableau portait quatre identifiants *relevés en production le 11/05/2026*,
+> avec le prénom de chaque personne en regard. Un UUID seul est pseudonyme ;
+> accompagné d'une table de correspondance, il identifie une personne réelle —
+> et trois tiers figuraient ainsi dans un dépôt public. **Une fixture relevée
+> en production est une donnée de production : elle en garde le statut une fois
+> recopiée dans un test.** Une suite qui a besoin d'un acteur le demande au
+> seed ; elle ne le prélève jamais dans la base réelle.
+>
+> Le rôle `administrador` a disparu de ce tableau avec le même correctif : ce
+> n'est pas un rôle de bibliothèque. Le CHECK de `user_library_memberships`
+> n'admet que `reader`, `librarian` et `coordenador` ; l'administration **du
+> réseau** vit dans `network_administrators` et n'a pas la main sur la
+> circulation locale.
 
 ### `paquet_cotisation_tests.sql` (18 tests + 1 best-effort)
 
@@ -105,7 +120,7 @@ Si le SQL global se termine sans erreur, **tous les tests sont passés**. Le blo
 
 ## Tests "SKIP"
 
-Certains tests vérifient un comportement qui dépend de l'état de la base (ex. "rejeter Arthur sur emprunt de Lívia" demande qu'un emprunt de Lívia existe). Si les fixtures manquent, le test affiche `NOTICE: SKIP : ...` et ne fait pas échouer la suite. Ce n'est pas idéal pour une CI stricte mais c'est pragmatique pour BLMF (une seule biblio, données réelles).
+Certains tests vérifient un comportement qui dépend de l'état de la base (ex. "rejeter le lecteur B sur emprunt de la lectrice A" demande qu'un emprunt de la lectrice A existe). Si les fixtures manquent, le test affiche `NOTICE: SKIP : ...` et ne fait pas échouer la suite. Ce n'est pas idéal pour une CI stricte mais c'est pragmatique pour BLMF (une seule biblio, données réelles).
 
 Pour rendre ces tests plus robustes : créer des fixtures dans une transaction au début (BEGIN; INSERT INTO emprestimos_v2 ...; tests; ROLLBACK;).
 

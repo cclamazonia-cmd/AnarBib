@@ -3,7 +3,7 @@
 **Date :** 2026-05-29
 **Chantier :** granularité (ex-EA-14) — backend 1a/1b/2/3a (prod, Woodpecker vert) + front 3b (conta lecteur) + Phase 4 (painel staff) + refonte conta (regroupement par emprunt).
 **Bibliothèque :** BLMF (`1234825f-a0f9-4fbd-a875-6551c30ea4ca`)
-**Lecteur de test :** Xavier (`d6710372-e5e5-4608-800b-99a26817c677`) — emprunteur de #50 et #51, donc testable des **deux** côtés (conta + painel).
+**Lecteur de test :** Xavier (`11111111-1111-1111-1111-111111111111`) — emprunteur de #50 et #51, donc testable des **deux** côtés (conta + painel).
 
 > ⚠️ **Premier vrai test d'exécution du backend.** Jusqu'ici : compilation `_synttest`, simulation de décision, court-circuit d'auth — **jamais** d'écriture réelle. `fn_v2_extend_core` boucle pour la première fois sur de vraies données ici.
 
