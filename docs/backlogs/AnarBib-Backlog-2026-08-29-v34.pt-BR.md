@@ -15,17 +15,17 @@
 - [O calendário restrito](#o-calendário-restrito)
 - [Dez regras pagas por um incidente](#dez-regras-pagas-por-um-incidente)
 - [Os canteiros](#os-canteiros)
-    - [A — Sustentabilidade coletiva](#a-sustentabilidade-coletiva) · 3
-    - [B — Banco de dados, segurança, RLS](#b-banco-de-dados-segurança-rls) · 12
-    - [C — Catalogação e dados documentais](#c-catalogação-e-dados-documentais) · 10
-    - [D — Periódicos, efêmeros, recursos digitais](#d-periódicos-efêmeros-recursos-digitais) · 6
-    - [E — Front, OPAC, i18n, acessibilidade](#e-front-opac-i18n-acessibilidade) · 11
-    - [F — E-mail e notificações](#f-e-mail-e-notificações) · 5
-    - [G — Rede, governança, federação](#g-rede-governança-federação) · 10
-    - [H — Interoperabilidade, tesauro, coleta](#h-interoperabilidade-tesauro-coleta) · 7
-    - [I — Auto-hospedagem, operação, backups, CI](#i-auto-hospedagem-operação-backups-ci) · 13
-    - [J — Documentação e corpus](#j-documentação-e-corpus) · 6
-    - [K — Caixa, comunicação, formação](#k-caixa-comunicação-formação) · 8
+    - [A — Sustentabilidade coletiva](#a--sustentabilidade-coletiva) · 3
+    - [B — Banco de dados, segurança, RLS](#b--banco-de-dados-segurança-rls) · 11
+    - [C — Catalogação e dados documentais](#c--catalogação-e-dados-documentais) · 10
+    - [D — Periódicos, efêmeros, recursos digitais](#d--periódicos-efêmeros-recursos-digitais) · 6
+    - [E — Front, OPAC, i18n, acessibilidade](#e--front-opac-i18n-acessibilidade) · 11
+    - [F — E-mail e notificações](#f--e-mail-e-notificações) · 5
+    - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
+    - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
+    - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 15
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
+    - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 8
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
 - [Manutenção deste documento](#manutenção-deste-documento)
@@ -66,7 +66,7 @@ Levantamento de **29 de agosto de 2026**. Banco de produção `uflwmikiyjfnikiph
 |---|---:|---|
 | Tabelas `public` | **187** | todas com RLS ativado, 279 policies em 174 tabelas |
 | Tabelas `ingest` | **10** | 8 estavam sem RLS na manhã de 29/08 — **as 10 estão desde a noite** (item **B1**, liquidado). O esquema nunca esteve exposto: nem `anon` nem `authenticated` tem `USAGE` nele |
-| Views `api` | **68** | 61 SECURITY INVOKER, **7 DEFINER** (item **B3**) |
+| Views `api` | **68** | **65 SECURITY INVOKER**, 3 DEFINER — les trois assumées et commentées `API-VUES-DEFINER` (item **B3**, soldé le 29/08) |
 | Funções aplicativas | **847** | das quais **664 SECURITY DEFINER**; nenhuma sem `search_path` fixado |
 | Migrações aplicadas | **221** | 224 arquivos no repositório; 3 datadas em 30/08 (item **I9**) |
 | Jobs `pg_cron` | **36** | **todos ativos**; 0 falha desde 17/08; 1 nunca executado (`oai-harvest-weekly`) |
@@ -181,6 +181,11 @@ Eis por que o v33 não podia mais servir. Estes desvios não são negligências:
 - *O que diz a documentação* — caminho executável, função `harvest-oai-pmh` implantada, cron semanal posto
 - *O que diz o banco ou o repositório* — O cron `anarbib-oai-harvest-weekly` **nunca rodou** (primeira ocorrência: terça-feira 04h20). `oai_harvest_state`: 9 inserções, 0 linha viva. O ponto de acesso OAI também nunca foi coletado de fora.
 
+**Nenhuma suíte de testes sabia simular uma chamada anônima**
+
+- *O que diz a documentação* — dezenas de testes anunciam «recusa `auth` (28000): chamada anônima» e passavam em verde
+- *O que diz o banco ou o repositório* — `set_config('request.jwt.claims', NULL)` não põe NULL mas a cadeia vazia, e os helpers `auth.uid()`, `auth.role()`, `auth.email()` do stub de CI convertiam em `jsonb` **antes** de neutralizá-la: `''::jsonb` levantava erro de sintaxe onde a função real do Supabase devolve NULL. Os testes provavam portanto uma pane do banco de ensaio, e sua salvaguarda (`SQLERRM LIKE '%uthenticat%'`) não podia corresponder. `auth.jwt()`, quatro linhas abaixo, tinha a forma correta desde sempre. **Corrigido em 29/08.**
+
 ### Número ou afirmação falsos
 
 **Os números de `CLAUDE.md`**
@@ -203,6 +208,11 @@ Eis por que o v33 não podia mais servir. Estes desvios não são negligências:
 - *O que diz a documentação* — uma afirma três perfis de biblioteca «verificados em prod»; a outra lista como «a implementar» a auditoria, as colunas de carência, os e-mails `team.*` e dois crons
 - *O que diz o banco ou o repositório* — A primeira é **falsa** (`BLT-test` não existe, a BTL está em `full_sigb`); a segunda **subestima** o que roda. Duas derivas de sentido inverso, levantadas no mesmo dia (itens **J3** e **J4**).
 
+**Identificadores de contas reais serviam de fixtures de teste**
+
+- *O que diz a documentação* — `tests/sql/README.md` apresentava-os como personas — «Xavier», «Lívia», «Arthur», «Patricia»
+- *O que diz o banco ou o repositório* — O mesmo README os datava: «UUIDs BLMF, **verificados em 11/05/2026**». Tinham sido colhidos na base real, e **três dos quatro correspondiam a linhas existentes em produção**. Os nomes, esses, eram fictícios — o que é a verdadeira armadilha: um rótulo inventado sobre uma linha real apaga a vigilância em vez de convocá-la. As suítes rodam em `BEGIN/ROLLBACK` sobre uma base descartável, então nada aconteceu, mas a convenção que tornava isso seguro não estava escrita em lugar nenhum. **Corrigido em 29/08** — 89 substituições em 12 arquivos, personas sintéticas fornecidas pelo seed. Falta tornar a regra mecânica: item **I14**.
+
 ### Nunca escrito em lugar nenhum
 
 **O esquema `ingest` não tinha RLS — mas nem por isso estava aberto**
@@ -223,7 +233,7 @@ Eis por que o v33 não podia mais servir. Estes desvios não são negligências:
 **Sete views do esquema `api` estão em SECURITY DEFINER**
 
 - *O que diz a documentação* — o hook `pre-commit` proíbe no entanto todo `CREATE VIEW` sem `security_invoker = true`
-- *O que diz o banco ou o repositório* — Sete views anteriores ao hook escapam: `collective_removal_proposals_current_v1`, `cooptation_proposals_current_v1`, `gazette_issues_public_v1`, `gazette_locales_public_v1`, `lettre_locales_public_v1`, `lettre_public_v1`, `library_email_identity`. Item **B3**.
+- *O que diz o banco ou o repositório* — Sete views anteriores ao hook escapavam: `collective_removal_proposals_current_v1`, `cooptation_proposals_current_v1`, `gazette_issues_public_v1`, `gazette_locales_public_v1`, `lettre_locales_public_v1`, `lettre_public_v1`, `library_email_identity`. **Encerrado em 29/08** (item **B3**): quatro passadas a `security_invoker`, as duas views de governança mantidas fora das policies mas dotadas na própria view da cláusula de visibilidade retomada da policy das tabelas de base, a sétima concedida a nenhum papel aplicativo. O hook só cobria `CREATE VIEW`: cobre agora também `CREATE OR REPLACE VIEW`, e uma suíte recusa qualquer view nova fora das duas derrogações nomeadas.
 
 ---
 
@@ -347,7 +357,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | | | | |
 |---|---|---|---|
 | **B2** | Triar as 142 funções `SECURITY DEFINER` do esquema `api` | `P1` | Aberto |
-| **B3** | Passar as sete views `api` que continuam em SECURITY DEFINER | `P1` | Aberto |
 | **B4** | Examinar as quatro tabelas com RLS sem policy que não são de trânsito | `P2` | Aberto |
 | **B5** | Resolver as nove policies que reavaliam `auth.*()` por linha | `P2` | Aberto |
 | **B6** | Reconciliar `config.toml` com as 48 funções realmente implantadas | `P1` | Aberto |
@@ -379,26 +388,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Faz-se por lotes. Um lote de vinte funções já é útil.
 
 *Remissões : `PLAN_DE_MARCHE §8` · `PLAN_DE_MARCHE règle 13.3` · `AUDIT_securite_fonctions_privees_2026-05-18`*
-
-#### B3 — Passar as sete views `api` que continuam em SECURITY DEFINER
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
-
-**Estado verificado em 29/08.** 61 das 68 views de `api` trazem `security_invoker = true`. Sete não têm: `collective_removal_proposals_current_v1`, `cooptation_proposals_current_v1`, `gazette_issues_public_v1`, `gazette_locales_public_v1`, `lettre_locales_public_v1`, `lettre_public_v1`, `library_email_identity`. O hook `pre-commit` proíbe no entanto desde maio toda view nova sem esse atributo.
-
-**O que é.** Para cada uma: verificar o que a view expõe, decidir se o atributo ausente é um esquecimento ou uma escolha, depois ou pôr `security_invoker = true` por migração, ou escrever por que ela deve permanecer em DEFINER.
-
-**Por que importa.** Uma view `security_invoker = false` contorna as policies RLS de suas tabelas de origem: é exatamente a mesma armadilha da policy ausente. `library_email_identity` é a mais preocupante — carrega a palavra «identity» e a palavra «email».
-
-**O que conta como terminado.**
-
-- As sete views têm um veredicto escrito e aplicado.
-- O hook `pre-commit` cobre também `CREATE OR REPLACE VIEW`.
-- Um teste SQL verifica que nenhuma view de `api` está em DEFINER sem derrogação nomeada.
-
-**Dependências.** Independente de **B2**, mesma família de risco.
-
-*Remissões : `Relevé du 29/08/2026` · `PLAN_DE_MARCHE règle 13.2`*
 
 #### B4 — Examinar as quatro tabelas com RLS sem policy que não são de trânsito
 
@@ -1671,13 +1660,15 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **I4** | Terminar a testemunha de proveniência dos backups | `P1` | Aberto |
 | **I5** | Fazer saber que um workflow falhou | `P1` | Aberto |
 | **I6** | Purgar os registros da sonda de saúde | `P2` | Aberto |
-| **I7** | Recolocar na integração contínua as seis suítes SQL esquecidas | `P1` | Aberto |
+| **I7** | Liquidar o que a reativação das seis suítes SQL trouxe à tona | `P1` | Em curso |
 | **I8** | Pôr `deploy/README.md` de acordo com o que foi executado | `P2` | Aberto |
 | **I9** | Corrigir as três migrações datadas no futuro | `P2` | Aberto |
 | **I10** | Limpar os rastros do Turnstile e os arquivos de refugo | `P2` | Aberto |
 | **I11** | Sair do `node:20`, em fim de manutenção | `P2` | Aberto |
 | **I12** | Automatizar a atualização do espelho frio | `P2` | Aberto |
 | **I13** | Terminar a migração para o novo motor de páginas | `P3` | Aberto |
+| **I14** | Proibir mecanicamente os identificadores de produção nos testes | `P1` | Aberto |
+| **I15** | Reescrever as três suítes de circulação anteriores à CI | `P2` | Aberto |
 
 #### I1 — Alinhar a imagem GoTrue com o estado real das migrações de autenticação
 
@@ -1798,25 +1789,25 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `Relevé du 29/08/2026` · `REGISTRE §38 OPS`*
 
-#### I7 — Recolocar na integração contínua as seis suítes SQL esquecidas
+#### I7 — Liquidar o que a reativação das seis suítes SQL trouxe à tona
 
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL
+`P1` Prioritário · Estado : **Em curso** · Carga : alguns dias · O que exige : SQL / PostgreSQL
 
-**Estado verificado em 29/08.** 43 suítes de testes SQL existem em `tests/sql/`. O manifesto `ci-suites.txt` só ativa **37**. As seis ausentes são as mais antigas: `paquet19_loan_wrappers_tests.sql` (32 KB), `paquet24_consulta_helpers_tests.sql`, `paquet25_consulta_wrappers_tests.sql` (25 KB), `paquet26_consulta_notification_triggers_tests.sql`, `paquetA1_cancel_note_required_tests.sql`, `paquetA_profils_tests.sql`.
+**Estado verificado em 29/08.** As seis suítes ausentes de `ci-suites.txt` voltaram ao manifesto em 29/08. Ficaram vermelhas, e era essa a informação buscada: **35 falhas, quatro causas, das quais só uma dizia respeito ao produto**. (1) O stub de autenticação não sabia simular o anônimo — `set_config('request.jwt.claims', NULL)` põe a cadeia vazia, e `auth.uid()/role()/email()` convertiam em `jsonb` antes de neutralizá-la, de modo que `''::jsonb` levantava erro de sintaxe onde a função real do Supabase devolve NULL: **nenhuma suíte do corpus testava a recusa de uma chamada anônima**. (2) O seed não continha nem leitor nem exemplar: uma dúzia de SKIP deixava todos os caminhos nominais da circulação sem prova, e `paquetA1` falhava já no setup. (3) Quatro testes estavam errados contra um produto que estava certo — `NULL` esperado de um predicado que recusa em `false`, dez helpers exigidos abertos a `anon` quando o endurecimento de julho fechou seis, `administrador` exigido como papel de biblioteca quando não o é, um helper canônico procurado sob um nome inexistente. (4) `paquetA` e `paquetA1` terminavam com um `SELECT` de uma cadeia **constante** anunciando «15/15 testes passam», impressa mesmo após uma falha; `paquet25` passava 28/28 e era contada vermelha por falta de balanço à convenção.
 
-**O que é.** Reexecutá-las uma a uma, reparar as que falham, e recolocá-las no manifesto. Se uma estiver obsoleta, suprimi-la em vez de deixá-la no lugar sem execução.
+**O que é.** O stub, o seed, os quatro testes e os três balanços estão corrigidos e enviados. Falta confirmar uma execução verde de ponta a ponta, e depois decidir a sorte dos onze SKIP restantes de `paquet19` — escrever os caminhos nominais que descrevem, ou dizer por que ficarão fora da CI.
 
-**Por que importa.** São precisamente as suítes que cobrem os empréstimos e as consultas — o coração da circulação. Uma suíte presente mas não executada é pior que uma suíte ausente: dá a impressão de que o domínio está coberto.
+**Por que importa.** Uma suíte presente mas não executada é pior que uma suíte ausente: dá a impressão de que o domínio está coberto. E o que a reativação mostrou vale além destas seis suítes — era o **banco de ensaio** que não sabia produzir uma chamada anônima nem um empréstimo, não o produto que estava quebrado.
 
 **O que conta como terminado.**
 
-- `ci-suites.txt` lista 43 suítes, ou menos com as supressões justificadas.
-- O arnês passa em verde com o conjunto.
-- Colocar também o stub `storage` ausente ao lado dos stubs `auth` e `vault` — sem ele, toda migração que toca `storage.*` precisa se guardar sozinha.
+- `ci-suites.txt` lista as 45 suítes e o arnês passa em verde de ponta a ponta.
+- Os onze SKIP de `paquet19` têm veredicto escrito: escritos, ou justificados.
+- O stub `storage` está posto ao lado dos stubs `auth` e `vault`. **Feito** — visível no log de CI.
 
 **Dependências.** Nenhuma.
 
-*Remissões : `Relevé du 29/08/2026` · `PLAN_DE_MARCHE §8 §9`*
+*Remissões : `Relevé du 29/08/2026` · `Journaux de CI sql-tests du 29/08/2026` · `PLAN_DE_MARCHE §8 §9`*
 
 #### I8 — Pôr `deploy/README.md` de acordo com o que foi executado
 
@@ -1936,6 +1927,46 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 
 *Remissões : `PLAN_migration_git_pages_2026-08-19` · `RUNBOOK_exploitation_v0.3`*
 
+#### I14 — Proibir mecanicamente os identificadores de produção nos testes
+
+`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : SQL / PostgreSQL, PowerShell (hooks Windows)
+
+**Estado verificado em 29/08.** Três suítes designavam seus atores por UUID **colhidos na base real** em 11/05/2026, e `tests/sql/README.md` dava a tabela de correspondência. Três dos quatro correspondiam a linhas existentes em produção. Corrigido em 29/08 — 89 substituições em 12 arquivos, personas sintéticas fornecidas pelo seed — mas **nada impede que recomece**: a regra hoje só vive num quadro do README.
+
+**O que é.** Acrescentar uma sexta regra bloqueante ao hook `pre-commit`: em `tests/sql/`, todo UUID fora de uma lista branca sintética é recusado. Uma dezena de linhas de PowerShell.
+
+**Por que importa.** A verdadeira armadilha não era a exposição, era o **rótulo**. O README chamava «Patricia» uma linha bem real: quem lê pensa manipular uma fixture. As suítes rodam em `BEGIN/ROLLBACK` sobre uma base descartável, então nada aconteceu — mas a convenção que tornava isso seguro não estava escrita em lugar nenhum. Um rótulo fictício sobre uma linha real apaga a vigilância em vez de convocá-la.
+
+**O que conta como terminado.**
+
+- O hook recusa um UUID não sintético acrescentado a `tests/sql/`.
+- A lista branca é a do seed, e é citada a partir do seed em vez de recopiada.
+- A regra é levada ao REGISTRO: uma fixture colhida em produção é um dado de produção.
+
+**Dependências.** Nenhuma. Assenta no hook existente, que já traz cinco regras bloqueantes.
+
+*Remissões : `Constat du 29/08/2026` · `tests/sql/README.md` · `.githooks/pre-commit.ps1`*
+
+#### I15 — Reescrever as três suítes de circulação anteriores à CI
+
+`P2` Corrente · Estado : **Aberto** · Carga : várias semanas · O que exige : SQL / PostgreSQL
+
+**Estado verificado em 29/08.** `paquet19`, `paquet24` e `paquet25` são artefatos escritos para o SQL Editor, antes de a CI existir. Trazem todas as marcas disso: onze SKIP só em `paquet19`, fixtures outrora colhidas em produção, balanços heterogêneos — uma delas só dizia seu sucesso em `NOTICE` —, e guardas que reconhecem um erro procurando uma subcadeia na mensagem em vez do seu código.
+
+**O que é.** Retomá-las no modelo das suítes recentes: atores pedidos ao seed, balanço à convenção, um erro reconhecido pelo seu código. Escrever os caminhos nominais que os SKIP descrevem, agora que o seed fornece um exemplar.
+
+**Por que importa.** Cobrem o coração da circulação — empréstimos e consultas. Remendá-las permitiu saber o que escondiam; remendá-las de novo seria manter uma rede cujos furos já conhecemos. Uma guarda que reconhece um erro por uma subcadeia cala-se no dia em que a mensagem muda de língua.
+
+**O que conta como terminado.**
+
+- As três suítes não trazem mais SKIP injustificado.
+- Cada guarda de erro testa um código, não uma frase.
+- Os três balanços seguem a convenção `NOME OK : N/N`.
+
+**Dependências.** Depende de **I7** (a execução verde de referência) e do seed enriquecido, já no lugar.
+
+*Remissões : `Journaux de CI sql-tests du 29/08/2026` · `tests/sql/paquet19_loan_wrappers_tests.sql`*
+
 ---
 
 ### J — Documentação e corpus
@@ -1948,7 +1979,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 | **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
 | **J3** | Corrigir as três afirmações falsas da spec das consultas | `P1` | Aberto |
 | **J4** | Reescrever a seção 14 da spec de governança dos papéis | `P1` | Aberto |
-| **J5** | Resolver as incoerências do corpus documental | `P2` | Aberto |
 | **J6** | Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria | `P2` | Aberto |
 
 #### J1 — Atualizar os números de `CLAUDE.md` e do `README.md`
@@ -2028,28 +2058,6 @@ Estas regras não são preferências. Cada uma foi paga por um incidente cujo ra
 **Dependências.** Nenhuma.
 
 *Remissões : `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §2` · `REGISTRE §41 GOUV`*
-
-#### J5 — Resolver as incoerências do corpus documental
-
-`P2` Corrente · Estado : **Aberto** · Carga : alguns dias · O que exige : nenhuma competência técnica
-
-**Estado verificado em 29/08.** Uma releitura do corpus levantou umas vinte contradições internas. As mais estruturantes: **duas seções `MAP` no REGISTRO** com vereditos inversos e sem remissão de uma à outra; **duas seções numeradas §17** (`IMP` e `PRIV`); três versões declaradas do REGISTRO (v0.1, v0.2, v0.3) conforme o índice consultado; `OAI-1` a `OAI-9` anunciados «a inscrever aqui» e nunca inscritos; **sete specs presentes em disco e referenciadas por nenhum índice**; e o índice geral que ainda designa o Woodpecker como cadeia de implantação onde o REGISTRO diz Forgejo desde 11/06.
-
-**O que é.** Uma passagem de higiene, por ordem de gravidade: as colisões de número e de seção no REGISTRO primeiro, depois as versões declaradas, depois as sete specs órfãs, depois as remissões vencidas.
-
-**Por que importa.** O REGISTRO faz fé: está escrito na regra de precedência, e essa regra é o que permite a alguém decidir sem perguntar. Um registro que traz duas §17 e duas seções `MAP` contraditórias não pode fazer fé nesses pontos precisos. É um defeito na única coisa que não tem direito a tê-los.
-
-**O que conta como terminado.**
-
-- As colisões de seção estão resolvidas, respeitando `#HYG-REG-1`: **não se renumera o normativo já inscrito**, as seções novas tomam os números seguintes.
-- A §2 `MAP` traz uma remissão à §34.
-- As sete specs órfãs estão referenciadas ou arquivadas.
-- As remissões ao Woodpecker estão corrigidas em `docs/specs/INDEX.md` e `CONTRIBUTING.md`.
-- Os dois identificadores citados mas ausentes da tabela das doutrinas — `DOC-COLLECTIVE-1` e `USER-EMAIL-1` — estão inscritos ou retirados.
-
-**Dependências.** Nenhuma. **Entrada sem competência técnica**, mas que exige paciência.
-
-*Remissões : `docs/specs/REGISTRE_decisions.md` · `docs/INDEX.md` · `docs/specs/INDEX.md`*
 
 #### J6 — Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria
 
@@ -2277,6 +2285,8 @@ Estas entradas constavam no v33, em `ETAT-AVANCEMENT-multisessions`, em `ETAT-la
 | A5 | Configuração git com dois URLs de push | **Já corrigido.** Constatado em 29/08 em `.git/config`: `origin` traz um único URL de push (Codeberg) e o GitHub é um remote nomeado à parte. A correção prevista após os quatro incidentes de 19/08 foi aplicada. Não há mais alias `git publish-app`: empurra-se explicitamente para os dois remotes. |
 | B1 | Oito tabelas do esquema `ingest` sem RLS | **Entregue em 29/08** — migração `20260830140000_ingest_ne_depend_plus_d_un_grant`, suíte `ingest_ferme_tests.sql` (7 testes) no manifesto, hook `pre-commit` estendido a `ingest`. Verificado no banco após a implantação: 10 tabelas sob RLS, nenhuma em FORCE, as 2 172 linhas de staging e os 2 084 vínculos intactos. **Mas a ficha errava no essencial**: `anon` e `authenticated` nunca tiveram `USAGE` nesse esquema, portanto nenhuma falha estava aberta. O pacote é um segundo ferrolho, não uma correção. |
 | A4 | Uma porta de entrada para quem quer ajudar sem programar | **Entregue em 29/08** — `AIDER.md` na raiz, em francês, português e inglês: sete entradas, cada uma com seu identificador de backlog, o que exige, o que traz e **o número do dia**. É o que a página `/colaborar` do site não faz, e com razão: ela é genérica e intemporal. Dois erros de `CONTRIBUTING.md` corrigidos de passagem — remetia a `specs/REGISTRE_decisions.md`, caminho inexistente (o arquivo está em `docs/specs/`), duas vezes, em francês e em inglês; e ainda anunciava o Woodpecker. |
+| B3 | As sete views `api` que continuavam fora das policies | Encerrado em 29/08 (migração `20260830160000`, em base). As quatro views gazeta/carta passam a `security_invoker`. As duas views de governança permanecem voluntariamente fora das policies — em invoker, o join em `profiles` devolveria NULL a quem administra e precisa decidir — e trazem agora na própria view a cláusula de visibilidade retomada da policy das tabelas de base. `library_email_identity` não é concedida a nenhum papel aplicativo. Suíte `vues_api_definer_tests.sql`, 5 testes, entre eles uma salvaguarda que recusa qualquer view NOVA fora das duas derrogações nomeadas. Estado verificado: 65 views em invoker, 3 restantes todas comentadas `API-VUES-DEFINER`. |
+| J5 | As incoerências do corpus documental | Encerrado em 29/08. `PRIV` deixa a §17 que dividia com `IMP` e passa a §42 sem renumerar o normativo já inscrito (`#HYG-REG-1`); a §2 `MAP` traz sua remissão à §34; as sete specs órfãs estão referenciadas em `docs/specs/INDEX.md`; Woodpecker corrigido para Forgejo Actions; os números de `docs/INDEX.md` repostos no real (970 linhas, 44 seções, 42 specs, 10 locales). E os dois identificadores citados desde junho sem nunca constarem da tabela das doutrinas — `DOC-COLLECTIVE-1`, `USER-EMAIL-1` — estão nela inscritos, o segundo após verificação do trigger em base. REGISTRO em v0.5. |
 
 ---
 

@@ -89,7 +89,14 @@ function markdown(k) {
   p(`- [${t.chantiers}](#${slug(t.chantiers)})`);
   D.domains.forEach((d) => {
     const n = byDomain(d.key).length;
-    p(`    - [${d.key} — ${L(d.label, k)}](#${slug(d.key + '-' + L(d.label, k))}) · ${n}`);
+    // L'ancre se calcule sur le TITRE REEL, pas sur une recomposition : le
+    // titre porte un tiret cadratin (« B — Base de donnees »), que slug()
+    // retire en laissant les deux espaces qui l'entouraient -- donc un DOUBLE
+    // tiret dans l'ancre. La recomposition `key + '-' + label` n'en produisait
+    // qu'un seul, et les onze liens de domaine du sommaire ne pointaient nulle
+    // part. Corrige le 29/08/2026 : une ancre se derive de son titre.
+    const titreDom = `${d.key} — ${L(d.label, k)}`;
+    p(`    - [${titreDom}](#${slug(titreDom)}) · ${n}`);
   });
   [t.clotures, t.nonouvert, t.maintenance].forEach((s) => p(`- [${s}](#${slug(s)})`));
   p();
