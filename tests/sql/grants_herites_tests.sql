@@ -101,6 +101,50 @@ BEGIN
     v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM);
   END;
 
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T6 aucune VUE de public n''est une cible d''ecriture pour anon/authenticated';
+  -- Le defaut du schema redonne INSERT/UPDATE/DELETE a chaque relation neuve,
+  -- vues comprises, et on ne peut PAS le corriger a la source : `ALTER DEFAULT
+  -- PRIVILEGES ... ON TABLES` ne distingue pas les tables des vues, et ces
+  -- droits sur les TABLES sont exactement ce qui fait marcher l'API. Cet
+  -- invariant ne peut donc vivre que dans un controle — celui-ci.
+  BEGIN
+    SELECT count(*), coalesce(string_agg(DISTINCT g.table_name, ', ' ORDER BY g.table_name), '')
+      INTO v_n, v_txt
+      FROM information_schema.role_table_grants g
+     WHERE g.table_schema = 'public'
+       AND g.grantee IN ('anon', 'authenticated')
+       AND g.privilege_type IN ('INSERT', 'UPDATE', 'DELETE')
+       AND EXISTS (SELECT 1 FROM pg_views v
+                    WHERE v.schemaname = 'public' AND v.viewname = g.table_name);
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' -> '||left(v_txt, 200)); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
+  -- ─────────────────────────────────────────────────────────────────
+  v_t := 'T7 aucune vue SANS security_invoker n''est lisible par anon/authenticated';
+  -- C'est LA classe dangereuse, et elle ne se confond pas avec T6 : sans
+  -- security_invoker, une vue s'execute avec les droits de son proprietaire, donc
+  -- la RLS des tables de base est CONTOURNEE pour qui peut la lire. Au 30/08 les
+  -- 5 vues concernees (listes de travail dedoublonnage, Terra Livre) ne sont
+  -- accordees a personne : l'invariant tient, et c'est lui qu'il faut garder —
+  -- pas « toutes les vues en security_invoker », qui forcerait des changements
+  -- sans objet sur des vues internes.
+  BEGIN
+    SELECT count(*), coalesce(string_agg(DISTINCT c.relname, ', ' ORDER BY c.relname), '')
+      INTO v_n, v_txt
+      FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+     WHERE n.nspname = 'public' AND c.relkind = 'v'
+       AND coalesce((SELECT option_value FROM pg_options_to_table(c.reloptions)
+                      WHERE option_name = 'security_invoker'), 'false') <> 'true'
+       AND EXISTS (SELECT 1 FROM information_schema.role_table_grants g
+                    WHERE g.table_schema = 'public' AND g.table_name = c.relname
+                      AND g.grantee IN ('anon', 'authenticated')
+                      AND g.privilege_type = 'SELECT');
+    IF v_n = 0 THEN v_passed := v_passed+1;
+    ELSE v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||v_n||' -> '||left(v_txt, 200)); END IF;
+  EXCEPTION WHEN OTHERS THEN v_failed := v_failed+1; v_failures := v_failures||(v_t||' : '||SQLERRM); END;
+
   IF v_failed = 0 THEN
     RAISE EXCEPTION 'GRANTS-HERITES OK : %/% tests passés', v_passed, (v_passed+v_failed);
   ELSE
