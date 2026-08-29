@@ -378,27 +378,57 @@ BEGIN
 END $$;
 
 -- ============================================================
--- TEST 15 — GRANTs sur helpers : anon peut executer
+-- TEST 15 — Partage des helpers entre anon et authenticated
 -- ============================================================
+-- Ce test exigeait les DIX helpers ouverts a `anon`. Le durcissement du
+-- 02/07/2026 (migration 20260702103557, advisor Supabase 0028) a retire `anon`
+-- de six d'entre eux : le test reclamait donc plus d'exposition que la doctrine
+-- n'en veut, et rougissait sur une amelioration.
+--
+-- La ligne de partage est la meme qu'au TEST 13, et elle est bonne :
+--   * LIRE UN MODE est public. Une visiteuse non connectee doit pouvoir savoir
+--     si une bibliotheque publie son catalogue pour que sa page s'affiche.
+--   * JUGER UN DROIT ne l'est pas. Les six predicats restent `authenticated`.
+-- Le test garde desormais ce partage dans les deux sens : il rougira aussi bien
+-- si l'on referme un lecteur de mode que si l'on rouvre un predicat a `anon`.
+-- Reecrit le 29/08/2026 (backlog v34, item I7).
 DO $$
 DECLARE
-  v_count int;
-BEGIN
-  SELECT count(*) INTO v_count
-    FROM information_schema.routine_privileges
-    WHERE routine_schema = 'public'
-      AND routine_name IN ('fn_library_catalog_mode', 'fn_library_circulation_mode',
-                           'fn_library_network_mode', 'fn_library_governance_mode',
-                           'fn_library_has_circulation', 'fn_library_has_full_sigb',
+  c_modes  text[] := ARRAY['fn_library_catalog_mode', 'fn_library_circulation_mode',
+                           'fn_library_network_mode',  'fn_library_governance_mode'];
+  c_predic text[] := ARRAY['fn_library_has_circulation', 'fn_library_has_full_sigb',
                            'fn_library_publishes_catalog', 'fn_library_is_federated',
-                           'fn_library_uses_governance', 'fn_library_has_staff_roles')
-      AND grantee = 'anon'
-      AND privilege_type = 'EXECUTE';
-  
-  IF v_count < 10 THEN
-    RAISE EXCEPTION 'TEST 15 FAILED : attendu 10 GRANT EXECUTE pour anon, trouve %', v_count;
+                           'fn_library_uses_governance', 'fn_library_has_staff_roles'];
+  v_txt text;
+BEGIN
+  SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
+    FROM unnest(c_modes) AS nom
+   WHERE NOT EXISTS (SELECT 1 FROM information_schema.routine_privileges
+                      WHERE routine_schema = 'public' AND routine_name = nom
+                        AND grantee = 'anon' AND privilege_type = 'EXECUTE');
+  IF v_txt IS NOT NULL THEN
+    RAISE EXCEPTION 'TEST 15.1 FAILED : lecteur(s) de mode fermes a anon -> % (la page publique d''une bibliotheque ne peut plus se rendre)', v_txt;
   END IF;
-  RAISE NOTICE 'TEST 15 OK : 10 helpers ont GRANT EXECUTE TO anon';
+
+  SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
+    FROM unnest(c_predic) AS nom
+   WHERE EXISTS (SELECT 1 FROM information_schema.routine_privileges
+                  WHERE routine_schema = 'public' AND routine_name = nom
+                    AND grantee = 'anon' AND privilege_type = 'EXECUTE');
+  IF v_txt IS NOT NULL THEN
+    RAISE EXCEPTION 'TEST 15.2 FAILED : predicat(s) de droit rouverts a anon -> % (regression du durcissement du 02/07/2026)', v_txt;
+  END IF;
+
+  SELECT string_agg(nom, ', ' ORDER BY nom) INTO v_txt
+    FROM unnest(c_modes || c_predic) AS nom
+   WHERE NOT EXISTS (SELECT 1 FROM information_schema.routine_privileges
+                      WHERE routine_schema = 'public' AND routine_name = nom
+                        AND grantee = 'authenticated' AND privilege_type = 'EXECUTE');
+  IF v_txt IS NOT NULL THEN
+    RAISE EXCEPTION 'TEST 15.3 FAILED : helper(s) fermes a authenticated -> %', v_txt;
+  END IF;
+
+  RAISE NOTICE 'TEST 15 OK : 4 lecteurs de mode ouverts a anon, 6 predicats reserves a authenticated';
 END $$;
 
 -- ============================================================

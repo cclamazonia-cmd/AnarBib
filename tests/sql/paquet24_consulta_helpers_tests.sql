@@ -59,8 +59,15 @@ BEGIN
     v_failures := array_append(v_failures, 'A.2 staff_em_preparacao_to_consulta_agendada');
   END IF;
 
-  -- A.3 staff administrador : consulta_agendada -> consulta_realizada
-  IF public.fn_check_consulta_transition('consulta_agendada', 'consulta_realizada', 'administrador') = true THEN
+  -- A.3 staff local : consulta_agendada -> consulta_realizada
+  -- Corrige le 29/08/2026 (backlog v34, item I7). Ce test passait
+  -- 'administrador' et rougissait. Or `administrador` n'est pas un role de
+  -- bibliotheque : le CHECK de user_library_memberships n'admet que reader,
+  -- librarian et coordenador ; l'administration DU RESEAU vit dans
+  -- network_administrators. Le helper a donc raison de le refuser, et le refus
+  -- merite d'etre teste pour lui-meme plutot que d'etre pris pour une panne.
+  IF public.fn_check_consulta_transition('consulta_agendada', 'consulta_realizada', 'coordenador') = true
+     AND public.fn_check_consulta_transition('consulta_agendada', 'consulta_realizada', 'administrador') = false THEN
     v_passed := v_passed + 1;
   ELSE
     v_failed := v_failed + 1;

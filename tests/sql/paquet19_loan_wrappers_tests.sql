@@ -93,11 +93,19 @@ BEGIN
     ELSE v_failed := v_failed + 1; v_failures := v_failures || v_test_name; END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END;
 
-  v_test_name := '1.08 helper renew par staff (paquet 19 v2)';
+  -- `administrador` a ete retire de ce test le 29/08/2026 (backlog v34, item I7).
+  -- Ce n'est pas un role de bibliotheque : le CHECK de user_library_memberships
+  -- n'admet que reader, librarian et coordenador. `administrador` designe
+  -- l'administration DU RESEAU, qui vit dans network_administrators. Le helper
+  -- a donc raison de le refuser -- une administratrice de reseau n'a pas la main
+  -- sur la circulation d'une bibliotheque locale, et c'est tout le principe.
+  -- Le test encodait un modele de roles anterieur.
+  v_test_name := '1.08 helper renew par staff local, pas par l''admin reseau';
   BEGIN
     IF public.fn_check_loan_action('renew_as_reader', 'aberto', 'coordenador')
        AND public.fn_check_loan_action('renew_as_reader', 'aberto', 'librarian')
-       AND public.fn_check_loan_action('renew_as_reader', 'aberto', 'administrador') THEN v_passed := v_passed + 1;
+       AND NOT public.fn_check_loan_action('renew_as_reader', 'aberto', 'administrador')
+       AND NOT public.fn_check_loan_action('renew_as_reader', 'aberto', 'reader') THEN v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1; v_failures := v_failures || v_test_name; END IF;
   EXCEPTION WHEN OTHERS THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END;
 
