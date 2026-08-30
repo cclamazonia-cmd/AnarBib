@@ -2,17 +2,19 @@
 //
 // CHEMIN DÉPÔT : src/tests/notify-internal-task-signature.test.js
 //
-// `notify-internal-task` ne partage pas son code d'envoi avec le reste du
-// réseau : elle tourne sur une copie privée de la pile courriel
-// (supabase/functions/notify-internal-task/_shared/, 9 fichiers d'infrastructure
-// dupliqués, ~694 lignes d'écart avec le canonique — item F6 du backlog).
+// `notify-internal-task` a tourné jusqu'au 30/08/2026 sur une copie privée de
+// TOUTE la pile courriel : 9 fichiers d'infrastructure dupliqués, ~694 lignes
+// d'écart avec le tronc, gelés depuis le premier commit du dépôt (item F6).
+// Cette copie a disparu — la fonction lit désormais `_shared/`, comme les 47
+// autres. Ce test garde ce que la divergence avait coûté, pour que la
+// réunification ne se défasse pas en silence.
 //
-// Cette copie était restée à une version antérieure au chantier i18n layout :
-// elle ne lisait que `signature_short`, le champ texte simple, et son
+// La copie était restée à une version antérieure au chantier i18n layout : elle
+// ne lisait que `signature_short`, le champ texte simple, et son
 // `resolveMailRouting` n'acceptait même pas de locale. La BLMF ayant sa
 // signature courte renseignée en six langues, ses avis de tâche interne
-// partaient signés « Equipe da BLMF » à tout le monde, quand tous ses autres
-// courriels disaient « L'équipe de la BLMF » à qui lit en français.
+// seraient partis signés « Equipe da BLMF » à tout le monde, quand tous ses
+// autres courriels disent « L'équipe de la BLMF » à qui lit en français.
 //
 // Une divergence de ce genre ne se voit pas : le message part, il est
 // simplement signé dans la mauvaise langue, et personne ne compare deux
@@ -29,7 +31,11 @@ import { readFileSync } from 'node:fs';
 import { transformSync } from 'esbuild';
 
 const SRC = new URL(
-  '../../supabase/functions/notify-internal-task/_shared/context/library-mail-routing.ts',
+  '../../supabase/functions/_shared/context/library-mail-routing.ts',
+  import.meta.url,
+);
+const STRINGS = new URL(
+  '../../supabase/functions/_shared/i18n/task-mail-strings.ts',
   import.meta.url,
 );
 const CODE = transformSync(readFileSync(SRC, 'utf8'), {
@@ -48,6 +54,12 @@ function charger() {
       replaceBrandTokens: (t) => t,
       resolvedBrandName: (c) => c?.library_short_name || 'AnarBib',
       resolvedSubjectTag: (c) => c?.library_short_name || 'AnarBib',
+    };
+    // Le module du tronc résout le pied de page par défaut via tMail, là où la
+    // copie lisait une constante d'environnement. C'est l'une des différences
+    // que la réunification apporte, et le stub la rend visible.
+    if (spec.includes('i18n/mail-strings')) return {
+      tMail: (locale, cle) => `[${cle}]`,
     };
     throw new Error(`import inattendu : ${spec}`);
   };
@@ -95,13 +107,50 @@ describe('la signature de pied de page suit la langue du message', () => {
   it('une biblio sans signature retombe sur le pied de page par défaut', () => {
     const { resolveMailRouting } = charger();
     const sansRien = { library_short_name: 'BTL', channel_active: true };
-    expect(resolveMailRouting(sansRien, 'fr').footerText).toBe('Pied de page par défaut');
+    expect(resolveMailRouting(sansRien, 'fr').footerText).toBe('[layout.footerText]');
   });
 
   it('accepte une locale sans que la biblio ait de table i18n', () => {
     const { resolveMailRouting } = charger();
     const sansI18n = { library_short_name: 'MLEG', signature_short: 'Equipe MLEG', channel_active: true };
     expect(resolveMailRouting(sansI18n, 'fr').footerText).toBe('Equipe MLEG');
+  });
+});
+
+describe('le vocabulaire des statuts couvre ce que la base écrit', () => {
+  // `painel_internal_tasks.status` n'a AUCUNE contrainte CHECK et vaut
+  // 'pendente' par défaut ; le frontend filtre sur 'pendente'/'em_andamento' ;
+  // la table de libellés ne connaissait que 'aberta', 'a_fazer', etc. Le repli
+  // de taskStatusLabel rend la valeur brute : la première tâche créée aurait
+  // produit un courriel affichant « pendente » en dur, dans les dix langues.
+  //
+  // Ce test ne tranche pas la question de fond — un seul vocabulaire, avec une
+  // CHECK — qui reste ouverte à l'item F6. Il garde seulement que le libellé
+  // par défaut de la base est traduit partout.
+  function chargerStrings() {
+    const code = transformSync(readFileSync(STRINGS, 'utf8'), {
+      loader: 'ts', format: 'cjs', target: 'es2022',
+    }).code;
+    const mod = { exports: {} };
+    new Function('require', 'module', 'exports', code)(() => ({}), mod, mod.exports);
+    return mod.exports;
+  }
+
+  const LOCALES = ['pt-BR', 'fr', 'es', 'en', 'it', 'de', 'ca', 'eo', 'nl', 'el'];
+
+  it("traduit le statut par défaut de la base dans les dix locales", () => {
+    const { taskStatusLabel } = chargerStrings();
+    for (const loc of LOCALES) {
+      const label = taskStatusLabel(loc, 'pendente');
+      expect(label, `locale ${loc}`).toBeTruthy();
+      expect(label, `locale ${loc} rend la valeur brute`).not.toBe('pendente');
+    }
+  });
+
+  it('garde les statuts déjà connus', () => {
+    const { taskStatusLabel } = chargerStrings();
+    expect(taskStatusLabel('fr', 'em_andamento')).toBe('En cours');
+    expect(taskStatusLabel('pt-BR', 'concluida')).toBe('Concluída');
   });
 });
 

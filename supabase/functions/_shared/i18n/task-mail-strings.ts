@@ -8,6 +8,7 @@ const TASK_STRINGS = {
   "pt-BR": {
     status: {
       aberta: "Aberta",
+      pendente: "Pendente",
       a_fazer: "A fazer",
       em_andamento: "Em andamento",
       bloqueada: "Bloqueada",
@@ -70,6 +71,7 @@ const TASK_STRINGS = {
   "fr": {
     status: {
       aberta: "Ouverte",
+      pendente: "En attente",
       a_fazer: "À faire",
       em_andamento: "En cours",
       bloqueada: "Bloquée",
@@ -132,6 +134,7 @@ const TASK_STRINGS = {
   "es": {
     status: {
       aberta: "Abierta",
+      pendente: "Pendiente",
       a_fazer: "Por hacer",
       em_andamento: "En curso",
       bloqueada: "Bloqueada",
@@ -194,6 +197,7 @@ const TASK_STRINGS = {
   "en": {
     status: {
       aberta: "Open",
+      pendente: "Pending",
       a_fazer: "To do",
       em_andamento: "In progress",
       bloqueada: "Blocked",
@@ -256,6 +260,7 @@ const TASK_STRINGS = {
   "it": {
     status: {
       aberta: "Aperta",
+      pendente: "In attesa",
       a_fazer: "Da fare",
       em_andamento: "In corso",
       bloqueada: "Bloccata",
@@ -318,6 +323,7 @@ const TASK_STRINGS = {
   "de": {
     status: {
       aberta: "Offen",
+      pendente: "Ausstehend",
       a_fazer: "Zu erledigen",
       em_andamento: "In Arbeit",
       bloqueada: "Blockiert",
@@ -380,6 +386,7 @@ const TASK_STRINGS = {
   "ca": {
     status: {
       aberta: "Oberta",
+      pendente: "Pendent",
       a_fazer: "Per fer",
       em_andamento: "En curs",
       bloqueada: "Bloquejada",
@@ -442,6 +449,7 @@ const TASK_STRINGS = {
   "eo": {
     status: {
       aberta: "Malfermita",
+      pendente: "Atendanta",
       a_fazer: "Farenda",
       em_andamento: "En progreso",
       bloqueada: "Blokita",
@@ -504,6 +512,7 @@ const TASK_STRINGS = {
   "nl": {
     status: {
       aberta: "Open",
+      pendente: "In afwachting",
       a_fazer: "Te doen",
       em_andamento: "Bezig",
       bloqueada: "Geblokkeerd",
@@ -568,6 +577,7 @@ const TASK_STRINGS = {
   "el": {
     status: {
       aberta: "Ανοιχτή",
+      pendente: "Σε αναμονή",
       a_fazer: "Προς εκτέλεση",
       em_andamento: "Σε εξέλιξη",
       bloqueada: "Μπλοκαρισμένη",
