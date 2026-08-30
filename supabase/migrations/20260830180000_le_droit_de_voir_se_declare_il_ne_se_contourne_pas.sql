@@ -1,6 +1,13 @@
 -- =====================================================================
 -- AnarBib -- Les deux vues de gouvernance passent sous les policies
 -- Date    : 2026-08-30  ·  Item B3 (reprise) ; advisor Supabase 0010
+--
+-- HORODATAGE. Ce fichier a d'abord porte le prefixe 20260830090000, deja pris
+-- par `un_lot_dit_ce_qu_il_contient`. `supabase db push` indexe par VERSION :
+-- voyant la version deja inscrite a `schema_migrations`, il a saute ce fichier
+-- SANS RIEN DIRE -- deploiement vert, migration jamais executee. Renomme en
+-- 180000, apres le dernier horodatage libre du jour. `DOC-DEPLOY-1` le dit :
+-- migrations horodatees UTC, VERIFIER avant de choisir.
 -- Ref     : migration 20260830160000 (paquet API-VUES-DEFINER, 29/08)
 --
 -- CE QUE CORRIGE CETTE MIGRATION, ET POURQUOI ELLE REVIENT SUR HIER.
@@ -146,17 +153,30 @@ DECLARE
   v_pol_vote int;
   v_txt      text;
 BEGIN
-  -- 4.1 Plus aucune vue de `api` hors policies, sauf library_email_identity
-  --     (accordee a aucun role applicatif, donc hors de portee).
+  -- 4.1 Les DEUX vues que cette migration touche sont sous les policies.
+  --
+  --     Volontairement borne a ces deux-la. La premiere version verifiait ici
+  --     un invariant GLOBAL -- « aucune vue de api hors des policies » -- et
+  --     c'etait une faute : la CI rejoue tout l'historique depuis zero, donc le
+  --     bloc d'une migration s'execute contre l'etat de la base A SA DATE, pas
+  --     contre l'etat final. Place trop tot dans la sequence, il a echoue en
+  --     denoncant quatre vues qu'une migration ULTERIEURE corrige. Une
+  --     assertion globale dans une migration est une bombe a retardement : elle
+  --     casse le jour ou quelqu'un ajoute une vue, des annees apres.
+  --
+  --     Regle : une migration verifie CE QU'ELLE FAIT ; l'invariant global est
+  --     l'affaire d'une suite de tests, qui tourne contre l'etat final
+  --     (`tests/sql/vues_api_definer_tests.sql`, T1).
   SELECT count(*), coalesce(string_agg(c.relname, ', ' ORDER BY c.relname), '')
     INTO v_definer, v_txt
     FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
    WHERE n.nspname = 'api' AND c.relkind = 'v'
-     AND c.relname <> 'library_email_identity'
+     AND c.relname IN ('cooptation_proposals_current_v1',
+                       'collective_removal_proposals_current_v1')
      AND coalesce((SELECT option_value FROM pg_options_to_table(c.reloptions)
                     WHERE option_name = 'security_invoker'), 'false') <> 'true';
   IF v_definer > 0 THEN
-    RAISE EXCEPTION 'ECHEC : % vue(s) de api hors des policies -> %', v_definer, v_txt;
+    RAISE EXCEPTION 'ECHEC : % vue(s) de gouvernance hors des policies -> %', v_definer, v_txt;
   END IF;
 
   -- 4.2 Les deux policies sont bien en place et PERMISSIVE (sans quoi elles
