@@ -5350,7 +5350,11 @@
         "library_notification_profiles.signature_short_i18n (BLMF, 6 langues)",
         "commit e6ec991a — import initial du dépôt, 21/08/2026",
         "src/tests/notify-internal-task-signature.test.js"
-      ]
+      ],
+      "verif": {
+        "fr": "30/08 — relevé fait fichier par fichier, après ouverture de l'item : 9 fichiers dupliqués et tous divergents, ~694 lignes, et **une seule divergence à effet observable** — la signature de pied de page non traduite, **refermée le soir même et gardée par 6 tests**. L'origine des copies n'a pas de réponse dans le dépôt : elles sont dans le premier commit. Ce qui reste est une décision de portée, pas une mesure.",
+        "pt": "30/08 — levantamento feito ficheiro a ficheiro, depois da abertura do item: 9 ficheiros duplicados e todos divergentes, ~694 linhas, e **uma única divergência com efeito observável** — a assinatura de rodapé não traduzida, **fechada na mesma noite e guardada por 6 testes**. A origem das cópias não tem resposta no repositório: estão no primeiro commit. O que resta é uma decisão de alcance, não uma medição."
+      }
     }
   ]
 }
