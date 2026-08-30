@@ -269,7 +269,14 @@ export default function BibliotecaPage() {
       setOpeningHours({ slots: Array.isArray(ohR.data?.slots) ? ohR.data.slots : [], public_note: ohR.data?.public_note || '' });
       setFichePublic({ contact_is_public: !!pcR.data?.is_public, hours_is_public: !!ohR.data?.is_public });
       setRegDocs(regR.data || []); setDocGov(dgR.data);
-      setMailChannel(mcR.data); setNotifPolicy(npR.data);
+      // CEINTURE-CANAL (30/08/2026) : `|| {}` et non `null`. Le bloc du canal est
+      // le SEUL endroit ou l on coupe les envois d une biblio ; conditionner son
+      // affichage a l existence de la ligne rendait le reglage inatteignable
+      // pour toute biblio qui n en avait pas (CIRA Marseille au 30/08). Une
+      // migration pose desormais l invariant cote base (trigger sur libraries),
+      // ceci en est la ceinture : l ecran fabrique les defauts et la RPC
+      // upsert_library_mail_channel cree la ligne a la premiere sauvegarde.
+      setMailChannel(mcR.data || {}); setNotifPolicy(npR.data);
       setMembershipRules(mrR.data || []);
       // Règles de dépôt de garantie (DEPOT-6) — co-chargées avec les cotisations.
       const { data: drData } = await supabase.from('library_deposit_rules')
@@ -464,7 +471,26 @@ export default function BibliotecaPage() {
       // couper, `delivery_mode` pour le transport), honore par transportDisabledReason
       // dans _shared/context/library-mail-routing.ts.
       if (commons) await supabase.from('library_commons').update({ display_name:commons.display_name, contact_email:commons.contact_email, reply_to_email:commons.reply_to_email }).eq('library_id', libraryId);
-      if (mailChannel) await supabase.from('library_mail_channels').update({ admin_notification_email:mailChannel.admin_notification_email, weekly_report_email:mailChannel.weekly_report_email, severe_alert_email:mailChannel.severe_alert_email, delivery_mode:mailChannel.delivery_mode||'platform_shared', active:mailChannel.active!==false }).eq('library_id', libraryId);
+      // La RPC remplace la ligne ENTIERE : on lui repasse les champs que cet
+      // ecran n edite pas (transport_state, transport_channel, last_tested_at),
+      // sans quoi une sauvegarde des adresses effacerait le resultat du dernier
+      // test de transport.
+      if (mailChannel) {
+        const { error: mcErr } = await supabase.rpc('upsert_library_mail_channel', {
+          p_library_id: libraryId,
+          p_channel: {
+            delivery_mode: mailChannel.delivery_mode || 'platform_shared',
+            admin_notification_email: mailChannel.admin_notification_email || null,
+            weekly_report_email: mailChannel.weekly_report_email || null,
+            severe_alert_email: mailChannel.severe_alert_email || null,
+            transport_state: mailChannel.transport_state || 'not_tested',
+            transport_channel: mailChannel.transport_channel || null,
+            last_tested_at: mailChannel.last_tested_at || null,
+            active: mailChannel.active !== false,
+          },
+        });
+        if (mcErr) throw mcErr;
+      }
       if (notifPolicy) {
         // PATCH 08/05/2026 paquet 3A : sauvegarde aussi les 2 paramètres de
         // négociation symétrique (toggle + timeout). Validation timeout côté
