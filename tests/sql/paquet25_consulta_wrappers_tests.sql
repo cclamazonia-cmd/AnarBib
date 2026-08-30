@@ -89,18 +89,28 @@ BEGIN
   -- ===================================================================
   -- SECTION B : api.create_consulta_local (5 tests)
   -- ===================================================================
-  -- En SQL Editor on tourne en service_role/postgres, donc auth.uid()
-  -- retourne NULL. Tous les appels passent par la garde "not_authenticated".
-  -- Pour les tests qui veulent verifier d'autres comportements, on simule
-  -- une session via set_config('request.jwt.claims', ...) + SET LOCAL ROLE.
+  -- Sans session, auth.uid() retourne NULL et tous les appels passent par la
+  -- garde `not_authenticated`. Pour verifier autre chose, on simule une
+  -- session via set_config('request.jwt.claims', ...) + SET LOCAL ROLE.
   --
-  -- ATTENTION : la simulation n'est pas parfaite. auth.uid() depend de
-  -- la fonction Supabase qui parse les claims. Sur Supabase managed,
-  -- ca peut ne pas fonctionner depuis le SQL Editor. Dans ce cas, les
-  -- tests B/C/D/E/F lèveront des exceptions "wrong" parce que auth.uid()
-  -- restera NULL malgre tout. Le bloc gere ce cas gracieusement en
-  -- marquant skipped si l'exception est 'not_authenticated' alors qu'on
-  -- attend autre chose.
+  -- CE QUI A CHANGE LE 30/08/2026 (item I15). Cette suite portait ici un
+  -- avertissement : « la simulation n'est pas parfaite [...] sur Supabase
+  -- managed, ca peut ne pas fonctionner depuis le SQL Editor ». Douze tests
+  -- traitaient donc `not_authenticated` comme un SKIP quand ils attendaient
+  -- autre chose. C'etait vrai avant la CI ; ca ne l'est plus depuis que
+  -- `_ci_setup_auth_stub.sql` installe les definitions REELLES des helpers
+  -- Supabase : le JWT simule pilote fidelement auth.uid() et la RLS.
+  --
+  -- Ces douze branches ont ete retirees, et pas seulement parce qu'elles
+  -- etaient devenues inutiles. Elles etaient DANGEREUSES : le bilan excluait
+  -- les skips de son denominateur. Si le stub d'auth regressait, les douze
+  -- tests seraient passes de PASSE a SKIP et la suite aurait annonce
+  -- « OK : 20/20 » au lieu de « OK : 32/32 ». Verte, plus courte, et muette
+  -- sur la panne. Le denominateur inclut desormais les skips.
+  --
+  -- Regle : dans un test qui a simule une session, `not_authenticated` est un
+  -- ECHEC. C'est la preuve que la simulation ne marche pas -- exactement ce
+  -- qu'on veut voir en rouge.
 
   -- B.1 not_authenticated quand aucune session
   BEGIN
@@ -134,9 +144,6 @@ BEGIN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%not_found%' OR v_err LIKE '%nenhum holding%' THEN
       v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'B.2 SKIPPED (jwt claims sim not effective in SQL Editor)');
     ELSE
       v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'B.2 wrong_exception: ' || v_err);
@@ -157,9 +164,6 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%not_found%' THEN v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'B.3 SKIPPED (jwt sim)');
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'B.3 wrong_exception: ' || v_err); END IF;
   END;
@@ -175,9 +179,12 @@ BEGIN
     v_failures := array_append(v_failures, 'B.4 should_have_raised');
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
-    -- Soit not_authenticated (auth.uid() NULL teste en premier),
-    -- soit p_user_id missing (si claims sim effective)
-    IF v_err LIKE '%not_authenticated%' OR v_err LIKE '%p_user_id%' OR v_err LIKE '%not_found%' THEN
+    -- `api.create_consulta_local` teste auth.uid() EN PREMIER et leve
+    -- `not_authenticated` (28000) ; `not_found: p_user_id manquant` ne vient
+    -- qu'ensuite. Les claims etant vides ici, il n'y a qu'une reponse juste.
+    -- La garde acceptait les trois : c'etait la couverture du doute d'avant
+    -- la CI, pas une alternative reelle.
+    IF v_err LIKE '%not_authenticated%' THEN
       v_passed := v_passed + 1;
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'B.4 wrong_exception: ' || v_err); END IF;
@@ -222,9 +229,6 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%not_found%' OR v_err LIKE '%line_nos%' THEN v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'C.2 SKIPPED (jwt sim)');
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'C.2 wrong_exception: ' || v_err); END IF;
   END;
@@ -240,9 +244,6 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%invalid_stage%' OR v_err LIKE '%target_stage%' THEN v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'C.3 SKIPPED (jwt sim)');
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'C.3 wrong_exception: ' || v_err); END IF;
   END;
@@ -258,9 +259,6 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%not_found%' THEN v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'C.4 SKIPPED (jwt sim)');
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'C.4 wrong_exception: ' || v_err); END IF;
   END;
@@ -295,9 +293,6 @@ BEGIN
       EXCEPTION WHEN OTHERS THEN
         GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
         IF v_err LIKE '%schedule_missing%' OR v_err LIKE '%scheduled_for%' THEN v_passed := v_passed + 1;
-        ELSIF v_err LIKE '%not_authenticated%' THEN
-          v_skipped := v_skipped + 1;
-          v_failures := array_append(v_failures, 'C.5 SKIPPED (jwt sim)');
         ELSE v_failed := v_failed + 1;
           v_failures := array_append(v_failures, 'C.5 wrong_exception: ' || v_err); END IF;
       END;
@@ -321,9 +316,6 @@ BEGIN
     EXCEPTION WHEN OTHERS THEN
       GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
       IF v_err LIKE '%invalid_stage%' THEN v_passed := v_passed + 1;
-      ELSIF v_err LIKE '%not_authenticated%' THEN
-        v_skipped := v_skipped + 1;
-        v_failures := array_append(v_failures, 'C.6 SKIPPED (jwt sim)');
       ELSE v_failed := v_failed + 1;
         v_failures := array_append(v_failures, 'C.6 wrong_exception: ' || v_err); END IF;
     END;
@@ -373,9 +365,6 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%invalid_stage%' OR v_err LIKE '%sim_quem_sabe%' THEN v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'D.2 SKIPPED (jwt sim)');
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'D.2 wrong_exception: ' || v_err); END IF;
   END;
@@ -390,9 +379,6 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%not_found%' THEN v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'D.3 SKIPPED (jwt sim)');
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'D.3 wrong_exception: ' || v_err); END IF;
   END;
@@ -424,9 +410,6 @@ BEGIN
     EXCEPTION WHEN OTHERS THEN
       GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
       IF v_err LIKE '%invalid_stage%' OR v_err LIKE '%consulta_agendada%' THEN v_passed := v_passed + 1;
-      ELSIF v_err LIKE '%not_authenticated%' OR v_err LIKE '%not_owner%' THEN
-        v_skipped := v_skipped + 1;
-        v_failures := array_append(v_failures, 'D.4 SKIPPED (jwt sim)');
       ELSE v_failed := v_failed + 1;
         v_failures := array_append(v_failures, 'D.4 wrong_exception: ' || v_err); END IF;
     END;
@@ -486,9 +469,6 @@ BEGIN
     EXCEPTION WHEN OTHERS THEN
       GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
       IF v_err LIKE '%not_owner%' THEN v_passed := v_passed + 1;
-      ELSIF v_err LIKE '%not_authenticated%' THEN
-        v_skipped := v_skipped + 1;
-        v_failures := array_append(v_failures, 'E.2 SKIPPED (jwt sim)');
       ELSE v_failed := v_failed + 1;
         v_failures := array_append(v_failures, 'E.2 wrong_exception: ' || v_err); END IF;
     END;
@@ -528,9 +508,6 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN
     GET STACKED DIAGNOSTICS v_err = MESSAGE_TEXT;
     IF v_err LIKE '%not_found%' THEN v_passed := v_passed + 1;
-    ELSIF v_err LIKE '%not_authenticated%' THEN
-      v_skipped := v_skipped + 1;
-      v_failures := array_append(v_failures, 'F.2 SKIPPED (jwt sim)');
     ELSE v_failed := v_failed + 1;
       v_failures := array_append(v_failures, 'F.2 wrong_exception: ' || v_err); END IF;
   END;
@@ -562,8 +539,12 @@ BEGIN
   -- une ligne « OK : N/N » ; ne la trouvant pas, il la classait rouge alors
   -- qu'elle passait 28/28. Une suite qui reussit doit le DIRE, pas se taire.
   -- Ajoute le 29/08/2026 (backlog v34, item I7).
+  -- Le denominateur inclut les skips (corrige le 30/08/2026, item I15) : sans
+  -- cela, un test qui bascule de PASSE a SKIP disparait des DEUX termes et la
+  -- suite reste verte en testant moins. Un skip doit se voir dans le chiffre,
+  -- pas seulement dans une note que personne ne lit.
   RAISE EXCEPTION 'CONSULTA-WRAPPERS OK : %/% tests passes (skipped: %)',
-    v_passed, v_passed + v_failed, v_skipped;
+    v_passed, v_passed + v_failed + v_skipped, v_skipped;
 END;
 $$;
 

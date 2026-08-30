@@ -28,6 +28,15 @@
 -- NOTE sur « emprunt inexistant » (29/08/2026, backlog v34, item I7).
 -- Les wrappers levent un CODE machine -- `loan_not_found` -- et non une phrase
 -- portugaise. Les gardes de 4.02, 5.02 et 8.03 ne cherchaient que
+-- SQLERRM PORTE LE MESSAGE, JAMAIS LE HINT (I15, 30/08/2026). Six gardes de
+-- cette suite cherchaient « seus proprios » dans SQLERRM. Ce texte est le HINT
+-- de `not_your_loan` ; SQLERRM vaut `not_your_loan`. Les six clauses etaient
+-- donc mortes -- trois sans consequence (une autre clause portait le test),
+-- deux qui rendaient toujours vraie une condition de la forme
+-- `SQLSTATE = '42501' AND SQLERRM NOT LIKE '%seus proprios%'`. Pour lire un
+-- hint il faut GET STACKED DIAGNOSTICS ... = PG_EXCEPTION_HINT. On teste
+-- desormais le code leve, qui EST le message.
+--
 -- '%nao encontrado%' : le trait de soulignement de `loan_not_found` suffisait a
 -- les faire manquer d'un caractere. Elles exigent desormais le code, EXACTEMENT,
 -- plutot que d'accepter les deux formes -- un « ou bien » dans une garde
@@ -56,8 +65,8 @@ DECLARE
   v_skips text[] := ARRAY[]::text[];
 
   v_test_emprestimo_id bigint;
-  v_livia_loan_id bigint;
-  v_xavier_loan_id bigint;
+  v_leitora_a_loan_id bigint;
+  v_coord_loan_id bigint;
   v_ctx record;
   v_test_name text;
 
@@ -229,9 +238,14 @@ BEGIN
     PERFORM api.create_loan_at_counter(c_leitora_a, ARRAY[99999999]::bigint[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : aurait du echouer dans fn DEFINER');
   EXCEPTION WHEN OTHERS THEN
-    IF SQLSTATE = '28000' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : auth a echoue : ' || SQLERRM);
+    -- On attend d'avoir traverse les gardes du wrapper (auth, role) et d'etre
+    -- refuse PAR LA FONCTION DEFINER, sur le holding inexistant. La garde
+    -- nommait les deux echecs interdits et comptait tout le reste comme un
+    -- succes : un plantage interne y passait. On exige desormais le message.
+    IF SQLERRM LIKE '%nao encontrada%' OR SQLERRM LIKE '%não encontrada%' THEN v_passed := v_passed + 1;
+    ELSIF SQLSTATE = '28000' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : auth a echoue : ' || SQLERRM);
     ELSIF SQLSTATE = '42501' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : role a echoue : ' || SQLERRM);
-    ELSE v_passed := v_passed + 1; END IF;
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : la fn DEFINER devait refuser le holding inexistant, elle a leve [' || SQLSTATE || '] ' || SQLERRM); END IF;
   END;
 
   v_test_name := '3.04 create rejette holdings vide';
@@ -241,8 +255,10 @@ BEGIN
     PERFORM api.create_loan_at_counter(c_leitora_a, ARRAY[]::bigint[]);
     v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : holdings vide doit etre rejete');
   EXCEPTION WHEN OTHERS THEN
-    IF SQLSTATE = '28000' OR SQLSTATE = '42501' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : aurait du atteindre fn DEFINER : ' || SQLERRM);
-    ELSE v_passed := v_passed + 1; END IF;
+    -- Message attendu : « Informe ao menos 1 holding. »
+    IF SQLERRM LIKE '%ao menos 1 holding%' THEN v_passed := v_passed + 1;
+    ELSIF SQLSTATE = '28000' OR SQLSTATE = '42501' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : aurait du atteindre fn DEFINER : ' || SQLERRM);
+    ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : refus attendu sur le tableau vide, obtenu [' || SQLSTATE || '] ' || SQLERRM); END IF;
   END;
 
   v_test_name := '3.05 create rejette le compte sans role BLMF';
@@ -481,17 +497,17 @@ BEGIN
 
   v_test_name := '6.03 renew cross-ownership lecteur B sur lectrice A';
   BEGIN
-    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
-    IF v_livia_loan_id IS NULL THEN
+    SELECT id INTO v_leitora_a_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
+    IF v_leitora_a_loan_id IS NULL THEN
       v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
-        PERFORM api.renew_my_loan(v_livia_loan_id);
+        PERFORM api.renew_my_loan(v_leitora_a_loan_id);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ECHEC CRITIQUE OWNERSHIP');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%loan_not_found%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
+        IF SQLERRM LIKE '%not_your_loan%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -499,39 +515,44 @@ BEGIN
 
   v_test_name := '6.04 renew coordination sur son emprunt (paquet 19 v2)';
   BEGIN
-    SELECT id INTO v_xavier_loan_id FROM public.emprestimos_v2 
+    SELECT id INTO v_coord_loan_id FROM public.emprestimos_v2 
       WHERE user_id = c_coord AND status_global IN ('aberto', 'parcialmente_devolvido') LIMIT 1;
-    IF v_xavier_loan_id IS NULL THEN
-      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : Xavier n''a aucun emprunt ouvert');
+    IF v_coord_loan_id IS NULL THEN
+      v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la coordination n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims', '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}', true);
-        PERFORM api.renew_my_loan(v_xavier_loan_id);
+        PERFORM api.renew_my_loan(v_coord_loan_id);
         v_passed := v_passed + 1;
       EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE = '28000' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Xavier doit passer auth : ' || SQLERRM);
-        ELSIF SQLSTATE = '42501' AND SQLERRM NOT LIKE '%seus proprios%' THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : Xavier doit pouvoir : ' || SQLERRM);
-        ELSE v_passed := v_passed + 1; END IF;
+        -- Ce test attend un SUCCES : toute exception est un echec, et on dit
+        -- laquelle. Le handler precedent s'achevait sur « ELSE v_passed » --
+        -- un plantage interne y passait pour un succes.
+        v_failed := v_failed + 1;
+        v_failures := v_failures || (v_test_name || ' : la coordination doit pouvoir renouveler son propre emprunt ['
+          || SQLSTATE || '] ' || SQLERRM);
       END;
     END IF;
   END;
 
   v_test_name := '6.05 renew lectrice A leitor sur son emprunt';
   BEGIN
-    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 
+    SELECT id INTO v_leitora_a_loan_id FROM public.emprestimos_v2 
       WHERE user_id = c_leitora_a AND status_global IN ('aberto', 'parcialmente_devolvido') LIMIT 1;
-    IF v_livia_loan_id IS NULL THEN
+    IF v_leitora_a_loan_id IS NULL THEN
       v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt ouvert');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims', '{"sub": "33333333-3333-3333-3333-333333333333", "role": "authenticated"}', true);
-        PERFORM api.renew_my_loan(v_livia_loan_id);
+        PERFORM api.renew_my_loan(v_leitora_a_loan_id);
         v_passed := v_passed + 1;
       EXCEPTION WHEN OTHERS THEN
-        IF SQLSTATE = '28000' OR (SQLSTATE = '42501' AND SQLERRM NOT LIKE '%seus proprios%') THEN v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : la lectrice A doit passer : ' || SQLERRM);
-        ELSE v_passed := v_passed + 1; END IF;
+        -- Meme raison qu'en 6.04 : ce test attend un SUCCES.
+        v_failed := v_failed + 1;
+        v_failures := v_failures || (v_test_name || ' : la lectrice A doit pouvoir renouveler son propre emprunt ['
+          || SQLSTATE || '] ' || SQLERRM);
       END;
     END IF;
   END;
@@ -561,17 +582,17 @@ BEGIN
 
   v_test_name := '7.03 schedule lecteur B sur lectrice A';
   BEGIN
-    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
-    IF v_livia_loan_id IS NULL THEN
+    SELECT id INTO v_leitora_a_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
+    IF v_leitora_a_loan_id IS NULL THEN
       v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
-        PERFORM api.schedule_loan_return(v_livia_loan_id, ARRAY[1]::integer[], now() + interval '1 day');
+        PERFORM api.schedule_loan_return(v_leitora_a_loan_id, ARRAY[1]::integer[], now() + interval '1 day');
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas planifier sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%loan_not_found%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
+        IF SQLERRM LIKE '%not_your_loan%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
@@ -590,17 +611,17 @@ BEGIN
 
   v_test_name := '7.05 clear lecteur B sur lectrice A';
   BEGIN
-    SELECT id INTO v_livia_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
-    IF v_livia_loan_id IS NULL THEN
+    SELECT id INTO v_leitora_a_loan_id FROM public.emprestimos_v2 WHERE user_id = c_leitora_a LIMIT 1;
+    IF v_leitora_a_loan_id IS NULL THEN
       v_skipped := v_skipped + 1; v_skips := v_skips || (v_test_name || ' : la lectrice A n''a aucun emprunt');
     ELSE
       BEGIN
         SET LOCAL ROLE authenticated;
         PERFORM set_config('request.jwt.claims', '{"sub": "44444444-4444-4444-4444-444444444444", "role": "authenticated"}', true);
-        PERFORM api.clear_loan_return_schedule(v_livia_loan_id, ARRAY[1]::integer[]);
+        PERFORM api.clear_loan_return_schedule(v_leitora_a_loan_id, ARRAY[1]::integer[]);
         v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : le lecteur B ne doit pas annuler sur la lectrice A');
       EXCEPTION WHEN OTHERS THEN
-        IF SQLERRM LIKE '%seus proprios%' OR SQLERRM LIKE '%loan_not_found%' OR SQLSTATE = '42501' THEN v_passed := v_passed + 1;
+        IF SQLERRM LIKE '%not_your_loan%' THEN v_passed := v_passed + 1;
         ELSE v_failed := v_failed + 1; v_failures := v_failures || (v_test_name || ' : ' || SQLERRM); END IF;
       END;
     END IF;
