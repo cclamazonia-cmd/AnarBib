@@ -88,10 +88,11 @@ BEGIN
   --      (« Sem exemplares disponíveis para reserva ») : réserve-t-on quand un
   --      exemplaire est libre, ou seulement quand tout est sorti ? Le seed pose
   --      un exemplaire libre sur TEST-CIRC-1 ; la réponse décide du holding.
-  --   2. ce que rend `api.resolve_circulation_rule(p_mode := 'reservation')`
-  --      pour `blmf-test`, qui n'a aucune politique de circulation configurée.
-  --      Si `reservation_allowed` y est faux par défaut, aucun E2E réservation
-  --      n'est possible sans étoffer le seed d'une politique.
+  --   2. ~~ce que rend `api.resolve_circulation_rule(p_mode := 'reservation')`
+  --      pour `blmf-test`~~ — **RÉSOLU le 30/08**, et par un autre test : le
+  --      chemin E2E des emprunts a rapporté `reason=not_renewable`, c'est-à-dire
+  --      que le résolveur refuse tout à une bibliothèque sans jeu de règles
+  --      actif. Le seed en pose désormais un, avec une règle `reservation`.
   --
   -- Écrire le test avant de trancher ces deux points, ce serait parier — et un
   -- test qui échoue pour une précondition non tenue coûte plus cher qu'un skip

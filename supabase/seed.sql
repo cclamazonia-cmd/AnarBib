@@ -309,3 +309,54 @@ BEGIN
 
   RAISE NOTICE 'seed circulation : + 1 emprunt coordination, 1 consulta (em_preparacao), 1 reservation active';
 END $$;
+
+-- =====================================================================
+-- Un jeu de règles de circulation, parce que renouveler suppose une règle
+-- ---------------------------------------------------------------------
+-- Ajouté le 30/08/2026 (item I15), sur une réponse rapportée par un test.
+--
+-- Le chemin E2E des emprunts (`paquet_emprestimos` section 3) prêtait et
+-- rendait correctement, mais le renouvellement ne faisait RIEN — sans lever :
+-- `api.renew_my_loan` rend `{ok:false, reason:'not_renewable'}`. Ce n'était ni
+-- un quota épuisé ni un retard : `api.resolve_circulation_rule` refusait parce
+-- que `blmf-test` n'avait AUCUN jeu de règles actif. Le monde de test savait
+-- prêter et rendre, mais pas renouveler, parce que renouveler suppose une
+-- politique — et qu'il n'y en avait pas.
+--
+-- PORTÉE VOLONTAIREMENT ÉTROITE : deux règles seulement, `renewal` et
+-- `reservation`. On NE pose PAS de règle `loan` ni `local_consultation`, alors
+-- qu'une vraie bibliothèque en aurait : une règle `loan` porte `loan_days`, qui
+-- entrerait dans le calcul des échéances de TOUTES les suites déjà vertes.
+-- Étoffer le monde de test ne doit pas déplacer ce que les autres tests
+-- mesurent. Le jour où un test aura besoin d'une règle `loan`, il l'ajoutera en
+-- sachant ce qu'il change.
+--
+-- Les colonnes non citées gardent leurs valeurs par défaut, qui sont
+-- permissives (`loan_allowed`, `reservation_allowed`, `renewable` à `true`).
+DO $$
+DECLARE
+  c_blmf constant uuid := '1234825f-a0f9-4fbd-a875-6551c30ea4ca';
+  v_set  bigint;
+BEGIN
+  INSERT INTO public.library_circulation_policy_sets
+    (library_id, label, status, is_active, activated_at, scope_note)
+  VALUES (c_blmf, 'Regles de test — seed AnarBib', 'active', true, now(),
+          'Fixture de seed. Deux regles seulement : renouvellement et reservation. '
+          'Voir le commentaire de supabase/seed.sql.')
+  RETURNING id INTO v_set;
+
+  -- Renouvellement : deux fois, quatorze jours. Des valeurs FINIES et petites,
+  -- pour qu'un test puisse verifier qu'un quota se ferme, pas seulement qu'un
+  -- renouvellement passe.
+  INSERT INTO public.library_circulation_policy_rules
+    (policy_set_id, rule_label, circulation_mode, renewable, renewal_max_count, renewal_days)
+  VALUES (v_set, 'Renouvellement de test', 'renewal', true, 2, 14);
+
+  -- Reservation : autorisee. Debloque la premiere des deux regles que le SKIP
+  -- de `paquet_reservas` 2.xx demandait d'etablir.
+  INSERT INTO public.library_circulation_policy_rules
+    (policy_set_id, rule_label, circulation_mode, reservation_allowed)
+  VALUES (v_set, 'Reservation de test', 'reservation', true);
+
+  RAISE NOTICE 'seed circulation : 1 jeu de regles actif (renewal + reservation)';
+END $$;

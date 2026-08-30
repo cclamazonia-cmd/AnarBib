@@ -181,7 +181,7 @@ BEGIN
       -- L'implication est un vrai test : un `ok = true` sans echeance qui
       -- bouge le fait rougir. Et le NOTICE porte la raison dans le journal de
       -- CI, pour qu'on sache quoi seeder sans relancer une enquete.
-      v_t:='3.03 renew_my_loan respecte son contrat, et tient sa promesse quand il aboutit';
+      v_t:='3.03 renew_my_loan aboutit et recule l''echeance';
       SELECT max(due_at) INTO v_due_avant FROM public.emprestimo_itens_v2 WHERE emprestimo_id = v_loan;
       BEGIN
         SET LOCAL ROLE authenticated;
@@ -197,10 +197,18 @@ BEGIN
           coalesce(v_json->>'ok','(absent)'), coalesce(v_json->>'reason','(absente)'),
           coalesce(v_due_avant::text,'NULL'), coalesce(v_due_apres::text,'NULL'));
 
+        -- Depuis le 30/08 le seed pose un jeu de regles actif : le
+        -- renouvellement DOIT aboutir. La premiere ecriture de ce test se
+        -- contentait de l'implication (« si ok, alors l'echeance recule »)
+        -- parce que le monde de test ne savait pas renouveler ; il le sait.
         IF NOT (v_json ? 'ok' AND v_json ? 'reason') THEN
           v_failed:=v_failed+1;
           v_failures:=v_failures||(v_t||' : reponse hors contrat -> '||coalesce(v_json::text,'NULL'));
-        ELSIF (v_json->>'ok')::boolean AND NOT (v_due_apres > v_due_avant) THEN
+        ELSIF NOT (v_json->>'ok')::boolean THEN
+          v_failed:=v_failed+1;
+          v_failures:=v_failures||(v_t||' : refuse -> reason='||coalesce(v_json->>'reason','(absente)')
+            ||'. Si c''est not_renewable, le jeu de regles du seed a disparu ou n''est plus actif');
+        ELSIF NOT (v_due_apres > v_due_avant) THEN
           v_failed:=v_failed+1;
           v_failures:=v_failures||(v_t||' : ok=true mais echeance inchangee ('
             ||coalesce(v_due_avant::text,'NULL')||' -> '||coalesce(v_due_apres::text,'NULL')
