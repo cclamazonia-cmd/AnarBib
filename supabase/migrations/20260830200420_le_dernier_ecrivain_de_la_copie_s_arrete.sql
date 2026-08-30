@@ -175,13 +175,25 @@ $function$;
 -- -------------------------------------------------------------------------
 -- Vérification (doctrine) : plus aucune fonction ne cite les objets retirés.
 -- -------------------------------------------------------------------------
+-- `prosrc` contient les COMMENTAIRES du corps, pas seulement le code. Une
+-- première version de cette assertion comparait le texte brut : elle a échoué
+-- sur cette fonction même, dont les commentaires expliquent précisément ce qui
+-- a été retiré et pourquoi. Le garde-fou refusait la correction à cause de sa
+-- propre explication.
+--
+-- Et la raison pour laquelle je ne l'avais pas vu vaut d'être écrite : la
+-- vérification contre la production avait été faite sur une version ALLÉGÉE du
+-- corps, sans les commentaires — donc pas sur l'artefact livré. Vérifier une
+-- variante n'est pas vérifier ce qu'on livre.
+--
+-- On retire donc les commentaires de ligne avant de comparer.
 DO $$
 DECLARE v_noms text;
 BEGIN
   SELECT string_agg(n.nspname||'.'||p.proname, ', ' ORDER BY p.proname) INTO v_noms
     FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
-   WHERE p.prosrc ILIKE '%library_email_identity%'
-      OR p.prosrc ILIKE '%email_delivery_mode%';
+   WHERE regexp_replace(p.prosrc, '--[^\n]*', '', 'g') ILIKE '%library_email_identity%'
+      OR regexp_replace(p.prosrc, '--[^\n]*', '', 'g') ILIKE '%email_delivery_mode%';
   IF v_noms IS NOT NULL THEN
     RAISE EXCEPTION 'des fonctions citent encore les objets retires : %', v_noms;
   END IF;
