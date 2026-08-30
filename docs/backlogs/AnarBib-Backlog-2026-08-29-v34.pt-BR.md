@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 86 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -24,7 +24,7 @@
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 11
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 5
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 4
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 8
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -2085,7 +2085,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 |---|---|---|---|
 | **J1** | Atualizar os números de `CLAUDE.md` e do `README.md` | `P1` | Aberto |
 | **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
-| **J3** | Corrigir as três afirmações falsas da spec das consultas | `P1` | Aberto |
 | **J4** | Reescrever a seção 14 da spec de governança dos papéis | `P1` | Aberto |
 | **J6** | Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria | `P2` | Aberto |
 
@@ -2131,27 +2130,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** Faz-se ao depositar este backlog.
 
 *Remissões : `docs/backlogs/INDEX.md`*
-
-#### J3 — Corrigir as três afirmações falsas da spec das consultas
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** `spec-flux-consultations-v2.2.md` afirma, seção perfis, que a BLMF está em `full_sigb`, a BTL em `informal` e `BLT-test` em `informal`, tudo «verificado em prod». **As três são falsas hoje**: `BLT-test` não existe no banco, e a BTL está em `full_sigb`.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Levantar o estado real das cinco bibliotecas e transpô-lo, com a data do levantamento.
-
-**Por que importa.** Uma afirmação marcada «verificado em prod» que já não o é é mais perigosa que uma afirmação não marcada: desencoraja a verificação. É a lição central deste backlog.
-
-**O que conta como terminado.**
-
-- A seção descreve o estado real, datado.
-- Toda afirmação «verificado em prod» do corpus traz agora sua data.
-
-**Dependências.** Ligado a **G5** (estatuto da BTL).
-
-*Remissões : `PLAN_formation_coordination_BLMF §8`*
 
 #### J4 — Reescrever a seção 14 da spec de governança dos papéis
 
@@ -2436,6 +2414,9 @@ Em 30/08 os dois pares concordam (20/20 e 13/13 colunas). Guardado pelo **T8** d
 A conclusão do item assentava num contrassenso: **não declarar uma função não é um esquecimento, é a forma de lhe deixar o padrão da plataforma** — e esse padrão é o ajuste *mais fechado*. A doutrina escrita no topo do ficheiro já dizia exatamente isso.
 
 O que estava errado eram os **números do comentário**, datados de 07/05, e os de `CLAUDE.md`. Três documentos contradiziam-se a respeito de um ficheiro que tinha razão. O comentário foi refeito, datado, e diz agora onde está a fonte de verdade: a lista das secções `[functions.*]`, não a prosa que a comenta. |
+| J3 | As afirmações falsas da spec das consultas | **Corrigido e encerrado em 30/08 — e o constato ficava aquém da verdade.** O item apontava três afirmações falsas. Levantamento em `public.libraries` a 30/08: as **cinco** bibliotecas estão **todas** em `circulation_mode = full_sigb`. A spec não errava em três linhas: ilustrava uma **diversidade de perfis que não existe**.
+
+O que daí decorre vale mais que a correção. A doutrina continua justa, mas os comportamentos adaptativos `informal` e `off` **nunca foram experimentados numa biblioteca real**, ao contrário do que «validados no pacote E.0-E.5» deixava entender. A linha di-lo agora, com a data do levantamento. |
 
 ---
 
@@ -2467,4 +2448,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 86 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
