@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Reescrita integral sobre estado verificado — ferramenta de trabalho para as colaboradoras e os colaboradores por vir
 
-**2026-08-29** · atualizado em **2026-08-30** · 85 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
+**2026-08-29** · atualizado em **2026-08-30** · 84 itens · Version française : `AnarBib-Backlog-2026-08-29-v34.md`
 
 > Arquivo **gerado** por `scripts/build-backlog.cjs` a partir de `backlog-v34.json`. Não o modifique à mão.
 
@@ -24,7 +24,7 @@
     - [G — Rede, governança, federação](#g--rede-governança-federação) · 10
     - [H — Interoperabilidade, tesauro, coleta](#h--interoperabilidade-tesauro-coleta) · 7
     - [I — Auto-hospedagem, operação, backups, CI](#i--auto-hospedagem-operação-backups-ci) · 11
-    - [J — Documentação e corpus](#j--documentação-e-corpus) · 3
+    - [J — Documentação e corpus](#j--documentação-e-corpus) · 2
     - [K — Caixa, comunicação, formação](#k--caixa-comunicação-formação) · 8
 - [Encerramentos e entradas caducas](#encerramentos-e-entradas-caducas)
 - [O que não está no backlog](#o-que-não-está-no-backlog)
@@ -2120,7 +2120,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 | | | | |
 |---|---|---|---|
 | **J2** | Reparar o índice dos backlogs e decidir a convenção de arquivamento | `P2` | Aberto |
-| **J4** | Reescrever a seção 14 da spec de governança dos papéis | `P1` | Aberto |
 | **J6** | Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria | `P2` | Aberto |
 
 #### J2 — Reparar o índice dos backlogs e decidir a convenção de arquivamento
@@ -2143,28 +2142,6 @@ Resta uma pergunta: a coluna `libraries.is_test_mode`, ainda a `true` numa bibli
 **Dependências.** Faz-se ao depositar este backlog.
 
 *Remissões : `docs/backlogs/INDEX.md`*
-
-#### J4 — Reescrever a seção 14 da spec de governança dos papéis
-
-`P1` Prioritário · Estado : **Aberto** · Carga : uma noite · O que exige : nenhuma competência técnica
-
-**Estado.** `spec-gouvernance-roles.md` §14 lista como «a implementar» coisas **que rodam em produção**: a tabela de auditoria `library_membership_audit` (alimentada, oito entradas recentes), as colunas de carência `pending_removal_until` e `pending_removal_requested_by`, os e-mails `team.*` (21 envios, zero falha), e os dois crons `anarbib-team-pending-removal-complete` e `anarbib-team-inactive-cleanup`.
-
-*Constato de 29/08, não reverificado desde então.*
-
-**O que é.** Reescrever as duas seções conforme o estado verificado de 26/08, e atualizar a versão — o REGISTRO já cita uma v1.4 que o índice das specs ignora.
-
-**Por que importa.** Uma spec que subestima o entregue faz refazer o que existe. É a deriva de sentido inverso de **J3**, e as duas foram levantadas no mesmo dia.
-
-**O que conta como terminado.**
-
-- As §14 e §5.3 descrevem o estado real.
-- A versão da spec é a mesma no REGISTRO e em `docs/specs/INDEX.md`.
-- A doutrina do papel exclusivo é anotada como aplicada pela própria RPC, não apenas escrita — a promoção de 26/08 dá o rastro: linha `coordenador` criada ativa, linha `librarian` passada a `removed` no mesmo carimbo, duas entradas de auditoria, notificação em 2,5 segundos.
-
-**Dependências.** Nenhuma.
-
-*Remissões : `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §2` · `REGISTRE §41 GOUV`*
 
 #### J6 — Escrever as cinco doutrinas internalizadas onde um terceiro as encontraria
 
@@ -2437,6 +2414,11 @@ De manhã, a secção de estado do `README` foi recontada no banco e o seu títu
 Feita a demonstração num só dia, os números cedem lugar a uma **remissão para `docs/backlogs/`**, que traz uma foto datada. **Uma remissão não caduca; uma cópia, sim.**
 
 `CLAUDE.md` recebeu as mesmas correções, mas está gitignorado desde 23/07: **nada do que aí se escreve chega a quem contribui**. É mais um argumento para que o estado numérico viva no repositório, e num único lugar. |
+| J4 | A secção 14 da spec de governança dos papéis | **Encerrado em 30/08 — o trabalho fora feito em 26/08, apenas o ponteiro não o seguira.** A spec traz **v1.4.1 (26/08/2026)**, o seu §14 está refeito sobre estado constatado, e vai além do que o item pedia: distingue **«entregue» de «experimentado»** — o circuito de convite estava entregue havia dois meses e nunca servira, zero linhas em 26/08. O §14.2 nomeia mesmo as duas afirmações que **não** verificou.
+
+O que continuava errado era o **índice das specs**, que anunciava v1.3 (24/05). Corrigido. Um segundo desvio foi encontrado: `spec-migration-mail-resend`, índice v0.4 contra v0.6 no ficheiro arquivado.
+
+Controlo mecânico sobre os **48 links** do índice: **nenhum link morto**. Quarta vez no dia em que um item do backlog descrevia o ponteiro e não o objeto. |
 
 ---
 
@@ -2468,4 +2450,4 @@ Se essa mecânica atrapalhar mais do que ajudar, joga-se fora sem dano: os `.md`
 
 ## Colofão
 
-Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 85 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.
+Backlog v34, escrito em 2026-08-29, atualizado em 2026-08-30. Substitui `AnarBib-Backlog-2026-06-17-v33.md`. 84 itens em 11 domínios. O estado inicial foi verificado em 2026-08-29 contra o banco de produção em somente-leitura e contra o repositório Codeberg no commit `1d00ed2c`; os itens retocados desde então trazem a própria data no seu texto. Este documento não arbitra nada: o `REGISTRE_decisions.md` faz fé.

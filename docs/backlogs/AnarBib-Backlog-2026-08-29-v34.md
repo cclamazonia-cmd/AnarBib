@@ -1,6 +1,6 @@
 # Backlog AnarBib v34 — Réécriture intégrale sur état vérifié — outil de travail pour les collaboratrices et collaborateurs à venir
 
-**2026-08-29** · mis à jour le **2026-08-30** · 85 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
+**2026-08-29** · mis à jour le **2026-08-30** · 84 items · Versão em português : `AnarBib-Backlog-2026-08-29-v34.pt-BR.md`
 
 > Fichier **engendré** par `scripts/build-backlog.cjs` depuis `backlog-v34.json`. Ne le modifiez pas à la main.
 
@@ -24,7 +24,7 @@
     - [G — Réseau, gouvernance, fédération](#g--réseau-gouvernance-fédération) · 10
     - [H — Interopérabilité, thésaurus, moisson](#h--interopérabilité-thésaurus-moisson) · 7
     - [I — Auto-hébergement, exploitation, sauvegardes, CI](#i--auto-hébergement-exploitation-sauvegardes-ci) · 11
-    - [J — Documentation et corpus](#j--documentation-et-corpus) · 3
+    - [J — Documentation et corpus](#j--documentation-et-corpus) · 2
     - [K — Caisse, communication, formation](#k--caisse-communication-formation) · 8
 - [Clôtures et entrées caduques](#clôtures-et-entrées-caduques)
 - [Ce qui n'est pas au backlog](#ce-qui-nest-pas-au-backlog)
@@ -2122,7 +2122,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 | | | | |
 |---|---|---|---|
 | **J2** | Réparer l'index des backlogs et trancher la convention d'archivage | `P2` | Ouvert |
-| **J4** | Réécrire la section 14 de la spec de gouvernance des rôles | `P1` | Ouvert |
 | **J6** | Écrire les cinq doctrines internalisées là où un tiers les trouverait | `P2` | Ouvert |
 
 #### J2 — Réparer l'index des backlogs et trancher la convention d'archivage
@@ -2145,28 +2144,6 @@ Ce qui reste tient en une question : la colonne `libraries.is_test_mode`, toujou
 **Dépendances.** Se fait en posant ce backlog.
 
 *Renvois : `docs/backlogs/INDEX.md`*
-
-#### J4 — Réécrire la section 14 de la spec de gouvernance des rôles
-
-`P1` Prioritaire · État : **Ouvert** · Charge : une soirée · Ce que ça demande : aucune compétence technique
-
-**État.** `spec-gouvernance-roles.md` §14 liste comme « à implémenter » des choses **qui tournent en production** : la table d'audit `library_membership_audit` (alimentée, huit entrées récentes), les colonnes de carence `pending_removal_until` et `pending_removal_requested_by`, les courriels `team.*` (21 envois, zéro échec), et les deux crons `anarbib-team-pending-removal-complete` et `anarbib-team-inactive-cleanup`. La §5.3 est également périmée : la transition T2 n'est plus unilatérale.
-
-*Constat du 29/08, non revérifié depuis.*
-
-**Ce que c'est.** Réécrire les deux sections d'après l'état vérifié du 26/08, et passer la version à jour — le REGISTRE cite déjà une v1.4 que l'index des specs ignore.
-
-**Pourquoi ça compte.** Une spec qui sous-estime le livré fait refaire ce qui existe. C'est la dérive de sens inverse de **J3**, et les deux ont été relevées le même jour.
-
-**Ce qui compte comme fini.**
-
-- Les §14 et §5.3 décrivent l'état réel.
-- La version de la spec est la même au REGISTRE et dans `docs/specs/INDEX.md`.
-- La doctrine du rôle exclusif est notée comme appliquée par la RPC elle-même, pas seulement écrite — la promotion du 26/08 en donne la trace : ligne `coordenador` créée active, ligne `librarian` passée à `removed` au même horodatage, deux entrées d'audit, notification en 2,5 secondes.
-
-**Dépendances.** Aucune.
-
-*Renvois : `VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §2` · `REGISTRE §41 GOUV`*
 
 #### J6 — Écrire les cinq doctrines internalisées là où un tiers les trouverait
 
@@ -2439,6 +2416,11 @@ Le matin, la section d'état du `README` a été recomptée en base et son titre
 La démonstration étant faite en une journée, les chiffres cèdent la place à un **renvoi vers `docs/backlogs/`**, qui porte une photo datée et dit d'où vient chaque nombre. **Un renvoi ne périme pas ; une copie, si.**
 
 `CLAUDE.md` a reçu les mêmes corrections, mais il est gitignoré depuis le 23/07 : **rien de ce qui n'y est écrit n'atteint un·e contributeur·rice**, et tout y disparaît au re-clonage. Le `README` le dit déjà à sa section Architecture. C'est un argument de plus pour que l'état chiffré vive au dépôt, et un seul endroit. |
+| J4 | La section 14 de la spec de gouvernance des rôles | **Clos le 30/08 — le travail avait été fait le 26/08, seul le pointeur ne l'avait pas suivi.** L'item demandait de réécrire les §14 et §5.3, qui listaient « à implémenter » des objets tournant en production. C'est déjà fait : la spec porte **v1.4.1 (26/08/2026)**, son §14 est refait sur état constaté, et il va plus loin que l'item ne demandait — il note que la liste précédente annonçait « à faire » des objets présents dans le dump de référence **antérieur de cinq jours**, et il distingue **« livré » de « éprouvé »** : le circuit d'invitation était livré depuis deux mois et n'avait jamais servi, zéro ligne au 26/08. Son §14.2 nomme même les deux affirmations qu'il n'a **pas** vérifiées, plutôt que de les recopier comme si elles l'étaient.
+
+Ce qui restait faux était l'**index des specs**, qui annonçait v1.3 (24/05) — trois mois et une refonte en arrière. Corrigé, avec la mention de l'écart. Un second écart a été trouvé au passage : `spec-migration-mail-resend`, index v0.4 contre v0.6 dans le fichier archivé.
+
+Contrôle mécanique fait sur les **48 liens** de l'index : **aucun lien mort**. La quatrième fois de la journée qu'un item du backlog décrivait le pointeur et non l'objet — après B6, J1 et J3. |
 
 ---
 
@@ -2470,4 +2452,4 @@ Si cette mécanique gêne plus qu'elle n'aide, elle se jette sans dommage : les 
 
 ## Colophon
 
-Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 85 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.
+Backlog v34, écrit le 2026-08-29, mis à jour le 2026-08-30. Remplace `AnarBib-Backlog-2026-06-17-v33.md`. 84 items sur 11 domaines. L'état de départ a été vérifié le 2026-08-29 contre la base de production en lecture seule et contre le dépôt Codeberg au commit `1d00ed2c` ; les items retouchés depuis portent leur propre date dans leur texte. Ce document n'arbitre rien : le `REGISTRE_decisions.md` fait foi.

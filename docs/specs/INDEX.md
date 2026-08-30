@@ -33,7 +33,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
 | Administration réseau | [`spec-administrateur-reseau-v0.4.md`](./spec-administrateur-reseau-v0.4.md) | v0.4 (20/05/2026) | 🟢 Référence — v0.3.1 en prod, enrichissements v0.4 à implémenter |
-| Gouvernance locale (rôles, status, transitions) | [`spec-gouvernance-roles.md`](./spec-gouvernance-roles.md) | v1.3 (24/05/2026) | 🟢 Référence — partiellement en prod |
+| Gouvernance locale (rôles, status, transitions) | [`spec-gouvernance-roles.md`](./spec-gouvernance-roles.md) | v1.4.1 (26/08/2026) | 🟢 Référence — **les sept lots du §14 sont livrés**, T2 refondu collégial le 26/08. L'index annonçait v1.3 (24/05) jusqu'au 30/08 : la spec avait été refaite, le pointeur ne l'avait pas suivi (item `J4`). |
 | Profils d'adoption (4 axes orthogonaux) | [`spec-profils-bibliotheque-v0_7.md`](./spec-profils-bibliotheque-v0_7.md) | v0.7 (19/05/2026) | 🟢 Référence post-clôture chantier #98 — entièrement en prod |
 | Écran de gestion « Biblioteca » (`/biblioteca`, 12 onglets) | [`spec-ecran-biblioteca.md`](./spec-ecran-biblioteca.md) | v1.0 (18/06/2026) | ✅ En prod (chantier-cadre clos) — **carte d'orientation** vers les specs par domaine |
 
@@ -110,7 +110,7 @@ Ce document est la **porte d'entrée** du corpus de specs. Pour la description d
 
 | Domaine | Spec de référence | Version | Statut |
 |---|---|---|---|
-| Migration mail Brevo → Resend | [`spec-migration-mail-resend.md`](./archive/spec-migration-mail-resend.md) | v0.4 (01/06/2026) | ✅ #110 clos — Brevo entièrement retiré (R.6+R.7) — archivé 2026-06-10 |
+| Migration mail Brevo → Resend | [`spec-migration-mail-resend.md`](./archive/spec-migration-mail-resend.md) | v0.6 (01/06/2026) | ✅ #110 clos — Brevo entièrement retiré (R.6+R.7) — archivé 2026-06-10. *Version corrigée le 30/08 : l'index disait v0.4, le fichier archivé porte v0.6.* |
 | Cartographie du réseau AnarBib | [`spec-cartographie-reseau.md`](./spec-cartographie-reseau.md) | v1.0 (18/06/2026) | 🟢 Arbitrages `MAP-A..MAP-L` tranchés (REGISTRE §34) — **reste à implémenter** (post-Bologna) ; aligné PUBLIB (confidentialité) |
 
 ### 🔵 Specs doctrinales de chantier ponctuel — référence historique

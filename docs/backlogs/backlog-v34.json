@@ -1445,6 +1445,17 @@
           "fr": "**Clos le 30/08, et par la seconde branche de l'alternative que l'item posait lui-même** — « peut-être un renvoi vers le backlog vaut-il mieux qu'une copie ».\n\nLe matin, la section d'état du `README` a été recomptée en base et son titre neutralisé : il annonçait « État au 7 juillet » tout en décrivant des faits d'août, ce qui est la façon la plus discrète de vieillir — le lecteur date le contenu d'après le titre. **Le soir du même jour, le recomptage du matin était déjà faux** : « 224 migrations, la dernière étant `20260830180000` » alors que la base en portait **231**, la dernière étant `20260830210000`. Sept migrations en douze heures, et rien dans un `README` ne signale qu'un nombre a vieilli.\n\nLa démonstration étant faite en une journée, les chiffres cèdent la place à un **renvoi vers `docs/backlogs/`**, qui porte une photo datée et dit d'où vient chaque nombre. **Un renvoi ne périme pas ; une copie, si.**\n\n`CLAUDE.md` a reçu les mêmes corrections, mais il est gitignoré depuis le 23/07 : **rien de ce qui n'y est écrit n'atteint un·e contributeur·rice**, et tout y disparaît au re-clonage. Le `README` le dit déjà à sa section Architecture. C'est un argument de plus pour que l'état chiffré vive au dépôt, et un seul endroit.",
           "pt": "**Encerrado em 30/08, e pelo segundo ramo da alternativa que o próprio item colocava** — «talvez uma remissão para o backlog valha mais que uma cópia».\n\nDe manhã, a secção de estado do `README` foi recontada no banco e o seu título neutralizado. **À noite do mesmo dia, a recontagem da manhã já estava errada**: «224 migrações» quando o banco tinha **231**. Sete migrações em doze horas, e nada num `README` assinala que um número envelheceu.\n\nFeita a demonstração num só dia, os números cedem lugar a uma **remissão para `docs/backlogs/`**, que traz uma foto datada. **Uma remissão não caduca; uma cópia, sim.**\n\n`CLAUDE.md` recebeu as mesmas correções, mas está gitignorado desde 23/07: **nada do que aí se escreve chega a quem contribui**. É mais um argumento para que o estado numérico viva no repositório, e num único lugar."
         }
+      ],
+      [
+        "J4",
+        {
+          "fr": "La section 14 de la spec de gouvernance des rôles",
+          "pt": "A secção 14 da spec de governança dos papéis"
+        },
+        {
+          "fr": "**Clos le 30/08 — le travail avait été fait le 26/08, seul le pointeur ne l'avait pas suivi.** L'item demandait de réécrire les §14 et §5.3, qui listaient « à implémenter » des objets tournant en production. C'est déjà fait : la spec porte **v1.4.1 (26/08/2026)**, son §14 est refait sur état constaté, et il va plus loin que l'item ne demandait — il note que la liste précédente annonçait « à faire » des objets présents dans le dump de référence **antérieur de cinq jours**, et il distingue **« livré » de « éprouvé »** : le circuit d'invitation était livré depuis deux mois et n'avait jamais servi, zéro ligne au 26/08. Son §14.2 nomme même les deux affirmations qu'il n'a **pas** vérifiées, plutôt que de les recopier comme si elles l'étaient.\n\nCe qui restait faux était l'**index des specs**, qui annonçait v1.3 (24/05) — trois mois et une refonte en arrière. Corrigé, avec la mention de l'écart. Un second écart a été trouvé au passage : `spec-migration-mail-resend`, index v0.4 contre v0.6 dans le fichier archivé.\n\nContrôle mécanique fait sur les **48 liens** de l'index : **aucun lien mort**. La quatrième fois de la journée qu'un item du backlog décrivait le pointeur et non l'objet — après B6, J1 et J3.",
+          "pt": "**Encerrado em 30/08 — o trabalho fora feito em 26/08, apenas o ponteiro não o seguira.** A spec traz **v1.4.1 (26/08/2026)**, o seu §14 está refeito sobre estado constatado, e vai além do que o item pedia: distingue **«entregue» de «experimentado»** — o circuito de convite estava entregue havia dois meses e nunca servira, zero linhas em 26/08. O §14.2 nomeia mesmo as duas afirmações que **não** verificou.\n\nO que continuava errado era o **índice das specs**, que anunciava v1.3 (24/05). Corrigido. Um segundo desvio foi encontrado: `spec-migration-mail-resend`, índice v0.4 contra v0.6 no ficheiro arquivado.\n\nControlo mecânico sobre os **48 links** do índice: **nenhum link morto**. Quarta vez no dia em que um item do backlog descrevia o ponteiro e não o objeto."
+        }
       ]
     ]
   },
@@ -4917,52 +4928,6 @@
       },
       "r": [
         "docs/backlogs/INDEX.md"
-      ]
-    },
-    {
-      "id": "J4",
-      "d": "J",
-      "p": "P1",
-      "s": "ouvert",
-      "e": "S",
-      "sk": [
-        "aucune"
-      ],
-      "t": {
-        "fr": "Réécrire la section 14 de la spec de gouvernance des rôles",
-        "pt": "Reescrever a seção 14 da spec de governança dos papéis"
-      },
-      "v": {
-        "fr": "`spec-gouvernance-roles.md` §14 liste comme « à implémenter » des choses **qui tournent en production** : la table d'audit `library_membership_audit` (alimentée, huit entrées récentes), les colonnes de carence `pending_removal_until` et `pending_removal_requested_by`, les courriels `team.*` (21 envois, zéro échec), et les deux crons `anarbib-team-pending-removal-complete` et `anarbib-team-inactive-cleanup`. La §5.3 est également périmée : la transition T2 n'est plus unilatérale.",
-        "pt": "`spec-gouvernance-roles.md` §14 lista como «a implementar» coisas **que rodam em produção**: a tabela de auditoria `library_membership_audit` (alimentada, oito entradas recentes), as colunas de carência `pending_removal_until` e `pending_removal_requested_by`, os e-mails `team.*` (21 envios, zero falha), e os dois crons `anarbib-team-pending-removal-complete` e `anarbib-team-inactive-cleanup`."
-      },
-      "w": {
-        "fr": "Réécrire les deux sections d'après l'état vérifié du 26/08, et passer la version à jour — le REGISTRE cite déjà une v1.4 que l'index des specs ignore.",
-        "pt": "Reescrever as duas seções conforme o estado verificado de 26/08, e atualizar a versão — o REGISTRO já cita uma v1.4 que o índice das specs ignora."
-      },
-      "y": {
-        "fr": "Une spec qui sous-estime le livré fait refaire ce qui existe. C'est la dérive de sens inverse de **J3**, et les deux ont été relevées le même jour.",
-        "pt": "Uma spec que subestima o entregue faz refazer o que existe. É a deriva de sentido inverso de **J3**, e as duas foram levantadas no mesmo dia."
-      },
-      "f": {
-        "fr": [
-          "Les §14 et §5.3 décrivent l'état réel.",
-          "La version de la spec est la même au REGISTRE et dans `docs/specs/INDEX.md`.",
-          "La doctrine du rôle exclusif est notée comme appliquée par la RPC elle-même, pas seulement écrite — la promotion du 26/08 en donne la trace : ligne `coordenador` créée active, ligne `librarian` passée à `removed` au même horodatage, deux entrées d'audit, notification en 2,5 secondes."
-        ],
-        "pt": [
-          "As §14 e §5.3 descrevem o estado real.",
-          "A versão da spec é a mesma no REGISTRO e em `docs/specs/INDEX.md`.",
-          "A doutrina do papel exclusivo é anotada como aplicada pela própria RPC, não apenas escrita — a promoção de 26/08 dá o rastro: linha `coordenador` criada ativa, linha `librarian` passada a `removed` no mesmo carimbo, duas entradas de auditoria, notificação em 2,5 segundos."
-        ]
-      },
-      "dep": {
-        "fr": "Aucune.",
-        "pt": "Nenhuma."
-      },
-      "r": [
-        "VERIF_etat_reel_gouvernance_et_crons_2026-08-26 §2",
-        "REGISTRE §41 GOUV"
       ]
     },
     {
